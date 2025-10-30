@@ -9,7 +9,7 @@
     />
     <TableAction
       v-if="hasActions"
-      :class="{'filter-expand': filterExpand}"
+      :class="{ 'filter-expand': filterExpand }"
       :date-pick="handleDateChange"
       :has-quick-filter="iHasQuickFilter"
       :quick-filter-expand.sync="filterExpand"
@@ -85,10 +85,13 @@ export default {
         date_from: getDaysAgo(7).toISOString(),
         date_to: this.$moment(getDayEnd()).add(1, 'day').toISOString()
       }
-      this.headerActions.datePicker = Object.assign({
-        dateStart: extraQuery.date_from,
-        dateEnd: extraQuery.date_to
-      }, this.headerActions.datePicker)
+      this.headerActions.datePicker = Object.assign(
+        {
+          dateStart: extraQuery.date_from,
+          dateEnd: extraQuery.date_to
+        },
+        this.headerActions.datePicker
+      )
     }
     if (this.$route.query.order) {
       extraQuery['order'] = this.$route.query.order
@@ -169,7 +172,7 @@ export default {
         extraQuery: this.extraQuery
       })
       const checkRoot = !(this.$route.meta?.disableOrgsChange === true)
-      const checkPermAndRoot = (action) => {
+      const checkPermAndRoot = action => {
         if (!this.hasActionPerm(action)) {
           return this.$t('NoPermission')
         }
@@ -390,6 +393,6 @@ export default {
 
 //修改颜色
 .el-button--text {
-  color: #409EFF;
+  color: #409eff;
 }
 </style>

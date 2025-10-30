@@ -1,6 +1,10 @@
 <template>
   <Page>
-    <AdhocOpenDialog v-if="showOpenAdhocDialog" :visible.sync="showOpenAdhocDialog" @select="onSelectAdhoc" />
+    <AdhocOpenDialog
+      v-if="showOpenAdhocDialog"
+      :visible.sync="showOpenAdhocDialog"
+      @select="onSelectAdhoc"
+    />
     <AdhocSaveDialog
       v-if="showOpenAdhocSaveDialog"
       :args="command"
@@ -24,7 +28,7 @@
       <div class="select-assets">
         <SelectJobAssetDialog @change="handleSelectAssets" />
       </div>
-      <div class="transition-box" style="width: calc(100% - 17px);">
+      <div class="transition-box" style="width: calc(100% - 17px)">
         <CodeEditor
           v-if="ready"
           :options="cmOptions"
@@ -43,14 +47,14 @@
             @view-assets="viewConfirmRunAssets"
           />
         </div>
-        <div style="display: flex;margin-top:10px;justify-content: space-between" />
+        <div style="display: flex; margin-top: 10px; justify-content: space-between" />
       </div>
     </div>
   </Page>
 </template>
 
 <script>
-import _isequal from 'lodash.isequal'
+import _isequal from 'lodash/isEqual'
 import QuickJobTerm from '@/views/ops/Adhoc/components/QuickJobTerm.vue'
 import CodeEditor from '@/components/Form/FormFields/CodeEditor'
 import Page from '@/layout/components/Page'
@@ -151,20 +155,22 @@ export default {
                   return cb([])
                 }
                 cb([]) // 先返回空，避免输入时出现下拉闪烁
-                this.$axios.post('/api/v1/ops/username-hints/', {
-                  nodes: nodes,
-                  assets: hosts,
-                  query: query
-                }).then(data => {
-                  const ns = data.map(item => {
-                    return { value: item.username }
+                this.$axios
+                  .post('/api/v1/ops/username-hints/', {
+                    nodes: nodes,
+                    assets: hosts,
+                    query: query
                   })
-                  cb(ns)
-                })
+                  .then(data => {
+                    const ns = data.map(item => {
+                      return { value: item.username }
+                    })
+                    cb(ns)
+                  })
               }
             },
             options: [],
-            callback: (option) => {
+            callback: option => {
               this.runas = option
             }
           },
@@ -178,7 +184,8 @@ export default {
               {
                 label: this.$tc('Skip'),
                 value: 'skip'
-              }, {
+              },
+              {
                 label: this.$tc('PrivilegedFirst'),
                 value: 'privileged_first'
               },
@@ -187,7 +194,7 @@ export default {
                 value: 'privileged_only'
               }
             ],
-            callback: (option) => {
+            callback: option => {
               this.runasPolicy = option
             }
           },
@@ -198,31 +205,39 @@ export default {
             value: 'shell',
             options: [
               {
-                label: 'Shell', value: 'shell'
+                label: 'Shell',
+                value: 'shell'
               },
               {
-                label: 'Powershell', value: 'win_shell'
+                label: 'Powershell',
+                value: 'win_shell'
               },
               {
-                label: 'Raw', value: 'raw'
+                label: 'Raw',
+                value: 'raw'
               },
               {
-                label: 'Python', value: 'python'
+                label: 'Python',
+                value: 'python'
               },
               {
-                label: 'MySQL', value: 'mysql'
+                label: 'MySQL',
+                value: 'mysql'
               },
               {
-                label: 'PostgreSQL', value: 'postgresql'
+                label: 'PostgreSQL',
+                value: 'postgresql'
               },
               {
-                label: 'SQLServer', value: 'sqlserver'
+                label: 'SQLServer',
+                value: 'sqlserver'
               },
               {
-                label: 'CloudEngine', value: 'huawei'
+                label: 'CloudEngine',
+                value: 'huawei'
               }
             ],
-            callback: (option) => {
+            callback: option => {
               this.cmOptions.mode = option === 'win_shell' ? 'powershell' : option
               this.module = option
             }
@@ -239,7 +254,7 @@ export default {
               { label: '30', value: 30 },
               { label: '60', value: 60 }
             ],
-            callback: (option) => {
+            callback: option => {
               this.timeout = option
             }
           },
@@ -250,7 +265,7 @@ export default {
             value: '',
             placeholder: this.$tc('EnterRunningPath'),
             tip: this.$tc('RunningPathHelpText'),
-            callback: (val) => {
+            callback: val => {
               this.chdir = val
             }
           }
@@ -356,7 +371,7 @@ export default {
       }
     },
     onSelectAdhoc(adhoc) {
-      this.variableFormData = adhoc?.variable.map((data) => {
+      this.variableFormData = adhoc?.variable.map(data => {
         return data.form_data
       })
       this.variableQueryParam = 'adhoc=' + adhoc.id
@@ -368,17 +383,20 @@ export default {
       const url = '/ws/ops/tasks/log/'
       const wsURL = scheme + '://' + document.location.hostname + port + url
       this.ws = new WebSocket(wsURL)
-      this.ws.onerror = (e) => {
+      this.ws.onerror = e => {
         this.xterm.write(this.wrapperError('Connect websocket server error'))
       }
       this.setWsCallback()
     },
     setWsCallback() {
-      this.ws.onmessage = (e) => {
+      this.ws.onmessage = e => {
         const data = JSON.parse(e.data)
         if (data.hasOwnProperty('message')) {
           let message = data.message
-          message = message.replace(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} Task ops\.tasks\.run_ops_job_execution.*/, '')
+          message = message.replace(
+            /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} Task ops\.tasks\.run_ops_job_execution.*/,
+            ''
+          )
           this.xterm.write(message)
         }
         if (data.hasOwnProperty('event')) {
@@ -456,16 +474,18 @@ export default {
       }
 
       this.lastRequestPayload = { ...payload }
-      this.$axios.post('/api/v1/ops/classified-hosts/', {
-        ...payload
-      }).then(data => {
-        this.classifiedAssets = data
-        if (this.classifiedAssets.error.length === 0) {
-          this.onConfirmRunAsset(hosts, nodes)
-        } else {
-          this.showConfirmRunAssetsDialog = true
-        }
-      })
+      this.$axios
+        .post('/api/v1/ops/classified-hosts/', {
+          ...payload
+        })
+        .then(data => {
+          this.classifiedAssets = data
+          if (this.classifiedAssets.error.length === 0) {
+            this.onConfirmRunAsset(hosts, nodes)
+          } else {
+            this.showConfirmRunAssetsDialog = true
+          }
+        })
     },
     onConfirmRunAsset(assets, nodes) {
       const data = {
@@ -501,16 +521,22 @@ export default {
       this.showConfirmRunAssetsDialog = true
     },
     stop() {
-      stopJob({ task_id: this.currentTaskId }).then(() => {
-        this.xterm.write('\x1b[31m' +
-          this.$tc('StopLogOutput').replace('currentTaskId', this.currentTaskId) + '\x1b[0m')
-        this.xterm.write(this.wrapperError(''))
-        this.getTaskStatus()
-      }).catch((e) => {
-        this.$log.error(e)
-      }).finally(() => {
-        this.setBtn()
-      })
+      stopJob({ task_id: this.currentTaskId })
+        .then(() => {
+          this.xterm.write(
+            '\x1b[31m' +
+              this.$tc('StopLogOutput').replace('currentTaskId', this.currentTaskId) +
+              '\x1b[0m'
+          )
+          this.xterm.write(this.wrapperError(''))
+          this.getTaskStatus()
+        })
+        .catch(e => {
+          this.$log.error(e)
+        })
+        .finally(() => {
+          this.setBtn()
+        })
     },
     setBtn() {
       if (!this.isRunning) {
@@ -570,7 +596,7 @@ $container-bg-color: #f7f7f7;
   padding: 5px 0;
   background-color: var(--color-primary);
   border-color: var(--color-primary);
-  color: #FFFFFF;
+  color: #ffffff;
   border-radius: 2px;
 }
 
@@ -588,7 +614,6 @@ $container-bg-color: #f7f7f7;
 .output {
   padding-left: 30px;
   background-color: rgb(247 247 247);
-  border: solid 1px #f3f3f3;;
+  border: solid 1px #f3f3f3;
 }
-
 </style>
