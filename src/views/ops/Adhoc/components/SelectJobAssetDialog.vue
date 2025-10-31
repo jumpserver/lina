@@ -2,14 +2,14 @@
   <div class="asset-select">
     <el-card>
       <div slot="header" class="clearfix">
-        <span>已选资产({{ selectAssets.length }})</span>
+        <span>{{ $t('selectedAssets') }}({{ selectAssets.length }})</span>
         <el-button
           v-if="selectAssets.length > 0"
           style="float: right; padding: 3px 0"
           type="text"
           @click="handleClick"
         >
-          请选择资产
+          {{ $t('pleaseSelectAssets') }}
         </el-button>
       </div>
       <div
@@ -21,8 +21,8 @@
         @click=" handleClick()"
       >
         <i class="icon el-icon-plus" />
-        <span class="title">请选择资产</span>
-        <span class="subtitle">点击添加</span>
+        <span class="title">{{ $t('pleaseSelectAssets') }}</span>
+        <span class="subtitle">{{ $t('clickToAdd') }}</span>
       </div>
       <div v-else class="asset-list">
         <div
@@ -62,7 +62,7 @@
               >{{ item.name }}</span>
               <i
                 class="el-icon-minus asset-remove-icon"
-                title="移除"
+                :title="$tc('Remove')"
                 @click.stop="removeAsset(item)"
               />
             </el-checkbox>
