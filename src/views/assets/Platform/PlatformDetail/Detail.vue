@@ -143,7 +143,20 @@ export default {
             disabled: !this.canEdit
           },
           callbacks: Object.freeze({
-            click: () => {
+            click: async () => {
+              try {
+                await this.$confirm(
+                  this.$t('overwriteProtocolsAndPortsMsg'),
+                  this.$t('Confirm'),
+                  {
+                    confirmButtonText: this.$t('Confirm'),
+                    cancelButtonText: this.$t('Cancel'),
+                    type: 'warning'
+                  }
+                )
+              } catch (e) {
+                return
+              }
               const data = { platform_id: this.object.id }
               this.$axios.post(
                 '/api/v1/assets/assets/sync-platform-protocols/', data).then(res => {
