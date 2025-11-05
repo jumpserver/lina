@@ -115,14 +115,12 @@ export default {
 }
 </script>
 
-<style>
-.acceptance .el-message-box__content {
+<style lang="scss" scoped>
+::v-deep .acceptance .el-message-box__content {
   overflow-y: auto;
   max-height: 400px;
 }
-</style>
 
-<style lang='scss' scoped>
 .box {
   margin-bottom: 15px;
 }
