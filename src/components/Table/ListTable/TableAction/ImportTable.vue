@@ -97,6 +97,10 @@ export default {
     origin: {
       type: String,
       default: ''
+    },
+    encryptFields: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -273,11 +277,15 @@ export default {
       }
       return columns
     },
+    getEncryptFields() {
+      const fromProp = Array.isArray(this.encryptFields) && this.encryptFields.length ? this.encryptFields : null
+      return fromProp || ['password', 'secret', 'private_key']
+    },
     generateTableData(tableTitles, tableData) {
       const totalData = []
       tableData.forEach(item => {
         this.$set(item, '@status', 'pending')
-        const encryptFields = ['password', 'secret', 'private_key']
+        const encryptFields = this.getEncryptFields()
         for (const field of encryptFields) {
           if (item[field]) {
             item[field] = encryptPassword(item[field])

@@ -37,8 +37,12 @@ export default {
 
       },
       headerActions: {
-        hasExport: false,
-        hasImport: false,
+        hasExport: true,
+        hasImport: true,
+        importOptions: {
+          encryptFields: [''], // 这里不加密 password，''只是为了保证数组有值
+          canImportUpdate: false
+        },
         hasCreate: true,
         hasSearch: true,
         hasRefresh: true,
