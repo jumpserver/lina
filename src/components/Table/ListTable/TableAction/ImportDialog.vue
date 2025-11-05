@@ -58,6 +58,7 @@
         :import-option="importOption"
         :json-data="jsonData"
         :url="url"
+        v-bind="$attrs"
         @cancel="cancelUpload"
         @finish="closeDialog"
       />
@@ -247,46 +248,46 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-  @import "~@/styles/variables";
+@import "~@/styles/variables";
 
-  .error-msg {
-    color: $--color-danger;
+.error-msg {
+  color: $--color-danger;
+}
+
+.error-msg.error-results {
+  background-color: #f3f3f4;
+  max-height: 200px;
+  overflow: auto
+}
+
+.file-uploader ::v-deep .el-upload {
+  width: 100%;
+  //padding-right: 150px;
+}
+
+.file-uploader ::v-deep .el-upload-dragger {
+  width: 100%;
+}
+
+.importTableZone {
+  padding: 0 20px;
+
+  .importTable {
+    overflow: auto;
   }
 
-  .error-msg.error-results {
-    background-color: #f3f3f4;
-    max-height: 200px;
-    overflow: auto
+  .tableFilter {
+    padding-bottom: 10px;
   }
+}
 
-  .file-uploader ::v-deep .el-upload {
-    width: 100%;
-    //padding-right: 150px;
-  }
+.importTable ::v-deep .el-dialog__body {
+  padding-bottom: 20px;
+}
 
-  .file-uploader ::v-deep .el-upload-dragger {
-    width: 100%;
-  }
-
-  .importTableZone {
-    padding: 0 20px;
-
-    .importTable {
-      overflow: auto;
-    }
-
-    .tableFilter {
-      padding-bottom: 10px;
-    }
-  }
-
-  .importTable ::v-deep .el-dialog__body {
-    padding-bottom: 20px;
-  }
-
-  .export-item {
-    margin-left: 80px;
-  }
+.export-item {
+  margin-left: 80px;
+}
 
 .export-item:first-child {
   margin-left: 0;
