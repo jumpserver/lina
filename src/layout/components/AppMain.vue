@@ -78,6 +78,3 @@ export default {
   }
 }
 </style>
-
-<style lang="scss">
-</style>

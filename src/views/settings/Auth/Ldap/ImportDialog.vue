@@ -222,13 +222,11 @@ export default {
 }
 </script>
 
-<style>
-.el-select-dropdown.select-org-dropdown {
+<style lang="scss" scoped>
+::v-deep .el-select-dropdown.select-org-dropdown {
   max-width: 300px !important;
 }
-</style>
 
-<style lang="scss" scoped>
 .org-select {
   float: left;
   width: 300px;
@@ -245,5 +243,4 @@ export default {
     width: 180px !important;
   }
 }
-
 </style>

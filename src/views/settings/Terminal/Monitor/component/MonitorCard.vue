@@ -219,11 +219,12 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.el-popover.el-popper.monitor-popover {
+<style lang="scss" scoped>
+:global(.el-popover.el-popper.monitor-popover) {
   ul {
     padding-left: 15px;
     margin: 0;
+
     li {
       line-height: 24px;
       color: var(--color-primary);
@@ -231,19 +232,19 @@ export default {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+
       &:hover {
-        filter: opacity(65%)!important;
+        filter: opacity(65%) !important;
       }
     }
   }
 }
-</style>
 
-<style lang="less" scoped>
 .echarts {
   width: 100%;
   height: 150px;
 }
+
 .name {
   display: inline-block;
   margin-bottom: 8px;
@@ -256,6 +257,7 @@ export default {
   justify-content: space-between;
   font-size: 14px;
   margin-bottom: 8px;
+
   .num {
     margin-left: 2px;
     cursor: pointer;
@@ -279,9 +281,9 @@ export default {
   line-height: 20px;
   padding: 2px 0;
   color: #fff;
-  -webkit-transition: width .6s ease;
-  -o-transition: width .6s ease;
-  transition: width .6s ease;
+  -webkit-transition: width 0.6s ease;
+  -o-transition: width 0.6s ease;
+  transition: width 0.6s ease;
   overflow: hidden;
 }
 
@@ -292,9 +294,11 @@ export default {
   margin-right: 5px;
   border-radius: 4px;
   background-color: currentColor;
+
   &:hover {
     transform: scale(1.2);
   }
+
   &:last-child {
     margin-right: 0;
   }
@@ -303,6 +307,7 @@ export default {
 .session {
   margin-top: 13px;
   border-left: 1px solid #f3f3f3;
+
   .session-title {
     margin-bottom: 8px;
     color: #a3a3a4;

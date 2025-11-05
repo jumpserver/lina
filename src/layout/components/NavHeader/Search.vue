@@ -369,7 +369,7 @@ export default {
           }
         }
 
-        .el-input__prefix .el-input__icon{
+        .el-input__prefix .el-input__icon {
           font-size: 15px;
           line-height: 32px;
         }
@@ -402,11 +402,9 @@ export default {
     }
   }
 }
-</style>
 
-<style lang="scss">
 /* 搜索模态框全局样式 */
-.search-modal {
+::v-deep .search-modal {
   &.el-dialog {
     position: fixed;
     top: 5px;
@@ -427,17 +425,17 @@ export default {
   }
 }
 
-body .v-modal {
+::v-deep body .v-modal {
   opacity: 0.3;
 }
 
-.search-modal-content {
+::v-deep .search-modal-content {
   height: 70vh;
   display: flex;
   flex-direction: column;
 }
 
-.search-input-wrapper {
+::v-deep .search-input-wrapper {
   padding: 20px;
   border-bottom: 1px solid #f0f0f0;
   // background: #fff;
@@ -451,7 +449,7 @@ body .v-modal {
   }
 }
 
-.search-results {
+::v-deep .search-results {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
@@ -476,7 +474,7 @@ body .v-modal {
   }
 }
 
-.section-title {
+::v-deep .section-title {
   padding: 12px 24px 6px;
   font-size: 12px;
   line-height: 1.5;
@@ -505,12 +503,12 @@ body .v-modal {
 
     .clear-icon {
       font-size: 14px;
-    color: red;
+      color: red;
     }
   }
 }
 
-.list {
+::v-deep .list {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -581,15 +579,15 @@ body .v-modal {
   }
 }
 
-.loading,
-.empty {
+::v-deep .loading,
+::v-deep .empty {
   padding: 32px 24px;
   color: #909399;
   text-align: center;
   font-size: 14px;
 }
 
-.section.placeholder {
+::v-deep .section.placeholder {
   padding: 32px 24px;
 
   .placeholder-content {
@@ -637,4 +635,3 @@ body .v-modal {
   }
 }
 </style>
-

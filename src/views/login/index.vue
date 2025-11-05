@@ -125,17 +125,21 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
-$bg:#283443;
-$light_gray:#fff;
-$cursor: #fff;
+$input-bg: #283443;
+$input-light-gray: #fff;
+$input-cursor: #fff;
 
-@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
+$login-bg: #2d3a4b;
+$login-dark-gray: #889aa4;
+$login-light-gray: #eee;
+
+@supports (-webkit-mask: none) and (not (cater-color: $input-cursor)) {
   .login-container .el-input input {
-    color: $cursor;
+    color: $input-cursor;
   }
 }
 
@@ -147,17 +151,17 @@ $cursor: #fff;
 
     input {
       background: transparent;
-      border: 0px;
+      border: 0;
       -webkit-appearance: none;
-      border-radius: 0px;
+      border-radius: 0;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
+      color: $input-light-gray;
       height: 47px;
-      caret-color: $cursor;
+      caret-color: $input-cursor;
 
       &:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: $cursor !important;
+        box-shadow: 0 0 0 1000px $input-bg inset !important;
+        -webkit-text-fill-color: $input-cursor !important;
       }
     }
   }
@@ -169,17 +173,11 @@ $cursor: #fff;
     color: #454545;
   }
 }
-</style>
-
-<style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
 
 .login-container {
   min-height: 100%;
   width: 100%;
-  background-color: $bg;
+  background-color: $login-bg;
   overflow: hidden;
 
   .login-form {
@@ -205,7 +203,7 @@ $light_gray:#eee;
 
   .svg-container {
     padding: 6px 5px 6px 15px;
-    color: $dark_gray;
+    color: $login-dark-gray;
     vertical-align: middle;
     width: 30px;
     display: inline-block;
@@ -216,7 +214,7 @@ $light_gray:#eee;
 
     .title {
       font-size: 26px;
-      color: $light_gray;
+      color: $login-light-gray;
       margin: 0px auto 40px auto;
       text-align: center;
       font-weight: bold;
@@ -228,7 +226,7 @@ $light_gray:#eee;
     right: 10px;
     top: 7px;
     font-size: 16px;
-    color: $dark_gray;
+    color: $login-dark-gray;
     cursor: pointer;
     user-select: none;
   }
