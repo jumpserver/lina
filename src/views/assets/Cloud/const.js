@@ -147,7 +147,7 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
   [ctyun]: {
     name: ctyun,
     title: i18n.t('CTYun'),
-    attrs: ['access_key_id', 'access_key_secret'],
+    attrs: ['access_key_id', 'access_key_secret', 'project_id'],
     image: require('@/assets/img/cloud/state.svg')
   },
   [vmware]: {
