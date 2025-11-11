@@ -3,7 +3,7 @@
     <el-form-item>
       <el-radio-group v-model="realRadioSelected" @input="handleRadioChanged">
         <el-radio
-          v-for="(i) in realChoices"
+          v-for="(i) in iRealChoices"
           :key="i.label"
           :disabled="i.disabled"
           :label="i.value"
@@ -125,6 +125,14 @@ export default {
       type: Boolean,
       default: true
     },
+    enableNoneAccount: {
+      type: Boolean,
+      default: false
+    },
+    enableExcludeAccounts: {
+      type: Boolean,
+      default: false
+    },
     addTemplateHelpText: {
       type: String,
       default() {
@@ -185,6 +193,18 @@ export default {
   computed: {
     virtualAccount() {
       return virtualAccount
+    },
+    iRealChoices: {
+      get() {
+        let choices = this.realChoices.slice()
+        if (!this.enableNoneAccount) {
+          choices = choices.filter(i => i.value !== NoneAccount)
+        }
+        if (!this.enableExcludeAccounts) {
+          choices = choices.filter(i => i.value !== ExcludeAccount)
+        }
+        return choices
+      }
     }
   },
   watch: {
