@@ -110,6 +110,8 @@ export default {
           type: 'input',
           component: AccountFormatter,
           el: {
+            enableExcludeAccounts: true,
+            enableNoneAccount: true,
             assets: [],
             nodes: []
           },
