@@ -223,7 +223,8 @@ export default {
       const mapped = {}
       Object.entries(errors || {}).forEach(([k, v]) => {
         let msg = v
-        if (Array.isArray(v)) msg = v.join('; ')
+        // v是数组并且数组都是字符串，则拼接为字符串
+        if (Array.isArray(v) && v.every(item => typeof item === 'string')) msg = v.join('; ')
         else if (typeof v === 'object' && v !== null) msg = JSON.stringify(v)
         mapped[k] = String(msg || '')
       })
