@@ -515,6 +515,8 @@ export default {
         this.setBtn()
         this.selectAssets = assets
         this.selectNodes = nodes
+      }).catch(() => {
+        this.lastRequestPayload = null
       })
     },
     viewConfirmRunAssets() {
@@ -525,8 +527,8 @@ export default {
         .then(() => {
           this.xterm.write(
             '\x1b[31m' +
-              this.$tc('StopLogOutput').replace('currentTaskId', this.currentTaskId) +
-              '\x1b[0m'
+            this.$tc('StopLogOutput').replace('currentTaskId', this.currentTaskId) +
+            '\x1b[0m'
           )
           this.xterm.write(this.wrapperError(''))
           this.getTaskStatus()

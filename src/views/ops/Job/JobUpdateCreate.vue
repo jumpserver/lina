@@ -224,11 +224,12 @@ export default {
           title: this.$t('ExecuteAfterSaving'),
           callback: (value, form, btn) => {
             form.value.run_after_save = true
-            const parameters = form.value.variable.reduce((acc, item) => {
-              acc[item.var_name] = item.default_value || ''
-              return acc
-            }, {})
-            form.value['parameters'] = parameters
+            if (form.value?.variable) {
+              form.value['parameters'] = form.value.variable.reduce((acc, item) => {
+                acc[item.var_name] = item.default_value || ''
+                return acc
+              }, {})
+            }
             this.submitForm(form, btn)
           }
         }
