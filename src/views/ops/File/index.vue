@@ -441,8 +441,7 @@ export default {
           this.xtermConfig = { taskId: this.currentTaskId, type: 'shortcut_cmd' }
           this.setCostTimeInterval()
           this.writeExecutionOutput()
-        }).catch((error) => {
-          this.$message.error(this.$tc('Error'), error)
+        }).catch(() => {
           this.execute_stop()
         })
       })
