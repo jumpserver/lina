@@ -57,6 +57,7 @@ export default {
             id: 'check',
             name: this.$t('Check'),
             icon: 'scan',
+            has: (node) => node?.meta?.type === 'asset',
             callback: (node) => {
               vm.detectDialog.asset = node.id
               setTimeout(() => {
