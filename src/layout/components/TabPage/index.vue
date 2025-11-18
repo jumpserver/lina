@@ -167,8 +167,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-
+<style lang="scss" scoped>
 .page.no-title {
   ::v-deep {
     .page-submenu .el-tabs__header {
@@ -197,6 +196,14 @@ export default {
     &.is-active {
       .pre-icon {
         opacity: 1;
+      }
+    }
+
+    &.is-disabled {
+      cursor: not-allowed;
+
+      &:hover {
+        color: #c0c4cc;
       }
     }
   }
