@@ -6,7 +6,6 @@
     class="risk-review-drawer"
     destroy-on-close
     direction="rtl"
-    style="z-index: 999"
   >
     <div class="drawer-container">
       <div class="drawer-body">
