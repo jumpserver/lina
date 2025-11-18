@@ -161,8 +161,7 @@ module.exports = {
         target: process.env.VUE_APP_CORE_HOST || 'http://127.0.0.1:8080',
         changeOrigin: true
       }
-    },
-    after: require('./mock/mock-server.js')
+    }
   },
   css: {},
   configureWebpack: {
