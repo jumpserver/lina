@@ -32,6 +32,22 @@ export default {
       }
     }
   },
+  computed: {
+    passwordMenuDisabled() {
+      return this.$store.state.users.profile.source.value !== 'local'
+    }
+  },
+  watch: {
+    passwordMenuDisabled: {
+      immediate: true,
+      handler(disabled) {
+        this.config.submenu = this.getSubmenu()
+        if (disabled && this.config.activeMenu === 'Password') {
+          this.config.activeMenu = 'SSHKeyList'
+        }
+      }
+    }
+  },
   methods: {
     getSubmenu() {
       return [
