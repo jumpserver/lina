@@ -408,7 +408,6 @@ export default {
       createJob(data).then(res => {
         this.progressLength = 0
         this.executionInfo.timeCost = 0
-        this.showProgress = true
         this.speedText = ''
         const form = new FormData()
         const start = Date.now()
@@ -436,6 +435,7 @@ export default {
             }
           }
         }).then(res => {
+          this.showProgress = true
           this.executionInfo.status = 'running'
           this.currentTaskId = res.task_id
           this.xtermConfig = { taskId: this.currentTaskId, type: 'shortcut_cmd' }
