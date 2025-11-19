@@ -65,6 +65,17 @@ export default {
       'usingOrgs',
       'currentViewRoute'
     ]),
+    currentOrgDisplayName() {
+      const currentOrgId = this.currentOrg?.id
+      if (!currentOrgId) {
+        return this.$tc('Select')
+      }
+      const matchedOrg = this.usingOrgs.find(item => item.id === currentOrgId)
+      if (matchedOrg?.name) {
+        return matchedOrg.name
+      }
+      return this.currentOrg.name || this.$tc('Select')
+    },
     orgActionsGroup() {
       const orgActions = {
         label: this.$t('OrganizationList'),
@@ -110,11 +121,8 @@ export default {
     }
   },
   watch: {
-    currentOrg: {
-      handler() {
-        this.updateWidth()
-      },
-      deep: true
+    currentOrgDisplayName() {
+      this.updateWidth()
     }
   },
   mounted() {
@@ -133,8 +141,9 @@ export default {
         tempSpan.style.fontWeight = 'normal'
         tempSpan.style.letterSpacing = 'normal'
 
-        // 获取当前组织名称
-        const orgName = this.currentOrg.name || this.$tc('Select')
+        // 获取当前组织显示名称
+        const orgName = this.currentOrgDisplayName
+
         tempSpan.textContent = orgName
         document.body.appendChild(tempSpan)
 
