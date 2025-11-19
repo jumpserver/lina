@@ -223,9 +223,21 @@ export default {
       const mapped = {}
       Object.entries(errors || {}).forEach(([k, v]) => {
         let msg = v
+        console.log(k, v)
         // v是数组并且数组都是字符串，则拼接为字符串
         if (Array.isArray(v) && v.every(item => typeof item === 'string')) msg = v.join('; ')
-        else if (typeof v === 'object' && v !== null) msg = JSON.stringify(v)
+        // 处理 [{"port":["请确保该值小于或者等于 65535。"]},{},{}] 这种情况
+        else if (Array.isArray(v) && v.every(item => _.isPlainObject(item))) {
+          const subMsg = []
+          v.forEach((subItem) => {
+            Object.values(subItem).forEach((subMsgArr) => {
+              if (Array.isArray(subMsgArr)) {
+                subMsg.push(...subMsgArr)
+              }
+            })
+          })
+          msg = subMsg.join(' ')
+        } else if (typeof v === 'object' && v !== null) msg = JSON.stringify(v)
         mapped[k] = String(msg || '')
       })
       this.serverErrors = mapped
