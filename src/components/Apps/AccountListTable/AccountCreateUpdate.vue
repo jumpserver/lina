@@ -107,6 +107,10 @@ export default {
           this.$emit('add', true)
         }
       }).catch(error => {
+        if (error?.response?.data?.code === 'no_valid_assets') {
+          this.$message.error(error?.response?.data?.detail)
+          return
+        }
         this.iVisible = true
         this.handleResult(null, error)
       })
