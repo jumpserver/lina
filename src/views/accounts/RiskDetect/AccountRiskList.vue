@@ -43,7 +43,9 @@ export default {
         asset: ''
       },
       treeSetting: {
-        showMenu: true,
+        showMenu: (node) => {
+          return node?.meta?.type === 'asset'
+        },
         showRefresh: true,
         showSearch: true,
         showAssets: true,
@@ -55,9 +57,8 @@ export default {
         menu: [
           {
             id: 'check',
-            name: this.$t('Check'),
+            name: this.$t('RiskDetection'),
             icon: 'scan',
-            has: (node) => node?.meta?.type === 'asset',
             callback: (node) => {
               vm.detectDialog.asset = node.id
               setTimeout(() => {
