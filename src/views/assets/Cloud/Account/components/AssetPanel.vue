@@ -1,10 +1,6 @@
 <template>
   <div class="asset-panel">
-    <el-alert
-      :center="false"
-      :closable="true"
-      style="margin-bottom: 6px"
-    >
+    <el-alert :center="false" :closable="true" style="margin-bottom: 6px">
       <el-link :icon="linkIcon" :type="linkType" :underline="false"> {{ tip }}</el-link>
     </el-alert>
     <ImportTable
@@ -18,9 +14,8 @@
 </template>
 
 <script>
-
 import ImportTable from '@/components/Table/ListTable/TableAction/ImportTable'
-import _isequal from 'lodash.isequal'
+import _isequal from 'lodash/isEqual'
 
 export default {
   name: 'AssetPanel',
@@ -114,16 +109,19 @@ export default {
       const url = '/ws/xpack/cloud/'
       const wsURL = scheme + '://' + document.location.hostname + port + url
       this.ws = new WebSocket(wsURL)
-      this.ws.onopen = (e) => {
+      this.ws.onopen = e => {
         this.settings.disableImportBtn = true
-        this.ws.send(JSON.stringify({
-          action: 'sync_task', account_id: this.object.id
-        }))
+        this.ws.send(
+          JSON.stringify({
+            action: 'sync_task',
+            account_id: this.object.id
+          })
+        )
       }
       this.ws.onerror = () => {
         this.$message.error(this.$tc('ConnectWebSocketError'))
       }
-      this.ws.onmessage = (e) => {
+      this.ws.onmessage = e => {
         const data = JSON.parse(e.data)
         if (data.action === 'sync_region') {
           this.addRegion(data.region_id)
@@ -163,6 +161,5 @@ export default {
 <style lang="scss" scoped>
 .asset-panel {
   display: block;
-
 }
 </style>

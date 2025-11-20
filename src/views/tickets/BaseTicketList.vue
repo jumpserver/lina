@@ -2,6 +2,7 @@
   <GenericListPage
     ref="ListPage"
     v-loading="loading"
+    :get-drawer-title="getDrawerTitle"
     :create-drawer="createDrawer"
     :detail-drawer="detailDrawer"
     :header-actions="iTicketAction"
@@ -38,6 +39,7 @@ export default {
     const vm = this
     return {
       loading: true,
+      getDrawerTitle: () => ' ',
       createDrawer: () => import('@/views/tickets/RequestAssetPerm/CreateUpdate'),
       detailDrawer: null,
       ticketTableConfig: {

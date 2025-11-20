@@ -67,28 +67,28 @@ export default {
 }
 </script>
 
-<style>
-.help-dialog.dialog .el-dialog__footer {
+<style lang="scss" scoped>
+::v-deep .help-dialog.dialog .el-dialog__footer {
   border-top: none;
   padding: 8px;
 }
-</style>
 
-<style lang="scss" scoped>
 .help-table {
   width: 100%;
   border-collapse: collapse;
   border: 1px solid #dee2e6;
+}
 
-  &::v-deep th, td {
-    height: 40px;
-    padding: 0 8px;
-    text-align: left;
-  }
+::v-deep .help-table th,
+::v-deep .help-table td {
+  height: 40px;
+  padding: 0 8px;
+  text-align: left;
+}
 
-  &::v-deep .item-td, .item-label {
-    cursor: pointer;
-    color: var(--color-primary);
-  }
+::v-deep .help-table .item-td,
+::v-deep .help-table .item-label {
+  cursor: pointer;
+  color: var(--color-primary);
 }
 </style>

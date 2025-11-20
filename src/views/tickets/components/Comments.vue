@@ -147,7 +147,7 @@ export default {
       this.loading = true
       const url = `/api/v1/tickets/comments/?ticket_id=${this.object.id}`
       this.$axios.get(url).then(res => {
-        this.comments = res.results
+        this.comments = res
       }).catch(err => {
         this.$message.error(err)
       }).finally(() => {

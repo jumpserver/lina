@@ -29,6 +29,7 @@
 import DataForm from '../DataForm/index.vue'
 import FormGroupHeader from '@/components/Form/FormGroupHeader/index.vue'
 import { FormFieldGenerator } from '@/components/Form/AutoDataForm/utils'
+import { UniqueCheck } from '@/components/Form/DataForm/rules'
 
 export default {
   name: 'AutoDataForm',
@@ -114,6 +115,47 @@ export default {
       this.totalFields = generator.generateFields(this.fields, this.fieldsMeta, this.remoteMeta)
       this.groups = generator.groups
       this.$log.debug('Total fields: ', this.totalFields)
+      this.applyUniqueRules()
+    },
+    applyUniqueRules() {
+      const fields = this.totalFields || []
+      const currentIdGetter = () => {
+        return this.$route?.params?.id || this.form?.id || this.iForm?.id
+      }
+
+      // 移除 url 后拼接的参数
+      const defaultListUrl = (() => {
+        try {
+          const u = new URL(this.url, location.origin)
+          u.pathname = u.pathname.replace(/\/(\d+|[0-9a-fA-F-]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12})\/?$/, '/')
+          return u.origin ? u.origin + u.pathname : u.pathname
+        } catch (e) {
+          return (this.url || '').replace(/\/(\d+|[0-9a-fA-F-]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12})\/?($|\?)/, '/$2')
+        }
+      })()
+
+      fields.forEach(field => {
+        const conf = field?.uniqueCheck
+
+        if (!conf) return
+
+        const confObj = (typeof conf === 'object') ? conf : {}
+        const param = confObj.param || field.prop || field.id
+        const url = confObj.url || defaultListUrl
+        const label = confObj.label || field.label || param
+        const entityName = confObj.entityName || ''
+
+        if (!Array.isArray(field.rules)) field.rules = []
+
+        field.rules.push(UniqueCheck({
+          url,
+          param,
+          label,
+          entityName,
+          getIgnoreId: currentIdGetter,
+          fieldName: field.prop || field.id
+        }))
+      })
     },
     _cleanFormValue(form, remoteMeta) {
       if (!form) {
@@ -181,8 +223,21 @@ export default {
       const mapped = {}
       Object.entries(errors || {}).forEach(([k, v]) => {
         let msg = v
-        if (Array.isArray(v)) msg = v.join('; ')
-        else if (typeof v === 'object' && v !== null) msg = JSON.stringify(v)
+        console.log(k, v)
+        // v是数组并且数组都是字符串，则拼接为字符串
+        if (Array.isArray(v) && v.every(item => typeof item === 'string')) msg = v.join('; ')
+        // 处理 [{"port":["请确保该值小于或者等于 65535。"]},{},{}] 这种情况
+        else if (Array.isArray(v) && v.every(item => _.isPlainObject(item))) {
+          const subMsg = []
+          v.forEach((subItem) => {
+            Object.values(subItem).forEach((subMsgArr) => {
+              if (Array.isArray(subMsgArr)) {
+                subMsg.push(...subMsgArr)
+              }
+            })
+          })
+          msg = subMsg.join(' ')
+        } else if (typeof v === 'object' && v !== null) msg = JSON.stringify(v)
         mapped[k] = String(msg || '')
       })
       this.serverErrors = mapped

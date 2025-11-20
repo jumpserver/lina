@@ -16,7 +16,7 @@
       closable
       size="small"
       type="info"
-      @click="handleTagClick(v,k)"
+      @click="handleTagClick(v, k)"
       @close.stop="handleTagClose(k)"
     >
       <strong v-if="v.label">{{ v.label + ':' }}</strong>
@@ -40,7 +40,6 @@
     />
     <span :class="isFocus ? 'is-focus ' : ''" class="keydown-focus">/</span>
   </div>
-
 </template>
 
 <script>
@@ -49,8 +48,7 @@ export default {
   props: {
     config: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     options: {
       type: Array,
@@ -90,13 +88,14 @@ export default {
     },
     filterMaps() {
       const data = {}
+      const keyword = 'search'
       for (let key in this.filterTags) {
         const value = this.filterTags[key]['value']
         if (key === '') {
-          key = 'search'
+          key = keyword
         }
-        if (key.startsWith('search')) {
-          data['search'] = (data.search ? data.search + ',' : '') + value
+        if (key.startsWith(keyword)) {
+          data[keyword] = (data[keyword] ? data[keyword] + ',' : '') + value
         } else {
           data[key] = value
         }
@@ -138,7 +137,7 @@ export default {
         this.emptyCount = 1
       }
     },
-    '$route'(to, from) {
+    $route(to, from) {
       if (from.query !== to.query) {
         this.filterTags = {}
         if (to.query && Object.keys(to.query).length) {
@@ -169,7 +168,7 @@ export default {
     // 获取url中的查询条件，判断是不是包含在当前查询条件里
     checkInTableColumns(options) {
       const searchFieldOptions = {}
-      const queryInfoValues = options.map((i) => i.value)
+      const queryInfoValues = options.map(i => i.value)
       const routeQuery = this.getUrlQuery ? this.$route?.query : {}
       const routeQueryKeysLength = Object.keys(routeQuery).length
       if (routeQueryKeysLength < 1) return searchFieldOptions

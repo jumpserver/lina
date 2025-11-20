@@ -149,6 +149,11 @@ export function getErrorResponseMsg(error) {
       .join('; ')
   } else if (typeof data === 'string') {
     return data
+  } else if (_.isPlainObject(data)) {
+    return Object.values(data)
+      .map(item => getErrorResponseMsg(item))
+      .filter(i => i)
+      .join('; ')
   } else {
     msg = error.toString()
   }

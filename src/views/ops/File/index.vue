@@ -55,6 +55,12 @@
           class="file-uploader"
         >
           <el-card>
+            <div class="file-uploader-header">
+              <span>{{ $t('selectFiles', {number: uploadFileList.length}) }}</span>
+              <el-tooltip v-if="uploadFileList.length > 0" :content="$t('ClearSelection')" placement="top">
+                <i class="el-icon-delete" @click="clearAllFiles" />
+              </el-tooltip>
+            </div>
             <el-upload
               v-if="ready"
               ref="upload"
@@ -402,7 +408,6 @@ export default {
       createJob(data).then(res => {
         this.progressLength = 0
         this.executionInfo.timeCost = 0
-        this.showProgress = true
         this.speedText = ''
         const form = new FormData()
         const start = Date.now()
@@ -430,13 +435,13 @@ export default {
             }
           }
         }).then(res => {
+          this.showProgress = true
           this.executionInfo.status = 'running'
           this.currentTaskId = res.task_id
           this.xtermConfig = { taskId: this.currentTaskId, type: 'shortcut_cmd' }
           this.setCostTimeInterval()
           this.writeExecutionOutput()
-        }).catch((error) => {
-          this.$message.error(this.$tc('Error'), error)
+        }).catch(() => {
           this.execute_stop()
         })
       })
@@ -450,6 +455,10 @@ export default {
     },
     handleSelectAssets(assets) {
       this.selectHosts = assets
+    },
+    clearAllFiles() {
+      this.$refs.upload.clearFiles()
+      this.uploadFileList = []
     }
   }
 }
@@ -515,8 +524,15 @@ export default {
   margin: 10px 0;
   min-width: 925px;
 
+  .file-uploader-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 5px;
+  }
+
   ::v-deep .el-card__body {
-    > div:first-child {
+    > div:nth-child(2) {
       //不要影响到 el-progress
       display: flex;
       position: relative;

@@ -1,5 +1,5 @@
-import _frompairs from 'lodash.frompairs'
-import _isplainobject from 'lodash.isplainobject'
+import _frompairs from 'lodash/fromPairs'
+import _isplainobject from 'lodash/isPlainObject'
 
 export function noop() {}
 
@@ -12,11 +12,9 @@ export function collect(content, key) {
         value: item.type === 'group' ? collect(item.items, key) : item[key]
       }))
       .filter(
-        ({ type, value }) =>
-          value !== undefined ||
-          (type === 'group' && Object.keys(value).length),
+        ({ type, value }) => value !== undefined || (type === 'group' && Object.keys(value).length)
       )
-      .map(({ id, value }) => [id, value]),
+      .map(({ id, value }) => [id, value])
   )
 }
 

@@ -93,8 +93,8 @@ export default {
         iVisible = true
         data = formValue
         url = `/api/v1/accounts/accounts/bulk/`
-        if (data.assets.length === 0) {
-          this.$message.error(this.$tc('PleaseSelectAsset'))
+        if ((!data.assets || data.assets.length === 0) && (!data.nodes || data.nodes.length === 0)) {
+          this.$message.error(this.$tc('PleaseSelectAssetOrNode'))
           return
         }
       }
@@ -107,6 +107,10 @@ export default {
           this.$emit('add', true)
         }
       }).catch(error => {
+        if (error?.response?.data?.code === 'no_valid_assets') {
+          this.$message.error(error?.response?.data?.detail)
+          return
+        }
         this.iVisible = true
         this.handleResult(null, error)
       })

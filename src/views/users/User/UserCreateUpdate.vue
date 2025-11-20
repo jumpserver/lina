@@ -46,8 +46,12 @@ export default {
       ],
       url: '/api/v1/users/users/',
       fieldsMeta: {
-        name: {},
-        username: {},
+        name: {
+          uniqueCheck: true
+        },
+        username: {
+          uniqueCheck: true
+        },
         password_strategy: {
           hidden: (formValue) => {
             return this.$route.params.id || formValue.source !== 'local'
@@ -60,7 +64,8 @@ export default {
           rules: [
             rules.EmailCheck,
             rules.Required
-          ]
+          ],
+          uniqueCheck: true
         },
         update_password: {
           label: this.$t('ChangePassword'),

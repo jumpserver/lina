@@ -26,6 +26,7 @@ import Passkey from './Passkey.vue'
 import Slack from './Slack.vue'
 import { getAuthItems } from './const'
 import { mapState } from 'vuex'
+import Integration from './Integration.vue'
 
 export default {
   components: {
@@ -45,7 +46,8 @@ export default {
     SAML2,
     OAuth2,
     Passkey,
-    Slack
+    Slack,
+    Integration
   },
   data() {
     return {
@@ -63,6 +65,10 @@ export default {
         {
           title: this.$t('Basic'),
           name: 'Basic'
+        },
+        {
+          title: this.$t('Integration'),
+          name: 'Integration'
         },
         ...this.authMethods.map(item => {
           return {

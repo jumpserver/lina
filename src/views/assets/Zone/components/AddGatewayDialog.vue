@@ -65,7 +65,7 @@ export default {
               multiple: true,
               clearable: true,
               ajax: {
-                url: '/api/v1/assets/assets/?gateway_enabled=true&is_gateway=1'
+                url: '/api/v1/assets/assets/?is_gateway=1'
               },
               disabledValues: this.object.gateways.map(item => item.id)
             }

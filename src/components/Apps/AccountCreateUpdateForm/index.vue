@@ -63,7 +63,7 @@ export default {
       encryptedFields: ['secret'],
       fields: [
         [this.$t('Basic'), ['name', 'username', 'privileged', 'su_from', 'su_from_username', 'template']],
-        [this.$t('Asset'), ['assets']],
+        [this.$t('Asset'), ['nodes', 'assets']],
         [this.$t('Secret'), [
           'secret_type', 'password', 'ssh_key', 'token',
           'access_key', 'passphrase', 'api_key',

@@ -107,8 +107,8 @@ export default {
         const formatterArgs = value?.formatterArgs
         // console.log('>>> name: ', key)
         // console.log('>>> formatter: ', formatter)
-        const detailFormaters = ['AmountFormatter', 'DetailFormatter']
-        if (formatter && detailFormaters.includes(formatter.name) && formatterArgs.drawer !== false) {
+        const detailFormatters = ['AmountFormatter', 'DetailFormatter']
+        if (formatter && detailFormatters.includes(formatter.name) && formatterArgs.drawer !== false) {
           formatterArgs.onClick = this.onDetail
         }
       }
@@ -223,7 +223,6 @@ export default {
       }
 
       title = actionLabel + this.$t('WordSep') + toLowerCaseExcludeAbbr(title)
-
       return title
     },
     getDefaultDrawer(action) {
@@ -295,7 +294,6 @@ export default {
         // 3. 设置组件
         this.drawerComponent = this.getDrawerComponent(action, payload)
         this.$log.debug('>>> drawerComponent: ', this.drawerComponent)
-        this.drawerTitle = this.getActionDrawerTitle({ action, row, col, cellValue, payload })
 
         // 4. 如果没有组件，尝试获取默认组件
         if (!this.drawerComponent) {
@@ -312,6 +310,7 @@ export default {
           const actionMeta = await this.$store.getters['common/drawerActionMeta']
           this.title = this.getDrawerTitle({ action, ...actionMeta })
         }
+        this.drawerTitle = this.getActionDrawerTitle({ action, row, col, cellValue, payload })
 
         // 7. 等待下一个 tick，确保组件已设置
         await this.$nextTick()

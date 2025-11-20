@@ -337,6 +337,7 @@ export default {
   height: 40px;
   padding: 5px 0;
   min-width: 200px;
+  margin-right: 5px;
 
   .search-trigger {
     height: 30px;
@@ -345,32 +346,39 @@ export default {
     .search-input {
       height: 30px;
       line-height: 1;
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: rgba(5, 5, 5, 0.1);
       border-radius: 4px;
       cursor: pointer;
 
       &:hover {
-        background-color: rgba(0, 0, 0, 0.1);
+        background-color: rgba(0, 0, 0, 0.2);
       }
 
-      ::v-deep .el-input__inner {
-        height: 30px;
-        line-height: 1;
-        background: transparent;
-        border: none;
-        color: #fff;
-        cursor: pointer;
-      }
+      ::v-deep {
+        .el-input__inner {
+          height: 30px;
+          line-height: 1;
+          background: transparent;
+          border: none;
+          color: #fff;
+          cursor: pointer;
 
-      ::v-deep .el-input__inner::placeholder {
-        color: #fff;
-        opacity: 0.7;
-      }
+          &::placeholder {
+            color: #fff;
+            opacity: 0.7;
+          }
+        }
 
-      ::v-deep .el-input__suffix {
-        display: flex;
-        align-items: center;
-        height: 100%;
+        .el-input__prefix .el-input__icon {
+          font-size: 15px;
+          line-height: 32px;
+        }
+
+        .el-input__suffix {
+          display: flex;
+          align-items: center;
+          height: 100%;
+        }
       }
 
       .search-shortcut {
@@ -394,11 +402,9 @@ export default {
     }
   }
 }
-</style>
 
-<style lang="scss">
 /* 搜索模态框全局样式 */
-.search-modal {
+::v-deep .search-modal {
   &.el-dialog {
     position: fixed;
     top: 5px;
@@ -407,8 +413,7 @@ export default {
     max-height: calc(100vh - 10px);
     max-width: calc(100vw - 10px);
     border-radius: 5px;
-    // box-shadow: 0 0 8px 4px #00000014;
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 3px -2px, rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.12) 0px 1px 8px 0px;
+    box-shadow: 0 0 8px 4px #00000014;
 
     .el-dialog__body {
       padding: 0;
@@ -420,17 +425,17 @@ export default {
   }
 }
 
-body .v-modal {
+::v-deep body .v-modal {
   opacity: 0.3;
 }
 
-.search-modal-content {
+::v-deep .search-modal-content {
   height: 70vh;
   display: flex;
   flex-direction: column;
 }
 
-.search-input-wrapper {
+::v-deep .search-input-wrapper {
   padding: 20px;
   border-bottom: 1px solid #f0f0f0;
   // background: #fff;
@@ -444,7 +449,7 @@ body .v-modal {
   }
 }
 
-.search-results {
+::v-deep .search-results {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
@@ -469,7 +474,7 @@ body .v-modal {
   }
 }
 
-.section-title {
+::v-deep .section-title {
   padding: 12px 24px 6px;
   font-size: 12px;
   line-height: 1.5;
@@ -498,12 +503,12 @@ body .v-modal {
 
     .clear-icon {
       font-size: 14px;
-    color: red;
+      color: red;
     }
   }
 }
 
-.list {
+::v-deep .list {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -574,15 +579,15 @@ body .v-modal {
   }
 }
 
-.loading,
-.empty {
+::v-deep .loading,
+::v-deep .empty {
   padding: 32px 24px;
   color: #909399;
   text-align: center;
   font-size: 14px;
 }
 
-.section.placeholder {
+::v-deep .section.placeholder {
   padding: 32px 24px;
 
   .placeholder-content {
@@ -630,4 +635,3 @@ body .v-modal {
   }
 }
 </style>
-

@@ -1,6 +1,6 @@
 // i18n.js
 import Vue from 'vue'
-import locale from 'elementui-lts/lib/locale'
+import locale from 'element-ui/lib/locale'
 import VueI18n from 'vue-i18n'
 import messages from './langs'
 import date from './date'
@@ -54,7 +54,7 @@ export async function fetchTranslationsFromAPI() {
       }
     }
   } catch (error) {
-    alert(error)
+    console.log(error)
   } finally {
     await store.dispatch('app/setI18nLoaded', true)
   }

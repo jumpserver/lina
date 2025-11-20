@@ -86,13 +86,11 @@ export default {
     },
     datePick: {
       type: Function,
-      default: (val) => {
-      }
+      default: val => {}
     },
     searchTable: {
       type: Function,
-      default: (val) => {
-      }
+      default: val => {}
     },
     selectedRows: {
       type: Array,
@@ -153,7 +151,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 $innerHeight: 28px;
 $headerHeight: 30px;
 
@@ -239,5 +237,4 @@ $headerHeight: 30px;
   display: block;
   padding: 5px 20px;
 }
-
 </style>
