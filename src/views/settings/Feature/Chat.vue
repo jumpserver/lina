@@ -10,6 +10,7 @@
 import { GenericCreateUpdateForm } from '@/layout/components'
 import IBox from '@/components/Common/IBox/index.vue'
 import { mapGetters } from 'vuex'
+import ChatProvidersField from './components/ChatProvidersField.vue'
 
 export default {
   components: {
@@ -17,104 +18,52 @@ export default {
     GenericCreateUpdateForm
   },
   data() {
-    const vm = this
+    const hasProviders = (formValue) => {
+      const providers = formValue?.CHAT_AI_PROVIDERS?.providers || []
+      return Array.isArray(providers) && providers.length > 0
+    }
     return {
       url: '/api/v1/settings/setting/?category=chat',
       hasReset: false,
       moreButtons: [
-        {
-          title: this.$t('Test'),
-          loading: false,
-          callback: function(value, form, btn) {
-            btn.loading = true
-            vm.$axios.post(
-              '/api/v1/settings/chatai/testing/',
-              value
-            ).then(res => {
-              vm.$message.success(res['msg'])
-            }).catch(() => {
-              vm.$log.error('err occur')
-            }).finally(() => {
-              btn.loading = false
-            })
-          }
-        }
       ],
       encryptedFields: ['VAULT_HCP_TOKEN'],
       fields: [
         'CHAT_AI_ENABLED',
         'CHAT_AI_METHOD',
-        'CHAT_AI_EMBED_URL',
-        'CHAT_AI_TYPE',
-        'DEEPSEEK_BASE_URL',
-        'DEEPSEEK_API_KEY',
-        'DEEPSEEK_PROXY',
-        'DEEPSEEK_MODEL',
-        'GPT_BASE_URL',
-        'GPT_API_KEY',
-        'GPT_PROXY',
-        'GPT_MODEL'
+        'CHAT_AI_PROVIDERS',
+        'CHAT_AI_EMBED_URL'
       ],
       fieldsMeta: {
         CHAT_AI_TYPE: {
           hidden: (formValue) => {
-            return formValue.CHAT_AI_METHOD !== 'api'
+            return formValue.CHAT_AI_METHOD !== 'api' || hasProviders(formValue)
           }
         },
-        GPT_BASE_URL: {
-          el: {
-            autocomplete: 'new-password'
-          },
-          hidden: (formValue) => {
-            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'gpt'
-          }
-        },
-        GPT_API_KEY: {
-          el: {
-            autocomplete: 'new-password'
-          },
-          hidden: (formValue) => {
-            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'gpt'
-          }
-        },
-        GPT_PROXY: {
-          hidden: (formValue) => {
-            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'gpt'
-          }
-        },
-        GPT_MODEL: {
-          hidden: (formValue) => {
-            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'gpt'
-          }
-        },
-        DEEPSEEK_BASE_URL: {
-          el: {
-            autocomplete: 'new-password'
-          },
-          hidden: (formValue) => {
-            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'deep-seek'
-          }
-        },
-        DEEPSEEK_API_KEY: {
-          el: {
-            autocomplete: 'new-password'
-          },
-          hidden: (formValue) => {
-            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'deep-seek'
-          }
-        },
-        DEEPSEEK_PROXY: {
-          hidden: (formValue) => {
-            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'deep-seek'
-          }
-        },
-        DEEPSEEK_MODEL: {
-          hidden: (formValue) => {
-            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'deep-seek'
-          }
+        CHAT_AI_PROVIDERS: {
+          component: ChatProvidersField,
+          hidden: (formValue) => formValue.CHAT_AI_METHOD !== 'api'
         },
         CHAT_AI_EMBED_URL: {
           hidden: (formValue) => formValue.CHAT_AI_METHOD !== 'embed'
+        }
+      },
+      afterGetFormValue(formValue) {
+        const providers = Array.isArray(formValue.CHAT_AI_PROVIDERS) ? formValue.CHAT_AI_PROVIDERS : []
+        return {
+          ...formValue,
+          CHAT_AI_PROVIDERS: {
+            providers: providers
+          }
+        }
+      },
+      cleanFormValue(values) {
+        const config = values.CHAT_AI_PROVIDERS || {}
+        const providers = Array.isArray(config.providers) ? config.providers : []
+        return {
+          ...values,
+          CHAT_AI_PROVIDERS: providers,
+          CHAT_AI_TYPE: values.CHAT_AI_TYPE || providers[0]?.type || values.CHAT_AI_TYPE
         }
       },
       submitMethod() {
