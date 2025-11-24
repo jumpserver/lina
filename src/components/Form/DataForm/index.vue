@@ -149,7 +149,7 @@ export default {
     },
     labelWidth: {
       type: String,
-      default: '25%'
+      default: '18.2%'
     }
   },
   data() {
