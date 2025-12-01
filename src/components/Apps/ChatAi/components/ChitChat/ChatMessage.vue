@@ -3,9 +3,18 @@
     <div class="chart-item-container">
       <div class="avatar">
         <el-avatar
-          :src="isUserRole ? userUrl : chatUrl"
+          v-if="isUserRole"
+          :src="userUrl"
           class="header-avatar"
         />
+        <el-avatar
+          v-else-if="!hasModelIcon"
+          :src="chatUrl"
+          class="header-avatar"
+        />
+        <el-avatar v-else class="header-avatar">
+          <ModelIcon :name="modelIconName" class-name="model-icon" />
+        </el-avatar>
       </div>
       <div class="content">
         <div class="operational">
@@ -76,6 +85,7 @@
 
 <script>
 import MessageText from './MessageText.vue'
+import ModelIcon from '../../models/ModelIcon.vue'
 import { mapGetters, mapState } from 'vuex'
 import { copy } from '@/utils/common/index'
 import { useChat } from '../../useChat.js'
@@ -85,13 +95,18 @@ const { setLoading, removeLoadingMessageInChat } = useChat()
 
 export default {
   components: {
-    MessageText
+    MessageText,
+    ModelIcon
   },
   props: {
     item: {
       type: Object,
       default: () => {
       }
+    },
+    selectedModel: {
+      type: String,
+      default: ''
     },
     isTerminal: {
       type: Boolean,
@@ -128,6 +143,15 @@ export default {
       return (this.item.type === 'finish' && this.item.result.content === '')
         ? this.$i18n.t('ServerBusyRetry')
         : ''
+    },
+    modelIconName() {
+      return (this.item?.message?.model || this.selectedModel || this.publicSettings.CHAT_AI_TYPE || '').toString()
+    },
+    hasModelIcon() {
+      const name = this.modelIconName.toLowerCase()
+      console.log('-------------- modelIconName --------------', name)
+      if (!name) return false
+      return ['gpt', 'deep-seek', 'grok', 'claude', 'gemini'].some(key => name.includes(key))
     },
     chatUrl() {
       return this.publicSettings.CHAT_AI_TYPE === 'gpt'
@@ -175,6 +199,12 @@ export default {
         &::v-deep img {
           background-color: #fff;
         }
+      }
+
+      .model-icon {
+        width: 100%;
+        height: 100%;
+        display: block;
       }
     }
 

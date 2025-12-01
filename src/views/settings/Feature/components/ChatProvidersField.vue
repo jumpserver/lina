@@ -23,7 +23,7 @@
           <el-input
             v-model="row.base_url"
             size="mini"
-            placeholder="https://api.example.com/v1"
+            :placeholder="defaultKaelBase"
             @input="emitChange"
           />
         </template>
@@ -45,6 +45,16 @@
             v-model="row.proxy"
             size="mini"
             placeholder="http://ip:port"
+            @input="emitChange"
+          />
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('Model')" min-width="140">
+        <template #default="{ row }">
+          <el-input
+            v-model="row.model"
+            size="mini"
+            placeholder="gpt-4o-mini"
             @input="emitChange"
           />
         </template>
@@ -76,6 +86,14 @@
 <script>
 import cloneDeep from 'lodash/cloneDeep'
 
+const rawKaelBase = process.env.VUE_APP_KAEL_HOST || '/kael/api'
+let defaultKaelBase = rawKaelBase
+if (!defaultKaelBase.includes('/kael')) {
+  defaultKaelBase = `${defaultKaelBase.replace(/\/$/, '')}/kael/api`
+} else if (!defaultKaelBase.includes('/kael/api')) {
+  defaultKaelBase = `${defaultKaelBase.replace(/\/$/, '')}/api`
+}
+
 export default {
   name: 'ChatProvidersField',
   props: {
@@ -87,7 +105,8 @@ export default {
       type: Array,
       default: () => ([
         { label: 'Ollama', value: 'ollama' },
-        { label: 'OpenAI', value: 'openai' }
+        { label: 'OpenAI', value: 'openai' },
+        { label: 'Kael', value: 'kael' }
       ])
     }
   },
@@ -95,7 +114,8 @@ export default {
     const { providers, defaultProvider } = this.normalizeValue(this.value)
     return {
       localProviders: providers,
-      defaultProvider: this.pickDefault(defaultProvider, providers)
+      defaultProvider: this.pickDefault(defaultProvider, providers),
+      defaultKaelBase
     }
   },
   watch: {
@@ -111,9 +131,10 @@ export default {
   methods: {
     emptyProvider() {
       return {
-        type: 'openai',
-        base_url: 'https://api.openai.com/v1',
-        api_key: 'sk-JumpserveraAndWebOpenUI',
+        type: 'kael',
+        base_url: defaultKaelBase,
+        api_key: '',
+        model: 'gpt-4o-mini',
         proxy: '',
         is_assistant: false
       }
@@ -144,9 +165,9 @@ export default {
       this.$emit('change', { providers, defaultProvider })
     },
     handleAssistantChange(current) {
-      if (current.IsAssistant) {
+      if (current.is_assistant) {
         this.localProviders.forEach(item => {
-          if (item !== current) item.IsAssistant = false
+          if (item !== current) item.is_assistant = false
         })
       }
       this.emitChange()
