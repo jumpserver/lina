@@ -1,9 +1,9 @@
 <template>
   <div class="container">
-    <div v-if="hasPrompt" class="chat-action">
+    <div class="chat-action">
       <Select2
         v-model="select.value"
-        :disabled="isLoading || isSelectDisabled"
+        :disabled="isLoading || isSelectDisabled || loading || !options.length"
         v-bind="select"
         @change="onSelectChange"
       />
@@ -37,9 +37,17 @@ export default {
       type: Boolean,
       default: false
     },
-    hasPrompt: {
+    modelOptions: {
+      type: Array,
+      default: () => []
+    },
+    selectedModel: {
+      type: String,
+      default: ''
+    },
+    loading: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   data() {
@@ -47,15 +55,10 @@ export default {
       isIM: false,
       inputValue: '',
       select: {
-        url: '/api/v1/settings/chatai-prompts/',
         value: '',
         multiple: false,
-        placeholder: this.$t('Role'),
-        ajax: {
-          transformOption: (item) => {
-            return { label: item.name, value: item.content }
-          }
-        }
+        placeholder: this.$t('Model'),
+        options: []
       }
     }
   },
@@ -64,7 +67,26 @@ export default {
       isLoading: state => state.chat.loading
     }),
     isSelectDisabled() {
-      return !!this.select.value
+      return false
+    },
+    options() {
+      return (this.modelOptions || []).map(item => {
+        return { label: item.name || item.id, value: item.id }
+      })
+    }
+  },
+  watch: {
+    modelOptions: {
+      immediate: true,
+      handler(val) {
+        this.select.options = (val || []).map(item => ({ label: item.name || item.id, value: item.id }))
+      }
+    },
+    selectedModel: {
+      immediate: true,
+      handler(val) {
+        this.select.value = val || ''
+      }
     }
   },
   methods: {
@@ -84,7 +106,7 @@ export default {
       this.inputValue = ''
     },
     onSelectChange(value) {
-      this.$emit('select-prompt', value)
+      this.$emit('select-model', value)
     }
   }
 }

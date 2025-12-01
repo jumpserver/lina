@@ -46,7 +46,6 @@
 import Sidebar from './components/Sidebar/index.vue'
 import Chat from './components/ChitChat/index.vue'
 import { getInputFocus } from './useChat.js'
-import { ws } from '@/utils/request'
 import DrawerPanel from '@/components/Apps/DrawerPanel/index.vue'
 import { ObjectLocalStorage } from '@/utils/common'
 import { mapGetters } from 'vuex'
@@ -82,7 +81,8 @@ export default {
       height: '400px',
       expanded: false,
       clientOffset: {},
-      currentTerminalContent: {}
+      currentTerminalContent: {},
+      initialized: false
     }
   },
   computed: {
@@ -123,11 +123,18 @@ export default {
         document.body.appendChild(script)
       }
     },
+    initAssistant() {
+      if (this.initialized) return
+      this.initialized = true
+      this.$nextTick(() => {
+        this.$refs.component?.init()
+      })
+    },
     handlePostMessage() {
       window.addEventListener('message', (event) => {
         if (event.data === 'show-chat-panel') {
           this.$refs.drawer.show = true
-          this.initWebSocket()
+          this.initAssistant()
           return
         }
         const msg = event.data
@@ -152,11 +159,6 @@ export default {
       }
       this.$refs.drawer.handleHeaderMoveUp(event)
     },
-    initWebSocket() {
-      if (!ws) {
-        this.$refs.component?.init()
-      }
-    },
     onClose() {
       this.$refs.drawer.show = false
     },
@@ -170,7 +172,6 @@ export default {
     },
     save_pannel_settings() {
       aiPannelLocalStorage.set('expanded', this.expanded)
-      console.log('AI panel settings saved:', this.expanded)
     },
     updateExpandedState(expanded) {
       this.expanded = expanded
@@ -184,8 +185,8 @@ export default {
       })
     },
     onToggle(status) {
-      this.initWebSocket()
       if (status) {
+        this.initAssistant()
         getInputFocus()
       }
     }
