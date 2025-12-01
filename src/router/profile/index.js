@@ -124,6 +124,16 @@ export default {
       }
     },
     {
+      path: '/profile/access-token',
+      component: () => import('@/views/profile/AccessToken'),
+      name: 'AccessToken',
+      meta: {
+        title: i18n.t('AccessToken'),
+        icon: 'access-token',
+        permissions: ['oauth2_provider.view_accesstoken']
+      }
+    },
+    {
       path: '/profile/preferences',
       name: 'Preferences',
       component: () => import('@/views/profile/Preferences/index'),
