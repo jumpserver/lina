@@ -29,7 +29,7 @@ export default {
             'CAS_RENAME_ATTRIBUTES'
           ]],
           [this.$t('Other'), [
-            'CAS_ORG_IDS', 'CAS_CREATE_USER', 'CAS_LOGOUT_COMPLETELY'
+            'CAS_ORG_IDS', 'CAS_LOGOUT_COMPLETELY'
           ]]
         ],
         fieldsMeta: {
