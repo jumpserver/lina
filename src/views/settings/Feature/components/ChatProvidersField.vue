@@ -59,15 +59,6 @@
           />
         </template>
       </el-table-column>
-      <el-table-column :label="$t('Assistant')" min-width="160">
-        <template #default="{ row }">
-          <el-switch
-            v-model="row.is_assistant"
-            size="mini"
-            @change="handleAssistantChange(row)"
-          />
-        </template>
-      </el-table-column>
       <el-table-column :label="$t('Actions')" width="100" align="center">
         <template #default="{ $index }">
           <el-button
@@ -135,8 +126,7 @@ export default {
         base_url: defaultKaelBase,
         api_key: '',
         model: 'gpt-4o-mini',
-        proxy: '',
-        is_assistant: false
+        proxy: ''
       }
     },
     normalizeValue(v) {
@@ -165,11 +155,6 @@ export default {
       this.$emit('change', { providers, defaultProvider })
     },
     handleAssistantChange(current) {
-      if (current.is_assistant) {
-        this.localProviders.forEach(item => {
-          if (item !== current) item.is_assistant = false
-        })
-      }
       this.emitChange()
     },
     addProvider() {
