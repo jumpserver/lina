@@ -31,7 +31,7 @@ export default {
             [
               'SECURITY_MFA_AUTH',
               'SECURITY_MFA_IN_LOGIN_PAGE',
-              'SECURITY_MFA_BY_EMAIL',
+              'SECURITY_MFA_ENABLED_BACKENDS',
               'SECURITY_MFA_AUTH_ENABLED_FOR_THIRD_PARTY',
               'SECURITY_MFA_VERIFY_TTL',
               'OTP_ISSUER_NAME', 'OTP_VALID_WINDOW'
