@@ -7,12 +7,7 @@
           :src="userUrl"
           class="header-avatar"
         />
-        <el-avatar
-          v-else-if="!hasModelIcon"
-          :src="chatUrl"
-          class="header-avatar"
-        />
-        <el-avatar v-else class="header-avatar">
+        <el-avatar v-else class="header-avatar" :style="{ backgroundColor: 'transparent' }">
           <ModelIcon :name="modelIconName" class-name="model-icon" />
         </el-avatar>
       </div>
@@ -146,17 +141,6 @@ export default {
     },
     modelIconName() {
       return (this.item?.message?.model || this.selectedModel || this.publicSettings.CHAT_AI_TYPE || '').toString()
-    },
-    hasModelIcon() {
-      const name = this.modelIconName.toLowerCase()
-      console.log('-------------- modelIconName --------------', name)
-      if (!name) return false
-      return ['gpt', 'deep-seek', 'grok', 'claude', 'gemini'].some(key => name.includes(key))
-    },
-    chatUrl() {
-      return this.publicSettings.CHAT_AI_TYPE === 'gpt'
-        ? require('@/assets/img/chat.png')
-        : require('@/assets/img/deepSeek.png')
     }
   },
   methods: {
@@ -195,6 +179,7 @@ export default {
         width: 100%;
         height: 100%;
         border-radius: 50%;
+        background-color: transparent;
 
         &::v-deep img {
           background-color: #fff;

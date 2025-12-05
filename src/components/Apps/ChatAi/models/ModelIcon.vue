@@ -39,6 +39,7 @@ export default {
       if (!name) return null
       if (name.includes('gpt')) return ChatGPTIcon
       if (name.includes('deep-seek')) return DeepSeekIcon
+      if (name.includes('deepseek')) return DeepSeekIcon
       if (name.includes('grok')) return GrokIcon
       if (name.includes('claude')) return ClaudeIcon
       if (name.includes('gemini')) return GeminiIcon
