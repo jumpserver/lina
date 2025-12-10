@@ -23,7 +23,7 @@
           <el-input
             v-model="row.base_url"
             size="mini"
-            :placeholder="defaultKaelBase"
+            :placeholder="openAIBaseUrl"
             @input="emitChange"
           />
         </template>
@@ -49,16 +49,6 @@
           />
         </template>
       </el-table-column>
-      <el-table-column :label="$t('Model')" min-width="140">
-        <template #default="{ row }">
-          <el-input
-            v-model="row.model"
-            size="mini"
-            placeholder="gpt-4o-mini"
-            @input="emitChange"
-          />
-        </template>
-      </el-table-column>
       <el-table-column :label="$t('Actions')" width="100" align="center">
         <template #default="{ $index }">
           <el-button
@@ -77,14 +67,6 @@
 <script>
 import cloneDeep from 'lodash/cloneDeep'
 
-const rawKaelBase = process.env.VUE_APP_KAEL_HOST || '/kael/api'
-let defaultKaelBase = rawKaelBase
-if (!defaultKaelBase.includes('/kael')) {
-  defaultKaelBase = `${defaultKaelBase.replace(/\/$/, '')}/kael/api`
-} else if (!defaultKaelBase.includes('/kael/api')) {
-  defaultKaelBase = `${defaultKaelBase.replace(/\/$/, '')}/api`
-}
-
 export default {
   name: 'ChatProvidersField',
   props: {
@@ -96,8 +78,7 @@ export default {
       type: Array,
       default: () => ([
         { label: 'Ollama', value: 'ollama' },
-        { label: 'OpenAI', value: 'openai' },
-        { label: 'Kael', value: 'kael' }
+        { label: 'OpenAI', value: 'openai' }
       ])
     }
   },
@@ -106,7 +87,7 @@ export default {
     return {
       localProviders: providers,
       defaultProvider: this.pickDefault(defaultProvider, providers),
-      defaultKaelBase
+      openAIBaseUrl: 'https://api.openai.com/v1'
     }
   },
   watch: {
@@ -122,10 +103,9 @@ export default {
   methods: {
     emptyProvider() {
       return {
-        type: 'kael',
-        base_url: defaultKaelBase,
+        type: 'openai',
+        base_url: this.openAIBaseUrl,
         api_key: '',
-        model: 'gpt-4o-mini',
         proxy: ''
       }
     },
