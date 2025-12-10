@@ -1,12 +1,59 @@
 <template>
   <div class="container">
     <div class="chat-action">
-      <Select2
-        v-model="select.value"
-        :disabled="isLoading || isSelectDisabled || loading || !options.length"
-        v-bind="select"
-        @change="onSelectChange"
-      />
+      <div class="model-select">
+        <Select2
+          v-model="select.value"
+          :disabled="isLoading || isSelectDisabled || loading || !options.length"
+          v-bind="select"
+          @change="onSelectChange"
+        />
+      </div>
+      <el-dropdown
+        :hide-on-click="false"
+        trigger="click"
+      >
+        <span class="el-dropdown-link">
+          <i class="fa fa-plug" />
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <div class="menu-section">
+            <div v-if="toolsLoading">
+              <i class="el-icon-loading" /> {{ $t('Loading') }}
+            </div>
+            <div v-else class="menu-body">
+              <div>
+                <div
+                  v-for="item in toolOptions"
+                  :key="item.value"
+                >
+                  <div>
+                    <i class="fa fa-wrench item-icon" />
+                    <span class="item-label">{{ item.label }}</span>
+                    <el-switch
+                      :value="selectedToolsSet.has(item.value)"
+                      @change="() => toggleTool(item.value)"
+                    />
+                  </div>
+                </div>
+                <div
+                  v-for="item in toolServerOptions"
+                  :key="item.value"
+                >
+                  <div>
+                    <i class="fa fa-server item-icon" />
+                    <span class="item-label">{{ item.label }}</span>
+                    <el-switch
+                      :value="selectedToolServersSet.has(item.value)"
+                      @change="() => toggleToolServer(item.value)"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </el-dropdown-menu>
+      </el-dropdown>
     </div>
     <div class="chat-input">
       <el-input
@@ -48,6 +95,26 @@ export default {
     loading: {
       type: Boolean,
       default: false
+    },
+    toolOptions: {
+      type: Array,
+      default: () => []
+    },
+    toolServerOptions: {
+      type: Array,
+      default: () => []
+    },
+    selectedTools: {
+      type: Array,
+      default: () => []
+    },
+    selectedToolServers: {
+      type: Array,
+      default: () => []
+    },
+    toolsLoading: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -73,6 +140,12 @@ export default {
       return (this.modelOptions || []).map(item => {
         return { label: item.name || item.id, value: item.id }
       })
+    },
+    selectedToolsSet() {
+      return new Set(this.selectedTools || [])
+    },
+    selectedToolServersSet() {
+      return new Set(this.selectedToolServers || [])
     }
   },
   watch: {
@@ -107,6 +180,24 @@ export default {
     },
     onSelectChange(value) {
       this.$emit('select-model', value)
+    },
+    toggleTool(id) {
+      const set = new Set(this.selectedTools || [])
+      if (set.has(id)) {
+        set.delete(id)
+      } else {
+        set.add(id)
+      }
+      this.$emit('select-tools', Array.from(set))
+    },
+    toggleToolServer(id) {
+      const set = new Set(this.selectedToolServers || [])
+      if (set.has(id)) {
+        set.delete(id)
+      } else {
+        set.add(id)
+      }
+      this.$emit('select-tool-servers', Array.from(set))
     }
   }
 }
@@ -121,9 +212,18 @@ export default {
   .chat-action {
     width: 100%;
     margin: 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .model-select {
+      flex: 0 0 48%;
+      max-width: 240px;
+      min-width: 160px;
+    }
 
     &::v-deep .el-select {
-      width: 50%;
+      width: 100%;
 
       .el-input__inner {
         height: 28px;

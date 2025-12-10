@@ -42,8 +42,15 @@
         :model-options="models"
         :selected-model="selectedModel"
         :loading="modelsLoading"
+        :tool-options="toolOptions"
+        :tool-server-options="toolServerOptions"
+        :selected-tools="selectedToolIds"
+        :selected-tool-servers="selectedToolServerIds"
+        :tools-loading="toolsLoading"
         @send="onSendHandle"
         @select-model="onSelectModel"
+        @select-tools="onSelectTools"
+        @select-tool-servers="onSelectToolServers"
       />
     </div>
   </div>
@@ -56,6 +63,7 @@ import { mapGetters, mapState } from 'vuex'
 import { getInputFocus, useChat } from '../../useChat.js'
 import io from 'socket.io-client'
 import { v4 as uuidv4 } from 'uuid'
+import yaml from 'js-yaml'
 
 const {
   setLoading,
@@ -92,7 +100,14 @@ export default {
       models: [],
       selectedModel: '',
       sessionId: '',
-      socket: null
+      socket: null,
+      tools: [],
+      selectedToolIds: [],
+      toolsLoaded: false,
+      toolServers: [],
+      toolServersLoaded: false,
+      selectedToolServerIds: [],
+      toolsLoading: false
     }
   },
   computed: {
@@ -102,7 +117,19 @@ export default {
     }),
     ...mapGetters([
       'publicSettings'
-    ])
+    ]),
+    toolOptions() {
+      return (this.tools || []).map(item => ({
+        label: item?.name || item?.id,
+        value: false
+      }))
+    },
+    toolServerOptions() {
+      return (this.toolServers || []).map(server => ({
+        label: server?.info?.title || server?.info?.name || server?.url || server?.id,
+        value: server?.id
+      }))
+    }
   },
   methods: {
     init() {
@@ -114,6 +141,8 @@ export default {
       if (!this.modelsInitialized) {
         this.modelsInitialized = true
         this.ensureModels()
+        this.ensureToolServers()
+        this.ensureTools()
       }
     },
     initSocket() {
@@ -333,8 +362,6 @@ export default {
       const startIndex = chats.findIndex(chat => chat?.message?.role === 'user')
       if (startIndex === -1) return []
 
-      console.log('---------------- buildCompletedMessages ----------------', chats)
-
       let parentId = null
       for (let i = startIndex; i < chats.length; i += 1) {
         const chat = chats[i] || {}
@@ -489,6 +516,12 @@ export default {
       if (!this.modelsLoaded) {
         await this.fetchModels(provider, headers)
       }
+      if (!this.toolsLoaded) {
+        await this.fetchTools(provider, headers)
+      }
+      if (!this.toolServersLoaded) {
+        await this.ensureToolServers()
+      }
 
       if (!this.chatId) {
         await this.createChat(provider, userId, value, headers)
@@ -504,6 +537,11 @@ export default {
         id: modelId,
         name: modelId
       }
+      const selectedToolIds = Array.isArray(this.selectedToolIds) ? this.selectedToolIds.filter(Boolean) : []
+      const availableToolServers = this.toolServers || []
+      const selectedToolServers = Array.isArray(this.selectedToolServerIds) && this.selectedToolServerIds.length
+        ? availableToolServers.filter(server => this.selectedToolServerIds.includes(server.id))
+        : availableToolServers
 
       const payload = {
         stream: true,
@@ -512,7 +550,8 @@ export default {
         chat_id: this.chatId || undefined,
         session_id: this.sessionId,
         params: {},
-        tool_servers: [],
+        tool_servers: selectedToolServers,
+        ...(selectedToolIds.length ? { tool_ids: selectedToolIds } : {}),
         features: payloadFeatures,
         variables: payloadVariables,
         model_item: payloadModelItem,
@@ -773,6 +812,276 @@ export default {
       }
       await this.fetchModels(provider, headers)
     },
+    async fetchTools(provider, headers = {}) {
+      try {
+        this.toolsLoading = true
+        const baseUrl = this.getApiBase(provider)
+        const res = await fetch(`${baseUrl}/v1/tools/`, {
+          method: 'GET',
+          headers,
+          credentials: 'include'
+        })
+        if (!res.ok) {
+          console.warn('fetch tools failed', res.status)
+          this.toolsLoaded = true
+          return
+        }
+        const data = await res.json()
+        if (Array.isArray(data)) {
+          this.tools = data
+          if (!this.selectedToolIds.length) {
+            this.selectedToolIds = data.map(item => item?.id).filter(Boolean)
+          } else {
+            // drop stale selections
+            const validIds = data.map(item => item?.id)
+            this.selectedToolIds = this.selectedToolIds.filter(id => validIds.includes(id))
+          }
+        }
+      } catch (err) {
+        console.warn('fetch tools error', err)
+      } finally {
+        this.toolsLoaded = true
+        this.toolsLoading = false
+      }
+    },
+    async ensureTools() {
+      const provider = this.getActiveProvider()
+      if (!provider) return
+      const headers = {}
+      if (provider.api_key) {
+        headers.Authorization = `Bearer ${provider.api_key}`
+      }
+      await this.fetchTools(provider, headers)
+    },
+    async ensureToolServers() {
+      try {
+        const servers = this.getStoredToolServers()
+        if (!servers.length) {
+          this.toolServers = []
+          return
+        }
+        const loaded = await this.loadToolServers(servers)
+        this.toolServers = loaded
+        if (!this.selectedToolServerIds.length) {
+          this.selectedToolServerIds = loaded.map(item => item.id)
+        } else {
+          const validIds = loaded.map(item => item.id)
+          this.selectedToolServerIds = this.selectedToolServerIds.filter(id => validIds.includes(id))
+        }
+      } catch (err) {
+        console.warn('load tool servers error', err)
+        this.toolServers = []
+      } finally {
+        this.toolServersLoaded = true
+      }
+    },
+    getStoredToolServers() {
+      const baseKey = 'kael:user-settings'
+      const userName = (this.$store?.getters?.user?.name || '').trim()
+      const keys = userName ? [`${baseKey}:${userName}`, baseKey] : [baseKey]
+      for (const key of keys) {
+        try {
+          const raw = localStorage.getItem(key)
+          if (!raw) continue
+          const parsed = JSON.parse(raw)
+          const servers = parsed?.ui?.toolServers
+          if (Array.isArray(servers)) {
+            return servers
+          }
+        } catch (err) {
+          console.warn('parse stored tool servers error', err)
+        }
+      }
+      return []
+    },
+    async loadToolServers(servers) {
+      const tasks = []
+      servers.forEach((server, idx) => {
+        if (server?.config?.enable && (server.type || 'openapi') === 'openapi') {
+          tasks.push(this.fetchToolServer(server, idx))
+        }
+      })
+      const results = await Promise.all(tasks)
+      return results.filter(Boolean)
+    },
+    async fetchToolServer(server, idx) {
+      try {
+        const authType = server?.auth_type || 'bearer'
+        const headers = {
+          Accept: 'application/json'
+        }
+        if (authType === 'bearer' && server?.key) {
+          headers.Authorization = `Bearer ${server.key}`
+        } else if (authType === 'session' && localStorage.token) {
+          headers.Authorization = `Bearer ${localStorage.token}`
+        }
+
+        const specType = server?.spec_type || 'url'
+        let spec = null
+        if (specType === 'url') {
+          const path = server?.path || 'openapi.json'
+          const url = path.includes('://')
+            ? path
+            : `${server?.url || ''}${path.startsWith('/') ? '' : '/'}${path}`
+          const res = await fetch(url, {
+            method: 'GET',
+            headers,
+            credentials: authType === 'session' ? 'include' : 'omit'
+          })
+          if (!res.ok) {
+            console.warn('fetch tool server spec failed', res.status)
+            return null
+          }
+          const contentType = res.headers.get('content-type') || ''
+          if (contentType.includes('json')) {
+            spec = await res.json()
+          } else {
+            const text = await res.text()
+            try {
+              spec = JSON.parse(text)
+            } catch (e) {
+              spec = yaml.load(text)
+            }
+          }
+        } else if (specType === 'json' && server?.spec) {
+          try {
+            spec = JSON.parse(server.spec)
+          } catch (err) {
+            console.warn('parse inline tool server spec error', err)
+            return null
+          }
+        }
+
+        if (!spec) return null
+
+        const openapi = spec
+        const specs = this.convertOpenApiToToolPayload(openapi)
+        const info = openapi?.info || server?.info || {}
+        const id = info?.id || String(idx)
+        return {
+          id: String(id),
+          idx,
+          url: server?.url,
+          openapi,
+          info,
+          specs
+        }
+      } catch (err) {
+        console.warn('fetch tool server error', err)
+        return null
+      }
+    },
+    resolveSchema(schemaRef, components) {
+      if (!schemaRef) return {}
+      if (!schemaRef.$ref && schemaRef.type === 'object') {
+        const schemaObj = {
+          type: 'object',
+          properties: {},
+          required: schemaRef.required || []
+        }
+        for (const [propName, propSchema] of Object.entries(schemaRef.properties || {})) {
+          schemaObj.properties[propName] = this.resolveSchema(propSchema, components)
+        }
+        return schemaObj
+      }
+
+      if (!schemaRef.$ref && schemaRef.type === 'array') {
+        return {
+          type: 'array',
+          items: this.resolveSchema(schemaRef.items, components)
+        }
+      }
+
+      if (!schemaRef.$ref && schemaRef.type) {
+        return {
+          type: schemaRef.type,
+          ...(schemaRef.description ? { description: schemaRef.description } : {})
+        }
+      }
+
+      if (schemaRef.$ref) {
+        const refPath = schemaRef.$ref.replace('#/components/schemas/', '')
+        const refSchema = components?.schemas?.[refPath]
+        if (!refSchema) return {}
+        const schemaObj = {
+          type: refSchema.type || 'object',
+          properties: {},
+          required: refSchema.required || []
+        }
+        if (refSchema.type === 'object') {
+          for (const [propName, propSchema] of Object.entries(refSchema.properties || {})) {
+            schemaObj.properties[propName] = this.resolveSchema(propSchema, components)
+          }
+        } else if (refSchema.type === 'array') {
+          schemaObj.items = this.resolveSchema(refSchema.items, components)
+        }
+        return schemaObj
+      }
+
+      return {}
+    },
+    convertOpenApiToToolPayload(openApiSpec) {
+      if (!openApiSpec?.paths) return []
+      const toolPayload = []
+      for (const [, methods] of Object.entries(openApiSpec.paths)) {
+        for (const [, operation] of Object.entries(methods)) {
+          if (operation?.operationId) {
+            const tool = {
+              name: operation.operationId,
+              description: operation.description || operation.summary || 'No description available.',
+              parameters: {
+                type: 'object',
+                properties: {},
+                required: []
+              }
+            }
+
+            if (operation.parameters) {
+              operation.parameters.forEach(param => {
+                const paramSchema = param.schema || {}
+                let description = paramSchema.description || param.description || ''
+                if (Array.isArray(paramSchema.enum)) {
+                  description += `. Possible values: ${paramSchema.enum.join(', ')}`
+                }
+                tool.parameters.properties[param.name] = {
+                  type: paramSchema.type,
+                  ...(description ? { description } : {})
+                }
+                if (param.required) {
+                  tool.parameters.required.push(param.name)
+                }
+              })
+            }
+
+            if (operation.requestBody) {
+              const content = operation.requestBody.content
+              if (content && content['application/json']) {
+                const requestSchema = content['application/json'].schema
+                const resolved = this.resolveSchema(requestSchema, openApiSpec.components)
+                if (resolved.properties) {
+                  tool.parameters.properties = {
+                    ...tool.parameters.properties,
+                    ...resolved.properties
+                  }
+                }
+                if (resolved.required) {
+                  tool.parameters.required = [
+                    ...new Set([...tool.parameters.required, ...(resolved.required || [])])
+                  ]
+                }
+                if (resolved.type === 'array') {
+                  tool.parameters = resolved
+                }
+              }
+            }
+
+            toolPayload.push(tool)
+          }
+        }
+      }
+
+      return toolPayload
+    },
     async createChat(provider, messageId, content, headers = {}) {
       try {
         const models = [provider.model || 'gpt-4o-mini']
@@ -988,6 +1297,12 @@ export default {
         name: 'INSERT_TERMINAL_CODE',
         data: code.replace(/^[\s\r\n]+|[\s\r\n]+$/g, '')
       })
+    },
+    onSelectTools(ids) {
+      this.selectedToolIds = Array.isArray(ids) ? ids : []
+    },
+    onSelectToolServers(ids) {
+      this.selectedToolServerIds = Array.isArray(ids) ? ids : []
     },
     sendPostMessage(data) {
       window.parent.postMessage(data)
