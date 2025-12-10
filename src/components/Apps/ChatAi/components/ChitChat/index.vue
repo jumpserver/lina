@@ -119,16 +119,20 @@ export default {
       'publicSettings'
     ]),
     toolOptions() {
-      return (this.tools || []).map(item => ({
-        label: item?.name || item?.id,
-        value: false
-      }))
+      return (this.tools || [])
+        .map(item => ({
+          label: item?.name || item?.id,
+          value: item?.id
+        }))
+        .filter(item => !!item.value)
     },
     toolServerOptions() {
-      return (this.toolServers || []).map(server => ({
-        label: server?.info?.title || server?.info?.name || server?.url || server?.id,
-        value: server?.id
-      }))
+      return (this.toolServers || [])
+        .map(server => ({
+          label: server?.info?.title || server?.info?.name || server?.url || server?.id,
+          value: server?.id
+        }))
+        .filter(server => !!server.value)
     }
   },
   methods: {
@@ -829,10 +833,8 @@ export default {
         const data = await res.json()
         if (Array.isArray(data)) {
           this.tools = data
-          if (!this.selectedToolIds.length) {
-            this.selectedToolIds = data.map(item => item?.id).filter(Boolean)
-          } else {
-            // drop stale selections
+          // keep any existing selections, but don't auto-enable new tools by default
+          if (this.selectedToolIds.length) {
             const validIds = data.map(item => item?.id)
             this.selectedToolIds = this.selectedToolIds.filter(id => validIds.includes(id))
           }
