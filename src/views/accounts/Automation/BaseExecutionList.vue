@@ -137,8 +137,8 @@ export default {
           getUrlQuery: true,
           options: [
             {
-              label: this.$t('TaskID'),
-              value: 'automation_id'
+              label: this.$t('ID'),
+              value: 'id'
             },
             {
               label: this.$t('DisplayName'),
