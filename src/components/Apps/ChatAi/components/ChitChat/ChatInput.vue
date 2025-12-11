@@ -27,9 +27,10 @@
                   v-for="item in toolOptions"
                   :key="item.value"
                 >
-                  <div>
+                  <div style="padding: 0 10px">
                     <i class="fa fa-wrench item-icon" />
                     <span class="item-label">{{ item.label }}</span>
+                    &nbsp;&nbsp;&nbsp;
                     <el-switch
                       :value="selectedToolsSet.has(item.value)"
                       @change="() => toggleTool(item.value)"
