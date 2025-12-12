@@ -28,7 +28,7 @@
     </div>
     <div class="input-box">
       <el-button
-        v-if="isLoading && controller"
+        v-if="showStopButton"
         class="stop"
         icon="fa fa-stop-circle-o"
         round
@@ -91,6 +91,14 @@ export default {
       chatId: '',
       showIntroduction: false,
       introduction: [],
+      requestRunning: false,
+      requestDone: true,
+      doneReceived: false,
+      awaitingSocketDone: false,
+      stopVisible: false,
+      streamReading: false,
+      loadingMessageId: '',
+      pendingResponseId: '',
       terminalContext: null,
       isTerminal: false,
       sessionChat: {},
@@ -111,6 +119,10 @@ export default {
     }
   },
   computed: {
+    showStopButton() {
+      // 持续显示到请求真正结束（收到 DONE/关闭）才隐藏
+      return this.stopVisible
+    },
     ...mapState({
       isLoading: state => state.chat.loading,
       activeChat: state => state.chat.activeChat
@@ -136,6 +148,24 @@ export default {
     }
   },
   methods: {
+    replaceLoadingChat(chat) {
+      const chats = this.activeChat?.chats || []
+      const idx = chats.findIndex(c =>
+        c?.message?.id === this.loadingMessageId ||
+        c?.message?.content === 'loading' ||
+        c?.message?.is_loading
+      )
+      if (idx !== -1) {
+        chat.message = chat.message || {}
+        if (!chat.message.id) chat.message.id = this.loadingMessageId || chat.message.id || this.genId()
+        chats[idx] = chat
+        this.loadingMessageId = ''
+        console.log('[chat] replaceLoadingChat success', { id: chat.message.id, idx })
+        return true
+      }
+      console.log('[chat] replaceLoadingChat miss', { loadingMessageId: this.loadingMessageId })
+      return false
+    },
     init() {
       // 防止重复初始化时重复插入欢迎消息
       if (!this.activeChat?.chats || this.activeChat.chats.length === 0) {
@@ -171,6 +201,46 @@ export default {
     },
     genId() {
       return uuidv4()
+    },
+    startRequest() {
+      this.requestRunning = true
+      this.doneReceived = false
+      this.awaitingSocketDone = false
+      this.requestDone = false
+      this.stopVisible = true
+    },
+    endRequest() {
+      this.requestRunning = false
+      this.requestDone = true
+      this.stopVisible = false
+    },
+    markDone(reason = '') {
+      this.doneReceived = true
+      this.loadingMessageId = ''
+      this.endRequest()
+    },
+    removeLoadingMessage() {
+      if (!this.loadingMessageId) return
+      const chats = this.activeChat?.chats || []
+      const idx = chats.findIndex(c => c?.type === 'loading' || c?.message?.is_loading)
+      if (idx !== -1) {
+        chats.splice(idx, 1)
+      }
+      this.loadingMessageId = ''
+    },
+    addLoadingMessage(id) {
+      this.loadingMessageId = id
+      const loadingChat = {
+        message: {
+          id,
+          content: 'loading',
+          role: 'assistant',
+          create_time: new Date(),
+          is_loading: true
+        },
+        type: 'loading'
+      }
+      addChatMessageById(loadingChat)
     },
     initChatMessage() {
       this.prompt = ''
@@ -486,9 +556,9 @@ export default {
         childrenIds: messageMap[msg.id].childrenIds || msg.childrenIds || []
       }))
     },
-    async sendToKael(value, userMessageId) {
+    async sendToKael(value, userMessageId, responseId) {
       const userId = userMessageId || this.genId()
-      const responseId = this.genId()
+      const finalResponseId = responseId || this.genId()
       const provider = this.getActiveProvider()
       const modelId = this.selectedModel || provider.model || 'gpt-4o-mini'
       if (!provider) {
@@ -500,7 +570,10 @@ export default {
           },
           type: 'error'
         }
-        addChatMessageById(chat)
+        if (!this.replaceLoadingChat(chat)) {
+          addChatMessageById(chat)
+        }
+        this.markDone('no provider')
         return
       }
 
@@ -559,7 +632,8 @@ export default {
         features: payloadFeatures,
         variables: payloadVariables,
         model_item: payloadModelItem,
-        id: responseId,
+        id: finalResponseId,
+        response_id: finalResponseId,
         background_tasks: {
           title_generation: true,
           tags_generation: true,
@@ -585,34 +659,37 @@ export default {
         }
 
         const contentType = response.headers.get('content-type') || ''
-        console.log('chat contentType:', contentType)
         if (contentType.includes('text/event-stream')) {
-          await this.handleStreamResponse(response, payload, provider, headers, responseId)
+          await this.handleStreamResponse(response, payload, provider, headers, finalResponseId)
         } else {
           const data = await response.json()
 
-          removeLoadingMessageInChat()
           const assistantChat = this.buildAssistantChat(data)
           if (assistantChat) {
             if (!assistantChat.message.id) {
-              assistantChat.message.id = responseId
+              assistantChat.message.id = finalResponseId
             }
             assistantChat.message.model = payload.model
             this.linkAssistantToLastUser(assistantChat)
-            addChatMessageById(assistantChat)
+            if (!this.replaceLoadingChat(assistantChat)) {
+              this.removeLoadingMessage()
+              addChatMessageById(assistantChat)
+            }
+            this.loadingMessageId = ''
             await this.notifyChatCompleted(provider, headers, assistantChat)
           }
           setLoading(false)
+          // 等待 socket completion 再隐藏停止按钮
+          this.awaitingSocketDone = true
           getInputFocus()
         }
       } catch (error) {
         console.error(error)
         if (error?.name === 'AbortError') {
-          removeLoadingMessageInChat()
           setLoading(false)
+          this.markDone('abort')
           return
         }
-        removeLoadingMessageInChat()
         setLoading(false)
         const chat = {
           message: {
@@ -622,85 +699,104 @@ export default {
           },
           type: 'error'
         }
-        addChatMessageById(chat)
+        if (!this.replaceLoadingChat(chat)) {
+          addChatMessageById(chat)
+        }
+        this.markDone('error')
       } finally {
         this.controller = null
       }
     },
     async handleStreamResponse(response, payload, provider, headers, fallbackMessageId) {
-      const decoder = new TextDecoder('utf-8')
-      const reader = response.body.getReader()
-      let buffer = ''
-      console.log('handleStreamResponse: start')
+      this.streamReading = true
+      try {
+        const decoder = new TextDecoder('utf-8')
+        const reader = response.body.getReader()
+        let buffer = ''
+        console.log('handleStreamResponse: start')
 
-      const assistantChat = {
-        message: {
-          id: payload.id || fallbackMessageId || this.genId(),
-          content: '',
-          role: 'assistant',
-          create_time: new Date(),
-          model: payload.model || ''
-        },
-        result: {
-          content: ''
+        const assistantChat = {
+          message: {
+            id: payload.id || fallbackMessageId || this.genId(),
+            content: '',
+            role: 'assistant',
+            create_time: new Date(),
+            model: payload.model || ''
+          },
+          result: {
+            content: ''
+          }
         }
-      }
-      let assistantAdded = false
-      let hasContent = false
+        let assistantAdded = false
+        let hasContent = false
 
-      const processLine = (line) => {
-        if (!line.startsWith('data:')) return
-        const jsonStr = line.replace(/^data:\s*/, '')
-        if (jsonStr === '[DONE]') {
-          return 'done'
-        }
-        try {
-          const data = JSON.parse(jsonStr)
-          const delta = data?.choices?.[0]?.delta?.content || data?.content || ''
-          if (delta) {
-            if (!assistantAdded) {
-              addChatMessageById(assistantChat)
-              assistantAdded = true
+        const processLine = (line) => {
+          if (!line.startsWith('data:')) return
+          const jsonStr = line.replace(/^data:\s*/, '')
+          if (jsonStr === '[DONE]') {
+            this.doneReceived = true
+            console.log('[chat] stream DONE received')
+            return 'done'
+          }
+          try {
+            const data = JSON.parse(jsonStr)
+            const delta = data?.choices?.[0]?.delta?.content || data?.content || ''
+            if (delta) {
+              if (!assistantAdded) {
+                if (!this.replaceLoadingChat(assistantChat)) {
+                  this.removeLoadingMessage()
+                  addChatMessageById(assistantChat)
+                }
+                this.loadingMessageId = ''
+                assistantAdded = true
+              }
+              assistantChat.message.content += delta
+              assistantChat.result.content += delta
+              hasContent = true
             }
-            assistantChat.message.content += delta
-            assistantChat.result.content += delta
-            hasContent = true
+            if (data?.id && !assistantChat.message.id) {
+              assistantChat.message.id = data.id
+            }
+          } catch (e) {
+            console.warn('parse stream chunk error', e)
           }
-          if (data?.id && !assistantChat.message.id) {
-            assistantChat.message.id = data.id
-          }
-        } catch (e) {
-          console.warn('parse stream chunk error', e)
+          return null
         }
-        return null
-      }
 
-      let done = false
-      while (!done) {
-        const { value, done: readerDone } = await reader.read()
-        console.log('handleStreamResponse: read chunk', { readerDone, length: value?.length || 0 })
-        if (readerDone) break
-        buffer += decoder.decode(value, { stream: true })
-        const parts = buffer.split('\n')
-        buffer = parts.pop() || ''
-        for (const part of parts) {
-          const status = processLine(part.trim())
-          if (status === 'done') {
-            done = true
-            break
+        let done = false
+        while (!done) {
+          const { value, done: readerDone } = await reader.read()
+          console.log('handleStreamResponse: read chunk', { readerDone, length: value?.length || 0 })
+          if (readerDone) break
+          buffer += decoder.decode(value, { stream: true })
+          const parts = buffer.split('\n')
+          buffer = parts.pop() || ''
+          for (const part of parts) {
+            const status = processLine(part.trim())
+            if (status === 'done') {
+              done = true
+              break
+            }
           }
         }
-      }
 
-      removeLoadingMessageInChat()
-      if (hasContent && assistantAdded) {
-        this.linkAssistantToLastUser(assistantChat)
-        await this.notifyChatCompleted(provider, headers, assistantChat)
-      } else if (!hasContent) {
-        this.removeMessageById(assistantChat?.message?.id)
+        removeLoadingMessageInChat()
+        if (hasContent && assistantAdded) {
+          this.linkAssistantToLastUser(assistantChat)
+          await this.notifyChatCompleted(provider, headers, assistantChat)
+        } else if (!hasContent) {
+          this.removeMessageById(assistantChat?.message?.id)
+        }
+        if (this.doneReceived) {
+          setLoading(false)
+          this.markDone('stream done')
+          getInputFocus()
+        } else {
+          console.log('[chat] stream finished without DONE', { hasContent, assistantAdded })
+        }
+      } finally {
+        this.streamReading = false
       }
-      setLoading(false)
-      getInputFocus()
     },
     async handleSocketEvent(event) {
       const { chat_id, message_id, data } = event || {}
@@ -715,7 +811,7 @@ export default {
         if (target) return target
         const chat = this.buildAssistantChat({}) || {
           message: {
-            id: message_id || this.genId(),
+            id: message_id || this.loadingMessageId || this.genId(),
             content: '',
             role: 'assistant',
             create_time: new Date(),
@@ -725,15 +821,23 @@ export default {
             content: ''
           }
         }
-        chat.message.id = chat.message.id || message_id || this.genId()
+        chat.message.id = chat.message.id || message_id || this.loadingMessageId || this.genId()
         chat.message.model = chat.message.model || payload?.model || ''
-        addChatMessageById(chat)
+        if (!this.replaceLoadingChat(chat)) {
+          this.removeLoadingMessage()
+          addChatMessageById(chat)
+        }
         target = chat
+        if (this.loadingMessageId && target?.message?.id === this.loadingMessageId) {
+          this.loadingMessageId = ''
+        }
         return target
       }
 
       const appendContent = (delta) => {
         const msg = ensureTarget()
+        msg.message = msg.message || { content: '', role: 'assistant', id: message_id || this.genId() }
+        msg.result = msg.result || { content: '' }
         msg.message.content = (msg.message.content || '') + (delta || '')
         msg.result.content = (msg.result.content || '') + (delta || '')
       }
@@ -742,6 +846,8 @@ export default {
         appendContent(payload?.content || '')
       } else if ((type === 'chat:message' || type === 'replace') && payload?.content) {
         const msg = ensureTarget()
+        msg.message = msg.message || { content: '', role: 'assistant', id: message_id || this.genId() }
+        msg.result = msg.result || { content: '' }
         msg.message.content = payload?.content || ''
         msg.result.content = payload?.content || ''
       } else if (type === 'chat:completion') {
@@ -750,13 +856,17 @@ export default {
         }
         if (payload?.content) {
           const msg = ensureTarget()
+          msg.message = msg.message || { content: '', role: 'assistant', id: message_id || this.genId() }
+          msg.result = msg.result || { content: '' }
           msg.message.content = payload.content
           msg.result.content = payload.content
         }
 
         if (payload?.done === true) {
-          removeLoadingMessageInChat()
+          this.doneReceived = true
+          this.awaitingSocketDone = false
           setLoading(false)
+          this.markDone('socket done')
           getInputFocus()
           const provider = this.getActiveProvider()
           if (provider && this.chatId) {
@@ -778,6 +888,10 @@ export default {
       } else if (type === 'chat:message:error') {
         const msg = ensureTarget()
         msg.message.content = payload?.error?.content || ''
+        removeLoadingMessageInChat()
+        setLoading(false)
+        this.awaitingSocketDone = false
+        this.markDone('socket error')
       }
     },
     async fetchModels(provider, headers = {}) {
@@ -1252,9 +1366,13 @@ export default {
     },
     onSendHandle(value) {
       this.showIntroduction = false
+      this.startRequest()
+      const responseId = this.genId()
+      this.pendingResponseId = responseId
       const userMessageId = this.genId()
       this.addUserMessage(value, userMessageId)
-      this.sendToKael(value, userMessageId)
+      this.addLoadingMessage(responseId)
+      this.sendToKael(value, userMessageId, responseId)
     },
     addUserMessage(value, id) {
       const model = this.selectedModel || this.getActiveProvider()?.model || ''
@@ -1289,6 +1407,7 @@ export default {
       }
       removeLoadingMessageInChat()
       setLoading(false)
+      this.markDone('manual stop')
     },
     sendIntroduction(item) {
       this.showIntroduction = false
