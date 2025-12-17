@@ -43,7 +43,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import store from '@/store'
 import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/jms/org'
 import ListTable from '@/components/Table/ListTable'

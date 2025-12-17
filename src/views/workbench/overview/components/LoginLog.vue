@@ -2,7 +2,7 @@
   <HomeCard :table-config="tableConfig" v-bind="cardConfig" />
 </template>
 
-<script>
+<script lang="jsx">
 import HomeCard from './HomeCard'
 
 export default {

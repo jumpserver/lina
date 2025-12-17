@@ -10,7 +10,6 @@
       <slot v-if="!isHidden(item)" :name="`id:${item.id}`" />
       <component
         :is="item.type === GROUP ? 'render-form-group' : 'render-form-item'"
-        :key="item.id"
         :data="item"
         :server-errors="serverErrors"
         :disabled="disabled || item.disabled"

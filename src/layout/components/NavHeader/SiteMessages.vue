@@ -77,7 +77,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import { toSafeLocalDateStr } from '@/utils/common/time'
 import Dialog from '@/components/Dialog'
 import MarkDown from '@/components/Widgets/MarkDown'

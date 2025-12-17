@@ -9,7 +9,7 @@
   </TwoCol>
 </template>
 
-<script type="text/jsx">
+<script lang="jsx">
 import { DrawerListTable as ListTable, QuickActions } from '@/components'
 import { openTaskPage } from '@/utils/jms/index'
 import { DetailFormatter } from '@/components/Table/TableFormatters'

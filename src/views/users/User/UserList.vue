@@ -22,7 +22,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import { createSourceIdCache } from '@/api/common'
 import { GenericListPage, GenericUpdateFormDialog } from '@/layout/components'
 import { mapGetters } from 'vuex'

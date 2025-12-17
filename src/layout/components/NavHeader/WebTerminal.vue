@@ -4,7 +4,7 @@
   </el-link>
 </template>
 
-<script>
+<script lang="jsx">
 import { BASE_URL } from '@/utils/common/index'
 
 export default {

@@ -9,7 +9,7 @@
   </TwoCol>
 </template>
 
-<script>
+<script lang="jsx">
 import { QuickActions } from '@/components'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
 import { openTaskPage } from '@/utils/jms/index'

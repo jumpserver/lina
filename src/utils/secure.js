@@ -44,9 +44,9 @@ const options = {
 }
 const filter = new xss.FilterXSS(options)
 
-import JSEncrypt from 'jsencrypt/bin/jsencrypt.min'
+import JSEncrypt from 'jsencrypt'
 import CryptoJS from 'crypto-js'
-import VueCookie from 'vue-cookie'
+import { VueCookieNext as VueCookie } from 'vue-cookie-next'
 
 export function fillKey(key) {
   const KeyLength = 16
@@ -76,7 +76,7 @@ export function rsaEncrypt(text, pubKey) {
 }
 
 export function getCookie(name) {
-  return VueCookie.get(name)
+  return VueCookie.getCookie(name)
 }
 
 export function encryptPassword(password) {

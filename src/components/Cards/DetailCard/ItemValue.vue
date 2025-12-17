@@ -1,4 +1,4 @@
-<script type="text/jsx">
+<script lang="jsx">
 import { toSafeLocalDateStr } from '@/utils/common/time'
 
 export default {

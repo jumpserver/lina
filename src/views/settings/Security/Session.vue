@@ -6,7 +6,7 @@
   </IBox>
 </template>
 
-<script>
+<script lang="jsx">
 import IBox from '@/components/Common/IBox/index.vue'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index.vue'
 import WatermarkHelpDialog from '@/components/Apps/VariablesHelpTextDialog'

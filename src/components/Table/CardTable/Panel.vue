@@ -32,7 +32,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import Icon from '@/components/Widgets/Icon/index.vue'
 
 export default {

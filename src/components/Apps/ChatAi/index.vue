@@ -48,6 +48,7 @@ import Chat from './components/ChitChat/index.vue'
 import { getInputFocus } from './useChat.js'
 import DrawerPanel from '@/components/Apps/DrawerPanel/index.vue'
 import { ObjectLocalStorage } from '@/utils/common'
+import i18n from '@/i18n/i18n'
 import { mapGetters } from 'vuex'
 
 const aiPannelLocalStorage = new ObjectLocalStorage('ai_panel_settings')
@@ -61,7 +62,7 @@ export default {
     title: {
       type: String,
       default: function() {
-        return this.$t('ChatAI')
+        return i18n.global.t('ChatAI')
       }
     },
     defaultShowPanel: {

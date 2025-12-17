@@ -2,7 +2,7 @@
   <GenericListTable ref="GenericListTable" :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
-<script>
+<script lang="jsx">
 import GenericListTable from '@/layout/components/GenericListTable/index'
 import { ActionsFormatter, DateFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'

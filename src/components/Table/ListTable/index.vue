@@ -44,6 +44,7 @@ import AutoDataTable from '../AutoDataTable/index.vue'
 import QuickFilter from './TableAction/QuickFilter.vue'
 import { getDayEnd, getDaysAgo } from '@/utils/common/time'
 import { ObjectLocalStorage } from '@/utils/common/index'
+import i18n from '@/i18n/i18n'
 
 export default {
   name: 'ListTable',
@@ -150,11 +151,11 @@ export default {
       for (const [k, v] of Object.entries(actions)) {
         const hasPerm = v.action.split('|').some(i => this.hasActionPerm(i.trim()))
         if (!hasPerm) {
-          defaults[k] = this.$t('NoPermission')
+          defaults[k] = i18n.global.t('NoPermission')
           continue
         }
         if (v.checkRoot && this.currentOrgIsRoot) {
-          defaults[k] = this.$t('NoPermissionInGlobal')
+          defaults[k] = i18n.global.t('NoPermissionInGlobal')
           continue
         }
         defaults[k] = true
@@ -174,10 +175,10 @@ export default {
       const checkRoot = !(this.$route.meta?.disableOrgsChange === true)
       const checkPermAndRoot = action => {
         if (!this.hasActionPerm(action)) {
-          return this.$t('NoPermission')
+          return i18n.global.t('NoPermission')
         }
         if (checkRoot && this.currentOrgIsRoot) {
-          return this.$t('NoPermissionInGlobal')
+          return i18n.global.t('NoPermissionInGlobal')
         }
         return true
       }

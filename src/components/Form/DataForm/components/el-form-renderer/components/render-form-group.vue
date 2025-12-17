@@ -1,10 +1,9 @@
 <template>
   <div>
-    <template v-for="(item, index) in data.items">
+    <template v-for="(item, index) in data.items" :key="item.id || index">
       <slot :name="`id:${item.id}`" />
       <slot :name="`$id:${item.id}`" />
       <render-form-item
-        :key="index"
         :prop="`${data.id}.${item.id}`"
         :data="item"
         :value="value"

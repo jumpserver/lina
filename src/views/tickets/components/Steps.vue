@@ -49,7 +49,7 @@
   </IBox>
 </template>
 
-<script>
+<script lang="jsx">
 import { toSafeLocalDateStr, formatTime, getDateTimeStamp } from '@/utils/common/time'
 import IBox from '@/components/Common/IBox'
 import { STATE_MAP } from '../const'

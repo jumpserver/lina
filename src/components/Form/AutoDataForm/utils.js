@@ -1,4 +1,4 @@
-import Vue from 'vue'
+// Vue dependency removed; use console for debug logs
 import ObjectSelect2 from '@/components/Form/FormFields/NestedObjectSelect2.vue'
 import NestedField from '@/components/Form/AutoDataForm/components/NestedField.vue'
 import rules from '@/components/Form/DataForm/rules'
@@ -7,6 +7,7 @@ import JsonEditor from '@/components/Form/FormFields/JsonEditor.vue'
 import { assignIfNot, toSentenceCase } from '@/utils/common/index'
 import TagInput from '@/components/Form/FormFields/TagInput.vue'
 import i18n from '@/i18n/i18n'
+import _ from 'lodash'
 
 export class FormFieldGenerator {
   constructor() {
@@ -119,7 +120,7 @@ export class FormFieldGenerator {
       const f = this.generateField(name, nestedFieldsMeta, nestedFieldsRemoteMeta)
       fields.push(f)
     }
-    Vue.$log.debug('NestFields: ', fields)
+    console.debug('NestFields: ', fields)
     return fields
   }
 
@@ -242,7 +243,7 @@ export class FormFieldGenerator {
     field = this.setPlaceholder(field, remoteFieldMeta)
     field = this.afterGenerateField(field)
     _.set(field, 'attrs.error', '')
-    Vue.$log.debug('Generate field: ', name, field)
+    console.debug('Generate field: ', name, field)
     return field
   }
 
@@ -255,7 +256,7 @@ export class FormFieldGenerator {
       return field
     }
     if (field.type === 'select' || [ObjectSelect2].indexOf(field.component) > -1) {
-      field.el.placeholder = i18n.t('PleaseSelect') + label.toLowerCase()
+      field.el.placeholder = i18n.global.t('PleaseSelect') + label.toLowerCase()
     } else if (field.type === 'input') {
       field.el.placeholder = field.label
     }

@@ -20,7 +20,7 @@
   </div>
 </template>
 
-<script type="text/jsx">
+<script lang="jsx">
 import Sortable from 'sortablejs'
 import DataTable from '@/components/Table/DataTable/index.vue'
 import { newURL, ObjectLocalStorage, replaceAllUUID } from '@/utils/common/index'

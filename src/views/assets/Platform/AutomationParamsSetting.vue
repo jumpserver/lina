@@ -47,7 +47,7 @@ export default {
     title: {
       type: String,
       default: function() {
-        return this.$t('PushParams')
+        return 'PushParams'
       }
     },
     btnText: {

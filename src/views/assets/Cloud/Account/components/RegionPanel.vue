@@ -45,7 +45,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import { Dialog } from '@/components'
 import { encryptAttrsField } from '@/views/assets/Cloud/const'
 

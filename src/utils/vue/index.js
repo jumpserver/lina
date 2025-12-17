@@ -27,10 +27,10 @@ export function getRouteUrl(route, router) {
     route = { name: route }
   }
 
-  const r = router.match(route)
+  const r = router.resolve(route)
 
   if (!r) {
     return
   }
-  return r.path
+  return r.path || r.href
 }

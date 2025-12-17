@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script type="text/jsx">
+<script lang="jsx">
 import GenericListPage from '@/layout/components/GenericListPage'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
@@ -75,20 +75,20 @@ export default {
           is_finished: {
             formatter: (row) => {
               if (row.is_finished) {
-                return <i Class='fa fa-check text-primary'/>
+                return <i class='fa fa-check text-primary'/>
               }
-              return <i Class='fa fa-times text-danger'/>
+              return <i class='fa fa-times text-danger'/>
             }
           },
           is_success: {
             formatter: (row) => {
               if (!row.is_finished) {
-                return <i Class='fa  fa fa-spinner fa-spin'/>
+                return <i class='fa  fa fa-spinner fa-spin'/>
               }
               if (row.is_success) {
-                return <i Class='fa fa-check text-primary'/>
+                return <i class='fa fa-check text-primary'/>
               }
-              return <i Class='fa fa-times text-danger'/>
+              return <i class='fa fa-times text-danger'/>
             }
           }
         }

@@ -73,7 +73,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import BaseFormatter from './base.vue'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
 import Dialog from '@/components/Dialog'

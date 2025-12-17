@@ -1,6 +1,5 @@
 <template>
   <div :class="{'no-title': noTitle}" class="page">
-    <TagsView />
     <PageHeading v-if="iTitle || helpMessage" :help-msg="helpMessage" class="disabled-when-print page-head">
       <el-button
         :disabled="gobackDisabled"
@@ -60,6 +59,7 @@ import UserConfirmDialog from '@/components/Apps/UserConfirmDialog/index.vue'
 import TagsView from '../TagsView/index.vue'
 import { toSentenceCase } from '@/utils/common/index'
 import IBox from '@/components/Common/IBox/index.vue'
+import i18n from '@/i18n/i18n'
 
 export default {
   name: 'Page',
@@ -90,7 +90,9 @@ export default {
     goBack: {
       type: Function,
       default: function(obj) {
-        return this.$router.back()
+        if (window.history.length > 1) {
+          window.history.back()
+        }
       }
     }
   },
@@ -109,7 +111,7 @@ export default {
       }
       let title = this.title || this.$route.meta.title
       if (!title) {
-        title = this.$t('NoTitle')
+        title = i18n.global.t('NoTitle')
       }
       title = toSentenceCase(title)
       return title

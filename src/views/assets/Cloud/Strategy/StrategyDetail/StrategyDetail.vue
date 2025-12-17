@@ -4,7 +4,7 @@
   </TwoCol>
 </template>
 
-<script>
+<script lang="jsx">
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
@@ -83,4 +83,3 @@ li {
   margin: 3px 0;
 }
 </style>
-

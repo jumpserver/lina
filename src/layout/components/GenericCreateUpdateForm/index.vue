@@ -77,21 +77,21 @@ export default {
     createSuccessMsg: {
       type: String,
       default: function() {
-        return this.$t('CreateSuccessMsg')
+        return 'CreateSuccessMsg'
       }
     },
     // 保存成功，继续添加的msg
     saveSuccessContinueMsg: {
       type: String,
       default: function() {
-        return this.$t('SaveSuccessContinueMsg')
+        return 'SaveSuccessContinueMsg'
       }
     },
     // 更新成功的msg
     updateSuccessMsg: {
       type: String,
       default: function() {
-        return this.$t('UpdateSuccessMsg')
+        return 'UpdateSuccessMsg'
       }
     },
     // 创建成功的跳转路由
@@ -128,7 +128,7 @@ export default {
     cloneNameSuffix: {
       type: [String, Number],
       default: function() {
-        return this.$t('Duplicate').toLowerCase()
+        return 'Duplicate'.toLowerCase()
       }
     },
     // 获取提交的方法

@@ -12,7 +12,7 @@
   </el-alert>
 </template>
 
-<script>
+<script lang="jsx">
 import { mapGetters } from 'vuex'
 
 export default {

@@ -12,7 +12,7 @@
   </el-row>
 </template>
 
-<script>
+<script lang="jsx">
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import { IBox } from '@/components'
 import VueMarkdown from 'vue-markdown'

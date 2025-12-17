@@ -8,7 +8,7 @@
   />
 </template>
 
-<script>
+<script lang="jsx">
 import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'

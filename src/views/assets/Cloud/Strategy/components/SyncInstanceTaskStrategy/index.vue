@@ -47,7 +47,7 @@ export default {
           { prop: 'strategy_actions', label: this.$t('ActionCount'), formatter: tableFormatter('count') },
           { prop: 'action', label: this.$t('Action'), align: 'center', width: '100px', formatter: (row, col, cellValue, index) => {
             return (
-              <div className='input-button'>
+              <div class='input-button'>
                 <el-button
                   icon='el-icon-edit'
                   size='mini'

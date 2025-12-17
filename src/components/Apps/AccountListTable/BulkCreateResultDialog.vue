@@ -13,7 +13,7 @@
   </Dialog>
 </template>
 
-<script>
+<script lang="jsx">
 import Dialog from '@/components/Dialog/index.vue'
 import DataTable from '@/components/Table/DataTable/index.vue'
 

@@ -8,7 +8,7 @@
   />
 </template>
 
-<script type="text/jsx">
+<script lang="jsx">
 import CopyableFormatter from '@/components/Table/TableFormatters/CopyableFormatter.vue'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { GenericListTable } from '@/layout/components'
@@ -96,4 +96,3 @@ export default {
   }
 }
 </script>
-

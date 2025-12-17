@@ -8,7 +8,7 @@
   />
 </template>
 
-<script>
+<script lang="jsx">
 import { AttrInput, Select2 } from '@/components/Form/FormFields'
 import { Required } from '@/components/Form/DataForm/rules'
 import ProtocolSelector from '@/components/Form/FormFields/ProtocolSelector'
@@ -178,7 +178,7 @@ export default {
             width: '100px',
             formatter: (row, col, cellValue, index) => {
               return (
-                <div className='input-button'>
+                <div class='input-button'>
                   <el-button
                     icon='el-icon-minus'
                     size='mini'
@@ -252,4 +252,3 @@ export default {
 .action-input {
 }
 </style>
-

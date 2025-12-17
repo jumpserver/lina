@@ -16,7 +16,7 @@
   </IBox>
 </template>
 
-<script>
+<script lang="jsx">
 import IBox from '@/components/Common/IBox'
 
 export default {
@@ -28,7 +28,7 @@ export default {
     title: {
       type: String,
       default() {
-        return this.$t('Tags')
+        return 'Tags'
       }
     },
     labels: {

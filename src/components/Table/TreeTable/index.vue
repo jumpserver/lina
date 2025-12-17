@@ -116,7 +116,7 @@ export default {
       // eslint-disable-next-line vue/require-prop-type-constructor
       type: String,
       default() {
-        return this.$t('AssetTree')
+        return 'AssetTree'
       }
     }
   },

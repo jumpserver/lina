@@ -4,7 +4,7 @@
   </el-link>
 </template>
 
-<script>
+<script lang="jsx">
 
 export default {
   name: 'WebTerminal',

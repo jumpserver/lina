@@ -1,13 +1,15 @@
 
 <template>
-  <!-- eslint-disable vue/require-component-is -->
-  <component v-bind="linkProps(to)">
+  <!-- Use dynamic component with explicit :is to support Vue 3 -->
+  <component :is="tag" v-bind="attrs">
     <slot />
   </component>
+  
 </template>
 
 <script>
 import { isExternal } from '@/utils/secure'
+import { RouterLink } from 'vue-router'
 
 export default {
   props: {
@@ -16,20 +18,15 @@ export default {
       required: true
     }
   },
-  methods: {
-    linkProps(url) {
-      if (isExternal(url)) {
-        return {
-          is: 'a',
-          href: url,
-          target: '_blank',
-          rel: 'noopener'
-        }
+  computed: {
+    tag() {
+      return isExternal(this.to) ? 'a' : RouterLink
+    },
+    attrs() {
+      if (isExternal(this.to)) {
+        return { href: this.to, target: '_blank', rel: 'noopener' }
       }
-      return {
-        is: 'router-link',
-        to: url
-      }
+      return { to: this.to }
     }
   }
 }

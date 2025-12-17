@@ -6,7 +6,7 @@
   </el-row>
 </template>
 
-<script type="text/jsx">
+<script lang="jsx">
 import { DrawerListTable as ListTable } from '@/components'
 
 export default {

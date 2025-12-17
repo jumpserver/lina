@@ -18,7 +18,7 @@
   </el-tag>
 </template>
 
-<script>
+<script lang="jsx">
 import { isDarkness } from '@/utils/common/color'
 
 export default {

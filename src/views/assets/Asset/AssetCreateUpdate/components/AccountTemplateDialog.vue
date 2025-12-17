@@ -27,7 +27,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import Dialog from '@/components/Dialog'
 import CreateAccountTemplateDialog from './CreateAccountTemplateDialog'
 import { DrawerListTable as ListTable } from '@/components'

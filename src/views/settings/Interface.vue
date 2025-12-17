@@ -65,7 +65,7 @@
   </Page>
 </template>
 
-<script>
+<script lang="jsx">
 import { Page } from '@/layout/components'
 import { IBox, UploadField } from '@/components'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'

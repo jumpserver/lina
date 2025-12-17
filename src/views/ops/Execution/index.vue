@@ -5,7 +5,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import { GenericListPage } from '@/layout/components'
 import { openTaskPage } from '@/utils/jms/index'
 import ExecutionDetailDialog from '@/views/ops/Execution/ExecutionDetail'
@@ -53,21 +53,21 @@ export default {
             width: '100px',
             formatter: (row) => {
               if (row.is_finished) {
-                return <i Class='fa fa-check text-primary'/>
+                return <i class='fa fa-check text-primary'/>
               }
-              return <i Class='fa fa-times text-danger'/>
+              return <i class='fa fa-times text-danger'/>
             }
           },
           is_success: {
             width: '100px',
             formatter: (row) => {
               if (!row.is_finished) {
-                return <i Class='fa  fa fa-spinner fa-spin'/>
+                return <i class='fa  fa fa-spinner fa-spin'/>
               }
               if (row.is_success) {
-                return <i Class='fa fa-check text-primary'/>
+                return <i class='fa fa-check text-primary'/>
               }
-              return <i Class='fa fa-times text-danger'/>
+              return <i class='fa fa-times text-danger'/>
             }
           },
           time_cost: {

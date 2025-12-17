@@ -23,7 +23,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import BaseFormatter from './base.vue'
 import Drawer from '@/components/Drawer/index.vue'
 

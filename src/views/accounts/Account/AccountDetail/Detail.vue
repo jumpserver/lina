@@ -35,7 +35,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
 import QuickActions from '@/components/Common/QuickActions/index.vue'
 import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret.vue'

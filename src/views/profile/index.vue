@@ -63,7 +63,7 @@
   </Page>
 </template>
 
-<script type="text/jsx">
+<script lang="jsx">
 import { IBox, QuickActions } from '@/components'
 import { PhoneInput } from '@/components/Form/FormFields'
 import Page from '@/layout/components/Page'

@@ -19,7 +19,7 @@
   </CardTable>
 </template>
 
-<script type="text/jsx">
+<script lang="jsx">
 import CardTable from '@/components/Table/CardTable/index.vue'
 import CardPanel from './Panel.vue'
 

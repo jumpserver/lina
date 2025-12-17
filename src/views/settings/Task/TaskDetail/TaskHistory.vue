@@ -2,7 +2,7 @@
   <ListTable ref="list" :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
-<script type="text/jsx">
+<script lang="jsx">
 import { DrawerListTable as ListTable } from '@/components'
 import { openTaskPage } from '@/utils/jms/index'
 
@@ -35,9 +35,9 @@ export default {
             label: this.$t('IsFinished'),
             formatter: (row) => {
               if (row.is_finished) {
-                return <i Class='fa fa-check text-primary'/>
+                return <i class='fa fa-check text-primary'/>
               }
-              return <i Class='fa fa-times text-danger'/>
+              return <i class='fa fa-times text-danger'/>
             },
             formatterArgs: {
               width: '14px'
@@ -47,12 +47,12 @@ export default {
             label: this.$t('IsSuccess'),
             formatter: (row) => {
               if (!row.is_finished) {
-                return <i Class='fa  fa fa-spinner fa-spin'/>
+                return <i class='fa  fa fa-spinner fa-spin'/>
               }
               if (row.is_success) {
-                return <i Class='fa fa-check text-primary'/>
+                return <i class='fa fa-check text-primary'/>
               }
-              return <i Class='fa fa-times text-danger'/>
+              return <i class='fa fa-times text-danger'/>
             },
             formatterArgs: {
               width: '14px'

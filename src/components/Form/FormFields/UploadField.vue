@@ -6,7 +6,13 @@
     </el-button>
     <span>{{ fileName }}</span>
     <div v-if="tip !== ''" class="help-block">{{ tip }}</div>
-    <input v-model="value" hidden type="text" v-on="$listeners">
+    <input
+      :value="value"
+      hidden
+      type="text"
+      @input="onInput($event.target.value)"
+      v-on="$attrs"
+    >
     <div>
       <img v-if="preview" :class="showBG ? 'show-bg' : ''" :src="preview" v-bind="$attrs" alt="">
     </div>

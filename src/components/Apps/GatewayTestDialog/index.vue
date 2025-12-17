@@ -14,7 +14,7 @@
         <div style="line-height: 34px">{{ $t('SSHPort') }}</div>
       </el-col>
       <el-col :md="14" :sm="24">
-        <el-input v-model="port" />
+        <el-input v-model="iPort" />
         <span class="help-tips help-block">{{ $t('TestGatewayHelpMessage') }}</span>
       </el-col>
       <el-col :md="4" :sm="24">
@@ -69,6 +69,14 @@ export default {
       },
       set(val) {
         this.$emit('update:visible', val)
+      }
+    },
+    iPort: {
+      get() {
+        return this.port
+      },
+      set(val) {
+        this.$emit('update:port', val)
       }
     }
   },

@@ -1,20 +1,20 @@
-import VueCookie from 'vue-cookie'
+import { VueCookieNext as VueCookie } from 'vue-cookie-next'
 import request from '@/utils/request'
 
 const CURRENT_ORG_KEY = 'currentOrg'
 const CURRENT_ROLE_KEY = 'currentRole'
-let cookieNamePrefix = VueCookie.get('SESSION_COOKIE_NAME_PREFIX')
+let cookieNamePrefix = VueCookie.getCookie('SESSION_COOKIE_NAME_PREFIX')
 if (!cookieNamePrefix || ['""', "''"].indexOf(cookieNamePrefix) > -1) {
   cookieNamePrefix = ''
 }
 const TOKEN_KEY = `${cookieNamePrefix}csrftoken`
 
 export function getTokenFromCookie() {
-  return VueCookie.get(TOKEN_KEY)
+  return VueCookie.getCookie(TOKEN_KEY)
 }
 
 export function setTokenToCookie(value, expires) {
-  return VueCookie.set(TOKEN_KEY, value, { expires: expires })
+  return VueCookie.setCookie(TOKEN_KEY, value, { expires: expires })
 }
 
 export function getCurrentRoleLocal(username) {
@@ -45,10 +45,10 @@ export function saveCurrentOrgLocal(username, org) {
   const key = CURRENT_ORG_KEY + ':' + username
   if (org) {
     localStorage.setItem(key, JSON.stringify(org))
-    VueCookie.set('X-JMS-ORG', org.id)
+    VueCookie.setCookie('X-JMS-ORG', org.id)
   } else {
     localStorage.removeItem(key)
-    VueCookie.delete('X-JMS-ORG')
+    VueCookie.removeCookie('X-JMS-ORG')
   }
 }
 

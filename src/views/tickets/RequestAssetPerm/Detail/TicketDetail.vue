@@ -54,7 +54,7 @@
   </GenericTicketDetail>
 </template>
 
-<script>
+<script lang="jsx">
 import { formatTime, getDateTimeStamp } from '@/utils/common/time'
 import { toSafeLocalDateStr } from '@/utils/common/time'
 import { STATUS_MAP, treeNodes } from '../../const'

@@ -13,7 +13,7 @@
   </TwoCol>
 </template>
 
-<script type="text/jsx">
+<script lang="jsx">
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import Variable from '@/views/ops/Template/components/Variable'
 import { IBox } from '@/components'

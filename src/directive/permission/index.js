@@ -1,39 +1,36 @@
 import { hasPermission, getRouteRequiredPerms, getApiUrlRequirePerms } from '@/utils/jms/index'
 import permission from './permission'
-import Vue from 'vue'
 
-const install = function(Vue) {
-  Vue.directive('perms', permission)
+export function installPermissionDirective(app) {
+  app.directive('perms', permission)
 
-  Vue.prototype.$hasPerm = function(perms) {
+  app.config.globalProperties.$hasPerm = function(perms) {
     return hasPermission(perms)
   }
 
-  Vue.prototype.$hasApiActionPerm = function(url, action) {
+  app.config.globalProperties.$hasApiActionPerm = function(url, action) {
     const permsRequired = getApiUrlRequirePerms(url, action)
     return hasPermission(permsRequired)
   }
 
-  Vue.prototype.$getCurrentResActionPerms = function(action) {
+  app.config.globalProperties.$getCurrentResActionPerms = function(action) {
     return getRouteRequiredPerms(this.$route, action)
   }
 
-  Vue.prototype.$hasCurrentResAction = function(action) {
+  app.config.globalProperties.$hasCurrentResAction = function(action) {
     const permsRequired = getRouteRequiredPerms(this.$route, action)
     return hasPermission(permsRequired)
   }
 
-  Vue.prototype.$hasLicense = function() {
+  app.config.globalProperties.$hasLicense = function() {
     return this.$store.getters.hasValidLicense
   }
 
-  Vue.prototype.$isRootOrg = function() {
+  app.config.globalProperties.$isRootOrg = function() {
     return this.$store.getters.currentOrgIsRoot
   }
 }
 
-window['permission'] = permission
-Vue.use(install) // eslint-disable-line
-
-permission.install = install
-export default permission
+export default {
+  install: installPermissionDirective
+}

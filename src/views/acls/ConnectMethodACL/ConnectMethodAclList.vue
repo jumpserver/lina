@@ -2,7 +2,7 @@
   <GenericListPage :header-actions="headerActions" :help-tip="helpText" :table-config="tableConfig" />
 </template>
 
-<script>
+<script lang="jsx">
 import { GenericListPage } from '@/layout/components'
 
 export default {

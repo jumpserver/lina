@@ -49,7 +49,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import { mapGetters } from 'vuex'
 import MarkDown from '@/components/Widgets/MarkDown'
 

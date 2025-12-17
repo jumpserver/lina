@@ -1,4 +1,4 @@
-import { Message as elMessage } from 'element-ui'
+import { ElMessage as elMessage } from 'element-plus'
 import { toSentenceCase } from '@/utils/common/index'
 
 let messageDom = null

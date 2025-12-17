@@ -73,7 +73,11 @@ export function changeThemeColors(themeColors) {
         axios.get('/ui/theme/element-extra.css')
       ]).then(
         axios.spread((file, extraFile) => {
-          const fileData = file.data
+          let fileData = file.data
+          // strip @font-face blocks to avoid loading old element-icons fonts
+          try {
+            fileData = fileData.replace(/@font-face[\s\S]*?\}/g, '')
+          } catch (e) {}
           const extraFileData = extraFile.data.replace(/[\r\n]/g, '')
           originalStyle = replaceStyleColors(fileData + extraFileData)
           resolve()
@@ -102,4 +106,3 @@ export function replaceStyleColors(data) {
 
   return data
 }
-

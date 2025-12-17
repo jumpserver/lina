@@ -27,7 +27,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import IBox from '@/components/Common/IBox/index.vue'
 import DiffDetail from '@/components/Dialog/DiffDetail.vue'
 import { openTaskPage } from '@/utils/jms/index'

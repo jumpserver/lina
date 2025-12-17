@@ -14,7 +14,7 @@
   />
 </template>
 
-<script>
+<script lang="jsx">
 import TreeTable from '@/components/Table/TreeTable/index.vue'
 import { getDayEnd, getDaysAgo, toSafeLocalDateStr } from '@/utils/common/time'
 import { OutputExpandFormatter } from '../formatters'

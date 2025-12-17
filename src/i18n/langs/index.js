@@ -19,7 +19,7 @@ const elementLocaleNameByAppLocale = {
 function loadElementLocale(localeName) {
   try {
     // eslint-disable-next-line import/no-dynamic-require, global-require
-    const mod = require(`element-ui/lib/locale/lang/${localeName}`)
+    const mod = require(`element-plus/es/locale/lang/${localeName}`)
     return (mod && (mod.default || mod)) || {}
   } catch (e) {
     return {}

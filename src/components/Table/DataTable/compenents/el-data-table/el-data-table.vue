@@ -362,7 +362,7 @@ export default {
     newText: {
       type: String,
       default: function() {
-        return this.$t('Add')
+        return 'Add'
       }
     },
     /**
@@ -371,7 +371,7 @@ export default {
     editText: {
       type: String,
       default: function() {
-        return this.$t('Modify')
+        return 'Modify'
       }
     },
     /**
@@ -380,7 +380,7 @@ export default {
     viewText: {
       type: String,
       default: function() {
-        return this.$t('View')
+        return 'View'
       }
     },
     /**
@@ -389,7 +389,7 @@ export default {
     deleteText: {
       type: String,
       default: function() {
-        return this.$t('Delete')
+        return 'Delete'
       }
     },
     /**
@@ -400,7 +400,7 @@ export default {
     deleteMessage: {
       type: Function,
       default() {
-        return this.$t('Confirm') + this.deleteText + '?'
+        return 'Confirm' + this.deleteText + '?'
       }
     },
     /**
@@ -456,7 +456,7 @@ export default {
     onSuccess: {
       type: Function,
       default() {
-        return this.$message.success(this.$t('SuccessfulOperation'))
+        return this.$message.success('SuccessfulOperation')
       }
     },
     /**

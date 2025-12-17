@@ -57,7 +57,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import Dialog from '@/components/Dialog/index.vue'
 import PasswordHistoryDialog from './PasswordHistoryDialog.vue'
 import { SecretViewerFormatter } from '@/components/Table/TableFormatters'

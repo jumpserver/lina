@@ -11,7 +11,7 @@
   </span>
 </template>
 
-<script>
+<script lang="jsx">
 import BaseFormatter from './base.vue'
 
 export default {

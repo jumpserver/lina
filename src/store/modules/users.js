@@ -8,7 +8,6 @@ import {
 } from '@/utils/jms/auth'
 import orgUtil from '@/utils/jms/org'
 import { resetRouter } from '@/router'
-import Vue from 'vue'
 import store from '@/store'
 
 const _ = require('lodash')
@@ -207,7 +206,7 @@ const actions = {
       settings: state.consoleOrgs
     }
     const usingOrgs = mapper[viewName] || state.consoleOrgs
-    Vue.$log.debug('Set using orgs: ', viewName, usingOrgs)
+    console.debug('Set using orgs: ', viewName, usingOrgs)
     commit('SET_USING_ORGS', usingOrgs)
   },
   ifFirstLogin({ commit }, flag) {

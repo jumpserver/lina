@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import { GenericListTable } from '@/layout/components'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 

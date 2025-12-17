@@ -22,7 +22,7 @@
   </TwoCol>
 </template>
 
-<script>
+<script lang="jsx">
 import { GenericListTable } from '@/layout/components'
 import GatewayTestDialog from '@/components/Apps/GatewayTestDialog'
 import { connectivityMeta } from '@/components/Apps/AccountListTable/const'

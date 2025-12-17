@@ -12,7 +12,8 @@
 </template>
 
 <script>
-import { AppMain, NavHeader, NavLeft } from './components'
+import { AppMain, NavHeader } from './components'
+import NavLeft from './components/NavLeft/index.vue'
 import ResizeMixin from './mixin/ResizeHandler'
 
 export default {

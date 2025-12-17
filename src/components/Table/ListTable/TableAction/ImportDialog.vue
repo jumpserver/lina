@@ -66,7 +66,7 @@
   </Dialog>
 </template>
 
-<script>
+<script lang="jsx">
 import Dialog from '@/components/Dialog/index.vue'
 import ImportTable from '@/components/Table/ListTable/TableAction/ImportTable.vue'
 import { download, getErrorResponseMsg } from '@/utils/common/index'

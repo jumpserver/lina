@@ -10,7 +10,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import DetailCard from './index.vue'
 import { copy } from '@/utils/common/index'
 import { toSafeLocalDateStr } from '@/utils/common/time'

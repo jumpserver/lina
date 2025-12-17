@@ -124,7 +124,7 @@
   </span>
 </template>
 
-<script>
+<script lang="jsx">
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
 import { ObjectLocalStorage } from '@/utils/common'

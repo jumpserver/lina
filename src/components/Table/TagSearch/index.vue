@@ -42,7 +42,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 export default {
   name: 'TagSearch',
   props: {

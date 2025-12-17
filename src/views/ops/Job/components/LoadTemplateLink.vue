@@ -7,7 +7,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import AdhocOpenDialog from '@/views/ops/Adhoc/AdhocOpenDialog'
 
 export default {

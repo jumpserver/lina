@@ -11,7 +11,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import { GenericListPage } from '@/layout/components'
 import BindDialog from './BindDialog.vue'
 import LabelResourcesDialog from '@/views/labels/LabelResourcesDialog.vue'

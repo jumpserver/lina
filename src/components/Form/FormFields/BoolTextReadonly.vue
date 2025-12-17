@@ -17,13 +17,13 @@ export default {
     trueText: {
       type: String,
       default: function() {
-        return this.$t('Yes')
+        return 'Yes'
       }
     },
     falseText: {
       type: String,
       default: function() {
-        return this.$t('No')
+        return 'No'
       }
     },
     trueIcon: {

@@ -36,7 +36,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import Select2 from '../Select2.vue'
 import DataTable from '@/components/Table/DataTable/index.vue'
 import ValueFormatter from './ValueFormatter.vue'
@@ -117,7 +117,7 @@ export default {
             width: '120px',
             formatter: (row, col, cellValue, index) => {
               return (
-                <div className='input-button'>
+                <div class='input-button'>
                   <el-button
                     icon='el-icon-edit'
                     size='mini'

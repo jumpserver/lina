@@ -2,7 +2,7 @@
   <GenericTicketDetail :detail-card-items="detailCardItems" :object="object" />
 </template>
 
-<script>
+<script lang="jsx">
 import { STATUS_MAP } from '../const'
 import { formatTime, getDateTimeStamp } from '@/utils/common/time'
 import { toSafeLocalDateStr } from '@/utils/common/time'

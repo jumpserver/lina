@@ -9,7 +9,7 @@
   </TwoCol>
 </template>
 
-<script>
+<script lang="jsx">
 import { ListTable, QuickActions } from '@/components'
 import { openTaskPage } from '@/utils/jms/index'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'

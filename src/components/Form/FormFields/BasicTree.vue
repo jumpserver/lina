@@ -13,7 +13,7 @@
   />
 </template>
 
-<script>
+<script lang="jsx">
 export default {
   props: {
     value: {

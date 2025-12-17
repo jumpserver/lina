@@ -22,7 +22,7 @@
   </el-row>
 </template>
 
-<script>
+<script lang="jsx">
 import Details from './Details'
 import Comments from './Comments'
 import Steps from './Steps'

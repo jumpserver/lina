@@ -1,8 +1,8 @@
-import VueCookie from 'vue-cookie'
+import { VueCookieNext as VueCookie } from 'vue-cookie-next'
 import store from '@/store'
 
 export function getLangCode(withInternalCode = false) {
-  const cookieLang = VueCookie.get('django_language')
+  const cookieLang = VueCookie.getCookie('django_language')
   let lang = cookieLang || navigator.language.toLowerCase()
   if (withInternalCode) {
     const languages = store.getters.publicSettings['LANGUAGES']

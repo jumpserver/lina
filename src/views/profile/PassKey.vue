@@ -19,7 +19,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import { GenericListPage } from '@/layout/components'
 import { AutoDataForm, Dialog } from '@/components'
 import passkey from '@/utils/passkey'

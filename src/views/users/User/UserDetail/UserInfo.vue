@@ -15,7 +15,7 @@
   </TwoCol>
 </template>
 
-<script>
+<script lang="jsx">
 import { QuickActions } from '@/components'
 import RelationCard from '@/components/Cards/RelationCard'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'

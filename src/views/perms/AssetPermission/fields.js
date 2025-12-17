@@ -3,7 +3,7 @@ import AccountFormatter from './components/AccountFormatter'
 
 function getFields() {
   const users = {
-    label: this.$t('Users'),
+    label: 'Users',
     hidden: () => false,
     el: {
       value: [],
@@ -17,7 +17,7 @@ function getFields() {
   }
 
   const user_groups = {
-    label: this.$t('UserGroups'),
+    label: 'UserGroups',
     hidden: () => false,
     el: {
       value: [],
@@ -29,7 +29,7 @@ function getFields() {
     type: 'assetSelect',
     hidden: () => false,
     component: AssetSelect,
-    label: this.$t('Asset'),
+    label: 'Asset',
     rules: [{
       required: false
     }],
@@ -39,7 +39,7 @@ function getFields() {
   }
 
   const nodes = {
-    label: this.$t('Node'),
+    label: 'Node',
     hidden: () => false,
     el: {
       value: [],
@@ -54,27 +54,27 @@ function getFields() {
 
   const accounts = {
     type: 'input',
-    label: this.$t('Account'),
+    label: 'Account',
     component: AccountFormatter
   }
 
   const date_start = {
-    label: this.$t('DateStart'),
+    label: 'DateStart',
     hidden: () => false
   }
 
   const date_expired = {
-    label: this.$t('DateExpired'),
+    label: 'DateExpired',
     hidden: () => false
   }
 
   const is_active = {
-    label: this.$t('IsActive'),
+    label: 'IsActive',
     type: 'checkbox'
   }
 
   const applications = {
-    label: this.$t('Applications'),
+    label: 'Applications',
     hidden: () => false,
     el: {
       value: [],

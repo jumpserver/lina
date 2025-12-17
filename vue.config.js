@@ -92,7 +92,8 @@ module.exports = {
    * In most cases please use '/' !!!
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
-  transpileDependencies: [/\/node_modules\/vue-echarts\//, /\/node_modules\/resize-detector\//],
+  // Avoid transpiling ESM libs like vue-echarts to CommonJS in modern builds
+  transpileDependencies: [],
   publicPath: '/ui/',
   outputDir: 'lina',
   assetsDir: 'assets',
@@ -102,14 +103,14 @@ module.exports = {
     port: port,
     host: '0.0.0.0',
     open: false,
-    disableHostCheck: true,
-    overlay: {
-      warnings: false,
-      errors: true
+    allowedHosts: 'all',
+    client: {
+      overlay: {
+        warnings: false,
+        errors: true
+      }
     },
-    watchOptions: {
-      aggregateTimeout: 2000
-    },
+    watchFiles: ['src/**/*', 'public/**/*'],
     proxy: {
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
@@ -168,11 +169,21 @@ module.exports = {
     // provide the app's title in webpack's name field, so that
     // it can be accessed in index.html to inject the correct title.
     name: name,
+    // Temporarily silence ::v-deep deprecation warnings
+    // We will migrate to :deep(...) later
+    ignoreWarnings: [
+      /::v-deep usage as a combinator has been deprecated/
+    ],
     resolve: {
       alias: {
         '@': resolve('src'),
-        elementCss: resolve('node_modules/element-ui/lib/theme-chalk/index.css'),
-        elementLocale: resolve('node_modules/element-ui/lib/locale/lang/en.js')
+        vue$: '@vue/compat',
+        // Ensure runtime deps for svg-sprite-loader resolve from top-level node_modules
+        'svg-baker-runtime': resolve('node_modules/svg-baker-runtime'),
+        'svg-sprite-loader': resolve('node_modules/svg-sprite-loader')
+      },
+      fallback: {
+        path: require.resolve('path-browserify')
       },
       extensions: ['.vue', '.js', '.json']
     }
@@ -194,10 +205,17 @@ module.exports = {
       .test(/\.svg$/)
       .include.add(resolve('src/icons'))
       .end()
+      // Webpack 5 + ESM interop for loader-generated code
+      .type('javascript/auto')
+      .resolve.set('fullySpecified', false)
+      .end()
       .use('svg-sprite-loader')
       .loader('svg-sprite-loader')
       .options({
-        symbolId: 'icon-[name]'
+        symbolId: 'icon-[name]',
+        // Force absolute module paths to avoid odd relative resolution
+        spriteModule: require.resolve('svg-sprite-loader/runtime/browser-sprite.build'),
+        symbolModule: require.resolve('svg-baker-runtime/browser-symbol')
       })
       .end()
 
@@ -207,8 +225,11 @@ module.exports = {
       .use('vue-loader')
       .loader('vue-loader')
       .tap(options => {
-        options.compilerOptions.preserveWhitespace = true
-        options.compilerOptions.directives = {
+        const compilerOptions = options.compilerOptions || {}
+        compilerOptions.preserveWhitespace = true
+        compilerOptions.compatConfig = compilerOptions.compatConfig || {}
+        compilerOptions.compatConfig.MODE = 2
+        compilerOptions.directives = {
           html(node, directiveMeta) {
             const props = node.props || (node.props = [])
             props.push({
@@ -217,13 +238,14 @@ module.exports = {
             })
           }
         }
+        options.compilerOptions = compilerOptions
         return options
       })
       .end()
 
     config
-      // https://webpack.js.org/configuration/devtool/#development
-      .when(process.env.NODE_ENV === 'development', config => config.devtool('cheap-source-map'))
+      // Use higher-quality source maps in dev to get accurate file/line
+      .when(process.env.NODE_ENV === 'development', config => config.devtool('eval-source-map'))
 
     config.when(process.env.NODE_ENV === 'production', config => {
       config.plugin('CompressionWebpackPlugin').use(CompressionWebpackPlugin, [

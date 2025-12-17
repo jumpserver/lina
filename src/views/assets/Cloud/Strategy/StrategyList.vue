@@ -7,7 +7,7 @@
   />
 </template>
 
-<script type="text/jsx">
+<script lang="jsx">
 import { DrawerListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 

@@ -21,6 +21,7 @@ import { mapGetters } from 'vuex'
 import { getTicketOpenCount } from '@/api/ticket'
 import AssignedTicketList from './AssignedTicketList'
 import MyTicketList from './MyTicketList'
+import i18n from '@/i18n/i18n'
 
 export default {
   name: 'Index',
@@ -36,11 +37,11 @@ export default {
         activeMenu: 'MyTicketList',
         submenu: [
           {
-            title: this.$t('MyTickets'),
+            title: i18n.global.t('MyTickets'),
             name: 'MyTicketList'
           },
           {
-            title: this.$t('AwaitingMyApproval'),
+            title: i18n.global.t('AwaitingMyApproval'),
             name: 'AssignedTicketList'
           }
         ]

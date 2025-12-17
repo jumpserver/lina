@@ -1,39 +1,8 @@
 <template>
-  <el-select
-    :disabled="disabled"
-    :placeholder="$tc('Select')"
-    :value="currentOrgId"
-    class="org-select"
-    :style="{ width: selectWidth }"
-    filterable
-    popper-class="switch-org"
-    @change="changeOrg"
-  >
-    <template slot="prefix">
-      <svg-icon icon-class="organization" />
-    </template>
-
-    <el-option-group
-      v-for="group in orgGroups"
-      :key="group.label"
-      :label="group.label"
-      class="option-group"
-    >
-      <el-option
-        v-for="item in group.options"
-        :key="item.id"
-        :disabled="item.disabled"
-        :label="item.name"
-        :selected="item.id === currentOrg.id"
-        :value="item.id"
-      >
-        <span v-if="item.icon" style="font-size: 15px; margin-right: 5px;">
-          <svg-icon :icon-class="item.icon" />
-        </span>
-        <span>{{ item.name }}</span>
-      </el-option>
-    </el-option-group>
-  </el-select>
+  <div>
+    <h1>Organization</h1>
+  </div>
+ 
 </template>
 
 <script>

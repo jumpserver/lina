@@ -3,11 +3,11 @@
     :url="url"
     :columns-meta="columnsMeta"
     :extra-quick-actions="quickActions"
-    :object.sync="object"
+    :object="object"
   />
 </template>
 
-<script>
+<script lang="jsx">
 import Account from '@/views/assets/Asset/AssetDetail/Account'
 
 export default {

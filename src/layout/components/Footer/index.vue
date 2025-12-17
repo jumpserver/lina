@@ -6,7 +6,7 @@
     <div>{{ corporation }}</div>
   </div>
 </template>
-<script>
+<script lang="jsx">
 import { mapGetters } from 'vuex'
 export default {
   name: 'Footer',

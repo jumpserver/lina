@@ -25,7 +25,7 @@ export default {
     title: {
       type: String,
       default() {
-        return this.$t('Feishu')
+        return 'Feishu'
       }
     },
     encryptedFields: {
@@ -35,10 +35,10 @@ export default {
     formFields: {
       type: Array,
       default() {
-        return [[this.$t('Basic'), [
+        return [['Basic', [
           'AUTH_FEISHU', 'FEISHU_APP_ID',
           'FEISHU_APP_SECRET', 'FEISHU_RENAME_ATTRIBUTES'
-        ]], [this.$t('Other'), [
+        ]], ['Other', [
           'FEISHU_ORG_IDS'
         ]]
         ]
@@ -68,7 +68,7 @@ export default {
         hasDetailInMsg: false,
         moreButtons: [
           {
-            title: this.$t('Test'),
+            title: 'Test',
             loading: false,
             callback: function(value, form, btn) {
               btn.loading = true

@@ -46,13 +46,13 @@ export default {
     variablesHelpText: {
       type: String,
       default() {
-        return this.$t('WatermarkVariableHelpText')
+        return 'WatermarkVariableHelpText'
       }
     }
   },
   data() {
     return {
-      title: this.$t('BuiltinVariable')
+      title: 'BuiltinVariable'
     }
   },
   computed: {

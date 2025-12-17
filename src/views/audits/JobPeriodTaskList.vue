@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script type="text/jsx">
+<script lang="jsx">
 import GenericListPage from '@/layout/components/GenericListPage'
 import { SwitchFormatter } from '@/components/Table/TableFormatters'
 
@@ -39,7 +39,7 @@ export default {
             label: `${this.$t('Success')}/${this.$t('Total')}`,
             formatter: (row) => {
               return <div>
-                <span Class='text-primary'>{row.summary.success}</span>/
+                <span class='text-primary'>{row.summary.success}</span>/
                 <span>{row.summary.total}</span>
               </div>
             }

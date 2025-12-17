@@ -24,7 +24,7 @@
   </el-row>
 </template>
 
-<script>
+<script lang="jsx">
 
 export default {
   name: 'TwoTabFormatter',

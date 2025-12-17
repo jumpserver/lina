@@ -20,7 +20,7 @@
   </div>
 </template>
 
-<script type="text/jsx">
+<script lang="jsx">
 import { lan, privateCloudProviders, publicHostProviders, publicDBProviders } from '../const'
 import CreateDialog from './components/CreateDialog.vue'
 import UpdateDialog from './components/UpdateDialog.vue'

@@ -7,7 +7,7 @@
     </span>
   </span>
 </template>
-<script>
+<script lang="jsx">
 import BaseFormatter from '@/components/Table/TableFormatters/base.vue'
 
 export default {

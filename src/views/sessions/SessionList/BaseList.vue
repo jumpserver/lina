@@ -6,7 +6,7 @@
   />
 </template>
 
-<script type="text/jsx">
+<script lang="jsx">
 import prettyBytes from 'pretty-bytes'
 import { DrawerListTable as ListTable } from '@/components'
 import { timeOffset } from '@/utils/common/time'

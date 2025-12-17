@@ -73,7 +73,7 @@
   </TwoCol>
 </template>
 
-<script type="text/jsx">
+<script lang="jsx">
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import IBox from '@/components/Common/IBox'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'

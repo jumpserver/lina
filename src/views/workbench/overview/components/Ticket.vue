@@ -2,11 +2,12 @@
   <HomeCard :table-config="tableConfig" v-bind="cardConfig" />
 </template>
 
-<script>
+<script lang="jsx">
 import HomeCard from './HomeCard'
 import { mapGetters } from 'vuex'
 import { toSafeLocalDateStr } from '@/utils/common/time'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import i18n from '@/i18n/i18n'
 
 export default {
   name: 'HomeAnnouncement',
@@ -22,7 +23,7 @@ export default {
   data() {
     return {
       cardConfig: {
-        title: this.$t('AwaitingMyApproval'),
+        title: i18n.global.t('AwaitingMyApproval'),
         icon: 'fa-check-square-o',
         dataArr: []
       },
@@ -31,7 +32,7 @@ export default {
         columns: ['title', 'applicant', 'type', 'status', 'date_created'],
         columnsMeta: {
           title: {
-            label: this.$t('Title'),
+            label: i18n.global.t('Title'),
             formatter: DetailFormatter,
             formatterArgs: {
               getRoute: function({ row }) {
@@ -55,13 +56,13 @@ export default {
             has: false
           },
           applicant: {
-            label: this.$t('User'),
+            label: i18n.global.t('User'),
             formatter: row => {
               return row.rel_snapshot.applicant
             }
           },
           type: {
-            label: this.$t('Type'),
+            label: i18n.global.t('Type'),
             width: '130px',
             formatter: row => {
               return row.type.label
@@ -72,14 +73,14 @@ export default {
             width: '120px',
             formatter: row => {
               if (row.status.value === 'open') {
-                return <el-tag type='primary' size='mini'> {this.$t('OpenStatus')}</el-tag>
+                return <el-tag type='primary' size='mini'> {i18n.global.t('OpenStatus')}</el-tag>
               } else {
-                return <el-tag type='danger' size='mini'>  {this.$t('CloseStatus')}</el-tag>
+                return <el-tag type='danger' size='mini'>  {i18n.global.t('CloseStatus')}</el-tag>
               }
             }
           },
           date_created: {
-            label: this.$t('Date'),
+            label: i18n.global.t('Date'),
             formatter: (row) => toSafeLocalDateStr(row.date_created)
           }
         },

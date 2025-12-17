@@ -35,7 +35,7 @@ export default {
     text: {
       type: String,
       default() {
-        return this.$t('Update')
+        return 'Update'
       }
     },
     showInput: {

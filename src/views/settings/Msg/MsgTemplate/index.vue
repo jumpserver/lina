@@ -15,7 +15,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import { IBox } from '@/components'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import MarkDownEditor from '@/views/settings/Msg/Email/markDownEditor.vue'

@@ -57,9 +57,9 @@
             <el-tooltip :disabled="!item.tip" :content="item.tip">
               <span class="filter-label">{{ item.name }}:</span>
               <el-select
+                v-model="formModel[item.name]"
                 v-if="item.type === 'select' && item.el && item.el.create"
                 :key="index"
-                v-model="formModel[item.name]"
                 :allow-create="item.el.create || false"
                 :filterable="item.el.create || false"
                 :multiple="item.el.multiple"

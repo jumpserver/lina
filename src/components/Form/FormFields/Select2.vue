@@ -1,48 +1,12 @@
 <template>
-  <el-select
-    ref="select"
-    v-model="iValue"
-    v-loadmore="loadMore"
-    :allow-create="allowCreate"
-    :class="transformed ? 'hidden-tag' : 'show-tag'"
-    :clearable="clearable"
-    :collapse-tags="collapseTags"
-    :disabled="!!selectDisabled"
-    :filterable="true"
-    :loading="!initialized"
-    :multiple="multiple"
-    :options="iOptions"
-    :placeholder="placeholder"
-    :remote="remote"
-    :remote-method="filterOptions"
-    class="select2"
-    popper-append-to-body
-    @change="onChange"
-    v-on="$listeners"
-    @visible-change="onVisibleChange"
-  >
-    <div v-if="showSelectAll" class="el-select-dropdown__header">
-      <el-checkbox v-model="allSelected" :disabled="selectAllDisabled" @change="handleSelectAllChange">
-        {{ $t('SelectAll') }}
-      </el-checkbox>
-      <div v-if="quickAddCallback" style="float: right">
-        <el-link :underline="false" @click="quickAddCallback">{{ $t('QuickAdd') }}</el-link>
-        <el-link :underline="false" icon="el-icon-refresh" style="margin-left: 5px;" @click="refresh" />
-      </div>
-    </div>
-    <el-option
-      v-for="item in iOptions"
-      :key="item.value"
-      :disabled="checkDisabled(item)"
-      :label="item.label"
-      :value="item.value"
-    />
-
-  </el-select>
+  <div>
+    <span>Hello World</span>
+  </div>
 </template>
 
-<script>
+<script lang="jsx">
 import { createSourceIdCache } from '@/api/common'
+import _ from 'lodash'
 
 export default {
   name: 'Select2',
@@ -115,7 +79,12 @@ export default {
     placeholder: {
       type: String,
       default: function() {
-        return this.$t('Select')
+        try {
+          const { default: i18n } = require('@/i18n/i18n')
+          return i18n?.global?.t?.('Select') || 'Select'
+        } catch (e) {
+          return 'Select'
+        }
       }
     },
     quickAddCallback: {
@@ -161,7 +130,8 @@ export default {
       initialOptions: [],
       remote: true,
       allSelected: false,
-      transformed: false // 这里改回来是因为，acl 中资产选择，category 选择后，再编辑，就看不到了
+      transformed: false, // 这里改回来是因为，acl 中资产选择，category 选择后，再编辑，就看不到了
+      innerValue: _.cloneDeep(this.value)
     }
   },
   computed: {
@@ -177,24 +147,6 @@ export default {
     selectAllDisabled() {
       const validOptions = this.iOptions.filter(item => this.disabledValues.indexOf(item.value) === -1)
       return validOptions.length === 0
-    },
-    iValue: {
-      set(val) {
-        const noValue = !this.value || this.value.length === 0
-        if (noValue && !this.initialized) {
-          return
-        }
-        if (val && val.constructor === Object && val.value) {
-          this.$emit('input', val.value)
-        } else if (val && val.constructor === Object && val.id) {
-          this.$emit('input', val.id)
-        } else {
-          this.$emit('input', val)
-        }
-      },
-      get() {
-        return this.value
-      }
     },
     iAjax() {
       const defaultMakeParams = (params) => {
@@ -249,6 +201,7 @@ export default {
     }
   },
   watch: {
+    // Keep inner state in sync with prop without causing loops
     disabled(newValue, oldValue) {
       this.selectDisabled = newValue
     },
@@ -260,17 +213,20 @@ export default {
       this.refresh()
     },
     value: {
-      handler(newValue, oldValue) {
+      handler(newValue) {
+        if (!_.isEqual(this.innerValue, newValue)) {
+          this.innerValue = _.cloneDeep(newValue)
+        }
       },
       deep: true
-    }
+    },
   },
   async mounted() {
     if (!this.initialized) {
       await this.initialSelect()
       setTimeout(() => {
         this.$log.debug('Value is : ', this.value)
-        this.iValue = this.value
+        this.innerValue = _.cloneDeep(this.value)
         this.initialized = true
         this.$emit('initialized', true)
       }, 100)
@@ -317,6 +273,19 @@ export default {
       this.iOptions = []
       this.params.search = query
       this.getOptions()
+      // 同步输入时避免 value 仍指向旧引用造成递归
+      if (!this.multiple && Array.isArray(this.innerValue)) {
+        this.innerValue = ''
+      }
+    },
+    handleModelUpdate(val) {
+      // avoid loops
+      if (!_.isEqual(this.innerValue, val)) {
+        this.innerValue = _.cloneDeep(val)
+      }
+      if (!_.isEqual(this.value, val)) {
+        this.$emit('input', _.cloneDeep(val))
+      }
     },
     async getInitialOptions() {
       const { url, processResults, validateStatus } = this.iAjax
@@ -393,7 +362,7 @@ export default {
       this.iOptions.push(option)
     },
     getSelectedOptions() {
-      let values = this.iValue
+      let values = this.innerValue
       if (!Array.isArray(values)) {
         values = [values]
       }
@@ -402,7 +371,8 @@ export default {
       })
     },
     clearSelected() {
-      this.iValue = this.multiple ? [] : ''
+      this.innerValue = this.multiple ? [] : ''
+      this.$emit('input', _.cloneDeep(this.innerValue))
     },
     checkDisabled(item) {
       return item.disabled === undefined ? this.disabledValues.indexOf(item.value) !== -1 : item.disabled
@@ -430,13 +400,15 @@ export default {
     },
     async selectAll() {
       await this.loadAll()
-      this.iValue = this.iOptions.map((v) => v.value)
+      this.innerValue = this.iOptions.map((v) => v.value)
+      this.$emit('input', _.cloneDeep(this.innerValue))
     },
     handleSelectAllChange(checked) {
       if (checked) {
         this.selectAll()
       } else {
-        this.iValue = []
+        this.innerValue = []
+        this.$emit('input', [])
       }
     }
   }

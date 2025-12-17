@@ -29,7 +29,7 @@
   </Page>
 </template>
 
-<script>
+<script lang="jsx">
 import Page from '@/layout/components/Page'
 import { Dialog, QuickActions } from '@/components'
 import DetailCard from '@/components/Cards/DetailCard/index'

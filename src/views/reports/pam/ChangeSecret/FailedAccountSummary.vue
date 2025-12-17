@@ -9,7 +9,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import HomeCard from '@/views/workbench/overview/components/HomeCard.vue'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
@@ -76,12 +76,12 @@ export default {
             label: this.$t('Success'),
             formatter: (row) => {
               if (row.status === 'pending') {
-                return <i Class='fa  fa fa-spinner fa-spin'/>
+                return <i class='fa  fa fa-spinner fa-spin'/>
               }
               if (row.is_success) {
-                return <i Class='fa fa-check text-primary'/>
+                return <i class='fa fa-check text-primary'/>
               }
-              return <i Class='fa fa-times text-danger'/>
+              return <i class='fa fa-times text-danger'/>
             }
           },
           actions: {

@@ -33,7 +33,7 @@
           </span>
         </el-button>
         <el-dropdown-menu slot="dropdown" style="overflow: auto; max-height: 60vh">
-          <template v-for="option in action.dropdown">
+          <template v-for="option in action.dropdown" :key="option.name">
             <div
               v-if="option.group"
               :key="'group:' + option.name"
@@ -43,7 +43,6 @@
               {{ option.group }}
             </div>
             <el-tooltip
-              :key="option.name"
               :content="option.tip"
               :disabled="!option.tip"
               :open-delay="500"

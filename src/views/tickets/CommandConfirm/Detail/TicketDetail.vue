@@ -11,7 +11,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import { STATUS_MAP } from '../../const'
 import Drawer from '@/components/Drawer/index.vue'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'

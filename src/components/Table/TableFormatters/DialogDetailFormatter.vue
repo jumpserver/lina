@@ -15,7 +15,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import DetailCard from '@/components/Cards/DetailCard/index.vue'
 import Dialog from '@/components/Dialog/index.vue'
 import BaseFormatter from './base.vue'

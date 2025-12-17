@@ -2,7 +2,7 @@
   <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
-<script>
+<script lang="jsx">
 import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 
@@ -70,12 +70,12 @@ export default {
             label: this.$t('Success'),
             formatter: (row) => {
               if (row.status === 'pending') {
-                return <i Class='fa  fa fa-spinner fa-spin'/>
+                return <i class='fa  fa fa-spinner fa-spin'/>
               }
               if (row.is_success) {
-                return <i Class='fa fa-check text-primary'/>
+                return <i class='fa fa-check text-primary'/>
               }
-              return <i Class='fa fa-times text-danger'/>
+              return <i class='fa fa-times text-danger'/>
             }
           },
           actions: {

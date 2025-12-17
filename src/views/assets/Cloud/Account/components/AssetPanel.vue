@@ -13,7 +13,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import ImportTable from '@/components/Table/ListTable/TableAction/ImportTable'
 import _isequal from 'lodash/isEqual'
 

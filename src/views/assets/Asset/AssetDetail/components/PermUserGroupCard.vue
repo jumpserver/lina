@@ -48,7 +48,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import IBox from '@/components/Common/IBox'
 import Drawer from '@/components/Drawer/index.vue'
 

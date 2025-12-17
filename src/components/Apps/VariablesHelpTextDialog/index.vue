@@ -46,7 +46,7 @@ export default {
     variablesHelpText: {
       type: String,
       default() {
-        return this.$t('WatermarkVariableHelpText')
+        return 'WatermarkVariableHelpText'
       }
     }
   },

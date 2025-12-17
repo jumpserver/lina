@@ -24,15 +24,13 @@ import { getApiPath } from '@/utils/common/index'
 import ActionsGroup from '@/components/Common/ActionsGroup'
 import ResourceActivity from '@/components/Apps/ResourceActivity/index.vue'
 import { mapGetters } from 'vuex'
-import Vue from 'vue'
-
-Vue.component('ResourceActivity', ResourceActivity)
 
 export default {
   name: 'GenericDetailPage',
   components: {
     TabPage,
-    ActionsGroup
+    ActionsGroup,
+    ResourceActivity
   },
   props: {
     url: {
@@ -81,19 +79,8 @@ export default {
     getTitle: {
       type: Function,
       default: function(obj) {
-        const objectType = this.$route.meta.title
-          .replace('Details', '')
-          .replace('Detail', '')
-          .replace('详情', '')
-          .trim()
-        this.$log.debug('Object is: ', obj)
-        const titlePrefix = this.titlePrefix || objectType
-        const objectName = this.getObjectName(obj)
-        let title = `${titlePrefix}: ${objectName}`
-        if (title.length > 80) {
-          title = title.slice(0, 80) + '...'
-        }
-        return title
+        const objectName = obj?.name || ''
+        return objectName
       }
     }
   },

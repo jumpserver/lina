@@ -29,7 +29,7 @@ export default {
     title: {
       type: String,
       default() {
-        return this.$t('BasicInfo')
+        return 'BasicInfo'
       }
     },
     fa: {

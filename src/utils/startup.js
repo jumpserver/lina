@@ -1,7 +1,6 @@
 // import getPageTitle from '@/utils/get-page-title'
 import store from '@/store'
 import router, { resetRouter } from '@/router'
-import Vue from 'vue'
 import { message } from '@/utils/vue/message'
 import orgUtil from '@/utils/jms/org'
 import orgs from '@/api/orgs'
@@ -45,7 +44,7 @@ async function checkLogin({ to, from, next }) {
   try {
     return await store.dispatch('users/getProfile')
   } catch (e) {
-    Vue.$log.error(e)
+    console.error(e)
     await beforeGoToLogin()
     return reject('No profile get: ' + e)
   }
@@ -74,20 +73,20 @@ async function changeCurrentOrgIfNeed({ to, from, next }) {
 
   const usingOrgs = store.getters.usingOrgs
   if (!usingOrgs || usingOrgs.length === 0) {
-    Vue.$log.debug('No using orgs, return: ', usingOrgs)
+    console.debug('No using orgs, return: ', usingOrgs)
     return
   }
   await refreshCurrentOrg()
   const currentOrg = store.getters.currentOrg
   if (!currentOrg || typeof currentOrg !== 'object') {
-    Vue.$log.error('Current org is null or not a object: ', currentOrg)
+    console.error('Current org is null or not a object: ', currentOrg)
     await orgUtil.change2PropOrg({ to, from, next })
   }
   const globalOrgPath = [
-    '/console/perms/login-acls/',
-    '/console/users/roles/',
-    '/console/perms/connect-method-acls/',
-    '/settings/'
+    '/console/perms/login-acls',
+    '/console/users/roles',
+    '/console/perms/connect-method-acls',
+    '/settings'
   ]
   if (autoEnterOrgs.indexOf(currentOrg.id) !== -1 && currentOrg.autoEnter) {
     const delta = new Date().getTime() - currentOrg.autoEnter
@@ -98,7 +97,7 @@ async function changeCurrentOrgIfNeed({ to, from, next }) {
     return
   }
   if (!orgUtil.hasCurrentOrgPermission()) {
-    Vue.$log.error('Not has current org permission: ', currentOrg)
+    console.error('Not has current org permission: ', currentOrg)
     await orgUtil.change2PropOrg({ to, from, next })
   }
 }
@@ -116,32 +115,34 @@ export async function generatePageRoutes({ to, from, next }) {
     accessRoutes = [
       ...accessRoutes,
       {
-        path: '*',
+        path: '/:pathMatch(.*)*',
         redirect: '/404',
         hidden: true
       }
     ]
     // dynamically add accessible routes
-    Vue.$log.debug(
+    console.debug(
       'All routes:',
       accessRoutes.reduce((acc, cur) => {
         acc[cur.name] = cur
         return acc
       }, {})
     )
-    router.addRoutes(accessRoutes)
+    accessRoutes.forEach(route => {
+      router.addRoute(route)
+    })
 
     await store.dispatch('permission/generateViewRoutes', { to, from })
 
     // hack method to ensure that addRoutes is complete
     // set the replace: true, so the navigation will not leave a history record
-    // Vue.$log.debug('Next to: ', to)
+    // console.debug('Next to: ', to)
     next({ ...to, replace: true })
   } catch (error) {
     // remove token and go to login page to re-login
     // await store.dispatch('user/resetToken')
     message.error(error || 'Has Error')
-    Vue.$log.error('Error occur: ', error)
+    console.error('Error occur: ', error)
   }
 }
 
@@ -167,20 +168,25 @@ export async function changeCurrentViewIfNeed({ to, from, next }) {
   let viewName = to.path.split('/')[1]
   // 这几个是需要检测的, 切换视图组织时，避免 404, 这里不能加 settings, 因为 默认没有返回 setting 组织(System) 的管理权限
   if (['console', 'audit', 'pam', 'workbench', 'tickets', ''].indexOf(viewName) === -1) {
-    Vue.$log.debug('Current view no need check', viewName)
+    console.debug('Current view no need check', viewName)
     return
   }
 
   const has = isViewHasOrgs(viewName)
-  Vue.$log.debug('Change has current view, has perm: ', viewName, '=>', has)
+  console.debug('Change has current view, has perm: ', viewName, '=>', has)
   if (has) {
     await store.dispatch('users/changeToView', viewName)
     return { status: 'continue' }
   }
-  viewName = getPropView()
+  const preferView = getPropView()
+  // 如果没有可用视图，直接放行，避免无限重定向
+  if (!preferView || preferView === viewName) {
+    return { status: 'continue' }
+  }
+  viewName = preferView
   // Next 之前要重置 init 状态，否则这些路由守卫就不走了
   await store.dispatch('app/reset')
-  next(`/${viewName}/`)
+  next(`/${viewName}`)
 
   // new Promise((resolve, reject) => reject('')) 这种方式通过输出发现在页面除此渲染的时候执行两次，
   // 返回一个 Promise 我理解是为了中断第一次导航，确保只有第二次导航到到有权限的视图。由于第一个 has 为 false
@@ -229,7 +235,7 @@ export async function startup({ to, from, next }) {
     await checkUserFirstLogin({ to, from, next })
     await store.dispatch('assets/getAssetCategories')
   } catch (e) {
-    Vue.$log.error('Startup error: ', e)
+    console.error('Startup error: ', e)
   }
   return true
 }

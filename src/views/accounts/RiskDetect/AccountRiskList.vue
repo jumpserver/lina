@@ -20,7 +20,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
 import RiskHandleFormatter from './RiskHandlerFormatter/index.vue'
 import BatchResolveDialog from '@/views/accounts/RiskDetect/RiskHandlerFormatter/BatchResolveDialog.vue'

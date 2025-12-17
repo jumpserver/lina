@@ -10,7 +10,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import store from '@/store'
 import { mapGetters } from 'vuex'
 import { Select2 } from '@/components'

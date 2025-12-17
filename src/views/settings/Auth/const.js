@@ -3,6 +3,8 @@ import { Select2 } from '@/components/Form/FormFields'
 import i18n from '@/i18n/i18n'
 import { ObjectLocalStorage } from '@/utils/common/index'
 
+const t = i18n.global.t.bind(i18n.global)
+
 export const authLocalStorage = new ObjectLocalStorage('auth')
 
 export function getOrgSelect2Meta() {
@@ -28,82 +30,82 @@ export function getAuthItems() {
     {
       name: 'LdapHA',
       logo: require('@/assets/img/auth/ldap_logo.png'),
-      title: i18n.t('AD/LDAP HA'),
+      title: t('AD/LDAP HA'),
       authKey: 'AUTH_LDAP_HA',
-      description: i18n.t('LdapHaSummary'),
+      description: t('LdapHaSummary'),
       type: 'common'
     },
     {
       name: 'OIDC',
-      title: i18n.t('OIDC'),
+      title: t('OIDC'),
       logo: require('@/assets/img/auth/oidc_logo.png'),
       authKey: 'AUTH_OPENID',
       type: 'SSO',
-      description: i18n.t('OidcSummary')
+      description: t('OidcSummary')
     },
     {
       name: 'SAML2',
       logo: require('@/assets/img/auth/saml2_logo.png'),
-      title: i18n.t('SAML2'),
+      title: t('SAML2'),
       authKey: 'AUTH_SAML2',
       type: 'SSO',
-      description: i18n.t('Saml2Summary')
+      description: t('Saml2Summary')
     },
     {
       name: 'OAuth2',
       logo: require('@/assets/img/auth/oauth2_logo.png'),
-      title: i18n.t('OAuth2'),
+      title: t('OAuth2'),
       authKey: 'AUTH_OAUTH2',
       type: 'SSO',
-      description: i18n.t('OAuth2Summary')
+      description: t('OAuth2Summary')
     },
     {
       name: 'WeCom',
       logo: require('@/assets/img/auth/wecom_logo.png'),
-      title: i18n.t('WeCom'),
+      title: t('WeCom'),
       authKey: 'AUTH_WECOM',
       type: 'IdP',
-      description: i18n.t('WeComSummary')
+      description: t('WeComSummary')
     },
     {
       name: 'DingTalk',
       logo: require('@/assets/img/auth/dingtalk_logo.webp'),
-      title: i18n.t('DingTalk'),
+      title: t('DingTalk'),
       authKey: 'AUTH_DINGTALK',
       type: 'IdP',
-      description: i18n.t('DingTalkSummary')
+      description: t('DingTalkSummary')
     },
     {
       name: 'FeiShu',
       logo: require('@/assets/img/auth/feishu_logo.png'),
-      title: i18n.t('FeiShu'),
+      title: t('FeiShu'),
       authKey: 'AUTH_FEISHU',
       type: 'IdP',
-      description: i18n.t('FeiShuSummary')
+      description: t('FeiShuSummary')
     },
     {
       name: 'Lark',
       logo: require('@/assets/img/auth/lark_logo.png'),
-      title: i18n.t('Lark'),
+      title: t('Lark'),
       authKey: 'AUTH_LARK',
       type: 'IdP',
-      description: i18n.t('LarkSummary')
+      description: t('LarkSummary')
     },
     {
       name: 'Slack',
       logo: require('@/assets/img/auth/slack_logo.png'),
-      title: i18n.t('Slack'),
+      title: t('Slack'),
       authKey: 'AUTH_SLACK',
       type: 'IdP',
-      description: i18n.t('SlackSummary')
+      description: t('SlackSummary')
     },
     {
       name: 'Radius',
       logo: require('@/assets/img/auth/radius_logo.png'),
-      title: i18n.t('Radius'),
+      title: t('Radius'),
       authKey: 'AUTH_RADIUS',
       type: 'common',
-      description: i18n.t('RadiusSummary')
+      description: t('RadiusSummary')
     }
   ]
 
@@ -111,25 +113,25 @@ export function getAuthItems() {
     {
       name: 'LDAP',
       logo: require('@/assets/img/auth/ldap_logo.png'),
-      title: i18n.t('AD/LDAP'),
+      title: t('AD/LDAP'),
       authKey: 'AUTH_LDAP',
       type: 'common',
-      description: i18n.t('LdapSummary')
+      description: t('LdapSummary')
     },
     {
       name: 'CAS',
       logo: require('@/assets/img/auth/cas_logo.png'),
-      title: i18n.t('CAS'),
+      title: t('CAS'),
       authKey: 'AUTH_CAS',
-      description: i18n.t('CasSummary'),
+      description: t('CasSummary'),
       type: 'SSO'
     },
     {
       name: 'Passkey',
       logo: require('@/assets/img/auth/passkey_logo.png'),
-      title: i18n.t('Passkey'),
+      title: t('Passkey'),
       authKey: 'AUTH_PASSKEY',
-      description: i18n.t('PasskeySummary'),
+      description: t('PasskeySummary'),
       type: 'common'
     }
   ]

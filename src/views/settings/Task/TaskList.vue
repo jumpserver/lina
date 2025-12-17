@@ -2,7 +2,7 @@
   <ListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
-<script type="text/jsx">
+<script lang="jsx">
 import { ChoicesFormatter, DetailFormatter, SwitchFormatter } from '@/components/Table/TableFormatters'
 import { BASE_URL } from '@/utils/common/index'
 import { DrawerListTable as ListTable } from '@/components'
@@ -76,7 +76,7 @@ export default {
             label: `${this.$t('Success')}/${this.$t('Total')}`,
             formatter: (row) => {
               return <div>
-                <span Class='text-primary'>{row.summary.success || 0}</span>/
+                <span class='text-primary'>{row.summary.success || 0}</span>/
                 <span>{row.summary.total || 0}</span>
               </div>
             }

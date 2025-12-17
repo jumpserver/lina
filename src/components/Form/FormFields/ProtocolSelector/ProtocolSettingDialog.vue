@@ -29,7 +29,7 @@
   </Dialog>
 </template>
 
-<script>
+<script lang="jsx">
 import { AutoDataForm, Dialog } from '@/components'
 import JsonEditor from '@/components/Form/FormFields/JsonEditor.vue'
 

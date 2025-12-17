@@ -2,27 +2,29 @@ import i18n from '@/i18n/i18n'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 import DetailFormatter from '@/components/Table/TableFormatters/DetailFormatter.vue'
 
+const t = i18n.global.t.bind(i18n.global)
+
 export const UserAssetPermissionListPageSearchConfigOptions = [
-  { label: i18n.t('Name'), value: 'name' },
-  { label: i18n.t('Username'), value: 'username' },
-  { label: i18n.t('UserGroups'), value: 'user_group' },
-  { label: i18n.t('AssetName'), value: 'asset_name' },
-  { label: i18n.t('AssetAddress'), value: 'address' },
-  { label: i18n.t('Account'), value: 'accounts' },
+  { label: t('Name'), value: 'name' },
+  { label: t('Username'), value: 'username' },
+  { label: t('UserGroups'), value: 'user_group' },
+  { label: t('AssetName'), value: 'asset_name' },
+  { label: t('AssetAddress'), value: 'address' },
+  { label: t('Account'), value: 'accounts' },
   {
-    label: i18n.t('Valid'),
+    label: t('Valid'),
     value: 'is_valid',
-    children: [{ value: '1', label: i18n.t('Yes') }, { value: '0', label: i18n.t('No') }]
+    children: [{ value: '1', label: t('Yes') }, { value: '0', label: t('No') }]
   },
   {
-    label: i18n.t('Effective'),
+    label: t('Effective'),
     value: 'is_effective',
-    children: [{ value: '1', label: i18n.t('Yes') }, { value: '0', label: i18n.t('No') }]
+    children: [{ value: '1', label: t('Yes') }, { value: '0', label: t('No') }]
   },
   {
-    label: i18n.t('FromTicket'),
+    label: t('FromTicket'),
     value: 'from_ticket',
-    children: [{ value: '1', label: i18n.t('Yes') }, { value: '0', label: i18n.t('No') }]
+    children: [{ value: '1', label: t('Yes') }, { value: '0', label: t('No') }]
   }
 ]
 
@@ -39,10 +41,10 @@ export const AssetPermissionTableMeta = {
     }
   },
   action: {
-    label: i18n.t('Action'),
+    label: t('Action'),
     formatter: row => {
       if (row.actions.length === 6) {
-        return i18n.t('All')
+        return t('All')
       }
       return row.actions
         .map(item => {
@@ -143,11 +145,11 @@ export const AssetPermissionTableMeta = {
 export const AssetPermissionListPageSearchConfigOptions = [
   ...UserAssetPermissionListPageSearchConfigOptions,
   {
-    label: i18n.t('NodeSearchStrategy'),
+    label: t('NodeSearchStrategy'),
     value: 'all',
     children: [
-      { value: '0', label: i18n.t('OnlySearchCurrentNodePerm') },
-      { value: '1', label: i18n.t('SearchAncestorNodePerm') }
+      { value: '0', label: t('OnlySearchCurrentNodePerm') },
+      { value: '1', label: t('SearchAncestorNodePerm') }
     ]
   }
 ]
@@ -161,31 +163,31 @@ export const AnonymousAccount = '@ANON'
 export const NoneAccount = '@NONE'
 
 export const AccountLabelMapper = {
-  [AllAccount]: i18n.t('AllAccounts'),
-  [SpecAccount]: i18n.t('SpecAccount'),
-  [ExcludeAccount]: i18n.t('ExcludeAccount'),
-  [NoneAccount]: i18n.t('None'),
-  [SameAccount]: i18n.t('SameAccount'),
-  [ManualAccount]: i18n.t('ManualAccount'),
-  [AnonymousAccount]: i18n.t('AnonymousAccount')
+  [AllAccount]: t('AllAccounts'),
+  [SpecAccount]: t('SpecAccount'),
+  [ExcludeAccount]: t('ExcludeAccount'),
+  [NoneAccount]: t('None'),
+  [SameAccount]: t('SameAccount'),
+  [ManualAccount]: t('ManualAccount'),
+  [AnonymousAccount]: t('AnonymousAccount')
 }
 
 export const virtualAccount = {
-  label: i18n.t('VirtualAccounts'),
+  label: t('VirtualAccounts'),
   value: '@VIRTUAL',
-  tip: i18n.t('VirtualAccountHelpMsg')
+  tip: t('VirtualAccountHelpMsg')
 }
 
 export const realChoices = [
   {
     label: AccountLabelMapper[AllAccount],
     value: AllAccount,
-    tip: i18n.t('AllAccountTip')
+    tip: t('AllAccountTip')
   },
   {
     label: AccountLabelMapper[SpecAccount],
     value: SpecAccount,
-    tip: i18n.t('SpecAccountTip')
+    tip: t('SpecAccountTip')
   },
   {
     label: AccountLabelMapper[ExcludeAccount],
@@ -201,17 +203,17 @@ export const virtualAccounts = [
   {
     label: AccountLabelMapper[ManualAccount],
     value: ManualAccount,
-    tip: i18n.t('ManualAccountTip')
+    tip: t('ManualAccountTip')
   },
   {
     label: AccountLabelMapper[SameAccount],
     value: SameAccount,
-    tip: i18n.t('SameAccountTip')
+    tip: t('SameAccountTip')
   },
   {
     label: AccountLabelMapper[AnonymousAccount],
     value: AnonymousAccount,
-    tip: i18n.t('AnonymousAccountTip')
+    tip: t('AnonymousAccountTip')
   }
 ]
 

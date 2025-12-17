@@ -8,9 +8,8 @@
       stretch
       @tab-click="handleTabClick"
     >
-      <template v-for="item in tabIndices">
+      <template v-for="item in tabIndices" :key="item.name">
         <el-tab-pane
-          :key="item.name"
           :disabled="item.disabled"
           :label-content="item.labelContent"
           :name="item.name"

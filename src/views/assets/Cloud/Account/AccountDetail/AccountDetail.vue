@@ -33,7 +33,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import { toSafeLocalDateStr } from '@/utils/common/time'
 import RelationCard from '@/components/Cards/RelationCard'

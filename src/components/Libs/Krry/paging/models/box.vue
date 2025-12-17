@@ -117,6 +117,7 @@ export default {
     }
   },
   data() {
+    const i18n = require('@/i18n/i18n').default
     return {
       districtListMock: [], // 展示的数据 （搜索和分页会自动修改这个数组）
       checkedData: [], // 已选择，数据格式：[id,id,id...]
@@ -131,8 +132,8 @@ export default {
       asyncSearch: false, // 要执行异步搜索的标记
       asyncPageIndex: 1, // 异步分页的 pageIndex
       asyncSearchPageIndex: 1, // 异步搜索的 pageIndex,
-      defaultPrev: '< ' + this.$tc('PagePrev'),
-      defaultNext: this.$tc('PageNext') + ' >'
+      defaultPrev: '< ' + (i18n?.global?.tc?.('PagePrev') || 'Prev'),
+      defaultNext: (i18n?.global?.tc?.('PageNext') || 'Next') + ' >'
     }
   },
   watch: {

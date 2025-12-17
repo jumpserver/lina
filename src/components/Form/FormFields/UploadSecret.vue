@@ -38,7 +38,7 @@ export default {
     btnText: {
       type: String,
       default: function() {
-        return this.$t('SelectFile')
+        return 'SelectFile'
       }
     },
     rows: {

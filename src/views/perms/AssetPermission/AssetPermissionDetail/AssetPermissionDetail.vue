@@ -13,7 +13,7 @@
   </TwoCol>
 </template>
 
-<script>
+<script lang="jsx">
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import { QuickActions } from '@/components'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
