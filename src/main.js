@@ -4,7 +4,11 @@ import enLocale from 'element-plus/dist/locale/en.mjs'
 import 'element-plus/dist/index.css'
 // 导入 Element Plus CSS 变量配置（需要在 Element Plus 样式之后，自定义样式之前）
 import '@/styles/element-plus-vars.css'
+// 导入默认主题配置（包含 :root CSS 变量定义）
+import '@/styles/default-theme.scss'
 import '@/styles/index.scss' // global css
+// 导入默认主题配置并初始化
+import { setRootColors } from '@/utils/theme/color'
 import App from './App'
 import store from './store'
 import router from './router'
@@ -85,6 +89,9 @@ async function initApp() {
   setupErrorHandler(app, message)
 
   window._ = _
+
+  // 初始化默认主题变量（确保在应用启动时就注入 CSS 变量）
+  setRootColors()
 
   await fetchTranslationsFromAPI()
   watchSessions()

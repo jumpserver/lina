@@ -1,8 +1,39 @@
 <template>
-  <div>
-    <h1>Organization</h1>
-  </div>
- 
+  <el-select
+    :disabled="disabled"
+    :placeholder="$tc('Select')"
+    :value="currentOrgId"
+    class="org-select"
+    :style="{ width: selectWidth }"
+    filterable
+    popper-class="switch-org"
+    @change="changeOrg"
+  >
+    <template slot="prefix">
+      <svg-icon icon-class="organization" />
+    </template>
+
+    <el-option-group
+      v-for="group in orgGroups"
+      :key="group.label"
+      :label="group.label"
+      class="option-group"
+    >
+      <el-option
+        v-for="item in group.options"
+        :key="item.id"
+        :disabled="item.disabled"
+        :label="item.name"
+        :selected="item.id === currentOrg.id"
+        :value="item.id"
+      >
+        <span v-if="item.icon" style="font-size: 15px; margin-right: 5px">
+          <svg-icon :icon-class="item.icon" />
+        </span>
+        <span>{{ item.name }}</span>
+      </el-option>
+    </el-option-group>
+  </el-select>
 </template>
 
 <script>
@@ -29,11 +60,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'currentOrg',
-      'usingOrgs',
-      'currentViewRoute'
-    ]),
+    ...mapGetters(['currentOrg', 'usingOrgs', 'currentViewRoute']),
     currentOrgDisplayName() {
       const currentOrgId = this.currentOrg?.id
       if (!currentOrgId) {
@@ -74,10 +101,7 @@ export default {
       }
     },
     orgGroups() {
-      return [
-        this.orgActionsGroup,
-        this.orgChoicesGroup
-      ]
+      return [this.orgActionsGroup, this.orgChoicesGroup]
     },
     currentOrgId() {
       const usingOrgIds = this.usingOrgs.map(o => o.id)
@@ -106,7 +130,8 @@ export default {
         tempSpan.style.position = 'absolute'
         tempSpan.style.whiteSpace = 'nowrap'
         tempSpan.style.fontSize = '14px'
-        tempSpan.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+        tempSpan.style.fontFamily =
+          '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
         tempSpan.style.fontWeight = 'normal'
         tempSpan.style.letterSpacing = 'normal'
 
@@ -219,7 +244,7 @@ $height: 28px;
 .line {
   width: 1px;
   margin-left: 5px;
-  border: .5px solid #FFF;
+  border: 0.5px solid #fff;
   opacity: 0.4;
 }
 </style>
