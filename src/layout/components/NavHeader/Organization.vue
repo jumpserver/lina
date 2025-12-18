@@ -187,6 +187,12 @@ $height: 28px;
 
 .org-select {
   line-height: $height;
+
+  ::v-deep .el-select__wrapper {
+    background: none;
+    border: none;
+    box-shadow: none;
+  }
 }
 
 ::v-deep .el-input {

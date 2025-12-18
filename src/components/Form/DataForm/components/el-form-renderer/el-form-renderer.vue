@@ -131,7 +131,9 @@ export default {
     this.initValue = _clonedeep(this.value)
     this.$nextTick(() => {
       // proxy
-      Object.keys(this.$refs.elForm.$options.methods).forEach(item => {
+      const methods = this.$refs.elForm.$options.methods || {}
+
+      Object.keys(methods).forEach(item => {
         if (item in this) return
         this[item] = this.$refs.elForm[item]
       })
@@ -224,6 +226,11 @@ export default {
         return item.hidden(this.value)
       }
       return false
+    },
+    clearValidate() {
+      if (this.$refs.elForm) {
+        this.$refs.elForm.clearValidate()
+      }
     }
   }
 }

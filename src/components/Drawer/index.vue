@@ -1,8 +1,9 @@
 <template>
+  <!-- DEBUG: Drawer visible={{ visible }}, component={{ component ? 'EXISTS' : 'EMPTY' }}, title={{ title }} -->
   <el-drawer
     ref="drawer"
-    v-model="iVisible"
-    v-el-drawer-drag-width
+    :model-value="visible"
+    @update:model-value="handleUpdateModelValue"
     :append-to-body="true"
     :before-close="handleClose"
     :class="['drawer', { 'drawer__no-footer': !hasFooter }]"
@@ -31,6 +32,7 @@
 
 <script>
 import { getDrawerWidth } from '@/utils/common/index'
+import { useDrawerDrag } from '@/utils/vue/useDrawerDrag'
 
 export default {
   props: {
@@ -72,22 +74,64 @@ export default {
   data() {
     return {
       loading: false,
-      formLabelWidth: '80px'
+      formLabelWidth: '80px',
+      drawerDrag: null
     }
   },
-  computed: {
-    iVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$emit('update:visible', val)
+  watch: {
+    visible(val) {
+      console.debug('>>> Drawer visible watch:', val, {
+        component: this.component ? 'EXISTS' : 'EMPTY',
+        title: this.title
+      })
+      if (val) {
+        // 抽屉打开时，初始化拖拽功能
+        this.$nextTick(() => {
+          if (!this.drawerDrag) {
+            this.drawerDrag = useDrawerDrag({
+              storageKey: 'drawerWidth'
+            })
+          }
+          this.drawerDrag.start()
+        })
+      } else {
+        // 抽屉关闭时，清理拖拽功能
+        if (this.drawerDrag) {
+          this.drawerDrag.cleanup()
+        }
       }
     }
   },
   mounted() {
+    console.debug('>>> Drawer mounted:', {
+      visible: this.visible,
+      component: this.component ? 'EXISTS' : 'EMPTY',
+      title: this.title
+    })
+    if (this.visible) {
+      this.$nextTick(() => {
+        if (!this.drawerDrag) {
+          this.drawerDrag = useDrawerDrag({
+            storageKey: 'drawerWidth'
+          })
+        }
+        this.drawerDrag.start()
+      })
+    }
+  },
+  beforeUnmount() {
+    if (this.drawerDrag) {
+      this.drawerDrag.cleanup()
+    }
   },
   methods: {
+    handleUpdateModelValue(val) {
+      console.debug('>>> Drawer handleUpdateModelValue:', val, {
+        component: this.component ? 'EXISTS' : 'EMPTY',
+        title: this.title
+      })
+      this.$emit('update:visible', val)
+    },
     handleClose(done) {
       this.$emit('close-drawer')
       done()
@@ -96,7 +140,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .drawer__no-footer {
   ::v-deep {
     .drawer {
@@ -242,7 +286,7 @@ export default {
     }
 
     .el-drawer__header {
-      border-bottom: 1px solid #EBEEF5;
+      border-bottom: 1px solid #ebeef5;
       margin-bottom: 0;
       padding: 15px 20px;
       font-size: 16px;
@@ -282,7 +326,8 @@ export default {
       }
     }
 
-    .drawer__content, .tab-page-content {
+    .drawer__content,
+    .tab-page-content {
       height: 100%;
       background: #f3f3f3;
     }

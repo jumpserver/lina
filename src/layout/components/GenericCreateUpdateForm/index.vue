@@ -45,12 +45,12 @@ export default {
     },
     afterGetFormValue: {
       type: Function,
-      default: (value) => value
+      default: value => value
     },
     // 提交前，清理form的值
     cleanFormValue: {
       type: Function,
-      default: (value) => value
+      default: value => value
     },
     // 获取 meta
     afterGetRemoteMeta: {
@@ -76,45 +76,47 @@ export default {
     // 创建成功的msg
     createSuccessMsg: {
       type: String,
-      default: function() {
+      default: function () {
         return 'CreateSuccessMsg'
       }
     },
     // 保存成功，继续添加的msg
     saveSuccessContinueMsg: {
       type: String,
-      default: function() {
+      default: function () {
         return 'SaveSuccessContinueMsg'
       }
     },
     // 更新成功的msg
     updateSuccessMsg: {
       type: String,
-      default: function() {
+      default: function () {
         return 'UpdateSuccessMsg'
       }
     },
     // 创建成功的跳转路由
     createSuccessNextRoute: {
       type: Object,
-      default: function() {
-        const routeName = this.$route.name?.replace('Create', 'List')
+      default: function () {
+        // const routeName = this.$route.name?.replace('Create', 'List')
+        const routeName = 'GroupCreate'
         return { name: routeName }
       }
     },
     // 更新成功的跳转路由
     updateSuccessNextRoute: {
       type: Object,
-      default: function() {
-        const routeName = this.$route.name?.replace('Update', 'List')
+      default: function () {
+        // const routeName = this.$route.name?.replace('Update', 'List')
+        const routeName = 'GroupUpdate'
         return { name: routeName }
       }
     },
     objectDetailRoute: {
       type: Object,
-      default: function() {
-        const routeName = this.$route.name?.replace('Update', 'Detail')
-          .replace('Create', 'Detail')
+      default: function () {
+        // const routeName = this.$route.name?.replace('Update', 'Detail').replace('Create', 'Detail')
+        const routeName = 'GroupDetail'
         return { name: routeName }
       }
     },
@@ -122,12 +124,13 @@ export default {
     getNextRoute: {
       type: Function,
       default(res, method) {
-        return method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
+        return { name: 'GroupList' }
+        // return method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
       }
     },
     cloneNameSuffix: {
       type: [String, Number],
-      default: function() {
+      default: function () {
         return 'Duplicate'.toLowerCase()
       }
     },
@@ -139,7 +142,7 @@ export default {
     // 获取创建和更新的url function
     getUrl: {
       type: Function,
-      default: function() {
+      default: function () {
         const objectId = this.getUpdateId()
         let url = this.url
         if (objectId) {
@@ -180,12 +183,16 @@ export default {
           msg = msg[0].toLowerCase() + msg.slice(1)
           this.$message({
             message: h('p', null, [
-              h('el-link', {
-                on: {
-                  click: () => this.$router.push(detailRoute)
+              h(
+                'el-link',
+                {
+                  on: {
+                    click: () => this.$router.push(detailRoute)
+                  },
+                  style: { 'vertical-align': 'top', 'margin-right': '5px' }
                 },
-                style: { 'vertical-align': 'top', 'margin-right': '5px' }
-              }, msgLinkName),
+                msgLinkName
+              ),
               h('span', {}, msg)
             ]),
             type: 'success'
@@ -200,9 +207,12 @@ export default {
       default(res, method, vm, addContinue) {
         const route = this.getNextRoute(res, method)
         if (!(route.params && route.params.id)) {
-          route['params'] = deepmerge(route['params'] || {}, { 'id': res.id })
+          route['params'] = deepmerge(route['params'] || {}, { id: res.id })
         }
-        route['query'] = deepmerge(route['query'], { 'order': this.extraQueryOrder, 'updated': new Date().getTime() })
+        route['query'] = deepmerge(route['query'], {
+          order: this.extraQueryOrder,
+          updated: new Date().getTime()
+        })
 
         this.$emit('submitSuccess', res)
 
@@ -344,7 +354,7 @@ export default {
     encryptFields(values) {
       // 批量提交，clean 后可能是个数组
       if (values instanceof Array) {
-        return values.map((item) => this.encryptFields(item))
+        return values.map(item => this.encryptFields(item))
       }
       values = { ...values }
       for (const field of this.encryptedFields) {
@@ -372,8 +382,8 @@ export default {
     defaultOnSubmit(validValues, formName, addContinue) {
       this.isSubmitting = true
       this.performSubmit(validValues)
-        .then((res) => this.onPerformSuccess.bind(this)(res, this.method, this, addContinue))
-        .catch((error) => this.onPerformError(error, this.method, this))
+        .then(res => this.onPerformSuccess.bind(this)(res, this.method, this, addContinue))
+        .catch(error => this.onPerformError(error, this.method, this))
         .finally(() => {
           setTimeout(() => {
             this.isSubmitting = false
@@ -383,7 +393,7 @@ export default {
     },
     async getCloneForm(cloneFrom) {
       const [curUrl, query] = this.url.split('?')
-      const url = `${curUrl}${cloneFrom}/${query ? ('?' + query) : ''}`
+      const url = `${curUrl}${cloneFrom}/${query ? '?' + query : ''}`
       try {
         const object = await this.getObjectDetail(url)
         let name = ''
@@ -438,5 +448,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
