@@ -217,7 +217,7 @@ export default {
 
       & ::v-deep .svg-icon {
         line-height: 40px;
-        color: #fff;
+        color: #eef3fb;
         font-size: 15px;
       }
 
@@ -242,7 +242,7 @@ export default {
       }
 
       & ::v-deep i {
-        color: #fff;
+        color: #eef3fb;
         font-size: 16px;
 
         &.el-icon-arrow-down {
@@ -262,7 +262,7 @@ export default {
       }
 
       &:hover {
-        background: rgba(0, 0, 0, 12%);
+        background: rgba(255, 255, 255, 0.08);
       }
     }
   }

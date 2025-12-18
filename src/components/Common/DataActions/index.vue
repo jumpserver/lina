@@ -303,8 +303,6 @@ $color-drop-menu-border: #e4e7ed;
   ::v-deep .action-item.el-dropdown .el-button {
     display: block;
     color: var(--color-primary);
-    background-color: $color-btn-background;
-    border-color: $color-btn-focus-background;
 
     &:focus {
       color: $btn-text-color;

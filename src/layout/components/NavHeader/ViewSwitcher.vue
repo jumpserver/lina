@@ -128,8 +128,12 @@ export default {
 
 <style lang="scss" scoped>
 .menu-main.el-menu {
-  background-color: transparent;
-  letter-spacing: 0.09em;
+  background-color: #1e2733 !important;
+  border-radius: 8px;
+  padding: 6px;
+  min-width: 180px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  letter-spacing: 0.05em;
 
   ::v-deep .el-submenu .el-submenu__title {
     height: 38px;
@@ -143,17 +147,24 @@ export default {
 
   & ::v-deep .el-icon-arrow-down {
     font-size: 13px;
-    color: #606266;
+    color: var(--menu-text);
   }
 
   .el-menu-item {
     height: 38px;
-    width: 160px;
     line-height: 28px;
-    padding: 4px 24px;
+    padding: 6px 14px;
+    color: var(--menu-text);
+    border-radius: 6px;
 
     &:hover {
-      background-color: var(--menu-hover);
+      color: var(--menu-text-active);
+      background: var(--menu-hover);
+    }
+
+    &.is-active {
+      color: #e5edf7;
+      background: linear-gradient(90deg, rgba(64, 158, 255, 0.28) 0%, #22344b 30%, #1e2733 100%);
     }
   }
 }
@@ -196,13 +207,14 @@ export default {
   vertical-align: middle !important;
   font-size: 14px;
   text-align: center;
-  color: #1F2329;
+  color: var(--menu-text);
   margin-right: 10px;
 }
 
 .icons-title {
   display: inline-block;
   font-size: 13px;
+  color: inherit;
 
   .menu-main.mobile-view-switch ::v-deep .el-submenu__icon-arrow {
     right: 10px;

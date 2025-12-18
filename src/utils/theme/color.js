@@ -86,7 +86,7 @@ export function changeMenuColor(themeColors) {
 
   // 后端不用返回 --menu-hover
   const menuActiveTextColor = colors['--menu-text-active']
-  if (menuActiveTextColor) {
+  if (menuActiveTextColor && !colors['--menu-hover']) {
     colors['--menu-hover'] = mix(white, menuActiveTextColor.replace(/#/g, ''), 90)
   }
 

@@ -18,7 +18,7 @@ $--color-transition-base: color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1) !defau
 /* Color
 -------------------------- */
 /// color|1|Brand Color|0
-$--color-primary: #1ab394 !default;
+$--color-primary: #409eff !default;
 /// color|1|Background Color|4
 $--color-white: #ffffff !default;
 /// color|1|Background Color|4
@@ -73,8 +73,8 @@ $--background-color-base: #f5f7fa !default;
 
 /* Link
 -------------------------- */
-$--link-color: $--color-success !default;
-$--link-hover-color: $--color-success-lighter !default;
+$--link-color: $--color-primary !default;
+$--link-hover-color: $--color-primary-light-2 !default;
 
 /* Border
 -------------------------- */
