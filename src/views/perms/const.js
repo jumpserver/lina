@@ -8,7 +8,6 @@ export const UserAssetPermissionListPageSearchConfigOptions = [
   { label: i18n.t('UserGroups'), value: 'user_group' },
   { label: i18n.t('AssetName'), value: 'asset_name' },
   { label: i18n.t('AssetAddress'), value: 'address' },
-  { label: i18n.t('Account'), value: 'accounts' },
   {
     label: i18n.t('Valid'),
     value: 'is_valid',

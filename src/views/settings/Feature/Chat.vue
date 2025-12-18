@@ -53,7 +53,10 @@ export default {
         'GPT_BASE_URL',
         'GPT_API_KEY',
         'GPT_PROXY',
-        'GPT_MODEL'
+        'GPT_MODEL',
+        'IS_CUSTOM_MODEL',
+        'CUSTOM_GPT_MODEL',
+        'CUSTOM_DEEPSEEK_MODEL'
       ],
       fieldsMeta: {
         CHAT_AI_TYPE: {
@@ -115,6 +118,16 @@ export default {
         },
         CHAT_AI_EMBED_URL: {
           hidden: (formValue) => formValue.CHAT_AI_METHOD !== 'embed'
+        },
+        CUSTOM_GPT_MODEL: {
+          hidden: (formValue) => {
+            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'gpt' || !formValue.IS_CUSTOM_MODEL
+          }
+        },
+        CUSTOM_DEEPSEEK_MODEL: {
+          hidden: (formValue) => {
+            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'deep-seek' || !formValue.IS_CUSTOM_MODEL
+          }
         }
       },
       submitMethod() {

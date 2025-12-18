@@ -190,10 +190,6 @@ export default {
               label: this.$t('RelevantAsset')
             },
             {
-              value: 'relevant_system_user',
-              label: this.$t('RelevantCommand')
-            },
-            {
               value: 'relevant_command',
               label: this.$t('ApplyRunCommand')
             }
