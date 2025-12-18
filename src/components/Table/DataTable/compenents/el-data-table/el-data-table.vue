@@ -22,60 +22,34 @@
         @select-all="handleSelectAll($event, canSelect)"
         @sort-change="onSortChange"
       >
-        <!--TODO 不用jsx写, 感觉template逻辑有点不清晰了-->
         <template v-if="isTree">
-          <!--有多选-->
-          <template v-if="hasSelect">
-            <el-data-table-column
-              key="selection-key"
-              v-bind="{ align: columnsAlign, ...columns[0] }"
-            />
+          <el-data-table-column
+            v-if="hasSelect"
+            key="selection-key"
+            v-bind="{ align: columnsAlign, ...columns[0] }"
+          />
+          <el-data-table-column
+            :key="treeControlColumn.prop || 'tree-ctrl'"
+            v-bind="treeControlColumn"
+          >
+            <template slot-scope="scope">
+              <span v-for="space in scope.row._level" :key="space" class="ms-tree-space" />
+              <span
+                v-if="iconShow(scope.$index, scope.row)"
+                class="tree-ctrl"
+                @click="toggleExpanded(scope.$index)"
+              >
+                <i :class="`el-icon-${scope.row._expanded ? 'minus' : 'plus'}`" />
+              </span>
+              {{ scope.row[treeLabelProp] }}
+            </template>
+          </el-data-table-column>
 
-            <el-data-table-column key="tree-ctrl" v-bind="{ align: columnsAlign, ...columns[1] }">
-              <template slot-scope="scope">
-                <span v-for="space in scope.row._level" :key="space" class="ms-tree-space" />
-                <span
-                  v-if="iconShow(scope.$index, scope.row)"
-                  class="tree-ctrl"
-                  @click="toggleExpanded(scope.$index)"
-                >
-                  <i :class="`el-icon-${scope.row._expanded ? 'minus' : 'plus'}`" />
-                </span>
-                {{ scope.row[columns[1].prop] }}
-              </template>
-            </el-data-table-column>
-
-            <el-data-table-column
-              v-for="col in columns.filter((c, i) => i !== 0 && i !== 1)"
-              :key="col.prop"
-              v-bind="{ align: columnsAlign, ...col }"
-            />
-          </template>
-
-          <!--无选择-->
-          <template v-else>
-            <!--展开这列, 丢失 el-data-table-column属性-->
-            <el-data-table-column key="tree-ctrl" v-bind="{ align: columnsAlign, ...columns[0] }">
-              <template slot-scope="scope">
-                <span v-for="space in scope.row._level" :key="space" class="ms-tree-space" />
-
-                <span
-                  v-if="iconShow(scope.$index, scope.row)"
-                  class="tree-ctrl"
-                  @click="toggleExpanded(scope.$index)"
-                >
-                  <i :class="`el-icon-${scope.row._expanded ? 'minus' : 'plus'}`" />
-                </span>
-                {{ scope.row[columns[0].prop] }}
-              </template>
-            </el-data-table-column>
-
-            <el-data-table-column
-              v-for="col in columns.filter((c, i) => i !== 0)"
-              :key="col.prop"
-              v-bind="{ align: columnsAlign, ...col }"
-            />
-          </template>
+          <el-data-table-column
+            v-for="col in treeDataColumns"
+            :key="col.prop"
+            v-bind="{ align: columnsAlign, ...col }"
+          />
         </template>
 
         <!--非树-->
@@ -86,7 +60,7 @@
             :selectable="canSelect"
             type="selection"
           />
-          <el-data-table-column
+          <el-table-column
             v-for="col in columns"
             :key="col.prop"
             :filter-method="typeof col.filterMethod === 'function' ? col.filterMethod : null"
@@ -94,16 +68,18 @@
             :filters="col.filters || null"
             :formatter="typeof col.formatter === 'function' ? col.formatter : null"
             :title="col.label"
-            v-bind="{ align: columnsAlign, ...col }"
+            :prop="col.prop"
+            v-bind="getColumnBindProps(col)"
           >
             <template #header>
               <span :title="col.label">{{ col.label }}</span>
             </template>
+
             <template
               v-if="col.formatter && typeof col.formatter !== 'function'"
-              v-slot:default="{ row, column, $index }"
+              #default="{ row, column, $index }"
             >
-              <div
+              <component
                 :is="col.formatter"
                 :key="row.id"
                 :cell-value="row[col.prop]"
@@ -116,7 +92,7 @@
                 :url="url"
               />
             </template>
-          </el-data-table-column>
+          </el-table-column>
         </template>
         <slot />
       </el-table>
@@ -361,7 +337,7 @@ export default {
      */
     newText: {
       type: String,
-      default: function() {
+      default: function () {
         return 'Add'
       }
     },
@@ -370,7 +346,7 @@ export default {
      */
     editText: {
       type: String,
-      default: function() {
+      default: function () {
         return 'Modify'
       }
     },
@@ -379,7 +355,7 @@ export default {
      */
     viewText: {
       type: String,
-      default: function() {
+      default: function () {
         return 'View'
       }
     },
@@ -388,7 +364,7 @@ export default {
      */
     deleteText: {
       type: String,
-      default: function() {
+      default: function () {
         return 'Delete'
       }
     },
@@ -775,6 +751,21 @@ export default {
         return this.defaultAlign
       }
     },
+    treeColumnIndex() {
+      return this.hasSelect ? 1 : 0
+    },
+    treeControlColumn() {
+      const column = this.columns[this.treeColumnIndex] || {}
+      return { align: this.columnsAlign, ...column }
+    },
+    treeDataColumns() {
+      const start = this.hasSelect ? 2 : 1
+      return this.columns.slice(start)
+    },
+    treeLabelProp() {
+      const column = this.columns[this.treeColumnIndex] || {}
+      return column.prop
+    },
     routerMode() {
       return this.$router ? this.$router.mode : 'hash'
     },
@@ -886,6 +877,13 @@ export default {
     this.debouncedGetListFromRemote = _.debounce(this.getListFromRemote, 300)
   },
   methods: {
+    getColumnBindProps(col) {
+      // 排除 formatter，因为组件类型的 formatter 不应该传递给 el-table-column 的 formatter prop
+      // 函数类型的 formatter 已经通过 :formatter 显式传递了
+      // 但是我们需要保留 formatter 在 v-bind 中，以便 template slot 可以访问到
+      // 所以这里不排除 formatter，而是在 el-data-table-column 中处理
+      return { align: this.columnsAlign, ...col }
+    },
     getQuery() {
       // 构造query对象
       let query = {}

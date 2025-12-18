@@ -1,8 +1,8 @@
 <template>
   <div>
-    <img v-if="icon" :src="icon" alt="icon" class="icon">
+    <img v-if="icon" :src="icon" alt="icon" class="icon" />
     <el-link
-      :class="{ 'clicked': linkClicked }"
+      :class="{ clicked: linkClicked }"
       :disabled="disabled"
       :type="col.type || 'info'"
       class="detail"
@@ -36,7 +36,7 @@ export default {
       type: Object,
       default() {
         return {
-          route: this.$route.name.replace('List', 'Detail'),
+          route: 'GroupDetail',
           can: true,
           getRoute: null,
           routeQuery: null,
@@ -44,8 +44,7 @@ export default {
           onClick: null,
           openInNewPage: false,
           removeColorOnClick: false,
-          beforeClick: () => {
-          },
+          beforeClick: () => {},
           getTitle({ row, cellValue }) {
             return cellValue != null ? cellValue : row.name
           },
@@ -127,7 +126,11 @@ export default {
       }
 
       if (this.formatterArgs.onClick) {
-        return this.formatterArgs.onClick({ ...this.callbackArgs, detailRoute: this.getDetailRoute(), formatterArgs: this.formatterArgs })
+        return this.formatterArgs.onClick({
+          ...this.callbackArgs,
+          detailRoute: this.getDetailRoute(),
+          formatterArgs: this.formatterArgs
+        })
       }
 
       if (this.preventClick) {
@@ -213,5 +216,4 @@ export default {
     }
   }
 }
-
 </style>

@@ -13,7 +13,7 @@
 import BaseFormatter from './base.vue'
 import ActionsGroup from '@/components/Common/ActionsGroup/index.vue'
 
-const defaultPerformDelete = function({ row, col }) {
+const defaultPerformDelete = function ({ row, col }) {
   const id = row.id
   const url = new URL(this.url, location.origin)
   url.pathname += `${id}/`
@@ -21,7 +21,7 @@ const defaultPerformDelete = function({ row, col }) {
   return this.$axios.delete(deleteUrl)
 }
 
-const defaultUpdateCallback = function({ row, col }) {
+const defaultUpdateCallback = function ({ row, col }) {
   const id = row.id
   let route = { params: { id: id } }
   const updateRoute = this.colActions.updateRoute
@@ -37,7 +37,7 @@ const defaultUpdateCallback = function({ row, col }) {
   this.$router.push(route)
 }
 
-const defaultViewCallback = function({ row, col }) {
+const defaultViewCallback = function ({ row, col }) {
   const id = row.id
   let route = { params: { id: id } }
   const viewRoute = this.colActions.viewRoute
@@ -53,7 +53,7 @@ const defaultViewCallback = function({ row, col }) {
   this.$router.push(route)
 }
 
-const defaultCloneCallback = function({ row, col }) {
+const defaultCloneCallback = function ({ row, col }) {
   const id = row.id
   let route = { query: { clone_from: id } }
   const cloneRoute = this.colActions.cloneRoute
@@ -68,7 +68,7 @@ const defaultCloneCallback = function({ row, col }) {
   this.$router.push(route)
 }
 
-const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
+const defaultDeleteCallback = function ({ row, col, cellValue, reload }) {
   let msg = this.$t('DeleteWarningMsg')
   const name = row.name || row.hostname
   if (name) {
@@ -109,7 +109,7 @@ export default {
   props: {
     formatterArgsDefault: {
       type: Object,
-      default: function() {
+      default: function () {
         return {
           hasUpdate: true, // can set function(row, value)
           canUpdate: true, // can set function(row, value)
@@ -117,8 +117,8 @@ export default {
           canDelete: true,
           hasClone: true,
           canClone: true,
-          updateRoute: this.$route.name.replace('List', 'Update'),
-          cloneRoute: this.$route.name.replace('List', 'Create'),
+          updateRoute: 'GroupUpdate',
+          cloneRoute: 'GroupCreate',
           performDelete: defaultPerformDelete,
           onUpdate: defaultUpdateCallback,
           onView: defaultViewCallback,
@@ -172,7 +172,7 @@ export default {
     cleanedActions() {
       let actions = [...this.defaultActions, ...this.extraActions]
       actions = _.cloneDeep(actions)
-      actions = actions.map((v) => {
+      actions = actions.map(v => {
         v.has = this.cleanBoolean(v, 'has', true)
         v.can = this.cleanBoolean(v, 'can', true)
         v.callback = this.cleanCallback(v, 'callback')
@@ -182,7 +182,7 @@ export default {
         v.title = this.cleanValue(v, 'title')
         return v
       })
-      actions = actions.filter((v) => v.has)
+      actions = actions.filter(v => v.has)
       actions.sort((a, b) => a.order - b.order)
       return actions
     },
