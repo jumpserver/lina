@@ -30,7 +30,7 @@ export default {
     createRoute: {
       type: [String, Object, Function],
       default() {
-        return this.$route.name?.replace('List', 'Create')
+        return this.$route?.name?.replace('List', 'Create')
       }
     },
     beforeCreate: {
@@ -51,8 +51,7 @@ export default {
     canBulkUpdate: defaultTrue,
     handleBulkUpdate: {
       type: Function,
-      default: () => {
-      }
+      default: () => {}
     },
     hasMoreActions: defaultTrue,
     tableUrl: {
@@ -61,8 +60,7 @@ export default {
     },
     reloadTable: {
       type: Function,
-      default: () => {
-      }
+      default: () => {}
     },
     performBulkDelete: {
       type: Function,
@@ -70,15 +68,15 @@ export default {
     },
     selectedRows: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     extraActions: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     extraMoreActions: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     moreActionsTitle: {
       type: String,
@@ -116,7 +114,7 @@ export default {
           name: 'actionUpdateSelected',
           has: this.hasBulkUpdate,
           icon: 'batch-update',
-          can: function({ selectedRows }) {
+          can: function ({ selectedRows }) {
             let canBulkUpdate = vm.canBulkUpdate
             if (typeof canBulkUpdate === 'function') {
               canBulkUpdate = canBulkUpdate({ selectedRows })
@@ -182,16 +180,19 @@ export default {
       const invariantActions = [
         {
           name: 'batch',
-          title: this.$t('BatchProcessing', { 'number': this.selectedRows.length }),
+          title: this.$t('BatchProcessing', { number: this.selectedRows.length }),
           divided: true,
-          has: function({ selectedRows }) {
+          has: function ({ selectedRows }) {
             return selectedRows.length > 0
           },
           class: 'more-batch-processing',
           can: true
         }
       ]
-      let dropdown = _.uniqBy([...invariantActions, ...this.extraMoreActions, ...this.defaultMoreActions], 'name')
+      let dropdown = _.uniqBy(
+        [...invariantActions, ...this.extraMoreActions, ...this.defaultMoreActions],
+        'name'
+      )
       dropdown = cleanActions(dropdown, true, {
         selectedRows: this.selectedRows,
         reloadTable: this.reloadTable
@@ -233,7 +234,8 @@ export default {
       }
     },
     defaultBulkDeleteCallback({ selectedRows, reloadTable }) {
-      const msg = this.$t('DeleteWarningMsg') + ' ' + selectedRows.length + ' ' + this.$t('Rows') + ' ?'
+      const msg =
+        this.$t('DeleteWarningMsg') + ' ' + selectedRows.length + ' ' + this.$t('Rows') + ' ?'
       const title = this.$tc('Info')
       const performDelete = this.performBulkDelete || this.defaultPerformBulkDelete
       this.$alert(msg, title, {
@@ -260,16 +262,18 @@ export default {
       })
     },
     async defaultPerformBulkDelete(selectedRows) {
-      const ids = selectedRows.map((v) => {
+      const ids = selectedRows.map(v => {
         return v.id
       })
       const data = await createSourceIdCache(ids)
-      const url = (this.tableUrl.indexOf('?') === -1) ? `${this.tableUrl}?spm=` + data.spm : `${this.tableUrl}&spm=` + data.spm
+      const url =
+        this.tableUrl.indexOf('?') === -1
+          ? `${this.tableUrl}?spm=` + data.spm
+          : `${this.tableUrl}&spm=` + data.spm
       return this.$axios.delete(url)
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

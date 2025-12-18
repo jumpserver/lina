@@ -13,7 +13,7 @@
       :component="drawerComponent"
       :props="drawerProps"
       :title="drawerTitle"
-      :visible.sync="drawerVisible"
+      v-model:visible="drawerVisible"
       class="page-drawer"
     />
   </div>
@@ -76,7 +76,8 @@ export default {
       drawerTitle: '',
       action: '',
       drawerVisible: false,
-      drawerComponent: ''
+      drawerComponent: '',
+      isReopeningDrawer: false // 标志：是否正在重新打开抽屉
     }
   },
   computed: {
@@ -130,7 +131,11 @@ export default {
         this.$log.debug('>>> drawerVisible changed: ', oldVal, '->', val)
         if (!val && oldVal) {
           this.$nextTick(() => {
-            this.afterCloseDrawer()
+            // 如果正在重新打开抽屉，不清空组件
+            if (!this.isReopeningDrawer) {
+              this.afterCloseDrawer()
+            }
+            this.isReopeningDrawer = false
           })
         }
       }
@@ -280,42 +285,54 @@ export default {
 
     async showDrawer(action, { row = {}, col = {}, query = {}, cellValue = '', payload = {} } = {}) {
       try {
-        // 1. 先重置状态
-        this.drawerVisible = false
+        // 1. 设置 action
         this.action = action
 
         for (const key in query) {
           this.$route.query[key] = query[key]
         }
 
-        // 2. 等待下一个 tick，确保状态已重置
-        await this.$nextTick()
+        // 2. 先获取组件
+        const component = this.getDrawerComponent(action, payload) || this.getDefaultDrawer(action)
+        this.$log.debug('>>> drawerComponent: ', component)
 
-        // 3. 设置组件
-        this.drawerComponent = this.getDrawerComponent(action, payload)
-        this.$log.debug('>>> drawerComponent: ', this.drawerComponent)
-
-        // 4. 如果没有组件，尝试获取默认组件
-        if (!this.drawerComponent) {
-          this.drawerComponent = this.getDefaultDrawer(action)
-        }
-
-        // 5. 如果还是没有组件，报错
-        if (!this.drawerComponent) {
+        // 3. 如果还是没有组件，报错
+        if (!component) {
           throw new Error(`No drawer component found for action: ${action}`)
         }
 
-        // 6. 获取标题
+        // 4. 如果组件已存在且相同，且抽屉已打开，直接返回
+        if (this.drawerComponent === component && this.drawerVisible) {
+          return
+        }
+
+        // 5. 设置标志，防止关闭时清空组件
+        this.isReopeningDrawer = true
+
+        // 6. 先设置组件（在关闭之前设置）
+        this.drawerComponent = component
+
+        // 7. 如果抽屉已打开，先关闭
+        if (this.drawerVisible) {
+          this.drawerVisible = false
+          await this.$nextTick()
+          // 确保组件没有被清空
+          if (!this.drawerComponent) {
+            this.drawerComponent = component
+          }
+        }
+
+        // 8. 获取标题
         if (this.getDrawerTitle) {
           const actionMeta = await this.$store.getters['common/drawerActionMeta']
           this.title = this.getDrawerTitle({ action, ...actionMeta })
         }
         this.drawerTitle = this.getActionDrawerTitle({ action, row, col, cellValue, payload })
 
-        // 7. 等待下一个 tick，确保组件已设置
+        // 9. 等待下一个 tick，确保组件已设置
         await this.$nextTick()
 
-        // 8. 显示抽屉
+        // 10. 显示抽屉
         this.drawerVisible = true
 
         this.$log.debug('Drawer initialized:', {
@@ -323,13 +340,13 @@ export default {
           visible: this.drawerVisible,
           component: this.drawerComponent,
           action: this.action,
-          'this': this,
-          'vm': this.vm
+          'this': this
         })
       } catch (error) {
         console.error('Failed to show drawer:', error)
         this.drawerVisible = false
         this.drawerComponent = ''
+        this.isReopeningDrawer = false
       }
     },
     reloadTable() {

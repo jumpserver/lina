@@ -1022,5 +1022,6 @@ $--breakpoints-spec: (
   )
 );
 
-$--font-path: '~element-ui/lib/theme-chalk/fonts';
-@import '~element-ui/packages/theme-chalk/src/index';
+// Element Plus 样式已通过 main.js 中的 'element-plus/dist/index.css' 导入
+// 这里只定义 SCSS 变量供项目内部使用
+// Element Plus 使用 CSS 变量进行主题定制，可以通过 :root 或 el-config-provider 设置

@@ -67,7 +67,7 @@ export default {
   watch: {
     config: {
       immediate: false,
-      handler: _.debounce(function(iNew, iOld) {
+      handler: _.debounce(function (iNew, iOld) {
         if (this.isDeactivated || !this.inited) {
           return
         }
@@ -133,7 +133,7 @@ export default {
 
       this.sortable = Sortable.create(el, {
         animation: 150,
-        onEnd: (evt) => {
+        onEnd: evt => {
           let { oldIndex, newIndex } = evt
           if (oldIndex === newIndex) {
             return
@@ -152,8 +152,12 @@ export default {
             columnNames.push('actions')
           }
           // 边界
-          if (oldIndex >= 0 && oldIndex < columnNames.length &&
-            newIndex >= 0 && newIndex < columnNames.length) {
+          if (
+            oldIndex >= 0 &&
+            oldIndex < columnNames.length &&
+            newIndex >= 0 &&
+            newIndex < columnNames.length
+          ) {
             const movedItem = columnNames.splice(oldIndex, 1)[0]
             columnNames.splice(newIndex, 0, movedItem)
 
@@ -187,12 +191,13 @@ export default {
       this.iConfig = _.cloneDeep(this.config)
     },
     async optionUrlMetaAndGenCols() {
-      if (this.config.url === '') {
+      if (!this.config.url) {
         return
       }
-      const url = (this.config.url.indexOf('?') === -1)
-        ? `${this.config.url}?display=1`
-        : `${this.config.url}&display=1`
+      const url =
+        this.config.url.indexOf('?') === -1
+          ? `${this.config.url}?display=1`
+          : `${this.config.url}&display=1`
 
       /**
        * 原有代码无法正确的同步 storage 的原因是 currentOrder 总是在 totalColumns 之前进行的
@@ -227,8 +232,9 @@ export default {
       }
 
       // 最小列
-      const minColumnsNames = _.get(this.iConfig, 'columnsShow.min', ['actions', 'id'])
-        .filter(n => totalColumnsNames.includes(n))
+      const minColumnsNames = _.get(this.iConfig, 'columnsShow.min', ['actions', 'id']).filter(n =>
+        totalColumnsNames.includes(n)
+      )
 
       const configShowColumnsNames = this.tableColumnsStorage.get()
       let showColumnsNames = configShowColumnsNames || defaultColumnsNames
@@ -279,7 +285,7 @@ export default {
         }
         return prop
       })
-      const sorted = _.sortBy(columns, (item) => {
+      const sorted = _.sortBy(columns, item => {
         const i = ordering.indexOf(item.prop)
         item.order = i
         return i === -1 ? 999 : i

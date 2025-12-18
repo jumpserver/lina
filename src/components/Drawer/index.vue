@@ -1,6 +1,7 @@
 <template>
   <el-drawer
     ref="drawer"
+    v-model="iVisible"
     v-el-drawer-drag-width
     :append-to-body="true"
     :before-close="handleClose"
@@ -8,7 +9,6 @@
     :modal="modal"
     :size="size"
     :title="title"
-    :visible.sync="iVisible"
     custom-class="drawer"
     destroy-on-close
     direction="rtl"

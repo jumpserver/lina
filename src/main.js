@@ -2,6 +2,8 @@ import { createApp, configureCompat } from 'vue'
 import ElementPlus from 'element-plus'
 import enLocale from 'element-plus/dist/locale/en.mjs'
 import 'element-plus/dist/index.css'
+// 导入 Element Plus CSS 变量配置（需要在 Element Plus 样式之后，自定义样式之前）
+import '@/styles/element-plus-vars.css'
 import '@/styles/index.scss' // global css
 import App from './App'
 import store from './store'
@@ -14,57 +16,16 @@ import { installSvgIcon } from '@/icons' // icon
 import '@/guards' // permission control
 import { installDirectives } from '@/directive'
 import { installFilters } from '@/filters'
-import { VueCookieNext } from 'vue-cookie-next'
-import { VueECharts } from 'vue-echarts'
 import i18n, { fetchTranslationsFromAPI } from './i18n/i18n'
-import { use } from 'echarts/core'
-import {
-  CanvasRenderer
-} from 'echarts/renderers'
-import {
-  BarChart,
-  LineChart,
-  PieChart,
-  ScatterChart,
-  MapChart,
-  RadarChart,
-  GaugeChart
-} from 'echarts/charts'
-import {
-  GridComponent,
-  TooltipComponent,
-  LegendComponent,
-  TitleComponent,
-  DatasetComponent,
-  ToolboxComponent,
-  DataZoomComponent,
-  VisualMapComponent
-} from 'echarts/components'
+import ChartsPlugin from '@/libs/charts'
+import { setupErrorHandler } from '@/libs/errors'
+import CookiePlugin from '@/libs/cookie'
 import request from '@/utils/request'
 import { message } from '@/utils/vue/message'
 import xss from '@/utils/secure'
 import VSanitize from 'v-sanitize'
 import moment from 'moment'
 import _ from 'lodash'
-
-use([
-  CanvasRenderer,
-  BarChart,
-  LineChart,
-  PieChart,
-  ScatterChart,
-  MapChart,
-  RadarChart,
-  GaugeChart,
-  GridComponent,
-  TooltipComponent,
-  LegendComponent,
-  TitleComponent,
-  DatasetComponent,
-  ToolboxComponent,
-  DataZoomComponent,
-  VisualMapComponent
-])
 
 moment.locale('zh-cn')
 
@@ -97,11 +58,8 @@ async function initApp() {
   app.use(router)
   app.use(i18n)
   app.use(ElementPlus, { locale: enLocale })
-  app.use(VueCookieNext)
-  // Register both legacy and new names to avoid resolution warnings
-  app.component('echarts', VueECharts)
-  app.component('Echart', VueECharts)
-  app.component('Echarts', VueECharts)
+  app.use(CookiePlugin)
+  app.use(ChartsPlugin)
   app.use(VSanitize, {
     allowedClasses: {
       '*': ['*']
@@ -112,15 +70,6 @@ async function initApp() {
   installFilters(app)
   installSvgIcon(app)
 
-  const cookieCompat = {
-    get: VueCookieNext.getCookie.bind(VueCookieNext),
-    set: VueCookieNext.setCookie.bind(VueCookieNext),
-    delete: VueCookieNext.removeCookie.bind(VueCookieNext),
-    getCookie: VueCookieNext.getCookie.bind(VueCookieNext),
-    setCookie: VueCookieNext.setCookie.bind(VueCookieNext),
-    removeCookie: VueCookieNext.removeCookie.bind(VueCookieNext)
-  }
-
   app.config.globalProperties.$moment = moment
   app.config.globalProperties.$axios = request
   app.config.globalProperties.$message = message
@@ -128,29 +77,13 @@ async function initApp() {
   app.config.globalProperties.$eventBus = eventBus
   app.config.globalProperties._ = _
   app.config.globalProperties.$log = console
-  app.config.globalProperties.$cookie = cookieCompat
   // Override with i18n-bound functions after plugin install
   app.config.globalProperties.$t = identityT
   app.config.globalProperties.$tc = identityTc
-  app.mixin({
-    beforeCreate() {
-      if (typeof this.$t !== 'function') {
-        this.$t = identityT
-      }
-      if (typeof this.$tc !== 'function') {
-        this.$tc = identityTc
-      }
-    },
-    methods: {
-      $t(...args) {
-        return identityT(...args)
-      },
-      $tc(...args) {
-        return identityTc(...args)
-      }
-    }
-  })
-  window.$cookie = cookieCompat
+
+  // 设置全局错误处理器
+  setupErrorHandler(app, message)
+
   window._ = _
 
   await fetchTranslationsFromAPI()
