@@ -44,9 +44,7 @@ export default {
     },
     getShowUrl: {
       type: Function,
-      default({ row, col }) {
-        return this.tableUrl.replace('/assets/', `/assets/${row.id}/accounts/`)
-      }
+      default: ({ row, col }) => this.tableUrl.replace('/assets/', `/assets/${row.id}/accounts/`)
     },
     name: {
       type: Object,

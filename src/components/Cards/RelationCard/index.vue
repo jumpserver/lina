@@ -169,8 +169,8 @@ export default {
         that.iHasObjects = [...that.iHasObjects, ...objects.filter(item => !oldValues.includes(item.value))]
         that.$refs.select2.clearSelected()
         that.$message.success(that.$t('AddSuccessMsg'))
-        this.$refs.select2.refresh()
-        this.$emit('addSuccess')
+        that.$refs.select2.refresh()
+        that.$emit('addSuccess')
       }
     },
     getHasObjects: {

@@ -121,7 +121,7 @@
         :view-title="dialogViewTitle"
         @confirm="onConfirm"
       >
-        <template v-slot="scope">
+        <template #default="scope">
           <!-- @slot 表单作用域插槽。当编辑、查看时传入row；新增时row=null -->
           <slot :row="scope.row" name="form" />
         </template>
@@ -337,7 +337,7 @@ export default {
      */
     newText: {
       type: String,
-      default: function () {
+      default: function() {
         return 'Add'
       }
     },
@@ -346,7 +346,7 @@ export default {
      */
     editText: {
       type: String,
-      default: function () {
+      default: function() {
         return 'Modify'
       }
     },
@@ -355,7 +355,7 @@ export default {
      */
     viewText: {
       type: String,
-      default: function () {
+      default: function() {
         return 'View'
       }
     },
@@ -364,7 +364,7 @@ export default {
      */
     deleteText: {
       type: String,
-      default: function () {
+      default: function() {
         return 'Delete'
       }
     },
@@ -401,7 +401,7 @@ export default {
     onNew: {
       type: Function,
       default(data) {
-        return this.$axios.post(this.url, data, this.axiosConfig)
+        console.log('onNew', data)
       }
     },
     /**
@@ -419,8 +419,9 @@ export default {
     onDelete: {
       type: Function,
       default(data) {
-        const ids = Array.isArray(data) ? data.map(v => v[this.id]).join(',') : data[this.id]
-        return this.$axios.delete(this.url + '/' + ids + '/', this.axiosConfig)
+        // const ids = Array.isArray(data) ? data.map(v => v[this.id]).join(',') : data[this.id]
+        // return this.$axios.delete(this.url + '/' + ids + '/', this.axiosConfig)
+        console.log('onDelete', data)
       }
     },
     /**

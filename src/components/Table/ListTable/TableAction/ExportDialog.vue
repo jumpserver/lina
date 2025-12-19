@@ -76,9 +76,7 @@ export default {
     },
     performExport: {
       type: Function,
-      default(selectedRows, exportOptions, query, exportType) {
-        return this.defaultPerformExport(selectedRows, exportOptions, query, exportType)
-      }
+      default: null
     },
     canExportAll: {
       type: Boolean,
@@ -228,7 +226,8 @@ export default {
       delete query['limit']
       delete query['offset']
       await this.beforeExport()
-      return this.performExport(this.selectedRows, this.exportOption, query, this.exportTypeOption)
+      const performExport = this.performExport || this.defaultPerformExport
+      return performExport(this.selectedRows, this.exportOption, query, this.exportTypeOption)
     },
     async handleExportConfirm() {
       await this.handleExport()

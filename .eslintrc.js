@@ -1,8 +1,17 @@
 module.exports = {
   root: true,
+  // Explicitly use vue-eslint-parser for .vue SFCs
+  parser: 'vue-eslint-parser',
   parserOptions: {
-    parser: 'babel-eslint',
-    sourceType: 'module'
+    parser: '@babel/eslint-parser',
+    sourceType: 'module',
+    ecmaVersion: 2021,
+    ecmaFeatures: { jsx: true },
+    requireConfigFile: false,
+    babelOptions: {
+      babelrc: false,
+      configFile: false
+    }
   },
   env: {
     browser: true,

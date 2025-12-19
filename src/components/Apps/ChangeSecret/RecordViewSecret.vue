@@ -3,7 +3,7 @@
     <Dialog
       :destroy-on-close="true"
       :show-cancel="false"
-      :title="title"
+      :title="iTitle"
       :visible.sync="showSecret"
       :width="'50'"
       v-bind="$attrs"
@@ -53,16 +53,15 @@ export default {
     },
     title: {
       type: String,
-      default: function() {
-        return this.$tc('ViewSecret')
-      }
+      default: ''
     }
   },
   data() {
     return {
       secretInfo: {},
       showSecret: false,
-      mfaDialogVisible: true
+      mfaDialogVisible: true,
+      iTitle: this.title || this.$tc('ViewSecret')
     }
   },
   computed: {},

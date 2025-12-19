@@ -81,7 +81,6 @@ export default {
   props: {
     boxTitle: {
       type: Array,
-      // default: () => [this.$tc('Selection'), this.$tc('Selected')]
       default: () => ['', '']
     },
     pageSize: {
@@ -103,12 +102,10 @@ export default {
     filterPlaceholder: {
       type: Array,
       default: () => ['', '']
-      // default: () => [this.$tc('Search'), this.$tc('Search')]
     },
     pageTexts: {
       type: Array,
       default: () => ['', '']
-      // default: () => ['< ' + this.$tc('PagePrev'), this.$tc('PageNext') + ' >']
     },
     sort: {
       type: Boolean,

@@ -85,9 +85,7 @@ export default {
     },
     exportUrl: {
       type: String,
-      default() {
-        return this.url.replace('/accounts/accounts/', '/accounts/account-secrets/')
-      }
+      default: ''
     },
     hasLeftActions: {
       type: Boolean,
@@ -161,6 +159,7 @@ export default {
       showResultDialog: false,
       showAddDialog: false,
       showAddTemplateDialog: false,
+      iExportUrl: this.exportUrl || this.url.replace('/accounts/accounts/', '/accounts/account-secrets/'),
       detailDrawer: () => import('@/views/accounts/Account/AccountDetail/index.vue'),
       createAccountResults: [],
       iAsset: this.asset,

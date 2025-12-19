@@ -39,14 +39,7 @@ export default {
     },
     handleExportClick: {
       type: Function,
-      default: function({ selectedRows }) {
-        // const { exportOptions, tableUrl } = this
-        const url = this.iExportOptions.url
-        this.dialogExportVisible = true
-        this.$nextTick(() => {
-          this.$eventBus.$emit('showExportDialog', { selectedRows, url, name: this.name })
-        })
-      }
+      default: null
     },
     hasImport: defaultTrue,
     importOptions: {
@@ -55,28 +48,17 @@ export default {
     },
     handleImportClick: {
       type: Function,
-      default: function({ selectedRows }) {
-        const { importOptions, tableUrl } = this
-        const url = importOptions?.url ? importOptions.url : tableUrl
-        this.dialogExportVisible = true
-        this.$nextTick(() => {
-          this.$eventBus.$emit('showImportDialog', { selectedRows, url, name: this.name })
-        })
-      }
+      default: null
     },
     hasColumnSetting: defaultTrue,
     handleTableSettingClick: {
       type: Function,
-      default: function({ selectedRows }) {
-        this.$eventBus.$emit('showColumnSettingPopover', { url: this.tableUrl, row: selectedRows, name: this.name })
-      }
+      default: null
     },
     hasRefresh: defaultTrue,
     handleRefreshClick: {
       type: Function,
-      default: function() {
-        this.reloadTable()
-      }
+      default: null
     },
     selectedRows: {
       type: Array,
@@ -107,6 +89,19 @@ export default {
   },
   data() {
     return {
+      defaultHandleExportClick: function({ selectedRows }) {
+        const url = this.iExportOptions.url
+        this.dialogExportVisible = true
+        this.$nextTick(() => {
+          this.$eventBus.$emit('showExportDialog', { selectedRows, url, name: this.name })
+        })
+      },
+      defaultHandleTableSettingClick: function({ selectedRows }) {
+        this.$eventBus.$emit('showColumnSettingPopover', { url: this.tableUrl, row: selectedRows, name: this.name })
+      },
+      defaultHandleRefreshClick: function() {
+        this.reloadTable()
+      },
       defaultRightSideActions: [
         {
           name: 'actionFilter',
@@ -120,28 +115,28 @@ export default {
           icon: 'system-setting',
           tip: this.$t('ListPreference'),
           has: this.hasColumnSetting,
-          callback: this.handleTableSettingClick.bind(this)
+          callback: this.handleTableSettingClick || this.defaultHandleTableSettingClick
         },
         {
           name: 'actionImport',
           icon: 'upload',
           tip: this.$t('Import'),
           has: this.hasImport,
-          callback: this.handleImportClick.bind(this)
+          callback: this.handleImportClick || this.defaultHandleImportClick
         },
         {
           name: 'actionExport',
           icon: 'download',
           tip: this.$t('Export'),
           has: this.hasExport,
-          callback: this.handleExportClick.bind(this)
+          callback: this.handleExportClick || this.defaultHandleExportClick
         },
         {
           name: 'actionRefresh',
           icon: 'refresh',
           tip: this.$t('Refresh'),
           has: this.hasRefresh,
-          callback: this.handleRefreshClick.bind(this)
+          callback: this.handleRefreshClick || this.defaultHandleRefreshClick
         }
       ],
       dialogExportVisible: false

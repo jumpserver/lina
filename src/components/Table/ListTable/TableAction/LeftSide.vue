@@ -29,9 +29,7 @@ export default {
     canCreate: defaultTrue,
     createRoute: {
       type: [String, Object, Function],
-      default() {
-        return this.$route?.name?.replace('List', 'Create')
-      }
+      default: ''
     },
     beforeCreate: {
       type: Function,
@@ -92,7 +90,7 @@ export default {
     },
     createTitle: {
       type: String,
-      default: () => i18n.t('Create')
+      default: ''
     }
   },
   data() {
@@ -114,7 +112,7 @@ export default {
           name: 'actionUpdateSelected',
           has: this.hasBulkUpdate,
           icon: 'batch-update',
-          can: function ({ selectedRows }) {
+          can: function({ selectedRows }) {
             let canBulkUpdate = vm.canBulkUpdate
             if (typeof canBulkUpdate === 'function') {
               canBulkUpdate = canBulkUpdate({ selectedRows })
@@ -127,11 +125,17 @@ export default {
     }
   },
   computed: {
+    iCreateTitle() {
+      return this.createTitle || this.$t('Create')
+    },
+    iCreateRoute() {
+      return this.createRoute || this.$route?.name?.replace('List', 'Create')
+    },
     defaultActions() {
       const defaultActions = [
         {
           name: 'actionCreate',
-          title: this.createTitle,
+          title: this.iCreateTitle,
           type: 'primary',
           has: this.hasCreate && !this.moreCreates,
           can: this.canCreate,
@@ -146,7 +150,7 @@ export default {
       if (this.moreCreates) {
         const defaultMoreCreate = {
           name: 'actionMoreCreate',
-          title: this.createTitle,
+          title: this.iCreateTitle,
           type: 'primary',
           has: true,
           icon: 'plus',
@@ -182,7 +186,7 @@ export default {
           name: 'batch',
           title: this.$t('BatchProcessing', { number: this.selectedRows.length }),
           divided: true,
-          has: function ({ selectedRows }) {
+          has: function({ selectedRows }) {
             return selectedRows.length > 0
           },
           class: 'more-batch-processing',

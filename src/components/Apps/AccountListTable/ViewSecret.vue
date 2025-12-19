@@ -3,7 +3,7 @@
     <Dialog
       :destroy-on-close="true"
       :show-cancel="false"
-      :title="title"
+      :title="iTitle"
       :visible.sync="showSecret"
       :width="'50'"
       v-bind="$attrs"
@@ -89,9 +89,7 @@ export default {
     },
     title: {
       type: String,
-      default: function() {
-        return this.$tc('Detail')
-      }
+      default: ''
     },
     showPasswordRecord: {
       type: Boolean,
@@ -107,6 +105,7 @@ export default {
       mfaDialogVisible: true,
       sshKeyFingerprint: '-',
       historyCount: 0,
+      iTitle: this.title || this.$tc('Detail'),
       showPasswordHistoryDialog: false
     }
   },

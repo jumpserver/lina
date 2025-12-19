@@ -13,7 +13,7 @@
       <span class="cellValue">{{ iCellValue }}</span>
       <a
         v-if="formatterArgs.showEditBtn"
-        :class="[{ 'disabled-link': this.$store.getters.currentOrgIsRoot },'edit-btn']"
+        :class="[{ 'disabled-link': $store.getters.currentOrgIsRoot },'edit-btn']"
         style="padding-left: 5px"
         @click="editCell"
       >
@@ -38,9 +38,10 @@ export default {
         return {
           trigger: 'click',
           onEnter: ({ row, col, oldValue, newValue }) => {
-            const prop = col.prop
-            this.$log.debug(`Set value ${oldValue} => ${newValue}`)
-            this.$set(row, prop, newValue)
+            // const prop = col.prop
+            // this.$log.debug(`Set value ${oldValue} => ${newValue}`)
+            // this.$set(row, prop, newValue)
+            console.log('onEnter', row, col, oldValue, newValue)
           }
         }
       }
