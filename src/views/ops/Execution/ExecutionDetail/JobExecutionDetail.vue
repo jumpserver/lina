@@ -1,11 +1,10 @@
 <template>
   <TwoCol>
-    <template>
-      <AutoDetailCard :excludes="excludes" :fields="detailFields" :object="object" :url="url" />
-    </template>
-    <template v-if="hasSummary" #right class="detail-right-quick-actions">
+    <AutoDetailCard :excludes="excludes" :fields="detailFields" :object="object" :url="url" />
+    <template v-if="hasSummary" #right>
       <IBox
         v-if="object.summary.ok"
+        class="detail-right-quick-actions"
         :title="`${$tc('SuccessAsset')} (${object.summary.ok.length})`"
         type="success"
       >

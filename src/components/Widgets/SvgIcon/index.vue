@@ -59,7 +59,7 @@ export default {
   mask-size: cover!important;
   display: inline-block;
 }
-::v-deep path {
+:deep(path) {
   fill: inherit !important;
 }
 </style>

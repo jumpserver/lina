@@ -19,7 +19,7 @@
           shadow="hover"
         >
           <keep-alive>
-            <slot :index="index" :item="d" :onView="onView">
+            <slot :index="index" :item="d" :on-view="onView">
               <Panel :d="d" @click.native="onView(d)" />
             </slot>
           </keep-alive>
@@ -31,8 +31,8 @@
       ref="pagination"
       class="pagination"
       v-bind="$data"
-      @currentSizeChange="handleCurrentChange"
-      @sizeChange="handleSizeChange"
+      @current-size-change="handleCurrentChange"
+      @size-change="handleSizeChange"
     />
     <Drawer
       v-if="detailDrawer"
@@ -232,10 +232,8 @@ export default {
 .the-row .empty-box {
   display: block;
 
-  ::v-deep {
-    .el-empty {
-      margin: 0 auto;
-    }
+  :deep(.el-empty) {
+    margin: 0 auto;
   }
 }
 
@@ -265,7 +263,7 @@ export default {
       width: 380px;
       padding: 15px;
 
-      ::v-deep .el-card__body {
+      :deep(.el-card__body) {
         height: 100%;
         width: 100%;
         padding: 0;

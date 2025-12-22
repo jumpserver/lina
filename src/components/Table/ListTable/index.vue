@@ -362,7 +362,7 @@ export default {
 
 <style lang="scss" scoped>
 .filter-expand {
-  &::v-deep button.actionFilter {
+  :deep(button.actionFilter) {
     background-color: rgb(0, 0, 0, 0.08) !important;
   }
 }
@@ -370,26 +370,24 @@ export default {
 .table-content {
   margin-top: 10px;
 
-  ::v-deep {
-    .el-card__body {
-      padding: 0;
-    }
-
-    .el-table__row .cell {
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-
-    .el-table__expanded-cell pre {
-      max-height: 500px;
-      overflow-y: scroll;
-    }
-
-    .el-button-ungroup .el-dropdown > .more-action {
-      //height: 24.6px;
-    }
+  :deep(.el-card__body) {
+    padding: 0;
   }
+
+  :deep(.el-table__row .cell) {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  :deep(.el-table__expanded-cell pre) {
+    max-height: 500px;
+    overflow-y: scroll;
+  }
+
+  // .el-button-ungroup .el-dropdown > .more-action {
+  //   height: 24.6px;
+  // }
 }
 
 //修改颜色

@@ -56,7 +56,6 @@
 import PageHeading from './PageHeading'
 import PageContent from './PageContent'
 import UserConfirmDialog from '@/components/Apps/UserConfirmDialog/index.vue'
-import TagsView from '../TagsView/index.vue'
 import { toSentenceCase } from '@/utils/common/index'
 import IBox from '@/components/Common/IBox/index.vue'
 import i18n from '@/i18n/i18n'
@@ -67,7 +66,6 @@ export default {
     UserConfirmDialog,
     PageHeading,
     PageContent,
-    TagsView,
     IBox
   },
   props: {
@@ -167,7 +165,7 @@ export default {
     overflow-x: hidden;
     overflow-y: auto !important;
 
-    ::v-deep > div {
+    :deep(> div) {
       // 这个当时为什么设置的
       //margin-bottom: 50px;
       // 别设置，用户列页面会被撑开
@@ -181,7 +179,7 @@ export default {
   padding: 6px;
 }
 
-.go-back ::v-deep i {
+.go-back :deep(i) {
   font-size: 18px;
   font-weight: 600;
 }

@@ -219,7 +219,7 @@ export default {
         }
       },
       deep: true
-    },
+    }
   },
   async mounted() {
     if (!this.initialized) {
@@ -421,24 +421,24 @@ export default {
   width: 100%;
 
   &.hidden-tag {
-    ::v-deep .el-select__tags {
+    :deep(.el-select__tags) {
       opacity: 0;
       cursor: not-allowed;
     }
   }
 
   &.show-tag {
-    ::v-deep .el-select__tags {
+    :deep(.el-select__tags) {
       opacity: 1;
     }
   }
 
-  ::v-deep .el-tag.el-tag--info {
+  :deep(.el-tag.el-tag--info) {
     height: auto;
     white-space: normal;
   }
 
-  ::v-deep input::placeholder {
+  :deep(input::placeholder) {
     padding-left: 2px;
   }
 }

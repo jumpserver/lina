@@ -50,20 +50,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .password-input ::v-deep .Password__badge--error {
+  .password-input :deep(.Password__badge--error) {
     background-color: var(--color-danger);
   }
 
-  .password-input ::v-deep .Password__strength-meter--fill[data-score="4"] {
+  .password-input :deep(.Password__strength-meter--fill[data-score="4"]) {
     background: var(--color-success);
     width: 100%;
   }
 
-  .password-input ::v-deep .Password__badge--success {
+  .password-input :deep(.Password__badge--success) {
     background: var(--color-success);
   }
 
-  .password-input ::v-deep .Password__strength-meter {
+  .password-input :deep(.Password__strength-meter) {
     margin-bottom: 10px;
   }
 </style>

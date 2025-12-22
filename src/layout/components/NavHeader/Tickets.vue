@@ -48,7 +48,7 @@ export default {
   font-weight: 400
 }
 
-.el-badge ::v-deep .el-badge__content.is-fixed {
+.el-badge :deep(.el-badge__content.is-fixed) {
   top: 10px;
 }
 

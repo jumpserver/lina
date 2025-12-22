@@ -1,12 +1,12 @@
 <template>
   <div>
     <Dialog
+      v-bind="$attrs"
       :destroy-on-close="true"
       :show-cancel="false"
       :title="iTitle"
       :visible.sync="showSecret"
       :width="'50'"
-      v-bind="$attrs"
       @confirm="accountConfirmHandle"
       v-on="$listeners"
     >
@@ -166,7 +166,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .item-textarea ::v-deep .el-textarea__inner {
+  .item-textarea :deep(.el-textarea__inner) {
     height: 110px;
   }
 
@@ -179,7 +179,7 @@ export default {
       border-bottom: none;
     }
 
-    ::v-deep .el-form-item__label {
+    :deep(.el-form-item__label) {
       display: flex;
       align-items: center;
       justify-content: flex-start;
@@ -190,7 +190,7 @@ export default {
       white-space: normal;
     }
 
-    ::v-deep .el-form-item__content {
+    :deep(.el-form-item__content) {
       line-height: 30px;
 
       pre {

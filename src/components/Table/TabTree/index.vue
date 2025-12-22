@@ -29,7 +29,7 @@
             :key="componentKey"
             ref="AutoDataZTree"
             :setting="activeTreeSetting"
-            @urlChange="handleUrlChange"
+            @url-change="handleUrlChange"
           >
             <div slot="rMenu" slot-scope="{data}">
               <slot :data="data" name="rMenu" />
@@ -183,11 +183,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .data-z-tree {
+:deep(.data-z-tree) {
   padding: 0;
 }
 
-.page-submenu ::v-deep .el-tabs__nav-wrap {
+.page-submenu :deep(.el-tabs__nav-wrap) {
   position: static;
 
   .el-tabs__item {
@@ -201,19 +201,17 @@ export default {
 }
 
 .only-submenu {
-  &::v-deep .el-tabs__active-bar {
+  &:deep(.el-tabs__active-bar) {
     transform: none !important;
   }
 
-  &::v-deep .el-tabs__item.is-active {
+  &:deep(.el-tabs__item.is-active) {
     text-align: left;
     padding: 0 20px;
   }
 }
 
-::v-deep {
-  .ztree {
-    padding: 0;
-  }
+:deep(.ztree) {
+  padding: 0;
 }
 </style>

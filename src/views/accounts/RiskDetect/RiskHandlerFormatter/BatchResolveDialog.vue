@@ -20,7 +20,7 @@
           :selected-rows="selectedRows"
           :value="1"
           class="risk-handler"
-          @processDone="handleProcessDone"
+          @process-done="handleProcessDone"
         />
       </el-form>
       <DataTable
@@ -160,14 +160,14 @@ export default {
 <style lang="scss" scoped>
 
 .el-form {
-  ::v-deep .el-form-item {
+  :deep(.el-form-item) {
     margin-bottom: 5px;
   }
 
   .risk-select {
     display: inline-block;
 
-    ::v-deep .el-form-item__content {
+    :deep(.el-form-item__content) {
       width: 100%;
     }
   }
@@ -175,7 +175,7 @@ export default {
   .risk-handler {
     margin-left: 10px;
 
-    ::v-deep button {
+    :deep(button) {
       padding: 8px;
     }
   }

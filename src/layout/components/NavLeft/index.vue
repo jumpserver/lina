@@ -51,7 +51,7 @@
         <Hamburger
           :is-active="sidebar.opened"
           class="hamburger-container"
-          @toggleClick="toggleSideBar"
+          @toggle-click="toggleSideBar"
         />
       </div>
     </div>
@@ -175,7 +175,7 @@ $hover-border-color: #d2d2d2;
     .active-mobile {
       display: none;
 
-      ::v-deep .organization {
+      :deep(.organization) {
         height: $mobileHeight;
         padding-left: 20px;
         background: var(--color-primary-dark-1);
@@ -194,12 +194,12 @@ $hover-border-color: #d2d2d2;
         }
       }
 
-      & ::v-deep .title-label {
+      & :deep(.title-label) {
         color: $origin-color !important;
       }
 
       .mobile-view-switch {
-        &::v-deep .el-menu-item.is-active {
+        :deep(.el-menu-item.is-active) {
           color: var(--menu-text-active) !important;
 
           .svg-icon {
@@ -233,7 +233,7 @@ $hover-border-color: #d2d2d2;
           display: inline-block;
         }
 
-        ::v-deep .el-popover__reference {
+        :deep(.el-popover__reference) {
           display: flex;
           justify-content: center;
           align-items: center;
@@ -283,7 +283,7 @@ $hover-border-color: #d2d2d2;
       border: 0;
       cursor: pointer;
 
-      ::v-deep .hamburger-container {
+      :deep(.hamburger-container) {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -321,7 +321,7 @@ $hover-border-color: #d2d2d2;
   }
 
   &.collapsed .nav-title .switch-view {
-    ::v-deep .el-popover__reference {
+    :deep(.el-popover__reference) {
       .icon-zone {
         margin-right: 0;
       }
@@ -334,7 +334,7 @@ $hover-border-color: #d2d2d2;
 }
 
 @media screen and (max-width: 992px) {
-  ::v-deep .active-mobile {
+  :deep(.active-mobile) {
     display: block !important;
   }
 }

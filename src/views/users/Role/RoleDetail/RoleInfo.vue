@@ -324,18 +324,8 @@ export default {
 <style lang="scss" scoped>
 .perm-tree {
 
-  ::v-deep {
-    .ztree * {
-      //background: white;
-    }
-
-    .ztree {
-      background: white !important;
-
-      .button.chk {
-        //float: right;
-      }
-    }
+  :deep(.ztree) {
+    background: white !important;
 
     .checkbox_false_disable, .checkbox_true_disable {
       cursor: not-allowed !important;

@@ -47,7 +47,7 @@ export default {
     padding: 0;
   }
 
-  .ibox ::v-deep .el-card__header {
+  .ibox :deep(.el-card__header) {
     border-color: #e7eaec;
     border-image: none;
     margin-bottom: 0;
@@ -85,7 +85,7 @@ export default {
     font-size: 14px;
   }
 
-  .ibox ::v-deep .el-card__body {
+  .ibox :deep(.el-card__body) {
     //padding: 30px 30px 20px 30px; // 这个设置会影响详情中的 quick update 和 relations
     color: var(--color-icon-primary);
   }

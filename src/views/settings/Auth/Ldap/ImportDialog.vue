@@ -223,7 +223,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .el-select-dropdown.select-org-dropdown {
+:deep(.el-select-dropdown.select-org-dropdown) {
   max-width: 300px !important;
 }
 

@@ -54,13 +54,13 @@ function SetToDefaultStorage(url) {
 
 export function SetToDefaultCommandStorage(id) {
   return SetToDefaultStorage(
-    `/api/v1/terminal/command-storages/${id}/`,
+    `/api/v1/terminal/command-storages/${id}/`
   )
 }
 
 export function SetToDefaultReplayStorage(id) {
   return SetToDefaultStorage(
-    `/api/v1/terminal/replay-storages/${id}/`,
+    `/api/v1/terminal/replay-storages/${id}/`
   )
 }
 

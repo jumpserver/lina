@@ -158,7 +158,7 @@ export default {
   }
 }
 
-::v-deep .detail {
+:deep(.detail) {
   padding: 0 5px;
 }
 

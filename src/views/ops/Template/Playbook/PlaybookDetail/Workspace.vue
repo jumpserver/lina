@@ -324,7 +324,7 @@ export default {
 }
 
 .workspace-tab {
-  ::v-deep .el-tabs__header {
+  :deep(.el-tabs__header) {
     margin: 0 0 15px 30px !important;
   }
 }
@@ -343,7 +343,7 @@ export default {
   /*border-right: solid 1px red;*/
 }
 
-.vue-codemirror-wrap ::v-deep .CodeMirror {
+.vue-codemirror-wrap :deep(.CodeMirror) {
   width: 600px;
   height: 100px;
   border: 1px solid #eee;

@@ -248,24 +248,24 @@ export default {
     margin-right: 0;
   }
 
-  ::v-deep .el-input-group__prepend {
+  :deep(.el-input-group__prepend) {
     border-radius: 0;
   }
 
-  ::v-deep .form-group-header {
+  :deep(.form-group-header) {
     margin-left: 50px;
     color: var(--color-text-primary);
   }
 
   &.label-top {
-    ::v-deep .el-form-item {
+    :deep(.el-form-item) {
       .el-form-item__content {
         width: 100%;
       }
     }
   }
 
-  ::v-deep .el-form-item {
+  :deep(.el-form-item) {
     margin-bottom: 10px;
 
     .el-form-item__label {
@@ -364,17 +364,17 @@ export default {
     }
   }
 
-  ::v-deep .form-buttons {
+  :deep(.form-buttons) {
     margin-top: 30px;
     margin-left: var(--label-width);
   }
 }
 
-.mobile.el-form ::v-deep .el-form-item__content {
+.mobile.el-form :deep(.el-form-item__content) {
   width: 100%;
 }
 
-.el-form.mobile ::v-deep .form-group-header {
+.el-form.mobile :deep(.form-group-header) {
   margin-left: 0;
 }
 </style>

@@ -18,7 +18,7 @@ const elementLocaleNameByAppLocale = {
 
 function loadElementLocale(localeName) {
   try {
-    // eslint-disable-next-line import/no-dynamic-require, global-require
+    // eslint-disable-next-line global-require
     const mod = require(`element-plus/es/locale/lang/${localeName}`)
     return (mod && (mod.default || mod)) || {}
   } catch (e) {

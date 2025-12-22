@@ -9,12 +9,12 @@
     <!-- DEBUG: drawerComponent = {{ drawerComponent ? 'EXISTS' : 'EMPTY' }}, drawerVisible = {{ drawerVisible }} -->
     <Drawer
       v-if="drawerComponent"
+      v-model:visible="drawerVisible"
       :action="action"
       :class="[action]"
       :component="drawerComponent"
       :props="drawerProps"
       :title="drawerTitle"
-      v-model:visible="drawerVisible"
       class="page-drawer"
     />
   </div>

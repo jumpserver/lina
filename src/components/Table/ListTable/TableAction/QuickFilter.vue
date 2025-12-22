@@ -220,7 +220,7 @@ export default {
 
     .summary-block {
       .active {
-        ::v-deep .no-margins .num {
+        :deep(.no-margins .num) {
           color: var(--color-primary);
 
           &::after {

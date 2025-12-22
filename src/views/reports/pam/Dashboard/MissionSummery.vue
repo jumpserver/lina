@@ -181,7 +181,7 @@ export default {
     align-items: center;
     justify-content: center;
 
-    ::v-deep .echarts {
+    :deep(.echarts) {
       height: 14.25rem;
     }
   }

@@ -1,6 +1,6 @@
 <template>
   <TabPage
-    :active-menu.sync="iActiveMenu"
+    v-model:active-menu="iActiveMenu"
     :submenu="iSubmenu"
     :title="iTitle"
     class="generic-detail-page"
@@ -22,15 +22,13 @@ import TabPage from '../TabPage'
 import { flashErrorMsg } from '@/utils/request'
 import { getApiPath } from '@/utils/common/index'
 import ActionsGroup from '@/components/Common/ActionsGroup'
-import ResourceActivity from '@/components/Apps/ResourceActivity/index.vue'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'GenericDetailPage',
   components: {
     TabPage,
-    ActionsGroup,
-    ResourceActivity
+    ActionsGroup
   },
   props: {
     url: {
@@ -84,6 +82,15 @@ export default {
       }
     }
   },
+  emits: [
+    'update:activeMenu',
+    'tab-click',
+    'update:object',
+    'getObjectDone',
+    'close-drawer',
+    'detail-delete-success',
+    'reload-table'
+  ],
   data() {
     const vm = this
     const defaultActions = {
@@ -282,11 +289,9 @@ export default {
 }
 
 .generic-detail-page {
-  ::v-deep {
-    .tab-page-content {
-      padding-left: 20px;
-      padding-right: 15px;
-    }
+  :deep(.tab-page-content) {
+    padding-left: 20px;
+    padding-right: 15px;
   }
 }
 </style>

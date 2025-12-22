@@ -10,12 +10,12 @@
         row-key="id"
       >
         <el-table-column :label="$tc('MessageType')" width="230">
-          <template v-slot="scope">
+          <template #default="scope">
             <span>{{ scope.row.value }}</span>
           </template>
         </el-table-column>
         <el-table-column v-for="header in receiveBackends" :key="header.id" :label="getNameDisplay(header)" width="80">
-          <template v-slot="scope">
+          <template #default="scope">
             <span v-if="!scope.row.children">
               <el-checkbox
                 v-if="header.name !== 'site_msg'"
@@ -37,7 +37,7 @@
           </template>
         </el-table-column>
         <el-table-column :label="$tc('Actions')" width="200">
-          <template v-slot="scope">
+          <template #default="scope">
             <el-button v-if="!scope.row.children" type="small" @click="onOpenDialog(scope.row)">
               {{ $t('EditRecipient') }}
             </el-button>
@@ -192,7 +192,7 @@ export default {
   width: 50%;
 }
 
-::v-deep .el-table .cell {
+:deep(.el-table .cell) {
   display: flex;
 
   .name-wrapper {
@@ -207,7 +207,7 @@ export default {
   }
 }
 
-::v-deep .black-theme-popover .el-popover__inner {
+:deep(.black-theme-popover .el-popover__inner) {
   background-color: #000 !important;
   color: #fff !important;
   border-color: #000 !important;

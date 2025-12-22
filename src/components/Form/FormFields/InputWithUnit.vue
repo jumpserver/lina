@@ -37,7 +37,7 @@ export default {
 
 <style scoped>
 
-::v-deep .el-input-group__append {
+:deep(.el-input-group__append) {
   color: inherit;
   padding: 0 15px;
 }

@@ -143,7 +143,7 @@ export default {
         for (const [index, item] of value.entries()) {
           if (tp === 'object') {
             const firstValue = value[0]
-            if (firstValue.hasOwnProperty('name')) {
+            if (Object.prototype.hasOwnProperty.call(firstValue, 'name')) {
               value.forEach(item => {
                 const fieldName = `${name}.${item.name}`
                 if (excludes.includes(fieldName)) {

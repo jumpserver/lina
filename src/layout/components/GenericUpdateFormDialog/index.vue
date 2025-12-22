@@ -1,13 +1,13 @@
 <template>
   <Dialog
     v-if="iVisible"
+    v-model:visible="iVisible"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('UpdateSelected')"
-    :visible.sync="iVisible"
     top="1vh"
     width="70%"
-    v-on="$listeners"
+    v-bind="$attrs"
   >
     <el-alert v-if="tips" class="tips" type="success">{{ tips }}</el-alert>
     <el-row :gutter="20">
@@ -69,6 +69,7 @@ export default {
       default: false
     }
   },
+  emits: ['update:visible', 'update', 'submitError'],
   data: function() {
     return {
       internalKey: 0,

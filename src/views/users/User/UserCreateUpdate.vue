@@ -3,9 +3,8 @@
     <GenericCreateUpdatePage
       v-if="!loading"
       class="user-create-update"
-      v-bind="$data"
-      @getObjectDone="afterGetUser"
-      v-on="$listeners"
+      v-bind="{ ...$data, ...$attrs }"
+      @get-object-done="afterGetUser"
     />
   </div>
 </template>
@@ -287,7 +286,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.user-create-update ::v-deep .el-form-item-need_update_password {
+.user-create-update :deep(.el-form-item-need_update_password) {
   margin-top: -10px;
 
   .el-form-item__content label {

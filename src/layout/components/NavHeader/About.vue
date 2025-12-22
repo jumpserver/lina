@@ -129,11 +129,11 @@ export default {
 
 <style lang="scss" scoped>
 .about-dialog {
-  &.dialog ::v-deep .el-dialog__body {
+  &.dialog :deep(.el-dialog__body) {
     padding: 20px 30px;
   }
 
-  &.dialog ::v-deep .el-dialog__footer {
+  &.dialog :deep(.el-dialog__footer) {
     border-top: none;
     display: none;
   }
@@ -167,7 +167,7 @@ export default {
   }
 }
 
-::v-deep .divider.el-divider {
+:deep(.divider.el-divider) {
   margin: 15px 0 !important;
 }
 </style>

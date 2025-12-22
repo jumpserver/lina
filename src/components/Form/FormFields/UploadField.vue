@@ -2,7 +2,7 @@
   <div>
     <input ref="upLoadFile" :accept="accept" style="display: none" type="file" @change="Onchange">
     <el-button size="mini" @click.native.stop="onUpLoad">
-      {{ this.$t('SelectFile') }}
+      {{ $t('SelectFile') }}
     </el-button>
     <span>{{ fileName }}</span>
     <div v-if="tip !== ''" class="help-block">{{ tip }}</div>
@@ -17,7 +17,7 @@
       <img v-if="preview" :class="showBG ? 'show-bg' : ''" :src="preview" v-bind="$attrs" alt="">
     </div>
     <el-button v-if="fileName" size="mini" type="danger" @click.native.stop="resetUpload">
-      {{ this.$t('Cancel') }}
+      {{ $t('Cancel') }}
     </el-button>
   </div>
 </template>

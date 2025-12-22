@@ -75,7 +75,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.App-Provider ::v-deep .protocol {
+.App-Provider :deep(.protocol) {
   margin-left: 3px;
 }
 </style>

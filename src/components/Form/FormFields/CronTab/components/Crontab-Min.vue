@@ -3,20 +3,20 @@
   <el-form size="small">
     <el-form-item>
       <el-radio v-model="radioValue" :label="1" size="mini">
-        {{ this.$t('Min') }}，{{ this.$t('WildcardsAllowed') }}[, - * /]
+        {{ $t('Min') }}，{{ $t('WildcardsAllowed') }}[, - * /]
       </el-radio>
     </el-form-item>
     <el-form-item>
       <el-radio v-model="radioValue" :label="3">
-        {{ this.$t('From') }}
+        {{ $t('From') }}
         <el-input-number v-model="average02" :max="59" :min="1" size="mini" />
-        {{ this.$t('Min') }} {{ this.$t('ExecuteOnce') }}
+        {{ $t('Min') }} {{ $t('ExecuteOnce') }}
       </el-radio>
     </el-form-item>
 
     <el-form-item>
       <el-radio v-model="radioValue" :label="4">
-        {{ this.$t('Appoint') }}
+        {{ $t('Appoint') }}
         <el-select
           v-model="checkboxList"
           :placeholder="$tc('ManyChoose')"

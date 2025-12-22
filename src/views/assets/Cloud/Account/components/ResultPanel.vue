@@ -7,7 +7,7 @@
     >
       <el-table-column prop="key" width="120" />
       <el-table-column prop="value">
-        <template v-slot="scope">
+        <template #default="scope">
           <el-link :underline="false"> {{ scope.row.value }}</el-link>
         </template>
       </el-table-column>
@@ -65,11 +65,11 @@ export default {
   padding: 10px;
 }
 
-::v-deep .el-alert__content {
+:deep(.el-alert__content) {
   width: 100%;
 }
 
-::v-deep .el-divider__text {
+:deep(.el-divider__text) {
   background-color: transparent;
   font-size: 18px;
   font-weight: 400;

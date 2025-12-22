@@ -101,17 +101,17 @@ export default {
 .upload-secret {
   display: flex;
 
-  &::v-deep .el-list-enter-active,
-  &::v-deep .el-list-leave-active {
+  &:deep(.el-list-enter-active),
+  &:deep(.el-list-leave-active) {
     transition: none;
   }
 
-  &::v-deep .el-list-enter,
-  &::v-deep .el-list-leave-active {
+  &:deep(.el-list-enter),
+  &:deep(.el-list-leave-active) {
     opacity: 0;
   }
 
-  &::v-deep .el-upload-list {
+  &:deep(.el-upload-list) {
     height: 40px;
   }
 }

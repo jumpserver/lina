@@ -50,7 +50,7 @@
 
     <div class="popup-main">
       <div class="popup-result">
-        <p class="title">{{ this.$t('TimeExpression') }}</p>
+        <p class="title">{{ $t('TimeExpression') }}</p>
         <table>
           <thead>
             <th v-for="item of tabTitles" :key="item" width="40">{{ item }}</th>
@@ -95,7 +95,7 @@
             </td>
           </tbody>
         </table>
-        <CrontabResult :ex="contabValueString" @crontabDiffChange="crontabDiffChangeHandle" />
+        <CrontabResult :ex="contabValueString" @crontab-diff-change="crontabDiffChangeHandle" />
       </div>
 
       <div class="pop_btn">
@@ -103,14 +103,14 @@
           size="small"
           @click="clearCron"
         >
-          {{ this.$t('Reset') }}
+          {{ $t('Reset') }}
         </el-button>
         <el-button
           size="small"
           type="primary"
           @click="submitFill"
         >
-          {{ this.$t('Confirm') }}
+          {{ $t('Confirm') }}
         </el-button>
       </div>
     </div>
@@ -457,9 +457,9 @@ export default {
   overflow-y: auto;
 }
 
-::v-deep {
-  .el-form-item--mini.el-form-item,
-  .el-form-item--small.el-form-item {
+:deep(.el-form-item){
+  &.el-form-item--mini,
+  &.el-form-item--small {
     margin-bottom: 5px;
   }
 
@@ -477,7 +477,7 @@ export default {
   border: 1px solid #dcdfe6;
 }
 
-::v-deep .el-tabs__header {
+:deep(.el-tabs__header) {
   background-color: white;
   margin-top: -10px;
   padding: 0 30px;
@@ -499,11 +499,11 @@ export default {
 }
 
 .tab-page {
-  ::v-deep .page-heading {
+  :deep(.page-heading) {
     border-bottom: none;
   }
 
-  ::v-deep .page-content {
+  :deep(.page-content) {
     overflow-y: hidden;
     padding: 0;
   }
@@ -520,7 +520,7 @@ export default {
   }
 }
 
-::v-deep .el-tabs__nav-wrap {
+:deep(.el-tabs__nav-wrap) {
   position: static;
 }
 </style>

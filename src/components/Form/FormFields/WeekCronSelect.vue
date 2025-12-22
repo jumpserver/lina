@@ -5,7 +5,7 @@
     <table :class="{'c-min-table': colspan < 2}" class="c-weektime-table">
       <thead class="c-weektime-head">
         <tr>
-          <th class="week-td" rowspan="8">{{ this.$t('WeekOrTime') }}</th>
+          <th class="week-td" rowspan="8">{{ $t('WeekOrTime') }}</th>
           <th :colspan="12 * colspan">00:00 - 12:00</th>
           <th :colspan="12 * colspan">12:00 - 24:00</th>
         </tr>
@@ -31,9 +31,9 @@
         <tr>
           <td class="c-weektime-preview" colspan="49">
             <div class="g-clearfix c-weektime-con">
-              <span class="g-pull-left">{{ this.$t('CanDragSelect') }}</span>
-              <a class="g-pull-right" @click.prevent="clearWeektime">{{ this.$t('ClearSelection') }}</a>
-              <a class="g-pull-right g-pull-margin" @click.prevent="selectAll">{{ this.$t('SelectAll') }}</a>
+              <span class="g-pull-left">{{ $t('CanDragSelect') }}</span>
+              <a class="g-pull-right" @click.prevent="clearWeektime">{{ $t('ClearSelection') }}</a>
+              <a class="g-pull-right g-pull-margin" @click.prevent="selectAll">{{ $t('SelectAll') }}</a>
             </div>
           </td>
         </tr>

@@ -57,9 +57,9 @@
             <el-tooltip :disabled="!item.tip" :content="item.tip">
               <span class="filter-label">{{ item.name }}:</span>
               <el-select
-                v-model="formModel[item.name]"
                 v-if="item.type === 'select' && item.el && item.el.create"
                 :key="index"
+                v-model="formModel[item.name]"
                 :allow-create="item.el.create || false"
                 :filterable="item.el.create || false"
                 :multiple="item.el.multiple"
@@ -99,15 +99,17 @@
                     </span>
                   </div>
                 </el-button>
-                <el-dropdown-menu v-slot="dropdown">
-                  <el-dropdown-item
-                    v-for="(option, i) in item.options"
-                    :key="i"
-                    :command="option.value"
-                  >
-                    {{ option.label }}
-                  </el-dropdown-item>
-                </el-dropdown-menu>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item
+                      v-for="(option, i) in item.options"
+                      :key="i"
+                      :command="option.value"
+                    >
+                      {{ option.label }}
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
               </el-dropdown>
             </el-tooltip>
           </template>
@@ -124,7 +126,7 @@
           </template>
         </el-form-item>
         <div
-          v-if="toolbar.hasOwnProperty('fold')"
+          v-if="Object.prototype.hasOwnProperty.call(toolbar, 'fold')"
           :class="!isFold ? 'sepcial-icon' : ''"
           class="fold"
         >
@@ -216,7 +218,7 @@ export default {
       const actions = Object.values(actionsObj)
 
       actions.forEach(action => {
-        if (!this.formModel.hasOwnProperty(action.name)) {
+        if (!Object.prototype.hasOwnProperty.call(this.formModel, action.name)) {
           this.$set(this.formModel, action.name, action.value || '')
         }
       })
@@ -307,7 +309,7 @@ $input-border-color: #C0C4CC;
         margin-right: 5px;
 
         // input 框与 label 相关样式
-        ::v-deep .el-form-item__label {
+        :deep(.el-form-item__label) {
           display: flex;
           justify-items: flex-start;
           align-items: center;
@@ -318,20 +320,20 @@ $input-border-color: #C0C4CC;
           font-size: 11px;
         }
 
-        ::v-deep .el-form-item__content .inline-input .el-input__inner {
+        :deep(.el-form-item__content .inline-input .el-input__inner) {
           //width: 130px;
           min-width: 130px;
         }
 
         // 执行、暂停按钮
-        ::v-deep .el-form-item__content .start-stop-btn {
+        :deep(.el-form-item__content .start-stop-btn) {
           display: flex;
           align-items: center;
           height: 28px;
           margin-bottom: 1.5px;
         }
 
-        ::v-deep .el-form-item__content .select-dropdown .el-button {
+        :deep(.el-form-item__content) .select-dropdown .el-button {
           width: 125px;
           background-color: $header-bg-color;
           border-color: $input-border-color;
@@ -404,18 +406,16 @@ $input-border-color: #C0C4CC;
   }
 }
 
-::v-deep .CodeMirror pre.CodeMirror-line,
-::v-deep .CodeMirror-linenumber.CodeMirror-gutter-elt {
+:deep(.CodeMirror) pre.CodeMirror-line,
+:deep(.CodeMirror-linenumber.CodeMirror-gutter-elt) {
   line-height: 18px !important;
 }
 
 .runas-input {
   height: 28px;
 
-  ::v-deep {
-    .el-select {
+  :deep(.el-select){
       width: 100px;
-    }
   }
 }
 
@@ -423,7 +423,7 @@ $input-border-color: #C0C4CC;
   min-width: 100px;
 }
 
-.autoWidth-select ::v-deep .el-input__prefix {
+.autoWidth-select :deep(.el-input__prefix) {
   position: relative;
   left: 0;
   box-sizing: border-box;
@@ -432,7 +432,7 @@ $input-border-color: #C0C4CC;
   visibility: hidden;
 }
 
-.autoWidth-select ::v-deep input {
+.autoWidth-select :deep(input) {
   position: absolute;
   padding-left: 0px;
   border: none;
@@ -443,7 +443,7 @@ $input-border-color: #C0C4CC;
   line-height: 27px;
 }
 
-::v-deep .el-select {
+:deep(.el-select) {
   top: -1px;
 
   .el-input .el-select__caret {

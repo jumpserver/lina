@@ -190,10 +190,8 @@ div.info-panel {
         }
       }
 
-      ::v-deep {
-        .el-avatar {
-          background: #fff;
-        }
+      :deep(.el-avatar) {
+        background: #fff;
       }
     }
 
@@ -201,8 +199,7 @@ div.info-panel {
       display: flex;
       align-items: center;
 
-      ::v-deep {
-        button.el-button--mini {
+      :deep(.button.el-button--mini) {
           padding: 5px 7px;
 
           .el-icon--right {
@@ -210,7 +207,6 @@ div.info-panel {
           }
         }
       }
-    }
   }
 
   .panel-content {

@@ -241,12 +241,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .el-form-item:nth-child(-n+3) {
+:deep(.el-form-item) {
+  &:nth-child(-n+3) {
   width: 43.5%;
-}
-
-::v-deep .el-form-item:last-child {
-  width: 6%;
+  }
+  &:last-child {
+    width: 6%;
+  }
 }
 
 .action-input {

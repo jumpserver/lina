@@ -49,15 +49,15 @@ export default {
 
 <style lang="scss" scoped>
 
-::v-deep .el-select {
+:deep(.el-select) {
   width: 100%;
 }
 
-::v-deep .el-form-item__content {
+:deep(.el-form-item__content) {
   width: 100% !important;
 }
 
-::v-deep .form-buttons {
+:deep(.form-buttons) {
   margin: 0 !important;
 }
 

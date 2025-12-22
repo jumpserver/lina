@@ -46,7 +46,7 @@ export async function fetchTranslationsFromAPI() {
     const res = await axios.get(`/api/v1/settings/i18n/lina/?lang=${lang}&flat=0`)
     const data = res.data
     for (const key in data) {
-      if (data.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
         i18n.global.mergeLocaleMessage(key, data[key])
       }
     }

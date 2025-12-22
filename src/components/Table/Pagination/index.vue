@@ -107,11 +107,11 @@ export default {
 </script>
 
 <style scoped>
-::v-deep .el-pagination {
+:deep(.el-pagination) {
   text-align: right;
 }
 
-::v-deep .el-pagination__total {
+:deep(.el-pagination__total) {
   float: left;
 }
 </style>

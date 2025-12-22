@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img v-if="icon" :src="icon" alt="icon" class="icon" />
+    <img v-if="icon" :src="icon" alt="icon" class="icon">
     <el-link
       :class="{ clicked: linkClicked }"
       :disabled="disabled"
@@ -204,16 +204,14 @@ export default {
   height: 28px;
 }
 
-::v-deep .go-back {
+:deep(.go-back) {
   display: none;
 }
 
 .detail-drawer {
-  ::v-deep {
-    .el-drawer__header {
-      border-bottom: none;
-      padding-bottom: 1px;
-    }
+  :deep(.el-drawer__header) {
+    border-bottom: none;
+    padding-bottom: 1px;
   }
 }
 </style>

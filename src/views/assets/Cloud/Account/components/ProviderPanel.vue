@@ -99,7 +99,7 @@ export default {
         border: 1px solid;
       }
 
-      ::v-deep .el-image {
+      :deep(.el-image) {
         overflow: unset;
 
         img {
@@ -108,7 +108,7 @@ export default {
         }
       }
 
-      ::v-deep .description {
+      :deep(.description) {
         margin-left: 15px;
         font-size: 14px;
         word-break: keep-all;

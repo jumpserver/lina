@@ -22,7 +22,6 @@ export function useDrawerDrag(options = {}) {
 
   let dragHandle = null
   let observer = null
-  let drawerEle = null
 
   const findDrawer = () => {
     const drawers = document.querySelectorAll('.el-drawer')
@@ -31,8 +30,6 @@ export function useDrawerDrag(options = {}) {
 
   const initDrag = element => {
     if (!element || element.querySelector('.el-drawer-drag-handle')) return
-
-    drawerEle = element
 
     // 创建拖拽手柄
     dragHandle = Object.assign(document.createElement('div'), {
@@ -59,11 +56,11 @@ export function useDrawerDrag(options = {}) {
         const deltaX = startX - e.pageX
         const newWidth = Math.max(minWidth, Math.min(maxWidth, startWidth + deltaX))
         element.style.width = `${newWidth}px`
-        
+
         if (storageKey) {
           localStorage.setItem(storageKey, newWidth)
         }
-        
+
         if (onWidthChange) {
           onWidthChange(newWidth)
         }
@@ -124,7 +121,6 @@ export function useDrawerDrag(options = {}) {
       observer.disconnect()
       observer = null
     }
-    drawerEle = null
   }
 
   return {

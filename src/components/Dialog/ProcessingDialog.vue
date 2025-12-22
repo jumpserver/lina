@@ -44,7 +44,7 @@ export default {
 
 <style lang="scss" scoped>
 .processing-dialog {
-  ::v-deep .el-dialog__body {
+  :deep(.el-dialog__body) {
     overflow: hidden;
   }
 }

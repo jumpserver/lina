@@ -9,7 +9,7 @@
       <TreeMenu
         slot="rMenu"
         :tree="treeRef"
-        @showAll="showAll"
+        @show-all="showAll"
       />
       <BaseList
         ref="baseList"
@@ -114,7 +114,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.asset-select-dialog ::v-deep .transition-box:first-child {
+.asset-select-dialog :deep(.transition-box:first-child) {
   background-color: #f3f3f3;
 }
 </style>

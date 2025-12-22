@@ -280,7 +280,7 @@ export default {
       cursor: pointer;
       transition: all 0.3s ease-in-out;
 
-      ::v-deep .summary-header {
+      :deep(.summary-header) {
         .title {
           color: #646a73;
           font-size: 0.9rem;
@@ -297,7 +297,7 @@ export default {
       &:hover {
         transform: translateY(-0.2rem);
 
-        ::v-deep .no-margins {
+        :deep(.no-margins) {
           .num {
             color: var(--color-primary);
           }

@@ -3,7 +3,6 @@
   <el-drawer
     ref="drawer"
     :model-value="visible"
-    @update:model-value="handleUpdateModelValue"
     :append-to-body="true"
     :before-close="handleClose"
     :class="['drawer', { 'drawer__no-footer': !hasFooter }]"
@@ -13,6 +12,7 @@
     custom-class="drawer"
     destroy-on-close
     direction="rtl"
+    @update:model-value="handleUpdateModelValue"
     v-on="$listeners"
   >
     <div class="drawer__content">
@@ -142,27 +142,23 @@ export default {
 
 <style lang="scss" scoped>
 .drawer__no-footer {
-  ::v-deep {
-    .drawer {
+  :deep(.drawer){
       .page {
         height: calc(100vh - 55px);
       }
-    }
   }
 }
 
 @media (max-width: 992px) {
-  .drawer ::v-deep {
-    .el-form-item {
+  .drawer :deep(.el-form-item){
       display: flex;
       flex-direction: column;
       gap: 0.3rem;
-    }
   }
 }
 
 .drawer {
-  ::v-deep {
+  :deep(.el-form-item){
     min-width: 565px;
 
     .el-card__body {

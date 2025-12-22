@@ -99,7 +99,7 @@ export default {
 </script>
 
 <style scoped>
-.form ::v-deep .form-buttons {
+.form :deep(.form-buttons) {
   padding-top: 30px;
 }
 </style>

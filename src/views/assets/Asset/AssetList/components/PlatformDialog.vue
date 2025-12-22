@@ -161,7 +161,7 @@ export default {
 
 <style lang="scss" scoped>
 
-::v-deep .el-drawer__body {
+:deep(.el-drawer__body) {
   padding: 0 20px;
   overflow-y: scroll;
 }
@@ -173,7 +173,7 @@ export default {
 .platform-item {
   margin: 5px 0;
 
-  & ::v-deep .el-card__body {
+  & :deep(.el-card__body) {
     padding: 10px;
     flex-wrap: nowrap;
     overflow: hidden;
@@ -193,7 +193,7 @@ export default {
   color: #303133;
 }
 
-::v-deep .el-collapse {
+:deep(.el-collapse) {
   border: none;
 
   .el-collapse-item__content {
@@ -211,7 +211,7 @@ export default {
   }
 }
 
-::v-deep .el-card__body {
+:deep(.el-card__body) {
   display: flex;
   align-items: center;
 }

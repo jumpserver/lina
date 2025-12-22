@@ -97,7 +97,7 @@ export default {
                 return
               }
               this.queryParam = `playbook=${event.pk}`
-              this.$axios.get(`/api/v1/ops/playbooks/${event.pk}/`,
+              this.$axios.get(`/api/v1/ops/playbooks/${event.pk}/`
               ).then(data => {
                 data?.variable.map(item => {
                   delete item.job

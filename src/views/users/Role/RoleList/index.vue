@@ -1,5 +1,9 @@
 <template>
-  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu" @tab-click="handleTabClick">
+  <TabPage
+    v-model:active-menu="config.activeMenu"
+    :submenu="config.submenu"
+    @tab-click="handleTabClick"
+  >
     <div slot="title">
       {{ Title }}
     </div>

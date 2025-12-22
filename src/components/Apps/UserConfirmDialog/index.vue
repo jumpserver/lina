@@ -21,7 +21,7 @@
       <el-row :gutter="24" style="margin: 0 auto">
         <el-col :md="24" :sm="24">
           <el-button class="confirm-btn" size="mini" type="primary" @click="logout">
-            {{ this.$t('ReLogin') }}
+            {{ $t('ReLogin') }}
           </el-button>
         </el-col>
       </el-row>
@@ -89,7 +89,7 @@
             type="primary"
             @click="handleConfirm"
           >
-            {{ this.$t('Confirm') }}
+            {{ $t('Confirm') }}
           </el-button>
           <el-button
             v-if="subTypeSelected === 'face'"
@@ -99,7 +99,7 @@
             type="primary"
             @click="handleFaceCapture"
           >
-            {{ this.$tc('VerifyFace') }}
+            {{ $tc('VerifyFace') }}
           </el-button>
           <el-button
             v-if="subTypeSelected === 'passkey'"
@@ -109,7 +109,7 @@
             type="primary"
             @click="handlePasskeyVerify"
           >
-            {{ this.$tc('Next') }}
+            {{ $tc('Next') }}
           </el-button>
         </el-col>
       </el-row>
@@ -335,11 +335,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.dialog-content ::v-deep .el-dialog__footer {
+.dialog-content :deep(.el-dialog__footer) {
   padding: 0;
 }
 
-.dialog-content ::v-deep .el-dialog {
+.dialog-content :deep(.el-dialog) {
   padding: 8px;
 
   .el-dialog__body {

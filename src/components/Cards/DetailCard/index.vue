@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       iItems: this.items.filter(item => {
-        return !item.hasOwnProperty('has') || item.has === true
+        return !Object.prototype.hasOwnProperty.call(item, 'has') || item.has === true
       })
     }
   },
@@ -76,7 +76,7 @@ export default {
   font-size: 13px;
   line-height: 2;
 
-  ::v-deep .el-form-item {
+  :deep(.el-form-item) {
     border-bottom: 1px dashed #F4F4F4;
     padding: 1px 0;
     margin-bottom: 0;
@@ -93,11 +93,11 @@ export default {
     &.array-item {
       border-bottom: none;
 
-      ::v-deep .el-form-item__content {
+      :deep(.el-form-item__content) {
         border-bottom: 1px dashed #EBEEF5
       }
 
-      ::v-deep .el-form-item__label:last-child {
+      :deep(.el-form-item__label:last-child) {
         border: 1px dashed #EBEEF5;
       }
     }
@@ -127,13 +127,13 @@ export default {
       padding: 5px 0;
     }
 
-    ::v-deep .el-tag--mini {
+    :deep(.el-tag--mini) {
       margin-right: 3px;
     }
   }
 
   .item-value {
-    ::v-deep span {
+    :deep(span) {
       //display: -webkit-box;
       overflow: hidden;
       text-overflow: ellipsis;

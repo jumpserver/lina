@@ -329,7 +329,7 @@ export default {
 }
 
 .help-block {
-  ::v-deep .el-alert__icon {
+  :deep(.el-alert__icon) {
     font-size: 16px;
   }
 

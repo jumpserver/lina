@@ -68,7 +68,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .help-dialog.dialog .el-dialog__footer {
+:deep(.help-dialog.dialog .el-dialog__footer) {
   border-top: none;
   padding: 8px;
 }
@@ -79,15 +79,17 @@ export default {
   border: 1px solid #dee2e6;
 }
 
-::v-deep .help-table th,
-::v-deep .help-table td {
-  height: 40px;
-  padding: 0 8px;
-  text-align: left;
+:deep(.help-table) {
+  th,
+  td {
+    height: 40px;
+    padding: 0 8px;
+    text-align: left;
+  }
 }
 
-::v-deep .help-table .item-td,
-::v-deep .help-table .item-label {
+:deep(.help-table .item-td),
+:deep(.help-table .item-label) {
   cursor: pointer;
   color: var(--color-primary);
 }

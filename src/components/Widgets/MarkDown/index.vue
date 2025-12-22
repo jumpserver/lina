@@ -122,7 +122,7 @@ export default {
   font-size: 13px;
 }
 
-::v-deep .el-textarea {
+:deep(.el-textarea) {
   height: 100% !important;
 
   .el-textarea__inner {
@@ -135,7 +135,7 @@ export default {
   padding: 6px;
 }
 
-::v-deep .result-html {
+:deep(.result-html) {
   min-height: 210px;
   margin-left: 4px;
   padding: 5px 10px;

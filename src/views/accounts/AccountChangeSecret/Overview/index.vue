@@ -1,5 +1,5 @@
 <template>
-  <div v-if="this.$hasPerm('accounts.view_changesecretautomation')" class="change-secret-container">
+  <div v-if="$hasPerm('accounts.view_changesecretautomation')" class="change-secret-container">
     <ChangeSecretReport :nav="false" :only-charts="true" />
   </div>
 </template>

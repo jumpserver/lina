@@ -79,7 +79,7 @@ export default {
     box-shadow: 0 1px 4px rgba(0,21,41,.08);
     transition: all .3s;
 
-    ::v-deep {
+    :deep(){
       .card-content {
         padding-bottom: unset;
         border-bottom: unset;
@@ -108,7 +108,7 @@ export default {
   //   margin-bottom: 1.25rem;
   // }
 
-  .page ::v-deep .page-heading {
+  .page :deep(.page-heading) {
     display: none;
   }
 
@@ -122,7 +122,7 @@ export default {
     height: 100%;
     margin-top: 16px;
 
-    ::v-deep #HomeCard .el-card.no-border {
+    :deep(#HomeCard .el-card.no-border) {
       height: 100%;
       margin-bottom: unset !important;
 
@@ -144,7 +144,7 @@ export default {
   }
 
   @media (max-width: 1200px) {
-    ::v-deep .data-summary {
+    :deep(.data-summary) {
       margin-left: unset !important;
     }
   }

@@ -8,7 +8,7 @@
       tabindex="-1"
       @click="rMenuAddAssetToNode"
     >
-      <i class="fa fa-clone" />  {{ this.$t('AddAssetToNode') }}
+      <i class="fa fa-clone" />  {{ $t('AddAssetToNode') }}
     </li>
     <li
       id="m_move_asset_to_node"
@@ -17,7 +17,7 @@
       tabindex="-1"
       @click="rMenuMoveAssetToNode"
     >
-      <i class="fa fa-scissors" />  {{ this.$t('MoveAssetToNode') }}
+      <i class="fa fa-scissors" />  {{ $t('MoveAssetToNode') }}
     </li>
     <li
       id="m_remove_asset_from_node"
@@ -26,7 +26,7 @@
       tabindex="-1"
       @click="rMenuRemoveAssetFromNode"
     >
-      <i class="fa fa-minus-square-o" />  {{ this.$t('RemoveAssetFromNode') }}
+      <i class="fa fa-minus-square-o" />  {{ $t('RemoveAssetFromNode') }}
     </li>
     <li v-if="$hasPerm('assets.change_assetnodes')" class="divider" />
     <li
@@ -36,7 +36,7 @@
       tabindex="-1"
       @click="rMenuUpdateNodeAssetHardwareInfo"
     >
-      <i class="fa fa-refresh" />  {{ this.$t('UpdateNodeAssetHardwareInfo') }}
+      <i class="fa fa-refresh" />  {{ $t('UpdateNodeAssetHardwareInfo') }}
     </li>
     <li
       id="m_test_node_asset_connectivity"
@@ -45,14 +45,14 @@
       tabindex="-1"
       @click="rMenuTestNodeAssetConnectivity"
     >
-      <i class="fa fa-link" />  {{ this.$t('TestNodeAssetConnectivity') }}
+      <i class="fa fa-link" />  {{ $t('TestNodeAssetConnectivity') }}
     </li>
     <li v-if="$hasPerm('assets.change_assetnodes | assets.test_assetconnectivity')" class="divider" />
     <li id="m_show_asset_only_current_node" class="rmenu" tabindex="-1" @click="rMenuShowAssetOnlyCurrentNode">
-      <i class="fa fa-indent" />  {{ this.$t('ShowAssetOnlyCurrentNode') }}
+      <i class="fa fa-indent" />  {{ $t('ShowAssetOnlyCurrentNode') }}
     </li>
     <li id="m_show_asset_all_children_node" class="rmenu" tabindex="-1" @click="rMenuShowAssetAllChildrenNode">
-      <i class="fa fa-align-justify" />  {{ this.$t('ShowAssetAllChildrenNode') }}
+      <i class="fa fa-align-justify" />  {{ $t('ShowAssetAllChildrenNode') }}
     </li>
     <li class="divider" />
     <li
@@ -62,10 +62,10 @@
       tabindex="-1"
       @click="rCheckAssetsAmount"
     >
-      <i class="fa fa-clone" />  {{ this.$t('CheckAssetsAmount') }}
+      <i class="fa fa-clone" />  {{ $t('CheckAssetsAmount') }}
     </li>
     <li id="m_show_node_info" class="rmenu" tabindex="-1" @click="rMenuShowNodeInfo">
-      <i class="fa fa-info-circle" />  {{ this.$t('ShowNodeInfo') }}
+      <i class="fa fa-info-circle" />  {{ $t('ShowNodeInfo') }}
     </li>
     <NodeAssetsUpdateDialog
       v-if="nodeAssetsUpdateDialog.visible"

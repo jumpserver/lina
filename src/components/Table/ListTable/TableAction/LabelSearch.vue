@@ -100,7 +100,7 @@ export default {
         setTimeout(() => {
           this.$refs.labelCascader.updateStyle()
           input.style.height = '30px'
-        },)
+        })
         return
       } else {
         input.style.height = '30px'
@@ -162,7 +162,7 @@ export default {
   border: 1px solid var(--color-border);
   overflow: hidden;
 
-  ::v-deep .el-button.label-button {
+  :deep(.el-button.label-button) {
     height: 28px;
     border: none;
   }
@@ -172,7 +172,7 @@ export default {
     height: 28px;
     line-height: 28px;
 
-    ::v-deep .el-input {
+    :deep(.el-input) {
       .el-input__inner {
         height: 28px !important;
         line-height: 28px;
@@ -185,7 +185,7 @@ export default {
       }
     }
 
-    ::v-deep .el-cascader__tags {
+    :deep(.el-cascader__tags) {
       white-space: nowrap;
       flex-wrap: nowrap;
       overflow: hidden;
@@ -200,7 +200,7 @@ export default {
     }
   }
 
-  ::v-deep .svg-icon {
+  :deep(.svg-icon) {
     color: var(--color-icon-primary) !important;
   }
 }

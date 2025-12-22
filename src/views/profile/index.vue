@@ -500,11 +500,9 @@ export default {
 <style lang="scss" scoped>
 
 .update-info {
-  ::v-deep {
-    .el-input-group {
-      .el-select {
-        width: 80px;
-      }
+  :deep(.el-input-group) {
+    .el-select {
+      width: 80px;
     }
   }
 

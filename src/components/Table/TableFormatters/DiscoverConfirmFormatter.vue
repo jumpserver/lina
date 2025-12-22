@@ -12,10 +12,10 @@
         </el-dropdown-menu>
       </el-dropdown>
       <el-tooltip :content="$tc('Ignore')" :open-delay="400">
-        <el-button :disabled="!this.$hasPerm('accounts.change_accountrisk')" class="ignore action" size="mini">
+        <el-button :disabled="!$hasPerm('accounts.change_accountrisk')" class="ignore action" size="mini">
           <svg-icon
             icon-class="ignore"
-            :style="!this.$hasPerm('accounts.change_accountrisk') ? 'pointer-events: none;' : ''"
+            :style="!$hasPerm('accounts.change_accountrisk') ? 'pointer-events: none;' : ''"
             @click="handleRisk('ignore')"
           />
         </el-button>
@@ -158,19 +158,19 @@ export default {
   padding: 1px 4px;
 
   &.confirm {
-    ::v-deep i {
+    :deep(i) {
       color: var(--color-primary);
     }
   }
 
   &.remove {
-    ::v-deep i {
+    :deep(i) {
       color: var(--color-danger);
     }
   }
 
   &.ignore {
-    ::v-deep svg.svg-icon {
+    :deep(svg.svg-icon) {
     }
   }
 }

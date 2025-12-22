@@ -14,7 +14,7 @@
   >
     <GenericCreateUpdateForm
       v-bind="formConfig"
-      @submitSuccess="onSubmitSuccess"
+      @submit-success="onSubmitSuccess"
     />
   </Dialog>
 </template>
@@ -90,7 +90,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.dialog ::v-deep .el-dialog__footer {
+.dialog :deep(.el-dialog__footer) {
   padding: 0;
 }
 </style>

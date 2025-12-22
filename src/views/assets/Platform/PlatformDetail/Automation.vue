@@ -78,7 +78,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-::v-deep {
+:deep(){
   .el-cascader {
     width: 100%;
   }

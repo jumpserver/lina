@@ -179,7 +179,7 @@ export default {
   height: calc(100vh - 40px);
   overflow-y: auto;
 
-  ::v-deep .export-bar {
+  :deep(.export-bar) {
     float: right;
 
     .export-btn.el-button--text {
@@ -247,7 +247,7 @@ export default {
 
   .charts-zone {
 
-    ::v-deep {
+    :deep(){
       .chart-container {
         break-inside: avoid;
         page-break-inside: avoid;
@@ -268,7 +268,7 @@ export default {
   box-sizing: border-box;
   min-height: 100px; // 添加最小高度确保容器始终存在
 
-  ::v-deep {
+  :deep(){
     .full-width-chart {
       width: 100%;
       margin-bottom: 32px;

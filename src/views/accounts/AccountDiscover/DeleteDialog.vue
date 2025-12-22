@@ -11,13 +11,13 @@
       v-on="$listeners"
     >
       <el-alert type="error" :closable="closeable">
-        {{ this.$t('DeleteWarningMsg') }} {{ account.username }}({{ account.asset.name }}) ?
+        {{ $t('DeleteWarningMsg') }} {{ account.username }}({{ account.asset.name }}) ?
 
         <div class="extra-delete">
           <div v-if="hasDeleteAccount && assetAccounts.length > 0" class="delete-item">
             <el-checkbox v-model="iDeleteAccount">
               <!-- 发现资产账号列表中，存在该账号，是否同步删除 ? -->
-              {{ this.$t('FoundAccountInAssetDeleteMsg') }} ?
+              {{ $t('FoundAccountInAssetDeleteMsg') }} ?
             </el-checkbox>
             <ul>
               <li v-for="item in assetAccounts" :key="item.id">
@@ -36,7 +36,7 @@
 
           <div v-if="hasDeleteRemote && account.present" class="delete-item">
             <el-checkbox v-model="iDeleteRemote">
-              {{ this.$t('RemoteAssetFoundAccountDeleteMsg') }} ?
+              {{ $t('RemoteAssetFoundAccountDeleteMsg') }} ?
               <!-- 远端主机上存在该账号，是否要同步删除 ? -->
             </el-checkbox>
           </div>
@@ -143,10 +143,8 @@ export default {
     margin-top: 20px;
   }
 
-  ::v-deep {
-    .el-checkbox__label {
-      font-size: 12px;
-    }
+  :deep(.el-checkbox__label) {
+    font-size: 12px;
   }
 }
 </style>

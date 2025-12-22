@@ -265,7 +265,7 @@ export default {
     setWsCallback() {
       this.ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
-        if (data.hasOwnProperty('message')) {
+        if (Object.prototype.hasOwnProperty.call(data, 'message')) {
           let message = data.message
           message = message.replace(/Task ops\.tasks\.run_ops_job_execution.*/, '')
           this.xterm.write(message)
@@ -493,13 +493,13 @@ export default {
   width: 12px !important;
 }
 
-.vue-codemirror-wrap ::v-deep .CodeMirror {
+.vue-codemirror-wrap :deep(.CodeMirror) {
   width: 600px;
   height: 100px;
   border: 1px solid #eee;
 }
 
-.upload_input ::v-deep .el-input-group__prepend {
+.upload_input :deep(.el-input-group__prepend) {
   padding: 0 10px;
 }
 
@@ -531,7 +531,7 @@ export default {
     padding-bottom: 5px;
   }
 
-  ::v-deep .el-card__body {
+  :deep(.el-card__body) {
     > div:nth-child(2) {
       //不要影响到 el-progress
       display: flex;
@@ -594,7 +594,7 @@ export default {
   background: #fff;
 }
 
-.output ::v-deep #terminal {
+.output :deep(#terminal) {
   border: dashed 1px #d9d9d9;
 }
 

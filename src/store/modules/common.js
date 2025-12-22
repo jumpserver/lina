@@ -21,10 +21,8 @@ const mutations = {
     state.metaMap[url] = meta
   },
   reload: (state) => {
-    state.isRouterAlive = false
-    setTimeout(() => {
-      state.isRouterAlive = true
-    }, 0)
+    // 通过切换 key 来强制 router-view 重新渲染，避免使用 v-if 反复销毁/重建根节点导致的 DOM 插入错误
+    state.isRouterAlive = !state.isRouterAlive
   },
   addSQLQueryCounter: (state, { url, count }) => {
     if (count < 5) {

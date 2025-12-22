@@ -1,5 +1,5 @@
 <template>
-  <div :class="grouped ? 'el-button-group' : 'el-button-ungroup'" class="layout">
+  <div :class="grouped ? 'el-button-group' : 'el-button-ungroup'" class="data-actions layout">
     <template v-for="action in iActions" :key="action.name">
       <el-dropdown
         v-if="action.dropdown"
@@ -249,13 +249,13 @@ $color-drop-menu-border: #e4e7ed;
     font-size: 11px;
 
     .more-action.el-button--default {
-      ::v-deep .el-icon-arrow-down.el-icon--right {
+      :deep(.el-icon-arrow-down.el-icon--right) {
         color: var(--color-icon-primary) !important;
       }
     }
 
     .el-button--primary {
-      ::v-deep .el-icon-arrow-down.el-icon--right {
+      :deep(.el-icon-arrow-down.el-icon--right) {
         color: #ffffff !important;
       }
 
@@ -266,59 +266,9 @@ $color-drop-menu-border: #e4e7ed;
   }
 }
 
-// 主要是 Table 中的操作列
-.layout.table-actions {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-
-  .el-button {
-    padding: 2px 5px;
-    font-size: 13px;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    height: 24px !important;
-    line-height: 24px !important;
-
-    &:not(.is-plain) {
-      color: $btn-text-color;
-    }
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    // 确保按钮内部所有内容都垂直居中
-    ::v-deep span {
-      display: inline-flex;
-      align-items: center;
-      line-height: 1;
-      vertical-align: middle;
-    }
-  }
-
-  ::v-deep .action-item.el-dropdown .el-button {
-    display: block;
-    color: var(--color-primary);
-    background-color: $color-btn-background;
-    border-color: $color-btn-focus-background;
-
-    &:focus {
-      color: $btn-text-color;
-      background-color: $color-btn-focus-background !important;
-    }
-
-    &:hover {
-      color: $btn-text-color;
-      background-color: $color-btn-focus-background;
-    }
-  }
-}
-
 // 下拉 options
 .el-dropdown-menu {
-  ::v-deep .more-batch-processing {
+  :deep(.more-batch-processing) {
     &:hover {
       background-color: transparent !important;
     }
@@ -347,14 +297,14 @@ $color-drop-menu-border: #e4e7ed;
       display: inline-block;
     }
 
-    ::v-deep i.fa {
+    :deep(i.fa) {
       font-size: 13px;
       height: 13px;
       width: 13px;
       margin-right: 0;
     }
 
-    ::v-deep .svg-icon {
+    :deep(.svg-icon) {
       font-size: 13px;
       height: 13px;
       width: 13px;

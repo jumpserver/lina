@@ -188,14 +188,14 @@ $height: 28px;
 .org-select {
   line-height: $height;
 
-  ::v-deep .el-select__wrapper {
+  :deep(.el-select__wrapper) {
     background: none;
     border: none;
     box-shadow: none;
   }
 }
 
-::v-deep .el-input {
+:deep(.el-input) {
   .el-input__inner {
     height: $height;
     line-height: $height;
@@ -223,14 +223,14 @@ $height: 28px;
     padding-left: 8px;
     max-width: 400px;
 
-    ::v-deep .el-select-group__title {
+    :deep(.el-select-group__title) {
       color: var(--color-icon-primary);
       padding-left: 15px;
       font-size: 12px;
       line-height: 30px;
     }
 
-    ::v-deep .el-select-dropdown__item {
+    :deep(.el-select-dropdown__item) {
       padding: 0 15px;
       line-height: 30px;
       height: 30px;
@@ -238,7 +238,7 @@ $height: 28px;
   }
 }
 
-.org-select ::v-deep .el-input.is-disabled .el-input__inner {
+.org-select :deep(.el-input.is-disabled .el-input__inner) {
   color: #ffffff !important;
   background-color: transparent;
 }

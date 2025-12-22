@@ -87,7 +87,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .item-textarea ::v-deep .el-textarea__inner {
+  .item-textarea :deep(.el-textarea__inner) {
     height: 110px;
   }
 
@@ -100,12 +100,12 @@ export default {
       border-bottom: none;
     }
 
-    ::v-deep .el-form-item__label {
+    :deep(.el-form-item__label) {
       padding-right: 20px;
       line-height: 30px;
     }
 
-    ::v-deep .el-form-item__content {
+    :deep(.el-form-item__content) {
       line-height: 30px;
 
       pre {

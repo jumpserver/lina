@@ -213,13 +213,13 @@ export default {
   font-size: 13px;
   max-width: 300px;;
 
-  &::v-deep p {
+  &:deep(p) {
     margin-bottom: 0 !important;
   }
 
   background: inherit;
 
-  &::v-deep pre {
+  &:deep(pre) {
     padding: 0 0 6px 0;
 
     .hljs.code-block-body {
@@ -227,7 +227,7 @@ export default {
     }
   }
 
-  &::v-deep .code-block-wrapper {
+  &:deep(.code-block-wrapper) {
     background: #1F2329;
     padding: 0;
     margin: 5px 0;
@@ -281,7 +281,7 @@ export default {
   }
 }
 
-::v-deep .link-style {
+:deep(.link-style) {
   color: #487bf4;
 
   &:hover {

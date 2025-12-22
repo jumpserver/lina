@@ -46,7 +46,7 @@ export default {
                   can: ({ row }) => row['is_valid'] && this.$hasPerm('authentication.change_temptoken'),
                   type: 'info',
                   callback: function({ row }) {
-                    this.$axios.patch(`${ajaxUrl}${row.id}/expire/`,
+                    this.$axios.patch(`${ajaxUrl}${row.id}/expire/`
                     ).then(res => {
                       this.reloadTable()
                       this.$message.success(this.$tc('UpdateSuccessMsg'))

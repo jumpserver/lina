@@ -107,13 +107,11 @@ export default {
     min-height: .1px;
   }
 
-  ::v-deep {
-    .el-card__body {
-      padding-top: 10px
-    }
+  :deep(.el-card__body) {
+    padding-top: 10px
   }
 
-  .ListTable ::v-deep .el-data-table .el-pagination {
+  .ListTable :deep(.el-data-table .el-pagination) {
     display: none;
   }
 </style>

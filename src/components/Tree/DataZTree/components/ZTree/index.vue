@@ -21,11 +21,11 @@
         </el-input>
       </div>
       <ul v-show="loading" class="zloading">
-        {{ this.$t('Loading') }}...
+        {{ $t('Loading') }}...
       </ul>
       <ul v-show="!loading" :id="iZTreeID" :key="iZTreeID" class="ztree" />
       <div v-if="treeSetting.treeUrl===''" class="tree-empty">
-        {{ this.$t('Empty') }}
+        {{ $t('Empty') }}
         <a id="tree-refresh"><i class="fa fa-refresh" /></a>
       </div>
     </div>
@@ -402,7 +402,7 @@ export default {
   }
 
   &:hover {
-    ::v-deep .tree-action-btn {
+    :deep(.tree-action-btn) {
       display: inline;
 
       &:hover {
@@ -478,7 +478,7 @@ div.rMenu li {
   overflow: auto;
 }
 
-.ztree ::v-deep .fa {
+.ztree :deep(.fa) {
   font: normal normal normal 14px/1 FontAwesome !important;
 }
 
@@ -506,7 +506,7 @@ div.rMenu li {
   background-color: #f5f5f5;
 }
 
-::v-deep .tree-banner-icon-zone {
+:deep(.tree-banner-icon-zone) {
   position: absolute;
   right: 7px;
   height: 30px;
@@ -521,7 +521,7 @@ div.rMenu li {
   }
 }
 
-::v-deep .tree-search {
+:deep(.tree-search) {
   position: relative;
   top: -2px;
   width: 20px;
@@ -541,7 +541,7 @@ div.rMenu li {
   }
 }
 
-::v-deep .tree-search .tree-banner-icon {
+:deep(.tree-search .tree-banner-icon) {
   position: absolute;
   top: 4px;
   left: 6px;
@@ -554,16 +554,16 @@ div.rMenu li {
   cursor: pointer;
 }
 
-::v-deep .tree-search.active {
+:deep(.tree-search.active) {
   width: 160px;
   background-color: #ffffff !important;
 }
 
-::v-deep .tree-search.active:hover {
+:deep(.tree-search.active:hover) {
   border-radius: 12px;
 }
 
-::v-deep .tree-search input {
+:deep(.tree-search input) {
   position: relative;
   left: 20px;
   width: 133px;
@@ -625,14 +625,14 @@ div.rMenu li {
 .fixed-tree-search {
   margin-bottom: 10px;
 
-  & ::v-deep .el-input__inner {
+  & :deep(.el-input__inner) {
     border-radius: 4px;
     background: #fafafa;
     padding-right: 32px;
     color: var(--color-text-primary)
   }
 
-  & ::v-deep .el-input__suffix {
+  & :deep(.el-input__suffix) {
     padding-right: 8px;
 
     .el-input__suffix-inner:hover {
@@ -640,7 +640,7 @@ div.rMenu li {
     }
   }
 
-  & ::v-deep .el-input__prefix {
+  & :deep(.el-input__prefix) {
     display: flex;
 
     .el-input__icon {
@@ -650,7 +650,7 @@ div.rMenu li {
     }
   }
 
-  & ::v-deep .el-input__suffix-inner {
+  & :deep(.el-input__suffix-inner) {
     line-height: 30px;
   }
 }
@@ -672,7 +672,7 @@ div.rMenu li {
   cursor: pointer;
 }
 
-::v-deep .tree-action-btn {
+:deep(.tree-action-btn) {
   display: none;
 }
 

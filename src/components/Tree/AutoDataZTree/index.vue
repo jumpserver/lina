@@ -421,7 +421,7 @@ export default {
   display: inline-block;
 }
 
-.data-z-tree ::v-deep .icon {
+.data-z-tree :deep(.icon) {
   width: 10px;
   margin-right: 3px;
 }

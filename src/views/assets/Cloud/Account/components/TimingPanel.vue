@@ -3,8 +3,8 @@
     ref="form"
     class="form"
     v-bind="settings"
-    @performFinished="handlePerformFinished"
-    @submitSuccess="handleSubmitSuccess"
+    @perform-finished="handlePerformFinished"
+    @submit-success="handleSubmitSuccess"
   />
 </template>
 
@@ -87,7 +87,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-::v-deep .el-form-item.form-buttons {
+:deep(.el-form-item.form-buttons) {
   text-align: right;
 }
 

@@ -3,9 +3,9 @@
     ref="form"
     class="form"
     v-bind="settings"
-    @performError="handlePerformError"
-    @performFinished="handlePerformFinished"
-    @submitSuccess="handleSubmitSuccess"
+    @perform-error="handlePerformError"
+    @perform-finished="handlePerformFinished"
+    @submit-success="handleSubmitSuccess"
   />
 </template>
 
@@ -204,7 +204,7 @@ export default {
       }
     },
     handlePerformError(errorData) {
-      if (errorData.hasOwnProperty('attrs')) {
+      if (Object.prototype.hasOwnProperty.call(errorData, 'attrs')) {
         for (const f in errorData['attrs']) {
           this.setAttrsFieldError(f, errorData['attrs'][f])
         }
@@ -231,19 +231,17 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-::v-deep .el-form-item.form-buttons {
+:deep(.el-form-item.form-buttons) {
   text-align: right;
 }
 
 .form {
   margin-right: 0;
 
-  ::v-deep {
-    form {
-      margin-right: 0;
-      padding-right: 0;
-      padding-bottom: 10px;
-    }
+  :deep(form) {
+    margin-right: 0;
+    padding-right: 0;
+    padding-bottom: 10px;
   }
 }
 </style>

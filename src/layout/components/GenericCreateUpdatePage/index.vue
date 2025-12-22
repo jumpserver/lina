@@ -31,7 +31,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .ibox {
+:deep(.ibox) {
   margin: 0 10px 30px 0;
 
   .el-card__body {
@@ -40,7 +40,7 @@ export default {
   }
 }
 
-.drawer ::v-deep .page-heading {
+.drawer :deep(.page-heading) {
   display: none;
 }
 </style>

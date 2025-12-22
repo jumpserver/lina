@@ -9,7 +9,7 @@ export const filterSelectValues = values => {
   if (!values) return
   const selects = []
   values.forEach(item => {
-    if (item.hasOwnProperty('pk')) {
+    if (Object.prototype.hasOwnProperty.call(item, 'pk')) {
       selects.push(item)
     } else {
       // 格式校验：不以:开头，不以:结尾
@@ -200,8 +200,9 @@ export const assetJSONSelectMeta = vm => {
       categories.push({ value: category.value, label: category.label })
       _types.push(...category.types.map(item => ({ value: item.value, label: item.label })))
       for (const type of category.types) {
+        const protocols = type.constraints?.protocols || []
         _protocols.push(
-          ...type.constraints.protocols?.map(item => ({
+          ...protocols.map(item => ({
             value: item.name,
             label: item.name.toUpperCase()
           }))

@@ -141,7 +141,7 @@ export default {
             type: 'primary',
             can: this.$hasPerm('ops.view_taskmonitor'),
             callback: () => {
-              window.open(`${BASE_URL}/core/flower/?_=${Date.now()}`,)
+              window.open(`${BASE_URL}/core/flower/?_=${Date.now()}`)
             }
           }
         ]

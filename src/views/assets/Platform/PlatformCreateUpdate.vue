@@ -11,7 +11,7 @@
       :has-reset="false"
       :initial="initial"
       :url="url"
-      @submitSuccess="onSubmitSuccess"
+      @submit-success="onSubmitSuccess"
     />
   </div>
 </template>
@@ -65,11 +65,11 @@ export default {
         const ansibleConfig = automation?.['ansible_config'] || {}
         automation.ansible_config = ansibleConfig instanceof Object ? ansibleConfig : JSON.parse(ansibleConfig)
 
-        if (automation.hasOwnProperty('id')) {
+        if (Object.prototype.hasOwnProperty.call(automation, 'id')) {
           delete automation['id']
         }
         values['protocols'] = protocols.map(i => {
-          if (i.hasOwnProperty('id')) {
+          if (Object.prototype.hasOwnProperty.call(i, 'id')) {
             delete i['id']
           }
           return i
@@ -174,7 +174,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.platform-form ::v-deep {
+.platform-form :deep(){
   .el-cascader {
     width: 100%;
   }

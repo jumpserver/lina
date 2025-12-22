@@ -406,7 +406,7 @@ $origin-white-color: #ffffff;
     height: 28px;
     line-height: 28px;
 
-    ::v-deep .el-input.el-input--suffix {
+    :deep(.el-input.el-input--suffix) {
       .el-input__inner {
         width: 0;
         height: 28px;
@@ -415,7 +415,7 @@ $origin-white-color: #ffffff;
       }
     }
 
-    ::v-deep .el-input__suffix {
+    :deep(.el-input__suffix) {
       color: var(--color-icon-primary) !important;
 
       .el-input__suffix-inner .el-input__icon {
@@ -444,7 +444,7 @@ $origin-white-color: #ffffff;
   .search-input {
     height: 28px;
 
-    ::v-deep .el-input__suffix {
+    :deep(.el-input__suffix) {
       cursor: pointer;
 
       i {
@@ -454,7 +454,7 @@ $origin-white-color: #ffffff;
       }
     }
 
-    ::v-deep .el-input__inner {
+    :deep(.el-input__inner) {
       height: 28px;
       max-width: 200px;
       border: none;
@@ -487,7 +487,7 @@ $origin-white-color: #ffffff;
   }
 }
 
-.search-input2 ::v-deep .el-input__inner {
+.search-input2 :deep(.el-input__inner) {
   text-indent: 5px;
 }
 

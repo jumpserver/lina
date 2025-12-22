@@ -131,12 +131,12 @@ export default {
   color: var(--el-text-color-secondary);
 }
 
-::v-deep .el-dropdown-menu__item {
+:deep(.el-dropdown-menu__item) {
   transition: height 0.3s ease-in-out, padding 0.3s ease-in-out;
   overflow: hidden;
 }
 
-::v-deep .el-dropdown-menu {
+:deep(.el-dropdown-menu) {
   transition: min-height 0.3s ease-in-out;
 }
 </style>

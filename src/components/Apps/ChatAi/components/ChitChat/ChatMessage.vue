@@ -181,7 +181,7 @@ export default {
         border-radius: 50%;
         background-color: transparent;
 
-        &::v-deep img {
+        &:deep(img) {
           background-color: #fff;
         }
       }
@@ -249,7 +249,7 @@ export default {
               margin: unset;
               padding-left: 0.5rem;
 
-              ::v-deep p {
+              :deep(p) {
                 color: #8b8b8b;
               }
             }

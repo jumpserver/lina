@@ -1,7 +1,7 @@
 /**
  * 全局错误处理器
  * 防止 Vue 3 中未捕获的错误导致整个应用崩溃
- * 
+ *
  * @param {Object} app - Vue 应用实例
  * @param {Object} message - 消息提示服务对象
  */

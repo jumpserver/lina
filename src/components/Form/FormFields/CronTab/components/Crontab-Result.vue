@@ -1,12 +1,12 @@
 /* eslint-disable */
 <template>
   <div class="popup-result-time">
-    <p class="title">{{ this.$t('RunningTimes') }}</p>
+    <p class="title">{{ $t('RunningTimes') }}</p>
     <ul class="popup-result-scroll">
       <template v-if="isShow">
         <li v-for="item in resultList" :key="item">{{ item }}</li>
       </template>
-      <li v-else>{{ this.$t('CalculationResults') }}</li>
+      <li v-else>{{ $t('CalculationResults') }}</li>
     </ul>
   </div>
 </template>

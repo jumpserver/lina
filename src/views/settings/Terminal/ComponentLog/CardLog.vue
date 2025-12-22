@@ -60,16 +60,16 @@ export default {
   display: block;
 }
 
-.log-table ::v-deep td {
+.log-table :deep(td) {
   padding: 5px 5px;
 }
 
-.log-table ::v-deep tr {
+.log-table :deep(tr) {
   overflow-x: auto;
   white-space: nowrap;
 }
 
-.log-card ::v-deep .el-card__body {
+.log-card :deep(.el-card__body) {
   padding: 10px 10px 5px;
 }
 

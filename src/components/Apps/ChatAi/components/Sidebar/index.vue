@@ -92,7 +92,7 @@ export default {
   transform: rotate(-90deg)
 }
 
-::v-deep .el-tabs {
+:deep(.el-tabs) {
   .el-tabs__item {
     padding: 0 10px;
     font-size: 14px;

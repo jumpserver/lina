@@ -10,9 +10,9 @@
     />
     <GenericUpdateFormDialog
       v-if="updateSelectedDialogSetting.visible"
+      v-model:visible="updateSelectedDialogSetting.visible"
       :form-setting="updateSelectedDialogSetting.formSetting"
       :selected-rows="updateSelectedDialogSetting.selectedRows"
-      :visible.sync="updateSelectedDialogSetting.visible"
       @update="handleDialogUpdate"
     />
     <InviteUsersDialog
@@ -461,11 +461,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.asset-select-dialog ::v-deep .transition-box:first-child {
+.asset-select-dialog :deep(.transition-box:first-child) {
   background-color: #f3f3f3;
 }
 
-.dialog ::v-deep .el-dialog__footer {
+.dialog :deep(.el-dialog__footer) {
   padding: 0;
 }
 </style>

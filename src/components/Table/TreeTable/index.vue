@@ -17,7 +17,7 @@
           :setting="treeSetting"
           class="auto-data-ztree"
           v-bind="treeTabConfig"
-          @urlChange="handleUrlChange"
+          @url-change="handleUrlChange"
           v-on="$listeners"
         >
           <div slot="rMenu" slot-scope="{data}">
@@ -217,7 +217,7 @@ $origin-color: #ffffff;
       overflow: auto;
       height: 100%;
 
-      &.tree-tab ::v-deep .page-submenu {
+      &.tree-tab :deep(.page-submenu) {
         height: 40px;
       }
     }
@@ -233,7 +233,7 @@ $origin-color: #ffffff;
       }
     }
 
-    ::v-deep .tab-text {
+    :deep(.tab-text) {
       font-size: 13px;
     }
 

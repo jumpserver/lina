@@ -354,8 +354,7 @@ export default {
         background-color: rgba(0, 0, 0, 0.2);
       }
 
-      ::v-deep {
-        .el-input__inner {
+      :deep(.el-input__inner) {
           height: 30px;
           line-height: 1;
           background: transparent;
@@ -399,12 +398,11 @@ export default {
         height: 18px;
         line-height: 1;
       }
-    }
   }
 }
 
 /* 搜索模态框全局样式 */
-::v-deep .search-modal {
+:deep(.search-modal) {
   &.el-dialog {
     position: fixed;
     top: 5px;
@@ -425,17 +423,17 @@ export default {
   }
 }
 
-::v-deep body .v-modal {
+:deep(body .v-modal) {
   opacity: 0.3;
 }
 
-::v-deep .search-modal-content {
+:deep(.search-modal-content) {
   height: 70vh;
   display: flex;
   flex-direction: column;
 }
 
-::v-deep .search-input-wrapper {
+:deep(.search-input-wrapper) {
   padding: 20px;
   border-bottom: 1px solid #f0f0f0;
   // background: #fff;
@@ -449,7 +447,7 @@ export default {
   }
 }
 
-::v-deep .search-results {
+:deep(.search-results) {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
@@ -474,7 +472,7 @@ export default {
   }
 }
 
-::v-deep .section-title {
+:deep(.section-title) {
   padding: 12px 24px 6px;
   font-size: 12px;
   line-height: 1.5;
@@ -508,7 +506,7 @@ export default {
   }
 }
 
-::v-deep .list {
+:deep(.list) {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -579,15 +577,15 @@ export default {
   }
 }
 
-::v-deep .loading,
-::v-deep .empty {
+:deep(.loading),
+:deep(.empty) {
   padding: 32px 24px;
   color: #909399;
   text-align: center;
   font-size: 14px;
 }
 
-::v-deep .section.placeholder {
+:deep(.section.placeholder) {
   padding: 32px 24px;
 
   .placeholder-content {

@@ -81,7 +81,7 @@ export default {
                   callback: ({ row }) => {
                     this.$axios.post(
                       `/api/v1/assets/assets/${row.id}/tasks/`,
-                      { action: 'refresh' },
+                      { action: 'refresh' }
                     ).then(res => {
                       openTaskPage(res['task'])
                     })
@@ -107,7 +107,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.applet-host ::v-deep .protocol {
+.applet-host :deep(.protocol) {
   margin-left: 3px;
 }
 </style>

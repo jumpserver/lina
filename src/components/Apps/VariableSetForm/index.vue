@@ -53,7 +53,7 @@ export default {
 
 <style lang='scss' scoped>
 .variable-set {
-  ::v-deep .el-form-item {
+  :deep(.el-form-item) {
     margin-bottom: 5px;
 
     .help-block {
@@ -61,7 +61,7 @@ export default {
     }
   }
 
-  ::v-deep .form-group-header {
+  :deep(.form-group-header) {
     .hr-line-dashed {
       margin: 5px 0;
     }

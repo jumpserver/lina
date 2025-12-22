@@ -118,11 +118,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .el-form-item:nth-child(-n+4) {
-  width: 29%;
-}
-
-::v-deep .el-form-item:last-child {
-  width: 6%;
+:deep(.el-form-item) {
+  &:nth-child(-n+4) {
+    width: 29%;
+  }
+  &:last-child {
+    width: 6%;
+  }
 }
 </style>

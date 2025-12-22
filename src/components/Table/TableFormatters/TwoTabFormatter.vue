@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="10">
     <div v-if="isAllEmpty()" style="text-align: center">
-      {{ this.$t('NoContent') }}
+      {{ $t('NoContent') }}
     </div>
     <div v-else>
       <el-col :span="rightEmpty() ? 24 : 12">

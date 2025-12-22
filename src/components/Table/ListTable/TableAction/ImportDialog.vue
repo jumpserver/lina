@@ -14,10 +14,10 @@
     <el-form v-if="!showTable" label-position="left" style="padding-left: 20px">
       <el-form-item :label="$tc('Import' )" :label-width="'100px'">
         <el-radio v-if="canImportCreate" v-model="importOption" class="export-item" label="create">
-          {{ this.$t('Create') }}
+          {{ $t('Create') }}
         </el-radio>
         <el-radio v-if="canImportUpdate" v-model="importOption" class="export-item" label="update">
-          {{ this.$t('Update') }}
+          {{ $t('Update') }}
         </el-radio>
         <div style="line-height: 1.5">
           <span class="el-upload__tip">
@@ -260,12 +260,12 @@ export default {
   overflow: auto
 }
 
-.file-uploader ::v-deep .el-upload {
+.file-uploader :deep(.el-upload) {
   width: 100%;
   //padding-right: 150px;
 }
 
-.file-uploader ::v-deep .el-upload-dragger {
+.file-uploader :deep(.el-upload-dragger) {
   width: 100%;
 }
 
@@ -281,7 +281,7 @@ export default {
   }
 }
 
-.importTable ::v-deep .el-dialog__body {
+.importTable :deep(.el-dialog__body) {
   padding-bottom: 20px;
 }
 

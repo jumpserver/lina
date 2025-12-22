@@ -168,7 +168,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.filter-field ::v-deep .el-input__inner {
+.filter-field :deep(.el-input__inner) {
   height: 28px;
 }
 </style>

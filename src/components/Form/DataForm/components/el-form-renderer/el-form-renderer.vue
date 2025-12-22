@@ -6,7 +6,7 @@
     v-bind="$attrs"
     @submit.native.prevent
   >
-    <template v-for="item in innerContent">
+    <template v-for="item in innerContent" :key="item.id">
       <slot v-if="!isHidden(item)" :name="`id:${item.id}`" />
       <component
         :is="item.type === GROUP ? 'render-form-group' : 'render-form-item'"
@@ -17,7 +17,7 @@
         :options="options[item.id]"
         :readonly="readonly || item.readonly"
         :value="value"
-        @updateValue="updateValue"
+        @update-value="updateValue"
       />
       <slot v-if="!isHidden(item)" :name="`$id:${item.id}`" />
     </template>

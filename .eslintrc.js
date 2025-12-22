@@ -7,18 +7,15 @@ module.exports = {
     sourceType: 'module',
     ecmaVersion: 2021,
     ecmaFeatures: { jsx: true },
-    requireConfigFile: false,
-    babelOptions: {
-      babelrc: false,
-      configFile: false
-    }
+    // 允许使用项目的 babel 配置（babel.config.js），避免 JSX 等语法解析错误
+    requireConfigFile: true
   },
   env: {
     browser: true,
     node: true,
     es6: true
   },
-  extends: ['plugin:vue/recommended', 'eslint:recommended'],
+  extends: ['plugin:vue/vue3-recommended', 'eslint:recommended'],
   globals: {
     window: true,
     _: true
@@ -30,8 +27,25 @@ module.exports = {
     'vue/max-attributes-per-line': ['warn', { singleline: 10, multiline: 1 }],
     'vue/singleline-html-element-content-newline': 'off',
     'vue/multiline-html-element-content-newline': 'off',
-    'vue/name-property-casing': ['error', 'PascalCase'],
+    // Vue 3: use the new rule name instead of the removed `vue/name-property-casing`
+    'vue/component-definition-name-casing': ['error', 'PascalCase'],
     'vue/no-v-html': 'off',
+    // Vue 3 新增的一些默认规则在老项目里成本很高，这里关掉以减少迁移成本
+    'vue/multi-word-component-names': 'off',
+    'vue/no-reserved-component-names': 'off',
+    'vue/no-deprecated-v-bind-sync': 'off',
+    'vue/no-deprecated-dollar-listeners-api': 'off',
+    'vue/no-deprecated-slot-attribute': 'off',
+    'vue/no-deprecated-v-on-native-modifier': 'off',
+    'vue/no-deprecated-destroyed-lifecycle': 'off',
+    'vue/no-deprecated-slot-scope-attribute': 'off',
+    'vue/no-deprecated-props-default-this': 'off',
+    'vue/no-deprecated-dollar-scopedslots-api': 'off',
+    'vue/no-mutating-props': 'off',
+    'vue/no-deprecated-filter': 'off',
+    'vue/no-computed-properties-in-data': 'off',
+    // other rules used in inline disable comments
+    'vue/no-deprecated-router-link-tag-prop': 'off',
     'accessor-pairs': 2,
     'arrow-spacing': [
       2,

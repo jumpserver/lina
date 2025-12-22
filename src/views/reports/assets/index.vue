@@ -83,7 +83,7 @@ export default {
 
 <style scoped lang="scss">
 .page {
-  ::v-deep .page-content {
+  :deep(.page-content) {
     padding-right: 20px;
     padding-top: 10px;
   }
@@ -109,7 +109,7 @@ h5 {
 .chart {
   padding: 10px;
 
-  ::v-deep .content {
+  :deep(.content) {
     background-color: #fff;
     overflow: hidden;
     height: 100%;

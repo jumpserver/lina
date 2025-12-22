@@ -88,7 +88,7 @@ export default {
 .file-uploader.el-form-item {
   margin-bottom: 0;
 
-  ::v-deep .el-upload {
+  :deep(.el-upload) {
     width: 100%;
 
     .el-upload-dragger {

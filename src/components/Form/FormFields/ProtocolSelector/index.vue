@@ -145,7 +145,7 @@ export default {
       handler(value, oldValue) {
         setTimeout(() => {
           this.setDefaultItems(value)
-        },)
+        })
       },
       deep: true,
       immediate: true
@@ -321,7 +321,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.el-select ::v-deep .el-input__inner {
+.el-select :deep(.el-input__inner) {
   width: 120px;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -351,7 +351,7 @@ export default {
   margin-left: 20px
 }
 
-.input-button ::v-deep .el-button.el-button--mini {
+.input-button :deep(.el-button.el-button--mini) {
   height: 25px;
   padding: 5px;
 }

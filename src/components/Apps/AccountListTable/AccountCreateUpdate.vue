@@ -203,7 +203,7 @@ export default {
 
 <style lang="scss" scoped>
 .drawer {
-  ::v-deep .el-drawer__body {
+  :deep(.el-drawer__body) {
 
     .el-form {
       margin-right: 30px;

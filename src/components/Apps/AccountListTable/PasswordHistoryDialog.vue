@@ -1,5 +1,5 @@
 <template>
-  <GenericListTableDialog :visible.sync="iVisible" v-bind="config" />
+  <GenericListTableDialog v-bind="config" :visible.sync="iVisible" />
 </template>
 
 <script>

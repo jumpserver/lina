@@ -15,7 +15,7 @@
       :min-columns="popoverColumns.minCols"
       :total-columns-list="popoverColumns.totalColumnsList"
       :url="config.url"
-      @columnsUpdate="handlePopoverColumnsChange"
+      @columns-update="handlePopoverColumnsChange"
     />
   </div>
 </template>
@@ -67,7 +67,7 @@ export default {
   watch: {
     config: {
       immediate: false,
-      handler: _.debounce(function (iNew, iOld) {
+      handler: _.debounce(function(iNew, iOld) {
         if (this.isDeactivated || !this.inited) {
           return
         }

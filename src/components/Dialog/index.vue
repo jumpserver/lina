@@ -35,7 +35,7 @@
 
 <script>
 export default {
-  name: 'Dialog',
+  name: 'DialogComponent',
   props: {
     title: {
       type: String,
@@ -106,11 +106,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.dialog.shadow ::v-deep .el-dialog {
+.dialog.shadow :deep(.el-dialog) {
   box-shadow: 1px 2px 12px 0 rgba(0, 0, 0, 0.6);
 }
 
-.dialog ::v-deep .el-dialog {
+.dialog :deep(.el-dialog) {
   border-radius: 0.3em;
   max-width: min(100vw, 1500px);
 
@@ -128,14 +128,14 @@ export default {
     display: none;
   }
 
-  &__header {
+  &.dialog__header {
     box-sizing: border-box;
     padding: 15px 22px;
     border-bottom: 1px solid #dee2e6;
     font-weight: 400;
   }
 
-  &__body {
+  &.dialog__body {
     padding: 20px 30px;
     font-size: 13px;
 
@@ -144,7 +144,7 @@ export default {
     }
   }
 
-  &__footer {
+  &.dialog__footer {
     border-top: 1px solid #dee2e6;
     padding: 16px 25px;
     justify-content: flex-end;
@@ -152,12 +152,12 @@ export default {
 }
 
 @media (max-width: 900px) {
-  .dialog ::v-deep .el-dialog {
+  .dialog :deep(.el-dialog) {
     max-width: calc(100% - 30px);
   }
 }
 
-.dialog-footer ::v-deep button.el-button {
+.dialog-footer :deep(button.el-button) {
   font-size: 13px;
   padding: 8px 12px;
 }

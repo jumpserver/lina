@@ -391,7 +391,7 @@ export default {
     setWsCallback() {
       this.ws.onmessage = e => {
         const data = JSON.parse(e.data)
-        if (data.hasOwnProperty('message')) {
+        if (Object.prototype.hasOwnProperty.call(data, 'message')) {
           let message = data.message
           message = message.replace(
             /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} Task ops\.tasks\.run_ops_job_execution.*/,
@@ -399,7 +399,7 @@ export default {
           )
           this.xterm.write(message)
         }
-        if (data.hasOwnProperty('event')) {
+        if (Object.prototype.hasOwnProperty.call(data, 'event')) {
           const event = data.event
           switch (event) {
             case 'end':
@@ -583,7 +583,7 @@ $container-bg-color: #f7f7f7;
     & > div {
       height: 100%;
 
-      & ::v-deep .xterm {
+      & :deep(.xterm) {
         height: calc(100% - 8px);
         overflow-y: hidden;
       }
@@ -607,7 +607,7 @@ $container-bg-color: #f7f7f7;
   width: 12px !important;
 }
 
-.vue-codemirror-wrap ::v-deep .CodeMirror {
+.vue-codemirror-wrap :deep(.CodeMirror) {
   width: 600px;
   height: 100px;
   border: 1px solid #eee;

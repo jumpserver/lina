@@ -7,7 +7,7 @@
     v-bind="$attrs"
     v-on="$listeners"
   >
-    <template v-slot:default="slotProps">
+    <template #default="slotProps">
       <CardPanel
         :object="slotProps.item"
         :on-view="slotProps.onView"
@@ -52,10 +52,8 @@ export default {
 
 <style lang="scss" scoped>
 .info-card-table {
-  ::v-deep {
-    div.the-card {
-      padding: 0;
-    }
+  :deep(.the-card) {
+    padding: 0;
   }
 }
 </style>

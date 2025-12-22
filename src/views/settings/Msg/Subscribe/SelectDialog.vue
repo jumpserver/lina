@@ -98,7 +98,7 @@ export default {
   padding-left: 10px;
 }
 
-.transfer ::v-deep .district-panel {
+.transfer :deep(.district-panel) {
   width: 300px;
 
   .el-transfer-panel__body {
@@ -110,11 +110,11 @@ export default {
   }
 }
 
-.transfer ::v-deep .el-transfer-panel__item:hover {
+.transfer :deep(.el-transfer-panel__item:hover) {
   color: #428bca;
 }
 
-.transfer ::v-deep .el-checkbox {
+.transfer :deep(.el-checkbox) {
   font-weight: normal;
 }
 </style>

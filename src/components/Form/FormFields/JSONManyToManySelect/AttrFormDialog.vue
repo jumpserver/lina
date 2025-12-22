@@ -155,7 +155,7 @@ export default {
 <style lang="scss" scoped>
 
 .attr-form {
-  ::v-deep .el-select {
+  :deep(.el-select) {
     width: 100%;
   }
 }

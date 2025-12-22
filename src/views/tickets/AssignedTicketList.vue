@@ -89,7 +89,7 @@ export default {
             ticketType = 'apply-login-asset-tickets'
             break
         }
-        if (!data.hasOwnProperty(ticketType)) {
+        if (!Object.prototype.hasOwnProperty.call(data, ticketType)) {
           data[ticketType] = []
         }
         data[ticketType].push(item.id)

@@ -16,7 +16,7 @@
           <DatetimeRangePicker
             class="datepicker"
             v-bind="datePicker"
-            @dateChange="handleDateChange"
+            @date-change="handleDateChange"
           />
         </div>
         <div class="search-input">
@@ -208,7 +208,7 @@ $headerHeight: 30px;
     display: block;
     float: left;
 
-    ::v-deep .action-item.el-dropdown > .el-button {
+    :deep(.action-item.el-dropdown > .el-button) {
       height: 100%;
     }
   }
@@ -238,7 +238,7 @@ $headerHeight: 30px;
   padding-bottom: 10px;
 }
 
-.search-text ::v-deep.el-input__inner {
+.search-text :deep(.el-input__inner) {
   height: 30px;
 }
 
@@ -270,7 +270,7 @@ $headerHeight: 30px;
   height: 30px;
   line-height: 30px;
 
-  ::v-deep .el-button {
+  :deep(.el-button) {
     border: none;
     padding: 5px;
     font-size: 14px;
@@ -282,7 +282,7 @@ $headerHeight: 30px;
     }
   }
 
-  ::v-deep .fa {
+  :deep(.fa) {
     height: 16px;
     width: 16px;
   }

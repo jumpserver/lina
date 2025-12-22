@@ -111,7 +111,7 @@ export default {
 
 <style lang="scss" scoped>
 
-.el-tree-custom ::v-deep {
+.el-tree-custom :deep(.el-tree){
   .help-tips {
     margin-left: 10px;
     font-size: 12px;

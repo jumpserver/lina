@@ -214,7 +214,7 @@ export default {
   background: #fff;
   color: var(--color-border);
 
-  ::v-deep {
+  :deep(){
     .el-card {
       flex: 1;
     }
@@ -313,11 +313,11 @@ export default {
   width: 100%;
 }
 
-.page ::v-deep .page-heading {
+.page :deep(.page-heading) {
   display: none;
 }
 
-.el-dialog__wrapper ::v-deep .el-dialog__body {
+.el-dialog__wrapper :deep(.el-dialog__body) {
   padding: 0 0 0 3px;
 }
 

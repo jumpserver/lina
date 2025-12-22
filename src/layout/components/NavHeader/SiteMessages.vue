@@ -210,7 +210,7 @@ export default {
   height: calc(100% - 0px);
 }
 
-.el-badge ::v-deep .el-badge__content.is-fixed {
+.el-badge :deep(.el-badge__content.is-fixed) {
   top: 10px;
 }
 
@@ -218,7 +218,7 @@ export default {
   padding: 0 25px 20px;
 }
 
-::v-deep .site-msg {
+:deep(.site-msg) {
   .el-drawer__header {
     border-bottom: solid 1px rgb(231, 234, 239);
     margin-bottom: 0;
@@ -304,7 +304,7 @@ export default {
   font-size: 12px;
   display: block;
 
-  ::v-deep .ticket-container {
+  :deep(.ticket-container) {
     .title {
       font-size: 12px;
     }
@@ -336,11 +336,11 @@ export default {
       line-height: 24px;
     }
 
-    & ::v-deep a {
+    & :deep(a) {
       color: var(--color-success) !important;
     }
 
-    ::v-deep .ticket-container {
+    :deep(.ticket-container) {
       height: 618px;
       flex-shrink: 0;
       border-radius: 4px;
@@ -422,7 +422,7 @@ export default {
   text-align: center;
 }
 
-::v-deep :focus {
+:deep(:focus) {
   outline: 0;
 }
 </style>

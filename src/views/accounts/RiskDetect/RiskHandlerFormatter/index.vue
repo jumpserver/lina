@@ -24,7 +24,7 @@
         <el-button
           class="ignore action"
           size="mini"
-          :disabled="!this.$hasPerm('accounts.change_accountrisk')"
+          :disabled="!$hasPerm('accounts.change_accountrisk')"
           @click="handleDropdown('ignore')"
         >
           <svg-icon icon-class="ignore" />
@@ -239,13 +239,13 @@ export default {
   padding: 1px 4px;
 
   &.confirm {
-    ::v-deep i {
+    :deep(i) {
       color: var(--color-primary);
     }
   }
 
   &.remove {
-    ::v-deep i {
+    :deep(i) {
       color: var(--color-danger);
     }
   }

@@ -4,7 +4,7 @@
   <component :is="tag" v-bind="attrs">
     <slot />
   </component>
-  
+
 </template>
 
 <script>

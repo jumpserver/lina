@@ -144,7 +144,7 @@ export default {
 </script>
 
 <style scoped>
-.listTable ::v-deep .table-action-right-side {
+.listTable :deep(.table-action-right-side) {
   padding-top: 0 !important;
 }
 

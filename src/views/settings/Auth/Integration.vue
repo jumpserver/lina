@@ -106,12 +106,10 @@ export default {
 
 <style lang="scss" scoped>
 .auth-method-box {
-  ::v-deep {
-    .el-card__body {
-      padding-top: 10px;
-      padding-left: 30px;
-      padding-right: 30px;
-    }
+  :deep(.el-card__body) {
+    padding-top: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
   }
 }
 
@@ -172,7 +170,7 @@ export default {
 .auth-method-item {
   margin-bottom: 10px;
 
-  ::v-deep .auth-item-col {
+  :deep(.auth-item-col) {
     width: 100%;
     max-width: none;
     margin: 0;

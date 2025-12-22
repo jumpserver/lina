@@ -166,7 +166,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
 
-  ::v-deep .el-col {
+  :deep(.el-col) {
 
     .el-checkbox {
       display: flex;

@@ -102,7 +102,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-form ::v-deep .el-form {
+.el-form :deep(.el-form) {
   margin-top: -15px;
 }
 </style>

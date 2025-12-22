@@ -21,7 +21,7 @@
     </a>
     <a
       v-if="formatterArgs.showEditBtn"
-      :class="[{ 'disabled-link': this.$store.getters.currentOrgIsRoot },'edit-btn']"
+      :class="[{ 'disabled-link': $store.getters.currentOrgIsRoot },'edit-btn']"
       style="padding-left: 5px"
       @click="showDialog = true"
     >
@@ -273,7 +273,7 @@ export default {
   }
 
   .tag-select {
-    ::v-deep .el-input__inner::placeholder {
+    :deep(.el-input__inner::placeholder) {
       font-size: 13px;
     }
   }

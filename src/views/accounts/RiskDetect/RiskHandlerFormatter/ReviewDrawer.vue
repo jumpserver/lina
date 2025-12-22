@@ -222,7 +222,7 @@ export default {
 
 <style lang='scss' scoped>
 .risk-review-drawer {
-  ::v-deep {
+  :deep(){
     .el-drawer__header {
       padding: 16px 20px;
       margin-bottom: 0;
@@ -283,13 +283,11 @@ export default {
       margin-bottom: 16px;
     }
 
-    ::v-deep {
-      .processor {
-        margin-top: 5px;
-        font-size: 12px;
+    :deep(.processor) {
+      margin-top: 5px;
+      font-size: 12px;
 
-        color: var(--color-text-secondary)
-      }
+      color: var(--color-text-secondary)
     }
   }
 }
@@ -299,10 +297,8 @@ export default {
   padding: 15px 20px;
   border-top: 1px solid var(--color-border);
 
-  ::v-deep {
-    .el-textarea {
-      margin-bottom: 5px;
-    }
+  :deep(.el-textarea) {
+    margin-bottom: 5px;
   }
 }
 </style>

@@ -218,7 +218,7 @@ export default {
     removeGateway(rows) {
       let patch_data
       let msg
-      if (rows.hasOwnProperty('selectedRows')) {
+      if (Object.prototype.hasOwnProperty.call(rows, 'selectedRows')) {
         patch_data = rows.selectedRows.map(row => {
           return {
             id: row.id,

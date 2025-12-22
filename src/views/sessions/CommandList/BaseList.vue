@@ -7,10 +7,10 @@
     :table-config="tableConfig"
     :tree-setting="treeSetting"
     class="command-list-table"
-    @TagDateChange="handleDateChange"
-    @TagFilter="handleFilterChange"
-    @TagSearch="handleTagChange"
-    @TreeInitFinish="checkFirstNode"
+    @tag-date-change="handleDateChange"
+    @tag-filter="handleFilterChange"
+    @tag-search="handleTagChange"
+    @tree-init-finish="checkFirstNode"
   />
 </template>
 
@@ -225,7 +225,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.command-list-table ::v-deep .risk-command {
+.command-list-table :deep(.risk-command) {
   background-color: oldlace;
 
   tr {

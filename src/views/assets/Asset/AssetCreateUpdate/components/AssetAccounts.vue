@@ -8,19 +8,19 @@
         <el-table-column :label="$tc('Name')" prop="name" />
         <el-table-column :label="$tc('Username')" prop="username" />
         <el-table-column :label="$tc('Privileged')" prop="privileged">
-          <template v-slot="scope">
+          <template #default="scope">
             <i v-if="scope.row['privileged']" class="fa fa-check text-primary" />
             <span v-else>-</span>
           </template>
         </el-table-column>
         <el-table-column :label="$tc('TemplateAdd')" prop="template">
-          <template v-slot="scope">
+          <template #default="scope">
             <i v-if="scope.row['template']" class="fa fa-check text-primary" />
             <span v-else>-</span>
           </template>
         </el-table-column>
         <el-table-column :label="$tc('Actions')" align="center" class-name="buttons" fixed="right" width="135">
-          <template v-slot="scope">
+          <template #default="scope">
             <el-button icon="el-icon-minus" size="mini" type="danger" @click="removeAccount(scope.row)" />
             <el-button
               :disabled="!!scope.row.template"
@@ -180,7 +180,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-data-table ::v-deep .el-table {
+.el-data-table :deep(.el-table) {
   .table {
     margin-top: 15px;
   }
@@ -231,7 +231,7 @@ export default {
   }
 }
 
-.el-data-table ::v-deep .el-table .el-table__header > thead > tr .is-sortable {
+.el-data-table :deep(.el-table .el-table__header > thead > tr .is-sortable) {
   padding: 5px 0;
 
   .cell {
@@ -239,7 +239,7 @@ export default {
   }
 }
 
-::v-deep .page.tab-page {
+:deep(.page.tab-page) {
   .page-heading .el-row--flex {
     flex-wrap: wrap;
 
@@ -255,11 +255,9 @@ export default {
 }
 
 .detail-drawer {
-  ::v-deep {
-    .el-drawer__header {
-      border-bottom: none;
-      padding-bottom: 1px;
-    }
+  :deep(.el-drawer__header) {
+    border-bottom: none;
+    padding-bottom: 1px;
   }
 }
 </style>

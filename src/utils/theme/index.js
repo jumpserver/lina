@@ -77,7 +77,9 @@ export function changeThemeColors(themeColors) {
           // strip @font-face blocks to avoid loading old element-icons fonts
           try {
             fileData = fileData.replace(/@font-face[\s\S]*?\}/g, '')
-          } catch (e) {}
+          } catch (e) {
+            // ignore parsing errors for remote theme css
+          }
           const extraFileData = extraFile.data.replace(/[\r\n]/g, '')
           originalStyle = replaceStyleColors(fileData + extraFileData)
           resolve()

@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <router-view v-if="isRouterAlive" />
+    <!-- 使用 key 而不是 v-if 来强制重新渲染 router-view，避免根节点被完全卸载导致的 DOM insertBefore 错误 -->
+    <router-view :key="isRouterAlive" />
   </div>
 </template>
 
@@ -53,7 +54,7 @@ export default {
     } else {
       console.error('Component Error:', err?.message || err)
     }
-    
+
     // 尝试显示友好的错误提示
     try {
       if (this.$message && typeof this.$message.error === 'function') {
@@ -62,7 +63,7 @@ export default {
     } catch (e) {
       // 如果 message 服务不可用，忽略
     }
-    
+
     // 返回 false 可以阻止错误继续向上传播
     // 但这里返回 true，让全局错误处理器也能处理
     return true

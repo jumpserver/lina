@@ -111,7 +111,7 @@ export default {
   .ring {
     padding: 26px 0 10px;
 
-    & ::v-deep .echarts {
+    & :deep(.echarts) {
       width: 100% !important;
       height: 278px !important;
     }

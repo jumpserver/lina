@@ -18,12 +18,12 @@ export function installDrawerDragDirective(app) {
             drawerEle = wrapper.querySelector('.el-drawer')
           }
         }
-        
+
         if (!drawerEle) {
           console.warn('el-drawer element not found for drag directive')
           return
         }
-        
+
         // 创建触发拖拽的元素
         const dragItem = document.createElement('div')
         // 将元素放置到抽屉的左边边缘

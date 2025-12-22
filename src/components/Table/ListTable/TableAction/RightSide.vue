@@ -7,8 +7,8 @@
       :import-options="iImportOptions"
       :selected-rows="selectedRows"
       v-bind="$attrs"
-      @importDialogClose="onImportDialogClose"
-      @importDialogConfirm="onImportDialogConfirm"
+      @import-dialog-close="onImportDialogClose"
+      @import-dialog-confirm="onImportDialogConfirm"
     />
   </div>
 </template>
@@ -209,7 +209,7 @@ export default {
   height: 30px;
   line-height: 30px;
 
-  ::v-deep .el-button {
+  :deep(.el-button) {
     border: none;
     padding: 7px;
     font-size: 13px;
@@ -221,7 +221,7 @@ export default {
     }
   }
 
-  ::v-deep .fa {
+  :deep(.fa) {
     height: 16px;
     width: 16px;
   }

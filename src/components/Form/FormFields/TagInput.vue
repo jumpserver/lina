@@ -172,14 +172,14 @@ export default {
     border-color: #c0c4cc;
   }
 
-  & ::v-deep .el-tag {
+  & :deep(.el-tag) {
     margin-bottom: 2px;
     margin-top: 2px;
     font-family: sans-serif !important;
     margin-left: 5px;
   }
 
-  & ::v-deep .el-autocomplete {
+  & :deep(.el-autocomplete) {
     height: 28px;
   }
 }
@@ -188,7 +188,7 @@ export default {
   flex: 1;
   min-width: 150px;
 
-  & ::v-deep .el-input__inner {
+  & :deep(.el-input__inner) {
     max-width: 100%;
     border: none;
     padding-left: 12px;
@@ -196,12 +196,12 @@ export default {
   }
 }
 
-.el-input ::v-deep .el-input__inner {
+.el-input :deep(.el-input__inner) {
   border: none !important;
   font-size: 13px;
 }
 
-.filter-field ::v-deep .el-input__inner {
+.filter-field :deep(.el-input__inner) {
   height: 27px !important;
 }
 

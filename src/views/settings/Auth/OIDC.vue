@@ -156,19 +156,15 @@ export default {
         AUTH_OPENID_PROVIDER_USERINFO_ENDPOINT: 'userinfo_endpoint',
         AUTH_OPENID_PROVIDER_END_SESSION_ENDPOINT: 'end_session_endpoint'
       }
-      try {
-        const res = await this.$axios.get(url, config)
-        const data = {}
-        for (const [k, v] of Object.entries(configMap)) {
-          data[k] = res[v]
-        }
-        if (Object.keys(data).length < 5) {
-          throw new Error('Invalid issuer, missing required fields')
-        }
-        return data
-      } catch (err) {
-        throw err
+      const res = await this.$axios.get(url, config)
+      const data = {}
+      for (const [k, v] of Object.entries(configMap)) {
+        data[k] = res[v]
       }
+      if (Object.keys(data).length < 5) {
+        throw new Error('Invalid issuer, missing required fields')
+      }
+      return data
     },
     setDefault(issuer) {
       const fields = {

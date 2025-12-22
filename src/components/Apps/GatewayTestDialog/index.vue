@@ -25,7 +25,7 @@
           type="primary"
           @click="dialogConfirm"
         >
-          {{ this.$t('Confirm') }}
+          {{ $t('Confirm') }}
         </el-button>
       </el-col>
     </el-row>

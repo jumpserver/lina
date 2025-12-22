@@ -9,7 +9,7 @@
         />
       </template>
       <template #right>
-        <RelationCard :key="relationKey" v-bind="relationConfig" @addSuccess="addSuccess" />
+        <RelationCard :key="relationKey" v-bind="relationConfig" @add-success="addSuccess" />
       </template>
     </TwoCol>
     <TwoCol />
@@ -55,7 +55,7 @@ export default {
                 beforeClose: async (action, instance, done) => {
                   if (action !== 'confirm') return done()
                   this.$axios.post(
-                    `/api/v1/users/groups/${this.object.id}/add-all-users/`,
+                    `/api/v1/users/groups/${this.object.id}/add-all-users/`
                   ).then(res => {
                     this.$message.success(this.$tc('AddSuccessMsg'))
                     done()

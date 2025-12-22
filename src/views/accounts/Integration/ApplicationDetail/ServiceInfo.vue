@@ -49,7 +49,7 @@ export default {
           callbacks: {
             click: function() {
               this.$axios.get(
-                `/api/v1/accounts/integration-applications/${this.object.id}/secret/`,
+                `/api/v1/accounts/integration-applications/${this.object.id}/secret/`
               ).then(res => {
                 this.$refs.secretDialog.show(res)
               })

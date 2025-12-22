@@ -83,7 +83,7 @@ export default {
   margin-top: 10px;
 }
 
-::v-deep .content .summary-card {
+:deep(.content) .summary-card {
   flex: 1;
   width: 33%;
   max-width: 33%;

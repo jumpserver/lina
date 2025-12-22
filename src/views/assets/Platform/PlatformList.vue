@@ -132,9 +132,11 @@ export default {
         hasRightActions: true,
         createRoute: 'PlatformCreate',
         canCreate: () => this.$hasPerm('assets.add_platform'),
+        // eslint-disable-next-line vue/no-computed-properties-in-data
         importOptions: {
           url: vm.url
         },
+        // eslint-disable-next-line vue/no-computed-properties-in-data
         exportOptions: {
           url: vm.url
         },

@@ -84,7 +84,7 @@ export default {
   display: flex;
   margin-left: 20px
 }
-.input-button ::v-deep .el-button.el-button--mini {
+.input-button :deep(.el-button.el-button--mini) {
   height: 25px;
   padding: 5px;
 }

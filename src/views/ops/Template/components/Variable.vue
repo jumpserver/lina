@@ -13,7 +13,7 @@
           fixed="right"
           width="135"
         >
-          <template v-slot="scope">
+          <template #default="scope">
             <el-button icon="el-icon-minus" size="mini" type="danger" @click="removeVariable(scope.row)" />
             <el-button
               :disabled="!!scope.row.template"
@@ -122,7 +122,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-data-table ::v-deep .el-table {
+.el-data-table :deep(.el-table) {
   .table {
     margin-top: 15px;
   }
@@ -173,7 +173,7 @@ export default {
   }
 }
 
-.el-data-table ::v-deep .el-table .el-table__header > thead > tr .is-sortable {
+.el-data-table :deep(.el-table .el-table__header > thead > tr .is-sortable) {
   padding: 5px 0;
 
   .cell {

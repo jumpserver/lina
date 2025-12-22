@@ -64,29 +64,29 @@ export default {
 
   .json-editor {
     .resize {
-      & ::v-deep .jsoneditor {
+      & :deep(.jsoneditor) {
         resize: vertical;
         cursor: s-resize;
       }
     }
 
-    & ::v-deep .jsoneditor {
+    & :deep(.jsoneditor) {
       border: 1px solid #e5e6e7;
     }
 
-    & ::v-deep .jsoneditor-compact {
+    & :deep(.jsoneditor-compact) {
       display: none;
     }
 
-    & ::v-deep .jsoneditor-modes {
+    & :deep(.jsoneditor-modes) {
       display: none;
     }
 
-    & ::v-deep .jsoneditor-poweredBy {
+    & :deep(.jsoneditor-poweredBy) {
       display: none;
     }
 
-    & ::v-deep .jsoneditor-menu {
+    & :deep(.jsoneditor-menu) {
       background: var(--color-primary);
       border-bottom: 1px solid var(--color-primary);
     }

@@ -107,12 +107,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .el-dialog {
+:deep(.el-dialog) {
   min-width: 1051px !important;
   max-width: 1056px !important;
 }
 
-::v-deep .el-drawer__body {
+:deep(.el-drawer__body) {
   overflow-x: hidden;
 
   .drawer__content {
@@ -138,15 +138,13 @@ export default {
   //background-color: #fff;
   display: block;
 
-  ::v-deep {
-    .el-form {
-      padding: 20px 20px 20px 10px;
-      background: #fff;
-    }
+  :deep(.el-form) {
+    padding: 20px 20px 20px 10px;
+    background: #fff;
   }
 }
 
-::v-deep .el-step {
+:deep(.el-step) {
   .el-step__head {
     &.is-process {
       color: var(--color-primary);

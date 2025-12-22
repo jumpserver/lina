@@ -13,7 +13,7 @@
         :provider="object.provider.value"
         :visible.sync="iVisible"
         origin="update"
-        @submitSuccess="onSubmitSuccess"
+        @submit-success="onSubmitSuccess"
       />
     </IBox>
   </Drawer>
@@ -60,10 +60,8 @@ export default {
   margin: 15px
 }
 
-.drawer ::v-deep {
-  .el-drawer__body {
-    background: #f3f3f3;
-  }
+.drawer :deep(.el-drawer__body) {
+  background: #f3f3f3;
 }
 
 </style>

@@ -1,8 +1,8 @@
 <template>
   <Dialog
+    v-bind="$attrs"
     :show-cancel="false"
     :title="title"
-    v-bind="$attrs"
     @confirm="closeDialog"
     v-on="$listeners"
   >
@@ -114,10 +114,7 @@ export default {
   color: var(--color-success);
 }
 
-.color-default {
-}
-
-::v-deep .el-data-table .el-table .el-table__row > td > div > span {
+:deep(.el-data-table .el-table .el-table__row > td > div > span) {
   white-space: inherit;
 }
 

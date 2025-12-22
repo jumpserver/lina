@@ -115,7 +115,7 @@ export default {
   padding: 10px 20px;
   border: 1px solid #DCDFE6;
 
-  ::v-deep .table {
+  :deep(.table) {
     border-collapse: collapse;
     border-spacing: 0;
     width: 100%;

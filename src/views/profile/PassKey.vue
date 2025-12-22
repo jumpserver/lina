@@ -167,7 +167,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.source-alert ::v-deep .el-alert__content {
+.source-alert :deep(.el-alert__content) {
   text-align: center;
 }
 </style>

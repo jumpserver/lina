@@ -223,7 +223,7 @@ export default {
       min-width: 160px;
     }
 
-    &::v-deep .el-select {
+    &:deep(.el-select) {
       width: 100%;
 
       .el-input__inner {
@@ -252,7 +252,7 @@ export default {
     flex-direction: column;
     border-radius: 12px;
 
-    &::v-deep .el-textarea {
+    &:deep(.el-textarea) {
       height: 100%;
 
       .el-textarea__inner {

@@ -54,7 +54,7 @@ export default {
                   type: 'info',
                   can: ({ row }) => !row['is_expired'] && this.$hasPerm('authentication.expire_connectiontoken'),
                   callback: function({ row }) {
-                    this.$axios.patch(`${ajaxUrl}${row.id}/expire/`,
+                    this.$axios.patch(`${ajaxUrl}${row.id}/expire/`
                     ).then(res => {
                       this.reloadTable()
                       this.$message.success(this.$tc('UpdateSuccessMsg'))

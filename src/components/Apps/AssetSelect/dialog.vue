@@ -161,11 +161,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.page ::v-deep .page-heading {
+.page :deep(.page-heading) {
   display: none;
 }
 
-.el-dialog__wrapper ::v-deep .el-dialog__body {
+.el-dialog__wrapper :deep(.el-dialog__body) {
   padding: 0 0 0 3px;
 
   .tree-table {
@@ -191,11 +191,11 @@ export default {
   }
 }
 
-.page ::v-deep .treebox .ztree {
+.page :deep(.treebox .ztree) {
 
 }
 
-.asset-select-dialog ::v-deep .el-icon-circle-check {
+.asset-select-dialog :deep(.el-icon-circle-check) {
   display: none;
 }
 </style>

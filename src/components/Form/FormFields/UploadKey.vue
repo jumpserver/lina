@@ -2,11 +2,11 @@
   <div class="upload-key">
     <input ref="upLoadFile" style="display: none" type="file" @change="onChange">
     <el-button v-if="!fingerprint" size="mini" @click.native.stop="onUpLoad">
-      {{ this.$t('SelectFile') }}
+      {{ $t('SelectFile') }}
     </el-button>
     <span v-else>
       <el-button icon="el-icon-edit" type="text" @click.native.stop="onUpLoad">
-        {{ this.$t('Update') }}
+        {{ $t('Update') }}
       </el-button>
       <span v-if="!fileName" class="fingerprint">{{ fingerprint }}</span>
     </span>

@@ -17,10 +17,10 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col v-if="$store.getters.hasValidLicense && this.$hasPerm('accounts.view_changesecretautomation')" :span="14" :xs="24">
+        <el-col v-if="$store.getters.hasValidLicense && $hasPerm('accounts.view_changesecretautomation')" :span="14" :xs="24">
           <AccountSecretSummary class="account-secret-summary" />
         </el-col>
-        <el-col :span="$store.getters.hasValidLicense && this.$hasPerm('accounts.view_changesecretautomation') ? 10: 24" :xs="24">
+        <el-col :span="$store.getters.hasValidLicense && $hasPerm('accounts.view_changesecretautomation') ? 10: 24" :xs="24">
           <RiskSummary class="risk-summary" />
         </el-col>
       </el-row>
@@ -87,7 +87,7 @@ export default {
   .account-secret-summary {
     margin-top: unset;
 
-    ::v-deep .echarts {
+    :deep(.echarts) {
       height: 16rem;
     }
   }

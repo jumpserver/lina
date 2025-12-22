@@ -1,5 +1,5 @@
 <template>
-  <el-checkbox-group v-model="iValue" v-bind="$attrs" v-on="$listeners">
+  <el-checkbox-group v-model="iValue" v-bind="$attrs">
     <el-checkbox v-for="item in group" :key="item.value" :label="item.value">{{ item.label }}</el-checkbox>
   </el-checkbox-group>
 </template>

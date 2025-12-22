@@ -13,7 +13,7 @@
 import BaseFormatter from './base.vue'
 import ActionsGroup from '@/components/Common/ActionsGroup/index.vue'
 
-const defaultPerformDelete = function ({ row, col }) {
+const defaultPerformDelete = function({ row, col }) {
   const id = row.id
   const url = new URL(this.url, location.origin)
   url.pathname += `${id}/`
@@ -21,7 +21,7 @@ const defaultPerformDelete = function ({ row, col }) {
   return this.$axios.delete(deleteUrl)
 }
 
-const defaultUpdateCallback = function ({ row, col }) {
+const defaultUpdateCallback = function({ row, col }) {
   const id = row.id
   let route = { params: { id: id } }
   const updateRoute = this.colActions.updateRoute
@@ -37,7 +37,7 @@ const defaultUpdateCallback = function ({ row, col }) {
   this.$router.push(route)
 }
 
-const defaultViewCallback = function ({ row, col }) {
+const defaultViewCallback = function({ row, col }) {
   const id = row.id
   let route = { params: { id: id } }
   const viewRoute = this.colActions.viewRoute
@@ -53,7 +53,7 @@ const defaultViewCallback = function ({ row, col }) {
   this.$router.push(route)
 }
 
-const defaultCloneCallback = function ({ row, col }) {
+const defaultCloneCallback = function({ row, col }) {
   const id = row.id
   let route = { query: { clone_from: id } }
   const cloneRoute = this.colActions.cloneRoute
@@ -68,7 +68,7 @@ const defaultCloneCallback = function ({ row, col }) {
   this.$router.push(route)
 }
 
-const defaultDeleteCallback = function ({ row, col, cellValue, reload }) {
+const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
   let msg = this.$t('DeleteWarningMsg')
   const name = row.name || row.hostname
   if (name) {
@@ -109,7 +109,7 @@ export default {
   props: {
     formatterArgsDefault: {
       type: Object,
-      default: function () {
+      default: function() {
         return {
           hasUpdate: true, // can set function(row, value)
           canUpdate: true, // can set function(row, value)
@@ -243,10 +243,8 @@ export default {
 
 <style lang="scss" scoped>
 .table-actions {
-  ::v-deep {
-    .el-icon-arrow-down {
-      display: none;
-    }
+  :deep(.el-icon-arrow-down) {
+    display: none;
   }
 }
 </style>

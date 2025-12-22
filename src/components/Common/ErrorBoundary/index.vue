@@ -50,14 +50,14 @@ export default {
     this.hasError = true
     this.error = err
     this.errorInfo = info
-    
+
     // 在开发环境下打印错误
     if (process.env.NODE_ENV === 'development') {
       console.error('ErrorBoundary caught error:', err)
       console.error('Component instance:', instance)
       console.error('Error info:', info)
     }
-    
+
     // 返回 false 阻止错误继续向上传播
     return false
   },
@@ -113,17 +113,17 @@ export default {
 .error-details {
   margin-top: 24px;
   text-align: left;
-  
+
   summary {
     cursor: pointer;
     color: #909399;
     margin-bottom: 8px;
-    
+
     &:hover {
       color: #606266;
     }
   }
-  
+
   pre {
     background: #f5f7fa;
     padding: 12px;

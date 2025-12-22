@@ -55,9 +55,9 @@ const ChartsPlugin = {
   install(app) {
     // 初始化并注册 ECharts 扩展
     initECharts()
-    
+
     // 注册 ECharts 组件到 Vue 应用
-    app.component('echarts', VueECharts)
+    app.component('Echarts', VueECharts)
     app.component('Echart', VueECharts)
     app.component('Echarts', VueECharts)
   }

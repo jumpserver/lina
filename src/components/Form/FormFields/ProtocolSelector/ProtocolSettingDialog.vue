@@ -127,12 +127,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.data-form ::v-deep .el-form-item.form-buttons {
+.data-form :deep(.el-form-item.form-buttons) {
   padding-top: 10px;
   margin-bottom: 0;
 }
 
-.setting-dialog ::v-deep .el-dialog__body {
+.setting-dialog :deep(.el-dialog__body) {
   padding-top: 10px;
 }
 

@@ -9,7 +9,7 @@
   >
     <div>
       <div v-if="isEmpty()" style="text-align: center">
-        {{ this.$tc('NoContent') }}
+        {{ $tc('NoContent') }}
       </div>
       <div v-else>
         <el-table
@@ -99,7 +99,7 @@ export default {
     width: 100%;
     max-height: 80vh;
 
-    & ::v-deep td {
+    & :deep(td) {
       padding: 5px 0 !important;
     }
   }

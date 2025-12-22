@@ -81,7 +81,7 @@ export default {
 
 <style lang="scss" scoped>
 
-.checkbox-accounts ::v-deep .el-checkbox-group {
+.checkbox-accounts :deep(.el-checkbox-group) {
   line-height: 40px;
 }
 

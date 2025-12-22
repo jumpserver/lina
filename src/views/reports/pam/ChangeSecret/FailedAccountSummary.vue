@@ -126,7 +126,7 @@ export default {
                   type: 'primary',
                   callback: ({ row }) => {
                     this.$axios.patch(
-                      `/api/v1/accounts/change-secret-records/${row.id}/ignore-fail/`,
+                      `/api/v1/accounts/change-secret-records/${row.id}/ignore-fail/`
                     ).then(res => {
                       this.$message.success(this.$tc('UpdateSuccessMsg'))
                       this.$refs.HomeCard.$refs.ListTable.reloadTable()
@@ -157,10 +157,8 @@ export default {
 <style lang="scss" scoped>
 .failed-accounts {
 
-  ::v-deep {
-    .el-table {
-      min-height: 260px;
-    }
+  :deep(.el-table){
+    min-height: 260px;
   }
 }
 </style>

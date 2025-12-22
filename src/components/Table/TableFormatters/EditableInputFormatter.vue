@@ -111,7 +111,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.editInput ::v-deep .el-input__inner {
+.editInput :deep(.el-input__inner) {
   padding: 2px;
   line-height: 12px;
 }

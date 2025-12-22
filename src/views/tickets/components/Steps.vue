@@ -3,12 +3,12 @@
     <div style="height: 660px;">
       <el-steps :active="ticketSteps" direction="vertical">
         <el-step
-          :description="`${this.$t('Applicant')}：${object.rel_snapshot.applicant}`"
-          :title="`${this.$t('OpenTicket')}：${object.title}`"
+          :description="`${$t('Applicant')}：${object.rel_snapshot.applicant}`"
+          :title="`${$t('OpenTicket')}：${object.title}`"
         >
           <div slot="description" class="description">
-            <div>{{ `${this.$t('Applicant')}：${object.rel_snapshot.applicant}` }}</div>
-            <div>{{ `${this.$t('DateCreated')}: ${toSafeLocalDateStr(object.date_created)}` }}</div>
+            <div>{{ `${$t('Applicant')}：${object.rel_snapshot.applicant}` }}</div>
+            <div>{{ `${$t('DateCreated')}: ${toSafeLocalDateStr(object.date_created)}` }}</div>
           </div>
         </el-step>
         <el-step
@@ -38,7 +38,7 @@
           </div>
         </el-step>
         <el-step
-          :title="`${this.$t('FinishedTicket')}`"
+          :title="`${$t('FinishedTicket')}`"
         >
           <div v-if="object.status.value === 'closed'" slot="description">
             <div>{{ $t('DateFinished') }}: {{ toSafeLocalDateStr(object.date_updated) }}</div>
@@ -101,7 +101,7 @@ export default {
       const h = this.$createElement
       const content = []
       assignees_display.forEach(item => {
-        content.push(h('p', null, item),)
+        content.push(h('p', null, item))
       })
       this.$msgbox({
         title: this.$t('RelevantAssignees'),
@@ -116,7 +116,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .acceptance .el-message-box__content {
+:deep(.acceptance .el-message-box__content) {
   overflow-y: auto;
   max-height: 400px;
 }

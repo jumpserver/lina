@@ -353,7 +353,7 @@ tr.item td {
   margin-bottom: 20px;
 }
 
-.the-box ::v-deep .el-card__body {
+.the-box :deep(.el-card__body) {
   padding: 20px;
 }
 </style>

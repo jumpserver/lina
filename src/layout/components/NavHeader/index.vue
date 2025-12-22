@@ -37,7 +37,7 @@
     <hamburger
       :is-active="sidebar.opened"
       class="hamburger-container is-show-menu"
-      @toggleClick="toggleSideBar"
+      @toggle-click="toggleSideBar"
     />
     <ul class="navbar-left">
       <li class="left-item">
@@ -175,11 +175,11 @@ export default {
         font-size: 15px;
         max-width: 250px;
 
-        ::v-deep .el-input__inner {
+        :deep(.el-input__inner) {
           padding-left: 20px;
         }
 
-        ::v-deep .el-input.is-disabled > input {
+        :deep(.el-input.is-disabled > input) {
           background: none;
         }
 
@@ -189,7 +189,7 @@ export default {
       }
 
       // 未找到与之对应的
-      & ::v-deep .el-sub-menu__title {
+      & :deep(.el-sub-menu__title) {
         font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
         padding: 0 8px;
         line-height: $headerHeight;
@@ -197,7 +197,7 @@ export default {
       }
 
       // 未找到与之对应的
-      & ::v-deep .svg-icon {
+      & :deep(.svg-icon) {
         color: #fff !important;
       }
     }
@@ -215,13 +215,13 @@ export default {
       padding-right: 10px;
       padding-left: 10px;
 
-      & ::v-deep .svg-icon {
+      & :deep(.svg-icon) {
         line-height: 40px;
         color: #fff;
         font-size: 15px;
       }
 
-      & ::v-deep .el-badge {
+      & :deep(.el-badge) {
         vertical-align: top;
 
         .el-link {
@@ -241,7 +241,7 @@ export default {
         }
       }
 
-      & ::v-deep i {
+      & :deep(i) {
         color: #fff;
         font-size: 16px;
 
@@ -250,7 +250,7 @@ export default {
         }
       }
 
-      & ::v-deep i.el-dialog__close.el-icon-close {
+      & :deep(i.el-dialog__close.el-icon-close) {
         color: #7c7e7f;
       }
 

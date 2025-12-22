@@ -1,11 +1,11 @@
 <template>
   <Dialog
     v-if="setting.InviteDialogVisible"
+    v-model:visible="setting.InviteDialogVisible"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('InviteUserInOrg')"
-    :visible.sync="setting.InviteDialogVisible"
     after
     custom-class="asset-select-dialog"
     top="8vh"
@@ -13,7 +13,7 @@
   >
     <GenericCreateUpdateForm
       v-bind="formConfig"
-      @submitSuccess="onSubmitSuccess"
+      @submit-success="onSubmitSuccess"
     />
   </Dialog>
 </template>
@@ -93,10 +93,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.dialog ::v-deep form {
-}
-
-.dialog ::v-deep .el-dialog__footer {
+.dialog :deep(.el-dialog__footer) {
   padding: 0;
 }
 </style>

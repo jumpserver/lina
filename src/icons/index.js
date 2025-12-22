@@ -4,7 +4,7 @@ const req = require.context('./svg', false, /\.svg$/)
 const requireAll = requireContext => requireContext.keys().map(requireContext)
 
 export function installSvgIcon(app) {
-  app.component('svg-icon', SvgIcon)
+  app.component('SvgIcon', SvgIcon)
   requireAll(req)
 }
 

@@ -164,16 +164,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.announcement-dialog ::v-deep .el-dialog {
+.announcement-dialog :deep(.el-dialog) {
   border-radius: 5px;
 }
 
-.announcement-dialog ::v-deep .el-dialog__wrapper {
+.announcement-dialog :deep(.el-dialog__wrapper) {
   backdrop-filter: blur(4px);
 }
 
 @media (max-width: 768px) {
-  .announcement-dialog ::v-deep .el-dialog {
+  .announcement-dialog :deep(.el-dialog) {
     width: 95% !important;
     margin: 0 auto;
   }
@@ -194,7 +194,7 @@ export default {
   }
 }
 
-.announcement-dialog ::v-deep .el-dialog__header {
+.announcement-dialog :deep(.el-dialog__header) {
   border-radius: 8px 8px 0 0;
   padding: 10px 20px 10px 20px;
 
@@ -204,7 +204,7 @@ export default {
   }
 }
 
-.announcement-dialog ::v-deep .el-dialog__body {
+.announcement-dialog :deep(.el-dialog__body) {
   padding: 0;
 }
 
@@ -230,7 +230,7 @@ export default {
   }
 }
 
-.announcement ::v-deep .el-alert__content {
+.announcement :deep(.el-alert__content) {
   width: 100%;
 }
 

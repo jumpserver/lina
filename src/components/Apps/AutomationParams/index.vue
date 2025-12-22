@@ -159,7 +159,7 @@ export default {
       for (const method of methods) {
         const filterField = this.remoteMeta[method] || {}
         // 修改资产、节点时不点击设置按钮也需要获取form表单值暴露出去
-        if (this.form.hasOwnProperty(method)) {
+        if (Object.prototype.hasOwnProperty.call(this.form, method)) {
           newForm[method] = this.form[method]
         }
         fields.push([filterField.label, [method]])

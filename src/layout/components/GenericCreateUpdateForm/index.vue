@@ -10,7 +10,7 @@
       :method="method"
       :url="iUrl"
       v-bind="$attrs"
-      @afterRemoteMeta="handleAfterRemoteMeta"
+      @after-remote-meta="handleAfterRemoteMeta"
       @submit="handleSubmit"
       v-on="$listeners"
     />
@@ -76,28 +76,28 @@ export default {
     // 创建成功的msg
     createSuccessMsg: {
       type: String,
-      default: function () {
+      default: function() {
         return 'CreateSuccessMsg'
       }
     },
     // 保存成功，继续添加的msg
     saveSuccessContinueMsg: {
       type: String,
-      default: function () {
+      default: function() {
         return 'SaveSuccessContinueMsg'
       }
     },
     // 更新成功的msg
     updateSuccessMsg: {
       type: String,
-      default: function () {
+      default: function() {
         return 'UpdateSuccessMsg'
       }
     },
     // 创建成功的跳转路由
     createSuccessNextRoute: {
       type: Object,
-      default: function () {
+      default: function() {
         // const routeName = this.$route.name?.replace('Create', 'List')
         const routeName = 'GroupCreate'
         return { name: routeName }
@@ -106,7 +106,7 @@ export default {
     // 更新成功的跳转路由
     updateSuccessNextRoute: {
       type: Object,
-      default: function () {
+      default: function() {
         // const routeName = this.$route.name?.replace('Update', 'List')
         const routeName = 'GroupUpdate'
         return { name: routeName }
@@ -114,7 +114,7 @@ export default {
     },
     objectDetailRoute: {
       type: Object,
-      default: function () {
+      default: function() {
         // const routeName = this.$route.name?.replace('Update', 'Detail').replace('Create', 'Detail')
         const routeName = 'GroupDetail'
         return { name: routeName }
@@ -130,7 +130,7 @@ export default {
     },
     cloneNameSuffix: {
       type: [String, Number],
-      default: function () {
+      default: function() {
         return 'Duplicate'.toLowerCase()
       }
     },
@@ -142,7 +142,7 @@ export default {
     // 获取创建和更新的url function
     getUrl: {
       type: Function,
-      default: function () {
+      default: function() {
         const objectId = this.getUpdateId()
         let url = this.url
         if (objectId) {

@@ -2,9 +2,9 @@
   <AutoDataForm
     v-if="!loading"
     ref="AutoDataForm"
+    v-bind="$data"
     :class="addTemplate? '': 'account-add'"
     :submit-btn-text="submitBtnText"
-    v-bind="$data"
     @submit="confirm"
   />
 </template>
@@ -172,7 +172,7 @@ export default {
 
 <style lang='scss' scoped>
 .account-add {
-  ::v-deep .el-form-item {
+  :deep(.el-form-item) {
     //margin-bottom: 5px;
 
     .help-block {
@@ -180,7 +180,7 @@ export default {
     }
   }
 
-  ::v-deep .form-group-header {
+  :deep(.form-group-header) {
     .hr-line-dashed {
       //margin: 5px 0;
     }

@@ -491,7 +491,7 @@ export default {
   color: $--color-danger;
 }
 
-.importTable ::v-deep .cell {
+.importTable :deep(.cell) {
   min-height: 20px;
   height: 100%;
   max-height: 160px;
@@ -501,7 +501,7 @@ export default {
   display: flex;
   justify-content: flex-end;
 
-  ::v-deep .el-button.is-disabled {
+  :deep(.el-button.is-disabled) {
     cursor: not-allowed;
   }
 }

@@ -1501,7 +1501,7 @@ export default {
     z-index: 11;
     transform: translateX(-50%);
 
-    ::v-deep i {
+    :deep(i) {
       margin-right: 4px;
     }
   }

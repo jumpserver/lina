@@ -1,10 +1,9 @@
 <template>
   <section class="app-main">
-    <transition mode="out-in" name="fade-transform">
-      <keep-alive :max="10">
-        <router-view :key="key" />
-      </keep-alive>
-    </transition>
+    <!-- 去掉过渡包装，避免 Vue 3 兼容层在路由切换离场动画阶段访问已被清理的 vnode.subTree -->
+    <keep-alive :max="10">
+      <router-view :key="key" />
+    </keep-alive>
     <ChatGPT v-if="chatAiEnabled" />
   </section>
 </template>

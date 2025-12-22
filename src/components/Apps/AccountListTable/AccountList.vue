@@ -17,7 +17,7 @@
       v-if="showUpdateSecretDialog"
       :account="account"
       :visible.sync="showUpdateSecretDialog"
-      @updateAuthDone="onUpdateAuthDone"
+      @update-auth-done="onUpdateAuthDone"
     />
     <AccountCreateUpdate
       v-if="showAddDialog"
@@ -37,8 +37,8 @@
     />
     <AccountBulkUpdateDialog
       v-if="updateSelectedDialogSetting.visible"
-      :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
+      :visible.sync="updateSelectedDialogSetting.visible"
       @update="handleAccountBulkUpdate"
     />
     <PasswordHistoryDialog

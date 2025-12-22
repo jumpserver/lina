@@ -28,7 +28,7 @@ export default {
     },
     args: {
       type: String,
-      default: () => ({})
+      default: ''
     },
     module: {
       type: String,

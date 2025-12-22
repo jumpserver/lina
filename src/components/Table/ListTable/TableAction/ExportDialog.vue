@@ -252,7 +252,7 @@ export default {
     padding: 10px 20px;
   }
 
-  .export-form ::v-deep .el-form-item__label {
+  .export-form :deep(.el-form-item__label) {
     line-height: 2
   }
 </style>

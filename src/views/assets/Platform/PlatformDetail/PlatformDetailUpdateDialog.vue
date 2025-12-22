@@ -7,7 +7,7 @@
     top="1vh"
     width="60%"
   >
-    <GenericCreateUpdateForm v-bind="$data" @submitSuccess="submitSuccess" />
+    <GenericCreateUpdateForm v-bind="$data" @submit-success="submitSuccess" />
   </Dialog>
 </template>
 
@@ -77,7 +77,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  ::v-deep .el-dialog .el-dialog__body {
+  :deep(.el-dialog .el-dialog__body) {
     padding: 0 20px;
   }
 </style>

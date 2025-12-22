@@ -107,7 +107,7 @@ export default {
     margin-bottom: 10px;
     box-shadow: unset !important;
 
-    ::v-deep .el-card__body {
+    :deep(.el-card__body) {
       padding: 10px 30px !important;
     }
   }

@@ -216,7 +216,7 @@ export default {
     }
   }
 
-  .edit-input ::v-deep input {
+  .edit-input :deep(input) {
     border-left: none;
     border-right: none;
     border-top: none;

@@ -83,7 +83,7 @@ $origin-color: #ffffff;
 .switch {
   font-weight: 400;
 
-  ::v-deep .el-radio-button {
+  :deep(.el-radio-button) {
     &.is-active {
       .el-radio-button__inner {
         border-color: var(--color-primary);
@@ -93,7 +93,7 @@ $origin-color: #ffffff;
     }
   }
 
-  ::v-deep .el-radio-button {
+  :deep(.el-radio-button) {
     .el-radio-button__inner {
       color: var(--color-text-primary);
       background: $origin-color;

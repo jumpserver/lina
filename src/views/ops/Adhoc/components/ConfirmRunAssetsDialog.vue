@@ -153,7 +153,7 @@ export default {
   }
 
   .group-assets {
-    ::v-deep .el-checkbox__label {
+    :deep(.el-checkbox__label) {
       display: inline-block;
       padding-left: 10px;
       line-height: 19px;

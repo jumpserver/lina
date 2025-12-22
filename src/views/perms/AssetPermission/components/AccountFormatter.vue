@@ -310,16 +310,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.select ::v-deep .el-input.el-input--suffix {
+.select :deep(.el-input.el-input--suffix) {
   width: 100px
 }
 
 .spec-accounts {
-  ::v-deep {
-    .filter-field {
-      width: 100%;
-      margin-bottom: 3px !important;
-    }
+  :deep(.filter-field) {
+    width: 100%;
+    margin-bottom: 3px !important;
   }
 }
 
@@ -351,10 +349,8 @@ export default {
 }
 
 .account-content {
-  ::v-deep {
-    .el-form-item__content {
-      width: 90% !important;
-    }
+  :deep(.el-form-item__content) {
+    width: 90% !important;
   }
 }
 

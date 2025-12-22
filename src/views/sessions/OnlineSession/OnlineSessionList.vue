@@ -4,7 +4,7 @@
     :header-actions="headerActions"
     :help-tip="helpMsg"
     :table-config="tableConfig"
-    :title="this.$t('OnlineUserDevices')"
+    :title="$t('OnlineUserDevices')"
   />
 </template>
 

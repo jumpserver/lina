@@ -87,7 +87,7 @@ export default {
             },
             onDelete: function(col, row, cellValue, reload) {
               this.$axios.delete(
-                `/api/v1/rbac/${this.object.scope.value}-role-bindings/${row.id}/?role=${this.object.id}`,
+                `/api/v1/rbac/${this.object.scope.value}-role-bindings/${row.id}/?role=${this.object.id}`
               ).then(res => {
                 this.$message.success(this.$tc('DeleteSuccessMsg'))
                 reload()

@@ -50,7 +50,7 @@
           <span v-sanitize="isHighlight ? filterHighlight(item.label) : item.label" />
         </el-checkbox>
       </el-checkbox-group>
-      <p v-else class="no-data">{{ this.$t('NoData') }}</p>
+      <p v-else class="no-data">{{ $t('NoData') }}</p>
     </div>
     <div class="vip-footer">
       <el-button :disabled="disabledPre" class="v-page" plain small @click="prev">
@@ -295,7 +295,7 @@ export default {
     .el-checkbox {
       display: inline-block;
 
-      ::v-deep .el-checkbox__label {
+      :deep(.el-checkbox__label) {
         font-size: 14px;
       }
     }
@@ -356,12 +356,12 @@ export default {
       line-height: 28px;
       height: 28px;
 
-      ::v-deep .el-checkbox__label {
+      :deep(.el-checkbox__label) {
         font-weight: 400;
         line-height: 28px;
       }
 
-      ::v-deep .el-checkbox__input {
+      :deep(.el-checkbox__input) {
         top: 7px;
       }
     }

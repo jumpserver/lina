@@ -11,7 +11,7 @@
     @confirm="handleColumnConfirm()"
   >
     <el-col style="margin-bottom: 5px">
-      <label>{{ this.$t('TableColSetting') }}</label>
+      <label>{{ $t('TableColSetting') }}</label>
     </el-col>
     <el-checkbox
       v-model="checkAll"
@@ -148,7 +148,7 @@ export default {
   .col-item {
     margin-top: 5px;
 
-    ::v-deep .el-checkbox {
+    :deep(.el-checkbox) {
       width: 100%;
 
       .el-checkbox__input {

@@ -3,7 +3,7 @@
     ref="table"
     class="el-data-table"
     v-bind="tableConfig"
-    @sizeChange="handleSizeChange"
+    @size-change="handleSizeChange"
     @update="onUpdate"
     v-on="iListeners"
   />
@@ -170,7 +170,7 @@ export default {
 
 <style lang="scss" scoped>
 .el-data-table {
-  ::v-deep .el-pagination.is-background .el-pager li {
+  :deep(.el-pagination.is-background .el-pager li) {
     margin: 0 1px;
     padding: 0 2px;
   }

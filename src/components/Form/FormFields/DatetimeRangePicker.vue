@@ -102,7 +102,7 @@ export default {
 
 <style lang='scss' scoped>
 html:lang(pt-br) {
-  .datepicker ::v-deep .el-range-separator {
+  .datepicker :deep(.el-range-separator) {
     padding: 0 10px;
   }
 }
@@ -117,17 +117,17 @@ html:lang(pt-br) {
   border-radius: 2px;
   height: 28px;
 
-  ::v-deep .el-range-separator,
-  ::v-deep .el-input__icon {
+  :deep(.el-range-separator),
+  :deep(.el-input__icon) {
     line-height: 26px;
     color: var(--color-icon-primary) !important;
   }
 
-  ::v-deep .el-range-input {
+  :deep(.el-range-input) {
     color: var(--color-text-primary) !important;
   }
 
-  ::v-deep .el-range-input {
+  :deep(.el-range-input) {
     width: 49%;
   }
 }

@@ -141,7 +141,7 @@ export default {
       }
     }
 
-    ::v-deep .el-card__body {
+    :deep(.el-card__body) {
       display: none;
     }
   }

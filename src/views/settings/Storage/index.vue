@@ -17,6 +17,12 @@ export default {
     ReplayStorage,
     CommandStorage
   },
+  beforeRouteUpdate(to, from, next) {
+    if (to.name === from.name && to.path === from.path && to.query?.tab) {
+      this.$store.commit('common/reload')
+    }
+    next()
+  },
   data() {
     return {
       loading: true,
@@ -39,12 +45,6 @@ export default {
     componentData() {
       return {}
     }
-  },
-  beforeRouteUpdate(to, from, next) {
-    if (to.name === from.name && to.path === from.path && to.query?.tab) {
-      this.$store.commit('common/reload')
-    }
-    next()
   }
 }
 </script>

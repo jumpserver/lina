@@ -240,7 +240,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-::v-deep .el-card__body {
+:deep(.el-card__body) {
   padding: 10px 20px 20px 20px;
 
   .el-form {

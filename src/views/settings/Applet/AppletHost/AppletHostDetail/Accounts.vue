@@ -43,7 +43,7 @@ export default {
           callbacks: {
             click: function() {
               this.$axios.put(
-                `/api/v1/terminal/applet-hosts/${this.object.id}/generate-accounts/`,
+                `/api/v1/terminal/applet-hosts/${this.object.id}/generate-accounts/`
               ).then(res => {
                 this.$message.success(this.$tc('GenerateSuccessMsg'))
               })

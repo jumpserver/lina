@@ -59,8 +59,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.asset-table ::v-deep .row-clicked,
-.asset-user-table ::v-deep .row-background-color {
+.asset-table :deep(.row-clicked),
+.asset-user-table :deep(.row-background-color) {
   background-color: #f5f7fa;
 }
 
@@ -69,11 +69,11 @@ export default {
     cursor: pointer;
   }
 
-  & ::v-deep .table-content {
+  & :deep(.table-content) {
     margin-left: 21px;
   }
 
-  & ::v-deep .el-table__row {
+  & :deep(.el-table__row) {
     height: 40px;
 
     & > td {

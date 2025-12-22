@@ -85,6 +85,7 @@ export default {
       default: ''
     }
   },
+  emits: ['update:activeMenu', 'tab-click'],
   data() {
     return {
       loading: false,
@@ -168,8 +169,8 @@ export default {
 
 <style lang="scss" scoped>
 .page.no-title {
-  ::v-deep {
-    .page-submenu .el-tabs__header {
+  :deep(.page-submenu) {
+    .el-tabs__header {
       margin-top: 0;
     }
 
@@ -179,7 +180,7 @@ export default {
   }
 }
 
-.page-submenu ::v-deep .el-tabs__header {
+.page-submenu :deep(.el-tabs__header) {
   background-color: white;
   margin-top: -10px;
   padding: 0 30px;
@@ -221,11 +222,11 @@ export default {
     height: 100%;
   }
 
-  ::v-deep .page-heading {
+  :deep(.page-heading) {
     border-bottom: none;
   }
 
-  ::v-deep .page-content {
+  :deep(.page-content) {
     overflow-y: hidden !important;
     padding: 0;
   }
@@ -242,7 +243,7 @@ export default {
   }
 }
 
-.page-submenu ::v-deep .el-tabs__nav-wrap {
+.page-submenu :deep(.el-tabs__nav-wrap) {
   position: static;
 }
 
