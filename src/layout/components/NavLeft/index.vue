@@ -11,17 +11,8 @@
         <span :class="switchViewOtherClasses" class="switch-view active-switch-view">
           <el-popover :open-delay="200" placement="right-start" trigger="hover">
             <template #reference>
-              <span style="width: 100%">
-                <el-tooltip
-                  v-show="!isCollapse"
-                  :content="isRouteMeta.title"
-                  :open-delay="1000"
-                  placement="bottom"
-                  effect="dark"
-                  class="view-title"
-                >
-                  <span class="text-overflow">{{ isRouteMeta.title || '' }}</span>
-                </el-tooltip>
+              <span style="width: 100%;padding: 0 15px;display: flex;align-items: center;">
+                <span class="text-overflow">{{ isRouteMeta.title || '' }}</span>
                 <span class="icon-zone">
                   <svg-icon class="icon" icon-class="switch" />
                 </span>
@@ -157,7 +148,7 @@ export default {
       if (hasOpened) {
         return
       }
-      const el = document.querySelector('.el-submenu__title')
+      const el = document.querySelector('.el-sub-menu__title')
       if (el) {
         el.click()
       }
@@ -236,6 +227,11 @@ $hover-border-color: #d2d2d2;
       .switch-view {
         width: 100%;
         padding: 5px;
+
+        .text-overflow {
+          width: calc(100% - 15px);
+          display: inline-block;
+        }
 
         ::v-deep .el-popover__reference {
           display: flex;

@@ -78,7 +78,7 @@
     .el-submenu-sidebar {
       overflow: hidden;
 
-      & > .el-submenu__title {
+      & > .el-sub-menu__title {
 
         .el-submenu__icon-arrow {
           display: none;
@@ -88,7 +88,7 @@
 
     .el-menu--collapse {
       .el-submenu-sidebar {
-        & > .el-submenu__title {
+        & > .el-sub-menu__title {
           & > span {
             height: 0;
             width: 0;

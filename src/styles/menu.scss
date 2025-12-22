@@ -61,7 +61,7 @@ $single-menu-height: 38px;
     line-height: $single-menu-height;
   }
 
-  .el-submenu__title {
+  .el-sub-menu__title {
     display: flex;
     align-items: center;
     height: $single-menu-height;
@@ -111,11 +111,11 @@ $single-menu-height: 38px;
         }
 
         &.el-submenu.is-active {
-          .el-submenu__title {
+          .el-sub-menu__title {
             color: var(--color-primary);
           }
 
-          .el-submenu__title, li {
+          .el-sub-menu__title, li {
             @include only_active
           }
         }

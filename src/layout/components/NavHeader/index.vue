@@ -189,7 +189,7 @@ export default {
       }
 
       // 未找到与之对应的
-      & ::v-deep .el-submenu__title {
+      & ::v-deep .el-sub-menu__title {
         font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
         padding: 0 8px;
         line-height: $headerHeight;

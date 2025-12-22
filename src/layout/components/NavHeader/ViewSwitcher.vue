@@ -131,7 +131,7 @@ export default {
   background-color: transparent;
   letter-spacing: 0.09em;
 
-  ::v-deep .el-submenu .el-submenu__title {
+  ::v-deep .el-submenu .el-sub-menu__title {
     height: 38px;
     line-height: 32px;
     border-bottom: none;

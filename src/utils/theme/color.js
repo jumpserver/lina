@@ -1,6 +1,6 @@
 import color from 'css-color-function'
 import formula from './formula.json'
-import defaultThemeConfig from '@/styles/default-theme.scss'
+import defaultThemeConfig from '@/styles/default-theme.scss?module'
 
 export function generateColors(themeColors) {
   const colors = {}

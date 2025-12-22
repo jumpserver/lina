@@ -33,14 +33,14 @@
           class="nest-menu"
         />
       </div>
-      <el-submenu
+      <el-sub-menu
         v-else
         ref="subMenu"
         :index="resolvePath(item.path)"
         class="el-submenu-sidebar submenu-item level1-menu"
         popper-append-to-body
       >
-        <template slot="title">
+        <template #title>
           <item v-if="item.meta" :children="item.children" :icon="item.meta && item.meta.icon" :title="getItemTitle(item)" />
         </template>
         <sidebar-item
@@ -51,7 +51,7 @@
           :item="child"
           class="nest-menu"
         />
-      </el-submenu>
+      </el-sub-menu>
     </div>
   </div>
 </template>

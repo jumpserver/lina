@@ -1,10 +1,9 @@
 <template>
   <div :class="grouped ? 'el-button-group' : 'el-button-ungroup'" class="layout">
-    <template v-for="action in iActions">
+    <template v-for="action in iActions" :key="action.name">
       <el-dropdown
         v-if="action.dropdown"
         v-show="action.dropdown.length > 0"
-        :key="action.name"
         :class="[action.name, { grouped: action.grouped }]"
         :size="action.size"
         :split-button="!!action.split"
@@ -34,12 +33,7 @@
         </el-button>
         <el-dropdown-menu slot="dropdown" style="overflow: auto; max-height: 60vh">
           <template v-for="option in action.dropdown" :key="option.name">
-            <div
-              v-if="option.group"
-              :key="'group:' + option.name"
-              class="dropdown-menu-title"
-              style="width: 130px"
-            >
+            <div v-if="option.group" class="dropdown-menu-title" style="width: 130px">
               {{ option.group }}
             </div>
             <el-tooltip
@@ -67,21 +61,18 @@
 
       <el-button
         v-else
-        :key="action.name"
         :class="[action.name, { grouped: action.grouped }]"
         :size="size"
         class="action-item"
         v-bind="{ ...cleanButtonAction(action), icon: '' }"
         @click="handleClick(action)"
       >
-        <el-tooltip :content="action.tip" :disabled="!action.tip" placement="top">
-          <span>
-            <span v-if="action.icon" style="vertical-align: initial">
-              <Icon :icon="action.icon" />
-            </span>
-            {{ action.title }}
-          </span>
-        </el-tooltip>
+        <!-- <el-tooltip :content="action.tip" :disabled="!action.tip" placement="top"> -->
+        <!-- <span v-if="action.icon" >
+          <Icon :icon="action.icon" />
+        </span> -->
+        {{ action.title }}
+        <!-- </el-tooltip> -->
       </el-button>
     </template>
   </div>
@@ -283,8 +274,12 @@ $color-drop-menu-border: #e4e7ed;
 
   .el-button {
     padding: 2px 5px;
-    line-height: 1.3;
     font-size: 13px;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 24px !important;
+    line-height: 24px !important;
 
     &:not(.is-plain) {
       color: $btn-text-color;
@@ -294,8 +289,12 @@ $color-drop-menu-border: #e4e7ed;
     text-overflow: ellipsis;
     white-space: nowrap;
 
-    * {
-      vertical-align: baseline !important;
+    // 确保按钮内部所有内容都垂直居中
+    ::v-deep span {
+      display: inline-flex;
+      align-items: center;
+      line-height: 1;
+      vertical-align: middle;
     }
   }
 
