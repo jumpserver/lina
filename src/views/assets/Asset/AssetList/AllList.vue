@@ -46,6 +46,9 @@ export default {
         url: '/api/v1/assets/assets/',
         showMenu: !this.$store.getters.currentOrgIsRoot,
         showDefaultMenu: true,
+        async: {
+          enable: false
+        },
         menu: [
         ]
       },

@@ -248,9 +248,10 @@ export default {
       if (!children) {
         return []
       }
-      let allChildren = []
+      const allChildren = []
       children.forEach((n) => {
-        allChildren = [...children, ...this.recurseChildren(n)]
+        allChildren.push(n)
+        allChildren.push(...this.recurseChildren(n))
       })
       return allChildren
     },
