@@ -142,7 +142,7 @@ export default {
         }
       },
       defaultTicketActions: {
-        hasExport: false,
+        hasImport: false,
         hasMoreActions: false,
         hasLeftActions: true,
         canCreate: this.$hasPerm('tickets.view_ticket'),
