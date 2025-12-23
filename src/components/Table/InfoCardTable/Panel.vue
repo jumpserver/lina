@@ -152,6 +152,7 @@ div.info-panel {
   padding: 10px;
   gap: 10px;
   cursor: pointer;
+  height: initial !important;
 
   .panel-header {
     padding: 10px 20px;
@@ -164,7 +165,7 @@ div.info-panel {
       display: flex;
       align-items: center;
       font-weight: 600;
-      gap: 10px;
+      gap: unset;
 
       .title-display {
         display: flex;
@@ -183,6 +184,7 @@ div.info-panel {
           overflow: hidden;
           white-space: nowrap;
           width: 100%;
+          margin: unset;
         }
 
         .comment {
