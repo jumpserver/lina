@@ -1,12 +1,12 @@
 <template>
   <Dialog
     v-if="setting.addAssetDialogVisible"
+    v-model:visible="setting.addAssetDialogVisible"
     :destroy-on-close="true"
     :modal="false"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('AddAssetInZone')"
-    :visible.sync="setting.addAssetDialogVisible"
     after
     custom-class="asset-select-dialog"
     top="15vh"

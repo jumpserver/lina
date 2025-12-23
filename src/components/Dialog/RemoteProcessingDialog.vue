@@ -1,10 +1,11 @@
 <template>
   <Dialog
-    :visible="iVisible"
+    :visible="visible"
     height="300"
     title="Processing"
     width="300"
     class="processing-dialog"
+    @update:visible="$emit('update:visible', $event)"
   >
     <div id="load">
       <div class="spinner" />
@@ -24,18 +25,9 @@ export default {
       default: false
     }
   },
+  emits: ['update:visible'],
   data() {
     return {}
-  },
-  computed: {
-    iVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$emit('update:visible', val)
-      }
-    }
   }
 }
 </script>

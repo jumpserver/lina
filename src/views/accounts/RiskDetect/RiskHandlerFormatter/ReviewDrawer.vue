@@ -1,11 +1,12 @@
 <template>
   <el-drawer
+    :visible="visible"
     :title="$t('Details')"
-    :visible.sync="iVisible"
     append-to-body
     class="risk-review-drawer"
     destroy-on-close
     direction="rtl"
+    @update:visible="$emit('update:visible', $event)"
   >
     <div class="drawer-container">
       <div class="drawer-body">
@@ -31,10 +32,10 @@
           <el-input v-model="comment" :placeholder="$tc('PleaseEnterReason')" type="textarea" />
           <span class="buttons">
             <el-button size="small" type="primary" @click="handleClose">
-              {{ $t("Close") }}
+              {{ $t('Close') }}
             </el-button>
             <el-button size="small" @click="handleIgnore">
-              {{ $t("IgnoreAlert") }}
+              {{ $t('IgnoreAlert') }}
             </el-button>
           </span>
         </div>
@@ -83,14 +84,6 @@ export default {
     }
   },
   computed: {
-    iVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$emit('update:visible', val)
-      }
-    },
     actionMap() {
       return riskActions.reduce((acc, cur) => {
         acc[cur.name] = cur
@@ -197,11 +190,14 @@ export default {
         case 'group_changed':
         case 'sudoers_changed':
         case 'authorized_key_changed':
-          return this.$t('Diff') + `:
+          return (
+            this.$t('Diff') +
+            `:
             <pre>
               ${detail.diff}
             </pre>
             `
+          )
         case 'long_time_password':
           return this.$t('LastChangeTime') + ': ' + this.formatTimestamp(detail.date)
         case 'account_deleted':
@@ -220,9 +216,9 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .risk-review-drawer {
-  :deep(){
+  :deep() {
     .el-drawer__header {
       padding: 16px 20px;
       margin-bottom: 0;
@@ -287,7 +283,7 @@ export default {
       margin-top: 5px;
       font-size: 12px;
 
-      color: var(--color-text-secondary)
+      color: var(--color-text-secondary);
     }
   }
 }

@@ -2,24 +2,24 @@
   <Page>
     <AdhocOpenDialog
       v-if="showOpenAdhocDialog"
-      :visible.sync="showOpenAdhocDialog"
+      v-model:visible="showOpenAdhocDialog"
       @select="onSelectAdhoc"
     />
     <AdhocSaveDialog
       v-if="showOpenAdhocSaveDialog"
+      v-model:visible="showOpenAdhocSaveDialog"
       :args="command"
       :module="module"
-      :visible.sync="showOpenAdhocSaveDialog"
     />
-    <VariableHelpDialog :visible.sync="showHelpDialog" />
+    <VariableHelpDialog v-model:visible="showHelpDialog" />
     <SetVariableDialog
+      v-model:visible="showSetVariableDialog"
       :form-data="variableFormData"
       :query-param="variableQueryParam"
-      :visible.sync="showSetVariableDialog"
       @submit="onSubmitVariable"
     />
     <ConfirmRunAssetsDialog
-      :visible.sync="showConfirmRunAssetsDialog"
+      v-model:visible="showConfirmRunAssetsDialog"
       :is-running="isRunning"
       :assets="classifiedAssets"
       @submit="onConfirmRunAsset"
@@ -31,9 +31,9 @@
       <div class="transition-box" style="width: calc(100% - 17px)">
         <CodeEditor
           v-if="ready"
+          v-model="command"
           :options="cmOptions"
           :toolbar="toolbar"
-          :value.sync="command"
           style="margin-bottom: 20px"
         />
         <span v-if="executionInfo.status" style="float: right" />

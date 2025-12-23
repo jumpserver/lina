@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage
-    :active-menu.sync="config.activeMenu"
-    :object.sync="CommandFilterACL"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="CommandFilterACL"
     v-bind="config"
     v-on="$listeners"
   >

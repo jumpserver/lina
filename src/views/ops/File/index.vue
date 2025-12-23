@@ -66,9 +66,9 @@
             <el-upload
               v-if="ready"
               ref="upload"
+              v-model="uploadFileList"
               :auto-upload="false"
               :on-change="onFileChange"
-              :value.sync="uploadFileList"
               action=""
               drag
               multiple

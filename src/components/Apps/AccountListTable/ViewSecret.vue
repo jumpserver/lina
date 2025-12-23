@@ -2,10 +2,10 @@
   <div>
     <Dialog
       v-bind="$attrs"
+      v-model:visible="showSecret"
       :destroy-on-close="true"
       :show-cancel="false"
       :title="iTitle"
-      :visible.sync="showSecret"
       :width="'50'"
       @confirm="accountConfirmHandle"
       v-on="$listeners"
@@ -20,10 +20,12 @@
         <el-form-item :label="secretTypeLabel">
           <SecretViewerFormatter
             :cell-value="secretInfo.secret"
-            :col="{ formatterArgs: {
-              name: account['name'],
-              secretType: secretType || ''
-            }}"
+            :col="{
+              formatterArgs: {
+                name: account['name'],
+                secretType: secretType || ''
+              }
+            }"
             @input="onShowKeyCopyFormatterChange"
           />
         </el-form-item>
@@ -36,12 +38,12 @@
         <el-form-item :label="$tc('DateUpdated')">
           <span>{{ account['date_updated'] | date }}</span>
         </el-form-item>
-        <el-form-item v-if="showPasswordRecord" v-perms="'accounts.view_accountsecret'" :label="$tc('PasswordRecord')">
-          <el-link
-            :underline="false"
-            type="success"
-            @click="showHistoryDialog"
-          >
+        <el-form-item
+          v-if="showPasswordRecord"
+          v-perms="'accounts.view_accountsecret'"
+          :label="$tc('PasswordRecord')"
+        >
+          <el-link :underline="false" type="success" @click="showHistoryDialog">
             <span style="padding-right: 30px">
               {{ versions }}
             </span>
@@ -51,8 +53,8 @@
     </Dialog>
     <PasswordHistoryDialog
       v-if="showPasswordHistoryDialog"
+      v-model:visible="showPasswordHistoryDialog"
       :account="account"
-      :visible.sync="showPasswordHistoryDialog"
     />
   </div>
 </template>
@@ -96,6 +98,7 @@ export default {
       default: true
     }
   },
+  emits: ['update:visible'],
   data() {
     return {
       modifiedSecret: '',
@@ -139,13 +142,14 @@ export default {
         name: this.secretInfo.name,
         secret: encryptPassword(this.modifiedSecret)
       }
-      const url = this.type === 'account' ? `/api/v1/accounts/accounts` : `/api/v1/accounts/account-templates`
+      const url =
+        this.type === 'account' ? `/api/v1/accounts/accounts` : `/api/v1/accounts/account-templates`
       this.$axios.patch(`${url}/${this.account.id}/`, params).then(() => {
         this.$message.success(this.$tc('UpdateSuccessMsg'))
       })
     },
     showSecretDialog() {
-      return this.$axios.get(this.url, { disableFlashErrorMsg: true }).then((res) => {
+      return this.$axios.get(this.url, { disableFlashErrorMsg: true }).then(res => {
         this.secretInfo = res
         this.sshKeyFingerprint = res?.spec_info?.ssh_key_fingerprint || '-'
         this.showSecret = true
@@ -166,54 +170,54 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .item-textarea :deep(.el-textarea__inner) {
-    height: 110px;
+.item-textarea :deep(.el-textarea__inner) {
+  height: 110px;
+}
+
+.el-form-item {
+  border-bottom: 1px solid #ebeef5;
+  padding: 5px 0;
+  margin-bottom: 0;
+
+  &:last-child {
+    border-bottom: none;
   }
 
-  .el-form-item {
-    border-bottom: 1px solid #EBEEF5;
-    padding: 5px 0;
-    margin-bottom: 0;
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    :deep(.el-form-item__label) {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      padding-right: 20px;
-      line-height: 30px;
-      word-break: keep-all;
-      overflow-wrap: break-word;
-      white-space: normal;
-    }
-
-    :deep(.el-form-item__content) {
-      line-height: 30px;
-
-      pre {
-        margin: 0;
-      }
-    }
+  :deep(.el-form-item__label) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-right: 20px;
+    line-height: 30px;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    white-space: normal;
   }
 
-  ul {
-    margin: 0;
-  }
+  :deep(.el-form-item__content) {
+    line-height: 30px;
 
-  li {
-    display: block;
-    font-size: 13px;
-    margin-bottom: 8px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    .title {
-      color: #303133;
-      font-weight: 500;
+    pre {
+      margin: 0;
     }
   }
+}
+
+ul {
+  margin: 0;
+}
+
+li {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  .title {
+    color: #303133;
+    font-weight: 500;
+  }
+}
 </style>

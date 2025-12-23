@@ -1,10 +1,10 @@
 <template>
   <Dialog
     v-if="showColumnSettingPopover"
+    v-model:visible="showColumnSettingPopover"
     :cancel-title="$tc('RestoreDefault')"
     :destroy-on-close="true"
     :title="$tc('ListPreference')"
-    :visible.sync="showColumnSettingPopover"
     top="10%"
     width="50%"
     @cancel="restoreDefault()"

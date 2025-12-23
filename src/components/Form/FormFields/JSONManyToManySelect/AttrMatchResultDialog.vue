@@ -5,7 +5,8 @@
     :title="$tc('MatchResult')"
     :v-bind="$attrs"
     :v-on="$listeners"
-    :visible.sync="iVisible"
+    :visible="visible"
+    @update:visible="$emit('update:visible', $event)"
   >
     <ListTable v-bind="attrMatchTableConfig" />
   </Dialog>
@@ -32,6 +33,7 @@ export default {
       default: false
     }
   },
+  emits: ['update:visible'],
   data() {
     return {
       attrMatchTableConfig: {
@@ -56,16 +58,6 @@ export default {
             }
           }
         }
-      }
-    }
-  },
-  computed: {
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
       }
     }
   }

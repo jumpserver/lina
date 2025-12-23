@@ -37,9 +37,9 @@
         </el-button>
       </div>
       <AddVariableDialog
+        v-model:visible="addVariableDialogVisible"
         :variable="variable"
         :variables="variables"
-        :visible.sync="addVariableDialogVisible"
       />
     </div>
   </div>

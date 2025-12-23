@@ -1,8 +1,8 @@
 <template>
   <Dialog
+    v-model:visible="show"
     :destroy-on-close="true"
     :show-cancel="false"
-    :visible.sync="show"
     :width="'50'"
     v-bind="$attrs"
     @confirm="accountConfirmHandle"

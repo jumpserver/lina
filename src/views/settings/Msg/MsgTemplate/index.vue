@@ -8,9 +8,9 @@
       />
     </IBox>
     <VariablesHelpTextDialog
+      v-model:visible="showHelpDialog"
       :variables-help-text="variablesHelpText"
       :variables="variables"
-      :visible.sync="showHelpDialog"
     />
   </div>
 </template>

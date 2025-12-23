@@ -1,10 +1,10 @@
 <template>
   <div>
     <Dialog
+      v-model:visible="showSecret"
       :destroy-on-close="true"
       :show-cancel="false"
       :title="iTitle"
-      :visible.sync="showSecret"
       :width="'50'"
       v-bind="$attrs"
       @confirm="accountConfirmHandle"

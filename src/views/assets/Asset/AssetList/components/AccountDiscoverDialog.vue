@@ -1,17 +1,18 @@
 <template>
   <div>
     <Dialog
+      :visible="visible"
       :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
       :title="$tc('AccountDiscover')"
-      :visible.sync="iVisible"
       top="35vh"
       width="80%"
-      @close="loading=true"
+      @close="loading = true"
+      @update:visible="$emit('update:visible', $event)"
     >
       <div v-loading="loading">
-        <iframe :src="url" style="border: none;" title="dialog" @load="onIframeLoad" />
+        <iframe :src="url" style="border: none" title="dialog" @load="onIframeLoad" />
       </div>
     </Dialog>
   </div>
@@ -36,6 +37,7 @@ export default {
       default: ''
     }
   },
+  emits: ['update:visible'],
   data() {
     return {
       showDeleteAccountDialog: false,
@@ -43,20 +45,15 @@ export default {
       showLoading: true,
       gatherAccounts: [],
       config: {
-        tableConfig: gatherAccountTableConfig(this, `/api/v1/accounts/gathered-accounts/discover/?asset_id=${this.asset}`),
+        tableConfig: gatherAccountTableConfig(
+          this,
+          `/api/v1/accounts/gathered-accounts/discover/?asset_id=${this.asset}`
+        ),
         headerActions: gatherAccountHeaderActions(this)
       }
     }
   },
   computed: {
-    iVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$emit('update:visible', val)
-      }
-    },
     url: {
       get() {
         return `/api/v1/accounts/gather-account-executions/adhoc/?asset_id=${this.asset}`
@@ -71,10 +68,8 @@ export default {
       immediate: true
     }
   },
-  mounted() {
-  },
-  beforeMount() {
-  },
+  mounted() {},
+  beforeMount() {},
   methods: {
     onIframeLoad() {
       this.loading = false

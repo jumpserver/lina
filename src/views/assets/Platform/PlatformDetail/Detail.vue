@@ -26,7 +26,7 @@
         v-if="visible"
         :object="object"
         :show-fields="fields"
-        :visible.sync="visible"
+        :visible="visible"
       />
     </template>
   </TwoCol>

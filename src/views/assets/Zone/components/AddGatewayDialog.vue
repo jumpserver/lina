@@ -1,11 +1,11 @@
 <template>
   <Dialog
     v-if="setting.addGatewayDialogVisible"
+    v-model:visible="setting.addGatewayDialogVisible"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('AddGatewayInZone')"
-    :visible.sync="setting.addGatewayDialogVisible"
     after
     custom-class="asset-select-dialog"
     top="15vh"

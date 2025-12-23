@@ -1,7 +1,7 @@
 <template>
   <TabPage
     v-if="!loading"
-    :active-menu.sync="config.activeMenu"
+    v-model:active-menu="config.activeMenu"
     :submenu="config.submenu"
     @tab-click="handleTabClick"
   />

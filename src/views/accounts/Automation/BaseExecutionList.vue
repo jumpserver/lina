@@ -4,7 +4,7 @@
       :header-actions="headerActions"
       :table-config="tableConfig"
     />
-    <ReportDialog :url="reportUrl" :visible.sync="visible" />
+    <ReportDialog v-model:visible="visible" :url="reportUrl" />
   </div>
 </template>
 

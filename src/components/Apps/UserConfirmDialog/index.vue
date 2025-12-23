@@ -5,7 +5,7 @@
     :show-cancel="false"
     :show-confirm="false"
     :title="title"
-    :visible.sync="visible"
+    :visible="visible"
     class="dialog-content"
     v-bind="$attrs"
     width="600px"

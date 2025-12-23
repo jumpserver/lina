@@ -9,8 +9,9 @@
       :show-cancel="false"
       :show-confirm="false"
       :title="title"
-      :visible.sync="visible"
+      :visible="visible"
       width="70%"
+      @update:visible="$emit('update:visible', $event)"
       @confirm="onConfirm()"
       v-on="$listeners"
     >

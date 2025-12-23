@@ -56,8 +56,8 @@
 
     <Dialog
       v-if="showTemplateDialog"
+      v-model:visible="showTemplateDialog"
       :title="$tc('AccountTemplate')"
-      :visible.sync="showTemplateDialog"
       @cancel="handleAccountTemplateCancel"
       @confirm="handleAccountTemplateConfirm"
     >

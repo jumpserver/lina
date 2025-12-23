@@ -1,6 +1,6 @@
 <template>
   <TabPage
-    :active-menu.sync="config.activeMenu"
+    v-model:active-menu="config.activeMenu"
     :submenu="config.submenu"
   />
 </template>

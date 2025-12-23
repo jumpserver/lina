@@ -1,7 +1,7 @@
 <template>
   <div>
     <QuickFilter
-      :expand.sync="filterExpand"
+      v-model:expand="filterExpand"
       :filters="quickFilters"
       :summary="quickSummary"
       :table-url="tableUrl"
@@ -9,10 +9,10 @@
     />
     <TableAction
       v-if="hasActions"
+      v-model:quick-filter-expand="filterExpand"
       :class="{ 'filter-expand': filterExpand }"
       :date-pick="handleDateChange"
       :has-quick-filter="iHasQuickFilter"
-      :quick-filter-expand.sync="filterExpand"
       :reload-table="reloadTable"
       :search-table="search"
       :selected-rows="selectedRows"

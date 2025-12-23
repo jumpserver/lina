@@ -8,11 +8,11 @@
       :detail-drawer="detailDrawer"
     />
     <Dialog
+      v-model:visible="dialogSettings.visible"
       :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
       :title="$tc('TerminalUpdateStorage')"
-      :visible.sync="dialogSettings.visible"
     >
       <GenericCreateUpdateForm v-bind="dialogSettings.iFormSetting" />
     </Dialog>

@@ -11,7 +11,7 @@
       :show-cancel="false"
       :show-confirm="false"
       :title="title"
-      :visible.sync="visible"
+      :visible="visible"
       v-bind="$attrs"
       width="60%"
       v-on="$listeners"

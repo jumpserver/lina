@@ -2,7 +2,7 @@
   <Page v-bind="$attrs">
     <div v-if="!loading">
       <el-alert v-if="publicSettings.XPACK_ENABLED" type="success">
-        {{ this.$t('ImportLicenseTip') }}
+        {{ $t('ImportLicenseTip') }}
       </el-alert>
       <TwoCol>
         <template>
@@ -13,15 +13,15 @@
         </template>
       </TwoCol>
       <Dialog
+        v-model:visible="dialogLicenseImport"
         :title="$tc('ImportLicense')"
-        :visible.sync="dialogLicenseImport"
         top="20vh"
         width="600px"
         @cancel="dialogLicenseImport = false"
         @confirm="importLicense"
       >
         <div style="padding-bottom: 10px">
-          {{ this.$t('LicenseFile') }}
+          {{ $t('LicenseFile') }}
         </div>
         <input type="file" @change="fileChange">
       </Dialog>

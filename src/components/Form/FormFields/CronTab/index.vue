@@ -4,9 +4,9 @@
       <el-input v-model="input" clearable @clear="onClear" @focus="showDialog" />
     </div>
     <Dialog
+      v-model:visible="showCron"
       :show-buttons="false"
       :title="$tc('NewCron')"
-      :visible.sync="showCron"
       append-to-body
       top="8vh"
       width="650px"

@@ -2,13 +2,13 @@
   <div>
     <RemoveAccount
       v-if="showDeleteAccountDialog"
+      v-model:visible="showDeleteAccountDialog"
       :accounts="gatherAccounts"
-      :visible.sync="showDeleteAccountDialog"
     />
     <DeleteDialog
       v-if="deleteDialog.visible"
+      v-model:visible="deleteDialog.visible"
       :account="deleteDialog.account"
-      :visible.sync="deleteDialog.visible"
       :closeable="false"
       @deleted="afterDeleteGatheredAccount"
     />
@@ -20,7 +20,7 @@
       :table-config="tableConfig"
       :tree-setting="treeSetting"
     />
-    <AccountDiscoverDialog :asset="discoveryDialog.asset" :visible.sync="discoveryDialog.visible" />
+    <AccountDiscoverDialog v-model:visible="discoveryDialog.visible" :asset="discoveryDialog.asset" />
   </div>
 </template>
 

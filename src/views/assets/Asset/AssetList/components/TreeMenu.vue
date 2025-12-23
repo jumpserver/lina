@@ -69,14 +69,14 @@
     </li>
     <NodeAssetsUpdateDialog
       v-if="nodeAssetsUpdateDialog.visible"
-      :visible.sync="nodeAssetsUpdateDialog.visible"
+      v-model:visible="nodeAssetsUpdateDialog.visible"
       v-bind="nodeAssetsUpdateDialog"
     />
     <Dialog
+      v-model:visible="nodeInfoDialogSetting.dialogVisible"
       :show-cancel="false"
       :show-confirm="false"
       :title="$tc('NodeInformation')"
-      :visible.sync="nodeInfoDialogSetting.dialogVisible"
       width="50%"
     >
       <el-row

@@ -1,13 +1,13 @@
 <template>
   <div>
     <Dialog
-      v-if="iVisible"
+      v-if="visible"
       :close-on-click-modal="false"
       :confirm-title="$tc('Add')"
       :destroy-on-close="true"
       :model="false"
       :title="$tc('SelectTemplate')"
-      :visible.sync="iVisible"
+      :visible="visible"
       v-bind="$attrs"
       width="800px"
       @cancel="handleCancel"
@@ -20,8 +20,8 @@
     </Dialog>
     <CreateAccountTemplateDialog
       v-if="isShowCreate"
-      :create-visible.sync="isShowCreate"
-      @onPerform="onCreateTemplatePerform"
+      v-model:create-visible="isShowCreate"
+      @on-perform="onCreateTemplatePerform"
       v-on="$listeners"
     />
   </div>
@@ -58,6 +58,7 @@ export default {
       default: true
     }
   },
+  emits: ['update:visible', 'onConfirm'],
   data() {
     const protocols = this.asset?.protocols?.map(i => i.name).toString() || ''
     return {
@@ -111,14 +112,6 @@ export default {
   computed: {
     refTable() {
       return this.$refs.listTable.$refs.ListTable.$refs.dataTable.$refs.dataTable
-    },
-    iVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$emit('update:visible', val)
-      }
     }
   },
   methods: {
@@ -126,7 +119,7 @@ export default {
       this.refTable.getList()
     },
     handleConfirm() {
-      this.iVisible = false
+      this.$emit('update:visible', false)
       // 过滤掉添加里还没有id的账号
       const templates = this.accounts.filter(i => i?.template).map(item => item.template)
       const newAddAccounts = this.accountsSelected.filter(i => {
@@ -144,7 +137,7 @@ export default {
       this.$emit('onConfirm', this.accounts)
     },
     handleCancel() {
-      this.iVisible = false
+      this.$emit('update:visible', false)
     },
     onAddClick() {
       this.isShowCreate = true

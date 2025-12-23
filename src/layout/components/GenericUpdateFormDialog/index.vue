@@ -1,13 +1,14 @@
 <template>
   <Dialog
-    v-if="iVisible"
-    v-model:visible="iVisible"
+    v-if="visible"
+    :visible="visible"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('UpdateSelected')"
     top="1vh"
     width="70%"
     v-bind="$attrs"
+    @update:visible="$emit('update:visible', $event)"
   >
     <el-alert v-if="tips" class="tips" type="success">{{ tips }}</el-alert>
     <el-row :gutter="20">
@@ -78,16 +79,6 @@ export default {
       iFormSetting: {}
     }
   },
-  computed: {
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
-    }
-  },
   mounted() {
     const defaultFormSetting = this.getDefaultFormSetting()
     this.iFormSetting = Object.assign({}, defaultFormSetting, this.formSetting)
@@ -133,7 +124,7 @@ export default {
           this.$axios.patch(url, validValues).then((res) => {
             vm.$emit('update')
             this.$message.success(msg)
-            this.iVisible = false
+            this.$emit('update:visible', false)
           }).catch(error => {
             this.$emit('submitError', error)
             const response = error.response

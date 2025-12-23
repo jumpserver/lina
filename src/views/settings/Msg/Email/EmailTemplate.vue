@@ -8,7 +8,7 @@
       :show-cancel="false"
       :show-confirm="false"
       :title="$tc('EmailTemplate')"
-      :visible.sync="visible"
+      :visible="visible"
       width="70%"
       @confirm="onConfirm()"
     >

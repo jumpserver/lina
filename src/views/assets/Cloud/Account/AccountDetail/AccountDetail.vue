@@ -22,13 +22,13 @@
       </template>
     </TwoCol>
     <Dialog
+      v-model:visible="showTimer"
       :close-on-click-modal="false"
       :destroy-on-close="true"
       :show-buttons="false"
       :title="$tc('Timer')"
-      :visible.sync="showTimer"
     >
-      <TimingPanel :object="object" :visible.sync="showTimer" />
+      <TimingPanel v-model:visible="showTimer" :object="object" />
     </Dialog>
   </div>
 </template>

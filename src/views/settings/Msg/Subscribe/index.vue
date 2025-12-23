@@ -47,9 +47,9 @@
 
       <SelectDialog
         v-if="dialogVisible"
+        v-model:visible="dialogVisible"
         :selected-users="dialogSelectedUsers"
         :title="$tc('EditRecipient')"
-        :visible.sync="dialogVisible"
         @cancel="dialogVisible=false"
         @submit="onDialogSelectSubmit"
       />

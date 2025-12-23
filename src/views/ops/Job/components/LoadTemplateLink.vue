@@ -1,6 +1,6 @@
 <template>
   <div>
-    <AdhocOpenDialog v-if="showOpenAdhocDialog" :visible.sync="showOpenAdhocDialog" @select="onSelectAdhoc" />
+    <AdhocOpenDialog v-if="showOpenAdhocDialog" v-model:visible="showOpenAdhocDialog" @select="onSelectAdhoc" />
     <el-link :underline="false" type="default" @click="onClick()">
       {{ $t('LoadTemplate') }}
     </el-link>

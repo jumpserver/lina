@@ -6,7 +6,7 @@
       v-if="visible"
       :table-config="tableConfig"
       :value="attrValue"
-      :visible.sync="visible"
+      :visible="visible"
       @confirm="onAttrDialogConfirm"
     />
     <el-button size="small" type="primary" @click="handleCreate">

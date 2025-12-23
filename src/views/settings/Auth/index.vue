@@ -1,5 +1,5 @@
 <template>
-  <TabPage v-if="!loading" :active-menu.sync="activeMenu" :submenu="submenu">
+  <TabPage v-if="!loading" v-model:active-menu="activeMenu" :submenu="submenu">
     <keep-alive>
       <component :is="activeMenu" />
     </keep-alive>

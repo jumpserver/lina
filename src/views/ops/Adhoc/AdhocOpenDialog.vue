@@ -1,8 +1,9 @@
 <template>
   <GenericListTableDialog
     :header-actions="headerActions"
-    :visible.sync="iVisible"
+    :visible="visible"
     v-bind="config"
+    @update:visible="$emit('update:visible', $event)"
   />
 </template>
 
@@ -24,6 +25,7 @@ export default {
       default: false
     }
   },
+  emits: ['update:visible', 'select'],
   data() {
     return {
       config: {
@@ -55,7 +57,7 @@ export default {
                     type: 'primary',
                     callback: ({ row }) => {
                       this.$emit('select', row)
-                      this.iVisible = false
+                      this.$emit('update:visible', false)
                     }
                   }
                 ]
@@ -73,16 +75,6 @@ export default {
         searchConfig: {
           getUrlQuery: false
         }
-      }
-    }
-  },
-  computed: {
-    iVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$emit('update:visible', val)
       }
     }
   }

@@ -13,27 +13,27 @@
       :table-config="iTableConfig"
     />
     <PlatformDialog
+      v-model:visible="showPlatform"
       :category="category"
-      :visible.sync="showPlatform"
       @select-platform="createAsset"
     />
     <AssetBulkUpdateDialog
       v-if="updateSelectedDialogSetting.visible"
+      v-model:visible="updateSelectedDialogSetting.visible"
       :category="category"
-      :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
       @update="handleAssetBulkUpdate"
     />
     <GatewayDialog
+      v-model:visible="gatewayVisible"
       :cell="gatewayCell"
       :port="gatewayPort"
-      :visible.sync="gatewayVisible"
     />
-    <AccountDiscoverDialog :asset="discoveryDialog.asset" :visible.sync="discoveryDialog.visible" />
+    <AccountDiscoverDialog v-model:visible="discoveryDialog.visible" :asset="discoveryDialog.asset" />
     <AccountCreateUpdate
       v-if="showAddDialog"
+      v-model:visible="showAddDialog"
       :asset="asset"
-      :visible.sync="showAddDialog"
       @add="addAccountSuccess"
     />
   </div>

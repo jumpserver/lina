@@ -12,7 +12,7 @@
     <GenericCreateUpdateForm
       :has-detail-in-msg="false"
       v-bind="settings"
-      @submitSuccess="onSuccess"
+      @submit-success="onSuccess"
     />
   </Dialog>
 </template>

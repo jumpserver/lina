@@ -13,9 +13,9 @@
     </TwoCol>
     <ViewSecret
       v-if="showViewSecretDialog"
+      v-model:visible="showViewSecretDialog"
       :account="account"
       :url="secretUrl"
-      :visible.sync="showViewSecretDialog"
     />
   </div>
 </template>

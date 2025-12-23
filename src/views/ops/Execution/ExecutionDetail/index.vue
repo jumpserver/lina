@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage
-    :active-menu.sync="config.activeMenu"
-    :object.sync="JobExecutionDetail"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="JobExecutionDetail"
     v-bind="config"
     v-on="$listeners"
   >

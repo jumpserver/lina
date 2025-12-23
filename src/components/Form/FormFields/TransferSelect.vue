@@ -11,9 +11,9 @@
     />
     <Dialog
       v-if="showTransfer"
+      v-model:visible="showTransfer"
       :close-on-click-modal="false"
       :title="label"
-      :visible.sync="showTransfer"
       :disabled-status="!isLoaded"
       class="the-dialog"
       width="730px"
@@ -21,7 +21,12 @@
       @confirm="handleTransConfirm"
       v-on="$listeners"
     >
-      <krryPaging v-if="selectInitialized" ref="pageTransfer" class="transfer" v-bind="pagingTransfer" />
+      <krryPaging
+        v-if="selectInitialized"
+        ref="pageTransfer"
+        class="transfer"
+        v-bind="pagingTransfer"
+      />
     </Dialog>
   </div>
 </template>
@@ -64,17 +69,20 @@ export default {
   },
   data() {
     const vm = this
-    const transformOption = vm.transformOption || vm.ajax.transformOption || ((item) => {
-      return { label: item.name, value: item.id }
-    })
+    const transformOption =
+      vm.transformOption ||
+      vm.ajax.transformOption ||
+      (item => {
+        return { label: item.name, value: item.id }
+      })
     const url = vm.url || vm.ajax.url
     const getPageData = async ({ pageIndex, pageSize, keyword }) => {
       const limit = pageSize
       const offset = (pageIndex - 1) * pageSize
       const params = {
-        'limit': limit,
-        'offset': offset,
-        'fields_size': 'mini'
+        limit: limit,
+        offset: offset,
+        fields_size: 'mini'
       }
       if (keyword) {
         params['search'] = keyword
@@ -147,11 +155,13 @@ export default {
     },
     handleFocus() {
       this.$refs.select2.selectRef.blur()
-      this.pagingTransfer.selectedData = this.$refs.select2.iOptions.map(item => {
-        return { id: item.value, label: item.label }
-      }).filter(item => {
-        return this.iValue.includes(item.id)
-      })
+      this.pagingTransfer.selectedData = this.$refs.select2.iOptions
+        .map(item => {
+          return { id: item.value, label: item.label }
+        })
+        .filter(item => {
+          return this.iValue.includes(item.id)
+        })
       this.showTransfer = true
     },
     handleSelectInitialed() {

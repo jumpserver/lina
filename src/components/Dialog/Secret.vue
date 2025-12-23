@@ -1,8 +1,8 @@
 <template>
   <Dialog
+    v-model:visible="iVisible"
     :show-cancel="false"
     :title="title"
-    :visible.sync="visible"
     :close-on-click-modal="false"
     width="700px"
     @close="onClose"
@@ -30,12 +30,14 @@
 import i18n from '@/i18n/i18n'
 import { copy } from '@/utils/common/index'
 import Dialog from '@/components/Dialog/index'
+import vModelMixin from '@/utils/vue/vModelMixin'
 
 export default {
   name: 'Secret',
   components: {
     Dialog
   },
+  mixins: [vModelMixin('visible')],
   props: {
     title: {
       type: String,
@@ -65,11 +67,10 @@ export default {
     }
   }
 }
-
 </script>
 
-<style lang='scss' scoped>
- .secret {
+<style lang="scss" scoped>
+.secret {
   color: #2b2f3a;
   margin-top: 20px;
 }

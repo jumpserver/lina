@@ -1,12 +1,12 @@
 <template>
   <Dialog
+    v-model:visible="showImportDialog"
     :close-on-click-modal="false"
     :destroy-on-close="true"
     :loading-status="loadStatus"
     :show-cancel="false"
     :show-confirm="false"
     :title="importTitle"
-    :visible.sync="showImportDialog"
     class="importDialog"
     width="900px"
     @close="handleImportCancel"

@@ -1,8 +1,8 @@
 <template>
   <IBox>
     <GenericCreateUpdateForm submit-method="patch" v-bind="config" />
-    <WatermarkHelpDialog :variables="sessionVariables" :visible.sync="showSessionHelpDialog" />
-    <WatermarkHelpDialog :variables="consoleVariables" :visible.sync="showConsoleHelpDialog" />
+    <WatermarkHelpDialog v-model:visible="showSessionHelpDialog" :variables="sessionVariables" />
+    <WatermarkHelpDialog v-model:visible="showConsoleHelpDialog" :variables="consoleVariables" />
   </IBox>
 </template>
 

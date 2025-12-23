@@ -8,9 +8,9 @@
       {{ content }}
     </el-link>
     <Dialog
+      v-model:visible="regionVisible"
       :destroy-on-close="true"
       :title="$tc('Region')"
-      :visible.sync="regionVisible"
       :show-cancel="false"
       width="60%"
       @confirm="regionVisible=false"

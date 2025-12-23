@@ -1,5 +1,5 @@
 <template>
-  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu">
+  <TabPage v-model:active-menu="config.activeMenu" :submenu="config.submenu">
     <template #badge>
       <el-badge
         v-if="props.tab === 'AssignedTicketList'"

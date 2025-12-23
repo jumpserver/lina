@@ -4,9 +4,9 @@
     <Dialog
       :show-buttons="false"
       :title="$tc('General')"
-      :visible.sync="visible"
+      :visible="visible"
     >
-      <GenericCreateUpdateForm v-bind="form" @submitSuccess="visible=false" />
+      <GenericCreateUpdateForm v-bind="form" @submit-success="visible=false" />
     </Dialog>
   </div>
 </template>

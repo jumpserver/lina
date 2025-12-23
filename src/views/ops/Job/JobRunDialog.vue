@@ -1,10 +1,10 @@
 <template>
   <Dialog
     v-if="iVisible && ready"
+    v-model:visible="iVisible"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('RunJob')"
-    :visible.sync="iVisible"
     top="1vh"
     width="50%"
   >
@@ -33,11 +33,13 @@
 
 <script>
 import Dialog from '@/components/Dialog'
+import vModelMixin from '@/utils/vue/vModelMixin'
 
 export default {
   components: {
     Dialog
   },
+  mixins: [vModelMixin('visible')],
   props: {
     visible: {
       type: Boolean,
@@ -48,21 +50,12 @@ export default {
       default: () => ({})
     }
   },
+  emits: ['update:visible', 'submit'],
   data() {
     return {
       ready: false,
       vars: {},
       form: {}
-    }
-  },
-  computed: {
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
     }
   },
   mounted() {
@@ -75,7 +68,7 @@ export default {
   methods: {
     onSubmit() {
       this.$emit('submit', this.item, JSON.stringify(this.form))
-      this.iVisible = false
+      this.$emit('update:visible', false)
     }
   }
 }

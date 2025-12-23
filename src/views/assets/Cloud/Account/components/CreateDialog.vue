@@ -7,7 +7,7 @@
     :show-buttons="false"
     :show-close="false"
     :title="$tc('CloudSyncConfig')"
-    :visible.sync="iVisible"
+    :visible="visible"
     v-bind="$attrs"
     v-on="$listeners"
   >
@@ -24,12 +24,12 @@
         <div class="right-content">
           <component
             :is="activeMenu"
-            :active.sync="active"
-            :object.sync="account"
+            v-model:active="active"
+            v-model:object="account"
+            v-model:selected="iSelected"
             :provider="iSelected"
             :providers="providers"
-            :selected.sync="iSelected"
-            :visible.sync="iVisible"
+            :visible="visible"
           />
         </div>
       </el-col>
@@ -66,6 +66,7 @@ export default {
       default: () => false
     }
   },
+  emits: ['update:visible'],
   data() {
     return {
       activeMenuMap: { 0: 'ProviderPanel', 1: 'AuthPanel', 2: 'AssetPanel', 3: 'ResultPanel' },
@@ -85,14 +86,6 @@ export default {
       },
       get() {
         return this.selected
-      }
-    },
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
       }
     }
   },

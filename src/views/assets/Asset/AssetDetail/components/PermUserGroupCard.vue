@@ -35,10 +35,10 @@
       </table>
     </IBox>
     <Drawer
+      v-model:visible="drawerVisible"
       :component="detailDrawer"
       :has-footer="false"
       :title="title"
-      :visible.sync="drawerVisible"
     />
   </div>
 </template>

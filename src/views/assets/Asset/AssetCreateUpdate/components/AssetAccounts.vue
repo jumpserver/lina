@@ -63,23 +63,23 @@
         </el-button>
       </div>
       <AddAccountDialog
+        v-model:visible="addAccountDialogVisible"
         :account="account"
         :accounts="accounts"
         :platform="platform"
-        :visible.sync="addAccountDialogVisible"
       />
       <AccountTemplateDialog
         v-if="templateDialogVisible"
+        v-model:visible="templateDialogVisible"
         :accounts="accounts"
-        :visible.sync="templateDialogVisible"
       />
     </div>
 
     <Drawer
+      v-model:visible="drawerVisible"
       :title="$t('Account')"
       :component="drawerComponent"
       :has-footer="false"
-      :visible.sync="drawerVisible"
       class="detail-drawer"
     />
   </div>

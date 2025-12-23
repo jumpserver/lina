@@ -11,22 +11,22 @@
         <QuickActions :actions="quickActions" type="primary" />
         <ViewSecret
           v-if="showViewSecretDialog"
+          v-model:visible="showViewSecretDialog"
           :account="object"
           :url="secretUrl"
-          :visible.sync="showViewSecretDialog"
         />
         <AutomationParamsForm
+          v-model:visible="autoPushVisible"
           :has-button="false"
           :method="pushAccountMethod"
-          :visible.sync="autoPushVisible"
-          @canSetting="onCanSetting"
+          @can-setting="onCanSetting"
           @submit="onSubmit"
         />
       </template>
     </TwoCol>
     <el-drawer
+      v-model:visible="pamDrawerShow"
       :append-to-body="true"
-      :visible.sync="pamDrawerShow"
       :with-header="false"
       size="50%"
     >

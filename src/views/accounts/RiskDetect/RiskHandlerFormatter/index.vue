@@ -36,11 +36,11 @@
       </el-button>
     </el-tooltip>
     <ReviewDraw
+      v-model:visible="reviewDrawer"
       :row="row"
       :rows="rows"
       :selected-rows="selectedRows"
       :show-buttons="reviewButtons"
-      :visible.sync="reviewDrawer"
       @handle="handleDrawerEvent"
     />
     <ProcessingDialog :visible="processing" />

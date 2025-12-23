@@ -9,7 +9,7 @@
     />
     <UploadDialog
       v-if="uploadDialogVisible"
-      :visible.sync="uploadDialogVisible"
+      v-model:visible="uploadDialogVisible"
       @completed="refreshTable"
     />
   </div>

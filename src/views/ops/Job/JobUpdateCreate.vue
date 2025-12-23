@@ -1,6 +1,6 @@
 <template>
   <div v-if="ready">
-    <VariableHelpDialog :visible.sync="showHelpDialog" />
+    <VariableHelpDialog v-model:visible="showHelpDialog" />
     <GenericCreateUpdatePage ref="form" v-bind="$data" />
   </div>
 </template>

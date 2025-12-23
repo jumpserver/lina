@@ -4,9 +4,10 @@
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('SelectPlatform')"
-    :visible.sync="iVisible"
+    :visible="visible"
     size="700px"
     top="1vh"
+    @update:visible="$emit('update:visible', $event)"
   >
     <template #title>
       <div class="drawer-title">
@@ -72,6 +73,7 @@ export default {
       default: 'all'
     }
   },
+  emits: ['update:visible', 'select-platform'],
   data() {
     return {
       platforms: [],
@@ -93,14 +95,6 @@ export default {
     }
   },
   computed: {
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
-    },
     iPlatforms() {
       let recentPlatforms = {}
       let platforms = {}
@@ -139,7 +133,7 @@ export default {
       return loadPlatformIcon(platform.name, platform.type.value)
     },
     onConfirm() {
-      this.iVisible = false
+      this.$emit('update:visible', false)
     },
     randomBorderColor(i) {
       const length = this.bottomColors.length
@@ -153,7 +147,7 @@ export default {
     },
     handleManagePlatform() {
       this.$router.push({ name: 'PlatformList' })
-      this.iVisible = false
+      this.$emit('update:visible', false)
     }
   }
 }

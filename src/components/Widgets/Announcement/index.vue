@@ -2,7 +2,7 @@
   <div>
     <el-dialog
       v-if="enabled && showModal"
-      :visible.sync="dialogVisible"
+      v-model:visible="dialogVisible"
       :title="title"
       :close-on-click-modal="false"
       :close-on-press-escape="false"

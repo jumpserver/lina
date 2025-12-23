@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage
-    :active-menu.sync="config.activeMenu"
-    :object.sync="sessionData"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="sessionData"
     v-bind="config"
   >
     <keep-alive>

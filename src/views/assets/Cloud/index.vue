@@ -1,5 +1,5 @@
 <template>
-  <TabPage :active-menu.sync="config.activeMenu" v-bind="config" />
+  <TabPage v-model:active-menu="config.activeMenu" v-bind="config" />
 </template>
 
 <script>

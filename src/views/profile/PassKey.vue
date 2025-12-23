@@ -6,9 +6,9 @@
       :table-config="tableConfig"
     />
     <Dialog
+      v-model:visible="dialogVisible"
       :show-buttons="false"
       :title="$tc('AddPassKey')"
-      :visible.sync="dialogVisible"
       width="600px"
     >
       <el-alert v-if="!isLocalUser" :closable="false" class="source-alert" type="error">

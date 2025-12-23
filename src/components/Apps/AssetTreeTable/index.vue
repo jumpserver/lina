@@ -1,7 +1,7 @@
 <template>
   <TreeTable
     ref="TreeList"
-    :active-menu.sync="treeTableConfig.activeMenu"
+    v-model:active-menu="treeTableConfig.activeMenu"
     :component="treeComponent"
     :table-config="tableConfig"
     :tree-tab-config="treeTableConfig"

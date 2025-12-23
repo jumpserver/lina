@@ -1,7 +1,7 @@
 <template>
   <div>
     <IBox>
-      <GenericCreateUpdateForm v-bind="$data" @submitSuccess="submitSuccess" />
+      <GenericCreateUpdateForm v-bind="$data" @submit-success="submitSuccess" />
     </IBox>
   </div>
 </template>

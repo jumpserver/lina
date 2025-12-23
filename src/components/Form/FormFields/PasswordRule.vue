@@ -4,9 +4,9 @@
       {{ $t('Setting') }}
     </el-button>
     <Dialog
+      v-model:visible="iVisible"
       :destroy-on-close="true"
       :title="$tc('PasswordRule')"
-      :visible.sync="visible"
       width="600px"
       @cancel="handleCancel"
       @confirm="handleConfirm"
@@ -20,10 +20,12 @@
 <script>
 import Dialog from '@/components/Dialog/index.vue'
 import AutoDataForm from '@/components/Form/AutoDataForm/index.vue'
+import vModelMixin from '@/utils/vue/vModelMixin'
 
 export default {
   name: 'PasswordRule',
   components: { Dialog, AutoDataForm },
+  mixins: [vModelMixin('visible')],
   props: {
     value: {
       type: Object,

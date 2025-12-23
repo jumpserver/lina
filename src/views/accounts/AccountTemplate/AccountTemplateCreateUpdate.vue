@@ -1,7 +1,7 @@
 <template>
   <GenericCreateUpdatePage
     v-bind="$data"
-    @getObjectDone="getObjectDone"
+    @get-object-done="getObjectDone"
   />
 </template>
 

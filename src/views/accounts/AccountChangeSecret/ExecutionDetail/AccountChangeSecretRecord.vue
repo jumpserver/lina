@@ -2,8 +2,8 @@
   <div>
     <RecordViewSecret
       v-if="showViewSecretDialog"
+      v-model:visible="showViewSecretDialog"
       :url="secretUrl"
-      :visible.sync="showViewSecretDialog"
     />
     <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
   </div>

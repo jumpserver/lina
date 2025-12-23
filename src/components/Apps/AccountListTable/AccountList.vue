@@ -9,42 +9,42 @@
     />
     <ViewSecret
       v-if="showViewSecretDialog"
+      v-model:visible="showViewSecretDialog"
       :account="account"
       :url="secretUrl"
-      :visible.sync="showViewSecretDialog"
     />
     <UpdateSecretInfo
       v-if="showUpdateSecretDialog"
+      v-model:visible="showUpdateSecretDialog"
       :account="account"
-      :visible.sync="showUpdateSecretDialog"
       @update-auth-done="onUpdateAuthDone"
     />
     <AccountCreateUpdate
       v-if="showAddDialog"
+      v-model:visible="showAddDialog"
       :account="account"
       :add-template="addTemplate"
       :asset="iAsset"
       :title="accountCreateUpdateTitle"
-      :visible.sync="showAddDialog"
       @add="addAccountSuccess"
       @bulk-create-done="showBulkCreateResult($event)"
     />
     <ResultDialog
       v-if="showResultDialog"
+      v-model:visible="showResultDialog"
       :result="createAccountResults"
-      :visible.sync="showResultDialog"
       @close-all="closeAll"
     />
     <AccountBulkUpdateDialog
       v-if="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
-      :visible.sync="updateSelectedDialogSetting.visible"
+      v-model:visible="updateSelectedDialogSetting.visible"
       @update="handleAccountBulkUpdate"
     />
     <PasswordHistoryDialog
       v-if="showPasswordHistoryDialog"
+      v-model:visible="showPasswordHistoryDialog"
       :account="currentAccountColumn"
-      :visible.sync="showPasswordHistoryDialog"
     />
   </div>
 </template>

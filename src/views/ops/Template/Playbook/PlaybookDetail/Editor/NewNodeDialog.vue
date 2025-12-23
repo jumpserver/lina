@@ -1,12 +1,13 @@
 <template>
   <Dialog
-    v-if="iVisible"
+    v-if="visible"
     :show-cancel="false"
     :show-confirm="true"
     :title="$tc('NewFile')"
-    :visible.sync="iVisible"
+    :visible="visible"
     top="1vh"
     width="40%"
+    @update:visible="$emit('update:visible', $event)"
     @confirm="onConfirm"
   >
     <el-form>
@@ -30,19 +31,10 @@ export default {
       default: false
     }
   },
+  emits: ['update:visible', 'confirm'],
   data() {
     return {
       name: ''
-    }
-  },
-  computed: {
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
     }
   },
   mounted() {
@@ -50,7 +42,7 @@ export default {
   methods: {
     onConfirm() {
       this.$emit('confirm', this.name)
-      this.iVisible = false
+      this.$emit('update:visible', false)
     }
   }
 }

@@ -3,10 +3,11 @@
     :show-cancel="false"
     :show-confirm="false"
     :title="title"
-    :visible.sync="iVisible"
+    :visible="visible"
     class="help-dialog"
     top="1vh"
     width="50%"
+    @update:visible="$emit('update:visible', $event)"
   >
     <p>{{ $t('VariableHelpText') }}</p>
     <table border="1" class="help-table">
@@ -38,20 +39,11 @@ export default {
       default: false
     }
   },
+  emits: ['update:visible'],
   data() {
     return {
       title: this.$t('BuiltinVariable'),
       variables: {}
-    }
-  },
-  computed: {
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
     }
   },
   mounted() {

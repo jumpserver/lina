@@ -9,13 +9,13 @@
     />
     <BatchResolveDialog
       v-if="batchResolveDialog.visible"
-      :visible.sync="batchResolveDialog.visible"
+      v-model:visible="batchResolveDialog.visible"
       v-bind="batchResolveDialog"
     />
     <RiskScanDialog
       v-if="detectDialog.visible"
+      v-model:visible="detectDialog.visible"
       :asset="detectDialog.asset"
-      :visible.sync="detectDialog.visible"
     />
   </div>
 </template>

@@ -9,10 +9,10 @@
     />
     <ViewSecret
       v-if="showViewSecretDialog"
+      v-model:visible="showViewSecretDialog"
       :account="account"
       :show-password-record="false"
       :url="secretUrl"
-      :visible.sync="showViewSecretDialog"
       type="template"
     />
   </div>

@@ -74,12 +74,12 @@
     <AssetSelectDialog
       v-if="dialogVisible"
       ref="dialog"
+      v-model:visible="dialogVisible"
       :base-node-url="baseNodeUrl"
       :base-url="baseUrl"
       :tree-setting="treeSetting"
       :tree-url-query="treeUrlQuery"
       :value="selectAssets"
-      :visible.sync="dialogVisible"
       v-bind="$attrs"
       @cancel="handleCancel"
       @confirm="handleConfirm"

@@ -3,19 +3,19 @@
     <SmallCard ref="table" class="account-table" v-bind="table" />
     <CreateDialog
       v-if="visible"
-      :visible.sync="visible"
+      :visible="visible"
       v-bind="providerConfig"
     />
     <UpdateDialog
       v-if="updateVisible"
+      v-model:visible="updateVisible"
       :object="object"
-      :visible.sync="updateVisible"
-      @submitSuccess="onSubmitSuccess"
+      @submit-success="onSubmitSuccess"
     />
     <SyncDialog
       v-if="onlineSyncVisible"
+      v-model:visible="onlineSyncVisible"
       :object="object"
-      :visible.sync="onlineSyncVisible"
     />
   </div>
 </template>

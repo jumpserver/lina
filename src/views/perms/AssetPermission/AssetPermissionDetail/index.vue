@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage
-    :active-menu.sync="config.activeMenu"
-    :object.sync="AssetPermission"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="AssetPermission"
     v-bind="config"
     v-on="$listeners"
     @tab-click="handleTabClick"

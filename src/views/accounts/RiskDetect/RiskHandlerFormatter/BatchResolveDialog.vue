@@ -1,5 +1,11 @@
 <template>
-  <Dialog :destroy-on-close="true" :show-buttons="false" :title="$tc('ResolveSelected')" :visible.sync="iVisible">
+  <Dialog
+    :destroy-on-close="true"
+    :show-buttons="false"
+    :visible="visible"
+    :title="$tc('ResolveSelected')"
+    @update:visible="$emit('update:visible', $event)"
+  >
     <div>
       <el-form class="el-form">
         <el-form-item class="risk-select" prop="selected">
@@ -71,7 +77,7 @@ export default {
           {
             prop: 'asset',
             label: this.$t('Asset'),
-            formatter: (row) => row.asset.name
+            formatter: row => row.asset.name
           },
           {
             prop: 'username',
@@ -80,26 +86,18 @@ export default {
           {
             prop: 'risk',
             label: this.$t('Risk'),
-            formatter: (row) => row.risk.label
+            formatter: row => row.risk.label
           },
           {
             prop: 'status',
             label: this.$t('Status'),
-            formatter: (row) => row.status.label
+            formatter: row => row.status.label
           }
         ]
       }
     }
   },
   computed: {
-    iVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$emit('update:visible', val)
-      }
-    },
     riskTypes() {
       const types = {}
       for (const item of this.unconfirmedRisks) {
@@ -125,7 +123,9 @@ export default {
   watch: {
     riskSelected(val) {
       if (val) {
-        this.tableConfig.totalData = this.unconfirmedRisks.filter(item => item.risk.value === this.riskSelected)
+        this.tableConfig.totalData = this.unconfirmedRisks.filter(
+          item => item.risk.value === this.riskSelected
+        )
       } else {
         this.tableConfig.totalData = this.unconfirmedRisks.filter(item => item.status.value === '0')
       }
@@ -158,7 +158,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .el-form {
   :deep(.el-form-item) {
     margin-bottom: 5px;
@@ -179,7 +178,5 @@ export default {
       padding: 8px;
     }
   }
-
 }
-
 </style>

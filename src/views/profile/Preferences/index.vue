@@ -1,7 +1,7 @@
 <template>
-  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="user" v-bind="config" v-on="$listeners">
+  <GenericDetailPage v-model:active-menu="config.activeMenu" v-model:object="user" v-bind="config" v-on="$listeners">
     <keep-alive>
-      <component :is="config.activeMenu" :object="user" @update:activeMenu="handleUpdate" />
+      <component :is="config.activeMenu" :object="user" @update:active-menu="handleUpdate" />
     </keep-alive>
   </GenericDetailPage>
 </template>

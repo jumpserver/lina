@@ -36,9 +36,9 @@
     />
     <Drawer
       v-if="detailDrawer"
+      v-model:visible="detailDrawerVisible"
       :component="detailDrawer"
       :title="detailTitle"
-      :visible.sync="detailDrawerVisible"
     />
   </div>
 </template>

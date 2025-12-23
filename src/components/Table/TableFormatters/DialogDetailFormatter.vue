@@ -4,9 +4,9 @@
       {{ iTitle }}
     </el-link>
     <Dialog
+      v-model:visible="dialogVisible"
       :show-cancel="false"
       :title="dialogTitle"
-      :visible.sync="dialogVisible"
       width="60%"
       @confirm="onCancel"
     >

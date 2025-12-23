@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage
-    :active-menu.sync="config.activeMenu"
-    :object.sync="taskDetail"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="taskDetail"
     :title="getTitle"
     v-bind="config"
     v-on="$listeners"

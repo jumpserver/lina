@@ -14,10 +14,10 @@
     </el-link>
     <Drawer
       v-if="formatterArgs.drawer && drawerComponent && drawerVisible"
+      v-model:visible="drawerVisible"
       :component="drawerComponent"
       :has-footer="false"
       :title="drawerTitle"
-      :visible.sync="drawerVisible"
       class="detail-drawer"
     />
   </div>

@@ -11,7 +11,7 @@
         <el-dropdown-item command="about">{{ $tc('About') }}</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
-    <About :visible.sync="visible" />
+    <About v-model:visible="visible" />
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" @getObjectDone="disableMFAFieldIfNeed" />
+  <GenericCreateUpdatePage v-bind="$data" @get-object-done="disableMFAFieldIfNeed" />
 </template>
 
 <script>

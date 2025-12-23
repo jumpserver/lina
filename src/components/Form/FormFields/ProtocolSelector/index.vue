@@ -57,9 +57,9 @@
     />
     <ProtocolSettingDialog
       v-if="showDialog"
+      v-model:visible="showDialog"
       :disabled="settingReadonly || readonly"
       :protocol="currentProtocol"
-      :visible.sync="showDialog"
       @confirm="handleSettingConfirm"
     />
   </div>

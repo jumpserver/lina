@@ -10,10 +10,10 @@
       @click="onSetting"
     />
     <Dialog
+      v-model:visible="isVisible"
       :show-cancel="false"
       :show-confirm="false"
       :title="title"
-      :visible.sync="isVisible"
       width="60%"
       @close="onDialogClose"
     >

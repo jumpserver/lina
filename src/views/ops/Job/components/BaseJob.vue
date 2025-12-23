@@ -7,12 +7,12 @@
       :detail-drawer="detailDrawer"
       :table-config="tableConfig"
     />
-    <JobRunDialog v-if="showJobRunDialog" :item="item" :visible.sync="showJobRunDialog" @submit="runJob" />
+    <JobRunDialog v-if="showJobRunDialog" v-model:visible="showJobRunDialog" :item="item" @submit="runJob" />
     <SetVariableDialog
       v-if="showVariableDialog"
+      v-model:visible="showVariableDialog"
       :form-data="formData"
       :query-param="'job=' + item.id"
-      :visible.sync="showVariableDialog"
       @submit="runJobWithParams"
     />
   </div>

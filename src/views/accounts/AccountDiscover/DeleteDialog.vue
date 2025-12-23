@@ -4,9 +4,10 @@
       :destroy-on-close="true"
       :show-cancel="false"
       :title="$tc('DeleteGatherAccountTitle')"
-      :visible.sync="iVisible"
+      :visible="visible"
       v-bind="$attrs"
       width="600px"
+      @update:visible="$emit('update:visible', $event)"
       @confirm="handleConfirm"
       v-on="$listeners"
     >
@@ -45,8 +46,8 @@
     </Dialog>
     <RemoveAccount
       v-if="removeAccountTask.visible"
+      v-model:visible="removeAccountTask.visible"
       :accounts="removeAccountTask.accounts"
-      :visible.sync="removeAccountTask.visible"
     />
   </div>
 </template>
@@ -91,6 +92,7 @@ export default {
       default: true
     }
   },
+  emits: ['update:visible', 'deleted'],
   data() {
     return {
       removeAccountTask: {
@@ -100,16 +102,6 @@ export default {
       iDeleteRemote: this.defaultDeleteRemote,
       iDeleteAccount: this.defaultDeleteAccount,
       assetAccounts: []
-    }
-  },
-  computed: {
-    iVisible: {
-      set(item) {
-        this.$emit('update:visible', item)
-      },
-      get() {
-        return this.visible
-      }
     }
   },
   mounted() {
@@ -129,7 +121,7 @@ export default {
         this.$message.success(this.$tc('DeleteSuccessMsg'))
         this.$emit('deleted', res)
         setTimeout(() => {
-          this.iVisible = false
+          this.$emit('update:visible', false)
         }, 100)
       })
     }

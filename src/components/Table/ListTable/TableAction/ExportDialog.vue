@@ -2,9 +2,9 @@
   <div>
     <Dialog
       v-if="exportDialogShow"
+      v-model:visible="exportDialogShow"
       :destroy-on-close="true"
       :title="$tc('Export')"
-      :visible.sync="exportDialogShow"
       width="700px"
       @close="handleExportCancel"
       @cancel="handleExportCancel()"

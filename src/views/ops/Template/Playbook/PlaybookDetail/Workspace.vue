@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NewNodeDialog v-if="createDialogVisible" :visible.sync="createDialogVisible" @confirm="doCreate" />
+    <NewNodeDialog v-if="createDialogVisible" v-model:visible="createDialogVisible" @confirm="doCreate" />
     <TreeTable ref="TreeTable" :tree-setting="treeSetting">
       <template v-if="!disableEdit" slot="rMenu">
         <li id="m_create_file" class="rmenu" tabindex="-1" @click="onCreate('file')">
@@ -26,9 +26,9 @@
               :name="key"
             >
               <CodeEditor
+                v-model="editor.value"
                 :options="cmOptions"
                 :toolbar="toolbar"
-                :value.sync="editor.value"
                 style="margin-bottom: 20px"
               />
             </el-tab-pane>
@@ -37,7 +37,7 @@
           <el-form ref="form" label-position="left" label-width="30px">
             <div class="form-content">
               <el-form-item label="" prop="variable">
-                <Variable :value.sync="variables" :disable-edit.sync="disableEdit" @input="setVariable" />
+                <Variable v-model="variables" v-model:disable-edit="disableEdit" @input="setVariable" />
               </el-form-item>
             </div>
           </el-form>

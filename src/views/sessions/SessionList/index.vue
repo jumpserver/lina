@@ -1,5 +1,5 @@
 <template>
-  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu">
+  <TabPage v-model:active-menu="config.activeMenu" :submenu="config.submenu">
     <div slot="title">
       {{ Title }}
     </div>

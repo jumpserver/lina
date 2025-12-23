@@ -2,10 +2,10 @@
   <div>
     <Dialog
       v-if="isVisible"
+      v-model:visible="isVisible"
       :show-cancel="false"
       :show-confirm="false"
       :title="$tc('TemplateCreate')"
-      :visible.sync="isVisible"
       width="70%"
     >
       <GenericCreateUpdateForm v-bind="formConfig" />

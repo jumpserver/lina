@@ -9,7 +9,7 @@
       :create-drawer="createDrawer"
     />
     <PermBulkUpdateDialog
-      :visible.sync="updateSelectedDialogSetting.visible"
+      v-model:visible="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
       @update="handlePermBulkUpdate"
     />

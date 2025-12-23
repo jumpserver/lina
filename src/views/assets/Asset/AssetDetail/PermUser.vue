@@ -9,7 +9,7 @@
       </template>
     </TwoCol>
     <GenericListTableDialog
-      :visible.sync="GenericListTableDialogConfig.visible"
+      v-model:visible="GenericListTableDialogConfig.visible"
       v-bind="GenericListTableDialogConfig"
     />
   </div>

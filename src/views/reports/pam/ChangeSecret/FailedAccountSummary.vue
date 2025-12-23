@@ -2,8 +2,8 @@
   <div>
     <RecordViewSecret
       v-if="showViewSecretDialog"
+      v-model:visible="showViewSecretDialog"
       :url="secretUrl"
-      :visible.sync="showViewSecretDialog"
     />
     <HomeCard ref="HomeCard" :table-config="tableConfig" class="failed-accounts" v-bind="cardConfig" />
   </div>

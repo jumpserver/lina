@@ -1,5 +1,5 @@
 <template>
-  <TabPage :active-menu.sync="activeMenu" :submenu="submenu">
+  <TabPage v-model:active-menu="activeMenu" :submenu="submenu">
     <div>
       <el-alert v-if="currentTime" :closable="false" type="success">
         {{ `${$t('ServerTime')}: ${currentTime}` }}

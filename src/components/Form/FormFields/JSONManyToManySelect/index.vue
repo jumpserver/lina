@@ -23,17 +23,17 @@
 
     <AttrFormDialog
       v-if="attrFormVisible"
+      v-model:visible="attrFormVisible"
       :attrs="attrs"
       :attrs-added="attrsAdded"
       :form="attrForm"
-      :visible.sync="attrFormVisible"
       @confirm="handleAttrDialogConfirm"
     />
     <AttrMatchResultDialog
       v-if="attrMatchTableVisible"
+      v-model:visible="attrMatchTableVisible"
       :attrs="attrs"
       :url="attrMatchTableUrl"
-      :visible.sync="attrMatchTableVisible"
     />
   </div>
 </template>

@@ -1,12 +1,12 @@
 <template>
   <div>
     <GenericListPage ref="GenericListPage" :header-actions="headerActions" :table-config="tableConfig" />
-    <BindDialog v-if="bindVisible" :label="label" :visible.sync="bindVisible" @bind-success="handleDialogConfirm" />
+    <BindDialog v-if="bindVisible" v-model:visible="bindVisible" :label="label" @bind-success="handleDialogConfirm" />
     <LabelResourcesDialog
       v-if="resDialogVisible"
+      v-model:visible="resDialogVisible"
       :label="label"
-      :visible.sync="resDialogVisible"
-      @addResource="handleAddResource"
+      @add-resource="handleAddResource"
     />
   </div>
 </template>

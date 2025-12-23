@@ -9,9 +9,9 @@
       :table-config="tableConfig"
     />
     <GatewayTestDialog
+      v-model:visible="testConfig.visible"
       :cell="testConfig.cell"
       :port="testConfig.port"
-      :visible.sync="testConfig.visible"
     />
     <AddGatewayDialog
       v-if="addGatewaySetting.addGatewayDialogVisible"

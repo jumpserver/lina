@@ -4,7 +4,7 @@
     <template #right>
       <IBox :title="$tc('Variable')">
         <Variable
-          :value.sync="object.variable"
+          v-model="object.variable"
           :disable-edit="disableEdit"
           @input="updateVariable"
         />

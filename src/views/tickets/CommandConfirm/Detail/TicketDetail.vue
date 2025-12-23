@@ -3,8 +3,8 @@
     <GenericTicketDetail :object="object" :special-card-items="specialCardItems" />
 
     <Drawer
-      :title="this.$t('Session')"
-      :visible.sync="drawerVisible"
+      v-model:visible="drawerVisible"
+      :title="$t('Session')"
       :has-footer="false"
       :component="SessionDetail"
     />

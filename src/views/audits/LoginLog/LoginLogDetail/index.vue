@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage
-    :active-menu.sync="config.activeMenu"
-    :object.sync="LogDetail"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="LogDetail"
     v-bind="config"
     v-on="$listeners"
   >

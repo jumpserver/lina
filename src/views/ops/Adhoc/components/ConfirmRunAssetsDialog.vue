@@ -1,11 +1,12 @@
 <template>
   <Dialog
     :title="$t('ConfirmRunningAssets')"
-    :visible.sync="iVisible"
+    :visible="visible"
     :show-buttons="!isRunning"
     :show-confirm="true"
     :show-cancel="true"
     width="1200px"
+    @update:visible="$emit('update:visible', $event)"
     @confirm="onConfirm"
     @cancel="onCancel"
   >
@@ -76,6 +77,7 @@ export default {
       default: false
     }
   },
+  emits: ['update:visible', 'submit'],
   data() {
     return {
       checkAll: true,
@@ -84,14 +86,6 @@ export default {
     }
   },
   computed: {
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
-    },
     runnableAssets() {
       return this.assets.runnable
     },

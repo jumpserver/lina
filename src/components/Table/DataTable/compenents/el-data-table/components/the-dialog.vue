@@ -2,7 +2,7 @@
   <el-dialog
     ref="dialog"
     :title="title"
-    :visible.sync="visible"
+    :visible="visible"
     v-bind="dialogAttrs"
     @close="resetFields"
   >

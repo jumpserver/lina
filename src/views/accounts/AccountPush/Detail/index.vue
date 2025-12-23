@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="plan" v-bind="config">
+  <GenericDetailPage v-model:active-menu="config.activeMenu" v-model:object="plan" v-bind="config">
     <keep-alive>
       <component :is="config.activeMenu" :object="plan" />
     </keep-alive>

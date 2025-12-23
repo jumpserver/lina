@@ -3,7 +3,7 @@
     :destroy-on-close="true"
     :show-buttons="false"
     :title="$tc('CloudAccountUpdate')"
-    :visible.sync="iVisible"
+    :visible="visible"
     class="drawer"
     v-on="$listeners"
   >
@@ -11,7 +11,7 @@
       <AuthPanel
         :object="object"
         :provider="object.provider.value"
-        :visible.sync="iVisible"
+        :visible="visible"
         origin="update"
         @submit-success="onSubmitSuccess"
       />
@@ -37,16 +37,7 @@ export default {
       default: false
     }
   },
-  computed: {
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
-    }
-  },
+  emits: ['update:visible', 'submitSuccess'],
   methods: {
     onSubmitSuccess() {
       this.$emit('submitSuccess')

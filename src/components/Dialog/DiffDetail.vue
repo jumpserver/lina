@@ -1,11 +1,11 @@
 <template>
   <Dialog
     v-if="detailVisible"
+    v-model:visible="detailVisible"
     :modal="false"
     :show-cancel="false"
     :show-confirm="false"
     :title="title"
-    :visible.sync="detailVisible"
   >
     <div>
       <div v-if="isEmpty()" style="text-align: center">

@@ -29,8 +29,8 @@
     </a>
     <Dialog
       v-if="showDialog"
+      v-model:visible="showDialog"
       :title="$tc('BindLabel')"
-      :visible.sync="showDialog"
       class="tag-dialog"
       width="600px"
       @cancel="handleCancel"

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ExecutionDetailDialog v-if="showExecutionDetailDialog" :item="item" :visible.sync="showExecutionDetailDialog" />
+    <ExecutionDetailDialog v-if="showExecutionDetailDialog" v-model:visible="showExecutionDetailDialog" :item="item" />
     <GenericListPage ref="GenericListPage" :header-actions="headerActions" :table-config="tableConfig" />
   </div>
 </template>

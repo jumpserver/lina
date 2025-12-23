@@ -2,9 +2,9 @@
   <div>
     <BaseList v-bind="config" />
     <GatewayDialog
+      v-model:visible="GatewayVisible"
       :cell="GatewayCell"
       :port="GatewayPort"
-      :visible.sync="GatewayVisible"
     />
   </div>
 </template>

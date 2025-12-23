@@ -1,13 +1,14 @@
 <template>
   <Dialog
-    v-if="iVisible"
+    v-if="visible"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('About')"
-    :visible.sync="iVisible"
+    :visible="visible"
     class="about-dialog"
     top="10%"
     width="50%"
+    @update:visible="$emit('update:visible', $event)"
   >
     <div class="box">
       <div class="head">
@@ -42,6 +43,7 @@ export default {
       default: false
     }
   },
+  emits: ['update:visible'],
   data() {
     return {
       actions: [
@@ -62,14 +64,6 @@ export default {
     ...mapGetters([
       'publicSettings'
     ]),
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
-    },
     versionType() {
       return this.hasXPack ? this.$t('EnterpriseEdition') : this.$tc('CommunityEdition') + ' GPLv3'
     },

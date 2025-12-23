@@ -1,9 +1,9 @@
 <template>
   <GenericDetailPage
-    :active-menu.sync="config.activeMenu"
-    :object.sync="ticket"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="ticket"
     v-bind="config"
-    @getObjectDone="afterGetTicket"
+    @get-object-done="afterGetTicket"
     v-on="$listeners"
   >
     <component :is="config.activeMenu" :object="ticket" />

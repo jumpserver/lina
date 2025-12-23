@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage
-    :active-menu.sync="config.activeMenu"
-    :object.sync="CommandGroup"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="CommandGroup"
     :title="'null'"
     v-bind="config"
     v-on="$listeners"

@@ -1,7 +1,7 @@
 <template>
   <TabPage
     v-if="!loading"
-    :active-menu.sync="tab.activeMenu"
+    v-model:active-menu="tab.activeMenu"
     :help-tip="platformPageHelpMsg"
     :submenu="tab.submenu"
     @tab-click="changeMoreCreates"

@@ -29,7 +29,7 @@
       </div>
       <div class="sidebar">
         <Sidebar
-          :active.sync="active"
+          v-model:active="active"
           :expanded="expanded"
           v-bind="$attrs"
           @close="onClose"

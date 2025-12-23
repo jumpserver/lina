@@ -10,9 +10,10 @@
       :show-cancel="false"
       :show-confirm="false"
       :title="title"
-      :visible.sync="visible"
+      :visible="visible"
       v-bind="$attrs"
       width="40%"
+      @update:visible="$emit('update:visible', $event)"
       v-on="$listeners"
     >
       <LeakPasswordList />

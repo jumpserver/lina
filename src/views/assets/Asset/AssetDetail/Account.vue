@@ -15,10 +15,10 @@
         />
         <AccountTemplateDialog
           v-if="templateDialogVisible"
+          v-model:visible="templateDialogVisible"
           :asset="object"
           :show-create="false"
-          :visible.sync="templateDialogVisible"
-          @onConfirm="onConfirm"
+          @on-confirm="onConfirm"
         />
       </template>
     </TwoCol>

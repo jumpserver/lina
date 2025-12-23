@@ -3,11 +3,11 @@
     <BaseTicketList ref="BaseTicketList" :url="url" v-bind="$data" />
     <Dialog
       v-if="isVisible"
+      v-model:visible="isVisible"
       :cancel-title="$tc('BatchReject')"
       :confirm-title="$tc('BatchConsent')"
       :destroy-on-close="true"
       :title="$tc('ApprovalSelected')"
-      :visible.sync="isVisible"
       width="70%"
       @cancel="onCancel"
       @confirm="onConfirm"

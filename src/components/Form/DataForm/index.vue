@@ -217,7 +217,7 @@ export default {
     handleClick(button) {
       const callback =
         button.callback ||
-        function (values, form) {
+        function(values, form) {
           // debug('Click ', button.title, ': ', values)
         }
       const form = this.$refs['form']

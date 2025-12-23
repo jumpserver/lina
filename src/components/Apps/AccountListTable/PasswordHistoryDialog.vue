@@ -1,5 +1,9 @@
 <template>
-  <GenericListTableDialog v-bind="config" :visible.sync="iVisible" />
+  <GenericListTableDialog
+    v-bind="config"
+    :visible="visible"
+    @update:visible="$emit('update:visible', $event)"
+  />
 </template>
 
 <script>
@@ -20,6 +24,7 @@ export default {
       default: false
     }
   },
+  emits: ['update:visible'],
   data() {
     return {
       config: {
@@ -59,20 +64,8 @@ export default {
         }
       }
     }
-  },
-  computed: {
-    iVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$emit('update:visible', val)
-      }
-    }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

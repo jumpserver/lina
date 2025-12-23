@@ -11,7 +11,7 @@
         :disabled="disabled"
         :readonly="readonly"
         :options="options[item.id]"
-        @updateValue="updateValue"
+        @update-value="updateValue"
       />
     </template>
   </div>

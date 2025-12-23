@@ -6,11 +6,11 @@
       </el-link>
     </el-badge>
     <el-drawer
+      v-model:visible="show"
       :before-close="handleClose"
       :modal="false"
       :size="width"
       :title="$tc('SiteMessage')"
-      :visible.sync="show"
       class="drawer"
       custom-class="site-msg"
       @open="getMessages"
@@ -57,10 +57,10 @@
 
     <Dialog
       v-if="msgDetailVisible"
+      v-model:visible="msgDetailVisible"
       :close-on-click-modal="false"
       :confirm-title="$tc('MarkAsRead')"
       :title="currentMsg.content.subject"
-      :visible.sync="msgDetailVisible"
       @cancel="cancelRead"
       @close="markAsRead([currentMsg])"
       @confirm="markAsRead([currentMsg])"
