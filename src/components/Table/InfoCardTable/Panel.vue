@@ -150,7 +150,7 @@ div.info-panel {
   display: flex;
   flex-direction: column;
   padding: 10px;
-  gap: 10px;
+  gap: unset;
   cursor: pointer;
   height: initial !important;
 
@@ -165,7 +165,7 @@ div.info-panel {
       display: flex;
       align-items: center;
       font-weight: 600;
-      gap: unset;
+      gap: 10px;
 
       .title-display {
         display: flex;
