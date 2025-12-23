@@ -1,4 +1,4 @@
-@import "./variables";
+@import './variables';
 
 $icon-width: 1.1em;
 $single-menu-height: 38px;
@@ -19,7 +19,7 @@ $single-menu-height: 38px;
   background-color: #e6e6e6;
 
   &:before {
-    width: 0
+    width: 0;
   }
 }
 
@@ -31,7 +31,9 @@ $single-menu-height: 38px;
   border-right: none !important;
   background-color: inherit !important;
 
-  .svg-icon, .el-icon, .fa {
+  .svg-icon,
+  .el-icon,
+  .fa {
     width: $icon-width !important;
     height: $icon-width !important;
     margin-right: 10px;
@@ -78,6 +80,10 @@ $single-menu-height: 38px;
     font-size: 12px;
     min-width: 200px;
 
+    &:hover {
+      background-color: var(--menu-hover);
+    }
+
     &.is-active {
       background-color: var(--menu-hover);
       @include only_active;
@@ -97,7 +103,7 @@ $single-menu-height: 38px;
       font-size: 11px;
       font-weight: 600;
       line-height: 25px;
-      letter-spacing: .07em;
+      letter-spacing: 0.07em;
     }
 
     .nest-menu {
@@ -115,8 +121,9 @@ $single-menu-height: 38px;
             color: var(--color-primary);
           }
 
-          .el-sub-menu__title, li {
-            @include only_active
+          .el-sub-menu__title,
+          li {
+            @include only_active;
           }
         }
 
@@ -145,8 +152,8 @@ $single-menu-height: 38px;
       display: inline-block;
 
       .el-tooltip {
-          width: 55px !important;
-        }
+        width: 55px !important;
+      }
     }
 
     .group-title {

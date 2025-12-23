@@ -1,48 +1,89 @@
 // 默认主题 CSS 变量定义
 // 这些变量会被注入到 :root 中
+
+// SCSS 颜色变量定义（可以被其他 SCSS 文件导入使用）
+$color-primary: #1ab394;
+$color-success: #2793d7;
+$color-info: #1c84c6;
+$color-warning: #f8ac59;
+$color-danger: #ed5565;
+$color-error: #ed5565;
+$color-link: #1c84c6;
+$color-text-primary: #292827;
+$color-text-secondary: #7c7c7c;
+$color-icon-primary: #605e5c;
+$color-border: #e9ecef;
+$color-input-border: #bbbfc4;
+$color-disabled-background: #f5f7fa;
+$color-disabled: #bbb;
+$color-help-text: #8f959e;
+$banner-bg: #148f76;
+$submenu-bg: #ffffff;
+$menu-bg: #ffffff;
+$menu-text: #646a73;
+$menu-text-active: #1ab394;
+$menu-hover: #ffffff;
+
 :root {
-  --color-primary: #1ab394;
-  --color-success: #2793d7;
-  --color-info: #1c84c6;
-  --color-warning: #f8ac59;
-  --color-danger: #ed5565;
-  --color-link: #1c84c6;
-  --color-text-primary: #292827;
-  --color-text-secondary: #7c7c7c;
-  --color-icon-primary: #605e5c;
-  --color-border: #e9ecef;
-  --color-input-border: #bbbfc4;
-  --color-disabled-background: #f5f7fa;
-  --color-disabled: #bbb;
-  --color-help-text: #8f959e;
-  --banner-bg: #148f76;
-  --submenu-bg: #ffffff;
-  --menu-bg: #ffffff;
-  --menu-text: #646a73;
-  --menu-text-active: #1ab394;
-  --menu-hover: #ffffff;
+  /* 主题颜色变量 */
+  --color-primary: #{$color-primary};
+  --color-success: #{$color-success};
+  --color-info: #{$color-info};
+  --color-warning: #{$color-warning};
+  --color-danger: #{$color-danger};
+  --color-link: #{$color-link};
+
+  /* 文本颜色 */
+  --color-text-primary: #{$color-text-primary};
+  --color-text-secondary: #{$color-text-secondary};
+  --color-icon-primary: #{$color-icon-primary};
+
+  /* 边框和输入框 */
+  --color-border: #{$color-border};
+  --color-input-border: #{$color-input-border};
+
+  /* 禁用状态 */
+  --color-disabled-background: #{$color-disabled-background};
+  --color-disabled: #{$color-disabled};
+  --color-help-text: #{$color-help-text};
+
+  /* 菜单相关 */
+  --banner-bg: #{$banner-bg};
+  --submenu-bg: #{$submenu-bg};
+  --menu-bg: #{$menu-bg};
+  --menu-text: #{$menu-text};
+  --menu-text-active: #{$menu-text-active};
+  --menu-hover: #{$menu-hover};
+
+  /* Element Plus CSS 变量覆盖 */
+  --el-color-primary: #{$color-primary};
+  --el-color-success: #{$color-success};
+  --el-color-info: #{$color-info};
+  --el-color-warning: #{$color-warning};
+  --el-color-danger: #{$color-danger};
+  --el-color-error: #{$color-error};
 }
 
 // CSS Modules export（用于 JavaScript 导入）
 :export {
-  --color-primary: #1ab394;
-  --color-success: #2793d7;
-  --color-info: #1c84c6;
-  --color-warning: #f8ac59;
-  --color-danger: #ed5565;
-  --color-link: #1c84c6;
-  --color-text-primary: #292827;
-  --color-text-secondary: #7c7c7c;
-  --color-icon-primary: #605e5c;
-  --color-border: #e9ecef;
-  --color-input-border: #bbbfc4;
-  --color-disabled-background: #f5f7fa;
-  --color-disabled: #bbb;
-  --color-help-text: #8f959e;
-  --banner-bg: #148f76;
-  --submenu-bg: #ffffff;
-  --menu-bg: #ffffff;
-  --menu-text: #646a73;
-  --menu-text-active: #1ab394;
-  --menu-hover: #ffffff;
+  --color-primary: #{$color-primary};
+  --color-success: #{$color-success};
+  --color-info: #{$color-info};
+  --color-warning: #{$color-warning};
+  --color-danger: #{$color-danger};
+  --color-link: #{$color-link};
+  --color-text-primary: #{$color-text-primary};
+  --color-text-secondary: #{$color-text-secondary};
+  --color-icon-primary: #{$color-icon-primary};
+  --color-border: #{$color-border};
+  --color-input-border: #{$color-input-border};
+  --color-disabled-background: #{$color-disabled-background};
+  --color-disabled: #{$color-disabled};
+  --color-help-text: #{$color-help-text};
+  --banner-bg: #{$banner-bg};
+  --submenu-bg: #{$submenu-bg};
+  --menu-bg: #{$menu-bg};
+  --menu-text: #{$menu-text};
+  --menu-text-active: #{$menu-text-active};
+  --menu-hover: #{$menu-hover};
 }

@@ -15,16 +15,8 @@
       v-on="$listeners"
     >
       <!-- slot 透传 -->
-      <slot
-        v-for="item in fields"
-        :slot="`id:${item.id}`"
-        :name="`id:${item.id}`"
-      />
-      <slot
-        v-for="item in fields"
-        :slot="`$id:${item.id}`"
-        :name="`$id:${item.id}`"
-      />
+      <slot v-for="item in fields" :slot="`id:${item.id}`" :name="`id:${item.id}`" />
+      <slot v-for="item in fields" :slot="`$id:${item.id}`" :name="`$id:${item.id}`" />
 
       <div v-if="hasButtons" class="form-buttons">
         <el-button
@@ -43,15 +35,11 @@
           size="small"
           @click="submitForm('form', true)"
         >
-          {{ $t("SaveAndAddAnother") }}
+          {{ $t('SaveAndAddAnother') }}
         </el-button>
 
-        <el-button
-          v-if="defaultButton && hasReset"
-          size="small"
-          @click="resetForm('form')"
-        >
-          {{ $t("Reset") }}
+        <el-button v-if="defaultButton && hasReset" size="small" @click="resetForm('form')">
+          {{ $t('Reset') }}
         </el-button>
 
         <el-button
@@ -75,15 +63,23 @@ import ElFormRender from './components/el-form-renderer'
 import { randomString } from '@/utils/common/index'
 
 const scrollToError = (
-  el,
+  formInstance,
   scrollOption = {
     behavior: 'smooth',
     block: 'center'
   }
 ) => {
   setTimeout(() => {
-    const isError = el.getElementsByClassName('is-error')
-    isError[0].scrollIntoView(scrollOption)
+    // formInstance 是 ElFormRender 组件实例，需要访问内部的 el-form 元素
+    const elForm = formInstance.$refs?.elForm
+    if (!elForm || !elForm.$el) {
+      return
+    }
+    const formEl = elForm.$el
+    const errorElements = formEl.getElementsByClassName('is-error')
+    if (errorElements && errorElements.length > 0) {
+      errorElements[0].scrollIntoView(scrollOption)
+    }
   }, 0)
 }
 
@@ -203,17 +199,16 @@ export default {
      * @param {string} formName - 表单的引用名称
      * @param {boolean} [addContinue] - 是否继续添加
      */
-    submitForm(formName, addContinue) {
+    async submitForm(formName, addContinue) {
       const form = this.$refs[formName]
-      form.validate(valid => {
-        if (valid) {
-          this.$emit('submit', form.getFormValue(), form, addContinue)
-        } else {
-          this.$emit('invalid', valid)
-          scrollToError(form.$el)
-          return false
-        }
-      })
+      try {
+        await form.validate()
+        this.$emit('submit', form.getFormValue(), form, addContinue)
+      } catch (error) {
+        this.$emit('invalid', false)
+        scrollToError(form)
+        return false
+      }
     },
     // 重置表单
     resetForm() {
@@ -222,7 +217,7 @@ export default {
     handleClick(button) {
       const callback =
         button.callback ||
-        function(values, form) {
+        function (values, form) {
           // debug('Click ', button.title, ': ', values)
         }
       const form = this.$refs['form']

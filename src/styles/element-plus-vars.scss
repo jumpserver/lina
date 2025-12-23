@@ -5,30 +5,31 @@
 @use 'sass:map';
 @use 'sass:math';
 @use 'sass:color';
+@use './default-theme' as *;
 
-// 定义自定义颜色配置
+// 定义自定义颜色配置（从统一的颜色文件引用）
 $colors: () !default;
 $colors: map.deep-merge(
   (
     'white': #ffffff,
     'black': #000000,
     'primary': (
-      'base': #1ab394
+      'base': $color-primary
     ),
     'success': (
-      'base': #1c84c6
+      'base': $color-success
     ),
     'warning': (
-      'base': #f8ac59
+      'base': $color-warning
     ),
     'danger': (
-      'base': #ed5565
+      'base': $color-danger
     ),
     'error': (
-      'base': #ed5565
+      'base': $color-error
     ),
     'info': (
-      'base': #23c6c8
+      'base': $color-info
     )
   ),
   $colors

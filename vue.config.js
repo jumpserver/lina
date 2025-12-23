@@ -260,16 +260,52 @@ module.exports = {
     })
 
     config.when(process.env.NODE_ENV !== 'development', config => {
-      config
-        .plugin('ScriptExtHtmlWebpackPlugin')
-        .after('html')
-        .use('script-ext-html-webpack-plugin', [
-          {
-            // `runtime` must same as runtimeChunk name. default is `runtime`
-            inline: /runtime\..*\.js$/
-          }
-        ])
-        .end()
+      // Use html-webpack-plugin hooks to inline runtime chunk (webpack 5 compatible)
+      // This replaces script-ext-html-webpack-plugin which doesn't support webpack 5
+      const HtmlWebpackPlugin = require('html-webpack-plugin')
+      
+      class InlineRuntimeChunkPlugin {
+        apply(compiler) {
+          compiler.hooks.compilation.tap('InlineRuntimeChunkPlugin', compilation => {
+            HtmlWebpackPlugin.getHooks(compilation).alterAssetTags.tapAsync(
+              'InlineRuntimeChunkPlugin',
+              (data, cb) => {
+                const runtimeChunkRegex = /runtime\..*\.js$/
+                
+                // Find and inline runtime chunk scripts
+                if (data.assetTags && data.assetTags.scripts) {
+                  data.assetTags.scripts = data.assetTags.scripts.map(tag => {
+                    if (tag.attributes && tag.attributes.src) {
+                      const src = tag.attributes.src
+                      if (runtimeChunkRegex.test(src)) {
+                        // Get the asset content - handle both absolute and relative paths
+                        const publicPath = compilation.outputOptions.publicPath || ''
+                        const assetPath = src.replace(publicPath, '').replace(/^\//, '')
+                        const asset = compilation.assets[assetPath]
+                        
+                        if (asset) {
+                          return {
+                            tagName: 'script',
+                            voidTag: false,
+                            attributes: {},
+                            innerHTML: asset.source()
+                          }
+                        }
+                      }
+                    }
+                    return tag
+                  })
+                }
+                
+                cb(null, data)
+              }
+            )
+          })
+        }
+      }
+      
+      config.plugin('InlineRuntimeChunkPlugin').use(InlineRuntimeChunkPlugin).after('html')
+      
       config.optimization.splitChunks({
         chunks: 'all',
         cacheGroups: {
