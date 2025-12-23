@@ -321,46 +321,24 @@ export default {
       }
     },
     filterAssetsServer(keyword) {
-      if (!this.zTree) return
-      let searchNode = this.zTree.getNodesByFilter((node) => node.id === 'search')
-      if (searchNode) {
-        this.zTree.removeChildNodes(searchNode[0])
-        this.zTree.removeNode(searchNode[0])
-      }
-      const treeNodes = this.zTree.getNodes()
-      if (!keyword) {
-        if (treeNodes.length !== 0) {
-          this.zTree.showNodes(treeNodes)
-        }
-        return
-      }
-      if (treeNodes.length !== 0) {
-        this.zTree.hideNodes(treeNodes)
-      }
-
+      // 直接用搜索 API 返回的数据重新初始化树
       let treeUrl = this.treeSetting.searchUrl ? this.treeSetting.searchUrl : this.treeSetting.treeUrl
       const filterField = treeUrl.includes('?') ? `&search=${keyword}` : `?search=${keyword}`
       if (treeUrl.indexOf('assets/nodes/children/tree') > -1) {
         treeUrl = treeUrl + '&all=all'
       }
       const searchUrl = `${treeUrl}${filterField}`
+      this.loading = true
       this.$axios.get(searchUrl).then(nodes => {
-        let name = this.$t('Search')
-        const assetsAmount = nodes.length
-        name = `${name} (${assetsAmount})`
-        const newNode = { id: 'search', name: name, isParent: true, open: true, zAsync: true }
-        searchNode = this.zTree.addNodes(null, newNode)[0]
-        searchNode.zAsync = true
-        this.rootNodeAddDom(searchNode)
-
-        const nodesGroupByOrg = this.groupBy(nodes, (node) => {
-          return node.meta?.data?.org_name
-        })
-
-        for (const item of nodesGroupByOrg) {
-          this.zTree.addNodes(searchNode, item)
-        }
-        searchNode.open = true
+        this.loading = false
+        // 重新初始化树
+        $.fn.zTree.destroy(this.iZTreeID)
+        this.zTree = $.fn.zTree.init($(`#${this.iZTreeID}`), this.treeSetting, nodes)
+        const rootNode = this.zTree.getNodes()[0]
+        this.rootNodeAddDom(rootNode)
+        this.$emit('TreeInitFinish', this.zTree)
+      }).catch(() => {
+        this.loading = false
       })
     }
   }
