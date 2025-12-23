@@ -1,6 +1,11 @@
 <template>
   <div>
-    <div v-for="(command, index) in iValue" :key="index" :prop="'iValue.' + index + '.value'" class="command-item">
+    <div
+      v-for="(command, index) in iValue"
+      :key="index"
+      :prop="'iValue.' + index + '.value'"
+      class="command-item"
+    >
       <el-input v-model="iValue[index]" size="mini">
         <template slot="prepend"> {{ inputTitle + ' ' + (index + 1) }}</template>
       </el-input>
@@ -8,16 +13,16 @@
         <el-button
           :disabled="deleteDisabled()"
           icon="el-icon-minus"
-          size="mini"
-          style="flex-shrink: 0;"
+          size="small"
+          style="flex-shrink: 0"
           type="danger"
           @click="handleDelete(command)"
         />
         <el-button
           v-if="index === iValue.length - 1"
           icon="el-icon-plus"
-          size="mini"
-          style="flex-shrink: 0;"
+          size="small"
+          style="flex-shrink: 0"
           type="primary"
           @click="handleAdd()"
         />
@@ -27,7 +32,6 @@
 </template>
 
 <script>
-
 export default {
   props: {
     value: {
@@ -82,7 +86,7 @@ export default {
 .input-button {
   margin-top: 2px;
   display: flex;
-  margin-left: 20px
+  margin-left: 20px;
 }
 .input-button :deep(.el-button.el-button--mini) {
   height: 25px;

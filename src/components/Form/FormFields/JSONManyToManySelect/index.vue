@@ -9,12 +9,14 @@
     <div v-if="iValue.type === 'attrs'">
       <DataTable :config="tableConfig" class="attr-list" />
       <div class="actions">
-        <el-button size="mini" type="primary" @click="handleAttrAdd">
+        <el-button size="small" type="primary" @click="handleAttrAdd">
           {{ $t('Add') }}
         </el-button>
         <span style="padding-left: 10px; font-size: 13px">
-          <span class="help-tips; ">{{ $t('MatchedCount') }}:</span>
-          <a class="text-link" style="padding: 0 5px;" @click="showAttrMatchTable">{{ attrMatchCount }}</a>
+          <span class="help-tips;">{{ $t('MatchedCount') }}:</span>
+          <a class="text-link" style="padding: 0 5px" @click="showAttrMatchTable">{{
+            attrMatchCount
+          }}</a>
         </span>
       </div>
     </div>
@@ -64,7 +66,7 @@ export default {
     },
     attrs: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     resource: {
       type: String,
@@ -72,11 +74,11 @@ export default {
     },
     attrTableColumns: {
       type: Array,
-      default: () => (['name'])
+      default: () => ['name']
     }
   },
   data() {
-    const tableFormatter = (colName) => {
+    const tableFormatter = colName => {
       return (row, col, cellValue) => {
         const value = cellValue
         switch (colName) {
@@ -109,7 +111,12 @@ export default {
         columns: [
           { prop: 'name', label: this.$t('AttrName'), formatter: tableFormatter('name') },
           { prop: 'match', label: this.$t('Match'), formatter: tableFormatter('match') },
-          { prop: 'value', label: this.$t('AttrValue'), formatter: ValueFormatter, formatterArgs: { attrs: this.attrs } },
+          {
+            prop: 'value',
+            label: this.$t('AttrValue'),
+            formatter: ValueFormatter,
+            formatterArgs: { attrs: this.attrs }
+          },
           {
             prop: 'action',
             label: this.$t('Action'),
@@ -121,14 +128,14 @@ export default {
                   <el-button
                     icon='el-icon-edit'
                     size='mini'
-                    style={{ 'flexShrink': 0 }}
+                    style={{ flexShrink: 0 }}
                     type='primary'
                     onClick={this.handleAttrEdit({ row, col, cellValue, index })}
                   />
                   <el-button
                     icon='el-icon-minus'
                     size='mini'
-                    style={{ 'flexShrink': 0 }}
+                    style={{ flexShrink: 0 }}
                     type='danger'
                     onClick={this.handleAttrDelete({ row, col, cellValue, index })}
                   />

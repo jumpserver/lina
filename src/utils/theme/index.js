@@ -68,23 +68,12 @@ export function changeElementColor(themeColors) {
 export function changeThemeColors(themeColors) {
   return new Promise((resolve) => {
     if (!originalStyle) {
-      axios.all([
-        axios.get('/ui/theme/element-ui.css'),
-        axios.get('/ui/theme/element-extra.css')
-      ]).then(
-        axios.spread((file, extraFile) => {
-          let fileData = file.data
-          // strip @font-face blocks to avoid loading old element-icons fonts
-          try {
-            fileData = fileData.replace(/@font-face[\s\S]*?\}/g, '')
-          } catch (e) {
-            // ignore parsing errors for remote theme css
-          }
-          const extraFileData = extraFile.data.replace(/[\r\n]/g, '')
-          originalStyle = replaceStyleColors(fileData + extraFileData)
-          resolve()
-        })
-      )
+      // Element Plus 不再需要 element-ui.css，只加载 element-extra.css
+      axios.get('/ui/theme/element-extra.css').then((extraFile) => {
+        const extraFileData = extraFile.data.replace(/[\r\n]/g, '')
+        originalStyle = replaceStyleColors(extraFileData)
+        resolve()
+      })
     } else {
       resolve()
     }

@@ -20,7 +20,7 @@
       </el-row>
       <el-row :gutter="24" style="margin: 0 auto">
         <el-col :md="24" :sm="24">
-          <el-button class="confirm-btn" size="mini" type="primary" @click="logout">
+          <el-button class="confirm-btn" size="small" type="primary" @click="logout">
             {{ $t('ReLogin') }}
           </el-button>
         </el-col>
@@ -58,7 +58,7 @@
           >
             <el-button
               :disabled="smsBtnDisabled"
-              size="mini"
+              size="small"
               style="line-height: 14px; float: right"
               type="primary"
               @click="sendCode"
@@ -85,7 +85,7 @@
           <el-button
             v-if="!noCodeMFA.includes(subTypeSelected)"
             class="confirm-btn"
-            size="mini"
+            size="small"
             type="primary"
             @click="handleConfirm"
           >
@@ -95,7 +95,7 @@
             v-if="subTypeSelected === 'face'"
             v-show="!isFaceCaptureVisible"
             class="confirm-btn"
-            size="mini"
+            size="small"
             type="primary"
             @click="handleFaceCapture"
           >
@@ -105,7 +105,7 @@
             v-if="subTypeSelected === 'passkey'"
             v-loading="passkeyVisible"
             class="confirm-btn"
-            size="mini"
+            size="small"
             type="primary"
             @click="handlePasskeyVerify"
           >

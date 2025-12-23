@@ -1,11 +1,6 @@
 <template>
   <div class="">
-    <el-input
-      v-model="iValue"
-      :placeholder="placeholder"
-      :rows="rows"
-      type="textarea"
-    />
+    <el-input v-model="iValue" :placeholder="placeholder" :rows="rows" type="textarea" />
     <el-upload
       ref="upload"
       :accept="accept"
@@ -18,7 +13,7 @@
       class="upload-secret"
       v-bind="$attrs"
     >
-      <el-button size="mini" type="primary">
+      <el-button size="small" type="primary">
         {{ btnText }}
       </el-button>
       <div v-if="tip" slot="tip" class="el-upload__tip">

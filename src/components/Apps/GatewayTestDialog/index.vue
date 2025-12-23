@@ -20,8 +20,8 @@
       <el-col :md="4" :sm="24">
         <el-button
           :loading="loading"
-          size="mini"
-          style="line-height:20px "
+          size="small"
+          style="line-height: 20px"
           type="primary"
           @click="dialogConfirm"
         >
@@ -85,13 +85,12 @@ export default {
       if (isNaN(this.port)) {
         return this.$message.error(this.$tc('TestPortErrorMsg'))
       }
-      this.$axios.post(
-        `/api/v1/assets/gateways/${this.cell}/test-connective/`,
-        { port: this.port }
-      )
-        .then((res) => {
+      this.$axios
+        .post(`/api/v1/assets/gateways/${this.cell}/test-connective/`, { port: this.port })
+        .then(res => {
           openTaskPage(res['task'])
-        }).finally(() => {
+        })
+        .finally(() => {
           this.iVisible = false
         })
     }

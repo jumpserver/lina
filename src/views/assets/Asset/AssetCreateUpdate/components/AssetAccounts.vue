@@ -1,6 +1,11 @@
 <template>
   <div>
-    <el-link v-if="isUpdate(this)" :underline="false" type="default" @click="goToAssetAccountsPage()">
+    <el-link
+      v-if="isUpdate(this)"
+      :underline="false"
+      type="default"
+      @click="goToAssetAccountsPage()"
+    >
       {{ $t('InAssetDetail') }}
     </el-link>
     <div v-else class="accounts el-data-table">
@@ -19,13 +24,24 @@
             <span v-else>-</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$tc('Actions')" align="center" class-name="buttons" fixed="right" width="135">
+        <el-table-column
+          :label="$tc('Actions')"
+          align="center"
+          class-name="buttons"
+          fixed="right"
+          width="135"
+        >
           <template #default="scope">
-            <el-button icon="el-icon-minus" size="mini" type="danger" @click="removeAccount(scope.row)" />
+            <el-button
+              icon="el-icon-minus"
+              size="small"
+              type="danger"
+              @click="removeAccount(scope.row)"
+            />
             <el-button
               :disabled="!!scope.row.template"
               icon="el-icon-edit"
-              size="mini"
+              size="small"
               type="primary"
               @click="onEditClick(scope.row)"
             />
@@ -33,13 +49,13 @@
         </el-table-column>
       </el-table>
       <div class="actions">
-        <el-button size="mini" type="primary" @click="onAddClick">
+        <el-button size="small" type="primary" @click="onAddClick">
           {{ $t('Add') }}
         </el-button>
         <el-button
           v-if="$hasLicense() || $route.name !== 'Applets'"
           :disabled="!$hasPerm('accounts.view_accounttemplate')"
-          size="mini"
+          size="small"
           type="success"
           @click="onAddFromTemplateClick"
         >
@@ -92,7 +108,7 @@ export default {
     },
     isUpdate: {
       type: Function,
-      default: (vm) => {
+      default: vm => {
         return vm.$route.params.id
       }
     }
@@ -127,7 +143,7 @@ export default {
   },
   methods: {
     removeAccount(account) {
-      this.accounts = this.accounts.filter((item) => {
+      this.accounts = this.accounts.filter(item => {
         if (account.id && item.id) {
           return item.id !== account.id
         } else if (account.username && item.username) {
@@ -152,8 +168,7 @@ export default {
     onAddFromTemplateClick() {
       this.templateDialogVisible = true
     },
-    onSelectTemplate() {
-    },
+    onSelectTemplate() {},
     goToAssetAccountsPage() {
       const assetId = this.$route.params.id
       // todo: 临时解决方案，后续需要优化 发布机的组织是 system，所以需要判断一下，否则
@@ -170,7 +185,10 @@ export default {
       }
 
       this.$store.dispatch('common/setDrawerActionMeta', {
-        action: 'detail', row: {}, col: {}, id: assetId
+        action: 'detail',
+        row: {},
+        col: {},
+        id: assetId
       })
 
       this.drawerVisible = true
@@ -225,7 +243,7 @@ export default {
       text-overflow: ellipsis;
 
       &:hover {
-        border-right: 2px solid #EBEEF5;
+        border-right: 2px solid #ebeef5;
       }
     }
   }

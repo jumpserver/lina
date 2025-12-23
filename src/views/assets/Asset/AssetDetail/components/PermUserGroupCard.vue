@@ -1,11 +1,6 @@
 <template>
   <div>
-    <IBox
-      :fa="icon"
-      :title="title"
-      :type="type"
-      v-bind="$attrs"
-    >
+    <IBox :fa="icon" :title="title" :type="type" v-bind="$attrs">
       <table class="card-table">
         <div v-cloak v-if="iObjects.length > 0">
           <tr v-for="obj of iObjects" :key="obj.value" class="item">
@@ -15,7 +10,7 @@
                 :open-delay="500"
                 effect="dark"
                 placement="left"
-                style="margin: 4px;"
+                style="margin: 4px"
               >
                 <el-link class="detail" @click="goDetail(obj)">
                   {{ obj.label }}
@@ -24,7 +19,7 @@
             </td>
             <td>
               <el-button
-                size="mini"
+                size="small"
                 style="float: right"
                 type="primary"
                 @click="buttonClickCallback(obj)"
@@ -34,7 +29,7 @@
             </td>
           </tr>
         </div>
-        <div v-cloak v-else style="text-align: center;">
+        <div v-cloak v-else style="text-align: center">
           {{ $t('NoData') }}
         </div>
       </table>
@@ -85,8 +80,7 @@ export default {
     },
     buttonClickCallback: {
       type: Function,
-      default: (obj) => {
-      }
+      default: obj => {}
     }
   },
   data() {
@@ -114,13 +108,15 @@ export default {
     },
     goDetail(obj) {
       this.detailDrawer = this.detailRoute
-      this.$store.dispatch('common/setDrawerActionMeta', {
-        action: 'create',
-        row: {},
-        id: obj.id
-      }).then(() => {
-        this.drawerVisible = true
-      })
+      this.$store
+        .dispatch('common/setDrawerActionMeta', {
+          action: 'create',
+          row: {},
+          id: obj.id
+        })
+        .then(() => {
+          this.drawerVisible = true
+        })
     }
   }
 }
@@ -136,7 +132,8 @@ export default {
   display: none !important;
 }
 
-b, strong {
+b,
+strong {
   font-size: 13px;
 }
 
@@ -162,5 +159,4 @@ tr.item {
 .box-margin {
   margin-bottom: 20px;
 }
-
 </style>

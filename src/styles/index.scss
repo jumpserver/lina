@@ -432,6 +432,17 @@ input[type='file'] {
   font-weight: 400;
   padding: 8px 12px;
   border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+
+  // 确保按钮内容垂直居中
+  > span {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+  }
 }
 
 .el-button.el-button--mini,
@@ -746,4 +757,121 @@ div.el-loading-parent--relative {
 
 .el-message {
   z-index: 999999 !important;
+}
+
+// Element Plus dropdown menu 样式（通过 teleport 渲染到 body，需要使用全局样式）
+// 注意：不要强制显示 popper，只在打开时显示
+.el-dropdown__popper:not([style*='display: none']) {
+  .el-scrollbar {
+    height: auto !important;
+    min-height: auto !important;
+  }
+
+  .el-scrollbar__wrap {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+
+    &.el-scrollbar__wrap--hidden-default {
+      overflow: visible !important;
+    }
+  }
+
+  .el-scrollbar__view {
+    height: auto !important;
+    min-height: auto !important;
+  }
+
+  .el-dropdown__list {
+    height: auto !important;
+    min-height: auto !important;
+  }
+}
+
+.el-dropdown-menu {
+  padding: 4px 0 !important;
+
+  .el-dropdown-menu__item {
+    height: auto !important;
+    min-height: 34px !important;
+    line-height: 34px !important;
+    color: var(--color-text-primary) !important;
+    font-size: 14px !important;
+
+    &:not(.is-disabled) {
+      color: var(--color-text-primary) !important;
+    }
+  }
+
+  .more-batch-processing {
+    &:hover {
+      background-color: transparent !important;
+    }
+
+    &.el-dropdown-menu__item--divided {
+      margin-top: 0;
+      border-top: none;
+      color: var(--color-text-primary);
+      cursor: auto;
+      font-size: 12px;
+      line-height: 30px;
+      border-bottom: 1px solid #e4e7ed;
+
+      &:before {
+        height: 0;
+      }
+    }
+  }
+
+  .dropdown-item {
+    color: var(--color-text-primary);
+    line-height: 34px;
+
+    .pre-icon {
+      width: 17px;
+      display: inline-block;
+    }
+
+    i.fa {
+      font-size: 13px;
+      height: 13px;
+      width: 13px;
+      margin-right: 0;
+    }
+
+    .svg-icon {
+      font-size: 13px;
+      height: 13px;
+      width: 13px;
+    }
+  }
+
+  .el-dropdown-menu__item {
+    padding: 0 20px;
+
+    &.is-disabled {
+      color: var(--color-disabled);
+      cursor: not-allowed;
+      pointer-events: auto;
+    }
+
+    &:not(.is-disabled):hover {
+      background-color: var(--color-disabled-background);
+    }
+  }
+
+  .dropdown-menu-title {
+    text-align: left;
+    font-size: 12px;
+    color: #909399;
+    line-height: 30px;
+    padding-left: 10px;
+    padding-top: 10px;
+    border-top: solid 1px #e4e7ed;
+
+    &:first-child {
+      padding-top: 0;
+      border-top: none;
+    }
+  }
 }

@@ -10,13 +10,7 @@
       @command="handleProtocolConnect"
       @visible-change="visibleChange"
     >
-      <el-button
-        plain
-        size="mini"
-        type="primary"
-        :disabled="!hasPerm"
-        @click="handleBtnConnect"
-      >
+      <el-button plain size="small" type="primary" :disabled="!hasPerm" @click="handleBtnConnect">
         <i :class="iButtonIcon" :style="{ color: hasPerm ? '' : '#fff' }" />
       </el-button>
 
@@ -30,11 +24,7 @@
           </div>
         </el-dropdown-item>
         <el-dropdown-item divided />
-        <el-dropdown-item
-          v-for="protocol in protocols"
-          :key="protocol.id"
-          :command="protocol.name"
-        >
+        <el-dropdown-item v-for="protocol in protocols" :key="protocol.id" :command="protocol.name">
           {{ protocol.name }}
         </el-dropdown-item>
       </el-dropdown-menu>
@@ -116,7 +106,7 @@ export default {
         const url = this.formatterArgs.assetUrl.replace('{id}', assetId)
         const res = await this.$axios.get(url)
 
-        this.protocols = res.protocols.filter(protocol => (protocol.name !== 'winrm')) || []
+        this.protocols = res.protocols.filter(protocol => protocol.name !== 'winrm') || []
       } catch (e) {
         throw new Error(`Error getting protocols: ${e}`)
       }
@@ -132,7 +122,9 @@ export default {
 }
 
 :deep(.el-dropdown-menu__item) {
-  transition: height 0.3s ease-in-out, padding 0.3s ease-in-out;
+  transition:
+    height 0.3s ease-in-out,
+    padding 0.3s ease-in-out;
   overflow: hidden;
 }
 

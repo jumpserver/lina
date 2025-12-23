@@ -1,7 +1,7 @@
 <template>
   <div class="providers-card">
     <div class="providers-header">
-      <el-button size="mini" type="primary" icon="el-icon-plus" @click="addProvider">
+      <el-button size="small" type="primary" icon="el-icon-plus" @click="addProvider">
         {{ $t('Add') }}
       </el-button>
     </div>
@@ -52,7 +52,7 @@
       <el-table-column :label="$t('Actions')" width="100" align="center">
         <template #default="{ $index }">
           <el-button
-            size="mini"
+            size="small"
             type="text"
             class="danger-text"
             icon="el-icon-delete"
@@ -76,10 +76,10 @@ export default {
     },
     typeOptions: {
       type: Array,
-      default: () => ([
+      default: () => [
         { label: 'Ollama', value: 'ollama' },
         { label: 'OpenAI', value: 'openai' }
-      ])
+      ]
     }
   },
   data() {

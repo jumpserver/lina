@@ -1,12 +1,12 @@
 <template>
   <Page>
-    <el-alert
-      :center="false"
-      class="announcement"
-      type="success"
-    >
-      <span v-for="(tip,index) of FileTransferBootStepHelpTips" :key="index" style="padding-right: 24px">
-        <span style="font-weight: 700; color:#1C84C6">{{ index + 1 }}.</span>
+    <el-alert :center="false" class="announcement" type="success">
+      <span
+        v-for="(tip, index) of FileTransferBootStepHelpTips"
+        :key="index"
+        style="padding-right: 24px"
+      >
+        <span style="font-weight: 700; color: #1c84c6">{{ index + 1 }}.</span>
         {{ tip }}
       </span>
     </el-alert>
@@ -14,16 +14,16 @@
       <div class="select-assets">
         <SelectJobAssetDialog @change="handleSelectAssets" />
       </div>
-      <div class="transition-box" style="width: calc(100% - 17px);">
+      <div class="transition-box" style="width: calc(100% - 17px)">
         <div class="upload_input">
           <el-button
             :disabled="runButton.disabled"
-            :type="runButton.el&&runButton.el.type"
+            :type="runButton.el && runButton.el.type"
             size="small"
             style="display: inline-block; padding: 6px 10px"
             @click="runButton.callback()"
           >
-            <i :class="runButton.icon" style="margin-right: 4px;" />{{ runButton.name }}
+            <i :class="runButton.icon" style="margin-right: 4px" />{{ runButton.name }}
           </el-button>
         </div>
         <span style="color: red">*</span>
@@ -33,7 +33,7 @@
             v-model="runAsInput.value"
             :fetch-suggestions="runAsInput.el.query"
             :placeholder="runAsInput.placeholder"
-            size="mini"
+            size="small"
             style="display: inline-block; margin: 0 2px"
             @change="runAsInput.callback(runAsInput.value)"
             @select="runAsInput.callback(runAsInput.value)"
@@ -42,7 +42,7 @@
         <div class="upload_input">{{ $t('UploadDir') }}:</div>
         <div class="upload_input">
           <el-input
-            v-if="dstPathInput.type==='input'"
+            v-if="dstPathInput.type === 'input'"
             v-model="dstPath"
             :placeholder="dstPathInput.placeholder"
             size="mini"
@@ -51,13 +51,15 @@
             <template slot="prepend">/tmp/</template>
           </el-input>
         </div>
-        <div
-          class="file-uploader"
-        >
+        <div class="file-uploader">
           <el-card>
             <div class="file-uploader-header">
-              <span>{{ $t('selectFiles', {number: uploadFileList.length}) }}</span>
-              <el-tooltip v-if="uploadFileList.length > 0" :content="$t('ClearSelection')" placement="top">
+              <span>{{ $t('selectFiles', { number: uploadFileList.length }) }}</span>
+              <el-tooltip
+                v-if="uploadFileList.length > 0"
+                :content="$t('ClearSelection')"
+                placement="top"
+              >
                 <i class="el-icon-delete" @click="clearAllFiles" />
               </el-tooltip>
             </div>
@@ -72,49 +74,43 @@
               multiple
             >
               <i class="el-icon-upload" />
-              <div class="el-upload__text" style="margin-bottom: 10px;padding: 0 5px 0 5px ">
+              <div class="el-upload__text" style="margin-bottom: 10px; padding: 0 5px 0 5px">
                 {{ $t('DragUploadFileInfo') }}
               </div>
               <span>
-                {{ $t('UploadFileLthHelpText', {limit: sizeLimitMb}) }}
+                {{ $t('UploadFileLthHelpText', { limit: sizeLimitMb }) }}
               </span>
-              <div slot="file" slot-scope="{file}">
+              <div slot="file" slot-scope="{ file }">
                 <li class="el-upload-list__item is-ready" tabindex="0">
                   <a :style="sameFileStyle(file)" class="el-upload-list__item-name">
                     <i class="el-icon-document" />{{ file.name }}
-                    <i style="color: #1ab394;float: right;font-weight:normal">
+                    <i style="color: #1ab394; float: right; font-weight: normal">
                       {{ formatFileSize(file.size) }}
                       <i class="el-icon-close" @click="removeFile(file)" />
                     </i>
                   </a>
                 </li>
               </div>
-              <div
-                v-if="uploadFileList.length === 0"
-                slot="tip"
-                class="empty-file-tip"
-              >
+              <div v-if="uploadFileList.length === 0" slot="tip" class="empty-file-tip">
                 {{ $tc('NoFiles') }}
               </div>
             </el-upload>
-            <el-progress
-              v-if="showProgress"
-              :percentage="progressLength"
-            />
+            <el-progress v-if="showProgress" :percentage="progressLength" />
             <div v-if="showProgress" class="status-info">
               <span class="left">{{ speedText }}</span>
               <span class="right">{{ loadedSize }} / {{ totalSize }}</span>
             </div>
           </el-card>
         </div>
-        <div style="margin-bottom: 5px;font-weight: bold; display: inline-block">{{ $tc('Output') }}:</div>
+        <div style="margin-bottom: 5px; font-weight: bold; display: inline-block">
+          {{ $tc('Output') }}:
+        </div>
         <span v-if="executionInfo.status && summary && !showProgress" style="float: right">
           <span>
             <span><b>{{ $tc('Status') }}: </b></span>
-            <span
-              v-if="executionInfo.status==='timeout'"
-              class="status_warning"
-            >{{ $tc('Timeout') }}</span>
+            <span v-if="executionInfo.status === 'timeout'" class="status_warning">{{
+              $tc('Timeout')
+            }}</span>
             <span v-else>
               <span class="status_success">{{ $tc('Success') + ': ' + summary.success }}</span>
               <span class="status_warning">{{ $tc('Skip') + ': ' + summary.skip }}</span>
@@ -127,14 +123,10 @@
           </span>
         </span>
         <div class="output">
-          <Term
-            ref="xterm"
-            :show-tool-bar="true"
-            :xterm-config="xtermConfig"
-          />
+          <Term ref="xterm" :show-tool-bar="true" :xterm-config="xtermConfig" />
           <div style="height: 2px" />
         </div>
-        <div style="display: flex; margin-top:10px; justify-content: space-between" />
+        <div style="display: flex; margin-top: 10px; justify-content: space-between" />
       </div>
     </div>
   </Page>
@@ -193,20 +185,22 @@ export default {
           query: (query, cb) => {
             const { hosts, nodes } = this.getSelectedNodesAndHosts()
             cb([]) // 先返回空，避免输入时出现下拉闪烁
-            this.$axios.post('/api/v1/ops/username-hints/', {
-              nodes: nodes,
-              assets: hosts,
-              query: query
-            }).then(data => {
-              const ns = data.map(item => {
-                return { value: item.username }
+            this.$axios
+              .post('/api/v1/ops/username-hints/', {
+                nodes: nodes,
+                assets: hosts,
+                query: query
               })
-              cb(ns)
-            })
+              .then(data => {
+                const ns = data.map(item => {
+                  return { value: item.username }
+                })
+                cb(ns)
+              })
           }
         },
         options: [],
-        callback: (option) => {
+        callback: option => {
           this.runas = option
         }
       },
@@ -216,7 +210,7 @@ export default {
         align: 'left',
         value: '',
         placeholder: this.$tc('EnterUploadPath'),
-        callback: (val) => {
+        callback: val => {
           this.chdir = val
         }
       },
@@ -226,9 +220,9 @@ export default {
       uploadFileList: [],
       sizeLimitMb: store.getters.publicSettings['FILE_UPLOAD_SIZE_LIMIT_MB'],
       summary: {
-        'success': 0,
-        'failed': 0,
-        'skip': 0
+        success: 0,
+        failed: 0,
+        skip: 0
       },
       FileTransferBootStepHelpTips: [
         this.$tc('FileTransferBootStepHelpTips1'),
@@ -257,13 +251,13 @@ export default {
       const url = '/ws/ops/tasks/log/'
       const wsURL = scheme + '://' + document.location.hostname + port + url
       this.ws = new WebSocket(wsURL)
-      this.ws.onerror = (e) => {
+      this.ws.onerror = e => {
         this.xterm.write(this.wrapperError('Connect websocket server error'))
       }
       this.setWsCallback()
     },
     setWsCallback() {
-      this.ws.onmessage = (e) => {
+      this.ws.onmessage = e => {
         const data = JSON.parse(e.data)
         if (Object.prototype.hasOwnProperty.call(data, 'message')) {
           let message = data.message
@@ -332,7 +326,7 @@ export default {
       return firstPart + '...' + secondPart
     },
     handleSameFile(fileList) {
-      const filenameList = fileList.map((file) => file.name)
+      const filenameList = fileList.map(file => file.name)
       const filenameCount = _.countBy(filenameList)
       for (const file of fileList) {
         file.isSame = filenameCount[file.name] > 1
@@ -422,7 +416,7 @@ export default {
           }
         }, 100)
         JobUploadFile(form, {
-          onUploadProgress: (e) => {
+          onUploadProgress: e => {
             if (!e.total) return
             const percent = Math.floor((e.loaded / e.total) * 100)
             this.progressLength = Math.min(percent, 100)
@@ -434,16 +428,18 @@ export default {
               this.speedText = this.formatSpeed(speed)
             }
           }
-        }).then(res => {
-          this.showProgress = true
-          this.executionInfo.status = 'running'
-          this.currentTaskId = res.task_id
-          this.xtermConfig = { taskId: this.currentTaskId, type: 'shortcut_cmd' }
-          this.setCostTimeInterval()
-          this.writeExecutionOutput()
-        }).catch(() => {
-          this.execute_stop()
         })
+          .then(res => {
+            this.showProgress = true
+            this.executionInfo.status = 'running'
+            this.currentTaskId = res.task_id
+            this.xtermConfig = { taskId: this.currentTaskId, type: 'shortcut_cmd' }
+            this.setCostTimeInterval()
+            this.writeExecutionOutput()
+          })
+          .catch(() => {
+            this.execute_stop()
+          })
       })
     },
     execute_stop() {
@@ -484,7 +480,7 @@ export default {
   padding: 5px 0;
   background-color: var(--color-primary);
   border-color: var(--color-primary);
-  color: #FFFFFF;
+  color: #ffffff;
   border-radius: 2px;
 }
 
@@ -517,7 +513,7 @@ export default {
 
 .upload_input {
   display: inline-block;
-  margin: 0 2px
+  margin: 0 2px;
 }
 
 .file-uploader {
@@ -603,5 +599,4 @@ export default {
   justify-content: space-between;
   width: 100%;
 }
-
 </style>

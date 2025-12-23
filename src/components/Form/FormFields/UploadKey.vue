@@ -1,7 +1,7 @@
 <template>
   <div class="upload-key">
     <input ref="upLoadFile" style="display: none" type="file" @change="onChange">
-    <el-button v-if="!fingerprint" size="mini" @click.native.stop="onUpLoad">
+    <el-button v-if="!fingerprint" size="small" @click.native.stop="onUpLoad">
       {{ $t('SelectFile') }}
     </el-button>
     <span v-else>
@@ -55,9 +55,7 @@ export default {
         }
         vm.$emit('input', result)
       }
-      reader.readAsText(
-        upLoadFile[0]
-      )
+      reader.readAsText(upLoadFile[0])
     }
   }
 }
@@ -65,6 +63,6 @@ export default {
 
 <style scoped>
 .fingerprint {
-  font-size: 12px
+  font-size: 12px;
 }
 </style>

@@ -1,12 +1,7 @@
 <template>
   <div>
     <div>
-      <el-button
-        :disabled="isDisabled"
-        size="mini"
-        type="primary"
-        @click="onOpenDialog"
-      >
+      <el-button :disabled="isDisabled" size="small" type="primary" @click="onOpenDialog">
         {{ $tc('Setting') }}
       </el-button>
     </div>
@@ -127,21 +122,21 @@ export default {
       this.remoteMeta = data.actions[this.config.method.toUpperCase()] || {}
     },
     async getFilterPlatforms() {
-      return await this.$axios.post(
-        '/api/v1/assets/platforms/filter-nodes-assets/',
-        {
-          'node_ids': this.nodes,
-          'asset_ids': this.assets,
-          'platform_ids': this.platforms.map(i => i.id || i.pk || i)
-        }
-      )
+      return await this.$axios.post('/api/v1/assets/platforms/filter-nodes-assets/', {
+        node_ids: this.nodes,
+        asset_ids: this.assets,
+        platform_ids: this.platforms.map(i => i.id || i.pk || i)
+      })
     },
     async handleFieldChange() {
       const platforms = await this.getFilterPlatforms()
       let pushAccountMethods = platforms.map(i => i.automation[this.method])
       pushAccountMethods = _.uniq(pushAccountMethods)
       // 检测是否有可设置的推送方式
-      const hasCanSettingPushMethods = _.intersection(pushAccountMethods, Object.keys(this.remoteMeta))
+      const hasCanSettingPushMethods = _.intersection(
+        pushAccountMethods,
+        Object.keys(this.remoteMeta)
+      )
       this.setFormConfig(hasCanSettingPushMethods)
       this.isDisabled = hasCanSettingPushMethods.length <= 0
     },
@@ -152,8 +147,8 @@ export default {
       this.config.fields = []
       // Todo: 未来改成后端处理，生成 serializer, 这里就不用判断类型了
       const typeMapper = {
-        'string': 'input',
-        'boolean': 'switch'
+        string: 'input',
+        boolean: 'switch'
       }
 
       for (const method of methods) {
@@ -199,5 +194,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

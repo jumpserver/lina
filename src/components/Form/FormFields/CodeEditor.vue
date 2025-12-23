@@ -8,14 +8,13 @@
           :label="item.name"
           :prop="item.name"
         >
-
           <template v-if="item.type === 'button' && !item.isVisible">
             <el-tooltip :disabled="!item.tip" :content="item.tip">
               <el-button
                 :type="item.el && item.el.type"
                 class="start-stop-btn"
                 :disabled="item.disabled"
-                size="mini"
+                size="small"
                 @click="item.callback()"
               >
                 <i :class="item.icon" />
@@ -86,12 +85,14 @@
               <el-dropdown
                 class="select-dropdown"
                 trigger="click"
-                @command="(command) => {
-                  item.value = command
-                  item.callback(command)
-                }"
+                @command="
+                  command => {
+                    item.value = command
+                    item.callback(command)
+                  }
+                "
               >
-                <el-button size="mini" type="primary">
+                <el-button size="small" type="primary">
                   <div class="text-content">
                     <span class="content">
                       {{ getLabel(item.value, item.options) }}
@@ -145,12 +146,12 @@
             <el-button
               v-if="item.type === 'button'"
               :disabled="item.disabled"
-              size="mini"
+              size="small"
               type="default"
               @click="item.callback()"
             >
               <i v-if="item.icon.startsWith('fa')" :class="'fa ' + item.icon" />
-              <svg-icon v-else :icon-class="item.icon" style="font-size: 14px;" />
+              <svg-icon v-else :icon-class="item.icon" style="font-size: 14px" />
             </el-button>
           </el-tooltip>
         </div>
@@ -236,7 +237,9 @@ export default {
 
       Object.values(actionsObj).forEach(action => {
         if (action.name === this.$t('RunAs') && action.type === 'input') {
-          rules[action.name] = [{ required: true, message: this.$t('RequiredRunas'), trigger: 'blur' }]
+          rules[action.name] = [
+            { required: true, message: this.$t('RequiredRunas'), trigger: 'blur' }
+          ]
         }
       })
 
@@ -283,8 +286,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$header-bg-color: #F5F6F7;
-$input-border-color: #C0C4CC;
+$header-bg-color: #f5f6f7;
+$input-border-color: #c0c4cc;
 
 .code-editor {
   display: flex;
@@ -351,7 +354,6 @@ $input-border-color: #C0C4CC;
               display: flex;
               justify-content: space-between;
             }
-          ;
           }
         }
 
@@ -414,8 +416,8 @@ $input-border-color: #C0C4CC;
 .runas-input {
   height: 28px;
 
-  :deep(.el-select){
-      width: 100px;
+  :deep(.el-select) {
+    width: 100px;
   }
 }
 
@@ -464,7 +466,7 @@ $input-border-color: #C0C4CC;
   line-height: 28px;
   padding-left: 15px;
   font-size: 0;
-  border: 1px solid #DCDFE6;
+  border: 1px solid #dcdfe6;
   border-radius: 4px;
   background-color: #e6e6e6;
 }

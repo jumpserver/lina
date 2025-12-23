@@ -1,11 +1,5 @@
 <template>
-  <el-popover
-    :title="title"
-    placement="left"
-    trigger="click"
-    width="300"
-    @show="getAsyncItems"
-  >
+  <el-popover :title="title" placement="left" trigger="click" width="300" @show="getAsyncItems">
     <div v-if="!loading" class="detail-content">
       <div v-if="accountData.length === 0" class="empty-item">
         <span>{{ $t('No accounts') }}</span>
@@ -14,7 +8,7 @@
         <span>{{ getDisplay(account) }}</span>
       </div>
     </div>
-    <el-button slot="reference" class="link-btn" plain size="mini" type="primary">
+    <el-button slot="reference" class="link-btn" plain size="small" type="primary">
       {{ $t('View') }} <i class="el-icon-arrow-down" />
     </el-button>
   </el-popover>
@@ -54,11 +48,14 @@ export default {
       this.loading = true
       const userId = this.$route.params.id || 'self'
       const url = `/api/v1/perms/users/${userId}/assets/${this.row.id}/`
-      this.$axios.get(url).then(res => {
-        this.accountData = res?.permed_accounts || []
-      }).finally(() => {
-        this.loading = false
-      })
+      this.$axios
+        .get(url)
+        .then(res => {
+          this.accountData = res?.permed_accounts || []
+        })
+        .finally(() => {
+          this.loading = false
+        })
     }
   }
 }
@@ -72,12 +69,12 @@ export default {
 }
 
 .detail-item {
-  border-bottom: 1px solid #EBEEF5;
+  border-bottom: 1px solid #ebeef5;
   padding: 5px 0;
   margin-bottom: 0;
 
   &:hover {
-    background-color: #F5F7FA;
+    background-color: #f5f7fa;
   }
 }
 </style>

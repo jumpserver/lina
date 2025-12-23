@@ -6,16 +6,16 @@
         <el-button
           :disabled="disableDelete(item)"
           icon="el-icon-minus"
-          size="mini"
-          style="flex-shrink: 0;"
+          size="small"
+          style="flex-shrink: 0"
           type="danger"
           @click="handleDelete(index)"
         />
         <el-button
           :disabled="disableAdd(item, index)"
           icon="el-icon-plus"
-          size="mini"
-          style="flex-shrink: 0;"
+          size="small"
+          style="flex-shrink: 0"
           type="primary"
           @click="handleAdd(index)"
         />
@@ -30,15 +30,13 @@ export default {
   props: {
     value: {
       type: [Array, String],
-      default: () => ([])
+      default: () => []
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
-  computed: {
-  },
+  computed: {},
   mounted() {
     const value = this.value
     if (!value || !Array.isArray(value) || value.length === 0) {
@@ -72,7 +70,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .input-z {
   flex-shrink: 1;
   width: calc(100% - 80px) !important;
@@ -93,5 +90,4 @@ export default {
   height: 25px;
   padding: 5px;
 }
-
 </style>

@@ -1,6 +1,6 @@
 <template>
   <span>
-    <el-button v-if="shouldFold" circle class="search-btn" size="mini" @click="handleManualSearch">
+    <el-button v-if="shouldFold" circle class="search-btn" size="small" @click="handleManualSearch">
       <svg-icon icon-class="search" />
     </el-button>
     <TagSearch
@@ -78,7 +78,7 @@ export default {
       if (_.isEqual(tags, this.tags)) {
         return
       }
-      this.tags = (tags || [])
+      this.tags = tags || []
       if (tags.length === 0) {
         this.manualSearch = false
       }
@@ -109,7 +109,7 @@ export default {
         }
         if (['choice', 'labeled_choice'].indexOf(field.type) > -1 && field.choices) {
           option.children = field.choices.map(item => {
-            if (typeof (item.value) === 'boolean') {
+            if (typeof item.value === 'boolean') {
               if (item.value) {
                 return { label: item.label, value: 'True' }
               } else {
@@ -132,14 +132,17 @@ export default {
       }
     },
     optionUrlMeta() {
-      const url = (this.url.indexOf('?') === -1) ? `${this.url}?draw=1&display=1` : `${this.url}&draw=1&display=1`
+      const url =
+        this.url.indexOf('?') === -1
+          ? `${this.url}?draw=1&display=1`
+          : `${this.url}&draw=1&display=1`
       return this.$store.dispatch('common/getUrlMeta', { url: url })
     }
   }
 }
 </script>
 
-<style lang='less' scoped>
+<style lang="less" scoped>
 .search-btn {
   margin-top: 1px;
   cursor: pointer;

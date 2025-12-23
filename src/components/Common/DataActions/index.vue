@@ -1,5 +1,5 @@
 <template>
-  <div :class="grouped ? 'el-button-group' : 'el-button-ungroup'" class="data-actions layout">
+  <div :class="grouped ? 'el-button-group' : 'el-button-ungroup'" class="layout">
     <template v-for="action in iActions" :key="action.name">
       <el-dropdown
         v-if="action.dropdown"
@@ -28,35 +28,38 @@
             <Icon v-if="action.icon" :icon="action.icon" />
           </span>
           <span v-if="action.title">
-            {{ action.title }}<i class="el-icon-arrow-down el-icon--right" />
+            {{ action.title }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
           </span>
         </el-button>
-        <el-dropdown-menu slot="dropdown" style="overflow: auto; max-height: 60vh">
-          <template v-for="option in action.dropdown" :key="option.name">
-            <div v-if="option.group" class="dropdown-menu-title" style="width: 130px">
-              {{ option.group }}
-            </div>
-            <el-tooltip
-              :content="option.tip"
-              :disabled="!option.tip"
-              :open-delay="500"
-              placement="top"
-            >
-              <el-dropdown-item
-                :key="option.name"
-                :command="[option, action]"
-                :title="option.tip"
-                class="dropdown-item"
-                v-bind="{ ...option, icon: '' }"
+
+        <!-- <template #dropdown>
+          <el-dropdown-menu style="overflow: auto; max-height: 60vh">
+            <template v-for="option in action.dropdown" :key="option.name">
+              <div v-if="option.group" class="dropdown-menu-title" style="width: 130px">
+                {{ option.group }}
+              </div>
+              <el-tooltip
+                :content="option.tip"
+                :disabled="!option.tip"
+                :open-delay="500"
+                placement="top"
               >
-                <span v-if="actionsHasIcon(action.dropdown)" class="pre-icon">
-                  <Icon v-if="option.icon" :icon="option.icon" />
-                </span>
-                {{ option.title }}
-              </el-dropdown-item>
-            </el-tooltip>
-          </template>
-        </el-dropdown-menu>
+                <el-dropdown-item
+                  :key="option.name"
+                  :command="[option, action]"
+                  :title="option.tip"
+                  class="dropdown-item"
+                  v-bind="{ ...option, icon: '' }"
+                >
+                  <span v-if="actionsHasIcon(action.dropdown)" class="pre-icon">
+                    <Icon v-if="option.icon" :icon="option.icon" />
+                  </span>
+                  {{ option.title }}
+                </el-dropdown-item>
+              </el-tooltip>
+            </template>
+          </el-dropdown-menu>
+        </template> -->
       </el-dropdown>
 
       <el-button
@@ -67,12 +70,14 @@
         v-bind="{ ...cleanButtonAction(action), icon: '' }"
         @click="handleClick(action)"
       >
-        <!-- <el-tooltip :content="action.tip" :disabled="!action.tip" placement="top"> -->
-        <!-- <span v-if="action.icon" >
-          <Icon :icon="action.icon" />
-        </span> -->
-        {{ action.title }}
-        <!-- </el-tooltip> -->
+        <el-tooltip :content="action.tip" :disabled="!action.tip" placement="top">
+          <div>
+            <Icon v-if="action.icon" :icon="action.icon" />
+            <span>
+              {{ action.title }}
+            </span>
+          </div>
+        </el-tooltip>
       </el-button>
     </template>
   </div>
@@ -226,6 +231,21 @@ $color-drop-menu-border: #e4e7ed;
 
 // 通用
 .layout {
+  // 确保所有按钮都使用 flex 布局，内容垂直居中
+  :deep(.el-button) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+
+    // 确保按钮内部内容垂直居中
+    > span {
+      display: inline-flex;
+      align-items: center;
+      line-height: 1;
+    }
+  }
+
   .action-item {
     margin-left: 5px;
 
@@ -248,6 +268,13 @@ $color-drop-menu-border: #e4e7ed;
   .action-item.el-dropdown {
     font-size: 11px;
 
+    // 确保下拉按钮也垂直居中
+    :deep(.el-button) {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     .more-action.el-button--default {
       :deep(.el-icon-arrow-down.el-icon--right) {
         color: var(--color-icon-primary) !important;
@@ -262,81 +289,6 @@ $color-drop-menu-border: #e4e7ed;
       &.el-dropdown-selfdefine {
         border: none;
       }
-    }
-  }
-}
-
-// 下拉 options
-.el-dropdown-menu {
-  :deep(.more-batch-processing) {
-    &:hover {
-      background-color: transparent !important;
-    }
-
-    &.el-dropdown-menu__item--divided {
-      margin-top: 0;
-      border-top: none;
-      color: var(--color-text-primary);
-      cursor: auto;
-      font-size: 12px;
-      line-height: 30px;
-      border-bottom: 1px solid $color-divided;
-
-      &:before {
-        height: 0;
-      }
-    }
-  }
-
-  .dropdown-item {
-    color: var(--color-text-primary);
-    line-height: 34px;
-
-    .pre-icon {
-      width: 17px;
-      display: inline-block;
-    }
-
-    :deep(i.fa) {
-      font-size: 13px;
-      height: 13px;
-      width: 13px;
-      margin-right: 0;
-    }
-
-    :deep(.svg-icon) {
-      font-size: 13px;
-      height: 13px;
-      width: 13px;
-    }
-  }
-
-  .el-dropdown-menu__item {
-    padding: 0 20px;
-
-    &.is-disabled {
-      color: var(--color-disabled);
-      cursor: not-allowed;
-      pointer-events: auto;
-    }
-
-    &:not(.is-disabled):hover {
-      background-color: var(--color-disabled-background);
-    }
-  }
-
-  .dropdown-menu-title {
-    text-align: left;
-    font-size: 12px;
-    color: $color-drop-menu-title;
-    line-height: 30px;
-    padding-left: 10px;
-    padding-top: 10px;
-    border-top: solid 1px $color-drop-menu-border;
-
-    &:first-child {
-      padding-top: 0;
-      border-top: none;
     }
   }
 }

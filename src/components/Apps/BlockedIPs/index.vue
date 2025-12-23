@@ -2,7 +2,7 @@
   <div>
     <div>
       <el-button
-        size="mini"
+        size="small"
         type="primary"
         @click="onOpenDialog"
       >

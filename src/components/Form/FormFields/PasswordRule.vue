@@ -1,6 +1,6 @@
 <template>
   <div style="display: block">
-    <el-button size="mini" type="primary" @click="visible=true">
+    <el-button size="small" type="primary" @click="visible = true">
       {{ $t('Setting') }}
     </el-button>
     <Dialog
@@ -96,12 +96,9 @@ export default {
         this.visible = false
       }, 100)
     },
-    handleOpen() {
-    }
+    handleOpen() {}
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

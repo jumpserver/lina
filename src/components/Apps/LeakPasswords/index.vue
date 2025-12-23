@@ -1,11 +1,7 @@
 <template>
   <div>
     <div>
-      <el-button
-        size="mini"
-        type="primary"
-        @click="onOpenDialog"
-      >
+      <el-button size="small" type="primary" @click="onOpenDialog">
         {{ $tc('View') }}
       </el-button>
     </div>
@@ -72,5 +68,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

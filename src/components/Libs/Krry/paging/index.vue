@@ -33,14 +33,14 @@
               :disabled="disablePre"
               class="el-transfer__button"
               icon="el-icon-arrow-left"
-              size="mini"
+              size="small"
               @click="deleteData"
             />
             <el-button
               :disabled="disableNex"
               class="el-transfer__button"
               icon="el-icon-arrow-right"
-              size="mini"
+              size="small"
               type="primary"
               @click="addData"
             />
@@ -209,20 +209,14 @@ export default {
       // this.checkedData 为空 且 从来没有将已选区置为空，则从 selectedData 获取
       if ((!this.checkedData.length && !this.manualEmpty) || selectedChange) {
         this.checkedData = JSON.parse(JSON.stringify(this.selectedData))
-        const keywords = this.$refs.hasSelect
-          ? this.$refs.hasSelect.searchWord
-          : ''
+        const keywords = this.$refs.hasSelect ? this.$refs.hasSelect.searchWord : ''
         keywords && this.searchWord(keywords, 1)
       }
       if (!this.async) {
         this.selectListCheck = JSON.parse(JSON.stringify(this.checkedData))
         const checkDataId = this.selectListCheck.map(ele => ele.id)
-        this.notSelectDataList = this.originList.filter(
-          ele => !checkDataId.includes(ele.id)
-        )
-        this.dataListNoCheck = JSON.parse(
-          JSON.stringify(this.notSelectDataList)
-        )
+        this.notSelectDataList = this.originList.filter(ele => !checkDataId.includes(ele.id))
+        this.dataListNoCheck = JSON.parse(JSON.stringify(this.notSelectDataList))
       } else {
         if (selectedChange) {
           this.selectListCheck = JSON.parse(JSON.stringify(this.checkedData))
@@ -233,9 +227,7 @@ export default {
             !checkDataId.includes(ele.id) &&
             (ele.label.includes(this.noSelectKeyword) || this.asyncSearchFlag)
         )
-        this.dataListNoCheck = this.originList.filter(
-          ele => !checkDataId.includes(ele.id)
-        )
+        this.dataListNoCheck = this.originList.filter(ele => !checkDataId.includes(ele.id))
       }
     },
     searchWord(keyword, titleId) {
@@ -244,15 +236,11 @@ export default {
       if (titleId === 0) {
         this.noSelectKeyword = keyword
         if (!this.asyncSearchFlag) {
-          this.notSelectDataList = this.dataListNoCheck.filter(val =>
-            val.label.includes(keyword)
-          )
+          this.notSelectDataList = this.dataListNoCheck.filter(val => val.label.includes(keyword))
         }
       } else {
         this.haSelectKeyword = keyword
-        this.checkedData = this.selectListCheck.filter(val =>
-          val.label.includes(keyword)
-        )
+        this.checkedData = this.selectListCheck.filter(val => val.label.includes(keyword))
       }
       const refsName = titleId === 0 ? 'noSelect' : 'hasSelect'
       // 延迟执行
@@ -291,29 +279,21 @@ export default {
           !noCheckDataId.includes(ele.id) &&
           (ele.label.includes(this.noSelectKeyword) || this.asyncSearchFlag)
       )
-      this.dataListNoCheck = this.dataListNoCheck.filter(
-        ele => !noCheckDataId.includes(ele.id)
-      )
+      this.dataListNoCheck = this.dataListNoCheck.filter(ele => !noCheckDataId.includes(ele.id))
       // 已选区数据增加
       if (!this.async && this.sort) {
         // 排序，从固定不变的所有数据中过滤，顺序就不会乱。但若数据量大就会比较卡
         // 异步分页不支持排序
         const dataListNoCheckId = this.dataListNoCheck.map(ele => ele.id)
         this.checkedData = this.originList.filter(
-          ele =>
-            !dataListNoCheckId.includes(ele.id) &&
-            ele.label.includes(this.haSelectKeyword)
+          ele => !dataListNoCheckId.includes(ele.id) && ele.label.includes(this.haSelectKeyword)
         )
-        this.selectListCheck = this.originList.filter(
-          ele => !dataListNoCheckId.includes(ele.id)
-        )
+        this.selectListCheck = this.originList.filter(ele => !dataListNoCheckId.includes(ele.id))
       } else {
         // 这种效率更高的方法，但不能排序
         this.checkedData.push(...this.noCheckData)
         this.selectListCheck.push(...this.noCheckData)
-        this.checkedData = this.checkedData.filter(ele =>
-          ele.label.includes(this.haSelectKeyword)
-        )
+        this.checkedData = this.checkedData.filter(ele => ele.label.includes(this.haSelectKeyword))
       }
     },
     // 从已选中删除
@@ -321,13 +301,9 @@ export default {
       // 已选区数据过滤
       const hasCheckDataId = this.hasCheckData.map(ele => ele.id)
       this.checkedData = this.checkedData.filter(
-        ele =>
-          !hasCheckDataId.includes(ele.id) &&
-          ele.label.includes(this.haSelectKeyword)
+        ele => !hasCheckDataId.includes(ele.id) && ele.label.includes(this.haSelectKeyword)
       )
-      this.selectListCheck = this.selectListCheck.filter(
-        ele => !hasCheckDataId.includes(ele.id)
-      )
+      this.selectListCheck = this.selectListCheck.filter(ele => !hasCheckDataId.includes(ele.id))
 
       this.manualEmpty = !this.checkedData.length
 
@@ -340,9 +316,7 @@ export default {
           !selectListCheckId.includes(ele.id) &&
           (ele.label.includes(this.noSelectKeyword) || this.asyncSearchFlag)
       )
-      this.dataListNoCheck = this.originList.filter(
-        ele => !selectListCheckId.includes(ele.id)
-      )
+      this.dataListNoCheck = this.originList.filter(ele => !selectListCheckId.includes(ele.id))
     },
     // 提供获取已选数据的钩子
     getSelectedData() {
@@ -367,11 +341,7 @@ export default {
         this.$nextTick(() => {
           this.$refs.noSelect.asyncSearch = true
         })
-        const resData = await this.getSearchData(
-          keyword,
-          pageIndex,
-          this.pageSize
-        )
+        const resData = await this.getSearchData(keyword, pageIndex, this.pageSize)
         if (Array.isArray(resData) && resData.length) {
           this.asyncDataList = resData
           this.notSelectDataList = resData
@@ -439,7 +409,7 @@ export default {
 
   @media screen and (max-width: 992px) {
     margin: 8px 8px;
-    text-align: start
+    text-align: start;
   }
 
   .el-button.is-circle {
@@ -453,5 +423,4 @@ export default {
     padding: 5px;
   }
 }
-
 </style>

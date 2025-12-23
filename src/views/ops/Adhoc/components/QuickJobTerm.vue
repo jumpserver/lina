@@ -2,26 +2,22 @@
   <div class="term-wrapper">
     <div class="term-header">
       <div class="header-text">{{ $tc('Output') }}</div>
-      <div
-        v-if="executionInfo.status"
-        class="header-status"
-      >
+      <div v-if="executionInfo.status" class="header-status">
         <span class="status-item">
-          <el-link
-            @click="viewConfirmRunAssets"
-          >
+          <el-link @click="viewConfirmRunAssets">
             <span>{{ selectAssets.length }}</span>
           </el-link>
-          <span style="display: inline-block;" @click="viewConfirmRunAssets">
+          <span style="display: inline-block" @click="viewConfirmRunAssets">
             {{ $t('AssetsSelected') }}
           </span>
         </span>
         <span class="status-item">
           <span>{{ $tc('Status') }}: </span>
           <span
-            :class="{'status_success':executionInfo.status.value==='success',
-                     'status_warning':executionInfo.status.value==='timeout',
-                     'status_danger':executionInfo.status.value==='failed'
+            :class="{
+              status_success: executionInfo.status.value === 'success',
+              status_warning: executionInfo.status.value === 'timeout',
+              status_danger: executionInfo.status.value === 'failed'
             }"
           >{{ $tc('' + executionInfo.status.label) }}</span>
         </span>
@@ -31,15 +27,11 @@
         </span>
       </div>
       <div v-if="showToolBar" class="actions">
-        <div
-          v-for="(item,index) in toolbar"
-          :key="index"
-          class="action-item"
-        >
+        <div v-for="(item, index) in toolbar" :key="index" class="action-item">
           <el-tooltip :content="item.tip" :open-delay="500">
             <el-button
               v-if="!item.isScrollButton || showScrollButton"
-              size="mini"
+              size="small"
               type="primary"
               @click="item.callback()"
             >
@@ -70,8 +62,7 @@ export default {
     },
     xtermConfig: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     executionInfo: {
       type: Object,
@@ -85,18 +76,23 @@ export default {
   },
   data() {
     return {
-      xterm: new Terminal(Object.assign({
-        fontFamily: 'monaco, Consolas, "Lucida Console", monospace',
-        lineHeight: 1.2,
-        fontSize: 13,
-        scrollback: 9999999,
-        rightClickSelectsWord: true,
-        theme: {
-          background: '#fff',
-          foreground: '#000',
-          selection: '#363535'
-        }
-      }, this.xtermConfig)),
+      xterm: new Terminal(
+        Object.assign(
+          {
+            fontFamily: 'monaco, Consolas, "Lucida Console", monospace',
+            lineHeight: 1.2,
+            fontSize: 13,
+            scrollback: 9999999,
+            rightClickSelectsWord: true,
+            theme: {
+              background: '#fff',
+              foreground: '#000',
+              selection: '#363535'
+            }
+          },
+          this.xtermConfig
+        )
+      ),
       toolbar: [
         {
           tip: this.$tc('ScrollToTop'),
@@ -173,11 +169,10 @@ export default {
     }
   }
 }
-
 </script>
 
 <style scoped lang="scss">
-$header-bg-color: #F5F6F7;
+$header-bg-color: #f5f6f7;
 $actions-hover-bg-color: #d2d2d2;
 
 .term-wrapper {
@@ -261,7 +256,7 @@ $actions-hover-bg-color: #d2d2d2;
   .xterm {
     overflow: auto;
     padding: 10px 0 0 20px;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
   }
 }
 </style>

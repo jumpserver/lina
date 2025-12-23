@@ -95,7 +95,9 @@ export default {
       const safeFields = { ...fields, ...allVariables }
 
       // 安全解析模板
-      return new Function(...Object.keys(safeFields), `return \`${template}\`;`)(...Object.values(safeFields))
+      return new Function(...Object.keys(safeFields), `return \`${template}\`;`)(
+        ...Object.values(safeFields)
+      )
     },
 
     createWatermark() {

@@ -243,6 +243,9 @@ export default {
 
 <style lang="scss" scoped>
 .table-actions {
+  :deep(.el-button) {
+    height: 25px;
+  }
   :deep(.el-icon-arrow-down) {
     display: none;
   }

@@ -16,12 +16,7 @@
             class="prepend"
             @change="handleProtocolChange($event, item)"
           >
-            <el-option
-              v-for="p of remainProtocols"
-              :key="p.name"
-              :label="p.name"
-              :value="p.name"
-            />
+            <el-option v-for="p of remainProtocols" :key="p.name" :label="p.name" :value="p.name" />
           </el-select>
         </template>
         <template #append>
@@ -36,8 +31,8 @@
         <el-button
           :disabled="disableDelete(item)"
           icon="el-icon-minus"
-          size="mini"
-          style="flex-shrink: 0;"
+          size="small"
+          style="flex-shrink: 0"
           type="danger"
           @click="handleDelete(index)"
         />
@@ -45,8 +40,8 @@
           v-if="index === items.length - 1"
           :disabled="disableAdd(item, index)"
           icon="el-icon-plus"
-          size="mini"
-          style="flex-shrink: 0;"
+          size="small"
+          style="flex-shrink: 0"
           type="primary"
           @click="handleAdd(index)"
         />
@@ -55,8 +50,8 @@
     <el-button
       v-if="items.length === 0"
       icon="el-icon-plus"
-      size="mini"
-      style="flex-shrink: 0;"
+      size="small"
+      style="flex-shrink: 0"
       type="primary"
       @click="handleAdd(0)"
     />
@@ -88,7 +83,7 @@ export default {
     },
     choices: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     readonly: {
       // 这个是在详情中，不可编辑，包括所有
@@ -102,7 +97,7 @@ export default {
     },
     showSetting: {
       type: Function,
-      default: (item) => true
+      default: item => true
     },
     instance: {
       type: Object,
@@ -279,7 +274,7 @@ export default {
     },
     setDefaultItems(choices) {
       let items = []
-      const requiredItems = choices.filter(item => (item.required || item.primary))
+      const requiredItems = choices.filter(item => item.required || item.primary)
 
       if (this.value instanceof Array && this.value.length > 0) {
         const protocols = []
@@ -298,7 +293,7 @@ export default {
         const allProtocolNames = protocols.map(item => item.name)
         items = protocols.filter(item => allProtocolNames.indexOf(item.name) !== -1)
       } else {
-        const defaults = choices.filter(item => (item.required || item.primary || item.default))
+        const defaults = choices.filter(item => item.required || item.primary || item.default)
         if (defaults.length === 0 && choices.length !== 0) {
           defaults.push(choices[0])
         }
@@ -348,7 +343,7 @@ export default {
 .input-button {
   margin-top: 2px;
   display: flex;
-  margin-left: 20px
+  margin-left: 20px;
 }
 
 .input-button :deep(.el-button.el-button--mini) {

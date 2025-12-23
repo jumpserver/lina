@@ -1,34 +1,52 @@
 <template>
   <IBox :title="title" :type="type" class="the-box" v-bind="$attrs">
-    <table class="CardTable" style="width: 100%;table-layout:fixed;">
+    <table class="CardTable" style="width: 100%; table-layout: fixed">
       <tr>
         <td colspan="2">
-          <Select2 ref="select2" v-model="select2.value" :disabled="iDisabled" show-select-all v-bind="select2" />
+          <Select2
+            ref="select2"
+            v-model="select2.value"
+            :disabled="iDisabled"
+            show-select-all
+            v-bind="select2"
+          />
         </td>
       </tr>
       <slot />
       <tr>
         <td colspan="2">
-          <el-button :disabled="iDisabled" :loading="submitLoading" :type="type" size="small" @click="addObjects">
+          <el-button
+            :disabled="iDisabled"
+            :loading="submitLoading"
+            :type="type"
+            size="small"
+            @click="addObjects"
+          >
             {{ $t('Add') }}
           </el-button>
         </td>
       </tr>
       <template v-if="showHasObjects">
         <tr v-for="obj of iHasObjects" :key="obj.value" class="item">
-          <td style="width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+          <td style="width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
             <el-tooltip
               :content="obj.label.toString()"
               :open-delay="500"
               effect="dark"
               placement="left"
-              style="margin: 4px;"
+              style="margin: 4px"
             >
               <b>{{ obj.label }}</b>
             </el-tooltip>
           </td>
           <td>
-            <el-button :disabled="iDisabled" size="mini" style="float: right" type="danger" @click="removeObject(obj)">
+            <el-button
+              :disabled="iDisabled"
+              size="small"
+              style="float: right"
+              type="danger"
+              @click="removeObject(obj)"
+            >
               <i class="fa fa-minus" />
             </el-button>
           </td>
@@ -36,7 +54,13 @@
       </template>
       <tr v-if="params.hasMore && showHasMore" class="item">
         <td colspan="2">
-          <el-button :disabled="iDisabled" :type="type" size="small" style="width: 100%" @click="loadMore">
+          <el-button
+            :disabled="iDisabled"
+            :type="type"
+            size="small"
+            style="width: 100%"
+            @click="loadMore"
+          >
             <i class="fa fa-arrow-down" />
             {{ $t('More') }}
           </el-button>
@@ -107,8 +131,7 @@ export default {
     },
     performDelete: {
       type: Function,
-      default: (obj, that) => {
-      }
+      default: (obj, that) => {}
     },
     allowCreate: {
       type: Boolean,
@@ -116,14 +139,13 @@ export default {
     },
     select2Config: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     onDeleteSuccess: {
       type: Function,
       default(obj, that) {
         // 从 hasObjects 中移除这个object
-        const theRemoveIndex = that.iHasObjects.findIndex((v) => v.value === obj.value)
+        const theRemoveIndex = that.iHasObjects.findIndex(v => v.value === obj.value)
         that.iHasObjects.splice(theRemoveIndex, 1)
 
         // 从 disabled values 中移除这个 value
@@ -154,8 +176,7 @@ export default {
     },
     performAdd: {
       type: Function,
-      default: (objects, that) => {
-      }
+      default: (objects, that) => {}
     },
     showAddAll: {
       type: Boolean,
@@ -166,7 +187,10 @@ export default {
       default(objects, that) {
         that.$log.debug('Select value', that.select2.value)
         const oldValues = that.iHasObjects.map(item => item.value)
-        that.iHasObjects = [...that.iHasObjects, ...objects.filter(item => !oldValues.includes(item.value))]
+        that.iHasObjects = [
+          ...that.iHasObjects,
+          ...objects.filter(item => !oldValues.includes(item.value))
+        ]
         that.$refs.select2.clearSelected()
         that.$message.success(that.$t('AddSuccessMsg'))
         that.$refs.select2.refresh()
@@ -231,7 +255,7 @@ export default {
       this.$log.debug('hasObjects change, add ', addValues, 'remove ', removeValues)
       let disabledValues = this.select2.disabledValues
       if (removeValues.length > 0) {
-        disabledValues = disabledValues.filter((v) => {
+        disabledValues = disabledValues.filter(v => {
           return removeValues.indexOf(v) === -1
         })
       }
@@ -269,7 +293,7 @@ export default {
       const params = this.safeMakeParams(this.params)
       let data = await this.$axios.get(this.iAjax.url, {
         params: params,
-        validateStatus: (status) => {
+        validateStatus: status => {
           if (status === 403) {
             return 200
           }
@@ -278,8 +302,8 @@ export default {
       })
       data = this.iAjax.processResults.bind(this)(data)
       if (data.results) {
-        data.results.forEach((v) => {
-          if (!this.iHasObjects.find((item) => item.value === v.value)) {
+        data.results.forEach(v => {
+          if (!this.iHasObjects.find(item => item.value === v.value)) {
             this.iHasObjects.push(v)
           }
         })
@@ -295,7 +319,7 @@ export default {
       this.select2.disabledValues = this.hasObjectsId
 
       if (this.getHasObjects) {
-        this.getHasObjects(this.hasObjectsId).then((data) => {
+        this.getHasObjects(this.hasObjectsId).then(data => {
           this.iHasObjects = data
         })
       } else {
@@ -305,22 +329,25 @@ export default {
       }
     },
     removeObject(obj) {
-      this.performDelete(obj, this).then(() => {
-        this.onDeleteSuccess(obj, this)
-      }).catch(error => {
-        this.onDeleteFail(error, this)
-      })
+      this.performDelete(obj, this)
+        .then(() => {
+          this.onDeleteSuccess(obj, this)
+        })
+        .catch(error => {
+          this.onDeleteFail(error, this)
+        })
     },
     addObjects() {
-      const objects = this.$refs.select2.$refs.select.selected.map(item => ({ label: item.label, value: item.value }))
+      const objects = this.$refs.select2.$refs.select.selected.map(item => ({
+        label: item.label,
+        value: item.value
+      }))
       if (objects.length === 0) {
         return
       }
-      this.performAdd(objects, this).then(
-        () => {
-          this.onAddSuccess(objects, this)
-        }
-      )
+      this.performAdd(objects, this).then(() => {
+        this.onAddSuccess(objects, this)
+      })
     },
     async selectAll() {
       this.selectAllDisabled = true
@@ -333,8 +360,9 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-b, strong {
+<style lang="scss" scoped>
+b,
+strong {
   font-weight: 700;
   font-size: 13px;
 }
@@ -346,7 +374,7 @@ tr td {
 }
 
 tr.item td {
-  border-top: 1px dashed #EBEEF5;
+  border-top: 1px dashed #ebeef5;
 }
 
 .box-margin {

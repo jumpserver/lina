@@ -162,53 +162,53 @@ $color-drop-menu-title: #909399;
 $color-drop-menu-border: #e4e7ed;
 
 .table-header {
-    // 主要是 Table 中的操作列
-  :deep(.data-actions) {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
+  // 主要是 Table 中的操作列
+  // :deep(.data-actions) {
+  //   display: flex;
+  //   justify-content: center;
+  //   align-items: flex-end;
 
-    .el-button {
-      padding: 2px 5px;
-      font-size: 13px;
-      display: inline-block !important;
-      height: 30px;
-      line-height: 30px;
+  //   .el-button {
+  //     padding: 2px 5px;
+  //     font-size: 13px;
+  //     display: inline-block !important;
+  //     height: 30px;
+  //     line-height: 30px;
 
-      &:not(.is-plain) {
-        color: $btn-text-color;
-      }
+  //     &:not(.is-plain) {
+  //       color: $btn-text-color;
+  //     }
 
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+  //     overflow: hidden;
+  //     text-overflow: ellipsis;
+  //     white-space: nowrap;
 
-      // 确保按钮内部所有内容都垂直居中
-      :deep(span) {
-        display: inline-flex;
-        align-items: center;
-        line-height: 1;
-        vertical-align: middle;
-      }
-    }
+  //     // 确保按钮内部所有内容都垂直居中
+  //     :deep(span) {
+  //       display: inline-flex;
+  //       align-items: center;
+  //       line-height: 1;
+  //       vertical-align: middle;
+  //     }
+  //   }
 
-    :deep(.action-item.el-dropdown .el-button) {
-      display: block;
-      color: var(--color-primary);
-      background-color: $color-btn-background;
-      border-color: $color-btn-focus-background;
+  //   :deep(.action-item.el-dropdown .el-button) {
+  //     display: block;
+  //     color: var(--color-primary);
+  //     background-color: $color-btn-background;
+  //     border-color: $color-btn-focus-background;
 
-      &:focus {
-        color: $btn-text-color;
-        background-color: $color-btn-focus-background !important;
-      }
+  //     &:focus {
+  //       color: $btn-text-color;
+  //       background-color: $color-btn-focus-background !important;
+  //     }
 
-      &:hover {
-        color: $btn-text-color;
-        background-color: $color-btn-focus-background;
-      }
-    }
-  }
+  //     &:hover {
+  //       color: $btn-text-color;
+  //       background-color: $color-btn-focus-background;
+  //     }
+  //   }
+  // }
 
   .left-side {
     display: block;
@@ -216,6 +216,18 @@ $color-drop-menu-border: #e4e7ed;
 
     :deep(.action-item.el-dropdown > .el-button) {
       height: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    :deep(.action-item.el-button) {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      height: 30px;
     }
   }
 

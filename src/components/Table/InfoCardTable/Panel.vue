@@ -8,13 +8,9 @@
           <span class="comment">{{ object.provider.label }}</span>
         </div>
       </div>
-      <div
-        v-if="iActions.length !== 0"
-        class="panel-actions"
-        @click="handleClick($event)"
-      >
+      <div v-if="iActions.length !== 0" class="panel-actions" @click="handleClick($event)">
         <el-dropdown>
-          <el-button size="mini">
+          <el-button size="small">
             <i class="el-icon-more el-icon--right" />
           </el-button>
           <el-dropdown-menu default="dropdown">
@@ -64,21 +60,19 @@ export default {
     },
     getImage: {
       type: Function,
-      default: (obj) => ''
+      default: obj => ''
     },
     getInfos: {
       type: Function,
-      default: (obj) => []
+      default: obj => []
     },
     handleUpdate: {
       type: Function,
-      default: () => {
-      }
+      default: () => {}
     },
     onView: {
       type: Function,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -152,7 +146,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 div.info-panel {
   display: flex;
   flex-direction: column;
@@ -200,13 +193,13 @@ div.info-panel {
       align-items: center;
 
       :deep(.button.el-button--mini) {
-          padding: 5px 7px;
+        padding: 5px 7px;
 
-          .el-icon--right {
-            margin-left: 0;
-          }
+        .el-icon--right {
+          margin-left: 0;
         }
       }
+    }
   }
 
   .panel-content {

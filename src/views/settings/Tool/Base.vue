@@ -45,21 +45,11 @@
         <Term ref="xterm" :xterm-config="xtermConfig" style="border: solid 1px #dddddd" />
       </el-form-item>
       <el-form-item>
-        <el-button
-          v-if="!isTesting"
-          size="mini"
-          type="primary"
-          @click="submitTest"
-        >
-          <i class="fa fa-play" style="margin-right: 4px;" />{{ $t('Test') }}
+        <el-button v-if="!isTesting" size="small" type="primary" @click="submitTest">
+          <i class="fa fa-play" style="margin-right: 4px" />{{ $t('Test') }}
         </el-button>
-        <el-button
-          v-if="hasStop && isTesting"
-          size="mini"
-          type="danger"
-          @click="interruptTest"
-        >
-          <i class="fa fa-stop" style="margin-right: 4px;" />{{ $t('Stop') }}
+        <el-button v-if="hasStop && isTesting" size="small" type="danger" @click="interruptTest">
+          <i class="fa fa-stop" style="margin-right: 4px" />{{ $t('Stop') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -92,8 +82,7 @@ export default {
     },
     rules: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     fields: {
       type: Array,
@@ -127,20 +116,20 @@ export default {
       this.setWsCallback()
     },
     setWsCallback() {
-      this.ws.onmessage = (e) => {
+      this.ws.onmessage = e => {
         const data = JSON.parse(e.data)
         this.xterm.write(data.msg)
       }
-      this.ws.onopen = (e) => {
+      this.ws.onopen = e => {
         this.$log.debug('websocket connected: ', e)
         this.ws.send(JSON.stringify(this.iTestData))
         this.isTesting = true
       }
-      this.ws.onerror = (e) => {
+      this.ws.onerror = e => {
         this.xterm.write(this.$tc('WebSocketDisconnect'))
         this.isTesting = false
       }
-      this.ws.onclose = (e) => {
+      this.ws.onclose = e => {
         this.xterm.write(this.$tc('TaskDone'))
         this.isTesting = false
       }
@@ -149,7 +138,7 @@ export default {
       this.testData[key] = val
     },
     submitTest() {
-      this.$refs['testForm'].validate((valid) => {
+      this.$refs['testForm'].validate(valid => {
         if (valid) {
           this.enableWS()
         }

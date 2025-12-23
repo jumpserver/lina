@@ -1,15 +1,11 @@
 <template>
-  <div style="position: relative;">
+  <div style="position: relative">
     <div v-if="showToolBar" class="actions">
-      <div
-        v-for="(item,index) in toolbar"
-        :key="index"
-        style="display: inline-block"
-      >
+      <div v-for="(item, index) in toolbar" :key="index" style="display: inline-block">
         <el-tooltip :content="item.tip" :open-delay="500">
           <el-button
             v-if="!item.isScrollButton || showScrollButton"
-            size="mini"
+            size="small"
             type="default"
             @click="item.callback()"
           >
@@ -39,23 +35,27 @@ export default {
     },
     xtermConfig: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
     return {
-      xterm: new Terminal(Object.assign({
-        fontFamily: 'monaco, Consolas, "Lucida Console", monospace',
-        lineHeight: 1.2,
-        fontSize: 13,
-        rightClickSelectsWord: true,
-        theme: {
-          background: '#fff',
-          foreground: '#000',
-          selection: '#363535'
-        }
-      }, this.xtermConfig)),
+      xterm: new Terminal(
+        Object.assign(
+          {
+            fontFamily: 'monaco, Consolas, "Lucida Console", monospace',
+            lineHeight: 1.2,
+            fontSize: 13,
+            rightClickSelectsWord: true,
+            theme: {
+              background: '#fff',
+              foreground: '#000',
+              selection: '#363535'
+            }
+          },
+          this.xtermConfig
+        )
+      ),
       toolbar: [
         {
           tip: this.$tc('ScrollToTop'),
@@ -118,21 +118,20 @@ export default {
     }
   }
 }
-
 </script>
 
 <style scoped>
 .xterm {
   overflow: auto;
   padding-left: 5px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 }
 
 .actions {
   text-align: right;
-  background-color: #FFF;
+  background-color: #fff;
   padding-right: 5px;
-  padding-top: 2px
+  padding-top: 2px;
 }
 
 .el-button {

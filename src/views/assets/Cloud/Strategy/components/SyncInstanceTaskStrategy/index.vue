@@ -9,8 +9,8 @@
       :visible.sync="visible"
       @confirm="onAttrDialogConfirm"
     />
-    <el-button size="mini" type="primary" @click="handleCreate">
-      {{ this.$t('New') }}
+    <el-button size="small" type="primary" @click="handleCreate">
+      {{ $t('New') }}
     </el-button>
   </div>
 </template>
@@ -43,28 +43,42 @@ export default {
         columns: [
           { prop: 'name', label: this.$t('PolicyName') },
           { prop: 'priority', label: this.$t('Priority') },
-          { prop: 'strategy_rules', label: this.$t('RuleCount'), formatter: tableFormatter('count') },
-          { prop: 'strategy_actions', label: this.$t('ActionCount'), formatter: tableFormatter('count') },
-          { prop: 'action', label: this.$t('Action'), align: 'center', width: '100px', formatter: (row, col, cellValue, index) => {
-            return (
-              <div class='input-button'>
-                <el-button
-                  icon='el-icon-edit'
-                  size='mini'
-                  style={{ 'flexShrink': 0 }}
-                  type='primary'
-                  onClick={this.handleAttrEdit({ row, col, cellValue, index })}
-                />
-                <el-button
-                  icon='el-icon-minus'
-                  size='mini'
-                  style={{ 'flexShrink': 0 }}
-                  type='danger'
-                  onClick={this.handleAttrDelete({ row, col, cellValue, index })}
-                />
-              </div>
-            )
-          } }
+          {
+            prop: 'strategy_rules',
+            label: this.$t('RuleCount'),
+            formatter: tableFormatter('count')
+          },
+          {
+            prop: 'strategy_actions',
+            label: this.$t('ActionCount'),
+            formatter: tableFormatter('count')
+          },
+          {
+            prop: 'action',
+            label: this.$t('Action'),
+            align: 'center',
+            width: '100px',
+            formatter: (row, col, cellValue, index) => {
+              return (
+                <div class='input-button'>
+                  <el-button
+                    icon='el-icon-edit'
+                    size='mini'
+                    style={{ flexShrink: 0 }}
+                    type='primary'
+                    onClick={this.handleAttrEdit({ row, col, cellValue, index })}
+                  />
+                  <el-button
+                    icon='el-icon-minus'
+                    size='mini'
+                    style={{ flexShrink: 0 }}
+                    type='danger'
+                    onClick={this.handleAttrDelete({ row, col, cellValue, index })}
+                  />
+                </div>
+              )
+            }
+          }
         ],
         totalData: this.value,
         hasPagination: false
@@ -73,7 +87,7 @@ export default {
         url: '/api/v1/xpack/cloud/strategies/',
         multiple: false,
         ajax: {
-          transformOption: (item) => {
+          transformOption: item => {
             this.strategy[item.id] = {
               name: item.name,
               priority: item.priority,
@@ -118,7 +132,7 @@ export default {
     },
     handleAttrEdit({ row, index }) {
       return () => {
-        this.$axios.get(`/api/v1/xpack/cloud/strategies/${row?.id}/`).then((data) => {
+        this.$axios.get(`/api/v1/xpack/cloud/strategies/${row?.id}/`).then(data => {
           this.attrValue = data
           this.visible = true
         })
@@ -128,5 +142,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

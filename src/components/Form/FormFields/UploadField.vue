@@ -1,22 +1,16 @@
 <template>
   <div>
     <input ref="upLoadFile" :accept="accept" style="display: none" type="file" @change="Onchange">
-    <el-button size="mini" @click.native.stop="onUpLoad">
+    <el-button size="small" @click.native.stop="onUpLoad">
       {{ $t('SelectFile') }}
     </el-button>
     <span>{{ fileName }}</span>
     <div v-if="tip !== ''" class="help-block">{{ tip }}</div>
-    <input
-      :value="value"
-      hidden
-      type="text"
-      @input="onInput($event.target.value)"
-      v-on="$attrs"
-    >
+    <input :value="value" hidden type="text" @input="onInput($event.target.value)" v-on="$attrs">
     <div>
       <img v-if="preview" :class="showBG ? 'show-bg' : ''" :src="preview" v-bind="$attrs" alt="">
     </div>
-    <el-button v-if="fileName" size="mini" type="danger" @click.native.stop="resetUpload">
+    <el-button v-if="fileName" size="small" type="danger" @click.native.stop="resetUpload">
       {{ $t('Cancel') }}
     </el-button>
   </div>
