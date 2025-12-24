@@ -230,16 +230,22 @@ export default {
     getCheckedNodes: function() {
       return this.zTree.getCheckedNodes(true)
     },
+
     recurseParent(node) {
       const parentNode = node.getParentNode()
-      if (parentNode && parentNode.pId) {
-        return [parentNode, ...this.recurseParent(parentNode)]
-      } else if (parentNode) {
-        return [parentNode]
-      } else {
+      if (!parentNode) {
         return []
       }
+      const allParents = []
+      if (parentNode) {
+        allParents.push(parentNode)
+        if (parentNode.pId) {
+          allParents.push(...this.recurseParent(parentNode))
+        }
+      }
+      return allParents
     },
+
     recurseChildren(node) {
       if (!node.isParent) {
         return []
@@ -255,17 +261,7 @@ export default {
       })
       return allChildren
     },
-    groupBy(array, filter) {
-      const groups = {}
-      array.forEach(function(o) {
-        const group = JSON.stringify(filter(o))
-        groups[group] = groups[group] || []
-        groups[group].push(o)
-      })
-      return Object.keys(groups).map(function(group) {
-        return groups[group]
-      })
-    },
+
     filterTree(keyword, tree = this.zTree) {
       if (!this.zTree) return
 
@@ -298,6 +294,7 @@ export default {
       // 获取应该展示的节点，以及应该展开的节点
       let shouldShow = []
       let shouldExpandNodes = []
+      let shouldCollapseNodes = []
       matchedNodes.forEach((node) => {
         const parents = this.recurseParent(node)
         const children = this.recurseChildren(node)
@@ -308,9 +305,13 @@ export default {
 
         // 应该展开匹配节点的父节点，不展开匹配节点的子孙节点
         shouldExpandNodes.push(...parents)
+        // 应该折叠匹配节点的子孙节点
+        shouldCollapseNodes.push(node)
+        shouldCollapseNodes.push(...children)
       })
       shouldShow = Array.from(new Set(shouldShow))
       shouldExpandNodes = Array.from(new Set(shouldExpandNodes))
+      shouldCollapseNodes = Array.from(new Set(shouldCollapseNodes))
 
       // 隐藏所有节点，显示应该显示的节点
       tree.hideNodes(allNodes)
@@ -318,6 +319,10 @@ export default {
       // 展开应该展开的节点
       for (const node of shouldExpandNodes) {
         tree.expandNode(node, true)
+      }
+      // 折叠应该折叠的节点
+      for (const node of shouldCollapseNodes) {
+        tree.expandNode(node, false)
       }
     },
 
