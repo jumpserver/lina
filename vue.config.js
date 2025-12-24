@@ -180,7 +180,9 @@ module.exports = {
         vue$: '@vue/compat',
         // Ensure runtime deps for svg-sprite-loader resolve from top-level node_modules
         'svg-baker-runtime': resolve('node_modules/svg-baker-runtime'),
-        'svg-sprite-loader': resolve('node_modules/svg-sprite-loader')
+        'svg-sprite-loader': resolve('node_modules/svg-sprite-loader'),
+        // Ensure vue-loader resolves from top-level node_modules
+        'vue-loader': resolve('node_modules/vue-loader')
       },
       fallback: {
         path: require.resolve('path-browserify')
@@ -263,7 +265,7 @@ module.exports = {
       // Use html-webpack-plugin hooks to inline runtime chunk (webpack 5 compatible)
       // This replaces script-ext-html-webpack-plugin which doesn't support webpack 5
       const HtmlWebpackPlugin = require('html-webpack-plugin')
-      
+
       class InlineRuntimeChunkPlugin {
         apply(compiler) {
           compiler.hooks.compilation.tap('InlineRuntimeChunkPlugin', compilation => {
@@ -271,7 +273,7 @@ module.exports = {
               'InlineRuntimeChunkPlugin',
               (data, cb) => {
                 const runtimeChunkRegex = /runtime\..*\.js$/
-                
+
                 // Find and inline runtime chunk scripts
                 if (data.assetTags && data.assetTags.scripts) {
                   data.assetTags.scripts = data.assetTags.scripts.map(tag => {
@@ -282,7 +284,7 @@ module.exports = {
                         const publicPath = compilation.outputOptions.publicPath || ''
                         const assetPath = src.replace(publicPath, '').replace(/^\//, '')
                         const asset = compilation.assets[assetPath]
-                        
+
                         if (asset) {
                           return {
                             tagName: 'script',
@@ -296,16 +298,16 @@ module.exports = {
                     return tag
                   })
                 }
-                
+
                 cb(null, data)
               }
             )
           })
         }
       }
-      
+
       config.plugin('InlineRuntimeChunkPlugin').use(InlineRuntimeChunkPlugin).after('html')
-      
+
       config.optimization.splitChunks({
         chunks: 'all',
         cacheGroups: {

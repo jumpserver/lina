@@ -34,6 +34,7 @@
     "axios": "^1.7.9",
     "axios-retry": "^4.5.0",
     "babel-loader": "^10.0.0",
+    "babel-runtime": "^6.26.0",
     "caniuse-lite": "^1.0.30001642",
     "core-js": "^3.47.0",
     "cron-parser": "^4.9.0",
@@ -87,7 +88,7 @@
     "@babel/core": "^7.28.5",
     "@babel/eslint-parser": "^7.24.7",
     "@babel/register": "^7.28.3",
-    "@vue/babel-plugin-jsx": "^2.0.1",
+    "@vue/babel-plugin-jsx": "^1.2.2",
     "@vue/cli-plugin-babel": "^5.0.8",
     "@vue/cli-plugin-eslint": "^5.0.8",
     "@vue/cli-plugin-unit-jest": "^5.0.8",
@@ -129,6 +130,7 @@
     "svgo": "^4.0.0",
     "vue-eslint-parser": "^10.2.0",
     "vue-i18n-extract": "^2.0.7",
+    "vue-loader": "^17.0.0",
     "webpack": "^5.104.1"
   },
   "engines": {
