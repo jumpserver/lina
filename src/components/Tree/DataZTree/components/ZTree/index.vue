@@ -268,30 +268,17 @@ export default {
     },
     filterTree(keyword, tree = this.zTree) {
       if (!this.zTree) return
+
       const searchNode = tree.getNodesByFilter((node) => node.id === 'search')
       if (searchNode) tree.removeNode(searchNode[0])
-      const nodes = tree.transformToArray(tree.getNodes())
+
+      const allNodes = tree.transformToArray(tree.getNodes())
       if (!keyword) {
-        tree.showNodes(nodes)
+        tree.showNodes(allNodes)
+        tree.expandAll(false)
         return
       }
 
-      if (!keyword) {
-        if (tree.hiddenNodes) {
-          tree.showNodes(tree.hiddenNodes)
-          tree.hiddenNodes = null
-        }
-        if (tree.expandNodes) {
-          tree.expandNodes.forEach((node) => {
-            if (node.id !== nodes[0].id) {
-              tree.expandNode(node, false)
-            }
-          })
-          tree.expandNodes = null
-        }
-        return null
-      }
-      let shouldShow = []
       const matchedNodes = tree.getNodesByFilter((node) => {
         return node.name.toLowerCase().indexOf(keyword.toLowerCase()) > -1
       })
@@ -301,25 +288,39 @@ export default {
         const assetsAmount = matchedNodes.length
         name = `${name} (${assetsAmount})`
         const newNode = { id: 'search', name: name, isParent: false, open: false }
-        tree.addNodes(null, newNode)
+        const addedNodes = tree.addNodes(null, newNode)
+        // 隐藏所有节点，只显示搜索节点
+        tree.hideNodes(allNodes)
+        tree.showNodes(addedNodes)
+        return
       }
 
+      // 获取应该展示的节点，以及应该展开的节点
+      let shouldShow = []
+      let shouldExpandNodes = []
       matchedNodes.forEach((node) => {
         const parents = this.recurseParent(node)
         const children = this.recurseChildren(node)
-        shouldShow = [...shouldShow, ...parents, ...children, node]
-      })
+        // 应该显示匹配节点本身、其祖先节点和子孙节点
+        shouldShow.push(node)
+        shouldShow.push(...parents)
+        shouldShow.push(...children)
 
-      tree.hiddenNodes = nodes
-      tree.expandNodes = shouldShow
-      tree.hideNodes(nodes)
+        // 应该展开匹配节点的父节点，不展开匹配节点的子孙节点
+        shouldExpandNodes.push(...parents)
+      })
+      shouldShow = Array.from(new Set(shouldShow))
+      shouldExpandNodes = Array.from(new Set(shouldExpandNodes))
+
+      // 隐藏所有节点，显示应该显示的节点
+      tree.hideNodes(allNodes)
       tree.showNodes(shouldShow)
-      for (const node of shouldShow) {
-        if (node.isParent) {
-          tree.expandNode(node, true)
-        }
+      // 展开应该展开的节点
+      for (const node of shouldExpandNodes) {
+        tree.expandNode(node, true)
       }
     },
+
     filterAssetsServer(keyword) {
       // 直接用搜索 API 返回的数据重新初始化树
       let treeUrl = this.treeSetting.searchUrl ? this.treeSetting.searchUrl : this.treeSetting.treeUrl
