@@ -215,18 +215,10 @@ $color-drop-menu-border: #e4e7ed;
     //float: left;
 
     :deep(.action-item.el-dropdown > .el-button) {
-      height: 100%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 1;
+      height: 30px;
     }
 
     :deep(.action-item.el-button) {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 1;
       height: 30px;
     }
   }

@@ -20,8 +20,12 @@
         <td :title="$tc('ClickCopy')" class="item-td text-link" @click="onCopy(item.name)">
           <label class="item-label">{{ item.name }}</label>
         </td>
-        <td><span>{{ item.label }}</span></td>
-        <td><span>{{ item.default }}</span></td>
+        <td>
+          <span>{{ item.label }}</span>
+        </td>
+        <td>
+          <span>{{ item.default }}</span>
+        </td>
       </tr>
     </table>
   </Dialog>
@@ -78,16 +82,17 @@ export default {
 }
 
 :deep(.help-table) {
-  th, td {
+  th,
+  td {
     height: 40px;
     padding: 0 8px;
     text-align: left;
   }
 
-  .item-td, .item-label {
+  .item-td,
+  .item-label {
     cursor: pointer;
     color: var(--color-primary);
   }
 }
-
 </style>

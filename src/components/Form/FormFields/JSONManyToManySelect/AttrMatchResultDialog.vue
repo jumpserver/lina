@@ -26,7 +26,7 @@ export default {
     },
     attrs: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     visible: {
       type: Boolean,
@@ -45,13 +45,15 @@ export default {
         },
         tableConfig: {
           url: this.url,
-          columns: this.attrs.filter(item => item.inTable).map(item => {
-            return {
-              prop: item.name,
-              label: item.label,
-              formatter: item.formatter
-            }
-          }),
+          columns: this.attrs
+            .filter(item => item.inTable)
+            .map(item => {
+              return {
+                prop: item.name,
+                label: item.label,
+                formatter: item.formatter
+              }
+            }),
           columnsMeta: {
             actions: {
               has: false
@@ -64,6 +66,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

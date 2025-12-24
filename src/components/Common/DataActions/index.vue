@@ -32,7 +32,7 @@
           </span>
         </el-button>
 
-        <!-- <template #dropdown>
+        <template #dropdown>
           <el-dropdown-menu style="overflow: auto; max-height: 60vh">
             <template v-for="option in action.dropdown" :key="option.name">
               <div v-if="option.group" class="dropdown-menu-title" style="width: 130px">
@@ -59,7 +59,7 @@
               </el-tooltip>
             </template>
           </el-dropdown-menu>
-        </template> -->
+        </template>
       </el-dropdown>
 
       <el-button
@@ -273,6 +273,7 @@ $color-drop-menu-border: #e4e7ed;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      height: 30px;
     }
 
     .more-action.el-button--default {
