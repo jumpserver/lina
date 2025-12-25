@@ -12,7 +12,6 @@
       :style="{ '--label-width': labelWidth }"
       v-bind="$attrs"
       :server-errors="serverErrors"
-      v-on="$listeners"
     >
       <!-- slot 透传 -->
       <slot v-for="item in fields" :slot="`id:${item.id}`" :name="`id:${item.id}`" />
@@ -87,6 +86,7 @@ export default {
   components: {
     ElFormRender
   },
+  inheritAttrs: true,
   props: {
     defaultButton: {
       type: Boolean,
@@ -106,7 +106,7 @@ export default {
     },
     submitBtnSize: {
       type: String,
-      default: 'small'
+      default: 'default'
     },
     submitBtnText: {
       type: String,
@@ -148,6 +148,7 @@ export default {
       default: '18.2%'
     }
   },
+  emits: ['submit', 'invalid'],
   data() {
     return {
       basicForm: this.form,
@@ -217,7 +218,7 @@ export default {
     handleClick(button) {
       const callback =
         button.callback ||
-        function(values, form) {
+        function (values, form) {
           // debug('Click ', button.title, ': ', values)
         }
       const form = this.$refs['form']

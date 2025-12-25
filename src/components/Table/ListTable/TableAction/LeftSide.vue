@@ -2,6 +2,7 @@
   <DataActions
     v-if="hasLeftActions && iActions.length > 0"
     :actions="iActions"
+    size="default"
     class="header-action"
     v-bind="$attrs"
   />
@@ -111,7 +112,7 @@ export default {
           name: 'actionUpdateSelected',
           has: this.hasBulkUpdate,
           icon: 'batch-update',
-          can: function({ selectedRows }) {
+          can: function ({ selectedRows }) {
             let canBulkUpdate = vm.canBulkUpdate
             if (typeof canBulkUpdate === 'function') {
               canBulkUpdate = canBulkUpdate({ selectedRows })
@@ -185,7 +186,7 @@ export default {
           name: 'batch',
           title: this.$t('BatchProcessing', { number: this.selectedRows.length }),
           divided: true,
-          has: function({ selectedRows }) {
+          has: function ({ selectedRows }) {
             return selectedRows.length > 0
           },
           class: 'more-batch-processing',

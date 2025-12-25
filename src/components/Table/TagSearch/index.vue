@@ -451,8 +451,9 @@ $origin-white-color: #ffffff;
     height: 30px;
 
     :deep(.el-input__wrapper) {
-      max-width: 200px;
+      max-width: 180px;
       box-shadow: unset;
+      padding-left: 0;
 
       .el-input__inner {
         height: 28px;

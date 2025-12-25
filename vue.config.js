@@ -104,10 +104,17 @@ module.exports = {
     host: '0.0.0.0',
     open: false,
     allowedHosts: 'all',
+    hot: true,
+    liveReload: false,
     client: {
       overlay: {
         warnings: false,
         errors: true
+      },
+      webSocketURL: {
+        hostname: '0.0.0.0',
+        pathname: '/ws',
+        port: port
       }
     },
     watchFiles: ['src/**/*', 'public/**/*'],
@@ -227,6 +234,9 @@ module.exports = {
       .use('vue-loader')
       .loader('vue-loader')
       .tap(options => {
+        options = options || {}
+        // Enable HMR for Vue 3
+        options.hotReload = process.env.NODE_ENV === 'development'
         const compilerOptions = options.compilerOptions || {}
         compilerOptions.preserveWhitespace = true
         compilerOptions.compatConfig = compilerOptions.compatConfig || {}

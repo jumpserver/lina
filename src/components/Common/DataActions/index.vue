@@ -24,9 +24,7 @@
           class="more-action"
           v-bind="{ ...cleanButtonAction(action), icon: '' }"
         >
-          <span class="pre-icon">
-            <Icon v-if="action.icon" :icon="action.icon" />
-          </span>
+          <Icon v-if="action.icon" :icon="action.icon" class="pre-icon" />
           <span v-if="action.title">
             {{ action.title }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
           </span>
@@ -72,7 +70,7 @@
       >
         <el-tooltip :content="action.tip" :disabled="!action.tip" placement="top">
           <div>
-            <Icon v-if="action.icon" :icon="action.icon" />
+            <Icon v-if="action.icon" :icon="action.icon" class="pre-icon" />
             <span>
               {{ action.title }}
             </span>
@@ -249,6 +247,10 @@ $color-drop-menu-border: #e4e7ed;
   .action-item {
     margin-left: 5px;
 
+    .pre-icon + span {
+      margin-left: 3px;
+    }
+
     &.grouped {
       margin-left: 0;
     }
@@ -256,10 +258,6 @@ $color-drop-menu-border: #e4e7ed;
     &:first-child {
       margin-left: 0;
     }
-  }
-
-  .el-button.el-button--default {
-    color: var(--color-text-primary) !important;
   }
 }
 
