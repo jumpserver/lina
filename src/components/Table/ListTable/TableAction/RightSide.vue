@@ -1,6 +1,10 @@
 <template>
   <div>
-    <ActionsGroup :actions="rightSideActions" :is-fa="true" class="right-side-actions right-side-item" />
+    <ActionsGroup
+      :actions="rightSideActions"
+      :is-fa="true"
+      class="right-side-actions right-side-item"
+    />
     <ImExportDialog
       v-if="dialogExportVisible"
       :export-options="iExportOptions"
@@ -66,8 +70,7 @@ export default {
     },
     reloadTable: {
       type: Function,
-      default: () => {
-      }
+      default: () => {}
     },
     extraRightSideActions: {
       type: Array,
@@ -89,17 +92,21 @@ export default {
   },
   data() {
     return {
-      defaultHandleExportClick: function({ selectedRows }) {
+      defaultHandleExportClick: function ({ selectedRows }) {
         const url = this.iExportOptions.url
         this.dialogExportVisible = true
         this.$nextTick(() => {
           this.$eventBus.$emit('showExportDialog', { selectedRows, url, name: this.name })
         })
       },
-      defaultHandleTableSettingClick: function({ selectedRows }) {
-        this.$eventBus.$emit('showColumnSettingPopover', { url: this.tableUrl, row: selectedRows, name: this.name })
+      defaultHandleTableSettingClick: function ({ selectedRows }) {
+        this.$eventBus.$emit('showColumnSettingPopover', {
+          url: this.tableUrl,
+          row: selectedRows,
+          name: this.name
+        })
       },
-      defaultHandleRefreshClick: function() {
+      defaultHandleRefreshClick: function () {
         this.reloadTable()
       },
       defaultRightSideActions: [

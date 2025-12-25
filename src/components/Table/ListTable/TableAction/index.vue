@@ -239,6 +239,15 @@ $color-drop-menu-border: #e4e7ed;
     }
   }
 
+  // .search :deep(.el-input) {
+  //   height: 30px;
+
+  //   .el-input__wrapper {
+  //     width: 100%;
+  //     border-radius: 0;
+  //   }
+  // }
+
   .search.left {
     padding: 0 !important;
     gap: 10px;

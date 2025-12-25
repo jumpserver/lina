@@ -2,6 +2,7 @@
   <div class="filter-field">
     <el-cascader
       v-show="options.length > 0"
+      class="filter-cascader"
       ref="Cascade"
       :options="options"
       :props="config"
@@ -23,7 +24,7 @@
       <span v-if="v.valueLabel">{{ v.valueLabel }}</span>
       <span v-else>{{ v.value }}</span>
     </el-tag>
-    <span v-if="keyLabel" slot="prefix" class="filterTitle">{{ keyLabel + ':' }}</span>
+    <span v-if="keyLabel" slot="prefix" class="filter-title">{{ keyLabel + ':' }}</span>
     <el-input
       ref="SearchInput"
       v-model="filterValue"
@@ -402,16 +403,21 @@ $origin-white-color: #ffffff;
   min-width: 210px;
   background-color: $origin-white-color;
 
-  .el-cascader {
+  :deep(.el-cascader) {
     height: 28px;
     line-height: 28px;
 
-    :deep(.el-input.el-input--suffix) {
-      .el-input__inner {
+    .el-input {
+      .el-input__wrapper {
         width: 0;
         height: 28px;
         padding-right: 20px;
         border: none;
+        box-shadow: unset;
+
+        .el-input__inner {
+          display: none;
+        }
       }
     }
 
@@ -424,7 +430,7 @@ $origin-white-color: #ffffff;
     }
   }
 
-  .filterTitle {
+  .filter-title {
     padding-right: 2px;
     line-height: 100%;
     text-align: center;
@@ -442,24 +448,29 @@ $origin-white-color: #ffffff;
   }
 
   .search-input {
-    height: 28px;
+    height: 30px;
 
-    :deep(.el-input__suffix) {
-      cursor: pointer;
-
-      i {
-        line-height: 30px;
-        font-weight: 500;
-        color: var(--color-icon-primary);
-      }
-    }
-
-    :deep(.el-input__inner) {
-      height: 28px;
+    :deep(.el-input__wrapper) {
       max-width: 200px;
-      border: none;
-      padding-left: 1px;
-      font-size: 13px;
+      box-shadow: unset;
+
+      .el-input__inner {
+        height: 28px;
+        padding-left: 1px;
+        font-size: 13px;
+        box-shadow: unset;
+        border: none;
+      }
+
+      .el-input__suffix {
+        cursor: pointer;
+
+        i {
+          line-height: 30px;
+          font-weight: 500;
+          color: var(--color-icon-primary);
+        }
+      }
     }
 
     &.no-options {
