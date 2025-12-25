@@ -244,13 +244,13 @@ export default {
           },
           asset: {
             minWidth: '100px',
-            formatter: function (row) {
+            formatter: function(row) {
               return row.asset.name
             }
           },
           username: {
             minWidth: '60px',
-            formatter: function (row) {
+            formatter: function(row) {
               if (row.ds && row.ds['domain_name']) {
                 return `${row.username}@${row.ds['domain_name']}`
               } else {
@@ -259,12 +259,12 @@ export default {
             }
           },
           secret_type: {
-            formatter: function (row) {
+            formatter: function(row) {
               return row.secret_type.label
             }
           },
           source: {
-            formatter: function (row) {
+            formatter: function(row) {
               return row.source.label
             }
           },
@@ -372,7 +372,7 @@ export default {
                 vm.$hasPerm('accounts.verify_account')
               )
             },
-            callback: function ({ selectedRows }) {
+            callback: function({ selectedRows }) {
               const ids = selectedRows.map(v => {
                 return v.id
               })
@@ -394,7 +394,7 @@ export default {
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 && vm.$hasPerm('accounts.change_account')
             },
-            callback: function ({ selectedRows }) {
+            callback: function({ selectedRows }) {
               const ids = selectedRows.map(v => {
                 return v.id
               })

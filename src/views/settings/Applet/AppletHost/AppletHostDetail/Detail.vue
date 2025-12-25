@@ -1,10 +1,8 @@
 <template>
   <TwoCol>
-    <template>
-      <AutoDetailCard v-bind="detailBasicConfig" />
-      <AutoDetailCard v-bind="detailSpecInfoConfig" />
-      <AutoDetailCard v-bind="detailInfoConfig" />
-    </template>
+    <AutoDetailCard v-bind="detailBasicConfig" />
+    <AutoDetailCard v-bind="detailSpecInfoConfig" />
+    <AutoDetailCard v-bind="detailInfoConfig" />
     <template #right>
       <QuickActions :actions="quickActions" type="primary" />
       <RelationCard

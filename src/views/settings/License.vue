@@ -5,9 +5,7 @@
         {{ $t('ImportLicenseTip') }}
       </el-alert>
       <TwoCol>
-        <template>
-          <DetailCard :items="detailItems" :title="cardTitle" />
-        </template>
+        <DetailCard :items="detailItems" :title="cardTitle" />
         <template #right>
           <QuickActions :actions="quickActions" type="primary" />
         </template>

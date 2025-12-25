@@ -1,8 +1,6 @@
 <template>
   <TwoCol>
-    <template>
-      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
-    </template>
+    <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     <template #right>
       <IBox :title="$tc('Permissions')">
         <div style="height: 10%">

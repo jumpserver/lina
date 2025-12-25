@@ -11,13 +11,13 @@
           size="mini"
           @input="treeSearchHandle"
         >
-          <span slot="suffix">
+          <template #suffix>
             <i
               class="el-icon-close"
               style="font-size: 12px; cursor: pointer"
               @click="onClose"
             />
-          </span>
+          </template>
         </el-input>
       </div>
       <ul v-show="loading" class="zloading">

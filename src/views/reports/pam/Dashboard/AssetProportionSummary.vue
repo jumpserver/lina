@@ -78,4 +78,3 @@ export default {
     margin-top: 6px;
   }
 </style>
-

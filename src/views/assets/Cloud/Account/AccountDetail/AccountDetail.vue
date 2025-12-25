@@ -1,14 +1,12 @@
 <template>
   <div>
     <TwoCol>
-      <template>
-        <AutoDetailCard
-          :excludes="excludes"
-          :object="object"
-          :url="url"
-        />
-        <AutoDetailCard :fields="detailFields" :object="object" :title="$tc('TaskDetail')" :url="url" />
-      </template>
+      <AutoDetailCard
+        :excludes="excludes"
+        :object="object"
+        :url="url"
+      />
+      <AutoDetailCard :fields="detailFields" :object="object" :title="$tc('TaskDetail')" :url="url" />
       <template #right>
         <QuickActions :actions="quickEditActions" type="primary" />
         <QuickActions :actions="quickExecuteActions" :title="$t('Sync')" type="primary" />

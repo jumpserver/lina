@@ -1,12 +1,10 @@
 <template>
   <TwoCol>
-    <template>
-      <DrawerListTable
-        ref="listTable"
-        :header-actions="headerActions"
-        :table-config="tableConfig"
-      />
-    </template>
+    <DrawerListTable
+      ref="listTable"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+    />
     <template #right>
       <AssetRelationCard type="primary" v-bind="assetRelationConfig" />
       <RelationCard style="margin-top: 15px" type="info" v-bind="nodeRelationConfig" />

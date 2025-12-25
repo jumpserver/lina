@@ -1,9 +1,7 @@
 <template>
   <Page v-bind="$attrs">
     <TwoCol>
-      <template>
-        <DetailCard :items="detailCardItems" />
-      </template>
+      <DetailCard :items="detailCardItems" />
       <template #right>
         <QuickActions
           :actions="authQuickActions"

@@ -1,23 +1,21 @@
 <template>
   <DetailFormatter :col="col" :row="row" :prevent-click="formatterArgs.preventClick">
-    <template>
-      <el-popover
-        :disabled="!showItems"
-        :open-delay="500"
-        :title="title"
-        placement="top-start"
-        trigger="hover"
-        width="400"
-        @show="getAsyncItems"
-      >
-        <div class="detail-content">
-          <div v-for="[index, item] of Object.entries(items)" :key="getKey(item, index)" class="detail-item">
-            <span class="detail-item-name">{{ item }}</span>
-          </div>
+    <el-popover
+      :disabled="!showItems"
+      :open-delay="500"
+      :title="title"
+      placement="top-start"
+      trigger="hover"
+      width="400"
+      @show="getAsyncItems"
+    >
+      <div class="detail-content">
+        <div v-for="[index, item] of Object.entries(items)" :key="getKey(item, index)" class="detail-item">
+          <span class="detail-item-name">{{ item }}</span>
         </div>
-        <span slot="reference">{{ amount }}</span>
-      </el-popover>
-    </template>
+      </div>
+      <span slot="reference">{{ amount }}</span>
+    </el-popover>
   </DetailFormatter>
 </template>
 

@@ -1,12 +1,10 @@
 <template>
   <div>
     <TwoCol>
-      <template>
-        <AutoDetailCard
-          :object="object"
-          v-bind="detail"
-        />
-      </template>
+      <AutoDetailCard
+        :object="object"
+        v-bind="detail"
+      />
       <template #right>
         <QuickActions :actions="quickActions" type="primary" />
         <ViewSecret

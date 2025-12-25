@@ -11,45 +11,43 @@
       <div slot="header" class="clearfix ibox-title">
         <i class="fa fa-edit" /> {{ $tc('Actions') }}
       </div>
-      <template>
-        <el-form ref="requestForm" :model="requestForm" class="assets" label-position="left" label-width="140px">
-          <el-form-item :label="$tc('Node')">
-            <Select2 v-model="requestForm.nodes" style="width: 50% !important" v-bind="nodeSelect2" />
-          </el-form-item>
-          <el-form-item :label="$tc('Asset')">
-            <Select2 v-model="requestForm.assets" style="width: 50% !important" v-bind="assetSelect2" />
-          </el-form-item>
-          <el-form-item :label="$tc('Account')" :rules="isRequired">
-            <AccountFormatter
-              v-model="requestForm.accounts"
-              :assets="requestForm.assets"
-              :nodes="requestForm.nodes"
-              :oid="requestForm.oid"
-              :show-add-template="false"
-              style="width: 50% !important"
-            />
-          </el-form-item>
-          <el-form-item :label="$tc('DateStart')" required>
-            <el-date-picker
-              v-model="requestForm.apply_date_start"
-              type="datetime"
-            />
-          </el-form-item>
-          <el-form-item :label="$tc('DateExpired')" required>
-            <el-date-picker
-              v-model="requestForm.apply_date_expired"
-              type="datetime"
-            />
-          </el-form-item>
-          <el-form-item :label="$tc('Action')">
-            <BasicTree
-              v-model="requestForm.actions"
-              :tree="treeNodes"
-              style="width: 100%"
-            />
-          </el-form-item>
-        </el-form>
-      </template>
+      <el-form ref="requestForm" :model="requestForm" class="assets" label-position="left" label-width="140px">
+        <el-form-item :label="$tc('Node')">
+          <Select2 v-model="requestForm.nodes" style="width: 50% !important" v-bind="nodeSelect2" />
+        </el-form-item>
+        <el-form-item :label="$tc('Asset')">
+          <Select2 v-model="requestForm.assets" style="width: 50% !important" v-bind="assetSelect2" />
+        </el-form-item>
+        <el-form-item :label="$tc('Account')" :rules="isRequired">
+          <AccountFormatter
+            v-model="requestForm.accounts"
+            :assets="requestForm.assets"
+            :nodes="requestForm.nodes"
+            :oid="requestForm.oid"
+            :show-add-template="false"
+            style="width: 50% !important"
+          />
+        </el-form-item>
+        <el-form-item :label="$tc('DateStart')" required>
+          <el-date-picker
+            v-model="requestForm.apply_date_start"
+            type="datetime"
+          />
+        </el-form-item>
+        <el-form-item :label="$tc('DateExpired')" required>
+          <el-date-picker
+            v-model="requestForm.apply_date_expired"
+            type="datetime"
+          />
+        </el-form-item>
+        <el-form-item :label="$tc('Action')">
+          <BasicTree
+            v-model="requestForm.actions"
+            :tree="treeNodes"
+            style="width: 100%"
+          />
+        </el-form-item>
+      </el-form>
     </IBox>
   </GenericTicketDetail>
 </template>

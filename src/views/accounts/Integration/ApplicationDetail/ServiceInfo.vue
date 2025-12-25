@@ -1,9 +1,7 @@
 <template>
   <div>
     <TwoCol>
-      <template>
-        <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
-      </template>
+      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
       <template #right>
         <QuickActions :actions="quickActions" type="primary" />
       </template>

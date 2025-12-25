@@ -1,13 +1,11 @@
 <template>
   <TwoCol>
-    <template>
-      <AutoDetailCard
-        :fields="detailFields"
-        :formatters="detailFormatters"
-        :object="object"
-        :url="url"
-      />
-    </template>
+    <AutoDetailCard
+      :fields="detailFields"
+      :formatters="detailFormatters"
+      :object="object"
+      :url="url"
+    />
     <template #right>
       <QuickActions :actions="quickActions" type="primary" />
       <RelationCard type="info" v-bind="relationConfig" />

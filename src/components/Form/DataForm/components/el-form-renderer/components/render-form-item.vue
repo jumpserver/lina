@@ -34,9 +34,7 @@
         {{ itemValue }}
       </div>
       <div v-else-if="data.type === 'select'">
-        <template>
-          {{ multipleValue }}
-        </template>
+        {{ multipleValue }}
       </div>
     </template>
     <custom-component
@@ -47,11 +45,10 @@
       v-bind="componentProps"
       v-on="listeners"
     >
-      <template v-for="opt in options">
-        <el-option v-if="data.type === 'select'" :key="opt.label" v-bind="opt" />
+      <template v-for="opt in options" :key="opt.value">
+        <el-option v-if="data.type === 'select'" v-bind="opt" />
         <el-checkbox-button
           v-else-if="data.type === 'checkbox-group' && data.style === 'button'"
-          :key="opt.value"
           :label="'value' in opt ? opt.value : opt.label"
           v-bind="opt"
         >
@@ -60,7 +57,6 @@
 
         <el-checkbox
           v-else-if="data.type === 'checkbox-group' && data.style !== 'button'"
-          :key="opt.value"
           :label="'value' in opt ? opt.value : opt.label"
           v-bind="opt"
         >
@@ -74,7 +70,6 @@
         <!-- FYI: radio 的 value 属性可以在没有 radio-group 时用来关联到同一个 v-model -->
         <el-radio
           v-else-if="data.type === 'radio-group'"
-          :key="opt.label"
           :label="'value' in opt ? opt.value : opt.label"
           v-bind="opt"
         >

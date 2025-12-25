@@ -1,13 +1,11 @@
 <template>
   <div>
     <TwoCol>
-      <template>
-        <GenericListTable
-          ref="listTable"
-          :header-actions="headerActions"
-          :table-config="tableConfig"
-        />
-      </template>
+      <GenericListTable
+        ref="listTable"
+        :header-actions="headerActions"
+        :table-config="tableConfig"
+      />
       <template #right>
         <RelationCard :key="relationKey" v-bind="relationConfig" @add-success="addSuccess" />
       </template>

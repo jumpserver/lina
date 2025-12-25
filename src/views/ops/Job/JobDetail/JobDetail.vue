@@ -1,14 +1,12 @@
 <template>
   <TwoCol>
     <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
-    <template>
-      <IBox :title="$tc('Variable')">
-        <Variable
-          v-model="object.variable"
-          @input="updateVariable"
-        />
-      </IBox>
-    </template>
+    <IBox :title="$tc('Variable')">
+      <Variable
+        v-model="object.variable"
+        @input="updateVariable"
+      />
+    </IBox>
   </TwoCol>
 </template>
 

@@ -1,12 +1,10 @@
 <template>
   <TwoCol>
-    <template>
-      <ListTable
-        ref="ListTable"
-        :header-actions="headerActions"
-        :table-config="tableConfig"
-      />
-    </template>
+    <ListTable
+      ref="ListTable"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+    />
     <template #right>
       <RelationCard v-if="!loading" ref="userRelation" v-bind="relationConfig" />
     </template>

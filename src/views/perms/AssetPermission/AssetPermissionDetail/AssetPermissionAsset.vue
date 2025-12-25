@@ -1,8 +1,6 @@
 <template>
   <TwoCol>
-    <template>
-      <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
-    </template>
+    <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
     <template #right>
       <AssetRelationCard type="primary" v-bind="assetRelationConfig" />
       <RelationCard style="margin-top: 15px" type="info" v-bind="nodeRelationConfig" />

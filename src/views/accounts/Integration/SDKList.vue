@@ -10,9 +10,7 @@
             :name="language.value"
           >
             <two-col>
-              <template>
-                <vue-markdown :source="readme" class="code-markdown" />
-              </template>
+              <vue-markdown :source="readme" class="code-markdown" />
               <template #right>
                 <vue-markdown :source="code" class="code-demo" />
               </template>

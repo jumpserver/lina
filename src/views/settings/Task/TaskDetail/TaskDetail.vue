@@ -56,7 +56,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.task-detail /deep/ .item-value span {
+.task-detail :deep(.item-value span) {
   white-space: normal !important;
 }
 </style>

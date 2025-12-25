@@ -1,9 +1,7 @@
 <template>
   <div>
     <TwoCol>
-      <template>
-        <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
-      </template>
+      <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
       <template #right>
         <PermUserGroupCard v-bind="UserGroupCardConfig" />
       </template>

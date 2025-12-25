@@ -1,26 +1,24 @@
 <template>
   <div>
     <TwoCol>
-      <template>
-        <AccountListTable
-          ref="ListTable"
-          :asset="object"
-          :columns-default="columnsDefault"
-          :has-clone="false"
-          :has-import="false"
-          :has-left-actions="true"
-          :header-extra-actions="headerExtraActions"
-          :url="iUrl"
-          v-bind="$attrs"
-        />
-        <AccountTemplateDialog
-          v-if="templateDialogVisible"
-          v-model:visible="templateDialogVisible"
-          :asset="object"
-          :show-create="false"
-          @on-confirm="onConfirm"
-        />
-      </template>
+      <AccountListTable
+        ref="ListTable"
+        :asset="object"
+        :columns-default="columnsDefault"
+        :has-clone="false"
+        :has-import="false"
+        :has-left-actions="true"
+        :header-extra-actions="headerExtraActions"
+        :url="iUrl"
+        v-bind="$attrs"
+      />
+      <AccountTemplateDialog
+        v-if="templateDialogVisible"
+        v-model:visible="templateDialogVisible"
+        :asset="object"
+        :show-create="false"
+        @on-confirm="onConfirm"
+      />
     </TwoCol>
   </div>
 </template>

@@ -1,8 +1,6 @@
 <template>
   <TwoCol>
-    <template>
-      <DetailCard v-if="object" :items="detailItems" />
-    </template>
+    <DetailCard v-if="object" :items="detailItems" />
     <template #right>
       <QuickActions v-if="object" :actions="quickActions" type="primary" />
     </template>

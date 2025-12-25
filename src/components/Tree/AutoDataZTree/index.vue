@@ -1,6 +1,6 @@
 <template>
   <DataZTree ref="dataztree" :setting="treeSetting" class="data-z-tree" v-on="$listeners">
-    <slot slot="rMenu">
+    <template #rMenu>
       <div v-if="menu && menu.length > 0">
         <span v-for="item in menu" :key="item.id">
           <li
@@ -18,7 +18,7 @@
         </span>
       </div>
       <slot name="rMenu" />
-    </slot>
+    </template>
   </DataZTree>
 </template>
 

@@ -1,9 +1,9 @@
 <template>
   <ZTree ref="ztree" :setting="treeSetting" v-on="$listeners">
     <!--Slot透传-->
-    <div slot="rMenu" slot-scope="{data}">
-      <slot :data="data" name="rMenu" />
-    </div>
+    <template #rMenu>
+      <slot name="rMenu" />
+    </template>
   </ZTree>
 </template>
 

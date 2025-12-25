@@ -309,7 +309,7 @@ module.exports = {
         skipIfMatch: [
           'http://[^s]*',
           '^[-\\w]+/[-\\w\\.]+$',
-          String.raw`^\/api\/[a-z0-9\/._-]+$`,
+          String.raw`^\/api\/[a-z0-9\/._-]+$`
         ],
         minLength: 3
       }

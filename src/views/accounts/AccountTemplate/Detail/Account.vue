@@ -4,9 +4,7 @@
       {{ $t('AccountTemplateUpdateSecretHelpText') }}
     </el-alert>
     <TwoCol>
-      <template>
-        <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
-      </template>
+      <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
       <template #right>
         <QuickActions :actions="quickActions" type="primary" />
       </template>

@@ -14,9 +14,7 @@
       @confirm="handleConfirm"
       v-on="$listeners"
     >
-      <template>
-        <ListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
-      </template>
+      <ListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
     </Dialog>
     <CreateAccountTemplateDialog
       v-if="isShowCreate"
