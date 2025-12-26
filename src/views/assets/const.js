@@ -148,9 +148,10 @@ export const assetFieldsMeta = (vm, category, type) => {
         return vm.platform.ds_enabled === false
       }
     },
-    nodes: {
+    node: {
       rules: [rules.RequiredChange],
       el: {
+        multiple: false,
         ajax: {
           url: '/api/v1/assets/nodes/',
           transformOption: item => {

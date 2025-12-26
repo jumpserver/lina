@@ -61,7 +61,7 @@ export default {
         updateSuccessNextRoute: this.updateSuccessNextRoute,
         hasDetailInMsg: false,
         fields: [
-          [this.$t('Basic'), ['name', 'address', 'platform', 'nodes']],
+          [this.$t('Basic'), ['name', 'address', 'platform', 'node']],
           [this.$t('Protocol'), ['protocols']],
           [this.$t('Account'), ['accounts']],
           [this.$t('Other'), ['directory_services', 'zone', 'labels', 'is_active', 'comment']]
@@ -73,8 +73,8 @@ export default {
           const values = _.cloneDeep(validValues)
           const submitMethod = id ? 'put' : 'post'
 
-          if (values.nodes && values.nodes.length === 0) {
-            delete values['nodes']
+          if (!values.node) {
+            delete values['node']
           }
 
           if (submitMethod === 'put') {
@@ -143,15 +143,14 @@ export default {
     },
     async setInitial() {
       const { defaultConfig } = this
-      const { node } = this.$route.query
-      const nodesInitial = node ? [node] : []
+      const { node_id } = this.$route.query
       const platformId = this.platformID || 'Linux'
       const url = `/api/v1/assets/platforms/${platformId}/`
       this.platform = await this.$axios.get(url)
       const initial = {
         labels: [],
         is_active: true,
-        nodes: nodesInitial,
+        node: node_id,
         platform: parseInt(this.platform.id),
         protocols: []
       }

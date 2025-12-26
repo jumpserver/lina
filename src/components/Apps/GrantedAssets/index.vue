@@ -11,6 +11,7 @@
 import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import { AccountInfoFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
+import { setUrlParam } from '@/utils/common/index'
 
 export default {
   name: 'GrantedAssets',
@@ -34,7 +35,7 @@ export default {
         }
         const initialUrl = vm.tableConfig.initialUrl
         const nodeId = node.meta.data.id
-        const url = initialUrl.replace('/assets/', `/nodes/${nodeId}/assets/`)
+        const url = setUrlParam(initialUrl, 'node_id', nodeId)
         vm.tableConfig.url = url
       }
     },
@@ -70,7 +71,7 @@ export default {
         showMenu: false,
         showRefresh: true,
         showAssets: false,
-        showSearch: false,
+        showSearch: true,
         url: this.tableUrl,
         // ?assets=0不显示资产. =1显示资产
         treeUrl: this.treeUrl,
@@ -78,6 +79,9 @@ export default {
         callback: {
           onSelected: (event, node) => vm.onSelected(node, vm),
           refresh: vm.refreshObjectAssetPermission
+        },
+        async: {
+          enable: false
         }
       },
       tableConfig: {
