@@ -1,16 +1,67 @@
 <template>
   <div>
     <div class="treebox">
-      <div v-if="treeSetting.showSearch">
+      <div v-if="treeSetting.showSearch" @click="focusTreeSearchInput">
         <el-input
           v-show="showTreeSearch"
+          ref="treeSearchInput"
           v-model="treeSearchValue"
-          :placeholder="$tc('Search')"
           class="fixed-tree-search"
-          prefix-icon="fa fa-search"
+          :placeholder="treeSearchInputPlaceholder"
           size="mini"
           @input="treeSearchHandle"
         >
+          <template #prepend>
+
+            <template v-if="!isSearchTypeDropdownEnabled">
+              <el-tooltip
+                effect="dark"
+                placement="top"
+                :content="currentTreeSearchTypeTooltip"
+                :open-delay="300"
+              >
+                <span style="cursor: pointer;" @click.stop="focusTreeSearchInput">
+                  <i class="fa fa-search" />
+                  <span class="search-label">{{ treeSearchTypeLabel }}</span>
+                </span>
+              </el-tooltip>
+            </template>
+
+            <template v-else>
+              <el-dropdown trigger="hover" @command="onSearchTypeChange">
+                <el-tooltip
+                  effect="dark"
+                  placement="top"
+                  :content="currentTreeSearchTypeTooltip"
+                  :open-delay="1000"
+                >
+                  <span @click.stop="focusTreeSearchInput">
+                    <i class="fa fa-search" />
+                    <span class="search-label">{{ treeSearchTypeLabel }}</span>
+                    <i class="el-icon-arrow-down" />
+                  </span>
+                </el-tooltip>
+
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item
+                    v-for="(item, type) in treeSearchTypeOptions"
+                    :key="type"
+                    :command="type"
+                    :class="{ 'is-active': treeSearchType === type }"
+                  >
+                    <el-tooltip
+                      effect="dark"
+                      placement="right"
+                      :content="item.tooltip"
+                      :open-delay="300"
+                    >
+                      <span>{{ item.label }}</span>
+                    </el-tooltip>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </template>
+          </template>
           <span slot="suffix">
             <i
               class="el-icon-close"
@@ -47,6 +98,7 @@ import '@ztree/ztree_v3/js/jquery.ztree.exhide.min.js'
 import '@/styles/ztree.css'
 import '@/styles/ztree_icon.scss'
 import axiosRetry from 'axios-retry'
+import { setUrlParam } from '@/utils/common'
 
 const defaultObject = {
   type: Object,
@@ -66,18 +118,52 @@ export default {
       rMenu: '',
       init: false,
       loading: false,
-      showTreeSearch: false,
-      treeSearchValue: ''
+      showTreeSearch: true,
+      treeSearchValue: '',
+      treeSearchType: 'asset',
+      treeSearchTypeOptions: {},
+      treeSearchTypeSupportOptions: {
+        node: {
+          label: this.$t('Node'),
+          placeholder: this.$t('Search node'),
+          tooltip: this.$t('Search by node name'),
+          search_key: 'search_node'
+        },
+        asset: {
+          label: this.$t('Asset'),
+          placeholder: this.$t('Search asset'),
+          tooltip: this.$t('Search by asset name or address'),
+          search_key: 'search_asset'
+        }
+      },
+      treeType: '' // asset | node
     }
   },
   computed: {
     treeSetting() {
       return this.setting
+    },
+    isSearchTypeDropdownEnabled() {
+      return Object.keys(this.treeSearchTypeOptions).length > 1
+    },
+    currentTreeSearchType() {
+      return this.treeSearchTypeOptions[this.treeSearchType]
+    },
+    currentTreeSearchTypeTooltip() {
+      return this.currentTreeSearchType?.tooltip || ''
+    },
+    treeSearchTypeLabel() {
+      return this.currentTreeSearchType?.label || ''
+    },
+    treeSearchInputPlaceholder() {
+      return this.currentTreeSearchType?.placeholder || this.$t('Search')
     }
   },
   mounted() {
     window.refresh = this.refresh
     window.onSearch = this.onSearch
+    this.initTreeType()
+    this.initTreeSearchTypeOptions()
     this.initTree().then(() => {
       this.$nextTick(() => {
         this.updateTreeHeight()
@@ -90,6 +176,36 @@ export default {
     window.removeEventListener('resize', this.updateTreeHeight)
   },
   methods: {
+    initTreeType() {
+      let treeType = this.treeSetting.treeType
+      if (!treeType) {
+        treeType = this.treeSetting.async?.enable ? 'asset' : 'node'
+      }
+      this.treeType = treeType
+    },
+    initTreeSearchTypeOptions() {
+      if (this.treeType === 'asset') {
+        // 资产树支持异步搜索节点和资产
+        this.treeSearchTypeOptions = this.treeSearchTypeSupportOptions
+        // 默认搜索资产
+        this.treeSearchType = 'asset'
+      } else {
+        // 节点树只支持搜索节点
+        this.treeSearchTypeOptions = Object.fromEntries(
+          Object.entries(this.treeSearchTypeSupportOptions)
+            .filter(([key]) => key === 'node')
+        )
+        // 默认搜索节点
+        this.treeSearchType = 'node'
+      }
+    },
+    onSearchTypeChange(type) {
+      this.treeSearchType = type
+      this.focusTreeSearchInput()
+    },
+    focusTreeSearchInput() {
+      this.$refs.treeSearchInput.focus()
+    },
     onMenuClick(menu) {
       if (menu.disabled) {
         return
@@ -116,19 +232,14 @@ export default {
       const zTreeRect = tree.getBoundingClientRect()
       tree.style.height = `calc(100vh - ${zTreeRect.top}px - 30px - 25px)`
     }, 100),
-    async initTree(refresh = false) {
+    async initTree(refresh = false, iTreeUrl = '') {
       const vm = this
-      let treeUrl
       this.loading = true
-      if (refresh && this.treeSetting.treeUrl.indexOf('/perms/') !== -1 &&
-        this.treeSetting.treeUrl.indexOf('rebuild_tree') === -1
-      ) {
-        treeUrl = (this.treeSetting.treeUrl.indexOf('?') === -1)
-          ? `${this.treeSetting.treeUrl}?rebuild_tree=1`
-          : `${this.treeSetting.treeUrl}&rebuild_tree=1`
-      } else {
+      let treeUrl = iTreeUrl
+      if (!treeUrl) {
         treeUrl = this.treeSetting.treeUrl
       }
+      treeUrl = setUrlParam(treeUrl, 'tree_type', this.treeType)
 
       if (refresh) {
         $.fn.zTree.destroy(this.iZTreeID)
@@ -221,10 +332,10 @@ export default {
       searchInput.oninput = e => this.treeSearchHandle((e.target.value || ''))
     },
     treeSearchHandle: _.debounce(function(value) {
-      if (this.treeSetting.async.enable) {
-        this.filterAssetsServer(value)
+      if (this.treeSetting.async?.enable) {
+        this.searchFromServer(value)
       } else {
-        this.filterTree(value)
+        this.searchFromLocal(value)
       }
     }, 600),
     getCheckedNodes: function() {
@@ -262,7 +373,7 @@ export default {
       return allChildren
     },
 
-    filterTree(keyword, tree = this.zTree) {
+    searchFromLocal(keyword, tree = this.zTree) {
       if (!this.zTree) return
 
       const searchNode = tree.getNodesByFilter((node) => node.id === 'search')
@@ -326,26 +437,12 @@ export default {
       }
     },
 
-    filterAssetsServer(keyword) {
+    searchFromServer(keyword) {
       // 直接用搜索 API 返回的数据重新初始化树
-      let treeUrl = this.treeSetting.searchUrl ? this.treeSetting.searchUrl : this.treeSetting.treeUrl
-      const filterField = treeUrl.includes('?') ? `&search=${keyword}` : `?search=${keyword}`
-      if (treeUrl.indexOf('assets/nodes/children/tree') > -1) {
-        treeUrl = treeUrl + '&all=all'
-      }
-      const searchUrl = `${treeUrl}${filterField}`
-      this.loading = true
-      this.$axios.get(searchUrl).then(nodes => {
-        this.loading = false
-        // 重新初始化树
-        $.fn.zTree.destroy(this.iZTreeID)
-        this.zTree = $.fn.zTree.init($(`#${this.iZTreeID}`), this.treeSetting, nodes)
-        const rootNode = this.zTree.getNodes()[0]
-        this.rootNodeAddDom(rootNode)
-        this.$emit('TreeInitFinish', this.zTree)
-      }).catch(() => {
-        this.loading = false
-      })
+      const treeUrl = this.treeSetting.searchUrl ? this.treeSetting.searchUrl : this.treeSetting.treeUrl
+      const searchTypeKey = this.treeSearchTypeOptions[this.treeSearchType]?.search_key || 'search'
+      const searchUrl = setUrlParam(treeUrl, searchTypeKey, keyword)
+      this.initTree(true, searchUrl)
     }
   }
 
@@ -609,12 +706,19 @@ div.rMenu li {
 
 .fixed-tree-search {
   margin-bottom: 10px;
+  border: 1px solid;
+  border-radius: 3px;
+
+  &:hover,
+  &:focus-within {
+    border-color: var(--color-primary);
+  }
 
   & ::v-deep .el-input__inner {
-    border-radius: 4px;
+    border: none;
     background: #fafafa;
     padding-right: 32px;
-    color: var(--color-text-primary)
+    color: var(--color-text-primary);
   }
 
   & ::v-deep .el-input__suffix {
@@ -638,6 +742,37 @@ div.rMenu li {
   & ::v-deep .el-input__suffix-inner {
     line-height: 30px;
   }
+
+  & ::v-deep .el-input-group__prepend {
+    padding-left: 5px;
+    padding-right: 3px;
+    border: none;
+    color: #999;
+    * {
+      color: inherit;
+    }
+
+    align-items: center;
+    background: #fafafa;
+    .el-icon-arrow-down {
+      display: inline-block;
+      transition: transform 0.8s ease; /* 动画关键 */
+    }
+    :hover {
+      .el-icon-arrow-down {
+        transform: rotate(180deg); /* 顺时针 180° */
+      }
+    }
+    .search-label {
+      margin-left: 1px;
+      margin-right: 1px;
+    }
+  }
+}
+
+::v-deep .el-dropdown-menu__item.is-active {
+  color: var(--color-primary);
+  font-weight: 500;
 }
 
 .icon-refresh {
