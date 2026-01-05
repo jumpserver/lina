@@ -54,7 +54,6 @@ export default {
         'GPT_API_KEY',
         'GPT_PROXY',
         'GPT_MODEL',
-        'IS_CUSTOM_MODEL',
         'CUSTOM_GPT_MODEL',
         'CUSTOM_DEEPSEEK_MODEL'
       ],
@@ -121,12 +120,12 @@ export default {
         },
         CUSTOM_GPT_MODEL: {
           hidden: (formValue) => {
-            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'gpt' || !formValue.IS_CUSTOM_MODEL
+            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'gpt' || formValue.GPT_MODEL !== 'custom'
           }
         },
         CUSTOM_DEEPSEEK_MODEL: {
           hidden: (formValue) => {
-            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'deep-seek' || !formValue.IS_CUSTOM_MODEL
+            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'deep-seek' || formValue.DEEPSEEK_MODEL !== 'custom'
           }
         }
       },
