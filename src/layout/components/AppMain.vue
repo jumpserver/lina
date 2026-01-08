@@ -1,9 +1,11 @@
 <template>
   <section class="app-main">
-    <!-- 去掉过渡包装，避免 Vue 3 兼容层在路由切换离场动画阶段访问已被清理的 vnode.subTree -->
-    <keep-alive :max="10">
-      <router-view :key="key" />
-    </keep-alive>
+    <router-view v-slot="{ Component }">
+      <keep-alive :max="10">
+        <component :is="Component" :key="key" />
+      </keep-alive>
+    </router-view>
+
     <ChatGPT v-if="chatAiEnabled" />
   </section>
 </template>
@@ -18,9 +20,7 @@ export default {
     ChatGPT
   },
   computed: {
-    ...mapGetters([
-      'publicSettings'
-    ]),
+    ...mapGetters(['publicSettings']),
     key() {
       // 想让创建后回来 List 页面不刷新，但是完全不刷新 table 会不对，所以创建完成后，会更新 order 和 updated
       // query 去掉这两个，如果变了再刷新
