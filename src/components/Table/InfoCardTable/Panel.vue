@@ -192,7 +192,7 @@ div.info-panel {
       display: flex;
       align-items: center;
 
-      :deep(.button.el-button--mini) {
+      :deep(.button.el-button--small) {
         padding: 5px 7px;
 
         .el-icon--right {

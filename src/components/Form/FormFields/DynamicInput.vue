@@ -6,7 +6,7 @@
       :prop="'iValue.' + index + '.value'"
       class="command-item"
     >
-      <el-input v-model="iValue[index]" size="mini">
+      <el-input v-model="iValue[index]" size="small">
         <template slot="prepend"> {{ inputTitle + ' ' + (index + 1) }}</template>
       </el-input>
       <div class="input-button">
@@ -88,7 +88,7 @@ export default {
   display: flex;
   margin-left: 20px;
 }
-.input-button :deep(.el-button.el-button--mini) {
+.input-button :deep(.el-button.el-button--small) {
   height: 25px;
   padding: 5px;
 }

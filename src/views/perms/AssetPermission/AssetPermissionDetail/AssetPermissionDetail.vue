@@ -64,7 +64,7 @@ export default {
             return (
               <div>
                 {actionLabels.map(item => (
-                  <el-tag size='mini' style={{ marginRight: '3px' }} key={item}>{item}</el-tag>
+                  <el-tag size='small' style={{ marginRight: '3px' }} key={item}>{item}</el-tag>
                 ))}
               </div>
             )

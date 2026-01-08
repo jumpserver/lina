@@ -20,7 +20,7 @@ export default {
   props: {
     value: {
       type: Array,
-      default: () => ([])
+      default: () => []
     }
   },
   data() {
@@ -36,11 +36,10 @@ export default {
         initial: { attr: '', value: '' },
         inline: true,
         hasSaveContinue: false,
-        submitBtnSize: 'mini',
+        submitBtnSize: 'small',
         submitBtnText: this.$t('Add'),
         hasReset: false,
-        onSubmit: () => {
-        },
+        onSubmit: () => {},
         submitMethod: () => 'post',
         getUrl: () => '',
         cleanFormValue(data) {
@@ -110,7 +109,7 @@ export default {
               value: [],
               ajax: {
                 url: '/api/v1/assets/platforms/',
-                transformOption: (item) => {
+                transformOption: item => {
                   let display
                   switch (this.resourceType) {
                     case 'platform':
@@ -164,9 +163,15 @@ export default {
       },
       tableConfig: {
         columns: [
-          { prop: 'attr', label: this.$t('ResourceType'), formatter: tableFormatter('resource_type') },
           {
-            prop: 'value', label: this.$t('Resource'), formatter: tableFormatter('resource', () => {
+            prop: 'attr',
+            label: this.$t('ResourceType'),
+            formatter: tableFormatter('resource_type')
+          },
+          {
+            prop: 'value',
+            label: this.$t('Resource'),
+            formatter: tableFormatter('resource', () => {
               return this.globalResource
             })
           },
@@ -178,12 +183,12 @@ export default {
             width: '100px',
             formatter: (row, col, cellValue, index) => {
               return (
-                <div class='input-button'>
+                <div class="input-button">
                   <el-button
-                    icon='el-icon-minus'
-                    size='mini'
-                    style={{ 'flexShrink': 0 }}
-                    type='danger'
+                    icon="el-icon-minus"
+                    size="small"
+                    style={{ flexShrink: 0 }}
+                    type="danger"
                     onClick={this.handleDelete(index)}
                   />
                 </div>
@@ -201,7 +206,7 @@ export default {
   },
   methods: {
     init() {
-      this.nameOptions.map((o) => {
+      this.nameOptions.map(o => {
         this.globalResource[o.value] = o.label
       })
     },
@@ -211,7 +216,8 @@ export default {
     beforeSubmit(data) {
       let status = true
       const labelMap = {
-        platform: this.$tc('Platform'), zone: this.$tc('Zone'),
+        platform: this.$tc('Platform'),
+        zone: this.$tc('Zone'),
         name_strategy: this.$tc('Strategy')
       }
       this.tableConfig.totalData.map(item => {
@@ -242,8 +248,8 @@ export default {
 
 <style lang="scss" scoped>
 :deep(.el-form-item) {
-  &:nth-child(-n+3) {
-  width: 43.5%;
+  &:nth-child(-n + 3) {
+    width: 43.5%;
   }
   &:last-child {
     width: 6%;

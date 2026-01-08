@@ -64,7 +64,7 @@ export default {
                 2: this.$t('SyncedCount'),
                 3: this.$t('ReleasedCount')
               }
-              return <el-tag type='primary' size='mini'>{status[row.status]}</el-tag>
+              return <el-tag type='primary' size='small'>{status[row.status]}</el-tag>
             }
           },
           {

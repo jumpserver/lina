@@ -34,7 +34,7 @@ export default {
                 {
                   newArr.map((r, index) => {
                     return <li>
-                      <el-tag size='mini' key={index}>
+                      <el-tag size='small' key={index}>
                         {r.attr.label}<strong> {`${r.match.label}`} </strong>{r.value}
                       </el-tag>
                     </li>
@@ -53,7 +53,7 @@ export default {
                 {
                   newArr.map((a, index) => {
                     return <li>
-                      <el-tag size='mini' key={index}>
+                      <el-tag size='small' key={index}>
                         <strong>{a.attr.label}: </strong>{`${a.value.label}`}
                       </el-tag>
                     </li>

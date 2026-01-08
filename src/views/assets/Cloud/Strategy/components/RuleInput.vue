@@ -19,7 +19,7 @@ export default {
   props: {
     value: {
       type: Array,
-      default: () => ([])
+      default: () => []
     }
   },
   data() {
@@ -28,11 +28,10 @@ export default {
         initial: { attr: '', match: '', value: '' },
         inline: true,
         hasSaveContinue: false,
-        submitBtnSize: 'mini',
+        submitBtnSize: 'small',
         submitBtnText: this.$t('Add'),
         hasReset: false,
-        onSubmit: () => {
-        },
+        onSubmit: () => {},
         submitMethod: () => 'post',
         getUrl: () => '',
         fields: [['', ['attr', 'match', 'value']]],
@@ -56,7 +55,7 @@ export default {
               value: [],
               multiple: false,
               clearable: false,
-              options: attrMatchOptions.filter((option) => {
+              options: attrMatchOptions.filter(option => {
                 const matchValues = strMatchValues.concat('exclude')
                 if (matchValues.indexOf(option.value) !== -1 && option.value !== 'in') {
                   return option
@@ -82,12 +81,12 @@ export default {
             width: '100px',
             formatter: (row, col, cellValue, index) => {
               return (
-                <div class='input-button'>
+                <div class="input-button">
                   <el-button
-                    icon='el-icon-minus'
-                    size='mini'
-                    style={{ 'flexShrink': 0 }}
-                    type='danger'
+                    icon="el-icon-minus"
+                    size="small"
+                    style={{ flexShrink: 0 }}
+                    type="danger"
                     onClick={this.handleDelete(index)}
                   />
                 </div>
@@ -119,7 +118,7 @@ export default {
 
 <style lang="scss" scoped>
 :deep(.el-form-item) {
-  &:nth-child(-n+4) {
+  &:nth-child(-n + 4) {
     width: 29%;
   }
   &:last-child {

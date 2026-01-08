@@ -9,7 +9,7 @@
               <span>
                 {{ title }}
               </span>
-              <!-- <el-tag v-if="type" type="success" class="auth-item-type" size="mini">
+              <!-- <el-tag v-if="type" type="success" class="auth-item-type" size="small">
                 {{ type }}
               </el-tag> -->
             </div>

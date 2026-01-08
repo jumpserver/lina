@@ -55,7 +55,7 @@ export default {
                 'unknown': 'warning'
               }
               const tp = typeMapper[row.status.value] || 'info'
-              return <el-tag size='mini' type={tp}>{row.status.label}</el-tag>
+              return <el-tag size='small' type={tp}>{row.status.label}</el-tag>
             }
           },
           actions: {

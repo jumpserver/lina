@@ -5,7 +5,7 @@
       ref="inputRef"
       v-model="value"
       class="editInput"
-      size="mini"
+      size="small"
       @blur="onInputEnter"
       @keyup.enter.native="onInputEnter"
     />

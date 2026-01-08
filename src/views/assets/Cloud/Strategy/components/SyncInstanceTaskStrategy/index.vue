@@ -63,14 +63,14 @@ export default {
                 <div class='input-button'>
                   <el-button
                     icon='el-icon-edit'
-                    size='mini'
+                    size='small'
                     style={{ flexShrink: 0 }}
                     type='primary'
                     onClick={this.handleAttrEdit({ row, col, cellValue, index })}
                   />
                   <el-button
                     icon='el-icon-minus'
-                    size='mini'
+                    size='small'
                     style={{ flexShrink: 0 }}
                     type='danger'
                     onClick={this.handleAttrDelete({ row, col, cellValue, index })}

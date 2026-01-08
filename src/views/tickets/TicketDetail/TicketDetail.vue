@@ -45,7 +45,7 @@ export default {
           key: this.$t('Status'),
           value: object.status,
           formatter: (item, val) => {
-            return <el-tag type={this.statusMap.type} size='mini'> {this.statusMap.title}</el-tag>
+            return <el-tag type={this.statusMap.type} size='small'> {this.statusMap.title}</el-tag>
           }
         },
         {

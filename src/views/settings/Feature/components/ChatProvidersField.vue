@@ -5,10 +5,10 @@
         {{ $t('Add') }}
       </el-button>
     </div>
-    <el-table :data="localProviders" size="mini" border>
+    <el-table :data="localProviders" size="small" border>
       <el-table-column :label="$t('Type')" width="140">
         <template #default="{ row }">
-          <el-select v-model="row.type" size="mini" @change="emitChange">
+          <el-select v-model="row.type" size="small" @change="emitChange">
             <el-option
               v-for="item in typeOptions"
               :key="item.value"
@@ -22,7 +22,7 @@
         <template #default="{ row }">
           <el-input
             v-model="row.base_url"
-            size="mini"
+            size="small"
             :placeholder="openAIBaseUrl"
             @input="emitChange"
           />
@@ -32,7 +32,7 @@
         <template #default="{ row }">
           <el-input
             v-model="row.api_key"
-            size="mini"
+            size="small"
             show-password
             autocomplete="new-password"
             @input="emitChange"
@@ -43,7 +43,7 @@
         <template #default="{ row }">
           <el-input
             v-model="row.proxy"
-            size="mini"
+            size="small"
             placeholder="http://ip:port"
             @input="emitChange"
           />

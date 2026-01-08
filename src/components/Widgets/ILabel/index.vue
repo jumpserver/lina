@@ -7,7 +7,7 @@
     class="tag-formatter"
     disable-transitions
     effect="plain"
-    size="mini"
+    size="small"
     v-bind="el"
     @click="handleClick(label)"
     v-on="$listeners"

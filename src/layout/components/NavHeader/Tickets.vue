@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-badge :hidden="assignedTicketCount===0" :value="assignedTicketCount" size="mini" type="primary">
+    <el-badge :hidden="assignedTicketCount===0" :value="assignedTicketCount" size="small" type="primary">
       <el-link class="el-link" target="_blank" @click="goToTickets">
         <svg-icon icon-class="ticket" />
       </el-link>

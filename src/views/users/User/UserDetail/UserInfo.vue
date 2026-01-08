@@ -182,14 +182,14 @@ export default {
         system_roles: () => {
           const rolesDisplay = vm.object.system_roles || []
           const dom = rolesDisplay.map(item => {
-            return <el-tag size='mini'>{item.display_name}</el-tag>
+            return <el-tag size='small'>{item.display_name}</el-tag>
           })
           return <div>{dom}</div>
         },
         org_roles: () => {
           const rolesDisplay = vm.object.org_roles || []
           const dom = rolesDisplay.map(item => {
-            return <el-tag size='mini'>{item.display_name}</el-tag>
+            return <el-tag size='small'>{item.display_name}</el-tag>
           })
           return <div>{dom}</div>
         }

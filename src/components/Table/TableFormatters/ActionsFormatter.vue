@@ -4,7 +4,7 @@
     :actions="actions"
     :more-actions="moreActions"
     :more-actions-title="moreActionsTitle"
-    :size="'mini'"
+    :size="'small'"
     class="table-actions"
   />
 </template>

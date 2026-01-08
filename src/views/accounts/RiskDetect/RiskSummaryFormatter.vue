@@ -1,7 +1,7 @@
 <template>
   <span class="risk">
     <span v-for="[k, v] of Object.entries(cellValue) " :key="k">
-      <el-tag v-if="v !== 0" :type="getRiskType(k)" effect="plain" size="mini">
+      <el-tag v-if="v !== 0" :type="getRiskType(k)" effect="plain" size="small">
         {{ getRiskLabel(k) }}({{ v }})
       </el-tag>
     </span>

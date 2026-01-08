@@ -62,35 +62,35 @@
                 max="5"
                 min="0"
                 onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
-                size="mini"
+                size="small"
               />
             </td>
             <td>
               <el-input
                 v-model.trim="contabValueObj.hour"
                 onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
-                size="mini"
+                size="small"
               />
             </td>
             <td>
               <el-input
                 v-model.trim="contabValueObj.day"
                 onkeyup="value=value.replace(/[^\0-9\\-\*\,]/g,'')"
-                size="mini"
+                size="small"
               />
             </td>
             <td>
               <el-input
                 v-model.trim="contabValueObj.month"
                 onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
-                size="mini"
+                size="small"
               />
             </td>
             <td>
               <el-input
                 v-model.trim="contabValueObj.week"
                 onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
-                size="mini"
+                size="small"
               />
             </td>
           </tbody>
@@ -458,7 +458,7 @@ export default {
 }
 
 :deep(.el-form-item){
-  &.el-form-item--mini,
+  &.el-form-item--small,
   &.el-form-item--small {
     margin-bottom: 5px;
   }

@@ -8,7 +8,7 @@
           :placeholder="$tc('Search')"
           class="fixed-tree-search"
           prefix-icon="fa fa-search"
-          size="mini"
+          size="small"
           @input="treeSearchHandle"
         >
           <template #suffix>

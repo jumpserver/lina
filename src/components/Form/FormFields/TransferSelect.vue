@@ -82,7 +82,7 @@ export default {
       const params = {
         limit: limit,
         offset: offset,
-        fields_size: 'mini'
+        fields_size: 'small'
       }
       if (keyword) {
         params['search'] = keyword

@@ -52,9 +52,9 @@ export default {
             label: this.$t('Status'),
             formatter: row => {
               if (row.status === 1) {
-                return <el-tag type='primary' size='mini'>{this.$t('Success')}</el-tag>
+                return <el-tag type='primary' size='small'>{this.$t('Success')}</el-tag>
               } else {
-                return <el-tag type='danger' size='mini'>{this.$t('Failed')}</el-tag>
+                return <el-tag type='danger' size='small'>{this.$t('Failed')}</el-tag>
               }
             }
           },

@@ -17,10 +17,10 @@
           <b>{{ d.display_name }}</b>
         </div>
         <div class="tag-zone">
-          <el-tag v-if="d.version" size="mini" style="margin-left: 5px; background-color: #ecf5ff; color: #409eff;">
+          <el-tag v-if="d.version" size="small" style="margin-left: 5px; background-color: #ecf5ff; color: #409eff;">
             {{ d.version }}
           </el-tag>
-          <el-tag v-for="tag of d.tags" :key="tag" size="mini">
+          <el-tag v-for="tag of d.tags" :key="tag" size="small">
             {{ capitalize(tag) }}
           </el-tag>
         </div>

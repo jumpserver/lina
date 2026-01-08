@@ -45,7 +45,7 @@
             v-if="dstPathInput.type === 'input'"
             v-model="dstPath"
             :placeholder="dstPathInput.placeholder"
-            size="mini"
+            size="small"
             @change="dstPathInput.callback(dstPathInput.value)"
           >
             <template slot="prepend">/tmp/</template>

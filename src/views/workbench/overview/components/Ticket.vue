@@ -35,7 +35,7 @@ export default {
             label: i18n.global.t('Title'),
             formatter: DetailFormatter,
             formatterArgs: {
-              getRoute: function({ row }) {
+              getRoute: function ({ row }) {
                 const type = row.type.value
                 if (type === 'apply_asset') {
                   return 'AssetsTicketDetail'
@@ -73,15 +73,25 @@ export default {
             width: '120px',
             formatter: row => {
               if (row.status.value === 'open') {
-                return <el-tag type='primary' size='mini'> {i18n.global.t('OpenStatus')}</el-tag>
+                return (
+                  <el-tag type="primary" size="small">
+                    {' '}
+                    {i18n.global.t('OpenStatus')}
+                  </el-tag>
+                )
               } else {
-                return <el-tag type='danger' size='mini'>  {i18n.global.t('CloseStatus')}</el-tag>
+                return (
+                  <el-tag type="danger" size="small">
+                    {' '}
+                    {i18n.global.t('CloseStatus')}
+                  </el-tag>
+                )
               }
             }
           },
           date_created: {
             label: i18n.global.t('Date'),
-            formatter: (row) => toSafeLocalDateStr(row.date_created)
+            formatter: row => toSafeLocalDateStr(row.date_created)
           }
         },
         hasSelection: false,
@@ -91,17 +101,18 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-      'currentUser'
-    ])
+    ...mapGetters(['currentUser'])
   },
   watch: {
     url(iNew) {
-      this.$set(this.tableConfig, 'url', `${iNew}?assignees__id=${this.currentUser.id}&state=pending`)
+      this.$set(
+        this.tableConfig,
+        'url',
+        `${iNew}?assignees__id=${this.currentUser.id}&state=pending`
+      )
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

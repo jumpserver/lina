@@ -5,7 +5,7 @@
         v-if="props.tab === 'AssignedTicketList'"
         v-slot="props"
         :value="getBadgeValue(props)"
-        size="mini"
+        size="small"
         type="primary"
       />
     </template>

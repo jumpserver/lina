@@ -34,7 +34,12 @@ import _ from 'lodash'
 moment.locale('zh-cn')
 
 configureCompat({
-  MODE: 2
+  MODE: 2,
+  ATTR_FALSE_VALUE: false,
+  RENDER_FUNCTION: false,
+  COMPONENT_ASYNC: false,
+  WATCH_ARRAY: false,
+  ATTR_ENUMERATED_COERCION: false
 })
 
 async function initApp() {

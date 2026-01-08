@@ -31,7 +31,7 @@
                 :fetch-suggestions="item.el.query"
                 :placeholder="item.placeholder"
                 class="inline-input"
-                size="mini"
+                size="small"
                 clearable
                 @change="handleInputChange(item)"
                 @select="handleInputChange(item)"
@@ -46,7 +46,7 @@
                 :class="!isFold ? 'special-style' : ''"
                 :placeholder="item.placeholder"
                 class="inline-input"
-                size="mini"
+                size="small"
                 @change="item.callback(formModel[item.name])"
               />
             </el-tooltip>
@@ -65,7 +65,7 @@
                 :placeholder="item.name"
                 class="autoWidth-select"
                 default-first-option
-                size="mini"
+                size="small"
                 @change="item.callback(item.value)"
               >
                 <template slot="prefix">{{ item.label + ':' + item.value }}</template>

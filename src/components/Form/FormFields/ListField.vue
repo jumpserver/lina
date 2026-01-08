@@ -86,7 +86,7 @@ export default {
   margin-top: 4px;
 }
 
-.input-button :deep(.el-button.el-button--mini) {
+.input-button :deep(.el-button.el-button--small) {
   height: 25px;
   padding: 5px;
 }

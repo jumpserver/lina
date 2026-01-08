@@ -10,15 +10,15 @@
     <el-form-item>
       <el-radio v-model="radioValue" :label="3">
         {{ $t('From') }}
-        <el-input-number v-model="cycle01" :max="31" :min="0" size="mini" /> -
-        <el-input-number v-model="cycle02" :max="31" :min="0" size="mini" /> {{ $t('Day') }}
+        <el-input-number v-model="cycle01" :max="31" :min="0" size="small" /> -
+        <el-input-number v-model="cycle02" :max="31" :min="0" size="small" /> {{ $t('Day') }}
       </el-radio>
     </el-form-item>
 
     <el-form-item>
       <el-radio v-model="radioValue" :label="4">
         {{ $t('Every') }}
-        <el-input-number v-model="average02" :max="31" :min="1" size="mini" /> {{ $t('Day') }} {{ $t('ExecuteOnce') }}
+        <el-input-number v-model="average02" :max="31" :min="1" size="small" /> {{ $t('Day') }} {{ $t('ExecuteOnce') }}
       </el-radio>
     </el-form-item>
 

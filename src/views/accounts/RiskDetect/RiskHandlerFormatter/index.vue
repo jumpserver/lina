@@ -221,7 +221,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.action.el-button--mini {
+.action.el-button--small {
   cursor: pointer;
   padding: 1px 4px;
 

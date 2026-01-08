@@ -127,7 +127,7 @@ export default {
       padding: 5px 0;
     }
 
-    :deep(.el-tag--mini) {
+    :deep(.el-tag--small) {
       margin-right: 3px;
     }
   }

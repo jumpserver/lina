@@ -48,7 +48,7 @@ export default {
           formatter: () => {
             const types = ['primary', 'success', 'warning', 'danger']
             const data = this.object.protocols.map((p, i) => {
-              return <el-tag type={types[i % 4]} size='mini'>{p}</el-tag>
+              return <el-tag type={types[i % 4]} size='small'>{p}</el-tag>
             })
             return <span> {data} </span>
           }
@@ -58,7 +58,7 @@ export default {
           formatter: () => {
             const types = ['primary', 'success', 'warning', 'danger']
             const data = this.object.tags.map((p, i) => {
-              return <el-tag type={types[i % 4]} size='mini'>{p}</el-tag>
+              return <el-tag type={types[i % 4]} size='small'>{p}</el-tag>
             })
             return <span> {data} </span>
           }

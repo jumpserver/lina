@@ -51,7 +51,7 @@ export default {
             el: {
               min: 8,
               max: 36,
-              size: 'mini'
+              size: 'small'
             }
           },
           {

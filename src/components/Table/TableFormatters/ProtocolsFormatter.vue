@@ -4,7 +4,7 @@
       v-for="(p, index) of cellValue"
       :key="p.name"
       :type="getTagType(index)"
-      size="mini"
+      size="small"
     >
       {{ p.name }}/{{ p.port }}
     </el-tag>

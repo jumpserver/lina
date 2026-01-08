@@ -279,7 +279,7 @@ export default {
   }
 }
 
-.input-button .el-button.el-button--mini {
+.input-button .el-button.el-button--small {
   padding: 5px;
   height: 28px;
   width: 28px;

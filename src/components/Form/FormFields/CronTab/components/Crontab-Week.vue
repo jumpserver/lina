@@ -10,8 +10,8 @@
     <el-form-item>
       <el-radio v-model="radioValue" :label="3">
         {{ $t('CycleFromWeek') }}
-        <el-input-number v-model="cycle01" :max="7" :min="1" size="mini" /> -
-        <el-input-number v-model="cycle02" :max="7" :min="1" size="mini" />
+        <el-input-number v-model="cycle01" :max="7" :min="1" size="small" /> -
+        <el-input-number v-model="cycle02" :max="7" :min="1" size="small" />
       </el-radio>
     </el-form-item>
 

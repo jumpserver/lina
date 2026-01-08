@@ -2,14 +2,14 @@
 <template>
   <el-form size="small">
     <el-form-item>
-      <el-radio v-model="radioValue" :label="1" size="mini">
+      <el-radio v-model="radioValue" :label="1" size="small">
         {{ $t('Min') }}，{{ $t('WildcardsAllowed') }}[, - * /]
       </el-radio>
     </el-form-item>
     <el-form-item>
       <el-radio v-model="radioValue" :label="3">
         {{ $t('From') }}
-        <el-input-number v-model="average02" :max="59" :min="1" size="mini" />
+        <el-input-number v-model="average02" :max="59" :min="1" size="small" />
         {{ $t('Min') }} {{ $t('ExecuteOnce') }}
       </el-radio>
     </el-form-item>

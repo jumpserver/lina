@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="tableFilter">
-      <el-radio-group v-model="importStatusFilter" size="mini">
+      <el-radio-group v-model="importStatusFilter" size="small">
         <el-radio-button label="all">{{ $t('Total') }}: {{ totalCount }}</el-radio-button>
         <el-radio-button label="ok">{{ $t('Success') }}: {{ successCount }}</el-radio-button>
         <el-radio-button label="error">{{ $t('Failed') }}: {{ failedCount }}</el-radio-button>

@@ -120,7 +120,7 @@ export default {
           },
           risk: {
             formatter: (row) => {
-              return (<el-tag size='mini' type='danger' effect='plain'>{row.risk.label}</el-tag>)
+              return (<el-tag size='small' type='danger' effect='plain'>{row.risk.label}</el-tag>)
             }
           },
           status: {

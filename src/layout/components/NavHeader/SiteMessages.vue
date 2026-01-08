@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-badge :hidden="unreadMsgCount === 0" :max="99" :value="unreadMsgCount" size="mini" type="primary">
+    <el-badge :hidden="unreadMsgCount === 0" :max="99" :value="unreadMsgCount" size="small" type="primary">
       <el-link style="height: 100%" @click="toggleDrawer">
         <svg-icon icon-class="remind" />
       </el-link>

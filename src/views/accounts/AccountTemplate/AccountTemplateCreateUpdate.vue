@@ -39,7 +39,7 @@ export default {
           el: {
             icon: 'fa fa-external-link',
             type: 'primary',
-            size: 'mini'
+            size: 'small'
           },
           component: 'el-button',
           on: {
