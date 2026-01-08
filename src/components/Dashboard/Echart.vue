@@ -44,7 +44,7 @@ export default {
     this._chartId = `chart_${Date.now()}_${Math.random().toString(36).slice(2)}`
     window._echarts.total.add(this._chartId)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     if (window._echarts) {
       window._echarts.total.delete(this._chartId)
       window._echarts.finished.delete(this._chartId)

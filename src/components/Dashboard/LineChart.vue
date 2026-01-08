@@ -246,7 +246,7 @@ export default {
       this._mql._handler = handler
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('beforeprint', this._before)
     window.removeEventListener('afterprint', this._after)
     if (this._mql) {

@@ -59,7 +59,7 @@ export default {
   mounted() {
     this.$eventBus.$on('change-tab', this.handleChangeTab)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.$eventBus.$off('change-tab', this.handleChangeTab)
   },
   methods: {

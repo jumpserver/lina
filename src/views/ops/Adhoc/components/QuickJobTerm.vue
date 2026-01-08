@@ -136,7 +136,7 @@ export default {
     this.xterm.scrollToBottom()
     this.xterm.onScroll(this.checkScroll)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.xterm.dispose()
   },
   methods: {

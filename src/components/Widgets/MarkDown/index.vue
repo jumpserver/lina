@@ -82,7 +82,7 @@ export default {
       }
     })
   },
-  beforeDestroy() {
+  beforeUnmount() {
     const el = document.querySelector('.result-html')
     if (el) {
       this.resizeObserver.unobserve(el)

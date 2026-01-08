@@ -73,7 +73,7 @@ export default {
   mounted() {
     this.$eventBus.$on('labelSearch', this.labelSearchHandler)
   },
-  beforeDestroy(label) {
+  beforeUnmount(label) {
     this.$eventBus.$off('labelSearch', this.labelSearchHandler)
   },
   methods: {

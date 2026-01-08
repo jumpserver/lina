@@ -126,7 +126,7 @@ export default {
       return menu
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     $('body').unbind('mousedown')
   },
   methods: {

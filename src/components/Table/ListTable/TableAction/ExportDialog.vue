@@ -169,7 +169,7 @@ export default {
       ]
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.$eventBus.$off('showExportDialog', this.showExportDialogHandler)
   },
   mounted() {

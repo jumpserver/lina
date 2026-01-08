@@ -37,7 +37,7 @@ module.exports = {
     'vue/no-deprecated-dollar-listeners-api': 'off',
     'vue/no-deprecated-slot-attribute': 'off',
     'vue/no-deprecated-v-on-native-modifier': 'off',
-    'vue/no-deprecated-destroyed-lifecycle': 'off',
+    'vue/no-deprecated-destroyed-lifecycle': 'error',
     'vue/no-deprecated-slot-scope-attribute': 'off',
     'vue/no-deprecated-props-default-this': 'off',
     'vue/no-deprecated-dollar-scopedslots-api': 'off',

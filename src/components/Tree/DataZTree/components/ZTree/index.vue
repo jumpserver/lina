@@ -85,7 +85,7 @@ export default {
     })
     window.addEventListener('resize', this.updateTreeHeight)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     $.fn.zTree.destroy(this.iZTreeID)
     window.removeEventListener('resize', this.updateTreeHeight)
   },

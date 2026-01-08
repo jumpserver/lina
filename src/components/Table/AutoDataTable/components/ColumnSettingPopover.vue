@@ -91,7 +91,7 @@ export default {
       }
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.$eventBus.$off('showColumnSettingPopover', this.showColumnSettingPopoverHandler)
   },
   mounted() {

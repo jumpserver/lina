@@ -74,7 +74,7 @@ export default {
     this.init()
     this.insertToBody()
   },
-  beforeDestroy() {
+  beforeUnmount() {
     const element = this.$refs.drawer
     element.remove()
     // window.removeEventListener('click', this.closeSidebar)

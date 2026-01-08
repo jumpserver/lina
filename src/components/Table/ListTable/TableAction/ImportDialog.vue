@@ -143,7 +143,7 @@ export default {
       this.showTable = false
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.$eventBus.$off('showImportDialog', this.showImportEventHandler)
   },
   mounted() {

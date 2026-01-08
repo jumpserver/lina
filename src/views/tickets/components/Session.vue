@@ -98,7 +98,7 @@ export default {
       this.init()
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     clearTimeout(this.curTimer)
     this.curTimer = null
   },

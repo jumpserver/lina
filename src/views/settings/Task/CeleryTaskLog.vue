@@ -25,7 +25,7 @@ export default {
   mounted() {
     this.initTermAndWs()
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.xterm.dispose()
   },
   methods: {

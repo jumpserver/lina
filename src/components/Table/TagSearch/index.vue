@@ -151,7 +151,7 @@ export default {
   mounted() {
     document.addEventListener('keyup', this.handleKeyUp)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     document.removeEventListener('keyup', this.handleKeyUp)
   },
   methods: {

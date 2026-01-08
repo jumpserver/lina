@@ -51,7 +51,7 @@ export default {
   updated() {
     this.addEvents()
   },
-  destroyed() {
+  unmounted() {
     this.removeEvents()
   },
   methods: {

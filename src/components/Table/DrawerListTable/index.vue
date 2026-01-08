@@ -182,7 +182,7 @@ export default {
     }
     this.$log.debug('>>> DrawerListTable mounted: ', this.routeFreeze)
   },
-  destroyed() {
+  unmounted() {
     this.$log.debug('>>> DrawerListTable destroyed')
   },
   activated() {

@@ -167,7 +167,7 @@ export default {
   mounted() {
     this.$eventBus.$on('showConfirmDialog', this.performConfirm)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.$eventBus.$off('showConfirmDialog', this.performConfirm)
   },
   methods: {

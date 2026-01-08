@@ -146,7 +146,7 @@ export default {
       this.resizeObserver.observe(document.querySelector('.box-card'))
     })
   },
-  beforeDestroy() {
+  beforeUnmount() {
     const el = document.querySelector('.box-card')
     if (el) {
       this.resizeObserver.unobserve(el)

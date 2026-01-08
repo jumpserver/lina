@@ -176,7 +176,7 @@ export default {
     this.buildRouteSuggestions()
     this.bindKeyboardShortcut()
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.unbindKeyboardShortcut()
   },
   methods: {
