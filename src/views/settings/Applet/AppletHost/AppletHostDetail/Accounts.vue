@@ -1,36 +1,41 @@
 <template>
-  <Account
-    :url="url"
-    :columns-meta="columnsMeta"
-    :extra-quick-actions="quickActions"
-    :object.sync="object"
-  />
+  <TwoCol>
+    <template>
+      <Account :url="url" :columns-meta="columnsMeta" :object.sync="object" />
+    </template>
+    <template #right>
+      <QuickActions :actions="quickActions" type="primary" />
+    </template>
+  </TwoCol>
 </template>
 
 <script>
+import { QuickActions } from '@/components'
 import Account from '@/views/assets/Asset/AssetDetail/Account'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'Accounts',
   components: {
-    Account
+    TwoCol,
+    Account,
+    QuickActions
   },
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
     return {
       columnsMeta: {
         name: {
-          formatter: (row) => <span>{row.name}</span>
+          formatter: row => <span>{row.name}</span>
         },
         asset: {
           label: this.$t('Asset'),
-          formatter: (row) => <span>{row.asset.name}</span>
+          formatter: row => <span>{row.asset.name}</span>
         }
       },
       quickActions: [

@@ -62,6 +62,7 @@ import Dialog from '@/components/Dialog/index.vue'
 import PasswordHistoryDialog from './PasswordHistoryDialog.vue'
 import { SecretViewerFormatter } from '@/components/Table/TableFormatters'
 import { encryptPassword } from '@/utils/secure'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ShowSecretInfo',
@@ -111,6 +112,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      publicSettings: 'publicSettings'
+    }),
     secretTypeLabel() {
       return this.account['secret_type'].label || 'Password'
     },
@@ -146,7 +150,11 @@ export default {
       })
     },
     showSecretDialog() {
-      return this.$axios.get(this.url, { disableFlashErrorMsg: true }).then((res) => {
+      if (!this.publicSettings.SECURITY_ACCOUNT_SECRET_READ) {
+        this.$message.warning(this.$tc('AccountSecretReadDisabled'))
+        return
+      }
+      return this.$axios.get(this.url).then((res) => {
         this.secretInfo = res
         this.sshKeyFingerprint = res?.spec_info?.ssh_key_fingerprint || '-'
         this.showSecret = true
@@ -167,54 +175,54 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .item-textarea ::v-deep .el-textarea__inner {
-    height: 110px;
+.item-textarea ::v-deep .el-textarea__inner {
+  height: 110px;
+}
+
+.el-form-item {
+  border-bottom: 1px solid #EBEEF5;
+  padding: 5px 0;
+  margin-bottom: 0;
+
+  &:last-child {
+    border-bottom: none;
   }
 
-  .el-form-item {
-    border-bottom: 1px solid #EBEEF5;
-    padding: 5px 0;
-    margin-bottom: 0;
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    ::v-deep .el-form-item__label {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      padding-right: 20px;
-      line-height: 30px;
-      word-break: keep-all;
-      overflow-wrap: break-word;
-      white-space: normal;
-    }
-
-    ::v-deep .el-form-item__content {
-      line-height: 30px;
-
-      pre {
-        margin: 0;
-      }
-    }
+  ::v-deep .el-form-item__label {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-right: 20px;
+    line-height: 30px;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    white-space: normal;
   }
 
-  ul {
-    margin: 0;
-  }
+  ::v-deep .el-form-item__content {
+    line-height: 30px;
 
-  li {
-    display: block;
-    font-size: 13px;
-    margin-bottom: 8px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    .title {
-      color: #303133;
-      font-weight: 500;
+    pre {
+      margin: 0;
     }
   }
+}
+
+ul {
+  margin: 0;
+}
+
+li {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  .title {
+    color: #303133;
+    font-weight: 500;
+  }
+}
 </style>
