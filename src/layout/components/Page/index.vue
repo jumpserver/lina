@@ -11,6 +11,7 @@
         @mouseup="endLongPress"
         @mousedown.native="startLongPress"
       />
+
       <slot name="title">
         <span style="padding-left: 10px">
           {{ iTitle }}
@@ -24,10 +25,12 @@
           </el-tooltip>
         </span>
       </slot>
+
       <template #rightSide>
         <slot name="headingRightSide" />
       </template>
     </PageHeading>
+
     <PageContent :class="{'disabled': disabled}" class="page-content">
       <div v-if="disabled" class="content-disabled-mask">
         <IBox shadow="always">
@@ -49,6 +52,7 @@
       </el-alert>
       <slot />
     </PageContent>
+    
     <UserConfirmDialog />
   </div>
 </template>

@@ -15,7 +15,7 @@
     "fix": "eslint --ext .js,.vue --fix src",
     "test:unit": "jest --clearCache && vue-cli-service test:unit",
     "test:ci": "npm run lint && npm run test:unit",
-    "svgo": "svgo -f src/icons/svg --config=src/icas/svgo.yml",
+    "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml",
     "vue-i18n-extract": "vue-i18n-extract",
     "vue-i18n-report": "vue-i18n-extract report -v './src/**/*.?(js|vue)' -l './src/i18n/langs/**/*.json'",
     "vue-i18n-report-json": "vue-i18n-extract report -v './src/**/*.?(js|vue)' -l './src/i18n/langs/**/*.json' -o /tmp/abc.json",

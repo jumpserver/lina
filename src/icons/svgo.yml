@@ -16,7 +16,5 @@ plugins:
   #     param1: 1
   #     param2: 2
 
-- removeAttrs:
-    attrs:
-      - 'fill'
-      - 'fill-rule'
+- convertColors:
+    currentColor: true

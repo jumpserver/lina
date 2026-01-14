@@ -228,9 +228,8 @@ export default {
 
 <style lang="scss" scoped>
 $btn-text-color: #ffffff;
-$color-btn-background: #e8f7f4;
-$color-btn-focus-background: #83cbba;
 $color-divided: #e4e7ed;
+$color-btn-focus-background: #79bbff;
 $color-drop-menu-title: #909399;
 $color-drop-menu-border: #e4e7ed;
 
@@ -303,6 +302,7 @@ $color-drop-menu-border: #e4e7ed;
   ::v-deep .action-item.el-dropdown .el-button {
     display: block;
     color: var(--color-primary);
+    transition: all 0.2s;
 
     &:focus {
       color: $btn-text-color;
