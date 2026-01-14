@@ -11,7 +11,7 @@
         @keydown.esc.prevent="closePanel"
         @clear="clearSearch"
       >
-        <template slot="suffix">
+        <template #suffix>
           <span class="search-shortcut">{{ shortcutText }}</span>
         </template>
       </el-input>

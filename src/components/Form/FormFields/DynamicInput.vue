@@ -7,7 +7,7 @@
       class="command-item"
     >
       <el-input v-model="iValue[index]" size="small">
-        <template slot="prepend"> {{ inputTitle + ' ' + (index + 1) }}</template>
+        <template #prepend> {{ inputTitle + ' ' + (index + 1) }}</template>
       </el-input>
       <div class="input-button">
         <el-button

@@ -32,7 +32,7 @@
             :key="treeControlColumn.prop || 'tree-ctrl'"
             v-bind="treeControlColumn"
           >
-            <template slot-scope="scope">
+            <template #default="scope">
               <span v-for="space in scope.row._level" :key="space" class="ms-tree-space" />
               <span
                 v-if="iconShow(scope.$index, scope.row)"

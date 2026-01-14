@@ -23,11 +23,13 @@
       @focus="handleCascaderFocus"
       @visible-change="handleCascaderVisibleChange"
     >
-      <template slot-scope="{ node, data }">
+      <template #default="{ node, data }">
         <span>{{ data.label }}</span>
         <span v-if="!node.isLeaf"> ({{ data.children.length - 1 }}) </span>
       </template>
-      <i slot="prefix" class="el-input__icon el-icon-search" />
+      <template #prefix>
+        <i class="el-input__icon el-icon-search" />
+      </template>
     </el-cascader>
   </div>
 </template>

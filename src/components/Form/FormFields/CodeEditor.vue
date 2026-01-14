@@ -68,7 +68,7 @@
                 size="small"
                 @change="item.callback(item.value)"
               >
-                <template slot="prefix">{{ item.label + ':' + item.value }}</template>
+                <template #prefix>{{ item.label + ':' + item.value }}</template>
                 <el-option
                   v-for="(option, id) in item.options"
                   :key="id"

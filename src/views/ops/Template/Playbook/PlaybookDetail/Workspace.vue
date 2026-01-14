@@ -16,7 +16,7 @@
           {{ $tc('Delete') }}
         </li>
       </template>
-      <template slot="table">
+      <template #table>
         <div class="transition-box" style="width: calc(100% - 17px);">
           <el-tabs v-model="activeEditorId" :closable="true" class="workspace-tab" @tab-remove="onCloseEditor">
             <el-tab-pane

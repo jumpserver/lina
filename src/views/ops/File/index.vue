@@ -48,7 +48,7 @@
             size="small"
             @change="dstPathInput.callback(dstPathInput.value)"
           >
-            <template slot="prepend">/tmp/</template>
+            <template #prepend>/tmp/</template>
           </el-input>
         </div>
         <div class="file-uploader">

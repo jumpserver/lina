@@ -1,13 +1,15 @@
 <template>
   <div class="filter-field">
-    <el-cascader
-      v-show="options.length > 0"
-      class="filter-cascader"
-      ref="Cascade"
-      :options="options"
-      :props="config"
-      @change="handleMenuItemChange"
-    />
+    <template v-show="options.length > 0">
+      <el-cascader
+        class="filter-cascader"
+        ref="Cascade"
+        :options="options"
+        :props="config"
+        @change="handleMenuItemChange"
+      />
+    </template>
+
     <el-tag
       v-for="(v, k) in filterTags"
       :key="k"
@@ -24,7 +26,9 @@
       <span v-if="v.valueLabel">{{ v.valueLabel }}</span>
       <span v-else>{{ v.value }}</span>
     </el-tag>
+
     <span v-if="keyLabel" slot="prefix" class="filter-title">{{ keyLabel + ':' }}</span>
+    
     <el-input
       ref="SearchInput"
       v-model="filterValue"

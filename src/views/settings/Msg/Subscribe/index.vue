@@ -27,7 +27,7 @@
           </template>
         </el-table-column>
         <el-table-column :label="$tc('Receivers')">
-          <template slot-scope="scope">
+          <template #default="scope">
             <el-popover placement="top" popper-class="black-theme-popover" trigger="hover">
               <p v-for="item in scope.row.receivers" :key="item.name">{{ item.name }}</p>
               <span v-if="!scope.row.children" slot="reference" class="name-wrapper">

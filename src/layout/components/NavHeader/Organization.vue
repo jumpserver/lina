@@ -9,7 +9,7 @@
     popper-class="switch-org"
     @change="changeOrg"
   >
-    <template slot="prefix">
+    <template #prefix>
       <svg-icon icon-class="organization" />
     </template>
 
