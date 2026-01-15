@@ -229,83 +229,8 @@ input[type='file'] {
   //}
 }
 
-#app .el-pagination {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-  max-width: 100%;
-  padding: 8px 14px;
-  font-weight: 500;
-  box-sizing: border-box;
-  overflow-x: auto;
-  overflow-y: visible;
-}
-
-#app .el-pagination__total,
-#app .el-pagination__sizes,
-#app .el-pagination__jump {
-  margin: 0 8px;
-  color: var(--color-text-secondary);
-  font-weight: 400;
-}
-
-#app .el-pagination__total {
-  margin-right: auto;
-}
-
-#app .el-pagination.is-background {
-  .btn-prev,
-  .btn-next,
-  .el-pager li {
-    margin: 0 4px;
-    min-width: 32px;
-    height: 32px;
-    line-height: 32px;
-    padding: 0;
-    border-radius: 999px;
-    background-color: transparent;
-    color: var(--color-text-secondary);
-    border: 1px solid transparent;
-    font-weight: 500;
-  }
-
-  .btn-prev,
-  .btn-next {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .el-pager li {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .btn-prev:hover,
-  .btn-next:hover,
-  .el-pager li:not(.active):hover {
-    color: var(--color-primary);
-    background-color: transparent;
-  }
-
-  .btn-prev.disabled,
-  .btn-next.disabled,
-  .btn-prev:disabled,
-  .btn-next:disabled {
-    color: var(--color-disabled);
-    background-color: transparent;
-  }
-
-  .el-pager li.active {
-    background-color: var(--color-primary-light);
-    color: var(--color-primary);
-  }
-
-  .el-pager li.more::before {
-    line-height: 32px;
-  }
+.el-pagination {
+  overflow: auto;
 }
 
 .el-table-filter {

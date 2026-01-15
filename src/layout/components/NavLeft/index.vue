@@ -339,35 +339,7 @@ $hover-border-color: transparent;
     }
   }
 
-  // view switcher popover
-  ::v-deep .switcher-popper {
-    padding: 8px 6px;
-    background: #1e2733;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
-    .el-menu {
-      background: transparent;
-    }
-    .el-menu-item {
-      color: var(--menu-text);
-      border-radius: 6px;
-      margin-bottom: 4px;
-      &:hover {
-        color: var(--menu-text-active);
-        background: var(--menu-hover);
-      }
-      &.is-active {
-        color: #e5edf7;
-        background:
-          linear-gradient(90deg, rgba(64, 158, 255, 0.85) 0%, rgba(64, 158, 255, 0) 55%),
-          linear-gradient(90deg, #22344b 0%, var(--menu-bg) 100%);
-        // box-shadow:
-        //   inset 0 0 0 1px rgba(255, 255, 255, 0.06),
-        //   0 2px 8px rgba(0, 0, 0, 0.35);
-        overflow: hidden;
-      }
-    }
-  }
+  // view switcher popover uses global menu styles
 }
 
 @media screen and (max-width: 992px) {

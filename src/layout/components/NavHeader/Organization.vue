@@ -187,11 +187,11 @@ $height: 28px;
 
 .org-select {
   line-height: $height;
-  background-color: #303a48;
+  background-color: var(--nav-header-bg, var(--color-primary));
   transition: all 0.2s;
 
   &:hover {
-    background-color: #3a4656;
+    background-color: var(--nav-header-hover, var(--color-primary));
   }
 }
 

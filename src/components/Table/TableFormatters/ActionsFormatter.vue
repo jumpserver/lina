@@ -4,7 +4,6 @@
     :actions="actions"
     :more-actions="moreActions"
     :more-actions-title="moreActionsTitle"
-    :more-action-btn="moreActionBtn"
     :size="'mini'"
     class="table-actions"
   />
@@ -136,7 +135,7 @@ export default {
       {
         name: 'update',
         title: this.$t('Edit'),
-        type: 'text',
+        type: 'primary',
         has: colActions.hasUpdate,
         can: colActions.canUpdate,
         callback: colActions.onUpdate,
@@ -145,7 +144,7 @@ export default {
       {
         name: 'delete',
         title: this.$t('Delete'),
-        type: 'text',
+        type: 'danger',
         has: colActions.hasDelete,
         can: colActions.canDelete,
         callback: colActions.onDelete,
@@ -166,12 +165,7 @@ export default {
       defaultActions: defaultActions,
       extraActions: colActions.extraActions,
       // moreActionsTitle: colActions.moreActionsTitle || null
-      moreActionsTitle: '',
-      moreActionBtn: {
-        icon: 'fa-ellipsis-v',
-        tip: this.$t('More'),
-        type: 'text'
-      }
+      moreActionsTitle: ''
     }
   },
   computed: {

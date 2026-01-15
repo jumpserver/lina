@@ -121,10 +121,10 @@ export default {
 
 <style lang="scss" scoped>
 .menu-main.el-menu {
-  background-color: #1e2733 !important;
+  background-color: var(--menu-bg) !important;
   padding: 6px;
   min-width: 180px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  box-shadow: none;
   letter-spacing: 0.05em;
 
   ::v-deep .el-submenu .el-submenu__title {
@@ -151,18 +151,12 @@ export default {
 
     &:hover {
       color: var(--menu-text-active);
-      background: var(--menu-hover);
+      background: var(--menu-hover-bg, var(--menu-hover));
     }
 
     &.is-active {
-      color: #e5edf7;
-      background:
-        linear-gradient(90deg, rgba(64, 158, 255, 0.85) 0%, rgba(64, 158, 255, 0) 55%),
-        linear-gradient(90deg, #22344b 0%, var(--menu-bg) 100%);
-      // box-shadow:
-      //   inset 0 0 0 1px rgba(255, 255, 255, 0.06),
-      //   0 2px 8px rgba(0, 0, 0, 0.35);
-      overflow: hidden;
+      color: var(--menu-active-text, var(--menu-text-active));
+      background: var(--menu-active-bg, var(--menu-hover-bg, var(--menu-hover)));
     }
   }
 }

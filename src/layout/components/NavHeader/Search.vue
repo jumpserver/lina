@@ -346,13 +346,13 @@ export default {
     .search-input {
       height: 30px;
       line-height: 1;
-      background-color: #303a48;
+      background-color: var(--nav-header-bg, var(--color-primary));
       border-radius: 4px;
       cursor: pointer;
       transition: all 0.2s;
 
       &:hover {
-        background-color: #3a4656;
+        background-color: var(--nav-header-hover, var(--color-primary));
       }
 
       ::v-deep {

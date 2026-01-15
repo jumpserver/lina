@@ -237,7 +237,6 @@ $color-drop-menu-border: #e4e7ed;
 .layout {
   .action-item {
     margin-left: 5px;
-    box-shadow: unset;
 
     &.grouped {
       margin-left: 0;
@@ -299,27 +298,6 @@ $color-drop-menu-border: #e4e7ed;
 
     * {
       vertical-align: baseline !important;
-    }
-  }
-
-  .action-item.delete.el-button--text {
-    color: #f56c6c;
-
-    &:hover,
-    &:focus {
-      color: #f56c6c;
-    }
-  }
-
-  ::v-deep .action-item.el-dropdown .el-button.el-button--text {
-    display: block;
-    color: var(--color-primary);
-    transition: all 0.2s;
-
-    &:focus,
-    &:hover {
-      border-color: transparent;
-      background-color: transparent;
     }
   }
 }
