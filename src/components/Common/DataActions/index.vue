@@ -237,6 +237,7 @@ $color-drop-menu-border: #e4e7ed;
 .layout {
   .action-item {
     margin-left: 5px;
+    box-shadow: unset;
 
     &.grouped {
       margin-left: 0;
@@ -257,9 +258,11 @@ $color-drop-menu-border: #e4e7ed;
   .action-item.el-dropdown {
     font-size: 11px;
 
-    .more-action.el-button--default {
-      ::v-deep .el-icon-arrow-down.el-icon--right {
-        color: var(--color-icon-primary) !important;
+    .more-action {
+      .el-button--default {
+        ::v-deep .el-icon-arrow-down.el-icon--right {
+          color: var(--color-icon-primary) !important;
+        }
       }
     }
 

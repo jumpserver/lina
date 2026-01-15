@@ -122,7 +122,6 @@ export default {
 <style lang="scss" scoped>
 .menu-main.el-menu {
   background-color: #1e2733 !important;
-  border-radius: 8px;
   padding: 6px;
   min-width: 180px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
@@ -148,7 +147,7 @@ export default {
     line-height: 28px;
     padding: 6px 14px;
     color: var(--menu-text);
-    border-radius: 6px;
+    // border-radius: 6px;
 
     &:hover {
       color: var(--menu-text-active);

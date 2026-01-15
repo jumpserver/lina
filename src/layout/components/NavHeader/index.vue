@@ -167,7 +167,7 @@ export default {
       .organization {
         display: flex;
         align-items: center;
-        padding: 0 0 0 15px ;
+        padding: 0 0 0 15px;
         border-radius: 3px;
         // background-color: rgba(5, 5, 5, 0.1);
         color: #fff;
@@ -181,10 +181,6 @@ export default {
 
         ::v-deep .el-input.is-disabled > input {
           background: none;
-        }
-
-        &:hover {
-          background-color: rgba(0, 0, 0, 0.2);
         }
       }
 
