@@ -1,7 +1,11 @@
 <template>
-  <div :class="{'no-title': noTitle}" class="page">
+  <div :class="{ 'no-title': noTitle }" class="page">
     <TagsView />
-    <PageHeading v-if="iTitle || helpMessage" :help-msg="helpMessage" class="disabled-when-print page-head">
+    <PageHeading
+      v-if="iTitle || helpMessage"
+      :help-msg="helpMessage"
+      class="disabled-when-print page-head"
+    >
       <el-button
         :disabled="gobackDisabled"
         class="go-back"
@@ -15,7 +19,13 @@
       <slot name="title">
         <span style="padding-left: 10px">
           {{ iTitle }}
-          <el-tooltip v-if="helpTip" :open-delay="500" effect="dark" placement="top" popper-class="help-tips">
+          <el-tooltip
+            v-if="helpTip"
+            :open-delay="500"
+            effect="dark"
+            placement="top"
+            popper-class="help-tips"
+          >
             <div slot="content" v-sanitize="helpTip" class="page-help-content" />
             <span>
               <el-button class="help-msg-btn">
@@ -31,7 +41,7 @@
       </template>
     </PageHeading>
 
-    <PageContent :class="{'disabled': disabled}" class="page-content">
+    <PageContent :class="{ disabled: disabled }" class="page-content">
       <div v-if="disabled" class="content-disabled-mask">
         <IBox shadow="always">
           <div class="disabled-content">
@@ -47,12 +57,11 @@
           </div>
         </IBox>
       </div>
-      <el-alert v-if="iHelpMessage" type="success">
+      <el-alert v-if="iHelpMessage" type="info">
         <span v-sanitize="iHelpMessage" class="announcement-main" />
       </el-alert>
       <slot />
     </PageContent>
-    
     <UserConfirmDialog />
   </div>
 </template>

@@ -15,11 +15,7 @@
       class="menu-main"
       @select="handleSelectView"
     >
-      <el-menu-item
-        v-for="view of views"
-        :key="view.name"
-        :index="view.name"
-      >
+      <el-menu-item v-for="view of views" :key="view.name" :index="view.name">
         <span class="outline" />
         <Icon :icon="view.meta.icon" class="icons" />
         <span slot="title" class="icons-title">{{ view.meta.title }}</span>
@@ -55,12 +51,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'currentViewRoute',
-      'viewRoutes'
-    ]),
+    ...mapGetters(['currentViewRoute', 'viewRoutes']),
     views() {
-      return this.viewRoutes.filter((item) => {
+      return this.viewRoutes.filter(item => {
         let show = item.meta?.showNavSwitcher
         if (typeof show === 'function') {
           show = show()
@@ -164,7 +157,13 @@ export default {
 
     &.is-active {
       color: #e5edf7;
-      background: linear-gradient(90deg, rgba(64, 158, 255, 0.28) 0%, #22344b 30%, #1e2733 100%);
+      background:
+        linear-gradient(90deg, rgba(64, 158, 255, 0.85) 0%, rgba(64, 158, 255, 0) 55%),
+        linear-gradient(90deg, #22344b 0%, var(--menu-bg) 100%);
+      // box-shadow:
+      //   inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+      //   0 2px 8px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
     }
   }
 }

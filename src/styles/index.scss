@@ -430,15 +430,21 @@ input[type='file'] {
 .el-button.el-button--small,
 .el-button--small.is-round {
   font-weight: 400;
-  padding: 8px 12px;
-  border-radius: 2px;
+  padding: 8px 16px;
+  border-radius: 4px;
 }
 
 .el-button.el-button--mini,
 .el-button--mini.is-round {
   font-size: 0.7rem;
   font-weight: 400;
-  border-radius: 2px;
+  border-radius: 4px;
+}
+
+.el-button--text {
+  &:hover {
+    background-color: unset !important;
+  }
 }
 
 .el-cascader__dropdown .el-cascader-panel .el-cascader-menu {
@@ -473,6 +479,7 @@ input[type='file'] {
 .el-dialog__body .el-input__inner {
   height: 30px;
   font-size: 13px;
+  border-radius: 4px;
 }
 
 .el-input input::placeholder {
@@ -501,7 +508,7 @@ input[type='file'] {
 }
 
 .el-cascader .el-input__inner {
-  border-radius: 2px;
+  border-radius: 4px;
 }
 
 .el-select .el-input .el-select__caret {
@@ -573,7 +580,7 @@ li.rmenu i.fa {
 }
 
 .el-pagination.is-background .el-select .el-input .el-input__inner {
-  border-radius: 2px;
+  border-radius: 4px;
   height: 28px;
 }
 
@@ -587,7 +594,7 @@ li.rmenu i.fa {
 }
 
 .el-checkbox__inner {
-  border-radius: 1px !important;
+  border-radius: 4px !important;
   width: 16px !important;
   height: 16px !important;
 

@@ -286,9 +286,9 @@ $color-drop-menu-border: #e4e7ed;
     line-height: 1.3;
     font-size: 13px;
 
-    &:not(.is-plain) {
-      color: $btn-text-color;
-    }
+    // &:not(.is-plain) {
+    //   color: $btn-text-color;
+    // }
 
     overflow: hidden;
     text-overflow: ellipsis;
@@ -299,19 +299,24 @@ $color-drop-menu-border: #e4e7ed;
     }
   }
 
-  ::v-deep .action-item.el-dropdown .el-button {
+  .action-item.delete.el-button--text {
+    color: #f56c6c;
+
+    &:hover,
+    &:focus {
+      color: #f56c6c;
+    }
+  }
+
+  ::v-deep .action-item.el-dropdown .el-button.el-button--text {
     display: block;
     color: var(--color-primary);
     transition: all 0.2s;
 
-    &:focus {
-      color: $btn-text-color;
-      background-color: $color-btn-focus-background !important;
-    }
-
+    &:focus,
     &:hover {
-      color: $btn-text-color;
-      background-color: $color-btn-focus-background;
+      border-color: transparent;
+      background-color: transparent;
     }
   }
 }

@@ -1,18 +1,22 @@
-@import "./variables";
+@import './variables';
 
 $icon-width: 1.1em;
 $single-menu-height: 38px;
 
-@mixin only_active {
-  &:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 4px;
-    background-color: var(--menu-text-active);
-  }
+$menu-active-glow: rgba(64, 158, 255, 0.85);
+$menu-active-glow-fade: rgba(64, 158, 255, 0);
+$menu-active-mid: #22344b;
+
+@mixin menu-active-pill {
+  position: relative;
+  color: #e5edf7;
+  background:
+    linear-gradient(90deg, $menu-active-glow 0%, $menu-active-glow-fade 55%),
+    linear-gradient(90deg, $menu-active-mid 0%, var(--menu-bg) 100%);
+  // box-shadow:
+  //   inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+  //   0 2px 8px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
 }
 
 .switcher-popper {
@@ -50,8 +54,7 @@ $single-menu-height: 38px;
     }
 
     &.is-active {
-      color: #e5edf7;
-      background: linear-gradient(90deg, rgba(64, 158, 255, 0.28) 0%, #22344b 30%, #1e2733 100%);
+      @include menu-active-pill;
     }
   }
 
@@ -78,7 +81,9 @@ $single-menu-height: 38px;
   background-color: inherit !important;
   color: var(--menu-text);
 
-  .svg-icon, .el-icon, .fa {
+  .svg-icon,
+  .el-icon,
+  .fa {
     width: $icon-width !important;
     height: $icon-width !important;
     margin-right: 10px;
@@ -117,7 +122,12 @@ $single-menu-height: 38px;
 
     &:hover {
       color: var(--menu-text-active);
-      background: linear-gradient(90deg, rgba(54, 168, 255, 0.12) 0%, var(--menu-hover) 40%, #22344b 100%);
+      background: linear-gradient(
+        90deg,
+        rgba(54, 168, 255, 0.12) 0%,
+        var(--menu-hover) 40%,
+        #22344b 100%
+      );
     }
   }
 
@@ -133,13 +143,16 @@ $single-menu-height: 38px;
 
     &:hover {
       color: var(--menu-text-active);
-      background: linear-gradient(90deg, rgba(54, 168, 255, 0.12) 0%, var(--menu-hover) 40%, #22344b 100%);
+      background: linear-gradient(
+        90deg,
+        rgba(54, 168, 255, 0.12) 0%,
+        var(--menu-hover) 40%,
+        #22344b 100%
+      );
     }
 
     &.is-active {
-      color: #e5edf7;
-      background: linear-gradient(90deg, rgba(54, 168, 255, 0.28) 0%, #22344b 30%, #1e2733 100%);
-      @include only_active;
+      @include menu-active-pill;
 
       span {
         color: #e5edf7;
@@ -156,7 +169,7 @@ $single-menu-height: 38px;
       font-size: 11px;
       font-weight: 600;
       line-height: 25px;
-      letter-spacing: .07em;
+      letter-spacing: 0.07em;
       opacity: 0.75;
     }
 
@@ -172,12 +185,7 @@ $single-menu-height: 38px;
 
         &.el-submenu.is-active {
           .el-submenu__title {
-            color: #e5edf7;
-            background: linear-gradient(90deg, rgba(54, 168, 255, 0.28) 0%, #22344b 30%, #1e2733 100%);
-          }
-
-          .el-submenu__title, li {
-            @include only_active
+            @include menu-active-pill;
           }
         }
 
@@ -206,8 +214,8 @@ $single-menu-height: 38px;
       display: inline-block;
 
       .el-tooltip {
-          width: 55px !important;
-        }
+        width: 55px !important;
+      }
     }
 
     .group-title {

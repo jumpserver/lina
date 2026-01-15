@@ -21,7 +21,7 @@ const formatterArgsDefault = {
     false: 'fa-times-circle'
   },
   classChoices: {
-    true: 'text-primary',
+    true: 'text-success',
     false: 'text-danger'
   },
   getKey({ row, cellValue }) {
@@ -100,7 +100,3 @@ export default {
   methods: {}
 }
 </script>
-
-<style scoped>
-
-</style>

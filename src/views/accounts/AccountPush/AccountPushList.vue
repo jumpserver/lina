@@ -79,7 +79,7 @@ export default {
                   title: vm.$t('Execute'),
                   name: 'execute',
                   order: 1,
-                  type: 'primary',
+                  type: 'text',
                   can: ({ row }) => {
                     return row.is_active && vm.$hasPerm('accounts.add_pushaccountexecution')
                   },

@@ -1,11 +1,6 @@
 <template>
   <div class="label-search">
-    <el-button
-      v-if="!showLabelSearch"
-      class="label-button"
-      size="small"
-      @click="showSearchSelect"
-    >
+    <el-button v-if="!showLabelSearch" class="label-button" size="small" @click="showSearchSelect">
       <svg-icon icon-class="tag" />
     </el-button>
     <el-cascader
@@ -100,7 +95,7 @@ export default {
         setTimeout(() => {
           this.$refs.labelCascader.updateStyle()
           input.style.height = '30px'
-        },)
+        })
         return
       } else {
         input.style.height = '30px'
@@ -147,41 +142,44 @@ export default {
       }, 200)
     },
     listenViewPort() {
-      window.addEventListener('resize', debounce((e) => {
-        const viewPort = e?.target?.innerWidth
-        this.showLabelSearch = viewPort < 992
-      }, 100), false)
+      window.addEventListener(
+        'resize',
+        debounce(e => {
+          const viewPort = e?.target?.innerWidth
+          this.showLabelSearch = viewPort < 992
+        }, 100),
+        false
+      )
     }
   }
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .label-search {
-  margin-right: 10px;
   border: 1px solid var(--color-border);
   overflow: hidden;
 
   ::v-deep .el-button.label-button {
     height: 28px;
     border: none;
+    padding: 8px;
   }
 
   .label-cascader {
     width: 300px;
     height: 28px;
-    line-height: 28px;
+    line-height: unset !important;
 
     ::v-deep .el-input {
       .el-input__inner {
         height: 28px !important;
-        line-height: 28px;
         font-size: 13px;
         border: none;
       }
 
       .el-input__suffix {
-        color: var(--color-icon-primary) !important;;
+        color: var(--color-icon-primary) !important;
       }
     }
 

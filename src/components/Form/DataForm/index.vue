@@ -341,7 +341,7 @@ export default {
       }
 
       .el-textarea .el-textarea__inner {
-        border-radius: 0;
+        border-radius: 2px;
       }
 
       .el-data-table .el-table {

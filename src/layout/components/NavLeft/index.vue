@@ -234,7 +234,6 @@ $hover-border-color: transparent;
       transition: all 0.3s;
       color: var(--menu-text);
       background-color: var(--menu-bg);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 
       .switch-view {
         width: 100%;
@@ -359,7 +358,13 @@ $hover-border-color: transparent;
       }
       &.is-active {
         color: #e5edf7;
-        background: linear-gradient(90deg, rgba(64, 158, 255, 0.28) 0%, #22344b 30%, #1e2733 100%);
+        background:
+          linear-gradient(90deg, rgba(64, 158, 255, 0.85) 0%, rgba(64, 158, 255, 0) 55%),
+          linear-gradient(90deg, #22344b 0%, var(--menu-bg) 100%);
+        // box-shadow:
+        //   inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+        //   0 2px 8px rgba(0, 0, 0, 0.35);
+        overflow: hidden;
       }
     }
   }
