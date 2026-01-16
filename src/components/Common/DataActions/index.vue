@@ -228,8 +228,9 @@ export default {
 
 <style lang="scss" scoped>
 $btn-text-color: #ffffff;
+$color-btn-background: var(--color-primary-light-3, #e8f7f4);
+$color-btn-focus-background: var(--color-primary-light-1, var(--color-primary));
 $color-divided: #e4e7ed;
-$color-btn-focus-background: #79bbff;
 $color-drop-menu-title: #909399;
 $color-drop-menu-border: #e4e7ed;
 
@@ -288,9 +289,9 @@ $color-drop-menu-border: #e4e7ed;
     line-height: 1.3;
     font-size: 13px;
 
-    // &:not(.is-plain) {
-    //   color: $btn-text-color;
-    // }
+    &:not(.is-plain) {
+      color: $btn-text-color;
+    }
 
     overflow: hidden;
     text-overflow: ellipsis;
@@ -298,6 +299,23 @@ $color-drop-menu-border: #e4e7ed;
 
     * {
       vertical-align: baseline !important;
+    }
+  }
+
+  ::v-deep .action-item.el-dropdown .el-button {
+    display: block;
+    color: var(--color-primary);
+    background-color: $color-btn-background;
+    border-color: $color-btn-focus-background;
+
+    &:focus {
+      color: $btn-text-color;
+      background-color: $color-btn-focus-background !important;
+    }
+
+    &:hover {
+      color: $btn-text-color;
+      background-color: $color-btn-focus-background;
     }
   }
 }

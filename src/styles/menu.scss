@@ -8,8 +8,6 @@ $single-menu-height: 38px;
   color: var(--menu-active-text, var(--menu-text-active));
   background: var(--menu-active-bg, var(--menu-hover));
   overflow: hidden;
-  font-size: 13px;
-  font-weight: 500;
 
   &::before {
     content: '';
