@@ -77,21 +77,10 @@ export function setRootColors() {
   }
 }
 
-export function changeMenuColor(themeColors) {
-  const elementStyle = document.documentElement.style
-  const colors = Object.keys(themeColors).length > 0 ? themeColors : defaultThemeConfig
-
-  const white = 'ffffff'
-  const black = '000000'
-  const primaryColor =
-    colors['--color-primary'] || defaultThemeConfig['--color-primary'] || '#409eff'
-
-  // 后端不用返回 --menu-hover
-  const menuActiveTextColor = colors['--menu-text-active'] || primaryColor
+function applyDefaults(colors, menuActiveTextColor, white) {
   if (menuActiveTextColor && !colors['--menu-hover']) {
     colors['--menu-hover'] = mix(white, menuActiveTextColor.replace(/#/g, ''), 90)
   }
-
   if (!colors['--menu-active-bg']) {
     colors['--menu-active-bg'] = 'var(--menu-hover)'
   }
@@ -99,11 +88,10 @@ export function changeMenuColor(themeColors) {
     colors['--menu-hover-bg'] = 'var(--menu-hover)'
   }
   if (!colors['--menu-active-text']) {
-    colors['--menu-active-text'] = menuActiveTextColor || colors['--color-primary'] || '#409eff'
+    colors['--menu-active-text'] = menuActiveTextColor || colors['--color-primary']
   }
   if (!colors['--menu-active-indicator']) {
-    colors['--menu-active-indicator'] =
-      colors['--color-primary'] || menuActiveTextColor || '#409eff'
+    colors['--menu-active-indicator'] = colors['--color-primary'] || menuActiveTextColor
   }
   if (!colors['--menu-active-indicator-width']) {
     colors['--menu-active-indicator-width'] = '3px'
@@ -111,10 +99,35 @@ export function changeMenuColor(themeColors) {
   if (!colors['--menu-active-indicator-display']) {
     colors['--menu-active-indicator-display'] = 'block'
   }
+  if (!colors['--app-main-bg']) {
+    colors['--app-main-bg'] = '#f3f3f4'
+  }
+  // if (!colors['--table-header-bg']) {
+  //   colors['--table-header-bg'] = '#ffffff'
+  // }
+  if (!colors['--menu-border']) {
+    colors['--menu-border'] = '#e9ecef'
+  }
+}
+
+export function changeMenuColor(themeColors) {
+  const elementStyle = document.documentElement.style
+  const colors = Object.keys(themeColors).length > 0 ? themeColors : defaultThemeConfig
+
+  const white = 'ffffff'
+  const black = '000000'
+  const primaryColor = colors['--color-primary'] || defaultThemeConfig['--color-primary']
+
+  // 后端不用返回 --menu-hover
+  const menuActiveTextColor = colors['--menu-text-active'] || primaryColor
+
+  applyDefaults(colors, menuActiveTextColor, white)
 
   const hasNavHeaderBg = !!colors['--nav-header-bg']
   const bannerBg = colors['--banner-bg']
+
   let navHeaderBase = colors['--nav-header-bg'] || bannerBg || primaryColor
+
   if (!hasNavHeaderBg && bannerBg && bannerBg.startsWith('#')) {
     navHeaderBase = mix(white, bannerBg.replace(/#/g, ''), 8)
   }
@@ -133,6 +146,7 @@ export function changeMenuColor(themeColors) {
   const darken = [15, 30, 40, 80]
 
   const colorsGenMore = ['--color-primary']
+
   for (const key in colors) {
     const currentColor = colors[key]
     elementStyle.setProperty(key, currentColor)

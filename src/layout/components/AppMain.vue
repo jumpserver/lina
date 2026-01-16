@@ -52,7 +52,7 @@ export default {
 
 <style lang="scss" scoped>
 .app-main {
-  background-color: #eef1f6;
+  background-color: var(--app-main-bg, #f3f3f4);
   height: 100%;
   //height: 100vh !important;
   width: 100%;

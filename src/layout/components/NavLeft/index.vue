@@ -234,6 +234,7 @@ $hover-border-color: transparent;
       transition: all 0.3s;
       color: var(--menu-text);
       background-color: var(--menu-bg);
+      border-bottom: 1px solid var(--menu-border, #e9ecef);
 
       .switch-view {
         width: 100%;
@@ -277,7 +278,7 @@ $hover-border-color: transparent;
   .nav-footer {
     display: flex;
     justify-content: flex-start;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid var(--menu-border,rgba(31, 35, 41, 0.15));
     background-color: $subMenuBg;
     color: var(--menu-text);
 

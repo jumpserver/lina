@@ -328,6 +328,7 @@ input[type='file'] {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      // background-color: var(--table-header-bg, #fff);
 
       &:hover {
         border-right: 2px solid #ebeef5;
@@ -615,7 +616,7 @@ li.rmenu i.fa {
 }
 
 .el-table__header thead > tr > th {
-  background-color: white;
+  // background-color: var(--table-header-bg, #fff);
   font-weight: 600;
 }
 

@@ -2,7 +2,7 @@
   <div>
     <el-row :gutter="20">
       <el-col :md="24" :sm="24">
-        <el-alert type="success">
+        <el-alert type="info">
           {{ $t('AppletHelpText') }}
         </el-alert>
       </el-col>
