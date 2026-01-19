@@ -1,11 +1,16 @@
 <template>
   <div>
-    <el-alert type="success">
+    <el-alert type="info">
       {{ $t('AccountTemplateUpdateSecretHelpText') }}
     </el-alert>
     <TwoCol>
       <template>
-        <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
+        <GenericListTable
+          ref="listTable"
+          :detail-drawer="detailDrawer"
+          :header-actions="headerActions"
+          :table-config="tableConfig"
+        />
       </template>
       <template #right>
         <QuickActions :actions="quickActions" type="primary" />
@@ -21,12 +26,13 @@
 </template>
 
 <script>
-import GenericListTable from '@/layout/components/GenericListTable'
 import { QuickActions } from '@/components'
-import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
-import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret'
 import { openTaskPage } from '@/utils/jms/index'
+import { GenericListTable } from '@/layout/components'
+import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret'
 
 export default {
   name: 'AccountTemplateChangeSecret',
@@ -46,6 +52,7 @@ export default {
   data() {
     const vm = this
     return {
+      detailDrawer: () => import('@/views/accounts/AccountDiscover/TaskDetail/index.vue'),
       visible: false,
       secretUrl: '',
       showViewSecretDialog: false,
@@ -58,20 +65,20 @@ export default {
           },
           callbacks: Object.freeze({
             click: () => {
-              this.$axios.patch(
-                `/api/v1/accounts/account-templates/${this.object.id}/sync-related-accounts/`
-              ).then(res => {
-                openTaskPage(res['task'])
-              })
+              this.$axios
+                .patch(
+                  `/api/v1/accounts/account-templates/${this.object.id}/sync-related-accounts/`
+                )
+                .then(res => {
+                  openTaskPage(res['task'])
+                })
             }
           })
         }
       ],
       tableConfig: {
         url: `/api/v1/accounts/accounts/?source_id=${this.object.id}`,
-        columns: [
-          'name', 'asset', 'secret_type', 'is_active', 'date_created'
-        ],
+        columns: ['name', 'asset', 'secret_type', 'is_active', 'date_created'],
         columnsMeta: {
           name: {
             formatter: DetailFormatter,
@@ -79,8 +86,9 @@ export default {
               drawer: true,
               can: vm.$hasPerm('accounts.view_account'),
               getRoute: ({ row }) => {
+                this.detailDrawer = () => import('@/views/accounts/Account/AccountDetail/index.vue')
                 return {
-                  name: 'AssetAccountDetail',
+                  name: 'AccountDetail',
                   params: { id: row.id }
                 }
               }
@@ -94,6 +102,7 @@ export default {
               can: vm.$hasPerm('assets.view_asset'),
               getTitle: ({ row }) => row.asset.name,
               getRoute: ({ row }) => {
+                this.detailDrawer = () => import('@/views/assets/Asset/AssetDetail')
                 return {
                   name: 'AssetDetail',
                   params: { id: row.asset.id }
