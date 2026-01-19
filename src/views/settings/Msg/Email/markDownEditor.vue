@@ -58,5 +58,6 @@ export default {
 .v-md-editor {
   box-shadow: unset;
   border: 1px solid #ddd;
+  border-radius: 2px;
 }
 </style>

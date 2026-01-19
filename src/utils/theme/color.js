@@ -77,12 +77,15 @@ export function setRootColors() {
   }
 }
 
-function applyDefaults(colors, menuActiveTextColor, white) {
+function applyDefaults(colors, menuActiveTextColor, primaryColor, white) {
   if (menuActiveTextColor && !colors['--menu-hover']) {
     colors['--menu-hover'] = mix(white, menuActiveTextColor.replace(/#/g, ''), 90)
   }
+  const menuActiveBgDefault = (primaryColor && primaryColor.startsWith('#'))
+    ? mix(white, primaryColor.replace(/#/g, ''), 90)
+    : 'var(--menu-hover)'
   if (!colors['--menu-active-bg']) {
-    colors['--menu-active-bg'] = 'var(--menu-hover)'
+    colors['--menu-active-bg'] = menuActiveBgDefault
   }
   if (!colors['--menu-hover-bg']) {
     colors['--menu-hover-bg'] = 'var(--menu-hover)'
@@ -121,7 +124,7 @@ export function changeMenuColor(themeColors) {
   // 后端不用返回 --menu-hover
   const menuActiveTextColor = colors['--menu-text-active'] || primaryColor
 
-  applyDefaults(colors, menuActiveTextColor, white)
+  applyDefaults(colors, menuActiveTextColor, primaryColor, white)
 
   const hasNavHeaderBg = !!colors['--nav-header-bg']
   const bannerBg = colors['--banner-bg']
