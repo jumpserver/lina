@@ -77,39 +77,9 @@ export function setRootColors() {
   }
 }
 
-function applyDefaults(colors, menuActiveTextColor, primaryColor, white) {
+function applyDefaults(colors, menuActiveTextColor, white) {
   if (menuActiveTextColor && !colors['--menu-hover']) {
     colors['--menu-hover'] = mix(white, menuActiveTextColor.replace(/#/g, ''), 90)
-  }
-  const menuActiveBgDefault = (primaryColor && primaryColor.startsWith('#'))
-    ? mix(white, primaryColor.replace(/#/g, ''), 90)
-    : 'var(--menu-hover)'
-  if (!colors['--menu-active-bg']) {
-    colors['--menu-active-bg'] = menuActiveBgDefault
-  }
-  if (!colors['--menu-hover-bg']) {
-    colors['--menu-hover-bg'] = 'var(--menu-hover)'
-  }
-  if (!colors['--menu-active-text']) {
-    colors['--menu-active-text'] = menuActiveTextColor || colors['--color-primary']
-  }
-  if (!colors['--menu-active-indicator']) {
-    colors['--menu-active-indicator'] = colors['--color-primary'] || menuActiveTextColor
-  }
-  if (!colors['--menu-active-indicator-width']) {
-    colors['--menu-active-indicator-width'] = '3px'
-  }
-  if (!colors['--menu-active-indicator-display']) {
-    colors['--menu-active-indicator-display'] = 'block'
-  }
-  if (!colors['--app-main-bg']) {
-    colors['--app-main-bg'] = '#f3f3f4'
-  }
-  // if (!colors['--table-header-bg']) {
-  //   colors['--table-header-bg'] = '#ffffff'
-  // }
-  if (!colors['--menu-border']) {
-    colors['--menu-border'] = '#e9ecef'
   }
 }
 
@@ -124,7 +94,7 @@ export function changeMenuColor(themeColors) {
   // 后端不用返回 --menu-hover
   const menuActiveTextColor = colors['--menu-text-active'] || primaryColor
 
-  applyDefaults(colors, menuActiveTextColor, primaryColor, white)
+  applyDefaults(colors, menuActiveTextColor, white)
 
   const hasNavHeaderBg = !!colors['--nav-header-bg']
   const bannerBg = colors['--banner-bg']
