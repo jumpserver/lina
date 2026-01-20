@@ -26,6 +26,7 @@
 import DataZTree from '../DataZTree/index.vue'
 import Icon from '@/components/Widgets/Icon'
 import $ from '@/utils/jquery-vendor'
+import { getShowCurrentAssetValue } from '@/utils/common/index'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -199,7 +200,7 @@ export default {
     },
     // Request URL: http://localhost/api/v1/assets/assets/?node_id=ID&show_current_asset=null&draw=2&limit=15&offset=0&_=1587022917769
     onSelected: function(event, treeNode) {
-      const show_current_asset = this.$cookie.get('show_current_asset') || '0'
+      const show_current_asset = getShowCurrentAssetValue(this.$cookie)
       if (!this.setting.url) {
         return
       }
