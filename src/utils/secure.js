@@ -92,7 +92,7 @@ export function encryptPassword(password) {
   rsaPublicKeyText = rsaPublicKeyText.replaceAll('"', '')
   const rsaPublicKey = atob(rsaPublicKeyText)
   const keyCipher = rsaEncrypt(aesKey, rsaPublicKey)
-  const passwordCipher = aesEncrypt(password, aesKey)
+  const passwordCipher = aesEncrypt(String(password), aesKey)
   return `${keyCipher}:${passwordCipher}`
 }
 
