@@ -217,12 +217,14 @@ export default {
       const accounts = this.requestForm.accounts
       if (this.object.approval_step.value === this.object.process_map.length) {
         if (assets.length === 0 && nodes.length === 0) {
-          return this.$message.error(this.$tc('SelectAtLeastOneAssetOrNodeErrMsg'))
+          this.$message.error(this.$tc('SelectAtLeastOneAssetOrNodeErrMsg'))
+          return false
         } else if (accounts.length === 0) {
-          return this.$message.error(this.$tc('RequiredSystemUserErrMsg'))
+          this.$message.error(this.$tc('RequiredSystemUserErrMsg'))
+          return false
         }
       }
-      this.$axios.patch(`/api/v1/tickets/apply-asset-tickets/${this.object.id}/approve/`, {
+      return this.$axios.patch(`/api/v1/tickets/apply-asset-tickets/${this.object.id}/approve/`, {
         apply_nodes: nodes || [],
         apply_assets: assets || [],
         apply_accounts: accounts || [],
@@ -239,11 +241,11 @@ export default {
     },
     handleClose() {
       const url = `/api/v1/tickets/apply-asset-tickets/${this.object.id}/close/`
-      this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+      return this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     },
     handleReject() {
       const url = `/api/v1/tickets/apply-asset-tickets/${this.object.id}/reject/`
-      this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+      return this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     }
   }
 }
