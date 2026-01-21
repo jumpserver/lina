@@ -150,10 +150,11 @@ export function getErrorResponseMsg(error) {
   } else if (typeof data === 'string') {
     return data
   } else if (_.isPlainObject(data)) {
-    return Object.values(data)
+    const msg = Object.values(data)
       .map(item => getErrorResponseMsg(item))
       .filter(i => i)
-      .join('; ')
+    // 错误信息不要重复提示
+    return [...new Set(msg)].join('; ')
   } else {
     msg = error.toString()
   }
