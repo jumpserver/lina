@@ -185,6 +185,7 @@ div.info-panel {
           white-space: nowrap;
           width: 100%;
           margin: unset;
+          text-align: start;
         }
 
         .comment {
@@ -197,6 +198,7 @@ div.info-panel {
       ::v-deep {
         .el-avatar {
           background: #fff;
+          flex-shrink: 0;
         }
       }
     }

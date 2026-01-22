@@ -39,11 +39,6 @@ export default {
         },
         'trigger_display', 'date_start', 'date_finished',
         {
-          key: this.$t('MailRecipient'),
-          value: this.object.recipients ? this.object.recipients.map(
-            i => `${i[0]}` + `${i[1] ? ': ' + this.$t('ContainAttachment') : ''}`).join(', ') : ''
-        },
-        {
           key: this.$t('Comment'),
           value: this.object.snapshot.common
         }

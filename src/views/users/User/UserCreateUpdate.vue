@@ -264,7 +264,7 @@ export default {
       let mfa_level = null
       // SECURITY_MFA_AUTH 0 不开启 1 全局开启 2 管理员开启
       const securityMFAAuth = store.getters.publicSettings['SECURITY_MFA_AUTH']
-      const adminUserIsNeed = (user?.is_superuser || user?.is_org_admin) && this.$route.meta.action === 'update' &&
+      const adminUserIsNeed = (user?.is_superuser || user?.is_org_admin) && this.$route.params.action === 'update' &&
         securityMFAAuth === MFASystemSetting.onlyAdminUsers
       if (securityMFAAuth === MFASystemSetting.allUsers) {
         options = [{ 'value': MFALevel.allUsers, 'label': this.$t('MFAAllUsers') }]

@@ -96,7 +96,6 @@ export default {
         {
           title: this.$t('FacialFeatures'),
           has: this.$store.getters.publicSettings.FACE_RECOGNITION_ENABLED &&
-            this.$store.getters.publicSettings.XPACK_LICENSE_EDITION_ULTIMATE &&
             !store.getters.publicSettings['PRIVACY_MODE'],
           attrs: {
             type: 'primary',
