@@ -111,7 +111,7 @@ export default {
         {
           name: 'actionFilter',
           icon: 'filter',
-          tip: this.$t('Filter'),
+          tip: this.$t('QuickFilter'),
           has: this.hasQuickFilter,
           callback: this.handleFilterClick.bind(this)
         },
