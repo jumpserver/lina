@@ -73,7 +73,7 @@ export default {
           ]
         },
         {
-          label: this.$t('Action'),
+          label: this.$t('State'),
           options: [
             {
               label: this.$t('All'),
@@ -112,7 +112,7 @@ export default {
       ticketTableConfig: {
         url: this.url,
         extraQuery: this.extraQuery,
-        columnsExclude: ['process_map', 'rel_snapshot'],
+        columnsExclude: ['process_map', 'rel_snapshot', 'status'],
         columnsShow: {
           min: ['title', 'serial_num', 'type', 'state', 'date_created'],
           default: ['title', 'serial_num', 'type', 'state', 'date_created']
@@ -161,25 +161,8 @@ export default {
               return row.type.label
             }
           },
-          status: {
-            align: 'center',
-            sortable: 'custom',
-            formatter: TagChoicesFormatter,
-            formatterArgs: {
-              getTagLabel({ row }) {
-                return row.status.label
-              },
-              getTagType({ row }) {
-                if (row.status.value === 'open') {
-                  return 'primary'
-                } else {
-                  return 'danger'
-                }
-              }
-            }
-          },
           state: {
-            label: this.$t('Action'),
+            label: this.$t('State'),
             align: 'center',
             sortable: 'custom',
             formatter: TagChoicesFormatter,
