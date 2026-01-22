@@ -13,11 +13,7 @@
         @tab-click="handleTabClick"
       >
         <template v-for="item in tabIndices">
-          <el-tab-pane
-            :key="item.name"
-            :disabled="item.disabled"
-            :name="item.name"
-          >
+          <el-tab-pane :key="item.name" :disabled="item.disabled" :name="item.name">
             <span slot="label">
               <Icon v-if="item.icon" :icon="item.icon" class="pre-icon" />
               {{ toSentenceCase(item.title) }}
@@ -42,7 +38,7 @@
       </el-tabs>
 
       <div class="tab-page-content">
-        <el-alert v-if="helpMessage" type="success">
+        <el-alert v-if="helpMessage" type="info">
           <span v-sanitize="helpMessage" class="announcement-main" />
         </el-alert>
         <transition v-if="!loading" appear mode="out-in" name="fade-transform">
@@ -105,7 +101,7 @@ export default {
     },
     tabIndices() {
       const map = []
-      this.submenu.forEach((v) => {
+      this.submenu.forEach(v => {
         const hidden = typeof v.hidden === 'function' ? v.hidden() : v.hidden
         if (!hidden) {
           map.push(v)
@@ -116,7 +112,7 @@ export default {
     computeActiveComponent() {
       let needActiveComponent = ''
       for (const i of this.submenu) {
-        if (i.component && (i.name === this.iActiveMenu)) {
+        if (i.component && i.name === this.iActiveMenu) {
           needActiveComponent = i.component
           break
         }

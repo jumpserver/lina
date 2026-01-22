@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-link :type="col.type || 'success'" class="detail" @click="dialogVisible=true">
+    <el-link :type="col.type || 'primary'" class="detail" @click="dialogVisible=true">
       {{ iTitle }}
     </el-link>
     <Dialog

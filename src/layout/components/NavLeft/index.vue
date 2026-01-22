@@ -9,7 +9,12 @@
       </div>
       <div class="nav-title">
         <span :class="switchViewOtherClasses" class="switch-view active-switch-view">
-          <el-popover :open-delay="200" placement="right-start" trigger="hover">
+          <el-popover
+            :open-delay="200"
+            placement="right-start"
+            popper-class="switcher-popper"
+            trigger="hover"
+          >
             <span slot="reference" style="width: 100%">
               <el-tooltip
                 v-show="!isCollapse"
@@ -168,9 +173,9 @@ export default {
 
 $mobileHeight: 40px;
 $origin-color: #ffffff;
-$hover-bg-color: #e6e6e6;
-$hover-text-color: #606266;
-$hover-border-color: #d2d2d2;
+$hover-bg-color: var(--menu-hover);
+$hover-text-color: var(--menu-text-active);
+$hover-border-color: transparent;
 
 .left-side-wrapper {
   .nav-header {
@@ -227,9 +232,8 @@ $hover-border-color: #d2d2d2;
       white-space: nowrap;
       cursor: pointer;
       transition: all 0.3s;
-      color: var(--color-text-primary);
+      color: var(--menu-text);
       background-color: var(--menu-bg);
-      border-bottom: 1px solid var(--color-border);
 
       .switch-view {
         width: 100%;
@@ -273,8 +277,9 @@ $hover-border-color: #d2d2d2;
   .nav-footer {
     display: flex;
     justify-content: flex-start;
-    border-top: 1px solid rgba(31, 35, 41, 0.15);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
     background-color: $subMenuBg;
+    color: var(--menu-text);
 
     .toggle-bar {
       display: flex;
@@ -330,6 +335,36 @@ $hover-border-color: #d2d2d2;
 
       .switch-view .icon {
         margin-left: 0;
+      }
+    }
+  }
+
+  // view switcher popover
+  ::v-deep .switcher-popper {
+    padding: 8px 6px;
+    background: #1e2733;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+    .el-menu {
+      background: transparent;
+    }
+    .el-menu-item {
+      color: var(--menu-text);
+      border-radius: 6px;
+      margin-bottom: 4px;
+      &:hover {
+        color: var(--menu-text-active);
+        background: var(--menu-hover);
+      }
+      &.is-active {
+        color: #e5edf7;
+        background:
+          linear-gradient(90deg, rgba(64, 158, 255, 0.85) 0%, rgba(64, 158, 255, 0) 55%),
+          linear-gradient(90deg, #22344b 0%, var(--menu-bg) 100%);
+        // box-shadow:
+        //   inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+        //   0 2px 8px rgba(0, 0, 0, 0.35);
+        overflow: hidden;
       }
     }
   }

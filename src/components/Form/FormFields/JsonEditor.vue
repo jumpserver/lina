@@ -2,7 +2,7 @@
   <div class="json-editor">
     <JsonEditor
       v-model="resultInfo"
-      :class="{resize: resize === 'vertical'}"
+      :class="{ resize: resize === 'vertical' }"
       :mode="'code'"
       :show-btns="false"
       @json-change="onJsonChange"
@@ -24,7 +24,7 @@ export default {
     },
     resize: {
       type: String,
-      validator: (value) => {
+      validator: value => {
         return ['none', 'vertical'].indexOf(value) !== -1
       },
       default: 'vertical'
@@ -52,7 +52,7 @@ export default {
         this.$emit('change', this.resultInfo)
       }, 500)
     },
-    onError: _.debounce(function(value) {
+    onError: _.debounce(function (value) {
       this.$message.error(this.$tc('FormatError'))
     }, 1500)
   }
@@ -60,35 +60,38 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/styles/variables";
+@import '~@/styles/variables';
 
-  .json-editor {
-    .resize {
-      & ::v-deep .jsoneditor {
-        resize: vertical;
-        cursor: s-resize;
-      }
-    }
-
+.json-editor {
+  .resize {
     & ::v-deep .jsoneditor {
-      border: 1px solid #e5e6e7;
-    }
-
-    & ::v-deep .jsoneditor-compact {
-      display: none;
-    }
-
-    & ::v-deep .jsoneditor-modes {
-      display: none;
-    }
-
-    & ::v-deep .jsoneditor-poweredBy {
-      display: none;
-    }
-
-    & ::v-deep .jsoneditor-menu {
-      background: var(--color-primary);
-      border-bottom: 1px solid var(--color-primary);
+      resize: vertical;
+      cursor: s-resize;
     }
   }
+
+  & ::v-deep .jsoneditor {
+    border: 1px solid #e5e6e7;
+    border-left: unset;
+    border-top: unset;
+    border-radius: 2px;
+  }
+
+  & ::v-deep .jsoneditor-compact {
+    display: none;
+  }
+
+  & ::v-deep .jsoneditor-modes {
+    display: none;
+  }
+
+  & ::v-deep .jsoneditor-poweredBy {
+    display: none;
+  }
+
+  & ::v-deep .jsoneditor-menu {
+    background: var(--color-primary);
+    border-bottom: 1px solid var(--color-primary);
+  }
+}
 </style>

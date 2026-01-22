@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-alert type="success">
+    <el-alert type="info">
       {{ $t('AccountTemplateUpdateSecretHelpText') }}
     </el-alert>
     <TwoCol>

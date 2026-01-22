@@ -136,7 +136,7 @@ export default {
         height: 100%;
         padding: 8px 10px;
         resize: none;
-        border-radius: 5px;
+        border-radius: 2px;
 
         &::-webkit-scrollbar {
           width: 12px;
