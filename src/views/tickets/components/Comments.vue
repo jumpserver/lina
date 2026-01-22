@@ -231,7 +231,16 @@ export default {
       }
 
       if (handler) {
-        handler()
+        const result = handler()
+        if (result === false) {
+          this.isDisabled = false
+          return
+        }
+        if (result && typeof result.finally === 'function') {
+          result.finally(() => {
+            this.isDisabled = false
+          })
+        }
       } else {
         this.$message.error('No handler for action')
       }

@@ -150,10 +150,11 @@ export function getErrorResponseMsg(error) {
   } else if (typeof data === 'string') {
     return data
   } else if (_.isPlainObject(data)) {
-    return Object.values(data)
+    const msg = Object.values(data)
       .map(item => getErrorResponseMsg(item))
       .filter(i => i)
-      .join('; ')
+    // 错误信息不要重复提示
+    return [...new Set(msg)].join('; ')
   } else {
     msg = error.toString()
   }
@@ -421,6 +422,28 @@ export function getDrawerWidth() {
   const width = window.innerWidth
   if (width >= 1500) return '1080px'
   return '90%'
+}
+
+export function getShowCurrentAssetValue(cookie, defaultValue = '0') {
+  const stored = typeof window !== 'undefined'
+    ? window.localStorage.getItem('show_current_asset')
+    : null
+  if (stored === '0' || stored === '1') {
+    return stored
+  }
+  if (cookie && typeof cookie.get === 'function') {
+    return cookie.get('show_current_asset') || defaultValue
+  }
+  return defaultValue
+}
+
+export function setShowCurrentAssetValue(cookie, value) {
+  if (typeof window !== 'undefined') {
+    window.localStorage.setItem('show_current_asset', String(value))
+  }
+  if (cookie && typeof cookie.set === 'function') {
+    cookie.set('show_current_asset', value, 1)
+  }
 }
 
 export class ObjectLocalStorage {

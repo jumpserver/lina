@@ -20,6 +20,8 @@ import { QuickActions } from '@/components'
 import RelationCard from '@/components/Cards/RelationCard'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import store from '@/store'
+import { MFASystemSetting } from '@/views/users/const'
 
 export default {
   name: 'UserInfo',
@@ -226,7 +228,22 @@ export default {
             return <div>{doms}</div>
           }
         },
-        'wecom_id', 'dingtalk_id', 'feishu_id', 'mfa_level',
+        'wecom_id', 'dingtalk_id', 'feishu_id',
+        {
+          key: this.$t('MFA'),
+          formatter: (item, val) => {
+            const user = vm.object
+            const securityMFAAuth = store.getters.publicSettings['SECURITY_MFA_AUTH']
+            const adminUserIsNeed = (user?.is_superuser || user?.is_org_admin) && securityMFAAuth === MFASystemSetting.onlyAdminUsers
+            if (securityMFAAuth === MFASystemSetting.allUsers) {
+              return this.$t('MFAAllUsers')
+            }
+            if (securityMFAAuth === MFASystemSetting.onlyAdminUsers && adminUserIsNeed) {
+              return this.$t('MFAOnlyAdminUsers')
+            }
+            return user?.mfa_level.label
+          }
+        },
         'source', 'labels',
         'created_by', 'date_joined', 'date_expired',
         'date_password_last_updated', 'last_login', 'comment'

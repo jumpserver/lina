@@ -4,15 +4,11 @@
       <div class="panel-title">
         <el-avatar :src="imageUrl" shape="square" />
         <div class="title-display">
-          <span class="name">{{ object.name }}</span>
+          <p class="name" :title="object.name">{{ object.name }}</p>
           <span class="comment">{{ object.provider.label }}</span>
         </div>
       </div>
-      <div
-        v-if="iActions.length !== 0"
-        class="panel-actions"
-        @click="handleClick($event)"
-      >
+      <div v-if="iActions.length !== 0" class="panel-actions" @click="handleClick($event)">
         <el-dropdown>
           <el-button size="mini">
             <i class="el-icon-more el-icon--right" />
@@ -64,21 +60,19 @@ export default {
     },
     getImage: {
       type: Function,
-      default: (obj) => ''
+      default: obj => ''
     },
     getInfos: {
       type: Function,
-      default: (obj) => []
+      default: obj => []
     },
     handleUpdate: {
       type: Function,
-      default: () => {
-      }
+      default: () => {}
     },
     onView: {
       type: Function,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -152,13 +146,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 div.info-panel {
   display: flex;
   flex-direction: column;
   padding: 10px;
-  gap: 10px;
+  gap: unset;
   cursor: pointer;
+  height: initial !important;
 
   .panel-header {
     padding: 10px 20px;
@@ -175,12 +169,23 @@ div.info-panel {
 
       .title-display {
         display: flex;
+        flex-basis: 225px;
         flex-direction: column;
-        text-align: left;
+        justify-content: center;
+        align-items: start;
+        max-width: 225px;
+        min-width: 0;
+        overflow-x: hidden;
 
         .name {
           font-size: 1.1em;
           color: #555555;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+          width: 100%;
+          margin: unset;
+          text-align: start;
         }
 
         .comment {
@@ -193,6 +198,7 @@ div.info-panel {
       ::v-deep {
         .el-avatar {
           background: #fff;
+          flex-shrink: 0;
         }
       }
     }
