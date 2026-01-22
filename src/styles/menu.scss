@@ -174,6 +174,7 @@ $single-menu-height: 38px;
       .level1-menu {
         &.el-submenu.is-opened {
           border-top: solid 1px rgba(255, 255, 255, 0.06);
+          background-color: var(--menu-is-open-bg);
         }
 
         &.el-submenu.is-active {
