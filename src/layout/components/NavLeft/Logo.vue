@@ -7,7 +7,6 @@
       </a>
       <a v-else key="expand" class="sidebar-logo-link" @click="handleClick">
         <img :src="logoTextSrc" alt="logo" class="sidebar-logo-text" />
-        <span class="sidebar-title">{{ logoTitle }}</span>
       </a>
     </transition>
   </div>
