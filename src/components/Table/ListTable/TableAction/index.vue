@@ -178,6 +178,7 @@ $headerHeight: 30px;
     .right-side-item.action-search {
       border: 1px solid var(--color-border);
       overflow: hidden;
+      border-radius: 4px;
     }
   }
 
@@ -189,6 +190,8 @@ $headerHeight: 30px;
   .search.right {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
     padding-right: 10px;
   }
 }

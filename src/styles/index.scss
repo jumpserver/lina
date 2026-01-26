@@ -328,6 +328,7 @@ input[type='file'] {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      // background-color: var(--table-header-bg, #fff);
 
       &:hover {
         border-right: 2px solid #ebeef5;
@@ -439,6 +440,12 @@ input[type='file'] {
   font-size: 0.7rem;
   font-weight: 400;
   border-radius: 2px;
+}
+
+.el-button--text {
+  &:hover {
+    background-color: unset !important;
+  }
 }
 
 .el-cascader__dropdown .el-cascader-panel .el-cascader-menu {
@@ -597,6 +604,10 @@ li.rmenu i.fa {
   }
 }
 
+.fa-check-circle {
+  color: #1ab394 !important;
+}
+
 .el-alert.el-alert--info.is-light {
   i.el-icon-info.is-big {
     font-size: 16px;
@@ -605,7 +616,7 @@ li.rmenu i.fa {
 }
 
 .el-table__header thead > tr > th {
-  background-color: white;
+  // background-color: var(--table-header-bg, #fff);
   font-weight: 600;
 }
 

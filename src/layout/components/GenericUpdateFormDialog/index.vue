@@ -9,7 +9,7 @@
     width="70%"
     v-on="$listeners"
   >
-    <el-alert v-if="tips" class="tips" type="success">{{ tips }}</el-alert>
+    <el-alert v-if="tips" class="tips" type="info">{{ tips }}</el-alert>
     <el-row :gutter="20">
       <el-col :md="4" :sm="24">
         <div class="select-prop-label">
@@ -34,10 +34,7 @@
       <el-divider />
     </el-row>
     <el-row>
-      <GenericCreateUpdateForm
-        :key="internalKey"
-        v-bind="iFormSetting"
-      />
+      <GenericCreateUpdateForm :key="internalKey" v-bind="iFormSetting" />
     </el-row>
   </Dialog>
 </template>
@@ -49,12 +46,13 @@ import { GenericCreateUpdateForm } from '@/layout/components'
 export default {
   name: 'GenericUpdateFormDialog',
   components: {
-    Dialog, GenericCreateUpdateForm
+    Dialog,
+    GenericCreateUpdateForm
   },
   props: {
     selectedRows: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     formSetting: {
       type: Object,
@@ -69,7 +67,7 @@ export default {
       default: false
     }
   },
-  data: function() {
+  data: function () {
     return {
       internalKey: 0,
       selectPropertiesLabel: this.$t('SelectProperties'),
@@ -107,12 +105,12 @@ export default {
       return {
         needGetObjectDetail: false,
         submitMethod: () => 'patch',
-        cleanOtherFormValue: (formValue) => formValue,
-        cleanFormValue: (value) => {
+        cleanOtherFormValue: formValue => formValue,
+        cleanFormValue: value => {
           const filterValue = {}
           Object.keys(value)
-            .filter((key) => vm.checkedFields?.includes(key))
-            .forEach((key) => {
+            .filter(key => vm.checkedFields?.includes(key))
+            .forEach(key => {
               filterValue[key] = value[key]
             })
           let formValue = []
@@ -126,28 +124,31 @@ export default {
           }
           return formValue
         },
-        onSubmit: function(validValues) {
+        onSubmit: function (validValues) {
           const url = this.url
           const msg = this.updateSuccessMsg
-          this.$axios.patch(url, validValues).then((res) => {
-            vm.$emit('update')
-            this.$message.success(msg)
-            this.iVisible = false
-          }).catch(error => {
-            this.$emit('submitError', error)
-            const response = error.response
-            const data = response.data
-            // 不要逐个设置字段的 attrs.error 或改动 fields 引用。
-            // 这样会触发表单 content 重建，导致用户已输入的内容被覆盖/清空，
-            // 且可能出现只能显示一个字段错误的现象。
-            // 这里改为使用 AutoDataForm 暴露的 setErrors(errors) 覆盖式设置：
-            // - 直接同步到 UI 的 el-form-item.validateMessage
-            // - 支持同时显示多个字段错误
-            // - 不修改 fields/attrs 引用，避免输入丢失
-            if (response.status === 400 && data && typeof data === 'object') {
-              this.$refs.form.setErrors(data)
-            }
-          })
+          this.$axios
+            .patch(url, validValues)
+            .then(res => {
+              vm.$emit('update')
+              this.$message.success(msg)
+              this.iVisible = false
+            })
+            .catch(error => {
+              this.$emit('submitError', error)
+              const response = error.response
+              const data = response.data
+              // 不要逐个设置字段的 attrs.error 或改动 fields 引用。
+              // 这样会触发表单 content 重建，导致用户已输入的内容被覆盖/清空，
+              // 且可能出现只能显示一个字段错误的现象。
+              // 这里改为使用 AutoDataForm 暴露的 setErrors(errors) 覆盖式设置：
+              // - 直接同步到 UI 的 el-form-item.validateMessage
+              // - 支持同时显示多个字段错误
+              // - 不修改 fields/attrs 引用，避免输入丢失
+              if (response.status === 400 && data && typeof data === 'object') {
+                this.$refs.form.setErrors(data)
+              }
+            })
         }
       }
     }
@@ -156,16 +157,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .el-row-divider {
-    margin-bottom: 20px;
-  }
+.el-row-divider {
+  margin-bottom: 20px;
+}
 
-  .select-prop-label {
-    float: right;
-    padding-right: 30px;
-  }
+.select-prop-label {
+  float: right;
+  padding-right: 30px;
+}
 
-  .tips {
-    margin-bottom: 10px;
-  }
+.tips {
+  margin-bottom: 10px;
+}
 </style>

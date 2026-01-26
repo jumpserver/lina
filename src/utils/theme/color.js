@@ -77,23 +77,49 @@ export function setRootColors() {
   }
 }
 
+function applyDefaults(colors, menuActiveTextColor, white) {
+  if (menuActiveTextColor && !colors['--menu-hover']) {
+    colors['--menu-hover'] = mix(white, menuActiveTextColor.replace(/#/g, ''), 90)
+  }
+}
+
 export function changeMenuColor(themeColors) {
   const elementStyle = document.documentElement.style
   const colors = Object.keys(themeColors).length > 0 ? themeColors : defaultThemeConfig
 
   const white = 'ffffff'
   const black = '000000'
+  const primaryColor = colors['--color-primary'] || defaultThemeConfig['--color-primary']
 
   // 后端不用返回 --menu-hover
-  const menuActiveTextColor = colors['--menu-text-active']
-  if (menuActiveTextColor) {
-    colors['--menu-hover'] = mix(white, menuActiveTextColor.replace(/#/g, ''), 90)
+  const menuActiveTextColor = colors['--menu-text-active'] || primaryColor
+
+  applyDefaults(colors, menuActiveTextColor, white)
+
+  const hasNavHeaderBg = !!colors['--nav-header-bg']
+  const bannerBg = colors['--banner-bg']
+
+  let navHeaderBase = colors['--nav-header-bg'] || bannerBg || primaryColor
+
+  if (!hasNavHeaderBg && bannerBg && bannerBg.startsWith('#')) {
+    navHeaderBase = mix(white, bannerBg.replace(/#/g, ''), 8)
+  }
+  if (!colors['--nav-header-bg']) {
+    colors['--nav-header-bg'] = navHeaderBase
+  }
+  if (!colors['--nav-header-hover']) {
+    if (navHeaderBase && navHeaderBase.startsWith('#')) {
+      colors['--nav-header-hover'] = mix(white, navHeaderBase.replace(/#/g, ''), 12)
+    } else {
+      colors['--nav-header-hover'] = navHeaderBase
+    }
   }
 
   const lights = [15, 40, 60, 90]
   const darken = [15, 30, 40, 80]
 
   const colorsGenMore = ['--color-primary']
+
   for (const key in colors) {
     const currentColor = colors[key]
     elementStyle.setProperty(key, currentColor)

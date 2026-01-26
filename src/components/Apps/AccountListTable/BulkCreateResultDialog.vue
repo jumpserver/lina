@@ -6,7 +6,7 @@
     @confirm="closeDialog"
     v-on="$listeners"
   >
-    <el-alert style="margin-bottom: 10px" type="success">
+    <el-alert style="margin-bottom: 10px" type="info">
       <span v-for="item of summary" :key="item.key"><b>{{ item.label }}</b>: {{ item.value }} </span>
     </el-alert>
     <DataTable :config="config" />

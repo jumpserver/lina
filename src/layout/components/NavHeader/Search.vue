@@ -145,19 +145,17 @@ export default {
       routeSuggestions: [],
       routes: [],
       iconMap: {
-        'Account': 'accounts',
-        'Asset': 'assets',
-        'User': 'user-o',
-        'UserGroup': 'user-group',
-        'AssetPermission': 'permission'
+        Account: 'accounts',
+        Asset: 'assets',
+        User: 'user-o',
+        UserGroup: 'user-group',
+        AssetPermission: 'permission'
       },
       historyStore: new ObjectLocalStorage('globalSearchHistory')
     }
   },
   computed: {
-    ...mapGetters([
-      'viewRoutes'
-    ]),
+    ...mapGetters(['viewRoutes']),
     isEmpty() {
       return !this.routeSuggestions.length && this.options.length === 0
     },
@@ -247,10 +245,15 @@ export default {
         this.routeSuggestions = []
         return
       }
-      this.routeSuggestions = this.routes.filter(r => {
-        const title = r.title || r.name || r.path
-        return title.toLowerCase().includes(q.toLowerCase()) || r.path.toLowerCase().includes(q.toLowerCase())
-      }).slice(0, 5)
+      this.routeSuggestions = this.routes
+        .filter(r => {
+          const title = r.title || r.name || r.path
+          return (
+            title.toLowerCase().includes(q.toLowerCase()) ||
+            r.path.toLowerCase().includes(q.toLowerCase())
+          )
+        })
+        .slice(0, 5)
     },
     buildRouteSuggestions() {
       if (this.routes.length > 0) {
@@ -283,10 +286,7 @@ export default {
     addToHistory(q) {
       const entry = { q: q }
       const list = this.historyStore.get('list') || []
-      const next = [
-        entry,
-        ...list.filter(i => i.q !== entry.q)
-      ].slice(0, 10)
+      const next = [entry, ...list.filter(i => i.q !== entry.q)].slice(0, 10)
       this.historyStore.set('list', next)
       this.history = next
     },
@@ -315,11 +315,11 @@ export default {
 
         // 如果当前有输入框聚焦，不触发搜索
         const activeElement = document.activeElement
-        const isInputFocused = activeElement && (
-          activeElement.tagName === 'INPUT' ||
-          activeElement.tagName === 'TEXTAREA' ||
-          activeElement.contentEditable === 'true'
-        )
+        const isInputFocused =
+          activeElement &&
+          (activeElement.tagName === 'INPUT' ||
+            activeElement.tagName === 'TEXTAREA' ||
+            activeElement.contentEditable === 'true')
 
         if (!isInputFocused) {
           this.openPanel()
@@ -346,12 +346,13 @@ export default {
     .search-input {
       height: 30px;
       line-height: 1;
-      background-color: rgba(5, 5, 5, 0.1);
+      background-color: var(--nav-header-bg, var(--color-primary));
       border-radius: 4px;
       cursor: pointer;
+      transition: all 0.2s;
 
       &:hover {
-        background-color: rgba(0, 0, 0, 0.2);
+        background-color: var(--nav-header-hover, var(--color-primary));
       }
 
       ::v-deep {

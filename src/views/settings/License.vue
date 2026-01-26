@@ -1,7 +1,7 @@
 <template>
   <Page v-bind="$attrs">
     <div v-if="!loading">
-      <el-alert v-if="publicSettings.XPACK_ENABLED" type="success">
+      <el-alert v-if="publicSettings.XPACK_ENABLED" type="info">
         {{ this.$t('ImportLicenseTip') }}
       </el-alert>
       <TwoCol>

@@ -228,8 +228,8 @@ export default {
 
 <style lang="scss" scoped>
 $btn-text-color: #ffffff;
-$color-btn-background: #e8f7f4;
-$color-btn-focus-background: #83cbba;
+$color-btn-background: var(--color-primary-light-3, #e8f7f4);
+$color-btn-focus-background: var(--color-primary-light-1, var(--color-primary));
 $color-divided: #e4e7ed;
 $color-drop-menu-title: #909399;
 $color-drop-menu-border: #e4e7ed;
@@ -258,9 +258,11 @@ $color-drop-menu-border: #e4e7ed;
   .action-item.el-dropdown {
     font-size: 11px;
 
-    .more-action.el-button--default {
-      ::v-deep .el-icon-arrow-down.el-icon--right {
-        color: var(--color-icon-primary) !important;
+    .more-action {
+      .el-button--default {
+        ::v-deep .el-icon-arrow-down.el-icon--right {
+          color: var(--color-icon-primary) !important;
+        }
       }
     }
 

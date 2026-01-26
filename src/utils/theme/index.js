@@ -102,4 +102,3 @@ export function replaceStyleColors(data) {
 
   return data
 }
-

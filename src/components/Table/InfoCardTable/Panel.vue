@@ -172,7 +172,7 @@ div.info-panel {
         flex-basis: 225px;
         flex-direction: column;
         justify-content: center;
-        align-items: start;
+        align-items: flex-start;
         max-width: 225px;
         min-width: 0;
         overflow-x: hidden;

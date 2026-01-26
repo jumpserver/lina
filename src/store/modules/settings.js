@@ -64,9 +64,31 @@ const actions = {
           // 动态修改Title
           document.title = data?.INTERFACE?.login_title || ''
         }
-        const themeColors = data?.INTERFACE?.theme_info?.colors || {}
-        commit('SET_PUBLIC_SETTINGS', data)
-        changeThemeColors(themeColors)
+        const responseThemeColors = data?.INTERFACE?.theme_info?.colors || {}
+        const cachedThemeColors = (() => {
+          if (state.themeColors && Object.keys(state.themeColors).length > 0) {
+            return state.themeColors
+          }
+          try {
+            return JSON.parse(localStorage.getItem('themeColors')) || {}
+          } catch (error) {
+            return {}
+          }
+        })()
+        const themeColors =
+          Object.keys(responseThemeColors).length > 0 ? responseThemeColors : cachedThemeColors
+        const nextSettings = {
+          ...data,
+          INTERFACE: {
+            ...(data?.INTERFACE || {}),
+            theme_info: {
+              ...(data?.INTERFACE?.theme_info || {}),
+              colors: themeColors
+            }
+          }
+        }
+        commit('SET_PUBLIC_SETTINGS', nextSettings)
+        changeThemeColors(themeColors || {})
         resolve(response)
       }).catch(error => {
         if (error.response && error.response.status === 400) {
@@ -117,4 +139,3 @@ export default {
   mutations,
   actions
 }
-

@@ -12,7 +12,7 @@
     width="800px"
     v-on="$listeners"
   >
-    <el-alert v-if="disabled && platformDetail" style="margin-bottom: 10px" type="success">
+    <el-alert v-if="disabled && platformDetail" style="margin-bottom: 10px" type="info">
       {{ $t('InheritPlatformConfig') }}
       <el-link :href="platformDetail" class="link-more" target="_blank">
         {{ $t('View') }}
@@ -62,9 +62,7 @@ export default {
         hasButtons: !this.disabled,
         url: '/api/v1/assets/protocol-settings/?name=' + this.protocol.name,
         fields: [
-          [vm.$t('Basic'), [
-            'primary', 'required', 'default', 'public'
-          ]],
+          [vm.$t('Basic'), ['primary', 'required', 'default', 'public']],
           [vm.$t('Advanced'), ['setting']]
         ],
         fieldsMeta: {
@@ -72,23 +70,23 @@ export default {
             fields: '__all__',
             fieldsMeta: {
               username_selector: {
-                hidden: (formValue) => formValue['autofill'] !== 'basic'
+                hidden: formValue => formValue['autofill'] !== 'basic'
               },
               password_selector: {
-                hidden: (formValue) => formValue['autofill'] !== 'basic'
+                hidden: formValue => formValue['autofill'] !== 'basic'
               },
               submit_selector: {
-                hidden: (formValue) => formValue['autofill'] !== 'basic'
+                hidden: formValue => formValue['autofill'] !== 'basic'
               },
               script: {
                 component: JsonEditor,
-                hidden: (formValue) => formValue['autofill'] !== 'script'
+                hidden: formValue => formValue['autofill'] !== 'script'
               }
             }
           },
           public: {
             disabled: this.protocol.name === 'winrm',
-            hidden: (formValue) => {
+            hidden: formValue => {
               if (this.protocol.name === 'winrm') {
                 formValue['public'] = false
               }
