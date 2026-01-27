@@ -14,7 +14,8 @@ const state = {
   publicSettings: {},
   hasValidLicense: false,
   authMethods: {},
-  themeColors: JSON.parse(localStorage.getItem('themeColors')) || {}
+  themeColors: JSON.parse(localStorage.getItem('themeColors')) || {},
+  tableActionButtonType: 'default'
 }
 
 const mutations = {
@@ -26,6 +27,7 @@ const mutations = {
   SET_PUBLIC_SETTINGS: (state, settings) => {
     state.publicSettings = settings
     state.themeColors = settings?.INTERFACE?.theme_info?.colors || {}
+    state.tableActionButtonType = settings?.INTERFACE.theme_info['table-action-button'] || 'default'
 
     if (settings['XPACK_ENABLED']) {
       state.hasValidLicense = settings['XPACK_LICENSE_IS_VALID']
@@ -47,55 +49,63 @@ const actions = {
   // get user Profile
   getPublicSettings({ commit, state }, isOpen) {
     return new Promise((resolve, reject) => {
-      getPublicSettings(isOpen).then(response => {
-        const data = response || {}
-        if (isOpen) {
-          const faviconURL = data['INTERFACE']?.favicon
-          let link = document.querySelector("link[rel*='icon']")
-          if (!link) {
-            link = document.createElement('link')
-            link.type = 'image/x-icon'
-            link.rel = 'shortcut icon'
-            document.getElementsByTagName('head')[0].appendChild(link)
+      getPublicSettings(isOpen)
+        .then(response => {
+          const data = response || {}
+          if (isOpen) {
+            const faviconURL = data['INTERFACE']?.favicon
+            let link = document.querySelector("link[rel*='icon']")
+            if (!link) {
+              link = document.createElement('link')
+              link.type = 'image/x-icon'
+              link.rel = 'shortcut icon'
+              document.getElementsByTagName('head')[0].appendChild(link)
+            }
+            if (faviconURL) {
+              link.href = faviconURL
+            }
+            // 动态修改Title
+            document.title = data?.INTERFACE?.login_title || ''
           }
-          if (faviconURL) {
-            link.href = faviconURL
-          }
-          // 动态修改Title
-          document.title = data?.INTERFACE?.login_title || ''
-        }
-        const responseThemeColors = data?.INTERFACE?.theme_info?.colors || {}
-        const cachedThemeColors = (() => {
-          if (state.themeColors && Object.keys(state.themeColors).length > 0) {
-            return state.themeColors
-          }
-          try {
-            return JSON.parse(localStorage.getItem('themeColors')) || {}
-          } catch (error) {
-            return {}
-          }
-        })()
-        const themeColors =
-          Object.keys(responseThemeColors).length > 0 ? responseThemeColors : cachedThemeColors
-        const nextSettings = {
-          ...data,
-          INTERFACE: {
-            ...(data?.INTERFACE || {}),
-            theme_info: {
-              ...(data?.INTERFACE?.theme_info || {}),
-              colors: themeColors
+
+          const responseThemeColors = data?.INTERFACE?.theme_info?.colors || {}
+
+          const cachedThemeColors = (() => {
+            if (state.themeColors && Object.keys(state.themeColors).length > 0) {
+              return state.themeColors
+            }
+            try {
+              return JSON.parse(localStorage.getItem('themeColors')) || {}
+            } catch (error) {
+              return {}
+            }
+          })()
+
+          const themeColors =
+            Object.keys(responseThemeColors).length > 0 ? responseThemeColors : cachedThemeColors
+          const nextSettings = {
+            ...data,
+            INTERFACE: {
+              ...(data?.INTERFACE || {}),
+              theme_info: {
+                ...(data?.INTERFACE?.theme_info || {}),
+                colors: themeColors
+              }
             }
           }
-        }
-        commit('SET_PUBLIC_SETTINGS', nextSettings)
-        changeThemeColors(themeColors || {})
-        resolve(response)
-      }).catch(error => {
-        if (error.response && error.response.status === 400) {
-          alert('自 v3.6 版本开始，要求配置可信任域名或主机，否则无法正常使用, 查看: https://github.com/jumpserver/jumpserver/releases/tag/v3.6.0')
-        }
-        reject(error)
-      })
+
+          commit('SET_PUBLIC_SETTINGS', nextSettings)
+          changeThemeColors(themeColors || {})
+          resolve(response)
+        })
+        .catch(error => {
+          if (error.response && error.response.status === 400) {
+            alert(
+              '自 v3.6 版本开始，要求配置可信任域名或主机，否则无法正常使用, 查看: https://github.com/jumpserver/jumpserver/releases/tag/v3.6.0'
+            )
+          }
+          reject(error)
+        })
     })
   },
   changeThemeStyle({ commit }, themeColors) {
@@ -108,12 +118,15 @@ const actions = {
     return new Promise((resolve, reject) => {
       const url = '/api/v1/settings/setting/?category=auth'
       const data = { [key]: value }
-      request.patch(url, data).then(res => {
-        state.authMethods[key] = value
-        resolve(res)
-      }).catch(error => {
-        reject(error)
-      })
+      request
+        .patch(url, data)
+        .then(res => {
+          state.authMethods[key] = value
+          resolve(res)
+        })
+        .catch(error => {
+          reject(error)
+        })
     })
   },
   getAuthMethods({ commit, state }) {
@@ -122,12 +135,15 @@ const actions = {
         resolve(state.authMethods)
       } else {
         const url = '/api/v1/settings/setting/?category=auth'
-        request.get(url).then(res => {
-          state.authMethods = res
-          resolve(res)
-        }).catch(error => {
-          reject(error)
-        })
+        request
+          .get(url)
+          .then(res => {
+            state.authMethods = res
+            resolve(res)
+          })
+          .catch(error => {
+            reject(error)
+          })
       }
     })
   }

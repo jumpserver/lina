@@ -5,7 +5,7 @@
         v-if="action.dropdown"
         v-show="action.dropdown.length > 0"
         :key="action.name"
-        :class="[action.name, { grouped: action.grouped }]"
+        :class="[action.name, { grouped: action.grouped, 'table-action-text': isTableActionText }]"
         :size="action.size"
         :split-button="!!action.split"
         :type="action.type"
@@ -16,11 +16,12 @@
         @command="handleDropdownCallback"
       >
         <span v-if="action.split" :style="{ cursor: action.disabled ? 'not-allowed' : 'pointer' }">
-          {{ action.title }}
+          <Icon v-if="isEllipsisAction(action)" class="ellipsis-icon" icon="fa-ellipsis-v" />
+          <span v-else>{{ getActionTitle(action) }}</span>
         </span>
         <el-button
           v-else
-          :class="action.name"
+          :class="[action.name, { 'table-action-text': isTableActionText }]"
           :size="size"
           class="more-action"
           v-bind="{ ...cleanButtonAction(action), icon: '' }"
@@ -29,7 +30,9 @@
             <Icon v-if="action.icon" :icon="action.icon" />
           </span>
           <span v-if="action.title">
-            {{ action.title }}<i class="el-icon-arrow-down el-icon--right" />
+            <Icon v-if="isEllipsisAction(action)" class="ellipsis-icon" icon="fa-ellipsis-v" />
+            <span v-else>{{ getActionTitle(action) }}</span>
+            <i class="el-icon-arrow-down el-icon--right" />
           </span>
         </el-button>
         <el-dropdown-menu slot="dropdown" style="overflow: auto; max-height: 60vh">
@@ -69,7 +72,7 @@
       <el-button
         v-else
         :key="action.name"
-        :class="[action.name, { grouped: action.grouped }]"
+        :class="[action.name, { grouped: action.grouped, 'table-action-text': isTableActionText }]"
         :size="size"
         class="action-item"
         v-bind="{ ...cleanButtonAction(action), icon: '' }"
@@ -80,7 +83,8 @@
             <span v-if="action.icon" style="vertical-align: initial">
               <Icon :icon="action.icon" />
             </span>
-            {{ action.title }}
+            <Icon v-if="isEllipsisAction(action)" class="ellipsis-icon" icon="fa-ellipsis-v" />
+            <span v-else>{{ getActionTitle(action) }}</span>
           </span>
         </el-tooltip>
       </el-button>
@@ -118,9 +122,21 @@ export default {
   computed: {
     iActions() {
       return this.cleanActions(this.actions)
+    },
+    tableActionButtonType() {
+      return this.$store?.state?.settings?.tableActionButtonType || 'default'
+    },
+    isTableActionText() {
+      return this.tableActionButtonType === 'text'
     }
   },
   methods: {
+    getActionTitle(action) {
+      return action?.title
+    },
+    isEllipsisAction(action) {
+      return this.isTableActionText && action?.title === '...'
+    },
     actionsHasIcon(actions) {
       return actions.some(action => action.icon)
     },
@@ -230,6 +246,7 @@ export default {
 $btn-text-color: #ffffff;
 $color-btn-background: var(--color-primary-light-3, #e8f7f4);
 $color-btn-focus-background: var(--color-primary-light-1, var(--color-primary));
+$color-text-hover: var(--color-primary-light-1);
 $color-divided: #e4e7ed;
 $color-drop-menu-title: #909399;
 $color-drop-menu-border: #e4e7ed;
@@ -317,6 +334,24 @@ $color-drop-menu-border: #e4e7ed;
       color: $btn-text-color;
       background-color: $color-btn-focus-background;
     }
+  }
+
+  .action-item.table-action-text.el-button,
+  ::v-deep .action-item.table-action-text.el-dropdown .el-button {
+    color: var(--color-primary) !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
+    transition: color 0.2s ease;
+  }
+
+  .action-item.table-action-text.el-button:hover,
+  .action-item.table-action-text.el-button:focus,
+  ::v-deep .action-item.table-action-text.el-dropdown .el-button:hover,
+  ::v-deep .action-item.table-action-text.el-dropdown .el-button:focus {
+    color: $color-text-hover !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
   }
 }
 
