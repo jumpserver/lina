@@ -6,12 +6,14 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { Required } from '@/components/Form/DataForm/rules'
 import { PhoneInput } from '@/components/Form/FormFields'
+import Agreement from '@/components/Form/FormFields/agreement.vue'
 import store from '@/store'
 
 export default {
   name: 'Improvement',
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdatePage,
+    Agreement
   },
   props: {
     object: {
@@ -26,7 +28,7 @@ export default {
         [this.$t('Account'), ['username', 'name', 'email']],
         [this.$t('Authentication'), ['mfa_level', 'public_key']],
         [this.$t('Other'), ['phone']],
-        [this.$t('TermsAndConditions'), ['terms']]
+        [this.$t('TermsOfService'), ['terms']]
       ],
       fieldsMeta: {
         username: {
@@ -53,15 +55,14 @@ export default {
             type: 'textarea',
             placeholder: 'ssh-rsa AAAA...'
           },
-          hidden: (formValue) => {
+          hidden: formValue => {
             return formValue.source !== 'local'
           },
           helpText: this.$t('SSHKeyOfProfileSSHUpdatePage')
         },
         terms: {
-          label: this.$t('IAgree'),
-          type: 'checkbox',
-          checked: false,
+          label: '',
+          component: Agreement,
           rules: [Required],
           helpText: this.$t('MFAOfUserFirstLoginUserGuidePage')
         }
@@ -93,9 +94,14 @@ export default {
   },
   methods: {
     disableMFAFieldIfNeed(user) {
-      const adminUserIsNeed = (user?.is_superuser || user?.is_org_admin) &&
+      const adminUserIsNeed =
+        (user?.is_superuser || user?.is_org_admin) &&
         store.getters.publicSettings['SECURITY_MFA_AUTH'] === 2
-      if (store.getters.publicSettings['SECURITY_MFA_AUTH'] === 1 || adminUserIsNeed || user?.mfa_level.value === 2) {
+      if (
+        store.getters.publicSettings['SECURITY_MFA_AUTH'] === 1 ||
+        adminUserIsNeed ||
+        user?.mfa_level.value === 2
+      ) {
         this.fieldsMeta['mfa_level'].disabled = true
       }
     }
