@@ -2,11 +2,11 @@
   <div>
     <el-checkbox v-model="iValue">
       {{ $t('ReadAgreeTo') }}
-      <a href="/core/auth/agreement/" target="_blank" style="color: #409eff">
+      <a href="/core/auth/user-agreement/" target="_blank" style="color: #409eff">
         {{ $t('TermsOfService') }}
       </a>
       {{ $t('and') }}
-      <a href="/core/auth/privacy/" target="_blank" style="color: #409eff">
+      <a href="/core/auth/privacy-policy/" target="_blank" style="color: #409eff">
         {{ $t('PrivacyPolicy') }}
       </a>
     </el-checkbox>
@@ -26,16 +26,6 @@ export default {
       iValue: false
     }
   },
-  watch: {
-    iValue: {
-      handler(v) {
-        this.$emit('input', v)
-      }
-    }
-  },
-  created() {
-    this.iValue = this.value
-  },
   computed: {
     iValue: {
       get() {
@@ -45,6 +35,16 @@ export default {
         this.$emit('update:value', v)
       }
     }
+  },
+  watch: {
+    iValue: {
+      handler(v) {
+        this.$emit('input', v)
+      }
+    }
+  },
+  created() {
+    this.iValue = this.value
   },
   methods: {}
 }
