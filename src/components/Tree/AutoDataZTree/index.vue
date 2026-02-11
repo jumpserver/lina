@@ -303,7 +303,7 @@ export default {
         return
       }
       this.currentNode = treeNode
-      this.currentNodeId = treeNode.meta.data.id
+      this.currentNodeId = treeNode.meta?.data?.id || treeNode.id
       // 屏蔽收藏资产
       if (treeNode?.id === '-12') {
         return
@@ -313,9 +313,7 @@ export default {
         this.showRMenu('root', event.clientX, event.clientY)
       } else if (treeNode && !treeNode.noR) {
         this.zTree.selectNode(treeNode)
-        if (treeNode.meta?.data?.id) {
-          this.currentNodeId = treeNode.meta.data.id
-        }
+        this.currentNodeId = treeNode.meta?.data?.id || treeNode.id
         this.showRMenu('node', event.clientX, event.clientY)
       }
     },

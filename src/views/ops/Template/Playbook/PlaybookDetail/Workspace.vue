@@ -1,7 +1,7 @@
 <template>
   <div>
     <NewNodeDialog v-if="createDialogVisible" :visible.sync="createDialogVisible" @confirm="doCreate" />
-    <TreeTable ref="TreeTable" :tree-setting="treeSetting">
+    <TreeTable ref="TreeTable" :tree-setting="treeSetting" :table-config="{}">
       <template v-if="!disableEdit" slot="rMenu">
         <li id="m_create_file" class="rmenu" tabindex="-1" @click="onCreate('file')">
           {{ $tc('NewFile') }}
