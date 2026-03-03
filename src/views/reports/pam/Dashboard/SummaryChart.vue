@@ -40,6 +40,7 @@
 <script>
 import * as echarts from 'echarts'
 import Title from '@/components/Dashboard/Title.vue'
+import { colorToRgba, getCssVar } from '@/utils/theme/color'
 
 export default {
   components: {
@@ -79,6 +80,8 @@ export default {
   },
   computed: {
     chartOption() {
+      const primaryColor = getCssVar('--color-primary')
+
       return {
         title: {
           show: false
@@ -114,22 +117,22 @@ export default {
             stack: 'Total',
             smooth: true,
             itemStyle: {
-              color: '#1AB394'
+              color: primaryColor
             },
             lineStyle: {
               width: 2,
-              color: '#1AB394'
+              color: primaryColor
             },
             showSymbol: false,
             areaStyle: {
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                 {
                   offset: 0,
-                  color: 'rgba(26, 179, 148, 0.3)'
+                  color: colorToRgba(primaryColor, 0.3)
                 },
                 {
                   offset: 1,
-                  color: 'rgba(26, 179, 148, 0)'
+                  color: colorToRgba(primaryColor, 0)
                 }
               ])
             },
@@ -296,7 +299,7 @@ $text-color: #646A73;
         transform: translateY(-0.2rem);
 
         .metric-value {
-          color: #1ab394;
+          color: var(--color-primary);
         }
       }
     }
