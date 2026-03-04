@@ -1,8 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="44px" height="48px" viewBox="0 0 44 48" version="1.1" xmlns="http://www.w3.org/2000/svg"
->
-    <rect id="矩形" x="0" y="20" width="40" height="24.4444444" rx="1.33333333"></rect>
-    <path d="M8.88888889,20 L8.88888889,11.1111111 C8.88888889,4.97461111 13.8635556,0 20,0 C26.1364444,0 31.1111111,4.97461111 31.1111111,11.1111111 L31.1111111,20"
-          id="路径" stroke-linecap="round"></path>
-    <line x1="20" y1="28.8888889" x2="20" y2="35.5555556" id="路径" stroke-linecap="round"></line>
-</svg>
+<svg width="44" height="48" xmlns="http://www.w3.org/2000/svg"><rect y="20" width="40" height="24.444" rx="1.333"/><path d="M8.889 20v-8.889C8.889 4.975 13.864 0 20 0c6.136 0 11.111 4.975 11.111 11.111V20M20 28.889v6.667"/></svg>

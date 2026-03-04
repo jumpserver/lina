@@ -1,6 +1,11 @@
 <template>
-  <div style="border: 1px solid #ccc; padding: 10px;">
-    <vue-markdown-editor v-model="localValue" :right-toolbar="rightToolbar" :left-toolbar="leftToolbar" height="400px" />
+  <div>
+    <vue-markdown-editor
+      v-model="localValue"
+      :right-toolbar="rightToolbar"
+      :left-toolbar="leftToolbar"
+      height="400px"
+    />
   </div>
 </template>
 <script>
@@ -48,3 +53,11 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.v-md-editor {
+  box-shadow: unset;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+}
+</style>

@@ -1,6 +1,1 @@
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <rect id="fg" fill="#D8D8D8" opacity="0" x="0" y="0" width="24" height="24"></rect>
-    <rect id="bg" fill="#F9F9F9" opacity="0" x="1" y="1" width="22" height="22"></rect>
-    <path d="M18.8796476,7.82923431 L14.2412035,3.20353325 L15.4480523,2 L23,9.53120052 L2.65423616,9.53120052 L2.65423616,7.82923431 L18.8796476,7.82923431 Z M1,14.8937995 L21.5493434,14.8937995 L21.5493434,16.5957657 L5.12035242,16.5957657 L9.75879648,21.2214668 L8.5519477,22.425 L1,14.8937995 L1,14.8937995 Z"
-          id="形状" fill="#000000" fill-rule="nonzero"></path>
-</svg>
+<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="M18.88 7.83L14.24 3.203 15.448 2 23 9.531H2.654V7.83H18.88zM1 14.893h20.55v1.702H5.12L9.76 21.22l-1.207 1.204L1 14.894z" fill="currentColor"/></svg>

@@ -140,6 +140,7 @@ export default {
   margin-left: 4px;
   padding: 5px 10px;
   border: 1px solid #DCDFE6;
+  border-radius: 2px;
   @import "~github-markdown-css/github-markdown-light.css";
 }
 

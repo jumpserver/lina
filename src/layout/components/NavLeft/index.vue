@@ -9,7 +9,12 @@
       </div>
       <div class="nav-title">
         <span :class="switchViewOtherClasses" class="switch-view active-switch-view">
-          <el-popover :open-delay="200" placement="right-start" trigger="hover">
+          <el-popover
+            :open-delay="200"
+            placement="right-start"
+            popper-class="switcher-popper"
+            trigger="hover"
+          >
             <span slot="reference" style="width: 100%">
               <el-tooltip
                 v-show="!isCollapse"
@@ -168,9 +173,9 @@ export default {
 
 $mobileHeight: 40px;
 $origin-color: #ffffff;
-$hover-bg-color: #e6e6e6;
-$hover-text-color: #606266;
-$hover-border-color: #d2d2d2;
+$hover-bg-color: var(--menu-hover);
+$hover-text-color: var(--menu-text-active);
+$hover-border-color: transparent;
 
 .left-side-wrapper {
   .nav-header {
@@ -227,9 +232,9 @@ $hover-border-color: #d2d2d2;
       white-space: nowrap;
       cursor: pointer;
       transition: all 0.3s;
-      color: var(--color-text-primary);
+      color: var(--menu-text);
       background-color: var(--menu-bg);
-      border-bottom: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--menu-border, #e9ecef);
 
       .switch-view {
         width: 100%;
@@ -273,8 +278,9 @@ $hover-border-color: #d2d2d2;
   .nav-footer {
     display: flex;
     justify-content: flex-start;
-    border-top: 1px solid rgba(31, 35, 41, 0.15);
+    border-top: 1px solid var(--menu-border,rgba(31, 35, 41, 0.15));
     background-color: $subMenuBg;
+    color: var(--menu-text);
 
     .toggle-bar {
       display: flex;
@@ -333,6 +339,8 @@ $hover-border-color: #d2d2d2;
       }
     }
   }
+
+  // view switcher popover uses global menu styles
 }
 
 @media screen and (max-width: 992px) {

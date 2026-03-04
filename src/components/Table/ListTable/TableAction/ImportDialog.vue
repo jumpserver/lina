@@ -22,8 +22,8 @@
         <div style="line-height: 1.5">
           <span class="el-upload__tip">
             {{ downloadTemplateTitle }}
-            <el-link type="success" @click="downloadTemplateFile('csv')"> CSV </el-link>
-            <el-link type="success" @click="downloadTemplateFile('xlsx')"> XLSX </el-link>
+            <el-link type="primary" @click="downloadTemplateFile('csv')"> CSV </el-link>
+            <el-link type="primary" @click="downloadTemplateFile('xlsx')"> XLSX </el-link>
           </span>
         </div>
       </el-form-item>

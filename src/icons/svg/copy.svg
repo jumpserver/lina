@@ -1,7 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="42px" height="52px" viewBox="0 0 42 52" version="1.1" xmlns="http://www.w3.org/2000/svg"
->
-    <path d="M30,5 L35,5 C37.7614237,5 40,7.23857625 40,10 L40,45 C40,47.7614237 37.7614237,50 35,50 L5,50 C2.23857625,50 0,47.7614237 0,45 L0,10 C0,7.23857625 2.23857625,5 5,5 L10,5"
-          id="路径"></path>
-    <rect id="矩形" x="10" y="0" width="20" height="10" rx="0.0416666667"></rect>
-</svg>
+<svg width="42" height="52" xmlns="http://www.w3.org/2000/svg"><path d="M30 5h5a5 5 0 0 1 5 5v35a5 5 0 0 1-5 5H5a5 5 0 0 1-5-5V10a5 5 0 0 1 5-5h5"/><rect x="10" width="20" height="10" rx=".042"/></svg>

@@ -1,6 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="44px" height="30px" viewBox="0 0 44 30" version="1.1" xmlns="http://www.w3.org/2000/svg"
->
-    <polyline id="路径" points="40 13.7142857 40 0 26.2857143 0"></polyline>
-    <polyline id="路径" points="0 25.1428571 11.8148571 10.8571429 23.0685714 17.7142857 40 0"></polyline>
-</svg>
+<svg width="44" height="30" xmlns="http://www.w3.org/2000/svg"><path d="M40 13.714V0H26.286"/><path d="M0 25.143l11.815-14.286 11.254 6.857L40 0"/></svg>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-alert :closable="false" :title="helpMessage" type="success" />
+    <el-alert :closable="false" :title="helpMessage" type="info" />
     <BaseSMS ref="baseSms" :config="$data" :title="$tc('Custom')" />
   </div>
 </template>
