@@ -107,9 +107,7 @@
         </div>
         <span v-if="executionInfo.status && summary && !showProgress" style="float: right">
           <span>
-            <span
-              ><b>{{ $tc('Status') }}: </b></span
-            >
+            <span><b>{{ $tc('Status') }}: </b></span>
             <span v-if="executionInfo.status === 'timeout'" class="status_warning">{{
               $tc('Timeout')
             }}</span>
@@ -120,9 +118,7 @@
             </span>
           </span>
           <span>
-            <span
-              ><b>{{ $tc('TimeDelta') }}: </b></span
-            >
+            <span><b>{{ $tc('TimeDelta') }}: </b></span>
             <span>{{ executionInfo.timeCost }}</span>
           </span>
         </span>
@@ -388,6 +384,13 @@ export default {
         this.$message.error(this.$tc('RequiredRunas'))
         return
       }
+
+      // 立即禁用按钮并显示旋转图标
+      this.runButton.disabled = true
+      this.runButton.icon = 'fa fa-spinner fa-spin'
+      this.showProgress = true
+      this.progressLength = 0
+
       const data = {
         assets: hosts,
         nodes: nodes,
@@ -404,7 +407,6 @@ export default {
         data.chdir = this.chdir
       }
       createJob(data).then(res => {
-        this.progressLength = 0
         this.executionInfo.timeCost = 0
         this.speedText = ''
         const form = new FormData()
@@ -444,6 +446,8 @@ export default {
           .catch(() => {
             this.execute_stop()
           })
+      }).catch(() => {
+        this.execute_stop()
       })
     },
     execute_stop() {
