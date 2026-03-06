@@ -17,7 +17,13 @@ function getPropOrg() {
   if (defaultOrg) {
     return defaultOrg
   }
-  return orgs.filter(item => !item['is_root'] && !item['is_system'])[0]
+  // 优先选择非 SYSTEM 和非 ROOT 的组织
+  const nonSystemOrg = orgs.find(item => !item['is_root'] && !item['is_system'])
+  if (nonSystemOrg) {
+    return nonSystemOrg
+  }
+  // 如果用户只有 SYSTEM 组织，则允许使用 SYSTEM 组织，避免无限循环
+  return orgs[0]
 }
 
 async function change2PropOrg() {
