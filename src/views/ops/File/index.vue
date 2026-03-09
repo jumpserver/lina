@@ -304,9 +304,16 @@ export default {
       msg = JSON.stringify({ task: this.currentTaskId })
       this.ws.send(msg)
     },
-    setCostTimeInterval() {
-      this.runButton.icon = 'fa fa-spinner fa-spin'
+    setButtonLoading() {
       this.runButton.disabled = true
+      this.runButton.icon = 'fa fa-spinner fa-spin'
+    },
+    resetButtonState() {
+      this.runButton.disabled = false
+      this.runButton.icon = 'fa fa-play'
+    },
+    setCostTimeInterval() {
+      this.setButtonLoading()
       this.executionInfo.cancel = setInterval(() => {
         this.executionInfo.timeCost += 1
       }, 1000)
@@ -386,8 +393,7 @@ export default {
       }
 
       // 立即禁用按钮并显示旋转图标
-      this.runButton.disabled = true
-      this.runButton.icon = 'fa fa-spinner fa-spin'
+      this.setButtonLoading()
       this.showProgress = true
       this.progressLength = 0
 
@@ -453,9 +459,8 @@ export default {
     execute_stop() {
       this.progressLength = 0
       this.showProgress = false
-      this.runButton.disabled = false
+      this.resetButtonState()
       clearInterval(this.upload_interval)
-      this.runButton.icon = 'fa fa-play'
     },
     handleSelectAssets(assets) {
       this.selectHosts = assets
