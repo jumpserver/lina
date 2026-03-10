@@ -19,9 +19,10 @@
       </tr>
       <el-divider class="divider" />
       <div class="text">
-        <span v-for="(i, index) in actions" :key="index" class="text-link" @click="onClick(i.name)">
-          <i :class="i.icon" class="icon" />{{ i.label }}
-          <el-divider v-if="index !== actions.length - 1" direction="vertical" />
+        <span v-for="(i, index) in visibleActions" :key="i.name" class="text-link" @click="onClick(i.name)">
+          <i :class="i.icon" class="icon" />
+          {{ i.label }}
+          <el-divider v-if="index !== visibleActions.length - 1" direction="vertical" />
         </span>
       </div>
     </div>
@@ -94,6 +95,11 @@ export default {
           has: !this.hasXPack
         }
       ]
+    },
+    visibleActions() {
+      return this.actions.filter((action) => {
+        return !(action.name === 'github' && this.publicSettings.XPACK_LICENSE_IS_VALID)
+      })
     },
     corporation() {
       return this.publicSettings.XPACK_LICENSE_INFO.corporation

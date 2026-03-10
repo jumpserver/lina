@@ -290,7 +290,8 @@ module.exports = {
           'lang',
           'scoped',
           'pdf',
-          'rbac'
+          'rbac',
+          'jdmc'
         ],
         skipIfMatch: [
           'http://[^s]*',
