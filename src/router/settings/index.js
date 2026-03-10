@@ -1,5 +1,6 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
+import { BASE_URL } from '@/utils/common/index'
 
 const Setting = () => import('@/views/settings/index')
 const globalSubmenu = () => import('@/layout/globalOrg.vue')
@@ -552,6 +553,24 @@ export default {
           }
         }
       ]
+    },
+    {
+      path: '/settings/jdmc',
+      name: 'DeviceManager',
+      meta: {
+        title: i18n.t('DeviceManager'),
+        icon: 'device',
+        permissions: ['settings.view_setting'],
+        hidden: ({ settings }) => !settings['JDMC_ENABLED']
+      },
+      beforeEnter: (_to, _from, next) => {
+        let url = `${BASE_URL}/jdmc/`
+        if (process.env.NODE_ENV !== 'production') {
+          url = url.replace('9528', '9898')
+        }
+        window.open(url, '_blank')
+        next(false)
+      }
     },
     {
       path: '/settings/license',
