@@ -89,7 +89,8 @@ export default {
         columnsExtra: ['action'],
         columns: [
           'name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount',
-          'accounts', 'labels', 'is_valid', 'is_expired', 'from_ticket', 'is_active', 'actions'
+          'accounts', 'labels', 'is_valid', 'is_expired', 'from_ticket', 'is_active', 'actions',
+          'date_created', 'date_start', 'date_expired', 'created_by'
         ],
         columnsShow: {
           min: ['name', 'actions'],
