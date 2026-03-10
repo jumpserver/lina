@@ -2,6 +2,27 @@ const moment = require('moment')
 import { getLangCode } from '@/i18n/utils'
 import store from '@/store'
 
+/**
+ * 根据浏览器时区获取时间格式
+ * @returns {string} 'YYYY-MM-DD' 或 'MM/DD/YYYY'
+ */
+function getDateFormatByTimezone() {
+  try {
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+
+    // 美洲地区使用 MM/DD/YYYY 格式
+    if (timezone && (timezone.startsWith('America/') || timezone.startsWith('US/'))) {
+      return 'MM/DD/YYYY'
+    }
+
+    // 其他地区（包括 Asia、Europe 等）使用 YYYY-MM-DD 格式
+    return 'YYYY-MM-DD'
+  } catch (e) {
+    // 如果浏览器不支持获取时区，fallback 为 YYYY-MM-DD
+    return 'YYYY-MM-DD'
+  }
+}
+
 function getTimeUnits(u) {
   const units = {
     d: '天',
@@ -73,7 +94,8 @@ export function toSafeLocalDateStr(d) {
     return '-'
   }
   const date = safeDate(d)
-  return moment(date).format('L HH:mm:ss')
+  const dateFormat = getDateFormatByTimezone()
+  return moment(date).format(`${dateFormat} HH:mm:ss`)
 }
 
 export function getDaysAgo(days, now) {
