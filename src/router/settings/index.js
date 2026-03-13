@@ -1,6 +1,9 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
 import { BASE_URL } from '@/utils/common/index'
+import store from '@/store'
+
+const getSettings = () => store.state.settings.publicSettings || {}
 
 const Setting = () => import('@/views/settings/index')
 const globalSubmenu = () => import('@/layout/globalOrg.vue')
@@ -576,6 +579,19 @@ export default {
       path: '/settings/license',
       name: 'License',
       component: () => import('@/views/settings/License'),
+      beforeEnter: (_to, _from, next) => {
+        const settings = getSettings()
+        if (settings?.JDMC_ENABLED) {
+          let url = `${BASE_URL}/jdmc/appManagement/appAuth`
+          if (process.env.NODE_ENV !== 'production') {
+            url = url.replace('9528', '9898')
+          }
+          window.open(url, '_blank')
+          next(false)
+        } else {
+          next()
+        }
+      },
       meta: {
         title: i18n.t('License'),
         icon: 'license',

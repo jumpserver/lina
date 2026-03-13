@@ -26,11 +26,28 @@ export default {
       'currentUser'
     ]),
     licenseMsg() {
-      if (this.expireMsg) {
+      if (this.jdmcMsg) {
+        return this.jdmcMsg
+      } else if (this.expireMsg) {
         return this.expireMsg
       } else {
         return this.reachLimitsMsg
       }
+    },
+    jdmcMsg() {
+      if (!this.publicSettings['XPACK_ENABLED'] || !this.$hasPerm('settings.change_license')) {
+        return false
+      }
+      if (this.licenseData.message === 'license_expired') {
+        return this.$t('LicenseExpired')
+      }
+      if (this.licenseData.message === 'license_maintenance_expired') {
+        return this.$t('LicenseMaintenanceExpired')
+      }
+      if (this.licenseData.message === 'license_will_expire') {
+        return this.$t('LicenseWillExpire')
+      }
+      return false
     },
     expireMsg() {
       if (!this.publicSettings['XPACK_ENABLED'] || !this.$hasPerm('settings.change_license')) {

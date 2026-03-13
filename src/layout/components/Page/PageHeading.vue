@@ -2,7 +2,7 @@
   <div>
     <slot name="globalNotification">
       <SqlQueryTip v-if="debug " />
-      <LicenseRelatedTip v-else />
+      <LicenseRelatedTip />
       <PasswordExpireTip />
     </slot>
     <div class="page-heading">
