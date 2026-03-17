@@ -74,7 +74,8 @@ export default {
       if (currentOrg && (currentOrg.autoEnter || currentOrg.is_system)) {
         await this.$store.dispatch('users/setCurrentOrg', this.$store.getters.preOrg)
       }
-      window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${this.$route.fullPath}`
+      const logoutPath = this.$basePath.replace(/ui\/$/, '') + 'core/auth/logout/'
+      window.location.href = `${logoutPath}?next=${this.$route.fullPath}`
     }
   }
 }

@@ -78,9 +78,7 @@ export default {
         selectSyncToRoute: true,
         async: {
           enable: true,
-          url: (process.env.VUE_APP_ENV === 'production')
-            ? (`${this.setting.treeUrl}`)
-            : (`${process.env.VUE_APP_BASE_API}${this.setting.treeUrl}`),
+          url: this.setting.treeUrl,
           autoParam: ['id=key', 'name=n', 'level=lv'],
           type: 'get',
           headers: {

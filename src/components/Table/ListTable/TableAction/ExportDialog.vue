@@ -205,7 +205,7 @@ export default {
       download(url)
     },
     async defaultPerformExport(selectRows, exportOption, q, exportTypeOption) {
-      const url = (process.env.VUE_APP_ENV === 'production') ? (`${this.url}`) : (`${process.env.VUE_APP_BASE_API}${this.url}`)
+      const url = this.url
       const query = Object.assign({}, q)
       if (exportOption === 'selected') {
         const resources = []

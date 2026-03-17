@@ -6,8 +6,9 @@ import { message } from '@/utils/vue/message'
 import orgUtil from '@/utils/jms/org'
 import orgs from '@/api/orgs'
 import { getPropView, isViewHasOrgs } from '@/utils/jms/index'
+import { LOGIN_PATH } from '@/utils/base-url'
 
-const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
+const whiteList = ['/login', LOGIN_PATH] // no redirect whitelist
 const autoEnterOrgs = [
   '00000000-0000-0000-0000-000000000004',
   '00000000-0000-0000-0000-000000000001',

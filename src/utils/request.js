@@ -8,10 +8,11 @@ import { message } from '@/utils/vue/message'
 import store from '@/store'
 import axiosRetry from 'axios-retry'
 import router from '@/router'
+import { SITE_BASE, LOGIN_PATH, LOGOUT_PATH } from '@/utils/base-url'
 
 // create an axios instance
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  baseURL: SITE_BASE, // url = site base + request url, supports sub-directory deployment
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 2 * 60 * 1000 // request timeout
 })
@@ -55,7 +56,7 @@ service.interceptors.request.use(
 
 function goToLogin() {
   setTimeout(() => {
-    window.location = process.env.VUE_APP_LOGIN_PATH + '?next=' + window.location.pathname
+    window.location = LOGIN_PATH + '?next=' + window.location.pathname
   }, 200)
   localStorage.setItem('next', window.location.hash.replace('#', ''))
 }
@@ -97,7 +98,7 @@ function ifBadRequest({ response, error }) {
 }
 
 export function logout() {
-  window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${location.pathname}`
+  window.location.href = `${LOGOUT_PATH}?next=${location.pathname}`
 }
 
 export function flashErrorMsg({ response, error }) {

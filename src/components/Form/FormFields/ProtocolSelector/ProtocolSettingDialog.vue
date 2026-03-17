@@ -103,7 +103,7 @@ export default {
       const name = drawActionMeta.row.platform.name
 
       if (platform) {
-        this.platformDetail = `/ui/#/settings/platforms?id=${platform}&name=${name}`
+        this.platformDetail = `${this.$basePath}#/settings/platforms?id=${platform}&name=${name}`
       } else {
         this.platformDetail = ''
       }

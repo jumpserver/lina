@@ -116,7 +116,6 @@ export default {
         exportOptions: {
           performExport: async (selectRows, exportOption, q, exportTypeOption) => {
             let url = this.tableConfig.url
-            url = (process.env.VUE_APP_ENV === 'production') ? (`${url}`) : (`${process.env.VUE_APP_BASE_API}${url}`)
             const query = { ...q }
             if (exportOption === 'selected') {
               const resources = []

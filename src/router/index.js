@@ -36,6 +36,7 @@ import pamViewRoutes from './pam'
 import reportsViewRoutes from './reports'
 import { getPropView } from '@/utils/jms/index'
 import store from '@/store'
+import { BASE_PATH } from '@/utils/base-url'
 
 Vue.use(Router)
 
@@ -105,7 +106,7 @@ const createRouter = () =>
   new Router({
     // mode: 'history', // require service support
     scrollBehavior: () => ({ y: 0 }),
-    base: '/ui/',
+    base: BASE_PATH,
     routes: constantRoutes
   })
 

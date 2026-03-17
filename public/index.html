@@ -65,17 +65,21 @@
 </noscript>
 <script>
     window.onload = function () {
-        if (location.pathname === '/') {
-            location.pathname = '/ui/'
+        var pathname = window.location.pathname
+        // 动态检测 /ui/ 所在位置，支持任意二级目录前缀
+        var uiIdx = pathname.indexOf('/ui/')
+        var uiBase = uiIdx !== -1 ? pathname.substring(0, uiIdx + 4) : '/ui/'
+
+        if (pathname === '/' || pathname === uiBase.replace(/\/ui\/$/, '/')) {
+            location.pathname = uiBase
         }
-        const pathname = window.location.pathname
         if (pathname.startsWith('/core')) {
             return
         }
         if (pathname.indexOf('/ui') === -1) {
-            window.location.href = window.location.origin + '/ui/#' + pathname
+            window.location.href = window.location.origin + uiBase + '#' + pathname
         }
-        if (pathname.startsWith('/ui/#/chat')) {
+        if (pathname.startsWith(uiBase + '#/chat') || pathname.startsWith('/ui/#/chat')) {
             window.location.href = window.location.origin + pathname
         }
     }

@@ -1,6 +1,7 @@
 import { changeMenuColor, generateColors, mix, setRootColors } from './color'
 import axios from 'axios'
 import formula from './formula.json'
+import { BASE_PATH } from '@/utils/base-url'
 
 let originalStyle = ''
 
@@ -69,8 +70,8 @@ export function changeThemeColors(themeColors) {
   return new Promise((resolve) => {
     if (!originalStyle) {
       axios.all([
-        axios.get('/ui/theme/element-ui.css'),
-        axios.get('/ui/theme/element-extra.css')
+        axios.get(BASE_PATH + 'theme/element-ui.css'),
+        axios.get(BASE_PATH + 'theme/element-extra.css')
       ]).then(
         axios.spread((file, extraFile) => {
           const fileData = file.data

@@ -1,3 +1,8 @@
+import { BASE_PATH } from '@/utils/base-url'
+
+// eslint-disable-next-line camelcase, no-undef
+__webpack_public_path__ = BASE_PATH
+
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 import locale from 'elementLocale'
@@ -77,6 +82,9 @@ Vue.use(VSanitize, {
 
 // 注册全局事件总线
 Vue.prototype.$eventBus = eventBus
+
+// 注册全局基础路径（支持动态二级目录）
+Vue.prototype.$basePath = BASE_PATH
 
 async function initApp() {
   await fetchTranslationsFromAPI()

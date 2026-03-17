@@ -74,7 +74,7 @@ export default {
       const route = resolveRoute({ name: chart.name }, this.$router)
       this.component = route.components.default
       const routePath = route.path
-      this.url = '/ui/#' + routePath
+      this.url = this.$basePath + '#' + routePath
       this.name = chart.name
     }
   }

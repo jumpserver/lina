@@ -93,7 +93,7 @@ module.exports = {
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
   transpileDependencies: [/\/node_modules\/vue-echarts\//, /\/node_modules\/resize-detector\//],
-  publicPath: '/ui/',
+  publicPath: process.env.NODE_ENV === 'production' ? './' : '/ui/',
   outputDir: 'lina',
   assetsDir: 'assets',
   lintOnSave: process.env.NODE_ENV === 'development',

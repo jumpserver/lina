@@ -224,7 +224,8 @@ export default {
         })
     }, 500),
     logout() {
-      window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${this.$route.fullPath}`
+      const logoutPath = this.$basePath.replace(/ui\/$/, '') + 'core/auth/logout/'
+      window.location.href = `${logoutPath}?next=${this.$route.fullPath}`
     },
     sendCode() {
       this.$axios

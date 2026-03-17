@@ -3,7 +3,7 @@
     <div class="error-404-text">
       <h1 class="error-404-title">{{ $t('AjaxError404') }}</h1>
       <p class="error-404-subtitle">{{ $t('CannotAccess') }}</p>
-      <a class="el-button el-button--success error-button" href="/ui/">
+      <a class="el-button el-button--success error-button" :href="$basePath">
         {{ $t('GoHomePage') }}
       </a>
     </div>
