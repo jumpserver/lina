@@ -46,7 +46,7 @@ Vue.prototype.$tr = key => {
 
 export async function fetchTranslationsFromAPI() {
   try {
-    const res = await axios.get(`/api/v1/settings/i18n/lina/?lang=${lang}&flat=0`)
+    const res = await axios.get(`${window.__BASE_PATH__}/api/v1/settings/i18n/lina/?lang=${lang}&flat=0`)
     const data = res.data
     for (const key in data) {
       if (data.hasOwnProperty(key)) {

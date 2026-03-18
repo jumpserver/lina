@@ -46,7 +46,7 @@ export default {
         search: this.search
       }
       const params = new URLSearchParams(data)
-      const url = '/ui/#/terminal/components/loki/tail/?' + params.toString()
+      const url = window.__UI_BASE__ + '#/terminal/components/loki/tail/?' + params.toString()
       openWindow(url)
     }
   }

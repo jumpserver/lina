@@ -7,6 +7,7 @@
 import 'xterm/css/xterm.css'
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
+import { createWsUrl } from '@/utils/common/index'
 const spinChars = ['|', '/', '-', '\\']
 export default {
   name: 'ComponentLogTail',
@@ -53,10 +54,7 @@ export default {
       this.enableWS()
     },
     enableWS() {
-      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
-      const port = document.location.port ? ':' + document.location.port : ''
-      const url = '/ws/component-log-tail/'
-      const wsURL = scheme + '://' + document.location.hostname + port + url
+      const wsURL = createWsUrl('/ws/component-log-tail/')
       this.ws = new WebSocket(wsURL)
       this.ws.onerror = (e) => {
         this.xterm.write(this.wrapperError('Connect websocket server error'))

@@ -186,7 +186,7 @@ export function getUpdateObjURL(url, objId) {
   }
   pathname += `${objId}/`
   urlObj.pathname = pathname
-  return urlObj.href
+  return urlObj.pathname + urlObj.search
 }
 
 export function truncateCenter(s, l) {
@@ -529,4 +529,11 @@ export function randomString(length, includeSymbols = false) {
     .split('')
     .sort(() => 0.5 - Math.random())
     .join('')
+}
+
+export function createWsUrl(path) {
+  const scheme = location.protocol === 'https:' ? 'wss' : 'ws'
+  const port = location.port ? ':' + location.port : ''
+  const base = window.__BASE_PATH__ || ''
+  return scheme + '://' + location.hostname + port + base + path
 }

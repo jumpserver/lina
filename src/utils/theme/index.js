@@ -69,8 +69,8 @@ export function changeThemeColors(themeColors) {
   return new Promise((resolve) => {
     if (!originalStyle) {
       axios.all([
-        axios.get('/ui/theme/element-ui.css'),
-        axios.get('/ui/theme/element-extra.css')
+        axios.get(window.__UI_BASE__ + 'theme/element-ui.css'),
+        axios.get(window.__UI_BASE__ + 'theme/element-extra.css')
       ]).then(
         axios.spread((file, extraFile) => {
           const fileData = file.data

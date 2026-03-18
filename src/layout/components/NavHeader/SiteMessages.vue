@@ -79,6 +79,7 @@
 
 <script>
 import { toSafeLocalDateStr } from '@/utils/common/time'
+import { createWsUrl } from '@/utils/common/index'
 import Dialog from '@/components/Dialog'
 import MarkDown from '@/components/Widgets/MarkDown'
 
@@ -175,10 +176,7 @@ export default {
       this.msgDetailVisible = false
     },
     enablePullMsgCount() {
-      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
-      const port = document.location.port ? ':' + document.location.port : ''
-      const url = '/ws/notifications/site-msg/'
-      const wsURL = scheme + '://' + document.location.hostname + port + url
+      const wsURL = createWsUrl('/ws/notifications/site-msg/')
 
       const ws = new WebSocket(wsURL)
       ws.onopen = (event) => {

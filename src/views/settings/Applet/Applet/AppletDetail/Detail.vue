@@ -34,7 +34,7 @@ export default {
   data() {
     const vm = this
     return {
-      url: `/api/v1/terminal/applets/${this.object.id}`,
+      url: `/api/v1/terminal/applets/${this.object.id}/`,
       detailFields: [
         {
           key: '',

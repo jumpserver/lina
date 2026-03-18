@@ -6,6 +6,7 @@
 import 'xterm/css/xterm.css'
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
+import { createWsUrl } from '@/utils/common/index'
 export default {
   name: 'CeleryTaskLog',
   props: {
@@ -58,12 +59,7 @@ export default {
       this.enableWS()
     },
     enableWS() {
-      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
-      const port = document.location.port ? ':' + document.location.port : ''
-      const url = '/ws/ops/tasks/log/'
-      const wsURL = scheme + '://' + document.location.hostname + port + url
-      // const failOverPort = '8070'
-      // const failOverWsURL = scheme + '://' + document.location.hostname + ':' + failOverPort + url
+      const wsURL = createWsUrl('/ws/ops/tasks/log/')
       this.ws = new WebSocket(wsURL)
       this.ws.onerror = (e) => {
         this.xterm.write(this.wrapperError('Connect websocket server error'))

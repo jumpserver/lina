@@ -50,6 +50,7 @@ import ListTable from '@/components/Table/ListTable'
 import Dialog from '@/components/Dialog/index.vue'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
 import getStatusColumnMeta from '@/components/Table/ListTable/TableAction/const'
+import { createWsUrl } from '@/utils/common/index'
 
 export default {
   name: 'ImportDialog',
@@ -188,11 +189,7 @@ export default {
       }
     },
     enableWS() {
-      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
-      const port = document.location.port ? ':' + document.location.port : ''
-      const url = `/ws/ldap/?category=${this.category}`
-      const wsURL = scheme + '://' + document.location.hostname + port + url
-      this.ws = new WebSocket(wsURL)
+      this.ws = new WebSocket(createWsUrl(`/ws/ldap/?category=${this.category}`))
     },
     SyncUserClick() {
       this.dialogLdapUserSyncStatus = true
