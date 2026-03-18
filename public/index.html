@@ -10,6 +10,20 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title><%= webpackConfig.name %></title>
     <link href="<%= BASE_URL %>theme/element-ui.css" rel="stylesheet">
+    <script>
+        (function () {
+            var pathname = window.location.pathname || '/'
+            var marker = '/ui/'
+            var idx = pathname.indexOf(marker)
+            var prefix = ''
+            if (idx > 0) {
+                prefix = pathname.slice(0, idx)
+            }
+            prefix = prefix.replace(/\/+$/, '')
+            window.__BASE_PATH__ = prefix
+            window.__UI_BASE__ = prefix + marker
+        })()
+    </script>
     <style>
         #loading {
             position: fixed;
@@ -65,17 +79,24 @@
 </noscript>
 <script>
     window.onload = function () {
+        var base = window.__BASE_PATH__
+        var uiBase = window.__UI_BASE__
+
         if (location.pathname === '/') {
-            location.pathname = '/ui/'
-        }
-        const pathname = window.location.pathname
-        if (pathname.startsWith('/core')) {
+            location.pathname = uiBase
             return
         }
-        if (pathname.indexOf('/ui') === -1) {
-            window.location.href = window.location.origin + '/ui/#' + pathname
+
+        var pathname = window.location.pathname
+        if (pathname.startsWith(base + '/core')) {
+            return
         }
-        if (pathname.startsWith('/ui/#/chat')) {
+
+        if (pathname.indexOf(uiBase) !== 0 && pathname.indexOf('/ui') === -1) {
+            window.location.href = window.location.origin + uiBase + '#' + pathname
+            return
+        }
+        if (pathname.indexOf(uiBase + '#/chat') === 0) {
             window.location.href = window.location.origin + pathname
         }
     }

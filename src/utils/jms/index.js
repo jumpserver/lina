@@ -30,7 +30,7 @@ function openOrReuseWindow(
 export function openTaskPage(taskId, taskType, taskUrl) {
   taskType = taskType || 'celery'
   if (!taskUrl) {
-    taskUrl = `/core/ops/${taskType}/task/${taskId}/log/?type=${taskType}`
+    taskUrl = `${window.__BASE_PATH__}/core/ops/${taskType}/task/${taskId}/log/?type=${taskType}`
   }
   openOrReuseWindow(taskUrl)
 }

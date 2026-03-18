@@ -107,9 +107,7 @@
         </div>
         <span v-if="executionInfo.status && summary && !showProgress" style="float: right">
           <span>
-            <span
-              ><b>{{ $tc('Status') }}: </b></span
-            >
+            <span><b>{{ $tc('Status') }}: </b></span>
             <span v-if="executionInfo.status === 'timeout'" class="status_warning">{{
               $tc('Timeout')
             }}</span>
@@ -120,9 +118,7 @@
             </span>
           </span>
           <span>
-            <span
-              ><b>{{ $tc('TimeDelta') }}: </b></span
-            >
+            <span><b>{{ $tc('TimeDelta') }}: </b></span>
             <span>{{ executionInfo.timeCost }}</span>
           </span>
         </span>
@@ -140,7 +136,7 @@
 import Term from '@/components/Widgets/Term'
 import Page from '@/layout/components/Page'
 import { createJob, getTaskDetail, JobUploadFile } from '@/api/ops'
-import { formatFileSize } from '@/utils/common/index'
+import { formatFileSize, createWsUrl } from '@/utils/common/index'
 import store from '@/store'
 import SelectJobAssetDialog from '@/views/ops/Adhoc/components/SelectJobAssetDialog.vue'
 
@@ -250,10 +246,7 @@ export default {
   methods: {
     formatFileSize,
     enableWS() {
-      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
-      const port = document.location.port ? ':' + document.location.port : ''
-      const url = '/ws/ops/tasks/log/'
-      const wsURL = scheme + '://' + document.location.hostname + port + url
+      const wsURL = createWsUrl('/ws/ops/tasks/log/')
       this.ws = new WebSocket(wsURL)
       this.ws.onerror = e => {
         this.xterm.write(this.wrapperError('Connect websocket server error'))

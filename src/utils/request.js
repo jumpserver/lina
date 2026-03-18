@@ -42,6 +42,20 @@ service.interceptors.request.use(
   config => {
     // do something before request is sent
     // NProgress.start()
+    if (typeof config.url === 'string') {
+      const base = window.__BASE_PATH__ || ''
+      if (base) {
+        if (/^https?:\/\//i.test(config.url)) {
+          const urlObj = new URL(config.url)
+          if (!urlObj.pathname.startsWith(base + '/')) {
+            urlObj.pathname = base + urlObj.pathname
+            config.url = urlObj.toString()
+          }
+        } else if (config.url.startsWith('/') && !config.url.startsWith(base + '/')) {
+          config.url = base + config.url
+        }
+      }
+    }
     beforeRequestAddToken(config)
     beforeRequestAddTimezone(config)
     return config
@@ -55,7 +69,9 @@ service.interceptors.request.use(
 
 function goToLogin() {
   setTimeout(() => {
-    window.location = process.env.VUE_APP_LOGIN_PATH + '?next=' + window.location.pathname
+    const base = window.__BASE_PATH__ || ''
+    const next = base ? window.location.pathname.replace(base, '') : window.location.pathname
+    window.location = `${base}${process.env.VUE_APP_LOGIN_PATH}?next=${next}`
   }, 200)
   localStorage.setItem('next', window.location.hash.replace('#', ''))
 }
@@ -97,7 +113,9 @@ function ifBadRequest({ response, error }) {
 }
 
 export function logout() {
-  window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${location.pathname}`
+  const base = window.__BASE_PATH__ || ''
+  const next = base ? location.pathname.replace(base, '') : location.pathname
+  window.location.href = `${base}${process.env.VUE_APP_LOGOUT_PATH}?next=${next}`
 }
 
 export function flashErrorMsg({ response, error }) {
@@ -296,7 +314,8 @@ export function onError() {
   reconnect()
 }
 
-export function onClose() {}
+export function onClose() {
+}
 
 export function closeWebSocket() {
   ws?.close()
