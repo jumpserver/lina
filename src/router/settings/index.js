@@ -601,7 +601,7 @@ export default {
       beforeEnter: (_to, _from, next) => {
         const settings = getSettings()
         if (settings?.JDMC_ENABLED) {
-          goToJDMC('/jdmc/appManagement/appAuth')
+          goToJDMC('/jdmc/app-management/app-auth')
           next(false)
         } else {
           next()
