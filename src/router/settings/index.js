@@ -17,7 +17,7 @@ function goToJDMC(path) {
     disableFlashErrorMsg: true
   }).then(response => {
     const token = response.token
-    let url = `${BASE_URL}/jdmc/auth/tokens?token=${token}&next=${path}`
+    let url = `${BASE_URL}/jdmc/api/v1/auth/tokens?token=${token}&next=${path}`
     if (process.env.NODE_ENV !== 'production') {
       url = url.replace('9528', '9898')
     }
