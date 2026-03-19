@@ -6,6 +6,7 @@ import { message } from '@/utils/vue/message'
 import orgUtil from '@/utils/jms/org'
 import orgs from '@/api/orgs'
 import { getPropView, isViewHasOrgs } from '@/utils/jms/index'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
 const autoEnterOrgs = [

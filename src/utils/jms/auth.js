@@ -1,5 +1,5 @@
-import VueCookie from 'vue-cookie'
 import request from '@/utils/request'
+import { scopedLocalStorage as localStorage, vueCookie as VueCookie } from '@/utils/storage'
 
 const CURRENT_ORG_KEY = 'currentOrg'
 const CURRENT_ROLE_KEY = 'currentRole'

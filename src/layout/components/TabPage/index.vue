@@ -57,6 +57,7 @@
 import Page from '../Page/'
 import Icon from '@/components/Widgets/Icon'
 import { toSentenceCase } from '@/utils/common/index'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 export default {
   name: 'TabPage',

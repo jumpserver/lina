@@ -25,6 +25,7 @@
 
 <script>
 import { download } from '@/utils/common'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 export default {
   name: 'RightAction',

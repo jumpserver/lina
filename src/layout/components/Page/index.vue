@@ -73,6 +73,7 @@ import UserConfirmDialog from '@/components/Apps/UserConfirmDialog/index.vue'
 import TagsView from '../TagsView/index.vue'
 import { toSentenceCase } from '@/utils/common/index'
 import IBox from '@/components/Common/IBox/index.vue'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 export default {
   name: 'Page',

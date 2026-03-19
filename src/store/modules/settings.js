@@ -3,6 +3,7 @@ import { getPublicSettings } from '@/api/settings'
 import { changeElementColor, changeThemeColors } from '@/utils/theme/index'
 import { changeMenuColor } from '@/utils/theme/color'
 import request from '@/utils/request'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 const { showSettings, fixedHeader, sidebarLogo, tagsView } = defaultSettings
 

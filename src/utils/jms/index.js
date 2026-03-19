@@ -1,5 +1,6 @@
 import { constantRoutes } from '@/router'
 import store from '@/store'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 let openedTaskWindow = null // 保存已打开的窗口对象
 

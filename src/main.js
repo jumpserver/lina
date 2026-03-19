@@ -3,6 +3,7 @@ import ElementUI from 'element-ui'
 import locale from 'elementLocale'
 import '@/styles/index.scss' // global css
 import App from './App'
+import { vueCookie as VueCookie } from '@/utils/storage'
 import store from './store'
 import router from './router'
 import i18n, { fetchTranslationsFromAPI } from './i18n/i18n'
@@ -14,8 +15,6 @@ import '@/icons' // icon
 import '@/guards' // permission control
 import '@/directive'
 import '@/filters'
-// cookie
-import VueCookie from 'vue-cookie'
 import VueLogger from 'vuejs-logger'
 import loggerOptions from './utils/logger'
 import ECharts from 'vue-echarts'

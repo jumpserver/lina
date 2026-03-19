@@ -79,6 +79,7 @@ import * as echarts from 'echarts'
 import { mixColors } from '@/views/reports/const'
 import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
 import Echart from '@/components/Dashboard/Echart.vue'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 export default {
   components: {

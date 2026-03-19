@@ -52,6 +52,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import MarkDown from '@/components/Widgets/MarkDown'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 export default {
   name: 'Announcement',

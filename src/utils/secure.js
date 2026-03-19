@@ -46,7 +46,7 @@ const filter = new xss.FilterXSS(options)
 
 import JSEncrypt from 'jsencrypt/bin/jsencrypt.min'
 import CryptoJS from 'crypto-js'
-import VueCookie from 'vue-cookie'
+import { vueCookie as VueCookie } from '@/utils/storage'
 
 export function fillKey(key) {
   const KeyLength = 16

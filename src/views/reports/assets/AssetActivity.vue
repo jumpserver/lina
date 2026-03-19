@@ -85,6 +85,7 @@ import UserAssetActivity from '@/views/reports/console/UserAssetActivity.vue'
 import * as echarts from 'echarts'
 import Echart from '@/components/Dashboard/Echart.vue'
 import { mixColors } from '@/views/reports/const'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 export default {
   components: {
