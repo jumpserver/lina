@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 export default {
   name: 'PhoneInput',

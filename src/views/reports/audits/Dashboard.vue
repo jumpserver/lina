@@ -29,6 +29,7 @@ import CardSummary from './components/CardSummary.vue'
 import RightSummary from './components/RightSummary.vue'
 import BaseReport from '../base/BaseReport.vue'
 import { getRouteUrl } from '@/utils/vue'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 export default {
   components: {

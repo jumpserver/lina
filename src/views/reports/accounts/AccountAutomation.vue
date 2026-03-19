@@ -55,6 +55,7 @@ import * as echarts from 'echarts'
 import Echart from '@/components/Dashboard/Echart.vue'
 import AccountSummary from '@/views/reports/pam/ChangeSecret/AccountSummary.vue'
 import RiskSummary from '@/views/reports/pam/Dashboard/RiskSummary.vue'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 export default {
   components: {

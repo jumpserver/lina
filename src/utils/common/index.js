@@ -1,5 +1,6 @@
 import i18n from '@/i18n/i18n'
 import { message } from '@/utils/vue/message'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 const _ = require('lodash')
 
@@ -426,7 +427,7 @@ export function getDrawerWidth() {
 
 export function getShowCurrentAssetValue(cookie, defaultValue = '0') {
   const stored = typeof window !== 'undefined'
-    ? window.localStorage.getItem('show_current_asset')
+    ? localStorage.getItem('show_current_asset')
     : null
   if (stored === '0' || stored === '1') {
     return stored
@@ -439,7 +440,7 @@ export function getShowCurrentAssetValue(cookie, defaultValue = '0') {
 
 export function setShowCurrentAssetValue(cookie, value) {
   if (typeof window !== 'undefined') {
-    window.localStorage.setItem('show_current_asset', String(value))
+    localStorage.setItem('show_current_asset', String(value))
   }
   if (cookie && typeof cookie.set === 'function') {
     cookie.set('show_current_asset', value, 1)
@@ -457,7 +458,7 @@ export class ObjectLocalStorage {
   }
 
   getObject() {
-    const stored = window.localStorage.getItem(this.key)
+    const stored = localStorage.getItem(this.key)
     let value = {}
     try {
       value = JSON.parse(stored)
@@ -491,7 +492,7 @@ export class ObjectLocalStorage {
     }
     const attrSafe = this.b64(attr)
     obj[attrSafe] = value
-    window.localStorage.setItem(this.key, JSON.stringify(obj))
+    localStorage.setItem(this.key, JSON.stringify(obj))
   }
 }
 

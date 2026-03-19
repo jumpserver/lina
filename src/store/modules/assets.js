@@ -1,5 +1,6 @@
 import { getCategoryTypes as apiGetCategoryTypes } from '@/api/asset'
 import request from '@/utils/request'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 const state = {
   assetCategories: [],

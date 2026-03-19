@@ -1,3 +1,5 @@
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
+
 function getTableConfigFromLocal() {
   const configs = localStorage.getItem('tableConfig')
   try {

@@ -8,6 +8,7 @@ import { message } from '@/utils/vue/message'
 import store from '@/store'
 import axiosRetry from 'axios-retry'
 import router from '@/router'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 // create an axios instance
 const service = axios.create({
