@@ -2,11 +2,34 @@ import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
 import { BASE_URL } from '@/utils/common/index'
 import store from '@/store'
+import request from '@/utils/request'
+import { message } from '@/utils/vue/message'
 
 const getSettings = () => store.state.settings.publicSettings || {}
 
 const Setting = () => import('@/views/settings/index')
 const globalSubmenu = () => import('@/layout/globalOrg.vue')
+
+function goToJDMC(path) {
+  request({
+    url: '/api/v1/common/jdmc/sso-token/',
+    method: 'get',
+    disableFlashErrorMsg: true
+  }).then(response => {
+    const token = response.token
+    let url = `${BASE_URL}/jdmc/auth/tokens?token=${token}&next=${path}`
+    if (process.env.NODE_ENV !== 'production') {
+      url = url.replace('9528', '9898')
+    }
+    window.open(url, '_blank')
+  }).catch(error => {
+    if (error?.response?.status === 403) {
+      message.error(error?.message || i18n.t('BadRoleErrorMsg'))
+      return
+    }
+    message.error(error?.message || i18n.t('BadRequestErrorMsg'))
+  })
+}
 
 export default {
   path: '/settings',
@@ -567,11 +590,7 @@ export default {
         hidden: ({ settings }) => !settings['JDMC_ENABLED']
       },
       beforeEnter: (_to, _from, next) => {
-        let url = `${BASE_URL}/jdmc/`
-        if (process.env.NODE_ENV !== 'production') {
-          url = url.replace('9528', '9898')
-        }
-        window.open(url, '_blank')
+        goToJDMC('/jdmc/')
         next(false)
       }
     },
@@ -582,11 +601,7 @@ export default {
       beforeEnter: (_to, _from, next) => {
         const settings = getSettings()
         if (settings?.JDMC_ENABLED) {
-          let url = `${BASE_URL}/jdmc/appManagement/appAuth`
-          if (process.env.NODE_ENV !== 'production') {
-            url = url.replace('9528', '9898')
-          }
-          window.open(url, '_blank')
+          goToJDMC('/jdmc/appManagement/appAuth')
           next(false)
         } else {
           next()
