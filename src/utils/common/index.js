@@ -4,6 +4,22 @@ import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 const _ = require('lodash')
 
+function trimTrailingPunctuation(message) {
+  return String(message || '').replace(/[;；\s]*[。.]+$/g, '').trim()
+}
+
+export function joinErrorMessages(messages, separator = '; ') {
+  if (!Array.isArray(messages)) return ''
+
+  const normalized = messages
+    .map(item => String(item || '').trim())
+    .filter(Boolean)
+
+  return normalized
+    .map((item, index) => index === normalized.length - 1 ? item : trimTrailingPunctuation(item))
+    .join(separator)
+}
+
 export function getApiPath(that, objectId) {
   let pagePath = that.$route.path
   const pagePathArray = pagePath.split('/')
@@ -142,12 +158,11 @@ export function getErrorResponseMsg(error) {
   } else if (data && data['non_field_errors']) {
     msg = data['non_field_errors'].join(' ')
   } else if (Array.isArray(data)) {
-    msg = data
+    msg = joinErrorMessages(data
       .map((item, i) => {
         return getErrorResponseMsg(item)
       })
-      .filter(i => i)
-      .join('; ')
+      .filter(i => i))
   } else if (typeof data === 'string') {
     return data
   } else if (_.isPlainObject(data)) {
@@ -155,7 +170,7 @@ export function getErrorResponseMsg(error) {
       .map(item => getErrorResponseMsg(item))
       .filter(i => i)
     // 错误信息不要重复提示
-    return [...new Set(msg)].join('; ')
+    return joinErrorMessages([...new Set(msg)])
   } else {
     msg = error.toString()
   }
