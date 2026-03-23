@@ -6,6 +6,7 @@ import request from '@/utils/request'
 import { message } from '@/utils/vue/message'
 
 const getSettings = () => store.state.settings.publicSettings || {}
+const currentUser = () => store.getters.currentUser || {}
 
 const Setting = () => import('@/views/settings/index')
 const globalSubmenu = () => import('@/layout/globalOrg.vue')
@@ -29,6 +30,11 @@ function goToJDMC(path) {
     }
     message.error(error?.message || i18n.t('BadRequestErrorMsg'))
   })
+}
+
+function isSystemAdmin() {
+  const user = currentUser()
+  return user.username === 'admin'
 }
 
 export default {
@@ -590,8 +596,12 @@ export default {
         hidden: ({ settings }) => !settings['JDMC_ENABLED']
       },
       beforeEnter: (_to, _from, next) => {
-        goToJDMC('/jdmc/')
-        next(false)
+        if (isSystemAdmin()) {
+          goToJDMC('/jdmc/')
+          next(false)
+        } else {
+          next()
+        }
       }
     },
     {
@@ -600,7 +610,7 @@ export default {
       component: () => import('@/views/settings/License'),
       beforeEnter: (_to, _from, next) => {
         const settings = getSettings()
-        if (settings?.JDMC_ENABLED) {
+        if (settings?.JDMC_ENABLED && isSystemAdmin()) {
           goToJDMC('/jdmc/app-management/app-auth')
           next(false)
         } else {
@@ -615,4 +625,3 @@ export default {
     }
   ]
 }
-
