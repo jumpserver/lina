@@ -593,15 +593,12 @@ export default {
         title: i18n.t('DeviceManager'),
         icon: 'device',
         permissions: ['settings.view_setting'],
-        hidden: ({ settings }) => (!settings['JDMC_ENABLED'] || !isSystemAdmin()) 
+        // 在开启 JDMC 且是系统管理员时，才显示
+        hidden: ({ settings }) => !(settings['JDMC_ENABLED'] && isSystemAdmin())
       },
       beforeEnter: (_to, _from, next) => {
-        if (isSystemAdmin()) {
-          goToJDMC('/jdmc/')
-          next(false)
-        } else {
-          next()
-        }
+        goToJDMC('/jdmc/')
+        next(false)
       }
     },
     {
@@ -610,7 +607,7 @@ export default {
       component: () => import('@/views/settings/License'),
       beforeEnter: (_to, _from, next) => {
         const settings = getSettings()
-        if (settings?.JDMC_ENABLED && isSystemAdmin()) {
+        if (settings?.JDMC_ENABLED) {
           goToJDMC('/jdmc/app-management/app-auth')
           next(false)
         } else {
@@ -620,7 +617,11 @@ export default {
       meta: {
         title: i18n.t('License'),
         icon: 'license',
-        permissions: ['settings.change_license']
+        permissions: ['settings.change_license'],
+        // 开启 JDMC 但不是 admin 时，隐藏
+        // 开启 JDMC 且是 admin 是显示
+        // 没有开启 JDMC 时，显示
+        hidden: ({ settings }) => settings['JDMC_ENABLED'] && !isSystemAdmin()
       }
     }
   ]
