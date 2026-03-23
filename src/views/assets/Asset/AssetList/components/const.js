@@ -245,7 +245,9 @@ export function getDefaultConfig(vm) {
               name: 'AddAccount',
               title: vm.$t('AddAccount'),
               divided: true,
-              can: ({ row }) => !vm.$store.getters.currentOrgIsRoot,
+              has: ({ row }) =>
+                !vm.$store.getters.currentOrgIsRoot &&
+                vm.$hasPerm('accounts.add_account'),
               callback: ({ row }) => {
                 vm.asset = row
                 vm.showAddDialog = true
@@ -254,7 +256,9 @@ export function getDefaultConfig(vm) {
             {
               name: 'DiscoverAccounts',
               title: vm.$t('AccountDiscover'),
-              can: ({ row }) => !vm.$store.getters.currentOrgIsRoot,
+              has: ({ row }) =>
+                !vm.$store.getters.currentOrgIsRoot &&
+                vm.$hasPerm('accounts.add_gatheraccountsexecution'),
               callback: ({ row }) => {
                 vm.discoveryDialog.asset = row.id
                 setTimeout(() => {
