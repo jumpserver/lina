@@ -593,7 +593,7 @@ export default {
         title: i18n.t('DeviceManager'),
         icon: 'device',
         permissions: ['settings.view_setting'],
-        hidden: ({ settings }) => !settings['JDMC_ENABLED']
+        hidden: ({ settings }) => (!settings['JDMC_ENABLED'] || !isSystemAdmin()) 
       },
       beforeEnter: (_to, _from, next) => {
         if (isSystemAdmin()) {
