@@ -103,7 +103,11 @@ export function logout() {
 export function flashErrorMsg({ response, error }) {
   if (!response.config.disableFlashErrorMsg) {
     const responseErrorMsg = getErrorResponseMsg(error)
-    const msg = responseErrorMsg || error.message
+    let msg = responseErrorMsg || error.message
+
+    if (response.status === 413) {
+      msg = i18n.t('UploadFileTooLarge')
+    }
 
     if (response.status === 403 && msg === 'CSRF Failed: CSRF token missing.') {
       setTimeout(() => {
