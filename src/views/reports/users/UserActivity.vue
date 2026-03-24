@@ -4,67 +4,122 @@
       :title="title"
       :nav="nav"
       :name="name"
+      :show-display-mode-toggle="true"
+      :display-mode.sync="displayMode"
       v-bind="$attrs"
     >
       <div class="charts-grid">
+        <template v-if="displayMode === 'chart'">
+          <div class="chart-container full-width">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('Overview') }}</div>
+              <SummaryCountCard
+                :items="totalData"
+              />
+            </div>
+          </div>
 
-        <div class="chart-container full-width">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('Overview') }}</div>
-            <SummaryCountCard
-              :items="totalData"
+          <ReportToolbar
+            :filter-field="filterField"
+            :filter-label="filterLabel"
+            :filter-select="getFilterSelect()"
+            :filters="currentFilters"
+            :is-custom-report="isCustomReport"
+            class="chart-container full-width report-toolbar-wrap"
+            @filter-change="handleToolbarFilterChange"
+          />
+
+          <div class="chart-container full-width">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('UserLoginTrends') }}</div>
+              <div class="chart">
+                <Echart
+                  ref="loginTrend"
+                  :options="loginTrendOptions"
+                  :autoresize="true"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('LoginSource') }}</div>
+              <div class="chart">
+                <Echart
+                  :options="LoginSourceOptions"
+                  :autoresize="true"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('VisitTimeDistribution') }}</div>
+              <div class="chart">
+                <Echart
+                  :options="VisitTimeOptions"
+                  :autoresize="true"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container full-width">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('LoginMethodStatistics') }}</div>
+              <div class="chart">
+                <Echart
+                  :options="loginMethodOptions"
+                  :autoresize="true"
+                />
+              </div>
+            </div>
+          </div>
+        </template>
+        <div v-else class="full-width">
+          <div v-if="Array.isArray(tableData)" class="report-tables full-width">
+            <div v-if="tableData.length" class="report-table-wrap chart-container full-width">
+              <div class="chart-container-title" v-if="tableData[0].name">
+                <div class="chart-container-title-text">{{ tableData[0].name }}</div>
+              </div>
+              <el-table :data="tableData[0].rows" border>
+                <el-table-column v-for="column in tableData[0].columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+              </el-table>
+            </div>
+            <ReportToolbar
+              v-if="tableData.length"
+              :filter-field="filterField"
+              :filter-label="filterLabel"
+              :filter-select="getFilterSelect()"
+              :filters="currentFilters"
+              :is-custom-report="isCustomReport"
+              class="chart-container full-width report-toolbar-wrap"
+              @filter-change="handleToolbarFilterChange"
             />
-          </div>
-        </div>
-
-        <SwitchDate class="switch-date" :name="name" @change="onChange" />
-
-        <div class="chart-container full-width">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('UserLoginTrends') }}</div>
-            <div class="chart">
-              <Echart
-                ref="loginTrend"
-                :options="loginTrendOptions"
-                :autoresize="true"
-              />
+            <div v-for="(t, idx) in tableData.slice(1)" :key="t.name || idx" class="report-table-wrap chart-container full-width">
+              <div class="chart-container-title" v-if="t.name">
+                <div class="chart-container-title-text">{{ t.name }}</div>
+              </div>
+              <el-table :data="t.rows" border>
+                <el-table-column v-for="column in t.columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+              </el-table>
             </div>
           </div>
-        </div>
-
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('LoginSource') }}</div>
-            <div class="chart">
-              <Echart
-                :options="LoginSourceOptions"
-                :autoresize="true"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('VisitTimeDistribution') }}</div>
-            <div class="chart">
-              <Echart
-                :options="VisitTimeOptions"
-                :autoresize="true"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="chart-container full-width">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('LoginMethodStatistics') }}</div>
-            <div class="chart">
-              <Echart
-                :options="loginMethodOptions"
-                :autoresize="true"
-              />
-            </div>
+          <div v-else>
+            <ReportToolbar
+              :filter-field="filterField"
+              :filter-label="filterLabel"
+              :filter-select="getFilterSelect()"
+              :filters="currentFilters"
+              :is-custom-report="isCustomReport"
+              class="chart-container full-width report-toolbar-wrap"
+              @filter-change="handleToolbarFilterChange"
+            />
+            <el-table :data="tableData.rows" border>
+              <el-table-column v-for="column in tableData.columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+            </el-table>
           </div>
         </div>
       </div>
@@ -74,19 +129,21 @@
 
 <script>
 import BaseReport from '@/views/reports/base/BaseReport.vue'
-import SwitchDate from '@/components/Dashboard/SwitchDate'
 import * as echarts from 'echarts'
 import { mixColors } from '@/views/reports/const'
 import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
 import Echart from '@/components/Dashboard/Echart.vue'
+import reportPageMixin from '@/views/reports/base/reportPageMixin'
+import ReportToolbar from '@/views/reports/base/ReportToolbar.vue'
 
 export default {
   components: {
     SummaryCountCard,
     BaseReport,
-    SwitchDate,
-    Echart
+    Echart,
+    ReportToolbar
   },
+  mixins: [reportPageMixin],
   props: {
     nav: {
       type: Boolean,
@@ -413,7 +470,8 @@ export default {
       localStorage.setItem('reportDays', val)
     },
     async getData() {
-      const data = await this.$axios.get(`/api/v1/reports/reports/users/?days=${this.days}`)
+      const data = await this.fetchReportData('/api/v1/reports/reports/users/')
+      await this.loadTableData('/api/v1/reports/reports/users/')
       this.$set(this.user_stats, 'total', data.user_stats.total)
       this.$set(this.user_stats, 'not_enabled_mfa', data.user_stats.not_enabled_mfa)
       this.$set(this.user_stats, 'valid', data.user_stats.valid)

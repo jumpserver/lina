@@ -4,11 +4,12 @@
       :title="title"
       :nav="nav"
       :name="name"
+      :show-display-mode-toggle="true"
+      :display-mode.sync="displayMode"
       v-bind="$attrs"
     >
       <div class="charts-grid">
-        <SwitchDate class="switch-date" :name="name" @change="onChange" />
-        <br>
+        <template v-if="displayMode === 'chart'">
         <div class="chart-container full-width">
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('Overview') }}</div>
@@ -17,6 +18,16 @@
             />
           </div>
         </div>
+
+        <ReportToolbar
+          :filter-field="filterField"
+          :filter-label="filterLabel"
+          :filter-select="getFilterSelect()"
+          :filters="currentFilters"
+          :is-custom-report="isCustomReport"
+          class="chart-container full-width report-toolbar-wrap"
+          @filter-change="handleToolbarFilterChange"
+        />
 
         <div class="chart-container full-width">
           <div class="chart-container-title">
@@ -43,6 +54,55 @@
             <RankTable :config="config.change_password_top10_change_bys" />
           </div>
         </div>
+        </template>
+        <div v-else class="full-width">
+          <div v-if="Array.isArray(tableData)" class="report-tables full-width">
+            <div v-if="tableData.length" class="report-table-wrap chart-container full-width">
+              <div class="chart-container-title" v-if="tableData[0].name">
+                <div class="chart-container-title-text">{{ tableData[0].name }}</div>
+              </div>
+              <div class="report-card-body">
+                <el-table :data="tableData[0].rows" border>
+                  <el-table-column v-for="column in tableData[0].columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+                </el-table>
+              </div>
+            </div>
+            <ReportToolbar
+              v-if="tableData.length"
+              :filter-field="filterField"
+              :filter-label="filterLabel"
+              :filter-select="getFilterSelect()"
+              :filters="currentFilters"
+              :is-custom-report="isCustomReport"
+              class="chart-container full-width report-toolbar-wrap"
+              @filter-change="handleToolbarFilterChange"
+            />
+            <div v-for="(t, idx) in tableData.slice(1)" :key="t.name || idx" class="report-table-wrap chart-container full-width">
+              <div class="chart-container-title" v-if="t.name">
+                <div class="chart-container-title-text">{{ t.name }}</div>
+              </div>
+              <div class="report-card-body">
+                <el-table :data="t.rows" border>
+                  <el-table-column v-for="column in t.columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+                </el-table>
+              </div>
+            </div>
+          </div>
+          <div v-else>
+            <ReportToolbar
+              :filter-field="filterField"
+              :filter-label="filterLabel"
+              :filter-select="getFilterSelect()"
+              :filters="currentFilters"
+              :is-custom-report="isCustomReport"
+              class="chart-container full-width report-toolbar-wrap"
+              @filter-change="handleToolbarFilterChange"
+            />
+            <el-table :data="tableData.rows" border>
+              <el-table-column v-for="column in tableData.columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+            </el-table>
+          </div>
+        </div>
       </div>
     </BaseReport>
   </div>
@@ -56,6 +116,8 @@ import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
 import { mixColors } from '@/views/reports/const'
 import * as echarts from 'echarts'
 import Echart from '@/components/Dashboard/Echart.vue'
+import reportPageMixin from '@/views/reports/base/reportPageMixin'
+import ReportToolbar from '@/views/reports/base/ReportToolbar.vue'
 
 export default {
   components: {
@@ -63,8 +125,10 @@ export default {
     RankTable,
     BaseReport,
     SwitchDate,
-    Echart
+    Echart,
+    ReportToolbar
   },
+  mixins: [reportPageMixin],
   props: {
     nav: {
       type: Boolean,
@@ -265,7 +329,8 @@ export default {
       this.days = val
     },
     async getData() {
-      const data = await this.$axios.get(`/api/v1/reports/reports/user-change-password/?days=${this.days}`)
+      const data = await this.fetchReportData('/api/v1/reports/reports/user-change-password/')
+      await this.loadTableData('/api/v1/reports/reports/user-change-password/')
       this.$set(this.total_count_change_password, 'total', data.total_count_change_password.total)
       this.$set(this.total_count_change_password, 'user_total', data.total_count_change_password.user_total)
       this.$set(this.total_count_change_password, 'change_by_total', data.total_count_change_password.change_by_total)
