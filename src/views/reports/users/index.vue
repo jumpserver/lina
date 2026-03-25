@@ -7,33 +7,58 @@
           <ul class="folder-list m-b-md" style="padding: 0">
             <li
               v-for="chart in chartItems"
-              :key="chart.name"
-              :class="{ active: selectedChart && selectedChart.name === chart.name }"
+              :key="chart.key"
+              :class="{ active: isActive(chart) }"
             >
-              <a style="display: flex; align-items: center;" @click="handleChangeChart(chart)">
+              <a class="menu-link" @click="handleChangeChart(chart)">
                 <i :class="chart.icon" style="margin-right: 6px;" />
                 {{ chart.title }}
               </a>
+              <ul v-if="chart.children && chart.children.length" class="report-children">
+                <li
+                  v-for="child in chart.children"
+                  :key="child.key"
+                  :class="{ active: isActive(child) }"
+                >
+                  <a class="menu-link child-link" @click="handleChangeChart(child)">
+                    {{ child.title }}
+                  </a>
+                </li>
+              </ul>
             </li>
           </ul>
         </div>
       </el-col>
       <el-col :span="20" style="background-color: #fff" class="chart">
-        <component :is="component" :nav="false" :url="url" />
+        <component :is="component" :key="componentKey" :nav="false" :url="url" />
       </el-col>
     </el-row>
   </Page>
 </template>
 
 <script>
-import UserReport from './UserActivity.vue'
 import Page from '@/layout/components/Page'
 import { resolveRoute } from '@/utils/vue/index'
+import { appendQuery, isSameReportQuery } from '@/views/reports/base/reportUtils'
+
+const TEMPLATE_ROUTE_MAP = {
+  UserLoginReport: {
+    name: 'UserReport',
+    titleKey: 'UserLoginReport',
+    icon: 'fa fa-sign-in',
+    perm: 'rbac.view_userloginreport'
+  },
+  UserChangePasswordReport: {
+    name: 'ChangePassword',
+    titleKey: 'UserChangePasswordReport',
+    icon: 'fa fa-key',
+    perm: 'rbac.view_userchangepasswordreport'
+  }
+}
 
 export default {
   name: 'Users',
   components: {
-    UserReport,
     Page
   },
   data() {
@@ -41,41 +66,102 @@ export default {
       url: '',
       title: this.$t('ReportType'),
       component: '',
-      selectedChart: null,
-      charts: [
-        {
-          title: this.$t('UserLoginReport'),
-          name: 'UserReport',
-          icon: 'fa fa-sign-in',
-          hidden: this.$hasPerm('rbac.view_userloginreport')
-        },
-        {
-          title: this.$t('UserChangePasswordReport'),
-          name: 'ChangePassword',
-          icon: 'fa fa-key',
-          hidden: this.$hasPerm('rbac.view_userchangepasswordreport')
-        }
-      ]
+      componentKey: '',
+      selectedChartKey: '',
+      chartItems: []
     }
   },
-  computed: {
-    chartItems() {
-      return this.charts.filter(chart => chart.hidden)
+  watch: {
+    '$route.fullPath'() {
+      this.syncSelectedFromRoute()
     }
   },
-  created() {
-    if (this.chartItems.length > 0) {
-      this.handleChangeChart(this.chartItems[0])
-    }
+  async created() {
+    await this.loadCatalog()
   },
   methods: {
-    handleChangeChart(chart) {
-      this.selectedChart = chart
-      const route = resolveRoute({ name: chart.name }, this.$router)
+    getBuiltInTemplates() {
+      return Object.entries(TEMPLATE_ROUTE_MAP)
+        .filter(([, item]) => this.$hasPerm(item.perm))
+        .map(([reportType, item]) => ({
+          key: reportType,
+          reportType,
+          title: this.$t(item.titleKey),
+          routeName: item.name,
+          icon: item.icon,
+          isCustom: false,
+          query: {},
+          children: []
+        }))
+    },
+    async loadCatalog() {
+      const templates = this.getBuiltInTemplates()
+      const chartMap = templates.reduce((acc, item) => {
+        acc[item.reportType] = item
+        return acc
+      }, {})
+      try {
+        const data = await this.$axios.get('/api/v1/reports/reports/catalog/')
+        data.forEach((group) => {
+          const target = chartMap[group.tp]
+          if (!target) {
+            return
+          }
+          target.children = (group.children || []).map(child => ({
+            key: `report-${child.id}`,
+            title: child.name,
+            routeName: target.routeName,
+            reportId: child.id,
+            isCustom: true,
+            query: { report_id: child.id }
+          }))
+        })
+      } catch (error) {
+        console.error('load report catalog failed', error)
+      }
+      this.chartItems = templates
+      this.syncSelectedFromRoute()
+    },
+    syncSelectedFromRoute() {
+      const raw = this.$route.query.report_id
+      const reportId = Array.isArray(raw) ? raw[0] : raw
+      let target = null
+      if (reportId) {
+        target = this.chartItems
+          .flatMap(item => item.children || [])
+          .find(item => item.reportId === reportId)
+        if (!target) {
+          this.loadCatalog()
+          return
+        }
+      }
+      if (!target) {
+        target = this.chartItems[0]
+      }
+      if (target) {
+        this.applyChart(target)
+      }
+    },
+    isActive(item) {
+      return this.selectedChartKey === item.key
+    },
+    applyChart(chart) {
+      this.selectedChartKey = chart.key
+      const route = resolveRoute({ name: chart.routeName }, this.$router)
       this.component = route.components.default
-      const routePath = route.path
-      this.url = window.__UI_BASE__ + '#' + routePath
-      this.name = chart.name
+      this.componentKey = `${chart.key}-${this.$route.fullPath}`
+      this.url = appendQuery('/ui/#' + route.path, chart.query || {})
+    },
+    handleChangeChart(chart) {
+      const nextQuery = chart.query || {}
+      if (isSameReportQuery(this.$route.query, nextQuery)) {
+        this.applyChart(chart)
+        return
+      }
+      this.$router.replace({
+        path: this.$route.path,
+        query: nextQuery
+      })
     }
   }
 }
@@ -103,9 +189,26 @@ h5 {
     margin-right: 10px;
   }
 }
+
+.menu-link {
+  display: flex;
+  align-items: center;
+}
+
+.report-children {
+  margin: 6px 0 0 18px;
+  padding: 0;
+}
+
+.child-link {
+  color: #606266;
+  font-size: 12px;
+}
+
 .tag-container {
   border-radius: 5px;
 }
+
 .chart {
   padding: 10px;
 
@@ -115,6 +218,7 @@ h5 {
     height: 100%;
   }
 }
+
 .folder-list li.active {
   color: var(--color-primary);
   background-color: var(--menu-hover);

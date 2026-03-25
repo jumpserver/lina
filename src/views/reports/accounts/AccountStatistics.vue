@@ -4,61 +4,149 @@
       :title="title"
       :nav="nav"
       :name="name"
+      :show-display-mode-toggle="true"
+      :display-mode.sync="displayMode"
       v-bind="$attrs"
     >
       <div class="charts-grid">
-        <div class="chart-container full-width">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('Overview') }}</div>
-            <SummaryCountCard
-              :items="totalData"
-            />
+        <template v-if="displayMode === 'chart'">
+          <div class="chart-container full-width">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('Overview') }}</div>
+              <SummaryCountCard
+                :items="totalData"
+              />
+            </div>
           </div>
-        </div>
 
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('AccountCreationSourceDistribution') }}</div>
-            <div class="chart">
-              <Echart
-                :options="SourceOptions"
-                :autoresize="true"
-              />
+          <ReportToolbar
+            :filter-field="filterField"
+            :filter-label="filterLabel"
+            :filter-select="getFilterSelect()"
+            :filters="currentFilters"
+            :is-custom-report="isCustomReport"
+            :show-date-controls="false"
+            class="chart-container full-width report-toolbar-wrap"
+            @filter-change="handleToolbarFilterChange"
+          />
+
+          <div class="chart-container">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('AccountCreationSourceDistribution') }}</div>
+              <div class="chart">
+                <Echart
+                  :options="SourceOptions"
+                  :autoresize="true"
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('AccountConnectivityStatusDistribution') }}</div>
-            <div class="chart">
-              <Echart
-                :options="ConnectivityOptions"
-                :autoresize="true"
-              />
+          <div class="chart-container">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('AccountConnectivityStatusDistribution') }}</div>
+              <div class="chart">
+                <Echart
+                  :options="ConnectivityOptions"
+                  :autoresize="true"
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <div class="chart-container full-width">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('AccountPasswordChangeTrends') }}</div>
-            <div class="chart">
-              <Echart
-                :options="ChangeSecretOptions"
-                :autoresize="true"
-              />
+          <div class="chart-container full-width">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('AccountPasswordChangeTrends') }}</div>
+              <div class="chart">
+                <Echart
+                  :options="ChangeSecretOptions"
+                  :autoresize="true"
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('RankByNumberOfAssetAccounts') }}</div>
-            <RankTable :config="config.top10_asset_accounts" />
+          <div class="chart-container">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('RankByNumberOfAssetAccounts') }}</div>
+              <RankTable :config="config.top10_asset_accounts" />
+            </div>
           </div>
-        </div>
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('AccountAndPasswordChangeRank') }}</div>
-            <RankTable :config="config.top10_version_accounts" />
+          <div class="chart-container">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('AccountAndPasswordChangeRank') }}</div>
+              <RankTable :config="config.top10_version_accounts" />
+            </div>
+          </div>
+        </template>
+
+        <div v-else class="full-width">
+          <div v-if="Array.isArray(tableData)" class="report-tables full-width">
+            <div v-if="tableData.length" class="report-table-wrap full-width">
+              <el-card class="report-card" shadow="hover">
+                <div v-if="tableData[0].name" class="chart-container-title">
+                  <div class="chart-container-title-text">{{ tableData[0].name }}</div>
+                </div>
+                <div class="report-card-body">
+                  <el-table :data="tableData[0].rows" border>
+                    <el-table-column
+                      v-for="column in tableData[0].columns"
+                      :key="column.key"
+                      :label="column.label"
+                      :prop="column.key"
+                      min-width="140"
+                    />
+                  </el-table>
+                </div>
+              </el-card>
+            </div>
+            <ReportToolbar
+              v-if="tableData.length"
+              :filter-field="filterField"
+              :filter-label="filterLabel"
+              :filter-select="getFilterSelect()"
+              :filters="currentFilters"
+              :is-custom-report="isCustomReport"
+              :show-date-controls="false"
+              class="chart-container full-width report-toolbar-wrap"
+              @filter-change="handleToolbarFilterChange"
+            />
+            <div v-for="(t, idx) in tableData.slice(1)" :key="t.name || idx" class="report-table-wrap full-width">
+              <el-card class="report-card" shadow="hover">
+                <div v-if="t.name" class="chart-container-title">
+                  <div class="chart-container-title-text">{{ t.name }}</div>
+                </div>
+                <div class="report-card-body">
+                  <el-table :data="t.rows" border>
+                    <el-table-column
+                      v-for="column in t.columns"
+                      :key="column.key"
+                      :label="column.label"
+                      :prop="column.key"
+                      min-width="140"
+                    />
+                  </el-table>
+                </div>
+              </el-card>
+            </div>
+          </div>
+          <div v-else>
+            <ReportToolbar
+              :filter-field="filterField"
+              :filter-label="filterLabel"
+              :filter-select="getFilterSelect()"
+              :filters="currentFilters"
+              :is-custom-report="isCustomReport"
+              :show-date-controls="false"
+              class="chart-container full-width report-toolbar-wrap"
+              @filter-change="handleToolbarFilterChange"
+            />
+            <el-table :data="tableData.rows" border>
+              <el-table-column
+                v-for="column in tableData.columns"
+                :key="column.key"
+                :label="column.label"
+                :prop="column.key"
+                min-width="140"
+              />
+            </el-table>
           </div>
         </div>
       </div>
@@ -73,14 +161,18 @@ import * as echarts from 'echarts'
 import Echart from '@/components/Dashboard/Echart.vue'
 import { mixColors } from '@/views/reports/const'
 import RankTable from '@/views/reports/users/components/RankTable.vue'
+import reportPageMixin from '@/views/reports/base/reportPageMixin'
+import ReportToolbar from '@/views/reports/base/ReportToolbar.vue'
 
 export default {
   components: {
     RankTable,
     SummaryCountCard,
     BaseReport,
-    Echart
+    Echart,
+    ReportToolbar
   },
+  mixins: [reportPageMixin],
   props: {
     nav: {
       type: Boolean,
@@ -91,6 +183,7 @@ export default {
     return {
       title: this.$t('AccountStatisticsReport'),
       name: 'AccountStatistics',
+      days: '30',
       account_stats: {
         'total': 0,
         'active': 0,
@@ -364,30 +457,32 @@ export default {
   },
   methods: {
     async getData() {
-      const data = await this.$axios.get('/api/v1/reports/reports/account-statistic/?days=30')
-      this.$set(this.account_stats, 'total', data.account_stats.total)
-      this.$set(this.account_stats, 'active', data.account_stats.active)
-      this.$set(this.account_stats, 'connected', data.account_stats.connected)
-      this.$set(this.account_stats, 'su_from', data.account_stats.su_from)
-      this.$set(this.account_stats, 'date_change_secret', data.account_stats.date_change_secret)
-      this.$set(this.account_stats, 'template_total', data.account_stats.template_total)
-      this.$set(this.change_secret_account_metrics, 'dates_metrics_date', data.change_secret_account_metrics.dates_metrics_date)
-      this.$set(this.change_secret_account_metrics, 'dates_metrics_total', data.change_secret_account_metrics.dates_metrics_total)
+      const data = await this.fetchReportData('/api/v1/reports/reports/account-statistic/')
+      this.$set(this.account_stats, 'total', data.account_stats?.total || 0)
+      this.$set(this.account_stats, 'active', data.account_stats?.active || 0)
+      this.$set(this.account_stats, 'connected', data.account_stats?.connected || 0)
+      this.$set(this.account_stats, 'su_from', data.account_stats?.su_from || 0)
+      this.$set(this.account_stats, 'date_change_secret', data.account_stats?.date_change_secret || 0)
+      this.$set(this.account_stats, 'template_total', data.account_stats?.template_total || 0)
+      this.$set(this.change_secret_account_metrics, 'dates_metrics_date', data.change_secret_account_metrics?.dates_metrics_date || [])
+      this.$set(this.change_secret_account_metrics, 'dates_metrics_total', data.change_secret_account_metrics?.dates_metrics_total || [])
 
-      const accountSourcePie = data.source_pie
+      const accountSourcePie = data.source_pie || []
       if (accountSourcePie.length !== 0) {
         this.$set(this.config, 'source_pie', accountSourcePie)
       }
 
-      const by_connectivity = data.by_connectivity.map(item => {
+      const by_connectivity = (data.by_connectivity || []).map(item => {
         return {
           name: item.label,
           value: item.total
         }
       })
       this.$set(this.config, 'by_connectivity', by_connectivity)
-      this.$set(this.config.top10_asset_accounts, 'data', data.top_assets)
-      this.$set(this.config.top10_version_accounts, 'data', data.top_version_accounts)
+      this.$set(this.config.top10_asset_accounts, 'data', data.top_assets || [])
+      this.$set(this.config.top10_version_accounts, 'data', data.top_version_accounts || [])
+
+      await this.loadTableData('/api/v1/reports/reports/account-statistic/')
     }
   }
 }

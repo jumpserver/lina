@@ -4,42 +4,116 @@
       :title="title"
       :nav="nav"
       :name="name"
+      :show-display-mode-toggle="true"
+      :display-mode.sync="displayMode"
       v-bind="$attrs"
     >
       <div class="charts-grid">
-        <div class="chart-container full-width">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('Overview') }}</div>
-            <SummaryCountCard
-              :items="totalData"
-            />
-          </div>
-        </div>
-
-        <div class="chart-container full-width">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('RiskyAccount') }}</div>
-            <RiskSummary :is-title="false" class="risk-summary" />
-          </div>
-        </div>
-
-        <SwitchDate class="switch-date" :name="name" @change="onChange" />
-        <div class="chart-container full-width">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('TaskExecutionTrends') }}</div>
-            <div class="chart">
-              <Echart
-                :options="ExecutionMetricsOptions"
-                :autoresize="true"
+        <template v-if="displayMode === 'chart'">
+          <div class="chart-container full-width">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('Overview') }}</div>
+              <SummaryCountCard
+                :items="totalData"
               />
             </div>
           </div>
-        </div>
 
-        <div class="chart-container full-width">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('AccountResult') }}</div>
-            <AccountSummary :days="days" :is-title="false" :disable-box="true" class="account-summary" />
+          <ReportToolbar
+            :filter-field="filterField"
+            :filter-label="filterLabel"
+            :filter-select="getFilterSelect()"
+            :filters="currentFilters"
+            :is-custom-report="isCustomReport"
+            :show-date-controls="false"
+            class="chart-container full-width report-toolbar-wrap"
+            @filter-change="handleToolbarFilterChange"
+          />
+
+          <div v-if="!isCustomReport" class="chart-container full-width">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('RiskyAccount') }}</div>
+              <RiskSummary :is-title="false" class="risk-summary" />
+            </div>
+          </div>
+
+          <div class="chart-container full-width">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('TaskExecutionTrends') }}</div>
+              <div class="chart">
+                <Echart
+                  :options="ExecutionMetricsOptions"
+                  :autoresize="true"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container full-width">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('AccountResult') }}</div>
+              <AccountSummary
+                :days="days"
+                :disable-box="true"
+                :is-title="false"
+                :metrics="account_result_metrics"
+                class="account-summary"
+              />
+            </div>
+          </div>
+        </template>
+        <div v-else class="full-width">
+          <div v-if="Array.isArray(tableData)" class="report-tables full-width">
+            <div v-if="tableData.length" class="report-table-wrap full-width">
+              <el-card class="report-card" shadow="hover">
+                <div class="chart-container-title" v-if="tableData[0].name">
+                  <div class="chart-container-title-text">{{ tableData[0].name }}</div>
+                </div>
+                <div class="report-card-body">
+                  <el-table :data="tableData[0].rows" border>
+                    <el-table-column v-for="column in tableData[0].columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+                  </el-table>
+                </div>
+              </el-card>
+            </div>
+            <ReportToolbar
+              v-if="tableData.length"
+              :filter-field="filterField"
+              :filter-label="filterLabel"
+              :filter-select="getFilterSelect()"
+              :filters="currentFilters"
+              :is-custom-report="isCustomReport"
+              :show-date-controls="false"
+              class="chart-container full-width report-toolbar-wrap"
+              @filter-change="handleToolbarFilterChange"
+            />
+            <div v-for="(t, idx) in tableData.slice(1)" :key="t.name || idx" class="report-table-wrap full-width">
+              <el-card class="report-card" shadow="hover">
+                <div class="chart-container-title" v-if="t.name">
+                  <div class="chart-container-title-text">{{ t.name }}</div>
+                </div>
+                <div class="report-card-body">
+                  <el-table :data="t.rows" border>
+                    <el-table-column v-for="column in t.columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+                  </el-table>
+                </div>
+              </el-card>
+            </div>
+          </div>
+          <div v-else>
+            <ReportToolbar
+              :filter-field="filterField"
+              :filter-label="filterLabel"
+              :filter-select="getFilterSelect()"
+              :filters="currentFilters"
+              :is-custom-report="isCustomReport"
+              :show-date-controls="false"
+              class="chart-container full-width report-toolbar-wrap"
+              @filter-change="handleToolbarFilterChange"
+            />
+            <el-table :data="tableData.rows" border>
+              <el-table-column v-for="column in tableData.columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+            </el-table>
           </div>
         </div>
       </div>
@@ -50,22 +124,23 @@
 <script>
 import BaseReport from '../base/BaseReport.vue'
 import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
-import SwitchDate from '@/components/Dashboard/SwitchDate.vue'
 import * as echarts from 'echarts'
 import Echart from '@/components/Dashboard/Echart.vue'
 import AccountSummary from '@/views/reports/pam/ChangeSecret/AccountSummary.vue'
 import RiskSummary from '@/views/reports/pam/Dashboard/RiskSummary.vue'
-import { scopedLocalStorage as localStorage } from '@/utils/storage'
+import reportPageMixin from '@/views/reports/base/reportPageMixin'
+import ReportToolbar from '@/views/reports/base/ReportToolbar.vue'
 
 export default {
   components: {
     RiskSummary,
     AccountSummary,
-    SwitchDate,
     SummaryCountCard,
     BaseReport,
-    Echart
+    Echart,
+    ReportToolbar
   },
+  mixins: [reportPageMixin],
   props: {
     nav: {
       type: Boolean,
@@ -90,6 +165,11 @@ export default {
         legend: [],
         dates_metrics_total: {},
         series: []
+      },
+      account_result_metrics: {
+        dates_metrics_date: [],
+        dates_metrics_total_count_success: [0],
+        dates_metrics_total_count_failed: [0]
       }
     }
   },
@@ -216,7 +296,8 @@ export default {
       this.days = val
     },
     async getData() {
-      const data = await this.$axios.get(`/api/v1/reports/reports/account-automation/?days=${this.days}`)
+      const data = await this.fetchReportData('/api/v1/reports/reports/account-automation/')
+      await this.loadTableData('/api/v1/reports/reports/account-automation/')
       this.$set(this.automation_stats, 'push', data.automation_stats.push)
       this.$set(this.automation_stats, 'check', data.automation_stats.check)
       this.$set(this.automation_stats, 'backup', data.automation_stats.backup)
@@ -245,6 +326,9 @@ export default {
       const keys = Object.keys(data.execution_metrics.data)
       this.$set(this.execution_metrics, 'legend', keys)
       this.$set(this.execution_metrics, 'series', seriesData)
+      this.$set(this.account_result_metrics, 'dates_metrics_date', data.account_result_metrics?.dates_metrics_date || [])
+      this.$set(this.account_result_metrics, 'dates_metrics_total_count_success', data.account_result_metrics?.dates_metrics_total_count_success || [])
+      this.$set(this.account_result_metrics, 'dates_metrics_total_count_failed', data.account_result_metrics?.dates_metrics_total_count_failed || [])
     }
   }
 }
