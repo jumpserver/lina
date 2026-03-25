@@ -300,6 +300,7 @@ export default {
   }
 
   .title-bar {
+    background-color: white;
     width: 100%;
   }
 }

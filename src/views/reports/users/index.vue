@@ -185,6 +185,12 @@ h5 {
   font-size: 13px;
   padding: 5px 0;
 
+  .report-children {
+    li {
+      border-bottom: none;
+    }
+  }
+
   .fa {
     margin-right: 10px;
   }
@@ -219,9 +225,8 @@ h5 {
   }
 }
 
-.folder-list li.active {
+.folder-list li.active .menu-link {
   color: var(--color-primary);
-  background-color: var(--menu-hover);
   border-radius: 4px;
 }
 </style>
