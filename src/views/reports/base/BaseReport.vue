@@ -4,34 +4,53 @@
       <div class="nav-bar-logo">
         <Logo />
       </div>
-      <RightAction :name="name" />
+      <RightAction
+        :name="name"
+        :title="title"
+        :show-operation-dropdown="!isCustomReportPage"
+        :force-default-actions="nav && isCustomReportPage"
+      />
     </div>
     <div class="content">
       <div v-if="!onlyCharts" class="title-bar">
-        <div class="title">
-          {{ title }}
+        <div class="title-left">
+          <div class="title">
+            {{ title }}
 
-          <span class="datetime">
-            [{{ new Date().toLocaleString() }}]
-          </span>
+            <span class="datetime">
+              [{{ new Date().toLocaleString() }}]
+            </span>
 
-          <!-- <span v-if="!nav && url" class="export-btn">
+            <el-button-group v-if="showDisplayModeToggle && !nav" class="display-mode-switch">
+              <el-button :type="displayMode === 'chart' ? 'primary' : 'default'" size="mini" @click="$emit('update:displayMode', 'chart')">
+                {{ $t('ChartReport') }}
+              </el-button>
+              <el-button :type="displayMode === 'table' ? 'primary' : 'default'" size="mini" @click="$emit('update:displayMode', 'table')">
+                {{ $t('TableDetails') }}
+              </el-button>
+            </el-button-group>
+          </div>
+          <div v-if="isDescription" class="description">
+            {{ description }}
+          </div>
+        </div>
+        <div v-if="!nav" class="title-right">
+          <RightAction
+            :name="name"
+            :title="title"
+            :editor-only="true"
+            :show-editor-button="true"
+            :show-custom-actions-in-editor="isCustomReportPage"
+            :show-operation-only-in-editor="true"
+          />
+          <span v-if="url && showReportExportBtn" class="export-btn inline-export-btn">
             <el-button type="text" @click="openNewWindow">
               <i class="fa fa-external-link" style="font-size: 15px;" />
               {{ $t('Export') }}
             </el-button>
-          </span> -->
-        </div>
-        <div v-if="isDescription" class="description">
-          {{ description }}
+          </span>
         </div>
       </div>
-      <span v-if="!nav && url && showReportExportBtn" class="export-btn">
-        <el-button type="text" @click="openNewWindow">
-          <i class="fa fa-external-link" style="font-size: 15px;" />
-          {{ $t('Export') }}
-        </el-button>
-      </span>
       <div class="charts-zone" :class="{ 'charts-zone--no-padding': disableChartsPadding }">
         <slot />
       </div>
@@ -43,6 +62,7 @@
 import Logo from '@/layout/components/NavLeft/Logo'
 import RightAction from './RightAction.vue'
 import store from '@/store'
+import { appendQuery, pickReportQuery } from './reportUtils'
 
 export default {
   components: {
@@ -77,6 +97,14 @@ export default {
     disableChartsPadding: {
       type: Boolean,
       default: false
+    },
+    showDisplayModeToggle: {
+      type: Boolean,
+      default: false
+    },
+    displayMode: {
+      type: String,
+      default: 'chart'
     }
   },
   data() {
@@ -85,6 +113,12 @@ export default {
   computed: {
     isDescription() {
       return this.description && this.description.trim() !== ''
+    },
+    isCustomReportPage() {
+      const query = (this.$route && this.$route.query) || {}
+      const v = query.report_id
+      const reportId = Array.isArray(v) ? v[0] : v
+      return !!reportId
     },
     showReportExportBtn() {
       return store.getters.hasValidLicense
@@ -103,11 +137,11 @@ export default {
           const left = (screen.width - width) / 2
           const top = (screen.height - height) / 2
           const options = `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`
-          let url = this.url
-          if (this.$route.query.days) {
-            const separator = url.includes('?') ? '&' : '?'
-            url = `${url}${separator}days=${this.$route.query.days}`
-          }
+          const query = pickReportQuery(this.$route.query)
+          const url = appendQuery(this.url, {
+            ...query,
+            days: this.$route.query.days
+          })
           this.win = window.open(url, '_blank', options)
         }
         // 确保窗口在最前面
@@ -141,22 +175,50 @@ export default {
 }
 
 .title-bar {
-  display: inline-block;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 8px 16px;
+}
+
+.title-left {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.title-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .title {
-  height: 40px;
+  min-height: 40px;
   background-color: white;
-  line-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
   font-size: 15px;
   font-weight: 500;
   color: #333;
-  padding: 0 16px;
+  padding: 6px 16px;
+  border-radius: 4px;
 
   .datetime {
     font-size: 12px;
     color: #999;
-    margin-left: 16px;
+  }
+}
+
+.display-mode-switch {
+  display: inline-flex;
+  vertical-align: middle;
+
+  ::v-deep .el-button {
+    min-width: 88px;
+    padding: 6px 10px;
   }
 }
 
@@ -171,6 +233,18 @@ export default {
   float: right;
   line-height: 40px;
   margin-right: 23px;
+}
+
+.title-right {
+  .export-btn {
+    float: none;
+    line-height: 1;
+    margin-right: 0;
+  }
+}
+
+.inline-export-btn {
+  margin-right: 0;
 }
 
 .content {
@@ -322,6 +396,40 @@ export default {
       margin-bottom: 8px;
     }
 
+    .report-toolbar-wrap {
+      min-width: 0;
+      max-width: calc(100vw - 60px);
+      padding: 10px 12px;
+
+      .report-toolbar {
+        margin-bottom: 0;
+      }
+    }
+
+    /* Tables rendered as cards */
+    .report-tables {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .report-table-wrap {
+      width: 100%;
+    }
+
+    .report-card {
+      padding: 12px;
+      box-sizing: border-box;
+    }
+
+    .report-card .chart-container-title {
+      margin-bottom: 8px;
+    }
+
+    .report-card-body {
+      padding-top: 6px;
+    }
+
     // @media (max-width: 767px) {
     //   .charts-grid {
     //     grid-template-columns: 1fr;
@@ -333,9 +441,20 @@ export default {
   }
 }
 
+@media (max-width: 1200px) {
+  .title-bar {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .title-right {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
 .charts-zone--no-padding {
   padding: 0 !important;
 }
 
 </style>
-
