@@ -16,32 +16,6 @@
         <el-input v-model="form.name" />
       </el-form-item>
 
-      <el-form-item :label="$t('TimeRange')" prop="range_preset">
-        <el-select v-model="form.range_preset" style="width: 100%">
-          <el-option
-            v-for="option in presetOptions"
-            :key="option.value"
-            :label="option.label"
-            :value="option.value"
-          />
-        </el-select>
-      </el-form-item>
-
-      <el-form-item v-if="form.range_preset === 'custom'" :label="$t('StartAndEnd')" prop="date_range">
-        <el-date-picker
-          v-model="form.date_range"
-          end-placeholder="结束日期"
-          start-placeholder="开始日期"
-          style="width: 100%"
-          type="daterange"
-          value-format="yyyy-MM-dd"
-        />
-      </el-form-item>
-
-      <el-form-item v-if="filterField" :label="filterLabel">
-        <Select2 v-model="form.filter_value" v-bind="filterSelect" />
-      </el-form-item>
-
       <el-form-item :label="$t('ReportPeriodicExecution')">
         <el-switch v-model="form.is_periodic" />
       </el-form-item>
