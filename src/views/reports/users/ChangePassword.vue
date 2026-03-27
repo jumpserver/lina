@@ -8,57 +8,60 @@
       :display-mode.sync="displayMode"
       v-bind="$attrs"
     >
-      <div class="charts-grid">
-        <template v-if="displayMode === 'chart'">
-        <div class="chart-container full-width">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('Overview') }}</div>
-            <SummaryCountCard
-              :items="totalData"
-            />
-          </div>
-        </div>
-
-        <ReportToolbar
-          :filter-field="filterField"
-          :filter-label="filterLabel"
-          :filter-select="getFilterSelect()"
-          :filters="currentFilters"
-          :is-custom-report="isCustomReport"
-          class="chart-container full-width report-toolbar-wrap"
-          @filter-change="handleToolbarFilterChange"
-        />
-
-        <div class="chart-container full-width">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('UserModificationTrends') }}</div>
-            <div class="chart">
-              <Echart
-                :options="UserModificationOptions"
-                :autoresize="true"
+      <template #default>
+        <div v-if="showChart" class="charts-grid">
+          <div class="chart-container full-width">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('Overview') }}</div>
+              <SummaryCountCard
+                :items="totalData"
               />
             </div>
           </div>
-        </div>
 
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('ModifyTheTargetUserTopTank') }}</div>
-            <RankTable :config="config.change_password_top10_users" />
+          <ReportToolbar
+            :filter-field="filterField"
+            :filter-label="filterLabel"
+            :filter-select="getFilterSelect()"
+            :filters="currentFilters"
+            :is-custom-report="isCustomReport"
+            class="chart-container full-width report-toolbar-wrap"
+            @filter-change="handleToolbarFilterChange"
+          />
+
+          <div class="chart-container full-width">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('UserModificationTrends') }}</div>
+              <div class="chart">
+                <Echart
+                  :options="UserModificationOptions"
+                  :autoresize="true"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('ModifyTheTargetUserTopTank') }}</div>
+              <RankTable :config="config.change_password_top10_users" />
+            </div>
+          </div>
+
+          <div class="chart-container">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('TopRankOfOperateUsers') }}</div>
+              <RankTable :config="config.change_password_top10_change_bys" />
+            </div>
           </div>
         </div>
+      </template>
 
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('TopRankOfOperateUsers') }}</div>
-            <RankTable :config="config.change_password_top10_change_bys" />
-          </div>
-        </div>
-        </template>
-        <div v-else class="full-width">
+      <template #table>
+        <div v-if="showTable" class="full-width">
           <div v-if="Array.isArray(tableData)" class="report-tables full-width">
             <div v-if="tableData.length" class="report-table-wrap chart-container full-width">
-              <div class="chart-container-title" v-if="tableData[0].name">
+              <div v-if="tableData[0].name" class="chart-container-title">
                 <div class="chart-container-title-text">{{ tableData[0].name }}</div>
               </div>
               <div class="report-card-body">
@@ -78,7 +81,7 @@
               @filter-change="handleToolbarFilterChange"
             />
             <div v-for="(t, idx) in tableData.slice(1)" :key="t.name || idx" class="report-table-wrap chart-container full-width">
-              <div class="chart-container-title" v-if="t.name">
+              <div v-if="t.name" class="chart-container-title">
                 <div class="chart-container-title-text">{{ t.name }}</div>
               </div>
               <div class="report-card-body">
@@ -103,13 +106,12 @@
             </el-table>
           </div>
         </div>
-      </div>
+      </template>
     </BaseReport>
   </div>
 </template>
 
 <script>
-import SwitchDate from '@/components/Dashboard/SwitchDate'
 import RankTable from './components/RankTable.vue'
 import BaseReport from '../base/BaseReport.vue'
 import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
@@ -124,7 +126,6 @@ export default {
     SummaryCountCard,
     RankTable,
     BaseReport,
-    SwitchDate,
     Echart,
     ReportToolbar
   },

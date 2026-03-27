@@ -9,7 +9,7 @@
       v-bind="$attrs"
     >
       <div class="charts-grid">
-        <template v-if="displayMode === 'chart'">
+        <template v-if="showChart">
           <div class="chart-container full-width">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('Overview') }}</div>
@@ -54,7 +54,7 @@
           </div>
         </template>
 
-        <div v-else class="full-width">
+        <div v-if="showTable" class="full-width">
           <div v-if="Array.isArray(tableData)" class="report-tables full-width">
             <div v-if="tableData.length" class="report-table-wrap full-width">
               <el-card class="report-card" shadow="hover">

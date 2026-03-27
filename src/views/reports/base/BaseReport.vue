@@ -20,15 +20,40 @@
             <span class="datetime">
               [{{ new Date().toLocaleString() }}]
             </span>
-
-            <el-button-group v-if="showDisplayModeToggle && !nav" class="display-mode-switch">
-              <el-button :type="displayMode === 'chart' ? 'primary' : 'default'" size="mini" @click="$emit('update:displayMode', 'chart')">
+          </div>
+          <div v-if="customizeMode" class="report-visibility-panel">
+            <div class="report-visibility-row">
+              <el-checkbox :value="isDisplayModeEnabled('chart')" @change="handleModeToggle('chart', $event)">
                 {{ $t('ChartReport') }}
-              </el-button>
-              <el-button :type="displayMode === 'table' ? 'primary' : 'default'" size="mini" @click="$emit('update:displayMode', 'table')">
+              </el-checkbox>
+              <el-checkbox-group
+                v-if="chartOptions.length && isDisplayModeEnabled('chart')"
+                class="report-visibility-children"
+                size="mini"
+                :value="selectedChartNames"
+                @input="handleChartSelectionChange"
+              >
+                <el-checkbox v-for="item in chartOptions" :key="item.name" :label="item.name">
+                  {{ item.title }}
+                </el-checkbox>
+              </el-checkbox-group>
+            </div>
+            <div class="report-visibility-row">
+              <el-checkbox :value="isDisplayModeEnabled('table')" @change="handleModeToggle('table', $event)">
                 {{ $t('TableDetails') }}
-              </el-button>
-            </el-button-group>
+              </el-checkbox>
+              <el-checkbox-group
+                v-if="tableOptions.length && isDisplayModeEnabled('table')"
+                class="report-visibility-children"
+                size="mini"
+                :value="selectedTableNames"
+                @input="handleTableSelectionChange"
+              >
+                <el-checkbox v-for="item in tableOptions" :key="item.name" :label="item.name">
+                  {{ item.title }}
+                </el-checkbox>
+              </el-checkbox-group>
+            </div>
           </div>
           <div v-if="isDescription" class="description">
             {{ description }}
@@ -39,20 +64,22 @@
             :name="name"
             :title="title"
             :editor-only="true"
-            :show-editor-button="true"
+            :show-editor-button="false"
             :show-custom-actions-in-editor="isCustomReportPage"
             :show-operation-only-in-editor="true"
           />
           <span v-if="url && showReportExportBtn" class="export-btn inline-export-btn">
             <el-button type="text" @click="openNewWindow">
               <i class="fa fa-external-link" style="font-size: 15px;" />
-              {{ $t('Export') }}
+              {{ $t('Customize') }}
             </el-button>
           </span>
         </div>
       </div>
       <div class="charts-zone" :class="{ 'charts-zone--no-padding': disableChartsPadding }">
-        <slot />
+        <slot v-if="isDisplayModeEnabled('chart')" name="default" />
+        <div style="margin-top: 15px" />
+        <slot v-if="isDisplayModeEnabled('table')" name="table" />
       </div>
     </div>
   </div>
@@ -100,15 +127,29 @@ export default {
     },
     showDisplayModeToggle: {
       type: Boolean,
-      default: false
+      default: true
     },
     displayMode: {
-      type: String,
-      default: 'chart'
+      type: [String, Array],
+      default: () => {
+        return ['chart', 'table']
+      }
+    },
+    charts: {
+      type: Array,
+      default: () => []
+    },
+    tables: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
-    return {}
+    return {
+      selectedChartNames: [],
+      selectedTableNames: [],
+      visibilityObserver: null
+    }
   },
   computed: {
     isDescription() {
@@ -120,13 +161,202 @@ export default {
       const reportId = Array.isArray(v) ? v[0] : v
       return !!reportId
     },
+    selectedDisplayModes() {
+      const modes = Array.isArray(this.displayMode)
+        ? this.displayMode
+        : [this.displayMode]
+      const normalized = modes.filter(mode => mode === 'chart' || mode === 'table')
+      return normalized.length ? normalized : ['chart', 'table']
+    },
+    chartOptions() {
+      return this.normalizeOptions(this.charts)
+    },
+    tableOptions() {
+      return this.normalizeOptions(this.tables)
+    },
     showReportExportBtn() {
       return store.getters.hasValidLicense
+    },
+    customizeMode() {
+      const query = (this.$route && this.$route.query) || {}
+      const rawCustomizeMode = query.customize
+      const customizeMode = Array.isArray(rawCustomizeMode) ? rawCustomizeMode[0] : rawCustomizeMode
+      return String(customizeMode) === '1'
+    }
+  },
+  watch: {
+    charts: {
+      immediate: true,
+      handler() {
+        this.syncSelectionsFromRoute()
+      }
+    },
+    tables: {
+      immediate: true,
+      handler() {
+        this.syncSelectionsFromRoute()
+      }
+    },
+    '$route.query': {
+      deep: false,
+      handler() {
+        this.syncSelectionsFromRoute()
+        this.$nextTick(() => this.applyItemVisibility())
+      }
+    }
+  },
+  mounted() {
+    this.setupVisibilityObserver()
+    this.$nextTick(() => this.applyItemVisibility())
+  },
+  beforeDestroy() {
+    if (this.visibilityObserver) {
+      this.visibilityObserver.disconnect()
+      this.visibilityObserver = null
     }
   },
   methods: {
     handleChangeChart(event) {
       // console.log(event)
+    },
+    isDisplayModeEnabled(mode) {
+      return this.selectedDisplayModes.includes(mode)
+    },
+    normalizeOptions(items) {
+      if (!Array.isArray(items)) return []
+      return items
+        .filter(item => item && typeof item.name === 'string' && item.name.trim() !== '')
+        .map(item => ({
+          name: item.name,
+          title: String(item.title || item.name)
+        }))
+    },
+    getDefaultSelectedNames(current, options) {
+      const optionNames = options.map(item => item.name)
+      const selected = Array.isArray(current) ? current.filter(name => optionNames.includes(name)) : []
+      return selected.length ? selected : optionNames
+    },
+    parseQuerySelection(key, options) {
+      const optionNames = options.map(item => item.name)
+      if (!optionNames.length) return []
+      const routeQueryValue = this.$route && this.$route.query ? this.$route.query[key] : undefined
+      const hashQueryValue = this.getHashQueryValue(key)
+      const queryValue = routeQueryValue !== undefined ? routeQueryValue : hashQueryValue
+      if (queryValue === undefined || queryValue === null || queryValue === '') return null
+      const rawList = Array.isArray(queryValue) ? queryValue : String(queryValue).split(',')
+      const selected = Array.from(new Set(rawList.map(v => String(v).trim()).filter(v => optionNames.includes(v))))
+      return selected.length ? selected : optionNames
+    },
+    getHashQueryValue(key) {
+      if (typeof window === 'undefined' || !window.location) return undefined
+      const hash = window.location.hash || ''
+      const hashWithoutPrefix = hash.startsWith('#') ? hash.slice(1) : hash
+      const queryStartIndex = hashWithoutPrefix.indexOf('?')
+      if (queryStartIndex < 0) return undefined
+      const hashQuery = hashWithoutPrefix.slice(queryStartIndex + 1)
+      const params = new URLSearchParams(hashQuery)
+      const values = params.getAll(key)
+      if (!values.length) return undefined
+      return values.length > 1 ? values : values[0]
+    },
+    syncSelectionsFromRoute() {
+      const chartSelectionFromQuery = this.parseQuerySelection('visible_charts', this.chartOptions)
+      const tableSelectionFromQuery = this.parseQuerySelection('visible_tables', this.tableOptions)
+      this.selectedChartNames = chartSelectionFromQuery || this.getDefaultSelectedNames(this.selectedChartNames, this.chartOptions)
+      this.selectedTableNames = tableSelectionFromQuery || this.getDefaultSelectedNames(this.selectedTableNames, this.tableOptions)
+      this.$nextTick(() => this.applyItemVisibility())
+    },
+    updateVisibilityQuery() {
+      if (typeof window === 'undefined' || !window.history || !window.location) return
+      const pathSearch = new URLSearchParams(window.location.search)
+      pathSearch.delete('visible_charts')
+      pathSearch.delete('visible_tables')
+      const pathQueryString = pathSearch.toString()
+      const hash = window.location.hash || '#'
+      const hashWithoutPrefix = hash.startsWith('#') ? hash.slice(1) : hash
+      const queryStartIndex = hashWithoutPrefix.indexOf('?')
+      const hashPath = queryStartIndex >= 0 ? hashWithoutPrefix.slice(0, queryStartIndex) : hashWithoutPrefix
+      const hashSearch = new URLSearchParams(queryStartIndex >= 0 ? hashWithoutPrefix.slice(queryStartIndex + 1) : '')
+      const chartAllSelected = this.chartOptions.length && this.selectedChartNames.length === this.chartOptions.length
+      const tableAllSelected = this.tableOptions.length && this.selectedTableNames.length === this.tableOptions.length
+      if (this.chartOptions.length && !chartAllSelected) hashSearch.set('visible_charts', this.selectedChartNames.join(','))
+      else hashSearch.delete('visible_charts')
+      if (this.tableOptions.length && !tableAllSelected) hashSearch.set('visible_tables', this.selectedTableNames.join(','))
+      else hashSearch.delete('visible_tables')
+      const hashQueryString = hashSearch.toString()
+      const nextHash = `#${hashPath}${hashQueryString ? `?${hashQueryString}` : ''}`
+      const nextUrl = `${window.location.pathname}${pathQueryString ? `?${pathQueryString}` : ''}${nextHash}`
+      window.history.replaceState(window.history.state, '', nextUrl)
+    },
+    handleDisplayModeChange(modes) {
+      const normalized = Array.isArray(modes)
+        ? Array.from(new Set(modes.filter(mode => mode === 'chart' || mode === 'table')))
+        : []
+      if (!normalized.length) {
+        return
+      }
+      this.$emit('update:displayMode', normalized)
+    },
+    handleModeToggle(mode, checked) {
+      const nextModes = [...this.selectedDisplayModes]
+      const idx = nextModes.indexOf(mode)
+      if (checked && idx < 0) nextModes.push(mode)
+      if (!checked && idx >= 0) nextModes.splice(idx, 1)
+      if (!nextModes.length) return
+      this.handleDisplayModeChange(nextModes)
+    },
+    handleChartSelectionChange(names) {
+      const normalized = Array.isArray(names)
+        ? names.filter(name => this.chartOptions.some(item => item.name === name))
+        : []
+      if (!normalized.length && this.chartOptions.length) return
+      this.selectedChartNames = normalized
+      this.updateVisibilityQuery()
+      this.$nextTick(() => this.applyItemVisibility())
+    },
+    handleTableSelectionChange(names) {
+      const normalized = Array.isArray(names)
+        ? names.filter(name => this.tableOptions.some(item => item.name === name))
+        : []
+      if (!normalized.length && this.tableOptions.length) return
+      this.selectedTableNames = normalized
+      this.updateVisibilityQuery()
+      this.$nextTick(() => this.applyItemVisibility())
+    },
+    isItemSelected(type, rawName) {
+      if (!rawName) return true
+      const name = String(rawName).trim()
+      if (!name) return true
+      const options = type === 'chart' ? this.chartOptions : this.tableOptions
+      const selected = type === 'chart' ? this.selectedChartNames : this.selectedTableNames
+      if (!options.length || !selected.length) return true
+      const matchedByName = options.find(item => item.name === name)
+      if (matchedByName) return selected.includes(matchedByName.name)
+      const matchedByTitle = options.find(item => item.title === name)
+      if (matchedByTitle) return selected.includes(matchedByTitle.name)
+      return true
+    },
+    applyItemVisibility() {
+      if (!this.$el) return
+      const nodes = this.$el.querySelectorAll('[data-report-type][data-report-name]')
+      nodes.forEach((node) => {
+        const type = node.getAttribute('data-report-type')
+        const name = node.getAttribute('data-report-name')
+        const isVisible = this.isItemSelected(type, name)
+        node.classList.toggle('report-item-hidden', !isVisible)
+      })
+    },
+    setupVisibilityObserver() {
+      if (typeof MutationObserver === 'undefined' || !this.$el) return
+      const zone = this.$el.querySelector('.charts-zone')
+      if (!zone) return
+      this.visibilityObserver = new MutationObserver(() => {
+        this.applyItemVisibility()
+      })
+      this.visibilityObserver.observe(zone, {
+        childList: true,
+        subtree: true
+      })
     },
     openNewWindow() {
       try {
@@ -140,7 +370,8 @@ export default {
           const query = pickReportQuery(this.$route.query)
           const url = appendQuery(this.url, {
             ...query,
-            days: this.$route.query.days
+            days: this.$route.query.days,
+            customize: 1
           })
           this.win = window.open(url, '_blank', options)
         }
@@ -212,14 +443,22 @@ export default {
   }
 }
 
-.display-mode-switch {
-  display: inline-flex;
-  vertical-align: middle;
+.report-visibility-panel {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 4px;
+  background: #fff;
+}
 
-  ::v-deep .el-button {
-    min-width: 88px;
-    padding: 6px 10px;
-  }
+.report-visibility-row + .report-visibility-row {
+  margin-top: 6px;
+}
+
+.report-visibility-children {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-left: 18px;
 }
 
 .description {
@@ -456,6 +695,10 @@ export default {
 
 .charts-zone--no-padding {
   padding: 0 !important;
+}
+
+.report-item-hidden {
+  display: none !important;
 }
 
 </style>

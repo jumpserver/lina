@@ -1,11 +1,6 @@
 <template>
   <div :class="['nav-bar-right', 'export-bar', { 'editor-only': editorOnly }]">
     <el-button-group>
-      <template v-if="showEditorButton && canSaveReport">
-        <el-button class="export-btn" type="text" :icon="isCustomReport ? 'el-icon-edit' : 'el-icon-plus'" @click="openEditor">
-          {{ isCustomReport ? $t('Edit') : $t('Save') }}
-        </el-button>
-      </template>
       <template v-if="showCustomActions">
         <el-dropdown v-if="showOperationDropdown" class="export-btn" @command="handleCommand">
           <span class="el-dropdown-link">
@@ -18,15 +13,18 @@
           </el-dropdown-menu>
         </el-dropdown>
         <template v-if="!showOperationOnlyInEditor || !editorOnly">
-        <el-button class="export-btn" type="text" icon="el-icon-download" @click="showExportDialog = true">
-          {{ $t('Export') }}
-        </el-button>
-        <el-button class="export-btn" type="text" icon="el-icon-printer" @click="printReport">
-          {{ $t('Print') }}
-        </el-button>
+          <el-button class="export-btn" type="text" icon="el-icon-download" @click="showExportDialog = true">
+            {{ $t('Export') }}
+          </el-button>
+          <el-button class="export-btn" type="text" icon="el-icon-printer" @click="printReport">
+            {{ $t('Print') }}
+          </el-button>
         </template>
       </template>
       <template v-if="!editorOnly && (!isCustomReport || forceDefaultActions)">
+        <el-button class="export-btn" type="text" :icon="isCustomReport ? 'el-icon-edit' : 'el-icon-plus'" @click="openEditor">
+          {{ $t('Save') }}
+        </el-button>
         <el-button
           :loading="exportLoading"
           :disabled="exportLoading"

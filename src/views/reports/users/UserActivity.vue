@@ -4,13 +4,13 @@
       :title="title"
       :nav="nav"
       :name="name"
-      :show-display-mode-toggle="true"
-      :display-mode.sync="displayMode"
+      :charts="charts"
+      :tables="tables"
       v-bind="$attrs"
     >
-      <div class="charts-grid">
-        <template v-if="displayMode === 'chart'">
-          <div class="chart-container full-width">
+      <template #default>
+        <div class="charts-grid">
+          <div class="chart-container full-width" data-report-type="chart" data-report-name="UserLoginTrends">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('Overview') }}</div>
               <SummaryCountCard
@@ -29,7 +29,7 @@
             @filter-change="handleToolbarFilterChange"
           />
 
-          <div class="chart-container full-width">
+          <div class="chart-container full-width" data-report-type="chart" data-report-name="UserLoginTrends">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('UserLoginTrends') }}</div>
               <div class="chart">
@@ -42,7 +42,7 @@
             </div>
           </div>
 
-          <div class="chart-container">
+          <div class="chart-container" data-report-type="chart" data-report-name="LoginSource">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('LoginSource') }}</div>
               <div class="chart">
@@ -54,7 +54,7 @@
             </div>
           </div>
 
-          <div class="chart-container">
+          <div class="chart-container" data-report-type="chart" data-report-name="VisitTimeDistribution">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('VisitTimeDistribution') }}</div>
               <div class="chart">
@@ -66,7 +66,7 @@
             </div>
           </div>
 
-          <div class="chart-container full-width">
+          <div class="chart-container full-width" data-report-type="chart" data-report-name="LoginMethodStatistics">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('LoginMethodStatistics') }}</div>
               <div class="chart">
@@ -77,11 +77,18 @@
               </div>
             </div>
           </div>
-        </template>
-        <div v-else class="full-width">
+        </div>
+      </template>
+      <template #table>
+        <div class="full-width">
           <div v-if="Array.isArray(tableData)" class="report-tables full-width">
-            <div v-if="tableData.length" class="report-table-wrap chart-container full-width">
-              <div class="chart-container-title" v-if="tableData[0].name">
+            <div
+              v-if="tableData.length"
+              class="report-table-wrap chart-container full-width"
+              data-report-type="table"
+              :data-report-name="tableData[0].name"
+            >
+              <div v-if="tableData[0].name" class="chart-container-title">
                 <div class="chart-container-title-text">{{ tableData[0].name }}</div>
               </div>
               <el-table :data="tableData[0].rows" border>
@@ -98,8 +105,14 @@
               class="chart-container full-width report-toolbar-wrap"
               @filter-change="handleToolbarFilterChange"
             />
-            <div v-for="(t, idx) in tableData.slice(1)" :key="t.name || idx" class="report-table-wrap chart-container full-width">
-              <div class="chart-container-title" v-if="t.name">
+            <div
+              v-for="(t, idx) in tableData.slice(1)"
+              :key="t.name || idx"
+              class="report-table-wrap chart-container full-width"
+              data-report-type="table"
+              :data-report-name="t.name"
+            >
+              <div v-if="t.name" class="chart-container-title">
                 <div class="chart-container-title-text">{{ t.name }}</div>
               </div>
               <el-table :data="t.rows" border>
@@ -122,7 +135,7 @@
             </el-table>
           </div>
         </div>
-      </div>
+      </template>
     </BaseReport>
   </div>
 </template>
@@ -154,6 +167,47 @@ export default {
     return {
       title: this.$t('UserLoginReport'),
       name: 'UserLoginReport',
+      charts: [
+        {
+          name: 'UserLoginTrends',
+          title: this.$t('UserLoginTrends')
+        },
+        {
+          name: 'LoginSource',
+          title: this.$t('LoginSource')
+        },
+        {
+          name: 'VisitTimeDistribution',
+          title: this.$t('VisitTimeDistribution')
+        },
+        {
+          name: 'LoginMethodStatistics',
+          title: this.$t('LoginMethodStatistics')
+        }
+      ],
+      tables: [
+        {
+          name: 'Overview',
+          title: this.$t('Overview')
+        },
+        {
+          name: 'LoginSource',
+          title: this.$t('LoginSource')
+        },
+        {
+          name: 'UserLoginTrends',
+          title: this.$t('UserLoginTrends')
+        },
+        {
+          name: 'LoginMethodStatistics',
+          title: this.$t('LoginMethodStatistics')
+        },
+        {
+          name: 'VisitTimeDistribution',
+          title: this.$t('VisitTimeDistribution')
+        }
+
+      ],
       days: localStorage.getItem(this.name) || '7',
       user_stats: {
         total: 0,

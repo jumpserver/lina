@@ -9,7 +9,7 @@
       v-bind="$attrs"
     >
       <div class="charts-grid">
-        <template v-if="displayMode === 'chart'">
+        <template v-if="showChart">
           <div class="chart-container full-width">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('Overview') }}</div>
@@ -62,11 +62,11 @@
             </div>
           </div>
         </template>
-        <div v-else class="full-width">
+        <div v-if="showTable" class="full-width">
           <div v-if="Array.isArray(tableData)" class="report-tables full-width">
             <div v-if="tableData.length" class="report-table-wrap full-width">
               <el-card class="report-card" shadow="hover">
-                <div class="chart-container-title" v-if="tableData[0].name">
+                <div v-if="tableData[0].name" class="chart-container-title">
                   <div class="chart-container-title-text">{{ tableData[0].name }}</div>
                 </div>
                 <div class="report-card-body">
@@ -89,7 +89,7 @@
             />
             <div v-for="(t, idx) in tableData.slice(1)" :key="t.name || idx" class="report-table-wrap full-width">
               <el-card class="report-card" shadow="hover">
-                <div class="chart-container-title" v-if="t.name">
+                <div v-if="t.name" class="chart-container-title">
                   <div class="chart-container-title-text">{{ t.name }}</div>
                 </div>
                 <div class="report-card-body">

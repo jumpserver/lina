@@ -71,7 +71,7 @@ export default {
   data() {
     return {
       reportDetail: null,
-      displayMode: 'chart',
+      displayMode: ['chart', 'table'],
       // now supports multiple tables: array of { name, columns, rows }
       tableData: []
     }
@@ -85,6 +85,17 @@ export default {
     }
   },
   computed: {
+    displayModes() {
+      const modes = Array.isArray(this.displayMode) ? this.displayMode : [this.displayMode]
+      const normalized = modes.filter(mode => mode === 'chart' || mode === 'table')
+      return normalized.length ? normalized : ['chart', 'table']
+    },
+    showChart() {
+      return this.displayModes.includes('chart')
+    },
+    showTable() {
+      return this.displayModes.includes('table')
+    },
     reportId() {
       const v = this.$route.query.report_id
       if (Array.isArray(v)) return v[0]
