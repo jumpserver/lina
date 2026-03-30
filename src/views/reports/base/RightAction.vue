@@ -8,8 +8,8 @@
             <i class="el-icon-arrow-down el-icon--right" />
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="history">{{ $t('ExecutionHistory') }}</el-dropdown-item>
-            <el-dropdown-item v-if="canDeleteReport" command="delete" divided>{{ $t('Delete') }}</el-dropdown-item>
+            <el-dropdown-item v-if="canSaveReport" command="edit">{{ $t('Edit') }}</el-dropdown-item>
+            <el-dropdown-item v-if="canDeleteReport" :divided="canSaveReport" command="delete">{{ $t('Delete') }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <template v-if="!showOperationOnlyInEditor || !editorOnly">
@@ -45,10 +45,14 @@
     </el-button-group>
 
     <CreateReportDialog
+      :chart-options="chartOptions"
       :default-days="getDaysParam()"
+      :default-visible-charts="selectedChartNames"
+      :default-visible-tables="selectedTableNames"
       :report="editingReport"
       :report-title="title"
       :report-type="name"
+      :table-options="tableOptions"
       :visible.sync="showCreateDialog"
       @created="handleCreated"
     />
@@ -58,20 +62,14 @@
       :report-query="$route.query"
       :visible.sync="showExportDialog"
     />
-    <ReportExecutionDrawer
-      :report-id="reportId"
-      :report-name="title"
-      :visible.sync="showExecutionDrawer"
-    />
   </div>
 </template>
 
 <script>
 import { download } from '@/utils/common'
 import CreateReportDialog from './CreateReportDialog.vue'
-import ReportExecutionDrawer from './ReportExecutionDrawer.vue'
 import ReportExportDialog from './ReportExportDialog.vue'
-import { appendQuery, pickReportQuery } from './reportUtils'
+import { appendQuery, pickReportQuery, buildCustomReportRouteQuery, normalizeReportDays, fetchReportDetailShared } from './reportUtils'
 
 const REPORT_ACTION_PERM_MAP = {
   UserLoginReport: {
@@ -104,7 +102,6 @@ export default {
   name: 'RightAction',
   components: {
     CreateReportDialog,
-    ReportExecutionDrawer,
     ReportExportDialog
   },
   props: {
@@ -139,6 +136,22 @@ export default {
     forceDefaultActions: {
       type: Boolean,
       default: false
+    },
+    chartOptions: {
+      type: Array,
+      default: () => []
+    },
+    tableOptions: {
+      type: Array,
+      default: () => []
+    },
+    selectedChartNames: {
+      type: Array,
+      default: () => []
+    },
+    selectedTableNames: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -146,7 +159,6 @@ export default {
       exportLoading: false,
       reportData: null,
       showCreateDialog: false,
-      showExecutionDrawer: false,
       showExportDialog: false
     }
   },
@@ -187,43 +199,26 @@ export default {
     },
     editingReport() {
       const query = this.$route.query || {}
-      const filters = {}
-      if (query.range_preset) {
-        filters.range_preset = query.range_preset
-      }
-      if (query.start) {
-        filters.start = query.start
-      }
-      if (query.end) {
-        filters.end = query.end
-      }
-      const key = this.filterField
-      const filterValue = key ? query[key] : ''
-      if (key && filterValue) {
-        filters[key] = filterValue
-      }
+      const reportDays = parseInt(normalizeReportDays(query.days || this.reportData?.days || this.getDaysParam(), '7'), 10)
       if (this.isCustomReport) {
         return {
           ...(this.reportData || {}),
+          days: reportDays,
           filters: {
             ...(this.reportData?.filters || {}),
-            ...filters
+            // 使用当前页面的勾选状态，而不是已保存的状态
+            visible_charts: this.selectedChartNames,
+            visible_tables: this.selectedTableNames
           }
         }
       }
       return {
-        filters
+        days: reportDays,
+        filters: {
+          visible_charts: this.selectedChartNames,
+          visible_tables: this.selectedTableNames
+        }
       }
-    },
-    filterField() {
-      return {
-        UserLoginReport: 'user_id',
-        UserChangePasswordReport: 'user_id',
-        AssetStatistics: 'asset_id',
-        AssetReport: 'asset_id',
-        AccountStatistics: 'account',
-        AccountAutomationReport: 'account'
-      }[this.name] || ''
     }
   },
   watch: {
@@ -240,7 +235,7 @@ export default {
   },
   methods: {
     async loadReportDetail() {
-      this.reportData = await this.$axios.get(`/api/v1/reports/reports/${this.reportId}/`)
+      this.reportData = await fetchReportDetailShared(this.$axios, this.reportId)
     },
     checkName() {
       if (!this.name) {
@@ -250,7 +245,7 @@ export default {
       return true
     },
     getDaysParam() {
-      return this.$route.query.days || localStorage.getItem(this.name) || '7'
+      return normalizeReportDays(this.$route.query.days || localStorage.getItem(this.name), '7')
     },
     exportPdf() {
       if (!this.checkName()) {
@@ -302,8 +297,8 @@ export default {
       this.showCreateDialog = true
     },
     handleCommand(command) {
-      if (command === 'history') {
-        this.showExecutionDrawer = true
+      if (command === 'edit' && this.canSaveReport) {
+        this.openEditor()
         return
       }
       if (command === 'delete' && this.canDeleteReport) {
@@ -320,11 +315,15 @@ export default {
       this.$router.replace({ path: this.$route.path, query: {} })
     },
     handleCreated(report) {
+      const query = {
+        ...buildCustomReportRouteQuery(report)
+      }
+      if (this.$route.query.chart_key) {
+        query.chart_key = this.$route.query.chart_key
+      }
       this.$router.push({
         path: this.$route.path,
-        query: {
-          report_id: report.id
-        }
+        query
       })
     }
   }

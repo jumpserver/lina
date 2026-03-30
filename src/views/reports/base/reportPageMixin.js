@@ -1,13 +1,4 @@
-import { appendQuery, pickReportQuery } from './reportUtils'
-
-const FILTER_FIELD_MAP = {
-  UserLoginReport: 'user_id',
-  UserChangePasswordReport: 'user_id',
-  AssetReport: 'asset_id',
-  AssetStatistics: 'asset_id',
-  AccountStatistics: 'account',
-  AccountAutomationReport: 'account'
-}
+import { appendQuery, normalizeReportDays, normalizeVisibleFilterList, pickReportQuery, reportDebugLog, fetchReportDetailShared } from './reportUtils'
 
 const TABLE_LABEL_KEY_MAP = {
   user_stats: 'Overview',
@@ -18,6 +9,9 @@ const TABLE_LABEL_KEY_MAP = {
   user_login_time_metrics: 'VisitTimeDistribution',
   session_stats: 'Overview',
   asset_login_log_metrics: 'AssetLoginTrends',
+  asset_login_by_type: 'OperatingSystemDistributionOfLoginAssets',
+  asset_login_by_from: 'DistributionOfAssetLoginMethods',
+  asset_login_by_protocol: 'RemoteLoginProtocolUsageDistribution',
   user_asset_activity_metrics: 'UserAssetActivity',
   asset_stats: 'Overview',
   assets_by_type_category: 'AssetTypeDistribution',
@@ -73,16 +67,43 @@ export default {
       reportDetail: null,
       displayMode: ['chart', 'table'],
       // now supports multiple tables: array of { name, columns, rows }
-      tableData: []
+      tableData: [],
+      reportFetchInFlight: Object.create(null),
+      reportFetchCache: Object.create(null),
+      lastGetDataRouteKey: '',
+      lastFetchedReportId: ''
     }
   },
   watch: {
     '$route.fullPath'() {
+      const routeKey = this.buildGetDataRouteKey(this.$route.query)
+      if (routeKey === this.lastGetDataRouteKey) {
+        return
+      }
+      // reportId 变了说明切换到了不同的报告，父组件会改变 :key 导致本组件被销毁并重建
+      // 新组件的 mounted() 会负责初始化加载，此处不重复 getData
+      if (this.reportId !== this.lastFetchedReportId) {
+        this.lastGetDataRouteKey = routeKey
+        this.lastFetchedReportId = this.reportId
+        return
+      }
+      this.lastGetDataRouteKey = routeKey
+      this.lastFetchedReportId = this.reportId
+      reportDebugLog('mixin.route.fullPath', {
+        name: this.name,
+        routePath: this.$route.path,
+        query: this.$route.query
+      })
       this.reportDetail = null
       if (typeof this.getData === 'function') {
         this.getData()
       }
     }
+  },
+  created() {
+    // 预填当前路由 key，防止 mounted() 调用 getData 后，route watcher 对同一 key 重复触发
+    this.lastGetDataRouteKey = this.buildGetDataRouteKey(this.$route.query)
+    this.lastFetchedReportId = this.reportId
   },
   computed: {
     displayModes() {
@@ -107,27 +128,48 @@ export default {
     reportTitle() {
       return this.reportDetail?.name || this.title
     },
-    filterField() {
-      return FILTER_FIELD_MAP[this.name] || ''
-    },
-    filterLabel() {
-      return {
-        user_id: this.$t('UserFilterLabel'),
-        asset_id: this.$t('AssetFilterLabel'),
-        account: this.$t('AccountFilterLabel')
-      }[this.filterField] || ''
-    },
     currentFilters() {
-      const reportFilters = this.reportDetail?.filters || {}
+      const reportDays = this.reportDetail?.days
+      const fallbackDays = this.days || reportDays || 7
       return {
-        range_preset: this.$route.query.range_preset || reportFilters.range_preset || '',
-        start: this.$route.query.start || reportFilters.start || '',
-        end: this.$route.query.end || reportFilters.end || '',
-        filter_value: this.filterField ? (this.$route.query[this.filterField] || reportFilters[this.filterField] || '') : ''
+        days: normalizeReportDays(this.$route.query.days || fallbackDays, '7')
       }
     }
   },
   methods: {
+    buildGetDataRouteKey(query = {}) {
+      return JSON.stringify({
+        path: this.$route.path,
+        report_id: query.report_id || '',
+        days: query.days || '',
+        chart_key: query.chart_key || '',
+        visible_charts: query.visible_charts || '',
+        visible_tables: query.visible_tables || ''
+      })
+    },
+    async fetchWithDedupe(url) {
+      const now = Date.now()
+      const cached = this.reportFetchCache[url]
+      // Reuse recent same-url result to absorb rapid duplicate triggers.
+      if (cached && (now - cached.ts) < 600) {
+        reportDebugLog('mixin.fetch.cacheHit', { name: this.name, requestUrl: url })
+        return cached.data
+      }
+      if (this.reportFetchInFlight[url]) {
+        reportDebugLog('mixin.fetch.inFlightJoin', { name: this.name, requestUrl: url })
+        return this.reportFetchInFlight[url]
+      }
+      const request = this.$axios.get(url)
+        .then((res) => {
+          this.reportFetchCache[url] = { ts: Date.now(), data: res }
+          return res
+        })
+        .finally(() => {
+          delete this.reportFetchInFlight[url]
+        })
+      this.reportFetchInFlight[url] = request
+      return request
+    },
     async ensureReportDetail(reportId = this.reportId) {
       if (!reportId) {
         return null
@@ -135,7 +177,7 @@ export default {
       if (this.reportDetail?.id === reportId) {
         return this.reportDetail
       }
-      const data = await this.$axios.get(`/api/v1/reports/reports/${reportId}/`)
+      const data = await fetchReportDetailShared(this.$axios, reportId)
       if (this.reportId !== reportId) {
         return data
       }
@@ -147,7 +189,7 @@ export default {
     },
     buildTemplateUrl(baseUrl) {
       const query = pickReportQuery(this.$route.query)
-      if (!query.start && !query.end && !query.range_preset && this.days) {
+      if (!query.days && this.days) {
         query.days = this.days
       }
       return appendQuery(baseUrl, query)
@@ -158,11 +200,32 @@ export default {
       if (reportId) {
         await this.ensureReportDetail(reportId)
         if (this.reportId !== reportId) {
+          reportDebugLog('mixin.fetch.retry', {
+            name: this.name,
+            fromReportId: reportId,
+            toReportId: this.reportId,
+            routePath: this.$route.path,
+            query: this.$route.query
+          })
           return this.fetchReportData(baseUrl)
         }
-        return this.$axios.get(appendQuery(`/api/v1/reports/reports/${reportId}/data/`, query))
+        const requestUrl = appendQuery(`/api/v1/reports/reports/${reportId}/data/`, query)
+        reportDebugLog('mixin.fetch.custom', {
+          name: this.name,
+          requestUrl,
+          routePath: this.$route.path,
+          query: this.$route.query
+        })
+        return this.fetchWithDedupe(requestUrl)
       }
-      return this.$axios.get(this.buildTemplateUrl(baseUrl))
+      const requestUrl = this.buildTemplateUrl(baseUrl)
+      reportDebugLog('mixin.fetch.template', {
+        name: this.name,
+        requestUrl,
+        routePath: this.$route.path,
+        query: this.$route.query
+      })
+      return this.fetchWithDedupe(requestUrl)
     },
     async loadTableData(baseUrl) {
       const buildLabel = (k) => {
@@ -294,61 +357,32 @@ export default {
         return
       }
     },
-    handleToolbarFilterChange({ range_preset, start, end, filter_value }) {
+    handleToolbarFilterChange({ days }) {
       const query = {}
+      if (this.$route.query.chart_key) {
+        query.chart_key = this.$route.query.chart_key
+      }
       if (this.reportId) {
         query.report_id = this.reportId
       }
-      if (range_preset && range_preset !== 'custom') {
-        query.range_preset = range_preset
+      if (days) {
+        query.days = normalizeReportDays(days, '7')
       }
-      if (range_preset === 'custom') {
-        query.start = start
-        query.end = end
+      const visibleCharts = normalizeVisibleFilterList(this.$route.query.visible_charts || this.reportDetail?.filters?.visible_charts)
+      const visibleTables = normalizeVisibleFilterList(this.$route.query.visible_tables || this.reportDetail?.filters?.visible_tables)
+      if (visibleCharts.length) {
+        query.visible_charts = visibleCharts.join(',')
       }
-      if (this.filterField && filter_value) {
-        query[this.filterField] = filter_value
+      if (visibleTables.length) {
+        query.visible_tables = visibleTables.join(',')
+      }
+      if (this.days !== undefined && days) {
+        this.days = normalizeReportDays(days, '7')
+      }
+      if (this.buildGetDataRouteKey(this.$route.query) === this.buildGetDataRouteKey(query)) {
+        return
       }
       this.$router.replace({ path: this.$route.path, query })
     },
-    getFilterSelect() {
-      if (this.filterField === 'user_id') {
-        return {
-          multiple: false,
-          ajax: {
-            url: '/api/v1/users/users/suggestions/',
-            transformOption: (item) => ({ label: `${item.name}(${item.username})`, value: item.id })
-          }
-        }
-      }
-      if (this.filterField === 'asset_id') {
-        return {
-          multiple: false,
-          ajax: {
-            url: '/api/v1/assets/assets/?fields_size=mini',
-            transformOption: (item) => ({ label: item.name || item.address || item.hostname || item.id, value: item.id })
-          }
-        }
-      }
-      if (this.filterField === 'account') {
-        return {
-          multiple: false,
-          ajax: {
-            url: '/api/v1/accounts/accounts/?fields_size=mini',
-            transformOption: (item) => ({ label: item.asset ? `${item.username} @ ${item.asset.name}` : item.username, value: item.username })
-          }
-        }
-      }
-      return {}
-    },
-    async handleDeleteReport() {
-      if (!this.reportId) {
-        return
-      }
-      await this.$confirm(this.$t('ConfirmDeleteReport'), this.$t('Tip'), { type: 'warning' })
-      await this.$axios.delete(`/api/v1/reports/reports/${this.reportId}/`)
-      this.$message.success(this.$t('DeleteSuccessMsg'))
-      this.$router.replace({ path: this.$route.path, query: {} })
-    }
   }
 }
