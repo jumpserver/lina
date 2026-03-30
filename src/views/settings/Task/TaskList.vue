@@ -4,7 +4,6 @@
 
 <script type="text/jsx">
 import { ChoicesFormatter, DetailFormatter, SwitchFormatter } from '@/components/Table/TableFormatters'
-import { BASE_URL } from '@/utils/common/index'
 import { DrawerListTable as ListTable } from '@/components'
 
 export default {
@@ -141,7 +140,7 @@ export default {
             type: 'primary',
             can: this.$hasPerm('ops.view_taskmonitor'),
             callback: () => {
-              window.open(`${BASE_URL}/core/flower/?_=${Date.now()}`,)
+              window.open(`/core/flower/?_=${Date.now()}`,)
             }
           }
         ]

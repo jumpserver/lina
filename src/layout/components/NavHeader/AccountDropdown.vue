@@ -36,6 +36,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { logout as redirectToLogout } from '@/utils/request'
 
 export default {
   name: 'AccountDropdown',
@@ -74,7 +75,7 @@ export default {
       if (currentOrg && (currentOrg.autoEnter || currentOrg.is_system)) {
         await this.$store.dispatch('users/setCurrentOrg', this.$store.getters.preOrg)
       }
-      window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${this.$route.fullPath}`
+      redirectToLogout()
     }
   }
 }

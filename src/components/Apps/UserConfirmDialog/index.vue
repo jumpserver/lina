@@ -119,6 +119,7 @@
 <script>
 import Dialog from '@/components/Dialog/index.vue'
 import { encryptPassword } from '@/utils/secure'
+import { logout as redirectToLogout } from '@/utils/request'
 
 export default {
   name: 'UserConfirmDialog',
@@ -224,7 +225,7 @@ export default {
         })
     }, 500),
     logout() {
-      window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${this.$route.fullPath}`
+      redirectToLogout()
     },
     sendCode() {
       this.$axios
