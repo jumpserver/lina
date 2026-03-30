@@ -2,7 +2,7 @@ import axios from 'axios'
 import i18n from '@/i18n/i18n'
 import { eventBus } from '@/utils/vue/eventbus'
 import { getTokenFromCookie } from '@/utils/jms/auth'
-import { getErrorResponseMsg } from '@/utils/common'
+import { addBasePath, getCurrentPageUrl, getErrorResponseMsg } from '@/utils/common'
 import { MessageBox } from 'element-ui'
 import { message } from '@/utils/vue/message'
 import store from '@/store'
@@ -70,9 +70,8 @@ service.interceptors.request.use(
 
 function goToLogin() {
   setTimeout(() => {
-    const base = window.__BASE_PATH__ || ''
-    const next = base ? window.location.pathname.replace(base, '') : window.location.pathname
-    window.location = `${base}${process.env.VUE_APP_LOGIN_PATH}?next=${next}`
+    const next = encodeURIComponent(getCurrentPageUrl())
+    window.location = `${addBasePath(process.env.VUE_APP_LOGIN_PATH)}?next=${next}`
   }, 200)
   localStorage.setItem('next', window.location.hash.replace('#', ''))
 }
@@ -114,9 +113,8 @@ function ifBadRequest({ response, error }) {
 }
 
 export function logout() {
-  const base = window.__BASE_PATH__ || ''
-  const next = base ? location.pathname.replace(base, '') : location.pathname
-  window.location.href = `${base}${process.env.VUE_APP_LOGOUT_PATH}?next=${next}`
+  const next = encodeURIComponent(getCurrentPageUrl())
+  window.location.href = `${addBasePath(process.env.VUE_APP_LOGOUT_PATH)}?next=${next}`
 }
 
 export function flashErrorMsg({ response, error }) {

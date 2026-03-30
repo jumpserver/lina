@@ -69,6 +69,7 @@
 
 <script>
 import IBox from '@/components/Common/IBox'
+import { addBasePath } from '@/utils/common/index'
 import { IsSupportPauseSessionType } from '@/utils/jms/index'
 
 export default {
@@ -138,7 +139,7 @@ export default {
     },
     onMonitor() {
       const joinUrl = `/luna/monitor/${this.session.id}?ticket_id=${this.object.id}`
-      window.open(joinUrl, '_blank', 'height=600, width=850, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
+      window.open(addBasePath(joinUrl), '_blank', 'height=600, width=850, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
     },
     onToggleLock() {
       const url = '/api/v1/terminal/tasks/toggle-lock-session-for-ticket/'
