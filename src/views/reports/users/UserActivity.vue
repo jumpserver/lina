@@ -10,7 +10,7 @@
     >
       <template #default>
         <div class="charts-grid">
-          <div class="chart-container full-width" data-report-type="chart" data-report-name="UserLoginTrends">
+          <div class="chart-container full-width" data-report-type="chart" data-report-name="Overview">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('Overview') }}</div>
               <SummaryCountCard
@@ -20,11 +20,7 @@
           </div>
 
           <ReportToolbar
-            :filter-field="filterField"
-            :filter-label="filterLabel"
-            :filter-select="getFilterSelect()"
             :filters="currentFilters"
-            :is-custom-report="isCustomReport"
             class="chart-container full-width report-toolbar-wrap"
             @filter-change="handleToolbarFilterChange"
           />
@@ -95,16 +91,6 @@
                 <el-table-column v-for="column in tableData[0].columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
               </el-table>
             </div>
-            <ReportToolbar
-              v-if="tableData.length"
-              :filter-field="filterField"
-              :filter-label="filterLabel"
-              :filter-select="getFilterSelect()"
-              :filters="currentFilters"
-              :is-custom-report="isCustomReport"
-              class="chart-container full-width report-toolbar-wrap"
-              @filter-change="handleToolbarFilterChange"
-            />
             <div
               v-for="(t, idx) in tableData.slice(1)"
               :key="t.name || idx"
@@ -121,15 +107,6 @@
             </div>
           </div>
           <div v-else>
-            <ReportToolbar
-              :filter-field="filterField"
-              :filter-label="filterLabel"
-              :filter-select="getFilterSelect()"
-              :filters="currentFilters"
-              :is-custom-report="isCustomReport"
-              class="chart-container full-width report-toolbar-wrap"
-              @filter-change="handleToolbarFilterChange"
-            />
             <el-table :data="tableData.rows" border>
               <el-table-column v-for="column in tableData.columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
             </el-table>
@@ -169,6 +146,10 @@ export default {
       name: 'UserLoginReport',
       charts: [
         {
+          name: 'Overview',
+          title: this.$t('Overview')
+        },
+        {
           name: 'UserLoginTrends',
           title: this.$t('UserLoginTrends')
         },
@@ -191,22 +172,21 @@ export default {
           title: this.$t('Overview')
         },
         {
-          name: 'LoginSource',
-          title: this.$t('LoginSource')
-        },
-        {
           name: 'UserLoginTrends',
           title: this.$t('UserLoginTrends')
         },
         {
-          name: 'LoginMethodStatistics',
-          title: this.$t('LoginMethodStatistics')
+          name: 'LoginSource',
+          title: this.$t('LoginSource')
         },
         {
           name: 'VisitTimeDistribution',
           title: this.$t('VisitTimeDistribution')
+        },
+        {
+          name: 'LoginMethodStatistics',
+          title: this.$t('LoginMethodStatistics')
         }
-
       ],
       days: localStorage.getItem(this.name) || '7',
       user_stats: {
@@ -510,19 +490,10 @@ export default {
       }
     }
   },
-  watch: {
-    days() {
-      this.getData()
-    }
-  },
   async mounted() {
     await this.getData()
   },
   methods: {
-    onChange(val) {
-      this.days = val
-      localStorage.setItem('reportDays', val)
-    },
     async getData() {
       const data = await this.fetchReportData('/api/v1/reports/reports/users/')
       await this.loadTableData('/api/v1/reports/reports/users/')

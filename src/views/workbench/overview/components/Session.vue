@@ -5,7 +5,7 @@
 <script>
 import HomeCard from './HomeCard.vue'
 import { getPreference } from '@/api/settings'
-import { openNewWindow } from '@/utils/common/index'
+import { addBasePath, openNewWindow } from '@/utils/common/index'
 
 export default {
   name: 'Announcement',
@@ -79,7 +79,7 @@ export default {
                     if (this.preference?.basic?.connect_default_open_method === 'new') {
                       openNewWindow(`/luna/connect?login_to=${row.asset_id}&login_account=${row.account_id}`)
                     } else {
-                      window.open(`/luna/?login_to=${row.asset_id}&login_account=${row.account_id}`, '_blank')
+                      window.open(addBasePath(`/luna/?login_to=${row.asset_id}&login_account=${row.account_id}`), '_blank')
                     }
                   }
                 }

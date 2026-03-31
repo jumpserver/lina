@@ -26,7 +26,11 @@ export default {
       headerActions: {
         hasLeftActions: false,
         hasImport: false,
-        hasDatePicker: true
+        hasReportExport: true,
+        hasDatePicker: true,
+        searchConfig: {
+          getUrlQuery: true
+        }
       }
     }
   }

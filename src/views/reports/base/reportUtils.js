@@ -1,22 +1,17 @@
 import i18n from '@/i18n/i18n'
 
+export const REPORT_DEBUG_SWITCH_KEY = '__REPORT_DEBUG_SWITCH__'
+
 export const REPORT_RANGE_PRESET_OPTIONS = [
-  { label: i18n.t('LastDay'), value: 'last_day', days: 1 },
-  { label: i18n.t('Last7Days'), value: 'last_week', days: 7 },
-  { label: i18n.t('Last30Days'), value: 'last_month', days: 30 },
-  { label: i18n.t('LastThreeMonths'), value: 'last_three_months', days: 90 },
-  { label: i18n.t('LastHalfYear'), value: 'last_half_year', days: 180 },
-  { label: i18n.t('LastYear'), value: 'last_year', days: 365 },
-  { label: i18n.t('Custom'), value: 'custom', days: null }
+  { label: i18n.t('Today'), value: '1', days: 1 },
+  { label: i18n.t('Last7Days'), value: '7', days: 7 },
+  { label: i18n.t('Last30Days'), value: '30', days: 30 }
 ]
 
+export const REPORT_ALLOWED_DAYS = REPORT_RANGE_PRESET_OPTIONS.map(item => String(item.value))
+
 export const REPORT_FILTER_QUERY_KEYS = [
-  'start',
-  'end',
-  'range_preset',
-  'user_id',
-  'asset_id',
-  'account',
+  'days',
   'report_id'
 ]
 
@@ -57,4 +52,89 @@ export function appendQuery(url, query = {}) {
 export function getPresetLabel(value) {
   const preset = REPORT_RANGE_PRESET_OPTIONS.find(item => item.value === value)
   return preset ? preset.label : value
+}
+
+export function normalizeReportDays(value, fallback = '7') {
+  const normalizedFallback = REPORT_ALLOWED_DAYS.includes(String(fallback)) ? String(fallback) : '7'
+  const normalizedValue = String(value || '')
+  if (REPORT_ALLOWED_DAYS.includes(normalizedValue)) {
+    return normalizedValue
+  }
+  return normalizedFallback
+}
+
+export function normalizeVisibleFilterList(value) {
+  if (Array.isArray(value)) {
+    return value.map(item => String(item).trim()).filter(Boolean)
+  }
+  if (value === undefined || value === null || value === '') {
+    return []
+  }
+  return String(value)
+    .split(',')
+    .map(item => item.trim())
+    .filter(Boolean)
+}
+
+export function buildCustomReportRouteQuery(report = {}) {
+  const normalizedDays = normalizeReportDays(report.days, '7')
+  const query = {
+    report_id: report.id,
+    days: normalizedDays
+  }
+  const filters = report.filters || {}
+  const visibleCharts = normalizeVisibleFilterList(filters.visible_charts)
+  const visibleTables = normalizeVisibleFilterList(filters.visible_tables)
+  if (visibleCharts.length) {
+    query.visible_charts = visibleCharts.join(',')
+  }
+  if (visibleTables.length) {
+    query.visible_tables = visibleTables.join(',')
+  }
+  return query
+}
+
+export function isReportDebugEnabled() {
+  try {
+    const val = localStorage.getItem(REPORT_DEBUG_SWITCH_KEY)
+    return val === '1' || val === 'true'
+  } catch (e) {
+    return false
+  }
+}
+
+export function reportDebugLog(scope, payload = {}) {
+  if (!isReportDebugEnabled()) {
+    return
+  }
+  console.log(`[report-debug:${scope}]`, payload)
+}
+
+// 模块级 report detail 请求去重缓存
+// 多个组件实例（reportPageMixin + RightAction）可能同时请求同一 reportId，
+// 通过此缓存保证同一 URL 在短时间内只发一次 HTTP 请求
+const _reportDetailInFlight = Object.create(null)
+const _reportDetailCache = Object.create(null)
+const REPORT_DETAIL_CACHE_TTL = 1500
+
+export function fetchReportDetailShared(axios, reportId) {
+  const url = `/api/v1/reports/reports/${reportId}/`
+  const now = Date.now()
+  const cached = _reportDetailCache[url]
+  if (cached && (now - cached.ts) < REPORT_DETAIL_CACHE_TTL) {
+    return Promise.resolve(cached.data)
+  }
+  if (_reportDetailInFlight[url]) {
+    return _reportDetailInFlight[url]
+  }
+  const request = axios.get(url)
+    .then((res) => {
+      _reportDetailCache[url] = { ts: Date.now(), data: res }
+      return res
+    })
+    .finally(() => {
+      delete _reportDetailInFlight[url]
+    })
+  _reportDetailInFlight[url] = request
+  return request
 }

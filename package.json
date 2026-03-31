@@ -59,6 +59,7 @@
     "npm": "^7.8.0",
     "nprogress": "0.2.0",
     "path-to-regexp": "3.3.0",
+    "sm-crypto": "^0.4.0",
     "sortablejs": "^1.15.6",
     "v-sanitize": "^0.0.13",
     "vue": "2.7.16",

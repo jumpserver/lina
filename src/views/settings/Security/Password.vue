@@ -29,6 +29,7 @@ export default {
         [
           this.$t('Basic'),
           [
+            'SECURITY_PASSWORD_EXPIRATION_TIME_ADMIN',
             'SECURITY_PASSWORD_EXPIRATION_TIME',
             'OLD_PASSWORD_HISTORY_LIMIT_COUNT',
             'SECURITY_EXPIRED_TOKEN_RECORD_KEEP_DAYS'

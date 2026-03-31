@@ -23,7 +23,7 @@
 <script>
 import Dialog from '@/components/Dialog/index.vue'
 import { accountFieldsMeta } from '@/components/Apps/AccountCreateUpdateForm/const'
-import { encryptPassword } from '@/utils/secure'
+import { encryptPassword } from '@/utils/session-encrypt'
 import AutoDataForm from '@/components/Form/AutoDataForm/index.vue'
 
 export default {
@@ -46,8 +46,14 @@ export default {
     const accountMeta = accountFieldsMeta(this)
     return {
       fields: [
-        'name', 'secret_type', 'password', 'ssh_key', 'token',
-        'access_key', 'passphrase', 'api_key'
+        'name',
+        'secret_type',
+        'password',
+        'ssh_key',
+        'token',
+        'access_key',
+        'passphrase',
+        'api_key'
       ],
       fieldsMeta: {
         ...accountMeta,
@@ -80,18 +86,19 @@ export default {
       const data = {
         secret: encryptPassword(form[secretType])
       }
-      this.$axios.patch(
-        `/api/v1/accounts/accounts/${this.account.id}/`,
-        data,
-        { disableFlashErrorMsg: true }
-      ).then(res => {
-        this.$message.success(this.$tc('UpdateSuccessMsg'))
-        this.iVisible = false
-      }).catch(err => {
-        const errMsg = Object.values(err.response.data).join(', ')
-        this.$message.error(this.$tc('UpdateErrorMsg') + ' ' + errMsg)
-        this.iVisible = false
-      })
+      this.$axios
+        .patch(`/api/v1/accounts/accounts/${this.account.id}/`, data, {
+          disableFlashErrorMsg: true
+        })
+        .then(res => {
+          this.$message.success(this.$tc('UpdateSuccessMsg'))
+          this.iVisible = false
+        })
+        .catch(err => {
+          const errMsg = Object.values(err.response.data).join(', ')
+          this.$message.error(this.$tc('UpdateErrorMsg') + ' ' + errMsg)
+          this.iVisible = false
+        })
     },
     handleCancel() {
       this.$emit('update:visible', false)

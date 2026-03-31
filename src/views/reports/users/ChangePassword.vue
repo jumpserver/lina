@@ -4,6 +4,8 @@
       :title="title"
       :nav="nav"
       :name="name"
+      :charts="charts"
+      :tables="tables"
       :show-display-mode-toggle="true"
       :display-mode.sync="displayMode"
       v-bind="$attrs"
@@ -20,11 +22,7 @@
           </div>
 
           <ReportToolbar
-            :filter-field="filterField"
-            :filter-label="filterLabel"
-            :filter-select="getFilterSelect()"
             :filters="currentFilters"
-            :is-custom-report="isCustomReport"
             class="chart-container full-width report-toolbar-wrap"
             @filter-change="handleToolbarFilterChange"
           />
@@ -70,16 +68,6 @@
                 </el-table>
               </div>
             </div>
-            <ReportToolbar
-              v-if="tableData.length"
-              :filter-field="filterField"
-              :filter-label="filterLabel"
-              :filter-select="getFilterSelect()"
-              :filters="currentFilters"
-              :is-custom-report="isCustomReport"
-              class="chart-container full-width report-toolbar-wrap"
-              @filter-change="handleToolbarFilterChange"
-            />
             <div v-for="(t, idx) in tableData.slice(1)" :key="t.name || idx" class="report-table-wrap chart-container full-width">
               <div v-if="t.name" class="chart-container-title">
                 <div class="chart-container-title-text">{{ t.name }}</div>
@@ -92,15 +80,6 @@
             </div>
           </div>
           <div v-else>
-            <ReportToolbar
-              :filter-field="filterField"
-              :filter-label="filterLabel"
-              :filter-select="getFilterSelect()"
-              :filters="currentFilters"
-              :is-custom-report="isCustomReport"
-              class="chart-container full-width report-toolbar-wrap"
-              @filter-change="handleToolbarFilterChange"
-            />
             <el-table :data="tableData.rows" border>
               <el-table-column v-for="column in tableData.columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
             </el-table>
@@ -140,6 +119,18 @@ export default {
     return {
       title: this.$t('UserChangePasswordReport'),
       name: 'UserChangePasswordReport',
+      charts: [
+        { name: 'Overview', title: this.$t('Overview') },
+        { name: 'UserModificationTrends', title: this.$t('UserModificationTrends') },
+        { name: 'ModifyTheTargetUserTopTank', title: this.$t('ModifyTheTargetUserTopTank') },
+        { name: 'TopRankOfOperateUsers', title: this.$t('TopRankOfOperateUsers') }
+      ],
+      tables: [
+        { name: 'Overview', title: this.$t('Overview') },
+        { name: 'UserModificationTrends', title: this.$t('UserModificationTrends') },
+        { name: 'ModifyTheTargetUserTopTank', title: this.$t('ModifyTheTargetUserTopTank') },
+        { name: 'TopRankOfOperateUsers', title: this.$t('TopRankOfOperateUsers') }
+      ],
       days: localStorage.getItem(this.name) || '7',
       total_count_change_password: {
         'total': 0,
@@ -317,18 +308,10 @@ export default {
       }
     }
   },
-  watch: {
-    days() {
-      this.getData()
-    }
-  },
   async mounted() {
     await this.getData()
   },
   methods: {
-    onChange(val) {
-      this.days = val
-    },
     async getData() {
       const data = await this.fetchReportData('/api/v1/reports/reports/user-change-password/')
       await this.loadTableData('/api/v1/reports/reports/user-change-password/')

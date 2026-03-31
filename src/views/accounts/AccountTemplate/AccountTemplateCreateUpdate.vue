@@ -1,14 +1,11 @@
 <template>
-  <GenericCreateUpdatePage
-    v-bind="$data"
-    @getObjectDone="getObjectDone"
-  />
+  <GenericCreateUpdatePage v-bind="$data" @getObjectDone="getObjectDone" />
 </template>
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { templateFields, templateFieldsMeta } from './const.js'
-import { encryptPassword } from '@/utils/secure'
+import { encryptPassword } from '@/utils/session-encrypt'
 
 export default {
   name: 'GatewayCreateUpdate',
@@ -27,7 +24,7 @@ export default {
     return {
       initial: {
         secret_type: 'password',
-        push_params: { }
+        push_params: {}
       },
       url: '/api/v1/accounts/account-templates/',
       hasDetailInMsg: false,

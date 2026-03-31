@@ -5,7 +5,11 @@
         <Logo />
       </div>
       <RightAction
+        :chart-options="chartOptions"
         :name="name"
+        :selected-chart-names="selectedChartNames"
+        :selected-table-names="selectedTableNames"
+        :table-options="tableOptions"
         :title="title"
         :show-operation-dropdown="!isCustomReportPage"
         :force-default-actions="nav && isCustomReportPage"
@@ -21,7 +25,7 @@
               [{{ new Date().toLocaleString() }}]
             </span>
           </div>
-          <div v-if="customizeMode" class="report-visibility-panel">
+          <div v-if="customizeMode || isCustomReportPage" class="report-visibility-panel">
             <div class="report-visibility-row">
               <el-checkbox :value="isDisplayModeEnabled('chart')" @change="handleModeToggle('chart', $event)">
                 {{ $t('ChartReport') }}
@@ -61,12 +65,16 @@
         </div>
         <div v-if="!nav" class="title-right">
           <RightAction
+            :chart-options="chartOptions"
             :name="name"
             :title="title"
             :editor-only="true"
+            :selected-chart-names="selectedChartNames"
+            :selected-table-names="selectedTableNames"
             :show-editor-button="false"
             :show-custom-actions-in-editor="isCustomReportPage"
             :show-operation-only-in-editor="true"
+            :table-options="tableOptions"
           />
           <span v-if="url && showReportExportBtn" class="export-btn inline-export-btn">
             <el-button type="text" @click="openNewWindow">

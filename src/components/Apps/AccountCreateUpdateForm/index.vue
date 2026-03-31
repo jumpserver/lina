@@ -2,7 +2,7 @@
   <AutoDataForm
     v-if="!loading"
     ref="AutoDataForm"
-    :class="addTemplate? '': 'account-add'"
+    :class="addTemplate ? '' : 'account-add'"
     :submit-btn-text="submitBtnText"
     v-bind="$data"
     @submit="confirm"
@@ -11,7 +11,7 @@
 
 <script>
 import AutoDataForm from '@/components/Form/AutoDataForm/index.vue'
-import { encryptPassword } from '@/utils/secure'
+import { encryptPassword } from '@/utils/session-encrypt'
 import { accountFieldsMeta } from '@/components/Apps/AccountCreateUpdateForm/const'
 
 export default {
@@ -59,16 +59,27 @@ export default {
         ]
       },
       url: '/api/v1/accounts/accounts/',
-      form: Object.assign({ 'on_invalid': 'error' }, this.account || {}),
+      form: Object.assign({ on_invalid: 'error' }, this.account || {}),
       encryptedFields: ['secret'],
       fields: [
-        [this.$t('Basic'), ['name', 'username', 'privileged', 'su_from', 'su_from_username', 'template']],
+        [
+          this.$t('Basic'),
+          ['name', 'username', 'privileged', 'su_from', 'su_from_username', 'template']
+        ],
         [this.$t('Asset'), ['nodes', 'assets']],
-        [this.$t('Secret'), [
-          'secret_type', 'password', 'ssh_key', 'token',
-          'access_key', 'passphrase', 'api_key',
-          'secret_reset'
-        ]],
+        [
+          this.$t('Secret'),
+          [
+            'secret_type',
+            'password',
+            'ssh_key',
+            'token',
+            'access_key',
+            'passphrase',
+            'api_key',
+            'secret_reset'
+          ]
+        ],
         [this.$t('Other'), ['push_now', 'params', 'on_invalid', 'is_active', 'comment']]
       ],
       fieldsMeta: accountFieldsMeta(this),
@@ -170,7 +181,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .account-add {
   ::v-deep .el-form-item {
     //margin-bottom: 5px;

@@ -38,20 +38,25 @@
 
 <script>
 import Page from '@/layout/components/Page'
-import { resolveRoute } from '@/utils/vue/index'
-import { appendQuery, isSameReportQuery } from '@/views/reports/base/reportUtils'
+import UserActivity from '@/views/reports/users/UserActivity.vue'
+import ChangePassword from '@/views/reports/users/ChangePassword.vue'
+import { appendQuery, buildCustomReportRouteQuery, reportDebugLog } from '@/views/reports/base/reportUtils'
 
 const TEMPLATE_ROUTE_MAP = {
   UserLoginReport: {
-    name: 'UserReport',
+    key: 'UserReport',
     titleKey: 'UserLoginReport',
     icon: 'fa fa-sign-in',
+    component: UserActivity,
+    path: '/reports/users/user-activity',
     perm: 'rbac.view_userloginreport'
   },
   UserChangePasswordReport: {
-    name: 'ChangePassword',
+    key: 'ChangePassword',
     titleKey: 'UserChangePasswordReport',
     icon: 'fa fa-key',
+    component: ChangePassword,
+    path: '/reports/users/change-password',
     perm: 'rbac.view_userchangepasswordreport'
   }
 }
@@ -68,33 +73,68 @@ export default {
       component: '',
       componentKey: '',
       selectedChartKey: '',
-      chartItems: []
+      chartItems: [],
+      catalogLoaded: false,
+      lastSyncQueryKey: '',
+      isPageActive: true
     }
   },
   watch: {
     '$route.fullPath'() {
+      if (!this.isPageActive) return
+      const routeKey = this.buildRouteSyncKey(this.$route.query)
+      if (routeKey === this.lastSyncQueryKey) {
+        return
+      }
+      this.lastSyncQueryKey = routeKey
+      reportDebugLog('users.index.route.fullPath', {
+        routePath: this.$route.path,
+        query: this.$route.query,
+        selectedChartKey: this.selectedChartKey
+      })
       this.syncSelectedFromRoute()
     }
   },
   async created() {
     await this.loadCatalog()
   },
+  activated() {
+    this.isPageActive = true
+    this.syncSelectedFromRoute()
+  },
+  deactivated() {
+    this.isPageActive = false
+  },
   methods: {
+    buildRouteSyncKey(query = {}) {
+      return JSON.stringify({
+        report_id: query.report_id || '',
+        chart_key: query.chart_key || '',
+        days: query.days || '',
+        visible_charts: query.visible_charts || '',
+        visible_tables: query.visible_tables || ''
+      })
+    },
     getBuiltInTemplates() {
       return Object.entries(TEMPLATE_ROUTE_MAP)
         .filter(([, item]) => this.$hasPerm(item.perm))
         .map(([reportType, item]) => ({
-          key: reportType,
+          key: item.key,
           reportType,
           title: this.$t(item.titleKey),
-          routeName: item.name,
+          component: item.component,
+          path: item.path,
           icon: item.icon,
           isCustom: false,
-          query: {},
+          query: {
+            chart_key: item.key
+          },
           children: []
         }))
     },
     async loadCatalog() {
+      reportDebugLog('users.index.loadCatalog.start', { routePath: this.$route.path, query: this.$route.query })
+      this.catalogLoaded = false
       const templates = this.getBuiltInTemplates()
       const chartMap = templates.reduce((acc, item) => {
         acc[item.reportType] = item
@@ -110,16 +150,24 @@ export default {
           target.children = (group.children || []).map(child => ({
             key: `report-${child.id}`,
             title: child.name,
-            routeName: target.routeName,
-            reportId: child.id,
+            component: target.component,
+            path: target.path,
+            reportId: String(child.id),
             isCustom: true,
-            query: { report_id: child.id }
+            query: {
+              chart_key: target.key,
+              ...buildCustomReportRouteQuery(child)
+            }
           }))
         })
       } catch (error) {
         console.error('load report catalog failed', error)
       }
       this.chartItems = templates
+      this.catalogLoaded = true
+      reportDebugLog('users.index.loadCatalog.done', {
+        items: templates.map(item => ({ key: item.key, childCount: (item.children || []).length }))
+      })
       this.syncSelectedFromRoute()
     },
     syncSelectedFromRoute() {
@@ -129,32 +177,74 @@ export default {
       if (reportId) {
         target = this.chartItems
           .flatMap(item => item.children || [])
-          .find(item => item.reportId === reportId)
+          .find(item => String(item.reportId) === String(reportId))
         if (!target) {
-          this.loadCatalog()
+          if (!this.catalogLoaded) {
+            return
+          }
+          const nextQuery = { ...(this.$route.query || {}) }
+          delete nextQuery.report_id
+          this.$router.replace({ path: this.$route.path, query: nextQuery })
           return
         }
       }
       if (!target) {
-        target = this.chartItems[0]
+        const chartKey = this.$route.query.chart_key
+        target = this.chartItems.find(item => item.key === chartKey)
+          || this.chartItems.find(item => item.key === this.selectedChartKey)
+          || this.chartItems[0]
       }
-      if (target) {
+      if (target && (this.selectedChartKey !== target.key || !this.component)) {
         this.applyChart(target)
       }
+      reportDebugLog('users.index.syncSelectedFromRoute', {
+        reportId,
+        selectedChartKey: this.selectedChartKey,
+        targetKey: target?.key || ''
+      })
     },
     isActive(item) {
       return this.selectedChartKey === item.key
     },
     applyChart(chart) {
       this.selectedChartKey = chart.key
-      const route = resolveRoute({ name: chart.routeName }, this.$router)
-      this.component = route.components.default
-      this.componentKey = `${chart.key}-${this.$route.fullPath}`
-      this.url = appendQuery('/ui/#' + route.path, chart.query || {})
+      if (!chart.component || !chart.path) {
+        return
+      }
+      const nextUrl = appendQuery('/ui/#' + chart.path, chart.query || {})
+      if (this.component === chart.component && this.componentKey === chart.key && this.url === nextUrl) {
+        return
+      }
+      this.component = chart.component
+      this.componentKey = chart.key
+      this.url = nextUrl
+      reportDebugLog('users.index.applyChart', {
+        chartKey: chart.key,
+        reportId: chart.reportId || '',
+        url: this.url,
+        routePath: this.$route.path,
+        query: this.$route.query
+      })
     },
     handleChangeChart(chart) {
-      const nextQuery = chart.query || {}
-      if (isSameReportQuery(this.$route.query, nextQuery)) {
+      const nextQuery = {
+        ...(this.$route.query.days ? { days: this.$route.query.days } : {}),
+        ...(chart.query || {})
+      }
+      reportDebugLog('users.index.handleChangeChart', {
+        chartKey: chart.key,
+        reportId: chart.reportId || '',
+        nextQuery,
+        currentQuery: this.$route.query
+      })
+      const normalize = (query = {}) => ({
+        days: query.days || '',
+        report_id: query.report_id || '',
+        chart_key: query.chart_key || '',
+        visible_charts: query.visible_charts || '',
+        visible_tables: query.visible_tables || ''
+      })
+      if (JSON.stringify(normalize(this.$route.query)) === JSON.stringify(normalize(nextQuery))) {
         this.applyChart(chart)
         return
       }
@@ -225,7 +315,7 @@ h5 {
   }
 }
 
-.folder-list li.active .menu-link {
+.folder-list li.active > .menu-link {
   color: var(--color-primary);
   border-radius: 4px;
 }

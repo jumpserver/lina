@@ -4,11 +4,18 @@
       :title="title"
       :nav="nav"
       :name="name"
+      :charts="charts"
+      :tables="tables"
       :show-display-mode-toggle="true"
       :display-mode.sync="displayMode"
       v-bind="$attrs"
     >
       <div class="charts-grid">
+        <ReportToolbar
+          :filters="currentFilters"
+          class="chart-container full-width report-toolbar-wrap"
+          @filter-change="handleToolbarFilterChange"
+        />
         <template v-if="showChart">
           <div class="chart-container full-width">
             <div class="chart-container-title">
@@ -18,17 +25,6 @@
               />
             </div>
           </div>
-
-          <ReportToolbar
-            :filter-field="filterField"
-            :filter-label="filterLabel"
-            :filter-select="getFilterSelect()"
-            :filters="currentFilters"
-            :is-custom-report="isCustomReport"
-            :show-date-controls="false"
-            class="chart-container full-width report-toolbar-wrap"
-            @filter-change="handleToolbarFilterChange"
-          />
 
           <div v-if="!isCustomReport" class="chart-container full-width">
             <div class="chart-container-title">
@@ -76,17 +72,6 @@
                 </div>
               </el-card>
             </div>
-            <ReportToolbar
-              v-if="tableData.length"
-              :filter-field="filterField"
-              :filter-label="filterLabel"
-              :filter-select="getFilterSelect()"
-              :filters="currentFilters"
-              :is-custom-report="isCustomReport"
-              :show-date-controls="false"
-              class="chart-container full-width report-toolbar-wrap"
-              @filter-change="handleToolbarFilterChange"
-            />
             <div v-for="(t, idx) in tableData.slice(1)" :key="t.name || idx" class="report-table-wrap full-width">
               <el-card class="report-card" shadow="hover">
                 <div v-if="t.name" class="chart-container-title">
@@ -101,16 +86,6 @@
             </div>
           </div>
           <div v-else>
-            <ReportToolbar
-              :filter-field="filterField"
-              :filter-label="filterLabel"
-              :filter-select="getFilterSelect()"
-              :filters="currentFilters"
-              :is-custom-report="isCustomReport"
-              :show-date-controls="false"
-              class="chart-container full-width report-toolbar-wrap"
-              @filter-change="handleToolbarFilterChange"
-            />
             <el-table :data="tableData.rows" border>
               <el-table-column v-for="column in tableData.columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
             </el-table>
@@ -151,6 +126,16 @@ export default {
     return {
       title: this.$t('AccountAutomationReport'),
       name: 'AccountAutomationReport',
+      charts: [
+        { name: 'Overview', title: this.$t('Overview') },
+        { name: 'TaskExecutionTrends', title: this.$t('TaskExecutionTrends') },
+        { name: 'AccountResult', title: this.$t('AccountResult') }
+      ],
+      tables: [
+        { name: 'Overview', title: this.$t('Overview') },
+        { name: 'TaskExecutionTrends', title: this.$t('TaskExecutionTrends') },
+        { name: 'AccountResult', title: this.$t('AccountResult') }
+      ],
       description: '-',
       days: localStorage.getItem(this.name) || '7',
       automation_stats: {
@@ -283,18 +268,10 @@ export default {
       }
     }
   },
-  watch: {
-    days() {
-      this.getData()
-    }
-  },
   async mounted() {
     await this.getData()
   },
   methods: {
-    onChange(val) {
-      this.days = val
-    },
     async getData() {
       const data = await this.fetchReportData('/api/v1/reports/reports/account-automation/')
       await this.loadTableData('/api/v1/reports/reports/account-automation/')

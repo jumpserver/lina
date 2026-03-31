@@ -3,7 +3,7 @@
     <Dialog
       v-if="exportDialogShow"
       :destroy-on-close="true"
-      :title="$tc('Export')"
+      :title="iDialogTitle"
       :visible.sync="exportDialogShow"
       width="700px"
       @close="handleExportCancel"
@@ -14,10 +14,10 @@
         {{ tips }}
       </el-alert>
       <el-form label-position="left" style="padding-left: 20px">
-        <el-form-item :label="$tc('FileType' )" :label-width="'100px'">
+        <el-form-item v-if="showFileType" :label="$tc('FileType' )" :label-width="'100px'">
           <el-radio-group v-model="exportTypeOption">
             <el-radio
-              v-for="option of exportTypeOptions"
+              v-for="option of iExportTypeOptions"
               :key="option.value"
               :disabled="!option.can"
               :label="option.value"
@@ -99,6 +99,34 @@ export default {
     tipsType: {
       type: String,
       default: 'success'
+    },
+    triggerEvent: {
+      type: String,
+      default: 'showExportDialog'
+    },
+    dialogTitle: {
+      type: String,
+      default: ''
+    },
+    showFileType: {
+      type: Boolean,
+      default: true
+    },
+    defaultExportType: {
+      type: String,
+      default: 'csv'
+    },
+    fixedExportType: {
+      type: String,
+      default: ''
+    },
+    fileTypeOptions: {
+      type: Array,
+      default: () => []
+    },
+    extraQuery: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -137,6 +165,9 @@ export default {
     tableHasQuery() {
       return Object.keys(this.tableQuery).length > 0
     },
+    iDialogTitle() {
+      return this.dialogTitle || this.$tc('Export')
+    },
     exportOptions() {
       return [
         {
@@ -156,7 +187,10 @@ export default {
         }
       ]
     },
-    exportTypeOptions() {
+    iExportTypeOptions() {
+      if (this.fileTypeOptions.length > 0) {
+        return this.fileTypeOptions
+      }
       return [
         {
           label: 'CSV',
@@ -172,10 +206,10 @@ export default {
     }
   },
   beforeDestroy() {
-    this.$eventBus.$off('showExportDialog', this.showExportDialogHandler)
+    this.$eventBus.$off(this.triggerEvent, this.showExportDialogHandler)
   },
   mounted() {
-    this.$eventBus.$on('showExportDialog', this.showExportDialogHandler)
+    this.$eventBus.$on(this.triggerEvent, this.showExportDialogHandler)
   },
   methods: {
     showExportDialogHandler({ selectedRows, url, name }) {
@@ -184,6 +218,9 @@ export default {
       }
     },
     showExportDialog() {
+      this.exportTypeOption = this.fixedExportType || this.defaultExportType
+      this.exportOption = 'all'
+
       if (!this.mfaVerifyRequired) {
         this.exportDialogShow = true
 
@@ -199,6 +236,13 @@ export default {
       }
       this.$axios.get('/api/v1/authentication/confirm/check/?confirm_type=mfa').then(() => {
         this.exportDialogShow = true
+        if (this.hasSelected) {
+          this.exportOption = 'selected'
+        }
+
+        if (this.tableHasQuery) {
+          this.exportOption = 'filtered'
+        }
       })
     },
     downloadCsv(url) {
@@ -216,7 +260,8 @@ export default {
         const spm = await createSourceIdCache(resources)
         query['spm'] = spm.spm
       }
-      query['format'] = exportTypeOption
+      Object.assign(query, this.extraQuery)
+      query['format'] = exportTypeOption || this.fixedExportType || this.defaultExportType
       const queryStr =
         (url.indexOf('?') > -1 ? '&' : '?') +
         queryUtil.stringify(query, '=', '&')

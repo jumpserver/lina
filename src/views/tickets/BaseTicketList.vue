@@ -193,6 +193,7 @@ export default {
       },
       defaultTicketActions: {
         hasImport: false,
+        hasReportExport: true,
         hasMoreActions: false,
         hasLeftActions: true,
         canCreate: this.$hasPerm('tickets.view_ticket'),

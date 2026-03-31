@@ -1,6 +1,6 @@
 import i18n from '@/i18n/i18n'
 import { message } from '@/utils/vue/message'
-import { scopedLocalStorage as localStorage } from '@/utils/storage'
+import { getBasePath, scopedLocalStorage as localStorage } from '@/utils/storage'
 
 const _ = require('lodash')
 
@@ -194,6 +194,38 @@ export function newURL(url) {
   return obj
 }
 
+export function addBasePath(path = '') {
+  if (!path || /^https?:\/\//i.test(path)) {
+    return path
+  }
+
+  const basePath = getBasePath()
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`
+
+  if (!basePath) {
+    return normalizedPath
+  }
+
+  if (
+    normalizedPath === basePath ||
+    normalizedPath.startsWith(basePath + '/') ||
+    normalizedPath.startsWith(basePath + '?') ||
+    normalizedPath.startsWith(basePath + '#')
+  ) {
+    return normalizedPath
+  }
+
+  return `${basePath}${normalizedPath}`
+}
+
+export function getCurrentPageUrl() {
+  if (typeof window === 'undefined') {
+    return '/'
+  }
+  const { pathname, search, hash } = window.location
+  return `${pathname}${search}${hash}`
+}
+
 export function getUpdateObjURL(url, objId) {
   const urlObj = new URL(url, location.origin)
   let pathname = urlObj.pathname
@@ -231,7 +263,7 @@ export const assignIfNot = _.partialRight(_.assignInWith, customizer)
 
 const scheme = document.location.protocol
 const port = document.location.port ? ':' + document.location.port : ''
-const BASE_URL = scheme + '//' + document.location.hostname + port
+const BASE_URL = scheme + '//' + document.location.hostname + port + getBasePath()
 
 export function groupedDropdownToCascader(group) {
   const firstType = group[0]
@@ -427,7 +459,7 @@ export function openNewWindow(url) {
   let params = 'toolbar=yes,scrollbars=yes,resizable=yes'
   params = params + `,top=${top},left=${left},width=${screen.width / 3},height=${screen.height / 3}`
   window.sessionStorage.setItem('newWindowCount', `${count + 1}`)
-  window.open(url, '_blank', params)
+  window.open(addBasePath(url), '_blank', params)
 }
 
 export function getDrawerWidth() {
@@ -548,8 +580,10 @@ export function randomString(length, includeSymbols = false) {
 }
 
 export function createWsUrl(path) {
+  if (/^wss?:\/\//i.test(path)) {
+    return path
+  }
   const scheme = location.protocol === 'https:' ? 'wss' : 'ws'
   const port = location.port ? ':' + location.port : ''
-  const base = window.__BASE_PATH__ || ''
-  return scheme + '://' + location.hostname + port + base + path
+  return scheme + '://' + location.hostname + port + addBasePath(path)
 }

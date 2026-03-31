@@ -11,7 +11,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { STORAGE_TYPE_META_MAP } from '@/views/sessions/const'
 import { UploadSecret } from '@/components/Form/FormFields'
-import { encryptPassword } from '@/utils/secure'
+import { encryptPassword } from '@/utils/session-encrypt'
 
 export default {
   name: 'ReplayStorageUpdate',
@@ -51,19 +51,19 @@ export default {
           fields: storageTypeMeta.meta,
           fieldsMeta: {
             SFTP_PASSWORD: {
-              hidden: (formValue) => formValue.STP_SECRET_TYPE !== 'password'
+              hidden: formValue => formValue.STP_SECRET_TYPE !== 'password'
             },
             STP_PRIVATE_KEY: {
               component: UploadSecret,
-              hidden: (formValue) => formValue.STP_SECRET_TYPE !== 'ssh_key'
+              hidden: formValue => formValue.STP_SECRET_TYPE !== 'ssh_key'
             },
             STP_PASSPHRASE: {
-              hidden: (formValue) => formValue.STP_SECRET_TYPE !== 'ssh_key'
+              hidden: formValue => formValue.STP_SECRET_TYPE !== 'ssh_key'
             }
           }
         },
         is_default: {
-          hidden: (formValue) => formValue.type === 'sftp'
+          hidden: formValue => formValue.type === 'sftp'
         },
         comment: {
           component: 'el-input',
@@ -102,6 +102,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
