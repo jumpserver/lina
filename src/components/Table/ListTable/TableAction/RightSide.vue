@@ -4,6 +4,7 @@
     <ImExportDialog
       v-if="dialogExportVisible"
       :export-options="iExportOptions"
+      :report-export-options="iReportExportOptions"
       :import-options="iImportOptions"
       :selected-rows="selectedRows"
       v-bind="$attrs"
@@ -20,6 +21,7 @@ import { cleanActions } from './utils'
 import { assignIfNot } from '@/utils/common/index'
 
 const defaultTrue = { type: [Boolean, Function, String], default: true }
+const defaultFalse = { type: [Boolean, Function, String], default: false }
 
 export default {
   name: 'RightSide',
@@ -45,6 +47,22 @@ export default {
         this.dialogExportVisible = true
         this.$nextTick(() => {
           this.$eventBus.$emit('showExportDialog', { selectedRows, url, name: this.name })
+        })
+      }
+    },
+    hasReportExport: defaultFalse,
+    reportExportOptions: {
+      type: Object,
+      default: () => ({})
+    },
+    handleReportExportClick: {
+      type: Function,
+      default: function({ selectedRows }) {
+        const url = this.iReportExportOptions.url
+        const triggerEvent = this.iReportExportOptions.triggerEvent || 'showReportExportDialog'
+        this.dialogExportVisible = true
+        this.$nextTick(() => {
+          this.$eventBus.$emit(triggerEvent, { selectedRows, url, name: this.name })
         })
       }
     },
@@ -133,8 +151,15 @@ export default {
           name: 'actionExport',
           icon: 'download',
           tip: this.$t('Export'),
-          has: this.hasExport,
+          has: this.showLegacyExport.bind(this),
           callback: this.handleExportClick.bind(this)
+        },
+        {
+          name: 'actionReportExport',
+          icon: 'fa-file-excel-o',
+          tip: this.$t('ReportExport'),
+          has: this.showReportExport.bind(this),
+          callback: this.handleReportExportClick.bind(this)
         },
         {
           name: 'actionRefresh',
@@ -179,9 +204,53 @@ export default {
         url: this.tableUrl,
         ...this.exportOptions
       }
+    },
+    iReportExportOptions() {
+      const reportExportOptions = this.reportExportOptions || {}
+      const {
+        extraQuery = {},
+        fileTypeOptions,
+        ...restReportExportOptions
+      } = reportExportOptions
+
+      return {
+        url: this.tableUrl,
+        triggerEvent: 'showReportExportDialog',
+        dialogTitle: this.$t('ReportExport'),
+        fixedExportType: 'xlsx',
+        showFileType: false,
+        ...restReportExportOptions,
+        extraQuery: {
+          export_mode: 'report',
+          ...extraQuery
+        },
+        fileTypeOptions: fileTypeOptions || [
+          {
+            label: 'Excel',
+            value: 'xlsx',
+            can: true
+          }
+        ]
+      }
     }
   },
   methods: {
+    getActionVisibility(value, args) {
+      if (typeof value === 'function') {
+        return value(args)
+      }
+      return value
+    },
+    showLegacyExport(args) {
+      const reportExportVisibility = this.getActionVisibility(this.hasReportExport, args)
+      if (reportExportVisibility) {
+        return false
+      }
+      return this.getActionVisibility(this.hasExport, args)
+    },
+    showReportExport(args) {
+      return this.getActionVisibility(this.hasReportExport, args)
+    },
     handleFilterClick() {
       this.$emit('update:quick-filter-expand', !this.quickFilterExpand)
     },
