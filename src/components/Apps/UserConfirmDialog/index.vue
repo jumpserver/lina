@@ -118,7 +118,7 @@
 </template>
 <script>
 import Dialog from '@/components/Dialog/index.vue'
-import { encryptPassword } from '@/utils/secure'
+import { encryptPassword } from '@/utils/session-encrypt'
 import { logout as redirectToLogout } from '@/utils/request'
 
 export default {
@@ -180,7 +180,7 @@ export default {
       this.inputPlaceholder = this.subTypeChoices.filter(item => item.name === val)[0]?.placeholder
       this.smsWidth = val === 'sms' ? 6 : 0
     },
-    performConfirm: _.debounce(function({ response, callback, cancel }) {
+    performConfirm: _.debounce(function ({ response, callback, cancel }) {
       if (this.processing || this.visible) {
         return
       }

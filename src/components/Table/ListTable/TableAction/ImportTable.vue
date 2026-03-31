@@ -11,10 +11,18 @@
     <div class="row">
       <el-progress :percentage="processedPercent" />
     </div>
-    <DataTable v-if="tableGenDone" id="importTable" ref="dataTable" :config="tableConfig" class="importTable" />
+    <DataTable
+      v-if="tableGenDone"
+      id="importTable"
+      ref="dataTable"
+      :config="tableConfig"
+      class="importTable"
+    />
     <div class="row" style="padding-top: 20px">
       <div class="btn-groups">
-        <el-button v-if="showCancel" size="small" @click="performCancel">{{ $t('Cancel') }}</el-button>
+        <el-button v-if="showCancel" size="small" @click="performCancel">{{
+          $t('Cancel')
+        }}</el-button>
         <el-button
           v-show="!disableImportBtn"
           size="small"
@@ -45,7 +53,7 @@ import DataTable from '@/components/Table/DataTable/index.vue'
 import { getUpdateObjURL } from '@/utils/common/index'
 import { sleep } from '@/utils/common/time'
 import { EditableInputFormatter } from '@/components/Table/TableFormatters'
-import { encryptPassword } from '@/utils/secure'
+import { encryptPassword } from '@/utils/session-encrypt'
 import getStatusColumnMeta from '@/components/Table/ListTable/TableAction/const'
 
 export default {
@@ -162,17 +170,17 @@ export default {
       return this.importActions[this.importAction]
     },
     successData() {
-      return this.iTotalData.filter((item) => {
+      return this.iTotalData.filter(item => {
         return item['@status'] === 'ok'
       })
     },
     failedData() {
-      return this.iTotalData.filter((item) => {
+      return this.iTotalData.filter(item => {
         return typeof item['@status'] === 'object' && item['@status'].name === 'error'
       })
     },
     pendingData() {
-      return this.iTotalData.filter((item) => {
+      return this.iTotalData.filter(item => {
         return item['@status'] === 'pending'
       })
     },
@@ -195,7 +203,7 @@ export default {
       if (this.totalCount === 0) {
         return 0
       }
-      return Math.round(this.processedCount / this.totalCount * 100)
+      return Math.round((this.processedCount / this.totalCount) * 100)
     },
     elDataTable() {
       return this.$refs['dataTable'].dataTable
@@ -218,7 +226,7 @@ export default {
       } else if (val === 'error') {
         this.tableConfig.totalData = this.failedData
       } else {
-        this.tableConfig.totalData = this.iTotalData.filter((item) => {
+        this.tableConfig.totalData = this.iTotalData.filter(item => {
           return item['@status'] === val
         })
       }
@@ -278,7 +286,8 @@ export default {
       return columns
     },
     getEncryptFields() {
-      const fromProp = Array.isArray(this.encryptFields) && this.encryptFields.length ? this.encryptFields : null
+      const fromProp =
+        Array.isArray(this.encryptFields) && this.encryptFields.length ? this.encryptFields : null
       return fromProp || ['password', 'secret', 'private_key']
     },
     generateTableData(tableTitles, tableData) {
@@ -415,11 +424,7 @@ export default {
     },
     async performUpdateObject(item) {
       const updateUrl = getUpdateObjURL(this.url, item.id)
-      return this.$axios.patch(
-        updateUrl,
-        item,
-        { disableFlashErrorMsg: true }
-      )
+      return this.$axios.patch(updateUrl, item, { disableFlashErrorMsg: true })
     },
     async defaultPerformUploadObject(item) {
       let handler = this.performCreateObject
@@ -439,11 +444,7 @@ export default {
       }
     },
     async performCreateObject(item) {
-      return this.$axios.post(
-        this.url,
-        item,
-        { disableFlashErrorMsg: true }
-      )
+      return this.$axios.post(this.url, item, { disableFlashErrorMsg: true })
     },
     keepElementInViewport() {
       const tableRef = document.getElementById('importTable')
@@ -455,11 +456,7 @@ export default {
       const rect = parentTdRef.getBoundingClientRect()
       let windowInnerHeight = window.innerHeight || document.documentElement.clientHeight
       windowInnerHeight = windowInnerHeight * 0.97 - 150
-      const inViewport = (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= windowInnerHeight
-      )
+      const inViewport = rect.top >= 0 && rect.left >= 0 && rect.bottom <= windowInnerHeight
       if (!inViewport) {
         parentTdRef.scrollIntoView({ behavior: 'auto', block: 'start', inline: 'start' })
       }
@@ -468,8 +465,7 @@ export default {
       this.tableConfig.totalData.push(item)
     },
     handleClick(btn) {
-      const callback = btn.callback || function() {
-      }
+      const callback = btn.callback || function () {}
       callback(btn)
     }
   }
@@ -477,10 +473,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/variables";
+@import '~@/styles/variables';
 
 .summary-item {
-  padding: 0 10px
+  padding: 0 10px;
 }
 
 .summary-success {

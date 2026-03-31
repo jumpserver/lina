@@ -11,7 +11,7 @@
 <script>
 import { GenericUpdateFormDialog } from '@/layout/components'
 import { accountFieldsMeta } from '@/components/Apps/AccountCreateUpdateForm/const'
-import { encryptPassword } from '@/utils/secure'
+import { encryptPassword } from '@/utils/session-encrypt'
 
 export default {
   name: 'AccountBulkUpdateDialog',
@@ -25,7 +25,7 @@ export default {
     },
     selectedRows: {
       type: Array,
-      default: () => ([])
+      default: () => []
     }
   },
   data() {
@@ -35,7 +35,7 @@ export default {
         hasSaveContinue: false,
         fields: [],
         fieldsMeta: accountFieldsMeta(this),
-        cleanOtherFormValue: (formValue) => {
+        cleanOtherFormValue: formValue => {
           for (const value of formValue) {
             Object.keys(value).forEach((item, index, arr) => {
               if (['ssh_key', 'token', 'access_key', 'api_key', 'password'].includes(item)) {
@@ -82,6 +82,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

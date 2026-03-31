@@ -1,5 +1,5 @@
 import i18n from '@/i18n/i18n'
-import { encryptPassword } from '@/utils/secure'
+import { encryptPassword } from '@/utils/session-encrypt'
 
 export const gcp = 'gcp'
 export const aliyun = 'aliyun'
@@ -55,8 +55,18 @@ export const publicHostProviders = [
 export const publicDBProviders = [aliyun]
 
 export const privateCloudProviders = [
-  vmware, qingcloud_private, huaweicloud_private, ctyun_private,
-  openstack, zstack, nutanix, fc, scp, apsara_stack, smartx, proxmox
+  vmware,
+  qingcloud_private,
+  huaweicloud_private,
+  ctyun_private,
+  openstack,
+  zstack,
+  nutanix,
+  fc,
+  scp,
+  apsara_stack,
+  smartx,
+  proxmox
 ]
 
 export const ACCOUNT_PROVIDER_ATTRS_MAP = {
