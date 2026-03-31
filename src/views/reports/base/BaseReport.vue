@@ -25,7 +25,7 @@
               [{{ new Date().toLocaleString() }}]
             </span>
           </div>
-          <div v-if="customizeMode || isCustomReportPage" class="report-visibility-panel">
+          <div v-if="customizeMode && nav" class="report-visibility-panel">
             <div class="report-visibility-row">
               <el-checkbox :value="isDisplayModeEnabled('chart')" @change="handleModeToggle('chart', $event)">
                 {{ $t('ChartReport') }}

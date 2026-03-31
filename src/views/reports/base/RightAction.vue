@@ -35,7 +35,7 @@
         >
           {{ $t('ExportAsPDF') }}
         </el-button>
-        <el-button class="export-btn" type="text" icon="el-icon-message" @click="emailReport">
+        <el-button class="export-btn" style="display: none" type="text" icon="el-icon-message" @click="emailReport">
           {{ $t('EMailReport') }}
         </el-button>
         <el-button class="export-btn" type="text" icon="el-icon-printer" @click="printReport">
@@ -66,10 +66,10 @@
 </template>
 
 <script>
-import { download } from '@/utils/common'
 import CreateReportDialog from './CreateReportDialog.vue'
 import ReportExportDialog from './ReportExportDialog.vue'
 import { appendQuery, pickReportQuery, buildCustomReportRouteQuery, normalizeReportDays, fetchReportDetailShared } from './reportUtils'
+import { exportElementToPdf } from '@/utils/common/pdf'
 
 const REPORT_ACTION_PERM_MAP = {
   UserLoginReport: {
@@ -234,6 +234,17 @@ export default {
     }
   },
   methods: {
+    getReportContainer() {
+      const contentFromCurrent = this.$el.closest('.content')
+      const header = this.$el.closest('.header')
+      const contentFromHeaderSibling = header &&
+      header.nextElementSibling &&
+      header.nextElementSibling.classList &&
+      header.nextElementSibling.classList.contains('content')
+        ? header.nextElementSibling
+        : null
+      return contentFromCurrent || contentFromHeaderSibling || window.document.querySelector('.content')
+    },
     async loadReportDetail() {
       this.reportData = await fetchReportDetailShared(this.$axios, this.reportId)
     },
@@ -247,21 +258,33 @@ export default {
     getDaysParam() {
       return normalizeReportDays(this.$route.query.days || localStorage.getItem(this.name), '7')
     },
-    exportPdf() {
+    async exportPdf() {
       if (!this.checkName()) {
         return
       }
-      const query = pickReportQuery(this.$route.query)
-      const exportUrl = appendQuery('/core/reports/export-pdf/', {
-        chart: this.name,
-        days: this.getDaysParam(),
-        ...query
-      })
+      const reportContainer = this.getReportContainer()
+      if (!reportContainer) {
+        this.$message.error(this.$t('Failed') + ': report content not found')
+        return
+      }
+      this.exportLoading = true
       this.$message.success(this.$t('Export') + '...')
-      download(exportUrl)
+      try {
+        await this.$nextTick()
+        await exportElementToPdf(reportContainer, { filename: 'report.pdf' })
+      } catch (error) {
+        this.$message.error(this.$t('Failed') + ': ' + (error && error.message ? error.message : String(error)))
+      } finally {
+        this.exportLoading = false
+      }
     },
-    emailReport() {
+    async emailReport() {
       if (!this.checkName()) {
+        return
+      }
+      const reportContainer = this.getReportContainer()
+      if (!reportContainer) {
+        this.$message.error(this.$t('Failed') + ': report content not found')
         return
       }
       const query = pickReportQuery(this.$route.query)
@@ -271,15 +294,26 @@ export default {
         ...query
       })
       this.$message.success(this.$t('EMailReport') + '...')
-      this.$axios.post(url).then((res) => {
+      this.exportLoading = true
+      try {
+        await this.$nextTick()
+        const pdfBlob = await exportElementToPdf(reportContainer, {
+          filename: 'report.pdf',
+          output: 'blob'
+        })
+        const formData = new FormData()
+        formData.append('file', pdfBlob, 'report.pdf')
+        const res = await this.$axios.post(url, formData)
         if (res.error) {
           this.$message.error(res.error)
         } else {
           this.$message.success(res.message)
         }
-      }).catch(error => {
+      } catch (error) {
         this.$message.error(this.$t('Failed') + ': ' + error.message)
-      })
+      } finally {
+        this.exportLoading = false
+      }
     },
     printReport() {
       window.print()
