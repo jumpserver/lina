@@ -9,6 +9,13 @@ on:
       - 'package-lock.json'
       - 'yarn.lock'
       - 'Dockerfile-base'
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: '构建基础镜像所用的分支'
+        required: true
+        type: string
+        default: 'main'
 
 jobs:
   build-and-push:
@@ -16,12 +23,15 @@ jobs:
 
     steps:
       - name: Lock Pull Request
+        if: github.event_name == 'push'
         run: |
           curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -d '{"state":"pending", "description":"Action running, merge disabled", "context":"Lock PR"}' \
           "https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}"
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.branch || github.ref }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -66,6 +76,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Unlock Pull Request
+        if: github.event_name == 'push'
         run: |
           curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -d '{"state":"success", "description":"Action running, merge disabled", "context":"Lock PR"}' \
