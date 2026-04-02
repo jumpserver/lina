@@ -130,12 +130,6 @@ export default {
       line-height: $headerHeight;
       font-size: 16px;
       text-align: left;
-      font-family:
-        Avenir,
-        Helvetica Neue,
-        Arial,
-        Helvetica,
-        sans-serif;
       vertical-align: middle;
       letter-spacing: 1.5px;
       white-space: nowrap;
