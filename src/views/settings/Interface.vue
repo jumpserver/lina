@@ -102,7 +102,6 @@ export default {
       ],
       fieldsMeta: {
         login_title: {
-          helpText: this.$t('LoginTitleTip')
         },
         theme: {
           on: {
