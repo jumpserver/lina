@@ -13,7 +13,7 @@ const globalSubmenu = () => import('@/layout/globalOrg.vue')
 
 function goToJDMC(path) {
   request({
-    url: '/api/v1/common/jdmc/sso-token/',
+    url: '/api/v1/xpack/jdmc/sso-token/',
     method: 'get',
     disableFlashErrorMsg: true
   }).then(response => {
