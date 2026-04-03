@@ -31,10 +31,6 @@ export function pickReportQuery(query = {}) {
   }, {})
 }
 
-export function isSameReportQuery(currentQuery = {}, nextQuery = {}) {
-  return JSON.stringify(pickReportQuery(currentQuery)) === JSON.stringify(pickReportQuery(nextQuery))
-}
-
 export function appendQuery(url, query = {}) {
   const params = new URLSearchParams()
   Object.entries(query).forEach(([key, value]) => {
@@ -137,4 +133,10 @@ export function fetchReportDetailShared(axios, reportId) {
     })
   _reportDetailInFlight[url] = request
   return request
+}
+
+export function invalidateReportDetailCache(reportId) {
+  const url = `/api/v1/reports/reports/${reportId}/`
+  delete _reportDetailCache[url]
+  delete _reportDetailInFlight[url]
 }

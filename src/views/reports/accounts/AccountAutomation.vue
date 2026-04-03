@@ -1,7 +1,7 @@
 <template>
   <div>
     <BaseReport
-      :title="title"
+      :title="reportTitle"
       :nav="nav"
       :name="name"
       :charts="charts"
@@ -10,14 +10,16 @@
       :display-mode.sync="displayMode"
       v-bind="$attrs"
     >
-      <div class="charts-grid">
+      <template #toolbar>
         <ReportToolbar
           :filters="currentFilters"
           class="chart-container full-width report-toolbar-wrap"
           @filter-change="handleToolbarFilterChange"
         />
-        <template v-if="showChart">
-          <div class="chart-container full-width">
+      </template>
+      <template #default>
+        <div v-if="showChart" class="charts-grid">
+          <div class="chart-container full-width" data-report-type="chart" data-report-name="Overview">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('Overview') }}</div>
               <SummaryCountCard
@@ -33,7 +35,7 @@
             </div>
           </div>
 
-          <div class="chart-container full-width">
+          <div class="chart-container full-width" data-report-type="chart" data-report-name="TaskExecutionTrends">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('TaskExecutionTrends') }}</div>
               <div class="chart">
@@ -45,7 +47,7 @@
             </div>
           </div>
 
-          <div class="chart-container full-width">
+          <div class="chart-container full-width" data-report-type="chart" data-report-name="AccountResult">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('AccountResult') }}</div>
               <AccountSummary
@@ -57,32 +59,37 @@
               />
             </div>
           </div>
-        </template>
+        </div>
+      </template>
+      <template #table>
         <div v-if="showTable" class="full-width">
           <div v-if="Array.isArray(tableData)" class="report-tables full-width">
-            <div v-if="tableData.length" class="report-table-wrap full-width">
-              <el-card class="report-card" shadow="hover">
-                <div v-if="tableData[0].name" class="chart-container-title">
-                  <div class="chart-container-title-text">{{ tableData[0].name }}</div>
-                </div>
-                <div class="report-card-body">
-                  <el-table :data="tableData[0].rows" border>
-                    <el-table-column v-for="column in tableData[0].columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
-                  </el-table>
-                </div>
-              </el-card>
+            <div
+              v-if="tableData.length"
+              class="report-table-wrap chart-container full-width"
+              data-report-type="table"
+              :data-report-name="tableData[0].name"
+            >
+              <div v-if="tableData[0].name" class="chart-container-title">
+                <div class="chart-container-title-text">{{ tableData[0].name }}</div>
+              </div>
+              <el-table :data="tableData[0].rows" border>
+                <el-table-column v-for="column in tableData[0].columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+              </el-table>
             </div>
-            <div v-for="(t, idx) in tableData.slice(1)" :key="t.name || idx" class="report-table-wrap full-width">
-              <el-card class="report-card" shadow="hover">
-                <div v-if="t.name" class="chart-container-title">
-                  <div class="chart-container-title-text">{{ t.name }}</div>
-                </div>
-                <div class="report-card-body">
-                  <el-table :data="t.rows" border>
-                    <el-table-column v-for="column in t.columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
-                  </el-table>
-                </div>
-              </el-card>
+            <div
+              v-for="(t, idx) in tableData.slice(1)"
+              :key="t.name || idx"
+              class="report-table-wrap chart-container full-width"
+              data-report-type="table"
+              :data-report-name="t.name"
+            >
+              <div v-if="t.name" class="chart-container-title">
+                <div class="chart-container-title-text">{{ t.name }}</div>
+              </div>
+              <el-table :data="t.rows" border>
+                <el-table-column v-for="column in t.columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+              </el-table>
             </div>
           </div>
           <div v-else>
@@ -91,7 +98,7 @@
             </el-table>
           </div>
         </div>
-      </div>
+      </template>
     </BaseReport>
   </div>
 </template>

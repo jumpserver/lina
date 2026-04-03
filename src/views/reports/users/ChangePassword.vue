@@ -1,7 +1,7 @@
 <template>
   <div>
     <BaseReport
-      :title="title"
+      :title="reportTitle"
       :nav="nav"
       :name="name"
       :charts="charts"
@@ -10,9 +10,16 @@
       :display-mode.sync="displayMode"
       v-bind="$attrs"
     >
+      <template #toolbar>
+        <ReportToolbar
+          :filters="currentFilters"
+          class="chart-container full-width report-toolbar-wrap"
+          @filter-change="handleToolbarFilterChange"
+        />
+      </template>
       <template #default>
         <div v-if="showChart" class="charts-grid">
-          <div class="chart-container full-width">
+          <div class="chart-container full-width" data-report-type="chart" data-report-name="Overview">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('Overview') }}</div>
               <SummaryCountCard
@@ -21,13 +28,7 @@
             </div>
           </div>
 
-          <ReportToolbar
-            :filters="currentFilters"
-            class="chart-container full-width report-toolbar-wrap"
-            @filter-change="handleToolbarFilterChange"
-          />
-
-          <div class="chart-container full-width">
+          <div class="chart-container full-width" data-report-type="chart" data-report-name="UserModificationTrends">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('UserModificationTrends') }}</div>
               <div class="chart">
@@ -39,14 +40,14 @@
             </div>
           </div>
 
-          <div class="chart-container">
+          <div class="chart-container" data-report-type="chart" data-report-name="ModifyTheTargetUserTopTank">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('ModifyTheTargetUserTopTank') }}</div>
               <RankTable :config="config.change_password_top10_users" />
             </div>
           </div>
 
-          <div class="chart-container">
+          <div class="chart-container" data-report-type="chart" data-report-name="TopRankOfOperateUsers">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('TopRankOfOperateUsers') }}</div>
               <RankTable :config="config.change_password_top10_change_bys" />
@@ -58,26 +59,24 @@
       <template #table>
         <div v-if="showTable" class="full-width">
           <div v-if="Array.isArray(tableData)" class="report-tables full-width">
-            <div v-if="tableData.length" class="report-table-wrap chart-container full-width">
-              <div v-if="tableData[0].name" class="chart-container-title">
-                <div class="chart-container-title-text">{{ tableData[0].name }}</div>
+            <template v-for="(t, idx) in tableData">
+              <div v-if="rankingTableConfigs[t.name]" :key="'rank-' + idx" class="report-table-wrap chart-container full-width" data-report-type="table" :data-report-name="t.name">
+                <div class="chart-container-title">
+                  <div class="chart-container-title-text">{{ t.name }}</div>
+                </div>
+                <RankTable :config="rankingTableConfigs[t.name]" />
               </div>
-              <div class="report-card-body">
-                <el-table :data="tableData[0].rows" border>
-                  <el-table-column v-for="column in tableData[0].columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
-                </el-table>
+              <div v-else :key="t.name || idx" class="report-table-wrap chart-container full-width" data-report-type="table" :data-report-name="t.name">
+                <div v-if="t.name" class="chart-container-title">
+                  <div class="chart-container-title-text">{{ t.name }}</div>
+                </div>
+                <div class="report-card-body">
+                  <el-table :data="t.rows" border>
+                    <el-table-column v-for="column in t.columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+                  </el-table>
+                </div>
               </div>
-            </div>
-            <div v-for="(t, idx) in tableData.slice(1)" :key="t.name || idx" class="report-table-wrap chart-container full-width">
-              <div v-if="t.name" class="chart-container-title">
-                <div class="chart-container-title-text">{{ t.name }}</div>
-              </div>
-              <div class="report-card-body">
-                <el-table :data="t.rows" border>
-                  <el-table-column v-for="column in t.columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
-                </el-table>
-              </div>
-            </div>
+            </template>
           </div>
           <div v-else>
             <el-table :data="tableData.rows" border>
@@ -172,6 +171,12 @@ export default {
     }
   },
   computed: {
+    rankingTableConfigs() {
+      return {
+        [this.$t('ModifyTheTargetUserTopTank')]: this.config.change_password_top10_users,
+        [this.$t('TopRankOfOperateUsers')]: this.config.change_password_top10_change_bys
+      }
+    },
     totalData() {
       return [
         {

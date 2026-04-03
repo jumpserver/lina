@@ -13,7 +13,7 @@
   >
     <el-form ref="form" :model="form" :rules="rules" label-width="110px">
       <el-form-item :label="$t('Name')" prop="name">
-        <el-input v-model="form.name" />
+        <el-input v-model="form.name" :maxlength="32" show-word-limit />
       </el-form-item>
 
       <el-form-item :label="$t('TimeRange')" prop="days">
@@ -27,29 +27,22 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="$t('ChartReport')" prop="visibleCharts">
-        <el-checkbox-group v-model="form.visibleCharts">
-          <el-checkbox
-            v-for="item in normalizedChartOptions"
-            :key="item.name"
-            :label="item.name"
-          >
-            {{ item.title }}
-          </el-checkbox>
-        </el-checkbox-group>
-      </el-form-item>
-
-      <el-form-item :label="$t('TableDetails')" prop="visibleTables">
-        <el-checkbox-group v-model="form.visibleTables">
-          <el-checkbox
-            v-for="item in normalizedTableOptions"
-            :key="item.name"
-            :label="item.name"
-          >
-            {{ item.title }}
-          </el-checkbox>
-        </el-checkbox-group>
-      </el-form-item>
+      <template v-if="showVisibilityOptions">
+        <el-form-item v-if="chartOptions.length" :label="$t('ChartReport')">
+          <el-checkbox-group v-model="form.visibleCharts">
+            <el-checkbox v-for="item in chartOptions" :key="item.name" :label="item.name">
+              {{ item.title }}
+            </el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item v-if="tableOptions.length" :label="$t('TableDetails')">
+          <el-checkbox-group v-model="form.visibleTables">
+            <el-checkbox v-for="item in tableOptions" :key="item.name" :label="item.name">
+              {{ item.title }}
+            </el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+      </template>
     </el-form>
   </Dialog>
 </template>
@@ -90,6 +83,10 @@ export default {
       type: [String, Number],
       default: '7'
     },
+    showVisibilityOptions: {
+      type: Boolean,
+      default: false
+    },
     chartOptions: {
       type: Array,
       default: () => []
@@ -111,12 +108,7 @@ export default {
     return {
       submitting: false,
       form: this.getInitialForm(),
-      presetOptions: REPORT_RANGE_PRESET_OPTIONS,
-      rules: {
-        name: [{ required: true, message: this.$t('ThisFieldIsRequired'), trigger: 'blur' }],
-        visibleCharts: [{ validator: this.validateVisibleReports, trigger: 'change' }],
-        visibleTables: [{ validator: this.validateVisibleReports, trigger: 'change' }]
-      }
+      presetOptions: REPORT_RANGE_PRESET_OPTIONS
     }
   },
   computed: {
@@ -131,63 +123,51 @@ export default {
     isEdit() {
       return !!this.report?.id
     },
-    normalizedChartOptions() {
-      return this.normalizeOptions(this.chartOptions)
-    },
-    normalizedTableOptions() {
-      return this.normalizeOptions(this.tableOptions)
+    rules() {
+      return {
+        name: [
+          { required: true, message: this.$t('ThisFieldIsRequired'), trigger: 'blur' },
+          { max: 32, message: this.$t('NameTooLong32'), trigger: 'blur' },
+          { validator: this.validateNameNotDuplicate, trigger: 'blur' }
+        ]
+      }
     }
   },
+
   watch: {
     visible(val) {
       if (val) {
         this.form = this.getInitialForm()
+        this.$nextTick(() => {
+          this.$refs.form && this.$refs.form.clearValidate()
+        })
       }
+    },
+    'form.name'() {
+      this.$nextTick(() => {
+        this.$refs.form && this.$refs.form.clearValidate('name')
+      })
     }
   },
   methods: {
     normalizeDays(days) {
       return normalizeReportDays(days, '7')
     },
-    normalizeOptions(items = []) {
-      if (!Array.isArray(items)) {
-        return []
-      }
-      return items
-        .filter(item => item && item.name)
-        .map(item => ({
-          name: String(item.name),
-          title: String(item.title || item.name)
-        }))
-    },
-    normalizeSelection(raw, options = []) {
-      const safeOptions = Array.isArray(options) ? options : []
-      const optionNames = safeOptions.map(item => item.name)
-      const selected = Array.isArray(raw)
-        ? raw.map(item => String(item).trim()).filter(Boolean)
-        : []
-      const filtered = selected.filter(name => optionNames.includes(name))
-      return filtered.length ? filtered : optionNames
-    },
-    validateVisibleReports(rule, value, callback) {
-      const total = (this.form.visibleCharts || []).length + (this.form.visibleTables || []).length
-      if (total <= 0) {
-        callback(new Error(this.$t('PleaseSelectAtLeastOneReportSection')))
-        return
-      }
-      callback()
-    },
     getInitialForm() {
       const report = this.report || {}
       const reportDays = this.normalizeDays(report.days || this.defaultDays || '7')
       const filters = report.filters || {}
-      const chartOptions = this.normalizedChartOptions
-      const tableOptions = this.normalizedTableOptions
+      const visibleCharts = Array.isArray(filters.visible_charts)
+        ? filters.visible_charts
+        : [...this.defaultVisibleCharts]
+      const visibleTables = Array.isArray(filters.visible_tables)
+        ? filters.visible_tables
+        : [...this.defaultVisibleTables]
       return {
         name: report.name || getDefaultName(this.reportTitle || this.reportType || 'report'),
         days: reportDays,
-        visibleCharts: this.normalizeSelection(filters.visible_charts || this.defaultVisibleCharts, chartOptions),
-        visibleTables: this.normalizeSelection(filters.visible_tables || this.defaultVisibleTables, tableOptions)
+        visibleCharts,
+        visibleTables
       }
     },
     getPayload() {
@@ -205,6 +185,21 @@ export default {
     },
     handleClose() {
       this.iVisible = false
+    },
+    validateNameNotDuplicate(rule, value, callback) {
+      const name = (value || '').trim()
+      if (!name) return callback()
+      this.$axios.get('/api/v1/reports/reports/', { params: { name } })
+        .then(res => {
+          const list = Array.isArray(res) ? res : (res.results || [])
+          const conflicting = list.filter(item => !this.isEdit || String(item.id) !== String(this.report?.id))
+          if (conflicting.length > 0) {
+            callback(new Error(this.$t('ReportNameAlreadyExists')))
+          } else {
+            callback()
+          }
+        })
+        .catch(() => callback())
     },
     handleSubmit() {
       this.$refs.form.validate(async (valid) => {
@@ -228,11 +223,3 @@ export default {
 }
 </script>
 
-<style scoped>
-.form-help-text {
-  margin-top: 6px;
-  color: #909399;
-  font-size: 12px;
-  line-height: 1.4;
-}
-</style>

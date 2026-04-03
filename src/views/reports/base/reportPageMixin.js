@@ -1,4 +1,4 @@
-import { appendQuery, normalizeReportDays, normalizeVisibleFilterList, pickReportQuery, reportDebugLog, fetchReportDetailShared } from './reportUtils'
+import { appendQuery, normalizeReportDays, normalizeVisibleFilterList, pickReportQuery, reportDebugLog, fetchReportDetailShared, invalidateReportDetailCache } from './reportUtils'
 
 const TABLE_LABEL_KEY_MAP = {
   user_stats: 'Overview',
@@ -26,9 +26,9 @@ const TABLE_LABEL_KEY_MAP = {
   top_assets: 'RankByNumberOfAssetAccounts',
   top_version_accounts: 'AccountAndPasswordChangeRank',
   total_count_change_password: 'Overview',
-  change_password_top10_users: 'PasswordChangeUserRank',
-  change_password_top10_change_bys: 'PasswordChangeOperatorRank',
-  user_change_password_metrics: 'PasswordChangeLog'
+  change_password_top10_users: 'ModifyTheTargetUserTopTank',
+  change_password_top10_change_bys: 'TopRankOfOperateUsers',
+  user_change_password_metrics: 'UserModificationTrends'
 }
 
 const COLUMN_LABEL_KEY_MAP = {
@@ -58,7 +58,10 @@ const COLUMN_LABEL_KEY_MAP = {
   account_count: 'AccountTotal',
   version: 'Version',
   user: 'Username',
-  change_by: 'Username'
+  change_by: 'Username',
+  asset__name: 'Asset',
+  display_key: 'Account',
+  label: 'Name'
 }
 
 export default {
@@ -80,15 +83,21 @@ export default {
       if (routeKey === this.lastGetDataRouteKey) {
         return
       }
-      // reportId 变了说明切换到了不同的报告，父组件会改变 :key 导致本组件被销毁并重建
-      // 新组件的 mounted() 会负责初始化加载，此处不重复 getData
-      if (this.reportId !== this.lastFetchedReportId) {
-        this.lastGetDataRouteKey = routeKey
-        this.lastFetchedReportId = this.reportId
-        return
-      }
+      const prevKey = JSON.parse(this.lastGetDataRouteKey || '{}')
+      const nextKey = JSON.parse(routeKey)
+      const onlyVisibilityChanged = (
+        prevKey.path === nextKey.path &&
+        prevKey.report_id === nextKey.report_id &&
+        prevKey.days === nextKey.days &&
+        prevKey.chart_key === nextKey.chart_key &&
+        (prevKey.visible_charts !== nextKey.visible_charts || prevKey.visible_tables !== nextKey.visible_tables)
+      )
       this.lastGetDataRouteKey = routeKey
       this.lastFetchedReportId = this.reportId
+      if (onlyVisibilityChanged) {
+        this.$eventBus.$emit('reportVisibilityChanged')
+        return
+      }
       reportDebugLog('mixin.route.fullPath', {
         name: this.name,
         routePath: this.$route.path,
@@ -101,9 +110,12 @@ export default {
     }
   },
   created() {
-    // 预填当前路由 key，防止 mounted() 调用 getData 后，route watcher 对同一 key 重复触发
     this.lastGetDataRouteKey = this.buildGetDataRouteKey(this.$route.query)
     this.lastFetchedReportId = this.reportId
+    this.$eventBus.$on('reportForceRefresh', this._handleReportForceRefresh)
+  },
+  beforeDestroy() {
+    this.$eventBus.$off('reportForceRefresh', this._handleReportForceRefresh)
   },
   computed: {
     displayModes() {
@@ -137,6 +149,15 @@ export default {
     }
   },
   methods: {
+    _handleReportForceRefresh(reportId) {
+      if (!reportId || String(this.reportId) !== String(reportId)) return
+      this.reportDetail = null
+      this.reportFetchCache = Object.create(null)
+      invalidateReportDetailCache(reportId)
+      if (typeof this.getData === 'function') {
+        this.getData()
+      }
+    },
     buildGetDataRouteKey(query = {}) {
       return JSON.stringify({
         path: this.$route.path,
@@ -273,12 +294,12 @@ export default {
               if (k === 'dates_metrics_date') return
               // arrays like dates_metrics_success_total
               if (Array.isArray(v)) {
-                const colKey = `${groupKey}.${k}`
+                const colKey = k
                 const raw = k.replace(/^dates_metrics_?/, '')
                 const label = translateColumnLabel(raw)
                 columns.push({ key: colKey, label })
                 rows.forEach((row, idx) => {
-                  row[colKey] = (v && v[idx] !== undefined) ? v[idx] : ''
+                  row[colKey] = (v && v[idx] !== undefined && v[idx] !== null) ? v[idx] : 0
                 })
                 return
               }
@@ -286,11 +307,11 @@ export default {
               if (v && typeof v === 'object') {
                 Object.entries(v).forEach(([innerKey, innerArr]) => {
                   if (!Array.isArray(innerArr)) return
-                  const colKey = `${groupKey}.${innerKey}`
+                  const colKey = innerKey
                   const label = translateColumnLabel(innerKey)
                   columns.push({ key: colKey, label })
                   rows.forEach((row, idx) => {
-                    row[colKey] = (innerArr && innerArr[idx] !== undefined) ? innerArr[idx] : ''
+                    row[colKey] = (innerArr && innerArr[idx] !== undefined && innerArr[idx] !== null) ? innerArr[idx] : 0
                   })
                 })
               }
@@ -304,23 +325,32 @@ export default {
             // skip null/undefined
             if (v === null || v === undefined) continue
 
-            // 1) date-series metric objects
             if (typeof v === 'object' && Array.isArray(v.dates_metrics_date)) {
               tables.push(buildDateTable(k, v))
               continue
             }
 
-            // 2) arrays of {name,value} (e.g., user_by_source)
             if (Array.isArray(v) && v.length && typeof v[0] === 'object' && ('name' in v[0] || 'label' in v[0])) {
               const columns = [{ key: 'name', label: this.$t('Name') }, { key: 'value', label: this.$t('Value') }]
-              const rows = v.map(item => ({ name: item.name || item.label || '', value: item.value || item.count || 0 }))
+              const rows = v.map(item => ({ name: item.name || item.label || '', value: (item.value !== undefined && item.value !== null) ? item.value : (item.count !== undefined && item.count !== null) ? item.count : (item.total !== undefined && item.total !== null) ? item.total : 0 }))
               tables.push({ name: buildLabel(k) || k, columns, rows })
               continue
             }
 
-            // 3) plain object of metric buckets (e.g., user_login_time_metrics, user_stats)
+            if (Array.isArray(v) && v.length && typeof v[0] === 'object') {
+              const firstItem = v[0]
+              const itemKeys = Object.keys(firstItem)
+              const columns = itemKeys.map(ik => ({ key: ik, label: translateColumnLabel(ik) }))
+              const rows = v.map(item => {
+                const row = {}
+                itemKeys.forEach(ik => { row[ik] = (item[ik] !== undefined && item[ik] !== null) ? item[ik] : 0 })
+                return row
+              })
+              tables.push({ name: buildLabel(k) || k, columns, rows })
+              continue
+            }
+
             if (typeof v === 'object') {
-              // if its values are primitives (numbers/strings), render key-value table
               const entries = Object.entries(v)
               const primitive = entries.every(([, val]) => (typeof val !== 'object'))
               if (primitive) {
@@ -329,9 +359,30 @@ export default {
                 tables.push({ name: buildLabel(k) || k, columns, rows })
                 continue
               }
-              // otherwise, attempt to detect nested arrays/object and fallback to date table if matches
-              if (entries.some(([, val]) => Array.isArray(val))) {
-                tables.push(buildDateTable(k, v))
+              const hasArrayVals = entries.some(([, val]) => Array.isArray(val))
+              if (hasArrayVals) {
+                const arraysArePrimitive = entries
+                  .filter(([, val]) => Array.isArray(val))
+                  .every(([, arr]) => arr.length === 0 || typeof arr[0] !== 'object')
+                if (arraysArePrimitive) {
+                  tables.push(buildDateTable(k, v))
+                  continue
+                }
+                const firstNonEmpty = entries.find(([, val]) => Array.isArray(val) && val.length > 0)
+                const subKeys = firstNonEmpty ? Object.keys(firstNonEmpty[1][0]) : []
+                const nestedCols = [{ key: '__category', label: this.$t('Category') }]
+                  .concat(subKeys.map(sk => ({ key: sk, label: translateColumnLabel(sk) })))
+                const flatRows = []
+                for (const [catKey, catList] of entries) {
+                  if (Array.isArray(catList)) {
+                    catList.forEach(item => {
+                      const row = { __category: catKey }
+                      subKeys.forEach(sk => { row[sk] = (item[sk] !== undefined && item[sk] !== null) ? item[sk] : 0 })
+                      flatRows.push(row)
+                    })
+                  }
+                }
+                tables.push({ name: buildLabel(k) || k, columns: nestedCols, rows: flatRows })
                 continue
               }
             }
@@ -365,6 +416,9 @@ export default {
       if (this.reportId) {
         query.report_id = this.reportId
       }
+      if (this.$route.query.customize) {
+        query.customize = this.$route.query.customize
+      }
       if (days) {
         query.days = normalizeReportDays(days, '7')
       }
@@ -383,6 +437,6 @@ export default {
         return
       }
       this.$router.replace({ path: this.$route.path, query })
-    },
+    }
   }
 }

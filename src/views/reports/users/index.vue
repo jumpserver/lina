@@ -76,7 +76,8 @@ export default {
       chartItems: [],
       catalogLoaded: false,
       lastSyncQueryKey: '',
-      isPageActive: true
+      isPageActive: true,
+      syncRetryPending: false
     }
   },
   watch: {
@@ -97,6 +98,10 @@ export default {
   },
   async created() {
     await this.loadCatalog()
+    this.$eventBus.$on('reportCatalogChanged', this.handleCatalogChanged)
+  },
+  beforeDestroy() {
+    this.$eventBus.$off('reportCatalogChanged', this.handleCatalogChanged)
   },
   activated() {
     this.isPageActive = true
@@ -114,6 +119,9 @@ export default {
         visible_charts: query.visible_charts || '',
         visible_tables: query.visible_tables || ''
       })
+    },
+    handleCatalogChanged() {
+      this.loadCatalog()
     },
     getBuiltInTemplates() {
       return Object.entries(TEMPLATE_ROUTE_MAP)
@@ -182,17 +190,25 @@ export default {
           if (!this.catalogLoaded) {
             return
           }
+          // catalog 已加载但找不到 report_id，可能是 API 返回了旧数据（竞争条件），重试一次
+          if (!this.syncRetryPending) {
+            this.syncRetryPending = true
+            this.loadCatalog()
+            return
+          }
+          this.syncRetryPending = false
           const nextQuery = { ...(this.$route.query || {}) }
           delete nextQuery.report_id
           this.$router.replace({ path: this.$route.path, query: nextQuery })
           return
         }
+        this.syncRetryPending = false
       }
       if (!target) {
         const chartKey = this.$route.query.chart_key
-        target = this.chartItems.find(item => item.key === chartKey)
-          || this.chartItems.find(item => item.key === this.selectedChartKey)
-          || this.chartItems[0]
+        target = this.chartItems.find(item => item.key === chartKey) ||
+          this.chartItems.find(item => item.key === this.selectedChartKey) ||
+          this.chartItems[0]
       }
       if (target && (this.selectedChartKey !== target.key || !this.component)) {
         this.applyChart(target)

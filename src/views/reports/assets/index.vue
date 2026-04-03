@@ -78,7 +78,8 @@ export default {
       chartItems: [],
       catalogLoaded: false,
       lastSyncQueryKey: '',
-      isPageActive: true
+      isPageActive: true,
+      syncRetryPending: false
     }
   },
   watch: {
@@ -97,6 +98,10 @@ export default {
   },
   async created() {
     await this.loadCatalog()
+    this.$eventBus.$on('reportCatalogChanged', this.handleCatalogChanged)
+  },
+  beforeDestroy() {
+    this.$eventBus.$off('reportCatalogChanged', this.handleCatalogChanged)
   },
   activated() {
     this.isPageActive = true
@@ -175,17 +180,24 @@ export default {
           if (!this.catalogLoaded) {
             return
           }
+          if (!this.syncRetryPending) {
+            this.syncRetryPending = true
+            this.loadCatalog()
+            return
+          }
+          this.syncRetryPending = false
           const nextQuery = { ...(this.$route.query || {}) }
           delete nextQuery.report_id
           this.$router.replace({ path: this.$route.path, query: nextQuery })
           return
         }
+        this.syncRetryPending = false
       }
       if (!target) {
         const chartKey = this.$route.query.chart_key
-        target = this.chartItems.find(item => item.key === chartKey)
-          || this.chartItems.find(item => item.key === this.selectedChartKey)
-          || this.chartItems[0]
+        target = this.chartItems.find(item => item.key === chartKey) ||
+          this.chartItems.find(item => item.key === this.selectedChartKey) ||
+          this.chartItems[0]
       }
       if (target && (this.selectedChartKey !== target.key || !this.component)) {
         this.applyChart(target)
@@ -221,6 +233,9 @@ export default {
         chart_key: query.chart_key || '',
         days: query.days || ''
       })
+    },
+    handleCatalogChanged() {
+      this.loadCatalog()
     },
     handleChangeChart(chart) {
       const nextQuery = {

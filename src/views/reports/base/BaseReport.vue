@@ -7,6 +7,7 @@
       <RightAction
         :chart-options="chartOptions"
         :name="name"
+        :nav-mode="true"
         :selected-chart-names="selectedChartNames"
         :selected-table-names="selectedTableNames"
         :table-options="tableOptions"
@@ -25,7 +26,7 @@
               [{{ new Date().toLocaleString() }}]
             </span>
           </div>
-          <div v-if="customizeMode && nav" class="report-visibility-panel">
+          <div v-if="nav" class="report-visibility-panel">
             <div class="report-visibility-row">
               <el-checkbox :value="isDisplayModeEnabled('chart')" @change="handleModeToggle('chart', $event)">
                 {{ $t('ChartReport') }}
@@ -65,16 +66,9 @@
         </div>
         <div v-if="!nav" class="title-right">
           <RightAction
-            :chart-options="chartOptions"
             :name="name"
-            :title="title"
             :editor-only="true"
-            :selected-chart-names="selectedChartNames"
-            :selected-table-names="selectedTableNames"
-            :show-editor-button="false"
-            :show-custom-actions-in-editor="isCustomReportPage"
-            :show-operation-only-in-editor="true"
-            :table-options="tableOptions"
+            :delete-only="true"
           />
           <span v-if="url && showReportExportBtn" class="export-btn inline-export-btn">
             <el-button type="text" @click="openNewWindow">
@@ -85,6 +79,7 @@
         </div>
       </div>
       <div class="charts-zone" :class="{ 'charts-zone--no-padding': disableChartsPadding }">
+        <slot name="toolbar" />
         <slot v-if="isDisplayModeEnabled('chart')" name="default" />
         <div style="margin-top: 15px" />
         <slot v-if="isDisplayModeEnabled('table')" name="table" />
@@ -97,7 +92,7 @@
 import Logo from '@/layout/components/NavLeft/Logo'
 import RightAction from './RightAction.vue'
 import store from '@/store'
-import { appendQuery, pickReportQuery } from './reportUtils'
+import { appendQuery } from './reportUtils'
 
 export default {
   components: {
@@ -153,10 +148,13 @@ export default {
     }
   },
   data() {
+    const initModes = Array.isArray(this.displayMode) ? this.displayMode : [this.displayMode]
+    const normalizedInit = initModes.filter(m => m === 'chart' || m === 'table')
     return {
       selectedChartNames: [],
       selectedTableNames: [],
-      visibilityObserver: null
+      visibilityObserver: null,
+      internalDisplayMode: normalizedInit.length ? normalizedInit : ['chart', 'table']
     }
   },
   computed: {
@@ -170,9 +168,7 @@ export default {
       return !!reportId
     },
     selectedDisplayModes() {
-      const modes = Array.isArray(this.displayMode)
-        ? this.displayMode
-        : [this.displayMode]
+      const modes = this.internalDisplayMode
       const normalized = modes.filter(mode => mode === 'chart' || mode === 'table')
       return normalized.length ? normalized : ['chart', 'table']
     },
@@ -184,15 +180,14 @@ export default {
     },
     showReportExportBtn() {
       return store.getters.hasValidLicense
-    },
-    customizeMode() {
-      const query = (this.$route && this.$route.query) || {}
-      const rawCustomizeMode = query.customize
-      const customizeMode = Array.isArray(rawCustomizeMode) ? rawCustomizeMode[0] : rawCustomizeMode
-      return String(customizeMode) === '1'
     }
   },
   watch: {
+    displayMode(val) {
+      const modes = Array.isArray(val) ? val : [val]
+      const normalized = modes.filter(m => m === 'chart' || m === 'table')
+      this.internalDisplayMode = normalized.length ? normalized : ['chart', 'table']
+    },
     charts: {
       immediate: true,
       handler() {
@@ -216,17 +211,16 @@ export default {
   mounted() {
     this.setupVisibilityObserver()
     this.$nextTick(() => this.applyItemVisibility())
+    this.$eventBus.$on('reportVisibilityChanged', this.applyItemVisibility)
   },
   beforeDestroy() {
+    this.$eventBus.$off('reportVisibilityChanged', this.applyItemVisibility)
     if (this.visibilityObserver) {
       this.visibilityObserver.disconnect()
       this.visibilityObserver = null
     }
   },
   methods: {
-    handleChangeChart(event) {
-      // console.log(event)
-    },
     isDisplayModeEnabled(mode) {
       return this.selectedDisplayModes.includes(mode)
     },
@@ -274,6 +268,25 @@ export default {
       this.selectedTableNames = tableSelectionFromQuery || this.getDefaultSelectedNames(this.selectedTableNames, this.tableOptions)
       this.$nextTick(() => this.applyItemVisibility())
     },
+    pushVisibilityQuery() {
+      if (!this.$router || !this.$route) return
+      const chartAllSelected = this.chartOptions.length &&
+        this.selectedChartNames.length === this.chartOptions.length
+      const tableAllSelected = this.tableOptions.length &&
+        this.selectedTableNames.length === this.tableOptions.length
+      const query = { ...(this.$route.query || {}) }
+      if (this.chartOptions.length && !chartAllSelected) {
+        query.visible_charts = this.selectedChartNames.join(',')
+      } else {
+        delete query.visible_charts
+      }
+      if (this.tableOptions.length && !tableAllSelected) {
+        query.visible_tables = this.selectedTableNames.join(',')
+      } else {
+        delete query.visible_tables
+      }
+      this.$router.replace({ path: this.$route.path, query }).catch(() => {})
+    },
     updateVisibilityQuery() {
       if (typeof window === 'undefined' || !window.history || !window.location) return
       const pathSearch = new URLSearchParams(window.location.search)
@@ -303,6 +316,7 @@ export default {
       if (!normalized.length) {
         return
       }
+      this.internalDisplayMode = normalized
       this.$emit('update:displayMode', normalized)
     },
     handleModeToggle(mode, checked) {
@@ -319,7 +333,7 @@ export default {
         : []
       if (!normalized.length && this.chartOptions.length) return
       this.selectedChartNames = normalized
-      this.updateVisibilityQuery()
+      this.pushVisibilityQuery()
       this.$nextTick(() => this.applyItemVisibility())
     },
     handleTableSelectionChange(names) {
@@ -328,7 +342,7 @@ export default {
         : []
       if (!normalized.length && this.tableOptions.length) return
       this.selectedTableNames = normalized
-      this.updateVisibilityQuery()
+      this.pushVisibilityQuery()
       this.$nextTick(() => this.applyItemVisibility())
     },
     isItemSelected(type, rawName) {
@@ -375,12 +389,14 @@ export default {
           const left = (screen.width - width) / 2
           const top = (screen.height - height) / 2
           const options = `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`
-          const query = pickReportQuery(this.$route.query)
-          const url = appendQuery(this.url, {
-            ...query,
-            days: this.$route.query.days,
-            customize: 1
-          })
+          // 从 url prop 中只取路径部分（去掉旧的内嵌 query），
+          // 再从当前路由取实际有效参数重新拼接，避免重复或过时参数
+          const basePath = this.url.split('?')[0]
+          const rq = this.$route.query || {}
+          const query = { customize: 1 }
+          if (rq.report_id) query.report_id = rq.report_id
+          if (rq.days) query.days = rq.days
+          const url = appendQuery(basePath, query)
           this.win = window.open(url, '_blank', options)
         }
         // 确保窗口在最前面
@@ -390,9 +406,6 @@ export default {
         // 降级处理：在当前窗口打开
         window.location.href = this.url
       }
-    },
-    openSettings() {
-      console.log('openSettings')
     }
   }
 }
@@ -495,7 +508,6 @@ export default {
 }
 
 .content {
-  // background-color: white;
   background-color: #F1F1F1;
   height: calc(100vh - 40px);
   overflow-y: auto;
@@ -580,12 +592,35 @@ export default {
       }
     }
   }
+
+  /* 强制打印时保留 checkbox 颜色，避免浏览器剥离背景 */
+  .report-visibility-panel {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+
+    ::v-deep {
+      .el-checkbox__inner {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        border-color: #dcdfe6 !important;
+      }
+
+      .el-checkbox__input.is-checked .el-checkbox__inner,
+      .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+        background-color: #1890ff !important;
+        border-color: #1890ff !important;
+      }
+
+      .el-checkbox__input.is-checked .el-checkbox__inner::after {
+        border-color: #fff !important;
+      }
+    }
+  }
 }
 
 .charts-zone {
   padding: 16px 30px;
   margin: 0 auto;
-  // width: 100%;
   // max-width: 1046px; 不能设置，因为 dashboard 中会引用
   box-sizing: border-box;
   min-height: 100px; // 添加最小高度确保容器始终存在
@@ -618,7 +653,6 @@ export default {
       background-color: white;
       border-radius: 4px;
       padding: 16px;
-      // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
       border: 1px solid var(--color-border);
       transition: all 0.3s ease;
       max-width: calc(50vw - 30px);
@@ -678,18 +712,7 @@ export default {
       padding-top: 6px;
     }
 
-    // @media (max-width: 767px) {
-    //   .charts-grid {
-    //     grid-template-columns: 1fr;
-    //   }
-    //   .full-width {
-    //     grid-column: 1 / -1;
-    //   }
-    // }
-  }
-}
-
-@media (max-width: 1200px) {
+    .report-card-body { {
   .title-bar {
     flex-direction: column;
     gap: 10px;
@@ -705,7 +728,7 @@ export default {
   padding: 0 !important;
 }
 
-.report-item-hidden {
+::v-deep .report-item-hidden {
   display: none !important;
 }
 

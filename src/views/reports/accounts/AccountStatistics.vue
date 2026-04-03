@@ -1,7 +1,7 @@
 <template>
   <div>
     <BaseReport
-      :title="title"
+      :title="reportTitle"
       :nav="nav"
       :name="name"
       :charts="charts"
@@ -10,14 +10,16 @@
       :display-mode.sync="displayMode"
       v-bind="$attrs"
     >
-      <div class="charts-grid">
+      <template #toolbar>
         <ReportToolbar
           :filters="currentFilters"
           class="chart-container full-width report-toolbar-wrap"
           @filter-change="handleToolbarFilterChange"
         />
-        <template v-if="showChart">
-          <div class="chart-container full-width">
+      </template>
+      <template #default>
+        <div v-if="showChart" class="charts-grid">
+          <div class="chart-container full-width" data-report-type="chart" data-report-name="Overview">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('Overview') }}</div>
               <SummaryCountCard
@@ -26,7 +28,7 @@
             </div>
           </div>
 
-          <div class="chart-container">
+          <div class="chart-container" data-report-type="chart" data-report-name="AccountCreationSourceDistribution">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('AccountCreationSourceDistribution') }}</div>
               <div class="chart">
@@ -37,7 +39,7 @@
               </div>
             </div>
           </div>
-          <div class="chart-container">
+          <div class="chart-container" data-report-type="chart" data-report-name="AccountConnectivityStatusDistribution">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('AccountConnectivityStatusDistribution') }}</div>
               <div class="chart">
@@ -48,7 +50,7 @@
               </div>
             </div>
           </div>
-          <div class="chart-container full-width">
+          <div class="chart-container full-width" data-report-type="chart" data-report-name="AccountPasswordChangeTrends">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('AccountPasswordChangeTrends') }}</div>
               <div class="chart">
@@ -59,42 +61,31 @@
               </div>
             </div>
           </div>
-          <div class="chart-container">
+          <div class="chart-container" data-report-type="chart" data-report-name="RankByNumberOfAssetAccounts">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('RankByNumberOfAssetAccounts') }}</div>
               <RankTable :config="config.top10_asset_accounts" />
             </div>
           </div>
-          <div class="chart-container">
+          <div class="chart-container" data-report-type="chart" data-report-name="AccountAndPasswordChangeRank">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('AccountAndPasswordChangeRank') }}</div>
               <RankTable :config="config.top10_version_accounts" />
             </div>
           </div>
-        </template>
-
+        </div>
+      </template>
+      <template #table>
         <div v-if="showTable" class="full-width">
           <div v-if="Array.isArray(tableData)" class="report-tables full-width">
-            <div v-if="tableData.length" class="report-table-wrap full-width">
-              <el-card class="report-card" shadow="hover">
-                <div v-if="tableData[0].name" class="chart-container-title">
-                  <div class="chart-container-title-text">{{ tableData[0].name }}</div>
+            <template v-for="(t, idx) in tableData">
+              <div v-if="rankingTableConfigs[t.name]" :key="'rank-' + idx" class="report-table-wrap chart-container full-width" data-report-type="table" :data-report-name="t.name">
+                <div class="chart-container-title">
+                  <div class="chart-container-title-text">{{ t.name }}</div>
                 </div>
-                <div class="report-card-body">
-                  <el-table :data="tableData[0].rows" border>
-                    <el-table-column
-                      v-for="column in tableData[0].columns"
-                      :key="column.key"
-                      :label="column.label"
-                      :prop="column.key"
-                      min-width="140"
-                    />
-                  </el-table>
-                </div>
-              </el-card>
-            </div>
-            <div v-for="(t, idx) in tableData.slice(1)" :key="t.name || idx" class="report-table-wrap full-width">
-              <el-card class="report-card" shadow="hover">
+                <RankTable :config="rankingTableConfigs[t.name]" />
+              </div>
+              <div v-else :key="t.name || idx" class="report-table-wrap chart-container full-width" data-report-type="table" :data-report-name="t.name">
                 <div v-if="t.name" class="chart-container-title">
                   <div class="chart-container-title-text">{{ t.name }}</div>
                 </div>
@@ -109,8 +100,8 @@
                     />
                   </el-table>
                 </div>
-              </el-card>
-            </div>
+              </div>
+            </template>
           </div>
           <div v-else>
             <el-table :data="tableData.rows" border>
@@ -124,7 +115,7 @@
             </el-table>
           </div>
         </div>
-      </div>
+      </template>
     </BaseReport>
   </div>
 </template>
@@ -174,7 +165,7 @@ export default {
         { name: 'RankByNumberOfAssetAccounts', title: this.$t('RankByNumberOfAssetAccounts') },
         { name: 'AccountAndPasswordChangeRank', title: this.$t('AccountAndPasswordChangeRank') }
       ],
-      days: '30',
+      days: localStorage.getItem(this.name) || '7',
       account_stats: {
         'total': 0,
         'active': 0,
@@ -221,6 +212,12 @@ export default {
     }
   },
   computed: {
+    rankingTableConfigs() {
+      return {
+        [this.$t('RankByNumberOfAssetAccounts')]: this.config.top10_asset_accounts,
+        [this.$t('AccountAndPasswordChangeRank')]: this.config.top10_version_accounts
+      }
+    },
     totalData() {
       return [
         {

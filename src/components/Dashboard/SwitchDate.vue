@@ -51,6 +51,13 @@ export default {
       iOptions: this.options.length > 0 ? this.options : defaultOptions
     }
   },
+  watch: {
+    days(val) {
+      if (val != null && String(val) !== this.select) {
+        this.select = String(val)
+      }
+    }
+  },
   created() {
     let days = this.days
     if (!days) {

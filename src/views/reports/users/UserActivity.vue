@@ -1,15 +1,22 @@
 <template>
   <div>
     <BaseReport
-      :title="title"
+      :title="reportTitle"
       :nav="nav"
       :name="name"
       :charts="charts"
       :tables="tables"
       v-bind="$attrs"
     >
+      <template #toolbar>
+        <ReportToolbar
+          :filters="currentFilters"
+          class="chart-container full-width report-toolbar-wrap"
+          @filter-change="handleToolbarFilterChange"
+        />
+      </template>
       <template #default>
-        <div class="charts-grid">
+        <div v-if="showChart" class="charts-grid">
           <div class="chart-container full-width" data-report-type="chart" data-report-name="Overview">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('Overview') }}</div>
@@ -18,12 +25,6 @@
               />
             </div>
           </div>
-
-          <ReportToolbar
-            :filters="currentFilters"
-            class="chart-container full-width report-toolbar-wrap"
-            @filter-change="handleToolbarFilterChange"
-          />
 
           <div class="chart-container full-width" data-report-type="chart" data-report-name="UserLoginTrends">
             <div class="chart-container-title">

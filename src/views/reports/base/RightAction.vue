@@ -1,6 +1,16 @@
 <template>
   <div :class="['nav-bar-right', 'export-bar', { 'editor-only': editorOnly }]">
-    <el-button-group>
+    <el-button
+      v-if="deleteOnly && isCustomReport && canDeleteReport"
+      class="export-btn delete-btn"
+      type="text"
+      icon="el-icon-delete"
+      style="color: #f56c6c;"
+      @click="handleDelete"
+    >
+      {{ $t('Delete') }}
+    </el-button>
+    <el-button-group v-if="!deleteOnly">
       <template v-if="showCustomActions">
         <el-dropdown v-if="showOperationDropdown" class="export-btn" @command="handleCommand">
           <span class="el-dropdown-link">
@@ -35,9 +45,6 @@
         >
           {{ $t('ExportAsPDF') }}
         </el-button>
-        <el-button class="export-btn" style="display: none" type="text" icon="el-icon-message" @click="emailReport">
-          {{ $t('EMailReport') }}
-        </el-button>
         <el-button class="export-btn" type="text" icon="el-icon-printer" @click="printReport">
           {{ $t('Print') }}
         </el-button>
@@ -45,6 +52,7 @@
     </el-button-group>
 
     <CreateReportDialog
+      v-if="!deleteOnly"
       :chart-options="chartOptions"
       :default-days="getDaysParam()"
       :default-visible-charts="selectedChartNames"
@@ -52,11 +60,13 @@
       :report="editingReport"
       :report-title="title"
       :report-type="name"
+      :show-visibility-options="!navMode && !isCustomizeMode"
       :table-options="tableOptions"
       :visible.sync="showCreateDialog"
       @created="handleCreated"
     />
     <ReportExportDialog
+      v-if="!deleteOnly"
       :report-id="reportId"
       :report-name="title"
       :report-query="$route.query"
@@ -68,7 +78,7 @@
 <script>
 import CreateReportDialog from './CreateReportDialog.vue'
 import ReportExportDialog from './ReportExportDialog.vue'
-import { appendQuery, pickReportQuery, buildCustomReportRouteQuery, normalizeReportDays, fetchReportDetailShared } from './reportUtils'
+import { buildCustomReportRouteQuery, normalizeReportDays, fetchReportDetailShared, invalidateReportDetailCache } from './reportUtils'
 import { exportElementToPdf } from '@/utils/common/pdf'
 
 const REPORT_ACTION_PERM_MAP = {
@@ -117,7 +127,7 @@ export default {
       type: Boolean,
       default: false
     },
-    showEditorButton: {
+    deleteOnly: {
       type: Boolean,
       default: false
     },
@@ -134,6 +144,10 @@ export default {
       default: true
     },
     forceDefaultActions: {
+      type: Boolean,
+      default: false
+    },
+    navMode: {
       type: Boolean,
       default: false
     },
@@ -219,6 +233,11 @@ export default {
           visible_tables: this.selectedTableNames
         }
       }
+    },
+    isCustomizeMode() {
+      const query = (this.$route && this.$route.query) || {}
+      const raw = query.customize
+      return String(Array.isArray(raw) ? raw[0] : raw) === '1'
     }
   },
   watch: {
@@ -271,46 +290,9 @@ export default {
       this.$message.success(this.$t('Export') + '...')
       try {
         await this.$nextTick()
-        await exportElementToPdf(reportContainer, { filename: 'report.pdf' })
+        await exportElementToPdf(reportContainer, { filename: `${this.title}.pdf` })
       } catch (error) {
         this.$message.error(this.$t('Failed') + ': ' + (error && error.message ? error.message : String(error)))
-      } finally {
-        this.exportLoading = false
-      }
-    },
-    async emailReport() {
-      if (!this.checkName()) {
-        return
-      }
-      const reportContainer = this.getReportContainer()
-      if (!reportContainer) {
-        this.$message.error(this.$t('Failed') + ': report content not found')
-        return
-      }
-      const query = pickReportQuery(this.$route.query)
-      const url = appendQuery('/core/reports/send-mail/', {
-        chart: this.name,
-        days: this.getDaysParam(),
-        ...query
-      })
-      this.$message.success(this.$t('EMailReport') + '...')
-      this.exportLoading = true
-      try {
-        await this.$nextTick()
-        const pdfBlob = await exportElementToPdf(reportContainer, {
-          filename: 'report.pdf',
-          output: 'blob'
-        })
-        const formData = new FormData()
-        formData.append('file', pdfBlob, 'report.pdf')
-        const res = await this.$axios.post(url, formData)
-        if (res.error) {
-          this.$message.error(res.error)
-        } else {
-          this.$message.success(res.message)
-        }
-      } catch (error) {
-        this.$message.error(this.$t('Failed') + ': ' + error.message)
       } finally {
         this.exportLoading = false
       }
@@ -346,19 +328,30 @@ export default {
       await this.$confirm(this.$t('ConfirmDeleteReport'), this.$t('Tip'), { type: 'warning' })
       await this.$axios.delete(`/api/v1/reports/reports/${this.reportId}/`)
       this.$message.success(this.$t('DeleteSuccessMsg'))
-      this.$router.replace({ path: this.$route.path, query: {} })
+      // 先通知侧边栏刷新菜单，再清除路由中的 report_id
+      // mixin 不再监听 reportCatalogChanged，无需担心请求已删除的报表
+      this.$eventBus.$emit('reportCatalogChanged')
+      this.$router.replace({ path: this.$route.path, query: {} }).catch(() => {})
     },
     handleCreated(report) {
-      const query = {
-        ...buildCustomReportRouteQuery(report)
-      }
-      if (this.$route.query.chart_key) {
-        query.chart_key = this.$route.query.chart_key
-      }
-      this.$router.push({
-        path: this.$route.path,
-        query
+      // 先使模块级 detail 缓存失效，确保后续 ensureReportDetail 拿到最新数据
+      invalidateReportDetailCache(report.id)
+      this.reportData = null
+      const reportQuery = buildCustomReportRouteQuery(report)
+      const rq = this.$route.query || {}
+      // report_id 和 days 从保存结果获取（用户在对话框中明确选择的值）
+      const query = { report_id: reportQuery.report_id, days: reportQuery.days }
+      // 保留当前 URL 中的非数据参数
+      if (rq.chart_key) query.chart_key = rq.chart_key
+      if (rq.customize) query.customize = rq.customize
+      // 保留当前 URL 中的可见性参数（由页面复选框 / Customize 视图控制）
+      if (rq.visible_charts) query.visible_charts = rq.visible_charts
+      if (rq.visible_tables) query.visible_tables = rq.visible_tables
+      this.$router.push({ path: this.$route.path, query }).catch(() => {
+        // NavigationDuplicated（仅名称变更等 key 不变场景）: 强制刷新数据
+        this.$eventBus.$emit('reportForceRefresh', String(report.id))
       })
+      this.$eventBus.$emit('reportCatalogChanged')
     }
   }
 }
@@ -384,19 +377,18 @@ export default {
       color: #fff;
     }
 
+    &.delete-btn,
+    &.delete-btn.el-button--text {
+      color: #f56c6c;
+      &:hover {
+        color: #f78989;
+      }
+    }
+
     & + span {
       color: #fff;
       margin-left: 2px;
     }
-  }
-
-  .export-btn .el-icon-document,
-  .export-btn .el-icon-printer,
-  .export-btn .el-icon-message,
-  .export-btn .el-icon-download,
-  .export-btn .el-icon-plus,
-  .export-btn .el-icon-tickets {
-    margin-right: 4px;
   }
 
   .el-button-group {
