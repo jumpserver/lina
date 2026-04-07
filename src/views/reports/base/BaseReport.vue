@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'only-charts': onlyCharts, 'nav': nav }">
+  <div :class="{ 'only-charts': onlyCharts, nav: nav }">
     <div v-if="!onlyCharts && nav" class="header nav-bar">
       <div class="nav-bar-logo">
         <Logo />
@@ -22,13 +22,14 @@
           <div class="title">
             {{ title }}
 
-            <span class="datetime">
-              [{{ new Date().toLocaleString() }}]
-            </span>
+            <span class="datetime"> [{{ new Date().toLocaleString() }}] </span>
           </div>
           <div v-if="nav" class="report-visibility-panel">
             <div class="report-visibility-row">
-              <el-checkbox :value="isDisplayModeEnabled('chart')" @change="handleModeToggle('chart', $event)">
+              <el-checkbox
+                :value="isDisplayModeEnabled('chart')"
+                @change="handleModeToggle('chart', $event)"
+              >
                 {{ $t('ChartReport') }}
               </el-checkbox>
               <el-checkbox-group
@@ -44,7 +45,10 @@
               </el-checkbox-group>
             </div>
             <div class="report-visibility-row">
-              <el-checkbox :value="isDisplayModeEnabled('table')" @change="handleModeToggle('table', $event)">
+              <el-checkbox
+                :value="isDisplayModeEnabled('table')"
+                @change="handleModeToggle('table', $event)"
+              >
                 {{ $t('TableDetails') }}
               </el-checkbox>
               <el-checkbox-group
@@ -65,14 +69,10 @@
           </div>
         </div>
         <div v-if="!nav" class="title-right">
-          <RightAction
-            :name="name"
-            :editor-only="true"
-            :delete-only="true"
-          />
+          <RightAction :name="name" :editor-only="true" :delete-only="true" />
           <span v-if="url && showReportExportBtn" class="export-btn inline-export-btn">
             <el-button type="text" @click="openNewWindow">
-              <i class="fa fa-external-link" style="font-size: 15px;" />
+              <i class="fa fa-external-link" style="font-size: 15px" />
               {{ $t('Customize') }}
             </el-button>
           </span>
@@ -235,7 +235,9 @@ export default {
     },
     getDefaultSelectedNames(current, options) {
       const optionNames = options.map(item => item.name)
-      const selected = Array.isArray(current) ? current.filter(name => optionNames.includes(name)) : []
+      const selected = Array.isArray(current)
+        ? current.filter(name => optionNames.includes(name))
+        : []
       return selected.length ? selected : optionNames
     },
     parseQuerySelection(key, options) {
@@ -246,7 +248,9 @@ export default {
       const queryValue = routeQueryValue !== undefined ? routeQueryValue : hashQueryValue
       if (queryValue === undefined || queryValue === null || queryValue === '') return null
       const rawList = Array.isArray(queryValue) ? queryValue : String(queryValue).split(',')
-      const selected = Array.from(new Set(rawList.map(v => String(v).trim()).filter(v => optionNames.includes(v))))
+      const selected = Array.from(
+        new Set(rawList.map(v => String(v).trim()).filter(v => optionNames.includes(v)))
+      )
       return selected.length ? selected : optionNames
     },
     getHashQueryValue(key) {
@@ -264,16 +268,20 @@ export default {
     syncSelectionsFromRoute() {
       const chartSelectionFromQuery = this.parseQuerySelection('visible_charts', this.chartOptions)
       const tableSelectionFromQuery = this.parseQuerySelection('visible_tables', this.tableOptions)
-      this.selectedChartNames = chartSelectionFromQuery || this.getDefaultSelectedNames(this.selectedChartNames, this.chartOptions)
-      this.selectedTableNames = tableSelectionFromQuery || this.getDefaultSelectedNames(this.selectedTableNames, this.tableOptions)
+      this.selectedChartNames =
+        chartSelectionFromQuery ||
+        this.getDefaultSelectedNames(this.selectedChartNames, this.chartOptions)
+      this.selectedTableNames =
+        tableSelectionFromQuery ||
+        this.getDefaultSelectedNames(this.selectedTableNames, this.tableOptions)
       this.$nextTick(() => this.applyItemVisibility())
     },
     pushVisibilityQuery() {
       if (!this.$router || !this.$route) return
-      const chartAllSelected = this.chartOptions.length &&
-        this.selectedChartNames.length === this.chartOptions.length
-      const tableAllSelected = this.tableOptions.length &&
-        this.selectedTableNames.length === this.tableOptions.length
+      const chartAllSelected =
+        this.chartOptions.length && this.selectedChartNames.length === this.chartOptions.length
+      const tableAllSelected =
+        this.tableOptions.length && this.selectedTableNames.length === this.tableOptions.length
       const query = { ...(this.$route.query || {}) }
       if (this.chartOptions.length && !chartAllSelected) {
         query.visible_charts = this.selectedChartNames.join(',')
@@ -296,14 +304,21 @@ export default {
       const hash = window.location.hash || '#'
       const hashWithoutPrefix = hash.startsWith('#') ? hash.slice(1) : hash
       const queryStartIndex = hashWithoutPrefix.indexOf('?')
-      const hashPath = queryStartIndex >= 0 ? hashWithoutPrefix.slice(0, queryStartIndex) : hashWithoutPrefix
-      const hashSearch = new URLSearchParams(queryStartIndex >= 0 ? hashWithoutPrefix.slice(queryStartIndex + 1) : '')
-      const chartAllSelected = this.chartOptions.length && this.selectedChartNames.length === this.chartOptions.length
-      const tableAllSelected = this.tableOptions.length && this.selectedTableNames.length === this.tableOptions.length
-      if (this.chartOptions.length && !chartAllSelected) hashSearch.set('visible_charts', this.selectedChartNames.join(','))
-      else hashSearch.delete('visible_charts')
-      if (this.tableOptions.length && !tableAllSelected) hashSearch.set('visible_tables', this.selectedTableNames.join(','))
-      else hashSearch.delete('visible_tables')
+      const hashPath =
+        queryStartIndex >= 0 ? hashWithoutPrefix.slice(0, queryStartIndex) : hashWithoutPrefix
+      const hashSearch = new URLSearchParams(
+        queryStartIndex >= 0 ? hashWithoutPrefix.slice(queryStartIndex + 1) : ''
+      )
+      const chartAllSelected =
+        this.chartOptions.length && this.selectedChartNames.length === this.chartOptions.length
+      const tableAllSelected =
+        this.tableOptions.length && this.selectedTableNames.length === this.tableOptions.length
+      if (this.chartOptions.length && !chartAllSelected) {
+        hashSearch.set('visible_charts', this.selectedChartNames.join(','))
+      } else hashSearch.delete('visible_charts')
+      if (this.tableOptions.length && !tableAllSelected) {
+        hashSearch.set('visible_tables', this.selectedTableNames.join(','))
+      } else hashSearch.delete('visible_tables')
       const hashQueryString = hashSearch.toString()
       const nextHash = `#${hashPath}${hashQueryString ? `?${hashQueryString}` : ''}`
       const nextUrl = `${window.location.pathname}${pathQueryString ? `?${pathQueryString}` : ''}${nextHash}`
@@ -361,7 +376,7 @@ export default {
     applyItemVisibility() {
       if (!this.$el) return
       const nodes = this.$el.querySelectorAll('[data-report-type][data-report-name]')
-      nodes.forEach((node) => {
+      nodes.forEach(node => {
         const type = node.getAttribute('data-report-type')
         const name = node.getAttribute('data-report-name')
         const isVisible = this.isItemSelected(type, name)
@@ -508,7 +523,7 @@ export default {
 }
 
 .content {
-  background-color: #F1F1F1;
+  background-color: #f1f1f1;
   height: calc(100vh - 40px);
   overflow-y: auto;
 
@@ -580,7 +595,6 @@ export default {
   }
 
   .charts-zone {
-
     ::v-deep {
       .chart-container {
         break-inside: avoid;
@@ -712,24 +726,25 @@ export default {
       padding-top: 6px;
     }
 
-    .report-card-body { {
-  .title-bar {
-    flex-direction: column;
-    gap: 10px;
-  }
+    .report-card-body {
+      .title-bar {
+        flex-direction: column;
+        gap: 10px;
+      }
 
-  .title-right {
-    width: 100%;
-    justify-content: flex-end;
-  }
-}
+      .title-right {
+        width: 100%;
+        justify-content: flex-end;
+      }
+    }
 
-.charts-zone--no-padding {
-  padding: 0 !important;
+    .charts-zone--no-padding {
+      padding: 0 !important;
+    }
+  }
 }
 
 ::v-deep .report-item-hidden {
   display: none !important;
 }
-
 </style>
