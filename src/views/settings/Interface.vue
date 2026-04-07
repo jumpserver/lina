@@ -85,6 +85,14 @@ export default {
       stepStatus: ['wait', 'success', 'finish', 'process', 'error'],
       loading: true,
       files: {},
+      imagePreviews: {},
+      imageValidationToken: {},
+      imageFieldConfig: {
+        logo_index: { width: 185, height: 55 },
+        logo_logout: { width: 82, height: 82 },
+        favicon: { width: 16, height: 16 },
+        login_image: { width: 492, height: 472 }
+      },
       examples: {
         'primary': this.$t('Primary'), 'info': this.$t('Info'), 'warning': this.$t('Warning'),
         'success': this.$t('Success'), 'danger': this.$t('Danger')
@@ -120,8 +128,11 @@ export default {
             tip: this.$t('LoginImageTip')
           },
           on: {
+            input: ([value]) => {
+              this.syncImagePreview('login_image', value)
+            },
             fileChange: ([value], updateForm) => {
-              this.files['login_image'] = value
+              this.handleImageChange('login_image', value, updateForm)
             }
           }
         },
@@ -134,8 +145,11 @@ export default {
             tip: this.$t('FaviconTip')
           },
           on: {
+            input: ([value]) => {
+              this.syncImagePreview('favicon', value)
+            },
             fileChange: ([value], updateForm) => {
-              this.files['favicon'] = value
+              this.handleImageChange('favicon', value, updateForm)
             }
           }
         },
@@ -149,8 +163,11 @@ export default {
             showBG: true
           },
           on: {
+            input: ([value]) => {
+              this.syncImagePreview('logo_index', value)
+            },
             fileChange: ([value], updateForm) => {
-              this.files['logo_index'] = value
+              this.handleImageChange('logo_index', value, updateForm)
             }
           }
         },
@@ -163,8 +180,11 @@ export default {
             tip: this.$t('LogoLogoutTip')
           },
           on: {
+            input: ([value]) => {
+              this.syncImagePreview('logo_logout', value)
+            },
             fileChange: ([value], updateForm) => {
-              this.files['logo_logout'] = value
+              this.handleImageChange('logo_logout', value, updateForm)
             }
           }
         },
@@ -242,6 +262,179 @@ export default {
       }).catch(error => {
         this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
       })
+    },
+    async handleImageChange(field, file, updateForm) {
+      const token = (this.imageValidationToken[field] || 0) + 1
+      this.imageValidationToken[field] = token
+
+      if (!file) {
+        this.$delete(this.files, field)
+        this.$delete(this.imagePreviews, field)
+        return
+      }
+
+      const previousFile = this.files[field]
+      const previousPreview = this.imagePreviews[field]
+      const nextFile = await this.validateImage(field, file)
+
+      if (this.imageValidationToken[field] !== token) {
+        return
+      }
+
+      if (!nextFile) {
+        if (previousFile) {
+          this.files[field] = previousFile
+        } else {
+          this.$delete(this.files, field)
+        }
+        if (previousPreview) {
+          this.imagePreviews[field] = previousPreview
+        } else {
+          this.$delete(this.imagePreviews, field)
+        }
+        updateForm({ [field]: previousPreview || this.interfaceInfo[field] || '' })
+        return
+      }
+
+      this.files[field] = nextFile
+      if (nextFile !== file) {
+        const previewUrl = this.getObjectURL(nextFile)
+        this.imagePreviews[field] = previewUrl
+        updateForm({ [field]: previewUrl })
+      }
+    },
+    syncImagePreview(field, value) {
+      this.imagePreviews[field] = value
+    },
+    validateImage(field, file) {
+      return new Promise((resolve) => {
+        const url = URL.createObjectURL(file)
+        const img = new Image()
+
+        img.onload = async () => {
+          URL.revokeObjectURL(url)
+          if (file.size <= 10 * 1024 * 1024) {
+            const fieldConfig = this.imageFieldConfig[field]
+            const isMatchedSize = !fieldConfig ||
+              (
+                img.naturalWidth === fieldConfig.width &&
+                img.naturalHeight === fieldConfig.height
+              )
+
+            if (isMatchedSize) {
+              resolve(file)
+              return
+            }
+
+            const resizedFile = await this.compressImageToLimit(field, file, img)
+            if (!resizedFile) {
+              resolve(null)
+              return
+            }
+            resolve(resizedFile)
+            return
+          }
+
+          this.$message.error(this.$t('UploadFileLthHelpText', { limit: 10 }))
+          resolve(null)
+        }
+
+        img.onerror = () => {
+          URL.revokeObjectURL(url)
+          this.$message.error(this.$t('ImageFileCorruptedOrUnreadable'))
+          resolve(null)
+        }
+
+        img.src = url
+      })
+    },
+    async compressImageToLimit(field, file, image) {
+      const limitSize = 10 * 1024 * 1024
+      const { width: targetWidth, height: targetHeight } = this.imageFieldConfig[field] || {
+        width: image.naturalWidth,
+        height: image.naturalHeight
+      }
+      const canvas = document.createElement('canvas')
+      canvas.width = targetWidth
+      canvas.height = targetHeight
+
+      const ctx = canvas.getContext('2d')
+      if (!ctx) {
+        return null
+      }
+
+      const drawRect = this.getContainRect(
+        image.naturalWidth,
+        image.naturalHeight,
+        targetWidth,
+        targetHeight
+      )
+
+      if (file.type !== 'image/png') {
+        ctx.fillStyle = '#fff'
+        ctx.fillRect(0, 0, targetWidth, targetHeight)
+      } else {
+        ctx.clearRect(0, 0, targetWidth, targetHeight)
+      }
+
+      ctx.drawImage(
+        image,
+        drawRect.offsetX,
+        drawRect.offsetY,
+        drawRect.width,
+        drawRect.height
+      )
+
+      const mimeType = file.type === 'image/png' ? 'image/png' : 'image/jpeg'
+      const blob = await this.canvasToBlob(canvas, mimeType, mimeType === 'image/png' ? 1 : 0.92)
+      if (!blob || blob.size > limitSize) {
+        return null
+      }
+      return new File(
+        [blob],
+        this.renameImage(file.name, mimeType),
+        {
+          type: mimeType,
+          lastModified: Date.now()
+        }
+      )
+    },
+    getContainRect(sourceWidth, sourceHeight, targetWidth, targetHeight) {
+      const scale = Math.min(targetWidth / sourceWidth, targetHeight / sourceHeight, 1)
+      const width = Math.max(1, Math.round(sourceWidth * scale))
+      const height = Math.max(1, Math.round(sourceHeight * scale))
+
+      return {
+        width,
+        height,
+        offsetX: Math.floor((targetWidth - width) / 2),
+        offsetY: Math.floor((targetHeight - height) / 2)
+      }
+    },
+    canvasToBlob(canvas, type, quality) {
+      return new Promise((resolve) => {
+        canvas.toBlob(blob => {
+          resolve(blob)
+        }, type, quality)
+      })
+    },
+    renameImage(fileName, mimeType) {
+      const ext = mimeType === 'image/png' ? '.png' : '.jpg'
+      if (/\.[^.]+$/.test(fileName)) {
+        return fileName.replace(/\.[^.]+$/, ext)
+      }
+      return fileName + ext
+    },
+    getObjectURL(file) {
+      let url = null
+      if (window.createObjectURL !== undefined) {
+        url = window.createObjectURL(file)
+      } else if (window.URL !== undefined) {
+        url = window.URL.createObjectURL(file)
+      } else if (window.webkitURL !== undefined) {
+        url = window.webkitURL.createObjectURL(file)
+      }
+      return url
     }
   }
 }
