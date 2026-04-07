@@ -1,7 +1,7 @@
 <template>
-  <div :class="{ collapse: collapse }" class="sidebar-logo-container">
+  <div :class="{ collapse: logoTextMode }" class="sidebar-logo-container">
     <transition name="sidebarLogoFade">
-      <a v-if="collapse" key="collapse" class="sidebar-logo-link" @click="handleClick">
+      <a v-if="logoTextMode" key="collapse" class="sidebar-logo-link" @click="handleClick">
         <img :src="logoSrc" alt="logo" class="sidebar-logo" />
         <span :style="logoTitleStyle" class="sidebar-title">{{ logoTitle }}</span>
       </a>
@@ -17,17 +17,8 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'SidebarLogo',
-  props: {
-    collapse: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data() {
-    return {}
-  },
   computed: {
-    ...mapGetters(['viewRoutes', 'publicSettings']),
+    ...mapGetters(['viewRoutes', 'publicSettings', 'logoTextMode']),
     // eslint-disable-next-line vue/return-in-computed-property
     logoTextSrc() {
       return this.publicSettings['INTERFACE']['logo_index']
@@ -61,7 +52,6 @@ export default {
       }
     }
   },
-  created() {},
   methods: {
     handleClick() {
       const currentPath = this.$route.path

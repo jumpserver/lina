@@ -42,8 +42,7 @@
     <ul class="navbar-left">
       <li class="left-item">
         <div class="nav-logo">
-          <!-- TODO 根据 INTERFACE store 的开关动态设置 -->
-          <Logo v-if="showLogo" :collapse="true" />
+          <Logo v-if="showLogo" />
         </div>
       </li>
       <li v-if="orgsShow" class="left-item" style="margin-left: 20px">

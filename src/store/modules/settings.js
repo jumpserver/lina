@@ -5,13 +5,17 @@ import { changeMenuColor } from '@/utils/theme/color'
 import request from '@/utils/request'
 import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
+const parseBooleanEnv = value => String(value).trim() === '1'
+
 const { showSettings, fixedHeader, sidebarLogo, tagsView } = defaultSettings
+const envLogoTextMode = parseBooleanEnv(process.env.VUE_APP_LOGO_TEXT_MODE)
 
 const state = {
   showSettings: showSettings,
   fixedHeader: fixedHeader,
   sidebarLogo: sidebarLogo,
   tagsView: tagsView,
+  logoTextMode: envLogoTextMode,
   publicSettings: {},
   hasValidLicense: false,
   authMethods: {},
@@ -34,6 +38,9 @@ const mutations = {
       state.hasValidLicense = settings['XPACK_LICENSE_IS_VALID']
     }
   },
+  SET_LOGO_TEXT_MODE: (state, value) => {
+    state.logoTextMode = value
+  },
   SET_SECURITY_WATERMARK_ENABLED: (state, value) => {
     state.publicSettings['SECURITY_WATERMARK_ENABLED'] = value
   },
@@ -50,6 +57,7 @@ const actions = {
   // get user Profile
   getPublicSettings({ commit, state }, isOpen) {
     return new Promise((resolve, reject) => {
+      commit('SET_LOGO_TEXT_MODE', envLogoTextMode)
       getPublicSettings(isOpen)
         .then(response => {
           const data = response || {}
