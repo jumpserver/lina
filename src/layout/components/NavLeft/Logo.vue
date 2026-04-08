@@ -1,12 +1,12 @@
 <template>
-  <div :class="{ collapse: logoTextMode }" class="sidebar-logo-container">
+  <div :class="{ collapse: !sidebar.opened, 'logo-mode-split': logoMode === 'split' }" class="sidebar-logo-container">
     <transition name="sidebarLogoFade">
-      <a v-if="logoTextMode" key="collapse" class="sidebar-logo-link" @click="handleClick">
-        <img :src="logoSrc" alt="logo" class="sidebar-logo" />
-        <span :style="logoTitleStyle" class="sidebar-title">{{ logoTitle }}</span>
+      <a v-if="logoMode === 'split'" key="collapse" class="sidebar-logo-link" @click="handleClick">
+        <img :src="logoSrc" alt="logo" class="sidebar-logo">
+        <span v-if="sidebar.opened" :style="logoTitleStyle" class="sidebar-title">{{ logoTitle }}</span>
       </a>
       <a v-else key="expand" class="sidebar-logo-link" @click="handleClick">
-        <img :src="logoTextSrc" alt="logo" class="sidebar-logo-text" />
+        <img :src="logoTextSrc" alt="logo" class="sidebar-logo-text">
       </a>
     </transition>
   </div>
@@ -18,7 +18,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'SidebarLogo',
   computed: {
-    ...mapGetters(['viewRoutes', 'publicSettings', 'logoTextMode']),
+    ...mapGetters(['viewRoutes', 'publicSettings', 'logoMode', 'sidebar']),
     // eslint-disable-next-line vue/return-in-computed-property
     logoTextSrc() {
       return this.publicSettings['INTERFACE']['logo_index']
@@ -89,6 +89,12 @@ export default {
   line-height: $headerHeight;
   text-align: center;
   overflow: hidden;
+
+  // &.collapse.logo-mode-split {
+  //   .sidebar-logo-link {
+  //     margin-left: 8px;
+  //   }
+  // }
 
   & .sidebar-logo-link {
     box-sizing: border-box;
