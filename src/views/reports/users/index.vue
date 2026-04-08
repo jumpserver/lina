@@ -40,7 +40,7 @@
 import Page from '@/layout/components/Page'
 import UserActivity from '@/views/reports/users/UserActivity.vue'
 import ChangePassword from '@/views/reports/users/ChangePassword.vue'
-import { appendQuery, buildCustomReportRouteQuery, reportDebugLog } from '@/views/reports/base/reportUtils'
+import { appendQuery, buildCustomReportRouteQuery, normalizeReportDays, reportDebugLog } from '@/views/reports/base/reportUtils'
 
 const TEMPLATE_ROUTE_MAP = {
   UserLoginReport: {
@@ -163,8 +163,8 @@ export default {
             reportId: String(child.id),
             isCustom: true,
             query: {
-              chart_key: target.key,
-              ...buildCustomReportRouteQuery(child)
+              ...buildCustomReportRouteQuery(child),
+              chart_key: target.key
             }
           }))
         })
@@ -179,6 +179,7 @@ export default {
       this.syncSelectedFromRoute()
     },
     syncSelectedFromRoute() {
+      const normalizeRouteValue = (v) => (Array.isArray(v) ? v[0] : (v || ''))
       const raw = this.$route.query.report_id
       const reportId = Array.isArray(raw) ? raw[0] : raw
       let target = null
@@ -209,6 +210,43 @@ export default {
         target = this.chartItems.find(item => item.key === chartKey) ||
           this.chartItems.find(item => item.key === this.selectedChartKey) ||
           this.chartItems[0]
+      }
+      if (target?.isCustom) {
+        const rq = this.$route.query || {}
+        const isCustomizeMode = String(Array.isArray(rq.customize) ? rq.customize[0] : rq.customize) === '1'
+        const targetVisibleCharts = target.query?.visible_charts || ''
+        const targetVisibleTables = target.query?.visible_tables || ''
+        const desiredBase = {
+          chart_key: target.query?.chart_key || target.key,
+          report_id: String(target.reportId || target.query?.report_id || ''),
+          days: normalizeReportDays(target.query?.days, '7')
+        }
+        const currentBase = {
+          chart_key: normalizeRouteValue(rq.chart_key),
+          report_id: normalizeRouteValue(rq.report_id),
+          days: normalizeReportDays(normalizeRouteValue(rq.days), '7')
+        }
+        const baseNeedsCorrection = JSON.stringify(currentBase) !== JSON.stringify(desiredBase)
+        // 普通页面：visible_* 始终以报表保存值为准（用户无法在普通页面手动修改）
+        const visibleNeedsCorrection = !isCustomizeMode && (
+          (normalizeRouteValue(rq.visible_charts) || '') !== targetVisibleCharts ||
+          (normalizeRouteValue(rq.visible_tables) || '') !== targetVisibleTables
+        )
+        if (baseNeedsCorrection || visibleNeedsCorrection) {
+          const correctedQuery = { ...desiredBase }
+          if (isCustomizeMode) {
+            // customize 窗口：保留用户在选项卡上的实时操作
+            if (rq.visible_charts) correctedQuery.visible_charts = rq.visible_charts
+            if (rq.visible_tables) correctedQuery.visible_tables = rq.visible_tables
+            if (rq.customize) correctedQuery.customize = rq.customize
+          } else {
+            // 普通页面：始终使用报表保存值
+            if (targetVisibleCharts) correctedQuery.visible_charts = targetVisibleCharts
+            if (targetVisibleTables) correctedQuery.visible_tables = targetVisibleTables
+          }
+          this.$router.replace({ path: this.$route.path, query: correctedQuery })
+          return
+        }
       }
       if (target && (this.selectedChartKey !== target.key || !this.component)) {
         this.applyChart(target)

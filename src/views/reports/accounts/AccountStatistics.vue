@@ -61,18 +61,6 @@
               </div>
             </div>
           </div>
-          <div class="chart-container" data-report-type="chart" data-report-name="RankByNumberOfAssetAccounts">
-            <div class="chart-container-title">
-              <div class="chart-container-title-text">{{ $t('RankByNumberOfAssetAccounts') }}</div>
-              <RankTable :config="config.top10_asset_accounts" />
-            </div>
-          </div>
-          <div class="chart-container" data-report-type="chart" data-report-name="AccountAndPasswordChangeRank">
-            <div class="chart-container-title">
-              <div class="chart-container-title-text">{{ $t('AccountAndPasswordChangeRank') }}</div>
-              <RankTable :config="config.top10_version_accounts" />
-            </div>
-          </div>
         </div>
       </template>
       <template #table>
@@ -153,9 +141,7 @@ export default {
         { name: 'Overview', title: this.$t('Overview') },
         { name: 'AccountCreationSourceDistribution', title: this.$t('AccountCreationSourceDistribution') },
         { name: 'AccountConnectivityStatusDistribution', title: this.$t('AccountConnectivityStatusDistribution') },
-        { name: 'AccountPasswordChangeTrends', title: this.$t('AccountPasswordChangeTrends') },
-        { name: 'RankByNumberOfAssetAccounts', title: this.$t('RankByNumberOfAssetAccounts') },
-        { name: 'AccountAndPasswordChangeRank', title: this.$t('AccountAndPasswordChangeRank') }
+        { name: 'AccountPasswordChangeTrends', title: this.$t('AccountPasswordChangeTrends') }
       ],
       tables: [
         { name: 'Overview', title: this.$t('Overview') },

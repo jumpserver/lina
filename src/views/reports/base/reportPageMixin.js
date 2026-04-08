@@ -33,9 +33,15 @@ const TABLE_LABEL_KEY_MAP = {
 
 const COLUMN_LABEL_KEY_MAP = {
   date: 'Date',
+  type: 'Type',
   name: 'Name',
   metric: 'Metric',
   value: 'Value',
+  push: 'AccountPushList',
+  check: 'RiskDetection',
+  backup: 'BaseAccountBackup',
+  collect: 'DiscoverAccounts',
+  change_secret: 'MenuChangeSecret',
   count: 'Count',
   total: 'Total',
   active: 'Active',

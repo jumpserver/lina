@@ -32,8 +32,8 @@
         </template>
       </template>
       <template v-if="!editorOnly && (!isCustomReport || forceDefaultActions)">
-        <el-button class="export-btn" type="text" :icon="isCustomReport ? 'el-icon-edit' : 'el-icon-plus'" @click="openEditor">
-          {{ $t('Save') }}
+        <el-button class="export-btn" type="text" :icon="saveActionIcon" @click="openEditor">
+          {{ saveActionLabel }}
         </el-button>
         <el-button
           :loading="exportLoading"
@@ -199,6 +199,12 @@ export default {
       const perm = this.reportActionPerms.delete
       return !perm || this.$hasPerm(perm)
     },
+    saveActionIcon() {
+      return this.isCustomReport ? 'el-icon-edit' : 'el-icon-plus'
+    },
+    saveActionLabel() {
+      return this.isCustomReport ? this.$t('Update') : this.$t('Save')
+    },
     showCustomActions() {
       if (this.forceDefaultActions) {
         return false
@@ -215,15 +221,17 @@ export default {
       const query = this.$route.query || {}
       const reportDays = parseInt(normalizeReportDays(query.days || this.reportData?.days || this.getDaysParam(), '7'), 10)
       if (this.isCustomReport) {
+        const savedFilters = (this.reportData && this.reportData.filters) ? { ...this.reportData.filters } : {}
+        if (query.visible_charts) {
+          savedFilters.visible_charts = String(query.visible_charts).split(',').map(s => s.trim()).filter(Boolean)
+        }
+        if (query.visible_tables) {
+          savedFilters.visible_tables = String(query.visible_tables).split(',').map(s => s.trim()).filter(Boolean)
+        }
         return {
           ...(this.reportData || {}),
           days: reportDays,
-          filters: {
-            ...(this.reportData?.filters || {}),
-            // 使用当前页面的勾选状态，而不是已保存的状态
-            visible_charts: this.selectedChartNames,
-            visible_tables: this.selectedTableNames
-          }
+          filters: savedFilters
         }
       }
       return {
@@ -277,6 +285,16 @@ export default {
     getDaysParam() {
       return normalizeReportDays(this.$route.query.days || localStorage.getItem(this.name), '7')
     },
+    toggleReportOutputMode(enabled) {
+      const reportContainer = this.getReportContainer()
+      if (!reportContainer) {
+        return () => {}
+      }
+      reportContainer.classList.toggle('report-output-mode', enabled)
+      return () => {
+        reportContainer.classList.remove('report-output-mode')
+      }
+    },
     async exportPdf() {
       if (!this.checkName()) {
         return
@@ -288,17 +306,31 @@ export default {
       }
       this.exportLoading = true
       this.$message.success(this.$t('Export') + '...')
+      const restoreOutputMode = this.toggleReportOutputMode(true)
       try {
         await this.$nextTick()
         await exportElementToPdf(reportContainer, { filename: `${this.title}.pdf` })
       } catch (error) {
         this.$message.error(this.$t('Failed') + ': ' + (error && error.message ? error.message : String(error)))
       } finally {
+        restoreOutputMode()
         this.exportLoading = false
       }
     },
     printReport() {
-      window.print()
+      const restoreOutputMode = this.toggleReportOutputMode(true)
+      const restoreOnce = () => {
+        restoreOutputMode()
+        window.removeEventListener('afterprint', restoreOnce)
+      }
+
+      window.addEventListener('afterprint', restoreOnce)
+      try {
+        window.print()
+      } finally {
+        // Fallback for environments where afterprint is not fired.
+        window.setTimeout(restoreOnce, 1000)
+      }
     },
     openEditor() {
       if (!this.canSaveReport) {
@@ -328,27 +360,20 @@ export default {
       await this.$confirm(this.$t('ConfirmDeleteReport'), this.$t('Tip'), { type: 'warning' })
       await this.$axios.delete(`/api/v1/reports/reports/${this.reportId}/`)
       this.$message.success(this.$t('DeleteSuccessMsg'))
-      // 先通知侧边栏刷新菜单，再清除路由中的 report_id
-      // mixin 不再监听 reportCatalogChanged，无需担心请求已删除的报表
       this.$eventBus.$emit('reportCatalogChanged')
       this.$router.replace({ path: this.$route.path, query: {} }).catch(() => {})
     },
     handleCreated(report) {
-      // 先使模块级 detail 缓存失效，确保后续 ensureReportDetail 拿到最新数据
       invalidateReportDetailCache(report.id)
       this.reportData = null
       const reportQuery = buildCustomReportRouteQuery(report)
       const rq = this.$route.query || {}
-      // report_id 和 days 从保存结果获取（用户在对话框中明确选择的值）
       const query = { report_id: reportQuery.report_id, days: reportQuery.days }
-      // 保留当前 URL 中的非数据参数
       if (rq.chart_key) query.chart_key = rq.chart_key
       if (rq.customize) query.customize = rq.customize
-      // 保留当前 URL 中的可见性参数（由页面复选框 / Customize 视图控制）
-      if (rq.visible_charts) query.visible_charts = rq.visible_charts
-      if (rq.visible_tables) query.visible_tables = rq.visible_tables
+      if (reportQuery.visible_charts) query.visible_charts = reportQuery.visible_charts
+      if (reportQuery.visible_tables) query.visible_tables = reportQuery.visible_tables
       this.$router.push({ path: this.$route.path, query }).catch(() => {
-        // NavigationDuplicated（仅名称变更等 key 不变场景）: 强制刷新数据
         this.$eventBus.$emit('reportForceRefresh', String(report.id))
       })
       this.$eventBus.$emit('reportCatalogChanged')

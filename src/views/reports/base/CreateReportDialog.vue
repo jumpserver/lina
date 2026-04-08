@@ -153,16 +153,47 @@ export default {
     normalizeDays(days) {
       return normalizeReportDays(days, '7')
     },
+    normalizeSelection(raw, options = [], fallback = []) {
+      const safeOptions = Array.isArray(options) ? options : []
+      const optionNames = safeOptions
+        .map(item => String(item && item.name ? item.name : '').trim())
+        .filter(Boolean)
+      const optionNameSet = new Set(optionNames)
+      const titleToName = safeOptions.reduce((acc, item) => {
+        const title = String(item && item.title ? item.title : '').trim()
+        if (title && item && item.name) acc[title] = String(item.name).trim()
+        return acc
+      }, {})
+      const toName = (v) => {
+        const s = String(v).trim()
+        if (optionNameSet.has(s)) return s
+        return titleToName[s] || ''
+      }
+      const picked = (Array.isArray(raw) ? raw : [])
+        .map(toName)
+        .filter(Boolean)
+      if (picked.length) {
+        return Array.from(new Set(picked))
+      }
+      const fallbackPicked = (Array.isArray(fallback) ? fallback : [])
+        .map(toName)
+        .filter(Boolean)
+      return fallbackPicked.length ? Array.from(new Set(fallbackPicked)) : optionNames
+    },
     getInitialForm() {
       const report = this.report || {}
       const reportDays = this.normalizeDays(report.days || this.defaultDays || '7')
       const filters = report.filters || {}
-      const visibleCharts = Array.isArray(filters.visible_charts)
-        ? filters.visible_charts
-        : [...this.defaultVisibleCharts]
-      const visibleTables = Array.isArray(filters.visible_tables)
-        ? filters.visible_tables
-        : [...this.defaultVisibleTables]
+      const visibleCharts = this.normalizeSelection(
+        filters.visible_charts,
+        this.chartOptions,
+        this.defaultVisibleCharts
+      )
+      const visibleTables = this.normalizeSelection(
+        filters.visible_tables,
+        this.tableOptions,
+        this.defaultVisibleTables
+      )
       return {
         name: report.name || getDefaultName(this.reportTitle || this.reportType || 'report'),
         days: reportDays,
@@ -172,14 +203,24 @@ export default {
     },
     getPayload() {
       const rangeDays = parseInt(this.normalizeDays(this.form.days), 10)
+      const visibleCharts = this.normalizeSelection(
+        this.form.visibleCharts,
+        this.chartOptions,
+        this.defaultVisibleCharts
+      )
+      const visibleTables = this.normalizeSelection(
+        this.form.visibleTables,
+        this.tableOptions,
+        this.defaultVisibleTables
+      )
       return {
         name: this.form.name,
         tp: this.reportType,
         is_active: true,
         days: rangeDays,
         filters: {
-          visible_charts: this.form.visibleCharts,
-          visible_tables: this.form.visibleTables
+          visible_charts: visibleCharts,
+          visible_tables: visibleTables
         }
       }
     },
@@ -223,3 +264,15 @@ export default {
 }
 </script>
 
+<style scoped>
+.form-help-text {
+  margin-top: 6px;
+  color: #909399;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+::v-deep .el-input__count {
+  color: #909399;
+}
+</style>

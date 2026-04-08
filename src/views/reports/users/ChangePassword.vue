@@ -40,19 +40,6 @@
             </div>
           </div>
 
-          <div class="chart-container" data-report-type="chart" data-report-name="ModifyTheTargetUserTopTank">
-            <div class="chart-container-title">
-              <div class="chart-container-title-text">{{ $t('ModifyTheTargetUserTopTank') }}</div>
-              <RankTable :config="config.change_password_top10_users" />
-            </div>
-          </div>
-
-          <div class="chart-container" data-report-type="chart" data-report-name="TopRankOfOperateUsers">
-            <div class="chart-container-title">
-              <div class="chart-container-title-text">{{ $t('TopRankOfOperateUsers') }}</div>
-              <RankTable :config="config.change_password_top10_change_bys" />
-            </div>
-          </div>
         </div>
       </template>
 
@@ -90,7 +77,6 @@
 </template>
 
 <script>
-import RankTable from './components/RankTable.vue'
 import BaseReport from '../base/BaseReport.vue'
 import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
 import { mixColors } from '@/views/reports/const'
@@ -102,7 +88,6 @@ import ReportToolbar from '@/views/reports/base/ReportToolbar.vue'
 export default {
   components: {
     SummaryCountCard,
-    RankTable,
     BaseReport,
     Echart,
     ReportToolbar
@@ -120,9 +105,7 @@ export default {
       name: 'UserChangePasswordReport',
       charts: [
         { name: 'Overview', title: this.$t('Overview') },
-        { name: 'UserModificationTrends', title: this.$t('UserModificationTrends') },
-        { name: 'ModifyTheTargetUserTopTank', title: this.$t('ModifyTheTargetUserTopTank') },
-        { name: 'TopRankOfOperateUsers', title: this.$t('TopRankOfOperateUsers') }
+        { name: 'UserModificationTrends', title: this.$t('UserModificationTrends') }
       ],
       tables: [
         { name: 'Overview', title: this.$t('Overview') },
@@ -137,32 +120,6 @@ export default {
         'change_by_total': 0
       },
       config: {
-        change_password_top10_users: {
-          data: [],
-          columns: [
-            {
-              prop: 'user',
-              label: this.$t('Username')
-            },
-            {
-              prop: 'count',
-              label: this.$t('Total')
-            }
-          ]
-        },
-        change_password_top10_change_bys: {
-          data: [],
-          columns: [
-            {
-              prop: 'change_by',
-              label: this.$t('Username')
-            },
-            {
-              prop: 'count',
-              label: this.$t('Total')
-            }
-          ]
-        },
         user_change_password_metrics: {
           dates_metrics_date: [],
           dates_metrics_total: [0]
@@ -323,8 +280,6 @@ export default {
       this.$set(this.total_count_change_password, 'total', data.total_count_change_password.total)
       this.$set(this.total_count_change_password, 'user_total', data.total_count_change_password.user_total)
       this.$set(this.total_count_change_password, 'change_by_total', data.total_count_change_password.change_by_total)
-      this.$set(this.config.change_password_top10_users, 'data', data.change_password_top10_users)
-      this.$set(this.config.change_password_top10_change_bys, 'data', data.change_password_top10_change_bys)
       this.$set(this.config.user_change_password_metrics, 'dates_metrics_date', data.user_change_password_metrics.dates_metrics_date)
       this.$set(this.config.user_change_password_metrics, 'dates_metrics_total', data.user_change_password_metrics.dates_metrics_total)
     }

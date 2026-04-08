@@ -243,13 +243,24 @@ export default {
     parseQuerySelection(key, options) {
       const optionNames = options.map(item => item.name)
       if (!optionNames.length) return []
+      const optionNameSet = new Set(optionNames)
+      const titleToName = options.reduce((acc, item) => {
+        const title = String(item && item.title ? item.title : '').trim()
+        if (title) acc[title] = item.name
+        return acc
+      }, {})
       const routeQueryValue = this.$route && this.$route.query ? this.$route.query[key] : undefined
       const hashQueryValue = this.getHashQueryValue(key)
       const queryValue = routeQueryValue !== undefined ? routeQueryValue : hashQueryValue
       if (queryValue === undefined || queryValue === null || queryValue === '') return null
       const rawList = Array.isArray(queryValue) ? queryValue : String(queryValue).split(',')
       const selected = Array.from(
-        new Set(rawList.map(v => String(v).trim()).filter(v => optionNames.includes(v)))
+        new Set(
+          rawList
+            .map(v => String(v).trim())
+            .map(v => (optionNameSet.has(v) ? v : (titleToName[v] || '')))
+            .filter(Boolean)
+        )
       )
       return selected.length ? selected : optionNames
     },
@@ -411,6 +422,8 @@ export default {
           const query = { customize: 1 }
           if (rq.report_id) query.report_id = rq.report_id
           if (rq.days) query.days = rq.days
+          if (rq.visible_charts) query.visible_charts = rq.visible_charts
+          if (rq.visible_tables) query.visible_tables = rq.visible_tables
           const url = appendQuery(basePath, query)
           this.win = window.open(url, '_blank', options)
         }
@@ -527,6 +540,12 @@ export default {
   height: calc(100vh - 40px);
   overflow-y: auto;
 
+  &.report-output-mode {
+    .report-visibility-panel {
+      display: none !important;
+    }
+  }
+
   ::v-deep .export-bar {
     float: right;
 
@@ -586,6 +605,10 @@ export default {
 @media print {
   .header {
     display: none;
+  }
+
+  .report-visibility-panel {
+    display: none !important;
   }
 
   .content {

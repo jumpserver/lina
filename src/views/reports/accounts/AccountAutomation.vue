@@ -28,7 +28,7 @@
             </div>
           </div>
 
-          <div v-if="!isCustomReport" class="chart-container full-width">
+          <div data-report-type="chart" data-report-name="RiskyAccount" class="chart-container full-width">
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('RiskyAccount') }}</div>
               <RiskSummary :is-title="false" class="risk-summary" />
@@ -63,6 +63,19 @@
       </template>
       <template #table>
         <div v-if="showTable" class="full-width">
+          <div data-report-type="table" data-report-name="RiskyAccount" class="report-table-wrap full-width">
+            <el-card class="report-card" shadow="hover">
+              <div class="chart-container-title">
+                <div class="chart-container-title-text">{{ $t('RiskyAccount') }}</div>
+              </div>
+              <div class="report-card-body">
+                <el-table :data="riskCounter" border>
+                  <el-table-column :label="$t('Name')" prop="name" min-width="200" />
+                  <el-table-column :label="$t('Count')" prop="value" min-width="120" />
+                </el-table>
+              </div>
+            </el-card>
+          </div>
           <div v-if="Array.isArray(tableData)" class="report-tables full-width">
             <div
               v-if="tableData.length"
@@ -135,11 +148,13 @@ export default {
       name: 'AccountAutomationReport',
       charts: [
         { name: 'Overview', title: this.$t('Overview') },
+        { name: 'RiskyAccount', title: this.$t('RiskyAccount') },
         { name: 'TaskExecutionTrends', title: this.$t('TaskExecutionTrends') },
         { name: 'AccountResult', title: this.$t('AccountResult') }
       ],
       tables: [
         { name: 'Overview', title: this.$t('Overview') },
+        { name: 'RiskyAccount', title: this.$t('RiskyAccount') },
         { name: 'TaskExecutionTrends', title: this.$t('TaskExecutionTrends') },
         { name: 'AccountResult', title: this.$t('AccountResult') }
       ],
@@ -162,7 +177,8 @@ export default {
         dates_metrics_date: [],
         dates_metrics_total_count_success: [0],
         dates_metrics_total_count_failed: [0]
-      }
+      },
+      riskCounter: []
     }
   },
   computed: {
@@ -282,6 +298,38 @@ export default {
     async getData() {
       const data = await this.fetchReportData('/api/v1/reports/reports/account-automation/')
       await this.loadTableData('/api/v1/reports/reports/account-automation/')
+      try {
+        const riskData = await this.$axios.get('/api/v1/accounts/pam-dashboard/', {
+          params: {
+            total_long_time_no_login_accounts: 1,
+            total_new_found_accounts: 1,
+            total_groups_changed_accounts: 1,
+            total_sudoers_changed_accounts: 1,
+            total_authorized_keys_changed_accounts: 1,
+            total_account_deleted_accounts: 1,
+            total_password_expired_accounts: 1,
+            total_long_time_password_accounts: 1,
+            total_weak_password_accounts: 1,
+            total_leaked_password_accounts: 1,
+            total_repeated_password_accounts: 1
+          }
+        })
+        this.riskCounter = [
+          { name: this.$t('NoLoginLongTime'), value: riskData.total_long_time_no_login_accounts },
+          { name: this.$t('NewAccountsFound'), value: riskData.total_new_found_accounts },
+          { name: this.$t('GroupsChanged'), value: riskData.total_groups_changed_accounts },
+          { name: this.$t('SudoersChanged'), value: riskData.total_sudoers_changed_accounts },
+          { name: this.$t('AuthorizedKeysChanged'), value: riskData.total_authorized_keys_changed_accounts },
+          { name: this.$t('AccountDeleted'), value: riskData.total_account_deleted_accounts },
+          { name: this.$t('PasswordExpired'), value: riskData.total_password_expired_accounts },
+          { name: this.$t('LongTimePassword'), value: riskData.total_long_time_password_accounts },
+          { name: this.$t('WeakPassword'), value: riskData.total_weak_password_accounts },
+          { name: this.$t('LeakedPassword'), value: riskData.total_leaked_password_accounts },
+          { name: this.$t('RepeatedPassword'), value: riskData.total_repeated_password_accounts }
+        ]
+      } catch (e) {
+        this.riskCounter = []
+      }
       this.$set(this.automation_stats, 'push', data.automation_stats.push)
       this.$set(this.automation_stats, 'check', data.automation_stats.check)
       this.$set(this.automation_stats, 'backup', data.automation_stats.backup)
