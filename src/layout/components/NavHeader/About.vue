@@ -105,7 +105,7 @@ export default {
       return this.publicSettings.XPACK_LICENSE_INFO.corporation
     },
     copyright() {
-      if (this.corporation.indexOf('FIT2CLOUD 飞致云') > -1) {
+      if (this.corporation?.indexOf('FIT2CLOUD 飞致云') > -1) {
         return this.corporation
       } else {
         return ''
