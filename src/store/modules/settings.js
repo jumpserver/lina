@@ -22,6 +22,7 @@ const state = {
 
 function updateThemeColors(state, interfaceSettings) {
   const responseThemeColors = interfaceSettings?.theme_info?.colors
+  const hasResponseThemeColors = responseThemeColors && Object.keys(responseThemeColors).length > 0
   const cachedThemeColors = (() => {
     if (state.themeColors && Object.keys(state.themeColors).length > 0) {
       return state.themeColors
@@ -34,7 +35,7 @@ function updateThemeColors(state, interfaceSettings) {
   })()
 
   const themeColors =
-     Object.keys(responseThemeColors).length > 0 ? responseThemeColors : cachedThemeColors
+      hasResponseThemeColors ? responseThemeColors : cachedThemeColors
 
   const settings = {
     ...(interfaceSettings || {}),
@@ -73,7 +74,7 @@ const mutations = {
   SET_PUBLIC_SETTINGS: (state, settings) => {
     state.publicSettings = settings
     state.themeColors = settings?.INTERFACE?.theme_info?.colors || {}
-    state.tableActionButtonType = settings?.INTERFACE.theme_info['table-action-button'] || 'default'
+    state.tableActionButtonType = settings?.INTERFACE?.theme_info?.['table-action-button'] || 'default'
 
     if (settings['XPACK_ENABLED']) {
       state.hasValidLicense = settings['XPACK_LICENSE_IS_VALID']
@@ -104,12 +105,13 @@ const actions = {
           if (isOpen) {
             updateTitleIcon(data?.INTERFACE)
             const interfaceSettings = updateThemeColors(state, data?.INTERFACE)
+            const logoMode = interfaceSettings?.logo_mode
             const nextSettings = {
               ...data,
               INTERFACE: interfaceSettings
             }
-            if (interfaceSettings.logo_mode !== 'combine') {
-              commit('SET_LOGO_MODE', interfaceSettings.logo_mode)
+            if (logoMode && logoMode !== 'combine') {
+              commit('SET_LOGO_MODE', logoMode)
             }
             commit('SET_PUBLIC_SETTINGS', nextSettings)
           }
