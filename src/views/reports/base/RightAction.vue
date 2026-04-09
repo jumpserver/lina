@@ -306,31 +306,23 @@ export default {
       }
       this.exportLoading = true
       this.$message.success(this.$t('Export') + '...')
-      const restoreOutputMode = this.toggleReportOutputMode(true)
       try {
         await this.$nextTick()
-        await exportElementToPdf(reportContainer, { filename: `${this.title}.pdf` })
+        await exportElementToPdf(reportContainer, {
+          filename: `${this.title}.pdf`,
+          ignoreElements: function(el) {
+            if (!el || !el.classList) return false
+            return el.classList.contains('report-visibility-panel') || el.classList.contains('report-item-hidden')
+          }
+        })
       } catch (error) {
         this.$message.error(this.$t('Failed') + ': ' + (error && error.message ? error.message : String(error)))
       } finally {
-        restoreOutputMode()
         this.exportLoading = false
       }
     },
     printReport() {
-      const restoreOutputMode = this.toggleReportOutputMode(true)
-      const restoreOnce = () => {
-        restoreOutputMode()
-        window.removeEventListener('afterprint', restoreOnce)
-      }
-
-      window.addEventListener('afterprint', restoreOnce)
-      try {
-        window.print()
-      } finally {
-        // Fallback for environments where afterprint is not fired.
-        window.setTimeout(restoreOnce, 1000)
-      }
+      window.print()
     },
     openEditor() {
       if (!this.canSaveReport) {

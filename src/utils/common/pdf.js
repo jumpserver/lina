@@ -11,7 +11,8 @@ export async function exportElementToPdf(element, options = {}) {
     scale = 2,
     backgroundColor = '#ffffff',
     waitMs = 120,
-    output = 'save'
+    output = 'save',
+    ignoreElements = null
   } = options
 
   const originStyle = {
@@ -32,7 +33,7 @@ export async function exportElementToPdf(element, options = {}) {
 
     const captureWidth = element.scrollWidth || element.clientWidth
     const captureHeight = element.scrollHeight || element.clientHeight
-    const stitchedCanvas = await html2canvas(element, {
+    const canvasOptions = {
       useCORS: true,
       backgroundColor,
       scale,
@@ -42,7 +43,11 @@ export async function exportElementToPdf(element, options = {}) {
       windowHeight: captureHeight,
       scrollX: 0,
       scrollY: 0
-    })
+    }
+    if (typeof ignoreElements === 'function') {
+      canvasOptions.ignoreElements = ignoreElements
+    }
+    const stitchedCanvas = await html2canvas(element, canvasOptions)
 
     const pdf = new JsPDF('p', 'mm', 'a4')
     const pageWidth = pdf.internal.pageSize.getWidth()
