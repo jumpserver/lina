@@ -104,18 +104,17 @@ const actions = {
           const data = response || {}
           if (isOpen) {
             updateTitleIcon(data?.INTERFACE)
-            const interfaceSettings = updateThemeColors(state, data?.INTERFACE)
-            const logoMode = interfaceSettings?.logo_mode
-            const nextSettings = {
-              ...data,
-              INTERFACE: interfaceSettings
-            }
-            if (logoMode && logoMode !== 'combine') {
-              commit('SET_LOGO_MODE', logoMode)
-            }
-            commit('SET_PUBLIC_SETTINGS', nextSettings)
           }
-
+          const interfaceSettings = updateThemeColors(state, data?.INTERFACE)
+          const logoMode = interfaceSettings?.logo_mode
+          const nextSettings = {
+            ...data,
+            INTERFACE: interfaceSettings
+          }
+          if (logoMode && logoMode !== 'combine') {
+            commit('SET_LOGO_MODE', logoMode)
+          }
+          commit('SET_PUBLIC_SETTINGS', nextSettings)
           resolve(response)
         })
         .catch(error => {
