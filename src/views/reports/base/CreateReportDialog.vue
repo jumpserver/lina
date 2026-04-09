@@ -154,6 +154,8 @@ export default {
       return normalizeReportDays(days, '7')
     },
     normalizeSelection(raw, options = [], fallback = []) {
+      // 显式空数组 = 用户清除了所有选择（如关闭图形报表模式），直接返回空
+      if (Array.isArray(raw) && raw.length === 0) return []
       const safeOptions = Array.isArray(options) ? options : []
       const optionNames = safeOptions
         .map(item => String(item && item.name ? item.name : '').trim())

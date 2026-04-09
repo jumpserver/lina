@@ -222,10 +222,10 @@ export default {
       const reportDays = parseInt(normalizeReportDays(query.days || this.reportData?.days || this.getDaysParam(), '7'), 10)
       if (this.isCustomReport) {
         const savedFilters = (this.reportData && this.reportData.filters) ? { ...this.reportData.filters } : {}
-        if (query.visible_charts) {
+        if (query.visible_charts !== undefined && query.visible_charts !== null) {
           savedFilters.visible_charts = String(query.visible_charts).split(',').map(s => s.trim()).filter(Boolean)
         }
-        if (query.visible_tables) {
+        if (query.visible_tables !== undefined && query.visible_tables !== null) {
           savedFilters.visible_tables = String(query.visible_tables).split(',').map(s => s.trim()).filter(Boolean)
         }
         return {

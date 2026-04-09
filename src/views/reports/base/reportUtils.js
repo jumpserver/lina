@@ -34,8 +34,8 @@ export function pickReportQuery(query = {}) {
 export function appendQuery(url, query = {}) {
   const params = new URLSearchParams()
   Object.entries(query).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== '') {
-      params.set(key, value)
+    if (value !== undefined && value !== null) {
+      params.set(key, String(value))
     }
   })
   const queryString = params.toString()
@@ -83,9 +83,14 @@ export function buildCustomReportRouteQuery(report = {}) {
   const visibleTables = normalizeVisibleFilterList(filters.visible_tables)
   if (visibleCharts.length) {
     query.visible_charts = visibleCharts.join(',')
+  } else if (filters.visible_charts !== undefined) {
+    // 显式保存为空 = 全部隐藏，用空字符串表示
+    query.visible_charts = ''
   }
   if (visibleTables.length) {
     query.visible_tables = visibleTables.join(',')
+  } else if (filters.visible_tables !== undefined) {
+    query.visible_tables = ''
   }
   return query
 }

@@ -203,35 +203,37 @@ export default {
       if (target?.isCustom) {
         const rq = this.$route.query || {}
         const isCustomizeMode = String(Array.isArray(rq.customize) ? rq.customize[0] : rq.customize) === '1'
-        const targetVisibleCharts = target.query?.visible_charts || ''
-        const targetVisibleTables = target.query?.visible_tables || ''
+        const normalizeVisibleParam = (v) => {
+          if (v === undefined || v === null) return undefined
+          return String(Array.isArray(v) ? v[0] : v) || ''
+        }
+        const targetVC = normalizeVisibleParam(target.query?.visible_charts)
+        const targetVT = normalizeVisibleParam(target.query?.visible_tables)
+        const currentVC = normalizeVisibleParam(rq.visible_charts)
+        const currentVT = normalizeVisibleParam(rq.visible_tables)
         const desiredBase = {
           chart_key: target.query?.chart_key || target.key,
-          report_id: String(target.reportId || target.query?.report_id || ''),
-          days: normalizeReportDays(target.query?.days, '7')
+          report_id: String(target.reportId || target.query?.report_id || '')
         }
         const currentBase = {
           chart_key: normalizeRouteValue(rq.chart_key),
-          report_id: normalizeRouteValue(rq.report_id),
-          days: normalizeReportDays(normalizeRouteValue(rq.days), '7')
+          report_id: normalizeRouteValue(rq.report_id)
         }
         const baseNeedsCorrection = JSON.stringify(currentBase) !== JSON.stringify(desiredBase)
-        // 普通页面：visible_* 始终以报表保存值为准（用户无法在普通页面手动修改）
         const visibleNeedsCorrection = !isCustomizeMode && (
-          (normalizeRouteValue(rq.visible_charts) || '') !== targetVisibleCharts ||
-          (normalizeRouteValue(rq.visible_tables) || '') !== targetVisibleTables
+          targetVC !== currentVC || targetVT !== currentVT
         )
         if (baseNeedsCorrection || visibleNeedsCorrection) {
-          const correctedQuery = { ...desiredBase }
+          // days: 优先保留用户当前选择，无则回落到报表保存值
+          const activeDays = normalizeReportDays(normalizeRouteValue(rq.days) || target.query?.days, '7')
+          const correctedQuery = { ...desiredBase, days: activeDays }
           if (isCustomizeMode) {
-            // customize 窗口：保留用户在选项卡上的实时操作
-            if (rq.visible_charts) correctedQuery.visible_charts = rq.visible_charts
-            if (rq.visible_tables) correctedQuery.visible_tables = rq.visible_tables
+            if (currentVC !== undefined) correctedQuery.visible_charts = currentVC
+            if (currentVT !== undefined) correctedQuery.visible_tables = currentVT
             if (rq.customize) correctedQuery.customize = rq.customize
           } else {
-            // 普通页面：始终使用报表保存值
-            if (targetVisibleCharts) correctedQuery.visible_charts = targetVisibleCharts
-            if (targetVisibleTables) correctedQuery.visible_tables = targetVisibleTables
+            if (targetVC !== undefined) correctedQuery.visible_charts = targetVC
+            if (targetVT !== undefined) correctedQuery.visible_tables = targetVT
           }
           this.$router.replace({ path: this.$route.path, query: correctedQuery })
           return

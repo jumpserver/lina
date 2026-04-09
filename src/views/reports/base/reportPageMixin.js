@@ -428,13 +428,21 @@ export default {
       if (days) {
         query.days = normalizeReportDays(days, '7')
       }
-      const visibleCharts = normalizeVisibleFilterList(this.$route.query.visible_charts || this.reportDetail?.filters?.visible_charts)
-      const visibleTables = normalizeVisibleFilterList(this.$route.query.visible_tables || this.reportDetail?.filters?.visible_tables)
-      if (visibleCharts.length) {
-        query.visible_charts = visibleCharts.join(',')
+      const routeVC = this.$route.query.visible_charts
+      const routeVT = this.$route.query.visible_tables
+      const chartsSource = routeVC !== undefined && routeVC !== null
+        ? routeVC
+        : this.reportDetail?.filters?.visible_charts
+      const tablesSource = routeVT !== undefined && routeVT !== null
+        ? routeVT
+        : this.reportDetail?.filters?.visible_tables
+      if (chartsSource !== undefined && chartsSource !== null) {
+        const list = normalizeVisibleFilterList(chartsSource)
+        query.visible_charts = list.length ? list.join(',') : ''
       }
-      if (visibleTables.length) {
-        query.visible_tables = visibleTables.join(',')
+      if (tablesSource !== undefined && tablesSource !== null) {
+        const list = normalizeVisibleFilterList(tablesSource)
+        query.visible_tables = list.length ? list.join(',') : ''
       }
       if (this.days !== undefined && days) {
         this.days = normalizeReportDays(days, '7')

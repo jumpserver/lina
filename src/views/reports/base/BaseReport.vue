@@ -222,7 +222,10 @@ export default {
   },
   methods: {
     isDisplayModeEnabled(mode) {
-      return this.selectedDisplayModes.includes(mode)
+      if (!this.selectedDisplayModes.includes(mode)) return false
+      if (mode === 'chart' && this.chartOptions.length > 0 && this.selectedChartNames.length === 0) return false
+      if (mode === 'table' && this.tableOptions.length > 0 && this.selectedTableNames.length === 0) return false
+      return true
     },
     normalizeOptions(items) {
       if (!Array.isArray(items)) return []
@@ -252,7 +255,8 @@ export default {
       const routeQueryValue = this.$route && this.$route.query ? this.$route.query[key] : undefined
       const hashQueryValue = this.getHashQueryValue(key)
       const queryValue = routeQueryValue !== undefined ? routeQueryValue : hashQueryValue
-      if (queryValue === undefined || queryValue === null || queryValue === '') return null
+      if (queryValue === undefined || queryValue === null) return null
+      if (queryValue === '') return []
       const rawList = Array.isArray(queryValue) ? queryValue : String(queryValue).split(',')
       const selected = Array.from(
         new Set(
@@ -352,6 +356,17 @@ export default {
       if (!checked && idx >= 0) nextModes.splice(idx, 1)
       if (!nextModes.length) return
       this.handleDisplayModeChange(nextModes)
+      // 同步 selectedNames 和 URL：关闭模式 = 清空选择，开启 = 全选
+      if (mode === 'chart') {
+        this.selectedChartNames = checked ? this.chartOptions.map(item => item.name) : []
+        this.pushVisibilityQuery()
+        this.$nextTick(() => this.applyItemVisibility())
+      }
+      if (mode === 'table') {
+        this.selectedTableNames = checked ? this.tableOptions.map(item => item.name) : []
+        this.pushVisibilityQuery()
+        this.$nextTick(() => this.applyItemVisibility())
+      }
     },
     handleChartSelectionChange(names) {
       const normalized = Array.isArray(names)
@@ -377,7 +392,8 @@ export default {
       if (!name) return true
       const options = type === 'chart' ? this.chartOptions : this.tableOptions
       const selected = type === 'chart' ? this.selectedChartNames : this.selectedTableNames
-      if (!options.length || !selected.length) return true
+      if (!options.length) return true
+      if (!selected.length) return false
       const matchedByName = options.find(item => item.name === name)
       if (matchedByName) return selected.includes(matchedByName.name)
       const matchedByTitle = options.find(item => item.title === name)
@@ -422,8 +438,8 @@ export default {
           const query = { customize: 1 }
           if (rq.report_id) query.report_id = rq.report_id
           if (rq.days) query.days = rq.days
-          if (rq.visible_charts) query.visible_charts = rq.visible_charts
-          if (rq.visible_tables) query.visible_tables = rq.visible_tables
+          if (rq.visible_charts !== undefined && rq.visible_charts !== null) query.visible_charts = rq.visible_charts
+          if (rq.visible_tables !== undefined && rq.visible_tables !== null) query.visible_tables = rq.visible_tables
           const url = appendQuery(basePath, query)
           this.win = window.open(url, '_blank', options)
         }
