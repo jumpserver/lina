@@ -110,6 +110,18 @@ export default {
       ],
       fieldsMeta: {
         login_title: {
+          rules: [
+            {
+              validator: (rule, value, callback) => {
+                if (!String(value || '').trim()) {
+                  callback(new Error(this.$t('FieldRequiredError')))
+                  return
+                }
+                callback()
+              },
+              trigger: ['blur', 'change']
+            }
+          ]
         },
         theme: {
           on: {
@@ -193,7 +205,19 @@ export default {
           el: {
             preview: true,
             rows: 5
-          }
+          },
+          rules: [
+            {
+              validator: (rule, value, callback) => {
+                if (String(value || '').length > 200) {
+                  callback(new Error(this.$t('FooterContentTooLong200')))
+                  return
+                }
+                callback()
+              },
+              trigger: ['blur', 'change']
+            }
+          ]
         }
       },
       url: '/api/v1/xpack/interface/setting/',
