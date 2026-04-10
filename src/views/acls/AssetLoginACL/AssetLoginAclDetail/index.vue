@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="instance" v-bind="config" v-on="$listeners">
     <keep-alive>
-      <component :is="config.activeMenu" :object="instance" />
+      <component :is="config.activeMenu" :object="instance" object-app-model="acls.LoginAssetACL" />
     </keep-alive>
   </GenericDetailPage>
 </template>
