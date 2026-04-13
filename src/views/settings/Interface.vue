@@ -264,6 +264,7 @@ export default {
       })
     },
     async loadUrlMeta() {
+      console.log('--------------TO TEST-----------------')
       const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
       const actions = data.actions || {}
       const putMeta = actions.PUT || {}
