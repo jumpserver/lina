@@ -55,9 +55,11 @@ export class FormFieldGenerator {
         break
       case 'string':
         type = 'input'
-        if (!fieldRemoteMeta['max_length']) {
+        if (fieldRemoteMeta.style === 'textarea' || !fieldRemoteMeta['max_length']) {
           field.el.type = 'textarea'
-          field.el.rows = 3
+          if (!field.el.rows) {
+            field.el.rows = 3
+          }
         }
         if (fieldRemoteMeta['write_only']) {
           field.el.type = 'password'

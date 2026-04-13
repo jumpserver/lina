@@ -69,7 +69,7 @@
 import { Page } from '@/layout/components'
 import { IBox, UploadField } from '@/components'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
-import { getInterfaceInfo, previewThemes, restoreInterface, updateInterface } from '@/api/interface'
+import { getInterfaceInfo, previewThemes, restoreInterface } from '@/api/interface'
 import MarkDown from '@/components/Widgets/MarkDown'
 
 export default {
@@ -87,6 +87,7 @@ export default {
       files: {},
       imagePreviews: {},
       imageValidationToken: {},
+      remoteExtMeta: {},
       imageFieldConfig: {
         logo_index: { width: 185, height: 55 },
         logo_logout: { width: 82, height: 82 },
@@ -244,18 +245,90 @@ export default {
       ]
     }
   },
-  mounted() {
-    getInterfaceInfo().then(data => {
-      this.interfaceInfo = data
+  async mounted() {
+    try {
+      this.loading = true
+      await Promise.all([
+        this.loadUrlMeta(),
+        this.loadInterfaceInfo()
+      ])
+    } finally {
       this.loading = false
-    })
+    }
     this.getPreviewThemes()
   },
   methods: {
     getPreviewThemes() {
-      previewThemes().then(res => {
+      return previewThemes().then(res => {
         this.themeConfigs = res
       })
+    },
+    async loadUrlMeta() {
+      const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
+      const actions = data.actions || {}
+      const putMeta = actions.PUT || {}
+
+      this.remoteExtMeta = putMeta.ext || {}
+      this.setExtFormConfig()
+    },
+    async loadInterfaceInfo() {
+      this.interfaceInfo = await getInterfaceInfo()
+    },
+    setExtFormConfig() {
+      const extChildren = this.remoteExtMeta.children || {}
+      const extFields = Object.keys(extChildren)
+
+      if (extFields.length === 0) {
+        return
+      }
+
+      const extGroupLabel = this.remoteExtMeta.label || 'Ext'
+      const hasExtGroup = this.fields.some(([, groupFields]) => {
+        return Array.isArray(groupFields) && groupFields.length === 1 && groupFields[0] === 'ext'
+      })
+      const extFieldsMeta = {}
+
+      extFields.forEach((name) => {
+        if (this.isUploadFieldMeta(extChildren[name])) {
+          extFieldsMeta[name] = this.getExtImageFieldMeta(name)
+        }
+      })
+
+      if (!hasExtGroup) {
+        this.fields = [...this.fields, [extGroupLabel, ['ext']]]
+      }
+      this.fieldsMeta = this.mergeObjects({}, this.fieldsMeta, {
+        ext: {
+          fields: extFields,
+          fieldsMeta: extFieldsMeta
+        }
+      })
+    },
+    getExtFieldKey(name) {
+      return `ext.${name}`
+    },
+    getExtImageFieldMeta(name) {
+      const field = this.getExtFieldKey(name)
+
+      return {
+        component: UploadField,
+        el: {
+          width: '10%',
+          height: '10%',
+          accept: 'image/jpg, image/png, image/jpeg'
+        },
+        on: {
+          input: ([value]) => {
+            this.syncImagePreview(field, value)
+          },
+          fileChange: ([file], updateForm) => {
+            this.handleExtImageChange(name, file, updateForm)
+          }
+        }
+      }
+    },
+    isUploadFieldMeta(meta = {}) {
+      return ['file upload'].includes(meta.type)
     },
     getSelectThemeConfig(value) {
       let themeConfig
@@ -268,24 +341,71 @@ export default {
       return themeConfig
     },
     submitForm(values) {
-      const form = new FormData()
-      const imageKeys = ['favicon', 'login_image', 'logo_logout', 'logo_index']
-      for (const key in values) {
-        let value
-        if (imageKeys.includes(key)) {
-          value = this.files[key]
-        } else {
-          value = values[key]
-        }
-        if (value !== undefined) {
-          form.append(key, value)
-        }
-      }
-      updateInterface(form).then(res => {
+      const { hasFiles, form, payload } = this.buildSubmitPayload(values)
+      const requestData = hasFiles ? form : payload
+      const request = this.$axios.put(this.url, requestData)
+
+      return request.then(() => {
         this.$message.success(this.$tc('UpdateSuccessMsg'))
       }).catch(error => {
         this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
       })
+    },
+    buildSubmitPayload(values) {
+      const form = new FormData()
+      const payload = {}
+      const imageKeys = ['favicon', 'login_image', 'logo_logout', 'logo_index']
+      const extChildren = this.remoteExtMeta.children || {}
+      const extValues = { ...(values.ext || {}) }
+      const payloadExtValues = {}
+      const multipartExtValues = {}
+      let hasFiles = false
+
+      for (const key in values) {
+        if (key === 'ext') {
+          continue
+        }
+
+        if (imageKeys.includes(key)) {
+          if (this.files[key] !== undefined) {
+            form.append(key, this.files[key])
+            hasFiles = true
+          }
+          continue
+        }
+
+        payload[key] = values[key]
+        form.append(key, values[key])
+      }
+
+      Object.keys(extChildren).forEach((name) => {
+        const meta = extChildren[name] || {}
+        if (!this.isUploadFieldMeta(meta)) {
+          if (extValues[name] !== undefined) {
+            payloadExtValues[name] = extValues[name]
+            multipartExtValues[name] = extValues[name]
+          }
+          return
+        }
+
+        const field = this.getExtFieldKey(name)
+        if (this.files[field] !== undefined) {
+          form.append(field, this.files[field])
+          hasFiles = true
+        }
+      })
+
+      if (Object.keys(extChildren).length > 0 || values.ext !== undefined) {
+        payload.ext = payloadExtValues
+      }
+
+      if (hasFiles) {
+        Object.keys(multipartExtValues).forEach((name) => {
+          form.append(this.getExtFieldKey(name), multipartExtValues[name])
+        })
+      }
+
+      return { hasFiles, form, payload }
     },
     async handleImageChange(field, file, updateForm) {
       const token = (this.imageValidationToken[field] || 0) + 1
@@ -325,6 +445,47 @@ export default {
         const previewUrl = this.getObjectURL(nextFile)
         this.imagePreviews[field] = previewUrl
         updateForm({ [field]: previewUrl })
+      }
+    },
+    async handleExtImageChange(name, file, updateForm) {
+      const field = this.getExtFieldKey(name)
+      const token = (this.imageValidationToken[field] || 0) + 1
+      this.imageValidationToken[field] = token
+
+      if (!file) {
+        this.$delete(this.files, field)
+        this.$delete(this.imagePreviews, field)
+        return
+      }
+
+      const previousFile = this.files[field]
+      const previousPreview = this.imagePreviews[field]
+      const nextFile = await this.validateImage(field, file)
+
+      if (this.imageValidationToken[field] !== token) {
+        return
+      }
+
+      if (!nextFile) {
+        if (previousFile) {
+          this.files[field] = previousFile
+        } else {
+          this.$delete(this.files, field)
+        }
+        if (previousPreview) {
+          this.imagePreviews[field] = previousPreview
+        } else {
+          this.$delete(this.imagePreviews, field)
+        }
+        updateForm({ [name]: previousPreview || _.get(this.interfaceInfo, field) || '' })
+        return
+      }
+
+      this.files[field] = nextFile
+      if (nextFile !== file) {
+        const previewUrl = this.getObjectURL(nextFile)
+        this.imagePreviews[field] = previewUrl
+        updateForm({ [name]: previewUrl })
       }
     },
     syncImagePreview(field, value) {
@@ -459,6 +620,18 @@ export default {
         url = window.webkitURL.createObjectURL(file)
       }
       return url
+    },
+    mergeObjects(target, ...sources) {
+      for (const source of sources) {
+        for (const key in source) {
+          if (typeof source[key] === 'object' && typeof target[key] === 'object') {
+            this.mergeObjects(target[key], source[key])
+          } else {
+            target[key] = source[key]
+          }
+        }
+      }
+      return target
     }
   }
 }
