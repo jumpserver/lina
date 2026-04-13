@@ -269,6 +269,7 @@ export default {
       const putMeta = actions.PUT || {}
 
       this.remoteExtMeta = putMeta.ext || {}
+      console.log('-------------------------------', this.remoteExtMeta)
       this.setExtFormConfig()
     },
     async loadInterfaceInfo() {
