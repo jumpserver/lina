@@ -1,9 +1,7 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
-import { BASE_URL } from '@/utils/common/index'
 import store from '@/store'
-import request from '@/utils/request'
-import { message } from '@/utils/vue/message'
+import { openJDMC } from '@/utils/jdmc'
 
 const getSettings = () => store.state.settings.publicSettings || {}
 const currentUser = () => store.getters.currentUser || {}
@@ -11,30 +9,17 @@ const currentUser = () => store.getters.currentUser || {}
 const Setting = () => import('@/views/settings/index')
 const globalSubmenu = () => import('@/layout/globalOrg.vue')
 
-function goToJDMC(path) {
-  request({
-    url: '/api/v1/xpack/jdmc/sso-token/',
-    method: 'get',
-    disableFlashErrorMsg: true
-  }).then(response => {
-    const token = response.token
-    let url = `${BASE_URL}/jdmc/api/v1/auth/tokens?token=${token}&next=${path}`
-    if (process.env.NODE_ENV !== 'production') {
-      url = url.replace('9528', '9898')
-    }
-    window.open(url, '_blank')
-  }).catch(error => {
-    if (error?.response?.status === 403) {
-      message.error(error?.message || i18n.t('BadRoleErrorMsg'))
-      return
-    }
-    message.error(error?.message || i18n.t('BadRequestErrorMsg'))
-  })
-}
-
 function isSystemAdmin() {
   const user = currentUser()
   return user.username === 'admin'
+}
+
+function redirectAfterExternalAction(from, next) {
+  if (from?.name) {
+    next(false)
+    return
+  }
+  next('/settings/basic')
 }
 
 export default {
@@ -593,23 +578,27 @@ export default {
         title: i18n.t('DeviceManager'),
         icon: 'device',
         permissions: ['settings.view_setting'],
+        externalAction: {
+          type: 'jdmc',
+          nextPath: '/jdmc/'
+        },
         // 在开启 JDMC 且是系统管理员时，才显示
         hidden: ({ settings }) => !(settings['JDMC_ENABLED'] && isSystemAdmin())
       },
-      beforeEnter: (_to, _from, next) => {
-        goToJDMC('/jdmc/')
-        next(false)
+      beforeEnter: (_to, from, next) => {
+        openJDMC('/jdmc/')
+        redirectAfterExternalAction(from, next)
       }
     },
     {
       path: '/settings/license',
       name: 'License',
       component: () => import('@/views/settings/License'),
-      beforeEnter: (_to, _from, next) => {
+      beforeEnter: (_to, from, next) => {
         const settings = getSettings()
         if (settings?.JDMC_ENABLED) {
-          goToJDMC('/jdmc/app-management/app-auth')
-          next(false)
+          openJDMC('/jdmc/app-management/app-auth')
+          redirectAfterExternalAction(from, next)
         } else {
           next()
         }
@@ -618,6 +607,11 @@ export default {
         title: i18n.t('License'),
         icon: 'license',
         permissions: ['settings.change_license'],
+        externalAction: {
+          type: 'jdmc',
+          nextPath: '/jdmc/app-management/app-auth',
+          enabled: ({ settings }) => settings?.JDMC_ENABLED
+        },
         // 开启 JDMC 但不是 admin 时，隐藏
         // 开启 JDMC 且是 admin 是显示
         // 没有开启 JDMC 时，显示

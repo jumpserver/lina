@@ -5,7 +5,10 @@
         (!onlyOneChild.children || onlyOneChild.noShowingChildren) &&
         !item.alwaysShow"
     >
-      <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
+      <app-link
+        v-if="onlyOneChild.meta && !isExternalAction(onlyOneChild)"
+        :to="resolvePath(onlyOneChild.path)"
+      >
         <el-menu-item
           :class="{'submenu-title-noDropdown':!isNest, 'level1-menu': !isNest}"
           :index="resolvePath(onlyOneChild.path)"
@@ -18,6 +21,22 @@
           />
         </el-menu-item>
       </app-link>
+      <div
+        v-else-if="onlyOneChild.meta"
+        :class="{'submenu-title-noDropdown':!isNest, 'level1-menu': !isNest}"
+        class="el-menu-item submenu-item level2-menu"
+        role="button"
+        tabindex="0"
+        @click.stop.prevent="handleExternalAction(onlyOneChild)"
+        @keydown.enter.stop.prevent="handleExternalAction(onlyOneChild)"
+        @keydown.space.stop.prevent="handleExternalAction(onlyOneChild)"
+      >
+        <item
+          :children="item.children"
+          :icon="onlyOneChild.meta.icon||(item.meta && item.meta.icon)"
+          :title="getItemTitle(onlyOneChild)"
+        />
+      </div>
     </template>
 
     <div v-else>
@@ -63,6 +82,7 @@ import Item from './Item'
 import AppLink from './Link'
 import FixiOSBug from './FixiOSBug'
 import { toSentenceCase } from '@/utils/common/index'
+import { openJDMC } from '@/utils/jdmc'
 
 export default {
   name: 'SidebarItem',
@@ -155,6 +175,25 @@ export default {
         return this.basePath
       }
       return path.resolve(this.basePath, routePath)
+    },
+    isExternalAction(route) {
+      const externalAction = route?.meta?.externalAction
+      if (externalAction?.type !== 'jdmc') {
+        return false
+      }
+      if (typeof externalAction.enabled === 'function') {
+        return externalAction.enabled({
+          route,
+          settings: this.$store.state.settings.publicSettings
+        })
+      }
+      return true
+    },
+    handleExternalAction(route) {
+      const externalAction = route?.meta?.externalAction
+      if (externalAction?.type === 'jdmc') {
+        openJDMC(externalAction.nextPath)
+      }
     }
   }
 }
