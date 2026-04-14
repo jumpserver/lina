@@ -355,8 +355,13 @@ export default {
       if (checked && idx < 0) nextModes.push(mode)
       if (!checked && idx >= 0) nextModes.splice(idx, 1)
       if (!nextModes.length) return
+      if (!checked) {
+        const otherHasItems = mode === 'chart'
+          ? this.selectedTableNames.length > 0
+          : this.selectedChartNames.length > 0
+        if (!otherHasItems) return
+      }
       this.handleDisplayModeChange(nextModes)
-      // 同步 selectedNames 和 URL：关闭模式 = 清空选择，开启 = 全选
       if (mode === 'chart') {
         this.selectedChartNames = checked ? this.chartOptions.map(item => item.name) : []
         this.pushVisibilityQuery()
@@ -372,7 +377,7 @@ export default {
       const normalized = Array.isArray(names)
         ? names.filter(name => this.chartOptions.some(item => item.name === name))
         : []
-      if (!normalized.length && this.chartOptions.length) return
+      if (!normalized.length && !this.selectedTableNames.length) return
       this.selectedChartNames = normalized
       this.pushVisibilityQuery()
       this.$nextTick(() => this.applyItemVisibility())
@@ -381,7 +386,7 @@ export default {
       const normalized = Array.isArray(names)
         ? names.filter(name => this.tableOptions.some(item => item.name === name))
         : []
-      if (!normalized.length && this.tableOptions.length) return
+      if (!normalized.length && !this.selectedChartNames.length) return
       this.selectedTableNames = normalized
       this.pushVisibilityQuery()
       this.$nextTick(() => this.applyItemVisibility())
