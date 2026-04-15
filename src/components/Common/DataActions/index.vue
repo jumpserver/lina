@@ -353,6 +353,23 @@ $color-drop-menu-border: #e4e7ed;
     border-color: transparent !important;
     box-shadow: none !important;
   }
+
+  .action-item.table-action-text.el-button.is-disabled,
+  .action-item.table-action-text.el-button.is-disabled:hover,
+  .action-item.table-action-text.el-button.is-disabled:focus,
+  ::v-deep .action-item.table-action-text.el-dropdown .el-button.is-disabled,
+  ::v-deep .action-item.table-action-text.el-dropdown .el-button.is-disabled:hover,
+  ::v-deep .action-item.table-action-text.el-dropdown .el-button.is-disabled:focus {
+    color: $color-text-hover !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    cursor: not-allowed;
+
+    * {
+      color: inherit !important;
+    }
+  }
 }
 
 // 下拉 options
