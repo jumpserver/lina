@@ -3,9 +3,9 @@
     <div class="error-404-text">
       <h1 class="error-404-title">{{ $t('AjaxError404') }}</h1>
       <p class="error-404-subtitle">{{ $t('CannotAccess') }}</p>
-      <a class="el-button el-button--success error-button" :href="window.__UI_BASE__">
+      <router-link class="el-button el-button--success error-button" :to="{ name: 'home' }">
         {{ $t('GoHomePage') }}
-      </a>
+      </router-link>
     </div>
     <div class="error-404-image-container">
       <img alt="page error" class="error-404-error-image" src="@/assets/img/robot.png">
