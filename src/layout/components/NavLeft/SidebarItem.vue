@@ -24,12 +24,12 @@
       <div
         v-else-if="onlyOneChild.meta"
         :class="{'submenu-title-noDropdown':!isNest, 'level1-menu': !isNest}"
-        class="el-menu-item submenu-item level2-menu"
+        class="el-menu-item submenu-item level2-menu external-action-menu-item"
         role="button"
         tabindex="0"
-        @click.stop.prevent="handleExternalAction(onlyOneChild)"
-        @keydown.enter.stop.prevent="handleExternalAction(onlyOneChild)"
-        @keydown.space.stop.prevent="handleExternalAction(onlyOneChild)"
+        @click.stop.prevent="handleExternalAction(onlyOneChild, $event)"
+        @keydown.enter.stop.prevent="handleExternalAction(onlyOneChild, $event)"
+        @keydown.space.stop.prevent="handleExternalAction(onlyOneChild, $event)"
       >
         <item
           :children="item.children"
@@ -189,7 +189,8 @@ export default {
       }
       return true
     },
-    handleExternalAction(route) {
+    handleExternalAction(route, event) {
+      event?.currentTarget?.blur()
       const externalAction = route?.meta?.externalAction
       if (externalAction?.type === 'jdmc') {
         openJDMC(externalAction.nextPath)
@@ -198,3 +199,29 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.external-action-menu-item {
+  color: var(--menu-text) !important;
+  background: var(--menu-bg) !important;
+
+  &:hover {
+    color: var(--menu-text-active) !important;
+    background: var(--menu-hover-bg, var(--menu-hover)) !important;
+  }
+
+  &:focus {
+    color: var(--menu-text) !important;
+    background: var(--menu-bg) !important;
+  }
+
+  &:focus-visible {
+    color: var(--menu-text-active) !important;
+    background: var(--menu-hover-bg, var(--menu-hover)) !important;
+  }
+
+  ::v-deep .svg-icon {
+    color: inherit !important;
+  }
+}
+</style>
