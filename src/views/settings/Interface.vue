@@ -92,8 +92,6 @@ export default {
       remoteExtMeta: {},
       imageFieldConfig: {
         logo_index: { width: 185, height: 55 },
-        logo_logout: { width: 82, height: 82 },
-        favicon: { width: 16, height: 16 },
         login_image: { width: 492, height: 472 }
       },
       examples: {
@@ -107,7 +105,7 @@ export default {
       themeConfigs: [],
       fields: [
         [this.$t('Basic'), ['login_title', 'theme']],
-        ['Logo', ['logo_index', 'logo_logout', 'favicon']],
+        ['Logo', ['logo_index', 'logo_logout']],
         [this.$t('Images'), ['login_image']],
         [this.$t('Footer'), ['footer_content']]
       ],
@@ -151,23 +149,6 @@ export default {
             }
           }
         },
-        favicon: {
-          component: UploadField,
-          el: {
-            width: '5%',
-            height: '5%',
-            accept: 'image/jpg, image/png, image/jpeg',
-            tip: this.$t('FaviconTip')
-          },
-          on: {
-            input: ([value]) => {
-              this.syncImagePreview('favicon', value)
-            },
-            fileChange: ([value], updateForm) => {
-              this.handleImageChange('favicon', value, updateForm)
-            }
-          }
-        },
         logo_index: {
           component: UploadField,
           el: {
@@ -192,7 +173,7 @@ export default {
             width: '5%',
             height: '5%',
             accept: 'image/jpg, image/png, image/jpeg',
-            tip: this.$t('LogoLogoutTip')
+            tip: this.$t('LogoLogoutFaviconTip')
           },
           on: {
             input: ([value]) => {
@@ -363,7 +344,7 @@ export default {
     buildSubmitPayload(values) {
       const form = new FormData()
       const payload = {}
-      const imageKeys = ['favicon', 'login_image', 'logo_logout', 'logo_index']
+      const imageKeys = ['login_image', 'logo_logout', 'logo_index']
       const extChildren = this.remoteExtMeta.children || {}
       const extValues = { ...(values.ext || {}) }
       const payloadExtValues = {}
