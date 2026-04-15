@@ -16,14 +16,20 @@ const state = {
   publicSettings: {},
   hasValidLicense: false,
   authMethods: {},
-  themeColors: JSON.parse(localStorage.getItem('themeColors')) || {},
+  themeColors: {},
   tableActionButtonType: 'default'
 }
 
 function updateThemeColors(state, interfaceSettings) {
   const responseThemeColors = interfaceSettings?.theme_info?.colors
+  const themeName = interfaceSettings?.theme
   const hasResponseThemeColors = responseThemeColors && Object.keys(responseThemeColors).length > 0
+
   const cachedThemeColors = (() => {
+    if (themeName === 'default' || !themeName || themeName === 'classic_green') {
+      return {}
+    }
+
     if (state.themeColors && Object.keys(state.themeColors).length > 0) {
       return state.themeColors
     }
