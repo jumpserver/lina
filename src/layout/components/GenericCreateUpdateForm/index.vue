@@ -70,34 +70,34 @@ export default {
     performSubmit: {
       type: Function,
       default(validValues) {
-        return this.$axios[this.method](this.iUrl, validValues)
+        return this.$axios[this.method](this.iUrl, validValues, this.getFieldErrorConfig())
       }
     },
     // 创建成功的msg
     createSuccessMsg: {
       type: String,
-      default: function () {
+      default: function() {
         return this.$t('CreateSuccessMsg')
       }
     },
     // 保存成功，继续添加的msg
     saveSuccessContinueMsg: {
       type: String,
-      default: function () {
+      default: function() {
         return this.$t('SaveSuccessContinueMsg')
       }
     },
     // 更新成功的msg
     updateSuccessMsg: {
       type: String,
-      default: function () {
+      default: function() {
         return this.$t('UpdateSuccessMsg')
       }
     },
     // 创建成功的跳转路由
     createSuccessNextRoute: {
       type: Object,
-      default: function () {
+      default: function() {
         const routeName = this.$route.name?.replace('Create', 'List')
         return { name: routeName }
       }
@@ -105,14 +105,14 @@ export default {
     // 更新成功的跳转路由
     updateSuccessNextRoute: {
       type: Object,
-      default: function () {
+      default: function() {
         const routeName = this.$route.name?.replace('Update', 'List')
         return { name: routeName }
       }
     },
     objectDetailRoute: {
       type: Object,
-      default: function () {
+      default: function() {
         const routeName = this.$route.name?.replace('Update', 'Detail').replace('Create', 'Detail')
         return { name: routeName }
       }
@@ -126,7 +126,7 @@ export default {
     },
     cloneNameSuffix: {
       type: [String, Number],
-      default: function () {
+      default: function() {
         return this.$t('Duplicate').toLowerCase()
       }
     },
@@ -138,7 +138,7 @@ export default {
     // 获取创建和更新的url function
     getUrl: {
       type: Function,
-      default: function () {
+      default: function() {
         const objectId = this.getUpdateId()
         let url = this.url
         if (objectId) {
@@ -346,6 +346,12 @@ export default {
     },
     isUpdateMethod() {
       return ['put', 'patch'].indexOf(this.method.toLowerCase()) > -1
+    },
+    getFieldErrorConfig() {
+      const fields = this.$refs.form?.getFieldNames?.() || []
+      return {
+        fieldErrorFields: fields
+      }
     },
     encryptFields(values) {
       // 批量提交，clean 后可能是个数组
