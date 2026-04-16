@@ -116,7 +116,7 @@ function isPlainObject(data) {
   return Object.prototype.toString.call(data) === '[object Object]'
 }
 
-const fieldErrorGlobalKeys = ['detail', 'non_field_errors', 'error', 'msg']
+const fieldErrorGlobalKeys = new Set(['detail', 'non_field_errors', 'error', 'msg'])
 
 function hasErrorMessage(value) {
   if (typeof value === 'string') {
@@ -152,7 +152,7 @@ function isFieldErrorHandledByForm(response) {
   }
 
   const errorKeys = Object.keys(data).filter(key => hasErrorMessage(data[key]))
-  if (errorKeys.length === 0 || errorKeys.some(key => fieldErrorGlobalKeys.includes(key))) {
+  if (errorKeys.length === 0 || errorKeys.some(key => fieldErrorGlobalKeys.has(key))) {
     return false
   }
 
