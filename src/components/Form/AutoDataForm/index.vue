@@ -220,6 +220,13 @@ export default {
       // 不写入 totalFields，避免触发 innerContent 变化导致表单值被覆盖
       this.$set(this.serverErrors, name, error)
     },
+    getFieldNames() {
+      const elForm = this._getElFormInstance()
+      if (elForm && Array.isArray(elForm.fields)) {
+        return elForm.fields.map(item => item.prop).filter(Boolean)
+      }
+      return (this.totalFields || []).map(item => item.prop).filter(Boolean)
+    },
     setErrors(errors) {
       const mapped = {}
       Object.entries(errors || {}).forEach(([k, v]) => {

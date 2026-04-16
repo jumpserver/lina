@@ -112,6 +112,59 @@ function ifBadRequest({ response, error }) {
   }
 }
 
+function isPlainObject(data) {
+  return Object.prototype.toString.call(data) === '[object Object]'
+}
+
+const fieldErrorGlobalKeys = ['detail', 'non_field_errors', 'error', 'msg']
+
+function hasErrorMessage(value) {
+  if (typeof value === 'string') {
+    return value.trim() !== ''
+  }
+  if (Array.isArray(value)) {
+    return value.some(item => hasErrorMessage(item))
+  }
+  if (isPlainObject(value)) {
+    return Object.values(value).some(item => hasErrorMessage(item))
+  }
+  return value !== null && value !== undefined
+}
+
+function isFieldErrorValue(value) {
+  if (!hasErrorMessage(value)) {
+    return false
+  }
+  return typeof value === 'string' || Array.isArray(value) || isPlainObject(value)
+}
+
+function isFieldErrorHandledByForm(response) {
+  const data = response.data
+  const fields = response.config?.fieldErrorFields || []
+  if (response.status !== 400) {
+    return false
+  }
+  if (!Array.isArray(fields) || fields.length === 0) {
+    return false
+  }
+  if (!isPlainObject(data) || Object.keys(data).length === 0) {
+    return false
+  }
+
+  const errorKeys = Object.keys(data).filter(key => hasErrorMessage(data[key]))
+  if (errorKeys.length === 0 || errorKeys.some(key => fieldErrorGlobalKeys.includes(key))) {
+    return false
+  }
+
+  return errorKeys.every(key => fields.includes(key) && isFieldErrorValue(data[key]))
+}
+
+function disableHandledFieldErrorFlash({ response }) {
+  if (isFieldErrorHandledByForm(response)) {
+    response.config.disableFlashErrorMsg = true
+  }
+}
+
 export function logout() {
   const next = encodeURIComponent(getCurrentPageUrl())
   window.location.href = `${addBasePath(process.env.VUE_APP_LOGOUT_PATH)}?next=${next}`
@@ -192,6 +245,7 @@ service.interceptors.response.use(
 
     await ifUnauthorized({ response, error })
     await ifBadRequest({ response, error })
+    await disableHandledFieldErrorFlash({ response, error })
     await flashErrorMsg({ response, error })
     return Promise.reject(error)
   }

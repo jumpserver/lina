@@ -67,7 +67,7 @@ export default {
       default: false
     }
   },
-  data: function () {
+  data: function() {
     return {
       internalKey: 0,
       selectPropertiesLabel: this.$t('SelectProperties'),
@@ -124,11 +124,11 @@ export default {
           }
           return formValue
         },
-        onSubmit: function (validValues) {
+        onSubmit: function(validValues) {
           const url = this.url
           const msg = this.updateSuccessMsg
           this.$axios
-            .patch(url, validValues)
+            .patch(url, validValues, this.getFieldErrorConfig())
             .then(res => {
               vm.$emit('update')
               this.$message.success(msg)
