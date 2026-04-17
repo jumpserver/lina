@@ -90,11 +90,11 @@ export default {
   text-align: center;
   overflow: hidden;
 
-  // &.collapse.logo-mode-split {
-  //   .sidebar-logo-link {
-  //     margin-left: 8px;
-  //   }
-  // }
+  &.logo-mode-split {
+    .sidebar-logo-link {
+      margin: 0 5px;
+    }
+  }
 
   & .sidebar-logo-link {
     box-sizing: border-box;
