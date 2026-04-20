@@ -54,7 +54,7 @@
         <div class="file-uploader">
           <el-card>
             <div class="file-uploader-header">
-              <span>{{ $t('selectFiles', { number: uploadFileList.length }) }}</span>
+              <span>{{ $t('selectFiles', {number: uploadFileList.length}) }}</span>
               <el-tooltip
                 v-if="uploadFileList.length > 0"
                 :content="$t('ClearSelection')"
@@ -78,7 +78,7 @@
                 {{ $t('DragUploadFileInfo') }}
               </div>
               <span>
-                {{ $t('UploadFileLthHelpText', { limit: sizeLimitMb }) }}
+                {{ $t('UploadFileLthHelpText', {limit: sizeLimitMb}) }}
               </span>
               <div slot="file" slot-scope="{ file }">
                 <li class="el-upload-list__item is-ready" tabindex="0">
@@ -119,7 +119,7 @@
           </span>
           <span>
             <span><b>{{ $tc('TimeDelta') }}: </b></span>
-            <span>{{ executionInfo.timeCost }}</span>
+            <span>{{ executionInfo.timeCost }}s</span>
           </span>
         </span>
         <div class="output">
