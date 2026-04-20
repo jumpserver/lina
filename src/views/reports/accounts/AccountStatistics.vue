@@ -8,6 +8,7 @@
       :tables="tables"
       :show-display-mode-toggle="true"
       :display-mode.sync="displayMode"
+      :current-days="currentFilters.days"
       v-bind="$attrs"
     >
       <template #toolbar>

@@ -40,7 +40,7 @@
 import Page from '@/layout/components/Page'
 import UserActivity from '@/views/reports/users/UserActivity.vue'
 import ChangePassword from '@/views/reports/users/ChangePassword.vue'
-import { appendQuery, buildCustomReportRouteQuery, normalizeReportDays, reportDebugLog } from '@/views/reports/base/reportUtils'
+import { appendQuery, buildCustomReportRouteQuery, reportDebugLog } from '@/views/reports/base/reportUtils'
 
 const TEMPLATE_ROUTE_MAP = {
   UserLoginReport: {
@@ -213,15 +213,6 @@ export default {
       }
       if (target?.isCustom) {
         const rq = this.$route.query || {}
-        const isCustomizeMode = String(Array.isArray(rq.customize) ? rq.customize[0] : rq.customize) === '1'
-        const normalizeVisibleParam = (v) => {
-          if (v === undefined || v === null) return undefined
-          return String(Array.isArray(v) ? v[0] : v) || ''
-        }
-        const targetVC = normalizeVisibleParam(target.query?.visible_charts)
-        const targetVT = normalizeVisibleParam(target.query?.visible_tables)
-        const currentVC = normalizeVisibleParam(rq.visible_charts)
-        const currentVT = normalizeVisibleParam(rq.visible_tables)
         const desiredBase = {
           chart_key: target.query?.chart_key || target.key,
           report_id: String(target.reportId || target.query?.report_id || '')
@@ -231,21 +222,11 @@ export default {
           report_id: normalizeRouteValue(rq.report_id)
         }
         const baseNeedsCorrection = JSON.stringify(currentBase) !== JSON.stringify(desiredBase)
-        const visibleNeedsCorrection = !isCustomizeMode && (
-          targetVC !== currentVC || targetVT !== currentVT
-        )
-        if (baseNeedsCorrection || visibleNeedsCorrection) {
-          // days: 优先保留用户当前选择，无则回落到报表保存值
-          const activeDays = normalizeReportDays(normalizeRouteValue(rq.days) || target.query?.days, '7')
-          const correctedQuery = { ...desiredBase, days: activeDays }
-          if (isCustomizeMode) {
-            if (currentVC !== undefined) correctedQuery.visible_charts = currentVC
-            if (currentVT !== undefined) correctedQuery.visible_tables = currentVT
-            if (rq.customize) correctedQuery.customize = rq.customize
-          } else {
-            if (targetVC !== undefined) correctedQuery.visible_charts = targetVC
-            if (targetVT !== undefined) correctedQuery.visible_tables = targetVT
-          }
+        const hasStaleVisibleParams = rq.visible_charts !== undefined || rq.visible_tables !== undefined
+        if (baseNeedsCorrection || hasStaleVisibleParams) {
+          const correctedQuery = { ...desiredBase }
+          if (rq.days) correctedQuery.days = rq.days
+          if (rq.customize) correctedQuery.customize = rq.customize
           this.$router.replace({ path: this.$route.path, query: correctedQuery })
           return
         }
@@ -284,7 +265,7 @@ export default {
     },
     handleChangeChart(chart) {
       const nextQuery = {
-        ...(this.$route.query.days ? { days: this.$route.query.days } : {}),
+        ...(this.$route.query.days && !chart.isCustom ? { days: this.$route.query.days } : {}),
         ...(chart.query || {})
       }
       reportDebugLog('users.index.handleChangeChart', {

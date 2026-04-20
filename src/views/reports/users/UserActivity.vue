@@ -6,6 +6,7 @@
       :name="name"
       :charts="charts"
       :tables="tables"
+      :current-days="currentFilters.days"
       v-bind="$attrs"
     >
       <template #toolbar>

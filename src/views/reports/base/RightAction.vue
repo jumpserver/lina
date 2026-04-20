@@ -54,7 +54,7 @@
     <CreateReportDialog
       v-if="!deleteOnly"
       :chart-options="chartOptions"
-      :default-days="getDaysParam()"
+      :default-days="currentDays || getDaysParam()"
       :default-visible-charts="selectedChartNames"
       :default-visible-tables="selectedTableNames"
       :report="editingReport"
@@ -166,6 +166,10 @@ export default {
     selectedTableNames: {
       type: Array,
       default: () => []
+    },
+    currentDays: {
+      type: [String, Number],
+      default: ''
     }
   },
   data() {
@@ -222,12 +226,6 @@ export default {
       const reportDays = parseInt(normalizeReportDays(query.days || this.reportData?.days || this.getDaysParam(), '7'), 10)
       if (this.isCustomReport) {
         const savedFilters = (this.reportData && this.reportData.filters) ? { ...this.reportData.filters } : {}
-        if (query.visible_charts !== undefined && query.visible_charts !== null) {
-          savedFilters.visible_charts = String(query.visible_charts).split(',').map(s => s.trim()).filter(Boolean)
-        }
-        if (query.visible_tables !== undefined && query.visible_tables !== null) {
-          savedFilters.visible_tables = String(query.visible_tables).split(',').map(s => s.trim()).filter(Boolean)
-        }
         return {
           ...(this.reportData || {}),
           days: reportDays,
@@ -360,11 +358,9 @@ export default {
       this.reportData = null
       const reportQuery = buildCustomReportRouteQuery(report)
       const rq = this.$route.query || {}
-      const query = { report_id: reportQuery.report_id, days: reportQuery.days }
+      const query = { report_id: reportQuery.report_id }
       if (rq.chart_key) query.chart_key = rq.chart_key
       if (rq.customize) query.customize = rq.customize
-      if (reportQuery.visible_charts) query.visible_charts = reportQuery.visible_charts
-      if (reportQuery.visible_tables) query.visible_tables = reportQuery.visible_tables
       this.$router.push({ path: this.$route.path, query }).catch(() => {
         this.$eventBus.$emit('reportForceRefresh', String(report.id))
       })

@@ -74,6 +74,7 @@ export default {
   data() {
     return {
       reportDetail: null,
+      sessionDays: '',
       displayMode: ['chart', 'table'],
       // now supports multiple tables: array of { name, columns, rows }
       tableData: [],
@@ -84,26 +85,18 @@ export default {
     }
   },
   watch: {
+    reportId(newId, oldId) {
+      if (newId !== oldId) {
+        this.sessionDays = ''
+      }
+    },
     '$route.fullPath'() {
       const routeKey = this.buildGetDataRouteKey(this.$route.query)
       if (routeKey === this.lastGetDataRouteKey) {
         return
       }
-      const prevKey = JSON.parse(this.lastGetDataRouteKey || '{}')
-      const nextKey = JSON.parse(routeKey)
-      const onlyVisibilityChanged = (
-        prevKey.path === nextKey.path &&
-        prevKey.report_id === nextKey.report_id &&
-        prevKey.days === nextKey.days &&
-        prevKey.chart_key === nextKey.chart_key &&
-        (prevKey.visible_charts !== nextKey.visible_charts || prevKey.visible_tables !== nextKey.visible_tables)
-      )
       this.lastGetDataRouteKey = routeKey
       this.lastFetchedReportId = this.reportId
-      if (onlyVisibilityChanged) {
-        this.$eventBus.$emit('reportVisibilityChanged')
-        return
-      }
       reportDebugLog('mixin.route.fullPath', {
         name: this.name,
         routePath: this.$route.path,
@@ -147,10 +140,14 @@ export default {
       return this.reportDetail?.name || this.title
     },
     currentFilters() {
-      const reportDays = this.reportDetail?.days
-      const fallbackDays = this.days || reportDays || 7
+      const fallbackDays = this.isCustomReport
+        ? (this.reportDetail?.days || 7)
+        : (this.days || 7)
+      const activeDays = this.isCustomReport
+        ? (this.sessionDays || fallbackDays)
+        : (this.$route.query.days || fallbackDays)
       return {
-        days: normalizeReportDays(this.$route.query.days || fallbackDays, '7')
+        days: normalizeReportDays(activeDays, '7')
       }
     }
   },
@@ -169,9 +166,7 @@ export default {
         path: this.$route.path,
         report_id: query.report_id || '',
         days: query.days || '',
-        chart_key: query.chart_key || '',
-        visible_charts: query.visible_charts || '',
-        visible_tables: query.visible_tables || ''
+        chart_key: query.chart_key || ''
       })
     },
     async fetchWithDedupe(url) {
@@ -209,6 +204,7 @@ export default {
         return data
       }
       this.reportDetail = data
+      this.sessionDays = ''
       if (data?.name) {
         this.title = data.name
       }
@@ -223,7 +219,6 @@ export default {
     },
     async fetchReportData(baseUrl) {
       const reportId = this.reportId
-      const query = pickReportQuery(this.$route.query)
       if (reportId) {
         await this.ensureReportDetail(reportId)
         if (this.reportId !== reportId) {
@@ -236,7 +231,11 @@ export default {
           })
           return this.fetchReportData(baseUrl)
         }
-        const requestUrl = appendQuery(`/api/v1/reports/reports/${reportId}/data/`, query)
+        const effectiveDays = normalizeReportDays(
+          this.sessionDays || (this.reportDetail && this.reportDetail.days) || '7',
+          '7'
+        )
+        const requestUrl = appendQuery(`/api/v1/reports/reports/${reportId}/data/`, { days: effectiveDays })
         reportDebugLog('mixin.fetch.custom', {
           name: this.name,
           requestUrl,
@@ -415,6 +414,16 @@ export default {
       }
     },
     handleToolbarFilterChange({ days }) {
+      if (this.isCustomReport) {
+        if (days) {
+          this.sessionDays = normalizeReportDays(days, '7')
+        }
+        this.reportFetchCache = Object.create(null)
+        if (typeof this.getData === 'function') {
+          this.getData()
+        }
+        return
+      }
       const query = {}
       if (this.$route.query.chart_key) {
         query.chart_key = this.$route.query.chart_key
@@ -428,21 +437,23 @@ export default {
       if (days) {
         query.days = normalizeReportDays(days, '7')
       }
-      const routeVC = this.$route.query.visible_charts
-      const routeVT = this.$route.query.visible_tables
-      const chartsSource = routeVC !== undefined && routeVC !== null
-        ? routeVC
-        : this.reportDetail?.filters?.visible_charts
-      const tablesSource = routeVT !== undefined && routeVT !== null
-        ? routeVT
-        : this.reportDetail?.filters?.visible_tables
-      if (chartsSource !== undefined && chartsSource !== null) {
-        const list = normalizeVisibleFilterList(chartsSource)
-        query.visible_charts = list.length ? list.join(',') : ''
-      }
-      if (tablesSource !== undefined && tablesSource !== null) {
-        const list = normalizeVisibleFilterList(tablesSource)
-        query.visible_tables = list.length ? list.join(',') : ''
+      if (!this.isCustomReport) {
+        const routeVC = this.$route.query.visible_charts
+        const routeVT = this.$route.query.visible_tables
+        const chartsSource = routeVC !== undefined && routeVC !== null
+          ? routeVC
+          : this.reportDetail?.filters?.visible_charts
+        const tablesSource = routeVT !== undefined && routeVT !== null
+          ? routeVT
+          : this.reportDetail?.filters?.visible_tables
+        if (chartsSource !== undefined && chartsSource !== null) {
+          const list = normalizeVisibleFilterList(chartsSource)
+          query.visible_charts = list.length ? list.join(',') : ''
+        }
+        if (tablesSource !== undefined && tablesSource !== null) {
+          const list = normalizeVisibleFilterList(tablesSource)
+          query.visible_tables = list.length ? list.join(',') : ''
+        }
       }
       if (this.days !== undefined && days) {
         this.days = normalizeReportDays(days, '7')

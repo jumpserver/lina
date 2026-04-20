@@ -16,17 +16,6 @@
         <el-input v-model="form.name" :maxlength="32" show-word-limit />
       </el-form-item>
 
-      <el-form-item :label="$t('TimeRange')" prop="days">
-        <el-select v-model="form.days" style="width: 100%">
-          <el-option
-            v-for="option in presetOptions"
-            :key="option.value"
-            :label="option.label"
-            :value="option.value"
-          />
-        </el-select>
-      </el-form-item>
-
       <template v-if="showVisibilityOptions">
         <el-form-item v-if="chartOptions.length" :label="$t('ChartReport')">
           <el-checkbox-group v-model="form.visibleCharts">
@@ -49,7 +38,7 @@
 
 <script>
 import Dialog from '@/components/Dialog'
-import { REPORT_RANGE_PRESET_OPTIONS, normalizeReportDays } from './reportUtils'
+import { normalizeReportDays } from './reportUtils'
 
 function getDefaultName(title) {
   const now = new Date()
@@ -107,8 +96,7 @@ export default {
   data() {
     return {
       submitting: false,
-      form: this.getInitialForm(),
-      presetOptions: REPORT_RANGE_PRESET_OPTIONS
+      form: this.getInitialForm()
     }
   },
   computed: {
@@ -154,7 +142,6 @@ export default {
       return normalizeReportDays(days, '7')
     },
     normalizeSelection(raw, options = [], fallback = []) {
-      // 显式空数组 = 用户清除了所有选择（如关闭图形报表模式），直接返回空
       if (Array.isArray(raw) && raw.length === 0) return []
       const safeOptions = Array.isArray(options) ? options : []
       const optionNames = safeOptions
@@ -184,27 +171,25 @@ export default {
     },
     getInitialForm() {
       const report = this.report || {}
-      const reportDays = this.normalizeDays(report.days || this.defaultDays || '7')
       const filters = report.filters || {}
       const visibleCharts = this.normalizeSelection(
-        filters.visible_charts,
+        this.defaultVisibleCharts.length ? this.defaultVisibleCharts : filters.visible_charts,
         this.chartOptions,
         this.defaultVisibleCharts
       )
       const visibleTables = this.normalizeSelection(
-        filters.visible_tables,
+        this.defaultVisibleTables.length ? this.defaultVisibleTables : filters.visible_tables,
         this.tableOptions,
         this.defaultVisibleTables
       )
       return {
         name: report.name || getDefaultName(this.reportTitle || this.reportType || 'report'),
-        days: reportDays,
         visibleCharts,
         visibleTables
       }
     },
     getPayload() {
-      const rangeDays = parseInt(this.normalizeDays(this.form.days), 10)
+      const rangeDays = parseInt(this.normalizeDays(this.defaultDays), 10)
       const visibleCharts = this.normalizeSelection(
         this.form.visibleCharts,
         this.chartOptions,
@@ -232,6 +217,9 @@ export default {
     validateNameNotDuplicate(rule, value, callback) {
       const name = (value || '').trim()
       if (!name) return callback()
+      if (this.isEdit && name === (this.report?.name || '').trim()) {
+        return callback()
+      }
       this.$axios.get('/api/v1/reports/reports/', { params: { name } })
         .then(res => {
           const list = Array.isArray(res) ? res : (res.results || [])
@@ -245,6 +233,7 @@ export default {
         .catch(() => callback())
     },
     handleSubmit() {
+      const payload = this.getPayload()
       this.$refs.form.validate(async (valid) => {
         if (!valid) {
           return
@@ -253,7 +242,7 @@ export default {
         try {
           const url = this.isEdit ? `/api/v1/reports/reports/${this.report.id}/` : '/api/v1/reports/reports/'
           const method = this.isEdit ? 'put' : 'post'
-          const res = await this.$axios[method](url, this.getPayload())
+          const res = await this.$axios[method](url, payload)
           this.$message.success(this.isEdit ? this.$t('UpdateSuccessMsg') : this.$t('CreateSuccessMsg'))
           this.$emit('created', res)
           this.handleClose()

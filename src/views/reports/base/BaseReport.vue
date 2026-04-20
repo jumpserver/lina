@@ -6,6 +6,7 @@
       </div>
       <RightAction
         :chart-options="chartOptions"
+        :current-days="currentDays"
         :name="name"
         :nav-mode="true"
         :selected-chart-names="selectedChartNames"
@@ -92,7 +93,7 @@
 import Logo from '@/layout/components/NavLeft/Logo'
 import RightAction from './RightAction.vue'
 import store from '@/store'
-import { appendQuery } from './reportUtils'
+import { appendQuery, fetchReportDetailShared, normalizeVisibleFilterList } from './reportUtils'
 
 export default {
   components: {
@@ -145,6 +146,10 @@ export default {
     tables: {
       type: Array,
       default: () => []
+    },
+    currentDays: {
+      type: [String, Number],
+      default: ''
     }
   },
   data() {
@@ -211,10 +216,8 @@ export default {
   mounted() {
     this.setupVisibilityObserver()
     this.$nextTick(() => this.applyItemVisibility())
-    this.$eventBus.$on('reportVisibilityChanged', this.applyItemVisibility)
   },
   beforeDestroy() {
-    this.$eventBus.$off('reportVisibilityChanged', this.applyItemVisibility)
     if (this.visibilityObserver) {
       this.visibilityObserver.disconnect()
       this.visibilityObserver = null
@@ -281,6 +284,10 @@ export default {
       return values.length > 1 ? values : values[0]
     },
     syncSelectionsFromRoute() {
+      if (this.isCustomReportPage) {
+        this.syncSelectionsFromReportDetail()
+        return
+      }
       const chartSelectionFromQuery = this.parseQuerySelection('visible_charts', this.chartOptions)
       const tableSelectionFromQuery = this.parseQuerySelection('visible_tables', this.tableOptions)
       this.selectedChartNames =
@@ -291,8 +298,48 @@ export default {
         this.getDefaultSelectedNames(this.selectedTableNames, this.tableOptions)
       this.$nextTick(() => this.applyItemVisibility())
     },
+    syncSelectionsFromReportDetail() {
+      const reportId = this.getCustomReportId()
+      if (!reportId) return
+      fetchReportDetailShared(this.$axios, reportId).then(detail => {
+        if (this.getCustomReportId() !== reportId) return
+        const filters = (detail && detail.filters) || {}
+        const chartNames = this.chartOptions.map(item => item.name)
+        const tableNames = this.tableOptions.map(item => item.name)
+        const savedCharts = normalizeVisibleFilterList(filters.visible_charts)
+        const savedTables = normalizeVisibleFilterList(filters.visible_tables)
+        if (savedCharts.length) {
+          this.selectedChartNames = savedCharts.filter(name => chartNames.includes(name))
+        } else if (filters.visible_charts !== undefined) {
+          this.selectedChartNames = []
+        } else {
+          this.selectedChartNames = chartNames
+        }
+        if (savedTables.length) {
+          this.selectedTableNames = savedTables.filter(name => tableNames.includes(name))
+        } else if (filters.visible_tables !== undefined) {
+          this.selectedTableNames = []
+        } else {
+          this.selectedTableNames = tableNames
+        }
+        this.$nextTick(() => this.applyItemVisibility())
+      }).catch(() => {
+        this.selectedChartNames = this.getDefaultSelectedNames(this.selectedChartNames, this.chartOptions)
+        this.selectedTableNames = this.getDefaultSelectedNames(this.selectedTableNames, this.tableOptions)
+        this.$nextTick(() => this.applyItemVisibility())
+      })
+    },
+    getCustomReportId() {
+      const query = (this.$route && this.$route.query) || {}
+      const v = query.report_id
+      return Array.isArray(v) ? v[0] : (v || '')
+    },
     pushVisibilityQuery() {
       if (!this.$router || !this.$route) return
+      if (this.isCustomReportPage) {
+        this.$nextTick(() => this.applyItemVisibility())
+        return
+      }
       const chartAllSelected =
         this.chartOptions.length && this.selectedChartNames.length === this.chartOptions.length
       const tableAllSelected =
@@ -430,25 +477,23 @@ export default {
     openNewWindow() {
       try {
         if (!this.win || this.win.closed) {
-          // 计算窗口居中位置
           const width = 1024
           const height = 800
           const left = (screen.width - width) / 2
           const top = (screen.height - height) / 2
           const options = `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`
-          // 从 url prop 中只取路径部分（去掉旧的内嵌 query），
-          // 再从当前路由取实际有效参数重新拼接，避免重复或过时参数
           const basePath = this.url.split('?')[0]
           const rq = this.$route.query || {}
           const query = { customize: 1 }
           if (rq.report_id) query.report_id = rq.report_id
           if (rq.days) query.days = rq.days
-          if (rq.visible_charts !== undefined && rq.visible_charts !== null) query.visible_charts = rq.visible_charts
-          if (rq.visible_tables !== undefined && rq.visible_tables !== null) query.visible_tables = rq.visible_tables
+          if (!rq.report_id) {
+            if (rq.visible_charts != null) query.visible_charts = rq.visible_charts
+            if (rq.visible_tables != null) query.visible_tables = rq.visible_tables
+          }
           const url = appendQuery(basePath, query)
           this.win = window.open(url, '_blank', options)
         }
-        // 确保窗口在最前面
         this.win.focus()
       } catch (error) {
         console.error('打开新窗口失败:', error)
