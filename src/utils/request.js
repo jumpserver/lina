@@ -182,12 +182,16 @@ export function flashErrorMsg({ response, error }) {
   if (!response.config.disableFlashErrorMsg) {
     const responseErrorMsg = getErrorResponseMsg(error)
     const msg = responseErrorMsg || error.message
-    const displayMsg = stripHtmlTags(msg)
+    let displayMsg = stripHtmlTags(msg)
 
     if (response.status === 403 && msg === 'CSRF Failed: CSRF token missing.') {
       setTimeout(() => {
         logout()
       }, 1000)
+    }
+
+    if (response.status === 413) {
+      displayMsg = i18n.t('FileSizeExceedsLimit')
     }
     message({
       message: displayMsg,
