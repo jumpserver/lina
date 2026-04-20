@@ -138,6 +138,14 @@ function isFieldErrorValue(value) {
   return typeof value === 'string' || Array.isArray(value) || isPlainObject(value)
 }
 
+function stripHtmlTags(text) {
+  if (typeof text !== 'string') {
+    return text
+  }
+  const cleanedText = text.replace(/<[^>]*>/g, '').trim()
+  return cleanedText || text
+}
+
 function isFieldErrorHandledByForm(response) {
   const data = response.data
   const fields = response.config?.fieldErrorFields || []
@@ -174,6 +182,7 @@ export function flashErrorMsg({ response, error }) {
   if (!response.config.disableFlashErrorMsg) {
     const responseErrorMsg = getErrorResponseMsg(error)
     const msg = responseErrorMsg || error.message
+    const displayMsg = stripHtmlTags(msg)
 
     if (response.status === 403 && msg === 'CSRF Failed: CSRF token missing.') {
       setTimeout(() => {
@@ -181,7 +190,7 @@ export function flashErrorMsg({ response, error }) {
       }, 1000)
     }
     message({
-      message: msg,
+      message: displayMsg,
       type: 'error',
       duration: 5 * 1000
     })
