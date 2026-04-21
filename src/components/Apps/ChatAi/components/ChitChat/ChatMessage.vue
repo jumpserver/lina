@@ -307,7 +307,8 @@ export default {
         flex-direction: row-reverse;
 
         .message-content {
-          background-color: var(--menu-hover);
+          background-color: var(--color-primary-light-8, #d9ecff);
+          color: #1f2d3d;
           border-radius: 12px 2px 12px 12px;
         }
       }
