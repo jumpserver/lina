@@ -597,7 +597,7 @@ export default {
       beforeEnter: (_to, from, next) => {
         const settings = getSettings()
         if (settings?.JDMC_ENABLED) {
-          openJDMC('/jdmc/app-management/app-auth')
+          openJDMC('/jdmc/sys-management/sys-auth')
           redirectAfterExternalAction(from, next)
         } else {
           next()
