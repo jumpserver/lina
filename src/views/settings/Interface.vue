@@ -51,6 +51,7 @@
     </div>
     <IBox v-if="!loading">
       <GenericCreateUpdateForm
+        :key="formRenderKey"
         :fields="fields"
         :fields-meta="fieldsMeta"
         :has-save-continue="hasSaveContinue"
@@ -87,6 +88,7 @@ export default {
       files: {},
       imagePreviews: {},
       imageValidationToken: {},
+      formRenderKey: 0,
       remoteExtMeta: {},
       imageFieldConfig: {
         logo_index: { width: 185, height: 55 },
@@ -228,18 +230,23 @@ export default {
       moreButtons: [
         {
           title: this.$t('RestoreButton'),
-          callback: function(value, form) {
-            this.$confirm(this.$t('RestoreDialogMessage'),
-              this.$t('RestoreDialogTitle'), {
-                confirmButtonText: this.$t('Confirm'),
-                cancelButtonText: this.$t('Cancel'),
-                type: 'warning'
-              }).then(() => {
-              restoreInterface().then(res => {
-                this.$message.success(res.success)
-                location.reload()
-              })
-            })
+          callback: async function(value, form) {
+            try {
+              await this.$confirm(this.$t('RestoreDialogMessage'),
+                this.$t('RestoreDialogTitle'), {
+                  confirmButtonText: this.$t('Confirm'),
+                  cancelButtonText: this.$t('Cancel'),
+                  type: 'warning'
+                })
+              const res = await restoreInterface()
+              await this.$store.dispatch('settings/getPublicSettings')
+              await this.loadInterfaceInfo()
+              this.$message.success(res.success)
+            } catch (error) {
+              if (error !== 'cancel') {
+                this.$message.error(this.$tc('UpdateErrorMsg'))
+              }
+            }
           }.bind(this)
         }
       ]
@@ -273,6 +280,7 @@ export default {
     },
     async loadInterfaceInfo() {
       this.interfaceInfo = await getInterfaceInfo()
+      this.formRenderKey += 1
     },
     setExtFormConfig() {
       const extChildren = this.remoteExtMeta.children || {}
@@ -340,16 +348,17 @@ export default {
       }
       return themeConfig
     },
-    submitForm(values) {
+    async submitForm(values) {
       const { hasFiles, form, payload } = this.buildSubmitPayload(values)
       const requestData = hasFiles ? form : payload
-      const request = this.$axios.put(this.url, requestData)
 
-      return request.then(() => {
+      try {
+        await this.$axios.put(this.url, requestData)
+        await this.$store.dispatch('settings/getPublicSettings')
         this.$message.success(this.$tc('UpdateSuccessMsg'))
-      }).catch(error => {
+      } catch (error) {
         this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
-      })
+      }
     },
     buildSubmitPayload(values) {
       const form = new FormData()
