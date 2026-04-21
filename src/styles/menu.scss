@@ -212,6 +212,33 @@ $single-menu-height: 38px;
       }
     }
 
+    .menu-link-item.level1-menu,
+    .external-action-menu-item.level1-menu {
+      display: flex;
+      justify-content: center;
+      min-width: 55px;
+      width: 55px;
+      padding: 0;
+
+      &::before {
+        left: 4px;
+      }
+
+      .svg-icon,
+      .el-icon,
+      .fa {
+        margin-right: 0 !important;
+      }
+
+      .item-title {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+        visibility: hidden;
+      }
+    }
+
     .group-title {
       & > span {
         display: none;
