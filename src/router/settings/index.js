@@ -2,17 +2,12 @@ import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
 import store from '@/store'
 import { openJDMC } from '@/utils/jdmc'
+import { hasPermission } from '@/utils/jms'
 
 const getSettings = () => store.state.settings.publicSettings || {}
-const currentUser = () => store.getters.currentUser || {}
 
 const Setting = () => import('@/views/settings/index')
 const globalSubmenu = () => import('@/layout/globalOrg.vue')
-
-function isSystemAdmin() {
-  const user = currentUser()
-  return user.username === 'admin'
-}
 
 function redirectAfterExternalAction(from, next) {
   if (from?.name) {
@@ -582,13 +577,13 @@ export default {
       meta: {
         title: i18n.t('DeviceManager'),
         icon: 'device',
-        permissions: ['settings.view_setting'],
+        permissions: ['rbac.view_jdmc'],
         externalAction: {
           type: 'jdmc',
           nextPath: '/jdmc/'
         },
-        // 在开启 JDMC 且是系统管理员时，才显示
-        hidden: ({ settings }) => !(settings['JDMC_ENABLED'] && isSystemAdmin())
+        // 在开启 JDMC 且有 rbac.view_jdmc 权限时，才显示
+        hidden: ({ settings }) => !settings['JDMC_ENABLED']
       },
       beforeEnter: (_to, from, next) => {
         openJDMC('/jdmc/')
@@ -617,10 +612,10 @@ export default {
           nextPath: '/jdmc/sys-management/sys-auth',
           enabled: ({ settings }) => settings?.JDMC_ENABLED
         },
-        // 开启 JDMC 但不是 admin 时，隐藏
-        // 开启 JDMC 且是 admin 是显示
+        // 开启 JDMC 但没有 rbac.view_jdmc 权限时，隐藏
+        // 开启 JDMC 且有 rbac.view_jdmc 权限时显示
         // 没有开启 JDMC 时，显示
-        hidden: ({ settings }) => settings['JDMC_ENABLED'] && !isSystemAdmin()
+        hidden: ({ settings }) => settings['JDMC_ENABLED'] && !hasPermission('rbac.view_jdmc')
       }
     }
   ]
