@@ -24,22 +24,31 @@
       </el-row>
       <el-checkbox-group
         v-model="checkedRegion"
+        class="region-grid"
         @change="handleCheckedRegionChange"
       >
-        <el-row
+        <div
           v-for="r in allRegions"
           :key="r.id"
-          type="flex"
+          class="region-grid__item"
         >
-          <el-col>
+          <el-tooltip
+            :content="r.name"
+            :disabled="(r.name || '').length < 20"
+            placement="top"
+            :open-delay="500"
+          >
             <el-checkbox
               :label="r.id"
               :value="r.id"
+              class="region-checkbox"
             >
-              {{ r.name }}
+              <span class="region-checkbox__text">
+                {{ r.name }}
+              </span>
             </el-checkbox>
-          </el-col>
-        </el-row>
+          </el-tooltip>
+        </div>
       </el-checkbox-group>
     </Dialog>
   </div>
@@ -162,18 +171,45 @@ export default {
   margin-bottom: 10px;
 }
 
-.el-checkbox-group {
+.region-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px 24px;
+  width: 100%;
+  min-width: 0;
+}
+
+.region-grid__item {
+  min-width: 0;
+}
+
+.region-checkbox {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+}
 
-  ::v-deep .el-col {
+::v-deep .region-checkbox .el-checkbox__input {
+  flex: 0 0 auto;
+}
 
-    .el-checkbox {
-      display: flex;
-      align-items: center;
-      width: 250px;
-      height: 25px;
-    }
-  }
+::v-deep .region-checkbox .el-checkbox__label {
+  display: block;
+  width: 100%;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding-left: 8px;
+  overflow: hidden;
+}
+
+.region-checkbox__text {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 </style>
