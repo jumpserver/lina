@@ -178,7 +178,10 @@ export default {
         this.activeFilters.push(option)
       } else {
         this.activeFilters = this.activeFilters.filter(item => {
-          return item.label !== option.label && item.category !== option.category
+          if (item.category !== option.category || item.label !== option.label) {
+            return true
+          }
+          return false
         })
       }
       option.active = !option.active
@@ -282,6 +285,8 @@ export default {
 
         &.active {
           color: var(--color-primary);
+          font-weight: 600;
+          border-radius: 10px;
 
           i {
             visibility: visible;
