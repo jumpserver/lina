@@ -84,7 +84,7 @@ export default {
         {
           title: this.$t('HistoricalSessionNum'),
           body: {
-            route: { name: `SessionList`, params: { activeMenu: 'OfflineList' } },
+            route: { name: `SessionList`, params: { activeMenu: 'OfflineList' }, query: { tab: 'OfflineList' } },
             count: this.data.total_count_history_sessions,
             disabled: !this.$hasPerm('terminal.view_session')
           }
