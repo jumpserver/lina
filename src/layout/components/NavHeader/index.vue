@@ -41,7 +41,7 @@
     />
     <ul class="navbar-left">
       <li class="left-item">
-        <div class="nav-logo">
+        <div :class="{ 'is-collapsed': !sidebar.opened }" class="nav-logo">
           <Logo v-if="showLogo" />
         </div>
       </li>
@@ -158,9 +158,14 @@ export default {
 
       .nav-logo {
         width: 200px;
+        transition: width 0.28s;
 
         &:hover {
           background: rgba(0, 0, 0, 12%);
+        }
+
+        &.is-collapsed {
+          width: 54px;
         }
       }
 

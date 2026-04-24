@@ -56,21 +56,21 @@
     </el-drawer>
 
     <Dialog
-      v-if="msgDetailVisible"
+      v-if="msgDialogVisible && currentMsg"
       :close-on-click-modal="false"
       :confirm-title="$tc('MarkAsRead')"
-      :title="currentMsg.content.subject"
-      :visible.sync="msgDetailVisible"
+      :title="currentDialogTitle"
+      :visible.sync="msgDialogVisible"
       @cancel="cancelRead"
-      @close="markAsRead([currentMsg])"
-      @confirm="markAsRead([currentMsg])"
+      @close="handleDialogClose"
+      @confirm="confirmRead"
     >
       <div class="msg-detail">
-        <div class="msg-detail-head">
+        <div v-if="currentMsg.date_created" class="msg-detail-head">
           <span class="msg-detail-time">{{ formatDate(currentMsg.date_created) }}</span>
         </div>
         <div class="msg-detail-txt">
-          <MarkDown :value="currentMsg.content.message" />
+          <MarkDown :value="currentDialogMessage" />
         </div>
       </div>
     </Dialog>
@@ -94,14 +94,24 @@ export default {
       show: false,
       messages: [],
       hoverMsgId: '',
-      msgDetailVisible: false,
+      msgDialogVisible: false,
+      currentDialogType: '',
+      dialogAction: '',
+      isClosingDialog: false,
       currentMsg: null,
+      popupMessages: [],
       unreadMsgCount: 0
     }
   },
   computed: {
     width() {
       return this.$store.state.app.device === 'mobile' ? '70%' : '450px'
+    },
+    currentDialogTitle() {
+      return this.currentMsg?.content?.subject || this.$tc('SiteMessage')
+    },
+    currentDialogMessage() {
+      return this.currentMsg?.content?.message || ''
     }
   },
   mounted() {
@@ -116,7 +126,9 @@ export default {
     },
     showMsgDetail(msg) {
       this.currentMsg = msg
-      this.msgDetailVisible = true
+      this.currentDialogType = 'siteMessage'
+      this.dialogAction = ''
+      this.msgDialogVisible = true
     },
     getMessages() {
       const url = '/api/v1/notifications/site-messages/?offset=0&limit=15&has_read=false'
@@ -153,7 +165,7 @@ export default {
     markAsReadAll(msgs) {
       const url = `/api/v1/notifications/site-messages/mark-as-read-all/`
       this.$axios.patch(url, {}).then(res => {
-        this.msgDetailVisible = false
+        this.msgDialogVisible = false
         this.getMessages()
       }).catch(err => {
         this.$message(err.detail)
@@ -161,19 +173,99 @@ export default {
     },
     markAsRead(msgs) {
       const url = `/api/v1/notifications/site-messages/mark-as-read/`
-      const msgIds = []
-      for (const item of msgs) {
-        msgIds.push(item.id)
+      const msgIds = msgs.filter(Boolean).map(item => item.id).filter(Boolean)
+      if (msgIds.length === 0) {
+        this.closeCurrentDialog()
+        return
       }
       this.$axios.patch(url, { ids: msgIds }).then(res => {
-        this.msgDetailVisible = false
+        this.closeCurrentDialog()
         this.getMessages()
       }).catch(err => {
         this.$message(err.detail)
       })
     },
+    confirmRead() {
+      this.dialogAction = 'confirm'
+      this.markAsRead([this.currentMsg])
+    },
     cancelRead() {
-      this.msgDetailVisible = false
+      this.dialogAction = 'cancel'
+      this.closeCurrentDialog()
+    },
+    handleDialogClose() {
+      if (this.isClosingDialog) {
+        return
+      }
+      if (this.dialogAction === 'confirm') {
+        return
+      }
+      if (this.currentDialogType === 'siteMessage') {
+        this.dialogAction = 'confirm'
+        this.markAsRead([this.currentMsg])
+        return
+      }
+      this.dialogAction = 'cancel'
+      this.closeCurrentDialog()
+    },
+    closeCurrentDialog() {
+      if (this.isClosingDialog) {
+        return
+      }
+      const shouldShowNextPopup = this.currentDialogType === 'popup'
+
+      this.isClosingDialog = true
+      this.msgDialogVisible = false
+      this.currentMsg = null
+      this.currentDialogType = ''
+
+      this.$nextTick(() => {
+        this.dialogAction = ''
+        this.isClosingDialog = false
+        if (shouldShowNextPopup) {
+          this.showNextPopupMessage()
+        }
+      })
+    },
+    isPopupMessage(data) {
+      const siteMsg = data?.site_meg || data?.site_msg
+      const content = siteMsg?.content || siteMsg
+      return data?.type === 'display' && content?.display_mode === 'popup'
+    },
+    normalizePopupMessage(data) {
+      const siteMsg = data.site_meg || data.site_msg
+      const content = siteMsg.content || siteMsg
+      return {
+        id: siteMsg.id,
+        content: {
+          subject: content.subject || this.$tc('SiteMessage'),
+          message: content.message || ''
+        },
+        date_created: siteMsg.date_created || content.date_created || '',
+        has_read: false
+      }
+    },
+    enqueuePopupMessage(data) {
+      const msg = this.normalizePopupMessage(data)
+      const isCurrentMsg = this.currentDialogType === 'popup' && this.currentMsg?.id === msg.id
+      const isQueuedMsg = this.popupMessages.some(item => item.id === msg.id)
+
+      if (msg.id && (isCurrentMsg || isQueuedMsg)) {
+        return
+      }
+
+      this.popupMessages.push(msg)
+      this.showNextPopupMessage()
+    },
+    showNextPopupMessage() {
+      if (this.msgDialogVisible || this.popupMessages.length === 0) {
+        return
+      }
+
+      this.currentMsg = this.popupMessages.shift()
+      this.currentDialogType = 'popup'
+      this.dialogAction = ''
+      this.msgDialogVisible = true
     },
     enablePullMsgCount() {
       const wsURL = createWsUrl('/ws/notifications/site-msg/')
@@ -189,6 +281,9 @@ export default {
           const unreadCount = data['unread_count']
           if (unreadCount !== undefined) {
             this.unreadMsgCount = unreadCount
+          }
+          if (this.isPopupMessage(data)) {
+            this.enqueuePopupMessage(data)
           }
         } catch (e) {
           this.$log.debug('Recv site message error')

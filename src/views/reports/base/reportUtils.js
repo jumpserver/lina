@@ -73,26 +73,9 @@ export function normalizeVisibleFilterList(value) {
 }
 
 export function buildCustomReportRouteQuery(report = {}) {
-  const normalizedDays = normalizeReportDays(report.days, '7')
-  const query = {
-    report_id: report.id,
-    days: normalizedDays
+  return {
+    report_id: report.id
   }
-  const filters = report.filters || {}
-  const visibleCharts = normalizeVisibleFilterList(filters.visible_charts)
-  const visibleTables = normalizeVisibleFilterList(filters.visible_tables)
-  if (visibleCharts.length) {
-    query.visible_charts = visibleCharts.join(',')
-  } else if (filters.visible_charts !== undefined) {
-    // 显式保存为空 = 全部隐藏，用空字符串表示
-    query.visible_charts = ''
-  }
-  if (visibleTables.length) {
-    query.visible_tables = visibleTables.join(',')
-  } else if (filters.visible_tables !== undefined) {
-    query.visible_tables = ''
-  }
-  return query
 }
 
 export function isReportDebugEnabled() {
@@ -111,9 +94,6 @@ export function reportDebugLog(scope, payload = {}) {
   console.log(`[report-debug:${scope}]`, payload)
 }
 
-// 模块级 report detail 请求去重缓存
-// 多个组件实例（reportPageMixin + RightAction）可能同时请求同一 reportId，
-// 通过此缓存保证同一 URL 在短时间内只发一次 HTTP 请求
 const _reportDetailInFlight = Object.create(null)
 const _reportDetailCache = Object.create(null)
 const REPORT_DETAIL_CACHE_TTL = 1500

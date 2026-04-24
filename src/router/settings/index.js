@@ -2,17 +2,12 @@ import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
 import store from '@/store'
 import { openJDMC } from '@/utils/jdmc'
+import { hasPermission } from '@/utils/jms'
 
 const getSettings = () => store.state.settings.publicSettings || {}
-const currentUser = () => store.getters.currentUser || {}
 
 const Setting = () => import('@/views/settings/index')
 const globalSubmenu = () => import('@/layout/globalOrg.vue')
-
-function isSystemAdmin() {
-  const user = currentUser()
-  return user.username === 'admin'
-}
 
 function redirectAfterExternalAction(from, next) {
   if (from?.name) {
@@ -212,7 +207,9 @@ export default {
       meta: {
         title: i18n.t('Notifications'),
         icon: 'remind',
-        permissions: ['settings.change_email | settings.change_sms | settings.change_systemmsgsubscription']
+        permissions: [
+          'settings.change_email | settings.change_sms | settings.change_systemmsgsubscription'
+        ]
       }
     },
     {
@@ -224,7 +221,7 @@ export default {
         icon: 'feature',
         permissions: [
           'settings.change_ticket | settings.change_ops | settings.change_vault | ' +
-          'settings.change_chatai | settings.change_virtualapp'
+            'settings.change_chatai | settings.change_virtualapp'
         ]
       }
     },
@@ -373,7 +370,8 @@ export default {
         {
           path: 'endpoint-rule/create',
           name: 'EndpointRuleCreate',
-          component: () => import('@/views/settings/Terminal/EndpointRule/EndpointRuleCreateUpdate'),
+          component: () =>
+            import('@/views/settings/Terminal/EndpointRule/EndpointRuleCreateUpdate'),
           meta: {
             title: i18n.t('CreateEndpointRule'),
             activeMenu: '/settings/terminal',
@@ -384,7 +382,8 @@ export default {
         {
           path: 'endpoint-rule/:id/update',
           name: 'EndpointRuleUpdate',
-          component: () => import('@/views/settings/Terminal/EndpointRule/EndpointRuleCreateUpdate'),
+          component: () =>
+            import('@/views/settings/Terminal/EndpointRule/EndpointRuleCreateUpdate'),
           meta: {
             title: i18n.t('UpdateEndpointRule'),
             activeMenu: '/settings/terminal',
@@ -496,7 +495,8 @@ export default {
         {
           path: 'app-providers/:id',
           name: 'AppProviderDetail',
-          component: () => import('@/views/settings/Applet/AppProvider/AppProviderDetail/index.vue'),
+          component: () =>
+            import('@/views/settings/Applet/AppProvider/AppProviderDetail/index.vue'),
           hidden: true,
           meta: {
             title: i18n.t('AppProviderDetail'),
@@ -577,13 +577,13 @@ export default {
       meta: {
         title: i18n.t('DeviceManager'),
         icon: 'device',
-        permissions: ['settings.view_setting'],
+        permissions: ['rbac.view_jdmc'],
         externalAction: {
           type: 'jdmc',
           nextPath: '/jdmc/'
         },
-        // 在开启 JDMC 且是系统管理员时，才显示
-        hidden: ({ settings }) => !(settings['JDMC_ENABLED'] && isSystemAdmin())
+        // 在开启 JDMC 且有 rbac.view_jdmc 权限时，才显示
+        hidden: ({ settings }) => !settings['JDMC_ENABLED']
       },
       beforeEnter: (_to, from, next) => {
         openJDMC('/jdmc/')
@@ -597,7 +597,7 @@ export default {
       beforeEnter: (_to, from, next) => {
         const settings = getSettings()
         if (settings?.JDMC_ENABLED) {
-          openJDMC('/jdmc/app-management/app-auth')
+          openJDMC('/jdmc/sys-management/sys-auth')
           redirectAfterExternalAction(from, next)
         } else {
           next()
@@ -609,13 +609,13 @@ export default {
         permissions: ['settings.change_license'],
         externalAction: {
           type: 'jdmc',
-          nextPath: '/jdmc/app-management/app-auth',
+          nextPath: '/jdmc/sys-management/sys-auth',
           enabled: ({ settings }) => settings?.JDMC_ENABLED
         },
-        // 开启 JDMC 但不是 admin 时，隐藏
-        // 开启 JDMC 且是 admin 是显示
+        // 开启 JDMC 但没有 rbac.view_jdmc 权限时，隐藏
+        // 开启 JDMC 且有 rbac.view_jdmc 权限时显示
         // 没有开启 JDMC 时，显示
-        hidden: ({ settings }) => settings['JDMC_ENABLED'] && !isSystemAdmin()
+        hidden: ({ settings }) => settings['JDMC_ENABLED'] && !hasPermission('rbac.view_jdmc')
       }
     }
   ]

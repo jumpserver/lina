@@ -78,7 +78,7 @@ export default {
       return [
         {
           label: this.$t('Product'),
-          value: 'JumpServer ' + this.versionType
+          value: this.versionType
         },
         {
           label: this.$t('Version'),
