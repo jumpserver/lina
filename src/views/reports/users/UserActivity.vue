@@ -222,44 +222,51 @@ export default {
   },
   computed: {
     totalData() {
-      return [
+      const items = [
         {
+          key: 'total',
           title: this.$t('Total'),
           body: {
             count: this.user_stats.total
           }
         },
         {
+          key: 'not_enabled_mfa',
           title: this.$t('NotEnableMfa'),
           body: {
             count: this.user_stats.not_enabled_mfa
           }
         },
         {
+          key: 'first_login',
           title: this.$t('FirstLogin'),
           body: {
             count: this.user_stats.first_login
           }
         },
         {
+          key: 'valid',
           title: this.$t('Valid'),
           body: {
             count: this.user_stats.valid
           }
         },
         {
+          key: 'face_vector',
           title: this.$t('FaceVector'),
           body: {
             count: this.user_stats.face_vector
           }
         },
         {
+          key: 'need_update_password',
           title: this.$t('NeedUpdatePassword'),
           body: {
             count: this.user_stats.need_update_password
           }
         }
       ]
+      return items.filter(item => !(item.key === 'face_vector' && Number(item.body.count) === 0))
     },
     LoginSourceOptions() {
       return {
