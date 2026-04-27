@@ -85,7 +85,7 @@ export default {
             multiple: false,
             value: [],
             ajax: {
-              url: `/api/v1/ops/playbooks/?only_mine=true`,
+              url: `/api/v1/ops/playbooks/`,
               transformOption: (item) => {
                 return { label: item.name, value: item.id }
               }
