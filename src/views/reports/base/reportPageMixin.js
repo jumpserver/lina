@@ -360,7 +360,9 @@ export default {
               const primitive = entries.every(([, val]) => (typeof val !== 'object'))
               if (primitive) {
                 const columns = [{ key: 'metric', label: this.$t('Metric') }, { key: 'value', label: this.$t('Value') }]
-                const rows = entries.map(([kk, vv]) => ({ metric: translateColumnLabel(kk) || kk, value: vv }))
+                const rows = entries
+                  .filter(([kk, vv]) => !(k === 'user_stats' && kk === 'face_vector' && Number(vv) === 0))
+                  .map(([kk, vv]) => ({ metric: translateColumnLabel(kk) || kk, value: vv }))
                 tables.push({ name: buildLabel(k) || k, columns, rows })
                 continue
               }

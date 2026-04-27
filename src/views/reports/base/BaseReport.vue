@@ -23,7 +23,7 @@
           <div class="title">
             {{ title }}
 
-            <span class="datetime"> [{{ new Date().toLocaleString() }}] </span>
+            <span class="datetime"> [{{ headerDateTime }}] </span>
           </div>
           <div v-if="nav" class="report-visibility-panel">
             <div class="report-visibility-row">
@@ -158,6 +158,7 @@ export default {
     return {
       selectedChartNames: [],
       selectedTableNames: [],
+      headerDateTime: new Date().toLocaleString(),
       visibilityObserver: null,
       internalDisplayMode: normalizedInit.length ? normalizedInit : ['chart', 'table']
     }
