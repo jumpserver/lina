@@ -3,6 +3,7 @@ import empty from '@/layout/empty'
 import store from '@/store'
 import { openJDMC } from '@/utils/jdmc'
 import { hasPermission } from '@/utils/jms'
+import { getFirstAccessibleChildPath } from '@/utils/vue'
 
 const getSettings = () => store.state.settings.publicSettings || {}
 
@@ -20,7 +21,15 @@ function redirectAfterExternalAction(from, next) {
 export default {
   path: '/settings',
   component: Setting,
-  redirect: '/settings/basic',
+  // redirect: '/settings/basic',
+  beforeEnter: (to, _from, next) => {
+    if (to.path !== '/settings') {
+      next()
+      return
+    }
+    const redirectPath = getFirstAccessibleChildPath('/settings')
+    next(redirectPath || '/404')
+  },
   name: 'SystemSetting',
   meta: {
     title: i18n.t('Settings'),
@@ -40,7 +49,7 @@ export default {
       meta: {
         title: i18n.t('BasicSettings'),
         icon: 'basic',
-        permissions: ['settings.view_setting']
+        permissions: ['settings.change_other']
       }
     },
     {
@@ -534,7 +543,7 @@ export default {
       meta: {
         title: i18n.t('SystemTools'),
         icon: 'tools',
-        permissions: ['settings.view_setting']
+        permissions: ['settings.change_other']
       }
     },
     {
@@ -546,7 +555,7 @@ export default {
       meta: {
         title: i18n.t('BaseSystemTasks'),
         icon: 'tasks',
-        permissions: ['ops.view_celerytask']
+        permissions: ['settings.change_ops']
       },
       children: [
         {
