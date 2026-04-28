@@ -173,14 +173,14 @@ export default {
       const report = this.report || {}
       const filters = report.filters || {}
       const visibleCharts = this.normalizeSelection(
-        this.defaultVisibleCharts.length ? this.defaultVisibleCharts : filters.visible_charts,
+        this.defaultVisibleCharts,
         this.chartOptions,
-        this.defaultVisibleCharts
+        filters.visible_charts
       )
       const visibleTables = this.normalizeSelection(
-        this.defaultVisibleTables.length ? this.defaultVisibleTables : filters.visible_tables,
+        this.defaultVisibleTables,
         this.tableOptions,
-        this.defaultVisibleTables
+        filters.visible_tables
       )
       return {
         name: report.name || getDefaultName(this.reportTitle || this.reportType || 'report'),
