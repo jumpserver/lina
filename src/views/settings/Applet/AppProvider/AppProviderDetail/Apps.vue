@@ -32,7 +32,7 @@ export default {
       config: {
         url: `/api/v1/terminal/virtual-app-publications/?provider=${this.object.id}`,
         columns: [
-          'app.name', 'app.image_name', 'date_updated', 'status'
+          'app.name', 'date_updated', 'status'
         ],
         excludes: ['actions'],
         columnsMeta: {
@@ -47,9 +47,6 @@ export default {
               })
             },
             id: ({ row }) => row.app.id
-          },
-          'app.image_name': {
-            label: this.$t('ImageName')
           },
           status: {
             label: this.$t('PublishStatus'),
