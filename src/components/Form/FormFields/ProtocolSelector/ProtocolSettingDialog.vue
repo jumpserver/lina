@@ -56,7 +56,7 @@ export default {
       platform: '',
       loading: true,
       form: this.protocol,
-      platformDetail: platform ? '#/console/assets/platforms/' + platform : '',
+      platformDetail: platform ? '#/settings/platforms?id=' + platform : '',
       config: {
         hasSaveContinue: false,
         hasButtons: !this.disabled,

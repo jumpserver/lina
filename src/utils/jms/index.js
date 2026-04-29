@@ -9,7 +9,7 @@ function openOrReuseWindow(
   windowName = 'task',
   windowFeatures = '',
   iWidth = 900,
-  iHeight = 600
+  iHeight = 680
 ) {
   const iTop = (window.screen.height - 30 - iHeight) / 2
   const iLeft = (window.screen.width - 10 - iWidth) / 2
