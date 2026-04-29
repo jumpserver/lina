@@ -62,7 +62,7 @@ export default {
             type: 'select2',
             el: {
               value: [],
-              url: '/api/v1/assets/assets/',
+              url: '/api/v1/assets/assets/?exclude_category=web',
               canSelect: (row) => {
                 return !row.platform?.name.startsWith('Gateway') && this.object.assets.map(item => item.id).indexOf(row.id) === -1
               }
