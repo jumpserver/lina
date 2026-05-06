@@ -63,7 +63,8 @@ export default {
           this.$axios.get(`/core/auth/profile/pubkey/generate/?${queryParams}`)
             .then((res) => {
               vm.createSuccessHandle()
-              downloadText(res, `${name}.jumpserver.pem`)
+              const domainName = location.hostname.split('.')[0]
+              downloadText(res, `${name}.${domainName}.pem`)
             })
         } else {
           const method = isCreated ? 'post' : 'patch'
