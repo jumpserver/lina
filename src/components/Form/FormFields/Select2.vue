@@ -403,6 +403,7 @@ export default {
     },
     clearSelected() {
       this.iValue = this.multiple ? [] : ''
+      this.allSelected = false
     },
     checkDisabled(item) {
       return item.disabled === undefined ? this.disabledValues.indexOf(item.value) !== -1 : item.disabled
@@ -430,7 +431,9 @@ export default {
     },
     async selectAll() {
       await this.loadAll()
-      this.iValue = this.iOptions.map((v) => v.value)
+      this.iValue = this.iOptions
+        .filter(item => !this.checkDisabled(item))
+        .map((v) => v.value)
     },
     handleSelectAllChange(checked) {
       if (checked) {

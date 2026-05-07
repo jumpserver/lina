@@ -55,7 +55,8 @@ export default {
               const url = `/api/v1/perms/asset-permissions-users-relations/?assetpermission=${this.object.id}&user=${cellValue}`
               this.$axios.delete(url).then(res => {
                 this.$message.success(this.$tc('DeleteSuccessMsg'))
-                this.$store.commit('common/reload')
+                this.updateUserRelationIds(this.userRelationConfig.hasObjectsId.filter(id => id !== cellValue))
+                reload()
               }).catch(error => {
                 this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
               })
@@ -103,6 +104,8 @@ export default {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
+          const newUserIds = objects.map(o => o.value)
+          this.updateUserRelationIds([...new Set([...this.userRelationConfig.hasObjectsId, ...newUserIds])])
           this.$refs.ListTable.reloadTable()
         }
       },
@@ -163,6 +166,10 @@ export default {
     this.updateTableConfigUrl(this.$route.params.id)
   },
   methods: {
+    updateUserRelationIds(userIds) {
+      this.userRelationConfig.hasObjectsId = userIds
+      this.tableConfig.columnsMeta.delete_action.objects = userIds.map(id => ({ id }))
+    },
     // 对于 url 中的 id 值有可能会捕获到上一个页面路由对象中的 id 值，因此会导致权限报错
     updateTableConfigUrl(id) {
       if (id) {

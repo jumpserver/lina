@@ -65,7 +65,9 @@ export default {
               const url = `/api/v1/perms/asset-permissions-assets-relations/?assetpermission=${this.object.id}&asset=${cellValue}`
               this.$axios.delete(url).then(res => {
                 this.$message.success(this.$tc('DeleteSuccessMsg'))
-                this.$store.commit('common/reload')
+                this.assetRelationConfig.hasObjectsId = this.assetRelationConfig.hasObjectsId.filter(id => id !== cellValue)
+                this.tableConfig.columnsMeta.delete_action.objects = (this.tableConfig.columnsMeta.delete_action.objects || []).filter(obj => obj.id !== cellValue)
+                this.$refs.ListTable.reloadTable()
               }).catch(error => {
                 this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
               })
@@ -87,7 +89,7 @@ export default {
         hasObjectsId: this.object.assets?.map(i => i.id) || [],
         disabled: this.$store.getters.currentOrgIsRoot,
         canSelect: (row, index) => {
-          return (this.object.assets?.map(i => i.id) || []).indexOf(row.id) === -1
+          return this.assetRelationConfig.hasObjectsId.indexOf(row.id) === -1
         },
         performAdd: (items, that) => {
           const relationUrl = `/api/v1/perms/asset-permissions-assets-relations/`
@@ -102,8 +104,11 @@ export default {
         },
         onAddSuccess: (items, that) => {
           this.$log.debug('AssetSelect value', that.assets)
+          this.assetRelationConfig.hasObjectsId = [...new Set([...this.assetRelationConfig.hasObjectsId, ...items])]
+          this.tableConfig.columnsMeta.delete_action.objects = [...this.object.assets || [], ...items.map(id => ({ id }))]
+          that.$refs.assetSelect.$refs.select2.iValue = []
           this.$message.success(this.$tc('UpdateSuccessMsg'))
-          this.$store.commit('common/reload')
+          this.$refs.ListTable.reloadTable()
         }
       },
       nodeRelationConfig: {
