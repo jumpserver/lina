@@ -122,6 +122,9 @@
     "vue-template-compiler": "2.7.16",
     "webpack": "^4.28.4"
   },
+  "resolutions": {
+    "braces": "3.0.3"
+  },
   "engines": {
     "node": ">=12",
     "npm": ">= 3.0.0"
