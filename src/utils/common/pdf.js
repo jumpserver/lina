@@ -1,5 +1,5 @@
 import html2canvas from 'html2canvas'
-import { jsPDF as JsPDF } from 'jspdf'
+const { jsPDF: JsPDF } = require('jspdf/dist/jspdf.umd.min.js')
 
 export async function exportElementToPdf(element, options = {}) {
   if (!element) {
