@@ -566,15 +566,22 @@ export default {
   background: #fff;
 }
 
+.report-visibility-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
 .report-visibility-row + .report-visibility-row {
   margin-top: 6px;
 }
 
 .report-visibility-children {
-  display: inline-flex;
+  display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-left: 18px;
+  gap: 6px 12px;
+  margin-left: 22px;
 }
 
 .description {
@@ -707,6 +714,10 @@ export default {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
         border-color: #dcdfe6 !important;
+      }
+
+      .el-checkbox__label {
+        padding-left: 2px;
       }
 
       .el-checkbox__input.is-checked .el-checkbox__inner,
