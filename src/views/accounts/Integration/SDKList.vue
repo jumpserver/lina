@@ -11,10 +11,10 @@
           >
             <two-col>
               <template>
-                <vue-markdown :source="readme" class="code-markdown" />
+                <markdown-renderer :source="readme" class="code-markdown" />
               </template>
               <template #right>
-                <vue-markdown :source="code" class="code-demo" />
+                <markdown-renderer :source="code" class="code-demo" />
               </template>
             </two-col>
           </el-tab-pane>
@@ -36,7 +36,7 @@
 
 <script>
 import { IBox } from '@/components'
-import VueMarkdown from 'vue-markdown'
+import MarkdownRenderer from '@/components/Widgets/MarkdownRenderer'
 import { highlightBlock } from 'highlight.js'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
@@ -45,7 +45,7 @@ export default {
   components: {
     TwoCol,
     IBox,
-    VueMarkdown
+    MarkdownRenderer
   },
   data() {
     return {

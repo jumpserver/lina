@@ -94,10 +94,7 @@ module.exports = {
    */
   transpileDependencies: [
     /\/node_modules\/vue-echarts\//,
-    /\/node_modules\/resize-detector\//,
-    /\/node_modules\/jspdf\//,
-    /\/node_modules\/fast-png\//,
-    /\/node_modules\/iobuffer\//
+    /\/node_modules\/resize-detector\//
   ],
   // In production, use relative paths so the same build works under any prefix (e.g. /x/y/ui/).
   // In development, keep /ui/ for current local access habits.
