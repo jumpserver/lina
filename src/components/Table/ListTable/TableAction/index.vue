@@ -2,7 +2,7 @@
   <div :class="device" class="table-header clearfix container">
     <slot name="header">
       <LeftSide
-        v-if="hasLeftActions"
+        v-if="iHasLeftActions"
         :selected-rows="selectedRows"
         :table-url="tableUrl"
         class="left-side"
@@ -145,7 +145,11 @@ export default {
       this.foldSearch = val
     },
     handleActionsDone(actions) {
-      this.iHasLeftActions = actions.filter(i => i && i.has !== false).length > 0
+      this.iHasLeftActions = actions.some(i => {
+        if (!i || i.has === false) return false
+        if (typeof i.has === 'function') return i.has()
+        return true
+      })
     }
   }
 }
@@ -185,6 +189,7 @@ $headerHeight: 30px;
   .search.left {
     padding: 0 !important;
     gap: 10px;
+    justify-content: flex-start;
   }
 
   .search.right {
