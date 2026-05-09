@@ -3,6 +3,7 @@
 </template>
 
 <script type="text/jsx">
+import { mapGetters } from 'vuex'
 import { ChoicesFormatter, DetailFormatter, SwitchFormatter } from '@/components/Table/TableFormatters'
 import { DrawerListTable as ListTable } from '@/components'
 
@@ -10,6 +11,11 @@ export default {
   name: 'TaskList',
   components: {
     ListTable
+  },
+  computed: {
+    ...mapGetters({
+      vendor: 'vendor'
+    })
   },
   data() {
     return {
@@ -141,6 +147,10 @@ export default {
             can: this.$hasPerm('ops.view_taskmonitor'),
             callback: () => {
               window.open(`/core/flower/?_=${Date.now()}`,)
+            },
+            has: () => {
+              // 如果 vender 的值是 OSM 则隐藏
+              return this.vendor === 'OSM'
             }
           }
         ]

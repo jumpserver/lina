@@ -23,6 +23,7 @@ const getters = {
   viewRoutes: state => state.permission.addRoutes,
   publicSettings: state => state.settings.publicSettings,
   logoMode: state => state.settings.logoMode,
+  vendor: state => state.settings.vendor,
   currentOrgRoles: state => state.users.roles,
   currentOrgPerms: state => state.users.perms,
   MFAVerifyAt: state => state.users.MFAVerifyAt,
