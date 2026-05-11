@@ -367,15 +367,22 @@ export default {
         }
         newNode.checked = this.zTree.getSelectedNodes()[0].checked
         this.zTree.addNodes(parentNode, 0, newNode)
-        const node = this.zTree.getNodeByParam('id', newNode.id, parentNode)
-        this.currentNodeId = node.meta.data.id || newNode.id
-        this.zTree.editName(node)
-        this.$message.success(this.$tc('CreateSuccessMsg'))
+        setTimeout(() => {
+          const node = this.zTree.getNodeByParam('id', newNode.id, parentNode)
+          if (!node) {
+            this.zTree.refresh()
+            return
+          }
+          this.currentNodeId = node.meta.data.id || newNode.id
+          this.zTree.editName(node)
+          this.$message.success(this.$tc('CreateSuccessMsg'))
+        }, 100)
       }).catch(error => {
         this.$message.error(this.$tc('CreateErrorMsg') + ' ' + error)
       })
     },
     refresh: function() {
+      this.zTree.refresh()
     },
     getSelectedNodes: function() {
       return this.zTree.getSelectedNodes()
