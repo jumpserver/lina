@@ -124,7 +124,7 @@
   },
   "resolutions": {
     "braces": "3.0.3",
-    "tar": "7.5.3"
+    "tar": "^7.5.11"
   },
   "engines": {
     "node": ">=12",
