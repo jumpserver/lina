@@ -13,6 +13,7 @@ const state = {
   sidebarLogo: sidebarLogo,
   tagsView: tagsView,
   logoMode: 'combine',
+  vendor: '',
   publicSettings: {},
   hasValidLicense: false,
   authMethods: {},
@@ -95,6 +96,9 @@ const mutations = {
   setTheme(state, data) {
     state.themeColors = data
     localStorage.setItem('themeColors', JSON.stringify(data))
+  },
+  SET_VENDOR: (state, value) => {
+    state.vendor = value
   }
 }
 
@@ -111,11 +115,13 @@ const actions = {
           updateTitleIcon(data?.INTERFACE)
           const interfaceSettings = updateThemeColors(state, data?.INTERFACE)
           const logoMode = interfaceSettings?.logo_mode || 'combine'
+          const vendor = interfaceSettings?.vendor || ''
           const nextSettings = {
             ...data,
             INTERFACE: interfaceSettings
           }
           commit('SET_LOGO_MODE', logoMode)
+          commit('SET_VENDOR', vendor)
           commit('SET_PUBLIC_SETTINGS', nextSettings)
           resolve(response)
         })
