@@ -7,6 +7,7 @@
       :tree-setting="treeSetting"
       :quick-filters="quickFilter"
       :create-drawer="createDrawer"
+      @relation-change="handleRelationChange"
     />
     <PermBulkUpdateDialog
       :visible.sync="updateSelectedDialogSetting.visible"
@@ -141,6 +142,10 @@ export default {
     }, 500)
   },
   methods: {
+    handleRelationChange() {
+      this.$log.debug('Asset permission relation changed, reloading table')
+      this.$refs.AssetTreeTable.$refs.TreeList.$refs?.ListTable?.reloadTable()
+    },
     handlePermBulkUpdate() {
       this.updateSelectedDialogSetting.visible = false
       this.$refs.AssetTreeTable.$refs.TreeList.$refs?.ListTable?.reloadTable()

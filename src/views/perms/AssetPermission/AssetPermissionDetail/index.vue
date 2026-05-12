@@ -7,7 +7,11 @@
     @tab-click="handleTabClick"
   >
     <keep-alive>
-      <component :is="config.activeMenu" :object="AssetPermission" />
+      <component
+        :is="config.activeMenu"
+        :object="AssetPermission"
+        @relation-changed="handleRelationChanged"
+      />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -30,6 +34,7 @@ export default {
   },
   data() {
     return {
+      relationChanged: false,
       AssetPermission: {
         name: '',
         users_amount: 0,
@@ -67,7 +72,16 @@ export default {
       }
     }
   },
+  beforeDestroy() {
+    // 当弹窗关闭时，如果关联发生变化，通知父级列表局部刷新
+    if (this.relationChanged) {
+      this.$emit('relation-change')
+    }
+  },
   methods: {
+    handleRelationChanged() {
+      this.relationChanged = true
+    },
     handleTabClick(tab) {
       if (tab.name !== 'AssetPermissionDetail') {
         this.$set(this.config, 'hasRightSide', false)
