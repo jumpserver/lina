@@ -65,7 +65,8 @@ export default {
               const url = `/api/v1/perms/asset-permissions-assets-relations/?assetpermission=${this.object.id}&asset=${cellValue}`
               this.$axios.delete(url).then(res => {
                 this.$message.success(this.$tc('DeleteSuccessMsg'))
-                this.$store.commit('common/reload')
+                this.$emit('relation-changed')
+                reload()
               }).catch(error => {
                 this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
               })
@@ -103,7 +104,8 @@ export default {
         onAddSuccess: (items, that) => {
           this.$log.debug('AssetSelect value', that.assets)
           this.$message.success(this.$tc('UpdateSuccessMsg'))
-          this.$store.commit('common/reload')
+          this.$emit('relation-changed')
+          this.$refs.ListTable.reloadTable()
         }
       },
       nodeRelationConfig: {
@@ -131,6 +133,7 @@ export default {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
+          this.$emit('relation-changed')
           this.$message.success(this.$tc('UpdateSuccessMsg'))
           this.$refs.ListTable.reloadTable()
         },
@@ -148,6 +151,7 @@ export default {
             this.$log.debug('disabled values remove index: ', i)
             that.select2.disabledValues.splice(i, 1)
           }
+          this.$emit('relation-changed')
           this.$message.success(this.$tc('DeleteSuccessMsg'))
           this.$refs.ListTable.reloadTable()
         }
