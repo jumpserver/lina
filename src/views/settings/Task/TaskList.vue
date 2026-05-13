@@ -150,10 +150,6 @@ export default {
             can: this.$hasPerm('ops.view_taskmonitor'),
             callback: () => {
               window.open(`/core/flower/?_=${Date.now()}`,)
-            },
-            has: () => {
-              // 如果 vender 的值是 OSM 则隐藏
-              return this.vendor === 'OSM'
             }
           }
         ]
