@@ -12,11 +12,7 @@ export default {
   components: {
     ListTable
   },
-  computed: {
-    ...mapGetters({
-      vendor: 'vendor'
-    })
-  },
+
   data() {
     return {
       tableConfig: {
@@ -157,7 +153,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['publicSettings'])
+    ...mapGetters({
+      publicSettings: 'publicSettings'
+    })
   }
 }
 </script>
