@@ -145,8 +145,7 @@ export default {
             title: this.$t('TaskMonitor'),
             type: 'primary',
             has: () => {
-              return false
-              // return this.publicSettings.FLOWER_ENABLED
+              return this.publicSettings.FLOWER_ENABLED
             },
             can: this.$hasPerm('ops.view_taskmonitor'),
             callback: () => {
