@@ -5,7 +5,7 @@
     </el-col>
     <el-col :lg="14" :md="14" :sm="24">
       <IBox title="README">
-        <vue-markdown v-if="object.readme" :source="object.readme" />
+        <markdown-renderer v-if="object.readme" :source="object.readme" />
         <span v-else>{{ $tc('NoData') }}</span>
       </IBox>
     </el-col>
@@ -14,14 +14,14 @@
 
 <script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
-import VueMarkdown from 'vue-markdown'
+import MarkdownRenderer from '@/components/Widgets/MarkdownRenderer'
 import { IBox } from '@/components'
 
 export default {
   name: 'Detail',
   components: {
     IBox,
-    VueMarkdown,
+    MarkdownRenderer,
     AutoDetailCard
   },
   props: {

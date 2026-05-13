@@ -22,7 +22,6 @@ import request from '@/utils/request'
 import { message } from '@/utils/vue/message'
 import xss from '@/utils/secure'
 import ElTableTooltipPatch from '@/utils/vue/elTableTooltipPatch.js'
-import VSanitize from 'v-sanitize'
 import moment from 'moment'
 
 moment.locale('zh-cn')
@@ -68,11 +67,6 @@ window._ = require('lodash')
 Vue.prototype.$message = message
 
 Vue.prototype.$xss = xss
-Vue.use(VSanitize, {
-  allowedClasses: {
-    '*': ['*']
-  }
-})
 
 // 注册全局事件总线
 Vue.prototype.$eventBus = eventBus

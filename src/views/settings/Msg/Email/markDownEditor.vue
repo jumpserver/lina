@@ -1,27 +1,25 @@
 <template>
   <div>
-    <vue-markdown-editor
-      v-model="localValue"
-      :right-toolbar="rightToolbar"
-      :left-toolbar="leftToolbar"
-      height="400px"
-    />
+    <el-row :gutter="12">
+      <el-col :span="12">
+        <el-input
+          v-model="localValue"
+          type="textarea"
+          :rows="18"
+          resize="vertical"
+        />
+      </el-col>
+      <el-col :span="12">
+        <div class="preview-box markdown-body" v-html="html" />
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>
-import VueMarkdownEditor, { xss } from '@kangc/v-md-editor'
-import '@kangc/v-md-editor/lib/style/base-editor.css'
-import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js'
-import '@kangc/v-md-editor/lib/theme/style/vuepress.css'
-import Prism from 'prismjs'
-
-VueMarkdownEditor.use(vuepressTheme, {
-  Prism
-})
+import { renderMarkdown } from '@/utils/markdown'
 
 export default {
   name: 'RichEditor',
-  components: { VueMarkdownEditor },
   props: {
     value: {
       type: String,
@@ -30,14 +28,12 @@ export default {
   },
   data() {
     return {
-      localValue: this.value,
-      rightToolbar: 'preview  sync-scroll fullscreen',
-      leftToolbar: 'undo redo clear | h bold italic strikethrough quote | ul ol hr | link  code '
+      localValue: this.value
     }
   },
   computed: {
     html() {
-      return xss.process(VueMarkdownEditor.themeConfig.markdownParser.render(this.localValue))
+      return renderMarkdown(this.localValue)
     }
   },
   watch: {
@@ -55,9 +51,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.v-md-editor {
-  box-shadow: unset;
+.preview-box {
+  min-height: 388px;
+  padding: 12px;
   border: 1px solid #ddd;
   border-radius: 2px;
+  overflow: auto;
+  background: #fff;
+  @import "~github-markdown-css/github-markdown-light.css";
 }
 </style>
