@@ -135,9 +135,6 @@ export default {
               ]
             }
           }
-        },
-        tableAttrs: {
-          border: false
         }
       },
       headerActions: {
