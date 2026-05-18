@@ -93,7 +93,7 @@
         }
 
         if (pathname.indexOf(uiBase) !== 0 && pathname.indexOf('/ui') === -1) {
-            window.location.href = window.location.origin + uiBase + '#' + pathname
+            window.location.href = window.location.origin + uiBase + '#' + '/'
             return
         }
         if (pathname.indexOf(uiBase + '#/chat') === 0) {
