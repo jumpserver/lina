@@ -245,24 +245,17 @@ export default {
   text-align: center;
 
   .card-container {
-    display: flex;
-    justify-content: left;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 20px;
 
     .el-card .el-card__body div {
       height: inherit;
     }
-  }
-
-  .el-col, div {
-    gap: 20px;
 
     .the-card {
-      min-width: 330px;
       position: relative;
-      margin-bottom: 20px;
       height: 180px;
-      width: 380px;
       padding: 15px;
 
       ::v-deep .el-card__body {
