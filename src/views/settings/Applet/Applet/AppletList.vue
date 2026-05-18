@@ -58,6 +58,11 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters({
+      publicSettings: 'publicSettings'
+    })
+  },
   mounted() {
     this.$store.dispatch('users/enterSettingOrg')
   },
@@ -65,12 +70,8 @@ export default {
     handleUpload(res) {
       this.$refs.CardTable.reloadTable()
     }
-  },
-  computed: {
-    ...mapGetters({
-      publicSettings: 'publicSettings'
-    })
   }
+
 }
 </script>
 
