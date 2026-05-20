@@ -254,7 +254,7 @@ $color-drop-menu-border: #e4e7ed;
 // 通用
 .layout {
   .action-item {
-    margin-left: 5px;
+    margin-left: 1px;
 
     &.grouped {
       margin-left: 0;

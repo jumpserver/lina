@@ -7,25 +7,26 @@
         </el-alert>
       </el-col>
     </el-row>
-    <CardTable ref="CardTable" v-bind="$data" />
+    <DrawerCardTable ref="CardTable" v-bind="$data" />
     <UploadDialog :visible.sync="uploadDialogVisible" @upload-event="handleUpload" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import CardTable from '@/components/Table/CardTable'
+import DrawerCardTable from '@/components/Table/DrawerCardTable'
 import UploadDialog from './UploadDialog'
 
 export default {
   name: 'Applets',
   components: {
-    CardTable,
+    DrawerCardTable,
     UploadDialog
   },
   data() {
     return {
       uploadDialogVisible: false,
+      detailDrawer: () => import('./AppletDetail/index.vue'),
       tableConfig: {
         url: '/api/v1/terminal/applets/',
         deletePerm: 'terminal.delete_applet'
