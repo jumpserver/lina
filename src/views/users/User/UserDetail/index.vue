@@ -59,7 +59,7 @@ export default {
             name: 'UserInfo'
           },
           {
-            title: this.$t('UserAuthCert'),
+            title: this.$t('用户证书'),
             name: 'UserAuthCert'
             // TODO: hidden: () => !vm.$hasPerm('perms.change_user_auth_cert')
           },
