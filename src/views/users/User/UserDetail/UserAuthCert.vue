@@ -117,8 +117,7 @@ export default {
       driverConfigLoaded: false,
       signAlgorithm: '',
       deviceInserted: false,
-      deviceVersion: '',
-      deviceSN: '',
+      basicInfoItems: [], // 来自 showBasicInfo 配置的动态信息项
 
       // execution state
       running: false,
@@ -157,18 +156,12 @@ export default {
           value: this.deviceInserted ? '已插入' : '未插入',
           tag: this.deviceInserted ? 'success' : 'warning'
         },
-        {
-          key: 'device_version',
-          label: '设备版本',
-          value: this.deviceVersion,
+        ...this.basicInfoItems.map(item => ({
+          key: item.key,
+          label: item.label,
+          value: item.value,
           tag: undefined
-        },
-        {
-          key: 'device_sn',
-          label: '设备序列号',
-          value: this.deviceSN,
-          tag: undefined
-        },
+        })),
         {
           key: 'sign_algo',
           label: '签名算法',
@@ -195,17 +188,28 @@ export default {
     },
     certInfoItems() {
       if (!this.certInfo) return []
-      console.log('Cert Info:', this.certInfo)
-      // 直接将 getCertInfo 返回的 JSON 字段转为列表展示
-      // TODO: 按需调整 label 映射或字段顺序
-      return Object.entries(this.certInfo).map(([key, value]) => ({
-        key,
-        label: key,
-        value: typeof value === 'boolean'
-          ? (value ? '是' : '否')
-          : String(value == null ? '' : value),
-        tag: undefined
-      }))
+      const certCfg = (driverConfig && driverConfig.getCertInfo) || {}
+      // 从 fields 配置构建 key → label 映射
+      const labelMap = {}
+      for (const item of (certCfg.fields || [])) {
+        const [key, cfg] = Object.entries(item)[0]
+        labelMap[key] = (cfg && cfg.label) || key
+      }
+      // 按 showFields 顺序展示，无 showFields 时展示全部
+      const showFields = certCfg.showFields || Object.keys(this.certInfo)
+      return showFields
+        .filter(key => key in this.certInfo)
+        .map(key => {
+          const value = this.certInfo[key]
+          return {
+            key,
+            label: labelMap[key] || key,
+            value: typeof value === 'boolean'
+              ? (value ? '是' : '否')
+              : String(value == null ? '' : value),
+            tag: undefined
+          }
+        })
     }
   },
   async mounted() {
@@ -247,7 +251,7 @@ export default {
     // ── 用配置映射创建 UKey 实例 ──────────────────────────────────
     initUKeyInstance() {
       try {
-        const constructorName = driverConfig.newUKeyAPI
+        const constructorName = driverConfig.newUKeyAPI && driverConfig.newUKeyAPI.method && driverConfig.newUKeyAPI.method.call
         if (!window[constructorName]) {
           throw new Error(`构造函数 "${constructorName}" 不存在，请确认驱动脚本已正确加载`)
         }
@@ -264,21 +268,16 @@ export default {
             this.deviceInserted = false
           }
         }
-        // 读取设备版本
-        if (driverConfig.getVersion) {
+        // 读取 showBasicInfo 中定义的基础信息（版本、序列号等）
+        this.basicInfoItems = []
+        for (const infoItem of (driverConfig.showBasicInfo || [])) {
+          const [key, cfg] = Object.entries(infoItem)[0]
+          let value = '--'
           try {
-            this.deviceVersion = this.callUKey('getVersion')
-          } catch (e) {
-            this.deviceVersion = ''
-          }
-        }
-        // 读取设备序列号
-        if (driverConfig.getDevSN) {
-          try {
-            this.deviceSN = this.callUKey('getDevSN')
-          } catch (e) {
-            this.deviceSN = ''
-          }
+            const rawVal = ukey[cfg.method.call]()
+            value = rawVal == null ? '--' : String(rawVal)
+          } catch (e) { /* ignore */ }
+          this.basicInfoItems.push({ key, label: cfg.label, value })
         }
         // 读取证书信息
         if (driverConfig.getCertInfo) {
@@ -313,61 +312,160 @@ export default {
 
     // ── 制证流程 ─────────────────────────────────────────────────
     async handleIssueCert() {
-      this.execSteps = [
-        { key: 'detect_driver', title: '检测驱动环境', status: 'wait', message: '' },
-        { key: 'detect_device', title: '检测 USB Key 设备', status: 'wait', message: '' },
-        { key: 'init_key', title: '初始化 USB Key', status: 'wait', message: '' },
-        { key: 'generate_cert', title: '生成证书', status: 'wait', message: '' },
-        { key: 'write_cert', title: '写入证书', status: 'wait', message: '' }
-      ]
+      const enrollSteps = (driverConfig && driverConfig.enrollSteps) || []
 
-      await this.runStep(0, '检测驱动环境', async () => {
-        // driverConfig.checkInstall => 实际方法名，如 "UKey_CheckInstall"
-        // TODO: await this.callUKey('checkInstall')
+      // 从配置动态构建步骤，title 取自配置的 description
+      this.execSteps = enrollSteps.map(item => {
+        const [key, cfg] = Object.entries(item)[0]
+        return { key, title: cfg.description || key, status: 'wait', message: '' }
       })
-      await this.runStep(1, '检测 USB Key 设备', async () => {
-        // TODO: const devices = await this.callUKey('getDeviceList')
-        // this.deviceInserted = devices.length > 0
-        this.deviceInserted = true
-      })
-      await this.runStep(2, '初始化 USB Key', async () => {
-        // TODO: await this.callUKey('generateKeyPair', { algo: this.signAlgorithm })
-      })
-      await this.runStep(3, '生成证书', async () => {
-        // TODO: const csr = await this.callUKey('generateCSR', { userId: this.object.id })
-        // TODO: const { data } = await this.$axios.post('/api/v1/authentication/cert/generate/', { user: this.object.id, csr })
-      })
-      await this.runStep(4, '写入证书', async () => {
-        // TODO: await this.callUKey('writeCertificate', certData)
-        // this.certInfo = data.cert_info
-      })
+
+      // 各步骤具体逻辑（参数传递、结果处理）
+      let csr = null
+      let signedCert = null
+      const stepHandlers = {
+        generateKeyPair: async (cfg) => {
+          const paramsCfg = cfg.method && cfg.method.params
+          const params = this.resolveStepParams(paramsCfg)
+          console.log('generateKeyPair params:', params)
+          await this.callEnrollMethod('generateKeyPair', ...params)
+        },
+        generateCSR: async (cfg) => {
+          const paramsCfg = cfg.method && cfg.method.params
+          const params = this.resolveStepParams(paramsCfg)
+          csr = await this.callEnrollMethod('generateCSR', ...params)
+        },
+        signCert: async (cfg) => {
+          // 内部步骤：将 CSR 提交到 Django CA 签发证书
+          let resp
+          try {
+            resp = await this.$axios.post('/api/v1/authentication/cert/enroll/', {
+              user: this.object.id,
+              csr
+            })
+            signedCert = resp.signed_cert
+            this.appendLog(`[${cfg.description || cfg.label}] 调用成功`, 'success')
+          } catch (e) {
+            const err = e.response?.data?.error || e.message || String(e)
+            const errorMsg = `[${cfg.description || cfg.label}] 调用失败：${err}`
+            throw new Error(errorMsg)
+          }
+        },
+        deleteCertificate: async (cfg) => {
+          await this.callEnrollMethod('deleteCertificate')
+        },
+        writeCertificate: async (cfg) => {
+          const paramsCfg = cfg.method && cfg.method.params
+          const params = this.resolveStepParams(paramsCfg)
+          // 将标注了 fromSignedCert 的参数位置替换为已签发的证书内容
+          ;(paramsCfg || []).forEach((p, i) => {
+            console.log('p..........', p, i, signedCert)
+            if (p.fromSignedCert === true) params[i] = signedCert
+          })
+          await this.callEnrollMethod('writeCertificate', ...params)
+        }
+      }
+
+      for (let i = 0; i < enrollSteps.length; i++) {
+        const [key, cfg] = Object.entries(enrollSteps[i])[0]
+        const handler = stepHandlers[key] || (async (cfg) => { await this.callEnrollMethod(key) })
+        await this.runStep(i, () => handler(cfg))
+      }
 
       this.appendLog('制证完成', 'success')
+    },
+
+    // ── 从 enrollSteps 数组中按 key 查找步骤配置 ─────────────────────
+    findEnrollStep(key) {
+      for (const item of (driverConfig.enrollSteps || [])) {
+        if (key in item) return item[key]
+      }
+      return null
+    },
+
+    // ── 解析步骤方法的全部参数，按顺序返回值列表（通用） ─────────────────
+    // 内部以 [{ key, value }] 存储，便于将来按需返回 dict
+    // 优先级：items(fromObject) → fromConfig+options → default；type=int 做类型转换
+    resolveStepParams(paramsCfg) {
+      const entries = []
+      for (const param of (paramsCfg || [])) {
+        let value
+        if (param.type === 'string' && param.items) {
+          // 根据 items[].fromObject 从当前 object 取值，构建 dict
+          const dict = {}
+          for (const item of param.items) {
+            if (item.fromObject !== undefined) {
+              dict[item.key] = this.object[item.fromObject]
+            }
+          }
+          if (param.type === 'string') {
+            value = JSON.stringify(dict)
+          }
+          entries.push({ key: param.key, value })
+          continue
+        }
+        const configVal = param.fromConfig ? this.publicSettings[param.fromConfig] : undefined
+
+        if (configVal !== undefined) {
+          value = configVal
+        } else {
+          value = param.default
+        }
+        if (param.options && value in param.options) {
+          value = param.options[value]
+        }
+        // 类型转换
+        if (param.type === 'int') {
+          value = parseInt(value, 10)
+        }
+        entries.push({ key: param.key, value })
+      }
+      // 只返回按顺序排列的值列表
+      return entries.map(e => e.value)
     },
 
     // ── 通过配置映射调用 UKey 方法 ────────────────────────────────
     // abstractName: driverConfig 中的抽象方法名，如 'getDeviceList'
     // args: 传给 driver 方法的参数
-    callUKey(abstractName, ...args) {
-      const realMethod = driverConfig[abstractName]
-      if (!realMethod) {
-        const msg = `驱动配置中不存在方法映射：${abstractName}`
-        this.appendLog(msg, 'error')
-        throw new Error(msg)
-      }
-      if (typeof ukey[realMethod] !== 'function') {
+    // ── 底层：持有 step 配置对象后统一执行 ──────────────────────────────
+    callStep(step, label, ...args) {
+      const realMethod = step.method && step.method.call
+      if (!realMethod || typeof ukey[realMethod] !== 'function') {
         const msg = `驱动实例中不存在方法：${realMethod}`
         this.appendLog(msg, 'error')
         throw new Error(msg)
       }
       try {
+        console.log('.......', realMethod, args)
         const result = ukey[realMethod](...args)
-        this.appendLog(`[${abstractName}] 调用成功`, 'success')
+        this.appendLog(`[${step.description || label}] 调用成功`, 'success')
         return result
       } catch (e) {
-        this.appendLog(`[${abstractName}] 调用失败：${e.message}`, 'error')
+        this.appendLog(`[${step.description || label}] 调用失败：${e}`, 'error')
         throw e
       }
+    },
+
+    // ── 通过顶级配置 key 调用驱动方法（如 checkInstall、getCertInfo）──────
+    callUKey(abstractName, ...args) {
+      const step = driverConfig[abstractName]
+      if (!step) {
+        const msg = `驱动配置中不存在方法映射：${abstractName}`
+        this.appendLog(msg, 'error')
+        throw new Error(msg)
+      }
+      return this.callStep(step, abstractName, ...args)
+    },
+
+    // ── 通过制证配置（enrollSteps）调用驱动方法 ──────────────────────────
+    callEnrollMethod(key, ...args) {
+      const step = this.findEnrollStep(key)
+      if (!step) {
+        const msg = `制证配置中不存在步骤：${key}`
+        this.appendLog(msg, 'error')
+        throw new Error(msg)
+      }
+      return this.callStep(step, key, ...args)
     },
 
     // ── 解析 getCertInfo 返回值 ───────────────────────────────────
@@ -377,34 +475,36 @@ export default {
       if (typeof value === 'string') {
         try {
           value = JSON.parse(value)
+          if (Array.isArray(value)) {
+            value = value[0]
+          }
+          if (typeof value === 'string') {
+            value = JSON.parse(value)
+          }
+          if (value && typeof value === 'object') {
+            return value
+          } else {
+            return null
+          }
         } catch (_) {
           return null
         }
       }
-      // 如果是数组，取第一个元素
-      if (Array.isArray(value)) {
-        value = value[0]
-      }
-
-      if (typeof value === 'string') {
-        try {
-          value = JSON.parse(value)
-        } catch (_) {
-          return null
-        }
-      }
-      // 确保最终是普通对象
-      return value && typeof value === 'object' ? value : null
     },
 
     // ── 执行单步 ─────────────────────────────────────────────────
-    async runStep(index, label, fn) {
+    async runStep(index, fn) {
       this.setStepStatus(index, 'process', '')
       this.activeStep = index
-      this.appendLog(label + '...')
-      await fn()
-      this.setStepStatus(index, 'finish', '')
-      this.activeStep = index + 1
+      try {
+        await fn()
+        this.setStepStatus(index, 'finish', '')
+        this.activeStep = index + 1
+      } catch (e) {
+        const msg = e
+        this.setStepStatus(index, 'error', msg)
+        throw e
+      }
     },
 
     setStepStatus(index, status, message = '') {
