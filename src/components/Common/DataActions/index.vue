@@ -253,8 +253,13 @@ $color-drop-menu-border: #e4e7ed;
 
 // 通用
 .layout {
+  &.right-side-actions {
+    .action-item {
+      margin-left: 0px;
+    }
+  }
   .action-item {
-    margin-left: 5px;
+    margin-left: 2px;
 
     &.grouped {
       margin-left: 0;

@@ -128,7 +128,7 @@ export default {
 
     .page-submenu {
       .el-tabs__header {
-        padding: 0 15px;
+        padding: 0 1px;
       }
 
       .el-tabs__item.is-top {
