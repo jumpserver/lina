@@ -68,30 +68,19 @@
     <template #right>
       <!-- 证书信息 -->
       <IBox title="证书信息">
-        <div v-if="certInfo" class="cert-info-body">
-          <div class="cert-info-row">
-            <span class="label">序列号</span>
-            <span class="value">{{ certInfo.serialNumber }}</span>
-          </div>
-          <div class="cert-info-row">
-            <span class="label">主体</span>
-            <span class="value">{{ certInfo.subject }}</span>
-          </div>
-          <div class="cert-info-row">
-            <span class="label">生效时间</span>
-            <span class="value">{{ certInfo.notBefore }}</span>
-          </div>
-          <div class="cert-info-row">
-            <span class="label">过期时间</span>
-            <span class="value">{{ certInfo.notAfter }}</span>
-          </div>
-          <div class="cert-info-row">
-            <span class="label">状态</span>
-            <el-tag :type="certInfo.valid ? 'success' : 'danger'" size="small">
-              {{ certInfo.valid ? '有效' : '已失效' }}
-            </el-tag>
-          </div>
-        </div>
+        <table v-if="certInfo" class="status-table">
+          <tbody>
+            <tr v-for="item in certInfoItems" :key="item.key">
+              <td class="status-label">{{ item.label }}</td>
+              <td class="status-value">
+                <el-tag v-if="item.tag !== undefined" :type="item.tag" size="mini" effect="plain">
+                  {{ item.value }}
+                </el-tag>
+                <span v-else class="status-text">{{ item.value !== undefined ? item.value : '--' }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <el-empty v-else description="暂未制证" :image-size="80" />
       </IBox>
     </template>
@@ -105,6 +94,11 @@ import { mapGetters } from 'vuex'
 
 const DRIVER_SCRIPT_ID = 'cert-vendor-driver-sdk'
 const DRIVER_SCRIPT_SRC = '/api/v1/authentication/cert/vendor-driver.js/'
+const DRIVER_CONFIG = '/api/v1/authentication/cert/vendor-driver-config/'
+
+// 模块级变量，避免 Vue 响应式代理破坏第三方对象
+let ukey = null
+let driverConfig = null
 
 export default {
   name: 'UserAuthCert',
@@ -123,6 +117,8 @@ export default {
       driverConfigLoaded: false,
       signAlgorithm: '',
       deviceInserted: false,
+      deviceVersion: '',
+      deviceSN: '',
 
       // execution state
       running: false,
@@ -156,16 +152,28 @@ export default {
           tag: this.driverConfigLoaded ? 'success' : 'warning'
         },
         {
-          key: 'sign_algo',
-          label: '签名算法',
-          value: this.signAlgorithm,
-          tag: undefined
-        },
-        {
           key: 'device',
           label: 'USB Key',
           value: this.deviceInserted ? '已插入' : '未插入',
           tag: this.deviceInserted ? 'success' : 'warning'
+        },
+        {
+          key: 'device_version',
+          label: '设备版本',
+          value: this.deviceVersion,
+          tag: undefined
+        },
+        {
+          key: 'device_sn',
+          label: '设备序列号',
+          value: this.deviceSN,
+          tag: undefined
+        },
+        {
+          key: 'sign_algo',
+          label: '签名算法',
+          value: this.signAlgorithm,
+          tag: undefined
         }
         // TODO: 预留更多状态项
       ]
@@ -184,34 +192,106 @@ export default {
         }
         // TODO: 预留更多操作按钮
       ]
+    },
+    certInfoItems() {
+      if (!this.certInfo) return []
+      console.log('Cert Info:', this.certInfo)
+      // 直接将 getCertInfo 返回的 JSON 字段转为列表展示
+      // TODO: 按需调整 label 映射或字段顺序
+      return Object.entries(this.certInfo).map(([key, value]) => ({
+        key,
+        label: key,
+        value: typeof value === 'boolean'
+          ? (value ? '是' : '否')
+          : String(value == null ? '' : value),
+        tag: undefined
+      }))
     }
   },
-  mounted() {
+  async mounted() {
+    await this.loadDriverConfig()
     this.loadVendorDriver()
   },
   methods: {
-    // ── Driver 加载 ──────────────────────────────────────────────
+    // ── 加载驱动配置 ─────────────────────────────────────────────
+    async loadDriverConfig() {
+      try {
+        driverConfig = await this.$axios.get(DRIVER_CONFIG)
+        this.driverConfigLoaded = true
+        this.appendLog('驱动配置加载成功', 'success')
+      } catch (e) {
+        this.appendLog('驱动配置加载失败：' + e.message, 'error')
+        throw e
+      }
+    },
+
+    // ── 加载驱动 JS 并创建实例 ────────────────────────────────────
     loadVendorDriver() {
       if (document.getElementById(DRIVER_SCRIPT_ID)) {
-        this.driverLoaded = true
+        // 脚本已存在，直接初始化实例
+        this.initUKeyInstance()
         return
       }
       const script = document.createElement('script')
       script.id = DRIVER_SCRIPT_ID
       script.src = DRIVER_SCRIPT_SRC
       script.async = true
-      script.onload = () => {
-        this.driverLoaded = true
-        this.appendLog('驱动 SDK 加载成功', 'success')
-        // TODO: 读取 driver 配置、签名算法等初始信息
-        // this.driverConfigLoaded = ...
-        this.signAlgorithm = this.publicSettings['AUTH_CERT_ENROLL_KEY_ALGO']
-      }
+      script.onload = () => this.initUKeyInstance()
       script.onerror = () => {
         this.driverLoadError = true
-        this.appendLog('驱动 SDK 加载失败，请检查后端服务', 'error')
+        this.appendLog('驱动加载失败，请检查后端服务', 'error')
       }
       document.body.appendChild(script)
+    },
+
+    // ── 用配置映射创建 UKey 实例 ──────────────────────────────────
+    initUKeyInstance() {
+      try {
+        const constructorName = driverConfig.newUKeyAPI
+        if (!window[constructorName]) {
+          throw new Error(`构造函数 "${constructorName}" 不存在，请确认驱动脚本已正确加载`)
+        }
+        ukey = new window[constructorName]('UKeyPlugin')
+        this.driverLoaded = true
+        this.signAlgorithm = this.publicSettings['AUTH_CERT_ENROLL_KEY_ALGO']
+        this.appendLog(`驱动加载成功，实例已创建 (${constructorName})`, 'success')
+        // 检测设备是否已插入
+        if (driverConfig.checkInstall) {
+          try {
+            this.callUKey('checkInstall')
+            this.deviceInserted = true
+          } catch (e) {
+            this.deviceInserted = false
+          }
+        }
+        // 读取设备版本
+        if (driverConfig.getVersion) {
+          try {
+            this.deviceVersion = this.callUKey('getVersion')
+          } catch (e) {
+            this.deviceVersion = ''
+          }
+        }
+        // 读取设备序列号
+        if (driverConfig.getDevSN) {
+          try {
+            this.deviceSN = this.callUKey('getDevSN')
+          } catch (e) {
+            this.deviceSN = ''
+          }
+        }
+        // 读取证书信息
+        if (driverConfig.getCertInfo) {
+          try {
+            this.certInfo = this.parseCertInfo(this.callUKey('getCertInfo'))
+          } catch (e) {
+            this.certInfo = null
+          }
+        }
+      } catch (e) {
+        this.driverLoadError = true
+        this.appendLog('UKey 实例创建失败：' + e.message, 'error')
+      }
     },
 
     // ── 操作分发 ─────────────────────────────────────────────────
@@ -242,24 +322,79 @@ export default {
       ]
 
       await this.runStep(0, '检测驱动环境', async () => {
-        // TODO: await window.CertVendorSDK.detectDriver()
+        // driverConfig.checkInstall => 实际方法名，如 "UKey_CheckInstall"
+        // TODO: await this.callUKey('checkInstall')
       })
       await this.runStep(1, '检测 USB Key 设备', async () => {
-        // TODO: await window.CertVendorSDK.detectDevice()
+        // TODO: const devices = await this.callUKey('getDeviceList')
+        // this.deviceInserted = devices.length > 0
         this.deviceInserted = true
       })
       await this.runStep(2, '初始化 USB Key', async () => {
-        // TODO: await window.CertVendorSDK.initKey({ userId: this.object.id })
+        // TODO: await this.callUKey('generateKeyPair', { algo: this.signAlgorithm })
       })
       await this.runStep(3, '生成证书', async () => {
-        // TODO: const { data } = await this.$http.post('/api/v1/authentication/cert/generate/', { user: this.object.id })
+        // TODO: const csr = await this.callUKey('generateCSR', { userId: this.object.id })
+        // TODO: const { data } = await this.$axios.post('/api/v1/authentication/cert/generate/', { user: this.object.id, csr })
       })
       await this.runStep(4, '写入证书', async () => {
-        // TODO: await window.CertVendorSDK.writeCert({ certData, userId: this.object.id })
+        // TODO: await this.callUKey('writeCertificate', certData)
         // this.certInfo = data.cert_info
       })
 
       this.appendLog('制证完成', 'success')
+    },
+
+    // ── 通过配置映射调用 UKey 方法 ────────────────────────────────
+    // abstractName: driverConfig 中的抽象方法名，如 'getDeviceList'
+    // args: 传给 driver 方法的参数
+    callUKey(abstractName, ...args) {
+      const realMethod = driverConfig[abstractName]
+      if (!realMethod) {
+        const msg = `驱动配置中不存在方法映射：${abstractName}`
+        this.appendLog(msg, 'error')
+        throw new Error(msg)
+      }
+      if (typeof ukey[realMethod] !== 'function') {
+        const msg = `驱动实例中不存在方法：${realMethod}`
+        this.appendLog(msg, 'error')
+        throw new Error(msg)
+      }
+      try {
+        const result = ukey[realMethod](...args)
+        this.appendLog(`[${abstractName}] 调用成功`, 'success')
+        return result
+      } catch (e) {
+        this.appendLog(`[${abstractName}] 调用失败：${e.message}`, 'error')
+        throw e
+      }
+    },
+
+    // ── 解析 getCertInfo 返回值 ───────────────────────────────────
+    parseCertInfo(raw) {
+      // 先尝试对字符串做 JSON.parse（处理 '[]'、'{}' 等情况）
+      let value = raw
+      if (typeof value === 'string') {
+        try {
+          value = JSON.parse(value)
+        } catch (_) {
+          return null
+        }
+      }
+      // 如果是数组，取第一个元素
+      if (Array.isArray(value)) {
+        value = value[0]
+      }
+
+      if (typeof value === 'string') {
+        try {
+          value = JSON.parse(value)
+        } catch (_) {
+          return null
+        }
+      }
+      // 确保最终是普通对象
+      return value && typeof value === 'object' ? value : null
     },
 
     // ── 执行单步 ─────────────────────────────────────────────────
