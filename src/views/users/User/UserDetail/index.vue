@@ -61,8 +61,7 @@ export default {
           {
             title: this.$t('UserAuthCert'),
             name: 'UserAuthCert'
-            // TODO: auth-cert
-            // hidden: () => !vm.$hasPerm('perms.change_userauthcert')
+            // TODO: hidden: () => !vm.$hasPerm('perms.change_user_auth_cert')
           },
           {
             title: this.$t('GrantedAssets'),

@@ -248,7 +248,7 @@ export default {
         // TODO: await window.CertVendorSDK.initKey({ userId: this.object.id })
       })
       await this.runStep(3, '生成证书', async () => {
-        // TODO: const { data } = await this.$axios.post('/api/v1/authentication/cert/generate/', { user: this.object.id })
+        // TODO: const { data } = await this.$http.post('/api/v1/authentication/cert/generate/', { user: this.object.id })
       })
       await this.runStep(4, '写入证书', async () => {
         // TODO: await window.CertVendorSDK.writeCert({ certData, userId: this.object.id })
