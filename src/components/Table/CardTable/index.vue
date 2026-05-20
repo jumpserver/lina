@@ -45,7 +45,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { Pagination } from '@/components'
+import Pagination from '@/components/Table/Pagination'
 import TableAction from '@/components/Table/ListTable/TableAction'
 import IBox from '@/components/Common/IBox/index.vue'
 import Panel from './Panel'
@@ -294,9 +294,9 @@ export default {
   border-top: 1px solid #e7eaec;
 }
 
-.el-col {
-  //min-width: 330px; 设置完后，remote app 列表会有问题
-}
+// .el-col {
+//   min-width: 330px; 设置完后，remote app 列表会有问题
+// }
 
 .no-data {
   display: flex;
