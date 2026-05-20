@@ -8,7 +8,11 @@
   >
     <template #headingRightSide>
       <span v-if="hasRightSide">
-        <ActionsGroup slot="headingRightSide" :actions="pageActions" class="header-buttons" />
+        <ActionsGroup
+          slot="headingRightSide"
+          :actions="pageActions"
+          class="header-buttons"
+        />
       </span>
     </template>
     <div v-if="!loading">
@@ -142,13 +146,12 @@ export default {
         },
         {
           name: 'delete',
-          title: this.$t('Delete'),
           type: 'danger',
           plain: true,
           icon: 'el-icon-delete',
           size: 'small',
           can: this.validActions.canDelete,
-          has: this.validActions.hasDelete && !this.drawer,
+          has: this.validActions.hasDelete,
           callback: this.validActions.deleteCallback.bind(this)
         }
       ]
@@ -209,9 +212,10 @@ export default {
     },
     afterDelete() {
       if (this.drawer) {
-        this.$emit('close-drawer')
-        this.$emit('detail-delete-success')
-        this.$emit('reload-table')
+        this.$store.dispatch('common/finishDrawerActionMeta', {
+          action: 'delete',
+          row: this.object
+        })
       } else {
         this.$message.success(this.$tc('DeleteSuccessMsg'))
         this.$router.push({ name: this.validActions.deleteSuccessRoute })

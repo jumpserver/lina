@@ -1,19 +1,23 @@
 <template>
   <Page :title="title" class="tab-page" v-bind="$attrs">
-    <template #headingRightSide>
-      <slot name="headingRightSide" />
-    </template>
-
     <div class="tab-page-wrapper">
-      <el-tabs
-        v-if="tabIndices.length > 1"
+      <div
+        v-if="tabIndices.length > 1 || $slots.headingRightSide"
         slot="submenu"
-        v-model="iActiveMenu"
-        class="page-submenu"
-        @tab-click="handleTabClick"
+        class="tab-page-submenu"
       >
-        <template v-for="item in tabIndices">
-          <el-tab-pane :key="item.name" :disabled="item.disabled" :name="item.name">
+        <el-tabs
+          v-if="tabIndices.length > 1"
+          v-model="iActiveMenu"
+          class="page-submenu"
+          @tab-click="handleTabClick"
+        >
+          <el-tab-pane
+            v-for="item in tabIndices"
+            :key="item.name"
+            :disabled="item.disabled"
+            :name="item.name"
+          >
             <span slot="label">
               <Icon v-if="item.icon" :icon="item.icon" class="pre-icon" />
               {{ toSentenceCase(item.title) }}
@@ -34,8 +38,12 @@
               </el-tooltip>
             </span>
           </el-tab-pane>
-        </template>
-      </el-tabs>
+        </el-tabs>
+
+        <div v-if="$slots.headingRightSide" class="tab-page-submenu-right">
+          <slot name="headingRightSide" />
+        </div>
+      </div>
 
       <div class="tab-page-content">
         <el-alert v-if="helpMessage" type="info">
@@ -178,10 +186,7 @@ export default {
 }
 
 .page-submenu ::v-deep .el-tabs__header {
-  background-color: white;
-  margin-top: -10px;
-  padding: 0 30px;
-  margin-bottom: 5px;
+  margin: 0;
 
   .el-tabs__item {
     .pre-icon {
@@ -217,6 +222,31 @@ export default {
 .tab-page {
   .tab-page-wrapper {
     height: 100%;
+  }
+
+  .tab-page-submenu {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding: 0 20px;
+    margin-bottom: 5px;
+    overflow: visible;
+  }
+
+  .page-submenu {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .tab-page-submenu-right {
+    display: flex;
+    align-items: center;
+    margin-left: 12px;
+    flex-shrink: 0;
+
+    >>> .el-button {
+      padding: 5px 8px;
+    }
   }
 
   ::v-deep .page-heading {
