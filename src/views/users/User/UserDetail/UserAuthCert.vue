@@ -101,6 +101,7 @@
 <script>
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import IBox from '@/components/Common/IBox'
+import { mapGetters } from 'vuex'
 
 const DRIVER_SCRIPT_ID = 'cert-vendor-driver-sdk'
 const DRIVER_SCRIPT_SRC = '/api/v1/authentication/cert/vendor-driver.js/'
@@ -135,6 +136,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'publicSettings'
+    ]),
     statusItems() {
       return [
         {
@@ -201,7 +205,7 @@ export default {
         this.appendLog('驱动 SDK 加载成功', 'success')
         // TODO: 读取 driver 配置、签名算法等初始信息
         // this.driverConfigLoaded = ...
-        // this.signAlgorithm = window.CertVendorSDK.getSignAlgorithm()
+        this.signAlgorithm = this.publicSettings['AUTH_CERT_ENROLL_KEY_ALGO']
       }
       script.onerror = () => {
         this.driverLoadError = true
