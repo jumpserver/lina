@@ -195,8 +195,11 @@ export default {
         const [key, cfg] = Object.entries(item)[0]
         labelMap[key] = (cfg && cfg.label) || key
       }
-      // 证书归属：CN 与当前用户 id 比对，固定放第一行
-      const isSelf = this.certInfo.CN != null && String(this.certInfo.CN) === String(this.object.id)
+      // 证书归属：CN 与 config 指定的 object 属性比对，固定放第一行
+      // certCfg.cnMatch.fromObject 指定从 this.object 取哪个字段，默认 'username'
+      const fromObjectKey = (certCfg.cnMatch && certCfg.cnMatch.fromObject) || 'username'
+      const objectVal = this.object[fromObjectKey]
+      const isSelf = this.certInfo.CN != null && String(this.certInfo.CN) === String(objectVal)
       const ownerItem = {
         key: 'cert_owner',
         label: '证书归属',
