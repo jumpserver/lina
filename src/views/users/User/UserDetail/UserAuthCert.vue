@@ -366,9 +366,9 @@ export default {
         await this.runStep(i, () => handler(cfg))
       }
 
-      this.appendLog('制证完成', 'success')
+      this.appendLog('[制证完成]', 'success')
       this.refreshCertInfo()
-      this.appendLog('读取证书完成', 'success')
+      this.appendLog('[读取证书完成]', 'success')
     },
 
     // ── 从 enrollSteps 数组中按 key 查找步骤配置 ─────────────────────
