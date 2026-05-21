@@ -8532,15 +8532,10 @@ js-beautify@^1.6.12, js-beautify@^1.6.14:
     js-cookie "^3.0.5"
     nopt "^7.2.1"
 
-js-cookie@2.2.0:
-  version "2.2.0"
-  resolved "https://registry.npmmirror.com/js-cookie/-/js-cookie-2.2.0.tgz#1b2c279a6eece380a12168b92485265b35b1effb"
-  integrity sha512-7YAJP/LPE/MhDjHIdfIiT665HUSumCwPN2hAmO6OJZ8V3o1mtz2HeQ8BKetEjkh+3nqGxYaq1vPMViUR8kaOXw==
-
-js-cookie@^3.0.5:
-  version "3.0.5"
-  resolved "https://registry.npmmirror.com/js-cookie/-/js-cookie-3.0.5.tgz#0b7e2fd0c01552c58ba86e0841f94dc2557dcdbc"
-  integrity sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==
+js-cookie@3.0.6, js-cookie@^3.0.5:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/js-cookie/-/js-cookie-3.0.6.tgz#ee61fd31363d8e14acf9849a38e33b7c079b5447"
+  integrity sha512-mYhz0Og/Wv8bZJcBC6rRzYG+rYf8DyQSK3rcUbuGHQIgSsX6uynAIVoaPgqf0udH2AGS953hGFy3w6on1rJzMw==
 
 js-levenshtein@^1.1.3:
   version "1.1.6"
