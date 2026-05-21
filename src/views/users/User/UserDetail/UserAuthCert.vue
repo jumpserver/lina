@@ -156,6 +156,18 @@ export default {
           value: this.deviceInserted ? '已插入' : '未插入',
           tag: this.deviceInserted ? 'success' : 'warning'
         },
+        {
+          key: 'cert_owner',
+          label: '证书归属',
+          value: (() => {
+            if (!this.certInfo || !this.certInfo.CN) return '未知'
+            return String(this.certInfo.CN) === String(this.object.id) ? '当前用户' : '非当前用户'
+          })(),
+          tag: (() => {
+            if (!this.certInfo || !this.certInfo.CN) return 'info'
+            return String(this.certInfo.CN) === String(this.object.id) ? 'success' : 'danger'
+          })()
+        },
         ...this.basicInfoItems.map(item => ({
           key: item.key,
           label: item.label,
@@ -180,7 +192,7 @@ export default {
           btnLabel: '开始制证',
           btnType: 'primary',
           icon: 'el-icon-s-authentication',
-          disabled: !this.driverLoaded,
+          disabled: !this.driverLoaded || !this.deviceInserted,
           handler: this.handleIssueCert
         }
         // TODO: 预留更多操作按钮
