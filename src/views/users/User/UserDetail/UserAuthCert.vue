@@ -156,18 +156,6 @@ export default {
           value: this.deviceInserted ? '已插入' : '未插入',
           tag: this.deviceInserted ? 'success' : 'warning'
         },
-        {
-          key: 'cert_owner',
-          label: '证书归属',
-          value: (() => {
-            if (!this.certInfo || !this.certInfo.CN) return '未知'
-            return String(this.certInfo.CN) === String(this.object.id) ? '当前用户' : '非当前用户'
-          })(),
-          tag: (() => {
-            if (!this.certInfo || !this.certInfo.CN) return 'info'
-            return String(this.certInfo.CN) === String(this.object.id) ? 'success' : 'danger'
-          })()
-        },
         ...this.basicInfoItems.map(item => ({
           key: item.key,
           label: item.label,
@@ -207,9 +195,17 @@ export default {
         const [key, cfg] = Object.entries(item)[0]
         labelMap[key] = (cfg && cfg.label) || key
       }
+      // 证书归属：CN 与当前用户 id 比对，固定放第一行
+      const isSelf = this.certInfo.CN != null && String(this.certInfo.CN) === String(this.object.id)
+      const ownerItem = {
+        key: 'cert_owner',
+        label: '证书归属',
+        value: this.certInfo.CN != null ? (isSelf ? '当前用户' : '非当前用户') : '未知',
+        tag: this.certInfo.CN != null ? (isSelf ? 'success' : 'danger') : 'info'
+      }
       // 按 showFields 顺序展示，无 showFields 时展示全部
       const showFields = certCfg.showFields || Object.keys(this.certInfo)
-      return showFields
+      const fieldItems = showFields
         .filter(key => key in this.certInfo)
         .map(key => {
           const value = this.certInfo[key]
@@ -222,6 +218,7 @@ export default {
             tag: undefined
           }
         })
+      return [ownerItem, ...fieldItems]
     }
   },
   async mounted() {
