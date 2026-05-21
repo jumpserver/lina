@@ -280,13 +280,7 @@ export default {
           this.basicInfoItems.push({ key, label: cfg.label, value })
         }
         // 读取证书信息
-        if (driverConfig.getCertInfo) {
-          try {
-            this.certInfo = this.parseCertInfo(this.callUKey('getCertInfo'))
-          } catch (e) {
-            this.certInfo = null
-          }
-        }
+        this.refreshCertInfo()
       } catch (e) {
         this.driverLoadError = true
         this.appendLog('UKey 实例创建失败：' + e.message, 'error')
@@ -373,6 +367,8 @@ export default {
       }
 
       this.appendLog('制证完成', 'success')
+      this.refreshCertInfo()
+      this.appendLog('读取证书完成', 'success')
     },
 
     // ── 从 enrollSteps 数组中按 key 查找步骤配置 ─────────────────────
@@ -466,6 +462,16 @@ export default {
         throw new Error(msg)
       }
       return this.callStep(step, key, ...args)
+    },
+
+    // ── 读取并刷新证书信息 ──────────────────────────────────────────
+    refreshCertInfo() {
+      if (!driverConfig || !driverConfig.getCertInfo) return
+      try {
+        this.certInfo = this.parseCertInfo(this.callUKey('getCertInfo'))
+      } catch (e) {
+        this.certInfo = null
+      }
     },
 
     // ── 解析 getCertInfo 返回值 ───────────────────────────────────
