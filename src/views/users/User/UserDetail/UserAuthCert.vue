@@ -115,7 +115,6 @@ export default {
       driverLoaded: false,
       driverLoadError: false,
       driverConfigLoaded: false,
-      signAlgorithm: '',
       deviceInserted: false,
       basicInfoItems: [], // 来自 showBasicInfo 配置的动态信息项
 
@@ -161,30 +160,58 @@ export default {
           label: item.label,
           value: item.value,
           tag: undefined
-        })),
-        {
-          key: 'sign_algo',
-          label: '签名算法',
-          value: this.signAlgorithm,
-          tag: undefined
-        }
-        // TODO: 预留更多状态项
+        }))
       ]
     },
     certActions() {
-      return [
-        {
+      // 通过引用 driverConfigLoaded 确保配置加载后触发重新计算
+      const enrollEnabled = this.driverConfigLoaded && !!(driverConfig && driverConfig.cert && driverConfig.cert.enroll && driverConfig.cert.enroll.enabled)
+      const hasPinDefault = this.driverConfigLoaded && (driverConfig && driverConfig.cert && driverConfig.cert.pin && driverConfig.cert.pin.default != null)
+      const actions = []
+      if (enrollEnabled) {
+        actions.push({
           key: 'issue_cert',
           title: '一键制证',
           hint: '检测设备、初始化 USB Key 并写入证书',
-          btnLabel: '开始制证',
+          btnLabel: '一键制证',
           btnType: 'primary',
           icon: 'el-icon-s-authentication',
           disabled: !this.driverLoaded || !this.deviceInserted,
           handler: this.handleIssueCert
-        }
-        // TODO: 预留更多操作按钮
-      ]
+        })
+        actions.push({
+          key: 'delete_cert',
+          title: '清除证书',
+          hint: '清除 USB Key 中已存储的证书',
+          btnLabel: '清除证书',
+          btnType: 'danger',
+          disabled: !this.driverLoaded || !this.deviceInserted,
+          preConfirm: {
+            title: '清除证书',
+            message: '确认要清除 USB Key 中的证书吗？此操作不可恢复。',
+            type: 'warning'
+          },
+          handler: this.handleDeleteCert
+        })
+      }
+      if (hasPinDefault) {
+        actions.push({
+          key: 'reset_pin',
+          title: '重置 PIN',
+          hint: '使用管理员 PIN 将 USB Key 的用户 PIN 重置为默认值',
+          btnLabel: '重置 PIN',
+          btnType: 'warning',
+          disabled: !this.driverLoaded || !this.deviceInserted,
+          prePrompt: {
+            title: '重置 PIN',
+            message: '请输入管理员 PIN',
+            inputType: 'password',
+            placeholder: '管理员 PIN'
+          },
+          handler: this.handleResetPIN
+        })
+      }
+      return actions
     },
     certInfoItems() {
       if (!this.certInfo) return []
@@ -269,7 +296,6 @@ export default {
         }
         ukey = new window[constructorName]('UKeyPlugin')
         this.driverLoaded = true
-        this.signAlgorithm = this.publicSettings['AUTH_CERT_ENROLL_KEY_ALGO']
         this.appendLog(`驱动加载成功，实例已创建 (${constructorName})`, 'success')
         // 检测设备是否已插入
         if (driverConfig.checkInstall) {
@@ -285,10 +311,14 @@ export default {
         for (const infoItem of (driverConfig.showBasicInfo || [])) {
           const [key, cfg] = Object.entries(infoItem)[0]
           let value = '--'
-          try {
-            const rawVal = ukey[cfg.method.call]()
-            value = rawVal == null ? '--' : String(rawVal)
-          } catch (e) { /* ignore */ }
+          if (cfg.method && cfg.method.call) {
+            try {
+              const rawVal = ukey[cfg.method.call]()
+              value = rawVal == null ? '--' : String(rawVal)
+            } catch (e) { /* ignore */ }
+          } else if (cfg.value !== undefined) {
+            value = String(cfg.value)
+          }
           this.basicInfoItems.push({ key, label: cfg.label, value })
         }
         // 读取证书信息
@@ -301,11 +331,46 @@ export default {
 
     // ── 操作分发 ─────────────────────────────────────────────────
     async handleAction(action) {
+      // 若操作声明了 preConfirm，先弹出确认框；用户取消则静默退出
+      if (action.preConfirm) {
+        try {
+          await this.$confirm(
+            action.preConfirm.message,
+            action.preConfirm.title,
+            {
+              type: action.preConfirm.type || 'warning',
+              confirmButtonText: '确定',
+              cancelButtonText: '取消'
+            }
+          )
+        } catch (_) {
+          return
+        }
+      }
+      // 若操作声明了 prePrompt，先弹框收集输入；用户取消则静默退出
+      let promptValue
+      if (action.prePrompt) {
+        try {
+          const { value } = await this.$prompt(
+            action.prePrompt.message,
+            action.prePrompt.title,
+            {
+              inputType: action.prePrompt.inputType || 'text',
+              inputPlaceholder: action.prePrompt.placeholder || '',
+              confirmButtonText: '确定',
+              cancelButtonText: '取消'
+            }
+          )
+          promptValue = value
+        } catch (_) {
+          return
+        }
+      }
       this.resetExec()
       this.running = true
       this.currentAction = action.key
       try {
-        await action.handler()
+        await action.handler(promptValue)
       } catch (e) {
         this.appendLog(e.message || '执行失败', 'error')
         const idx = this.execSteps.findIndex(s => s.status === 'process')
@@ -314,6 +379,35 @@ export default {
         this.running = false
         this.currentAction = ''
       }
+    },
+
+    // ── 清除证书 ──────────────────────────────────────────────────
+    async handleDeleteCert() {
+      const cfg = driverConfig && driverConfig.deleteCert
+      if (!cfg || !cfg.method) {
+        throw new Error('驱动配置中未找到 deleteCert 方法')
+      }
+      this.callStep(cfg, 'deleteCert')
+      this.appendLog('[清除证书完成]', 'success')
+      this.refreshCertInfo()
+    },
+
+    // ── 重置 PIN ──────────────────────────────────────────────────
+    async handleResetPIN(adminPin) {
+      const cfg = driverConfig && driverConfig.adminResetPIN
+      if (!cfg || !cfg.method) {
+        throw new Error('驱动配置中未找到 adminResetPIN 方法')
+      }
+      const defaultPin = driverConfig.cert && driverConfig.cert.pin && driverConfig.cert.pin.default
+      const context = {
+        input: { admin_pin: adminPin },
+        output: { default_pin: defaultPin },
+        user: this.object,
+        settings: this.publicSettings
+      }
+      const params = this.resolveStepParams(cfg.method.params, context)
+      this.callStep(cfg, 'adminResetPIN', ...params)
+      this.appendLog('[重置 PIN 完成]', 'success')
     },
 
     // ── 制证流程 ─────────────────────────────────────────────────
@@ -326,56 +420,40 @@ export default {
         return { key, title: cfg.description || key, status: 'wait', message: '' }
       })
 
-      // 各步骤具体逻辑（参数传递、结果处理）
-      let csr = null
-      let signedCert = null
-      const stepHandlers = {
-        generateKeyPair: async (cfg) => {
-          const paramsCfg = cfg.method && cfg.method.params
-          const params = this.resolveStepParams(paramsCfg)
-          console.log('generateKeyPair params:', params)
-          await this.callEnrollMethod('generateKeyPair', ...params)
-        },
-        generateCSR: async (cfg) => {
-          const paramsCfg = cfg.method && cfg.method.params
-          const params = this.resolveStepParams(paramsCfg)
-          csr = await this.callEnrollMethod('generateCSR', ...params)
-        },
-        signCert: async (cfg) => {
-          // 内部步骤：将 CSR 提交到 Django CA 签发证书
-          let resp
-          try {
-            resp = await this.$axios.post('/api/v1/authentication/cert/enroll/', {
-              user: this.object.id,
-              csr
-            })
-            signedCert = resp.signed_cert
-            this.appendLog(`[${cfg.description || cfg.label}] 调用成功`, 'success')
-          } catch (e) {
-            const err = e.response?.data?.error || e.message || String(e)
-            const errorMsg = `[${cfg.description || cfg.label}] 调用失败：${err}`
-            throw new Error(errorMsg)
-          }
-        },
-        deleteCertificate: async (cfg) => {
-          await this.callEnrollMethod('deleteCertificate')
-        },
-        writeCertificate: async (cfg) => {
-          const paramsCfg = cfg.method && cfg.method.params
-          const params = this.resolveStepParams(paramsCfg)
-          // 将标注了 fromSignedCert 的参数位置替换为已签发的证书内容
-          ;(paramsCfg || []).forEach((p, i) => {
-            console.log('p..........', p, i, signedCert)
-            if (p.fromSignedCert === true) params[i] = signedCert
-          })
-          await this.callEnrollMethod('writeCertificate', ...params)
-        }
-      }
+      // 执行上下文：output 累积各步骤产出，input 存储用户输入
+      const output = {}
+      const input = {}
+      const context = { input, output, user: this.object, settings: this.publicSettings }
 
       for (let i = 0; i < enrollSteps.length; i++) {
         const [key, cfg] = Object.entries(enrollSteps[i])[0]
-        const handler = stepHandlers[key] || (async (cfg) => { await this.callEnrollMethod(key) })
-        await this.runStep(i, () => handler(cfg))
+        await this.runStep(i, async () => {
+          if (key === 'signCert') {
+            // 服务端签发步骤：将 CSR 提交后端 CA
+            let resp
+            try {
+              resp = await this.$axios.post('/api/v1/authentication/cert/enroll/', {
+                user_id: this.object.id,
+                csr: output.genCSR
+              })
+              // 将响应字段合并到 output（如 signed_cert）
+              Object.assign(output, resp)
+              this.appendLog(`[${cfg.description || key}] 调用成功`, 'success')
+            } catch (e) {
+              const err = e.response?.data?.error || e.message || String(e)
+              throw new Error(`[${cfg.description || key}] 调用失败：${err}`)
+            }
+          } else if (cfg.method) {
+            console.log('>>> enroll step method params:', cfg.method.params)
+            const params = this.resolveStepParams(cfg.method.params, context)
+            console.log('>>> enroll step method resolved params:', params)
+
+            const result = this.callEnrollMethod(key, ...params)
+            if (result !== undefined) {
+              output[key] = result
+            }
+          }
+        })
       }
 
       this.appendLog('[制证完成]', 'success')
@@ -391,45 +469,49 @@ export default {
       return null
     },
 
-    // ── 解析步骤方法的全部参数，按顺序返回值列表（通用） ─────────────────
-    // 内部以 [{ key, value }] 存储，便于将来按需返回 dict
-    // 优先级：items(fromObject) → fromConfig+options → default；type=int 做类型转换
-    resolveStepParams(paramsCfg) {
-      const entries = []
+    // ── 解析模板值 {{ scope.key }} ───────────────────────────────
+    // context: { input, output, user, settings }
+    resolveTemplateValue(tplStr, context) {
+      if (typeof tplStr !== 'string') return tplStr
+      const match = tplStr.match(/^\{\{\s*([\w]+(?:\.[\w]+)*)\s*\}\}$/)
+      if (!match) return tplStr
+      const parts = match[1].split('.')
+      let val = context
+      for (const p of parts) {
+        if (val == null || typeof val !== 'object') return undefined
+        val = val[p]
+      }
+      return val
+    },
+
+    // ── 解析步骤方法的全部参数，按顺序返回值列表 ─────────────────────
+    // 参数值支持 {{ scope.key }} 模板语法，scope 可为 input/output/user/settings
+    resolveStepParams(paramsCfg, context = {}) {
+      const values = []
       for (const param of (paramsCfg || [])) {
         let value
         if (param.type === 'string' && param.items) {
-          // 根据 items[].fromObject 从当前 object 取值，构建 dict
+          // 按 items 构建 dict，每个 item.value 支持模板
           const dict = {}
           for (const item of param.items) {
-            if (item.fromObject !== undefined) {
-              dict[item.key] = this.object[item.fromObject]
-            }
+            dict[item.key] = this.resolveTemplateValue(item.value, context)
           }
-          if (param.type === 'string') {
-            value = JSON.stringify(dict)
-          }
-          entries.push({ key: param.key, value })
-          continue
-        }
-        const configVal = param.fromConfig ? this.publicSettings[param.fromConfig] : undefined
-
-        if (configVal !== undefined) {
-          value = configVal
+          value = JSON.stringify(dict)
         } else {
-          value = param.default
+          value = this.resolveTemplateValue(param.value, context)
+          if (value === undefined) {
+            value = param.default
+          }
+          if (param.options && value in param.options) {
+            value = param.options[value]
+          }
+          if (param.type === 'int') {
+            value = parseInt(value, 10)
+          }
         }
-        if (param.options && value in param.options) {
-          value = param.options[value]
-        }
-        // 类型转换
-        if (param.type === 'int') {
-          value = parseInt(value, 10)
-        }
-        entries.push({ key: param.key, value })
+        values.push(value)
       }
-      // 只返回按顺序排列的值列表
-      return entries.map(e => e.value)
+      return values
     },
 
     // ── 通过配置映射调用 UKey 方法 ────────────────────────────────
@@ -611,9 +693,13 @@ export default {
   }
 
   .action-btn {
-    width: 90px;
+    width: 72px;
     text-align: right;
     white-space: nowrap;
+
+    ::v-deep .el-button {
+      width: 100%;
+    }
   }
 }
 
