@@ -19,6 +19,7 @@ import UserInfo from './UserInfo'
 import UserSession from './UserSession.vue'
 import UserLoginACL from './UserLoginACL.vue'
 import UserGrantedAssets from './UserGrantedAssets'
+import UserAuthCert from './UserAuthCert'
 import AssetPermissionUser from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionUser.vue'
 import AssetPermissionAsset from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionAsset.vue'
 import AssetPermissionDetail from '@/views/perms/AssetPermission/AssetPermissionDetail/index.vue'
@@ -27,9 +28,11 @@ import UserAssetPermissionRules from './UserAssetPermissionRules'
 
 export default {
   components: {
+    mapGetters,
     UserInfo,
     UserSession,
     UserLoginACL,
+    UserAuthCert,
     GenericDetailPage,
     UserGrantedAssets,
     AssetPermissionUser,
@@ -57,6 +60,11 @@ export default {
             name: 'UserInfo'
           },
           {
+            title: this.$t('UserCertificate'),
+            name: 'UserAuthCert',
+            hidden: () => !vm.$hasPerm('users.change_user') || !vm.publicSettings.AUTH_CERT
+          },
+          {
             title: this.$t('GrantedAssets'),
             name: 'UserGrantedAssets',
             hidden: () => !vm.$hasPerm('perms.view_userassets')
@@ -82,7 +90,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentUserIsSuperAdmin'
+      'currentUserIsSuperAdmin',
+      'publicSettings'
     ])
   },
   methods: {
