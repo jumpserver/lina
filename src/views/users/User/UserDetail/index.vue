@@ -28,6 +28,7 @@ import UserAssetPermissionRules from './UserAssetPermissionRules'
 
 export default {
   components: {
+    mapGetters,
     UserInfo,
     UserSession,
     UserLoginACL,
@@ -60,8 +61,8 @@ export default {
           },
           {
             title: this.$t('用户证书'),
-            name: 'UserAuthCert'
-            // TODO: hidden: () => !vm.$hasPerm('perms.change_user_auth_cert')
+            name: 'UserAuthCert',
+            hidden: () => !vm.$hasPerm('users.change_user') || !vm.publicSettings.AUTH_CERT
           },
           {
             title: this.$t('GrantedAssets'),
@@ -89,7 +90,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentUserIsSuperAdmin'
+      'currentUserIsSuperAdmin',
+      'publicSettings'
     ])
   },
   methods: {
