@@ -64,7 +64,7 @@ export default {
           disabled: !this.$store.state.users.profile.can_public_key_auth
         },
         {
-          title: this.$t('Login Certificate'),
+          title: this.$t('LoginCertificate'),
           name: 'Cert',
           hidden: !this.$store.state.users.profile.can_cert_auth
         }

@@ -4,7 +4,7 @@ const DRIVER_SCRIPT_ID = 'cert-vendor-driver-sdk'
 const DRIVER_SCRIPT_SRC = '/api/v1/authentication/cert/vendor-driver.js/'
 const DRIVER_CONFIG = '/api/v1/authentication/cert/vendor-driver-config/'
 
-// 模块级单例，避免 Vue 响应式代理破坏第三方对象
+// Module-level singletons — prevent Vue reactive proxy from corrupting third-party objects
 let ukey = null
 let driverConfig = null
 
@@ -37,20 +37,20 @@ export default {
       return [
         {
           key: 'driver',
-          label: '驱动状态',
-          value: this.driverLoadError ? '加载失败' : this.driverLoaded ? '已加载' : '加载中',
+          label: this.$t('CertDriverStatus'),
+          value: this.driverLoadError ? this.$t('CertLoadFailed') : this.driverLoaded ? this.$t('CertLoaded') : this.$t('CertLoading'),
           tag: this.driverLoadError ? 'danger' : this.driverLoaded ? 'success' : 'info'
         },
         {
           key: 'driver_config',
-          label: '驱动配置',
-          value: this.driverConfigLoaded ? '已加载' : '未加载',
+          label: this.$t('CertDriverConfig'),
+          value: this.driverConfigLoaded ? this.$t('CertLoaded') : this.$t('CertNotLoaded'),
           tag: this.driverConfigLoaded ? 'success' : 'warning'
         },
         {
           key: 'device',
           label: 'USB Key',
-          value: this.deviceInserted ? '已插入' : '未插入',
+          value: this.deviceInserted ? this.$t('CertDeviceInserted') : this.$t('CertDeviceNotInserted'),
           tag: this.deviceInserted ? 'success' : 'warning'
         },
         ...this.basicInfoItems
@@ -80,9 +80,9 @@ export default {
         String(this.certInfo.CN) === String(objectVal)
       const ownerItem = {
         key: 'cert_owner',
-        label: '证书归属',
+        label: this.$t('CertOwner'),
         value: objectVal != null
-          ? (this.certInfo.CN != null ? (isSelf ? '当前用户' : '非当前用户') : '未知')
+          ? (this.certInfo.CN != null ? (isSelf ? this.$t('CertOwnerSelf') : this.$t('CertOwnerOther')) : this.$t('CertOwnerUnknown'))
           : (this.certInfo.CN != null ? String(this.certInfo.CN) : '--'),
         tag: objectVal != null
           ? (this.certInfo.CN != null ? (isSelf ? 'success' : 'danger') : 'info')
@@ -98,7 +98,7 @@ export default {
             key,
             label: labelMap[key] || key,
             value: typeof value === 'boolean'
-              ? (value ? '是' : '否')
+              ? (value ? this.$t('Yes') : this.$t('No'))
               : String(value == null ? '' : value),
             tag: undefined
           }
@@ -113,35 +113,35 @@ export default {
   },
 
   methods: {
-    // ── hook: 状态行过滤，组件可 override（返回 false 则隐藏该行）──────
+    // ── Hook: filter status rows; component can override (return false to hide a row) ──
     statusItemFilter(/* item */) {
       return true
     },
 
-    // ── hook: 证书归属比对值，组件可 override ──────────────────────
-    // fromObjectKey: config 指定的 object 字段名（如 'username'）
+    // ── Hook: cert owner comparison value; component can override ────────────────────
+    // fromObjectKey: object field name specified by config (e.g. 'username')
     getCertOwnerValue(/* fromObjectKey */) {
       return null
     },
 
-    // ── 暴露 driverConfig 给组件使用 ─────────────────────────────
+    // ── Expose driverConfig to components ────────────────────────────────────────────
     getDriverConfig() {
       return driverConfig
     },
 
-    // ── 加载驱动配置 ─────────────────────────────────────────────
+    // ── Load driver config ────────────────────────────────────────────────────────────
     async loadDriverConfig() {
       try {
         driverConfig = await this.$axios.get(DRIVER_CONFIG)
         this.driverConfigLoaded = true
-        this.appendLog('驱动配置加载成功', 'success')
+        this.appendLog('Driver config loaded', 'success')
       } catch (e) {
-        this.appendLog('驱动配置加载失败：' + e.message, 'error')
+        this.appendLog('Driver config load failed: ' + e.message, 'error')
         throw e
       }
     },
 
-    // ── 加载驱动 JS 并创建实例 ────────────────────────────────────
+    // ── Load vendor driver JS and create instance ───────────────────────────────────
     loadVendorDriver() {
       if (document.getElementById(DRIVER_SCRIPT_ID)) {
         this.initUKeyInstance()
@@ -154,23 +154,23 @@ export default {
       script.onload = () => this.initUKeyInstance()
       script.onerror = () => {
         this.driverLoadError = true
-        this.appendLog('驱动加载失败，请检查后端服务', 'error')
+        this.appendLog('Driver load failed, please check the backend service', 'error')
       }
       document.body.appendChild(script)
     },
 
-    // ── 用配置映射创建 UKey 实例 ──────────────────────────────────
+    // ── Create UKey instance using config mapping ──────────────────────────────────
     initUKeyInstance() {
       try {
         const constructorName = driverConfig.newUKeyAPI &&
           driverConfig.newUKeyAPI.method &&
           driverConfig.newUKeyAPI.method.call
         if (!window[constructorName]) {
-          throw new Error(`构造函数 "${constructorName}" 不存在，请确认驱动脚本已正确加载`)
+          throw new Error(`Constructor "${constructorName}" not found, please verify the driver script is loaded correctly`)
         }
         ukey = new window[constructorName]('UKeyPlugin')
         this.driverLoaded = true
-        this.appendLog(`驱动加载成功，实例已创建 (${constructorName})`, 'success')
+        this.appendLog(`Driver loaded, instance created (${constructorName})`, 'success')
 
         if (driverConfig.checkInstall) {
           try {
@@ -199,15 +199,15 @@ export default {
         this.refreshCertInfo()
       } catch (e) {
         this.driverLoadError = true
-        this.appendLog('UKey 实例创建失败：' + e.message, 'error')
+        this.appendLog('UKey instance creation failed: ' + e.message, 'error')
       }
     },
 
-    // ── 操作分发 ─────────────────────────────────────────────────
-    // action 可声明以下前置交互之一（优先级依次）：
-    //   preDialog   : () => Promise<value>  自定义多字段表单
-    //   preConfirm  : { title, message, type }  确认弹框
-    //   prePrompt   : { title, message, inputType, placeholder }  单行输入
+    // ── Action dispatcher ─────────────────────────────────────────────────
+    // An action may declare one of the following pre-interactions (in priority order):
+    //   preDialog   : () => Promise<value>  custom multi-field form
+    //   preConfirm  : { title, message, type }  confirmation dialog
+    //   prePrompt   : { title, message, inputType, placeholder }  single-line input
     async handleAction(action) {
       let preValue
 
@@ -224,8 +224,8 @@ export default {
             action.preConfirm.title,
             {
               type: action.preConfirm.type || 'warning',
-              confirmButtonText: '确定',
-              cancelButtonText: '取消'
+              confirmButtonText: this.$t('Confirm'),
+              cancelButtonText: this.$t('Cancel')
             }
           )
         } catch (_) {
@@ -239,8 +239,8 @@ export default {
             {
               inputType: action.prePrompt.inputType || 'text',
               inputPlaceholder: action.prePrompt.placeholder || '',
-              confirmButtonText: '确定',
-              cancelButtonText: '取消'
+              confirmButtonText: this.$t('Confirm'),
+              cancelButtonText: this.$t('Cancel')
             }
           )
           preValue = value
@@ -257,7 +257,7 @@ export default {
       try {
         await action.handler(preValue)
       } catch (e) {
-        this.appendLog(e.message || '执行失败', 'error')
+        this.appendLog(e.message || 'Execution failed', 'error')
         const idx = this.execSteps.findIndex(s => s.status === 'process')
         if (idx !== -1) this.setStepStatus(idx, 'error', e.message || '')
       } finally {
@@ -266,7 +266,7 @@ export default {
       }
     },
 
-    // ── 从 enrollSteps 数组中按 key 查找步骤配置 ─────────────────────
+    // ── Find step config by key from enrollSteps array ───────────────────────────────
     findEnrollStep(key) {
       for (const item of (driverConfig.enrollSteps || [])) {
         if (key in item) return item[key]
@@ -274,7 +274,7 @@ export default {
       return null
     },
 
-    // ── 解析模板值 {{ scope.key }} ───────────────────────────────
+    // ── Resolve template value {{ scope.key }} ────────────────────────────────────────
     // context: { input, output, user, settings }
     resolveTemplateValue(tplStr, context) {
       if (typeof tplStr !== 'string') return tplStr
@@ -289,8 +289,8 @@ export default {
       return val
     },
 
-    // ── 解析步骤方法的全部参数，按顺序返回值列表 ─────────────────────
-    // 参数值支持 {{ scope.key }} 模板语法，scope 可为 input/output/user/settings
+    // ── Resolve all params for a step method, return as ordered list ──────────────────
+    // Param values support {{ scope.key }} template syntax; scope can be input/output/user/settings
     resolveStepParams(paramsCfg, context = {}) {
       const values = []
       for (const param of (paramsCfg || [])) {
@@ -312,47 +312,47 @@ export default {
       return values
     },
 
-    // ── 底层：持有 step 配置对象后统一执行 ──────────────────────────────
+    // ── Core: execute a step given its config object ────────────────────────────────
     callStep(step, label, ...args) {
       const realMethod = step.method && step.method.call
       if (!realMethod || typeof ukey[realMethod] !== 'function') {
-        const msg = `驱动实例中不存在方法：${realMethod}`
+        const msg = `Method not found in driver instance: ${realMethod}`
         this.appendLog(msg, 'error')
         throw new Error(msg)
       }
       try {
         const result = ukey[realMethod](...args)
-        this.appendLog(`[${step.description || label}] 调用成功`, 'success')
+        this.appendLog(`[${step.description || label}] succeeded`, 'success')
         return result
       } catch (e) {
-        this.appendLog(`[${step.description || label}] 调用失败：${e}`, 'error')
+        this.appendLog(`[${step.description || label}] failed: ${e}`, 'error')
         throw e
       }
     },
 
-    // ── 通过顶级配置 key 调用驱动方法（如 checkInstall、getCertInfo）──────
+    // ── Call driver method by top-level config key (e.g. checkInstall, getCertInfo) ──
     callUKey(abstractName, ...args) {
       const step = driverConfig[abstractName]
       if (!step) {
-        const msg = `驱动配置中不存在方法映射：${abstractName}`
+        const msg = `Method mapping not found in driver config: ${abstractName}`
         this.appendLog(msg, 'error')
         throw new Error(msg)
       }
       return this.callStep(step, abstractName, ...args)
     },
 
-    // ── 通过制证配置（enrollSteps）调用驱动方法 ──────────────────────────
+    // ── Call driver method via enroll config (enrollSteps) ──────────────────────────
     callEnrollMethod(key, ...args) {
       const step = this.findEnrollStep(key)
       if (!step) {
-        const msg = `制证配置中不存在步骤：${key}`
+        const msg = `Step not found in enroll config: ${key}`
         this.appendLog(msg, 'error')
         throw new Error(msg)
       }
       return this.callStep(step, key, ...args)
     },
 
-    // ── 读取并刷新证书信息 ──────────────────────────────────────────
+    // ── Read and refresh certificate info ──────────────────────────────────────────
     refreshCertInfo() {
       if (!driverConfig || !driverConfig.getCertInfo) return
       try {
@@ -362,7 +362,7 @@ export default {
       }
     },
 
-    // ── 解析 getCertInfo 返回值 ───────────────────────────────────
+    // ── Parse getCertInfo return value ────────────────────────────────────────────
     parseCertInfo(raw) {
       let value = raw
       if (typeof value === 'string') {
@@ -378,7 +378,7 @@ export default {
       }
     },
 
-    // ── 执行单步 ─────────────────────────────────────────────────
+    // ── Execute a single step ────────────────────────────────────────────────────────
     async runStep(index, fn) {
       this.setStepStatus(index, 'process', '')
       this.activeStep = index
