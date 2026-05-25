@@ -140,7 +140,7 @@
 <script>
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import IBox from '@/components/Common/IBox'
-import certDriverMixin from '@/mixins/certDriver'
+import certDriverMixin from './certDriver'
 
 export default {
   name: 'CertPanel',
