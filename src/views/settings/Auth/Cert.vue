@@ -19,7 +19,11 @@ export default {
       settings: {
         url: '/api/v1/settings/setting/?category=cert',
         fields: [
-          'AUTH_CERT'
+          'AUTH_CERT',
+          'AUTH_CERT_ENROLL_ENABLED',
+          'AUTH_CERT_ENROLL_VALIDITY_DAYS',
+          'AUTH_CERT_CHALLENGE_TTL',
+          'AUTH_CERT_DEFAULT_PIN'
         ],
         fieldsMeta: {
         },
