@@ -134,9 +134,9 @@ export default {
       try {
         driverConfig = await this.$axios.get(DRIVER_CONFIG)
         this.driverConfigLoaded = true
-        this.appendLog('Driver config loaded', 'success')
+        this.appendLog(this.$t('CertDriverConfigLoaded'), 'success')
       } catch (e) {
-        this.appendLog('Driver config load failed: ' + e.message, 'error')
+        this.appendLog(this.$t('CertDriverConfigLoadFailed', { msg: e.message }), 'error')
         throw e
       }
     },
@@ -154,7 +154,7 @@ export default {
       script.onload = () => this.initUKeyInstance()
       script.onerror = () => {
         this.driverLoadError = true
-        this.appendLog('Driver load failed, please check the backend service', 'error')
+        this.appendLog(this.$t('CertDriverLoadFailed'), 'error')
       }
       document.body.appendChild(script)
     },
@@ -166,11 +166,11 @@ export default {
           driverConfig.newUKeyAPI.method &&
           driverConfig.newUKeyAPI.method.call
         if (!window[constructorName]) {
-          throw new Error(`Constructor "${constructorName}" not found, please verify the driver script is loaded correctly`)
+          throw new Error(this.$t('CertConstructorNotFound', { name: constructorName }))
         }
         ukey = new window[constructorName]('UKeyPlugin')
         this.driverLoaded = true
-        this.appendLog(`Driver loaded, instance created (${constructorName})`, 'success')
+        this.appendLog(this.$t('CertDriverInstanceCreated', { name: constructorName }), 'success')
 
         if (driverConfig.checkInstall) {
           try {
@@ -199,7 +199,7 @@ export default {
         this.refreshCertInfo()
       } catch (e) {
         this.driverLoadError = true
-        this.appendLog('UKey instance creation failed: ' + e.message, 'error')
+        this.appendLog(this.$t('CertUKeyInstanceFailed', { msg: e.message }), 'error')
       }
     },
 
@@ -257,7 +257,7 @@ export default {
       try {
         await action.handler(preValue)
       } catch (e) {
-        this.appendLog(e.message || 'Execution failed', 'error')
+        this.appendLog(e.message || this.$t('CertExecutionFailed'), 'error')
         const idx = this.execSteps.findIndex(s => s.status === 'process')
         if (idx !== -1) this.setStepStatus(idx, 'error', e.message || '')
       } finally {
@@ -316,16 +316,16 @@ export default {
     callStep(step, label, ...args) {
       const realMethod = step.method && step.method.call
       if (!realMethod || typeof ukey[realMethod] !== 'function') {
-        const msg = `Method not found in driver instance: ${realMethod}`
+        const msg = this.$t('CertMethodNotFound', { method: realMethod })
         this.appendLog(msg, 'error')
         throw new Error(msg)
       }
       try {
         const result = ukey[realMethod](...args)
-        this.appendLog(`[${step.description || label}] succeeded`, 'success')
+        this.appendLog(this.$t('CertStepSucceeded', { step: step.description || label }), 'success')
         return result
       } catch (e) {
-        this.appendLog(`[${step.description || label}] failed: ${e}`, 'error')
+        this.appendLog(this.$t('CertStepFailed', { step: step.description || label, err: e }), 'error')
         throw e
       }
     },
@@ -334,7 +334,7 @@ export default {
     callUKey(abstractName, ...args) {
       const step = driverConfig[abstractName]
       if (!step) {
-        const msg = `Method mapping not found in driver config: ${abstractName}`
+        const msg = this.$t('CertMethodMappingNotFound', { name: abstractName })
         this.appendLog(msg, 'error')
         throw new Error(msg)
       }
@@ -345,7 +345,7 @@ export default {
     callEnrollMethod(key, ...args) {
       const step = this.findEnrollStep(key)
       if (!step) {
-        const msg = `Step not found in enroll config: ${key}`
+        const msg = this.$t('CertEnrollStepNotFound', { key })
         this.appendLog(msg, 'error')
         throw new Error(msg)
       }
