@@ -271,10 +271,10 @@ export default {
                 csr: output.genCSR
               })
               Object.assign(output, resp)
-              this.appendLog(`[${stepCfg.description || key}] succeeded`, 'success')
+              this.appendLog(this.$t('CertStepSucceeded', { step: stepCfg.description || key }), 'success')
             } catch (e) {
               const err = (e.response && e.response.data && e.response.data.error) || e.message || String(e)
-              throw new Error(`[${stepCfg.description || key}] failed: ${err}`)
+              throw new Error(this.$t('CertStepFailed', { step: stepCfg.description || key, err }))
             }
           } else if (stepCfg.method) {
             const params = this.resolveStepParams(stepCfg.method.params, context)
@@ -284,9 +284,9 @@ export default {
         })
       }
 
-      this.appendLog('[Issue Certificate Done]', 'success')
+      this.appendLog(this.$t('CertIssueCertDone'), 'success')
       this.refreshCertInfo()
-      this.appendLog('[Refresh Certificate Info Done]', 'success')
+      this.appendLog(this.$t('CertRefreshCertInfoDone'), 'success')
     },
 
     // ── Admin: delete certificate ────────────────────────────────
@@ -294,10 +294,10 @@ export default {
       const cfg = this.getDriverConfig()
       const stepCfg = cfg && cfg.deleteCert
       if (!stepCfg || !stepCfg.method) {
-        throw new Error('deleteCert method not found in driver config')
+        throw new Error(this.$t('CertDeleteCertMethodNotFound'))
       }
       this.callStep(stepCfg, 'deleteCert')
-      this.appendLog('[Delete Certificate Done]', 'success')
+      this.appendLog(this.$t('CertDeleteCertDone'), 'success')
       this.refreshCertInfo()
     },
 
@@ -306,7 +306,7 @@ export default {
       const cfg = this.getDriverConfig()
       const stepCfg = cfg && cfg.adminResetPIN
       if (!stepCfg || !stepCfg.method) {
-        throw new Error('adminResetPIN method not found in driver config')
+        throw new Error(this.$t('CertAdminResetPINMethodNotFound'))
       }
       const defaultPin = cfg.cert && cfg.cert.pin && cfg.cert.pin.default
       const context = {
@@ -317,7 +317,7 @@ export default {
       }
       const params = this.resolveStepParams(stepCfg.method.params, context)
       this.callStep(stepCfg, 'adminResetPIN', ...params)
-      this.appendLog('[Reset PIN Done]', 'success')
+      this.appendLog(this.$t('CertResetPINDone'), 'success')
     },
 
     // ── User: change PIN dialog ───────────────────────────────────
@@ -360,7 +360,7 @@ export default {
       const cfg = this.getDriverConfig()
       const stepCfg = cfg && cfg.userChangePIN
       if (!stepCfg || !stepCfg.method) {
-        throw new Error('userChangePIN method not found in driver config')
+        throw new Error(this.$t('CertUserChangePINMethodNotFound'))
       }
       const context = {
         input: inputs,
@@ -370,7 +370,7 @@ export default {
       }
       const params = this.resolveStepParams(stepCfg.method.params, context)
       this.callStep(stepCfg, 'userChangePIN', ...params)
-      this.appendLog('[Change PIN Done]', 'success')
+      this.appendLog(this.$t('CertChangePINDone'), 'success')
     }
   }
 }
