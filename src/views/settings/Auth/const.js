@@ -104,6 +104,14 @@ export function getAuthItems() {
       authKey: 'AUTH_RADIUS',
       type: 'common',
       description: i18n.t('RadiusSummary')
+    },
+    {
+      name: 'Cert',
+      logo: require('@/assets/img/auth/cert_logo.png'),
+      title: i18n.t('Certificate'),
+      authKey: 'AUTH_CERT',
+      description: i18n.t('CertSummary'),
+      type: 'cert'
     }
   ]
 
