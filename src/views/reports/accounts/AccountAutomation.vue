@@ -353,7 +353,7 @@ export default {
         lineStyle: {
           width: 2
         },
-        showSymbol: false
+        showSymbol: true
       }))
 
       const keys = Object.keys(data.execution_metrics.data)
