@@ -4,7 +4,7 @@ import hljs from 'highlight.js'
 import DOMPurify from 'dompurify'
 
 const markdown = new MarkdownIt({
-  html: false,
+  html: true,
   linkify: true,
   breaks: false,
   highlight(code, language) {
