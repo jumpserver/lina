@@ -111,7 +111,7 @@ export function getAuthItems() {
       title: i18n.t('UKey'),
       authKey: 'AUTH_CERT',
       description: i18n.t('CertSummary'),
-      type: 'cert'
+      type: 'device'
     }
   ]
 

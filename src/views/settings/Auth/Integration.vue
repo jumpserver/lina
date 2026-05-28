@@ -31,7 +31,7 @@ export default {
         common: this.$t('Common'),
         SSO: this.$t('SSO'),
         IdP: this.$t('IdP'),
-        cert: this.$t('Certificate')
+        device: this.$t('Device')
       }
     }
   },
