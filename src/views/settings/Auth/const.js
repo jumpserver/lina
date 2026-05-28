@@ -108,7 +108,7 @@ export function getAuthItems() {
     {
       name: 'Cert',
       logo: require('@/assets/img/auth/cert_logo.png'),
-      title: i18n.t('Certificate'),
+      title: i18n.t('UKey'),
       authKey: 'AUTH_CERT',
       description: i18n.t('CertSummary'),
       type: 'cert'
