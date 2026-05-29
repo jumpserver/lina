@@ -1,6 +1,6 @@
 <template>
   <el-collapse-transition>
-    <div class="tree-table-content">
+    <div class="tree-table-content" v-bind="rootAttrs">
       <div
         v-show="iShowTree"
         :class="iShowTree ? '' : 'hidden'"
@@ -18,11 +18,11 @@
           class="auto-data-ztree"
           v-bind="treeTabConfig"
           @url-change="handleUrlChange"
-          v-on="$listeners"
+          v-on="forwardedListeners"
         >
-          <div slot="rMenu" slot-scope="{data}">
+          <template #rMenu="{ data }">
             <slot :data="data" name="rMenu" />
-          </div>
+          </template>
         </component>
       </div>
       <div
@@ -49,7 +49,7 @@
               :quick-summary="quickSummary"
               :table-config="iTableConfig"
               :create-drawer="createDrawer"
-              v-on="$listeners"
+              v-on="forwardedListeners"
             />
           </slot>
         </div>
@@ -59,16 +59,18 @@
 </template>
 
 <script>
+import IBox from '@/components/Common/IBox/index.vue'
 import Dialog from '@/components/Dialog/index.vue'
-import { setUrlParam } from '@/utils/common/index'
 import ListTable from '@/components/Table/DrawerListTable/index.vue'
 import FileTree from '@/components/Table/TreeTable/components/FileTree.vue'
-import IBox from '@/components/Common/IBox/index.vue'
-import TabTree from '../TabTree/index.vue'
 import AutoDataZTree from '@/components/Tree/AutoDataZTree/index.vue'
+import { setUrlParam } from '@/utils/common/index'
+import { omitVueListeners, pickVueListeners } from '@/utils/vue'
+import TabTree from '../TabTree/index.vue'
 
 export default {
   name: 'TreeTable',
+  inheritAttrs: false,
   components: {
     ListTable,
     AutoDataZTree,
@@ -128,6 +130,14 @@ export default {
       componentTreeKey: 0
     }
   },
+  computed: {
+    rootAttrs() {
+      return omitVueListeners(this.$attrs)
+    },
+    forwardedListeners() {
+      return pickVueListeners(this.$attrs)
+    }
+  },
   watch: {
     treeConfig: {
       handler(val) {
@@ -149,11 +159,17 @@ export default {
       if (url) {
         url = setUrlParam(url, 'asset', asset)
         url = setUrlParam(url, 'node', node)
-        this.$set(this.iTableConfig, 'url', url)
+        this.iTableConfig = {
+          ...this.iTableConfig,
+          url
+        }
       }
     },
     handleUrlChange(url) {
-      this.$set(this.iTableConfig, 'url', url)
+      this.iTableConfig = {
+        ...this.iTableConfig,
+        url
+      }
       this.$emit('urlChange', url)
       this.forceRerender()
     },

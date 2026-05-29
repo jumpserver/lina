@@ -61,7 +61,7 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
   .tooltip {
     margin-bottom: 10px;
   }

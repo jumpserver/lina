@@ -62,7 +62,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .hr-line-dashed {
   border-top: 1px dashed #e7eaec;
   color: #ffffff;

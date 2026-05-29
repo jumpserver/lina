@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import { MatchExcludeParenthesis, Required } from '@/components/Form/DataForm/rules'
-import { ProtocolsFormatter } from '@/components/Table/TableFormatters'
+import { MatchExcludeParenthesis, Required } from '@/components/Form/DataForm/rules';
+import { ProtocolsFormatter } from '@/components/Table/TableFormatters';
+import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage';
 
 export default {
   components: {
@@ -42,6 +42,6 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 
 </style>

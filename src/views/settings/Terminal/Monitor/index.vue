@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import MonitorCard from './component/MonitorCard'
+import MonitorCard from './component/MonitorCard';
 
 export default {
   name: 'SystemMonitor',
@@ -38,7 +38,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
 .monitorCard{
   //margin-bottom: 20px;
   padding: 20px 30px;

@@ -1,5 +1,6 @@
-<script lang="jsx">
-import { toSafeLocalDateStr } from '@/utils/common/time'
+<script>
+import { toSafeLocalDateStr } from '@/utils/common/time';
+import { h } from 'vue';
 
 export default {
   name: 'ItemValue',
@@ -66,7 +67,7 @@ export default {
       }
     }
   },
-  render(h) {
+  render() {
     let formatterData = ''
     if (typeof this.formatter === 'function') {
       const data = this.formatter(this.item, this.value)
@@ -77,22 +78,26 @@ export default {
       } else {
         formatterData = data
       }
-      return (
-        <span style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: '1.2' }}>{formatterData}</span>
+      return h(
+        'span',
+        { style: { whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: '1.2' } },
+        [formatterData]
       )
     }
     if (this.value instanceof Array) {
       const newArr = this.value || []
-      return (
-        <span>
-          {
-            newArr.map((item, index) => <div key={index}>{item.key}：{item.value} </div>)
-          }
-        </span>
+      return h(
+        'span',
+        newArr.map((item, index) => h('div', { key: index }, `${item.key}：${item.value} `))
       )
     }
-    return (
-      <span style='white-space: pre-wrap;' title={this.displayValue}>{this.displayValue}</span>
+    return h(
+      'span',
+      {
+        style: { whiteSpace: 'pre-wrap' },
+        title: this.displayValue
+      },
+      this.displayValue
     )
   }
 }

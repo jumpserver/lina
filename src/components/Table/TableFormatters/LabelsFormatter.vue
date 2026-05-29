@@ -73,11 +73,11 @@
   </div>
 </template>
 
-<script lang="jsx">
-import BaseFormatter from './base.vue'
-import Select2 from '@/components/Form/FormFields/Select2.vue'
-import Dialog from '@/components/Dialog'
-import ILabel from '@/components/Widgets/ILabel'
+<script>
+import Dialog from '@/components/Dialog';
+import Select2 from '@/components/Form/FormFields/Select2.vue';
+import ILabel from '@/components/Widgets/ILabel';
+import BaseFormatter from './base.vue';
 
 export default {
   name: 'LabelsFormatter',

@@ -1,0 +1,18 @@
+
+-  Building legacy bundle for production...
+ ERROR  ValidationError: Invalid options object. Compression Plugin has been initialized using an options object that does not match the API schema.
+         - options has an unknown property 'cache'. These properties are valid:
+           object { test?, include?, exclude?, algorithm?, compressionOptions?, threshold?, minRatio?, deleteOriginalAssets?, filename? }
+ValidationError: Invalid options object. Compression Plugin has been initialized using an options object that does not match the API schema.
+ - options has an unknown property 'cache'. These properties are valid:
+   object { test?, include?, exclude?, algorithm?, compressionOptions?, threshold?, minRatio?, deleteOriginalAssets?, filename? }
+    at validate (/Users/zhaojisen/lina/node_modules/schema-utils/dist/validate.js:213:11)
+    at new CompressionPlugin (/Users/zhaojisen/lina/node_modules/compression-webpack-plugin/dist/index.js:102:5)
+    at /Users/zhaojisen/lina/node_modules/@vue/cli-service/node_modules/webpack-chain/src/Plugin.js:14:18
+    at module.exports.toConfig (/Users/zhaojisen/lina/node_modules/@vue/cli-service/node_modules/webpack-chain/src/Plugin.js:78:22)
+    at /Users/zhaojisen/lina/node_modules/@vue/cli-service/node_modules/webpack-chain/src/Config.js:129:63
+    at Array.map (<anonymous>)
+    at module.exports.toConfig (/Users/zhaojisen/lina/node_modules/@vue/cli-service/node_modules/webpack-chain/src/Config.js:129:40)
+    at Service.resolveWebpackConfig (/Users/zhaojisen/lina/node_modules/@vue/cli-service/lib/Service.js:277:34)
+    at PluginAPI.resolveWebpackConfig (/Users/zhaojisen/lina/node_modules/@vue/cli-service/lib/PluginAPI.js:132:25)
+    at module.exports (/Users/zhaojisen/lina/node_modules/@vue/cli-service/lib/commands/build/resolveAppConfig.js:51:14)

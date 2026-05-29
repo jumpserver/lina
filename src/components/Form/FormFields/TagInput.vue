@@ -39,8 +39,8 @@
   </div>
 </template>
 
-<script lang="jsx">
-import i18n from '@/i18n/i18n'
+<script>
+import i18n from '@/i18n/i18n';
 
 export default {
   props: {

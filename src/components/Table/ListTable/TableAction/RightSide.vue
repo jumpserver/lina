@@ -19,9 +19,9 @@
 
 <script>
 import ActionsGroup from '@/components/Common/ActionsGroup/index.vue'
+import { assignIfNot } from '@/utils/common/index'
 import ImExportDialog from './ImExportDialog.vue'
 import { cleanActions } from './utils'
-import { assignIfNot } from '@/utils/common/index'
 
 const defaultTrue = { type: [Boolean, Function, String], default: true }
 
@@ -92,21 +92,21 @@ export default {
   },
   data() {
     return {
-      defaultHandleExportClick: function ({ selectedRows }) {
+      defaultHandleExportClick: function({ selectedRows }) {
         const url = this.iExportOptions.url
         this.dialogExportVisible = true
         this.$nextTick(() => {
           this.$eventBus.$emit('showExportDialog', { selectedRows, url, name: this.name })
         })
       },
-      defaultHandleTableSettingClick: function ({ selectedRows }) {
+      defaultHandleTableSettingClick: function({ selectedRows }) {
         this.$eventBus.$emit('showColumnSettingPopover', {
           url: this.tableUrl,
           row: selectedRows,
           name: this.name
         })
       },
-      defaultHandleRefreshClick: function () {
+      defaultHandleRefreshClick: function() {
         this.reloadTable()
       },
       defaultRightSideActions: [

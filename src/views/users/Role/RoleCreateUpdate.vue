@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
-import { TextReadonly } from '@/components/Form/FormFields'
+import { TextReadonly } from '@/components/Form/FormFields';
+import { GenericCreateUpdatePage } from '@/layout/components';
 
 export default {
   components: {
@@ -56,6 +56,6 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 
 </style>

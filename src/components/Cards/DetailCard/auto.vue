@@ -10,12 +10,13 @@
   </div>
 </template>
 
-<script lang="jsx">
-import DetailCard from './index.vue'
+<script>
+import IBox from '@/components/Common/IBox/index.vue'
 import { copy } from '@/utils/common/index'
 import { toSafeLocalDateStr } from '@/utils/common/time'
-import IBox from '@/components/Common/IBox/index.vue'
+import { h } from 'vue'
 import LabelsDetailFormatter from '../Formatters/LabelsDetailFormatter.vue'
+import DetailCard from './index.vue'
 
 export default {
   name: 'AutoDetailCard',
@@ -81,12 +82,16 @@ export default {
       for (const name of fields) {
         formatter[name] = function(item, val) {
           if (val === '-') {
-            return <span>{'-'}</span>
+            return h('span', '-')
           }
-          return (
-            <span style={{ cursor: 'pointer' }} onClick={() => copy(val)} title={val}>
-              {val}
-            </span>
+          return h(
+            'span',
+            {
+              style: { cursor: 'pointer' },
+              onClick: () => copy(val),
+              title: val
+            },
+            val
           )
         }
       }

@@ -3,7 +3,7 @@
     v-if="_show"
     :class="classes"
     :label="data.label"
-    :prop="prop"
+    :prop="itemProp"
     :rules="_show && Array.isArray(data.rules) ? data.rules : []"
     v-bind="data.attrs"
     :error="errorText"
@@ -20,7 +20,9 @@
           placement="right"
           popper-class="help-tips"
         >
-          <div slot="content" v-sanitize="data.helpTip" class="help-tip-content" />
+          <template #content>
+            <div v-sanitize="data.helpTip" class="help-tip-content" />
+          </template>
           <!-- Noncompliant -->
           <i class="fa fa-question-circle-o help-tip-icon" />
         </el-tooltip>
@@ -37,9 +39,10 @@
         {{ multipleValue }}
       </div>
     </template>
-    <custom-component
+    <component
       v-else
       :component="data.component || `el-${data.type}`"
+      :is="data.component || `el-${data.type}`"
       :disabled="disabled || componentProps.disabled || readonly"
       :value="itemValue"
       v-bind="componentProps"
@@ -79,7 +82,7 @@
           </el-tooltip>
         </el-radio>
       </template>
-    </custom-component>
+    </component>
     <div v-if="data.helpText" :class="data.type" class="help-block">
       <el-alert
         v-if="data.helpText.startsWith('!')"
@@ -98,12 +101,12 @@
   </el-form-item>
 </template>
 <script>
-import getEnableWhenStatus from '../util/enable-when'
-import { noop } from '../util/utils'
+import _frompairs from 'lodash/fromPairs'
 import _get from 'lodash/get'
 import _includes from 'lodash/includes'
 import _topairs from 'lodash/toPairs'
-import _frompairs from 'lodash/fromPairs'
+import getEnableWhenStatus from '../util/enable-when'
+import { noop } from '../util/utils'
 
 function validator(data) {
   if (!data) {
@@ -116,26 +119,18 @@ function validator(data) {
 }
 
 export default {
+  emits: ['updateValue'],
   components: {
     RenderHelpTextSafe: {
-      functional: true,
       props: {
         renderContent: {
           type: Function,
           required: true
         }
       },
-      render(h, { props }) {
-        return props.renderContent()
+      render() {
+        return this.renderContent()
       }
-    },
-    /**
-     * 🐂🍺只需要有组件选项对象，就可以立刻包装成函数式组件在 template 中使用
-     * FYI: https://cn.vuejs.org/v2/guide/render-function.html#%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BB%84%E4%BB%B6
-     */
-    CustomComponent: {
-      functional: true,
-      render: (h, ctx) => h(ctx.props.component, ctx.data, ctx.children)
     }
   },
   props: {
@@ -147,9 +142,7 @@ export default {
     },
     prop: {
       type: String,
-      default() {
-        return this.data.id
-      }
+      default: ''
     },
     // eslint-disable-next-line vue/require-prop-types,vue/require-default-prop
     itemValue: {},
@@ -171,6 +164,9 @@ export default {
     }
   },
   computed: {
+    itemProp() {
+      return this.prop || this.data.id
+    },
     // 解构运算符会处理 undefined 的情况
     componentProps: ({ data: { el }, propsInner }) => ({ ...el, ...propsInner }),
     hasReadonlyContent: ({ data: { type } }) => _includes(['input', 'select'], type),
@@ -274,10 +270,10 @@ export default {
           .then(resp => {
             if (isOptionsCase) {
               let formRenderer = this.$parent
-              while (formRenderer.$options._componentTag !== 'el-form-renderer') {
+              while (formRenderer && formRenderer.$options.name !== 'ElFormRenderer') {
                 formRenderer = formRenderer.$parent
               }
-              formRenderer.setOptions(this.prop, resp)
+              formRenderer?.setOptions(this.itemProp, resp)
             } else {
               this.propsInner = { [prop]: resp }
             }

@@ -11,10 +11,10 @@
 </template>
 
 <script lang="jsx">
-import AutoDetailCard from '@/components/Cards/DetailCard/auto'
-import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-import Variable from '@/views/ops/Template/components/Variable.vue'
-import { IBox } from '@/components'
+import { IBox } from '@/components';
+import AutoDetailCard from '@/components/Cards/DetailCard/auto';
+import TwoCol from '@/layout/components/Page/TwoColPage.vue';
+import Variable from '@/views/ops/Template/components/Variable.vue';
 
 export default {
   components: {
@@ -58,6 +58,6 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 
 </style>

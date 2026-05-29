@@ -1,15 +1,15 @@
-import { toSentenceCase } from '@/utils/common/index'
 import i18n from '@/i18n/i18n'
+import { toSentenceCase } from '@/utils/common/index'
 
 import {
-  ActionsFormatter,
-  ArrayFormatter,
-  ChoicesFormatter,
-  CopyableFormatter,
-  DateFormatter,
-  DetailFormatter,
-  DisplayFormatter,
-  ObjectRelatedFormatter
+    ActionsFormatter,
+    ArrayFormatter,
+    ChoicesFormatter,
+    CopyableFormatter,
+    DateFormatter,
+    DetailFormatter,
+    DisplayFormatter,
+    ObjectRelatedFormatter
 } from '@/components/Table/TableFormatters'
 import LabelsFormatter from '@/components/Table/TableFormatters/LabelsFormatter.vue'
 
@@ -284,15 +284,23 @@ export class TableColumnsGenerator {
         }
       }
 
-      return (
-        <span>
-          {column.label}
-          <el-tooltip {...binds}>
-            <div slot='content' v-sanitize={helpTip} />
-            <i class='fa fa-question-circle-o help-tip-icon' style='padding-left: 2px' />
-          </el-tooltip>
-        </span>
-      )
+      return h('span', [
+        column.label,
+        h(
+          'el-tooltip',
+          binds,
+          [
+            h('div', {
+              slot: 'content',
+              directives: [{ name: 'sanitize', value: helpTip }]
+            }),
+            h('i', {
+              class: 'fa fa-question-circle-o help-tip-icon',
+              style: 'padding-left: 2px'
+            })
+          ]
+        )
+      ])
     }
     return col
   }

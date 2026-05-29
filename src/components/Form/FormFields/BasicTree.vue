@@ -13,7 +13,7 @@
   />
 </template>
 
-<script lang="jsx">
+<script>
 export default {
   props: {
     value: {
@@ -96,14 +96,24 @@ export default {
         helpText = match[2]
       }
 
-      return (
-        <span>
-          <span>{label} </span>
-          {helpText
-            ? (<el-tooltip content={helpText} placement='top'>
-              <i class='fa fa-question-circle-o'></i>
-            </el-tooltip>) : ''}
-        </span>)
+      const children = [h('span', `${label} `)]
+
+      if (helpText) {
+        children.push(
+          h(
+            'el-tooltip',
+            {
+              props: {
+                content: helpText,
+                placement: 'top'
+              }
+            },
+            [h('i', { class: 'fa fa-question-circle-o' })]
+          )
+        )
+      }
+
+      return h('span', children)
     }
   }
 }

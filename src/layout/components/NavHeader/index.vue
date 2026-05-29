@@ -115,7 +115,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import '~@/styles/variables.scss';
+@use '@/styles/variables' as *;
 
 .navbar {
   position: relative;
@@ -138,7 +138,7 @@ export default {
     margin: 8px;
     padding: 1px 8px !important;
     border-radius: 5px;
-    border-color: $--color-primary;
+    border-color: $color-primary;
     background-color: white;
     color: var(--text-primary);
     cursor: pointer;

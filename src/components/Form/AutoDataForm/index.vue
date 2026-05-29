@@ -6,12 +6,11 @@
       :fields="totalFields"
       :form="iForm"
       :server-errors="serverErrors"
-      v-bind="$attrs"
-      v-on="$listeners"
+      v-bind="forwardedAttrs"
     >
       <template
         v-for="(group, i) in groups"
-        :slot="'id:'+group.name"
+        v-slot:[`id:${group.name}`]
       >
         <FormGroupHeader
           v-if="!groupHidden(group, i)"
@@ -26,13 +25,14 @@
 </template>
 
 <script>
-import DataForm from '../DataForm/index.vue'
-import FormGroupHeader from '@/components/Form/FormGroupHeader/index.vue'
-import { FormFieldGenerator } from '@/components/Form/AutoDataForm/utils'
-import { UniqueCheck } from '@/components/Form/DataForm/rules'
+import { FormFieldGenerator } from '@/components/Form/AutoDataForm/utils';
+import { UniqueCheck } from '@/components/Form/DataForm/rules';
+import FormGroupHeader from '@/components/Form/FormGroupHeader/index.vue';
+import DataForm from '../DataForm/index.vue';
 
 export default {
   name: 'AutoDataForm',
+  inheritAttrs: false,
   components: {
     DataForm,
     FormGroupHeader
@@ -72,6 +72,9 @@ export default {
     }
   },
   computed: {
+    forwardedAttrs() {
+      return this.$attrs
+    },
     dataForm() {
       return this.$refs.dataForm
     },
@@ -217,7 +220,10 @@ export default {
         }
       }
       // 不写入 totalFields，避免触发 innerContent 变化导致表单值被覆盖
-      this.$set(this.serverErrors, name, error)
+      this.serverErrors = {
+        ...this.serverErrors,
+        [name]: error
+      }
     },
     setErrors(errors) {
       const mapped = {}

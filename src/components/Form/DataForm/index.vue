@@ -14,8 +14,12 @@
       :server-errors="serverErrors"
     >
       <!-- slot 透传 -->
-      <slot v-for="item in fields" :slot="`id:${item.id}`" :name="`id:${item.id}`" />
-      <slot v-for="item in fields" :slot="`$id:${item.id}`" :name="`$id:${item.id}`" />
+      <template v-for="item in fields" :key="`id:${item.id}`">
+        <slot :name="`id:${item.id}`" />
+      </template>
+      <template v-for="item in fields" :key="`$id:${item.id}`">
+        <slot :name="`$id:${item.id}`" />
+      </template>
 
       <div v-if="hasButtons" class="form-buttons">
         <el-button
@@ -58,8 +62,8 @@
 </template>
 
 <script>
-import ElFormRender from './components/el-form-renderer'
 import { randomString } from '@/utils/common/index'
+import ElFormRender from './components/el-form-renderer'
 
 const scrollToError = (
   formInstance,
@@ -218,7 +222,7 @@ export default {
     handleClick(button) {
       const callback =
         button.callback ||
-        function (values, form) {
+        function(values, form) {
           // debug('Click ', button.title, ': ', values)
         }
       const form = this.$refs['form']
@@ -235,7 +239,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .el-form {
   margin-right: 80px;
   margin-bottom: 20px;

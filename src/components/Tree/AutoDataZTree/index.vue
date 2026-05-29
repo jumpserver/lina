@@ -1,5 +1,11 @@
 <template>
-  <DataZTree ref="dataztree" :setting="treeSetting" class="data-z-tree" v-on="$listeners">
+  <DataZTree
+    ref="dataztree"
+    :setting="treeSetting"
+    class="data-z-tree"
+    v-bind="treeAttrs"
+    v-on="forwardedListeners"
+  >
     <template #rMenu>
       <div v-if="menu && menu.length > 0">
         <span v-for="item in menu" :key="item.id">
@@ -23,13 +29,15 @@
 </template>
 
 <script>
-import DataZTree from '../DataZTree/index.vue'
 import Icon from '@/components/Widgets/Icon'
 import $ from '@/utils/jquery-vendor'
+import { omitVueListeners, pickVueListeners } from '@/utils/vue'
 import { mapGetters } from 'vuex'
+import DataZTree from '../DataZTree/index.vue'
 
 export default {
   name: 'AutoDataZTree',
+  inheritAttrs: false,
   components: {
     DataZTree,
     Icon
@@ -108,6 +116,12 @@ export default {
     treeSetting() {
       this.$log.debug('Settings: ', this.setting)
       return _.merge(this.defaultSetting, this.setting)
+    },
+    treeAttrs() {
+      return omitVueListeners(this.$attrs)
+    },
+    forwardedListeners() {
+      return pickVueListeners(this.$attrs)
     },
     zTree() {
       return this.$refs.dataztree.zTree

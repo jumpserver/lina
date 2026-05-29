@@ -8,10 +8,10 @@
 </template>
 
 <script lang="jsx">
-import { AttrInput, Select2 } from '@/components/Form/FormFields'
-import { Required } from '@/components/Form/DataForm/rules'
-import { instanceAttrOptions, tableFormatter } from './const'
-import { attrMatchOptions, strMatchValues } from '@/components/const'
+import { attrMatchOptions, strMatchValues } from '@/components/const';
+import { Required } from '@/components/Form/DataForm/rules';
+import { AttrInput, Select2 } from '@/components/Form/FormFields';
+import { instanceAttrOptions, tableFormatter } from './const';
 
 export default {
   name: 'RuleInput',
@@ -81,12 +81,12 @@ export default {
             width: '100px',
             formatter: (row, col, cellValue, index) => {
               return (
-                <div class="input-button">
+                <div class='input-button'>
                   <el-button
-                    icon="el-icon-minus"
-                    size="small"
+                    icon='el-icon-minus'
+                    size='small'
                     style={{ flexShrink: 0 }}
-                    type="danger"
+                    type='danger'
                     onClick={this.handleDelete(index)}
                   />
                 </div>

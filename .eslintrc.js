@@ -15,7 +15,7 @@ module.exports = {
     node: true,
     es6: true
   },
-  extends: ['plugin:vue/vue3-recommended', 'eslint:recommended'],
+  extends: ['plugin:vue/recommended', 'eslint:recommended'],
   globals: {
     window: true,
     _: true
@@ -44,6 +44,7 @@ module.exports = {
     'vue/no-mutating-props': 'off',
     'vue/no-deprecated-filter': 'off',
     'vue/no-computed-properties-in-data': 'off',
+    'vue/require-explicit-emits': 'off',
     // other rules used in inline disable comments
     'vue/no-deprecated-router-link-tag-prop': 'off',
     'accessor-pairs': 2,
@@ -281,7 +282,7 @@ module.exports = {
     'spellcheck/spell-checker': [
       'warn',
       {
-        comments: true,
+        comments: false,
         strings: false,
         identifiers: false,
         lang: 'en_US',

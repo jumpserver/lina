@@ -6,7 +6,6 @@
     v-bind="$attrs"
     :loading="loading"
     :type="type"
-    v-on="$listeners"
     @click="handleClick"
   >
     <slot />
@@ -16,9 +15,10 @@
 <script>
 /* eslint-disable vue/require-default-prop */
 /* eslint-disable vue/require-prop-types */
-import TextButton from './text-button.vue'
+import TextButton from './text-button.vue';
 
 export default {
+  inheritAttrs: false,
   components: { TextButton },
   props: {
     /**

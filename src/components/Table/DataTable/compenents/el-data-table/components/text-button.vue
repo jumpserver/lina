@@ -4,7 +4,6 @@
     v-bind="$attrs"
     plain
     :style="style"
-    v-on="$listeners"
   >
     <slot />
   </el-button>
@@ -12,6 +11,7 @@
 
 <script>
 export default {
+  inheritAttrs: false,
   data() {
     return {
       style: {

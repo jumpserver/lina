@@ -1,4 +1,4 @@
-@import './variables';
+@use './variables' as *;
 
 $icon-width: 1.1em;
 $single-menu-height: 38px;

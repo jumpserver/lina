@@ -65,10 +65,9 @@
 </template>
 
 <script>
-import IBox from '@/components/Common/IBox'
-import { formatTime, getDateTimeStamp } from '@/utils/common/time'
-import { toSafeLocalDateStr } from '@/utils/common/time'
-import MarkDown from '@/components/Widgets/MarkDown'
+import IBox from '@/components/Common/IBox';
+import MarkDown from '@/components/Widgets/MarkDown';
+import { formatTime, getDateTimeStamp, toSafeLocalDateStr } from '@/utils/common/time';
 
 export default {
   name: 'Comments',
@@ -258,7 +257,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
 .box {
   margin-bottom: 15px;
 }

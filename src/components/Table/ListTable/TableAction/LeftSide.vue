@@ -9,9 +9,9 @@
 </template>
 
 <script>
-import { cleanActions } from './utils'
 import { createSourceIdCache } from '@/api/common'
 import { getErrorResponseMsg } from '@/utils/common/index'
+import { cleanActions } from './utils'
 
 import DataActions from '@/components/Common/DataActions/index.vue'
 
@@ -112,7 +112,7 @@ export default {
           name: 'actionUpdateSelected',
           has: this.hasBulkUpdate,
           icon: 'batch-update',
-          can: function ({ selectedRows }) {
+          can: function({ selectedRows }) {
             let canBulkUpdate = vm.canBulkUpdate
             if (typeof canBulkUpdate === 'function') {
               canBulkUpdate = canBulkUpdate({ selectedRows })
@@ -186,7 +186,7 @@ export default {
           name: 'batch',
           title: this.$t('BatchProcessing', { number: this.selectedRows.length }),
           divided: true,
-          has: function ({ selectedRows }) {
+          has: function({ selectedRows }) {
             return selectedRows.length > 0
           },
           class: 'more-batch-processing',

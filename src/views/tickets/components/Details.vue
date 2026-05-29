@@ -41,8 +41,8 @@
   </IBox>
 </template>
 <script>
-import ItemValue from '@/components/Cards/DetailCard/ItemValue'
-import IBox from '@/components/Common/IBox'
+import ItemValue from '@/components/Cards/DetailCard/ItemValue';
+import IBox from '@/components/Common/IBox';
 
 export default {
   name: 'Details',
@@ -67,7 +67,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
 .box {
   margin-bottom: 15px;
 }

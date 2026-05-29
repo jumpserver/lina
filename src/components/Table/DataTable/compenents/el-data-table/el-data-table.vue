@@ -1,5 +1,5 @@
 <template>
-  <div class="el-data-table">
+  <div class="el-data-table" v-bind="rootAttrs">
     <template v-if="showNoData">
       <!--@slot 获取数据为空时的内容-->
       <slot name="no-data" />
@@ -77,17 +77,17 @@
 
             <template
               v-if="col.formatter && typeof col.formatter !== 'function'"
-              #default="{ row, column, $index }"
+              #default="{ row: tableRow, column, $index }"
             >
               <component
                 :is="col.formatter"
-                :key="row.id"
-                :cell-value="row[col.prop]"
+                :key="tableRow.id"
+                :cell-value="tableRow[col.prop]"
                 :col="col"
                 :column="column"
                 :index="$index"
                 :reload="getList"
-                :row="row"
+                :row="tableRow"
                 :table-data="data"
                 :url="url"
               />
@@ -131,24 +131,26 @@
 </template>
 
 <script>
+import { omitVueListeners, pickVueListeners } from '@/utils/vue'
+import merge from 'deepmerge'
 import _get from 'lodash/get'
-import _values from 'lodash/values'
 import _isEmpty from 'lodash/isEmpty'
+import _values from 'lodash/values'
+import ElDataTableColumn from './components/el-data-table-column'
 import SelfLoadingButton from './components/self-loading-button.vue'
 import TheDialog, { dialogModes } from './components/the-dialog.vue'
-import ElDataTableColumn from './components/el-data-table-column'
-import * as queryUtil from './utils/query'
-import getSelectStrategy from './utils/select-strategy'
 import getLocatedSlotKeys from './utils/extract-keys'
-import transformSearchImmediatelyItem from './utils/search-immediately-item'
 import isFalsey from './utils/is-falsey'
-import merge from 'deepmerge'
+import * as queryUtil from './utils/query'
+import transformSearchImmediatelyItem from './utils/search-immediately-item'
+import getSelectStrategy from './utils/select-strategy'
 
 const defaultFirstPage = 1
 const noPaginationDataPath = 'payload'
 
 export default {
   name: 'ElDataTable',
+  inheritAttrs: false,
   components: {
     SelfLoadingButton,
     TheDialog,
@@ -779,7 +781,7 @@ export default {
         (this.hasSelect && this.hasDelete) ||
         this.headerButtons.length ||
         this.canSearchCollapse ||
-        this.$scopedSlots.header
+        this.$slots.header
       )
     },
     _extraBody() {
@@ -791,9 +793,12 @@ export default {
     selectStrategy() {
       return getSelectStrategy(this)
     },
+    rootAttrs() {
+      return omitVueListeners(this.$attrs)
+    },
     // 过滤会与内部选择策略冲突的事件，避免父组件只拿到当前页 selection
     forwardListeners() {
-      const listeners = { ...this.$listeners }
+      const listeners = { ...pickVueListeners(this.$attrs) }
       delete listeners['selection-change']
       delete listeners['select']
       delete listeners['select-all']
@@ -1227,13 +1232,13 @@ export default {
       let tmp = []
       data.forEach(record => {
         if (record._expanded === undefined) {
-          this.$set(record, '_expanded', expandAll)
+          record._expanded = expandAll
         }
         let _level = 0
         if (level !== undefined && level !== null) {
           _level = level + 1
         }
-        this.$set(record, '_level', _level)
+        record._level = _level
         // 如果有父元素
         if (parent) {
           Object.defineProperty(record, 'parent', {
@@ -1284,13 +1289,13 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 // 自定义样式
-@import url(index.less);
+@use './index';
 
 .el-data-table {
-  @color-blue: #2196f3;
-  @space-width: 18px;
+  $color-blue: #2196f3;
+  $space-width: 18px;
 
   .ms-tree-space {
     position: relative;
@@ -1299,7 +1304,7 @@ export default {
     font-style: normal;
     font-weight: 400;
     line-height: 1;
-    width: @space-width;
+    width: $space-width;
     height: 14px;
 
     &::before {
@@ -1310,7 +1315,7 @@ export default {
   .tree-ctrl {
     position: relative;
     cursor: pointer;
-    color: @color-blue;
+    color: $color-blue;
   }
 
   @keyframes treeTableShow {

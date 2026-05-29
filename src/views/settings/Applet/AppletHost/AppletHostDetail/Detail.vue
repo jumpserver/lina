@@ -17,11 +17,11 @@
 </template>
 
 <script>
-import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import { QuickActions } from '@/components'
-import { openTaskPage } from '@/utils/jms/index'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import RelationCard from '@/components/Cards/RelationCard/index.vue'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import { openTaskPage } from '@/utils/jms/index'
 
 export default {
   name: 'Detail',
@@ -182,6 +182,6 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
 
 </style>

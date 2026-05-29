@@ -32,8 +32,8 @@
   </div>
 </template>
 
-<script lang="jsx">
-import Icon from '@/components/Widgets/Icon/index.vue'
+<script>
+import Icon from '@/components/Widgets/Icon/index.vue';
 
 export default {
   name: 'Panel',

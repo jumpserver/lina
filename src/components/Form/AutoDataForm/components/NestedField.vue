@@ -5,19 +5,18 @@
     :fields="iFields"
     :form="iValue"
     class="sub-form"
-    v-bind="kwargs"
+    v-bind="dataFormAttrs"
     @change="updateValue($event)"
     @input="updateValue($event)"
-    v-on="$listeners"
-    @submit.native.prevent
   />
 </template>
 
 <script>
-import DataForm from '@/components/Form/DataForm/index.vue'
+import DataForm from '@/components/Form/DataForm/index.vue';
 
 export default {
   name: 'NestedField',
+  inheritAttrs: false,
   components: {
     DataForm
   },
@@ -52,6 +51,12 @@ export default {
     }
   },
   computed: {
+    dataFormAttrs() {
+      return {
+        ...this.$attrs,
+        ...this.kwargs
+      }
+    },
     iFields() {
       const fields = this.fields
       if (this.errors && typeof this.errors === 'object') {

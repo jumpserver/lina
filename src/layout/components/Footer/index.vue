@@ -7,7 +7,7 @@
   </div>
 </template>
 <script lang="jsx">
-import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex';
 export default {
   name: 'Footer',
   data() {
@@ -33,7 +33,7 @@ export default {
   }
 }
 </script>
-<style lang="less">
+<style lang="scss">
 .el-footer{
     padding: 0;
     height: 35px !important;

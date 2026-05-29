@@ -4,7 +4,7 @@
     :model="value"
     class="el-form-renderer"
     v-bind="$attrs"
-    @submit.native.prevent
+    @submit.prevent
   >
     <template v-for="item in innerContent" :key="item.id">
       <slot v-if="!isHidden(item)" :name="`id:${item.id}`" />
@@ -25,34 +25,28 @@
   </el-form>
 </template>
 <script>
-import _set from 'lodash/set'
-import _isequal from 'lodash/isEqual'
 import _clonedeep from 'lodash/cloneDeep'
+import _isequal from 'lodash/isEqual'
+import _set from 'lodash/set'
 import RenderFormGroup from './components/render-form-group.vue'
 import RenderFormItem from './components/render-form-item.vue'
 import transformContent from './util/transform-content'
 import {
-  collect,
-  correctValue,
-  mergeValue,
-  transformInputValue,
-  transformOutputValue
+    collect,
+    correctValue,
+    mergeValue,
+    transformInputValue,
+    transformOutputValue
 } from './util/utils'
 
 const GROUP = 'group'
 
 export default {
   name: 'ElFormRenderer',
+  emits: ['input', 'update:form'],
   components: {
     RenderFormItem,
     RenderFormGroup
-  },
-  /**
-   * value 已经被内部大量使用，所以换用 form
-   */
-  model: {
-    prop: 'form',
-    event: 'input'
   },
   props: {
     content: {
@@ -119,6 +113,7 @@ export default {
       handler(v, oldV) {
         if (!v || _isequal(v, oldV)) return
         this.$emit('input', transformOutputValue(v, this.innerContent))
+        this.$emit('update:form', transformOutputValue(v, this.innerContent))
       }
       // deep: true, // 应该是没有必要的
     }

@@ -5,8 +5,8 @@
 </template>
 
 <script lang="jsx">
-import AutoDetailCard from '@/components/Cards/DetailCard/auto'
-import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto';
+import TwoCol from '@/layout/components/Page/TwoColPage.vue';
 
 export default {
   components: {
@@ -36,6 +36,6 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 
 </style>

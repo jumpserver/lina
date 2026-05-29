@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
-import FlowRuleField from './FlowRuleField'
+import { GenericCreateUpdatePage } from '@/layout/components';
+import FlowRuleField from './FlowRuleField';
 
 export default {
   name: 'FlowCreateUpdate',
@@ -65,6 +65,6 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 
 </style>

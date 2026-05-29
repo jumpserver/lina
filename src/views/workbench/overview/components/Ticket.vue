@@ -3,11 +3,11 @@
 </template>
 
 <script lang="jsx">
-import HomeCard from './HomeCard'
-import { mapGetters } from 'vuex'
-import { toSafeLocalDateStr } from '@/utils/common/time'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import i18n from '@/i18n/i18n'
+import { toSafeLocalDateStr } from '@/utils/common/time'
+import { mapGetters } from 'vuex'
+import HomeCard from './HomeCard'
 
 export default {
   name: 'HomeAnnouncement',
@@ -35,7 +35,7 @@ export default {
             label: i18n.global.t('Title'),
             formatter: DetailFormatter,
             formatterArgs: {
-              getRoute: function ({ row }) {
+              getRoute: function({ row }) {
                 const type = row.type.value
                 if (type === 'apply_asset') {
                   return 'AssetsTicketDetail'
@@ -74,14 +74,14 @@ export default {
             formatter: row => {
               if (row.status.value === 'open') {
                 return (
-                  <el-tag type="primary" size="small">
+                  <el-tag type='primary' size='small'>
                     {' '}
                     {i18n.global.t('OpenStatus')}
                   </el-tag>
                 )
               } else {
                 return (
-                  <el-tag type="danger" size="small">
+                  <el-tag type='danger' size='small'>
                     {' '}
                     {i18n.global.t('CloseStatus')}
                   </el-tag>

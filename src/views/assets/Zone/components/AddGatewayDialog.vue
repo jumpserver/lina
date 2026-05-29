@@ -91,7 +91,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .dialog :deep(.el-dialog__footer) {
   padding: 0;
 }

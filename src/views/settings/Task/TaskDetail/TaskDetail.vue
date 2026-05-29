@@ -7,7 +7,7 @@
 </template>
 
 <script lang="jsx">
-import DetailCard from '@/components/Cards/DetailCard/index.vue'
+import DetailCard from '@/components/Cards/DetailCard/index.vue';
 
 export default {
   name: 'TaskDetail',
@@ -55,7 +55,7 @@ export default {
   methods: {}
 }
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .task-detail :deep(.item-value span) {
   white-space: normal !important;
 }

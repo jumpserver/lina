@@ -157,7 +157,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import '~@/styles/variables.scss';
+@use '@/styles/variables' as *;
 
 $mobileHeight: 40px;
 $origin-color: #ffffff;

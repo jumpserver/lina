@@ -2,9 +2,10 @@
   <el-dialog
     ref="dialog"
     :title="title"
-    :visible="visible"
+    v-model="visible"
     v-bind="dialogAttrs"
     @close="resetFields"
+    @opened="handleOpened"
   >
     <!--https://github.com/FEMessage/el-form-renderer-->
     <el-form-renderer
@@ -17,15 +18,17 @@
       <slot :row="slotData" />
     </el-form-renderer>
 
-    <div v-show="!isView" slot="footer">
-      <el-button :size="buttonSize" @click="visible = false">取 消</el-button>
-      <el-button
-        type="primary"
-        :loading="confirmLoading"
-        :size="buttonSize"
-        @click="confirm"
-      >确 定</el-button>
-    </div>
+    <template v-if="!isView" #footer>
+      <div>
+        <el-button :size="buttonSize" @click="visible = false">取 消</el-button>
+        <el-button
+          type="primary"
+          :loading="confirmLoading"
+          :size="buttonSize"
+          @click="confirm"
+        >确 定</el-button>
+      </div>
+    </template>
   </el-dialog>
 </template>
 
@@ -38,6 +41,7 @@ export const dialogModes = {
 }
 
 export default {
+  emits: ['confirm'],
   props: {
     newTitle: {
       type: String,
@@ -70,7 +74,8 @@ export default {
       mode: dialogModes.new,
       visible: false,
       confirmLoading: false,
-      slotData: null
+      slotData: null,
+      pendingFormValue: null
     }
   },
   computed: {
@@ -95,14 +100,18 @@ export default {
      */
     show(mode, formValue) {
       this.mode = mode
+      this.pendingFormValue = formValue || null
+      this.slotData = null
       this.visible = true
-      if (formValue) {
-        // $nextTick 有时也拿不到 form ，这样是稳妥的做法
-        this.$refs.dialog.$once('opened', () => {
-          this.$refs.form.updateForm(formValue)
-          this.slotData = formValue
-        })
+    },
+    handleOpened() {
+      if (!this.pendingFormValue) {
+        return
       }
+
+      this.$refs.form.updateForm(this.pendingFormValue)
+      this.slotData = this.pendingFormValue
+      this.pendingFormValue = null
     },
     async confirm() {
       const valid = await new Promise(this.$refs.form.validate)
@@ -120,6 +129,7 @@ export default {
     resetFields() {
       this.$refs.form.resetFields()
       this.slotData = null
+      this.pendingFormValue = null
     }
   }
 }

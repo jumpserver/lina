@@ -33,10 +33,10 @@
 </template>
 
 <script>
-import { IBox } from '@/components'
-import VueMarkdown from 'vue-markdown'
-import { highlightBlock } from 'highlight.js'
-import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import { IBox } from '@/components';
+import TwoCol from '@/layout/components/Page/TwoColPage.vue';
+import { highlightBlock } from 'highlight.js';
+import VueMarkdown from 'vue-markdown';
 
 export default {
   name: 'SDKList',
@@ -103,7 +103,7 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .code-container {
   position: relative;
 }

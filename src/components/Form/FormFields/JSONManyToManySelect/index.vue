@@ -38,19 +38,73 @@
   </div>
 </template>
 
-<script lang="jsx">
-import Select2 from '../Select2.vue'
+<script>
+import { attrMatchOptions } from '@/components/const'
 import DataTable from '@/components/Table/DataTable/index.vue'
-import ValueFormatter from './ValueFormatter.vue'
+import { setUrlParam } from '@/utils/common/index'
+import { toM2MJsonParams } from '@/utils/jms/index'
+import { h, resolveComponent } from 'vue'
+import Select2 from '../Select2.vue'
 import AttrFormDialog from './AttrFormDialog.vue'
 import AttrMatchResultDialog from './AttrMatchResultDialog.vue'
-import { setUrlParam } from '@/utils/common/index'
-import { attrMatchOptions } from '@/components/const'
-import { toM2MJsonParams } from '@/utils/jms/index'
+import ValueFormatter from './ValueFormatter.vue'
+
+const AttrActionFormatter = {
+  name: 'AttrActionFormatter',
+  props: {
+    row: {
+      type: Object,
+      default: () => ({})
+    },
+    col: {
+      type: Object,
+      default: () => ({})
+    },
+    cellValue: {
+      type: [String, Number, Boolean, Object, Array],
+      default: null
+    },
+    index: {
+      type: Number,
+      default: 0
+    }
+  },
+  methods: {
+    trigger(handlerName) {
+      const handler = this.col?.formatterArgs?.[handlerName]
+      if (typeof handler !== 'function') {
+        return
+      }
+      const next = handler({ row: this.row, col: this.col, cellValue: this.cellValue, index: this.index })
+      if (typeof next === 'function') {
+        next()
+      }
+    }
+  },
+  render() {
+    const ElButton = resolveComponent('el-button')
+    return h('div', { class: 'input-button' }, [
+      h(ElButton, {
+        icon: 'el-icon-edit',
+        size: 'small',
+        style: { flexShrink: 0 },
+        type: 'primary',
+        onClick: () => this.trigger('onEdit')
+      }),
+      h(ElButton, {
+        icon: 'el-icon-minus',
+        size: 'small',
+        style: { flexShrink: 0 },
+        type: 'danger',
+        onClick: () => this.trigger('onDelete')
+      })
+    ])
+  }
+}
 
 export default {
   name: 'JSONManyToManySelect',
-  components: { AttrFormDialog, DataTable, Select2, AttrMatchResultDialog },
+  components: { AttrActionFormatter, AttrFormDialog, DataTable, Select2, AttrMatchResultDialog },
   props: {
     value: {
       type: Object,
@@ -122,25 +176,10 @@ export default {
             label: this.$t('Action'),
             align: 'center',
             width: '120px',
-            formatter: (row, col, cellValue, index) => {
-              return (
-                <div class='input-button'>
-                  <el-button
-                    icon='el-icon-edit'
-                    size='small'
-                    style={{ flexShrink: 0 }}
-                    type='primary'
-                    onClick={this.handleAttrEdit({ row, col, cellValue, index })}
-                  />
-                  <el-button
-                    icon='el-icon-minus'
-                    size='small'
-                    style={{ flexShrink: 0 }}
-                    type='danger'
-                    onClick={this.handleAttrDelete({ row, col, cellValue, index })}
-                  />
-                </div>
-              )
+            formatter: AttrActionFormatter,
+            formatterArgs: {
+              onEdit: this.handleAttrEdit,
+              onDelete: this.handleAttrDelete
             }
           }
         ],

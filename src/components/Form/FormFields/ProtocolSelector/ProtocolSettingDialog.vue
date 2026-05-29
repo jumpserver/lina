@@ -29,9 +29,9 @@
   </Dialog>
 </template>
 
-<script lang="jsx">
-import { AutoDataForm, Dialog } from '@/components'
-import JsonEditor from '@/components/Form/FormFields/JsonEditor.vue'
+<script>
+import { AutoDataForm, Dialog } from '@/components';
+import JsonEditor from '@/components/Form/FormFields/JsonEditor.vue';
 
 export default {
   name: 'ProtocolSetting',

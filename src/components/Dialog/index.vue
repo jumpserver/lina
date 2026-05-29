@@ -9,26 +9,27 @@
       :width="iWidth"
       class="dialog"
       v-bind="$attrs"
-      v-on="$listeners"
     >
       <div v-loading="disabledStatus">
         <slot />
       </div>
 
-      <div v-if="showButtons" slot="footer" class="dialog-footer">
-        <slot name="footer">
-          <el-button v-if="showCancel && showButtons" size="small" @click="onCancel">{{ cancelTitle }}</el-button>
-          <el-button
-            v-if="showConfirm && showButtons"
-            :disabled="disabledStatus"
-            size="small"
-            type="primary"
-            @click="onConfirm"
-          >
-            {{ confirmTitle }}
-          </el-button>
-        </slot>
-      </div>
+      <template v-if="showButtons" #footer>
+        <div class="dialog-footer">
+          <slot name="footer">
+            <el-button v-if="showCancel && showButtons" size="small" @click="onCancel">{{ cancelTitle }}</el-button>
+            <el-button
+              v-if="showConfirm && showButtons"
+              :disabled="disabledStatus"
+              size="small"
+              type="primary"
+              @click="onConfirm"
+            >
+              {{ confirmTitle }}
+            </el-button>
+          </slot>
+        </div>
+      </template>
     </el-dialog>
   </transition>
 </template>
@@ -36,6 +37,8 @@
 <script>
 export default {
   name: 'DialogComponent',
+  inheritAttrs: false,
+  emits: ['cancel', 'confirm'],
   props: {
     title: {
       type: String,

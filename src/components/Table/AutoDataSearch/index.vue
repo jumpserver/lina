@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import TagSearch from '@/components/Table/TagSearch/index.vue'
-import i18n from '@/i18n/i18n'
+import TagSearch from '@/components/Table/TagSearch/index.vue';
+import i18n from '@/i18n/i18n';
 
 export default {
   name: 'AutoDataSearch',
@@ -142,7 +142,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .search-btn {
   margin-top: 1px;
   cursor: pointer;

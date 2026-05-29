@@ -8,12 +8,12 @@
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
-import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
 import Select2 from '@/components/Form/FormFields/Select2'
-import { getDaysFuture } from '@/utils/common/time'
-import { mapGetters, mapState } from 'vuex'
+import { GenericCreateUpdatePage } from '@/layout/components'
 import store from '@/store'
+import { getDaysFuture } from '@/utils/common/time'
+import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   components: {
@@ -176,6 +176,6 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 
 </style>

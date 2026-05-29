@@ -18,11 +18,11 @@
 </template>
 
 <script>
-import Dialog from '@/components/Dialog/index.vue'
-import vModelMixin from '@/utils/vue/vModelMixin'
+import Dialog from '@/components/Dialog/index.vue';
+import vModelMixin from '@/utils/vue/vModelMixin';
 export default {
-  mixins: [vModelMixin('visible')],
   name: 'ReportDialog',
+  mixins: [vModelMixin('visible')],
   components: {
     Dialog
   },

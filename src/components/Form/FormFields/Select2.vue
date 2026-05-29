@@ -4,9 +4,9 @@
   </div>
 </template>
 
-<script lang="jsx">
-import { createSourceIdCache } from '@/api/common'
-import _ from 'lodash'
+<script>
+import { createSourceIdCache } from '@/api/common';
+import _ from 'lodash';
 
 export default {
   name: 'Select2',

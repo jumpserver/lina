@@ -24,14 +24,14 @@
 
 <script lang="jsx">
 import { createSourceIdCache } from '@/api/common'
-import { GenericListPage, GenericUpdateFormDialog } from '@/layout/components'
-import { mapGetters } from 'vuex'
-import { getDayFuture } from '@/utils/common/time'
-import InviteUsersDialog from './components/InviteUsersDialog'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
-import store from '@/store'
-import { MFASystemSetting } from '../const'
 import DetailFormatter from '@/components/Table/TableFormatters/DetailFormatter.vue'
+import { GenericListPage, GenericUpdateFormDialog } from '@/layout/components'
+import store from '@/store'
+import { getDayFuture } from '@/utils/common/time'
+import { mapGetters } from 'vuex'
+import { MFASystemSetting } from '../const'
+import InviteUsersDialog from './components/InviteUsersDialog'
 
 export default {
   components: {
@@ -460,7 +460,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .asset-select-dialog :deep(.transition-box:first-child) {
   background-color: #f3f3f3;
 }

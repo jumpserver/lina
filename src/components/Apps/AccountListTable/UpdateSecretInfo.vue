@@ -20,19 +20,19 @@
 </template>
 
 <script>
-import Dialog from '@/components/Dialog/index.vue'
 import { accountFieldsMeta } from '@/components/Apps/AccountCreateUpdateForm/const'
-import { encryptPassword } from '@/utils/secure'
+import Dialog from '@/components/Dialog/index.vue'
 import AutoDataForm from '@/components/Form/AutoDataForm/index.vue'
+import { encryptPassword } from '@/utils/secure'
 import vModelMixin from '@/utils/vue/vModelMixin'
 
 export default {
   name: 'UpdateSecretInfo',
-  mixins: [vModelMixin('visible')],
   components: {
     AutoDataForm,
     Dialog
   },
+  mixins: [vModelMixin('visible')],
   props: {
     account: {
       type: Object,

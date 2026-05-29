@@ -18,8 +18,8 @@
   </el-tag>
 </template>
 
-<script lang="jsx">
-import { isDarkness } from '@/utils/common/color'
+<script>
+import { isDarkness } from '@/utils/common/color';
 
 export default {
   name: 'Label',

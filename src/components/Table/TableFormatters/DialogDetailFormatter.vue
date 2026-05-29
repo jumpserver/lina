@@ -15,10 +15,10 @@
   </div>
 </template>
 
-<script lang="jsx">
-import DetailCard from '@/components/Cards/DetailCard/index.vue'
-import Dialog from '@/components/Dialog/index.vue'
-import BaseFormatter from './base.vue'
+<script>
+import DetailCard from '@/components/Cards/DetailCard/index.vue';
+import Dialog from '@/components/Dialog/index.vue';
+import BaseFormatter from './base.vue';
 
 export default {
   name: 'DialogDetailFormatter',

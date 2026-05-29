@@ -20,10 +20,10 @@
   </div>
 </template>
 
-<script lang="jsx">
-import Sortable from 'sortablejs'
+<script>
 import DataTable from '@/components/Table/DataTable/index.vue'
 import { newURL, ObjectLocalStorage, replaceAllUUID } from '@/utils/common/index'
+import Sortable from 'sortablejs'
 import ColumnSettingPopover from './components/ColumnSettingPopover.vue'
 import { TableColumnsGenerator } from './utils'
 

@@ -27,12 +27,12 @@
   </div>
 </template>
 
-<script lang="jsx">
+<script>
 import IBox from '@/components/Common/IBox/index.vue'
 import DiffDetail from '@/components/Dialog/DiffDetail.vue'
-import { openTaskPage } from '@/utils/jms/index'
-import { toSafeLocalDateStr } from '@/utils/common/time'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import { toSafeLocalDateStr } from '@/utils/common/time'
+import { openTaskPage } from '@/utils/jms/index'
 
 export default {
   name: 'ResourceActivity',

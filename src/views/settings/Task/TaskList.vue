@@ -3,9 +3,9 @@
 </template>
 
 <script lang="jsx">
-import { ChoicesFormatter, DetailFormatter, SwitchFormatter } from '@/components/Table/TableFormatters'
-import { BASE_URL } from '@/utils/common/index'
-import { DrawerListTable as ListTable } from '@/components'
+import { DrawerListTable as ListTable } from '@/components';
+import { ChoicesFormatter, DetailFormatter, SwitchFormatter } from '@/components/Table/TableFormatters';
+import { BASE_URL } from '@/utils/common/index';
 
 export default {
   name: 'TaskList',
@@ -151,6 +151,6 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 
 </style>

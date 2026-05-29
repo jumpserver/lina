@@ -4,7 +4,7 @@
   </el-link>
 </template>
 
-<script lang="jsx">
+<script>
 export default {
   name: 'Link',
   props: {

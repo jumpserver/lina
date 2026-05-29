@@ -477,18 +477,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/variables";
+@use "@/styles/variables" as *;
 
 .summary-item {
   padding: 0 10px
 }
 
 .summary-success {
-  color: $--color-primary;
+  color: $color-primary;
 }
 
 .summary-failed {
-  color: $--color-danger;
+  color: $color-danger;
 }
 
 .importTable :deep(.cell) {

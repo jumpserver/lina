@@ -15,7 +15,7 @@
   </div>
 </template>
 
-<script lang="jsx">
+<script>
 export default {
   name: 'LoginList',
   props: {

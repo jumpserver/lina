@@ -18,11 +18,11 @@
   </Dialog>
 </template>
 <script>
-import Dialog from '@/components/Dialog'
 import { Select2 } from '@/components'
+import Dialog from '@/components/Dialog'
+import rules from '@/components/Form/DataForm/rules'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { mapGetters } from 'vuex'
-import rules from '@/components/Form/DataForm/rules'
 
 export default {
   components: {
@@ -92,7 +92,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .dialog :deep(.el-dialog__footer) {
   padding: 0;
 }

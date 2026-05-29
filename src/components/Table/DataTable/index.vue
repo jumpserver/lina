@@ -2,7 +2,7 @@
   <ElDatableTable
     ref="table"
     class="el-data-table"
-    v-bind="tableConfig"
+    v-bind="mergedTableConfig"
     @size-change="handleSizeChange"
     @update="onUpdate"
     v-on="iListeners"
@@ -10,12 +10,14 @@
 </template>
 
 <script>
-import { newURL, ObjectLocalStorage } from '@/utils/common/index'
-import { default as ElDatableTable } from './compenents/el-data-table'
-import { mapGetters } from 'vuex'
+import { newURL, ObjectLocalStorage } from '@/utils/common/index';
+import { omitVueListeners, pickVueListeners } from '@/utils/vue';
+import { mapGetters } from 'vuex';
+import { default as ElDatableTable } from './compenents/el-data-table';
 
 export default {
   name: 'DataTable',
+  inheritAttrs: false,
   components: {
     ElDatableTable
   },
@@ -104,9 +106,11 @@ export default {
     }
   },
   computed: {
+    mergedTableConfig() {
+      return Object.assign({}, this.tableConfig, omitVueListeners(this.$attrs))
+    },
     iListeners() {
-      const defaultListeners = {}
-      return Object.assign(defaultListeners, this.$listeners, this.tableConfig?.listeners)
+      return Object.assign({}, pickVueListeners(this.$attrs), this.tableConfig?.listeners)
     },
     dataTable() {
       return this.$refs.table

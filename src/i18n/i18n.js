@@ -1,10 +1,10 @@
 // i18n.js
-import { createI18n } from 'vue-i18n'
-import messages from './langs'
-import date from './date'
-import axios from 'axios'
-import { getLangCode } from './utils'
 import store from '@/store'
+import axios from 'axios'
+import { createI18n } from 'vue-i18n'
+import date from './date'
+import messages from './langs'
+import { getLangCode } from './utils'
 
 const lang = getLangCode()
 
@@ -19,27 +19,38 @@ const i18n = createI18n({
   messages
 })
 
-// Provide Vue2-style helpers for legacy imports
-i18n.t = i18n.global.t.bind(i18n.global)
-i18n.tc = i18n.global.tc.bind(i18n.global)
+function getCurrentLocale() {
+  const locale = i18n.global.locale
+  return typeof locale === 'string' ? locale : locale?.value
+}
 
-// 自定义 tc 方法, 默认添加 s
-const originalTc = i18n.global.tc.bind(i18n.global)
+function compatTc(key, choice, ...args) {
+  const hasNumericChoice = typeof choice === 'number'
+  const locale = getCurrentLocale()
 
-i18n.global.tc = function(key, choice, ...args) {
-  // 获取原始翻译结果
-  const translation = i18n.global.t(key, choice).toString()
+  if (!hasNumericChoice) {
+    if (typeof choice === 'undefined' && args.length === 0) {
+      return i18n.global.t(key)
+    }
+    return i18n.global.t(key, choice, ...args)
+  }
 
-  // 仅处理英语且翻译不包含复数形式的情况
-  if (i18n.global.locale === 'en') {
+  const translation = i18n.global.t(key, choice, ...args).toString()
+
+  if (locale === 'en') {
     const parts = translation.split('|')
     if (parts.length === 1) {
-      // 自动添加 's'（当数量不等于1时）
       return choice > 1 ? `${translation}s` : translation
     }
   }
-  return originalTc(key, choice, ...args)
+
+  return translation
 }
+
+// Provide Vue2-style helpers for legacy imports
+i18n.t = i18n.global.t.bind(i18n.global)
+i18n.global.tc = compatTc
+i18n.tc = compatTc.bind(i18n.global)
 
 export async function fetchTranslationsFromAPI() {
   try {
@@ -56,7 +67,5 @@ export async function fetchTranslationsFromAPI() {
     await store.dispatch('app/setI18nLoaded', true)
   }
 }
-
-i18n.tc = i18n.global.tc.bind(i18n.global)
 
 export default i18n

@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import AutoDetailCard from '@/components/Cards/DetailCard/auto'
-import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto';
+import TwoCol from '@/layout/components/Page/TwoColPage.vue';
 
 export default {
   name: 'Detail',
@@ -66,5 +66,5 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
 </style>

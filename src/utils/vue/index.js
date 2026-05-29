@@ -25,6 +25,48 @@ export function resolveRoute(route, router) {
   }
 }
 
+const vueListenerAttrRE = /^on[^a-z]/
+
+export function isVueListenerAttrKey(key) {
+  return vueListenerAttrRE.test(key)
+}
+
+export function toVueListenerName(attrKey) {
+  if (!isVueListenerAttrKey(attrKey)) {
+    return ''
+  }
+
+  const rawName = attrKey.slice(2)
+  const separatorIndex = rawName.indexOf(':')
+
+  if (separatorIndex === -1) {
+    return rawName.replace(/([A-Z])/g, '-$1').replace(/^-/, '').toLowerCase()
+  }
+
+  const first = rawName.slice(0, separatorIndex)
+  const rest = rawName.slice(separatorIndex + 1)
+
+  return `${first.replace(/([A-Z])/g, '-$1').replace(/^-/, '').toLowerCase()}:${rest}`
+}
+
+export function pickVueListeners(attrs = {}) {
+  return Object.entries(attrs).reduce((listeners, [key, value]) => {
+    if (isVueListenerAttrKey(key)) {
+      listeners[toVueListenerName(key)] = value
+    }
+    return listeners
+  }, {})
+}
+
+export function omitVueListeners(attrs = {}) {
+  return Object.entries(attrs).reduce((forwardedAttrs, [key, value]) => {
+    if (!isVueListenerAttrKey(key)) {
+      forwardedAttrs[key] = value
+    }
+    return forwardedAttrs
+  }, {})
+}
+
 export function getComponentFromRoute(route, router) {
   const r = resolveRoute(route, router)
   if (!r) {

@@ -1,8 +1,9 @@
-@import './mixin.scss';
+@use './mixin';
+@use './variables' as *;
 //@import './transition.scss';
-@import './sidebar.scss';
-@import './menu.scss';
-@import './fonts.scss';
+@use './sidebar';
+@use './menu';
+@use './fonts';
 @import './fonts/font-awesome.min.css';
 
 ::-webkit-scrollbar {
@@ -100,7 +101,7 @@ small {
 }
 
 .text-navy {
-  color: $--color-primary;
+  color: $color-primary;
 }
 
 b,
