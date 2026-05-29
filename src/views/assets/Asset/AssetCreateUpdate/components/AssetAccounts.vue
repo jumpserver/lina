@@ -85,10 +85,10 @@
   </div>
 </template>
 
-<script lang="jsx">
-import AddAccountDialog from './AddAccountDialog'
-import Drawer from '@/components/Drawer/index.vue'
-import AccountTemplateDialog from './AccountTemplateDialog'
+<script>
+import Drawer from '@/components/Drawer/index.vue';
+import AccountTemplateDialog from './AccountTemplateDialog';
+import AddAccountDialog from './AddAccountDialog';
 
 export default {
   name: 'AssetAccounts',

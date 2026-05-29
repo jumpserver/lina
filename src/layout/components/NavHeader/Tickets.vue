@@ -8,7 +8,7 @@
   </div>
 </template>
 
-<script lang="jsx">
+<script>
 import { getTicketOpenCount } from '@/api/ticket'
 import { mapGetters } from 'vuex'
 

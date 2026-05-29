@@ -4,12 +4,12 @@
   </div>
 </template>
 
-<script lang="jsx">
-import GenericListPage from '@/layout/components/GenericListPage'
-import { ActionsFormatter } from '@/components/Table/TableFormatters'
-import { openTaskPage } from '@/utils/jms/index'
-import { stopJob } from '@/api/ops'
-
+<script>
+import { createVNode as _createVNode } from "vue";
+import GenericListPage from '@/layout/components/GenericListPage';
+import { ActionsFormatter } from '@/components/Table/TableFormatters';
+import { openTaskPage } from '@/utils/jms/index';
+import { stopJob } from '@/api/ops';
 export default {
   components: {
     GenericListPage
@@ -20,16 +20,9 @@ export default {
         url: '/api/v1/audits/job-logs/',
         columnsShow: {
           min: ['material', 'is_success'],
-          default: [
-            'creator_name', 'material', 'job_type', 'is_finished',
-            'is_success', 'time_cost', 'date_start', 'actions'
-          ]
+          default: ['creator_name', 'material', 'job_type', 'is_finished', 'is_success', 'time_cost', 'date_start', 'actions']
         },
-        columns: [
-          'creator_name', 'material', 'job_type', 'is_finished',
-          'is_success', 'time_cost', 'date_start',
-          'date_finished', 'actions'
-        ],
+        columns: ['creator_name', 'material', 'job_type', 'is_finished', 'is_success', 'time_cost', 'date_start', 'date_finished', 'actions'],
         columnsMeta: {
           actions: {
             formatter: ActionsFormatter,
@@ -37,58 +30,73 @@ export default {
               hasUpdate: false,
               hasDelete: false,
               hasClone: false,
-              extraActions: [
-                {
-                  title: this.$t('View'),
-                  name: 'logging',
-                  can: true,
-                  type: 'primary',
-                  callback: ({ row }) => {
-                    openTaskPage(row.task_id)
-                  }
-                },
-                {
-                  title: this.$t('Stop'),
-                  name: 'stop',
-                  can: ({ row }) => {
-                    return !row.is_finished
-                  },
-                  type: 'danger',
-                  callback: ({ row }) => {
-                    stopJob({ task_id: row.task_id }).then(() => {
-                      this.$refs.ListPage.reloadTable()
-                      this.$message.success(this.$t('StopJobMsg'))
-                    })
-                  }
+              extraActions: [{
+                title: this.$t('View'),
+                name: 'logging',
+                can: true,
+                type: 'primary',
+                callback: ({
+                  row
+                }) => {
+                  openTaskPage(row.task_id);
                 }
-              ]
+              }, {
+                title: this.$t('Stop'),
+                name: 'stop',
+                can: ({
+                  row
+                }) => {
+                  return !row.is_finished;
+                },
+                type: 'danger',
+                callback: ({
+                  row
+                }) => {
+                  stopJob({
+                    task_id: row.task_id
+                  }).then(() => {
+                    this.$refs.ListPage.reloadTable();
+                    this.$message.success(this.$t('StopJobMsg'));
+                  });
+                }
+              }]
             }
           },
           time_cost: {
-            formatter: function(row) {
+            formatter: function (row) {
               if (row.time_cost) {
-                return row.time_cost.toFixed(2) + 's'
+                return row.time_cost.toFixed(2) + 's';
               }
-              return '-'
+              return '-';
             }
           },
           is_finished: {
-            formatter: (row) => {
+            formatter: row => {
               if (row.is_finished) {
-                return <i class='fa fa-check text-primary'/>
+                return _createVNode("i", {
+                  "class": "fa fa-check text-primary"
+                }, null);
               }
-              return <i class='fa fa-times text-danger'/>
+              return _createVNode("i", {
+                "class": "fa fa-times text-danger"
+              }, null);
             }
           },
           is_success: {
-            formatter: (row) => {
+            formatter: row => {
               if (!row.is_finished) {
-                return <i class='fa  fa fa-spinner fa-spin'/>
+                return _createVNode("i", {
+                  "class": "fa  fa fa-spinner fa-spin"
+                }, null);
               }
               if (row.is_success) {
-                return <i class='fa fa-check text-primary'/>
+                return _createVNode("i", {
+                  "class": "fa fa-check text-primary"
+                }, null);
               }
-              return <i class='fa fa-times text-danger'/>
+              return _createVNode("i", {
+                "class": "fa fa-times text-danger"
+              }, null);
             }
           }
         }
@@ -98,17 +106,15 @@ export default {
         hasDatePicker: true,
         hasImport: false,
         searchConfig: {
-          options: [
-            {
-              label: this.$t('User'),
-              value: 'creator__name'
-            }
-          ]
+          options: [{
+            label: this.$t('User'),
+            value: 'creator__name'
+          }]
         }
       }
-    }
+    };
   }
-}
+};
 </script>
 
 <style>

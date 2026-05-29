@@ -13,12 +13,12 @@
   </TwoCol>
 </template>
 
-<script lang="jsx">
-import { QuickActions } from '@/components'
-import RelationCard from '@/components/Cards/RelationCard'
-import AutoDetailCard from '@/components/Cards/DetailCard/auto'
-import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-
+<script>
+import { resolveComponent as _resolveComponent, createVNode as _createVNode, createTextVNode as _createTextVNode } from "vue";
+import { QuickActions } from '@/components';
+import RelationCard from '@/components/Cards/RelationCard';
+import AutoDetailCard from '@/components/Cards/DetailCard/auto';
+import TwoCol from '@/layout/components/Page/TwoColPage.vue';
 export default {
   name: 'UserInfo',
   components: {
@@ -34,201 +34,200 @@ export default {
     }
   },
   data() {
-    const vm = this
+    const vm = this;
     return {
-      quickActions: [
-        {
-          title: this.$t('Active'),
-          type: 'switch',
-          attrs: {
-            model: this.object.is_active,
-            disabled: !vm.$hasPerm('users.change_user')
-          },
-          callbacks: {
-            change: function(v, item) {
-              const url = `/api/v1/users/users/${vm.object.id}/`
-              const data = { is_active: v }
-              vm.$axios.patch(url, data).catch(() => {
-                item.attrs.model = !v
-              }).then(res => {
-                vm.$message.success(vm.$t('UpdateSuccessMsg'))
-              }).catch(err => {
-                vm.$message.error(vm.$t('UpdateErrorMsg' + ' ' + err))
-              })
-            }
-          }
+      quickActions: [{
+        title: this.$t('Active'),
+        type: 'switch',
+        attrs: {
+          model: this.object.is_active,
+          disabled: !vm.$hasPerm('users.change_user')
         },
-        {
-          title: this.$t('ResetPassword'),
-          attrs: {
-            type: 'primary',
-            disabled: this.object.source.value !== 'local' || !vm.$hasPerm('users.change_user'),
-            label: this.$t('Send')
-          },
-          callbacks: {
-            click: function() {
-              const warnMsg = vm.$t('ResetPasswordWarningMsg')
-              const warnTitle = vm.$t('Info')
-              const url = `/api/v1/users/users/${vm.object.id}/password/reset/`
-              const successMsg = vm.$t('ResetPasswordSuccessMsg')
-              vm.$confirm(warnMsg, warnTitle, {
-                type: 'warning',
-                confirmButtonClass: 'el-button--warning',
-                showCancelButton: true,
-                beforeClose: async (action, instance, done) => {
-                  if (action !== 'confirm') return done()
-                  instance.confirmButtonLoading = true
-                  try {
-                    await vm.$axios.patch(url, {})
-                    done()
-                    vm.$message.success(successMsg)
-                  } finally {
-                    instance.confirmButtonLoading = false
-                  }
-                }
-              })
-            }
-          }
-        },
-        {
-          title: this.$t('ResetSSHKey'),
-          attrs: {
-            type: 'primary',
-            disabled: !this.$store.state.users.profile.can_public_key_auth || !vm.$hasPerm('users.change_user'),
-            label: this.$t('Send')
-          },
-          callbacks: {
-            click: function() {
-              const warnMsg = vm.$t('ResetSSHKeyWarningMsg')
-              const warnTitle = vm.$t('Info')
-              const url = `/api/v1/users/users/${vm.object.id}/pubkey/reset/`
-              const successMsg = vm.$t('ResetSSHKeySuccessMsg')
-              vm.$confirm(warnMsg, warnTitle, {
-                type: 'warning',
-                confirmButtonClass: 'el-button--warning',
-                showCancelButton: true,
-                beforeClose: async (action, instance, done) => {
-                  if (action !== 'confirm') return done()
-                  instance.confirmButtonLoading = true
-                  try {
-                    await vm.$axios.patch(url, {})
-                    done()
-                    vm.$message.success(successMsg)
-                  } finally {
-                    instance.confirmButtonLoading = false
-                  }
-                }
-              })
-            }
-          }
-        },
-        {
-          title: this.$t('ResetMFA'),
-          attrs: {
-            type: 'primary',
-            disabled: !vm.$hasPerm('users.change_user'),
-            label: this.$t('Reset')
-          },
-          callbacks: {
-            click: function() {
-              const warnMsg = vm.$t('ResetMFAWarningMsg')
-              const warnTitle = vm.$t('Info')
-              const url = `/api/v1/users/users/${vm.object.id}/mfa/reset/`
-              const successMsg = vm.$t('ResetMFAdSuccessMsg')
-              vm.$confirm(warnMsg, warnTitle, {
-                type: 'warning',
-                confirmButtonClass: 'el-button--warning',
-                showCancelButton: true,
-                beforeClose: async (action, instance, done) => {
-                  if (action !== 'confirm') return done()
-                  instance.confirmButtonLoading = true
-                  try {
-                    await vm.$axios.get(url)
-                    done()
-                    vm.$message.success(successMsg)
-                  } finally {
-                    instance.confirmButtonLoading = false
-                  }
-                }
-              })
-            }
-          }
-        },
-        {
-          title: this.$t('UnblockUser'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('Unblock'),
-            disabled: !this.object.login_blocked || !vm.$hasPerm('users.change_user')
-          },
-          callbacks: {
-            click: function(v, item) {
-              const url = `/api/v1/users/users/${vm.object.id}/unblock/`
-              const unblockSuccessMsg = vm.$t('UnblockSuccessMsg')
-              vm.$axios.patch(url).then(() => {
-                item.attrs.disabled = !item.attrs.disabled
-                vm.$message.success(unblockSuccessMsg)
-              })
-            }
+        callbacks: {
+          change: function (v, item) {
+            const url = `/api/v1/users/users/${vm.object.id}/`;
+            const data = {
+              is_active: v
+            };
+            vm.$axios.patch(url, data).catch(() => {
+              item.attrs.model = !v;
+            }).then(res => {
+              vm.$message.success(vm.$t('UpdateSuccessMsg'));
+            }).catch(err => {
+              vm.$message.error(vm.$t('UpdateErrorMsg' + ' ' + err));
+            });
           }
         }
-      ],
+      }, {
+        title: this.$t('ResetPassword'),
+        attrs: {
+          type: 'primary',
+          disabled: this.object.source.value !== 'local' || !vm.$hasPerm('users.change_user'),
+          label: this.$t('Send')
+        },
+        callbacks: {
+          click: function () {
+            const warnMsg = vm.$t('ResetPasswordWarningMsg');
+            const warnTitle = vm.$t('Info');
+            const url = `/api/v1/users/users/${vm.object.id}/password/reset/`;
+            const successMsg = vm.$t('ResetPasswordSuccessMsg');
+            vm.$confirm(warnMsg, warnTitle, {
+              type: 'warning',
+              confirmButtonClass: 'el-button--warning',
+              showCancelButton: true,
+              beforeClose: async (action, instance, done) => {
+                if (action !== 'confirm') return done();
+                instance.confirmButtonLoading = true;
+                try {
+                  await vm.$axios.patch(url, {});
+                  done();
+                  vm.$message.success(successMsg);
+                } finally {
+                  instance.confirmButtonLoading = false;
+                }
+              }
+            });
+          }
+        }
+      }, {
+        title: this.$t('ResetSSHKey'),
+        attrs: {
+          type: 'primary',
+          disabled: !this.$store.state.users.profile.can_public_key_auth || !vm.$hasPerm('users.change_user'),
+          label: this.$t('Send')
+        },
+        callbacks: {
+          click: function () {
+            const warnMsg = vm.$t('ResetSSHKeyWarningMsg');
+            const warnTitle = vm.$t('Info');
+            const url = `/api/v1/users/users/${vm.object.id}/pubkey/reset/`;
+            const successMsg = vm.$t('ResetSSHKeySuccessMsg');
+            vm.$confirm(warnMsg, warnTitle, {
+              type: 'warning',
+              confirmButtonClass: 'el-button--warning',
+              showCancelButton: true,
+              beforeClose: async (action, instance, done) => {
+                if (action !== 'confirm') return done();
+                instance.confirmButtonLoading = true;
+                try {
+                  await vm.$axios.patch(url, {});
+                  done();
+                  vm.$message.success(successMsg);
+                } finally {
+                  instance.confirmButtonLoading = false;
+                }
+              }
+            });
+          }
+        }
+      }, {
+        title: this.$t('ResetMFA'),
+        attrs: {
+          type: 'primary',
+          disabled: !vm.$hasPerm('users.change_user'),
+          label: this.$t('Reset')
+        },
+        callbacks: {
+          click: function () {
+            const warnMsg = vm.$t('ResetMFAWarningMsg');
+            const warnTitle = vm.$t('Info');
+            const url = `/api/v1/users/users/${vm.object.id}/mfa/reset/`;
+            const successMsg = vm.$t('ResetMFAdSuccessMsg');
+            vm.$confirm(warnMsg, warnTitle, {
+              type: 'warning',
+              confirmButtonClass: 'el-button--warning',
+              showCancelButton: true,
+              beforeClose: async (action, instance, done) => {
+                if (action !== 'confirm') return done();
+                instance.confirmButtonLoading = true;
+                try {
+                  await vm.$axios.get(url);
+                  done();
+                  vm.$message.success(successMsg);
+                } finally {
+                  instance.confirmButtonLoading = false;
+                }
+              }
+            });
+          }
+        }
+      }, {
+        title: this.$t('UnblockUser'),
+        attrs: {
+          type: 'primary',
+          label: this.$t('Unblock'),
+          disabled: !this.object.login_blocked || !vm.$hasPerm('users.change_user')
+        },
+        callbacks: {
+          click: function (v, item) {
+            const url = `/api/v1/users/users/${vm.object.id}/unblock/`;
+            const unblockSuccessMsg = vm.$t('UnblockSuccessMsg');
+            vm.$axios.patch(url).then(() => {
+              item.attrs.disabled = !item.attrs.disabled;
+              vm.$message.success(unblockSuccessMsg);
+            });
+          }
+        }
+      }],
       url: `/api/v1/users/users/${this.object.id}`,
       detailFormatters: {
         phone: () => {
-          const phoneObj = vm.object.phone
-          return <div>{phoneObj?.code} {phoneObj?.phone}</div>
+          const phoneObj = vm.object.phone;
+          return _createVNode("div", null, [phoneObj?.code, _createTextVNode(" "), phoneObj?.phone]);
         },
         system_roles: () => {
-          const rolesDisplay = vm.object.system_roles || []
+          const rolesDisplay = vm.object.system_roles || [];
           const dom = rolesDisplay.map(item => {
-            return <el-tag size='small'>{item.display_name}</el-tag>
-          })
-          return <div>{dom}</div>
+            return _createVNode(_resolveComponent("el-tag"), {
+              "size": "small"
+            }, {
+              default: () => [item.display_name]
+            });
+          });
+          return _createVNode("div", null, [dom]);
         },
         org_roles: () => {
-          const rolesDisplay = vm.object.org_roles || []
+          const rolesDisplay = vm.object.org_roles || [];
           const dom = rolesDisplay.map(item => {
-            return <el-tag size='small'>{item.display_name}</el-tag>
-          })
-          return <div>{dom}</div>
+            return _createVNode(_resolveComponent("el-tag"), {
+              "size": "small"
+            }, {
+              default: () => [item.display_name]
+            });
+          });
+          return _createVNode("div", null, [dom]);
         }
       },
-      detailFields: [
-        {
-          key: '',
-          formatter: () => {
-            return <img src={this.object.avatar_url} alt='' height='50'/>
+      detailFields: [{
+        key: '',
+        formatter: () => {
+          return _createVNode("img", {
+            "src": this.object.avatar_url,
+            "alt": "",
+            "height": "50"
+          }, null);
+        }
+      }, 'id', 'name', 'username', 'email', 'phone', 'system_roles', 'org_roles', {
+        key: this.$t('OrgsAndRoles'),
+        has: this.$store.getters.currentOrgIsRoot,
+        formatter: (item, val) => {
+          if (!this.$store.getters.currentOrgIsRoot) {
+            return '';
           }
-        },
-        'id', 'name', 'username', 'email', 'phone',
-        'system_roles', 'org_roles',
-        {
-          key: this.$t('OrgsAndRoles'),
-          has: this.$store.getters.currentOrgIsRoot,
-          formatter: (item, val) => {
-            if (!this.$store.getters.currentOrgIsRoot) {
-              return ''
+          const doms = [];
+          const orgsRoles = this.object.orgs_roles;
+          const allowKeyMaxLength = 50;
+          Object.entries(orgsRoles).forEach(([key, value]) => {
+            let prettyKey = key;
+            if (key.length >= allowKeyMaxLength) {
+              prettyKey = key.substring(0, allowKeyMaxLength - 3) + '...';
             }
-            const doms = []
-            const orgsRoles = this.object.orgs_roles
-            const allowKeyMaxLength = 50
-            Object.entries(orgsRoles).forEach(([key, value]) => {
-              let prettyKey = key
-              if (key.length >= allowKeyMaxLength) {
-                prettyKey = key.substring(0, allowKeyMaxLength - 3) + '...'
-              }
-              const item = prettyKey + ': ' + value.join(', ')
-              doms.push([item, <br/>])
-            })
-            return <div>{doms}</div>
-          }
-        },
-        'wecom_id', 'dingtalk_id', 'feishu_id', 'mfa_level',
-        'source', 'labels',
-        'created_by', 'date_joined', 'date_expired',
-        'date_password_last_updated', 'last_login', 'comment'
-      ],
+            const item = prettyKey + ': ' + value.join(', ');
+            doms.push([item, _createVNode("br", null, null)]);
+          });
+          return _createVNode("div", null, [doms]);
+        }
+      }, 'wecom_id', 'dingtalk_id', 'feishu_id', 'mfa_level', 'source', 'labels', 'created_by', 'date_joined', 'date_expired', 'date_password_last_updated', 'last_login', 'comment'],
       relationConfig: {
         icon: 'fa-user',
         title: this.$t('UserGroups'),
@@ -236,35 +235,35 @@ export default {
           url: '/api/v1/users/groups/?fields_size=mini&order=name'
         },
         hasObjectsId: this.object.groups,
-        performDelete: (item) => {
-          const itemId = item.value
-          const objectId = this.object.id
-          const relationUrl = `/api/v1/users/users-groups-relations/?user=${objectId}&usergroup=${itemId}`
-          return this.$axios.delete(relationUrl)
+        performDelete: item => {
+          const itemId = item.value;
+          const objectId = this.object.id;
+          const relationUrl = `/api/v1/users/users-groups-relations/?user=${objectId}&usergroup=${itemId}`;
+          return this.$axios.delete(relationUrl);
         },
-        performAdd: (items) => {
-          const relationUrl = `/api/v1/users/users-groups-relations/`
-          const objectId = this.object.id
+        performAdd: items => {
+          const relationUrl = `/api/v1/users/users-groups-relations/`;
+          const objectId = this.object.id;
           const data = items.map(v => {
             return {
               usergroup: v.value,
               user: objectId
-            }
-          })
-          return this.$axios.post(relationUrl, data)
+            };
+          });
+          return this.$axios.post(relationUrl, data);
         }
       }
-    }
+    };
   },
   computed: {},
   watch: {
     group(iNew, iOld) {
-      this.$log.debug('Group has changed')
-      this.relationConfig.hasObjectsId = iNew.users
+      this.$log.debug('Group has changed');
+      this.relationConfig.hasObjectsId = iNew.users;
     }
   },
   methods: {}
-}
+};
 </script>
 
 <style lang="scss" scoped>

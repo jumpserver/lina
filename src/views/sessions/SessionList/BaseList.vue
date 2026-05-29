@@ -6,11 +6,11 @@
   />
 </template>
 
-<script lang="jsx">
-import prettyBytes from 'pretty-bytes'
-import { DrawerListTable as ListTable } from '@/components'
-import { timeOffset } from '@/utils/common/time'
-import { ActionsFormatter, ChoicesFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+<script>
+import { DrawerListTable as ListTable } from '@/components';
+import { ActionsFormatter, ChoicesFormatter, DetailFormatter } from '@/components/Table/TableFormatters';
+import { timeOffset } from '@/utils/common/time';
+import prettyBytes from 'pretty-bytes';
 
 export default {
   name: 'BaseList',

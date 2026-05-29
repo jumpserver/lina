@@ -22,15 +22,20 @@
   </el-row>
 </template>
 
-<script lang="jsx">
-import Details from './Details'
-import Comments from './Comments'
-import Steps from './Steps'
-import Session from './Session'
-
+<script>
+import { createVNode as _createVNode, resolveComponent as _resolveComponent } from "vue";
+import Details from './Details';
+import Comments from './Comments';
+import Steps from './Steps';
+import Session from './Session';
 export default {
   name: 'GenericTicketDetail',
-  components: { Steps, Comments, Details, Session },
+  components: {
+    Steps,
+    Comments,
+    Details,
+    Session
+  },
   props: {
     object: {
       type: Object,
@@ -38,7 +43,7 @@ export default {
     },
     specialCardItems: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     detailCardItems: {
       type: Array,
@@ -46,7 +51,7 @@ export default {
     },
     assignedCardItems: {
       type: Array,
-      default: () => ([])
+      default: () => []
     }
   },
   data() {
@@ -58,50 +63,48 @@ export default {
         closed: 'info',
         reopen: 'warning'
       }
-    }
+    };
   },
   computed: {
     iDetailCardItems() {
       if (this.detailCardItems) {
-        return this.detailCardItems
+        return this.detailCardItems;
       }
-      const { object } = this
-      return [
-        {
-          key: this.$tc('Number'),
-          value: object['serial_num']
-        },
-        {
-          key: this.$tc('Status'),
-          value: object.state.value,
-          formatter: (item, val) => {
-            const tp = this.statusMap[val]
-            return <el-tag type={tp} size='small'>{this.object.state.label}</el-tag>
-          }
-        },
-        {
-          key: this.$tc('Type'),
-          value: object.type.label
-        },
-        {
-          key: this.$tc('User'),
-          value: object.rel_snapshot.applicant
-        },
-        {
-          key: this.$tc('OrgName'),
-          value: object.org_name
-        },
-        {
-          key: this.$tc('DateCreated'),
-          value: object.date_created
-        },
-        {
-          key: this.$tc('Comment'),
-          value: object.comment
+      const {
+        object
+      } = this;
+      return [{
+        key: this.$tc('Number'),
+        value: object['serial_num']
+      }, {
+        key: this.$tc('Status'),
+        value: object.state.value,
+        formatter: (item, val) => {
+          const tp = this.statusMap[val];
+          return _createVNode(_resolveComponent("el-tag"), {
+            "type": tp,
+            "size": "small"
+          }, {
+            default: () => [this.object.state.label]
+          });
         }
-      ]
+      }, {
+        key: this.$tc('Type'),
+        value: object.type.label
+      }, {
+        key: this.$tc('User'),
+        value: object.rel_snapshot.applicant
+      }, {
+        key: this.$tc('OrgName'),
+        value: object.org_name
+      }, {
+        key: this.$tc('DateCreated'),
+        value: object.date_created
+      }, {
+        key: this.$tc('Comment'),
+        value: object.comment
+      }];
     }
   }
-
-}
+};
 </script>

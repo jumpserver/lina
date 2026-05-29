@@ -4,20 +4,24 @@
       <router-link
         v-for="tag in visitedViews"
         :key="tag.path"
-        ref="tag"
-        :class="isActive(tag) ? 'active' : '' "
+        v-slot="{ navigate }"
         :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
-        class="tags-view-item"
-        tag="span"
-        @click.middle.native="!isAffix(tag)?closeSelectedTag(tag):''"
-        @contextmenu.prevent.native="openMenu(tag,$event)"
+        custom
       >
-        {{ tag.title }}
         <span
-          v-if="!isAffix(tag)"
-          class="el-icon-close"
-          @click.prevent.stop="closeSelectedTag(tag)"
-        />
+          :class="isActive(tag) ? 'active' : '' "
+          class="tags-view-item"
+          @click="navigate"
+          @click.middle="!isAffix(tag) ? closeSelectedTag(tag) : ''"
+          @contextmenu.prevent="openMenu(tag, $event)"
+        >
+          {{ tag.title }}
+          <span
+            v-if="!isAffix(tag)"
+            class="el-icon-close"
+            @click.prevent.stop="closeSelectedTag(tag)"
+          />
+        </span>
       </router-link>
     </scroll-pane>
     <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
@@ -120,13 +124,12 @@ export default {
       return false
     },
     moveToCurrentTag() {
-      const tags = this.$refs.tag
       this.$nextTick(() => {
-        for (const tag of tags) {
-          if (tag.to.path === this.$route.path) {
-            this.$refs.scrollPane.moveToTarget(tag)
+        for (const tag of this.visitedViews) {
+          if (tag.path === this.$route.path) {
+            this.$refs.scrollPane.moveToTarget()
             // when query is different then update
-            if (tag.to.fullPath !== this.$route.fullPath) {
+            if (tag.fullPath !== this.$route.fullPath) {
               this.$store.dispatch('tagsView/updateVisitedView', this.$route)
             }
             break

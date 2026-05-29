@@ -2,10 +2,10 @@
   <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
-<script lang="jsx">
-import { GenericListTable } from '@/layout/components'
-import { DetailFormatter } from '@/components/Table/TableFormatters'
-
+<script>
+import { createVNode as _createVNode } from "vue";
+import { GenericListTable } from '@/layout/components';
+import { DetailFormatter } from '@/components/Table/TableFormatters';
 export default {
   name: 'AccountPushRecord',
   components: {
@@ -22,9 +22,7 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/accounts/push-account-records/',
-        columns: [
-          'asset', 'account', 'date_finished', 'is_success', 'error'
-        ],
+        columns: ['asset', 'account', 'date_finished', 'is_success', 'error'],
         columnsMeta: {
           asset: {
             label: this.$t('Asset'),
@@ -32,17 +30,25 @@ export default {
             formatterArgs: {
               drawer: true,
               can: this.$hasPerm('assets.view_asset'),
-              getTitle({ row }) {
-                return row.asset.name
+              getTitle({
+                row
+              }) {
+                return row.asset.name;
               },
-              getDrawerTitle({ row }) {
-                return row.asset.name
+              getDrawerTitle({
+                row
+              }) {
+                return row.asset.name;
               },
-              getRoute({ row }) {
+              getRoute({
+                row
+              }) {
                 return {
                   name: 'AssetDetail',
-                  params: { id: row.asset.id }
-                }
+                  params: {
+                    id: row.asset.id
+                  }
+                };
               }
             }
           },
@@ -52,30 +58,44 @@ export default {
             formatterArgs: {
               drawer: true,
               can: this.$hasPerm('accounts.view_account'),
-              getTitle({ row }) {
-                return row.account.username
+              getTitle({
+                row
+              }) {
+                return row.account.username;
               },
-              getDrawerTitle({ row }) {
-                return row.account.username
+              getDrawerTitle({
+                row
+              }) {
+                return row.account.username;
               },
-              getRoute({ row }) {
+              getRoute({
+                row
+              }) {
                 return {
                   name: 'AssetAccountDetail',
-                  params: { id: row.account.id }
-                }
+                  params: {
+                    id: row.account.id
+                  }
+                };
               }
             }
           },
           is_success: {
             label: this.$t('Success'),
-            formatter: (row) => {
+            formatter: row => {
               if (row.status === 'pending') {
-                return <i class='fa  fa fa-spinner fa-spin'/>
+                return _createVNode("i", {
+                  "class": "fa  fa fa-spinner fa-spin"
+                }, null);
               }
               if (row.is_success) {
-                return <i class='fa fa-check text-primary'/>
+                return _createVNode("i", {
+                  "class": "fa fa-check text-primary"
+                }, null);
               }
-              return <i class='fa fa-times text-danger'/>
+              return _createVNode("i", {
+                "class": "fa fa-times text-danger"
+              }, null);
             }
           },
           actions: {
@@ -96,43 +116,34 @@ export default {
         searchConfig: {
           getUrlQuery: true,
           exclude: ['id', 'status', 'execution'],
-          options: [
-            {
-              label: this.$t('Asset'),
-              value: 'asset_name'
-            },
-            {
-              label: this.$t('Accounts'),
-              value: 'account_username'
-            },
-            {
-              value: 'status',
-              label: this.$t('Status'),
-              type: 'choice',
-              children: [
-                {
-                  default: true,
-                  value: 'success',
-                  label: this.$t('Success')
-                },
-                {
-                  value: 'failed',
-                  label: this.$t('Failed')
-                },
-                {
-                  value: 'pending',
-                  label: this.$t('Pending')
-                }
-              ]
-            },
-            {
-              label: this.$t('ExecutionID'),
-              value: 'execution_id'
-            }
-          ]
+          options: [{
+            label: this.$t('Asset'),
+            value: 'asset_name'
+          }, {
+            label: this.$t('Accounts'),
+            value: 'account_username'
+          }, {
+            value: 'status',
+            label: this.$t('Status'),
+            type: 'choice',
+            children: [{
+              default: true,
+              value: 'success',
+              label: this.$t('Success')
+            }, {
+              value: 'failed',
+              label: this.$t('Failed')
+            }, {
+              value: 'pending',
+              label: this.$t('Pending')
+            }]
+          }, {
+            label: this.$t('ExecutionID'),
+            value: 'execution_id'
+          }]
         }
       }
-    }
+    };
   }
-}
+};
 </script>

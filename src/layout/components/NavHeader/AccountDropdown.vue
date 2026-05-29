@@ -6,30 +6,31 @@
         {{ currentUser.name }}
         <i class="el-icon-arrow-down el-icon--right" />
       </span>
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item command="ProfileIndex">
-          <svg-icon class="icon" icon-class="attestation" />
-          {{ $t('YourProfile') }}
-        </el-dropdown-item>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item command="ProfileIndex">
+            <svg-icon class="icon" icon-class="attestation" />
+            {{ $t('YourProfile') }}
+          </el-dropdown-item>
 
-        <el-dropdown-item command="PasswordAndSSHKey">
-          <svg-icon class="icon" icon-class="personal" />
-          {{ $t('PasswordAndSSHKey') }}
-        </el-dropdown-item>
+          <el-dropdown-item command="PasswordAndSSHKey">
+            <svg-icon class="icon" icon-class="personal" />
+            {{ $t('PasswordAndSSHKey') }}
+          </el-dropdown-item>
 
-        <!--  Preference -->
-        <el-dropdown-item command="Preferences" divided>
-          <svg-icon class="icon" icon-class="preference" />
-          {{ $t('Preferences') }}
-        </el-dropdown-item>
+          <!--  Preference -->
+          <el-dropdown-item command="Preferences" divided>
+            <svg-icon class="icon" icon-class="preference" />
+            {{ $t('Preferences') }}
+          </el-dropdown-item>
 
-        <!-- logout -->
-        <el-dropdown-item command="logout" divided>
-          <svg-icon class="icon" icon-class="logout" />
-          {{ $t('Logout') }}
-        </el-dropdown-item>
-
-      </el-dropdown-menu>
+          <!-- logout -->
+          <el-dropdown-item command="logout" divided>
+            <svg-icon class="icon" icon-class="logout" />
+            {{ $t('Logout') }}
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
     </el-dropdown>
   </div>
 </template>

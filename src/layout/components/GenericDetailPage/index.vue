@@ -8,7 +8,7 @@
   >
     <template #headingRightSide>
       <span v-if="hasRightSide">
-        <ActionsGroup slot="headingRightSide" :actions="pageActions" class="header-buttons" />
+        <ActionsGroup :actions="pageActions" class="header-buttons" />
       </span>
     </template>
     <div v-if="!loading">

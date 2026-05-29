@@ -9,42 +9,40 @@
   />
 </template>
 
-<script lang="jsx">
-import { DetailFormatter } from '@/components/Table/TableFormatters'
-import { openTaskPage } from '@/utils/jms/index'
-import { GenericListTable } from '@/layout/components'
-import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
-
+<script>
+import { createVNode as _createVNode, createTextVNode as _createTextVNode } from "vue";
+import { DetailFormatter } from '@/components/Table/TableFormatters';
+import { openTaskPage } from '@/utils/jms/index';
+import { GenericListTable } from '@/layout/components';
+import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue';
 export default {
   name: 'AccountCheckTaskList',
   components: {
     GenericListTable
   },
   data() {
-    const vm = this
+    const vm = this;
     return {
       createDrawer: () => import('@/views/accounts/RiskDetect/AccountCheckCreateUpdate.vue'),
       detailDrawer: () => import('@/views/accounts/RiskDetect/AccountCheckDetail/index.vue'),
       tableConfig: {
         url: '/api/v1/accounts/check-account-automations/',
-        columns: [
-          'name', 'assets', 'nodes', 'is_periodic',
-          'periodic_display', 'is_active', 'actions'
-        ],
+        columns: ['name', 'assets', 'nodes', 'is_periodic', 'periodic_display', 'is_active', 'actions'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: [
-            'name', 'assets', 'nodes', 'periodic_display',
-            'executed_amount', 'is_active', 'actions'
-          ]
+          default: ['name', 'assets', 'nodes', 'periodic_display', 'executed_amount', 'is_active', 'actions']
         },
         columnsMeta: {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              getRoute: ({ row }) => ({
+              getRoute: ({
+                row
+              }) => ({
                 name: 'AccountCheckDetail',
-                params: { id: row.id }
+                params: {
+                  id: row.id
+                }
               })
             }
           },
@@ -65,17 +63,19 @@ export default {
             }
           },
           secret_strategy: {
-            formatter: function(row) {
-              return <span> {row.secret_strategy.label} </span>
+            formatter: function (row) {
+              return _createVNode("span", null, [_createTextVNode(" "), row.secret_strategy.label, _createTextVNode(" ")]);
             }
           },
           username: {
             showOverflowTooltip: true,
-            formatter: ({ username }) => {
+            formatter: ({
+              username
+            }) => {
               if (username === '@USER') {
-                return this.$t('DynamicUsername')
+                return this.$t('DynamicUsername');
               } else {
-                return username
+                return username;
               }
             }
           },
@@ -93,42 +93,43 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               can: vm.$hasPerm('accounts.view_pushaccountexecution'),
-              getRoute({ row }) {
+              getRoute({
+                row
+              }) {
                 return {
                   name: 'AccountPushList',
                   query: {
                     tab: 'AccountPushExecutionList',
                     automation_id: row.id
                   }
-                }
+                };
               }
             }
           },
           actions: {
             formatterArgs: {
               updateRoute: 'AccountCheckCreateUpdate',
-              extraActions: [
-                {
-                  title: vm.$t('Execute'),
-                  order: 1,
-                  type: 'primary',
-                  name: 'execute',
-                  can: ({ row }) => {
-                    return row.is_active && vm.$hasPerm('accounts.add_checkaccountexecution')
-                  },
-                  callback: function({ row }) {
-                    this.$axios.post(
-                      `/api/v1/accounts/check-account-executions/`,
-                      {
-                        automation: row.id,
-                        type: row.type.value
-                      }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
-                  }.bind(this)
-                }
-              ]
+              extraActions: [{
+                title: vm.$t('Execute'),
+                order: 1,
+                type: 'primary',
+                name: 'execute',
+                can: ({
+                  row
+                }) => {
+                  return row.is_active && vm.$hasPerm('accounts.add_checkaccountexecution');
+                },
+                callback: function ({
+                  row
+                }) {
+                  this.$axios.post(`/api/v1/accounts/check-account-executions/`, {
+                    automation: row.id,
+                    type: row.type.value
+                  }).then(res => {
+                    openTaskPage(res['task']);
+                  });
+                }.bind(this)
+              }]
             }
           }
         }
@@ -140,7 +141,7 @@ export default {
         createRoute: 'AccountCheckCreateUpdate',
         canCreate: vm.$hasPerm('accounts.add_checkaccountautomation') && !this.$store.getters.currentOrgIsRoot
       }
-    }
+    };
   }
-}
+};
 </script>

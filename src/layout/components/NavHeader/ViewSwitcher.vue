@@ -1,6 +1,6 @@
 <template>
   <el-tooltip
-    v-model="iShowTip"
+    v-model:visible="iShowTip"
     :content="tipText"
     :manual="true"
     :open-delay="500"
@@ -22,7 +22,7 @@
       >
         <span class="outline" />
         <Icon :icon="view.meta.icon" class="icons" />
-        <span slot="title" class="icons-title">{{ view.meta.title }}</span>
+        <span class="icons-title">{{ view.meta.title }}</span>
       </el-menu-item>
     </el-menu>
   </el-tooltip>

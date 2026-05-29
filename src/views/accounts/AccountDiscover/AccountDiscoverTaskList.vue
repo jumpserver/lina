@@ -8,18 +8,18 @@
   />
 </template>
 
-<script lang="jsx">
-import { GenericListTable } from '@/layout/components'
-import { DetailFormatter } from '@/components/Table/TableFormatters'
-import { openTaskPage } from '@/utils/jms/index'
-
+<script>
+import { createVNode as _createVNode, resolveComponent as _resolveComponent } from "vue";
+import { GenericListTable } from '@/layout/components';
+import { DetailFormatter } from '@/components/Table/TableFormatters';
+import { openTaskPage } from '@/utils/jms/index';
 export default {
   name: 'AccountDiscoverTaskList',
   components: {
     GenericListTable
   },
   data() {
-    const vm = this
+    const vm = this;
     return {
       createDrawer: () => import('@/views/accounts/AccountDiscover/AccountDiscoverTaskCreateUpdate.vue'),
       detailDrawer: () => import('@/views/accounts/AccountDiscover/TaskDetail/index.vue'),
@@ -34,31 +34,31 @@ export default {
           app: 'accounts',
           resource: 'gatheraccountsautomation'
         },
-        columns: [
-          'name', 'nodes', 'assets', 'is_periodic',
-          'periodic_display', 'executed_amount'
-        ],
+        columns: ['name', 'nodes', 'assets', 'is_periodic', 'periodic_display', 'executed_amount'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: [
-            'name', 'nodes', 'assets', 'is_periodic',
-            'periodic_display', 'executed_amount'
-          ]
+          default: ['name', 'nodes', 'assets', 'is_periodic', 'periodic_display', 'executed_amount']
         },
         columnsMeta: {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              getRoute: ({ row }) => ({
+              getRoute: ({
+                row
+              }) => ({
                 name: 'AccountDiscoverTaskDetail',
-                params: { id: row.id },
-                query: { type: 'pam' }
+                params: {
+                  id: row.id
+                },
+                query: {
+                  type: 'pam'
+                }
               })
             }
           },
           nodes: {
-            formatter: function(row, column, cellValue, index) {
-              return cellValue.map(v => v['name']).join(', ')
+            formatter: function (row, column, cellValue, index) {
+              return cellValue.map(v => v['name']).join(', ');
             }
           },
           is_periodic: {
@@ -69,38 +69,39 @@ export default {
           },
           periodic_display: {},
           executed_amount: {
-            formatter: (row) => {
-              const can = vm.$hasPerm('accounts.view_gatheraccountsexecution')
-              return <el-link onClick={ () => this.handleExecAmount(row) } disabled={ !can }>{ row.executed_amount }</el-link>
+            formatter: row => {
+              const can = vm.$hasPerm('accounts.view_gatheraccountsexecution');
+              return _createVNode(_resolveComponent("el-link"), {
+                "onClick": () => this.handleExecAmount(row),
+                "disabled": !can
+              }, {
+                default: () => [row.executed_amount]
+              });
             }
           },
           actions: {
             formatterArgs: {
               updateRoute: 'AccountDiscoverTaskUpdate',
               hasClone: false,
-              extraActions: [
-                {
-                  title: vm.$t('Execute'),
-                  name: 'execute',
-                  type: 'primary',
-                  order: 1,
-                  can: ({ row }) => {
-                    return this.$hasPerm('accounts.add_gatheraccountsexecution') && row.is_active
-                  },
-                  callback: function(data) {
-                    this.$axios.post(
-                      `/api/v1/accounts/gather-account-executions/`,
-                      {
-                        automation: data.row.id,
-                        type: data.row.type.value
-                      }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    }).catch(res => {
-                    })
-                  }
+              extraActions: [{
+                title: vm.$t('Execute'),
+                name: 'execute',
+                type: 'primary',
+                order: 1,
+                can: ({
+                  row
+                }) => {
+                  return this.$hasPerm('accounts.add_gatheraccountsexecution') && row.is_active;
+                },
+                callback: function (data) {
+                  this.$axios.post(`/api/v1/accounts/gather-account-executions/`, {
+                    automation: data.row.id,
+                    type: data.row.type.value
+                  }).then(res => {
+                    openTaskPage(res['task']);
+                  }).catch(res => {});
                 }
-              ]
+              }]
             }
           }
         }
@@ -115,7 +116,7 @@ export default {
           getUrlQuery: false
         }
       }
-    }
+    };
   },
   methods: {
     handleExecAmount(row) {
@@ -125,8 +126,8 @@ export default {
           tab: 'AccountDiscoverTaskExecutionList',
           automation_id: row.id
         }
-      })
+      });
     }
   }
-}
+};
 </script>

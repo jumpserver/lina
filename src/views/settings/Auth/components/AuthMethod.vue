@@ -31,7 +31,7 @@
   </el-col>
 </template>
 
-<script lang="jsx">
+<script>
 export default {
   props: {
     logo: {

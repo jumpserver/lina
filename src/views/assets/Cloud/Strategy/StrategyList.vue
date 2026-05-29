@@ -7,9 +7,9 @@
   />
 </template>
 
-<script lang="jsx">
-import { DrawerListTable } from '@/components'
-import { DetailFormatter } from '@/components/Table/TableFormatters'
+<script>
+import { DrawerListTable } from '@/components';
+import { DetailFormatter } from '@/components/Table/TableFormatters';
 
 export default {
   name: 'StrategyList',

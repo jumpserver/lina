@@ -13,9 +13,9 @@
   </div>
 </template>
 
-<script lang="jsx">
-import ImportTable from '@/components/Table/ListTable/TableAction/ImportTable'
-import _isequal from 'lodash/isEqual'
+<script>
+import ImportTable from '@/components/Table/ListTable/TableAction/ImportTable';
+import _isequal from 'lodash/isEqual';
 
 export default {
   name: 'AssetPanel',

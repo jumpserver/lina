@@ -6,7 +6,7 @@
   </el-row>
 </template>
 
-<script lang="jsx">
+<script>
 import DetailCard from '@/components/Cards/DetailCard/index.vue';
 
 export default {

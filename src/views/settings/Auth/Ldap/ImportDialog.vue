@@ -43,14 +43,14 @@
   </div>
 </template>
 
-<script lang="jsx">
-import store from '@/store'
-import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/jms/org'
-import ListTable from '@/components/Table/ListTable'
-import Dialog from '@/components/Dialog/index.vue'
-import Select2 from '@/components/Form/FormFields/Select2.vue'
-import getStatusColumnMeta from '@/components/Table/ListTable/TableAction/const'
-
+<script>
+import { createVNode as _createVNode, createTextVNode as _createTextVNode } from "vue";
+import store from '@/store';
+import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/jms/org';
+import ListTable from '@/components/Table/ListTable';
+import Dialog from '@/components/Dialog/index.vue';
+import Select2 from '@/components/Form/FormFields/Select2.vue';
+import getStatusColumnMeta from '@/components/Table/ListTable/TableAction/const';
 export default {
   name: 'ImportDialog',
   components: {
@@ -77,8 +77,10 @@ export default {
         hasExport: false,
         hasImport: false,
         hasUpdate: false,
-        handleRefreshClick: async ({ reloadTable }) => {
-          reloadTable()
+        handleRefreshClick: async ({
+          reloadTable
+        }) => {
+          reloadTable();
         }
       },
       tableConfig: {
@@ -96,8 +98,8 @@ export default {
           },
           groups: {
             label: this.$t('UserGroups'),
-            formatter: function(row) {
-              return <span> {row.groups.join(' | ')} </span>
+            formatter: function (row) {
+              return _createVNode("span", null, [_createTextVNode(" "), row.groups.join(' | '), _createTextVNode(" ")]);
             }
           },
           email: {
@@ -116,110 +118,118 @@ export default {
         multiple: true,
         ajax: {
           url: '/api/v1/orgs/orgs/',
-          transformOption: (item) => {
+          transformOption: item => {
             if (item.id !== SYSTEM_ORG_ID) {
-              return { label: item.name, value: item.id }
+              return {
+                label: item.name,
+                value: item.id
+              };
             }
           }
         },
         value: this.orgIds()
       }
-    }
+    };
   },
   computed: {
     showOrgSelect() {
-      return store.getters.hasValidLicense
+      return store.getters.hasValidLicense;
     }
   },
   methods: {
     orgIds() {
-      return [DEFAULT_ORG_ID]
+      return [DEFAULT_ORG_ID];
     },
     importUserClick() {
-      this.dialogLdapUserImportLoginStatus = true
-      const selectIds = []
+      this.dialogLdapUserImportLoginStatus = true;
+      const selectIds = [];
       this.$refs.listTable.selectedRows.forEach((item, index) => {
-        selectIds.push(item.id)
-      })
-      const org_ids = this.select2.value || []
+        selectIds.push(item.id);
+      });
+      const org_ids = this.select2.value || [];
       const data = {
         org_ids: org_ids,
         username_list: selectIds
-      }
+      };
       if (selectIds.length === 0) {
-        this.$message.error(this.$tc('UnselectedUser'))
-        this.dialogLdapUserImportLoginStatus = false
+        this.$message.error(this.$tc('UnselectedUser'));
+        this.dialogLdapUserImportLoginStatus = false;
       } else if (org_ids.length === 0) {
-        this.$message.error(this.$tc('UnselectedOrg'))
-        this.dialogLdapUserImportLoginStatus = false
+        this.$message.error(this.$tc('UnselectedOrg'));
+        this.dialogLdapUserImportLoginStatus = false;
       } else {
-        this.importLdapUser(data)
+        this.importLdapUser(data);
       }
     },
     importAllUserClick() {
-      this.dialogLdapUserImportAllLoginStatus = true
-      const org_ids = this.select2.value || []
+      this.dialogLdapUserImportAllLoginStatus = true;
+      const org_ids = this.select2.value || [];
       const data = {
         org_ids: org_ids,
         username_list: ['*']
-      }
+      };
       if (org_ids.length === 0) {
-        this.$message.error(this.$tc('UnselectedOrg'))
-        this.dialogLdapUserImportLoginStatus = false
+        this.$message.error(this.$tc('UnselectedOrg'));
+        this.dialogLdapUserImportLoginStatus = false;
       } else {
-        this.importLdapUser(data)
+        this.importLdapUser(data);
       }
     },
     importLdapUser(data) {
-      this.enableWS()
-      this.ws.onopen = (e) => {
-        this.ws.send(JSON.stringify({ msg_type: 'import_user', ...data }))
-      }
-      this.ws.onmessage = (e) => {
-        const data = JSON.parse(e.data)
+      this.enableWS();
+      this.ws.onopen = e => {
+        this.ws.send(JSON.stringify({
+          msg_type: 'import_user',
+          ...data
+        }));
+      };
+      this.ws.onmessage = e => {
+        const data = JSON.parse(e.data);
         if (data.ok) {
-          this.$message.success(data.msg)
-          this.$refs.listTable.reloadTable()
+          this.$message.success(data.msg);
+          this.$refs.listTable.reloadTable();
         } else {
-          this.$message.error(data.msg) || this.$t('ImportFail')
+          this.$message.error(data.msg) || this.$t('ImportFail');
         }
-        this.dialogLdapUserImportLoginStatus = false
-        this.dialogLdapUserImportAllLoginStatus = false
-      }
+        this.dialogLdapUserImportLoginStatus = false;
+        this.dialogLdapUserImportAllLoginStatus = false;
+      };
     },
     enableWS() {
-      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
-      const port = document.location.port ? ':' + document.location.port : ''
-      const url = `/ws/ldap/?category=${this.category}`
-      const wsURL = scheme + '://' + document.location.hostname + port + url
-      this.ws = new WebSocket(wsURL)
+      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws';
+      const port = document.location.port ? ':' + document.location.port : '';
+      const url = `/ws/ldap/?category=${this.category}`;
+      const wsURL = scheme + '://' + document.location.hostname + port + url;
+      this.ws = new WebSocket(wsURL);
     },
     SyncUserClick() {
-      this.dialogLdapUserSyncStatus = true
-      this.enableWS()
-      this.ws.onopen = (e) => {
-        this.ws.send(JSON.stringify({ msg_type: 'sync_user' }))
-      }
-      this.ws.onmessage = (e) => {
-        const data = JSON.parse(e.data)
+      this.dialogLdapUserSyncStatus = true;
+      this.enableWS();
+      this.ws.onopen = e => {
+        this.ws.send(JSON.stringify({
+          msg_type: 'sync_user'
+        }));
+      };
+      this.ws.onmessage = e => {
+        const data = JSON.parse(e.data);
         if (data.ok) {
-          this.$refs.listTable.reloadTable()
+          this.$refs.listTable.reloadTable();
         } else {
-          this.$message.error(data.msg)
+          this.$message.error(data.msg);
         }
-        this.dialogLdapUserSyncStatus = false
-      }
+        this.dialogLdapUserSyncStatus = false;
+      };
     },
     handlerListTableXHRError(errMsg) {
       if (this.dialogLdapUserImport) {
-        setTimeout(this.$refs.listTable.reloadTable, 30000)
+        setTimeout(this.$refs.listTable.reloadTable, 30000);
       }
     },
     hiddenDialog() {
-      this.$emit('update:visible', false)
+      this.$emit('update:visible', false);
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

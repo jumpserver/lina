@@ -4,7 +4,7 @@
   </TwoCol>
 </template>
 
-<script lang="jsx">
+<script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto';
 import TwoCol from '@/layout/components/Page/TwoColPage.vue';
 

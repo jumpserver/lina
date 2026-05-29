@@ -15,12 +15,14 @@
       custom-class="site-msg"
       @open="getMessages"
     >
-      <div slot="title">
-        <span>{{ $t('SiteMessage') }}</span>
-        <div v-if="unreadMsgCount !== 0" class="msg-list-all-read-btn" @click.stop="oneClickRead(messages)">
-          <a style="vertical-align: sub;"> {{ $t('AllClickRead') }}</a>
+      <template #title>
+        <div>
+          <span>{{ $t('SiteMessage') }}</span>
+          <div v-if="unreadMsgCount !== 0" class="msg-list-all-read-btn" @click.stop="oneClickRead(messages)">
+            <a style="vertical-align: sub;"> {{ $t('AllClickRead') }}</a>
+          </div>
         </div>
-      </div>
+      </template>
       <div v-if="unreadMsgCount !== 0" class="msg-list">
         <div
           v-for="msg of messages"
@@ -77,10 +79,10 @@
   </div>
 </template>
 
-<script lang="jsx">
-import { toSafeLocalDateStr } from '@/utils/common/time'
+<script>
 import Dialog from '@/components/Dialog'
 import MarkDown from '@/components/Widgets/MarkDown'
+import { toSafeLocalDateStr } from '@/utils/common/time'
 
 export default {
   name: 'SiteMessages',

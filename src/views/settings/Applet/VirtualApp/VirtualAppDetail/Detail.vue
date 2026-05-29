@@ -12,11 +12,14 @@
   </el-row>
 </template>
 
-<script lang="jsx">
-import AutoDetailCard from '@/components/Cards/DetailCard/auto'
-import { IBox } from '@/components'
-import VueMarkdown from 'vue-markdown'
-
+<script>
+import { createTextVNode as _createTextVNode, isVNode as _isVNode, resolveComponent as _resolveComponent, createVNode as _createVNode } from "vue";
+import AutoDetailCard from '@/components/Cards/DetailCard/auto';
+import { IBox } from '@/components';
+import VueMarkdown from 'vue-markdown';
+function _isSlot(s) {
+  return typeof s === 'function' || Object.prototype.toString.call(s) === '[object Object]' && !_isVNode(s);
+}
 export default {
   name: 'Detail',
   components: {
@@ -27,69 +30,77 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
-    const vm = this
+    const vm = this;
     return {
       url: `/api/v1/terminal/virtual-apps/${this.object.id}`,
-      detailFields: [
-        {
-          key: '',
-          formatter: () => {
-            return <img src={this.object.icon} alt='' height='40'/>
-          }
-        },
-        'name', 'display_name', 'author',
-        {
-          key: this.$t('Protocols'),
-          formatter: () => {
-            const types = ['primary', 'success', 'warning', 'danger']
-            const data = this.object.protocols.map((p, i) => {
-              return <el-tag type={types[i % 4]} size='small'>{p}</el-tag>
-            })
-            return <span> {data} </span>
-          }
-        },
-        {
-          key: this.$t('Tags'),
-          formatter: () => {
-            const types = ['primary', 'success', 'warning', 'danger']
-            const data = this.object.tags.map((p, i) => {
-              return <el-tag type={types[i % 4]} size='small'>{p}</el-tag>
-            })
-            return <span> {data} </span>
-          }
-        },
-        {
-          key: this.$t('Active'),
-          formatter: () => {
-            return <el-switch
-              v-model={this.object.is_active}
-              disabled={!vm.$hasPerm('terminal.change_virtualapp')}
-              onChange={(v) => {
-                const url = `/api/v1/terminal/virtual-apps/${vm.object.id}/`
-                const data = { is_active: v }
-                vm.$axios.patch(url, data).catch(() => {
-                  this.object.is_active = !v
-                }).then(res => {
-                  vm.$message.success(vm.$t('UpdateSuccessMsg'))
-                }).catch(err => {
-                  vm.$message.error(vm.$t('UpdateErrorMsg' + ' ' + err))
-                })
-              }}
-            />
-          }
-        },
-        'date_created', 'date_updated', 'comment'
-      ]
-    }
+      detailFields: [{
+        key: '',
+        formatter: () => {
+          return _createVNode("img", {
+            "src": this.object.icon,
+            "alt": "",
+            "height": "40"
+          }, null);
+        }
+      }, 'name', 'display_name', 'author', {
+        key: this.$t('Protocols'),
+        formatter: () => {
+          const types = ['primary', 'success', 'warning', 'danger'];
+          const data = this.object.protocols.map((p, i) => {
+            return _createVNode(_resolveComponent("el-tag"), {
+              "type": types[i % 4],
+              "size": "small"
+            }, _isSlot(p) ? p : {
+              default: () => [p]
+            });
+          });
+          return _createVNode("span", null, [_createTextVNode(" "), data, _createTextVNode(" ")]);
+        }
+      }, {
+        key: this.$t('Tags'),
+        formatter: () => {
+          const types = ['primary', 'success', 'warning', 'danger'];
+          const data = this.object.tags.map((p, i) => {
+            return _createVNode(_resolveComponent("el-tag"), {
+              "type": types[i % 4],
+              "size": "small"
+            }, _isSlot(p) ? p : {
+              default: () => [p]
+            });
+          });
+          return _createVNode("span", null, [_createTextVNode(" "), data, _createTextVNode(" ")]);
+        }
+      }, {
+        key: this.$t('Active'),
+        formatter: () => {
+          return _createVNode(_resolveComponent("el-switch"), {
+            "modelValue": this.object.is_active,
+            "onUpdate:modelValue": $event => this.object.is_active = $event,
+            "disabled": !vm.$hasPerm('terminal.change_virtualapp'),
+            "onChange": v => {
+              const url = `/api/v1/terminal/virtual-apps/${vm.object.id}/`;
+              const data = {
+                is_active: v
+              };
+              vm.$axios.patch(url, data).catch(() => {
+                this.object.is_active = !v;
+              }).then(res => {
+                vm.$message.success(vm.$t('UpdateSuccessMsg'));
+              }).catch(err => {
+                vm.$message.error(vm.$t('UpdateErrorMsg' + ' ' + err));
+              });
+            }
+          }, null);
+        }
+      }, 'date_created', 'date_updated', 'comment']
+    };
   },
-  mounted() {
-  }
-}
+  mounted() {}
+};
 </script>
 
 <style scoped>

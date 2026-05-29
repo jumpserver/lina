@@ -2,14 +2,19 @@
   <GenericListTable ref="GenericListTable" :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
-<script lang="jsx">
-import GenericListTable from '@/layout/components/GenericListTable/index'
-import { ActionsFormatter, DateFormatter } from '@/components/Table/TableFormatters'
-import { openTaskPage } from '@/utils/jms/index'
-
+<script>
+import { createVNode as _createVNode, isVNode as _isVNode, resolveComponent as _resolveComponent } from "vue";
+import GenericListTable from '@/layout/components/GenericListTable/index';
+import { ActionsFormatter, DateFormatter } from '@/components/Table/TableFormatters';
+import { openTaskPage } from '@/utils/jms/index';
+function _isSlot(s) {
+  return typeof s === 'function' || Object.prototype.toString.call(s) === '[object Object]' && !_isVNode(s);
+}
 export default {
   name: 'TaskHistoryList',
-  components: { GenericListTable },
+  components: {
+    GenericListTable
+  },
   props: {
     object: {
       type: Object,
@@ -30,73 +35,76 @@ export default {
       },
       tableConfig: {
         url: `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task?.id}/history/`,
-        columns: [
-          {
-            prop: 'summary.new',
-            label: this.$t('NewCount')
-          },
-          {
-            prop: 'summary.unsync',
-            label: this.$t('UnSyncCount')
-          },
-          {
-            prop: 'summary.sync',
-            label: this.$t('SyncedCount')
-          },
-          {
-            prop: 'summary.released',
-            label: this.$t('ReleasedCount')
-          },
-          {
-            prop: 'status',
-            label: this.$t('Status'),
-            formatter: row => {
-              if (row.status === 1) {
-                return <el-tag type='primary' size='small'>{this.$t('Success')}</el-tag>
-              } else {
-                return <el-tag type='danger' size='small'>{this.$t('Failed')}</el-tag>
-              }
-            }
-          },
-          {
-            prop: 'date_sync',
-            label: this.$t('DateSync'),
-            formatter: DateFormatter
-          },
-          {
-            prop: 'trigger',
-            label: this.$t('TriggerMode'),
-            formatter: row => {
-              return row.trigger.label
-            }
-          },
-          {
-            prop: 'actions',
-            label: this.$t('Actions'),
-            align: 'center',
-            formatter: ActionsFormatter,
-            formatterArgs: {
-              hasUpdate: false, // can set function(row, value)
-              hasDelete: false, // can set function(row, value)
-              moreActionsTitle: this.$t('Log'),
-              hasClone: false,
-              extraActions: [
-                {
-                  name: 'View',
-                  title: this.$t('View'),
-                  type: 'primary',
-                  callback: function(val) {
-                    openTaskPage(val.row.id)
-                  }
-                }
-              ]
+        columns: [{
+          prop: 'summary.new',
+          label: this.$t('NewCount')
+        }, {
+          prop: 'summary.unsync',
+          label: this.$t('UnSyncCount')
+        }, {
+          prop: 'summary.sync',
+          label: this.$t('SyncedCount')
+        }, {
+          prop: 'summary.released',
+          label: this.$t('ReleasedCount')
+        }, {
+          prop: 'status',
+          label: this.$t('Status'),
+          formatter: row => {
+            if (row.status === 1) {
+              let _slot;
+              return _createVNode(_resolveComponent("el-tag"), {
+                "type": "primary",
+                "size": "small"
+              }, _isSlot(_slot = this.$t('Success')) ? _slot : {
+                default: () => [_slot]
+              });
+            } else {
+              let _slot2;
+              return _createVNode(_resolveComponent("el-tag"), {
+                "type": "danger",
+                "size": "small"
+              }, _isSlot(_slot2 = this.$t('Failed')) ? _slot2 : {
+                default: () => [_slot2]
+              });
             }
           }
-        ]
+        }, {
+          prop: 'date_sync',
+          label: this.$t('DateSync'),
+          formatter: DateFormatter
+        }, {
+          prop: 'trigger',
+          label: this.$t('TriggerMode'),
+          formatter: row => {
+            return row.trigger.label;
+          }
+        }, {
+          prop: 'actions',
+          label: this.$t('Actions'),
+          align: 'center',
+          formatter: ActionsFormatter,
+          formatterArgs: {
+            hasUpdate: false,
+            // can set function(row, value)
+            hasDelete: false,
+            // can set function(row, value)
+            moreActionsTitle: this.$t('Log'),
+            hasClone: false,
+            extraActions: [{
+              name: 'View',
+              title: this.$t('View'),
+              type: 'primary',
+              callback: function (val) {
+                openTaskPage(val.row.id);
+              }
+            }]
+          }
+        }]
       }
-    }
+    };
   }
-}
+};
 </script>
 
 <style lang='scss' scoped>

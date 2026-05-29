@@ -2,13 +2,13 @@
   <HomeCard :table-config="tableConfig" v-bind="cardConfig" />
 </template>
 
-<script lang="jsx">
-import { DetailFormatter } from '@/components/Table/TableFormatters'
-import i18n from '@/i18n/i18n'
-import { toSafeLocalDateStr } from '@/utils/common/time'
-import { mapGetters } from 'vuex'
-import HomeCard from './HomeCard'
-
+<script>
+import { createVNode as _createVNode, resolveComponent as _resolveComponent } from "vue";
+import { DetailFormatter } from '@/components/Table/TableFormatters';
+import i18n from '@/i18n/i18n';
+import { toSafeLocalDateStr } from '@/utils/common/time';
+import { mapGetters } from 'vuex';
+import HomeCard from './HomeCard';
 export default {
   name: 'HomeAnnouncement',
   components: {
@@ -35,37 +35,38 @@ export default {
             label: i18n.global.t('Title'),
             formatter: DetailFormatter,
             formatterArgs: {
-              getRoute: function({ row }) {
-                const type = row.type.value
+              getRoute: function ({
+                row
+              }) {
+                const type = row.type.value;
                 if (type === 'apply_asset') {
-                  return 'AssetsTicketDetail'
+                  return 'AssetsTicketDetail';
                 } else if (type === 'login_asset_confirm') {
-                  return 'LoginAssetTicketDetail'
+                  return 'LoginAssetTicketDetail';
                 } else if (type === 'login_confirm') {
-                  return 'LoginTicketDetail'
+                  return 'LoginTicketDetail';
                 } else if (type === 'command_confirm') {
-                  return 'CommandConfirmDetail'
+                  return 'CommandConfirmDetail';
                 } else {
-                  return 'TicketDetail'
+                  return 'TicketDetail';
                 }
               }
             }
           },
-
           actions: {
             has: false
           },
           applicant: {
             label: i18n.global.t('User'),
             formatter: row => {
-              return row.rel_snapshot.applicant
+              return row.rel_snapshot.applicant;
             }
           },
           type: {
             label: i18n.global.t('Type'),
             width: '130px',
             formatter: row => {
-              return row.type.label
+              return row.type.label;
             }
           },
           status: {
@@ -73,19 +74,19 @@ export default {
             width: '120px',
             formatter: row => {
               if (row.status.value === 'open') {
-                return (
-                  <el-tag type='primary' size='small'>
-                    {' '}
-                    {i18n.global.t('OpenStatus')}
-                  </el-tag>
-                )
+                return _createVNode(_resolveComponent("el-tag"), {
+                  "type": "primary",
+                  "size": "small"
+                }, {
+                  default: () => [' ', i18n.global.t('OpenStatus')]
+                });
               } else {
-                return (
-                  <el-tag type='danger' size='small'>
-                    {' '}
-                    {i18n.global.t('CloseStatus')}
-                  </el-tag>
-                )
+                return _createVNode(_resolveComponent("el-tag"), {
+                  "type": "danger",
+                  "size": "small"
+                }, {
+                  default: () => [' ', i18n.global.t('CloseStatus')]
+                });
               }
             }
           },
@@ -97,22 +98,17 @@ export default {
         hasSelection: false,
         paginationSize: 10
       }
-    }
+    };
   },
-
   computed: {
     ...mapGetters(['currentUser'])
   },
   watch: {
     url(iNew) {
-      this.$set(
-        this.tableConfig,
-        'url',
-        `${iNew}?assignees__id=${this.currentUser.id}&state=pending`
-      )
+      this.$set(this.tableConfig, 'url', `${iNew}?assignees__id=${this.currentUser.id}&state=pending`);
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

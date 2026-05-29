@@ -57,8 +57,8 @@
     </div>
   </el-drawer>
 </template>
-<script lang="jsx">
-import { loadPlatformIcon } from '@/utils/jms/index'
+<script>
+import { loadPlatformIcon } from '@/utils/jms/index';
 
 export default {
   name: 'PlatformDrawer',

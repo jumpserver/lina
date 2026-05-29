@@ -4,10 +4,10 @@
   </TwoCol>
 </template>
 
-<script lang="jsx">
-import AutoDetailCard from '@/components/Cards/DetailCard/auto'
-import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-
+<script>
+import { resolveComponent as _resolveComponent, createVNode as _createVNode, createTextVNode as _createTextVNode } from "vue";
+import AutoDetailCard from '@/components/Cards/DetailCard/auto';
+import TwoCol from '@/layout/components/Page/TwoColPage.vue';
 export default {
   name: 'StrategyDetail',
   components: {
@@ -23,51 +23,36 @@ export default {
   data() {
     return {
       url: `/api/v1/xpack/cloud/strategies/${this.object.id}/`,
-      detailFields: [
-        'name', 'priority',
-        {
-          key: this.$t('Rule'),
-          formatter: () => {
-            const newArr = this.object.strategy_rules || []
-            return (
-              <ul>
-                {
-                  newArr.map((r, index) => {
-                    return <li>
-                      <el-tag size='small' key={index}>
-                        {r.attr.label}<strong> {`${r.match.label}`} </strong>{r.value}
-                      </el-tag>
-                    </li>
-                  })
-                }
-              </ul>
-            )
-          }
-        },
-        {
-          key: this.$t('Action'),
-          formatter: () => {
-            const newArr = this.object.strategy_actions || []
-            return (
-              <ul>
-                {
-                  newArr.map((a, index) => {
-                    return <li>
-                      <el-tag size='small' key={index}>
-                        <strong>{a.attr.label}: </strong>{`${a.value.label}`}
-                      </el-tag>
-                    </li>
-                  })
-                }
-              </ul>
-            )
-          }
-        },
-        'comment', 'org_name'
-      ]
-    }
+      detailFields: ['name', 'priority', {
+        key: this.$t('Rule'),
+        formatter: () => {
+          const newArr = this.object.strategy_rules || [];
+          return _createVNode("ul", null, [newArr.map((r, index) => {
+            return _createVNode("li", null, [_createVNode(_resolveComponent("el-tag"), {
+              "size": "small",
+              "key": index
+            }, {
+              default: () => [r.attr.label, _createVNode("strong", null, [_createTextVNode(" "), `${r.match.label}`, _createTextVNode(" ")]), r.value]
+            })]);
+          })]);
+        }
+      }, {
+        key: this.$t('Action'),
+        formatter: () => {
+          const newArr = this.object.strategy_actions || [];
+          return _createVNode("ul", null, [newArr.map((a, index) => {
+            return _createVNode("li", null, [_createVNode(_resolveComponent("el-tag"), {
+              "size": "small",
+              "key": index
+            }, {
+              default: () => [_createVNode("strong", null, [a.attr.label, _createTextVNode(": ")]), `${a.value.label}`]
+            })]);
+          })]);
+        }
+      }, 'comment', 'org_name']
+    };
   }
-}
+};
 </script>
 
 <style scoped>

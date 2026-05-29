@@ -8,18 +8,18 @@
   />
 </template>
 
-<script lang="jsx">
-import CopyableFormatter from '@/components/Table/TableFormatters/CopyableFormatter.vue'
-import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
-import { GenericListTable } from '@/layout/components'
-
+<script>
+import { createVNode as _createVNode } from "vue";
+import CopyableFormatter from '@/components/Table/TableFormatters/CopyableFormatter.vue';
+import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters';
+import { GenericListTable } from '@/layout/components';
 export default {
   name: 'CloudAccountList',
   components: {
     GenericListTable
   },
   data() {
-    const vm = this
+    const vm = this;
     return {
       createDrawer: () => import('@/views/accounts/Integration/ApplicationCreateUpdate.vue'),
       detailDrawer: () => import('@/views/accounts/Integration/ApplicationDetail/index.vue'),
@@ -36,25 +36,29 @@ export default {
           },
           logo: {
             width: '80px',
-            formatter: (row) => {
-              return (
-                <img src={row.logo} alt={row.name}
-                  style='width: 40px; height: 40px; border-radius: 50%;'
-                />
-              )
+            formatter: row => {
+              return _createVNode("img", {
+                "src": row.logo,
+                "alt": row.name,
+                "style": "width: 40px; height: 40px; border-radius: 50%;"
+              }, null);
             }
           },
           accounts_amount: {
             width: '100px',
-            formatter: (row) => {
-              return row.accounts_amount
+            formatter: row => {
+              return row.accounts_amount;
             }
           },
           name: {
             formatterArgs: {
-              getRoute: ({ row }) => ({
+              getRoute: ({
+                row
+              }) => ({
                 name: 'IntegrationApplicationDetail',
-                params: { id: row.id }
+                params: {
+                  id: row.id
+                }
               }),
               drawer: true
             },
@@ -65,9 +69,11 @@ export default {
             formatter: CopyableFormatter,
             formatterArgs: {
               shadow: true,
-              getText: async function({ row }) {
-                const app = await vm.$axios.get(`/api/v1/accounts/integration-applications/${row.id}/secret/`)
-                return app.secret
+              getText: async function ({
+                row
+              }) {
+                const app = await vm.$axios.get(`/api/v1/accounts/integration-applications/${row.id}/secret/`);
+                return app.secret;
               }
             }
           },
@@ -80,11 +86,12 @@ export default {
         },
         columnsExtra: ['secret'],
         columnsShow: {
-          default: [
-            'logo', 'name', 'id', 'secret', 'accounts_amount', 'date_last_used', 'active'
-          ]
+          default: ['logo', 'name', 'id', 'secret', 'accounts_amount', 'date_last_used', 'active']
         },
-        permissions: { app: 'accounts', resource: 'integrationapplication' }
+        permissions: {
+          app: 'accounts',
+          resource: 'integrationapplication'
+        }
       },
       headerActions: {
         hasImport: false,
@@ -92,7 +99,7 @@ export default {
           getUrlQuery: false
         }
       }
-    }
+    };
   }
-}
+};
 </script>

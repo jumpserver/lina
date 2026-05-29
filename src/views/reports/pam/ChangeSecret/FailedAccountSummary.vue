@@ -9,12 +9,12 @@
   </div>
 </template>
 
-<script lang="jsx">
-import HomeCard from '@/views/workbench/overview/components/HomeCard.vue'
-import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
-import { openTaskPage } from '@/utils/jms/index'
-import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue'
-
+<script>
+import { createVNode as _createVNode } from "vue";
+import HomeCard from '@/views/workbench/overview/components/HomeCard.vue';
+import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters';
+import { openTaskPage } from '@/utils/jms/index';
+import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue';
 export default {
   components: {
     RecordViewSecret,
@@ -27,7 +27,7 @@ export default {
     }
   },
   data() {
-    const vm = this
+    const vm = this;
     return {
       url: '/api/v1/accounts/change-secret-records/dashboard/',
       showViewSecretDialog: false,
@@ -36,23 +36,27 @@ export default {
       },
       tableConfig: {
         url: vm.tableUrl(),
-        columns: [
-          'asset', 'account', 'date_finished', 'is_success', 'error', 'actions'
-        ],
+        columns: ['asset', 'account', 'date_finished', 'is_success', 'error', 'actions'],
         columnsMeta: {
           asset: {
             label: this.$t('Asset'),
             formatter: DetailFormatter,
             formatterArgs: {
               can: this.$hasPerm('assets.view_asset'),
-              getTitle({ row }) {
-                return row.asset.name
+              getTitle({
+                row
+              }) {
+                return row.asset.name;
               },
-              getRoute({ row }) {
+              getRoute({
+                row
+              }) {
                 return {
                   name: 'AssetDetail',
-                  params: { id: row.asset.id }
-                }
+                  params: {
+                    id: row.asset.id
+                  }
+                };
               }
             }
           },
@@ -61,27 +65,39 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               can: this.$hasPerm('accounts.view_account'),
-              getTitle({ row }) {
-                return row.account.username
+              getTitle({
+                row
+              }) {
+                return row.account.username;
               },
-              getRoute({ row }) {
+              getRoute({
+                row
+              }) {
                 return {
                   name: 'AssetAccountDetail',
-                  params: { id: row.account.id }
-                }
+                  params: {
+                    id: row.account.id
+                  }
+                };
               }
             }
           },
           is_success: {
             label: this.$t('Success'),
-            formatter: (row) => {
+            formatter: row => {
               if (row.status === 'pending') {
-                return <i class='fa  fa fa-spinner fa-spin'/>
+                return _createVNode("i", {
+                  "class": "fa  fa fa-spinner fa-spin"
+                }, null);
               }
               if (row.is_success) {
-                return <i class='fa fa-check text-primary'/>
+                return _createVNode("i", {
+                  "class": "fa fa-check text-primary"
+                }, null);
               }
-              return <i class='fa fa-times text-danger'/>
+              return _createVNode("i", {
+                "class": "fa fa-times text-danger"
+              }, null);
             }
           },
           actions: {
@@ -91,67 +107,66 @@ export default {
               hasDelete: false,
               hasClone: false,
               moreActionsTitle: this.$t('More'),
-              extraActions: [
-                {
-                  name: 'View',
-                  title: this.$t('View'),
-                  type: 'primary',
-                  callback: ({ row }) => {
-                    // debugger
-                    vm.secretUrl = `/api/v1/accounts/change-secret-records/${row.id}/secret/`
-                    vm.showViewSecretDialog = false
-                    setTimeout(() => {
-                      vm.showViewSecretDialog = true
-                    })
-                  }
-                },
-                {
-                  name: 'Retry',
-                  title: this.$t('Retry'),
-                  can: this.$hasPerm('accounts.add_changesecretexecution'),
-                  type: 'primary',
-                  callback: ({ row }) => {
-                    this.$axios.post(
-                      '/api/v1/accounts/change-secret-records/execute/',
-                      { record_ids: [row.id] }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
-                  }
-                },
-                {
-                  name: 'ignoreFail',
-                  title: this.$t('IgnoreFail'),
-                  can: this.$hasPerm('accounts.view_changesecretrecord'),
-                  type: 'primary',
-                  callback: ({ row }) => {
-                    this.$axios.patch(
-                      `/api/v1/accounts/change-secret-records/${row.id}/ignore-fail/`
-                    ).then(res => {
-                      this.$message.success(this.$tc('UpdateSuccessMsg'))
-                      this.$refs.HomeCard.$refs.ListTable.reloadTable()
-                    })
-                  }
+              extraActions: [{
+                name: 'View',
+                title: this.$t('View'),
+                type: 'primary',
+                callback: ({
+                  row
+                }) => {
+                  // debugger
+                  vm.secretUrl = `/api/v1/accounts/change-secret-records/${row.id}/secret/`;
+                  vm.showViewSecretDialog = false;
+                  setTimeout(() => {
+                    vm.showViewSecretDialog = true;
+                  });
                 }
-              ]
+              }, {
+                name: 'Retry',
+                title: this.$t('Retry'),
+                can: this.$hasPerm('accounts.add_changesecretexecution'),
+                type: 'primary',
+                callback: ({
+                  row
+                }) => {
+                  this.$axios.post('/api/v1/accounts/change-secret-records/execute/', {
+                    record_ids: [row.id]
+                  }).then(res => {
+                    openTaskPage(res['task']);
+                  });
+                }
+              }, {
+                name: 'ignoreFail',
+                title: this.$t('IgnoreFail'),
+                can: this.$hasPerm('accounts.view_changesecretrecord'),
+                type: 'primary',
+                callback: ({
+                  row
+                }) => {
+                  this.$axios.patch(`/api/v1/accounts/change-secret-records/${row.id}/ignore-fail/`).then(res => {
+                    this.$message.success(this.$tc('UpdateSuccessMsg'));
+                    this.$refs.HomeCard.$refs.ListTable.reloadTable();
+                  });
+                }
+              }]
             }
           }
         }
       }
-    }
+    };
   },
   watch: {
     days() {
-      this.$refs.HomeCard.$refs.ListTable.tableConfig.url = this.tableUrl()
-      this.$refs.HomeCard.$refs.ListTable.reloadTable()
+      this.$refs.HomeCard.$refs.ListTable.tableConfig.url = this.tableUrl();
+      this.$refs.HomeCard.$refs.ListTable.reloadTable();
     }
   },
   methods: {
     tableUrl() {
-      return `/api/v1/accounts/change-secret-records/dashboard/?days=${this.days}`
+      return `/api/v1/accounts/change-secret-records/dashboard/?days=${this.days}`;
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

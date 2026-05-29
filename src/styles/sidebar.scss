@@ -1,4 +1,4 @@
-@use "./variables" as *;
+@use './variables' as *;
 
 #app {
   .main-container {
@@ -6,7 +6,7 @@
     top: $headerHeight;
     min-height: 100%;
     height: calc(100vh - #{$headerHeight});
-    transition: margin-left .28s;
+    transition: margin-left 0.28s;
     margin-left: $sideBarWidth;
   }
 
@@ -26,7 +26,10 @@
 
     // reset element-ui css
     .horizontal-collapse-transition {
-      transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out;
+      transition:
+        0s width ease-in-out,
+        0s padding-left ease-in-out,
+        0s padding-right ease-in-out;
     }
 
     .scrollbar-wrapper {
@@ -45,7 +48,9 @@
     &.has-logo {
       .el-scrollbar {
         margin-top: 5px;
-        height: calc(100% - #{$headerHeight} - 50px - 42px - 5px); // header-height, view-header, footer-height + bolder, margin-top
+        height: calc(
+          100% - #{$headerHeight} - 50px - 42px - 5px
+        ); // header-height, view-header, footer-height + bolder, margin-top
       }
     }
 
@@ -72,14 +77,12 @@
     .submenu-title-noDropdown {
       padding: 0 !important;
       position: relative;
-
     }
 
     .el-submenu-sidebar {
       overflow: hidden;
 
       & > .el-sub-menu__title {
-
         .el-submenu__icon-arrow {
           display: none;
         }
@@ -108,7 +111,7 @@
     }
 
     .sidebar-container {
-      transition: transform .28s;
+      transition: transform 0.28s;
       width: $sideBarWidth !important;
     }
 
@@ -128,4 +131,3 @@
     }
   }
 }
-

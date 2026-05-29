@@ -20,14 +20,14 @@
   </div>
 </template>
 
-<script lang="jsx">
-import { lan, privateCloudProviders, publicHostProviders, publicDBProviders } from '../const'
-import CreateDialog from './components/CreateDialog.vue'
-import UpdateDialog from './components/UpdateDialog.vue'
-import SyncDialog from './components/SyncDialog.vue'
+<script>
 import SmallCard from '@/components/Table/InfoCardTable/index.vue'
-import { ACCOUNT_PROVIDER_ATTRS_MAP } from '@/views/assets/Cloud/const'
 import { toSafeLocalDateStr } from '@/utils/common/time'
+import { ACCOUNT_PROVIDER_ATTRS_MAP } from '@/views/assets/Cloud/const'
+import { lan, privateCloudProviders, publicDBProviders, publicHostProviders } from '../const'
+import CreateDialog from './components/CreateDialog.vue'
+import SyncDialog from './components/SyncDialog.vue'
+import UpdateDialog from './components/UpdateDialog.vue'
 
 export default {
   name: 'CloudAccountList',

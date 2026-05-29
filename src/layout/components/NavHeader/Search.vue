@@ -124,11 +124,11 @@
   </span>
 </template>
 
-<script lang="jsx">
+<script>
+import Icon from '@/components/Widgets/Icon/index.vue'
+import { ObjectLocalStorage } from '@/utils/common'
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
-import { ObjectLocalStorage } from '@/utils/common'
-import Icon from '@/components/Widgets/Icon/index.vue'
 
 export default {
   name: 'Search',

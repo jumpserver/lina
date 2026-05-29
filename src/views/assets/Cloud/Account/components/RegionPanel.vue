@@ -45,9 +45,9 @@
   </div>
 </template>
 
-<script lang="jsx">
-import { Dialog } from '@/components'
-import { encryptAttrsField } from '@/views/assets/Cloud/const'
+<script>
+import { Dialog } from '@/components';
+import { encryptAttrsField } from '@/views/assets/Cloud/const';
 
 export default {
   name: 'RegionPanel',

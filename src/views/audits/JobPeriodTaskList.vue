@@ -4,44 +4,38 @@
   </div>
 </template>
 
-<script lang="jsx">
-import GenericListPage from '@/layout/components/GenericListPage'
-import { SwitchFormatter } from '@/components/Table/TableFormatters'
-
+<script>
+import { createTextVNode as _createTextVNode, createVNode as _createVNode } from "vue";
+import GenericListPage from '@/layout/components/GenericListPage';
+import { SwitchFormatter } from '@/components/Table/TableFormatters';
 export default {
   components: {
     GenericListPage
   },
   data() {
-    const vm = this
+    const vm = this;
     return {
       tableConfig: {
         url: '/api/v1/audits/jobs/',
         columnsShow: {
           min: ['name', 'args'],
-          default: [
-            'name', 'args', 'type', 'crontab', 'interval', 'created_by', 'is_periodic_display', 'is_periodic'
-          ]
+          default: ['name', 'args', 'type', 'crontab', 'interval', 'created_by', 'is_periodic_display', 'is_periodic']
         },
-        columns: [
-          'name', 'args', 'type', 'crontab', 'interval', 'date_last_run', 'summary',
-          'created_by', 'is_periodic_display', 'is_periodic'
-        ],
+        columns: ['name', 'args', 'type', 'crontab', 'interval', 'date_last_run', 'summary', 'created_by', 'is_periodic_display', 'is_periodic'],
         columnsMeta: {
           actions: {
             has: false
           },
           name: {
-            formatter: (row) => row.name
+            formatter: row => row.name
           },
           summary: {
             width: '130px',
             label: `${this.$t('Success')}/${this.$t('Total')}`,
-            formatter: (row) => {
-              return <div>
-                <span class='text-primary'>{row.summary.success}</span>/
-                <span>{row.summary.total}</span>
-              </div>
+            formatter: row => {
+              return _createVNode("div", null, [_createVNode("span", {
+                "class": "text-primary"
+              }, [row.summary.success]), _createTextVNode("/"), _createVNode("span", null, [row.summary.total])]);
             }
           },
           is_periodic_display: {
@@ -54,18 +48,18 @@ export default {
             formatter: SwitchFormatter,
             formatterArgs: {
               isDisplay(row) {
-                return row.is_periodic
+                return row.is_periodic;
               },
               getPatchUrl(row) {
-                return `/api/v1/audits/jobs/${row.id}/`
+                return `/api/v1/audits/jobs/${row.id}/`;
               },
               getPatchData(row) {
                 return {
                   is_periodic: !row.is_periodic
-                }
+                };
               },
               callback() {
-                vm.$refs.ListPage.reloadTable()
+                vm.$refs.ListPage.reloadTable();
               }
             }
           }
@@ -75,9 +69,9 @@ export default {
         hasLeftActions: false,
         hasImport: false
       }
-    }
+    };
   }
-}
+};
 </script>
 
 <style>

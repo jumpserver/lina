@@ -49,10 +49,10 @@
   </IBox>
 </template>
 
-<script lang="jsx">
-import { toSafeLocalDateStr, formatTime, getDateTimeStamp } from '@/utils/common/time'
-import IBox from '@/components/Common/IBox'
-import { STATE_MAP } from '../const'
+<script>
+import IBox from '@/components/Common/IBox';
+import { formatTime, getDateTimeStamp, toSafeLocalDateStr } from '@/utils/common/time';
+import { STATE_MAP } from '../const';
 
 export default {
   name: 'Steps',

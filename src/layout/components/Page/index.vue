@@ -8,13 +8,15 @@
         @click="handleGoBack"
         @mouseleave="endLongPress"
         @mouseup="endLongPress"
-        @mousedown.native="startLongPress"
+        @mousedown="startLongPress"
       />
       <slot name="title">
         <span style="padding-left: 10px">
           {{ iTitle }}
           <el-tooltip v-if="helpTip" :open-delay="500" effect="dark" placement="top" popper-class="help-tips">
-            <div slot="content" v-sanitize="helpTip" class="page-help-content" />
+            <template #content>
+              <div v-sanitize="helpTip" class="page-help-content" />
+            </template>
             <span>
               <el-button class="help-msg-btn">
                 <i class="el-icon-info" />

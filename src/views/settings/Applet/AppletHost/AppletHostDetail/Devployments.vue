@@ -7,11 +7,11 @@
   </TwoCol>
 </template>
 
-<script lang="jsx">
-import { ListTable, QuickActions } from '@/components'
-import { openTaskPage } from '@/utils/jms/index'
-import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-
+<script>
+import { createVNode as _createVNode, resolveComponent as _resolveComponent } from "vue";
+import { ListTable, QuickActions } from '@/components';
+import { openTaskPage } from '@/utils/jms/index';
+import TwoCol from '@/layout/components/Page/TwoColPage.vue';
 export default {
   name: 'Developments',
   components: {
@@ -22,8 +22,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -36,9 +35,7 @@ export default {
       config: {
         hasSelection: false,
         url: `/api/v1/terminal/applet-host-deployments/?host=${this.object.id}`,
-        columns: [
-          'id', 'date_start', 'date_finished', 'status', 'actions'
-        ],
+        columns: ['id', 'date_start', 'date_finished', 'status', 'actions'],
         columnsMeta: {
           id: {
             type: 'index',
@@ -47,15 +44,20 @@ export default {
           },
           status: {
             label: this.$t('Status'),
-            formatter: (row) => {
+            formatter: row => {
               const typeMapper = {
                 'pending': 'success',
                 'success': 'primary',
                 'failed': 'danger',
                 'unknown': 'warning'
-              }
-              const tp = typeMapper[row.status.value] || 'info'
-              return <el-tag size='small' type={tp}>{row.status.label}</el-tag>
+              };
+              const tp = typeMapper[row.status.value] || 'info';
+              return _createVNode(_resolveComponent("el-tag"), {
+                "size": "small",
+                "type": tp
+              }, {
+                default: () => [row.status.label]
+              });
             }
           },
           actions: {
@@ -63,42 +65,37 @@ export default {
               hasClone: false,
               hasDelete: false,
               hasUpdate: false,
-              extraActions: [
-                {
-                  name: 'View',
-                  title: this.$t('View'),
-                  type: 'primary',
-                  callback: function(val) {
-                    openTaskPage(val.row.task)
-                  }
+              extraActions: [{
+                name: 'View',
+                title: this.$t('View'),
+                type: 'primary',
+                callback: function (val) {
+                  openTaskPage(val.row.task);
                 }
-              ]
+              }]
             }
           }
         }
       },
-      quickActions: [
-        {
-          title: this.$t('InitialDeploy'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('Deploy')
-          },
-          callbacks: {
-            click: function() {
-              this.$axios.post(
-                `/api/v1/terminal/applet-host-deployments/`,
-                { host: this.object.id }
-              ).then(res => {
-                openTaskPage(res['task'])
-              })
-            }.bind(this)
-          }
+      quickActions: [{
+        title: this.$t('InitialDeploy'),
+        attrs: {
+          type: 'primary',
+          label: this.$t('Deploy')
+        },
+        callbacks: {
+          click: function () {
+            this.$axios.post(`/api/v1/terminal/applet-host-deployments/`, {
+              host: this.object.id
+            }).then(res => {
+              openTaskPage(res['task']);
+            });
+          }.bind(this)
         }
-      ]
-    }
+      }]
+    };
   }
-}
+};
 </script>
 
 <style scoped>

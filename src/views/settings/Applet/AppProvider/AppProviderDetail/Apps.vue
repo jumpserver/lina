@@ -6,10 +6,10 @@
   </el-row>
 </template>
 
-<script lang="jsx">
-import { DrawerListTable as ListTable } from '@/components'
-import { DetailFormatter } from '@/components/Table/TableFormatters'
-
+<script>
+import { createVNode as _createVNode, resolveComponent as _resolveComponent } from "vue";
+import { DrawerListTable as ListTable } from '@/components';
+import { DetailFormatter } from '@/components/Table/TableFormatters';
 export default {
   name: 'Apps',
   components: {
@@ -18,8 +18,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -31,37 +30,48 @@ export default {
       },
       config: {
         url: `/api/v1/terminal/virtual-app-publications/?provider=${this.object.id}`,
-        columns: [
-          'app.name', 'app.image_name', 'date_updated', 'status'
-        ],
+        columns: ['app.name', 'app.image_name', 'date_updated', 'status'],
         excludes: ['actions'],
         columnsMeta: {
           'app.name': {
             label: this.$t('Name'),
             formatter: DetailFormatter,
             formatterArgs: {
-              getTitle: ({ row }) => row.app.name,
-              getRoute: ({ row }) => ({
+              getTitle: ({
+                row
+              }) => row.app.name,
+              getRoute: ({
+                row
+              }) => ({
                 name: 'VirtualAppDetail',
-                params: { id: row.app.id }
+                params: {
+                  id: row.app.id
+                }
               })
             },
-            id: ({ row }) => row.app.id
+            id: ({
+              row
+            }) => row.app.id
           },
           'app.image_name': {
             label: this.$t('ImageName')
           },
           status: {
             label: this.$t('PublishStatus'),
-            formatter: (row) => {
+            formatter: row => {
               const typeMapper = {
                 'pending': 'success',
                 'success': 'primary',
                 'failed': 'danger',
                 'unknown': 'warning'
-              }
-              const tp = typeMapper[row.status.value] || 'warning'
-              return <el-tag size='small' type={tp}>{row.status.label}</el-tag>
+              };
+              const tp = typeMapper[row.status.value] || 'warning';
+              return _createVNode(_resolveComponent("el-tag"), {
+                "size": "small",
+                "type": tp
+              }, {
+                default: () => [row.status.label]
+              });
             }
           },
           date_updated: {
@@ -78,9 +88,9 @@ export default {
           }
         }
       }
-    }
+    };
   }
-}
+};
 </script>
 
 <style scoped>

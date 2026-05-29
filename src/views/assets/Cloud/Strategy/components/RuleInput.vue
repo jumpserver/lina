@@ -7,15 +7,17 @@
   />
 </template>
 
-<script lang="jsx">
+<script>
+import { createVNode as _createVNode, resolveComponent as _resolveComponent } from "vue";
 import { attrMatchOptions, strMatchValues } from '@/components/const';
 import { Required } from '@/components/Form/DataForm/rules';
 import { AttrInput, Select2 } from '@/components/Form/FormFields';
 import { instanceAttrOptions, tableFormatter } from './const';
-
 export default {
   name: 'RuleInput',
-  components: { AttrInput },
+  components: {
+    AttrInput
+  },
   props: {
     value: {
       type: Array,
@@ -25,7 +27,11 @@ export default {
   data() {
     return {
       formConfig: {
-        initial: { attr: '', match: '', value: '' },
+        initial: {
+          attr: '',
+          match: '',
+          value: ''
+        },
         inline: true,
         hasSaveContinue: false,
         submitBtnSize: 'small',
@@ -56,9 +62,9 @@ export default {
               multiple: false,
               clearable: false,
               options: attrMatchOptions.filter(option => {
-                const matchValues = strMatchValues.concat('exclude')
+                const matchValues = strMatchValues.concat('exclude');
                 if (matchValues.indexOf(option.value) !== -1 && option.value !== 'in') {
-                  return option
+                  return option;
                 }
               })
             }
@@ -70,50 +76,57 @@ export default {
         }
       },
       tableConfig: {
-        columns: [
-          { prop: 'attr', label: this.$t('AttrName'), formatter: tableFormatter('attr') },
-          { prop: 'match', label: this.$t('Match'), formatter: tableFormatter('match') },
-          { prop: 'value', label: this.$t('AttrValue'), formatter: tableFormatter('value') },
-          {
-            prop: 'action',
-            label: this.$t('Action'),
-            align: 'center',
-            width: '100px',
-            formatter: (row, col, cellValue, index) => {
-              return (
-                <div class='input-button'>
-                  <el-button
-                    icon='el-icon-minus'
-                    size='small'
-                    style={{ flexShrink: 0 }}
-                    type='danger'
-                    onClick={this.handleDelete(index)}
-                  />
-                </div>
-              )
-            }
+        columns: [{
+          prop: 'attr',
+          label: this.$t('AttrName'),
+          formatter: tableFormatter('attr')
+        }, {
+          prop: 'match',
+          label: this.$t('Match'),
+          formatter: tableFormatter('match')
+        }, {
+          prop: 'value',
+          label: this.$t('AttrValue'),
+          formatter: tableFormatter('value')
+        }, {
+          prop: 'action',
+          label: this.$t('Action'),
+          align: 'center',
+          width: '100px',
+          formatter: (row, col, cellValue, index) => {
+            return _createVNode("div", {
+              "class": "input-button"
+            }, [_createVNode(_resolveComponent("el-button"), {
+              "icon": "el-icon-minus",
+              "size": "small",
+              "style": {
+                flexShrink: 0
+              },
+              "type": "danger",
+              "onClick": this.handleDelete(index)
+            }, null)]);
           }
-        ],
+        }],
         totalData: this.value || [],
         hasPagination: false
       }
-    }
+    };
   },
   methods: {
     onSubmit() {
-      this.$emit('input', this.tableConfig.totalData)
+      this.$emit('input', this.tableConfig.totalData);
     },
     handleDelete(index) {
       return () => {
-        const item = this.tableConfig.totalData.splice(index, 1)
+        const item = this.tableConfig.totalData.splice(index, 1);
         if (item[0]?.id) {
-          this.$axios.delete(`/api/v1/xpack/cloud/strategy-rules/${item[0].id}/`)
+          this.$axios.delete(`/api/v1/xpack/cloud/strategy-rules/${item[0].id}/`);
         }
-        this.$message.success(this.$tc('DeleteSuccessMsg'))
-      }
+        this.$message.success(this.$tc('DeleteSuccessMsg'));
+      };
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

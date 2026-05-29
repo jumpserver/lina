@@ -7,7 +7,6 @@
     <div class="tab-page-wrapper">
       <el-tabs
         v-if="tabIndices.length > 1"
-        slot="submenu"
         v-model="iActiveMenu"
         class="page-submenu"
         @tab-click="handleTabClick"
@@ -17,7 +16,7 @@
             :disabled="item.disabled"
             :name="item.name"
           >
-            <span slot="label">
+            <template #label>
               <Icon v-if="item.icon" :icon="item.icon" class="pre-icon" />
               {{ toSentenceCase(item.title) }}
               <slot :tab="item.name" name="badge" />
@@ -28,14 +27,16 @@
                 placement="bottom"
                 popper-class="help-tips"
               >
-                <div slot="content" v-sanitize="item.helpTip" class="page-help-content" />
+                <template #content>
+                  <div v-sanitize="item.helpTip" class="page-help-content" />
+                </template>
                 <span>
                   <el-button class="help-msg-btn">
                     <i class="el-icon-info" />
                   </el-button>
                 </span>
               </el-tooltip>
-            </span>
+            </template>
           </el-tab-pane>
         </template>
       </el-tabs>

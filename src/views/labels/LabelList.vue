@@ -11,12 +11,12 @@
   </div>
 </template>
 
-<script lang="jsx">
-import { GenericListPage } from '@/layout/components'
-import BindDialog from './BindDialog.vue'
-import LabelResourcesDialog from '@/views/labels/LabelResourcesDialog.vue'
-import { mapGetters } from 'vuex'
-
+<script>
+import { createVNode as _createVNode, resolveComponent as _resolveComponent } from "vue";
+import { GenericListPage } from '@/layout/components';
+import BindDialog from './BindDialog.vue';
+import LabelResourcesDialog from '@/views/labels/LabelResourcesDialog.vue';
+import { mapGetters } from 'vuex';
 export default {
   components: {
     LabelResourcesDialog,
@@ -24,7 +24,7 @@ export default {
     GenericListPage
   },
   data() {
-    const vm = this
+    const vm = this;
     return {
       bindVisible: false,
       resDialogVisible: false,
@@ -37,77 +37,80 @@ export default {
         },
         columnsMeta: {
           name: {
-            formatter: (row) => row.name
+            formatter: row => row.name
           },
           res_count: {
-            formatter: (row) => {
+            formatter: row => {
               const onClick = () => {
-                vm.handleClickResCount(row)
-              }
-              return (
-                <el-link type='success' onClick={onClick}>{row['res_count']}</el-link>
-              )
+                vm.handleClickResCount(row);
+              };
+              return _createVNode(_resolveComponent("el-link"), {
+                "type": "success",
+                "onClick": onClick
+              }, {
+                default: () => [row['res_count']]
+              });
             }
           },
           color: {
-            formatter: (row) => {
+            formatter: row => {
               const onChange = () => {
-                vm.$axios.patch(`/api/v1/labels/labels/${row.id}/`, { color: row.color })
-              }
-              return (
-                <el-color-picker
-                  v-model={row.color}
-                  size='small'
-                  onChange={onChange}
-                />
-              )
+                vm.$axios.patch(`/api/v1/labels/labels/${row.id}/`, {
+                  color: row.color
+                });
+              };
+              return _createVNode(_resolveComponent("el-color-picker"), {
+                "modelValue": row.color,
+                "onUpdate:modelValue": $event => row.color = $event,
+                "size": "small",
+                "onChange": onChange
+              }, null);
             }
           },
           actions: {
             formatterArgs: {
-              extraActions: [
-                {
-                  title: this.$t('BindResource'),
-                  name: 'bind',
-                  callback: ({ row }) => {
-                    this.label = row
-                    this.bindVisible = true
-                  },
-                  can: () => {
-                    return !this.currentOrgIsRoot && this.$hasPerm('labels.change_labeledresource')
-                  }
+              extraActions: [{
+                title: this.$t('BindResource'),
+                name: 'bind',
+                callback: ({
+                  row
+                }) => {
+                  this.label = row;
+                  this.bindVisible = true;
+                },
+                can: () => {
+                  return !this.currentOrgIsRoot && this.$hasPerm('labels.change_labeledresource');
                 }
-              ]
+              }]
             }
           }
-
         }
       },
       headerActions: {
         createRoute: 'LabelCreate'
       }
-    }
+    };
   },
   computed: {
     ...mapGetters(['currentOrgIsRoot'])
   },
   methods: {
     handleClickResCount(row) {
-      this.label = row
-      this.resDialogVisible = true
+      this.label = row;
+      this.resDialogVisible = true;
     },
     handleAddResource() {
-      this.resDialogVisible = false
+      this.resDialogVisible = false;
       this.$nextTick(() => {
-        this.bindVisible = true
-      })
+        this.bindVisible = true;
+      });
     },
     handleDialogConfirm() {
-      this.bindVisible = false
-      this.$refs.GenericListPage.reloadTable()
+      this.bindVisible = false;
+      this.$refs.GenericListPage.reloadTable();
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

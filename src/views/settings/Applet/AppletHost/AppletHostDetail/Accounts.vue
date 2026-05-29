@@ -7,9 +7,9 @@
   />
 </template>
 
-<script lang="jsx">
-import Account from '@/views/assets/Asset/AssetDetail/Account'
-
+<script>
+import { createVNode as _createVNode } from "vue";
+import Account from '@/views/assets/Asset/AssetDetail/Account';
 export default {
   name: 'Accounts',
   components: {
@@ -18,40 +18,35 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
     return {
       columnsMeta: {
         name: {
-          formatter: (row) => <span>{row.name}</span>
+          formatter: row => _createVNode("span", null, [row.name])
         },
         asset: {
           label: this.$t('Asset'),
-          formatter: (row) => <span>{row.asset.name}</span>
+          formatter: row => _createVNode("span", null, [row.asset.name])
         }
       },
-      quickActions: [
-        {
-          title: this.$t('GenerateAccounts'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('Generate')
-          },
-          callbacks: {
-            click: function() {
-              this.$axios.put(
-                `/api/v1/terminal/applet-hosts/${this.object.id}/generate-accounts/`
-              ).then(res => {
-                this.$message.success(this.$tc('GenerateSuccessMsg'))
-              })
-            }.bind(this)
-          }
+      quickActions: [{
+        title: this.$t('GenerateAccounts'),
+        attrs: {
+          type: 'primary',
+          label: this.$t('Generate')
+        },
+        callbacks: {
+          click: function () {
+            this.$axios.put(`/api/v1/terminal/applet-hosts/${this.object.id}/generate-accounts/`).then(res => {
+              this.$message.success(this.$tc('GenerateSuccessMsg'));
+            });
+          }.bind(this)
         }
-      ]
-    }
+      }]
+    };
   }
-}
+};
 </script>

@@ -188,14 +188,18 @@ export default {
       if (address.indexOf('://') === -1) {
         address = `https://${address}`
       }
-      const parse = require('url-parse')
-      const path = parse(address)
-      let port = path.port
+      let url
+      try {
+        url = new URL(address)
+      } catch (error) {
+        return 0
+      }
+      let port = Number(url.port)
       if (port < 0 || port > 65535) {
         port = 0
       }
       if (!port) {
-        port = path.protocol === 'https:' ? 443 : 80
+        port = url.protocol === 'https:' ? 443 : 80
       }
       return port
     },

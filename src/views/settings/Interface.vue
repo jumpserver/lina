@@ -65,12 +65,12 @@
   </Page>
 </template>
 
-<script lang="jsx">
-import { Page } from '@/layout/components'
-import { IBox, UploadField } from '@/components'
-import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
+<script>
 import { getInterfaceInfo, previewThemes, restoreInterface, updateInterface } from '@/api/interface'
+import { IBox, UploadField } from '@/components'
 import MarkDown from '@/components/Widgets/MarkDown'
+import { Page } from '@/layout/components'
+import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 
 export default {
   name: 'InterfaceSettings',

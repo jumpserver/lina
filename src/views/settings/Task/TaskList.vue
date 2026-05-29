@@ -2,11 +2,11 @@
   <ListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
-<script lang="jsx">
+<script>
+import { createTextVNode as _createTextVNode, createVNode as _createVNode } from "vue";
 import { DrawerListTable as ListTable } from '@/components';
 import { ChoicesFormatter, DetailFormatter, SwitchFormatter } from '@/components/Table/TableFormatters';
 import { BASE_URL } from '@/utils/common/index';
-
 export default {
   name: 'TaskList',
   components: {
@@ -16,15 +16,9 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/ops/tasks/',
-        columns: [
-          'name', 'queue', 'count', 'state', 'date_last_publish',
-          'exec_cycle', 'next_exec_time', 'enabled'
-        ],
+        columns: ['name', 'queue', 'count', 'state', 'date_last_publish', 'exec_cycle', 'next_exec_time', 'enabled'],
         columnsShow: {
-          default: [
-            'name', 'count', 'state', 'date_last_publish',
-            'exec_cycle', 'next_exec_time', 'enabled'
-          ]
+          default: ['name', 'count', 'state', 'date_last_publish', 'exec_cycle', 'next_exec_time', 'enabled']
         },
         columnsMeta: {
           name: {
@@ -32,53 +26,55 @@ export default {
             formatterArgs: {
               can: this.$hasPerm('ops.view_celerytask'),
               router: 'TaskDetail',
-              getTitle({ row, cellValue }) {
+              getTitle({
+                row,
+                cellValue
+              }) {
                 if (row.meta && row.meta.comment) {
-                  return row.meta.comment
+                  return row.meta.comment;
                 }
-                return cellValue
+                return cellValue;
               }
             }
           },
           queue: {
             label: this.$t('Queue'),
             width: '120px',
-            formatter: (row) => {
-              return row.meta.queue
+            formatter: row => {
+              return row.meta.queue;
             }
           },
           comment: {
             width: '300px',
             formatter: row => {
-              return row.meta.comment ? row.meta.comment : '-'
+              return row.meta.comment ? row.meta.comment : '-';
             }
           },
           last_published_time: {
             width: '210px',
-            formatter: (row) => {
-              return row.last_published_time != null ? row.last_published_time : '-'
+            formatter: row => {
+              return row.last_published_time != null ? row.last_published_time : '-';
             }
           },
           exec_cycle: {
             width: '120px',
-            formatter: (row) => {
-              return row.exec_cycle ? row.exec_cycle : '-'
+            formatter: row => {
+              return row.exec_cycle ? row.exec_cycle : '-';
             }
           },
           next_exec_time: {
             width: '210px',
-            formatter: (row) => {
-              return row.next_exec_time ? row.next_exec_time : '-'
+            formatter: row => {
+              return row.next_exec_time ? row.next_exec_time : '-';
             }
           },
           count: {
             width: '130px',
             label: `${this.$t('Success')}/${this.$t('Total')}`,
-            formatter: (row) => {
-              return <div>
-                <span class='text-primary'>{row.summary.success || 0}</span>/
-                <span>{row.summary.total || 0}</span>
-              </div>
+            formatter: row => {
+              return _createVNode("div", null, [_createVNode("span", {
+                "class": "text-primary"
+              }, [row.summary.success || 0]), _createTextVNode("/"), _createVNode("span", null, [row.summary.total || 0])]);
             }
           },
           state: {
@@ -88,7 +84,7 @@ export default {
             formatter: ChoicesFormatter,
             formatterArgs: {
               getIcon() {
-                return 'fa-circle-o'
+                return 'fa-circle-o';
               },
               classChoices: {
                 green: 'text-primary',
@@ -97,14 +93,16 @@ export default {
               },
               showText: false,
               hasTips: true,
-              getTips: ({ cellValue }) => {
+              getTips: ({
+                cellValue
+              }) => {
                 switch (cellValue) {
                   case 'green':
-                    return this.$t('StatusGreen')
+                    return this.$t('StatusGreen');
                   case 'yellow':
-                    return this.$t('StatusYellow')
+                    return this.$t('StatusYellow');
                   default:
-                    return this.$t('StatusRed')
+                    return this.$t('StatusRed');
                 }
               }
             }
@@ -118,15 +116,15 @@ export default {
             formatter: SwitchFormatter,
             formatterArgs: {
               isDisplay(row) {
-                return row.exec_cycle !== undefined
+                return row.exec_cycle !== undefined;
               },
               getPatchUrl(row) {
-                return `/api/v1/ops/celery/period-tasks/${row.name}/`
+                return `/api/v1/ops/celery/period-tasks/${row.name}/`;
               },
               getPatchData(row) {
                 return {
                   enabled: !row.enabled
-                }
+                };
               }
             }
           }
@@ -135,20 +133,18 @@ export default {
       headerActions: {
         hasCreate: false,
         hasMoreActions: false,
-        extraActions: [
-          {
-            title: this.$t('TaskMonitor'),
-            type: 'primary',
-            can: this.$hasPerm('ops.view_taskmonitor'),
-            callback: () => {
-              window.open(`${BASE_URL}/core/flower/?_=${Date.now()}`)
-            }
+        extraActions: [{
+          title: this.$t('TaskMonitor'),
+          type: 'primary',
+          can: this.$hasPerm('ops.view_taskmonitor'),
+          callback: () => {
+            window.open(`${BASE_URL}/core/flower/?_=${Date.now()}`);
           }
-        ]
+        }]
       }
-    }
+    };
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

@@ -13,7 +13,7 @@
   </TwoCol>
 </template>
 
-<script lang="jsx">
+<script>
 import { IBox } from '@/components';
 import AutoDetailCard from '@/components/Cards/DetailCard/auto';
 import TwoCol from '@/layout/components/Page/TwoColPage.vue';

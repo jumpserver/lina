@@ -8,18 +8,18 @@
   />
 </template>
 
-<script lang="jsx">
-import { ActionsFormatter, ArrayFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
-import { openTaskPage } from '@/utils/jms/index'
-import { GenericListTable } from '@/layout/components'
-
+<script>
+import { createVNode as _createVNode, resolveComponent as _resolveComponent } from "vue";
+import { ActionsFormatter, ArrayFormatter, DetailFormatter } from '@/components/Table/TableFormatters';
+import { openTaskPage } from '@/utils/jms/index';
+import { GenericListTable } from '@/layout/components';
 export default {
   name: 'AccountBackupList',
   components: {
     GenericListTable
   },
   data() {
-    const vm = this
+    const vm = this;
     return {
       createDrawer: () => import('@/views/accounts/AccountBackup/AccountBackupCreateUpdate.vue'),
       detailDrawer: () => import('@/views/accounts/AccountBackup/Detail/index.vue'),
@@ -29,16 +29,10 @@ export default {
           app: 'accounts',
           resource: 'backupaccountautomation'
         },
-        columns: [
-          'name', 'backup_type', 'org_name', 'is_periodic',
-          'periodic_display', 'executed_amount', 'is_active', 'actions'
-        ],
+        columns: ['name', 'backup_type', 'org_name', 'is_periodic', 'periodic_display', 'executed_amount', 'is_active', 'actions'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: [
-            'name', 'backup_type', 'periodic_display',
-            'executed_amount', 'is_active', 'actions'
-          ]
+          default: ['name', 'backup_type', 'periodic_display', 'executed_amount', 'is_active', 'actions']
         },
         columnsMeta: {
           name: {
@@ -56,37 +50,41 @@ export default {
             }
           },
           executed_amount: {
-            formatter: (row) => {
-              const can = vm.$hasPerm('accounts.view_backupaccountexecution')
-              return <el-link onClick={ () => this.handleExecAmount(row) } disabled={ !can }>{ row.executed_amount }</el-link>
+            formatter: row => {
+              const can = vm.$hasPerm('accounts.view_backupaccountexecution');
+              return _createVNode(_resolveComponent("el-link"), {
+                "onClick": () => this.handleExecAmount(row),
+                "disabled": !can
+              }, {
+                default: () => [row.executed_amount]
+              });
             }
           },
           actions: {
             formatterArgs: {
               formatter: ActionsFormatter,
               cloneRoute: 'AccountBackupCreate',
-              extraActions: [
-                {
-                  title: vm.$t('Execute'),
-                  order: 1,
-                  name: 'execute',
-                  type: 'primary',
-                  can: ({ row }) => {
-                    return this.$hasPerm('accounts.add_backupaccountexecution') && row.is_active
-                  },
-                  callback: function({ row }) {
-                    this.$axios.post(
-                      `/api/v1/accounts/account-backup-plan-executions/`,
-                      {
-                        automation: row.id,
-                        type: row.type.value
-                      }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
-                  }.bind(this)
-                }
-              ]
+              extraActions: [{
+                title: vm.$t('Execute'),
+                order: 1,
+                name: 'execute',
+                type: 'primary',
+                can: ({
+                  row
+                }) => {
+                  return this.$hasPerm('accounts.add_backupaccountexecution') && row.is_active;
+                },
+                callback: function ({
+                  row
+                }) {
+                  this.$axios.post(`/api/v1/accounts/account-backup-plan-executions/`, {
+                    automation: row.id,
+                    type: row.type.value
+                  }).then(res => {
+                    openTaskPage(res['task']);
+                  });
+                }.bind(this)
+              }]
             }
           }
         }
@@ -96,7 +94,7 @@ export default {
         hasExport: false,
         hasImport: false
       }
-    }
+    };
   },
   methods: {
     handleExecAmount(row) {
@@ -106,8 +104,8 @@ export default {
           tab: 'AccountBackupExecutionList',
           automation_id: row.id
         }
-      })
+      });
     }
   }
-}
+};
 </script>

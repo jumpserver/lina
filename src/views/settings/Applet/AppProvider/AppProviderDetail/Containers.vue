@@ -6,8 +6,8 @@
   </el-row>
 </template>
 
-<script lang="jsx">
-import { DrawerListTable as ListTable } from '@/components'
+<script>
+import { DrawerListTable as ListTable } from '@/components';
 
 export default {
   name: 'Containers',

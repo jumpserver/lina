@@ -7,8 +7,8 @@
   </div>
 </template>
 
-<script lang="jsx">
-import AdhocOpenDialog from '@/views/ops/Adhoc/AdhocOpenDialog'
+<script>
+import AdhocOpenDialog from '@/views/ops/Adhoc/AdhocOpenDialog';
 
 export default {
   name: 'LoadTemplateLink',

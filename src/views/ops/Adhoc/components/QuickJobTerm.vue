@@ -45,11 +45,11 @@
   </div>
 </template>
 
-<script lang="jsx">
-import 'xterm/css/xterm.css'
-import { Terminal } from 'xterm'
-import { FitAddon } from 'xterm-addon-fit'
-import { downloadText } from '@/utils/common/index'
+<script>
+import { downloadText } from '@/utils/common/index';
+import { Terminal } from 'xterm';
+import { FitAddon } from 'xterm-addon-fit';
+import 'xterm/css/xterm.css';
 
 export default {
   name: 'Term',

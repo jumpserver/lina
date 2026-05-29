@@ -5,12 +5,12 @@
   </div>
 </template>
 
-<script lang="jsx">
-import { GenericListPage } from '@/layout/components'
-import { openTaskPage } from '@/utils/jms/index'
-import ExecutionDetailDialog from '@/views/ops/Execution/ExecutionDetail'
-import detailFormatter from '@/components/Table/TableFormatters/DetailFormatter.vue'
-
+<script>
+import { createVNode as _createVNode } from "vue";
+import { GenericListPage } from '@/layout/components';
+import { openTaskPage } from '@/utils/jms/index';
+import ExecutionDetailDialog from '@/views/ops/Execution/ExecutionDetail';
+import detailFormatter from '@/components/Table/TableFormatters/DetailFormatter.vue';
 export default {
   components: {
     GenericListPage,
@@ -23,15 +23,10 @@ export default {
       showExecutionDetailDialog: false,
       tableConfig: {
         url: '/api/v1/ops/job-executions/',
-        columnsExclude: [
-          'summary', 'parameters', 'timedelta'
-        ],
+        columnsExclude: ['summary', 'parameters', 'timedelta'],
         columnsShow: {
           min: ['material', 'actions'],
-          default: [
-            'id', 'material', 'job_type', 'is_finished', 'is_success',
-            'time_cost', 'date_created', 'actions'
-          ]
+          default: ['id', 'material', 'job_type', 'is_finished', 'is_success', 'time_cost', 'date_created', 'actions']
         },
         columnsMeta: {
           material: {
@@ -45,37 +40,47 @@ export default {
             }
           },
           job: {
-            formatter: (row) => {
-              return <span>{row.job?.name || '-'}</span>
+            formatter: row => {
+              return _createVNode("span", null, [row.job?.name || '-']);
             }
           },
           is_finished: {
             width: '100px',
-            formatter: (row) => {
+            formatter: row => {
               if (row.is_finished) {
-                return <i class='fa fa-check text-primary'/>
+                return _createVNode("i", {
+                  "class": "fa fa-check text-primary"
+                }, null);
               }
-              return <i class='fa fa-times text-danger'/>
+              return _createVNode("i", {
+                "class": "fa fa-times text-danger"
+              }, null);
             }
           },
           is_success: {
             width: '100px',
-            formatter: (row) => {
+            formatter: row => {
               if (!row.is_finished) {
-                return <i class='fa  fa fa-spinner fa-spin'/>
+                return _createVNode("i", {
+                  "class": "fa  fa fa-spinner fa-spin"
+                }, null);
               }
               if (row.is_success) {
-                return <i class='fa fa-check text-primary'/>
+                return _createVNode("i", {
+                  "class": "fa fa-check text-primary"
+                }, null);
               }
-              return <i class='fa fa-times text-danger'/>
+              return _createVNode("i", {
+                "class": "fa fa-times text-danger"
+              }, null);
             }
           },
           time_cost: {
-            formatter: function(row) {
+            formatter: function (row) {
               if (row.time_cost) {
-                return row.time_cost.toFixed(2) + 's'
+                return row.time_cost.toFixed(2) + 's';
               }
-              return '-'
+              return '-';
             }
           },
           actions: {
@@ -84,17 +89,17 @@ export default {
               hasUpdate: false,
               hasDelete: false,
               hasClone: false,
-              extraActions: [
-                {
-                  title: this.$t('Output'),
-                  name: 'logging',
-                  type: 'info',
-                  can: true,
-                  callback: ({ row }) => {
-                    openTaskPage(row.task_id)
-                  }
+              extraActions: [{
+                title: this.$t('Output'),
+                name: 'logging',
+                type: 'info',
+                can: true,
+                callback: ({
+                  row
+                }) => {
+                  openTaskPage(row.task_id);
                 }
-              ]
+              }]
             }
           }
         }
@@ -104,7 +109,7 @@ export default {
         hasExport: false,
         hasImport: false
       }
-    }
+    };
   }
-}
+};
 </script>

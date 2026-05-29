@@ -3,15 +3,17 @@
     <span class="el-dropdown-link header-lang">
       {{ currentLang.title }}<i class="el-icon-arrow-down el-icon--right" />
     </span>
-    <el-dropdown-menu slot="dropdown">
-      <el-dropdown-item
-        v-for="item of supportLanguages"
-        :key="item.code"
-        @click.native="changeLangTo(item)"
-      >
-        {{ item.title }}
-      </el-dropdown-item>
-    </el-dropdown-menu>
+    <template #dropdown>
+      <el-dropdown-menu>
+        <el-dropdown-item
+          v-for="item of supportLanguages"
+          :key="item.code"
+          @click="changeLangTo(item)"
+        >
+          {{ item.title }}
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </template>
   </el-dropdown>
 </template>
 
