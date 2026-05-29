@@ -70,7 +70,6 @@ import TabTree from '../TabTree/index.vue'
 
 export default {
   name: 'TreeTable',
-  inheritAttrs: false,
   components: {
     ListTable,
     AutoDataZTree,
@@ -79,6 +78,7 @@ export default {
     IBox,
     Dialog
   },
+  inheritAttrs: false,
   props: {
     ...ListTable.props,
     treeSetting: {

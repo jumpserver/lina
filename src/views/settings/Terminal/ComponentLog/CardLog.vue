@@ -1,9 +1,11 @@
 <template>
   <el-card class="log-card">
-    <div slot="header">
-      <span> {{ title }}</span>
-      <el-button style="float: right" type="text" @click="tailLog"> {{ $tc('TailLog') }} </el-button>
-    </div>
+    <template #header>
+      <div>
+        <span> {{ title }}</span>
+        <el-button style="float: right" type="text" @click="tailLog"> {{ $tc('TailLog') }} </el-button>
+      </div>
+    </template>
     <table v-if="logs.length>0" class="log-table">
       <tr v-for="(o,i) in logs" :key="i">
         <td>{{ o['message'] }}</td>

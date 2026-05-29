@@ -32,15 +32,15 @@
 </template>
 
 <script>
-import { createVNode as _createVNode } from "vue";
-import AutoDetailCard from '@/components/Cards/DetailCard/auto';
-import { toSafeLocalDateStr } from '@/utils/common/time';
-import RelationCard from '@/components/Cards/RelationCard';
-import { QuickActions } from '@/components';
-import TimingPanel from '@/views/assets/Cloud/Account/components/TimingPanel';
-import { openTaskPage } from '@/utils/jms/index';
-import Dialog from '@/components/Dialog';
-import TwoCol from '@/layout/components/Page/TwoColPage.vue';
+import { createVNode as _createVNode } from 'vue'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import { toSafeLocalDateStr } from '@/utils/common/time'
+import RelationCard from '@/components/Cards/RelationCard'
+import { QuickActions } from '@/components'
+import TimingPanel from '@/views/assets/Cloud/Account/components/TimingPanel'
+import { openTaskPage } from '@/utils/jms/index'
+import Dialog from '@/components/Dialog'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 export default {
   name: 'CloudAccountDetail',
   components: {
@@ -81,10 +81,10 @@ export default {
           disabled: !this.hasEditPerm()
         },
         callbacks: {
-          change: function (val) {
+          change: function(val) {
             this.updateTaskData({
               'sync_ip_type': val
-            });
+            })
           }.bind(this)
         }
       }, {
@@ -95,10 +95,10 @@ export default {
           disabled: !this.hasEditPerm()
         },
         callbacks: {
-          change: function (val) {
+          change: function(val) {
             this.updateTaskData({
               'release_assets': val
-            });
+            })
           }.bind(this)
         }
       }, {
@@ -111,10 +111,10 @@ export default {
           disabled: !this.hasEditPerm()
         },
         callbacks: {
-          change: function (val) {
+          change: function(val) {
             this.updateTaskData({
               'is_always_update': val
-            });
+            })
           }.bind(this)
         }
       }],
@@ -128,10 +128,10 @@ export default {
           disabled: !this.$hasPerm('xpack.add_syncinstancetaskexecution')
         },
         callbacks: {
-          click: function () {
+          click: function() {
             this.$axios.get(`/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task.id}/run/`).then(res => {
-              openTaskPage(res['task']);
-            });
+              openTaskPage(res['task'])
+            })
           }.bind(this)
         }
       }, {
@@ -143,8 +143,8 @@ export default {
           label: this.$t('Modify')
         },
         callbacks: {
-          click: function (val) {
-            this.showTimer = true;
+          click: function(val) {
+            this.showTimer = true
           }.bind(this)
         }
       }],
@@ -156,44 +156,44 @@ export default {
             return {
               label: item.name,
               value: item.id
-            };
+            }
           }
         },
         select2Config: {
           quickAddCallback: () => {
             window.open(this.$router.resolve({
               name: 'CloudStrategyCreate'
-            }).href, '_blank');
+            }).href, '_blank')
           }
         },
         hasObjectsId: this.object?.task?.strategy?.map(i => i.id) || [],
         performAdd: items => {
-          const newData = [];
-          const value = this.$refs.StrategyRelation.iHasObjects;
+          const newData = []
+          const value = this.$refs.StrategyRelation.iHasObjects
           value.map(v => {
-            newData.push(v.value);
-          });
-          const relationUrl = `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task.id}/`;
+            newData.push(v.value)
+          })
+          const relationUrl = `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task.id}/`
           items.map(v => {
-            newData.push(v.value);
-          });
+            newData.push(v.value)
+          })
           return this.$axios.patch(relationUrl, {
             strategy: newData
-          });
+          })
         },
         performDelete: item => {
-          const itemId = item.value;
-          const newData = [];
-          const value = this.$refs.StrategyRelation.iHasObjects;
+          const itemId = item.value
+          const newData = []
+          const value = this.$refs.StrategyRelation.iHasObjects
           value.map(v => {
             if (v.value !== itemId) {
-              newData.push(v.value);
+              newData.push(v.value)
             }
-          });
-          const relationUrl = `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task.id}/`;
+          })
+          const relationUrl = `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task.id}/`
           return this.$axios.patch(relationUrl, {
             strategy: newData
-          });
+          })
         }
       },
       detailFields: [{
@@ -206,9 +206,9 @@ export default {
         key: this.$t('Region'),
         value: this.object.task?.regions_display,
         formatter(row, value) {
-          return _createVNode("div", null, [value?.map(content => {
-            return _createVNode("div", null, [content]);
-          })]);
+          return _createVNode('div', null, [value?.map(content => {
+            return _createVNode('div', null, [content])
+          })])
         }
       }, {
         key: this.$t('DateLastSync'),
@@ -217,21 +217,21 @@ export default {
         key: this.$t('DateCreated'),
         value: this.object?.task.date_created ? toSafeLocalDateStr(this.object?.task.date_created) : ''
       }, 'comment']
-    };
+    }
   },
   methods: {
     hasEditPerm() {
-      return this.$hasPerm('xpack.change_account') && this.$hasPerm('xpack.change_syncinstancetask');
+      return this.$hasPerm('xpack.change_account') && this.$hasPerm('xpack.change_syncinstancetask')
     },
     updateTaskData(data) {
       this.$axios.patch(`/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task.id}/`, data).then(res => {
-        this.$message.success(this.$tc('UpdateSuccessMsg'));
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
       }).catch(err => {
-        this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err));
-      });
+        this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
+      })
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

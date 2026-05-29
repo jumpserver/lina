@@ -8,10 +8,10 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, createTextVNode as _createTextVNode } from "vue";
-import AutoDetailCard from '@/components/Cards/DetailCard/auto';
-import { QuickActions } from '@/components';
-import TwoCol from '@/layout/components/Page/TwoColPage.vue';
+import { createVNode as _createVNode, createTextVNode as _createTextVNode } from 'vue'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import { QuickActions } from '@/components'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 export default {
   name: 'Detail',
   components: {
@@ -35,14 +35,14 @@ export default {
           disabled: !this.$hasPerm('accounts.change_accounttemplate')
         },
         callbacks: {
-          change: function (val) {
+          change: function(val) {
             this.$axios.patch(`/api/v1/accounts/account-templates/${this.object.id}/`, {
               privileged: val
             }).then(res => {
-              this.$message.success(this.$tc('UpdateSuccessMsg'));
+              this.$message.success(this.$tc('UpdateSuccessMsg'))
             }).catch(err => {
-              this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err));
-            });
+              this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
+            })
           }.bind(this)
         }
       }],
@@ -51,15 +51,15 @@ export default {
       detailFields: ['id', 'name', 'username', 'secret_type', 'auto_push', 'secret_strategy', 'created_by', 'comment', {
         key: this.$t('SuFrom'),
         formatter: () => {
-          const su_from = this.object.su_from;
-          if (!su_from) return _createVNode("span", null, [_createTextVNode("-")]);
-          return _createVNode("span", null, [su_from.name, _createTextVNode("("), su_from.username, _createTextVNode(")")]);
+          const su_from = this.object.su_from
+          if (!su_from) return _createVNode('span', null, [_createTextVNode('-')])
+          return _createVNode('span', null, [su_from.name, _createTextVNode('('), su_from.username, _createTextVNode(')')])
         }
       }, 'is_active', 'date_created', 'date_updated']
-    };
+    }
   },
   computed: {}
-};
+}
 </script>
 
 <style scoped>

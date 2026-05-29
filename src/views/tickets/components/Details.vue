@@ -1,8 +1,10 @@
 <template>
   <IBox class="box">
-    <div slot="header" class="clearfix ibox-title">
-      <i /> {{ title }}
-    </div>
+    <template #header>
+      <div class="clearfix ibox-title">
+        <i /> {{ title }}
+      </div>
+    </template>
     <div class="content">
       <el-row :gutter="10">
         <el-col
@@ -41,8 +43,8 @@
   </IBox>
 </template>
 <script>
-import ItemValue from '@/components/Cards/DetailCard/ItemValue';
-import IBox from '@/components/Common/IBox';
+import ItemValue from '@/components/Cards/DetailCard/ItemValue'
+import IBox from '@/components/Common/IBox'
 
 export default {
   name: 'Details',

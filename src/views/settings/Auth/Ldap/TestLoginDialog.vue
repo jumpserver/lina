@@ -6,7 +6,6 @@
     :title="$tc('TestLdapLoginTitle') "
     v-bind="$attrs"
     @confirm="testUserLoginClick()"
-    v-on="$listeners"
   >
     <el-form
       :model="userLoginForm"

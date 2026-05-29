@@ -1,5 +1,5 @@
 <template>
-  <el-form class="account-content" @submit.native.prevent>
+  <el-form class="account-content" @submit.prevent>
     <el-form-item>
       <el-radio-group v-model="realRadioSelected" @input="handleRadioChanged">
         <el-radio v-for="i in iRealChoices" :key="i.label" :disabled="i.disabled" :label="i.value">

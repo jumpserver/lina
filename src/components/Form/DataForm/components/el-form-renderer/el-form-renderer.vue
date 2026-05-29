@@ -32,18 +32,17 @@ import RenderFormGroup from './components/render-form-group.vue'
 import RenderFormItem from './components/render-form-item.vue'
 import transformContent from './util/transform-content'
 import {
-    collect,
-    correctValue,
-    mergeValue,
-    transformInputValue,
-    transformOutputValue
+  collect,
+  correctValue,
+  mergeValue,
+  transformInputValue,
+  transformOutputValue
 } from './util/utils'
 
 const GROUP = 'group'
 
 export default {
   name: 'ElFormRenderer',
-  emits: ['input', 'update:form'],
   components: {
     RenderFormItem,
     RenderFormGroup
@@ -73,6 +72,7 @@ export default {
       default: undefined
     }
   },
+  emits: ['input', 'update:form'],
   data() {
     return {
       GROUP,

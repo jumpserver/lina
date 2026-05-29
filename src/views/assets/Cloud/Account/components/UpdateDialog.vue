@@ -5,7 +5,6 @@
     :title="$tc('CloudAccountUpdate')"
     :visible="visible"
     class="drawer"
-    v-on="$listeners"
   >
     <IBox>
       <AuthPanel

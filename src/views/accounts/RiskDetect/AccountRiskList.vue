@@ -21,12 +21,12 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from "vue";
-import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue';
-import RiskHandleFormatter from './RiskHandlerFormatter/index.vue';
-import BatchResolveDialog from '@/views/accounts/RiskDetect/RiskHandlerFormatter/BatchResolveDialog.vue';
-import RiskScanDialog from './RiskScanDialog.vue';
-import { DetailFormatter } from '@/components/Table/TableFormatters';
+import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
+import RiskHandleFormatter from './RiskHandlerFormatter/index.vue'
+import BatchResolveDialog from '@/views/accounts/RiskDetect/RiskHandlerFormatter/BatchResolveDialog.vue'
+import RiskScanDialog from './RiskScanDialog.vue'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 export default {
   components: {
     RiskScanDialog,
@@ -34,7 +34,7 @@ export default {
     AssetTreeTable
   },
   data() {
-    const vm = this;
+    const vm = this
     return {
       gatherAccounts: [],
       scanVisible: false,
@@ -44,7 +44,7 @@ export default {
       },
       treeSetting: {
         showMenu: node => {
-          return node?.meta?.type === 'asset';
+          return node?.meta?.type === 'asset'
         },
         showRefresh: true,
         showSearch: true,
@@ -59,10 +59,10 @@ export default {
           name: this.$t('RiskDetection'),
           icon: 'scan',
           callback: node => {
-            vm.detectDialog.asset = node.id;
+            vm.detectDialog.asset = node.id
             setTimeout(() => {
-              vm.detectDialog.visible = true;
-            }, 100);
+              vm.detectDialog.visible = true
+            }, 100)
           }
         }]
       },
@@ -108,7 +108,7 @@ export default {
                   params: {
                     id: row.asset.id
                   }
-                };
+                }
               },
               drawer: true
             }
@@ -119,13 +119,13 @@ export default {
           },
           risk: {
             formatter: row => {
-              return _createVNode(_resolveComponent("el-tag"), {
-                "size": "small",
-                "type": "danger",
-                "effect": "plain"
+              return _createVNode(_resolveComponent('el-tag'), {
+                'size': 'small',
+                'type': 'danger',
+                'effect': 'plain'
               }, {
                 default: () => [row.risk.label]
-              });
+              })
             }
           },
           status: {
@@ -148,35 +148,35 @@ export default {
           name: 'resolveSelected',
           title: this.$t('ResolveSelected'),
           icon: 'el-icon-check',
-          callback: function ({
+          callback: function({
             selectedRows
           }) {
-            vm.batchResolveDialog.risks = selectedRows;
-            vm.batchResolveDialog.visible = true;
+            vm.batchResolveDialog.risks = selectedRows
+            vm.batchResolveDialog.visible = true
           },
-          can: function ({
+          can: function({
             selectedRows
           }) {
-            return selectedRows.length > 0 && vm.$hasPerm('accounts.change_accountrisk');
+            return selectedRows.length > 0 && vm.$hasPerm('accounts.change_accountrisk')
           }
         }]
       }
-    };
+    }
   },
   mounted() {
-    this.checkPayload();
+    this.checkPayload()
   },
   methods: {
     checkPayload() {
-      const payload = this.$route.query.payload;
-      if (!payload) return;
-      const queryParams = `&risk=${payload}`;
+      const payload = this.$route.query.payload
+      if (!payload) return
+      const queryParams = `&risk=${payload}`
       if (queryParams) {
-        this.tableConfig.url += queryParams;
+        this.tableConfig.url += queryParams
       }
     }
   }
-};
+}
 </script>
 <style lang='scss' scoped>
 

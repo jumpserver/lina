@@ -8,11 +8,11 @@
 </template>
 
 <script>
-import { createVNode as _createVNode } from "vue";
-import { QuickActions } from '@/components';
-import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue';
-import { openTaskPage } from '@/utils/jms/index';
-import TwoCol from '@/layout/components/Page/TwoColPage.vue';
+import { createVNode as _createVNode } from 'vue'
+import { QuickActions } from '@/components'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
+import { openTaskPage } from '@/utils/jms/index'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 export default {
   name: 'AccountBackupInfo',
   components: {
@@ -29,7 +29,7 @@ export default {
   },
   isEmail: false,
   data() {
-    this.isEmail = this.object.backup_type.value === 'email';
+    this.isEmail = this.object.backup_type.value === 'email'
     return {
       quickActions: [{
         title: this.$t('ManualExecution'),
@@ -39,12 +39,12 @@ export default {
           disabled: !this.$hasPerm('accounts.add_backupaccountexecution')
         },
         callbacks: {
-          click: function () {
+          click: function() {
             this.$axios.post(`/api/v1/accounts/account-backup-plan-executions/`, {
               automation: this.object.id
             }).then(res => {
-              openTaskPage(res['task']);
-            });
+              openTaskPage(res['task'])
+            })
           }.bind(this)
         }
       }],
@@ -53,47 +53,47 @@ export default {
         key: this.$t('Crontab'),
         value: this.object.crontab,
         formatter: (item, val) => {
-          return _createVNode("span", null, [this.object.is_periodic ? val : '-']);
+          return _createVNode('span', null, [this.object.is_periodic ? val : '-'])
         }
       }, {
         key: this.$t('Interval'),
         value: this.object.interval,
         formatter: (item, val) => {
-          return _createVNode("span", null, [this.object.is_periodic ? val : '-']);
+          return _createVNode('span', null, [this.object.is_periodic ? val : '-'])
         }
       }, {
         key: this.$t('Recipient') + ' A',
         value: this.object.recipients_part_one,
         formatter: (item, val) => {
-          const recipientA = this.isEmail ? val.map(item => item.name).join(', ') : '-';
-          return _createVNode("span", null, [recipientA]);
+          const recipientA = this.isEmail ? val.map(item => item.name).join(', ') : '-'
+          return _createVNode('span', null, [recipientA])
         }
       }, {
         key: this.$t('Recipient') + ' B',
         value: this.object.recipients_part_two,
         formatter: (item, val) => {
-          const recipientB = this.isEmail ? val.map(item => item.name).join(', ') : '-';
-          return _createVNode("span", null, [recipientB]);
+          const recipientB = this.isEmail ? val.map(item => item.name).join(', ') : '-'
+          return _createVNode('span', null, [recipientB])
         }
       }, {
         key: this.$t('RecipientServer') + ' A',
         value: this.object.obj_recipients_part_one,
         formatter: (item, val) => {
-          const recipientServerA = this.isEmail ? '-' : val.map(item => item.name).join(', ');
-          return _createVNode("span", null, [recipientServerA]);
+          const recipientServerA = this.isEmail ? '-' : val.map(item => item.name).join(', ')
+          return _createVNode('span', null, [recipientServerA])
         }
       }, {
         key: this.$t('RecipientServer') + ' B',
         value: this.object.obj_recipients_part_two,
         formatter: (item, val) => {
-          const recipientServerB = this.isEmail ? '-' : val.map(item => item.name).join(', ');
-          return _createVNode("span", null, [recipientServerB]);
+          const recipientServerB = this.isEmail ? '-' : val.map(item => item.name).join(', ')
+          return _createVNode('span', null, [recipientServerB])
         }
       }, 'date_created', 'date_updated', 'is_active', 'comment']
-    };
+    }
   },
   computed: {}
-};
+}
 </script>
 
 <style scoped>

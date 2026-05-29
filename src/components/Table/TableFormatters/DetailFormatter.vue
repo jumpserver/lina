@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import Drawer from '@/components/Drawer/index.vue';
-import BaseFormatter from './base.vue';
+import Drawer from '@/components/Drawer/index.vue'
+import BaseFormatter from './base.vue'
 
 export default {
   name: 'DetailFormatter',

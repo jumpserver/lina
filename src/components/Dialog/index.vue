@@ -38,7 +38,6 @@
 export default {
   name: 'DialogComponent',
   inheritAttrs: false,
-  emits: ['cancel', 'confirm'],
   props: {
     title: {
       type: String,
@@ -89,6 +88,7 @@ export default {
       default: true
     }
   },
+  emits: ['cancel', 'confirm'],
   data() {
     return {}
   },

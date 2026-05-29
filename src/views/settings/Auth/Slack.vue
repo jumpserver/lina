@@ -3,7 +3,6 @@
     :config="settings"
     :title="$tc('Slack')"
     enable-field="AUTH_SLACK"
-    v-on="$listeners"
   />
 </template>
 

@@ -32,7 +32,6 @@
       <DataTable
         ref="table"
         :config="tableConfig"
-        v-on="$listeners"
         @selection-change="handleSelectionChange"
       />
     </div>

@@ -14,11 +14,11 @@
 </template>
 
 <script>
-import { resolveComponent as _resolveComponent, createVNode as _createVNode, createTextVNode as _createTextVNode } from "vue";
-import { QuickActions } from '@/components';
-import RelationCard from '@/components/Cards/RelationCard';
-import AutoDetailCard from '@/components/Cards/DetailCard/auto';
-import TwoCol from '@/layout/components/Page/TwoColPage.vue';
+import { resolveComponent as _resolveComponent, createVNode as _createVNode, createTextVNode as _createTextVNode } from 'vue'
+import { QuickActions } from '@/components'
+import RelationCard from '@/components/Cards/RelationCard'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 export default {
   name: 'UserInfo',
   components: {
@@ -34,7 +34,7 @@ export default {
     }
   },
   data() {
-    const vm = this;
+    const vm = this
     return {
       quickActions: [{
         title: this.$t('Active'),
@@ -44,18 +44,18 @@ export default {
           disabled: !vm.$hasPerm('users.change_user')
         },
         callbacks: {
-          change: function (v, item) {
-            const url = `/api/v1/users/users/${vm.object.id}/`;
+          change: function(v, item) {
+            const url = `/api/v1/users/users/${vm.object.id}/`
             const data = {
               is_active: v
-            };
+            }
             vm.$axios.patch(url, data).catch(() => {
-              item.attrs.model = !v;
+              item.attrs.model = !v
             }).then(res => {
-              vm.$message.success(vm.$t('UpdateSuccessMsg'));
+              vm.$message.success(vm.$t('UpdateSuccessMsg'))
             }).catch(err => {
-              vm.$message.error(vm.$t('UpdateErrorMsg' + ' ' + err));
-            });
+              vm.$message.error(vm.$t('UpdateErrorMsg' + ' ' + err))
+            })
           }
         }
       }, {
@@ -66,27 +66,27 @@ export default {
           label: this.$t('Send')
         },
         callbacks: {
-          click: function () {
-            const warnMsg = vm.$t('ResetPasswordWarningMsg');
-            const warnTitle = vm.$t('Info');
-            const url = `/api/v1/users/users/${vm.object.id}/password/reset/`;
-            const successMsg = vm.$t('ResetPasswordSuccessMsg');
+          click: function() {
+            const warnMsg = vm.$t('ResetPasswordWarningMsg')
+            const warnTitle = vm.$t('Info')
+            const url = `/api/v1/users/users/${vm.object.id}/password/reset/`
+            const successMsg = vm.$t('ResetPasswordSuccessMsg')
             vm.$confirm(warnMsg, warnTitle, {
               type: 'warning',
               confirmButtonClass: 'el-button--warning',
               showCancelButton: true,
               beforeClose: async (action, instance, done) => {
-                if (action !== 'confirm') return done();
-                instance.confirmButtonLoading = true;
+                if (action !== 'confirm') return done()
+                instance.confirmButtonLoading = true
                 try {
-                  await vm.$axios.patch(url, {});
-                  done();
-                  vm.$message.success(successMsg);
+                  await vm.$axios.patch(url, {})
+                  done()
+                  vm.$message.success(successMsg)
                 } finally {
-                  instance.confirmButtonLoading = false;
+                  instance.confirmButtonLoading = false
                 }
               }
-            });
+            })
           }
         }
       }, {
@@ -97,27 +97,27 @@ export default {
           label: this.$t('Send')
         },
         callbacks: {
-          click: function () {
-            const warnMsg = vm.$t('ResetSSHKeyWarningMsg');
-            const warnTitle = vm.$t('Info');
-            const url = `/api/v1/users/users/${vm.object.id}/pubkey/reset/`;
-            const successMsg = vm.$t('ResetSSHKeySuccessMsg');
+          click: function() {
+            const warnMsg = vm.$t('ResetSSHKeyWarningMsg')
+            const warnTitle = vm.$t('Info')
+            const url = `/api/v1/users/users/${vm.object.id}/pubkey/reset/`
+            const successMsg = vm.$t('ResetSSHKeySuccessMsg')
             vm.$confirm(warnMsg, warnTitle, {
               type: 'warning',
               confirmButtonClass: 'el-button--warning',
               showCancelButton: true,
               beforeClose: async (action, instance, done) => {
-                if (action !== 'confirm') return done();
-                instance.confirmButtonLoading = true;
+                if (action !== 'confirm') return done()
+                instance.confirmButtonLoading = true
                 try {
-                  await vm.$axios.patch(url, {});
-                  done();
-                  vm.$message.success(successMsg);
+                  await vm.$axios.patch(url, {})
+                  done()
+                  vm.$message.success(successMsg)
                 } finally {
-                  instance.confirmButtonLoading = false;
+                  instance.confirmButtonLoading = false
                 }
               }
-            });
+            })
           }
         }
       }, {
@@ -128,27 +128,27 @@ export default {
           label: this.$t('Reset')
         },
         callbacks: {
-          click: function () {
-            const warnMsg = vm.$t('ResetMFAWarningMsg');
-            const warnTitle = vm.$t('Info');
-            const url = `/api/v1/users/users/${vm.object.id}/mfa/reset/`;
-            const successMsg = vm.$t('ResetMFAdSuccessMsg');
+          click: function() {
+            const warnMsg = vm.$t('ResetMFAWarningMsg')
+            const warnTitle = vm.$t('Info')
+            const url = `/api/v1/users/users/${vm.object.id}/mfa/reset/`
+            const successMsg = vm.$t('ResetMFAdSuccessMsg')
             vm.$confirm(warnMsg, warnTitle, {
               type: 'warning',
               confirmButtonClass: 'el-button--warning',
               showCancelButton: true,
               beforeClose: async (action, instance, done) => {
-                if (action !== 'confirm') return done();
-                instance.confirmButtonLoading = true;
+                if (action !== 'confirm') return done()
+                instance.confirmButtonLoading = true
                 try {
-                  await vm.$axios.get(url);
-                  done();
-                  vm.$message.success(successMsg);
+                  await vm.$axios.get(url)
+                  done()
+                  vm.$message.success(successMsg)
                 } finally {
-                  instance.confirmButtonLoading = false;
+                  instance.confirmButtonLoading = false
                 }
               }
-            });
+            })
           }
         }
       }, {
@@ -159,73 +159,73 @@ export default {
           disabled: !this.object.login_blocked || !vm.$hasPerm('users.change_user')
         },
         callbacks: {
-          click: function (v, item) {
-            const url = `/api/v1/users/users/${vm.object.id}/unblock/`;
-            const unblockSuccessMsg = vm.$t('UnblockSuccessMsg');
+          click: function(v, item) {
+            const url = `/api/v1/users/users/${vm.object.id}/unblock/`
+            const unblockSuccessMsg = vm.$t('UnblockSuccessMsg')
             vm.$axios.patch(url).then(() => {
-              item.attrs.disabled = !item.attrs.disabled;
-              vm.$message.success(unblockSuccessMsg);
-            });
+              item.attrs.disabled = !item.attrs.disabled
+              vm.$message.success(unblockSuccessMsg)
+            })
           }
         }
       }],
       url: `/api/v1/users/users/${this.object.id}`,
       detailFormatters: {
         phone: () => {
-          const phoneObj = vm.object.phone;
-          return _createVNode("div", null, [phoneObj?.code, _createTextVNode(" "), phoneObj?.phone]);
+          const phoneObj = vm.object.phone
+          return _createVNode('div', null, [phoneObj?.code, _createTextVNode(' '), phoneObj?.phone])
         },
         system_roles: () => {
-          const rolesDisplay = vm.object.system_roles || [];
+          const rolesDisplay = vm.object.system_roles || []
           const dom = rolesDisplay.map(item => {
-            return _createVNode(_resolveComponent("el-tag"), {
-              "size": "small"
+            return _createVNode(_resolveComponent('el-tag'), {
+              'size': 'small'
             }, {
               default: () => [item.display_name]
-            });
-          });
-          return _createVNode("div", null, [dom]);
+            })
+          })
+          return _createVNode('div', null, [dom])
         },
         org_roles: () => {
-          const rolesDisplay = vm.object.org_roles || [];
+          const rolesDisplay = vm.object.org_roles || []
           const dom = rolesDisplay.map(item => {
-            return _createVNode(_resolveComponent("el-tag"), {
-              "size": "small"
+            return _createVNode(_resolveComponent('el-tag'), {
+              'size': 'small'
             }, {
               default: () => [item.display_name]
-            });
-          });
-          return _createVNode("div", null, [dom]);
+            })
+          })
+          return _createVNode('div', null, [dom])
         }
       },
       detailFields: [{
         key: '',
         formatter: () => {
-          return _createVNode("img", {
-            "src": this.object.avatar_url,
-            "alt": "",
-            "height": "50"
-          }, null);
+          return _createVNode('img', {
+            'src': this.object.avatar_url,
+            'alt': '',
+            'height': '50'
+          }, null)
         }
       }, 'id', 'name', 'username', 'email', 'phone', 'system_roles', 'org_roles', {
         key: this.$t('OrgsAndRoles'),
         has: this.$store.getters.currentOrgIsRoot,
         formatter: (item, val) => {
           if (!this.$store.getters.currentOrgIsRoot) {
-            return '';
+            return ''
           }
-          const doms = [];
-          const orgsRoles = this.object.orgs_roles;
-          const allowKeyMaxLength = 50;
+          const doms = []
+          const orgsRoles = this.object.orgs_roles
+          const allowKeyMaxLength = 50
           Object.entries(orgsRoles).forEach(([key, value]) => {
-            let prettyKey = key;
+            let prettyKey = key
             if (key.length >= allowKeyMaxLength) {
-              prettyKey = key.substring(0, allowKeyMaxLength - 3) + '...';
+              prettyKey = key.substring(0, allowKeyMaxLength - 3) + '...'
             }
-            const item = prettyKey + ': ' + value.join(', ');
-            doms.push([item, _createVNode("br", null, null)]);
-          });
-          return _createVNode("div", null, [doms]);
+            const item = prettyKey + ': ' + value.join(', ')
+            doms.push([item, _createVNode('br', null, null)])
+          })
+          return _createVNode('div', null, [doms])
         }
       }, 'wecom_id', 'dingtalk_id', 'feishu_id', 'mfa_level', 'source', 'labels', 'created_by', 'date_joined', 'date_expired', 'date_password_last_updated', 'last_login', 'comment'],
       relationConfig: {
@@ -236,34 +236,34 @@ export default {
         },
         hasObjectsId: this.object.groups,
         performDelete: item => {
-          const itemId = item.value;
-          const objectId = this.object.id;
-          const relationUrl = `/api/v1/users/users-groups-relations/?user=${objectId}&usergroup=${itemId}`;
-          return this.$axios.delete(relationUrl);
+          const itemId = item.value
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/users/users-groups-relations/?user=${objectId}&usergroup=${itemId}`
+          return this.$axios.delete(relationUrl)
         },
         performAdd: items => {
-          const relationUrl = `/api/v1/users/users-groups-relations/`;
-          const objectId = this.object.id;
+          const relationUrl = `/api/v1/users/users-groups-relations/`
+          const objectId = this.object.id
           const data = items.map(v => {
             return {
               usergroup: v.value,
               user: objectId
-            };
-          });
-          return this.$axios.post(relationUrl, data);
+            }
+          })
+          return this.$axios.post(relationUrl, data)
         }
       }
-    };
+    }
   },
   computed: {},
   watch: {
     group(iNew, iOld) {
-      this.$log.debug('Group has changed');
-      this.relationConfig.hasObjectsId = iNew.users;
+      this.$log.debug('Group has changed')
+      this.relationConfig.hasObjectsId = iNew.users
     }
   },
   methods: {}
-};
+}
 </script>
 
 <style lang="scss" scoped>

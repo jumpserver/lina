@@ -3,7 +3,6 @@
     :config="settings"
     :title="title"
     enable-field="enableFieldName"
-    v-on="$listeners"
   />
 </template>
 

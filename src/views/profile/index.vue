@@ -62,14 +62,14 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, createTextVNode as _createTextVNode } from "vue";
-import { IBox, QuickActions } from '@/components';
-import { PhoneInput } from '@/components/Form/FormFields';
-import Page from '@/layout/components/Page';
-import DetailCard from '@/components/Cards/DetailCard';
-import { toSafeLocalDateStr } from '@/utils/common/time';
-import store from '@/store';
-import TwoCol from '@/layout/components/Page/TwoColPage.vue';
+import { createVNode as _createVNode, createTextVNode as _createTextVNode } from 'vue'
+import { IBox, QuickActions } from '@/components'
+import { PhoneInput } from '@/components/Form/FormFields'
+import Page from '@/layout/components/Page'
+import DetailCard from '@/components/Cards/DetailCard'
+import { toSafeLocalDateStr } from '@/utils/common/time'
+import store from '@/store'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 export default {
   components: {
     TwoCol,
@@ -99,8 +99,8 @@ export default {
         },
         callbacks: {
           click: () => {
-            const next_url = this.$store.state.users.profile.is_face_code_set ? '/core/auth/profile/face/disable/' : '/core/auth/profile/face/enable/';
-            window.open(next_url, '_blank');
+            const next_url = this.$store.state.users.profile.is_face_code_set ? '/core/auth/profile/face/disable/' : '/core/auth/profile/face/enable/'
+            window.open(next_url, '_blank')
           }
         }
       }],
@@ -115,9 +115,9 @@ export default {
         },
         has: this.$store.getters.publicSettings.AUTH_WECOM && !store.getters.publicSettings['PRIVACY_MODE'],
         callbacks: {
-          click: function () {
-            this.currentEdit = 'wecom';
-            this.verifyDone();
+          click: function() {
+            this.currentEdit = 'wecom'
+            this.verifyDone()
           }.bind(this)
         }
       }, {
@@ -131,9 +131,9 @@ export default {
         },
         has: this.$store.getters.publicSettings.AUTH_DINGTALK && !store.getters.publicSettings['PRIVACY_MODE'],
         callbacks: {
-          click: function () {
-            this.currentEdit = 'dingtalk';
-            this.verifyDone();
+          click: function() {
+            this.currentEdit = 'dingtalk'
+            this.verifyDone()
           }.bind(this)
         }
       }, {
@@ -147,9 +147,9 @@ export default {
         },
         has: this.$store.getters.publicSettings.AUTH_FEISHU && !store.getters.publicSettings['PRIVACY_MODE'],
         callbacks: {
-          click: function () {
-            this.currentEdit = 'feishu';
-            this.verifyDone();
+          click: function() {
+            this.currentEdit = 'feishu'
+            this.verifyDone()
           }.bind(this)
         }
       }, {
@@ -163,9 +163,9 @@ export default {
         },
         has: this.$store.getters.publicSettings.AUTH_LARK && !store.getters.publicSettings['PRIVACY_MODE'],
         callbacks: {
-          click: function () {
-            this.currentEdit = 'lark';
-            this.verifyDone();
+          click: function() {
+            this.currentEdit = 'lark'
+            this.verifyDone()
           }.bind(this)
         }
       }, {
@@ -179,9 +179,9 @@ export default {
         },
         has: this.$store.getters.publicSettings.AUTH_SLACK && !store.getters.publicSettings['PRIVACY_MODE'],
         callbacks: {
-          click: function () {
-            this.currentEdit = 'slack';
-            this.verifyDone();
+          click: function() {
+            this.currentEdit = 'slack'
+            this.verifyDone()
           }.bind(this)
         }
       }, {
@@ -191,8 +191,8 @@ export default {
           label: this.$t('Setting')
         },
         callbacks: {
-          click: function () {
-            window.open('/core/auth/profile/mfa/', '_blank');
+          click: function() {
+            window.open('/core/auth/profile/mfa/', '_blank')
           }
         }
       }, {
@@ -203,13 +203,13 @@ export default {
           disabled: !this.isUserFromSource('local')
         },
         callbacks: {
-          click: function () {
+          click: function() {
             this.$router.push({
               name: 'SSHKeyList',
               query: {
                 tab: 'Password'
               }
-            });
+            })
           }.bind(this)
         }
       }, {
@@ -220,13 +220,13 @@ export default {
           disabled: !this.$store.state.users.profile.can_public_key_auth
         },
         callbacks: {
-          click: function () {
+          click: function() {
             this.$router.push({
               name: 'SSHKeyList',
               query: {
                 tab: 'SSHKeyList'
               }
-            });
+            })
           }.bind(this)
         }
       }],
@@ -307,11 +307,11 @@ export default {
           change: this.updateUserReceiveBackends
         }
       }]
-    };
+    }
   },
   computed: {
     store() {
-      return store;
+      return store
     },
     detailCardItems() {
       return [{
@@ -328,9 +328,9 @@ export default {
         key: this.$t('Phone'),
         formatter: (item, val) => {
           if (val) {
-            return _createVNode("span", null, [val.code, _createTextVNode(" "), val.phone]);
+            return _createVNode('span', null, [val.code, _createTextVNode(' '), val.phone])
           } else {
-            return '-';
+            return '-'
           }
         },
         has: !store.getters.publicSettings['PRIVACY_MODE']
@@ -348,9 +348,9 @@ export default {
         value: this.object,
         key: 'SSH Key',
         formatter: (item, val) => {
-          const comment = val.public_key_comment || '-';
-          const md5 = val.public_key_hash_md5 || '-';
-          return _createVNode("span", null, [comment, _createTextVNode(" "), _createVNode("br", null, null), _createTextVNode(" "), md5]);
+          const comment = val.public_key_comment || '-'
+          const md5 = val.public_key_hash_md5 || '-'
+          return _createVNode('span', null, [comment, _createTextVNode(' '), _createVNode('br', null, null), _createTextVNode(' '), md5])
         }
       }, {
         value: this.object.mfa_level.label,
@@ -376,88 +376,88 @@ export default {
       }, {
         value: this.object.comment,
         key: this.$t('Comment')
-      }];
+      }]
     },
     confirmUrl() {
-      return '/api/v1/authentication/confirm-oauth/';
+      return '/api/v1/authentication/confirm-oauth/'
     },
     bindOrUnbindUrl() {
-      let url = '';
+      let url = ''
       if (!this.object[`${this.currentEdit}_id`]) {
-        url = `/core/auth/${this.currentEdit}/qr/bind/?redirect_url=${this.$route.fullPath}`;
+        url = `/core/auth/${this.currentEdit}/qr/bind/?redirect_url=${this.$route.fullPath}`
       } else {
-        url = `/api/v1/authentication/${this.currentEdit}/qr/unbind/`;
+        url = `/api/v1/authentication/${this.currentEdit}/qr/unbind/`
       }
-      return url;
+      return url
     }
   },
   methods: {
     updateProfile() {
-      const url = `/api/v1/users/profile/`;
+      const url = `/api/v1/users/profile/`
       const data = {
         phone: this.object.phone,
         wechat: this.object.wechat
-      };
+      }
       this.$axios.patch(url, data).then(() => {
-        this.$message.success(this.$tc('UpdateSuccessMsg'));
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
       }).catch(err => {
-        const errMsg = err.request.response;
-        this.$message.error(this.$tc('Error') + ': ' + errMsg);
-      });
+        const errMsg = err.request.response
+        this.$message.error(this.$tc('Error') + ': ' + errMsg)
+      })
     },
     isBind(sourceName) {
-      return !!this.$store.state.users.profile[`${sourceName}_id`];
+      return !!this.$store.state.users.profile[`${sourceName}_id`]
     },
     getLabel(sourceName) {
-      return this.isBind(sourceName) ? this.$t('Unbind') : this.$t('Bind');
+      return this.isBind(sourceName) ? this.$t('Unbind') : this.$t('Bind')
     },
     isUserFromSource(sourceName) {
-      return this.$store.state.users.profile.source.value === sourceName;
+      return this.$store.state.users.profile.source.value === sourceName
     },
     isDisabled(sourceName) {
-      return this.isBind(sourceName) && this.isUserFromSource(sourceName);
+      return this.isBind(sourceName) && this.isUserFromSource(sourceName)
     },
     updateUserReceiveBackends(val) {
       this.$axios.patch(`/api/v1/notifications/user-msg-subscription/${this.object.id}/`, {
         'receive_backends': this.getReceiveBackendList()
       }).then(res => {
-        this.$message.success(this.$tc('UpdateSuccessMsg'));
-        this.$store.dispatch('users/getProfile', true);
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
+        this.$store.dispatch('users/getProfile', true)
       }).catch(err => {
-        this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err));
-      });
+        this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
+      })
     },
     getReceiveBackendList() {
-      const backendList = [];
+      const backendList = []
       for (const backend of this.messageSubscriptionQuickActions) {
-        const name = backend.attrs.name;
-        const enabled = backend.attrs.model;
+        const name = backend.attrs.name
+        const enabled = backend.attrs.model
         if (enabled) {
-          backendList.push(name);
+          backendList.push(name)
         }
       }
-      return backendList;
+      return backendList
     },
     verifyDone() {
       this.$axios.get(this.confirmUrl).then(() => {
-        const url = this.bindOrUnbindUrl;
+        const url = this.bindOrUnbindUrl
         if (!this.object[`${this.currentEdit}_id`]) {
-          window.open(url, 'Bind', 'width=800,height=600');
+          window.open(url, 'Bind', 'width=800,height=600')
         } else {
           this.$axios.post(url).then(() => {
-            this.$message.success(this.$tc('UpdateSuccessMsg'));
-            this.$store.dispatch('users/getProfile');
+            this.$message.success(this.$tc('UpdateSuccessMsg'))
+            this.$store.dispatch('users/getProfile')
             // 此处对子组件使用 key 或 $forceUpdate 都无法使得子组件中 button 文本更新
-            window.location.reload();
-          });
+            window.location.reload()
+          })
         }
-      });
+      })
     },
     exit() {
-      this.$emit('update:visible', false);
+      this.$emit('update:visible', false)
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 

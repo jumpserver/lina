@@ -3,7 +3,6 @@
     v-model:active-menu="config.activeMenu"
     v-model:object="account"
     v-bind="config"
-    v-on="$listeners"
   >
     <keep-alive>
       <component :is="config.activeMenu" :object="account" />

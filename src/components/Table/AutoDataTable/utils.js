@@ -2,14 +2,14 @@ import i18n from '@/i18n/i18n'
 import { toSentenceCase } from '@/utils/common/index'
 
 import {
-    ActionsFormatter,
-    ArrayFormatter,
-    ChoicesFormatter,
-    CopyableFormatter,
-    DateFormatter,
-    DetailFormatter,
-    DisplayFormatter,
-    ObjectRelatedFormatter
+  ActionsFormatter,
+  ArrayFormatter,
+  ChoicesFormatter,
+  CopyableFormatter,
+  DateFormatter,
+  DetailFormatter,
+  DisplayFormatter,
+  ObjectRelatedFormatter
 } from '@/components/Table/TableFormatters'
 import LabelsFormatter from '@/components/Table/TableFormatters/LabelsFormatter.vue'
 

@@ -9,17 +9,17 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from "vue";
-import { GenericListTable } from '@/layout/components';
-import { DetailFormatter } from '@/components/Table/TableFormatters';
-import { openTaskPage } from '@/utils/jms/index';
+import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import { GenericListTable } from '@/layout/components'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
+import { openTaskPage } from '@/utils/jms/index'
 export default {
   name: 'AccountDiscoverTaskList',
   components: {
     GenericListTable
   },
   data() {
-    const vm = this;
+    const vm = this
     return {
       createDrawer: () => import('@/views/accounts/AccountDiscover/AccountDiscoverTaskCreateUpdate.vue'),
       detailDrawer: () => import('@/views/accounts/AccountDiscover/TaskDetail/index.vue'),
@@ -57,8 +57,8 @@ export default {
             }
           },
           nodes: {
-            formatter: function (row, column, cellValue, index) {
-              return cellValue.map(v => v['name']).join(', ');
+            formatter: function(row, column, cellValue, index) {
+              return cellValue.map(v => v['name']).join(', ')
             }
           },
           is_periodic: {
@@ -70,13 +70,13 @@ export default {
           periodic_display: {},
           executed_amount: {
             formatter: row => {
-              const can = vm.$hasPerm('accounts.view_gatheraccountsexecution');
-              return _createVNode(_resolveComponent("el-link"), {
-                "onClick": () => this.handleExecAmount(row),
-                "disabled": !can
+              const can = vm.$hasPerm('accounts.view_gatheraccountsexecution')
+              return _createVNode(_resolveComponent('el-link'), {
+                'onClick': () => this.handleExecAmount(row),
+                'disabled': !can
               }, {
                 default: () => [row.executed_amount]
-              });
+              })
             }
           },
           actions: {
@@ -91,15 +91,15 @@ export default {
                 can: ({
                   row
                 }) => {
-                  return this.$hasPerm('accounts.add_gatheraccountsexecution') && row.is_active;
+                  return this.$hasPerm('accounts.add_gatheraccountsexecution') && row.is_active
                 },
-                callback: function (data) {
+                callback: function(data) {
                   this.$axios.post(`/api/v1/accounts/gather-account-executions/`, {
                     automation: data.row.id,
                     type: data.row.type.value
                   }).then(res => {
-                    openTaskPage(res['task']);
-                  }).catch(res => {});
+                    openTaskPage(res['task'])
+                  }).catch(res => {})
                 }
               }]
             }
@@ -116,7 +116,7 @@ export default {
           getUrlQuery: false
         }
       }
-    };
+    }
   },
   methods: {
     handleExecAmount(row) {
@@ -126,8 +126,8 @@ export default {
           tab: 'AccountDiscoverTaskExecutionList',
           automation_id: row.id
         }
-      });
+      })
     }
   }
-};
+}
 </script>

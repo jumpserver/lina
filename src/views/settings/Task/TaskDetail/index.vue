@@ -4,7 +4,6 @@
     v-model:object="taskDetail"
     :title="getTitle"
     v-bind="config"
-    v-on="$listeners"
   >
     <keep-alive>
       <component :is="config.activeMenu" :object="taskDetail" />

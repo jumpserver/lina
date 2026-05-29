@@ -7,10 +7,10 @@
 </template>
 
 <script>
-import { DrawerListTable as ListTable } from '@/components';
-import { ActionsFormatter, ChoicesFormatter, DetailFormatter } from '@/components/Table/TableFormatters';
-import { timeOffset } from '@/utils/common/time';
-import prettyBytes from 'pretty-bytes';
+import { DrawerListTable as ListTable } from '@/components'
+import { ActionsFormatter, ChoicesFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import { timeOffset } from '@/utils/common/time'
+import prettyBytes from 'pretty-bytes'
 
 export default {
   name: 'BaseList',

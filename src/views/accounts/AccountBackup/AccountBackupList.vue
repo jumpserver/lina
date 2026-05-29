@@ -9,17 +9,17 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from "vue";
-import { ActionsFormatter, ArrayFormatter, DetailFormatter } from '@/components/Table/TableFormatters';
-import { openTaskPage } from '@/utils/jms/index';
-import { GenericListTable } from '@/layout/components';
+import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import { ActionsFormatter, ArrayFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import { openTaskPage } from '@/utils/jms/index'
+import { GenericListTable } from '@/layout/components'
 export default {
   name: 'AccountBackupList',
   components: {
     GenericListTable
   },
   data() {
-    const vm = this;
+    const vm = this
     return {
       createDrawer: () => import('@/views/accounts/AccountBackup/AccountBackupCreateUpdate.vue'),
       detailDrawer: () => import('@/views/accounts/AccountBackup/Detail/index.vue'),
@@ -51,13 +51,13 @@ export default {
           },
           executed_amount: {
             formatter: row => {
-              const can = vm.$hasPerm('accounts.view_backupaccountexecution');
-              return _createVNode(_resolveComponent("el-link"), {
-                "onClick": () => this.handleExecAmount(row),
-                "disabled": !can
+              const can = vm.$hasPerm('accounts.view_backupaccountexecution')
+              return _createVNode(_resolveComponent('el-link'), {
+                'onClick': () => this.handleExecAmount(row),
+                'disabled': !can
               }, {
                 default: () => [row.executed_amount]
-              });
+              })
             }
           },
           actions: {
@@ -72,17 +72,17 @@ export default {
                 can: ({
                   row
                 }) => {
-                  return this.$hasPerm('accounts.add_backupaccountexecution') && row.is_active;
+                  return this.$hasPerm('accounts.add_backupaccountexecution') && row.is_active
                 },
-                callback: function ({
+                callback: function({
                   row
                 }) {
                   this.$axios.post(`/api/v1/accounts/account-backup-plan-executions/`, {
                     automation: row.id,
                     type: row.type.value
                   }).then(res => {
-                    openTaskPage(res['task']);
-                  });
+                    openTaskPage(res['task'])
+                  })
                 }.bind(this)
               }]
             }
@@ -94,7 +94,7 @@ export default {
         hasExport: false,
         hasImport: false
       }
-    };
+    }
   },
   methods: {
     handleExecAmount(row) {
@@ -104,8 +104,8 @@ export default {
           tab: 'AccountBackupExecutionList',
           automation_id: row.id
         }
-      });
+      })
     }
   }
-};
+}
 </script>

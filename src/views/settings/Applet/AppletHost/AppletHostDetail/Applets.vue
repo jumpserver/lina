@@ -8,11 +8,11 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from "vue";
-import { DrawerListTable as ListTable, QuickActions } from '@/components';
-import { openTaskPage } from '@/utils/jms/index';
-import { DetailFormatter } from '@/components/Table/TableFormatters';
-import TwoCol from '@/layout/components/Page/TwoColPage.vue';
+import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import { DrawerListTable as ListTable, QuickActions } from '@/components'
+import { openTaskPage } from '@/utils/jms/index'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 export default {
   name: 'Publications',
   components: {
@@ -77,14 +77,14 @@ export default {
                 'success': 'primary',
                 'failed': 'danger',
                 'unknown': 'warning'
-              };
-              const tp = typeMapper[row.status.value] || 'warning';
-              return _createVNode(_resolveComponent("el-tag"), {
-                "size": "small",
-                "type": tp
+              }
+              const tp = typeMapper[row.status.value] || 'warning'
+              return _createVNode(_resolveComponent('el-tag'), {
+                'size': 'small',
+                'type': tp
               }, {
                 default: () => [row.status.label]
-              });
+              })
             }
           },
           date_updated: {
@@ -98,27 +98,27 @@ export default {
               hasClone: false,
               extraActions: [{
                 title: this.$t('Deploy'),
-                callback: function ({
+                callback: function({
                   row
                 }) {
                   this.$axios.post(`/api/v1/terminal/applet-host-deployments/applets/`, {
                     hosts: [row.host.id],
                     applet_id: row.applet.id
                   }).then(res => {
-                    openTaskPage(res['task']);
-                  });
+                    openTaskPage(res['task'])
+                  })
                 }
               }, {
                 title: this.$t('Uninstall'),
-                callback: function ({
+                callback: function({
                   row
                 }) {
                   this.$axios.post(`/api/v1/terminal/applet-host-deployments/uninstall/`, {
                     hosts: [row.host.id],
                     applet_id: row.applet.id
                   }).then(res => {
-                    openTaskPage(res['task']);
-                  });
+                    openTaskPage(res['task'])
+                  })
                 }
               }]
             }
@@ -132,12 +132,12 @@ export default {
           label: this.$t('Deploy')
         },
         callbacks: {
-          click: function () {
+          click: function() {
             this.$axios.post(`/api/v1/terminal/applet-host-deployments/`, {
               host: this.object.id
             }).then(res => {
-              openTaskPage(res['task']);
-            });
+              openTaskPage(res['task'])
+            })
           }.bind(this)
         }
       }, {
@@ -147,13 +147,13 @@ export default {
           label: this.$t('Deploy')
         },
         callbacks: {
-          click: function () {
+          click: function() {
             this.$axios.post(`/api/v1/terminal/applet-host-deployments/`, {
               host: this.object.id,
               install_applets: false
             }).then(res => {
-              openTaskPage(res['task']);
-            });
+              openTaskPage(res['task'])
+            })
           }.bind(this)
         }
       }, {
@@ -163,16 +163,16 @@ export default {
           label: this.$t('Publish')
         },
         callbacks: {
-          click: function () {
+          click: function() {
             this.$axios.post(`/api/v1/terminal/applet-host-deployments/applets/`, {
               hosts: [this.object.id]
             }).then(res => {
-              openTaskPage(res['task']);
-            });
+              openTaskPage(res['task'])
+            })
           }.bind(this)
         }
       }]
-    };
+    }
   }
-};
+}
 </script>

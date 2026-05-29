@@ -30,8 +30,8 @@
 </template>
 
 <script>
-import { AutoDataForm, Dialog } from '@/components';
-import JsonEditor from '@/components/Form/FormFields/JsonEditor.vue';
+import { AutoDataForm, Dialog } from '@/components'
+import JsonEditor from '@/components/Form/FormFields/JsonEditor.vue'
 
 export default {
   name: 'ProtocolSetting',

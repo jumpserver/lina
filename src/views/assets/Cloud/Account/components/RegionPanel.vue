@@ -46,8 +46,8 @@
 </template>
 
 <script>
-import { Dialog } from '@/components';
-import { encryptAttrsField } from '@/views/assets/Cloud/const';
+import { Dialog } from '@/components'
+import { encryptAttrsField } from '@/views/assets/Cloud/const'
 
 export default {
   name: 'RegionPanel',

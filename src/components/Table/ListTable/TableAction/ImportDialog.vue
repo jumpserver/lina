@@ -67,10 +67,10 @@
 </template>
 
 <script>
-import { createSourceIdCache } from '@/api/common';
-import Dialog from '@/components/Dialog/index.vue';
-import ImportTable from '@/components/Table/ListTable/TableAction/ImportTable.vue';
-import { download, getErrorResponseMsg } from '@/utils/common/index';
+import { createSourceIdCache } from '@/api/common'
+import Dialog from '@/components/Dialog/index.vue'
+import ImportTable from '@/components/Table/ListTable/TableAction/ImportTable.vue'
+import { download, getErrorResponseMsg } from '@/utils/common/index'
 
 export default {
   name: 'ImportDialog',

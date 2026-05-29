@@ -8,11 +8,11 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from "vue";
-import { attrMatchOptions, strMatchValues } from '@/components/const';
-import { Required } from '@/components/Form/DataForm/rules';
-import { AttrInput, Select2 } from '@/components/Form/FormFields';
-import { instanceAttrOptions, tableFormatter } from './const';
+import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import { attrMatchOptions, strMatchValues } from '@/components/const'
+import { Required } from '@/components/Form/DataForm/rules'
+import { AttrInput, Select2 } from '@/components/Form/FormFields'
+import { instanceAttrOptions, tableFormatter } from './const'
 export default {
   name: 'RuleInput',
   components: {
@@ -62,9 +62,9 @@ export default {
               multiple: false,
               clearable: false,
               options: attrMatchOptions.filter(option => {
-                const matchValues = strMatchValues.concat('exclude');
+                const matchValues = strMatchValues.concat('exclude')
                 if (matchValues.indexOf(option.value) !== -1 && option.value !== 'in') {
-                  return option;
+                  return option
                 }
               })
             }
@@ -94,39 +94,39 @@ export default {
           align: 'center',
           width: '100px',
           formatter: (row, col, cellValue, index) => {
-            return _createVNode("div", {
-              "class": "input-button"
-            }, [_createVNode(_resolveComponent("el-button"), {
-              "icon": "el-icon-minus",
-              "size": "small",
-              "style": {
+            return _createVNode('div', {
+              'class': 'input-button'
+            }, [_createVNode(_resolveComponent('el-button'), {
+              'icon': 'el-icon-minus',
+              'size': 'small',
+              'style': {
                 flexShrink: 0
               },
-              "type": "danger",
-              "onClick": this.handleDelete(index)
-            }, null)]);
+              'type': 'danger',
+              'onClick': this.handleDelete(index)
+            }, null)])
           }
         }],
         totalData: this.value || [],
         hasPagination: false
       }
-    };
+    }
   },
   methods: {
     onSubmit() {
-      this.$emit('input', this.tableConfig.totalData);
+      this.$emit('input', this.tableConfig.totalData)
     },
     handleDelete(index) {
       return () => {
-        const item = this.tableConfig.totalData.splice(index, 1);
+        const item = this.tableConfig.totalData.splice(index, 1)
         if (item[0]?.id) {
-          this.$axios.delete(`/api/v1/xpack/cloud/strategy-rules/${item[0].id}/`);
+          this.$axios.delete(`/api/v1/xpack/cloud/strategy-rules/${item[0].id}/`)
         }
-        this.$message.success(this.$tc('DeleteSuccessMsg'));
-      };
+        this.$message.success(this.$tc('DeleteSuccessMsg'))
+      }
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

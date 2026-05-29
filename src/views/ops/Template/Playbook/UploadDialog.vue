@@ -4,7 +4,6 @@
     :title="$tc('UploadPlaybook')"
     v-bind="$attrs"
     @confirm="onSubmit"
-    v-on="$listeners"
   >
     <el-form label-position="top">
       <el-form-item
@@ -26,18 +25,20 @@
           <div class="el-upload__text">
             {{ $t('DragUploadFileInfo') }}
           </div>
-          <div slot="tip" class="el-upload__tip">
-            <span :class="{'hasError': hasFileFormatOrSizeError }" />
-            <div v-if="renderError" class="hasError">{{ renderError }}</div>
-            <h5>{{ $t('UploadHelpText') }}</h5>
-            <pre style="display:flex; line-height: 1.2em">
+          <template #tip>
+            <div class="el-upload__tip">
+              <span :class="{'hasError': hasFileFormatOrSizeError }" />
+              <div v-if="renderError" class="hasError">{{ renderError }}</div>
+              <h5>{{ $t('UploadHelpText') }}</h5>
+              <pre style="display:flex; line-height: 1.2em">
 ./
 ├── roles
 ├── vars
 ├── set_env.yml
 └── main.yml ({{ $tc('RequiredEntryFile') }})
-            </pre>
-          </div>
+              </pre>
+            </div>
+          </template>
         </el-upload>
       </el-form-item>
     </el-form>

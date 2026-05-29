@@ -34,14 +34,14 @@
 </template>
 
 <script>
-import { createVNode as _createVNode } from "vue";
-import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue';
-import QuickActions from '@/components/Common/QuickActions/index.vue';
-import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret.vue';
-import { openTaskPage } from '@/utils/jms/index';
-import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue';
-import AssetDetail from '@/views/assets/Asset/AssetDetail';
-import TwoCol from '@/layout/components/Page/TwoColPage.vue';
+import { createVNode as _createVNode } from 'vue'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
+import QuickActions from '@/components/Common/QuickActions/index.vue'
+import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret.vue'
+import { openTaskPage } from '@/utils/jms/index'
+import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
+import AssetDetail from '@/views/assets/Asset/AssetDetail'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 export default {
   name: 'Detail',
   components: {
@@ -59,7 +59,7 @@ export default {
     }
   },
   data() {
-    const vm = this;
+    const vm = this
     return {
       pamDrawerShow: false,
       drawerRefName: null,
@@ -80,8 +80,8 @@ export default {
               is_active: val,
               name: this.object.name
             }).then(res => {
-              this.$message.success(this.$tc('UpdateSuccessMsg'));
-            });
+              this.$message.success(this.$tc('UpdateSuccessMsg'))
+            })
           }
         })
       }, {
@@ -97,8 +97,8 @@ export default {
               name: this.object?.name,
               privileged: val
             }).then(res => {
-              this.$message.success(this.$tc('UpdateSuccessMsg'));
-            });
+              this.$message.success(this.$tc('UpdateSuccessMsg'))
+            })
           }
         })
       }, {
@@ -114,8 +114,8 @@ export default {
               action: 'verify',
               accounts: [this.object.id]
             }).then(res => {
-              openTaskPage(res['task']);
-            });
+              openTaskPage(res['task'])
+            })
           }
         })
       }, {
@@ -128,14 +128,14 @@ export default {
         callbacks: Object.freeze({
           click: () => {
             if (this.needSetAutoPushParams) {
-              this.autoPushVisible = true;
+              this.autoPushVisible = true
             } else {
               this.$axios.post(`/api/v1/accounts/accounts/tasks/`, {
                 action: 'push',
                 accounts: [this.object.id]
               }).then(res => {
-                openTaskPage(res['task']);
-              });
+                openTaskPage(res['task'])
+              })
             }
           }
         })
@@ -148,10 +148,10 @@ export default {
         },
         callbacks: Object.freeze({
           click: () => {
-            vm.showViewSecretDialog = false;
+            vm.showViewSecretDialog = false
             setTimeout(() => {
-              vm.showViewSecretDialog = true;
-            });
+              vm.showViewSecretDialog = true
+            })
           }
         })
       }, {
@@ -166,8 +166,8 @@ export default {
             this.$axios.patch('/api/v1/accounts/accounts/clear-secret/', {
               account_ids: [this.object.id]
             }).then(() => {
-              this.$message.success(this.$tc('ClearSuccessMsg'));
-            });
+              this.$message.success(this.$tc('ClearSuccessMsg'))
+            })
           }
         })
       }, {
@@ -186,18 +186,18 @@ export default {
               return {
                 label: item.name + '(' + item.username + ')',
                 value: item.id
-              };
+              }
             }
           },
           disabled: !vm.$hasPerm('accounts.change_account') || !vm.object.asset.auto_config?.su_enabled
         },
         callbacks: Object.freeze({
           change: value => {
-            const relationUrl = `/api/v1/accounts/accounts/${this.object.id}/`;
+            const relationUrl = `/api/v1/accounts/accounts/${this.object.id}/`
             return this.$axios.patch(relationUrl, {
               su_from: value,
               name: this.object.name
-            });
+            })
           }
         })
       }],
@@ -206,23 +206,23 @@ export default {
         excludes: ['template', 'privileged', 'secret', 'passphrase', 'spec_info', 'params'],
         formatters: {
           asset: (item, value) => {
-            return _createVNode("span", null, [value?.name]);
+            return _createVNode('span', null, [value?.name])
           },
           su_from: (item, value) => {
-            return _createVNode("span", null, [value?.name ? value?.name + `(${value?.username})` : '']);
+            return _createVNode('span', null, [value?.name ? value?.name + `(${value?.username})` : ''])
           }
         }
       }
-    };
+    }
   },
   computed: {
     pushAccountMethod() {
-      return this.object.asset?.auto_config?.push_account_method || '';
+      return this.object.asset?.auto_config?.push_account_method || ''
     }
   },
   methods: {
     onCanSetting(item) {
-      this.needSetAutoPushParams = item;
+      this.needSetAutoPushParams = item
     },
     onSubmit(form) {
       this.$axios.post(`/api/v1/accounts/accounts/tasks/`, {
@@ -230,11 +230,11 @@ export default {
         accounts: [this.object.id],
         params: form
       }).then(res => {
-        openTaskPage(res['task']);
-      });
+        openTaskPage(res['task'])
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

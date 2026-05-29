@@ -10,20 +10,20 @@
 </template>
 
 <script>
-import { resolveComponent as _resolveComponent, createTextVNode as _createTextVNode, createVNode as _createVNode } from "vue";
-import store from '@/store';
-import { mapGetters } from 'vuex';
-import { Select2 } from '@/components';
-import { GenericCreateUpdatePage } from '@/layout/components';
-import { PhoneInput, UserPassword } from '@/components/Form/FormFields';
-import rules from '@/components/Form/DataForm/rules';
-import { MFALevel, MFASystemSetting } from '../const';
+import { resolveComponent as _resolveComponent, createTextVNode as _createTextVNode, createVNode as _createVNode } from 'vue'
+import store from '@/store'
+import { mapGetters } from 'vuex'
+import { Select2 } from '@/components'
+import { GenericCreateUpdatePage } from '@/layout/components'
+import { PhoneInput, UserPassword } from '@/components/Form/FormFields'
+import rules from '@/components/Form/DataForm/rules'
+import { MFALevel, MFASystemSetting } from '../const'
 export default {
   components: {
     GenericCreateUpdatePage
   },
   data() {
-    const roleManage = this.$t('RoleManage');
+    const roleManage = this.$t('RoleManage')
     return {
       loading: true,
       initial: {
@@ -45,7 +45,7 @@ export default {
         },
         password_strategy: {
           hidden: formValue => {
-            return this.$route.params.id || formValue.source !== 'local';
+            return this.$route.params.id || formValue.source !== 'local'
           }
         },
         mfa_level: {
@@ -60,21 +60,21 @@ export default {
           type: 'checkbox',
           hidden: formValue => {
             if (formValue.update_password) {
-              return true;
+              return true
             }
-            return formValue.source !== 'local' || this.$route.params.action !== 'update';
+            return formValue.source !== 'local' || this.$route.params.action !== 'update'
           }
         },
         password: {
           component: UserPassword,
           hidden: formValue => {
             if (formValue.source !== 'local') {
-              return true;
+              return true
             }
             if (formValue.password_strategy === 'custom' || formValue.update_password) {
-              return false;
+              return false
             }
-            return true;
+            return true
           },
           el: {
             required: false,
@@ -95,14 +95,14 @@ export default {
           }],
           hidden: formValue => {
             if (formValue.source !== 'local') {
-              return true;
+              return true
             }
             if (formValue.password_strategy === 'custom') {
-              return false;
+              return false
             } else if (formValue.update_password) {
-              return false;
+              return false
             } else {
-              return true;
+              return true
             }
           }
         },
@@ -117,12 +117,12 @@ export default {
                 return {
                   label: item.display_name,
                   value: item.id
-                };
+                }
               }
             }
           },
           hidden: () => {
-            return !this.$hasPerm('rbac.add_systemrolebinding');
+            return !this.$hasPerm('rbac.add_systemrolebinding')
           },
           value: []
         },
@@ -134,16 +134,16 @@ export default {
             const handleClick = () => {
               this.$router.push({
                 name: 'RoleList'
-              });
+              })
               // window.open('/settings/roles', '_blank')
-            };
-            return _createVNode(_resolveComponent("el-link"), {
-              "onClick": handleClick
+            }
+            return _createVNode(_resolveComponent('el-link'), {
+              'onClick': handleClick
             }, {
-              default: () => [_createVNode("i", {
-                "class": "fa fa-external-link"
-              }, null), _createTextVNode(" "), roleManage]
-            });
+              default: () => [_createVNode('i', {
+                'class': 'fa fa-external-link'
+              }, null), _createTextVNode(' '), roleManage]
+            })
           },
           el: {
             multiple: true,
@@ -153,14 +153,14 @@ export default {
                 return {
                   label: item.display_name,
                   value: item.id
-                };
+                }
               }
             },
             disabled: this.$store.getters.currentOrgIsRoot,
             value: []
           },
           hidden: () => {
-            return !this.$store.getters.hasValidLicense || !this.$hasPerm('rbac.add_orgrolebinding') || this.$store.getters.currentOrgIsRoot;
+            return !this.$store.getters.hasValidLicense || !this.$hasPerm('rbac.add_orgrolebinding') || this.$store.getters.currentOrgIsRoot
           }
         },
         groups: {
@@ -183,108 +183,108 @@ export default {
         }
       },
       submitMethod() {
-        const params = this.$route.params;
+        const params = this.$route.params
         if (params.id) {
-          return 'put';
+          return 'put'
         } else {
-          return 'post';
+          return 'post'
         }
       },
       afterGetFormValue(obj) {
         if (obj?.id) {
           obj.org_roles = obj.org_roles?.map(({
             id
-          }) => id);
+          }) => id)
           obj.system_roles = obj.system_roles?.map(({
             id
-          }) => id);
-          obj.mfa_level.value = this.initial.mfa_level || obj.mfa_level.value;
+          }) => id)
+          obj.mfa_level.value = this.initial.mfa_level || obj.mfa_level.value
         }
-        return obj;
+        return obj
       },
       cleanFormValue(value) {
-        const method = this.submitMethod();
+        const method = this.submitMethod()
         if (method === 'post' && value.password_strategy === 'email') {
-          delete value['password'];
+          delete value['password']
           if (this.currentOrgIsRoot) {
-            delete value['groups'];
+            delete value['groups']
           }
         }
         if (value.update_password !== undefined) {
-          delete value.update_password;
+          delete value.update_password
         }
         if (value.source !== 'local') {
-          delete value.need_update_password;
+          delete value.need_update_password
         }
         if ([MFALevel.allUsers, MFALevel.onlyAdminUsers].indexOf(value.mfa_level) > -1) {
-          delete value.mfa_level;
+          delete value.mfa_level
         }
-        return value;
+        return value
       }
-    };
+    }
   },
   computed: {
     ...mapGetters(['currentOrgIsRoot', 'currentUser'])
   },
   async mounted() {
     if (this.currentOrgIsRoot) {
-      this.fieldsMeta.groups.el.disabled = true;
+      this.fieldsMeta.groups.el.disabled = true
     }
-    await this.setDefaultRoles();
-    this.disableMFAFieldIfNeed(null);
-    this.loading = false;
+    await this.setDefaultRoles()
+    this.disableMFAFieldIfNeed(null)
+    this.loading = false
   },
   methods: {
     afterGetUser(user) {
-      this.user = user;
+      this.user = user
       if (this.user.id === this.currentUser.id) {
-        const fieldsToUpdate = ['system_roles', 'org_roles', 'is_active'];
+        const fieldsToUpdate = ['system_roles', 'org_roles', 'is_active']
         fieldsToUpdate.forEach(field => {
           const msg = this.$t('disallowSelfUpdateFields', {
             attr: this.fieldsMeta[field]['label']
-          });
-          this.fieldsMeta[field].el.disabled = true;
-          this.fieldsMeta[field].helpTip = msg;
-        });
+          })
+          this.fieldsMeta[field].el.disabled = true
+          this.fieldsMeta[field].helpTip = msg
+        })
       }
-      this.fieldsMeta.password.el.userIsOrgAdmin = user['is_org_admin'];
+      this.fieldsMeta.password.el.userIsOrgAdmin = user['is_org_admin']
       if (this.$route.query.clone_from) {
-        this.user.groups = [];
+        this.user.groups = []
       }
-      this.disableMFAFieldIfNeed(user);
+      this.disableMFAFieldIfNeed(user)
     },
     async setDefaultRoles() {
-      const roles = await this.$axios.get('/api/v1/rbac/roles/');
-      this.initial.system_roles = roles.filter(role => role.name === 'User').map(role => role.id);
-      this.initial.org_roles = roles.filter(role => role.name === 'OrgUser').map(role => role.id);
+      const roles = await this.$axios.get('/api/v1/rbac/roles/')
+      this.initial.system_roles = roles.filter(role => role.name === 'User').map(role => role.id)
+      this.initial.org_roles = roles.filter(role => role.name === 'OrgUser').map(role => role.id)
     },
     disableMFAFieldIfNeed(user) {
-      let options = null;
-      let mfa_level = null;
+      let options = null
+      let mfa_level = null
       // SECURITY_MFA_AUTH 0 不开启 1 全局开启 2 管理员开启
-      const securityMFAAuth = store.getters.publicSettings['SECURITY_MFA_AUTH'];
-      const adminUserIsNeed = (user?.is_superuser || user?.is_org_admin) && this.$route.meta.action === 'update' && securityMFAAuth === MFASystemSetting.onlyAdminUsers;
+      const securityMFAAuth = store.getters.publicSettings['SECURITY_MFA_AUTH']
+      const adminUserIsNeed = (user?.is_superuser || user?.is_org_admin) && this.$route.meta.action === 'update' && securityMFAAuth === MFASystemSetting.onlyAdminUsers
       if (securityMFAAuth === MFASystemSetting.allUsers) {
         options = [{
           'value': MFALevel.allUsers,
           'label': this.$t('MFAAllUsers')
-        }];
-        mfa_level = MFALevel.allUsers;
+        }]
+        mfa_level = MFALevel.allUsers
       }
       if (securityMFAAuth === MFASystemSetting.onlyAdminUsers && adminUserIsNeed) {
         options = [{
           'value': MFALevel.onlyAdminUsers,
           'label': this.$t('MFAOnlyAdminUsers')
-        }];
-        mfa_level = MFALevel.onlyAdminUsers;
+        }]
+        mfa_level = MFALevel.onlyAdminUsers
       }
       if (mfa_level !== null && options !== null) {
-        this.fieldsMeta['mfa_level'].options = options;
-        this.initial.mfa_level = mfa_level;
+        this.fieldsMeta['mfa_level'].options = options
+        this.initial.mfa_level = mfa_level
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

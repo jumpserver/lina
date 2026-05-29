@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import { createVNode as _createVNode } from "vue";
-import { GenericListTable } from '@/layout/components';
-import { DetailFormatter } from '@/components/Table/TableFormatters';
+import { createVNode as _createVNode } from 'vue'
+import { GenericListTable } from '@/layout/components'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 export default {
   name: 'AccountPushRecord',
   components: {
@@ -33,12 +33,12 @@ export default {
               getTitle({
                 row
               }) {
-                return row.asset.name;
+                return row.asset.name
               },
               getDrawerTitle({
                 row
               }) {
-                return row.asset.name;
+                return row.asset.name
               },
               getRoute({
                 row
@@ -48,7 +48,7 @@ export default {
                   params: {
                     id: row.asset.id
                   }
-                };
+                }
               }
             }
           },
@@ -61,12 +61,12 @@ export default {
               getTitle({
                 row
               }) {
-                return row.account.username;
+                return row.account.username
               },
               getDrawerTitle({
                 row
               }) {
-                return row.account.username;
+                return row.account.username
               },
               getRoute({
                 row
@@ -76,7 +76,7 @@ export default {
                   params: {
                     id: row.account.id
                   }
-                };
+                }
               }
             }
           },
@@ -84,18 +84,18 @@ export default {
             label: this.$t('Success'),
             formatter: row => {
               if (row.status === 'pending') {
-                return _createVNode("i", {
-                  "class": "fa  fa fa-spinner fa-spin"
-                }, null);
+                return _createVNode('i', {
+                  'class': 'fa  fa fa-spinner fa-spin'
+                }, null)
               }
               if (row.is_success) {
-                return _createVNode("i", {
-                  "class": "fa fa-check text-primary"
-                }, null);
+                return _createVNode('i', {
+                  'class': 'fa fa-check text-primary'
+                }, null)
               }
-              return _createVNode("i", {
-                "class": "fa fa-times text-danger"
-              }, null);
+              return _createVNode('i', {
+                'class': 'fa fa-times text-danger'
+              }, null)
             }
           },
           actions: {
@@ -143,7 +143,7 @@ export default {
           }]
         }
       }
-    };
+    }
   }
-};
+}
 </script>

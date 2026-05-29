@@ -6,8 +6,8 @@
           :body-style="{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }"
           :class="selected === p.name ? 'active': ''"
           shadow="hover"
-          @dblclick.native="handleCardDBClick(p.name)"
-          @click.native="handleCardClick(p.name)"
+          @dblclick="handleCardDBClick(p.name)"
+          @click="handleCardClick(p.name)"
         >
           <el-image
             :src="p.image"

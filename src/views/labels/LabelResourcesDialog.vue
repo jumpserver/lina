@@ -4,7 +4,6 @@
     :title="$tc('BindResource')"
     destroy-on-close
     v-bind="$attrs"
-    v-on="$listeners"
   >
     <ListTable :header-actions="headerActions" :table-config="tableConfig" />
   </Dialog>

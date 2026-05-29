@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import DetailCard from '@/components/Cards/DetailCard/index.vue';
+import DetailCard from '@/components/Cards/DetailCard/index.vue'
 
 export default {
   name: 'TaskDetail',

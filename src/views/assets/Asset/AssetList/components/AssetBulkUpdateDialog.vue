@@ -5,7 +5,6 @@
     :selected-rows="selectedRows"
     :tips="tips"
     :visible="visible"
-    v-on="$listeners"
   />
 </template>
 

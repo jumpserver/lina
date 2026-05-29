@@ -4,7 +4,6 @@
     v-model:object="ticket"
     v-bind="config"
     @get-object-done="afterGetTicket"
-    v-on="$listeners"
   >
     <component :is="config.activeMenu" :object="ticket" />
   </GenericDetailPage>

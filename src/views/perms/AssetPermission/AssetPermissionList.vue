@@ -128,21 +128,34 @@ export default {
       updateSelectedDialogSetting: {
         visible: false,
         selectedRows: []
-      }
+      },
+      activatedReloadTimer: null
     }
   },
   computed: {
     ...mapGetters(['currentOrgIsRoot'])
   },
   activated() {
-    setTimeout(() => {
-      this.$refs.AssetTreeTable.$refs.TreeList.reloadTable()
+    clearTimeout(this.activatedReloadTimer)
+    this.activatedReloadTimer = setTimeout(() => {
+      this.reloadAssetTreeTable()
     }, 500)
   },
+  deactivated() {
+    clearTimeout(this.activatedReloadTimer)
+    this.activatedReloadTimer = null
+  },
+  beforeUnmount() {
+    clearTimeout(this.activatedReloadTimer)
+    this.activatedReloadTimer = null
+  },
   methods: {
+    reloadAssetTreeTable() {
+      this.$refs.AssetTreeTable?.reloadTable?.()
+    },
     handlePermBulkUpdate() {
       this.updateSelectedDialogSetting.visible = false
-      this.$refs.AssetTreeTable.$refs.TreeList.$refs?.ListTable?.reloadTable()
+      this.reloadAssetTreeTable()
     }
   }
 }

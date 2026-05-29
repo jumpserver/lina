@@ -9,17 +9,17 @@
 </template>
 
 <script>
-import { resolveComponent as _resolveComponent, createVNode as _createVNode, createTextVNode as _createTextVNode } from "vue";
-import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters';
-import { openTaskPage } from '@/utils/jms/index';
-import { GenericListTable } from '@/layout/components';
+import { resolveComponent as _resolveComponent, createVNode as _createVNode, createTextVNode as _createTextVNode } from 'vue'
+import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import { openTaskPage } from '@/utils/jms/index'
+import { GenericListTable } from '@/layout/components'
 export default {
   name: 'AccountPushList',
   components: {
     GenericListTable
   },
   data() {
-    const vm = this;
+    const vm = this
     return {
       createDrawer: () => import('@/views/accounts/AccountPush/AccountPushCreateUpdate.vue'),
       detailDrawer: () => import('@/views/accounts/AccountPush/Detail/index.vue'),
@@ -38,13 +38,13 @@ export default {
             }
           },
           accounts: {
-            formatter: function (row) {
-              return _createVNode("span", null, [_createTextVNode(" "), row.accounts.join(', '), _createTextVNode(" ")]);
+            formatter: function(row) {
+              return _createVNode('span', null, [_createTextVNode(' '), row.accounts.join(', '), _createTextVNode(' ')])
             }
           },
           secret_strategy: {
-            formatter: function (row) {
-              return _createVNode("span", null, [_createTextVNode(" "), row.secret_strategy.label, _createTextVNode(" ")]);
+            formatter: function(row) {
+              return _createVNode('span', null, [_createTextVNode(' '), row.secret_strategy.label, _createTextVNode(' ')])
             }
           },
           assets_amount: {
@@ -59,13 +59,13 @@ export default {
           },
           executed_amount: {
             formatter: row => {
-              const can = vm.$hasPerm('accounts.view_pushaccountexecution');
-              return _createVNode(_resolveComponent("el-link"), {
-                "onClick": () => this.handleExecAmount(row),
-                "disabled": !can
+              const can = vm.$hasPerm('accounts.view_pushaccountexecution')
+              return _createVNode(_resolveComponent('el-link'), {
+                'onClick': () => this.handleExecAmount(row),
+                'disabled': !can
               }, {
                 default: () => [row.executed_amount]
-              });
+              })
             }
           },
           actions: {
@@ -81,17 +81,17 @@ export default {
                 can: ({
                   row
                 }) => {
-                  return row.is_active && vm.$hasPerm('accounts.add_pushaccountexecution');
+                  return row.is_active && vm.$hasPerm('accounts.add_pushaccountexecution')
                 },
-                callback: function ({
+                callback: function({
                   row
                 }) {
                   this.$axios.post(`/api/v1/accounts/push-account-executions/`, {
                     automation: row.id,
                     type: row.type.value
                   }).then(res => {
-                    openTaskPage(res['task']);
-                  });
+                    openTaskPage(res['task'])
+                  })
                 }.bind(this)
               }]
             }
@@ -127,7 +127,7 @@ export default {
           }) => this.bulkActivateCallback(selectedRows, reloadTable)
         }]
       }
-    };
+    }
   },
   methods: {
     handleExecAmount(row) {
@@ -137,40 +137,40 @@ export default {
           tab: 'AccountPushExecutionList',
           automation_id: row.id
         }
-      });
+      })
     },
     bulkDisableCallback(selectedRows, reloadTable) {
-      const url = '/api/v1/accounts/push-account-automations/';
+      const url = '/api/v1/accounts/push-account-automations/'
       const data = selectedRows.map(row => {
         return {
           id: row.id,
           is_active: false
-        };
-      });
-      if (data.length === 0) return;
+        }
+      })
+      if (data.length === 0) return
       this.$axios.patch(url, data).then(() => {
-        reloadTable();
-        this.$message.success(this.$t('DisableSuccessMsg'));
+        reloadTable()
+        this.$message.success(this.$t('DisableSuccessMsg'))
       }).catch(error => {
-        this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error);
-      });
+        this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error)
+      })
     },
     bulkActivateCallback(selectedRows, reloadTable) {
-      const url = '/api/v1/accounts/push-account-automations/';
+      const url = '/api/v1/accounts/push-account-automations/'
       const data = selectedRows.map(row => {
         return {
           id: row.id,
           is_active: true
-        };
-      });
-      if (data.length === 0) return;
+        }
+      })
+      if (data.length === 0) return
       this.$axios.patch(url, data).then(() => {
-        reloadTable();
-        this.$message.success(this.$t('DisableSuccessMsg'));
+        reloadTable()
+        this.$message.success(this.$t('DisableSuccessMsg'))
       }).catch(error => {
-        this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error);
-      });
+        this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error)
+      })
     }
   }
-};
+}
 </script>

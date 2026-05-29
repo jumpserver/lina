@@ -10,18 +10,18 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, createTextVNode as _createTextVNode } from "vue";
-import { DetailFormatter } from '@/components/Table/TableFormatters';
-import { openTaskPage } from '@/utils/jms/index';
-import { GenericListTable } from '@/layout/components';
-import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue';
+import { createVNode as _createVNode, createTextVNode as _createTextVNode } from 'vue'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
+import { openTaskPage } from '@/utils/jms/index'
+import { GenericListTable } from '@/layout/components'
+import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 export default {
   name: 'AccountCheckTaskList',
   components: {
     GenericListTable
   },
   data() {
-    const vm = this;
+    const vm = this
     return {
       createDrawer: () => import('@/views/accounts/RiskDetect/AccountCheckCreateUpdate.vue'),
       detailDrawer: () => import('@/views/accounts/RiskDetect/AccountCheckDetail/index.vue'),
@@ -63,8 +63,8 @@ export default {
             }
           },
           secret_strategy: {
-            formatter: function (row) {
-              return _createVNode("span", null, [_createTextVNode(" "), row.secret_strategy.label, _createTextVNode(" ")]);
+            formatter: function(row) {
+              return _createVNode('span', null, [_createTextVNode(' '), row.secret_strategy.label, _createTextVNode(' ')])
             }
           },
           username: {
@@ -73,9 +73,9 @@ export default {
               username
             }) => {
               if (username === '@USER') {
-                return this.$t('DynamicUsername');
+                return this.$t('DynamicUsername')
               } else {
-                return username;
+                return username
               }
             }
           },
@@ -102,7 +102,7 @@ export default {
                     tab: 'AccountPushExecutionList',
                     automation_id: row.id
                   }
-                };
+                }
               }
             }
           },
@@ -117,17 +117,17 @@ export default {
                 can: ({
                   row
                 }) => {
-                  return row.is_active && vm.$hasPerm('accounts.add_checkaccountexecution');
+                  return row.is_active && vm.$hasPerm('accounts.add_checkaccountexecution')
                 },
-                callback: function ({
+                callback: function({
                   row
                 }) {
                   this.$axios.post(`/api/v1/accounts/check-account-executions/`, {
                     automation: row.id,
                     type: row.type.value
                   }).then(res => {
-                    openTaskPage(res['task']);
-                  });
+                    openTaskPage(res['task'])
+                  })
                 }.bind(this)
               }]
             }
@@ -141,7 +141,7 @@ export default {
         createRoute: 'AccountCheckCreateUpdate',
         canCreate: vm.$hasPerm('accounts.add_checkaccountautomation') && !this.$store.getters.currentOrgIsRoot
       }
-    };
+    }
   }
-};
+}
 </script>

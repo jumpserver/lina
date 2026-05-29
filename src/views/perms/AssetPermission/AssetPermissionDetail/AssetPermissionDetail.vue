@@ -12,12 +12,12 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, isVNode as _isVNode, resolveComponent as _resolveComponent } from "vue";
-import AutoDetailCard from '@/components/Cards/DetailCard/auto';
-import { QuickActions } from '@/components';
-import TwoCol from '@/layout/components/Page/TwoColPage.vue';
+import { createVNode as _createVNode, isVNode as _isVNode, resolveComponent as _resolveComponent } from 'vue'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import { QuickActions } from '@/components'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 function _isSlot(s) {
-  return typeof s === 'function' || Object.prototype.toString.call(s) === '[object Object]' && !_isVNode(s);
+  return typeof s === 'function' || Object.prototype.toString.call(s) === '[object Object]' && !_isVNode(s)
 }
 export default {
   name: 'AssetPermissionDetail',
@@ -42,14 +42,14 @@ export default {
           disabled: !this.$hasPerm('perms.change_assetpermission')
         },
         callbacks: {
-          change: function (val) {
+          change: function(val) {
             this.$axios.patch(`/api/v1/perms/asset-permissions/${this.object.id}/`, {
               is_active: val
             }).then(res => {
-              this.$message.success(this.$tc('UpdateSuccessMsg'));
+              this.$message.success(this.$tc('UpdateSuccessMsg'))
             }).catch(err => {
-              this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err));
-            });
+              this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
+            })
           }.bind(this)
         }
       }],
@@ -58,19 +58,19 @@ export default {
         key: this.$t('Action'),
         value: this.object.actions,
         formatter(row, value) {
-          const actionLabels = value.map(item => item.label.replace(/ \([^)]*\)/, ''));
-          return _createVNode("div", null, [actionLabels.map(item => _createVNode(_resolveComponent("el-tag"), {
-            "size": "small",
-            "style": {
+          const actionLabels = value.map(item => item.label.replace(/ \([^)]*\)/, ''))
+          return _createVNode('div', null, [actionLabels.map(item => _createVNode(_resolveComponent('el-tag'), {
+            'size': 'small',
+            'style': {
               marginRight: '3px'
             },
-            "key": item
+            'key': item
           }, _isSlot(item) ? item : {
             default: () => [item]
-          }))]);
+          }))])
         }
       }, 'date_start', 'date_expired', 'date_created', 'created_by', 'comment']
-    };
+    }
   },
   computed: {
     detailCardItems() {
@@ -89,8 +89,8 @@ export default {
       }, {
         key: this.$t('Comment'),
         value: this.object.comment
-      }];
+      }]
     }
   }
-};
+}
 </script>

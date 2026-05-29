@@ -3,12 +3,12 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, isVNode as _isVNode, resolveComponent as _resolveComponent } from "vue";
-import HomeCard from './HomeCard.vue';
-import { getPreference } from '@/api/settings';
-import { openNewWindow } from '@/utils/common/index';
+import { createVNode as _createVNode, isVNode as _isVNode, resolveComponent as _resolveComponent } from 'vue'
+import HomeCard from './HomeCard.vue'
+import { getPreference } from '@/api/settings'
+import { openNewWindow } from '@/utils/common/index'
 function _isSlot(s) {
-  return typeof s === 'function' || Object.prototype.toString.call(s) === '[object Object]' && !_isVNode(s);
+  return typeof s === 'function' || Object.prototype.toString.call(s) === '[object Object]' && !_isVNode(s)
 }
 export default {
   name: 'Announcement',
@@ -16,7 +16,7 @@ export default {
     HomeCard
   },
   data() {
-    const vm = this;
+    const vm = this
     return {
       preference: {},
       cardConfig: {
@@ -30,8 +30,8 @@ export default {
             prop: 'id',
             align: 'center',
             width: '50px',
-            formatter: function (row, column, cellValue, index) {
-              const label = index + 1;
+            formatter: function(row, column, cellValue, index) {
+              const label = index + 1
               const route = {
                 to: {
                   name: 'SessionDetail',
@@ -39,15 +39,15 @@ export default {
                     id: row.id
                   }
                 }
-              };
+              }
               if (vm.$hasPerm('terminal.view_session')) {
-                return _createVNode(_resolveComponent("router-link"), {
+                return _createVNode(_resolveComponent('router-link'), {
                   attrs: route
                 }, _isSlot(label) ? label : {
                   default: () => [label]
-                });
+                })
               } else {
-                return label;
+                return label
               }
             }
           },
@@ -92,9 +92,9 @@ export default {
                   row
                 }) => {
                   if (this.preference?.basic?.connect_default_open_method === 'new') {
-                    openNewWindow(`/luna/connect?login_to=${row.asset_id}&login_account=${row.account_id}`);
+                    openNewWindow(`/luna/connect?login_to=${row.asset_id}&login_account=${row.account_id}`)
                   } else {
-                    window.open(`/luna/?login_to=${row.asset_id}&login_account=${row.account_id}`, '_blank');
+                    window.open(`/luna/?login_to=${row.asset_id}&login_account=${row.account_id}`, '_blank')
                   }
                 }
               }]
@@ -104,14 +104,14 @@ export default {
         hasSelection: false,
         paginationSize: 10
       }
-    };
+    }
   },
   mounted() {
     getPreference().then(resp => {
-      this.preference = resp;
-    });
+      this.preference = resp
+    })
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

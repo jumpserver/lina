@@ -1,17 +1,19 @@
 <template>
   <div id="HomeCard">
     <el-card class="box-card no-border" shadow="never">
-      <div v-show="title || btnText" slot="header" class="clearfix">
-        <span v-show="title" class="title">{{ title }}</span>
-        <el-button
-          v-show="btnText"
-          style="float: right; padding: 3px 0"
-          type="text"
-          @click="btnChange"
-        >
-          {{ btnText }}
-        </el-button>
-      </div>
+      <template #header>
+        <div v-show="title || btnText" class="clearfix">
+          <span v-show="title" class="title">{{ title }}</span>
+          <el-button
+            v-show="btnText"
+            style="float: right; padding: 3px 0"
+            type="text"
+            @click="btnChange"
+          >
+            {{ btnText }}
+          </el-button>
+        </div>
+      </template>
       <ListTable
         ref="ListTable"
         :header-actions="headerActions"

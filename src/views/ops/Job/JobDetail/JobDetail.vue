@@ -11,10 +11,10 @@
 </template>
 
 <script>
-import { IBox } from '@/components';
-import AutoDetailCard from '@/components/Cards/DetailCard/auto';
-import TwoCol from '@/layout/components/Page/TwoColPage.vue';
-import Variable from '@/views/ops/Template/components/Variable.vue';
+import { IBox } from '@/components'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import Variable from '@/views/ops/Template/components/Variable.vue'
 
 export default {
   components: {

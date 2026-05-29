@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import { TextReadonly } from '@/components/Form/FormFields';
-import { GenericCreateUpdatePage } from '@/layout/components';
+import { TextReadonly } from '@/components/Form/FormFields'
+import { GenericCreateUpdatePage } from '@/layout/components'
 
 export default {
   components: {

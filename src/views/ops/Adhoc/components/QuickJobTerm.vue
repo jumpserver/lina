@@ -46,10 +46,10 @@
 </template>
 
 <script>
-import { downloadText } from '@/utils/common/index';
-import { Terminal } from 'xterm';
-import { FitAddon } from 'xterm-addon-fit';
-import 'xterm/css/xterm.css';
+import { downloadText } from '@/utils/common/index'
+import { Terminal } from 'xterm'
+import { FitAddon } from 'xterm-addon-fit'
+import 'xterm/css/xterm.css'
 
 export default {
   name: 'Term',

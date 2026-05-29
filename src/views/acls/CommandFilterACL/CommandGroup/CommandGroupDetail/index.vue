@@ -4,7 +4,6 @@
     v-model:object="CommandGroup"
     :title="'null'"
     v-bind="config"
-    v-on="$listeners"
   >
     <keep-alive>
       <component :is="config.activeMenu" :object="CommandGroup" />

@@ -1,17 +1,19 @@
 <template>
   <div class="asset-select">
     <el-card>
-      <div slot="header" class="clearfix">
-        <span>{{ $t('selectedAssets') }}({{ selectAssets.length }})</span>
-        <el-button
-          v-if="selectAssets.length > 0"
-          style="float: right; padding: 3px 0"
-          type="text"
-          @click="handleClick"
-        >
-          {{ $t('pleaseSelectAssets') }}
-        </el-button>
-      </div>
+      <template #header>
+        <div class="clearfix">
+          <span>{{ $t('selectedAssets') }}({{ selectAssets.length }})</span>
+          <el-button
+            v-if="selectAssets.length > 0"
+            style="float: right; padding: 3px 0"
+            type="text"
+            @click="handleClick"
+          >
+            {{ $t('pleaseSelectAssets') }}
+          </el-button>
+        </div>
+      </template>
       <div
         v-if="selectAssets.length === 0"
         class="empty-assets"
@@ -83,7 +85,6 @@
       v-bind="$attrs"
       @cancel="handleCancel"
       @confirm="handleConfirm"
-      v-on="$listeners"
     />
   </div>
 </template>

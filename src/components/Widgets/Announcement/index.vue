@@ -50,8 +50,8 @@
 </template>
 
 <script>
-import MarkDown from '@/components/Widgets/MarkDown';
-import { mapGetters } from 'vuex';
+import MarkDown from '@/components/Widgets/MarkDown'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Announcement',

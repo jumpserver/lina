@@ -9,10 +9,10 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from "vue";
-import { DrawerListTable as ListTable } from '@/components';
-import { DetailFormatter } from '@/components/Table/TableFormatters';
-import { openTaskPage } from '@/utils/jms/index';
+import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import { DrawerListTable as ListTable } from '@/components'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
+import { openTaskPage } from '@/utils/jms/index'
 export default {
   name: 'Publications',
   components: {
@@ -25,7 +25,7 @@ export default {
     }
   },
   data() {
-    const vm = this;
+    const vm = this
     return {
       detailDrawer: () => import('./Detail.vue'),
       headerActions: {
@@ -43,19 +43,19 @@ export default {
           can: ({
             selectedRows
           }) => {
-            return selectedRows.length > 0;
+            return selectedRows.length > 0
           },
-          callback: function ({
+          callback: function({
             selectedRows
           }) {
             vm.$axios.post(`/api/v1/terminal/applet-host-deployments/applets/`, {
               hosts: selectedRows.map(v => {
-                return v.host.id;
+                return v.host.id
               }),
               applet_id: vm.object.id
             }).then(res => {
-              openTaskPage(res['task']);
-            });
+              openTaskPage(res['task'])
+            })
           }
         }]
       },
@@ -99,14 +99,14 @@ export default {
                 'success': 'primary',
                 'failed': 'danger',
                 'unknown': 'warning'
-              };
-              const tp = typeMapper[row.status.value] || 'warning';
-              return _createVNode(_resolveComponent("el-tag"), {
-                "size": "small",
-                "type": tp
+              }
+              const tp = typeMapper[row.status.value] || 'warning'
+              return _createVNode(_resolveComponent('el-tag'), {
+                'size': 'small',
+                'type': tp
               }, {
                 default: () => [row.status.label]
-              });
+              })
             }
           },
           date_updated: {
@@ -119,22 +119,22 @@ export default {
               hasClone: false,
               extraActions: [{
                 title: this.$t('Deploy'),
-                callback: function ({
+                callback: function({
                   row
                 }) {
                   this.$axios.post(`/api/v1/terminal/applet-host-deployments/applets/`, {
                     hosts: [row.host.id],
                     applet_id: vm.object.id
                   }).then(res => {
-                    openTaskPage(res['task']);
-                  });
+                    openTaskPage(res['task'])
+                  })
                 }
               }]
             }
           }
         }
       }
-    };
+    }
   }
-};
+}
 </script>

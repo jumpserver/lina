@@ -4,9 +4,11 @@
     :submenu="config.submenu"
     @tab-click="handleTabClick"
   >
-    <div slot="title">
-      {{ Title }}
-    </div>
+    <template #title>
+      <div>
+        {{ Title }}
+      </div>
+    </template>
   </TabPage>
 </template>
 

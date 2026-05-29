@@ -37,11 +37,11 @@ import DataZTree from '../DataZTree/index.vue'
 
 export default {
   name: 'AutoDataZTree',
-  inheritAttrs: false,
   components: {
     DataZTree,
     Icon
   },
+  inheritAttrs: false,
   props: {
     setting: {
       type: Object,

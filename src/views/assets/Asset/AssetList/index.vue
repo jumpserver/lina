@@ -84,9 +84,12 @@ export default {
       nameComponentMap[item.name] = item
     }
     this.$axios.get('/api/v1/assets/categories/').then(res => {
-      const categories = res.results
+      const categories = Array.isArray(res) ? res : (res?.results || [])
       for (const item of categories) {
         const name = item.value
+        if (!nameComponentMap[name]) {
+          continue
+        }
         // 如果报错，需要在上面的 submenu 中添加对应的组件
         nameComponentMap[name]['hidden'] = false
         nameComponentMap[name]['title'] = item.label

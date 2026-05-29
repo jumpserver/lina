@@ -8,9 +8,11 @@
     :special-card-items="specialCardItems"
   >
     <IBox v-if="hasActionPerm && object.status.value !== 'closed'" class="box">
-      <div slot="header" class="clearfix ibox-title">
-        <i class="fa fa-edit" /> {{ $tc('Actions') }}
-      </div>
+      <template #header>
+        <div class="clearfix ibox-title">
+          <i class="fa fa-edit" /> {{ $tc('Actions') }}
+        </div>
+      </template>
       <el-form ref="requestForm" :model="requestForm" class="assets" label-position="left" label-width="140px">
         <el-form-item :label="$tc('Node')">
           <Select2 v-model="requestForm.nodes" style="width: 50% !important" v-bind="nodeSelect2" />
@@ -53,18 +55,18 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, isVNode as _isVNode, resolveComponent as _resolveComponent } from "vue";
-import { formatTime, getDateTimeStamp } from '@/utils/common/time';
-import { toSafeLocalDateStr } from '@/utils/common/time';
-import { STATUS_MAP, treeNodes } from '../../const';
-import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail';
-import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter';
-import Select2 from '@/components/Form/FormFields/Select2';
-import BasicTree from '@/components/Form/FormFields/BasicTree';
-import IBox from '@/components/Common/IBox';
-import { AccountLabelMapper } from '@/views/perms/const';
+import { createVNode as _createVNode, isVNode as _isVNode, resolveComponent as _resolveComponent } from 'vue'
+import { formatTime, getDateTimeStamp } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/utils/common/time'
+import { STATUS_MAP, treeNodes } from '../../const'
+import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
+import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
+import Select2 from '@/components/Form/FormFields/Select2'
+import BasicTree from '@/components/Form/FormFields/BasicTree'
+import IBox from '@/components/Common/IBox'
+import { AccountLabelMapper } from '@/views/perms/const'
 function _isSlot(s) {
-  return typeof s === 'function' || Object.prototype.toString.call(s) === '[object Object]' && !_isVNode(s);
+  return typeof s === 'function' || Object.prototype.toString.call(s) === '[object Object]' && !_isVNode(s)
 }
 export default {
   name: '',
@@ -98,15 +100,15 @@ export default {
         multiple: true,
         value: this.object.apply_nodes,
         ajax: {
-          url: function (object) {
-            const oid = object.org_id;
-            return `/api/v1/assets/nodes/?oid=${oid}&protocol__in=rdp,vnc,ssh,telnet`;
-          }(this.object),
+          url: (function(object) {
+            const oid = object.org_id
+            return `/api/v1/assets/nodes/?oid=${oid}&protocol__in=rdp,vnc,ssh,telnet`
+          }(this.object)),
           transformOption: item => {
             return {
               label: `${item.full_value}`,
               value: item.id
-            };
+            }
           }
         }
       },
@@ -114,35 +116,35 @@ export default {
         multiple: true,
         value: this.object.apply_assets,
         ajax: {
-          url: function (object) {
-            const oid = object.org_id;
-            return `/api/v1/assets/assets/?oid=${oid}&protocol__in=rdp,vnc,ssh,telnet`;
-          }(this.object),
+          url: (function(object) {
+            const oid = object.org_id
+            return `/api/v1/assets/assets/?oid=${oid}&protocol__in=rdp,vnc,ssh,telnet`
+          }(this.object)),
           transformOption: item => {
             return {
               label: `${item.name}(${item.address})`,
               value: item.id
-            };
+            }
           }
         }
       }
-    };
+    }
   },
   computed: {
     isRequired() {
       if (this.object.approval_step.value === this.object.process_map.length) {
         return [{
           required: true
-        }];
+        }]
       }
       return [{
         required: false
-      }];
+      }]
     },
     specialCardItems() {
       const {
         object
-      } = this;
+      } = this
       return [{
         key: this.$tc('Node'),
         value: object.apply_nodes.map(item => item.name).join(', ')
@@ -161,17 +163,17 @@ export default {
       }, {
         key: this.$tc('DateExpired'),
         value: object.apply_date_expired
-      }];
+      }]
     },
     assignedCardItems() {
-      const vm = this;
+      const vm = this
       const {
         object
-      } = this;
+      } = this
       return [{
         key: this.$tc('PermissionName'),
         value: object.apply_permission_name,
-        formatter: function (item, value) {
+        formatter: function(item, value) {
           const to = {
             name: 'AssetPermissionDetail',
             params: {
@@ -180,15 +182,15 @@ export default {
             query: {
               oid: object.org_id
             }
-          };
+          }
           if (vm.$hasPerm('perms.view_assetpermission') && object.status.value === 'closed' && object.state.value === 'approved') {
-            return _createVNode(_resolveComponent("router-link"), {
-              "to": to
+            return _createVNode(_resolveComponent('router-link'), {
+              'to': to
             }, _isSlot(value) ? value : {
               default: () => [value]
-            });
+            })
           } else {
-            return _createVNode("span", null, [value]);
+            return _createVNode('span', null, [value])
           }
         }
       }, {
@@ -209,33 +211,33 @@ export default {
       }, {
         key: this.$tc('DateExpired'),
         value: object.apply_date_expired
-      }];
+      }]
     },
     hasActionPerm() {
-      const approval_step = this.object.approval_step.value;
-      const current_user_id = this.$store.state.users.profile.id;
-      return this.object.process_map.filter(item => item.approval_level === approval_step)[0].assignees.indexOf(current_user_id) !== -1;
+      const approval_step = this.object.approval_step.value
+      const current_user_id = this.$store.state.users.profile.id
+      return this.object.process_map.filter(item => item.approval_level === approval_step)[0].assignees.indexOf(current_user_id) !== -1
     }
   },
   methods: {
     formatTime(dateStr) {
-      return formatTime(getDateTimeStamp(dateStr));
+      return formatTime(getDateTimeStamp(dateStr))
     },
     toSafeLocalDateStr(dataStr) {
-      return toSafeLocalDateStr(dataStr);
+      return toSafeLocalDateStr(dataStr)
     },
     reloadPage() {
-      window.location.reload();
+      window.location.reload()
     },
     handleApprove() {
-      const nodes = this.requestForm.nodes;
-      const assets = this.requestForm.assets;
-      const accounts = this.requestForm.accounts;
+      const nodes = this.requestForm.nodes
+      const assets = this.requestForm.assets
+      const accounts = this.requestForm.accounts
       if (this.object.approval_step.value === this.object.process_map.length) {
         if (assets.length === 0 && nodes.length === 0) {
-          return this.$message.error(this.$tc('SelectAtLeastOneAssetOrNodeErrMsg'));
+          return this.$message.error(this.$tc('SelectAtLeastOneAssetOrNodeErrMsg'))
         } else if (accounts.length === 0) {
-          return this.$message.error(this.$tc('RequiredSystemUserErrMsg'));
+          return this.$message.error(this.$tc('RequiredSystemUserErrMsg'))
         }
       }
       this.$axios.patch(`/api/v1/tickets/apply-asset-tickets/${this.object.id}/approve/`, {
@@ -247,22 +249,22 @@ export default {
         apply_date_start: this.requestForm.apply_date_start,
         apply_date_expired: this.requestForm.apply_date_expired
       }).then(() => {
-        this.$message.success(this.$tc('UpdateSuccessMsg'));
-        this.reloadPage();
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
+        this.reloadPage()
       }).catch(() => {
-        this.$message.success(this.$tc('UpdateErrorMsg'));
-      });
+        this.$message.success(this.$tc('UpdateErrorMsg'))
+      })
     },
     handleClose() {
-      const url = `/api/v1/tickets/apply-asset-tickets/${this.object.id}/close/`;
-      this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err));
+      const url = `/api/v1/tickets/apply-asset-tickets/${this.object.id}/close/`
+      this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     },
     handleReject() {
-      const url = `/api/v1/tickets/apply-asset-tickets/${this.object.id}/reject/`;
-      this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err));
+      const url = `/api/v1/tickets/apply-asset-tickets/${this.object.id}/reject/`
+      this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     }
   }
-};
+}
 </script>
 
 <style scoped>

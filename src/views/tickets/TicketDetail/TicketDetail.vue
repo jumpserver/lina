@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent, createTextVNode as _createTextVNode } from "vue";
-import { STATUS_MAP } from '../const';
-import { formatTime, getDateTimeStamp } from '@/utils/common/time';
-import { toSafeLocalDateStr } from '@/utils/common/time';
-import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail';
+import { createVNode as _createVNode, resolveComponent as _resolveComponent, createTextVNode as _createTextVNode } from 'vue'
+import { STATUS_MAP } from '../const'
+import { formatTime, getDateTimeStamp } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/utils/common/time'
+import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 export default {
   name: 'TicketDetail',
   components: {
@@ -27,13 +27,13 @@ export default {
         comments: ''
       },
       comments: ''
-    };
+    }
   },
   computed: {
     detailCardItems() {
       const {
         object
-      } = this;
+      } = this
       return [{
         key: this.$t('Applicant'),
         value: object.rel_snapshot.applicant
@@ -44,12 +44,12 @@ export default {
         key: this.$t('Status'),
         value: object.status,
         formatter: (item, val) => {
-          return _createVNode(_resolveComponent("el-tag"), {
-            "type": this.statusMap.type,
-            "size": "small"
+          return _createVNode(_resolveComponent('el-tag'), {
+            'type': this.statusMap.type,
+            'size': 'small'
           }, {
-            default: () => [_createTextVNode(" "), this.statusMap.title]
-          });
+            default: () => [_createTextVNode(' '), this.statusMap.title]
+          })
         }
       }, {
         key: this.$t('Assignees'),
@@ -60,18 +60,18 @@ export default {
       }, {
         key: this.$t('DateCreated'),
         value: toSafeLocalDateStr(object.date_created)
-      }];
+      }]
     }
   },
   methods: {
     formatTime(dateStr) {
-      return formatTime(getDateTimeStamp(dateStr));
+      return formatTime(getDateTimeStamp(dateStr))
     },
     toSafeLocalDateStr(dataStr) {
-      return toSafeLocalDateStr(dataStr);
+      return toSafeLocalDateStr(dataStr)
     }
   }
-};
+}
 </script>
 
 <style scoped>

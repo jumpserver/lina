@@ -1,8 +1,10 @@
 <template>
   <TabPage v-model:active-menu="config.activeMenu" :submenu="config.submenu">
-    <div slot="title">
-      {{ Title }}
-    </div>
+    <template #title>
+      <div>
+        {{ Title }}
+      </div>
+    </template>
     <keep-alive>
       <component :is="config.activeMenu" />
     </keep-alive>

@@ -10,11 +10,11 @@
 </template>
 
 <script>
-import { createVNode as _createVNode } from "vue";
-import { GenericListTable } from '@/layout/components';
-import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters';
-import { openTaskPage } from '@/utils/jms/index';
-import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue';
+import { createVNode as _createVNode } from 'vue'
+import { GenericListTable } from '@/layout/components'
+import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import { openTaskPage } from '@/utils/jms/index'
+import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue'
 export default {
   name: 'AccountChangeSecretRecord',
   components: {
@@ -22,7 +22,7 @@ export default {
     GenericListTable
   },
   data() {
-    const vm = this;
+    const vm = this
     return {
       secretUrl: '',
       showViewSecretDialog: false,
@@ -50,7 +50,7 @@ export default {
                   params: {
                     id: row.asset.id
                   }
-                };
+                }
               }
             }
           },
@@ -74,7 +74,7 @@ export default {
                   params: {
                     id: row.account.id
                   }
-                };
+                }
               }
             }
           },
@@ -82,18 +82,18 @@ export default {
             label: this.$t('Success'),
             formatter: row => {
               if (row.status === 'pending') {
-                return _createVNode("i", {
-                  "class": "fa  fa fa-spinner fa-spin"
-                }, null);
+                return _createVNode('i', {
+                  'class': 'fa  fa fa-spinner fa-spin'
+                }, null)
               }
               if (row.is_success) {
-                return _createVNode("i", {
-                  "class": "fa fa-check text-primary"
-                }, null);
+                return _createVNode('i', {
+                  'class': 'fa fa-check text-primary'
+                }, null)
               }
-              return _createVNode("i", {
-                "class": "fa fa-times text-danger"
-              }, null);
+              return _createVNode('i', {
+                'class': 'fa fa-times text-danger'
+              }, null)
             }
           },
           actions: {
@@ -111,11 +111,11 @@ export default {
                   row
                 }) => {
                   // debugger
-                  vm.secretUrl = `/api/v1/accounts/change-secret-records/${row.id}/secret/`;
-                  vm.showViewSecretDialog = false;
+                  vm.secretUrl = `/api/v1/accounts/change-secret-records/${row.id}/secret/`
+                  vm.showViewSecretDialog = false
                   setTimeout(() => {
-                    vm.showViewSecretDialog = true;
-                  });
+                    vm.showViewSecretDialog = true
+                  })
                 }
               }, {
                 name: 'Retry',
@@ -128,8 +128,8 @@ export default {
                   this.$axios.post('/api/v1/accounts/change-secret-records/execute/', {
                     record_ids: [row.id]
                   }).then(res => {
-                    openTaskPage(res['task']);
-                  });
+                    openTaskPage(res['task'])
+                  })
                 }
               }]
             }
@@ -183,23 +183,23 @@ export default {
           can: ({
             selectedRows
           }) => {
-            return selectedRows.length > 0 && vm.$hasPerm('accounts.add_changesecretexecution');
+            return selectedRows.length > 0 && vm.$hasPerm('accounts.add_changesecretexecution')
           },
-          callback: function ({
+          callback: function({
             selectedRows
           }) {
             const ids = selectedRows.map(v => {
-              return v.id;
-            });
+              return v.id
+            })
             this.$axios.post('/api/v1/accounts/change-secret-records/execute/', {
               record_ids: ids
             }).then(res => {
-              openTaskPage(res['task']);
-            });
+              openTaskPage(res['task'])
+            })
           }.bind(this)
         }]
       }
-    };
+    }
   }
-};
+}
 </script>

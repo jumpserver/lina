@@ -16,13 +16,13 @@
 </template>
 
 <script>
-import { createVNode as _createVNode } from "vue";
-import { IBox } from '@/components';
-import { GenericCreateUpdateForm } from '@/layout/components';
-import MarkDownEditor from '@/views/settings/Msg/Email/markDownEditor.vue';
-import { Select2 } from '@/components/Form/FormFields';
-import VariablesHelpTextDialog from '@/components/Apps/VariablesHelpTextDialog';
-import variable from '@/views/ops/Template/components/Variable.vue';
+import { createVNode as _createVNode } from 'vue'
+import { IBox } from '@/components'
+import { GenericCreateUpdateForm } from '@/layout/components'
+import MarkDownEditor from '@/views/settings/Msg/Email/markDownEditor.vue'
+import { Select2 } from '@/components/Form/FormFields'
+import VariablesHelpTextDialog from '@/components/Apps/VariablesHelpTextDialog'
+import variable from '@/views/ops/Template/components/Variable.vue'
 export default {
   name: 'MsgTemplate',
   components: {
@@ -31,7 +31,7 @@ export default {
     VariablesHelpTextDialog
   },
   data() {
-    const vm = this;
+    const vm = this
     return {
       initial: {
         template_name: localStorage.getItem('selectTemplateName') || 'terminal/_msg_session_sharing.html'
@@ -42,13 +42,13 @@ export default {
           label: this.$t('Name'),
           helpTextFormatter: () => {
             const handleClick = () => {
-              this.showHelpDialog = true;
-            };
-            return _createVNode("i", {
-              "onClick": handleClick,
-              "class": "fa fa-question-circle",
-              "style": "cursor: pointer"
-            }, [this.$t('Help')]);
+              this.showHelpDialog = true
+            }
+            return _createVNode('i', {
+              'onClick': handleClick,
+              'class': 'fa fa-question-circle',
+              'style': 'cursor: pointer'
+            }, [this.$t('Help')])
           },
           component: Select2,
           el: {
@@ -60,16 +60,16 @@ export default {
               setTimeout(() => {
                 vm.templates.map(item => {
                   if (item.template_name === event) {
-                    this.selectTemplateName = item.template_name;
-                    localStorage.setItem('selectTemplateName', item.template_name);
-                    this.variables = item.contexts;
-                    this.source = item.source;
+                    this.selectTemplateName = item.template_name
+                    localStorage.setItem('selectTemplateName', item.template_name)
+                    this.variables = item.contexts
+                    this.source = item.source
                     updateForm({
                       template_content: item.content.trimStart()
-                    });
+                    })
                   }
-                });
-              }, 500);
+                })
+              }, 500)
             }
           }
         },
@@ -77,7 +77,7 @@ export default {
           component: MarkDownEditor,
           on: {
             htmlChange: ([html]) => {
-              vm.html = html;
+              vm.html = html
             }
           }
         }
@@ -95,15 +95,15 @@ export default {
       hasSaveContinue: false,
       onPerformError() {},
       performSubmit(validValues) {
-        validValues['render_html'] = vm.html;
+        validValues['render_html'] = vm.html
         return this.$axios['patch']('/api/v1/notifications/templates/edit/', validValues).then(res => {
           this.$router.push({
             name: 'Msg',
             query: {
               t: new Date().getTime()
             }
-          });
-        });
+          })
+        })
       },
       moreButtons: [{
         title: this.$t('Reset'),
@@ -118,35 +118,35 @@ export default {
               query: {
                 t: new Date().getTime()
               }
-            });
-            this.$message.success(this.$t('ResetSuccessfully'));
-          });
+            })
+            this.$message.success(this.$t('ResetSuccessfully'))
+          })
         }
       }]
-    };
+    }
   },
   computed: {
     variable() {
-      return variable;
+      return variable
     }
   },
   mounted() {
-    this.fetchTemplates();
+    this.fetchTemplates()
   },
   methods: {
     fetchTemplates() {
       this.$axios.get('/api/v1/notifications/templates/').then(data => {
         if (data.length > 0) {
-          this.templates = data;
+          this.templates = data
           this.fieldsMeta.template_name.el.options = data.map(item => ({
             label: item.subject,
             value: item.template_name
-          }));
+          }))
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style scoped>

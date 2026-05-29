@@ -8,10 +8,10 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from "vue";
-import { ListTable, QuickActions } from '@/components';
-import { openTaskPage } from '@/utils/jms/index';
-import TwoCol from '@/layout/components/Page/TwoColPage.vue';
+import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import { ListTable, QuickActions } from '@/components'
+import { openTaskPage } from '@/utils/jms/index'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 export default {
   name: 'Developments',
   components: {
@@ -50,14 +50,14 @@ export default {
                 'success': 'primary',
                 'failed': 'danger',
                 'unknown': 'warning'
-              };
-              const tp = typeMapper[row.status.value] || 'info';
-              return _createVNode(_resolveComponent("el-tag"), {
-                "size": "small",
-                "type": tp
+              }
+              const tp = typeMapper[row.status.value] || 'info'
+              return _createVNode(_resolveComponent('el-tag'), {
+                'size': 'small',
+                'type': tp
               }, {
                 default: () => [row.status.label]
-              });
+              })
             }
           },
           actions: {
@@ -69,8 +69,8 @@ export default {
                 name: 'View',
                 title: this.$t('View'),
                 type: 'primary',
-                callback: function (val) {
-                  openTaskPage(val.row.task);
+                callback: function(val) {
+                  openTaskPage(val.row.task)
                 }
               }]
             }
@@ -84,18 +84,18 @@ export default {
           label: this.$t('Deploy')
         },
         callbacks: {
-          click: function () {
+          click: function() {
             this.$axios.post(`/api/v1/terminal/applet-host-deployments/`, {
               host: this.object.id
             }).then(res => {
-              openTaskPage(res['task']);
-            });
+              openTaskPage(res['task'])
+            })
           }.bind(this)
         }
       }]
-    };
+    }
   }
-};
+}
 </script>
 
 <style scoped>

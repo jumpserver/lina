@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import ImportTable from '@/components/Table/ListTable/TableAction/ImportTable';
-import _isequal from 'lodash/isEqual';
+import ImportTable from '@/components/Table/ListTable/TableAction/ImportTable'
+import _isequal from 'lodash/isEqual'
 
 export default {
   name: 'AssetPanel',

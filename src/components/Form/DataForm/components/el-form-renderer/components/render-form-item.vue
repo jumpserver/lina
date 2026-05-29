@@ -40,9 +40,9 @@
       </div>
     </template>
     <component
+      :is="data.component || `el-${data.type}`"
       v-else
       :component="data.component || `el-${data.type}`"
-      :is="data.component || `el-${data.type}`"
       :disabled="disabled || componentProps.disabled || readonly"
       :value="itemValue"
       v-bind="componentProps"
@@ -119,7 +119,6 @@ function validator(data) {
 }
 
 export default {
-  emits: ['updateValue'],
   components: {
     RenderHelpTextSafe: {
       props: {
@@ -153,6 +152,7 @@ export default {
     // eslint-disable-next-line vue/require-default-prop
     options: Array
   },
+  emits: ['updateValue'],
   data() {
     return {
       propsInner: {},

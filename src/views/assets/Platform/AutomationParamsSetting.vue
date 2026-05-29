@@ -23,7 +23,6 @@
         class="data-form"
         v-bind="config"
         @submit="onSubmit"
-        v-on="$listeners"
       />
     </Dialog>
   </div>

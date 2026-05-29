@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { DrawerListTable as ListTable } from '@/components';
+import { DrawerListTable as ListTable } from '@/components'
 
 export default {
   name: 'LeakPasswordList',

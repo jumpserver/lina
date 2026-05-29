@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import Icon from '@/components/Widgets/Icon/index.vue';
+import Icon from '@/components/Widgets/Icon/index.vue'
 
 export default {
   name: 'Panel',

@@ -12,12 +12,12 @@
 </template>
 
 <script>
-import { isVNode as _isVNode, resolveComponent as _resolveComponent, createVNode as _createVNode } from "vue";
-import { STATUS_MAP } from '../../const';
-import Drawer from '@/components/Drawer/index.vue';
-import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail';
+import { isVNode as _isVNode, resolveComponent as _resolveComponent, createVNode as _createVNode } from 'vue'
+import { STATUS_MAP } from '../../const'
+import Drawer from '@/components/Drawer/index.vue'
+import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 function _isSlot(s) {
-  return typeof s === 'function' || Object.prototype.toString.call(s) === '[object Object]' && !_isVNode(s);
+  return typeof s === 'function' || Object.prototype.toString.call(s) === '[object Object]' && !_isVNode(s)
 }
 export default {
   name: 'CommandConfirmTicketDetail',
@@ -41,13 +41,13 @@ export default {
         comments: ''
       },
       comments: ''
-    };
+    }
   },
   computed: {
     specialCardItems() {
       const {
         object
-      } = this;
+      } = this
       return [{
         key: this.$t('ApplyRunUser'),
         value: object.rel_snapshot.apply_run_user
@@ -64,15 +64,15 @@ export default {
         key: this.$t('ApplyFromSession'),
         value: object.apply_from_session,
         formatter: (_item, value) => {
-          let _slot;
+          let _slot
           if (!this.$hasPerm('terminal.view_session')) {
-            return _createVNode("span", null, [this.$t('Session')]);
+            return _createVNode('span', null, [this.$t('Session')])
           }
-          return _createVNode(_resolveComponent("el-link"), {
-            "onClick": () => this.handleSideEffect(value)
+          return _createVNode(_resolveComponent('el-link'), {
+            'onClick': () => this.handleSideEffect(value)
           }, _isSlot(_slot = this.$t('Session')) ? _slot : {
             default: () => [_slot]
-          });
+          })
         }
       }, {
         key: this.$t('ApplyFromCMDFilterRule'),
@@ -80,8 +80,8 @@ export default {
           cmdFilterRuleId: object.apply_from_cmd_filter_rule,
           cmdFilterId: object.apply_from_cmd_filter
         },
-        formatter: function (item, value) {
-          let _slot2;
+        formatter: function(item, value) {
+          let _slot2
           const to = {
             name: 'CommandFilterRulesUpdate',
             params: {
@@ -91,17 +91,17 @@ export default {
               filter: value.cmdFilterId,
               oid: object.org_id
             }
-          };
-          if (!this.$hasPerm('assets.change_commandfilterrule')) {
-            return _createVNode("span", null, [this.$t('CommandFilterRules')]);
           }
-          return _createVNode(_resolveComponent("router-link"), {
-            "to": to
+          if (!this.$hasPerm('assets.change_commandfilterrule')) {
+            return _createVNode('span', null, [this.$t('CommandFilterRules')])
+          }
+          return _createVNode(_resolveComponent('router-link'), {
+            'to': to
           }, _isSlot(_slot2 = this.$t('CommandFilterRules')) ? _slot2 : {
             default: () => [_slot2]
-          });
+          })
         }
-      }];
+      }]
     }
   },
   methods: {
@@ -111,11 +111,11 @@ export default {
         row: {},
         col: {},
         id: value.id
-      });
+      })
       this.$nextTick(() => {
-        this.drawerVisible = true;
-      });
+        this.drawerVisible = true
+      })
     }
   }
-};
+}
 </script>

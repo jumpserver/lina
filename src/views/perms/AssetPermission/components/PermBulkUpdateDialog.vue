@@ -4,7 +4,6 @@
     :form-setting="formSetting"
     :selected-rows="selectedRows"
     :visible="visible"
-    v-on="$listeners"
   />
 </template>
 

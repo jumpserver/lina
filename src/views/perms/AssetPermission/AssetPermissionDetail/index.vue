@@ -3,7 +3,6 @@
     v-model:active-menu="config.activeMenu"
     v-model:object="AssetPermission"
     v-bind="config"
-    v-on="$listeners"
     @tab-click="handleTabClick"
   >
     <keep-alive>

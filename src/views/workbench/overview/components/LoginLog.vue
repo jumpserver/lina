@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, createTextVNode as _createTextVNode } from "vue";
-import HomeCard from './HomeCard';
+import { createVNode as _createVNode, createTextVNode as _createTextVNode } from 'vue'
+import HomeCard from './HomeCard'
 export default {
   name: 'Log',
   components: {
@@ -18,7 +18,7 @@ export default {
           hasLeftActions: false,
           hasRightActions: false,
           hasSearch: false
-        };
+        }
       }
     }
   },
@@ -33,7 +33,7 @@ export default {
         columnsMeta: {
           city: {
             formatter: row => {
-              return _createVNode("span", null, [row.city, _createTextVNode("("), row.ip, _createTextVNode(")")]);
+              return _createVNode('span', null, [row.city, _createTextVNode('('), row.ip, _createTextVNode(')')])
             }
           },
           actions: {
@@ -43,9 +43,9 @@ export default {
         hasSelection: false,
         paginationSize: 5
       }
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

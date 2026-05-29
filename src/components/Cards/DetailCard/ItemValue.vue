@@ -1,6 +1,6 @@
 <script>
-import { toSafeLocalDateStr } from '@/utils/common/time';
-import { h } from 'vue';
+import { toSafeLocalDateStr } from '@/utils/common/time'
+import { h } from 'vue'
 
 export default {
   name: 'ItemValue',

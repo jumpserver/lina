@@ -7,7 +7,6 @@
     v-bind="$attrs"
     @cancel="onCancel"
     @confirm="onSubmit"
-    v-on="$listeners"
   >
     <el-form label-position="top">
       <el-form-item
@@ -31,12 +30,14 @@
           <div class="el-upload__text">
             {{ $t('DragUploadFileInfo') }}
           </div>
-          <div slot="tip" class="el-upload__tip">
-            <span :class="{'hasError': hasFileFormatOrSizeError }">
-              {{ $t('UploadZipTips') }}
-            </span>
-            <div v-if="renderError" class="hasError">{{ renderError }}</div>
-          </div>
+          <template #tip>
+            <div class="el-upload__tip">
+              <span :class="{'hasError': hasFileFormatOrSizeError }">
+                {{ $t('UploadZipTips') }}
+              </span>
+              <div v-if="renderError" class="hasError">{{ renderError }}</div>
+            </div>
+          </template>
         </el-upload>
       </el-form-item>
     </el-form>

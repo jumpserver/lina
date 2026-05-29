@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import { createVNode as _createVNode } from "vue";
-import { DrawerListTable as ListTable } from '@/components';
-import { openTaskPage } from '@/utils/jms/index';
+import { createVNode as _createVNode } from 'vue'
+import { DrawerListTable as ListTable } from '@/components'
+import { openTaskPage } from '@/utils/jms/index'
 export default {
   name: 'TaskHistory',
   components: {
@@ -18,7 +18,7 @@ export default {
     }
   },
   data() {
-    const vm = this;
+    const vm = this
     return {
       tableConfig: {
         hasSelection: false,
@@ -32,13 +32,13 @@ export default {
             label: this.$t('IsFinished'),
             formatter: row => {
               if (row.is_finished) {
-                return _createVNode("i", {
-                  "class": "fa fa-check text-primary"
-                }, null);
+                return _createVNode('i', {
+                  'class': 'fa fa-check text-primary'
+                }, null)
               }
-              return _createVNode("i", {
-                "class": "fa fa-times text-danger"
-              }, null);
+              return _createVNode('i', {
+                'class': 'fa fa-times text-danger'
+              }, null)
             },
             formatterArgs: {
               width: '14px'
@@ -48,18 +48,18 @@ export default {
             label: this.$t('IsSuccess'),
             formatter: row => {
               if (!row.is_finished) {
-                return _createVNode("i", {
-                  "class": "fa  fa fa-spinner fa-spin"
-                }, null);
+                return _createVNode('i', {
+                  'class': 'fa  fa fa-spinner fa-spin'
+                }, null)
               }
               if (row.is_success) {
-                return _createVNode("i", {
-                  "class": "fa fa-check text-primary"
-                }, null);
+                return _createVNode('i', {
+                  'class': 'fa fa-check text-primary'
+                }, null)
               }
-              return _createVNode("i", {
-                "class": "fa fa-times text-danger"
-              }, null);
+              return _createVNode('i', {
+                'class': 'fa fa-times text-danger'
+              }, null)
             },
             formatterArgs: {
               width: '14px'
@@ -68,11 +68,11 @@ export default {
           time_cost: {
             label: this.$t('Time'),
             width: '100px',
-            formatter: function (row) {
+            formatter: function(row) {
               if (row.time_cost) {
-                return row.time_cost.toFixed(2) + 's';
+                return row.time_cost.toFixed(2) + 's'
               }
-              return '-';
+              return '-'
             }
           },
           actions: {
@@ -85,24 +85,24 @@ export default {
               extraActions: [{
                 name: 'detail',
                 title: this.$t('Output'),
-                callback: function ({
+                callback: function({
                   row,
                   tableData
                 }) {
-                  openTaskPage(row.id);
+                  openTaskPage(row.id)
                 }
               }, {
                 name: 'run',
                 title: this.$t('RunAgain'),
                 type: 'primary',
-                callback: function ({
+                callback: function({
                   row,
                   tableData
                 }) {
                   this.$axios.post(`/api/v1/ops/task-executions/?from=${row.id}`, {}).then(data => {
-                    vm.refreshTable();
-                    openTaskPage(data.task_id);
-                  });
+                    vm.refreshTable()
+                    openTaskPage(data.task_id)
+                  })
                 }
               }]
             }
@@ -112,14 +112,14 @@ export default {
       headerActions: {
         hasLeftActions: false
       }
-    };
+    }
   },
   methods: {
     refreshTable() {
-      this.$refs.list.reloadTable();
+      this.$refs.list.reloadTable()
     }
   }
-};
+}
 </script>
 
 <style scoped>

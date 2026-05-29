@@ -7,10 +7,10 @@
 </template>
 
 <script>
-import { createVNode as _createVNode } from "vue";
-import IBox from '@/components/Common/IBox/index.vue';
-import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index.vue';
-import WatermarkHelpDialog from '@/components/Apps/VariablesHelpTextDialog';
+import { createVNode as _createVNode } from 'vue'
+import IBox from '@/components/Common/IBox/index.vue'
+import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index.vue'
+import WatermarkHelpDialog from '@/components/Apps/VariablesHelpTextDialog'
 export default {
   name: 'SessionSecurity',
   components: {
@@ -76,25 +76,25 @@ export default {
           SECURITY_WATERMARK_SESSION_CONTENT: {
             helpTextFormatter: () => {
               const handleClick = () => {
-                this.showSessionHelpDialog = true;
-              };
-              return _createVNode("i", {
-                "onClick": handleClick,
-                "class": "fa fa-question-circle",
-                "style": "cursor: pointer"
-              }, [this.$t('Help')]);
+                this.showSessionHelpDialog = true
+              }
+              return _createVNode('i', {
+                'onClick': handleClick,
+                'class': 'fa fa-question-circle',
+                'style': 'cursor: pointer'
+              }, [this.$t('Help')])
             }
           },
           SECURITY_WATERMARK_CONSOLE_CONTENT: {
             helpTextFormatter: () => {
               const handleClick = () => {
-                this.showConsoleHelpDialog = true;
-              };
-              return _createVNode("i", {
-                "onClick": handleClick,
-                "class": "fa fa-question-circle",
-                "style": "cursor: pointer"
-              }, [this.$t('Help')]);
+                this.showConsoleHelpDialog = true
+              }
+              return _createVNode('i', {
+                'onClick': handleClick,
+                'class': 'fa fa-question-circle',
+                'style': 'cursor: pointer'
+              }, [this.$t('Help')])
             }
           },
           SECURITY_WATERMARK_COLOR: {
@@ -107,19 +107,19 @@ export default {
           }
         },
         onSubmit: async validValues => {
-          const url = '/api/v1/settings/setting/?category=security_session';
+          const url = '/api/v1/settings/setting/?category=security_session'
           try {
-            const res = await this.$axios.patch(url, validValues);
+            const res = await this.$axios.patch(url, validValues)
             if (res) {
-              this.$message.success(this.$t('UpdateSuccessMsg'));
-              this.$store.commit('settings/SET_SECURITY_WATERMARK_ENABLED', res['SECURITY_WATERMARK_ENABLED']);
+              this.$message.success(this.$t('UpdateSuccessMsg'))
+              this.$store.commit('settings/SET_SECURITY_WATERMARK_ENABLED', res['SECURITY_WATERMARK_ENABLED'])
             }
           } catch (error) {
-            throw new Error(error);
+            throw new Error(error)
           }
         }
       }
-    };
+    }
   }
-};
+}
 </script>

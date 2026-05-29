@@ -6,7 +6,6 @@
     :title="$tc('Strategy')"
     v-bind="$attrs"
     width="80%"
-    v-on="$listeners"
   >
     <IBox>
       <GenericCreateUpdateForm v-bind="$data" />

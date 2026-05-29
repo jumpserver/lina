@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import Details from './Details';
+import Details from './Details'
 
 export default {
   name: 'GenericTicketDetail',

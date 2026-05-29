@@ -5,11 +5,11 @@
 </template>
 
 <script>
-import { createVNode as _createVNode } from "vue";
-import GenericListPage from '@/layout/components/GenericListPage';
-import { ActionsFormatter } from '@/components/Table/TableFormatters';
-import { openTaskPage } from '@/utils/jms/index';
-import { stopJob } from '@/api/ops';
+import { createVNode as _createVNode } from 'vue'
+import GenericListPage from '@/layout/components/GenericListPage'
+import { ActionsFormatter } from '@/components/Table/TableFormatters'
+import { openTaskPage } from '@/utils/jms/index'
+import { stopJob } from '@/api/ops'
 export default {
   components: {
     GenericListPage
@@ -38,7 +38,7 @@ export default {
                 callback: ({
                   row
                 }) => {
-                  openTaskPage(row.task_id);
+                  openTaskPage(row.task_id)
                 }
               }, {
                 title: this.$t('Stop'),
@@ -46,7 +46,7 @@ export default {
                 can: ({
                   row
                 }) => {
-                  return !row.is_finished;
+                  return !row.is_finished
                 },
                 type: 'danger',
                 callback: ({
@@ -55,48 +55,48 @@ export default {
                   stopJob({
                     task_id: row.task_id
                   }).then(() => {
-                    this.$refs.ListPage.reloadTable();
-                    this.$message.success(this.$t('StopJobMsg'));
-                  });
+                    this.$refs.ListPage.reloadTable()
+                    this.$message.success(this.$t('StopJobMsg'))
+                  })
                 }
               }]
             }
           },
           time_cost: {
-            formatter: function (row) {
+            formatter: function(row) {
               if (row.time_cost) {
-                return row.time_cost.toFixed(2) + 's';
+                return row.time_cost.toFixed(2) + 's'
               }
-              return '-';
+              return '-'
             }
           },
           is_finished: {
             formatter: row => {
               if (row.is_finished) {
-                return _createVNode("i", {
-                  "class": "fa fa-check text-primary"
-                }, null);
+                return _createVNode('i', {
+                  'class': 'fa fa-check text-primary'
+                }, null)
               }
-              return _createVNode("i", {
-                "class": "fa fa-times text-danger"
-              }, null);
+              return _createVNode('i', {
+                'class': 'fa fa-times text-danger'
+              }, null)
             }
           },
           is_success: {
             formatter: row => {
               if (!row.is_finished) {
-                return _createVNode("i", {
-                  "class": "fa  fa fa-spinner fa-spin"
-                }, null);
+                return _createVNode('i', {
+                  'class': 'fa  fa fa-spinner fa-spin'
+                }, null)
               }
               if (row.is_success) {
-                return _createVNode("i", {
-                  "class": "fa fa-check text-primary"
-                }, null);
+                return _createVNode('i', {
+                  'class': 'fa fa-check text-primary'
+                }, null)
               }
-              return _createVNode("i", {
-                "class": "fa fa-times text-danger"
-              }, null);
+              return _createVNode('i', {
+                'class': 'fa fa-times text-danger'
+              }, null)
             }
           }
         }
@@ -112,9 +112,9 @@ export default {
           }]
         }
       }
-    };
+    }
   }
-};
+}
 </script>
 
 <style>

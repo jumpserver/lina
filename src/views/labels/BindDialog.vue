@@ -8,7 +8,6 @@
     width="768px"
     @cancel="handleCancel"
     @confirm="handleConfirm"
-    v-on="$listeners"
   >
     <div style="padding: 0 20px 20px">
       <el-row>

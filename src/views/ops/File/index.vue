@@ -80,20 +80,24 @@
               <span>
                 {{ $t('UploadFileLthHelpText', { limit: sizeLimitMb }) }}
               </span>
-              <div slot="file" slot-scope="{ file }">
-                <li class="el-upload-list__item is-ready" tabindex="0">
-                  <a :style="sameFileStyle(file)" class="el-upload-list__item-name">
-                    <i class="el-icon-document" />{{ file.name }}
-                    <i style="color: #1ab394; float: right; font-weight: normal">
-                      {{ formatFileSize(file.size) }}
-                      <i class="el-icon-close" @click="removeFile(file)" />
-                    </i>
-                  </a>
-                </li>
-              </div>
-              <div v-if="uploadFileList.length === 0" slot="tip" class="empty-file-tip">
-                {{ $tc('NoFiles') }}
-              </div>
+              <template #file="{ file }">
+                <div>
+                  <li class="el-upload-list__item is-ready" tabindex="0">
+                    <a :style="sameFileStyle(file)" class="el-upload-list__item-name">
+                      <i class="el-icon-document" />{{ file.name }}
+                      <i style="color: #1ab394; float: right; font-weight: normal">
+                        {{ formatFileSize(file.size) }}
+                        <i class="el-icon-close" @click="removeFile(file)" />
+                      </i>
+                    </a>
+                  </li>
+                </div>
+              </template>
+              <template #tip>
+                <div v-if="uploadFileList.length === 0" class="empty-file-tip">
+                  {{ $tc('NoFiles') }}
+                </div>
+              </template>
             </el-upload>
             <el-progress v-if="showProgress" :percentage="progressLength" />
             <div v-if="showProgress" class="status-info">

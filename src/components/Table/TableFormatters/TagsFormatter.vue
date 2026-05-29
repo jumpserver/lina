@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import BaseFormatter from './base.vue';
+import BaseFormatter from './base.vue'
 
 export default {
   name: 'TagsFormatter',

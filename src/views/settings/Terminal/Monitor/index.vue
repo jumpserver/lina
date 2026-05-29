@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import MonitorCard from './component/MonitorCard';
+import MonitorCard from './component/MonitorCard'
 
 export default {
   name: 'SystemMonitor',

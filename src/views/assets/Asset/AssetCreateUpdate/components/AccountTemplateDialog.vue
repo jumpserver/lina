@@ -12,7 +12,6 @@
       width="800px"
       @cancel="handleCancel"
       @confirm="handleConfirm"
-      v-on="$listeners"
     >
       <ListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
     </Dialog>
@@ -20,16 +19,15 @@
       v-if="isShowCreate"
       v-model:create-visible="isShowCreate"
       @on-perform="onCreateTemplatePerform"
-      v-on="$listeners"
     />
   </div>
 </template>
 
 <script>
-import { createVNode as _createVNode } from "vue";
-import Dialog from '@/components/Dialog';
-import CreateAccountTemplateDialog from './CreateAccountTemplateDialog';
-import { DrawerListTable as ListTable } from '@/components';
+import { createVNode as _createVNode } from 'vue'
+import Dialog from '@/components/Dialog'
+import CreateAccountTemplateDialog from './CreateAccountTemplateDialog'
+import { DrawerListTable as ListTable } from '@/components'
 export default {
   name: 'AccountTemplateDialog',
   components: {
@@ -57,7 +55,7 @@ export default {
   },
   emits: ['update:visible', 'onConfirm'],
   data() {
-    const protocols = this.asset?.protocols?.map(i => i.name).toString() || '';
+    const protocols = this.asset?.protocols?.map(i => i.name).toString() || ''
     return {
       isShowCreate: false,
       accountsSelected: [],
@@ -66,7 +64,7 @@ export default {
         columns: ['name', 'username', 'secret_type', 'privileged'],
         columnsMeta: {
           name: {
-            formatter: row => _createVNode("span", null, [row.name])
+            formatter: row => _createVNode('span', null, [row.name])
             // 暂禁用远程应用中账号模板的详情跳转
             // formatterArgs: {
             //   route: 'AccountTemplateDetail'
@@ -82,21 +80,21 @@ export default {
         listeners: {
           'toggle-row-selection': (isSelected, row) => {
             if (isSelected) {
-              this.addRowToSelect(row);
+              this.addRowToSelect(row)
             } else {
-              this.removeRowToSelect(row);
+              this.removeRowToSelect(row)
             }
           }
         },
         theRowDefaultIsSelected: row => {
           return this.accounts.some(account => {
-            return account.id === row.id;
-          });
+            return account.id === row.id
+          })
         }
       },
       headerActions: {
         onCreate: () => {
-          this.isShowCreate = true;
+          this.isShowCreate = true
         },
         hasCreate: this.showCreate,
         hasMoreActions: false,
@@ -104,23 +102,23 @@ export default {
         hasImport: false,
         hasExport: false
       }
-    };
+    }
   },
   computed: {
     refTable() {
-      return this.$refs.listTable.$refs.ListTable.$refs.dataTable.$refs.dataTable;
+      return this.$refs.listTable.$refs.ListTable.$refs.dataTable.$refs.dataTable
     }
   },
   methods: {
     onCreateTemplatePerform() {
-      this.refTable.getList();
+      this.refTable.getList()
     },
     handleConfirm() {
-      this.$emit('update:visible', false);
+      this.$emit('update:visible', false)
       // 过滤掉添加里还没有id的账号
-      const templates = this.accounts.filter(i => i?.template).map(item => item.template);
+      const templates = this.accounts.filter(i => i?.template).map(item => item.template)
       const newAddAccounts = this.accountsSelected.filter(i => {
-        return templates.indexOf(i.id) === -1;
+        return templates.indexOf(i.id) === -1
       }).map(item => {
         return {
           template: item.id,
@@ -128,49 +126,49 @@ export default {
           username: item.username,
           secret_type: item.secret_type.value,
           privileged: item.privileged
-        };
-      });
-      this.accounts.push(...newAddAccounts);
-      this.$emit('onConfirm', this.accounts);
+        }
+      })
+      this.accounts.push(...newAddAccounts)
+      this.$emit('onConfirm', this.accounts)
     },
     handleCancel() {
-      this.$emit('update:visible', false);
+      this.$emit('update:visible', false)
     },
     onAddClick() {
-      this.isShowCreate = true;
+      this.isShowCreate = true
     },
     hasSelectValue(row) {
-      return this.accountsSelected.some(item => item.id === row.id);
+      return this.accountsSelected.some(item => item.id === row.id)
     },
     // 判断是否有相同类型的账号, 有则不允许选择
     hasSameTypeAccount(row) {
-      const notIdAccounts = this.accounts.filter(i => !i?.id);
-      const needFilterAccounts = [...notIdAccounts, ...this.accountsSelected];
+      const notIdAccounts = this.accounts.filter(i => !i?.id)
+      const needFilterAccounts = [...notIdAccounts, ...this.accountsSelected]
       const status = needFilterAccounts.some(item => {
-        return row.username === item.username && (row.secret_type.value === item.secret_type || row.secret_type.value === item.secret_type.value);
-      });
+        return row.username === item.username && (row.secret_type.value === item.secret_type || row.secret_type.value === item.secret_type.value)
+      })
       if (status) {
-        this.refTable.toggleRowSelection(row, false);
-        this.$message.error(this.$tc('SameTypeAccountTip'));
+        this.refTable.toggleRowSelection(row, false)
+        this.$message.error(this.$tc('SameTypeAccountTip'))
       }
-      return status;
+      return status
     },
     addRowToSelect(row) {
-      const hasSelectValue = this.hasSelectValue(row);
-      const hasSameTypeAccount = this.hasSameTypeAccount(row);
+      const hasSelectValue = this.hasSelectValue(row)
+      const hasSameTypeAccount = this.hasSameTypeAccount(row)
       if (!hasSelectValue && !hasSameTypeAccount) {
-        this.accountsSelected.push(row);
+        this.accountsSelected.push(row)
       }
     },
     removeRowToSelect(row) {
-      const hasSelectValue = this.hasSelectValue(row);
+      const hasSelectValue = this.hasSelectValue(row)
       if (hasSelectValue) {
-        const index = this.accountsSelected.findIndex(i => i?.id === row.id);
-        this.accountsSelected.splice(index, 1);
+        const index = this.accountsSelected.findIndex(i => i?.id === row.id)
+        this.accountsSelected.splice(index, 1)
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

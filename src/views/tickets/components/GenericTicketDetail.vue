@@ -23,11 +23,11 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from "vue";
-import Details from './Details';
-import Comments from './Comments';
-import Steps from './Steps';
-import Session from './Session';
+import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import Details from './Details'
+import Comments from './Comments'
+import Steps from './Steps'
+import Session from './Session'
 export default {
   name: 'GenericTicketDetail',
   components: {
@@ -63,16 +63,16 @@ export default {
         closed: 'info',
         reopen: 'warning'
       }
-    };
+    }
   },
   computed: {
     iDetailCardItems() {
       if (this.detailCardItems) {
-        return this.detailCardItems;
+        return this.detailCardItems
       }
       const {
         object
-      } = this;
+      } = this
       return [{
         key: this.$tc('Number'),
         value: object['serial_num']
@@ -80,13 +80,13 @@ export default {
         key: this.$tc('Status'),
         value: object.state.value,
         formatter: (item, val) => {
-          const tp = this.statusMap[val];
-          return _createVNode(_resolveComponent("el-tag"), {
-            "type": tp,
-            "size": "small"
+          const tp = this.statusMap[val]
+          return _createVNode(_resolveComponent('el-tag'), {
+            'type': tp,
+            'size': 'small'
           }, {
             default: () => [this.object.state.label]
-          });
+          })
         }
       }, {
         key: this.$tc('Type'),
@@ -103,8 +103,8 @@ export default {
       }, {
         key: this.$tc('Comment'),
         value: object.comment
-      }];
+      }]
     }
   }
-};
+}
 </script>

@@ -6,11 +6,11 @@
 </template>
 
 <script>
-import { createVNode as _createVNode } from "vue";
-import { GenericListPage } from '@/layout/components';
-import { openTaskPage } from '@/utils/jms/index';
-import ExecutionDetailDialog from '@/views/ops/Execution/ExecutionDetail';
-import detailFormatter from '@/components/Table/TableFormatters/DetailFormatter.vue';
+import { createVNode as _createVNode } from 'vue'
+import { GenericListPage } from '@/layout/components'
+import { openTaskPage } from '@/utils/jms/index'
+import ExecutionDetailDialog from '@/views/ops/Execution/ExecutionDetail'
+import detailFormatter from '@/components/Table/TableFormatters/DetailFormatter.vue'
 export default {
   components: {
     GenericListPage,
@@ -41,46 +41,46 @@ export default {
           },
           job: {
             formatter: row => {
-              return _createVNode("span", null, [row.job?.name || '-']);
+              return _createVNode('span', null, [row.job?.name || '-'])
             }
           },
           is_finished: {
             width: '100px',
             formatter: row => {
               if (row.is_finished) {
-                return _createVNode("i", {
-                  "class": "fa fa-check text-primary"
-                }, null);
+                return _createVNode('i', {
+                  'class': 'fa fa-check text-primary'
+                }, null)
               }
-              return _createVNode("i", {
-                "class": "fa fa-times text-danger"
-              }, null);
+              return _createVNode('i', {
+                'class': 'fa fa-times text-danger'
+              }, null)
             }
           },
           is_success: {
             width: '100px',
             formatter: row => {
               if (!row.is_finished) {
-                return _createVNode("i", {
-                  "class": "fa  fa fa-spinner fa-spin"
-                }, null);
+                return _createVNode('i', {
+                  'class': 'fa  fa fa-spinner fa-spin'
+                }, null)
               }
               if (row.is_success) {
-                return _createVNode("i", {
-                  "class": "fa fa-check text-primary"
-                }, null);
+                return _createVNode('i', {
+                  'class': 'fa fa-check text-primary'
+                }, null)
               }
-              return _createVNode("i", {
-                "class": "fa fa-times text-danger"
-              }, null);
+              return _createVNode('i', {
+                'class': 'fa fa-times text-danger'
+              }, null)
             }
           },
           time_cost: {
-            formatter: function (row) {
+            formatter: function(row) {
               if (row.time_cost) {
-                return row.time_cost.toFixed(2) + 's';
+                return row.time_cost.toFixed(2) + 's'
               }
-              return '-';
+              return '-'
             }
           },
           actions: {
@@ -97,7 +97,7 @@ export default {
                 callback: ({
                   row
                 }) => {
-                  openTaskPage(row.task_id);
+                  openTaskPage(row.task_id)
                 }
               }]
             }
@@ -109,7 +109,7 @@ export default {
         hasExport: false,
         hasImport: false
       }
-    };
+    }
   }
-};
+}
 </script>

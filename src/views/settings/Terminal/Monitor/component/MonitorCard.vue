@@ -23,9 +23,11 @@
                       {{ i }}
                     </li>
                   </ul>
-                  <span slot="reference" class="num">
-                    {{ componentMetric[item.key].length || 0 }}
-                  </span>
+                  <template #reference>
+                    <span class="num">
+                      {{ componentMetric[item.key].length || 0 }}
+                    </span>
+                  </template>
                 </el-popover>
                 <span v-else>
                   {{ componentMetric[item.key] instanceof Array ? componentMetric[item.key].length : componentMetric[item.key] }}

@@ -6,7 +6,6 @@
     v-bind="$attrs"
     width="790px"
     @confirm="submit"
-    v-on="$listeners"
   >
     <krryPaging ref="pageTransfer" class="transfer" v-bind="pagingTransfer" />
   </Dialog>

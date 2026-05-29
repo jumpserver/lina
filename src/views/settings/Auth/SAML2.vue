@@ -3,7 +3,6 @@
     :config="settings"
     :title="$tc('SAML2')"
     enable-field="AUTH_SAML2"
-    v-on="$listeners"
   />
 </template>
 

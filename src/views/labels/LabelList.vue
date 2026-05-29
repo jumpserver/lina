@@ -12,11 +12,11 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from "vue";
-import { GenericListPage } from '@/layout/components';
-import BindDialog from './BindDialog.vue';
-import LabelResourcesDialog from '@/views/labels/LabelResourcesDialog.vue';
-import { mapGetters } from 'vuex';
+import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import { GenericListPage } from '@/layout/components'
+import BindDialog from './BindDialog.vue'
+import LabelResourcesDialog from '@/views/labels/LabelResourcesDialog.vue'
+import { mapGetters } from 'vuex'
 export default {
   components: {
     LabelResourcesDialog,
@@ -24,7 +24,7 @@ export default {
     GenericListPage
   },
   data() {
-    const vm = this;
+    const vm = this
     return {
       bindVisible: false,
       resDialogVisible: false,
@@ -42,14 +42,14 @@ export default {
           res_count: {
             formatter: row => {
               const onClick = () => {
-                vm.handleClickResCount(row);
-              };
-              return _createVNode(_resolveComponent("el-link"), {
-                "type": "success",
-                "onClick": onClick
+                vm.handleClickResCount(row)
+              }
+              return _createVNode(_resolveComponent('el-link'), {
+                'type': 'success',
+                'onClick': onClick
               }, {
                 default: () => [row['res_count']]
-              });
+              })
             }
           },
           color: {
@@ -57,14 +57,14 @@ export default {
               const onChange = () => {
                 vm.$axios.patch(`/api/v1/labels/labels/${row.id}/`, {
                   color: row.color
-                });
-              };
-              return _createVNode(_resolveComponent("el-color-picker"), {
-                "modelValue": row.color,
-                "onUpdate:modelValue": $event => row.color = $event,
-                "size": "small",
-                "onChange": onChange
-              }, null);
+                })
+              }
+              return _createVNode(_resolveComponent('el-color-picker'), {
+                'modelValue': row.color,
+                'onUpdate:modelValue': $event => row.color = $event,
+                'size': 'small',
+                'onChange': onChange
+              }, null)
             }
           },
           actions: {
@@ -75,11 +75,11 @@ export default {
                 callback: ({
                   row
                 }) => {
-                  this.label = row;
-                  this.bindVisible = true;
+                  this.label = row
+                  this.bindVisible = true
                 },
                 can: () => {
-                  return !this.currentOrgIsRoot && this.$hasPerm('labels.change_labeledresource');
+                  return !this.currentOrgIsRoot && this.$hasPerm('labels.change_labeledresource')
                 }
               }]
             }
@@ -89,28 +89,28 @@ export default {
       headerActions: {
         createRoute: 'LabelCreate'
       }
-    };
+    }
   },
   computed: {
     ...mapGetters(['currentOrgIsRoot'])
   },
   methods: {
     handleClickResCount(row) {
-      this.label = row;
-      this.resDialogVisible = true;
+      this.label = row
+      this.resDialogVisible = true
     },
     handleAddResource() {
-      this.resDialogVisible = false;
+      this.resDialogVisible = false
       this.$nextTick(() => {
-        this.bindVisible = true;
-      });
+        this.bindVisible = true
+      })
     },
     handleDialogConfirm() {
-      this.bindVisible = false;
-      this.$refs.GenericListPage.reloadTable();
+      this.bindVisible = false
+      this.$refs.GenericListPage.reloadTable()
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

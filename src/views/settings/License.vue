@@ -28,13 +28,13 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, createTextVNode as _createTextVNode } from "vue";
-import Page from '@/layout/components/Page';
-import { Dialog, QuickActions } from '@/components';
-import DetailCard from '@/components/Cards/DetailCard/index';
-import { importLicense } from '@/api/settings';
-import { mapGetters } from 'vuex';
-import TwoCol from '@/layout/components/Page/TwoColPage.vue';
+import { createVNode as _createVNode, createTextVNode as _createTextVNode } from 'vue'
+import Page from '@/layout/components/Page'
+import { Dialog, QuickActions } from '@/components'
+import DetailCard from '@/components/Cards/DetailCard/index'
+import { importLicense } from '@/api/settings'
+import { mapGetters } from 'vuex'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 export default {
   name: 'License',
   components: {
@@ -76,12 +76,12 @@ export default {
           click: this.consultAction
         }
       }]
-    };
+    }
   },
   computed: {
     ...mapGetters(['publicSettings', 'hasValidLicense']),
     cardTitle() {
-      return '';
+      return ''
     },
     detailItems() {
       if (!this.hasValidLicense) {
@@ -97,12 +97,12 @@ export default {
         }, {
           key: 'Github',
           formatter: () => {
-            return _createVNode("a", {
-              "href": "https://github.com/jumpserver/jumpserver",
-              "target": "_blank"
-            }, [_createTextVNode(" JumpServer ")]);
+            return _createVNode('a', {
+              'href': 'https://github.com/jumpserver/jumpserver',
+              'target': '_blank'
+            }, [_createTextVNode(' JumpServer ')])
           }
-        }];
+        }]
       }
       return [{
         key: this.$t('SerialNumber'),
@@ -122,49 +122,49 @@ export default {
       }, {
         key: this.$t('Comment'),
         value: this.licenseData?.remark || ''
-      }];
+      }]
     }
   },
   mounted() {
-    this.quickActions[0].attrs.disabled = !this.publicSettings.XPACK_ENABLED;
+    this.quickActions[0].attrs.disabled = !this.publicSettings.XPACK_ENABLED
     if (this.publicSettings.XPACK_ENABLED) {
       this.$axios.get('/api/v1/xpack/license/detail').then(res => {
-        this.licenseData = res;
+        this.licenseData = res
       }).finally(() => {
-        this.loading = false;
-      });
+        this.loading = false
+      })
     } else {
-      this.loading = false;
+      this.loading = false
     }
   },
   methods: {
-    importAction: function () {
-      this.dialogLicenseImport = true;
+    importAction: function() {
+      this.dialogLicenseImport = true
     },
-    consultAction: function () {
-      const url = 'https://www.lxware.hk/pages/about';
-      window.open(url, '_blank');
+    consultAction: function() {
+      const url = 'https://www.lxware.hk/pages/about'
+      window.open(url, '_blank')
     },
     importLicense() {
       if (this.licenseFile['file'] === undefined) {
-        return;
+        return
       }
-      const formData = new FormData();
-      formData.append('file', this.licenseFile['file']);
+      const formData = new FormData()
+      formData.append('file', this.licenseFile['file'])
       importLicense(formData).then(res => {
         if (res.status) {
-          this.$message.success(res.msg);
-          setTimeout(() => location.reload(), 500);
+          this.$message.success(res.msg)
+          setTimeout(() => location.reload(), 500)
         } else {
-          this.$message.error(res.msg);
+          this.$message.error(res.msg)
         }
-      });
+      })
     },
     fileChange(e) {
-      this.licenseFile['file'] = e.target.files[0];
+      this.licenseFile['file'] = e.target.files[0]
     }
   }
-};
+}
 </script>
 
 <style scoped>

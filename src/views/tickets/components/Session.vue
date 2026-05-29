@@ -1,9 +1,11 @@
 <template>
   <IBox v-if="session.id" v-loading="loading" class="box">
-    <div slot="header" class="clearfix ibox-title">
-      <i class="fa fa-rocket" />
-      {{ $t('Session') }}
-    </div>
+    <template #header>
+      <div class="clearfix ibox-title">
+        <i class="fa fa-rocket" />
+        {{ $t('Session') }}
+      </div>
+    </template>
     <div class="content">
       <el-row class="item">
         <el-col>

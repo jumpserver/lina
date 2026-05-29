@@ -2,7 +2,6 @@
   <BaseAuth
     :config="settings"
     enable-field="AUTH_PASSKEY"
-    v-on="$listeners"
   />
 </template>
 

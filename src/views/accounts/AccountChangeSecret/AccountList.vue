@@ -5,16 +5,16 @@
 </template>
 
 <script>
-import { createTextVNode as _createTextVNode, createVNode as _createVNode } from "vue";
-import { GenericListTable } from '@/layout/components';
-import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters';
+import { createTextVNode as _createTextVNode, createVNode as _createVNode } from 'vue'
+import { GenericListTable } from '@/layout/components'
+import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 export default {
   name: 'AccountChangeSecret',
   components: {
     GenericListTable
   },
   data() {
-    const vm = this;
+    const vm = this
     return {
       secretUrl: '',
       showViewSecretDialog: false,
@@ -105,11 +105,11 @@ export default {
                 queued: 'Queued',
                 ready: 'Ready',
                 processing: 'Processing'
-              };
-              if (statusMap[row.meta.status]) {
-                return _createVNode("span", null, [vm.$t(statusMap[row.meta.status])]);
               }
-              return _createVNode("span", null, [_createTextVNode("\u2013")]);
+              if (statusMap[row.meta.status]) {
+                return _createVNode('span', null, [vm.$t(statusMap[row.meta.status])])
+              }
+              return _createVNode('span', null, [_createTextVNode('\u2013')])
             }
           },
           actions: {
@@ -131,8 +131,8 @@ export default {
                     data: {
                       account_ids: [row.id]
                     }
-                  });
-                  vm.$refs.ListTable.reloadTable();
+                  })
+                  vm.$refs.ListTable.reloadTable()
                 }
               }]
             }
@@ -182,24 +182,24 @@ export default {
           can: ({
             selectedRows
           }) => {
-            return selectedRows.length > 0;
+            return selectedRows.length > 0
           },
-          callback: function ({
+          callback: function({
             selectedRows
           }) {
             const ids = selectedRows.map(v => {
-              return v.id;
-            });
+              return v.id
+            })
             this.$axios.delete('/api/v1/accounts/change-secret-status/', {
               data: {
                 account_ids: ids
               }
-            });
-            vm.$refs.ListTable.reloadTable();
+            })
+            vm.$refs.ListTable.reloadTable()
           }.bind(this)
         }]
       }
-    };
+    }
   }
-};
+}
 </script>

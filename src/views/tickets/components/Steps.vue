@@ -6,43 +6,49 @@
           :description="`${$t('Applicant')}：${object.rel_snapshot.applicant}`"
           :title="`${$t('OpenTicket')}：${object.title}`"
         >
-          <div slot="description" class="description">
-            <div>{{ `${$t('Applicant')}：${object.rel_snapshot.applicant}` }}</div>
-            <div>{{ `${$t('DateCreated')}: ${toSafeLocalDateStr(object.date_created)}` }}</div>
-          </div>
+          <template #description>
+            <div class="description">
+              <div>{{ `${$t('Applicant')}：${object.rel_snapshot.applicant}` }}</div>
+              <div>{{ `${$t('DateCreated')}: ${toSafeLocalDateStr(object.date_created)}` }}</div>
+            </div>
+          </template>
         </el-step>
         <el-step
           v-for="(item, i) in process_map"
           :key="i"
           :title="$tc('HandleTicket')"
         >
-          <div slot="description">
-            <div class="processors">
-              <div class="processors-content">
-                <span v-for="assignee of item.assignees_display.slice(0,4)" :key="assignee" style="display: block">
-                  {{ assignee }}
-                </span>
+          <template #description>
+            <div>
+              <div class="processors">
+                <div class="processors-content">
+                  <span v-for="assignee of item.assignees_display.slice(0,4)" :key="assignee" style="display: block">
+                    {{ assignee }}
+                  </span>
+                </div>
+                <el-button v-if="item.assignees.length > 4" type="text" @click="lookOver(item.assignees_display)">
+                  {{ $tc('CheckViewAcceptor') }}
+                </el-button>
               </div>
-              <el-button v-if="item.assignees.length > 4" type="text" @click="lookOver(item.assignees_display)">
-                {{ $tc('CheckViewAcceptor') }}
-              </el-button>
             </div>
-          </div>
-          <div v-if="item.state ==='closed'" slot="description">
-            <div>{{ $t('Assignee') }}: {{ object.rel_snapshot.applicant }}</div>
-            <div>{{ $t('DateFinished') }}: {{ toSafeLocalDateStr(item.approval_date) }}</div>
-          </div>
-          <div v-if="item.state !=='pending' && item.state !=='closed'" slot="description">
-            <div> {{ $t('Assignee') }}: {{ item.processor_display }}</div>
-            <div>{{ $t('DateFinished') }}: {{ toSafeLocalDateStr(item.approval_date) }}</div>
-          </div>
+            <div v-if="item.state ==='closed'">
+              <div>{{ $t('Assignee') }}: {{ object.rel_snapshot.applicant }}</div>
+              <div>{{ $t('DateFinished') }}: {{ toSafeLocalDateStr(item.approval_date) }}</div>
+            </div>
+            <div v-if="item.state !=='pending' && item.state !=='closed'">
+              <div> {{ $t('Assignee') }}: {{ item.processor_display }}</div>
+              <div>{{ $t('DateFinished') }}: {{ toSafeLocalDateStr(item.approval_date) }}</div>
+            </div>
+          </template>
         </el-step>
         <el-step
           :title="`${$t('FinishedTicket')}`"
         >
-          <div v-if="object.status.value === 'closed'" slot="description">
-            <div>{{ $t('DateFinished') }}: {{ toSafeLocalDateStr(object.date_updated) }}</div>
-          </div>
+          <template #description>
+            <div v-if="object.status.value === 'closed'">
+              <div>{{ $t('DateFinished') }}: {{ toSafeLocalDateStr(object.date_updated) }}</div>
+            </div>
+          </template>
         </el-step>
       </el-steps>
     </div>
@@ -50,9 +56,9 @@
 </template>
 
 <script>
-import IBox from '@/components/Common/IBox';
-import { formatTime, getDateTimeStamp, toSafeLocalDateStr } from '@/utils/common/time';
-import { STATE_MAP } from '../const';
+import IBox from '@/components/Common/IBox'
+import { formatTime, getDateTimeStamp, toSafeLocalDateStr } from '@/utils/common/time'
+import { STATE_MAP } from '../const'
 
 export default {
   name: 'Steps',

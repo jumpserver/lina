@@ -6,7 +6,6 @@
     :destroy-on-close="true"
     :show-buttons="false"
     :title="$tc('SyncOnline')"
-    v-on="$listeners"
   >
     <AssetPanel v-model:visible="iVisible" :object="object" />
   </Dialog>

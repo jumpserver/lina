@@ -10,17 +10,17 @@
 </template>
 
 <script>
-import { newURL, ObjectLocalStorage } from '@/utils/common/index';
-import { omitVueListeners, pickVueListeners } from '@/utils/vue';
-import { mapGetters } from 'vuex';
-import { default as ElDatableTable } from './compenents/el-data-table';
+import { newURL, ObjectLocalStorage } from '@/utils/common/index'
+import { omitVueListeners, pickVueListeners } from '@/utils/vue'
+import { mapGetters } from 'vuex'
+import { default as ElDatableTable } from './compenents/el-data-table'
 
 export default {
   name: 'DataTable',
-  inheritAttrs: false,
   components: {
     ElDatableTable
   },
+  inheritAttrs: false,
   props: {
     config: {
       type: Object,

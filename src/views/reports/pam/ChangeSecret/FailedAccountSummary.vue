@@ -10,11 +10,11 @@
 </template>
 
 <script>
-import { createVNode as _createVNode } from "vue";
-import HomeCard from '@/views/workbench/overview/components/HomeCard.vue';
-import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters';
-import { openTaskPage } from '@/utils/jms/index';
-import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue';
+import { createVNode as _createVNode } from 'vue'
+import HomeCard from '@/views/workbench/overview/components/HomeCard.vue'
+import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import { openTaskPage } from '@/utils/jms/index'
+import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue'
 export default {
   components: {
     RecordViewSecret,
@@ -27,7 +27,7 @@ export default {
     }
   },
   data() {
-    const vm = this;
+    const vm = this
     return {
       url: '/api/v1/accounts/change-secret-records/dashboard/',
       showViewSecretDialog: false,
@@ -46,7 +46,7 @@ export default {
               getTitle({
                 row
               }) {
-                return row.asset.name;
+                return row.asset.name
               },
               getRoute({
                 row
@@ -56,7 +56,7 @@ export default {
                   params: {
                     id: row.asset.id
                   }
-                };
+                }
               }
             }
           },
@@ -68,7 +68,7 @@ export default {
               getTitle({
                 row
               }) {
-                return row.account.username;
+                return row.account.username
               },
               getRoute({
                 row
@@ -78,7 +78,7 @@ export default {
                   params: {
                     id: row.account.id
                   }
-                };
+                }
               }
             }
           },
@@ -86,18 +86,18 @@ export default {
             label: this.$t('Success'),
             formatter: row => {
               if (row.status === 'pending') {
-                return _createVNode("i", {
-                  "class": "fa  fa fa-spinner fa-spin"
-                }, null);
+                return _createVNode('i', {
+                  'class': 'fa  fa fa-spinner fa-spin'
+                }, null)
               }
               if (row.is_success) {
-                return _createVNode("i", {
-                  "class": "fa fa-check text-primary"
-                }, null);
+                return _createVNode('i', {
+                  'class': 'fa fa-check text-primary'
+                }, null)
               }
-              return _createVNode("i", {
-                "class": "fa fa-times text-danger"
-              }, null);
+              return _createVNode('i', {
+                'class': 'fa fa-times text-danger'
+              }, null)
             }
           },
           actions: {
@@ -115,11 +115,11 @@ export default {
                   row
                 }) => {
                   // debugger
-                  vm.secretUrl = `/api/v1/accounts/change-secret-records/${row.id}/secret/`;
-                  vm.showViewSecretDialog = false;
+                  vm.secretUrl = `/api/v1/accounts/change-secret-records/${row.id}/secret/`
+                  vm.showViewSecretDialog = false
                   setTimeout(() => {
-                    vm.showViewSecretDialog = true;
-                  });
+                    vm.showViewSecretDialog = true
+                  })
                 }
               }, {
                 name: 'Retry',
@@ -132,8 +132,8 @@ export default {
                   this.$axios.post('/api/v1/accounts/change-secret-records/execute/', {
                     record_ids: [row.id]
                   }).then(res => {
-                    openTaskPage(res['task']);
-                  });
+                    openTaskPage(res['task'])
+                  })
                 }
               }, {
                 name: 'ignoreFail',
@@ -144,29 +144,29 @@ export default {
                   row
                 }) => {
                   this.$axios.patch(`/api/v1/accounts/change-secret-records/${row.id}/ignore-fail/`).then(res => {
-                    this.$message.success(this.$tc('UpdateSuccessMsg'));
-                    this.$refs.HomeCard.$refs.ListTable.reloadTable();
-                  });
+                    this.$message.success(this.$tc('UpdateSuccessMsg'))
+                    this.$refs.HomeCard.$refs.ListTable.reloadTable()
+                  })
                 }
               }]
             }
           }
         }
       }
-    };
+    }
   },
   watch: {
     days() {
-      this.$refs.HomeCard.$refs.ListTable.tableConfig.url = this.tableUrl();
-      this.$refs.HomeCard.$refs.ListTable.reloadTable();
+      this.$refs.HomeCard.$refs.ListTable.tableConfig.url = this.tableUrl()
+      this.$refs.HomeCard.$refs.ListTable.reloadTable()
     }
   },
   methods: {
     tableUrl() {
-      return `/api/v1/accounts/change-secret-records/dashboard/?days=${this.days}`;
+      return `/api/v1/accounts/change-secret-records/dashboard/?days=${this.days}`
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

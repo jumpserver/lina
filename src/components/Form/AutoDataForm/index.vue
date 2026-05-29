@@ -10,7 +10,7 @@
     >
       <template
         v-for="(group, i) in groups"
-        v-slot:[`id:${group.name}`]
+        #[`id:${group.name}`]
       >
         <FormGroupHeader
           v-if="!groupHidden(group, i)"
@@ -25,18 +25,18 @@
 </template>
 
 <script>
-import { FormFieldGenerator } from '@/components/Form/AutoDataForm/utils';
-import { UniqueCheck } from '@/components/Form/DataForm/rules';
-import FormGroupHeader from '@/components/Form/FormGroupHeader/index.vue';
-import DataForm from '../DataForm/index.vue';
+import { FormFieldGenerator } from '@/components/Form/AutoDataForm/utils'
+import { UniqueCheck } from '@/components/Form/DataForm/rules'
+import FormGroupHeader from '@/components/Form/FormGroupHeader/index.vue'
+import DataForm from '../DataForm/index.vue'
 
 export default {
   name: 'AutoDataForm',
-  inheritAttrs: false,
   components: {
     DataForm,
     FormGroupHeader
   },
+  inheritAttrs: false,
   props: {
     url: {
       type: String,

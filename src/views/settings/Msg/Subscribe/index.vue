@@ -30,9 +30,11 @@
           <template #default="scope">
             <el-popover placement="top" popper-class="black-theme-popover" trigger="hover">
               <p v-for="item in scope.row.receivers" :key="item.name">{{ item.name }}</p>
-              <span v-if="!scope.row.children" slot="reference" class="name-wrapper">
-                {{ scope.row.receivers.map(item => item.name).join(', ') }}
-              </span>
+              <template #reference>
+                <span v-if="!scope.row.children" class="name-wrapper">
+                  {{ scope.row.receivers.map(item => item.name).join(', ') }}
+                </span>
+              </template>
             </el-popover>
           </template>
         </el-table-column>

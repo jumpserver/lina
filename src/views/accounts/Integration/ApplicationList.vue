@@ -9,17 +9,17 @@
 </template>
 
 <script>
-import { createVNode as _createVNode } from "vue";
-import CopyableFormatter from '@/components/Table/TableFormatters/CopyableFormatter.vue';
-import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters';
-import { GenericListTable } from '@/layout/components';
+import { createVNode as _createVNode } from 'vue'
+import CopyableFormatter from '@/components/Table/TableFormatters/CopyableFormatter.vue'
+import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import { GenericListTable } from '@/layout/components'
 export default {
   name: 'CloudAccountList',
   components: {
     GenericListTable
   },
   data() {
-    const vm = this;
+    const vm = this
     return {
       createDrawer: () => import('@/views/accounts/Integration/ApplicationCreateUpdate.vue'),
       detailDrawer: () => import('@/views/accounts/Integration/ApplicationDetail/index.vue'),
@@ -37,17 +37,17 @@ export default {
           logo: {
             width: '80px',
             formatter: row => {
-              return _createVNode("img", {
-                "src": row.logo,
-                "alt": row.name,
-                "style": "width: 40px; height: 40px; border-radius: 50%;"
-              }, null);
+              return _createVNode('img', {
+                'src': row.logo,
+                'alt': row.name,
+                'style': 'width: 40px; height: 40px; border-radius: 50%;'
+              }, null)
             }
           },
           accounts_amount: {
             width: '100px',
             formatter: row => {
-              return row.accounts_amount;
+              return row.accounts_amount
             }
           },
           name: {
@@ -69,11 +69,11 @@ export default {
             formatter: CopyableFormatter,
             formatterArgs: {
               shadow: true,
-              getText: async function ({
+              getText: async function({
                 row
               }) {
-                const app = await vm.$axios.get(`/api/v1/accounts/integration-applications/${row.id}/secret/`);
-                return app.secret;
+                const app = await vm.$axios.get(`/api/v1/accounts/integration-applications/${row.id}/secret/`)
+                return app.secret
               }
             }
           },
@@ -99,7 +99,7 @@ export default {
           getUrlQuery: false
         }
       }
-    };
+    }
   }
-};
+}
 </script>

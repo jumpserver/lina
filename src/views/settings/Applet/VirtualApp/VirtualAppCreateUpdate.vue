@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import { MatchExcludeParenthesis, Required } from '@/components/Form/DataForm/rules';
-import { ProtocolsFormatter } from '@/components/Table/TableFormatters';
-import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage';
+import { MatchExcludeParenthesis, Required } from '@/components/Form/DataForm/rules'
+import { ProtocolsFormatter } from '@/components/Table/TableFormatters'
+import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 
 export default {
   components: {

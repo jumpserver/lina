@@ -5,7 +5,6 @@
       :show-cancel="false"
       :title="$tc('ImportLdapUserTitle')"
       v-bind="$attrs"
-      v-on="$listeners"
     >
       <el-alert type="success" style="margin-bottom: 10px"> {{ $t('ImportLdapUserTip') }}</el-alert>
       <ListTable
@@ -14,43 +13,45 @@
         :table-config="tableConfig"
         class="listTable"
       />
-      <div slot="footer">
-        <span v-show="showOrgSelect" class="org-select">
-          <span class="label">{{ $tc('ImportOrg') }}：</span>
-          <Select2
-            ref="select2"
-            v-model="select2.value"
-            popper-class="select-org-dropdown"
-            v-bind="select2"
-          />
-        </span>
-        <el-button :loading="dialogLdapUserSyncStatus" size="small" type="primary" @click="SyncUserClick">
-          {{ $t('SyncUser') }}
-        </el-button>
-        <el-button :loading="dialogLdapUserImportLoginStatus" size="small" type="primary" @click="importUserClick">
-          {{ $t('Import') }}
-        </el-button>
-        <el-button
-          :loading="dialogLdapUserImportAllLoginStatus"
-          size="small"
-          type="primary"
-          @click="importAllUserClick"
-        >{{ $t('ImportAll') }}
-        </el-button>
-        <el-button size="small" @click="hiddenDialog">{{ $t('Cancel') }}</el-button>
-      </div>
+      <template #footer>
+        <div>
+          <span v-show="showOrgSelect" class="org-select">
+            <span class="label">{{ $tc('ImportOrg') }}：</span>
+            <Select2
+              ref="select2"
+              v-model="select2.value"
+              popper-class="select-org-dropdown"
+              v-bind="select2"
+            />
+          </span>
+          <el-button :loading="dialogLdapUserSyncStatus" size="small" type="primary" @click="SyncUserClick">
+            {{ $t('SyncUser') }}
+          </el-button>
+          <el-button :loading="dialogLdapUserImportLoginStatus" size="small" type="primary" @click="importUserClick">
+            {{ $t('Import') }}
+          </el-button>
+          <el-button
+            :loading="dialogLdapUserImportAllLoginStatus"
+            size="small"
+            type="primary"
+            @click="importAllUserClick"
+          >{{ $t('ImportAll') }}
+          </el-button>
+          <el-button size="small" @click="hiddenDialog">{{ $t('Cancel') }}</el-button>
+        </div>
+      </template>
     </Dialog>
   </div>
 </template>
 
 <script>
-import { createVNode as _createVNode, createTextVNode as _createTextVNode } from "vue";
-import store from '@/store';
-import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/jms/org';
-import ListTable from '@/components/Table/ListTable';
-import Dialog from '@/components/Dialog/index.vue';
-import Select2 from '@/components/Form/FormFields/Select2.vue';
-import getStatusColumnMeta from '@/components/Table/ListTable/TableAction/const';
+import { createVNode as _createVNode, createTextVNode as _createTextVNode } from 'vue'
+import store from '@/store'
+import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/jms/org'
+import ListTable from '@/components/Table/ListTable'
+import Dialog from '@/components/Dialog/index.vue'
+import Select2 from '@/components/Form/FormFields/Select2.vue'
+import getStatusColumnMeta from '@/components/Table/ListTable/TableAction/const'
 export default {
   name: 'ImportDialog',
   components: {
@@ -80,7 +81,7 @@ export default {
         handleRefreshClick: async ({
           reloadTable
         }) => {
-          reloadTable();
+          reloadTable()
         }
       },
       tableConfig: {
@@ -98,8 +99,8 @@ export default {
           },
           groups: {
             label: this.$t('UserGroups'),
-            formatter: function (row) {
-              return _createVNode("span", null, [_createTextVNode(" "), row.groups.join(' | '), _createTextVNode(" ")]);
+            formatter: function(row) {
+              return _createVNode('span', null, [_createTextVNode(' '), row.groups.join(' | '), _createTextVNode(' ')])
             }
           },
           email: {
@@ -123,113 +124,113 @@ export default {
               return {
                 label: item.name,
                 value: item.id
-              };
+              }
             }
           }
         },
         value: this.orgIds()
       }
-    };
+    }
   },
   computed: {
     showOrgSelect() {
-      return store.getters.hasValidLicense;
+      return store.getters.hasValidLicense
     }
   },
   methods: {
     orgIds() {
-      return [DEFAULT_ORG_ID];
+      return [DEFAULT_ORG_ID]
     },
     importUserClick() {
-      this.dialogLdapUserImportLoginStatus = true;
-      const selectIds = [];
+      this.dialogLdapUserImportLoginStatus = true
+      const selectIds = []
       this.$refs.listTable.selectedRows.forEach((item, index) => {
-        selectIds.push(item.id);
-      });
-      const org_ids = this.select2.value || [];
+        selectIds.push(item.id)
+      })
+      const org_ids = this.select2.value || []
       const data = {
         org_ids: org_ids,
         username_list: selectIds
-      };
+      }
       if (selectIds.length === 0) {
-        this.$message.error(this.$tc('UnselectedUser'));
-        this.dialogLdapUserImportLoginStatus = false;
+        this.$message.error(this.$tc('UnselectedUser'))
+        this.dialogLdapUserImportLoginStatus = false
       } else if (org_ids.length === 0) {
-        this.$message.error(this.$tc('UnselectedOrg'));
-        this.dialogLdapUserImportLoginStatus = false;
+        this.$message.error(this.$tc('UnselectedOrg'))
+        this.dialogLdapUserImportLoginStatus = false
       } else {
-        this.importLdapUser(data);
+        this.importLdapUser(data)
       }
     },
     importAllUserClick() {
-      this.dialogLdapUserImportAllLoginStatus = true;
-      const org_ids = this.select2.value || [];
+      this.dialogLdapUserImportAllLoginStatus = true
+      const org_ids = this.select2.value || []
       const data = {
         org_ids: org_ids,
         username_list: ['*']
-      };
+      }
       if (org_ids.length === 0) {
-        this.$message.error(this.$tc('UnselectedOrg'));
-        this.dialogLdapUserImportLoginStatus = false;
+        this.$message.error(this.$tc('UnselectedOrg'))
+        this.dialogLdapUserImportLoginStatus = false
       } else {
-        this.importLdapUser(data);
+        this.importLdapUser(data)
       }
     },
     importLdapUser(data) {
-      this.enableWS();
+      this.enableWS()
       this.ws.onopen = e => {
         this.ws.send(JSON.stringify({
           msg_type: 'import_user',
           ...data
-        }));
-      };
+        }))
+      }
       this.ws.onmessage = e => {
-        const data = JSON.parse(e.data);
+        const data = JSON.parse(e.data)
         if (data.ok) {
-          this.$message.success(data.msg);
-          this.$refs.listTable.reloadTable();
+          this.$message.success(data.msg)
+          this.$refs.listTable.reloadTable()
         } else {
-          this.$message.error(data.msg) || this.$t('ImportFail');
+          this.$message.error(data.msg) || this.$t('ImportFail')
         }
-        this.dialogLdapUserImportLoginStatus = false;
-        this.dialogLdapUserImportAllLoginStatus = false;
-      };
+        this.dialogLdapUserImportLoginStatus = false
+        this.dialogLdapUserImportAllLoginStatus = false
+      }
     },
     enableWS() {
-      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws';
-      const port = document.location.port ? ':' + document.location.port : '';
-      const url = `/ws/ldap/?category=${this.category}`;
-      const wsURL = scheme + '://' + document.location.hostname + port + url;
-      this.ws = new WebSocket(wsURL);
+      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
+      const port = document.location.port ? ':' + document.location.port : ''
+      const url = `/ws/ldap/?category=${this.category}`
+      const wsURL = scheme + '://' + document.location.hostname + port + url
+      this.ws = new WebSocket(wsURL)
     },
     SyncUserClick() {
-      this.dialogLdapUserSyncStatus = true;
-      this.enableWS();
+      this.dialogLdapUserSyncStatus = true
+      this.enableWS()
       this.ws.onopen = e => {
         this.ws.send(JSON.stringify({
           msg_type: 'sync_user'
-        }));
-      };
+        }))
+      }
       this.ws.onmessage = e => {
-        const data = JSON.parse(e.data);
+        const data = JSON.parse(e.data)
         if (data.ok) {
-          this.$refs.listTable.reloadTable();
+          this.$refs.listTable.reloadTable()
         } else {
-          this.$message.error(data.msg);
+          this.$message.error(data.msg)
         }
-        this.dialogLdapUserSyncStatus = false;
-      };
+        this.dialogLdapUserSyncStatus = false
+      }
     },
     handlerListTableXHRError(errMsg) {
       if (this.dialogLdapUserImport) {
-        setTimeout(this.$refs.listTable.reloadTable, 30000);
+        setTimeout(this.$refs.listTable.reloadTable, 30000)
       }
     },
     hiddenDialog() {
-      this.$emit('update:visible', false);
+      this.$emit('update:visible', false)
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

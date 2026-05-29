@@ -150,12 +150,12 @@ const noPaginationDataPath = 'payload'
 
 export default {
   name: 'ElDataTable',
-  inheritAttrs: false,
   components: {
     SelfLoadingButton,
     TheDialog,
     ElDataTableColumn
   },
+  inheritAttrs: false,
 
   props: {
     /**

@@ -15,16 +15,16 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, createTextVNode as _createTextVNode } from "vue";
-import TreeTable from '@/components/Table/TreeTable/index.vue';
-import { getDayEnd, getDaysAgo, toSafeLocalDateStr } from '@/utils/common/time';
-import { OutputExpandFormatter } from '../formatters';
-import { DetailFormatter } from '@/components/Table/TableFormatters';
-import isFalsey from '@/components/Table/DataTable/compenents/el-data-table/utils/is-falsey';
-import deepmerge from 'deepmerge';
-import * as queryUtil from '@/components/Table/DataTable/compenents/el-data-table/utils/query';
-import { createSourceIdCache } from '@/api/common';
-import { download } from '@/utils/common/index';
+import { createVNode as _createVNode, createTextVNode as _createTextVNode } from 'vue'
+import TreeTable from '@/components/Table/TreeTable/index.vue'
+import { getDayEnd, getDaysAgo, toSafeLocalDateStr } from '@/utils/common/time'
+import { OutputExpandFormatter } from '../formatters'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
+import isFalsey from '@/components/Table/DataTable/compenents/el-data-table/utils/is-falsey'
+import deepmerge from 'deepmerge'
+import * as queryUtil from '@/components/Table/DataTable/compenents/el-data-table/utils/query'
+import { createSourceIdCache } from '@/api/common'
+import { download } from '@/utils/common/index'
 export default {
   name: 'CommandList',
   components: {
@@ -37,8 +37,8 @@ export default {
     }
   },
   data() {
-    const dateFrom = getDaysAgo(7).toISOString();
-    const dateTo = this.$moment(getDayEnd()).add(1, 'day').toISOString();
+    const dateFrom = getDaysAgo(7).toISOString()
+    const dateTo = this.$moment(getDayEnd()).add(1, 'day').toISOString()
     return {
       title: this.$t('CommandStorage'),
       loading: true,
@@ -49,9 +49,9 @@ export default {
             row
           }) => {
             if (row.risk_level === 5) {
-              return 'risk-command';
+              return 'risk-command'
             }
-            return 'command';
+            return 'command'
           }
         },
         columns: ['expandCol', 'input', 'risk_level', 'user', 'asset', 'account', 'session', 'timestamp'],
@@ -68,13 +68,13 @@ export default {
           },
           risk_level: {
             formatter: (row, col, cellValue) => {
-              const display = row['risk_level'].label;
+              const display = row['risk_level'].label
               if (cellValue?.value === 0) {
-                return display;
+                return display
               } else {
-                return _createVNode("span", {
-                  "class": "text-danger"
-                }, [_createTextVNode(" "), display, _createTextVNode(" ")]);
+                return _createVNode('span', {
+                  'class': 'text-danger'
+                }, [_createTextVNode(' '), display, _createTextVNode(' ')])
               }
             }
           },
@@ -94,7 +94,7 @@ export default {
                   params: {
                     id: cellValue
                   }
-                };
+                }
               }
             }
           },
@@ -102,8 +102,8 @@ export default {
             label: this.$t('Datetime'),
             width: 180,
             sortable: 'custom',
-            formatter: function (row) {
-              return toSafeLocalDateStr(row.timestamp * 1000);
+            formatter: function(row) {
+              return toSafeLocalDateStr(row.timestamp * 1000)
             }
           }
         }
@@ -120,24 +120,24 @@ export default {
         canExportSelected: true,
         exportOptions: {
           performExport: async (selectRows, exportOption, q, exportTypeOption) => {
-            let url = this.tableConfig.url;
-            url = process.env.VUE_APP_ENV === 'production' ? `${url}` : `${process.env.VUE_APP_BASE_API}${url}`;
+            let url = this.tableConfig.url
+            url = process.env.VUE_APP_ENV === 'production' ? `${url}` : `${process.env.VUE_APP_BASE_API}${url}`
             const query = {
               ...q
-            };
-            if (exportOption === 'selected') {
-              const resources = [];
-              for (const item of selectRows) {
-                resources.push(item.id);
-              }
-              const spm = await createSourceIdCache(resources);
-              query['spm'] = spm.spm;
             }
-            query['format'] = exportTypeOption;
-            const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(query, '=', '&');
-            url = url + queryStr;
-            this.$log.debug('Export url: ', this.url, '=>', url);
-            download(url + queryStr);
+            if (exportOption === 'selected') {
+              const resources = []
+              for (const item of selectRows) {
+                resources.push(item.id)
+              }
+              const spm = await createSourceIdCache(resources)
+              query['spm'] = spm.spm
+            }
+            query['format'] = exportTypeOption
+            const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(query, '=', '&')
+            url = url + queryStr
+            this.$log.debug('Export url: ', this.url, '=>', url)
+            download(url + queryStr)
           }
         }
       },
@@ -153,80 +153,80 @@ export default {
             if (treeNode.chkDisabled) {
               return {
                 opacity: '0.4'
-              };
+              }
             }
-            return {};
+            return {}
           }
         },
         callback: {
           onSelected: (event, treeNode) => {
             // 禁止点击根节点
             if (treeNode.id === 'root') {
-              return;
+              return
             }
             if (!treeNode.valid) {
-              this.$message.error(this.$tc('EsDisabled'));
-              return;
+              this.$message.error(this.$tc('EsDisabled'))
+              return
             }
-            this.tableConfig.url = `/api/v1/terminal/commands/?command_storage_id=${treeNode.id}&order=-timestamp`;
+            this.tableConfig.url = `/api/v1/terminal/commands/?command_storage_id=${treeNode.id}&order=-timestamp`
             if (this.assetId) {
-              this.tableConfig.url += `&asset_id=${this.assetId}`;
+              this.tableConfig.url += `&asset_id=${this.assetId}`
             }
           }
         }
       }
-    };
+    }
   },
   computed: {
     treeTable() {
-      return this.$refs.CommandTreeTable;
+      return this.$refs.CommandTreeTable
     }
   },
   watch: {},
   methods: {
     checkFirstNode(obj) {
-      const ztree = obj;
-      const nodes = ztree.getNodes();
+      const ztree = obj
+      const nodes = ztree.getNodes()
       if (nodes[0].children.length > 0) {
-        ztree.selectNode(nodes[0].children[0]);
+        ztree.selectNode(nodes[0].children[0])
       }
-      this.loading = false;
+      this.loading = false
     },
     handleTagChange(query) {
-      const _query = this.cleanUrl(query);
-      const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`;
-      const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(_query, '=', '&');
-      const treeUrl = url + queryStr;
-      this.$set(this.treeSetting, 'treeUrl', treeUrl);
+      const _query = this.cleanUrl(query)
+      const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`
+      const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(_query, '=', '&')
+      const treeUrl = url + queryStr
+      this.$set(this.treeSetting, 'treeUrl', treeUrl)
     },
     handleFilterChange(query) {
-      const _query = this.cleanUrl(query);
-      const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`;
-      const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(_query, '=', '&');
-      const treeUrl = url + queryStr;
-      this.$set(this.treeSetting, 'treeUrl', treeUrl);
+      const _query = this.cleanUrl(query)
+      const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`
+      const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(_query, '=', '&')
+      const treeUrl = url + queryStr
+      this.$set(this.treeSetting, 'treeUrl', treeUrl)
     },
     handleDateChange(object) {
       this.query = {
         date_from: object[0].toISOString(),
         date_to: object[1].toISOString()
-      };
-      const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`;
-      const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(this.query, '=', '&');
-      const treeUrl = url + queryStr;
-      this.$set(this.treeSetting, 'treeUrl', treeUrl);
-      this.treeTable.forceRerenderTree();
+      }
+      const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`
+      const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(this.query, '=', '&')
+      const treeUrl = url + queryStr
+      this.$set(this.treeSetting, 'treeUrl', treeUrl)
+      this.treeTable.forceRerenderTree()
     },
     cleanUrl(query) {
       query = Object.keys(query).filter(k => !isFalsey(query[k])).reduce((obj, k) => {
-        obj[k] = query[k].toString().trim();
-        return obj;
-      }, {});
-      query = deepmerge(this.query, query);
-      return query;
+        obj[k] = query[k].toString().trim()
+        return obj
+      }, {})
+      query = deepmerge(this.query, query)
+      return query
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

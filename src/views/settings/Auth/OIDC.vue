@@ -2,7 +2,6 @@
   <BaseAuth
     :config="settings"
     enable-field="AUTH_OPENID"
-    v-on="$listeners"
   />
 </template>
 

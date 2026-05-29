@@ -60,10 +60,10 @@
 </template>
 
 <script>
-import Dialog from '@/components/Dialog/index.vue';
-import { SecretViewerFormatter } from '@/components/Table/TableFormatters';
-import { encryptPassword } from '@/utils/secure';
-import PasswordHistoryDialog from './PasswordHistoryDialog.vue';
+import Dialog from '@/components/Dialog/index.vue'
+import { SecretViewerFormatter } from '@/components/Table/TableFormatters'
+import { encryptPassword } from '@/utils/secure'
+import PasswordHistoryDialog from './PasswordHistoryDialog.vue'
 
 export default {
   name: 'ShowSecretInfo',

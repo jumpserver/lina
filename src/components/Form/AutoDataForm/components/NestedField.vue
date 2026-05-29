@@ -12,14 +12,14 @@
 </template>
 
 <script>
-import DataForm from '@/components/Form/DataForm/index.vue';
+import DataForm from '@/components/Form/DataForm/index.vue'
 
 export default {
   name: 'NestedField',
-  inheritAttrs: false,
   components: {
     DataForm
   },
+  inheritAttrs: false,
   props: {
     fields: {
       type: Array,

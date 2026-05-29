@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import { createTextVNode as _createTextVNode, createVNode as _createVNode } from "vue";
-import { DrawerListTable as ListTable } from '@/components';
-import { ChoicesFormatter, DetailFormatter, SwitchFormatter } from '@/components/Table/TableFormatters';
-import { BASE_URL } from '@/utils/common/index';
+import { createTextVNode as _createTextVNode, createVNode as _createVNode } from 'vue'
+import { DrawerListTable as ListTable } from '@/components'
+import { ChoicesFormatter, DetailFormatter, SwitchFormatter } from '@/components/Table/TableFormatters'
+import { BASE_URL } from '@/utils/common/index'
 export default {
   name: 'TaskList',
   components: {
@@ -31,9 +31,9 @@ export default {
                 cellValue
               }) {
                 if (row.meta && row.meta.comment) {
-                  return row.meta.comment;
+                  return row.meta.comment
                 }
-                return cellValue;
+                return cellValue
               }
             }
           },
@@ -41,40 +41,40 @@ export default {
             label: this.$t('Queue'),
             width: '120px',
             formatter: row => {
-              return row.meta.queue;
+              return row.meta.queue
             }
           },
           comment: {
             width: '300px',
             formatter: row => {
-              return row.meta.comment ? row.meta.comment : '-';
+              return row.meta.comment ? row.meta.comment : '-'
             }
           },
           last_published_time: {
             width: '210px',
             formatter: row => {
-              return row.last_published_time != null ? row.last_published_time : '-';
+              return row.last_published_time != null ? row.last_published_time : '-'
             }
           },
           exec_cycle: {
             width: '120px',
             formatter: row => {
-              return row.exec_cycle ? row.exec_cycle : '-';
+              return row.exec_cycle ? row.exec_cycle : '-'
             }
           },
           next_exec_time: {
             width: '210px',
             formatter: row => {
-              return row.next_exec_time ? row.next_exec_time : '-';
+              return row.next_exec_time ? row.next_exec_time : '-'
             }
           },
           count: {
             width: '130px',
             label: `${this.$t('Success')}/${this.$t('Total')}`,
             formatter: row => {
-              return _createVNode("div", null, [_createVNode("span", {
-                "class": "text-primary"
-              }, [row.summary.success || 0]), _createTextVNode("/"), _createVNode("span", null, [row.summary.total || 0])]);
+              return _createVNode('div', null, [_createVNode('span', {
+                'class': 'text-primary'
+              }, [row.summary.success || 0]), _createTextVNode('/'), _createVNode('span', null, [row.summary.total || 0])])
             }
           },
           state: {
@@ -84,7 +84,7 @@ export default {
             formatter: ChoicesFormatter,
             formatterArgs: {
               getIcon() {
-                return 'fa-circle-o';
+                return 'fa-circle-o'
               },
               classChoices: {
                 green: 'text-primary',
@@ -98,11 +98,11 @@ export default {
               }) => {
                 switch (cellValue) {
                   case 'green':
-                    return this.$t('StatusGreen');
+                    return this.$t('StatusGreen')
                   case 'yellow':
-                    return this.$t('StatusYellow');
+                    return this.$t('StatusYellow')
                   default:
-                    return this.$t('StatusRed');
+                    return this.$t('StatusRed')
                 }
               }
             }
@@ -116,15 +116,15 @@ export default {
             formatter: SwitchFormatter,
             formatterArgs: {
               isDisplay(row) {
-                return row.exec_cycle !== undefined;
+                return row.exec_cycle !== undefined
               },
               getPatchUrl(row) {
-                return `/api/v1/ops/celery/period-tasks/${row.name}/`;
+                return `/api/v1/ops/celery/period-tasks/${row.name}/`
               },
               getPatchData(row) {
                 return {
                   enabled: !row.enabled
-                };
+                }
               }
             }
           }
@@ -138,13 +138,13 @@ export default {
           type: 'primary',
           can: this.$hasPerm('ops.view_taskmonitor'),
           callback: () => {
-            window.open(`${BASE_URL}/core/flower/?_=${Date.now()}`);
+            window.open(`${BASE_URL}/core/flower/?_=${Date.now()}`)
           }
         }]
       }
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

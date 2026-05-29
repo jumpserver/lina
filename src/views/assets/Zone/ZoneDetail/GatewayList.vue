@@ -23,13 +23,13 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent, createTextVNode as _createTextVNode } from "vue";
-import { GenericListTable } from '@/layout/components';
-import GatewayTestDialog from '@/components/Apps/GatewayTestDialog';
-import { connectivityMeta } from '@/components/Apps/AccountListTable/const';
-import { ArrayFormatter, ChoicesFormatter, DetailFormatter, TagsFormatter } from '@/components/Table/TableFormatters';
-import AddGatewayDialog from '@/views/assets/Zone/components/AddGatewayDialog';
-import TwoCol from '@/layout/components/Page/TwoColPage.vue';
+import { createVNode as _createVNode, resolveComponent as _resolveComponent, createTextVNode as _createTextVNode } from 'vue'
+import { GenericListTable } from '@/layout/components'
+import GatewayTestDialog from '@/components/Apps/GatewayTestDialog'
+import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
+import { ArrayFormatter, ChoicesFormatter, DetailFormatter, TagsFormatter } from '@/components/Table/TableFormatters'
+import AddGatewayDialog from '@/views/assets/Zone/components/AddGatewayDialog'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 export default {
   components: {
     TwoCol,
@@ -44,7 +44,7 @@ export default {
     }
   },
   data() {
-    const vm = this;
+    const vm = this
     return {
       createDrawer: () => import('@/views/assets/Zone/ZoneDetail/GatewayCreateUpdate.vue'),
       detailDrawer: () => import('@/views/assets/Asset/AssetDetail'),
@@ -73,7 +73,7 @@ export default {
                   params: {
                     id: row.id
                   }
-                };
+                }
               }
             },
             sortable: true
@@ -94,12 +94,12 @@ export default {
           },
           protocols: {
             formatter: row => {
-              const data = row.protocols.map(p => _createVNode(_resolveComponent("el-tag"), {
-                "size": "small"
+              const data = row.protocols.map(p => _createVNode(_resolveComponent('el-tag'), {
+                'size': 'small'
               }, {
-                default: () => [p.name, _createTextVNode("/"), p.port, _createTextVNode(" ")]
-              }));
-              return _createVNode("span", null, [_createTextVNode(" "), data, _createTextVNode(" ")]);
+                default: () => [p.name, _createTextVNode('/'), p.port, _createTextVNode(' ')]
+              }))
+              return _createVNode('span', null, [_createTextVNode(' '), data, _createTextVNode(' ')])
             }
           },
           nodes_display: {
@@ -109,7 +109,7 @@ export default {
             formatter: TagsFormatter,
             formatterArgs: {
               getTags(cellValue) {
-                return cellValue.map(item => `${item.name}:${item.value}`);
+                return cellValue.map(item => `${item.name}:${item.value}`)
               }
             }
           },
@@ -132,35 +132,35 @@ export default {
                     ...row,
                     payload: 'pam_asset_clone'
                   }
-                });
+                })
               },
               performDelete: ({
                 row
               }) => {
-                const id = row.id;
-                const url = `/api/v1/assets/gateways/${id}/`;
-                return this.$axios.delete(url);
+                const id = row.id
+                const url = `/api/v1/assets/gateways/${id}/`
+                return this.$axios.delete(url)
               },
               extraActions: [{
                 name: 'RemoveGateWay',
                 order: 10,
                 can: this.$hasPerm('assets.test_assetconnectivity') && !this.$store.getters.currentOrgIsRoot,
                 title: this.$t('Remove'),
-                callback: function (val) {
-                  this.removeGateway(val);
+                callback: function(val) {
+                  this.removeGateway(val)
                 }.bind(this)
               }, {
                 name: 'TestConnection',
                 can: this.$hasPerm('assets.test_assetconnectivity') && !this.$store.getters.currentOrgIsRoot,
                 title: this.$t('TestConnection'),
-                callback: function (val) {
-                  vm.testConfig.visible = true;
-                  const port = val.row.protocols.find(item => item.name === 'ssh').port;
+                callback: function(val) {
+                  vm.testConfig.visible = true
+                  const port = val.row.protocols.find(item => item.name === 'ssh').port
                   if (!port) {
-                    return this.$message.error(this.$tc('BadRequestErrorMsg'));
+                    return this.$message.error(this.$tc('BadRequestErrorMsg'))
                   } else {
-                    vm.testConfig.port = port;
-                    vm.testConfig.cell = val.row.id;
+                    vm.testConfig.port = port
+                    vm.testConfig.cell = val.row.id
                   }
                 }.bind(this)
               }]
@@ -179,10 +179,10 @@ export default {
           can({
             selectedRows
           }) {
-            return selectedRows.length > 0;
+            return selectedRows.length > 0
           },
-          callback: function (rows) {
-            this.removeGateway(rows);
+          callback: function(rows) {
+            this.removeGateway(rows)
           }.bind(this)
         }],
         extraActions: [{
@@ -193,7 +193,7 @@ export default {
             // 由于修改成为了抽屉形式，导致传入到 AddGateway 组件中的 obj 任然为最初的数量，就会导致新增的 item 依然会出现可选的情况
             // 此时修改为在打开 AddGateway 额外从 tableConfig.url 的接口中获取最新的 gateways 数目
             try {
-              const res = await this.$axios.get(this.tableConfig.url);
+              const res = await this.$axios.get(this.tableConfig.url)
               if (res) {
                 this.transObject = {
                   ...this.object,
@@ -201,16 +201,16 @@ export default {
                     return {
                       name: item.name,
                       id: item.id
-                    };
+                    }
                   })
-                };
+                }
               }
             } catch (err) {
-              throw new Error(err);
+              throw new Error(err)
             }
             vm.$nextTick(() => {
-              this.addGatewaySetting.addGatewayDialogVisible = true;
-            });
+              this.addGatewaySetting.addGatewayDialogVisible = true
+            })
           }
         }],
         onCreate: () => {
@@ -220,48 +220,48 @@ export default {
               platform_type: 'linux',
               category: 'host'
             }
-          });
+          })
         }
       },
       addGatewaySetting: {
         addGatewayDialogVisible: false
       }
-    };
+    }
   },
   methods: {
     reloadTable() {
-      this.$refs.ListTable.$refs.ListTable.reloadTable();
+      this.$refs.ListTable.$refs.ListTable.reloadTable()
     },
     removeGateway(rows) {
-      let patch_data;
-      let msg;
+      let patch_data
+      let msg
       if (Object.prototype.hasOwnProperty.call(rows, 'selectedRows')) {
         patch_data = rows.selectedRows.map(row => {
           return {
             id: row.id,
             zone: null
-          };
-        });
-        msg = patch_data.length + ' ' + this.$t('Rows');
+          }
+        })
+        msg = patch_data.length + ' ' + this.$t('Rows')
       } else {
         patch_data = [{
           id: rows.row.id,
           zone: null
-        }];
-        msg = rows.row.name;
+        }]
+        msg = rows.row.name
       }
       this.$confirm(this.$t('RemoveWarningMsg') + ' ' + msg + ' ?', {
         type: 'warning'
       }).then(() => {
         this.$axios.patch(`/api/v1/assets/gateways/`, patch_data).then(() => {
-          this.reloadTable();
-          this.$message.success(this.$t('RemoveSuccessMsg'));
-        });
-      }).catch(() => {});
+          this.reloadTable()
+          this.$message.success(this.$t('RemoveSuccessMsg'))
+        })
+      }).catch(() => {})
     },
     handleAddGatewayDialogClose() {
-      this.reloadTable();
+      this.reloadTable()
     }
   }
-};
+}
 </script>

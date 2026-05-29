@@ -6,18 +6,20 @@
       :table-config="tableConfig"
       :tree-setting="treeSetting"
     >
-      <TreeMenu
-        slot="rMenu"
-        :tree="treeRef"
-        @show-all="showAll"
-      />
-      <BaseList
-        ref="baseList"
-        slot="table"
-        :add-extra-more-actions="addExtraMoreActions"
-        :header-actions="headerActions"
-        v-bind="tableConfig"
-      />
+      <template #rMenu>
+        <TreeMenu
+          :tree="treeRef"
+          @show-all="showAll"
+        />
+      </template>
+      <template #table>
+        <BaseList
+          ref="baseList"
+          :add-extra-more-actions="addExtraMoreActions"
+          :header-actions="headerActions"
+          v-bind="tableConfig"
+        />
+      </template>
     </AssetTreeTable>
   </div>
 </template>

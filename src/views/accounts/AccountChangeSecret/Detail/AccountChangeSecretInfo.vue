@@ -8,11 +8,11 @@
 </template>
 
 <script>
-import { createVNode as _createVNode } from "vue";
-import { QuickActions } from '@/components';
-import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue';
-import { openTaskPage } from '@/utils/jms/index';
-import TwoCol from '@/layout/components/Page/TwoColPage.vue';
+import { createVNode as _createVNode } from 'vue'
+import { QuickActions } from '@/components'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
+import { openTaskPage } from '@/utils/jms/index'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 export default {
   name: 'AccountChangeSecretInfo',
   components: {
@@ -37,12 +37,12 @@ export default {
           disabled: !this.$hasPerm('accounts.add_changesecretexecution') || !this.object.is_active
         },
         callbacks: {
-          click: function () {
+          click: function() {
             this.$axios.post(`/api/v1/accounts/change-secret-executions/`, {
               automation: this.object.id
             }).then(res => {
-              openTaskPage(res['task']);
-            });
+              openTaskPage(res['task'])
+            })
           }.bind(this)
         }
       }],
@@ -63,19 +63,19 @@ export default {
         key: this.$t('Crontab'),
         value: this.object.crontab,
         formatter: (item, val) => {
-          return _createVNode("span", null, [this.object.is_periodic ? val : '-']);
+          return _createVNode('span', null, [this.object.is_periodic ? val : '-'])
         }
       }, {
         key: this.$t('Interval'),
         value: this.object.interval,
         formatter: (item, val) => {
-          return _createVNode("span", null, [this.object.is_periodic ? val : '-']);
+          return _createVNode('span', null, [this.object.is_periodic ? val : '-'])
         }
       }, 'date_created', 'date_updated', 'comment', 'is_active']
-    };
+    }
   },
   computed: {}
-};
+}
 </script>
 
 <style scoped>

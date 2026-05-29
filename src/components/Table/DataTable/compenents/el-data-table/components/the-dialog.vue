@@ -1,8 +1,8 @@
 <template>
   <el-dialog
     ref="dialog"
-    :title="title"
     v-model="visible"
+    :title="title"
     v-bind="dialogAttrs"
     @close="resetFields"
     @opened="handleOpened"
@@ -41,7 +41,6 @@ export const dialogModes = {
 }
 
 export default {
-  emits: ['confirm'],
   props: {
     newTitle: {
       type: String,
@@ -69,6 +68,7 @@ export default {
     },
     buttonSize: String
   },
+  emits: ['confirm'],
   data() {
     return {
       mode: dialogModes.new,

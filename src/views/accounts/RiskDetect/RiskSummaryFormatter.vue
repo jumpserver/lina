@@ -8,7 +8,7 @@
   </span>
 </template>
 <script>
-import BaseFormatter from '@/components/Table/TableFormatters/base.vue';
+import BaseFormatter from '@/components/Table/TableFormatters/base.vue'
 
 export default {
   name: 'RiskSummaryFormatter',

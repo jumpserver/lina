@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import { DrawerListTable } from '@/components';
-import { DetailFormatter } from '@/components/Table/TableFormatters';
+import { DrawerListTable } from '@/components'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'StrategyList',

@@ -1,16 +1,15 @@
 const { run } = require('runjs')
-const chalk = require('chalk')
-const config = require('../vue.config.js')
 const rawArgv = process.argv.slice(2)
-const args = rawArgv.join(' ')
+const args = rawArgv.filter(arg => arg !== '--preview' && arg !== '--report').join(' ')
+const publicPath = '/ui/'
+const outputDir = './lina'
 
 if (process.env.npm_config_preview || rawArgv.includes('--preview')) {
   const report = rawArgv.includes('--report')
 
-  run(`vue-cli-service build ${args}`)
+  run(`webpack --mode production --env mode=production ${args}`)
 
   const port = 9526
-  const publicPath = config.publicPath
 
   var connect = require('connect')
   var serveStatic = require('serve-static')
@@ -18,7 +17,7 @@ if (process.env.npm_config_preview || rawArgv.includes('--preview')) {
 
   app.use(
     publicPath,
-    serveStatic('./dist', {
+    serveStatic(outputDir, {
       index: ['index.html', '/']
     })
   )
@@ -28,8 +27,7 @@ if (process.env.npm_config_preview || rawArgv.includes('--preview')) {
     if (report) {
       // debug(chalk.green(`> Report at  http://localhost:${port}${publicPath}report.html`))
     }
-
   })
 } else {
-  run(`vue-cli-service build ${args}`)
+  run(`webpack --mode production --env mode=production ${args}`)
 }

@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage v-model:active-menu="config.activeMenu" v-model:object="TaskDetail" v-bind="config" v-on="$listeners">
+  <GenericDetailPage v-model:active-menu="config.activeMenu" v-model:object="TaskDetail" v-bind="config">
     <keep-alive>
       <component :is="config.activeMenu" :object="TaskDetail" />
     </keep-alive>

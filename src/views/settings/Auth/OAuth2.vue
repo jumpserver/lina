@@ -3,7 +3,6 @@
     :config="settings"
     :title="$tc('OAuth2')"
     enable-field="AUTH_OAUTH2"
-    v-on="$listeners"
   />
 </template>
 

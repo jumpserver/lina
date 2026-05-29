@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from "vue";
-import GenericListTable from '@/layout/components/GenericListTable/index';
-import { DateFormatter } from '@/components/Table/TableFormatters';
+import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import GenericListTable from '@/layout/components/GenericListTable/index'
+import { DateFormatter } from '@/components/Table/TableFormatters'
 export default {
   name: 'TaskSyncAssetList',
   components: {
@@ -57,13 +57,13 @@ export default {
               1: this.$t('NewSyncCount'),
               2: this.$t('SyncedCount'),
               3: this.$t('ReleasedCount')
-            };
-            return _createVNode(_resolveComponent("el-tag"), {
-              "type": "primary",
-              "size": "small"
+            }
+            return _createVNode(_resolveComponent('el-tag'), {
+              'type': 'primary',
+              'size': 'small'
             }, {
               default: () => [status[row.status]]
-            });
+            })
           }
         }, {
           prop: 'date_sync',
@@ -74,31 +74,31 @@ export default {
           has: false
         }]
       }
-    };
+    }
   },
   computed: {
     dynamicUrl() {
-      const category = this.$route.query.category;
-      const baseUrl = `/api/v1/xpack/cloud/sync-instance-tasks/instances/?category=${category}`;
-      return this.object ? `${baseUrl}&task_id=${this.object.task.id}` : baseUrl;
+      const category = this.$route.query.category
+      const baseUrl = `/api/v1/xpack/cloud/sync-instance-tasks/instances/?category=${category}`
+      return this.object ? `${baseUrl}&task_id=${this.object.task.id}` : baseUrl
     }
   },
   mounted() {
-    this.tableConfig.url = this.dynamicUrl;
+    this.tableConfig.url = this.dynamicUrl
   },
   methods: {
     DeleteReleasedAssets() {
-      const baseUrl = '/api/v1/xpack/cloud/sync-instance-tasks/released-assets/';
-      const url = this.object ? `${baseUrl}?task_id=${this.object.task.id}` : baseUrl;
+      const baseUrl = '/api/v1/xpack/cloud/sync-instance-tasks/released-assets/'
+      const url = this.object ? `${baseUrl}?task_id=${this.object.task.id}` : baseUrl
       this.$axios.delete(url).then(res => {
-        this.$message.success(this.$tc('DeleteSuccessMsg'));
-        this.$refs.GenericListTable.$refs.ListTable.reloadTable();
+        this.$message.success(this.$tc('DeleteSuccessMsg'))
+        this.$refs.GenericListTable.$refs.ListTable.reloadTable()
       }).catch(() => {
-        this.$message.error(this.$tc('DeleteErrorMsg'));
-      });
+        this.$message.error(this.$tc('DeleteErrorMsg'))
+      })
     }
   }
-};
+}
 </script>
 
 <style lang='scss' scoped>

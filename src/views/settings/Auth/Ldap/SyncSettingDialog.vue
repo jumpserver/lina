@@ -7,7 +7,6 @@
     top="10%"
     v-bind="$attrs"
     width="50%"
-    v-on="$listeners"
   >
     <GenericCreateUpdateForm
       :has-detail-in-msg="false"

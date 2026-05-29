@@ -13,7 +13,6 @@
       width="70%"
       @update:visible="$emit('update:visible', $event)"
       @confirm="onConfirm()"
-      v-on="$listeners"
     >
       <GenericCreateUpdateForm ref="form" v-bind="iConfig" @submit-success="submitSuccess" />
     </Dialog>

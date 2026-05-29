@@ -1,8 +1,10 @@
 <template>
   <IBox v-loading="loading" class="box">
-    <div slot="header" class="clearfix ibox-title">
-      <i class="fa fa-comments" /> {{ $t('Message') }}
-    </div>
+    <template #header>
+      <div class="clearfix ibox-title">
+        <i class="fa fa-comments" /> {{ $t('Message') }}
+      </div>
+    </template>
     <template v-if="comments">
       <div v-for="item in comments" :key="item.id" class="feed-activity-list">
         <div class="feed-element">
@@ -11,7 +13,7 @@
           </a>
           <div class="media-body ">
             <strong>{{ item.user_display }}</strong>
-            <small class="text-muted">{{ item.date_created | date }}</small>
+            <small class="text-muted">{{ $filters.date(item.date_created) }}</small>
             <MarkDown :value="item.body" />
           </div>
         </div>
@@ -65,9 +67,9 @@
 </template>
 
 <script>
-import IBox from '@/components/Common/IBox';
-import MarkDown from '@/components/Widgets/MarkDown';
-import { formatTime, getDateTimeStamp, toSafeLocalDateStr } from '@/utils/common/time';
+import IBox from '@/components/Common/IBox'
+import MarkDown from '@/components/Widgets/MarkDown'
+import { formatTime, getDateTimeStamp, toSafeLocalDateStr } from '@/utils/common/time'
 
 export default {
   name: 'Comments',

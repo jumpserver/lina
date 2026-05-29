@@ -44,8 +44,8 @@
 </template>
 
 <script>
-import IBox from '@/components/Common/IBox';
-import Drawer from '@/components/Drawer/index.vue';
+import IBox from '@/components/Common/IBox'
+import Drawer from '@/components/Drawer/index.vue'
 
 export default {
   name: 'PermUserGroupCard',

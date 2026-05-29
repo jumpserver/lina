@@ -2,7 +2,6 @@
   <BaseAuth
     :config="settings"
     enable-field="AUTH_WECOM"
-    v-on="$listeners"
   />
 </template>
 

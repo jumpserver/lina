@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import { createSourceIdCache } from '@/api/common';
-import _ from 'lodash';
+import { createSourceIdCache } from '@/api/common'
+import _ from 'lodash'
 
 export default {
   name: 'Select2',

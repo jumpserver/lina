@@ -3,12 +3,12 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, isVNode as _isVNode, resolveComponent as _resolveComponent } from "vue";
-import GenericListTable from '@/layout/components/GenericListTable/index';
-import { ActionsFormatter, DateFormatter } from '@/components/Table/TableFormatters';
-import { openTaskPage } from '@/utils/jms/index';
+import { createVNode as _createVNode, isVNode as _isVNode, resolveComponent as _resolveComponent } from 'vue'
+import GenericListTable from '@/layout/components/GenericListTable/index'
+import { ActionsFormatter, DateFormatter } from '@/components/Table/TableFormatters'
+import { openTaskPage } from '@/utils/jms/index'
 function _isSlot(s) {
-  return typeof s === 'function' || Object.prototype.toString.call(s) === '[object Object]' && !_isVNode(s);
+  return typeof s === 'function' || Object.prototype.toString.call(s) === '[object Object]' && !_isVNode(s)
 }
 export default {
   name: 'TaskHistoryList',
@@ -52,21 +52,21 @@ export default {
           label: this.$t('Status'),
           formatter: row => {
             if (row.status === 1) {
-              let _slot;
-              return _createVNode(_resolveComponent("el-tag"), {
-                "type": "primary",
-                "size": "small"
+              let _slot
+              return _createVNode(_resolveComponent('el-tag'), {
+                'type': 'primary',
+                'size': 'small'
               }, _isSlot(_slot = this.$t('Success')) ? _slot : {
                 default: () => [_slot]
-              });
+              })
             } else {
-              let _slot2;
-              return _createVNode(_resolveComponent("el-tag"), {
-                "type": "danger",
-                "size": "small"
+              let _slot2
+              return _createVNode(_resolveComponent('el-tag'), {
+                'type': 'danger',
+                'size': 'small'
               }, _isSlot(_slot2 = this.$t('Failed')) ? _slot2 : {
                 default: () => [_slot2]
-              });
+              })
             }
           }
         }, {
@@ -77,7 +77,7 @@ export default {
           prop: 'trigger',
           label: this.$t('TriggerMode'),
           formatter: row => {
-            return row.trigger.label;
+            return row.trigger.label
           }
         }, {
           prop: 'actions',
@@ -95,16 +95,16 @@ export default {
               name: 'View',
               title: this.$t('View'),
               type: 'primary',
-              callback: function (val) {
-                openTaskPage(val.row.id);
+              callback: function(val) {
+                openTaskPage(val.row.id)
               }
             }]
           }
         }]
       }
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang='scss' scoped>

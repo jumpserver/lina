@@ -15,11 +15,11 @@
 <script>
 /* eslint-disable vue/require-default-prop */
 /* eslint-disable vue/require-prop-types */
-import TextButton from './text-button.vue';
+import TextButton from './text-button.vue'
 
 export default {
-  inheritAttrs: false,
   components: { TextButton },
+  inheritAttrs: false,
   props: {
     /**
      * 是否是文字按钮。

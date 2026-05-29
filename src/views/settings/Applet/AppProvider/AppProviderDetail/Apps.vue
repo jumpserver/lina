@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from "vue";
-import { DrawerListTable as ListTable } from '@/components';
-import { DetailFormatter } from '@/components/Table/TableFormatters';
+import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import { DrawerListTable as ListTable } from '@/components'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 export default {
   name: 'Apps',
   components: {
@@ -64,14 +64,14 @@ export default {
                 'success': 'primary',
                 'failed': 'danger',
                 'unknown': 'warning'
-              };
-              const tp = typeMapper[row.status.value] || 'warning';
-              return _createVNode(_resolveComponent("el-tag"), {
-                "size": "small",
-                "type": tp
+              }
+              const tp = typeMapper[row.status.value] || 'warning'
+              return _createVNode(_resolveComponent('el-tag'), {
+                'size': 'small',
+                'type': tp
               }, {
                 default: () => [row.status.label]
-              });
+              })
             }
           },
           date_updated: {
@@ -88,9 +88,9 @@ export default {
           }
         }
       }
-    };
+    }
   }
-};
+}
 </script>
 
 <style scoped>

@@ -2,9 +2,11 @@
   <div>
     <div v-for="(item, i) of approveData" :key="i">
       <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span>{{ `${i + 1} ${$t('LevelApproval')}` }}</span>
-        </div>
+        <template #header>
+          <div class="clearfix">
+            <span>{{ `${i + 1} ${$t('LevelApproval')}` }}</span>
+          </div>
+        </template>
         <JSONManyToManySelect
           :value="item.users"
           :resource="userComponentMeta.el.resource"

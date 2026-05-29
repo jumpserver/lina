@@ -42,7 +42,7 @@
                   :style="{ borderLeftColor: randomBorderColor(index) }"
                   class="platform-item"
                   shadow="hover"
-                  @click.native="handleSelect(platform)"
+                  @click="handleSelect(platform)"
                 >
                   <div class="icon-zone">
                     <img :src="getPlatformLogo(platform)" alt="icon" class="asset-icon">
@@ -58,7 +58,7 @@
   </el-drawer>
 </template>
 <script>
-import { loadPlatformIcon } from '@/utils/jms/index';
+import { loadPlatformIcon } from '@/utils/jms/index'
 
 export default {
   name: 'PlatformDrawer',

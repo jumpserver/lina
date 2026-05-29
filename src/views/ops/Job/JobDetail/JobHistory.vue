@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import { createVNode as _createVNode } from "vue";
-import GenericListTable from '@/layout/components/GenericListTable';
-import { ActionsFormatter } from '@/components/Table/TableFormatters';
-import { openTaskPage } from '@/utils/jms/index';
+import { createVNode as _createVNode } from 'vue'
+import GenericListTable from '@/layout/components/GenericListTable'
+import { ActionsFormatter } from '@/components/Table/TableFormatters'
+import { openTaskPage } from '@/utils/jms/index'
 export default {
   components: {
     GenericListTable
@@ -35,13 +35,13 @@ export default {
             label: this.$t('IsFinished'),
             formatter: row => {
               if (row.is_finished) {
-                return _createVNode("i", {
-                  "class": "fa fa-check text-primary"
-                }, null);
+                return _createVNode('i', {
+                  'class': 'fa fa-check text-primary'
+                }, null)
               }
-              return _createVNode("i", {
-                "class": "fa fa-times text-danger"
-              }, null);
+              return _createVNode('i', {
+                'class': 'fa fa-times text-danger'
+              }, null)
             },
             formatterArgs: {
               width: '14px'
@@ -51,18 +51,18 @@ export default {
             label: this.$t('IsSuccess'),
             formatter: row => {
               if (!row.is_finished) {
-                return _createVNode("i", {
-                  "class": "fa  fa fa-spinner fa-spin"
-                }, null);
+                return _createVNode('i', {
+                  'class': 'fa  fa fa-spinner fa-spin'
+                }, null)
               }
               if (row.is_success) {
-                return _createVNode("i", {
-                  "class": "fa fa-check text-primary"
-                }, null);
+                return _createVNode('i', {
+                  'class': 'fa fa-check text-primary'
+                }, null)
               }
-              return _createVNode("i", {
-                "class": "fa fa-times text-danger"
-              }, null);
+              return _createVNode('i', {
+                'class': 'fa fa-times text-danger'
+              }, null)
             },
             formatterArgs: {
               width: '14px'
@@ -71,11 +71,11 @@ export default {
           time_cost: {
             label: this.$t('Time'),
             width: '100px',
-            formatter: function (row) {
+            formatter: function(row) {
               if (row.time_cost) {
-                return row.time_cost.toFixed(2) + 's';
+                return row.time_cost.toFixed(2) + 's'
               }
-              return '-';
+              return '-'
             }
           },
           actions: {
@@ -91,7 +91,7 @@ export default {
                 callback: ({
                   row
                 }) => {
-                  openTaskPage(row.task_id);
+                  openTaskPage(row.task_id)
                 }
               }]
             }
@@ -102,17 +102,17 @@ export default {
         hasRightActions: false,
         hasLeftActions: false
       }
-    };
+    }
   },
   mounted() {
     if (this.object) {
-      this.tableConfig.url += `?job_id=${this.object.id}`;
+      this.tableConfig.url += `?job_id=${this.object.id}`
     }
     if (this.query) {
-      this.tableConfig.url += `?type=${this.query.type}`;
+      this.tableConfig.url += `?type=${this.query.type}`
     }
   }
-};
+}
 </script>
 
 <style>

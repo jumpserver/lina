@@ -1,5 +1,5 @@
 <template>
-  <el-select v-model="value" v-bind="$attrs" class="select2" v-on="$listeners">
+  <el-select v-model="value" v-bind="$attrs" class="select2">
     <el-option-group
       v-for="group in options"
       :key="group.org_name"

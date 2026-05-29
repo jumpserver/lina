@@ -9,7 +9,6 @@
       width="600px"
       @update:visible="$emit('update:visible', $event)"
       @confirm="handleConfirm"
-      v-on="$listeners"
     >
       <el-alert type="error" :closable="closeable">
         {{ $t('DeleteWarningMsg') }} {{ account.username }}({{ account.asset.name }}) ?
