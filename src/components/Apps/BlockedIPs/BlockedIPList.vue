@@ -59,7 +59,12 @@ export default {
         hasExport: false,
         hasImport: false,
         hasCreate: false,
-        hasSearch: false,
+        hasSearch: true,
+        searchConfig: {
+          options: [
+            { label: this.$t('IP'), value: 'ip', type: 'string' }
+          ]
+        },
         hasRefresh: true,
         hasBulkDelete: false,
         hasBulkUpdate: false,
