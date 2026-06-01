@@ -355,10 +355,42 @@ export default {
     //             fetch 结果注入 cert.* 命名空间，字段用 {{ cert.xxx }} 引用
     // ═══════════════════════════════════════════════════════════════════════════
     async readCertInfo() {
-      const fields = this.config?.info?.cert || []
-      if (!fields.length) { this.certInfoItems = []; this.hasCert = false; this.certLoading = false; return }
+      const certConfig = this.config && this.config.info && this.config.info.cert
+      // 兼容数组（旧格式）和对象（新格式 { check?, fields }）
+      const fields = Array.isArray(certConfig) ? certConfig : (certConfig && certConfig.fields || [])
+      const certCheck = Array.isArray(certConfig) ? undefined : (certConfig && certConfig.check)
 
       const ctx = this.buildContext({ vars: {}, input: {} })
+
+      // cert 级别 check 钩子：false → hasCert = false，显示「暂未签发证书」
+      if (certCheck !== undefined) {
+        let passed = false
+        try {
+          if (certCheck && typeof certCheck === 'object' && certCheck.call) {
+            // call + 可选 expr
+            const result = this.callUKeyMethod(certCheck, ctx)
+            if (certCheck.expr) {
+              passed = !!this.resolveValue(certCheck.expr, Object.assign({}, ctx, { result: result }))
+            } else {
+              passed = result != null
+            }
+          } else {
+            // 字符串表达式
+            passed = !!this.resolveValue(certCheck, ctx)
+          }
+        } catch (_) {
+          passed = false
+        }
+        if (!passed) {
+          this.certInfoItems = []
+          this.hasCert = false
+          this.certLoading = false
+          return
+        }
+      }
+
+      if (!fields.length) { this.certInfoItems = []; this.hasCert = false; this.certLoading = false; return }
+
       let hasAny = false
 
       const items = fields.map(field => {
@@ -523,9 +555,20 @@ export default {
      */
     resolveFieldValue(field, ctx) {
       if (field.call) {
+        let result
         try {
-          return this.callUKeyMethod(field, ctx)
+          result = this.callUKeyMethod(field, ctx)
         } catch (_) { return null }
+        // 调用成功后对返回值做校验（check 配置），未通过则不显示该字段
+        if (field.check !== undefined) {
+          const checkExpr = typeof field.check === 'string' ? field.check : field.check && field.check.expr
+          if (checkExpr) {
+            const checkCtx = Object.assign({}, ctx, { result: result })
+            const passed = this.resolveValue(checkExpr, checkCtx)
+            if (!passed && passed !== undefined) return null
+          }
+        }
+        return result
       }
       if ('value' in field) {
         return this.resolveValue(field.value, ctx)
@@ -537,6 +580,7 @@ export default {
     buildContext({ vars = {}, input = {} }) {
       return {
         ukey: _ukey,
+        instance: _instance,
         vars,
         input,
         user: this.object || {},
@@ -556,6 +600,7 @@ export default {
 
       const nsMap = {
         ukey: ctx.ukey,
+        instance: ctx.instance,
         vars: ctx.vars,
         input: ctx.input,
         user: ctx.user,
@@ -563,7 +608,7 @@ export default {
         config: ctx.config,
         // 透传 ctx 中的其他临时变量（如 result）
         ...Object.fromEntries(
-          Object.entries(ctx).filter(([k]) => !['ukey', 'vars', 'input', 'user', 'settings', 'config'].includes(k))
+          Object.entries(ctx).filter(([k]) => !['ukey', 'instance', 'vars', 'input', 'user', 'settings', 'config'].includes(k))
         )
       }
 
@@ -576,7 +621,7 @@ export default {
           if (!(ns in nsMap)) return undefined
           let val = nsMap[ns]
           for (const p of parts.slice(1)) {
-            if (val == null || typeof val !== 'object') return undefined
+            if (val == null) return undefined
             val = val[p]
           }
           return val
