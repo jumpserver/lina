@@ -1,5 +1,5 @@
 <template>
-  <echarts v-bind="$attrs" :options="iOptions"
+  <echarts v-bind="$attrs" :option="iOptions" autoresize
     @finished="onFinished" />
 </template>
 

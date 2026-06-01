@@ -14,7 +14,7 @@
     @update:model-value="handleUpdateModelValue">
     <div class="drawer__content">
       <slot name="default">
-        <component v-bind="componentProps" :is="component"
+        <component v-bind="componentProps" :is="resolvedComponent"
           v-if="component"
           ref="dynamicComponent"
           v-on="componentListeners" />
@@ -26,6 +26,7 @@
 
 <script>
 import { getDrawerWidth } from '@/utils/common/index'
+import { resolveAsyncComponentCompat } from '@/utils/vue'
 import { useDrawerDrag } from '@/utils/vue/useDrawerDrag'
 
 export default {
@@ -70,6 +71,11 @@ export default {
       loading: false,
       formLabelWidth: '80px',
       drawerDrag: null
+    }
+  },
+  computed: {
+    resolvedComponent() {
+      return resolveAsyncComponentCompat(this.component)
     }
   },
   watch: {

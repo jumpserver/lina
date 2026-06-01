@@ -1,3 +1,17 @@
+import { defineAsyncComponent, markRaw } from 'vue'
+
+const asyncComponentCache = new WeakMap()
+
+export function resolveAsyncComponentCompat(component) {
+  if (typeof component !== 'function') {
+    return component
+  }
+  if (!asyncComponentCache.has(component)) {
+    asyncComponentCache.set(component, markRaw(defineAsyncComponent(component)))
+  }
+  return asyncComponentCache.get(component)
+}
+
 export function resolveRoute(route, router) {
   try {
     const routes = router.resolve(route)
@@ -72,7 +86,7 @@ export function getComponentFromRoute(route, router) {
   if (!r) {
     return
   }
-  return r.components.default
+  return resolveAsyncComponentCompat(r.components.default)
 }
 
 export function getRouteUrl(route, router) {

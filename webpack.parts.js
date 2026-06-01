@@ -1,4 +1,5 @@
 const fs = require('fs')
+const net = require('net')
 const path = require('path')
 const dotenv = require('dotenv')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -16,6 +17,33 @@ function normalizePublicPath(value) {
     return '/ui/'
   }
   return value.endsWith('/') ? value : `${value}/`
+}
+
+function canListen(port, host = '0.0.0.0') {
+  return new Promise(resolve => {
+    const server = net.createServer()
+
+    server.unref()
+    server.once('error', () => resolve(false))
+    server.listen({ port, host }, () => {
+      server.close(() => resolve(true))
+    })
+  })
+}
+
+async function resolveDevServerPort(port) {
+  const normalizedPort = Number(port)
+
+  if (!Number.isInteger(normalizedPort) || normalizedPort <= 0) {
+    return port || 'auto'
+  }
+
+  if (await canListen(normalizedPort)) {
+    return normalizedPort
+  }
+
+  console.warn(`[dev-server] Port ${normalizedPort} is already in use, falling back to an available port.`)
+  return 'auto'
 }
 
 function loadEnv(mode) {
@@ -186,6 +214,14 @@ function installDevProxyErrorHandlers() {
 }
 
 function createDevServer({ port, publicPath, coreHost, kokoHost }) {
+  const webSocketURL = {
+    pathname: '/ws'
+  }
+
+  if (port !== 'auto') {
+    webSocketURL.port = port
+  }
+
   return {
     port,
     host: '0.0.0.0',
@@ -209,11 +245,7 @@ function createDevServer({ port, publicPath, coreHost, kokoHost }) {
         warnings: false,
         errors: true
       },
-      webSocketURL: {
-        hostname: '0.0.0.0',
-        pathname: '/ws',
-        port
-      }
+      webSocketURL
     },
     watchFiles: ['src/**/*', 'public/**/*'],
     proxy: [
@@ -288,5 +320,6 @@ module.exports = {
   normalizePublicPath,
   outputDir,
   productionGzipExtensions,
+  resolveDevServerPort,
   resolvePath
 }

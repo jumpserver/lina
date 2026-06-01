@@ -28,7 +28,7 @@
 <script>
 import AccountStatistics from './AccountStatistics.vue'
 import Page from '@/layout/components/Page'
-import { resolveRoute } from '@/utils/vue/index'
+import { resolveAsyncComponentCompat, resolveRoute } from '@/utils/vue/index'
 
 export default {
   name: 'Accounts',
@@ -72,7 +72,7 @@ export default {
     handleChangeChart(chart) {
       this.selectedChart = chart
       const route = resolveRoute({ name: chart.name }, this.$router)
-      this.component = route.components.default
+      this.component = resolveAsyncComponentCompat(route.components.default)
       const routePath = route.path
       this.url = '/ui/#' + routePath
       this.name = chart.name

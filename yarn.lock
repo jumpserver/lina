@@ -4163,7 +4163,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:*, commander@npm:2":
+"commander@npm:2":
   version: 2.17.1
   resolution: "commander@npm:2.17.1"
   checksum: 10c0/b10453ca205d5a794c5e639dbc54bf4eaec61a204d56693b8082e9000744df13a47840f7d10ae2fc6fc046e2d71bb7c67987dff5b77f862064e187cf88beac3f
@@ -8181,7 +8181,6 @@ __metadata:
     markdown-it-link-attributes: "npm:^4.0.1"
     mini-css-extract-plugin: "npm:^2.10.2"
     mitt: "npm:^3.0.1"
-    mockjs: "npm:^1.1.0"
     moment: "npm:^2.30.1"
     normalize.css: "npm:^8.0.1"
     nprogress: "npm:^0.2.0"
@@ -9069,17 +9068,6 @@ __metadata:
     pkg-types: "npm:^1.3.1"
     ufo: "npm:^1.6.3"
   checksum: 10c0/aa826683a6daddf2aef65f9c8142e362731cf8e415a5591faf92fd51040a76697e45ab6dbb7a3b38be74e0f8c464825a7eabe827750455c7472421953f5da733
-  languageName: node
-  linkType: hard
-
-"mockjs@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "mockjs@npm:1.1.0"
-  dependencies:
-    commander: "npm:*"
-  bin:
-    random: bin/random
-  checksum: 10c0/b96f7f2845da5dd0c8305e2931da6bde00bf13314bc48d1c0ee1a56346da187be678acc0f657c9a5bde15d85ee3e6c9337562c8e43016689bc7a53d4d2500c10
   languageName: node
   linkType: hard
 

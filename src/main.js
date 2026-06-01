@@ -4,6 +4,7 @@ import enLocale from 'element-plus/dist/locale/en.mjs'
 import 'element-plus/dist/index.css'
 // 导入 Element Plus CSS 变量配置（需要在 Element Plus 样式之后，自定义样式之前）
 import '@/styles/element-plus-vars.scss'
+import '@/styles/element-icons-legacy.scss'
 // 导入默认主题配置（包含 :root CSS 变量定义）
 import '@/styles/default-theme.scss?module'
 import '@/styles/index.scss' // global css
@@ -17,6 +18,7 @@ import '@/styles/fonts/loadSans'
 import { watchSessions } from './utils/jms/auth'
 
 import { installSvgIcon } from '@/icons' // icon
+import { installElementIconCompat } from '@/icons/element-icons-compat'
 import '@/guards' // permission control
 import { installDirectives } from '@/directive'
 import { installFilters } from '@/filters'
@@ -78,6 +80,7 @@ async function initApp() {
   installDirectives(app)
   installFilters(app)
   installSvgIcon(app)
+  installElementIconCompat(app)
 
   app.config.globalProperties.$moment = moment
   app.config.globalProperties.$axios = request

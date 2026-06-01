@@ -61,6 +61,7 @@
 import Page from '../Page/'
 import Icon from '@/components/Widgets/Icon'
 import { toSentenceCase } from '@/utils/common/index'
+import { resolveAsyncComponentCompat } from '@/utils/vue'
 
 export default {
   name: 'TabPage',
@@ -118,7 +119,7 @@ export default {
       let needActiveComponent = ''
       for (const i of this.submenu) {
         if (i.component && (i.name === this.iActiveMenu)) {
-          needActiveComponent = i.component
+          needActiveComponent = this.resolveComponent(i.component)
           break
         }
       }
@@ -141,6 +142,9 @@ export default {
       this.$emit('tab-click', tab)
       this.iActiveMenu = tab.name
       localStorage.setItem('activeTab', tab.name)
+    },
+    resolveComponent(component) {
+      return resolveAsyncComponentCompat(component)
     },
     getPropActiveTab() {
       let activeTab = ''

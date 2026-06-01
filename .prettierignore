@@ -46,9 +46,6 @@ lina/fonts/
 src/assets/
 public/
 
-# Mock data
-mock/
-
 # Test files
 tests/
 
