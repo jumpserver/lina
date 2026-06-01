@@ -6,16 +6,16 @@
       :table-config="tableConfig"
     />
     <template #right>
-      <RelationCard v-if="!loading" ref="userRelation" v-bind="relationConfig" />
+      <RelationCard v-if="!loading" v-bind="relationConfig" ref="userRelation" />
     </template>
   </TwoCol>
 </template>
 
 <script>
 import { ListTable, RelationCard } from '@/components'
-import { mapGetters } from 'vuex'
 import { DeleteActionFormatter } from '@/components/Table/TableFormatters'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {

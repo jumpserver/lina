@@ -4,19 +4,19 @@
       <span v-html="$t('AppletHostSelectHelpMessage')" />
     </el-alert>
     <DrawerListTable
+      v-bind="$data"
       ref="table"
       class="applet-host"
       :create-drawer="createDrawer"
       :resource="$t('AppletHosts')"
-      v-bind="$data"
     />
   </div>
 </template>
 
 <script>
 import { DrawerListTable } from '@/components'
-import { openTaskPage } from '@/utils/jms/index'
 import { ProtocolsFormatter } from '@/components/Table/TableFormatters'
+import { openTaskPage } from '@/utils/jms/index'
 
 export default {
   name: 'AppletHost',

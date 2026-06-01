@@ -1,11 +1,11 @@
 <template>
   <BaseReport
+    v-bind="$attrs"
     :nav="nav"
     :title="$t('ChangeSecretDashboard')"
     :disable-charts-padding="true"
     name="ChangeSecretDashboard"
     :url="reportUrl"
-    v-bind="$attrs"
   >
     <div class="switch-date-wrapper">
       <SwitchDate class="switch-date" :name="name" @change="onChange" />
@@ -31,13 +31,13 @@
 </template>
 
 <script>
-import DataSummary from './DataSummary.vue'
-import CardSummary from './CardSummary.vue'
 import SwitchDate from '@/components/Dashboard/SwitchDate'
-import AccountSummary from './AccountSummary.vue'
-import FailedAccountSummary from './FailedAccountSummary.vue'
-import BaseReport from '../../base/BaseReport.vue'
 import { getRouteUrl } from '@/utils/vue'
+import BaseReport from '../../base/BaseReport.vue'
+import AccountSummary from './AccountSummary.vue'
+import CardSummary from './CardSummary.vue'
+import DataSummary from './DataSummary.vue'
+import FailedAccountSummary from './FailedAccountSummary.vue'
 
 export default {
   name: 'ChangeSecret',

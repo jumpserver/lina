@@ -1,10 +1,10 @@
 <template>
   <div>
     <BaseReport
+      v-bind="$attrs"
       :title="title"
       :nav="nav"
       :name="name"
-      v-bind="$attrs"
     >
       <div class="charts-grid">
         <div class="chart-container full-width">
@@ -44,11 +44,11 @@
 </template>
 
 <script>
-import BaseReport from '../base/BaseReport.vue'
-import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
-import * as echarts from 'echarts'
 import Echart from '@/components/Dashboard/Echart.vue'
+import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
 import { mixColors } from '@/views/reports/const'
+import * as echarts from 'echarts'
+import BaseReport from '../base/BaseReport.vue'
 
 export default {
   components: {

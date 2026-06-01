@@ -1,11 +1,11 @@
 <template>
   <BaseReport
+    v-bind="$attrs"
     :nav="nav"
     :url="reportUrl"
     :title="$t('PamDashboard')"
     :disable-charts-padding="true"
     name="PamDashboard"
-    v-bind="$attrs"
   >
     <div class="summary-container">
       <el-row :gutter="20">
@@ -33,13 +33,13 @@
 </template>
 
 <script>
-import DataSummary from './DataSummary.vue'
-import RiskSummary from './RiskSummary.vue'
-import AssetProportionSummary from './AssetProportionSummary.vue'
-import MissionSummery from './MissionSummery.vue'
+import { getRouteUrl } from '@/utils/vue'
 import AccountSecretSummary from '@/views/reports/pam/ChangeSecret/AccountSummary.vue'
 import BaseReport from '../../base/BaseReport.vue'
-import { getRouteUrl } from '@/utils/vue'
+import AssetProportionSummary from './AssetProportionSummary.vue'
+import DataSummary from './DataSummary.vue'
+import MissionSummery from './MissionSummery.vue'
+import RiskSummary from './RiskSummary.vue'
 
 export default {
   name: 'Dashboard',

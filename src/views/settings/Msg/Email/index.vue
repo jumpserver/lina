@@ -3,9 +3,9 @@
     <el-alert v-sanitize="helpText" type="success" />
     <IBox>
       <GenericCreateUpdateForm
+        v-bind="$data"
         :create-success-next-route="successUrl"
         :update-success-next-route="successUrl"
-        v-bind="$data"
       />
     </IBox>
   </div>
@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import { IBox } from '@/components'
-import { GenericCreateUpdateForm } from '@/layout/components'
 import { testEmailSetting } from '@/api/settings'
+import { IBox } from '@/components'
 import rules from '@/components/Form/DataForm/rules'
+import { GenericCreateUpdateForm } from '@/layout/components'
 import EmailTemplate from './EmailTemplate.vue'
 
 export default {

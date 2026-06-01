@@ -1,10 +1,10 @@
 <template>
   <div>
     <Dialog
+      v-bind="$attrs"
       :destroy-on-close="true"
       :show-cancel="false"
       :title="$tc('ImportLdapUserTitle')"
-      v-bind="$attrs"
     >
       <el-alert type="success" style="margin-bottom: 10px"> {{ $t('ImportLdapUserTip') }}</el-alert>
       <ListTable
@@ -18,10 +18,10 @@
           <span v-show="showOrgSelect" class="org-select">
             <span class="label">{{ $tc('ImportOrg') }}：</span>
             <Select2
+              v-bind="select2"
               ref="select2"
               v-model="select2.value"
               popper-class="select-org-dropdown"
-              v-bind="select2"
             />
           </span>
           <el-button :loading="dialogLdapUserSyncStatus" size="small" type="primary" @click="SyncUserClick">
@@ -45,13 +45,13 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, createTextVNode as _createTextVNode } from 'vue'
-import store from '@/store'
-import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/jms/org'
-import ListTable from '@/components/Table/ListTable'
 import Dialog from '@/components/Dialog/index.vue'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
+import ListTable from '@/components/Table/ListTable'
 import getStatusColumnMeta from '@/components/Table/ListTable/TableAction/const'
+import store from '@/store'
+import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/jms/org'
+import { createTextVNode as _createTextVNode, createVNode as _createVNode } from 'vue'
 export default {
   name: 'ImportDialog',
   components: {

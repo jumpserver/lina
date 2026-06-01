@@ -1,9 +1,9 @@
 <template>
   <GenericCreateUpdatePage
     v-if="!loading"
+    v-bind="$data"
     :create-success-next-route="createSuccessNextRoute"
     :perform-submit="performSubmit"
-    v-bind="$data"
   />
 </template>
 

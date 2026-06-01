@@ -5,8 +5,8 @@
         <h4 class="auth-method-type">{{ typeMap[type] }}</h4>
         <AuthMethod
           v-for="item in items"
-          :key="item.title"
           v-bind="item"
+          :key="item.title"
         />
       </el-row>
     </IBox>
@@ -14,10 +14,10 @@
 </template>
 
 <script>
-import AuthMethod from './components/AuthMethod.vue'
 import IBox from '@/components/Common/IBox'
-import { getAuthItems } from './const'
 import { mapState } from 'vuex'
+import AuthMethod from './components/AuthMethod.vue'
+import { getAuthItems } from './const'
 
 export default {
   components: {

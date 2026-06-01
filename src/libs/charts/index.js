@@ -1,27 +1,27 @@
-import { VueECharts } from 'vue-echarts'
+import {
+  BarChart,
+  GaugeChart,
+  LineChart,
+  MapChart,
+  PieChart,
+  RadarChart,
+  ScatterChart
+} from 'echarts/charts'
+import {
+  DatasetComponent,
+  DataZoomComponent,
+  GridComponent,
+  LegendComponent,
+  TitleComponent,
+  ToolboxComponent,
+  TooltipComponent,
+  VisualMapComponent
+} from 'echarts/components'
 import { use } from 'echarts/core'
 import {
   CanvasRenderer
 } from 'echarts/renderers'
-import {
-  BarChart,
-  LineChart,
-  PieChart,
-  ScatterChart,
-  MapChart,
-  RadarChart,
-  GaugeChart
-} from 'echarts/charts'
-import {
-  GridComponent,
-  TooltipComponent,
-  LegendComponent,
-  TitleComponent,
-  DatasetComponent,
-  ToolboxComponent,
-  DataZoomComponent,
-  VisualMapComponent
-} from 'echarts/components'
+import VueECharts from 'vue-echarts'
 
 /**
  * 初始化并注册 ECharts 扩展
@@ -59,7 +59,6 @@ const ChartsPlugin = {
     // 注册 ECharts 组件到 Vue 应用
     app.component('Echarts', VueECharts)
     app.component('Echart', VueECharts)
-    app.component('Echarts', VueECharts)
   }
 }
 

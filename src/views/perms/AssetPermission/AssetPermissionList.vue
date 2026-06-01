@@ -17,11 +17,11 @@
 </template>
 
 <script>
-import Page from '@/layout/components/Page'
 import AssetTreeTable from '@/components/Apps/AssetTreeTable'
-import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
+import Page from '@/layout/components/Page'
 import { mapGetters } from 'vuex'
 import { AssetPermissionListPageSearchConfigOptions, AssetPermissionTableMeta } from '../const.js'
+import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
 
 export default {
   components: {

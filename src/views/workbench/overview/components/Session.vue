@@ -1,12 +1,12 @@
 <template>
-  <HomeCard :table-config="tableConfig" v-bind="cardConfig" />
+  <HomeCard v-bind="cardConfig" :table-config="tableConfig" />
 </template>
 
 <script>
-import { createVNode as _createVNode, isVNode as _isVNode, resolveComponent as _resolveComponent } from 'vue'
-import HomeCard from './HomeCard.vue'
 import { getPreference } from '@/api/settings'
 import { openNewWindow } from '@/utils/common/index'
+import { createVNode as _createVNode, isVNode as _isVNode, resolveComponent as _resolveComponent } from 'vue'
+import HomeCard from './HomeCard.vue'
 function _isSlot(s) {
   return typeof s === 'function' || Object.prototype.toString.call(s) === '[object Object]' && !_isVNode(s)
 }

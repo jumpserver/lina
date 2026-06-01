@@ -1,9 +1,9 @@
 <template>
-  <HomeCard :table-config="tableConfig" v-bind="cardConfig" />
+  <HomeCard v-bind="cardConfig" :table-config="tableConfig" />
 </template>
 
 <script>
-import { createVNode as _createVNode, createTextVNode as _createTextVNode } from 'vue'
+import { createTextVNode as _createTextVNode, createVNode as _createVNode } from 'vue'
 import HomeCard from './HomeCard'
 export default {
   name: 'Log',

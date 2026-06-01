@@ -1,18 +1,18 @@
 <template>
   <div v-if="ready">
     <VariableHelpDialog v-model:visible="showHelpDialog" />
-    <GenericCreateUpdatePage ref="form" v-bind="$data" />
+    <GenericCreateUpdatePage v-bind="$data" ref="form" />
   </div>
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
 import AssetSelect from '@/components/Apps/AssetSelect'
-import CodeEditor from '@/components/Form/FormFields/CodeEditor'
-import i18n from '@/i18n/i18n'
-import VariableHelpDialog from '@/views/ops/Adhoc/VariableHelpDialog.vue'
 import { Required } from '@/components/Form/DataForm/rules'
+import CodeEditor from '@/components/Form/FormFields/CodeEditor'
 import { crontab, interval } from '@/components/const'
+import i18n from '@/i18n/i18n'
+import { GenericCreateUpdatePage } from '@/layout/components'
+import VariableHelpDialog from '@/views/ops/Adhoc/VariableHelpDialog.vue'
 import LoadTemplateLink from '@/views/ops/Job/components/LoadTemplateLink.vue'
 import Variable from '@/views/ops/Template/components/Variable'
 

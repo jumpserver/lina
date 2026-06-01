@@ -1,8 +1,8 @@
 <template>
   <GenericDetailPage
+    v-bind="config"
     v-model:active-menu="config.activeMenu"
     v-model:object="user"
-    v-bind="config"
   >
     <keep-alive>
       <component :is="config.activeMenu" :object="user" />
@@ -11,18 +11,18 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import { GenericDetailPage } from '@/layout/components'
+import { mapGetters } from 'vuex'
 
-import UserInfo from './UserInfo'
-import UserSession from './UserSession.vue'
-import UserLoginACL from './UserLoginACL.vue'
-import UserGrantedAssets from './UserGrantedAssets'
-import AssetPermissionUser from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionUser.vue'
-import AssetPermissionAsset from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionAsset.vue'
-import AssetPermissionDetail from '@/views/perms/AssetPermission/AssetPermissionDetail/index.vue'
 import AssetPermissionAccount from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionAccount.vue'
+import AssetPermissionAsset from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionAsset.vue'
+import AssetPermissionUser from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionUser.vue'
+import AssetPermissionDetail from '@/views/perms/AssetPermission/AssetPermissionDetail/index.vue'
 import UserAssetPermissionRules from './UserAssetPermissionRules'
+import UserGrantedAssets from './UserGrantedAssets'
+import UserInfo from './UserInfo'
+import UserLoginACL from './UserLoginACL.vue'
+import UserSession from './UserSession.vue'
 
 export default {
   components: {

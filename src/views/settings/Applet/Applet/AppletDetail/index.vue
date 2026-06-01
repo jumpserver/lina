@@ -1,8 +1,8 @@
 <template>
   <GenericDetailPage
+    v-bind="config"
     v-model:active-menu="config.activeMenu"
     v-model:object="applet"
-    v-bind="config"
   >
     <keep-alive>
       <component :is="config.activeMenu" :object="applet" />
@@ -12,8 +12,8 @@
 
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
-import Detail from './Detail'
 import AppletHosts from './AppletHosts'
+import Detail from './Detail'
 
 export default {
   name: 'AppletDetail',

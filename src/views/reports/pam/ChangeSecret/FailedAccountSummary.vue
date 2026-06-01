@@ -5,16 +5,16 @@
       v-model:visible="showViewSecretDialog"
       :url="secretUrl"
     />
-    <HomeCard ref="HomeCard" :table-config="tableConfig" class="failed-accounts" v-bind="cardConfig" />
+    <HomeCard v-bind="cardConfig" ref="HomeCard" :table-config="tableConfig" class="failed-accounts" />
   </div>
 </template>
 
 <script>
-import { createVNode as _createVNode } from 'vue'
-import HomeCard from '@/views/workbench/overview/components/HomeCard.vue'
+import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
-import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue'
+import HomeCard from '@/views/workbench/overview/components/HomeCard.vue'
+import { createVNode as _createVNode } from 'vue'
 export default {
   components: {
     RecordViewSecret,

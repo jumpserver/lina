@@ -1,15 +1,15 @@
 <template>
   <GenericCreateUpdatePage
+    v-bind="$data"
     :create-success-next-route="successUrl"
     :update-success-next-route="successUrl"
-    v-bind="$data"
   />
 </template>
 
 <script>
-import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage/index.vue'
 import { Required, RequiredChange } from '@/components/Form/DataForm/rules'
 import TagInput from '@/components/Form/FormFields/TagInput.vue'
+import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage/index.vue'
 
 export default {
   name: 'CommandStorageUpdate',

@@ -8,17 +8,17 @@
     />
     <template #right>
       <QuickActions :actions="quickActions" type="primary" />
-      <RelationCard type="info" v-bind="relationConfig" />
+      <RelationCard v-bind="relationConfig" type="info" />
     </template>
   </TwoCol>
 </template>
 
 <script>
-import { resolveComponent as _resolveComponent, createVNode as _createVNode, createTextVNode as _createTextVNode } from 'vue'
 import { QuickActions } from '@/components'
-import RelationCard from '@/components/Cards/RelationCard'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import RelationCard from '@/components/Cards/RelationCard'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import { createTextVNode as _createTextVNode, createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
 export default {
   name: 'UserInfo',
   components: {

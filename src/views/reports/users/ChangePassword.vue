@@ -1,10 +1,10 @@
 <template>
   <div>
     <BaseReport
+      v-bind="$attrs"
       :title="title"
       :nav="nav"
       :name="name"
-      v-bind="$attrs"
     >
       <div class="charts-grid">
         <SwitchDate class="switch-date" :name="name" @change="onChange" />
@@ -49,13 +49,13 @@
 </template>
 
 <script>
-import SwitchDate from '@/components/Dashboard/SwitchDate'
-import RankTable from './components/RankTable.vue'
-import BaseReport from '../base/BaseReport.vue'
+import Echart from '@/components/Dashboard/Echart.vue'
 import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
+import SwitchDate from '@/components/Dashboard/SwitchDate'
 import { mixColors } from '@/views/reports/const'
 import * as echarts from 'echarts'
-import Echart from '@/components/Dashboard/Echart.vue'
+import BaseReport from '../base/BaseReport.vue'
+import RankTable from './components/RankTable.vue'
 
 export default {
   components: {

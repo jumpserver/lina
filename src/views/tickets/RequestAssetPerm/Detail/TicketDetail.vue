@@ -15,10 +15,10 @@
       </template>
       <el-form ref="requestForm" :model="requestForm" class="assets" label-position="left" label-width="140px">
         <el-form-item :label="$tc('Node')">
-          <Select2 v-model="requestForm.nodes" style="width: 50% !important" v-bind="nodeSelect2" />
+          <Select2 v-bind="nodeSelect2" v-model="requestForm.nodes" style="width: 50% !important" />
         </el-form-item>
         <el-form-item :label="$tc('Asset')">
-          <Select2 v-model="requestForm.assets" style="width: 50% !important" v-bind="assetSelect2" />
+          <Select2 v-bind="assetSelect2" v-model="requestForm.assets" style="width: 50% !important" />
         </el-form-item>
         <el-form-item :label="$tc('Account')" :rules="isRequired">
           <AccountFormatter
@@ -55,16 +55,15 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, isVNode as _isVNode, resolveComponent as _resolveComponent } from 'vue'
-import { formatTime, getDateTimeStamp } from '@/utils/common/time'
-import { toSafeLocalDateStr } from '@/utils/common/time'
-import { STATUS_MAP, treeNodes } from '../../const'
-import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
-import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
-import Select2 from '@/components/Form/FormFields/Select2'
-import BasicTree from '@/components/Form/FormFields/BasicTree'
 import IBox from '@/components/Common/IBox'
+import BasicTree from '@/components/Form/FormFields/BasicTree'
+import Select2 from '@/components/Form/FormFields/Select2'
+import { formatTime, getDateTimeStamp, toSafeLocalDateStr } from '@/utils/common/time'
+import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
 import { AccountLabelMapper } from '@/views/perms/const'
+import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
+import { createVNode as _createVNode, isVNode as _isVNode, resolveComponent as _resolveComponent } from 'vue'
+import { STATUS_MAP, treeNodes } from '../../const'
 function _isSlot(s) {
   return typeof s === 'function' || Object.prototype.toString.call(s) === '[object Object]' && !_isVNode(s)
 }

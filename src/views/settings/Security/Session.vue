@@ -1,16 +1,16 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm submit-method="patch" v-bind="config" />
+    <GenericCreateUpdateForm v-bind="config" submit-method="patch" />
     <WatermarkHelpDialog v-model:visible="showSessionHelpDialog" :variables="sessionVariables" />
     <WatermarkHelpDialog v-model:visible="showConsoleHelpDialog" :variables="consoleVariables" />
   </IBox>
 </template>
 
 <script>
-import { createVNode as _createVNode } from 'vue'
+import WatermarkHelpDialog from '@/components/Apps/VariablesHelpTextDialog'
 import IBox from '@/components/Common/IBox/index.vue'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index.vue'
-import WatermarkHelpDialog from '@/components/Apps/VariablesHelpTextDialog'
+import { createVNode as _createVNode } from 'vue'
 export default {
   name: 'SessionSecurity',
   components: {

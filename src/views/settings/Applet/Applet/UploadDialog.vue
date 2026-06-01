@@ -1,10 +1,10 @@
 <template>
   <Dialog
+    v-bind="$attrs"
     :before-close="handleClose"
     :disabled-status="!isFinished"
     :show-cancel="false"
     :title="$tc('OfflineUpload')"
-    v-bind="$attrs"
     @cancel="onCancel"
     @confirm="onSubmit"
   >

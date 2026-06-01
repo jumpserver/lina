@@ -1,11 +1,11 @@
 <template>
   <BaseReport
+    v-bind="$attrs"
     :url="url"
     :nav="nav"
     :title="$t('AuditsDashboard')"
     :disable-charts-padding="true"
     name="AuditsDashboard"
-    v-bind="$attrs"
   >
     <SwitchDate class="switch-date" :name="name" @change="onChange" />
     <CardSummary :days="days" />
@@ -23,12 +23,12 @@
 
 <script>
 import SwitchDate from '@/components/Dashboard/SwitchDate'
-import TrendSummary from './components/TrendSummary'
-import DataSummary from './components/DataSummary'
-import CardSummary from './components/CardSummary.vue'
-import RightSummary from './components/RightSummary.vue'
-import BaseReport from '../base/BaseReport.vue'
 import { getRouteUrl } from '@/utils/vue'
+import BaseReport from '../base/BaseReport.vue'
+import CardSummary from './components/CardSummary.vue'
+import DataSummary from './components/DataSummary'
+import RightSummary from './components/RightSummary.vue'
+import TrendSummary from './components/TrendSummary'
 
 export default {
   components: {

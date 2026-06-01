@@ -1,8 +1,8 @@
 <template>
   <GenericDetailPage
+    v-bind="config"
     v-model:active-menu="config.activeMenu"
     v-model:object="sessionData"
-    v-bind="config"
   >
     <keep-alive>
       <component :is="config.activeMenu" :object="sessionData" />
@@ -14,8 +14,8 @@
 import { GenericDetailPage } from '@/layout/components'
 import SessionCommands from './SessionCommands'
 import SessionDetailInfo from './SessionDetailInfo'
-import SessionJoinRecords from './SessionJoinRecords'
 import SessionFTPLogs from './SessionFTPLogs'
+import SessionJoinRecords from './SessionJoinRecords'
 
 export default {
   name: 'SessionDetail',

@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
 import CodeEditor from '@/components/Form/FormFields/CodeEditor'
+import { GenericCreateUpdatePage } from '@/layout/components'
 import Variable from '@/views/ops/Template/components/Variable'
 
 export default {

@@ -1,6 +1,6 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm submit-method="patch" v-bind="config" />
+    <GenericCreateUpdateForm v-bind="config" submit-method="patch" />
   </IBox>
 </template>
 

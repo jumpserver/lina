@@ -2,9 +2,9 @@
   <div>
     <IBox>
       <GenericCreateUpdateForm
+        v-bind="$data"
         :create-success-next-route="successUrl"
         :update-success-next-route="successUrl"
-        v-bind="$data"
       />
     </IBox>
     <VariablesHelpTextDialog
@@ -16,13 +16,13 @@
 </template>
 
 <script>
-import { createVNode as _createVNode } from 'vue'
 import { IBox } from '@/components'
-import { GenericCreateUpdateForm } from '@/layout/components'
-import MarkDownEditor from '@/views/settings/Msg/Email/markDownEditor.vue'
-import { Select2 } from '@/components/Form/FormFields'
 import VariablesHelpTextDialog from '@/components/Apps/VariablesHelpTextDialog'
+import { Select2 } from '@/components/Form/FormFields'
+import { GenericCreateUpdateForm } from '@/layout/components'
 import variable from '@/views/ops/Template/components/Variable.vue'
+import MarkDownEditor from '@/views/settings/Msg/Email/markDownEditor.vue'
+import { createVNode as _createVNode } from 'vue'
 export default {
   name: 'MsgTemplate',
   components: {

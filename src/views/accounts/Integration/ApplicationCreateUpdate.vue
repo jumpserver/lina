@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
 import { UploadField } from '@/components'
 import { JSONManyToManySelect } from '@/components/Form/FormFields'
+import { GenericCreateUpdatePage } from '@/layout/components'
 
 export default {
   name: 'IntegrationApplicationCreateUpdate',

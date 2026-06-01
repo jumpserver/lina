@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
-import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
 import { AssetSelect, AutomationParams } from '@/components'
 import { periodicMeta } from '@/components/const'
 import { TagInput } from '@/components/Form/FormFields'
+import { GenericCreateUpdatePage } from '@/layout/components'
+import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
 
 export default {
   name: 'AccountPushCreateUpdate',

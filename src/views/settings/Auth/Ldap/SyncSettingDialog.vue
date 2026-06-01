@@ -1,27 +1,27 @@
 <template>
   <Dialog
+    v-bind="$attrs"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('SyncSetting')"
     top="10%"
-    v-bind="$attrs"
     width="50%"
   >
     <GenericCreateUpdateForm
-      :has-detail-in-msg="false"
       v-bind="settings"
+      :has-detail-in-msg="false"
       @submit-success="onSuccess"
     />
   </Dialog>
 </template>
 
 <script>
-import { GenericCreateUpdateForm } from '@/layout/components'
 import { Dialog } from '@/components'
-import Select2 from '@/components/Form/FormFields/Select2.vue'
 import { Required } from '@/components/Form/DataForm/rules'
+import Select2 from '@/components/Form/FormFields/Select2.vue'
 import { crontab, interval, is_periodic } from '@/components/const'
+import { GenericCreateUpdateForm } from '@/layout/components'
 
 export default {
   name: 'SyncSettingDialog',

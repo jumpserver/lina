@@ -14,7 +14,7 @@
       @update:visible="$emit('update:visible', $event)"
       @confirm="onConfirm()"
     >
-      <GenericCreateUpdateForm ref="form" v-bind="iConfig" @submit-success="submitSuccess" />
+      <GenericCreateUpdateForm v-bind="iConfig" ref="form" @submit-success="submitSuccess" />
     </Dialog>
   </div>
 </template>

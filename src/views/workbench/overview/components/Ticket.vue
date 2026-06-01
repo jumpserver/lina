@@ -1,12 +1,12 @@
 <template>
-  <HomeCard :table-config="tableConfig" v-bind="cardConfig" />
+  <HomeCard v-bind="cardConfig" :table-config="tableConfig" />
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import i18n from '@/i18n/i18n'
 import { toSafeLocalDateStr } from '@/utils/common/time'
+import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
 import { mapGetters } from 'vuex'
 import HomeCard from './HomeCard'
 export default {

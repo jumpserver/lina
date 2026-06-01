@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage :initial="initial" v-bind="$data" />
+  <GenericCreateUpdatePage v-bind="$data" :initial="initial" />
 </template>
 
 <script>

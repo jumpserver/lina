@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BaseTicketList ref="BaseTicketList" :url="url" v-bind="$data" />
+    <BaseTicketList v-bind="$data" ref="BaseTicketList" :url="url" />
     <Dialog
       v-if="isVisible"
       v-model:visible="isVisible"
@@ -26,10 +26,10 @@
 </template>
 
 <script>
-import BaseTicketList from './BaseTicketList'
-import { mapGetters } from 'vuex'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import Dialog from '@/components/Dialog'
+import { mapGetters } from 'vuex'
+import BaseTicketList from './BaseTicketList'
 
 export default {
   name: 'AssignedTicketList',

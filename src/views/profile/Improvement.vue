@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
 import { Required } from '@/components/Form/DataForm/rules'
 import { PhoneInput } from '@/components/Form/FormFields'
+import { GenericCreateUpdatePage } from '@/layout/components'
 import store from '@/store'
 
 export default {

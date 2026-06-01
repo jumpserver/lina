@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import rules from '@/components/Form/DataForm/rules'
-import { userJSONSelectMeta } from '@/views/users/const'
-import { assetJSONSelectMeta } from '@/views/assets/const'
 import { Select2 } from '@/components/Form/FormFields'
+import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import { assetJSONSelectMeta } from '@/views/assets/const'
+import { userJSONSelectMeta } from '@/views/users/const'
 
 export default {
   name: 'ACLCreateUpdate',

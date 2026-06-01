@@ -1,8 +1,8 @@
 <template>
   <GenericDetailPage
+    v-bind="config"
     v-model:active-menu="config.activeMenu"
     v-model:object="ticket"
-    v-bind="config"
     @get-object-done="afterGetTicket"
   >
     <component :is="config.activeMenu" :object="ticket" />

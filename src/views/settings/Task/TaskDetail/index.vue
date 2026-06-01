@@ -1,9 +1,9 @@
 <template>
   <GenericDetailPage
+    v-bind="config"
     v-model:active-menu="config.activeMenu"
     v-model:object="taskDetail"
     :title="getTitle"
-    v-bind="config"
   >
     <keep-alive>
       <component :is="config.activeMenu" :object="taskDetail" />
@@ -13,9 +13,9 @@
 
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
+import CeleryTaskLog from '../CeleryTaskLog.vue'
 import TaskDetail from './TaskDetail.vue'
 import TaskHistory from './TaskHistory.vue'
-import CeleryTaskLog from '../CeleryTaskLog.vue'
 
 export default {
   components: {

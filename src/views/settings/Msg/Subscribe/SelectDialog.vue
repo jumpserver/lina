@@ -1,20 +1,20 @@
 <template>
   <Dialog
+    v-bind="$attrs"
     ref="myDialog"
     :destroy-on-close="true"
     height="720px"
-    v-bind="$attrs"
     width="790px"
     @confirm="submit"
   >
-    <krryPaging ref="pageTransfer" class="transfer" v-bind="pagingTransfer" />
+    <krryPaging v-bind="pagingTransfer" ref="pageTransfer" class="transfer" />
   </Dialog>
 </template>
 
 <script>
+import { getUserList } from '@/api/users'
 import Dialog from '@/components/Dialog/index.vue'
 import krryPaging from '@/components/Libs/Krry/paging/index.vue'
-import { getUserList } from '@/api/users'
 
 export default {
   name: 'ListSelect',

@@ -7,7 +7,7 @@
         :table-config="tableConfig"
       />
       <template #right>
-        <RelationCard :key="relationKey" v-bind="relationConfig" @add-success="addSuccess" />
+        <RelationCard v-bind="relationConfig" :key="relationKey" @add-success="addSuccess" />
       </template>
     </TwoCol>
     <TwoCol />
@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import GenericListTable from '@/layout/components/GenericListTable'
 import RelationCard from '@/components/Cards/RelationCard'
 import { DeleteActionFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import GenericListTable from '@/layout/components/GenericListTable'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {

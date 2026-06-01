@@ -1,11 +1,11 @@
 <template>
   <IBox>
     <GenericCreateUpdateForm
+      v-bind="$data"
       :create-success-next-route="successUrl"
       :has-detail-in-msg="false"
       :submit-method="submitMethod"
       :update-success-next-route="successUrl"
-      v-bind="$data"
     />
   </IBox>
 </template>

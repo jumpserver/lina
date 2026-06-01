@@ -1,7 +1,7 @@
-import zh from './zh.json'
-import zh_hant from './zh_hant.json'
 import en from './en.json'
 import ja from './ja.json'
+import zh from './zh.json'
+import zh_hant from './zh_hant.json'
 
 // Map app locales to Element-UI locale file names
 const elementLocaleNameByAppLocale = {
@@ -19,7 +19,7 @@ const elementLocaleNameByAppLocale = {
 function loadElementLocale(localeName) {
   try {
     // eslint-disable-next-line global-require
-    const mod = require(`element-plus/es/locale/lang/${localeName}`)
+    const mod = require(`element-plus/dist/locale/${localeName}.js`)
     return (mod && (mod.default || mod)) || {}
   } catch (e) {
     return {}

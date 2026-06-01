@@ -13,7 +13,7 @@
         :title="$tc('AssignedInfo')"
       />
       <slot id="MoreDetails" />
-      <Comments :object="object" v-bind="$attrs" />
+      <Comments v-bind="$attrs" :object="object" />
     </el-col>
     <el-col :md="7" :sm="24">
       <Steps :object="object" />
@@ -24,10 +24,10 @@
 
 <script>
 import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
-import Details from './Details'
 import Comments from './Comments'
-import Steps from './Steps'
+import Details from './Details'
 import Session from './Session'
+import Steps from './Steps'
 export default {
   name: 'GenericTicketDetail',
   components: {

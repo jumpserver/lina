@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
-import getChangeSecretFields from '@/views/accounts/AccountBackup/fields'
-import { encryptPassword } from '@/utils/secure'
 import { periodicMeta } from '@/components/const'
+import { GenericCreateUpdatePage } from '@/layout/components'
+import { encryptPassword } from '@/utils/secure'
+import getChangeSecretFields from '@/views/accounts/AccountBackup/fields'
 
 export default {
   name: 'AccountBackupUpdate',

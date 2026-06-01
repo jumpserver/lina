@@ -3,9 +3,9 @@
 </template>
 
 <script>
+import { AssetSelect, AutomationParams } from '@/components'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
-import { AssetSelect, AutomationParams } from '@/components'
 
 export default {
   name: 'AccountChangeSecretCreateUpdate',

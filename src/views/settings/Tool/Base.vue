@@ -13,10 +13,10 @@
                   </el-tooltip>
                 </template>
                 <component
+                  v-bind="item.el"
                   :is="item.component ? item.component : 'el-input'"
                   v-model="testData[item.name]"
                   :value="testData[item.name]"
-                  v-bind="item.el"
                   @change="onChange(item.name, $event)"
                 />
               </el-form-item>
@@ -32,10 +32,10 @@
               </el-tooltip>
             </template>
             <component
+              v-bind="field.el"
               :is="field.component ? field.component : 'el-input'"
               v-model="testData[field.name]"
               :value="testData[field.name]"
-              v-bind="field.el"
               @change="onChange(field.name, $event)"
             />
           </el-form-item>
@@ -58,8 +58,8 @@
 
 <script>
 import { IBox } from '@/components'
-import Term from '@/components/Widgets/Term'
 import { Select2, TagInput } from '@/components/Form/FormFields'
+import Term from '@/components/Widgets/Term'
 
 export default {
   name: 'Base',
