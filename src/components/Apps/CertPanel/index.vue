@@ -2,127 +2,118 @@
   <div>
     <TwoCol>
       <template>
-        <!-- 1. Status -->
-        <IBox :title="$t('CertDeviceDriverStatus')">
-          <table class="status-table">
+        <!-- 左上：设备驱动状态 -->
+        <IBox title="设备驱动状态">
+          <table class="cp-info-table">
             <tbody>
               <tr v-for="item in statusItems" :key="item.key">
-                <td class="status-label">{{ item.label }}</td>
-                <td class="status-value">
+                <td class="cp-label">{{ item.label }}</td>
+                <td class="cp-value">
                   <el-tag v-if="item.tag !== undefined" :type="item.tag" size="mini" effect="plain">
                     {{ item.value }}
                   </el-tag>
-                  <span v-else class="status-text">{{ item.value || '--' }}</span>
+                  <span v-else class="cp-text">{{ item.value || '--' }}</span>
                 </td>
               </tr>
             </tbody>
           </table>
         </IBox>
 
-        <!-- 2. Actions -->
-        <IBox :title="$t('CertActions')" style="margin-top: 10px">
-          <table class="action-table">
+        <!-- 左中：操作按钮 -->
+        <IBox title="操作" style="margin-top: 10px">
+          <table v-if="visibleOperations.length > 0" class="cp-action-table">
             <tbody>
-              <tr v-for="action in certActions" :key="action.key">
-                <td class="action-desc">
-                  <div class="action-title">{{ action.title }}</div>
-                  <div class="action-hint">{{ action.hint }}</div>
+              <tr v-for="op in visibleOperations" :key="op.key">
+                <td class="cp-action-desc">
+                  <div class="cp-action-title">{{ op.label }}</div>
+                  <div v-if="op.hint" class="cp-action-hint">{{ op.hint }}</div>
                 </td>
-                <td class="action-btn">
+                <td class="cp-action-btn">
                   <el-button
-                    :disabled="action.disabled || running"
-                    :icon="action.icon"
-                    :loading="running && currentAction === action.key"
-                    :type="action.btnType || 'primary'"
+                    :type="op.btnType || 'primary'"
+                    :disabled="!deviceReady || running"
+                    :loading="running && currentOperation === op.key"
                     size="small"
-                    @click="handleAction(action)"
+                    @click="handleOperation(op)"
                   >
-                    {{ action.btnLabel }}
+                    {{ op.label }}
                   </el-button>
                 </td>
               </tr>
             </tbody>
           </table>
+          <div v-else style="color: #909399; font-size: 13px; padding: 12px 0; text-align: center">
+            暂无可用操作
+          </div>
         </IBox>
 
-        <!-- 3. Operation Logs -->
-        <IBox v-if="logs.length > 0" :title="$t('CertOperationLogs')" style="margin-top: 10px">
-          <div class="cert-logs">
-            <div ref="logBox" class="logs-box">
-              <div
-                v-for="(log, i) in logs"
-                :key="i"
-                :class="['log-item', `log-${log.level}`]"
-              >
-                <span class="log-time">{{ log.time }}</span>
-                <span class="log-msg">{{ log.message }}</span>
-              </div>
+        <!-- 左下：操作日志 -->
+        <IBox v-if="logs.length > 0" title="操作日志" style="margin-top: 10px">
+          <div ref="logBox" class="cp-logs-box">
+            <div
+              v-for="(log, i) in logs"
+              :key="i"
+              :class="['cp-log-item', `cp-log-${log.level}`]"
+            >
+              <span class="cp-log-time">{{ log.time }}</span>
+              <span class="cp-log-msg">{{ log.message }}</span>
             </div>
           </div>
         </IBox>
       </template>
 
       <template #right>
-        <!-- Certificate Info -->
-        <IBox :title="$t('CertInfo')">
-          <table v-if="certInfo" class="status-table">
+        <!-- 右上：证书信息 -->
+        <IBox title="证书信息">
+          <div v-if="certLoading" class="cp-cert-loading">
+            <i class="el-icon-loading" />
+            <span>加载中…</span>
+          </div>
+          <table v-else-if="hasCert" class="cp-info-table">
             <tbody>
               <tr v-for="item in certInfoItems" :key="item.key">
-                <td class="status-label">{{ item.label }}</td>
-                <td class="status-value">
-                  <el-tag v-if="item.tag !== undefined" :type="item.tag" size="mini" effect="plain">
+                <td class="cp-label">{{ item.label }}</td>
+                <td class="cp-value">
+                  <el-tag v-if="item.tag !== undefined" :type="item.tag" size="mini" effect="plain" :title="item.value">
                     {{ item.value }}
                   </el-tag>
-                  <span v-else class="status-text">{{ item.value !== undefined ? item.value : '--' }}</span>
+                  <span v-else class="cp-text" :title="item.value">{{ item.value || '--' }}</span>
                 </td>
               </tr>
             </tbody>
           </table>
-          <el-empty v-else :description="$t('CertNoCertIssued')" :image-size="80" />
+          <el-empty v-else description="暂未签发证书" :image-size="80" />
         </IBox>
       </template>
     </TwoCol>
 
-    <!-- PIN change dialog -->
+    <!-- 通用输入弹框（步骤内 input 配置驱动） -->
     <el-dialog
-      :title="$t('CertChangePIN')"
-      :visible.sync="pinDialog.visible"
-      :before-close="cancelPinChange"
-      :close-on-click-modal="!pinDialog.submitting"
-      :close-on-press-escape="!pinDialog.submitting"
-      custom-class="pin-change-dialog"
-      width="360px"
+      :title="inputDialog.title"
+      :visible.sync="inputDialog.visible"
+      :before-close="cancelInputDialog"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      width="380px"
       :lock-scroll="false"
       append-to-body
     >
-      <el-form label-width="80px">
-        <el-form-item :label="$t('CertOldPIN')">
+      <el-form label-width="100px">
+        <el-form-item
+          v-for="f in inputDialog.fields"
+          :key="f.key"
+          :label="f.label"
+        >
           <el-input
-            v-model="pinDialog.form.oldPin"
-            type="password"
-            :placeholder="$t('CertEnterOldPIN')"
-            show-password
-          />
-        </el-form-item>
-        <el-form-item :label="$t('CertNewPIN')">
-          <el-input
-            v-model="pinDialog.form.newPin1"
-            type="password"
-            :placeholder="$t('CertEnterNewPIN')"
-            show-password
-          />
-        </el-form-item>
-        <el-form-item :label="$t('CertConfirmPIN')">
-          <el-input
-            v-model="pinDialog.form.newPin2"
-            type="password"
-            :placeholder="$t('CertReEnterNewPIN')"
-            show-password
+            v-model="inputDialog.form[f.key]"
+            :type="f.type === 'password' ? 'password' : 'text'"
+            :show-password="f.type === 'password'"
+            :placeholder="f.placeholder || ''"
           />
         </el-form-item>
         <el-alert
-          v-if="pinDialog.error"
-          :title="pinDialog.error"
+          v-if="inputDialog.error"
+          :title="inputDialog.error"
           type="error"
           show-icon
           :closable="false"
@@ -130,254 +121,612 @@
         />
       </el-form>
       <span slot="footer">
-        <el-button :disabled="pinDialog.submitting" @click="cancelPinChange">{{ $t('Cancel') }}</el-button>
-        <el-button type="primary" :loading="pinDialog.submitting" @click="confirmPinChange">{{ $t('Confirm') }}</el-button>
+        <el-button @click="cancelInputDialog">取 消</el-button>
+        <el-button type="primary" @click="confirmInputDialog">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import IBox from '@/components/Common/IBox'
-import certDriverMixin from './certDriver'
+
+const CONFIG_API = '/api/v1/authentication/cert/vendor-driver-config/'
+const DRIVER_SCRIPT_URL = '/api/v1/authentication/cert/vendor-driver.js/'
+const SCRIPT_TAG_ID = 'cert-vendor-driver-sdk'
+
+// 模块级单例 — 防止 Vue 响应式代理污染第三方 SDK 对象
+let _instance = null // UKey SDK 实例
+let _ukey = {} // ukey.* 命名空间（driver.setup.steps register 的变量）
 
 export default {
   name: 'CertPanel',
   components: { TwoCol, IBox },
-  mixins: [certDriverMixin],
+
   props: {
-    // 'admin': admin manages another user's certificate; 'user': user self-manages their own certificate
+    /** 'admin': 管理员管理他人证书；'user': 用户自管理 */
     mode: {
       type: String,
       default: 'user',
       validator: v => ['admin', 'user'].includes(v)
     },
+    /** 被管理的用户对象（admin 模式必传） */
     object: {
       type: Object,
       default: null
     }
   },
+
   data() {
     return {
-      pinDialog: {
+      config: null,
+      configLoaded: false,
+      driverLoaded: false,
+      driverLoadError: false,
+      deviceConnected: false,
+
+      deviceInfoItems: [], // [{ key, label, value, scope }]
+      certInfoItems: [], // [{ key, label, value, tag? }]
+      certLoading: true,
+      hasCert: false,
+
+      running: false,
+      currentOperation: '',
+      logs: [],
+
+      inputDialog: {
         visible: false,
-        form: { oldPin: '', newPin1: '', newPin2: '' },
+        title: '',
+        fields: [],
+        form: {},
         error: '',
-        submitting: false
+        _resolve: null,
+        _reject: null
       }
     }
   },
-  computed: {
-    certActions() {
-      const cfg = this.getDriverConfig()
-      const isAdmin = this.mode === 'admin'
-      const enrollEnabled = this.driverConfigLoaded && !!(cfg?.cert?.enroll?.enabled)
-      const hasPinDefault = this.driverConfigLoaded && (cfg?.cert?.pin?.default != null)
-      const hasChangePIN = this.driverConfigLoaded && !!(cfg?.userChangePIN)
-      const deviceReady = this.driverLoaded && this.deviceInserted
 
-      const actions = [
+  computed: {
+    ...mapGetters(['publicSettings']),
+
+    // ── 左上状态面板：固定行 + config.info.device 动态行 ──────────────────────────
+    statusItems() {
+      const fixed = [
         {
-          key: 'issue_cert',
-          has: isAdmin && enrollEnabled,
-          title: this.$t('CertIssueCert'),
-          hint: this.$t('CertIssueCertHint'),
-          btnLabel: this.$t('CertIssueCert'),
-          btnType: 'primary',
-          icon: 'el-icon-s-authentication',
-          disabled: !deviceReady,
-          handler: this.handleIssueCert
+          key: '__config',
+          label: '配置文件',
+          value: this.configLoaded ? '已加载' : '未加载',
+          tag: this.configLoaded ? 'success' : 'warning'
         },
         {
-          key: 'delete_cert',
-          has: isAdmin && enrollEnabled,
-          title: this.$t('CertDeleteCert'),
-          hint: this.$t('CertDeleteCertHint'),
-          btnLabel: this.$t('CertDeleteCert'),
-          btnType: 'danger',
-          disabled: !deviceReady,
-          preConfirm: {
-            title: this.$t('CertDeleteCert'),
-            message: this.$t('CertDeleteCertConfirmMsg'),
-            type: 'warning'
-          },
-          handler: this.handleDeleteCert
+          key: '__driver',
+          label: '驱动状态',
+          value: this.driverLoadError ? '加载失败' : this.driverLoaded ? '已就绪' : '加载中...',
+          tag: this.driverLoadError ? 'danger' : this.driverLoaded ? 'success' : 'info'
         },
         {
-          key: 'reset_pin',
-          has: isAdmin && hasPinDefault,
-          title: this.$t('CertResetPIN'),
-          hint: this.$t('CertResetPINHint'),
-          btnLabel: this.$t('CertResetPIN'),
-          btnType: 'warning',
-          disabled: !deviceReady,
-          prePrompt: {
-            title: this.$t('CertResetPIN'),
-            message: this.$t('CertEnterAdminPIN'),
-            inputType: 'password',
-            placeholder: this.$t('CertAdminPIN')
-          },
-          handler: this.handleResetPIN
-        },
-        {
-          key: 'change_pin',
-          has: hasChangePIN,
-          title: this.$t('CertChangePIN'),
-          hint: this.$t('CertChangePINHint'),
-          btnLabel: this.$t('CertChangePIN'),
-          btnType: 'primary',
-          disabled: !deviceReady,
-          skipExecReset: true,
-          handler: this.showChangePinDialog
+          key: '__device',
+          label: 'UKey',
+          value: this.deviceConnected ? '已连接' : '未连接',
+          tag: this.deviceConnected ? 'success' : 'warning'
         }
       ]
+      const dynamic = this.deviceInfoItems.filter(item =>
+        this.mode === 'admin' || (item.scope || 'both') !== 'admin'
+      )
+      return [...fixed, ...dynamic]
+    },
 
-      return actions.filter(a => a.has)
+    // ── 根据 scope / hidden 过滤后的操作按钮 ────────────────────────────────────
+    visibleOperations() {
+      if (!this.config || !Array.isArray(this.config.operations)) return []
+      const ctx = {
+        ukey: _ukey,
+        vars: {},
+        input: {},
+        user: this.object || {},
+        settings: this.publicSettings || {},
+        config: this.config?.config || {}
+      }
+      return this.config.operations.filter(op => {
+        const scope = op.scope || 'both'
+        if (scope === 'admin' && this.mode !== 'admin') return false
+        if (scope === 'user' && this.mode !== 'user') return false
+        // hidden 支持布尔值或 {{ }} 模板（解析结果为真值时隐藏）
+        if (op.hidden !== undefined) {
+          const resolved = this.resolveValue(op.hidden, ctx)
+          if (resolved === true || resolved === 'true' || resolved === 1) return false
+        }
+        return true
+      })
+    },
+
+    deviceReady() {
+      return this.driverLoaded && this.deviceConnected
     }
   },
+
+  async mounted() {
+    await this.loadConfig()
+    this.loadDriverScript()
+  },
+
   methods: {
-    // ── hooks ────────────────────────────────────────────────────
-    getCertOwnerValue(fromObjectKey) {
-      return this.object ? this.object[fromObjectKey] : null
+    // ═══════════════════════════════════════════════════════════════════════════
+    // 1. 配置加载
+    // ═══════════════════════════════════════════════════════════════════════════
+    async loadConfig() {
+      try {
+        this.config = await this.$axios.get(CONFIG_API)
+        this.configLoaded = true
+        this.appendLog('配置文件加载成功', 'success')
+      } catch (e) {
+        this.appendLog(`配置文件加载失败: ${e.message}`, 'error')
+      }
     },
 
-    statusItemFilter(item) {
-      if (this.mode === 'user') return item.only !== 'admin'
-      return true
+    // ═══════════════════════════════════════════════════════════════════════════
+    // 2. 驱动脚本注入
+    // ═══════════════════════════════════════════════════════════════════════════
+    loadDriverScript() {
+      if (!this.config) return
+
+      if (document.getElementById(SCRIPT_TAG_ID)) {
+        // 脚本已注入（页面复用），直接初始化实例
+        this.initDriverInstance()
+        return
+      }
+
+      const script = document.createElement('script')
+      script.id = SCRIPT_TAG_ID
+      script.src = DRIVER_SCRIPT_URL
+      script.async = true
+      script.onload = () => this.initDriverInstance()
+      script.onerror = () => {
+        this.driverLoadError = true
+        this.appendLog('驱动脚本加载失败，请检查网络或驱动服务', 'error')
+      }
+      document.body.appendChild(script)
     },
 
-    // ── Admin: issue certificate flow ───────────────────────────
-    async handleIssueCert() {
-      const cfg = this.getDriverConfig()
-      const enrollSteps = (cfg && cfg.enrollSteps) || []
+    // ═══════════════════════════════════════════════════════════════════════════
+    // 3. UKey 实例创建 + setup 步骤执行
+    // ═══════════════════════════════════════════════════════════════════════════
+    async initDriverInstance() {
+      // 3a. 创建实例
+      try {
+        const constructorName = this.config.driver?.create?.constructor
+        if (!constructorName || !window[constructorName]) {
+          throw new Error(`构造函数 "${constructorName}" 在 window 上不存在`)
+        }
+        const ctorArgs = this.config.driver.create?.args || []
+        _instance = new window[constructorName](...ctorArgs)
+        _ukey = {}
+        this.driverLoaded = true
+        this.appendLog(`驱动实例已创建 (${constructorName})`, 'success')
+      } catch (e) {
+        this.driverLoadError = true
+        this.appendLog(`驱动实例创建失败: ${e.message}`, 'error')
+        return
+      }
 
-      this.execSteps = enrollSteps.map(item => {
-        const [key, stepCfg] = Object.entries(item)[0]
-        return { key, title: stepCfg.description || key, status: 'wait', message: '' }
+      // 3b. 执行 setup 步骤（各厂商按需配置，结果可注册到 ukey.* 供后续使用）
+      try {
+        const setupSteps = this.config.driver?.setup?.steps || []
+        for (const step of setupSteps) {
+          const ctx = this.buildContext({ vars: {}, input: {} })
+          const result = this.callUKeyMethod(step, ctx)
+          if (step.register) this.applyRegister(step.register, result, {})
+          this.appendLog(`初始化: ${step.label || step.name || step.call} 成功`, 'success')
+        }
+        this.deviceConnected = true
+      } catch (e) {
+        this.deviceConnected = false
+        this.appendLog(`设备初始化失败: ${e.message}`, 'error')
+        return
+      }
+
+      // 3c. 读取设备信息和证书信息
+      await this.readDeviceInfo()
+      await this.readCertInfo()
+    },
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // 4. 设备信息读取（填充左上动态行）
+    // ═══════════════════════════════════════════════════════════════════════════
+    async readDeviceInfo() {
+      const fields = this.config?.info?.device || []
+      const ctx = this.buildContext({ vars: {}, input: {} })
+      this.deviceInfoItems = fields.map(field => {
+        const raw = this.resolveFieldValue(field, ctx)
+        const value = raw == null ? '--' : String(raw)
+        return { key: field.key, label: field.label, value, scope: field.scope || 'both' }
+      })
+      console.log('>>>>>>>>> ukey: ', _ukey)
+    },
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // 5. 证书信息读取（填充右上）
+    //    支持两种模式：
+    //    - per-field：config.info.cert 为数组，每个字段独立 call / value
+    //    - batch：config.info.cert 为对象 { fetch, fields }，先统一调用一次
+    //             fetch 结果注入 cert.* 命名空间，字段用 {{ cert.xxx }} 引用
+    // ═══════════════════════════════════════════════════════════════════════════
+    async readCertInfo() {
+      const fields = this.config?.info?.cert || []
+      if (!fields.length) { this.certInfoItems = []; this.hasCert = false; this.certLoading = false; return }
+
+      const ctx = this.buildContext({ vars: {}, input: {} })
+      let hasAny = false
+
+      const items = fields.map(field => {
+        const rawVal = this.resolveFieldValue(field, ctx)
+
+        const item = {
+          key: field.key,
+          label: field.label,
+          value: rawVal == null ? '--' : String(rawVal)
+        }
+
+        if (rawVal != null) {
+          hasAny = true
+          // 归属判断：将此字段与当前用户对象的指定字段比对
+          if (field.owner && this.object) {
+            const userVal = this.object[field.owner.user_field]
+            if (userVal != null) {
+              const isSelf = String(rawVal) === String(userVal)
+              item.tag = isSelf ? 'success' : 'danger'
+              item.value = `${rawVal}（${isSelf ? '本人' : '他人'}）`
+            }
+          }
+        }
+
+        return item
       })
 
-      const output = {}
-      const input = {}
-      const context = { input, output, user: this.object, settings: this.publicSettings }
+      this.certInfoItems = items
+      this.hasCert = hasAny
+      this.certLoading = false
+    },
 
-      for (let i = 0; i < enrollSteps.length; i++) {
-        const [key, stepCfg] = Object.entries(enrollSteps[i])[0]
-        await this.runStep(i, async () => {
-          if (key === 'signCert') {
-            try {
-              const resp = await this.$axios.post('/api/v1/authentication/cert/enroll/', {
-                user_id: this.object.id,
-                csr: output.genCSR
-              })
-              Object.assign(output, resp)
-              this.appendLog(this.$t('CertStepSucceeded', { step: stepCfg.description || key }), 'success')
-            } catch (e) {
-              const err = (e.response && e.response.data && e.response.data.error) || e.message || String(e)
-              throw new Error(this.$t('CertStepFailed', { step: stepCfg.description || key, err }))
+    // ═══════════════════════════════════════════════════════════════════════════
+    // 6. 操作按钮处理入口
+    // ═══════════════════════════════════════════════════════════════════════════
+    async handleOperation(op) {
+      // 操作前全局确认（op.confirm 配置）
+      if (op.confirm) {
+        try {
+          await this.$confirm(
+            op.confirm.message || '确认执行此操作？',
+            op.confirm.title || '操作确认',
+            {
+              type: op.confirm.type || 'warning',
+              confirmButtonText: '确定',
+              cancelButtonText: '取消'
             }
-          } else if (stepCfg.method) {
-            const params = this.resolveStepParams(stepCfg.method.params, context)
-            const result = this.callEnrollMethod(key, ...params)
-            if (result !== undefined) output[key] = result
+          )
+        } catch (_) { return }
+      }
+
+      this.running = true
+      this.currentOperation = op.key
+      try {
+        const operationVars = {} // vars.* 命名空间，仅当前操作可见
+        for (const step of (op.steps || [])) {
+          await this.executeStep(step, operationVars)
+        }
+        this.appendLog(`操作「${op.label}」执行完成`, 'success')
+        await this.readCertInfo()
+      } catch (e) {
+        this.appendLog(`操作「${op.label}」失败: ${e.message}`, 'error')
+      } finally {
+        this.running = false
+        this.currentOperation = ''
+      }
+    },
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // 7. 单步执行器
+    // ═══════════════════════════════════════════════════════════════════════════
+    async executeStep(step, operationVars) {
+      let inputVars = {}
+
+      // 7a. 若步骤声明了 input，先弹对话框收集用户输入
+      if (step.input) {
+        try {
+          inputVars = await this.showInputDialog(
+            step.input.fields || [],
+            step.input.title || step.label || '请输入'
+          )
+        } catch (_) {
+          throw new Error('操作已取消')
+        }
+      }
+
+      const ctx = this.buildContext({ vars: operationVars, input: inputVars })
+      let result
+
+      try {
+        if (step.type === 'api') {
+          result = await this.executeApiStep(step, ctx)
+        } else {
+          result = this.callUKeyMethod(step, ctx)
+        }
+
+        // 7b. 返回值校验（check 配置）
+        if (step.check !== undefined) {
+          const checkExpr = typeof step.check === 'string' ? step.check : step.check?.expr
+          const checkMsg = step.check?.message
+          if (checkExpr) {
+            // 将 result 注入上下文，供表达式引用
+            const checkCtx = { ...ctx, result }
+            const passed = this.resolveValue(checkExpr, checkCtx)
+            if (!passed && passed !== undefined) {
+              const errMsg = checkMsg
+                ? String(this.resolveValue(checkMsg, checkCtx) || checkMsg)
+                : `返回值校验失败（${checkExpr}），实际返回: ${JSON.stringify(result)}`
+              throw new Error(errMsg)
+            }
           }
+        }
+
+        const stepLabel = step.label || step.name || step.call || '步骤'
+        this.appendLog(`${stepLabel} 成功`, 'success')
+      } catch (e) {
+        const stepLabel = step.label || step.name || step.call || '步骤'
+        const msg = `${stepLabel} 失败: ${e.message || e}`
+        if (step.on_error === 'skip') {
+          this.appendLog(msg + '（已跳过）', 'warn')
+          return
+        }
+        this.appendLog(msg, 'error')
+        throw new Error(msg)
+      }
+
+      // 7b. 将返回值注册到对应命名空间
+      if (step.register && result !== undefined) {
+        this.applyRegister(step.register, result, operationVars)
+      }
+    },
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // 8. API 步骤（type: api）
+    // ═══════════════════════════════════════════════════════════════════════════
+    async executeApiStep(step, ctx) {
+      const method = (step.method || 'post').toLowerCase()
+      const url = this.resolveValue(step.url, ctx)
+      const body = step.body ? this.resolveObjectValues(step.body, ctx) : undefined
+      return await this.$axios[method](url, body)
+    },
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // 9. UKey 方法调用
+    // ═══════════════════════════════════════════════════════════════════════════
+    callUKeyMethod(step, ctx) {
+      if (!step.call) return undefined
+      if (!_instance || typeof _instance[step.call] !== 'function') {
+        throw new Error(`UKey 方法 "${step.call}" 不存在`)
+      }
+      const args = this.resolveArgs(step.args || [], ctx)
+      return _instance[step.call](...args)
+    },
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // 10. 变量解析工具
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    /**
+     * 读取一个 info 字段的值，优先级：call > value（支持模板）
+     * 任何错误均静默返回 null
+     */
+    resolveFieldValue(field, ctx) {
+      if (field.call) {
+        try {
+          return this.callUKeyMethod(field, ctx)
+        } catch (_) { return null }
+      }
+      if ('value' in field) {
+        return this.resolveValue(field.value, ctx)
+      }
+      return null
+    },
+
+    /** 构建上下文对象，供模板解析使用 */
+    buildContext({ vars = {}, input = {} }) {
+      return {
+        ukey: _ukey,
+        vars,
+        input,
+        user: this.object || {},
+        settings: this.publicSettings || {},
+        config: this.config?.config || {}
+      }
+    },
+
+    /**
+     * 解析单个模板值：
+     *   - 整体为 {{ expr }}  → 求值后返回（保留原始类型，如数字/布尔）
+     *   - 包含多个 {{ }}     → 字符串插值，所有片段替换后拼接返回字符串
+     *   - 无 {{ }}           → 原样返回
+     */
+    resolveValue(tpl, ctx) {
+      if (typeof tpl !== 'string') return tpl
+
+      const nsMap = {
+        ukey: ctx.ukey,
+        vars: ctx.vars,
+        input: ctx.input,
+        user: ctx.user,
+        settings: ctx.settings,
+        config: ctx.config,
+        // 透传 ctx 中的其他临时变量（如 result）
+        ...Object.fromEntries(
+          Object.entries(ctx).filter(([k]) => !['ukey', 'vars', 'input', 'user', 'settings', 'config'].includes(k))
+        )
+      }
+
+      const evalExpr = (expr) => {
+        const e = expr.trim()
+        // 纯路径快速路径
+        if (/^[\w.]+$/.test(e)) {
+          const parts = e.split('.')
+          const ns = parts[0]
+          if (!(ns in nsMap)) return undefined
+          let val = nsMap[ns]
+          for (const p of parts.slice(1)) {
+            if (val == null || typeof val !== 'object') return undefined
+            val = val[p]
+          }
+          return val
+        }
+        // 表达式求值
+        try {
+          const keys = Object.keys(nsMap)
+          const vals = keys.map(k => nsMap[k])
+          // eslint-disable-next-line no-new-func
+          return new Function(...keys, `return (${e})`)(...vals)
+        } catch (_) {
+          return undefined
+        }
+      }
+
+      // 整体是单个 {{ expr }}：保留原始类型
+      const singleMatch = tpl.match(/^\{\{\s*([\s\S]+?)\s*\}\}$/)
+      if (singleMatch) return evalExpr(singleMatch[1])
+
+      // 含有至少一个 {{ }}：字符串插值
+      if (/\{\{/.test(tpl)) {
+        return tpl.replace(/\{\{\s*([\s\S]+?)\s*\}\}/g, (_, expr) => {
+          const val = evalExpr(expr)
+          return val == null ? '' : String(val)
         })
       }
 
-      this.appendLog(this.$t('CertIssueCertDone'), 'success')
-      this.refreshCertInfo()
-      this.appendLog(this.$t('CertRefreshCertInfoDone'), 'success')
+      // 纯文本
+      return tpl
     },
 
-    // ── Admin: delete certificate ────────────────────────────────
-    async handleDeleteCert() {
-      const cfg = this.getDriverConfig()
-      const stepCfg = cfg && cfg.deleteCert
-      if (!stepCfg || !stepCfg.method) {
-        throw new Error(this.$t('CertDeleteCertMethodNotFound'))
-      }
-      this.callStep(stepCfg, 'deleteCert')
-      this.appendLog(this.$t('CertDeleteCertDone'), 'success')
-      this.refreshCertInfo()
+    /**
+     * 解析参数列表
+     * 支持：字符串模板、复杂对象参数 { type: 'csv'|'json', value: {...} }
+     */
+    resolveArgs(argsDef, ctx) {
+      return argsDef.map(arg => {
+        if (arg == null || typeof arg !== 'object') {
+          return this.resolveValue(arg, ctx)
+        }
+        // 复杂参数：将 value dict 各字段解析后格式化为字符串
+        if (arg.type === 'csv' || arg.type === 'json') {
+          const resolved = {}
+          for (const [k, v] of Object.entries(arg.value || {})) {
+            resolved[k] = this.resolveValue(v, ctx)
+          }
+          if (arg.type === 'csv') {
+            return Object.entries(resolved).map(([k, v]) => `${k}=${v}`).join(',')
+          }
+          return JSON.stringify(resolved)
+        }
+        // 普通对象：递归解析所有值
+        return this.resolveObjectValues(arg, ctx)
+      })
     },
 
-    // ── Admin: reset PIN ─────────────────────────────────────────
-    async handleResetPIN(adminPin) {
-      const cfg = this.getDriverConfig()
-      const stepCfg = cfg && cfg.adminResetPIN
-      if (!stepCfg || !stepCfg.method) {
-        throw new Error(this.$t('CertAdminResetPINMethodNotFound'))
+    /** 递归解析对象（或数组）中所有字符串模板值 */
+    resolveObjectValues(obj, ctx) {
+      if (obj == null || typeof obj !== 'object') return this.resolveValue(obj, ctx)
+      if (Array.isArray(obj)) return obj.map(i => this.resolveObjectValues(i, ctx))
+      const result = {}
+      for (const [k, v] of Object.entries(obj)) {
+        result[k] = this.resolveObjectValues(v, ctx)
       }
-      const defaultPin = cfg.cert && cfg.cert.pin && cfg.cert.pin.default
-      const context = {
-        input: { admin_pin: adminPin },
-        output: { default_pin: defaultPin },
-        user: this.object,
-        settings: this.publicSettings
-      }
-      const params = this.resolveStepParams(stepCfg.method.params, context)
-      this.callStep(stepCfg, 'adminResetPIN', ...params)
-      this.appendLog(this.$t('CertResetPINDone'), 'success')
+      return result
     },
 
-    // ── User: change PIN dialog ───────────────────────────────────
-    showChangePinDialog() {
-      this.pinDialog.form = { oldPin: '', newPin1: '', newPin2: '' }
-      this.pinDialog.error = ''
-      this.pinDialog.submitting = false
-      this.pinDialog.visible = true
+    /**
+     * 将步骤返回值写入 ukey.* 或 vars.* 命名空间
+     * register 格式：ukey.appHandle  /  vars.certData  /  vars.certData.certificate
+     */
+    applyRegister(register, value, operationVars) {
+      const dot = register.indexOf('.')
+      if (dot === -1) return
+      const ns = register.substring(0, dot)
+      const key = register.substring(dot + 1)
+      const target = ns === 'ukey' ? _ukey : ns === 'vars' ? operationVars : null
+      if (!target) return
+      this.setNestedPath(target, key, value)
     },
 
-    cancelPinChange() {
-      if (this.pinDialog.submitting) return
-      this.pinDialog.visible = false
+    setNestedPath(obj, path, value) {
+      const parts = path.split('.')
+      let cur = obj
+      for (let i = 0; i < parts.length - 1; i++) {
+        if (cur[parts[i]] == null || typeof cur[parts[i]] !== 'object') cur[parts[i]] = {}
+        cur = cur[parts[i]]
+      }
+      cur[parts[parts.length - 1]] = value
     },
 
-    async confirmPinChange() {
-      const { oldPin, newPin1, newPin2 } = this.pinDialog.form
-      if (!oldPin || !newPin1 || !newPin2) {
-        this.pinDialog.error = this.$t('CertFillAllFields')
-        return
-      }
-      if (newPin1 !== newPin2) {
-        this.pinDialog.error = this.$t('CertPINMismatch')
-        return
-      }
-      this.pinDialog.error = ''
-      this.pinDialog.submitting = true
-      try {
-        await this.handleChangePIN({ old_pin: oldPin, new_pin1: newPin1 })
-        this.pinDialog.visible = false
-      } catch (e) {
-        this.pinDialog.error = e.message || this.$t('CertChangePINFailed')
-      } finally {
-        this.pinDialog.submitting = false
-      }
+    // ═══════════════════════════════════════════════════════════════════════════
+    // 11. 通用输入弹框
+    // ═══════════════════════════════════════════════════════════════════════════
+    showInputDialog(fields, title) {
+      return new Promise((resolve, reject) => {
+        const form = {}
+        fields.forEach(f => { form[f.key] = '' })
+        this.inputDialog = {
+          visible: true,
+          title,
+          fields,
+          form,
+          error: '',
+          _resolve: resolve,
+          _reject: reject
+        }
+      })
     },
 
-    // ── User: change PIN ─────────────────────────────────────────
-    async handleChangePIN(inputs) {
-      const cfg = this.getDriverConfig()
-      const stepCfg = cfg && cfg.userChangePIN
-      if (!stepCfg || !stepCfg.method) {
-        throw new Error(this.$t('CertUserChangePINMethodNotFound'))
+    confirmInputDialog() {
+      // 校验各字段
+      for (const f of this.inputDialog.fields) {
+        if (!f.validate) continue
+        const val = this.inputDialog.form[f.key]
+        if (f.validate.equals !== undefined) {
+          const target = this.inputDialog.form[f.validate.equals]
+          if (val !== target) {
+            this.inputDialog.error = f.validate.message || `「${f.label}」与「${f.validate.equals}」不一致`
+            return
+          }
+        }
       }
-      const context = {
-        input: inputs,
-        output: {},
-        user: this.object,
-        settings: this.publicSettings
-      }
-      const params = this.resolveStepParams(stepCfg.method.params, context)
-      this.callStep(stepCfg, 'userChangePIN', ...params)
-      this.appendLog(this.$t('CertChangePINDone'), 'success')
+      this.inputDialog.error = ''
+      this.inputDialog.visible = false
+      this.inputDialog._resolve({ ...this.inputDialog.form })
+    },
+
+    cancelInputDialog() {
+      this.inputDialog.visible = false
+      this.inputDialog._reject(new Error('cancelled'))
+    },
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // 12. 日志
+    // ═══════════════════════════════════════════════════════════════════════════
+    appendLog(message, level = 'info') {
+      const time = new Date().toLocaleTimeString()
+      this.logs.push({ time, message, level })
+      this.$nextTick(() => {
+        if (this.$refs.logBox) this.$refs.logBox.scrollTop = this.$refs.logBox.scrollHeight
+      })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.status-table {
+// ── 信息展示表格（左上状态 / 右上证书）─────────────────────────────────────────
+.cp-info-table {
   width: 100%;
   border-collapse: collapse;
 
@@ -392,20 +741,44 @@ export default {
     vertical-align: middle;
   }
 
-  .status-label {
+  .cp-label {
     color: #909399;
-    text-align: left;
     white-space: nowrap;
+    padding-right: 12px;
   }
 
-  .status-value {
+  .cp-value {
     text-align: right;
+    max-width: 200px;
   }
 
-  .status-text { color: #303133; }
+  .cp-text {
+    color: #303133;
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
+    cursor: default;
+  }
 }
 
-.action-table {
+// ── 证书加载中 ──────────────────────────────────────────────────────────────────
+.cp-cert-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 0;
+  justify-content: center;
+  color: #909399;
+  font-size: 13px;
+
+  .el-icon-loading { font-size: 16px; }
+}
+
+// ── 操作按钮表格（左中）─────────────────────────────────────────────────────────
+.cp-action-table {
   width: 100%;
   border-collapse: collapse;
 
@@ -416,14 +789,14 @@ export default {
 
   td { padding: 10px 0; vertical-align: middle; }
 
-  .action-desc {
+  .cp-action-desc {
     padding-right: 12px;
 
-    .action-title { font-size: 13px; color: #303133; line-height: 1.4; }
-    .action-hint  { font-size: 12px; color: #909399; margin-top: 2px; line-height: 1.4; }
+    .cp-action-title { font-size: 13px; color: #303133; line-height: 1.4; }
+    .cp-action-hint  { font-size: 12px; color: #909399; margin-top: 2px; line-height: 1.4; }
   }
 
-  .action-btn {
+  .cp-action-btn {
     width: 72px;
     text-align: right;
     white-space: nowrap;
@@ -432,46 +805,27 @@ export default {
   }
 }
 
-.cert-logs {
-  margin-top: 12px;
-
-  .logs-box {
-    background: #1e1e1e;
-    border-radius: 4px;
-    padding: 10px 14px;
-    max-height: 160px;
-    overflow-y: auto;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 12px;
-  }
-
-  .log-item {
-    line-height: 1.8;
-    display: flex;
-    gap: 10px;
-
-    .log-time { color: #6a9955; flex-shrink: 0; }
-    .log-msg  { color: #d4d4d4; }
-
-    &.log-success .log-msg { color: #4ec9b0; }
-    &.log-error   .log-msg { color: #f48771; }
-    &.log-warn    .log-msg { color: #dcdcaa; }
-  }
+// ── 操作日志（左下）──────────────────────────────────────────────────────────────
+.cp-logs-box {
+  background: #1e1e1e;
+  border-radius: 4px;
+  padding: 10px 14px;
+  max-height: 200px;
+  overflow-y: auto;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 12px;
 }
-</style>
 
-<!-- PIN 弹框紧凑样式（append-to-body 挂载到 body，需非 scoped）-->
-<style lang="scss">
-.pin-change-dialog {
-  .el-dialog__body {
-    padding: 16px 20px 8px;
-    max-height: 60vh;
-    overflow-y: auto;
-  }
+.cp-log-item {
+  line-height: 1.8;
+  display: flex;
+  gap: 10px;
 
-  .el-form-item {
-    margin-bottom: 12px;
-    &:last-child { margin-bottom: 0; }
-  }
+  .cp-log-time { color: #6a9955; flex-shrink: 0; }
+  .cp-log-msg  { color: #d4d4d4; }
+
+  &.cp-log-success .cp-log-msg { color: #4ec9b0; }
+  &.cp-log-error   .cp-log-msg { color: #f48771; }
+  &.cp-log-warn    .cp-log-msg { color: #dcdcaa; }
 }
 </style>
