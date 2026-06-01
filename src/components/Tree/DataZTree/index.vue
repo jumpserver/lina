@@ -1,5 +1,5 @@
 <template>
-  <ZTree ref="ztree" :setting="treeSetting" v-on="$listeners">
+  <ZTree v-bind="$attrs" ref="ztree" :setting="treeSetting">
     <!--Slot透传-->
     <template #rMenu>
       <slot name="rMenu" />

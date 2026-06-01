@@ -1,11 +1,8 @@
 <template>
-  <el-form
-    ref="elForm"
+  <el-form v-bind="$attrs" ref="elForm"
     :model="value"
     class="el-form-renderer"
-    v-bind="$attrs"
-    @submit.prevent
-  >
+    @submit.prevent>
     <template v-for="item in innerContent" :key="item.id">
       <slot v-if="!isHidden(item)" :name="`id:${item.id}`" />
       <component

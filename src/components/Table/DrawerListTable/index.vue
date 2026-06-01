@@ -1,11 +1,8 @@
 <template>
   <div>
-    <ListTable
-      ref="ListTable"
+    <ListTable v-bind="$attrs" ref="ListTable"
       :header-actions="iHeaderActions"
-      :table-config="iTableConfig"
-      v-bind="$attrs"
-    />
+      :table-config="iTableConfig" />
     <!-- DEBUG: drawerComponent = {{ drawerComponent ? 'EXISTS' : 'EMPTY' }}, drawerVisible = {{ drawerVisible }} -->
     <Drawer
       v-if="drawerComponent"

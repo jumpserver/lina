@@ -1,14 +1,11 @@
 <template>
-  <Dialog
-    :close-on-click-modal="false"
+  <Dialog v-bind="$attrs" :close-on-click-modal="false"
     :destroy-on-close="true"
     :title="$tc('BindResource')"
     top="80px"
-    v-bind="$attrs"
     width="768px"
     @cancel="handleCancel"
-    @confirm="handleConfirm"
-  >
+    @confirm="handleConfirm">
     <div style="padding: 0 20px 20px">
       <el-row>
         <div class="label-zone">
@@ -33,7 +30,7 @@
         <div class="label-zone">
           <label class="table-label" for="">{{ $t('SelectResource') }}: </label>
         </div>
-        <krryPaging v-if="!transferLoading" ref="pageTransfer" class="transfer" v-bind="pagingTransfer" />
+        <krryPaging v-bind="pagingTransfer" v-if="!transferLoading" ref="pageTransfer" class="transfer" />
       </el-row>
     </div>
   </Dialog>

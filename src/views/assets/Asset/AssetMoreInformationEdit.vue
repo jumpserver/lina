@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage :perform-submit="performSubmit" v-bind="$data" />
+  <GenericCreateUpdatePage v-bind="$data" :perform-submit="performSubmit" />
 </template>
 
 <script>

@@ -1,12 +1,9 @@
 <template>
-  <BaseReport
-    v-bind="$attrs"
-    :nav="nav"
+  <BaseReport v-bind="$attrs" :nav="nav"
     :title="$t('ChangeSecretDashboard')"
     :disable-charts-padding="true"
     name="ChangeSecretDashboard"
-    :url="reportUrl"
-  >
+    :url="reportUrl">
     <div class="switch-date-wrapper">
       <SwitchDate class="switch-date" :name="name" @change="onChange" />
     </div>

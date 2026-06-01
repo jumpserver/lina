@@ -18,7 +18,7 @@
               v-for="action in iActions"
               :key="action.name"
               :disabled="action.disabled"
-              @click.native="action.callback(object)"
+              @click="action.callback(object)"
             >
               {{ action.name }}
             </el-dropdown-item>

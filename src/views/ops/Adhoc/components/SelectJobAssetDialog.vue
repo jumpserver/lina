@@ -73,8 +73,7 @@
       </div>
     </el-card>
 
-    <AssetSelectDialog
-      v-if="dialogVisible"
+    <AssetSelectDialog v-bind="$attrs" v-if="dialogVisible"
       ref="dialog"
       v-model:visible="dialogVisible"
       :base-node-url="baseNodeUrl"
@@ -82,10 +81,8 @@
       :tree-setting="treeSetting"
       :tree-url-query="treeUrlQuery"
       :value="selectAssets"
-      v-bind="$attrs"
       @cancel="handleCancel"
-      @confirm="handleConfirm"
-    />
+      @confirm="handleConfirm" />
   </div>
 </template>
 

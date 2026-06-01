@@ -1,13 +1,10 @@
 /* eslint-disable vue/require-prop-types */
 
 <template>
-  <component
-    :is="isText ? 'text-button' : 'el-button'"
-    v-bind="$attrs"
+  <component v-bind="$attrs" :is="isText ? 'text-button' : 'el-button'"
     :loading="loading"
     :type="type"
-    @click="handleClick"
-  >
+    @click="handleClick">
     <slot />
   </component>
 </template>

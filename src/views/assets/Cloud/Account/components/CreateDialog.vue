@@ -1,15 +1,12 @@
 <template>
-  <Drawer
-    :close-on-click-modal="false"
+  <Drawer v-bind="$attrs" :close-on-click-modal="false"
     :close-on-press-escape="false"
     :destroy-on-close="true"
     :has-footer="false"
     :show-buttons="false"
     :show-close="false"
     :title="$tc('CloudSyncConfig')"
-    :visible="visible"
-    v-bind="$attrs"
-  >
+    :visible="visible">
     <el-row :gutter="5" style="padding: 10px">
       <el-col :span="6" class="left-step-zone">
         <el-steps :active="active" direction="vertical">

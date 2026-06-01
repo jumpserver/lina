@@ -1,12 +1,9 @@
 <template>
-  <BaseReport
-    v-bind="$attrs"
-    :url="url"
+  <BaseReport v-bind="$attrs" :url="url"
     :nav="nav"
     :title="$t('AuditsDashboard')"
     :disable-charts-padding="true"
-    name="AuditsDashboard"
-  >
+    name="AuditsDashboard">
     <SwitchDate class="switch-date" :name="name" @change="onChange" />
     <CardSummary :days="days" />
     <el-row :gutter="10">

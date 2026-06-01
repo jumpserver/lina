@@ -1,15 +1,11 @@
 <template>
   <div>
-    <Dialog
-      v-bind="$attrs"
-      v-model:visible="showSecret"
+    <Dialog v-bind="$attrs" v-model:visible="showSecret"
       :destroy-on-close="true"
       :show-cancel="false"
       :title="iTitle"
       :width="'50'"
-      @confirm="accountConfirmHandle"
-      v-on="$listeners"
-    >
+      @confirm="accountConfirmHandle">
       <el-form :model="secretInfo" class="password-form" label-position="right" label-width="130px">
         <el-form-item :label="$tc('Name')">
           <span>{{ account['name'] }}</span>
@@ -33,10 +29,10 @@
           <span>{{ sshKeyFingerprint }}</span>
         </el-form-item>
         <el-form-item :label="$tc('DateCreated')">
-          <span>{{ account['date_created'] | date }}</span>
+          <span>{{ $filters.date(account['date_created']) }}</span>
         </el-form-item>
         <el-form-item :label="$tc('DateUpdated')">
-          <span>{{ account['date_updated'] | date }}</span>
+          <span>{{ $filters.date(account['date_updated']) }}</span>
         </el-form-item>
         <el-form-item
           v-if="showPasswordRecord"

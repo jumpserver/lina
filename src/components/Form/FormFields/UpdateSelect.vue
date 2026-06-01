@@ -10,15 +10,11 @@
       {{ iLabel }}
       <svg-icon class-name="icon" icon-class="switch" />
     </el-button>
-    <Select2
-      v-show="iShowSelect"
+    <Select2 v-bind="$attrs" v-show="iShowSelect"
       ref="select2"
       v-model="iValue"
       :disabled="disabled"
-      v-bind="$attrs"
-      @change="onSelectChange"
-      v-on="$listeners"
-    />
+      @change="onSelectChange" />
   </div>
 </template>
 

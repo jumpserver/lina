@@ -7,7 +7,7 @@
       class="editInput"
       size="small"
       @blur="onInputEnter"
-      @keyup.enter.native="onInputEnter"
+      @keyup.enter="onInputEnter"
     />
     <template v-else>
       <span class="cellValue">{{ iCellValue }}</span>

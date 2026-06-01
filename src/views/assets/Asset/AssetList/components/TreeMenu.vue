@@ -67,11 +67,8 @@
     <li id="m_show_node_info" class="rmenu" tabindex="-1" @click="rMenuShowNodeInfo">
       <i class="fa fa-info-circle" />  {{ $t('ShowNodeInfo') }}
     </li>
-    <NodeAssetsUpdateDialog
-      v-if="nodeAssetsUpdateDialog.visible"
-      v-model:visible="nodeAssetsUpdateDialog.visible"
-      v-bind="nodeAssetsUpdateDialog"
-    />
+    <NodeAssetsUpdateDialog v-bind="nodeAssetsUpdateDialog" v-if="nodeAssetsUpdateDialog.visible"
+      v-model:visible="nodeAssetsUpdateDialog.visible" />
     <Dialog
       v-model:visible="nodeInfoDialogSetting.dialogVisible"
       :show-cancel="false"

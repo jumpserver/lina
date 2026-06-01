@@ -1,5 +1,5 @@
 <template>
-  <div class="el-data-table" v-bind="rootAttrs">
+  <div v-bind="rootAttrs" class="el-data-table">
     <template v-if="showNoData">
       <!--@slot 获取数据为空时的内容-->
       <slot name="no-data" />
@@ -10,28 +10,19 @@
         导致跨页选择（persistSelection）被覆盖，只剩当页数据。
         选择事件统一走 selectStrategy，在内部维护全量 selected 并向外 emit。
       -->
-      <el-table
-        ref="table"
+      <el-table v-bind="tableAttrs" ref="table"
         v-loading="tableLoading"
         :data="data"
         :row-class-name="rowClassName"
-        v-bind="tableAttrs"
         @select="selectStrategy.onSelect"
         v-on="forwardListeners"
         @selection-change="selectStrategy.onSelectionChange"
         @select-all="handleSelectAll($event, canSelect)"
-        @sort-change="onSortChange"
-      >
+        @sort-change="onSortChange">
         <template v-if="isTree">
-          <el-data-table-column
-            v-if="hasSelect"
-            key="selection-key"
-            v-bind="{ align: columnsAlign, ...columns[0] }"
-          />
-          <el-data-table-column
-            :key="treeControlColumn.prop || 'tree-ctrl'"
-            v-bind="treeControlColumn"
-          >
+          <el-data-table-column v-bind="{ align: columnsAlign, ...columns[0] }" v-if="hasSelect"
+            key="selection-key" />
+          <el-data-table-column v-bind="treeControlColumn" :key="treeControlColumn.prop || 'tree-ctrl'">
             <template #default="scope">
               <span v-for="space in scope.row._level" :key="space" class="ms-tree-space" />
               <span
@@ -45,11 +36,8 @@
             </template>
           </el-data-table-column>
 
-          <el-data-table-column
-            v-for="col in treeDataColumns"
-            :key="col.prop"
-            v-bind="{ align: columnsAlign, ...col }"
-          />
+          <el-data-table-column v-bind="{ align: columnsAlign, ...col }" v-for="col in treeDataColumns"
+            :key="col.prop" />
         </template>
 
         <!--非树-->
@@ -60,17 +48,14 @@
             :selectable="canSelect"
             type="selection"
           />
-          <el-table-column
-            v-for="col in columns"
+          <el-table-column v-bind="getColumnBindProps(col)" v-for="col in columns"
             :key="col.prop"
             :filter-method="typeof col.filterMethod === 'function' ? col.filterMethod : null"
             :filter-multiple="false"
             :filters="col.filters || null"
             :formatter="typeof col.formatter === 'function' ? col.formatter : null"
             :title="col.label"
-            :prop="col.prop"
-            v-bind="getColumnBindProps(col)"
-          >
+            :prop="col.prop">
             <template #header>
               <span :title="col.label">{{ col.label }}</span>
             </template>
@@ -97,18 +82,15 @@
         <slot />
       </el-table>
 
-      <el-pagination
-        v-if="hasPagination"
+      <el-pagination v-bind="extraPaginationAttrs" v-if="hasPagination"
         :background="paginationBackground"
         :current-page="page"
         :layout="paginationLayout"
         :page-size="size"
         :page-sizes="paginationSizes"
         :total="total"
-        v-bind="extraPaginationAttrs"
         @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+        @current-change="handleCurrentChange" />
 
       <the-dialog
         ref="dialog"

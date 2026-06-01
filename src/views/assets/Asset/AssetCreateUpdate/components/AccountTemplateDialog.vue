@@ -1,18 +1,15 @@
 <template>
   <div>
-    <Dialog
-      v-if="visible"
+    <Dialog v-bind="$attrs" v-if="visible"
       :close-on-click-modal="false"
       :confirm-title="$tc('Add')"
       :destroy-on-close="true"
       :model="false"
       :title="$tc('SelectTemplate')"
       :visible="visible"
-      v-bind="$attrs"
       width="800px"
       @cancel="handleCancel"
-      @confirm="handleConfirm"
-    >
+      @confirm="handleConfirm">
       <ListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
     </Dialog>
     <CreateAccountTemplateDialog

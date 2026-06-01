@@ -1,14 +1,11 @@
 <template>
-  <DataForm
-    v-if="!loading"
+  <DataForm v-bind="dataFormAttrs" v-if="!loading"
     :disabled="disabled"
     :fields="iFields"
     :form="iValue"
     class="sub-form"
-    v-bind="dataFormAttrs"
     @change="updateValue($event)"
-    @input="updateValue($event)"
-  />
+    @input="updateValue($event)" />
 </template>
 
 <script>

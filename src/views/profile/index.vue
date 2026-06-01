@@ -29,31 +29,33 @@
           fa="fa-edit"
         >
           <table>
-            <tr>
-              <td class="label"> {{ $t('Phone') }}</td>
-              <td class="value">
-                <PhoneInput :value="object.phone" />
-              </td>
-            </tr>
-            <tr>
-              <td class="label"> {{ $t('WeChat') }}</td>
-              <td class="value">
-                <el-input v-model="object.wechat" />
-              </td>
-            </tr>
-            <tr>
-              <td class="label" />
-              <td class="value">
-                <el-button
-                  size="small"
-                  style="margin-top: 10px"
-                  type="primary"
-                  @click="updateProfile"
-                >
-                  {{ $t('Update') }}
-                </el-button>
-              </td>
-            </tr>
+            <tbody>
+              <tr>
+                <td class="label"> {{ $t('Phone') }}</td>
+                <td class="value">
+                  <PhoneInput :value="object.phone" />
+                </td>
+              </tr>
+              <tr>
+                <td class="label"> {{ $t('WeChat') }}</td>
+                <td class="value">
+                  <el-input v-model="object.wechat" />
+                </td>
+              </tr>
+              <tr>
+                <td class="label" />
+                <td class="value">
+                  <el-button
+                    size="small"
+                    style="margin-top: 10px"
+                    type="primary"
+                    @click="updateProfile"
+                  >
+                    {{ $t('Update') }}
+                  </el-button>
+                </td>
+              </tr>
+            </tbody>
           </table>
         </IBox>
       </template>

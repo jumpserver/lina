@@ -168,7 +168,7 @@
 </template>
 
 <script>
-import { codemirror } from 'vue-codemirror'
+import { Codemirror } from 'vue-codemirror'
 
 import 'codemirror/mode/shell/shell'
 import 'codemirror/mode/powershell/powershell'
@@ -183,7 +183,7 @@ import 'codemirror/lib/codemirror.css'
 
 export default {
   components: {
-    codemirror
+    codemirror: Codemirror
   },
   props: {
     toolbar: {

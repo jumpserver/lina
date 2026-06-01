@@ -1,15 +1,12 @@
 <template>
   <div>
-    <Dialog
-      :destroy-on-close="true"
+    <Dialog v-bind="$attrs" :destroy-on-close="true"
       :show-cancel="false"
       :title="$tc('DeleteGatherAccountTitle')"
       :visible="visible"
-      v-bind="$attrs"
       width="600px"
       @update:visible="$emit('update:visible', $event)"
-      @confirm="handleConfirm"
-    >
+      @confirm="handleConfirm">
       <el-alert type="error" :closable="closeable">
         {{ $t('DeleteWarningMsg') }} {{ account.username }}({{ account.asset.name }}) ?
 

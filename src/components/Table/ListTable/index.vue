@@ -7,8 +7,7 @@
       :table-url="tableUrl"
       @filter="filter"
     />
-    <TableAction
-      v-if="hasActions"
+    <TableAction v-bind="iHeaderActions" v-if="hasActions"
       v-model:quick-filter-expand="filterExpand"
       :class="{ 'filter-expand': filterExpand }"
       :date-pick="handleDateChange"
@@ -17,18 +16,13 @@
       :search-table="search"
       :selected-rows="selectedRows"
       :table-url="tableUrl"
-      v-bind="iHeaderActions"
-      @done="handleActionInitialDone"
-    />
+      @done="handleActionInitialDone" />
     <IBox v-loading="!actionInit" class="table-content">
-      <AutoDataTable
-        v-if="actionInit"
+      <AutoDataTable v-bind="$attrs" v-if="actionInit"
         ref="dataTable"
         :config="iTableConfig"
         :filter-table="filter"
-        v-on="$listeners"
-        @selection-change="handleSelectionChange"
-      />
+        @selection-change="handleSelectionChange" />
     </IBox>
   </div>
 </template>

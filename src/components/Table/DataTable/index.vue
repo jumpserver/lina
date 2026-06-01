@@ -1,12 +1,9 @@
 <template>
-  <ElDatableTable
-    ref="table"
+  <ElDatableTable v-bind="mergedTableConfig" ref="table"
     class="el-data-table"
-    v-bind="mergedTableConfig"
     @size-change="handleSizeChange"
     @update="onUpdate"
-    v-on="iListeners"
-  />
+    v-on="iListeners" />
 </template>
 
 <script>

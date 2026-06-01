@@ -17,13 +17,10 @@
         <span v-if="action.split" :style="{ cursor: action.disabled ? 'not-allowed' : 'pointer' }">
           {{ action.title }}
         </span>
-        <el-button
-          v-else
+        <el-button v-bind="{ ...cleanButtonAction(action), icon: '' }" v-else
           :class="action.name"
           :size="size"
-          class="more-action"
-          v-bind="{ ...cleanButtonAction(action), icon: '' }"
-        >
+          class="more-action">
           <Icon v-if="action.icon" :icon="action.icon" class="pre-icon" />
           <span v-if="action.title">
             {{ action.title }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
@@ -42,13 +39,10 @@
                 :open-delay="500"
                 placement="top"
               >
-                <el-dropdown-item
-                  :key="option.name"
+                <el-dropdown-item v-bind="{ ...option, icon: '' }" :key="option.name"
                   :command="[option, action]"
                   :title="option.tip"
-                  class="dropdown-item"
-                  v-bind="{ ...option, icon: '' }"
-                >
+                  class="dropdown-item">
                   <span v-if="actionsHasIcon(action.dropdown)" class="pre-icon">
                     <Icon v-if="option.icon" :icon="option.icon" />
                   </span>
@@ -60,14 +54,11 @@
         </template>
       </el-dropdown>
 
-      <el-button
-        v-else
+      <el-button v-bind="{ ...cleanButtonAction(action), icon: '' }" v-else
         :class="[action.name, { grouped: action.grouped }]"
         :size="size"
         class="action-item"
-        v-bind="{ ...cleanButtonAction(action), icon: '' }"
-        @click="handleClick(action)"
-      >
+        @click="handleClick(action)">
         <el-tooltip :content="action.tip" :disabled="!action.tip" placement="top">
           <div>
             <Icon v-if="action.icon" :icon="action.icon" class="pre-icon" />

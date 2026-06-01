@@ -1,10 +1,7 @@
 <template>
   <div>
-    <ListTable
-      ref="listTable"
-      :update-drawer="updateDrawer"
-      v-bind="config"
-    />
+    <ListTable v-bind="config" ref="listTable"
+      :update-drawer="updateDrawer" />
   </div>
 </template>
 

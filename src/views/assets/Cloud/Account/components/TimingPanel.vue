@@ -1,11 +1,8 @@
 <template>
-  <GenericCreateUpdateForm
-    ref="form"
+  <GenericCreateUpdateForm v-bind="settings" ref="form"
     class="form"
-    v-bind="settings"
     @perform-finished="handlePerformFinished"
-    @submit-success="handleSubmitSuccess"
-  />
+    @submit-success="handleSubmitSuccess" />
 </template>
 
 <script>

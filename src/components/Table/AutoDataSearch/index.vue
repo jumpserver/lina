@@ -3,14 +3,10 @@
     <el-button v-if="shouldFold" circle class="search-btn" size="small" @click="handleManualSearch">
       <svg-icon icon-class="search" />
     </el-button>
-    <TagSearch
-      v-show="!shouldFold"
+    <TagSearch v-bind="$attrs" v-show="!shouldFold"
       :options="iOption"
-      v-bind="$attrs"
       @blur="handleBlur"
-      v-on="$listeners"
-      @tag-search="handleTagSearch"
-    />
+      @tag-search="handleTagSearch" />
   </span>
 </template>
 

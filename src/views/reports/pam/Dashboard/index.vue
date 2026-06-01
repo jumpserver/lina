@@ -1,12 +1,9 @@
 <template>
-  <BaseReport
-    v-bind="$attrs"
-    :nav="nav"
+  <BaseReport v-bind="$attrs" :nav="nav"
     :url="reportUrl"
     :title="$t('PamDashboard')"
     :disable-charts-padding="true"
-    name="PamDashboard"
-  >
+    name="PamDashboard">
     <div class="summary-container">
       <el-row :gutter="20">
         <el-col :span="14" :xs="24">

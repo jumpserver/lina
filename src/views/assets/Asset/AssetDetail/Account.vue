@@ -1,17 +1,14 @@
 <template>
   <div>
     <TwoCol>
-      <AccountListTable
-        ref="ListTable"
+      <AccountListTable v-bind="$attrs" ref="ListTable"
         :asset="object"
         :columns-default="columnsDefault"
         :has-clone="false"
         :has-import="false"
         :has-left-actions="true"
         :header-extra-actions="headerExtraActions"
-        :url="iUrl"
-        v-bind="$attrs"
-      />
+        :url="iUrl" />
       <AccountTemplateDialog
         v-if="templateDialogVisible"
         v-model:visible="templateDialogVisible"

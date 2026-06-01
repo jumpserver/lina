@@ -12,7 +12,7 @@
       @confirm="handleConfirm"
       @open="handleOpen"
     >
-      <AutoDataForm ref="dataform" v-bind="form" />
+      <AutoDataForm v-bind="form" ref="dataform" />
     </Dialog>
   </div>
 </template>

@@ -1,11 +1,8 @@
 <template>
   <div class="el-card-table">
-    <TableAction
-      :reload-table="reloadTable"
+    <TableAction v-bind="headerActions" :reload-table="reloadTable"
       :search-table="search"
-      :table-url="tableUrl"
-      v-bind="headerActions"
-    />
+      :table-url="tableUrl" />
     <el-row v-loading="loading" class="the-row">
       <IBox v-if="totalData.length === 0" class="empty-box">
         <el-empty :description="$t('NoData')" :image-size="200" class="no-data" style="padding: 20px" />
@@ -20,17 +17,15 @@
         >
           <keep-alive>
             <slot :index="index" :item="d" :on-view="onView">
-              <Panel :d="d" @click.native="onView(d)" />
+              <Panel :d="d" @click="onView(d)" />
             </slot>
           </keep-alive>
         </el-card>
       </div>
     </el-row>
-    <Pagination
-      v-show="pagination && total > paginationSize"
+    <Pagination v-bind="$data" v-show="pagination && total> paginationSize"
       ref="pagination"
       class="pagination"
-      v-bind="$data"
       @current-size-change="handleCurrentChange"
       @size-change="handleSizeChange"
     />

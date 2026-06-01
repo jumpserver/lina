@@ -1,6 +1,6 @@
 <template>
   <Page>
-    <CardTable ref="CardTable" v-bind="$data" />
+    <CardTable v-bind="$data" ref="CardTable" />
   </Page>
 </template>
 

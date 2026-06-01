@@ -1,7 +1,7 @@
 
 <template>
   <!-- Use dynamic component with explicit :is to support Vue 3 -->
-  <component :is="tag" v-bind="attrs">
+  <component v-bind="attrs" :is="tag">
     <slot />
   </component>
 

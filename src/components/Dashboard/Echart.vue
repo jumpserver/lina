@@ -1,10 +1,6 @@
 <template>
-  <echarts
-    :options="iOptions"
-    v-bind="$attrs"
-    @finished="onFinished"
-    v-on="$listeners"
-  />
+  <echarts v-bind="$attrs" :options="iOptions"
+    @finished="onFinished" />
 </template>
 
 <script>

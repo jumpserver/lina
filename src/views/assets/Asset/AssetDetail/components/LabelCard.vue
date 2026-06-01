@@ -1,5 +1,5 @@
 <template>
-  <IBox :title="title" fa="fa-info-circle" v-bind="$attrs">
+  <IBox v-bind="$attrs" :title="title" fa="fa-info-circle">
     <div class="quick-actions">
       <p v-if="labels.length === 0">{{ $t('Nothing') }}</p>
       <template v-else>

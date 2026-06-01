@@ -1,11 +1,8 @@
 <template>
-  <DataZTree
-    ref="dataztree"
+  <DataZTree v-bind="treeAttrs" ref="dataztree"
     :setting="treeSetting"
     class="data-z-tree"
-    v-bind="treeAttrs"
-    v-on="forwardedListeners"
-  >
+    v-on="forwardedListeners">
     <template #rMenu>
       <div v-if="menu && menu.length > 0">
         <span v-for="item in menu" :key="item.id">

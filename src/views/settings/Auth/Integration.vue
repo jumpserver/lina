@@ -3,11 +3,8 @@
     <IBox :title="$tc('AuthIntegration')" class="auth-box-wrapper auth-method-box">
       <el-row v-for="[type, items] in Object.entries(groupedAuthItems)" :key="type" :gutter="20">
         <h4 class="auth-method-type">{{ typeMap[type] }}</h4>
-        <AuthMethod
-          v-for="item in items"
-          v-bind="item"
-          :key="item.title"
-        />
+        <AuthMethod v-bind="item" v-for="item in items"
+          :key="item.title" />
       </el-row>
     </IBox>
   </div>

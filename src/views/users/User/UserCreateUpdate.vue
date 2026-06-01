@@ -1,11 +1,8 @@
 <template>
   <div v-loading="loading">
-    <GenericCreateUpdatePage
-      v-if="!loading"
+    <GenericCreateUpdatePage v-bind="{ ...$data, ...$attrs }" v-if="!loading"
       class="user-create-update"
-      v-bind="{ ...$data, ...$attrs }"
-      @get-object-done="afterGetUser"
-    />
+      @get-object-done="afterGetUser" />
   </div>
 </template>
 

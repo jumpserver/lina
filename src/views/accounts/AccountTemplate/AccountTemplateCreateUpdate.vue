@@ -1,8 +1,5 @@
 <template>
-  <GenericCreateUpdatePage
-    v-bind="$data"
-    @get-object-done="getObjectDone"
-  />
+  <GenericCreateUpdatePage v-bind="$data" @get-object-done="getObjectDone" />
 </template>
 
 <script>

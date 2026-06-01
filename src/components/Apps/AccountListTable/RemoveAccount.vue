@@ -1,13 +1,9 @@
 <template>
-  <Dialog
-    v-model:visible="show"
+  <Dialog v-bind="$attrs" v-model:visible="show"
     :destroy-on-close="true"
     :show-cancel="false"
     :width="'50'"
-    v-bind="$attrs"
-    @confirm="accountConfirmHandle"
-    v-on="$listeners"
-  />
+    @confirm="accountConfirmHandle" />
 </template>
 
 <script>

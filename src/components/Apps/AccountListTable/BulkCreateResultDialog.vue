@@ -1,11 +1,7 @@
 <template>
-  <Dialog
-    v-bind="$attrs"
-    :show-cancel="false"
+  <Dialog v-bind="$attrs" :show-cancel="false"
     :title="title"
-    @confirm="closeDialog"
-    v-on="$listeners"
-  >
+    @confirm="closeDialog">
     <el-alert style="margin-bottom: 10px" type="success">
       <span v-for="item of summary" :key="item.key"><b>{{ item.label }}</b>: {{ item.value }} </span>
     </el-alert>

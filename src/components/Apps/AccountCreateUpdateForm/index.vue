@@ -1,12 +1,9 @@
 <template>
-  <AutoDataForm
-    v-if="!loading"
+  <AutoDataForm v-bind="$data" v-if="!loading"
     ref="AutoDataForm"
-    v-bind="$data"
     :class="addTemplate? '': 'account-add'"
     :submit-btn-text="submitBtnText"
-    @submit="confirm"
-  />
+    @submit="confirm" />
 </template>
 
 <script>

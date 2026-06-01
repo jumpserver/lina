@@ -1,15 +1,11 @@
 <template>
   <div>
-    <Dialog
-      v-model:visible="showSecret"
+    <Dialog v-bind="$attrs" v-model:visible="showSecret"
       :destroy-on-close="true"
       :show-cancel="false"
       :title="iTitle"
       :width="'50'"
-      v-bind="$attrs"
-      @confirm="accountConfirmHandle"
-      v-on="$listeners"
-    >
+      @confirm="accountConfirmHandle">
       <el-form :model="secretInfo" class="password-form" label-position="right" label-width="100px">
         <el-form-item :label="$tc('OldSecret')">
           <SecretViewerFormatter

@@ -1,6 +1,5 @@
 <template>
-  <el-date-picker
-    v-model="value"
+  <el-date-picker v-bind="$attrs" v-model="value"
     :clearable="false"
     :default-time="['00:00:01', '23:59:59']"
     :end-placeholder="$tc('DateEnd')"
@@ -10,10 +9,7 @@
     class="datepicker"
     range-separator="-"
     size="small"
-    v-bind="$attrs"
-    @change="handleDateChange"
-    v-on="$listeners"
-  />
+    @change="handleDateChange" />
 </template>
 
 <script>

@@ -4,13 +4,10 @@
       <Title :config="config" />
     </div>
     <div class="content">
-      <SummaryCard
-        v-for="item of items"
+      <SummaryCard v-bind="item.body" v-for="item of items"
         :key="item.title"
         :title="item.title"
-        class="summary-card"
-        v-bind="item.body"
-      />
+        class="summary-card" />
     </div>
   </div>
 </template>

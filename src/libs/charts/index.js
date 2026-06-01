@@ -66,5 +66,4 @@ const ChartsPlugin = {
 export default ChartsPlugin
 
 // 导出 VueECharts 组件，供其他地方使用
-export { VueECharts }
-
+export { default as VueECharts } from 'vue-echarts'

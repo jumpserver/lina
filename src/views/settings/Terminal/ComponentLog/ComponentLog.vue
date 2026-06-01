@@ -13,11 +13,8 @@
           />
         </div>
         <div class="search-input">
-          <DatetimeRangePicker
-            class="datepicker"
-            v-bind="datePicker"
-            @date-change="handleDateChange"
-          />
+          <DatetimeRangePicker v-bind="datePicker" class="datepicker"
+            @date-change="handleDateChange" />
         </div>
         <div class="search-input">
           <ActionsGroup :actions="iconActions" :is-fa="true" class="right-side-actions right-side-item" />

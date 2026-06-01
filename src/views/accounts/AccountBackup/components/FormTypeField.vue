@@ -1,14 +1,11 @@
 <template>
-  <el-tree
-    :data="iData"
+  <el-tree v-bind="$attrs" :data="iData"
     :default-checked-keys="value"
     :default-expand-all="true"
     :props="defaultProps"
     node-key="id"
     show-checkbox
-    v-bind="$attrs"
-    @check="handleCheckChange"
-  />
+    @check="handleCheckChange" />
 </template>
 
 <script>

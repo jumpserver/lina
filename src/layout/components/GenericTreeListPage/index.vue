@@ -1,10 +1,7 @@
 <template>
   <Page v-bind="pageAttrs">
-    <TreeTable
-      ref="TreeTable"
-      v-bind="treeTableAttrs"
-      v-on="forwardedListeners"
-    >
+    <TreeTable v-bind="treeTableAttrs" ref="TreeTable"
+      v-on="forwardedListeners">
       <template #table>
         <slot name="table" />
       </template>

@@ -1,12 +1,9 @@
 <template>
-  <Dialog
-    v-bind="$attrs"
-    :destroy-on-close="true"
+  <Dialog v-bind="$attrs" :destroy-on-close="true"
     :loading-status="testLdapLoginStatus"
     :show-cancel="false"
     :title="$tc('TestLdapLoginTitle') "
-    @confirm="testUserLoginClick()"
-  >
+    @confirm="testUserLoginClick()">
     <el-form
       :model="userLoginForm"
       label-position="right"

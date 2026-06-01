@@ -1,19 +1,13 @@
 <template>
-  <el-dialog
-    ref="dialog"
+  <el-dialog v-bind="dialogAttrs" ref="dialog"
     v-model="visible"
     :title="title"
-    v-bind="dialogAttrs"
     @close="resetFields"
-    @opened="handleOpened"
-  >
+    @opened="handleOpened">
     <!--https://github.com/FEMessage/el-form-renderer-->
-    <el-form-renderer
-      ref="form"
+    <el-form-renderer v-bind="formAttrs" ref="form"
       :content="form"
-      v-bind="formAttrs"
-      :disabled="isView"
-    >
+      :disabled="isView">
       <!--@slot 额外的弹窗表单内容, 当form不满足需求时可以使用，参考：https://femessage.github.io/el-form-renderer/#/Demo?id=slot -->
       <slot :row="slotData" />
     </el-form-renderer>

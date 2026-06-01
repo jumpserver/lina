@@ -1,6 +1,6 @@
 <template>
   <el-collapse-transition>
-    <div class="tree-table-content" v-bind="rootAttrs">
+    <div v-bind="rootAttrs" class="tree-table-content">
       <div
         v-show="iShowTree"
         :class="iShowTree ? '' : 'hidden'"
@@ -10,16 +10,13 @@
         <span v-if="component === 'AutoDataZTree'" class="title">
           {{ title }}
         </span>
-        <component
-          :is="component"
+        <component v-bind="treeTabConfig" :is="component"
           :key="componentTreeKey"
           ref="AutoDataZTree"
           :setting="treeSetting"
           class="auto-data-ztree"
-          v-bind="treeTabConfig"
           @url-change="handleUrlChange"
-          v-on="forwardedListeners"
-        >
+          v-on="forwardedListeners">
           <template #rMenu="{ data }">
             <slot :data="data" name="rMenu" />
           </template>

@@ -1,13 +1,10 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm
-      v-bind="$data"
-      :fields="fields"
+    <GenericCreateUpdateForm v-bind="$data" :fields="fields"
       :fields-meta="fieldsMeta"
       :has-detail-in-msg="false"
       :submit-method="submitMethod"
-      :url="url"
-    />
+      :url="url" />
   </IBox>
 </template>
 

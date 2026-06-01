@@ -1,10 +1,7 @@
 <template>
   <div>
-    <GenericCreateUpdateForm
-      class="attr-input"
-      v-bind="formConfig"
-      @submit="onSubmit"
-    />
+    <GenericCreateUpdateForm v-bind="formConfig" class="attr-input"
+      @submit="onSubmit" />
     <DataTable :config="tableConfig" class="attr-list" />
   </div>
 </template>

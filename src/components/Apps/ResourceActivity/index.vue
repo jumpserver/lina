@@ -1,7 +1,7 @@
 <template>
   <div>
     <TwoCol>
-      <IBox :title="title" class="block" v-bind="$attrs">
+      <IBox v-bind="$attrs" :title="title" class="block">
         <el-timeline>
           <el-timeline-item
             v-for="(activity, index) in activities"
@@ -15,7 +15,7 @@
             <el-link
               v-if="activity['detail_url']"
               type="primary"
-              @click.native="onClick(activity)"
+              @click="onClick(activity)"
             >
               {{ $tc('Detail') }}
             </el-link>

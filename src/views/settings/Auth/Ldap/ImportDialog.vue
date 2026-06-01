@@ -1,11 +1,8 @@
 <template>
   <div>
-    <Dialog
-      v-bind="$attrs"
-      :destroy-on-close="true"
+    <Dialog v-bind="$attrs" :destroy-on-close="true"
       :show-cancel="false"
-      :title="$tc('ImportLdapUserTitle')"
-    >
+      :title="$tc('ImportLdapUserTitle')">
       <el-alert type="success" style="margin-bottom: 10px"> {{ $t('ImportLdapUserTip') }}</el-alert>
       <ListTable
         ref="listTable"
@@ -17,12 +14,9 @@
         <div>
           <span v-show="showOrgSelect" class="org-select">
             <span class="label">{{ $tc('ImportOrg') }}：</span>
-            <Select2
-              v-bind="select2"
-              ref="select2"
+            <Select2 v-bind="select2" ref="select2"
               v-model="select2.value"
-              popper-class="select-org-dropdown"
-            />
+              popper-class="select-org-dropdown" />
           </span>
           <el-button :loading="dialogLdapUserSyncStatus" size="small" type="primary" @click="SyncUserClick">
             {{ $t('SyncUser') }}

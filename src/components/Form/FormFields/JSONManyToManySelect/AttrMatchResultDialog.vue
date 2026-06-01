@@ -1,13 +1,9 @@
 <template>
-  <Dialog
-    :destroy-on-close="true"
+  <Dialog v-bind="$attrs" :destroy-on-close="true"
     :show-buttons="false"
     :title="$tc('MatchResult')"
-    :v-bind="$attrs"
-    :v-on="$listeners"
     :visible="visible"
-    @update:visible="$emit('update:visible', $event)"
-  >
+    @update:visible="$emit('update:visible', $event)">
     <ListTable v-bind="attrMatchTableConfig" />
   </Dialog>
 </template>

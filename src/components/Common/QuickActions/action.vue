@@ -8,13 +8,10 @@
     </td>
     <td>
       <span slot="reference">
-        <component
-          :is="iType"
+        <component v-bind="action.attrs" :is="iType"
           v-model="action.attrs.model"
           :title="label"
-          v-bind="action.attrs"
-          v-on="callbacks"
-        >
+          v-on="callbacks">
           {{ label }}
         </component>
       </span>

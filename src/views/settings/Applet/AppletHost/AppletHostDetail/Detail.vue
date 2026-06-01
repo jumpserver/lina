@@ -5,13 +5,10 @@
     <AutoDetailCard v-bind="detailInfoConfig" />
     <template #right>
       <QuickActions :actions="quickActions" type="primary" />
-      <RelationCard
-        v-bind="labelConfig"
-        ref="LabelRelation"
+      <RelationCard v-bind="labelConfig" ref="LabelRelation"
         v-perms="'assets.view_label'"
         style="margin-top: 15px"
-        type="warning"
-      />
+        type="warning" />
     </template>
   </TwoCol>
 </template>

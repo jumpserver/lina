@@ -12,13 +12,10 @@
                     <i class="fa fa-question-circle-o" />
                   </el-tooltip>
                 </template>
-                <component
-                  v-bind="item.el"
-                  :is="item.component ? item.component : 'el-input'"
+                <component v-bind="item.el" :is="item.component ? item.component : 'el-input'"
                   v-model="testData[item.name]"
                   :value="testData[item.name]"
-                  @change="onChange(item.name, $event)"
-                />
+                  @change="onChange(item.name, $event)" />
               </el-form-item>
             </el-col>
           </el-form-item>
@@ -31,13 +28,10 @@
                 <i class="fa fa-question-circle-o" />
               </el-tooltip>
             </template>
-            <component
-              v-bind="field.el"
-              :is="field.component ? field.component : 'el-input'"
+            <component v-bind="field.el" :is="field.component ? field.component : 'el-input'"
               v-model="testData[field.name]"
               :value="testData[field.name]"
-              @change="onChange(field.name, $event)"
-            />
+              @change="onChange(field.name, $event)" />
           </el-form-item>
         </div>
       </div>

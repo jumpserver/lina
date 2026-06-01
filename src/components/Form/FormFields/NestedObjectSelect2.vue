@@ -1,11 +1,8 @@
 <template>
-  <Select2
-    v-model="iValue"
+  <Select2 v-bind="attrsWithoutValue" v-model="iValue"
     :multiple="multiple"
-    v-bind="attrsWithoutValue"
     @change="onChange"
-    @change-options="onChangeOptions"
-  />
+    @change-options="onChangeOptions" />
 </template>
 
 <script>

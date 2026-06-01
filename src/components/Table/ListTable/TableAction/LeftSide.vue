@@ -1,10 +1,8 @@
 <template>
-  <DataActions
-    v-if="hasLeftActions && iActions.length > 0"
+  <DataActions v-bind="$attrs" v-if="hasLeftActions && iActions.length> 0"
     :actions="iActions"
     size="default"
     class="header-action"
-    v-bind="$attrs"
   />
 </template>
 

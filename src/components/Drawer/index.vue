@@ -1,7 +1,6 @@
 <template>
   <!-- DEBUG: Drawer visible={{ visible }}, component={{ component ? 'EXISTS' : 'EMPTY' }}, title={{ title }} -->
-  <el-drawer
-    ref="drawer"
+  <el-drawer v-bind="$attrs" ref="drawer"
     :model-value="visible"
     :append-to-body="true"
     :before-close="handleClose"
@@ -12,18 +11,13 @@
     custom-class="drawer"
     destroy-on-close
     direction="rtl"
-    @update:model-value="handleUpdateModelValue"
-    v-on="$listeners"
-  >
+    @update:model-value="handleUpdateModelValue">
     <div class="drawer__content">
       <slot name="default">
-        <component
-          :is="component"
+        <component v-bind="componentProps" :is="component"
           v-if="component"
           ref="dynamicComponent"
-          v-bind="componentProps"
-          v-on="componentListeners"
-        />
+          v-on="componentListeners" />
       </slot>
     </div>
     <div v-if="hasFooter" ref="drawerFooter" class="drawer__footer" />

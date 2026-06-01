@@ -1,25 +1,19 @@
 <template>
   <TwoCol>
     <AutoDetailCard v-bind="basicInfoConfig" />
-    <AutoDetailCard v-if="isShowSpecInfo" v-bind="specInfoConfig" />
+    <AutoDetailCard v-bind="specInfoConfig" v-if="isShowSpecInfo" />
     <AutoDetailCard v-bind="customInfoConfig" />
     <AutoDetailCard v-bind="gatheredInfoConfig" />
     <template #right>
       <QuickActions :actions="quickActions" type="primary" />
-      <RelationCard
-        ref="NodeRelation"
+      <RelationCard v-bind="nodeRelationConfig" ref="NodeRelation"
         v-perms="'assets.change_asset'"
         style="margin-top: 15px"
-        type="info"
-        v-bind="nodeRelationConfig"
-      />
-      <RelationCard
-        ref="LabelRelation"
+        type="info" />
+      <RelationCard v-bind="labelConfig" ref="LabelRelation"
         v-perms="'assets.change_asset'"
         style="margin-top: 15px"
-        type="warning"
-        v-bind="labelConfig"
-      />
+        type="warning" />
     </template>
   </TwoCol>
 </template>

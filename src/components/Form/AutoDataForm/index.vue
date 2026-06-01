@@ -1,13 +1,10 @@
 <template>
   <div>
-    <DataForm
-      v-if="!loading"
+    <DataForm v-bind="forwardedAttrs" v-if="!loading"
       ref="dataForm"
       :fields="totalFields"
       :form="iForm"
-      :server-errors="serverErrors"
-      v-bind="forwardedAttrs"
-    >
+      :server-errors="serverErrors">
       <template
         v-for="(group, i) in groups"
         #[`id:${group.name}`]

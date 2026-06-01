@@ -14,7 +14,7 @@
       <el-alert v-if="!isLocalUser" :closable="false" class="source-alert" type="error">
         {{ $t('PasskeyAddDisableInfo', {source: source.label}) }}
       </el-alert>
-      <AutoDataForm v-else v-bind="form" @submit="onAddConfirm" />
+      <AutoDataForm v-bind="form" v-else @submit="onAddConfirm" />
     </Dialog>
   </div>
 </template>

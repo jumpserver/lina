@@ -1,16 +1,12 @@
 <template>
   <div>
-    <Select2
-      ref="select2"
+    <Select2 v-bind="select2" ref="select2"
       v-model="iValue"
-      v-bind="select2"
       @initialized="handleSelectInitialed"
       @input="onInputChange"
-      v-on="$listeners"
-      @focus.stop.prevent="handleFocus"
-    />
-    <Dialog
-      v-if="showTransfer"
+      v-bind="$attrs"
+      @focus.stop.prevent="handleFocus" />
+    <Dialog v-bind="$attrs" v-if="showTransfer"
       v-model:visible="showTransfer"
       :close-on-click-modal="false"
       :title="label"
@@ -18,15 +14,10 @@
       class="the-dialog"
       width="730px"
       @cancel="handleTransCancel"
-      @confirm="handleTransConfirm"
-      v-on="$listeners"
-    >
-      <krryPaging
-        v-if="selectInitialized"
+      @confirm="handleTransConfirm">
+      <krryPaging v-bind="pagingTransfer" v-if="selectInitialized"
         ref="pageTransfer"
-        class="transfer"
-        v-bind="pagingTransfer"
-      />
+        class="transfer" />
     </Dialog>
   </div>
 </template>

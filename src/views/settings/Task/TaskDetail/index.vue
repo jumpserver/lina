@@ -1,10 +1,7 @@
 <template>
-  <GenericDetailPage
-    v-bind="config"
-    v-model:active-menu="config.activeMenu"
+  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu"
     v-model:object="taskDetail"
-    :title="getTitle"
-  >
+    :title="getTitle">
     <keep-alive>
       <component :is="config.activeMenu" :object="taskDetail" />
     </keep-alive>

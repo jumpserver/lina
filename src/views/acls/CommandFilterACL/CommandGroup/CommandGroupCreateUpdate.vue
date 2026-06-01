@@ -1,13 +1,10 @@
 <template>
-  <GenericCreateUpdatePage
-    :create-success-next-route="createSuccessNextRoute"
+  <GenericCreateUpdatePage v-bind="$data" :create-success-next-route="createSuccessNextRoute"
     :fields="fields"
     :fields-meta="fieldsMeta"
     :initial="initial"
     :url="url"
-    title="null"
-    v-bind="$data"
-  />
+    title="null" />
 </template>
 
 <script>

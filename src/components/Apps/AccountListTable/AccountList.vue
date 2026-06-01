@@ -35,12 +35,9 @@
       :result="createAccountResults"
       @close-all="closeAll"
     />
-    <AccountBulkUpdateDialog
-      v-if="updateSelectedDialogSetting.visible"
-      v-bind="updateSelectedDialogSetting"
+    <AccountBulkUpdateDialog v-bind="updateSelectedDialogSetting" v-if="updateSelectedDialogSetting.visible"
       v-model:visible="updateSelectedDialogSetting.visible"
-      @update="handleAccountBulkUpdate"
-    />
+      @update="handleAccountBulkUpdate" />
     <PasswordHistoryDialog
       v-if="showPasswordHistoryDialog"
       v-model:visible="showPasswordHistoryDialog"

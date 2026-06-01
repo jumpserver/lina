@@ -1,71 +1,70 @@
 <template>
-  <IBox :title="title" :type="type" class="the-box" v-bind="$attrs">
+  <IBox v-bind="$attrs" :title="title" :type="type" class="the-box">
     <table class="CardTable" style="width: 100%; table-layout: fixed">
-      <tr>
-        <td colspan="2">
-          <Select2
-            ref="select2"
-            v-model="select2.value"
-            :disabled="iDisabled"
-            show-select-all
-            v-bind="select2"
-          />
-        </td>
-      </tr>
-      <slot />
-      <tr>
-        <td colspan="2">
-          <el-button
-            :disabled="iDisabled"
-            :loading="submitLoading"
-            :type="type"
-            size="small"
-            @click="addObjects"
-          >
-            {{ $t('Add') }}
-          </el-button>
-        </td>
-      </tr>
-      <template v-if="showHasObjects">
-        <tr v-for="obj of iHasObjects" :key="obj.value" class="item">
-          <td style="width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
-            <el-tooltip
-              :content="obj.label.toString()"
-              :open-delay="500"
-              effect="dark"
-              placement="left"
-              style="margin: 4px"
-            >
-              <b>{{ obj.label }}</b>
-            </el-tooltip>
+      <tbody>
+        <tr>
+          <td colspan="2">
+            <Select2 v-bind="select2" ref="select2"
+              v-model="select2.value"
+              :disabled="iDisabled"
+              show-select-all />
           </td>
-          <td>
+        </tr>
+        <slot />
+        <tr>
+          <td colspan="2">
             <el-button
               :disabled="iDisabled"
+              :loading="submitLoading"
+              :type="type"
               size="small"
-              style="float: right"
-              type="danger"
-              @click="removeObject(obj)"
+              @click="addObjects"
             >
-              <i class="fa fa-minus" />
+              {{ $t('Add') }}
             </el-button>
           </td>
         </tr>
-      </template>
-      <tr v-if="params.hasMore && showHasMore" class="item">
-        <td colspan="2">
-          <el-button
-            :disabled="iDisabled"
-            :type="type"
-            size="small"
-            style="width: 100%"
-            @click="loadMore"
-          >
-            <i class="fa fa-arrow-down" />
-            {{ $t('More') }}
-          </el-button>
-        </td>
-      </tr>
+        <template v-if="showHasObjects">
+          <tr v-for="obj of iHasObjects" :key="obj.value" class="item">
+            <td style="width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
+              <el-tooltip
+                :content="obj.label.toString()"
+                :open-delay="500"
+                effect="dark"
+                placement="left"
+                style="margin: 4px"
+              >
+                <b>{{ obj.label }}</b>
+              </el-tooltip>
+            </td>
+            <td>
+              <el-button
+                :disabled="iDisabled"
+                size="small"
+                style="float: right"
+                type="danger"
+                @click="removeObject(obj)"
+              >
+                <i class="fa fa-minus" />
+              </el-button>
+            </td>
+          </tr>
+        </template>
+        <tr v-if="params.hasMore && showHasMore" class="item">
+          <td colspan="2">
+            <el-button
+              :disabled="iDisabled"
+              :type="type"
+              size="small"
+              style="width: 100%"
+              @click="loadMore"
+            >
+              <i class="fa fa-arrow-down" />
+              {{ $t('More') }}
+            </el-button>
+          </td>
+        </tr>
+      </tbody>
     </table>
   </IBox>
 </template>

@@ -10,13 +10,10 @@
       <template #right>
         <QuickActions :actions="quickEditActions" type="primary" />
         <QuickActions :actions="quickExecuteActions" :title="$t('Sync')" type="primary" />
-        <RelationCard
-          ref="StrategyRelation"
+        <RelationCard v-bind="strategyRelationConfig" ref="StrategyRelation"
           v-perms="'xpack.change_strategy'"
           style="margin-top: 15px"
-          type="info"
-          v-bind="strategyRelationConfig"
-        />
+          type="info" />
       </template>
     </TwoCol>
     <Dialog

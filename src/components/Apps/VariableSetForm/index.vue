@@ -1,12 +1,9 @@
 <template>
-  <AutoDataForm
-    ref="AutoDataForm"
+  <AutoDataForm v-bind="$data" ref="AutoDataForm"
     class="variable-set"
     :submit-btn-text="submitBtnText"
-    v-bind="$data"
     :fields="fields"
-    @submit="confirm"
-  />
+    @submit="confirm" />
 </template>
 
 <script>

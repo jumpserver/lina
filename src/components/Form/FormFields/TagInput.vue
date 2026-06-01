@@ -24,7 +24,7 @@
       @change="handleChange"
       @focus="focus = true"
       @select="handleSelect"
-      @keyup.enter.prevent.native="handleConfirm"
+      @keyup.enter.prevent="handleConfirm"
     />
     <span
       v-if="replaceShowPassword && filterTags.length > 0"

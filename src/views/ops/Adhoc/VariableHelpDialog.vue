@@ -11,16 +11,18 @@
   >
     <p>{{ $t('VariableHelpText') }}</p>
     <table border="1" class="help-table">
-      <tr>
-        <th>{{ $tc('Variable') }}</th>
-        <th>{{ $tc('Description') }}</th>
-      </tr>
-      <tr v-for="(val, key, index) in variables" :key="index">
-        <td :title="$tc('ClickCopy')" class="item-td text-link" @click="onCopy(key)">
-          <label class="item-label">{{ key }}</label>
-        </td>
-        <td><span>{{ val }}</span></td>
-      </tr>
+      <tbody>
+        <tr>
+          <th>{{ $tc('Variable') }}</th>
+          <th>{{ $tc('Description') }}</th>
+        </tr>
+        <tr v-for="(val, key, index) in variables" :key="index">
+          <td :title="$tc('ClickCopy')" class="item-td text-link" @click="onCopy(key)">
+            <label class="item-label">{{ key }}</label>
+          </td>
+          <td><span>{{ val }}</span></td>
+        </tr>
+      </tbody>
     </table>
   </Dialog>
 </template>

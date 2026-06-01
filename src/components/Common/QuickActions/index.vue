@@ -1,5 +1,5 @@
 <template>
-  <IBox :fa="fa" :title="title" v-bind="$attrs">
+  <IBox v-bind="$attrs" :fa="fa" :title="title">
     <div v-for="action of actions" :key="action.title" class="quick-actions">
       <table>
         <ActionItem v-if="action.has === undefined || action.has" :action="action" />

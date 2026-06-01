@@ -1,7 +1,6 @@
 <template>
   <div v-loading="loading">
-    <AutoDataForm
-      v-if="!loading"
+    <AutoDataForm v-bind="$attrs" v-if="!loading"
       ref="form"
       :form="form"
       :has-reset="iHasReset"
@@ -9,11 +8,8 @@
       :is-submitting="isSubmitting"
       :method="method"
       :url="iUrl"
-      v-bind="$attrs"
       @after-remote-meta="handleAfterRemoteMeta"
-      @submit="handleSubmit"
-      v-on="$listeners"
-    />
+      @submit="handleSubmit" />
   </div>
 </template>
 <script>

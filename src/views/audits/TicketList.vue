@@ -1,5 +1,5 @@
 <template>
-  <BaseTicketList :url="url" v-bind="$data" />
+  <BaseTicketList v-bind="$data" :url="url" />
 </template>
 
 <script>

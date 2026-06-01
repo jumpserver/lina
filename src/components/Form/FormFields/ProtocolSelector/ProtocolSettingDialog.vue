@@ -1,6 +1,5 @@
 <template>
-  <Dialog
-    v-if="$attrs.visible"
+  <Dialog v-bind="$attrs" v-if="$attrs.visible"
     :close-on-click-modal="false"
     :destroy-on-close="true"
     :modal="false"
@@ -8,10 +7,7 @@
     :show-confirm="false"
     :title="$tc('PlatformProtocolConfig') + '：' + protocol.name"
     class="setting-dialog"
-    v-bind="$attrs"
-    width="800px"
-    v-on="$listeners"
-  >
+    width="800px">
     <el-alert v-if="disabled && platformDetail" style="margin-bottom: 10px" type="success">
       {{ $t('InheritPlatformConfig') }}
       <el-link :href="platformDetail" class="link-more" target="_blank">
@@ -19,13 +15,10 @@
       </el-link>
       <i class="fa fa-external-link" />
     </el-alert>
-    <AutoDataForm
-      :disabled="disabled"
+    <AutoDataForm v-bind="config" :disabled="disabled"
       :form="form"
       class="data-form"
-      v-bind="config"
-      @submit="onSubmit"
-    />
+      @submit="onSubmit" />
   </Dialog>
 </template>
 

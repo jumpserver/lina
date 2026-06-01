@@ -1,14 +1,11 @@
 <template>
   <div :class="showSetting ? 'show-setting' : 'hide-setting'">
     <div v-for="(item, index) in items" :key="item.name" class="protocol-item">
-      <el-input
-        v-model="item.port"
+      <el-input v-bind="$attrs" v-model="item.port"
         :class="isPortReadonly(item) ? '' : 'input-with-select'"
         :placeholder="portPlaceholder"
         :readonly="isPortReadonly(item)"
-        :title="isPortReadonly(item) ? '端口由 URL 指定' : ''"
-        v-bind="$attrs"
-      >
+        :title="isPortReadonly(item) ? '端口由 URL 指定' : ''">
         <template #prepend>
           <el-select
             :disabled="disableSelect(item)"

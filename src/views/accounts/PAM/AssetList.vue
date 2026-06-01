@@ -1,9 +1,6 @@
 <template>
-  <BaseList
-    :header-actions="headerActions"
-    :table-config="tableConfig"
-    v-bind="config"
-  />
+  <BaseList v-bind="config" :header-actions="headerActions"
+    :table-config="tableConfig" />
 </template>
 
 <script>

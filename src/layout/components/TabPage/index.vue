@@ -1,5 +1,5 @@
 <template>
-  <Page :title="title" class="tab-page" v-bind="$attrs">
+  <Page v-bind="$attrs" :title="title" class="tab-page">
     <template #headingRightSide>
       <slot name="headingRightSide" />
     </template>

@@ -39,8 +39,8 @@
       @blur="handleBlur"
       @change="handleConfirm"
       @focus="handleFocus"
-      @keyup.enter.native="handleConfirm"
-      @keyup.delete.native="handleDelete"
+      @keyup.enter="handleConfirm"
+      @keyup.delete="handleDelete"
     />
     <span :class="isFocus ? 'is-focus ' : ''" class="keydown-focus">/</span>
   </div>

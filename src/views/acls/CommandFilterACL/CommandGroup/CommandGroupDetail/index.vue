@@ -1,10 +1,7 @@
 <template>
-  <GenericDetailPage
-    v-model:active-menu="config.activeMenu"
+  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu"
     v-model:object="CommandGroup"
-    :title="'null'"
-    v-bind="config"
-  >
+    :title="'null'">
     <keep-alive>
       <component :is="config.activeMenu" :object="CommandGroup" />
     </keep-alive>

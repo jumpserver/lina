@@ -6,10 +6,7 @@
         <PermUserGroupCard v-bind="UserGroupCardConfig" />
       </template>
     </TwoCol>
-    <GenericListTableDialog
-      v-model:visible="GenericListTableDialogConfig.visible"
-      v-bind="GenericListTableDialogConfig"
-    />
+    <GenericListTableDialog v-bind="GenericListTableDialogConfig" v-model:visible="GenericListTableDialogConfig.visible" />
   </div>
 </template>
 

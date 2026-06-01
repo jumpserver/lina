@@ -1,5 +1,5 @@
 <template>
-  <DataActions :actions="iActions" v-bind="$attrs" />
+  <DataActions v-bind="$attrs" :actions="iActions" />
 </template>
 
 <script>

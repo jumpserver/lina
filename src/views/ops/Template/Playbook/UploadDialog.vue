@@ -1,10 +1,7 @@
 <template>
-  <Dialog
-    :show-cancel="false"
+  <Dialog v-bind="$attrs" :show-cancel="false"
     :title="$tc('UploadPlaybook')"
-    v-bind="$attrs"
-    @confirm="onSubmit"
-  >
+    @confirm="onSubmit">
     <el-form label-position="top">
       <el-form-item
         :label-width="'100px'"

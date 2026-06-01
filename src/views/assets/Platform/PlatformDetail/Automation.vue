@@ -1,6 +1,6 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm :object="object" class="form" v-bind="$data" />
+    <GenericCreateUpdateForm v-bind="$data" :object="object" class="form" />
   </IBox>
 </template>
 

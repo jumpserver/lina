@@ -2,11 +2,8 @@
   <div>
     <el-alert v-sanitize="helpText" type="success" />
     <IBox>
-      <GenericCreateUpdateForm
-        v-bind="$data"
-        :create-success-next-route="successUrl"
-        :update-success-next-route="successUrl"
-      />
+      <GenericCreateUpdateForm v-bind="$data" :create-success-next-route="successUrl"
+        :update-success-next-route="successUrl" />
     </IBox>
   </div>
 

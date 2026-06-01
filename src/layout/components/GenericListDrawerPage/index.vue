@@ -1,12 +1,8 @@
 <template>
   <Page v-bind="$attrs">
-    <DrawerListTable
-      ref="ListTable"
+    <DrawerListTable v-bind="$attrs" ref="ListTable"
       :header-actions="headerActions"
-      :table-config="tableConfig"
-      v-bind="$attrs"
-      v-on="$listeners"
-    />
+      :table-config="tableConfig" />
   </Page>
 </template>
 

@@ -1,9 +1,6 @@
 <template>
-  <GenericCreateUpdatePage
-    v-if="!loading"
-    v-bind="$data"
-    :after-get-form-value="afterGetFormValue"
-  />
+  <GenericCreateUpdatePage v-bind="$data" v-if="!loading"
+    :after-get-form-value="afterGetFormValue" />
 </template>
 
 <script>

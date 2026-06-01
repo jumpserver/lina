@@ -1,18 +1,13 @@
 <template>
-  <Dialog
-    :close-on-click-modal="false"
+  <Dialog v-bind="$attrs" :close-on-click-modal="false"
     :title="$tc('Assets')"
     custom-class="asset-select-dialog"
     top="2vh"
-    v-bind="$attrs"
     width="1000px"
     @cancel="handleCancel"
     @close="handleClose"
-    @confirm="handleConfirm"
-    v-on="$listeners"
-  >
-    <AssetTreeTable
-      ref="ListPage"
+    @confirm="handleConfirm">
+    <AssetTreeTable v-bind="$attrs" ref="ListPage"
       :header-actions="headerActions"
       :node-url="baseNodeUrl"
       :sync-select-to-url="false"
@@ -21,10 +16,7 @@
       :tree-url="`${baseNodeUrl}children/tree/`"
       :url="baseUrl"
       class="tree-table"
-      v-bind="$attrs"
-      @loaded="handleTableLoaded"
-      v-on="$listeners"
-    />
+      @loaded="handleTableLoaded" />
   </Dialog>
 </template>
 

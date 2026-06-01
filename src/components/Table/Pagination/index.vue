@@ -1,17 +1,14 @@
 <template>
   <div class="el-page">
-    <el-pagination
-      v-if="hasPagination"
+    <el-pagination v-bind="extraPaginationAttrs" v-if="hasPagination"
       :background="paginationBackground"
       :current-page="page"
       :layout="paginationLayout"
       :page-size="size"
       :page-sizes="paginationSizes"
       :total="total"
-      v-bind="extraPaginationAttrs"
       @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-    />
+      @current-change="handleCurrentChange" />
   </div>
 </template>
 

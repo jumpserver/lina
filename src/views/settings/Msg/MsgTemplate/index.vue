@@ -1,11 +1,8 @@
 <template>
   <div>
     <IBox>
-      <GenericCreateUpdateForm
-        v-bind="$data"
-        :create-success-next-route="successUrl"
-        :update-success-next-route="successUrl"
-      />
+      <GenericCreateUpdateForm v-bind="$data" :create-success-next-route="successUrl"
+        :update-success-next-route="successUrl" />
     </IBox>
     <VariablesHelpTextDialog
       v-model:visible="showHelpDialog"

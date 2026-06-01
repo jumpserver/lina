@@ -1,18 +1,12 @@
 <template>
-  <Dialog
-    v-bind="$attrs"
-    :destroy-on-close="true"
+  <Dialog v-bind="$attrs" :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('SyncSetting')"
     top="10%"
-    width="50%"
-  >
-    <GenericCreateUpdateForm
-      v-bind="settings"
-      :has-detail-in-msg="false"
-      @submit-success="onSuccess"
-    />
+    width="50%">
+    <GenericCreateUpdateForm v-bind="settings" :has-detail-in-msg="false"
+      @submit-success="onSuccess" />
   </Dialog>
 </template>
 

@@ -7,14 +7,18 @@
       </div>
     </template>
     <table v-if="logs.length>0" class="log-table">
-      <tr v-for="(o,i) in logs" :key="i">
-        <td>{{ o['message'] }}</td>
-      </tr>
+      <tbody>
+        <tr v-for="(o,i) in logs" :key="i">
+          <td>{{ o['message'] }}</td>
+        </tr>
+      </tbody>
     </table>
     <table v-else class="log-table">
-      <tr>
-        <td>{{ $tc('NoLog') }}</td>
-      </tr>
+      <tbody>
+        <tr>
+          <td>{{ $tc('NoLog') }}</td>
+        </tr>
+      </tbody>
     </table></el-card>
 
 </template>

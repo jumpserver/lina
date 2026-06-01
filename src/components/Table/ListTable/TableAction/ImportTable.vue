@@ -23,16 +23,13 @@
         >
           {{ importActionTitle }}
         </el-button>
-        <el-button
-          v-for="button in moreButtons"
+        <el-button v-bind="button" v-for="button in moreButtons"
           v-show="!button.hidden"
           :key="button.title"
           :disabled="disableImportBtn"
           :loading="button.loading"
           size="small"
-          v-bind="button"
-          @click="handleClick(button)"
-        >
+          @click="handleClick(button)">
           {{ button.title }}
         </el-button>
       </div>

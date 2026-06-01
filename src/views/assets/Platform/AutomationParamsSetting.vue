@@ -17,13 +17,10 @@
       width="60%"
       @close="onDialogClose"
     >
-      <AutoDataForm
-        ref="autoDataForm"
+      <AutoDataForm v-bind="config" ref="autoDataForm"
         :form="form"
         class="data-form"
-        v-bind="config"
-        @submit="onSubmit"
-      />
+        @submit="onSubmit" />
     </Dialog>
   </div>
 </template>

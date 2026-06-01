@@ -1,11 +1,8 @@
 <template>
   <div>
-    <BaseReport
-      :title="title"
+    <BaseReport v-bind="$attrs" :title="title"
       :nav="nav"
-      :name="name"
-      v-bind="$attrs"
-    >
+      :name="name">
       <div class="charts-grid">
         <div class="chart-container full-width">
           <div class="chart-container-title">

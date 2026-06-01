@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-if="!loading" v-bind="iConfig" />
+  <GenericCreateUpdatePage v-bind="iConfig" v-if="!loading" />
 </template>
 
 <script>

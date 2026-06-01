@@ -2,12 +2,9 @@
   <div class="container">
     <div class="chat-action">
       <div class="model-select">
-        <Select2
-          v-model="select.value"
+        <Select2 v-bind="select" v-model="select.value"
           :disabled="isLoading || isSelectDisabled || loading || !options.length"
-          v-bind="select"
-          @change="onSelectChange"
-        />
+          @change="onSelectChange" />
       </div>
       <el-dropdown
         :hide-on-click="false"
@@ -65,7 +62,7 @@
         type="textarea"
         @compositionend="isIM = false"
         @compositionstart="isIM = true"
-        @keypress.native="onKeyEnter"
+        @keypress="onKeyEnter"
       />
     </div>
   </div>

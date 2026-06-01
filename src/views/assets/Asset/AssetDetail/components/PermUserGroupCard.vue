@@ -1,6 +1,6 @@
 <template>
   <div>
-    <IBox :fa="icon" :title="title" :type="type" v-bind="$attrs">
+    <IBox v-bind="$attrs" :fa="icon" :title="title" :type="type">
       <table class="card-table">
         <div v-cloak v-if="iObjects.length > 0">
           <tr v-for="obj of iObjects" :key="obj.value" class="item">

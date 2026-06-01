@@ -1,15 +1,12 @@
 <template>
-  <Dialog
-    v-if="visible"
+  <Dialog v-bind="$attrs" v-if="visible"
     :visible="visible"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('UpdateSelected')"
     top="1vh"
     width="70%"
-    v-bind="$attrs"
-    @update:visible="$emit('update:visible', $event)"
-  >
+    @update:visible="$emit('update:visible', $event)">
     <el-alert v-if="tips" class="tips" type="success">{{ tips }}</el-alert>
     <el-row :gutter="20">
       <el-col :md="4" :sm="24">
@@ -35,10 +32,7 @@
       <el-divider />
     </el-row>
     <el-row>
-      <GenericCreateUpdateForm
-        :key="internalKey"
-        v-bind="iFormSetting"
-      />
+      <GenericCreateUpdateForm v-bind="iFormSetting" :key="internalKey" />
     </el-row>
   </Dialog>
 </template>

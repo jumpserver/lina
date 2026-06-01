@@ -61,7 +61,7 @@
       @cancel="handleAccountTemplateCancel"
       @confirm="handleAccountTemplateConfirm"
     >
-      <ListTable ref="templateTable" v-bind="accountTemplateTable" />
+      <ListTable v-bind="accountTemplateTable" ref="templateTable" />
     </Dialog>
   </el-form>
 </template>

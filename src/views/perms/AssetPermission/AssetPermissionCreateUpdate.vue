@@ -1,11 +1,8 @@
 <template>
-  <GenericCreateUpdatePage
-    :fields="fields"
+  <GenericCreateUpdatePage v-bind="$data" :fields="fields"
     :fields-meta="fieldsMeta"
     :initial="initial"
-    :url="url"
-    v-bind="$data"
-  />
+    :url="url" />
 </template>
 
 <script>

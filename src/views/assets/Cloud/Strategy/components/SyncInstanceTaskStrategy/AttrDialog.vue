@@ -1,12 +1,9 @@
 <template>
-  <Dialog
-    :close-on-click-modal="false"
+  <Dialog v-bind="$attrs" :close-on-click-modal="false"
     :destroy-on-close="true"
     :show-buttons="false"
     :title="$tc('Strategy')"
-    v-bind="$attrs"
-    width="80%"
-  >
+    width="80%">
     <IBox>
       <GenericCreateUpdateForm v-bind="$data" />
     </IBox>

@@ -3,7 +3,7 @@
     <div class="head">
       <Title :config="titleConfig" />
     </div>
-    <ProgressChart v-if="config.data.length > 0" v-bind="config" />
+    <ProgressChart v-bind="config" v-if="config.data.length> 0" />
     <div v-else class="no-data">{{ $tc('NoData') }}</div>
   </div>
 </template>

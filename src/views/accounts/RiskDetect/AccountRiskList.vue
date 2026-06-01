@@ -7,11 +7,8 @@
       :table-config="tableConfig"
       :tree-setting="treeSetting"
     />
-    <BatchResolveDialog
-      v-if="batchResolveDialog.visible"
-      v-model:visible="batchResolveDialog.visible"
-      v-bind="batchResolveDialog"
-    />
+    <BatchResolveDialog v-bind="batchResolveDialog" v-if="batchResolveDialog.visible"
+      v-model:visible="batchResolveDialog.visible" />
     <RiskScanDialog
       v-if="detectDialog.visible"
       v-model:visible="detectDialog.visible"

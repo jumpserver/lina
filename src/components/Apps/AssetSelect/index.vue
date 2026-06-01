@@ -1,15 +1,10 @@
 <template>
   <div class="asset-select-formatter">
-    <Select2
-      ref="select2"
+    <Select2 v-bind="{ ...$attrs, ...select2Config }" ref="select2"
       v-model="select2Config.value"
-      v-bind="select2Config"
       @input="onInputChange"
-      v-on="$listeners"
-      @focus.stop="handleFocus"
-    />
-    <AssetSelectDialog
-      v-if="dialogVisible"
+      @focus.stop="handleFocus" />
+    <AssetSelectDialog v-bind="$attrs" v-if="dialogVisible"
       ref="dialog"
       v-model:visible="dialogVisible"
       :base-node-url="baseNodeUrl"
@@ -17,11 +12,8 @@
       :tree-setting="treeSetting"
       :tree-url-query="treeUrlQuery"
       :value="value"
-      v-bind="$attrs"
       @cancel="handleCancel"
-      @confirm="handleConfirm"
-      v-on="$listeners"
-    />
+      @confirm="handleConfirm" />
   </div>
 </template>
 

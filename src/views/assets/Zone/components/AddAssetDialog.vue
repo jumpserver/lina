@@ -12,10 +12,7 @@
     top="15vh"
     width="600px"
   >
-    <GenericCreateUpdateForm
-      v-bind="formConfig"
-      @submit-success="onSubmitSuccess"
-    />
+    <GenericCreateUpdateForm v-bind="formConfig" @submit-success="onSubmitSuccess" />
   </Dialog>
 </template>
 <script>

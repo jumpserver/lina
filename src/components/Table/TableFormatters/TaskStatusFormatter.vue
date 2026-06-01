@@ -1,5 +1,5 @@
 <template>
-  <ChoicesFormatter :formatter-args-default="iFormatterArgsDefault" v-bind="$props" />
+  <ChoicesFormatter v-bind="$props" :formatter-args-default="iFormatterArgsDefault" />
 </template>
 
 <script>

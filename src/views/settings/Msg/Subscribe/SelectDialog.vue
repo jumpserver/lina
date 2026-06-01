@@ -1,12 +1,9 @@
 <template>
-  <Dialog
-    v-bind="$attrs"
-    ref="myDialog"
+  <Dialog v-bind="$attrs" ref="myDialog"
     :destroy-on-close="true"
     height="720px"
     width="790px"
-    @confirm="submit"
-  >
+    @confirm="submit">
     <krryPaging v-bind="pagingTransfer" ref="pageTransfer" class="transfer" />
   </Dialog>
 </template>

@@ -53,15 +53,12 @@
       </el-form-item>
     </el-form>
     <div v-else class="importTableZone">
-      <ImportTable
-        ref="importTable"
+      <ImportTable v-bind="$attrs" ref="importTable"
         :import-option="importOption"
         :json-data="jsonData"
         :url="url"
-        v-bind="$attrs"
         @cancel="cancelUpload"
-        @finish="closeDialog"
-      />
+        @finish="closeDialog" />
     </div>
   </Dialog>
 </template>

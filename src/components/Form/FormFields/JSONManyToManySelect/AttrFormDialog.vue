@@ -1,18 +1,11 @@
 <template>
-  <Dialog
-    :destroy-on-close="true"
+  <Dialog v-bind="$attrs" :destroy-on-close="true"
     :show-buttons="false"
-    :title="$tc('SelectAttrs')"
-    v-bind="$attrs"
-    v-on="$listeners"
-  >
+    :title="$tc('SelectAttrs')">
     <div v-if="!loading">
-      <DataForm
-        :form="form"
+      <DataForm v-bind="formConfig" :form="form"
         class="attr-form"
-        v-bind="formConfig"
-        @submit="onAttrDialogConfirm"
-      />
+        @submit="onAttrDialogConfirm" />
     </div>
   </Dialog>
 </template>

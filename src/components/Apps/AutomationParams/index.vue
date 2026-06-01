@@ -5,24 +5,17 @@
         {{ $tc('Setting') }}
       </el-button>
     </div>
-    <Dialog
-      v-if="visible"
+    <Dialog v-bind="$attrs" v-if="visible"
       :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
       :title="title"
       :visible="visible"
-      v-bind="$attrs"
-      width="60%"
-      v-on="$listeners"
-    >
-      <AutoDataForm
-        ref="autoDataForm"
+      width="60%">
+      <AutoDataForm v-bind="config" ref="autoDataForm"
         :form="form"
         class="data-form"
-        v-bind="config"
-        @submit="onSubmit"
-      />
+        @submit="onSubmit" />
     </Dialog>
   </div>
 </template>

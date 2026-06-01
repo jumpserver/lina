@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ListTable class="App-Provider" v-bind="$data" />
+    <ListTable v-bind="$data" class="App-Provider" />
   </div>
 </template>
 

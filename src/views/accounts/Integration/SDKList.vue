@@ -35,7 +35,7 @@
 <script>
 import { IBox } from '@/components'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-import { highlightBlock } from 'highlight.js'
+import hljs from 'highlight.js'
 import VueMarkdown from 'vue-markdown'
 
 export default {
@@ -75,7 +75,7 @@ export default {
       const codeBlocks = this.$el.querySelectorAll('pre code')
       codeBlocks.forEach((block) => {
         if (block?.dataset?.highlighted !== 'yes') {
-          highlightBlock(block)
+          hljs.highlightElement(block)
         }
       })
     },

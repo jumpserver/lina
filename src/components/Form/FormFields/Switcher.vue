@@ -1,11 +1,7 @@
 <template>
-  <el-switch
-    v-model="iValue"
+  <el-switch v-bind="$attrs" v-model="iValue"
     :class="type"
-    inactive-color="#dcdfe6"
-    v-bind="$attrs"
-    v-on="$listeners"
-  />
+    inactive-color="#dcdfe6" />
 </template>
 
 <script>

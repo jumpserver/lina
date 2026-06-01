@@ -6,7 +6,7 @@
       :table-config="tableConfig"
     />
     <template #right>
-      <RelationCard v-if="!loading" v-bind="relationConfig" ref="userRelation" />
+      <RelationCard v-bind="relationConfig" v-if="!loading" ref="userRelation" />
     </template>
   </TwoCol>
 </template>

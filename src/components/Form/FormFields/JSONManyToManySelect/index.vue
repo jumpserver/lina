@@ -5,7 +5,7 @@
         {{ tp.label }}
       </el-radio>
     </el-radio-group>
-    <Select2 v-if="iValue.type === 'ids'" v-model="ids" v-bind="select2" @change="onChangeEmit" />
+    <Select2 v-bind="select2" v-if="iValue.type === 'ids'" v-model="ids" @change="onChangeEmit" />
     <div v-if="iValue.type === 'attrs'">
       <DataTable :config="tableConfig" class="attr-list" />
       <div class="actions">

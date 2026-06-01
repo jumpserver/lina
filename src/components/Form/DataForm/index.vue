@@ -1,7 +1,6 @@
 <template>
   <div>
-    <ElFormRender
-      :id="id"
+    <ElFormRender v-bind="$attrs" :id="id"
       ref="form"
       :class="[mobile ? 'mobile' : 'desktop']"
       :content="fields"
@@ -10,9 +9,7 @@
       class="form-fields"
       :label-width="labelWidth"
       :style="{ '--label-width': labelWidth }"
-      v-bind="$attrs"
-      :server-errors="serverErrors"
-    >
+      :server-errors="serverErrors">
       <!-- slot 透传 -->
       <template v-for="item in fields" :key="`id:${item.id}`">
         <slot :name="`id:${item.id}`" />
@@ -45,15 +42,12 @@
           {{ $t('Reset') }}
         </el-button>
 
-        <el-button
-          v-for="button in moreButtons"
+        <el-button v-bind="button" v-for="button in moreButtons"
           v-show="!iHidden(button)"
           :key="button.title"
           :loading="button.loading"
           size="small"
-          v-bind="button"
-          @click="handleClick(button)"
-        >
+          @click="handleClick(button)">
           {{ button.title }}
         </el-button>
       </div>

@@ -3,13 +3,10 @@
     <el-alert :center="false" :closable="true" style="margin-bottom: 6px">
       <el-link :icon="linkIcon" :type="linkType" :underline="false"> {{ tip }}</el-link>
     </el-alert>
-    <ImportTable
-      ref="importTable"
+    <ImportTable v-bind="settings" ref="importTable"
       origin="cloudSync"
-      v-bind="settings"
       @cancel="closeDialog"
-      @finish="showResult"
-    />
+      @finish="showResult" />
   </div>
 </template>
 

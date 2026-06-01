@@ -11,22 +11,24 @@
   >
     <p>{{ variablesHelpText }}</p>
     <table border="1" class="help-table">
-      <tr>
-        <th>{{ $tc('Variable') }}</th>
-        <th>{{ $tc('Description') }}</th>
-        <th>{{ $tc('Example') }}</th>
-      </tr>
-      <tr v-for="(item, index) in variables" :key="index">
-        <td :title="$tc('ClickCopy')" class="item-td text-link" @click="onCopy(item.name)">
-          <label class="item-label">{{ item.name }}</label>
-        </td>
-        <td>
-          <span>{{ item.label }}</span>
-        </td>
-        <td>
-          <span>{{ item.default }}</span>
-        </td>
-      </tr>
+      <tbody>
+        <tr>
+          <th>{{ $tc('Variable') }}</th>
+          <th>{{ $tc('Description') }}</th>
+          <th>{{ $tc('Example') }}</th>
+        </tr>
+        <tr v-for="(item, index) in variables" :key="index">
+          <td :title="$tc('ClickCopy')" class="item-td text-link" @click="onCopy(item.name)">
+            <label class="item-label">{{ item.name }}</label>
+          </td>
+          <td>
+            <span>{{ item.label }}</span>
+          </td>
+          <td>
+            <span>{{ item.default }}</span>
+          </td>
+        </tr>
+      </tbody>
     </table>
   </Dialog>
 </template>

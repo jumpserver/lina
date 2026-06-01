@@ -38,16 +38,13 @@
     >
       <el-row class="tag-select">
         <el-col :span="12">
-          <Select2 v-model="keySelect2.value" v-bind="keySelect2" @change="handleKeyChanged" />
+          <Select2 v-bind="keySelect2" v-model="keySelect2.value" @change="handleKeyChanged" />
         </el-col>
         <el-col :span="12" style="padding-left: 5px">
-          <Select2
-            v-model="valueSelect2.value"
+          <Select2 v-bind="valueSelect2" v-model="valueSelect2.value"
             :disabled="!keySelect2.value"
             style="margin-left: 10px"
-            v-bind="valueSelect2"
-            @change="handleAddLabel"
-          />
+            @change="handleAddLabel" />
         </el-col>
       </el-row>
       <div class="tag-zone">

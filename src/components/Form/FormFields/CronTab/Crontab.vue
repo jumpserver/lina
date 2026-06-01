@@ -53,46 +53,50 @@
         <p class="title">{{ $t('TimeExpression') }}</p>
         <table>
           <thead>
-            <th v-for="item of tabTitles" :key="item" width="40">{{ item }}</th>
+            <tr>
+              <th v-for="item of tabTitles" :key="item" width="40">{{ item }}</th>
+            </tr>
           </thead>
           <tbody>
-            <td>
-              <el-input
-                v-model.trim="contabValueObj.min"
-                max="5"
-                min="0"
-                onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
-                size="small"
-              />
-            </td>
-            <td>
-              <el-input
-                v-model.trim="contabValueObj.hour"
-                onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
-                size="small"
-              />
-            </td>
-            <td>
-              <el-input
-                v-model.trim="contabValueObj.day"
-                onkeyup="value=value.replace(/[^\0-9\\-\*\,]/g,'')"
-                size="small"
-              />
-            </td>
-            <td>
-              <el-input
-                v-model.trim="contabValueObj.month"
-                onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
-                size="small"
-              />
-            </td>
-            <td>
-              <el-input
-                v-model.trim="contabValueObj.week"
-                onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
-                size="small"
-              />
-            </td>
+            <tr>
+              <td>
+                <el-input
+                  v-model.trim="contabValueObj.min"
+                  max="5"
+                  min="0"
+                  onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
+                  size="small"
+                />
+              </td>
+              <td>
+                <el-input
+                  v-model.trim="contabValueObj.hour"
+                  onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
+                  size="small"
+                />
+              </td>
+              <td>
+                <el-input
+                  v-model.trim="contabValueObj.day"
+                  onkeyup="value=value.replace(/[^\0-9\\-\*\,]/g,'')"
+                  size="small"
+                />
+              </td>
+              <td>
+                <el-input
+                  v-model.trim="contabValueObj.month"
+                  onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
+                  size="small"
+                />
+              </td>
+              <td>
+                <el-input
+                  v-model.trim="contabValueObj.week"
+                  onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
+                  size="small"
+                />
+              </td>
+            </tr>
           </tbody>
         </table>
         <CrontabResult :ex="contabValueString" @crontab-diff-change="crontabDiffChangeHandle" />

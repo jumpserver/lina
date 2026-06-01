@@ -1,9 +1,6 @@
 <template>
-  <GenericDetailPage
-    v-model:active-menu="config.activeMenu"
-    v-model:object="CommandFilterACL"
-    v-bind="config"
-  >
+  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu"
+    v-model:object="CommandFilterACL">
     <keep-alive>
       <component :is="config.activeMenu" :object="CommandFilterACL" />
     </keep-alive>

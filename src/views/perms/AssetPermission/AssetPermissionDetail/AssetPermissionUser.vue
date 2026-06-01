@@ -2,8 +2,8 @@
   <TwoCol>
     <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
     <template #right>
-      <RelationCard type="primary" v-bind="userRelationConfig" />
-      <RelationCard style="margin-top: 15px" type="info" v-bind="groupRelationConfig" />
+      <RelationCard v-bind="userRelationConfig" type="primary" />
+      <RelationCard v-bind="groupRelationConfig" style="margin-top: 15px" type="info" />
     </template>
   </TwoCol>
 </template>

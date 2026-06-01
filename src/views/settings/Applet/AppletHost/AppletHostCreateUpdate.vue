@@ -1,5 +1,5 @@
 <template>
-  <BaseAssetCreateUpdate v-if="!loading" v-bind="config" />
+  <BaseAssetCreateUpdate v-bind="config" v-if="!loading" />
 </template>
 
 <script>

@@ -1,16 +1,18 @@
 <template>
-  <IBox :fa="icon" :title="title" :type="type" v-bind="$attrs">
+  <IBox v-bind="$attrs" :fa="icon" :title="title" :type="type">
     <table style="width: 100%">
-      <tr>
-        <td colspan="2">
-          <AssetSelect ref="assetSelect" :can-select="canSelect" :disabled="disabled" />
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
-          <el-button :disabled="disabled" :type="type" size="small" @click="addObjects">{{ $t('Add') }}</el-button>
-        </td>
-      </tr>
+      <tbody>
+        <tr>
+          <td colspan="2">
+            <AssetSelect ref="assetSelect" :can-select="canSelect" :disabled="disabled" />
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <el-button :disabled="disabled" :type="type" size="small" @click="addObjects">{{ $t('Add') }}</el-button>
+          </td>
+        </tr>
+      </tbody>
     </table>
   </IBox>
 </template>

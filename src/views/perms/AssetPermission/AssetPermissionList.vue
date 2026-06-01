@@ -1,5 +1,5 @@
 <template>
-  <Page :help-tip="helpMsg" v-bind="$attrs">
+  <Page v-bind="$attrs" :help-tip="helpMsg">
     <AssetTreeTable
       ref="AssetTreeTable"
       :header-actions="headerActions"
@@ -8,11 +8,8 @@
       :quick-filters="quickFilter"
       :create-drawer="createDrawer"
     />
-    <PermBulkUpdateDialog
-      v-model:visible="updateSelectedDialogSetting.visible"
-      v-bind="updateSelectedDialogSetting"
-      @update="handlePermBulkUpdate"
-    />
+    <PermBulkUpdateDialog v-bind="updateSelectedDialogSetting" v-model:visible="updateSelectedDialogSetting.visible"
+      @update="handlePermBulkUpdate" />
   </Page>
 </template>
 

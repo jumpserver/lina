@@ -28,15 +28,11 @@
         </div>
       </div>
       <div class="sidebar">
-        <Sidebar
-          v-model:active="active"
+        <Sidebar v-bind="$attrs" v-model:active="active"
           :expanded="expanded"
-          v-bind="$attrs"
           @close="onClose"
           @compress="compress"
-          @expand="expandFull"
-          v-on="$listeners"
-        />
+          @expand="expandFull" />
       </div>
     </div>
   </DrawerPanel>

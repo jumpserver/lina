@@ -1,15 +1,12 @@
 <template>
   <transition name="dialog-fade">
-    <el-dialog
-      :append-to-body="true"
+    <el-dialog v-bind="$attrs" :append-to-body="true"
       :class="{ shadow: shadow }"
       :modal-append-to-body="true"
       :title="title"
       :top="top"
       :width="iWidth"
-      class="dialog"
-      v-bind="$attrs"
-    >
+      class="dialog">
       <div v-loading="disabledStatus">
         <slot />
       </div>

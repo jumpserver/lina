@@ -1,5 +1,5 @@
 <template>
-  <el-input v-bind="$attrs" v-on="$listeners">
+  <el-input v-bind="$attrs">
     <template #append>{{ iUnit }}</template>
   </el-input>
 </template>

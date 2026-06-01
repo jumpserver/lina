@@ -13,12 +13,9 @@
         />
       </template>
       <template #table>
-        <BaseList
-          ref="baseList"
+        <BaseList v-bind="tableConfig" ref="baseList"
           :add-extra-more-actions="addExtraMoreActions"
-          :header-actions="headerActions"
-          v-bind="tableConfig"
-        />
+          :header-actions="headerActions" />
       </template>
     </AssetTreeTable>
   </div>

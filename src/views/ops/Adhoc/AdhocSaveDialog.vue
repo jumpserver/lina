@@ -9,7 +9,7 @@
     width="40%"
     @update:visible="$emit('update:visible', $event)"
   >
-    <GenericCreateUpdateForm v-if="ready" :on-perform-success="onSubmitSuccess" v-bind="$data" />
+    <GenericCreateUpdateForm v-bind="$data" v-if="ready" :on-perform-success="onSubmitSuccess" />
   </Dialog>
 </template>
 

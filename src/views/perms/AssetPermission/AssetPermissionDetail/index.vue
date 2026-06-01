@@ -1,10 +1,7 @@
 <template>
-  <GenericDetailPage
-    v-model:active-menu="config.activeMenu"
+  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu"
     v-model:object="AssetPermission"
-    v-bind="config"
-    @tab-click="handleTabClick"
-  >
+    @tab-click="handleTabClick">
     <keep-alive>
       <component :is="config.activeMenu" :object="AssetPermission" />
     </keep-alive>

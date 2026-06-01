@@ -1,13 +1,10 @@
 <template>
-  <el-form-item
-    v-if="_show"
+  <el-form-item v-bind="data.attrs" v-if="_show"
     :class="classes"
     :label="data.label"
     :prop="itemProp"
     :rules="_show && Array.isArray(data.rules) ? data.rules : []"
-    v-bind="data.attrs"
-    :error="errorText"
-  >
+    :error="errorText">
     <template v-if="data.label" #label>
       <span :title="data.label">
         <span v-if="data.required">* </span>
@@ -39,30 +36,21 @@
         {{ multipleValue }}
       </div>
     </template>
-    <component
-      :is="data.component || `el-${data.type}`"
+    <component v-bind="componentProps" :is="data.component || `el-${data.type}`"
       v-else
       :component="data.component || `el-${data.type}`"
       :disabled="disabled || componentProps.disabled || readonly"
       :value="itemValue"
-      v-bind="componentProps"
-      v-on="listeners"
-    >
+      v-on="listeners">
       <template v-for="opt in options" :key="opt.value">
-        <el-option v-if="data.type === 'select'" v-bind="opt" />
-        <el-checkbox-button
-          v-else-if="data.type === 'checkbox-group' && data.style === 'button'"
-          :label="'value' in opt ? opt.value : opt.label"
-          v-bind="opt"
-        >
+        <el-option v-bind="opt" v-if="data.type === 'select'" />
+        <el-checkbox-button v-bind="opt" v-else-if="data.type === 'checkbox-group' && data.style === 'button'"
+          :label="'value' in opt ? opt.value : opt.label">
           {{ opt.label }}
         </el-checkbox-button>
 
-        <el-checkbox
-          v-else-if="data.type === 'checkbox-group' && data.style !== 'button'"
-          :label="'value' in opt ? opt.value : opt.label"
-          v-bind="opt"
-        >
+        <el-checkbox v-bind="opt" v-else-if="data.type === 'checkbox-group' && data.style !== 'button'"
+          :label="'value' in opt ? opt.value : opt.label">
           {{ opt.label }}
           <el-tooltip v-if="opt.tip" :content="opt.tip" :open-delay="500" placement="top">
             <i class="el-icon-warning-outline" />
@@ -71,11 +59,8 @@
         </el-checkbox>
         <!-- WARNING: radio 用 label 属性来表示 value 的含义 -->
         <!-- FYI: radio 的 value 属性可以在没有 radio-group 时用来关联到同一个 v-model -->
-        <el-radio
-          v-else-if="data.type === 'radio-group'"
-          :label="'value' in opt ? opt.value : opt.label"
-          v-bind="opt"
-        >
+        <el-radio v-bind="opt" v-else-if="data.type === 'radio-group'"
+          :label="'value' in opt ? opt.value : opt.label">
           {{ opt.label }}
           <el-tooltip v-if="opt.tip" :content="opt.tip" :open-delay="500" placement="top">
             <i class="el-icon-warning-outline" />

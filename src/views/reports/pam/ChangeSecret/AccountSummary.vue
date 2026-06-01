@@ -3,7 +3,7 @@
     <div v-if="isTitle" class="head">
       <Title :config="config" />
     </div>
-    <LineChart v-if="loading" v-bind="lineChartConfig" />
+    <LineChart v-bind="lineChartConfig" v-if="loading" />
   </div>
 </template>
 

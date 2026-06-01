@@ -1,17 +1,13 @@
 <template>
-  <Dialog
-    :close-on-click-modal="false"
+  <Dialog v-bind="$attrs" :close-on-click-modal="false"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
     :title="title"
     :visible="visible"
     class="dialog-content"
-    v-bind="$attrs"
     width="600px"
-    @confirm="visible = false"
-    v-on="$listeners"
-  >
+    @confirm="visible = false">
     <div v-if="confirmTypeRequired === 'relogin'">
       <el-row :gutter="24" style="margin: 0 auto">
         <el-col :md="24" :sm="24">
@@ -50,7 +46,7 @@
             v-model="secretValue"
             :placeholder="inputPlaceholder"
             :show-password="showPassword"
-            @keyup.enter.native="handleConfirm"
+            @keyup.enter="handleConfirm"
           />
           <span
             v-if="subTypeSelected === 'sms' || subTypeSelected === 'email'"

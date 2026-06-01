@@ -1,7 +1,7 @@
 <template>
   <div>
     <TwoCol>
-      <BaseList ref="AssetBaseList" v-bind="config" />
+      <BaseList v-bind="config" ref="AssetBaseList" />
     </TwoCol>
     <AddAssetDialog
       v-if="addAssetSetting.addAssetDialogVisible"

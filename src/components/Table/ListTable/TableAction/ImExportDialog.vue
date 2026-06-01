@@ -1,7 +1,7 @@
 <template>
   <div>
-    <ExportDialog :selected-rows="selectedRows" v-bind="exportOptions" v-on="$listeners" />
-    <ImportDialog :selected-rows="selectedRows" v-bind="importOptions" v-on="$listeners" />
+    <ExportDialog v-bind="{ ...$attrs, ...exportOptions }" :selected-rows="selectedRows" />
+    <ImportDialog v-bind="{ ...$attrs, ...importOptions }" :selected-rows="selectedRows" />
   </div>
 </template>
 

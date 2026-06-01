@@ -1,9 +1,6 @@
 <template>
-  <GenericListTableDialog
-    v-bind="config"
-    :visible="visible"
-    @update:visible="$emit('update:visible', $event)"
-  />
+  <GenericListTableDialog v-bind="config" :visible="visible"
+    @update:visible="$emit('update:visible', $event)" />
 </template>
 
 <script>

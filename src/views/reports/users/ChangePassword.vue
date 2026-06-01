@@ -1,11 +1,8 @@
 <template>
   <div>
-    <BaseReport
-      v-bind="$attrs"
-      :title="title"
+    <BaseReport v-bind="$attrs" :title="title"
       :nav="nav"
-      :name="name"
-    >
+      :name="name">
       <div class="charts-grid">
         <SwitchDate class="switch-date" :name="name" @change="onChange" />
         <br>

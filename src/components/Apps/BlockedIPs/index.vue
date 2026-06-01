@@ -10,17 +10,13 @@
         <span>({{ $tc('LockedIP', ipCounts ) }})</span>
       </el-button>
     </div>
-    <Dialog
-      :destroy-on-close="true"
+    <Dialog v-bind="$attrs" :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
       :title="title"
       :visible="visible"
-      v-bind="$attrs"
       width="40%"
-      @update:visible="$emit('update:visible', $event)"
-      v-on="$listeners"
-    >
+      @update:visible="$emit('update:visible', $event)">
       <BlockedIPList />
     </Dialog>
   </div>

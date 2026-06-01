@@ -1,7 +1,7 @@
 <template>
   <AssetTreeTable ref="TreeTablePage" :table-config="tableConfig" :tree-setting="treeSetting">
     <template #table>
-      <AccountListTable ref="table" v-bind="tableConfig" />
+      <AccountListTable v-bind="tableConfig" ref="table" />
     </template>
   </AssetTreeTable>
 </template>

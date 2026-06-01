@@ -1,10 +1,7 @@
 <template>
-  <GenericDetailPage
-    v-bind="config"
-    v-model:active-menu="config.activeMenu"
+  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu"
     v-model:object="ticket"
-    @get-object-done="afterGetTicket"
-  >
+    @get-object-done="afterGetTicket">
     <component :is="config.activeMenu" :object="ticket" />
   </GenericDetailPage>
 </template>

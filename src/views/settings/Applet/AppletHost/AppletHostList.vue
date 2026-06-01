@@ -3,13 +3,10 @@
     <el-alert type="success">
       <span v-html="$t('AppletHostSelectHelpMessage')" />
     </el-alert>
-    <DrawerListTable
-      v-bind="$data"
-      ref="table"
+    <DrawerListTable v-bind="$data" ref="table"
       class="applet-host"
       :create-drawer="createDrawer"
-      :resource="$t('AppletHosts')"
-    />
+      :resource="$t('AppletHosts')" />
   </div>
 </template>
 

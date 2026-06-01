@@ -1,14 +1,10 @@
 <template>
-  <TreeTable
-    ref="TreeList"
+  <TreeTable v-bind="$attrs" ref="TreeList"
     v-model:active-menu="treeTableConfig.activeMenu"
     :component="treeComponent"
     :table-config="tableConfig"
     :tree-tab-config="treeTableConfig"
-    :tree-width="treeWidth"
-    v-bind="$attrs"
-    v-on="$listeners"
-  >
+    :tree-width="treeWidth">
     <template #table>
       <slot name="table" />
     </template>

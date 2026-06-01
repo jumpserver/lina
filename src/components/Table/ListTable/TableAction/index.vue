@@ -1,24 +1,16 @@
 <template>
   <div :class="device" class="table-header clearfix container">
     <slot name="header">
-      <LeftSide
-        v-if="hasLeftActions"
+      <LeftSide v-bind="$attrs" v-if="hasLeftActions"
         :selected-rows="selectedRows"
         :table-url="tableUrl"
         class="left-side"
-        v-bind="$attrs"
-        v-on="$listeners"
-        @init-actions-done="handleActionsDone"
-      />
+        @init-actions-done="handleActionsDone" />
 
-      <RightSide
-        v-if="hasRightActions"
+      <RightSide v-bind="$attrs" v-if="hasRightActions"
         :selected-rows="selectedRows"
         :table-url="tableUrl"
-        class="right-side"
-        v-bind="$attrs"
-        v-on="$listeners"
-      />
+        class="right-side" />
 
       <div :class="searchClass" class="search">
         <LabelSearch
@@ -26,19 +18,13 @@
           @label-search="handleLabelSearch"
           @show-label-search="handleLabelSearchShowChange"
         />
-        <AutoDataSearch
-          v-if="hasSearch"
+        <AutoDataSearch v-bind="iSearchTableConfig" v-if="hasSearch"
           :fold="foldSearch"
           class="right-side-item action-search"
-          v-bind="iSearchTableConfig"
-          @tag-search="handleTagSearch"
-        />
-        <DatetimeRangePicker
-          v-if="hasDatePicker"
+          @tag-search="handleTagSearch" />
+        <DatetimeRangePicker v-bind="datePicker" v-if="hasDatePicker"
           class="datepicker"
-          v-bind="datePicker"
-          @date-change="handleDateChange"
-        />
+          @date-change="handleDateChange" />
       </div>
     </slot>
   </div>

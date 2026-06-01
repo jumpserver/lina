@@ -1,9 +1,6 @@
 <template>
-  <GenericDetailPage
-    v-model:active-menu="config.activeMenu"
-    v-model:object="JobExecutionDetail"
-    v-bind="config"
-  >
+  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu"
+    v-model:object="JobExecutionDetail">
     <keep-alive>
       <component :is="config.activeMenu" :object="JobExecutionDetail" />
     </keep-alive>

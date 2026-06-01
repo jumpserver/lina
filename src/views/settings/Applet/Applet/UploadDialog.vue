@@ -1,13 +1,10 @@
 <template>
-  <Dialog
-    v-bind="$attrs"
-    :before-close="handleClose"
+  <Dialog v-bind="$attrs" :before-close="handleClose"
     :disabled-status="!isFinished"
     :show-cancel="false"
     :title="$tc('OfflineUpload')"
     @cancel="onCancel"
-    @confirm="onSubmit"
-  >
+    @confirm="onSubmit">
     <el-form label-position="top">
       <el-form-item
         :label="$tc('Upload' )"

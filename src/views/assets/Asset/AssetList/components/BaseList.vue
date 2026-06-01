@@ -17,13 +17,10 @@
       :category="category"
       @select-platform="createAsset"
     />
-    <AssetBulkUpdateDialog
-      v-if="updateSelectedDialogSetting.visible"
+    <AssetBulkUpdateDialog v-bind="updateSelectedDialogSetting" v-if="updateSelectedDialogSetting.visible"
       v-model:visible="updateSelectedDialogSetting.visible"
       :category="category"
-      v-bind="updateSelectedDialogSetting"
-      @update="handleAssetBulkUpdate"
-    />
+      @update="handleAssetBulkUpdate" />
     <GatewayDialog
       v-model:visible="gatewayVisible"
       :cell="gatewayCell"

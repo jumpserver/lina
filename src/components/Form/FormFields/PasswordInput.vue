@@ -1,11 +1,7 @@
 <template>
-  <Password
-    :value="value"
+  <Password v-bind="{ ...$attrs, ...iAttrs }" :value="value"
     class="el-input password-input"
-    v-bind="iAttrs"
-    @input="handleInput"
-    v-on="$listeners"
-  >
+    @input="handleInput">
     hello
   </Password>
 </template>

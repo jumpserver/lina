@@ -1,10 +1,7 @@
 <template>
-  <Dialog
-    :show-buttons="false"
+  <Dialog v-bind="$attrs" :show-buttons="false"
     :title="$tc('BindResource')"
-    destroy-on-close
-    v-bind="$attrs"
-  >
+    destroy-on-close>
     <ListTable :header-actions="headerActions" :table-config="tableConfig" />
   </Dialog>
 </template>

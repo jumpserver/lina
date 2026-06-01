@@ -1,8 +1,7 @@
 <template>
   <div class="">
     <el-input v-model="iValue" :placeholder="placeholder" :rows="rows" type="textarea" />
-    <el-upload
-      ref="upload"
+    <el-upload v-bind="$attrs" ref="upload"
       :accept="accept"
       :action="''"
       :auto-upload="false"
@@ -10,9 +9,7 @@
       :limit="limit"
       :on-change="handleChange"
       :on-remove="handleRemove"
-      class="upload-secret"
-      v-bind="$attrs"
-    >
+      class="upload-secret">
       <el-button size="small" type="primary">
         {{ btnText }}
       </el-button>
