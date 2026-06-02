@@ -5,6 +5,7 @@
 <script>
 import BaseList from './BaseList'
 import { terminateSession, toggleLockSession } from '@/api/sessions'
+import { addBasePath } from '@/utils/common/index'
 import { IsSupportPauseSessionType } from '@/utils/jms/index'
 
 export default {
@@ -97,7 +98,7 @@ export default {
           },
           callback: function({ row, tableData }) {
             const monitorUrl = '/luna/monitor/' + row.id
-            window.open(monitorUrl, '_blank', 'height=600, width=850, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
+            window.open(addBasePath(monitorUrl), '_blank', 'height=600, width=850, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
           }
         }
       ],

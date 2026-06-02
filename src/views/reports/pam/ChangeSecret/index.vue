@@ -38,6 +38,7 @@ import AccountSummary from './AccountSummary.vue'
 import FailedAccountSummary from './FailedAccountSummary.vue'
 import BaseReport from '../../base/BaseReport.vue'
 import { getRouteUrl } from '@/utils/vue'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 export default {
   name: 'ChangeSecret',

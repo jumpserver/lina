@@ -22,6 +22,7 @@ import MarkDownEditor from '@/views/settings/Msg/Email/markDownEditor.vue'
 import { Select2 } from '@/components/Form/FormFields'
 import VariablesHelpTextDialog from '@/components/Apps/VariablesHelpTextDialog'
 import variable from '@/views/ops/Template/components/Variable.vue'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 export default {
   name: 'MsgTemplate',

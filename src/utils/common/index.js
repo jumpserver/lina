@@ -1,7 +1,24 @@
 import i18n from '@/i18n/i18n'
 import { message } from '@/utils/vue/message'
+import { getBasePath, scopedLocalStorage as localStorage } from '@/utils/storage'
 
 const _ = require('lodash')
+
+function trimTrailingPunctuation(message) {
+  return String(message || '').replace(/[;；\s]*[。.]+$/g, '').trim()
+}
+
+export function joinErrorMessages(messages, separator = '; ') {
+  if (!Array.isArray(messages)) return ''
+
+  const normalized = messages
+    .map(item => String(item || '').trim())
+    .filter(Boolean)
+
+  return normalized
+    .map((item, index) => index === normalized.length - 1 ? item : trimTrailingPunctuation(item))
+    .join(separator)
+}
 
 export function getApiPath(that, objectId) {
   let pagePath = that.$route.path
@@ -141,12 +158,11 @@ export function getErrorResponseMsg(error) {
   } else if (data && data['non_field_errors']) {
     msg = data['non_field_errors'].join(' ')
   } else if (Array.isArray(data)) {
-    msg = data
+    msg = joinErrorMessages(data
       .map((item, i) => {
         return getErrorResponseMsg(item)
       })
-      .filter(i => i)
-      .join('; ')
+      .filter(i => i))
   } else if (typeof data === 'string') {
     return data
   } else if (_.isPlainObject(data)) {
@@ -154,7 +170,7 @@ export function getErrorResponseMsg(error) {
       .map(item => getErrorResponseMsg(item))
       .filter(i => i)
     // 错误信息不要重复提示
-    return [...new Set(msg)].join('; ')
+    return joinErrorMessages([...new Set(msg)])
   } else {
     msg = error.toString()
   }
@@ -178,6 +194,38 @@ export function newURL(url) {
   return obj
 }
 
+export function addBasePath(path = '') {
+  if (!path || /^https?:\/\//i.test(path)) {
+    return path
+  }
+
+  const basePath = getBasePath()
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`
+
+  if (!basePath) {
+    return normalizedPath
+  }
+
+  if (
+    normalizedPath === basePath ||
+    normalizedPath.startsWith(basePath + '/') ||
+    normalizedPath.startsWith(basePath + '?') ||
+    normalizedPath.startsWith(basePath + '#')
+  ) {
+    return normalizedPath
+  }
+
+  return `${basePath}${normalizedPath}`
+}
+
+export function getCurrentPageUrl() {
+  if (typeof window === 'undefined') {
+    return '/'
+  }
+  const { pathname, search, hash } = window.location
+  return `${pathname}${search}${hash}`
+}
+
 export function getUpdateObjURL(url, objId) {
   const urlObj = new URL(url, location.origin)
   let pathname = urlObj.pathname
@@ -186,7 +234,7 @@ export function getUpdateObjURL(url, objId) {
   }
   pathname += `${objId}/`
   urlObj.pathname = pathname
-  return urlObj.href
+  return urlObj.pathname + urlObj.search
 }
 
 export function truncateCenter(s, l) {
@@ -215,7 +263,7 @@ export const assignIfNot = _.partialRight(_.assignInWith, customizer)
 
 const scheme = document.location.protocol
 const port = document.location.port ? ':' + document.location.port : ''
-const BASE_URL = scheme + '//' + document.location.hostname + port
+const BASE_URL = scheme + '//' + document.location.hostname + port + getBasePath()
 
 export function groupedDropdownToCascader(group) {
   const firstType = group[0]
@@ -411,7 +459,7 @@ export function openNewWindow(url) {
   let params = 'toolbar=yes,scrollbars=yes,resizable=yes'
   params = params + `,top=${top},left=${left},width=${screen.width / 3},height=${screen.height / 3}`
   window.sessionStorage.setItem('newWindowCount', `${count + 1}`)
-  window.open(url, '_blank', params)
+  window.open(addBasePath(url), '_blank', params)
 }
 
 export function getDrawerWidth() {
@@ -426,7 +474,7 @@ export function getDrawerWidth() {
 
 export function getShowCurrentAssetValue(cookie, defaultValue = '0') {
   const stored = typeof window !== 'undefined'
-    ? window.localStorage.getItem('show_current_asset')
+    ? localStorage.getItem('show_current_asset')
     : null
   if (stored === '0' || stored === '1') {
     return stored
@@ -439,7 +487,7 @@ export function getShowCurrentAssetValue(cookie, defaultValue = '0') {
 
 export function setShowCurrentAssetValue(cookie, value) {
   if (typeof window !== 'undefined') {
-    window.localStorage.setItem('show_current_asset', String(value))
+    localStorage.setItem('show_current_asset', String(value))
   }
   if (cookie && typeof cookie.set === 'function') {
     cookie.set('show_current_asset', value, 1)
@@ -457,7 +505,7 @@ export class ObjectLocalStorage {
   }
 
   getObject() {
-    const stored = window.localStorage.getItem(this.key)
+    const stored = localStorage.getItem(this.key)
     let value = {}
     try {
       value = JSON.parse(stored)
@@ -491,7 +539,7 @@ export class ObjectLocalStorage {
     }
     const attrSafe = this.b64(attr)
     obj[attrSafe] = value
-    window.localStorage.setItem(this.key, JSON.stringify(obj))
+    localStorage.setItem(this.key, JSON.stringify(obj))
   }
 }
 
@@ -529,4 +577,13 @@ export function randomString(length, includeSymbols = false) {
     .split('')
     .sort(() => 0.5 - Math.random())
     .join('')
+}
+
+export function createWsUrl(path) {
+  if (/^wss?:\/\//i.test(path)) {
+    return path
+  }
+  const scheme = location.protocol === 'https:' ? 'wss' : 'ws'
+  const port = location.port ? ':' + location.port : ''
+  return scheme + '://' + location.hostname + port + addBasePath(path)
 }

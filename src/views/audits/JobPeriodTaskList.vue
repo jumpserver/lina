@@ -73,6 +73,7 @@ export default {
       },
       headerActions: {
         hasLeftActions: false,
+        hasReportExport: true,
         hasImport: false
       }
     }

@@ -240,7 +240,7 @@ export default {
         this.zTree.removeNode(currentNode)
         this.refreshTree()
       }).catch(() => {
-        // this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
+        this.$message.error(this.$tc('DeleteErrorMsg'))
       })
     },
     onRename: function(event, treeId, treeNode, isCancel) {
@@ -347,35 +347,52 @@ export default {
     },
     createTreeNode: function() {
       this.hideRMenu()
+
       const parentNode = this.zTree.getSelectedNodes()[0]
-      if (!parentNode) {
-        return
-      }
-      this.zTree.expandNode(parentNode, true, false, true, false)
-      // http://localhost/api/v1/assets/nodes/85aa4ee2-0bd9-41db-9079-aa3646448d0c/children/
+      if (!parentNode) return
+
       const url = `${this.treeSetting.nodeUrl}${parentNode.meta.data.id}/children/`
+
       this.$axios.post(url, {}).then(data => {
         const newNode = {
-          id: data['key'],
-          name: data['value'],
+          id: data.key,
+          name: data.value,
           pId: parentNode.id,
           isParent: true,
+          checked: parentNode.checked,
           meta: {
             data: data,
             type: 'node'
           }
         }
-        newNode.checked = this.zTree.getSelectedNodes()[0].checked
-        this.zTree.addNodes(parentNode, 0, newNode)
-        const node = this.zTree.getNodeByParam('id', newNode.id, parentNode)
-        this.currentNodeId = node.meta.data.id || newNode.id
-        this.zTree.editName(node)
-        this.$message.success(this.$tc('CreateSuccessMsg'))
+
+        // 如果父节点还没展开，先展开，但不要触发 async 竞争
+        if (!parentNode.open) {
+          this.zTree.expandNode(parentNode, true, false, false, false)
+        }
+
+        const addedNodes = this.zTree.addNodes(parentNode, 0, newNode)
+
+        const node = Array.isArray(addedNodes) ? addedNodes[0] : addedNodes
+
+        if (!node) {
+          console.log('addNodes failed', newNode, parentNode)
+          return
+        }
+
+        this.currentNodeId = node.meta.data.id || node.id
+
+        this.$nextTick(() => {
+          this.zTree.selectNode(node)
+          this.zTree.editName(node)
+          this.$message.success(this.$tc('CreateSuccessMsg'))
+        })
       }).catch(error => {
         this.$message.error(this.$tc('CreateErrorMsg') + ' ' + error)
       })
     },
     refresh: function() {
+      this.zTree.refresh()
     },
     getSelectedNodes: function() {
       return this.zTree.getSelectedNodes()

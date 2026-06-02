@@ -14,6 +14,7 @@ import SyncSettingDialog from './SyncSettingDialog.vue'
 import { IBox } from '@/components'
 import rules, { JsonRequired } from '@/components/Form/DataForm/rules'
 import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
+import { createWsUrl } from '@/utils/common/index'
 
 export default {
   name: 'Ldap',
@@ -133,11 +134,7 @@ export default {
   },
   methods: {
     enableWS() {
-      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
-      const port = document.location.port ? ':' + document.location.port : ''
-      const url = '/ws/ldap/'
-      const wsURL = scheme + '://' + document.location.hostname + port + url
-      this.ws = new WebSocket(wsURL)
+      this.ws = new WebSocket(createWsUrl('/ws/ldap/'))
     }
   }
 }

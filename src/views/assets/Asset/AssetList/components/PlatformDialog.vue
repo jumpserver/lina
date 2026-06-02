@@ -152,7 +152,7 @@ export default {
       this.$emit('select-platform', platform)
     },
     handleManagePlatform() {
-      this.$router.push({ name: 'PlatformList' })
+      this.$router.push('/settings/platforms')
       this.iVisible = false
     }
   }

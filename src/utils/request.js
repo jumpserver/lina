@@ -2,12 +2,13 @@ import axios from 'axios'
 import i18n from '@/i18n/i18n'
 import { eventBus } from '@/utils/vue/eventbus'
 import { getTokenFromCookie } from '@/utils/jms/auth'
-import { getErrorResponseMsg } from '@/utils/common'
+import { addBasePath, getCurrentPageUrl, getErrorResponseMsg } from '@/utils/common'
 import { MessageBox } from 'element-ui'
 import { message } from '@/utils/vue/message'
 import store from '@/store'
 import axiosRetry from 'axios-retry'
 import router from '@/router'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 // create an axios instance
 const service = axios.create({
@@ -42,6 +43,20 @@ service.interceptors.request.use(
   config => {
     // do something before request is sent
     // NProgress.start()
+    if (typeof config.url === 'string') {
+      const base = window.__BASE_PATH__ || ''
+      if (base) {
+        if (/^https?:\/\//i.test(config.url)) {
+          const urlObj = new URL(config.url)
+          if (!urlObj.pathname.startsWith(base + '/')) {
+            urlObj.pathname = base + urlObj.pathname
+            config.url = urlObj.toString()
+          }
+        } else if (config.url.startsWith('/') && !config.url.startsWith(base + '/')) {
+          config.url = base + config.url
+        }
+      }
+    }
     beforeRequestAddToken(config)
     beforeRequestAddTimezone(config)
     return config
@@ -55,7 +70,8 @@ service.interceptors.request.use(
 
 function goToLogin() {
   setTimeout(() => {
-    window.location = process.env.VUE_APP_LOGIN_PATH + '?next=' + window.location.pathname
+    const next = encodeURIComponent(getCurrentPageUrl())
+    window.location = `${addBasePath(process.env.VUE_APP_LOGIN_PATH)}?next=${next}`
   }, 200)
   localStorage.setItem('next', window.location.hash.replace('#', ''))
 }
@@ -96,26 +112,89 @@ function ifBadRequest({ response, error }) {
   }
 }
 
+function isPlainObject(data) {
+  return Object.prototype.toString.call(data) === '[object Object]'
+}
+
+const fieldErrorGlobalKeys = new Set(['detail', 'non_field_errors', 'error', 'msg'])
+
+function hasErrorMessage(value) {
+  if (typeof value === 'string') {
+    return value.trim() !== ''
+  }
+  if (Array.isArray(value)) {
+    return value.some(item => hasErrorMessage(item))
+  }
+  if (isPlainObject(value)) {
+    return Object.values(value).some(item => hasErrorMessage(item))
+  }
+  return value !== null && value !== undefined
+}
+
+function isFieldErrorValue(value) {
+  if (!hasErrorMessage(value)) {
+    return false
+  }
+  return typeof value === 'string' || Array.isArray(value) || isPlainObject(value)
+}
+
+function stripHtmlTags(text) {
+  if (typeof text !== 'string') {
+    return text
+  }
+  const cleanedText = text.replace(/<[^>]*>/g, '').trim()
+  return cleanedText || text
+}
+
+function isFieldErrorHandledByForm(response) {
+  const data = response.data
+  const fields = response.config?.fieldErrorFields || []
+  if (response.status !== 400) {
+    return false
+  }
+  if (!Array.isArray(fields) || fields.length === 0) {
+    return false
+  }
+  if (!isPlainObject(data) || Object.keys(data).length === 0) {
+    return false
+  }
+
+  const errorKeys = Object.keys(data).filter(key => hasErrorMessage(data[key]))
+  if (errorKeys.length === 0 || errorKeys.some(key => fieldErrorGlobalKeys.has(key))) {
+    return false
+  }
+
+  return errorKeys.every(key => fields.includes(key) && isFieldErrorValue(data[key]))
+}
+
+function disableHandledFieldErrorFlash({ response }) {
+  if (isFieldErrorHandledByForm(response)) {
+    response.config.disableFlashErrorMsg = true
+  }
+}
+
 export function logout() {
-  window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${location.pathname}`
+  const next = encodeURIComponent(getCurrentPageUrl())
+  window.location.href = `${addBasePath(process.env.VUE_APP_LOGOUT_PATH)}?next=${next}`
 }
 
 export function flashErrorMsg({ response, error }) {
   if (!response.config.disableFlashErrorMsg) {
     const responseErrorMsg = getErrorResponseMsg(error)
-    let msg = responseErrorMsg || error.message
-
-    if (response.status === 413) {
-      msg = i18n.t('UploadFileTooLarge')
-    }
+    const msg = responseErrorMsg || error.message
+    let displayMsg = stripHtmlTags(msg)
 
     if (response.status === 403 && msg === 'CSRF Failed: CSRF token missing.') {
       setTimeout(() => {
         logout()
       }, 1000)
     }
+
+    if (response.status === 413) {
+      displayMsg = i18n.t('FileSizeExceedsLimit')
+    }
     message({
-      message: msg,
+      message: displayMsg,
       type: 'error',
       duration: 5 * 1000
     })
@@ -179,6 +258,7 @@ service.interceptors.response.use(
 
     await ifUnauthorized({ response, error })
     await ifBadRequest({ response, error })
+    await disableHandledFieldErrorFlash({ response, error })
     await flashErrorMsg({ response, error })
     return Promise.reject(error)
   }
@@ -300,7 +380,8 @@ export function onError() {
   reconnect()
 }
 
-export function onClose() {}
+export function onClose() {
+}
 
 export function closeWebSocket() {
   ws?.close()

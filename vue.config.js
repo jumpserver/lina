@@ -92,8 +92,13 @@ module.exports = {
    * In most cases please use '/' !!!
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
-  transpileDependencies: [/\/node_modules\/vue-echarts\//, /\/node_modules\/resize-detector\//],
-  publicPath: '/ui/',
+  transpileDependencies: [
+    /\/node_modules\/vue-echarts\//,
+    /\/node_modules\/resize-detector\//
+  ],
+  // In production, use relative paths so the same build works under any prefix (e.g. /x/y/ui/).
+  // In development, keep /ui/ for current local access habits.
+  publicPath: process.env.NODE_ENV === 'production' ? './' : '/ui/',
   outputDir: 'lina',
   assetsDir: 'assets',
   lintOnSave: process.env.NODE_ENV === 'development',

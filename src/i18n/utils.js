@@ -1,5 +1,5 @@
-import VueCookie from 'vue-cookie'
 import store from '@/store'
+import { vueCookie as VueCookie } from '@/utils/storage'
 
 export function getLangCode(withInternalCode = false) {
   const cookieLang = VueCookie.get('django_language')
@@ -15,4 +15,3 @@ export function getLangCode(withInternalCode = false) {
   }
   return lang
 }
-

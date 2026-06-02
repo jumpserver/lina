@@ -61,16 +61,17 @@ export default {
       document.documentElement.lang = lang
     },
     changeLangTo(item) {
-      this.$axios.get(`/core/i18n/${item.cookieCode}/`).then(() => {
+      this.$axios.get(`/core/i18n/${item.cookieCode}/`).finally(() => {
         window.location.reload()
-      })
+      }
+      )
     }
   }
 }
 </script>
 
 <style scoped>
-  .header-lang {
-    color: white;
-  }
+.header-lang {
+  color: white;
+}
 </style>

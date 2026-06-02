@@ -18,20 +18,20 @@
         />
       </el-col>
       <el-col v-show="isShow" :span="span">
-        <VueMarkdown class="result-html" :source="sanitizedValue" :html="false" :show="true" />
+        <MarkdownRenderer class="result-html" :source="sanitizedValue" :html="false" :show="true" />
       </el-col>
     </el-row>
-    <VueMarkdown v-else class="source" :html="false" :source="sanitizedValue" />
+    <MarkdownRenderer v-else class="source" :html="false" :source="sanitizedValue" />
   </div>
 </template>
 
 <script>
 import DOMPurify from 'dompurify'
-import VueMarkdown from 'vue-markdown'
+import MarkdownRenderer from '@/components/Widgets/MarkdownRenderer'
 
 export default {
   components: {
-    VueMarkdown
+    MarkdownRenderer
   },
   props: {
     value: {

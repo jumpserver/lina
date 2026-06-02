@@ -28,6 +28,7 @@
 import { mapGetters } from 'vuex'
 import Icon from '@/components/Widgets/Icon'
 import store from '@/store'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 export default {
   name: 'ViewSwitcher',

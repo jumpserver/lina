@@ -20,10 +20,12 @@
         <el-form-item :label="secretTypeLabel">
           <SecretViewerFormatter
             :cell-value="secretInfo.secret"
-            :col="{ formatterArgs: {
-              name: account['name'],
-              secretType: secretType || ''
-            }}"
+            :col="{
+              formatterArgs: {
+                name: account['name'],
+                secretType: secretType || ''
+              }
+            }"
             @input="onShowKeyCopyFormatterChange"
           />
         </el-form-item>
@@ -36,12 +38,12 @@
         <el-form-item :label="$tc('DateUpdated')">
           <span>{{ account['date_updated'] | date }}</span>
         </el-form-item>
-        <el-form-item v-if="showPasswordRecord" v-perms="'accounts.view_accountsecret'" :label="$tc('PasswordRecord')">
-          <el-link
-            :underline="false"
-            type="success"
-            @click="showHistoryDialog"
-          >
+        <el-form-item
+          v-if="showPasswordRecord"
+          v-perms="'accounts.view_accountsecret'"
+          :label="$tc('PasswordRecord')"
+        >
+          <el-link :underline="false" type="success" @click="showHistoryDialog">
             <span style="padding-right: 30px">
               {{ versions }}
             </span>
@@ -61,7 +63,7 @@
 import Dialog from '@/components/Dialog/index.vue'
 import PasswordHistoryDialog from './PasswordHistoryDialog.vue'
 import { SecretViewerFormatter } from '@/components/Table/TableFormatters'
-import { encryptPassword } from '@/utils/secure'
+import { encryptPassword } from '@/utils/session-encrypt'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -90,7 +92,7 @@ export default {
     },
     title: {
       type: String,
-      default: function() {
+      default: function () {
         return this.$tc('Detail')
       }
     },
@@ -144,7 +146,8 @@ export default {
         name: this.secretInfo.name,
         secret: encryptPassword(this.modifiedSecret)
       }
-      const url = this.type === 'account' ? `/api/v1/accounts/accounts` : `/api/v1/accounts/account-templates`
+      const url =
+        this.type === 'account' ? `/api/v1/accounts/accounts` : `/api/v1/accounts/account-templates`
       this.$axios.patch(`${url}/${this.account.id}/`, params).then(() => {
         this.$message.success(this.$tc('UpdateSuccessMsg'))
       })
@@ -154,7 +157,7 @@ export default {
         this.$message.warning(this.$tc('AccountSecretReadDisabled'))
         return
       }
-      return this.$axios.get(this.url).then((res) => {
+      return this.$axios.get(this.url).then(res => {
         this.secretInfo = res
         this.sshKeyFingerprint = res?.spec_info?.ssh_key_fingerprint || '-'
         this.showSecret = true
@@ -180,7 +183,7 @@ export default {
 }
 
 .el-form-item {
-  border-bottom: 1px solid #EBEEF5;
+  border-bottom: 1px solid #ebeef5;
   padding: 5px 0;
   margin-bottom: 0;
 

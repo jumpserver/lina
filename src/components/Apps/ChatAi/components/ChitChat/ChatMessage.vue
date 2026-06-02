@@ -2,8 +2,12 @@
   <div :class="{ 'user-role': isUserRole }" class="chat-item">
     <div class="chart-item-container">
       <div class="avatar">
+        <div v-if="isUserRole" class="header-avatar logo-avatar">
+          <img :src="userUrl" alt="logo" class="logo-avatar-img">
+        </div>
         <el-avatar
-          :src="isUserRole ? userUrl : chatUrl"
+          v-else
+          :src="chatUrl"
           class="header-avatar"
         />
       </div>
@@ -176,6 +180,24 @@ export default {
           background-color: #fff;
         }
       }
+
+      .logo-avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background-color: #fff;
+
+        .logo-avatar-img {
+          display: block;
+          width: 100%;
+          height: 100%;
+          padding: 3px;
+          box-sizing: border-box;
+          object-fit: contain;
+          object-position: center;
+        }
+      }
     }
 
     .content {
@@ -307,7 +329,8 @@ export default {
         flex-direction: row-reverse;
 
         .message-content {
-          background-color: var(--menu-hover);
+          background-color: var(--color-primary-light-8, #d9ecff);
+          color: #1f2d3d;
           border-radius: 12px 2px 12px 12px;
         }
       }

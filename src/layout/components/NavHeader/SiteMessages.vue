@@ -56,21 +56,43 @@
     </el-drawer>
 
     <Dialog
-      v-if="msgDetailVisible"
+      v-if="msgDialogVisible && hasDialogContent"
       :close-on-click-modal="false"
       :confirm-title="$tc('MarkAsRead')"
-      :title="currentMsg.content.subject"
-      :visible.sync="msgDetailVisible"
+      :title="currentDialogTitle"
+      :visible.sync="msgDialogVisible"
       @cancel="cancelRead"
-      @close="markAsRead([currentMsg])"
-      @confirm="markAsRead([currentMsg])"
+      @close="handleDialogClose"
+      @confirm="confirmRead"
     >
-      <div class="msg-detail">
-        <div class="msg-detail-head">
+      <div v-if="isPopupDialog" class="msg-popup-detail">
+        <div class="msg-popup-board">
+          <el-collapse v-model="activePopupNames" class="msg-popup-collapse">
+            <el-collapse-item
+              v-for="msg in currentPopupMessages"
+              :key="msg.dialogKey"
+              :name="msg.dialogKey"
+              class="msg-popup-item"
+            >
+              <template #title>
+                <div class="popup-collapse-title">
+                  <span class="popup-collapse-subject">{{ msg.content.subject }}</span>
+                  <span class="popup-collapse-time">{{ formatDate(msg.date_created) }}</span>
+                </div>
+              </template>
+              <div class="msg-detail-txt msg-popup-content">
+                <MarkDown :value="msg.content.message" />
+              </div>
+            </el-collapse-item>
+          </el-collapse>
+        </div>
+      </div>
+      <div v-else class="msg-detail">
+        <div v-if="currentMsg.date_created" class="msg-detail-head">
           <span class="msg-detail-time">{{ formatDate(currentMsg.date_created) }}</span>
         </div>
         <div class="msg-detail-txt">
-          <MarkDown :value="currentMsg.content.message" />
+          <MarkDown :value="currentDialogMessage" />
         </div>
       </div>
     </Dialog>
@@ -78,9 +100,10 @@
 </template>
 
 <script>
-import { toSafeLocalDateStr } from '@/utils/common/time'
 import Dialog from '@/components/Dialog'
 import MarkDown from '@/components/Widgets/MarkDown'
+import { createWsUrl } from '@/utils/common/index'
+import { toSafeLocalDateStr } from '@/utils/common/time'
 
 export default {
   name: 'SiteMessages',
@@ -93,14 +116,35 @@ export default {
       show: false,
       messages: [],
       hoverMsgId: '',
-      msgDetailVisible: false,
+      msgDialogVisible: false,
+      currentDialogType: '',
+      dialogAction: '',
+      isClosingDialog: false,
       currentMsg: null,
+      currentPopupMessages: [],
+      activePopupNames: [],
+      popupMessages: [],
       unreadMsgCount: 0
     }
   },
   computed: {
     width() {
       return this.$store.state.app.device === 'mobile' ? '70%' : '450px'
+    },
+    currentDialogTitle() {
+      if (this.currentDialogType === 'popup') {
+        return this.$tc('Tip')
+      }
+      return this.currentMsg?.content?.subject || this.$tc('SiteMessage')
+    },
+    currentDialogMessage() {
+      return this.currentMsg?.content?.message || ''
+    },
+    hasDialogContent() {
+      return this.isPopupDialog ? this.currentPopupMessages.length > 0 : Boolean(this.currentMsg)
+    },
+    isPopupDialog() {
+      return this.currentDialogType === 'popup'
     }
   },
   mounted() {
@@ -115,7 +159,9 @@ export default {
     },
     showMsgDetail(msg) {
       this.currentMsg = msg
-      this.msgDetailVisible = true
+      this.currentDialogType = 'siteMessage'
+      this.dialogAction = ''
+      this.msgDialogVisible = true
     },
     getMessages() {
       const url = '/api/v1/notifications/site-messages/?offset=0&limit=15&has_read=false'
@@ -152,7 +198,11 @@ export default {
     markAsReadAll(msgs) {
       const url = `/api/v1/notifications/site-messages/mark-as-read-all/`
       this.$axios.patch(url, {}).then(res => {
-        this.msgDetailVisible = false
+        if (this.currentDialogType === 'popup') {
+          this.closeCurrentDialog()
+        } else {
+          this.msgDialogVisible = false
+        }
         this.getMessages()
       }).catch(err => {
         this.$message(err.detail)
@@ -160,25 +210,121 @@ export default {
     },
     markAsRead(msgs) {
       const url = `/api/v1/notifications/site-messages/mark-as-read/`
-      const msgIds = []
-      for (const item of msgs) {
-        msgIds.push(item.id)
+      const msgIds = msgs.filter(Boolean).map(item => item.id).filter(Boolean)
+      if (msgIds.length === 0) {
+        this.closeCurrentDialog()
+        return
       }
       this.$axios.patch(url, { ids: msgIds }).then(res => {
-        this.msgDetailVisible = false
+        this.closeCurrentDialog()
         this.getMessages()
       }).catch(err => {
         this.$message(err.detail)
       })
     },
+    confirmRead() {
+      this.dialogAction = 'confirm'
+      if (this.currentDialogType === 'popup') {
+        this.markAsRead(this.currentPopupMessages)
+        return
+      }
+      this.markAsRead([this.currentMsg])
+    },
     cancelRead() {
-      this.msgDetailVisible = false
+      this.dialogAction = 'cancel'
+      this.closeCurrentDialog()
+    },
+    handleDialogClose() {
+      if (this.isClosingDialog) {
+        return
+      }
+      if (this.dialogAction === 'confirm') {
+        return
+      }
+      if (this.currentDialogType === 'siteMessage') {
+        this.dialogAction = 'confirm'
+        this.markAsRead([this.currentMsg])
+        return
+      }
+      this.dialogAction = 'cancel'
+      this.closeCurrentDialog()
+    },
+    closeCurrentDialog() {
+      if (this.isClosingDialog) {
+        return
+      }
+      const shouldShowNextPopup = this.popupMessages.length > 0
+
+      this.isClosingDialog = true
+      this.msgDialogVisible = false
+      this.currentMsg = null
+      this.currentPopupMessages = []
+      this.activePopupNames = []
+      this.currentDialogType = ''
+
+      this.$nextTick(() => {
+        this.dialogAction = ''
+        this.isClosingDialog = false
+        if (shouldShowNextPopup) {
+          this.showNextPopupMessage()
+        }
+      })
+    },
+    isPopupMessage(data) {
+      const siteMsg = data?.site_meg || data?.site_msg
+      const content = siteMsg?.content || siteMsg
+      return data?.type === 'display' && content?.display_mode === 'popup'
+    },
+    normalizePopupMessage(data) {
+      const siteMsg = data.site_meg || data.site_msg
+      const content = siteMsg.content || siteMsg
+      const dateCreated = siteMsg.date_created || content.date_created || ''
+      const subject = content.subject || this.$tc('SiteMessage')
+      const message = content.message || ''
+      return {
+        id: siteMsg.id,
+        dialogKey: String(siteMsg.id || [subject, dateCreated, message].filter(Boolean).join('-')),
+        content: {
+          subject,
+          message
+        },
+        date_created: dateCreated,
+        has_read: false
+      }
+    },
+    enqueuePopupMessage(data) {
+      const msg = this.normalizePopupMessage(data)
+      const isCurrentMsg = this.currentDialogType === 'popup' && this.currentPopupMessages.some(item => item.dialogKey === msg.dialogKey)
+      const isQueuedMsg = this.popupMessages.some(item => item.id === msg.id)
+
+      if ((msg.id && isQueuedMsg) || isCurrentMsg) {
+        return
+      }
+
+      if (this.currentDialogType === 'popup' && this.msgDialogVisible) {
+        this.currentPopupMessages.push(msg)
+        this.activePopupNames = this.currentPopupMessages.map(item => item.dialogKey)
+        return
+      }
+
+      this.popupMessages.push(msg)
+      this.showNextPopupMessage()
+    },
+    showNextPopupMessage() {
+      if (this.msgDialogVisible || this.popupMessages.length === 0) {
+        return
+      }
+
+      this.currentMsg = null
+      this.currentPopupMessages = [...this.popupMessages]
+      this.activePopupNames = this.currentPopupMessages.map(item => item.dialogKey)
+      this.popupMessages = []
+      this.currentDialogType = 'popup'
+      this.dialogAction = ''
+      this.msgDialogVisible = true
     },
     enablePullMsgCount() {
-      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
-      const port = document.location.port ? ':' + document.location.port : ''
-      const url = '/ws/notifications/site-msg/'
-      const wsURL = scheme + '://' + document.location.hostname + port + url
+      const wsURL = createWsUrl('/ws/notifications/site-msg/')
 
       const ws = new WebSocket(wsURL)
       ws.onopen = (event) => {
@@ -191,6 +337,9 @@ export default {
           const unreadCount = data['unread_count']
           if (unreadCount !== undefined) {
             this.unreadMsgCount = unreadCount
+          }
+          if (this.isPopupMessage(data)) {
+            this.enqueuePopupMessage(data)
           }
         } catch (e) {
           this.$log.debug('Recv site message error')
@@ -415,6 +564,108 @@ export default {
       }
     }
   }
+}
+
+.msg-popup-detail {
+  max-height: min(65vh, 720px);
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.msg-popup-board {
+  padding: 12px;
+  border: 1px solid var(--menu-border, #E9ECEF);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #FCFCFD 0%, #F7F8FA 100%);
+  box-shadow: 0 10px 24px rgba(31, 35, 41, 0.06);
+}
+
+.popup-collapse-title {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-right: 12px;
+}
+
+.popup-collapse-subject {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--neutral-900, #1F2329);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.popup-collapse-time {
+  flex-shrink: 0;
+  color: var(--N600, #646A73);
+  font-size: 12px;
+  line-height: 20px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(100, 106, 115, 0.08);
+}
+
+.msg-popup-content {
+  padding: 16px 18px 18px;
+  background: #fff;
+}
+
+.msg-popup-detail ::v-deep .el-collapse {
+  border-top: 0;
+  border-bottom: 0;
+  background: transparent;
+}
+
+.msg-popup-detail ::v-deep .el-collapse-item__header {
+  align-items: center;
+  line-height: 22px;
+  height: auto;
+  min-height: 56px;
+  padding: 0 18px;
+  border-bottom: 0;
+  background: #fff;
+}
+
+.msg-popup-detail ::v-deep .el-collapse-item__wrap {
+  overflow: visible;
+  border-bottom: 0;
+  background: transparent;
+}
+
+.msg-popup-detail ::v-deep .el-collapse-item__content {
+  padding-bottom: 0;
+}
+
+.msg-popup-detail ::v-deep .msg-popup-collapse {
+  border-top: 0;
+  border-bottom: 0;
+}
+
+.msg-popup-detail ::v-deep .msg-popup-item {
+  margin-bottom: 12px;
+  border: 1px solid rgba(31, 35, 41, 0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(31, 35, 41, 0.05);
+}
+
+.msg-popup-detail ::v-deep .msg-popup-item:last-child {
+  margin-bottom: 0;
+}
+
+.msg-popup-detail ::v-deep .msg-popup-item.is-active {
+  border-color: rgba(38, 122, 58, 0.24);
+  box-shadow: 0 8px 20px rgba(38, 122, 58, 0.08);
+}
+
+.msg-popup-detail ::v-deep .msg-popup-item .el-collapse-item__arrow {
+  color: var(--N600, #646A73);
 }
 
 .no-msg {

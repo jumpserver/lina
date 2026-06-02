@@ -7,6 +7,7 @@ import JsonEditor from '@/components/Form/FormFields/JsonEditor.vue'
 import { assignIfNot, toSentenceCase } from '@/utils/common/index'
 import TagInput from '@/components/Form/FormFields/TagInput.vue'
 import i18n from '@/i18n/i18n'
+import { vueCookie as VueCookie } from '@/utils/storage'
 
 export class FormFieldGenerator {
   constructor() {
@@ -54,9 +55,11 @@ export class FormFieldGenerator {
         break
       case 'string':
         type = 'input'
-        if (!fieldRemoteMeta['max_length']) {
+        if (fieldRemoteMeta.style === 'textarea' || !fieldRemoteMeta['max_length']) {
           field.el.type = 'textarea'
-          field.el.rows = 3
+          if (!field.el.rows) {
+            field.el.rows = 3
+          }
         }
         if (fieldRemoteMeta['write_only']) {
           field.el.type = 'password'
@@ -174,7 +177,7 @@ export class FormFieldGenerator {
     const placeholderType = ['input', 'select', 'm2m_related_field']
     const placeholderComponent = [ObjectSelect2]
 
-    const systemLang = document.cookie.django_language
+    const systemLang = VueCookie.get('django_language')
     if (helpTextAsPlaceholder !== undefined) {
       helpTextAsPlaceholder = !!helpTextAsPlaceholder
     } else if (

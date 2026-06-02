@@ -123,6 +123,16 @@ $single-menu-height: 38px;
     line-height: $single-menu-height;
     color: var(--menu-text);
 
+    &:focus {
+      color: var(--menu-text);
+      background: var(--menu-bg);
+    }
+
+    &:focus-visible {
+      color: var(--menu-text-active);
+      background: var(--menu-hover-bg, var(--menu-hover));
+    }
+
     &:hover {
       color: var(--menu-text-active);
       background: var(--menu-hover-bg, var(--menu-hover));
@@ -138,6 +148,16 @@ $single-menu-height: 38px;
     letter-spacing: 0.02em;
     font-size: 12px;
     min-width: 200px;
+
+    &:focus:not(.is-active) {
+      color: var(--menu-text);
+      background: var(--menu-bg);
+    }
+
+    &:focus-visible:not(.is-active) {
+      color: var(--menu-text-active);
+      background: var(--menu-hover-bg, var(--menu-hover));
+    }
 
     &:hover {
       color: var(--menu-text-active);
@@ -209,6 +229,33 @@ $single-menu-height: 38px;
 
       .el-tooltip {
         width: 55px !important;
+      }
+    }
+
+    .menu-link-item.level1-menu,
+    .external-action-menu-item.level1-menu {
+      display: flex;
+      justify-content: center;
+      min-width: 55px;
+      width: 55px;
+      padding: 0;
+
+      &::before {
+        left: 4px;
+      }
+
+      .svg-icon,
+      .el-icon,
+      .fa {
+        margin-right: 0 !important;
+      }
+
+      .item-title {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+        visibility: hidden;
       }
     }
 

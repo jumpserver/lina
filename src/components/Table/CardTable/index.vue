@@ -45,7 +45,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { Pagination } from '@/components'
+import Pagination from '@/components/Table/Pagination'
 import TableAction from '@/components/Table/ListTable/TableAction'
 import IBox from '@/components/Common/IBox/index.vue'
 import Panel from './Panel'
@@ -245,24 +245,17 @@ export default {
   text-align: center;
 
   .card-container {
-    display: flex;
-    justify-content: left;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 20px;
 
     .el-card .el-card__body div {
       height: inherit;
     }
-  }
-
-  .el-col, div {
-    gap: 20px;
 
     .the-card {
-      min-width: 330px;
       position: relative;
-      margin-bottom: 20px;
       height: 180px;
-      width: 380px;
       padding: 15px;
 
       ::v-deep .el-card__body {
@@ -301,9 +294,9 @@ export default {
   border-top: 1px solid #e7eaec;
 }
 
-.el-col {
-  //min-width: 330px; 设置完后，remote app 列表会有问题
-}
+// .el-col {
+//   min-width: 330px; 设置完后，remote app 列表会有问题
+// }
 
 .no-data {
   display: flex;

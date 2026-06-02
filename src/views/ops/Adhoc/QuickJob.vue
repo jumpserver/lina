@@ -64,6 +64,7 @@ import VariableHelpDialog from './VariableHelpDialog.vue'
 import ConfirmRunAssetsDialog from './components/ConfirmRunAssetsDialog.vue'
 import SetVariableDialog from '@/views/ops/Template/components/SetVariableDialog.vue'
 import { createJob, getJob, getTaskDetail, stopJob } from '@/api/ops'
+import { createWsUrl } from '@/utils/common/index'
 import SelectJobAssetDialog from './components/SelectJobAssetDialog.vue'
 
 export default {
@@ -378,10 +379,7 @@ export default {
       this.command = adhoc.args
     },
     enableWS() {
-      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
-      const port = document.location.port ? ':' + document.location.port : ''
-      const url = '/ws/ops/tasks/log/'
-      const wsURL = scheme + '://' + document.location.hostname + port + url
+      const wsURL = createWsUrl('/ws/ops/tasks/log/')
       this.ws = new WebSocket(wsURL)
       this.ws.onerror = e => {
         this.xterm.write(this.wrapperError('Connect websocket server error'))

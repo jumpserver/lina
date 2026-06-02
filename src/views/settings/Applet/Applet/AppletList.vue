@@ -7,24 +7,26 @@
         </el-alert>
       </el-col>
     </el-row>
-    <CardTable ref="CardTable" v-bind="$data" />
+    <DrawerCardTable ref="CardTable" v-bind="$data" />
     <UploadDialog :visible.sync="uploadDialogVisible" @upload-event="handleUpload" />
   </div>
 </template>
 
 <script>
-import CardTable from '@/components/Table/CardTable'
+import { mapGetters } from 'vuex'
+import DrawerCardTable from '@/components/Table/DrawerCardTable'
 import UploadDialog from './UploadDialog'
 
 export default {
   name: 'Applets',
   components: {
-    CardTable,
+    DrawerCardTable,
     UploadDialog
   },
   data() {
     return {
       uploadDialogVisible: false,
+      detailDrawer: () => import('./AppletDetail/index.vue'),
       tableConfig: {
         url: '/api/v1/terminal/applets/',
         deletePerm: 'terminal.delete_applet'
@@ -44,7 +46,7 @@ export default {
             title: this.$t('Marketplace'),
             icon: 'el-icon-shopping-bag-1',
             callback: () => {
-              window.open('https://apps.fit2cloud.com/jumpserver')
+              window.open(this.publicSettings?.REMOTE_APP_STORE_URL)
             }
           }
         ],
@@ -57,6 +59,11 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters({
+      publicSettings: 'publicSettings'
+    })
+  },
   mounted() {
     this.$store.dispatch('users/enterSettingOrg')
   },
@@ -65,6 +72,7 @@ export default {
       this.$refs.CardTable.reloadTable()
     }
   }
+
 }
 </script>
 

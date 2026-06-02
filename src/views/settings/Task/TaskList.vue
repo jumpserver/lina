@@ -3,8 +3,8 @@
 </template>
 
 <script type="text/jsx">
+import { mapGetters } from 'vuex'
 import { ChoicesFormatter, DetailFormatter, SwitchFormatter } from '@/components/Table/TableFormatters'
-import { BASE_URL } from '@/utils/common/index'
 import { DrawerListTable as ListTable } from '@/components'
 
 export default {
@@ -12,6 +12,7 @@ export default {
   components: {
     ListTable
   },
+
   data() {
     return {
       tableConfig: {
@@ -139,14 +140,22 @@ export default {
           {
             title: this.$t('TaskMonitor'),
             type: 'primary',
+            has: () => {
+              return this.publicSettings.FLOWER_ENABLED
+            },
             can: this.$hasPerm('ops.view_taskmonitor'),
             callback: () => {
-              window.open(`${BASE_URL}/core/flower/?_=${Date.now()}`,)
+              window.open(`/core/flower/?_=${Date.now()}`,)
             }
           }
         ]
       }
     }
+  },
+  computed: {
+    ...mapGetters({
+      publicSettings: 'publicSettings'
+    })
   }
 }
 </script>

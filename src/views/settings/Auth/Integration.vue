@@ -30,7 +30,8 @@ export default {
       typeMap: {
         common: this.$t('Common'),
         SSO: this.$t('SSO'),
-        IdP: this.$t('IdP')
+        IdP: this.$t('IdP'),
+        device: this.$t('Device')
       }
     }
   },

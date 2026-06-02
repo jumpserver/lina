@@ -13,6 +13,7 @@
 import DetailCard from '@/components/Cards/DetailCard/index'
 import { QuickActions } from '@/components'
 import { terminateSession } from '@/api/sessions'
+import { addBasePath } from '@/utils/common'
 import { toSafeLocalDateStr } from '@/utils/common/time'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
@@ -70,7 +71,7 @@ export default {
             click: function() {
               // 跳转到luna页面
               const joinUrl = '/luna/monitor/' + vm.session.id
-              window.open(joinUrl, 'height=600, width=800, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
+              window.open(addBasePath(joinUrl), 'height=600, width=800, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
             }
           }
         }
@@ -89,7 +90,7 @@ export default {
           callbacks: {
             click: function() {
               const replayUrl = '/luna/replay/' + vm.session.id
-              window.open(replayUrl)
+              window.open(addBasePath(replayUrl))
             }
           }
         },

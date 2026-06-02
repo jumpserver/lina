@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 Vue.directive('el-drawer-drag-width', {
   bind(el, binding, vnode, oldVnode) {

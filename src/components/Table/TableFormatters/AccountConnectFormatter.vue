@@ -44,6 +44,7 @@
 
 <script>
 import BaseFormatter from './base.vue'
+import { addBasePath } from '@/utils/common/index'
 
 export default {
   name: 'AccountConnectFormatter',
@@ -56,12 +57,12 @@ export default {
           can: () => true,
           getConnectUrl: (row, protocol, asset) => {
             const assetId = asset ? asset.id : row.asset.id
-            return `/luna/admin-connect/?
+            return addBasePath(`/luna/admin-connect/?
               asset=${assetId}
               &account=${row.id}
               &protocol=${protocol}
               &org_id=${this.$store.getters.currentOrg.id}
-            `.replace(/\s+/g, '')
+            `.replace(/\s+/g, ''))
           },
           asset: null,
           assetUrl: '/api/v1/assets/assets/{id}/',

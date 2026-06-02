@@ -38,6 +38,7 @@ import ChatInput from './ChatInput.vue'
 import ChatMessage from './ChatMessage.vue'
 import { mapState } from 'vuex'
 import { closeWebSocket, createWebSocket, onSend, ws } from '@/utils/request'
+import { createWsUrl } from '@/utils/common/index'
 import { getInputFocus, useChat } from '../../useChat.js'
 
 const {
@@ -91,11 +92,12 @@ export default {
     initWebSocket() {
       const { NODE_ENV, VUE_APP_KOKO_HOST } = process.env || {}
       const api = '/koko/ws/chat/system/'
-      const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
-      const path = `${protocol}://${window.location.host}${api}`
-      const index = VUE_APP_KOKO_HOST?.indexOf('://')
-      const localPath = protocol + VUE_APP_KOKO_HOST?.substring(index, VUE_APP_KOKO_HOST?.length) + api
-      const url = NODE_ENV === 'development' ? localPath : path
+      let url = createWsUrl(api)
+      if (NODE_ENV === 'development' && VUE_APP_KOKO_HOST) {
+        const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
+        const index = VUE_APP_KOKO_HOST.indexOf('://')
+        url = protocol + VUE_APP_KOKO_HOST.substring(index, VUE_APP_KOKO_HOST.length) + api
+      }
       createWebSocket(url, this.onWebSocketMessage)
     },
     initChatMessage() {

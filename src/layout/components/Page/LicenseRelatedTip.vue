@@ -26,11 +26,28 @@ export default {
       'currentUser'
     ]),
     licenseMsg() {
-      if (this.expireMsg) {
+      if (this.jdmcMsg) {
+        return this.jdmcMsg
+      } else if (this.expireMsg) {
         return this.expireMsg
       } else {
         return this.reachLimitsMsg
       }
+    },
+    jdmcMsg() {
+      if (!this.publicSettings['XPACK_ENABLED'] || !this.$hasPerm('settings.change_license')) {
+        return false
+      }
+      if (this.licenseData.message === 'license_expired') {
+        return this.$t('LicenseExpired')
+      }
+      if (this.licenseData.message === 'license_maintenance_expired') {
+        return this.$t('LicenseMaintenanceExpired')
+      }
+      if (this.licenseData.message === 'license_will_expire') {
+        return this.$t('LicenseWillExpire')
+      }
+      return false
     },
     expireMsg() {
       if (!this.publicSettings['XPACK_ENABLED'] || !this.$hasPerm('settings.change_license')) {
@@ -73,7 +90,20 @@ export default {
     getIntervalDays(date) {
       const dateExpired = new Date(date)
       const dateNow = new Date()
-      const intervalTime = dateExpired.getTime() - dateNow.getTime()
+      // 只保留年月日，去掉时分秒
+      const expiredDay = new Date(
+        dateExpired.getFullYear(),
+        dateExpired.getMonth(),
+        dateExpired.getDate()
+      )
+
+      const nowDay = new Date(
+        dateNow.getFullYear(),
+        dateNow.getMonth(),
+        dateNow.getDate()
+      )
+
+      const intervalTime = expiredDay.getTime() - nowDay.getTime()
       return Math.floor(intervalTime / (24 * 3600 * 1000))
     }
   }

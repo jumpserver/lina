@@ -1,99 +1,151 @@
 <template>
   <div>
     <BaseReport
-      :title="title"
+      :title="reportTitle"
       :nav="nav"
       :name="name"
+      :charts="charts"
+      :tables="tables"
+      :show-display-mode-toggle="true"
+      :display-mode.sync="displayMode"
+      :current-days="currentFilters.days"
       v-bind="$attrs"
     >
-      <div class="charts-grid">
-        <SwitchDate class="switch-date" :name="name" @change="onChange" />
-        <br>
-        <div class="chart-container full-width">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('Overview') }}</div>
-            <SummaryCountCard
-              :items="totalData"
-            />
-          </div>
-        </div>
-
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <UserAssetActivity :days="days" />
-          </div>
-        </div>
-
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('DistributionOfAssetLoginMethods') }}</div>
-            <div class="chart">
-              <Echart
-                :options="LoginEntryOptions"
-                :autoresize="true"
+      <template #toolbar>
+        <ReportToolbar
+          :filters="currentFilters"
+          class="chart-container full-width report-toolbar-wrap"
+          @filter-change="handleToolbarFilterChange"
+        />
+      </template>
+      <template #default>
+        <div v-if="showChart" class="charts-grid">
+          <div class="chart-container full-width" data-report-type="chart" data-report-name="Overview">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('Overview') }}</div>
+              <SummaryCountCard
+                :items="totalData"
               />
             </div>
           </div>
-        </div>
 
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('RemoteLoginProtocolUsageDistribution') }}</div>
-            <div class="chart">
-              <Echart
-                :options="LoginProtocolOptions"
-                :autoresize="true"
-              />
+          <div class="chart-container" data-report-type="chart" data-report-name="UserAssetActivity">
+            <div class="chart-container-title">
+              <UserAssetActivity :days="days" :metrics="user_asset_activity_metrics" />
+            </div>
+          </div>
+
+          <div class="chart-container" data-report-type="chart" data-report-name="DistributionOfAssetLoginMethods">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('DistributionOfAssetLoginMethods') }}</div>
+              <div class="chart">
+                <Echart
+                  :options="LoginEntryOptions"
+                  :autoresize="true"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container" data-report-type="chart" data-report-name="RemoteLoginProtocolUsageDistribution">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('RemoteLoginProtocolUsageDistribution') }}</div>
+              <div class="chart">
+                <Echart
+                  :options="LoginProtocolOptions"
+                  :autoresize="true"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container" data-report-type="chart" data-report-name="OperatingSystemDistributionOfLoginAssets">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('OperatingSystemDistributionOfLoginAssets') }}</div>
+              <div class="chart">
+                <Echart
+                  :options="LoginOSOptions"
+                  :autoresize="true"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container full-width" data-report-type="chart" data-report-name="AssetLoginTrends">
+            <div class="chart-container-title">
+              <div class="chart-container-title-text">{{ $t('AssetLoginTrends') }}</div>
+              <div class="chart">
+                <Echart
+                  ref="loginTrend"
+                  :options="loginTrendOptions"
+                  :autoresize="true"
+                />
+              </div>
             </div>
           </div>
         </div>
-
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('OperatingSystemDistributionOfLoginAssets') }}</div>
-            <div class="chart">
-              <Echart
-                :options="LoginOSOptions"
-                :autoresize="true"
-              />
+      </template>
+      <template #table>
+        <div v-if="showTable" class="full-width">
+          <div v-if="Array.isArray(tableData)" class="report-tables full-width">
+            <div
+              v-if="tableData.length"
+              class="report-table-wrap chart-container full-width"
+              data-report-type="table"
+              :data-report-name="tableData[0].name"
+            >
+              <div v-if="tableData[0].name" class="chart-container-title">
+                <div class="chart-container-title-text">{{ tableData[0].name }}</div>
+              </div>
+              <el-table :data="tableData[0].rows" border>
+                <el-table-column v-for="column in tableData[0].columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+              </el-table>
+            </div>
+            <div
+              v-for="(t, idx) in tableData.slice(1)"
+              :key="t.name || idx"
+              class="report-table-wrap chart-container full-width"
+              data-report-type="table"
+              :data-report-name="t.name"
+            >
+              <div v-if="t.name" class="chart-container-title">
+                <div class="chart-container-title-text">{{ t.name }}</div>
+              </div>
+              <el-table :data="t.rows" border>
+                <el-table-column v-for="column in t.columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+              </el-table>
             </div>
           </div>
-        </div>
-
-        <div class="chart-container full-width">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('AssetLoginTrends') }}</div>
-            <div class="chart">
-              <Echart
-                ref="loginTrend"
-                :options="loginTrendOptions"
-                :autoresize="true"
-              />
-            </div>
+          <div v-else>
+            <el-table :data="tableData.rows" border>
+              <el-table-column v-for="column in tableData.columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+            </el-table>
           </div>
         </div>
-      </div>
+      </template>
     </BaseReport>
   </div>
 </template>
 
 <script>
-import SwitchDate from '@/components/Dashboard/SwitchDate'
 import BaseReport from '@/views/reports/base/BaseReport.vue'
 import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
 import UserAssetActivity from '@/views/reports/console/UserAssetActivity.vue'
 import * as echarts from 'echarts'
 import Echart from '@/components/Dashboard/Echart.vue'
 import { mixColors } from '@/views/reports/const'
+import reportPageMixin from '@/views/reports/base/reportPageMixin'
+import ReportToolbar from '@/views/reports/base/ReportToolbar.vue'
 
 export default {
   components: {
     UserAssetActivity,
     SummaryCountCard,
     BaseReport,
-    SwitchDate,
-    Echart
+    Echart,
+    ReportToolbar
   },
+  mixins: [reportPageMixin],
   props: {
     nav: {
       type: Boolean,
@@ -104,6 +156,22 @@ export default {
     return {
       title: this.$t('AssetActivityReport'),
       name: 'AssetReport',
+      charts: [
+        { name: 'Overview', title: this.$t('Overview') },
+        { name: 'UserAssetActivity', title: this.$t('UserAssetActivity') },
+        { name: 'DistributionOfAssetLoginMethods', title: this.$t('DistributionOfAssetLoginMethods') },
+        { name: 'RemoteLoginProtocolUsageDistribution', title: this.$t('RemoteLoginProtocolUsageDistribution') },
+        { name: 'OperatingSystemDistributionOfLoginAssets', title: this.$t('OperatingSystemDistributionOfLoginAssets') },
+        { name: 'AssetLoginTrends', title: this.$t('AssetLoginTrends') }
+      ],
+      tables: [
+        { name: 'Overview', title: this.$t('Overview') },
+        { name: 'UserAssetActivity', title: this.$t('UserAssetActivity') },
+        { name: 'DistributionOfAssetLoginMethods', title: this.$t('DistributionOfAssetLoginMethods') },
+        { name: 'RemoteLoginProtocolUsageDistribution', title: this.$t('RemoteLoginProtocolUsageDistribution') },
+        { name: 'OperatingSystemDistributionOfLoginAssets', title: this.$t('OperatingSystemDistributionOfLoginAssets') },
+        { name: 'AssetLoginTrends', title: this.$t('AssetLoginTrends') }
+      ],
       days: localStorage.getItem(this.name) || '7',
       session_stats: {
         'total': 0,
@@ -118,6 +186,11 @@ export default {
       asset_login_log_metrics: {
         dates_metrics_date: [],
         dates_metrics_total: [0]
+      },
+      user_asset_activity_metrics: {
+        dates_metrics_date: [],
+        dates_metrics_total_count_active_users: [0],
+        dates_metrics_total_count_active_assets: [0]
       }
     }
   },
@@ -360,18 +433,10 @@ export default {
       }
     }
   },
-  watch: {
-    days() {
-      this.getData()
-    }
-  },
   async mounted() {
     await this.getData()
   },
   methods: {
-    onChange(val) {
-      this.days = val
-    },
     conversionData(data) {
       return data.map(item => {
         return {
@@ -389,12 +454,16 @@ export default {
       }
     },
     async getData() {
-      const data = await this.$axios.get(`/api/v1/reports/reports/asset-activity/?days=${this.days}`)
+      const data = await this.fetchReportData('/api/v1/reports/reports/asset-activity/')
+      await this.loadTableData('/api/v1/reports/reports/asset-activity/')
       this.$set(this.session_stats, 'total', data.session_stats.total)
       this.$set(this.session_stats, 'asset_count', data.session_stats.asset_count)
       this.$set(this.session_stats, 'user_count', data.session_stats.user_count)
       this.$set(this.asset_login_log_metrics, 'dates_metrics_date', data.asset_login_log_metrics.dates_metrics_date)
       this.$set(this.asset_login_log_metrics, 'dates_metrics_total', data.asset_login_log_metrics.dates_metrics_total)
+      this.$set(this.user_asset_activity_metrics, 'dates_metrics_date', data.user_asset_activity_metrics?.dates_metrics_date || [])
+      this.$set(this.user_asset_activity_metrics, 'dates_metrics_total_count_active_users', data.user_asset_activity_metrics?.dates_metrics_total_count_active_users || [])
+      this.$set(this.user_asset_activity_metrics, 'dates_metrics_total_count_active_assets', data.user_asset_activity_metrics?.dates_metrics_total_count_active_assets || [])
 
       this.setPieData('asset_login_by_type', data.asset_login_by_type)
       this.setPieData('asset_login_by_from', data.asset_login_by_from)

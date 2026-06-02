@@ -1,5 +1,6 @@
 import { constantRoutes } from '@/router'
 import store from '@/store'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 let openedTaskWindow = null // 保存已打开的窗口对象
 
@@ -8,7 +9,7 @@ function openOrReuseWindow(
   windowName = 'task',
   windowFeatures = '',
   iWidth = 900,
-  iHeight = 600
+  iHeight = 680
 ) {
   const iTop = (window.screen.height - 30 - iHeight) / 2
   const iLeft = (window.screen.width - 10 - iWidth) / 2
@@ -175,6 +176,17 @@ export function toM2MJsonParams(attrFilter) {
   const encoder = new TextEncoder()
   const data = encoder.encode(JSON.stringify(attrFilter))
   return ['attr_rules', encodeURIComponent(btoa(String.fromCharCode(...data)))]
+}
+
+export function toM2MInstanceJsonParams(instanceAppModel, instanceId) {
+  const encoder = new TextEncoder()
+  const [instanceApp, instanceModel] = instanceAppModel.split('.')
+  const data = encoder.encode(JSON.stringify({
+    'app': instanceApp,
+    'model': instanceModel,
+    'id': instanceId
+  }))
+  return ['attr_rules_instance', encodeURIComponent(btoa(String.fromCharCode(...data)))]
 }
 
 export function IsSupportPauseSessionType(terminalType) {

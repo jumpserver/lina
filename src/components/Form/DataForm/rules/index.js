@@ -119,6 +119,7 @@ export default {
   matchAlphanumericUnderscore,
   MatchExcludeParenthesis
 }
+
 /**
  * @description 表单唯一性校验
  *

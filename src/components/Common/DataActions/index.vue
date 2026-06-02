@@ -253,11 +253,12 @@ $color-drop-menu-border: #e4e7ed;
 
 // 通用
 .layout {
-  &.right-side-actions {
+  &.right-side-actions.right-side-item {
     .action-item {
-      margin-left: 0px;
+      margin-left: 1px;
     }
   }
+
   .action-item {
     margin-left: 2px;
 
@@ -357,6 +358,23 @@ $color-drop-menu-border: #e4e7ed;
     background-color: transparent !important;
     border-color: transparent !important;
     box-shadow: none !important;
+  }
+
+  .action-item.table-action-text.el-button.is-disabled,
+  .action-item.table-action-text.el-button.is-disabled:hover,
+  .action-item.table-action-text.el-button.is-disabled:focus,
+  ::v-deep .action-item.table-action-text.el-dropdown .el-button.is-disabled,
+  ::v-deep .action-item.table-action-text.el-dropdown .el-button.is-disabled:hover,
+  ::v-deep .action-item.table-action-text.el-dropdown .el-button.is-disabled:focus {
+    color: $color-text-hover !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    cursor: not-allowed;
+
+    * {
+      color: inherit !important;
+    }
   }
 }
 

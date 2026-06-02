@@ -54,7 +54,7 @@
         <div class="file-uploader">
           <el-card>
             <div class="file-uploader-header">
-              <span>{{ $t('selectFiles', { number: uploadFileList.length }) }}</span>
+              <span>{{ $t('selectFiles', {number: uploadFileList.length}) }}</span>
               <el-tooltip
                 v-if="uploadFileList.length > 0"
                 :content="$t('ClearSelection')"
@@ -78,7 +78,7 @@
                 {{ $t('DragUploadFileInfo') }}
               </div>
               <span>
-                {{ $t('UploadFileLthHelpText', { limit: sizeLimitMb }) }}
+                {{ $t('UploadFileLthHelpText', {limit: sizeLimitMb}) }}
               </span>
               <div slot="file" slot-scope="{ file }">
                 <li class="el-upload-list__item is-ready" tabindex="0">
@@ -119,7 +119,7 @@
           </span>
           <span>
             <span><b>{{ $tc('TimeDelta') }}: </b></span>
-            <span>{{ executionInfo.timeCost }}</span>
+            <span>{{ executionInfo.timeCost }}s</span>
           </span>
         </span>
         <div class="output">
@@ -136,7 +136,7 @@
 import Term from '@/components/Widgets/Term'
 import Page from '@/layout/components/Page'
 import { createJob, getTaskDetail, JobUploadFile } from '@/api/ops'
-import { formatFileSize } from '@/utils/common/index'
+import { formatFileSize, createWsUrl } from '@/utils/common/index'
 import store from '@/store'
 import SelectJobAssetDialog from '@/views/ops/Adhoc/components/SelectJobAssetDialog.vue'
 
@@ -246,10 +246,7 @@ export default {
   methods: {
     formatFileSize,
     enableWS() {
-      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
-      const port = document.location.port ? ':' + document.location.port : ''
-      const url = '/ws/ops/tasks/log/'
-      const wsURL = scheme + '://' + document.location.hostname + port + url
+      const wsURL = createWsUrl('/ws/ops/tasks/log/')
       this.ws = new WebSocket(wsURL)
       this.ws.onerror = e => {
         this.xterm.write(this.wrapperError('Connect websocket server error'))

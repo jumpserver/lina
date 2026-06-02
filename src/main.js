@@ -3,6 +3,7 @@ import ElementUI from 'element-ui'
 import locale from 'elementLocale'
 import '@/styles/index.scss' // global css
 import App from './App'
+import { vueCookie as VueCookie } from '@/utils/storage'
 import store from './store'
 import router from './router'
 import i18n, { fetchTranslationsFromAPI } from './i18n/i18n'
@@ -14,8 +15,6 @@ import '@/icons' // icon
 import '@/guards' // permission control
 import '@/directive'
 import '@/filters'
-// cookie
-import VueCookie from 'vue-cookie'
 import VueLogger from 'vuejs-logger'
 import loggerOptions from './utils/logger'
 import ECharts from 'vue-echarts'
@@ -23,7 +22,6 @@ import request from '@/utils/request'
 import { message } from '@/utils/vue/message'
 import xss from '@/utils/secure'
 import ElTableTooltipPatch from '@/utils/vue/elTableTooltipPatch.js'
-import VSanitize from 'v-sanitize'
 import moment from 'moment'
 
 moment.locale('zh-cn')
@@ -69,11 +67,6 @@ window._ = require('lodash')
 Vue.prototype.$message = message
 
 Vue.prototype.$xss = xss
-Vue.use(VSanitize, {
-  allowedClasses: {
-    '*': ['*']
-  }
-})
 
 // 注册全局事件总线
 Vue.prototype.$eventBus = eventBus

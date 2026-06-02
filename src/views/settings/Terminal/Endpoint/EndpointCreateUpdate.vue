@@ -2,12 +2,13 @@
   <GenericCreateUpdatePage
     :create-success-next-route="successUrl"
     :update-success-next-route="successUrl"
-    v-bind="$data"
+    v-bind="{ ...$data, fields }"
   />
 </template>
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'EndpointCreateUpdate',
@@ -18,24 +19,6 @@ export default {
     return {
       url: '/api/v1/terminal/endpoints/',
       successUrl: { name: 'TerminalSetting', params: { activeMenu: 'EndpointList' } },
-      fields: [
-        [this.$t('Basic'), ['name', 'host']],
-        [
-          this.$t('Port'),
-          [
-            'http_port', 'https_port', 'ssh_port', 'rdp_port', 'vnc_port'
-          ]
-        ],
-        [
-          '',
-          [
-            'mysql_port', 'mariadb_port', 'postgresql_port',
-            'redis_port', 'sqlserver_port', 'oracle_port',
-            'mongodb_port'
-          ]
-        ],
-        [this.$t('Other'), ['is_active', 'comment']]
-      ],
       fieldsMeta: {
         host: {
           disabled: this.$route.params.id === '00000000-0000-0000-0000-000000000001'
@@ -47,10 +30,33 @@ export default {
       hasDetailInMsg: false
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters({
+      publicSettings: 'publicSettings'
+    }),
+    fields() {
+      let dbFields = [
+        'mysql_port', 'mariadb_port', 'postgresql_port',
+        'redis_port', 'sqlserver_port'
+      ]
+      if (this.publicSettings.VENDOR.toLowerCase() === 'jumpserver') {
+        dbFields = dbFields.concat(['oracle_port', 'mongodb_port'])
+      }
+      return [
+        [this.$t('Basic'), ['name', 'host']],
+        [
+          this.$t('Port'),
+          ['http_port', 'https_port', 'ssh_port', 'rdp_port', 'vnc_port']
+        ],
+        ['', dbFields],
+        [this.$t('Other'), ['is_active', 'comment']]
+      ]
+    }
+  },
   created() {
   },
-  methods: {}
+  methods: {
+  }
 }
 </script>
 

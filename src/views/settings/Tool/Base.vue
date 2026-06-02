@@ -70,6 +70,7 @@
 import { IBox } from '@/components'
 import Term from '@/components/Widgets/Term'
 import { Select2, TagInput } from '@/components/Form/FormFields'
+import { createWsUrl } from '@/utils/common/index'
 
 export default {
   name: 'Base',
@@ -118,10 +119,7 @@ export default {
   },
   methods: {
     enableWS() {
-      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
-      const port = document.location.port ? ':' + document.location.port : ''
-      const url = '/ws/setting/tools/'
-      const wsURL = scheme + '://' + document.location.hostname + port + url
+      const wsURL = createWsUrl('/ws/setting/tools/')
       this.xterm.reset()
       this.ws = new WebSocket(wsURL)
       this.setWsCallback()

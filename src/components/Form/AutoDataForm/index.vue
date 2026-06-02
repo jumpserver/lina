@@ -30,6 +30,7 @@ import DataForm from '../DataForm/index.vue'
 import FormGroupHeader from '@/components/Form/FormGroupHeader/index.vue'
 import { FormFieldGenerator } from '@/components/Form/AutoDataForm/utils'
 import { UniqueCheck } from '@/components/Form/DataForm/rules'
+import { joinErrorMessages } from '@/utils/common'
 
 export default {
   name: 'AutoDataForm',
@@ -219,13 +220,20 @@ export default {
       // 不写入 totalFields，避免触发 innerContent 变化导致表单值被覆盖
       this.$set(this.serverErrors, name, error)
     },
+    getFieldNames() {
+      const elForm = this._getElFormInstance()
+      if (elForm && Array.isArray(elForm.fields)) {
+        return elForm.fields.map(item => item.prop).filter(Boolean)
+      }
+      return (this.totalFields || []).map(item => item.prop).filter(Boolean)
+    },
     setErrors(errors) {
       const mapped = {}
       Object.entries(errors || {}).forEach(([k, v]) => {
         let msg = v
         console.log(k, v)
         // v是数组并且数组都是字符串，则拼接为字符串
-        if (Array.isArray(v) && v.every(item => typeof item === 'string')) msg = v.join('; ')
+        if (Array.isArray(v) && v.every(item => typeof item === 'string')) msg = joinErrorMessages(v)
         // 处理 [{"port":["请确保该值小于或者等于 65535。"]},{},{}] 这种情况
         else if (Array.isArray(v) && v.every(item => _.isPlainObject(item))) {
           const subMsg = []
@@ -236,7 +244,7 @@ export default {
               }
             })
           })
-          msg = subMsg.join(' ')
+          msg = joinErrorMessages(subMsg, ' ')
         } else if (typeof v === 'object' && v !== null) msg = JSON.stringify(v)
         mapped[k] = String(msg || '')
       })

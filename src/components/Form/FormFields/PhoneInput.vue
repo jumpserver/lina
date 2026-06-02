@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 export default {
   name: 'PhoneInput',
@@ -39,10 +40,11 @@ export default {
   },
   computed: {
     fullPhone() {
-      if (!this.rawValue.phone) {
+      const phone = (this.rawValue.phone || '').trim()
+      if (!phone) {
         return ''
       }
-      return `${this.rawValue.code}${this.rawValue.phone}`
+      return `${this.rawValue.code}${phone}`
     }
   },
   mounted() {

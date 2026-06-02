@@ -10,12 +10,14 @@
 import { GenericDetailPage } from '@/layout/components'
 import Password from './Password/Password.vue'
 import SSHKeyList from './SSHKey/SSHKeyList.vue'
+import Cert from './Cert/Cert.vue'
 
 export default {
   components: {
     GenericDetailPage,
     Password,
-    SSHKeyList
+    SSHKeyList,
+    Cert
   },
   data() {
     return {
@@ -60,6 +62,11 @@ export default {
           title: this.$t('LoginSSHKeySetting'),
           name: 'SSHKeyList',
           disabled: !this.$store.state.users.profile.can_public_key_auth
+        },
+        {
+          title: this.$t('LoginUKeySetting'),
+          name: 'Cert',
+          hidden: !this.$store.state.users.profile.can_cert_auth
         }
       ]
     },

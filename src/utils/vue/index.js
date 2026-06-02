@@ -1,3 +1,5 @@
+import store from '@/store'
+
 export function resolveRoute(route, router) {
   const routes = router.resolve(route)
   if (!routes) {
@@ -33,4 +35,12 @@ export function getRouteUrl(route, router) {
     return
   }
   return r.path
+}
+
+export function getFirstAccessibleChildPath(path) {
+  const routes = store.state.permission.routes || []
+  const settingsRoute = routes.find(route => route.path === path)
+  const children = settingsRoute?.children || []
+  const firstChild = children.find(route => route?.path && !route.hidden)
+  return firstChild?.path
 }

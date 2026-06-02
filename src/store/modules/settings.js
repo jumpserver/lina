@@ -3,6 +3,7 @@ import { getPublicSettings } from '@/api/settings'
 import { changeElementColor, changeThemeColors } from '@/utils/theme/index'
 import { changeMenuColor } from '@/utils/theme/color'
 import request from '@/utils/request'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 const { showSettings, fixedHeader, sidebarLogo, tagsView } = defaultSettings
 
@@ -11,11 +12,64 @@ const state = {
   fixedHeader: fixedHeader,
   sidebarLogo: sidebarLogo,
   tagsView: tagsView,
+  logoMode: 'combine',
+  vendor: '',
   publicSettings: {},
   hasValidLicense: false,
   authMethods: {},
-  themeColors: JSON.parse(localStorage.getItem('themeColors')) || {},
+  themeColors: {},
   tableActionButtonType: 'default'
+}
+
+function updateThemeColors(state, interfaceSettings) {
+  const responseThemeColors = interfaceSettings?.theme_info?.colors
+  const themeName = interfaceSettings?.theme
+  const hasResponseThemeColors = responseThemeColors && Object.keys(responseThemeColors).length > 0
+
+  const cachedThemeColors = (() => {
+    if (themeName === 'default' || !themeName || themeName === 'classic_green') {
+      return {}
+    }
+
+    if (state.themeColors && Object.keys(state.themeColors).length > 0) {
+      return state.themeColors
+    }
+    try {
+      return JSON.parse(localStorage.getItem('themeColors')) || {}
+    } catch (error) {
+      return {}
+    }
+  })()
+
+  const themeColors =
+      hasResponseThemeColors ? responseThemeColors : cachedThemeColors
+
+  const settings = {
+    ...(interfaceSettings || {}),
+    theme_info: {
+      ...(interfaceSettings?.theme_info || {}),
+      colors: themeColors
+    }
+  }
+
+  changeThemeColors(themeColors || {})
+  return settings
+}
+
+function updateTitleIcon(interfaceSettings) {
+  const faviconURL = interfaceSettings?.favicon
+  let link = document.querySelector("link[rel*='icon']")
+  if (!link) {
+    link = document.createElement('link')
+    link.type = 'image/x-icon'
+    link.rel = 'shortcut icon'
+    document.getElementsByTagName('head')[0].appendChild(link)
+  }
+  if (faviconURL) {
+    link.href = faviconURL
+  }
+  // 动态修改Title
+  document.title = interfaceSettings?.login_title || ''
 }
 
 const mutations = {
@@ -27,11 +81,14 @@ const mutations = {
   SET_PUBLIC_SETTINGS: (state, settings) => {
     state.publicSettings = settings
     state.themeColors = settings?.INTERFACE?.theme_info?.colors || {}
-    state.tableActionButtonType = settings?.INTERFACE.theme_info['table-action-button'] || 'default'
+    state.tableActionButtonType = settings?.INTERFACE?.theme_info?.['table-action-button'] || 'default'
 
     if (settings['XPACK_ENABLED']) {
       state.hasValidLicense = settings['XPACK_LICENSE_IS_VALID']
     }
+  },
+  SET_LOGO_MODE: (state, value) => {
+    state.logoMode = value
   },
   SET_SECURITY_WATERMARK_ENABLED: (state, value) => {
     state.publicSettings['SECURITY_WATERMARK_ENABLED'] = value
@@ -39,6 +96,9 @@ const mutations = {
   setTheme(state, data) {
     state.themeColors = data
     localStorage.setItem('themeColors', JSON.stringify(data))
+  },
+  SET_VENDOR: (state, value) => {
+    state.vendor = value
   }
 }
 
@@ -52,50 +112,17 @@ const actions = {
       getPublicSettings(isOpen)
         .then(response => {
           const data = response || {}
-          if (isOpen) {
-            const faviconURL = data['INTERFACE']?.favicon
-            let link = document.querySelector("link[rel*='icon']")
-            if (!link) {
-              link = document.createElement('link')
-              link.type = 'image/x-icon'
-              link.rel = 'shortcut icon'
-              document.getElementsByTagName('head')[0].appendChild(link)
-            }
-            if (faviconURL) {
-              link.href = faviconURL
-            }
-            // 动态修改Title
-            document.title = data?.INTERFACE?.login_title || ''
-          }
-
-          const responseThemeColors = data?.INTERFACE?.theme_info?.colors || {}
-
-          const cachedThemeColors = (() => {
-            if (state.themeColors && Object.keys(state.themeColors).length > 0) {
-              return state.themeColors
-            }
-            try {
-              return JSON.parse(localStorage.getItem('themeColors')) || {}
-            } catch (error) {
-              return {}
-            }
-          })()
-
-          const themeColors =
-            Object.keys(responseThemeColors).length > 0 ? responseThemeColors : cachedThemeColors
+          updateTitleIcon(data?.INTERFACE)
+          const interfaceSettings = updateThemeColors(state, data?.INTERFACE)
+          const logoMode = interfaceSettings?.logo_mode || 'combine'
+          const vendor = interfaceSettings?.vendor || ''
           const nextSettings = {
             ...data,
-            INTERFACE: {
-              ...(data?.INTERFACE || {}),
-              theme_info: {
-                ...(data?.INTERFACE?.theme_info || {}),
-                colors: themeColors
-              }
-            }
+            INTERFACE: interfaceSettings
           }
-
+          commit('SET_LOGO_MODE', logoMode)
+          commit('SET_VENDOR', vendor)
           commit('SET_PUBLIC_SETTINGS', nextSettings)
-          changeThemeColors(themeColors || {})
           resolve(response)
         })
         .catch(error => {
