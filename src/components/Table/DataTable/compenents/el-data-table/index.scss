@@ -13,9 +13,19 @@
 
 .el-data-table :deep(.el-pagination) {
   text-align: right;
-  padding: 15px 17px 20px 17px;
+  padding: var(--space-3) var(--space-4);
 
   .el-pagination__total {
     float: left;
+  }
+
+  .el-select,
+  .el-select__wrapper,
+  .el-pagination__sizes,
+  .btn-prev,
+  .btn-next,
+  .el-pager li {
+    height: 32px;
+    line-height: 32px;
   }
 }

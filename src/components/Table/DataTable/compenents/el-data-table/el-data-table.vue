@@ -10,7 +10,9 @@
         导致跨页选择（persistSelection）被覆盖，只剩当页数据。
         选择事件统一走 selectStrategy，在内部维护全量 selected 并向外 emit。
       -->
-      <el-table v-bind="tableAttrs" ref="table"
+      <el-table
+        v-bind="tableAttrs"
+        ref="table"
         v-loading="tableLoading"
         :data="data"
         :row-class-name="rowClassName"
@@ -18,10 +20,14 @@
         v-on="forwardListeners"
         @selection-change="selectStrategy.onSelectionChange"
         @select-all="handleSelectAll($event, canSelect)"
-        @sort-change="onSortChange">
+        @sort-change="onSortChange"
+      >
         <template v-if="isTree">
-          <el-data-table-column v-bind="{ align: columnsAlign, ...columns[0] }" v-if="hasSelect"
-            key="selection-key" />
+          <el-data-table-column
+            v-if="hasSelect"
+            v-bind="{ align: columnsAlign, ...columns[0] }"
+            key="selection-key"
+          />
           <el-data-table-column v-bind="treeControlColumn" :key="treeControlColumn.prop || 'tree-ctrl'">
             <template #default="scope">
               <span v-for="space in scope.row._level" :key="space" class="ms-tree-space" />
@@ -36,8 +42,11 @@
             </template>
           </el-data-table-column>
 
-          <el-data-table-column v-bind="{ align: columnsAlign, ...col }" v-for="col in treeDataColumns"
-            :key="col.prop" />
+          <el-data-table-column
+            v-for="col in treeDataColumns"
+            v-bind="{ align: columnsAlign, ...col }"
+            :key="col.prop"
+          />
         </template>
 
         <!--非树-->
@@ -48,14 +57,17 @@
             :selectable="canSelect"
             type="selection"
           />
-          <el-table-column v-bind="getColumnBindProps(col)" v-for="col in columns"
+          <el-table-column
+            v-for="col in columns"
+            v-bind="getColumnBindProps(col)"
             :key="col.prop"
             :filter-method="typeof col.filterMethod === 'function' ? col.filterMethod : null"
             :filter-multiple="false"
             :filters="col.filters || null"
             :formatter="typeof col.formatter === 'function' ? col.formatter : null"
             :title="col.label"
-            :prop="col.prop">
+            :prop="col.prop"
+          >
             <template #header>
               <span :title="col.label">{{ col.label }}</span>
             </template>
@@ -64,25 +76,30 @@
               v-if="col.formatter && typeof col.formatter !== 'function'"
               #default="{ row: tableRow, column, $index }"
             >
-              <component
-                :is="col.formatter"
-                :key="tableRow.id"
-                :cell-value="tableRow[col.prop]"
-                :col="col"
-                :column="column"
-                :index="$index"
-                :reload="getList"
-                :row="tableRow"
-                :table-data="data"
-                :url="url"
-              />
+              <span class="table-formatter-host">
+                <component
+                  :is="col.formatter"
+                  :key="tableRow.id"
+                  :cell-value="tableRow[col.prop]"
+                  class="table-formatter"
+                  :col="col"
+                  :column="column"
+                  :index="$index"
+                  :reload="getList"
+                  :row="tableRow"
+                  :table-data="data"
+                  :url="url"
+                />
+              </span>
             </template>
           </el-table-column>
         </template>
         <slot />
       </el-table>
 
-      <el-pagination v-bind="extraPaginationAttrs" v-if="hasPagination"
+      <el-pagination
+        v-if="hasPagination"
+        v-bind="extraPaginationAttrs"
         :background="paginationBackground"
         :current-page="page"
         :layout="paginationLayout"
@@ -90,7 +107,8 @@
         :page-sizes="paginationSizes"
         :total="total"
         @size-change="handleSizeChange"
-        @current-change="handleCurrentChange" />
+        @current-change="handleCurrentChange"
+      />
 
       <the-dialog
         ref="dialog"
@@ -1316,6 +1334,54 @@ export default {
 
   .row-hide {
     display: none;
+  }
+
+  :deep(.el-table td.el-table__cell),
+  :deep(.el-table .cell),
+  :deep(.table-formatter-host) {
+    font-family: var(--table-font-family, var(--font-family-base)) !important;
+    font-stretch: normal;
+    font-style: normal !important;
+    font-synthesis: none;
+    font-synthesis-style: none;
+    font-variation-settings: normal;
+  }
+
+  :deep(.el-table td.el-table__cell :where(span, div, a, p, small, strong, b, label)),
+  :deep(.el-table .cell :where(span, div, a, p, small, strong, b, label)),
+  :deep(.table-formatter-host :where(span, div, a, p, small, strong, b, label)) {
+    font-family: var(--table-font-family, var(--font-family-base)) !important;
+    font-stretch: normal;
+    font-style: normal !important;
+    font-synthesis: none;
+    font-synthesis-style: none;
+    font-variation-settings: normal;
+  }
+
+  :deep(.table-formatter-host .fa) {
+    font-family: FontAwesome !important;
+    font-style: normal !important;
+    font-variation-settings: normal;
+  }
+
+  :deep(.table-formatter-host [class^='el-icon-']),
+  :deep(.table-formatter-host [class*=' el-icon-']) {
+    font-family: element-icons !important;
+    font-style: normal !important;
+    font-variation-settings: normal;
+  }
+
+  .table-formatter-host {
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    font-family: var(--table-font-family, var(--font-family-base)) !important;
+    font-stretch: normal;
+    font-style: normal !important;
+    font-synthesis: none;
+    font-synthesis-style: none;
+    font-variation-settings: normal;
+    line-height: 1.4;
   }
 }
 </style>

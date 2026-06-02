@@ -63,6 +63,8 @@ export default {
   .app-wrapper {
     @include clearfix;
     position: relative;
+    display: flex;
+    flex-direction: column;
     height: 100vh;
     width: 100%;
     overflow: hidden;
@@ -82,12 +84,18 @@ export default {
   }
 
   .fixed-header {
-    position: fixed;
-    top: 0;
-    right: 0;
+    position: relative;
     z-index: 9;
     width: 100%;
+    flex: 0 0 $headerHeight;
     transition: width 0.28s;
+  }
+
+  .main-container {
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
   }
 
   .mobile .fixed-header {

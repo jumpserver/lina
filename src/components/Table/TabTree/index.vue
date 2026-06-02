@@ -14,11 +14,13 @@
           :label-content="item.labelContent"
           :name="item.name"
         >
-          <span slot="label" class="tab-container">
-            <i v-if="item.icon && !showText" :class="item.icon" class="tab-icon fa " />
-            <span v-if="showText" class="tab-text">{{ item.title }}</span>
-            <slot :tab="item.name" name="badge" />
-          </span>
+          <template #label>
+            <span class="tab-container">
+              <i v-if="item.icon && !showText" :class="item.icon" class="tab-icon fa " />
+              <span v-if="showText" class="tab-text">{{ item.title }}</span>
+              <slot :tab="item.name" name="badge" />
+            </span>
+          </template>
         </el-tab-pane>
       </template>
     </el-tabs>
@@ -31,9 +33,9 @@
             :setting="activeTreeSetting"
             @url-change="handleUrlChange"
           >
-            <div slot="rMenu" slot-scope="{data}">
-              <slot :data="data" name="rMenu" />
-            </div>
+            <template #rMenu>
+              <slot name="rMenu" />
+            </template>
           </AutoDataZTree>
         </keep-alive>
       </slot>
@@ -183,35 +185,167 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-:deep(.data-z-tree) {
-  padding: 0;
+.tree-tab {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: 0;
+  height: 100%;
+  color: var(--N800);
+  font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
+  font-stretch: normal;
+  font-style: normal;
+  font-synthesis: none;
+  font-synthesis-style: none;
+  font-variation-settings: normal;
 }
 
-.page-submenu :deep(.el-tabs__nav-wrap) {
-  position: static;
+.page-submenu {
+  flex: 0 0 auto;
 
-  .el-tabs__item {
-    padding-right: 0;
-    padding-left: 0;
+  :deep(.el-tabs__header) {
+    margin: 0;
+    border-bottom: 1px solid var(--N200);
+    background: var(--surface-panel);
+  }
+
+  :deep(.el-tabs__nav-wrap) {
+    position: relative;
+    padding: 0 var(--space-2);
+
+    &::after {
+      height: 0;
+    }
+  }
+
+  :deep(.el-tabs__nav) {
+    display: flex;
+    align-items: center;
+  }
+
+  :deep(.el-tabs__item) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 var(--space-3);
+    color: var(--N600);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    line-height: 36px;
+    transition: color var(--duration-fast) var(--ease-standard);
 
     &:hover {
       color: var(--color-primary);
     }
+
+    &.is-active {
+      color: var(--color-primary);
+    }
+  }
+
+  :deep(.el-tabs__active-bar) {
+    height: 2px;
+    border-radius: 999px;
+    background-color: var(--color-primary);
+  }
+
+  :deep(.tab-container) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-width: 0;
+    line-height: 1;
+  }
+
+  :deep(.tab-icon) {
+    width: var(--icon-size-base);
+    height: var(--icon-size-base);
+    margin-right: 0 !important;
+    font-family: FontAwesome !important;
+    font-size: var(--icon-size-base);
+    line-height: var(--icon-size-base);
+  }
+
+  :deep(.tab-text) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 
 .only-submenu {
-  &:deep(.el-tabs__active-bar) {
+  :deep(.el-tabs__active-bar) {
     transform: none !important;
   }
 
-  &:deep(.el-tabs__item.is-active) {
+  :deep(.el-tabs__item.is-active) {
     text-align: left;
-    padding: 0 20px;
+    padding: 0 var(--space-3);
   }
 }
 
-:deep(.ztree) {
+:deep(.data-z-tree) {
+  flex: 1 1 auto;
+  min-height: 0;
   padding: 0;
+}
+
+:deep(.treebox) {
+  min-height: 0;
+  border: 1px solid var(--N200);
+  border-radius: var(--radius-card);
+  background: var(--surface-panel);
+  overflow: hidden;
+}
+
+:deep(.ztree) {
+  padding: 0 var(--space-2);
+}
+
+:deep(.ztree li) {
+  line-height: 28px;
+}
+
+:deep(.ztree li ul) {
+  padding-left: var(--space-4);
+}
+
+:deep(.ztree li a) {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  max-width: 100%;
+  height: 28px;
+  padding: 0 var(--space-2);
+  border: 0;
+  border-radius: var(--radius-control);
+  color: var(--N700) !important;
+  line-height: 28px;
+  transition: background-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+}
+
+:deep(.ztree li a:hover) {
+  background: var(--N50);
+  box-shadow: none;
+}
+
+:deep(.ztree li a.curSelectedNode) {
+  background: rgba(26, 179, 148, 0.08);
+  color: var(--color-primary) !important;
+  opacity: 1;
+}
+
+:deep(.ztree li span.node_name) {
+  font-family: 'Inter','PingFang SC', 'Microsoft YaHei', Arial, sans-serif !important;
+  font-stretch: normal;
+  font-style: normal !important;
+  font-synthesis: none;
+  font-synthesis-style: none;
+  font-variation-settings: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

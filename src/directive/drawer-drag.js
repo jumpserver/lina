@@ -11,9 +11,9 @@ export function installDrawerDragDirective(app) {
         if (!drawerEle) {
           drawerEle = el.querySelector('.el-drawer')
         }
-        // 如果还是没找到，尝试从 el-drawer__wrapper 查找
+        // 如果还是没找到，尝试从 Element Plus 的 drawer overlay 查找
         if (!drawerEle) {
-          const wrapper = document.querySelector('.el-drawer__wrapper')
+          const wrapper = document.querySelector('.el-overlay.is-drawer')
           if (wrapper) {
             drawerEle = wrapper.querySelector('.el-drawer')
           }

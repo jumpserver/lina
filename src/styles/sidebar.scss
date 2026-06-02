@@ -2,27 +2,27 @@
 
 #app {
   .main-container {
-    position: relative;
-    top: $headerHeight;
-    min-height: 100%;
-    height: calc(100vh - #{$headerHeight});
-    transition: margin-left 0.28s;
-    margin-left: $sideBarWidth;
+    display: flex;
+    min-height: 0;
+    height: 100%;
   }
 
   .sidebar-container {
-    transition: width 0.28s;
+    flex: 0 0 $sideBarWidth;
+    transition:
+      width var(--duration-fast) var(--ease-standard),
+      flex-basis var(--duration-fast) var(--ease-standard),
+      transform var(--duration-fast) var(--ease-standard);
     width: $sideBarWidth !important;
     background-color: $menuBg;
     height: 100%;
-    position: fixed;
+    position: relative;
     font-size: 0;
-    top: $headerHeight;
-    bottom: 0;
-    left: 0;
+    top: 0;
     z-index: 1001;
     overflow: hidden;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
+    border-right: 1px solid var(--N200);
 
     // reset element-ui css
     .horizontal-collapse-transition {
@@ -67,11 +67,8 @@
 
   .hideSidebar {
     .sidebar-container {
+      flex-basis: 54px;
       width: 54px !important;
-    }
-
-    .main-container {
-      margin-left: 54px;
     }
 
     .submenu-title-noDropdown {
@@ -79,11 +76,17 @@
       position: relative;
     }
 
+    .left-menu {
+      .item-title {
+        display: none !important;
+      }
+    }
+
     .el-submenu-sidebar {
       overflow: hidden;
 
       & > .el-sub-menu__title {
-        .el-submenu__icon-arrow {
+        .el-sub-menu__icon-arrow {
           display: none;
         }
       }
@@ -107,18 +110,22 @@
   // mobile responsive
   .mobile {
     .main-container {
-      margin-left: 0;
+      position: relative;
     }
 
     .sidebar-container {
-      transition: transform 0.28s;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      flex: none;
       width: $sideBarWidth !important;
     }
 
     &.hideSidebar {
       .sidebar-container {
         pointer-events: none;
-        transition-duration: 0.3s;
+        transition-duration: var(--duration-fast);
         transform: translate3d(-$sideBarWidth, 0, 0);
       }
     }

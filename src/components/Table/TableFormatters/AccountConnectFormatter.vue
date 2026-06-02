@@ -11,23 +11,25 @@
       @visible-change="visibleChange"
     >
       <el-button plain size="small" type="primary" :disabled="!hasPerm" @click="handleBtnConnect">
-        <i :class="iButtonIcon" :style="{ color: hasPerm ? '' : '#fff' }" />
+        <i :class="iButtonIcon" />
       </el-button>
 
-      <el-dropdown-menu v-if="!isClick" slot="dropdown">
-        <el-dropdown-item command="title" disabled>
-          <div v-if="getProtocolsLoading">
-            {{ $t('Loading') }}
-          </div>
-          <div v-else>
-            {{ dropdownTitle }}
-          </div>
-        </el-dropdown-item>
-        <el-dropdown-item divided />
-        <el-dropdown-item v-for="protocol in protocols" :key="protocol.id" :command="protocol.name">
-          {{ protocol.name }}
-        </el-dropdown-item>
-      </el-dropdown-menu>
+      <template #dropdown>
+        <el-dropdown-menu v-if="!isClick">
+          <el-dropdown-item command="title" disabled>
+            <div v-if="getProtocolsLoading">
+              {{ $t('Loading') }}
+            </div>
+            <div v-else>
+              {{ dropdownTitle }}
+            </div>
+          </el-dropdown-item>
+          <el-dropdown-item divided />
+          <el-dropdown-item v-for="protocol in protocols" :key="protocol.id" :command="protocol.name">
+            {{ protocol.name }}
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
     </el-dropdown>
   </div>
 </template>
@@ -116,6 +118,58 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.action-connect {
+  :deep(.el-button.el-button--small) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    min-width: 28px;
+    height: 28px;
+    min-height: 28px;
+    padding: 0 !important;
+    border: 1px solid rgba(26, 179, 148, 0.26);
+    border-radius: var(--radius-control);
+    background: rgba(26, 179, 148, 0.04) !important;
+    box-shadow: none !important;
+    color: var(--color-primary) !important;
+    line-height: 1;
+
+    &:hover,
+    &:focus {
+      border-color: rgba(26, 179, 148, 0.34) !important;
+      background: rgba(26, 179, 148, 0.08) !important;
+      color: var(--color-primary) !important;
+    }
+
+    &:active {
+      border-color: rgba(26, 179, 148, 0.42) !important;
+      background: rgba(26, 179, 148, 0.12) !important;
+      color: var(--color-primary) !important;
+    }
+
+    i,
+    .svg-icon {
+      width: 14px;
+      height: 14px;
+      margin: 0 !important;
+      font-size: 14px;
+      font-style: normal !important;
+      line-height: 14px;
+      color: currentColor !important;
+    }
+
+    i.fa {
+      font-family: FontAwesome !important;
+    }
+
+    [class^='el-icon-'],
+    [class*=' el-icon-'] {
+      font-family: element-icons !important;
+    }
+  }
+}
+
 .el-dropdown-menu__item.is-disabled {
   font-weight: 500;
   color: var(--el-text-color-secondary);

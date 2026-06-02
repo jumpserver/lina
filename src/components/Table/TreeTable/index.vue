@@ -196,29 +196,34 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$origin-color: #ffffff;
-
 .tree-table-content {
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 0;
 
   .left {
-    //height: 100%;
-    background: $origin-color;
-    color: var(--color-border);
+    flex-shrink: 0;
+    min-height: 0;
+    border: 1px solid var(--N200);
+    border-radius: var(--radius-card);
+    background: var(--surface-panel);
+    color: var(--N700);
+    overflow: hidden;
 
     // title 部分
     .title {
       display: flex;
       align-items: center;
       height: 40px;
-      padding: 0 20px;
+      padding: 0 var(--space-4);
       width: 100%;
-      border-bottom: solid 2px var(--color-primary);
-      font-size: 13px;
-      font-weight: 600;
+      border-bottom: 1px solid var(--N200);
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-medium);
       color: var(--color-text-primary);
+      line-height: 40px;
 
       &:hover {
         cursor: pointer;
@@ -229,37 +234,50 @@ $origin-color: #ffffff;
     .auto-data-ztree {
       overflow: auto;
       height: 100%;
+      padding: var(--space-3);
 
       &.tree-tab :deep(.page-submenu) {
-        height: 40px;
+        min-height: 36px;
+      }
+
+      &.tree-tab :deep(.treebox) {
+        border: 0;
+        border-radius: 0;
+        padding: 0;
       }
     }
 
     // tree 部分
     .data-z-tree {
-      //margin-left: -20px;
-      //width: calc(100% + 20px);
+      height: 100%;
 
       .treebox {
-        padding-left: 10px;
-        padding-bottom: 10px;
+        padding: 0;
       }
     }
 
     :deep(.tab-text) {
-      font-size: 13px;
+      font-size: var(--font-size-sm);
     }
 
     &:hover {
       ~ .right .is-show {
-        display: block !important;;
+        opacity: 1;
+        visibility: visible;
       }
     }
+  }
+
+  .right {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: auto !important;
   }
 }
 
 .is-show {
-  display: none;
+  opacity: 0;
+  visibility: hidden;
 }
 
 .hidden {
@@ -274,20 +292,27 @@ $origin-color: #ffffff;
 .mini-button {
   position: absolute;
   top: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transform: translate(-100%, -50%);
-  width: 13px;
-  float: right;
-  text-align: center;
-  padding: 5px 0;
-  border: 1px solid #DCDFE6;
-  background-color: #f3f3f3;
-  border-radius: 2px;
+  width: 16px;
+  padding: var(--space-1) 0;
+  border: 1px solid var(--N300);
+  background-color: var(--surface-panel);
+  border-radius: var(--radius-control);
   cursor: pointer;
-  height: 30px;
+  height: 32px;
+  color: var(--N600);
+  transition: color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    opacity var(--duration-fast) var(--ease-standard);
 
   &:hover {
-    display: block;
-    border: 1px solid #d2d2d2;
+    border-color: rgba(26, 179, 148, 0.34);
+    background-color: rgba(26, 179, 148, 0.08);
+    color: var(--color-primary);
   }
 
   .icon-left {
@@ -296,20 +321,33 @@ $origin-color: #ffffff;
   }
 }
 
+.mini-button.sweezy-custom-cursor-hover {
+  opacity: 1;
+  visibility: visible;
+}
+
 .el-tree {
   background-color: inherit !important;
 }
 
 .mini {
   position: relative;
-  margin-right: 5px;
-  width: 2px !important;
+  margin-right: 0;
+  flex: 0 0 16px;
+  width: 16px !important;
+  min-width: 16px;
 }
 
 .transition-box.left {
-  background: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 2px;
+  background: var(--surface-panel);
+  border: 1px solid var(--N200);
+  border-radius: var(--radius-card);
+}
+
+.transition-box {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto !important;
 }
 
 </style>

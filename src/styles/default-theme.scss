@@ -62,6 +62,92 @@ $menu-hover: #ffffff;
   --el-color-warning: #{$color-warning};
   --el-color-danger: #{$color-danger};
   --el-color-error: #{$color-error};
+
+  /* Existing neutral scale */
+  --N900: #1f2329;
+  --N800: #2b2f36;
+  --N700: #373c43;
+  --N600: #646a73;
+  --N500: #8f959e;
+  --N400: #bbbfc4;
+  --N300: #dee0e3;
+  --N200: #eff0f1;
+  --N100: #f5f6f7;
+  --N50: #f8f9fa;
+  --neutral-900: var(--N900);
+  --neutral-800: var(--N800);
+  --neutral-700: var(--N700);
+  --neutral-600: var(--N600);
+  --neutral-500: var(--N500);
+  --neutral-400: var(--N400);
+  --neutral-300: var(--N300);
+  --neutral-200: var(--N200);
+  --neutral-100: var(--N100);
+  --neutral-50: var(--N50);
+
+  /* Linear-inspired system tokens */
+  --font-family-base: Inter, 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 13px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --icon-size-base: 13px;
+  --icon-size-emphasis: 16px;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --line-height-tight: 1.25;
+  --line-height-base: 1.5;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --radius-control: 6px;
+  --radius-card: 8px;
+  --radius-modal: 12px;
+  --duration-fast: 150ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --surface-page: var(--N50);
+  --surface-panel: #ffffff;
+  --surface-subtle: var(--N100);
+  --focus-ring: rgba(26, 179, 148, 0.18);
+  --shadow-subtle: 0 1px 2px rgba(31, 35, 41, 0.06);
+
+  /* Element Plus CSS variable alignment */
+  --el-font-family: var(--font-family-base);
+  --el-font-size-extra-large: 20px;
+  --el-font-size-large: 16px;
+  --el-font-size-medium: 14px;
+  --el-font-size-base: var(--font-size-base);
+  --el-font-size-small: var(--font-size-sm);
+  --el-font-size-extra-small: var(--font-size-xs);
+  --el-font-weight-primary: var(--font-weight-medium);
+  --el-component-size-large: 40px;
+  --el-component-size: 36px;
+  --el-component-size-small: 32px;
+  --el-border-radius-base: var(--radius-control);
+  --el-border-radius-small: var(--radius-control);
+  --el-border-color: var(--N300);
+  --el-border-color-light: var(--N200);
+  --el-border-color-lighter: var(--N200);
+  --el-border-color-extra-light: var(--N100);
+  --el-text-color-primary: var(--N900);
+  --el-text-color-regular: var(--N700);
+  --el-text-color-secondary: var(--N600);
+  --el-text-color-placeholder: var(--N500);
+  --el-fill-color: var(--N100);
+  --el-fill-color-light: var(--N50);
+  --el-fill-color-lighter: #fbfbfc;
+  --el-fill-color-blank: #ffffff;
+  --el-bg-color-page: var(--surface-page);
+  --el-bg-color-overlay: var(--surface-panel);
+  --el-transition-duration: var(--duration-fast);
+  --el-transition-duration-fast: var(--duration-fast);
 }
 
 // CSS Modules export（用于 JavaScript 导入）
@@ -86,4 +172,5 @@ $menu-hover: #ffffff;
   --menu-text: #{$menu-text};
   --menu-text-active: #{$menu-text-active};
   --menu-hover: #{$menu-hover};
+  --font-family-base: Inter, 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
 }

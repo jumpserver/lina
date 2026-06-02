@@ -1,0 +1,30 @@
+.svg-icon,
+.el-icon,
+[class*=' el-icon-'],
+[class^='el-icon-'] {
+  width: var(--icon-size-base);
+  height: var(--icon-size-base);
+  font-size: var(--icon-size-base);
+  line-height: var(--icon-size-base);
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.fa {
+  width: var(--icon-size-base);
+  height: var(--icon-size-base);
+  font-size: var(--icon-size-base);
+  line-height: var(--icon-size-base);
+}
+
+.help-msg-btn {
+  width: 28px;
+  min-width: 28px;
+  min-height: 28px;
+  padding: 0 !important;
+}
+
+.el-alert.el-alert--info.is-light i.el-icon-info.is-big {
+  width: var(--icon-size-emphasis);
+  font-size: var(--icon-size-emphasis);
+}

@@ -140,8 +140,20 @@ export default {
 
 <style lang="scss" scoped>
 .search-btn {
-  margin-top: 1px;
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
+  margin-top: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+
+  :deep(.svg-icon) {
+    width: 14px;
+    height: 14px;
+  }
+
   &:hover {
     color: #409eff;
   }

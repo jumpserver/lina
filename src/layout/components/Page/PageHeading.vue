@@ -1,28 +1,32 @@
 <template>
-  <div>
-    <slot name="globalNotification">
-      <SqlQueryTip v-if="debug " />
-      <LicenseRelatedTip v-else />
-      <PasswordExpireTip />
-    </slot>
+  <div class="page-heading-shell">
+    <div class="page-heading-notification">
+      <slot name="globalNotification">
+        <LicenseRelatedTip v-if="!debug" />
+        <PasswordExpireTip />
+      </slot>
+    </div>
+    <div v-if="debug" class="page-heading-context-row">
+      <SqlQueryTip />
+    </div>
     <div class="page-heading">
-      <el-row :gutter="0" type="flex">
-        <el-col :span="16" class="page-heading-left">
+      <div class="page-heading-main">
+        <div class="page-heading-left">
           <slot><h2>{{ title }}</h2></slot>
-        </el-col>
-        <el-col :span="8" class="page-heading-right">
+        </div>
+        <div class="page-heading-right">
           <slot name="rightSide" />
-        </el-col>
-      </el-row>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import LicenseRelatedTip from './LicenseRelatedTip'
 import PasswordExpireTip from './PasswordExpireTip'
 import SqlQueryTip from './SqlQueryTip'
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'PageHeading',
@@ -49,35 +53,85 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$origin-color: #ffffff;
+.page-heading-shell {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface-panel);
+}
 
-.page-heading {
+.page-heading-notification {
+  flex: 0 0 auto;
+  overflow: hidden;
+}
+
+.page-heading-context-row {
   display: flex;
   align-items: center;
-  height: 50px;
-  background-color: $origin-color;
-  border-bottom: 1px solid rgba(31, 35, 41, .15);
+  min-height: 38px;
+  background-color: var(--N100);
+  border-bottom: 1px solid var(--N200);
+}
 
-  .el-row {
+.page-heading-context-row :deep(.sql-debug-tip) {
+  width: 100%;
+}
+
+.page-heading {
+  flex: 0 0 auto;
+  min-height: 48px;
+  background-color: var(--surface-panel);
+  border-bottom: 1px solid var(--N200);
+}
+
+.page-heading-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 48px;
+  padding: 0 var(--space-4);
+}
+
+.page-heading-left,
+.page-heading-left :deep(h2) {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  color: var(--color-text-primary);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.page-heading-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+  min-width: fit-content;
+}
+
+@media (max-width: 992px) {
+  .page-heading-shell {
+    padding: 0 var(--space-4);
+  }
+
+  .page-heading-main {
+    flex-wrap: wrap;
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-2);
+  }
+
+  .page-heading-left,
+  .page-heading-right {
     width: 100%;
-    padding: 0 24px;
+  }
 
-    .page-heading-left,
-    h2 {
-      display: flex;
-      align-items: center;
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--color-text-primary);
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-
-    .page-heading-right {
-      display: flex;
-      justify-content: flex-end;
-    }
+  .page-heading-right {
+    justify-content: flex-start;
   }
 }
 </style>

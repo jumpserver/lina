@@ -35,9 +35,84 @@ $colors: map.deep-merge(
   $colors
 );
 
+$font-family: (
+  '': "Inter, 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif"
+);
+
+$font-size: (
+  'extra-large': 20px,
+  'large': 16px,
+  'medium': 14px,
+  'base': 13px,
+  'small': 12px,
+  'extra-small': 11px
+);
+
+$border-radius: (
+  'base': 6px,
+  'small': 6px,
+  'round': 999px,
+  'circle': 100%
+);
+
+$common-component-size: (
+  'large': 40px,
+  'default': 36px,
+  'small': 32px
+);
+
+$text-color: (
+  'primary': #1f2329,
+  'regular': #373c43,
+  'secondary': #646a73,
+  'placeholder': #8f959e,
+  'disabled': #bbbfc4
+);
+
+$border-color: (
+  '': #dee0e3,
+  'light': #eff0f1,
+  'lighter': #eff0f1,
+  'extra-light': #f5f6f7,
+  'dark': #bbbfc4,
+  'darker': #8f959e
+);
+
+$fill-color: (
+  '': #f5f6f7,
+  'light': #f8f9fa,
+  'lighter': #fbfbfc,
+  'extra-light': #ffffff,
+  'dark': #eff0f1,
+  'darker': #dee0e3,
+  'blank': #ffffff
+);
+
+$bg-color: (
+  '': #ffffff,
+  'page': #f8f9fa,
+  'overlay': #ffffff
+);
+
+$box-shadow: (
+  '': 0 1px 2px rgba(31, 35, 41, 0.06),
+  'light': 0 1px 2px rgba(31, 35, 41, 0.06),
+  'lighter': 0 1px 1px rgba(31, 35, 41, 0.04),
+  'dark': 0 8px 24px rgba(31, 35, 41, 0.12)
+);
+
 // 使用 @forward 将自定义配置传递给 Element Plus
 // 这会覆盖 Element Plus 的默认颜色变量
 // Element Plus 会自动生成 light-1 到 light-9 和 dark-2 等颜色变体
 @forward 'element-plus/theme-chalk/src/common/var.scss' with (
-  $colors: $colors
+  $colors: $colors,
+  $font-family: $font-family,
+  $font-size: $font-size,
+  $border-radius: $border-radius,
+  $common-component-size: $common-component-size,
+  $text-color: $text-color,
+  $border-color: $border-color,
+  $fill-color: $fill-color,
+  $bg-color: $bg-color,
+  $box-shadow: $box-shadow
 );

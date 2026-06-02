@@ -22,10 +22,16 @@ function getPropOrg() {
 
 async function change2PropOrg() {
   const org = getPropOrg()
+  if (!org) {
+    return
+  }
   await changeOrg(org)
 }
 
 async function changeOrg(org, reload = true, vm = null) {
+  if (!org) {
+    return
+  }
   await store.dispatch('users/setCurrentOrg', org)
   await store.dispatch('app/reset')
   const fullPath = location.hash.slice(1)
@@ -64,7 +70,7 @@ async function changeOrg(org, reload = true, vm = null) {
 
   if (vm) {
     const result = vm.$router.resolve({ path })
-    if (result.resolved.name === '404') {
+    if (result?.name === '404' || result?.resolved?.name === '404') {
       path = '/'
     }
   }
@@ -74,7 +80,10 @@ async function changeOrg(org, reload = true, vm = null) {
 
 function hasCurrentOrgPermission() {
   const currentOrg = store.getters.currentOrg
-  const currentOrgId = currentOrg.id
+  const currentOrgId = currentOrg?.id
+  if (!currentOrgId) {
+    return false
+  }
   const orgs = store.getters.usingOrgs
   return orgs.find(item => item.id === currentOrgId)
 }

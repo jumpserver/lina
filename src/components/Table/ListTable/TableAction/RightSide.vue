@@ -210,13 +210,17 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 30px;
-  line-height: 30px;
+  height: 32px;
+  line-height: 32px;
 
   :deep(.el-button) {
     border: none;
-    padding: 7px;
-    font-size: 13px;
+    width: 28px;
+    height: 28px;
+    min-height: 28px;
+    padding: 0;
+    border-radius: var(--radius-control);
+    font-size: 14px;
     color: var(--color-icon-primary);
     background-color: transparent;
 
@@ -226,8 +230,10 @@ export default {
   }
 
   :deep(.fa) {
-    height: 16px;
-    width: 16px;
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
+    line-height: 14px;
   }
 }
 

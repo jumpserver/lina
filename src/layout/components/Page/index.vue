@@ -162,10 +162,20 @@ export default {
   }
 
   .page-content {
-    flex: 1; /* 占用剩余高度 */
-    //height: calc(100% - 50px);
+    display: flex;
+    flex: 1 1 auto; /* 占用剩余高度 */
+    flex-direction: column;
+    gap: var(--space-4);
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    padding: var(--space-4) var(--space-6);
     overflow-x: hidden;
     overflow-y: auto !important;
+
+    > * {
+      min-width: 0;
+    }
 
     :deep(> div) {
       // 这个当时为什么设置的

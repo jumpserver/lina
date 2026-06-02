@@ -5,16 +5,18 @@
         <el-button class="confirm action" size="small">
           <i class="fa fa-check" />
         </el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item
-            v-for="item of iActions"
-            :key="item.name"
-            :command="item.name"
-            :disabled="item.disabled"
-          >
-            {{ item.label }}
-          </el-dropdown-item>
-        </el-dropdown-menu>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item
+              v-for="item of iActions"
+              :key="item.name"
+              :command="item.name"
+              :disabled="item.disabled"
+            >
+              {{ item.label }}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
       </el-dropdown>
       <el-tooltip :content="$tc('Ignore')" :open-delay="400">
         <el-button
@@ -172,7 +174,49 @@ export default {
 <style lang="scss" scoped>
 .action.el-button--small {
   cursor: pointer;
-  padding: 1px 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  min-height: 28px;
+  padding: 0 !important;
+  border: 1px solid var(--N300);
+  border-radius: var(--radius-control);
+  background: var(--surface-panel);
+  box-shadow: none !important;
+  line-height: 1;
+
+  &:hover,
+  &:focus {
+    border-color: rgba(26, 179, 148, 0.28);
+    background: rgba(26, 179, 148, 0.08);
+  }
+
+  &:active {
+    border-color: rgba(26, 179, 148, 0.36);
+    background: rgba(26, 179, 148, 0.12);
+  }
+
+  :deep(i),
+  :deep(.svg-icon) {
+    width: 14px;
+    height: 14px;
+    margin: 0 !important;
+    font-size: 14px;
+    font-style: normal !important;
+    line-height: 14px;
+  }
+
+  :deep(.fa) {
+    font-family: FontAwesome !important;
+  }
+
+  :deep([class^='el-icon-']),
+  :deep([class*=' el-icon-']) {
+    font-family: element-icons !important;
+  }
 
   &.confirm {
     :deep(i) {

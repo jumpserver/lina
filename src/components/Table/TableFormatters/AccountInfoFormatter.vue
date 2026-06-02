@@ -1,5 +1,10 @@
 <template>
   <el-popover :title="title" placement="left" trigger="click" width="300" @show="getAsyncItems">
+    <template #reference>
+      <el-button class="link-btn" plain size="small" type="primary">
+        {{ $t('View') }} <i class="el-icon-arrow-down" />
+      </el-button>
+    </template>
     <div v-if="!loading" class="detail-content">
       <div v-if="accountData.length === 0" class="empty-item">
         <span>{{ $t('No accounts') }}</span>
@@ -8,9 +13,6 @@
         <span>{{ getDisplay(account) }}</span>
       </div>
     </div>
-    <el-button slot="reference" class="link-btn" plain size="small" type="primary">
-      {{ $t('View') }} <i class="el-icon-arrow-down" />
-    </el-button>
   </el-popover>
 </template>
 

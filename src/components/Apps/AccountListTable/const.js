@@ -25,12 +25,24 @@ export const connectivityMeta = {
       ntlm_err: 'text-danger',
       create_temp_err: 'text-danger'
     },
-    getText({ cellValue }) {
-      if (cellValue?.value === '-' || cellValue?.value === 'unknown') {
-        return '-'
-      } else {
-        return cellValue?.label
+    getKey({ cellValue }) {
+      if (cellValue && typeof cellValue === 'object') {
+        return cellValue.value ?? cellValue.key ?? cellValue.id ?? '-'
       }
+      return cellValue ?? '-'
+    },
+    getText({ cellValue }) {
+      const value = cellValue && typeof cellValue === 'object'
+        ? cellValue.value ?? cellValue.key ?? cellValue.id
+        : cellValue
+      if (value === '-' || value === 'unknown' || value === undefined || value === null || value === '') {
+        return '-'
+      }
+      if (cellValue && typeof cellValue === 'object') {
+        const label = cellValue.label ?? cellValue.name ?? value
+        return label && typeof label === 'object' ? JSON.stringify(label) : label
+      }
+      return value
     }
   },
   width: '130px'

@@ -4,14 +4,14 @@
     :actions="actions"
     :more-actions="moreActions"
     :more-actions-title="moreActionsTitle"
-    :size="'small'"
+    size="default"
     class="table-actions"
   />
 </template>
 
 <script>
-import BaseFormatter from './base.vue'
 import ActionsGroup from '@/components/Common/ActionsGroup/index.vue'
+import BaseFormatter from './base.vue'
 
 const defaultPerformDelete = function({ row, col }) {
   const id = row.id
@@ -243,9 +243,104 @@ export default {
 
 <style lang="scss" scoped>
 .table-actions {
-  :deep(.el-button) {
-    height: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  font-style: normal;
+
+  :deep(.data-actions.layout) {
+    display: inline-flex;
+    align-items: center;
   }
+
+  :deep(.el-button) {
+    height: 28px;
+    min-height: 28px;
+    padding: 0 var(--space-2);
+    border-radius: var(--radius-control);
+    font-style: normal;
+    line-height: 1;
+  }
+
+  :deep(.el-button--primary:not(.is-plain):not(.is-text):not(.is-link)) {
+    color: #ffffff;
+  }
+
+  :deep(.data-actions.layout .action-item.el-dropdown) {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0;
+  }
+
+  :deep(.data-actions.layout .action-item.el-dropdown .more-action) {
+    width: 28px;
+    min-width: 28px;
+    height: 28px;
+    min-height: 28px;
+    padding: 0;
+    color: var(--N600) !important;
+    border: 1px solid var(--N300) !important;
+    background: var(--surface-panel) !important;
+    box-shadow: none !important;
+    border-radius: var(--radius-control);
+  }
+
+  :deep(.data-actions.layout.table-actions .action-item.el-dropdown .more-action) {
+    border-color: var(--N300) !important;
+    background: var(--surface-panel) !important;
+  }
+
+  :deep(.data-actions.layout.table-actions .action-item.el-dropdown .more-action:hover),
+  :deep(.data-actions.layout.table-actions .action-item.el-dropdown .more-action:focus-visible) {
+    border-color: var(--N400) !important;
+    background: var(--N50) !important;
+    color: var(--N900) !important;
+  }
+
+  :deep(.data-actions.layout .action-item.el-dropdown .more-action:hover),
+  :deep(.data-actions.layout .action-item.el-dropdown .more-action:focus-visible) {
+    color: var(--N900) !important;
+    border-color: var(--N400) !important;
+    background: var(--N50) !important;
+    box-shadow: none !important;
+  }
+
+  :deep(.data-actions.layout .action-item.el-dropdown .more-action:active) {
+    color: var(--color-primary) !important;
+    background: rgba(26, 179, 148, 0.12) !important;
+    box-shadow: none !important;
+  }
+
+  :deep(.data-actions.layout .action-item.el-dropdown .more-action .action-content) {
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    gap: 0;
+  }
+
+  :deep(.svg-icon),
+  :deep(.el-icon),
+  :deep([class^='el-icon-']),
+  :deep([class*=' el-icon-']),
+  :deep(.fa) {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-right: 0 !important;
+    font-size: 14px;
+    line-height: 14px;
+  }
+
+  :deep(.fa) {
+    font-family: FontAwesome !important;
+  }
+
+  :deep([class^='el-icon-']),
+  :deep([class*=' el-icon-']) {
+    font-family: element-icons !important;
+  }
+
   :deep(.el-icon-arrow-down) {
     display: none;
   }

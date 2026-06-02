@@ -31,19 +31,25 @@ function canListen(port, host = '0.0.0.0') {
   })
 }
 
-async function resolveDevServerPort(port) {
+async function resolveDevServerPort(port, host = '0.0.0.0') {
   const normalizedPort = Number(port)
 
   if (!Number.isInteger(normalizedPort) || normalizedPort <= 0) {
-    return port || 'auto'
+    return port || 9528
   }
 
-  if (await canListen(normalizedPort)) {
-    return normalizedPort
+  for (let offset = 0; offset < 50; offset += 1) {
+    const nextPort = normalizedPort + offset
+    if (await canListen(nextPort, host)) {
+      if (offset > 0) {
+        console.warn(`[dev-server] Port ${normalizedPort} is already in use, using ${nextPort} instead.`)
+      }
+      return nextPort
+    }
   }
 
-  console.warn(`[dev-server] Port ${normalizedPort} is already in use, falling back to an available port.`)
-  return 'auto'
+  console.warn(`[dev-server] Ports ${normalizedPort}-${normalizedPort + 49} are unavailable, using ${normalizedPort}.`)
+  return normalizedPort
 }
 
 function loadEnv(mode) {
@@ -218,9 +224,7 @@ function createDevServer({ port, publicPath, coreHost, kokoHost }) {
     pathname: '/ws'
   }
 
-  if (port !== 'auto') {
-    webSocketURL.port = port
-  }
+  webSocketURL.port = port
 
   return {
     port,

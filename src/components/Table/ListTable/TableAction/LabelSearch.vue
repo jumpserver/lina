@@ -79,6 +79,24 @@ export default {
     this.$eventBus.$off('labelSearch', this.labelSearchHandler)
   },
   methods: {
+    getCascaderInput() {
+      return this.$refs.labelCascader?.$el
+        ?.getElementsByClassName('el-input--suffix')[0]
+        ?.querySelector('input')
+    },
+    setCascaderVisible(visible) {
+      const cascader = this.$refs.labelCascader
+      if (!cascader) {
+        return
+      }
+      if (typeof cascader.togglePopperVisible === 'function') {
+        cascader.togglePopperVisible(visible)
+        return
+      }
+      if (typeof cascader.toggleDropDownVisible === 'function') {
+        cascader.toggleDropDownVisible(visible)
+      }
+    },
     handleCascaderFocus() {
       this.setSearchFocus()
     },
@@ -95,17 +113,17 @@ export default {
       }, 500)
     },
     handleCascaderVisibleChange(visible) {
-      const input = this.$refs.labelCascader.$el
-        .getElementsByClassName('el-input--suffix')[0]
-        .querySelector('input')
+      const input = this.getCascaderInput()
+      if (!input) {
+        return
+      }
       if (visible) {
         setTimeout(() => {
-          this.$refs.labelCascader.updateStyle()
-          input.style.height = '30px'
+          input.style.height = '32px'
         })
         return
       } else {
-        input.style.height = '30px'
+        input.style.height = '32px'
       }
       if (this.labelValue.length === 0) {
         this.showLabelSearch = false
@@ -144,7 +162,7 @@ export default {
       this.getLabelOptions()
       this.showLabelSearch = true
       setTimeout(() => {
-        this.$refs.labelCascader.toggleDropDownVisible(true)
+        this.setCascaderVisible(true)
         this.setSearchFocus()
       }, 200)
     },
@@ -160,34 +178,65 @@ export default {
 
 <style lang='scss' scoped>
 .label-search {
-  margin-right: 10px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
   border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background-color: var(--surface-panel);
   overflow: hidden;
 
   :deep(.el-button.label-button) {
-    height: 28px;
+    width: 32px;
+    height: 32px;
+    min-height: 32px;
+    padding: 0;
     border: none;
+    border-radius: 0;
+    background-color: transparent;
+
+    .svg-icon {
+      width: 14px;
+      height: 14px;
+    }
   }
 
   .label-cascader {
     width: 300px;
-    height: 28px;
-    line-height: 28px;
+    height: 32px;
+    line-height: 32px;
 
     :deep(.el-input) {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+
+      .el-input__wrapper {
+        min-height: 32px;
+        height: 32px;
+        padding: 0 12px;
+        border: none;
+        border-radius: 0;
+        background-color: transparent;
+        box-shadow: none;
+      }
+
       .el-input__inner {
-        height: 28px !important;
-        line-height: 28px;
-        font-size: 13px;
+        height: 32px !important;
+        line-height: 32px;
+        font-size: var(--font-size-base);
         border: none;
       }
 
       .el-input__suffix {
-        color: var(--color-icon-primary) !important;;
+        display: inline-flex;
+        align-items: center;
+        color: var(--color-icon-primary) !important;
       }
     }
 
     :deep(.el-cascader__tags) {
+      align-items: center;
       white-space: nowrap;
       flex-wrap: nowrap;
       overflow: hidden;

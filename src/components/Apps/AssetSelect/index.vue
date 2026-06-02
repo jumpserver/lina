@@ -131,7 +131,7 @@ export default {
   display: none;
 }
 
-.el-dialog__wrapper :deep(.el-dialog__body) {
+:deep(.el-overlay-dialog .el-dialog__body) {
   padding: 0 0 0 3px;
 
   .tree-table {

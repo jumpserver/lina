@@ -1,0 +1,107 @@
+.ztree {
+  --tree-font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
+  font-family: var(--tree-font-family) !important;
+  font-stretch: normal;
+  font-style: normal;
+  font-synthesis: none;
+  font-synthesis-style: none;
+  font-variation-settings: normal;
+}
+
+.ztree {
+  color: var(--N700);
+  background-color: transparent;
+}
+
+.ztree a,
+.ztree span.node_name {
+  font-family: var(--tree-font-family) !important;
+  font-stretch: normal;
+  font-style: normal !important;
+  font-synthesis: none;
+  font-synthesis-style: none;
+  font-variation-settings: normal;
+}
+
+.ztree li,
+.ztree li span,
+.ztree li a {
+  font-family: var(--tree-font-family) !important;
+  font-stretch: normal;
+  font-style: normal !important;
+  font-synthesis: none;
+  font-synthesis-style: none;
+  font-variation-settings: normal;
+}
+
+.ztree li {
+  line-height: 28px;
+}
+
+.ztree li ul {
+  padding-left: 18px;
+}
+
+.ztree li a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: 28px;
+  color: var(--N700) !important;
+  border-radius: var(--radius-control);
+  line-height: 28px;
+  vertical-align: middle;
+}
+
+.ztree li a:hover {
+  box-shadow: none;
+  background-color: var(--N50);
+}
+
+.ztree li a.curSelectedNode {
+  background-color: rgba(26, 179, 148, 0.08);
+  color: var(--color-primary) !important;
+  opacity: 1;
+}
+
+.ztree li span {
+  line-height: 28px;
+  vertical-align: middle;
+}
+
+.ztree li span.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 28px;
+  margin-right: var(--space-1);
+  line-height: 28px;
+  vertical-align: middle;
+}
+
+.ztree li span.button::before,
+.ztree li span.button.chk::before {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 28px;
+  padding: 0 !important;
+  color: var(--N600);
+  font-family: FontAwesome;
+  font-size: 12px;
+  line-height: 28px;
+}
+
+.ztree li span.button.ico_open::before,
+.ztree li span.button.ico_close::before,
+.ztree li span.button.ico_docu::before {
+  color: var(--N600);
+  font-size: 13px;
+}
+
+.ztree li span.button.switch::before {
+  color: var(--N500);
+  font-size: 12px;
+}

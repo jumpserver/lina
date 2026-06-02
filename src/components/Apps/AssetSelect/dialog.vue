@@ -1,7 +1,7 @@
 <template>
   <Dialog v-bind="$attrs" :close-on-click-modal="false"
     :title="$tc('Assets')"
-    custom-class="asset-select-dialog"
+    class="asset-select-dialog"
     top="2vh"
     width="1000px"
     @cancel="handleCancel"
@@ -157,7 +157,7 @@ export default {
   display: none;
 }
 
-.el-dialog__wrapper :deep(.el-dialog__body) {
+:deep(.el-overlay-dialog .el-dialog__body) {
   padding: 0 0 0 3px;
 
   .tree-table {

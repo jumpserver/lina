@@ -48,8 +48,13 @@ export default {
   font-weight: 400
 }
 
+.el-badge {
+  display: inline-flex;
+  align-items: center;
+}
+
 .el-badge :deep(.el-badge__content.is-fixed) {
-  top: 10px;
+  top: 0;
 }
 
 .icon {

@@ -1,0 +1,284 @@
+.data-actions.layout {
+  .action-item.el-button--primary {
+    border: none;
+    box-shadow: none;
+
+    &:hover,
+    &:focus,
+    &:active {
+      border: none;
+      box-shadow: none;
+    }
+  }
+
+  .action-content {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    min-width: 0;
+    line-height: 1;
+  }
+
+  .action-label {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    line-height: 1;
+  }
+
+  .action-item {
+    .pre-icon + span {
+      margin-left: 0;
+    }
+
+    &.grouped,
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+
+  .pre-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--icon-size-base);
+    height: var(--icon-size-base);
+    line-height: var(--icon-size-base);
+
+    .svg-icon,
+    .el-icon,
+    [class^='el-icon-'],
+    [class*=' el-icon-'],
+    .fa {
+      width: var(--icon-size-base);
+      height: var(--icon-size-base);
+      margin-right: 0 !important;
+      font-size: var(--icon-size-base);
+      line-height: var(--icon-size-base);
+    }
+  }
+
+  .action-caret {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--icon-size-base);
+    height: var(--icon-size-base);
+    margin-left: 0;
+    flex-shrink: 0;
+    color: currentColor;
+    line-height: var(--icon-size-base);
+
+    svg {
+      width: var(--icon-size-base);
+      height: var(--icon-size-base);
+    }
+  }
+}
+
+.data-actions.layout.header-action {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+
+  .action-item {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0;
+    box-sizing: border-box;
+  }
+
+  .action-item.el-button--primary {
+    border: 1px solid transparent;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+
+    &:hover,
+    &:focus,
+    &:active {
+      border: 1px solid transparent;
+    }
+  }
+
+  .action-item.el-dropdown {
+    display: inline-flex;
+    align-items: center;
+    font-size: var(--font-size-base);
+
+    .el-dropdown-selfdefine,
+    .el-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+    }
+
+    .el-button {
+      height: 32px;
+      min-height: 32px;
+      gap: 0;
+    }
+
+    .more-action.el-button--default .action-caret {
+      color: var(--color-icon-primary);
+    }
+
+    .el-button--primary {
+      .action-caret {
+        color: var(--surface-panel);
+      }
+
+      &.el-dropdown-selfdefine {
+        border: 1px solid transparent;
+      }
+    }
+  }
+
+  .el-button {
+    height: 32px;
+    min-height: 32px;
+    padding: 0 12px;
+    border-radius: var(--radius-control);
+    font-size: 13px;
+    font-weight: var(--font-weight-medium);
+    line-height: 18px;
+
+    > span {
+      min-height: 18px;
+      line-height: 18px;
+    }
+  }
+
+  .el-button--primary:not(.is-plain):not(.is-text):not(.is-link) {
+    border-color: transparent;
+    color: var(--surface-panel);
+  }
+}
+
+.data-actions.layout.header-action.left-side {
+  .el-button,
+  .action-item.el-dropdown .el-button,
+  .action-item.el-button {
+    box-sizing: border-box;
+    height: 32px;
+    min-height: 32px;
+    padding-top: 0;
+    padding-bottom: 0;
+    line-height: 18px;
+  }
+
+  .actionCreate.el-button--primary {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .action-item.el-dropdown.create {
+    .el-button-group {
+      display: inline-flex;
+      align-items: center;
+      height: 32px;
+    }
+
+    .el-button-group > .el-button:first-child {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .el-button-group > .el-button:last-child {
+      width: 32px;
+      min-width: 32px;
+      padding-right: 0;
+      padding-left: 0;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    .el-button-group > .el-button + .el-button {
+      margin-left: -1px;
+    }
+  }
+
+  .pre-icon,
+  .pre-icon .svg-icon,
+  .pre-icon .el-icon,
+  .pre-icon [class^='el-icon-'],
+  .pre-icon [class*=' el-icon-'],
+  .pre-icon .fa {
+    width: 13px;
+    height: 13px;
+    font-size: 13px;
+    line-height: 13px;
+  }
+}
+
+.el-table .data-actions.layout.table-actions,
+.el-data-table .data-actions.layout.table-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+
+  .action-item.el-dropdown {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0;
+  }
+
+  .action-item.el-dropdown .more-action,
+  .action-item.el-dropdown .more-action.el-button--primary,
+  .action-item.el-dropdown .more-action.el-button--primary.is-plain {
+    width: 28px;
+    min-width: 28px;
+    height: 28px;
+    min-height: 28px;
+    padding: 0 !important;
+    border: 1px solid var(--N300) !important;
+    border-radius: var(--radius-control);
+    background: var(--surface-panel) !important;
+    box-shadow: none !important;
+    color: var(--N600) !important;
+  }
+
+  .action-item.el-dropdown .more-action:hover,
+  .action-item.el-dropdown .more-action:focus,
+  .action-item.el-dropdown .more-action:focus-visible {
+    border-color: var(--N200) !important;
+    background: var(--N50) !important;
+    box-shadow: none !important;
+    color: var(--N900) !important;
+  }
+
+  .action-item.el-dropdown .more-action:active {
+    border-color: rgba(26, 179, 148, 0.22) !important;
+    background: rgba(26, 179, 148, 0.08) !important;
+    color: var(--color-primary) !important;
+  }
+
+  .action-item.el-dropdown .more-action > span,
+  .action-item.el-dropdown .more-action .action-content {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    gap: 0;
+  }
+
+  .action-item.el-dropdown .more-action .pre-icon {
+    flex: 0 0 14px;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+  }
+
+  .action-item.el-dropdown .more-action .svg-icon,
+  .action-item.el-dropdown .more-action .el-icon,
+  .action-item.el-dropdown .more-action [class^='el-icon-'],
+  .action-item.el-dropdown .more-action [class*=' el-icon-'],
+  .action-item.el-dropdown .more-action .fa {
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
+    font-style: normal !important;
+    line-height: 14px;
+  }
+}

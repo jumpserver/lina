@@ -403,20 +403,25 @@ $origin-white-color: #ffffff;
   position: relative;
   display: flex;
   align-items: center;
+  min-height: 32px;
   min-width: 210px;
-  background-color: $origin-white-color;
+  background-color: transparent;
 
   :deep(.el-cascader) {
-    height: 28px;
-    line-height: 28px;
+    display: inline-flex;
+    align-items: center;
+    height: 32px;
+    line-height: 32px;
 
     .el-input {
       .el-input__wrapper {
         width: 0;
-        height: 28px;
-        padding-right: 20px;
+        min-height: 32px;
+        height: 32px;
+        padding-right: 18px;
         border: none;
         box-shadow: unset;
+        background-color: transparent;
 
         .el-input__inner {
           display: none;
@@ -425,24 +430,32 @@ $origin-white-color: #ffffff;
     }
 
     :deep(.el-input__suffix) {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       color: var(--color-icon-primary) !important;
 
       .el-input__suffix-inner .el-input__icon {
-        line-height: 30px;
+        width: 14px;
+        height: 14px;
+        font-size: 14px;
+        line-height: 14px;
       }
     }
   }
 
   .filter-title {
-    padding-right: 2px;
-    line-height: 100%;
+    display: inline-flex;
+    align-items: center;
+    height: 32px;
+    padding-right: 4px;
+    line-height: 1;
     text-align: center;
     flex-shrink: 0;
     border-collapse: separate;
     box-sizing: border-box;
     color: var(--el-text-icon);
-    display: inline;
-    font-size: 13px;
+    font-size: var(--font-size-base);
     height: auto;
   }
 
@@ -451,26 +464,40 @@ $origin-white-color: #ffffff;
   }
 
   .search-input {
-    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    flex: 1 1 auto;
+    height: 32px;
 
     :deep(.el-input__wrapper) {
       max-width: 180px;
+      min-height: 32px;
+      height: 32px;
       box-shadow: unset;
-      padding-left: 0;
+      padding: 0 32px 0 4px;
+      background-color: transparent;
 
       .el-input__inner {
-        height: 28px;
-        padding-left: 1px;
-        font-size: 13px;
+        height: 32px;
+        padding-left: 0;
+        font-size: var(--font-size-base);
+        line-height: 32px;
         box-shadow: unset;
         border: none;
       }
 
       .el-input__suffix {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 32px;
         cursor: pointer;
 
         i {
-          line-height: 30px;
+          width: 14px;
+          height: 14px;
+          font-size: 14px;
+          line-height: 14px;
           font-weight: 500;
           color: var(--color-icon-primary);
         }
@@ -478,23 +505,29 @@ $origin-white-color: #ffffff;
     }
 
     &.no-options {
-      padding-left: 15px;
+      :deep(.el-input__wrapper) {
+        padding-left: 12px;
+      }
     }
   }
 
   .keydown-focus {
     position: absolute;
-    right: 0;
-    display: inline-block;
-    margin-right: 10px;
-    padding: 3px 5px;
+    top: 50%;
+    right: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0;
+    padding: 2px 5px;
     font-size: 11px;
     color: var(--color-text-primary);
     border: solid 1px $borderColor-neutral-muted;
     border-radius: 6px;
-    line-height: 10px;
+    line-height: 1;
     background-color: var(--bgColor-muted);
     box-shadow: inset 0 -1px 0 $borderColor-neutral-muted;
+    transform: translateY(-50%);
 
     &.is-focus {
       display: none;

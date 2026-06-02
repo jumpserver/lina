@@ -192,30 +192,35 @@ export default {
 </script>
 <style lang='scss' scoped>
 .quick-filter {
-  background: white;
-  padding: 10px 10px 10px 20px;
-  margin-bottom: 10px;
   display: flex;
-  place-content: stretch flex-end;
-  justify-content: center;
-  align-content: stretch;
-  box-shadow: 0 1px 1px 0 rgba(54, 58, 80, .32);
+  width: 100%;
+  margin-bottom: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--N200);
+  border-radius: var(--radius-card);
+  background: var(--surface-panel);
+  box-shadow: none;
 
   &.shrink {
-    background: inherit;
     padding: 0;
     margin-bottom: 0;
+    border: 0;
+    background: transparent;
     box-shadow: none;
   }
 
   .quick-filter-wrap {
-    display: inline-block;
-    width: calc(100% - 70px);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    width: 100%;
+    min-width: 0;
 
     .summary-zone {
-      padding-top: 10px;
       display: flex;
-      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      padding-top: 0;
     }
 
     .summary-block {
@@ -236,51 +241,72 @@ export default {
     .quick-filter-zone {
       display: flex;
       justify-content: flex-start;
-      flex-wrap: wrap; /* 允许 item-zone 换行 */
-      gap: 10px;
+      flex-wrap: wrap;
+      gap: var(--space-3) var(--space-6);
 
       h5 {
-        font-weight: 600;
-        text-transform: uppercase;
-        font-size: 12px;
-        margin-bottom: .5rem;
-        line-height: 1.2;
+        flex: 0 0 auto;
+        position: relative;
+        min-width: 56px;
+        margin: 0;
+        padding-right: var(--space-2);
+        color: var(--N500);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-medium);
+        line-height: 28px;
         display: inline-block;
+        cursor: default;
+        user-select: none;
+        white-space: nowrap;
+      }
+
+      h5::after {
+        content: "";
+        position: absolute;
+        top: 7px;
+        right: 0;
+        width: 1px;
+        height: 14px;
+        background: var(--N200);
       }
 
       .item-zone {
-        margin-right: 30px;
-        margin-bottom: 5px;
+        min-width: 0;
+        margin: 0;
+
+        > div {
+          display: flex;
+          align-items: center;
+          gap: var(--space-3);
+          min-width: 0;
+        }
       }
 
       .item {
-        display: inline-block;
-        margin-right: 8px;
-        color: #303133;
-        font-size: 12px;
+        display: inline-flex;
+        align-items: center;
+        height: 28px;
+        margin-right: 0;
+        padding: 0 var(--space-2);
+        border: 1px solid transparent;
+        border-radius: var(--radius-control);
+        color: var(--N700);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-regular);
+        line-height: 26px;
         cursor: pointer;
-
-        &::after {
-          content: "";
-          margin-left: 4px;
-          margin-bottom: 2px;
-          vertical-align: middle;
-          width: 1px; /* 分割线宽度 */
-          height: 8px; /* 分割线高度 */
-          background-color: var(--color-icon-primary); /* 分割线颜色 */
-          display: inline-block;
-        }
-
-        &:last-child::after {
-          display: none;
-        }
+        transition: color var(--duration-fast) var(--ease-standard),
+          background-color var(--duration-fast) var(--ease-standard),
+          border-color var(--duration-fast) var(--ease-standard);
 
         i {
           visibility: hidden;
-          margin-left: -3px;
+          margin-left: var(--space-1);
         }
 
         &.active {
+          border-color: rgba(26, 179, 148, 0.22);
+          background: rgba(26, 179, 148, 0.08);
           color: var(--color-primary);
 
           i {
@@ -289,6 +315,8 @@ export default {
         }
 
         &:hover {
+          border-color: var(--N200);
+          background: var(--N50);
           color: var(--color-primary);
         }
       }
@@ -303,7 +331,10 @@ export default {
 }
 
 .filter-options {
-  display: block;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  min-width: 0;
 }
 
 .expand-bar-wrap {

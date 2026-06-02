@@ -178,24 +178,44 @@ export default {
     .el-tabs__header {
       margin-top: 0;
     }
-
-    .tab-page-content {
-      height: calc(100% - 45px);
-    }
   }
 }
 
 .page-submenu :deep(.el-tabs__header) {
-  background-color: white;
-  margin-top: -10px;
-  padding: 0 30px;
-  margin-bottom: 5px;
+  margin: 0;
+  padding: 0 var(--space-6);
+  border-bottom: 1px solid var(--N200);
+  background-color: var(--surface-panel);
 
   .el-tabs__item {
+    display: inline-flex;
+    align-items: center;
+    height: 40px;
+    color: var(--N600);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 40px;
+
+    &:hover,
+    &.is-active {
+      color: var(--color-primary);
+    }
+
     .pre-icon {
       width: 16px;
-      display: inline-block;
+      height: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: var(--space-2);
       opacity: 0.6;
+
+      :deep(.svg-icon),
+      :deep(.fa) {
+        width: 16px;
+        height: 16px;
+        margin-right: 0 !important;
+      }
     }
 
     &.is-active {
@@ -224,6 +244,10 @@ export default {
 
 .tab-page {
   .tab-page-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-height: 0;
     height: 100%;
   }
 
@@ -237,19 +261,24 @@ export default {
   }
 
   .tab-page-content {
-    padding: 10px 30px 22px;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-height: 0;
+    padding: var(--space-4) var(--space-6);
     overflow-y: auto;
-    height: calc(100% - 33px);
+    height: auto;
 
     .el-alert {
       margin-top: 0;
-      margin-bottom: 5px;
+      margin-bottom: 0;
     }
   }
 }
 
 .page-submenu :deep(.el-tabs__nav-wrap) {
-  position: static;
+  position: relative;
 }
 
 .fa {

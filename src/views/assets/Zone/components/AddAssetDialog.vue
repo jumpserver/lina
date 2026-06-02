@@ -8,7 +8,7 @@
     :show-confirm="false"
     :title="$tc('AddAssetInZone')"
     after
-    custom-class="asset-select-dialog"
+    class="asset-select-dialog"
     top="15vh"
     width="600px"
   >

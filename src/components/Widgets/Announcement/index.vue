@@ -168,7 +168,7 @@ export default {
   border-radius: 5px;
 }
 
-.announcement-dialog :deep(.el-dialog__wrapper) {
+:deep(.el-overlay-dialog:has(.announcement-dialog)) {
   backdrop-filter: blur(4px);
 }
 

@@ -11,8 +11,7 @@
       :modal="false"
       :size="width"
       :title="$tc('SiteMessage')"
-      class="drawer"
-      custom-class="site-msg"
+      class="drawer site-msg"
       @open="getMessages"
     >
       <template #title>
@@ -212,8 +211,13 @@ export default {
   height: calc(100% - 0px);
 }
 
+.el-badge {
+  display: inline-flex;
+  align-items: center;
+}
+
 .el-badge :deep(.el-badge__content.is-fixed) {
-  top: 10px;
+  top: 0;
 }
 
 .msg-list {

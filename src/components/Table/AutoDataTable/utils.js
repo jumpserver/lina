@@ -104,12 +104,24 @@ export class TableColumnsGenerator {
     col = this.generateColumnByType(colMeta.type, col, colMeta)
     col = this.generateColumnByName(name, col)
     col = this.setDefaultFormatterIfNeed(col)
-    col = Object.assign(col, customMeta)
+    col = this.mergeCustomMeta(col, customMeta)
     col = this.addHelpTipIfNeed(col)
     col = this.addFilterIfNeed(col)
     col = this.addOrderingIfNeed(col)
     col = this.updateLabelIfNeed(col)
     col = this.setDefaultWidthIfNeed(col)
+    return col
+  }
+
+  mergeCustomMeta(col, customMeta = {}) {
+    const formatterArgs = {
+      ...(col.formatterArgs || {}),
+      ...(customMeta.formatterArgs || {})
+    }
+    col = Object.assign(col, customMeta)
+    if (Object.keys(formatterArgs).length > 0) {
+      col.formatterArgs = formatterArgs
+    }
     return col
   }
 
@@ -218,7 +230,7 @@ export class TableColumnsGenerator {
     const h = this.vm.$createElement
     if (!col.formatter) {
       col.formatter = (row, column, cellValue) => {
-        let value = cellValue
+        let value = this.normalizeDisplayValue(cellValue)
         let padding = '0'
         const excludes = [undefined, null, '']
         if (excludes.indexOf(value) !== -1) {
@@ -237,6 +249,17 @@ export class TableColumnsGenerator {
       }
     }
     return col
+  }
+
+  normalizeDisplayValue(value) {
+    if (Array.isArray(value)) {
+      return value.map(item => this.normalizeDisplayValue(item)).filter(Boolean).join(', ')
+    }
+    if (value && typeof value === 'object') {
+      const displayValue = value.label ?? value.display_name ?? value.name ?? value.value ?? value.id ?? '-'
+      return displayValue && typeof displayValue === 'object' ? JSON.stringify(displayValue) : displayValue
+    }
+    return value
   }
 
   setDefaultWidthIfNeed(col) {

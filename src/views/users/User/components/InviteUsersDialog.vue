@@ -7,7 +7,7 @@
     :show-confirm="false"
     :title="$tc('InviteUserInOrg')"
     after
-    custom-class="asset-select-dialog"
+    class="asset-select-dialog"
     top="8vh"
     width="710px"
   >

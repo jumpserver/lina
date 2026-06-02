@@ -53,27 +53,11 @@ export default {
 
 <style lang="scss" scoped>
 .app-main {
-  background-color: #f3f3f4;
-  height: 100%;
-  //height: 100vh !important;
-  width: 100%;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  width: auto;
   position: relative;
   overflow: auto;
-  /*padding: 10px 20px 10px;*/
-}
-
-.fixed-header + .app-main {
-  padding-top: 50px;
-}
-
-.hasTagsView {
-  .app-main {
-    /* 84 = navbar + tags-view = 50 + 34 */
-    min-height: calc(100vh - 84px);
-  }
-
-  .fixed-header + .app-main {
-    padding-top: 84px;
-  }
 }
 </style>

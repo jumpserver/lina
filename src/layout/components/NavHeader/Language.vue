@@ -73,6 +73,10 @@ export default {
 
 <style scoped>
   .header-lang {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    line-height: 1;
     color: white;
   }
 </style>

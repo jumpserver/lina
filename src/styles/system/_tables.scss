@@ -1,0 +1,379 @@
+.el-data-table,
+.el-table {
+  --table-font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
+}
+
+.el-table__body {
+  width: 100%;
+  table-layout: fixed !important;
+}
+
+.el-data-table .el-table,
+.el-table {
+  --el-table-border-color: var(--N200);
+  --el-table-header-bg-color: #fbfbfc;
+  --el-table-row-hover-bg-color: var(--N50);
+  --el-table-current-row-bg-color: rgba(26, 179, 148, 0.08);
+  color: var(--N800);
+  font-family: var(--table-font-family) !important;
+  font-size: var(--font-size-base);
+  font-stretch: normal;
+  font-style: normal !important;
+  font-synthesis: none;
+  font-synthesis-style: none;
+  font-variation-settings: normal;
+  border-radius: var(--radius-card);
+
+  &::before,
+  &::after {
+    background-color: var(--N200);
+  }
+
+  th.el-table__cell,
+  td.el-table__cell {
+    border-bottom-color: var(--N200);
+    border-right: none;
+  }
+
+  th.el-table__cell {
+    height: 36px;
+    padding: 0;
+    background-color: #fbfbfc !important;
+    color: var(--N600);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.3;
+  }
+
+  td.el-table__cell {
+    height: 40px;
+    padding: 0;
+    color: var(--N800);
+    font-family: var(--table-font-family) !important;
+    font-stretch: normal;
+    font-style: normal !important;
+    font-synthesis: none;
+    font-synthesis-style: none;
+    font-variation-settings: normal;
+    line-height: 1.4;
+  }
+
+  .cell {
+    padding: 0 var(--space-3);
+    font-family: var(--table-font-family) !important;
+    font-stretch: normal;
+    font-style: normal !important;
+    font-synthesis: none;
+    font-synthesis-style: none;
+    font-variation-settings: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .table-formatter,
+  .table-formatter *,
+  .table-formatter i,
+  .table-formatter em,
+  .table-formatter cite,
+  .table-formatter dfn,
+  .table-formatter var {
+    font-stretch: normal;
+    font-style: normal !important;
+    font-synthesis: none;
+    font-synthesis-style: none;
+    font-variation-settings: normal;
+  }
+
+  td.el-table__cell *,
+  .cell * {
+    font-family: var(--table-font-family) !important;
+    font-stretch: normal;
+    font-style: normal !important;
+    font-synthesis: none;
+    font-synthesis-style: none;
+    font-variation-settings: normal;
+  }
+
+  td.el-table__cell,
+  td.el-table__cell .cell,
+  td.el-table__cell .cell > span,
+  td.el-table__cell .cell > div,
+  td.el-table__cell .cell a,
+  td.el-table__cell .cell p,
+  td.el-table__cell .cell strong,
+  td.el-table__cell .cell small {
+    font-family: var(--table-font-family) !important;
+    font-stretch: normal;
+    font-style: normal !important;
+    font-synthesis: none;
+    font-synthesis-style: none;
+    font-variation-settings: normal;
+  }
+
+  i,
+  em {
+    font-style: normal !important;
+  }
+
+  .el-link,
+  .el-link__inner {
+    font-family: var(--table-font-family) !important;
+    font-stretch: normal;
+    font-style: normal !important;
+    font-synthesis: none;
+    font-synthesis-style: none;
+    font-variation-settings: normal;
+  }
+
+  .table-formatter-host {
+    font-family: var(--table-font-family) !important;
+    font-stretch: normal;
+    font-style: normal !important;
+    font-synthesis: none;
+    font-synthesis-style: none;
+    font-variation-settings: normal;
+  }
+
+  .table-formatter-host :where(span, div, a, p, small, strong, b, label) {
+    font-family: var(--table-font-family) !important;
+    font-stretch: normal;
+    font-style: normal !important;
+    font-synthesis: none;
+    font-synthesis-style: none;
+    font-variation-settings: normal;
+  }
+
+  .table-formatter-host .fa {
+    font-family: FontAwesome !important;
+    font-style: normal !important;
+    font-variation-settings: normal;
+  }
+
+  .table-formatter-host [class^='el-icon-'],
+  .table-formatter-host [class*=' el-icon-'] {
+    font-family: element-icons !important;
+    font-style: normal !important;
+    font-variation-settings: normal;
+  }
+
+  .table-formatter-host .el-button.el-button--small.action,
+  .table-formatter-host .action-connect .el-button.el-button--small {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    min-width: 28px;
+    height: 28px;
+    min-height: 28px;
+    padding: 0 !important;
+    border: 1px solid var(--N300);
+    border-radius: var(--radius-control);
+    background: var(--surface-panel);
+    box-shadow: none !important;
+    color: var(--color-primary);
+    line-height: 1;
+  }
+
+  .table-formatter-host .el-button.el-button--small.action:hover,
+  .table-formatter-host .el-button.el-button--small.action:focus,
+  .table-formatter-host .action-connect .el-button.el-button--small:hover,
+  .table-formatter-host .action-connect .el-button.el-button--small:focus {
+    border-color: rgba(26, 179, 148, 0.34) !important;
+    background: rgba(26, 179, 148, 0.08) !important;
+    color: var(--color-primary) !important;
+  }
+
+  .table-formatter-host .el-button.el-button--small.action:active,
+  .table-formatter-host .action-connect .el-button.el-button--small:active {
+    border-color: rgba(26, 179, 148, 0.42) !important;
+    background: rgba(26, 179, 148, 0.12) !important;
+    color: var(--color-primary) !important;
+  }
+
+  .table-formatter-host .el-button.el-button--small.action.is-disabled,
+  .table-formatter-host .action-connect .el-button.el-button--small.is-disabled {
+    border-color: var(--N200);
+    background: var(--N50);
+    color: var(--N400);
+    opacity: 1;
+  }
+
+  .table-formatter-host .el-button.el-button--small.action i,
+  .table-formatter-host .el-button.el-button--small.action .svg-icon,
+  .table-formatter-host .action-connect .el-button.el-button--small i,
+  .table-formatter-host .action-connect .el-button.el-button--small .svg-icon {
+    width: 14px;
+    height: 14px;
+    margin: 0 !important;
+    font-size: 14px;
+    font-style: normal !important;
+    line-height: 14px;
+  }
+
+  .el-table__row {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+
+    &.selected-row,
+    &.current-row > td.el-table__cell {
+      background-color: rgba(26, 179, 148, 0.08);
+    }
+
+    td * {
+      vertical-align: middle;
+    }
+  }
+
+  a {
+    color: var(--color-link);
+  }
+}
+
+.el-table__header thead > tr > th {
+  background-color: #fbfbfc;
+  font-weight: var(--font-weight-medium);
+}
+
+.el-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  overflow: auto;
+  padding: var(--space-3) var(--space-4);
+  color: var(--N600);
+  font-size: var(--font-size-sm);
+  line-height: 32px;
+}
+
+.el-pagination.is-background .el-pager,
+.el-pagination .el-pager {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: 32px;
+  margin: 0;
+  padding: 0;
+}
+
+.el-pagination.is-background button.btn-prev,
+.el-pagination.is-background button.btn-next,
+.el-pagination.is-background .btn-next,
+.el-pagination.is-background .btn-prev,
+.el-pagination.is-background .el-pager li.number,
+.el-pagination.is-background .el-pager li.more,
+.el-pagination.is-background .el-pager li {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  margin: 0 !important;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--N300) !important;
+  border-radius: var(--radius-control) !important;
+  background-color: var(--surface-panel) !important;
+  color: var(--N700) !important;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: 32px;
+  box-shadow: none !important;
+  transition:
+    color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard);
+}
+
+.el-pagination.is-background button.btn-prev:hover,
+.el-pagination.is-background button.btn-next:hover,
+.el-pagination.is-background .btn-next:hover,
+.el-pagination.is-background .btn-prev:hover,
+.el-pagination.is-background .el-pager li:hover {
+  border-color: var(--N400) !important;
+  background-color: var(--N50) !important;
+  color: var(--N900) !important;
+}
+
+.el-pagination.is-background .el-pager li.number.is-active,
+.el-pagination.is-background .el-pager li.is-active {
+  border-color: var(--color-primary) !important;
+  background-color: var(--color-primary) !important;
+  color: var(--surface-panel) !important;
+}
+
+.el-pagination.is-background button.btn-next:disabled,
+.el-pagination.is-background button.btn-prev:disabled,
+.el-pagination.is-background .btn-next:disabled,
+.el-pagination.is-background .btn-prev:disabled,
+.el-pagination.is-background .btn-next.is-disabled,
+.el-pagination.is-background .btn-prev.is-disabled {
+  border-color: var(--N200) !important;
+  background-color: var(--N50) !important;
+  color: var(--N400) !important;
+  cursor: not-allowed;
+}
+
+.el-pagination.is-background .btn-prev.is-first,
+.el-pagination.is-background .btn-next.is-last,
+.el-pagination.is-background button.btn-prev.is-first,
+.el-pagination.is-background button.btn-next.is-last {
+  border-radius: var(--radius-control) !important;
+}
+
+.el-pagination .el-pagination__total,
+.el-pagination .el-pagination__jump {
+  height: 32px;
+  color: var(--N600);
+  font-size: var(--font-size-sm);
+  line-height: 32px;
+}
+
+.el-pagination .el-select {
+  width: 104px;
+  height: 32px;
+  line-height: 32px;
+}
+
+.el-pagination .el-select .el-select__wrapper,
+.el-pagination .el-input .el-input__wrapper {
+  min-height: 32px;
+  height: 32px;
+  border: 1px solid var(--N300);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-control);
+  box-shadow: none;
+  background-color: var(--surface-panel);
+}
+
+.el-pagination .el-select .el-select__wrapper:hover,
+.el-pagination .el-input .el-input__wrapper:hover {
+  border-color: var(--N400);
+  box-shadow: none;
+}
+
+.el-pagination .el-select .el-select__selected-item,
+.el-pagination .el-input .el-input__inner {
+  height: 30px;
+  color: var(--N800);
+  font-size: var(--font-size-sm);
+  line-height: 30px;
+}
+
+.el-pagination .el-pagination__sizes {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  line-height: 32px;
+}
+
+.el-table-filter {
+  max-height: 60vh;
+  overflow: auto;
+}
+
+.sync-setting-org.el-select-dropdown .el-select-dropdown__item {
+  max-width: 600px !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+}

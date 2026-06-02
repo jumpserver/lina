@@ -171,9 +171,14 @@ export default {
 
 <style lang="scss" scoped>
 .el-data-table {
+  :deep(.el-pagination.is-background .btn-prev),
+  :deep(.el-pagination.is-background .btn-next),
   :deep(.el-pagination.is-background .el-pager li) {
-    margin: 0 1px;
-    padding: 0 2px;
+    margin: 0;
+    padding: 0 var(--space-2);
+    height: 32px;
+    border-radius: var(--radius-control);
+    line-height: 32px;
   }
 }
 </style>

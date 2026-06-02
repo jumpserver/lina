@@ -7,7 +7,7 @@
     :show-confirm="false"
     :title="$tc('AddGatewayInZone')"
     after
-    custom-class="asset-select-dialog"
+    class="asset-select-dialog"
     top="15vh"
     width="50vw"
   >

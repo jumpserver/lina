@@ -1,0 +1,85 @@
+.navbar {
+  box-shadow: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+
+  .header-item,
+  .left-item .organization,
+  .hamburger-container {
+    transition:
+      background-color var(--duration-fast) var(--ease-standard),
+      opacity var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard);
+  }
+}
+
+#app .sidebar-container {
+  box-shadow: none;
+  border-right: 1px solid var(--N200);
+}
+
+#app .sidebar-container .left-menu {
+  --menu-hover: var(--N50);
+
+  .svg-icon,
+  .el-icon,
+  .fa {
+    flex: 0 0 var(--icon-size-base);
+    width: var(--icon-size-base) !important;
+    height: var(--icon-size-base) !important;
+    margin-right: var(--space-2) !important;
+    font-size: var(--icon-size-base);
+    line-height: var(--icon-size-base);
+  }
+
+  .el-menu-item,
+  .el-sub-menu__title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    height: 36px;
+    line-height: 36px;
+    border-radius: var(--radius-control);
+    margin: 0;
+    padding-left: var(--space-3) !important;
+    color: var(--N700);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0;
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      background-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .el-menu-item:hover,
+  .el-sub-menu__title:hover {
+    background-color: var(--N50);
+    color: var(--N900);
+  }
+
+  .el-menu-item.is-active,
+  .el-sub-menu.is-active > .el-sub-menu__title {
+    background-color: rgba(26, 179, 148, 0.08);
+    color: var(--color-primary);
+  }
+
+  .group-title > span {
+    display: block;
+    padding: var(--space-4) var(--space-3) var(--space-1);
+    color: var(--N500);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.2;
+    letter-spacing: 0.04em;
+  }
+}
+
+.view-switcher {
+  .el-menu--popup-container {
+    margin-top: 0 !important;
+  }
+
+  .el-menu--popup {
+    min-width: 70px !important;
+  }
+}

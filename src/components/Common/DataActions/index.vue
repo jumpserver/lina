@@ -1,5 +1,5 @@
 <template>
-  <div :class="grouped ? 'el-button-group' : 'el-button-ungroup'" class="layout">
+  <div :class="grouped ? 'el-button-group' : 'el-button-ungroup'" class="data-actions layout">
     <template v-for="action in iActions" :key="action.name">
       <el-dropdown
         v-if="action.dropdown"
@@ -17,55 +17,63 @@
         <span v-if="action.split" :style="{ cursor: action.disabled ? 'not-allowed' : 'pointer' }">
           {{ action.title }}
         </span>
-        <el-button v-bind="{ ...cleanButtonAction(action), icon: '' }" v-else
+        <el-button
+          v-else
+          v-bind="{ ...cleanButtonAction(action), icon: '' }"
           :class="action.name"
           :size="size"
-          class="more-action">
-          <Icon v-if="action.icon" :icon="action.icon" class="pre-icon" />
-          <span v-if="action.title">
-            {{ action.title }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
+          class="more-action"
+        >
+          <span class="action-content">
+            <Icon v-if="action.icon" :icon="action.icon" class="pre-icon" />
+            <span v-if="action.title" class="action-label">
+              {{ action.title }}
+            </span>
+            <el-icon v-if="action.title" class="action-caret">
+              <ArrowDown />
+            </el-icon>
           </span>
         </el-button>
 
         <template #dropdown>
-          <el-dropdown-menu style="overflow: auto; max-height: 60vh">
+          <el-dropdown-menu>
             <template v-for="option in action.dropdown" :key="option.name">
-              <div v-if="option.group" class="dropdown-menu-title" style="width: 130px">
+              <div v-if="option.group" class="dropdown-menu-title">
                 {{ option.group }}
               </div>
-              <el-tooltip
-                :content="option.tip"
-                :disabled="!option.tip"
-                :open-delay="500"
-                placement="top"
+              <el-dropdown-item
+                v-bind="{ ...option, icon: '' }"
+                :command="[option, action]"
+                :title="option.tip"
+                class="dropdown-item"
               >
-                <el-dropdown-item v-bind="{ ...option, icon: '' }" :key="option.name"
-                  :command="[option, action]"
-                  :title="option.tip"
-                  class="dropdown-item">
+                <span class="dropdown-item-content">
                   <span v-if="actionsHasIcon(action.dropdown)" class="pre-icon">
                     <Icon v-if="option.icon" :icon="option.icon" />
                   </span>
-                  {{ option.title }}
-                </el-dropdown-item>
-              </el-tooltip>
+                  <span class="action-label">{{ option.title }}</span>
+                </span>
+              </el-dropdown-item>
             </template>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
 
-      <el-button v-bind="{ ...cleanButtonAction(action), icon: '' }" v-else
+      <el-button
+        v-else
+        v-bind="{ ...cleanButtonAction(action), icon: '' }"
         :class="[action.name, { grouped: action.grouped }]"
         :size="size"
         class="action-item"
-        @click="handleClick(action)">
+        @click="handleClick(action)"
+      >
         <el-tooltip :content="action.tip" :disabled="!action.tip" placement="top">
-          <div>
+          <span class="action-content">
             <Icon v-if="action.icon" :icon="action.icon" class="pre-icon" />
-            <span>
+            <span class="action-label">
               {{ action.title }}
             </span>
-          </div>
+          </span>
         </el-tooltip>
       </el-button>
     </template>
@@ -73,12 +81,14 @@
 </template>
 
 <script>
-import { toSentenceCase } from '@/utils/common/index'
 import Icon from '@/components/Widgets/Icon/index.vue'
+import { toSentenceCase } from '@/utils/common/index'
+import { ArrowDown } from '@element-plus/icons-vue'
 
 export default {
   name: 'DataActions',
   components: {
+    ArrowDown,
     Icon
   },
   props: {
@@ -88,7 +98,7 @@ export default {
     },
     size: {
       type: String,
-      default: 'small'
+      default: 'default'
     },
     type: {
       type: String,
@@ -196,7 +206,7 @@ export default {
         delete action['can']
 
         if (!action.size) {
-          action.size = 'small'
+          action.size = 'default'
         }
 
         if (action.dropdown) {
@@ -211,75 +221,79 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$btn-text-color: #ffffff;
-$color-btn-background: #e8f7f4;
-$color-btn-focus-background: #83cbba;
-$color-divided: #e4e7ed;
-$color-drop-menu-title: #909399;
-$color-drop-menu-border: #e4e7ed;
+.data-actions.layout {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-style: normal;
 
-// 通用
-.layout {
-  // 确保所有按钮都使用 flex 布局，内容垂直居中
+  .action-item {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0;
+    font-style: normal;
+  }
+
   :deep(.el-button) {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     line-height: 1;
-
-    // 确保按钮内部内容垂直居中
-    > span {
-      display: inline-flex;
-      align-items: center;
-      line-height: 1;
-    }
+    font-style: normal;
   }
 
-  .action-item {
-    margin-left: 5px;
-
-    .pre-icon + span {
-      margin-left: 3px;
-    }
-
-    &.grouped {
-      margin-left: 0;
-    }
-
-    &:first-child {
-      margin-left: 0;
-    }
+  :deep(.el-button > span) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    line-height: 1;
   }
 }
 
-// 主要是左侧 LeftSide
-.layout.header-action {
-  .action-item.el-dropdown {
-    font-size: 11px;
+.action-content,
+.dropdown-item-content {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+  font-style: normal;
+  line-height: 1;
+}
 
-    // 确保下拉按钮也垂直居中
-    :deep(.el-button) {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: 30px;
-    }
+.action-label {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  font-style: normal;
+  line-height: 1;
+}
 
-    .more-action.el-button--default {
-      :deep(.el-icon-arrow-down.el-icon--right) {
-        color: var(--color-icon-primary) !important;
-      }
-    }
+.pre-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 var(--icon-size-base);
+  width: var(--icon-size-base);
+  height: var(--icon-size-base);
+  font-style: normal;
+  line-height: var(--icon-size-base);
 
-    .el-button--primary {
-      :deep(.el-icon-arrow-down.el-icon--right) {
-        color: #ffffff !important;
-      }
-
-      &.el-dropdown-selfdefine {
-        border: none;
-      }
-    }
+  :deep(.svg-icon),
+  :deep(.el-icon),
+  :deep([class^='el-icon-']),
+  :deep([class*=' el-icon-']),
+  :deep(.fa),
+  :deep(i) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--icon-size-base);
+    height: var(--icon-size-base);
+    margin-right: 0 !important;
+    font-size: var(--icon-size-base);
+    font-style: normal;
+    line-height: var(--icon-size-base);
   }
 }
 </style>

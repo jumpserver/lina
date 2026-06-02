@@ -15,6 +15,7 @@ import store from './store'
 import router from './router'
 import { eventBus } from './utils/vue/eventbus'
 import '@/styles/fonts/loadSans'
+import '@/styles/design-system.scss'
 import { watchSessions } from './utils/jms/auth'
 
 import { installSvgIcon } from '@/icons' // icon

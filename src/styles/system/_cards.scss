@@ -1,0 +1,35 @@
+.el-card,
+.ibox.el-card {
+  border: 1px solid var(--N200);
+  border-radius: var(--radius-card);
+  background: var(--surface-panel);
+  box-shadow: none !important;
+}
+
+.el-card__header,
+.ibox .el-card__header {
+  min-height: 40px;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--N200);
+  color: var(--N900);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+}
+
+.el-card__body {
+  padding: var(--space-4);
+}
+
+.el-card.no-border {
+  margin-bottom: var(--space-5, 20px);
+
+  .el-card__header {
+    padding-top: var(--space-5, 20px);
+    padding-bottom: 0;
+    border-bottom: none;
+    display: inline-block;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+  }
+}

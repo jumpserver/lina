@@ -8,7 +8,6 @@
     :modal="modal"
     :size="size"
     :title="title"
-    custom-class="drawer"
     destroy-on-close
     direction="rtl"
     @update:model-value="handleUpdateModelValue">

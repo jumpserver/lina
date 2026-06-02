@@ -1,5 +1,5 @@
 <template>
-  <DetailFormatter :col="col" :row="row" :prevent-click="formatterArgs.preventClick">
+  <DetailFormatter :cell-value="cellValue" :col="col" :row="row" :prevent-click="formatterArgs.preventClick">
     <el-popover
       :disabled="!showItems"
       :open-delay="500"
@@ -9,12 +9,14 @@
       width="400"
       @show="getAsyncItems"
     >
+      <template #reference>
+        <span>{{ amount }}</span>
+      </template>
       <div class="detail-content">
         <div v-for="[index, item] of Object.entries(items)" :key="getKey(item, index)" class="detail-item">
           <span class="detail-item-name">{{ item }}</span>
         </div>
       </div>
-      <span slot="reference">{{ amount }}</span>
     </el-popover>
   </DetailFormatter>
 </template>

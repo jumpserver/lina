@@ -7,10 +7,12 @@
           v-model="treeSearchValue"
           :placeholder="$tc('Search')"
           class="fixed-tree-search"
-          prefix-icon="fa fa-search"
           size="small"
           @input="treeSearchHandle"
         >
+          <template #prefix>
+            <i class="fa fa-search" />
+          </template>
           <template #suffix>
             <i
               class="el-icon-close"
@@ -184,7 +186,7 @@ export default {
         </a>`
       const treeActions = `${showSearch ? searchIcon : ''}${showRefresh ? refreshIcon : ''}`
       const icons = `
-        <span style="float: right; margin-right: 10px;" class='tree-actions'>
+        <span class='tree-actions'>
           ${treeActions}
         </span>`
       if (rootNode) {
@@ -372,7 +374,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 10px 10px 0 10px;
+  padding: 0;
 
   .ztree {
     width: 100%;
@@ -403,7 +405,8 @@ export default {
 
   &:hover {
     :deep(.tree-action-btn) {
-      display: inline;
+      opacity: 1;
+      visibility: visible;
 
       &:hover {
         box-shadow: none;
@@ -412,6 +415,64 @@ export default {
     }
   }
 
+}
+
+:deep(.ztree li) {
+  line-height: 28px;
+}
+
+:deep(.ztree a),
+:deep(.ztree span.node_name) {
+  font-family: var(--tree-font-family, 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif) !important;
+  font-stretch: normal;
+  font-style: normal !important;
+  font-synthesis: none;
+  font-synthesis-style: none;
+  font-variation-settings: normal;
+}
+
+:deep(.ztree li a) {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  line-height: 28px;
+  vertical-align: middle;
+}
+
+:deep(.ztree li span.button) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 28px;
+  margin-right: var(--space-1);
+  line-height: 28px;
+  vertical-align: middle;
+}
+
+:deep(.ztree li span.button::before) {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 28px;
+  padding: 0 !important;
+  color: var(--N600);
+  font-family: FontAwesome;
+  font-size: 12px;
+  line-height: 28px;
+}
+
+:deep(.ztree li span.button.ico_open::before),
+:deep(.ztree li span.button.ico_close::before),
+:deep(.ztree li span.button.ico_docu::before) {
+  color: var(--N600);
+  font-size: 13px;
+}
+
+:deep(.ztree li span.button.switch::before) {
+  color: var(--N500);
+  font-size: 12px;
 }
 
 div.rMenu {
@@ -673,7 +734,35 @@ div.rMenu li {
 }
 
 :deep(.tree-action-btn) {
-  display: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-control);
+  color: var(--N500);
+  line-height: 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard),
+    opacity var(--duration-fast) var(--ease-standard);
+}
+
+:deep(.tree-actions) {
+  display: inline-flex;
+  float: right;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-1);
+  width: 56px;
+  height: 28px;
+  margin-right: var(--space-2);
+}
+
+:deep(.tree-action-btn:hover) {
+  background-color: var(--N50);
+  color: var(--N800) !important;
 }
 
 </style>

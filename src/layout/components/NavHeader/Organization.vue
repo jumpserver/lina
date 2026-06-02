@@ -1,8 +1,8 @@
 <template>
   <el-select
     :disabled="disabled"
+    :model-value="currentOrgId"
     :placeholder="$tc('Select')"
-    :value="currentOrgId"
     class="org-select"
     :style="{ width: selectWidth }"
     filterable
@@ -56,7 +56,7 @@ export default {
   data() {
     return {
       orgOption: [],
-      selectWidth: 'auto'
+      selectWidth: '128px'
     }
   },
   computed: {
@@ -70,7 +70,7 @@ export default {
       if (matchedOrg?.name) {
         return matchedOrg.name
       }
-      return this.currentOrg.name || this.$tc('Select')
+      return this.currentOrg?.name || this.$tc('Select')
     },
     orgActionsGroup() {
       const orgActions = {
@@ -91,21 +91,23 @@ export default {
         ]
       }
       const hasPerms = this.$hasPerm('orgs.view_organization | orgs.add_organization')
-      const isConsole = ['console'].includes(this.currentViewRoute.name)
+      const isConsole = ['console'].includes(this.currentViewRoute?.name)
       return hasPerms && isConsole ? orgActions : {}
     },
     orgChoicesGroup() {
       return {
         label: this.$t('ChangeOrganization'),
-        options: this.usingOrgs
+        options: this.usingOrgs || []
       }
     },
     orgGroups() {
-      return [this.orgActionsGroup, this.orgChoicesGroup]
+      return [this.orgActionsGroup, this.orgChoicesGroup].filter(group => {
+        return group?.options?.length
+      })
     },
     currentOrgId() {
-      const usingOrgIds = this.usingOrgs.map(o => o.id)
-      let currentOrgId = this.currentOrg.id
+      const usingOrgIds = (this.usingOrgs || []).map(o => o.id)
+      let currentOrgId = this.currentOrg?.id
       const find = usingOrgIds.indexOf(currentOrgId) > -1
       if (!find) {
         currentOrgId = null
@@ -130,8 +132,7 @@ export default {
         tempSpan.style.position = 'absolute'
         tempSpan.style.whiteSpace = 'nowrap'
         tempSpan.style.fontSize = '14px'
-        tempSpan.style.fontFamily =
-          '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+        tempSpan.style.fontFamily = 'Inter, "PingFang SC", "Microsoft YaHei", Arial, sans-serif'
         tempSpan.style.fontWeight = 'normal'
         tempSpan.style.letterSpacing = 'normal'
 
@@ -151,7 +152,7 @@ export default {
         const totalWidth = textWidth + iconWidth + paddingWidth + arrowWidth
 
         // 设置合理的边界
-        const minWidth = 100
+        const minWidth = 128
         const maxWidth = 400
         const finalWidth = Math.max(minWidth, Math.min(maxWidth, totalWidth))
 
@@ -162,7 +163,7 @@ export default {
       })
     },
     changeOrg(orgId) {
-      const org = this.usingOrgs.find(item => item.id === orgId)
+      const org = (this.usingOrgs || []).find(item => item.id === orgId)
 
       switch (orgId) {
         case 'create':
@@ -172,6 +173,9 @@ export default {
           this.$router.push({ name: 'OrganizationList' })
           break
         default:
+          if (!org) {
+            return
+          }
           orgUtil.changeOrg(org, true, this)
       }
       this.updateWidth()
@@ -183,15 +187,76 @@ export default {
 <style lang="scss" scoped>
 @use '@/styles/variables' as *;
 
-$height: 28px;
+$height: 32px;
 
 .org-select {
-  line-height: $height;
+  display: inline-flex;
+  align-items: center;
+  width: 100% !important;
+  height: $height;
+  line-height: 1;
+  vertical-align: middle;
 
   :deep(.el-select__wrapper) {
-    background: none;
-    border: none;
+    align-items: center;
+    width: 100%;
+    min-height: $height;
+    height: $height;
+    padding: 0 var(--space-2);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-control);
+    background: rgba(255, 255, 255, 0.1);
     box-shadow: none;
+    color: #fff;
+    line-height: 1;
+    transition:
+      background-color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard);
+
+    &:hover {
+      border-color: rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.16);
+    }
+  }
+
+  :deep(.el-select__wrapper.is-filterable),
+  :deep(.el-tooltip__trigger),
+  :deep(.el-select__wrapper.is-filterable.el-tooltip__trigger) {
+    width: 100%;
+  }
+
+  :deep(.el-select__prefix),
+  :deep(.el-select__suffix) {
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
+    color: rgba(255, 255, 255, 0.88);
+  }
+
+  :deep(.el-select__placeholder),
+  :deep(.el-select__selected-item),
+  :deep(.el-select__selected-item span) {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    color: #fff;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1;
+  }
+
+  :deep(.el-select__caret),
+  :deep(.el-icon),
+  :deep(.svg-icon) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--icon-size-base);
+    height: var(--icon-size-base);
+    color: rgba(255, 255, 255, 0.88);
+    font-size: var(--icon-size-base);
+    font-style: normal;
+    line-height: var(--icon-size-base);
   }
 }
 
@@ -241,6 +306,12 @@ $height: 28px;
 .org-select :deep(.el-input.is-disabled .el-input__inner) {
   color: #ffffff !important;
   background-color: transparent;
+}
+
+.org-select :deep(.el-select__wrapper.is-disabled) {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.08);
+  cursor: not-allowed;
 }
 
 .icon {

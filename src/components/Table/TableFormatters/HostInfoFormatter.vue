@@ -1,5 +1,5 @@
 <template>
-  <DetailFormatter :col="col" :row="row">
+  <DetailFormatter :cell-value="cellValue" :col="col" :row="row">
     <el-popover
       :open-delay="parseInt('500')"
       :title="title"
@@ -7,11 +7,13 @@
       trigger="hover"
       width="400"
     >
+      <template #reference>
+        <span>{{ viewText }}</span>
+      </template>
       <el-row v-for="(item, key) of items" :key="key" class="detail-item">
         <el-col :span="12">{{ formatterArgs.info[key] }}</el-col>
         <el-col :span="12">{{ item }}</el-col>
       </el-row>
-      <span slot="reference">{{ viewText }}</span>
     </el-popover>
   </DetailFormatter>
 </template>

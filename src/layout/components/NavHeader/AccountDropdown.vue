@@ -83,16 +83,28 @@ export default {
 
 <style lang="scss" scoped>
   .header-profile {
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
+
     .el-dropdown {
+      display: inline-flex;
+      align-items: center;
       color: #fff;
+    }
+
+    .el-dropdown-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      line-height: 1;
     }
   }
 
   .header-avatar {
     height: 24px;
     width: 24px;
-    margin-right: 5px;
-    vertical-align: middle;
+    margin-right: 0;
     background: white;
   }
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-dropdown :show-timeout="50" @command="handleCommand">
-      <span class="el-dropdown-link" style="vertical-align: baseline;">
+      <span class="el-dropdown-link">
         <svg-icon icon-class="question-mark" />
       </span>
       <template #dropdown>
@@ -68,6 +68,13 @@ export default {
 </script>
 
 <style scoped>
+.el-dropdown-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
 .icon {
   color: #fff;
 }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-tooltip v-if="formatterArgs.hasTips" :open-delay="500" effect="dark" placement="bottom">
-      <div slot="content">
+      <template #content>
         <template v-if="tipsIsArray">
           <div v-for="tip of tips" :key="tip">
             <span>{{ tip }}</span>
@@ -11,7 +11,7 @@
         <span v-else>
           {{ tips }}
         </span>
-      </div>
+      </template>
       <i :class="'fa ' + iconClass" />
     </el-tooltip>
     <i v-else :class="'fa ' + iconClass" />
@@ -65,5 +65,7 @@ export default {
 </script>
 
 <style scoped>
-
+i {
+  font-style: normal;
+}
 </style>

@@ -51,7 +51,8 @@ export default {
   .error-404-title {
     font-size: 40px;
     font-weight: 600;
-    font-synthesis: style;
+    font-synthesis: none;
+    font-synthesis-style: none;
   }
 
   .error-404-subtitle {

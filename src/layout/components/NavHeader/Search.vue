@@ -7,10 +7,12 @@
         :placeholder="$t('Search')"
         class="search-input"
         readonly
-        prefix-icon="el-icon-search"
         @keydown.esc.prevent="closePanel"
         @clear="clearSearch"
       >
+        <template #prefix>
+          <i class="el-icon-search" />
+        </template>
         <template #suffix>
           <span class="search-shortcut">{{ shortcutText }}</span>
         </template>
@@ -23,7 +25,7 @@
       :close-on-click-modal="true"
       :close-on-press-escape="true"
       :append-to-body="true"
-      custom-class="search-modal"
+      class="search-modal"
       width="70%"
       @close="closePanel"
     >
@@ -36,10 +38,13 @@
             :placeholder="$t('Search')"
             :clearable="true"
             size="large"
-            prefix-icon="el-icon-search"
             @input="onInput"
             @keydown.enter.prevent="onEnter"
-          />
+          >
+            <template #prefix>
+              <i class="el-icon-search" />
+            </template>
+          </el-input>
         </div>
 
         <!-- 搜索结果内容 -->
@@ -333,71 +338,102 @@ export default {
 <style lang="scss" scoped>
 .global-search {
   position: relative;
-  width: 200px;
-  height: 40px;
-  padding: 5px 0;
-  min-width: 200px;
-  margin-right: 5px;
+  display: inline-flex;
+  align-items: center;
+  width: 220px;
+  min-width: 220px;
+  height: 32px;
+  margin-right: var(--space-1);
 
   .search-trigger {
-    height: 30px;
-    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+    height: 32px;
 
     .search-input {
-      height: 30px;
+      width: 100%;
+      height: 32px;
       line-height: 1;
-      background-color: rgba(5, 5, 5, 0.1);
-      border-radius: 4px;
       cursor: pointer;
 
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.2);
+      :deep(.el-input__wrapper) {
+        align-items: center;
+        min-height: 32px;
+        height: 32px;
+        padding: 0 var(--space-2);
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: var(--radius-control);
+        box-shadow: none;
+        cursor: pointer;
+        transition:
+          background-color var(--duration-fast) var(--ease-standard),
+          border-color var(--duration-fast) var(--ease-standard);
+      }
+
+      &:hover :deep(.el-input__wrapper) {
+        background: rgba(255, 255, 255, 0.18);
+        border-color: rgba(255, 255, 255, 0.24);
+      }
+
+      :deep(.el-input__prefix) {
+        display: inline-flex;
+        align-items: center;
+        height: 100%;
+        margin-right: var(--space-1);
       }
 
       :deep(.el-input__inner) {
-          height: 30px;
-          line-height: 1;
-          background: transparent;
-          border: none;
-          color: #fff;
-          cursor: pointer;
+        height: 30px;
+        line-height: 30px;
+        background: transparent;
+        border: none;
+        color: #fff;
+        cursor: pointer;
 
-          &::placeholder {
-            color: #fff;
-            opacity: 0.7;
-          }
-        }
-
-        .el-input__prefix .el-input__icon {
-          font-size: 15px;
-          line-height: 32px;
-        }
-
-        .el-input__suffix {
-          display: flex;
-          align-items: center;
-          height: 100%;
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.72);
         }
       }
 
-      .search-shortcut {
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 11px;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        font-weight: 500;
-        letter-spacing: 0.5px;
-        padding: 2px 6px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 3px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        user-select: none;
-        pointer-events: none;
+      :deep(.el-input__prefix .el-input__icon),
+      :deep(.el-input__prefix i) {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        height: 18px;
-        line-height: 1;
+        width: 14px;
+        height: 14px;
+        color: rgba(255, 255, 255, 0.78);
+        font-size: 14px;
+        line-height: 14px;
       }
+
+      :deep(.el-input__suffix) {
+        display: inline-flex;
+        align-items: center;
+        height: 100%;
+      }
+    }
+
+    .search-shortcut {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 18px;
+      padding: 0 var(--space-1);
+      color: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      font-family: var(--font-family-base);
+      font-size: 11px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0;
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
   }
 }
 

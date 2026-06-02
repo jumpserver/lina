@@ -1,16 +1,22 @@
 <template>
   <div :class="device" class="table-header clearfix container">
     <slot name="header">
-      <LeftSide v-bind="$attrs" v-if="hasLeftActions"
+      <LeftSide
+        v-if="hasLeftActions"
+        v-bind="$attrs"
         :selected-rows="selectedRows"
         :table-url="tableUrl"
         class="left-side"
-        @init-actions-done="handleActionsDone" />
+        @init-actions-done="handleActionsDone"
+      />
 
-      <RightSide v-bind="$attrs" v-if="hasRightActions"
+      <RightSide
+        v-if="hasRightActions"
+        v-bind="$attrs"
         :selected-rows="selectedRows"
         :table-url="tableUrl"
-        class="right-side" />
+        class="right-side"
+      />
 
       <div :class="searchClass" class="search">
         <LabelSearch
@@ -18,25 +24,31 @@
           @label-search="handleLabelSearch"
           @show-label-search="handleLabelSearchShowChange"
         />
-        <AutoDataSearch v-bind="iSearchTableConfig" v-if="hasSearch"
+        <AutoDataSearch
+          v-if="hasSearch"
+          v-bind="iSearchTableConfig"
           :fold="foldSearch"
           class="right-side-item action-search"
-          @tag-search="handleTagSearch" />
-        <DatetimeRangePicker v-bind="datePicker" v-if="hasDatePicker"
+          @tag-search="handleTagSearch"
+        />
+        <DatetimeRangePicker
+          v-if="hasDatePicker"
+          v-bind="datePicker"
           class="datepicker"
-          @date-change="handleDateChange" />
+          @date-change="handleDateChange"
+        />
       </div>
     </slot>
   </div>
 </template>
 
 <script>
+import DatetimeRangePicker from '@/components/Form/FormFields/DatetimeRangePicker.vue'
+import AutoDataSearch from '@/components/Table/AutoDataSearch/index.vue'
+import LabelSearch from '@/components/Table/ListTable/TableAction/LabelSearch.vue'
+import { getDaysAgo, getDaysFuture } from '@/utils/common/time'
 import LeftSide from './LeftSide.vue'
 import RightSide from './RightSide.vue'
-import AutoDataSearch from '@/components/Table/AutoDataSearch/index.vue'
-import DatetimeRangePicker from '@/components/Form/FormFields/DatetimeRangePicker.vue'
-import { getDaysAgo, getDaysFuture } from '@/utils/common/time'
-import LabelSearch from '@/components/Table/ListTable/TableAction/LabelSearch.vue'
 
 const defaultTrue = { type: Boolean, default: true }
 const defaultFalse = { type: Boolean, default: false }
@@ -198,30 +210,62 @@ $color-drop-menu-border: #e4e7ed;
 
   .left-side {
     display: block;
-    //float: left;
 
     :deep(.action-item.el-dropdown > .el-button) {
-      height: 30px;
+      height: 32px;
     }
 
     :deep(.action-item.el-button) {
-      height: 30px;
+      height: 32px;
     }
   }
 
   .right-side {
-    //float: right;
-    height: 30px;
+    height: 32px;
   }
 
   .search {
     display: flex;
     flex-direction: row;
+    align-items: center;
     justify-content: flex-end;
+    gap: var(--space-2);
 
     .right-side-item.action-search {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
       border: 1px solid var(--color-border);
+      border-radius: var(--radius-control);
+      background-color: var(--surface-panel);
       overflow: hidden;
+
+      :deep(.filter-field) {
+        min-height: 32px;
+      }
+
+      :deep(.el-input__suffix),
+      :deep(.el-input__prefix),
+      :deep(.el-input__suffix-inner) {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      :deep(.el-input__icon),
+      :deep([class^='el-icon-']),
+      :deep([class*=' el-icon-']) {
+        width: 14px;
+        height: 14px;
+        font-size: 14px;
+        line-height: 14px;
+      }
+
+      :deep(.search-input .el-input__wrapper),
+      :deep(.filter-cascader .el-input__wrapper) {
+        min-height: 32px;
+        height: 32px;
+      }
     }
   }
 
@@ -236,11 +280,12 @@ $color-drop-menu-border: #e4e7ed;
 
   .search.left {
     padding: 0 !important;
-    gap: 10px;
+    gap: var(--space-2);
   }
 
   .search.right {
     display: flex;
+    align-items: center;
     flex-wrap: wrap;
     padding-right: 10px;
   }

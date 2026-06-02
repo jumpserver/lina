@@ -9,7 +9,13 @@
       </div>
       <div class="nav-title">
         <span :class="switchViewOtherClasses" class="switch-view active-switch-view">
-          <el-popover :open-delay="200" placement="right-start" trigger="hover">
+          <el-popover
+            :open-delay="200"
+            :width="180"
+            placement="right-start"
+            popper-class="view-switcher-popover"
+            trigger="hover"
+          >
             <template #reference>
               <span style="width: 100%;padding: 0 15px;display: flex;align-items: center;">
                 <span class="text-overflow">{{ isRouteMeta.title || '' }}</span>
@@ -62,12 +68,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import SidebarItem from './SidebarItem'
 import Hamburger from '@/components/Widgets/Hamburger'
-import ViewSwitcher from '../NavHeader/ViewSwitcher'
-import Organization from '../NavHeader/Organization'
 import variables from '@/styles/variables.scss'
+import { mapGetters } from 'vuex'
+import Organization from '../NavHeader/Organization'
+import ViewSwitcher from '../NavHeader/ViewSwitcher'
+import SidebarItem from './SidebarItem'
 
 export default {
   components: {
@@ -143,7 +149,7 @@ export default {
     },
     setLeastMenuOpen() {
       const hasOpened = document.querySelector(
-        '.el-submenu-sidebar.submenu-item.el-submenu.is-opened'
+        '.el-submenu-sidebar.submenu-item.el-sub-menu.is-opened'
       )
       if (hasOpened) {
         return
@@ -161,12 +167,14 @@ export default {
 
 $mobileHeight: 40px;
 $origin-color: #ffffff;
-$hover-bg-color: #e6e6e6;
-$hover-text-color: #606266;
-$hover-border-color: #d2d2d2;
 
 .left-side-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
   .nav-header {
+    flex: 0 0 auto;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -247,8 +255,17 @@ $hover-border-color: #d2d2d2;
           .icon-zone {
             display: flex;
             align-items: center;
-            padding: 6px;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            padding: 0;
             box-sizing: border-box;
+            border: 1px solid transparent;
+            border-radius: var(--radius-control);
+            color: var(--N600);
+            transition: color var(--duration-fast) var(--ease-standard),
+              background-color var(--duration-fast) var(--ease-standard),
+              border-color var(--duration-fast) var(--ease-standard);
 
             .icon {
               width: 1.05em;
@@ -257,10 +274,9 @@ $hover-border-color: #d2d2d2;
             }
 
             &:hover {
-              color: $hover-text-color;
-              border-color: $hover-border-color;
-              background-color: $hover-bg-color;
-              border-radius: 4px;
+              color: var(--color-primary);
+              border-color: rgba(26, 179, 148, 0.24);
+              background-color: rgba(26, 179, 148, 0.08);
             }
           }
         }
@@ -268,9 +284,17 @@ $hover-border-color: #d2d2d2;
     }
   }
 
+  .menu-wrap {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+  }
+
   .nav-footer {
     display: flex;
+    flex: 0 0 auto;
     justify-content: flex-start;
+    margin-top: auto;
     border-top: 1px solid rgba(31, 35, 41, 0.15);
     background-color: $subMenuBg;
 
@@ -297,9 +321,9 @@ $hover-border-color: #d2d2d2;
       }
 
       &:hover {
-        color: $hover-text-color;
-        border-color: $hover-border-color;
-        background-color: $hover-bg-color;
+        color: var(--color-primary);
+        border-color: rgba(26, 179, 148, 0.24);
+        background-color: rgba(26, 179, 148, 0.08);
       }
     }
   }
@@ -331,6 +355,24 @@ $hover-border-color: #d2d2d2;
       }
     }
   }
+}
+
+:global(.view-switcher-popover.el-popper.is-light.el-popover) {
+  width: 180px !important;
+  min-width: 180px;
+  padding: var(--space-2);
+  border-color: var(--N200);
+  border-radius: var(--radius-card);
+  box-shadow: 0 8px 24px rgba(31, 35, 41, 0.10);
+}
+
+:global(.view-switcher-popover .menu-main.el-menu) {
+  width: 100%;
+}
+
+:global(.view-switcher-popover .menu-main.el-menu .el-menu-item) {
+  width: 100%;
+  border-radius: var(--radius-control);
 }
 
 @media screen and (max-width: 992px) {
