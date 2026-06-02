@@ -167,20 +167,20 @@ info:
   # 右上「证书信息」区域
   #
   # cert 支持两种格式：
-  #   数组格式（旧）— 直接列出字段，无整体 check
-  #   对象格式（新）— { check?, fields }，先执行 check，失败则显示「暂未签发证书」
+  #   数组格式（旧）— 直接列出字段，无整体 when
+  #   对象格式（新）— { when?, fields }，先执行 when，条件不满足则显示「暂未签发证书」
   #
-  # check 可选，支持两种写法：
+  # when 可选，支持两种写法：
   #   字符串（表达式）：
-  #     check: "{{ ukey.cert != null && ukey.cert !== '' }}"
+  #     when: "{{ ukey.cert != null && ukey.cert !== '' }}"
   #   对象（call + 可选 expr）：
-  #     check:
+  #     when:
   #       call: SOF_GetCertCount
   #       args:
   #         - "{{ ukey.devSN }}"
   #       expr: "{{ result > 0 }}"
   cert:
-    check: "{{ ukey.cert != null && ukey.cert !== '' }}"
+    when: "{{ ukey.cert != null && ukey.cert !== '' }}"
     fields:
       - key: CERT_SUBJECT_CN
         label: "证书拥有者 CN"

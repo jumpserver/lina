@@ -23,6 +23,7 @@ export default {
         fields: [
           [this.$t('Basic'), [
             'AUTH_CERT',
+            'AUTH_CERT_VENDOR',
             'AUTH_CERT_CHALLENGE_TTL',
             'AUTH_CERT_DEFAULT_PIN'
           ]],

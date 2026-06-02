@@ -358,7 +358,7 @@ export default {
       const certConfig = this.config && this.config.info && this.config.info.cert
       // 兼容数组（旧格式）和对象（新格式 { check?, fields }）
       const fields = Array.isArray(certConfig) ? certConfig : (certConfig && certConfig.fields || [])
-      const certCheck = Array.isArray(certConfig) ? undefined : (certConfig && certConfig.check)
+      const certCheck = Array.isArray(certConfig) ? undefined : (certConfig && (certConfig.when))
 
       const ctx = this.buildContext({ vars: {}, input: {} })
 
