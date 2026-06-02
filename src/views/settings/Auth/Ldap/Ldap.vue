@@ -9,6 +9,7 @@
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index.vue'
 import ImportDialog from './ImportDialog.vue'
+import LdapCACertificate from './LdapCACertificate.vue'
 import TestLoginDialog from './TestLoginDialog.vue'
 import SyncSettingDialog from './SyncSettingDialog.vue'
 import { IBox } from '@/components'
@@ -52,7 +53,8 @@ export default {
           this.$t('Other'),
           [
             'AUTH_LDAP_STRICT_SYNC', 'AUTH_LDAP_CONNECT_TIMEOUT', 'AUTH_LDAP_SEARCH_PAGED_SIZE',
-            'AUTH_LDAP_CACHE_TIMEOUT'
+            'AUTH_LDAP_CACHE_TIMEOUT', 'AUTH_LDAP_IGNORE_SSL_VERIFICATION',
+            'ldap_ca_certificate'
           ]
         ]
       ],
@@ -73,6 +75,11 @@ export default {
         AUTH_LDAP_USER_ATTR_MAP: {
           component: JsonEditor,
           rules: [JsonRequired]
+        },
+        ldap_ca_certificate: {
+          component: LdapCACertificate,
+          label: this.$t('CACertificate'),
+          el: { category: category }
         }
       },
       hasDetailInMsg: false,
