@@ -205,7 +205,7 @@ export default {
     height: 14px;
     margin: 0 !important;
     font-size: 14px;
-    font-style: normal !important;
+    font-style: normal;
     line-height: 14px;
   }
 

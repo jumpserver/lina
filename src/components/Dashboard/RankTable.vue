@@ -96,24 +96,32 @@ export default {
 
 <style lang="scss" scoped>
 .box {
-  margin-top: 16px;
-  padding: 20px;
-  background: #fff;
+  display: flex;
+  flex-direction: column;
+  min-height: 336px;
+  padding: var(--space-4, 16px);
+  background: var(--surface-panel, #fff);
+  border: 1px solid var(--color-border, var(--N200));
+  border-radius: var(--radius-card, 8px);
 
   .head {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    margin-bottom: 8px;
+    margin-bottom: var(--space-3, 12px);
   }
 }
 
+.table {
+  flex: 1;
+}
+
 :deep(.el-table td, .el-table th) {
-  padding: 5px 0;
+  padding: var(--space-2, 8px) var(--space-3, 12px);
 }
 
 :deep(.el-table th, .el-table tr) {
-  background-color: #F5F6F7 !important;
-
+  background-color: var(--N50) !important;
 }
 
 :deep(.el-table .cell) {

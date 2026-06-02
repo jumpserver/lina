@@ -1339,48 +1339,34 @@ export default {
   :deep(.el-table td.el-table__cell),
   :deep(.el-table .cell),
   :deep(.table-formatter-host) {
-    font-family: var(--table-font-family, var(--font-family-base)) !important;
-    font-stretch: normal;
-    font-style: normal !important;
-    font-synthesis: none;
-    font-synthesis-style: none;
-    font-variation-settings: normal;
+    font-family: var(--table-font-family, var(--font-family-base));
+    font-style: normal;
   }
 
   :deep(.el-table td.el-table__cell :where(span, div, a, p, small, strong, b, label)),
   :deep(.el-table .cell :where(span, div, a, p, small, strong, b, label)),
   :deep(.table-formatter-host :where(span, div, a, p, small, strong, b, label)) {
-    font-family: var(--table-font-family, var(--font-family-base)) !important;
-    font-stretch: normal;
-    font-style: normal !important;
-    font-synthesis: none;
-    font-synthesis-style: none;
-    font-variation-settings: normal;
+    font-family: inherit;
+    font-style: normal;
   }
 
   :deep(.table-formatter-host .fa) {
     font-family: FontAwesome !important;
-    font-style: normal !important;
-    font-variation-settings: normal;
+    font-style: normal;
   }
 
   :deep(.table-formatter-host [class^='el-icon-']),
   :deep(.table-formatter-host [class*=' el-icon-']) {
     font-family: element-icons !important;
-    font-style: normal !important;
-    font-variation-settings: normal;
+    font-style: normal;
   }
 
   .table-formatter-host {
     display: inline-flex;
     align-items: center;
     max-width: 100%;
-    font-family: var(--table-font-family, var(--font-family-base)) !important;
-    font-stretch: normal;
-    font-style: normal !important;
-    font-synthesis: none;
-    font-synthesis-style: none;
-    font-variation-settings: normal;
+    font-family: var(--table-font-family, var(--font-family-base));
+    font-style: normal;
     line-height: 1.4;
   }
 }

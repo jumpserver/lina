@@ -1,9 +1,12 @@
 <template>
-  <BaseReport v-bind="$attrs" :nav="nav"
+  <BaseReport
+    v-bind="$attrs"
+    :nav="nav"
     :url="reportUrl"
     :title="$t('PamDashboard')"
     :disable-charts-padding="true"
-    name="PamDashboard">
+    name="PamDashboard"
+  >
     <div class="summary-container">
       <el-row :gutter="20">
         <el-col :span="14" :xs="24">
@@ -57,7 +60,7 @@ export default {
   data() {
     return {
       url: '/api/v1/accounts/pam-dashboard/?total_count_type_to_accounts=1',
-      reportUrl: getRouteUrl('PamReport', this.$router)
+      reportUrl: getRouteUrl({ name: 'PamReport', path: '/reports/dashboard/pam' }, this.$router)
     }
   }
 }
@@ -65,15 +68,23 @@ export default {
 
 <style lang="scss" scoped>
 .el-row {
-  margin-bottom: 1.25rem;
+  margin-bottom: var(--space-6, 24px);
 }
 
 .summary-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6, 24px);
+
+  .el-row {
+    margin-bottom: 0;
+  }
+
   .account-secret-summary,
   .asset-proportion-summary,
   .risk-summary,
   .mission-summery {
-    border-radius: 0.25rem;
+    border-radius: var(--radius-card, 8px);
   }
 
   .account-secret-summary,
@@ -92,11 +103,11 @@ export default {
 
 @media (max-width: 768px) {
   .data-summery {
-    margin-bottom: 1.25rem;
+    margin-bottom: var(--space-4, 16px);
   }
 
   .risk-summary {
-    margin-top: 1.25rem;
+    margin-top: var(--space-4, 16px);
   }
 }
 </style>

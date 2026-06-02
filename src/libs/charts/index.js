@@ -4,6 +4,7 @@ import {
   LineChart,
   MapChart,
   PieChart,
+  PictorialBarChart,
   RadarChart,
   ScatterChart
 } from 'echarts/charts'
@@ -30,6 +31,7 @@ function initECharts() {
   use([
     CanvasRenderer,
     BarChart,
+    PictorialBarChart,
     LineChart,
     PieChart,
     ScatterChart,

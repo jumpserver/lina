@@ -13,7 +13,7 @@
     >
       <div class="announcement-content">
         <div class="content-wrapper">
-          <MarkDown :value="announcement.content" class="markdown" />
+          <div v-sanitize="announcement.content" class="markdown" />
         </div>
         <div v-if="announcement.link" class="link-section">
           <el-link :href="announcement.link" class="link-more" target="_blank" type="info">
@@ -33,29 +33,37 @@
     <el-alert
       v-if="enabled && showAlert"
       :center="false"
+      :closable="false"
       :title="title"
       class="announcement"
       type="success"
-      @close="onAlertClose"
     >
-      <MarkDown :value="announcement.content" class="markdown" />
-      <span v-if="announcement.link">
-        <el-link :href="announcement.link" class="link-more" target="_blank" type="info">
-          {{ $t('ViewMore') }}
-        </el-link>
-        <i class="fa fa-external-link icon" />
-      </span>
+      <div class="announcement-body">
+        <div v-sanitize="announcement.content" class="markdown" />
+        <span v-if="announcement.link">
+          <el-link :href="announcement.link" class="link-more" target="_blank" type="info">
+            {{ $t('ViewMore') }}
+          </el-link>
+          <i class="fa fa-external-link icon" />
+        </span>
+      </div>
+      <button
+        aria-label="Close announcement"
+        class="announcement-close"
+        type="button"
+        @click.stop.prevent="onAlertClose"
+      >
+        &times;
+      </button>
     </el-alert>
   </div>
 </template>
 
 <script>
-import MarkDown from '@/components/Widgets/MarkDown'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'Announcement',
-  components: { MarkDown },
   data() {
     return {
       viewedKey: 'AnnouncementViewed',
@@ -85,6 +93,9 @@ export default {
     },
     title() {
       return this.$t('Announcement') + ': ' + this.announcement.subject
+    },
+    announcementKey() {
+      return String(this.announcement.id || `${this.announcement.subject || ''}:${this.announcement.content || ''}`)
     },
     isDateValid() {
       if (this.announcement.date_start === undefined || this.announcement.date_end === undefined) {
@@ -128,7 +139,7 @@ export default {
       }
     },
     onModalConfirm() {
-      localStorage.setItem(this.modalConfirmedKey, this.announcement.id)
+      localStorage.setItem(this.modalConfirmedKey, this.announcementKey)
       this.modalConfirmed = true
       this.dialogVisible = false
 
@@ -139,8 +150,8 @@ export default {
       })
     },
     onAlertClose() {
-      localStorage.setItem(this.viewedKey, this.announcement.id)
       this.alertViewed = true
+      localStorage.setItem(this.viewedKey, this.announcementKey)
 
       this.$emit('announcement-read', {
         id: this.announcement.id,
@@ -150,11 +161,11 @@ export default {
     },
     isModalConfirmed() {
       const confirmedId = localStorage.getItem(this.modalConfirmedKey)
-      return confirmedId === this.announcement.id
+      return confirmedId === this.announcementKey
     },
     isAlertViewed() {
       const viewedId = localStorage.getItem(this.viewedKey)
-      return viewedId === this.announcement.id
+      return viewedId === this.announcementKey
     },
     isViewed() {
       return this.isAlertViewed()
@@ -230,8 +241,43 @@ export default {
   }
 }
 
+.announcement {
+  position: relative;
+}
+
 .announcement :deep(.el-alert__content) {
-  width: 100%;
+  min-width: 0;
+  padding-right: 32px;
+}
+
+.announcement-body {
+  min-width: 0;
+}
+
+.announcement-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-control, 6px);
+  background: transparent;
+  color: var(--N500);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  pointer-events: auto;
+
+  &:hover {
+    background: rgba(64, 158, 255, 0.12);
+    color: var(--color-info);
+  }
 }
 
 .icon {

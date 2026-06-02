@@ -114,13 +114,16 @@ export default {
 }
 
 .box {
-  background: #fff;
-  padding: 30px;
+  background: var(--surface-panel, #fff);
+  padding: var(--space-4, 16px);
+  border: 1px solid var(--color-border, var(--N200));
+  border-radius: var(--radius-card, 8px);
 
   .head {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    margin-bottom: 8px;
+    margin-bottom: var(--space-3, 12px);
   }
 
 }

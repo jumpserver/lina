@@ -16,7 +16,7 @@
         </div>
       </div>
 
-      <div ref="chartRef" class="right-section" />
+      <Echart class="right-section" :options="chartOption" />
     </div>
 
     <el-divider />
@@ -39,10 +39,12 @@
 
 <script>
 import * as echarts from 'echarts'
+import Echart from '@/components/Dashboard/Echart.vue'
 import Title from '@/components/Dashboard/Title.vue'
 
 export default {
   components: {
+    Echart,
     Title
   },
   props: {
@@ -136,48 +138,13 @@ export default {
             emphasis: {
               focus: 'series'
             },
-            data: []
+            data: [this.config.privileged, this.config.resetSecret, this.config.connectable, this.config.is_active]
           }
         ]
       }
     }
   },
-  watch: {
-    config: {
-      handler(newData) {
-        if (this.chart) {
-          this.chart.setOption({
-            series: [{
-              data: [newData.privileged, newData.resetSecret, newData.connectable, newData.is_active]
-            }]
-          })
-        }
-      },
-      immediate: true,
-      deep: true
-    }
-  },
-  mounted() {
-    this.initChart()
-    window.addEventListener('resize', this.resizeChart)
-  },
-  beforeUnmount() {
-    if (this.chart) {
-      this.chart.dispose()
-      this.chart = null
-    }
-    window.removeEventListener('resize', this.resizeChart)
-  },
   methods: {
-    initChart() {
-      this.chart = echarts.init(this.$refs.chartRef)
-      this.chart.setOption(this.chartOption)
-    },
-    resizeChart() {
-      if (this.chart) {
-        this.chart.resize()
-      }
-    },
     handleClick(item) {
       this.$router.push({ name: this.config.route.name, query: { payload: item.key } })
     }
@@ -195,64 +162,66 @@ $text-color: #646A73;
 .card {
   display: flex;
   flex-direction: column;
-  gap: 1.37rem;
+  gap: var(--space-4, 16px);
   width: 100%;
   height: 100%;
-  padding: 1.25rem;
-  background-color: #FFF;
+  padding: var(--space-4, 16px);
+  background-color: var(--surface-panel, #fff);
   overflow: hidden;
-  border-radius: 0.25rem;
+  border: 1px solid var(--color-border, var(--N200));
+  border-radius: var(--radius-card, 8px);
 
   .card-content {
     display: flex;
+    gap: var(--space-4, 16px);
 
     .left-section {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: var(--space-2, 8px);
       flex: 1;
 
       .total-section {
         display: flex;
-        gap: 0.4rem;
+        gap: var(--space-2, 8px);
         flex-direction: column;
-        margin-top: 0.5rem;
+        margin-top: var(--space-2, 8px);
 
         .total-title {
-          font-size: 0.875rem;
-          color: #646A73;
+          font-size: var(--font-size-sm, 13px);
+          color: var(--N600);
           font-weight: 400;
         }
 
         .sub-title {
-          color: #646A73;
-          font-size: 0.9rem;
+          color: var(--N600);
+          font-size: var(--font-size-sm, 13px);
           font-weight: 400;
         }
 
         .total-account {
-          color: #1F2329;
-          font-size: 2rem;
-          font-weight: 500;
-          line-height: 2.5rem;
+          color: var(--N900);
+          font-size: 32px;
+          font-weight: var(--font-weight-medium, 500);
+          line-height: 40px;
         }
 
         .week-add {
           display: flex;
-          gap: 0.5rem;
-          color: #1F2329;
+          gap: var(--space-2, 8px);
+          color: var(--N900);
           font-weight: 400;
-          line-height: 1.4rem;
+          line-height: var(--line-height-sm, 20px);
 
           .week-add-title {
-            font-size: 0.9rem;
+            font-size: var(--font-size-sm, 13px);
             font-weight: inherit;
             line-height: inherit;
           }
 
           .week-add-value {
             color: #F54A45;
-            font-size: 0.9rem;
+            font-size: var(--font-size-sm, 13px);
             font-weight: inherit;
             line-height: inherit;
           }
@@ -261,8 +230,8 @@ $text-color: #646A73;
     }
 
     .right-section {
-      height: 8rem;
-      width: 20rem;
+      height: 128px;
+      width: 320px;
     }
   }
 
@@ -273,30 +242,29 @@ $text-color: #646A73;
     .metric-item {
       display: flex;
       flex-direction: column;
-      gap: 0.3rem;
+      gap: var(--space-1, 4px);
       flex: 1;
-      transition: all 0.3s ease-in-out;
+      transition: color var(--duration-fast) var(--ease-standard);
 
       .metric-label {
-        color: #646A73;
+        color: var(--N600);
         font-weight: 400;
-        line-height: 1.4rem;
-        font-size: 0.9rem;
+        line-height: var(--line-height-sm, 20px);
+        font-size: var(--font-size-sm, 13px);
       }
 
       .metric-value {
-        color: #1F2329;
-        line-height: 2rem;
-        font-size: 1.5rem;
-        font-weight: 500;
+        color: var(--N900);
+        line-height: 32px;
+        font-size: 24px;
+        font-weight: var(--font-weight-medium, 500);
       }
 
       &:hover {
         cursor: pointer;
-        transform: translateY(-0.2rem);
 
         .metric-value {
-          color: #1ab394;
+          color: var(--color-primary);
         }
       }
     }

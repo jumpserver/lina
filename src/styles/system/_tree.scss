@@ -1,11 +1,7 @@
 .ztree {
   --tree-font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
-  font-family: var(--tree-font-family) !important;
-  font-stretch: normal;
+  font-family: var(--tree-font-family);
   font-style: normal;
-  font-synthesis: none;
-  font-synthesis-style: none;
-  font-variation-settings: normal;
 }
 
 .ztree {
@@ -15,23 +11,15 @@
 
 .ztree a,
 .ztree span.node_name {
-  font-family: var(--tree-font-family) !important;
-  font-stretch: normal;
-  font-style: normal !important;
-  font-synthesis: none;
-  font-synthesis-style: none;
-  font-variation-settings: normal;
+  font-family: var(--tree-font-family);
+  font-style: normal;
 }
 
 .ztree li,
 .ztree li span,
 .ztree li a {
-  font-family: var(--tree-font-family) !important;
-  font-stretch: normal;
-  font-style: normal !important;
-  font-synthesis: none;
-  font-synthesis-style: none;
-  font-variation-settings: normal;
+  font-family: var(--tree-font-family);
+  font-style: normal;
 }
 
 .ztree li {

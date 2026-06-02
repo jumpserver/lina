@@ -1,13 +1,7 @@
 <template>
-  <div>
-    <el-row :gutter="16">
-      <el-col :lg="12" :sm="24">
-        <RankTable :config="userConfig" />
-      </el-col>
-      <el-col :lg="12" :sm="24">
-        <RankTable :config="assetConfig" />
-      </el-col>
-    </el-row>
+  <div class="rank-summary">
+    <RankTable :config="userConfig" />
+    <RankTable :config="assetConfig" />
   </div>
 </template>
 
@@ -56,3 +50,18 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.rank-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4, 16px);
+  align-items: stretch;
+}
+
+@media (max-width: 1200px) {
+  .rank-summary {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

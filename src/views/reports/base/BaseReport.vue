@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'only-charts': onlyCharts, 'nav': nav }">
+  <div class="dashboard-report" :class="{ 'only-charts': onlyCharts, 'nav': nav }">
     <div v-if="!onlyCharts && nav" class="header nav-bar">
       <div class="nav-bar-logo">
         <Logo />
@@ -141,30 +141,35 @@ export default {
 }
 
 .title-bar {
-  display: inline-block;
+  display: block;
+  margin-bottom: var(--space-4, 16px);
 }
 
 .title {
-  height: 40px;
-  background-color: white;
-  line-height: 40px;
-  font-size: 15px;
-  font-weight: 500;
-  color: #333;
-  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3, 12px);
+  min-height: 40px;
+  background-color: transparent;
+  line-height: var(--line-height-xl, 28px);
+  font-size: var(--font-size-xl, 20px);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--N900);
+  padding: 0;
 
   .datetime {
-    font-size: 12px;
-    color: #999;
-    margin-left: 16px;
+    font-size: var(--font-size-xs, 12px);
+    color: var(--N500);
+    margin-left: 0;
   }
 }
 
 .description {
-  font-size: 14px;
-  color: #333;
-  padding: 16px;
-  background-color: white;
+  font-size: var(--font-size-md, 14px);
+  line-height: var(--line-height-md, 22px);
+  color: var(--N600);
+  padding: 0;
+  background-color: transparent;
 }
 
 .export-btn {
@@ -174,8 +179,7 @@ export default {
 }
 
 .content {
-  // background-color: white;
-  background-color: #F1F1F1;
+  background-color: transparent;
   height: calc(100vh - 40px);
   overflow-y: auto;
 
@@ -214,7 +218,7 @@ export default {
   }
 
   .charts-zone {
-    padding: 2px 0;
+    padding: 0;
   }
 }
 
@@ -261,7 +265,10 @@ export default {
 }
 
 .charts-zone {
-  padding: 16px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6, 24px);
+  padding: var(--space-6, 24px);
   margin: 0 auto;
   // width: 100%;
   // max-width: 1046px; 不能设置，因为 dashboard 中会引用
@@ -271,7 +278,7 @@ export default {
   :deep(){
     .full-width-chart {
       width: 100%;
-      margin-bottom: 32px;
+      margin-bottom: var(--space-6, 24px);
       position: relative; // 添加相对定位
     }
 
@@ -283,7 +290,7 @@ export default {
     .charts-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
+      gap: var(--space-4, 16px);
       width: 100%;
       margin: 0 auto;
     }
@@ -293,17 +300,18 @@ export default {
     }
 
     .chart-container {
-      background-color: white;
-      border-radius: 4px;
-      padding: 16px;
+      background-color: var(--surface-panel, #fff);
+      border-radius: var(--radius-card, 8px);
+      padding: var(--space-4, 16px);
       // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-      border: 1px solid var(--color-border);
-      transition: all 0.3s ease;
-      max-width: calc(50vw - 30px);
+      border: 1px solid var(--color-border, var(--N200));
+      transition: border-color var(--duration-fast) var(--ease-standard),
+        background-color var(--duration-fast) var(--ease-standard);
+      max-width: none;
       min-width: 300px;
 
       &.full-width {
-        max-width: calc(100vw - 60px);
+        max-width: none;
       }
 
       &.transport-box {
@@ -312,14 +320,14 @@ export default {
     }
 
     .chart-container-title {
-      margin-bottom: 16px;
+      margin-bottom: var(--space-4, 16px);
     }
 
     .chart-container-title-text {
-      font-size: 14px;
-      font-weight: 500;
-      color: #333;
-      margin-bottom: 8px;
+      font-size: var(--font-size-lg, 16px);
+      font-weight: var(--font-weight-semibold, 600);
+      color: var(--N900);
+      margin-bottom: var(--space-2, 8px);
     }
 
     // @media (max-width: 767px) {

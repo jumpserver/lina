@@ -15,13 +15,9 @@
   --el-table-row-hover-bg-color: var(--N50);
   --el-table-current-row-bg-color: rgba(26, 179, 148, 0.08);
   color: var(--N800);
-  font-family: var(--table-font-family) !important;
+  font-family: var(--table-font-family);
   font-size: var(--font-size-base);
-  font-stretch: normal;
-  font-style: normal !important;
-  font-synthesis: none;
-  font-synthesis-style: none;
-  font-variation-settings: normal;
+  font-style: normal;
   border-radius: var(--radius-card);
 
   &::before,
@@ -49,112 +45,50 @@
     height: 40px;
     padding: 0;
     color: var(--N800);
-    font-family: var(--table-font-family) !important;
-    font-stretch: normal;
-    font-style: normal !important;
-    font-synthesis: none;
-    font-synthesis-style: none;
-    font-variation-settings: normal;
+    font-family: var(--table-font-family);
+    font-style: normal;
     line-height: 1.4;
   }
 
   .cell {
     padding: 0 var(--space-3);
-    font-family: var(--table-font-family) !important;
-    font-stretch: normal;
-    font-style: normal !important;
-    font-synthesis: none;
-    font-synthesis-style: none;
-    font-variation-settings: normal;
+    font-family: var(--table-font-family);
+    font-style: normal;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .table-formatter,
-  .table-formatter *,
-  .table-formatter i,
-  .table-formatter em,
-  .table-formatter cite,
-  .table-formatter dfn,
-  .table-formatter var {
-    font-stretch: normal;
-    font-style: normal !important;
-    font-synthesis: none;
-    font-synthesis-style: none;
-    font-variation-settings: normal;
-  }
-
-  td.el-table__cell *,
-  .cell * {
-    font-family: var(--table-font-family) !important;
-    font-stretch: normal;
-    font-style: normal !important;
-    font-synthesis: none;
-    font-synthesis-style: none;
-    font-variation-settings: normal;
-  }
-
-  td.el-table__cell,
-  td.el-table__cell .cell,
-  td.el-table__cell .cell > span,
-  td.el-table__cell .cell > div,
-  td.el-table__cell .cell a,
-  td.el-table__cell .cell p,
-  td.el-table__cell .cell strong,
-  td.el-table__cell .cell small {
-    font-family: var(--table-font-family) !important;
-    font-stretch: normal;
-    font-style: normal !important;
-    font-synthesis: none;
-    font-synthesis-style: none;
-    font-variation-settings: normal;
-  }
-
   i,
   em {
-    font-style: normal !important;
+    font-style: normal;
   }
 
   .el-link,
   .el-link__inner {
-    font-family: var(--table-font-family) !important;
-    font-stretch: normal;
-    font-style: normal !important;
-    font-synthesis: none;
-    font-synthesis-style: none;
-    font-variation-settings: normal;
+    font-family: var(--table-font-family);
+    font-style: normal;
   }
 
   .table-formatter-host {
-    font-family: var(--table-font-family) !important;
-    font-stretch: normal;
-    font-style: normal !important;
-    font-synthesis: none;
-    font-synthesis-style: none;
-    font-variation-settings: normal;
+    font-family: var(--table-font-family);
+    font-style: normal;
   }
 
   .table-formatter-host :where(span, div, a, p, small, strong, b, label) {
-    font-family: var(--table-font-family) !important;
-    font-stretch: normal;
-    font-style: normal !important;
-    font-synthesis: none;
-    font-synthesis-style: none;
-    font-variation-settings: normal;
+    font-family: inherit;
+    font-style: normal;
   }
 
   .table-formatter-host .fa {
     font-family: FontAwesome !important;
-    font-style: normal !important;
-    font-variation-settings: normal;
+    font-style: normal;
   }
 
   .table-formatter-host [class^='el-icon-'],
   .table-formatter-host [class*=' el-icon-'] {
     font-family: element-icons !important;
-    font-style: normal !important;
-    font-variation-settings: normal;
+    font-style: normal;
   }
 
   .table-formatter-host .el-button.el-button--small.action,
@@ -207,7 +141,7 @@
     height: 14px;
     margin: 0 !important;
     font-size: 14px;
-    font-style: normal !important;
+    font-style: normal;
     line-height: 14px;
   }
 

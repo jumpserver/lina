@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <div style="margin-bottom: 12px;">
+    <div class="head">
       <Title :config="config" />
     </div>
     <div class="content">
@@ -83,13 +83,19 @@ export default {
 
 <style lang="scss" scoped>
 .box {
-  padding: 20px;
-  background: #FFFFFF;
+  padding: var(--space-4, 16px);
+  background: var(--surface-panel, #fff);
+  border: 1px solid var(--color-border, var(--N200));
+  border-radius: var(--radius-card, 8px);
+
+  .head {
+    margin-bottom: var(--space-3, 12px);
+  }
 
   .content {
     .el-col {
-      padding-left: 16px;
-      border-left: 1px solid #EFF0F1;
+      padding-left: var(--space-4, 16px);
+      border-left: 1px solid var(--N200);
 
       &:first-child {
         padding-left: 0;
@@ -100,15 +106,16 @@ export default {
     .sub {
       font-style: normal;
       font-weight: 400;
-      font-size: 12px;
-      line-height: 20px;
-      color: #646A73;
+      font-size: var(--font-size-xs, 12px);
+      line-height: var(--line-height-xs, 18px);
+      color: var(--N600);
     }
 
     .num {
       font-style: normal;
       font-weight: 500;
-      font-size: 24px;
+      font-size: 20px;
+      line-height: 28px;
       cursor: pointer;
     }
   }

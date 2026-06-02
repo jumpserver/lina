@@ -34,23 +34,29 @@ export default {
 
 <style lang="scss" scoped>
 .content {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1, 4px);
+
   .title {
-    font-weight: 500;
-    font-size: 16px;
-    color: #1F2329;
+    color: var(--N900);
+    font-size: var(--font-size-lg, 16px);
+    font-weight: var(--font-weight-semibold, 600);
+    line-height: var(--line-height-lg, 24px);
   }
+
   .icon {
-    color: #BBBFC4;
-    font-size: 16px;
+    color: var(--N400);
+    font-size: var(--icon-size-base, 16px);
     cursor: pointer;
   }
+
   .time {
     font-style: normal;
     font-weight: 400;
-    font-size: 10px;
-    margin-left: 8px;
-    color: #8F959E;
+    font-size: var(--font-size-xs, 12px);
+    margin-left: var(--space-2, 8px);
+    color: var(--N500);
   }
 }
 

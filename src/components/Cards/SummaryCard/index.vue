@@ -79,10 +79,11 @@ export default {
 
   .title {
     font-style: normal;
-    font-weight: 600;
-    font-size: 12px;
-    text-transform: uppercase;
-    line-height: 1.2;
+    font-weight: var(--font-weight-regular, 400);
+    font-size: var(--font-size-sm, 13px);
+    text-transform: none;
+    line-height: var(--line-height-sm, 20px);
+    color: var(--N600);
   }
 }
 
@@ -91,10 +92,10 @@ export default {
 
   .num {
     font-style: normal;
-    font-weight: 500;
+    font-weight: var(--font-weight-medium, 500);
     font-size: 24px;
-    line-height: 40px;
-    color: var(--color-text-primary);
+    line-height: 32px;
+    color: var(--N900);
     cursor: pointer;
 
     &.can-direct:hover {

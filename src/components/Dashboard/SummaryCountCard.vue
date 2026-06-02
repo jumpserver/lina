@@ -1,13 +1,16 @@
 <template>
   <div class="box">
-    <div style="margin-bottom: 12px;">
+    <div class="head">
       <Title :config="config" />
     </div>
     <div class="content">
-      <SummaryCard v-bind="item.body" v-for="item of items"
+      <SummaryCard
+        v-for="item of items"
         :key="item.title"
+        v-bind="item.body"
         :title="item.title"
-        class="summary-card" />
+        class="summary-card"
+      />
     </div>
   </div>
 </template>
@@ -41,17 +44,23 @@ export default {
 
 <style lang="scss" scoped>
 .box {
-  padding: 20px;
-  background: #FFFFFF;
+  padding: var(--space-4, 16px);
+  background: var(--surface-panel, #fff);
+  border: 1px solid var(--color-border, var(--N200));
+  border-radius: var(--radius-card, 8px);
+
+  .head {
+    margin-bottom: var(--space-3, 12px);
+  }
 
   .content {
     display: flex;
     justify-content: space-between;
-    padding: 0 10px;
+    padding: 0;
 
     .summary-card {
-      padding-left: 16px;
-      border-left: 1px solid #EFF0F1;
+      padding-left: var(--space-4, 16px);
+      border-left: 1px solid var(--N200);
 
       &:first-child {
         padding-left: 0;

@@ -6,7 +6,7 @@
         <PasswordExpireTip />
       </slot>
     </div>
-    <div v-if="debug" class="page-heading-context-row">
+    <div v-if="showDebugContext" class="page-heading-context-row">
       <SqlQueryTip />
     </div>
     <div class="page-heading">
@@ -47,7 +47,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['inDrawer'])
+    ...mapGetters(['inDrawer', 'showSqlQueryCounter', 'sqlQueryCounter']),
+    showDebugContext() {
+      return this.debug && this.showSqlQueryCounter && (this.sqlQueryCounter || []).length > 0
+    }
   }
 }
 </script>

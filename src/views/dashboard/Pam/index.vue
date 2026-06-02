@@ -1,7 +1,7 @@
 <template>
   <Page>
-    <div v-if="$hasPerm('rbac.view_pam')">
-      <Announcement />
+    <div v-if="$hasPerm('rbac.view_pam')" class="dashboard-home">
+      <Announcement class="dashboard-announcement" />
       <PamReport :nav="false" :only-charts="true" />
     </div>
     <Page403 v-else />
@@ -31,4 +31,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.dashboard-home {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-announcement {
+  :deep(.announcement) {
+    margin-bottom: var(--space-4, 16px);
+  }
+}
 </style>

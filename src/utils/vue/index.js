@@ -94,10 +94,15 @@ export function getRouteUrl(route, router) {
     route = { name: route }
   }
 
-  const r = router.resolve(route)
+  let r
+  try {
+    r = router.resolve(route)
+  } catch (error) {
+    return route.path || ''
+  }
 
   if (!r) {
-    return
+    return route.path || ''
   }
   return r.path || r.href
 }

@@ -3,7 +3,7 @@
     <div class="head">
       <Title :config="config" />
     </div>
-    <LineChart v-bind="lineChartConfig" v-if="loading" />
+    <LineChart v-if="loading" v-bind="lineChartConfig" />
   </div>
 </template>
 
@@ -60,14 +60,17 @@ export default {
 
 <style lang="scss" scoped>
 .box {
-  margin-top: 16px;
-  padding: 20px;
-  background: #fff;
+  margin-top: var(--space-4, 16px);
+  padding: var(--space-4, 16px);
+  background: var(--surface-panel, #fff);
+  border: 1px solid var(--color-border, var(--N200));
+  border-radius: var(--radius-card, 8px);
 
   .head {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    margin-bottom: 8px;
+    margin-bottom: var(--space-3, 12px);
   }
 }
 </style>

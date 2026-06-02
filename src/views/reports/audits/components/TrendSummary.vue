@@ -1,6 +1,8 @@
 <template>
   <div class="chart-container full-width">
-    <Title :config="config" style="margin: 10px 0;" />
+    <div class="head">
+      <Title :config="config" />
+    </div>
     <ColumnChart v-bind="columnChartConfig" />
   </div>
 </template>
@@ -53,6 +55,10 @@ export default {
 
 <style lang="scss" scoped>
 .chart-container {
-  padding-bottom: 20px;
+  padding-bottom: var(--space-4, 16px);
+}
+
+.head {
+  margin-bottom: var(--space-3, 12px);
 }
 </style>

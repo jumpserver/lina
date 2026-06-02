@@ -1,13 +1,20 @@
 <template>
-  <echarts v-bind="$attrs" :option="iOptions" autoresize
-    @finished="onFinished" />
+  <VueECharts
+    v-bind="$attrs"
+    :option="iOptions"
+    autoresize
+    class="dashboard-echart"
+    @finished="onFinished"
+  />
 </template>
 
 <script>
-import 'echarts'
+import VueECharts from 'vue-echarts'
 
 export default {
-  components: {},
+  components: {
+    VueECharts
+  },
   props: {
     options: {
       type: Object,
@@ -64,4 +71,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.dashboard-echart {
+  width: 100%;
+  height: 100%;
+  min-height: 240px;
+}
 </style>

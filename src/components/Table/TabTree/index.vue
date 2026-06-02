@@ -193,11 +193,7 @@ export default {
   height: 100%;
   color: var(--N800);
   font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
-  font-stretch: normal;
   font-style: normal;
-  font-synthesis: none;
-  font-synthesis-style: none;
-  font-variation-settings: normal;
 }
 
 .page-submenu {
@@ -338,12 +334,8 @@ export default {
 }
 
 :deep(.ztree li span.node_name) {
-  font-family: 'Inter','PingFang SC', 'Microsoft YaHei', Arial, sans-serif !important;
-  font-stretch: normal;
-  font-style: normal !important;
-  font-synthesis: none;
-  font-synthesis-style: none;
-  font-variation-settings: normal;
+  font-family: inherit;
+  font-style: normal;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

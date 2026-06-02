@@ -63,8 +63,6 @@ body {
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
   font-style: normal;
-  font-synthesis: none;
-  font-synthesis-style: none;
   font-weight: var(--font-weight-regular);
   line-height: var(--line-height-base);
 }
@@ -99,8 +97,6 @@ body
     var
   ) {
   font-style: normal;
-  font-synthesis: none;
-  font-synthesis-style: none;
 }
 
 path {
@@ -220,7 +216,7 @@ input,
 optgroup,
 select,
 textarea {
-  font-family: var(--font-family-base) !important;
+  font-family: var(--font-family-base);
   font-style: normal;
 }
 
@@ -549,7 +545,7 @@ input[type='file'] {
 }
 
 .el-input input::placeholder {
-  font-weight: 400 !important;
+  font-weight: 400;
   font-family: var(--font-family-base);
   font-size: 13px;
 }
@@ -625,24 +621,16 @@ li.rmenu i.fa {
 .el-table .table-formatter-host,
 .el-data-table .table-formatter,
 .el-data-table .table-formatter-host {
-  font-family: var(--table-font-family, var(--font-family-base)) !important;
-  font-stretch: normal;
-  font-style: normal !important;
-  font-synthesis: none;
-  font-synthesis-style: none;
-  font-variation-settings: normal;
+  font-family: var(--table-font-family, var(--font-family-base));
+  font-style: normal;
 }
 
 .el-table .table-formatter :where(span, div, a, p, small, strong, b, label),
 .el-table .table-formatter-host :where(span, div, a, p, small, strong, b, label),
 .el-data-table .table-formatter :where(span, div, a, p, small, strong, b, label),
 .el-data-table .table-formatter-host :where(span, div, a, p, small, strong, b, label) {
-  font-family: var(--table-font-family, var(--font-family-base)) !important;
-  font-stretch: normal;
-  font-style: normal !important;
-  font-synthesis: none;
-  font-synthesis-style: none;
-  font-variation-settings: normal;
+  font-family: inherit;
+  font-style: normal;
 }
 
 .el-table .table-formatter .fa,
@@ -650,7 +638,7 @@ li.rmenu i.fa {
 .el-data-table .table-formatter .fa,
 .el-data-table .table-formatter-host .fa {
   font-family: FontAwesome !important;
-  font-style: normal !important;
+  font-style: normal;
 }
 
 .el-table .table-formatter [class^='el-icon-'],
@@ -662,7 +650,7 @@ li.rmenu i.fa {
 .el-data-table .table-formatter-host [class^='el-icon-'],
 .el-data-table .table-formatter-host [class*=' el-icon-'] {
   font-family: element-icons !important;
-  font-style: normal !important;
+  font-style: normal;
 }
 
 .el-checkbox__input {

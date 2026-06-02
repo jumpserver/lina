@@ -9,9 +9,6 @@
 </template>
 
 <script>
-import 'echarts/lib/chart/line'
-import 'echarts/lib/component/legend'
-
 import Decimal from 'decimal.js'
 import Echart from '@/components/Dashboard/Echart.vue'
 

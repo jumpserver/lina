@@ -75,10 +75,13 @@ export default {
           itemWidth: 10,
           itemHeight: 10,
           textStyle: {
-            color: '#000',
-            lineHeight: 10
+            color: '#646A73',
+            fontFamily: 'Inter, PingFang SC, Microsoft YaHei, Arial, sans-serif',
+            fontSize: 12,
+            fontWeight: 400,
+            lineHeight: 18
           },
-          bottom: 30,
+          bottom: 24,
           data: labels
 
         },
@@ -135,9 +138,9 @@ export default {
           appendToBody: true
         },
         grid: {
-          top: '60%',
+          top: '58%',
           containLabel: true,
-          bottom: '-10',
+          bottom: 0,
           left: '0%',
           right: 1
         },
@@ -182,6 +185,6 @@ export default {
 <style lang="scss" scoped>
 .echarts {
   width: 100%;
-  height: 72px;
+  height: 88px;
 }
 </style>

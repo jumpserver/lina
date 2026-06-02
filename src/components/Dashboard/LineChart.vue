@@ -79,23 +79,31 @@ export default {
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-            type: 'cross',
+            type: 'line',
             label: {
               backgroundColor: '#6a7985'
             }
           }
         },
         legend: {
-          left: 'auto',
+          top: 0,
+          right: 0,
           icon: 'rect',
           // 图例标记的图形宽度
           itemWidth: 10,
-          itemHeight: 10
+          itemHeight: 10,
+          textStyle: {
+            color: '#646A73',
+            fontFamily: 'Inter, PingFang SC, Microsoft YaHei, Arial, sans-serif',
+            fontSize: 12,
+            fontWeight: 400
+          }
         },
         grid: {
           left: '3%',
           right: '4%',
-          bottom: '3%',
+          top: 44,
+          bottom: 28,
           containLabel: true
         },
         color: [primary, '#F3B44B'],
@@ -105,12 +113,15 @@ export default {
             boundaryGap: false,
             axisLine: {
               lineStyle: {
-                color: '#8F959E'
+                color: '#D8DCE0'
               }
             },
             axisLabel: {
+              hideOverlap: true,
+              interval: 'auto',
               textStyle: {
-                color: '#8F959E'
+                color: '#8F959E',
+                fontSize: 12
               }
             },
             axisTick: {
@@ -123,6 +134,8 @@ export default {
           {
             type: 'value',
             name: '',
+            minInterval: 1,
+            splitNumber: 4,
             axisLine: {
               show: false,
               lineStyle: {
@@ -131,7 +144,8 @@ export default {
             },
             axisLabel: {
               textStyle: {
-                color: '#8F959E'
+                color: '#8F959E',
+                fontSize: 12
               }
             },
             axisTick: {
@@ -141,7 +155,8 @@ export default {
             splitLine: {
               show: true,
               lineStyle: {
-                color: '#EFF0F1'
+                color: '#EFF0F1',
+                type: 'dashed'
               }
             }
           }

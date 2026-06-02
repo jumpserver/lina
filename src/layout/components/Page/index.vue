@@ -165,7 +165,7 @@ export default {
     display: flex;
     flex: 1 1 auto; /* 占用剩余高度 */
     flex-direction: column;
-    gap: var(--space-4);
+    gap: var(--space-2);
     width: 100%;
     min-width: 0;
     min-height: 0;

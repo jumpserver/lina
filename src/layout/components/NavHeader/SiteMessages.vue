@@ -257,7 +257,7 @@ export default {
   }
 
   .msg-icon {
-    font-size: 13px !important;
+    font-size: 13px;
     line-height: 13px;
     color: gray !important;
   }
@@ -410,7 +410,7 @@ export default {
           display: inline-block;
 
           strong {
-            font-weight: 400 !important;
+            font-weight: 400;
           }
         }
 

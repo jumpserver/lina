@@ -59,12 +59,14 @@ export default {
 <style lang="scss" scoped>
 .card {
   width: 100%;
-  padding: 20px;
-  background-color: #FFF;
+  padding: var(--space-4, 16px);
+  background-color: var(--surface-panel, #fff);
+  border: 1px solid var(--color-border, var(--N200));
+  border-radius: var(--radius-card, 8px);
 
   .card-content {
-    padding-bottom: 16px;
-    border-bottom: 1px solid #EFF0F1;
+    padding-bottom: var(--space-4, 16px);
+    border-bottom: 1px solid var(--N200);
 
     .title,
     .num {
@@ -72,14 +74,14 @@ export default {
     }
 
     .title {
-      margin-bottom: 12px;
+      margin-bottom: var(--space-3, 12px);
     }
 
     .num {
-      font-weight: 500;
+      font-weight: var(--font-weight-medium, 500);
       font-size: 32px;
       line-height: 40px;
-      margin-bottom: 4px;
+      margin-bottom: var(--space-1, 4px);
     }
 
     .sub,
@@ -89,9 +91,9 @@ export default {
 
     .sub {
       font-weight: 400;
-      font-size: 12px;
-      line-height: 20px;
-      margin-bottom: 4px;
+      font-size: var(--font-size-sm, 13px);
+      line-height: var(--line-height-sm, 20px);
+      margin-bottom: var(--space-1, 4px);
     }
 
     .add {
@@ -109,11 +111,11 @@ export default {
   }
 
   .ring {
-    padding: 26px 0 10px;
+    padding: var(--space-4, 16px) 0 0;
 
     & :deep(.echarts) {
       width: 100% !important;
-      height: 278px !important;
+      height: 240px !important;
     }
   }
 

@@ -2,12 +2,6 @@
   color-scheme: light;
 }
 
-html,
-body {
-  font-synthesis: none;
-  font-synthesis-style: none;
-}
-
 html {
   height: 100%;
   box-sizing: border-box;
@@ -33,8 +27,6 @@ body {
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
   font-style: normal;
-  font-synthesis: none;
-  font-synthesis-style: none;
   font-weight: var(--font-weight-regular);
   line-height: var(--line-height-base);
   letter-spacing: 0;
@@ -43,8 +35,6 @@ body {
 
 body :where(span, div, p, a, label, small, strong, b, td, th, input, textarea, select, button, h1, h2, h3, h4, h5, h6, li, i, em, cite, dfn, var) {
   font-style: normal;
-  font-synthesis: none;
-  font-synthesis-style: none;
 }
 
 path {
@@ -60,10 +50,8 @@ input,
 optgroup,
 select,
 textarea {
-  font-family: var(--font-family-base) !important;
+  font-family: var(--font-family-base);
   font-style: normal;
-  font-synthesis: none;
-  font-synthesis-style: none;
 }
 
 i,

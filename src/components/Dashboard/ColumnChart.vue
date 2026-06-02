@@ -51,9 +51,9 @@ export default {
       return {
         grid: {
           left: '2%',
-          top: '3%',
+          top: '8%',
           right: '2%',
-          bottom: '1%',
+          bottom: '2%',
           containLabel: true
         },
         tooltip: {
@@ -66,19 +66,19 @@ export default {
           nameGap: 35,
           nameTextStyle: {
             color: '#8796AD',
-            fontSize: '16'
+            fontSize: 12
           },
           axisLabel: {
             textStyle: {
               color: '#8796AD',
-              fontSize: '14'
+              fontSize: 12
             }
           },
           data: this.datesMetrics,
           axisLine: {
             lineStyle: {
               width: 2,
-              color: '#BBBFC4'
+              color: '#D8DCE0'
             }
           },
           axisTick: {
@@ -92,12 +92,12 @@ export default {
           nameGap: 45,
           nameTextStyle: {
             color: '#8796AD',
-            fontSize: '16'
+            fontSize: 12
           },
           axisLabel: {
             textStyle: {
               color: '#8796AD',
-              fontSize: '14'
+              fontSize: 12
             }
           },
           axisTick: {
@@ -108,7 +108,8 @@ export default {
           },
           splitLine: {
             lineStyle: {
-              color: 'rgba(160,160,160,0.3)'
+              color: '#EFF0F1',
+              type: 'dashed'
             }
           }
         }],
@@ -116,7 +117,7 @@ export default {
           type: 'bar',
           name: this.primaryName,
           stack: 1,
-          barWidth: '20%',
+          barWidth: 16,
           borderWidth: 0,
           itemStyle: {
             normal: {
@@ -142,8 +143,8 @@ export default {
           type: 'pictorialBar',
           name: this.primaryName,
           symbol: 'rect',
-          symbolSize: ['25%', 6],
-          symbolOffset: [0, -6],
+          symbolSize: [20, 4],
+          symbolOffset: [0, -4],
           z: 12,
           itemStyle: {
             normal: {

@@ -423,12 +423,8 @@ export default {
 
 :deep(.ztree a),
 :deep(.ztree span.node_name) {
-  font-family: var(--tree-font-family, 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif) !important;
-  font-stretch: normal;
-  font-style: normal !important;
-  font-synthesis: none;
-  font-synthesis-style: none;
-  font-variation-settings: normal;
+  font-family: var(--tree-font-family, 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif);
+  font-style: normal;
 }
 
 :deep(.ztree li a) {

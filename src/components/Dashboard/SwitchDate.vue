@@ -1,11 +1,15 @@
 <template>
-  <span>
-    <el-radio-group v-model="select" class="switch" size="small" @change="onChange">
-      <el-radio-button v-for="i in iOptions" :key="i.value" :label="i.value">
-        {{ i.label }}
-      </el-radio-button>
-    </el-radio-group>
-  </span>
+  <el-button-group class="switch">
+    <el-button
+      v-for="i in iOptions"
+      :key="i.value"
+      :class="{ 'is-active': select === i.value }"
+      size="small"
+      @click="onChange(i.value)"
+    >
+      {{ i.label }}
+    </el-button>
+  </el-button-group>
 </template>
 
 <script>
@@ -65,6 +69,7 @@ export default {
   },
   methods: {
     onChange(val) {
+      this.select = val
       localStorage.setItem(this.name, val)
       this.$emit('change', val)
     }
@@ -73,27 +78,43 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$origin-color: #ffffff;
-
 .switch {
-  font-weight: 400;
+  display: inline-flex;
+  height: var(--button-height-sm, 32px);
+  padding: 0;
+  border: 1px solid var(--N200);
+  border-radius: var(--radius-md, 6px);
+  background: var(--surface-panel, #fff);
+  font-weight: var(--font-weight-medium, 500);
+  overflow: hidden;
 
-  :deep(.el-radio-button) {
-    &.is-active {
-      .el-radio-button__inner {
-        border-color: var(--color-primary);
-        color: var(--color-primary);
-        background-color: $origin-color;
-      }
+  :deep(.el-button) {
+    height: 30px;
+    min-width: 56px;
+    padding: 0 var(--space-3, 12px);
+    border: 0;
+    border-left: 1px solid var(--N200);
+    border-radius: 0;
+    background: var(--surface-panel, #fff);
+    color: var(--N600);
+    font-size: var(--font-size-sm, 13px);
+    font-weight: var(--font-weight-medium, 500);
+    line-height: 30px;
+    box-shadow: none;
+
+    &:first-child {
+      border-left: 0;
+    }
+
+    &:hover {
+      background: var(--N50);
+      color: var(--N900);
     }
   }
 
-  :deep(.el-radio-button) {
-    .el-radio-button__inner {
-      color: var(--color-text-primary);
-      background: $origin-color;
-      border-radius: 0;
-    }
+  :deep(.el-button.is-active) {
+    background: rgba(26, 179, 148, 0.08);
+    color: var(--color-primary);
   }
 }
 </style>

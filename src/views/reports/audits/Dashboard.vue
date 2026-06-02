@@ -1,12 +1,15 @@
 <template>
-  <BaseReport v-bind="$attrs" :url="url"
+  <BaseReport
+    v-bind="$attrs"
+    :url="url"
     :nav="nav"
     :title="$t('AuditsDashboard')"
     :disable-charts-padding="true"
-    name="AuditsDashboard">
+    name="AuditsDashboard"
+  >
     <SwitchDate class="switch-date" :name="name" @change="onChange" />
     <CardSummary :days="days" />
-    <el-row :gutter="10">
+    <el-row :gutter="16" class="dashboard-grid-row">
       <el-col :span="12" :md="12">
         <DataSummary class="chart-container" :days="days" />
       </el-col>
@@ -46,7 +49,7 @@ export default {
     return {
       name: 'AuditsDashboard',
       days: localStorage.getItem(this.name) || '7',
-      url: getRouteUrl('AuditsReport', this.$router)
+      url: getRouteUrl({ name: 'AuditsReport', path: '/reports/dashboard/audits' }, this.$router)
     }
   },
   methods: {
@@ -58,6 +61,14 @@ export default {
 </script>
 <style lang="scss" scoped>
 .chart-container {
-  margin-top: 16px;
+  margin-top: var(--space-4, 16px);
+}
+
+.switch-date {
+  margin-bottom: var(--space-4, 16px);
+}
+
+.dashboard-grid-row {
+  margin-top: var(--space-4, 16px);
 }
 </style>

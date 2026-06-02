@@ -13,12 +13,7 @@
 
 <script>
 import Title from '@/components/Dashboard/Title.vue'
-import * as echarts from 'echarts'
 import Echart from '@/components/Dashboard/Echart.vue'
-import 'echarts/lib/chart/pie'
-import 'echarts/lib/component/tooltip'
-import 'echarts/lib/component/title'
-import 'echarts/lib/component/legend'
 
 export default {
   name: 'MissionSummery',
@@ -35,8 +30,7 @@ export default {
         total_count_gathered_account_automation: 0,
         total_count_backup_account_automation: 0,
         total_count_integration_application: 0
-      },
-      chart: null
+      }
     }
   },
   computed: {
@@ -109,26 +103,8 @@ export default {
       }
     }
   },
-  watch: {
-    counter: {
-      handler() {
-        this.updateChart()
-      },
-      deep: true
-    }
-  },
   async mounted() {
-    // this.initChart()
     this.counter = await this.getResourcesCount()
-    // this.updateChart()
-    // window.addEventListener('resize', this.resizeChart)
-  },
-  beforeUnmount() {
-    // if (this.chart) {
-    //   this.chart.dispose()
-    //   this.chart = null
-    // }
-    // window.removeEventListener('resize', this.resizeChart)
   },
   methods: {
     async getResourcesCount() {
@@ -141,20 +117,6 @@ export default {
           total_count_integration_application: 1
         }
       })
-    },
-    initChart() {
-      this.chart = echarts.init(this.$refs.chartRef)
-      this.chart.setOption(this.chartOption)
-    },
-    updateChart() {
-      if (this.chart) {
-        this.chart.setOption(this.chartOption)
-      }
-    },
-    resizeChart() {
-      if (this.chart) {
-        this.chart.resize()
-      }
     }
   }
 }
@@ -165,24 +127,25 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: #fff;
-  border-radius: 4px;
+  background: var(--surface-panel, #fff);
+  border: 1px solid var(--color-border, var(--N200));
+  border-radius: var(--radius-card, 8px);
 
   .header {
-    padding: 1.2rem 1.25rem 0;
-    margin-bottom: 8px;
+    padding: var(--space-4, 16px) var(--space-4, 16px) 0;
+    margin-bottom: var(--space-3, 12px);
   }
 
   .chart-content {
     flex: 1;
     min-height: 0;
-    padding: 0 10px 0;
+    padding: 0 var(--space-4, 16px) var(--space-4, 16px);
     display: flex;
     align-items: center;
     justify-content: center;
 
     :deep(.echarts) {
-      height: 14.25rem;
+      height: 240px;
     }
   }
 }

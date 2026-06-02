@@ -91,13 +91,15 @@ export default {
 
 <style lang="scss" scoped>
 .box {
-  padding: 20px;
-  background: #FFFFFF;
+  padding: var(--space-4, 16px);
+  background: var(--surface-panel, #fff);
+  border: 1px solid var(--color-border, var(--N200));
+  border-radius: var(--radius-card, 8px);
 
   .content {
     .el-col {
-      padding-left: 16px;
-      border-left: 1px solid #EFF0F1;
+      padding-left: var(--space-4, 16px);
+      border-left: 1px solid var(--N200);
 
       &:first-child {
         padding-left: 0;
@@ -108,15 +110,16 @@ export default {
     .sub {
       font-style: normal;
       font-weight: 400;
-      font-size: 12px;
-      line-height: 20px;
-      color: #646A73;
+      font-size: var(--font-size-sm, 13px);
+      line-height: var(--line-height-sm, 20px);
+      color: var(--N600);
     }
 
     .num {
       font-style: normal;
       font-weight: 500;
       font-size: 24px;
+      line-height: 32px;
       cursor: pointer;
     }
   }

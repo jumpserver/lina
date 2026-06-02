@@ -1,7 +1,7 @@
 <template>
   <Page>
-    <div v-if="$hasPerm('rbac.view_audit')">
-      <Announcement />
+    <div v-if="$hasPerm('rbac.view_audit')" class="dashboard-home">
+      <Announcement class="dashboard-announcement" />
       <AuditReport :only-charts="true" :nav="false" />
     </div>
     <Page403 v-else />
@@ -34,3 +34,16 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.dashboard-home {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-announcement {
+  :deep(.announcement) {
+    margin-bottom: var(--space-4, 16px);
+  }
+}
+</style>

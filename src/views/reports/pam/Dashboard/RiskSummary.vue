@@ -4,17 +4,17 @@
       <Title :config="config" />
     </div>
     <div class="metrics-section">
-      <div ref="chartRef" class="the-chart" />
+      <Echart class="the-chart" :options="chartOption" @click="onChartClick" />
     </div>
   </div>
 </template>
 
 <script>
-import * as echarts from 'echarts'
+import Echart from '@/components/Dashboard/Echart.vue'
 import Title from '@/components/Dashboard/Title.vue'
 
 export default {
-  components: { Title },
+  components: { Echart, Title },
   props: {
     isTitle: {
       type: Boolean,
@@ -39,8 +39,7 @@ export default {
         total_weak_password_accounts: '.',
         total_leaked_password_accounts: '.',
         total_repeated_password_accounts: '.'
-      },
-      chart: null
+      }
     }
   },
   computed: {
@@ -113,7 +112,7 @@ export default {
       }
 
       // 找出所有数据中最大的值，并设置为 x 轴的 max。如果全是零则设置为 10
-      const maxValue = Math.max(...filteredData.map(item => item.value))
+      const maxValue = Math.max(...filteredData.map(item => Number(item.value) || 0))
       const max = maxValue > 0 ? maxValue : 10
 
       return {
@@ -169,7 +168,7 @@ export default {
             type: 'bar',
             data: filteredData.map(item => ({
               name: item.name,
-              value: item.value,
+              value: Number(item.value) || 0,
               description: item.description
             })),
             barWidth: '60%',
@@ -190,25 +189,8 @@ export default {
       }
     }
   },
-  watch: {
-    counter: {
-      handler() {
-        this.updateChart()
-      },
-      deep: true
-    }
-  },
   async mounted() {
     this.counter = await this.getResourcesCount()
-    this.initChart()
-    window.addEventListener('resize', this.resizeChart)
-  },
-  beforeUnmount() {
-    if (this.chart) {
-      this.chart.dispose()
-      this.chart = null
-    }
-    window.removeEventListener('resize', this.resizeChart)
   },
   methods: {
     async getResourcesCount() {
@@ -228,31 +210,17 @@ export default {
         }
       })
     },
-    initChart() {
-      this.chart = echarts.init(this.$refs.chartRef)
-      this.chart.setOption(this.chartOption)
-
-      if (this.$hasPerm('accounts.view_accountrisk')) {
-        this.chart.on('click', (params) => {
-          if (params.componentType === 'series') {
-            this.$router.push({
-              name: 'AccountCheckList',
-              query: {
-                payload: params.data.description
-              }
-            })
+    onChartClick(params) {
+      if (!this.$hasPerm('accounts.view_accountrisk')) {
+        return
+      }
+      if (params.componentType === 'series') {
+        this.$router.push({
+          name: 'AccountCheckList',
+          query: {
+            payload: params.data.description
           }
         })
-      }
-    },
-    updateChart() {
-      if (this.chart) {
-        this.chart.setOption(this.chartOption)
-      }
-    },
-    resizeChart() {
-      if (this.chart) {
-        this.chart.resize()
       }
     }
   }
@@ -263,40 +231,41 @@ export default {
 .card {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-3, 12px);
   width: 100%;
   height: 100%;
-  padding: 1.25rem;
-  background-color: #fff;
+  padding: var(--space-4, 16px);
+  background-color: var(--surface-panel, #fff);
   overflow: hidden;
+  border: 1px solid var(--color-border, var(--N200));
+  border-radius: var(--radius-card, 8px);
 
   .metrics-section {
     display: flex;
     flex-wrap: wrap;
-    row-gap: 1.25rem;
+    row-gap: var(--space-4, 16px);
 
     .metric-item {
       width: 25%;
       cursor: pointer;
-      transition: all 0.3s ease-in-out;
+      transition: color var(--duration-fast) var(--ease-standard);
 
       :deep(.summary-header) {
         .title {
-          color: #646a73;
-          font-size: 0.9rem;
+          color: var(--N600);
+          font-size: var(--font-size-sm, 13px);
           font-weight: 400;
-          line-height: 1.4rem;
+          line-height: var(--line-height-sm, 20px);
           text-transform: unset;
         }
 
         h3 span {
-          font-size: 1.5rem;
+          font-size: 24px;
+          line-height: 32px;
         }
       }
 
       &:hover {
-        transform: translateY(-0.2rem);
-
         :deep(.no-margins) {
           .num {
             color: var(--color-primary);
@@ -309,6 +278,6 @@ export default {
 
 .the-chart {
   width: 100%;
-  height: 16rem;
+  height: 256px;
 }
 </style>

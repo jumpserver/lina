@@ -1,13 +1,7 @@
 <template>
-  <div>
-    <el-row :gutter="16">
-      <el-col :lg="12" :sm="12">
-        <DataCard :config="userConfig" />
-      </el-col>
-      <el-col :lg="12" :sm="12">
-        <DataCard :config="assetConfig" />
-      </el-col>
-    </el-row>
+  <div class="data-summary-grid">
+    <DataCard :config="userConfig" />
+    <DataCard :config="assetConfig" />
   </div>
 </template>
 
@@ -71,10 +65,10 @@ export default {
         { name: this.$t('ActiveUser'), value: userActive.toString() },
         { name: this.$t('InActiveUser'), value: userTotal.toString() }
       ]
-      this.$set(this.userConfig, 'data', users)
-      this.$set(this.userConfig, 'total', data.total_count_users)
-      this.$set(this.userConfig, 'active', data.total_count_login_users)
-      this.$set(this.userConfig, 'weekAdd', data.total_count_users_this_week)
+      this.userConfig.data = users
+      this.userConfig.total = data.total_count_users
+      this.userConfig.active = data.total_count_login_users
+      this.userConfig.weekAdd = data.total_count_users_this_week
 
       const ActiveAssetCountDecimal = data.total_count_today_active_assets ? new Decimal(data.total_count_today_active_assets) : new Decimal(0)
       const AssetCountDecimal = data.total_count_assets ? new Decimal(data.total_count_assets) : new Decimal(0)
@@ -87,17 +81,30 @@ export default {
         { name: this.$t('ActiveAsset'), value: assetActive.toString() },
         { name: this.$t('InActiveAsset'), value: assetTotal.toString() }
       ]
-      this.$set(this.assetConfig, 'data', assets)
-      this.$set(this.assetConfig, 'total', data.total_count_assets)
-      this.$set(this.assetConfig, 'active', data.total_count_today_active_assets)
-      this.$set(this.assetConfig, 'weekAdd', data.total_count_assets_this_week)
+      this.assetConfig.data = assets
+      this.assetConfig.total = data.total_count_assets
+      this.assetConfig.active = data.total_count_today_active_assets
+      this.assetConfig.weekAdd = data.total_count_assets_this_week
     }
   }
 }
 </script>
 
-<style scoped>
-.left, .right {
-  display: inline-block;
+<style lang="scss" scoped>
+.data-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4, 16px);
+  height: 100%;
+
+  :deep(.card) {
+    height: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .data-summary-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

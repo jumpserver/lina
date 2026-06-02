@@ -3,7 +3,9 @@
     <div class="head">
       <Title :config="config" />
     </div>
-    <LineChart v-bind="lineChartConfig" v-if="loading" />
+    <div class="chart-body">
+      <LineChart v-if="loading" v-bind="lineChartConfig" />
+    </div>
   </div>
 </template>
 
@@ -73,14 +75,39 @@ export default {
 
 <style lang="scss" scoped>
 .box {
-  margin-top: 16px;
-  padding: 20px;
-  background: #fff;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 360px;
+  padding: var(--space-4, 16px);
+  background: var(--surface-panel, #fff);
+  border: 1px solid var(--color-border, var(--N200));
+  border-radius: var(--radius-card, 8px);
 
   .head {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    margin-bottom: 8px;
+    margin-bottom: var(--space-3, 12px);
   }
+}
+
+.chart-body {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  flex: 1;
+  min-height: 0;
+  padding-top: var(--space-4, 16px);
+}
+
+.chart-body > :deep(div) {
+  width: 100%;
+}
+
+:deep(.dashboard-echart) {
+  height: 304px !important;
+  min-height: 304px;
 }
 </style>
