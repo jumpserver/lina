@@ -101,6 +101,11 @@ info:
       scope: admin
       value: "{{ config.enroll.validity_days }}"
 
+    - key: vendor
+      label: "设备厂商"
+      scope: admin
+      value: "吉大"
+
   # 右上「证书信息」区域的字段，每个字段单独调用 SDK 方法或写固定 value 获取
   # 取值方式（二选一，call 优先级高于 value）：
   #   call + args — 调用 UKey 方法，返回值作为显示内容

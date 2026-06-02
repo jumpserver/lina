@@ -10,6 +10,24 @@ meta:
   description: "龙脉 UKey Web SDK 驱动配置"
 
 
+# - 配置信息 
+config:
+  # 非对称密钥的算法
+  asymAlg: 
+    SM2: 131328
+    RSA-1024: 65536
+    RSA-2048: 65536
+    default: 131328
+  # 密钥类型
+  keySpec: 1  # 1 表示签名密钥
+  # 密钥长度（位）
+  keyLength:
+    SM2: 256
+    RSA-1024: 1024
+    RSA-2048: 2048
+    default: 256
+
+
 #═══════════════════════════════════════════════════════════════════════════════
 # driver: SDK 脚本加载、实例创建、初始化步骤
 #
@@ -65,6 +83,12 @@ driver:
         call: SOF_EnumDevice
         args: []
         register: ukey.devSN 
+      
+      - key: releaseAppInstance
+        label: "释放应用实例"
+        call: SOF_ReleaseDeviceInstance
+        args:
+          - "{{ ukey.devSN }}"
 
       # 重要：后续 API 内部会用 devName 
       - key: BindAppInstance
@@ -88,7 +112,7 @@ driver:
         call: SOF_ExportUserCert
         args:
           - "{{ settings.VENDOR }}"  # containerName
-          - 1  # keySpec
+          - "{{ config.keySpec }}"  # keySpec
         register: ukey.cert
 
 #═══════════════════════════════════════════════════════════════════════════════
@@ -129,6 +153,16 @@ info:
       label: "证书签发有效期（天）"
       scope: admin
       value: "{{ config.enroll.validity_days }}"
+    
+    - key: uKeyVendor
+      label: "设备厂商"
+      scope: admin
+      value: "龙脉"
+    
+    - key: asymAlgName
+      label: "非对称算法"
+      scope: both
+      value: "{{ config.asymAlgName }}"
 
   # 右上「证书信息」区域
   #
@@ -305,9 +339,9 @@ operations:
         call: SOF_CreateKeyPair
         args:
           - "{{ settings.VENDOR }}"  # containerName
-          - 1  # keySpec
-          - "{{ instance.SGD_SM2_1 }}" # asymAlg SM2
-          - 256  # keyLength
+          - "{{ config.keySpec }}"  # keySpec
+          - "{{ config.asymAlg }}" # asymAlg SM2
+          - "{{ config.keyLength }}"  # keyLength
         check:
           expr: "{{ result === 0 }}"
           message: "生成密钥对失败，错误码: {{ result }}"
@@ -321,9 +355,9 @@ operations:
             value:
               CN: "{{ user.username }}"
               O: "{{ settings.VENDOR }}"
-          - "{{ instance.SGD_SM2_1 }}" # asymAlg SM2
-          - 1  # keySpec
-          - 256  # keyLength
+          - "{{ config.asymAlg }}" # asymAlg SM2
+          - "{{ config.keySpec }}"  # keySpec
+          - "{{ config.keyLength }}"  # keyLength
         register: vars.csr
         check:
           expr: "{{ result !== null }}"
@@ -345,7 +379,7 @@ operations:
         args: 
           - "{{ settings.VENDOR }}"  # containerName
           - "{{ vars.certData.signed_cert }}"  # cert base64
-          - 1 # keySpec 签名证书
+          - "{{ config.keySpec }}" # keySpec 签名证书
         check:
           expr: "{{ result === 0 }}"
           message: "导入证书失败，错误码: {{ result }}"
@@ -355,7 +389,7 @@ operations:
         call: SOF_ExportUserCert
         args:
           - "{{ settings.VENDOR }}"  # containerName
-          - 1  # keySpec
+          - "{{ config.keySpec }}"  # keySpec
         register: ukey.cert
         check:
           expr: "{{ result != null && result != '' }}"
@@ -396,7 +430,7 @@ operations:
         call: SOF_ExportUserCert
         args:
           - "{{ settings.VENDOR }}"  # containerName
-          - 1  # keySpec
+          - "{{ config.keySpec }}"  # keySpec
         register: ukey.cert
 
   - key: resetPin
