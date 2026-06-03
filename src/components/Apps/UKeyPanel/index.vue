@@ -133,17 +133,17 @@ import { mapGetters } from 'vuex'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import IBox from '@/components/Common/IBox'
 
-const CONFIG_API = '/api/v1/authentication/cert/vendor-driver-config/'
-const DRIVER_SCRIPT_URL = '/api/v1/authentication/cert/vendor-driver.js/'
-const SCRIPT_TAG_ID = 'cert-vendor-driver-sdk'
+const CONFIG_API = '/api/v1/authentication/ukey/ukey-sdk-config/'
+
+const SCRIPT_TAG_ID = 'ukey-sdk-script'
 
 // 模块级单例 — 防止 Vue 响应式代理污染第三方 SDK 对象
 let _instance = null // UKey SDK 实例
-let _ukey = {} // ukey.* 命名空间（driver.setup.steps register 的变量）
+let _ukey = {} // ukey.* 命名空间（sdk.setup.steps register 的变量）
 let _userOverride = null // user.* 命名空间覆盖（操作步骤 register: user 写入）
 
 export default {
-  name: 'CertPanel',
+  name: 'UKeyPanel',
   components: { TwoCol, IBox },
 
   props: {
@@ -162,10 +162,11 @@ export default {
 
   data() {
     return {
-      config: null,
+      sdkConfig: null,
+      config: {},
       configLoaded: false,
-      driverLoaded: false,
-      driverLoadError: false,
+      sdkLoaded: false,
+      sdkLoadError: false,
 
       deviceInfoItems: [], // [{ key, label, value, scope }]
       certInfoItems: [], // [{ key, label, value, tag? }]
@@ -203,10 +204,10 @@ export default {
           tag: this.configLoaded ? 'success' : 'warning'
         },
         {
-          key: '__driver',
-          label: '驱动状态',
-          value: this.driverLoadError ? '加载失败' : this.driverLoaded ? '已就绪' : '加载中...',
-          tag: this.driverLoadError ? 'danger' : this.driverLoaded ? 'success' : 'info'
+          key: '__sdk',
+          label: 'SDK 状态',
+          value: this.sdkLoadError ? '加载失败' : this.sdkLoaded ? '已就绪' : '加载中...',
+          tag: this.sdkLoadError ? 'danger' : this.sdkLoaded ? 'success' : 'info'
         }
       ]
       const dynamic = this.deviceInfoItems.filter(item =>
@@ -217,7 +218,7 @@ export default {
 
     // ── 根据 scope / hidden 过滤后的操作按钮 ────────────────────────────────────
     visibleOperations() {
-      if (!this.config || !Array.isArray(this.config.operations)) return []
+      if (!this.sdkConfig || !Array.isArray(this.sdkConfig.operations)) return []
       // 引用 ukeySnapshot 使 computed 在 _ukey 变化时自动重算
       const ukey = this.ukeySnapshot
       const ctx = {
@@ -226,9 +227,9 @@ export default {
         input: {},
         user: this.object || {},
         settings: this.publicSettings || {},
-        config: this.config?.config || {}
+        config: this.config
       }
-      return this.config.operations.filter(op => {
+      return this.sdkConfig.operations.filter(op => {
         const scope = op.scope || 'both'
         if (scope === 'admin' && this.mode !== 'admin') return false
         if (scope === 'user' && this.mode !== 'user') return false
@@ -250,14 +251,14 @@ export default {
     },
 
     deviceReady() {
-      return this.driverLoaded
+      return this.sdkLoaded
     }
   },
 
   async mounted() {
     this.pollTimer = null // 非响应式，直接挂实例
     await this.loadConfig()
-    this.loadDriverScript()
+    this.loadSDKScript()
   },
 
   beforeDestroy() {
@@ -270,7 +271,8 @@ export default {
     // ═══════════════════════════════════════════════════════════════════════════
     async loadConfig() {
       try {
-        this.config = await this.$axios.get(CONFIG_API)
+        this.sdkConfig = await this.$axios.get(CONFIG_API)
+        this.config = this.sdkConfig.config || {}
         this.configLoaded = true
         this.appendLog('配置文件加载成功', 'success')
       } catch (e) {
@@ -281,22 +283,28 @@ export default {
     // ═══════════════════════════════════════════════════════════════════════════
     // 2. 驱动脚本注入
     // ═══════════════════════════════════════════════════════════════════════════
-    loadDriverScript() {
-      if (!this.config) return
+    loadSDKScript() {
+      if (!this.sdkConfig) return
 
       if (document.getElementById(SCRIPT_TAG_ID)) {
         // 脚本已注入（页面复用），直接初始化实例
-        this.initDriverInstance()
+        this.initSDKInstance()
         return
       }
 
+      const sdkUrl = this.config.api?.ukey_sdk_script_url
+      if (!sdkUrl) {
+        this.sdkLoadError = true
+        this.appendLog('配置中缺少 api.ukey_sdk_script_url', 'error')
+        return
+      }
       const script = document.createElement('script')
       script.id = SCRIPT_TAG_ID
-      script.src = DRIVER_SCRIPT_URL
+      script.src = sdkUrl
       script.async = true
-      script.onload = () => this.initDriverInstance()
+      script.onload = () => this.initSDKInstance()
       script.onerror = () => {
-        this.driverLoadError = true
+        this.sdkLoadError = true
         this.appendLog('驱动脚本加载失败，请检查网络或驱动服务', 'error')
       }
       document.body.appendChild(script)
@@ -305,28 +313,28 @@ export default {
     // ═══════════════════════════════════════════════════════════════════════════
     // 3. UKey 实例创建 + setup 步骤执行
     // ═══════════════════════════════════════════════════════════════════════════
-    async initDriverInstance() {
+    async initSDKInstance() {
       // 3a. 创建实例
       try {
-        const constructorName = this.config.driver?.create?.constructor
+        const constructorName = this.sdkConfig.sdk?.create?.constructor
         if (!constructorName || !window[constructorName]) {
           throw new Error(`构造函数 "${constructorName}" 在 window 上不存在`)
         }
-        const ctorArgs = this.config.driver.create?.args || []
+        const ctorArgs = this.sdkConfig.sdk.create?.args || []
         _instance = new window[constructorName](...ctorArgs)
         _ukey = {}
         _userOverride = null
-        this.driverLoaded = true
+        this.sdkLoaded = true
         this.appendLog(`驱动实例已创建 (${constructorName})`, 'success')
       } catch (e) {
-        this.driverLoadError = true
+        this.sdkLoadError = true
         this.appendLog(`驱动实例创建失败: ${e.message}`, 'error')
         return
       }
 
       // 3b. 执行 setup 步骤（各厂商按需配置，结果可注册到 ukey.* 供后续使用）
       try {
-        const setupSteps = this.config.driver?.setup?.steps || []
+        const setupSteps = this.sdkConfig.sdk?.setup?.steps || []
         for (const step of setupSteps) {
           const ctx = this.buildContext({ vars: {}, input: {} })
           const result = this.callUKeyMethod(step, ctx)
@@ -345,7 +353,7 @@ export default {
       await this.readCertInfo()
 
       // 3d. 启动轮询，定时刷新设备状态和证书信息
-      const interval = this.config?.config?.poll_interval || 5000
+      const interval = this.config.poll_interval || 5000
       if (interval > 0) {
         this.pollTimer = setInterval(() => this.pollStatus(), interval)
       }
@@ -355,7 +363,7 @@ export default {
     // 4. 设备信息读取（填充左上动态行）
     // ═══════════════════════════════════════════════════════════════════════════
     async readDeviceInfo() {
-      const fields = this.config?.info?.device || []
+      const fields = this.sdkConfig?.info?.device || []
       const ctx = this.buildContext({ vars: {}, input: {} })
       this.deviceInfoItems = fields.map(field => {
         // hidden 支持布尔值或 {{ }} 模板，为真时跳过该字段
@@ -404,7 +412,7 @@ export default {
       if (this.running) return // 操作进行中，跳过本次轮询
       try {
         // 重新执行 setup 步骤检测设备是否仍然在线
-        const setupSteps = this.config?.driver?.setup?.steps || []
+        const setupSteps = this.sdkConfig?.sdk?.setup?.steps || []
         for (const step of setupSteps) {
           const ctx = this.buildContext({ vars: {}, input: {} })
           const result = this.callUKeyMethod(step, ctx)
@@ -426,7 +434,7 @@ export default {
     //             fetch 结果注入 cert.* 命名空间，字段用 {{ cert.xxx }} 引用
     // ═══════════════════════════════════════════════════════════════════════════
     async readCertInfo() {
-      const certConfig = this.config && this.config.info && this.config.info.cert
+      const certConfig = this.sdkConfig && this.sdkConfig.info && this.sdkConfig.info.cert
       // 兼容数组（旧格式）和对象（新格式 { check?, fields }）
       const fields = Array.isArray(certConfig) ? certConfig : (certConfig && certConfig.fields || [])
       const certCheck = Array.isArray(certConfig) ? undefined : (certConfig && (certConfig.when))
@@ -703,7 +711,7 @@ export default {
         input,
         user: _userOverride || this.object || {},
         settings: this.publicSettings || {},
-        config: this.config?.config || {}
+        config: this.config
       }
     },
 

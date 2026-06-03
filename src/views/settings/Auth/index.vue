@@ -27,7 +27,7 @@ import Slack from './Slack.vue'
 import { getAuthItems } from './const'
 import { mapState } from 'vuex'
 import Integration from './Integration.vue'
-import Cert from './Cert.vue'
+import UKey from './UKey.vue'
 
 export default {
   components: {
@@ -48,7 +48,7 @@ export default {
     OAuth2,
     Passkey,
     Slack,
-    Cert,
+    UKey,
     Integration
   },
   data() {

@@ -106,11 +106,11 @@ export function getAuthItems() {
       description: i18n.t('RadiusSummary')
     },
     {
-      name: 'Cert',
+      name: 'UKey',
       logo: require('@/assets/img/auth/ukey_logo.png'),
       title: i18n.t('UKey'),
-      authKey: 'AUTH_CERT',
-      description: i18n.t('CertSummary'),
+      authKey: 'AUTH_UKEY',
+      description: i18n.t('UKeySummary'),
       type: 'device'
     }
   ]
