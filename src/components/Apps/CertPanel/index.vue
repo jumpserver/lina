@@ -31,8 +31,7 @@
                 <td class="cp-action-btn">
                   <el-button
                     :type="op.btnType || 'primary'"
-                    :disabled="!deviceReady || running"
-                    :loading="running && currentOperation === op.key"
+                    :disabled="!deviceReady || running || op._disabled"
                     size="small"
                     @click="handleOperation(op)"
                   >
@@ -82,7 +81,7 @@
               </tr>
             </tbody>
           </table>
-          <el-empty v-else description="暂未签发证书" :image-size="80" />
+          <el-empty v-else description="暂未签发证书" :image-size="80" class="cp-cert-empty" />
         </IBox>
       </template>
     </TwoCol>
@@ -94,11 +93,12 @@
       :before-close="cancelInputDialog"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
-      width="380px"
+      width="480px"
       :lock-scroll="false"
       append-to-body
+      custom-class="cp-input-dialog"
     >
-      <el-form label-width="100px">
+      <el-form label-width="110px" class="cp-input-form">
         <el-form-item
           v-for="f in inputDialog.fields"
           :key="f.key"
@@ -117,7 +117,7 @@
           type="error"
           show-icon
           :closable="false"
-          style="margin-top: 8px"
+          style="margin-top: 6px"
         />
       </el-form>
       <span slot="footer">
@@ -140,6 +140,7 @@ const SCRIPT_TAG_ID = 'cert-vendor-driver-sdk'
 // 模块级单例 — 防止 Vue 响应式代理污染第三方 SDK 对象
 let _instance = null // UKey SDK 实例
 let _ukey = {} // ukey.* 命名空间（driver.setup.steps register 的变量）
+let _userOverride = null // user.* 命名空间覆盖（操作步骤 register: user 写入）
 
 export default {
   name: 'CertPanel',
@@ -165,7 +166,6 @@ export default {
       configLoaded: false,
       driverLoaded: false,
       driverLoadError: false,
-      deviceConnected: false,
 
       deviceInfoItems: [], // [{ key, label, value, scope }]
       certInfoItems: [], // [{ key, label, value, tag? }]
@@ -175,6 +175,8 @@ export default {
       running: false,
       currentOperation: '',
       logs: [],
+
+      ukeySnapshot: {}, // _ukey 的响应式镜像，驱动 computed 重算
 
       inputDialog: {
         visible: false,
@@ -205,12 +207,6 @@ export default {
           label: '驱动状态',
           value: this.driverLoadError ? '加载失败' : this.driverLoaded ? '已就绪' : '加载中...',
           tag: this.driverLoadError ? 'danger' : this.driverLoaded ? 'success' : 'info'
-        },
-        {
-          key: '__device',
-          label: 'UKey',
-          value: this.deviceConnected ? '已连接' : '未连接',
-          tag: this.deviceConnected ? 'success' : 'warning'
         }
       ]
       const dynamic = this.deviceInfoItems.filter(item =>
@@ -222,8 +218,10 @@ export default {
     // ── 根据 scope / hidden 过滤后的操作按钮 ────────────────────────────────────
     visibleOperations() {
       if (!this.config || !Array.isArray(this.config.operations)) return []
+      // 引用 ukeySnapshot 使 computed 在 _ukey 变化时自动重算
+      const ukey = this.ukeySnapshot
       const ctx = {
-        ukey: _ukey,
+        ukey,
         vars: {},
         input: {},
         user: this.object || {},
@@ -240,17 +238,30 @@ export default {
           if (resolved === true || resolved === 'true' || resolved === 1) return false
         }
         return true
+      }).map(op => {
+        // disabled 支持布尔值或 {{ }} 模板（解析结果为真值时禁用）
+        let opDisabled = false
+        if (op.disabled !== undefined) {
+          const resolved = this.resolveValue(op.disabled, ctx)
+          opDisabled = !!resolved
+        }
+        return { ...op, _disabled: opDisabled }
       })
     },
 
     deviceReady() {
-      return this.driverLoaded && this.deviceConnected
+      return this.driverLoaded
     }
   },
 
   async mounted() {
+    this.pollTimer = null // 非响应式，直接挂实例
     await this.loadConfig()
     this.loadDriverScript()
+  },
+
+  beforeDestroy() {
+    if (this.pollTimer) clearInterval(this.pollTimer)
   },
 
   methods: {
@@ -304,6 +315,7 @@ export default {
         const ctorArgs = this.config.driver.create?.args || []
         _instance = new window[constructorName](...ctorArgs)
         _ukey = {}
+        _userOverride = null
         this.driverLoaded = true
         this.appendLog(`驱动实例已创建 (${constructorName})`, 'success')
       } catch (e) {
@@ -323,9 +335,7 @@ export default {
           if (step.register) this.applyRegister(step.register, normalized, {})
           this.appendLog(`初始化: ${step.label || step.name || step.call} 成功`, 'success')
         }
-        this.deviceConnected = true
       } catch (e) {
-        this.deviceConnected = false
         this.appendLog(`设备初始化失败: ${e.message}`, 'error')
         return
       }
@@ -333,6 +343,12 @@ export default {
       // 3c. 读取设备信息和证书信息
       await this.readDeviceInfo()
       await this.readCertInfo()
+
+      // 3d. 启动轮询，定时刷新设备状态和证书信息
+      const interval = this.config?.config?.poll_interval || 5000
+      if (interval > 0) {
+        this.pollTimer = setInterval(() => this.pollStatus(), interval)
+      }
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -344,18 +360,65 @@ export default {
       this.deviceInfoItems = fields.map(field => {
         const raw = this.resolveFieldValue(field, ctx)
         const actual = Array.isArray(raw) && raw.length === 1 ? raw[0] : raw
-        const value = actual == null ? '--' : (Array.isArray(actual) ? actual.join(', ') : String(actual))
+        const value = actual == null ? '-' : (Array.isArray(actual) ? actual.join(', ') : String(actual))
         const item = { key: field.key, label: field.label, value, scope: field.scope || 'both' }
-        if (field.compare !== undefined) {
+
+        // status.cases：通过 source 表达式的值匹配 case，决定显示文本和标签颜色
+        if (field.status && Array.isArray(field.status.cases)) {
+          const sourceVal = field.source !== undefined ? this.resolveValue(field.source, ctx) : actual
+          const matchedIndex = field.status.cases.findIndex(c => {
+            if (c.match === 'truthy') return !!sourceVal
+            if (c.match === 'falsy') return !sourceVal
+            return String(sourceVal) === String(c.match)
+          })
+          const matched = matchedIndex !== -1 ? field.status.cases[matchedIndex] : null
+          if (matched) {
+            item.value = matched.text || value
+            if (matched.type) item.tag = matched.type
+          }
+          // register：将匹配 case 的 value 写入指定路径
+          if (field.register && matched && 'value' in matched) {
+            this.applyRegister(field.register, matched.value, {})
+          }
+        } else if (field.compare !== undefined) {
           const match = this.resolveCompare(field.compare, actual, ctx)
-          if (match !== null) item.tag = match ? 'success' : 'danger'
+          item.tag = match === false ? 'danger' : 'success'
         }
         return item
       })
+      // 同步响应式镜像，触发 visibleOperations 重算
+      this.ukeySnapshot = Object.assign({}, _ukey)
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
-    // 5. 证书信息读取（填充右上）
+    // 5. 轮询：定时刷新设备状态与证书信息
+    // ═══════════════════════════════════════════════════════════════════════════
+    async pollStatus() {
+      if (this.running) return // 操作进行中，跳过本次轮询
+      try {
+        // 重新执行 setup 步骤检测设备是否仍然在线
+        const setupSteps = this.config?.driver?.setup?.steps || []
+        for (const step of setupSteps) {
+          const ctx = this.buildContext({ vars: {}, input: {} })
+          const result = this.callUKeyMethod(step, ctx)
+          const normalized = Array.isArray(result) && result.length === 1 ? result[0] : result
+          if (step.register) this.applyRegister(step.register, normalized, {})
+        }
+      } catch (_) {
+        // 设备已拔出：清空状态
+        _ukey = {}
+        this.deviceInfoItems = []
+        this.certInfoItems = []
+        this.hasCert = false
+        this.certLoading = false
+        return
+      }
+      await this.readDeviceInfo()
+      await this.readCertInfo()
+    },
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // 6. 证书信息读取（填充右上）
     //    支持两种模式：
     //    - per-field：config.info.cert 为数组，每个字段独立 call / value
     //    - batch：config.info.cert 为对象 { fetch, fields }，先统一调用一次
@@ -406,14 +469,14 @@ export default {
         const item = {
           key: field.key,
           label: field.label,
-          value: rawVal == null ? '--' : String(rawVal)
+          value: rawVal == null ? '-' : String(rawVal)
         }
 
         if (rawVal != null) {
           hasAny = true
           if (field.compare !== undefined) {
             const match = this.resolveCompare(field.compare, rawVal, ctx)
-            if (match !== null) item.tag = match ? 'success' : 'danger'
+            item.tag = (match === null || match) ? 'success' : 'danger'
           }
         }
 
@@ -428,6 +491,21 @@ export default {
     // ═══════════════════════════════════════════════════════════════════════════
     // 6. 操作按钮处理入口
     // ═══════════════════════════════════════════════════════════════════════════
+
+    /**
+     * 执行 op.event 声明的刷新事件
+     * 支持字符串或数组：'refresh.info.cert' / ['refresh.info.device', 'refresh.info.cert']
+     * 无 event 配置时默认刷新 cert
+     */
+    async handleEvents(event) {
+      const events = event === undefined
+        ? ['refresh.info.cert']
+        : (event == null ? [] : (Array.isArray(event) ? event : [event]))
+      for (const e of events) {
+        if (e === 'refresh.info.device') await this.readDeviceInfo()
+        else if (e === 'refresh.info.cert') await this.readCertInfo()
+      }
+    },
     async handleOperation(op) {
       // 操作前全局确认（op.confirm 配置）
       if (op.confirm) {
@@ -453,7 +531,7 @@ export default {
           await this.executeStep(step, operationVars, collectedInput)
         }
         this.appendLog(`操作「${op.label}」执行完成`, 'success')
-        await this.readCertInfo()
+        await this.handleEvents(op.event)
       } catch (e) {
         this.appendLog(`操作「${op.label}」失败: ${e.message}`, 'error')
       } finally {
@@ -622,7 +700,7 @@ export default {
         instance: _instance,
         vars,
         input,
-        user: this.object || {},
+        user: _userOverride || this.object || {},
         settings: this.publicSettings || {},
         config: this.config?.config || {}
       }
@@ -734,11 +812,25 @@ export default {
      */
     applyRegister(register, value, operationVars) {
       const dot = register.indexOf('.')
-      if (dot === -1) return
+      // 无点号：整体替换命名空间
+      if (dot === -1) {
+        if (register === 'ukey') { _ukey = (value && typeof value === 'object') ? value : {} } else if (register === 'user') { _userOverride = (value && typeof value === 'object') ? value : {} }
+        return
+      }
       const ns = register.substring(0, dot)
       const key = register.substring(dot + 1)
-      const target = ns === 'ukey' ? _ukey : ns === 'vars' ? operationVars : null
-      if (!target) return
+      let target
+      if (ns === 'ukey') {
+        target = _ukey
+      } else if (ns === 'vars') {
+        target = operationVars
+      } else if (ns === 'user') {
+        // 确保有可写对象（不直接修改 prop）
+        if (!_userOverride) _userOverride = Object.assign({}, this.object || {})
+        target = _userOverride
+      } else {
+        return
+      }
       this.setNestedPath(target, key, value)
     },
 
@@ -851,6 +943,15 @@ export default {
   }
 }
 
+// ── 证书空状态 ──────────────────────────────────────────────────────────────────
+.cp-cert-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+}
+
 // ── 证书加载中 ──────────────────────────────────────────────────────────────────
 .cp-cert-loading {
   display: flex;
@@ -914,5 +1015,17 @@ export default {
   &.cp-log-success .cp-log-msg { color: #4ec9b0; }
   &.cp-log-error   .cp-log-msg { color: #f48771; }
   &.cp-log-warn    .cp-log-msg { color: #dcdcaa; }
+}
+</style>
+
+<style lang="scss">
+// ── 输入弹框（custom-class 不受 scoped 限制）────────────────────────────────────
+.cp-input-dialog {
+  .el-dialog__body { padding: 16px 20px 8px; }
+  .el-dialog__footer { padding: 8px 20px 16px; }
+}
+
+.cp-input-form {
+  .el-form-item { margin-bottom: 14px; }
 }
 </style>
