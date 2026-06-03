@@ -98,7 +98,7 @@
       append-to-body
       custom-class="cp-input-dialog"
     >
-      <el-form label-width="110px" class="cp-input-form">
+      <el-form label-width="110px" class="cp-input-form" @submit.native.prevent="confirmInputDialog">
         <el-form-item
           v-for="f in inputDialog.fields"
           :key="f.key"
@@ -337,10 +337,10 @@ export default {
         }
       } catch (e) {
         this.appendLog(`设备初始化失败: ${e.message}`, 'error')
-        return
+        _ukey = {}
       }
 
-      // 3c. 读取设备信息和证书信息
+      // 3c. 读取设备信息和证书信息（无论 setup 是否成功都执行）
       await this.readDeviceInfo()
       await this.readCertInfo()
 
@@ -358,6 +358,11 @@ export default {
       const fields = this.config?.info?.device || []
       const ctx = this.buildContext({ vars: {}, input: {} })
       this.deviceInfoItems = fields.map(field => {
+        // hidden 支持布尔值或 {{ }} 模板，为真时跳过该字段
+        if (field.hidden !== undefined) {
+          const resolved = this.resolveValue(field.hidden, ctx)
+          if (resolved) return null
+        }
         const raw = this.resolveFieldValue(field, ctx)
         const actual = Array.isArray(raw) && raw.length === 1 ? raw[0] : raw
         const value = actual == null ? '-' : (Array.isArray(actual) ? actual.join(', ') : String(actual))
@@ -382,10 +387,12 @@ export default {
           }
         } else if (field.compare !== undefined) {
           const match = this.resolveCompare(field.compare, actual, ctx)
-          item.tag = match === false ? 'danger' : 'success'
+          if (match !== null) {
+            item.tag = match === false ? 'danger' : 'success'
+          }
         }
         return item
-      })
+      }).filter(item => item !== null)
       // 同步响应式镜像，触发 visibleOperations 重算
       this.ukeySnapshot = Object.assign({}, _ukey)
     },
@@ -405,13 +412,7 @@ export default {
           if (step.register) this.applyRegister(step.register, normalized, {})
         }
       } catch (_) {
-        // 设备已拔出：清空状态
         _ukey = {}
-        this.deviceInfoItems = []
-        this.certInfoItems = []
-        this.hasCert = false
-        this.certLoading = false
-        return
       }
       await this.readDeviceInfo()
       await this.readCertInfo()
