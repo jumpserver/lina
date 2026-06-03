@@ -318,7 +318,9 @@ export default {
         for (const step of setupSteps) {
           const ctx = this.buildContext({ vars: {}, input: {} })
           const result = this.callUKeyMethod(step, ctx)
-          if (step.register) this.applyRegister(step.register, result, {})
+          // 单元素数组展开（SDK 多设备枚举结果），避免后续模板使用时拿到数组
+          const normalized = Array.isArray(result) && result.length === 1 ? result[0] : result
+          if (step.register) this.applyRegister(step.register, normalized, {})
           this.appendLog(`初始化: ${step.label || step.name || step.call} 成功`, 'success')
         }
         this.deviceConnected = true
@@ -341,10 +343,15 @@ export default {
       const ctx = this.buildContext({ vars: {}, input: {} })
       this.deviceInfoItems = fields.map(field => {
         const raw = this.resolveFieldValue(field, ctx)
-        const value = raw == null ? '--' : String(raw)
-        return { key: field.key, label: field.label, value, scope: field.scope || 'both' }
+        const actual = Array.isArray(raw) && raw.length === 1 ? raw[0] : raw
+        const value = actual == null ? '--' : (Array.isArray(actual) ? actual.join(', ') : String(actual))
+        const item = { key: field.key, label: field.label, value, scope: field.scope || 'both' }
+        if (field.compare !== undefined) {
+          const match = this.resolveCompare(field.compare, actual, ctx)
+          if (match !== null) item.tag = match ? 'success' : 'danger'
+        }
+        return item
       })
-      console.log('>>>>>>>>> ukey: ', _ukey)
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -404,14 +411,9 @@ export default {
 
         if (rawVal != null) {
           hasAny = true
-          // 归属判断：将此字段与当前用户对象的指定字段比对
-          if (field.owner && this.object) {
-            const userVal = this.object[field.owner.user_field]
-            if (userVal != null) {
-              const isSelf = String(rawVal) === String(userVal)
-              item.tag = isSelf ? 'success' : 'danger'
-              item.value = `${rawVal}（${isSelf ? '本人' : '他人'}）`
-            }
+          if (field.compare !== undefined) {
+            const match = this.resolveCompare(field.compare, rawVal, ctx)
+            if (match !== null) item.tag = match ? 'success' : 'danger'
           }
         }
 
@@ -446,8 +448,9 @@ export default {
       this.currentOperation = op.key
       try {
         const operationVars = {} // vars.* 命名空间，仅当前操作可见
+        const collectedInput = {} // input.* 命名空间，跨步骤累积
         for (const step of (op.steps || [])) {
-          await this.executeStep(step, operationVars)
+          await this.executeStep(step, operationVars, collectedInput)
         }
         this.appendLog(`操作「${op.label}」执行完成`, 'success')
         await this.readCertInfo()
@@ -462,22 +465,23 @@ export default {
     // ═══════════════════════════════════════════════════════════════════════════
     // 7. 单步执行器
     // ═══════════════════════════════════════════════════════════════════════════
-    async executeStep(step, operationVars) {
-      let inputVars = {}
-
+    async executeStep(step, operationVars, collectedInput = {}) {
       // 7a. 若步骤声明了 input，先弹对话框收集用户输入
       if (step.input) {
         try {
-          inputVars = await this.showInputDialog(
+          const inputCtx = this.buildContext({ vars: operationVars, input: collectedInput })
+          const newInput = await this.showInputDialog(
             step.input.fields || [],
-            step.input.title || step.label || '请输入'
+            step.input.title || step.label || '请输入',
+            inputCtx
           )
+          Object.assign(collectedInput, newInput)
         } catch (_) {
           throw new Error('操作已取消')
         }
       }
 
-      const ctx = this.buildContext({ vars: operationVars, input: inputVars })
+      const ctx = this.buildContext({ vars: operationVars, input: collectedInput })
       let result
 
       try {
@@ -528,9 +532,22 @@ export default {
     // ═══════════════════════════════════════════════════════════════════════════
     async executeApiStep(step, ctx) {
       const method = (step.method || 'post').toLowerCase()
-      const url = this.resolveValue(step.url, ctx)
+      let url = this.resolveValue(step.url, ctx)
+      // url_format: 将 {key} 占位符替换为解析后的值
+      if (step.url_format && typeof url === 'string') {
+        const formatParams = this.resolveObjectValues(step.url_format, ctx)
+        url = url.replace(/\{(\w+)\}/g, (_, key) => {
+          return key in formatParams ? encodeURIComponent(formatParams[key]) : `{${key}}`
+        })
+      }
       const body = step.body ? this.resolveObjectValues(step.body, ctx) : undefined
-      return await this.$axios[method](url, body)
+      const params = step.params ? this.resolveObjectValues(step.params, ctx) : undefined
+      const axiosConfig = params ? { params } : undefined
+      // GET/DELETE: (url, config)；其他方法: (url, body, config)
+      if (method === 'get' || method === 'delete') {
+        return await this.$axios[method](url, axiosConfig)
+      }
+      return await this.$axios[method](url, body, axiosConfig)
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -548,6 +565,28 @@ export default {
     // ═══════════════════════════════════════════════════════════════════════════
     // 10. 变量解析工具
     // ═══════════════════════════════════════════════════════════════════════════
+
+    /**
+     * 解析 compare 配置，返回比对结果：true / false / null（无法比对）
+     * 支持：
+     *   compare: "{{ ukey.devSN }}"          → fieldValue vs 解析值
+     *   compare: { key1: "...", key2: "..." } → key1 vs key2
+     */
+    resolveCompare(compare, fieldValue, ctx) {
+      const normalize = v => {
+        const r = Array.isArray(v) && v.length === 1 ? v[0] : v
+        return r == null ? null : String(r)
+      }
+      let v1, v2
+      if (compare && typeof compare === 'object') {
+        v1 = normalize(this.resolveValue(compare.key1, ctx))
+        v2 = normalize(this.resolveValue(compare.key2, ctx))
+      } else {
+        v1 = normalize(fieldValue)
+        v2 = normalize(this.resolveValue(compare, ctx))
+      }
+      return v1 != null && v2 != null ? v1 === v2 : null
+    },
 
     /**
      * 读取一个 info 字段的值，优先级：call > value（支持模板）
@@ -716,10 +755,13 @@ export default {
     // ═══════════════════════════════════════════════════════════════════════════
     // 11. 通用输入弹框
     // ═══════════════════════════════════════════════════════════════════════════
-    showInputDialog(fields, title) {
+    showInputDialog(fields, title, ctx = {}) {
       return new Promise((resolve, reject) => {
         const form = {}
-        fields.forEach(f => { form[f.key] = '' })
+        fields.forEach(f => {
+          const defaultVal = f.value !== undefined ? this.resolveValue(f.value, ctx) : ''
+          form[f.key] = defaultVal == null ? '' : String(defaultVal)
+        })
         this.inputDialog = {
           visible: true,
           title,
