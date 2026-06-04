@@ -299,6 +299,10 @@ export default {
   },
 
   methods: {
+    syncUkeySnapshot() {
+      this.ukeySnapshot = Object.assign({}, _ukey)
+    },
+
     syncWhenGateLogs() {
       if (!this.infoWhenPassed) {
         if (!this.infoWhenFalseLogged) {
@@ -401,13 +405,13 @@ export default {
         for (const step of setupSteps) {
           const ctx = this.buildContext({ vars: {}, input: {} })
           const result = this.callUKeyMethod(step, ctx)
-          // 单元素数组展开（SDK 多设备枚举结果），避免后续模板使用时拿到数组
           if (step.register) this.applyRegister(step.register, result, {})
           this.appendLog(`${this.$t('Initialize')}: ${step.label || step.name || step.call} ${this.$t('Success')}`, 'success')
         }
       } catch (e) {
         this.appendLog(`${this.$t('DeviceInitFailed')}: ${e.message}`, 'error')
         _ukey = {}
+        this.syncUkeySnapshot()
       }
 
       // 3c. 读取设备信息和证书信息（无论 setup 是否成功都执行）
@@ -427,7 +431,7 @@ export default {
     async readDeviceInfo() {
       if (!this.infoWhenPassed) {
         this.deviceInfoItems = []
-        this.ukeySnapshot = Object.assign({}, _ukey)
+        this.syncUkeySnapshot()
         this.syncWhenGateLogs()
         return
       }
@@ -469,7 +473,7 @@ export default {
         return item
       }).filter(item => item !== null)
       // 同步响应式镜像，触发 visibleOperations 重算
-      this.ukeySnapshot = Object.assign({}, _ukey)
+      this.syncUkeySnapshot()
       this.syncWhenGateLogs()
     },
 
@@ -488,6 +492,7 @@ export default {
         }
       } catch (_) {
         _ukey = {}
+        this.syncUkeySnapshot()
       }
       await this.readDeviceInfo()
       await this.readCertInfo()
@@ -821,8 +826,11 @@ export default {
 
     /** 构建上下文对象，供模板解析使用 */
     buildContext({ vars = {}, input = {} }) {
+      const ukey = (_ukey && typeof _ukey === 'object' && Object.keys(_ukey).length > 0)
+        ? _ukey
+        : (this.ukeySnapshot || {})
       return {
-        ukey: _ukey,
+        ukey,
         instance: _instance,
         vars,
         input,
@@ -943,7 +951,12 @@ export default {
       const dot = register.indexOf('.')
       // 无点号：整体替换命名空间
       if (dot === -1) {
-        if (register === 'ukey') { _ukey = (value && typeof value === 'object') ? value : {} } else if (register === 'user') { _userOverride = (value && typeof value === 'object') ? value : {} }
+        if (register === 'ukey') {
+          _ukey = (value && typeof value === 'object') ? value : {}
+          this.syncUkeySnapshot()
+        } else if (register === 'user') {
+          _userOverride = (value && typeof value === 'object') ? value : {}
+        }
         return
       }
       const ns = register.substring(0, dot)
@@ -961,6 +974,7 @@ export default {
         return
       }
       this.setNestedPath(target, key, value)
+      if (ns === 'ukey') this.syncUkeySnapshot()
     },
 
     setNestedPath(obj, path, value) {
