@@ -12,7 +12,7 @@
                   <el-tag v-if="item.tag !== undefined" :type="item.tag" size="mini" effect="plain">
                     {{ item.value }}
                   </el-tag>
-                  <span v-else class="cp-text">{{ item.value || '--' }}</span>
+                  <span v-else class="cp-text">{{ item.value || '-' }}</span>
                 </td>
               </tr>
             </tbody>
@@ -21,7 +21,7 @@
 
         <!-- 左中：操作按钮 -->
         <IBox :title="$t('Operation')" style="margin-top: 10px">
-          <table v-if="visibleOperations.length > 0" class="cp-action-table">
+          <table v-if="operationWhenPassed && visibleOperations.length > 0" class="cp-action-table">
             <tbody>
               <tr v-for="op in visibleOperations" :key="op.key">
                 <td class="cp-action-desc">
@@ -64,11 +64,11 @@
       <template #right>
         <!-- 右上：证书信息 -->
         <IBox :title="$t('CertificateInfo')">
-          <div v-if="certLoading" class="cp-cert-loading">
+          <div v-if="infoWhenPassed && certLoading" class="cp-cert-loading">
             <i class="el-icon-loading" />
             <span>{{ $t('Loading') }}</span>
           </div>
-          <table v-else-if="hasCert" class="cp-info-table">
+          <table v-else-if="infoWhenPassed && hasCert" class="cp-info-table">
             <tbody>
               <tr v-for="item in certInfoItems" :key="item.key">
                 <td class="cp-label">{{ item.label }}</td>
@@ -76,12 +76,17 @@
                   <el-tag v-if="item.tag !== undefined" :type="item.tag" size="mini" effect="plain" :title="item.value">
                     {{ item.value }}
                   </el-tag>
-                  <span v-else class="cp-text" :title="item.value">{{ item.value || '--' }}</span>
+                  <span v-else class="cp-text" :title="item.value">{{ item.value || '-' }}</span>
                 </td>
               </tr>
             </tbody>
           </table>
-          <el-empty v-else :description="$t('NoCertificateIssued')" :image-size="80" class="cp-cert-empty" />
+          <el-empty
+            v-else
+            :description="infoWhenPassed ? $t('NoCertificateIssued') : $t('NoCertificateInfo')"
+            :image-size="80"
+            class="cp-cert-empty"
+          />
         </IBox>
       </template>
     </TwoCol>
@@ -172,6 +177,8 @@ export default {
       certInfoItems: [], // [{ key, label, value, tag? }]
       certLoading: true,
       hasCert: false,
+      infoWhenFalseLogged: false,
+      operationWhenFalseLogged: false,
 
       running: false,
       currentOperation: '',
@@ -195,6 +202,25 @@ export default {
   computed: {
     ...mapGetters(['publicSettings']),
 
+    operationsConfig() {
+      const operations = this.sdkConfig?.operations
+      if (operations && typeof operations === 'object') {
+        return {
+          when: operations.when,
+          items: Array.isArray(operations.items) ? operations.items : []
+        }
+      }
+      return { when: undefined, items: [] }
+    },
+
+    infoWhenPassed() {
+      return this.evaluateWhen(this.sdkConfig?.info?.when)
+    },
+
+    operationWhenPassed() {
+      return this.evaluateWhen(this.operationsConfig.when)
+    },
+
     // ── 左上状态面板：固定行 + config.info.device 动态行 ──────────────────────────
     statusItems() {
       const fixed = [
@@ -214,26 +240,32 @@ export default {
       const dynamic = this.deviceInfoItems.filter(item =>
         this.mode === 'admin' || (item.scope || 'both') !== 'admin'
       )
+      if (!this.infoWhenPassed) return fixed
       return [...fixed, ...dynamic]
     },
 
     // ── 根据 scope / hidden 过滤后的操作按钮 ────────────────────────────────────
     visibleOperations() {
-      if (!this.sdkConfig || !Array.isArray(this.sdkConfig.operations)) return []
+      if (!this.sdkConfig) return []
+      const operationItems = this.operationsConfig.items
+      if (!Array.isArray(operationItems) || operationItems.length === 0) return []
+      if (!this.operationWhenPassed) return []
       // 引用 ukeySnapshot 使 computed 在 _ukey 变化时自动重算
       const ukey = this.ukeySnapshot
       const ctx = {
         ukey,
         vars: {},
         input: {},
+        mode: this.mode,
         user: this.object || {},
         settings: this.publicSettings || {},
         config: this.config
       }
-      return this.sdkConfig.operations.filter(op => {
+      return operationItems.filter(op => {
         const scope = op.scope || 'both'
         if (scope === 'admin' && this.mode !== 'admin') return false
         if (scope === 'user' && this.mode !== 'user') return false
+        if (!this.evaluateWhen(op.when, ctx)) return false
         // hidden 支持布尔值或 {{ }} 模板（解析结果为真值时隐藏）
         if (op.hidden !== undefined) {
           const resolved = this.resolveValue(op.hidden, ctx)
@@ -267,6 +299,39 @@ export default {
   },
 
   methods: {
+    syncWhenGateLogs() {
+      if (!this.infoWhenPassed) {
+        if (!this.infoWhenFalseLogged) {
+          this.appendLog(this.$t('InfoHiddenWhenMismatch'), 'warn')
+          this.infoWhenFalseLogged = true
+        }
+      } else {
+        this.infoWhenFalseLogged = false
+      }
+
+      if (!this.operationWhenPassed) {
+        if (!this.operationWhenFalseLogged) {
+          this.appendLog(this.$t('OperationUnavailableWhenMismatch'), 'warn')
+          this.operationWhenFalseLogged = true
+        }
+      } else {
+        this.operationWhenFalseLogged = false
+      }
+    },
+
+    evaluateWhen(whenExpr, customCtx = null) {
+      if (whenExpr === undefined) return true
+      if (typeof whenExpr === 'boolean') return whenExpr
+
+      const ctx = customCtx || this.buildContext({ vars: {}, input: {} })
+      const resolved = this.resolveValue(whenExpr, ctx)
+
+      if (resolved === false || resolved === 'false' || resolved === 0 || resolved === '0') return false
+      if (resolved == null) return false
+      if (typeof resolved === 'string' && resolved.trim() === '') return false
+      return true
+    },
+
     // ═══════════════════════════════════════════════════════════════════════════
     // 1. 配置加载
     // ═══════════════════════════════════════════════════════════════════════════
@@ -360,6 +425,12 @@ export default {
     // 4. 设备信息读取（填充左上动态行）
     // ═══════════════════════════════════════════════════════════════════════════
     async readDeviceInfo() {
+      if (!this.infoWhenPassed) {
+        this.deviceInfoItems = []
+        this.ukeySnapshot = Object.assign({}, _ukey)
+        this.syncWhenGateLogs()
+        return
+      }
       const fields = this.sdkConfig?.info?.device || []
       const ctx = this.buildContext({ vars: {}, input: {} })
       this.deviceInfoItems = fields.map(field => {
@@ -399,6 +470,7 @@ export default {
       }).filter(item => item !== null)
       // 同步响应式镜像，触发 visibleOperations 重算
       this.ukeySnapshot = Object.assign({}, _ukey)
+      this.syncWhenGateLogs()
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -429,6 +501,13 @@ export default {
     //             fetch 结果注入 cert.* 命名空间，字段用 {{ cert.xxx }} 引用
     // ═══════════════════════════════════════════════════════════════════════════
     async readCertInfo() {
+      if (!this.infoWhenPassed) {
+        this.certInfoItems = []
+        this.hasCert = false
+        this.certLoading = false
+        this.syncWhenGateLogs()
+        return
+      }
       const certConfig = this.sdkConfig && this.sdkConfig.info && this.sdkConfig.info.cert
       // 兼容数组（旧格式）和对象（新格式 { check?, fields }）
       const fields = Array.isArray(certConfig) ? certConfig : (certConfig && certConfig.fields || [])
@@ -490,6 +569,7 @@ export default {
       this.certInfoItems = items
       this.hasCert = hasAny
       this.certLoading = false
+      this.syncWhenGateLogs()
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -695,6 +775,8 @@ export default {
      *   compare: { key1: "...", key2: "..." } → key1 vs key2
      */
     resolveCompare(compare, fieldValue, ctx) {
+      if (!fieldValue) return null
+
       const normalize = v => {
         const r = Array.isArray(v) && v.length === 1 ? v[0] : v
         return r == null ? null : String(r)
@@ -744,6 +826,7 @@ export default {
         instance: _instance,
         vars,
         input,
+        mode: this.mode,
         user: _userOverride || this.object || {},
         settings: this.publicSettings || {},
         config: this.config
@@ -789,10 +872,12 @@ export default {
         }
         // 表达式求值
         try {
+          // 兼容配置里常见的路径写法：ukey.devSN.0 -> ukey.devSN[0]
+          const normalizedExpr = e.replace(/\.([0-9]+)(?=\b)/g, '[$1]')
           const keys = Object.keys(nsMap)
           const vals = keys.map(k => nsMap[k])
           // eslint-disable-next-line no-new-func
-          return new Function(...keys, `return (${e})`)(...vals)
+          return new Function(...keys, `return (${normalizedExpr})`)(...vals)
         } catch (_) {
           return undefined
         }
