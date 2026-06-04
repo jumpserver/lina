@@ -98,11 +98,12 @@
       append-to-body
       custom-class="cp-input-dialog"
     >
-      <el-form label-width="180px" class="cp-input-form" @submit.native.prevent="confirmInputDialog">
+      <el-form label-width="0px" class="cp-input-form" @submit.native.prevent="confirmInputDialog">
         <el-form-item
           v-for="f in inputDialog.fields"
           :key="f.key"
           :label="f.label"
+          :label-width="inputDialog.labelWidth"
         >
           <el-input
             v-model="inputDialog.form[f.key]"
@@ -182,6 +183,7 @@ export default {
         visible: false,
         title: '',
         fields: [],
+        labelWidth: '120px',
         form: {},
         error: '',
         _resolve: null,
@@ -889,6 +891,18 @@ export default {
     // ═══════════════════════════════════════════════════════════════════════════
     // 11. 通用输入弹框
     // ═══════════════════════════════════════════════════════════════════════════
+    getInputDialogLabelWidth(fields) {
+      const maxWeightedLen = (fields || []).reduce((max, f) => {
+        const text = String((f && f.label) || '')
+        const weightedLen = Array.from(text).reduce((sum, ch) => {
+          return sum + (/[^\x00-\xff]/.test(ch) ? 2 : 1)
+        }, 0)
+        return Math.max(max, weightedLen)
+      }, 0)
+      const width = Math.min(240, Math.max(88, maxWeightedLen * 8 + 20))
+      return `${width}px`
+    },
+
     showInputDialog(fields, title, ctx = {}) {
       return new Promise((resolve, reject) => {
         const form = {}
@@ -900,6 +914,7 @@ export default {
           visible: true,
           title,
           fields,
+          labelWidth: this.getInputDialogLabelWidth(fields),
           form,
           error: '',
           _resolve: resolve,
