@@ -3,7 +3,7 @@
     <TwoCol>
       <template>
         <!-- 左上：设备驱动状态 -->
-        <IBox title="设备驱动状态">
+        <IBox :title="$t('DeviceDriverStatus')">
           <table class="cp-info-table">
             <tbody>
               <tr v-for="item in statusItems" :key="item.key">
@@ -20,7 +20,7 @@
         </IBox>
 
         <!-- 左中：操作按钮 -->
-        <IBox title="操作" style="margin-top: 10px">
+        <IBox :title="$t('Operation')" style="margin-top: 10px">
           <table v-if="visibleOperations.length > 0" class="cp-action-table">
             <tbody>
               <tr v-for="op in visibleOperations" :key="op.key">
@@ -42,12 +42,12 @@
             </tbody>
           </table>
           <div v-else style="color: #909399; font-size: 13px; padding: 12px 0; text-align: center">
-            暂无可用操作
+            {{ $t('NoAvailableActions') }}
           </div>
         </IBox>
 
         <!-- 左下：操作日志 -->
-        <IBox v-if="logs.length > 0" title="操作日志" style="margin-top: 10px">
+        <IBox v-if="logs.length > 0" :title="$t('OperationLogs')" style="margin-top: 10px">
           <div ref="logBox" class="cp-logs-box">
             <div
               v-for="(log, i) in logs"
@@ -63,10 +63,10 @@
 
       <template #right>
         <!-- 右上：证书信息 -->
-        <IBox title="证书信息">
+        <IBox :title="$t('CertificateInfo')">
           <div v-if="certLoading" class="cp-cert-loading">
             <i class="el-icon-loading" />
-            <span>加载中…</span>
+            <span>{{ $t('Loading') }}</span>
           </div>
           <table v-else-if="hasCert" class="cp-info-table">
             <tbody>
@@ -81,7 +81,7 @@
               </tr>
             </tbody>
           </table>
-          <el-empty v-else description="暂未签发证书" :image-size="80" class="cp-cert-empty" />
+          <el-empty v-else :description="$t('NoCertificateIssued')" :image-size="80" class="cp-cert-empty" />
         </IBox>
       </template>
     </TwoCol>
@@ -98,7 +98,7 @@
       append-to-body
       custom-class="cp-input-dialog"
     >
-      <el-form label-width="110px" class="cp-input-form" @submit.native.prevent="confirmInputDialog">
+      <el-form label-width="180px" class="cp-input-form" @submit.native.prevent="confirmInputDialog">
         <el-form-item
           v-for="f in inputDialog.fields"
           :key="f.key"
@@ -121,8 +121,8 @@
         />
       </el-form>
       <span slot="footer">
-        <el-button @click="cancelInputDialog">取 消</el-button>
-        <el-button type="primary" @click="confirmInputDialog">确 定</el-button>
+        <el-button @click="cancelInputDialog">{{ $t('Cancel') }}</el-button>
+        <el-button type="primary" @click="confirmInputDialog">{{ $t('Confirm') }}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -199,14 +199,14 @@ export default {
       const fixed = [
         {
           key: '__config',
-          label: '配置文件',
-          value: this.configLoaded ? '已加载' : '未加载',
+          label: this.$t('ConfigFile'),
+          value: this.configLoaded ? this.$t('Loaded') : this.$t('NotLoaded'),
           tag: this.configLoaded ? 'success' : 'warning'
         },
         {
           key: '__sdk',
-          label: 'SDK 状态',
-          value: this.sdkLoadError ? '加载失败' : this.sdkLoaded ? '已就绪' : '加载中...',
+          label: this.$t('SdkStatus'),
+          value: this.sdkLoadError ? this.$t('LoadFailed') : this.sdkLoaded ? this.$t('Ready') : this.$t('Loading'),
           tag: this.sdkLoadError ? 'danger' : this.sdkLoaded ? 'success' : 'info'
         }
       ]
@@ -274,9 +274,9 @@ export default {
         this.sdkConfig = await this.$axios.get(CONFIG_API)
         this.config = this.sdkConfig.config || {}
         this.configLoaded = true
-        this.appendLog('配置文件加载成功', 'success')
+        this.appendLog(this.$t('ConfigLoadedSuccess'), 'success')
       } catch (e) {
-        this.appendLog(`配置文件加载失败: ${e.message}`, 'error')
+        this.appendLog(`${this.$t('ConfigLoadedFailed')}: ${e.message}`, 'error')
       }
     },
 
@@ -295,7 +295,7 @@ export default {
       const sdkUrl = this.config.api?.ukey_sdk_script_url
       if (!sdkUrl) {
         this.sdkLoadError = true
-        this.appendLog('配置中缺少 api.ukey_sdk_script_url', 'error')
+        this.appendLog(this.$t('MissingUkeySdkScriptUrl'), 'error')
         return
       }
       const script = document.createElement('script')
@@ -305,7 +305,7 @@ export default {
       script.onload = () => this.initSDKInstance()
       script.onerror = () => {
         this.sdkLoadError = true
-        this.appendLog('驱动脚本加载失败，请检查网络或驱动服务', 'error')
+        this.appendLog(this.$t('SdkScriptLoadFailed'), 'error')
       }
       document.body.appendChild(script)
     },
@@ -318,17 +318,17 @@ export default {
       try {
         const constructorName = this.sdkConfig.sdk?.create?.constructor
         if (!constructorName || !window[constructorName]) {
-          throw new Error(`构造函数 "${constructorName}" 在 window 上不存在`)
+          throw new Error(`${this.$t('Constructor')} "${constructorName}" ${this.$t('NotFoundOnWindow')}`)
         }
         const ctorArgs = this.sdkConfig.sdk.create?.args || []
         _instance = new window[constructorName](...ctorArgs)
         _ukey = {}
         _userOverride = null
         this.sdkLoaded = true
-        this.appendLog(`驱动实例已创建 (${constructorName})`, 'success')
+        this.appendLog(`${this.$t('DriverInstanceCreated')} (${constructorName})`, 'success')
       } catch (e) {
         this.sdkLoadError = true
-        this.appendLog(`驱动实例创建失败: ${e.message}`, 'error')
+        this.appendLog(`${this.$t('DriverInstanceCreateFailed')}: ${e.message}`, 'error')
         return
       }
 
@@ -340,10 +340,10 @@ export default {
           const result = this.callUKeyMethod(step, ctx)
           // 单元素数组展开（SDK 多设备枚举结果），避免后续模板使用时拿到数组
           if (step.register) this.applyRegister(step.register, result, {})
-          this.appendLog(`初始化: ${step.label || step.name || step.call} 成功`, 'success')
+          this.appendLog(`${this.$t('Initialize')}: ${step.label || step.name || step.call} ${this.$t('Success')}`, 'success')
         }
       } catch (e) {
-        this.appendLog(`设备初始化失败: ${e.message}`, 'error')
+        this.appendLog(`${this.$t('DeviceInitFailed')}: ${e.message}`, 'error')
         _ukey = {}
       }
 
@@ -517,12 +517,12 @@ export default {
       if (op.confirm) {
         try {
           await this.$confirm(
-            op.confirm.message || '确认执行此操作？',
-            op.confirm.title || '操作确认',
+            op.confirm.message || this.$t('ConfirmExecuteOperation'),
+            op.confirm.title || this.$t('OperationConfirm'),
             {
               type: op.confirm.type || 'warning',
-              confirmButtonText: '确定',
-              cancelButtonText: '取消'
+              confirmButtonText: this.$t('Confirm'),
+              cancelButtonText: this.$t('Cancel')
             }
           )
         } catch (_) { return }
@@ -536,10 +536,10 @@ export default {
         for (const step of (op.steps || [])) {
           await this.executeStep(step, operationVars, collectedInput)
         }
-        this.appendLog(`操作「${op.label}」执行完成`, 'success')
+        this.appendLog(`${this.$t('Operation')}「${op.label}」${this.$t('Completed')}`, 'success')
         await this.handleEvents(op.event)
       } catch (e) {
-        this.appendLog(`操作「${op.label}」失败: ${e.message}`, 'error')
+        this.appendLog(`${this.$t('Operation')}「${op.label}」${this.$t('Failed')}: ${e.message}`, 'error')
       } finally {
         this.running = false
         this.currentOperation = ''
@@ -556,12 +556,12 @@ export default {
           const inputCtx = this.buildContext({ vars: operationVars, input: collectedInput })
           const newInput = await this.showInputDialog(
             step.input.fields || [],
-            step.input.title || step.label || '请输入',
+            step.input.title || step.label || this.$t('PleaseInput'),
             inputCtx
           )
           Object.assign(collectedInput, newInput)
         } catch (_) {
-          throw new Error('操作已取消')
+          throw new Error(this.$t('OperationCanceled'))
         }
       }
 
@@ -586,19 +586,19 @@ export default {
             if (!passed && passed !== undefined) {
               const errMsg = checkMsg
                 ? String(this.resolveValue(checkMsg, checkCtx) || checkMsg)
-                : `返回值校验失败（${checkExpr}），实际返回: ${JSON.stringify(result)}`
+                : `${this.$t('ReturnValidationFailed')}（${checkExpr}），${this.$t('ActualReturned')}: ${JSON.stringify(result)}`
               throw new Error(errMsg)
             }
           }
         }
 
-        const stepLabel = step.label || step.name || step.call || '步骤'
-        this.appendLog(`${stepLabel} 成功`, 'success')
+        const stepLabel = step.label || step.name || step.call || this.$t('Step')
+        this.appendLog(`${stepLabel} ${this.$t('Success')}`, 'success')
       } catch (e) {
-        const stepLabel = step.label || step.name || step.call || '步骤'
-        const msg = `${stepLabel} 失败: ${e.message || e}`
+        const stepLabel = step.label || step.name || step.call || this.$t('Step')
+        const msg = `${stepLabel} ${this.$t('Failed')}: ${e.message || e}`
         if (step.on_error === 'skip') {
-          this.appendLog(msg + '（已跳过）', 'warn')
+          this.appendLog(`${msg}（${this.$t('Skipped')}）`, 'warn')
           return
         }
         this.appendLog(msg, 'error')
@@ -626,21 +626,21 @@ export default {
 
       // URL 仅允许从 config.api.xxx 的 xxx 获取
       if (typeof url !== 'string' || !url) {
-        throw new Error(`API key "${apiKey || stepUrlTpl}" 未在 config.api 中配置，不支持调用`)
+        throw new Error(`API key "${apiKey || stepUrlTpl}" ${this.$t('ApiNotConfiguredUnsupported')}`)
       }
 
       // method 仅允许从 api_method[apiKey] 中读取
       const apiMethodConfig = (this.config && typeof this.config.api_method === 'object' && this.config.api_method) || {}
       const allowedMethods = apiKey ? apiMethodConfig[apiKey] : undefined
       if (!Array.isArray(allowedMethods) || allowedMethods.length === 0) {
-        throw new Error(`API key "${apiKey}" 未定义 method，不支持调用`)
+        throw new Error(`API key "${apiKey}" ${this.$t('ApiMethodNotDefinedUnsupported')}`)
       }
       const normalizedAllowedMethods = allowedMethods
         .map(m => String(m || '').trim().toUpperCase())
         .filter(Boolean)
       const requestMethod = method.toUpperCase()
       if (!normalizedAllowedMethods.includes(requestMethod)) {
-        throw new Error(`API key "${apiKey}" 不允许使用 ${requestMethod} 方法，仅允许使用 ${normalizedAllowedMethods.join(', ')} 方法`)
+        throw new Error(`API key "${apiKey}" ${this.$t('MethodNotAllowed')} ${requestMethod} ${this.$t('MethodOnlyAllowed')} ${normalizedAllowedMethods.join(', ')} ${this.$t('Method')}`)
       }
 
       // url_format: 将 {key} 占位符替换为解析后的值
@@ -680,7 +680,7 @@ export default {
     callUKeyMethod(step, ctx) {
       if (!step.call) return undefined
       if (!_instance || typeof _instance[step.call] !== 'function') {
-        throw new Error(`UKey 方法 "${step.call}" 不存在`)
+        throw new Error(`UKey ${this.$t('Method')} "${step.call}" ${this.$t('NotExist')}`)
       }
       const args = this.resolveArgs(step.args || [], ctx)
       return _instance[step.call](...args)
@@ -920,7 +920,7 @@ export default {
         if (f.validate.equals !== undefined) {
           const target = this.inputDialog.form[f.validate.equals]
           if (val !== target) {
-            this.inputDialog.error = f.validate.message || `「${f.label}」与「${f.validate.equals}」不一致`
+            this.inputDialog.error = f.validate.message || `「${f.label}」${this.$t('And')}「${f.validate.equals}」${this.$t('NotMatch')}`
             return
           }
         }
@@ -1073,5 +1073,35 @@ export default {
 
 .cp-input-form {
   .el-form-item { margin-bottom: 14px; }
+
+  // 英文标签更长，固定单行避免中间断行
+  .el-form-item__label {
+    white-space: nowrap;
+    word-break: keep-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 14px;
+  }
+}
+
+@media (max-width: 640px) {
+  .cp-input-form {
+    // 小屏改为上下布局，避免横向空间不足导致标签可读性下降
+    .el-form-item__label {
+      float: none;
+      display: block;
+      width: 100% !important;
+      text-align: left;
+      line-height: 1.4;
+      padding: 0 0 6px;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+    }
+
+    .el-form-item__content {
+      margin-left: 0 !important;
+    }
+  }
 }
 </style>
