@@ -1,7 +1,7 @@
 <template>
   <BaseAuth
     :config="settings"
-    enable-field="AUTH_CERT"
+    enable-field="AUTH_UKEY"
     v-on="$listeners"
   />
 </template>
@@ -12,50 +12,50 @@ import { UploadKey } from '@/components'
 import TextReadonly from '@/components/Form/FormFields/TextReadonly.vue'
 
 export default {
-  name: 'Cert',
+  name: 'UKey',
   components: {
     BaseAuth
   },
   data() {
     return {
       settings: {
-        url: '/api/v1/settings/setting/?category=cert',
+        url: '/api/v1/settings/setting/?category=ukey',
         fields: [
           [this.$t('Basic'), [
-            'AUTH_CERT',
-            'AUTH_CERT_CHALLENGE_TTL',
-            'AUTH_CERT_DEFAULT_PIN'
+            'AUTH_UKEY',
+            'AUTH_UKEY_CHALLENGE_TTL',
+            'AUTH_UKEY_DEFAULT_PIN'
           ]],
           [this.$t('Enrollment'), [
-            'AUTH_CERT_ENROLL_ENABLED',
-            'AUTH_CERT_ENROLL_VALIDITY_DAYS',
-            'AUTH_CERT_CA_CERT_CONTENT',
-            'AUTH_CERT_CA_CERT_ALGORITHM',
-            'AUTH_CERT_CA_KEY_CONTENT',
-            'AUTH_CERT_CA_KEY_PASS'
+            'AUTH_UKEY_ENROLL_ENABLED',
+            'AUTH_UKEY_CA_CERT_ALGORITHM',
+            'AUTH_UKEY_CA_CERT_CONTENT',
+            'AUTH_UKEY_CA_KEY_CONTENT',
+            'AUTH_UKEY_CA_KEY_PASS',
+            'AUTH_UKEY_ENROLL_VALIDITY_DAYS'
           ]]
         ],
         fieldsMeta: {
-          AUTH_CERT_ENROLL_VALIDITY_DAYS: {
-            hidden: (form) => !form['AUTH_CERT_ENROLL_ENABLED']
+          AUTH_UKEY_ENROLL_VALIDITY_DAYS: {
+            hidden: (form) => !form['AUTH_UKEY_ENROLL_ENABLED']
           },
-          AUTH_CERT_CA_CERT_CONTENT: {
+          AUTH_UKEY_CA_CERT_CONTENT: {
             component: UploadKey,
-            hidden: (form) => !form['AUTH_CERT_ENROLL_ENABLED']
+            hidden: (form) => !form['AUTH_UKEY_ENROLL_ENABLED']
           },
-          AUTH_CERT_CA_CERT_ALGORITHM: {
+          AUTH_UKEY_CA_CERT_ALGORITHM: {
             component: TextReadonly,
             el: {
               bolder: false
             },
-            hidden: (form) => !form['AUTH_CERT_ENROLL_ENABLED']
+            hidden: (form) => !form['AUTH_UKEY_ENROLL_ENABLED']
           },
-          AUTH_CERT_CA_KEY_CONTENT: {
+          AUTH_UKEY_CA_KEY_CONTENT: {
             component: UploadKey,
-            hidden: (form) => !form['AUTH_CERT_ENROLL_ENABLED']
+            hidden: (form) => !form['AUTH_UKEY_ENROLL_ENABLED']
           },
-          AUTH_CERT_CA_KEY_PASS: {
-            hidden: (form) => !form['AUTH_CERT_ENROLL_ENABLED']
+          AUTH_UKEY_CA_KEY_PASS: {
+            hidden: (form) => !form['AUTH_UKEY_ENROLL_ENABLED']
           }
         },
         submitMethod: () => 'patch',

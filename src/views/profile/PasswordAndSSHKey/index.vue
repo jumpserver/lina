@@ -10,14 +10,14 @@
 import { GenericDetailPage } from '@/layout/components'
 import Password from './Password/Password.vue'
 import SSHKeyList from './SSHKey/SSHKeyList.vue'
-import Cert from './Cert/Cert.vue'
+import UKey from './UKey/UKey.vue'
 
 export default {
   components: {
     GenericDetailPage,
     Password,
     SSHKeyList,
-    Cert
+    UKey: UKey
   },
   data() {
     return {
@@ -65,8 +65,8 @@ export default {
         },
         {
           title: this.$t('LoginUKeySetting'),
-          name: 'Cert',
-          hidden: !this.$store.state.users.profile.can_cert_auth
+          name: 'UKey',
+          hidden: !this.$store.state.users.profile.can_ukey_auth
         }
       ]
     },
