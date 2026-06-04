@@ -166,7 +166,6 @@ export default {
       config: {},
       configLoaded: false,
       sdkLoaded: false,
-      sdkLoadError: false,
 
       deviceInfoItems: [], // [{ key, label, value, scope }]
       certInfoItems: [], // [{ key, label, value, tag? }]
@@ -206,8 +205,8 @@ export default {
         {
           key: '__sdk',
           label: this.$t('SdkStatus'),
-          value: this.sdkLoadError ? this.$t('LoadFailed') : this.sdkLoaded ? this.$t('Ready') : this.$t('Loading'),
-          tag: this.sdkLoadError ? 'danger' : this.sdkLoaded ? 'success' : 'info'
+          value: this.sdkLoaded ? this.$t('Loaded') : this.$t('NotLoaded'),
+          tag: this.sdkLoaded ? 'success' : 'warning'
         }
       ]
       const dynamic = this.deviceInfoItems.filter(item =>
@@ -294,7 +293,6 @@ export default {
 
       const sdkUrl = this.config.api?.ukey_sdk_script_url
       if (!sdkUrl) {
-        this.sdkLoadError = true
         this.appendLog(this.$t('MissingUkeySdkScriptUrl'), 'error')
         return
       }
@@ -304,7 +302,6 @@ export default {
       script.async = true
       script.onload = () => this.initSDKInstance()
       script.onerror = () => {
-        this.sdkLoadError = true
         this.appendLog(this.$t('SdkScriptLoadFailed'), 'error')
       }
       document.body.appendChild(script)
@@ -327,7 +324,6 @@ export default {
         this.sdkLoaded = true
         this.appendLog(`${this.$t('DriverInstanceCreated')} (${constructorName})`, 'success')
       } catch (e) {
-        this.sdkLoadError = true
         this.appendLog(`${this.$t('DriverInstanceCreateFailed')}: ${e.message}`, 'error')
         return
       }
