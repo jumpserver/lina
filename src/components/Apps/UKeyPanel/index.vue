@@ -92,7 +92,7 @@
       :visible.sync="inputDialog.visible"
       :before-close="cancelInputDialog"
       :close-on-click-modal="false"
-      :close-on-press-escape="false"
+      :close-on-press-escape="true"
       width="480px"
       :lock-scroll="false"
       append-to-body
@@ -339,8 +339,7 @@ export default {
           const ctx = this.buildContext({ vars: {}, input: {} })
           const result = this.callUKeyMethod(step, ctx)
           // 单元素数组展开（SDK 多设备枚举结果），避免后续模板使用时拿到数组
-          const normalized = Array.isArray(result) && result.length === 1 ? result[0] : result
-          if (step.register) this.applyRegister(step.register, normalized, {})
+          if (step.register) this.applyRegister(step.register, result, {})
           this.appendLog(`初始化: ${step.label || step.name || step.call} 成功`, 'success')
         }
       } catch (e) {
@@ -372,13 +371,12 @@ export default {
           if (resolved) return null
         }
         const raw = this.resolveFieldValue(field, ctx)
-        const actual = Array.isArray(raw) && raw.length === 1 ? raw[0] : raw
-        const value = actual == null ? '-' : (Array.isArray(actual) ? actual.join(', ') : String(actual))
+        const value = raw == null ? '-' : raw
         const item = { key: field.key, label: field.label, value, scope: field.scope || 'both' }
 
         // status.cases：通过 source 表达式的值匹配 case，决定显示文本和标签颜色
         if (field.status && Array.isArray(field.status.cases)) {
-          const sourceVal = field.source !== undefined ? this.resolveValue(field.source, ctx) : actual
+          const sourceVal = field.source !== undefined ? this.resolveValue(field.source, ctx) : raw
           const matchedIndex = field.status.cases.findIndex(c => {
             if (c.match === 'truthy') return !!sourceVal
             if (c.match === 'falsy') return !sourceVal
@@ -394,7 +392,7 @@ export default {
             this.applyRegister(field.register, matched.value, {})
           }
         } else if (field.compare !== undefined) {
-          const match = this.resolveCompare(field.compare, actual, ctx)
+          const match = this.resolveCompare(field.compare, raw, ctx)
           if (match !== null) {
             item.tag = match === false ? 'danger' : 'success'
           }
@@ -416,8 +414,7 @@ export default {
         for (const step of setupSteps) {
           const ctx = this.buildContext({ vars: {}, input: {} })
           const result = this.callUKeyMethod(step, ctx)
-          const normalized = Array.isArray(result) && result.length === 1 ? result[0] : result
-          if (step.register) this.applyRegister(step.register, normalized, {})
+          if (step.register) this.applyRegister(step.register, result, {})
         }
       } catch (_) {
         _ukey = {}
@@ -619,7 +616,33 @@ export default {
     // ═══════════════════════════════════════════════════════════════════════════
     async executeApiStep(step, ctx) {
       const method = (step.method || 'post').toLowerCase()
-      let url = this.resolveValue(step.url, ctx)
+      const apiConfig = (this.config && typeof this.config.api === 'object' && this.config.api) || {}
+      const stepUrlTpl = step && step.url
+      const apiKeyMatch = typeof stepUrlTpl === 'string'
+        ? stepUrlTpl.match(/config\.api\.([A-Za-z0-9_]+)/)
+        : null
+      const apiKey = apiKeyMatch ? apiKeyMatch[1] : ''
+      let url = apiKey ? apiConfig[apiKey] : ''
+
+      // URL 仅允许从 config.api.xxx 的 xxx 获取
+      if (typeof url !== 'string' || !url) {
+        throw new Error(`API key "${apiKey || stepUrlTpl}" 未在 config.api 中配置，不支持调用`)
+      }
+
+      // method 仅允许从 api_method[apiKey] 中读取
+      const apiMethodConfig = (this.config && typeof this.config.api_method === 'object' && this.config.api_method) || {}
+      const allowedMethods = apiKey ? apiMethodConfig[apiKey] : undefined
+      if (!Array.isArray(allowedMethods) || allowedMethods.length === 0) {
+        throw new Error(`API key "${apiKey}" 未定义 method，不支持调用`)
+      }
+      const normalizedAllowedMethods = allowedMethods
+        .map(m => String(m || '').trim().toUpperCase())
+        .filter(Boolean)
+      const requestMethod = method.toUpperCase()
+      if (!normalizedAllowedMethods.includes(requestMethod)) {
+        throw new Error(`API key "${apiKey}" 不允许使用 ${requestMethod} 方法，仅允许使用 ${normalizedAllowedMethods.join(', ')} 方法`)
+      }
+
       // url_format: 将 {key} 占位符替换为解析后的值
       if (step.url_format && typeof url === 'string') {
         const formatParams = this.resolveObjectValues(step.url_format, ctx)
@@ -627,9 +650,23 @@ export default {
           return key in formatParams ? encodeURIComponent(formatParams[key]) : `{${key}}`
         })
       }
-      const body = step.body ? this.resolveObjectValues(step.body, ctx) : undefined
+
+      let body = step.body ? this.resolveObjectValues(step.body, ctx) : undefined
       const params = step.params ? this.resolveObjectValues(step.params, ctx) : undefined
       const axiosConfig = params ? { params } : undefined
+
+      // === 只保留允许的 body 字段（仅按 config.api.xxx 的 xxx 匹配）===
+      if (body && this.config.api_body && typeof this.config.api_body === 'object') {
+        const allowedFields = apiKey ? this.config.api_body[apiKey] : undefined
+
+        // api_body 未配置该 URL（或字段列表为空）时，不限制 body
+        if (Array.isArray(allowedFields) && allowedFields.length > 0) {
+          body = Object.fromEntries(
+            Object.entries(body).filter(([k]) => allowedFields.includes(k))
+          )
+        }
+      }
+
       // GET/DELETE: (url, config)；其他方法: (url, body, config)
       if (method === 'get' || method === 'delete') {
         return await this.$axios[method](url, axiosConfig)
