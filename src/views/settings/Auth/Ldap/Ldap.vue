@@ -11,7 +11,7 @@ import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm
 import ImportDialog from './ImportDialog.vue'
 import TestLoginDialog from './TestLoginDialog.vue'
 import SyncSettingDialog from './SyncSettingDialog.vue'
-import { IBox } from '@/components'
+import { IBox, UploadKey } from '@/components'
 import rules, { JsonRequired } from '@/components/Form/DataForm/rules'
 import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
 import { createWsUrl } from '@/utils/common/index'
@@ -33,13 +33,20 @@ export default {
       dialogTest: false,
       dialogLdapUserImport: false,
       dialogSyncSetting: false,
-      encryptedFields: ['AUTH_LDAP_BIND_PASSWORD'],
+      encryptedFields: [
+        'AUTH_LDAP_BIND_PASSWORD',
+        'AUTH_LDAP_CACERT_CONTENT',
+        'AUTH_LDAP_CERT_CONTENT',
+        'AUTH_LDAP_KEY_CONTENT'
+      ],
       fields: [
         [
           this.$t('Basic'),
           [
             'AUTH_LDAP', 'AUTH_LDAP_SERVER_URI',
-            'AUTH_LDAP_BIND_DN', 'AUTH_LDAP_BIND_PASSWORD'
+            'AUTH_LDAP_BIND_DN', 'AUTH_LDAP_BIND_PASSWORD',
+            'AUTH_LDAP_START_TLS',
+            'AUTH_LDAP_CACERT_CONTENT', 'AUTH_LDAP_CERT_CONTENT', 'AUTH_LDAP_KEY_CONTENT'
           ]
         ],
         [
@@ -74,6 +81,18 @@ export default {
         AUTH_LDAP_USER_ATTR_MAP: {
           component: JsonEditor,
           rules: [JsonRequired]
+        },
+        AUTH_LDAP_CACERT_CONTENT: {
+          component: UploadKey,
+          helpText: this.$t('AuthLdapCACertHelpText')
+        },
+        AUTH_LDAP_CERT_CONTENT: {
+          component: UploadKey,
+          helpText: this.$t('AuthLdapCertHelpText')
+        },
+        AUTH_LDAP_KEY_CONTENT: {
+          component: UploadKey,
+          helpText: this.$t('AuthLdapKeyHelpText')
         }
       },
       hasDetailInMsg: false,
@@ -85,6 +104,11 @@ export default {
             if (value['AUTH_LDAP_BIND_PASSWORD'] === undefined) {
               value['AUTH_LDAP_BIND_PASSWORD'] = ''
             }
+            ['AUTH_LDAP_CACERT_CONTENT', 'AUTH_LDAP_CERT_CONTENT', 'AUTH_LDAP_KEY_CONTENT'].forEach((key) => {
+              if (value[key] === undefined) {
+                value[key] = ''
+              }
+            })
             btn.loading = true
             this.enableWS()
             this.ws.onopen = (e) => {
@@ -128,6 +152,11 @@ export default {
         if (data['AUTH_LDAP_BIND_PASSWORD'] === '') {
           delete data['AUTH_LDAP_BIND_PASSWORD']
         }
+        ['AUTH_LDAP_CACERT_CONTENT', 'AUTH_LDAP_CERT_CONTENT', 'AUTH_LDAP_KEY_CONTENT'].forEach((key) => {
+          if (data[key] === '') {
+            delete data[key]
+          }
+        })
         return data
       }
     }
