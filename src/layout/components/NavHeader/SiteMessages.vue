@@ -15,7 +15,7 @@
       custom-class="site-msg"
       @open="getMessages"
     >
-      <template #title>
+      <template #header>
         <div>
           <span>{{ $t('SiteMessage') }}</span>
           <div v-if="unreadMsgCount !== 0" class="msg-list-all-read-btn" @click.stop="oneClickRead(messages)">

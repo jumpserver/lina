@@ -105,7 +105,7 @@ export default {
       } else if (treeNode.meta.type === 'platform') {
         url = setUrlParam(url, 'platform', treeNode.id)
       }
-      this.$set(this.tableConfig, 'url', url)
+      this.tableConfig['url'] = url
       setRouterQuery(this, url)
     }
   }

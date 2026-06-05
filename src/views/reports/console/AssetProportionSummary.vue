@@ -35,7 +35,7 @@ export default {
     async getChartData() {
       const url = '/api/v1/index/?total_count_type_to_assets_amount=1'
       const data = await this.$axios.get(url)
-      this.$set(this.config, 'data', data.total_count_type_to_assets_amount)
+      this.config['data'] = data.total_count_type_to_assets_amount
     }
   }
 }

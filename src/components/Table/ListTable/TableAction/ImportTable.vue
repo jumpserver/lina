@@ -267,7 +267,7 @@ export default {
               const prop = col.prop
               row['@status'] = 'pending'
               this.$log.debug(`Set value ${oldValue} => ${newValue}`)
-              this.$set(row, prop, newValue)
+              row[prop] = newValue
             }
           }
         })
@@ -281,7 +281,7 @@ export default {
     generateTableData(tableTitles, tableData) {
       const totalData = []
       tableData.forEach(item => {
-        this.$set(item, '@status', 'pending')
+        item['@status'] = 'pending'
         const encryptFields = this.getEncryptFields()
         for (const field of encryptFields) {
           if (item[field]) {

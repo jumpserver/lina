@@ -14,20 +14,22 @@
         <i :class="iButtonIcon" :style="{ color: hasPerm ? '' : '#fff' }" />
       </el-button>
 
-      <el-dropdown-menu v-if="!isClick" slot="dropdown">
-        <el-dropdown-item command="title" disabled>
-          <div v-if="getProtocolsLoading">
-            {{ $t('Loading') }}
-          </div>
-          <div v-else>
-            {{ dropdownTitle }}
-          </div>
-        </el-dropdown-item>
-        <el-dropdown-item divided />
-        <el-dropdown-item v-for="protocol in protocols" :key="protocol.id" :command="protocol.name">
-          {{ protocol.name }}
-        </el-dropdown-item>
-      </el-dropdown-menu>
+      <template v-if="!isClick" #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item command="title" disabled>
+            <div v-if="getProtocolsLoading">
+              {{ $t('Loading') }}
+            </div>
+            <div v-else>
+              {{ dropdownTitle }}
+            </div>
+          </el-dropdown-item>
+          <el-dropdown-item divided />
+          <el-dropdown-item v-for="protocol in protocols" :key="protocol.id" :command="protocol.name">
+            {{ protocol.name }}
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
     </el-dropdown>
   </div>
 </template>

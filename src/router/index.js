@@ -61,15 +61,13 @@ export const constantRoutes = [
           icon: 'dashboard',
           title: i18n.global.t('Overview')
         },
-        beforeEnter: async (to, from, next) => {
+        beforeEnter: async () => {
           const preferView = getPropView()
           if (preferView) {
             await store.dispatch('app/reset')
-            next(`/${preferView}`)
-            return false
+            return `/${preferView}`
           }
-          next()
-          return false
+          return true
         }
       }
     ]

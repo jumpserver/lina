@@ -61,7 +61,7 @@ export default {
   mounted() {
     this.vars = JSON.parse(this.item.parameters_define)
     for (const key of Object.keys(this.vars)) {
-      this.$set(this.form, key, this.vars[key].default || '')
+      this.form[key] = this.vars[key].default || ''
     }
     this.ready = true
   },

@@ -124,7 +124,7 @@ export default {
       this.$refs.SearchInput.focus()
     },
     handleTagClick(v, k) {
-      this.$delete(this.filterTags, k)
+      delete this.filterTags[k]
       this.filterValue = v
       this.$refs.SearchInput.focus()
     },

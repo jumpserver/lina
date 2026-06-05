@@ -380,18 +380,18 @@ export default {
     setPieData(key, rawData) {
       const converted = this.conversionData(rawData)
       if (converted.length > 0) {
-        this.$set(this.pie, key, converted)
+        this.pie[key] = converted
       } else {
-        this.$set(this.pie, key, [{ name: this.$t('Nothing'), value: 0 }])
+        this.pie[key] = [{ name: this.$t('Nothing'), value: 0 }]
       }
     },
     async getData() {
       const data = await this.$axios.get(`/api/v1/reports/reports/asset-activity/?days=${this.days}`)
-      this.$set(this.session_stats, 'total', data.session_stats.total)
-      this.$set(this.session_stats, 'asset_count', data.session_stats.asset_count)
-      this.$set(this.session_stats, 'user_count', data.session_stats.user_count)
-      this.$set(this.asset_login_log_metrics, 'dates_metrics_date', data.asset_login_log_metrics.dates_metrics_date)
-      this.$set(this.asset_login_log_metrics, 'dates_metrics_total', data.asset_login_log_metrics.dates_metrics_total)
+      this.session_stats['total'] = data.session_stats.total
+      this.session_stats['asset_count'] = data.session_stats.asset_count
+      this.session_stats['user_count'] = data.session_stats.user_count
+      this.asset_login_log_metrics['dates_metrics_date'] = data.asset_login_log_metrics.dates_metrics_date
+      this.asset_login_log_metrics['dates_metrics_total'] = data.asset_login_log_metrics.dates_metrics_total
 
       this.setPieData('asset_login_by_type', data.asset_login_by_type)
       this.setPieData('asset_login_by_from', data.asset_login_by_from)

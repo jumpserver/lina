@@ -40,7 +40,7 @@ export default {
           onEnter: ({ row, col, oldValue, newValue }) => {
             // const prop = col.prop
             // this.$log.debug(`Set value ${oldValue} => ${newValue}`)
-            // this.$set(row, prop, newValue)
+            //  = newValue
             console.log('onEnter', row, col, oldValue, newValue)
           }
         }

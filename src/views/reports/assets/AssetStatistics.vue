@@ -272,14 +272,14 @@ export default {
   methods: {
     async getData() {
       const data = await this.$axios.get('/api/v1/reports/reports/asset-statistic/?days=7')
-      this.$set(this.asset_stats, 'total', data.asset_stats.total)
-      this.$set(this.asset_stats, 'active', data.asset_stats.active)
-      this.$set(this.asset_stats, 'connected', data.asset_stats.connected)
-      this.$set(this.asset_stats, 'zone', data.asset_stats.zone)
-      this.$set(this.asset_stats, 'directory_services', data.asset_stats.directory_services)
-      this.$set(this.asset_stats, 'platform_count', data.asset_stats.platform_count)
-      this.$set(this.added_asset_metrics, 'dates_metrics_date', data.added_asset_metrics.dates_metrics_date)
-      this.$set(this.added_asset_metrics, 'dates_metrics_total', data.added_asset_metrics.dates_metrics_total)
+      this.asset_stats['active'] = data.asset_stats.active
+      this.asset_stats['active'] = data.asset_stats.active
+      this.asset_stats['connected'] = data.asset_stats.connected
+      this.asset_stats['zone'] = data.asset_stats.zone
+      this.asset_stats['directory_services'] = data.asset_stats.directory_services
+      this.asset_stats['platform_count'] = data.asset_stats.platform_count
+      this.added_asset_metrics['dates_metrics_date'] = data.added_asset_metrics.dates_metrics_date
+      this.added_asset_metrics['dates_metrics_total'] = data.added_asset_metrics.dates_metrics_total
 
       const assetsByTypeCategory = data.assets_by_type_category || {}
 
@@ -310,9 +310,9 @@ export default {
           data
         }
       })
-      this.$set(this.assets_by_type_category, 'categories', categories)
-      this.$set(this.assets_by_type_category, 'typeLabelMap', typeLabelMap)
-      this.$set(this.assets_by_type_category, 'series', series)
+      this.assets_by_type_category['categories'] = categories
+      this.assets_by_type_category['typeLabelMap'] = typeLabelMap
+      this.assets_by_type_category['series'] = series
     }
   }
 }

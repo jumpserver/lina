@@ -28,6 +28,8 @@
 
 <script>
 /* eslint-disable vue/require-default-prop */
+import ElFormRenderer from '@/components/Form/DataForm/components/el-form-renderer'
+
 export const dialogModes = {
   new: 'new',
   edit: 'edit',
@@ -35,6 +37,9 @@ export const dialogModes = {
 }
 
 export default {
+  components: {
+    ElFormRenderer
+  },
   props: {
     newTitle: {
       type: String,

@@ -40,6 +40,7 @@
       v-else
       :component="data.component || `el-${data.type}`"
       :disabled="disabled || componentProps.disabled || readonly"
+      :model-value="itemValue"
       :value="itemValue"
       v-on="listeners">
       <template v-for="opt in options" :key="opt.value">
@@ -188,13 +189,34 @@ export default {
         ),
         // 手动更新表单数据
         input: (value, ...rest) => {
-          this.$emit('updateValue', { id, value })
-          // 更新表单时调用
-          atChange(id, value)
-          originOnInput([value, ...rest], updateForm)
-
-          // FIXME: rules 的 trigger 只写了 blur，依然会在 input 的时候触发校验！
-          this.triggerValidate(id)
+          this.handleValueUpdate({
+            id,
+            value,
+            rest,
+            atChange,
+            originInput: originOnInput,
+            updateForm
+          })
+        },
+        'update:model-value': (value, ...rest) => {
+          this.handleValueUpdate({
+            id,
+            value,
+            rest,
+            atChange,
+            originInput: originOnInput,
+            updateForm
+          })
+        },
+        'update:modelValue': (value, ...rest) => {
+          this.handleValueUpdate({
+            id,
+            value,
+            rest,
+            atChange,
+            originInput: originOnInput,
+            updateForm
+          })
         },
         change: (value, ...rest) => {
           if (typeof value === 'string' && trim) value = value.trim()
@@ -268,6 +290,15 @@ export default {
     }
   },
   methods: {
+    handleValueUpdate({ id, value, rest = [], atChange = noop, originInput = noop, updateForm }) {
+      this.$emit('updateValue', { id, value })
+      // 更新表单时调用
+      atChange(id, value)
+      originInput([value, ...rest], updateForm)
+
+      // FIXME: rules 的 trigger 只写了 blur，依然会在 input 的时候触发校验！
+      this.triggerValidate(id)
+    },
     triggerValidate(id) {
       if (!this.data.rules || !this.data.rules.length) return
 

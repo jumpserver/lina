@@ -251,8 +251,7 @@ export default {
       this.zTree.editName(node)
     },
     onOpenEditor(node) {
-      this.$set(this.openedEditor, node.id,
-        { key: node.id, name: node.name, originValue: '', value: '' })
+      this.openedEditor[node.id] = { key: node.id, name: node.name, originValue: '', value: '' }
       this.activeEditorId = node.id
       this.getFileContent(node.id)
     },
@@ -277,7 +276,7 @@ export default {
       })
     },
     remoteTab(key) {
-      this.$delete(this.openedEditor, key)
+      delete this.openedEditor[key]
       const keys = Object.keys(this.openedEditor)
       if (keys.length !== 0) {
         this.activeEditorId = keys[keys.length - 1]

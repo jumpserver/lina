@@ -362,18 +362,18 @@ export default {
   methods: {
     async getData() {
       const data = await this.$axios.get('/api/v1/reports/reports/account-statistic/?days=30')
-      this.$set(this.account_stats, 'total', data.account_stats.total)
-      this.$set(this.account_stats, 'active', data.account_stats.active)
-      this.$set(this.account_stats, 'connected', data.account_stats.connected)
-      this.$set(this.account_stats, 'su_from', data.account_stats.su_from)
-      this.$set(this.account_stats, 'date_change_secret', data.account_stats.date_change_secret)
-      this.$set(this.account_stats, 'template_total', data.account_stats.template_total)
-      this.$set(this.change_secret_account_metrics, 'dates_metrics_date', data.change_secret_account_metrics.dates_metrics_date)
-      this.$set(this.change_secret_account_metrics, 'dates_metrics_total', data.change_secret_account_metrics.dates_metrics_total)
+      this.account_stats['active'] = data.account_stats.active
+      this.account_stats['active'] = data.account_stats.active
+      this.account_stats['connected'] = data.account_stats.connected
+      this.account_stats['su_from'] = data.account_stats.su_from
+      this.account_stats['date_change_secret'] = data.account_stats.date_change_secret
+      this.account_stats['template_total'] = data.account_stats.template_total
+      this.change_secret_account_metrics['dates_metrics_date'] = data.change_secret_account_metrics.dates_metrics_date
+      this.change_secret_account_metrics['dates_metrics_total'] = data.change_secret_account_metrics.dates_metrics_total
 
       const accountSourcePie = data.source_pie
       if (accountSourcePie.length !== 0) {
-        this.$set(this.config, 'source_pie', accountSourcePie)
+        this.config['source_pie'] = accountSourcePie
       }
 
       const by_connectivity = data.by_connectivity.map(item => {
@@ -382,9 +382,9 @@ export default {
           value: item.total
         }
       })
-      this.$set(this.config, 'by_connectivity', by_connectivity)
-      this.$set(this.config.top10_asset_accounts, 'data', data.top_assets)
-      this.$set(this.config.top10_version_accounts, 'data', data.top_version_accounts)
+      this.config['by_connectivity'] = by_connectivity
+      this.config.top10_asset_accounts['data'] = data.top_assets
+      this.config.top10_version_accounts['data'] = data.top_version_accounts
     }
   }
 }

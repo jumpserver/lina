@@ -6,32 +6,27 @@ import store from '@/store'
 import { isSameView } from '@/utils/jms/index'
 import { toSentenceCase } from '@/utils/common/index'
 
-function beforeRouteChange(to, from, next) {
+function beforeRouteChange(to, from) {
   localStorage.setItem('activeTab', '')
 }
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, from) => {
   // start progress bar
   // NProgress.start()
-  // ensure next() is called at most once
-  let proceeded = false
-  const nextOnce = (...args) => {
-    if (proceeded) return
-    proceeded = true
-    return next(...args)
-  }
   try {
     await store.dispatch('common/cleanDrawerActionMeta')
-    await startup({ to, from, next: nextOnce })
-    if (!proceeded) {
-      if (to.name && from.name && to.name !== from.name) {
-        await beforeRouteChange(to, from, nextOnce)
-      }
-      nextOnce()
+    const startupResult = await startup({ to, from })
+    if (startupResult && startupResult !== true) {
+      return startupResult
     }
+    if (to.name && from.name && to.name !== from.name) {
+      await beforeRouteChange(to, from)
+    }
+    return true
   } catch (e) {
     const msg = 'Start service error: ' + e
     console.log(msg)
+    return false
   }
 })
 

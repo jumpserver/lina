@@ -36,9 +36,9 @@ async function beforeGoToLogin() {
   }
 }
 
-async function checkLogin({ to, from, next }) {
+async function checkLogin({ to, from }) {
   if (whiteList.indexOf(to.path) !== -1) {
-    next()
+    return true
   }
 
   try {
@@ -50,7 +50,7 @@ async function checkLogin({ to, from, next }) {
   }
 }
 
-async function getPublicSetting({ to, from, next }, isOpen) {
+async function getPublicSetting({ to, from }, isOpen) {
   // 获取Public settings
   const publicSettings = store.getters.publicSettings
   if (!publicSettings || Object.keys(publicSettings).length === 0 || !isOpen) {
@@ -68,7 +68,7 @@ async function refreshCurrentOrg() {
   })
 }
 
-async function changeCurrentOrgIfNeed({ to, from, next }) {
+async function changeCurrentOrgIfNeed({ to, from }) {
   await store.dispatch('users/getProfile')
 
   const usingOrgs = store.getters.usingOrgs
@@ -80,7 +80,7 @@ async function changeCurrentOrgIfNeed({ to, from, next }) {
   const currentOrg = store.getters.currentOrg
   if (!currentOrg || typeof currentOrg !== 'object') {
     console.error('Current org is null or not a object: ', currentOrg)
-    await orgUtil.change2PropOrg({ to, from, next })
+    await orgUtil.change2PropOrg()
   }
   const globalOrgPath = [
     '/console/perms/login-acls',
@@ -92,17 +92,17 @@ async function changeCurrentOrgIfNeed({ to, from, next }) {
     const delta = new Date().getTime() - currentOrg.autoEnter
     const notNeedChange = globalOrgPath.find(path => to.path.indexOf(path) === 0)
     if (!notNeedChange && delta > 3000) {
-      await orgUtil.change2PropOrg({ to, from, next })
+      await orgUtil.change2PropOrg()
     }
     return
   }
   if (!orgUtil.hasCurrentOrgPermission()) {
     console.error('Not has current org permission: ', currentOrg)
-    await orgUtil.change2PropOrg({ to, from, next })
+    await orgUtil.change2PropOrg()
   }
 }
 
-export async function generatePageRoutes({ to, from, next }) {
+export async function generatePageRoutes({ to, from }) {
   // determine whether the user has obtained his permission roles through getProfile
   resetRouter()
 
@@ -137,7 +137,7 @@ export async function generatePageRoutes({ to, from, next }) {
     // hack method to ensure that addRoutes is complete
     // set the replace: true, so the navigation will not leave a history record
     // console.debug('Next to: ', to)
-    next({ ...to, replace: true })
+    return { ...to, replace: true }
   } catch (error) {
     // remove token and go to login page to re-login
     // await store.dispatch('user/resetToken')
@@ -150,21 +150,22 @@ export async function checkUserFirstLogin({ to, from, next }) {
   // 防止递归调用
   if (to.path === '/profile/improvement') return true
   if (store.state.users.profile.is_first_login) {
-    next({
+    return {
       name: 'Improvement',
       replace: true,
       query: { _t: Date.now() } // 添加时间戳，防止 from 一样 next 不触发 guard.js router.beforeEach逻辑
-    })
+    }
   } else {
     const nextRoute = localStorage.getItem('next')
     if (nextRoute) {
       localStorage.setItem('next', '')
-      next(nextRoute.replace('#', ''))
+      return nextRoute.replace('#', '')
     }
   }
+  return true
 }
 
-export async function changeCurrentViewIfNeed({ to, from, next }) {
+export async function changeCurrentViewIfNeed({ to, from }) {
   let viewName = to.path.split('/')[1]
   // 这几个是需要检测的, 切换视图组织时，避免 404, 这里不能加 settings, 因为 默认没有返回 setting 组织(System) 的管理权限
   if (['console', 'audit', 'pam', 'workbench', 'tickets', ''].indexOf(viewName) === -1) {
@@ -176,23 +177,17 @@ export async function changeCurrentViewIfNeed({ to, from, next }) {
   console.debug('Change has current view, has perm: ', viewName, '=>', has)
   if (has) {
     await store.dispatch('users/changeToView', viewName)
-    return { status: 'continue' }
+    return true
   }
   const preferView = getPropView()
   // 如果没有可用视图，直接放行，避免无限重定向
   if (!preferView || preferView === viewName) {
-    return { status: 'continue' }
+    return true
   }
   viewName = preferView
   // Next 之前要重置 init 状态，否则这些路由守卫就不走了
   await store.dispatch('app/reset')
-  next(`/${viewName}`)
-
-  // new Promise((resolve, reject) => reject('')) 这种方式通过输出发现在页面除此渲染的时候执行两次，
-  // 返回一个 Promise 我理解是为了中断第一次导航，确保只有第二次导航到到有权限的视图。由于第一个 has 为 false
-  // 导致被 startup catch 捕获，而 error 的 trace 之所以锁定为到 runtime 等中也是因为由于 Babel 和 Polyfill 的缘故
-
-  return { status: 'redirected', to: viewName }
+  return `/${viewName}`
 }
 
 function onI18nLoaded() {
@@ -215,7 +210,10 @@ export async function startup({ to, from, next }) {
   // if (store.getters.inited) { return true }
   if (store.getters.inited) {
     // 页面初始化后也需要检测
-    await checkUserFirstLogin({ to, from, next })
+    const firstLoginResult = await checkUserFirstLogin({ to, from })
+    if (firstLoginResult && firstLoginResult !== true) {
+      return firstLoginResult
+    }
     return true
   }
 
@@ -224,15 +222,17 @@ export async function startup({ to, from, next }) {
 
     // set page title
     // await getOpenPublicSetting({ to, from, next })
-    await getPublicSetting({ to, from, next }, true)
-    await checkLogin({ to, from, next })
+    await getPublicSetting({ to, from }, true)
+    await checkLogin({ to, from })
     await onI18nLoaded()
-    await getPublicSetting({ to, from, next }, false)
-    const viewResult = await changeCurrentViewIfNeed({ to, from, next })
-    if (viewResult && viewResult.status === 'redirected') return true
-    await changeCurrentOrgIfNeed({ to, from, next })
-    await generatePageRoutes({ to, from, next })
-    await checkUserFirstLogin({ to, from, next })
+    await getPublicSetting({ to, from }, false)
+    const viewResult = await changeCurrentViewIfNeed({ to, from })
+    if (viewResult && viewResult !== true) return viewResult
+    await changeCurrentOrgIfNeed({ to, from })
+    const pageRoutesResult = await generatePageRoutes({ to, from })
+    if (pageRoutesResult && pageRoutesResult !== true) return pageRoutesResult
+    const firstLoginResult = await checkUserFirstLogin({ to, from })
+    if (firstLoginResult && firstLoginResult !== true) return firstLoginResult
     await store.dispatch('assets/getAssetCategories')
   } catch (e) {
     console.error('Startup error: ', e)

@@ -66,9 +66,9 @@ export default {
   methods: {
     handleTabClick(tab) {
       if (tab.name !== 'AssetPermissionDetail') {
-        this.$set(this.config, 'hasRightSide', false)
+        this.config['hasRightSide'] = false
       } else {
-        this.$set(this.config, 'hasRightSide', true)
+        this.config['hasRightSide'] = true
       }
     }
   }

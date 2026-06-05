@@ -74,12 +74,14 @@
 
 <script>
 import { toSentenceCase } from '@/utils/common/index'
+import { ArrowDown } from '@element-plus/icons-vue'
 import Icon from '@/components/Widgets/Icon/index.vue'
 
 export default {
   name: 'DataActions',
   components: {
-    Icon
+    Icon,
+    ArrowDown
   },
   props: {
     grouped: {

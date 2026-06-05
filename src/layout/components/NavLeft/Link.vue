@@ -9,7 +9,6 @@
 
 <script>
 import { isExternal } from '@/utils/secure'
-import { RouterLink } from 'vue-router'
 
 export default {
   props: {
@@ -20,13 +19,13 @@ export default {
   },
   computed: {
     tag() {
-      return isExternal(this.to) ? 'a' : RouterLink
+      return 'a'
     },
     attrs() {
       if (isExternal(this.to)) {
         return { href: this.to, target: '_blank', rel: 'noopener' }
       }
-      return { to: this.to }
+      return { href: `#${this.to}` }
     }
   }
 }

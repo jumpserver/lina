@@ -1,6 +1,7 @@
 <template>
   <ElDatableTable v-bind="mergedTableConfig" ref="table"
-    class="el-data-table"
+    :class="rootClass"
+    :style="rootStyle"
     @size-change="handleSizeChange"
     @update="onUpdate"
     v-on="iListeners" />
@@ -104,7 +105,16 @@ export default {
   },
   computed: {
     mergedTableConfig() {
-      return Object.assign({}, this.tableConfig, omitVueListeners(this.$attrs))
+      const attrs = omitVueListeners(this.$attrs)
+      delete attrs.class
+      delete attrs.style
+      return Object.assign({}, this.tableConfig, attrs)
+    },
+    rootClass() {
+      return ['el-data-table', this.$attrs.class]
+    },
+    rootStyle() {
+      return this.$attrs.style
     },
     iListeners() {
       return Object.assign({}, pickVueListeners(this.$attrs), this.tableConfig?.listeners)

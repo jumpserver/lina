@@ -197,14 +197,14 @@ export default {
       const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`
       const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(_query, '=', '&')
       const treeUrl = url + queryStr
-      this.$set(this.treeSetting, 'treeUrl', treeUrl)
+      this.treeSetting['treeUrl'] = treeUrl
     },
     handleFilterChange(query) {
       const _query = this.cleanUrl(query)
       const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`
       const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(_query, '=', '&')
       const treeUrl = url + queryStr
-      this.$set(this.treeSetting, 'treeUrl', treeUrl)
+      this.treeSetting['treeUrl'] = treeUrl
     },
     handleDateChange(object) {
       this.query = {
@@ -214,7 +214,7 @@ export default {
       const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`
       const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(this.query, '=', '&')
       const treeUrl = url + queryStr
-      this.$set(this.treeSetting, 'treeUrl', treeUrl)
+      this.treeSetting['treeUrl'] = treeUrl
       this.treeTable.forceRerenderTree()
     },
     cleanUrl(query) {

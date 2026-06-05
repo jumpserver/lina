@@ -41,11 +41,36 @@ configureCompat({
   RENDER_FUNCTION: false,
   COMPONENT_ASYNC: false,
   WATCH_ARRAY: false,
+  INSTANCE_ATTRS_CLASS_STYLE: false,
+  GLOBAL_PROTOTYPE: false,
   ATTR_ENUMERATED_COERCION: false
 })
 
+function shouldIgnoreVueWarning(msg, trace = '') {
+  if (
+    msg.includes('Enumerated attribute "spellcheck"') &&
+    trace.includes('<ElTooltip>')
+  ) {
+    return true
+  }
+  return (
+    msg.includes('Runtime directive used on component with non-element root node') &&
+    (
+      trace.includes('<ElCascader>') ||
+      trace.includes('<ElRovingFocusGroupCollectionItem>')
+    )
+  )
+}
+
 async function initApp() {
   const app = createApp(App)
+
+  app.config.warnHandler = (msg, instance, trace) => {
+    if (shouldIgnoreVueWarning(msg, trace)) {
+      return
+    }
+    console.warn(`[Vue warn]: ${msg}${trace || ''}`)
+  }
 
   // i18n helpers (set immediately to avoid undefined)
   const identityT = (key, ...rest) => {

@@ -41,6 +41,9 @@ export default {
     title() {
       return `${this.$t('HardwareInfo')}`
     },
+    formatterArgs() {
+      return Object.assign({}, this.formatterArgsNew, this.col.formatterArgs)
+    },
     items() {
       const cellValue = { ...this.cellValue }
       const memory = this.cellValue?.memory

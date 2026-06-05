@@ -9,7 +9,7 @@
     top="1vh"
     @update:visible="$emit('update:visible', $event)"
   >
-    <template #title>
+    <template #header>
       <div class="drawer-title">
         <span>{{ $tc('SelectPlatform') }}</span>
         <el-link

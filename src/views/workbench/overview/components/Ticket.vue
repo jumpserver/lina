@@ -105,7 +105,7 @@ export default {
   },
   watch: {
     url(iNew) {
-      this.$set(this.tableConfig, 'url', `${iNew}?assignees__id=${this.currentUser.id}&state=pending`)
+      this.tableConfig['url'] = `${iNew}?assignees__id=${this.currentUser.id}&state=pending`
     }
   }
 }

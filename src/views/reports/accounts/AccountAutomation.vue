@@ -213,12 +213,12 @@ export default {
     },
     async getData() {
       const data = await this.$axios.get(`/api/v1/reports/reports/account-automation/?days=${this.days}`)
-      this.$set(this.automation_stats, 'push', data.automation_stats.push)
-      this.$set(this.automation_stats, 'check', data.automation_stats.check)
-      this.$set(this.automation_stats, 'backup', data.automation_stats.backup)
-      this.$set(this.automation_stats, 'collect', data.automation_stats.collect)
-      this.$set(this.automation_stats, 'change_secret', data.automation_stats.change_secret)
-      this.$set(this.execution_metrics, 'dates_metrics_date', data.execution_metrics.dates_metrics_date)
+      this.automation_stats['push'] = data.automation_stats.push
+      this.automation_stats['check'] = data.automation_stats.check
+      this.automation_stats['backup'] = data.automation_stats.backup
+      this.automation_stats['collect'] = data.automation_stats.collect
+      this.automation_stats['change_secret'] = data.automation_stats.change_secret
+      this.execution_metrics['dates_metrics_date'] = data.execution_metrics.dates_metrics_date
 
       const seriesData = Object.entries(data.execution_metrics.data).map(([key, value]) => ({
         name: key,
@@ -239,8 +239,8 @@ export default {
       }))
 
       const keys = Object.keys(data.execution_metrics.data)
-      this.$set(this.execution_metrics, 'legend', keys)
-      this.$set(this.execution_metrics, 'series', seriesData)
+      this.execution_metrics['legend'] = keys
+      this.execution_metrics['series'] = seriesData
     }
   }
 }

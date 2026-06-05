@@ -233,7 +233,7 @@ export default {
     }
   },
   mounted() {
-    this.$set(this.urlUpdated, this.tableUrl, location.href)
+    this.urlUpdated[this.tableUrl] = location.href
   },
   deactivated() {
     this.isDeactivated = true
@@ -246,7 +246,7 @@ export default {
 
       if (!preURL || preURL === location.href) return
 
-      this.$set(this.urlUpdated, this.tableUrl, location.href)
+      this.urlUpdated[this.tableUrl] = location.href
       this.$log.debug('Reload the table get latest data: pre ', preURL, ' current: ', location.href)
       this.reloadTable()
     })
@@ -289,13 +289,13 @@ export default {
       if (!this.actionInit) {
         this.initQuery = attrs
         for (const key in attrs) {
-          this.$set(this.extraQuery, key, attrs[key])
+          this.extraQuery[key] = attrs[key]
         }
         return true
       }
       const removeKeys = Object.keys(this.initQuery).filter(key => !attrs[key])
       for (const key of removeKeys) {
-        this.$delete(this.extraQuery, key)
+        delete this.extraQuery[key]
       }
     },
     getMergedQuery() {
@@ -338,8 +338,8 @@ export default {
         dateTo.setDate(dateTo.getDate() + 1)
         dateTo = dateTo.toISOString()
       }
-      this.$set(this.extraQuery, 'date_from', dateFrom)
-      this.$set(this.extraQuery, 'date_to', dateTo)
+      this.extraQuery['date_from'] = dateFrom
+      this.extraQuery['date_to'] = dateTo
       const query = {
         date_from: dateFrom,
         date_to: dateTo

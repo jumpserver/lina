@@ -263,13 +263,13 @@ export default {
     },
     async getData() {
       const data = await this.$axios.get(`/api/v1/reports/reports/user-change-password/?days=${this.days}`)
-      this.$set(this.total_count_change_password, 'total', data.total_count_change_password.total)
-      this.$set(this.total_count_change_password, 'user_total', data.total_count_change_password.user_total)
-      this.$set(this.total_count_change_password, 'change_by_total', data.total_count_change_password.change_by_total)
-      this.$set(this.config.change_password_top10_users, 'data', data.change_password_top10_users)
-      this.$set(this.config.change_password_top10_change_bys, 'data', data.change_password_top10_change_bys)
-      this.$set(this.config.user_change_password_metrics, 'dates_metrics_date', data.user_change_password_metrics.dates_metrics_date)
-      this.$set(this.config.user_change_password_metrics, 'dates_metrics_total', data.user_change_password_metrics.dates_metrics_total)
+      this.total_count_change_password['total'] = data.total_count_change_password.total
+      this.total_count_change_password['user_total'] = data.total_count_change_password.user_total
+      this.total_count_change_password['change_by_total'] = data.total_count_change_password.change_by_total
+      this.config.change_password_top10_users['data'] = data.change_password_top10_users
+      this.config.change_password_top10_change_bys['data'] = data.change_password_top10_change_bys
+      this.config.user_change_password_metrics['dates_metrics_date'] = data.user_change_password_metrics.dates_metrics_date
+      this.config.user_change_password_metrics['dates_metrics_total'] = data.user_change_password_metrics.dates_metrics_total
     }
   }
 }

@@ -34,7 +34,11 @@
       </div>
 
       <div v-if="enableVirtualAccount" class="spec-zone virtual-choices">
-        <el-checkbox v-model="virtualChecked" @change="handleVirtualChecked">
+        <el-checkbox
+          :model-value="virtualChecked"
+          @change="handleVirtualChecked"
+          @update:model-value="virtualChecked = $event"
+        >
           {{ virtualAccount.label }}
         </el-checkbox>
         <el-select

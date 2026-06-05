@@ -25,11 +25,11 @@ export default {
     EndpointRuleList,
     ComponentLog
   },
-  beforeRouteUpdate(to, from, next) {
+  beforeRouteUpdate(to, from) {
     if (to.name === from.name && to.path === from.path && to.query?.tab) {
       this.$store.commit('common/reload')
     }
-    next()
+    return true
   },
   data() {
     return {

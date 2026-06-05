@@ -220,7 +220,7 @@ export default {
 
       actions.forEach(action => {
         if (!Object.prototype.hasOwnProperty.call(this.formModel, action.name)) {
-          this.$set(this.formModel, action.name, action.value || '')
+          this.formModel[action.name] = action.value || ''
         }
       })
 

@@ -61,7 +61,7 @@ export default {
     }
   },
   data() {
-    const formatterArgs = Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
+    const formatterArgs = Object.assign({}, this.formatterArgsDefault, this.col.formatterArgs)
     return {
       drawerTitle: '',
       linkClicked: false,

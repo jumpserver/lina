@@ -223,7 +223,7 @@ export default {
     clearWeektime() {
       this.weekTimeData.forEach(item => {
         item.child.forEach(t => {
-          this.$set(t, 'check', false)
+          t['check'] = false
         })
       })
       this.timeRange = []
@@ -233,7 +233,7 @@ export default {
     selectAll() {
       this.weekTimeData.forEach(item => {
         item.child.forEach(t => {
-          this.$set(t, 'check', true)
+          t['check'] = true
         })
       })
       this.setTimeRange()
@@ -314,7 +314,7 @@ export default {
       this.weekTimeData.forEach(item => {
         item.child.forEach(t => {
           if (t.row >= minRow && t.row <= maxRow && t.col >= minCol && t.col <= maxCol) {
-            this.$set(t, 'check', check)
+            t['check'] = check
           }
         })
       })

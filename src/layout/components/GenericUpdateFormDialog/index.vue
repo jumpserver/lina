@@ -15,7 +15,11 @@
         </div>
       </el-col>
       <el-col :md="18" :sm="24">
-        <el-checkbox-group v-model="checkedFields" @change="handleCheckedFieldsChange">
+        <el-checkbox-group
+          :model-value="checkedFields"
+          @change="handleCheckedFieldsChange"
+          @update:model-value="checkedFields = $event"
+        >
           <el-checkbox
             v-for="(value, name) in iFormSetting.fieldsMeta"
             :key="name"

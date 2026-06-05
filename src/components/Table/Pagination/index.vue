@@ -7,8 +7,8 @@
       :page-size="size"
       :page-sizes="paginationSizes"
       :total="total"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange" />
+      @update:current-page="handleCurrentChange"
+      @update:page-size="handleSizeChange" />
   </div>
 </template>
 

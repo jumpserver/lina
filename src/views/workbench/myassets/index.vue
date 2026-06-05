@@ -147,7 +147,7 @@ export default {
         this.$message.error(e?.response?.request?.responseText || this.$t('BadRequestErrorMsg'))
         return Promise.reject(e)
       }).then(() => {
-        this.$set(row, colProp, newValue)
+        row[colProp] = newValue
         this.$message.success(this.$t('UpdateSuccessMsg'))
       })
     }

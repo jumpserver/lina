@@ -53,7 +53,7 @@ export default {
           this.titleConfig.tip = this.$t('ProportionOfAssetTypes')
         }
 
-        this.$set(this.config, 'data', str)
+        this.config['data'] = str
       } catch (e) {
         this.$message.error(e.message)
       }

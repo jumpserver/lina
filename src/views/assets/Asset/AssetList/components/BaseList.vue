@@ -195,7 +195,7 @@ export default {
   },
   watch: {
     optionInfo(iNew) {
-      this.$set(this.defaultConfig.columnsMeta.gathered_info.formatterArgs, 'info', iNew)
+      this.defaultConfig.columnsMeta.gathered_info.formatterArgs['info'] = iNew
     },
     $route(iNew, old) {
       const tab = iNew.query.tab

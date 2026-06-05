@@ -17,14 +17,20 @@
     >
       <el-row>
         <el-col>
-          <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckedAllChange">
+          <el-checkbox
+            :indeterminate="isIndeterminate"
+            :model-value="checkAll"
+            @change="handleCheckedAllChange"
+            @update:model-value="checkAll = $event"
+          >
             {{ $t('All') }}
           </el-checkbox>
         </el-col>
       </el-row>
       <el-checkbox-group
-        v-model="checkedRegion"
+        :model-value="checkedRegion"
         @change="handleCheckedRegionChange"
+        @update:model-value="checkedRegion = $event"
       >
         <el-row
           v-for="r in allRegions"

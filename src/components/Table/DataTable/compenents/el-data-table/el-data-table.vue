@@ -1,5 +1,5 @@
 <template>
-  <div v-bind="rootAttrs" class="el-data-table">
+  <div v-bind="rootAttrs" :class="rootClass" :style="rootStyle">
     <template v-if="showNoData">
       <!--@slot 获取数据为空时的内容-->
       <slot name="no-data" />
@@ -65,7 +65,7 @@
               #default="{ row: tableRow, column, $index }"
             >
               <component
-                :is="col.formatter"
+                :is="getFormatterComponent(col)"
                 :key="tableRow.id"
                 :cell-value="tableRow[col.prop]"
                 :col="col"
@@ -89,18 +89,18 @@
         :page-size="size"
         :page-sizes="paginationSizes"
         :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange" />
+        @update:current-page="handleCurrentChange"
+        @update:page-size="handleSizeChange" />
 
       <the-dialog
         ref="dialog"
         :button-size="buttonSize"
         :dialog-attrs="dialogAttrs"
-        :edit-title="dialogEditTitle"
+        :edit-title="iDialogEditTitle"
         :form="form"
         :form-attrs="formAttrs"
-        :new-title="dialogNewTitle"
-        :view-title="dialogViewTitle"
+        :new-title="iDialogNewTitle"
+        :view-title="iDialogViewTitle"
         @confirm="onConfirm"
       >
         <template #default="scope">
@@ -114,6 +114,7 @@
 
 <script>
 import { omitVueListeners, pickVueListeners } from '@/utils/vue'
+import { markRaw, toRaw } from 'vue'
 import merge from 'deepmerge'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
@@ -524,27 +525,21 @@ export default {
      */
     dialogNewTitle: {
       type: String,
-      default() {
-        return this.newText
-      }
+      default: ''
     },
     /**
      * 修改弹窗的标题，默认为editText的值
      */
     dialogEditTitle: {
       type: String,
-      default() {
-        return this.editText
-      }
+      default: ''
     },
     /**
      * 查看弹窗的标题，默认为viewText的值
      */
     dialogViewTitle: {
       type: String,
-      default() {
-        return this.viewText
-      }
+      default: ''
     },
     /**
      * 弹窗表单, 用于新增与修改, 详情配置参考el-form-renderer
@@ -776,7 +771,25 @@ export default {
       return getSelectStrategy(this)
     },
     rootAttrs() {
-      return omitVueListeners(this.$attrs)
+      const attrs = omitVueListeners(this.$attrs)
+      delete attrs.class
+      delete attrs.style
+      return attrs
+    },
+    rootClass() {
+      return ['el-data-table', this.$attrs.class]
+    },
+    rootStyle() {
+      return this.$attrs.style
+    },
+    iDialogNewTitle() {
+      return this.dialogNewTitle || this.newText
+    },
+    iDialogEditTitle() {
+      return this.dialogEditTitle || this.editText
+    },
+    iDialogViewTitle() {
+      return this.dialogViewTitle || this.viewText
     },
     // 过滤会与内部选择策略冲突的事件，避免父组件只拿到当前页 selection
     forwardListeners() {
@@ -865,6 +878,12 @@ export default {
     this.debouncedGetListFromRemote = _.debounce(this.getListFromRemote, 300)
   },
   methods: {
+    getFormatterComponent(col) {
+      if (!col?.formatter || typeof col.formatter === 'function') {
+        return null
+      }
+      return markRaw(toRaw(col.formatter))
+    },
     getColumnBindProps(col) {
       // 排除 formatter，因为组件类型的 formatter 不应该传递给 el-table-column 的 formatter prop
       // 函数类型的 formatter 已经通过 :formatter 显式传递了

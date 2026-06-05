@@ -12,7 +12,6 @@
           class="submenu-item level2-menu"
         >
           <item
-            :children="item.children"
             :icon="onlyOneChild.meta.icon||(item.meta && item.meta.icon)"
             :title="getItemTitle(onlyOneChild)"
           />
@@ -41,7 +40,7 @@
         popper-append-to-body
       >
         <template #title>
-          <item v-if="item.meta" :children="item.children" :icon="item.meta && item.meta.icon" :title="getItemTitle(item)" />
+          <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="getItemTitle(item)" />
         </template>
         <sidebar-item
           v-for="child in item.children"

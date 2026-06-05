@@ -1,13 +1,14 @@
 <template>
   <div class="filter-field">
-    <el-cascader
-      v-show="options.length > 0"
-      ref="Cascade"
-      class="filter-cascader"
-      :options="options"
-      :props="config"
-      @change="handleMenuItemChange"
-    />
+    <div v-show="options.length > 0" class="filter-cascader-wrap">
+      <el-cascader
+        ref="Cascade"
+        class="filter-cascader"
+        :options="options"
+        :props="config"
+        @change="handleMenuItemChange"
+      />
+    </div>
 
     <el-tag
       v-for="(v, k) in filterTags"
@@ -284,7 +285,7 @@ export default {
       this.$nextTick(() => this.$refs.Cascade.handleClear())
     },
     handleTagClose(evt) {
-      this.$delete(this.filterTags, evt)
+      delete this.filterTags[evt]
       if (this.getUrlQuery) {
         this.checkUrlFields(evt)
       }
@@ -319,7 +320,7 @@ export default {
         value: this.filterValue,
         valueLabel: this.valueLabel
       }
-      this.$set(this.filterTags, this.filterKey, tag)
+      this.filterTags[this.filterKey] = tag
       // this.$emit('tagSearch', this.filterMaps)
 
       // 修改查询参数时改变url中保存的参数
@@ -362,7 +363,7 @@ export default {
         this.handleConfirm()
       }
 
-      this.$delete(this.filterTags, k)
+      delete this.filterTags[k]
 
       this.filterKey = v.key
       this.filterValue = v.value

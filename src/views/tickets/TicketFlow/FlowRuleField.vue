@@ -87,7 +87,7 @@ export default {
       this.$emit('input', this.rules)
     },
     handleInput(index, event) {
-      this.$set(this.rules, index, { 'users': event })
+      this.rules[index] = { 'users': event }
       this.$emit('input', this.rules)
     }
   }

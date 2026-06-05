@@ -1,34 +1,33 @@
 <template>
-  <transition name="dialog-fade">
-    <el-dialog v-bind="$attrs" :append-to-body="true"
-      :class="{ shadow: shadow }"
-      :modal-append-to-body="true"
-      :title="title"
-      :top="top"
-      :width="iWidth"
-      class="dialog">
-      <div v-loading="disabledStatus">
-        <slot />
-      </div>
+  <el-dialog v-bind="dialogAttrs" :append-to-body="true"
+    :class="dialogClass"
+    :style="dialogStyle"
+    :modal-append-to-body="true"
+    :title="title"
+    :top="top"
+    :width="iWidth"
+  >
+    <div v-loading="disabledStatus">
+      <slot />
+    </div>
 
-      <template v-if="showButtons" #footer>
-        <div class="dialog-footer">
-          <slot name="footer">
-            <el-button v-if="showCancel && showButtons" size="small" @click="onCancel">{{ cancelTitle }}</el-button>
-            <el-button
-              v-if="showConfirm && showButtons"
-              :disabled="disabledStatus"
-              size="small"
-              type="primary"
-              @click="onConfirm"
-            >
-              {{ confirmTitle }}
-            </el-button>
-          </slot>
-        </div>
-      </template>
-    </el-dialog>
-  </transition>
+    <template v-if="showButtons" #footer>
+      <div class="dialog-footer">
+        <slot name="footer">
+          <el-button v-if="showCancel && showButtons" size="small" @click="onCancel">{{ cancelTitle }}</el-button>
+          <el-button
+            v-if="showConfirm && showButtons"
+            :disabled="disabledStatus"
+            size="small"
+            type="primary"
+            @click="onConfirm"
+          >
+            {{ confirmTitle }}
+          </el-button>
+        </slot>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
@@ -90,6 +89,18 @@ export default {
     return {}
   },
   computed: {
+    dialogAttrs() {
+      const attrs = { ...this.$attrs }
+      delete attrs.class
+      delete attrs.style
+      return attrs
+    },
+    dialogClass() {
+      return ['dialog', { shadow: this.shadow }, this.$attrs.class]
+    },
+    dialogStyle() {
+      return this.$attrs.style
+    },
     iWidth() {
       return this.$store.getters.isMobile ? '1000px' : this.width
     }

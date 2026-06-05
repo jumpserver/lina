@@ -194,7 +194,7 @@ export default {
       setTimeout(() => {
         const query = this.setTreeUrlQuery()
         url = query ? `${url}&${query}` : url
-        this.$set(this.tableConfig, 'url', url)
+        this.tableConfig['url'] = url
       })
 
       if (this.treeSetting.selectSyncToRoute !== false) {

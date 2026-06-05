@@ -7,10 +7,12 @@
           v-model="treeSearchValue"
           :placeholder="$tc('Search')"
           class="fixed-tree-search"
-          prefix-icon="fa fa-search"
           size="small"
           @input="treeSearchHandle"
         >
+          <template #prefix>
+            <i class="fa fa-search fixed-tree-search__prefix" />
+          </template>
           <template #suffix>
             <i
               class="el-icon-close"
@@ -642,6 +644,7 @@ div.rMenu li {
 
   & :deep(.el-input__prefix) {
     display: flex;
+    align-items: center;
 
     .el-input__icon {
       display: flex;
@@ -653,6 +656,17 @@ div.rMenu li {
   & :deep(.el-input__suffix-inner) {
     line-height: 30px;
   }
+}
+
+.fixed-tree-search__prefix {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  color: var(--N500);
+  font-size: 12px;
+  line-height: 1;
 }
 
 .icon-refresh {

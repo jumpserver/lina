@@ -17,14 +17,20 @@
             {{ $t('RunnableAssets') }}
           </div>
           <el-checkbox
-            v-model="checkAll"
             :indeterminate="isIndeterminate"
+            :model-value="checkAll"
             style="padding-bottom: 5px"
             @change="handleCheckAllChange"
+            @update:model-value="checkAll = $event"
           >
             {{ $t('All') }}
           </el-checkbox>
-          <el-checkbox-group v-model="selectedAssets" class="group-assets" @change="handleCheckedAssetChange">
+          <el-checkbox-group
+            :model-value="selectedAssets"
+            class="group-assets"
+            @change="handleCheckedAssetChange"
+            @update:model-value="selectedAssets = $event"
+          >
             <el-checkbox
               v-for="asset in runnableAssets"
               :key="asset.id"

@@ -5,16 +5,18 @@
         <el-button class="confirm action" size="small">
           <i class="fa fa-check" />
         </el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item
-            v-for="item of iActions"
-            :key="item.name"
-            :command="item.name"
-            :disabled="item.disabled"
-          >
-            {{ item.label }}
-          </el-dropdown-item>
-        </el-dropdown-menu>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item
+              v-for="item of iActions"
+              :key="item.name"
+              :command="item.name"
+              :disabled="item.disabled"
+            >
+              {{ item.label }}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
       </el-dropdown>
       <el-tooltip :content="$tc('Ignore')" :open-delay="400">
         <el-button
@@ -70,7 +72,7 @@ export default {
   },
   data() {
     return {
-      formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs),
+      formatterArgs: Object.assign({}, this.formatterArgsDefault, this.col.formatterArgs),
       processing: false,
       statusMap: statusMap
     }

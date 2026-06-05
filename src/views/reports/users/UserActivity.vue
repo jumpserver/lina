@@ -411,24 +411,24 @@ export default {
     },
     async getData() {
       const data = await this.$axios.get(`/api/v1/reports/reports/users/?days=${this.days}`)
-      this.$set(this.user_stats, 'total', data.user_stats.total)
-      this.$set(this.user_stats, 'not_enabled_mfa', data.user_stats.not_enabled_mfa)
-      this.$set(this.user_stats, 'valid', data.user_stats.valid)
-      this.$set(this.user_stats, 'first_login', data.user_stats.first_login)
-      this.$set(this.user_stats, 'face_vector', data.user_stats.face_vector)
-      this.$set(this.user_stats, 'need_update_password', data.user_stats.need_update_password)
-      this.$set(this.config.user_login_log_metrics, 'dates_metrics_date', data.user_login_log_metrics.dates_metrics_date)
-      this.$set(this.config.user_login_log_metrics, 'dates_metrics_success_total', data.user_login_log_metrics.dates_metrics_success_total)
-      this.$set(this.config.user_login_log_metrics, 'dates_metrics_failure_total', data.user_login_log_metrics.dates_metrics_failure_total)
-      this.$set(this.config.user_login_method_metrics, 'dates_metrics_date', data.user_login_method_metrics.dates_metrics_date)
-      this.$set(this.config.user_login_method_metrics, 'dates_metrics_total', data.user_login_method_metrics.dates_metrics_total)
-      this.$set(this.config, 'user_login_time_metrics', data.user_login_time_metrics)
+      this.user_stats['need_update_password'] = data.user_stats.need_update_password
+      this.user_stats['not_enabled_mfa'] = data.user_stats.not_enabled_mfa
+      this.user_stats['valid'] = data.user_stats.valid
+      this.user_stats['first_login'] = data.user_stats.first_login
+      this.user_stats['face_vector'] = data.user_stats.face_vector
+      this.user_stats['need_update_password'] = data.user_stats.need_update_password
+      this.config.user_login_log_metrics['dates_metrics_date'] = data.user_login_log_metrics.dates_metrics_date
+      this.config.user_login_log_metrics['dates_metrics_success_total'] = data.user_login_log_metrics.dates_metrics_success_total
+      this.config.user_login_log_metrics['dates_metrics_failure_total'] = data.user_login_log_metrics.dates_metrics_failure_total
+      this.config.user_login_method_metrics['dates_metrics_date'] = data.user_login_method_metrics.dates_metrics_date
+      this.config.user_login_method_metrics['dates_metrics_total'] = data.user_login_method_metrics.dates_metrics_total
+      this.config['user_login_time_metrics'] = data.user_login_time_metrics
 
       const userBySource = data.user_by_source
       if (userBySource.length !== 0) {
-        this.$set(this.pie, 'user_by_source', userBySource)
+        this.pie['user_by_source'] = userBySource
       } else {
-        this.$set(this.pie, 'user_by_source', [{ 'name': this.$t('Nothing'), 'value': 0 }])
+        this.pie['user_by_source'] = [{ 'name': this.$t('Nothing'), 'value': 0 }]
       }
     }
   }
