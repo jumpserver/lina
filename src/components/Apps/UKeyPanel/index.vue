@@ -1027,6 +1027,20 @@ export default {
       for (const f of this.inputDialog.fields) {
         if (!f.validate) continue
         const val = this.inputDialog.form[f.key]
+        if (f.validate.minLength !== undefined) {
+          const minLength = Number(f.validate.minLength)
+          if (!Number.isNaN(minLength) && String(val || '').length < minLength) {
+            this.inputDialog.error = f.validate.message || `「${f.label}」${this.$t('Length')} < ${minLength}`
+            return
+          }
+        }
+        if (f.validate.maxLength !== undefined) {
+          const maxLength = Number(f.validate.maxLength)
+          if (!Number.isNaN(maxLength) && String(val || '').length > maxLength) {
+            this.inputDialog.error = f.validate.message || `「${f.label}」${this.$t('Length')} > ${maxLength}`
+            return
+          }
+        }
         if (f.validate.equals !== undefined) {
           const target = this.inputDialog.form[f.validate.equals]
           if (val !== target) {
