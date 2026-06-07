@@ -280,8 +280,11 @@ export default {
     setDefaultItems(choices) {
       let items = []
       const requiredItems = choices.filter(item => (item.required || item.primary))
+      const choiceNames = new Set(choices.map(item => item.name))
+      const hasUnsupportedValue = this.settingReadonly && Array.isArray(this.value) &&
+        this.value.some(item => !choiceNames.has(item.name))
 
-      if (this.value instanceof Array && this.value.length > 0) {
+      if (Array.isArray(this.value) && this.value.length > 0 && !hasUnsupportedValue) {
         const protocols = []
         this.value.forEach(item => {
           // 有默认值的情况下，设置为只读或者有id、有setting是平台
@@ -309,7 +312,10 @@ export default {
     },
     getAssetDefaultItems(item, choices) {
       const protocols = []
-      const protocol = choices.find(i => i.name === item.name) || {}
+      const protocol = choices.find(i => i.name === item.name)
+      if (!protocol) {
+        return protocols
+      }
       protocols.push({ ...protocol, ...item })
       return protocols
     },
