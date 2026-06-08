@@ -14,7 +14,9 @@
           <span class="detail-item-name">{{ item }}</span>
         </div>
       </div>
-      <span slot="reference">{{ amount }}</span>
+      <template #reference>
+        <span>{{ amount }}</span>
+      </template>
     </el-popover>
   </DetailFormatter>
 </template>

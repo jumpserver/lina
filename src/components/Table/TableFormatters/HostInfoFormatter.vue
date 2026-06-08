@@ -11,7 +11,9 @@
         <el-col :span="12">{{ formatterArgs.info[key] }}</el-col>
         <el-col :span="12">{{ item }}</el-col>
       </el-row>
-      <span slot="reference">{{ viewText }}</span>
+      <template #reference>
+        <span>{{ viewText }}</span>
+      </template>
     </el-popover>
   </DetailFormatter>
 </template>

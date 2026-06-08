@@ -36,9 +36,9 @@
         {{ multipleValue }}
       </div>
     </template>
-    <component v-bind="componentProps" :is="data.component || `el-${data.type}`"
+    <component v-bind="componentProps" :is="rawComponent"
       v-else
-      :component="data.component || `el-${data.type}`"
+      :component="rawComponent"
       :disabled="disabled || componentProps.disabled || readonly"
       :model-value="itemValue"
       :value="itemValue"
@@ -58,10 +58,10 @@
           </el-tooltip>
           <span v-if="data.helpText">{{ data.helpText }}</span>
         </el-checkbox>
-        <!-- WARNING: radio 用 label 属性来表示 value 的含义 -->
+        <!-- radio 使用 value 属性来表示选中值 -->
         <!-- FYI: radio 的 value 属性可以在没有 radio-group 时用来关联到同一个 v-model -->
         <el-radio v-bind="opt" v-else-if="data.type === 'radio-group'"
-          :label="'value' in opt ? opt.value : opt.label">
+          :value="'value' in opt ? opt.value : opt.label">
           {{ opt.label }}
           <el-tooltip v-if="opt.tip" :content="opt.tip" :open-delay="500" placement="top">
             <i class="el-icon-warning-outline" />
@@ -91,6 +91,7 @@ import _frompairs from 'lodash/fromPairs'
 import _get from 'lodash/get'
 import _includes from 'lodash/includes'
 import _topairs from 'lodash/toPairs'
+import { markRaw } from 'vue'
 import getEnableWhenStatus from '../util/enable-when'
 import { noop } from '../util/utils'
 
@@ -152,6 +153,10 @@ export default {
   computed: {
     itemProp() {
       return this.prop || this.data.id
+    },
+    rawComponent() {
+      const comp = this.data.component || `el-${this.data.type}`
+      return typeof comp === 'string' ? comp : markRaw(comp)
     },
     // 解构运算符会处理 undefined 的情况
     componentProps: ({ data: { el }, propsInner }) => ({ ...el, ...propsInner }),

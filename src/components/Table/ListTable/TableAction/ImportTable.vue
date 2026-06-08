@@ -2,10 +2,10 @@
   <div>
     <div class="tableFilter">
       <el-radio-group v-model="importStatusFilter" size="small">
-        <el-radio-button label="all">{{ $t('Total') }}: {{ totalCount }}</el-radio-button>
-        <el-radio-button label="ok">{{ $t('Success') }}: {{ successCount }}</el-radio-button>
-        <el-radio-button label="error">{{ $t('Failed') }}: {{ failedCount }}</el-radio-button>
-        <el-radio-button label="pending">{{ $t('Pending') }}: {{ pendingCount }}</el-radio-button>
+        <el-radio-button value="all">{{ $t('Total') }}: {{ totalCount }}</el-radio-button>
+        <el-radio-button value="ok">{{ $t('Success') }}: {{ successCount }}</el-radio-button>
+        <el-radio-button value="error">{{ $t('Failed') }}: {{ failedCount }}</el-radio-button>
+        <el-radio-button value="pending">{{ $t('Pending') }}: {{ pendingCount }}</el-radio-button>
       </el-radio-group>
     </div>
     <div class="row">

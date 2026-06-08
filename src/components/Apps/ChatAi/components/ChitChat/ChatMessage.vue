@@ -19,7 +19,7 @@
             }}
           </div>
 
-          <div v-else class="thinking-time">{{ $i18n.t('DeeplyThoughtAbout') }}</div>
+          <div v-else class="thinking-time">{{ $t('DeeplyThoughtAbout') }}</div>
         </div>
         <div :class="item.reasoning ? 'reasoning' : 'message'">
           <div class="message-content">
@@ -61,7 +61,8 @@
               <span class="el-dropdown-link">
                 <i class="fa fa-ellipsis-v" />
               </span>
-              <el-dropdown-menu slot="dropdown">
+              <template #dropdown>
+              <el-dropdown-menu>
                 <el-dropdown-item
                   v-for="i in dropdownOptions"
                   :key="i.action"
@@ -70,6 +71,7 @@
                   {{ i.label }}
                 </el-dropdown-item>
               </el-dropdown-menu>
+              </template>
             </el-dropdown>
           </div>
         </div>
@@ -136,7 +138,7 @@ export default {
     },
     isServerError() {
       return (this.item.type === 'finish' && this.item.result.content === '')
-        ? this.$i18n.t('ServerBusyRetry')
+        ? this.$t('ServerBusyRetry')
         : ''
     },
     modelIconName() {

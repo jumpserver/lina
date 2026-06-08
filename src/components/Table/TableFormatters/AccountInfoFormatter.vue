@@ -8,9 +8,11 @@
         <span>{{ getDisplay(account) }}</span>
       </div>
     </div>
-    <el-button slot="reference" class="link-btn" plain size="small" type="primary">
+    <template #reference>
+    <el-button class="link-btn" plain size="small" type="primary">
       {{ $t('View') }} <i class="el-icon-arrow-down" />
     </el-button>
+    </template>
   </el-popover>
 </template>
 

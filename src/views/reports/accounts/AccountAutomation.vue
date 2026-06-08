@@ -158,9 +158,7 @@ export default {
               }
             },
             axisLabel: {
-              textStyle: {
-                color: '#8F959E'
-              }
+              color: '#8F959E'
             },
             axisTick: {
               show: false
@@ -179,9 +177,7 @@ export default {
               }
             },
             axisLabel: {
-              textStyle: {
-                color: '#8F959E'
-              }
+              color: '#8F959E'
             },
             axisTick: {
               show: false

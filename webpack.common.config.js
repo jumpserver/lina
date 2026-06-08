@@ -29,7 +29,10 @@ function createCommonConfig({ appEnv, isDevelopment, publicPath }) {
       assetModuleFilename: `${assetsDir}/[name].[contenthash:8][ext][query]`,
       clean: true
     },
-    ignoreWarnings: [/::v-deep usage as a combinator has been deprecated/],
+    ignoreWarnings: [
+      /::v-deep usage as a combinator has been deprecated/,
+      /COMPILER_V_BIND_OBJECT_ORDER/
+    ],
     resolve: {
       alias: {
         '@': resolvePath('src'),

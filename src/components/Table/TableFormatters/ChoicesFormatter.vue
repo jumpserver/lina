@@ -1,7 +1,9 @@
 <template>
   <span>
     <el-tooltip v-if="shown" :disabled="!formatterArgs.hasTips" :open-delay="500" effect="dark" placement="bottom">
-      <div slot="content" v-sanitize="tips" />
+      <template #content>
+        <div v-sanitize="tips" />
+      </template>
       <span :class="classes">
         <i v-if="formatterArgs.showIcon && icon" :class="'fa ' + icon" />
         <span v-if="formatterArgs.showText">{{ text }}</span>

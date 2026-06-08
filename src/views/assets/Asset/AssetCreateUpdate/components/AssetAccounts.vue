@@ -2,7 +2,7 @@
   <div>
     <el-link
       v-if="isUpdate(this)"
-      :underline="false"
+      underline="never"
       type="default"
       @click="goToAssetAccountsPage()"
     >

@@ -56,9 +56,7 @@ export default {
     // 初始化值，也就是选中的值
     value: {
       type: [Array, String, Number, Boolean, Object],
-      default() {
-        return this.multiple ? [] : ''
-      }
+      default: undefined
     },
     disabledValues: {
       type: Array,
@@ -131,7 +129,7 @@ export default {
       remote: true,
       allSelected: false,
       transformed: false, // 这里改回来是因为，acl 中资产选择，category 选择后，再编辑，就看不到了
-      innerValue: _.cloneDeep(this.value)
+      innerValue: this.value !== undefined ? _.cloneDeep(this.value) : (this.multiple ? [] : '')
     }
   },
   computed: {
@@ -139,7 +137,7 @@ export default {
       return this.$refs.select
     },
     collapseTags() {
-      return this.multiple && this.collapseTagsCount > 0 && this.value.length > this.collapseTagsCount
+      return this.multiple && this.collapseTagsCount > 0 && (this.value?.length || 0) > this.collapseTagsCount
     },
     optionsValues() {
       return this.iOptions.map((v) => v.value)

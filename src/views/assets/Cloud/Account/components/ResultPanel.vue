@@ -8,7 +8,7 @@
       <el-table-column prop="key" width="120" />
       <el-table-column prop="value">
         <template #default="scope">
-          <el-link :underline="false"> {{ scope.row.value }}</el-link>
+          <el-link underline="never"> {{ scope.row.value }}</el-link>
         </template>
       </el-table-column>
     </el-table>

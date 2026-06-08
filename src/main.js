@@ -42,8 +42,10 @@ configureCompat({
   COMPONENT_ASYNC: false,
   WATCH_ARRAY: false,
   INSTANCE_ATTRS_CLASS_STYLE: false,
-  GLOBAL_PROTOTYPE: false,
-  ATTR_ENUMERATED_COERCION: false
+  GLOBAL_PROTOTYPE: 'suppress-warning',
+  ATTR_ENUMERATED_COERCION: false,
+  COMPONENT_V_MODEL: false,
+  TRANSITION_GROUP_ROOT: false
 })
 
 function shouldIgnoreVueWarning(msg, trace = '') {

@@ -2,7 +2,7 @@
   <div>
     <el-link
       icon="el-icon-edit"
-      :underline="false"
+      underline="never"
       @click="handlerLinkClick"
     >
       {{ content }}

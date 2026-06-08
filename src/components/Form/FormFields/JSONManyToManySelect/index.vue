@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-radio-group v-model="iValue.type" @input="handleTypeChange">
-      <el-radio v-for="tp of types" :key="tp.name" :label="tp.name">
+      <el-radio v-for="tp of types" :key="tp.name" :value="tp.name">
         {{ tp.label }}
       </el-radio>
     </el-radio-group>

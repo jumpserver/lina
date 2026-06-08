@@ -2,7 +2,7 @@
   <el-form class="account-content" @submit.prevent>
     <el-form-item>
       <el-radio-group v-model="realRadioSelected" @input="handleRadioChanged">
-        <el-radio v-for="i in iRealChoices" :key="i.label" :disabled="i.disabled" :label="i.value">
+        <el-radio v-for="i in iRealChoices" :key="i.label" :disabled="i.disabled" :value="i.value">
           {{ i.label }}
           <el-tooltip v-if="i.tip" :content="i.tip" :open-delay="500" placement="top">
             <i class="fa fa-question-circle-o" />

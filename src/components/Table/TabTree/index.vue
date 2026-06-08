@@ -14,11 +14,13 @@
           :label-content="item.labelContent"
           :name="item.name"
         >
-          <span slot="label" class="tab-container">
+          <template #label>
+          <span class="tab-container">
             <i v-if="item.icon && !showText" :class="item.icon" class="tab-icon fa " />
             <span v-if="showText" class="tab-text">{{ item.title }}</span>
             <slot :tab="item.name" name="badge" />
           </span>
+          </template>
         </el-tab-pane>
       </template>
     </el-tabs>
@@ -31,9 +33,11 @@
             :setting="activeTreeSetting"
             @url-change="handleUrlChange"
           >
-            <div slot="rMenu" slot-scope="{data}">
+            <template #rMenu="{data}">
+            <div>
               <slot :data="data" name="rMenu" />
             </div>
+            </template>
           </AutoDataZTree>
         </keep-alive>
       </slot>

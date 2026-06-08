@@ -8,9 +8,11 @@
     <template #table>
       <slot name="table" />
     </template>
-    <div slot="rMenu" slot-scope="{data}">
+    <template #rMenu="{data}">
+    <div>
       <slot :data="data" name="rMenu" />
     </div>
+    </template>
   </TreeTable>
 </template>
 

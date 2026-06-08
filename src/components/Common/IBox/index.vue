@@ -2,7 +2,7 @@
   <el-card v-bind="$attrs" :class="'ibox ' + type" :shadow="shadow">
     <template v-if="title" #header>
       <slot name="header">
-        <div v-if="title" slot="header" class="clearfix ibox-title">
+        <div v-if="title" class="clearfix ibox-title">
           <i v-if="fa" :class="'fa ' + fa" />
           <h5>{{ title }}</h5>
         </div>

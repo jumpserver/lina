@@ -69,10 +69,8 @@ export default {
             fontSize: '16'
           },
           axisLabel: {
-            textStyle: {
-              color: '#8796AD',
-              fontSize: '14'
-            }
+            color: '#8796AD',
+            fontSize: '14'
           },
           data: this.datesMetrics,
           axisLine: {
@@ -95,10 +93,8 @@ export default {
             fontSize: '16'
           },
           axisLabel: {
-            textStyle: {
-              color: '#8796AD',
-              fontSize: '14'
-            }
+            color: '#8796AD',
+            fontSize: '14'
           },
           axisTick: {
             show: false
@@ -119,22 +115,18 @@ export default {
           barWidth: '20%',
           borderWidth: 0,
           itemStyle: {
-            normal: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                offset: 0,
-                color: TwoLevelColor
-              },
-              {
-                offset: 1,
-                color: ThreeLevelColor
-              }
-              ], false)
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+              offset: 0,
+              color: TwoLevelColor
+            },
+            {
+              offset: 1,
+              color: ThreeLevelColor
             }
+            ], false)
           },
           label: {
-            normal: {
-              show: false
-            }
+            show: false
           },
           data: this.primaryData
         },
@@ -146,9 +138,7 @@ export default {
           symbolOffset: [0, -6],
           z: 12,
           itemStyle: {
-            normal: {
-              color: primary
-            }
+            color: primary
           },
           label: {
             show: false,

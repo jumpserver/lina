@@ -1,7 +1,7 @@
 <template>
   <div class="asset-panel">
     <el-alert :center="false" :closable="true" style="margin-bottom: 6px">
-      <el-link :icon="linkIcon" :type="linkType" :underline="false"> {{ tip }}</el-link>
+      <el-link :icon="linkIcon" :type="linkType" underline="never"> {{ tip }}</el-link>
     </el-alert>
     <ImportTable v-bind="settings" ref="importTable"
       origin="cloudSync"

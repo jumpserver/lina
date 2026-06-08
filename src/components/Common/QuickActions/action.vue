@@ -7,7 +7,7 @@
       </el-tooltip>
     </td>
     <td>
-      <span slot="reference">
+      <span>
         <component v-bind="action.attrs" :is="iType"
           v-model="action.attrs.model"
           :title="label"

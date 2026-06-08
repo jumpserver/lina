@@ -1,7 +1,7 @@
 <template>
   <span>
     <el-radio-group v-model="select" class="switch" size="small" @change="onChange">
-      <el-radio-button v-for="i in iOptions" :key="i.value" :label="i.value">
+      <el-radio-button v-for="i in iOptions" :key="i.value" :value="i.value">
         {{ i.label }}
       </el-radio-button>
     </el-radio-group>

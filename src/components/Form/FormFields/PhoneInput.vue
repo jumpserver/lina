@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-input v-model="rawValue.phone" :placeholder="$tc('InputPhone')" required @input="onInputChange">
+      <template #prepend>
       <el-select
-        slot="prepend"
         :placeholder="$tc('Select')"
         :value="rawValue.code"
         @change="onChange"
@@ -17,6 +17,7 @@
           <span style="float: right; font-size: 13px">{{ country.value }}</span>
         </el-option>
       </el-select>
+      </template>
     </el-input>
   </div>
 </template>

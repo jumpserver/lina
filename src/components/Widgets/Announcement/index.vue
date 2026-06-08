@@ -23,11 +23,13 @@
         </div>
       </div>
 
-      <div slot="footer" class="dialog-footer">
+      <template #footer>
+        <div class="dialog-footer">
         <el-button type="primary" @click="onModalConfirm">
           {{ $t('Confirm') }}
         </el-button>
-      </div>
+        </div>
+      </template>
     </el-dialog>
 
     <el-alert

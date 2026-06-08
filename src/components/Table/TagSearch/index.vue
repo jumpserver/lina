@@ -27,7 +27,7 @@
       <span v-else>{{ v.value }}</span>
     </el-tag>
 
-    <span v-if="keyLabel" slot="prefix" class="filter-title">{{ keyLabel + ':' }}</span>
+    <span v-if="keyLabel" class="filter-title">{{ keyLabel + ':' }}</span>
 
     <el-input
       ref="SearchInput"

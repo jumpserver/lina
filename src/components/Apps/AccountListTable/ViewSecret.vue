@@ -39,7 +39,7 @@
           v-perms="'accounts.view_accountsecret'"
           :label="$tc('PasswordRecord')"
         >
-          <el-link :underline="false" type="success" @click="showHistoryDialog">
+          <el-link underline="never" type="success" @click="showHistoryDialog">
             <span style="padding-right: 30px">
               {{ versions }}
             </span>

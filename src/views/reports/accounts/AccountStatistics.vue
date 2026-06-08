@@ -282,9 +282,7 @@ export default {
               }
             },
             axisLabel: {
-              textStyle: {
-                color: '#8F959E'
-              }
+              color: '#8F959E'
             },
             axisTick: {
               show: false
@@ -303,9 +301,7 @@ export default {
               }
             },
             axisLabel: {
-              textStyle: {
-                color: '#8F959E'
-              }
+              color: '#8F959E'
             },
             axisTick: {
               show: false
@@ -327,28 +323,26 @@ export default {
             smooth: true,
             areaStyle: {
               // 区域填充样式
-              normal: {
-                color: new echarts.graphic.LinearGradient(
-                  0,
-                  0,
-                  0,
-                  1,
-                  [{
-                    offset: 0,
-                    color: primary
-                  }, {
-                    offset: 0.6,
-                    color: TwoLevelColor
-                  }, {
-                    offset: 0.8,
-                    color: ThreeLevelColor
-                  }
-                  ],
-                  false
-                ),
-                shadowColor: shadowColor,
-                shadowBlur: 5
-              }
+              color: new echarts.graphic.LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                [{
+                  offset: 0,
+                  color: primary
+                }, {
+                  offset: 0.6,
+                  color: TwoLevelColor
+                }, {
+                  offset: 0.8,
+                  color: ThreeLevelColor
+                }
+                ],
+                false
+              ),
+              shadowColor: shadowColor,
+              shadowBlur: 5
             },
             data: this.change_secret_account_metrics.dates_metrics_total
           }

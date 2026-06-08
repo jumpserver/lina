@@ -1,5 +1,6 @@
 /* eslint-disable no-sequences */
 import _ from 'lodash'
+import { markRaw } from 'vue'
 /**
  * content 的每一项会浅拷贝一层
  * 只可以在 item 层新增修改属性，如 item.a = b
@@ -14,6 +15,11 @@ export default function transformContent(content) {
       extractRulesFromComponent(item)
       // 有些旧写法是 checkboxGroup & radioGroup
       item.type = _.kebabCase(item.type)
+    }
+
+    // 使用 markRaw 标记组件定义，避免被 Vue 变成响应式对象
+    if (item.component && typeof item.component !== 'string') {
+      item.component = markRaw(item.component)
     }
 
     return item

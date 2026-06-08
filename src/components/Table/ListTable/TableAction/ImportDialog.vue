@@ -13,10 +13,10 @@
   >
     <el-form v-if="!showTable" label-position="left" style="padding-left: 20px">
       <el-form-item :label="$tc('Import' )" :label-width="'100px'">
-        <el-radio v-if="canImportCreate" v-model="importOption" class="export-item" label="create">
+        <el-radio v-if="canImportCreate" v-model="importOption" class="export-item" value="create">
           {{ $t('Create') }}
         </el-radio>
-        <el-radio v-if="canImportUpdate" v-model="importOption" class="export-item" label="update">
+        <el-radio v-if="canImportUpdate" v-model="importOption" class="export-item" value="update">
           {{ $t('Update') }}
         </el-radio>
         <div style="line-height: 1.5">
@@ -43,12 +43,14 @@
           <div class="el-upload__text">
             {{ $t('DragUploadFileInfo') }}
           </div>
-          <div slot="tip" class="el-upload__tip">
+          <template #tip>
+          <div class="el-upload__tip">
             <span :class="{'hasError': hasFileFormatOrSizeError }">
               {{ $t('UploadCsvLth10MHelpText') }}
             </span>
             <div v-if="renderError" class="hasError">{{ renderError }}</div>
           </div>
+          </template>
         </el-upload>
       </el-form-item>
     </el-form>

@@ -25,6 +25,7 @@
 import _clonedeep from 'lodash/cloneDeep'
 import _isequal from 'lodash/isEqual'
 import _set from 'lodash/set'
+import { markRaw } from 'vue'
 import RenderFormGroup from './components/render-form-group.vue'
 import RenderFormItem from './components/render-form-item.vue'
 import transformContent from './util/transform-content'
@@ -41,8 +42,8 @@ const GROUP = 'group'
 export default {
   name: 'ElFormRenderer',
   components: {
-    RenderFormItem,
-    RenderFormGroup
+    RenderFormItem: markRaw(RenderFormItem),
+    RenderFormGroup: markRaw(RenderFormGroup)
   },
   props: {
     content: {

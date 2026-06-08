@@ -9,12 +9,12 @@ import { getLangCode } from './utils'
 const lang = getLangCode()
 
 const i18n = createI18n({
-  legacy: true, // keep Options API style helpers ($t/$tc)
-  globalInjection: true,
+  legacy: false, // Use Composition API mode
+  globalInjection: true, // Keep $t/$tc available globally
   locale: lang,
   fallbackLocale: 'en',
-  silentFallbackWarn: true,
-  silentTranslationWarn: true,
+  missingWarn: false,
+  fallbackWarn: false,
   datetimeFormats: date,
   messages
 })

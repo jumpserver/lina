@@ -2,13 +2,13 @@
 <template>
   <el-form size="small">
     <el-form-item>
-      <el-radio v-model="radioValue" :label="1">
+      <el-radio v-model="radioValue" :value="1">
         {{ $t('Hour') }}，{{ $t('WildcardsAllowed') }}[, - * /]
       </el-radio>
     </el-form-item>
 
     <el-form-item>
-      <el-radio v-model="radioValue" :label="2">
+      <el-radio v-model="radioValue" :value="2">
         {{ $t('From') }}
         <el-input-number v-model="cycle01" :max="23" :min="0" size="small" />
         -
@@ -18,7 +18,7 @@
     </el-form-item>
 
     <el-form-item>
-      <el-radio v-model="radioValue" :label="3">
+      <el-radio v-model="radioValue" :value="3">
         {{ $t('Every') }}
         <el-input-number v-model="average02" :max="23" :min="1" size="small" />
         {{ $t('Hour') }} {{ $t('ExecuteOnce') }}
@@ -26,7 +26,7 @@
     </el-form-item>
 
     <el-form-item>
-      <el-radio v-model="radioValue" :label="4">
+      <el-radio v-model="radioValue" :value="4">
         {{ $t('Appoint') }}
         <el-select
           v-model="checkboxList"

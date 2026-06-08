@@ -13,7 +13,7 @@
       <div class="drawer-title">
         <span>{{ $tc('SelectPlatform') }}</span>
         <el-link
-          :underline="false"
+          underline="never"
           size="small"
           type="primary"
           @click="handleManagePlatform"

@@ -13,7 +13,8 @@
         <span class="el-dropdown-link">
           <i class="fa fa-plug" />
         </span>
-        <el-dropdown-menu slot="dropdown">
+        <template #dropdown>
+        <el-dropdown-menu>
           <div class="menu-section">
             <div v-if="toolsLoading">
               <i class="el-icon-loading" /> {{ $t('Loading') }}
@@ -51,6 +52,7 @@
             </div>
           </div>
         </el-dropdown-menu>
+        </template>
       </el-dropdown>
     </div>
     <div class="chat-input">

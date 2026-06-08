@@ -13,9 +13,11 @@
       <el-button size="small" type="primary">
         {{ btnText }}
       </el-button>
-      <div v-if="tip" slot="tip" class="el-upload__tip">
+      <template #tip>
+      <div v-if="tip" class="el-upload__tip">
         {{ tip }}
       </div>
+      </template>
     </el-upload>
   </div>
 </template>

@@ -238,9 +238,7 @@ export default {
               }
             },
             axisLabel: {
-              textStyle: {
-                color: '#8F959E'
-              }
+              color: '#8F959E'
             },
             axisTick: {
               show: false
@@ -259,9 +257,7 @@ export default {
               }
             },
             axisLabel: {
-              textStyle: {
-                color: '#8F959E'
-              }
+              color: '#8F959E'
             },
             axisTick: {
               show: false
@@ -283,27 +279,25 @@ export default {
             type: 'line',
             smooth: true,
             areaStyle: {
-              normal: {
-                color: new echarts.graphic.LinearGradient(
-                  0,
-                  0,
-                  0,
-                  1,
-                  [{
-                    offset: 0,
-                    color: primary
-                  }, {
-                    offset: 0.6,
-                    color: TwoLevelColor
-                  }, {
-                    offset: 0.8,
-                    color: ThreeLevelColor
-                  }],
-                  false
-                ),
-                shadowColor: shadowColor,
-                shadowBlur: 5
-              }
+              color: new echarts.graphic.LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                [{
+                  offset: 0,
+                  color: primary
+                }, {
+                  offset: 0.6,
+                  color: TwoLevelColor
+                }, {
+                  offset: 0.8,
+                  color: ThreeLevelColor
+                }],
+                false
+              ),
+              shadowColor: shadowColor,
+              shadowBlur: 5
             },
             data: this.config.user_login_log_metrics.dates_metrics_success_total
           },
@@ -312,27 +306,25 @@ export default {
             type: 'line',
             smooth: true,
             areaStyle: {
-              normal: {
-                color: new echarts.graphic.LinearGradient(
-                  0,
-                  0,
-                  0,
-                  1,
-                  [{
-                    offset: 0,
-                    color: 'rgba(249, 199, 79, 0.6)'
-                  }, {
-                    offset: 0.6,
-                    color: 'rgba(249, 199, 79, 0.2)'
-                  }, {
-                    offset: 0.8,
-                    color: 'rgba(249, 199, 79, 0.1)'
-                  }],
-                  false
-                ),
-                shadowColor: 'rgba(249, 199, 79, 0.1)',
-                shadowBlur: 6
-              }
+              color: new echarts.graphic.LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                [{
+                  offset: 0,
+                  color: 'rgba(249, 199, 79, 0.6)'
+                }, {
+                  offset: 0.6,
+                  color: 'rgba(249, 199, 79, 0.2)'
+                }, {
+                  offset: 0.8,
+                  color: 'rgba(249, 199, 79, 0.1)'
+                }],
+                false
+              ),
+              shadowColor: 'rgba(249, 199, 79, 0.1)',
+              shadowBlur: 6
             },
             data: this.config.user_login_log_metrics.dates_metrics_failure_total
           }

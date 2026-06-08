@@ -175,10 +175,8 @@ export default {
               }
             },
             axisLabel: {
-              textStyle: {
-                // 坐标轴颜色
-                color: '#8F959E'
-              }
+              // 坐标轴颜色
+              color: '#8F959E'
             },
             axisTick: {
               show: false
@@ -197,9 +195,7 @@ export default {
               }
             },
             axisLabel: {
-              textStyle: {
-                color: '#8F959E'
-              }
+              color: '#8F959E'
             },
             axisTick: {
               show: false
@@ -220,28 +216,26 @@ export default {
             type: 'line',
             smooth: true,
             areaStyle: {
-              normal: {
-                color: new echarts.graphic.LinearGradient(
-                  0,
-                  0,
-                  0,
-                  1,
-                  [{
-                    offset: 0,
-                    color: primary
-                  }, {
-                    offset: 0.6,
-                    color: TwoLevelColor
-                  }, {
-                    offset: 0.8,
-                    color: ThreeLevelColor
-                  }
-                  ],
-                  false
-                ),
-                shadowColor: shadowColor,
-                shadowBlur: 5
-              }
+              color: new echarts.graphic.LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                [{
+                  offset: 0,
+                  color: primary
+                }, {
+                  offset: 0.6,
+                  color: TwoLevelColor
+                }, {
+                  offset: 0.8,
+                  color: ThreeLevelColor
+                }
+                ],
+                false
+              ),
+              shadowColor: shadowColor,
+              shadowBlur: 5
             },
             data: this.config.user_change_password_metrics.dates_metrics_total
           }

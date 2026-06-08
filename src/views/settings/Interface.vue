@@ -34,7 +34,7 @@
       </div>
       <div class="dz">
         <el-radio-group v-model="dz.radio">
-          <el-radio v-for="i in 3" :key="i" :label="$tc('Options') + ` ${i}`" />
+          <el-radio v-for="i in 3" :key="i" :value="$tc('Options') + ` ${i}`" />
         </el-radio-group>
       </div>
       <div class="dz">

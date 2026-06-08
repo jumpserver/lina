@@ -2,13 +2,19 @@
   <div class="el-page">
     <el-pagination
       v-if="hasPagination"
-      v-model:current-page="paginationCurrentPage"
-      v-model:page-size="paginationPageSize"
-      v-bind="normalizedExtraPaginationAttrs"
-      :background="paginationBackground"
-      :layout="paginationLayout"
-      :page-sizes="paginationSizes"
-      :total="total"
+      v-bind="{
+        ...normalizedExtraPaginationAttrs,
+        currentPage: paginationCurrentPage,
+        pageSize: paginationPageSize,
+        background: paginationBackground,
+        layout: paginationLayout,
+        pageSizes: paginationSizes,
+        total: total,
+        'onUpdate:current-page': handleCurrentChange,
+        'onUpdate:page-size': handleSizeChange,
+        onCurrentChange: handleCurrentChange,
+        onSizeChange: handleSizeChange
+      }"
     />
   </div>
 </template>
@@ -109,9 +115,14 @@ export default {
   },
   methods: {
     handleSizeChange(val) {
+      if (this.size === val) return
+      this.size = val
+      this.$emit('update:page-size', val)
       this.$emit('sizeChange', val)
     },
     handleCurrentChange(val) {
+      if (this.page === val) return
+      this.$emit('update:current-page', val)
       this.$emit('currentSizeChange', val)
     },
     getPageQuery(currentPage, pageSize) {
