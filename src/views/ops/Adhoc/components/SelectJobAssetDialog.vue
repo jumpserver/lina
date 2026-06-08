@@ -7,7 +7,7 @@
           <el-button
             v-if="selectAssets.length > 0"
             style="float: right; padding: 3px 0"
-            type="text"
+            link
             @click="handleClick"
           >
             {{ $t('pleaseSelectAssets') }}

@@ -1,14 +1,15 @@
 <template>
   <div class="el-page">
-    <el-pagination v-bind="extraPaginationAttrs" v-if="hasPagination"
+    <el-pagination
+      v-if="hasPagination"
+      v-model:current-page="paginationCurrentPage"
+      v-model:page-size="paginationPageSize"
+      v-bind="normalizedExtraPaginationAttrs"
       :background="paginationBackground"
-      :current-page="page"
       :layout="paginationLayout"
-      :page-size="size"
       :page-sizes="paginationSizes"
       :total="total"
-      @update:current-page="handleCurrentChange"
-      @update:page-size="handleSizeChange" />
+    />
   </div>
 </template>
 
@@ -76,6 +77,34 @@ export default {
   data() {
     return {
       size: this.paginationSize || this.paginationSizes[0]
+    }
+  },
+  computed: {
+    paginationCurrentPage: {
+      get() {
+        return this.page
+      },
+      set(val) {
+        this.handleCurrentChange(val)
+      }
+    },
+    paginationPageSize: {
+      get() {
+        return this.size
+      },
+      set(val) {
+        this.handleSizeChange(val)
+      }
+    },
+    normalizedExtraPaginationAttrs() {
+      const attrs = { ...(this.extraPaginationAttrs || {}) }
+      if ('small' in attrs) {
+        if (attrs.small && !attrs.size) {
+          attrs.size = 'small'
+        }
+        delete attrs.small
+      }
+      return attrs
     }
   },
   methods: {

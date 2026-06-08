@@ -16,7 +16,7 @@
           </span>
 
           <!-- <span v-if="!nav && url" class="export-btn">
-            <el-button type="text" @click="openNewWindow">
+            <el-button link @click="openNewWindow">
               <i class="fa fa-external-link" style="font-size: 15px;" />
               {{ $t('Export') }}
             </el-button>
@@ -27,7 +27,7 @@
         </div>
       </div>
       <span v-if="!nav && url && showReportExportBtn" class="export-btn">
-        <el-button type="text" @click="openNewWindow">
+        <el-button link @click="openNewWindow">
           <i class="fa fa-external-link" style="font-size: 15px;" />
           {{ $t('Export') }}
         </el-button>

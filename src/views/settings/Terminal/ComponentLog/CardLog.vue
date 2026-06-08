@@ -3,7 +3,7 @@
     <template #header>
       <div>
         <span> {{ title }}</span>
-        <el-button style="float: right" type="text" @click="tailLog"> {{ $tc('TailLog') }} </el-button>
+        <el-button style="float: right" link @click="tailLog"> {{ $tc('TailLog') }} </el-button>
       </div>
     </template>
     <table v-if="logs.length>0" class="log-table">

@@ -1,6 +1,6 @@
 <template>
   <div class="update-token">
-    <el-button v-show="!isShow" icon="el-icon-edit" type="text" @click="isShow=true">
+    <el-button v-show="!isShow" icon="el-icon-edit" link @click="isShow=true">
       {{ text }}
     </el-button>
     <el-input
@@ -13,7 +13,7 @@
       show-password
       @change="onChange"
     />
-    <el-button :disabled="disabled" size="small" type="text" @click="randomPassword">
+    <el-button :disabled="disabled" size="small" link @click="randomPassword">
       <i class="fa fa-refresh" />
     </el-button>
   </div>

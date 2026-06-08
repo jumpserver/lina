@@ -82,15 +82,16 @@
         <slot />
       </el-table>
 
-      <el-pagination v-bind="extraPaginationAttrs" v-if="hasPagination"
+      <el-pagination
+        v-if="hasPagination"
+        v-model:current-page="paginationCurrentPage"
+        v-model:page-size="paginationPageSize"
+        v-bind="normalizedExtraPaginationAttrs"
         :background="paginationBackground"
-        :current-page="page"
         :layout="paginationLayout"
-        :page-size="size"
         :page-sizes="paginationSizes"
         :total="total"
-        @update:current-page="handleCurrentChange"
-        @update:page-size="handleSizeChange" />
+      />
 
       <the-dialog
         ref="dialog"
@@ -713,6 +714,32 @@ export default {
     }
   },
   computed: {
+    paginationCurrentPage: {
+      get() {
+        return this.page
+      },
+      set(val) {
+        this.handleCurrentChange(val)
+      }
+    },
+    paginationPageSize: {
+      get() {
+        return this.size
+      },
+      set(val) {
+        this.handleSizeChange(val)
+      }
+    },
+    normalizedExtraPaginationAttrs() {
+      const attrs = { ...(this.extraPaginationAttrs || {}) }
+      if ('small' in attrs) {
+        if (attrs.small && !attrs.size) {
+          attrs.size = 'small'
+        }
+        delete attrs.small
+      }
+      return attrs
+    },
     hasSelect() {
       return this.columns.length && this.columns[0].type === 'selection'
     },

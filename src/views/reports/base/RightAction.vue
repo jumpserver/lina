@@ -5,18 +5,18 @@
         :loading="exportLoading"
         :disabled="exportLoading"
         class="export-btn"
-        type="text"
+        link
         icon="el-icon-printer"
         @click="exportPdf"
       >
         {{ $t('ExportAsPDF') }}
 
       </el-button>
-      <el-button class="export-btn" type="text" icon="el-icon-message" @click="emailReport">
+      <el-button class="export-btn" link icon="el-icon-message" @click="emailReport">
 
         {{ $t('EMailReport') }}
       </el-button>
-      <el-button class="export-btn" type="text" icon="el-icon-printer" @click="printReport">
+      <el-button class="export-btn" link icon="el-icon-printer" @click="printReport">
         {{ $t('Print') }}
       </el-button>
     </el-button-group>
@@ -98,7 +98,8 @@ export default {
     margin: 0 2px;
     padding: 8px;
 
-    &.el-button--text {
+    &.el-button--text,
+    &.is-link {
       color: #fff;
     }
 

@@ -45,7 +45,7 @@
     </div>
     <div class="vip-footer">
       <el-button
-        type="text"
+        link
         :disabled="selectedDistrict.length<=0"
         size="small"
         round

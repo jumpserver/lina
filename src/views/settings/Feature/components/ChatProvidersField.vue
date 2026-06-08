@@ -53,7 +53,7 @@
         <template #default="{ $index }">
           <el-button
             size="small"
-            type="text"
+            link
             class="danger-text"
             icon="el-icon-delete"
             @click="removeProvider($index)"

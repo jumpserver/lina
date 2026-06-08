@@ -15,7 +15,7 @@
         <el-link
           :underline="false"
           size="small"
-          type="text"
+          type="primary"
           @click="handleManagePlatform"
         >
           <i class="fa fa-external-link" />

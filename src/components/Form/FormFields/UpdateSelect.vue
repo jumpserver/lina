@@ -4,7 +4,7 @@
       v-show="!iShowSelect"
       :disabled="disabled"
       class="button-text"
-      type="text"
+      link
       @click="iShowSelect=true"
     >
       {{ iLabel }}

@@ -26,7 +26,7 @@
                     {{ assignee }}
                   </span>
                 </div>
-                <el-button v-if="item.assignees.length > 4" type="text" @click="lookOver(item.assignees_display)">
+                <el-button v-if="item.assignees.length > 4" link @click="lookOver(item.assignees_display)">
                   {{ $tc('CheckViewAcceptor') }}
                 </el-button>
               </div>

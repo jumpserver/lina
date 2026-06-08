@@ -5,7 +5,7 @@
       {{ $t('SelectFile') }}
     </el-button>
     <span v-else>
-      <el-button icon="el-icon-edit" type="text" @click.stop="onUpLoad">
+      <el-button icon="el-icon-edit" link @click.stop="onUpLoad">
         {{ $t('Update') }}
       </el-button>
       <span v-if="!fileName" class="fingerprint">{{ fingerprint }}</span>

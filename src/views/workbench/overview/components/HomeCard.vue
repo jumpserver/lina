@@ -7,7 +7,7 @@
           <el-button
             v-show="btnText"
             style="float: right; padding: 3px 0"
-            type="text"
+            link
             @click="btnChange"
           >
             {{ btnText }}

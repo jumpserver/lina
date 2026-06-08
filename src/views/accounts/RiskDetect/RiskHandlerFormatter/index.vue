@@ -30,7 +30,7 @@
       </el-tooltip>
     </span>
     <el-tooltip v-else :content="iLabel" :open-delay="400" class="platform-status">
-      <el-button size="small" type="text" @click="showDetail">
+      <el-button size="small" link @click="showDetail">
         <span class="detail-icon">
           <i v-if="iValue === '1'" class="fa fa-check-circle color-primary" />
           <svg-icon v-else icon-class="ignore" />
