@@ -47,7 +47,8 @@ export default {
             icon: 'el-icon-shopping-bag-1',
             callback: () => {
               window.open(this.publicSettings?.REMOTE_APP_STORE_URL)
-            }
+            },
+            has: !!this.publicSettings?.REMOTE_APP_STORE_URL
           }
         ],
         detailRoute: 'AppletDetail',
@@ -72,7 +73,6 @@ export default {
       this.$refs.CardTable.reloadTable()
     }
   }
-
 }
 </script>
 
