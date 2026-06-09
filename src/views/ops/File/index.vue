@@ -60,7 +60,7 @@
                 :content="$t('ClearSelection')"
                 placement="top"
               >
-                <i class="el-icon-delete" @click="clearAllFiles" />
+                <el-icon @click="clearAllFiles"><Delete /></el-icon>
               </el-tooltip>
             </div>
             <el-upload
@@ -73,7 +73,7 @@
               drag
               multiple
             >
-              <i class="el-icon-upload" />
+              <el-icon><Upload /></el-icon>
               <div class="el-upload__text" style="margin-bottom: 10px; padding: 0 5px 0 5px">
                 {{ $t('DragUploadFileInfo') }}
               </div>
@@ -84,10 +84,10 @@
                 <div>
                   <li class="el-upload-list__item is-ready" tabindex="0">
                     <a :style="sameFileStyle(file)" class="el-upload-list__item-name">
-                      <i class="el-icon-document" />{{ file.name }}
+                      <el-icon><Document /></el-icon>{{ file.name }}
                       <i style="color: #1ab394; float: right; font-weight: normal">
                         {{ formatFileSize(file.size) }}
-                        <i class="el-icon-close" @click="removeFile(file)" />
+                        <el-icon @click="removeFile(file)"><Close /></el-icon>
                       </i>
                     </a>
                   </li>

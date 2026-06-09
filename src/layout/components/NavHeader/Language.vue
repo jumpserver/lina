@@ -1,7 +1,7 @@
 <template>
   <el-dropdown>
     <span class="el-dropdown-link header-lang">
-      {{ currentLang.title }}<i class="el-icon-arrow-down el-icon--right" />
+      {{ currentLang.title }}<el-icon class="el-icon--right"><ArrowDown /></el-icon>
     </span>
     <template #dropdown>
       <el-dropdown-menu>

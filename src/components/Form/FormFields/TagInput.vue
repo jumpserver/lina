@@ -34,7 +34,7 @@
       <i :class="[isCheckShowPassword ? 'fa-eye-slash' : 'fa-eye']" class="fa" />
     </span>
     <span v-if="filterTags.length > 0" class="clear-icon" @click="handleClearAll">
-      <i class="el-icon-circle-close" :title="$t('Clear')" />
+      <el-icon :title="$t('Clear')"><CircleClose /></el-icon>
     </span>
   </div>
 </template>

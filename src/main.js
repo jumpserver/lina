@@ -18,7 +18,7 @@ import '@/styles/fonts/loadSans'
 import { watchSessions } from './utils/jms/auth'
 
 import { installSvgIcon } from '@/icons' // icon
-import { installElementIconCompat } from '@/icons/element-icons-compat'
+import { installElementPlusIcons } from '@/icons/element-plus-icons'
 import '@/guards' // permission control
 import { installDirectives } from '@/directive'
 import { installFilters } from '@/filters'
@@ -42,7 +42,7 @@ configureCompat({
   COMPONENT_ASYNC: false,
   WATCH_ARRAY: false,
   INSTANCE_ATTRS_CLASS_STYLE: false,
-  GLOBAL_PROTOTYPE: 'suppress-warning',
+  GLOBAL_PROTOTYPE: false,
   ATTR_ENUMERATED_COERCION: false,
   COMPONENT_V_MODEL: false,
   TRANSITION_GROUP_ROOT: false
@@ -107,7 +107,7 @@ async function initApp() {
   installDirectives(app)
   installFilters(app)
   installSvgIcon(app)
-  installElementIconCompat(app)
+  installElementPlusIcons(app)
 
   app.config.globalProperties.$moment = moment
   app.config.globalProperties.$axios = request

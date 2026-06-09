@@ -27,10 +27,10 @@
           @change="handleKeyword"
         >
         <span class="el-input__prefix" style="left: 0">
-          <i class="el-input__icon el-icon-search" />
+          <el-icon class="el-input__icon"><Search /></el-icon>
         </span>
         <span v-if="searchWord && showClearBtn" class="clear-input">
-          <i class="el-icon-circle-close" @click="clearInp" />
+          <el-icon @click="clearInp"><CircleClose /></el-icon>
         </span>
       </div>
       <el-checkbox-group

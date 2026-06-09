@@ -7,7 +7,7 @@
         :placeholder="$t('Search')"
         class="search-input"
         readonly
-        prefix-icon="el-icon-search"
+        prefix-icon="Search"
         @keydown.esc.prevent="closePanel"
         @clear="clearSearch"
       >
@@ -36,7 +36,7 @@
             :placeholder="$t('Search')"
             :clearable="true"
             size="large"
-            prefix-icon="el-icon-search"
+            prefix-icon="Search"
             @input="onInput"
             @keydown.enter.prevent="onEnter"
           />
@@ -60,9 +60,9 @@
                 class="item"
                 @click="applyHistory(item)"
               >
-                <i class="el-icon-time icon" />
+                <el-icon class="icon"><Timer /></el-icon>
                 <span class="label">{{ item.q }}</span>
-                <i class="el-icon-arrow-right go" />
+                <el-icon class="go"><ArrowRight /></el-icon>
               </li>
             </ul>
           </template>
@@ -76,7 +76,7 @@
                 class="item"
                 @click="navigateRoute(route)"
               >
-                <i class="el-icon-location-outline icon" />
+                <el-icon class="icon"><LocationInformation /></el-icon>
                 <span class="label">{{ route.title || route.name || route.path }}</span>
                 <span class="sub">{{ route.path }}</span>
               </li>

@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import { h } from 'vue'
 import IBox from '@/components/Common/IBox'
 import { formatTime, getDateTimeStamp, toSafeLocalDateStr } from '@/utils/common/time'
 import { STATE_MAP } from '../const'
@@ -104,7 +105,6 @@ export default {
       return toSafeLocalDateStr(dataStr)
     },
     lookOver(assignees_display) {
-      const h = this.$createElement
       const content = []
       assignees_display.forEach(item => {
         content.push(h('p', null, item))

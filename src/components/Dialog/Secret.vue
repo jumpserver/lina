@@ -14,12 +14,12 @@
         <div class="row">
           <span class="col">ID:</span>
           <span class="value">{{ keyInfo.id }}</span>
-          <i class="el-icon-copy-document copy-icon" @click="handleCopy(keyInfo.id)" />
+          <el-icon class="copy-icon" @click="handleCopy(keyInfo.id)"><CopyDocument /></el-icon>
         </div>
         <div class="row">
           <span class="col">Secret:</span>
           <span class="value">{{ keyInfo.secret }}</span>
-          <i class="el-icon-copy-document copy-icon" @click="handleCopy(keyInfo.secret)" />
+          <el-icon class="copy-icon" @click="handleCopy(keyInfo.secret)"><CopyDocument /></el-icon>
         </div>
       </div>
     </el-alert>

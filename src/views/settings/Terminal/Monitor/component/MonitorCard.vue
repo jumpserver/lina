@@ -9,7 +9,7 @@
             </div>
             <div class="type">
               <span v-for="(item) in componentTypes" :key="item.key">
-                <i v-if="item.icon" :class="item.icon" :style="{color: item.color}" />
+                <el-icon v-if="item.icon" :style="{color: item.color}"><component :is="iconComponent(item.icon)" /></el-icon>
                 <span style="color: #a3a3a4;">{{ item.name }}</span>
                 <el-popover
                   v-if="componentMetric[item.key].length > 0"
@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import { legacyIconComponents } from '@/icons/legacy-icon-map'
 
 export default {
   name: 'MonitorCard',
@@ -156,6 +157,9 @@ export default {
     this.resizeObserver = null
   },
   methods: {
+    iconComponent(name) {
+      return legacyIconComponents[name] || null
+    },
     setElementsColor(numArray) {
       const className = `.${this.componentMetric.type}-progress .box-bar`
       const elements = document.querySelectorAll(className)

@@ -10,7 +10,7 @@
     </div>
     <template #reference>
     <el-button class="link-btn" plain size="small" type="primary">
-      {{ $t('View') }} <i class="el-icon-arrow-down" />
+      {{ $t('View') }} <el-icon><ArrowDown /></el-icon>
     </el-button>
     </template>
   </el-popover>

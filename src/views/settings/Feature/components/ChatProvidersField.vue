@@ -1,7 +1,7 @@
 <template>
   <div class="providers-card">
     <div class="providers-header">
-      <el-button size="small" type="primary" icon="el-icon-plus" @click="addProvider">
+      <el-button size="small" type="primary" icon="Plus" @click="addProvider">
         {{ $t('Add') }}
       </el-button>
     </div>
@@ -55,7 +55,7 @@
             size="small"
             link
             class="danger-text"
-            icon="el-icon-delete"
+            icon="Delete"
             @click="removeProvider($index)"
           />
         </template>

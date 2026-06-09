@@ -54,7 +54,7 @@
           :label="'value' in opt ? opt.value : opt.label">
           {{ opt.label }}
           <el-tooltip v-if="opt.tip" :content="opt.tip" :open-delay="500" placement="top">
-            <i class="el-icon-warning-outline" />
+            <el-icon><Warning /></el-icon>
           </el-tooltip>
           <span v-if="data.helpText">{{ data.helpText }}</span>
         </el-checkbox>
@@ -64,7 +64,7 @@
           :value="'value' in opt ? opt.value : opt.label">
           {{ opt.label }}
           <el-tooltip v-if="opt.tip" :content="opt.tip" :open-delay="500" placement="top">
-            <i class="el-icon-warning-outline" />
+            <el-icon><Warning /></el-icon>
           </el-tooltip>
         </el-radio>
       </template>

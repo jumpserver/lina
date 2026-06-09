@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button size="small" type="primary" icon="el-icon-setting" @click="visible = true">{{
+    <el-button size="small" type="primary" icon="Setting" @click="visible = true">{{
       $t('Setting')
     }}</el-button>
     <Dialog

@@ -32,7 +32,7 @@
       :filter-placeholder="filterPlaceholder"
       @selected-checked="selectedCountry"
     />
-    <span class="inner-center el-icon-d-arrow-right" />
+    <el-icon class="inner-center"><DArrowRight /></el-icon>
     <krry-box
       style="width: 260px"
       :operation="boxOperation[3]"

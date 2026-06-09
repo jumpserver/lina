@@ -1,4 +1,5 @@
 import i18n from '@/i18n/i18n'
+import { h } from 'vue'
 import { toSentenceCase } from '@/utils/common/index'
 
 import {
@@ -215,7 +216,6 @@ export class TableColumnsGenerator {
   }
 
   setDefaultFormatterIfNeed(col) {
-    const h = this.vm.$createElement
     if (!col.formatter) {
       col.formatter = (row, column, cellValue) => {
         let value = cellValue

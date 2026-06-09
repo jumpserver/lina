@@ -14,11 +14,10 @@
             <i class="fa fa-search fixed-tree-search__prefix" />
           </template>
           <template #suffix>
-            <i
-              class="el-icon-close"
+            <el-icon
               style="font-size: 12px; cursor: pointer"
               @click="onClose"
-            />
+            ><Close /></el-icon>
           </template>
         </el-input>
       </div>

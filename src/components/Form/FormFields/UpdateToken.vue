@@ -1,6 +1,6 @@
 <template>
   <div class="update-token">
-    <el-button v-show="!isShow" icon="el-icon-edit" link @click="isShow=true">
+    <el-button v-show="!isShow" icon="Edit" link @click="isShow=true">
       {{ text }}
     </el-button>
     <el-input

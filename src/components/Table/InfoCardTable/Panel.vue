@@ -11,7 +11,7 @@
       <div v-if="iActions.length !== 0" class="panel-actions" @click="handleClick($event)">
         <el-dropdown>
           <el-button size="small">
-            <i class="el-icon-more el-icon--right" />
+            <el-icon class="el-icon--right"><More /></el-icon>
           </el-button>
           <el-dropdown-menu default="dropdown">
             <el-dropdown-item

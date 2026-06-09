@@ -6,17 +6,17 @@
         :disabled="exportLoading"
         class="export-btn"
         link
-        icon="el-icon-printer"
+        icon="Printer"
         @click="exportPdf"
       >
         {{ $t('ExportAsPDF') }}
 
       </el-button>
-      <el-button class="export-btn" link icon="el-icon-message" @click="emailReport">
+      <el-button class="export-btn" link icon="Message" @click="emailReport">
 
         {{ $t('EMailReport') }}
       </el-button>
-      <el-button class="export-btn" link icon="el-icon-printer" @click="printReport">
+      <el-button class="export-btn" link icon="Printer" @click="printReport">
         {{ $t('Print') }}
       </el-button>
     </el-button-group>

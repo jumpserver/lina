@@ -16,14 +16,14 @@
         >
           <template #default="scope">
             <el-button
-              icon="el-icon-minus"
+              icon="Minus"
               size="small"
               type="danger"
               @click="removeVariable(scope.row)"
             />
             <el-button
               :disabled="!!scope.row.template"
-              icon="el-icon-edit"
+              icon="Edit"
               size="small"
               type="primary"
               @click="onEditClick(scope.row)"

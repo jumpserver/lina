@@ -23,7 +23,7 @@
           class="el-input__inner"
         >
         <span class="el-input__prefix" style="left: 0px">
-          <i class="el-input__icon el-icon-search" />
+          <el-icon class="el-input__icon"><Search /></el-icon>
         </span>
       </div>
       <el-checkbox-group

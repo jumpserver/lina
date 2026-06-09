@@ -18,7 +18,7 @@
           drag
           list-type="text/csv"
         >
-          <i class="el-icon-upload" />
+          <el-icon><Upload /></el-icon>
           <div class="el-upload__text">
             {{ $t('DragUploadFileInfo') }}
           </div>

@@ -1,3 +1,5 @@
+// 旧 Element UI 字体图标名 -> Element Plus 图标组件 的映射表
+// 供 compat 全局注册 与 通用 Icon 组件共用
 import {
   ArrowDown,
   ArrowLeft,
@@ -36,7 +38,7 @@ import {
   Warning
 } from '@element-plus/icons-vue'
 
-const legacyIconComponents = {
+export const legacyIconComponents = {
   'el-icon-arrow-down': ArrowDown,
   'el-icon-arrow-left': ArrowLeft,
   'el-icon-arrow-right': ArrowRight,
@@ -74,10 +76,4 @@ const legacyIconComponents = {
   'el-icon-unlock': Unlock,
   'el-icon-upload': Upload,
   'el-icon-warning-outline': Warning
-}
-
-export function installElementIconCompat(app) {
-  Object.entries(legacyIconComponents).forEach(([name, component]) => {
-    app.component(name, component)
-  })
 }

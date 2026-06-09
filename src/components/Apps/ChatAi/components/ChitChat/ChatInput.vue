@@ -17,7 +17,7 @@
         <el-dropdown-menu>
           <div class="menu-section">
             <div v-if="toolsLoading">
-              <i class="el-icon-loading" /> {{ $t('Loading') }}
+              <el-icon><Loading /></el-icon> {{ $t('Loading') }}
             </div>
             <div v-else class="menu-body">
               <div>

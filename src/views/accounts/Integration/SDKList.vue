@@ -20,10 +20,10 @@
 
         <div class="copy-btn">
           <el-tooltip :content="$t('Copy')" placement="top">
-            <i
-              class="copy-btn el-icon-copy-document"
+            <el-icon
+              class="copy-btn"
               @click="copyContent"
-            />
+            ><CopyDocument /></el-icon>
           </el-tooltip>
         </div>
       </div>

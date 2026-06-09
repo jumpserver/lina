@@ -13,6 +13,8 @@
   </div>
 </template>
 <script>
+import { h } from 'vue'
+import { ElLink } from 'element-plus'
 import AutoDataForm from '@/components/Form/AutoDataForm'
 import { getUpdateObjURL } from '@/utils/common/index'
 import { encryptPassword } from '@/utils/secure'
@@ -172,7 +174,6 @@ export default {
         if (res.name) {
           msgLinkName = res.name
         }
-        const h = this.$createElement
         const detailRoute = this.objectDetailRoute
         detailRoute.params = { id: res.id }
         if (this.hasDetailInMsg) {
@@ -180,14 +181,12 @@ export default {
           this.$message({
             message: h('p', null, [
               h(
-                'el-link',
+                ElLink,
                 {
-                  on: {
-                    click: () => this.$router.push(detailRoute)
-                  },
+                  onClick: () => this.$router.push(detailRoute),
                   style: { 'vertical-align': 'top', 'margin-right': '5px' }
                 },
-                msgLinkName
+                () => msgLinkName
               ),
               h('span', {}, msg)
             ]),

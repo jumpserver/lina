@@ -143,7 +143,7 @@ export default {
     },
     setLeastMenuOpen() {
       const hasOpened = document.querySelector(
-        '.el-submenu-sidebar.submenu-item.el-submenu.is-opened'
+        '.el-submenu-sidebar.submenu-item.el-sub-menu.is-opened'
       )
       if (hasOpened) {
         return

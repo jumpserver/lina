@@ -4,7 +4,7 @@
       <el-button
         :disabled="gobackDisabled"
         class="go-back"
-        icon="el-icon-back"
+        icon="Back"
         @click="handleGoBack"
         @mouseleave="endLongPress"
         @mouseup="endLongPress"
@@ -19,7 +19,7 @@
             </template>
             <span>
               <el-button class="help-msg-btn">
-                <i class="el-icon-info" />
+                <el-icon><InfoFilled /></el-icon>
               </el-button>
             </span>
           </el-tooltip>
@@ -34,7 +34,7 @@
         <IBox shadow="always">
           <div class="disabled-content">
             <div class="lock-icon">
-              <i class="el-icon-unlock" />
+              <el-icon><Unlock /></el-icon>
             </div>
             <div class="disabled-text">
               {{ $t('UpgradeEnterpriseEditionHelpText') }}

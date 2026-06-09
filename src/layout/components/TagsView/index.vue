@@ -16,11 +16,10 @@
           @contextmenu.prevent="openMenu(tag, $event)"
         >
           {{ tag.title }}
-          <span
+          <el-icon
             v-if="!isAffix(tag)"
-            class="el-icon-close"
             @click.prevent.stop="closeSelectedTag(tag)"
-          />
+          ><Close /></el-icon>
         </span>
       </router-link>
     </scroll-pane>

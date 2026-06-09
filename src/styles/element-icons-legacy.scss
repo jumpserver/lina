@@ -1,83 +1,9 @@
-@font-face {
-  font-family: element-icons;
-  src: url('./fonts/element-icons.woff') format('woff'),
-    url('./fonts/element-icons.ttf') format('truetype');
-  font-weight: 400;
-  font-display: auto;
-  font-style: normal;
-}
-
-[class*=' el-icon-'],
-[class^='el-icon-'] {
-  font-family: element-icons !important;
-  speak: none;
-  font-style: normal;
-  font-weight: 400;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  vertical-align: baseline;
-  display: inline-block;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.el-icon-arrow-down::before { content: '\e6df'; }
-.el-icon-arrow-left::before { content: '\e6de'; }
-.el-icon-arrow-right::before { content: '\e6e0'; }
-.el-icon-arrow-up::before { content: '\e6e1'; }
-.el-icon-back::before { content: '\e6ea'; }
-.el-icon-bell::before { content: '\e725'; }
-.el-icon-check::before { content: '\e6da'; }
-.el-icon-circle-check::before { content: '\e720'; }
-.el-icon-circle-close::before { content: '\e78d'; }
-.el-icon-close::before { content: '\e6db'; }
-.el-icon-close-notification::before { content: '\e726'; }
-.el-icon-copy-document::before { content: '\e718'; }
-.el-icon-d-arrow-right::before { content: '\e6dc'; }
-.el-icon-delete::before { content: '\e6d7'; }
-.el-icon-document::before { content: '\e785'; }
-.el-icon-download::before { content: '\e77c'; }
-.el-icon-edit::before { content: '\e78c'; }
-.el-icon-edit-outline::before { content: '\e764'; }
-.el-icon-info::before { content: '\e7a1'; }
-.el-icon-loading::before { content: '\e6cf'; }
-.el-icon-location-outline::before { content: '\e708'; }
-.el-icon-message::before { content: '\e72b'; }
-.el-icon-message-solid::before { content: '\e799'; }
-.el-icon-minus::before { content: '\e6d8'; }
-.el-icon-more::before { content: '\e794'; }
-.el-icon-plus::before { content: '\e6d9'; }
-.el-icon-printer::before { content: '\e77e'; }
-.el-icon-refresh::before { content: '\e6d0'; }
-.el-icon-search::before { content: '\e778'; }
-.el-icon-setting::before { content: '\e6ca'; }
-.el-icon-shopping-bag-1::before { content: '\e74e'; }
-.el-icon-success::before { content: '\e79c'; }
-.el-icon-thumb::before { content: '\e739'; }
-.el-icon-time::before { content: '\e71f'; }
-.el-icon-unlock::before { content: '\e6e4'; }
-.el-icon-upload::before { content: '\e7c3'; }
-.el-icon-warning-outline::before { content: '\e6c9'; }
-
-.el-icon-loading {
-  animation: rotating 2s linear infinite;
-}
-
+// Element UI 旧图标的间距修饰类（迁移到 Element Plus 后仍被少量模板使用）
+// 字体字形（@font-face + ::before）已随图标组件化迁移移除
 .el-icon--right {
   margin-left: 5px;
 }
 
 .el-icon--left {
   margin-right: 5px;
-}
-
-@keyframes rotating {
-  0% {
-    transform: rotateZ(0);
-  }
-
-  100% {
-    transform: rotateZ(360deg);
-  }
 }

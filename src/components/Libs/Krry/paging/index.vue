@@ -32,14 +32,14 @@
             <el-button
               :disabled="disablePre"
               class="el-transfer__button"
-              icon="el-icon-arrow-left"
+              icon="ArrowLeft"
               size="small"
               @click="deleteData"
             />
             <el-button
               :disabled="disableNex"
               class="el-transfer__button"
-              icon="el-icon-arrow-right"
+              icon="ArrowRight"
               size="small"
               type="primary"
               @click="addData"

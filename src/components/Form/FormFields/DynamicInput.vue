@@ -12,7 +12,7 @@
       <div class="input-button">
         <el-button
           :disabled="deleteDisabled()"
-          icon="el-icon-minus"
+          icon="Minus"
           size="small"
           style="flex-shrink: 0"
           type="danger"
@@ -20,7 +20,7 @@
         />
         <el-button
           v-if="index === iValue.length - 1"
-          icon="el-icon-plus"
+          icon="Plus"
           size="small"
           style="flex-shrink: 0"
           type="primary"

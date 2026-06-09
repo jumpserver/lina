@@ -3,7 +3,9 @@
     <div v-if="modal" :style="{'background-color': modal ? 'rgba(0, 0, 0, .3)' : 'transparent'}" class="modal" />
     <div ref="panel" :style="{width: width, height: height }" class="drawer-panel">
       <div v-show="!show && !defaultShowPanel" ref="dragBox" class="handle-button">
-        <i v-if="icon.startsWith('fa') || icon.startsWith('el')" :class="show ? 'el-icon-close': icon" />
+        <i v-if="currentIcon.startsWith('fa')" :class="currentIcon" />
+        <el-icon v-else-if="elIconComponent"><component :is="elIconComponent" /></el-icon>
+        <i v-else-if="currentIcon.startsWith('el')" :class="currentIcon" />
         <img v-else :src="icon" alt="">
       </div>
       <div class="drawer-panel-item">
@@ -13,6 +15,7 @@
   </div>
 </template>
 <script>
+import { legacyIconComponents } from '@/icons/legacy-icon-map'
 
 export default {
   name: 'DrawerPanel',
@@ -50,6 +53,14 @@ export default {
     return {
       show: this.defaultShowPanel,
       clientOffset: {}
+    }
+  },
+  computed: {
+    currentIcon() {
+      return this.show ? 'el-icon-close' : this.icon
+    },
+    elIconComponent() {
+      return legacyIconComponents[this.currentIcon] || null
     }
   },
   watch: {

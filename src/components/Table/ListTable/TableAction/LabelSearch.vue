@@ -28,7 +28,7 @@
         <span v-if="!node.isLeaf"> ({{ data.children.length - 1 }}) </span>
       </template>
       <template #prefix>
-        <i class="el-input__icon el-icon-search" />
+        <el-icon class="el-input__icon"><Search /></el-icon>
       </template>
     </el-cascader>
   </div>

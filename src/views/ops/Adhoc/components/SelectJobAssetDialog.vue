@@ -22,7 +22,7 @@
         aria-label="Select assets"
         @click=" handleClick()"
       >
-        <i class="icon el-icon-plus" />
+        <el-icon class="icon"><Plus /></el-icon>
         <span class="title">{{ $t('pleaseSelectAssets') }}</span>
         <span class="subtitle">{{ $t('clickToAdd') }}</span>
       </div>
@@ -62,11 +62,11 @@
                 :title="item.name"
                 class="asset-name"
               >{{ item.name }}</span>
-              <i
-                class="el-icon-minus asset-remove-icon"
+              <el-icon
+                class="asset-remove-icon"
                 :title="$tc('Remove')"
                 @click.stop="removeAsset(item)"
-              />
+              ><Minus /></el-icon>
             </el-checkbox>
           </el-checkbox-group>
         </div>

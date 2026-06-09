@@ -30,7 +30,7 @@
                 class="tree-ctrl"
                 @click="toggleExpanded(scope.$index)"
               >
-                <i :class="`el-icon-${scope.row._expanded ? 'minus' : 'plus'}`" />
+                <el-icon><component :is="scope.row._expanded ? 'Minus' : 'Plus'" /></el-icon>
               </span>
               {{ scope.row[treeLabelProp] }}
             </template>

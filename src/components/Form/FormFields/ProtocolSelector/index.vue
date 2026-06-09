@@ -19,7 +19,7 @@
         <template #append>
           <el-button
             v-if="showSetting(item)"
-            icon="el-icon-setting"
+            icon="Setting"
             @click="onSettingClick(item)"
           />
         </template>
@@ -27,7 +27,7 @@
       <div v-if="!readonly" class="input-button">
         <el-button
           :disabled="disableDelete(item)"
-          icon="el-icon-minus"
+          icon="Minus"
           size="small"
           style="flex-shrink: 0"
           type="danger"
@@ -36,7 +36,7 @@
         <el-button
           v-if="index === items.length - 1"
           :disabled="disableAdd(item, index)"
-          icon="el-icon-plus"
+          icon="Plus"
           size="small"
           style="flex-shrink: 0"
           type="primary"
@@ -46,7 +46,7 @@
     </div>
     <el-button
       v-if="items.length === 0"
-      icon="el-icon-plus"
+      icon="Plus"
       size="small"
       style="flex-shrink: 0"
       type="primary"

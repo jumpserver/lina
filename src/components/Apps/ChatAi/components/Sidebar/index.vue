@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="close-sidebar">
-      <i v-if="hasClose" class="el-icon-download" @click="onClose" />
+      <el-icon v-if="hasClose" @click="onClose"><Download /></el-icon>
     </div>
     <div v-if="!expanded" class="close-sidebar">
       <i class="fa fa-expand" style="font-weight: 200" @click="$emit('expand')" />

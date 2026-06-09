@@ -96,7 +96,7 @@
                   <div class="text-content">
                     <span class="content">
                       {{ getLabel(item.value, item.options) }}
-                      <i class="el-icon-arrow-down el-icon--right" />
+                      <el-icon class="el-icon--right"><ArrowDown /></el-icon>
                     </span>
                   </div>
                 </el-button>

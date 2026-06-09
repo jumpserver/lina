@@ -131,7 +131,7 @@ export default {
   background-color: transparent;
   letter-spacing: 0.09em;
 
-  :deep(.el-submenu .el-sub-menu__title) {
+  :deep(.el-sub-menu .el-sub-menu__title) {
     height: 38px;
     line-height: 32px;
     border-bottom: none;
@@ -181,7 +181,7 @@ export default {
   }
 }
 
-.el-submenu.is-opened {
+.el-sub-menu.is-opened {
   background-color: transparent;
 }
 
@@ -204,7 +204,7 @@ export default {
   display: inline-block;
   font-size: 13px;
 
-  .menu-main.mobile-view-switch :deep(.el-submenu__icon-arrow) {
+  .menu-main.mobile-view-switch :deep(.el-sub-menu__icon-arrow) {
     right: 10px;
   }
 }

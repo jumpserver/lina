@@ -32,7 +32,7 @@
                 </template>
                 <span>
                   <el-button class="help-msg-btn">
-                    <i class="el-icon-info" />
+                    <el-icon><InfoFilled /></el-icon>
                   </el-button>
                 </span>
               </el-tooltip>

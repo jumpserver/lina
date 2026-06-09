@@ -85,14 +85,14 @@ const AttrActionFormatter = {
     const ElButton = resolveComponent('el-button')
     return h('div', { class: 'input-button' }, [
       h(ElButton, {
-        icon: 'el-icon-edit',
+        icon: 'Edit',
         size: 'small',
         style: { flexShrink: 0 },
         type: 'primary',
         onClick: () => this.trigger('onEdit')
       }),
       h(ElButton, {
-        icon: 'el-icon-minus',
+        icon: 'Minus',
         size: 'small',
         style: { flexShrink: 0 },
         type: 'danger',

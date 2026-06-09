@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-link
-      icon="el-icon-edit"
+      icon="Edit"
       underline="never"
       @click="handlerLinkClick"
     >

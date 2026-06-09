@@ -17,7 +17,7 @@
             <span class="title">{{ title }}</span>
           </div>
           <span class="new" @click="onNewChat">
-            <i class="el-icon-plus" />
+            <el-icon><Plus /></el-icon>
             <span>{{ $tc('NewChat') }}</span>
           </span>
         </div>

@@ -4,7 +4,7 @@
       <span class="el-dropdown-link">
         <el-avatar :src="avatarUrl" class="header-avatar" />
         {{ currentUser.name }}
-        <i class="el-icon-arrow-down el-icon--right" />
+        <el-icon class="el-icon--right"><ArrowDown /></el-icon>
       </span>
       <template #dropdown>
         <el-dropdown-menu>
