@@ -20,12 +20,10 @@
 <script>
 import Dialog from '@/components/Dialog/index.vue'
 import AutoDataForm from '@/components/Form/AutoDataForm/index.vue'
-import vModelMixin from '@/utils/vue/vModelMixin'
 
 export default {
   name: 'PasswordRule',
   components: { Dialog, AutoDataForm },
-  mixins: [vModelMixin('visible')],
   props: {
     value: {
       type: Object,
@@ -80,6 +78,17 @@ export default {
             type: 'input'
           }
         ]
+      }
+    }
+  },
+  computed: {
+    iVisible: {
+      get() {
+        return this.visible
+      },
+      set(val) {
+        this.visible = val
+        this.$emit('update:visible', val)
       }
     }
   },

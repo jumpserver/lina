@@ -14,7 +14,7 @@
 <script>
 import Dialog from '@/components/Dialog'
 import { GenericListTable } from '@/layout/components'
-import vModelMixin from '@/utils/vue/vModelMixin'
+import { useVModel } from '@/utils/vue/useVModel'
 
 export default {
   name: 'Index',
@@ -22,7 +22,6 @@ export default {
     Dialog,
     GenericListTable
   },
-  mixins: [vModelMixin('visible')],
   props: {
     title: {
       type: String,
@@ -45,6 +44,12 @@ export default {
       default: '60%'
     }
   },
-  emits: ['update:visible']
+  emits: ['update:visible'],
+  setup(props, { emit }) {
+    const iVisible = useVModel(props, emit, 'visible')
+    return {
+      iVisible
+    }
+  }
 }
 </script>

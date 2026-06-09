@@ -35,7 +35,7 @@ export default {
       default: null
     }
   },
-  emits: ['update:visible'],
+  emits: ['update:visible', 'hide-menu'],
   data() {
     return {
       dialogVisible: false
@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     handleVisibleChange(val) {
-      this.$parent?.hideMenu()
+      this.$emit('hide-menu')
       this.$emit('update:visible', val)
     },
     assetTreeTableDialogHandleConfirm(assetsSelected) {
@@ -85,7 +85,7 @@ export default {
         $('#tree-refresh').trigger('click')
         this.$message.success(this.$tc('UpdateSuccessMsg'))
       }).catch(error => {
-        this.$parent?.hideMenu()
+        this.$emit('hide-menu')
         this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
       })
     },

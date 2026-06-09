@@ -26,7 +26,7 @@ import Drawer from '@/components/Drawer/index.vue'
 import AccountCreateUpdateForm from '@/components/Apps/AccountCreateUpdateForm/index.vue'
 import IBox from '@/components/Common/IBox/index.vue'
 import Page from '@/layout/components/Page/index.vue'
-import vModelMixin from '@/utils/vue/vModelMixin'
+import { useVModel } from '@/utils/vue/useVModel'
 
 export default {
   name: 'CreateAccountDialog',
@@ -36,7 +36,6 @@ export default {
     Page,
     AccountCreateUpdateForm
   },
-  mixins: [vModelMixin('visible')],
   props: {
     visible: {
       type: Boolean,
@@ -62,6 +61,12 @@ export default {
     }
   },
   emits: ['update:visible', 'add', 'bulk-create-done'],
+  setup(props, { emit }) {
+    const iVisible = useVModel(props, emit, 'visible')
+    return {
+      iVisible
+    }
+  },
   data() {
     return {
       loading: false,

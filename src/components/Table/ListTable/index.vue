@@ -31,14 +31,18 @@
 import { getResourceFromApiUrl } from '@/utils/jms/index'
 import deepmerge from 'deepmerge'
 import { mapGetters } from 'vuex'
+import { provide } from 'vue'
 import IBox from '@/components/Common/IBox/index.vue'
 import TableAction from './TableAction/index.vue'
-import Emitter from '@/mixins/emitter'
 import AutoDataTable from '../AutoDataTable/index.vue'
 import QuickFilter from './TableAction/QuickFilter.vue'
 import { getDayEnd, getDaysAgo } from '@/utils/common/time'
 import { ObjectLocalStorage } from '@/utils/common/index'
 import i18n from '@/i18n/i18n'
+
+const LIST_TABLE_KEY = Symbol('listTable')
+
+export { LIST_TABLE_KEY }
 
 export default {
   name: 'ListTable',
@@ -48,7 +52,16 @@ export default {
     TableAction,
     IBox
   },
-  mixins: [Emitter],
+  setup() {
+    // Provide list table instance to child components
+    // This replaces $parent chain access
+    const listTableContext = {
+      dataTable: null,
+      tableConfig: null
+    }
+    provide(LIST_TABLE_KEY, listTableContext)
+    return { listTableContext }
+  },
   props: {
     // 定义 table 的配置
     tableConfig: {
@@ -154,7 +167,14 @@ export default {
         }
         defaults[k] = true
       }
-      return Object.assign(defaults, this.headerActions)
+      const result = Object.assign(defaults, this.headerActions)
+      console.log('[ListTable] iHeaderActions:', {
+        headerActionsOnCreate: this.headerActions?.onCreate,
+        headerActionsOnCreateType: typeof this.headerActions?.onCreate,
+        resultOnCreate: result?.onCreate,
+        resultOnCreateType: typeof result?.onCreate
+      })
+      return result
     },
     hasActions() {
       return this.iHeaderActions.has === undefined ? true : this.iHeaderActions.has
@@ -234,6 +254,13 @@ export default {
   },
   mounted() {
     this.urlUpdated[this.tableUrl] = location.href
+    // Populate the provided context with component references
+    // Note: $refs.dataTable is AutoDataTable, need to access its internal DataTable
+    this.listTableContext.dataTable = this.$refs.dataTable?.$refs.dataTable
+    Object.defineProperty(this.listTableContext, 'tableConfig', {
+      get: () => this.tableConfig,
+      enumerable: true
+    })
   },
   deactivated() {
     this.isDeactivated = true

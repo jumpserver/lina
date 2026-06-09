@@ -3,7 +3,7 @@
     <ElFormRender v-bind="$attrs" :id="id"
       ref="form"
       :class="[mobile ? 'mobile' : 'desktop']"
-      :content="fields"
+      :content="processedFields"
       :form="basicForm"
       :label-position="iLabelPosition"
       class="form-fields"
@@ -11,10 +11,10 @@
       :style="{ '--label-width': labelWidth }"
       :server-errors="serverErrors">
       <!-- slot 透传 -->
-      <template v-for="item in fields" :key="`id:${item.id}`">
+      <template v-for="item in processedFields" :key="`id:${item.id}`">
         <slot :name="`id:${item.id}`" />
       </template>
-      <template v-for="item in fields" :key="`$id:${item.id}`">
+      <template v-for="item in processedFields" :key="`$id:${item.id}`">
         <slot :name="`$id:${item.id}`" />
       </template>
 
@@ -57,6 +57,7 @@
 
 <script>
 import { randomString } from '@/utils/common/index'
+import { markRaw } from 'vue'
 import ElFormRender from './components/el-form-renderer'
 
 const scrollToError = (
@@ -82,7 +83,7 @@ const scrollToError = (
 
 export default {
   components: {
-    ElFormRender
+    ElFormRender: markRaw(ElFormRender)
   },
   inheritAttrs: true,
   props: {
@@ -173,6 +174,14 @@ export default {
       // }
       // return this.drawer || this.mobile ? 'top' : 'right'
       return this.mobile ? 'top' : 'right'
+    },
+    processedFields() {
+      return this.fields.map(field => {
+        if (field && field.component && typeof field.component !== 'string') {
+          return { ...field, component: markRaw(field.component) }
+        }
+        return field
+      })
     }
   },
   mounted() {

@@ -55,9 +55,15 @@ export default {
     }
   },
   data() {
+    let reportUrl = '/reports/dashboard/pam'
+    try {
+      reportUrl = getRouteUrl('PamReport', this.$router) || reportUrl
+    } catch (e) {
+      console.warn('Failed to resolve PamReport route:', e)
+    }
     return {
       url: '/api/v1/accounts/pam-dashboard/?total_count_type_to_accounts=1',
-      reportUrl: getRouteUrl('PamReport', this.$router)
+      reportUrl: reportUrl
     }
   }
 }

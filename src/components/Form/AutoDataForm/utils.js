@@ -1,4 +1,5 @@
 // Vue dependency removed; use console for debug logs
+import { markRaw } from 'vue'
 import ObjectSelect2 from '@/components/Form/FormFields/NestedObjectSelect2.vue'
 import NestedField from '@/components/Form/AutoDataForm/components/NestedField.vue'
 import rules from '@/components/Form/DataForm/rules'
@@ -30,7 +31,7 @@ export class FormFieldGenerator {
         break
       case 'tree':
         field.el.tree = fieldRemoteMeta.tree
-        field.component = BasicTree
+        field.component = markRaw(BasicTree)
         break
       case 'datetime':
         type = 'date-picker'
@@ -40,11 +41,11 @@ export class FormFieldGenerator {
         break
       case 'json':
         type = 'json-editor'
-        field.component = JsonEditor
+        field.component = markRaw(JsonEditor)
         break
       case 'field':
         type = ''
-        field.component = ObjectSelect2
+        field.component = markRaw(ObjectSelect2)
         if (fieldRemoteMeta.required) {
           field.el.clearable = false
         }
@@ -70,18 +71,18 @@ export class FormFieldGenerator {
         break
       case 'list':
         type = 'input'
-        field.component = TagInput
+        field.component = markRaw(TagInput)
         break
       case 'object_related_field':
-        field.component = ObjectSelect2
+        field.component = markRaw(ObjectSelect2)
         break
       case 'm2m_related_field':
-        field.component = ObjectSelect2
+        field.component = markRaw(ObjectSelect2)
         field.el.label = field.label
         break
       case 'nested object':
         type = 'nestedField'
-        field.component = NestedField
+        field.component = markRaw(NestedField)
         field.label = ''
         field.labelWidth = 0
         field.el = { ...field.el, ...fieldMeta }
@@ -291,6 +292,10 @@ export class FormFieldGenerator {
       } else if (field instanceof Object) {
         if (this.errors) {
           this.errors[field.prop] = ''
+        }
+        // Wrap component with markRaw to prevent Vue from making it reactive
+        if (field.component && typeof field.component !== 'string') {
+          field.component = markRaw(field.component)
         }
         fields.push(field)
       }

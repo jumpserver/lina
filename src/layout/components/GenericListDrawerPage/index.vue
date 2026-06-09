@@ -28,6 +28,15 @@ export default {
   data() {
     return {}
   },
+  mounted() {
+    console.log('[GenericListDrawerPage] mounted:', {
+      headerActions: this.headerActions,
+      headerActionsOnCreate: this.headerActions?.onCreate,
+      headerActionsOnCreateType: typeof this.headerActions?.onCreate,
+      attrs: this.$attrs,
+      attrsOnCreate: this.$attrs?.['create-drawer'] || this.$attrs?.createDrawer
+    })
+  },
   methods: {
     reloadTable() {
       this.$refs.ListTable.reloadTable()

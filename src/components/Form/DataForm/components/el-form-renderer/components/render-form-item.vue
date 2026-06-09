@@ -91,7 +91,8 @@ import _frompairs from 'lodash/fromPairs'
 import _get from 'lodash/get'
 import _includes from 'lodash/includes'
 import _topairs from 'lodash/toPairs'
-import { markRaw } from 'vue'
+import { markRaw, inject } from 'vue'
+import { FORM_RENDERER_KEY } from '../el-form-renderer.vue'
 import getEnableWhenStatus from '../util/enable-when'
 import { noop } from '../util/utils'
 
@@ -140,6 +141,15 @@ export default {
     options: Array
   },
   emits: ['updateValue'],
+  setup() {
+    // Inject form renderer context to replace $parent chain access
+    const formRendererContext = inject(FORM_RENDERER_KEY, {
+      updateForm: null,
+      setOptions: null,
+      getElForm: null
+    })
+    return { formRendererContext }
+  },
   data() {
     return {
       propsInner: {},
@@ -184,9 +194,7 @@ export default {
           on: { input: originOnInput = noop, change: originOnChange = noop } = {},
           trim = true
         },
-        $parent: {
-          $parent: { updateForm }
-        }
+        formRendererContext: { updateForm }
       } = this
       return {
         ..._frompairs(
@@ -281,11 +289,7 @@ export default {
           .then(onResponse, onError)
           .then(resp => {
             if (isOptionsCase) {
-              let formRenderer = this.$parent
-              while (formRenderer && formRenderer.$options.name !== 'ElFormRenderer') {
-                formRenderer = formRenderer.$parent
-              }
-              formRenderer?.setOptions(this.itemProp, resp)
+              this.formRendererContext?.setOptions?.(this.itemProp, resp)
             } else {
               this.propsInner = { [prop]: resp }
             }
@@ -306,28 +310,17 @@ export default {
     },
     triggerValidate(id) {
       if (!this.data.rules || !this.data.rules.length) return
+      if (this.isBlurTrigger) return
 
       /**
-       * 下面代码可参考 `emitter`
-       * 目的: 为了清除表单校验信息
-       * 因为有部分表单项的值变更时没有清除校验信息, 因此需要触发一次校验用于清除
-       * https://github.com/ElemeFE/element/blob/dev/src/mixins/emitter.js
+       * 使用注入的 formRendererContext 获取 ElForm 实例
+       * 替代原来的 $parent 链式访问
        */
-      let parent = this.$parent
-      let name = parent.$options.componentName
-
-      while (parent && name !== 'ElForm') {
-        parent = parent.$parent
-
-        if (parent) {
-          name = parent.$options.componentName
-        }
-      }
-
-      if (!parent || this.isBlurTrigger) return
+      const elForm = this.formRendererContext?.getElForm?.()
+      if (!elForm) return
 
       this.$nextTick(() => {
-        parent.validateField(id)
+        elForm.validateField(id)
       })
     }
   }

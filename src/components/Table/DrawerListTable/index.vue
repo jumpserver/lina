@@ -82,10 +82,15 @@ export default {
   computed: {
     ...mapGetters(['inDrawer']),
     iHeaderActions() {
-      const actions = this.headerActions
-      if (!actions.onCreate) {
-        actions.onCreate = this.onCreate
-      }
+      const actions = { ...this.headerActions }
+      // 始终使用 DrawerListTable 的 onCreate 来打开抽屉
+      actions.onCreate = this.onCreate
+      console.log('[DrawerListTable] iHeaderActions:', {
+        hasCreateDrawer: !!this.createDrawer,
+        createDrawerType: typeof this.createDrawer,
+        hasOnCreate: !!actions.onCreate,
+        onCreateType: typeof actions.onCreate
+      })
       return actions
     },
     iTableConfig() {
@@ -329,6 +334,13 @@ export default {
       return component
     },
     getDrawerComponent(action, payload) {
+      console.log('[DrawerListTable] getDrawerComponent:', {
+        action,
+        createDrawer: this.createDrawer,
+        createDrawerType: typeof this.createDrawer,
+        updateDrawer: this.updateDrawer,
+        detailDrawer: this.detailDrawer
+      })
       switch (action) {
         case 'create':
           return this.createDrawer
@@ -493,6 +505,7 @@ export default {
       })
     },
     async onCreate(meta) {
+      console.log('[DrawerListTable] onCreate called', { meta, createDrawer: this.createDrawer })
       this.$log.debug('>>> onCreate called', { meta })
       if (!meta) {
         meta = {}

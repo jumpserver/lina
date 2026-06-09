@@ -68,7 +68,7 @@
       <i class="fa fa-info-circle" />  {{ $t('ShowNodeInfo') }}
     </li>
     <NodeAssetsUpdateDialog v-bind="nodeAssetsUpdateDialog" v-if="nodeAssetsUpdateDialog.visible"
-      v-model:visible="nodeAssetsUpdateDialog.visible" />
+      v-model:visible="nodeAssetsUpdateDialog.visible" @hide-menu="hideMenu" />
     <Dialog
       v-model:visible="nodeInfoDialogSetting.dialogVisible"
       :show-cancel="false"

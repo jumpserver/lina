@@ -20,11 +20,12 @@
 /* eslint-disable vue/require-default-prop */
 /* eslint-disable vue/require-prop-types */
 
+import { markRaw } from 'vue'
 import RenderFormItem from './render-form-item.vue'
 
 export default {
   components: {
-    RenderFormItem
+    RenderFormItem: markRaw(RenderFormItem)
   },
   props: {
     data: Object,

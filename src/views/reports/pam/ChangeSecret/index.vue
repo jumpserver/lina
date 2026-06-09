@@ -53,10 +53,16 @@ export default {
     }
   },
   data() {
+    let reportUrl = '/reports/dashboard/change-secret'
+    try {
+      reportUrl = getRouteUrl('ChangeSecretReport', this.$router) || reportUrl
+    } catch (e) {
+      console.warn('Failed to resolve ChangeSecretReport route:', e)
+    }
     return {
       name: 'ChangeSecretDashboard',
       days: localStorage.getItem(this.name) || '7',
-      reportUrl: getRouteUrl('ChangeSecretReport', this.$router)
+      reportUrl: reportUrl
     }
   },
   methods: {

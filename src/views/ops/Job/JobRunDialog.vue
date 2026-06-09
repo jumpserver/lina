@@ -33,13 +33,12 @@
 
 <script>
 import Dialog from '@/components/Dialog'
-import vModelMixin from '@/utils/vue/vModelMixin'
+import { useVModel } from '@/utils/vue/useVModel'
 
 export default {
   components: {
     Dialog
   },
-  mixins: [vModelMixin('visible')],
   props: {
     visible: {
       type: Boolean,
@@ -51,6 +50,12 @@ export default {
     }
   },
   emits: ['update:visible', 'submit'],
+  setup(props, { emit }) {
+    const iVisible = useVModel(props, emit, 'visible')
+    return {
+      iVisible
+    }
+  },
   data() {
     return {
       ready: false,

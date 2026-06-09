@@ -1,7 +1,9 @@
 <template>
   <div :class="device" class="table-header clearfix container">
+    <!-- Debug: onCreate={{$attrs.onCreate ? 'EXISTS' : 'EMPTY'}} -->
     <slot name="header">
       <LeftSide v-bind="$attrs" v-if="hasLeftActions"
+        :on-create="onCreate"
         :selected-rows="selectedRows"
         :table-url="tableUrl"
         class="left-side"
@@ -55,6 +57,10 @@ export default {
     hasRightActions: defaultTrue,
     hasDatePicker: defaultFalse,
     hasLabelSearch: defaultFalse,
+    onCreate: {
+      type: Function,
+      default: null
+    },
     datePicker: {
       type: Object,
       default: () => ({
@@ -111,6 +117,12 @@ export default {
     }
   },
   created() {
+    console.log('[TableAction] created:', {
+      hasOnCreate: 'onCreate' in this.$attrs,
+      onCreate: this.$attrs.onCreate,
+      onCreateType: typeof this.$attrs.onCreate,
+      allAttrs: Object.keys(this.$attrs)
+    })
     this.$emit('done')
   },
   methods: {

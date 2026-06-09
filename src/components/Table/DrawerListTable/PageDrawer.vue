@@ -10,11 +10,10 @@
 
 <script>
 import Drawer from '@/components/Drawer/index.vue'
-import vModelMixin from '@/utils/vue/vModelMixin'
+import { useVModel } from '@/utils/vue/useVModel'
 
 export default {
   components: { Drawer },
-  mixins: [vModelMixin('visible')],
   props: {
     visible: {
       type: Boolean,
@@ -38,6 +37,12 @@ export default {
     }
   },
   emits: ['update:visible'],
+  setup(props, { emit }) {
+    const iVisible = useVModel(props, emit, 'visible')
+    return {
+      iVisible
+    }
+  },
   data() {
     return {
       listener: {

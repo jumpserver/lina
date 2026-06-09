@@ -50,11 +50,21 @@ import Dialog from '@/components/Dialog/index.vue'
 import { createSourceIdCache } from '@/api/common'
 import * as queryUtil from '@/components/Table/DataTable/compenents/el-data-table/utils/query'
 import { download } from '@/utils/common/index'
+import { inject } from 'vue'
+import { LIST_TABLE_KEY } from '../index.vue'
 
 export default {
   name: 'ExportDialog',
   components: {
     Dialog
+  },
+  setup() {
+    // Inject list table context to replace $parent chain access
+    const listTableContext = inject(LIST_TABLE_KEY, {
+      dataTable: null,
+      tableConfig: null
+    })
+    return { listTableContext }
   },
   props: {
     selectedRows: {
@@ -114,12 +124,12 @@ export default {
       return this.selectedRows.length > 0
     },
     tableQuery() {
-      const listTableRef = this.$parent?.$parent?.$parent?.$parent
-      if (!listTableRef) {
+      const listTableRef = this.listTableContext
+      if (!listTableRef || !listTableRef.dataTable) {
         return {}
       }
-      const query = listTableRef?.dataTable?.getQuery() || {}
-      const extraQuery = Object.keys(listTableRef?.tableConfig?.extraQuery || {})
+      const query = listTableRef.dataTable.getQuery() || {}
+      const extraQuery = Object.keys(listTableRef.tableConfig?.extraQuery || {})
 
       delete query['limit']
       delete query['offset']
@@ -221,8 +231,11 @@ export default {
       return this.downloadCsv(url + queryStr)
     },
     async handleExport() {
-      const listTableRef = this.$parent.$parent.$parent.$parent
-      const query = listTableRef['dataTable'].getQuery()
+      const listTableRef = this.listTableContext
+      if (!listTableRef || !listTableRef.dataTable) {
+        return
+      }
+      const query = listTableRef.dataTable.getQuery()
       delete query['limit']
       delete query['offset']
       await this.beforeExport()

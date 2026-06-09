@@ -24,7 +24,7 @@ import { accountFieldsMeta } from '@/components/Apps/AccountCreateUpdateForm/con
 import Dialog from '@/components/Dialog/index.vue'
 import AutoDataForm from '@/components/Form/AutoDataForm/index.vue'
 import { encryptPassword } from '@/utils/secure'
-import vModelMixin from '@/utils/vue/vModelMixin'
+import { useVModel } from '@/utils/vue/useVModel'
 
 export default {
   name: 'UpdateSecretInfo',
@@ -32,7 +32,6 @@ export default {
     AutoDataForm,
     Dialog
   },
-  mixins: [vModelMixin('visible')],
   props: {
     account: {
       type: Object,
@@ -44,6 +43,12 @@ export default {
     }
   },
   emits: ['update:visible', 'update-auth-done'],
+  setup(props, { emit }) {
+    const iVisible = useVModel(props, emit, 'visible')
+    return {
+      iVisible
+    }
+  },
   data() {
     const accountMeta = accountFieldsMeta(this)
     return {

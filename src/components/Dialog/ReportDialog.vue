@@ -19,10 +19,10 @@
 
 <script>
 import Dialog from '@/components/Dialog/index.vue'
-import vModelMixin from '@/utils/vue/vModelMixin'
+import { useVModel } from '@/utils/vue/useVModel'
+
 export default {
   name: 'ReportDialog',
-  mixins: [vModelMixin('visible')],
   components: {
     Dialog
   },
@@ -37,6 +37,12 @@ export default {
     }
   },
   emits: ['update:visible'],
+  setup(props, { emit }) {
+    const iVisible = useVModel(props, emit, 'visible')
+    return {
+      iVisible
+    }
+  },
   data() {
     return {
       loading: true

@@ -60,13 +60,13 @@ import path from 'path-browserify'
 import { isExternal } from '@/utils/secure'
 import Item from './Item'
 import AppLink from './Link'
-import FixiOSBug from './FixiOSBug'
+import { useFixIOSBug } from '@/utils/vue/useFixIOSBug'
 import { toSentenceCase } from '@/utils/common/index'
+import { ref } from 'vue'
 
 export default {
   name: 'SidebarItem',
   components: { Item, AppLink },
-  mixins: [FixiOSBug],
   props: {
     // route object
     item: {
@@ -84,6 +84,13 @@ export default {
     collapse: {
       type: Boolean,
       default: false
+    }
+  },
+  setup() {
+    const subMenu = ref(null)
+    useFixIOSBug(subMenu)
+    return {
+      subMenu
     }
   },
   data() {

@@ -43,10 +43,16 @@ export default {
     }
   },
   data() {
+    let reportUrl = '/reports/dashboard/audits'
+    try {
+      reportUrl = getRouteUrl('AuditsReport', this.$router) || reportUrl
+    } catch (e) {
+      console.warn('Failed to resolve AuditsReport route:', e)
+    }
     return {
       name: 'AuditsDashboard',
       days: localStorage.getItem(this.name) || '7',
-      url: getRouteUrl('AuditsReport', this.$router)
+      url: reportUrl
     }
   },
   methods: {

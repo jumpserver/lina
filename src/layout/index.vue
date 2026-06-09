@@ -14,7 +14,7 @@
 <script>
 import { AppMain, NavHeader } from './components'
 import NavLeft from './components/NavLeft/index.vue'
-import ResizeMixin from './mixin/ResizeHandler'
+import { useResizeHandler } from '@/utils/vue/useResizeHandler'
 
 export default {
   name: 'Layout',
@@ -23,7 +23,9 @@ export default {
     NavHeader,
     AppMain
   },
-  mixins: [ResizeMixin],
+  setup() {
+    useResizeHandler()
+  },
   computed: {
     sidebar() {
       return this.$store.state.app.sidebar

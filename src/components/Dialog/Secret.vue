@@ -30,14 +30,12 @@
 import i18n from '@/i18n/i18n'
 import { copy } from '@/utils/common/index'
 import Dialog from '@/components/Dialog/index'
-import vModelMixin from '@/utils/vue/vModelMixin'
 
 export default {
   name: 'Secret',
   components: {
     Dialog
   },
-  mixins: [vModelMixin('visible')],
   props: {
     title: {
       type: String,
@@ -52,6 +50,17 @@ export default {
     return {
       keyInfo: { id: '', secret: '' },
       visible: false
+    }
+  },
+  computed: {
+    iVisible: {
+      get() {
+        return this.visible
+      },
+      set(val) {
+        this.visible = val
+        this.$emit('update:visible', val)
+      }
     }
   },
   methods: {

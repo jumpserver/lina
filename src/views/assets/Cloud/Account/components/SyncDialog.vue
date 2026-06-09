@@ -14,12 +14,11 @@
 <script>
 import AssetPanel from '@/views/assets/Cloud/Account/components/AssetPanel.vue'
 import Dialog from '@/components/Dialog/index.vue'
-import vModelMixin from '@/utils/vue/vModelMixin'
+import { useVModel } from '@/utils/vue/useVModel'
 
 export default {
   name: 'SyncDialog',
   components: { Dialog, AssetPanel },
-  mixins: [vModelMixin('visible')],
   props: {
     object: {
       type: Object,
@@ -30,7 +29,13 @@ export default {
       default: () => false
     }
   },
-  emits: ['update:visible']
+  emits: ['update:visible'],
+  setup(props, { emit }) {
+    const iVisible = useVModel(props, emit, 'visible')
+    return {
+      iVisible
+    }
+  }
 }
 </script>
 
