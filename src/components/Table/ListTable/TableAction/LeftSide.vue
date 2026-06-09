@@ -1,7 +1,7 @@
 <template>
   <DataActions v-bind="$attrs" v-if="hasLeftActions && iActions.length> 0"
     :actions="iActions"
-    size="default"
+    size="small"
     class="header-action"
   />
 </template>

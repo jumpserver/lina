@@ -35,7 +35,7 @@
             v-model="search"
             :placeholder="$t('Search')"
             :clearable="true"
-            size="large"
+            size="small"
             prefix-icon="Search"
             @input="onInput"
             @keydown.enter.prevent="onEnter"

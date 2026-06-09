@@ -3,7 +3,7 @@
     <el-table
       :data="tableData"
       :show-header="false"
-      size="medium"
+      size="small"
     >
       <el-table-column prop="key" width="120" />
       <el-table-column prop="value">

@@ -95,7 +95,7 @@ async function initApp() {
   app.use(store)
   app.use(router)
   app.use(i18n)
-  app.use(ElementPlus, { locale: enLocale })
+  app.use(ElementPlus, { locale: enLocale, size: 'small' })
   app.use(CookiePlugin)
   app.use(ChartsPlugin)
   app.use(VSanitize, {
