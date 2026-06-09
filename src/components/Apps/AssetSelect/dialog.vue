@@ -187,7 +187,4 @@ export default {
 
 }
 
-.asset-select-dialog :deep(.el-icon-circle-check) {
-  display: none;
-}
 </style>

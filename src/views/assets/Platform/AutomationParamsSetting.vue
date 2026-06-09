@@ -54,7 +54,7 @@ export default {
     },
     icon: {
       type: String,
-      default: 'el-icon-setting'
+      default: 'Setting'
     },
     url: {
       type: String,

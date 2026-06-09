@@ -109,9 +109,7 @@ export default {
     }
   }
 
-  .export-btn .el-icon-document,
-  .export-btn .el-icon-printer,
-  .export-btn .el-icon-message {
+  .export-btn .el-icon {
     margin-right: 4px;
   }
 

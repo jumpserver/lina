@@ -135,9 +135,6 @@ export default {
     }
   }
 
-  .el-icon-circle-check {
-    display: none;
-  }
 
   &.dialog__header {
     box-sizing: border-box;

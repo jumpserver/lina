@@ -91,7 +91,7 @@ import _frompairs from 'lodash/fromPairs'
 import _get from 'lodash/get'
 import _includes from 'lodash/includes'
 import _topairs from 'lodash/toPairs'
-import { markRaw, inject } from 'vue'
+import { markRaw, toRaw, inject } from 'vue'
 import { FORM_RENDERER_KEY } from '../el-form-renderer.vue'
 import getEnableWhenStatus from '../util/enable-when'
 import { noop } from '../util/utils'
@@ -166,7 +166,7 @@ export default {
     },
     rawComponent() {
       const comp = this.data.component || `el-${this.data.type}`
-      return typeof comp === 'string' ? comp : markRaw(comp)
+      return typeof comp === 'string' ? comp : markRaw(toRaw(comp))
     },
     // 解构运算符会处理 undefined 的情况
     componentProps: ({ data: { el }, propsInner }) => ({ ...el, ...propsInner }),

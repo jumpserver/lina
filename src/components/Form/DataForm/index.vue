@@ -57,7 +57,7 @@
 
 <script>
 import { randomString } from '@/utils/common/index'
-import { markRaw } from 'vue'
+import { markRaw, toRaw } from 'vue'
 import ElFormRender from './components/el-form-renderer'
 
 const scrollToError = (
@@ -178,7 +178,7 @@ export default {
     processedFields() {
       return this.fields.map(field => {
         if (field && field.component && typeof field.component !== 'string') {
-          return { ...field, component: markRaw(field.component) }
+          return { ...field, component: markRaw(toRaw(field.component)) }
         }
         return field
       })
@@ -332,7 +332,7 @@ export default {
       .el-select {
         // 选择 tag 时的额外自定义样式
         .el-select__tags > span > .el-tag.el-tag--info {
-          .el-tag__close.el-icon-close {
+          .el-tag__close {
             margin-top: -1px !important;
           }
         }

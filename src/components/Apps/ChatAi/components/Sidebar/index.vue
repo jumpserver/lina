@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="close-sidebar">
-      <el-icon v-if="hasClose" @click="onClose"><Download /></el-icon>
+      <el-icon v-if="hasClose" class="download-icon" @click="onClose"><Download /></el-icon>
     </div>
     <div v-if="!expanded" class="close-sidebar">
       <i class="fa fa-expand" style="font-weight: 200" @click="$emit('expand')" />
@@ -88,7 +88,7 @@ export default {
   }
 }
 
-.el-icon-download {
+.download-icon {
   transform: rotate(-90deg)
 }
 

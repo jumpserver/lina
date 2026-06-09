@@ -246,7 +246,7 @@ export default {
   :deep(.el-button) {
     height: 25px;
   }
-  :deep(.el-icon-arrow-down) {
+  :deep(.el-icon--right) {
     display: none;
   }
 }

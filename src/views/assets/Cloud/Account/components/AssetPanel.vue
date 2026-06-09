@@ -40,7 +40,7 @@ export default {
       importAssets: {},
       tip: this.$tc('PrepareSyncTask'),
       linkType: 'primary',
-      linkIcon: 'el-icon-loading',
+      linkIcon: 'Loading',
       alreadySync: [],
       settings: {
         showCancel: !this.active,
@@ -129,7 +129,7 @@ export default {
           this.importAssets[data.asset_id]['@status'] = 'ok'
         } else if (data.action === 'finished') {
           this.linkType = 'success'
-          this.linkIcon = 'el-icon-success'
+          this.linkIcon = 'SuccessFilled'
           this.settings.disableImportBtn = false
           this.tip = `${this.$t('SyncSuccessMsg')}`
         } else {

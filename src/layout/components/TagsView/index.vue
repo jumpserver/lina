@@ -282,7 +282,7 @@ export default {
 // reset element css of el-icon-close
 .tags-view-wrapper {
   .tags-view-item {
-    .el-icon-close {
+    .el-icon {
       width: 16px;
       height: 16px;
       vertical-align: 2px;

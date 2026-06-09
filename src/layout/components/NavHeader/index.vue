@@ -245,12 +245,12 @@ export default {
         color: #fff;
         font-size: 16px;
 
-        &.el-icon-arrow-down {
+        &.el-icon--right {
           font-size: 13px;
         }
       }
 
-      & :deep(i.el-dialog__close.el-icon-close) {
+      & :deep(i.el-dialog__close) {
         color: #7c7e7f;
       }
 

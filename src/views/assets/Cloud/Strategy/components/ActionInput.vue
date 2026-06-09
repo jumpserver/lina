@@ -199,7 +199,7 @@ export default {
             return _createVNode('div', {
               'class': 'input-button'
             }, [_createVNode(_resolveComponent('el-button'), {
-              'icon': 'el-icon-minus',
+              'icon': 'Minus',
               'size': 'small',
               'style': {
                 flexShrink: 0

@@ -162,7 +162,7 @@ export default {
     handleFocus() {
       this.focus = true
       this.isFocus = true
-      this.suffixIcon = 'el-icon-search'
+      this.suffixIcon = 'Search'
     },
     handleBlur() {
       this.focus = false
@@ -374,7 +374,7 @@ export default {
       // 若存在遮罩层等组件在调用时，其 length 将会为 1
       if (event.target.classList.length === 0 && event.key === '/') {
         this.$refs.SearchInput.focus()
-        this.suffixIcon = 'el-icon-search'
+        this.suffixIcon = 'Search'
         this.isFocus = true
       }
     },

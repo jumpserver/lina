@@ -141,7 +141,7 @@ export default {
     border-bottom: none;
   }
 
-  & :deep(.el-icon-arrow-down) {
+  & :deep(.el-sub-menu__icon-arrow) {
     font-size: 13px;
     color: #606266;
   }

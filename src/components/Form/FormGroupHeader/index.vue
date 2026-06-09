@@ -4,7 +4,7 @@
     <div v-if="group['title']">
       <h3 @click="toggle">{{ group['title'] }} </h3>
       <span class="compass" @click="toggle">
-        <i :class="iconClass" />
+        <el-icon><component :is="iconClass" /></el-icon>
       </span>
     </div>
     <div v-if="!isVisible" class="ellipsis" @click="toggle">
@@ -36,7 +36,7 @@ export default {
   },
   computed: {
     iconClass() {
-      return this.isVisible ? 'el-icon-arrow-down' : 'el-icon-arrow-up'
+      return this.isVisible ? 'ArrowDown' : 'ArrowUp'
     }
   },
   methods: {

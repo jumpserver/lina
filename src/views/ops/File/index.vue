@@ -87,7 +87,7 @@
                       <el-icon><Document /></el-icon>{{ file.name }}
                       <i style="color: #1ab394; float: right; font-weight: normal">
                         {{ formatFileSize(file.size) }}
-                        <el-icon @click="removeFile(file)"><Close /></el-icon>
+                        <el-icon class="remove-icon" @click="removeFile(file)"><Close /></el-icon>
                       </i>
                     </a>
                   </li>
@@ -568,7 +568,7 @@ export default {
           }
 
           .el-upload-list__item-name {
-            .el-icon-close {
+            .remove-icon {
               position: relative;
               top: 0;
               left: 10px;
