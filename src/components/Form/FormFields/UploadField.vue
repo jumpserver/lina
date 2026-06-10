@@ -6,9 +6,9 @@
     </el-button>
     <span>{{ fileName }}</span>
     <div v-if="tip !== ''" class="help-block">{{ tip }}</div>
-    <input :value="value" hidden type="text" @input="onInput($event.target.value)" v-on="$attrs">
+    <input :value="value" hidden type="text" @input="onInput($event.target.value)">
     <div>
-      <img v-bind="$attrs" v-if="preview" :class="showBG ? 'show-bg' : ''" :src="preview" alt="">
+      <img v-if="preview" :class="showBG ? 'show-bg' : ''" :src="preview" alt="">
     </div>
     <el-button v-if="fileName" size="small" type="danger" @click.stop="resetUpload">
       {{ $t('Cancel') }}

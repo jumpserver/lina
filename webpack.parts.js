@@ -118,7 +118,7 @@ function createHtmlDirectiveTransform() {
       props: [
         createObjectProperty(
           createSimpleExpression('innerHTML', true),
-          createSimpleExpression(`$xss.process(_s(${expression}))`, false)
+          createSimpleExpression(`$xss.process(String(${expression} || ''))`, false)
         )
       ]
     }
