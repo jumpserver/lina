@@ -176,12 +176,25 @@ export default {
       return this.mobile ? 'top' : 'right'
     },
     processedFields() {
-      return this.fields.map(field => {
-        if (field && field.component && typeof field.component !== 'string') {
-          return { ...field, component: markRaw(toRaw(field.component)) }
-        }
-        return field
-      })
+      function markComponents(fields) {
+        if (!Array.isArray(fields)) return fields
+        return fields.map(field => {
+          if (!field) return field
+          if (typeof field === 'string') return field
+          const f = { ...field }
+          if (f.component && typeof f.component !== 'string') {
+            f.component = markRaw(toRaw(f.component))
+          }
+          if (f.fields) {
+            f.fields = markComponents(f.fields)
+          }
+          if (f.children) {
+            f.children = markComponents(f.children)
+          }
+          return f
+        })
+      }
+      return markComponents(this.fields)
     }
   },
   mounted() {

@@ -1,7 +1,7 @@
 <template>
   <IBox>
     <el-form ref="testForm" :model="testData" :rules="rules" label-width="15%">
-      <div v-for="field in fields" :key="field.name">
+      <div v-for="field in safeFields" :key="field.name">
         <div v-if="Array.isArray(field)">
           <el-form-item label-width="8%">
             <el-col v-for="item in field" :key="item.name" :span="getSpan(field)">
@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import { markRaw, toRaw } from 'vue'
 import { IBox } from '@/components'
 import { Select2, TagInput } from '@/components/Form/FormFields'
 import Term from '@/components/Widgets/Term'
@@ -92,6 +93,19 @@ export default {
     }
   },
   computed: {
+    safeFields() {
+      function mark(fields) {
+        if (!Array.isArray(fields)) return fields
+        return fields.map(f => {
+          if (Array.isArray(f)) return mark(f)
+          if (f && f.component && typeof f.component !== 'string') {
+            return { ...f, component: markRaw(toRaw(f.component)) }
+          }
+          return f
+        })
+      }
+      return mark(this.fields)
+    },
     xterm() {
       return this.$refs.xterm
     },
