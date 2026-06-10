@@ -19,7 +19,7 @@
 
     <!-- 搜索模态框 -->
     <el-dialog
-      v-model:visible="isOpen"
+      v-model="isOpen"
       :close-on-click-modal="true"
       :close-on-press-escape="true"
       :append-to-body="true"

@@ -91,7 +91,7 @@
           background: paginationBackground,
           layout: paginationLayout,
           pageSizes: paginationSizes,
-          total: total,
+          total: total || 0,
           'onUpdate:current-page': handleCurrentChange,
           'onUpdate:page-size': handleSizeChange,
           onCurrentChange: handleCurrentChange,

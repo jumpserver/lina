@@ -98,7 +98,9 @@ function cleanRoute(tmp, parent) {
   const pathValue = pathSlice[pathSlice.length - 1]
 
   if (!tmp.name && tmp.meta.title) {
-    tmp.name = tmp.meta.title
+    // 使用 path 生成唯一 name，避免父子路由 title 相同导致 vue-router 报重名错误
+    const uniqueName = path.replace(/^\//, '').replace(/[/:]/g, '-') || tmp.meta.title
+    tmp.name = uniqueName
   }
 
   // 标识路由是哪个 view

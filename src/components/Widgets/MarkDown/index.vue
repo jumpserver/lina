@@ -27,7 +27,7 @@
 
 <script>
 import DOMPurify from 'dompurify'
-import VueMarkdown from 'vue-markdown'
+import VueMarkdown from '@/components/Widgets/VueMarkdown/index.vue'
 
 export default {
   components: {

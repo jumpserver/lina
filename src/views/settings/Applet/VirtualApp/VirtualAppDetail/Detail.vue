@@ -16,7 +16,7 @@
 import { createTextVNode as _createTextVNode, isVNode as _isVNode, resolveComponent as _resolveComponent, createVNode as _createVNode } from 'vue'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import { IBox } from '@/components'
-import VueMarkdown from 'vue-markdown'
+import VueMarkdown from '@/components/Widgets/VueMarkdown/index.vue'
 function _isSlot(s) {
   return typeof s === 'function' || Object.prototype.toString.call(s) === '[object Object]' && !_isVNode(s)
 }

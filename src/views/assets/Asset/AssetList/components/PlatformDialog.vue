@@ -4,10 +4,10 @@
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('SelectPlatform')"
-    :visible="visible"
+    :model-value="visible"
     size="700px"
     top="1vh"
-    @update:visible="$emit('update:visible', $event)"
+    @update:model-value="$emit('update:visible', $event)"
   >
     <template #header>
       <div class="drawer-title">

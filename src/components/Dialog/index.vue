@@ -93,6 +93,19 @@ export default {
       const attrs = { ...this.$attrs }
       delete attrs.class
       delete attrs.style
+      // 兼容旧的 :visible / v-model:visible 写法 —— EP el-dialog 使用 modelValue 控制显隐
+      if ('visible' in attrs) {
+        if (!('modelValue' in attrs)) {
+          attrs.modelValue = attrs.visible
+        }
+        delete attrs.visible
+      }
+      if ('onUpdate:visible' in attrs) {
+        if (!('onUpdate:modelValue' in attrs)) {
+          attrs['onUpdate:modelValue'] = attrs['onUpdate:visible']
+        }
+        delete attrs['onUpdate:visible']
+      }
       return attrs
     },
     dialogClass() {

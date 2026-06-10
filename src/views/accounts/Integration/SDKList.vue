@@ -36,7 +36,7 @@
 import { IBox } from '@/components'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import hljs from 'highlight.js'
-import VueMarkdown from 'vue-markdown'
+import VueMarkdown from '@/components/Widgets/VueMarkdown/index.vue'
 
 export default {
   name: 'SDKList',

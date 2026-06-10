@@ -6,7 +6,7 @@
       </el-link>
     </el-badge>
     <el-drawer
-      v-model:visible="show"
+      v-model="show"
       :before-close="handleClose"
       :modal="false"
       :size="width"

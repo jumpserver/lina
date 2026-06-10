@@ -20,7 +20,7 @@
       </template>
     </TwoCol>
     <el-drawer
-      v-model:visible="pamDrawerShow"
+      v-model="pamDrawerShow"
       :append-to-body="true"
       :with-header="false"
       size="50%"

@@ -78,6 +78,14 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
+  // catch-all 使用 404 组件(不 redirect),保证懒加载路由首次解析时也能匹配,
+  // 避免 [Vue Router warn]: No match found;守卫会在动态路由就绪后重定向到真实路由
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('@/views/404'),
+    hidden: true
+  },
   ...commonRoutes
 ]
 
@@ -110,7 +118,7 @@ export function resetRouter() {
   // Remove dynamic routes
   router.getRoutes().forEach(route => {
     const name = route.name
-    if (name && name !== 'home' && name !== '404' && router.hasRoute(name)) {
+    if (name && name !== 'home' && name !== '404' && name !== 'NotFound' && router.hasRoute(name)) {
       router.removeRoute(name)
     }
   })

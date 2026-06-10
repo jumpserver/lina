@@ -109,17 +109,9 @@ export async function generatePageRoutes({ to, from }) {
   try {
     // try get user profile
     // generate accessible routes map based on roles
-    let accessRoutes = await store.dispatch('permission/generateRoutes', { to, from })
+    const accessRoutes = await store.dispatch('permission/generateRoutes', { to, from })
 
-    // Incorrect route, jump to 404
-    accessRoutes = [
-      ...accessRoutes,
-      {
-        path: '/:pathMatch(.*)*',
-        redirect: '/404',
-        hidden: true
-      }
-    ]
+    // catch-all(NotFound)已在 constantRoutes 中静态注册,此处不再追加,避免重复
     // dynamically add accessible routes
     console.debug(
       'All routes:',
@@ -137,7 +129,7 @@ export async function generatePageRoutes({ to, from }) {
     // hack method to ensure that addRoutes is complete
     // set the replace: true, so the navigation will not leave a history record
     // console.debug('Next to: ', to)
-    return { ...to, replace: true }
+    return { path: to.path, query: to.query, hash: to.hash, replace: true }
   } catch (error) {
     // remove token and go to login page to re-login
     // await store.dispatch('user/resetToken')

@@ -1,12 +1,12 @@
 <template>
   <el-drawer
-    :visible="visible"
+    :model-value="visible"
     :title="$t('Details')"
     append-to-body
     class="risk-review-drawer"
     destroy-on-close
     direction="rtl"
-    @update:visible="$emit('update:visible', $event)"
+    @update:model-value="$emit('update:visible', $event)"
   >
     <div class="drawer-container">
       <div class="drawer-body">

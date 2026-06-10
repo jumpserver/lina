@@ -29,8 +29,8 @@ import CookiePlugin from '@/libs/cookie'
 import request from '@/utils/request'
 import { message } from '@/utils/vue/message'
 import xss from '@/utils/secure'
-import VSanitize from 'v-sanitize'
 import moment from 'moment'
+import sanitizeHtml from 'sanitize-html'
 import _ from 'lodash'
 
 moment.locale('zh-cn')
@@ -98,9 +98,15 @@ async function initApp() {
   app.use(ElementPlus, { locale: enLocale, size: 'small' })
   app.use(CookiePlugin)
   app.use(ChartsPlugin)
-  app.use(VSanitize, {
-    allowedClasses: {
-      '*': ['*']
+
+  // v-sanitize: 手动注册(v-sanitize npm 包用 Vue.prototype 不兼容 Vue 3)
+  const sanitizeOptions = {
+    allowedClasses: { '*': ['*'] }
+  }
+  app.config.globalProperties.$sanitize = (dirty, opts) => sanitizeHtml(dirty, opts || sanitizeOptions)
+  app.directive('sanitize', (el, binding) => {
+    if (binding.value !== binding.oldValue) {
+      el.innerHTML = sanitizeHtml(binding.value || '', sanitizeOptions)
     }
   })
 
@@ -124,6 +130,9 @@ async function initApp() {
   setupErrorHandler(app, message)
 
   window._ = _
+  // v-html 经 webpack 自定义指令转换为 $xss.process(...),compat with(this) 模式下
+  // $xss 需作为真实全局变量才能被编译后的 render 解析(与 window._ 同理)
+  window.$xss = xss
 
   // 初始化默认主题变量（确保在应用启动时就注入 CSS 变量）
   setRootColors()
