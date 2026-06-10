@@ -95,17 +95,25 @@ export default {
       }, 500)
     },
     handleCascaderVisibleChange(visible) {
-      const input = this.$refs.labelCascader.$el
+      const cascaderEl = this.$refs.labelCascader?.$el
+      if (!cascaderEl || typeof cascaderEl.getElementsByClassName !== 'function') {
+        // EP cascader 在 Vue 3 中 $el 可能不是 DOM 元素，降级处理
+        if (!visible && this.labelValue.length === 0) {
+          this.showLabelSearch = false
+        }
+        this.$emit('showLabelSearch', this.showLabelSearch)
+        return
+      }
+      const input = cascaderEl
         .getElementsByClassName('el-input--suffix')[0]
-        .querySelector('input')
+        ?.querySelector('input')
       if (visible) {
         setTimeout(() => {
-          this.$refs.labelCascader.updateStyle()
-          input.style.height = '30px'
+          if (input) input.style.height = '30px'
         })
         return
       } else {
-        input.style.height = '30px'
+        if (input) input.style.height = '30px'
       }
       if (this.labelValue.length === 0) {
         this.showLabelSearch = false
@@ -137,14 +145,18 @@ export default {
     },
     setSearchFocus() {
       setTimeout(() => {
-        this.$refs.labelCascader.$el.getElementsByClassName('el-cascader__search-input')[0].focus()
+        const cascaderEl = this.$refs.labelCascader?.$el
+        const searchInput = cascaderEl?.querySelector?.('.el-cascader__search-input')
+          || cascaderEl?.getElementsByClassName?.('el-cascader__search-input')?.[0]
+        if (searchInput) searchInput.focus()
       }, 100)
     },
     showSearchSelect() {
       this.getLabelOptions()
       this.showLabelSearch = true
       setTimeout(() => {
-        this.$refs.labelCascader.toggleDropDownVisible(true)
+        this.$refs.labelCascader?.togglePopperVisible?.(true)
+          || this.$refs.labelCascader?.toggleDropDownVisible?.(true)
         this.setSearchFocus()
       }, 200)
     },

@@ -115,6 +115,9 @@ async function initApp() {
   installSvgIcon(app)
   installElementPlusIcons(app)
 
+  // 全局注册动态组件(被 GenericDetailPage submenu 按字符串 name 引用)
+  app.component('ResourceActivity', require('@/components/Apps/ResourceActivity').default)
+
   app.config.globalProperties.$moment = moment
   app.config.globalProperties.$axios = request
   app.config.globalProperties.$message = message

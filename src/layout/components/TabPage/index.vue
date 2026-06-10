@@ -47,7 +47,7 @@
         </el-alert>
         <transition v-if="!loading" appear mode="out-in" name="fade-transform">
           <slot>
-            <keep-alive>
+            <keep-alive v-if="computeActiveComponent">
               <component :is="computeActiveComponent" />
             </keep-alive>
           </slot>

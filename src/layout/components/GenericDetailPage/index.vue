@@ -22,13 +22,15 @@ import TabPage from '../TabPage'
 import { flashErrorMsg } from '@/utils/request'
 import { getApiPath } from '@/utils/common/index'
 import ActionsGroup from '@/components/Common/ActionsGroup'
+import ResourceActivity from '@/components/Apps/ResourceActivity'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'GenericDetailPage',
   components: {
     TabPage,
-    ActionsGroup
+    ActionsGroup,
+    ResourceActivity
   },
   props: {
     url: {

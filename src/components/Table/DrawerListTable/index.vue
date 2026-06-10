@@ -21,6 +21,7 @@
 import ListTable from '../ListTable'
 import Drawer from '@/components/Drawer/index.vue'
 import { setUrlParam, toLowerCaseExcludeAbbr, toSentenceCase } from '@/utils/common/index'
+import { markRaw, toRaw } from 'vue'
 import { mapGetters } from 'vuex'
 import { resolveRoute } from '@/utils/vue/index'
 
@@ -403,7 +404,7 @@ export default {
         this.$log.debug('>>> showDrawer step 5: isReopeningDrawer set to true')
 
         // 6. 先设置组件（在关闭之前设置）
-        this.drawerComponent = component
+        this.drawerComponent = markRaw(toRaw(component))
         this.$log.debug('>>> showDrawer step 6: drawerComponent set', {
           drawerComponent: this.drawerComponent ? 'EXISTS' : 'EMPTY',
           drawerVisible: this.drawerVisible
@@ -421,7 +422,7 @@ export default {
           // 确保组件没有被清空
           if (!this.drawerComponent) {
             this.$log.debug('>>> showDrawer step 7: drawerComponent was cleared, restoring it')
-            this.drawerComponent = component
+            this.drawerComponent = markRaw(toRaw(component))
           }
         }
 

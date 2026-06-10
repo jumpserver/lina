@@ -20,7 +20,7 @@
               v-for="option of exportTypeOptions"
               :key="option.value"
               :disabled="!option.can"
-              :label="option.value"
+              :value="option.value"
               style="padding: 10px 20px;"
             >
               {{ option.label }}
@@ -33,7 +33,7 @@
               v-for="option of exportOptions"
               :key="option.value"
               :disabled="!option.can"
-              :label="option.value"
+              :value="option.value"
               class="export-item"
             >
               {{ option.label }}

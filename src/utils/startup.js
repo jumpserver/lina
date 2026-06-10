@@ -109,9 +109,18 @@ export async function generatePageRoutes({ to, from }) {
   try {
     // try get user profile
     // generate accessible routes map based on roles
-    const accessRoutes = await store.dispatch('permission/generateRoutes', { to, from })
+    let accessRoutes = await store.dispatch('permission/generateRoutes', { to, from })
 
-    // catch-all(NotFound)已在 constantRoutes 中静态注册,此处不再追加,避免重复
+    // Incorrect route, jump to 404
+    accessRoutes = [
+      ...accessRoutes,
+      {
+        path: '/:pathMatch(.*)*',
+        name: 'NotFound',
+        component: () => import('@/views/404'),
+        hidden: true
+      }
+    ]
     // dynamically add accessible routes
     console.debug(
       'All routes:',

@@ -12,7 +12,7 @@
 import IBox from '@/components/Common/IBox/index.vue'
 import { copy } from '@/utils/common/index'
 import { toSafeLocalDateStr } from '@/utils/common/time'
-import { h } from 'vue'
+import { h, markRaw } from 'vue'
 import LabelsDetailFormatter from '../Formatters/LabelsDetailFormatter.vue'
 import DetailCard from './index.vue'
 
@@ -216,7 +216,7 @@ export default {
           this.items.push({
             key: label,
             value: value,
-            component: component
+            component: markRaw(component)
           })
           continue
         }
@@ -226,7 +226,7 @@ export default {
           this.items.push({
             key: label,
             value: value,
-            formatter: formatter
+            formatter: typeof formatter === 'object' ? markRaw(formatter) : formatter
           })
           continue
         }

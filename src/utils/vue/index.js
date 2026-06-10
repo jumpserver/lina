@@ -34,7 +34,7 @@ export function resolveRoute(route, router) {
       return matched[0]
     }
   } catch (error) {
-    console.warn('resolveRoute error:', error, route)
+    // vue-router 5 throws when route name not found; silently return undefined
     return
   }
 }

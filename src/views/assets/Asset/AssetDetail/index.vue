@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu"
     v-model:object="asset">
-    <keep-alive>
+    <keep-alive v-if="config.activeMenu">
       <component :is="config.activeMenu" :exclude="'Account'" :object="asset" />
     </keep-alive>
   </GenericDetailPage>

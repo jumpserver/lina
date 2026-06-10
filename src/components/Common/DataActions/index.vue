@@ -172,7 +172,7 @@ export default {
     },
     cleanActions(actions) {
       const cleanedActions = []
-      const cloneActions = _.cloneDeep(actions)
+      const cloneActions = actions.map(v => v ? { ...v } : v)
       for (const v of cloneActions) {
         if (!v) {
           continue

@@ -10,9 +10,11 @@
         @init-actions-done="handleActionsDone" />
 
       <RightSide v-bind="$attrs" v-if="hasRightActions"
+        :quick-filter-expand="quickFilterExpand"
         :selected-rows="selectedRows"
         :table-url="tableUrl"
-        class="right-side" />
+        class="right-side"
+        @update:quick-filter-expand="$emit('update:quick-filter-expand', $event)" />
 
       <div :class="searchClass" class="search">
         <LabelSearch
@@ -51,7 +53,12 @@ export default {
     AutoDataSearch,
     DatetimeRangePicker
   },
+  emits: ['update:quick-filter-expand', 'done'],
   props: {
+    quickFilterExpand: {
+      type: Boolean,
+      default: true
+    },
     hasLeftActions: defaultTrue,
     hasSearch: defaultTrue,
     hasRightActions: defaultTrue,

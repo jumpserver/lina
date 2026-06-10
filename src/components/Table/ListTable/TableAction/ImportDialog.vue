@@ -37,7 +37,7 @@
           accept=".csv,.xlsx"
           action="string"
           drag
-          list-type="text/csv"
+          list-type="text"
         >
           <el-icon><Upload /></el-icon>
           <div class="el-upload__text">
@@ -149,8 +149,9 @@ export default {
     this.$eventBus.$on('showImportDialog', this.showImportEventHandler)
   },
   methods: {
-    showImportEventHandler({ url }) {
-      if (url === this.url) {
+    showImportEventHandler(options = {}) {
+      const { url } = options
+      if (!url || url === this.url) {
         this.showImportDialog = true
       }
     },

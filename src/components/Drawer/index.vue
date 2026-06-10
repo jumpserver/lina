@@ -15,7 +15,7 @@
     <div class="drawer__content">
       <slot name="default">
         <component v-bind="componentProps" :is="resolvedComponent"
-          v-if="component"
+          v-if="resolvedComponent"
           ref="dynamicComponent"
           v-on="componentListeners" />
       </slot>
@@ -75,6 +75,7 @@ export default {
   },
   computed: {
     resolvedComponent() {
+      if (!this.component) return null
       return resolveAsyncComponentCompat(this.component)
     }
   },

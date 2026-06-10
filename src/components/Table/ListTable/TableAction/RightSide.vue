@@ -87,26 +87,15 @@ export default {
       default: true
     }
   },
+  emits: ['update:quick-filter-expand', 'importDialogClose'],
   data() {
     return {
-      defaultHandleExportClick: function({ selectedRows }) {
-        const url = this.iExportOptions.url
-        this.dialogExportVisible = true
-        this.$nextTick(() => {
-          this.$eventBus.$emit('showExportDialog', { selectedRows, url, name: this.name })
-        })
-      },
-      defaultHandleTableSettingClick: function({ selectedRows }) {
-        this.$eventBus.$emit('showColumnSettingPopover', {
-          url: this.tableUrl,
-          row: selectedRows,
-          name: this.name
-        })
-      },
-      defaultHandleRefreshClick: function() {
-        this.reloadTable()
-      },
-      defaultRightSideActions: [
+      dialogExportVisible: false
+    }
+  },
+  computed: {
+    defaultRightSideActions() {
+      return [
         {
           name: 'actionFilter',
           icon: 'filter',
@@ -119,34 +108,31 @@ export default {
           icon: 'system-setting',
           tip: this.$t('ListPreference'),
           has: this.hasColumnSetting,
-          callback: this.handleTableSettingClick || this.defaultHandleTableSettingClick
+          callback: this.handleTableSettingClick || this.defaultHandleTableSettingClickFn
         },
         {
           name: 'actionImport',
           icon: 'upload',
           tip: this.$t('Import'),
           has: this.hasImport,
-          callback: this.handleImportClick || this.defaultHandleImportClick
+          callback: this.handleImportClick || this.defaultHandleImportClickFn
         },
         {
           name: 'actionExport',
           icon: 'download',
           tip: this.$t('Export'),
           has: this.hasExport,
-          callback: this.handleExportClick || this.defaultHandleExportClick
+          callback: this.handleExportClick || this.defaultHandleExportClickFn
         },
         {
           name: 'actionRefresh',
           icon: 'refresh',
           tip: this.$t('Refresh'),
           has: this.hasRefresh,
-          callback: this.handleRefreshClick || this.defaultHandleRefreshClick
+          callback: this.handleRefreshClick || this.defaultHandleRefreshClickFn
         }
-      ],
-      dialogExportVisible: false
-    }
-  },
-  computed: {
+      ]
+    },
     rightSideActions() {
       const actions = [...this.defaultRightSideActions, ...this.extraRightSideActions]
       const params = {
@@ -181,6 +167,29 @@ export default {
     }
   },
   methods: {
+    defaultHandleExportClickFn({ selectedRows }) {
+      const url = this.iExportOptions.url
+      this.dialogExportVisible = true
+      this.$nextTick(() => {
+        this.$eventBus.$emit('showExportDialog', { selectedRows, url, name: this.name })
+      })
+    },
+    defaultHandleTableSettingClickFn({ selectedRows }) {
+      this.$eventBus.$emit('showColumnSettingPopover', {
+        url: this.tableUrl,
+        row: selectedRows,
+        name: this.name
+      })
+    },
+    defaultHandleImportClickFn() {
+      this.dialogExportVisible = true
+      this.$nextTick(() => {
+        this.$eventBus.$emit('showImportDialog')
+      })
+    },
+    defaultHandleRefreshClickFn() {
+      this.reloadTable()
+    },
     handleFilterClick() {
       this.$emit('update:quick-filter-expand', !this.quickFilterExpand)
     },

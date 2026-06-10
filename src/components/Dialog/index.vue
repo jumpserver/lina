@@ -1,11 +1,12 @@
 <template>
   <el-dialog v-bind="dialogAttrs" :append-to-body="true"
     :class="dialogClass"
+    :model-value="dialogVisible"
     :style="dialogStyle"
-    :modal-append-to-body="true"
     :title="title"
     :top="top"
     :width="iWidth"
+    @update:model-value="handleVisibleChange"
   >
     <div v-loading="disabledStatus">
       <slot />
@@ -35,6 +36,10 @@ export default {
   name: 'DialogComponent',
   inheritAttrs: false,
   props: {
+    visible: {
+      type: Boolean,
+      default: false
+    },
     title: {
       type: String,
       default: 'Title'
@@ -84,7 +89,7 @@ export default {
       default: true
     }
   },
-  emits: ['cancel', 'confirm'],
+  emits: ['cancel', 'confirm', 'update:visible', 'update:modelValue'],
   data() {
     return {}
   },
@@ -93,20 +98,10 @@ export default {
       const attrs = { ...this.$attrs }
       delete attrs.class
       delete attrs.style
-      // 兼容旧的 :visible / v-model:visible 写法 —— EP el-dialog 使用 modelValue 控制显隐
-      if ('visible' in attrs) {
-        if (!('modelValue' in attrs)) {
-          attrs.modelValue = attrs.visible
-        }
-        delete attrs.visible
-      }
-      if ('onUpdate:visible' in attrs) {
-        if (!('onUpdate:modelValue' in attrs)) {
-          attrs['onUpdate:modelValue'] = attrs['onUpdate:visible']
-        }
-        delete attrs['onUpdate:visible']
-      }
       return attrs
+    },
+    dialogVisible() {
+      return this.visible
     },
     dialogClass() {
       return ['dialog', { shadow: this.shadow }, this.$attrs.class]
@@ -119,6 +114,10 @@ export default {
     }
   },
   methods: {
+    handleVisibleChange(val) {
+      this.$emit('update:visible', val)
+      this.$emit('update:modelValue', val)
+    },
     onCancel() {
       this.$emit('cancel')
     },
