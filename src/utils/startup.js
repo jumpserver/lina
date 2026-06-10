@@ -129,8 +129,36 @@ export async function generatePageRoutes({ to, from }) {
         return acc
       }, {})
     )
+    // vue-router 5 不允许父子路由同名,递归去重:如果父 name 和某个后代重名,去掉父的 name
+    function deduplicateRouteNames(routes, ancestorNames = new Set()) {
+      for (const route of routes) {
+        if (route.name && ancestorNames.has(route.name)) {
+          // 子路由 name 与祖先重名,去掉子的(保留祖先的,子用 path 匹配)
+          delete route.name
+        }
+        if (route.children && route.children.length > 0) {
+          const childNames = new Set()
+          for (const child of route.children) {
+            if (child.name) childNames.add(child.name)
+          }
+          // 如果父 name 和某个 child name 相同,去掉父的 name(父只是容器)
+          if (route.name && childNames.has(route.name)) {
+            delete route.name
+          }
+          const newAncestors = new Set(ancestorNames)
+          if (route.name) newAncestors.add(route.name)
+          deduplicateRouteNames(route.children, newAncestors)
+        }
+      }
+    }
+    deduplicateRouteNames(accessRoutes)
+
     accessRoutes.forEach(route => {
-      router.addRoute(route)
+      try {
+        router.addRoute(route)
+      } catch (e) {
+        console.warn('addRoute failed:', route.name || route.path, e.message)
+      }
     })
 
     await store.dispatch('permission/generateViewRoutes', { to, from })

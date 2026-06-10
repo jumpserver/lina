@@ -93,9 +93,7 @@
           pageSizes: paginationSizes,
           total: total || 0,
           'onUpdate:current-page': handleCurrentChange,
-          'onUpdate:page-size': handleSizeChange,
-          onCurrentChange: handleCurrentChange,
-          onSizeChange: handleSizeChange
+          'onUpdate:page-size': handleSizeChange
         }"
       />
 
@@ -884,7 +882,7 @@ export default {
       if (val && val.length !== this.total) {
         this.page = defaultFirstPage
         this.total = val.length
-        this.getList()
+        this.$nextTick(() => this.getList())
       }
     }
   },
