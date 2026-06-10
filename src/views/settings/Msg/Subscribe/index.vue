@@ -28,19 +28,22 @@
         </el-table-column>
         <el-table-column :label="$tc('Receivers')">
           <template #default="scope">
-            <el-popover placement="top" popper-class="black-theme-popover" trigger="hover">
+            <el-popover v-if="!scope.row.children && scope.row.receivers && scope.row.receivers.length" placement="top" popper-class="black-theme-popover" trigger="hover">
               <p v-for="item in scope.row.receivers" :key="item.name">{{ item.name }}</p>
               <template #reference>
-                <span v-if="!scope.row.children" class="name-wrapper">
+                <span class="name-wrapper">
                   {{ scope.row.receivers.map(item => item.name).join(', ') }}
                 </span>
               </template>
             </el-popover>
+            <span v-else-if="!scope.row.children && scope.row.receivers">
+              {{ scope.row.receivers.map(item => item.name).join(', ') }}
+            </span>
           </template>
         </el-table-column>
         <el-table-column :label="$tc('Actions')" width="200">
           <template #default="scope">
-            <el-button v-if="!scope.row.children" type="small" @click="onOpenDialog(scope.row)">
+            <el-button v-if="!scope.row.children" size="small" @click="onOpenDialog(scope.row)">
               {{ $t('EditRecipient') }}
             </el-button>
           </template>

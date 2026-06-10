@@ -25,7 +25,7 @@
   "dependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.21.0",
     "@fontsource/open-sans": "^5.2.7",
-    "@kangc/v-md-editor": "^1.7.12",
+    "@kangc/v-md-editor": "2.3.18",
     "@traptitech/markdown-it-katex": "^3.6.0",
     "@vue/compat": "^3.5.35",
     "@ztree/ztree_v3": "3.5.48",

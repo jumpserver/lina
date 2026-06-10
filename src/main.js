@@ -50,9 +50,12 @@ configureCompat({
 
 function shouldIgnoreVueWarning(msg, trace = '') {
   if (
-    msg.includes('Enumerated attribute "spellcheck"') &&
-    trace.includes('<ElTooltip>')
+    msg.includes('Enumerated attribute') &&
+    (trace.includes('<ElTooltip>') || trace.includes('<VMd'))
   ) {
+    return true
+  }
+  if (msg.includes('ATTR_ENUMERATED_COERCION') && trace.includes('<VMd')) {
     return true
   }
   return (

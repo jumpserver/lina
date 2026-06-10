@@ -274,31 +274,26 @@ export class TableColumnsGenerator {
     if (!helpTip) {
       return col
     }
-    col.renderHeader = (h, { column, $index }) => {
-      const binds = {
-        props: {
-          placement: 'bottom',
-          effect: 'dark',
-          openDelay: 500,
-          popperClass: 'help-tips'
-        }
-      }
-
+    col.renderHeader = ({ column, $index }) => {
       return h('span', [
         column.label,
         h(
           'el-tooltip',
-          binds,
-          [
-            h('div', {
-              slot: 'content',
-              directives: [{ name: 'sanitize', value: helpTip }]
+          {
+            placement: 'bottom',
+            effect: 'dark',
+            openDelay: 500,
+            popperClass: 'help-tips'
+          },
+          {
+            content: () => h('div', {
+              innerHTML: window.$xss ? window.$xss.process(String(helpTip || '')) : helpTip
             }),
-            h('i', {
+            default: () => h('i', {
               class: 'fa fa-question-circle-o help-tip-icon',
               style: 'padding-left: 2px'
             })
-          ]
+          }
         )
       ])
     }

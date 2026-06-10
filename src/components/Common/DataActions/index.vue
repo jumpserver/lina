@@ -162,13 +162,9 @@ export default {
       return ok
     },
     cleanButtonAction(action) {
-      action = _.cloneDeep(action)
-      delete action['dropdown']
-      delete action['callback']
-      delete action['name']
-      delete action['can']
-      delete action['split']
-      return action
+      // 只保留 el-button 接受的属性,避免非法 prop 传入导致 validator 报错
+      const { type, size, disabled, plain, round, circle, link, loading } = action
+      return { type, size, disabled, plain, round, circle, link, loading }
     },
     cleanActions(actions) {
       const cleanedActions = []
