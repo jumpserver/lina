@@ -124,11 +124,11 @@ export default {
     },
     tableConfig() {
       const tableDefaultConfig = this.defaultConfig || {}
-      let tableAttrs = tableDefaultConfig.tableAttrs
-      if (this.config.tableAttrs) {
-        tableAttrs = Object.assign(tableAttrs, this.config.tableAttrs)
-      }
-      const config = Object.assign(tableDefaultConfig, this.config)
+      // 注意:必须用 Object.assign({}, ...) 生成新对象,不能直接 Object.assign(tableDefaultConfig, ...)
+      // 否则会就地修改响应式的 this.defaultConfig —— 而本计算属性又依赖 this.defaultConfig,
+      // 形成「计算属性修改自身依赖」的自触发循环,导致 Maximum recursive updates。
+      const tableAttrs = Object.assign({}, tableDefaultConfig.tableAttrs, this.config.tableAttrs)
+      const config = Object.assign({}, tableDefaultConfig, this.config)
       config.tableAttrs = tableAttrs
       this.$log.debug('elTableConfig', config)
       return config

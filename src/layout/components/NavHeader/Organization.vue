@@ -1,8 +1,8 @@
 <template>
   <el-select
     :disabled="disabled"
+    :model-value="currentOrgId"
     :placeholder="$tc('Select')"
-    :value="currentOrgId"
     class="org-select"
     :style="{ width: selectWidth }"
     filterable
@@ -105,7 +105,7 @@ export default {
     },
     currentOrgId() {
       const usingOrgIds = this.usingOrgs.map(o => o.id)
-      let currentOrgId = this.currentOrg.id
+      let currentOrgId = this.currentOrg?.id
       const find = usingOrgIds.indexOf(currentOrgId) > -1
       if (!find) {
         currentOrgId = null
@@ -172,6 +172,9 @@ export default {
           this.$router.push({ name: 'OrganizationList' })
           break
         default:
+          if (!org) {
+            return
+          }
           orgUtil.changeOrg(org, true, this)
       }
       this.updateWidth()

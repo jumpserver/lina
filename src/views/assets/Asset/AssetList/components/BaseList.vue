@@ -171,7 +171,8 @@ export default {
       recentPlatformIds: state => state.assets.recentPlatformIds
     }),
     iTableConfig() {
-      return _.merge(this.defaultConfig, this.tableConfig, {
+      // merge 到新对象,避免就地修改响应式 this.defaultConfig 造成计算属性自触发循环
+      return _.merge({}, this.defaultConfig, this.tableConfig, {
         url: this.url,
         ...(this.category && { category: this.category })
       })

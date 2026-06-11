@@ -22,6 +22,9 @@ import {
   CanvasRenderer
 } from 'echarts/renderers'
 import VueECharts from 'vue-echarts'
+// vue-echarts 7+ 把根元素 x-vue-echarts{width:100%;height:100%} 的样式拆到了单独的 css,
+// 必须显式导入,否则图表容器尺寸为 0,报 "[ECharts] Can't get DOM width or height"
+import 'vue-echarts/style.css'
 
 /**
  * 初始化并注册 ECharts 扩展

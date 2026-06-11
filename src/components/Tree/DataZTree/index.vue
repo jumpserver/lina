@@ -59,7 +59,8 @@ export default {
   },
   computed: {
     treeSetting() {
-      return _.merge(this.defaultSetting, this.setting)
+      // merge 到新对象,避免就地修改响应式 this.defaultSetting 造成计算属性自触发循环
+      return _.merge({}, this.defaultSetting, this.setting)
     },
     zTree() {
       return this.$refs.ztree.zTree

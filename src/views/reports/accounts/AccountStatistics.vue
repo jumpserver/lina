@@ -98,7 +98,7 @@ export default {
       },
       change_secret_account_metrics: {
         dates_metrics_date: [],
-        dates_metrics_total: {}
+        dates_metrics_total: []
       },
       config: {
         source_pie: [],

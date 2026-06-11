@@ -78,7 +78,7 @@ export default {
       },
       added_asset_metrics: {
         dates_metrics_date: [],
-        dates_metrics_total: {}
+        dates_metrics_total: []
       }
     }
   },

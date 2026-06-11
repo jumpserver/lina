@@ -26,6 +26,11 @@ async function change2PropOrg() {
 }
 
 async function changeOrg(org, reload = true, vm = null) {
+  if (!org || typeof org !== 'object' || !org.id) {
+    console.error('Invalid organization supplied to changeOrg:', org)
+    return false
+  }
+
   await store.dispatch('users/setCurrentOrg', org)
   await store.dispatch('app/reset')
   const fullPath = location.hash.slice(1)
@@ -63,13 +68,16 @@ async function changeOrg(org, reload = true, vm = null) {
   path = path + (queryStr ? '?' + queryStr : '')
 
   if (vm) {
-    const result = vm.$router.resolve({ path })
-    if (result.resolved.name === '404') {
+    const resolvedRoute = vm.$router.resolve({ path })
+    if (['404', 'NotFound'].includes(resolvedRoute?.name)) {
       path = '/'
     }
   }
   location.hash = '#' + path
-  setTimeout(() => location.reload(), 500)
+  if (reload) {
+    setTimeout(() => location.reload(), 500)
+  }
+  return true
 }
 
 function hasCurrentOrgPermission() {

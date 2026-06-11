@@ -112,7 +112,9 @@ export default {
     ]),
     treeSetting() {
       this.$log.debug('Settings: ', this.setting)
-      return _.merge(this.defaultSetting, this.setting)
+      // 必须 merge 到新对象,否则会就地修改响应式的 this.defaultSetting(本计算属性的依赖),
+      // 形成自触发循环,导致反复重渲染 / 重新初始化树 / 重复请求
+      return _.merge({}, this.defaultSetting, this.setting)
     },
     treeAttrs() {
       return omitVueListeners(this.$attrs)
