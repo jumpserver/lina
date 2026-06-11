@@ -21,7 +21,7 @@ export default {
     const vm = this
     return {
       tableConfig: {
-        url: '',
+        url: '/api/v1/settings/security/block-ip/',
         totalData: [
           {
             id: '1',
@@ -70,7 +70,7 @@ export default {
         hasExport: false,
         hasImport: false,
         hasCreate: false,
-        hasSearch: false,
+        hasSearch:true,
         hasRefresh: true,
         hasBulkDelete: false,
         hasBulkUpdate: false,

@@ -162,15 +162,14 @@ export default {
     },
     expandFull() {
       this.updateExpandedState(true)
-      this.save_pannel_settings()
+      this.savePanelSettings()
     },
     compress() {
       this.updateExpandedState(false)
-      this.save_pannel_settings()
+      this.savePanelSettings()
     },
-    save_pannel_settings() {
+    savePanelSettings() {
       aiPannelLocalStorage.set('expanded', this.expanded)
-      console.log('AI panel settings saved:', this.expanded)
     },
     updateExpandedState(expanded) {
       this.expanded = expanded

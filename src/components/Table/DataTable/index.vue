@@ -118,7 +118,7 @@ export default {
       }
       const config = Object.assign(tableDefaultConfig, this.config)
       config.tableAttrs = tableAttrs
-      this.$log.debug('elTableConfig', config)
+      this.$log.debug('elTableConfig', config, this.config)
       return config
     },
     ...mapGetters({
@@ -126,9 +126,6 @@ export default {
     })
   },
   watch: {},
-  mounted() {
-    console.log('Database init Table Config: ', this.config)
-  },
   methods: {
     getList() {
       this.$refs.table?.clearSelection()

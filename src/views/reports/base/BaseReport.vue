@@ -117,9 +117,6 @@ export default {
         // 降级处理：在当前窗口打开
         window.location.href = this.url
       }
-    },
-    openSettings() {
-      console.log('openSettings')
     }
   }
 }

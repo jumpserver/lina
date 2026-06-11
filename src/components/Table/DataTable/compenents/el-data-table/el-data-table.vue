@@ -864,7 +864,6 @@ export default {
     }
   },
   mounted() {
-    console.log('Total Data: ', this.totalData)
     if (this.saveQuery) {
       const query = queryUtil.get(location.href)
       if (query) {
@@ -931,20 +930,35 @@ export default {
     },
     getList({ loading = true } = {}) {
       const { url } = this
-      if (url) {
-        return this.debouncedGetListFromRemote({ loading })
-      }
       if (this.totalData) {
         return this.getListFromStaticData({ loading: true })
       }
+
+      if (url) {
+        return this.debouncedGetListFromRemote({ loading })
+      }
       // this.$log.debug("last page is: ", this.lastPageNum)
+    },
+    filterTotalData() {
+      const query = this.getQuery()
+      const keyword = query.search || ''
+      let totalData = this.totalData
+      if (keyword) {
+        totalData = totalData.filter(item => {
+          return Object.values(item).some(value => {
+            return value.toString().includes(keyword)
+          })
+        })
+      }
+      return totalData
     },
     getListFromStaticData({ loading = true } = {}) {
       if (loading) {
         this.tableLoading = true
       }
+      let totalData = this.filterTotalData()
       if (!this.hasPagination) {
-        this.data = this.totalData
+        this.data = totalData
         this.tableLoading = false
         if (this.isTree) {
           this.data = this.tree2Array(this.data, this.expandAll)
@@ -957,7 +971,7 @@ export default {
       const start = (page + pageOffset - 1) * this.size
       const end = (page + pageOffset) * this.size
       this.$log.debug(`page: ${page}, size: ${this.size}, start: ${start}, end: ${end}`)
-      this.data = this.totalData.slice(start, end)
+      this.data = totalData.slice(start, end)
       this.tableLoading = false
       this.data = this.tree2Array(this.data, this.expandAll)
       return this.data
