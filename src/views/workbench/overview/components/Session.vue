@@ -32,17 +32,15 @@ export default {
             width: '50px',
             formatter: function(row, column, cellValue, index) {
               const label = index + 1
-              const route = {
-                to: {
-                  name: 'SessionDetail',
-                  params: {
-                    id: row.id
-                  }
+              const to = {
+                name: 'SessionDetail',
+                params: {
+                  id: row.id
                 }
               }
               if (vm.$hasPerm('terminal.view_session')) {
                 return _createVNode(_resolveComponent('router-link'), {
-                  attrs: route
+                  to
                 }, _isSlot(label) ? label : {
                   default: () => [label]
                 })

@@ -26,16 +26,18 @@
 
           <template v-if="item.type === 'input' && item.el && item.el.autoComplete">
             <el-tooltip :disabled="!item.tip" :content="item.tip">
-              <el-autocomplete
-                v-model="formModel[item.name]"
-                :fetch-suggestions="item.el.query"
-                :placeholder="item.placeholder"
-                class="inline-input"
-                size="small"
-                clearable
-                @change="handleInputChange(item)"
-                @select="handleInputChange(item)"
-              />
+              <span class="inline-input">
+                <el-autocomplete
+                  v-model="formModel[item.name]"
+                  :fetch-suggestions="item.el.query"
+                  :placeholder="item.placeholder"
+                  class="inline-input"
+                  size="small"
+                  clearable
+                  @change="handleInputChange(item)"
+                  @select="handleInputChange(item)"
+                />
+              </span>
             </el-tooltip>
           </template>
 
@@ -54,29 +56,31 @@
 
           <template v-if="item.type === 'select' && item.el && item.el.create">
             <el-tooltip :disabled="!item.tip" :content="item.tip">
-              <span class="filter-label">{{ item.name }}:</span>
-              <el-select
-                v-if="item.type === 'select' && item.el && item.el.create"
-                :key="index"
-                v-model="formModel[item.name]"
-                :allow-create="item.el.create || false"
-                :filterable="item.el.create || false"
-                :multiple="item.el.multiple"
-                :placeholder="item.name"
-                class="autoWidth-select"
-                default-first-option
-                size="small"
-                @change="item.callback(item.value)"
-              >
-                <template #prefix>{{ item.label + ':' + item.value }}</template>
-                <el-option
-                  v-for="(option, id) in item.options"
-                  :key="id"
-                  :label="option.label"
-                  :title="option.value"
-                  :value="option.value"
-                />
-              </el-select>
+              <span>
+                <span class="filter-label">{{ item.name }}:</span>
+                <el-select
+                  v-if="item.type === 'select' && item.el && item.el.create"
+                  :key="index"
+                  v-model="formModel[item.name]"
+                  :allow-create="item.el.create || false"
+                  :filterable="item.el.create || false"
+                  :multiple="item.el.multiple"
+                  :placeholder="item.name"
+                  class="autoWidth-select"
+                  default-first-option
+                  size="small"
+                  @change="item.callback(item.value)"
+                >
+                  <template #prefix>{{ item.label + ':' + item.value }}</template>
+                  <el-option
+                    v-for="(option, id) in item.options"
+                    :key="id"
+                    :label="option.label"
+                    :title="option.value"
+                    :value="option.value"
+                  />
+                </el-select>
+              </span>
             </el-tooltip>
           </template>
 
@@ -160,26 +164,37 @@
     <codemirror
       ref="myCm"
       v-model="iValue"
-      :options="iOptions"
+      :extensions="extensions"
+      :tab-size="iOptions.tabSize || 4"
+      :placeholder="iOptions.placeholder"
+      :autofocus="iOptions.autofocus"
+      :disabled="!!iOptions.readOnly"
+      :style="editorStyle"
       class="editor"
-      :style="iActions.length > 0 ? { marginLeft: '30px' } : {}"
     />
   </div>
 </template>
 
 <script>
 import { Codemirror } from 'vue-codemirror'
+import { basicSetup } from 'codemirror'
+import { StreamLanguage } from '@codemirror/language'
+import { shell } from '@codemirror/legacy-modes/mode/shell'
+import { powerShell } from '@codemirror/legacy-modes/mode/powershell'
+import { python } from '@codemirror/legacy-modes/mode/python'
+import { yaml } from '@codemirror/legacy-modes/mode/yaml'
+import { ruby } from '@codemirror/legacy-modes/mode/ruby'
 
-import 'codemirror/mode/shell/shell'
-import 'codemirror/mode/powershell/powershell'
-import 'codemirror/mode/python/python'
-import 'codemirror/mode/yaml/yaml'
-import 'codemirror/mode/ruby/ruby' // theme css
-import 'codemirror/theme/base16-light.css'
-import 'codemirror/theme/idea.css'
-import 'codemirror/theme/mbo.css'
-import 'codemirror/theme/duotone-light.css'
-import 'codemirror/lib/codemirror.css'
+const MODE_MAP = {
+  shell,
+  bash: shell,
+  sh: shell,
+  powershell: powerShell,
+  win_shell: powerShell,
+  python,
+  yaml,
+  ruby
+}
 
 export default {
   components: {
@@ -190,7 +205,7 @@ export default {
       type: [Array, Object],
       default: () => []
     },
-    value: {
+    modelValue: {
       type: [String, Object],
       default: () => ''
     },
@@ -247,10 +262,10 @@ export default {
     },
     iValue: {
       get() {
-        return this.value
+        return this.modelValue
       },
       set(val) {
-        this.$emit('update:value', val)
+        this.$emit('update:modelValue', val)
         this.$emit('input', val)
       }
     },
@@ -258,12 +273,25 @@ export default {
       const defaultOptions = {
         tabSize: 4,
         mode: 'shell',
-        lineNumbers: true,
-        theme: 'idea',
         placeholder: 'Code goes here...',
         autofocus: true
       }
       return Object.assign(defaultOptions, this.options)
+    },
+    extensions() {
+      const exts = [basicSetup]
+      const mode = MODE_MAP[this.iOptions.mode]
+      if (mode) {
+        exts.push(StreamLanguage.define(mode))
+      }
+      return exts
+    },
+    editorStyle() {
+      const style = { height: this.iOptions.height || '300px' }
+      if (this.iActions.length > 0) {
+        style.marginLeft = '30px'
+      }
+      return style
     }
   },
   methods: {
@@ -403,14 +431,20 @@ $input-border-color: #c0c4cc;
   }
 
   .editor {
-    border: 1px solid var(--color-border);
     overflow: hidden;
+
+    :deep(.cm-editor) {
+      border: 1px solid var(--color-border);
+    }
+
+    :deep(.cm-scroller) {
+      overflow: auto;
+    }
   }
 }
 
-:deep(.CodeMirror) pre.CodeMirror-line,
-:deep(.CodeMirror-linenumber.CodeMirror-gutter-elt) {
-  line-height: 18px !important;
+:deep(.cm-line) {
+  line-height: 18px;
 }
 
 .runas-input {

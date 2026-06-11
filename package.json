@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.21.0",
+    "@codemirror/legacy-modes": "^6",
     "@fontsource/open-sans": "^5.2.7",
     "@kangc/v-md-editor": "2.3.18",
     "@traptitech/markdown-it-katex": "^3.6.0",
@@ -33,6 +34,7 @@
     "axios-retry": "^4.5.0",
     "babel-loader": "^10.1.1",
     "babel-runtime": "^6.26.0",
+    "codemirror": "^6",
     "core-js": "^3.49.0",
     "cron-parser": "^5.5.0",
     "crypto-js": "^4.2.0",

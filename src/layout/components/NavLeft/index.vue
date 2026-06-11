@@ -98,9 +98,10 @@ export default {
       if (meta.activeMenu) {
         return meta.activeMenu
       }
-      const { location } = this.$router.resolve('_Mark_')
-      let locPath = location.path.replace('_Mark_', '')
-      const parmaId = location.params?.id || route.params?.id
+      // hidden 路由且未显式指定 activeMenu:用当前路径剥掉动态 id 段,高亮父级菜单
+      // 注意:vue-router 5 的 router.resolve() 直接返回路由对象,没有 .location(VR3 才有)
+      let locPath = path
+      const parmaId = route.params?.id
       if (parmaId) {
         locPath = locPath.replace('/' + parmaId, '')
       }

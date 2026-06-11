@@ -2,9 +2,12 @@
   <div style="position: relative">
     <div v-if="showToolBar" class="actions">
       <div v-for="(item, index) in toolbar" :key="index" style="display: inline-block">
-        <el-tooltip :content="item.tip" :open-delay="500">
+        <el-tooltip
+          v-if="!item.isScrollButton || showScrollButton"
+          :content="item.tip"
+          :open-delay="500"
+        >
           <el-button
-            v-if="!item.isScrollButton || showScrollButton"
             size="small"
             type="default"
             @click="item.callback()"
@@ -20,6 +23,7 @@
 
 <script>
 import 'xterm/css/xterm.css'
+import { markRaw } from 'vue'
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
 import { downloadText } from '@/utils/common/index'
@@ -40,7 +44,7 @@ export default {
   },
   data() {
     return {
-      xterm: new Terminal(
+      xterm: markRaw(new Terminal(
         Object.assign(
           {
             fontFamily: 'monaco, Consolas, "Lucida Console", monospace',
@@ -55,7 +59,7 @@ export default {
           },
           this.xtermConfig
         )
-      ),
+      )),
       toolbar: [
         {
           tip: this.$tc('ScrollToTop'),
