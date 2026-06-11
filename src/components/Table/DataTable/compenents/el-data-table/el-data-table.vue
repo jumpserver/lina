@@ -361,7 +361,7 @@ export default {
      */
     newText: {
       type: String,
-      default: function() {
+      default: function () {
         return this.$t('Add')
       }
     },
@@ -370,7 +370,7 @@ export default {
      */
     editText: {
       type: String,
-      default: function() {
+      default: function () {
         return this.$t('Modify')
       }
     },
@@ -379,7 +379,7 @@ export default {
      */
     viewText: {
       type: String,
-      default: function() {
+      default: function () {
         return this.$t('View')
       }
     },
@@ -388,7 +388,7 @@ export default {
      */
     deleteText: {
       type: String,
-      default: function() {
+      default: function () {
         return this.$t('Delete')
       }
     },
@@ -864,6 +864,7 @@ export default {
     }
   },
   mounted() {
+    console.log('Total Data: ', this.totalData)
     if (this.saveQuery) {
       const query = queryUtil.get(location.href)
       if (query) {

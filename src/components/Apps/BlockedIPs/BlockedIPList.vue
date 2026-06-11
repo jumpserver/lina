@@ -21,9 +21,21 @@ export default {
     const vm = this
     return {
       tableConfig: {
-        url: '/api/v1/settings/security/block-ip/',
+        url: '',
+        totalData: [
+          {
+            id: '1',
+            ip: '192.168.1.1'
+          },
+          {
+            id: '2',
+            ip: '192.168.1.2'
+          }
+        ],
         columns: [
-          'ip', 'actions'
+          { prop: 'id', label: this.$t('ID') },
+          { prop: 'ip', label: this.$t('IP') },
+          { prop: 'actions', label: this.$t('Actions') }
         ],
         columnsMeta: {
           ip: {
@@ -41,13 +53,12 @@ export default {
                   can: this.$hasPerm('settings.change_security'),
                   type: 'primary',
                   callback: ({ row }) => {
-                    this.$axios.post(
-                      '/api/v1/settings/security/unlock-ip/',
-                      { ips: [row.ip] }
-                    ).then(() => {
-                      vm.$message.success(this.$tc('UnlockSuccessMsg'))
-                      vm.$refs.ListTable.reloadTable()
-                    })
+                    this.$axios
+                      .post('/api/v1/settings/security/unlock-ip/', { ips: [row.ip] })
+                      .then(() => {
+                        vm.$message.success(this.$tc('UnlockSuccessMsg'))
+                        vm.$refs.ListTable.reloadTable()
+                      })
                   }
                 }
               ]
@@ -73,18 +84,17 @@ export default {
             can: ({ selectedRows }) => {
               return selectedRows.length > 0
             },
-            callback: function({ selectedRows }) {
-              vm.$axios.post(
-                '/api/v1/settings/security/unlock-ip/',
-                {
+            callback: function ({ selectedRows }) {
+              vm.$axios
+                .post('/api/v1/settings/security/unlock-ip/', {
                   ips: selectedRows.map(v => {
                     return v.ip
                   })
-                }
-              ).then(res => {
-                vm.$message.success(vm.$tc('UnlockSuccessMsg'))
-                vm.$refs.ListTable.reloadTable()
-              })
+                })
+                .then(res => {
+                  vm.$message.success(vm.$tc('UnlockSuccessMsg'))
+                  vm.$refs.ListTable.reloadTable()
+                })
             }
           }
         ]
@@ -94,6 +104,4 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
-
-</style>
+<style lang="less" scoped></style>

@@ -22,8 +22,7 @@ export default {
   props: {
     config: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -62,8 +61,8 @@ export default {
           }
         },
         extraButtons: userTableActions.extraButtons,
-        onEdit: (row) => {
-          const defaultOnEdit = (row) => {
+        onEdit: row => {
+          const defaultOnEdit = row => {
             const routeName = userTableActions.editRoute
             this.$router.push({ name: routeName, params: { id: row.id } })
           }
@@ -97,7 +96,7 @@ export default {
           }
           return query
         },
-        theRowDefaultIsSelected: (row) => {
+        theRowDefaultIsSelected: row => {
           return false
         }
       }
@@ -123,10 +122,13 @@ export default {
       return config
     },
     ...mapGetters({
-      'globalTableConfig': 'tableConfig'
+      globalTableConfig: 'tableConfig'
     })
   },
   watch: {},
+  mounted() {
+    console.log('Database init Table Config: ', this.config)
+  },
   methods: {
     getList() {
       this.$refs.table?.clearSelection()
