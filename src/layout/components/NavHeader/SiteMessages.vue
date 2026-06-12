@@ -659,10 +659,10 @@ export default {
   margin-bottom: 0;
 }
 
-.msg-popup-detail ::v-deep .msg-popup-item.is-active {
-  border-color: rgba(38, 122, 58, 0.24);
-  box-shadow: 0 8px 20px rgba(38, 122, 58, 0.08);
-}
+// .msg-popup-detail ::v-deep .msg-popup-item.is-active {
+//   border-color: rgba(38, 122, 58, 0.24);
+//   box-shadow: 0 8px 20px rgba(38, 122, 58, 0.08);
+// }
 
 .msg-popup-detail ::v-deep .msg-popup-item .el-collapse-item__arrow {
   color: var(--N600, #646A73);
