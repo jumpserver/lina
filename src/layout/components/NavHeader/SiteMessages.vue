@@ -574,7 +574,7 @@ export default {
 
 .msg-popup-board {
   padding: 12px;
-  border: 1px solid var(--menu-border, #E9ECEF);
+  // border: 1px solid var(--menu-border, #E9ECEF);
   border-radius: 12px;
   background: linear-gradient(180deg, #FCFCFD 0%, #F7F8FA 100%);
   box-shadow: 0 10px 24px rgba(31, 35, 41, 0.06);
