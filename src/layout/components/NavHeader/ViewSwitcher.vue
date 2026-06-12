@@ -131,6 +131,11 @@ export default {
   background-color: transparent;
   letter-spacing: 0.09em;
 
+  &.vertical {
+    width: max-content;
+    min-width: 0;
+  }
+
   :deep(.el-sub-menu .el-sub-menu__title) {
     height: 38px;
     line-height: 32px;
@@ -148,13 +153,18 @@ export default {
 
   .el-menu-item {
     height: 38px;
-    width: 160px;
     line-height: 28px;
     padding: 4px 24px;
 
     &:hover {
       background-color: var(--menu-hover);
     }
+  }
+
+  &.vertical .el-menu-item {
+    width: auto;
+    min-width: 180px;
+    justify-content: flex-start;
   }
 }
 
@@ -203,6 +213,7 @@ export default {
 .icons-title {
   display: inline-block;
   font-size: 13px;
+  white-space: nowrap;
 
   .menu-main.mobile-view-switch :deep(.el-sub-menu__icon-arrow) {
     right: 10px;

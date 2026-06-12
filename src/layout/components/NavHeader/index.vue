@@ -1,5 +1,21 @@
 <template>
   <div class="navbar">
+    <hamburger
+      v-if="isMobile"
+      :is-active="sidebar.opened"
+      class="hamburger-container is-show-menu"
+      @toggle-click="toggleSideBar"
+    />
+    <ul class="navbar-left">
+      <li class="left-item">
+        <div class="nav-logo">
+          <Logo v-if="showLogo" :collapse="false" />
+        </div>
+      </li>
+      <li v-if="orgsShow" class="left-item organization-item">
+        <Organization :disabled="orgsDisabled" class="organization" />
+      </li>
+    </ul>
     <ul class="navbar-right">
       <li class="header-item header-icon none-hover">
         <Search @search-open="handleSearchOpen" />
@@ -32,21 +48,6 @@
       </li>
       <li class="header-item header-profile">
         <AccountDropdown />
-      </li>
-    </ul>
-    <hamburger
-      :is-active="sidebar.opened"
-      class="hamburger-container is-show-menu"
-      @toggle-click="toggleSideBar"
-    />
-    <ul class="navbar-left">
-      <li class="left-item">
-        <div class="nav-logo">
-          <Logo v-if="showLogo" :collapse="false" />
-        </div>
-      </li>
-      <li v-if="orgsShow" class="left-item" style="margin-left: 20px">
-        <Organization :disabled="orgsDisabled" class="organization" />
       </li>
     </ul>
   </div>
@@ -119,12 +120,15 @@ export default {
 
 .navbar {
   position: relative;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: $headerHeight;
   background-color: var(--banner-bg);
 
   ul {
     margin: 0;
     padding-inline-start: 0;
+    list-style: none;
   }
 
   .is-show-menu {
@@ -132,10 +136,13 @@ export default {
   }
 
   .hamburger-container {
-    float: left;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 25px;
     line-height: 25px;
-    margin: 8px;
+    margin: 0 8px;
     padding: 1px 8px !important;
     border-radius: 5px;
     border-color: $color-primary;
@@ -147,16 +154,22 @@ export default {
   }
 
   .navbar-left {
-    float: left;
     display: flex;
-    height: 100%;
+    align-items: stretch;
+    flex: 1 1 auto;
+    gap: 16px;
+    min-width: 0;
+    height: $headerHeight;
 
     .left-item {
       display: flex;
       align-items: center;
-      list-style: none;
+      flex: 0 0 auto;
 
       .nav-logo {
+        display: flex;
+        align-items: center;
+        height: 100%;
         width: 200px;
 
         &:hover {
@@ -164,28 +177,16 @@ export default {
         }
       }
 
+      &.organization-item {
+        min-width: 0;
+      }
+
       .organization {
         display: flex;
         align-items: center;
-        padding: 0 0 0 15px ;
-        border-radius: 3px;
-        // background-color: rgba(5, 5, 5, 0.1);
-        color: #fff;
-        font-weight: 600;
-        font-size: 15px;
-        max-width: 250px;
-
-        :deep(.el-input__inner) {
-          padding-left: 20px;
-        }
-
-        :deep(.el-input.is-disabled > input) {
-          background: none;
-        }
-
-        &:hover {
-          background-color: rgba(0, 0, 0, 0.2);
-        }
+        min-width: 180px;
+        max-width: min(360px, 28vw);
+        height: 100%;
       }
 
       // 未找到与之对应的
@@ -205,26 +206,49 @@ export default {
 
   .navbar-right {
     display: flex;
-    float: right;
     align-items: center;
+    flex: 0 0 auto;
+    margin-left: auto;
     margin-right: 10px;
+    height: $headerHeight;
 
     .header-item {
       display: flex;
-      line-height: $headerHeight;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      height: 100%;
+      line-height: 1;
       padding-right: 10px;
       padding-left: 10px;
 
+      > * {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+      }
+
       & :deep(.svg-icon) {
-        line-height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
         color: #fff;
         font-size: 15px;
       }
 
       & :deep(.el-badge) {
+        display: flex;
+        align-items: center;
+        height: 100%;
         vertical-align: top;
 
         .el-link {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
           vertical-align: baseline;
         }
 
@@ -241,7 +265,21 @@ export default {
         }
       }
 
+      & :deep(.el-link),
+      & :deep(.el-dropdown),
+      & :deep(.el-dropdown-link),
+      & :deep(.el-tooltip__trigger),
+      & :deep(.header-tools) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+      }
+
       & :deep(i) {
+        display: flex;
+        align-items: center;
+        line-height: 1;
         color: #fff;
         font-size: 16px;
 
@@ -256,6 +294,7 @@ export default {
 
       &.none-hover {
         padding: 0;
+
         &:hover {
           background: none;
         }
@@ -270,10 +309,6 @@ export default {
 
 @media screen and (max-width: 1006px) {
   .navbar {
-    .is-show-menu {
-      display: block;
-    }
-
     .navbar-left {
       display: none;
     }

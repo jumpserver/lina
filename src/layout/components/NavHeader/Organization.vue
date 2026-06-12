@@ -145,14 +145,14 @@ export default {
         const textWidth = tempSpan.offsetWidth
 
         // 固定空间：左侧图标 + padding + 右侧箭头
-        const iconWidth = 15 // 左侧图标
-        const paddingWidth = 35 // 左右 padding
-        const arrowWidth = 20 // 右侧箭头
+        const iconWidth = 18
+        const paddingWidth = 48
+        const arrowWidth = 24
         const totalWidth = textWidth + iconWidth + paddingWidth + arrowWidth
 
         // 设置合理的边界
-        const minWidth = 100
-        const maxWidth = 400
+        const minWidth = 180
+        const maxWidth = 360
         const finalWidth = Math.max(minWidth, Math.min(maxWidth, totalWidth))
 
         this.selectWidth = finalWidth + 'px'
@@ -189,30 +189,57 @@ export default {
 $height: 28px;
 
 .org-select {
+  display: flex;
+  align-items: center;
   line-height: $height;
 
   :deep(.el-select__wrapper) {
-    background: none;
-    border: none;
-    box-shadow: none;
-  }
-}
-
-:deep(.el-input) {
-  .el-input__inner {
-    height: $height;
-    line-height: $height;
-    background: none;
-    border: none;
-    padding-left: 20px;
+    width: 100%;
+    min-height: 32px;
+    padding: 0 12px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
   }
 
-  .el-input__prefix {
-    left: 0;
+  :deep(.el-select__wrapper.is-hovering:not(.is-focused)),
+  :deep(.el-select__wrapper.is-focused) {
+    background: rgba(255, 255, 255, 0.14);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
   }
 
-  .el-input__suffix > .el-input__suffix-inner i {
+  :deep(.el-select__wrapper.is-disabled) {
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+
+  :deep(.el-select__prefix),
+  :deep(.el-select__suffix) {
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  :deep(.el-select__selection) {
+    min-width: 0;
+  }
+
+  :deep(.el-select__selected-item),
+  :deep(.el-select__placeholder) {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     color: #fff;
+  }
+
+  :deep(.el-select__placeholder.is-transparent) {
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  :deep(.el-select__caret),
+  :deep(.svg-icon) {
+    color: #fff !important;
   }
 }
 
@@ -239,11 +266,6 @@ $height: 28px;
       height: 30px;
     }
   }
-}
-
-.org-select :deep(.el-input.is-disabled .el-input__inner) {
-  color: #ffffff !important;
-  background-color: transparent;
 }
 
 .icon {

@@ -9,7 +9,12 @@
       </div>
       <div class="nav-title">
         <span :class="switchViewOtherClasses" class="switch-view active-switch-view">
-          <el-popover :open-delay="200" placement="right-start" trigger="hover">
+          <el-popover
+            :open-delay="200"
+            placement="right-start"
+            popper-class="view-switcher-popper"
+            trigger="hover"
+          >
             <template #reference>
               <span style="width: 100%;padding: 0 15px;display: flex;align-items: center;">
                 <span class="text-overflow">{{ isRouteMeta.title || '' }}</span>
@@ -332,11 +337,20 @@ $hover-border-color: #d2d2d2;
       }
     }
   }
+
 }
 
 @media screen and (max-width: 992px) {
   :deep(.active-mobile) {
     display: block !important;
   }
+}
+</style>
+
+<style lang="scss">
+.view-switcher-popper.el-popover {
+  min-width: 0 !important;
+  width: max-content !important;
+  // padding: 8px 0 !important;
 }
 </style>

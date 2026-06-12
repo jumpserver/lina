@@ -83,8 +83,23 @@ export default {
 
 <style lang="scss" scoped>
   .header-profile {
+    display: flex;
+    align-items: center;
+    height: 100%;
+
     .el-dropdown {
+      display: flex;
+      align-items: center;
+      height: 100%;
       color: #fff;
+    }
+
+    .el-dropdown-link {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      line-height: 1;
+      color: inherit;
     }
   }
 

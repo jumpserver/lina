@@ -10,11 +10,11 @@
       :label-width="labelWidth"
       :style="{ '--label-width': labelWidth }"
       :server-errors="serverErrors">
-      <!-- slot 透传 -->
-      <template v-for="item in processedFields" :key="`id:${item.id}`">
+      <!-- named slot 透传给 ElFormRender，保持与字段渲染顺序一致 -->
+      <template v-for="item in processedFields" :key="`id:${item.id}`" #[`id:${item.id}`]>
         <slot :name="`id:${item.id}`" />
       </template>
-      <template v-for="item in processedFields" :key="`$id:${item.id}`">
+      <template v-for="item in processedFields" :key="`$id:${item.id}`" #[`$id:${item.id}`]>
         <slot :name="`$id:${item.id}`" />
       </template>
 

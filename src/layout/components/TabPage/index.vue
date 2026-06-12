@@ -58,10 +58,10 @@
 </template>
 
 <script>
-import Page from '../Page/'
 import Icon from '@/components/Widgets/Icon'
 import { toSentenceCase } from '@/utils/common/index'
 import { resolveAsyncComponentCompat } from '@/utils/vue'
+import Page from '../Page/'
 
 export default {
   name: 'TabPage',
@@ -192,6 +192,8 @@ export default {
   margin-bottom: 5px;
 
   .el-tabs__item {
+    gap: 8px;
+
     .pre-icon {
       width: 16px;
       display: inline-block;

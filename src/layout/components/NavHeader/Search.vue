@@ -5,9 +5,9 @@
       <el-input
         v-model="search"
         :placeholder="$t('Search')"
+        :prefix-icon="searchIcon"
         class="search-input"
         readonly
-        prefix-icon="Search"
         @keydown.esc.prevent="closePanel"
         @clear="clearSearch"
       >
@@ -35,8 +35,8 @@
             v-model="search"
             :placeholder="$t('Search')"
             :clearable="true"
+            :prefix-icon="searchIcon"
             size="small"
-            prefix-icon="Search"
             @input="onInput"
             @keydown.enter.prevent="onEnter"
           />
@@ -127,6 +127,7 @@
 <script>
 import Icon from '@/components/Widgets/Icon/index.vue'
 import { ObjectLocalStorage } from '@/utils/common'
+import { Search as SearchIcon } from '@element-plus/icons-vue'
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
 
@@ -151,6 +152,7 @@ export default {
         'UserGroup': 'user-group',
         'AssetPermission': 'permission'
       },
+      searchIcon: SearchIcon,
       historyStore: new ObjectLocalStorage('globalSearchHistory')
     }
   },
@@ -333,71 +335,96 @@ export default {
 <style lang="scss" scoped>
 .global-search {
   position: relative;
-  width: 200px;
+  display: flex;
+  align-items: center;
+  width: 220px;
   height: 40px;
   padding: 5px 0;
-  min-width: 200px;
+  min-width: 220px;
   margin-right: 5px;
 
   .search-trigger {
+    display: flex;
+    align-items: center;
+    width: 100%;
     height: 30px;
     line-height: 1;
+    cursor: pointer;
 
     .search-input {
+      width: 100%;
       height: 30px;
-      line-height: 1;
-      background-color: rgba(5, 5, 5, 0.1);
-      border-radius: 4px;
-      cursor: pointer;
+      pointer-events: none;
 
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.2);
+      :deep(.el-input__wrapper) {
+        height: 30px;
+        padding: 0 12px;
+        background-color: rgba(255, 255, 255, 0.08);
+        border-radius: 4px;
+        border: none !important;
+        box-shadow: inset 0 0 0 1px transparent !important;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
       }
 
       :deep(.el-input__inner) {
-          height: 30px;
-          line-height: 1;
-          background: transparent;
-          border: none;
+        height: 100%;
+        line-height: 1;
+        background: transparent;
+        border: unset !important;
+        cursor: pointer;
+
+        &::placeholder {
           color: #fff;
-          cursor: pointer;
-
-          &::placeholder {
-            color: #fff;
-            opacity: 0.7;
-          }
-        }
-
-        .el-input__prefix .el-input__icon {
-          font-size: 15px;
-          line-height: 32px;
-        }
-
-        .el-input__suffix {
-          display: flex;
-          align-items: center;
-          height: 100%;
+          opacity: 0.7;
         }
       }
 
-      .search-shortcut {
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 11px;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        font-weight: 500;
-        letter-spacing: 0.5px;
-        padding: 2px 6px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 3px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        user-select: none;
-        pointer-events: none;
-        display: inline-flex;
+      :deep(.el-input__prefix),
+      :deep(.el-input__suffix),
+      :deep(.el-input__suffix-inner) {
+        display: flex;
         align-items: center;
         justify-content: center;
-        height: 18px;
+        height: 100%;
+      }
+
+      :deep(.el-input__prefix-inner > :last-child) {
+        margin-right: 0;
+      }
+
+      :deep(.el-input__icon),
+      :deep(.el-icon) {
+        color: #fff;
+        font-size: 15px;
         line-height: 1;
       }
+    }
+
+    &:hover {
+      .search-input :deep(.el-input__wrapper) {
+        background-color: rgba(255, 255, 255, 0.14);
+      }
+    }
+
+    .search-shortcut {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 11px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      padding: 2px 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      user-select: none;
+      pointer-events: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 18px;
+      line-height: 1;
+    }
   }
 }
 
@@ -436,9 +463,13 @@ export default {
 :deep(.search-input-wrapper) {
   padding: 20px;
   border-bottom: 1px solid #f0f0f0;
-  // background: #fff;
 
   .el-input {
+    .el-input__wrapper {
+      min-height: 34px;
+      box-shadow: none;
+    }
+
     .el-input__inner {
       font-size: 14px;
       height: 34px;
