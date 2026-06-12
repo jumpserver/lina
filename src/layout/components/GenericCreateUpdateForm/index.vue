@@ -66,6 +66,10 @@ export default {
       type: Boolean,
       default: null
     },
+    continueCleanFields: {
+      type: Array,
+      default: null
+    },
     // 如何提交数据
     performSubmit: {
       type: Function,
@@ -214,6 +218,14 @@ export default {
 
         this.emitPerformSuccessMsg(method, res, addContinue)
         if (addContinue) {
+          if (this.continueCleanFields?.length) {
+            const cleanValues = {}
+            this.continueCleanFields.forEach(field => {
+              cleanValues[field] = ''
+              vm.$set(vm.form, field, '')
+            })
+            vm.$refs.form?.updateFormFields?.(cleanValues)
+          }
           return
         }
 

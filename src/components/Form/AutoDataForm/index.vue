@@ -269,6 +269,9 @@ export default {
         }
       }
       return true
+    },
+    updateFormFields(values) {
+      this.$refs?.dataForm?.$refs?.form?.updateForm(values)
     }
   }
 

@@ -1,5 +1,6 @@
 <template>
   <GenericCreateUpdatePage
+    :continue-clean-fields="continueCleanFields"
     :fields="fields"
     :fields-meta="fieldsMeta"
     :has-detail-in-msg="false"
@@ -26,6 +27,7 @@ export default {
         [this.$t('Basic'), ['name', 'value', 'color']],
         [this.$t('Other'), ['comment']]
       ],
+      continueCleanFields: ['value'],
       url: '/api/v1/labels/labels/',
       fieldsMeta: {
         color: {
