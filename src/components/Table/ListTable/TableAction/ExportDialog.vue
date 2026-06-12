@@ -13,8 +13,8 @@
       <el-alert v-if="tips" :type="tipsType">
         {{ tips }}
       </el-alert>
-      <el-alert type="info" title="">
-          <span> {{ $t('MaxExportSizeTips', { count: 10000 }) }} </span>
+      <el-alert type="info" title="" style="margin-bottom: 10px;">
+          <span> {{ $t('MaxExportSizeTips', { count: '10,000' }) }} </span>
       </el-alert>
       <el-form label-position="left" style="padding-left: 20px">
         <el-form-item v-if="showFileType" :label="$tc('FileType' )" :label-width="'100px'">
