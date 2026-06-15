@@ -226,7 +226,7 @@ export default {
     border: none;
     padding: 7px;
     font-size: 13px;
-    color: var(--color-icon-primary);
+    color: var(--color-text-primary) !important;
     background-color: transparent;
 
     &:hover {
@@ -234,9 +234,14 @@ export default {
     }
   }
 
+  :deep(.svg-icon),
+  :deep(.pre-icon),
+  :deep(.el-icon),
   :deep(.fa) {
-    height: 16px;
-    width: 16px;
+    width: 13px;
+    height: 13px;
+    font-size: 13px;
+    color: var(--color-text-primary) !important;
   }
 }
 

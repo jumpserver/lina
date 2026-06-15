@@ -1,6 +1,5 @@
 <template>
   <div :class="device" class="table-header clearfix container">
-    <!-- Debug: onCreate={{$attrs.onCreate ? 'EXISTS' : 'EMPTY'}} -->
     <slot name="header">
       <LeftSide v-bind="$attrs" v-if="hasLeftActions"
         :on-create="onCreate"
@@ -124,12 +123,6 @@ export default {
     }
   },
   created() {
-    console.log('[TableAction] created:', {
-      hasOnCreate: 'onCreate' in this.$attrs,
-      onCreate: this.$attrs.onCreate,
-      onCreateType: typeof this.$attrs.onCreate,
-      allAttrs: Object.keys(this.$attrs)
-    })
     this.$emit('done')
   },
   methods: {
@@ -220,11 +213,11 @@ $color-drop-menu-border: #e4e7ed;
     //float: left;
 
     :deep(.action-item.el-dropdown > .el-button) {
-      height: 30px;
+      min-height: 30px;
     }
 
     :deep(.action-item.el-button) {
-      height: 30px;
+      min-height: 30px;
     }
   }
 
@@ -239,6 +232,9 @@ $color-drop-menu-border: #e4e7ed;
     justify-content: flex-end;
 
     .right-side-item.action-search {
+      height: 30px;
+      min-width: 210px;
+      font-size: 13px;
       border: 1px solid var(--color-border);
       overflow: hidden;
     }

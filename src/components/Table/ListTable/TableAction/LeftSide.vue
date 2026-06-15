@@ -130,12 +130,6 @@ export default {
       return this.createRoute || this.$route?.name?.replace('List', 'Create')
     },
     defaultActions() {
-      console.log('[LeftSide] defaultActions:', {
-        onCreate: this.onCreate,
-        onCreateType: typeof this.onCreate,
-        hasCreate: this.hasCreate,
-        canCreate: this.canCreate
-      })
       const defaultActions = [
         {
           name: 'actionCreate',
@@ -145,11 +139,6 @@ export default {
           can: this.canCreate,
           icon: 'plus',
           callback: () => {
-            console.log('[LeftSide] create button clicked', {
-              onCreate: this.onCreate,
-              onCreateType: typeof this.onCreate,
-              willUseOnCreate: !!this.onCreate
-            })
             this.beforeCreate()
             const callback = this.onCreate || this.handleCreate
             callback()
@@ -222,11 +211,6 @@ export default {
     }
   },
   mounted() {
-    console.log('[LeftSide] mounted:', {
-      onCreate: this.onCreate,
-      onCreateType: typeof this.onCreate,
-      allProps: Object.keys(this.$props)
-    })
     this.$emit('init-actions-done', this.iActions)
   },
   methods: {

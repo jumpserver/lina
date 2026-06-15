@@ -244,8 +244,17 @@ export default {
 <style lang="scss" scoped>
 .table-actions {
   :deep(.el-button) {
-    height: 25px;
+    height: auto;
+    min-height: 0;
+    padding: 2px 5px;
+    font-size: 13px;
+    line-height: 1.3;
   }
+
+  :deep(.el-button > span) {
+    line-height: 1.3;
+  }
+
   :deep(.el-icon--right) {
     display: none;
   }

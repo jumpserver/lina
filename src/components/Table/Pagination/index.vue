@@ -146,6 +146,25 @@ export default {
   text-align: right;
 }
 
+:deep(.el-pagination.is-background .el-pager li) {
+  margin: 0 1px;
+  padding: 0 2px;
+  min-width: 28px;
+  border-radius: 2px;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+:deep(.el-pagination.is-background .btn-prev),
+:deep(.el-pagination.is-background .btn-next) {
+  margin: 0 5px;
+  padding: 0 2px;
+  min-width: 28px;
+  border-radius: 2px;
+  font-size: 12px;
+  font-weight: 400;
+}
+
 :deep(.el-pagination__total) {
   float: left;
 }

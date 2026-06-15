@@ -252,15 +252,22 @@ $color-drop-menu-border: #e4e7ed;
 
 // 主要是左侧 LeftSide
 .layout.header-action {
+  :deep(.action-item.el-button),
+  :deep(.action-item.el-dropdown > .el-button) {
+    min-height: 30px;
+    padding: 8px 12px;
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
   .action-item.el-dropdown {
-    font-size: 11px;
+    font-size: 12px;
 
     // 确保下拉按钮也垂直居中
     :deep(.el-button) {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      height: 30px;
     }
 
     .more-action.el-button--default {

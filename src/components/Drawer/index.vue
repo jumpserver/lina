@@ -284,7 +284,7 @@ export default {
 
     .el-drawer__header {
       border-bottom: 1px solid #ebeef5;
-      margin-bottom: 0;
+      margin-bottom: 0 !important;
       padding: 15px 20px;
       font-size: 16px;
       font-weight: 500;

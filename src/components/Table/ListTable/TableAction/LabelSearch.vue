@@ -109,11 +109,11 @@ export default {
         ?.querySelector('input')
       if (visible) {
         setTimeout(() => {
-          if (input) input.style.height = '30px'
+          if (input) input.style.height = '28px'
         })
         return
       } else {
-        if (input) input.style.height = '30px'
+        if (input) input.style.height = '28px'
       }
       if (this.labelValue.length === 0) {
         this.showLabelSearch = false
@@ -146,8 +146,8 @@ export default {
     setSearchFocus() {
       setTimeout(() => {
         const cascaderEl = this.$refs.labelCascader?.$el
-        const searchInput = cascaderEl?.querySelector?.('.el-cascader__search-input')
-          || cascaderEl?.getElementsByClassName?.('el-cascader__search-input')?.[0]
+        const searchInput = cascaderEl?.querySelector?.('.el-cascader__search-input') ||
+          cascaderEl?.getElementsByClassName?.('el-cascader__search-input')?.[0]
         if (searchInput) searchInput.focus()
       }, 100)
     },
@@ -155,8 +155,8 @@ export default {
       this.getLabelOptions()
       this.showLabelSearch = true
       setTimeout(() => {
-        this.$refs.labelCascader?.togglePopperVisible?.(true)
-          || this.$refs.labelCascader?.toggleDropDownVisible?.(true)
+        this.$refs.labelCascader?.togglePopperVisible?.(true) ||
+          this.$refs.labelCascader?.toggleDropDownVisible?.(true)
         this.setSearchFocus()
       }, 200)
     },
@@ -178,18 +178,25 @@ export default {
 
   :deep(.el-button.label-button) {
     height: 28px;
+    padding: 8px;
+    font-weight: 400;
     border: none;
   }
 
   .label-cascader {
     width: 300px;
-    height: 28px;
-    line-height: 28px;
+    height: 28px !important;
+    line-height: 32px;
+    font-size: 13px;
 
     :deep(.el-input) {
+      .el-input__wrapper {
+        height: 28px !important;
+      }
+
       .el-input__inner {
         height: 28px !important;
-        line-height: 28px;
+        line-height: 32px;
         font-size: 13px;
         border: none;
       }
@@ -210,6 +217,9 @@ export default {
 
       .el-cascader__search-input {
         display: none;
+        height: 28px !important;
+        line-height: 32px;
+        font-size: 13px;
       }
     }
   }
