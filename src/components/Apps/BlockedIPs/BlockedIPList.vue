@@ -22,21 +22,8 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/settings/security/block-ip/',
-        totalData: [
-          {
-            id: '1',
-            ip: '192.168.1.1'
-          },
-          {
-            id: '2',
-            ip: '192.168.1.2'
-          }
-        ],
-        columns: [
-          { prop: 'id', label: this.$t('ID') },
-          { prop: 'ip', label: this.$t('IP') },
-          { prop: 'actions', label: this.$t('Actions') }
-        ],
+        totalData: [],
+        columns: ['ip', 'actions'],
         columnsMeta: {
           ip: {
             label: this.$t('IP')
@@ -70,7 +57,7 @@ export default {
         hasExport: false,
         hasImport: false,
         hasCreate: false,
-        hasSearch:true,
+        hasSearch: true,
         hasRefresh: true,
         hasBulkDelete: false,
         hasBulkUpdate: false,
@@ -100,6 +87,11 @@ export default {
         ]
       }
     }
+  },
+  mounted() {
+    this.$axios.get('/api/v1/settings/security/block-ip/').then(res => {
+      this.tableConfig.totalData = res.results
+    })
   }
 }
 </script>
