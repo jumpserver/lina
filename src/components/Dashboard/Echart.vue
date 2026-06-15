@@ -1,7 +1,12 @@
 <template>
-  <div ref="wrap" class="echart-wrap">
-    <echarts v-if="ready" v-bind="$attrs" :option="iOptions" autoresize
-      @finished="onFinished" />
+  <div ref="wrap" :class="rootClass" :style="rootStyle">
+    <echarts
+      v-if="ready"
+      v-bind="chartAttrs"
+      :option="iOptions"
+      autoresize
+      @finished="onFinished"
+    />
   </div>
 </template>
 
@@ -10,6 +15,7 @@ import 'echarts'
 
 export default {
   components: {},
+  inheritAttrs: false,
   props: {
     options: {
       type: Object,
@@ -27,6 +33,18 @@ export default {
     }
   },
   computed: {
+    chartAttrs() {
+      const attrs = { ...this.$attrs }
+      delete attrs.class
+      delete attrs.style
+      return attrs
+    },
+    rootClass() {
+      return ['echarts', 'echart-wrap', this.$attrs.class]
+    },
+    rootStyle() {
+      return this.$attrs.style
+    },
     iOptions() {
       return {
         ...this.options,
@@ -122,6 +140,6 @@ x-vue-echarts {
 <style scoped lang="scss">
 .echart-wrap {
   width: 100%;
-  height: 100%;
+  min-width: 0;
 }
 </style>

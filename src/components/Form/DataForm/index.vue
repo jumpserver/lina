@@ -25,7 +25,7 @@
           :loading="isSubmitting"
           :size="submitBtnSize"
           type="primary"
-          @click="submitForm('form')"
+          @click="handlePrimarySubmitClick"
         >
           {{ iSubmitBtnText }}
         </el-button>
@@ -33,12 +33,12 @@
         <el-button
           v-if="defaultButton && hasSaveContinue"
           size="small"
-          @click="submitForm('form', true)"
+          @click="handleSaveContinueClick"
         >
           {{ $t('SaveAndAddAnother') }}
         </el-button>
 
-        <el-button v-if="defaultButton && hasReset" size="small" @click="resetForm('form')">
+        <el-button v-if="defaultButton && hasReset" size="small" @click="handleResetClick">
           {{ $t('Reset') }}
         </el-button>
 
@@ -201,6 +201,15 @@ export default {
     this.autoSetSubmitBtnText()
   },
   methods: {
+    handlePrimarySubmitClick(event) {
+      return this.submitForm('form')
+    },
+    handleSaveContinueClick(event) {
+      return this.submitForm('form', true)
+    },
+    handleResetClick(event) {
+      return this.resetForm('form')
+    },
     autoSetSubmitBtnText() {
       if (this.iSubmitBtnText) {
         return
@@ -224,7 +233,8 @@ export default {
       const form = this.$refs[formName]
       try {
         await form.validate()
-        this.$emit('submit', form.getFormValue(), form, addContinue)
+        const formValue = form.getFormValue()
+        this.$emit('submit', formValue, form, addContinue)
       } catch (error) {
         this.$emit('invalid', false)
         scrollToError(form)

@@ -150,14 +150,29 @@ export default {
         this[item] = this.$refs.elForm[item]
       })
       /**
-       * 有些组件会 created 阶段更新初始值为合法值，这会触发 validate。目前已知的情况有：
-       * - el-select 开启 multiple 时，会更新初始值 undefined 为 []
-       * @hack
-       */
+     * 有些组件会 created 阶段更新初始值为合法值，这会触发 validate。目前已知的情况有：
+     * - el-select 开启 multiple 时，会更新初始值 undefined 为 []
+     * @hack
+     */
       this.clearValidate()
     })
   },
   methods: {
+    validate(...args) {
+      const result = this.$refs.elForm?.validate?.(...args)
+      if (result && typeof result.then === 'function') {
+        return result
+          .then((value) => value)
+          .catch((error) => { throw error })
+      }
+      return result
+    },
+    validateField(...args) {
+      return this.$refs.elForm?.validateField?.(...args)
+    },
+    scrollToField(...args) {
+      return this.$refs.elForm?.scrollToField?.(...args)
+    },
     /**
      * 重置表单为初始值
      *
@@ -240,9 +255,7 @@ export default {
       return false
     },
     clearValidate() {
-      if (this.$refs.elForm) {
-        this.$refs.elForm.clearValidate()
-      }
+      return this.$refs.elForm?.clearValidate?.()
     }
   }
 }

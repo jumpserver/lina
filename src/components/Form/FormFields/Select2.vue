@@ -1,7 +1,42 @@
 <template>
-  <div>
-    <span>Hello World</span>
-  </div>
+  <el-select
+    ref="select"
+    v-model="iValue"
+    :allow-create="allowCreate"
+    :class="transformed ? 'hidden-tag' : 'show-tag'"
+    :clearable="clearable"
+    :collapse-tags="collapseTags"
+    :disabled="!!selectDisabled"
+    :filterable="true"
+    :loading="!initialized"
+    :multiple="multiple"
+    :options="iOptions"
+    :placeholder="placeholder"
+    :remote="remote"
+    :remote-method="filterOptions"
+    class="select2"
+    popper-append-to-body
+    @change="onChange"
+    @popup-scroll="onPopupScroll"
+    @visible-change="onVisibleChange"
+  >
+    <div v-if="showSelectAll" class="el-select-dropdown__header">
+      <el-checkbox v-model="allSelected" :disabled="selectAllDisabled" @change="handleSelectAllChange">
+        {{ $t('SelectAll') }}
+      </el-checkbox>
+      <div v-if="quickAddCallback" style="float: right">
+        <el-link :underline="false" @click="quickAddCallback">{{ $t('QuickAdd') }}</el-link>
+        <el-link :underline="false" icon="el-icon-refresh" style="margin-left: 5px;" @click="refresh" />
+      </div>
+    </div>
+    <el-option
+      v-for="item in iOptions"
+      :key="item.value"
+      :disabled="checkDisabled(item)"
+      :label="item.label"
+      :value="item.value"
+    />
+  </el-select>
 </template>
 
 <script>
@@ -10,27 +45,6 @@ import _ from 'lodash'
 
 export default {
   name: 'Select2',
-  directives: {
-    'loadmore': {
-      bind(el, binding) {
-        // 获取element-ui定义好的scroll盒子
-        const SELECTWRAP_DOM = el.querySelector('.el-select-dropdown .el-select-dropdown__wrap')
-        SELECTWRAP_DOM.addEventListener('scroll', function() {
-          /**
-           * scrollHeight 获取元素内容高度(只读)
-           * scrollTop 获取或者设置元素的偏移值,常用于, 计算滚动条的位置, 当一个元素的容器没有产生垂直方向的滚动条, 那它的scrollTop的值默认为0.
-           * clientHeight 读取元素的可见高度(只读)
-           * 如果元素滚动到底, 下面等式返回true, 没有则返回false:
-           * ele.scrollHeight - ele.scrollTop === ele.clientHeight;
-           */
-          const condition = this.scrollHeight - this.scrollTop - 600 <= this.clientHeight
-          if (condition) {
-            binding.value()
-          }
-        })
-      }
-    }
-  },
   props: {
     options: {
       type: Array,
@@ -98,6 +112,7 @@ export default {
       default: 10
     }
   },
+  emits: ['input', 'change', 'changeOptions', 'visible-change', 'initialized', 'loadInitialOptionsDone'],
   data() {
     const vm = this
     const defaultParams = {
@@ -145,6 +160,14 @@ export default {
     selectAllDisabled() {
       const validOptions = this.iOptions.filter(item => this.disabledValues.indexOf(item.value) === -1)
       return validOptions.length === 0
+    },
+    iValue: {
+      set(val) {
+        this.handleModelUpdate(val)
+      },
+      get() {
+        return this.innerValue
+      }
     },
     iAjax() {
       const defaultMakeParams = (params) => {
@@ -379,7 +402,17 @@ export default {
       const options = this.getSelectedOptions()
       this.$log.debug('Current select options: ', options, 'Val: ', this.value)
       this.$emit('changeOptions', options)
-      // this.$emit('change', options) // 事件重复
+      this.$emit('change', _.cloneDeep(values))
+    },
+    onPopupScroll({ scrollTop }) {
+      const wrapRef = this.selectRef?.scrollbarRef?.wrapRef
+      if (!wrapRef) {
+        return
+      }
+      const condition = wrapRef.scrollHeight - scrollTop - 600 <= wrapRef.clientHeight
+      if (condition) {
+        this.loadMore()
+      }
     },
     onVisibleChange(visible) {
       if (!visible && this.params.search) {

@@ -129,6 +129,7 @@ import Icon from '@/components/Widgets/Icon/index.vue'
 import { ObjectLocalStorage } from '@/utils/common'
 import { Search as SearchIcon } from '@element-plus/icons-vue'
 import _ from 'lodash'
+import { markRaw } from 'vue'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -152,7 +153,7 @@ export default {
         'UserGroup': 'user-group',
         'AssetPermission': 'permission'
       },
-      searchIcon: SearchIcon,
+      searchIcon: markRaw(SearchIcon),
       historyStore: new ObjectLocalStorage('globalSearchHistory')
     }
   },

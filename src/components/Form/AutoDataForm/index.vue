@@ -4,7 +4,9 @@
       ref="dataForm"
       :fields="totalFields"
       :form="iForm"
-      :server-errors="serverErrors">
+      :server-errors="serverErrors"
+      @submit="handleSubmit"
+      @invalid="handleInvalid">
       <template
         v-for="(group, i) in groups"
         #[`id:${group.name}`]
@@ -34,6 +36,7 @@ export default {
     FormGroupHeader
   },
   inheritAttrs: false,
+  emits: ['submit', 'invalid', 'afterRemoteMeta', 'afterGenerateColumns'],
   props: {
     url: {
       type: String,
@@ -70,7 +73,10 @@ export default {
   },
   computed: {
     forwardedAttrs() {
-      return this.$attrs
+      const attrs = { ...this.$attrs }
+      delete attrs.onSubmit
+      delete attrs.onInvalid
+      return attrs
     },
     dataForm() {
       return this.$refs.dataForm
@@ -96,6 +102,12 @@ export default {
     this.optionUrlMetaAndGenerateColumns()
   },
   methods: {
+    handleSubmit(...args) {
+      this.$emit('submit', ...args)
+    },
+    handleInvalid(...args) {
+      this.$emit('invalid', ...args)
+    },
     async optionUrlMetaAndGenerateColumns() {
       let data = { actions: {} }
       if (this.url) {
