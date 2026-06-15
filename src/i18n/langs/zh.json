@@ -19,5 +19,10 @@
     "Other": "其他",
     "Details": "详情",
     "Confirm": "确认",
-    "Ignore": "忽略"
+    "Ignore": "忽略",
+    "OTPSecretKey": "OTP 密钥",
+    "OTPSecretKeyHelpText": "可选。如果目标账号登录还需要动态口令，可以填写 OTP 密钥，或者点“生成”自动生成一组可用密钥。",
+    "CurrentOTPCode": "当前 OTP 验证码",
+    "OTPCode": "OTP 验证码",
+    "Authenticator": "身份验证器"
 }

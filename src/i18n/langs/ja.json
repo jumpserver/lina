@@ -8,5 +8,10 @@
   "notParenthesis": "不能包含括号。",
   "InvalidJson": "JSON 格式错误.",
   "requiredHasUserNameMapped": "用户名属性是必需的。",
-  "Diff": ""
+  "Diff": "",
+  "OTPSecretKey": "OTP Secret Key",
+  "OTPSecretKeyHelpText": "Optional. If the target account also requires a one-time password, set the OTP secret key here or click Generate to create a valid one.",
+  "CurrentOTPCode": "Current OTP Code",
+  "OTPCode": "OTP Code",
+  "Authenticator": "Authenticator"
 }

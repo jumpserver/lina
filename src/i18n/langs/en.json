@@ -20,6 +20,11 @@
     "Details": "Details",
     "Confirm": "Confirm",
     "Ignore": "Ignore",
+    "OTPSecretKey": "OTP Secret Key",
+    "OTPSecretKeyHelpText": "Optional. If the target account also requires a one-time password, set the OTP secret key here or click Generate to create a valid one.",
+    "CurrentOTPCode": "Current OTP Code",
+    "OTPCode": "OTP Code",
+    "Authenticator": "Authenticator",
     "Please enter a reason": "Please enter a reason",
     "PleaseEnterReason": "Please enter a reason | Please enter reasons"
 }

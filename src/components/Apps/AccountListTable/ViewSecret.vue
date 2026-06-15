@@ -92,7 +92,7 @@ export default {
     },
     title: {
       type: String,
-      default: function () {
+      default: function() {
         return this.$tc('Detail')
       }
     },

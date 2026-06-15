@@ -7,5 +7,10 @@
     "notAlphanumericUnderscore": "仅支持字母、数字和下划线。",
     "notParenthesis": "不能包含括号。",
     "InvalidJson": "JSON 格式错误.",
-    "requiredHasUserNameMapped": "用户名属性是必需的。"
+    "requiredHasUserNameMapped": "用户名属性是必需的。",
+    "OTPSecretKey": "OTP 密鑰",
+    "OTPSecretKeyHelpText": "可選。如果目標賬號登錄還需要動態口令，可以填寫 OTP 密鑰，或者點擊「生成」自動生成一組可用密鑰。",
+    "CurrentOTPCode": "當前 OTP 驗證碼",
+    "OTPCode": "OTP 驗證碼",
+    "Authenticator": "身份驗證器"
 }

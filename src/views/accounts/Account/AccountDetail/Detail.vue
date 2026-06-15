@@ -15,6 +15,11 @@
           :url="secretUrl"
           :visible.sync="showViewSecretDialog"
         />
+        <ViewOTPCode
+          v-if="showViewOTPCodeDialog"
+          :account="object"
+          :visible.sync="showViewOTPCodeDialog"
+        />
         <AutomationParamsForm
           :has-button="false"
           :method="pushAccountMethod"
@@ -39,6 +44,7 @@
 import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
 import QuickActions from '@/components/Common/QuickActions/index.vue'
 import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret.vue'
+import ViewOTPCode from '@/components/Apps/AccountListTable/ViewOTPCode.vue'
 import { openTaskPage } from '@/utils/jms/index'
 import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
 import AssetDetail from '@/views/assets/Asset/AssetDetail'
@@ -52,7 +58,8 @@ export default {
     QuickActions,
     AssetDetail,
     AutomationParamsForm,
-    ViewSecret
+    ViewSecret,
+    ViewOTPCode
   },
   props: {
     object: {
@@ -68,8 +75,8 @@ export default {
       drawerRefName: null,
       needSetAutoPushParams: false,
       autoPushVisible: false,
-      secretUrl: `/api/v1/accounts/account-secrets/${this.object.id}/`,
       showViewSecretDialog: false,
+      showViewOTPCodeDialog: false,
       quickActions: [
         {
           title: this.$t('Active'),
@@ -176,6 +183,24 @@ export default {
           })
         },
         {
+          name: 'OTPCode',
+          title: this.$t('OTPCode'),
+          has: false,
+          attrs: {
+            type: 'primary',
+            label: this.$t('View'),
+            disabled: !vm.$hasPerm('accounts.view_accountsecret')
+          },
+          callbacks: Object.freeze({
+            click: () => {
+              vm.showViewOTPCodeDialog = false
+              setTimeout(() => {
+                vm.showViewOTPCodeDialog = true
+              })
+            }
+          })
+        },
+        {
           title: this.$t('ClearSecret'),
           attrs: {
             type: 'primary',
@@ -238,8 +263,22 @@ export default {
     }
   },
   computed: {
+    secretUrl() {
+      return this.object?.id ? `/api/v1/accounts/account-secrets/${this.object.id}/` : ''
+    },
     pushAccountMethod() {
       return this.object.asset?.auto_config?.push_account_method || ''
+    }
+  },
+  watch: {
+    'object.has_otp_secret_key': {
+      handler(val) {
+        const action = this.quickActions.find(item => item.name === 'OTPCode')
+        if (action) {
+          this.$set(action, 'has', !!val)
+        }
+      },
+      immediate: true
     }
   },
   methods: {
