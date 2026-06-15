@@ -61,7 +61,7 @@
                 class="asset-name"
               >{{ item.name }}</span>
               <i
-                class="el-icon-minus asset-remove-icon"
+                class="el-icon-close asset-remove-icon"
                 :title="$tc('Remove')"
                 @click.stop="removeAsset(item)"
               />
@@ -240,7 +240,7 @@ export default {
         font-weight: normal;
         transition: opacity .15s ease;
         margin-left: auto;
-        color: var(--color-danger);
+        color: red;
       }
 
       .el-checkbox__label {
