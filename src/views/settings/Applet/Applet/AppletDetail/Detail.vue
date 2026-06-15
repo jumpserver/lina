@@ -13,9 +13,10 @@
 </template>
 
 <script>
+import { IBox } from '@/components'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import MarkdownRenderer from '@/components/Widgets/MarkdownRenderer'
-import { IBox } from '@/components'
+import { copy } from '@/utils/common'
 
 export default {
   name: 'Detail',
@@ -42,7 +43,22 @@ export default {
             return <img src={this.object.icon} alt='' height='40'/>
           }
         },
-        'name', 'display_name', 'author',
+        'name', 'display_name',
+        {
+          key: this.$t('Author'),
+          value: this.object.author,
+          has: () => vm.$store.getters.publicSettings?.VENDOR?.toLowerCase() === 'jumpserver',
+          formatter: (item, val) => {
+            if (val === '-' || val === null || val === undefined || val === '') {
+              return <span>{'-'}</span>
+            }
+            return (
+              <span style={{ cursor: 'pointer' }} onClick={() => copy(val)} title={val}>
+                {val}
+              </span>
+            )
+          }
+        },
         {
           key: this.$t('Protocols'),
           formatter: () => {
