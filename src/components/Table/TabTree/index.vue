@@ -70,6 +70,7 @@ export default {
     return {
       flag: false,
       componentKey: 1,
+      renderVersion: 0,
       activeTreeSetting: {},
       showText: true,
       keyMap: {}
@@ -153,6 +154,8 @@ export default {
         for (const tab of this.submenu) {
           if (tab.name === tabName) {
             vm.activeTreeSetting = tab.treeSetting
+            this.renderVersion += 1
+            this.componentKey = `${this.$route.name || 'tree'}_${tabName}_${this.renderVersion}`
             break
           }
         }

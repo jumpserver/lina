@@ -1,6 +1,6 @@
 <template>
   <div :class="{'no-title': noTitle}" class="page">
-    <PageHeading v-if="iTitle || helpMessage" :help-msg="helpMessage" class="disabled-when-print page-head">
+    <PageHeading v-if="showHeading" :help-msg="helpMessage" class="disabled-when-print page-head">
       <el-button
         :disabled="gobackDisabled"
         class="go-back"
@@ -49,7 +49,7 @@
         v-if="iHelpMessage && helpAlertVisible"
         class="page-alert"
         :closable="true"
-        type="success"
+        :type="helpAlertType"
         @close="helpAlertVisible = false"
       >
         <span v-sanitize="iHelpMessage" class="announcement-main" />
@@ -67,6 +67,7 @@ import UserConfirmDialog from '@/components/Apps/UserConfirmDialog/index.vue'
 import { toSentenceCase } from '@/utils/common/index'
 import IBox from '@/components/Common/IBox/index.vue'
 import i18n from '@/i18n/i18n'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Page',
@@ -93,6 +94,10 @@ export default {
       type: String,
       default: ''
     },
+    helpAlertType: {
+      type: String,
+      default: 'success'
+    },
     goBack: {
       type: Function,
       default: function(obj) {
@@ -109,8 +114,12 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['inDrawer']),
     noTitle() {
       return this.title === 'null' || this.title === null
+    },
+    showHeading() {
+      return !this.inDrawer && (this.iTitle || this.helpMessage)
     },
     iTitle() {
       if (this.noTitle) {

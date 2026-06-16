@@ -492,7 +492,7 @@ export default {
     align-items: center;
     gap: 10px;
     margin-top: 30px;
-    margin-left: var(--label-width);
+    margin-left: calc(var(--label-width) + 20px);
 
     .el-button {
       min-height: 30px;

@@ -3,7 +3,8 @@
     <Select2 v-bind="{ ...$attrs, ...select2Config }" ref="select2"
       v-model="select2Config.value"
       @input="onInputChange"
-      @focus.stop="handleFocus" />
+      @focus.stop="handleFocus"
+      @visible-change="handleVisibleChange" />
     <AssetSelectDialog v-bind="$attrs" v-if="dialogVisible"
       ref="dialog"
       v-model:visible="dialogVisible"
@@ -83,7 +84,14 @@ export default {
   },
   methods: {
     handleFocus() {
-      this.$refs.select2.selectRef.blur()
+      this.$refs.select2?.selectRef?.blur?.()
+      this.dialogVisible = true
+    },
+    handleVisibleChange(visible) {
+      if (!visible) {
+        return
+      }
+      this.$refs.select2?.selectRef?.blur?.()
       this.dialogVisible = true
     },
     handleConfirm(valueSelected, rowsAdd) {

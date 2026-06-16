@@ -30,7 +30,7 @@ export default {
     },
     type: {
       type: String,
-      default: () => 'input'
+      default: () => 'password'
     },
     text: {
       type: String,
@@ -75,10 +75,21 @@ export default {
 </script>
 <style lang='scss' scoped>
 .password-input {
-  width: calc(100% - 50px);
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
 }
 
 .update-token {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+
+  :deep(.el-input) {
+    width: 100%;
+  }
+
   i {
     color: var(--color-text-secondary);
     font-size: 14px;
