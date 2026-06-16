@@ -469,8 +469,21 @@ export default {
     white-space: normal;
   }
 
+  :deep(.el-select__wrapper) {
+    min-height: 28px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  :deep(.el-select__selection) {
+    min-height: 28px;
+    align-items: center;
+  }
+
   :deep(.el-select__tags) {
     height: 28px;
+    min-height: 28px;
+    align-items: center;
   }
 
   :deep(input::placeholder) {

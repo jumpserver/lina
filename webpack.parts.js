@@ -225,6 +225,7 @@ function createDevServer({ port, publicPath, coreHost, kokoHost }) {
   return {
     port,
     host: '0.0.0.0',
+    server: 'http',
     open: false,
     allowedHosts: 'all',
     hot: true,
@@ -246,6 +247,15 @@ function createDevServer({ port, publicPath, coreHost, kokoHost }) {
         errors: true
       },
       webSocketURL
+    },
+    onListening(devServer) {
+      const server = devServer && devServer.server
+      if (server && typeof server.getMaxListeners === 'function' && typeof server.setMaxListeners === 'function') {
+        const current = server.getMaxListeners()
+        if (current > 0 && current < 32) {
+          server.setMaxListeners(32)
+        }
+      }
     },
     watchFiles: ['src/**/*', 'public/**/*'],
     proxy: [
