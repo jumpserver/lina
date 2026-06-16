@@ -146,6 +146,43 @@ $single-menu-height: 38px;
     // 覆盖默认 64px 宽度
     width: 55px;
 
+    .el-menu-item,
+    .el-sub-menu__title,
+    .submenu-title-noDropdown {
+      position: relative;
+      justify-content: center;
+      min-width: 55px;
+      padding: 0 !important;
+    }
+
+    .submenu-item {
+      .svg-icon,
+      .el-icon,
+      .fa {
+        margin-right: 0 !important;
+      }
+    }
+
+    .submenu-item > .svg-icon,
+    .submenu-item > .el-icon,
+    .submenu-item > .fa {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .submenu-item .item-title {
+      width: 0 !important;
+      min-width: 0 !important;
+      max-width: 0 !important;
+      margin: 0 !important;
+      overflow: hidden !important;
+      white-space: nowrap !important;
+      visibility: hidden;
+      display: inline-block;
+    }
+
     .level1-menu {
       height: $single-menu-height;
       line-height: $single-menu-height;

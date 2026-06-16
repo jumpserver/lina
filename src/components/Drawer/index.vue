@@ -160,26 +160,126 @@ export default {
     padding: 0;
   }
 
+  :deep(.page.tab-page) {
+    height: calc(100vh - 110px);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  :deep(.page.tab-page .page-content) {
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  :deep(.page.tab-page .tab-page-wrapper) {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  :deep(.page.tab-page .page-submenu) {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    background: #fff;
+  }
+
+  :deep(.page.tab-page .page-submenu .el-tabs__header) {
+    display: flex;
+    align-items: stretch;
+    min-height: 40px;
+    margin: 0;
+    padding: 0 30px;
+    background: #fff;
+    border-bottom: 1px solid #ebeef5;
+  }
+
+  :deep(.page.tab-page .page-submenu .el-tabs__nav-wrap),
+  :deep(.page.tab-page .page-submenu .el-tabs__nav-scroll),
+  :deep(.page.tab-page .page-submenu .el-tabs__nav) {
+    display: flex;
+    align-items: stretch;
+  }
+
+  :deep(.page.tab-page .page-submenu .el-tabs__nav-wrap) {
+    position: static;
+    flex: 1 1 auto;
+    margin: 0;
+
+    &::after {
+      display: none;
+    }
+  }
+
+  :deep(.page.tab-page .page-submenu .el-tabs__active-bar) {
+    height: 2px;
+  }
+
+  :deep(.page.tab-page .page-submenu .el-tabs__item),
+  :deep(.page.tab-page .page-submenu .el-tabs__item.is-top) {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 18px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+  }
+
+  :deep(.page.tab-page .tab-page-content) {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 0;
+    padding: 10px 30px 22px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    background: #f3f3f3;
+  }
+
+  :deep(.page.tab-page .tab-page-content .tab-page-alert) {
+    margin: 0;
+  }
+
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__icon),
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__icon .el-icon),
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__icon .el-icon svg) {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__title),
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__description),
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__content),
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__description p),
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__content p),
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__content span),
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .announcement-main) {
+    font-size: 12px !important;
+    line-height: 1.5;
+  }
+
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__closebtn) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+
   :deep(.el-form-item){
     min-width: 565px;
 
     .el-card__body {
       padding-top: 10px;
       padding-bottom: 20px;
-    }
-
-    .page-submenu {
-      .el-tabs__header {
-        height: 40px;
-        margin-bottom: 0;
-        padding: 0;
-      }
-
-      .el-tabs__item.is-top {
-        height: 40px;
-        line-height: 40px;
-        padding: 0 20px;
-      }
     }
 
     .form-buttons {
@@ -292,16 +392,6 @@ export default {
     }
 
     .page {
-      overflow-y: auto;
-
-      height: calc(100vh - 110px);
-
-      &.tab-page {
-        .page-content {
-          padding: 0;
-        }
-      }
-
       .page-content {
         height: unset;
         padding-right: 10px;
@@ -322,11 +412,6 @@ export default {
     .tab-page-content {
       height: 100%;
       background: #f3f3f3;
-    }
-
-    .tab-page-content {
-      padding: 10px 30px 22px;
-      box-sizing: border-box;
     }
 
     .drawer__footer {

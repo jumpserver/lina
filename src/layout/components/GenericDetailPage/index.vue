@@ -22,15 +22,13 @@ import TabPage from '../TabPage'
 import { flashErrorMsg } from '@/utils/request'
 import { getApiPath } from '@/utils/common/index'
 import ActionsGroup from '@/components/Common/ActionsGroup'
-import ResourceActivity from '@/components/Apps/ResourceActivity'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'GenericDetailPage',
   components: {
     TabPage,
-    ActionsGroup,
-    ResourceActivity
+    ActionsGroup
   },
   props: {
     url: {
@@ -288,12 +286,5 @@ export default {
 <style lang="scss" scoped>
 .header-buttons {
   z-index: 999;
-}
-
-.generic-detail-page {
-  :deep(.tab-page-content) {
-    padding-left: 20px;
-    padding-right: 15px;
-  }
 }
 </style>

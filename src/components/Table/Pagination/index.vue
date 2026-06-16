@@ -162,12 +162,15 @@ export default {
   font-size: 13px;
 }
 
-:deep(.el-pagination .el-pagination__sizes .el-input__wrapper) {
-  min-height: 28px;
-  height: 28px;
+:deep(.el-pagination .el-pagination__sizes .el-select__wrapper) {
+  min-height: 28px !important;
+  height: 28px !important;
+  padding-top: 0;
+  padding-bottom: 0;
+  box-sizing: border-box;
 }
 
-:deep(.el-pagination .el-pagination__sizes .el-input__inner),
+:deep(.el-pagination .el-pagination__sizes .el-select__selected-item),
 :deep(.el-pagination .el-pagination__sizes .el-select__placeholder) {
   font-size: 13px;
   line-height: 28px;
@@ -196,7 +199,13 @@ export default {
   box-sizing: border-box;
   border: 1px solid #dcdfe6;
   border-radius: 2px;
+  background-color: #fff;
   font-size: 12px;
   font-weight: 400;
+}
+
+:deep(.el-pagination.is-background .btn-prev:disabled),
+:deep(.el-pagination.is-background .btn-next:disabled) {
+  background-color: #fff;
 }
 </style>

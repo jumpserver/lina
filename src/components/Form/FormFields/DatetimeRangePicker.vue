@@ -104,22 +104,32 @@ html:lang(pt-br) {
 }
 
 .datepicker {
-  &.el-date-editor--daterange.el-input__inner {
-    width: 243px;
-  }
-
   margin-left: 10px;
   border: 1px solid #dcdee2;
   border-radius: 2px;
-  height: 28px;
+  width: 243px !important;
+  min-width: 243px !important;
+  max-width: 243px !important;
+  flex: 0 0 243px !important;
+  display: inline-flex !important;
+  align-items: center;
+  align-self: flex-start;
+  height: 32px !important;
+  min-height: 32px !important;
+  max-height: 32px !important;
+  box-sizing: border-box;
+  background-color: #fff;
 
   :deep(.el-range-separator),
-  :deep(.el-input__icon) {
-    line-height: 26px;
+  :deep(.el-range__icon),
+  :deep(.el-range__close-icon) {
+    line-height: 30px;
     color: var(--color-icon-primary) !important;
   }
 
   :deep(.el-range-input) {
+    height: 30px;
+    line-height: 30px;
     color: var(--color-text-primary) !important;
   }
 

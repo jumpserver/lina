@@ -1,6 +1,7 @@
 <template>
   <div class="list-table">
     <QuickFilter
+      v-if="iHasQuickFilter"
       v-model:expand="filterExpand"
       :filters="quickFilters"
       :summary="quickSummary"
@@ -378,7 +379,7 @@ export default {
 .list-table {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 8px;
   min-width: 0;
 }
 

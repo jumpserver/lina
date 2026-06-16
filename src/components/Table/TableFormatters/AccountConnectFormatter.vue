@@ -123,6 +123,30 @@ export default {
   color: var(--el-text-color-secondary);
 }
 
+:deep(.action-connect .el-button:hover i),
+:deep(.action-connect .el-button:focus i),
+:deep(.action-connect .el-button:active i) {
+  color: #fff !important;
+}
+
+:deep(.action-connect .el-button.el-button--primary.is-plain) {
+  color: var(--color-primary);
+  background-color: var(--color-primary-light-3, #e8f7f4);
+  border-color: var(--color-primary-light-1, var(--color-primary));
+}
+
+:deep(.action-connect .el-button.el-button--primary.is-plain i) {
+  color: var(--color-primary) !important;
+}
+
+:deep(.action-connect .el-button.el-button--primary.is-plain:hover),
+:deep(.action-connect .el-button.el-button--primary.is-plain:focus),
+:deep(.action-connect .el-button.el-button--primary.is-plain:active) {
+  color: #fff;
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
 :deep(.el-dropdown-menu__item) {
   transition:
     height 0.3s ease-in-out,

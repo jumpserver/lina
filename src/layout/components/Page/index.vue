@@ -11,7 +11,7 @@
         @mousedown="startLongPress"
       />
       <slot name="title">
-        <span style="padding-left: 10px">
+        <span class="page-title-wrap">
           {{ iTitle }}
           <el-tooltip v-if="helpTip" :open-delay="500" effect="dark" placement="top" popper-class="help-tips">
             <template #content>
@@ -45,7 +45,13 @@
           </div>
         </IBox>
       </div>
-      <el-alert v-if="iHelpMessage" type="success">
+      <el-alert
+        v-if="iHelpMessage && helpAlertVisible"
+        class="page-alert"
+        :closable="true"
+        type="success"
+        @close="helpAlertVisible = false"
+      >
         <span v-sanitize="iHelpMessage" class="announcement-main" />
       </el-alert>
       <slot />
@@ -98,7 +104,8 @@ export default {
   },
   data() {
     return {
-      showHistory: false
+      showHistory: false,
+      helpAlertVisible: true
     }
   },
   computed: {
@@ -124,6 +131,11 @@ export default {
     },
     iHelpMessage() {
       return this.helpMessage || this.helpTip
+    }
+  },
+  watch: {
+    iHelpMessage() {
+      this.helpAlertVisible = true
     }
   },
   methods: {
@@ -175,6 +187,13 @@ export default {
       //height: 100%;
     }
   }
+}
+
+.page-title-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 10px;
 }
 
 .go-back {

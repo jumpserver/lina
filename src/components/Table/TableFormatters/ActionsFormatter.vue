@@ -258,5 +258,34 @@ export default {
   :deep(.el-icon--right) {
     display: none;
   }
+
+  :deep(.more-action.el-button--primary.is-plain),
+  :deep(.el-dropdown > .more-action.el-button--primary.is-plain) {
+    color: var(--color-primary);
+    background-color: var(--color-primary-light-3, #e8f7f4);
+    border-color: var(--color-primary-light-1, var(--color-primary));
+
+    &:hover,
+    &:focus,
+    &:active {
+      color: #fff;
+      background-color: var(--color-primary);
+      border-color: var(--color-primary);
+    }
+  }
+
+  :deep(.more-action.el-button--primary.is-plain .pre-icon),
+  :deep(.more-action.el-button--primary.is-plain .el-icon) {
+    color: var(--color-primary);
+  }
+
+  :deep(.more-action.el-button--primary.is-plain:hover .pre-icon),
+  :deep(.more-action.el-button--primary.is-plain:hover .el-icon),
+  :deep(.more-action.el-button--primary.is-plain:focus .pre-icon),
+  :deep(.more-action.el-button--primary.is-plain:focus .el-icon),
+  :deep(.more-action.el-button--primary.is-plain:active .pre-icon),
+  :deep(.more-action.el-button--primary.is-plain:active .el-icon) {
+    color: #fff;
+  }
 }
 </style>

@@ -1,6 +1,13 @@
 <template>
-  <div>
-    <el-alert v-if="helpMessage" show-icon type="info">
+  <div class="base-list">
+    <el-alert
+      v-if="helpMessage && helpAlertVisible"
+      class="base-list-alert"
+      :closable="true"
+      show-icon
+      type="info"
+      @close="helpAlertVisible = false"
+    >
       <span v-sanitize="helpMessage" class="announcement-main" />
     </el-alert>
     <ListTable
@@ -133,6 +140,7 @@ export default {
       dropdown: recentPlatforms
     }
     return {
+      helpAlertVisible: true,
       createDrawer: '',
       detailDrawer: () => import('@/views/assets/Asset/AssetDetail/index.vue'),
       drawer: {
@@ -197,6 +205,9 @@ export default {
   watch: {
     optionInfo(iNew) {
       this.defaultConfig.columnsMeta.gathered_info.formatterArgs['info'] = iNew
+    },
+    helpMessage() {
+      this.helpAlertVisible = true
     },
     $route(iNew, old) {
       const tab = iNew.query.tab
@@ -277,3 +288,42 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.base-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.base-list :deep(.base-list-alert) {
+  margin: 0;
+}
+
+.base-list :deep(.base-list-alert .el-alert__icon),
+.base-list :deep(.base-list-alert .el-alert__icon .el-icon),
+.base-list :deep(.base-list-alert .el-alert__icon .el-icon svg) {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.base-list :deep(.base-list-alert .el-alert__title),
+.base-list :deep(.base-list-alert .el-alert__description),
+.base-list :deep(.base-list-alert .el-alert__content),
+.base-list :deep(.base-list-alert .el-alert__description p),
+.base-list :deep(.base-list-alert .el-alert__content p),
+.base-list :deep(.base-list-alert .announcement-main) {
+  font-size: 12px !important;
+  line-height: 1.5;
+}
+
+.base-list :deep(.base-list-alert .el-alert__closebtn) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+</style>

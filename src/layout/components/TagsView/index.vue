@@ -1,5 +1,5 @@
 <template>
-  <el-alert v-show="show" id="tags-view-container" class="tags-view-container">
+  <el-alert v-show="show" id="tags-view-container" :closable="false" class="tags-view-container">
     <scroll-pane ref="scrollPane" class="tags-view-wrapper">
       <router-link
         v-for="tag in visitedViews"
@@ -219,9 +219,22 @@ export default {
   margin-bottom: 2px !important;
   padding: 0;
 
+  :deep(.el-alert__content) {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+  }
+
   .tags-view-wrapper {
+    display: flex;
+    align-items: center;
+    height: 100%;
+
     .tags-view-item {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
       position: relative;
       cursor: pointer;
       height: 26px;
@@ -232,7 +245,6 @@ export default {
       padding: 0 8px;
       font-size: 12px;
       margin-left: 5px;
-      margin-top: 4px;
       &:first-of-type {
         margin-left: 20px;
       }

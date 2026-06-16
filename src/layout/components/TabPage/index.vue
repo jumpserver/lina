@@ -42,7 +42,13 @@
       </el-tabs>
 
       <div class="tab-page-content">
-        <el-alert v-if="helpMessage" type="success">
+        <el-alert
+          v-if="helpMessage && helpAlertVisible"
+          class="tab-page-alert"
+          :closable="true"
+          type="success"
+          @close="helpAlertVisible = false"
+        >
           <span v-sanitize="helpMessage" class="announcement-main" />
         </el-alert>
         <transition v-if="!loading" appear mode="out-in" name="fade-transform">
@@ -91,6 +97,7 @@ export default {
   data() {
     return {
       loading: false,
+      helpAlertVisible: true,
       toSentenceCase: toSentenceCase,
       activeTab: this.activeMenu
     }
@@ -131,6 +138,9 @@ export default {
       handler(newValue) {
         this.iActiveMenu = newValue
       }
+    },
+    helpMessage() {
+      this.helpAlertVisible = true
     }
   },
   created() {
@@ -185,36 +195,100 @@ export default {
   }
 }
 
+.page-submenu {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+}
+
 .page-submenu :deep(.el-tabs__header) {
   background-color: white;
-  margin-top: -10px;
+  margin-top: 0;
+  margin-bottom: 0;
   padding: 0 30px;
-  margin-bottom: 5px;
+  display: flex;
+  align-items: stretch;
+  min-height: 40px;
+  border-bottom: 1px solid #ebeef5;
+}
 
-  .el-tabs__item {
-    gap: 8px;
+.page-submenu :deep(.el-tabs__nav-wrap),
+.page-submenu :deep(.el-tabs__nav-scroll),
+.page-submenu :deep(.el-tabs__nav) {
+  display: flex;
+  align-items: stretch;
+}
 
+.page-submenu :deep(.el-tabs__nav-wrap) {
+  flex: 1 1 auto;
+  margin: 0;
+
+  &::after {
+    display: none;
+  }
+}
+
+.page-submenu :deep(.el-tabs__active-bar) {
+  height: 2px;
+}
+
+.page-submenu :deep(.el-tabs__item) {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  line-height: 40px;
+  padding: 0 18px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+
+  .pre-icon {
+    width: 16px;
+    display: inline-block;
+    opacity: 0.6;
+  }
+
+  &.is-active {
     .pre-icon {
-      width: 16px;
-      display: inline-block;
-      opacity: 0.6;
-    }
-
-    &.is-active {
-      .pre-icon {
-        opacity: 1;
-      }
-    }
-
-    &.is-disabled {
-      cursor: not-allowed;
-
-      &:hover {
-        color: #c0c4cc;
-      }
+      opacity: 1;
     }
   }
 
+  &.is-disabled {
+    cursor: not-allowed;
+
+    &:hover {
+      color: #c0c4cc;
+    }
+  }
+}
+
+.page-submenu :deep(.el-tabs__item .el-tooltip__trigger),
+.page-submenu :deep(.el-tabs__item .help-msg-btn) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 13px;
+  height: 13px;
+  min-height: 13px;
+  padding: 0;
+  border: none;
+  background: transparent !important;
+  box-shadow: none;
+}
+
+.page-submenu :deep(.el-tabs__item .help-msg-btn .el-icon),
+.page-submenu :deep(.el-tabs__item .help-msg-btn .el-icon svg),
+.page-submenu :deep(.el-tabs__item .el-tooltip__trigger .el-icon),
+.page-submenu :deep(.el-tabs__item .el-tooltip__trigger .el-icon svg) {
+  width: 13px;
+  height: 13px;
+  font-size: 13px;
+  color: var(--color-info);
+}
+
+.page-submenu :deep(.el-tabs__header) {
   .el-tabs__nav-next {
     right: 10px;
   }
@@ -227,6 +301,9 @@ export default {
 .tab-page {
   .tab-page-wrapper {
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
   }
 
   :deep(.page-heading) {
@@ -239,14 +316,45 @@ export default {
   }
 
   .tab-page-content {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 0;
     padding: 10px 30px 22px;
     overflow-y: auto;
-    height: calc(100% - 33px);
+  }
 
-    .el-alert {
-      margin-top: 0;
-      margin-bottom: 5px;
-    }
+  .tab-page-content :deep(.tab-page-alert) {
+    margin: 0;
+  }
+
+  .tab-page-content :deep(.tab-page-alert .el-alert__icon) {
+    font-size: 16px;
+  }
+
+  .tab-page-content :deep(.tab-page-alert .el-alert__icon .el-icon),
+  .tab-page-content :deep(.tab-page-alert .el-alert__icon .el-icon svg) {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+
+  .tab-page-content :deep(.tab-page-alert .el-alert__title),
+  .tab-page-content :deep(.tab-page-alert .el-alert__description),
+  .tab-page-content :deep(.tab-page-alert .el-alert__content),
+  .tab-page-content :deep(.tab-page-alert .announcement-main) {
+    font-size: 12px !important;
+    line-height: 1.5;
+  }
+
+  .tab-page-content :deep(.tab-page-alert .el-alert__closebtn) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
   }
 }
 

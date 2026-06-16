@@ -327,7 +327,14 @@ $hover-border-color: #d2d2d2;
   }
 
   &.collapsed .nav-title .switch-view {
+    .text-overflow {
+      display: none;
+    }
+
     :deep(.el-popover__reference) {
+      justify-content: center;
+      padding: 0 !important;
+
       .icon-zone {
         margin-right: 0;
       }

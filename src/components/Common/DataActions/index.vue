@@ -5,6 +5,7 @@
         v-if="action.dropdown"
         v-show="action.dropdown.length > 0"
         :class="[action.name, { grouped: action.grouped }]"
+        :popper-class="action.popperClass"
         :size="action.size"
         :split-button="!!action.split"
         :type="action.type"
@@ -306,5 +307,14 @@ $color-drop-menu-border: #e4e7ed;
       }
     }
   }
+}
+
+:global(.table-action-dropdown.el-dropdown__popper .el-dropdown-menu--small) {
+  padding: 6px 0;
+}
+
+:global(.table-action-dropdown.el-dropdown__popper .el-dropdown-menu__item) {
+  padding: 0 20px;
+  font-size: 13px;
 }
 </style>

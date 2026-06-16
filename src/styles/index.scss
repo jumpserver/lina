@@ -425,6 +425,19 @@ input[type='file'] {
   text-overflow: ellipsis !important;
 }
 
+.el-select-dropdown {
+  .el-select-dropdown__list {
+    padding: 6px 0;
+  }
+
+  .el-select-dropdown__item {
+    height: 34px;
+    line-height: 34px;
+    padding: 0 20px;
+    font-size: 13px;
+  }
+}
+
 .el-link--default {
   color: #1c84c6 !important;
   font-weight: 300;
@@ -586,18 +599,45 @@ $tooltip-arrow-color: #c2d1e1;
   }
 }
 
-.el-button.el-button--default.help-msg-btn {
-  padding: 5px;
+.el-button.help-msg-btn,
+.el-button.el-button--default.help-msg-btn,
+.el-tooltip__trigger .help-msg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 13px;
+  height: 13px;
+  min-height: 13px;
+  padding: 0;
   border: none;
+  background: transparent !important;
+  box-shadow: none;
+  vertical-align: middle;
 
-  &:hover {
-    background-color: white !important;
+  &:hover,
+  &:focus,
+  &:active {
+    background: transparent !important;
+    border-color: transparent !important;
   }
 
+  .el-icon,
+  .el-icon svg,
   i {
+    width: 13px;
+    height: 13px;
+    font-size: 13px;
     color: var(--color-info);
     opacity: 1;
   }
+}
+
+.page-heading .help-msg-btn,
+.page-heading .el-tooltip__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
 }
 
 .page-help-content {
@@ -688,6 +728,7 @@ li.rmenu i.fa {
   }
 }
 
+.el-drawer.drawer .el-drawer__header,
 .el-drawer__wrapper .el-drawer__header {
   min-height: 56px;
   margin-bottom: 0;
@@ -699,8 +740,43 @@ li.rmenu i.fa {
   box-sizing: border-box;
 }
 
+.el-drawer.drawer .el-drawer__body,
 .el-drawer__wrapper .el-drawer__body {
   padding: 0;
+}
+
+.datepicker.el-date-editor,
+.datepicker.el-date-editor.el-range-editor,
+.datepicker.el-date-editor--daterange,
+.el-date-editor.el-date-editor--daterange,
+.el-date-editor.el-range-editor {
+  width: 243px !important;
+  min-width: 243px !important;
+  max-width: 243px !important;
+  flex: 0 0 243px !important;
+  display: inline-flex !important;
+  align-items: center;
+  align-self: flex-start;
+  height: 32px !important;
+  min-height: 32px !important;
+  max-height: 32px !important;
+  box-sizing: border-box;
+}
+
+.datepicker.el-date-editor .el-range-input,
+.datepicker.el-date-editor .el-range-separator,
+.datepicker.el-date-editor .el-range__icon,
+.datepicker.el-date-editor .el-range__close-icon,
+.el-date-editor.el-date-editor--daterange .el-range-input,
+.el-date-editor.el-date-editor--daterange .el-range-separator,
+.el-date-editor.el-date-editor--daterange .el-range__icon,
+.el-date-editor.el-date-editor--daterange .el-range__close-icon,
+.el-date-editor.el-range-editor .el-range-input,
+.el-date-editor.el-range-editor .el-range-separator,
+.el-date-editor.el-range-editor .el-range__icon,
+.el-date-editor.el-range-editor .el-range__close-icon {
+  height: 30px;
+  line-height: 30px;
 }
 
 .el-input-number {

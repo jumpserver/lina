@@ -47,7 +47,8 @@ export default {
         title: '',
         type: 'primary',
         icon: 'el-icon-more',
-        plain: true
+        plain: true,
+        popperClass: 'table-action-dropdown'
       }
       const btn = {
         ...defaultBtn,
