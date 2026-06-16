@@ -2,6 +2,7 @@
   <div :class="device" class="table-header clearfix container">
     <slot name="header">
       <LeftSide v-bind="$attrs" v-if="hasLeftActions"
+        :key="leftSideRenderKey"
         :on-create="onCreate"
         :selected-rows="selectedRows"
         :table-url="tableUrl"
@@ -99,12 +100,19 @@ export default {
     return {
       keyword: '',
       foldSearch: false,
-      iHasLeftActions: this.hasLeftActions
+      iHasLeftActions: this.hasLeftActions,
+      leftSideRenderVersion: 0
     }
   },
   computed: {
     hasSelectedRows() {
       return this.selectedRows.length > 0
+    },
+    leftSideRenderKey() {
+      const rowKeys = this.selectedRows.map((row, index) => {
+        return row?.id || row?.uuid || row?.pk || row?.name || `row-${index}`
+      }).join(',')
+      return `${this.leftSideRenderVersion}:${this.selectedRows.length}:${rowKeys}`
     },
     iSearchTableConfig() {
       const configDefault = {
@@ -120,6 +128,14 @@ export default {
     },
     searchClass() {
       return this.iHasLeftActions ? 'right' : 'left'
+    }
+  },
+  watch: {
+    selectedRows: {
+      handler() {
+        this.leftSideRenderVersion += 1
+      },
+      deep: true
     }
   },
   created() {

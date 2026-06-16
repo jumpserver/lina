@@ -469,6 +469,10 @@ export default {
     white-space: normal;
   }
 
+  :deep(.el-select__tags) {
+    height: 28px;
+  }
+
   :deep(input::placeholder) {
     padding-left: 2px;
   }

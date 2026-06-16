@@ -95,6 +95,9 @@ export default {
             radius: ['72%', '90%'],
             avoidLabelOverlap: false,
             itemStyle: {},
+            label: {
+              show: !this.config.hideRingLabels
+            },
             emphasis: {
               label: {
                 show: false

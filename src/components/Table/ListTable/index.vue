@@ -301,7 +301,7 @@ export default {
       }, 100)
     },
     handleSelectionChange(val) {
-      this.selectedRows = val
+      this.selectedRows = Array.isArray(val) ? [...val] : []
     },
     _reloadTable() {
       this.dataTable?.getList()

@@ -114,6 +114,16 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+:deep(.el-row) {
+  height: 100%;
+}
 
+:deep(.el-col) {
+  display: flex;
+}
+
+:deep(.card) {
+  height: 100%;
+}
 </style>

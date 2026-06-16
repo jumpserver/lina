@@ -1,5 +1,6 @@
 <template>
   <DataActions v-bind="$attrs" v-if="hasLeftActions && iActions.length> 0"
+    :key="actionsRenderKey"
     :actions="iActions"
     size="small"
     class="header-action"
@@ -167,6 +168,9 @@ export default {
     },
     iActions() {
       return [...this.actions, this.moreAction]
+    },
+    actionsRenderKey() {
+      return this.selectedRows.map(row => row.id).join(',') || 'empty'
     },
     actions() {
       const actions = [...this.defaultActions, ...this.extraActions]

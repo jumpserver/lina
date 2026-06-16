@@ -1,9 +1,12 @@
 <template>
-  <BaseReport v-bind="$attrs" :nav="nav"
+  <BaseReport
+    v-bind="$attrs"
+    :nav="nav"
     :url="reportUrl"
     :title="$t('PamDashboard')"
     :disable-charts-padding="true"
-    name="PamDashboard">
+    name="PamDashboard"
+  >
     <div class="summary-container">
       <el-row :gutter="20">
         <el-col :span="14" :xs="24">
@@ -23,7 +26,9 @@
       </el-row>
 
       <el-row>
-        <AssetProportionSummary :url="url" class="asset-proportion-summary" />
+        <el-col :span="24">
+          <AssetProportionSummary :url="url" class="asset-proportion-summary" />
+        </el-col>
       </el-row>
     </div>
   </BaseReport>
@@ -75,6 +80,10 @@ export default {
 }
 
 .summary-container {
+  .el-row:last-child {
+    margin-bottom: 0;
+  }
+
   .account-secret-summary,
   .asset-proportion-summary,
   .risk-summary,
@@ -85,6 +94,10 @@ export default {
   .account-secret-summary,
   .asset-proportion-summary {
     margin-top: unset;
+  }
+
+  .asset-proportion-summary {
+    width: 100%;
   }
 
   .account-secret-summary {

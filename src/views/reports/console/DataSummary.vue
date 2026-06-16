@@ -31,6 +31,7 @@ export default {
         subIcon: 'broken-line',
         color: '#FFD260',
         chartTitle: this.$t('LoginUserToday'),
+        hideRingLabels: true,
         data: [],
         route: { name: 'UserList' }
       },
@@ -42,6 +43,7 @@ export default {
         subIcon: 'broken-line',
         color: themeColor,
         chartTitle: this.$t('LoginAssetToday'),
+        hideRingLabels: true,
         data: [],
         route: { name: 'AssetList' }
       }

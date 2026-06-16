@@ -1,10 +1,13 @@
 <template>
   <el-drawer
-    :modal="false"
+    class="drawer"
+    :modal="true"
+    :close-on-click-modal="true"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('SelectPlatform')"
     :model-value="visible"
+    custom-class="drawer"
     size="700px"
     top="1vh"
     @update:model-value="$emit('update:visible', $event)"
@@ -156,15 +159,18 @@ export default {
 <style lang="scss" scoped>
 
 :deep(.el-drawer__body) {
-  padding: 0 20px;
-  overflow-y: scroll;
+  padding: 0;
+  overflow-y: auto;
 }
 
 .platform-content {
-  padding: 0 10px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 30px 22px;
 }
 
 .platform-item {
+  width: 100%;
   margin: 5px 0;
 
   & :deep(.el-card__body) {
@@ -188,10 +194,22 @@ export default {
 }
 
 :deep(.el-collapse) {
+  width: 100%;
   border: none;
 
   .el-collapse-item__content {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 0 -10px;
     padding-bottom: 10px;
+  }
+
+  .el-collapse-item__content > .el-col {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+    padding: 0 10px;
+    box-sizing: border-box;
   }
 
   .el-collapse-item:last-child {
@@ -202,6 +220,20 @@ export default {
     .el-collapse-item__wrap {
       border-bottom: none;
     }
+  }
+}
+
+@media (max-width: 992px) {
+  :deep(.el-collapse .el-collapse-item__content > .el-col) {
+    flex-basis: 50%;
+    max-width: 50%;
+  }
+}
+
+@media (max-width: 768px) {
+  :deep(.el-collapse .el-collapse-item__content > .el-col) {
+    flex-basis: 100%;
+    max-width: 100%;
   }
 }
 

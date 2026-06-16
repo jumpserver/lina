@@ -77,6 +77,20 @@ export function setRootColors() {
   }
 }
 
+function syncElementPlusColorVars(elementStyle, colorName, currentColor) {
+  const white = 'ffffff'
+  const black = '000000'
+  const elColorKey = `--el-color-${colorName}`
+
+  elementStyle.setProperty(elColorKey, currentColor)
+  elementStyle.setProperty(`${elColorKey}-light-3`, mix(white, currentColor.replace(/#/g, ''), 30))
+  elementStyle.setProperty(`${elColorKey}-light-5`, mix(white, currentColor.replace(/#/g, ''), 50))
+  elementStyle.setProperty(`${elColorKey}-light-7`, mix(white, currentColor.replace(/#/g, ''), 70))
+  elementStyle.setProperty(`${elColorKey}-light-8`, mix(white, currentColor.replace(/#/g, ''), 80))
+  elementStyle.setProperty(`${elColorKey}-light-9`, mix(white, currentColor.replace(/#/g, ''), 90))
+  elementStyle.setProperty(`${elColorKey}-dark-2`, mix(black, currentColor.replace(/#/g, ''), 20))
+}
+
 export function changeMenuColor(themeColors) {
   const elementStyle = document.documentElement.style
   const colors = Object.keys(themeColors).length > 0 ? themeColors : defaultThemeConfig
@@ -97,6 +111,11 @@ export function changeMenuColor(themeColors) {
   for (const key in colors) {
     const currentColor = colors[key]
     elementStyle.setProperty(key, currentColor)
+
+    if (/^--color-(primary|success|info|warning|danger)$/.test(key)) {
+      const colorName = key.replace('--color-', '')
+      syncElementPlusColorVars(elementStyle, colorName, currentColor)
+    }
 
     if (colorsGenMore.includes(key)) {
       for (const [i, light] of lights.entries()) {

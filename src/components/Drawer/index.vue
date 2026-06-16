@@ -145,6 +145,11 @@ export default {
 }
 
 .drawer {
+  .drawer__content {
+    height: 100%;
+    background: rgb(243, 243, 243);
+  }
+
   :deep(.el-drawer__header) {
     min-height: 56px;
     margin-bottom: 0 !important;

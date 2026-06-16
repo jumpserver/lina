@@ -47,7 +47,7 @@
                   <span v-if="actionsHasIcon(action.dropdown)" class="pre-icon">
                     <Icon v-if="option.icon" :icon="option.icon" />
                   </span>
-                  {{ option.title }}
+                  <span class="dropdown-item__label">{{ option.title }}</span>
                 </el-dropdown-item>
               </el-tooltip>
             </template>
@@ -199,6 +199,7 @@ export default {
         }
 
         if (action.dropdown) {
+          action.popperClass = [action.popperClass, 'action-dropdown'].filter(Boolean).join(' ')
           action.dropdown = this.cleanActions(action.dropdown)
         }
         cleanedActions.push(action)
@@ -262,6 +263,100 @@ $color-drop-menu-border: #e4e7ed;
     line-height: 1.3;
   }
 
+  :deep(.action-item.el-dropdown > .el-button.more-action),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.more-action) {
+    --el-button-hover-text-color: var(--color-primary) !important;
+    --el-button-hover-bg-color: var(--color-primary-light-3, #e8f7f4) !important;
+    --el-button-hover-border-color: var(--color-primary-light, #bae8df) !important;
+    --el-button-active-text-color: var(--color-primary) !important;
+    --el-button-active-bg-color: var(--color-primary-light-3, #e8f7f4) !important;
+    --el-button-active-border-color: var(--color-primary-light, #bae8df) !important;
+  }
+
+  :deep(.action-item.el-button.el-button--default),
+  :deep(.action-item.el-dropdown > .el-button.el-button--default),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default),
+  :deep(.action-item.el-button.el-button--primary.is-plain),
+  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain) {
+    --el-button-hover-text-color: var(--color-primary);
+    --el-button-hover-bg-color: var(--color-primary-light-3, #e8f7f4);
+    --el-button-hover-border-color: var(--color-primary-light, #bae8df);
+    --el-button-active-text-color: var(--color-primary);
+    --el-button-active-bg-color: var(--color-primary-light-3, #e8f7f4);
+    --el-button-active-border-color: var(--color-primary-light, #bae8df);
+
+    &:hover,
+    &:focus,
+    &:active {
+      color: var(--color-primary);
+      background-color: var(--color-primary-light-3, #e8f7f4) !important;
+      border-color: var(--color-primary-light, #bae8df) !important;
+      box-shadow: none !important;
+      outline: none;
+    }
+  }
+
+  :deep(.action-item.el-button.el-button--default .pre-icon),
+  :deep(.action-item.el-button.el-button--default .el-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--default .pre-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--default .el-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default .pre-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default .el-icon) {
+    color: var(--color-icon-primary);
+  }
+
+  :deep(.action-item.el-button.el-button--default:hover .pre-icon),
+  :deep(.action-item.el-button.el-button--default:hover .el-icon),
+  :deep(.action-item.el-button.el-button--default:focus .pre-icon),
+  :deep(.action-item.el-button.el-button--default:focus .el-icon),
+  :deep(.action-item.el-button.el-button--default:active .pre-icon),
+  :deep(.action-item.el-button.el-button--default:active .el-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--default:hover .pre-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--default:hover .el-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--default:focus .pre-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--default:focus .el-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--default:active .pre-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--default:active .el-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default:hover .pre-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default:hover .el-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default:focus .pre-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default:focus .el-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default:active .pre-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default:active .el-icon) {
+    color: var(--color-primary);
+  }
+
+  :deep(.action-item.el-button.el-button--primary.is-plain .pre-icon),
+  :deep(.action-item.el-button.el-button--primary.is-plain .el-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain .pre-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain .el-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain .pre-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain .el-icon) {
+    color: var(--color-primary);
+  }
+
+  :deep(.action-item.el-button.el-button--primary.is-plain:hover .pre-icon),
+  :deep(.action-item.el-button.el-button--primary.is-plain:hover .el-icon),
+  :deep(.action-item.el-button.el-button--primary.is-plain:focus .pre-icon),
+  :deep(.action-item.el-button.el-button--primary.is-plain:focus .el-icon),
+  :deep(.action-item.el-button.el-button--primary.is-plain:active .pre-icon),
+  :deep(.action-item.el-button.el-button--primary.is-plain:active .el-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:hover .pre-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:hover .el-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:focus .pre-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:focus .el-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:active .pre-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:active .el-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:hover .pre-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:hover .el-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:focus .pre-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:focus .el-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:active .pre-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:active .el-icon) {
+    color: var(--color-primary);
+  }
+
   .action-item.el-dropdown {
     font-size: 12px;
 
@@ -283,20 +378,6 @@ $color-drop-menu-border: #e4e7ed;
       }
     }
 
-    :deep(.el-button--primary.is-plain),
-    :deep(.more-action.el-button--primary.is-plain) {
-      color: var(--color-primary);
-      background-color: var(--color-primary-light-3, #e8f7f4);
-      border-color: var(--color-primary-light-1, var(--color-primary));
-
-      &:hover,
-      &:focus {
-        color: var(--color-primary);
-        background-color: var(--color-primary-light-3, #e8f7f4);
-        border-color: var(--color-primary-light-1, var(--color-primary));
-      }
-    }
-
     .el-button--primary {
       :deep(.el-icon-arrow-down.el-icon--right) {
         color: #ffffff !important;
@@ -309,12 +390,28 @@ $color-drop-menu-border: #e4e7ed;
   }
 }
 
-:global(.table-action-dropdown.el-dropdown__popper .el-dropdown-menu--small) {
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu--small) {
   padding: 6px 0;
 }
 
-:global(.table-action-dropdown.el-dropdown__popper .el-dropdown-menu__item) {
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item) {
+  display: flex;
+  align-items: center;
+  height: 34px;
+  line-height: 34px;
   padding: 0 20px;
   font-size: 13px;
+}
+
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  margin-right: 8px;
+}
+
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .dropdown-item__label) {
+  min-width: 0;
 }
 </style>

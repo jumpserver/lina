@@ -1,17 +1,20 @@
 <template>
-  <BaseReport v-bind="$attrs" :url="url"
+  <BaseReport
+    v-bind="$attrs"
+    :url="url"
     :nav="nav"
     :title="$t('AuditsDashboard')"
     :disable-charts-padding="true"
-    name="AuditsDashboard">
+    name="AuditsDashboard"
+  >
     <SwitchDate class="switch-date" :name="name" @change="onChange" />
     <CardSummary :days="days" />
-    <el-row :gutter="10">
-      <el-col :span="12" :md="12">
-        <DataSummary class="chart-container" :days="days" />
+    <el-row :gutter="10" class="summary-row">
+      <el-col :span="12" :md="12" class="summary-col">
+        <DataSummary class="chart-container audit-data-summary" :days="days" />
       </el-col>
-      <el-col :span="12" :md="12">
-        <RightSummary class="chart-container" :days="days" />
+      <el-col :span="12" :md="12" class="summary-col">
+        <RightSummary class="chart-container audit-right-summary" :days="days" />
       </el-col>
     </el-row>
     <TrendSummary :days="days" />
@@ -65,5 +68,19 @@ export default {
 <style lang="scss" scoped>
 .chart-container {
   margin-top: 16px;
+}
+
+.summary-row {
+  align-items: stretch;
+}
+
+.summary-col {
+  display: flex;
+}
+
+:deep(.audit-data-summary),
+:deep(.audit-right-summary) {
+  width: 100%;
+  height: 100%;
 }
 </style>

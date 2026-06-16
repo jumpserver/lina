@@ -95,5 +95,10 @@ $origin-color: #ffffff;
       border-radius: 0;
     }
   }
+
+  :deep(.el-radio-button__inner) {
+    padding: 7px 15px;
+    font-size: 12px;
+  }
 }
 </style>

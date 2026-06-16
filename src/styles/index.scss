@@ -425,19 +425,6 @@ input[type='file'] {
   text-overflow: ellipsis !important;
 }
 
-.el-select-dropdown {
-  .el-select-dropdown__list {
-    padding: 6px 0;
-  }
-
-  .el-select-dropdown__item {
-    height: 34px;
-    line-height: 34px;
-    padding: 0 20px;
-    font-size: 13px;
-  }
-}
-
 .el-link--default {
   color: #1c84c6 !important;
   font-weight: 300;
@@ -685,6 +672,33 @@ li.rmenu i.fa {
   }
 }
 
+.el-table .el-table-column--selection .cell {
+  display: flex;
+  align-items: center;
+  justify-content: center !important;
+  width: 100%;
+  padding: 0 !important;
+}
+
+.el-table .el-table-column--selection .el-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto !important;
+}
+
+.el-table .el-table-column--selection .el-checkbox__input {
+  padding-right: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.el-table .el-table-column--selection .el-checkbox__inner {
+  display: block;
+  margin: 0 auto;
+}
+
 
 .el-table__header thead > tr > th {
   background-color: white;
@@ -873,10 +887,6 @@ div.el-loading-parent--relative {
 
 .el-message {
   z-index: 999999 !important;
-}
-
-.el-button.el-button--primary.el-button--default:hover:not(.is-disabled) {
-  color: white;
 }
 
 // // Element Plus dropdown menu 样式（通过 teleport 渲染到 body，需要使用全局样式）
