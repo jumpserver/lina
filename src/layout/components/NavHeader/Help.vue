@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dropdown :show-timeout="50" @command="handleCommand">
+    <el-dropdown popper-class="nav-header-dropdown" :show-timeout="50" @command="handleCommand">
       <span class="el-dropdown-link" style="vertical-align: baseline;">
         <svg-icon icon-class="question-mark" />
       </span>

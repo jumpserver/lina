@@ -1,5 +1,5 @@
 <template>
-  <el-dropdown>
+  <el-dropdown popper-class="nav-header-dropdown">
     <span class="el-dropdown-link header-lang">
       {{ currentLang.title }}<el-icon class="el-icon--right"><ArrowDown /></el-icon>
     </span>

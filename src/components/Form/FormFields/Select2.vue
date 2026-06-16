@@ -465,30 +465,29 @@ export default {
   }
 
   :deep(.el-tag.el-tag--info) {
-    height: auto;
-    white-space: normal;
+    min-height: 24px;
+    height: 24px;
+    line-height: 22px;
+    white-space: nowrap;
   }
 
-  :deep(.el-select__wrapper) {
-    min-height: 28px;
-    padding-top: 0;
-    padding-bottom: 0;
-  }
+:deep(.el-select__wrapper) {
+  min-height: 30px;
+  height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
 
-  :deep(.el-select__selection) {
-    min-height: 28px;
-    align-items: center;
-  }
+:deep(.el-select__selection) {
+  min-height: 30px;
+  align-items: center;
+}
 
-  :deep(.el-select__tags) {
-    height: 28px;
-    min-height: 28px;
-    align-items: center;
-  }
-
-  :deep(input::placeholder) {
-    padding-left: 2px;
-  }
+:deep(.el-select__tags) {
+  height: 30px;
+  min-height: 30px;
+  align-items: center;
+}
 }
 
 .el-select-dropdown__header {

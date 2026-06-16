@@ -90,6 +90,20 @@ export default {
   width: 85px;
 }
 
+:deep(.el-input__wrapper),
+:deep(.el-select__wrapper),
+:deep(.el-input-group__prepend) {
+  min-height: 30px;
+  height: 30px;
+  box-sizing: border-box;
+}
+
+:deep(.el-input__inner) {
+  min-height: 28px;
+  height: 28px;
+  line-height: 28px;
+}
+
 .country-name {
   display: inline-block;
   width: 150px;

@@ -24,6 +24,7 @@
           :disabled="!canSubmit"
           :loading="isSubmitting"
           :size="submitBtnSize"
+          class="form-submit-button"
           type="primary"
           @click="handlePrimarySubmitClick"
         >
@@ -32,21 +33,21 @@
 
         <el-button
           v-if="defaultButton && hasSaveContinue"
-          size="small"
+          class="form-secondary-button"
           @click="handleSaveContinueClick"
         >
           {{ $t('SaveAndAddAnother') }}
         </el-button>
 
-        <el-button v-if="defaultButton && hasReset" size="small" @click="handleResetClick">
+        <el-button v-if="defaultButton && hasReset" class="form-secondary-button" @click="handleResetClick">
           {{ $t('Reset') }}
         </el-button>
 
         <el-button v-bind="button" v-for="button in moreButtons"
           v-show="!iHidden(button)"
           :key="button.title"
+          class="form-secondary-button"
           :loading="button.loading"
-          size="small"
           @click="handleClick(button)">
           {{ button.title }}
         </el-button>
@@ -285,19 +286,49 @@ export default {
 
   &.label-top {
     :deep(.el-form-item) {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+
+      .el-form-item__label-wrap {
+        width: 100%;
+        flex-basis: auto;
+      }
+
+      .el-form-item__label {
+        justify-content: flex-start;
+      }
+
       .el-form-item__content {
         width: 100%;
+        min-width: 100%;
       }
     }
   }
 
   :deep(.el-form-item) {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
     margin-bottom: 10px;
 
+    .el-form-item__label-wrap {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      flex: 0 0 var(--label-width);
+      width: var(--label-width);
+      min-width: 0;
+    }
+
     .el-form-item__label {
-      padding: 0 30px 0 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      min-height: 30px;
+      padding: 0;
       line-height: 30px;
       color: var(--color-text-primary);
+      box-sizing: border-box;
 
       span {
         display: unset;
@@ -318,8 +349,60 @@ export default {
     }
 
     .el-form-item__content {
-      width: calc(100% - var(--label-width));
-      line-height: 32px;
+      flex: 1 1 auto;
+      width: auto;
+      min-width: 0;
+      min-height: 30px;
+      line-height: 30px;
+
+      .el-input:not(.el-date-editor),
+      .el-select,
+      .el-cascader,
+      .el-input-number,
+      .el-date-editor.el-input,
+      .el-date-editor.el-date-editor--date,
+      .el-date-editor.el-date-editor--datetime,
+      .el-date-editor.el-date-editor--daterange,
+      .el-date-editor.el-date-editor--datetimerange {
+        min-height: 30px;
+      }
+
+      .el-input__wrapper,
+      .el-select__wrapper,
+      .el-cascader .el-input__wrapper,
+      .el-input-group__prepend,
+      .el-input-group__append,
+      .el-date-editor.el-input,
+      .el-date-editor--daterange,
+      .el-date-editor--datetimerange {
+        min-height: 30px;
+        height: 30px;
+        box-sizing: border-box;
+      }
+
+      .el-input__inner,
+      .el-select .el-input__inner,
+      .el-date-editor .el-range-input,
+      .el-date-editor .el-range-separator,
+      .el-date-editor .el-range__icon,
+      .el-date-editor .el-range__close-icon {
+        min-height: 28px;
+        height: 28px;
+        line-height: 28px;
+      }
+
+      .el-input__wrapper .el-input__inner,
+      .el-select__wrapper .el-select__selected-item,
+      .el-select__wrapper .el-select__placeholder {
+        border: 0 !important;
+        box-shadow: none !important;
+        padding-left: 0 !important;
+        margin-left: 0 !important;
+      }
+
+      .el-input__wrapper {
+        padding: 1px 11px;
+      }
 
       // 禁用的输入框
       .el-input.is-disabled .el-input__inner {
@@ -330,9 +413,18 @@ export default {
       // 复合型输入框
       .el-input.el-input-group {
         .el-input-group__prepend .el-select {
+          min-height: 30px;
+
+          .el-input__wrapper {
+            min-height: 28px;
+            height: 28px;
+            box-shadow: none;
+          }
+
           .el-input__inner {
             border: none;
             height: 28px;
+            line-height: 28px;
           }
         }
 
@@ -355,6 +447,10 @@ export default {
       .el-select {
         // 选择 tag 时的额外自定义样式
         .el-select__tags > span > .el-tag.el-tag--info {
+          min-height: 24px;
+          height: 24px;
+          line-height: 22px;
+
           .el-tag__close {
             margin-top: -1px !important;
           }
@@ -391,13 +487,36 @@ export default {
   }
 
   :deep(.form-buttons) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
     margin-top: 30px;
     margin-left: var(--label-width);
+
+    .el-button {
+      min-height: 30px;
+      height: 30px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1;
+    }
   }
+}
+
+.mobile.el-form :deep(.el-form-item) {
+  gap: 8px;
+}
+
+.mobile.el-form :deep(.el-form-item__label-wrap) {
+  width: 100%;
+  flex-basis: auto;
 }
 
 .mobile.el-form :deep(.el-form-item__content) {
   width: 100%;
+  flex-basis: 100%;
 }
 
 .el-form.mobile :deep(.form-group-header) {

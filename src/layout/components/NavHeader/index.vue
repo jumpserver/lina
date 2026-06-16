@@ -118,6 +118,19 @@ export default {
 <style lang="scss" scoped>
 @use '@/styles/variables' as *;
 
+:global(.nav-header-dropdown.el-dropdown__popper .el-dropdown-menu) {
+  padding: 10px 0;
+  margin: 5px 0;
+  border-radius: 4px;
+}
+
+:global(.nav-header-dropdown.el-dropdown__popper .el-dropdown-menu__item) {
+  height: 36px;
+  line-height: 36px;
+  padding: 0 20px;
+  font-size: 13px;
+}
+
 .navbar {
   position: relative;
   display: flex;

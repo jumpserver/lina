@@ -1,6 +1,6 @@
 <template>
   <div class="header-tools header-profile">
-    <el-dropdown :show-timeout="50" @command="handleClick">
+    <el-dropdown popper-class="nav-header-dropdown" :show-timeout="50" @command="handleClick">
       <span class="el-dropdown-link">
         <el-avatar :src="avatarUrl" class="header-avatar" />
         {{ currentUser.name }}
@@ -100,6 +100,15 @@ export default {
       height: 100%;
       line-height: 1;
       color: inherit;
+      outline: none !important;
+      box-shadow: none !important;
+
+      &:focus,
+      &:focus-visible,
+      &:active {
+        outline: none !important;
+        box-shadow: none !important;
+      }
     }
   }
 

@@ -141,6 +141,13 @@ export default {
       },
       deep: true
     },
+    iShowTree(val, oldVal) {
+      if (val && oldVal === false) {
+        this.$nextTick(() => {
+          this.forceRerenderTree()
+        })
+      }
+    },
     showTree(val) {
       this.iShowTree = val
     }

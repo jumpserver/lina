@@ -94,6 +94,9 @@ export default {
 <style lang="scss" scoped>
 .upload-secret {
   display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px;
 
   &:deep(.el-list-enter-active),
   &:deep(.el-list-leave-active) {
@@ -107,6 +110,14 @@ export default {
 
   &:deep(.el-upload-list) {
     height: 40px;
+  }
+
+  &:deep(.el-button) {
+    min-height: 30px;
+    height: 30px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 400;
   }
 }
 </style>

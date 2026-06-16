@@ -1,18 +1,26 @@
 <template>
-  <div>
+  <div class="upload-field">
     <input ref="upLoadFile" :accept="accept" style="display: none" type="file" @change="Onchange">
-    <el-button size="small" @click.stop="onUpLoad">
-      {{ $t('SelectFile') }}
-    </el-button>
-    <span>{{ fileName }}</span>
+    <div class="upload-field__actions">
+      <el-button size="small" @click.stop="onUpLoad">
+        {{ $t('SelectFile') }}
+      </el-button>
+      <span v-if="fileName" class="upload-field__filename">{{ fileName }}</span>
+      <el-button v-if="fileName" size="small" type="danger" @click.stop="resetUpload">
+        {{ $t('Cancel') }}
+      </el-button>
+    </div>
     <div v-if="tip !== ''" class="help-block">{{ tip }}</div>
     <input :value="value" hidden type="text" @input="onInput($event.target.value)">
-    <div>
-      <img v-if="preview" :class="showBG ? 'show-bg' : ''" :src="preview" alt="">
+    <div v-if="preview" class="upload-field__preview">
+      <el-image
+        :class="showBG ? 'show-bg' : ''"
+        :preview-src-list="[preview]"
+        :src="preview"
+        fit="contain"
+        preview-teleported
+      />
     </div>
-    <el-button v-if="fileName" size="small" type="danger" @click.stop="resetUpload">
-      {{ $t('Cancel') }}
-    </el-button>
   </div>
 </template>
 
@@ -90,6 +98,41 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.upload-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.upload-field__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.upload-field__filename {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+.upload-field__preview {
+  display: flex;
+  align-items: center;
+  min-height: 60px;
+
+  :deep(.el-image) {
+    display: inline-flex;
+    max-width: 160px;
+    max-height: 120px;
+    border: 1px solid var(--color-border);
+    border-radius: 2px;
+    overflow: hidden;
+    background: #fff;
+  }
+}
+
 .show-bg {
   background-color: var(--banner-bg);
 }
