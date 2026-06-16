@@ -26,7 +26,8 @@ export default {
               )
             }
           ]
-        }
+        },
+        helpMessage: this.$t('DatabaseConnectivityTestHelpMessage')
       }
     }
   }
