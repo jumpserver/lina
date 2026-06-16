@@ -39,7 +39,7 @@
     "css-color-function": "^1.3.3",
     "decimal.js": "^10.4.3",
     "deepmerge": "^4.2.2",
-    "dompurify": "^3.2.4",
+    "dompurify": "^3.4.9",
     "echarts": "4.7.0",
     "element-ui": "https://github.com/jumpserver-dev/element/releases/download/v2.15.15/jumpserver-element-ui-2.15.15.tgz",
     "eslint-plugin-html": "^6.0.0",

@@ -5099,10 +5099,10 @@ dompurify@2.3.5:
   resolved "https://registry.npmmirror.com/dompurify/-/dompurify-2.3.5.tgz#c83ed5a3ae5ce23e52efe654ea052ffb358dd7e3"
   integrity sha512-kD+f8qEaa42+mjdOpKeztu9Mfx5bv9gVLO6K9jRx4uGvh6Wv06Srn4jr1wPNY2OOUGGSKHNFN+A8MA3v0E0QAQ==
 
-dompurify@^3.2.4:
-  version "3.3.0"
-  resolved "https://registry.npmmirror.com/dompurify/-/dompurify-3.3.0.tgz#aaaadbb83d87e1c2fbb066452416359e5b62ec97"
-  integrity sha512-r+f6MYR1gGN1eJv0TVQbhA7if/U7P87cdPl3HN5rikqaBSBxLiCb/b9O+2eG0cxz0ghyU+mU1QkbsOwERMYlWQ==
+dompurify@^3.4.9:
+  version "3.4.9"
+  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-3.4.9.tgz#b036637b2df8997126b58837bc90f85dbcad6b2f"
+  integrity sha512-4dPSRMRDqHvs0V4YDFCsaIZo4if5u0xM+llyxiM2fwuZFdKArUBAF3VtI2+n8NKg9P870WMdYk0UhqQNoWXbfQ==
   optionalDependencies:
     "@types/trusted-types" "^2.0.7"
 
