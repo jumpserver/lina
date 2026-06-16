@@ -1,5 +1,4 @@
 <template>
-  <!-- DEBUG: Drawer visible={{ visible }}, component={{ component ? 'EXISTS' : 'EMPTY' }}, title={{ title }} -->
   <el-drawer v-bind="$attrs" ref="drawer"
     :model-value="visible"
     :append-to-body="true"
@@ -81,10 +80,6 @@ export default {
   },
   watch: {
     visible(val) {
-      console.debug('>>> Drawer visible watch:', val, {
-        component: this.component ? 'EXISTS' : 'EMPTY',
-        title: this.title
-      })
       if (val) {
         // 抽屉打开时，初始化拖拽功能
         this.$nextTick(() => {
@@ -104,11 +99,6 @@ export default {
     }
   },
   mounted() {
-    console.debug('>>> Drawer mounted:', {
-      visible: this.visible,
-      component: this.component ? 'EXISTS' : 'EMPTY',
-      title: this.title
-    })
     if (this.visible) {
       this.$nextTick(() => {
         if (!this.drawerDrag) {
@@ -127,10 +117,6 @@ export default {
   },
   methods: {
     handleUpdateModelValue(val) {
-      console.debug('>>> Drawer handleUpdateModelValue:', val, {
-        component: this.component ? 'EXISTS' : 'EMPTY',
-        title: this.title
-      })
       this.$emit('update:visible', val)
     },
     handleClose(done) {
@@ -159,6 +145,21 @@ export default {
 }
 
 .drawer {
+  :deep(.el-drawer__header) {
+    min-height: 56px;
+    margin-bottom: 0 !important;
+    padding: 15px 20px;
+    border-bottom: 1px solid #ebeef5;
+    box-sizing: border-box;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+  }
+
+  :deep(.el-drawer__body) {
+    padding: 0;
+  }
+
   :deep(.el-form-item){
     min-width: 565px;
 
@@ -169,11 +170,15 @@ export default {
 
     .page-submenu {
       .el-tabs__header {
-        padding: 0 15px;
+        height: 40px;
+        margin-bottom: 0;
+        padding: 0;
       }
 
       .el-tabs__item.is-top {
-        padding: 0 10px;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 20px;
       }
     }
 
@@ -282,15 +287,6 @@ export default {
       }
     }
 
-    .el-drawer__header {
-      border-bottom: 1px solid #ebeef5;
-      margin-bottom: 0 !important;
-      padding: 15px 20px;
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--color-text-primary);
-    }
-
     .sql.container {
       display: none;
     }
@@ -302,8 +298,7 @@ export default {
 
       &.tab-page {
         .page-content {
-          padding-right: 0;
-          padding-left: 0;
+          padding: 0;
         }
       }
 
@@ -327,6 +322,11 @@ export default {
     .tab-page-content {
       height: 100%;
       background: #f3f3f3;
+    }
+
+    .tab-page-content {
+      padding: 10px 30px 22px;
+      box-sizing: border-box;
     }
 
     .drawer__footer {

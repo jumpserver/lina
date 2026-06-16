@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="list-table">
     <QuickFilter
       v-model:expand="filterExpand"
       :filters="quickFilters"
@@ -167,14 +167,7 @@ export default {
         }
         defaults[k] = true
       }
-      const result = Object.assign(defaults, this.headerActions)
-      console.log('[ListTable] iHeaderActions:', {
-        headerActionsOnCreate: this.headerActions?.onCreate,
-        headerActionsOnCreateType: typeof this.headerActions?.onCreate,
-        resultOnCreate: result?.onCreate,
-        resultOnCreateType: typeof result?.onCreate
-      })
-      return result
+      return Object.assign(defaults, this.headerActions)
     },
     hasActions() {
       return this.iHeaderActions.has === undefined ? true : this.iHeaderActions.has
@@ -382,6 +375,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.list-table {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  min-width: 0;
+}
+
 .filter-expand {
   :deep(button.actionFilter) {
     background-color: rgb(0, 0, 0, 0.08) !important;
@@ -389,7 +389,7 @@ export default {
 }
 
 .table-content {
-  margin-top: 10px;
+  min-width: 0;
 
   :deep(.el-card__body) {
     padding: 0;

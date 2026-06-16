@@ -253,7 +253,8 @@ $color-drop-menu-border: #e4e7ed;
 // 主要是左侧 LeftSide
 .layout.header-action {
   :deep(.action-item.el-button),
-  :deep(.action-item.el-dropdown > .el-button) {
+  :deep(.action-item.el-dropdown > .el-button),
+  :deep(.action-item.el-dropdown .el-button-group .el-button) {
     min-height: 30px;
     padding: 8px 12px;
     font-size: 12px;
@@ -270,9 +271,28 @@ $color-drop-menu-border: #e4e7ed;
       justify-content: center;
     }
 
+    :deep(.el-button-group) {
+      display: inline-flex;
+      align-items: stretch;
+    }
+
     .more-action.el-button--default {
       :deep(.el-icon-arrow-down.el-icon--right) {
         color: var(--color-icon-primary) !important;
+      }
+    }
+
+    :deep(.el-button--primary.is-plain),
+    :deep(.more-action.el-button--primary.is-plain) {
+      color: var(--color-primary);
+      background-color: var(--color-primary-light-3, #e8f7f4);
+      border-color: var(--color-primary-light-1, var(--color-primary));
+
+      &:hover,
+      &:focus {
+        color: var(--color-primary);
+        background-color: var(--color-primary-light-3, #e8f7f4);
+        border-color: var(--color-primary-light-1, var(--color-primary));
       }
     }
 

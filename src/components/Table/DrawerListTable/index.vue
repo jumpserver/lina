@@ -3,7 +3,6 @@
     <ListTable v-bind="$attrs" ref="ListTable"
       :header-actions="iHeaderActions"
       :table-config="iTableConfig" />
-    <!-- DEBUG: drawerComponent = {{ drawerComponent ? 'EXISTS' : 'EMPTY' }}, drawerVisible = {{ drawerVisible }} -->
     <Drawer
       v-if="drawerComponent"
       v-model:visible="drawerVisible"
@@ -86,12 +85,6 @@ export default {
       const actions = { ...this.headerActions }
       // 始终使用 DrawerListTable 的 onCreate 来打开抽屉
       actions.onCreate = this.onCreate
-      console.log('[DrawerListTable] iHeaderActions:', {
-        hasCreateDrawer: !!this.createDrawer,
-        createDrawerType: typeof this.createDrawer,
-        hasOnCreate: !!actions.onCreate,
-        onCreateType: typeof actions.onCreate
-      })
       return actions
     },
     iTableConfig() {

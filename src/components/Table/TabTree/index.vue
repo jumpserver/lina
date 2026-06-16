@@ -140,7 +140,7 @@ export default {
       this.$emit('update:activeMenu', tab.name)
       this.$cookie.set(ACTIVE_TREE_TAB_KEY, tab.name, 1)
 
-      if (this.$router.currentRoute.query[ACTIVE_TREE_TAB_KEY]) {
+      if (this.$route?.query?.[ACTIVE_TREE_TAB_KEY]) {
         this.$router.push({
           query: merge(this.$route.query, { [ACTIVE_TREE_TAB_KEY]: '' })
         })
@@ -179,7 +179,7 @@ export default {
         }
       }
 
-      activeTab = this.tabIndices[0].name
+      activeTab = this.tabIndices[0]?.name || this.activeMenu || ''
       return activeTab
     }
   }

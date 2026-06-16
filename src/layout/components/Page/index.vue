@@ -158,12 +158,13 @@ export default {
   overflow-x: hidden;
 
   .el-alert {
-    margin: -5px 0 5px 0 !important;
+    margin: 0 !important;
   }
 
   .page-content {
     flex: 1; /* 占用剩余高度 */
-    //height: calc(100% - 50px);
+    display: flex;
+    flex-direction: column;
     overflow-x: hidden;
     overflow-y: auto !important;
 

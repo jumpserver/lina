@@ -13,13 +13,18 @@ export default {
 <style scoped>
   .wrapper-content {
     padding: 12px 30px 22px;
+    box-sizing: border-box;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
   }
 
   .wrapper-content :deep(.el-alert) {
-    margin-bottom: 15px;
+    margin: 0;
   }
 
   .page-alert :deep(.el-alert) {
-    margin-bottom: 20px;
+    margin: 0;
   }
 </style>

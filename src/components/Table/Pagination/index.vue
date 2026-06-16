@@ -143,13 +143,44 @@ export default {
 
 <style scoped>
 :deep(.el-pagination) {
-  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 15px 20px;
+}
+
+:deep(.el-pagination .el-pagination__total) {
+  margin-right: auto;
+  font-size: 12px;
+  line-height: 28px;
+  white-space: nowrap;
+}
+
+:deep(.el-pagination .el-pagination__sizes .el-select) {
+  width: 100px;
+  font-size: 13px;
+}
+
+:deep(.el-pagination .el-pagination__sizes .el-input__wrapper) {
+  min-height: 28px;
+  height: 28px;
+}
+
+:deep(.el-pagination .el-pagination__sizes .el-input__inner),
+:deep(.el-pagination .el-pagination__sizes .el-select__placeholder) {
+  font-size: 13px;
+  line-height: 28px;
 }
 
 :deep(.el-pagination.is-background .el-pager li) {
   margin: 0 1px;
   padding: 0 2px;
   min-width: 28px;
+  height: 28px;
+  line-height: 26px;
+  box-sizing: border-box;
+  border: 1px solid #dcdfe6;
   border-radius: 2px;
   font-size: 12px;
   font-weight: 400;
@@ -160,12 +191,12 @@ export default {
   margin: 0 5px;
   padding: 0 2px;
   min-width: 28px;
+  height: 28px;
+  line-height: 26px;
+  box-sizing: border-box;
+  border: 1px solid #dcdfe6;
   border-radius: 2px;
   font-size: 12px;
   font-weight: 400;
-}
-
-:deep(.el-pagination__total) {
-  float: left;
 }
 </style>

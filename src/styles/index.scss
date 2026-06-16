@@ -276,6 +276,21 @@ input[type='file'] {
 
 // table 相关通用样式
 .el-data-table .el-table {
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+
+  .el-table__inner-wrapper,
+  .el-table__header-wrapper,
+  .el-table__body-wrapper,
+  .el-table__footer-wrapper {
+    border-radius: inherit;
+  }
+
+  .el-table__header-wrapper {
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+  }
+
   th,
   td {
     font-size: 13px;
@@ -324,6 +339,14 @@ input[type='file'] {
 
   // 表头
   .el-table__header thead > tr > th {
+    &:first-child {
+      border-top-left-radius: 5px;
+    }
+
+    &:last-child {
+      border-top-right-radius: 5px;
+    }
+
     .cell {
       color: var(--color-text-primary);
       overflow: hidden;
@@ -666,9 +689,18 @@ li.rmenu i.fa {
 }
 
 .el-drawer__wrapper .el-drawer__header {
-  margin-bottom: 10px;
-  font-weight: 600;
+  min-height: 56px;
+  margin-bottom: 0;
+  padding: 15px 20px;
+  border-bottom: 1px solid #ebeef5;
   font-size: 16px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  box-sizing: border-box;
+}
+
+.el-drawer__wrapper .el-drawer__body {
+  padding: 0;
 }
 
 .el-input-number {
