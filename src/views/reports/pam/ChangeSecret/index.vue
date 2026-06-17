@@ -19,10 +19,14 @@
 
     </el-row>
     <el-row>
-      <AccountSummary :days="days" class="account-summary" />
+      <el-col :span="24">
+        <AccountSummary :days="days" class="account-summary" />
+      </el-col>
     </el-row>
     <el-row>
-      <FailedAccountSummary :days="days" class="failed-account-summary" />
+      <el-col :span="24">
+        <FailedAccountSummary :days="days" class="failed-account-summary" />
+      </el-col>
     </el-row>
   </BaseReport>
 </template>
@@ -118,6 +122,7 @@ export default {
   .account-summary {
     @extend %card-common;
     margin-top: 1rem;
+    width: 100%;
   }
 
   .failed-account-summary {
@@ -125,12 +130,18 @@ export default {
     height: 100%;
     margin-top: 16px;
 
+    :deep(#HomeCard) {
+      width: 100%;
+    }
+
     :deep(#HomeCard .el-card.no-border) {
       height: 100%;
       margin-bottom: unset !important;
 
       .ListTable .el-pagination {
-        display: block;
+        display: flex;
+        width: 100%;
+        flex-wrap: nowrap;
       }
     }
   }

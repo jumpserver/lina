@@ -2,7 +2,7 @@
   <div class="c-weektime">
     <div class="c-schedue" />
     <div :class="{'c-schedue': true, 'c-schedue-notransi': mode}" />
-    <table :class="{'c-min-table': colspan < 2}" class="c-weektime-table">
+    <table :class="{'c-min-table': colspan < 2}" :style="tableStyle" class="c-weektime-table">
       <thead class="c-weektime-head">
         <tr>
           <th class="week-td" rowspan="8">{{ $t('WeekOrTime') }}</th>
@@ -29,7 +29,7 @@
           />
         </tr>
         <tr>
-          <td class="c-weektime-preview" colspan="49">
+          <td :colspan="totalColumns" class="c-weektime-preview">
             <div class="g-clearfix c-weektime-con">
               <span class="g-pull-left">{{ $t('CanDragSelect') }}</span>
               <a class="g-pull-right" @click.prevent="clearWeektime">{{ $t('ClearSelection') }}</a>
@@ -114,6 +114,15 @@ export default {
         left: `${this.left}px`,
         top: `${this.top}px`
       }
+    },
+    tableStyle() {
+      return {
+        '--week-label-width': '112px',
+        '--week-cols': String(24 * this.colspan)
+      }
+    },
+    totalColumns() {
+      return 24 * this.colspan + 1
     },
     selectClasses() {
       return n => n.check ? 'ui-selected' : ''
@@ -324,10 +333,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 .c-weektime {
-  //min-width: 440px;
   position: relative;
-  display: inline-block;
-  padding-right: 20px;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding-right: 0;
+  overflow: hidden;
 }
 
 .c-schedue {
@@ -344,6 +355,9 @@ export default {
 }
 
 .c-weektime-table {
+  width: 100%;
+  min-width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
 
   th {
@@ -368,18 +382,36 @@ export default {
     font-size: 12px;
 
     .week-td {
-      width: 72px;
+      width: var(--week-label-width);
+      min-width: var(--week-label-width);
+      max-width: var(--week-label-width);
+    }
+
+    tr:nth-child(2) > td {
+      width: calc((100% - var(--week-label-width)) / var(--week-cols));
+      min-width: calc((100% - var(--week-label-width)) / var(--week-cols));
+      max-width: calc((100% - var(--week-label-width)) / var(--week-cols));
+      padding: 0;
     }
   }
 
   .c-weektime-body {
     font-size: 12px;
 
+    tr > td:first-child {
+      width: var(--week-label-width);
+      min-width: var(--week-label-width);
+      max-width: var(--week-label-width);
+    }
+
     td {
       &.weektime-atom-item {
         user-select: unset;
         background-color: #f5f5f5;
-        width: 18px;
+        width: calc((100% - var(--week-label-width)) / var(--week-cols));
+        min-width: calc((100% - var(--week-label-width)) / var(--week-cols));
+        max-width: calc((100% - var(--week-label-width)) / var(--week-cols));
+        padding: 0;
       }
 
       &.ui-selected {
@@ -389,13 +421,34 @@ export default {
   }
 
   .c-weektime-preview {
+    width: 100%;
     line-height: 2.4em;
     padding: 0 10px;
     font-size: 11px;
 
     .c-weektime-con {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
       line-height: 42px;
       user-select: none;
+
+      .g-pull-left,
+      .g-pull-right {
+        float: none;
+      }
+    }
+
+    :deep(a) {
+      flex: 0 0 auto;
+    }
+
+    :deep(span) {
+      flex: 1 1 auto;
+      min-width: 0;
+      text-align: left;
     }
 
     .c-weektime-time {

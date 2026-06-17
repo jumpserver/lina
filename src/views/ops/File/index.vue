@@ -1,6 +1,6 @@
 <template>
   <Page>
-    <el-alert :center="false" class="announcement" type="success">
+    <el-alert :center="false" class="announcement" type="info">
       <span
         v-for="(tip, index) of FileTransferBootStepHelpTips"
         :key="index"

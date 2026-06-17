@@ -1,31 +1,33 @@
 <template>
   <div class="filter-field">
-    <el-tag
-      v-for="(v, k) in filterTags"
-      :key="k"
-      :disable-transitions="true"
-      :type="tagType(v)"
-      closable
-      size="small"
-      @click="handleTagClick(v, k)"
-      @close="handleTagClose(v)"
-    >
-      {{ isCheckShowPassword ? changeTagShowValue(v) : v }}
-    </el-tag>
-    <component
-      :is="component"
-      ref="SearchInput"
-      v-model.trim="filterValue"
-      :fetch-suggestions="autocomplete"
-      :placeholder="iPlaceholder"
-      :type="inputType"
-      class="search-input"
-      @blur="focus = false"
-      @change="handleChange"
-      @focus="focus = true"
-      @select="handleSelect"
-      @keyup.enter.prevent="handleConfirm"
-    />
+    <div class="filter-field__content">
+      <el-tag
+        v-for="(v, k) in filterTags"
+        :key="k"
+        :disable-transitions="true"
+        :type="tagType(v)"
+        closable
+        size="small"
+        @click="handleTagClick(v, k)"
+        @close="handleTagClose(v)"
+      >
+        {{ isCheckShowPassword ? changeTagShowValue(v) : v }}
+      </el-tag>
+      <component
+        :is="component"
+        ref="SearchInput"
+        v-model.trim="filterValue"
+        :fetch-suggestions="autocomplete"
+        :placeholder="iPlaceholder"
+        :type="inputType"
+        class="search-input"
+        @blur="focus = false"
+        @change="handleChange"
+        @focus="focus = true"
+        @select="handleSelect"
+        @keyup.enter.prevent="handleConfirm"
+      />
+    </div>
     <span
       v-if="replaceShowPassword && filterTags.length > 0"
       class="show-password"
@@ -160,23 +162,55 @@ export default {
 
 .filter-field {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  //padding: 0 6px;
+  width: 100%;
+  min-height: 30px;
+  padding: 0 8px 0 4px;
+  box-sizing: border-box;
   border: 1px solid #dcdee2;
   border-radius: 1px;
   background-color: #fff;
-  line-height: 30px;
+  line-height: 1.4;
+  overflow: hidden;
 
   &:hover {
     border-color: #c0c4cc;
   }
 
+  .filter-field__content {
+    display: flex;
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+    align-items: center;
+    min-width: 0;
+  }
+
   & :deep(.el-tag) {
-    margin-bottom: 2px;
+    height: 24px;
+    line-height: 22px;
     margin-top: 2px;
+    margin-bottom: 2px;
     font-family: sans-serif !important;
     margin-left: 5px;
+    padding: 0 8px;
+  }
+
+  & :deep(.el-input),
+  & :deep(.el-autocomplete) {
+    flex: 1 1 auto;
+    min-width: 120px;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent;
+  }
+
+  & :deep(.el-input__wrapper) {
+    min-height: 28px;
+    height: 28px;
+    padding: 0;
+    border: none !important;
+    background: transparent;
+    box-shadow: none !important;
   }
 
   & :deep(.el-autocomplete) {
@@ -187,22 +221,52 @@ export default {
 .search-input {
   flex: 1;
   min-width: 150px;
+  width: auto;
+  max-width: 100%;
+  border: none !important;
+  box-shadow: none !important;
 
-  & :deep(.el-input__inner) {
+  & :deep(input.el-input__inner) {
     max-width: 100%;
-    border: none;
-    padding-left: 12px;
+    border: none !important;
+    outline: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding-left: 8px;
     height: 28px;
+    line-height: 28px;
+  }
+
+  & :deep(.el-input) {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+
+  & :deep(.el-input__wrapper) {
+    width: 100%;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
   }
 }
 
-.el-input :deep(.el-input__inner) {
+.filter-field :deep(input.el-input__inner) {
   border: none !important;
+  outline: none !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
   font-size: 13px;
+  background: transparent !important;
 }
 
-.filter-field :deep(.el-input__inner) {
-  height: 27px !important;
+.filter-field :deep(.el-input__suffix),
+.filter-field :deep(.el-input__suffix-inner) {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
 }
 
 .show-password {

@@ -38,7 +38,6 @@
     </template>
     <component v-bind="componentProps" :is="rawComponent"
       v-else
-      :component="rawComponent"
       :disabled="disabled || componentProps.disabled || readonly"
       :model-value="itemValue"
       :value="itemValue"

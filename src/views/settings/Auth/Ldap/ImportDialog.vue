@@ -3,7 +3,7 @@
     <Dialog v-bind="$attrs" :destroy-on-close="true"
       :show-cancel="false"
       :title="$tc('ImportLdapUserTitle')">
-      <el-alert type="success" style="margin-bottom: 10px"> {{ $t('ImportLdapUserTip') }}</el-alert>
+      <el-alert type="info" style="margin-bottom: 10px"> {{ $t('ImportLdapUserTip') }}</el-alert>
       <ListTable
         ref="listTable"
         :header-actions="headerActions"

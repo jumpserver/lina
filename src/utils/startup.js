@@ -83,9 +83,9 @@ async function changeCurrentOrgIfNeed({ to, from }) {
     await orgUtil.change2PropOrg()
   }
   const globalOrgPath = [
-    '/console/perms/login-acls',
+    '/console/perms/acls/login-acls',
     '/console/users/roles',
-    '/console/perms/connect-method-acls',
+    '/console/perms/acls/connect-method-acls',
     '/settings'
   ]
   if (autoEnterOrgs.indexOf(currentOrg.id) !== -1 && currentOrg.autoEnter) {

@@ -1,10 +1,10 @@
 <template>
-  <IBox v-bind="$attrs" :fa="icon" :title="title" :type="type">
-    <table style="width: 100%">
+  <IBox v-bind="$attrs" :fa="icon" :title="title" :type="type" class="asset-relation-box the-box">
+    <table class="CardTable" style="width: 100%; table-layout: fixed">
       <tbody>
         <tr>
           <td colspan="2">
-            <AssetSelect ref="assetSelect" :can-select="canSelect" :disabled="disabled" />
+            <AssetSelect ref="assetSelect" :can-select="canSelect" :disabled="disabled" class="asset-relation-card__select" />
           </td>
         </tr>
         <tr>
@@ -80,18 +80,44 @@ export default {
 </script>
 
 <style scoped>
-b, strong {
+.asset-relation-box :deep(.el-card__body) {
+  padding: 20px;
+}
+
+b,
+strong {
   font-weight: 700;
   font-size: 13px;
 }
 
 tr td {
-  line-height: 1.42857;
-  padding: 8px;
+  line-height: 1.4;
+  padding: 8px 0;
   vertical-align: top;
 }
 
-tr.item td {
-  border-top: 1px solid #e7eaec;
+.asset-relation-card__select {
+  width: 100%;
+}
+
+.asset-relation-box :deep(.select2 .el-select__tags) {
+  height: 28px;
+  min-height: 28px;
+  align-items: center;
+}
+
+.asset-relation-box :deep(.el-button) {
+  height: 30px;
+  min-height: 30px;
+  width: auto;
+  font-weight: 400;
+  padding: 8px 12px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.asset-relation-box :deep(.el-button--primary),
+.asset-relation-box :deep(.el-button--danger) {
+  color: #fff;
 }
 </style>

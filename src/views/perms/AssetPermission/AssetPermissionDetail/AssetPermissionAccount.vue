@@ -13,7 +13,7 @@
       :url="url"
     />
     <template #right>
-      <IBox :title="$tc('Account')" type="primary">
+      <IBox :title="$tc('Account')" class="permission-account-box" type="primary">
         <AccountFormatter
           :assets="assetIds"
           :nodes="nodeIds"
@@ -78,9 +78,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.checkbox-accounts {
+  width: 100%;
+  min-width: 0;
+}
 
-.checkbox-accounts :deep(.el-checkbox-group) {
-  line-height: 40px;
+.permission-account-box :deep(.el-card__body) {
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+.checkbox-accounts :deep(.el-radio),
+.checkbox-accounts :deep(.el-checkbox) {
+  line-height: 30px;
 }
 
 .item-name {

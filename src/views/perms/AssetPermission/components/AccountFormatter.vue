@@ -330,9 +330,12 @@ export default {
 }
 
 .spec-zone {
+  width: 100%;
+  min-width: 0;
   border-bottom: dashed 1px var(--color-border);
   padding-bottom: 10px;
   padding-top: 5px;
+  overflow: hidden;
 
   &:last-child {
     border-bottom: none;
@@ -340,14 +343,55 @@ export default {
 }
 
 .virtual-choices {
-  .el-select {
-    width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+
+  :deep(.el-checkbox) {
+    margin-right: 0;
+    flex: 0 0 auto;
+  }
+
+  :deep(.el-select) {
+    flex: 1 1 240px;
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
   }
 }
 
 .account-content {
+  width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+
+  :deep(.el-form-item) {
+    width: 100%;
+    margin-bottom: 0;
+  }
+
   :deep(.el-form-item__content) {
-    width: 90% !important;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    width: 100% !important;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  :deep(.el-radio-group) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  :deep(.el-radio) {
+    margin-right: 0;
   }
 }
 </style>

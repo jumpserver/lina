@@ -1,5 +1,5 @@
 <template>
-  <Page v-bind="$attrs" :class="{drawer: drawer}">
+  <Page v-bind="pageAttrs" :class="{drawer: drawer}">
     <IBox>
       <GenericCreateUpdateForm v-bind="$attrs" ref="createUpdateForm" />
     </IBox>
@@ -9,11 +9,21 @@
 import IBox from '@/components/Common/IBox'
 import Page from '@/layout/components/Page'
 import GenericCreateUpdateForm from '../GenericCreateUpdateForm'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'GenericCreateUpdatePage',
   components: {
     Page, IBox, GenericCreateUpdateForm
+  },
+  computed: {
+    ...mapGetters(['inDrawer']),
+    pageAttrs() {
+      return {
+        ...this.$attrs,
+        hideHeading: this.drawer || this.inDrawer
+      }
+    }
   },
   data() {
     return {

@@ -7,7 +7,7 @@
     top="1vh"
     width="70%"
     @update:visible="$emit('update:visible', $event)">
-    <el-alert v-if="tips" class="tips" type="success">{{ tips }}</el-alert>
+    <el-alert v-if="tips" class="tips" type="info">{{ tips }}</el-alert>
     <el-row :gutter="20">
       <el-col :md="4" :sm="24">
         <div class="select-prop-label">

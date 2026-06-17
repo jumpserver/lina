@@ -122,14 +122,25 @@ export default {
 
 <style lang="scss" scoped>
 .sub-form {
-  margin-left: -33%;
-  margin-right: 10px;
+  width: calc(100% + var(--label-width) + 20px);
+  margin-left: calc(-1 * (var(--label-width) + 20px));
+  margin-right: 0;
+}
+
+.sub-form :deep(.el-form) {
+  margin-right: 0;
+  margin-bottom: 0;
+}
+
+.sub-form :deep(.form-buttons) {
+  margin-top: 20px;
 }
 
 @media screen and (max-width: 992px) {
   .sub-form {
+    width: 100%;
     margin-left: 0;
-    margin-right: 10px;
+    margin-right: 0;
   }
 }
 </style>

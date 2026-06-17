@@ -1,5 +1,5 @@
 <template>
-  <Page v-bind="$attrs">
+  <Page v-bind="pageAttrs">
     <DrawerListTable v-bind="$attrs" ref="ListTable"
       :header-actions="headerActions"
       :table-config="tableConfig" />
@@ -9,6 +9,7 @@
 <script>
 import Page from '@/layout/components/Page'
 import DrawerListTable from '@/components/Table/DrawerListTable/index'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'GenericListDrawerPage',
@@ -25,17 +26,14 @@ export default {
       required: true
     }
   },
-  data() {
-    return {}
-  },
-  mounted() {
-    console.log('[GenericListDrawerPage] mounted:', {
-      headerActions: this.headerActions,
-      headerActionsOnCreate: this.headerActions?.onCreate,
-      headerActionsOnCreateType: typeof this.headerActions?.onCreate,
-      attrs: this.$attrs,
-      attrsOnCreate: this.$attrs?.['create-drawer'] || this.$attrs?.createDrawer
-    })
+  computed: {
+    ...mapGetters(['inDrawer']),
+    pageAttrs() {
+      return {
+        ...this.$attrs,
+        hideHeading: this.inDrawer
+      }
+    }
   },
   methods: {
     reloadTable() {

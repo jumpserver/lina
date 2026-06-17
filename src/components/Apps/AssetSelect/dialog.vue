@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-bind="$attrs" :close-on-click-modal="false"
+  <Dialog :close-on-click-modal="false"
     :title="$tc('Assets')"
     custom-class="asset-select-dialog"
     top="2vh"
@@ -7,7 +7,7 @@
     @cancel="handleCancel"
     @close="handleClose"
     @confirm="handleConfirm">
-    <AssetTreeTable v-bind="$attrs" ref="ListPage"
+    <AssetTreeTable ref="ListPage"
       :header-actions="headerActions"
       :node-url="baseNodeUrl"
       :sync-select-to-url="false"
@@ -27,6 +27,7 @@ import Dialog from '@/components/Dialog/index.vue'
 export default {
   componentName: 'AssetSelectDialog',
   components: { AssetTreeTable, Dialog },
+  inheritAttrs: false,
   props: {
     baseUrl: {
       type: String,

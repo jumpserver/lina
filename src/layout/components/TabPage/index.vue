@@ -46,7 +46,7 @@
           v-if="helpMessage && helpAlertVisible"
           class="tab-page-alert"
           :closable="true"
-          type="success"
+          type="info"
           @close="helpAlertVisible = false"
         >
           <span v-sanitize="helpMessage" class="announcement-main" />

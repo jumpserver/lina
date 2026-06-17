@@ -4,7 +4,7 @@
 
 <script>
 import { Required } from '@/components/Form/DataForm/rules'
-import { WeekCronSelect } from '@/components/Form/FormFields'
+import { TagInput, WeekCronSelect } from '@/components/Form/FormFields'
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { userJSONSelectMeta } from '@/views/users/const'
 
@@ -60,6 +60,11 @@ export default {
           ],
           fieldsMeta: {
             ip_group: {
+              component: TagInput,
+              el: {
+                value: ['*'],
+                placeholder: this.$t('IP')
+              },
               helpText: this.$t('IpGroupHelpText')
             },
             time_period: {

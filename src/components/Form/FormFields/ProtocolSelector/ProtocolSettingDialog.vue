@@ -8,7 +8,7 @@
     :title="$tc('PlatformProtocolConfig') + '：' + protocol.name"
     class="setting-dialog"
     width="800px">
-    <el-alert v-if="disabled && platformDetail" style="margin-bottom: 10px" type="success">
+    <el-alert v-if="disabled && platformDetail" style="margin-bottom: 10px" type="info">
       {{ $t('InheritPlatformConfig') }}
       <el-link :href="platformDetail" class="link-more" target="_blank">
         {{ $t('View') }}

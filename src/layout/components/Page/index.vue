@@ -67,7 +67,6 @@ import UserConfirmDialog from '@/components/Apps/UserConfirmDialog/index.vue'
 import { toSentenceCase } from '@/utils/common/index'
 import IBox from '@/components/Common/IBox/index.vue'
 import i18n from '@/i18n/i18n'
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'Page',
@@ -96,7 +95,11 @@ export default {
     },
     helpAlertType: {
       type: String,
-      default: 'success'
+      default: 'info'
+    },
+    hideHeading: {
+      type: Boolean,
+      default: false
     },
     goBack: {
       type: Function,
@@ -114,12 +117,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['inDrawer']),
     noTitle() {
       return this.title === 'null' || this.title === null
     },
     showHeading() {
-      return !this.inDrawer && (this.iTitle || this.helpMessage)
+      return !this.hideHeading && (this.iTitle || this.iHelpMessage)
     },
     iTitle() {
       if (this.noTitle) {

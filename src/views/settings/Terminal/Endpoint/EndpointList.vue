@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-alert v-sanitize="helpMessage" type="success" />
+    <el-alert v-sanitize="helpMessage" type="info" />
     <ListTable
       ref="ListTable"
       :header-actions="headerActions"

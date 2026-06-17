@@ -1,11 +1,10 @@
 <template>
   <div class="asset-select-formatter">
-    <Select2 v-bind="{ ...$attrs, ...select2Config }" ref="select2"
+    <Select2 v-bind="{ ...selectAttrs, ...select2Config }" ref="select2"
       v-model="select2Config.value"
       @input="onInputChange"
-      @focus.stop="handleFocus"
-      @visible-change="handleVisibleChange" />
-    <AssetSelectDialog v-bind="$attrs" v-if="dialogVisible"
+      @click.stop="openDialog" />
+    <AssetSelectDialog v-if="dialogVisible"
       ref="dialog"
       v-model:visible="dialogVisible"
       :base-node-url="baseNodeUrl"
@@ -25,6 +24,7 @@ import AssetSelectDialog from './dialog.vue'
 export default {
   componentName: 'AssetSelect',
   components: { AssetSelectDialog, Select2 },
+  inheritAttrs: false,
   props: {
     baseUrl: {
       type: String,
@@ -68,7 +68,7 @@ export default {
       dialogVisible: false,
       initialValue: _.cloneDeep(iValue),
       select2Config: {
-        disabled: this.disabled,
+        disabled: typeof this.disabled === 'function' ? this.disabled() : this.disabled,
         value: iValue,
         multiple: true,
         clearable: true,
@@ -82,13 +82,19 @@ export default {
       }
     }
   },
-  methods: {
-    handleFocus() {
-      this.$refs.select2?.selectRef?.blur?.()
-      this.dialogVisible = true
+  computed: {
+    isDisabled() {
+      return typeof this.disabled === 'function' ? this.disabled() : this.disabled
     },
-    handleVisibleChange(visible) {
-      if (!visible) {
+    selectAttrs() {
+      const attrs = { ...this.$attrs }
+      delete attrs.component
+      return attrs
+    }
+  },
+  methods: {
+    openDialog() {
+      if (this.isDisabled || this.dialogVisible) {
         return
       }
       this.$refs.select2?.selectRef?.blur?.()

@@ -2,7 +2,7 @@
   <Dialog v-bind="$attrs" :show-cancel="false"
     :title="title"
     @confirm="closeDialog">
-    <el-alert style="margin-bottom: 10px" type="success">
+    <el-alert style="margin-bottom: 10px" type="info">
       <span v-for="item of summary" :key="item.key"><b>{{ item.label }}</b>: {{ item.value }} </span>
     </el-alert>
     <DataTable :config="config" />
