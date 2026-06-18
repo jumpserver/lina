@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import { getActionMeta } from '@/api/common'
 import DataTable from '@/components/Table/DataTable/index.vue'
 import { newURL, ObjectLocalStorage, replaceAllUUID } from '@/utils/common/index'
 import Sortable from 'sortablejs'
@@ -206,7 +207,7 @@ export default {
       try {
         const data = await this.$store.dispatch('common/getUrlMeta', { url: url })
         const method = this.method.toUpperCase()
-        this.meta = data.actions && data.actions[method] ? data.actions[method] : {}
+        this.meta = getActionMeta(data, method)
 
         this.generateTotalColumns()
         this.cleanColumnsShow()

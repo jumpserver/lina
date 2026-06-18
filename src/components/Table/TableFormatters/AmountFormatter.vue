@@ -63,7 +63,11 @@ export default {
   },
   computed: {
     title() {
-      return this.formatterArgs.title || this.col.label.replace('amount', '').replace('数量', '')
+      if (this.formatterArgs.title) {
+        return this.formatterArgs.title
+      }
+      const label = this.col?.label || this.col?.prop || ''
+      return String(label).replace('amount', '').replace('数量', '')
     },
     cellValueToRemove() {
       return this.formatterArgs.cellValueToRemove || []
@@ -113,9 +117,10 @@ export default {
         let cellValue = []
         if (Array.isArray(this.cellValue)) {
           cellValue = this.cellValue
-        } else {
-          // object {key: [value]}
+        } else if (this.cellValue && typeof this.cellValue === 'object') {
           cellValue = Object.keys(this.cellValue)
+        } else {
+          cellValue = []
         }
 
         this.amount = (

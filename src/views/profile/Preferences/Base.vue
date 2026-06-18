@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { getActionMeta } from '@/api/common'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { IBox } from '@/components'
 
@@ -61,7 +62,7 @@ export default {
   methods: {
     async getUrlMeta() {
       const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
-      this.remoteMeta = data.actions['PATCH'] || {}
+      this.remoteMeta = getActionMeta(data, 'PATCH')
     },
     async setFormConfig() {
       const fields = []

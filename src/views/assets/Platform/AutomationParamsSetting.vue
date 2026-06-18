@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { getActionMeta } from '@/api/common'
 import Dialog from '@/components/Dialog'
 import AutoDataForm from '@/components/Form/AutoDataForm'
 import { DynamicInput, Switcher } from '@/components/Form/FormFields'
@@ -119,7 +120,7 @@ export default {
   methods: {
     async getUrlMeta() {
       const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
-      this.remoteMeta = data.actions[this.config.method.toUpperCase()] || {}
+      this.remoteMeta = getActionMeta(data, this.config.method)
 
       if (this.onCanSetting()) {
         this.setFormConfig()

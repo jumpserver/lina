@@ -31,7 +31,7 @@ import request from '@/utils/request'
 import { message } from '@/utils/vue/message'
 import xss from '@/utils/secure'
 import moment from 'moment'
-import sanitizeHtml from 'sanitize-html'
+import DOMPurify from 'dompurify'
 import _ from 'lodash'
 
 moment.locale('zh-cn')
@@ -102,13 +102,13 @@ async function initApp() {
 
   // v-sanitize: 手动注册(v-sanitize npm 包用 Vue.prototype 不兼容 Vue 3)
   const sanitizeOptions = {
-    allowedClasses: { '*': ['*'] }
+    ALLOW_DATA_ATTR: true
   }
   app.config.globalProperties.$sanitize = (dirty, opts) =>
-    sanitizeHtml(dirty, opts || sanitizeOptions)
+    DOMPurify.sanitize(dirty || '', { ...sanitizeOptions, ...opts })
   app.directive('sanitize', (el, binding) => {
     if (binding.value !== binding.oldValue) {
-      el.innerHTML = sanitizeHtml(binding.value || '', sanitizeOptions)
+      el.innerHTML = DOMPurify.sanitize(binding.value || '', sanitizeOptions)
     }
   })
 

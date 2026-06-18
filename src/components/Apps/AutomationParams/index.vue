@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { getActionMeta } from '@/api/common'
 import Dialog from '../../Dialog'
 import AutoDataForm from '../../Form/AutoDataForm'
 import _ from 'lodash'
@@ -119,7 +120,7 @@ export default {
   methods: {
     async getUrlMeta() {
       const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
-      this.remoteMeta = data.actions[this.config.method.toUpperCase()] || {}
+      this.remoteMeta = getActionMeta(data, this.config.method)
     },
     async getFilterPlatforms() {
       return await this.$axios.post('/api/v1/assets/platforms/filter-nodes-assets/', {

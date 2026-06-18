@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { getActionMeta } from '@/api/common'
 import { FormFieldGenerator } from '@/components/Form/AutoDataForm/utils'
 import { UniqueCheck } from '@/components/Form/DataForm/rules'
 import FormGroupHeader from '@/components/Form/FormGroupHeader/index.vue'
@@ -118,7 +119,7 @@ export default {
       if (this.url) {
         data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
       }
-      this.remoteMeta = data.actions[this.method.toUpperCase()] || {}
+      this.remoteMeta = getActionMeta(data, this.method)
       this.$emit('afterRemoteMeta', this.remoteMeta)
       this.generateColumns()
       this.$emit('afterGenerateColumns', this.totalFields)

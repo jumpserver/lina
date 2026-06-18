@@ -1,5 +1,6 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import autoprefixer from 'autoprefixer'
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { createObjectProperty, createSimpleExpression } from '@vue/compiler-core'
@@ -65,6 +66,14 @@ function createProxy(target, ws = false) {
   }
 }
 
+function createCorsOptions() {
+  return {
+    // JumpServer uses real OPTIONS requests for table/form metadata.
+    // Vite's default CORS middleware ends OPTIONS early, before proxying.
+    preflightContinue: true
+  }
+}
+
 export default defineConfig(({ mode }) => {
   const env = createClientEnv(mode)
   const publicPath = normalizePublicPath(env.VITE_PUBLIC_PATH || '/ui/')
@@ -108,6 +117,9 @@ export default defineConfig(({ mode }) => {
     ],
     css: {
       devSourcemap: mode === 'development',
+      postcss: {
+        plugins: [autoprefixer()]
+      },
       preprocessorOptions: {
         scss: {
           quietDeps: true
@@ -118,6 +130,7 @@ export default defineConfig(({ mode }) => {
       host: '0.0.0.0',
       port,
       open: false,
+      cors: createCorsOptions(),
       proxy: {
         '/api/': createProxy(coreHost),
         '/ws/': createProxy(coreHost, true),
@@ -133,7 +146,8 @@ export default defineConfig(({ mode }) => {
     },
     preview: {
       host: '0.0.0.0',
-      port: 9526
+      port: 9526,
+      cors: createCorsOptions()
     },
     build: {
       outDir: outputDir,

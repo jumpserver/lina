@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { getActionMeta } from '@/api/common'
 import IBox from '@/components/Common/IBox/index.vue'
 import { copy } from '@/utils/common/index'
 import { toSafeLocalDateStr } from '@/utils/common/time'
@@ -186,7 +187,7 @@ export default {
     },
     async optionAndGenFields() {
       const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
-      let remoteMeta = data.actions['GET'] || {}
+      let remoteMeta = getActionMeta(data, 'GET')
       if (this.nested) {
         remoteMeta = remoteMeta[this.nested]?.children || remoteMeta || {}
       }

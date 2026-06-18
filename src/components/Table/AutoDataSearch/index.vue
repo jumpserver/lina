@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { getActionMeta } from '@/api/common'
 import TagSearch from '@/components/Table/TagSearch/index.vue'
 import i18n from '@/i18n/i18n'
 
@@ -93,7 +94,7 @@ export default {
       const vm = this // 透传This
       vm.internalOptions = [] // 重置
       const data = await this.optionUrlMeta()
-      const meta = data.actions['GET'] || {}
+      const meta = getActionMeta(data, 'GET')
       for (const [name, field] of Object.entries(meta)) {
         if (!field.filter) {
           continue

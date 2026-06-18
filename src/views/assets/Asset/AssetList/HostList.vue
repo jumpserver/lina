@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { getActionMeta } from '@/api/common'
 import BaseList from './components/BaseList'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
 import GatewayDialog from '@/components/Apps/GatewayTestDialog'
@@ -90,7 +91,7 @@ export default {
   methods: {
     async optionAndGenFields() {
       const data = await this.$store.dispatch('common/getUrlMeta', { url: this.config.url })
-      const remoteMeta = data.actions['GET'] || {}
+      const remoteMeta = getActionMeta(data, 'GET')
       const remoteMetaFields = remoteMeta['info']?.children || {}
       const fields = Object.keys(remoteMetaFields)
       const info = {}
