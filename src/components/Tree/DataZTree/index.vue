@@ -73,7 +73,7 @@ export default {
     }
   },
   methods: {
-    defaultCallback: function(action) {
+    defaultCallback: function (action) {
       // debug(action)
     }
   }

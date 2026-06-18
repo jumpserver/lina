@@ -10,7 +10,11 @@
       @show="getAsyncItems"
     >
       <div class="detail-content">
-        <div v-for="[index, item] of Object.entries(items)" :key="getKey(item, index)" class="detail-item">
+        <div
+          v-for="[index, item] of Object.entries(items)"
+          :key="getKey(item, index)"
+          class="detail-item"
+        >
           <span class="detail-item-name">{{ item }}</span>
         </div>
       </div>
@@ -52,7 +56,7 @@ export default {
     const formatterArgs = Object.assign(this.formatterArgsDefault, this.col.formatterArgs || {})
     return {
       formatterArgs: formatterArgs,
-      listData: formatterArgs.async ? [] : (this.cellValue || []),
+      listData: formatterArgs.async ? [] : this.cellValue || [],
       amount: '',
       asyncGetDone: false
     }
@@ -68,17 +72,19 @@ export default {
       if (this.formatterArgs.async && !this.asyncGetDone) {
         return [this.$t('Loading') + '...']
       }
-      const getItem = this.formatterArgs.getItem || (item => item.name)
+      const getItem = this.formatterArgs.getItem || ((item) => item.name)
 
       let data = []
 
       if (Array.isArray(this.listData)) {
-        data = this.listData.map(item => getItem(item)).filter(Boolean)
+        data = this.listData.map((item) => getItem(item)).filter(Boolean)
       } else if (this.listData && typeof this.listData === 'object') {
-        data = Object.entries(this.listData).map(([key, value]) => {
-          const item = { key: key, value: value }
-          return getItem(item)
-        }).filter(Boolean)
+        data = Object.entries(this.listData)
+          .map(([key, value]) => {
+            const item = { key: key, value: value }
+            return getItem(item)
+          })
+          .filter(Boolean)
       }
 
       return data
@@ -112,7 +118,9 @@ export default {
           cellValue = Object.keys(this.cellValue)
         }
 
-        this.amount = (cellValue?.filter(value => !this.cellValueToRemove.includes(value)) || []).length
+        this.amount = (
+          cellValue?.filter((value) => !this.cellValueToRemove.includes(value)) || []
+        ).length
       }
     },
     getKey(item, index) {
@@ -132,7 +140,8 @@ export default {
       }
       const url = this.formatterArgs.ajax.url || this.getDefaultUrl()
       const params = this.formatterArgs.ajax.params || {}
-      const transform = this.formatterArgs.ajax.transform || (resp => resp[this.col.prop.replace('_amount', '')])
+      const transform =
+        this.formatterArgs.ajax.transform || ((resp) => resp[this.col.prop.replace('_amount', '')])
       const response = await this.$axios.get(url, { params: params })
       this.listData = transform(response)
       this.asyncGetDone = true
@@ -154,7 +163,7 @@ export default {
   margin-bottom: 0;
 
   &:hover {
-    background-color: #F5F7FA;
+    background-color: #f5f7fa;
   }
 }
 

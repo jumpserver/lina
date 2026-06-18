@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, createTextVNode as _createTextVNode } from 'vue'
+import { createVNode as createVNodeCompat, createTextVNode as createTextVNodeCompat } from 'vue'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import { QuickActions } from '@/components'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
@@ -27,41 +27,62 @@ export default {
   },
   data() {
     return {
-      quickActions: [{
-        title: this.$t('PrivilegedTemplate'),
-        type: 'switch',
-        attrs: {
-          model: this.object?.privileged,
-          disabled: !this.$hasPerm('accounts.change_accounttemplate')
-        },
-        callbacks: {
-          change: function(val) {
-            this.$axios.patch(`/api/v1/accounts/account-templates/${this.object.id}/`, {
-              privileged: val
-            }).then(res => {
-              this.$message.success(this.$tc('UpdateSuccessMsg'))
-            }).catch(err => {
-              this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
-            })
-          }.bind(this)
+      quickActions: [
+        {
+          title: this.$t('PrivilegedTemplate'),
+          type: 'switch',
+          attrs: {
+            model: this.object?.privileged,
+            disabled: !this.$hasPerm('accounts.change_accounttemplate')
+          },
+          callbacks: {
+            change: function (val) {
+              this.$axios
+                .patch(`/api/v1/accounts/account-templates/${this.object.id}/`, {
+                  privileged: val
+                })
+                .then((res) => {
+                  this.$message.success(this.$tc('UpdateSuccessMsg'))
+                })
+                .catch((err) => {
+                  this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
+                })
+            }.bind(this)
+          }
         }
-      }],
+      ],
       url: `/api/v1/accounts/account-templates/${this.object.id}/`,
       excludes: ['privileged', 'secret', 'passphrase', 'spec_info'],
-      detailFields: ['id', 'name', 'username', 'secret_type', 'auto_push', 'secret_strategy', 'created_by', 'comment', {
-        key: this.$t('SuFrom'),
-        formatter: () => {
-          const su_from = this.object.su_from
-          if (!su_from) return _createVNode('span', null, [_createTextVNode('-')])
-          return _createVNode('span', null, [su_from.name, _createTextVNode('('), su_from.username, _createTextVNode(')')])
-        }
-      }, 'is_active', 'date_created', 'date_updated']
+      detailFields: [
+        'id',
+        'name',
+        'username',
+        'secret_type',
+        'auto_push',
+        'secret_strategy',
+        'created_by',
+        'comment',
+        {
+          key: this.$t('SuFrom'),
+          formatter: () => {
+            const su_from = this.object.su_from
+            if (!su_from) return createVNodeCompat('span', null, [createTextVNodeCompat('-')])
+            return createVNodeCompat('span', null, [
+              su_from.name,
+              createTextVNodeCompat('('),
+              su_from.username,
+              createTextVNodeCompat(')')
+            ])
+          }
+        },
+        'is_active',
+        'date_created',
+        'date_updated'
+      ]
     }
   },
   computed: {}
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

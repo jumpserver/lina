@@ -7,13 +7,14 @@ function ElDataTableColumn(props, { attrs, slots }) {
   }
 
   const children = props.columns?.length
-    ? () => props.columns.map((column, index) =>
-      h(ElDataTableColumn, {
-        key: column.prop || index,
-        align: props.align,
-        ...column
-      })
-    )
+    ? () =>
+        props.columns.map((column, index) =>
+          h(ElDataTableColumn, {
+            key: column.prop || index,
+            align: props.align,
+            ...column
+          })
+        )
     : slots
 
   return h(resolveComponent('el-table-column'), columnProps, children)

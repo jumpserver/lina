@@ -38,7 +38,9 @@
               class="asset-item"
             >
               <div class="asset-item">
-                <span>{{ asset.name }}<span v-if="asset.ip">({{ asset.ip }})</span></span>
+                <span
+                  >{{ asset.name }}<span v-if="asset.ip">({{ asset.ip }})</span></span
+                >
               </div>
             </el-checkbox>
           </el-checkbox-group>
@@ -75,8 +77,7 @@ export default {
     },
     assets: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     isRunning: {
       type: Boolean,
@@ -137,7 +138,7 @@ export default {
 <style scoped lang="scss">
 .confirm-run-assets-dialog {
   .runnable-assets {
-    padding-right: 10px
+    padding-right: 10px;
   }
 
   display: grid;
@@ -178,7 +179,7 @@ export default {
 
       .icon {
         color: #ed5565;
-        padding-right: 3px
+        padding-right: 3px;
       }
 
       .asset-ip {
@@ -187,10 +188,9 @@ export default {
 
       .asset-status {
         padding-right: 10px;
-        color: #ed5565
+        color: #ed5565;
       }
     }
-
   }
 
   .group-assets::-webkit-scrollbar {

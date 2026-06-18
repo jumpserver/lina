@@ -5,7 +5,11 @@
 </template>
 
 <script>
-import { resolveComponent as _resolveComponent, createVNode as _createVNode, createTextVNode as _createTextVNode } from 'vue'
+import {
+  resolveComponent as resolveComponentCompat,
+  createVNode as createVNodeCompat,
+  createTextVNode as createTextVNodeCompat
+} from 'vue'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 export default {
@@ -23,33 +27,70 @@ export default {
   data() {
     return {
       url: `/api/v1/xpack/cloud/strategies/${this.object.id}/`,
-      detailFields: ['name', 'priority', {
-        key: this.$t('Rule'),
-        formatter: () => {
-          const newArr = this.object.strategy_rules || []
-          return _createVNode('ul', null, [newArr.map((r, index) => {
-            return _createVNode('li', null, [_createVNode(_resolveComponent('el-tag'), {
-              'size': 'small',
-              'key': index
-            }, {
-              default: () => [r.attr.label, _createVNode('strong', null, [_createTextVNode(' '), `${r.match.label}`, _createTextVNode(' ')]), r.value]
-            })])
-          })])
-        }
-      }, {
-        key: this.$t('Action'),
-        formatter: () => {
-          const newArr = this.object.strategy_actions || []
-          return _createVNode('ul', null, [newArr.map((a, index) => {
-            return _createVNode('li', null, [_createVNode(_resolveComponent('el-tag'), {
-              'size': 'small',
-              'key': index
-            }, {
-              default: () => [_createVNode('strong', null, [a.attr.label, _createTextVNode(': ')]), `${a.value.label}`]
-            })])
-          })])
-        }
-      }, 'comment', 'org_name']
+      detailFields: [
+        'name',
+        'priority',
+        {
+          key: this.$t('Rule'),
+          formatter: () => {
+            const newArr = this.object.strategy_rules || []
+            return createVNodeCompat('ul', null, [
+              newArr.map((r, index) => {
+                return createVNodeCompat('li', null, [
+                  createVNodeCompat(
+                    resolveComponentCompat('el-tag'),
+                    {
+                      size: 'small',
+                      key: index
+                    },
+                    {
+                      default: () => [
+                        r.attr.label,
+                        createVNodeCompat('strong', null, [
+                          createTextVNodeCompat(' '),
+                          `${r.match.label}`,
+                          createTextVNodeCompat(' ')
+                        ]),
+                        r.value
+                      ]
+                    }
+                  )
+                ])
+              })
+            ])
+          }
+        },
+        {
+          key: this.$t('Action'),
+          formatter: () => {
+            const newArr = this.object.strategy_actions || []
+            return createVNodeCompat('ul', null, [
+              newArr.map((a, index) => {
+                return createVNodeCompat('li', null, [
+                  createVNodeCompat(
+                    resolveComponentCompat('el-tag'),
+                    {
+                      size: 'small',
+                      key: index
+                    },
+                    {
+                      default: () => [
+                        createVNodeCompat('strong', null, [
+                          a.attr.label,
+                          createTextVNodeCompat(': ')
+                        ]),
+                        `${a.value.label}`
+                      ]
+                    }
+                  )
+                ])
+              })
+            ])
+          }
+        },
+        'comment',
+        'org_name'
+      ]
     }
   }
 }

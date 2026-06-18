@@ -22,19 +22,20 @@ export default {
         {
           title: this.$t('Test'),
           loading: false,
-          callback: function(value, form, btn) {
+          callback: function (value, form, btn) {
             btn.loading = true
-            vm.$axios.post(
-              `/api/v1/settings/sms/cmpp2/testing/`,
-              value
-            ).then(res => {
-              vm.$message.success(res['msg'])
-            }).catch((error) => {
-              vm.$log.error('err occur')
-              vm.$refs.baseSms.testPerformError(error)
-            }).finally(() => {
-              btn.loading = false
-            })
+            vm.$axios
+              .post(`/api/v1/settings/sms/cmpp2/testing/`, value)
+              .then((res) => {
+                vm.$message.success(res['msg'])
+              })
+              .catch((error) => {
+                vm.$log.error('err occur')
+                vm.$refs.baseSms.testPerformError(error)
+              })
+              .finally(() => {
+                btn.loading = false
+              })
           }
         }
       ],
@@ -42,16 +43,17 @@ export default {
         [
           this.$t('Basic'),
           [
-            'CMPP2_HOST', 'CMPP2_PORT', 'CMPP2_SP_ID', 'CMPP2_SP_SECRET', 'CMPP2_SRC_ID', 'CMPP2_SERVICE_ID',
-            'CMPP2_VERIFY_SIGN_NAME', 'CMPP2_VERIFY_TEMPLATE_CODE'
+            'CMPP2_HOST',
+            'CMPP2_PORT',
+            'CMPP2_SP_ID',
+            'CMPP2_SP_SECRET',
+            'CMPP2_SRC_ID',
+            'CMPP2_SERVICE_ID',
+            'CMPP2_VERIFY_SIGN_NAME',
+            'CMPP2_VERIFY_TEMPLATE_CODE'
           ]
         ],
-        [
-          this.$t('Test'),
-          [
-            'SMS_TEST_PHONE'
-          ]
-        ]
+        [this.$t('Test'), ['SMS_TEST_PHONE']]
       ],
       fieldsMeta: {
         CMPP2_SP_SECRET: {

@@ -38,9 +38,7 @@ export default {
         },
         assets: assetJSONSelectMeta(this),
         rules: {
-          fields: [
-            'ip_group', 'time_period'
-          ],
+          fields: ['ip_group', 'time_period'],
           fieldsMeta: {
             ip_group: {
               component: TagInput,
@@ -101,5 +99,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

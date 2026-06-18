@@ -92,7 +92,7 @@ export default {
   flex-direction: column;
 
   .hintWrap {
-    color: #D4D6E6;
+    color: #d4d6e6;
     display: flex;
     align-items: flex-start;
     justify-content: center;

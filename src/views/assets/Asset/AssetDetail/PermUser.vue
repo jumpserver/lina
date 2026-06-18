@@ -6,7 +6,10 @@
         <PermUserGroupCard v-bind="UserGroupCardConfig" />
       </template>
     </TwoCol>
-    <GenericListTableDialog v-bind="GenericListTableDialogConfig" v-model:visible="GenericListTableDialogConfig.visible" />
+    <GenericListTableDialog
+      v-bind="GenericListTableDialogConfig"
+      v-model:visible="GenericListTableDialogConfig.visible"
+    />
   </div>
 </template>
 
@@ -21,13 +24,14 @@ export default {
   name: 'PermUserList',
   components: {
     TwoCol,
-    ListTable, GenericListTableDialog, PermUserGroupCard
+    ListTable,
+    GenericListTableDialog,
+    PermUserGroupCard
   },
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -35,10 +39,7 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/assets/assets/${this.object.id}/perm-users/`,
-        columns: [
-          'name', 'username', 'email',
-          'comment', 'created_by'
-        ],
+        columns: ['name', 'username', 'email', 'comment', 'created_by'],
         columnsShow: {
           min: ['name', 'username'],
           default: ['name', 'username']
@@ -64,7 +65,7 @@ export default {
             width: '100px',
             label: this.$t('SystemRoles'),
             formatter: (row) => {
-              return row['system_roles'].map(item => item['display_name']).join(', ') || '-'
+              return row['system_roles'].map((item) => item['display_name']).join(', ') || '-'
             },
             filters: [],
             columnKey: 'system_roles'
@@ -73,7 +74,7 @@ export default {
             width: '100px',
             label: this.$t('OrgRoles'),
             formatter: (row) => {
-              return row['org_roles'].map(item => item['display_name']).join(', ') || '-'
+              return row['org_roles'].map((item) => item['display_name']).join(', ') || '-'
             },
             filters: [],
             columnKey: 'org_roles',
@@ -110,7 +111,7 @@ export default {
                   title: vm.$t('ViewPerm'),
                   name: 'view',
                   type: 'primary',
-                  callback: function(data) {
+                  callback: function (data) {
                     vm.GenericListTableDialogConfig.visible = true
                     vm.GenericListTableDialogConfig.tableConfig.url = `/api/v1/assets/assets/${vm.object.id}/perm-users/${data.row.id}/permissions/`
                   }
@@ -142,14 +143,20 @@ export default {
         tableConfig: {
           url: '',
           columns: [
-            'name', 'user_groups_amount', 'assets_amount',
-            'is_valid', 'is_active', 'date_expired', 'comment', 'org_name', 'created_by', 'date_created'
+            'name',
+            'user_groups_amount',
+            'assets_amount',
+            'is_valid',
+            'is_active',
+            'date_expired',
+            'comment',
+            'org_name',
+            'created_by',
+            'date_created'
           ],
           columnsShow: {
             min: ['name'],
-            default: [
-              'name', 'is_valid', 'created_by', 'date_created'
-            ]
+            default: ['name', 'is_valid', 'created_by', 'date_created']
           },
           columnsMeta: {
             name: {
@@ -207,7 +214,8 @@ export default {
   watch: {
     $route: {
       handler(newVal) {
-        newVal.fullPath.includes('/console/perms/asset-permissions/') && (this.GenericListTableDialogConfig.visible = false)
+        newVal.fullPath.includes('/console/perms/asset-permissions/') &&
+          (this.GenericListTableDialogConfig.visible = false)
       }
     }
   }

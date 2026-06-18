@@ -1,14 +1,25 @@
 <template>
-  <GenericListTable ref="GenericListTable" :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListTable
+    ref="GenericListTable"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script>
-import { createVNode as _createVNode, isVNode as _isVNode, resolveComponent as _resolveComponent } from 'vue'
+import {
+  createVNode as createVNodeCompat,
+  isVNode as isVNodeCompat,
+  resolveComponent as resolveComponentCompat
+} from 'vue'
 import GenericListTable from '@/layout/components/GenericListTable/index'
 import { ActionsFormatter, DateFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
 function _isSlot(s) {
-  return typeof s === 'function' || Object.prototype.toString.call(s) === '[object Object]' && !_isVNode(s)
+  return (
+    typeof s === 'function' ||
+    (Object.prototype.toString.call(s) === '[object Object]' && !isVNodeCompat(s))
+  )
 }
 export default {
   name: 'TaskHistoryList',
@@ -35,78 +46,99 @@ export default {
       },
       tableConfig: {
         url: `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task?.id}/history/`,
-        columns: [{
-          prop: 'summary.new',
-          label: this.$t('NewCount')
-        }, {
-          prop: 'summary.unsync',
-          label: this.$t('UnSyncCount')
-        }, {
-          prop: 'summary.sync',
-          label: this.$t('SyncedCount')
-        }, {
-          prop: 'summary.released',
-          label: this.$t('ReleasedCount')
-        }, {
-          prop: 'status',
-          label: this.$t('Status'),
-          formatter: row => {
-            if (row.status === 1) {
-              let _slot
-              return _createVNode(_resolveComponent('el-tag'), {
-                'type': 'primary',
-                'size': 'small'
-              }, _isSlot(_slot = this.$t('Success')) ? _slot : {
-                default: () => [_slot]
-              })
-            } else {
-              let _slot2
-              return _createVNode(_resolveComponent('el-tag'), {
-                'type': 'danger',
-                'size': 'small'
-              }, _isSlot(_slot2 = this.$t('Failed')) ? _slot2 : {
-                default: () => [_slot2]
-              })
+        columns: [
+          {
+            prop: 'summary.new',
+            label: this.$t('NewCount')
+          },
+          {
+            prop: 'summary.unsync',
+            label: this.$t('UnSyncCount')
+          },
+          {
+            prop: 'summary.sync',
+            label: this.$t('SyncedCount')
+          },
+          {
+            prop: 'summary.released',
+            label: this.$t('ReleasedCount')
+          },
+          {
+            prop: 'status',
+            label: this.$t('Status'),
+            formatter: (row) => {
+              if (row.status === 1) {
+                let _slot
+                return createVNodeCompat(
+                  resolveComponentCompat('el-tag'),
+                  {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  _isSlot((_slot = this.$t('Success')))
+                    ? _slot
+                    : {
+                        default: () => [_slot]
+                      }
+                )
+              } else {
+                let _slot2
+                return createVNodeCompat(
+                  resolveComponentCompat('el-tag'),
+                  {
+                    type: 'danger',
+                    size: 'small'
+                  },
+                  _isSlot((_slot2 = this.$t('Failed')))
+                    ? _slot2
+                    : {
+                        default: () => [_slot2]
+                      }
+                )
+              }
+            }
+          },
+          {
+            prop: 'date_sync',
+            label: this.$t('DateSync'),
+            formatter: DateFormatter
+          },
+          {
+            prop: 'trigger',
+            label: this.$t('TriggerMode'),
+            formatter: (row) => {
+              return row.trigger.label
+            }
+          },
+          {
+            prop: 'actions',
+            label: this.$t('Actions'),
+            align: 'center',
+            formatter: ActionsFormatter,
+            formatterArgs: {
+              hasUpdate: false,
+              // can set function(row, value)
+              hasDelete: false,
+              // can set function(row, value)
+              moreActionsTitle: this.$t('Log'),
+              hasClone: false,
+              extraActions: [
+                {
+                  name: 'View',
+                  title: this.$t('View'),
+                  type: 'primary',
+                  callback: function (val) {
+                    openTaskPage(val.row.id)
+                  }
+                }
+              ]
             }
           }
-        }, {
-          prop: 'date_sync',
-          label: this.$t('DateSync'),
-          formatter: DateFormatter
-        }, {
-          prop: 'trigger',
-          label: this.$t('TriggerMode'),
-          formatter: row => {
-            return row.trigger.label
-          }
-        }, {
-          prop: 'actions',
-          label: this.$t('Actions'),
-          align: 'center',
-          formatter: ActionsFormatter,
-          formatterArgs: {
-            hasUpdate: false,
-            // can set function(row, value)
-            hasDelete: false,
-            // can set function(row, value)
-            moreActionsTitle: this.$t('Log'),
-            hasClone: false,
-            extraActions: [{
-              name: 'View',
-              title: this.$t('View'),
-              type: 'primary',
-              callback: function(val) {
-                openTaskPage(val.row.id)
-              }
-            }]
-          }
-        }]
+        ]
       }
     }
   }
 }
 </script>
 
-<style lang='scss' scoped>
-
-</style>
+<style lang="scss" scoped></style>

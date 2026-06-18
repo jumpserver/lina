@@ -1,11 +1,14 @@
 <template>
-  <Drawer v-bind="props" v-model:visible="iVisible"
+  <Drawer
+    v-bind="props"
+    v-model:visible="iVisible"
     :component="component"
     :component-listeners="listener"
     :title="title"
     append-to-body
     class="form-drawer"
-    v-bind="$attrs" />
+    v-bind="$attrs"
+  />
 </template>
 
 <script>

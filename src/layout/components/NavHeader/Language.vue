@@ -47,7 +47,7 @@ export default {
     }
   },
   mounted() {
-    this.supportLanguages = store.getters.publicSettings['LANGUAGES'].map(item => {
+    this.supportLanguages = store.getters.publicSettings['LANGUAGES'].map((item) => {
       return {
         title: item.name,
         code: item.code,
@@ -72,7 +72,7 @@ export default {
 </script>
 
 <style scoped>
-  .header-lang {
-    color: white;
-  }
+.header-lang {
+  color: white;
+}
 </style>

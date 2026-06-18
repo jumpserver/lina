@@ -1,6 +1,11 @@
 <template>
-  <div style="border: 1px solid #ccc; padding: 10px;">
-    <vue-markdown-editor v-model="localValue" :right-toolbar="rightToolbar" :left-toolbar="leftToolbar" height="400px" />
+  <div style="border: 1px solid #ccc; padding: 10px">
+    <vue-markdown-editor
+      v-model="localValue"
+      :right-toolbar="rightToolbar"
+      :left-toolbar="leftToolbar"
+      height="400px"
+    />
   </div>
 </template>
 <script>

@@ -24,7 +24,7 @@ export default {
     return {
       initial: {
         secret_type: 'password',
-        push_params: { }
+        push_params: {}
       },
       url: '/api/v1/accounts/account-templates/',
       hasDetailInMsg: false,

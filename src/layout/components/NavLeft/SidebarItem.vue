@@ -1,18 +1,20 @@
 <template>
   <div v-if="!needHidden(item) && (item.alwaysShow || !allChildrenHidden(item))">
     <template
-      v-if="hasOneShowingChild(item.children, item) &&
+      v-if="
+        hasOneShowingChild(item.children, item) &&
         (!onlyOneChild.children || onlyOneChild.noShowingChildren) &&
-        !item.alwaysShow"
+        !item.alwaysShow
+      "
     >
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item
-          :class="{'submenu-title-noDropdown':!isNest, 'level1-menu': !isNest}"
+          :class="{ 'submenu-title-noDropdown': !isNest, 'level1-menu': !isNest }"
           :index="resolvePath(onlyOneChild.path)"
           class="submenu-item level2-menu"
         >
           <item
-            :icon="onlyOneChild.meta.icon||(item.meta && item.meta.icon)"
+            :icon="onlyOneChild.meta.icon || (item.meta && item.meta.icon)"
             :title="getItemTitle(onlyOneChild)"
           />
         </el-menu-item>
@@ -97,8 +99,7 @@ export default {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
     // TODO: refactor with render function
     this.onlyOneChild = null
-    return {
-    }
+    return {}
   },
   methods: {
     needHidden(item) {
@@ -130,7 +131,7 @@ export default {
       return title
     },
     hasOneShowingChild(children = [], parent) {
-      const showingChildren = children.filter(item => {
+      const showingChildren = children.filter((item) => {
         if (item.hidden) {
           return false
         } else {

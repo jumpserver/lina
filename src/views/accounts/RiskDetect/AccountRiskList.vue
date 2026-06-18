@@ -7,8 +7,11 @@
       :table-config="tableConfig"
       :tree-setting="treeSetting"
     />
-    <BatchResolveDialog v-bind="batchResolveDialog" v-if="batchResolveDialog.visible"
-      v-model:visible="batchResolveDialog.visible" />
+    <BatchResolveDialog
+      v-bind="batchResolveDialog"
+      v-if="batchResolveDialog.visible"
+      v-model:visible="batchResolveDialog.visible"
+    />
     <RiskScanDialog
       v-if="detectDialog.visible"
       v-model:visible="detectDialog.visible"
@@ -18,7 +21,7 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
 import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
 import RiskHandleFormatter from './RiskHandlerFormatter/index.vue'
 import BatchResolveDialog from '@/views/accounts/RiskDetect/RiskHandlerFormatter/BatchResolveDialog.vue'
@@ -40,7 +43,7 @@ export default {
         asset: ''
       },
       treeSetting: {
-        showMenu: node => {
+        showMenu: (node) => {
           return node?.meta?.type === 'asset'
         },
         showRefresh: true,
@@ -51,34 +54,40 @@ export default {
         nodeUrl: '/api/v1/assets/nodes/',
         // ?assets=0不显示资产. =1显示资产
         treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1&asset_amount=0',
-        menu: [{
-          id: 'check',
-          name: this.$t('RiskDetection'),
-          icon: 'scan',
-          callback: node => {
-            vm.detectDialog.asset = node.id
-            setTimeout(() => {
-              vm.detectDialog.visible = true
-            }, 100)
+        menu: [
+          {
+            id: 'check',
+            name: this.$t('RiskDetection'),
+            icon: 'scan',
+            callback: (node) => {
+              vm.detectDialog.asset = node.id
+              setTimeout(() => {
+                vm.detectDialog.visible = true
+              }, 100)
+            }
           }
-        }]
+        ]
       },
-      quickSummary: [{
-        title: this.$t('DateLastWeek'),
-        filter: {
-          'days': '7'
+      quickSummary: [
+        {
+          title: this.$t('DateLastWeek'),
+          filter: {
+            days: '7'
+          }
+        },
+        {
+          title: this.$t('DateLastMonth'),
+          filter: {
+            days: '30'
+          }
+        },
+        {
+          title: this.$t('Pending'),
+          filter: {
+            status: '0'
+          }
         }
-      }, {
-        title: this.$t('DateLastMonth'),
-        filter: {
-          'days': '30'
-        }
-      }, {
-        title: this.$t('Pending'),
-        filter: {
-          status: '0'
-        }
-      }],
+      ],
       batchResolveDialog: {
         visible: false,
         risks: []
@@ -91,15 +100,9 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               can: vm.$hasPerm('assets.view_asset'),
-              getTitle: ({
-                row
-              }) => row.asset.name,
-              getDrawerTitle: ({
-                row
-              }) => row.asset.name,
-              getRoute({
-                row
-              }) {
+              getTitle: ({ row }) => row.asset.name,
+              getDrawerTitle: ({ row }) => row.asset.name,
+              getRoute({ row }) {
                 return {
                   name: 'AssetDetail',
                   params: {
@@ -115,14 +118,18 @@ export default {
             width: '120px'
           },
           risk: {
-            formatter: row => {
-              return _createVNode(_resolveComponent('el-tag'), {
-                'size': 'small',
-                'type': 'danger',
-                'effect': 'plain'
-              }, {
-                default: () => [row.risk.label]
-              })
+            formatter: (row) => {
+              return createVNodeCompat(
+                resolveComponentCompat('el-tag'),
+                {
+                  size: 'small',
+                  type: 'danger',
+                  effect: 'plain'
+                },
+                {
+                  default: () => [row.risk.label]
+                }
+              )
             }
           },
           status: {
@@ -141,22 +148,20 @@ export default {
       headerActions: {
         hasCreate: false,
         hasImport: false,
-        extraMoreActions: [{
-          name: 'resolveSelected',
-          title: this.$t('ResolveSelected'),
-          icon: 'el-icon-check',
-          callback: function({
-            selectedRows
-          }) {
-            vm.batchResolveDialog.risks = selectedRows
-            vm.batchResolveDialog.visible = true
-          },
-          can: function({
-            selectedRows
-          }) {
-            return selectedRows.length > 0 && vm.$hasPerm('accounts.change_accountrisk')
+        extraMoreActions: [
+          {
+            name: 'resolveSelected',
+            title: this.$t('ResolveSelected'),
+            icon: 'el-icon-check',
+            callback: function ({ selectedRows }) {
+              vm.batchResolveDialog.risks = selectedRows
+              vm.batchResolveDialog.visible = true
+            },
+            can: function ({ selectedRows }) {
+              return selectedRows.length > 0 && vm.$hasPerm('accounts.change_accountrisk')
+            }
           }
-        }]
+        ]
       }
     }
   },
@@ -175,6 +180,4 @@ export default {
   }
 }
 </script>
-<style lang='scss' scoped>
-
-</style>
+<style lang="scss" scoped></style>

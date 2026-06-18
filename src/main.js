@@ -6,11 +6,11 @@ import 'element-plus/dist/index.css'
 import '@/styles/element-plus-vars.scss'
 import '@/styles/element-icons-legacy.scss'
 // 导入默认主题配置（包含 :root CSS 变量定义）
-import '@/styles/default-theme.scss?module'
+import '@/styles/default-theme.scss'
 import '@/styles/index.scss' // global css
 // 导入默认主题配置并初始化
 import { setRootColors } from '@/utils/theme/color'
-import App from './App'
+import App from './App.vue'
 import store from './store'
 import router from './router'
 import { eventBus } from './utils/vue/eventbus'
@@ -26,6 +26,7 @@ import i18n, { fetchTranslationsFromAPI } from './i18n/i18n'
 import ChartsPlugin from '@/libs/charts'
 import { setupErrorHandler } from '@/libs/errors'
 import CookiePlugin from '@/libs/cookie'
+import ResourceActivity from '@/components/Apps/ResourceActivity'
 import request from '@/utils/request'
 import { message } from '@/utils/vue/message'
 import xss from '@/utils/secure'
@@ -60,10 +61,7 @@ function shouldIgnoreVueWarning(msg, trace = '') {
   }
   return (
     msg.includes('Runtime directive used on component with non-element root node') &&
-    (
-      trace.includes('<ElCascader>') ||
-      trace.includes('<ElRovingFocusGroupCollectionItem>')
-    )
+    (trace.includes('<ElCascader>') || trace.includes('<ElRovingFocusGroupCollectionItem>'))
   )
 }
 
@@ -106,7 +104,8 @@ async function initApp() {
   const sanitizeOptions = {
     allowedClasses: { '*': ['*'] }
   }
-  app.config.globalProperties.$sanitize = (dirty, opts) => sanitizeHtml(dirty, opts || sanitizeOptions)
+  app.config.globalProperties.$sanitize = (dirty, opts) =>
+    sanitizeHtml(dirty, opts || sanitizeOptions)
   app.directive('sanitize', (el, binding) => {
     if (binding.value !== binding.oldValue) {
       el.innerHTML = sanitizeHtml(binding.value || '', sanitizeOptions)
@@ -119,7 +118,7 @@ async function initApp() {
   installElementPlusIcons(app)
 
   // 全局注册动态组件(被 GenericDetailPage submenu 按字符串 name 引用)
-  app.component('ResourceActivity', require('@/components/Apps/ResourceActivity').default)
+  app.component('ResourceActivity', ResourceActivity)
 
   app.config.globalProperties.$moment = moment
   app.config.globalProperties.$axios = request

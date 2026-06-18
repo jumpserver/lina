@@ -33,9 +33,9 @@
           :placeholder="$tc('ManyChoose')"
           clearable
           multiple
-          style="width:100%"
+          style="width: 100%"
         >
-          <el-option v-for="item in 24" :key="item" :value="item-1">{{ item - 1 }}</el-option>
+          <el-option v-for="item in 24" :key="item" :value="item - 1">{{ item - 1 }}</el-option>
         </el-select>
       </el-radio>
     </el-form-item>
@@ -54,8 +54,7 @@ export default {
     },
     check: {
       type: Function,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -93,15 +92,14 @@ export default {
         const str = this.checkboxList.join()
         return str === '' ? '*' : str
       },
-      set() {
-      }
+      set() {}
     }
   },
   watch: {
-    'radioValue': 'radioChange',
-    'cycleTotal': 'cycleChange',
-    'averageTotal': 'averageChange',
-    'checkboxString': 'checkboxChange'
+    radioValue: 'radioChange',
+    cycleTotal: 'cycleChange',
+    averageTotal: 'averageChange',
+    checkboxString: 'checkboxChange'
   },
   created() {
     this.$nextTick(() => {
@@ -161,6 +159,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,12 +1,7 @@
 <template>
-  <Dialog v-bind="$attrs" :show-cancel="false"
-    :title="$tc('UploadPlaybook')"
-    @confirm="onSubmit">
+  <Dialog v-bind="$attrs" :show-cancel="false" :title="$tc('UploadPlaybook')" @confirm="onSubmit">
     <el-form label-position="top">
-      <el-form-item
-        :label-width="'100px'"
-        class="file-uploader"
-      >
+      <el-form-item :label-width="'100px'" class="file-uploader">
         <el-upload
           ref="upload"
           :auto-upload="false"
@@ -24,10 +19,10 @@
           </div>
           <template #tip>
             <div class="el-upload__tip">
-              <span :class="{'hasError': hasFileFormatOrSizeError }" />
+              <span :class="{ hasError: hasFileFormatOrSizeError }" />
               <div v-if="renderError" class="hasError">{{ renderError }}</div>
               <h5>{{ $t('UploadHelpText') }}</h5>
-              <pre style="display:flex; line-height: 1.2em">
+              <pre style="display: flex; line-height: 1.2em">
 ./
 ├── roles
 ├── vars
@@ -64,15 +59,14 @@ export default {
       }
       this.file = file
     },
-    beforeUpload(file) {
-    },
+    beforeUpload(file) {},
     onSubmit() {
       if (!this.file) {
         return
       }
       const form = new FormData()
       form.append('path', this.file.raw)
-      uploadPlaybook(form).then(res => {
+      uploadPlaybook(form).then((res) => {
         this.$emit('update:visible', false)
         this.$emit('completed')
         this.$message.success(this.$tc('UploadSucceed'))
@@ -94,5 +88,4 @@ export default {
     }
   }
 }
-
 </style>

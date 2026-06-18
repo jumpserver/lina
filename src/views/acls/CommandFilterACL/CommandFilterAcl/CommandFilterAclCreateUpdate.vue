@@ -1,8 +1,11 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" :fields="fields"
+  <GenericCreateUpdatePage
+    v-bind="$data"
+    :fields="fields"
     :fields-meta="fieldsMeta"
     :initial="initial"
-    :url="url" />
+    :url="url"
+  />
 </template>
 
 <script>
@@ -78,6 +81,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -4,10 +4,13 @@
       <tbody>
         <tr>
           <td colspan="2">
-            <Select2 v-bind="select2" ref="select2"
+            <Select2
+              v-bind="select2"
+              ref="select2"
               v-model="select2.value"
               :disabled="iDisabled"
-              show-select-all />
+              show-select-all
+            />
           </td>
         </tr>
         <slot />
@@ -144,7 +147,7 @@ export default {
       type: Function,
       default(obj, that) {
         // 从 hasObjects 中移除这个object
-        const theRemoveIndex = that.iHasObjects.findIndex(v => v.value === obj.value)
+        const theRemoveIndex = that.iHasObjects.findIndex((v) => v.value === obj.value)
         that.iHasObjects.splice(theRemoveIndex, 1)
 
         // 从 disabled values 中移除这个 value
@@ -185,10 +188,10 @@ export default {
       type: Function,
       default(objects, that) {
         that.$log.debug('Select value', that.select2.value)
-        const oldValues = that.iHasObjects.map(item => item.value)
+        const oldValues = that.iHasObjects.map((item) => item.value)
         that.iHasObjects = [
           ...that.iHasObjects,
-          ...objects.filter(item => !oldValues.includes(item.value))
+          ...objects.filter((item) => !oldValues.includes(item.value))
         ]
         that.$refs.select2.clearSelected()
         that.$message.success(that.$t('AddSuccessMsg'))
@@ -247,14 +250,14 @@ export default {
       this.select2.disabledValues = iNew
     },
     iHasObjects(iNew, iOld) {
-      const newValues = iNew.map(v => v.value)
-      const oldValues = iOld.map(v => v.value)
+      const newValues = iNew.map((v) => v.value)
+      const oldValues = iOld.map((v) => v.value)
       const addValues = _.difference(newValues, oldValues)
       const removeValues = _.difference(oldValues, newValues)
       this.$log.debug('hasObjects change, add ', addValues, 'remove ', removeValues)
       let disabledValues = this.select2.disabledValues
       if (removeValues.length > 0) {
-        disabledValues = disabledValues.filter(v => {
+        disabledValues = disabledValues.filter((v) => {
           return removeValues.indexOf(v) === -1
         })
       }
@@ -292,7 +295,7 @@ export default {
       const params = this.safeMakeParams(this.params)
       let data = await this.$axios.get(this.iAjax.url, {
         params: params,
-        validateStatus: status => {
+        validateStatus: (status) => {
           if (status === 403) {
             return 200
           }
@@ -301,8 +304,8 @@ export default {
       })
       data = this.iAjax.processResults.bind(this)(data)
       if (data.results) {
-        data.results.forEach(v => {
-          if (!this.iHasObjects.find(item => item.value === v.value)) {
+        data.results.forEach((v) => {
+          if (!this.iHasObjects.find((item) => item.value === v.value)) {
             this.iHasObjects.push(v)
           }
         })
@@ -318,7 +321,7 @@ export default {
       this.select2.disabledValues = this.hasObjectsId
 
       if (this.getHasObjects) {
-        this.getHasObjects(this.hasObjectsId).then(data => {
+        this.getHasObjects(this.hasObjectsId).then((data) => {
           this.iHasObjects = data
         })
       } else {
@@ -332,12 +335,12 @@ export default {
         .then(() => {
           this.onDeleteSuccess(obj, this)
         })
-        .catch(error => {
+        .catch((error) => {
           this.onDeleteFail(error, this)
         })
     },
     addObjects() {
-      const objects = this.$refs.select2.$refs.select.selected.map(item => ({
+      const objects = this.$refs.select2.$refs.select.selected.map((item) => ({
         label: item.label,
         value: item.value
       }))

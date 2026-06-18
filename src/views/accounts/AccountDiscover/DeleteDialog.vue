@@ -1,12 +1,15 @@
 <template>
   <div>
-    <Dialog v-bind="$attrs" :destroy-on-close="true"
+    <Dialog
+      v-bind="$attrs"
+      :destroy-on-close="true"
       :show-cancel="false"
       :title="$tc('DeleteGatherAccountTitle')"
       :visible="visible"
       width="600px"
       @update:visible="$emit('update:visible', $event)"
-      @confirm="handleConfirm">
+      @confirm="handleConfirm"
+    >
       <el-alert type="error" :closable="closeable">
         {{ $t('DeleteWarningMsg') }} {{ account.username }}({{ account.asset.name }}) ?
 
@@ -35,10 +38,7 @@
           </div>
 
           <div v-if="hasDeleteRemote && account.present" class="delete-item">
-            <el-checkbox
-              :model-value="iDeleteRemote"
-              @update:model-value="iDeleteRemote = $event"
-            >
+            <el-checkbox :model-value="iDeleteRemote" @update:model-value="iDeleteRemote = $event">
               {{ $t('RemoteAssetFoundAccountDeleteMsg') }} ?
               <!-- 远端主机上存在该账号，是否要同步删除 ? -->
             </el-checkbox>
@@ -106,26 +106,27 @@ export default {
       assetAccounts: []
     }
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     handleConfirm() {
       this.$message.warning(this.$tc('ProcessingMessage'))
       const url = `/api/v1/accounts/gathered-accounts/${this.account.id}/`
-      this.$axios.delete(url, {
-        params: {
-          username: this.account.username,
-          asset: this.account.asset.id,
-          is_delete_account: this.iDeleteAccount,
-          is_delete_remote: this.iDeleteRemote
-        }
-      }).then(res => {
-        this.$message.success(this.$tc('DeleteSuccessMsg'))
-        this.$emit('deleted', res)
-        setTimeout(() => {
-          this.$emit('update:visible', false)
-        }, 100)
-      })
+      this.$axios
+        .delete(url, {
+          params: {
+            username: this.account.username,
+            asset: this.account.asset.id,
+            is_delete_account: this.iDeleteAccount,
+            is_delete_remote: this.iDeleteRemote
+          }
+        })
+        .then((res) => {
+          this.$message.success(this.$tc('DeleteSuccessMsg'))
+          this.$emit('deleted', res)
+          setTimeout(() => {
+            this.$emit('update:visible', false)
+          }, 100)
+        })
     }
   }
 }

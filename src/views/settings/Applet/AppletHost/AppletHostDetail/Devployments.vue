@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
 import { ListTable, QuickActions } from '@/components'
 import { openTaskPage } from '@/utils/jms/index'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
@@ -44,20 +44,24 @@ export default {
           },
           status: {
             label: this.$t('Status'),
-            formatter: row => {
+            formatter: (row) => {
               const typeMapper = {
-                'pending': 'success',
-                'success': 'primary',
-                'failed': 'danger',
-                'unknown': 'warning'
+                pending: 'success',
+                success: 'primary',
+                failed: 'danger',
+                unknown: 'warning'
               }
               const tp = typeMapper[row.status.value] || 'info'
-              return _createVNode(_resolveComponent('el-tag'), {
-                'size': 'small',
-                'type': tp
-              }, {
-                default: () => [row.status.label]
-              })
+              return createVNodeCompat(
+                resolveComponentCompat('el-tag'),
+                {
+                  size: 'small',
+                  type: tp
+                },
+                {
+                  default: () => [row.status.label]
+                }
+              )
             }
           },
           actions: {
@@ -65,39 +69,43 @@ export default {
               hasClone: false,
               hasDelete: false,
               hasUpdate: false,
-              extraActions: [{
-                name: 'View',
-                title: this.$t('View'),
-                type: 'primary',
-                callback: function(val) {
-                  openTaskPage(val.row.task)
+              extraActions: [
+                {
+                  name: 'View',
+                  title: this.$t('View'),
+                  type: 'primary',
+                  callback: function (val) {
+                    openTaskPage(val.row.task)
+                  }
                 }
-              }]
+              ]
             }
           }
         }
       },
-      quickActions: [{
-        title: this.$t('InitialDeploy'),
-        attrs: {
-          type: 'primary',
-          label: this.$t('Deploy')
-        },
-        callbacks: {
-          click: function() {
-            this.$axios.post(`/api/v1/terminal/applet-host-deployments/`, {
-              host: this.object.id
-            }).then(res => {
-              openTaskPage(res['task'])
-            })
-          }.bind(this)
+      quickActions: [
+        {
+          title: this.$t('InitialDeploy'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('Deploy')
+          },
+          callbacks: {
+            click: function () {
+              this.$axios
+                .post(`/api/v1/terminal/applet-host-deployments/`, {
+                  host: this.object.id
+                })
+                .then((res) => {
+                  openTaskPage(res['task'])
+                })
+            }.bind(this)
+          }
         }
-      }]
+      ]
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

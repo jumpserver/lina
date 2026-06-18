@@ -1,9 +1,7 @@
 <template>
   <IBox v-loading="loading" class="box">
     <template #header>
-      <div class="clearfix ibox-title">
-        <i class="fa fa-comments" /> {{ $t('Message') }}
-      </div>
+      <div class="clearfix ibox-title"><i class="fa fa-comments" /> {{ $t('Message') }}</div>
     </template>
     <template v-if="comments">
       <div v-for="item in comments" :key="item.id" class="feed-activity-list">
@@ -11,7 +9,7 @@
           <a class="pull-left" href="#">
             <el-avatar :size="30" :src="imageUrl" class="header-avatar" />
           </a>
-          <div class="media-body ">
+          <div class="media-body">
             <strong>{{ item.user_display }}</strong>
             <small class="text-muted">{{ $filters.date(item.date_created) }}</small>
             <MarkDown :value="item.body" />
@@ -70,6 +68,7 @@
 import IBox from '@/components/Common/IBox'
 import MarkDown from '@/components/Widgets/MarkDown'
 import { formatTime, getDateTimeStamp, toSafeLocalDateStr } from '@/utils/common/time'
+import { getAssetUrl } from '@/utils/assets'
 
 export default {
   name: 'Comments',
@@ -97,7 +96,7 @@ export default {
       isDisabled: false,
       comments: '',
       type_api: '',
-      imageUrl: require('@/assets/img/avatar.png'),
+      imageUrl: getAssetUrl('img/avatar.png'),
       form: {
         comments: ''
       },
@@ -109,9 +108,11 @@ export default {
       return this.$route.name === 'AuditTicketList'
     },
     hasActionPerm() {
-      return this.object.process_map.filter(
-        item => item.approval_level === this.object.approval_step.value
-      )[0].assignees.indexOf(this.$store.state.users.profile.id) !== -1
+      return (
+        this.object.process_map
+          .filter((item) => item.approval_level === this.object.approval_step.value)[0]
+          .assignees.indexOf(this.$store.state.users.profile.id) !== -1
+      )
     },
     isSelfTicket() {
       const profile = this.$store.state.users.profile
@@ -147,48 +148,62 @@ export default {
     getComment() {
       this.loading = true
       const url = `/api/v1/tickets/comments/?ticket_id=${this.object.id}`
-      this.$axios.get(url).then(res => {
-        this.comments = res
-      }).catch(err => {
-        this.$message.error(err)
-      }).finally(() => {
-        this.loading = false
-        this.form.comments = ''
-      })
+      this.$axios
+        .get(url)
+        .then((res) => {
+          this.comments = res
+        })
+        .catch((err) => {
+          this.$message.error(err)
+        })
+        .finally(() => {
+          this.loading = false
+          this.form.comments = ''
+        })
     },
     defaultApprove() {
-      this.createComment(function() {
-      })
+      this.createComment(function () {})
       const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/approve/`
-      this.$axios.put(url).then(res => {
-        this.reloadPage()
-      }).catch(err => {
-        this.$message.error(err)
-      }).finally(() => {
-        this.isDisabled = false
-      })
+      this.$axios
+        .put(url)
+        .then((res) => {
+          this.reloadPage()
+        })
+        .catch((err) => {
+          this.$message.error(err)
+        })
+        .finally(() => {
+          this.isDisabled = false
+        })
     },
     defaultReject() {
-      this.createComment(function() {
-      })
+      this.createComment(function () {})
       const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/reject/`
-      this.$axios.put(url).then(res => {
-        this.reloadPage()
-      }).catch(err => {
-        this.$message.error(err)
-      }).finally(() => {
-        this.isDisabled = false
-      })
+      this.$axios
+        .put(url)
+        .then((res) => {
+          this.reloadPage()
+        })
+        .catch((err) => {
+          this.$message.error(err)
+        })
+        .finally(() => {
+          this.isDisabled = false
+        })
     },
     defaultClose() {
       const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/close/`
-      this.$axios.put(url).then(res => {
-        this.reloadPage()
-      }).catch(err => {
-        this.$message.error(err)
-      }).finally(() => {
-        this.isDisabled = false
-      })
+      this.$axios
+        .put(url)
+        .then((res) => {
+          this.reloadPage()
+        })
+        .catch((err) => {
+          this.$message.error(err)
+        })
+        .finally(() => {
+          this.isDisabled = false
+        })
     },
     createComment(successCallback) {
       const commentText = this.form.comments
@@ -201,7 +216,7 @@ export default {
         body: commentText,
         ticket: ticketId
       }
-      this.$axios.post(commentUrl, body).then(res => {
+      this.$axios.post(commentUrl, body).then((res) => {
         if (successCallback) {
           successCallback()
         } else {
@@ -247,19 +262,16 @@ export default {
       this.handleAction('close')
     },
     handleComment() {
-      this.createComment(
-        this.getComment
-      )
+      this.createComment(this.getComment)
     },
     reloadPage() {
       window.location.reload()
     }
   }
-
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .box {
   margin-bottom: 15px;
 }

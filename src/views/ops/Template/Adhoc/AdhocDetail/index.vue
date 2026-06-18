@@ -1,5 +1,9 @@
 <template>
-  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu" v-model:object="AdhocDetail">
+  <GenericDetailPage
+    v-bind="config"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="AdhocDetail"
+  >
     <keep-alive>
       <component :is="config.activeMenu" :object="AdhocDetail" />
     </keep-alive>
@@ -37,6 +41,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

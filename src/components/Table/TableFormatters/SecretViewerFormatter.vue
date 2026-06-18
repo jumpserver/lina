@@ -69,19 +69,19 @@ export default {
     }
   },
   computed: {
-    hasShow: function() {
+    hasShow: function () {
       return this.formatterArgs.hasShow
     },
-    hasDownload: function() {
+    hasDownload: function () {
       return this.formatterArgs.hasDownload
     },
-    hasCopy: function() {
+    hasCopy: function () {
       return this.formatterArgs.hasCopy
     },
-    hasEdit: function() {
+    hasEdit: function () {
       return this.formatterArgs.hasEdit
     },
-    name: function() {
+    name: function () {
       return this.formatterArgs.name
     },
     iActions() {
@@ -126,7 +126,7 @@ export default {
   },
   watch: {
     cellValue: {
-      handler: function(val) {
+      handler: function (val) {
         this.realValue = val
       },
       immediate: true
@@ -178,48 +178,48 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .content {
-    display: inline-block;
-    width: 100%;
+.content {
+  display: inline-block;
+  width: 100%;
+  overflow: hidden;
+  //white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 13px;
+
+  .text {
+    flex: 1;
+    display: inline;
+    margin: 0;
+    padding: 0;
     overflow: hidden;
-    //white-space: nowrap;
+    white-space: nowrap;
     text-overflow: ellipsis;
+  }
+
+  .action {
     font-size: 13px;
+    cursor: pointer;
+    margin-left: 1px;
+    display: inline;
 
-    .text {
-      flex: 1;
-      display: inline;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+    &.right {
+      float: right;
     }
 
-    .action {
-      font-size: 13px;
-      cursor: pointer;
-      margin-left: 1px;
-      display: inline;
+    .fa {
+      margin-right: 5px;
 
-      &.right {
-        float: right;
-      }
-
-      .fa {
-        margin-right: 5px;
-
-        &:hover {
-          color: var(--color-primary);
-        }
+      &:hover {
+        color: var(--color-primary);
       }
     }
   }
+}
 
-  .edit-input :deep(input) {
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    height: 30px;
-  }
+.edit-input :deep(input) {
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  height: 30px;
+}
 </style>

@@ -1,13 +1,20 @@
 <template>
   <div v-loading="loading">
-    <GenericCreateUpdatePage v-bind="{ ...$data, ...$attrs }" v-if="!loading"
+    <GenericCreateUpdatePage
+      v-bind="{ ...$data, ...$attrs }"
+      v-if="!loading"
       class="user-create-update"
-      @get-object-done="afterGetUser" />
+      @get-object-done="afterGetUser"
+    />
   </div>
 </template>
 
 <script>
-import { resolveComponent as _resolveComponent, createTextVNode as _createTextVNode, createVNode as _createVNode } from 'vue'
+import {
+  resolveComponent as resolveComponentCompat,
+  createTextVNode as createTextVNodeCompat,
+  createVNode as createVNodeCompat
+} from 'vue'
 import store from '@/store'
 import { mapGetters } from 'vuex'
 import { Select2 } from '@/components'
@@ -29,9 +36,24 @@ export default {
         org_roles: []
       },
       user: {
-        'can_public_key_auth': false
+        can_public_key_auth: false
       },
-      fields: [[this.$t('Basic'), ['name', 'username', 'email', 'groups']], [this.$t('Authentication'), ['password_strategy', 'update_password', 'password', 'need_update_password', 'mfa_level', 'source']], [this.$t('Secure'), ['system_roles', 'org_roles', 'is_active', 'date_expired']], [this.$t('Other'), ['phone', 'comment']]],
+      fields: [
+        [this.$t('Basic'), ['name', 'username', 'email', 'groups']],
+        [
+          this.$t('Authentication'),
+          [
+            'password_strategy',
+            'update_password',
+            'password',
+            'need_update_password',
+            'mfa_level',
+            'source'
+          ]
+        ],
+        [this.$t('Secure'), ['system_roles', 'org_roles', 'is_active', 'date_expired']],
+        [this.$t('Other'), ['phone', 'comment']]
+      ],
       url: '/api/v1/users/users/',
       fieldsMeta: {
         name: {
@@ -41,7 +63,7 @@ export default {
           uniqueCheck: true
         },
         password_strategy: {
-          hidden: formValue => {
+          hidden: (formValue) => {
             return this.$route.params.id || formValue.source !== 'local'
           }
         },
@@ -55,7 +77,7 @@ export default {
         update_password: {
           label: this.$t('ChangePassword'),
           type: 'checkbox',
-          hidden: formValue => {
+          hidden: (formValue) => {
             if (formValue.update_password) {
               return true
             }
@@ -64,7 +86,7 @@ export default {
         },
         password: {
           component: UserPassword,
-          hidden: formValue => {
+          hidden: (formValue) => {
             if (formValue.source !== 'local') {
               return true
             }
@@ -86,11 +108,13 @@ export default {
           el: {
             style: 'margin-bottom: -10px'
           },
-          options: [{
-            label: this.$t('ResetPasswordNextLogin'),
-            value: true
-          }],
-          hidden: formValue => {
+          options: [
+            {
+              label: this.$t('ResetPasswordNextLogin'),
+              value: true
+            }
+          ],
+          hidden: (formValue) => {
             if (formValue.source !== 'local') {
               return true
             }
@@ -110,7 +134,7 @@ export default {
             multiple: true,
             ajax: {
               url: '/api/v1/rbac/system-roles/?id!=00000000-0000-0000-0000-000000000004',
-              transformOption: item => {
+              transformOption: (item) => {
                 return {
                   label: item.display_name,
                   value: item.id
@@ -134,19 +158,31 @@ export default {
               })
               // window.open('/settings/roles', '_blank')
             }
-            return _createVNode(_resolveComponent('el-link'), {
-              'onClick': handleClick
-            }, {
-              default: () => [_createVNode('i', {
-                'class': 'fa fa-external-link'
-              }, null), _createTextVNode(' '), roleManage]
-            })
+            return createVNodeCompat(
+              resolveComponentCompat('el-link'),
+              {
+                onClick: handleClick
+              },
+              {
+                default: () => [
+                  createVNodeCompat(
+                    'i',
+                    {
+                      class: 'fa fa-external-link'
+                    },
+                    null
+                  ),
+                  createTextVNodeCompat(' '),
+                  roleManage
+                ]
+              }
+            )
           },
           el: {
             multiple: true,
             ajax: {
               url: '/api/v1/rbac/org-roles/',
-              transformOption: item => {
+              transformOption: (item) => {
                 return {
                   label: item.display_name,
                   value: item.id
@@ -157,7 +193,11 @@ export default {
             value: []
           },
           hidden: () => {
-            return !this.$store.getters.hasValidLicense || !this.$hasPerm('rbac.add_orgrolebinding') || this.$store.getters.currentOrgIsRoot
+            return (
+              !this.$store.getters.hasValidLicense ||
+              !this.$hasPerm('rbac.add_orgrolebinding') ||
+              this.$store.getters.currentOrgIsRoot
+            )
           }
         },
         groups: {
@@ -189,12 +229,8 @@ export default {
       },
       afterGetFormValue(obj) {
         if (obj?.id) {
-          obj.org_roles = obj.org_roles?.map(({
-            id
-          }) => id)
-          obj.system_roles = obj.system_roles?.map(({
-            id
-          }) => id)
+          obj.org_roles = obj.org_roles?.map(({ id }) => id)
+          obj.system_roles = obj.system_roles?.map(({ id }) => id)
           obj.mfa_level.value = this.initial.mfa_level || obj.mfa_level.value
         }
         return obj
@@ -236,7 +272,7 @@ export default {
       this.user = user
       if (this.user.id === this.currentUser.id) {
         const fieldsToUpdate = ['system_roles', 'org_roles', 'is_active']
-        fieldsToUpdate.forEach(field => {
+        fieldsToUpdate.forEach((field) => {
           const msg = this.$t('disallowSelfUpdateFields', {
             attr: this.fieldsMeta[field]['label']
           })
@@ -252,27 +288,38 @@ export default {
     },
     async setDefaultRoles() {
       const roles = await this.$axios.get('/api/v1/rbac/roles/')
-      this.initial.system_roles = roles.filter(role => role.name === 'User').map(role => role.id)
-      this.initial.org_roles = roles.filter(role => role.name === 'OrgUser').map(role => role.id)
+      this.initial.system_roles = roles
+        .filter((role) => role.name === 'User')
+        .map((role) => role.id)
+      this.initial.org_roles = roles
+        .filter((role) => role.name === 'OrgUser')
+        .map((role) => role.id)
     },
     disableMFAFieldIfNeed(user) {
       let options = null
       let mfa_level = null
       // SECURITY_MFA_AUTH 0 不开启 1 全局开启 2 管理员开启
       const securityMFAAuth = store.getters.publicSettings['SECURITY_MFA_AUTH']
-      const adminUserIsNeed = (user?.is_superuser || user?.is_org_admin) && this.$route.meta.action === 'update' && securityMFAAuth === MFASystemSetting.onlyAdminUsers
+      const adminUserIsNeed =
+        (user?.is_superuser || user?.is_org_admin) &&
+        this.$route.meta.action === 'update' &&
+        securityMFAAuth === MFASystemSetting.onlyAdminUsers
       if (securityMFAAuth === MFASystemSetting.allUsers) {
-        options = [{
-          'value': MFALevel.allUsers,
-          'label': this.$t('MFAAllUsers')
-        }]
+        options = [
+          {
+            value: MFALevel.allUsers,
+            label: this.$t('MFAAllUsers')
+          }
+        ]
         mfa_level = MFALevel.allUsers
       }
       if (securityMFAAuth === MFASystemSetting.onlyAdminUsers && adminUserIsNeed) {
-        options = [{
-          'value': MFALevel.onlyAdminUsers,
-          'label': this.$t('MFAOnlyAdminUsers')
-        }]
+        options = [
+          {
+            value: MFALevel.onlyAdminUsers,
+            label: this.$t('MFAOnlyAdminUsers')
+          }
+        ]
         mfa_level = MFALevel.onlyAdminUsers
       }
       if (mfa_level !== null && options !== null) {
@@ -292,5 +339,4 @@ export default {
     line-height: 30px;
   }
 }
-
 </style>

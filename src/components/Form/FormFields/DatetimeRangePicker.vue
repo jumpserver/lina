@@ -1,5 +1,7 @@
 <template>
-  <el-date-picker v-bind="$attrs" v-model="value"
+  <el-date-picker
+    v-bind="$attrs"
+    v-model="value"
     :clearable="false"
     :default-time="['00:00:01', '23:59:59']"
     :end-placeholder="$tc('DateEnd')"
@@ -9,7 +11,8 @@
     class="datepicker"
     range-separator="-"
     size="small"
-    @change="handleDateChange" />
+    @change="handleDateChange"
+  />
 </template>
 
 <script>
@@ -55,16 +58,20 @@ export default {
           {
             text: this.$t('DateLastWeek'),
             onClick: (picker) => this.onShortcutClick(picker, 7)
-          }, {
+          },
+          {
             text: this.$t('DateLastMonth'),
             onClick: (picker) => this.onShortcutClick(picker, 30)
-          }, {
+          },
+          {
             text: this.$t('DateLast3Months'),
             onClick: (picker) => this.onShortcutClick(picker, 90)
-          }, {
+          },
+          {
             text: this.$t('DateLastHarfYear'),
             onClick: (picker) => this.onShortcutClick(picker, 183)
-          }, {
+          },
+          {
             text: this.$t('DateLastYear'),
             onClick: (picker) => this.onShortcutClick(picker, 365)
           }
@@ -96,7 +103,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 html:lang(pt-br) {
   .datepicker :deep(.el-range-separator) {
     padding: 0 10px;

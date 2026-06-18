@@ -1,5 +1,9 @@
 <template>
-  <TabPage v-model:active-menu="config.activeMenu" :disabled="!hasValidLicense" :submenu="config.submenu" />
+  <TabPage
+    v-model:active-menu="config.activeMenu"
+    :disabled="!hasValidLicense"
+    :submenu="config.submenu"
+  />
 </template>
 
 <script>

@@ -8,7 +8,9 @@
       :table-url="tableUrl"
       @filter="filter"
     />
-    <TableAction v-bind="iHeaderActions" v-if="hasActions"
+    <TableAction
+      v-bind="iHeaderActions"
+      v-if="hasActions"
       v-model:quick-filter-expand="filterExpand"
       :class="{ 'filter-expand': filterExpand }"
       :date-pick="handleDateChange"
@@ -17,13 +19,17 @@
       :search-table="search"
       :selected-rows="selectedRows"
       :table-url="tableUrl"
-      @done="handleActionInitialDone" />
+      @done="handleActionInitialDone"
+    />
     <IBox v-loading="!actionInit" class="table-content">
-      <AutoDataTable v-bind="$attrs" v-if="actionInit"
+      <AutoDataTable
+        v-bind="$attrs"
+        v-if="actionInit"
         ref="dataTable"
         :config="iTableConfig"
         :filter-table="filter"
-        @selection-change="handleSelectionChange" />
+        @selection-change="handleSelectionChange"
+      />
     </IBox>
   </div>
 </template>
@@ -40,6 +46,7 @@ import QuickFilter from './TableAction/QuickFilter.vue'
 import { getDayEnd, getDaysAgo } from '@/utils/common/time'
 import { ObjectLocalStorage } from '@/utils/common/index'
 import i18n from '@/i18n/i18n'
+import _ from 'lodash'
 
 const LIST_TABLE_KEY = Symbol('listTable')
 
@@ -157,7 +164,7 @@ export default {
       }
       const defaults = {}
       for (const [k, v] of Object.entries(actions)) {
-        const hasPerm = v.action.split('|').some(i => this.hasActionPerm(i.trim()))
+        const hasPerm = v.action.split('|').some((i) => this.hasActionPerm(i.trim()))
         if (!hasPerm) {
           defaults[k] = i18n.global.t('NoPermission')
           continue
@@ -181,7 +188,7 @@ export default {
         extraQuery: this.extraQuery
       })
       const checkRoot = !(this.$route.meta?.disableOrgsChange === true)
-      const checkPermAndRoot = action => {
+      const checkPermAndRoot = (action) => {
         if (!this.hasActionPerm(action)) {
           return i18n.global.t('NoPermission')
         }
@@ -314,7 +321,7 @@ export default {
         }
         return true
       }
-      const removeKeys = Object.keys(this.initQuery).filter(key => !attrs[key])
+      const removeKeys = Object.keys(this.initQuery).filter((key) => !attrs[key])
       for (const key of removeKeys) {
         delete this.extraQuery[key]
       }

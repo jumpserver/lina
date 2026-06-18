@@ -1,6 +1,8 @@
 <template>
   <div>
-    <ElFormRender v-bind="$attrs" :id="id"
+    <ElFormRender
+      v-bind="$attrs"
+      :id="id"
       ref="form"
       :class="[mobile ? 'mobile' : 'desktop']"
       :content="processedFields"
@@ -9,7 +11,8 @@
       class="form-fields"
       :label-width="labelWidth"
       :style="{ '--label-width': labelWidth }"
-      :server-errors="serverErrors">
+      :server-errors="serverErrors"
+    >
       <!-- named slot 透传给 ElFormRender，保持与字段渲染顺序一致 -->
       <template v-for="item in processedFields" :key="`id:${item.id}`" #[`id:${item.id}`]>
         <slot :name="`id:${item.id}`" />
@@ -39,16 +42,23 @@
           {{ $t('SaveAndAddAnother') }}
         </el-button>
 
-        <el-button v-if="defaultButton && hasReset" class="form-secondary-button" @click="handleResetClick">
+        <el-button
+          v-if="defaultButton && hasReset"
+          class="form-secondary-button"
+          @click="handleResetClick"
+        >
           {{ $t('Reset') }}
         </el-button>
 
-        <el-button v-bind="button" v-for="button in moreButtons"
+        <el-button
+          v-bind="button"
+          v-for="button in moreButtons"
           v-show="!iHidden(button)"
           :key="button.title"
           class="form-secondary-button"
           :loading="button.loading"
-          @click="handleClick(button)">
+          @click="handleClick(button)"
+        >
           {{ button.title }}
         </el-button>
       </div>
@@ -179,7 +189,7 @@ export default {
     processedFields() {
       function markComponents(fields) {
         if (!Array.isArray(fields)) return fields
-        return fields.map(field => {
+        return fields.map((field) => {
           if (!field) return field
           if (typeof field === 'string') return field
           const f = { ...field }
@@ -217,7 +227,7 @@ export default {
       }
       const dialogs = [...document.getElementsByClassName('el-dialog__body')]
       if (dialogs.length > 0) {
-        const dialog = dialogs.find(d => d.innerHTML.indexOf(this.id) !== -1)
+        const dialog = dialogs.find((d) => d.innerHTML.indexOf(this.id) !== -1)
         if (dialog) {
           this.iSubmitBtnText = this.$t('Confirm')
           return
@@ -249,7 +259,7 @@ export default {
     handleClick(button) {
       const callback =
         button.callback ||
-        function(values, form) {
+        function (values, form) {
           // debug('Click ', button.title, ': ', values)
         }
       const form = this.$refs['form']

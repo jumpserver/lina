@@ -28,7 +28,7 @@ const mutations = {
     if (count < 5) {
       return
     }
-    state.sqlQueryCounter = state.sqlQueryCounter.filter(item => item.url !== url)
+    state.sqlQueryCounter = state.sqlQueryCounter.filter((item) => item.url !== url)
     state.sqlQueryCounter.push({ url, count, time: new Date().getTime() })
     if (state.sqlQueryCounter.length > 5) {
       state.sqlQueryCounter.shift()
@@ -54,14 +54,17 @@ const actions = {
       return promise
     }
     promise = new Promise((resolve, reject) => {
-      optionUrlMeta(url).then(meta => {
-        commit('SET_URL_META', { url, meta })
-        resolve(meta)
-      }).catch(error => {
-        reject(error)
-      }).finally(() => {
-        state.metaPromiseMap[url] = null
-      })
+      optionUrlMeta(url)
+        .then((meta) => {
+          commit('SET_URL_META', { url, meta })
+          resolve(meta)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+        .finally(() => {
+          state.metaPromiseMap[url] = null
+        })
     })
     state.metaPromiseMap[url] = promise
     return promise

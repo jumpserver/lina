@@ -30,7 +30,7 @@ export default {
         name: 'record',
         title: this.$t('Record'),
         can: this.$hasPerm('accounts.view_pushsecretrecord'),
-        callback: function({ row }) {
+        callback: function ({ row }) {
           return this.$router.push({
             name: 'AccountPush',
             query: {

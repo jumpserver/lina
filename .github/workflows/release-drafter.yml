@@ -29,15 +29,20 @@ jobs:
           config-name: release-config.yml
           version: ${{ steps.get_version.outputs.TAG }}
           tag: ${{ steps.get_version.outputs.TAG }}
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: '20.15'
+          node-version: '24'
+          cache: 'pnpm'
+      - name: Enable pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.33.0 --activate
       - name: Install dependencies
-        run: yarn install
+        run: pnpm install --frozen-lockfile
       - name: Build web
         run: |
           sed -i "s@version-dev@${{ steps.get_version.outputs.TAG }}@g" src/layout/components/NavHeader/About.vue
-          yarn build
+          pnpm build
       - name: Create Upload Assets
         run: |
           rm -rf build/*

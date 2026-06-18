@@ -6,9 +6,9 @@
         <el-button style="float: right" link @click="tailLog"> {{ $tc('TailLog') }} </el-button>
       </div>
     </template>
-    <table v-if="logs.length>0" class="log-table">
+    <table v-if="logs.length > 0" class="log-table">
       <tbody>
-        <tr v-for="(o,i) in logs" :key="i">
+        <tr v-for="(o, i) in logs" :key="i">
           <td>{{ o['message'] }}</td>
         </tr>
       </tbody>
@@ -19,8 +19,8 @@
           <td>{{ $tc('NoLog') }}</td>
         </tr>
       </tbody>
-    </table></el-card>
-
+    </table></el-card
+  >
 </template>
 <script>
 import { openWindow } from '@/utils/common/index'
@@ -78,5 +78,4 @@ export default {
 .log-card :deep(.el-card__body) {
   padding: 10px 10px 5px;
 }
-
 </style>

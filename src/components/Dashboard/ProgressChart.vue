@@ -1,11 +1,6 @@
 <template>
   <div>
-    <Echart
-      ref="echarts"
-      :options="options"
-      :autoresize="true"
-      class="disabled-when-print"
-    />
+    <Echart ref="echarts" :options="options" :autoresize="true" class="disabled-when-print" />
   </div>
 </template>
 
@@ -26,8 +21,14 @@ export default {
         const colorValue = themeColor.replace(/#/g, '')
         const subCOlor = mix(colorValue, 'ffffff', 40)
         return [
-          themeColor, subCOlor, '#F3B44B', 'rgba(243, 180, 75, 0.5)',
-          '#535C65', 'rgba(83, 92, 101, 0.5)', '#29448A', 'rgba(41, 68, 138, 0.5)'
+          themeColor,
+          subCOlor,
+          '#F3B44B',
+          'rgba(243, 180, 75, 0.5)',
+          '#535C65',
+          'rgba(83, 92, 101, 0.5)',
+          '#29448A',
+          'rgba(41, 68, 138, 0.5)'
         ]
       }
     },
@@ -42,8 +43,8 @@ export default {
   computed: {
     options() {
       const seriesList = []
-      const labels = this.data.map(item => item.label)
-      const total = _.sumBy(this.data, function(i) {
+      const labels = this.data.map((item) => item.label)
+      const total = _.sumBy(this.data, function (i) {
         return i.total
       })
       for (let i = 0, len = this.data.length; i < len; i++) {
@@ -80,7 +81,6 @@ export default {
           },
           bottom: 30,
           data: labels
-
         },
         color: [
           {
@@ -100,7 +100,8 @@ export default {
             y2: 0,
             type: 'linear',
             global: false
-          }, {
+          },
+          {
             colorStops: [
               {
                 offset: 0,

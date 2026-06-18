@@ -49,16 +49,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'currentUser'
-    ])
+    ...mapGetters(['currentUser'])
   },
   mounted() {
     this.getTicketOpenCount()
   },
   methods: {
     getTicketOpenCount() {
-      getTicketOpenCount(this.currentUser.id).then(data => {
+      getTicketOpenCount(this.currentUser.id).then((data) => {
         this.assignedTicketCount = data['count']
       })
     },
@@ -69,5 +67,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

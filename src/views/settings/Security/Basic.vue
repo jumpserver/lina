@@ -16,14 +16,7 @@ export default {
       config: {
         url: '/api/v1/settings/setting/?category=security_basic',
         hasDetailInMsg: false,
-        fields: [
-          [
-            this.$t('Basic'),
-            [
-              'SECURITY_SERVICE_ACCOUNT_REGISTRATION'
-            ]
-          ]
-        ],
+        fields: [[this.$t('Basic'), ['SECURITY_SERVICE_ACCOUNT_REGISTRATION']]],
         fieldsMeta: {}
       }
     }
@@ -31,6 +24,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

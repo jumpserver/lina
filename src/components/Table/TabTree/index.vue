@@ -3,23 +3,19 @@
     <el-tabs
       v-if="tabIndices.length > 0"
       v-model="iActiveMenu"
-      :class="{ 'only-submenu': tabIndices.length === 1}"
+      :class="{ 'only-submenu': tabIndices.length === 1 }"
       class="page-submenu"
       stretch
       @tab-click="handleTabClick"
     >
       <template v-for="item in tabIndices" :key="item.name">
-        <el-tab-pane
-          :disabled="item.disabled"
-          :label-content="item.labelContent"
-          :name="item.name"
-        >
+        <el-tab-pane :disabled="item.disabled" :label-content="item.labelContent" :name="item.name">
           <template #label>
-          <span class="tab-container">
-            <i v-if="item.icon && !showText" :class="item.icon" class="tab-icon fa " />
-            <span v-if="showText" class="tab-text">{{ item.title }}</span>
-            <slot :tab="item.name" name="badge" />
-          </span>
+            <span class="tab-container">
+              <i v-if="item.icon && !showText" :class="item.icon" class="tab-icon fa" />
+              <span v-if="showText" class="tab-text">{{ item.title }}</span>
+              <slot :tab="item.name" name="badge" />
+            </span>
           </template>
         </el-tab-pane>
       </template>
@@ -33,10 +29,10 @@
             :setting="activeTreeSetting"
             @url-change="handleUrlChange"
           >
-            <template #rMenu="{data}">
-            <div>
-              <slot :data="data" name="rMenu" />
-            </div>
+            <template #rMenu="{ data }">
+              <div>
+                <slot :data="data" name="rMenu" />
+              </div>
             </template>
           </AutoDataZTree>
         </keep-alive>
@@ -47,7 +43,6 @@
 
 <script>
 import AutoDataZTree from '@/components/Tree/AutoDataZTree/index.vue'
-import merge from 'webpack-merge'
 
 const ACTIVE_TREE_TAB_KEY = 'activeTreeTab'
 
@@ -109,7 +104,7 @@ export default {
   methods: {
     hiddenTextIfNeed() {
       const vm = this
-      const hideOverflowingText = _.debounce(function() {
+      const hideOverflowingText = _.debounce(function () {
         const tabs = document.querySelector('.tree-tab .el-tabs__nav-wrap.is-scrollable')
         vm.showText = !tabs
       }, 800)
@@ -120,13 +115,13 @@ export default {
     hideRMenu() {
       this.$refs.AutoDataZTree?.hideRMenu()
     },
-    getSelectedNodes: function() {
+    getSelectedNodes: function () {
       return this.$refs.AutoDataZTree.getSelectedNodes()
     },
-    getNodes: function() {
+    getNodes: function () {
       return this.$refs.AutoDataZTree.getNodes()
     },
-    selectNode: function(node) {
+    selectNode: function (node) {
       return this.$refs.AutoDataZTree.selectNode(node)
     },
     handleUrlChange(url) {
@@ -143,7 +138,10 @@ export default {
 
       if (this.$route?.query?.[ACTIVE_TREE_TAB_KEY]) {
         this.$router.push({
-          query: merge(this.$route.query, { [ACTIVE_TREE_TAB_KEY]: '' })
+          query: {
+            ...this.$route.query,
+            [ACTIVE_TREE_TAB_KEY]: ''
+          }
         })
       }
     },

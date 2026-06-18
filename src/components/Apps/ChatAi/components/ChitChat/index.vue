@@ -34,7 +34,7 @@
         round
         size="small"
         @click="onStopHandle"
-      >{{ $tc('Stop') }}
+        >{{ $tc('Stop') }}
       </el-button>
       <ChatInput
         ref="chatInput"
@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import { KAEL_HOST } from '@/utils/env'
 import ChatInput from './ChatInput.vue'
 import ChatMessage from './ChatMessage.vue'
 import { mapGetters, mapState } from 'vuex'
@@ -124,40 +125,41 @@ export default {
       return this.stopVisible
     },
     ...mapState({
-      isLoading: state => state.chat.loading,
-      activeChat: state => state.chat.activeChat
+      isLoading: (state) => state.chat.loading,
+      activeChat: (state) => state.chat.activeChat
     }),
-    ...mapGetters([
-      'publicSettings'
-    ]),
+    ...mapGetters(['publicSettings']),
     toolOptions() {
       return (this.tools || [])
-        .map(item => ({
+        .map((item) => ({
           label: item?.name || item?.id,
           value: item?.id
         }))
-        .filter(item => !!item.value)
+        .filter((item) => !!item.value)
     },
     toolServerOptions() {
       return (this.toolServers || [])
-        .map(server => ({
+        .map((server) => ({
           label: server?.info?.title || server?.info?.name || server?.url || server?.id,
           value: server?.id
         }))
-        .filter(server => !!server.value)
+        .filter((server) => !!server.value)
     }
   },
   methods: {
     replaceLoadingChat(chat) {
       const chats = this.activeChat?.chats || []
-      const idx = chats.findIndex(c =>
-        c?.message?.id === this.loadingMessageId ||
-        c?.message?.content === 'loading' ||
-        c?.message?.is_loading
+      const idx = chats.findIndex(
+        (c) =>
+          c?.message?.id === this.loadingMessageId ||
+          c?.message?.content === 'loading' ||
+          c?.message?.is_loading
       )
       if (idx !== -1) {
         chat.message = chat.message || {}
-        if (!chat.message.id) chat.message.id = this.loadingMessageId || chat.message.id || this.genId()
+        if (!chat.message.id) {
+          chat.message.id = this.loadingMessageId || chat.message.id || this.genId()
+        }
         chats[idx] = chat
         this.loadingMessageId = ''
         console.log('[chat] replaceLoadingChat success', { id: chat.message.id, idx })
@@ -222,7 +224,7 @@ export default {
     removeLoadingMessage() {
       if (!this.loadingMessageId) return
       const chats = this.activeChat?.chats || []
-      const idx = chats.findIndex(c => c?.type === 'loading' || c?.message?.is_loading)
+      const idx = chats.findIndex((c) => c?.type === 'loading' || c?.message?.is_loading)
       if (idx !== -1) {
         chats.splice(idx, 1)
       }
@@ -266,23 +268,26 @@ export default {
       const config = this.publicSettings?.CHAT_AI_PROVIDERS || {}
       const providers = Array.isArray(config)
         ? config
-        : (Array.isArray(config.providers) ? config.providers : [])
+        : Array.isArray(config.providers)
+          ? config.providers
+          : []
       const defaultName = config.defaultProvider
 
-      const picked = (
-        providers.find(item => item.name && item.name === defaultName) ||
-        providers.find(item => item.is_assistant || item.IsAssistant) ||
+      const picked =
+        providers.find((item) => item.name && item.name === defaultName) ||
+        providers.find((item) => item.is_assistant || item.IsAssistant) ||
         providers[0]
-      )
 
-      return picked || {
-        base_url: process.env.VUE_APP_KAEL_HOST || '/kael',
-        api_key: '',
-        model: 'gpt-4o-mini'
-      }
+      return (
+        picked || {
+          base_url: KAEL_HOST || '/kael',
+          api_key: '',
+          model: 'gpt-4o-mini'
+        }
+      )
     },
     getApiBase(provider) {
-      const envBase = process.env.VUE_APP_KAEL_HOST || ''
+      const envBase = KAEL_HOST || ''
       let base = provider?.base_url || envBase || ''
 
       if (!base) {
@@ -299,7 +304,7 @@ export default {
       return base.replace(/\/$/, '')
     },
     getSocketBase() {
-      let base = process.env.VUE_APP_KAEL_HOST || ''
+      let base = KAEL_HOST || ''
       if (!base) {
         return window.location.origin
       }
@@ -316,7 +321,7 @@ export default {
       const history = this.activeChat?.chats || []
 
       // 只带用户消息，跳过欢迎语和助手历史，保持与 Kael 一致
-      history.forEach(chat => {
+      history.forEach((chat) => {
         const role = chat?.message?.role
         if (role !== 'user') return
         const content = chat?.message?.content || ''
@@ -344,12 +349,12 @@ export default {
     },
     findMessageById(id) {
       if (!id) return null
-      return (this.activeChat?.chats || []).find(item => item?.message?.id === id)
+      return (this.activeChat?.chats || []).find((item) => item?.message?.id === id)
     },
     removeMessageById(id) {
       if (!id) return
       const chats = this.activeChat?.chats || []
-      const index = chats.findIndex(item => item?.message?.id === id)
+      const index = chats.findIndex((item) => item?.message?.id === id)
       if (index !== -1) {
         chats.splice(index, 1)
       }
@@ -360,7 +365,15 @@ export default {
       const dateStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`
       const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`
       const datetimeStr = `${dateStr} ${timeStr}`
-      const weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][now.getDay()]
+      const weekday = [
+        'Sunday',
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday'
+      ][now.getDay()]
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''
       const lang = this.$i18n?.locale || 'en'
 
@@ -403,13 +416,15 @@ export default {
         chat.reasoning = { content: reasoning }
       }
 
-      const hasContent = (chat?.result?.content || '').trim() !== '' || (chat?.reasoning?.content || '').trim() !== ''
+      const hasContent =
+        (chat?.result?.content || '').trim() !== '' ||
+        (chat?.reasoning?.content || '').trim() !== ''
       return hasContent ? chat : null
     },
     linkAssistantToLastUser(assistantChat) {
       if (!assistantChat?.message) return assistantChat
       const chats = this.activeChat?.chats || []
-      const lastUser = [...chats].reverse().find(item => item?.message?.role === 'user')
+      const lastUser = [...chats].reverse().find((item) => item?.message?.role === 'user')
       if (lastUser?.message) {
         const userId = lastUser.message.id || this.genId()
         if (!lastUser.message.id) {
@@ -433,7 +448,7 @@ export default {
       const messages = []
       const chats = this.activeChat?.chats || []
       const now = Date.now()
-      const startIndex = chats.findIndex(chat => chat?.message?.role === 'user')
+      const startIndex = chats.findIndex((chat) => chat?.message?.role === 'user')
       if (startIndex === -1) return []
 
       let parentId = null
@@ -443,12 +458,11 @@ export default {
         const role = message.role || ''
         if (!role) continue
 
-        const content = role === 'assistant'
-          ? (chat?.result?.content || message.content || '')
-          : (message.content || '')
-        const ts = message.create_time
-          ? new Date(message.create_time).getTime()
-          : now
+        const content =
+          role === 'assistant'
+            ? chat?.result?.content || message.content || ''
+            : message.content || ''
+        const ts = message.create_time ? new Date(message.create_time).getTime() : now
         const id = message.id || `${role}-${i}-${ts}`
         if (!message.id) {
           message.id = id
@@ -505,17 +519,21 @@ export default {
           parentId,
           timestamp: msg.create_time ? new Date(msg.create_time).getTime() : now,
           childrenIds: [],
-          ...(msg.model ? { model: msg.model, modelName: msg.model } : (modelId ? { model: modelId, modelName: modelId } : {})),
+          ...(msg.model
+            ? { model: msg.model, modelName: msg.model }
+            : modelId
+              ? { model: modelId, modelName: modelId }
+              : {}),
           done: true
         }
         messageMap[id] = assistantItem
         messages.push(assistantItem)
       }
 
-      Object.values(messageMap).forEach(msg => {
+      Object.values(messageMap).forEach((msg) => {
         if (msg.parentId && messageMap[msg.parentId]) {
           messageMap[msg.parentId].childrenIds.push(msg.id)
-          const parentChat = chats.find(c => c?.message?.id === msg.parentId)
+          const parentChat = chats.find((c) => c?.message?.id === msg.parentId)
           if (parentChat) {
             parentChat.message.childrenIds = parentChat.message.childrenIds || []
             if (!parentChat.message.childrenIds.includes(msg.id)) {
@@ -551,7 +569,7 @@ export default {
         }
       }
 
-      return ordered.map(msg => ({
+      return ordered.map((msg) => ({
         ...msg,
         childrenIds: messageMap[msg.id].childrenIds || msg.childrenIds || []
       }))
@@ -614,11 +632,14 @@ export default {
         id: modelId,
         name: modelId
       }
-      const selectedToolIds = Array.isArray(this.selectedToolIds) ? this.selectedToolIds.filter(Boolean) : []
+      const selectedToolIds = Array.isArray(this.selectedToolIds)
+        ? this.selectedToolIds.filter(Boolean)
+        : []
       const availableToolServers = this.toolServers || []
-      const selectedToolServers = Array.isArray(this.selectedToolServerIds) && this.selectedToolServerIds.length
-        ? availableToolServers.filter(server => this.selectedToolServerIds.includes(server.id))
-        : availableToolServers
+      const selectedToolServers =
+        Array.isArray(this.selectedToolServerIds) && this.selectedToolServerIds.length
+          ? availableToolServers.filter((server) => this.selectedToolServerIds.includes(server.id))
+          : availableToolServers
 
       const payload = {
         stream: true,
@@ -766,7 +787,10 @@ export default {
         let done = false
         while (!done) {
           const { value, done: readerDone } = await reader.read()
-          console.log('handleStreamResponse: read chunk', { readerDone, length: value?.length || 0 })
+          console.log('handleStreamResponse: read chunk', {
+            readerDone,
+            length: value?.length || 0
+          })
           if (readerDone) break
           buffer += decoder.decode(value, { stream: true })
           const parts = buffer.split('\n')
@@ -836,7 +860,11 @@ export default {
 
       const appendContent = (delta) => {
         const msg = ensureTarget()
-        msg.message = msg.message || { content: '', role: 'assistant', id: message_id || this.genId() }
+        msg.message = msg.message || {
+          content: '',
+          role: 'assistant',
+          id: message_id || this.genId()
+        }
         msg.result = msg.result || { content: '' }
         msg.message.content = (msg.message.content || '') + (delta || '')
         msg.result.content = (msg.result.content || '') + (delta || '')
@@ -846,7 +874,11 @@ export default {
         appendContent(payload?.content || '')
       } else if ((type === 'chat:message' || type === 'replace') && payload?.content) {
         const msg = ensureTarget()
-        msg.message = msg.message || { content: '', role: 'assistant', id: message_id || this.genId() }
+        msg.message = msg.message || {
+          content: '',
+          role: 'assistant',
+          id: message_id || this.genId()
+        }
         msg.result = msg.result || { content: '' }
         msg.message.content = payload?.content || ''
         msg.result.content = payload?.content || ''
@@ -856,7 +888,11 @@ export default {
         }
         if (payload?.content) {
           const msg = ensureTarget()
-          msg.message = msg.message || { content: '', role: 'assistant', id: message_id || this.genId() }
+          msg.message = msg.message || {
+            content: '',
+            role: 'assistant',
+            id: message_id || this.genId()
+          }
           msg.result = msg.result || { content: '' }
           msg.message.content = payload.content
           msg.result.content = payload.content
@@ -949,8 +985,8 @@ export default {
           this.tools = data
           // keep any existing selections, but don't auto-enable new tools by default
           if (this.selectedToolIds.length) {
-            const validIds = data.map(item => item?.id)
-            this.selectedToolIds = this.selectedToolIds.filter(id => validIds.includes(id))
+            const validIds = data.map((item) => item?.id)
+            this.selectedToolIds = this.selectedToolIds.filter((id) => validIds.includes(id))
           }
         }
       } catch (err) {
@@ -979,10 +1015,12 @@ export default {
         const loaded = await this.loadToolServers(servers)
         this.toolServers = loaded
         if (!this.selectedToolServerIds.length) {
-          this.selectedToolServerIds = loaded.map(item => item.id)
+          this.selectedToolServerIds = loaded.map((item) => item.id)
         } else {
-          const validIds = loaded.map(item => item.id)
-          this.selectedToolServerIds = this.selectedToolServerIds.filter(id => validIds.includes(id))
+          const validIds = loaded.map((item) => item.id)
+          this.selectedToolServerIds = this.selectedToolServerIds.filter((id) =>
+            validIds.includes(id)
+          )
         }
       } catch (err) {
         console.warn('load tool servers error', err)
@@ -1144,7 +1182,8 @@ export default {
           if (operation?.operationId) {
             const tool = {
               name: operation.operationId,
-              description: operation.description || operation.summary || 'No description available.',
+              description:
+                operation.description || operation.summary || 'No description available.',
               parameters: {
                 type: 'object',
                 properties: {},
@@ -1153,7 +1192,7 @@ export default {
             }
 
             if (operation.parameters) {
-              operation.parameters.forEach(param => {
+              operation.parameters.forEach((param) => {
                 const paramSchema = param.schema || {}
                 let description = paramSchema.description || param.description || ''
                 if (Array.isArray(paramSchema.enum)) {
@@ -1259,12 +1298,18 @@ export default {
           ...headers
         }
         const modelId = assistantChat?.message?.model || provider.model || 'gpt-4o-mini'
-        const modelItem = this.models.find(m => m.id === modelId) || { id: modelId }
-        const messages = this.buildCompletedMessages(assistantChat?.message?.id, modelId, assistantChat)
+        const modelItem = this.models.find((m) => m.id === modelId) || { id: modelId }
+        const messages = this.buildCompletedMessages(
+          assistantChat?.message?.id,
+          modelId,
+          assistantChat
+        )
         // 确保至少包含一问一答
-        if (!messages.find(m => m.role === 'assistant') && assistantChat?.message) {
+        if (!messages.find((m) => m.role === 'assistant') && assistantChat?.message) {
           const assistId = assistantChat.message.id || this.genId()
-          const parentUser = messages.findLast ? messages.findLast(m => m.role === 'user') : [...messages].reverse().find(m => m.role === 'user')
+          const parentUser = messages.findLast
+            ? messages.findLast((m) => m.role === 'user')
+            : [...messages].reverse().find((m) => m.role === 'user')
           const parentId = parentUser?.id || null
           messages.push({
             id: assistId,
@@ -1272,7 +1317,9 @@ export default {
             parentId,
             childrenIds: [],
             content: assistantChat.message.content || assistantChat?.result?.content || '',
-            timestamp: assistantChat.message.create_time ? new Date(assistantChat.message.create_time).getTime() : Date.now(),
+            timestamp: assistantChat.message.create_time
+              ? new Date(assistantChat.message.create_time).getTime()
+              : Date.now(),
             done: true,
             model: modelId,
             modelName: modelId
@@ -1309,7 +1356,7 @@ export default {
         if (!this.chatId) return
         const baseUrlV1 = this.getApiBaseV1(provider)
         const historyMessages = {}
-        messages.forEach(msg => {
+        messages.forEach((msg) => {
           historyMessages[msg.id] = { ...msg }
         })
         const currentId = messages[messages.length - 1]?.id || null

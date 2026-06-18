@@ -10,7 +10,9 @@
         导致跨页选择（persistSelection）被覆盖，只剩当页数据。
         选择事件统一走 selectStrategy，在内部维护全量 selected 并向外 emit。
       -->
-      <el-table v-bind="tableAttrs" ref="table"
+      <el-table
+        v-bind="tableAttrs"
+        ref="table"
         v-loading="tableLoading"
         :data="data"
         :row-class-name="rowClassName"
@@ -18,11 +20,18 @@
         v-on="forwardListeners"
         @selection-change="selectStrategy.onSelectionChange"
         @select-all="handleSelectAll($event, canSelect)"
-        @sort-change="onSortChange">
+        @sort-change="onSortChange"
+      >
         <template v-if="isTree">
-          <el-data-table-column v-bind="{ align: columnsAlign, ...columns[0] }" v-if="hasSelect"
-            key="selection-key" />
-          <el-data-table-column v-bind="treeControlColumn" :key="treeControlColumn.prop || 'tree-ctrl'">
+          <el-data-table-column
+            v-bind="{ align: columnsAlign, ...columns[0] }"
+            v-if="hasSelect"
+            key="selection-key"
+          />
+          <el-data-table-column
+            v-bind="treeControlColumn"
+            :key="treeControlColumn.prop || 'tree-ctrl'"
+          >
             <template #default="scope">
               <span v-for="space in scope.row._level" :key="space" class="ms-tree-space" />
               <span
@@ -36,8 +45,11 @@
             </template>
           </el-data-table-column>
 
-          <el-data-table-column v-bind="{ align: columnsAlign, ...col }" v-for="col in treeDataColumns"
-            :key="col.prop" />
+          <el-data-table-column
+            v-bind="{ align: columnsAlign, ...col }"
+            v-for="col in treeDataColumns"
+            :key="col.prop"
+          />
         </template>
 
         <!--非树-->
@@ -48,14 +60,17 @@
             :selectable="canSelect"
             type="selection"
           />
-          <el-table-column v-bind="getColumnBindProps(col)" v-for="col in columns"
+          <el-table-column
+            v-bind="getColumnBindProps(col)"
+            v-for="col in columns"
             :key="col.prop"
             :filter-method="typeof col.filterMethod === 'function' ? col.filterMethod : null"
             :filter-multiple="false"
             :filters="col.filters || null"
             :formatter="typeof col.formatter === 'function' ? col.formatter : null"
             :title="col.label"
-            :prop="col.prop">
+            :prop="col.prop"
+          >
             <template #header>
               <span :title="col.label">{{ col.label }}</span>
             </template>
@@ -327,7 +342,7 @@ export default {
      */
     newText: {
       type: String,
-      default: function() {
+      default: function () {
         return 'Add'
       }
     },
@@ -336,7 +351,7 @@ export default {
      */
     editText: {
       type: String,
-      default: function() {
+      default: function () {
         return 'Modify'
       }
     },
@@ -345,7 +360,7 @@ export default {
      */
     viewText: {
       type: String,
-      default: function() {
+      default: function () {
         return 'View'
       }
     },
@@ -354,7 +369,7 @@ export default {
      */
     deleteText: {
       type: String,
-      default: function() {
+      default: function () {
         return 'Delete'
       }
     },
@@ -754,7 +769,7 @@ export default {
       return () => true
     },
     columnsAlign() {
-      if (this.columns.some(col => col.columns && col.columns.length)) {
+      if (this.columns.some((col) => col.columns && col.columns.length)) {
         // 多级表头默认居中
         return 'center'
       } else {
@@ -836,7 +851,7 @@ export default {
       return getLocatedSlotKeys(this.$slots, 'search:')
     },
     collapseForm() {
-      return this.searchForm.map(item => {
+      return this.searchForm.map((item) => {
         if ('collapsible' in item && !item.collapsible) {
           return item
         }
@@ -844,7 +859,7 @@ export default {
         const itemHidden = item.hidden || (() => false)
         return {
           ...item,
-          hidden: data => {
+          hidden: (data) => {
             return this.isSearchCollapse || itemHidden(data)
           }
         }
@@ -940,7 +955,7 @@ export default {
 
       // 无效值过滤，注意0是有效值
       query = Object.keys(query)
-        .filter(k => !isFalsey(query[k]))
+        .filter((k) => !isFalsey(query[k]))
         .reduce((obj, k) => {
           obj[k] = query[k].toString().trim()
           return obj
@@ -1067,7 +1082,7 @@ export default {
             this.selectStrategy?.updateElTableSelection()
           })
         })
-        .catch(err => {
+        .catch((err) => {
           /**
            * 请求数据失败，返回err对象
            * @event error
@@ -1263,7 +1278,7 @@ export default {
     // https://github.com/PanJiaChen/vue-element-admin/tree/master/@/components/TreeTable
     tree2Array(data, expandAll, parent = null, level = null) {
       let tmp = []
-      data.forEach(record => {
+      data.forEach((record) => {
         if (record._expanded === undefined) {
           record._expanded = expandAll
         }

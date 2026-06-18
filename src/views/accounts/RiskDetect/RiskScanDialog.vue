@@ -8,7 +8,7 @@
     top="35vh"
     width="80%"
     @update:visible="$emit('update:visible', $event)"
-    @close="loading=true"
+    @close="loading = true"
   >
     <div v-loading="loading">
       <iframe :src="url" frameborder="0" @load="onIframeLoad" />

@@ -7,7 +7,7 @@
     height="20"
     :class="className"
   >
-    <g style="transform: translateX(13px) rotateZ(0deg); transform-origin: 4.775px 7.73501px;">
+    <g style="transform: translateX(13px) rotateZ(0deg); transform-origin: 4.775px 7.73501px">
       <path
         shape-rendering="geometricPrecision"
         fill-opacity="1"
@@ -16,7 +16,7 @@
         d=" M0,0 C0,0 6.1677093505859375,15.470022201538086 6.1677093505859375,15.470022201538086 C6.1677093505859375,15.470022201538086 9.550004005432129,15.470022201538086 9.550004005432129,15.470022201538086 C9.550004005432129,15.470022201538086 3.382294178009033,0 3.382294178009033,0 C3.382294178009033,0 0,0 0,0 C0,0 0,0 0,0z"
       />
     </g>
-    <g opacity="1" style="transform: none; transform-origin: 7.935px 7.73501px;">
+    <g opacity="1" style="transform: none; transform-origin: 7.935px 7.73501px">
       <path
         shape-rendering="geometricPrecision"
         fill-opacity="1"

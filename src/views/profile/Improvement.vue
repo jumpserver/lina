@@ -93,9 +93,14 @@ export default {
   },
   methods: {
     disableMFAFieldIfNeed(user) {
-      const adminUserIsNeed = (user?.is_superuser || user?.is_org_admin) &&
+      const adminUserIsNeed =
+        (user?.is_superuser || user?.is_org_admin) &&
         store.getters.publicSettings['SECURITY_MFA_AUTH'] === 2
-      if (store.getters.publicSettings['SECURITY_MFA_AUTH'] === 1 || adminUserIsNeed || user?.mfa_level.value === 2) {
+      if (
+        store.getters.publicSettings['SECURITY_MFA_AUTH'] === 1 ||
+        adminUserIsNeed ||
+        user?.mfa_level.value === 2
+      ) {
         this.fieldsMeta['mfa_level'].disabled = true
       }
     }

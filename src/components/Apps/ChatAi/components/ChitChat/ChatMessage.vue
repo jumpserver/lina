@@ -2,11 +2,7 @@
   <div :class="{ 'user-role': isUserRole }" class="chat-item">
     <div class="chart-item-container">
       <div class="avatar">
-        <el-avatar
-          v-if="isUserRole"
-          :src="userUrl"
-          class="header-avatar"
-        />
+        <el-avatar v-if="isUserRole" :src="userUrl" class="header-avatar" />
         <el-avatar v-else class="header-avatar" :style="{ backgroundColor: 'transparent' }">
           <ModelIcon :name="modelIconName" class-name="model-icon" />
         </el-avatar>
@@ -14,9 +10,7 @@
       <div class="content">
         <div class="operational">
           <div v-if="!item.message.is_reasoning" class="date">
-            {{
-              $moment(item.message.create_time).format("YYYY-MM-DD HH:mm:ss")
-            }}
+            {{ $moment(item.message.create_time).format('YYYY-MM-DD HH:mm:ss') }}
           </div>
 
           <div v-else class="thinking-time">{{ $t('DeeplyThoughtAbout') }}</div>
@@ -45,7 +39,12 @@
                 <span v-if="isServerError" class="error">
                   {{ isServerError }}
                 </span>
-                <MessageText :message="item.result" :is-terminal="isTerminal" @insert-code="handleInsertCode" /></div>
+                <MessageText
+                  :message="item.result"
+                  :is-terminal="isTerminal"
+                  @insert-code="handleInsertCode"
+                />
+              </div>
             </div>
           </div>
           <div class="action">
@@ -62,15 +61,15 @@
                 <i class="fa fa-ellipsis-v" />
               </span>
               <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item
-                  v-for="i in dropdownOptions"
-                  :key="i.action"
-                  :command="i.action"
-                >
-                  {{ i.label }}
-                </el-dropdown-item>
-              </el-dropdown-menu>
+                <el-dropdown-menu>
+                  <el-dropdown-item
+                    v-for="i in dropdownOptions"
+                    :key="i.action"
+                    :command="i.action"
+                  >
+                    {{ i.label }}
+                  </el-dropdown-item>
+                </el-dropdown-menu>
               </template>
             </el-dropdown>
           </div>
@@ -98,8 +97,7 @@ export default {
   props: {
     item: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     selectedModel: {
       type: String,
@@ -123,26 +121,27 @@ export default {
   },
   computed: {
     ...mapState({
-      isLoading: state => state.chat.loading
+      isLoading: (state) => state.chat.loading
     }),
-    ...mapGetters([
-      'publicSettings'
-    ]),
+    ...mapGetters(['publicSettings']),
     isUserRole() {
       return this.item.message?.role === 'user'
     },
     isSystemError() {
-      return (
-        this.item.type === 'error' && this.item?.role === 'assistant'
-      )
+      return this.item.type === 'error' && this.item?.role === 'assistant'
     },
     isServerError() {
-      return (this.item.type === 'finish' && this.item.result.content === '')
+      return this.item.type === 'finish' && this.item.result.content === ''
         ? this.$t('ServerBusyRetry')
         : ''
     },
     modelIconName() {
-      return (this.item?.message?.model || this.selectedModel || this.publicSettings.CHAT_AI_TYPE || '').toString()
+      return (
+        this.item?.message?.model ||
+        this.selectedModel ||
+        this.publicSettings.CHAT_AI_TYPE ||
+        ''
+      ).toString()
     }
   },
   methods: {

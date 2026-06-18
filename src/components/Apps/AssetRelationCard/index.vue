@@ -4,12 +4,19 @@
       <tbody>
         <tr>
           <td colspan="2">
-            <AssetSelect ref="assetSelect" :can-select="canSelect" :disabled="disabled" class="asset-relation-card__select" />
+            <AssetSelect
+              ref="assetSelect"
+              :can-select="canSelect"
+              :disabled="disabled"
+              class="asset-relation-card__select"
+            />
           </td>
         </tr>
         <tr>
           <td colspan="2">
-            <el-button :disabled="disabled" :type="type" size="small" @click="addObjects">{{ $t('Add') }}</el-button>
+            <el-button :disabled="disabled" :type="type" size="small" @click="addObjects">{{
+              $t('Add')
+            }}</el-button>
           </td>
         </tr>
       </tbody>
@@ -50,13 +57,11 @@ export default {
     },
     performAdd: {
       type: Function,
-      default: (objects, that) => {
-      }
+      default: (objects, that) => {}
     },
     onAddSuccess: {
       type: Function,
-      default: (objects, that) => {
-      }
+      default: (objects, that) => {}
     },
     canSelect: {
       type: Function,
@@ -71,9 +76,7 @@ export default {
   methods: {
     addObjects() {
       const objects = this.$refs.assetSelect.$refs.select2.iValue
-      this.performAdd(objects, this).then(
-        () => this.onAddSuccess(objects, this)
-      )
+      this.performAdd(objects, this).then(() => this.onAddSuccess(objects, this))
     }
   }
 }

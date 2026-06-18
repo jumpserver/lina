@@ -3,11 +3,16 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent, createTextVNode as _createTextVNode } from 'vue'
+import {
+  createVNode as createVNodeCompat,
+  resolveComponent as resolveComponentCompat,
+  createTextVNode as createTextVNodeCompat
+} from 'vue'
 import { STATUS_MAP } from '../const'
 import { formatTime, getDateTimeStamp } from '@/utils/common/time'
 import { toSafeLocalDateStr } from '@/utils/common/time'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
+import { getAssetUrl } from '@/utils/assets'
 export default {
   name: 'TicketDetail',
   components: {
@@ -21,8 +26,11 @@ export default {
   },
   data() {
     return {
-      statusMap: this.object.status.value === 'open' ? STATUS_MAP['pending'] : STATUS_MAP[this.object.state.value],
-      imageUrl: require('@/assets/img/avatar.png'),
+      statusMap:
+        this.object.status.value === 'open'
+          ? STATUS_MAP['pending']
+          : STATUS_MAP[this.object.state.value],
+      imageUrl: getAssetUrl('img/avatar.png'),
       form: {
         comments: ''
       },
@@ -31,36 +39,45 @@ export default {
   },
   computed: {
     detailCardItems() {
-      const {
-        object
-      } = this
-      return [{
-        key: this.$t('Applicant'),
-        value: object.rel_snapshot.applicant
-      }, {
-        key: this.$t('Type'),
-        value: object.type.lable
-      }, {
-        key: this.$t('Status'),
-        value: object.status,
-        formatter: (item, val) => {
-          return _createVNode(_resolveComponent('el-tag'), {
-            'type': this.statusMap.type,
-            'size': 'small'
-          }, {
-            default: () => [_createTextVNode(' '), this.statusMap.title]
-          })
+      const { object } = this
+      return [
+        {
+          key: this.$t('Applicant'),
+          value: object.rel_snapshot.applicant
+        },
+        {
+          key: this.$t('Type'),
+          value: object.type.lable
+        },
+        {
+          key: this.$t('Status'),
+          value: object.status,
+          formatter: (item, val) => {
+            return createVNodeCompat(
+              resolveComponentCompat('el-tag'),
+              {
+                type: this.statusMap.type,
+                size: 'small'
+              },
+              {
+                default: () => [createTextVNodeCompat(' '), this.statusMap.title]
+              }
+            )
+          }
+        },
+        {
+          key: this.$t('Assignees'),
+          value: object.process_map[object.approval_step.value - 1].assignees_display.join(',')
+        },
+        {
+          key: this.$t('Assignee'),
+          value: object.process_map[object.approval_step.value - 1].processor_display
+        },
+        {
+          key: this.$t('DateCreated'),
+          value: toSafeLocalDateStr(object.date_created)
         }
-      }, {
-        key: this.$t('Assignees'),
-        value: object.process_map[object.approval_step.value - 1].assignees_display.join(',')
-      }, {
-        key: this.$t('Assignee'),
-        value: object.process_map[object.approval_step.value - 1].processor_display
-      }, {
-        key: this.$t('DateCreated'),
-        value: toSafeLocalDateStr(object.date_created)
-      }]
+      ]
     }
   },
   methods: {
@@ -74,5 +91,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

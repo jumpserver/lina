@@ -1,8 +1,11 @@
 <template>
   <div v-loading="loading">
-    <GenericCreateUpdatePage v-bind="{ ...$attrs, ...$data }" v-if="!loading"
+    <GenericCreateUpdatePage
+      v-bind="{ ...$attrs, ...$data }"
+      v-if="!loading"
       class="user-create-update"
-      :title="null" />
+      :title="null"
+    />
   </div>
 </template>
 
@@ -17,12 +20,9 @@ export default {
   data() {
     return {
       loading: true,
-      fields: [
-        [this.$t('Basic'), ['password']]
-      ],
+      fields: [[this.$t('Basic'), ['password']]],
       encryptedFields: [],
       url: '/api/v1/settings/leak-passwords/'
-
     }
   },
   async mounted() {
@@ -32,6 +32,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

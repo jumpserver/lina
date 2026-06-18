@@ -1,6 +1,12 @@
 <template>
   <div>
-    <el-badge :hidden="unreadMsgCount === 0" :max="99" :value="unreadMsgCount" size="small" type="primary">
+    <el-badge
+      :hidden="unreadMsgCount === 0"
+      :max="99"
+      :value="unreadMsgCount"
+      size="small"
+      type="primary"
+    >
       <el-link style="height: 100%" @click="toggleDrawer">
         <svg-icon icon-class="remind" />
       </el-link>
@@ -18,8 +24,12 @@
       <template #header>
         <div>
           <span>{{ $t('SiteMessage') }}</span>
-          <div v-if="unreadMsgCount !== 0" class="msg-list-all-read-btn" @click.stop="oneClickRead(messages)">
-            <a style="vertical-align: sub;"> {{ $t('AllClickRead') }}</a>
+          <div
+            v-if="unreadMsgCount !== 0"
+            class="msg-list-all-read-btn"
+            @click.stop="oneClickRead(messages)"
+          >
+            <a style="vertical-align: sub"> {{ $t('AllClickRead') }}</a>
           </div>
         </div>
       </template>
@@ -35,7 +45,10 @@
         >
           <el-row :gutter="10" class="msg-item-head">
             <el-col :span="15" class="msg-item-head-type">
-              <i :class="msg['has_read'] ? 'fa-envelope-open-o' : 'fa-envelope'" class="fa msg-icon" />
+              <i
+                :class="msg['has_read'] ? 'fa-envelope-open-o' : 'fa-envelope'"
+                class="fa msg-icon"
+              />
               {{ msg.content.subject }}
             </el-col>
             <el-col :span="9">
@@ -121,7 +134,7 @@ export default {
     },
     getMessages() {
       const url = '/api/v1/notifications/site-messages/?offset=0&limit=15&has_read=false'
-      this.$axios.get(url).then(resp => {
+      this.$axios.get(url).then((resp) => {
         this.messages = [...resp.results]
         this.unreadMsgCount = resp.count
       })
@@ -132,7 +145,7 @@ export default {
       }
       const d = new Date(s)
       const now = new Date()
-      if (now.getTime() - d.getTime() > (3600 * 24 * 7) * 1000) {
+      if (now.getTime() - d.getTime() > 3600 * 24 * 7 * 1000) {
         return toSafeLocalDateStr(s)
       } else {
         return this.$moment(d).fromNow()
@@ -153,12 +166,15 @@ export default {
     },
     markAsReadAll(msgs) {
       const url = `/api/v1/notifications/site-messages/mark-as-read-all/`
-      this.$axios.patch(url, {}).then(res => {
-        this.msgDetailVisible = false
-        this.getMessages()
-      }).catch(err => {
-        this.$message(err.detail)
-      })
+      this.$axios
+        .patch(url, {})
+        .then((res) => {
+          this.msgDetailVisible = false
+          this.getMessages()
+        })
+        .catch((err) => {
+          this.$message(err.detail)
+        })
     },
     markAsRead(msgs) {
       const url = `/api/v1/notifications/site-messages/mark-as-read/`
@@ -166,12 +182,15 @@ export default {
       for (const item of msgs) {
         msgIds.push(item.id)
       }
-      this.$axios.patch(url, { ids: msgIds }).then(res => {
-        this.msgDetailVisible = false
-        this.getMessages()
-      }).catch(err => {
-        this.$message(err.detail)
-      })
+      this.$axios
+        .patch(url, { ids: msgIds })
+        .then((res) => {
+          this.msgDetailVisible = false
+          this.getMessages()
+        })
+        .catch((err) => {
+          this.$message(err.detail)
+        })
     },
     cancelRead() {
       this.msgDetailVisible = false
@@ -272,7 +291,7 @@ export default {
 
   &:after {
     clear: both;
-    content: ".";
+    content: '.';
     display: block;
     height: 0;
     overflow: hidden;
@@ -311,18 +330,18 @@ export default {
       font-size: 12px;
     }
   }
-
 }
 
 .msg-detail {
-
   .msg-detail-time {
     font-weight: 400;
     line-height: 1.1;
     float: right;
-    color: var(--N600, #646A73);
+    color: var(--N600, #646a73);
     text-align: right;
-    font-feature-settings: 'clig' off, 'liga' off;
+    font-feature-settings:
+      'clig' off,
+      'liga' off;
     font-size: 14px;
     font-style: normal;
   }
@@ -331,7 +350,7 @@ export default {
     line-height: 24px;
 
     .el-dialog__title {
-      color: var(--neutral-900, #1F2329);
+      color: var(--neutral-900, #1f2329);
       font-size: 16px;
       font-style: normal;
       font-weight: 500;
@@ -346,14 +365,14 @@ export default {
       height: 618px;
       flex-shrink: 0;
       border-radius: 4px;
-      background: #FFF;
+      background: #fff;
       font-style: normal;
       font-weight: 400;
       line-height: 24px; /* 150% */
 
       .title {
         margin-bottom: 8px;
-        color: var(--neutral-900, #1F2329);
+        color: var(--neutral-900, #1f2329);
         font-size: 16px;
         font-weight: 500;
       }
@@ -365,7 +384,7 @@ export default {
           display: inline-flex;
           flex-direction: column;
           align-items: flex-start;
-          color: var(--neutral-900, #1F2329);
+          color: var(--neutral-900, #1f2329);
           font-size: 16px;
           font-style: normal;
           font-weight: 500;
@@ -375,20 +394,20 @@ export default {
         width: 100%;
         display: inline-block;
         border-radius: 4px;
-        background: var(--N100, #F5F6F7);
+        background: var(--N100, #f5f6f7);
       }
 
       .action_group {
         margin-top: 8px;
 
         .view-link {
-          color: #3370FF !important;
+          color: #3370ff !important;
           text-align: right;
           font-size: 14px;
           border-radius: 4px;
 
           &:hover {
-            background: rgba(51, 112, 255, 0.20);
+            background: rgba(51, 112, 255, 0.2);
             display: inline-block;
             border-radius: 4px;
           }
@@ -402,7 +421,7 @@ export default {
 
         .field-name {
           margin: 4px 0 4px 16px;
-          color: var(--N600, #646A73);
+          color: var(--N600, #646a73);
           display: inline-block;
 
           strong {
@@ -411,7 +430,7 @@ export default {
         }
 
         .field-value {
-          color: var(--N900, #1F2329);
+          color: var(--N900, #1f2329);
           display: inline-block;
         }
       }

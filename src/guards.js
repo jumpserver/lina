@@ -35,7 +35,7 @@ function generateViewRoutesIfChange({ to, from }) {
   console.log('sameView', sameView)
   // On first load, after startup's replace navigation, from/to may be same view.
   // Ensure we still set currentViewRoute if it hasn't been set.
-  const hasCurrent = !!(store.state?.permission?.currentViewRoute?.meta?.view)
+  const hasCurrent = !!store.state?.permission?.currentViewRoute?.meta?.view
   if (!sameView || !hasCurrent) {
     console.log('generateViewRoutesIfChange', to, from)
     return store.dispatch('permission/generateViewRoutes', { to: to, from: from })

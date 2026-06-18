@@ -1,7 +1,16 @@
 <template>
   <div>
-    <GenericListPage ref="GenericListPage" :header-actions="headerActions" :table-config="tableConfig" />
-    <BindDialog v-if="bindVisible" v-model:visible="bindVisible" :label="label" @bind-success="handleDialogConfirm" />
+    <GenericListPage
+      ref="GenericListPage"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+    />
+    <BindDialog
+      v-if="bindVisible"
+      v-model:visible="bindVisible"
+      :label="label"
+      @bind-success="handleDialogConfirm"
+    />
     <LabelResourcesDialog
       v-if="resDialogVisible"
       v-model:visible="resDialogVisible"
@@ -12,7 +21,7 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
 import { GenericListPage } from '@/layout/components'
 import BindDialog from './BindDialog.vue'
 import LabelResourcesDialog from '@/views/labels/LabelResourcesDialog.vue'
@@ -37,51 +46,59 @@ export default {
         },
         columnsMeta: {
           name: {
-            formatter: row => row.name
+            formatter: (row) => row.name
           },
           res_count: {
-            formatter: row => {
+            formatter: (row) => {
               const onClick = () => {
                 vm.handleClickResCount(row)
               }
-              return _createVNode(_resolveComponent('el-link'), {
-                'type': 'success',
-                'onClick': onClick
-              }, {
-                default: () => [row['res_count']]
-              })
+              return createVNodeCompat(
+                resolveComponentCompat('el-link'),
+                {
+                  type: 'success',
+                  onClick: onClick
+                },
+                {
+                  default: () => [row['res_count']]
+                }
+              )
             }
           },
           color: {
-            formatter: row => {
+            formatter: (row) => {
               const onChange = () => {
                 vm.$axios.patch(`/api/v1/labels/labels/${row.id}/`, {
                   color: row.color
                 })
               }
-              return _createVNode(_resolveComponent('el-color-picker'), {
-                'modelValue': row.color,
-                'onUpdate:modelValue': $event => row.color = $event,
-                'size': 'small',
-                'onChange': onChange
-              }, null)
+              return createVNodeCompat(
+                resolveComponentCompat('el-color-picker'),
+                {
+                  modelValue: row.color,
+                  'onUpdate:modelValue': ($event) => (row.color = $event),
+                  size: 'small',
+                  onChange: onChange
+                },
+                null
+              )
             }
           },
           actions: {
             formatterArgs: {
-              extraActions: [{
-                title: this.$t('BindResource'),
-                name: 'bind',
-                callback: ({
-                  row
-                }) => {
-                  this.label = row
-                  this.bindVisible = true
-                },
-                can: () => {
-                  return !this.currentOrgIsRoot && this.$hasPerm('labels.change_labeledresource')
+              extraActions: [
+                {
+                  title: this.$t('BindResource'),
+                  name: 'bind',
+                  callback: ({ row }) => {
+                    this.label = row
+                    this.bindVisible = true
+                  },
+                  can: () => {
+                    return !this.currentOrgIsRoot && this.$hasPerm('labels.change_labeledresource')
+                  }
                 }
-              }]
+              ]
             }
           }
         }
@@ -117,7 +134,6 @@ export default {
 .el-color-picker__trigger {
   width: 30px;
   height: 30px;
-  display: block
+  display: block;
 }
-
 </style>

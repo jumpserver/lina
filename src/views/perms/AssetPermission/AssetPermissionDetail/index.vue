@@ -1,7 +1,10 @@
 <template>
-  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu"
+  <GenericDetailPage
+    v-bind="config"
+    v-model:active-menu="config.activeMenu"
     v-model:object="AssetPermission"
-    @tab-click="handleTabClick">
+    @tab-click="handleTabClick"
+  >
     <keep-alive>
       <component :is="config.activeMenu" :object="AssetPermission" />
     </keep-alive>
@@ -47,17 +50,21 @@ export default {
           {
             title: this.$t('UsersAndUserGroups'),
             name: 'AssetPermissionUser',
-            hidden: () => !this.$hasPerm('users.view_user') || !this.$hasPerm('perms.change_assetpermission')
+            hidden: () =>
+              !this.$hasPerm('users.view_user') || !this.$hasPerm('perms.change_assetpermission')
           },
           {
             title: this.$t('AssetAndNode'),
             name: 'AssetPermissionAsset',
-            hidden: () => !this.$hasPerm('assets.view_asset') || !this.$hasPerm('perms.change_assetpermission')
+            hidden: () =>
+              !this.$hasPerm('assets.view_asset') || !this.$hasPerm('perms.change_assetpermission')
           },
           {
             title: this.$t('PermAccount'),
             name: 'AssetPermissionAccount',
-            hidden: () => !this.$hasPerm('accounts.view_account') || !this.$hasPerm('perms.change_assetpermission')
+            hidden: () =>
+              !this.$hasPerm('accounts.view_account') ||
+              !this.$hasPerm('perms.change_assetpermission')
           }
         ]
       }

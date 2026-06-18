@@ -2,56 +2,50 @@
   <div class="container">
     <div class="chat-action">
       <div class="model-select">
-        <Select2 v-bind="select" v-model="select.value"
+        <Select2
+          v-bind="select"
+          v-model="select.value"
           :disabled="isLoading || isSelectDisabled || loading || !options.length"
-          @change="onSelectChange" />
+          @change="onSelectChange"
+        />
       </div>
-      <el-dropdown
-        :hide-on-click="false"
-        trigger="click"
-      >
+      <el-dropdown :hide-on-click="false" trigger="click">
         <span class="el-dropdown-link">
           <i class="fa fa-plug" />
         </span>
         <template #dropdown>
-        <el-dropdown-menu>
-          <div class="menu-section">
-            <div v-if="toolsLoading">
-              <el-icon><Loading /></el-icon> {{ $t('Loading') }}
-            </div>
-            <div v-else class="menu-body">
-              <div>
-                <div
-                  v-for="item in toolOptions"
-                  :key="item.value"
-                >
-                  <div style="padding: 0 10px">
-                    <i class="fa fa-wrench item-icon" />
-                    <span class="item-label">{{ item.label }}</span>
-                    &nbsp;&nbsp;&nbsp;
-                    <el-switch
-                      :value="selectedToolsSet.has(item.value)"
-                      @change="() => toggleTool(item.value)"
-                    />
+          <el-dropdown-menu>
+            <div class="menu-section">
+              <div v-if="toolsLoading">
+                <el-icon><Loading /></el-icon> {{ $t('Loading') }}
+              </div>
+              <div v-else class="menu-body">
+                <div>
+                  <div v-for="item in toolOptions" :key="item.value">
+                    <div style="padding: 0 10px">
+                      <i class="fa fa-wrench item-icon" />
+                      <span class="item-label">{{ item.label }}</span>
+                      &nbsp;&nbsp;&nbsp;
+                      <el-switch
+                        :value="selectedToolsSet.has(item.value)"
+                        @change="() => toggleTool(item.value)"
+                      />
+                    </div>
                   </div>
-                </div>
-                <div
-                  v-for="item in toolServerOptions"
-                  :key="item.value"
-                >
-                  <div>
-                    <i class="fa fa-server item-icon" />
-                    <span class="item-label">{{ item.label }}</span>
-                    <el-switch
-                      :value="selectedToolServersSet.has(item.value)"
-                      @change="() => toggleToolServer(item.value)"
-                    />
+                  <div v-for="item in toolServerOptions" :key="item.value">
+                    <div>
+                      <i class="fa fa-server item-icon" />
+                      <span class="item-label">{{ item.label }}</span>
+                      <el-switch
+                        :value="selectedToolServersSet.has(item.value)"
+                        @change="() => toggleToolServer(item.value)"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </el-dropdown-menu>
+          </el-dropdown-menu>
         </template>
       </el-dropdown>
     </div>
@@ -60,7 +54,7 @@
         v-model="inputValue"
         :disabled="isLoading"
         :placeholder="$tc('InputMessage')"
-        :rows="expanded ? 3 :2"
+        :rows="expanded ? 3 : 2"
         type="textarea"
         @compositionend="isIM = false"
         @compositionstart="isIM = true"
@@ -131,13 +125,13 @@ export default {
   },
   computed: {
     ...mapState({
-      isLoading: state => state.chat.loading
+      isLoading: (state) => state.chat.loading
     }),
     isSelectDisabled() {
       return false
     },
     options() {
-      return (this.modelOptions || []).map(item => {
+      return (this.modelOptions || []).map((item) => {
         return { label: item.name || item.id, value: item.id }
       })
     },
@@ -152,7 +146,10 @@ export default {
     modelOptions: {
       immediate: true,
       handler(val) {
-        this.select.options = (val || []).map(item => ({ label: item.name || item.id, value: item.id }))
+        this.select.options = (val || []).map((item) => ({
+          label: item.name || item.id,
+          value: item.id
+        }))
       }
     },
     selectedModel: {
@@ -267,7 +264,7 @@ export default {
     }
 
     .el-textarea.is-disabled + .input-action {
-      background-color: #F5F7FA;
+      background-color: #f5f7fa;
       cursor: no-drop;
 
       i {

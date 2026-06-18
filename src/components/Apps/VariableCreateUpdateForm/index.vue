@@ -1,8 +1,11 @@
 <template>
-  <AutoDataForm v-bind="$data" ref="AutoDataForm"
+  <AutoDataForm
+    v-bind="$data"
+    ref="AutoDataForm"
     class="variable-add"
     :submit-btn-text="submitBtnText"
-    @submit="confirm" />
+    @submit="confirm"
+  />
 </template>
 
 <script>
@@ -31,9 +34,21 @@ export default {
       defaultValueRequired: false,
       submitBtnText: this.$t('Confirm'),
       url: '/api/v1/ops/variables/',
-      form: Object.assign({ 'on_invalid': 'error' }, this.variable || {}),
+      form: Object.assign({ on_invalid: 'error' }, this.variable || {}),
       fields: [
-        ['', ['name', 'var_name', 'type', 'text_default_value', 'select_default_value', 'extra_args', 'tips', 'required']]
+        [
+          '',
+          [
+            'name',
+            'var_name',
+            'type',
+            'text_default_value',
+            'select_default_value',
+            'extra_args',
+            'tips',
+            'required'
+          ]
+        ]
       ],
       fieldsMeta: {
         var_name: {
@@ -110,7 +125,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .variable-add {
   :deep(.el-form-item) {
     margin-bottom: 5px;

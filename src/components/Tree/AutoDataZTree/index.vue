@@ -1,8 +1,11 @@
 <template>
-  <DataZTree v-bind="treeAttrs" ref="dataztree"
+  <DataZTree
+    v-bind="treeAttrs"
+    ref="dataztree"
     :setting="treeSetting"
     class="data-z-tree"
-    v-on="forwardedListeners">
+    v-on="forwardedListeners"
+  >
     <template #rMenu>
       <div v-if="menu && menu.length > 0">
         <span v-for="item in menu" :key="item.id">
@@ -10,7 +13,7 @@
             v-if="hasMenuItem(item)"
             :id="item.id"
             :key="item.id"
-            :class="{ 'disabled': checkDisabled(item) }"
+            :class="{ disabled: checkDisabled(item) }"
             class="rmenu"
             tabindex="-1"
             @click="onMenuItemClick(item)"
@@ -28,6 +31,7 @@
 <script>
 import Icon from '@/components/Widgets/Icon'
 import $ from '@/utils/jquery-vendor'
+import { APP_ENV, withBaseApi } from '@/utils/env'
 import { omitVueListeners, pickVueListeners } from '@/utils/vue'
 import { mapGetters } from 'vuex'
 import DataZTree from '../DataZTree/index.vue'
@@ -42,8 +46,7 @@ export default {
   props: {
     setting: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -82,9 +85,10 @@ export default {
         selectSyncToRoute: true,
         async: {
           enable: true,
-          url: (process.env.VUE_APP_ENV === 'production')
-            ? (`${this.setting.treeUrl}`)
-            : (`${process.env.VUE_APP_BASE_API}${this.setting.treeUrl}`),
+          url:
+            APP_ENV === 'production'
+              ? `${this.setting.treeUrl}`
+              : withBaseApi(this.setting.treeUrl),
           autoParam: ['id=key', 'name=n', 'level=lv'],
           type: 'get',
           headers: {
@@ -107,9 +111,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'currentOrg'
-    ]),
+    ...mapGetters(['currentOrg']),
     treeSetting() {
       this.$log.debug('Settings: ', this.setting)
       // 必须 merge 到新对象,否则会就地修改响应式的 this.defaultSetting(本计算属性的依赖),
@@ -180,11 +182,11 @@ export default {
         }
       })
     },
-    refreshTree: function() {
+    refreshTree: function () {
       // const refreshIconRef = $('#tree-refresh')
       // refreshIconRef.click()
     },
-    editTreeNode: function() {
+    editTreeNode: function () {
       this.hideRMenu()
       const currentNode = this.zTree.getSelectedNodes()[0]
       if (!currentNode) {
@@ -206,12 +208,12 @@ export default {
       }
       this.zTree.editName(currentNode)
     },
-    hideRMenu: function() {
-      if (this.rMenu) this.rMenu.css({ 'visibility': 'hidden' })
+    hideRMenu: function () {
+      if (this.rMenu) this.rMenu.css({ visibility: 'hidden' })
       $('body').unbind('mousedown', this.onBodyMouseDown)
     },
     // Request URL: http://localhost/api/v1/assets/assets/?node_id=ID&show_current_asset=null&draw=2&limit=15&offset=0&_=1587022917769
-    onSelected: function(event, treeNode) {
+    onSelected: function (event, treeNode) {
       const show_current_asset = this.$cookie.get('show_current_asset') || '0'
       if (!this.setting.url) {
         return
@@ -239,23 +241,24 @@ export default {
       }
       this.$emit('urlChange', url)
     },
-    removeTreeNode: function() {
+    removeTreeNode: function () {
       this.hideRMenu()
       const currentNode = this.zTree.getSelectedNodes()[0]
       if (!currentNode) {
         return
       }
-      this.$axios.delete(
-        `${this.treeSetting.nodeUrl}${currentNode.meta.data.id}/`
-      ).then(() => {
-        this.$message.success(this.$tc('DeleteSuccessMsg'))
-        this.zTree.removeNode(currentNode)
-        this.refreshTree()
-      }).catch(() => {
-        // this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
-      })
+      this.$axios
+        .delete(`${this.treeSetting.nodeUrl}${currentNode.meta.data.id}/`)
+        .then(() => {
+          this.$message.success(this.$tc('DeleteSuccessMsg'))
+          this.zTree.removeNode(currentNode)
+          this.refreshTree()
+        })
+        .catch(() => {
+          // this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
+        })
     },
-    onRename: function(event, treeId, treeNode, isCancel) {
+    onRename: function (event, treeId, treeNode, isCancel) {
       const currentNodeId = this.currentNodeId || treeNode.meta.data?.id || ''
       const url = `${this.treeSetting.nodeUrl}${currentNodeId}/`
       if (isCancel) {
@@ -264,24 +267,27 @@ export default {
 
       const originalAssetsAmount = treeNode.meta.data['assetsAmount'] || 0
 
-      this.$axios.patch(url, { 'value': treeNode.name }).then(res => {
-        treeNode.name = treeNode.name + ' (' + originalAssetsAmount + ')'
-        treeNode.meta.data = Object.assign({}, treeNode.meta.data, res)
-        treeNode.meta.data['assetsAmount'] = originalAssetsAmount
+      this.$axios
+        .patch(url, { value: treeNode.name })
+        .then((res) => {
+          treeNode.name = treeNode.name + ' (' + originalAssetsAmount + ')'
+          treeNode.meta.data = Object.assign({}, treeNode.meta.data, res)
+          treeNode.meta.data['assetsAmount'] = originalAssetsAmount
 
-        this.zTree.updateNode(treeNode)
-        this.$message.success(this.$tc('UpdateSuccessMsg'))
-      }).finally(() => {
-        this.refreshTree()
-      })
+          this.zTree.updateNode(treeNode)
+          this.$message.success(this.$tc('UpdateSuccessMsg'))
+        })
+        .finally(() => {
+          this.refreshTree()
+        })
     },
-    onBodyMouseDown: function(event) {
+    onBodyMouseDown: function (event) {
       const rMenuID = this.$refs.dataztree.$refs.ztree.iRMenuID
       if (!(event.target.id === 'rMenu' || $(event.target).parents(`#${rMenuID}`).length > 0)) {
-        this.rMenu.css({ 'visibility': 'hidden' })
+        this.rMenu.css({ visibility: 'hidden' })
       }
     },
-    showRMenu: function(type, x, y) {
+    showRMenu: function (type, x, y) {
       const rMenuID = this.$refs.dataztree.$refs.ztree.iRMenuID
       const zTreeID = this.$refs.dataztree.$refs.ztree.iZTreeID
       const offset = $(`#${zTreeID}`).offset()
@@ -299,11 +305,11 @@ export default {
       }
       y = y < 0 ? 0 : y
 
-      this.rMenu.css({ 'top': y + 'px', 'left': x + 'px', 'visibility': 'visible' })
+      this.rMenu.css({ top: y + 'px', left: x + 'px', visibility: 'visible' })
       $(`#${rMenuID} ul`).show()
       $('body').bind('mousedown', this.onBodyMouseDown)
     },
-    onRightClick: function(event, treeId, treeNode) {
+    onRightClick: function (event, treeId, treeNode) {
       let showMenu = this.setting.showMenu
       if (typeof showMenu === 'function') {
         showMenu = showMenu(treeNode)
@@ -320,7 +326,11 @@ export default {
       if (treeNode?.id === '-12') {
         return
       }
-      if (!treeNode && event.target.tagName.toLowerCase() !== 'button' && $(event.target).parents('a').length === 0) {
+      if (
+        !treeNode &&
+        event.target.tagName.toLowerCase() !== 'button' &&
+        $(event.target).parents('a').length === 0
+      ) {
         this.zTree.cancelSelectedNode()
         this.showRMenu('root', event.clientX, event.clientY)
       } else if (treeNode && !treeNode.noR) {
@@ -331,9 +341,9 @@ export default {
         this.showRMenu('node', event.clientX, event.clientY)
       }
     },
-    beforeDrop: function(treeId, treeNodes, targetNode, moveType) {
+    beforeDrop: function (treeId, treeNodes, targetNode, moveType) {
       const treeNodesNames = []
-      $.each(treeNodes, function(index, value) {
+      $.each(treeNodes, function (index, value) {
         treeNodesNames.push(value.name)
       })
       if (!targetNode) {
@@ -343,23 +353,25 @@ export default {
       const msg = this.$t('DropConfirmMsg', { src: treeNodesNames.join(','), dst: targetNode.name })
       return confirm(msg)
     },
-    onDrop: function(event, treeId, treeNodes, targetNode, moveType) {
+    onDrop: function (event, treeId, treeNodes, targetNode, moveType) {
       const treeNodesIds = []
-      $.each(treeNodes, function(index, value) {
+      $.each(treeNodes, function (index, value) {
         treeNodesIds.push(value.meta.data.id)
       })
       const theUrl = `${this.treeSetting.nodeUrl}${targetNode.meta.data.id}/children/add/`
-      this.$axios.put(
-        theUrl, {
+      this.$axios
+        .put(theUrl, {
           nodes: treeNodesIds
-        }
-      ).then((res) => {
-        this.$message.success(this.$tc('UpdateSuccessMsg'))
-      }).catch(error => {
-        this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
-      }).finally()
+        })
+        .then((res) => {
+          this.$message.success(this.$tc('UpdateSuccessMsg'))
+        })
+        .catch((error) => {
+          this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
+        })
+        .finally()
     },
-    createTreeNode: function() {
+    createTreeNode: function () {
       this.hideRMenu()
       const parentNode = this.zTree.getSelectedNodes()[0]
       if (!parentNode) {
@@ -368,36 +380,38 @@ export default {
       this.zTree.expandNode(parentNode, true, false, true, false)
       // http://localhost/api/v1/assets/nodes/85aa4ee2-0bd9-41db-9079-aa3646448d0c/children/
       const url = `${this.treeSetting.nodeUrl}${parentNode.meta.data.id}/children/`
-      this.$axios.post(url, {}).then(data => {
-        const newNode = {
-          id: data['key'],
-          name: data['value'],
-          pId: parentNode.id,
-          isParent: true,
-          meta: {
-            data: data,
-            type: 'node'
+      this.$axios
+        .post(url, {})
+        .then((data) => {
+          const newNode = {
+            id: data['key'],
+            name: data['value'],
+            pId: parentNode.id,
+            isParent: true,
+            meta: {
+              data: data,
+              type: 'node'
+            }
           }
-        }
-        newNode.checked = this.zTree.getSelectedNodes()[0].checked
-        this.zTree.addNodes(parentNode, 0, newNode)
-        const node = this.zTree.getNodeByParam('id', newNode.id, parentNode)
-        this.currentNodeId = node.meta.data.id || newNode.id
-        this.zTree.editName(node)
-        this.$message.success(this.$tc('CreateSuccessMsg'))
-      }).catch(error => {
-        this.$message.error(this.$tc('CreateErrorMsg') + ' ' + error)
-      })
+          newNode.checked = this.zTree.getSelectedNodes()[0].checked
+          this.zTree.addNodes(parentNode, 0, newNode)
+          const node = this.zTree.getNodeByParam('id', newNode.id, parentNode)
+          this.currentNodeId = node.meta.data.id || newNode.id
+          this.zTree.editName(node)
+          this.$message.success(this.$tc('CreateSuccessMsg'))
+        })
+        .catch((error) => {
+          this.$message.error(this.$tc('CreateErrorMsg') + ' ' + error)
+        })
     },
-    refresh: function() {
-    },
-    getSelectedNodes: function() {
+    refresh: function () {},
+    getSelectedNodes: function () {
       return this.zTree.getSelectedNodes()
     },
-    getNodes: function() {
+    getNodes: function () {
       return this.zTree.getNodes()
     },
-    selectNode: function(node) {
+    selectNode: function (node) {
       return this.zTree.selectNode(node)
     }
   }
@@ -419,7 +433,8 @@ export default {
   cursor: pointer;
 }
 
-.rmenu > a:hover, .dropdown-menu > a:focus {
+.rmenu > a:hover,
+.dropdown-menu > a:focus {
   color: #262626;
   text-decoration: none;
   background-color: #f5f5f5;

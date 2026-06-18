@@ -1,4 +1,6 @@
-const isProduction = process.env.NODE_ENV === 'production'
+import { IS_PROD } from '@/utils/env'
+
+const isProduction = IS_PROD
 
 export default {
   isEnabled: true,

@@ -14,18 +14,17 @@
             <i class="fa fa-search fixed-tree-search__prefix" />
           </template>
           <template #suffix>
-            <el-icon
-              style="font-size: 12px; cursor: pointer"
-              @click="onClose"
-            ><Close /></el-icon>
+            <el-icon style="font-size: 12px; cursor: pointer" @click="onClose"><Close /></el-icon>
           </template>
         </el-input>
       </div>
       <ul v-show="loading" class="zloading">
-        {{ $t('Loading') }}...
+        {{
+          $t('Loading')
+        }}...
       </ul>
       <ul v-show="!loading" :id="iZTreeID" :key="iZTreeID" class="ztree" />
-      <div v-if="treeSetting.treeUrl===''" class="tree-empty">
+      <div v-if="treeSetting.treeUrl === ''" class="tree-empty">
         {{ $t('Empty') }}
         <a id="tree-refresh"><i class="fa fa-refresh" /></a>
       </div>
@@ -48,6 +47,7 @@ import '@ztree/ztree_v3/js/jquery.ztree.exhide.min.js'
 import '@/styles/ztree.css'
 import '@/styles/ztree_icon.scss'
 import axiosRetry from 'axios-retry'
+import _ from 'lodash'
 
 const defaultObject = {
   type: Object,
@@ -97,7 +97,7 @@ export default {
       }
       menu.callback()
     },
-    updateTreeHeight: _.debounce(function() {
+    updateTreeHeight: _.debounce(function () {
       const tree = document.getElementById(this.iZTreeID)
       if (!tree) {
         return
@@ -121,12 +121,15 @@ export default {
       const vm = this
       let treeUrl
       this.loading = true
-      if (refresh && this.treeSetting.treeUrl.indexOf('/perms/') !== -1 &&
+      if (
+        refresh &&
+        this.treeSetting.treeUrl.indexOf('/perms/') !== -1 &&
         this.treeSetting.treeUrl.indexOf('rebuild_tree') === -1
       ) {
-        treeUrl = (this.treeSetting.treeUrl.indexOf('?') === -1)
-          ? `${this.treeSetting.treeUrl}?rebuild_tree=1`
-          : `${this.treeSetting.treeUrl}&rebuild_tree=1`
+        treeUrl =
+          this.treeSetting.treeUrl.indexOf('?') === -1
+            ? `${this.treeSetting.treeUrl}?rebuild_tree=1`
+            : `${this.treeSetting.treeUrl}&rebuild_tree=1`
       } else {
         treeUrl = this.treeSetting.treeUrl
       }
@@ -138,7 +141,7 @@ export default {
       let res = await this.$axios.get(treeUrl, {
         'axios-retry': {
           retries: 20,
-          retryCondition: e => {
+          retryCondition: (e) => {
             return axiosRetry.isNetworkOrIdempotentRequestError(e) || e.response.status === 409
           },
           shouldResetTimeout: true,
@@ -190,7 +193,11 @@ export default {
         </span>`
       if (rootNode) {
         const $rootNodeRef = $('#' + rootNode.tId + '_a')
-        $rootNodeRef.css({ 'width': 'calc(100% - 68px)', 'overflow': 'hidden', 'text-overflow': 'ellipsis' })
+        $rootNodeRef.css({
+          width: 'calc(100% - 68px)',
+          overflow: 'hidden',
+          'text-overflow': 'ellipsis'
+        })
         $rootNodeRef.after(icons)
       }
     },
@@ -215,20 +222,20 @@ export default {
       }
       searchInput.onblur = (e) => {
         e.stopPropagation()
-        if (!(e.target.value)) {
+        if (!e.target.value) {
           searchIcon.classList.toggle('active')
         }
       }
-      searchInput.oninput = e => this.treeSearchHandle((e.target.value || ''))
+      searchInput.oninput = (e) => this.treeSearchHandle(e.target.value || '')
     },
-    treeSearchHandle: _.debounce(function(value) {
+    treeSearchHandle: _.debounce(function (value) {
       if (this.treeSetting.async.enable) {
         this.filterAssetsServer(value)
       } else {
         this.filterTree(value)
       }
     }, 600),
-    getCheckedNodes: function() {
+    getCheckedNodes: function () {
       return this.zTree.getCheckedNodes(true)
     },
     recurseParent(node) {
@@ -257,12 +264,12 @@ export default {
     },
     groupBy(array, filter) {
       const groups = {}
-      array.forEach(function(o) {
+      array.forEach(function (o) {
         const group = JSON.stringify(filter(o))
         groups[group] = groups[group] || []
         groups[group].push(o)
       })
-      return Object.keys(groups).map(function(group) {
+      return Object.keys(groups).map(function (group) {
         return groups[group]
       })
     },
@@ -338,13 +345,15 @@ export default {
         this.zTree.hideNodes(treeNodes)
       }
 
-      let treeUrl = this.treeSetting.searchUrl ? this.treeSetting.searchUrl : this.treeSetting.treeUrl
+      let treeUrl = this.treeSetting.searchUrl
+        ? this.treeSetting.searchUrl
+        : this.treeSetting.treeUrl
       const filterField = treeUrl.includes('?') ? `&search=${keyword}` : `?search=${keyword}`
       if (treeUrl.indexOf('assets/nodes/children/tree') > -1) {
         treeUrl = treeUrl + '&all=all'
       }
       const searchUrl = `${treeUrl}${filterField}`
-      this.$axios.get(searchUrl).then(nodes => {
+      this.$axios.get(searchUrl).then((nodes) => {
         let name = this.$t('Search')
         const assetsAmount = nodes.length
         name = `${name} (${assetsAmount})`
@@ -364,7 +373,6 @@ export default {
       })
     }
   }
-
 }
 </script>
 
@@ -412,7 +420,6 @@ export default {
       }
     }
   }
-
 }
 
 div.rMenu {
@@ -430,7 +437,7 @@ div.rMenu {
 }
 
 .dataTables_wrapper .dataTables_processing {
-  opacity: .9;
+  opacity: 0.9;
   border: none;
 }
 
@@ -484,7 +491,7 @@ div.rMenu li {
 }
 
 .dropdown a:hover {
-  background-color: #f1f1f1
+  background-color: #f1f1f1;
 }
 
 .dropdown-menu > li > a {
@@ -501,7 +508,8 @@ div.rMenu li {
   width: 20px;
 }
 
-.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
   color: #262626;
   text-decoration: none;
   background-color: #f5f5f5;
@@ -514,10 +522,10 @@ div.rMenu li {
   overflow: hidden;
 
   .fa {
-    color: #838385 !important;;
+    color: #838385 !important;
 
     &:hover {
-      color: #606266 !important;;
+      color: #606266 !important;
     }
   }
 }
@@ -530,7 +538,7 @@ div.rMenu li {
   display: inline-block;
   border-radius: 12px;
   vertical-align: sub;
-  transition: .25s;
+  transition: 0.25s;
   overflow: hidden;
 
   .fa {
@@ -602,7 +610,7 @@ div.rMenu li {
     box-sizing: border-box;
     overflow: hidden;
     cursor: pointer;
-    background-color: #D7D8DC;
+    background-color: #d7d8dc;
 
     .rotate {
       transition: all 0.8s ease-in-out;
@@ -630,7 +638,7 @@ div.rMenu li {
     border-radius: 4px;
     background: #fafafa;
     padding-right: 32px;
-    color: var(--color-text-primary)
+    color: var(--color-text-primary);
   }
 
   & :deep(.el-input__suffix) {
@@ -688,5 +696,4 @@ div.rMenu li {
 :deep(.tree-action-btn) {
   display: none;
 }
-
 </style>

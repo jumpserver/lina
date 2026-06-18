@@ -70,7 +70,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  :deep(.el-dialog .el-dialog__body) {
-    padding: 0 20px;
-  }
+:deep(.el-dialog .el-dialog__body) {
+  padding: 0 20px;
+}
 </style>

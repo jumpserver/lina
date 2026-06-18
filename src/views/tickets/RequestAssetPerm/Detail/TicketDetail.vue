@@ -9,16 +9,24 @@
   >
     <IBox v-if="hasActionPerm && object.status.value !== 'closed'" class="box">
       <template #header>
-        <div class="clearfix ibox-title">
-          <i class="fa fa-edit" /> {{ $tc('Actions') }}
-        </div>
+        <div class="clearfix ibox-title"><i class="fa fa-edit" /> {{ $tc('Actions') }}</div>
       </template>
-      <el-form ref="requestForm" :model="requestForm" class="assets" label-position="left" label-width="140px">
+      <el-form
+        ref="requestForm"
+        :model="requestForm"
+        class="assets"
+        label-position="left"
+        label-width="140px"
+      >
         <el-form-item :label="$tc('Node')">
           <Select2 v-bind="nodeSelect2" v-model="requestForm.nodes" style="width: 50% !important" />
         </el-form-item>
         <el-form-item :label="$tc('Asset')">
-          <Select2 v-bind="assetSelect2" v-model="requestForm.assets" style="width: 50% !important" />
+          <Select2
+            v-bind="assetSelect2"
+            v-model="requestForm.assets"
+            style="width: 50% !important"
+          />
         </el-form-item>
         <el-form-item :label="$tc('Account')" :rules="isRequired">
           <AccountFormatter
@@ -31,23 +39,13 @@
           />
         </el-form-item>
         <el-form-item :label="$tc('DateStart')" required>
-          <el-date-picker
-            v-model="requestForm.apply_date_start"
-            type="datetime"
-          />
+          <el-date-picker v-model="requestForm.apply_date_start" type="datetime" />
         </el-form-item>
         <el-form-item :label="$tc('DateExpired')" required>
-          <el-date-picker
-            v-model="requestForm.apply_date_expired"
-            type="datetime"
-          />
+          <el-date-picker v-model="requestForm.apply_date_expired" type="datetime" />
         </el-form-item>
         <el-form-item :label="$tc('Action')">
-          <BasicTree
-            v-model="requestForm.actions"
-            :tree="treeNodes"
-            style="width: 100%"
-          />
+          <BasicTree v-model="requestForm.actions" :tree="treeNodes" style="width: 100%" />
         </el-form-item>
       </el-form>
     </IBox>
@@ -62,10 +60,17 @@ import { formatTime, getDateTimeStamp, toSafeLocalDateStr } from '@/utils/common
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
 import { AccountLabelMapper } from '@/views/perms/const'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
-import { createVNode as _createVNode, isVNode as _isVNode, resolveComponent as _resolveComponent } from 'vue'
+import {
+  createVNode as createVNodeCompat,
+  isVNode as isVNodeCompat,
+  resolveComponent as resolveComponentCompat
+} from 'vue'
 import { STATUS_MAP, treeNodes } from '../../const'
 function _isSlot(s) {
-  return typeof s === 'function' || Object.prototype.toString.call(s) === '[object Object]' && !_isVNode(s)
+  return (
+    typeof s === 'function' ||
+    (Object.prototype.toString.call(s) === '[object Object]' && !isVNodeCompat(s))
+  )
 }
 export default {
   name: '',
@@ -85,10 +90,13 @@ export default {
   data() {
     return {
       treeNodes,
-      statusMap: this.object.status.value === 'open' ? STATUS_MAP['pending'] : STATUS_MAP[this.object.state.value],
+      statusMap:
+        this.object.status.value === 'open'
+          ? STATUS_MAP['pending']
+          : STATUS_MAP[this.object.state.value],
       requestForm: {
-        nodes: this.object.apply_nodes?.map(i => i.id),
-        assets: this.object.apply_assets?.map(i => i.id),
+        nodes: this.object.apply_nodes?.map((i) => i.id),
+        assets: this.object.apply_assets?.map((i) => i.id),
         accounts: this.object.apply_accounts,
         actions: this.object.apply_actions,
         oid: this.object.org_id,
@@ -99,11 +107,11 @@ export default {
         multiple: true,
         value: this.object.apply_nodes,
         ajax: {
-          url: (function(object) {
+          url: (function (object) {
             const oid = object.org_id
             return `/api/v1/assets/nodes/?oid=${oid}&protocol__in=rdp,vnc,ssh,telnet`
-          }(this.object)),
-          transformOption: item => {
+          })(this.object),
+          transformOption: (item) => {
             return {
               label: `${item.full_value}`,
               value: item.id
@@ -115,11 +123,11 @@ export default {
         multiple: true,
         value: this.object.apply_assets,
         ajax: {
-          url: (function(object) {
+          url: (function (object) {
             const oid = object.org_id
             return `/api/v1/assets/assets/?oid=${oid}&protocol__in=rdp,vnc,ssh,telnet`
-          }(this.object)),
-          transformOption: item => {
+          })(this.object),
+          transformOption: (item) => {
             return {
               label: `${item.name}(${item.address})`,
               value: item.id
@@ -132,90 +140,119 @@ export default {
   computed: {
     isRequired() {
       if (this.object.approval_step.value === this.object.process_map.length) {
-        return [{
-          required: true
-        }]
+        return [
+          {
+            required: true
+          }
+        ]
       }
-      return [{
-        required: false
-      }]
+      return [
+        {
+          required: false
+        }
+      ]
     },
     specialCardItems() {
-      const {
-        object
-      } = this
-      return [{
-        key: this.$tc('Node'),
-        value: object.apply_nodes.map(item => item.name).join(', ')
-      }, {
-        key: this.$tc('Asset'),
-        value: object.apply_assets.map(item => item.name).join(', ')
-      }, {
-        key: this.$tc('Account'),
-        value: object.apply_accounts.map(item => AccountLabelMapper[item] || item).join(', ')
-      }, {
-        key: this.$tc('Action'),
-        value: object.apply_actions.map(item => item.label).join(', ')
-      }, {
-        key: this.$tc('DateStart'),
-        value: object.apply_date_start
-      }, {
-        key: this.$tc('DateExpired'),
-        value: object.apply_date_expired
-      }]
+      const { object } = this
+      return [
+        {
+          key: this.$tc('Node'),
+          value: object.apply_nodes.map((item) => item.name).join(', ')
+        },
+        {
+          key: this.$tc('Asset'),
+          value: object.apply_assets.map((item) => item.name).join(', ')
+        },
+        {
+          key: this.$tc('Account'),
+          value: object.apply_accounts.map((item) => AccountLabelMapper[item] || item).join(', ')
+        },
+        {
+          key: this.$tc('Action'),
+          value: object.apply_actions.map((item) => item.label).join(', ')
+        },
+        {
+          key: this.$tc('DateStart'),
+          value: object.apply_date_start
+        },
+        {
+          key: this.$tc('DateExpired'),
+          value: object.apply_date_expired
+        }
+      ]
     },
     assignedCardItems() {
       const vm = this
-      const {
-        object
-      } = this
-      return [{
-        key: this.$tc('PermissionName'),
-        value: object.apply_permission_name,
-        formatter: function(item, value) {
-          const to = {
-            name: 'AssetPermissionDetail',
-            params: {
-              id: object.id
-            },
-            query: {
-              oid: object.org_id
+      const { object } = this
+      return [
+        {
+          key: this.$tc('PermissionName'),
+          value: object.apply_permission_name,
+          formatter: function (item, value) {
+            const to = {
+              name: 'AssetPermissionDetail',
+              params: {
+                id: object.id
+              },
+              query: {
+                oid: object.org_id
+              }
+            }
+            if (
+              vm.$hasPerm('perms.view_assetpermission') &&
+              object.status.value === 'closed' &&
+              object.state.value === 'approved'
+            ) {
+              return createVNodeCompat(
+                resolveComponentCompat('router-link'),
+                {
+                  to: to
+                },
+                _isSlot(value)
+                  ? value
+                  : {
+                      default: () => [value]
+                    }
+              )
+            } else {
+              return createVNodeCompat('span', null, [value])
             }
           }
-          if (vm.$hasPerm('perms.view_assetpermission') && object.status.value === 'closed' && object.state.value === 'approved') {
-            return _createVNode(_resolveComponent('router-link'), {
-              'to': to
-            }, _isSlot(value) ? value : {
-              default: () => [value]
-            })
-          } else {
-            return _createVNode('span', null, [value])
-          }
+        },
+        {
+          key: this.$tc('Node'),
+          value: object.apply_nodes.map((item) => item.name).join(', ')
+        },
+        {
+          key: this.$tc('Asset'),
+          value: object.apply_assets.map((item) => item.name).join(', ')
+        },
+        {
+          key: this.$tc('Account'),
+          value: object.apply_accounts.map((item) => AccountLabelMapper[item] || item).join(', ')
+        },
+        {
+          key: this.$tc('Action'),
+          value: object.apply_actions.map((item) => item.label).join(', ')
+        },
+        {
+          key: this.$tc('DateStart'),
+          value: object.apply_date_start
+        },
+        {
+          key: this.$tc('DateExpired'),
+          value: object.apply_date_expired
         }
-      }, {
-        key: this.$tc('Node'),
-        value: object.apply_nodes.map(item => item.name).join(', ')
-      }, {
-        key: this.$tc('Asset'),
-        value: object.apply_assets.map(item => item.name).join(', ')
-      }, {
-        key: this.$tc('Account'),
-        value: object.apply_accounts.map(item => AccountLabelMapper[item] || item).join(', ')
-      }, {
-        key: this.$tc('Action'),
-        value: object.apply_actions.map(item => item.label).join(', ')
-      }, {
-        key: this.$tc('DateStart'),
-        value: object.apply_date_start
-      }, {
-        key: this.$tc('DateExpired'),
-        value: object.apply_date_expired
-      }]
+      ]
     },
     hasActionPerm() {
       const approval_step = this.object.approval_step.value
       const current_user_id = this.$store.state.users.profile.id
-      return this.object.process_map.filter(item => item.approval_level === approval_step)[0].assignees.indexOf(current_user_id) !== -1
+      return (
+        this.object.process_map
+          .filter((item) => item.approval_level === approval_step)[0]
+          .assignees.indexOf(current_user_id) !== -1
+      )
     }
   },
   methods: {
@@ -239,28 +276,37 @@ export default {
           return this.$message.error(this.$tc('RequiredSystemUserErrMsg'))
         }
       }
-      this.$axios.patch(`/api/v1/tickets/apply-asset-tickets/${this.object.id}/approve/`, {
-        apply_nodes: nodes || [],
-        apply_assets: assets || [],
-        apply_accounts: accounts || [],
-        org_id: this.object.org_id,
-        apply_actions: this.requestForm.actions,
-        apply_date_start: this.requestForm.apply_date_start,
-        apply_date_expired: this.requestForm.apply_date_expired
-      }).then(() => {
-        this.$message.success(this.$tc('UpdateSuccessMsg'))
-        this.reloadPage()
-      }).catch(() => {
-        this.$message.success(this.$tc('UpdateErrorMsg'))
-      })
+      this.$axios
+        .patch(`/api/v1/tickets/apply-asset-tickets/${this.object.id}/approve/`, {
+          apply_nodes: nodes || [],
+          apply_assets: assets || [],
+          apply_accounts: accounts || [],
+          org_id: this.object.org_id,
+          apply_actions: this.requestForm.actions,
+          apply_date_start: this.requestForm.apply_date_start,
+          apply_date_expired: this.requestForm.apply_date_expired
+        })
+        .then(() => {
+          this.$message.success(this.$tc('UpdateSuccessMsg'))
+          this.reloadPage()
+        })
+        .catch(() => {
+          this.$message.success(this.$tc('UpdateErrorMsg'))
+        })
     },
     handleClose() {
       const url = `/api/v1/tickets/apply-asset-tickets/${this.object.id}/close/`
-      this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+      this.$axios
+        .put(url)
+        .then((res) => this.reloadPage())
+        .catch((err) => this.$message.error(err))
     },
     handleReject() {
       const url = `/api/v1/tickets/apply-asset-tickets/${this.object.id}/reject/`
-      this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+      this.$axios
+        .put(url)
+        .then((res) => this.reloadPage())
+        .catch((err) => this.$message.error(err))
     }
   }
 }

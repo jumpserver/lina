@@ -2,7 +2,7 @@
 import Component from './el-form-renderer.vue'
 
 // Vue 3 plugin install
-Component.install = app => {
+Component.install = (app) => {
   app.component(Component.name, Component)
 }
 

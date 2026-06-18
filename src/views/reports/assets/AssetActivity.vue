@@ -1,17 +1,13 @@
 <template>
   <div>
-    <BaseReport v-bind="$attrs" :title="title"
-      :nav="nav"
-      :name="name">
+    <BaseReport v-bind="$attrs" :title="title" :nav="nav" :name="name">
       <div class="charts-grid">
         <SwitchDate class="switch-date" :name="name" @change="onChange" />
-        <br>
+        <br />
         <div class="chart-container full-width">
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('Overview') }}</div>
-            <SummaryCountCard
-              :items="totalData"
-            />
+            <SummaryCountCard :items="totalData" />
           </div>
         </div>
 
@@ -23,36 +19,33 @@
 
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('DistributionOfAssetLoginMethods') }}</div>
+            <div class="chart-container-title-text">
+              {{ $t('DistributionOfAssetLoginMethods') }}
+            </div>
             <div class="chart">
-              <Echart
-                :options="LoginEntryOptions"
-                :autoresize="true"
-              />
+              <Echart :options="LoginEntryOptions" :autoresize="true" />
             </div>
           </div>
         </div>
 
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('RemoteLoginProtocolUsageDistribution') }}</div>
+            <div class="chart-container-title-text">
+              {{ $t('RemoteLoginProtocolUsageDistribution') }}
+            </div>
             <div class="chart">
-              <Echart
-                :options="LoginProtocolOptions"
-                :autoresize="true"
-              />
+              <Echart :options="LoginProtocolOptions" :autoresize="true" />
             </div>
           </div>
         </div>
 
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('OperatingSystemDistributionOfLoginAssets') }}</div>
+            <div class="chart-container-title-text">
+              {{ $t('OperatingSystemDistributionOfLoginAssets') }}
+            </div>
             <div class="chart">
-              <Echart
-                :options="LoginOSOptions"
-                :autoresize="true"
-              />
+              <Echart :options="LoginOSOptions" :autoresize="true" />
             </div>
           </div>
         </div>
@@ -61,11 +54,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('AssetLoginTrends') }}</div>
             <div class="chart">
-              <Echart
-                ref="loginTrend"
-                :options="loginTrendOptions"
-                :autoresize="true"
-              />
+              <Echart ref="loginTrend" :options="loginTrendOptions" :autoresize="true" />
             </div>
           </div>
         </div>
@@ -103,14 +92,14 @@ export default {
       name: 'AssetReport',
       days: localStorage.getItem(this.name) || '7',
       session_stats: {
-        'total': 0,
-        'asset_count': 0,
-        'user_count': 0
+        total: 0,
+        asset_count: 0,
+        user_count: 0
       },
       pie: {
-        'asset_login_by_type': [{ 'name': this.$t('Nothing'), 'value': 0 }],
-        'asset_login_by_from': [{ 'name': this.$t('Nothing'), 'value': 0 }],
-        'asset_login_by_protocol': [{ 'name': this.$t('Nothing'), 'value': 0 }]
+        asset_login_by_type: [{ name: this.$t('Nothing'), value: 0 }],
+        asset_login_by_from: [{ name: this.$t('Nothing'), value: 0 }],
+        asset_login_by_protocol: [{ name: this.$t('Nothing'), value: 0 }]
       },
       asset_login_log_metrics: {
         dates_metrics_date: [],
@@ -328,17 +317,19 @@ export default {
                 0,
                 0,
                 1,
-                [{
-                  offset: 0,
-                  color: 'rgba(249, 199, 79, 0.6)'
-                }, {
-                  offset: 0.6,
-                  color: 'rgba(249, 199, 79, 0.2)'
-                },
-                {
-                  offset: 0.8,
-                  color: 'rgba(249, 199, 79, 0.1)'
-                }
+                [
+                  {
+                    offset: 0,
+                    color: 'rgba(249, 199, 79, 0.6)'
+                  },
+                  {
+                    offset: 0.6,
+                    color: 'rgba(249, 199, 79, 0.2)'
+                  },
+                  {
+                    offset: 0.8,
+                    color: 'rgba(249, 199, 79, 0.1)'
+                  }
                 ],
                 false
               ),
@@ -364,7 +355,7 @@ export default {
       this.days = val
     },
     conversionData(data) {
-      return data.map(item => {
+      return data.map((item) => {
         return {
           name: item.label,
           value: item.total
@@ -380,12 +371,16 @@ export default {
       }
     },
     async getData() {
-      const data = await this.$axios.get(`/api/v1/reports/reports/asset-activity/?days=${this.days}`)
+      const data = await this.$axios.get(
+        `/api/v1/reports/reports/asset-activity/?days=${this.days}`
+      )
       this.session_stats['total'] = data.session_stats.total
       this.session_stats['asset_count'] = data.session_stats.asset_count
       this.session_stats['user_count'] = data.session_stats.user_count
-      this.asset_login_log_metrics['dates_metrics_date'] = data.asset_login_log_metrics.dates_metrics_date
-      this.asset_login_log_metrics['dates_metrics_total'] = data.asset_login_log_metrics.dates_metrics_total
+      this.asset_login_log_metrics['dates_metrics_date'] =
+        data.asset_login_log_metrics.dates_metrics_date
+      this.asset_login_log_metrics['dates_metrics_total'] =
+        data.asset_login_log_metrics.dates_metrics_total
 
       this.setPieData('asset_login_by_type', data.asset_login_by_type)
       this.setPieData('asset_login_by_from', data.asset_login_by_from)
@@ -395,6 +390,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

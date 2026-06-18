@@ -1,10 +1,6 @@
 <template>
   <div>
-    <el-link
-      icon="Edit"
-      underline="never"
-      @click="handlerLinkClick"
-    >
+    <el-link icon="Edit" underline="never" @click="handlerLinkClick">
       {{ content }}
     </el-link>
     <Dialog
@@ -13,7 +9,7 @@
       :title="$tc('Region')"
       :show-cancel="false"
       width="60%"
-      @confirm="regionVisible=false"
+      @confirm="regionVisible = false"
     >
       <el-row>
         <el-col>
@@ -32,16 +28,9 @@
         @change="handleCheckedRegionChange"
         @update:model-value="checkedRegion = $event"
       >
-        <el-row
-          v-for="r in allRegions"
-          :key="r.id"
-          type="flex"
-        >
+        <el-row v-for="r in allRegions" :key="r.id" type="flex">
           <el-col>
-            <el-checkbox
-              :label="r.id"
-              :value="r.id"
-            >
+            <el-checkbox :label="r.id" :value="r.id">
               {{ r.name }}
             </el-checkbox>
           </el-col>
@@ -115,23 +104,26 @@ export default {
 
         method = 'post'
         url = `/api/v1/xpack/cloud/regions/?provider=${this.provider}&category=${category}`
-        data = { 'attrs': encryptAttrsField(attrs) }
+        data = { attrs: encryptAttrsField(attrs) }
       }
 
       this.content = this.$t('Loading')
 
-      this.$axios[method](url, data).then(resp => {
-        this.allRegions = resp?.regions
-        this.regionVisible = true
-        this.updateCheckedStatus()
-      }).catch(() => {
-        this.$message.error(this.$tc('CloudRegionTip'))
-      }).finally(() => {
-        this.refreshContent()
-      })
+      this.$axios[method](url, data)
+        .then((resp) => {
+          this.allRegions = resp?.regions
+          this.regionVisible = true
+          this.updateCheckedStatus()
+        })
+        .catch(() => {
+          this.$message.error(this.$tc('CloudRegionTip'))
+        })
+        .finally(() => {
+          this.refreshContent()
+        })
     },
     handleCheckedAllChange(val) {
-      this.checkedRegion = val ? this.allRegions.map(region => region.id) : []
+      this.checkedRegion = val ? this.allRegions.map((region) => region.id) : []
       this.isIndeterminate = false
       this.checkAll = !!val
       this.$emit('input', [])
@@ -143,7 +135,7 @@ export default {
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.allRegions.length
 
       const region = this.allRegions
-        .filter(item => value.includes(item.id))
+        .filter((item) => value.includes(item.id))
         .reduce((acc, region) => {
           acc[region.id] = region.name
           return acc
@@ -163,7 +155,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .el-checkbox {
   margin-bottom: 10px;
 }
@@ -173,7 +165,6 @@ export default {
   flex-wrap: wrap;
 
   :deep(.el-col) {
-
     .el-checkbox {
       display: flex;
       align-items: center;

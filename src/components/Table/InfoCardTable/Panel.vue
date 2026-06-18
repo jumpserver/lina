@@ -60,11 +60,11 @@ export default {
     },
     getImage: {
       type: Function,
-      default: obj => ''
+      default: (obj) => ''
     },
     getInfos: {
       type: Function,
-      default: obj => []
+      default: (obj) => []
     },
     handleUpdate: {
       type: Function,
@@ -101,10 +101,10 @@ export default {
     },
     iActions() {
       const mergedActions = new Map()
-      this.defaultActions.forEach(a => {
+      this.defaultActions.forEach((a) => {
         mergedActions.set(a.id, { ...a })
       })
-      this.actions.forEach(a => {
+      this.actions.forEach((a) => {
         mergedActions.set(a.id, { ...a })
       })
       return Array.from(mergedActions.values())

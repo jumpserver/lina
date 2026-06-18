@@ -1,10 +1,6 @@
 <template>
   <div class="result-panel">
-    <el-table
-      :data="tableData"
-      :show-header="false"
-      size="small"
-    >
+    <el-table :data="tableData" :show-header="false" size="small">
       <el-table-column prop="key" width="120" />
       <el-table-column prop="value">
         <template #default="scope">
@@ -13,7 +9,9 @@
       </el-table-column>
     </el-table>
     <div style="margin-top: 20px">
-      <el-button size="small" type="primary" @click="handleClick">{{ $t('CloudAccountDetail') }}</el-button>
+      <el-button size="small" type="primary" @click="handleClick">{{
+        $t('CloudAccountDetail')
+      }}</el-button>
       <el-button size="small" @click="handleClose">{{ $t('Close') }}</el-button>
     </div>
   </div>
@@ -26,8 +24,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -44,7 +41,10 @@ export default {
           key: this.$t('IPType'),
           value: this.object.task.sync_ip_type === 1 ? this.$t('PublicIP') : this.$t('PrivateIP')
         },
-        { key: this.$t('Timer'), value: this.object.task.is_periodic ? this.$t('Yes') : this.$t('No') }
+        {
+          key: this.$t('Timer'),
+          value: this.object.task.is_periodic ? this.$t('Yes') : this.$t('No')
+        }
       ]
     }
   },
@@ -60,7 +60,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .result-panel {
   padding: 10px;
 }

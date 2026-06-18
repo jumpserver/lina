@@ -45,14 +45,15 @@ export default {
   },
   data() {
     return {
-      iFormatterArgsDefault: Object.assign({}, ChoicesFormatter.formatterArgsDefault, this.formatterArgsDefault)
+      iFormatterArgsDefault: Object.assign(
+        {},
+        ChoicesFormatter.formatterArgsDefault,
+        this.formatterArgsDefault
+      )
     }
   },
-  mounted() {
-  }
+  mounted() {}
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

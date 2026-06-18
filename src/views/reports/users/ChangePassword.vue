@@ -1,17 +1,13 @@
 <template>
   <div>
-    <BaseReport v-bind="$attrs" :title="title"
-      :nav="nav"
-      :name="name">
+    <BaseReport v-bind="$attrs" :title="title" :nav="nav" :name="name">
       <div class="charts-grid">
         <SwitchDate class="switch-date" :name="name" @change="onChange" />
-        <br>
+        <br />
         <div class="chart-container full-width">
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('Overview') }}</div>
-            <SummaryCountCard
-              :items="totalData"
-            />
+            <SummaryCountCard :items="totalData" />
           </div>
         </div>
 
@@ -19,10 +15,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('UserModificationTrends') }}</div>
             <div class="chart">
-              <Echart
-                :options="UserModificationOptions"
-                :autoresize="true"
-              />
+              <Echart :options="UserModificationOptions" :autoresize="true" />
             </div>
           </div>
         </div>
@@ -74,9 +67,9 @@ export default {
       name: 'UserChangePasswordReport',
       days: localStorage.getItem(this.name) || '7',
       total_count_change_password: {
-        'total': 0,
-        'user_total': 0,
-        'change_by_total': 0
+        total: 0,
+        user_total: 0,
+        change_by_total: 0
       },
       config: {
         change_password_top10_users: {
@@ -221,16 +214,19 @@ export default {
                 0,
                 0,
                 1,
-                [{
-                  offset: 0,
-                  color: primary
-                }, {
-                  offset: 0.6,
-                  color: TwoLevelColor
-                }, {
-                  offset: 0.8,
-                  color: ThreeLevelColor
-                }
+                [
+                  {
+                    offset: 0,
+                    color: primary
+                  },
+                  {
+                    offset: 0.6,
+                    color: TwoLevelColor
+                  },
+                  {
+                    offset: 0.8,
+                    color: ThreeLevelColor
+                  }
                 ],
                 false
               ),
@@ -256,19 +252,22 @@ export default {
       this.days = val
     },
     async getData() {
-      const data = await this.$axios.get(`/api/v1/reports/reports/user-change-password/?days=${this.days}`)
+      const data = await this.$axios.get(
+        `/api/v1/reports/reports/user-change-password/?days=${this.days}`
+      )
       this.total_count_change_password['total'] = data.total_count_change_password.total
       this.total_count_change_password['user_total'] = data.total_count_change_password.user_total
-      this.total_count_change_password['change_by_total'] = data.total_count_change_password.change_by_total
+      this.total_count_change_password['change_by_total'] =
+        data.total_count_change_password.change_by_total
       this.config.change_password_top10_users['data'] = data.change_password_top10_users
       this.config.change_password_top10_change_bys['data'] = data.change_password_top10_change_bys
-      this.config.user_change_password_metrics['dates_metrics_date'] = data.user_change_password_metrics.dates_metrics_date
-      this.config.user_change_password_metrics['dates_metrics_total'] = data.user_change_password_metrics.dates_metrics_total
+      this.config.user_change_password_metrics['dates_metrics_date'] =
+        data.user_change_password_metrics.dates_metrics_date
+      this.config.user_change_password_metrics['dates_metrics_total'] =
+        data.user_change_password_metrics.dates_metrics_total
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

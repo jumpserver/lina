@@ -35,9 +35,12 @@
       :result="createAccountResults"
       @close-all="closeAll"
     />
-    <AccountBulkUpdateDialog v-bind="updateSelectedDialogSetting" v-if="updateSelectedDialogSetting.visible"
+    <AccountBulkUpdateDialog
+      v-bind="updateSelectedDialogSetting"
+      v-if="updateSelectedDialogSetting.visible"
       v-model:visible="updateSelectedDialogSetting.visible"
-      @update="handleAccountBulkUpdate" />
+      @update="handleAccountBulkUpdate"
+    />
     <PasswordHistoryDialog
       v-if="showPasswordHistoryDialog"
       v-model:visible="showPasswordHistoryDialog"
@@ -223,7 +226,7 @@ export default {
           },
           ds: {
             width: '100px',
-            formatter: row => {
+            formatter: (row) => {
               if (row.ds && row.ds['domain_name']) {
                 return row.ds['domain_name']
               } else {
@@ -241,13 +244,13 @@ export default {
           },
           asset: {
             minWidth: '100px',
-            formatter: function(row) {
+            formatter: function (row) {
               return row.asset.name
             }
           },
           username: {
             minWidth: '60px',
-            formatter: function(row) {
+            formatter: function (row) {
               if (row.ds && row.ds['domain_name']) {
                 return `${row.username}@${row.ds['domain_name']}`
               } else {
@@ -256,12 +259,12 @@ export default {
             }
           },
           secret_type: {
-            formatter: function(row) {
+            formatter: function (row) {
               return row.secret_type.label
             }
           },
           source: {
-            formatter: function(row) {
+            formatter: function (row) {
               return row.source.label
             }
           },
@@ -369,16 +372,16 @@ export default {
                 vm.$hasPerm('accounts.verify_account')
               )
             },
-            callback: function({ selectedRows }) {
-              const ids = selectedRows.map(v => {
+            callback: function ({ selectedRows }) {
+              const ids = selectedRows.map((v) => {
                 return v.id
               })
               this.$axios
                 .post('/api/v1/accounts/accounts/tasks/', { action: 'verify', accounts: ids })
-                .then(res => {
+                .then((res) => {
                   openTaskPage(res['task'])
                 })
-                .catch(err => {
+                .catch((err) => {
                   this.$message.error(this.$tc('BulkVerifyErrorMsg' + ' ' + err))
                 })
             }.bind(this)
@@ -391,8 +394,8 @@ export default {
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 && vm.$hasPerm('accounts.change_account')
             },
-            callback: function({ selectedRows }) {
-              const ids = selectedRows.map(v => {
+            callback: function ({ selectedRows }) {
+              const ids = selectedRows.map((v) => {
                 return v.id
               })
               this.$axios
@@ -400,7 +403,7 @@ export default {
                 .then(() => {
                   this.$message.success(this.$tc('ClearSuccessMsg'))
                 })
-                .catch(err => {
+                .catch((err) => {
                   this.$message.error(this.$tc('ClearErrorMsg' + ' ' + err))
                 })
             }.bind(this)
@@ -414,7 +417,7 @@ export default {
                 selectedRows.length > 0 &&
                 !this.$store.getters.currentOrgIsRoot &&
                 vm.$hasPerm('accounts.change_account') &&
-                selectedRows.every(i => i.secret_type.value === selectedRows[0].secret_type.value)
+                selectedRows.every((i) => i.secret_type.value === selectedRows[0].secret_type.value)
               )
             },
             callback: ({ selectedRows }) => {

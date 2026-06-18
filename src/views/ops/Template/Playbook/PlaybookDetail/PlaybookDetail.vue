@@ -22,9 +22,7 @@ export default {
   data() {
     return {
       url: `/api/v1/ops/playbooks/${this.object.id}/`,
-      excludes: [
-        'variable', 'path', 'create_method', 'vcs_url'
-      ]
+      excludes: ['variable', 'path', 'create_method', 'vcs_url']
     }
   },
   computed: {
@@ -36,6 +34,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

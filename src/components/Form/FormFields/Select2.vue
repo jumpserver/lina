@@ -21,12 +21,21 @@
     @visible-change="onVisibleChange"
   >
     <div v-if="showSelectAll" class="el-select-dropdown__header">
-      <el-checkbox v-model="allSelected" :disabled="selectAllDisabled" @change="handleSelectAllChange">
+      <el-checkbox
+        v-model="allSelected"
+        :disabled="selectAllDisabled"
+        @change="handleSelectAllChange"
+      >
         {{ $t('SelectAll') }}
       </el-checkbox>
       <div v-if="quickAddCallback" style="float: right">
         <el-link :underline="false" @click="quickAddCallback">{{ $t('QuickAdd') }}</el-link>
-        <el-link :underline="false" icon="el-icon-refresh" style="margin-left: 5px;" @click="refresh" />
+        <el-link
+          :underline="false"
+          icon="el-icon-refresh"
+          style="margin-left: 5px"
+          @click="refresh"
+        />
       </div>
     </div>
     <el-option
@@ -41,6 +50,7 @@
 
 <script>
 import { createSourceIdCache } from '@/api/common'
+import i18n from '@/i18n/i18n'
 import _ from 'lodash'
 
 export default {
@@ -48,7 +58,7 @@ export default {
   props: {
     options: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     url: {
       type: String,
@@ -90,9 +100,8 @@ export default {
     },
     placeholder: {
       type: String,
-      default: function() {
+      default: function () {
         try {
-          const { default: i18n } = require('@/i18n/i18n')
           return i18n?.global?.t?.('Select') || 'Select'
         } catch (e) {
           return 'Select'
@@ -112,7 +121,14 @@ export default {
       default: 10
     }
   },
-  emits: ['input', 'change', 'changeOptions', 'visible-change', 'initialized', 'loadInitialOptionsDone'],
+  emits: [
+    'input',
+    'change',
+    'changeOptions',
+    'visible-change',
+    'initialized',
+    'loadInitialOptionsDone'
+  ],
   data() {
     const vm = this
     const defaultParams = {
@@ -144,7 +160,7 @@ export default {
       remote: true,
       allSelected: false,
       transformed: false, // 这里改回来是因为，acl 中资产选择，category 选择后，再编辑，就看不到了
-      innerValue: this.value !== undefined ? _.cloneDeep(this.value) : (this.multiple ? [] : '')
+      innerValue: this.value !== undefined ? _.cloneDeep(this.value) : this.multiple ? [] : ''
     }
   },
   computed: {
@@ -152,13 +168,19 @@ export default {
       return this.$refs.select
     },
     collapseTags() {
-      return this.multiple && this.collapseTagsCount > 0 && (this.value?.length || 0) > this.collapseTagsCount
+      return (
+        this.multiple &&
+        this.collapseTagsCount > 0 &&
+        (this.value?.length || 0) > this.collapseTagsCount
+      )
     },
     optionsValues() {
       return this.iOptions.map((v) => v.value)
     },
     selectAllDisabled() {
-      const validOptions = this.iOptions.filter(item => this.disabledValues.indexOf(item.value) === -1)
+      const validOptions = this.iOptions.filter(
+        (item) => this.disabledValues.indexOf(item.value) === -1
+      )
       return validOptions.length === 0
     },
     iValue: {
@@ -396,7 +418,9 @@ export default {
       this.$emit('input', _.cloneDeep(this.innerValue))
     },
     checkDisabled(item) {
-      return item.disabled === undefined ? this.disabledValues.indexOf(item.value) !== -1 : item.disabled
+      return item.disabled === undefined
+        ? this.disabledValues.indexOf(item.value) !== -1
+        : item.disabled
     },
     onChange(values) {
       const options = this.getSelectedOptions()
@@ -444,10 +468,9 @@ export default {
     }
   }
 }
-
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .select2 {
   width: 100%;
 

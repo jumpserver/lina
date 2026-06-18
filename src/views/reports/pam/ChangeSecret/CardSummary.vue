@@ -52,14 +52,12 @@ export default {
             canDirect: true,
             count: this.data.total_count_change_secrets,
             callback: () => {
-              this.$eventBus.$emit('change-tab',
-                {
-                  name: 'AccountChangeSecretList',
-                  payload: {
-                    days: this.days
-                  }
+              this.$eventBus.$emit('change-tab', {
+                name: 'AccountChangeSecretList',
+                payload: {
+                  days: this.days
                 }
-              )
+              })
             }
           }
         },
@@ -119,18 +117,15 @@ export default {
   },
   methods: {
     async getData() {
-      this.data = await this.$axios.get(
-        '/api/v1/accounts/change-secret-dashboard/',
-        {
-          params: {
-            days: this.days,
-            total_count_change_secrets: 1,
-            total_count_periodic_change_secrets: 1,
-            total_count_change_secret_assets: 1,
-            total_count_change_secret_status: 1
-          }
+      this.data = await this.$axios.get('/api/v1/accounts/change-secret-dashboard/', {
+        params: {
+          days: this.days,
+          total_count_change_secrets: 1,
+          total_count_periodic_change_secrets: 1,
+          total_count_change_secret_assets: 1,
+          total_count_change_secret_status: 1
         }
-      )
+      })
     }
   }
 }

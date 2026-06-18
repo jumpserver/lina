@@ -48,7 +48,7 @@ export default {
               {
                 match: 'm2m',
                 name: 'system_roles',
-                'value': ['00000000-0000-0000-0000-000000000001']
+                value: ['00000000-0000-0000-0000-000000000001']
               }
             ]
           }
@@ -87,7 +87,7 @@ export default {
       this.$emit('input', this.rules)
     },
     handleInput(index, event) {
-      this.rules[index] = { 'users': event }
+      this.rules[index] = { users: event }
       this.$emit('input', this.rules)
     }
   }
@@ -95,22 +95,22 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .text {
-    font-size: 14px;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  }
+.text {
+  font-size: 14px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
 
-  .item {
-    padding: 10px 0;
-  }
+.item {
+  padding: 10px 0;
+}
 
-  .box-card {
-    width: 96%;
-    margin-bottom: 10px;
-    box-shadow: unset !important;
+.box-card {
+  width: 96%;
+  margin-bottom: 10px;
+  box-shadow: unset !important;
 
-    :deep(.el-card__body) {
-      padding: 10px 30px !important;
-    }
+  :deep(.el-card__body) {
+    padding: 10px 30px !important;
   }
+}
 </style>

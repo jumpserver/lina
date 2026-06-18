@@ -20,7 +20,10 @@
       :table-config="tableConfig"
       :tree-setting="treeSetting"
     />
-    <AccountDiscoverDialog v-model:visible="discoveryDialog.visible" :asset="discoveryDialog.asset" />
+    <AccountDiscoverDialog
+      v-model:visible="discoveryDialog.visible"
+      :asset="discoveryDialog.asset"
+    />
   </div>
 </template>
 
@@ -80,13 +83,13 @@ export default {
           title: this.$t('DateLastWeek'),
           hasCount: true,
           filter: {
-            'days': '7'
+            days: '7'
           }
         },
         {
           title: this.$t('DateLastMonth'),
           filter: {
-            'days': '30'
+            days: '30'
           }
         },
         {
@@ -101,8 +104,7 @@ export default {
       headerActions: gatherAccountHeaderActions(this)
     }
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     afterDeleteGatheredAccount() {
       this.$refs.AssetTreeTable.reloadTable()

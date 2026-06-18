@@ -1,6 +1,9 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" :create-success-next-route="successUrl"
-    :update-success-next-route="successUrl" />
+  <GenericCreateUpdatePage
+    v-bind="$data"
+    :create-success-next-route="successUrl"
+    :update-success-next-route="successUrl"
+  />
 </template>
 
 <script>
@@ -81,7 +84,7 @@ export default {
         value.meta.INDEX = value.meta?.INDEX?.toLowerCase()
         // 解决第一次提交失败后，再次提交时，HOSTS字段为Array的问题
         if (typeof value.meta.HOSTS === 'string') {
-          value.meta.HOSTS = value.meta.HOSTS.split(',').map(item => (item.trim()))
+          value.meta.HOSTS = value.meta.HOSTS.split(',').map((item) => item.trim())
         }
         return value
       }

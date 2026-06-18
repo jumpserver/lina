@@ -25,7 +25,11 @@
             </div>
           </el-dropdown-item>
           <el-dropdown-item divided />
-          <el-dropdown-item v-for="protocol in protocols" :key="protocol.id" :command="protocol.name">
+          <el-dropdown-item
+            v-for="protocol in protocols"
+            :key="protocol.id"
+            :command="protocol.name"
+          >
             {{ protocol.name }}
           </el-dropdown-item>
         </el-dropdown-menu>
@@ -108,7 +112,7 @@ export default {
         const url = this.formatterArgs.assetUrl.replace('{id}', assetId)
         const res = await this.$axios.get(url)
 
-        this.protocols = res.protocols.filter(protocol => protocol.name !== 'winrm') || []
+        this.protocols = res.protocols.filter((protocol) => protocol.name !== 'winrm') || []
       } catch (e) {
         throw new Error(`Error getting protocols: ${e}`)
       }

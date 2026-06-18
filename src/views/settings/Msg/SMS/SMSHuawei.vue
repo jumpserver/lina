@@ -22,41 +22,30 @@ export default {
         {
           title: this.$t('Test'),
           loading: false,
-          callback: function(value, form, btn) {
+          callback: function (value, form, btn) {
             btn.loading = true
-            vm.$axios.post(
-              `/api/v1/settings/sms/huawei/testing/`,
-              value
-            ).then(res => {
-              vm.$message.success(res['msg'])
-            }).catch((error) => {
-              vm.$log.error('err occur')
-              vm.$refs.baseSms.testPerformError(error)
-            }).finally(() => {
-              btn.loading = false
-            })
+            vm.$axios
+              .post(`/api/v1/settings/sms/huawei/testing/`, value)
+              .then((res) => {
+                vm.$message.success(res['msg'])
+              })
+              .catch((error) => {
+                vm.$log.error('err occur')
+                vm.$refs.baseSms.testPerformError(error)
+              })
+              .finally(() => {
+                btn.loading = false
+              })
           }
         }
       ],
       fields: [
-        [
-          this.$t('Basic'),
-          [
-            'HUAWEI_APP_KEY', 'HUAWEI_APP_SECRET', 'HUAWEI_SMS_ENDPOINT'
-          ]
-        ],
+        [this.$t('Basic'), ['HUAWEI_APP_KEY', 'HUAWEI_APP_SECRET', 'HUAWEI_SMS_ENDPOINT']],
         [
           this.$t('Template'),
-          [
-            'HUAWEI_SIGN_CHANNEL_NUM', 'HUAWEI_VERIFY_SIGN_NAME', 'HUAWEI_VERIFY_TEMPLATE_CODE'
-          ]
+          ['HUAWEI_SIGN_CHANNEL_NUM', 'HUAWEI_VERIFY_SIGN_NAME', 'HUAWEI_VERIFY_TEMPLATE_CODE']
         ],
-        [
-          this.$t('Test'),
-          [
-            'SMS_TEST_PHONE'
-          ]
-        ]
+        [this.$t('Test'), ['SMS_TEST_PHONE']]
       ],
       fieldsMeta: {
         HUAWEI_VERIFY_SIGN_TMPL: {

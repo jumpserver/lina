@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
 import { DrawerListTable as ListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
@@ -36,28 +36,28 @@ export default {
         searchConfig: {
           exclude: ['applet']
         },
-        extraMoreActions: [{
-          name: 'SyncSelected',
-          title: this.$t('BatchDeployment'),
-          type: 'primary',
-          can: ({
-            selectedRows
-          }) => {
-            return selectedRows.length > 0
-          },
-          callback: function({
-            selectedRows
-          }) {
-            vm.$axios.post(`/api/v1/terminal/applet-host-deployments/applets/`, {
-              hosts: selectedRows.map(v => {
-                return v.host.id
-              }),
-              applet_id: vm.object.id
-            }).then(res => {
-              openTaskPage(res['task'])
-            })
+        extraMoreActions: [
+          {
+            name: 'SyncSelected',
+            title: this.$t('BatchDeployment'),
+            type: 'primary',
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0
+            },
+            callback: function ({ selectedRows }) {
+              vm.$axios
+                .post(`/api/v1/terminal/applet-host-deployments/applets/`, {
+                  hosts: selectedRows.map((v) => {
+                    return v.host.id
+                  }),
+                  applet_id: vm.object.id
+                })
+                .then((res) => {
+                  openTaskPage(res['task'])
+                })
+            }
           }
-        }]
+        ]
       },
       config: {
         url: `/api/v1/terminal/applet-publications/?applet=${this.object.id}`,
@@ -69,44 +69,40 @@ export default {
             formatterArgs: {
               drawer: true,
               can: vm.$hasPerm('assets.view_asset'),
-              getTitle: ({
-                row
-              }) => row.host.name,
-              getDrawerTitle: ({
-                row
-              }) => row.host.name,
-              getRoute: ({
-                row
-              }) => ({
+              getTitle: ({ row }) => row.host.name,
+              getDrawerTitle: ({ row }) => row.host.name,
+              getRoute: ({ row }) => ({
                 name: 'AppletHostDetail',
                 params: {
                   id: row.host.id
                 }
               })
             },
-            id: ({
-              row
-            }) => row.host.id
+            id: ({ row }) => row.host.id
           },
           'applet.version': {
             label: this.$t('Version')
           },
           status: {
             label: this.$t('PublishStatus'),
-            formatter: row => {
+            formatter: (row) => {
               const typeMapper = {
-                'pending': 'success',
-                'success': 'primary',
-                'failed': 'danger',
-                'unknown': 'warning'
+                pending: 'success',
+                success: 'primary',
+                failed: 'danger',
+                unknown: 'warning'
               }
               const tp = typeMapper[row.status.value] || 'warning'
-              return _createVNode(_resolveComponent('el-tag'), {
-                'size': 'small',
-                'type': tp
-              }, {
-                default: () => [row.status.label]
-              })
+              return createVNodeCompat(
+                resolveComponentCompat('el-tag'),
+                {
+                  size: 'small',
+                  type: tp
+                },
+                {
+                  default: () => [row.status.label]
+                }
+              )
             }
           },
           date_updated: {
@@ -117,19 +113,21 @@ export default {
               hasUpdate: false,
               hasDelete: false,
               hasClone: false,
-              extraActions: [{
-                title: this.$t('Deploy'),
-                callback: function({
-                  row
-                }) {
-                  this.$axios.post(`/api/v1/terminal/applet-host-deployments/applets/`, {
-                    hosts: [row.host.id],
-                    applet_id: vm.object.id
-                  }).then(res => {
-                    openTaskPage(res['task'])
-                  })
+              extraActions: [
+                {
+                  title: this.$t('Deploy'),
+                  callback: function ({ row }) {
+                    this.$axios
+                      .post(`/api/v1/terminal/applet-host-deployments/applets/`, {
+                        hosts: [row.host.id],
+                        applet_id: vm.object.id
+                      })
+                      .then((res) => {
+                        openTaskPage(res['task'])
+                      })
+                  }
                 }
-              }]
+              ]
             }
           }
         }

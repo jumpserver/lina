@@ -8,9 +8,7 @@
       >
         {{ title }}
       </el-checkbox>
-      <span class="check-number">
-        {{ checkedData.length }}/{{ districtListMock.length }}
-      </span>
+      <span class="check-number"> {{ checkedData.length }}/{{ districtListMock.length }} </span>
     </div>
     <div class="el-transfer-panel__body">
       <div
@@ -25,7 +23,7 @@
           class="el-input__inner"
           type="text"
           @change="handleKeyword"
-        >
+        />
         <span class="el-input__prefix" style="left: 0">
           <el-icon class="el-input__icon"><Search /></el-icon>
         </span>
@@ -64,6 +62,8 @@
 </template>
 
 <script>
+import i18n from '@/i18n/i18n'
+
 export default {
   components: {},
   props: {
@@ -117,7 +117,6 @@ export default {
     }
   },
   data() {
-    const i18n = require('@/i18n/i18n').default
     return {
       districtListMock: [], // 展示的数据 （搜索和分页会自动修改这个数组）
       checkedData: [], // 已选择，数据格式：[id,id,id...]
@@ -170,11 +169,7 @@ export default {
     handleKeyword() {
       this.asyncSearchPageIndex = 1
       this.asyncSearchFlag &&
-      this.$emit(
-        'get-data-by-keyword',
-        this.searchWord,
-        this.asyncSearchPageIndex
-      )
+        this.$emit('get-data-by-keyword', this.searchWord, this.asyncSearchPageIndex)
     },
     // 分页数据
     initData() {
@@ -186,9 +181,7 @@ export default {
     pageData() {
       this.checkedData = []
       if (this.total > 1 && this.pageIndex < this.total - 1) {
-        this.pageIndex === 0
-          ? (this.disabledPre = true)
-          : (this.disabledPre = false)
+        this.pageIndex === 0 ? (this.disabledPre = true) : (this.disabledPre = false)
         this.disabledNex = false
         this.districtListMock = this.dataShowList.slice(
           this.pageIndex * this.pageSize,
@@ -197,10 +190,7 @@ export default {
       } else {
         this.total > 1 ? (this.disabledPre = false) : (this.disabledPre = true)
         this.disabledNex = true
-        this.districtListMock = this.dataShowList.slice(
-          this.pageIndex * this.pageSize,
-          this.len
-        )
+        this.districtListMock = this.dataShowList.slice(this.pageIndex * this.pageSize, this.len)
       }
     },
     // 异步获取的数据，检查分页按钮可用性
@@ -223,14 +213,11 @@ export default {
         this.disabledPre = true
         this.asyncSearchFlag && this.asyncSearch
           ? this.$emit(
-            'get-data-by-keyword',
-            this.searchWord,
-            this.asyncSearchPageIndex <= 1 ? 1 : --this.asyncSearchPageIndex
-          )
-          : this.$emit(
-            'get-data',
-            this.asyncPageIndex <= 1 ? 1 : --this.asyncPageIndex
-          )
+              'get-data-by-keyword',
+              this.searchWord,
+              this.asyncSearchPageIndex <= 1 ? 1 : --this.asyncSearchPageIndex
+            )
+          : this.$emit('get-data', this.asyncPageIndex <= 1 ? 1 : --this.asyncPageIndex)
       } else {
         this.pageIndex > 0 && --this.pageIndex
         this.pageData()
@@ -242,11 +229,7 @@ export default {
         // 异步获取数据
         this.disabledNex = true
         this.asyncSearchFlag && this.asyncSearch
-          ? this.$emit(
-            'get-data-by-keyword',
-            this.searchWord,
-            ++this.asyncSearchPageIndex
-          )
+          ? this.$emit('get-data-by-keyword', this.searchWord, ++this.asyncSearchPageIndex)
           : this.$emit('get-data', ++this.asyncPageIndex)
       } else {
         this.pageIndex <= this.total - 1 && ++this.pageIndex
@@ -257,14 +240,15 @@ export default {
     handleCheckedChange(value) {
       const checkedCount = value.length
       this.checkAll = checkedCount === this.districtListMock.length
-      this.isIndeterminate =
-        checkedCount > 0 && checkedCount < this.districtListMock.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.districtListMock.length
       // 子传父
       this.$emit('check-district', value)
     },
     // 全选
     handleCheckAllChange(val) {
-      this.checkedData = val ? this.districtListMock.filter(val => !val.disabled).map((val) => val) : []
+      this.checkedData = val
+        ? this.districtListMock.filter((val) => !val.disabled).map((val) => val)
+        : []
       this.isIndeterminate = false
       // 子传父
       this.$emit('check-district', this.checkedData)
@@ -277,7 +261,10 @@ export default {
       label = label && label.trim()
       if (filterWord && label) {
         const reg = new RegExp(filterWord)
-        return label.replace(reg, `<span style="color: ${this.highlightColor}">${filterWord}</span>`)
+        return label.replace(
+          reg,
+          `<span style="color: ${this.highlightColor}">${filterWord}</span>`
+        )
       } else {
         return label
       }
@@ -287,7 +274,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .district-panel {
   width: 298px;
 

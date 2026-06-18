@@ -1,10 +1,13 @@
 <template>
   <div>
-    <DataTable v-bind="$attrs" v-if="!loading"
+    <DataTable
+      v-bind="$attrs"
+      v-if="!loading"
       ref="dataTable"
       v-loading="loading"
       :config="iConfig"
-      @filter-change="filterChange" />
+      @filter-change="filterChange"
+    />
     <ColumnSettingPopover
       :current-columns="popoverColumns.currentCols"
       :default-columns="popoverColumns.defaultCols"
@@ -22,6 +25,7 @@ import { newURL, ObjectLocalStorage, replaceAllUUID } from '@/utils/common/index
 import Sortable from 'sortablejs'
 import ColumnSettingPopover from './components/ColumnSettingPopover.vue'
 import { TableColumnsGenerator } from './utils'
+import _ from 'lodash'
 
 export default {
   name: 'AutoDataTable',
@@ -63,7 +67,7 @@ export default {
   watch: {
     config: {
       immediate: false,
-      handler: _.debounce(function(iNew, iOld) {
+      handler: _.debounce(function (iNew, iOld) {
         if (this.isDeactivated || !this.inited) {
           return
         }
@@ -129,7 +133,7 @@ export default {
 
       this.sortable = Sortable.create(el, {
         animation: 150,
-        onEnd: evt => {
+        onEnd: (evt) => {
           let { oldIndex, newIndex } = evt
           if (oldIndex === newIndex) {
             return
@@ -144,7 +148,7 @@ export default {
 
           let columnNames = [...this.cleanedColumnsShow.show]
           if (columnNames.includes('actions')) {
-            columnNames = columnNames.filter(item => item !== 'actions')
+            columnNames = columnNames.filter((item) => item !== 'actions')
             columnNames.push('actions')
           }
           // 边界
@@ -220,7 +224,7 @@ export default {
     },
     // 生成给子组件使用的TotalColList
     cleanColumnsShow() {
-      const totalColumnsNames = this.totalColumns.map(obj => obj.prop)
+      const totalColumnsNames = this.totalColumns.map((obj) => obj.prop)
       // 默认列
       let defaultColumnsNames = _.get(this.iConfig, 'columnsShow.default', [])
       if (defaultColumnsNames.length === 0) {
@@ -228,8 +232,8 @@ export default {
       }
 
       // 最小列
-      const minColumnsNames = _.get(this.iConfig, 'columnsShow.min', ['actions', 'id']).filter(n =>
-        totalColumnsNames.includes(n)
+      const minColumnsNames = _.get(this.iConfig, 'columnsShow.min', ['actions', 'id']).filter(
+        (n) => totalColumnsNames.includes(n)
       )
 
       const configShowColumnsNames = this.tableColumnsStorage.get()
@@ -255,7 +259,7 @@ export default {
     filterShowColumns() {
       this.cleanColumnsShow()
       const showFieldNames = this.cleanedColumnsShow.show
-      let showFields = this.totalColumns.filter(obj => {
+      let showFields = this.totalColumns.filter((obj) => {
         return showFieldNames.indexOf(obj.prop) > -1
       })
       showFields = this.orderingColumns(showFields)
@@ -274,14 +278,14 @@ export default {
     orderingColumns(columns) {
       const cols = _.cloneDeep(this.config.columns)
       const show = this.cleanedColumnsShow.show
-      const ordering = (show || cols || []).map(item => {
+      const ordering = (show || cols || []).map((item) => {
         let prop = item
         if (typeof item === 'object') {
           prop = item.prop
         }
         return prop
       })
-      const sorted = _.sortBy(columns, item => {
+      const sorted = _.sortBy(columns, (item) => {
         const i = ordering.indexOf(item.prop)
         item.order = i
         return i === -1 ? 999 : i
@@ -289,7 +293,7 @@ export default {
       return sorted
     },
     generatePopoverColumns() {
-      this.popoverColumns.totalColumnsList = this.totalColumns.filter(obj => {
+      this.popoverColumns.totalColumnsList = this.totalColumns.filter((obj) => {
         if (obj.label) {
           return { prop: obj.prop, label: obj.label }
         }

@@ -12,10 +12,15 @@
   >
     <div class="box">
       <div class="head">
-        <img :src="logoSrc" alt="logo" class="sidebar-logo-text" height="70">
+        <img :src="logoSrc" alt="logo" class="sidebar-logo-text" height="70" />
       </div>
-      <tr v-for="item of items" v-show="item.has || item.has === undefined" :key="item.label" class="text">
-        <td class="title">{{ item.label }}: </td>
+      <tr
+        v-for="item of items"
+        v-show="item.has || item.has === undefined"
+        :key="item.label"
+        class="text"
+      >
+        <td class="title">{{ item.label }}:</td>
         <td class="value">{{ item.value }}</td>
       </tr>
       <el-divider class="divider" />
@@ -61,9 +66,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'publicSettings'
-    ]),
+    ...mapGetters(['publicSettings']),
     versionType() {
       return this.hasXPack ? this.$t('EnterpriseEdition') : this.$tc('CommunityEdition') + ' GPLv3'
     },

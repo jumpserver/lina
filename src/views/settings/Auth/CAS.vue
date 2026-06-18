@@ -1,8 +1,5 @@
 <template>
-  <BaseAuth
-    :config="settings"
-    enable-field="AUTH_CAS"
-  />
+  <BaseAuth :config="settings" enable-field="AUTH_CAS" />
 </template>
 
 <script>
@@ -21,15 +18,9 @@ export default {
       settings: {
         url: '/api/v1/settings/setting/?category=cas',
         fields: [
-          [this.$t('Basic'), [
-            'AUTH_CAS', 'CAS_SERVER_URL', 'CAS_ROOT_PROXIED_AS', 'CAS_VERSION'
-          ]],
-          [this.$t('Search'), [
-            'CAS_RENAME_ATTRIBUTES'
-          ]],
-          [this.$t('Other'), [
-            'CAS_ORG_IDS', 'CAS_CREATE_USER', 'CAS_LOGOUT_COMPLETELY'
-          ]]
+          [this.$t('Basic'), ['AUTH_CAS', 'CAS_SERVER_URL', 'CAS_ROOT_PROXIED_AS', 'CAS_VERSION']],
+          [this.$t('Search'), ['CAS_RENAME_ATTRIBUTES']],
+          [this.$t('Other'), ['CAS_ORG_IDS', 'CAS_CREATE_USER', 'CAS_LOGOUT_COMPLETELY']]
         ],
         fieldsMeta: {
           CAS_RENAME_ATTRIBUTES: {
@@ -58,12 +49,9 @@ export default {
     }
   },
   methods: {
-    onConfirm() {
-    }
+    onConfirm() {}
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

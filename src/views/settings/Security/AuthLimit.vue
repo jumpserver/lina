@@ -1,10 +1,13 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm v-bind="$data" :fields="fields"
+    <GenericCreateUpdateForm
+      v-bind="$data"
+      :fields="fields"
       :fields-meta="fieldsMeta"
       :has-detail-in-msg="false"
       :submit-method="submitMethod"
-      :url="url" />
+      :url="url"
+    />
   </IBox>
 </template>
 
@@ -26,13 +29,7 @@ export default {
       },
       visible: false,
       fields: [
-        [
-          this.$t('User'),
-          [
-            'SECURITY_LOGIN_LIMIT_COUNT',
-            'SECURITY_LOGIN_LIMIT_TIME'
-          ]
-        ],
+        [this.$t('User'), ['SECURITY_LOGIN_LIMIT_COUNT', 'SECURITY_LOGIN_LIMIT_TIME']],
         [
           this.$t('IP'),
           [
@@ -82,12 +79,9 @@ export default {
     submitMethod() {
       return 'patch'
     },
-    onConfirm() {
-    }
+    onConfirm() {}
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

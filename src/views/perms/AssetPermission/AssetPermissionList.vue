@@ -8,8 +8,11 @@
       :quick-filters="quickFilter"
       :create-drawer="createDrawer"
     />
-    <PermBulkUpdateDialog v-bind="updateSelectedDialogSetting" v-model:visible="updateSelectedDialogSetting.visible"
-      @update="handlePermBulkUpdate" />
+    <PermBulkUpdateDialog
+      v-bind="updateSelectedDialogSetting"
+      v-model:visible="updateSelectedDialogSetting.visible"
+      @update="handlePermBulkUpdate"
+    />
   </Page>
 </template>
 
@@ -85,14 +88,30 @@ export default {
         hasTree: true,
         columnsExtra: ['action'],
         columns: [
-          'name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount',
-          'accounts', 'labels', 'is_valid', 'is_expired', 'from_ticket', 'is_active', 'actions'
+          'name',
+          'users_amount',
+          'user_groups_amount',
+          'assets_amount',
+          'nodes_amount',
+          'accounts',
+          'labels',
+          'is_valid',
+          'is_expired',
+          'from_ticket',
+          'is_active',
+          'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'users_amount', 'user_groups_amount', 'assets_amount',
-            'nodes_amount', 'accounts', 'is_valid', 'actions'
+            'name',
+            'users_amount',
+            'user_groups_amount',
+            'assets_amount',
+            'nodes_amount',
+            'accounts',
+            'is_valid',
+            'actions'
           ]
         },
         columnsMeta: {

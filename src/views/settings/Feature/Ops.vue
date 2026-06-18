@@ -24,11 +24,8 @@ export default {
     return {
       visible: false,
       config: {
-        fields: [
-          'SECURITY_COMMAND_EXECUTION', 'SECURITY_COMMAND_BLACKLIST'
-        ],
-        fieldsMeta: {
-        },
+        fields: ['SECURITY_COMMAND_EXECUTION', 'SECURITY_COMMAND_BLACKLIST'],
+        fieldsMeta: {},
         successUrl: { name: 'Settings', params: { activeMenu: 'Basic' } },
         url: '/api/v1/settings/setting/?category=ops',
         hasReset: false,
@@ -47,6 +44,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -45,14 +45,11 @@ export default {
         }
       },
       fields: [
-        [this.$t('Basic'), [
-          'name', 'category_type'
-        ]],
-        [this.$t('Config'), [
-          'protocols', 'su_enabled', 'su_method',
-          'gateway_enabled', 'ds_enabled',
-          'charset'
-        ]],
+        [this.$t('Basic'), ['name', 'category_type']],
+        [
+          this.$t('Config'),
+          ['protocols', 'su_enabled', 'su_method', 'gateway_enabled', 'ds_enabled', 'charset']
+        ],
         [this.$t('Automations'), ['automation']],
         [this.$t('Other'), ['comment']]
       ],
@@ -63,12 +60,13 @@ export default {
         const automation = values['automation'] || {}
         const category_type = values['category_type']
         const ansibleConfig = automation?.['ansible_config'] || {}
-        automation.ansible_config = ansibleConfig instanceof Object ? ansibleConfig : JSON.parse(ansibleConfig)
+        automation.ansible_config =
+          ansibleConfig instanceof Object ? ansibleConfig : JSON.parse(ansibleConfig)
 
         if (Object.prototype.hasOwnProperty.call(automation, 'id')) {
           delete automation['id']
         }
-        values['protocols'] = protocols.map(i => {
+        values['protocols'] = protocols.map((i) => {
           if (Object.prototype.hasOwnProperty.call(i, 'id')) {
             delete i['id']
           }
@@ -83,7 +81,7 @@ export default {
         if (obj['category'] && obj['type']) {
           obj['category_type'] = [obj['category'].value, obj['type'].value]
         }
-        obj.protocols = obj.protocols?.map(i => {
+        obj.protocols = obj.protocols?.map((i) => {
           if (i.name === 'http') {
             i.display_name = 'http(s)'
           }
@@ -108,7 +106,7 @@ export default {
       this.$store.dispatch('assets/cleanPlatforms')
     },
     updateSuMethodOptions() {
-      const options = this.suMethods.filter(i => {
+      const options = this.suMethods.filter((i) => {
         return this.suMethodLimits.includes(i.value)
       })
       this.fieldsMeta.su_method.options = options
@@ -144,7 +142,7 @@ export default {
       this.defaultOptions = constraints
 
       let protocols = constraints?.protocols || []
-      protocols = protocols?.map(i => {
+      protocols = protocols?.map((i) => {
         if (i.name === 'http') {
           i.display_name = 'http(s)'
         }
@@ -173,8 +171,8 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-.platform-form :deep(){
+<style lang="scss" scoped>
+.platform-form :deep() {
   .el-cascader {
     width: 100%;
   }

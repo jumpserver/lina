@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'no-title': noTitle}" class="page">
+  <div :class="{ 'no-title': noTitle }" class="page">
     <PageHeading v-if="showHeading" :help-msg="helpMessage" class="disabled-when-print page-head">
       <el-button
         :disabled="gobackDisabled"
@@ -13,7 +13,13 @@
       <slot name="title">
         <span class="page-title-wrap">
           {{ iTitle }}
-          <el-tooltip v-if="helpTip" :open-delay="500" effect="dark" placement="top" popper-class="help-tips">
+          <el-tooltip
+            v-if="helpTip"
+            :open-delay="500"
+            effect="dark"
+            placement="top"
+            popper-class="help-tips"
+          >
             <template #content>
               <div v-sanitize="helpTip" class="page-help-content" />
             </template>
@@ -29,7 +35,7 @@
         <slot name="headingRightSide" />
       </template>
     </PageHeading>
-    <PageContent :class="{'disabled': disabled}" class="page-content">
+    <PageContent :class="{ disabled: disabled }" class="page-content">
       <div v-if="disabled" class="content-disabled-mask">
         <IBox shadow="always">
           <div class="disabled-content">
@@ -103,7 +109,7 @@ export default {
     },
     goBack: {
       type: Function,
-      default: function(obj) {
+      default: function (obj) {
         if (window.history.length > 1) {
           window.history.back()
         }

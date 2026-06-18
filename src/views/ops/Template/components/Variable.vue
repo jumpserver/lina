@@ -15,12 +15,7 @@
           width="135"
         >
           <template #default="scope">
-            <el-button
-              icon="Minus"
-              size="small"
-              type="danger"
-              @click="removeVariable(scope.row)"
-            />
+            <el-button icon="Minus" size="small" type="danger" @click="removeVariable(scope.row)" />
             <el-button
               :disabled="!!scope.row.template"
               icon="Edit"
@@ -86,7 +81,7 @@ export default {
       handler(newVal, oldVal) {
         if (oldVal === undefined) return
         if (newVal.length > 0 || !this.initial) {
-          newVal.map(item => {
+          newVal.map((item) => {
             item.default_value = item.text_default_value || item.select_default_value || undefined
           })
           this.$emit('input', newVal)
@@ -101,7 +96,7 @@ export default {
   },
   methods: {
     removeVariable(variable) {
-      this.variables = this.variables.filter(item => {
+      this.variables = this.variables.filter((item) => {
         if (variable.id && item.id) {
           return item.id !== variable.id
         } else if (variable.var_name && item.var_name) {

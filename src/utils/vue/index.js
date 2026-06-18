@@ -24,9 +24,7 @@ export function resolveRoute(route, router) {
     if (!resolved || !resolved.matched) {
       return
     }
-    const matched = resolved.matched.filter(
-      item => item.name === route.name && item.components
-    )
+    const matched = resolved.matched.filter((item) => item.name === route.name && item.components)
     if (matched.length === 0) {
       return
     }
@@ -54,13 +52,19 @@ export function toVueListenerName(attrKey) {
   const separatorIndex = rawName.indexOf(':')
 
   if (separatorIndex === -1) {
-    return rawName.replace(/([A-Z])/g, '-$1').replace(/^-/, '').toLowerCase()
+    return rawName
+      .replace(/([A-Z])/g, '-$1')
+      .replace(/^-/, '')
+      .toLowerCase()
   }
 
   const first = rawName.slice(0, separatorIndex)
   const rest = rawName.slice(separatorIndex + 1)
 
-  return `${first.replace(/([A-Z])/g, '-$1').replace(/^-/, '').toLowerCase()}:${rest}`
+  return `${first
+    .replace(/([A-Z])/g, '-$1')
+    .replace(/^-/, '')
+    .toLowerCase()}:${rest}`
 }
 
 export function pickVueListeners(attrs = {}) {

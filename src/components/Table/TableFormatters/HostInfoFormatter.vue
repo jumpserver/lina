@@ -64,7 +64,7 @@ export default {
       let summary = ''
 
       if (cpuCount) {
-        const coreCount = cpuVcpus || (cpuCores * cpuCount)
+        const coreCount = cpuVcpus || cpuCores * cpuCount
         summary = `${coreCount} Core`
 
         if (memory) {
@@ -132,13 +132,12 @@ export default {
   overflow-y: auto;
 }
 .detail-item {
-  border-bottom: 1px solid #EBEEF5;
+  border-bottom: 1px solid #ebeef5;
   padding: 5px 0;
   margin-bottom: 0;
 
   &:hover {
-     background-color: #F5F7FA;
+    background-color: #f5f7fa;
   }
 }
-
 </style>

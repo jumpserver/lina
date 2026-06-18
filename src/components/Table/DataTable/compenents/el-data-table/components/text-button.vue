@@ -1,7 +1,5 @@
 <template>
-  <el-button v-bind="$attrs" :type="$attrs.type || 'primary'"
-    plain
-    :style="style">
+  <el-button v-bind="$attrs" :type="$attrs.type || 'primary'" plain :style="style">
     <slot />
   </el-button>
 </template>

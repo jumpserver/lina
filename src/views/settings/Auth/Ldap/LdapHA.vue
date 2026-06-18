@@ -1,7 +1,11 @@
 <template>
   <IBox>
     <GenericCreateUpdateForm v-bind="$data" />
-    <ImportDialog v-if="dialogLdapUserImport" v-model:visible="dialogLdapUserImport" :category="category" />
+    <ImportDialog
+      v-if="dialogLdapUserImport"
+      v-model:visible="dialogLdapUserImport"
+      :category="category"
+    />
     <TestLoginDialog v-model:visible="dialogTest" :category="category" />
     <SyncSettingDialog v-model:visible="dialogSyncSetting" />
   </IBox>
@@ -37,38 +41,35 @@ export default {
         [
           this.$t('Basic'),
           [
-            'AUTH_LDAP_HA', 'AUTH_LDAP_HA_SERVER_URI',
-            'AUTH_LDAP_HA_BIND_DN', 'AUTH_LDAP_HA_BIND_PASSWORD'
+            'AUTH_LDAP_HA',
+            'AUTH_LDAP_HA_SERVER_URI',
+            'AUTH_LDAP_HA_BIND_DN',
+            'AUTH_LDAP_HA_BIND_PASSWORD'
           ]
         ],
         [
           this.$t('Search'),
-          [
-            'AUTH_LDAP_HA_SEARCH_OU', 'AUTH_LDAP_HA_SEARCH_FILTER',
-            'AUTH_LDAP_HA_USER_ATTR_MAP'
-          ]
+          ['AUTH_LDAP_HA_SEARCH_OU', 'AUTH_LDAP_HA_SEARCH_FILTER', 'AUTH_LDAP_HA_USER_ATTR_MAP']
         ],
         [
           this.$t('Other'),
           [
-            'AUTH_LDAP_HA_STRICT_SYNC', 'AUTH_LDAP_HA_CONNECT_TIMEOUT', 'AUTH_LDAP_HA_SEARCH_PAGED_SIZE',
+            'AUTH_LDAP_HA_STRICT_SYNC',
+            'AUTH_LDAP_HA_CONNECT_TIMEOUT',
+            'AUTH_LDAP_HA_SEARCH_PAGED_SIZE',
             'AUTH_LDAP_HA_CACHE_TIMEOUT'
           ]
         ]
       ],
       fieldsMeta: {
         AUTH_LDAP_HA_BIND_DN: {
-          rules: [
-            rules.Required
-          ]
+          rules: [rules.Required]
         },
         AUTH_LDAP_HA_BIND_PASSWORD: {
           component: UpdateToken
         },
         AUTH_LDAP_HA_SEARCH_OU: {
-          rules: [
-            rules.Required
-          ]
+          rules: [rules.Required]
         },
         AUTH_LDAP_HA_USER_ATTR_MAP: {
           component: JsonEditor,
@@ -80,7 +81,7 @@ export default {
         {
           title: this.$t('LdapConnectTest'),
           loading: false,
-          callback: function(value, form, btn) {
+          callback: function (value, form, btn) {
             if (value['AUTH_LDAP_HA_BIND_PASSWORD'] === undefined) {
               value['AUTH_LDAP_HA_BIND_PASSWORD'] = ''
             }
@@ -102,19 +103,19 @@ export default {
         },
         {
           title: this.$t('LdapLoginTest'),
-          callback: function(value, form) {
+          callback: function (value, form) {
             this.dialogTest = true
           }.bind(this)
         },
         {
           title: this.$t('LdapBulkImport'),
-          callback: function(value, form) {
+          callback: function (value, form) {
             this.dialogLdapUserImport = true
           }.bind(this)
         },
         {
           title: this.$t('SyncSetting'),
-          callback: function(value, form) {
+          callback: function (value, form) {
             this.dialogSyncSetting = true
           }.bind(this)
         }
@@ -147,5 +148,4 @@ export default {
 .listTable :deep(.table-action-right-side) {
   padding-top: 0 !important;
 }
-
 </style>

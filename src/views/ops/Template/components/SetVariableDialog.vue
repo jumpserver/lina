@@ -9,11 +9,7 @@
     width="800px"
     @update:visible="$emit('update:visible', $event)"
   >
-    <VariableSetForm
-      :form-data="formData"
-      :query-param="queryParam"
-      @confirm="handleConfirm"
-    />
+    <VariableSetForm :form-data="formData" :query-param="queryParam" @confirm="handleConfirm" />
   </Dialog>
 </template>
 
@@ -34,7 +30,7 @@ export default {
     },
     formData: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     queryParam: {
       type: String,
@@ -53,6 +49,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

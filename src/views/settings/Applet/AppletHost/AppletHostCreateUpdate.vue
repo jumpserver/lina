@@ -17,7 +17,10 @@ export default {
         url: '/api/v1/terminal/applet-hosts/',
         addFields: [
           [this.$t('Automation'), ['deploy_options'], 3],
-          [this.$t('Account'), ['using_same_account', 'auto_create_accounts', 'accounts_create_amount']]
+          [
+            this.$t('Account'),
+            ['using_same_account', 'auto_create_accounts', 'accounts_create_amount']
+          ]
         ],
         addFieldsMeta: {
           name: {
@@ -31,8 +34,13 @@ export default {
           },
           deploy_options: {
             fields: [
-              'CORE_HOST', 'IGNORE_VERIFY_CERTS', 'RDS_Licensing', 'RDS_LicenseServer',
-              'RDS_LicensingMode', 'RDS_fSingleSessionPerUser', 'RDS_MaxDisconnectionTime',
+              'CORE_HOST',
+              'IGNORE_VERIFY_CERTS',
+              'RDS_Licensing',
+              'RDS_LicenseServer',
+              'RDS_LicensingMode',
+              'RDS_fSingleSessionPerUser',
+              'RDS_MaxDisconnectionTime',
               'RDS_RemoteAppLogoffTimeLimit'
             ],
             fieldsMeta: {

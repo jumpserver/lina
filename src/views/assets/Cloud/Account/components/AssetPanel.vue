@@ -3,10 +3,13 @@
     <el-alert :center="false" :closable="true" style="margin-bottom: 6px">
       <el-link :icon="linkIcon" :type="linkType" underline="never"> {{ tip }}</el-link>
     </el-alert>
-    <ImportTable v-bind="settings" ref="importTable"
+    <ImportTable
+      v-bind="settings"
+      ref="importTable"
       origin="cloudSync"
       @cancel="closeDialog"
-      @finish="showResult" />
+      @finish="showResult"
+    />
   </div>
 </template>
 
@@ -78,7 +81,7 @@ export default {
           ],
           data: []
         },
-        performUploadObject: async function(item) {
+        performUploadObject: async function (item) {
           const data = { action: 'sync_import', asset_id: item.id }
           vm.ws.send(JSON.stringify(data))
           vm.importAssets[item.id] = item
@@ -106,7 +109,7 @@ export default {
       const url = '/ws/xpack/cloud/'
       const wsURL = scheme + '://' + document.location.hostname + port + url
       this.ws = new WebSocket(wsURL)
-      this.ws.onopen = e => {
+      this.ws.onopen = (e) => {
         this.settings.disableImportBtn = true
         this.ws.send(
           JSON.stringify({
@@ -118,7 +121,7 @@ export default {
       this.ws.onerror = () => {
         this.$message.error(this.$tc('ConnectWebSocketError'))
       }
-      this.ws.onmessage = e => {
+      this.ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
         if (data.action === 'sync_region') {
           this.addRegion(data.region_id)

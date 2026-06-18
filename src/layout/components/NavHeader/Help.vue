@@ -1,14 +1,16 @@
 <template>
   <div>
     <el-dropdown popper-class="nav-header-dropdown" :show-timeout="50" @command="handleCommand">
-      <span class="el-dropdown-link" style="vertical-align: baseline;">
+      <span class="el-dropdown-link" style="vertical-align: baseline">
         <svg-icon icon-class="question-mark" />
       </span>
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item command="docs">{{ $t('Docs') }}</el-dropdown-item>
           <el-dropdown-item command="support">{{ $t('Support') }}</el-dropdown-item>
-          <el-dropdown-item v-if="!hasLicence" command="enterprise">{{ $t('EnterpriseEdition') }}</el-dropdown-item>
+          <el-dropdown-item v-if="!hasLicence" command="enterprise">{{
+            $t('EnterpriseEdition')
+          }}</el-dropdown-item>
           <el-dropdown-item command="about">{{ $tc('About') }}</el-dropdown-item>
         </el-dropdown-menu>
       </template>

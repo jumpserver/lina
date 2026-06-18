@@ -6,7 +6,7 @@
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import i18n from '@/i18n/i18n'
 import { toSafeLocalDateStr } from '@/utils/common/time'
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
 import { mapGetters } from 'vuex'
 import HomeCard from './HomeCard'
 export default {
@@ -35,9 +35,7 @@ export default {
             label: i18n.global.t('Title'),
             formatter: DetailFormatter,
             formatterArgs: {
-              getRoute: function({
-                row
-              }) {
+              getRoute: function ({ row }) {
                 const type = row.type.value
                 if (type === 'apply_asset') {
                   return 'AssetsTicketDetail'
@@ -58,41 +56,49 @@ export default {
           },
           applicant: {
             label: i18n.global.t('User'),
-            formatter: row => {
+            formatter: (row) => {
               return row.rel_snapshot.applicant
             }
           },
           type: {
             label: i18n.global.t('Type'),
             width: '130px',
-            formatter: row => {
+            formatter: (row) => {
               return row.type.label
             }
           },
           status: {
             align: 'center',
             width: '120px',
-            formatter: row => {
+            formatter: (row) => {
               if (row.status.value === 'open') {
-                return _createVNode(_resolveComponent('el-tag'), {
-                  'type': 'primary',
-                  'size': 'small'
-                }, {
-                  default: () => [' ', i18n.global.t('OpenStatus')]
-                })
+                return createVNodeCompat(
+                  resolveComponentCompat('el-tag'),
+                  {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  {
+                    default: () => [' ', i18n.global.t('OpenStatus')]
+                  }
+                )
               } else {
-                return _createVNode(_resolveComponent('el-tag'), {
-                  'type': 'danger',
-                  'size': 'small'
-                }, {
-                  default: () => [' ', i18n.global.t('CloseStatus')]
-                })
+                return createVNodeCompat(
+                  resolveComponentCompat('el-tag'),
+                  {
+                    type: 'danger',
+                    size: 'small'
+                  },
+                  {
+                    default: () => [' ', i18n.global.t('CloseStatus')]
+                  }
+                )
               }
             }
           },
           date_created: {
             label: i18n.global.t('Date'),
-            formatter: row => toSafeLocalDateStr(row.date_created)
+            formatter: (row) => toSafeLocalDateStr(row.date_created)
           }
         },
         hasSelection: false,

@@ -1,15 +1,11 @@
 <template>
   <div>
-    <BaseReport v-bind="$attrs" :title="title"
-      :nav="nav"
-      :name="name">
+    <BaseReport v-bind="$attrs" :title="title" :nav="nav" :name="name">
       <div class="charts-grid">
         <div class="chart-container full-width">
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('Overview') }}</div>
-            <SummaryCountCard
-              :items="totalData"
-            />
+            <SummaryCountCard :items="totalData" />
           </div>
         </div>
 
@@ -25,10 +21,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('TaskExecutionTrends') }}</div>
             <div class="chart">
-              <Echart
-                :options="ExecutionMetricsOptions"
-                :autoresize="true"
-              />
+              <Echart :options="ExecutionMetricsOptions" :autoresize="true" />
             </div>
           </div>
         </div>
@@ -36,7 +29,12 @@
         <div class="chart-container full-width">
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('AccountResult') }}</div>
-            <AccountSummary :days="days" :is-title="false" :disable-box="true" class="account-summary" />
+            <AccountSummary
+              :days="days"
+              :is-title="false"
+              :disable-box="true"
+              class="account-summary"
+            />
           </div>
         </div>
       </div>
@@ -75,11 +73,11 @@ export default {
       description: '-',
       days: localStorage.getItem(this.name) || '7',
       automation_stats: {
-        'push': 0,
-        'check': 0,
-        'backup': 0,
-        'collect': 0,
-        'change_secret': 0
+        push: 0,
+        check: 0,
+        backup: 0,
+        collect: 0,
+        change_secret: 0
       },
       execution_metrics: {
         dates_metrics_date: [],
@@ -208,7 +206,9 @@ export default {
       this.days = val
     },
     async getData() {
-      const data = await this.$axios.get(`/api/v1/reports/reports/account-automation/?days=${this.days}`)
+      const data = await this.$axios.get(
+        `/api/v1/reports/reports/account-automation/?days=${this.days}`
+      )
       this.automation_stats['push'] = data.automation_stats.push
       this.automation_stats['check'] = data.automation_stats.check
       this.automation_stats['backup'] = data.automation_stats.backup
@@ -242,6 +242,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

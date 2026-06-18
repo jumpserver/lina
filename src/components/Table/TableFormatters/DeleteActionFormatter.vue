@@ -37,11 +37,11 @@ export default {
       const url = col.deleteUrl + cellValue
       this.$axios
         .delete(url)
-        .then(res => {
+        .then((res) => {
           this.$message.success(this.$tc('DeleteSuccessMsg'))
           reload()
         })
-        .catch(error => {
+        .catch((error) => {
           this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
         })
     },
@@ -56,7 +56,7 @@ export default {
       if (this.col.objects === 'all') {
         return false
       }
-      const objectIds = this.col.objects.map(i => i.id)
+      const objectIds = this.col.objects.map((i) => i.id)
       return objectIds.indexOf(this.cellValue) === -1
     }
   }

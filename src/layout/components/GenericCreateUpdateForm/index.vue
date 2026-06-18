@@ -1,6 +1,8 @@
 <template>
   <div v-loading="loading">
-    <AutoDataForm v-bind="$attrs" v-if="!loading"
+    <AutoDataForm
+      v-bind="$attrs"
+      v-if="!loading"
       ref="form"
       :form="form"
       :has-reset="iHasReset"
@@ -9,7 +11,8 @@
       :method="method"
       :url="iUrl"
       @after-remote-meta="handleAfterRemoteMeta"
-      @submit="handleSubmit" />
+      @submit="handleSubmit"
+    />
   </div>
 </template>
 <script>
@@ -43,12 +46,12 @@ export default {
     },
     afterGetFormValue: {
       type: Function,
-      default: value => value
+      default: (value) => value
     },
     // 提交前，清理form的值
     cleanFormValue: {
       type: Function,
-      default: value => value
+      default: (value) => value
     },
     // 获取 meta
     afterGetRemoteMeta: {
@@ -74,28 +77,28 @@ export default {
     // 创建成功的msg
     createSuccessMsg: {
       type: String,
-      default: function() {
+      default: function () {
         return 'CreateSuccessMsg'
       }
     },
     // 保存成功，继续添加的msg
     saveSuccessContinueMsg: {
       type: String,
-      default: function() {
+      default: function () {
         return 'SaveSuccessContinueMsg'
       }
     },
     // 更新成功的msg
     updateSuccessMsg: {
       type: String,
-      default: function() {
+      default: function () {
         return 'UpdateSuccessMsg'
       }
     },
     // 创建成功的跳转路由
     createSuccessNextRoute: {
       type: Object,
-      default: function() {
+      default: function () {
         // const routeName = this.$route.name?.replace('Create', 'List')
         const routeName = 'GroupCreate'
         return { name: routeName }
@@ -104,7 +107,7 @@ export default {
     // 更新成功的跳转路由
     updateSuccessNextRoute: {
       type: Object,
-      default: function() {
+      default: function () {
         // const routeName = this.$route.name?.replace('Update', 'List')
         const routeName = 'GroupUpdate'
         return { name: routeName }
@@ -112,7 +115,7 @@ export default {
     },
     objectDetailRoute: {
       type: Object,
-      default: function() {
+      default: function () {
         // const routeName = this.$route.name?.replace('Update', 'Detail').replace('Create', 'Detail')
         const routeName = 'GroupDetail'
         return { name: routeName }
@@ -128,7 +131,7 @@ export default {
     },
     cloneNameSuffix: {
       type: [String, Number],
-      default: function() {
+      default: function () {
         return 'Duplicate'.toLowerCase()
       }
     },
@@ -140,7 +143,7 @@ export default {
     // 获取创建和更新的url function
     getUrl: {
       type: Function,
-      default: function() {
+      default: function () {
         const objectId = this.getUpdateId()
         let url = this.url
         if (objectId) {
@@ -349,7 +352,7 @@ export default {
     encryptFields(values) {
       // 批量提交，clean 后可能是个数组
       if (values instanceof Array) {
-        return values.map(item => this.encryptFields(item))
+        return values.map((item) => this.encryptFields(item))
       }
       values = { ...values }
       for (const field of this.encryptedFields) {
@@ -377,8 +380,8 @@ export default {
     defaultOnSubmit(validValues, formName, addContinue) {
       this.isSubmitting = true
       this.performSubmit(validValues)
-        .then(res => this.onPerformSuccess.bind(this)(res, this.method, this, addContinue))
-        .catch(error => this.onPerformError(error, this.method, this))
+        .then((res) => this.onPerformSuccess.bind(this)(res, this.method, this, addContinue))
+        .catch((error) => this.onPerformError(error, this.method, this))
         .finally(() => {
           setTimeout(() => {
             this.isSubmitting = false

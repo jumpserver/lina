@@ -9,21 +9,20 @@
         custom
       >
         <span
-          :class="isActive(tag) ? 'active' : '' "
+          :class="isActive(tag) ? 'active' : ''"
           class="tags-view-item"
           @click="navigate"
           @click.middle="!isAffix(tag) ? closeSelectedTag(tag) : ''"
           @contextmenu.prevent="openMenu(tag, $event)"
         >
           {{ tag.title }}
-          <el-icon
-            v-if="!isAffix(tag)"
-            @click.prevent.stop="closeSelectedTag(tag)"
-          ><Close /></el-icon>
+          <el-icon v-if="!isAffix(tag)" @click.prevent.stop="closeSelectedTag(tag)"
+            ><Close
+          /></el-icon>
         </span>
       </router-link>
     </scroll-pane>
-    <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
+    <ul v-show="visible" :style="{ left: left + 'px', top: top + 'px' }" class="contextmenu">
       <li @click="refreshSelectedTag(selectedTag)">Refresh</li>
       <li v-if="!isAffix(selectedTag)" @click="closeSelectedTag(selectedTag)">Close</li>
       <li @click="closeOthersTags">Close Others</li>
@@ -87,7 +86,7 @@ export default {
     },
     filterAffixTags(routes, basePath = '/') {
       let tags = []
-      routes.forEach(route => {
+      routes.forEach((route) => {
         if (route.meta && route.meta.affix) {
           const tagPath = path.resolve(basePath, route.path)
           tags.push({
@@ -147,25 +146,21 @@ export default {
       })
     },
     closeSelectedTag(view) {
-      this.$store
-        .dispatch('tagsView/delView', view)
-        .then(({ visitedViews }) => {
-          if (this.isActive(view)) {
-            this.toLastView(visitedViews, view)
-          }
-        })
+      this.$store.dispatch('tagsView/delView', view).then(({ visitedViews }) => {
+        if (this.isActive(view)) {
+          this.toLastView(visitedViews, view)
+        }
+      })
     },
     closeOthersTags() {
       this.$router.push(this.selectedTag)
-      this.$store
-        .dispatch('tagsView/delOthersViews', this.selectedTag)
-        .then(() => {
-          this.moveToCurrentTag()
-        })
+      this.$store.dispatch('tagsView/delOthersViews', this.selectedTag).then(() => {
+        this.moveToCurrentTag()
+      })
     },
     closeAllTags(view) {
       this.$store.dispatch('tagsView/delAllViews').then(({ visitedViews }) => {
-        if (this.affixTags.some(tag => tag.path === view.path)) {
+        if (this.affixTags.some((tag) => tag.path === view.path)) {
           return
         }
         this.toLastView(visitedViews, view)
@@ -209,7 +204,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use "@/styles/variables" as *;
+@use '@/styles/variables' as *;
 .tags-view-container {
   background-color: #f3f3f4 !important;
   border: none !important;
@@ -256,7 +251,7 @@ export default {
         color: #fff;
         border-color: $color-primary;
         &::before {
-          content: "";
+          content: '';
           background: #fff;
           display: inline-block;
           width: 8px;

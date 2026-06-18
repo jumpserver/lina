@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { createTextVNode as _createTextVNode, createVNode as _createVNode } from 'vue'
+import { createTextVNode as createTextVNodeCompat, createVNode as createVNodeCompat } from 'vue'
 import { GenericListTable } from '@/layout/components'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 export default {
@@ -27,15 +27,9 @@ export default {
             formatterArgs: {
               drawer: true,
               can: this.$hasPerm('assets.view_asset'),
-              getTitle: ({
-                row
-              }) => row.asset.name,
-              getDrawerTitle: ({
-                row
-              }) => row.asset.name,
-              getRoute: ({
-                row
-              }) => ({
+              getTitle: ({ row }) => row.asset.name,
+              getDrawerTitle: ({ row }) => row.asset.name,
+              getRoute: ({ row }) => ({
                 name: 'AssetDetail',
                 params: {
                   id: row.asset.id
@@ -52,15 +46,9 @@ export default {
             formatterArgs: {
               drawer: true,
               can: this.$hasPerm('accounts.view_account'),
-              getTitle: ({
-                row
-              }) => row.username,
-              getDrawerTitle: ({
-                row
-              }) => row.username,
-              getRoute: ({
-                row
-              }) => ({
+              getTitle: ({ row }) => row.username,
+              getDrawerTitle: ({ row }) => row.username,
+              getRoute: ({ row }) => ({
                 name: 'AssetAccountDetail',
                 params: {
                   id: row.id
@@ -81,15 +69,9 @@ export default {
             formatterArgs: {
               drawer: true,
               can: true,
-              getTitle: ({
-                row
-              }) => row.meta?.execution_id ? row.meta.execution_id : '-',
-              getDrawerTitle: ({
-                row
-              }) => row.meta?.execution_id,
-              getRoute: ({
-                row
-              }) => ({
+              getTitle: ({ row }) => (row.meta?.execution_id ? row.meta.execution_id : '-'),
+              getDrawerTitle: ({ row }) => row.meta?.execution_id,
+              getRoute: ({ row }) => ({
                 name: 'AccountChangeSecretExecutionDetail',
                 params: {
                   id: row.meta?.execution_id
@@ -100,16 +82,16 @@ export default {
           status: {
             width: '100px',
             label: vm.$t('Status'),
-            formatter: row => {
+            formatter: (row) => {
               const statusMap = {
                 queued: 'Queued',
                 ready: 'Ready',
                 processing: 'Processing'
               }
               if (statusMap[row.meta.status]) {
-                return _createVNode('span', null, [vm.$t(statusMap[row.meta.status])])
+                return createVNodeCompat('span', null, [vm.$t(statusMap[row.meta.status])])
               }
-              return _createVNode('span', null, [_createTextVNode('\u2013')])
+              return createVNodeCompat('span', null, [createTextVNodeCompat('\u2013')])
             }
           },
           actions: {
@@ -119,22 +101,22 @@ export default {
               hasDelete: false,
               hasClone: false,
               moreActionsTitle: this.$t('More'),
-              extraActions: [{
-                name: 'Delete',
-                title: this.$t('Delete'),
-                can: this.$hasPerm('accounts.add_changesecretexecution'),
-                type: 'danger',
-                callback: ({
-                  row
-                }) => {
-                  this.$axios.delete('/api/v1/accounts/change-secret-status/', {
-                    data: {
-                      account_ids: [row.id]
-                    }
-                  })
-                  vm.$refs.ListTable.reloadTable()
+              extraActions: [
+                {
+                  name: 'Delete',
+                  title: this.$t('Delete'),
+                  can: this.$hasPerm('accounts.add_changesecretexecution'),
+                  type: 'danger',
+                  callback: ({ row }) => {
+                    this.$axios.delete('/api/v1/accounts/change-secret-status/', {
+                      data: {
+                        account_ids: [row.id]
+                      }
+                    })
+                    vm.$refs.ListTable.reloadTable()
+                  }
                 }
-              }]
+              ]
             }
           }
         }
@@ -151,53 +133,59 @@ export default {
         hasBulkUpdate: false,
         searchConfig: {
           getUrlQuery: true,
-          options: [{
-            label: this.$t('AssetName'),
-            value: 'asset_name'
-          }, {
-            label: this.$t('ExecutionID'),
-            value: 'execution_id'
-          }, {
-            value: 'status',
-            label: this.$t('Status'),
-            type: 'choice',
-            children: [{
-              default: true,
-              value: 'queued',
-              label: this.$t('Queued')
-            }, {
-              value: 'ready',
-              label: this.$t('Ready')
-            }, {
-              value: 'processing',
-              label: this.$t('Processing')
-            }]
-          }]
+          options: [
+            {
+              label: this.$t('AssetName'),
+              value: 'asset_name'
+            },
+            {
+              label: this.$t('ExecutionID'),
+              value: 'execution_id'
+            },
+            {
+              value: 'status',
+              label: this.$t('Status'),
+              type: 'choice',
+              children: [
+                {
+                  default: true,
+                  value: 'queued',
+                  label: this.$t('Queued')
+                },
+                {
+                  value: 'ready',
+                  label: this.$t('Ready')
+                },
+                {
+                  value: 'processing',
+                  label: this.$t('Processing')
+                }
+              ]
+            }
+          ]
         },
-        extraMoreActions: [{
-          name: 'DeleteSelected',
-          title: this.$t('DeleteSelected'),
-          type: 'primary',
-          fa: 'fa-retweet',
-          can: ({
-            selectedRows
-          }) => {
-            return selectedRows.length > 0
-          },
-          callback: function({
-            selectedRows
-          }) {
-            const ids = selectedRows.map(v => {
-              return v.id
-            })
-            this.$axios.delete('/api/v1/accounts/change-secret-status/', {
-              data: {
-                account_ids: ids
-              }
-            })
-            vm.$refs.ListTable.reloadTable()
-          }.bind(this)
-        }]
+        extraMoreActions: [
+          {
+            name: 'DeleteSelected',
+            title: this.$t('DeleteSelected'),
+            type: 'primary',
+            fa: 'fa-retweet',
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0
+            },
+            callback: function ({ selectedRows }) {
+              const ids = selectedRows.map((v) => {
+                return v.id
+              })
+              this.$axios.delete('/api/v1/accounts/change-secret-status/', {
+                data: {
+                  account_ids: ids
+                }
+              })
+              vm.$refs.ListTable.reloadTable()
+            }.bind(this)
+          }
+        ]
       }
     }
   }

@@ -22,7 +22,7 @@ function isNeedHidden(route, rootState) {
 export function filterHiddenRoutes(routes, rootState) {
   const res = []
 
-  routes.forEach(route => {
+  routes.forEach((route) => {
     const tmp = {
       ...route
     }
@@ -194,7 +194,7 @@ const mutations = {
 const actions = {
   generateViewRoutes({ commit, rootState }, { to, from }) {
     console.log('Start generate view routes, to: ', to, 'from: ', from)
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const path = to.path
       const re = new RegExp('/(\\w+)/?.*')
       const matched = path.match(re)
@@ -219,7 +219,7 @@ const actions = {
     })
   },
   generateRoutes({ commit, dispatch, rootState }, { to, from }) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       let routes = filterPermedRoutes(viewRoutes, null)
       routes = filterHiddenRoutes(routes, rootState)
       if (routes.length === 0) {

@@ -163,7 +163,7 @@ export default {
     async setPlatformConstrains() {
       const { platform } = this
       let protocols = platform?.protocols || []
-      protocols = protocols.map(i => {
+      protocols = protocols.map((i) => {
         if (i.name === 'http') {
           i.display_name = 'http(s)'
         }
@@ -179,5 +179,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

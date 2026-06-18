@@ -1,5 +1,11 @@
 <template>
-  <el-alert v-show="showSqlQueryCounter" :class="{ noContent }" class="container sql" type="info" @close="handleClose">
+  <el-alert
+    v-show="showSqlQueryCounter"
+    :class="{ noContent }"
+    class="container sql"
+    type="info"
+    @close="handleClose"
+  >
     <el-tag
       v-for="item in sqlQueryCounter || []"
       :key="item.url"
@@ -24,10 +30,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'sqlQueryCounter',
-      'showSqlQueryCounter'
-    ]),
+    ...mapGetters(['sqlQueryCounter', 'showSqlQueryCounter']),
     noContent() {
       return this.sqlQueryCounter.length === 0
     }

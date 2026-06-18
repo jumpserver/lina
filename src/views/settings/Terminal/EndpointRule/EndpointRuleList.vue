@@ -27,9 +27,7 @@ export default {
         url: '/api/v1/terminal/endpoint-rules/',
         columnsShow: {
           min: ['name', 'actions'],
-          default: [
-            'name', 'ip_group', 'priority', 'endpoint', 'actions'
-          ]
+          default: ['name', 'ip_group', 'priority', 'endpoint', 'actions']
         },
         columnsMeta: {
           name: {

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
 import { Required } from '@/components/Form/DataForm/rules'
 import { AttrInput, Select2 } from '@/components/Form/FormFields'
 import ProtocolSelector from '@/components/Form/FormFields/ProtocolSelector'
@@ -30,13 +30,16 @@ export default {
       resourceType: '',
       globalResource: {},
       globalProtocols: {},
-      nameOptions: [{
-        label: this.$t('InstanceName'),
-        value: 'full_name'
-      }, {
-        label: this.$t('InstanceNamePartIp'),
-        value: 'part_name'
-      }],
+      nameOptions: [
+        {
+          label: this.$t('InstanceName'),
+          value: 'full_name'
+        },
+        {
+          label: this.$t('InstanceNamePartIp'),
+          value: 'part_name'
+        }
+      ],
       formConfig: {
         initial: {
           attr: '',
@@ -76,8 +79,7 @@ export default {
                 let url = ''
                 let options = []
                 switch (val) {
-                  case 'platform':
-                  {
+                  case 'platform': {
                     const category = this.$route.query.category || 'host'
                     url = `/api/v1/assets/platforms/?category=${category}`
                     break
@@ -120,7 +122,7 @@ export default {
               value: [],
               ajax: {
                 url: '/api/v1/assets/platforms/',
-                transformOption: item => {
+                transformOption: (item) => {
                   let display
                   switch (this.resourceType) {
                     case 'platform':
@@ -176,39 +178,54 @@ export default {
         }
       },
       tableConfig: {
-        columns: [{
-          prop: 'attr',
-          label: this.$t('ResourceType'),
-          formatter: tableFormatter('resource_type')
-        }, {
-          prop: 'value',
-          label: this.$t('Resource'),
-          formatter: tableFormatter('resource', () => {
-            return this.globalResource
-          })
-        }, {
-          prop: 'protocols',
-          label: this.$t('Other'),
-          formatter: tableFormatter('protocols')
-        }, {
-          prop: 'action',
-          label: this.$t('Action'),
-          align: 'center',
-          width: '100px',
-          formatter: (row, col, cellValue, index) => {
-            return _createVNode('div', {
-              'class': 'input-button'
-            }, [_createVNode(_resolveComponent('el-button'), {
-              'icon': 'Minus',
-              'size': 'small',
-              'style': {
-                flexShrink: 0
-              },
-              'type': 'danger',
-              'onClick': this.handleDelete(index)
-            }, null)])
+        columns: [
+          {
+            prop: 'attr',
+            label: this.$t('ResourceType'),
+            formatter: tableFormatter('resource_type')
+          },
+          {
+            prop: 'value',
+            label: this.$t('Resource'),
+            formatter: tableFormatter('resource', () => {
+              return this.globalResource
+            })
+          },
+          {
+            prop: 'protocols',
+            label: this.$t('Other'),
+            formatter: tableFormatter('protocols')
+          },
+          {
+            prop: 'action',
+            label: this.$t('Action'),
+            align: 'center',
+            width: '100px',
+            formatter: (row, col, cellValue, index) => {
+              return createVNodeCompat(
+                'div',
+                {
+                  class: 'input-button'
+                },
+                [
+                  createVNodeCompat(
+                    resolveComponentCompat('el-button'),
+                    {
+                      icon: 'Minus',
+                      size: 'small',
+                      style: {
+                        flexShrink: 0
+                      },
+                      type: 'danger',
+                      onClick: this.handleDelete(index)
+                    },
+                    null
+                  )
+                ]
+              )
+            }
           }
-        }],
+        ],
         totalData: this.value || [],
         hasPagination: false
       }
@@ -219,7 +236,7 @@ export default {
   },
   methods: {
     init() {
-      this.nameOptions.map(o => {
+      this.nameOptions.map((o) => {
         this.globalResource[o.value] = o.label
       })
     },
@@ -233,7 +250,7 @@ export default {
         zone: this.$tc('Zone'),
         name_strategy: this.$tc('Strategy')
       }
-      this.tableConfig.totalData.map(item => {
+      this.tableConfig.totalData.map((item) => {
         const iValue = item.value?.id || item.value
         const iAttr = item.attr?.value || item.attr
         if (iValue === data.value) {

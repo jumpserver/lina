@@ -65,9 +65,7 @@ export default {
       this.reportUrl = '/reports/dashboard/console'
     }
   }
-
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

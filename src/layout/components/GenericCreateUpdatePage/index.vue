@@ -1,5 +1,5 @@
 <template>
-  <Page v-bind="pageAttrs" :class="{drawer: drawer}">
+  <Page v-bind="pageAttrs" :class="{ drawer: drawer }">
     <IBox>
       <GenericCreateUpdateForm v-bind="$attrs" ref="createUpdateForm" />
     </IBox>
@@ -14,7 +14,9 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'GenericCreateUpdatePage',
   components: {
-    Page, IBox, GenericCreateUpdateForm
+    Page,
+    IBox,
+    GenericCreateUpdateForm
   },
   computed: {
     ...mapGetters(['inDrawer']),

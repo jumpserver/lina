@@ -70,8 +70,7 @@ export default {
     },
     extraPaginationAttrs: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     transformQuery: {
       type: Function,
@@ -126,9 +125,7 @@ export default {
     getPageQuery(currentPage, pageSize) {
       // 构造query对象
       let query = {}
-      query[this.pageSizeKey] = this.hasPagination
-        ? pageSize
-        : this.noPaginationSize
+      query[this.pageSizeKey] = this.hasPagination ? pageSize : this.noPaginationSize
 
       const offset = (currentPage - 1) * pageSize
       query[this.pageKey] = offset

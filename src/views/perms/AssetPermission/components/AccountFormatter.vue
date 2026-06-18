@@ -154,8 +154,8 @@ export default {
       specAccountsInput: [],
       specAccountsTemplate: [],
       showSpecZone: false,
-      getTagType: tag => {
-        if (vm.specAccountsTemplate.filter(i => i.username === tag).length > 0) {
+      getTagType: (tag) => {
+        if (vm.specAccountsTemplate.filter((i) => i.username === tag).length > 0) {
           return 'primary'
         } else {
           return 'info'
@@ -167,7 +167,7 @@ export default {
         const data = {
           username: query,
           assets: this.assets.slice(0, 20),
-          nodes: this.nodes.slice(0, 20).map(item => {
+          nodes: this.nodes.slice(0, 20).map((item) => {
             return typeof item === 'object' ? item.pk : item
           })
         }
@@ -175,11 +175,11 @@ export default {
           .post('/api/v1/accounts/accounts/username-suggestions/', data, {
             params: { oid: this.oid }
           })
-          .then(res => {
+          .then((res) => {
             if (!res) res = []
             const data = res
-              .filter(item => vm.value.indexOf(item) === -1)
-              .map(v => ({ value: v, label: v }))
+              .filter((item) => vm.value.indexOf(item) === -1)
+              .map((v) => ({ value: v, label: v }))
             cb(data)
           })
       }
@@ -193,10 +193,10 @@ export default {
       get() {
         let choices = this.realChoices.slice()
         if (!this.enableNoneAccount) {
-          choices = choices.filter(i => i.value !== NoneAccount)
+          choices = choices.filter((i) => i.value !== NoneAccount)
         }
         if (!this.enableExcludeAccounts) {
-          choices = choices.filter(i => i.value !== ExcludeAccount)
+          choices = choices.filter((i) => i.value !== ExcludeAccount)
         }
         return choices
       }
@@ -217,16 +217,16 @@ export default {
   methods: {
     getVirtualChoices(val) {
       return this.virtualAccounts
-        .filter(i => {
+        .filter((i) => {
           return val.includes(i.value)
         })
-        .map(i => i.value)
+        .map((i) => i.value)
     },
     getExcludeChoices(val) {
-      return val.filter(i => i.startsWith('!')).map(i => i.substring(1))
+      return val.filter((i) => i.startsWith('!')).map((i) => i.substring(1))
     },
     getSpecValues(val) {
-      return val.filter(i => !i.startsWith('@') && !i.startsWith('!'))
+      return val.filter((i) => !i.startsWith('@') && !i.startsWith('!'))
     },
     initDefaultChoice() {
       const value = this.value || []
@@ -261,8 +261,10 @@ export default {
     },
     handleAccountTemplateConfirm() {
       this.specAccountsTemplate = this.$refs.templateTable.selectedRows
-      const added = this.specAccountsTemplate.map(i => i.username)
-      this.specAccountsInput = this.specAccountsInput.filter(i => !added.includes(i)).concat(added)
+      const added = this.specAccountsTemplate.map((i) => i.username)
+      this.specAccountsInput = this.specAccountsInput
+        .filter((i) => !added.includes(i))
+        .concat(added)
       this.outputValue()
       setTimeout(() => {
         this.showTemplateDialog = false
@@ -285,12 +287,12 @@ export default {
       if (this.realRadioSelected === this.ALL) {
         choicesSelected = [this.ALL]
       } else if (this.realRadioSelected === this.SPEC && this.showSpecZone) {
-        const templateIds = this.specAccountsTemplate.map(i => `%${i.id}`)
+        const templateIds = this.specAccountsTemplate.map((i) => `%${i.id}`)
         choicesSelected = [this.realRadioSelected, ...this.specAccountsInput, ...templateIds]
       } else if (this.realRadioSelected === NoneAccount) {
         choicesSelected = []
       } else if (this.realRadioSelected === this.EXCLUDE && this.excludeAccountsInput) {
-        choicesSelected = [...this.excludeAccountsInput].map(i => '!' + i)
+        choicesSelected = [...this.excludeAccountsInput].map((i) => '!' + i)
       }
 
       if (this.virtualChecked) {

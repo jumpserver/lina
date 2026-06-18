@@ -1,8 +1,5 @@
 <template>
-  <el-form v-bind="$attrs" ref="elForm"
-    :model="value"
-    class="el-form-renderer"
-    @submit.prevent>
+  <el-form v-bind="$attrs" ref="elForm" :model="value" class="el-form-renderer" @submit.prevent>
     <template v-for="item in innerContent" :key="item.id">
       <slot v-if="!isHidden(item)" :name="`id:${item.id}`" />
       <component
@@ -145,15 +142,15 @@ export default {
       // proxy
       const methods = this.$refs.elForm.$options.methods || {}
 
-      Object.keys(methods).forEach(item => {
+      Object.keys(methods).forEach((item) => {
         if (item in this) return
         this[item] = this.$refs.elForm[item]
       })
       /**
-     * 有些组件会 created 阶段更新初始值为合法值，这会触发 validate。目前已知的情况有：
-     * - el-select 开启 multiple 时，会更新初始值 undefined 为 []
-     * @hack
-     */
+       * 有些组件会 created 阶段更新初始值为合法值，这会触发 validate。目前已知的情况有：
+       * - el-select 开启 multiple 时，会更新初始值 undefined 为 []
+       * @hack
+       */
       this.clearValidate()
     })
   },
@@ -163,7 +160,9 @@ export default {
       if (result && typeof result.then === 'function') {
         return result
           .then((value) => value)
-          .catch((error) => { throw error })
+          .catch((error) => {
+            throw error
+          })
       }
       return result
     },

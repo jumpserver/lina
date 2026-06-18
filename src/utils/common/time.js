@@ -1,6 +1,6 @@
-const moment = require('moment')
 import { getLangCode } from '@/i18n/utils'
 import store from '@/store'
+import moment from 'moment'
 
 function getTimeUnits(u) {
   const units = {
@@ -94,13 +94,8 @@ export function getDayEnd(now) {
   if (!now) {
     now = new Date()
   }
-  const zoneTime = moment(now)
-    .utc()
-    .endOf('day')
-    .format('YYYY-MM-DD HH:mm:ss')
-  return moment(zoneTime)
-    .utc()
-    .toDate()
+  const zoneTime = moment(now).utc().endOf('day').format('YYYY-MM-DD HH:mm:ss')
+  return moment(zoneTime).utc().toDate()
 }
 
 export function getDayFuture(days, now) {
@@ -111,7 +106,7 @@ export function getDayFuture(days, now) {
 }
 
 export function sleep(time) {
-  return new Promise(resolve => setTimeout(resolve, time))
+  return new Promise((resolve) => setTimeout(resolve, time))
 }
 
 export function formatDate(inputTime) {

@@ -3,10 +3,13 @@
     <el-alert type="info">
       <span v-html="$t('AppletHostSelectHelpMessage')" />
     </el-alert>
-    <DrawerListTable v-bind="$data" ref="table"
+    <DrawerListTable
+      v-bind="$data"
+      ref="table"
       class="applet-host"
       :create-drawer="createDrawer"
-      :resource="$t('AppletHosts')" />
+      :resource="$t('AppletHosts')"
+    />
   </div>
 </template>
 
@@ -30,10 +33,7 @@ export default {
         columnsExclude: ['info', 'auto_config', 'gathered_info', 'deploy_options'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: [
-            'name', 'address', 'protocols', 'load',
-            'comment', 'actions'
-          ]
+          default: ['name', 'address', 'protocols', 'load', 'comment', 'actions']
         },
         columnsMeta: {
           name: {
@@ -76,12 +76,11 @@ export default {
                   title: this.$t('Test'),
                   can: this.$hasPerm('assets.test_assetconnectivity'),
                   callback: ({ row }) => {
-                    this.$axios.post(
-                      `/api/v1/assets/assets/${row.id}/tasks/`,
-                      { action: 'refresh' }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
+                    this.$axios
+                      .post(`/api/v1/assets/assets/${row.id}/tasks/`, { action: 'refresh' })
+                      .then((res) => {
+                        openTaskPage(res['task'])
+                      })
                   }
                 }
               ]

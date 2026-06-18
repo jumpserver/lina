@@ -34,9 +34,7 @@ export default {
         assets: {
           type: 'assetSelect',
           component: AssetSelect,
-          rules: [
-            { required: false }
-          ],
+          rules: [{ required: false }],
           el: {
             baseUrl: '/api/v1/assets/assets/?push_account_enabled=true'
           },
@@ -88,7 +86,7 @@ export default {
           },
           on: {
             input: ([value]) => {
-              this.nodeIds = value?.map(i => i.pk)
+              this.nodeIds = value?.map((i) => i.pk)
             }
           }
         },
@@ -117,6 +115,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

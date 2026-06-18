@@ -1,6 +1,6 @@
 <template>
   <IBox>
-    <div style="height: 660px;">
+    <div style="height: 660px">
       <el-steps :active="ticketSteps" direction="vertical">
         <el-step
           :description="`${$t('Applicant')}：${object.rel_snapshot.applicant}`"
@@ -13,37 +13,39 @@
             </div>
           </template>
         </el-step>
-        <el-step
-          v-for="(item, i) in process_map"
-          :key="i"
-          :title="$tc('HandleTicket')"
-        >
+        <el-step v-for="(item, i) in process_map" :key="i" :title="$tc('HandleTicket')">
           <template #description>
             <div>
               <div class="processors">
                 <div class="processors-content">
-                  <span v-for="assignee of item.assignees_display.slice(0,4)" :key="assignee" style="display: block">
+                  <span
+                    v-for="assignee of item.assignees_display.slice(0, 4)"
+                    :key="assignee"
+                    style="display: block"
+                  >
                     {{ assignee }}
                   </span>
                 </div>
-                <el-button v-if="item.assignees.length > 4" link @click="lookOver(item.assignees_display)">
+                <el-button
+                  v-if="item.assignees.length > 4"
+                  link
+                  @click="lookOver(item.assignees_display)"
+                >
                   {{ $tc('CheckViewAcceptor') }}
                 </el-button>
               </div>
             </div>
-            <div v-if="item.state ==='closed'">
+            <div v-if="item.state === 'closed'">
               <div>{{ $t('Assignee') }}: {{ object.rel_snapshot.applicant }}</div>
               <div>{{ $t('DateFinished') }}: {{ toSafeLocalDateStr(item.approval_date) }}</div>
             </div>
-            <div v-if="item.state !=='pending' && item.state !=='closed'">
-              <div> {{ $t('Assignee') }}: {{ item.processor_display }}</div>
+            <div v-if="item.state !== 'pending' && item.state !== 'closed'">
+              <div>{{ $t('Assignee') }}: {{ item.processor_display }}</div>
               <div>{{ $t('DateFinished') }}: {{ toSafeLocalDateStr(item.approval_date) }}</div>
             </div>
           </template>
         </el-step>
-        <el-step
-          :title="`${$t('FinishedTicket')}`"
-        >
+        <el-step :title="`${$t('FinishedTicket')}`">
           <template #description>
             <div v-if="object.status.value === 'closed'">
               <div>{{ $t('DateFinished') }}: {{ toSafeLocalDateStr(object.date_updated) }}</div>
@@ -73,11 +75,10 @@ export default {
   data() {
     return {
       status: { open: 2, close: 3 },
-      process_map: this.object.process_map.sort(
-        (a, b) => {
+      process_map:
+        this.object.process_map.sort((a, b) => {
           return a.approval_level - b.approval_level
-        }
-      ) || [],
+        }) || [],
       vm: this,
       statusMap: STATE_MAP
     }
@@ -85,7 +86,7 @@ export default {
   computed: {
     ticketSteps() {
       let countApprove = 0
-      this.process_map.forEach(item => {
+      this.process_map.forEach((item) => {
         if (item.state === 'approved') {
           countApprove += 1
         }
@@ -106,7 +107,7 @@ export default {
     },
     lookOver(assignees_display) {
       const content = []
-      assignees_display.forEach(item => {
+      assignees_display.forEach((item) => {
         content.push(h('p', null, item))
       })
       this.$msgbox({

@@ -13,14 +13,13 @@
       <span class="cellValue">{{ iCellValue }}</span>
       <a
         v-if="formatterArgs.showEditBtn"
-        :class="[{ 'disabled-link': $store.getters.currentOrgIsRoot },'edit-btn']"
+        :class="[{ 'disabled-link': $store.getters.currentOrgIsRoot }, 'edit-btn']"
         style="padding-left: 5px"
         @click="editCell"
       >
         <i class="fa fa-edit" />
       </a>
     </template>
-
   </div>
 </template>
 
@@ -61,7 +60,7 @@ export default {
         if (this.cellValue.length === 0) {
           return ''
         }
-        return this.cellValue.map(v => this.getCellValue(v)).join(', ')
+        return this.cellValue.map((v) => this.getCellValue(v)).join(', ')
       }
       return this.getCellValue(this.cellValue)
     }
@@ -71,7 +70,7 @@ export default {
       immediate: true,
       handler(newVal) {
         const valueIsString = typeof newVal === 'string'
-        this.value = valueIsString ? newVal || '' : (newVal ? JSON.stringify(newVal) : '')
+        this.value = valueIsString ? newVal || '' : newVal ? JSON.stringify(newVal) : ''
         this.valueIsString = valueIsString
       }
     }
@@ -100,7 +99,8 @@ export default {
         // pass
       }
       this.formatterArgs.onEnter({
-        row: this.row, col: this.col,
+        row: this.row,
+        col: this.col,
         oldValue: this.cellValue,
         newValue: validValue
       })
@@ -130,7 +130,6 @@ export default {
     top: 50%;
     transform: translateY(-50%);
   }
-
 }
 
 .edit-container {
@@ -149,5 +148,4 @@ export default {
     overflow: hidden;
   }
 }
-
 </style>

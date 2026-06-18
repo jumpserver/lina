@@ -1,8 +1,11 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" :fields="fields"
+  <GenericCreateUpdatePage
+    v-bind="$data"
+    :fields="fields"
     :fields-meta="fieldsMeta"
     :initial="initial"
-    :url="url" />
+    :url="url"
+  />
 </template>
 
 <script>
@@ -65,9 +68,11 @@ export default {
         assets: {
           type: 'assetSelect',
           component: AssetSelect,
-          rules: [{
-            required: false
-          }],
+          rules: [
+            {
+              required: false
+            }
+          ],
           el: {
             value: [],
             defaultPageSize: 300,
@@ -143,5 +148,4 @@ export default {
 :deep(.el-tree) {
   padding: 5px 0;
 }
-
 </style>

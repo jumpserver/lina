@@ -1,6 +1,5 @@
 <template>
-  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu"
-    v-model:object="host">
+  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu" v-model:object="host">
     <keep-alive>
       <component :is="config.activeMenu" :object="host" />
     </keep-alive>
@@ -30,16 +29,16 @@ export default {
         activeMenu: 'Detail',
         submenu: [
           {
-            'title': this.$t('Basic'),
-            'name': 'Detail'
+            title: this.$t('Basic'),
+            name: 'Detail'
           },
           {
-            'title': this.$t('VirtualApps'),
-            'name': 'Apps'
+            title: this.$t('VirtualApps'),
+            name: 'Apps'
           },
           {
-            'title': this.$t('Containers'),
-            'name': 'Containers'
+            title: this.$t('Containers'),
+            name: 'Containers'
           }
         ],
         hasRightSide: true,
@@ -59,11 +58,8 @@ export default {
       }
     }
   },
-  mounted() {
-  }
+  mounted() {}
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

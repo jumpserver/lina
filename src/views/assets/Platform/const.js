@@ -14,14 +14,29 @@ export const platformFieldsMeta = (vm) => {
         ansible_config: ''
       },
       fields: [
-        'ansible_enabled', 'ansible_config',
-        'ping_enabled', 'ping_method', 'ping_params',
-        'gather_facts_enabled', 'gather_facts_method', 'gather_facts_params',
-        'change_secret_enabled', 'change_secret_method', 'change_secret_params',
-        'push_account_enabled', 'push_account_method', 'push_account_params',
-        'verify_account_enabled', 'verify_account_method', 'verify_account_params',
-        'gather_accounts_enabled', 'gather_accounts_method', 'gather_accounts_params',
-        'remove_account_enabled', 'remove_account_method', 'remove_account_params'
+        'ansible_enabled',
+        'ansible_config',
+        'ping_enabled',
+        'ping_method',
+        'ping_params',
+        'gather_facts_enabled',
+        'gather_facts_method',
+        'gather_facts_params',
+        'change_secret_enabled',
+        'change_secret_method',
+        'change_secret_params',
+        'push_account_enabled',
+        'push_account_method',
+        'push_account_params',
+        'verify_account_enabled',
+        'verify_account_method',
+        'verify_account_params',
+        'gather_accounts_enabled',
+        'gather_accounts_method',
+        'gather_accounts_params',
+        'remove_account_enabled',
+        'remove_account_method',
+        'remove_account_params'
       ],
       fieldsMeta: {
         ansible_config: {
@@ -61,9 +76,7 @@ export const platformFieldsMeta = (vm) => {
     category_type: {
       type: 'cascader',
       label: i18n.t('Type'),
-      rules: [
-        rules.Required
-      ],
+      rules: [rules.Required],
       el: {
         multiple: false,
         options: [],
@@ -107,8 +120,8 @@ export const setAutomations = (vm) => {
   const automation = vm.defaultOptions.automation || {}
   const autoFieldsMeta = vm.fieldsMeta.automation.fieldsMeta
   const autoFields = vm.fieldsMeta.automation.fields
-    .filter(item => item.endsWith('_method'))
-    .map(item => item.replace('_method', ''))
+    .filter((item) => item.endsWith('_method'))
+    .map((item) => item.replace('_method', ''))
 
   const initial = vm.initial.automation || {}
   initial['ansible_enabled'] = automation['ansible_enabled']
@@ -149,7 +162,7 @@ export const setAutomations = (vm) => {
     // 设置 method 类型和 options
     _.set(autoFieldsMeta, `${itemMethodKey}.type`, 'select')
     const methods = automation[itemMethodKey + 's'] || []
-    autoFieldsMeta[itemMethodKey].options = methods.map(method => {
+    autoFieldsMeta[itemMethodKey].options = methods.map((method) => {
       return { value: method['id'], label: method['name'] }
     })
     _.set(initial, `${itemMethodKey}`, autoFieldsMeta[itemMethodKey].options[0]?.value)

@@ -59,10 +59,10 @@ export default {
   },
   computed: {
     assetIds() {
-      return this.object.assets.map(asset => asset.id)
+      return this.object.assets.map((asset) => asset.id)
     },
     nodeIds() {
-      return this.object.nodes.map(node => node.id)
+      return this.object.nodes.map((node) => node.id)
     }
   },
   methods: {

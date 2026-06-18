@@ -15,4 +15,3 @@ export function getLangCode(withInternalCode = false) {
   }
   return lang
 }
-

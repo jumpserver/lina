@@ -2,11 +2,13 @@
   <div>
     <el-alert v-sanitize="helpText" type="info" />
     <IBox>
-      <GenericCreateUpdateForm v-bind="$data" :create-success-next-route="successUrl"
-        :update-success-next-route="successUrl" />
+      <GenericCreateUpdateForm
+        v-bind="$data"
+        :create-success-next-route="successUrl"
+        :update-success-next-route="successUrl"
+      />
     </IBox>
   </div>
-
 </template>
 
 <script>
@@ -28,15 +30,17 @@ export default {
       helpText: this.$t('EmailHelpText'),
       encryptedFields: ['EMAIL_HOST_PASSWORD'],
       fields: [
-        [this.$t('Server'), [
-          'EMAIL_PROTOCOL',
-          'EMAIL_HOST',
-          'EMAIL_PORT',
-          'EMAIL_HOST_USER',
-          'EMAIL_HOST_PASSWORD',
-          'EMAIL_FROM',
-          'EMAIL_SECURITY_PROTOCOL'
-        ]
+        [
+          this.$t('Server'),
+          [
+            'EMAIL_PROTOCOL',
+            'EMAIL_HOST',
+            'EMAIL_PORT',
+            'EMAIL_HOST_USER',
+            'EMAIL_HOST_PASSWORD',
+            'EMAIL_FROM',
+            'EMAIL_SECURITY_PROTOCOL'
+          ]
         ],
         [this.$t('Other'), ['CREATE_USER_MSG']],
         [this.$t('Test'), ['EMAIL_RECIPIENT']]
@@ -52,14 +56,10 @@ export default {
           }
         },
         EMAIL_FROM: {
-          rules: [
-            rules.EmailCheck
-          ]
+          rules: [rules.EmailCheck]
         },
         EMAIL_RECIPIENT: {
-          rules: [
-            rules.EmailCheck
-          ]
+          rules: [rules.EmailCheck]
         },
         EMAIL_SECURITY_PROTOCOL: {
           hidden: (formValue) => formValue.EMAIL_PROTOCOL !== 'smtp',
@@ -71,7 +71,6 @@ export default {
             { label: this.$t('SSL'), value: 'ssl' },
             { label: this.$t('TLS'), value: 'tls' }
           ]
-
         },
 
         CREATE_USER_MSG: {
@@ -97,46 +96,47 @@ export default {
         {
           title: this.$t('EmailTest'),
           loading: false,
-          callback: function(value, form, btn) {
+          callback: function (value, form, btn) {
             const testValue = {}
             testValue['EMAIL_FROM'] = value['EMAIL_FROM']
             testValue['EMAIL_RECIPIENT'] = value['EMAIL_RECIPIENT']
             btn.loading = true
-            testEmailSetting(value).then(res => {
-              vm.$message.success(res['msg'])
-            }).catch(res => {
-              vm.$message.error(res['response']['data']['error'])
-            }).finally(() => {
-              btn.loading = false
-            })
+            testEmailSetting(value)
+              .then((res) => {
+                vm.$message.success(res['msg'])
+              })
+              .catch((res) => {
+                vm.$message.error(res['response']['data']['error'])
+              })
+              .finally(() => {
+                btn.loading = false
+              })
           }
         }
       ],
       cleanFormValue(data) {
-        Object.keys(data).forEach(
-          function(key) {
-            if (data[key] === null) {
-              delete data[key]
-            }
-            if (!data['EMAIL_HOST_PASSWORD']) {
-              delete data['EMAIL_HOST_PASSWORD']
-            }
-            switch (data['EMAIL_SECURITY_PROTOCOL']) {
-              case 'ssl':
-                data['EMAIL_USE_SSL'] = true
-                data['EMAIL_USE_TLS'] = false
-                break
-              case 'tls':
-                data['EMAIL_USE_SSL'] = false
-                data['EMAIL_USE_TLS'] = true
-                break
-              default:
-                data['EMAIL_USE_SSL'] = false
-                data['EMAIL_USE_TLS'] = false
-                break
-            }
+        Object.keys(data).forEach(function (key) {
+          if (data[key] === null) {
+            delete data[key]
           }
-        )
+          if (!data['EMAIL_HOST_PASSWORD']) {
+            delete data['EMAIL_HOST_PASSWORD']
+          }
+          switch (data['EMAIL_SECURITY_PROTOCOL']) {
+            case 'ssl':
+              data['EMAIL_USE_SSL'] = true
+              data['EMAIL_USE_TLS'] = false
+              break
+            case 'tls':
+              data['EMAIL_USE_SSL'] = false
+              data['EMAIL_USE_TLS'] = true
+              break
+            default:
+              data['EMAIL_USE_SSL'] = false
+              data['EMAIL_USE_TLS'] = false
+              break
+          }
+        })
         return data
       },
       submitMethod() {
@@ -145,10 +145,7 @@ export default {
     }
   },
   methods: {}
-
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

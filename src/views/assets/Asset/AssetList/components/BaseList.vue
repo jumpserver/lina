@@ -24,16 +24,18 @@
       :category="category"
       @select-platform="createAsset"
     />
-    <AssetBulkUpdateDialog v-bind="updateSelectedDialogSetting" v-if="updateSelectedDialogSetting.visible"
+    <AssetBulkUpdateDialog
+      v-bind="updateSelectedDialogSetting"
+      v-if="updateSelectedDialogSetting.visible"
       v-model:visible="updateSelectedDialogSetting.visible"
       :category="category"
-      @update="handleAssetBulkUpdate" />
-    <GatewayDialog
-      v-model:visible="gatewayVisible"
-      :cell="gatewayCell"
-      :port="gatewayPort"
+      @update="handleAssetBulkUpdate"
     />
-    <AccountDiscoverDialog v-model:visible="discoveryDialog.visible" :asset="discoveryDialog.asset" />
+    <GatewayDialog v-model:visible="gatewayVisible" :cell="gatewayCell" :port="gatewayPort" />
+    <AccountDiscoverDialog
+      v-model:visible="discoveryDialog.visible"
+      :asset="discoveryDialog.asset"
+    />
     <AccountCreateUpdate
       v-if="showAddDialog"
       v-model:visible="showAddDialog"
@@ -113,14 +115,12 @@ export default {
       {
         name: 'linux',
         title: 'Linux',
-        callback: () => {
-        }
+        callback: () => {}
       },
       {
         name: 'windows',
         title: 'Windows',
-        callback: () => {
-        }
+        callback: () => {}
       }
     ]
     const createAction = {
@@ -144,13 +144,13 @@ export default {
       createDrawer: '',
       detailDrawer: () => import('@/views/assets/Asset/AssetDetail/index.vue'),
       drawer: {
-        'host': () => import('@/views/assets/Asset/AssetCreateUpdate/HostCreateUpdate.vue'),
-        'web': () => import('@/views/assets/Asset/AssetCreateUpdate/WebCreateUpdate.vue'),
-        'custom': () => import('@/views/assets/Asset/AssetCreateUpdate/CustomCreateUpdate.vue'),
-        'cloud': () => import('@/views/assets/Asset/AssetCreateUpdate/CloudCreateUpdate.vue'),
-        'device': () => import('@/views/assets/Asset/AssetCreateUpdate/DeviceCreateUpdate.vue'),
-        'database': () => import('@/views/assets/Asset/AssetCreateUpdate/DatabaseCreateUpdate.vue'),
-        'ds': () => import('@/views/assets/Asset/AssetCreateUpdate/DSCreateUpdate.vue')
+        host: () => import('@/views/assets/Asset/AssetCreateUpdate/HostCreateUpdate.vue'),
+        web: () => import('@/views/assets/Asset/AssetCreateUpdate/WebCreateUpdate.vue'),
+        custom: () => import('@/views/assets/Asset/AssetCreateUpdate/CustomCreateUpdate.vue'),
+        cloud: () => import('@/views/assets/Asset/AssetCreateUpdate/CloudCreateUpdate.vue'),
+        device: () => import('@/views/assets/Asset/AssetCreateUpdate/DeviceCreateUpdate.vue'),
+        database: () => import('@/views/assets/Asset/AssetCreateUpdate/DatabaseCreateUpdate.vue'),
+        ds: () => import('@/views/assets/Asset/AssetCreateUpdate/DSCreateUpdate.vue')
       },
       createProps: {},
       showPlatform: false,
@@ -176,7 +176,7 @@ export default {
   },
   computed: {
     ...mapState({
-      recentPlatformIds: state => state.assets.recentPlatformIds
+      recentPlatformIds: (state) => state.assets.recentPlatformIds
     }),
     iTableConfig() {
       // merge 到新对象,避免就地修改响应式 this.defaultConfig 造成计算属性自触发循环
@@ -264,14 +264,16 @@ export default {
     async setRecentPlatforms() {
       const recentPlatforms = await this.$store.dispatch('assets/getRecentPlatforms')
       const allPlatforms = await this.$store.dispatch('assets/getPlatforms')
-      const otherPlatforms = allPlatforms.filter(item => !this.recentPlatformIds.includes(item.id))
+      const otherPlatforms = allPlatforms.filter(
+        (item) => !this.recentPlatformIds.includes(item.id)
+      )
       let platforms = [...recentPlatforms, ...otherPlatforms]
       if (this.category !== 'all') {
-        platforms = platforms.filter(item => item.category.value === this.category)
+        platforms = platforms.filter((item) => item.category.value === this.category)
       }
       platforms = platforms.slice(0, 6)
       const vm = this
-      platforms = platforms.map(item => {
+      platforms = platforms.map((item) => {
         return {
           name: item.name,
           title: item.name,

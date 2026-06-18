@@ -2,16 +2,24 @@
   <tr>
     <td>
       {{ getActionTitle(action) }}
-      <el-tooltip v-if="action.attrs.showTip" :content="action.attrs.tip" :open-delay="500" effect="dark">
+      <el-tooltip
+        v-if="action.attrs.showTip"
+        :content="action.attrs.tip"
+        :open-delay="500"
+        effect="dark"
+      >
         <i class="fa fa-question-circle-o" />
       </el-tooltip>
     </td>
     <td>
       <span>
-        <component v-bind="action.attrs" :is="iType"
+        <component
+          v-bind="action.attrs"
+          :is="iType"
           v-model="action.attrs.model"
           :title="label"
-          v-on="callbacks">
+          v-on="callbacks"
+        >
           {{ label }}
         </component>
       </span>
@@ -49,8 +57,7 @@ export default {
   },
   data() {
     return {
-      empty: () => {
-      }
+      empty: () => {}
     }
   },
   computed: {

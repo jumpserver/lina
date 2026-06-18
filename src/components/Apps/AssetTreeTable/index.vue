@@ -1,17 +1,20 @@
 <template>
-  <TreeTable v-bind="$attrs" ref="TreeList"
+  <TreeTable
+    v-bind="$attrs"
+    ref="TreeList"
     v-model:active-menu="treeTableConfig.activeMenu"
     :component="treeComponent"
     :table-config="tableConfig"
     :tree-tab-config="treeTableConfig"
-    :tree-width="treeWidth">
+    :tree-width="treeWidth"
+  >
     <template #table>
       <slot name="table" />
     </template>
-    <template #rMenu="{data}">
-    <div>
-      <slot :data="data" name="rMenu" />
-    </div>
+    <template #rMenu="{ data }">
+      <div>
+        <slot :data="data" name="rMenu" />
+      </div>
     </template>
   </TreeTable>
 </template>

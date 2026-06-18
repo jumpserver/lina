@@ -1,6 +1,6 @@
 <template>
   <div class="update-token">
-    <el-button v-show="!isShow" icon="Edit" link @click="isShow=true">
+    <el-button v-show="!isShow" icon="Edit" link @click="isShow = true">
       {{ text }}
     </el-button>
     <el-input
@@ -73,7 +73,7 @@ export default {
   }
 }
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .password-input {
   flex: 1 1 auto;
   width: auto;
@@ -95,5 +95,4 @@ export default {
     font-size: 14px;
   }
 }
-
 </style>

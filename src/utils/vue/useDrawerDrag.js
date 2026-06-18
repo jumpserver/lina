@@ -28,7 +28,7 @@ export function useDrawerDrag(options = {}) {
     return drawers.length > 0 ? drawers[drawers.length - 1] : null
   }
 
-  const initDrag = element => {
+  const initDrag = (element) => {
     if (!element || element.querySelector('.el-drawer-drag-handle')) return
 
     // 创建拖拽手柄
@@ -45,14 +45,14 @@ export function useDrawerDrag(options = {}) {
     element.appendChild(dragHandle)
 
     // 拖拽逻辑
-    dragHandle.onmousedown = e => {
+    dragHandle.onmousedown = (e) => {
       e.preventDefault()
       const startX = e.pageX
       const startWidth = element.offsetWidth
       const minWidth = window.innerWidth * minWidthRatio
       const maxWidth = window.innerWidth * maxWidthRatio
 
-      const move = e => {
+      const move = (e) => {
         const deltaX = startX - e.pageX
         const newWidth = Math.max(minWidth, Math.min(maxWidth, startWidth + deltaX))
         element.style.width = `${newWidth}px`
@@ -128,4 +128,3 @@ export function useDrawerDrag(options = {}) {
     cleanup
   }
 }
-

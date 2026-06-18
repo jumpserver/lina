@@ -16,7 +16,7 @@ export default {
   props: {
     infos: {
       type: Array,
-      default: () => ([])
+      default: () => []
     }
   },
   data() {
@@ -25,7 +25,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @mixin textOverflow {
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -37,7 +37,6 @@ export default {
 }
 
 .panel-label {
-
 }
 
 //
@@ -60,5 +59,4 @@ export default {
 //  }
 //}
 //
-
 </style>

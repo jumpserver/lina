@@ -1,5 +1,7 @@
 <template>
-  <el-drawer v-bind="$attrs" ref="drawer"
+  <el-drawer
+    v-bind="$attrs"
+    ref="drawer"
     :model-value="visible"
     :append-to-body="true"
     :before-close="handleClose"
@@ -10,13 +12,17 @@
     custom-class="drawer"
     destroy-on-close
     direction="rtl"
-    @update:model-value="handleUpdateModelValue">
+    @update:model-value="handleUpdateModelValue"
+  >
     <div class="drawer__content">
       <slot name="default">
-        <component v-bind="componentProps" :is="resolvedComponent"
+        <component
+          v-bind="componentProps"
+          :is="resolvedComponent"
           v-if="resolvedComponent"
           ref="dynamicComponent"
-          v-on="componentListeners" />
+          v-on="componentListeners"
+        />
       </slot>
     </div>
     <div v-if="hasFooter" ref="drawerFooter" class="drawer__footer" />
@@ -129,18 +135,18 @@ export default {
 
 <style lang="scss" scoped>
 .drawer__no-footer {
-  :deep(.drawer){
-      .page {
-        height: calc(100vh - 55px);
-      }
+  :deep(.drawer) {
+    .page {
+      height: calc(100vh - 55px);
+    }
   }
 }
 
 @media (max-width: 992px) {
-  .drawer :deep(.el-form-item){
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
+  .drawer :deep(.el-form-item) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
   }
 }
 
@@ -279,7 +285,7 @@ export default {
     font-size: 16px;
   }
 
-  :deep(.el-form-item){
+  :deep(.el-form-item) {
     min-width: 565px;
 
     .el-card__body {

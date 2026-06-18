@@ -11,9 +11,14 @@
   >
     <div class="chat">
       <div class="container">
-        <div ref="header" class="header" @mousedown="handleMoveMouseDown" @mouseup="handleMouseMoveUp">
+        <div
+          ref="header"
+          class="header"
+          @mousedown="handleMoveMouseDown"
+          @mouseup="handleMouseMoveUp"
+        >
           <div class="left">
-            <img :src="robotUrl" alt="">
+            <img :src="robotUrl" alt="" />
             <span class="title">{{ title }}</span>
           </div>
           <span class="new" @click="onNewChat">
@@ -28,11 +33,14 @@
         </div>
       </div>
       <div class="sidebar">
-        <Sidebar v-bind="$attrs" v-model:active="active"
+        <Sidebar
+          v-bind="$attrs"
+          v-model:active="active"
           :expanded="expanded"
           @close="onClose"
           @compress="compress"
-          @expand="expandFull" />
+          @expand="expandFull"
+        />
       </div>
     </div>
   </DrawerPanel>
@@ -45,6 +53,7 @@ import { getInputFocus } from './useChat.js'
 import DrawerPanel from '@/components/Apps/DrawerPanel/index.vue'
 import { ObjectLocalStorage } from '@/utils/common'
 import i18n from '@/i18n/i18n'
+import { getAssetUrl } from '@/utils/assets'
 import { mapGetters } from 'vuex'
 
 const aiPannelLocalStorage = new ObjectLocalStorage('ai_panel_settings')
@@ -57,7 +66,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: function() {
+      default: function () {
         return i18n.global.t('ChatAI')
       }
     },
@@ -74,7 +83,7 @@ export default {
     return {
       visible: false,
       active: 'chat',
-      robotUrl: require('@/assets/img/robot-assistant.png'),
+      robotUrl: getAssetUrl('img/robot-assistant.png'),
       height: '400px',
       expanded: false,
       clientOffset: {},
@@ -83,9 +92,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'publicSettings'
-    ])
+    ...mapGetters(['publicSettings'])
   },
   watch: {
     'publicSettings.CHAT_AI_METHOD': {
@@ -205,7 +212,7 @@ export default {
     overflow: hidden;
 
     .header {
-      background: linear-gradient(90deg, #ebf1ff 24.34%, #e5fbf8 56.18%, #f2ebfe 90.18%);;
+      background: linear-gradient(90deg, #ebf1ff 24.34%, #e5fbf8 56.18%, #f2ebfe 90.18%);
       display: flex;
       justify-content: space-between;
       height: 48px;

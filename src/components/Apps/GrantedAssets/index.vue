@@ -83,7 +83,17 @@ export default {
         hasTree: true,
         columnsExtra: ['view_account'],
         columnsExclude: ['spec_info'],
-        columns: ['id', 'name', 'address', 'comment', 'labels', 'connectivity', 'platform', 'view_account', 'actions'],
+        columns: [
+          'id',
+          'name',
+          'address',
+          'comment',
+          'labels',
+          'connectivity',
+          'platform',
+          'view_account',
+          'actions'
+        ],
         columnsShow: {
           min: ['name', 'address', 'accounts'],
           default: ['name', 'address', 'platform', 'view_account', 'actions']
@@ -129,7 +139,9 @@ export default {
 </script>
 
 <style scoped>
-.row_disabled, .row_disabled:hover, .row_disabled:hover > td {
+.row_disabled,
+.row_disabled:hover,
+.row_disabled:hover > td {
   cursor: not-allowed;
   background-color: rgba(192, 196, 204, 0.28) !important;
 }

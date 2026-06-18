@@ -32,12 +32,7 @@
           width="135"
         >
           <template #default="scope">
-            <el-button
-              icon="Minus"
-              size="small"
-              type="danger"
-              @click="removeAccount(scope.row)"
-            />
+            <el-button icon="Minus" size="small" type="danger" @click="removeAccount(scope.row)" />
             <el-button
               :disabled="!!scope.row.template"
               icon="Edit"
@@ -108,7 +103,7 @@ export default {
     },
     isUpdate: {
       type: Function,
-      default: vm => {
+      default: (vm) => {
         return vm.$route.params.id
       }
     }
@@ -143,7 +138,7 @@ export default {
   },
   methods: {
     removeAccount(account) {
-      this.accounts = this.accounts.filter(item => {
+      this.accounts = this.accounts.filter((item) => {
         if (account.id && item.id) {
           return item.id !== account.id
         } else if (account.username && item.username) {

@@ -1,3 +1,5 @@
+import { IS_DEV } from '@/utils/env'
+
 /**
  * 全局错误处理器
  * 防止 Vue 3 中未捕获的错误导致整个应用崩溃
@@ -8,7 +10,7 @@
 export function setupErrorHandler(app, message) {
   app.config.errorHandler = (err, instance, info) => {
     // 在开发环境下打印详细错误信息
-    if (process.env.NODE_ENV === 'development') {
+    if (IS_DEV) {
       console.error('Global Error Handler:', err)
       console.error('Component instance:', instance)
       console.error('Error info:', info)
@@ -36,4 +38,3 @@ export function setupErrorHandler(app, message) {
     // 这样即使某个组件出错，其他部分仍可正常显示
   }
 }
-

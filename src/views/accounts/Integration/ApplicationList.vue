@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { createVNode as _createVNode } from 'vue'
+import { createVNode as createVNodeCompat } from 'vue'
 import CopyableFormatter from '@/components/Table/TableFormatters/CopyableFormatter.vue'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { GenericListTable } from '@/layout/components'
@@ -36,25 +36,27 @@ export default {
           },
           logo: {
             width: '80px',
-            formatter: row => {
-              return _createVNode('img', {
-                'src': row.logo,
-                'alt': row.name,
-                'style': 'width: 40px; height: 40px; border-radius: 50%;'
-              }, null)
+            formatter: (row) => {
+              return createVNodeCompat(
+                'img',
+                {
+                  src: row.logo,
+                  alt: row.name,
+                  style: 'width: 40px; height: 40px; border-radius: 50%;'
+                },
+                null
+              )
             }
           },
           accounts_amount: {
             width: '100px',
-            formatter: row => {
+            formatter: (row) => {
               return row.accounts_amount
             }
           },
           name: {
             formatterArgs: {
-              getRoute: ({
-                row
-              }) => ({
+              getRoute: ({ row }) => ({
                 name: 'IntegrationApplicationDetail',
                 params: {
                   id: row.id
@@ -69,10 +71,10 @@ export default {
             formatter: CopyableFormatter,
             formatterArgs: {
               shadow: true,
-              getText: async function({
-                row
-              }) {
-                const app = await vm.$axios.get(`/api/v1/accounts/integration-applications/${row.id}/secret/`)
+              getText: async function ({ row }) {
+                const app = await vm.$axios.get(
+                  `/api/v1/accounts/integration-applications/${row.id}/secret/`
+                )
                 return app.secret
               }
             }

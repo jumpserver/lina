@@ -12,8 +12,12 @@
         </el-col>
         <el-col :md="20" :sm="24">
           <ul>
-            <li><span class="title">{{ $t('Username') }}:</span><span>{{ users.name }}</span></li>
-            <li><span class="title">{{ $t('Email') }}:</span><span>{{ users.email }}</span></li>
+            <li>
+              <span class="title">{{ $t('Username') }}:</span><span>{{ users.name }}</span>
+            </li>
+            <li>
+              <span class="title">{{ $t('Email') }}:</span><span>{{ users.email }}</span>
+            </li>
             <li>
               <span class="title">{{ $t('LoginDate') }}:</span>
               <span>{{ $filters.date(users.last_login) }}</span>
@@ -26,6 +30,8 @@
 </template>
 
 <script>
+import { getAssetUrl } from '@/utils/assets'
+
 export default {
   name: 'Huser',
   props: {
@@ -37,7 +43,7 @@ export default {
   data() {
     return {
       users: {},
-      avatarUrl: require('@/assets/img/avatar.png')
+      avatarUrl: getAssetUrl('img/avatar.png')
     }
   },
   created() {
@@ -47,10 +53,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-ul, li {
+ul,
+li {
   padding: 0;
   margin: 0;
-  list-style: none
+  list-style: none;
 }
 
 li {

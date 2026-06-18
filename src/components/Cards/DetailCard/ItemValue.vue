@@ -31,13 +31,15 @@ export default {
       } else if (typeof this.value === 'object') {
         return this.value
       } else if (this.value instanceof Array) {
-        return this.value.map(item => {
-          if (typeof item === 'object') {
-            return item.label || item.title
-          } else {
-            return item
-          }
-        }).join(', ')
+        return this.value
+          .map((item) => {
+            if (typeof item === 'object') {
+              return item.label || item.title
+            } else {
+              return item
+            }
+          })
+          .join(', ')
       } else if (this.isDatetime(this.value)) {
         return toSafeLocalDateStr(this.value)
       } else {
@@ -72,7 +74,7 @@ export default {
     if (typeof this.formatter === 'function') {
       const data = this.formatter(this.item, this.value)
       if (data instanceof Promise) {
-        data.then(res => {
+        data.then((res) => {
           formatterData = res
         })
       } else {

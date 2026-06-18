@@ -50,7 +50,7 @@ export default {
       if (!this.value) {
         return []
       }
-      return this.value.map(item => {
+      return this.value.map((item) => {
         if (item.value) {
           return item.value
         }
@@ -72,13 +72,11 @@ export default {
   },
   methods: {
     handleCheckChange(node, { checkedNodes }) {
-      const checkedKeys = checkedNodes
-        .filter(item => !item.children)
-        .map(node => node.value)
+      const checkedKeys = checkedNodes.filter((item) => !item.children).map((node) => node.value)
       this.$emit('input', checkedKeys)
     },
     setTreeReadonly(tree) {
-      return tree.map(item => {
+      return tree.map((item) => {
         item.disabled = true
         if (item.children) {
           item.children = this.setTreeReadonly(item.children)
@@ -120,8 +118,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-.el-tree-custom :deep(.el-tree){
+.el-tree-custom :deep(.el-tree) {
   .help-tips {
     margin-left: 10px;
     font-size: 12px;
@@ -155,7 +152,7 @@ export default {
       padding-left: 13px;
 
       &:before {
-        content: "";
+        content: '';
         left: -4px;
         position: absolute;
         right: auto;
@@ -179,7 +176,7 @@ export default {
       }
 
       &:after {
-        content: "";
+        content: '';
         left: -4px;
         position: absolute;
         right: auto;
@@ -213,5 +210,4 @@ export default {
     }
   }
 }
-
 </style>

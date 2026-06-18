@@ -1,6 +1,5 @@
 <template>
-  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu"
-    v-model:object="user">
+  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu" v-model:object="user">
     <keep-alive>
       <component :is="config.activeMenu" :object="user" />
     </keep-alive>
@@ -43,8 +42,10 @@ export default {
         activeMenu: 'UserInfo',
         actions: {
           canUpdate: () => {
-            return this.$hasPerm('users.change_user') &&
+            return (
+              this.$hasPerm('users.change_user') &&
               !(!this.currentUserIsSuperAdmin && this.user['is_superuser'])
+            )
           }
         },
         submenu: [
@@ -77,9 +78,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'currentUserIsSuperAdmin'
-    ])
+    ...mapGetters(['currentUserIsSuperAdmin'])
   },
   methods: {
     handleTabClick(tab) {

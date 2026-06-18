@@ -1,7 +1,7 @@
 <template>
   <span class="platform-td">
     <span class="icon-zone">
-      <img :src="icon" alt="icon" class="asset-icon">
+      <img :src="icon" alt="icon" class="asset-icon" />
     </span>
     <span class="platform-name">{{ value.name }}</span>
   </span>
@@ -70,8 +70,7 @@ export default {
     min-width: 0;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis
+    text-overflow: ellipsis;
   }
 }
-
 </style>

@@ -1,11 +1,6 @@
 <template>
   <div ref="boxDom" class="tooltip">
-    <el-tooltip
-      :content="content"
-      :disabled="showTooltip"
-      :effect="effect"
-      :placement="placement"
-    >
+    <el-tooltip :content="content" :disabled="showTooltip" :effect="effect" :placement="placement">
       <div class="multi-line-limit">{{ content }}</div>
     </el-tooltip>
     <div ref="virtualDom" class="virtual-dom">{{ content }}</div>
@@ -62,19 +57,19 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .tooltip {
-    margin-bottom: 10px;
-  }
-  .multi-line-limit {
-    line-height: 15px;
-    height: var(--line);
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .virtual-dom {
-    position:absolute;
-    visibility: hidden;
-    white-space: nowrap;
-    z-index: -100;
-  }
+.tooltip {
+  margin-bottom: 10px;
+}
+.multi-line-limit {
+  line-height: 15px;
+  height: var(--line);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.virtual-dom {
+  position: absolute;
+  visibility: hidden;
+  white-space: nowrap;
+  z-index: -100;
+}
 </style>

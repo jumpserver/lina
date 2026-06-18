@@ -32,18 +32,19 @@ export default {
           title: this.$t('Sync'),
           loading: false,
           disabled: !store.getters.publicSettings['VAULT_ENABLED'],
-          callback: function(value, form, btn) {
+          callback: function (value, form, btn) {
             btn.loading = true
-            vm.$axios.post(
-              '/api/v1/settings/vault/sync/',
-              value
-            ).then(res => {
-              openTaskPage(res['task'])
-            }).catch(() => {
-              vm.$log.error('err occur')
-            }).finally(() => {
-              btn.loading = false
-            })
+            vm.$axios
+              .post('/api/v1/settings/vault/sync/', value)
+              .then((res) => {
+                openTaskPage(res['task'])
+              })
+              .catch(() => {
+                vm.$log.error('err occur')
+              })
+              .finally(() => {
+                btn.loading = false
+              })
           }
         }
       ],
@@ -97,6 +98,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

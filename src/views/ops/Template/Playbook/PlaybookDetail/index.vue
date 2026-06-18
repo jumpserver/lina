@@ -1,6 +1,9 @@
 <template>
-  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu"
-    v-model:object="PlaybookDetail">
+  <GenericDetailPage
+    v-bind="config"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="PlaybookDetail"
+  >
     <keep-alive>
       <component :is="config.activeMenu" :object="PlaybookDetail" />
     </keep-alive>
@@ -44,6 +47,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -18,7 +18,8 @@
     <el-form-item>
       <el-radio v-model="radioValue" :value="4">
         {{ $t('Every') }}
-        <el-input-number v-model="average02" :max="31" :min="1" size="small" /> {{ $t('Day') }} {{ $t('ExecuteOnce') }}
+        <el-input-number v-model="average02" :max="31" :min="1" size="small" /> {{ $t('Day') }}
+        {{ $t('ExecuteOnce') }}
       </el-radio>
     </el-form-item>
 
@@ -30,7 +31,7 @@
           :placeholder="$tc('ManyChoose')"
           clearable
           multiple
-          style="width:100%"
+          style="width: 100%"
         >
           <el-option v-for="item in 31" :key="item" :value="item">{{ item }}</el-option>
         </el-select>
@@ -51,8 +52,7 @@ export default {
     },
     check: {
       type: Function,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -91,16 +91,15 @@ export default {
         const str = this.checkboxList.join()
         return str === '' ? '*' : str
       },
-      set() {
-      }
+      set() {}
     }
   },
   watch: {
-    'radioValue': 'radioChange',
-    'cycleTotal': 'cycleChange',
-    'averageTotal': 'averageChange',
-    'workdayCheck': 'workdayChange',
-    'checkboxString': 'checkboxChange'
+    radioValue: 'radioChange',
+    cycleTotal: 'cycleChange',
+    averageTotal: 'averageChange',
+    workdayCheck: 'workdayChange',
+    checkboxString: 'checkboxChange'
   },
   created() {
     this.$nextTick(() => {
@@ -115,7 +114,7 @@ export default {
   methods: {
     // 单选按钮值变化时
     radioChange() {
-      ('day rachange')
+      ;('day rachange')
       if (this.radioValue === 1) {
         this.$emit('update', 'day', '*', 'day')
       } else {
@@ -150,7 +149,7 @@ export default {
           this.$emit('update', 'day', this.checkboxString)
           break
       }
-      ('day rachange end')
+      ;('day rachange end')
     },
     // 周期两个值变化时
     cycleChange() {
@@ -189,6 +188,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

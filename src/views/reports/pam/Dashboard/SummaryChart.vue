@@ -8,10 +8,10 @@
 
         <div class="total-section">
           <div class="total-title">{{ $t('TotalAccounts') }}</div>
-          <div class="total-account"> {{ config.total }} </div>
+          <div class="total-account">{{ config.total }}</div>
           <div class="week-add">
-            <div class="week-add-title"> {{ $t('WeekAdd') }} </div>
-            <div class="week-add-value"> + {{ config.weekAdd }} </div>
+            <div class="week-add-title">{{ $t('WeekAdd') }}</div>
+            <div class="week-add-value">+ {{ config.weekAdd }}</div>
           </div>
         </div>
       </div>
@@ -29,7 +29,7 @@
         @click="!item.disabled && handleClick(item)"
       >
         <span class="metric-label">{{ $tc(item.label) }}</span>
-        <span class="metric-value" :class="{'increase': config[item.key] > 0}">
+        <span class="metric-value" :class="{ increase: config[item.key] > 0 }">
           {{ config[item.key] }}
         </span>
       </div>
@@ -99,7 +99,12 @@ export default {
             show: false,
             type: 'category',
             boundaryGap: false,
-            data: [this.$t('Privileged'), this.$t('ResetSecret'), this.$t('Connectable'), this.$t('Active')]
+            data: [
+              this.$t('Privileged'),
+              this.$t('ResetSecret'),
+              this.$t('Connectable'),
+              this.$t('Active')
+            ]
           }
         ],
         yAxis: [
@@ -147,9 +152,16 @@ export default {
       handler(newData) {
         if (this.chart) {
           this.chart.setOption({
-            series: [{
-              data: [newData.privileged, newData.resetSecret, newData.connectable, newData.is_active]
-            }]
+            series: [
+              {
+                data: [
+                  newData.privileged,
+                  newData.resetSecret,
+                  newData.connectable,
+                  newData.is_active
+                ]
+              }
+            ]
           })
         }
       },
@@ -186,7 +198,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$text-color: #646A73;
+$text-color: #646a73;
 
 .el-divider--horizontal {
   margin: unset !important;
@@ -199,7 +211,7 @@ $text-color: #646A73;
   width: 100%;
   height: 100%;
   padding: 1.25rem;
-  background-color: #FFF;
+  background-color: #fff;
   overflow: hidden;
   border-radius: 0.25rem;
 
@@ -220,18 +232,18 @@ $text-color: #646A73;
 
         .total-title {
           font-size: 0.875rem;
-          color: #646A73;
+          color: #646a73;
           font-weight: 400;
         }
 
         .sub-title {
-          color: #646A73;
+          color: #646a73;
           font-size: 0.9rem;
           font-weight: 400;
         }
 
         .total-account {
-          color: #1F2329;
+          color: #1f2329;
           font-size: 2rem;
           font-weight: 500;
           line-height: 2.5rem;
@@ -240,7 +252,7 @@ $text-color: #646A73;
         .week-add {
           display: flex;
           gap: 0.5rem;
-          color: #1F2329;
+          color: #1f2329;
           font-weight: 400;
           line-height: 1.4rem;
 
@@ -251,7 +263,7 @@ $text-color: #646A73;
           }
 
           .week-add-value {
-            color: #F54A45;
+            color: #f54a45;
             font-size: 0.9rem;
             font-weight: inherit;
             line-height: inherit;
@@ -278,14 +290,14 @@ $text-color: #646A73;
       transition: all 0.3s ease-in-out;
 
       .metric-label {
-        color: #646A73;
+        color: #646a73;
         font-weight: 400;
         line-height: 1.4rem;
         font-size: 0.9rem;
       }
 
       .metric-value {
-        color: #1F2329;
+        color: #1f2329;
         line-height: 2rem;
         font-size: 1.5rem;
         font-weight: 500;

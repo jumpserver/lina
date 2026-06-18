@@ -1,9 +1,12 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm v-bind="$data" :create-success-next-route="successUrl"
+    <GenericCreateUpdateForm
+      v-bind="$data"
+      :create-success-next-route="successUrl"
       :has-detail-in-msg="false"
       :submit-method="submitMethod"
-      :update-success-next-route="successUrl" />
+      :update-success-next-route="successUrl"
+    />
   </IBox>
 </template>
 
@@ -45,5 +48,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

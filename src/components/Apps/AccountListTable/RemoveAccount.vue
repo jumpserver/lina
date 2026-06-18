@@ -1,9 +1,12 @@
 <template>
-  <Dialog v-bind="$attrs" v-model:visible="show"
+  <Dialog
+    v-bind="$attrs"
+    v-model:visible="show"
     :destroy-on-close="true"
     :show-cancel="false"
     :width="'50'"
-    @confirm="accountConfirmHandle" />
+    @confirm="accountConfirmHandle"
+  />
 </template>
 
 <script>
@@ -34,18 +37,15 @@ export default {
   computed: {},
   mounted() {
     const url = `/api/v1/accounts/accounts/tasks/`
-    this.$axios.post(
-      url, { disableFlashErrorMsg: true, action: 'remove' }
-    ).then(resp => {
-      this.$axios.post(
-        `/api/v1/accounts/accounts/tasks/`,
-        {
+    this.$axios.post(url, { disableFlashErrorMsg: true, action: 'remove' }).then((resp) => {
+      this.$axios
+        .post(`/api/v1/accounts/accounts/tasks/`, {
           action: 'remove',
-          gather_accounts: this.accounts.map(account => account.id)
-        }
-      ).then(res => {
-        openTaskPage(res['task'])
-      })
+          gather_accounts: this.accounts.map((account) => account.id)
+        })
+        .then((res) => {
+          openTaskPage(res['task'])
+        })
     })
   },
   methods: {
@@ -66,7 +66,7 @@ export default {
 }
 
 .el-form-item {
-  border-bottom: 1px solid #EBEEF5;
+  border-bottom: 1px solid #ebeef5;
   padding: 5px 0;
   margin-bottom: 0;
 

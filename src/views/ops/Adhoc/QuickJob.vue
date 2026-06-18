@@ -161,8 +161,8 @@ export default {
                     assets: hosts,
                     query: query
                   })
-                  .then(data => {
-                    const ns = data.map(item => {
+                  .then((data) => {
+                    const ns = data.map((item) => {
                       return { value: item.username }
                     })
                     cb(ns)
@@ -170,7 +170,7 @@ export default {
               }
             },
             options: [],
-            callback: option => {
+            callback: (option) => {
               this.runas = option
             }
           },
@@ -194,7 +194,7 @@ export default {
                 value: 'privileged_only'
               }
             ],
-            callback: option => {
+            callback: (option) => {
               this.runasPolicy = option
             }
           },
@@ -237,7 +237,7 @@ export default {
                 value: 'huawei'
               }
             ],
-            callback: option => {
+            callback: (option) => {
               this.cmOptions.mode = option === 'win_shell' ? 'powershell' : option
               this.module = option
             }
@@ -254,7 +254,7 @@ export default {
               { label: '30', value: 30 },
               { label: '60', value: 60 }
             ],
-            callback: option => {
+            callback: (option) => {
               this.timeout = option
             }
           },
@@ -265,7 +265,7 @@ export default {
             value: '',
             placeholder: this.$tc('EnterRunningPath'),
             tip: this.$tc('RunningPathHelpText'),
-            callback: val => {
+            callback: (val) => {
               this.chdir = val
             }
           }
@@ -351,8 +351,8 @@ export default {
     recoverStatus() {
       if (this.$route.query.taskId) {
         this.currentTaskId = this.$route.query.taskId
-        getTaskDetail(this.currentTaskId).then(data => {
-          getJob(data.job_id).then(res => {
+        getTaskDetail(this.currentTaskId).then((data) => {
+          getJob(data.job_id).then((res) => {
             this.toolbar.left.runas.value = res.runas
             this.toolbar.left.runas.callback(res.runas)
             this.toolbar.left.runasPolicy.value = res.runas_policy.value
@@ -371,7 +371,7 @@ export default {
       }
     },
     onSelectAdhoc(adhoc) {
-      this.variableFormData = adhoc?.variable.map(data => {
+      this.variableFormData = adhoc?.variable.map((data) => {
         return data.form_data
       })
       this.variableQueryParam = 'adhoc=' + adhoc.id
@@ -383,13 +383,13 @@ export default {
       const url = '/ws/ops/tasks/log/'
       const wsURL = scheme + '://' + document.location.hostname + port + url
       this.ws = new WebSocket(wsURL)
-      this.ws.onerror = e => {
+      this.ws.onerror = (e) => {
         this.xterm.write(this.wrapperError('Connect websocket server error'))
       }
       this.setWsCallback()
     },
     setWsCallback() {
-      this.ws.onmessage = e => {
+      this.ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
         if (Object.prototype.hasOwnProperty.call(data, 'message')) {
           let message = data.message
@@ -412,7 +412,7 @@ export default {
       }
     },
     getTaskStatus() {
-      getTaskDetail(this.currentTaskId).then(data => {
+      getTaskDetail(this.currentTaskId).then((data) => {
         this.executionInfo.status = data['status']
         this.setBtn()
       })
@@ -478,7 +478,7 @@ export default {
         .post('/api/v1/ops/classified-hosts/', {
           ...payload
         })
-        .then(data => {
+        .then((data) => {
           this.classifiedAssets = data
           if (this.classifiedAssets.error.length === 0) {
             this.onConfirmRunAsset(hosts, nodes)
@@ -505,19 +505,21 @@ export default {
       if (this.parameters) {
         data.parameters = this.parameters
       }
-      createJob(data).then(res => {
-        this.executionInfo.timeCost = 0
-        this.executionInfo.status = { value: 'running', label: this.$t('Running') }
-        this.currentTaskId = res.task_id
-        this.xtermConfig = { taskId: this.currentTaskId, type: 'shortcut_cmd' }
-        this.setCostTimeInterval()
-        this.writeExecutionOutput()
-        this.setBtn()
-        this.selectAssets = assets
-        this.selectNodes = nodes
-      }).catch(() => {
-        this.lastRequestPayload = null
-      })
+      createJob(data)
+        .then((res) => {
+          this.executionInfo.timeCost = 0
+          this.executionInfo.status = { value: 'running', label: this.$t('Running') }
+          this.currentTaskId = res.task_id
+          this.xtermConfig = { taskId: this.currentTaskId, type: 'shortcut_cmd' }
+          this.setCostTimeInterval()
+          this.writeExecutionOutput()
+          this.setBtn()
+          this.selectAssets = assets
+          this.selectNodes = nodes
+        })
+        .catch(() => {
+          this.lastRequestPayload = null
+        })
     },
     viewConfirmRunAssets() {
       this.showConfirmRunAssetsDialog = true
@@ -527,13 +529,13 @@ export default {
         .then(() => {
           this.xterm.write(
             '\x1b[31m' +
-            this.$tc('StopLogOutput').replace('currentTaskId', this.currentTaskId) +
-            '\x1b[0m'
+              this.$tc('StopLogOutput').replace('currentTaskId', this.currentTaskId) +
+              '\x1b[0m'
           )
           this.xterm.write(this.wrapperError(''))
           this.getTaskStatus()
         })
-        .catch(e => {
+        .catch((e) => {
           this.$log.error(e)
         })
         .finally(() => {

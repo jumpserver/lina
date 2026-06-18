@@ -26,7 +26,8 @@ export default [
       },
       {
         path: 'create',
-        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretCreateUpdate.vue'),
+        component: () =>
+          import('@/views/accounts/AccountChangeSecret/AccountChangeSecretCreateUpdate.vue'),
         name: 'AccountChangeSecretCreate',
         hidden: true,
         meta: {
@@ -36,7 +37,8 @@ export default [
       },
       {
         path: ':id/update',
-        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretCreateUpdate.vue'),
+        component: () =>
+          import('@/views/accounts/AccountChangeSecret/AccountChangeSecretCreateUpdate.vue'),
         name: 'AccountChangeSecretUpdate',
         hidden: true,
         meta: {
@@ -56,7 +58,8 @@ export default [
       },
       {
         path: 'executions',
-        component: () => import('@/views/accounts/AccountChangeSecret/Executions/AccountChangeSecretExecutionList.vue'),
+        component: () =>
+          import('@/views/accounts/AccountChangeSecret/Executions/AccountChangeSecretExecutionList.vue'),
         name: 'AccountChangeSecretExecutionList',
         hidden: true,
         meta: {

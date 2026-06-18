@@ -1,10 +1,13 @@
 /* eslint-disable vue/require-prop-types */
 
 <template>
-  <component v-bind="$attrs" :is="isText ? 'text-button' : 'el-button'"
+  <component
+    v-bind="$attrs"
+    :is="isText ? 'text-button' : 'el-button'"
     :loading="loading"
     :type="type"
-    @click="handleClick">
+    @click="handleClick"
+  >
     <slot />
   </component>
 </template>
@@ -59,13 +62,13 @@ export default {
 
       this.loading = true
       Promise.resolve(this.click(this.params))
-        .then(flag => {
+        .then((flag) => {
           if (flag === false) return
           // 调用父组件中的数据刷新方法
           this.callback()
         })
-        .catch(e => {})
-        .finally(e => {
+        .catch((e) => {})
+        .finally((e) => {
           this.loading = false
         })
     }

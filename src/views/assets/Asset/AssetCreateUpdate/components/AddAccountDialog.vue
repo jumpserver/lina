@@ -45,7 +45,7 @@ export default {
     },
     accounts: {
       type: Array,
-      default: () => ([])
+      default: () => []
     }
   },
   data() {
@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     addAccount(account) {
-      const i = this.accounts.findIndex(item => item.username === account.username)
+      const i = this.accounts.findIndex((item) => item.username === account.username)
       if (i !== -1) {
         this.accounts.splice(i, 1)
       }
@@ -61,7 +61,7 @@ export default {
       this.$emit('update:visible', false)
     },
     editAccount(form) {
-      const i = this.accounts.findIndex(item => item.username === this.account.username)
+      const i = this.accounts.findIndex((item) => item.username === this.account.username)
       this.accounts.splice(i, 1, form)
       this.$emit('update:visible', false)
     }

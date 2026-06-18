@@ -3,8 +3,7 @@
     <IBox :title="$tc('AuthIntegration')" class="auth-box-wrapper auth-method-box">
       <el-row v-for="[type, items] in Object.entries(groupedAuthItems)" :key="type" :gutter="20">
         <h4 class="auth-method-type">{{ typeMap[type] }}</h4>
-        <AuthMethod v-bind="item" v-for="item in items"
-          :key="item.title" />
+        <AuthMethod v-bind="item" v-for="item in items" :key="item.title" />
       </el-row>
     </IBox>
   </div>
@@ -33,13 +32,13 @@ export default {
   },
   computed: {
     ...mapState({
-      authMethodsSetting: state => state.settings.authMethods
+      authMethodsSetting: (state) => state.settings.authMethods
     }),
     // 未启用的认证方法（按类型分组）
     disabledAuthItems() {
       const disabled = {}
       Object.entries(this.authItems).forEach(([type, items]) => {
-        const disabledItems = items.filter(item => !item.enabled)
+        const disabledItems = items.filter((item) => !item.enabled)
         if (disabledItems.length > 0) {
           disabled[type] = disabledItems
         }
@@ -49,8 +48,8 @@ export default {
     // 已开启的认证方法（平铺列表，不分类）
     enabledAuthMethodsList() {
       const enabled = []
-      Object.values(this.authItems).forEach(items => {
-        items.forEach(item => {
+      Object.values(this.authItems).forEach((items) => {
+        items.forEach((item) => {
           if (item.enabled) {
             enabled.push(item)
           }
@@ -60,7 +59,7 @@ export default {
     },
     // 是否有未启用的认证方法
     hasDisabledMethods() {
-      return Object.values(this.disabledAuthItems).some(items => items.length > 0)
+      return Object.values(this.disabledAuthItems).some((items) => items.length > 0)
     },
     // 是否有已开启的认证方法
     hasEnabledMethods() {
@@ -74,7 +73,7 @@ export default {
   methods: {
     async initAuthItems() {
       let authItems = await getAuthItems(this)
-      authItems = authItems.map(item => {
+      authItems = authItems.map((item) => {
         return {
           ...item,
           enabled: this.authMethodsSetting[item.authKey]

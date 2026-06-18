@@ -42,4 +42,3 @@ export default CookiePlugin
 
 // 导出 VueCookieNext，供其他地方使用
 export { VueCookieNext }
-

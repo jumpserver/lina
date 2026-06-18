@@ -1,9 +1,10 @@
 <template>
-  <Dialog v-bind="$attrs" :show-cancel="false"
-    :title="title"
-    @confirm="closeDialog">
+  <Dialog v-bind="$attrs" :show-cancel="false" :title="title" @confirm="closeDialog">
     <el-alert style="margin-bottom: 10px" type="info">
-      <span v-for="item of summary" :key="item.key"><b>{{ item.label }}</b>: {{ item.value }} </span>
+      <span v-for="item of summary" :key="item.key"
+        ><b>{{ item.label }}</b
+        >: {{ item.value }}
+      </span>
     </el-alert>
     <DataTable :config="config" />
   </Dialog>
@@ -38,7 +39,11 @@ const StateFormatter = {
         updated: 'color-success',
         skipped: 'color-default'
       }
-      return h('span', { class: stateClsMap[this.row.state] }, stateMap[this.row.state] || this.row.state)
+      return h(
+        'span',
+        { class: stateClsMap[this.row.state] },
+        stateMap[this.row.state] || this.row.state
+      )
     }
 
     return h('span', '-')
@@ -128,5 +133,4 @@ export default {
 :deep(.el-data-table .el-table .el-table__row > td > div > span) {
   white-space: inherit;
 }
-
 </style>

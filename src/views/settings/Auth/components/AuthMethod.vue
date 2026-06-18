@@ -4,7 +4,7 @@
       <template #header>
         <div class="auth-item-header">
           <div class="auth-item-header-left">
-            <img :src="logo" alt="auth-logo" class="auth-logo">
+            <img :src="logo" alt="auth-logo" class="auth-logo" />
             <div :title="title" class="auth-item-header-title">
               <div>
                 <span>

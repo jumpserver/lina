@@ -14,6 +14,7 @@
 
 <script>
 import { BASE_URL } from '@/utils/common/index'
+import { IS_PROD } from '@/utils/env'
 
 export default {
   props: {
@@ -46,7 +47,7 @@ export default {
     },
     async openWebsite() {
       let url = `${BASE_URL}/?_=${Date.now()}`
-      if (process.env.NODE_ENV !== 'production') {
+      if (!IS_PROD) {
         url = url.replace('9528', '5173')
       }
 
@@ -77,7 +78,8 @@ export default {
       padding: 4px;
     }
 
-    i, .svg {
+    i,
+    .svg {
       border-radius: 2px;
 
       &:hover {
@@ -89,7 +91,7 @@ export default {
 }
 
 .download-icon {
-  transform: rotate(-90deg)
+  transform: rotate(-90deg);
 }
 
 :deep(.el-tabs) {

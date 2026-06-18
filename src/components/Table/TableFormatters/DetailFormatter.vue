@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img v-if="icon" :src="icon" alt="icon" class="icon">
+    <img v-if="icon" :src="icon" alt="icon" class="icon" />
     <el-link
       :class="{ clicked: linkClicked }"
       :disabled="disabled"

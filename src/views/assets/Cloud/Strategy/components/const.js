@@ -25,11 +25,11 @@ export const tableFormatter = (colName, getResourceLabel) => {
     }
     switch (colName) {
       case 'attr':
-        return instanceAttrOptions.find(attr => attr.value === value)?.label || value
+        return instanceAttrOptions.find((attr) => attr.value === value)?.label || value
       case 'resource_type':
-        return resourceTypeOptions.find(attr => attr.value === value)?.label || value
+        return resourceTypeOptions.find((attr) => attr.value === value)?.label || value
       case 'match':
-        return attrMatchOptions.find(opt => opt.value === value).label || value
+        return attrMatchOptions.find((opt) => opt.value === value).label || value
       case 'value':
         return Array.isArray(value) ? value.join(', ') : value
       case 'resource':
@@ -38,9 +38,13 @@ export const tableFormatter = (colName, getResourceLabel) => {
         }
         return globalResource[value] || value
       case 'protocols':
-        return Array.isArray(value) ? value.map(p => {
-          return `${p.name}/${p.port}`
-        }).join(', ') : ''
+        return Array.isArray(value)
+          ? value
+              .map((p) => {
+                return `${p.name}/${p.port}`
+              })
+              .join(', ')
+          : ''
       case 'count':
         return value?.length || 0
       default:

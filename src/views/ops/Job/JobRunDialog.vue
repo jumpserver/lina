@@ -88,5 +88,4 @@ export default {
   float: right;
   padding-right: 30px;
 }
-
 </style>

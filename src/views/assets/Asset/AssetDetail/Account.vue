@@ -1,14 +1,17 @@
 <template>
   <div>
     <TwoCol>
-      <AccountListTable v-bind="$attrs" ref="ListTable"
+      <AccountListTable
+        v-bind="$attrs"
+        ref="ListTable"
         :asset="object"
         :columns-default="columnsDefault"
         :has-clone="false"
         :has-import="false"
         :has-left-actions="true"
         :header-extra-actions="headerExtraActions"
-        :url="iUrl" />
+        :url="iUrl"
+      />
       <AccountTemplateDialog
         v-if="templateDialogVisible"
         v-model:visible="templateDialogVisible"
@@ -36,8 +39,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     url: {
       type: String,
@@ -60,7 +62,8 @@ export default {
           name: this.$t('AccountTemplate'),
           title: this.$t('AccountTemplate'),
           has: this.$hasLicense() || this.$route.name !== 'Applets',
-          can: () => this.$hasPerm('accounts.view_accounttemplate') && !this.$store.getters.currentOrgIsRoot,
+          can: () =>
+            this.$hasPerm('accounts.view_accounttemplate') && !this.$store.getters.currentOrgIsRoot,
           callback: () => {
             this.templateDialogVisible = true
           }
@@ -72,17 +75,20 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$tc('Test'),
-            disabled: ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(this.object.type.value) !== -1 ||
-              this.$store.getters.currentOrgIsRoot
+            disabled:
+              ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(this.object.type.value) !==
+                -1 || this.$store.getters.currentOrgIsRoot
           },
           callbacks: Object.freeze({
             click: () => {
-              this.$axios.post(
-                `/api/v1/accounts/accounts/tasks/`,
-                { action: 'verify', assets: [this.object.id] }
-              ).then(res => {
-                openTaskPage(res['task'])
-              })
+              this.$axios
+                .post(`/api/v1/accounts/accounts/tasks/`, {
+                  action: 'verify',
+                  assets: [this.object.id]
+                })
+                .then((res) => {
+                  openTaskPage(res['task'])
+                })
             }
           })
         },
@@ -97,7 +103,7 @@ export default {
   },
   methods: {
     onConfirm(data) {
-      data = data?.map(i => {
+      data = data?.map((i) => {
         i.asset = this.object.id
         return i
       })

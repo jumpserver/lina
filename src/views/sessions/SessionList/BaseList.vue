@@ -8,7 +8,11 @@
 
 <script>
 import { DrawerListTable as ListTable } from '@/components'
-import { ActionsFormatter, ChoicesFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import {
+  ActionsFormatter,
+  ChoicesFormatter,
+  DetailFormatter
+} from '@/components/Table/TableFormatters'
 import { timeOffset } from '@/utils/common/time'
 import prettyBytes from 'pretty-bytes'
 
@@ -31,17 +35,13 @@ export default {
       default: () => {
         return {
           min: ['id', 'actions'],
-          default: [
-            'id', 'user', 'asset', 'account', 'protocol',
-            'date_start', 'actions'
-          ]
+          default: ['id', 'user', 'asset', 'account', 'protocol', 'date_start', 'actions']
         }
       }
     },
     columnsMeta: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     columnsExclude: {
       type: Array,
@@ -146,7 +146,7 @@ export default {
           },
           duration: {
             label: this.$t('Duration'),
-            formatter: function(row) {
+            formatter: function (row) {
               return timeOffset(row.date_start, row.date_end)
             }
           },

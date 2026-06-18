@@ -1,10 +1,13 @@
 <template>
   <div class="tag">
-    <el-tag v-bind="formatterArgs.config" v-for="tag of iTags"
+    <el-tag
+      v-bind="formatterArgs.config"
+      v-for="tag of iTags"
       :key="tag"
       :type="getTagType(tag)"
       class="tag-formatter"
-      disable-transitions>
+      disable-transitions
+    >
       <i class="fa fa-tag" /> {{ tag }}
     </el-tag>
   </div>

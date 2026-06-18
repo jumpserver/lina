@@ -2,7 +2,7 @@
 import component from './el-data-table.vue'
 
 // Vue 3 plugin install
-component.install = app => {
+component.install = (app) => {
   app.component(component.name, component)
 }
 

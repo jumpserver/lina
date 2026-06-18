@@ -33,8 +33,7 @@ export default {
     },
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -64,13 +63,13 @@ export default {
               ajax: {
                 url: '/api/v1/assets/assets/?is_gateway=1'
               },
-              disabledValues: this.object.gateways.map(item => item.id)
+              disabledValues: this.object.gateways.map((item) => item.id)
             }
           }
         },
         cleanFormValue(values) {
           const data = []
-          values.gateways.forEach(item => {
+          values.gateways.forEach((item) => {
             const d = { id: item.pk, zone: vm.object.id }
             data.push(d)
           })

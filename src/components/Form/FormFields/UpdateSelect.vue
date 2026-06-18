@@ -5,16 +5,19 @@
       :disabled="disabled"
       class="button-text"
       link
-      @click="iShowSelect=true"
+      @click="iShowSelect = true"
     >
       {{ iLabel }}
       <svg-icon class-name="icon" icon-class="switch" />
     </el-button>
-    <Select2 v-bind="$attrs" v-show="iShowSelect"
+    <Select2
+      v-bind="$attrs"
+      v-show="iShowSelect"
       ref="select2"
       v-model="iValue"
       :disabled="disabled"
-      @change="onSelectChange" />
+      @change="onSelectChange"
+    />
   </div>
 </template>
 
@@ -68,7 +71,7 @@ export default {
   },
   methods: {
     onSelectChange(val) {
-      const options = this.$refs.select2.options.filter(item => item.value === val)
+      const options = this.$refs.select2.options.filter((item) => item.value === val)
       const label = options.length > 0 ? options[0].label : ''
       this.iShowSelect = this.showSelect
       this.iLabel = val ? label : '-'
@@ -80,9 +83,9 @@ export default {
 <style scoped>
 .button-text {
   color: #676a6c;
-  padding: 5px!important;
+  padding: 5px !important;
 }
 .icon {
-  color: #676a6c!important;
+  color: #676a6c !important;
 }
 </style>

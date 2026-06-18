@@ -2,6 +2,11 @@
  * Created by PanJiaChen on 16/11/18.
  */
 
+import xss from 'xss'
+import JSEncrypt from 'jsencrypt'
+import CryptoJS from 'crypto-js'
+import { VueCookieNext as VueCookie } from 'vue-cookie-next'
+
 /**
  * @param {string} path
  * @returns {Boolean}
@@ -19,7 +24,6 @@ export function validUsername(str) {
   return valid_map.indexOf(str.trim()) >= 0
 }
 
-const xss = require('xss')
 const excludeTags = ['iframe', 'script']
 
 const options = {
@@ -43,10 +47,6 @@ const options = {
   }
 }
 const filter = new xss.FilterXSS(options)
-
-import JSEncrypt from 'jsencrypt'
-import CryptoJS from 'crypto-js'
-import { VueCookieNext as VueCookie } from 'vue-cookie-next'
 
 export function fillKey(key) {
   const KeyLength = 16

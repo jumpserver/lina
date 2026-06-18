@@ -42,23 +42,22 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('Generate'),
-            disabled: !this.$hasPerm('accounts.change_integrationapplication') || !this.object.is_active
+            disabled:
+              !this.$hasPerm('accounts.change_integrationapplication') || !this.object.is_active
           },
           callbacks: {
-            click: function() {
-              this.$axios.get(
-                `/api/v1/accounts/integration-applications/${this.object.id}/secret/`
-              ).then(res => {
-                this.$refs.secretDialog.show(res)
-              })
+            click: function () {
+              this.$axios
+                .get(`/api/v1/accounts/integration-applications/${this.object.id}/secret/`)
+                .then((res) => {
+                  this.$refs.secretDialog.show(res)
+                })
             }.bind(this)
           }
         }
       ],
       url: `/api/v1/accounts/integration-applications/${this.object.id}`,
-      detailFields: [
-        'id', 'name', 'date_created', 'date_updated', 'comment', 'is_active'
-      ]
+      detailFields: ['id', 'name', 'date_created', 'date_updated', 'comment', 'is_active']
     }
   },
   computed: {}

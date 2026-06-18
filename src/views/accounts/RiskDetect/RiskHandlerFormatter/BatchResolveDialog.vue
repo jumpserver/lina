@@ -29,11 +29,7 @@
           @process-done="handleProcessDone"
         />
       </el-form>
-      <DataTable
-        ref="table"
-        :config="tableConfig"
-        @selection-change="handleSelectionChange"
-      />
+      <DataTable ref="table" :config="tableConfig" @selection-change="handleSelectionChange" />
     </div>
   </Dialog>
 </template>
@@ -76,7 +72,7 @@ export default {
           {
             prop: 'asset',
             label: this.$t('Asset'),
-            formatter: row => row.asset.name
+            formatter: (row) => row.asset.name
           },
           {
             prop: 'username',
@@ -85,12 +81,12 @@ export default {
           {
             prop: 'risk',
             label: this.$t('Risk'),
-            formatter: row => row.risk.label
+            formatter: (row) => row.risk.label
           },
           {
             prop: 'status',
             label: this.$t('Status'),
-            formatter: row => row.status.label
+            formatter: (row) => row.status.label
           }
         ]
       }
@@ -104,10 +100,10 @@ export default {
           types[item.risk.value] = item.risk.label
         }
       }
-      return Object.keys(types).map(key => ({ value: key, label: types[key] }))
+      return Object.keys(types).map((key) => ({ value: key, label: types[key] }))
     },
     unconfirmedRisks() {
-      return this.risks.filter(item => item.status.value === '0')
+      return this.risks.filter((item) => item.status.value === '0')
     },
     dataTable() {
       return this.$refs.table.$refs.table
@@ -123,10 +119,12 @@ export default {
     riskSelected(val) {
       if (val) {
         this.tableConfig.totalData = this.unconfirmedRisks.filter(
-          item => item.risk.value === this.riskSelected
+          (item) => item.risk.value === this.riskSelected
         )
       } else {
-        this.tableConfig.totalData = this.unconfirmedRisks.filter(item => item.status.value === '0')
+        this.tableConfig.totalData = this.unconfirmedRisks.filter(
+          (item) => item.status.value === '0'
+        )
       }
       this.fakeRow.risk = {
         value: this.riskSelected

@@ -7,11 +7,7 @@
           :content="item.tip"
           :open-delay="500"
         >
-          <el-button
-            size="small"
-            type="default"
-            @click="item.callback()"
-          >
+          <el-button size="small" type="default" @click="item.callback()">
             <svg-icon :icon-class="item.icon" />
           </el-button>
         </el-tooltip>
@@ -44,22 +40,24 @@ export default {
   },
   data() {
     return {
-      xterm: markRaw(new Terminal(
-        Object.assign(
-          {
-            fontFamily: 'monaco, Consolas, "Lucida Console", monospace',
-            lineHeight: 1.2,
-            fontSize: 13,
-            rightClickSelectsWord: true,
-            theme: {
-              background: '#fff',
-              foreground: '#000',
-              selection: '#363535'
-            }
-          },
-          this.xtermConfig
+      xterm: markRaw(
+        new Terminal(
+          Object.assign(
+            {
+              fontFamily: 'monaco, Consolas, "Lucida Console", monospace',
+              lineHeight: 1.2,
+              fontSize: 13,
+              rightClickSelectsWord: true,
+              theme: {
+                background: '#fff',
+                foreground: '#000',
+                selection: '#363535'
+              }
+            },
+            this.xtermConfig
+          )
         )
-      )),
+      ),
       toolbar: [
         {
           tip: this.$tc('ScrollToTop'),
@@ -98,7 +96,7 @@ export default {
       showScrollButton: false
     }
   },
-  mounted: function() {
+  mounted: function () {
     const terminalContainer = this.$refs.terminal
     const fitAddon = new FitAddon()
     this.xterm.loadAddon(fitAddon)
@@ -111,10 +109,10 @@ export default {
     this.xterm.dispose()
   },
   methods: {
-    reset: function() {
+    reset: function () {
       this.xterm.reset()
     },
-    write: function(val) {
+    write: function (val) {
       this.xterm.write(val)
     },
     checkScroll(position) {

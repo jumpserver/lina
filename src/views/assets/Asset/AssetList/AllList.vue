@@ -7,15 +7,15 @@
       :tree-setting="treeSetting"
     >
       <template #rMenu>
-        <TreeMenu
-          :tree="treeRef"
-          @show-all="showAll"
-        />
+        <TreeMenu :tree="treeRef" @show-all="showAll" />
       </template>
       <template #table>
-        <BaseList v-bind="tableConfig" ref="baseList"
+        <BaseList
+          v-bind="tableConfig"
+          ref="baseList"
           :add-extra-more-actions="addExtraMoreActions"
-          :header-actions="headerActions" />
+          :header-actions="headerActions"
+        />
       </template>
     </AssetTreeTable>
   </div>
@@ -45,13 +45,12 @@ export default {
         url: '/api/v1/assets/assets/',
         showMenu: !this.$store.getters.currentOrgIsRoot,
         showDefaultMenu: true,
-        menu: [
-        ]
+        menu: []
       },
       tableConfig: {
         url: tableUrl,
         category: 'all',
-        extraQuery: { 'order': '-date_updated' }
+        extraQuery: { order: '-date_updated' }
       },
       headerActions: {
         handleImportClick: ({ selectedRows }) => {

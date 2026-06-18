@@ -81,7 +81,7 @@ export default {
       }
       this.$axios
         .post(`/api/v1/assets/gateways/${this.cell}/test-connective/`, { port: this.port })
-        .then(res => {
+        .then((res) => {
           openTaskPage(res['task'])
         })
         .finally(() => {

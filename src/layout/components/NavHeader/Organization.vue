@@ -66,7 +66,7 @@ export default {
       if (!currentOrgId) {
         return this.$tc('Select')
       }
-      const matchedOrg = this.usingOrgs.find(item => item.id === currentOrgId)
+      const matchedOrg = this.usingOrgs.find((item) => item.id === currentOrgId)
       if (matchedOrg?.name) {
         return matchedOrg.name
       }
@@ -104,7 +104,7 @@ export default {
       return [this.orgActionsGroup, this.orgChoicesGroup]
     },
     currentOrgId() {
-      const usingOrgIds = this.usingOrgs.map(o => o.id)
+      const usingOrgIds = this.usingOrgs.map((o) => o.id)
       let currentOrgId = this.currentOrg?.id
       const find = usingOrgIds.indexOf(currentOrgId) > -1
       if (!find) {
@@ -162,7 +162,7 @@ export default {
       })
     },
     changeOrg(orgId) {
-      const org = this.usingOrgs.find(item => item.id === orgId)
+      const org = this.usingOrgs.find((item) => item.id === orgId)
 
       switch (orgId) {
         case 'create':
@@ -200,7 +200,9 @@ $height: 28px;
     border-radius: 6px;
     background: rgba(255, 255, 255, 0.08);
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
-    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    transition:
+      background-color 0.2s ease,
+      box-shadow 0.2s ease;
   }
 
   :deep(.el-select__wrapper.is-hovering:not(.is-focused)),

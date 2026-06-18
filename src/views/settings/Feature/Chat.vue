@@ -25,15 +25,9 @@ export default {
     return {
       url: '/api/v1/settings/setting/?category=chat',
       hasReset: false,
-      moreButtons: [
-      ],
+      moreButtons: [],
       encryptedFields: ['VAULT_HCP_TOKEN'],
-      fields: [
-        'CHAT_AI_ENABLED',
-        'CHAT_AI_METHOD',
-        'CHAT_AI_PROVIDERS',
-        'CHAT_AI_EMBED_URL'
-      ],
+      fields: ['CHAT_AI_ENABLED', 'CHAT_AI_METHOD', 'CHAT_AI_PROVIDERS', 'CHAT_AI_EMBED_URL'],
       fieldsMeta: {
         CHAT_AI_TYPE: {
           hidden: (formValue) => {
@@ -49,7 +43,9 @@ export default {
         }
       },
       afterGetFormValue(formValue) {
-        const providers = Array.isArray(formValue.CHAT_AI_PROVIDERS) ? formValue.CHAT_AI_PROVIDERS : []
+        const providers = Array.isArray(formValue.CHAT_AI_PROVIDERS)
+          ? formValue.CHAT_AI_PROVIDERS
+          : []
         return {
           ...formValue,
           CHAT_AI_PROVIDERS: {
@@ -72,9 +68,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'publicSettings'
-    ])
+    ...mapGetters(['publicSettings'])
   },
   methods: {
     submitSuccess(res) {
@@ -88,6 +82,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

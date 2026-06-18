@@ -46,12 +46,12 @@ export class TableColumnsGenerator {
     const columnsExclude = config.columnsExclude || []
     const columnsAdd = config.columnsAdd || []
     configColumns = configColumns.concat(columnsAdd)
-    configColumns = configColumns.filter(item => !columnsExclude.includes(item))
+    configColumns = configColumns.filter((item) => !columnsExclude.includes(item))
 
     // 解决后端 API 返回字段中包含 actions 的问题;
-    const hasColumnActions = configColumns.findIndex(item => item?.prop === 'actions') !== -1
+    const hasColumnActions = configColumns.findIndex((item) => item?.prop === 'actions') !== -1
     if (!hasColumnActions) {
-      configColumns = [...configColumns.filter(i => i !== 'actions'), 'actions']
+      configColumns = [...configColumns.filter((i) => i !== 'actions'), 'actions']
     }
 
     for (let col of configColumns) {
@@ -63,7 +63,7 @@ export class TableColumnsGenerator {
       }
     }
 
-    columns = columns.filter(item => {
+    columns = columns.filter((item) => {
       if (item?.showFullContent) {
         item.className = 'show-full-content'
       }
@@ -86,10 +86,7 @@ export class TableColumnsGenerator {
     if (!col.label) {
       return col
     }
-    col.label = col.label
-      .replace(' Amount', '')
-      .replace(' amount', '')
-      .replace('数量', '')
+    col.label = col.label.replace(' Amount', '').replace(' amount', '').replace('数量', '')
     if (col.label.startsWith('Is ')) {
       col.label = col.label.replace('Is ', '')
     }
@@ -286,13 +283,15 @@ export class TableColumnsGenerator {
             popperClass: 'help-tips'
           },
           {
-            content: () => h('div', {
-              innerHTML: window.$xss ? window.$xss.process(String(helpTip || '')) : helpTip
-            }),
-            default: () => h('i', {
-              class: 'fa fa-question-circle-o help-tip-icon',
-              style: 'padding-left: 2px'
-            })
+            content: () =>
+              h('div', {
+                innerHTML: window.$xss ? window.$xss.process(String(helpTip || '')) : helpTip
+              }),
+            default: () =>
+              h('i', {
+                class: 'fa fa-question-circle-o help-tip-icon',
+                style: 'padding-left: 2px'
+              })
           }
         )
       ])
@@ -307,12 +306,15 @@ export class TableColumnsGenerator {
         return col
       }
       if (column.type === 'boolean') {
-        col.filters = [{ text: i18n.t('Yes'), value: true }, { text: i18n.t('No'), value: false }]
+        col.filters = [
+          { text: i18n.t('Yes'), value: true },
+          { text: i18n.t('No'), value: false }
+        ]
         col.sortable = false
         col['column-key'] = col.prop
       }
       if (column.type === 'choice' && column.choices) {
-        col.filters = column.choices.map(item => {
+        col.filters = column.choices.map((item) => {
           if (typeof item.value === 'boolean') {
             if (item.value) {
               return { text: item['label'], value: 'True' }

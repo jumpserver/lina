@@ -23,15 +23,18 @@
           :placeholder="$tc('ManyChoose')"
           clearable
           multiple
-          style="width:100%"
+          style="width: 100%"
         >
-          <el-option v-for="(item,index) of weekList" :key="index" :value="index === 6 ? 0 : (index + 1)">
+          <el-option
+            v-for="(item, index) of weekList"
+            :key="index"
+            :value="index === 6 ? 0 : index + 1"
+          >
             {{ item }}
           </el-option>
         </el-select>
       </el-radio>
     </el-form-item>
-
   </el-form>
 </template>
 
@@ -47,8 +50,7 @@ export default {
     },
     check: {
       type: Function,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -60,7 +62,15 @@ export default {
       average01: 1,
       average02: 1,
       checkboxList: [],
-      weekList: [this.$t('Monday'), this.$t('Tuesday'), this.$t('Wednesday'), this.$t('Thursday'), this.$t('Friday'), this.$t('Saturday'), this.$t('Sunday')],
+      weekList: [
+        this.$t('Monday'),
+        this.$t('Tuesday'),
+        this.$t('Wednesday'),
+        this.$t('Thursday'),
+        this.$t('Friday'),
+        this.$t('Saturday'),
+        this.$t('Sunday')
+      ],
       checkNum: this.$options.propsData.check
     }
   },
@@ -88,16 +98,15 @@ export default {
         const str = this.checkboxList.join()
         return str === '' ? '*' : str
       },
-      set() {
-      }
+      set() {}
     }
   },
   watch: {
-    'radioValue': 'radioChange',
-    'cycleTotal': 'cycleChange',
-    'averageTotal': 'averageChange',
-    'weekdayCheck': 'weekdayChange',
-    'checkboxString': 'checkboxChange'
+    radioValue: 'radioChange',
+    cycleTotal: 'cycleChange',
+    averageTotal: 'averageChange',
+    weekdayCheck: 'weekdayChange',
+    checkboxString: 'checkboxChange'
   },
   created() {
     this.$nextTick(() => {
@@ -180,6 +189,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

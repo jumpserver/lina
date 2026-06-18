@@ -1,6 +1,9 @@
 <template>
-  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu"
-    v-model:object="applet">
+  <GenericDetailPage
+    v-bind="config"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="applet"
+  >
     <keep-alive>
       <component :is="config.activeMenu" :object="applet" />
     </keep-alive>
@@ -26,8 +29,8 @@ export default {
         activeMenu: 'Detail',
         submenu: [
           {
-            'title': this.$t('Basic'),
-            'name': 'Detail'
+            title: this.$t('Basic'),
+            name: 'Detail'
           }
         ],
         hasRightSide: true,
@@ -42,11 +45,8 @@ export default {
       }
     }
   },
-  mounted() {
-  }
+  mounted() {}
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

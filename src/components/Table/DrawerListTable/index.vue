@@ -1,8 +1,11 @@
 <template>
   <div>
-    <ListTable v-bind="$attrs" ref="ListTable"
+    <ListTable
+      v-bind="$attrs"
+      ref="ListTable"
       :header-actions="iHeaderActions"
-      :table-config="iTableConfig" />
+      :table-config="iTableConfig"
+    />
     <Drawer
       v-if="drawerComponent"
       v-model:visible="drawerVisible"

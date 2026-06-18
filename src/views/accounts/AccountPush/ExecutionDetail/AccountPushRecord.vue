@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { createVNode as _createVNode } from 'vue'
+import { createVNode as createVNodeCompat } from 'vue'
 import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 export default {
@@ -30,19 +30,13 @@ export default {
             formatterArgs: {
               drawer: true,
               can: this.$hasPerm('assets.view_asset'),
-              getTitle({
-                row
-              }) {
+              getTitle({ row }) {
                 return row.asset.name
               },
-              getDrawerTitle({
-                row
-              }) {
+              getDrawerTitle({ row }) {
                 return row.asset.name
               },
-              getRoute({
-                row
-              }) {
+              getRoute({ row }) {
                 return {
                   name: 'AssetDetail',
                   params: {
@@ -58,19 +52,13 @@ export default {
             formatterArgs: {
               drawer: true,
               can: this.$hasPerm('accounts.view_account'),
-              getTitle({
-                row
-              }) {
+              getTitle({ row }) {
                 return row.account.username
               },
-              getDrawerTitle({
-                row
-              }) {
+              getDrawerTitle({ row }) {
                 return row.account.username
               },
-              getRoute({
-                row
-              }) {
+              getRoute({ row }) {
                 return {
                   name: 'AssetAccountDetail',
                   params: {
@@ -82,20 +70,32 @@ export default {
           },
           is_success: {
             label: this.$t('Success'),
-            formatter: row => {
+            formatter: (row) => {
               if (row.status === 'pending') {
-                return _createVNode('i', {
-                  'class': 'fa  fa fa-spinner fa-spin'
-                }, null)
+                return createVNodeCompat(
+                  'i',
+                  {
+                    class: 'fa  fa fa-spinner fa-spin'
+                  },
+                  null
+                )
               }
               if (row.is_success) {
-                return _createVNode('i', {
-                  'class': 'fa fa-check text-primary'
-                }, null)
+                return createVNodeCompat(
+                  'i',
+                  {
+                    class: 'fa fa-check text-primary'
+                  },
+                  null
+                )
               }
-              return _createVNode('i', {
-                'class': 'fa fa-times text-danger'
-              }, null)
+              return createVNodeCompat(
+                'i',
+                {
+                  class: 'fa fa-times text-danger'
+                },
+                null
+              )
             }
           },
           actions: {
@@ -116,31 +116,40 @@ export default {
         searchConfig: {
           getUrlQuery: true,
           exclude: ['id', 'status', 'execution'],
-          options: [{
-            label: this.$t('Asset'),
-            value: 'asset_name'
-          }, {
-            label: this.$t('Accounts'),
-            value: 'account_username'
-          }, {
-            value: 'status',
-            label: this.$t('Status'),
-            type: 'choice',
-            children: [{
-              default: true,
-              value: 'success',
-              label: this.$t('Success')
-            }, {
-              value: 'failed',
-              label: this.$t('Failed')
-            }, {
-              value: 'pending',
-              label: this.$t('Pending')
-            }]
-          }, {
-            label: this.$t('ExecutionID'),
-            value: 'execution_id'
-          }]
+          options: [
+            {
+              label: this.$t('Asset'),
+              value: 'asset_name'
+            },
+            {
+              label: this.$t('Accounts'),
+              value: 'account_username'
+            },
+            {
+              value: 'status',
+              label: this.$t('Status'),
+              type: 'choice',
+              children: [
+                {
+                  default: true,
+                  value: 'success',
+                  label: this.$t('Success')
+                },
+                {
+                  value: 'failed',
+                  label: this.$t('Failed')
+                },
+                {
+                  value: 'pending',
+                  label: this.$t('Pending')
+                }
+              ]
+            },
+            {
+              label: this.$t('ExecutionID'),
+              value: 'execution_id'
+            }
+          ]
         }
       }
     }

@@ -16,25 +16,25 @@ export default {
     },
     trueText: {
       type: String,
-      default: function() {
+      default: function () {
         return 'Yes'
       }
     },
     falseText: {
       type: String,
-      default: function() {
+      default: function () {
         return 'No'
       }
     },
     trueIcon: {
       type: String,
-      default: function() {
+      default: function () {
         return 'fa-check-circle'
       }
     },
     falseIcon: {
       type: String,
-      default: function() {
+      default: function () {
         return ''
       }
     }
@@ -56,6 +56,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

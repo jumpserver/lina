@@ -24,7 +24,7 @@ export default {
     },
     selectedRows: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     category: {
       type: String,
@@ -52,9 +52,7 @@ export default {
                 }
               }
             },
-            rules: [
-              { required: false }
-            ],
+            rules: [{ required: false }],
             label: this.$t('Platform'),
             helpText: this.$t('UpdatePlatformHelpText')
           },
@@ -86,6 +84,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

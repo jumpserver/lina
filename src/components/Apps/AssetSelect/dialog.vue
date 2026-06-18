@@ -1,13 +1,16 @@
 <template>
-  <Dialog :close-on-click-modal="false"
+  <Dialog
+    :close-on-click-modal="false"
     :title="$tc('Assets')"
     custom-class="asset-select-dialog"
     top="2vh"
     width="1000px"
     @cancel="handleCancel"
     @close="handleClose"
-    @confirm="handleConfirm">
-    <AssetTreeTable ref="ListPage"
+    @confirm="handleConfirm"
+  >
+    <AssetTreeTable
+      ref="ListPage"
       :header-actions="headerActions"
       :node-url="baseNodeUrl"
       :sync-select-to-url="false"
@@ -16,7 +19,8 @@
       :tree-url="`${baseNodeUrl}children/tree/`"
       :url="baseUrl"
       class="tree-table"
-      @loaded="handleTableLoaded" />
+      @loaded="handleTableLoaded"
+    />
   </Dialog>
 </template>
 
@@ -82,7 +86,7 @@ export default {
             prop: 'platform',
             label: this.$t('Platform'),
             sortable: true,
-            formatter: function(row) {
+            formatter: function (row) {
               return row.platform.name
             }
           },
@@ -185,7 +189,5 @@ export default {
 }
 
 .page :deep(.treebox .ztree) {
-
 }
-
 </style>

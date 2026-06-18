@@ -61,13 +61,20 @@ export default {
       quickActions: [],
       url: `/api/v1/assets/platforms/${this.object.id}/`,
       detailFields: [
-        'id', 'name', 'charset', 'internal',
+        'id',
+        'name',
+        'charset',
+        'internal',
         {
           key: this.$t('Type'),
           value: `${this.object.category?.label}/${this.object.type?.label}`
         },
-        'su_method', 'date_created', 'date_updated',
-        'created_by', 'updated_by', 'comment'
+        'su_method',
+        'date_created',
+        'date_updated',
+        'created_by',
+        'updated_by',
+        'comment'
       ],
 
       protocolChoices: null,
@@ -109,8 +116,7 @@ export default {
           callbacks: Object.freeze({
             change: (val) => {
               const data = { gateway_enabled: val }
-              this.$axios.patch(
-                `/api/v1/assets/platforms/${object.id}/`, data).then(res => {
+              this.$axios.patch(`/api/v1/assets/platforms/${object.id}/`, data).then((res) => {
                 this.$message.success(this.$tc('UpdateSuccessMsg'))
               })
             }
@@ -126,8 +132,7 @@ export default {
           callbacks: Object.freeze({
             change: (val) => {
               const data = { su_enabled: val }
-              this.$axios.patch(
-                `/api/v1/assets/platforms/${object.id}/`, data).then(res => {
+              this.$axios.patch(`/api/v1/assets/platforms/${object.id}/`, data).then((res) => {
                 this.$message.success(this.$tc('UpdateSuccessMsg'))
               })
             }
@@ -143,23 +148,20 @@ export default {
           callbacks: Object.freeze({
             click: async () => {
               try {
-                await this.$confirm(
-                  this.$t('overwriteProtocolsAndPortsMsg'),
-                  this.$t('Confirm'),
-                  {
-                    confirmButtonText: this.$t('Confirm'),
-                    cancelButtonText: this.$t('Cancel'),
-                    type: 'warning'
-                  }
-                )
+                await this.$confirm(this.$t('overwriteProtocolsAndPortsMsg'), this.$t('Confirm'), {
+                  confirmButtonText: this.$t('Confirm'),
+                  cancelButtonText: this.$t('Cancel'),
+                  type: 'warning'
+                })
               } catch (e) {
                 return
               }
               const data = { platform_id: this.object.id }
-              this.$axios.post(
-                '/api/v1/assets/assets/sync-platform-protocols/', data).then(res => {
-                this.$message.success(this.$tc('UpdateSuccessMsg'))
-              })
+              this.$axios
+                .post('/api/v1/assets/assets/sync-platform-protocols/', data)
+                .then((res) => {
+                  this.$message.success(this.$tc('UpdateSuccessMsg'))
+                })
             }
           })
         }
@@ -170,6 +172,4 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-
-</style>
+<style lang="scss" scoped></style>

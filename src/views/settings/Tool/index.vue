@@ -74,7 +74,7 @@ export default {
     if (this.timer) {
       clearInterval(this.timer)
     }
-    this.$axios.get('/api/v1/settings/server-info/').then(info => {
+    this.$axios.get('/api/v1/settings/server-info/').then((info) => {
       const remoteTime = new Date(info.CURRENT_TIME)
       this.timer = setInterval(() => {
         remoteTime.setSeconds(remoteTime.getSeconds() + 1)
@@ -90,6 +90,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -34,8 +34,7 @@ export default {
     },
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -61,14 +60,17 @@ export default {
               value: [],
               url: '/api/v1/assets/assets/',
               canSelect: (row) => {
-                return !row.platform?.name.startsWith('Gateway') && this.object.assets.map(item => item.id).indexOf(row.id) === -1
+                return (
+                  !row.platform?.name.startsWith('Gateway') &&
+                  this.object.assets.map((item) => item.id).indexOf(row.id) === -1
+                )
               }
             }
           }
         },
         cleanFormValue(values) {
           const data = []
-          values.assets.forEach(item => {
+          values.assets.forEach((item) => {
             const d = { id: item, zone: vm.object.id }
             data.push(d)
           })

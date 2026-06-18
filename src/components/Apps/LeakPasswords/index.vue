@@ -5,13 +5,16 @@
         {{ $tc('View') }}
       </el-button>
     </div>
-    <Dialog v-bind="$attrs" :destroy-on-close="true"
+    <Dialog
+      v-bind="$attrs"
+      :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
       :title="title"
       :visible="visible"
       width="40%"
-      @update:visible="$emit('update:visible', $event)">
+      @update:visible="$emit('update:visible', $event)"
+    >
       <LeakPasswordList />
     </Dialog>
   </div>
@@ -34,7 +37,7 @@ export default {
     },
     title: {
       type: String,
-      default: function() {
+      default: function () {
         return 'LeakPasswordList'
       }
     },

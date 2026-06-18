@@ -11,7 +11,8 @@ import GenericListTable from '@/layout/components/GenericListTable'
 export default {
   name: 'GenericListPage',
   components: {
-    Page, GenericListTable
+    Page,
+    GenericListTable
   },
   methods: {
     reloadTable() {

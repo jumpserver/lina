@@ -37,7 +37,8 @@ export default {
             title: this.$t('OrgRole'),
             name: 'OrgRoleList',
             icon: 'fa-sitemap',
-            hidden: () => !this.$store.getters.hasValidLicense || !this.$hasPerm('rbac.view_orgrole'),
+            hidden: () =>
+              !this.$store.getters.hasValidLicense || !this.$hasPerm('rbac.view_orgrole'),
             component: () => import('@/views/users/Role/RoleList/OrgRoleList.vue'),
             helpTip: this.$t('OrgRoleHelpMsg')
           }

@@ -27,14 +27,9 @@
       @change="handleCheckedChange"
     >
       <el-row>
-        <el-col
-          v-for="item in totalColumnsList"
-          :key="item.prop"
-          :span="8"
-          class="col-item"
-        >
+        <el-col v-for="item in totalColumnsList" :key="item.prop" :span="8" class="col-item">
           <el-checkbox
-            :disabled="item.prop==='actions' || minColumns.indexOf(item.prop)!==-1"
+            :disabled="item.prop === 'actions' || minColumns.indexOf(item.prop) !== -1"
             :value="item.prop"
             :title="item.label"
           >
@@ -124,7 +119,7 @@ export default {
     handleCheckAllChange(value) {
       if (value) {
         this.iCurrentColumns = this.totalColumnsList.reduce((prev, item) => {
-          return [...prev, (item.prop)]
+          return [...prev, item.prop]
         }, [])
         this.isIndeterminate = false
       } else {
@@ -141,7 +136,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .column-setting {
   margin-left: 10px;
 
@@ -152,7 +147,7 @@ export default {
       width: 100%;
 
       .el-checkbox__input {
-        line-height: 16px
+        line-height: 16px;
       }
 
       .el-checkbox__label {

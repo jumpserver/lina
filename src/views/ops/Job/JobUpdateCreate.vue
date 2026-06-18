@@ -30,7 +30,19 @@ export default {
       fields: [
         [this.$t('Basic'), ['name', 'type', 'instant']],
         [this.$t('Asset'), ['assets', 'nodes', 'runas', 'runas_policy']],
-        [this.$t('Task'), ['module', 'argsLoadFromTemplate', 'args', 'playbook', 'variable', 'chdir', 'timeout', 'parameters']],
+        [
+          this.$t('Task'),
+          [
+            'module',
+            'argsLoadFromTemplate',
+            'args',
+            'playbook',
+            'variable',
+            'chdir',
+            'timeout',
+            'parameters'
+          ]
+        ],
         [this.$t('Plan'), ['run_after_save', 'is_periodic', 'interval', 'crontab']],
         [this.$t('Other'), ['comment']]
       ],
@@ -97,9 +109,8 @@ export default {
                 return
               }
               this.queryParam = `playbook=${event.pk}`
-              this.$axios.get(`/api/v1/ops/playbooks/${event.pk}/`
-              ).then(data => {
-                data?.variable.map(item => {
+              this.$axios.get(`/api/v1/ops/playbooks/${event.pk}/`).then((data) => {
+                data?.variable.map((item) => {
                   delete item.job
                   delete item.playbook
                   delete item.id
@@ -272,9 +283,6 @@ export default {
     }
   }
 }
-
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

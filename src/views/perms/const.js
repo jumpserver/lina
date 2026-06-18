@@ -14,17 +14,26 @@ export const UserAssetPermissionListPageSearchConfigOptions = [
   {
     label: t('Valid'),
     value: 'is_valid',
-    children: [{ value: '1', label: t('Yes') }, { value: '0', label: t('No') }]
+    children: [
+      { value: '1', label: t('Yes') },
+      { value: '0', label: t('No') }
+    ]
   },
   {
     label: t('Effective'),
     value: 'is_effective',
-    children: [{ value: '1', label: t('Yes') }, { value: '0', label: t('No') }]
+    children: [
+      { value: '1', label: t('Yes') },
+      { value: '0', label: t('No') }
+    ]
   },
   {
     label: t('FromTicket'),
     value: 'from_ticket',
-    children: [{ value: '1', label: t('Yes') }, { value: '0', label: t('No') }]
+    children: [
+      { value: '1', label: t('Yes') },
+      { value: '0', label: t('No') }
+    ]
   }
 ]
 
@@ -42,12 +51,12 @@ export const AssetPermissionTableMeta = {
   },
   action: {
     label: t('Action'),
-    formatter: row => {
+    formatter: (row) => {
       if (row.actions.length === 6) {
         return t('All')
       }
       return row.actions
-        .map(item => {
+        .map((item) => {
           return item.label.replace(/ \([^)]*\)/, '')
         })
         .join(',')
@@ -133,7 +142,7 @@ export const AssetPermissionTableMeta = {
     formatterArgs: {
       updateRoute: 'AssetPermissionUpdate',
       cloneRoute: 'AssetPermissionCreate',
-      performDelete: function({ row, col }) {
+      performDelete: function ({ row, col }) {
         const id = row.id
         const url = `/api/v1/perms/asset-permissions/${id}/`
         return this.$axios.delete(url)

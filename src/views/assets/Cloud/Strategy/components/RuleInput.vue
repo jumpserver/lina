@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
 import { attrMatchOptions, strMatchValues } from '@/components/const'
 import { Required } from '@/components/Form/DataForm/rules'
 import { AttrInput, Select2 } from '@/components/Form/FormFields'
@@ -61,7 +61,7 @@ export default {
               value: [],
               multiple: false,
               clearable: false,
-              options: attrMatchOptions.filter(option => {
+              options: attrMatchOptions.filter((option) => {
                 const matchValues = strMatchValues.concat('exclude')
                 if (matchValues.indexOf(option.value) !== -1 && option.value !== 'in') {
                   return option
@@ -76,37 +76,52 @@ export default {
         }
       },
       tableConfig: {
-        columns: [{
-          prop: 'attr',
-          label: this.$t('AttrName'),
-          formatter: tableFormatter('attr')
-        }, {
-          prop: 'match',
-          label: this.$t('Match'),
-          formatter: tableFormatter('match')
-        }, {
-          prop: 'value',
-          label: this.$t('AttrValue'),
-          formatter: tableFormatter('value')
-        }, {
-          prop: 'action',
-          label: this.$t('Action'),
-          align: 'center',
-          width: '100px',
-          formatter: (row, col, cellValue, index) => {
-            return _createVNode('div', {
-              'class': 'input-button'
-            }, [_createVNode(_resolveComponent('el-button'), {
-              'icon': 'Minus',
-              'size': 'small',
-              'style': {
-                flexShrink: 0
-              },
-              'type': 'danger',
-              'onClick': this.handleDelete(index)
-            }, null)])
+        columns: [
+          {
+            prop: 'attr',
+            label: this.$t('AttrName'),
+            formatter: tableFormatter('attr')
+          },
+          {
+            prop: 'match',
+            label: this.$t('Match'),
+            formatter: tableFormatter('match')
+          },
+          {
+            prop: 'value',
+            label: this.$t('AttrValue'),
+            formatter: tableFormatter('value')
+          },
+          {
+            prop: 'action',
+            label: this.$t('Action'),
+            align: 'center',
+            width: '100px',
+            formatter: (row, col, cellValue, index) => {
+              return createVNodeCompat(
+                'div',
+                {
+                  class: 'input-button'
+                },
+                [
+                  createVNodeCompat(
+                    resolveComponentCompat('el-button'),
+                    {
+                      icon: 'Minus',
+                      size: 'small',
+                      style: {
+                        flexShrink: 0
+                      },
+                      type: 'danger',
+                      onClick: this.handleDelete(index)
+                    },
+                    null
+                  )
+                ]
+              )
+            }
           }
-        }],
+        ],
         totalData: this.value || [],
         hasPagination: false
       }

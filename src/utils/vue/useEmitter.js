@@ -49,7 +49,7 @@ export function useProvideEmitter() {
   function emit(componentName, eventName, ...args) {
     const key = `${componentName}:${eventName}`
     if (listeners.has(key)) {
-      listeners.get(key).forEach(callback => callback(...args))
+      listeners.get(key).forEach((callback) => callback(...args))
     }
   }
 

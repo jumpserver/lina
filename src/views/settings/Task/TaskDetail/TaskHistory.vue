@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { createVNode as _createVNode } from 'vue'
+import { createVNode as createVNodeCompat } from 'vue'
 import { DrawerListTable as ListTable } from '@/components'
 import { openTaskPage } from '@/utils/jms/index'
 export default {
@@ -23,22 +23,39 @@ export default {
       tableConfig: {
         hasSelection: false,
         url: `/api/v1/ops/task-executions/?task_id=${this.object.id}`,
-        columns: ['id', 'is_finished', 'is_success', 'time_cost', 'date_start', 'date_published', 'date_finished', 'actions'],
+        columns: [
+          'id',
+          'is_finished',
+          'is_success',
+          'time_cost',
+          'date_start',
+          'date_published',
+          'date_finished',
+          'actions'
+        ],
         columnsShow: {
           default: ['id', 'is_finished', 'is_success', 'time_cost', 'date_start', 'actions']
         },
         columnsMeta: {
           is_finished: {
             label: this.$t('IsFinished'),
-            formatter: row => {
+            formatter: (row) => {
               if (row.is_finished) {
-                return _createVNode('i', {
-                  'class': 'fa fa-check text-primary'
-                }, null)
+                return createVNodeCompat(
+                  'i',
+                  {
+                    class: 'fa fa-check text-primary'
+                  },
+                  null
+                )
               }
-              return _createVNode('i', {
-                'class': 'fa fa-times text-danger'
-              }, null)
+              return createVNodeCompat(
+                'i',
+                {
+                  class: 'fa fa-times text-danger'
+                },
+                null
+              )
             },
             formatterArgs: {
               width: '14px'
@@ -46,20 +63,32 @@ export default {
           },
           is_success: {
             label: this.$t('IsSuccess'),
-            formatter: row => {
+            formatter: (row) => {
               if (!row.is_finished) {
-                return _createVNode('i', {
-                  'class': 'fa  fa fa-spinner fa-spin'
-                }, null)
+                return createVNodeCompat(
+                  'i',
+                  {
+                    class: 'fa  fa fa-spinner fa-spin'
+                  },
+                  null
+                )
               }
               if (row.is_success) {
-                return _createVNode('i', {
-                  'class': 'fa fa-check text-primary'
-                }, null)
+                return createVNodeCompat(
+                  'i',
+                  {
+                    class: 'fa fa-check text-primary'
+                  },
+                  null
+                )
               }
-              return _createVNode('i', {
-                'class': 'fa fa-times text-danger'
-              }, null)
+              return createVNodeCompat(
+                'i',
+                {
+                  class: 'fa fa-times text-danger'
+                },
+                null
+              )
             },
             formatterArgs: {
               width: '14px'
@@ -68,7 +97,7 @@ export default {
           time_cost: {
             label: this.$t('Time'),
             width: '100px',
-            formatter: function(row) {
+            formatter: function (row) {
               if (row.time_cost) {
                 return row.time_cost.toFixed(2) + 's'
               }
@@ -82,29 +111,28 @@ export default {
               hasDelete: false,
               hasUpdate: false,
               hasClone: false,
-              extraActions: [{
-                name: 'detail',
-                title: this.$t('Output'),
-                callback: function({
-                  row,
-                  tableData
-                }) {
-                  openTaskPage(row.id)
+              extraActions: [
+                {
+                  name: 'detail',
+                  title: this.$t('Output'),
+                  callback: function ({ row, tableData }) {
+                    openTaskPage(row.id)
+                  }
+                },
+                {
+                  name: 'run',
+                  title: this.$t('RunAgain'),
+                  type: 'primary',
+                  callback: function ({ row, tableData }) {
+                    this.$axios
+                      .post(`/api/v1/ops/task-executions/?from=${row.id}`, {})
+                      .then((data) => {
+                        vm.refreshTable()
+                        openTaskPage(data.task_id)
+                      })
+                  }
                 }
-              }, {
-                name: 'run',
-                title: this.$t('RunAgain'),
-                type: 'primary',
-                callback: function({
-                  row,
-                  tableData
-                }) {
-                  this.$axios.post(`/api/v1/ops/task-executions/?from=${row.id}`, {}).then(data => {
-                    vm.refreshTable()
-                    openTaskPage(data.task_id)
-                  })
-                }
-              }]
+              ]
             }
           }
         }
@@ -122,6 +150,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

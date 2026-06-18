@@ -77,17 +77,18 @@ export default {
         default:
           return
       }
-      this.$axios.put(
-        url, { assets: assetsSelected }
-      ).then(res => {
-        this.$emit('update:visible', false)
-        this.assetsSelected = []
-        $('#tree-refresh').trigger('click')
-        this.$message.success(this.$tc('UpdateSuccessMsg'))
-      }).catch(error => {
-        this.$emit('hide-menu')
-        this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
-      })
+      this.$axios
+        .put(url, { assets: assetsSelected })
+        .then((res) => {
+          this.$emit('update:visible', false)
+          this.assetsSelected = []
+          $('#tree-refresh').trigger('click')
+          this.$message.success(this.$tc('UpdateSuccessMsg'))
+        })
+        .catch((error) => {
+          this.$emit('hide-menu')
+          this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
+        })
     },
     assetTreeTableDialogHandleCancel() {
       this.$emit('update:visible', false)
@@ -96,6 +97,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

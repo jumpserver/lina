@@ -17,10 +17,13 @@
       width="60%"
       @close="onDialogClose"
     >
-      <AutoDataForm v-bind="config" ref="autoDataForm"
+      <AutoDataForm
+        v-bind="config"
+        ref="autoDataForm"
         :form="form"
         class="data-form"
-        @submit="onSubmit" />
+        @submit="onSubmit"
+      />
     </Dialog>
   </div>
 </template>
@@ -42,13 +45,13 @@ export default {
     },
     title: {
       type: String,
-      default: function() {
+      default: function () {
         return 'PushParams'
       }
     },
     btnText: {
       type: String,
-      default: function() {
+      default: function () {
         return ''
       }
     },
@@ -92,7 +95,7 @@ export default {
         method: 'get'
       },
       preFieldsMeta: {
-        'change_secret_by_ssh': {
+        change_secret_by_ssh: {
           commands: {
             helpTextAsTip: false
           }

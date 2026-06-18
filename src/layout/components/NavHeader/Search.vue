@@ -147,20 +147,18 @@ export default {
       routeSuggestions: [],
       routes: [],
       iconMap: {
-        'Account': 'accounts',
-        'Asset': 'assets',
-        'User': 'user-o',
-        'UserGroup': 'user-group',
-        'AssetPermission': 'permission'
+        Account: 'accounts',
+        Asset: 'assets',
+        User: 'user-o',
+        UserGroup: 'user-group',
+        AssetPermission: 'permission'
       },
       searchIcon: markRaw(SearchIcon),
       historyStore: new ObjectLocalStorage('globalSearchHistory')
     }
   },
   computed: {
-    ...mapGetters([
-      'viewRoutes'
-    ]),
+    ...mapGetters(['viewRoutes']),
     isEmpty() {
       return !this.routeSuggestions.length && this.options.length === 0
     },
@@ -207,7 +205,7 @@ export default {
         this.handleSearch(this.options[0].options[0])
       }
     },
-    debouncedQuery: _.debounce(function() {
+    debouncedQuery: _.debounce(function () {
       this.searchQuery(this.search)
     }, 300),
     async searchQuery(q) {
@@ -221,7 +219,7 @@ export default {
         const res = await this.$axios.get(url)
         let options = res || []
         options = _.groupBy(res, 'model_label')
-        this.options = Object.keys(options).map(key => ({
+        this.options = Object.keys(options).map((key) => ({
           label: key,
           options: options[key]
         }))
@@ -250,10 +248,15 @@ export default {
         this.routeSuggestions = []
         return
       }
-      this.routeSuggestions = this.routes.filter(r => {
-        const title = r.title || r.name || r.path
-        return title.toLowerCase().includes(q.toLowerCase()) || r.path.toLowerCase().includes(q.toLowerCase())
-      }).slice(0, 5)
+      this.routeSuggestions = this.routes
+        .filter((r) => {
+          const title = r.title || r.name || r.path
+          return (
+            title.toLowerCase().includes(q.toLowerCase()) ||
+            r.path.toLowerCase().includes(q.toLowerCase())
+          )
+        })
+        .slice(0, 5)
     },
     buildRouteSuggestions() {
       if (this.routes.length > 0) {
@@ -281,15 +284,12 @@ export default {
       this.routes = flat
     },
     loadHistory() {
-      this.history = (this.historyStore.get('list') || []).filter(i => i.q)
+      this.history = (this.historyStore.get('list') || []).filter((i) => i.q)
     },
     addToHistory(q) {
       const entry = { q: q }
       const list = this.historyStore.get('list') || []
-      const next = [
-        entry,
-        ...list.filter(i => i.q !== entry.q)
-      ].slice(0, 10)
+      const next = [entry, ...list.filter((i) => i.q !== entry.q)].slice(0, 10)
       this.historyStore.set('list', next)
       this.history = next
     },
@@ -318,11 +318,11 @@ export default {
 
         // 如果当前有输入框聚焦，不触发搜索
         const activeElement = document.activeElement
-        const isInputFocused = activeElement && (
-          activeElement.tagName === 'INPUT' ||
-          activeElement.tagName === 'TEXTAREA' ||
-          activeElement.contentEditable === 'true'
-        )
+        const isInputFocused =
+          activeElement &&
+          (activeElement.tagName === 'INPUT' ||
+            activeElement.tagName === 'TEXTAREA' ||
+            activeElement.contentEditable === 'true')
 
         if (!isInputFocused) {
           this.openPanel()

@@ -1,13 +1,15 @@
 <template>
-  <GenericCreateUpdateForm v-bind="settings" ref="form"
+  <GenericCreateUpdateForm
+    v-bind="settings"
+    ref="form"
     class="form"
     @perform-error="handlePerformError"
     @perform-finished="handlePerformFinished"
-    @submit-success="handleSubmitSuccess" />
+    @submit-success="handleSubmitSuccess"
+  />
 </template>
 
 <script>
-
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { ACCOUNT_PROVIDER_ATTRS_MAP, encryptAttrsField } from '@/views/assets/Cloud/const'
 import { RequiredChange, specialEmojiCheck } from '@/components/Form/DataForm/rules'
@@ -26,8 +28,7 @@ export default {
     },
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     origin: {
       type: String,
@@ -40,8 +41,15 @@ export default {
     function setFieldAttrs(provider) {
       const fieldsObject = {}
       const updateNotRequiredFields = [
-        'access_key_secret', 'client_secret', 'password', 'sc_password',
-        'oc_password', 'cert_file', 'key_file', 'public_key', 'private_key'
+        'access_key_secret',
+        'client_secret',
+        'password',
+        'sc_password',
+        'oc_password',
+        'cert_file',
+        'key_file',
+        'public_key',
+        'private_key'
       ]
       for (const item of ACCOUNT_PROVIDER_ATTRS_MAP[provider].attrs) {
         fieldsObject[item] = {
@@ -227,7 +235,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 :deep(.el-form-item.form-buttons) {
   text-align: right;
 }

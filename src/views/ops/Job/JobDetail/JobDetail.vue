@@ -2,10 +2,7 @@
   <TwoCol>
     <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     <IBox :title="$tc('Variable')">
-      <Variable
-        v-model="object.variable"
-        @input="updateVariable"
-      />
+      <Variable v-model="object.variable" @input="updateVariable" />
     </IBox>
   </TwoCol>
 </template>
@@ -19,7 +16,8 @@ import Variable from '@/views/ops/Template/components/Variable.vue'
 export default {
   components: {
     TwoCol,
-    IBox, Variable,
+    IBox,
+    Variable,
     AutoDetailCard
   },
   props: {
@@ -32,12 +30,16 @@ export default {
     return {
       url: `/api/v1/ops/jobs/${this.object.id}/`,
       detailFields: [
-        'name', 'type', 'comment',
+        'name',
+        'type',
+        'comment',
         {
           key: this.$t('AverageTimeCost'),
           value: this.object.average_time_cost.toFixed(2) + 's'
         },
-        'date_last_run', 'date_updated', 'date_created'
+        'date_last_run',
+        'date_updated',
+        'date_created'
       ]
     }
   },
@@ -53,11 +55,8 @@ export default {
         this.$message.success(this.$tc('UpdateSuccessMsg'))
       })
     }
-
   }
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

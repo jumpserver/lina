@@ -80,7 +80,7 @@ export default {
     },
     buttonClickCallback: {
       type: Function,
-      default: obj => {}
+      default: (obj) => {}
     }
   },
   data() {

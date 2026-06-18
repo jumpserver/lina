@@ -1,5 +1,7 @@
 <template>
-  <Dialog v-bind="$attrs" v-if="$attrs.visible"
+  <Dialog
+    v-bind="$attrs"
+    v-if="$attrs.visible"
     :close-on-click-modal="false"
     :destroy-on-close="true"
     :modal="false"
@@ -7,7 +9,8 @@
     :show-confirm="false"
     :title="$tc('PlatformProtocolConfig') + '：' + protocol.name"
     class="setting-dialog"
-    width="800px">
+    width="800px"
+  >
     <el-alert v-if="disabled && platformDetail" style="margin-bottom: 10px" type="info">
       {{ $t('InheritPlatformConfig') }}
       <el-link :href="platformDetail" class="link-more" target="_blank">
@@ -15,10 +18,13 @@
       </el-link>
       <i class="fa fa-external-link" />
     </el-alert>
-    <AutoDataForm v-bind="config" :disabled="disabled"
+    <AutoDataForm
+      v-bind="config"
+      :disabled="disabled"
       :form="form"
       class="data-form"
-      @submit="onSubmit" />
+      @submit="onSubmit"
+    />
   </Dialog>
 </template>
 
@@ -55,9 +61,7 @@ export default {
         hasButtons: !this.disabled,
         url: '/api/v1/assets/protocol-settings/?name=' + this.protocol.name,
         fields: [
-          [vm.$t('Basic'), [
-            'primary', 'required', 'default', 'public'
-          ]],
+          [vm.$t('Basic'), ['primary', 'required', 'default', 'public']],
           [vm.$t('Advanced'), ['setting']]
         ],
         fieldsMeta: {

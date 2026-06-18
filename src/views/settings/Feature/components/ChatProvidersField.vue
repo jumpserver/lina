@@ -121,8 +121,8 @@ export default {
       return { providers, defaultProvider: v.defaultProvider || '' }
     },
     pickDefault(current, providers) {
-      const enabledProviders = providers.filter(item => item?.enabled !== false)
-      if (current && providers.some(item => item.name === current)) {
+      const enabledProviders = providers.filter((item) => item?.enabled !== false)
+      if (current && providers.some((item) => item.name === current)) {
         return current
       }
       return enabledProviders[0]?.name || providers[0]?.name || ''

@@ -3,7 +3,7 @@
     <div class="head">
       <Title :config="titleConfig" />
     </div>
-    <ProgressChart v-bind="config" v-if="config.data.length> 0" />
+    <ProgressChart v-bind="config" v-if="config.data.length > 0" />
     <div v-else class="no-data">{{ $tc('NoData') }}</div>
   </div>
 </template>
@@ -42,18 +42,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .box {
-    margin-top: 16px;
-    padding: 20px;
-    background: #fff;
-    .head {
-      display: flex;
-      justify-content: space-between;
-    }
+.box {
+  margin-top: 16px;
+  padding: 20px;
+  background: #fff;
+  .head {
+    display: flex;
+    justify-content: space-between;
   }
-  .no-data {
-    text-align: center;
-    font-size: 14px;
-    margin-top: 6px;
-  }
+}
+.no-data {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 6px;
+}
 </style>

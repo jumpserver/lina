@@ -16,10 +16,8 @@ export default {
       from: this.$route.query.from
     }
   },
-  mounted() {
-  },
-  methods: {
-  }
+  mounted() {},
+  methods: {}
 }
 </script>
 

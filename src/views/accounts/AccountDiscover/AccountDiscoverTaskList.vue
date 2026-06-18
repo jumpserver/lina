@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
 import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
@@ -21,7 +21,8 @@ export default {
   data() {
     const vm = this
     return {
-      createDrawer: () => import('@/views/accounts/AccountDiscover/AccountDiscoverTaskCreateUpdate.vue'),
+      createDrawer: () =>
+        import('@/views/accounts/AccountDiscover/AccountDiscoverTaskCreateUpdate.vue'),
       detailDrawer: () => import('@/views/accounts/AccountDiscover/TaskDetail/index.vue'),
       showViewSecretDialog: false,
       showTableUpdateDrawer: false,
@@ -43,9 +44,7 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              getRoute: ({
-                row
-              }) => ({
+              getRoute: ({ row }) => ({
                 name: 'AccountDiscoverTaskDetail',
                 params: {
                   id: row.id
@@ -57,8 +56,8 @@ export default {
             }
           },
           nodes: {
-            formatter: function(row, column, cellValue, index) {
-              return cellValue.map(v => v['name']).join(', ')
+            formatter: function (row, column, cellValue, index) {
+              return cellValue.map((v) => v['name']).join(', ')
             }
           },
           is_periodic: {
@@ -69,39 +68,46 @@ export default {
           },
           periodic_display: {},
           executed_amount: {
-            formatter: row => {
+            formatter: (row) => {
               const can = vm.$hasPerm('accounts.view_gatheraccountsexecution')
-              return _createVNode(_resolveComponent('el-link'), {
-                'onClick': () => this.handleExecAmount(row),
-                'disabled': !can
-              }, {
-                default: () => [row.executed_amount]
-              })
+              return createVNodeCompat(
+                resolveComponentCompat('el-link'),
+                {
+                  onClick: () => this.handleExecAmount(row),
+                  disabled: !can
+                },
+                {
+                  default: () => [row.executed_amount]
+                }
+              )
             }
           },
           actions: {
             formatterArgs: {
               updateRoute: 'AccountDiscoverTaskUpdate',
               hasClone: false,
-              extraActions: [{
-                title: vm.$t('Execute'),
-                name: 'execute',
-                type: 'primary',
-                order: 1,
-                can: ({
-                  row
-                }) => {
-                  return this.$hasPerm('accounts.add_gatheraccountsexecution') && row.is_active
-                },
-                callback: function(data) {
-                  this.$axios.post(`/api/v1/accounts/gather-account-executions/`, {
-                    automation: data.row.id,
-                    type: data.row.type.value
-                  }).then(res => {
-                    openTaskPage(res['task'])
-                  }).catch(res => {})
+              extraActions: [
+                {
+                  title: vm.$t('Execute'),
+                  name: 'execute',
+                  type: 'primary',
+                  order: 1,
+                  can: ({ row }) => {
+                    return this.$hasPerm('accounts.add_gatheraccountsexecution') && row.is_active
+                  },
+                  callback: function (data) {
+                    this.$axios
+                      .post(`/api/v1/accounts/gather-account-executions/`, {
+                        automation: data.row.id,
+                        type: data.row.type.value
+                      })
+                      .then((res) => {
+                        openTaskPage(res['task'])
+                      })
+                      .catch((res) => {})
+                  }
                 }
-              }]
+              ]
             }
           }
         }

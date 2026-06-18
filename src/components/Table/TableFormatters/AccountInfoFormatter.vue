@@ -9,9 +9,9 @@
       </div>
     </div>
     <template #reference>
-    <el-button class="link-btn" plain size="small" type="primary">
-      {{ $t('View') }} <el-icon><ArrowDown /></el-icon>
-    </el-button>
+      <el-button class="link-btn" plain size="small" type="primary">
+        {{ $t('View') }} <el-icon><ArrowDown /></el-icon>
+      </el-button>
     </template>
   </el-popover>
 </template>
@@ -52,7 +52,7 @@ export default {
       const url = `/api/v1/perms/users/${userId}/assets/${this.row.id}/`
       this.$axios
         .get(url)
-        .then(res => {
+        .then((res) => {
           this.accountData = res?.permed_accounts || []
         })
         .finally(() => {

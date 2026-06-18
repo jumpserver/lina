@@ -173,7 +173,7 @@ export default {
     // 获取url中的查询条件，判断是不是包含在当前查询条件里
     checkInTableColumns(options) {
       const searchFieldOptions = {}
-      const queryInfoValues = options.map(i => i.value)
+      const queryInfoValues = options.map((i) => i.value)
       const routeQuery = this.getUrlQuery ? this.$route?.query : {}
       const routeQueryKeysLength = Object.keys(routeQuery).length
       if (routeQueryKeysLength < 1) return searchFieldOptions

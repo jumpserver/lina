@@ -1,7 +1,5 @@
 <template>
-  <el-switch v-bind="$attrs" v-model="iValue"
-    :class="type"
-    inactive-color="#dcdfe6" />
+  <el-switch v-bind="$attrs" v-model="iValue" :class="type" inactive-color="#dcdfe6" />
 </template>
 
 <script>
@@ -18,15 +16,14 @@ export default {
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
   computed: {
     iValue: {
-      set: function(newValue) {
+      set: function (newValue) {
         this.$emit('input', newValue)
       },
-      get: function() {
+      get: function () {
         return !!this.value
       }
     }

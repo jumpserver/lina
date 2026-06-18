@@ -71,7 +71,10 @@ export default {
                 }
 
                 this.$store.dispatch('common/setDrawerActionMeta', {
-                  action: 'detail', row: {}, col: {}, id: row.id
+                  action: 'detail',
+                  row: {},
+                  col: {},
+                  id: row.id
                 })
 
                 return {
@@ -84,13 +87,13 @@ export default {
           applicant: {
             label: this.$t('Applicant'),
             sortable: 'custom',
-            formatter: row => {
+            formatter: (row) => {
               return row['rel_snapshot'].applicant
             }
           },
           type: {
             label: this.$t('Type'),
-            formatter: row => {
+            formatter: (row) => {
               return row.type.label
             }
           },

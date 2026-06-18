@@ -1,9 +1,5 @@
 <template>
-  <BaseAuth
-    :config="settings"
-    :title="title"
-    enable-field="enableFieldName"
-  />
+  <BaseAuth :config="settings" :title="title" enable-field="enableFieldName" />
 </template>
 
 <script>
@@ -34,12 +30,12 @@ export default {
     formFields: {
       type: Array,
       default() {
-        return [['Basic', [
-          'AUTH_FEISHU', 'FEISHU_APP_ID',
-          'FEISHU_APP_SECRET', 'FEISHU_RENAME_ATTRIBUTES'
-        ]], ['Other', [
-          'FEISHU_ORG_IDS'
-        ]]
+        return [
+          [
+            'Basic',
+            ['AUTH_FEISHU', 'FEISHU_APP_ID', 'FEISHU_APP_SECRET', 'FEISHU_RENAME_ATTRIBUTES']
+          ],
+          ['Other', ['FEISHU_ORG_IDS']]
         ]
       }
     },
@@ -69,18 +65,19 @@ export default {
           {
             title: 'Test',
             loading: false,
-            callback: function(value, form, btn) {
+            callback: function (value, form, btn) {
               btn.loading = true
-              vm.$axios.post(
-                `/api/v1/settings/${vm.category}/testing/`,
-                value
-              ).then(res => {
-                vm.$message.success(res['msg'])
-              }).catch(() => {
-                vm.$log.error('err occur')
-              }).finally(() => {
-                btn.loading = false
-              })
+              vm.$axios
+                .post(`/api/v1/settings/${vm.category}/testing/`, value)
+                .then((res) => {
+                  vm.$message.success(res['msg'])
+                })
+                .catch(() => {
+                  vm.$log.error('err occur')
+                })
+                .finally(() => {
+                  btn.loading = false
+                })
             }
           }
         ],
@@ -89,7 +86,7 @@ export default {
         fieldsMeta: this.formFieldsMeta,
         // 不清理的话，编辑secret，在删除提交会报错
         cleanFormValue(data) {
-          this.encryptedFields.forEach(field => {
+          this.encryptedFields.forEach((field) => {
             if (!data[field]) {
               delete data[field]
             }
@@ -116,6 +113,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

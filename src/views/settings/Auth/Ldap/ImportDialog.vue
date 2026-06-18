@@ -1,8 +1,11 @@
 <template>
   <div>
-    <Dialog v-bind="$attrs" :destroy-on-close="true"
+    <Dialog
+      v-bind="$attrs"
+      :destroy-on-close="true"
       :show-cancel="false"
-      :title="$tc('ImportLdapUserTitle')">
+      :title="$tc('ImportLdapUserTitle')"
+    >
       <el-alert type="info" style="margin-bottom: 10px"> {{ $t('ImportLdapUserTip') }}</el-alert>
       <ListTable
         ref="listTable"
@@ -14,14 +17,27 @@
         <div>
           <span v-show="showOrgSelect" class="org-select">
             <span class="label">{{ $tc('ImportOrg') }}：</span>
-            <Select2 v-bind="select2" ref="select2"
+            <Select2
+              v-bind="select2"
+              ref="select2"
               v-model="select2.value"
-              popper-class="select-org-dropdown" />
+              popper-class="select-org-dropdown"
+            />
           </span>
-          <el-button :loading="dialogLdapUserSyncStatus" size="small" type="primary" @click="SyncUserClick">
+          <el-button
+            :loading="dialogLdapUserSyncStatus"
+            size="small"
+            type="primary"
+            @click="SyncUserClick"
+          >
             {{ $t('SyncUser') }}
           </el-button>
-          <el-button :loading="dialogLdapUserImportLoginStatus" size="small" type="primary" @click="importUserClick">
+          <el-button
+            :loading="dialogLdapUserImportLoginStatus"
+            size="small"
+            type="primary"
+            @click="importUserClick"
+          >
             {{ $t('Import') }}
           </el-button>
           <el-button
@@ -29,7 +45,7 @@
             size="small"
             type="primary"
             @click="importAllUserClick"
-          >{{ $t('ImportAll') }}
+            >{{ $t('ImportAll') }}
           </el-button>
           <el-button size="small" @click="hiddenDialog">{{ $t('Cancel') }}</el-button>
         </div>
@@ -45,7 +61,7 @@ import ListTable from '@/components/Table/ListTable'
 import getStatusColumnMeta from '@/components/Table/ListTable/TableAction/const'
 import store from '@/store'
 import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/jms/org'
-import { createTextVNode as _createTextVNode, createVNode as _createVNode } from 'vue'
+import { createTextVNode as createTextVNodeCompat, createVNode as createVNodeCompat } from 'vue'
 export default {
   name: 'ImportDialog',
   components: {
@@ -72,9 +88,7 @@ export default {
         hasExport: false,
         hasImport: false,
         hasUpdate: false,
-        handleRefreshClick: async ({
-          reloadTable
-        }) => {
+        handleRefreshClick: async ({ reloadTable }) => {
           reloadTable()
         }
       },
@@ -93,8 +107,12 @@ export default {
           },
           groups: {
             label: this.$t('UserGroups'),
-            formatter: function(row) {
-              return _createVNode('span', null, [_createTextVNode(' '), row.groups.join(' | '), _createTextVNode(' ')])
+            formatter: function (row) {
+              return createVNodeCompat('span', null, [
+                createTextVNodeCompat(' '),
+                row.groups.join(' | '),
+                createTextVNodeCompat(' ')
+              ])
             }
           },
           email: {
@@ -113,7 +131,7 @@ export default {
         multiple: true,
         ajax: {
           url: '/api/v1/orgs/orgs/',
-          transformOption: item => {
+          transformOption: (item) => {
             if (item.id !== SYSTEM_ORG_ID) {
               return {
                 label: item.name,
@@ -172,13 +190,15 @@ export default {
     },
     importLdapUser(data) {
       this.enableWS()
-      this.ws.onopen = e => {
-        this.ws.send(JSON.stringify({
-          msg_type: 'import_user',
-          ...data
-        }))
+      this.ws.onopen = (e) => {
+        this.ws.send(
+          JSON.stringify({
+            msg_type: 'import_user',
+            ...data
+          })
+        )
       }
-      this.ws.onmessage = e => {
+      this.ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
         if (data.ok) {
           this.$message.success(data.msg)
@@ -200,12 +220,14 @@ export default {
     SyncUserClick() {
       this.dialogLdapUserSyncStatus = true
       this.enableWS()
-      this.ws.onopen = e => {
-        this.ws.send(JSON.stringify({
-          msg_type: 'sync_user'
-        }))
+      this.ws.onopen = (e) => {
+        this.ws.send(
+          JSON.stringify({
+            msg_type: 'sync_user'
+          })
+        )
       }
-      this.ws.onmessage = e => {
+      this.ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
         if (data.ok) {
           this.$refs.listTable.reloadTable()

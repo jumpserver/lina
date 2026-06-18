@@ -15,7 +15,8 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, createTextVNode as _createTextVNode } from 'vue'
+import { withBaseApi } from '@/utils/env'
+import { createVNode as createVNodeCompat, createTextVNode as createTextVNodeCompat } from 'vue'
 import TreeTable from '@/components/Table/TreeTable/index.vue'
 import { getDayEnd, getDaysAgo, toSafeLocalDateStr } from '@/utils/common/time'
 import { OutputExpandFormatter } from '../formatters'
@@ -45,16 +46,23 @@ export default {
       tableConfig: {
         url: '/api/v1/terminal/commands/',
         tableAttrs: {
-          rowClassName: ({
-            row
-          }) => {
+          rowClassName: ({ row }) => {
             if (row.risk_level === 5) {
               return 'risk-command'
             }
             return 'command'
           }
         },
-        columns: ['expandCol', 'input', 'risk_level', 'user', 'asset', 'account', 'session', 'timestamp'],
+        columns: [
+          'expandCol',
+          'input',
+          'risk_level',
+          'user',
+          'asset',
+          'account',
+          'session',
+          'timestamp'
+        ],
         extraQuery: {
           date_to: dateTo,
           date_from: dateFrom
@@ -72,9 +80,13 @@ export default {
               if (cellValue?.value === 0) {
                 return display
               } else {
-                return _createVNode('span', {
-                  'class': 'text-danger'
-                }, [_createTextVNode(' '), display, _createTextVNode(' ')])
+                return createVNodeCompat(
+                  'span',
+                  {
+                    class: 'text-danger'
+                  },
+                  [createTextVNodeCompat(' '), display, createTextVNodeCompat(' ')]
+                )
               }
             }
           },
@@ -86,9 +98,7 @@ export default {
             formatterArgs: {
               drawer: true,
               can: this.$hasPerm('terminal.view_session'),
-              getRoute({
-                cellValue
-              }) {
+              getRoute({ cellValue }) {
                 return {
                   name: 'SessionDetail',
                   params: {
@@ -102,7 +112,7 @@ export default {
             label: this.$t('Datetime'),
             width: 180,
             sortable: 'custom',
-            formatter: function(row) {
+            formatter: function (row) {
               return toSafeLocalDateStr(row.timestamp * 1000)
             }
           }
@@ -120,8 +130,7 @@ export default {
         canExportSelected: true,
         exportOptions: {
           performExport: async (selectRows, exportOption, q, exportTypeOption) => {
-            let url = this.tableConfig.url
-            url = process.env.VUE_APP_ENV === 'production' ? `${url}` : `${process.env.VUE_APP_BASE_API}${url}`
+            let url = withBaseApi(this.tableConfig.url)
             const query = {
               ...q
             }
@@ -134,7 +143,8 @@ export default {
               query['spm'] = spm.spm
             }
             query['format'] = exportTypeOption
-            const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(query, '=', '&')
+            const queryStr =
+              (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(query, '=', '&')
             url = url + queryStr
             this.$log.debug('Export url: ', this.url, '=>', url)
             download(url + queryStr)
@@ -212,16 +222,19 @@ export default {
         date_to: object[1].toISOString()
       }
       const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`
-      const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(this.query, '=', '&')
+      const queryStr =
+        (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(this.query, '=', '&')
       const treeUrl = url + queryStr
       this.treeSetting['treeUrl'] = treeUrl
       this.treeTable.forceRerenderTree()
     },
     cleanUrl(query) {
-      query = Object.keys(query).filter(k => !isFalsey(query[k])).reduce((obj, k) => {
-        obj[k] = query[k].toString().trim()
-        return obj
-      }, {})
+      query = Object.keys(query)
+        .filter((k) => !isFalsey(query[k]))
+        .reduce((obj, k) => {
+          obj[k] = query[k].toString().trim()
+          return obj
+        }, {})
       query = deepmerge(this.query, query)
       return query
     }
@@ -237,5 +250,4 @@ export default {
     color: white;
   }
 }
-
 </style>

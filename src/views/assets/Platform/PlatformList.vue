@@ -110,7 +110,10 @@ export default {
             formatterArgs: {
               canClone: () => vm.$hasPerm('assets.add_platform'),
               onClone({ row }) {
-                vm.$refs.genericListTable.onClone({ row, query: { type: row.type.value, category: row.category.value } })
+                vm.$refs.genericListTable.onClone({
+                  row,
+                  query: { type: row.type.value, category: row.category.value }
+                })
               },
               canUpdate: ({ row }) => !row.internal && vm.$hasPerm('assets.change_platform'),
               canDelete: ({ row }) => !row.internal && vm.$hasPerm('assets.delete_platform'),
@@ -142,7 +145,9 @@ export default {
         },
         moreCreates: {
           callback: (item) => {
-            this.$refs.genericListTable.onCreate({ query: { type: item.name, category: item.category } })
+            this.$refs.genericListTable.onCreate({
+              query: { type: item.name, category: item.category }
+            })
           },
           dropdown: []
         }
@@ -155,8 +160,7 @@ export default {
       return `/api/v1/assets/platforms/?category=${this.tab.activeMenu}`
     }
   },
-  activated() {
-  },
+  activated() {},
   async mounted() {
     try {
       await this.setCategoriesTab()
@@ -181,14 +185,16 @@ export default {
       this.tableConfig.url = this.url
       this.headerActions.importOptions.url = this.url
       this.headerActions.exportOptions.url = this.url
-      const types = this.$store.state.assets.assetCategoriesDropdown.filter(item => {
-        return item.category === this.tab.activeMenu
-      }).map(item => {
-        if (item.group && !item.group.includes(this.$t('Type'))) {
-          item.group += this.$t('WordSep') + this.$t('Type')
-        }
-        return item
-      })
+      const types = this.$store.state.assets.assetCategoriesDropdown
+        .filter((item) => {
+          return item.category === this.tab.activeMenu
+        })
+        .map((item) => {
+          if (item.group && !item.group.includes(this.$t('Type'))) {
+            item.group += this.$t('WordSep') + this.$t('Type')
+          }
+          return item
+        })
       this.headerActions.moreCreates.dropdown = types
     },
     async setCategoriesTab() {

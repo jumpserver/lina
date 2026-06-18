@@ -38,9 +38,7 @@ export default {
         id: 'asset',
         columnsExclude: ['asset'],
         columnsExtra: ['delete_action'],
-        columns: [
-          'asset_display', 'delete_action'
-        ],
+        columns: ['asset_display', 'delete_action'],
         columnsShow: {
           min: ['asset_display', 'delete_action']
         },
@@ -59,14 +57,17 @@ export default {
             width: 150,
             objects: this.object.assets,
             formatter: DeleteActionFormatter,
-            onDelete: function(col, row, cellValue, reload) {
+            onDelete: function (col, row, cellValue, reload) {
               const url = `/api/v1/perms/asset-permissions-assets-relations/?assetpermission=${this.object.id}&asset=${cellValue}`
-              this.$axios.delete(url).then(res => {
-                this.$message.success(this.$tc('DeleteSuccessMsg'))
-                this.$store.commit('common/reload')
-              }).catch(error => {
-                this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
-              })
+              this.$axios
+                .delete(url)
+                .then((res) => {
+                  this.$message.success(this.$tc('DeleteSuccessMsg'))
+                  this.$store.commit('common/reload')
+                })
+                .catch((error) => {
+                  this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
+                })
             }.bind(this)
           }
         },
@@ -82,15 +83,15 @@ export default {
       assetRelationConfig: {
         icon: 'fa-edit',
         title: this.$t('AddAssetToThisPermission'),
-        hasObjectsId: this.object.assets?.map(i => i.id) || [],
+        hasObjectsId: this.object.assets?.map((i) => i.id) || [],
         disabled: this.$store.getters.currentOrgIsRoot,
         canSelect: (row, index) => {
-          return (this.object.assets?.map(i => i.id) || []).indexOf(row.id) === -1
+          return (this.object.assets?.map((i) => i.id) || []).indexOf(row.id) === -1
         },
         performAdd: (items, that) => {
           const relationUrl = `/api/v1/perms/asset-permissions-assets-relations/`
           const objectId = this.object.id
-          const data = items.map(item => {
+          const data = items.map((item) => {
             return {
               assetpermission: objectId,
               asset: item
@@ -113,11 +114,11 @@ export default {
             return { label: item.full_value, value: item.id }
           }
         },
-        hasObjectsId: this.object.nodes?.map(i => i.id) || [],
+        hasObjectsId: this.object.nodes?.map((i) => i.id) || [],
         performAdd: (items) => {
           const relationUrl = `/api/v1/perms/asset-permissions-nodes-relations/`
           const objectId = this.object.id
-          const data = items.map(v => {
+          const data = items.map((v) => {
             return {
               assetpermission: objectId,
               node: v.value
@@ -155,6 +156,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

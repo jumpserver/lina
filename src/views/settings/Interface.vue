@@ -2,33 +2,17 @@
   <Page>
     <div v-if="isDev" style="margin-bottom: 20px">
       <div class="dz">
-        <el-button
-          v-for="(value, tp) in examples"
-          :key="tp"
-          :type="tp"
-          size="small"
-        >
+        <el-button v-for="(value, tp) in examples" :key="tp" :type="tp" size="small">
           {{ value }}
         </el-button>
       </div>
       <div class="dz">
-        <el-button
-          v-for="(value, tp) in examples"
-          :key="tp"
-          :type="tp"
-          size="small"
-          disabled
-        >
+        <el-button v-for="(value, tp) in examples" :key="tp" :type="tp" size="small" disabled>
           {{ value }}
         </el-button>
       </div>
       <div class="dz">
-        <el-link
-          v-for="(value, tp) in examples"
-          :key="tp"
-          :type="tp"
-          style="padding-right: 10px;"
-        >
+        <el-link v-for="(value, tp) in examples" :key="tp" :type="tp" style="padding-right: 10px">
           {{ value }}
         </el-link>
       </div>
@@ -42,7 +26,7 @@
           <el-step
             v-for="(s, i) in stepStatus"
             :key="s"
-            :title="$tc('Step') + ` ${i+1}`"
+            :title="$tc('Step') + ` ${i + 1}`"
             :status="s"
           />
         </el-steps>
@@ -71,6 +55,7 @@ import { IBox, UploadField } from '@/components'
 import MarkDown from '@/components/Widgets/MarkDown'
 import { Page } from '@/layout/components'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
+import { IS_DEV } from '@/utils/env'
 
 export default {
   name: 'InterfaceSettings',
@@ -86,13 +71,16 @@ export default {
       loading: true,
       files: {},
       examples: {
-        'primary': this.$t('Primary'), 'info': this.$t('Info'), 'warning': this.$t('Warning'),
-        'success': this.$t('Success'), 'danger': this.$t('Danger')
+        primary: this.$t('Primary'),
+        info: this.$t('Info'),
+        warning: this.$t('Warning'),
+        success: this.$t('Success'),
+        danger: this.$t('Danger')
       },
       interfaceInfo: {},
       hasSaveContinue: false,
       successUrl: { name: 'Settings' },
-      isDev: process.env.NODE_ENV === 'development',
+      isDev: IS_DEV,
       themeConfigs: [],
       fields: [
         [this.$t('Basic'), ['login_title', 'theme']],
@@ -184,14 +172,13 @@ export default {
       moreButtons: [
         {
           title: this.$t('RestoreButton'),
-          callback: function(value, form) {
-            this.$confirm(this.$t('RestoreDialogMessage'),
-              this.$t('RestoreDialogTitle'), {
-                confirmButtonText: this.$t('Confirm'),
-                cancelButtonText: this.$t('Cancel'),
-                type: 'warning'
-              }).then(() => {
-              restoreInterface().then(res => {
+          callback: function (value, form) {
+            this.$confirm(this.$t('RestoreDialogMessage'), this.$t('RestoreDialogTitle'), {
+              confirmButtonText: this.$t('Confirm'),
+              cancelButtonText: this.$t('Cancel'),
+              type: 'warning'
+            }).then(() => {
+              restoreInterface().then((res) => {
                 this.$message.success(res.success)
                 location.reload()
               })
@@ -202,7 +189,7 @@ export default {
     }
   },
   mounted() {
-    getInterfaceInfo().then(data => {
+    getInterfaceInfo().then((data) => {
       this.interfaceInfo = data
       this.loading = false
     })
@@ -210,7 +197,7 @@ export default {
   },
   methods: {
     getPreviewThemes() {
-      previewThemes().then(res => {
+      previewThemes().then((res) => {
         this.themeConfigs = res
       })
     },
@@ -238,11 +225,13 @@ export default {
           form.append(key, value)
         }
       }
-      updateInterface(form).then(res => {
-        this.$message.success(this.$tc('UpdateSuccessMsg'))
-      }).catch(error => {
-        this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
-      })
+      updateInterface(form)
+        .then((res) => {
+          this.$message.success(this.$tc('UpdateSuccessMsg'))
+        })
+        .catch((error) => {
+          this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
+        })
     }
   }
 }
@@ -250,6 +239,6 @@ export default {
 
 <style scoped>
 .dz {
-  padding: 10px 0
+  padding: 10px 0;
 }
 </style>

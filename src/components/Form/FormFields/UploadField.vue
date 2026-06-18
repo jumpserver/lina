@@ -1,6 +1,6 @@
 <template>
   <div class="upload-field">
-    <input ref="upLoadFile" :accept="accept" style="display: none" type="file" @change="Onchange">
+    <input ref="upLoadFile" :accept="accept" style="display: none" type="file" @change="Onchange" />
     <div class="upload-field__actions">
       <el-button size="small" @click.stop="onUpLoad">
         {{ $t('SelectFile') }}
@@ -11,7 +11,7 @@
       </el-button>
     </div>
     <div v-if="tip !== ''" class="help-block">{{ tip }}</div>
-    <input :value="value" hidden type="text" @input="onInput($event.target.value)">
+    <input :value="value" hidden type="text" @input="onInput($event.target.value)" />
     <div v-if="preview" class="upload-field__preview">
       <el-image
         :class="showBG ? 'show-bg' : ''"

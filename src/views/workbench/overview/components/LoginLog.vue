@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { createTextVNode as _createTextVNode, createVNode as _createVNode } from 'vue'
+import { createTextVNode as createTextVNodeCompat, createVNode as createVNodeCompat } from 'vue'
 import HomeCard from './HomeCard'
 export default {
   name: 'Log',
@@ -32,8 +32,13 @@ export default {
         columns: ['city', 'datetime'],
         columnsMeta: {
           city: {
-            formatter: row => {
-              return _createVNode('span', null, [row.city, _createTextVNode('('), row.ip, _createTextVNode(')')])
+            formatter: (row) => {
+              return createVNodeCompat('span', null, [
+                row.city,
+                createTextVNodeCompat('('),
+                row.ip,
+                createTextVNodeCompat(')')
+              ])
             }
           },
           actions: {
@@ -48,5 +53,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

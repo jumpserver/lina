@@ -84,7 +84,7 @@ export default {
       this.iFieldsMeta = fieldsMeta
     },
     cleanFormValue(value) {
-      this.fieldsExclude.forEach(name => {
+      this.fieldsExclude.forEach((name) => {
         const nameArray = name.split('.')
         if (nameArray.length === 2) {
           delete value[nameArray[0]][nameArray[1]]
@@ -113,6 +113,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

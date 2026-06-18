@@ -3,10 +3,13 @@
     <el-button v-if="shouldFold" circle class="search-btn" size="small" @click="handleManualSearch">
       <svg-icon icon-class="search" />
     </el-button>
-    <TagSearch v-bind="$attrs" v-show="!shouldFold"
+    <TagSearch
+      v-bind="$attrs"
+      v-show="!shouldFold"
       :options="iOption"
       @blur="handleBlur"
-      @tag-search="handleTagSearch" />
+      @tag-search="handleTagSearch"
+    />
   </span>
 </template>
 
@@ -104,7 +107,7 @@ export default {
           value: name
         }
         if (['choice', 'labeled_choice'].indexOf(field.type) > -1 && field.choices) {
-          option.children = field.choices.map(item => {
+          option.children = field.choices.map((item) => {
             if (typeof item.value === 'boolean') {
               if (item.value) {
                 return { label: item.label, value: 'True' }

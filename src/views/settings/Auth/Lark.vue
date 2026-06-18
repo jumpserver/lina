@@ -28,13 +28,11 @@ export default {
     },
     formFields() {
       return [
-        [this.$t('Basic'), [
-          'AUTH_LARK', 'LARK_APP_ID',
-          'LARK_APP_SECRET', 'LARK_RENAME_ATTRIBUTES'
-        ]],
-        [this.$t('Other'), [
-          'LARK_ORG_IDS'
-        ]]
+        [
+          this.$t('Basic'),
+          ['AUTH_LARK', 'LARK_APP_ID', 'LARK_APP_SECRET', 'LARK_RENAME_ATTRIBUTES']
+        ],
+        [this.$t('Other'), ['LARK_ORG_IDS']]
       ]
     },
     encryptedFields() {
@@ -53,6 +51,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -12,11 +12,7 @@
             placement="bottom"
           >
             {{ activity.content }}
-            <el-link
-              v-if="activity['detail_url']"
-              type="primary"
-              @click="onClick(activity)"
-            >
+            <el-link v-if="activity['detail_url']" type="primary" @click="onClick(activity)">
               {{ $tc('Detail') }}
             </el-link>
           </el-timeline-item>
@@ -65,9 +61,9 @@ export default {
   },
   methods: {
     getActivities() {
-      this.$axios.get(this.activityUrl).then(res => {
+      this.$axios.get(this.activityUrl).then((res) => {
         const activities = res || []
-        activities.forEach(activity => {
+        activities.forEach((activity) => {
           activity.timestamp = toSafeLocalDateStr(activity.timestamp)
           this.activities.push(activity)
         })
@@ -77,11 +73,9 @@ export default {
       const type = activity['r_type']
       const taskUrl = activity['detail_url']
       if (type === 'O') {
-        this.$axios.get(taskUrl).then(
-          res => {
-            this.$refs.DetailDialog.show(res.diff)
-          }
-        )
+        this.$axios.get(taskUrl).then((res) => {
+          this.$refs.DetailDialog.show(res.diff)
+        })
       } else {
         openTaskPage('', 'celery', taskUrl)
       }
@@ -90,6 +84,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

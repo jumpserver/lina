@@ -5,7 +5,7 @@
         :data="tableData"
         :span-method="spanMethod"
         :stripe="true"
-        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+        :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         default-expand-all
         row-key="id"
       >
@@ -14,7 +14,12 @@
             <span>{{ scope.row.value }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-for="header in receiveBackends" :key="header.id" :label="getNameDisplay(header)" width="80">
+        <el-table-column
+          v-for="header in receiveBackends"
+          :key="header.id"
+          :label="getNameDisplay(header)"
+          width="80"
+        >
           <template #default="scope">
             <span v-if="!scope.row.children">
               <el-checkbox
@@ -28,16 +33,21 @@
         </el-table-column>
         <el-table-column :label="$tc('Receivers')">
           <template #default="scope">
-            <el-popover v-if="!scope.row.children && scope.row.receivers && scope.row.receivers.length" placement="top" popper-class="black-theme-popover" trigger="hover">
+            <el-popover
+              v-if="!scope.row.children && scope.row.receivers && scope.row.receivers.length"
+              placement="top"
+              popper-class="black-theme-popover"
+              trigger="hover"
+            >
               <p v-for="item in scope.row.receivers" :key="item.name">{{ item.name }}</p>
               <template #reference>
                 <span class="name-wrapper">
-                  {{ scope.row.receivers.map(item => item.name).join(', ') }}
+                  {{ scope.row.receivers.map((item) => item.name).join(', ') }}
                 </span>
               </template>
             </el-popover>
             <span v-else-if="!scope.row.children && scope.row.receivers">
-              {{ scope.row.receivers.map(item => item.name).join(', ') }}
+              {{ scope.row.receivers.map((item) => item.name).join(', ') }}
             </span>
           </template>
         </el-table-column>
@@ -55,7 +65,7 @@
         v-model:visible="dialogVisible"
         :selected-users="dialogSelectedUsers"
         :title="$tc('EditRecipient')"
-        @cancel="dialogVisible=false"
+        @cancel="dialogVisible = false"
         @submit="onDialogSelectSubmit"
       />
     </div>
@@ -95,36 +105,39 @@ export default {
         }
       }
 
-      this.$axios.patch(
-        `/api/v1/notifications/system-msg-subscription/${sub.id}/`,
-        { receive_backends: backends }
-      ).then(() => {
-        this.$message.success(this.$t('UpdateSuccessMsg'))
-      }).catch(err => {
-        this.$log.error(err)
-      })
+      this.$axios
+        .patch(`/api/v1/notifications/system-msg-subscription/${sub.id}/`, {
+          receive_backends: backends
+        })
+        .then(() => {
+          this.$message.success(this.$t('UpdateSuccessMsg'))
+        })
+        .catch((err) => {
+          this.$log.error(err)
+        })
     },
-    spanMethod({ row, column, rowIndex, columnIndex }) {
-    },
+    spanMethod({ row, column, rowIndex, columnIndex }) {},
     onDialogSelectSubmit(userIds) {
       this.dialogVisible = false
-      this.$axios.patch(
-        `/api/v1/notifications/system-msg-subscription/${this.currentEditSub.id}/`,
-        { users: userIds }
-      ).then(newSub => {
-        const msgType = this.idMessageTypeMapper[newSub.message_type]
-        msgType.receivers = newSub.receivers
-        this.tableData.forEach(i => {
-          for (const item of i.children) {
-            if (item.id === newSub.message_type) {
-              item.receivers = newSub.receivers
-              break
-            }
-          }
+      this.$axios
+        .patch(`/api/v1/notifications/system-msg-subscription/${this.currentEditSub.id}/`, {
+          users: userIds
         })
-      }).catch(() => {
-        // debug(err)
-      })
+        .then((newSub) => {
+          const msgType = this.idMessageTypeMapper[newSub.message_type]
+          msgType.receivers = newSub.receivers
+          this.tableData.forEach((i) => {
+            for (const item of i.children) {
+              if (item.id === newSub.message_type) {
+                item.receivers = newSub.receivers
+                break
+              }
+            }
+          })
+        })
+        .catch(() => {
+          // debug(err)
+        })
     },
     getNameDisplay(header) {
       const displayName = header['name_display']
@@ -141,7 +154,7 @@ export default {
     async initBackends() {
       let backends = []
       backends = await this.$axios.get('/api/v1/notifications/backends/')
-      this.receiveBackends = backends.filter(backend => {
+      this.receiveBackends = backends.filter((backend) => {
         return backend.name // !== 'site_msg'
       })
     },
@@ -159,7 +172,7 @@ export default {
 
         for (const item of category['children']) {
           const backendsChecked = {}
-          this.receiveBackends.forEach(backend => {
+          this.receiveBackends.forEach((backend) => {
             backendsChecked[backend.name] = item['receive_backends'].indexOf(backend.name) > -1
           })
 

@@ -1,9 +1,12 @@
 <template>
-  <Dialog v-bind="$attrs" :destroy-on-close="true"
+  <Dialog
+    v-bind="$attrs"
+    :destroy-on-close="true"
     :show-buttons="false"
     :title="$tc('MatchResult')"
     :visible="visible"
-    @update:visible="$emit('update:visible', $event)">
+    @update:visible="$emit('update:visible', $event)"
+  >
     <ListTable v-bind="attrMatchTableConfig" />
   </Dialog>
 </template>
@@ -42,8 +45,8 @@ export default {
         tableConfig: {
           url: this.url,
           columns: this.attrs
-            .filter(item => item.inTable)
-            .map(item => {
+            .filter((item) => item.inTable)
+            .map((item) => {
               return {
                 prop: item.name,
                 label: item.label,

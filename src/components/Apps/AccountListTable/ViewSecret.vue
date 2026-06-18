@@ -1,11 +1,14 @@
 <template>
   <div>
-    <Dialog v-bind="$attrs" v-model:visible="showSecret"
+    <Dialog
+      v-bind="$attrs"
+      v-model:visible="showSecret"
       :destroy-on-close="true"
       :show-cancel="false"
       :title="iTitle"
       :width="'50'"
-      @confirm="accountConfirmHandle">
+      @confirm="accountConfirmHandle"
+    >
       <el-form :model="secretInfo" class="password-form" label-position="right" label-width="130px">
         <el-form-item :label="$tc('Name')">
           <span>{{ account['name'] }}</span>
@@ -119,7 +122,7 @@ export default {
   mounted() {
     if (this.showPasswordRecord) {
       const url = `/api/v1/accounts/account-secrets/${this.account.id}/histories/?limit=1`
-      this.$axios.get(url, { disableFlashErrorMsg: true }).then(resp => {
+      this.$axios.get(url, { disableFlashErrorMsg: true }).then((resp) => {
         this.versions = resp.count
         this.showSecretDialog()
       })
@@ -145,7 +148,7 @@ export default {
       })
     },
     showSecretDialog() {
-      return this.$axios.get(this.url, { disableFlashErrorMsg: true }).then(res => {
+      return this.$axios.get(this.url, { disableFlashErrorMsg: true }).then((res) => {
         this.secretInfo = res
         this.sshKeyFingerprint = res?.spec_info?.ssh_key_fingerprint || '-'
         this.showSecret = true

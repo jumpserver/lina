@@ -1,8 +1,11 @@
 <template>
   <Page v-bind="pageAttrs">
-    <DrawerListTable v-bind="$attrs" ref="ListTable"
+    <DrawerListTable
+      v-bind="$attrs"
+      ref="ListTable"
       :header-actions="headerActions"
-      :table-config="tableConfig" />
+      :table-config="tableConfig"
+    />
   </Page>
 </template>
 
@@ -14,7 +17,8 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'GenericListDrawerPage',
   components: {
-    Page, DrawerListTable
+    Page,
+    DrawerListTable
   },
   props: {
     tableConfig: {

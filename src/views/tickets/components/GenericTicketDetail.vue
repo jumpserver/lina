@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
 import Comments from './Comments'
 import Details from './Details'
 import Session from './Session'
@@ -70,40 +70,50 @@ export default {
       if (this.detailCardItems) {
         return this.detailCardItems
       }
-      const {
-        object
-      } = this
-      return [{
-        key: this.$tc('Number'),
-        value: object['serial_num']
-      }, {
-        key: this.$tc('Status'),
-        value: object.state.value,
-        formatter: (item, val) => {
-          const tp = this.statusMap[val]
-          return _createVNode(_resolveComponent('el-tag'), {
-            'type': tp,
-            'size': 'small'
-          }, {
-            default: () => [this.object.state.label]
-          })
+      const { object } = this
+      return [
+        {
+          key: this.$tc('Number'),
+          value: object['serial_num']
+        },
+        {
+          key: this.$tc('Status'),
+          value: object.state.value,
+          formatter: (item, val) => {
+            const tp = this.statusMap[val]
+            return createVNodeCompat(
+              resolveComponentCompat('el-tag'),
+              {
+                type: tp,
+                size: 'small'
+              },
+              {
+                default: () => [this.object.state.label]
+              }
+            )
+          }
+        },
+        {
+          key: this.$tc('Type'),
+          value: object.type.label
+        },
+        {
+          key: this.$tc('User'),
+          value: object.rel_snapshot.applicant
+        },
+        {
+          key: this.$tc('OrgName'),
+          value: object.org_name
+        },
+        {
+          key: this.$tc('DateCreated'),
+          value: object.date_created
+        },
+        {
+          key: this.$tc('Comment'),
+          value: object.comment
         }
-      }, {
-        key: this.$tc('Type'),
-        value: object.type.label
-      }, {
-        key: this.$tc('User'),
-        value: object.rel_snapshot.applicant
-      }, {
-        key: this.$tc('OrgName'),
-        value: object.org_name
-      }, {
-        key: this.$tc('DateCreated'),
-        value: object.date_created
-      }, {
-        key: this.$tc('Comment'),
-        value: object.comment
-      }]
+      ]
     }
   }
 }

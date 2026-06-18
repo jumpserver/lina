@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 export function createSourceIdCache(ids) {
-  ids = ids.map(item => {
+  ids = ids.map((item) => {
     if (typeof item === 'object' && item.id) {
       return item.id
     } else {

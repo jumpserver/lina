@@ -1,10 +1,14 @@
 <template>
   <div class="asset-select-formatter">
-    <Select2 v-bind="{ ...selectAttrs, ...select2Config }" ref="select2"
+    <Select2
+      v-bind="{ ...selectAttrs, ...select2Config }"
+      ref="select2"
       v-model="select2Config.value"
       @input="onInputChange"
-      @click.stop="openDialog" />
-    <AssetSelectDialog v-if="dialogVisible"
+      @click.stop="openDialog"
+    />
+    <AssetSelectDialog
+      v-if="dialogVisible"
       ref="dialog"
       v-model:visible="dialogVisible"
       :base-node-url="baseNodeUrl"
@@ -13,7 +17,8 @@
       :tree-url-query="treeUrlQuery"
       :value="value"
       @cancel="handleCancel"
-      @confirm="handleConfirm" />
+      @confirm="handleConfirm"
+    />
   </div>
 </template>
 
@@ -116,7 +121,7 @@ export default {
       this.$emit('change', val)
     },
     addToSelect(options, row) {
-      const selectOptionsHas = options.find(item => item.value === row.id)
+      const selectOptionsHas = options.find((item) => item.value === row.id)
       // 如果select2的options中没有，那么可能无法显示正常的值
       if (selectOptionsHas === undefined) {
         const option = {

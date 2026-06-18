@@ -19,11 +19,7 @@ export default {
       },
       url: '/api/v1/authentication/access-keys/',
       hasDetailInMsg: false,
-      fields: [
-        'id',
-        'ip_group',
-        'is_active'
-      ],
+      fields: ['id', 'ip_group', 'is_active'],
       fieldsMeta: {
         id: {
           el: {
@@ -32,9 +28,7 @@ export default {
           }
         },
         rules: {
-          fields: [
-            'ip_group'
-          ],
+          fields: ['ip_group'],
           fieldsMeta: {
             ip_group: {
               label: this.$t('AccessIP'),
@@ -66,12 +60,9 @@ export default {
       }
     }
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {}
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

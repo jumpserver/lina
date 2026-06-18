@@ -37,8 +37,7 @@ export default {
       name: ''
     }
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     onConfirm() {
       this.$emit('confirm', this.name)

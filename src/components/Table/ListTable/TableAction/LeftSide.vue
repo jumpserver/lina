@@ -1,5 +1,7 @@
 <template>
-  <DataActions v-bind="$attrs" v-if="hasLeftActions && iActions.length> 0"
+  <DataActions
+    v-bind="$attrs"
+    v-if="hasLeftActions && iActions.length > 0"
     :key="actionsRenderKey"
     :actions="iActions"
     size="small"
@@ -111,7 +113,7 @@ export default {
           name: 'actionUpdateSelected',
           has: this.hasBulkUpdate,
           icon: 'batch-update',
-          can: function({ selectedRows }) {
+          can: function ({ selectedRows }) {
             let canBulkUpdate = vm.canBulkUpdate
             if (typeof canBulkUpdate === 'function') {
               canBulkUpdate = canBulkUpdate({ selectedRows })
@@ -170,7 +172,7 @@ export default {
       return [...this.actions, this.moreAction]
     },
     actionsRenderKey() {
-      return this.selectedRows.map(row => row.id).join(',') || 'empty'
+      return this.selectedRows.map((row) => row.id).join(',') || 'empty'
     },
     actions() {
       const actions = [...this.defaultActions, ...this.extraActions]
@@ -188,7 +190,7 @@ export default {
           name: 'batch',
           title: this.$t('BatchProcessing', { number: this.selectedRows.length }),
           divided: true,
-          has: function({ selectedRows }) {
+          has: function ({ selectedRows }) {
             return selectedRows.length > 0
           },
           class: 'more-batch-processing',
@@ -267,7 +269,7 @@ export default {
       })
     },
     async defaultPerformBulkDelete(selectedRows) {
-      const ids = selectedRows.map(v => {
+      const ids = selectedRows.map((v) => {
         return v.id
       })
       const data = await createSourceIdCache(ids)

@@ -1,5 +1,7 @@
 <template>
-  <Dialog v-bind="$attrs" :close-on-click-modal="false"
+  <Dialog
+    v-bind="$attrs"
+    :close-on-click-modal="false"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
@@ -7,7 +9,8 @@
     :visible="visible"
     class="dialog-content"
     width="600px"
-    @confirm="visible = false">
+    @confirm="visible = false"
+  >
     <div v-if="confirmTypeRequired === 'relogin'">
       <el-row :gutter="24" style="margin: 0 auto">
         <el-col :md="24" :sm="24">
@@ -113,8 +116,10 @@
   </Dialog>
 </template>
 <script>
+import { LOGOUT_PATH } from '@/utils/env'
 import Dialog from '@/components/Dialog/index.vue'
 import { encryptPassword } from '@/utils/secure'
+import _ from 'lodash'
 
 export default {
   name: 'UserConfirmDialog',
@@ -172,10 +177,12 @@ export default {
         this.isFaceCaptureVisible = false
       }
 
-      this.inputPlaceholder = this.subTypeChoices.filter(item => item.name === val)[0]?.placeholder
+      this.inputPlaceholder = this.subTypeChoices.filter(
+        (item) => item.name === val
+      )[0]?.placeholder
       this.smsWidth = val === 'sms' ? 6 : 0
     },
-    performConfirm: _.debounce(function({ response, callback, cancel }) {
+    performConfirm: _.debounce(function ({ response, callback, cancel }) {
       if (this.processing || this.visible) {
         return
       }
@@ -187,7 +194,7 @@ export default {
       const confirmUrl = '/api/v1/authentication/confirm/'
       this.$axios
         .get(confirmUrl, { params: { confirm_type: confirmType } })
-        .then(data => {
+        .then((data) => {
           this.confirmTypeRequired = data.confirm_type
 
           if (this.confirmTypeRequired === 'relogin') {
@@ -204,12 +211,12 @@ export default {
             return
           }
           this.subTypeChoices = data.content
-          const defaultSubType = this.subTypeChoices.filter(item => !item.disabled)[0]
+          const defaultSubType = this.subTypeChoices.filter((item) => !item.disabled)[0]
           this.subTypeSelected = defaultSubType.name
           this.inputPlaceholder = defaultSubType.placeholder
           this.visible = true
         })
-        .catch(err => {
+        .catch((err) => {
           const data = err.response?.data
           const msg = data?.error || data?.detail || data?.msg || this.$t('GetConfirmTypeFailed')
           this.$message.error(msg)
@@ -220,12 +227,12 @@ export default {
         })
     }, 500),
     logout() {
-      window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${this.$route.fullPath}`
+      window.location.href = `${LOGOUT_PATH}?next=${this.$route.fullPath}`
     },
     sendCode() {
       this.$axios
         .post(`/api/v1/authentication/mfa/select/`, { type: this.subTypeSelected })
-        .then(res => {
+        .then((res) => {
           this.$message.success(this.$tc('VerificationCodeSent'))
           let time = 60
           this.smsBtnDisabled = true
@@ -252,7 +259,7 @@ export default {
     checkPasskeyStatus() {
       const url = '/api/v1/authentication/confirm/check/?confirm_type=mfa'
       const t = setInterval(() => {
-        this.$axios.get(url).then(data => {
+        this.$axios.get(url).then((data) => {
           this.passkeyVisible = false
           this.onSuccess()
         })
@@ -269,13 +276,13 @@ export default {
       const url = '/api/v1/authentication/face/context/'
       this.$axios
         .post(url)
-        .then(data => {
+        .then((data) => {
           const token = data['token']
           this.faceCaptureUrl = '/facelive/capture?token=' + token
           this.isFaceCaptureVisible = true
 
           const timer = setInterval(() => {
-            this.$axios.get(url + `?token=${token}`).then(data => {
+            this.$axios.get(url + `?token=${token}`).then((data) => {
               if (data['is_finished']) {
                 clearInterval(timer)
                 this.isFaceCaptureVisible = false
@@ -320,7 +327,7 @@ export default {
         .then(() => {
           this.onSuccess()
         })
-        .catch(err => {
+        .catch((err) => {
           this.$message.error(err.message || this.$tc('ConfirmFailed'))
           this.faceCaptureUrl = null
           this.isFaceCaptureVisible = false

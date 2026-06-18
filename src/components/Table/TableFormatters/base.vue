@@ -24,7 +24,7 @@ export default {
     },
     tableData: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     url: {
       type: String,
@@ -51,6 +51,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

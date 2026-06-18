@@ -5,10 +5,17 @@
 <script>
 import { getPreference } from '@/api/settings'
 import { openNewWindow } from '@/utils/common/index'
-import { createVNode as _createVNode, isVNode as _isVNode, resolveComponent as _resolveComponent } from 'vue'
+import {
+  createVNode as createVNodeCompat,
+  isVNode as isVNodeCompat,
+  resolveComponent as resolveComponentCompat
+} from 'vue'
 import HomeCard from './HomeCard.vue'
 function _isSlot(s) {
-  return typeof s === 'function' || Object.prototype.toString.call(s) === '[object Object]' && !_isVNode(s)
+  return (
+    typeof s === 'function' ||
+    (Object.prototype.toString.call(s) === '[object Object]' && !isVNodeCompat(s))
+  )
 }
 export default {
   name: 'Announcement',
@@ -30,7 +37,7 @@ export default {
             prop: 'id',
             align: 'center',
             width: '50px',
-            formatter: function(row, column, cellValue, index) {
+            formatter: function (row, column, cellValue, index) {
               const label = index + 1
               const to = {
                 name: 'SessionDetail',
@@ -39,11 +46,17 @@ export default {
                 }
               }
               if (vm.$hasPerm('terminal.view_session')) {
-                return _createVNode(_resolveComponent('router-link'), {
-                  to
-                }, _isSlot(label) ? label : {
-                  default: () => [label]
-                })
+                return createVNodeCompat(
+                  resolveComponentCompat('router-link'),
+                  {
+                    to
+                  },
+                  _isSlot(label)
+                    ? label
+                    : {
+                        default: () => [label]
+                      }
+                )
               } else {
                 return label
               }
@@ -78,24 +91,27 @@ export default {
               hasDelete: false,
               hasClone: false,
               hasUpdate: false,
-              extraActions: [{
-                name: 'connect',
-                icon: 'fa-desktop',
-                plain: true,
-                type: 'primary',
-                can: ({
-                  row
-                }) => row.is_active,
-                callback: ({
-                  row
-                }) => {
-                  if (this.preference?.basic?.connect_default_open_method === 'new') {
-                    openNewWindow(`/luna/connect?login_to=${row.asset_id}&login_account=${row.account_id}`)
-                  } else {
-                    window.open(`/luna/?login_to=${row.asset_id}&login_account=${row.account_id}`, '_blank')
+              extraActions: [
+                {
+                  name: 'connect',
+                  icon: 'fa-desktop',
+                  plain: true,
+                  type: 'primary',
+                  can: ({ row }) => row.is_active,
+                  callback: ({ row }) => {
+                    if (this.preference?.basic?.connect_default_open_method === 'new') {
+                      openNewWindow(
+                        `/luna/connect?login_to=${row.asset_id}&login_account=${row.account_id}`
+                      )
+                    } else {
+                      window.open(
+                        `/luna/?login_to=${row.asset_id}&login_account=${row.account_id}`,
+                        '_blank'
+                      )
+                    }
                   }
                 }
-              }]
+              ]
             }
           }
         },
@@ -105,12 +121,11 @@ export default {
     }
   },
   mounted() {
-    getPreference().then(resp => {
+    getPreference().then((resp) => {
       this.preference = resp
     })
   }
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

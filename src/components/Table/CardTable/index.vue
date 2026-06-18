@@ -1,17 +1,25 @@
 <template>
   <div class="el-card-table">
-    <TableAction v-bind="headerActions" :reload-table="reloadTable"
+    <TableAction
+      v-bind="headerActions"
+      :reload-table="reloadTable"
       :search-table="search"
-      :table-url="tableUrl" />
+      :table-url="tableUrl"
+    />
     <el-row v-loading="loading" class="the-row">
       <IBox v-if="totalData.length === 0" class="empty-box">
-        <el-empty :description="$t('NoData')" :image-size="200" class="no-data" style="padding: 20px" />
+        <el-empty
+          :description="$t('NoData')"
+          :image-size="200"
+          class="no-data"
+          style="padding: 20px"
+        />
       </IBox>
       <div class="card-container">
         <el-card
           v-for="(d, index) in totalData"
           :key="index"
-          :class="{'is-disabled': isDisabled(d)}"
+          :class="{ 'is-disabled': isDisabled(d) }"
           class="the-card"
           shadow="hover"
         >
@@ -23,7 +31,9 @@
         </el-card>
       </div>
     </el-row>
-    <Pagination v-bind="$data" v-show="pagination && total> paginationSize"
+    <Pagination
+      v-bind="$data"
+      v-show="pagination && total > paginationSize"
       ref="pagination"
       class="pagination"
       @current-size-change="handleCurrentChange"
@@ -147,7 +157,9 @@ export default {
       }
       const pageQuery = this.getPageQuery(this.page, this.paginationSize)
       const query = Object.assign(this.extraQuery, pageQuery, this.tableConfig.extraQuery)
-      const queryString = Object.keys(query).map(key => key + '=' + query[key]).join('&')
+      const queryString = Object.keys(query)
+        .map((key) => key + '=' + query[key])
+        .join('&')
       const connector = this.tableUrl.indexOf('?') === -1 ? '?' : '&'
       const url = `${this.tableUrl}${connector}${queryString}`
 
@@ -193,7 +205,10 @@ export default {
       }
       if (this.detailDrawer) {
         await this.$store.dispatch('common/setDrawerActionMeta', {
-          action: 'detail', row: obj, col: {}, id: obj.id
+          action: 'detail',
+          row: obj,
+          col: {},
+          id: obj.id
         })
         this.detailTitle = `${this.$t('Detail')}: ${obj.name}`
         this.detailDrawerVisible = true
@@ -247,7 +262,8 @@ export default {
     }
   }
 
-  .el-col, div {
+  .el-col,
+  div {
     gap: 20px;
 
     .the-card {

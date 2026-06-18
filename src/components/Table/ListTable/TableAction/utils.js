@@ -1,7 +1,7 @@
 export function cleanActions(actions, canDefaults, { selectedRows, reloadTable }) {
   // debug('Start clean actions: ', selectedRows.length, reloadTable)
   const cleanedActions = []
-  const cloneActions = actions.map(action => ({ ...action }))
+  const cloneActions = actions.map((action) => ({ ...action }))
   cloneActions.forEach((action) => {
     action.has = cleanBoolean(action, 'has', true, { selectedRows, reloadTable })
     action.can = cleanBoolean(action, 'can', true, { selectedRows, reloadTable })
@@ -39,4 +39,3 @@ export function cleanCallback(action, { selectedRows, reloadTable }) {
   }
   return () => v({ selectedRows, reloadTable })
 }
-

@@ -1,7 +1,10 @@
 <template>
-  <GenericListTableDialog v-bind="config" :header-actions="headerActions"
+  <GenericListTableDialog
+    v-bind="config"
+    :header-actions="headerActions"
     :visible="visible"
-    @update:visible="$emit('update:visible', $event)" />
+    @update:visible="$emit('update:visible', $event)"
+  />
 </template>
 
 <script>
@@ -78,6 +81,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

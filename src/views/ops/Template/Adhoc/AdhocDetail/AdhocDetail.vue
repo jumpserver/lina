@@ -3,11 +3,7 @@
     <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
     <template #right>
       <IBox :title="$tc('Variable')">
-        <Variable
-          v-model="object.variable"
-          :disable-edit="disableEdit"
-          @input="updateVariable"
-        />
+        <Variable v-model="object.variable" :disable-edit="disableEdit" @input="updateVariable" />
       </IBox>
     </template>
   </TwoCol>
@@ -55,6 +51,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

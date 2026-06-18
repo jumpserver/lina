@@ -14,14 +14,14 @@
         {{ tips }}
       </el-alert>
       <el-form label-position="left" style="padding-left: 20px">
-        <el-form-item :label="$tc('FileType' )" :label-width="'100px'">
+        <el-form-item :label="$tc('FileType')" :label-width="'100px'">
           <el-radio-group v-model="exportTypeOption">
             <el-radio
               v-for="option of exportTypeOptions"
               :key="option.value"
               :disabled="!option.can"
               :value="option.value"
-              style="padding: 10px 20px;"
+              style="padding: 10px 20px"
             >
               {{ option.label }}
             </el-radio>
@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import { withBaseApi } from '@/utils/env'
 import Dialog from '@/components/Dialog/index.vue'
 import { createSourceIdCache } from '@/api/common'
 import * as queryUtil from '@/components/Table/DataTable/compenents/el-data-table/utils/query'
@@ -77,8 +78,7 @@ export default {
     },
     beforeExport: {
       type: Function,
-      default: () => {
-      }
+      default: () => {}
     },
     mfaVerifyRequired: {
       type: Boolean,
@@ -213,7 +213,7 @@ export default {
       download(url)
     },
     async defaultPerformExport(selectRows, exportOption, q, exportTypeOption) {
-      const url = (process.env.VUE_APP_ENV === 'production') ? (`${this.url}`) : (`${process.env.VUE_APP_BASE_API}${this.url}`)
+      const url = withBaseApi(this.url)
       const query = Object.assign({}, q)
       if (exportOption === 'selected') {
         const resources = []
@@ -225,9 +225,7 @@ export default {
         query['spm'] = spm.spm
       }
       query['format'] = exportTypeOption
-      const queryStr =
-        (url.indexOf('?') > -1 ? '&' : '?') +
-        queryUtil.stringify(query, '=', '&')
+      const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(query, '=', '&')
       return this.downloadCsv(url + queryStr)
     },
     async handleExport() {
@@ -258,14 +256,14 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-  .export-item {
-    width: 100%;
-    display: block;
-    padding: 10px 20px;
-  }
+<style lang="scss" scoped>
+.export-item {
+  width: 100%;
+  display: block;
+  padding: 10px 20px;
+}
 
-  .export-form :deep(.el-form-item__label) {
-    line-height: 2
-  }
+.export-form :deep(.el-form-item__label) {
+  line-height: 2;
+}
 </style>

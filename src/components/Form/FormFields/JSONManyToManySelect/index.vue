@@ -75,7 +75,12 @@ const AttrActionFormatter = {
       if (typeof handler !== 'function') {
         return
       }
-      const next = handler({ row: this.row, col: this.col, cellValue: this.cellValue, index: this.index })
+      const next = handler({
+        row: this.row,
+        col: this.col,
+        cellValue: this.cellValue,
+        index: this.index
+      })
       if (typeof next === 'function') {
         next()
       }
@@ -132,14 +137,14 @@ export default {
     }
   },
   data() {
-    const tableFormatter = colName => {
+    const tableFormatter = (colName) => {
       return (row, col, cellValue) => {
         const value = cellValue
         switch (colName) {
           case 'name':
-            return this.attrs.find(attr => attr.name === value)?.label || value
+            return this.attrs.find((attr) => attr.name === value)?.label || value
           case 'match':
-            return attrMatchOptions.find(opt => opt.value === value).label || value
+            return attrMatchOptions.find((opt) => opt.value === value).label || value
           case 'value':
             return Array.isArray(value) ? value.join(', ') : value
           default:
@@ -190,7 +195,7 @@ export default {
   },
   computed: {
     attrsAdded() {
-      return this.tableConfig.totalData.map(item => item.name)
+      return this.tableConfig.totalData.map((item) => item.name)
     }
   },
   watch: {
@@ -227,7 +232,7 @@ export default {
       const [key, value] = attrFilter
       let url = setUrlParam(this.select2.url, key, value)
       url = setUrlParam(url, 'limit', 1)
-      return this.$axios.get(url).then(res => {
+      return this.$axios.get(url).then((res) => {
         this.attrMatchCount = res.count
       })
     },
@@ -272,7 +277,7 @@ export default {
       }
       const allAttrs = this.tableConfig.totalData
       // 因为可能 attr 的 name 会重复，所以需要先删除再添加
-      const setIndex = allAttrs.findIndex(attr => attr.name === form.name)
+      const setIndex = allAttrs.findIndex((attr) => attr.name === form.name)
       if (setIndex === -1) {
         allAttrs.push(Object.assign({}, form))
       } else {

@@ -5,8 +5,9 @@ import { message } from '@/utils/vue/message'
 import orgUtil from '@/utils/jms/org'
 import orgs from '@/api/orgs'
 import { getPropView, isViewHasOrgs } from '@/utils/jms/index'
+import { LOGIN_PATH } from '@/utils/env'
 
-const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
+const whiteList = ['/login', LOGIN_PATH] // no redirect whitelist
 const autoEnterOrgs = [
   '00000000-0000-0000-0000-000000000004',
   '00000000-0000-0000-0000-000000000001',
@@ -59,7 +60,7 @@ async function getPublicSetting({ to, from }, isOpen) {
 }
 
 async function refreshCurrentOrg() {
-  return orgs.getCurrentOrg().then(org => {
+  return orgs.getCurrentOrg().then((org) => {
     // Root 就不刷新本地的了, 会影响 autoEnter
     if (autoEnterOrgs.indexOf(org.id) !== -1) {
       return
@@ -90,7 +91,7 @@ async function changeCurrentOrgIfNeed({ to, from }) {
   ]
   if (autoEnterOrgs.indexOf(currentOrg.id) !== -1 && currentOrg.autoEnter) {
     const delta = new Date().getTime() - currentOrg.autoEnter
-    const notNeedChange = globalOrgPath.find(path => to.path.indexOf(path) === 0)
+    const notNeedChange = globalOrgPath.find((path) => to.path.indexOf(path) === 0)
     if (!notNeedChange && delta > 3000) {
       await orgUtil.change2PropOrg()
     }
@@ -153,7 +154,7 @@ export async function generatePageRoutes({ to, from }) {
     }
     deduplicateRouteNames(accessRoutes)
 
-    accessRoutes.forEach(route => {
+    accessRoutes.forEach((route) => {
       try {
         router.addRoute(route)
       } catch (e) {
@@ -220,7 +221,7 @@ export async function changeCurrentViewIfNeed({ to, from }) {
 }
 
 function onI18nLoaded() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const load = store.state.app.i18nLoaded
     if (load) {
       resolve()

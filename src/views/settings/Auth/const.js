@@ -2,6 +2,7 @@ import store from '@/store'
 import { Select2 } from '@/components/Form/FormFields'
 import i18n from '@/i18n/i18n'
 import { ObjectLocalStorage } from '@/utils/common/index'
+import { getAssetUrl } from '@/utils/assets'
 
 const t = i18n.global.t.bind(i18n.global)
 
@@ -14,7 +15,7 @@ export function getOrgSelect2Meta() {
       multiple: true,
       ajax: {
         url: '/api/v1/orgs/orgs/',
-        transformOption: item => {
+        transformOption: (item) => {
           return { label: item.name, value: item.id }
         }
       }
@@ -29,7 +30,7 @@ export function getAuthItems() {
   const xpackBackends = [
     {
       name: 'LdapHA',
-      logo: require('@/assets/img/auth/ldap_logo.png'),
+      logo: getAssetUrl('img/auth/ldap_logo.png'),
       title: t('AD/LDAP HA'),
       authKey: 'AUTH_LDAP_HA',
       description: t('LdapHaSummary'),
@@ -38,14 +39,14 @@ export function getAuthItems() {
     {
       name: 'OIDC',
       title: t('OIDC'),
-      logo: require('@/assets/img/auth/oidc_logo.png'),
+      logo: getAssetUrl('img/auth/oidc_logo.png'),
       authKey: 'AUTH_OPENID',
       type: 'SSO',
       description: t('OidcSummary')
     },
     {
       name: 'SAML2',
-      logo: require('@/assets/img/auth/saml2_logo.png'),
+      logo: getAssetUrl('img/auth/saml2_logo.png'),
       title: t('SAML2'),
       authKey: 'AUTH_SAML2',
       type: 'SSO',
@@ -53,7 +54,7 @@ export function getAuthItems() {
     },
     {
       name: 'OAuth2',
-      logo: require('@/assets/img/auth/oauth2_logo.png'),
+      logo: getAssetUrl('img/auth/oauth2_logo.png'),
       title: t('OAuth2'),
       authKey: 'AUTH_OAUTH2',
       type: 'SSO',
@@ -61,7 +62,7 @@ export function getAuthItems() {
     },
     {
       name: 'WeCom',
-      logo: require('@/assets/img/auth/wecom_logo.png'),
+      logo: getAssetUrl('img/auth/wecom_logo.png'),
       title: t('WeCom'),
       authKey: 'AUTH_WECOM',
       type: 'IdP',
@@ -69,7 +70,7 @@ export function getAuthItems() {
     },
     {
       name: 'DingTalk',
-      logo: require('@/assets/img/auth/dingtalk_logo.webp'),
+      logo: getAssetUrl('img/auth/dingtalk_logo.webp'),
       title: t('DingTalk'),
       authKey: 'AUTH_DINGTALK',
       type: 'IdP',
@@ -77,7 +78,7 @@ export function getAuthItems() {
     },
     {
       name: 'FeiShu',
-      logo: require('@/assets/img/auth/feishu_logo.png'),
+      logo: getAssetUrl('img/auth/feishu_logo.png'),
       title: t('FeiShu'),
       authKey: 'AUTH_FEISHU',
       type: 'IdP',
@@ -85,7 +86,7 @@ export function getAuthItems() {
     },
     {
       name: 'Lark',
-      logo: require('@/assets/img/auth/lark_logo.png'),
+      logo: getAssetUrl('img/auth/lark_logo.png'),
       title: t('Lark'),
       authKey: 'AUTH_LARK',
       type: 'IdP',
@@ -93,7 +94,7 @@ export function getAuthItems() {
     },
     {
       name: 'Slack',
-      logo: require('@/assets/img/auth/slack_logo.png'),
+      logo: getAssetUrl('img/auth/slack_logo.png'),
       title: t('Slack'),
       authKey: 'AUTH_SLACK',
       type: 'IdP',
@@ -101,7 +102,7 @@ export function getAuthItems() {
     },
     {
       name: 'Radius',
-      logo: require('@/assets/img/auth/radius_logo.png'),
+      logo: getAssetUrl('img/auth/radius_logo.png'),
       title: t('Radius'),
       authKey: 'AUTH_RADIUS',
       type: 'common',
@@ -112,7 +113,7 @@ export function getAuthItems() {
   const authItems = [
     {
       name: 'LDAP',
-      logo: require('@/assets/img/auth/ldap_logo.png'),
+      logo: getAssetUrl('img/auth/ldap_logo.png'),
       title: t('AD/LDAP'),
       authKey: 'AUTH_LDAP',
       type: 'common',
@@ -120,7 +121,7 @@ export function getAuthItems() {
     },
     {
       name: 'CAS',
-      logo: require('@/assets/img/auth/cas_logo.png'),
+      logo: getAssetUrl('img/auth/cas_logo.png'),
       title: t('CAS'),
       authKey: 'AUTH_CAS',
       description: t('CasSummary'),
@@ -128,7 +129,7 @@ export function getAuthItems() {
     },
     {
       name: 'Passkey',
-      logo: require('@/assets/img/auth/passkey_logo.png'),
+      logo: getAssetUrl('img/auth/passkey_logo.png'),
       title: t('Passkey'),
       authKey: 'AUTH_PASSKEY',
       description: t('PasskeySummary'),

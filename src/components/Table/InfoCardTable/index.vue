@@ -1,13 +1,19 @@
 <template>
-  <CardTable v-bind="$attrs" ref="table"
+  <CardTable
+    v-bind="$attrs"
+    ref="table"
     :columns="3"
     :table-config="tableConfig"
-    class="info-card-table">
+    class="info-card-table"
+  >
     <template #default="slotProps">
-      <CardPanel v-bind="subComponentProps" :object="slotProps.item"
+      <CardPanel
+        v-bind="subComponentProps"
+        :object="slotProps.item"
         :on-view="slotProps.onView"
         :table-config="tableConfig"
-        @refresh="reloadTable" />
+        @refresh="reloadTable"
+      />
     </template>
   </CardTable>
 </template>

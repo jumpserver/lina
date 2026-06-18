@@ -11,10 +11,18 @@
     <div class="row">
       <el-progress :percentage="processedPercent" />
     </div>
-    <DataTable v-if="tableGenDone" id="importTable" ref="dataTable" :config="tableConfig" class="importTable" />
+    <DataTable
+      v-if="tableGenDone"
+      id="importTable"
+      ref="dataTable"
+      :config="tableConfig"
+      class="importTable"
+    />
     <div class="row" style="padding-top: 20px">
       <div class="btn-groups">
-        <el-button v-if="showCancel" size="small" @click="performCancel">{{ $t('Cancel') }}</el-button>
+        <el-button v-if="showCancel" size="small" @click="performCancel">{{
+          $t('Cancel')
+        }}</el-button>
         <el-button
           v-show="!disableImportBtn"
           size="small"
@@ -23,13 +31,16 @@
         >
           {{ importActionTitle }}
         </el-button>
-        <el-button v-bind="button" v-for="button in moreButtons"
+        <el-button
+          v-bind="button"
+          v-for="button in moreButtons"
           v-show="!button.hidden"
           :key="button.title"
           :disabled="disableImportBtn"
           :loading="button.loading"
           size="small"
-          @click="handleClick(button)">
+          @click="handleClick(button)"
+        >
           {{ button.title }}
         </el-button>
       </div>
@@ -192,7 +203,7 @@ export default {
       if (this.totalCount === 0) {
         return 0
       }
-      return Math.round(this.processedCount / this.totalCount * 100)
+      return Math.round((this.processedCount / this.totalCount) * 100)
     },
     elDataTable() {
       return this.$refs['dataTable'].dataTable
@@ -228,7 +239,7 @@ export default {
     generateTableColumns(tableTitles, tableData) {
       const columns = [{ ...getStatusColumnMeta.bind(this)().status }]
       for (const item of tableTitles) {
-        const dataItemLens = tableData.map(d => {
+        const dataItemLens = tableData.map((d) => {
           if (!d) {
             return 0
           }
@@ -275,12 +286,13 @@ export default {
       return columns
     },
     getEncryptFields() {
-      const fromProp = Array.isArray(this.encryptFields) && this.encryptFields.length ? this.encryptFields : null
+      const fromProp =
+        Array.isArray(this.encryptFields) && this.encryptFields.length ? this.encryptFields : null
       return fromProp || ['password', 'secret', 'private_key']
     },
     generateTableData(tableTitles, tableData) {
       const totalData = []
-      tableData.forEach(item => {
+      tableData.forEach((item) => {
         item['@status'] = 'pending'
         const encryptFields = this.getEncryptFields()
         for (const field of encryptFields) {
@@ -412,11 +424,7 @@ export default {
     },
     async performUpdateObject(item) {
       const updateUrl = getUpdateObjURL(this.url, item.id)
-      return this.$axios.patch(
-        updateUrl,
-        item,
-        { disableFlashErrorMsg: true }
-      )
+      return this.$axios.patch(updateUrl, item, { disableFlashErrorMsg: true })
     },
     async defaultPerformUploadObject(item) {
       let handler = this.performCreateObject
@@ -436,11 +444,7 @@ export default {
       }
     },
     async performCreateObject(item) {
-      return this.$axios.post(
-        this.url,
-        item,
-        { disableFlashErrorMsg: true }
-      )
+      return this.$axios.post(this.url, item, { disableFlashErrorMsg: true })
     },
     keepElementInViewport() {
       const tableRef = document.getElementById('importTable')
@@ -452,11 +456,7 @@ export default {
       const rect = parentTdRef.getBoundingClientRect()
       let windowInnerHeight = window.innerHeight || document.documentElement.clientHeight
       windowInnerHeight = windowInnerHeight * 0.97 - 150
-      const inViewport = (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= windowInnerHeight
-      )
+      const inViewport = rect.top >= 0 && rect.left >= 0 && rect.bottom <= windowInnerHeight
       if (!inViewport) {
         parentTdRef.scrollIntoView({ behavior: 'auto', block: 'start', inline: 'start' })
       }
@@ -465,8 +465,7 @@ export default {
       this.tableConfig.totalData.push(item)
     },
     handleClick(btn) {
-      const callback = btn.callback || function() {
-      }
+      const callback = btn.callback || function () {}
       callback(btn)
     }
   }
@@ -474,10 +473,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use "@/styles/variables" as *;
+@use '@/styles/variables' as *;
 
 .summary-item {
-  padding: 0 10px
+  padding: 0 10px;
 }
 
 .summary-success {

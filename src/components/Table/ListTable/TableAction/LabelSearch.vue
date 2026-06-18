@@ -1,11 +1,6 @@
 <template>
   <div class="label-search">
-    <el-button
-      v-if="!showLabelSearch"
-      class="label-button"
-      size="small"
-      @click="showSearchSelect"
-    >
+    <el-button v-if="!showLabelSearch" class="label-button" size="small" @click="showSearchSelect">
       <svg-icon icon-class="tag" />
     </el-button>
     <el-cascader
@@ -61,7 +56,7 @@ export default {
         return
       }
 
-      const labelSearch = newValue.map(item => item.join(':')).join(',')
+      const labelSearch = newValue.map((item) => item.join(':')).join(',')
       this.$emit('labelSearch', labelSearch)
     },
     showLabelSearch(newValue) {
@@ -104,9 +99,7 @@ export default {
         this.$emit('showLabelSearch', this.showLabelSearch)
         return
       }
-      const input = cascaderEl
-        .getElementsByClassName('el-input--suffix')[0]
-        ?.querySelector('input')
+      const input = cascaderEl.getElementsByClassName('el-input--suffix')[0]?.querySelector('input')
       if (visible) {
         setTimeout(() => {
           if (input) input.style.height = '28px'
@@ -125,12 +118,12 @@ export default {
         return
       }
       const url = '/api/v1/labels/labels/'
-      this.$axios.get(url).then(data => {
+      this.$axios.get(url).then((data) => {
         const groupedLabelOptions = _.groupBy(data, 'name')
         const labelOptions = []
         for (const [key, labels] of Object.entries(groupedLabelOptions)) {
           const all = { value: '*', label: this.$t('All') }
-          const children = _.sortBy(labels, 'value').map(label => ({
+          const children = _.sortBy(labels, 'value').map((label) => ({
             value: label.value,
             label: label.value
           }))
@@ -146,7 +139,8 @@ export default {
     setSearchFocus() {
       setTimeout(() => {
         const cascaderEl = this.$refs.labelCascader?.$el
-        const searchInput = cascaderEl?.querySelector?.('.el-cascader__search-input') ||
+        const searchInput =
+          cascaderEl?.querySelector?.('.el-cascader__search-input') ||
           cascaderEl?.getElementsByClassName?.('el-cascader__search-input')?.[0]
         if (searchInput) searchInput.focus()
       }, 100)
@@ -161,16 +155,20 @@ export default {
       }, 200)
     },
     listenViewPort() {
-      window.addEventListener('resize', debounce((e) => {
-        const viewPort = e?.target?.innerWidth
-        this.showLabelSearch = viewPort < 992
-      }, 100), false)
+      window.addEventListener(
+        'resize',
+        debounce((e) => {
+          const viewPort = e?.target?.innerWidth
+          this.showLabelSearch = viewPort < 992
+        }, 100),
+        false
+      )
     }
   }
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .label-search {
   margin-right: 10px;
   border: 1px solid var(--color-border);
@@ -202,7 +200,7 @@ export default {
       }
 
       .el-input__suffix {
-        color: var(--color-icon-primary) !important;;
+        color: var(--color-icon-primary) !important;
       }
     }
 

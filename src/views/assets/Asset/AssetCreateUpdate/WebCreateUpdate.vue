@@ -12,11 +12,11 @@ export default {
     return {
       url: '/api/v1/assets/webs/',
       addFields: [
-        [this.$t('Selector'), [
-          'autofill', 'username_selector',
-          'password_selector', 'submit_selector',
-          'script'
-        ], 1]
+        [
+          this.$t('Selector'),
+          ['autofill', 'username_selector', 'password_selector', 'submit_selector', 'script'],
+          1
+        ]
       ],
       addFieldsMeta: {
         protocols: {
@@ -26,7 +26,9 @@ export default {
             let port = address.startsWith('https://') ? 443 : 80
             try {
               const url = new URL(address)
-              if (url.port) { port = url.port }
+              if (url.port) {
+                port = url.port
+              }
             } catch (e) {
               // pass
             }
@@ -52,5 +54,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

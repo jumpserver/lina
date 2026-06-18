@@ -1,12 +1,20 @@
 <template>
   <div>
-    <ExecutionDetailDialog v-if="showExecutionDetailDialog" v-model:visible="showExecutionDetailDialog" :item="item" />
-    <GenericListPage ref="GenericListPage" :header-actions="headerActions" :table-config="tableConfig" />
+    <ExecutionDetailDialog
+      v-if="showExecutionDetailDialog"
+      v-model:visible="showExecutionDetailDialog"
+      :item="item"
+    />
+    <GenericListPage
+      ref="GenericListPage"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+    />
   </div>
 </template>
 
 <script>
-import { createVNode as _createVNode } from 'vue'
+import { createVNode as createVNodeCompat } from 'vue'
 import { GenericListPage } from '@/layout/components'
 import { openTaskPage } from '@/utils/jms/index'
 import ExecutionDetailDialog from '@/views/ops/Execution/ExecutionDetail'
@@ -26,7 +34,16 @@ export default {
         columnsExclude: ['summary', 'parameters', 'timedelta'],
         columnsShow: {
           min: ['material', 'actions'],
-          default: ['id', 'material', 'job_type', 'is_finished', 'is_success', 'time_cost', 'date_created', 'actions']
+          default: [
+            'id',
+            'material',
+            'job_type',
+            'is_finished',
+            'is_success',
+            'time_cost',
+            'date_created',
+            'actions'
+          ]
         },
         columnsMeta: {
           material: {
@@ -40,43 +57,63 @@ export default {
             }
           },
           job: {
-            formatter: row => {
-              return _createVNode('span', null, [row.job?.name || '-'])
+            formatter: (row) => {
+              return createVNodeCompat('span', null, [row.job?.name || '-'])
             }
           },
           is_finished: {
             width: '100px',
-            formatter: row => {
+            formatter: (row) => {
               if (row.is_finished) {
-                return _createVNode('i', {
-                  'class': 'fa fa-check text-primary'
-                }, null)
+                return createVNodeCompat(
+                  'i',
+                  {
+                    class: 'fa fa-check text-primary'
+                  },
+                  null
+                )
               }
-              return _createVNode('i', {
-                'class': 'fa fa-times text-danger'
-              }, null)
+              return createVNodeCompat(
+                'i',
+                {
+                  class: 'fa fa-times text-danger'
+                },
+                null
+              )
             }
           },
           is_success: {
             width: '100px',
-            formatter: row => {
+            formatter: (row) => {
               if (!row.is_finished) {
-                return _createVNode('i', {
-                  'class': 'fa  fa fa-spinner fa-spin'
-                }, null)
+                return createVNodeCompat(
+                  'i',
+                  {
+                    class: 'fa  fa fa-spinner fa-spin'
+                  },
+                  null
+                )
               }
               if (row.is_success) {
-                return _createVNode('i', {
-                  'class': 'fa fa-check text-primary'
-                }, null)
+                return createVNodeCompat(
+                  'i',
+                  {
+                    class: 'fa fa-check text-primary'
+                  },
+                  null
+                )
               }
-              return _createVNode('i', {
-                'class': 'fa fa-times text-danger'
-              }, null)
+              return createVNodeCompat(
+                'i',
+                {
+                  class: 'fa fa-times text-danger'
+                },
+                null
+              )
             }
           },
           time_cost: {
-            formatter: function(row) {
+            formatter: function (row) {
               if (row.time_cost) {
                 return row.time_cost.toFixed(2) + 's'
               }
@@ -89,17 +126,17 @@ export default {
               hasUpdate: false,
               hasDelete: false,
               hasClone: false,
-              extraActions: [{
-                title: this.$t('Output'),
-                name: 'logging',
-                type: 'info',
-                can: true,
-                callback: ({
-                  row
-                }) => {
-                  openTaskPage(row.task_id)
+              extraActions: [
+                {
+                  title: this.$t('Output'),
+                  name: 'logging',
+                  type: 'info',
+                  can: true,
+                  callback: ({ row }) => {
+                    openTaskPage(row.task_id)
+                  }
                 }
-              }]
+              ]
             }
           }
         }

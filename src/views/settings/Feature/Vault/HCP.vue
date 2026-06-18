@@ -20,28 +20,25 @@ export default {
         {
           title: this.$t('Test'),
           loading: false,
-          callback: function(value, form, btn) {
+          callback: function (value, form, btn) {
             btn.loading = true
-            vm.$axios.post(
-              '/api/v1/settings/vault/hcp/testing/',
-              value
-            ).then(res => {
-              vm.$message.success(res['msg'])
-            }).catch(() => {
-              vm.$log.error('err occur')
-            }).finally(() => { btn.loading = false })
+            vm.$axios
+              .post('/api/v1/settings/vault/hcp/testing/', value)
+              .then((res) => {
+                vm.$message.success(res['msg'])
+              })
+              .catch(() => {
+                vm.$log.error('err occur')
+              })
+              .finally(() => {
+                btn.loading = false
+              })
           }
         }
       ],
       encryptedFields: ['VAULT_HCP_TOKEN'],
       fields: [
-        [this.$t('AccountStorage'),
-          [
-            'VAULT_HCP_HOST',
-            'VAULT_HCP_TOKEN',
-            'VAULT_HCP_MOUNT_POINT'
-          ]
-        ]
+        [this.$t('AccountStorage'), ['VAULT_HCP_HOST', 'VAULT_HCP_TOKEN', 'VAULT_HCP_MOUNT_POINT']]
       ],
       fieldsMeta: {
         VAULT_HCP_MOUNT_POINT: {
@@ -59,6 +56,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

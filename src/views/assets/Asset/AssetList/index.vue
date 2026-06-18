@@ -83,8 +83,8 @@ export default {
     for (const item of this.config.submenu) {
       nameComponentMap[item.name] = item
     }
-    this.$axios.get('/api/v1/assets/categories/').then(res => {
-      const categories = Array.isArray(res) ? res : (res?.results || [])
+    this.$axios.get('/api/v1/assets/categories/').then((res) => {
+      const categories = Array.isArray(res) ? res : res?.results || []
       for (const item of categories) {
         const name = item.value
         if (!nameComponentMap[name]) {

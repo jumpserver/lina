@@ -12,7 +12,7 @@
     @close="handleImportCancel"
   >
     <el-form v-if="!showTable" label-position="left" style="padding-left: 20px">
-      <el-form-item :label="$tc('Import' )" :label-width="'100px'">
+      <el-form-item :label="$tc('Import')" :label-width="'100px'">
         <el-radio v-if="canImportCreate" v-model="importOption" class="export-item" value="create">
           {{ $t('Create') }}
         </el-radio>
@@ -27,7 +27,7 @@
           </span>
         </div>
       </el-form-item>
-      <el-form-item :label="$tc('Upload' )" :label-width="'100px'" class="file-uploader">
+      <el-form-item :label="$tc('Upload')" :label-width="'100px'" class="file-uploader">
         <el-upload
           ref="upload"
           :auto-upload="false"
@@ -44,23 +44,26 @@
             {{ $t('DragUploadFileInfo') }}
           </div>
           <template #tip>
-          <div class="el-upload__tip">
-            <span :class="{'hasError': hasFileFormatOrSizeError }">
-              {{ $t('UploadCsvLth10MHelpText') }}
-            </span>
-            <div v-if="renderError" class="hasError">{{ renderError }}</div>
-          </div>
+            <div class="el-upload__tip">
+              <span :class="{ hasError: hasFileFormatOrSizeError }">
+                {{ $t('UploadCsvLth10MHelpText') }}
+              </span>
+              <div v-if="renderError" class="hasError">{{ renderError }}</div>
+            </div>
           </template>
         </el-upload>
       </el-form-item>
     </el-form>
     <div v-else class="importTableZone">
-      <ImportTable v-bind="$attrs" ref="importTable"
+      <ImportTable
+        v-bind="$attrs"
+        ref="importTable"
         :import-option="importOption"
         :json-data="jsonData"
         :url="url"
         @cancel="cancelUpload"
-        @finish="closeDialog" />
+        @finish="closeDialog"
+      />
     </div>
   </Dialog>
 </template>
@@ -98,7 +101,12 @@ export default {
   data() {
     return {
       showImportDialog: false,
-      importOption: this.canImportCreate && this.canImportUpdate ? 'create' : this.canImportCreate ? 'create' : 'update',
+      importOption:
+        this.canImportCreate && this.canImportUpdate
+          ? 'create'
+          : this.canImportCreate
+            ? 'create'
+            : 'update',
       errorMsg: '',
       loadStatus: false,
       importTypeOption: 'csv',
@@ -178,23 +186,24 @@ export default {
       url.pathname += 'render-to-json/'
       const renderToJsonUrl = url.toString().replace('http://localhost', '')
       const requestMethod = this.importOption === 'create' ? 'post' : 'put'
-      this.$axios(
-        {
-          url: renderToJsonUrl,
-          data: file.raw,
-          method: requestMethod,
-          headers: { 'Content-Type': isCsv ? 'text/csv' : 'text/xlsx' },
-          disableFlashErrorMsg: true
-        }
-      ).then(data => {
-        this.jsonData = data
-        this.showTable = true
-      }).catch(error => {
-        fileList.splice(0, fileList.length)
-        this.renderError = getErrorResponseMsg(error)
-      }).finally(() => {
-        this.loadStatus = false
+      this.$axios({
+        url: renderToJsonUrl,
+        data: file.raw,
+        method: requestMethod,
+        headers: { 'Content-Type': isCsv ? 'text/csv' : 'text/xlsx' },
+        disableFlashErrorMsg: true
       })
+        .then((data) => {
+          this.jsonData = data
+          this.showTable = true
+        })
+        .catch((error) => {
+          fileList.splice(0, fileList.length)
+          this.renderError = getErrorResponseMsg(error)
+        })
+        .finally(() => {
+          this.loadStatus = false
+        })
     },
     beforeUpload(file) {
       const isLt30M = file.size / 1024 / 1024 < 30
@@ -247,8 +256,8 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-@use "@/styles/variables" as *;
+<style lang="scss" scoped>
+@use '@/styles/variables' as *;
 
 .error-msg {
   color: $color-danger;
@@ -257,7 +266,7 @@ export default {
 .error-msg.error-results {
   background-color: #f3f3f4;
   max-height: 200px;
-  overflow: auto
+  overflow: auto;
 }
 
 .file-uploader :deep(.el-upload) {

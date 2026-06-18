@@ -1,29 +1,29 @@
 <template>
   <div>
-    <el-input v-model="rawValue.phone" :placeholder="$tc('InputPhone')" required @input="onInputChange">
+    <el-input
+      v-model="rawValue.phone"
+      :placeholder="$tc('InputPhone')"
+      required
+      @input="onInputChange"
+    >
       <template #prepend>
-      <el-select
-        :placeholder="$tc('Select')"
-        :value="rawValue.code"
-        @change="onChange"
-      >
-        <el-option
-          v-for="country in countries"
-          :key="country.name"
-          :label="country.value"
-          :value="country.value"
-        >
-          <span class="country-name">{{ country.name }}</span>
-          <span style="float: right; font-size: 13px">{{ country.value }}</span>
-        </el-option>
-      </el-select>
+        <el-select :placeholder="$tc('Select')" :value="rawValue.code" @change="onChange">
+          <el-option
+            v-for="country in countries"
+            :key="country.name"
+            :label="country.value"
+            :value="country.value"
+          >
+            <span class="country-name">{{ country.name }}</span>
+            <span style="float: right; font-size: 13px">{{ country.value }}</span>
+          </el-option>
+        </el-select>
       </template>
     </el-input>
   </div>
 </template>
 
 <script>
-
 export default {
   name: 'PhoneInput',
   props: {
@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       rawValue: {},
-      countries: [{ 'name': 'China', 'value': '+86' }]
+      countries: [{ name: 'China', value: '+86' }]
     }
   },
   computed: {
@@ -49,8 +49,8 @@ export default {
   mounted() {
     const defaults = { code: this.getDefaultCode(), phone: '' }
     this.rawValue = this.value || defaults
-    this.$axios.get('/api/v1/common/countries/').then(res => {
-      this.countries = res.map(item => {
+    this.$axios.get('/api/v1/common/countries/').then((res) => {
+      this.countries = res.map((item) => {
         return { name: `${item.flag} ${item.name}`, value: item.phone_code }
       })
     })
@@ -59,16 +59,16 @@ export default {
   methods: {
     getDefaultCode() {
       const mapper = {
-        'zh': '+86',
-        'en': '+1',
-        'ja': '+81',
-        'ko': '+82',
-        'fr': '+33',
-        'de': '+49',
-        'es': '+34',
-        'it': '+39',
-        'ru': '+7',
-        'ar': '+966'
+        zh: '+86',
+        en: '+1',
+        ja: '+81',
+        ko: '+82',
+        fr: '+33',
+        de: '+49',
+        es: '+34',
+        it: '+39',
+        ru: '+7',
+        ar: '+966'
       }
       const locale = this.$i18n.locale.split('-')[0]
       return localStorage.getItem('prePhoneCode') || mapper[locale] || '+86'

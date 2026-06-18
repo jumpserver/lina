@@ -1,10 +1,13 @@
 <template>
-  <ElDatableTable v-bind="mergedTableConfig" ref="table"
+  <ElDatableTable
+    v-bind="mergedTableConfig"
+    ref="table"
     :class="rootClass"
     :style="rootStyle"
     @size-change="handleSizeChange"
     @update="onUpdate"
-    v-on="iListeners" />
+    v-on="iListeners"
+  />
 </template>
 
 <script>
@@ -22,8 +25,7 @@ export default {
   props: {
     config: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -57,7 +59,7 @@ export default {
           fit: true, // 宽度自适应,
           tooltipEffect: 'dark',
           rowClassName: ({ row }) => {
-            const selected = this.dataTable.selected.find(item => item.id === row.id)
+            const selected = this.dataTable.selected.find((item) => item.id === row.id)
             return selected ? 'selected-row' : ''
           }
         },
@@ -78,7 +80,7 @@ export default {
         paginationSize: objTableSize.get(pathName) || 15,
         paginationSizes: [15, 30, 50, 100],
         paginationBackground: true,
-        transformQuery: query => {
+        transformQuery: (query) => {
           if (query.page && query.size) {
             const page = query.page > 0 ? query.page : 1
             const offset = (page - 1) * query.size
@@ -134,7 +136,7 @@ export default {
       return config
     },
     ...mapGetters({
-      'globalTableConfig': 'tableConfig'
+      globalTableConfig: 'tableConfig'
     })
   },
   watch: {},

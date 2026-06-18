@@ -1,6 +1,9 @@
 <template>
-  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu"
-    v-model:object="CommandFilterACL">
+  <GenericDetailPage
+    v-bind="config"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="CommandFilterACL"
+  >
     <keep-alive>
       <component :is="config.activeMenu" :object="CommandFilterACL" />
     </keep-alive>
@@ -48,6 +51,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

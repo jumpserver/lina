@@ -1,22 +1,41 @@
 <template>
   <div class="json-editor">
-    <JsonEditor
-      v-model="resultInfo"
-      :class="{resize: resize === 'vertical'}"
-      :mode="'code'"
-      :show-btns="false"
-      @json-change="onJsonChange"
-      @json-save="onJsonSave"
-      @has-error="onError"
+    <codemirror
+      v-model="editorValue"
+      :class="{ resize: resize === 'vertical' }"
+      :extensions="extensions"
+      :style="editorStyle"
+      class="editor"
+      @blur="handleBlur"
     />
   </div>
 </template>
 
 <script>
-import JsonEditor from 'vue-json-editor'
+import { Codemirror } from 'vue-codemirror'
+import { basicSetup } from 'codemirror'
+import { StreamLanguage } from '@codemirror/language'
+import { javascript } from '@codemirror/legacy-modes/mode/javascript'
+
+function stringifyValue(value) {
+  if (typeof value === 'string') {
+    return value
+  }
+  if (value === null || typeof value === 'undefined') {
+    return ''
+  }
+  try {
+    return JSON.stringify(value, null, 2)
+  } catch (error) {
+    return ''
+  }
+}
 
 export default {
-  components: { JsonEditor },
+  name: 'JsonEditor',
+  components: {
+    codemirror: Codemirror
+  },
   props: {
     value: {
       type: [String, Object, Array],
@@ -24,71 +43,96 @@ export default {
     },
     resize: {
       type: String,
-      validator: (value) => {
-        return ['none', 'vertical'].indexOf(value) !== -1
-      },
+      validator: (value) => ['none', 'vertical'].includes(value),
       default: 'vertical'
     }
   },
+  emits: ['change'],
   data() {
     return {
-      hasJsonFlag: true, // json是否验证通过
-      resultInfo: {}
+      editorValue: stringifyValue(this.value),
+      emitTimer: null,
+      extensions: [basicSetup, StreamLanguage.define(javascript({ json: true }))]
     }
   },
-  created() {
-    this.resultInfo = typeof this.value === 'string' ? JSON.parse(this.value) : this.value
+  computed: {
+    editorStyle() {
+      return {
+        minHeight: '240px'
+      }
+    }
+  },
+  watch: {
+    value: {
+      deep: true,
+      handler(newValue) {
+        const nextValue = stringifyValue(newValue)
+        if (nextValue !== this.editorValue) {
+          this.editorValue = nextValue
+        }
+      }
+    },
+    editorValue() {
+      this.queueEmit()
+    }
+  },
+  beforeUnmount() {
+    if (this.emitTimer) {
+      clearTimeout(this.emitTimer)
+    }
   },
   methods: {
-    // 数据改变
-    onJsonChange(value) {
-      this.onJsonSave(value)
+    parseEditorValue() {
+      if (!this.editorValue.trim()) {
+        return {}
+      }
+      return JSON.parse(this.editorValue)
     },
-    // 保存
-    onJsonSave(value) {
-      this.resultInfo = typeof value === 'string' ? JSON.parse(value) : value
-      this.hasJsonFlag = true
-      setTimeout(() => {
-        this.$emit('change', this.resultInfo)
-      }, 500)
+    queueEmit() {
+      if (this.emitTimer) {
+        clearTimeout(this.emitTimer)
+      }
+      this.emitTimer = setTimeout(() => {
+        try {
+          this.$emit('change', this.parseEditorValue())
+        } catch (error) {
+          this.$message.error(this.$tc('FormatError'))
+        }
+      }, 300)
     },
-    onError: _.debounce(function(value) {
-      this.$message.error(this.$tc('FormatError'))
-    }, 1500)
+    handleBlur() {
+      try {
+        this.editorValue = JSON.stringify(this.parseEditorValue(), null, 2)
+      } catch (error) {
+        this.$message.error(this.$tc('FormatError'))
+      }
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  @use "@/styles/variables" as *;
-
-  .json-editor {
-    .resize {
-      & :deep(.jsoneditor) {
-        resize: vertical;
-        cursor: s-resize;
-      }
-    }
-
-    & :deep(.jsoneditor) {
-      border: 1px solid #e5e6e7;
-    }
-
-    & :deep(.jsoneditor-compact) {
-      display: none;
-    }
-
-    & :deep(.jsoneditor-modes) {
-      display: none;
-    }
-
-    & :deep(.jsoneditor-poweredBy) {
-      display: none;
-    }
-
-    & :deep(.jsoneditor-menu) {
-      background: var(--color-primary);
-      border-bottom: 1px solid var(--color-primary);
-    }
+.json-editor {
+  .resize :deep(.cm-editor) {
+    resize: vertical;
+    overflow: auto;
   }
+
+  :deep(.cm-editor) {
+    min-height: 240px;
+    border: 1px solid #e5e6e7;
+    border-radius: 4px;
+  }
+
+  :deep(.cm-focused) {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  :deep(.cm-scroller) {
+    min-height: 240px;
+    font-family: Monaco, Menlo, Consolas, 'Courier New', monospace;
+    font-size: 12px;
+  }
+}
 </style>

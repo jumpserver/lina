@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { h, resolveComponent } from 'vue'
 import DataTable from '@/components/Table/DataTable/index.vue'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
 import { tableFormatter } from '@/views/assets/Cloud/Strategy/components/const'
@@ -59,24 +60,23 @@ export default {
             align: 'center',
             width: '100px',
             formatter: (row, col, cellValue, index) => {
-              return (
-                <div class='input-button'>
-                  <el-button
-                    icon='Edit'
-                    size='small'
-                    style={{ flexShrink: 0 }}
-                    type='primary'
-                    onClick={this.handleAttrEdit({ row, col, cellValue, index })}
-                  />
-                  <el-button
-                    icon='Minus'
-                    size='small'
-                    style={{ flexShrink: 0 }}
-                    type='danger'
-                    onClick={this.handleAttrDelete({ row, col, cellValue, index })}
-                  />
-                </div>
-              )
+              const ElButton = resolveComponent('el-button')
+              return h('div', { class: 'input-button' }, [
+                h(ElButton, {
+                  icon: 'Edit',
+                  size: 'small',
+                  style: { flexShrink: 0 },
+                  type: 'primary',
+                  onClick: this.handleAttrEdit({ row, col, cellValue, index })
+                }),
+                h(ElButton, {
+                  icon: 'Minus',
+                  size: 'small',
+                  style: { flexShrink: 0 },
+                  type: 'danger',
+                  onClick: this.handleAttrDelete({ row, col, cellValue, index })
+                })
+              ])
             }
           }
         ],
@@ -87,7 +87,7 @@ export default {
         url: '/api/v1/xpack/cloud/strategies/',
         multiple: false,
         ajax: {
-          transformOption: item => {
+          transformOption: (item) => {
             this.strategy[item.id] = {
               name: item.name,
               priority: item.priority,
@@ -132,7 +132,7 @@ export default {
     },
     handleAttrEdit({ row, index }) {
       return () => {
-        this.$axios.get(`/api/v1/xpack/cloud/strategies/${row?.id}/`).then(data => {
+        this.$axios.get(`/api/v1/xpack/cloud/strategies/${row?.id}/`).then((data) => {
           this.attrValue = data
           this.visible = true
         })

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
 import { DrawerListTable as ListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 export default {
@@ -37,41 +37,39 @@ export default {
             label: this.$t('Name'),
             formatter: DetailFormatter,
             formatterArgs: {
-              getTitle: ({
-                row
-              }) => row.app.name,
-              getRoute: ({
-                row
-              }) => ({
+              getTitle: ({ row }) => row.app.name,
+              getRoute: ({ row }) => ({
                 name: 'VirtualAppDetail',
                 params: {
                   id: row.app.id
                 }
               })
             },
-            id: ({
-              row
-            }) => row.app.id
+            id: ({ row }) => row.app.id
           },
           'app.image_name': {
             label: this.$t('ImageName')
           },
           status: {
             label: this.$t('PublishStatus'),
-            formatter: row => {
+            formatter: (row) => {
               const typeMapper = {
-                'pending': 'success',
-                'success': 'primary',
-                'failed': 'danger',
-                'unknown': 'warning'
+                pending: 'success',
+                success: 'primary',
+                failed: 'danger',
+                unknown: 'warning'
               }
               const tp = typeMapper[row.status.value] || 'warning'
-              return _createVNode(_resolveComponent('el-tag'), {
-                'size': 'small',
-                'type': tp
-              }, {
-                default: () => [row.status.label]
-              })
+              return createVNodeCompat(
+                resolveComponentCompat('el-tag'),
+                {
+                  size: 'small',
+                  type: tp
+                },
+                {
+                  default: () => [row.status.label]
+                }
+              )
             }
           },
           date_updated: {
@@ -93,6 +91,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

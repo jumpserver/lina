@@ -1,7 +1,6 @@
 <template>
   <Page v-bind="pageAttrs">
-    <TreeTable v-bind="treeTableAttrs" ref="TreeTable"
-      v-on="forwardedListeners">
+    <TreeTable v-bind="treeTableAttrs" ref="TreeTable" v-on="forwardedListeners">
       <template #table>
         <slot name="table" />
       </template>
@@ -52,13 +51,13 @@ export default {
     hideRMenu() {
       this.$refs.TreeTable.hideRMenu()
     },
-    getSelectedNodes: function() {
+    getSelectedNodes: function () {
       return this.$refs.TreeTable.getSelectedNodes()
     },
-    getNodes: function() {
+    getNodes: function () {
       return this.$refs.TreeTable.getNodes()
     },
-    selectNode: function(node) {
+    selectNode: function (node) {
       return this.$refs.TreeTable.selectNode(node)
     },
     reloadTable() {
@@ -68,6 +67,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

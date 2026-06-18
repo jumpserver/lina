@@ -1,6 +1,5 @@
 <template>
-  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu"
-    v-model:object="role">
+  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu" v-model:object="role">
     <keep-alive>
       <component :is="config.activeMenu" :object="role" />
     </keep-alive>

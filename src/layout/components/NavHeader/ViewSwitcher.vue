@@ -15,11 +15,7 @@
       class="menu-main"
       @select="handleSelectView"
     >
-      <el-menu-item
-        v-for="view of views"
-        :key="view.name"
-        :index="view.name"
-      >
+      <el-menu-item v-for="view of views" :key="view.name" :index="view.name">
         <span class="outline" />
         <Icon :icon="view.meta.icon" class="icons" />
         <span class="icons-title">{{ view.meta.title }}</span>
@@ -55,10 +51,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'currentViewRoute',
-      'viewRoutes'
-    ]),
+    ...mapGetters(['currentViewRoute', 'viewRoutes']),
     views() {
       return this.viewRoutes.filter((item) => {
         let show = item.meta?.showNavSwitcher
@@ -206,7 +199,7 @@ export default {
   vertical-align: middle !important;
   font-size: 14px;
   text-align: center;
-  color: #1F2329;
+  color: #1f2329;
   margin-right: 10px;
 }
 

@@ -1,16 +1,16 @@
-import defaultSettings from '@/settings'
+// import defaultSettings from '@/settings'
 import { getPublicSettings } from '@/api/settings'
-import { changeElementColor, changeThemeColors } from '@/utils/theme/index'
-import { changeMenuColor } from '@/utils/theme/color'
 import request from '@/utils/request'
+import { changeMenuColor } from '@/utils/theme/color'
+import { changeElementColor, changeThemeColors } from '@/utils/theme/index'
 
-const { showSettings, fixedHeader, sidebarLogo, tagsView } = defaultSettings
+// const { showSettings, fixedHeader, sidebarLogo, tagsView } = defaultSettings
 
 const state = {
-  showSettings: showSettings,
-  fixedHeader: fixedHeader,
-  sidebarLogo: sidebarLogo,
-  tagsView: tagsView,
+  // showSettings: showSettings,
+  // fixedHeader: fixedHeader,
+  // sidebarLogo: sidebarLogo,
+  // tagsView: tagsView,
   publicSettings: {},
   hasValidLicense: false,
   authMethods: {},
@@ -47,33 +47,37 @@ const actions = {
   // get user Profile
   getPublicSettings({ commit, state }, isOpen) {
     return new Promise((resolve, reject) => {
-      getPublicSettings(isOpen).then(response => {
-        const data = response || {}
-        if (isOpen) {
-          const faviconURL = data['INTERFACE']?.favicon
-          let link = document.querySelector("link[rel*='icon']")
-          if (!link) {
-            link = document.createElement('link')
-            link.type = 'image/x-icon'
-            link.rel = 'shortcut icon'
-            document.getElementsByTagName('head')[0].appendChild(link)
+      getPublicSettings(isOpen)
+        .then((response) => {
+          const data = response || {}
+          if (isOpen) {
+            const faviconURL = data['INTERFACE']?.favicon
+            let link = document.querySelector("link[rel*='icon']")
+            if (!link) {
+              link = document.createElement('link')
+              link.type = 'image/x-icon'
+              link.rel = 'shortcut icon'
+              document.getElementsByTagName('head')[0].appendChild(link)
+            }
+            if (faviconURL) {
+              link.href = faviconURL
+            }
+            // 动态修改Title
+            document.title = data?.INTERFACE?.login_title || ''
           }
-          if (faviconURL) {
-            link.href = faviconURL
+          const themeColors = data?.INTERFACE?.theme_info?.colors || {}
+          commit('SET_PUBLIC_SETTINGS', data)
+          changeThemeColors(themeColors)
+          resolve(response)
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 400) {
+            alert(
+              '自 v3.6 版本开始，要求配置可信任域名或主机，否则无法正常使用, 查看: https://github.com/jumpserver/jumpserver/releases/tag/v3.6.0'
+            )
           }
-          // 动态修改Title
-          document.title = data?.INTERFACE?.login_title || ''
-        }
-        const themeColors = data?.INTERFACE?.theme_info?.colors || {}
-        commit('SET_PUBLIC_SETTINGS', data)
-        changeThemeColors(themeColors)
-        resolve(response)
-      }).catch(error => {
-        if (error.response && error.response.status === 400) {
-          alert('自 v3.6 版本开始，要求配置可信任域名或主机，否则无法正常使用, 查看: https://github.com/jumpserver/jumpserver/releases/tag/v3.6.0')
-        }
-        reject(error)
-      })
+          reject(error)
+        })
     })
   },
   changeThemeStyle({ commit }, themeColors) {
@@ -86,12 +90,15 @@ const actions = {
     return new Promise((resolve, reject) => {
       const url = '/api/v1/settings/setting/?category=auth'
       const data = { [key]: value }
-      request.patch(url, data).then(res => {
-        state.authMethods[key] = value
-        resolve(res)
-      }).catch(error => {
-        reject(error)
-      })
+      request
+        .patch(url, data)
+        .then((res) => {
+          state.authMethods[key] = value
+          resolve(res)
+        })
+        .catch((error) => {
+          reject(error)
+        })
     })
   },
   getAuthMethods({ commit, state }) {
@@ -100,12 +107,15 @@ const actions = {
         resolve(state.authMethods)
       } else {
         const url = '/api/v1/settings/setting/?category=auth'
-        request.get(url).then(res => {
-          state.authMethods = res
-          resolve(res)
-        }).catch(error => {
-          reject(error)
-        })
+        request
+          .get(url)
+          .then((res) => {
+            state.authMethods = res
+            resolve(res)
+          })
+          .catch((error) => {
+            reject(error)
+          })
       }
     })
   }
@@ -117,4 +127,3 @@ export default {
   mutations,
   actions
 }
-

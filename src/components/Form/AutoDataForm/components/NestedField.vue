@@ -1,15 +1,19 @@
 <template>
-  <DataForm v-bind="dataFormAttrs" v-if="!loading"
+  <DataForm
+    v-bind="dataFormAttrs"
+    v-if="!loading"
     :disabled="disabled"
     :fields="iFields"
     :form="iValue"
     class="sub-form"
     @change="updateValue($event)"
-    @input="updateValue($event)" />
+    @input="updateValue($event)"
+  />
 </template>
 
 <script>
 import DataForm from '@/components/Form/DataForm/index.vue'
+import _ from 'lodash'
 
 export default {
   name: 'NestedField',
@@ -98,7 +102,7 @@ export default {
     }
   },
   methods: {
-    outputValue: _.debounce(function(val) {
+    outputValue: _.debounce(function (val) {
       this.$emit('input', val)
     }),
     updateValue(val) {

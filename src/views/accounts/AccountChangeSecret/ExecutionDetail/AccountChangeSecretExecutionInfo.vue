@@ -37,11 +37,16 @@ export default {
           key: this.$t('NodeOfNumber'),
           value: this.object.snapshot.node_amount
         },
-        'trigger_display', 'date_start', 'date_finished',
+        'trigger_display',
+        'date_start',
+        'date_finished',
         {
           key: this.$t('MailRecipient'),
-          value: this.object.recipients ? this.object.recipients.map(
-            i => `${i[0]}` + `${i[1] ? ': ' + this.$t('ContainAttachment') : ''}`).join(', ') : ''
+          value: this.object.recipients
+            ? this.object.recipients
+                .map((i) => `${i[0]}` + `${i[1] ? ': ' + this.$t('ContainAttachment') : ''}`)
+                .join(', ')
+            : ''
         },
         {
           key: this.$t('Comment'),
@@ -54,6 +59,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

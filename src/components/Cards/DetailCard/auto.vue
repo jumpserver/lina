@@ -1,7 +1,9 @@
 <template>
   <IBox v-if="loading" style="width: 100%; height: 200px" />
   <div v-else>
-    <DetailCard v-bind="$attrs" v-if="hasObject && items.length> 0"
+    <DetailCard
+      v-bind="$attrs"
+      v-if="hasObject && items.length > 0"
       :items="validItems"
       :loading="loading"
     />
@@ -67,7 +69,7 @@ export default {
       return Object.keys(this.iObject).length > 0
     },
     validItems() {
-      return this.items.filter(item => this.isHidden(item))
+      return this.items.filter((item) => this.isHidden(item))
     }
   },
   async mounted() {
@@ -78,7 +80,7 @@ export default {
     defaultFormatter(fields) {
       const formatter = {}
       for (const name of fields) {
-        formatter[name] = function(item, val) {
+        formatter[name] = function (item, val) {
           if (val === '-') {
             return h('span', '-')
           }
@@ -117,7 +119,7 @@ export default {
       } else if (tp === 'related_field' || tp === 'nested object' || value?.name) {
         value = value?.['name']
       } else if (tp === 'm2m_related_field') {
-        value = value?.map(item => item['name']).join(', ')
+        value = value?.map((item) => item['name']).join(', ')
       } else if (tp === 'boolean') {
         value = value ? this.$t('Yes') : this.$t('No')
       }
@@ -147,7 +149,7 @@ export default {
           if (tp === 'object') {
             const firstValue = value[0]
             if (Object.prototype.hasOwnProperty.call(firstValue, 'name')) {
-              value.forEach(item => {
+              value.forEach((item) => {
                 const fieldName = `${name}.${item.name}`
                 if (excludes.includes(fieldName)) {
                   return
@@ -192,7 +194,7 @@ export default {
       fields = fields || Object.keys(remoteMeta)
       const defaultExcludes = ['org_id']
       const excludes = (this.excludes || []).concat(defaultExcludes)
-      fields = fields.filter(item => !excludes.includes(item))
+      fields = fields.filter((item) => !excludes.includes(item))
       const defaultFormatter = this.defaultFormatter(fields)
 
       for (const name of fields) {
@@ -257,6 +259,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

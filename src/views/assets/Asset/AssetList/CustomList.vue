@@ -15,8 +15,7 @@ export default {
         category: 'custom',
         url: '/api/v1/assets/customs/',
         tableConfig: {
-          columnsExclude: [
-          ],
+          columnsExclude: [],
           columnsMeta: {
             autofill: {
               width: '100px'

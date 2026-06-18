@@ -68,10 +68,10 @@ export function changeElementColor(themeColors) {
 }
 
 export function changeThemeColors(themeColors) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     if (!originalStyle) {
       // Element Plus 不再需要 element-ui.css，只加载 element-extra.css
-      axios.get('/ui/theme/element-extra.css').then(extraFile => {
+      axios.get('/ui/theme/element-extra.css').then((extraFile) => {
         const extraFileData = extraFile.data.replace(/[\r\n]/g, '')
         originalStyle = replaceStyleColors(extraFileData)
         resolve()
@@ -89,7 +89,7 @@ export function changeThemeColors(themeColors) {
 export function replaceStyleColors(data) {
   const colors = generateColors()
   const colorMap = new Map()
-  Object.keys(formula).forEach(key => {
+  Object.keys(formula).forEach((key) => {
     colorMap.set(colors[key], key)
   })
 

@@ -1,20 +1,26 @@
 <template>
   <div :class="device" class="table-header clearfix container">
     <slot name="header">
-      <LeftSide v-bind="$attrs" v-if="hasLeftActions"
+      <LeftSide
+        v-bind="$attrs"
+        v-if="hasLeftActions"
         :key="leftSideRenderKey"
         :on-create="onCreate"
         :selected-rows="selectedRows"
         :table-url="tableUrl"
         class="left-side"
-        @init-actions-done="handleActionsDone" />
+        @init-actions-done="handleActionsDone"
+      />
 
-      <RightSide v-bind="$attrs" v-if="hasRightActions"
+      <RightSide
+        v-bind="$attrs"
+        v-if="hasRightActions"
         :quick-filter-expand="quickFilterExpand"
         :selected-rows="selectedRows"
         :table-url="tableUrl"
         class="right-side"
-        @update:quick-filter-expand="$emit('update:quick-filter-expand', $event)" />
+        @update:quick-filter-expand="$emit('update:quick-filter-expand', $event)"
+      />
 
       <div :class="searchClass" class="search">
         <LabelSearch
@@ -22,13 +28,19 @@
           @label-search="handleLabelSearch"
           @show-label-search="handleLabelSearchShowChange"
         />
-        <AutoDataSearch v-bind="iSearchTableConfig" v-if="hasSearch"
+        <AutoDataSearch
+          v-bind="iSearchTableConfig"
+          v-if="hasSearch"
           :fold="foldSearch"
           class="right-side-item action-search"
-          @tag-search="handleTagSearch" />
-        <DatetimeRangePicker v-bind="datePicker" v-if="hasDatePicker"
+          @tag-search="handleTagSearch"
+        />
+        <DatetimeRangePicker
+          v-bind="datePicker"
+          v-if="hasDatePicker"
           class="datepicker"
-          @date-change="handleDateChange" />
+          @date-change="handleDateChange"
+        />
       </div>
     </slot>
   </div>
@@ -85,11 +97,11 @@ export default {
     },
     datePick: {
       type: Function,
-      default: val => {}
+      default: (val) => {}
     },
     searchTable: {
       type: Function,
-      default: val => {}
+      default: (val) => {}
     },
     selectedRows: {
       type: Array,
@@ -109,9 +121,11 @@ export default {
       return this.selectedRows.length > 0
     },
     leftSideRenderKey() {
-      const rowKeys = this.selectedRows.map((row, index) => {
-        return row?.id || row?.uuid || row?.pk || row?.name || `row-${index}`
-      }).join(',')
+      const rowKeys = this.selectedRows
+        .map((row, index) => {
+          return row?.id || row?.uuid || row?.pk || row?.name || `row-${index}`
+        })
+        .join(',')
       return `${this.leftSideRenderVersion}:${this.selectedRows.length}:${rowKeys}`
     },
     iSearchTableConfig() {
@@ -159,7 +173,7 @@ export default {
       this.foldSearch = val
     },
     handleActionsDone(actions) {
-      this.iHasLeftActions = actions.filter(i => i && i.has !== false).length > 0
+      this.iHasLeftActions = actions.filter((i) => i && i.has !== false).length > 0
     }
   }
 }

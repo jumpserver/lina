@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { createVNode as _createVNode } from 'vue'
+import { createVNode as createVNodeCompat } from 'vue'
 import { QuickActions } from '@/components'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
 import { openTaskPage } from '@/utils/jms/index'
@@ -31,71 +31,87 @@ export default {
   data() {
     this.isEmail = this.object.backup_type.value === 'email'
     return {
-      quickActions: [{
-        title: this.$t('ManualExecution'),
-        attrs: {
-          type: 'primary',
-          label: this.$t('Execute'),
-          disabled: !this.$hasPerm('accounts.add_backupaccountexecution')
-        },
-        callbacks: {
-          click: function() {
-            this.$axios.post(`/api/v1/accounts/account-backup-plan-executions/`, {
-              automation: this.object.id
-            }).then(res => {
-              openTaskPage(res['task'])
-            })
-          }.bind(this)
+      quickActions: [
+        {
+          title: this.$t('ManualExecution'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('Execute'),
+            disabled: !this.$hasPerm('accounts.add_backupaccountexecution')
+          },
+          callbacks: {
+            click: function () {
+              this.$axios
+                .post(`/api/v1/accounts/account-backup-plan-executions/`, {
+                  automation: this.object.id
+                })
+                .then((res) => {
+                  openTaskPage(res['task'])
+                })
+            }.bind(this)
+          }
         }
-      }],
+      ],
       url: `/api/v1/accounts/account-backup-plans/${this.object.id}/`,
-      detailFields: ['id', 'name', 'backup_type', {
-        key: this.$t('Crontab'),
-        value: this.object.crontab,
-        formatter: (item, val) => {
-          return _createVNode('span', null, [this.object.is_periodic ? val : '-'])
-        }
-      }, {
-        key: this.$t('Interval'),
-        value: this.object.interval,
-        formatter: (item, val) => {
-          return _createVNode('span', null, [this.object.is_periodic ? val : '-'])
-        }
-      }, {
-        key: this.$t('Recipient') + ' A',
-        value: this.object.recipients_part_one,
-        formatter: (item, val) => {
-          const recipientA = this.isEmail ? val.map(item => item.name).join(', ') : '-'
-          return _createVNode('span', null, [recipientA])
-        }
-      }, {
-        key: this.$t('Recipient') + ' B',
-        value: this.object.recipients_part_two,
-        formatter: (item, val) => {
-          const recipientB = this.isEmail ? val.map(item => item.name).join(', ') : '-'
-          return _createVNode('span', null, [recipientB])
-        }
-      }, {
-        key: this.$t('RecipientServer') + ' A',
-        value: this.object.obj_recipients_part_one,
-        formatter: (item, val) => {
-          const recipientServerA = this.isEmail ? '-' : val.map(item => item.name).join(', ')
-          return _createVNode('span', null, [recipientServerA])
-        }
-      }, {
-        key: this.$t('RecipientServer') + ' B',
-        value: this.object.obj_recipients_part_two,
-        formatter: (item, val) => {
-          const recipientServerB = this.isEmail ? '-' : val.map(item => item.name).join(', ')
-          return _createVNode('span', null, [recipientServerB])
-        }
-      }, 'date_created', 'date_updated', 'is_active', 'comment']
+      detailFields: [
+        'id',
+        'name',
+        'backup_type',
+        {
+          key: this.$t('Crontab'),
+          value: this.object.crontab,
+          formatter: (item, val) => {
+            return createVNodeCompat('span', null, [this.object.is_periodic ? val : '-'])
+          }
+        },
+        {
+          key: this.$t('Interval'),
+          value: this.object.interval,
+          formatter: (item, val) => {
+            return createVNodeCompat('span', null, [this.object.is_periodic ? val : '-'])
+          }
+        },
+        {
+          key: this.$t('Recipient') + ' A',
+          value: this.object.recipients_part_one,
+          formatter: (item, val) => {
+            const recipientA = this.isEmail ? val.map((item) => item.name).join(', ') : '-'
+            return createVNodeCompat('span', null, [recipientA])
+          }
+        },
+        {
+          key: this.$t('Recipient') + ' B',
+          value: this.object.recipients_part_two,
+          formatter: (item, val) => {
+            const recipientB = this.isEmail ? val.map((item) => item.name).join(', ') : '-'
+            return createVNodeCompat('span', null, [recipientB])
+          }
+        },
+        {
+          key: this.$t('RecipientServer') + ' A',
+          value: this.object.obj_recipients_part_one,
+          formatter: (item, val) => {
+            const recipientServerA = this.isEmail ? '-' : val.map((item) => item.name).join(', ')
+            return createVNodeCompat('span', null, [recipientServerA])
+          }
+        },
+        {
+          key: this.$t('RecipientServer') + ' B',
+          value: this.object.obj_recipients_part_two,
+          formatter: (item, val) => {
+            const recipientServerB = this.isEmail ? '-' : val.map((item) => item.name).join(', ')
+            return createVNodeCompat('span', null, [recipientServerB])
+          }
+        },
+        'date_created',
+        'date_updated',
+        'is_active',
+        'comment'
+      ]
     }
   },
   computed: {}
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

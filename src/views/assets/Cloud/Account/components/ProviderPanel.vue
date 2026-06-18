@@ -4,16 +4,12 @@
       <el-col v-for="p in providers" :key="p.name">
         <el-card
           :body-style="{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }"
-          :class="selected === p.name ? 'active': ''"
+          :class="selected === p.name ? 'active' : ''"
           shadow="hover"
           @dblclick="handleCardDBClick(p.name)"
           @click="handleCardClick(p.name)"
         >
-          <el-image
-            :src="p.image"
-            fit="contain"
-            shape="square"
-          />
+          <el-image :src="p.image" fit="contain" shape="square" />
           <div class="description">{{ p.title }}</div>
         </el-card>
       </el-col>
@@ -21,11 +17,7 @@
     <el-row class="buttons">
       <el-col>
         <el-button size="small" @click="handleCancel">{{ $tc('Cancel') }}</el-button>
-        <el-button
-          size="small"
-          type="primary"
-          @click="handleNext"
-        >
+        <el-button size="small" type="primary" @click="handleNext">
           {{ $tc('Next') }}
         </el-button>
       </el-col>
@@ -63,7 +55,7 @@ export default {
       this.handleNext()
     },
     handleNext() {
-      const provider = this.providers.filter(p => p.name === this.selected)[0]
+      const provider = this.providers.filter((p) => p.name === this.selected)[0]
       if (!provider) {
         this.$message.error(this.$tc('SelectProviderMsg'))
         return
@@ -77,7 +69,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .buttons {
   margin-top: 30px;
 }

@@ -4,39 +4,46 @@
       <div
         v-show="iShowTree"
         :class="iShowTree ? '' : 'hidden'"
-        :style="{width: treeWidth}"
+        :style="{ width: treeWidth }"
         class="left"
       >
         <span v-if="component === 'AutoDataZTree'" class="title">
           {{ title }}
         </span>
-        <component v-bind="treeTabConfig" :is="component"
+        <component
+          v-bind="treeTabConfig"
+          :is="component"
           :key="componentTreeKey"
           ref="AutoDataZTree"
           :setting="treeSetting"
           class="auto-data-ztree"
           @url-change="handleUrlChange"
-          v-on="forwardedListeners">
+          v-on="forwardedListeners"
+        >
           <template #rMenu="{ data }">
             <slot :data="data" name="rMenu" />
           </template>
         </component>
       </div>
       <div
-        :style="{'width': iShowTree ? ('calc(100% - ' + treeWidth + ')') : '100%'}"
+        :style="{ width: iShowTree ? 'calc(100% - ' + treeWidth + ')' : '100%' }"
         class="right"
         style="display: flex"
       >
         <div v-if="true" class="mini">
-          <div :class="{'is-show': iShowTree}" class="mini-button" @click="iShowTree = !iShowTree">
+          <div
+            :class="{ 'is-show': iShowTree }"
+            class="mini-button"
+            @click="iShowTree = !iShowTree"
+          >
             <svg-icon
-              :style="{'transform': iShowTree ? 'none' : 'rotate(180deg)'}"
+              :style="{ transform: iShowTree ? 'none' : 'rotate(180deg)' }"
               class="icon-left"
               icon-class="double-left"
             />
           </div>
         </div>
-        <div class="transition-box" style="width: calc(100% - 7px);">
+        <div class="transition-box" style="width: calc(100% - 7px)">
           <slot name="table">
             <ListTable
               :key="componentKey"
@@ -137,8 +144,7 @@ export default {
   },
   watch: {
     treeConfig: {
-      handler(val) {
-      },
+      handler(val) {},
       deep: true
     },
     iShowTree(val, oldVal) {
@@ -186,13 +192,13 @@ export default {
     hideRMenu() {
       this.$refs.AutoDataZTree.hideRMenu()
     },
-    getSelectedNodes: function() {
+    getSelectedNodes: function () {
       return this.$refs.AutoDataZTree.getSelectedNodes()
     },
-    getNodes: function() {
+    getNodes: function () {
       return this.$refs.AutoDataZTree.getNodes()
     },
-    selectNode: function(node) {
+    selectNode: function (node) {
       return this.$refs.AutoDataZTree.selectNode(node)
     },
     reloadTable() {
@@ -259,7 +265,7 @@ $origin-color: #ffffff;
 
     &:hover {
       ~ .right .is-show {
-        display: block !important;;
+        display: block !important;
       }
     }
   }
@@ -286,7 +292,7 @@ $origin-color: #ffffff;
   float: right;
   text-align: center;
   padding: 5px 0;
-  border: 1px solid #DCDFE6;
+  border: 1px solid #dcdfe6;
   background-color: #f3f3f3;
   border-radius: 2px;
   cursor: pointer;
@@ -318,5 +324,4 @@ $origin-color: #ffffff;
   border: 1px solid #e0e0e0;
   border-radius: 2px;
 }
-
 </style>

@@ -33,9 +33,15 @@ export default {
         columnsShow: {
           min: ['user', 'resource'],
           default: [
-            'user', 'action_display', 'resource_type_display',
-            'resource', 'remote_addr', 'datetime', 'action',
-            'resource_type', 'actions'
+            'user',
+            'action_display',
+            'resource_type_display',
+            'resource',
+            'remote_addr',
+            'datetime',
+            'action',
+            'resource_type',
+            'actions'
           ]
         },
         columnsMeta: {
@@ -55,13 +61,14 @@ export default {
                   type: 'primary',
                   callback: ({ row }) => {
                     vm.loading = true
-                    this.$axios.get(
-                      `/api/v1/audits/operate-logs/${row.id}/?type=action_detail`
-                    ).then(res => {
-                      this.$refs.DetailDialog.show(res.diff)
-                    }).finally(() => {
-                      vm.loading = false
-                    })
+                    this.$axios
+                      .get(`/api/v1/audits/operate-logs/${row.id}/?type=action_detail`)
+                      .then((res) => {
+                        this.$refs.DetailDialog.show(res.diff)
+                      })
+                      .finally(() => {
+                        vm.loading = false
+                      })
                   }
                 }
               ]
@@ -79,6 +86,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

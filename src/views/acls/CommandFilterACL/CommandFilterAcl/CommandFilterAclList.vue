@@ -1,10 +1,6 @@
 <template>
   <div>
-    <ListTable
-      ref="listTable"
-      :header-actions="headerActions"
-      :table-config="tableConfig"
-    />
+    <ListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
   </div>
 </template>
 
@@ -30,10 +26,7 @@ export default {
         columnsExclude: ['users', 'assets', 'accounts'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: [
-            'name', 'command_groups', 'priority',
-            'is_active', 'comment', 'actions'
-          ]
+          default: ['name', 'command_groups', 'priority', 'is_active', 'comment', 'actions']
         },
         columnsMeta: {
           name: {

@@ -18,22 +18,25 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
     return {
       url: `/api/v1/accounts/gather-account-automations/${this.object.id}/`,
       detailFields: [
-        'id', 'name', 'is_periodic',
+        'id',
+        'name',
+        'is_periodic',
         {
           key: this.$t('Crontab'),
           value: this.object?.periodic_display || '-'
         },
         {
           key: this.$t('DateLastSync'),
-          value: this.object.last_execution_date ? toSafeLocalDateStr(this.object.last_execution_date) : '-'
+          value: this.object.last_execution_date
+            ? toSafeLocalDateStr(this.object.last_execution_date)
+            : '-'
         },
         {
           key: this.$t('DateCreated'),
@@ -44,13 +47,9 @@ export default {
     }
   },
   computed: {},
-  mounted() {
-
-  },
+  mounted() {},
   methods: {}
 }
 </script>
 
-<style lang='scss' scoped>
-
-</style>
+<style lang="scss" scoped></style>

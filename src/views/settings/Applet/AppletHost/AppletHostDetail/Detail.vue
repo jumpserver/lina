@@ -5,10 +5,13 @@
     <AutoDetailCard v-bind="detailInfoConfig" />
     <template #right>
       <QuickActions :actions="quickActions" type="primary" />
-      <RelationCard v-bind="labelConfig" ref="LabelRelation"
+      <RelationCard
+        v-bind="labelConfig"
+        ref="LabelRelation"
         v-perms="'assets.view_label'"
         style="margin-top: 15px"
-        type="warning" />
+        type="warning"
+      />
     </template>
   </TwoCol>
 </template>
@@ -31,8 +34,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -53,20 +55,20 @@ export default {
         performAdd: (items) => {
           const newData = []
           const value = this.$refs.LabelRelation.iHasObjects
-          value.map(v => newData.push(v.label))
+          value.map((v) => newData.push(v.label))
           const relationUrl = `/api/v1/assets/assets/${this.object.id}/`
-          items.map(v => newData.push(v.label))
+          items.map((v) => newData.push(v.label))
           return this.$axios.patch(relationUrl, { labels: newData })
         },
         getHasObjects: (ids) => {
           return new Promise((resolve) => {
-            return resolve(ids.map(id => ({ value: id, label: id })))
+            return resolve(ids.map((id) => ({ value: id, label: id })))
           })
         },
         performDelete: (item) => {
           const itemId = item.value
           const value = this.$refs.LabelRelation.iHasObjects
-          const newData = value.filter(v => v.value !== itemId).map(v => v.value)
+          const newData = value.filter((v) => v.value !== itemId).map((v) => v.value)
           const relationUrl = `/api/v1/assets/assets/${this.object.id}/`
           return this.$axios.patch(relationUrl, { labels: newData })
         }
@@ -81,15 +83,15 @@ export default {
             disabled: !vm.$hasPerm('assets.change_asset')
           },
           callbacks: {
-            change: function(val) {
-              this.$axios.patch(
-                `/api/v1/assets/assets/${this.object.id}/`,
-                { is_active: val }
-              ).then(res => {
-                this.$message.success(this.$tc('UpdateSuccessMsg'))
-              }).catch(err => {
-                this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
-              })
+            change: function (val) {
+              this.$axios
+                .patch(`/api/v1/assets/assets/${this.object.id}/`, { is_active: val })
+                .then((res) => {
+                  this.$message.success(this.$tc('UpdateSuccessMsg'))
+                })
+                .catch((err) => {
+                  this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
+                })
             }.bind(this)
           }
         },
@@ -101,13 +103,12 @@ export default {
             disabled: !vm.$hasPerm('assets.refresh_assethardwareinfo')
           },
           callbacks: {
-            click: function() {
-              this.$axios.post(
-                `/api/v1/assets/assets/${this.object.id}/tasks/`,
-                { action: 'refresh' }
-              ).then(res => {
-                openTaskPage(res['task'])
-              })
+            click: function () {
+              this.$axios
+                .post(`/api/v1/assets/assets/${this.object.id}/tasks/`, { action: 'refresh' })
+                .then((res) => {
+                  openTaskPage(res['task'])
+                })
             }.bind(this)
           }
         },
@@ -119,13 +120,12 @@ export default {
             disabled: !vm.$hasPerm('assets.test_assetconnectivity')
           },
           callbacks: {
-            click: function() {
-              this.$axios.post(
-                `/api/v1/assets/assets/${this.object.id}/tasks/`,
-                { action: 'test' }
-              ).then(res => {
-                openTaskPage(res['task'])
-              })
+            click: function () {
+              this.$axios
+                .post(`/api/v1/assets/assets/${this.object.id}/tasks/`, { action: 'test' })
+                .then((res) => {
+                  openTaskPage(res['task'])
+                })
             }.bind(this)
           }
         }
@@ -146,13 +146,16 @@ export default {
           'address',
           {
             key: this.$t('Protocols'),
-            value: this.object.protocols.map(i => i.name + '/' + i.port).join(',')
+            value: this.object.protocols.map((i) => i.name + '/' + i.port).join(',')
           },
           {
             key: this.$t('Platform'),
             value: this.object.platform.name
           },
-          'is_active', 'date_created', 'created_by', 'comment'
+          'is_active',
+          'date_created',
+          'created_by',
+          'comment'
         ]
       },
       detailSpecInfoConfig: {
@@ -173,12 +176,9 @@ export default {
     }
   },
   computed: {},
-  mounted() {
-  },
+  mounted() {},
   methods: {}
 }
 </script>
 
-<style lang='scss' scoped>
-
-</style>
+<style lang="scss" scoped></style>

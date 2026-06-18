@@ -20,7 +20,8 @@ export default {
       url: '/api/v1/accounts/account-backup-plans/',
       fields: [
         [this.$t('Basic'), ['name', 'types']],
-        [this.$t('Backup'),
+        [
+          this.$t('Backup'),
           [
             'backup_type',
             'is_password_divided_by_email',
@@ -91,6 +92,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

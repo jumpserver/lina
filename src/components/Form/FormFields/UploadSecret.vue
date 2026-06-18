@@ -1,7 +1,9 @@
 <template>
   <div class="">
     <el-input v-model="iValue" :placeholder="placeholder" :rows="rows" type="textarea" />
-    <el-upload v-bind="$attrs" ref="upload"
+    <el-upload
+      v-bind="$attrs"
+      ref="upload"
       :accept="accept"
       :action="''"
       :auto-upload="false"
@@ -9,14 +11,15 @@
       :limit="limit"
       :on-change="handleChange"
       :on-remove="handleRemove"
-      class="upload-secret">
+      class="upload-secret"
+    >
       <el-button size="small" type="primary">
         {{ btnText }}
       </el-button>
       <template #tip>
-      <div v-if="tip" class="el-upload__tip">
-        {{ tip }}
-      </div>
+        <div v-if="tip" class="el-upload__tip">
+          {{ tip }}
+        </div>
       </template>
     </el-upload>
   </div>
@@ -31,7 +34,7 @@ export default {
     },
     btnText: {
       type: String,
-      default: function() {
+      default: function () {
         return 'SelectFile'
       }
     },
@@ -74,7 +77,7 @@ export default {
       const newFileList = fileList.slice(-1)
       this.fileList = newFileList
       const reader = new FileReader()
-      reader.onload = function(res) {
+      reader.onload = function (res) {
         const result = res.target.result
         vm.iValue = result
         vm.$emit('input', vm.iValue)

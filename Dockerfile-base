@@ -1,4 +1,4 @@
-FROM node:20.15-bullseye-slim
+FROM node:24-bullseye-slim
 
 ARG DEPENDENCIES="                    \
         g++                           \
@@ -14,9 +14,14 @@ RUN set -ex \
 
 WORKDIR /data
 
-COPY package.json yarn.lock ./
+ENV PNPM_HOME="/pnpm"
+ENV PATH="${PNPM_HOME}:${PATH}"
+
+RUN corepack enable && corepack prepare pnpm@10.33.0 --activate
+
+COPY package.json pnpm-lock.yaml ./
 
 ARG NPM_MIRROR="https://registry.npmjs.org"
-RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,sharing=locked,id=yarn-cache \
-    sed -i "s|https://registry.npmmirror.com|${NPM_MIRROR}|g" yarn.lock \
-    && yarn install
+RUN --mount=type=cache,target=/pnpm/store,sharing=locked,id=pnpm-store \
+    pnpm config set registry "${NPM_MIRROR}" \
+    && pnpm install --frozen-lockfile

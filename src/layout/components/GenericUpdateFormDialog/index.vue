@@ -1,12 +1,15 @@
 <template>
-  <Dialog v-bind="$attrs" v-if="visible"
+  <Dialog
+    v-bind="$attrs"
+    v-if="visible"
     :visible="visible"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('UpdateSelected')"
     top="1vh"
     width="70%"
-    @update:visible="$emit('update:visible', $event)">
+    @update:visible="$emit('update:visible', $event)"
+  >
     <el-alert v-if="tips" class="tips" type="info">{{ tips }}</el-alert>
     <el-row :gutter="20">
       <el-col :md="4" :sm="24">
@@ -48,12 +51,13 @@ import { GenericCreateUpdateForm } from '@/layout/components'
 export default {
   name: 'GenericUpdateFormDialog',
   components: {
-    Dialog, GenericCreateUpdateForm
+    Dialog,
+    GenericCreateUpdateForm
   },
   props: {
     selectedRows: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     formSetting: {
       type: Object,
@@ -69,7 +73,7 @@ export default {
     }
   },
   emits: ['update:visible', 'update', 'submitError'],
-  data: function() {
+  data: function () {
     return {
       internalKey: 0,
       selectPropertiesLabel: this.$t('SelectProperties'),
@@ -116,28 +120,31 @@ export default {
           }
           return formValue
         },
-        onSubmit: function(validValues) {
+        onSubmit: function (validValues) {
           const url = this.url
           const msg = this.updateSuccessMsg
-          this.$axios.patch(url, validValues).then((res) => {
-            vm.$emit('update')
-            this.$message.success(msg)
-            this.$emit('update:visible', false)
-          }).catch(error => {
-            this.$emit('submitError', error)
-            const response = error.response
-            const data = response.data
-            // 不要逐个设置字段的 attrs.error 或改动 fields 引用。
-            // 这样会触发表单 content 重建，导致用户已输入的内容被覆盖/清空，
-            // 且可能出现只能显示一个字段错误的现象。
-            // 这里改为使用 AutoDataForm 暴露的 setErrors(errors) 覆盖式设置：
-            // - 直接同步到 UI 的 el-form-item.validateMessage
-            // - 支持同时显示多个字段错误
-            // - 不修改 fields/attrs 引用，避免输入丢失
-            if (response.status === 400 && data && typeof data === 'object') {
-              this.$refs.form.setErrors(data)
-            }
-          })
+          this.$axios
+            .patch(url, validValues)
+            .then((res) => {
+              vm.$emit('update')
+              this.$message.success(msg)
+              this.$emit('update:visible', false)
+            })
+            .catch((error) => {
+              this.$emit('submitError', error)
+              const response = error.response
+              const data = response.data
+              // 不要逐个设置字段的 attrs.error 或改动 fields 引用。
+              // 这样会触发表单 content 重建，导致用户已输入的内容被覆盖/清空，
+              // 且可能出现只能显示一个字段错误的现象。
+              // 这里改为使用 AutoDataForm 暴露的 setErrors(errors) 覆盖式设置：
+              // - 直接同步到 UI 的 el-form-item.validateMessage
+              // - 支持同时显示多个字段错误
+              // - 不修改 fields/attrs 引用，避免输入丢失
+              if (response.status === 400 && data && typeof data === 'object') {
+                this.$refs.form.setErrors(data)
+              }
+            })
         }
       }
     }
@@ -146,16 +153,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .el-row-divider {
-    margin-bottom: 20px;
-  }
+.el-row-divider {
+  margin-bottom: 20px;
+}
 
-  .select-prop-label {
-    float: right;
-    padding-right: 30px;
-  }
+.select-prop-label {
+  float: right;
+  padding-right: 30px;
+}
 
-  .tips {
-    margin-bottom: 10px;
-  }
+.tips {
+  margin-bottom: 10px;
+}
 </style>

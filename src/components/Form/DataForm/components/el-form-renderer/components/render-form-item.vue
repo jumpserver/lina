@@ -1,10 +1,13 @@
 <template>
-  <el-form-item v-bind="data.attrs" v-if="_show"
+  <el-form-item
+    v-bind="data.attrs"
+    v-if="_show"
     :class="classes"
     :label="data.label"
     :prop="itemProp"
     :rules="_show && Array.isArray(data.rules) ? data.rules : []"
-    :error="errorText">
+    :error="errorText"
+  >
     <template v-if="data.label" #label>
       <span :title="data.label">
         <span v-if="data.required">* </span>
@@ -36,21 +39,30 @@
         {{ multipleValue }}
       </div>
     </template>
-    <component v-bind="componentProps" :is="rawComponent"
+    <component
+      v-bind="componentProps"
+      :is="rawComponent"
       v-else
       :disabled="disabled || componentProps.disabled || readonly"
       :model-value="itemValue"
       :value="itemValue"
-      v-on="listeners">
+      v-on="listeners"
+    >
       <template v-for="opt in options" :key="opt.value">
         <el-option v-bind="opt" v-if="data.type === 'select'" />
-        <el-checkbox-button v-bind="opt" v-else-if="data.type === 'checkbox-group' && data.style === 'button'"
-          :label="'value' in opt ? opt.value : opt.label">
+        <el-checkbox-button
+          v-bind="opt"
+          v-else-if="data.type === 'checkbox-group' && data.style === 'button'"
+          :label="'value' in opt ? opt.value : opt.label"
+        >
           {{ opt.label }}
         </el-checkbox-button>
 
-        <el-checkbox v-bind="opt" v-else-if="data.type === 'checkbox-group' && data.style !== 'button'"
-          :label="'value' in opt ? opt.value : opt.label">
+        <el-checkbox
+          v-bind="opt"
+          v-else-if="data.type === 'checkbox-group' && data.style !== 'button'"
+          :label="'value' in opt ? opt.value : opt.label"
+        >
           {{ opt.label }}
           <el-tooltip v-if="opt.tip" :content="opt.tip" :open-delay="500" placement="top">
             <el-icon><Warning /></el-icon>
@@ -59,8 +71,11 @@
         </el-checkbox>
         <!-- radio 使用 value 属性来表示选中值 -->
         <!-- FYI: radio 的 value 属性可以在没有 radio-group 时用来关联到同一个 v-model -->
-        <el-radio v-bind="opt" v-else-if="data.type === 'radio-group'"
-          :value="'value' in opt ? opt.value : opt.label">
+        <el-radio
+          v-bind="opt"
+          v-else-if="data.type === 'radio-group'"
+          :value="'value' in opt ? opt.value : opt.label"
+        >
           {{ opt.label }}
           <el-tooltip v-if="opt.tip" :content="opt.tip" :open-delay="500" placement="top">
             <el-icon><Warning /></el-icon>
@@ -154,7 +169,7 @@ export default {
       propsInner: {},
       isBlurTrigger:
         this.data.rules &&
-        this.data.rules.some(rule => {
+        this.data.rules.some((rule) => {
           return rule.required && rule.trigger === 'blur'
         })
     }
@@ -245,7 +260,7 @@ export default {
       const multipleSelectValue =
         _get(data, 'el.multiple') && Array.isArray(itemValue) ? itemValue : [itemValue]
       return multipleSelectValue
-        .map(val => (options.find(op => op.value === val) || {}).label)
+        .map((val) => (options.find((op) => op.value === val) || {}).label)
         .join()
     }
   },
@@ -266,13 +281,13 @@ export default {
           ['select', 'checkbox-group', 'radio-group'].indexOf(this.data.type) > -1
         const {
           url,
-          request = () => this.$axios.get(url).then(resp => resp.data),
+          request = () => this.$axios.get(url).then((resp) => resp.data),
           prop = 'options', // 默认处理 el-cascader 的情况
           dataPath = '',
-          onResponse = resp => {
+          onResponse = (resp) => {
             if (dataPath) resp = _get(resp, dataPath)
             if (isOptionsCase) {
-              return resp.map(item => ({
+              return resp.map((item) => ({
                 label: item[label],
                 value: item[value]
               }))
@@ -280,13 +295,13 @@ export default {
               return resp
             }
           },
-          onError = error => console.error(error.message),
+          onError = (error) => console.error(error.message),
           label = 'label',
           value = 'value'
         } = v
         Promise.resolve(request())
           .then(onResponse, onError)
-          .then(resp => {
+          .then((resp) => {
             if (isOptionsCase) {
               this.formRendererContext?.setOptions?.(this.itemProp, resp)
             } else {

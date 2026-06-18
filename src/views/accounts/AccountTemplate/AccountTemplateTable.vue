@@ -35,7 +35,8 @@ export default {
     const vm = this
     return {
       showViewSecretDialog: false,
-      createDrawer: () => import('@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'),
+      createDrawer: () =>
+        import('@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'),
       detailDrawer: () => import('@/views/accounts/AccountTemplate/Detail/index.vue'),
       account: {},
       secretUrl: '',
@@ -104,7 +105,9 @@ export default {
       },
       headerActions: {
         hasRefresh: true,
-        hasImport: this.$hasPerm('accounts.add_accounttemplate') || this.$hasPerm('accounts.change_accounttemplate'),
+        hasImport:
+          this.$hasPerm('accounts.add_accounttemplate') ||
+          this.$hasPerm('accounts.change_accounttemplate'),
         importOptions: {
           canImportCreate: this.$hasPerm('accounts.add_accounttemplate'),
           canImportUpdate: this.$hasPerm('accounts.change_accounttemplate')

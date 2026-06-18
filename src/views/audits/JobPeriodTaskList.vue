@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { createTextVNode as _createTextVNode, createVNode as _createVNode } from 'vue'
+import { createTextVNode as createTextVNodeCompat, createVNode as createVNodeCompat } from 'vue'
 import GenericListPage from '@/layout/components/GenericListPage'
 import { SwitchFormatter } from '@/components/Table/TableFormatters'
 export default {
@@ -19,23 +19,51 @@ export default {
         url: '/api/v1/audits/jobs/',
         columnsShow: {
           min: ['name', 'args'],
-          default: ['name', 'args', 'type', 'crontab', 'interval', 'created_by', 'is_periodic_display', 'is_periodic']
+          default: [
+            'name',
+            'args',
+            'type',
+            'crontab',
+            'interval',
+            'created_by',
+            'is_periodic_display',
+            'is_periodic'
+          ]
         },
-        columns: ['name', 'args', 'type', 'crontab', 'interval', 'date_last_run', 'summary', 'created_by', 'is_periodic_display', 'is_periodic'],
+        columns: [
+          'name',
+          'args',
+          'type',
+          'crontab',
+          'interval',
+          'date_last_run',
+          'summary',
+          'created_by',
+          'is_periodic_display',
+          'is_periodic'
+        ],
         columnsMeta: {
           actions: {
             has: false
           },
           name: {
-            formatter: row => row.name
+            formatter: (row) => row.name
           },
           summary: {
             width: '130px',
             label: `${this.$t('Success')}/${this.$t('Total')}`,
-            formatter: row => {
-              return _createVNode('div', null, [_createVNode('span', {
-                'class': 'text-primary'
-              }, [row.summary.success]), _createTextVNode('/'), _createVNode('span', null, [row.summary.total])])
+            formatter: (row) => {
+              return createVNodeCompat('div', null, [
+                createVNodeCompat(
+                  'span',
+                  {
+                    class: 'text-primary'
+                  },
+                  [row.summary.success]
+                ),
+                createTextVNodeCompat('/'),
+                createVNodeCompat('span', null, [row.summary.total])
+              ])
             }
           },
           is_periodic_display: {
@@ -74,5 +102,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

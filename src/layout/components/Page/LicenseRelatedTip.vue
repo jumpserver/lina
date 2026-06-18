@@ -21,10 +21,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'publicSettings',
-      'currentUser'
-    ]),
+    ...mapGetters(['publicSettings', 'currentUser']),
     licenseMsg() {
       if (this.expireMsg) {
         return this.expireMsg
@@ -41,7 +38,9 @@ export default {
         return this.$t('LicenseExpired')
       }
       if (intervalDays < 7) {
-        return this.$t('LicenseWillBe') + ' ' + this.licenseData.date_expired + ' ' + this.$t('Expire')
+        return (
+          this.$t('LicenseWillBe') + ' ' + this.licenseData.date_expired + ' ' + this.$t('Expire')
+        )
       }
       return false
     },
@@ -60,11 +59,14 @@ export default {
   },
   mounted() {
     if (this.publicSettings['XPACK_ENABLED'] && this.$hasPerm('settings.change_license')) {
-      this.$axios.get('/api/v1/xpack/license/detail').then(res => {
-        this.licenseData = res
-      }).finally(() => {
-        this.loading = false
-      })
+      this.$axios
+        .get('/api/v1/xpack/license/detail')
+        .then((res) => {
+          this.licenseData = res
+        })
+        .finally(() => {
+          this.loading = false
+        })
     } else {
       this.loading = false
     }
@@ -80,6 +82,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

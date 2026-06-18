@@ -64,35 +64,35 @@
                   v-model.trim="contabValueObj.min"
                   max="5"
                   min="0"
-                  onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
+                  onkeyup="value = value.replace(/[^\0-9\-\*\,]/g, '')"
                   size="small"
                 />
               </td>
               <td>
                 <el-input
                   v-model.trim="contabValueObj.hour"
-                  onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
+                  onkeyup="value = value.replace(/[^\0-9\-\*\,]/g, '')"
                   size="small"
                 />
               </td>
               <td>
                 <el-input
                   v-model.trim="contabValueObj.day"
-                  onkeyup="value=value.replace(/[^\0-9\\-\*\,]/g,'')"
+                  onkeyup="value = value.replace(/[^\0-9\\-\*\,]/g, '')"
                   size="small"
                 />
               </td>
               <td>
                 <el-input
                   v-model.trim="contabValueObj.month"
-                  onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
+                  onkeyup="value = value.replace(/[^\0-9\-\*\,]/g, '')"
                   size="small"
                 />
               </td>
               <td>
                 <el-input
                   v-model.trim="contabValueObj.week"
-                  onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
+                  onkeyup="value = value.replace(/[^\0-9\-\*\,]/g, '')"
                   size="small"
                 />
               </td>
@@ -103,17 +103,10 @@
       </div>
 
       <div class="pop_btn">
-        <el-button
-          size="small"
-          @click="clearCron"
-        >
+        <el-button size="small" @click="clearCron">
           {{ $t('Reset') }}
         </el-button>
-        <el-button
-          size="small"
-          type="primary"
-          @click="submitFill"
-        >
+        <el-button size="small" type="primary" @click="submitFill">
           {{ $t('Confirm') }}
         </el-button>
       </div>
@@ -155,7 +148,13 @@ export default {
   },
   data() {
     return {
-      tabTitles: [this.$t('Min'), this.$t('Hour'), this.$t('Day'), this.$t('Month'), this.$t('Week')],
+      tabTitles: [
+        this.$t('Min'),
+        this.$t('Hour'),
+        this.$t('Day'),
+        this.$t('Month'),
+        this.$t('Week')
+      ],
       tabActive: 0,
       myindex: 0,
       contabValueObj: {
@@ -175,20 +174,10 @@ export default {
     contabValueString: {
       get() {
         const obj = this.contabValueObj
-        const str =
-          obj.min +
-          ' ' +
-          obj.hour +
-          ' ' +
-          obj.day +
-          ' ' +
-          obj.month +
-          ' ' +
-          obj.week
+        const str = obj.min + ' ' + obj.hour + ' ' + obj.day + ' ' + obj.month + ' ' + obj.week
         return str
       },
-      set() {
-      }
+      set() {}
     }
   },
   watch: {
@@ -197,7 +186,7 @@ export default {
       // 隐藏部分组件
     }
   },
-  mounted: function() {
+  mounted: function () {
     this.resolveExp()
   },
   methods: {
@@ -396,7 +385,7 @@ export default {
   }
 }
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .pop_btn {
   float: right;
   margin-top: 10px;
@@ -461,14 +450,14 @@ export default {
   overflow-y: auto;
 }
 
-:deep(.el-form-item){
+:deep(.el-form-item) {
   &.el-form-item--small,
   &.el-form-item--small {
     margin-bottom: 5px;
   }
 
   .el-input-number {
-    margin: 0 5px
+    margin: 0 5px;
   }
 }
 

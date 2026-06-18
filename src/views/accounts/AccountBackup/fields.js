@@ -46,7 +46,10 @@ function getAccountBackupFields() {
       ajax: {
         url: '/api/v1/terminal/replay-storages/?type=sftp&fields_size=mini',
         transformOption: (item) => {
-          return { label: item.name + '(' + item.meta.SFTP_HOST + ':' + item.meta.SFTP_ROOT_PATH + ')', value: item.id }
+          return {
+            label: item.name + '(' + item.meta.SFTP_HOST + ':' + item.meta.SFTP_ROOT_PATH + ')',
+            value: item.id
+          }
         }
       }
     }
@@ -56,14 +59,19 @@ function getAccountBackupFields() {
     label: i18n.t('RecipientServer') + ' B',
     helpText: i18n.t('RecipientHelpText'),
     hidden: (formValue) => {
-      return !(formValue.backup_type === 'object_storage' && formValue.is_password_divided_by_obj_storage)
+      return !(
+        formValue.backup_type === 'object_storage' && formValue.is_password_divided_by_obj_storage
+      )
     },
     el: {
       value: [],
       ajax: {
         url: '/api/v1/terminal/replay-storages/?type=sftp&fields_size=mini',
         transformOption: (item) => {
-          return { label: item.name + '(' + item.meta.SFTP_HOST + ':' + item.meta.SFTP_ROOT_PATH + ')', value: item.id }
+          return {
+            label: item.name + '(' + item.meta.SFTP_HOST + ':' + item.meta.SFTP_ROOT_PATH + ')',
+            value: item.id
+          }
         }
       }
     }

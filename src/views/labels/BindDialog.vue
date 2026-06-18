@@ -1,22 +1,21 @@
 <template>
-  <Dialog v-bind="$attrs" :close-on-click-modal="false"
+  <Dialog
+    v-bind="$attrs"
+    :close-on-click-modal="false"
     :destroy-on-close="true"
     :title="$tc('BindResource')"
     top="80px"
     width="768px"
     @cancel="handleCancel"
-    @confirm="handleConfirm">
+    @confirm="handleConfirm"
+  >
     <div style="padding: 0 20px 20px">
       <el-row>
         <div class="label-zone">
           <label class="type-label" for="">{{ $t('ResourceType') }}: </label>
         </div>
         <el-select v-model="select2.value" class="select2" @change="handleChangeType">
-          <el-option-group
-            v-for="group in select2.options"
-            :key="group.label"
-            :label="group.label"
-          >
+          <el-option-group v-for="group in select2.options" :key="group.label" :label="group.label">
             <el-option
               v-for="item in group.options"
               :key="item.value"
@@ -30,7 +29,12 @@
         <div class="label-zone">
           <label class="table-label" for="">{{ $t('SelectResource') }}: </label>
         </div>
-        <krryPaging v-bind="pagingTransfer" v-if="!transferLoading" ref="pageTransfer" class="transfer" />
+        <krryPaging
+          v-bind="pagingTransfer"
+          v-if="!transferLoading"
+          ref="pageTransfer"
+          class="transfer"
+        />
       </el-row>
     </div>
   </Dialog>
@@ -55,9 +59,9 @@ export default {
       const limit = pageSize
       const offset = (pageIndex - 1) * pageSize
       const params = {
-        'limit': limit,
-        'offset': offset,
-        'fields_size': 'mini'
+        limit: limit,
+        offset: offset,
+        fields_size: 'mini'
       }
       if (keyword) {
         params['search'] = keyword
@@ -67,7 +71,7 @@ export default {
       }
       const url = `/api/v1/labels/resource-types/${vm.select2.value}/resources/`
       const data = await this.$axios.get(url, { params })
-      return data['results'].map(item => {
+      return data['results'].map((item) => {
         return { id: item.id, label: item.name }
       })
     }
@@ -83,10 +87,10 @@ export default {
         filterable: true,
         async: true,
         dataList: [],
-        getPageData: function(pageIndex, pageSize) {
+        getPageData: function (pageIndex, pageSize) {
           return getPageData({ pageIndex, pageSize })
         },
-        getSearchData: async function(keyword, pageIndex, pageSize) {
+        getSearchData: async function (keyword, pageIndex, pageSize) {
           return getPageData({ keyword, pageIndex, pageSize })
         },
         selectedData: [],
@@ -101,8 +105,8 @@ export default {
   methods: {
     handleChangeType() {
       const url = `/api/v1/labels/labels/${this.label.id}/resource-types/${this.select2.value}/resources/`
-      this.$axios.get(url).then(res => {
-        this.pagingTransfer.selectedData = res.map(item => {
+      this.$axios.get(url).then((res) => {
+        this.pagingTransfer.selectedData = res.map((item) => {
           return { id: item.id, label: item.name }
         })
       })
@@ -117,7 +121,7 @@ export default {
         res_ids: selectedData
       }
       const url = `/api/v1/labels/labels/${this.label.id}/resource-types/${this.select2.value}/resources/`
-      this.$axios.put(url, data).then(res => {
+      this.$axios.put(url, data).then((res) => {
         setTimeout(() => {
           this.$message.success(this.$tc('BindSuccess'))
           this.$emit('bind-success')
@@ -147,7 +151,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .table {
   margin: 20px;
 }
@@ -168,5 +172,4 @@ export default {
 .label-zone {
   margin-bottom: 8px;
 }
-
 </style>

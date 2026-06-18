@@ -35,9 +35,9 @@ export default {
     }
   },
   watch: {
-    'ex': 'expressionChange222'
+    ex: 'expressionChange222'
   },
-  mounted: function() {
+  mounted: function () {
     // 初始化 获取一次结果
     this.expressionChange222()
   },
@@ -63,14 +63,12 @@ export default {
     }
   }
 }
-
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .popup-result-time {
   margin-top: 10px;
 }
 .title {
   margin-bottom: 0;
 }
-
 </style>

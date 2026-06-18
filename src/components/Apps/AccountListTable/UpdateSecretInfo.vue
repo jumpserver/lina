@@ -87,11 +87,11 @@ export default {
         .patch(`/api/v1/accounts/accounts/${this.account.id}/`, data, {
           disableFlashErrorMsg: true
         })
-        .then(res => {
+        .then((res) => {
           this.$message.success(this.$tc('UpdateSuccessMsg'))
           this.$emit('update:visible', false)
         })
-        .catch(err => {
+        .catch((err) => {
           const errMsg = Object.values(err.response.data).join(', ')
           this.$message.error(this.$tc('UpdateErrorMsg') + ' ' + errMsg)
           this.$emit('update:visible', false)

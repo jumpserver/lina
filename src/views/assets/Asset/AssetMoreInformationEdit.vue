@@ -20,9 +20,19 @@ export default {
       fieldsMeta: {
         gathered_info: {
           fields: [
-            'vendor', 'model', 'sn', 'cpu_model', 'cpu_count',
-            'cpu_cores', 'cpu_vcpus', 'memory', 'disk_total',
-            'distribution', 'distribution_version', 'arch', 'gpu_model'
+            'vendor',
+            'model',
+            'sn',
+            'cpu_model',
+            'cpu_count',
+            'cpu_cores',
+            'cpu_vcpus',
+            'memory',
+            'disk_total',
+            'distribution',
+            'distribution_version',
+            'arch',
+            'gpu_model'
           ]
         }
       },
@@ -48,6 +58,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

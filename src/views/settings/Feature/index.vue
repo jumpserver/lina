@@ -50,7 +50,8 @@ export default {
         {
           title: this.$t('VirtualApps'),
           name: 'VirtualApp',
-          hidden: !this.$hasPerm('settings.change_virtualapp') || !this.$store.getters.hasValidLicense
+          hidden:
+            !this.$hasPerm('settings.change_virtualapp') || !this.$store.getters.hasValidLicense
         }
       ]
     }

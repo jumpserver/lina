@@ -40,16 +40,16 @@ export function getDefaultConfig(vm) {
           selectedRows.length > 0 &&
           selectedRows[0].auto_config?.ansible_enabled &&
           selectedRows[0].auto_config?.ping_enabled,
-        callback: function({ selectedRows }) {
-          const ids = selectedRows.map(v => {
+        callback: function ({ selectedRows }) {
+          const ids = selectedRows.map((v) => {
             return v.id
           })
           vm.$axios
             .post('/api/v1/assets/assets/tasks/', { action: 'test', assets: ids })
-            .then(res => {
+            .then((res) => {
               openTaskPage(res['task'])
             })
-            .catch(err => {
+            .catch((err) => {
               vm.$message.error(vm.$tc('common.bulkVerifyErrorMsg' + ' ' + err))
             })
         }
@@ -62,17 +62,17 @@ export function getDefaultConfig(vm) {
         can: ({ selectedRows }) => {
           return selectedRows.length > 0 && vm.$hasPerm('assets.change_asset')
         },
-        callback: function({ selectedRows }) {
-          const ids = selectedRows.map(v => {
+        callback: function ({ selectedRows }) {
+          const ids = selectedRows.map((v) => {
             return { pk: v.id, is_active: false }
           })
           vm.$axios
             .patch(`/api/v1/assets/assets/`, ids)
-            .then(res => {
+            .then((res) => {
               vm.$message.success(vm.$tc('UpdateSuccessMsg'))
               vm.$refs.ListTable.reloadTable()
             })
-            .catch(err => {
+            .catch((err) => {
               vm.$message.error(vm.$tc('UpdateErrorMsg' + ' ' + err))
             })
         }
@@ -85,17 +85,17 @@ export function getDefaultConfig(vm) {
         can: ({ selectedRows }) => {
           return selectedRows.length > 0 && vm.$hasPerm('assets.change_asset')
         },
-        callback: function({ selectedRows }) {
-          const ids = selectedRows.map(v => {
+        callback: function ({ selectedRows }) {
+          const ids = selectedRows.map((v) => {
             return { pk: v.id, is_active: true }
           })
           vm.$axios
             .patch(`/api/v1/assets/assets/`, ids)
-            .then(res => {
+            .then((res) => {
               vm.$message.success(vm.$tc('UpdateSuccessMsg'))
               vm.$refs.ListTable.reloadTable()
             })
-            .catch(err => {
+            .catch((err) => {
               vm.$message.error(vm.$tc('UpdateErrorMsg' + ' ' + err))
             })
         }
@@ -225,7 +225,7 @@ export function getDefaultConfig(vm) {
               callback: ({ row }) => {
                 if (row.platform.name === 'Gateway') {
                   vm.gatewayVisible = true
-                  const port = row.protocols.find(item => item.name === 'ssh').port
+                  const port = row.protocols.find((item) => item.name === 'ssh').port
                   if (!port) {
                     return vm.$message.error(vm.$tc('BadRequestErrorMsg'))
                   } else {
@@ -235,7 +235,7 @@ export function getDefaultConfig(vm) {
                 } else {
                   vm.$axios
                     .post(`/api/v1/assets/assets/${row.id}/tasks/`, { action: 'test' })
-                    .then(res => {
+                    .then((res) => {
                       openTaskPage(res['task'])
                     })
                 }

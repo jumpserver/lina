@@ -1,6 +1,9 @@
 <template>
-  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu"
-    v-model:object="sessionData">
+  <GenericDetailPage
+    v-bind="config"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="sessionData"
+  >
     <keep-alive>
       <component :is="config.activeMenu" :object="sessionData" />
     </keep-alive>

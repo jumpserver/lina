@@ -20,8 +20,12 @@
         <td :title="$tc('ClickCopy')" class="item-td text-link" @click="onCopy(item.key)">
           <label class="item-label">{{ item.key }}</label>
         </td>
-        <td><span>{{ item.label }}</span></td>
-        <td><span>{{ item.example }}</span></td>
+        <td>
+          <span>{{ item.label }}</span>
+        </td>
+        <td>
+          <span>{{ item.example }}</span>
+        </td>
       </tr>
     </table>
   </Dialog>

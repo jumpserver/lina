@@ -1,16 +1,15 @@
 <template>
-  <Dialog v-bind="$attrs" :before-close="handleClose"
+  <Dialog
+    v-bind="$attrs"
+    :before-close="handleClose"
     :disabled-status="!isFinished"
     :show-cancel="false"
     :title="$tc('OfflineUpload')"
     @cancel="onCancel"
-    @confirm="onSubmit">
+    @confirm="onSubmit"
+  >
     <el-form label-position="top">
-      <el-form-item
-        :label="$tc('Upload' )"
-        :label-width="'100px'"
-        class="file-uploader"
-      >
+      <el-form-item :label="$tc('Upload')" :label-width="'100px'" class="file-uploader">
         <el-upload
           ref="upload"
           :auto-upload="false"
@@ -29,7 +28,7 @@
           </div>
           <template #tip>
             <div class="el-upload__tip">
-              <span :class="{'hasError': hasFileFormatOrSizeError }">
+              <span :class="{ hasError: hasFileFormatOrSizeError }">
                 {{ $t('UploadZipTips') }}
               </span>
               <div v-if="renderError" class="hasError">{{ renderError }}</div>
@@ -64,8 +63,7 @@ export default {
       }
       this.file = file
     },
-    beforeUpload(file) {
-    },
+    beforeUpload(file) {},
     handleClose(done) {
       if (this.isFinished) {
         done()
@@ -83,26 +81,26 @@ export default {
       this.isFinished = false
       const form = new FormData()
       form.append('file', this.file.raw)
-      this.$axios.post(
-        '/api/v1/terminal/virtual-apps/upload/',
-        form,
-        {
+      this.$axios
+        .post('/api/v1/terminal/virtual-apps/upload/', form, {
           headers: { 'Content-Type': 'multipart/form-data' },
           disableFlashErrorMsg: true
-        }
-      ).then(res => {
-        this.isFinished = true
-        this.$message.success(this.$tc('UploadSucceed'))
-        this.$emit('update:visible', false)
-        this.$emit('upload-event', res)
-      }).catch(err => {
-        this.isFinished = true
-        const error = err.response.data
-        const msg = error?.message || error?.detail || error?.error || JSON.stringify(error)
-        this.$message.error(msg)
-      }).finally(() => {
-        this.$refs.upload.clearFiles()
-      })
+        })
+        .then((res) => {
+          this.isFinished = true
+          this.$message.success(this.$tc('UploadSucceed'))
+          this.$emit('update:visible', false)
+          this.$emit('upload-event', res)
+        })
+        .catch((err) => {
+          this.isFinished = true
+          const error = err.response.data
+          const msg = error?.message || error?.detail || error?.error || JSON.stringify(error)
+          this.$message.error(msg)
+        })
+        .finally(() => {
+          this.$refs.upload.clearFiles()
+        })
     }
   }
 }
@@ -120,5 +118,4 @@ export default {
     }
   }
 }
-
 </style>

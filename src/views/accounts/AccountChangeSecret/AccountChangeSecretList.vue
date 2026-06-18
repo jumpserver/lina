@@ -9,7 +9,11 @@
 </template>
 
 <script>
-import { resolveComponent as _resolveComponent, createVNode as _createVNode, createTextVNode as _createTextVNode } from 'vue'
+import {
+  resolveComponent as resolveComponentCompat,
+  createVNode as createVNodeCompat,
+  createTextVNode as createTextVNodeCompat
+} from 'vue'
 import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
@@ -21,15 +25,32 @@ export default {
   data() {
     const vm = this
     return {
-      createDrawer: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretCreateUpdate.vue'),
+      createDrawer: () =>
+        import('@/views/accounts/AccountChangeSecret/AccountChangeSecretCreateUpdate.vue'),
       detailDrawer: () => import('@/views/accounts/AccountChangeSecret/Detail/index.vue'),
       tableConfig: {
         url: '/api/v1/accounts/change-secret-automations/',
         columnsExclude: ['password_rules'],
-        columns: ['name', 'accounts', 'secret_strategy', 'is_periodic', 'periodic_display', 'executed_amount', 'is_active', 'actions'],
+        columns: [
+          'name',
+          'accounts',
+          'secret_strategy',
+          'is_periodic',
+          'periodic_display',
+          'executed_amount',
+          'is_active',
+          'actions'
+        ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'accounts', 'periodic_display', 'executed_amount', 'is_active', 'actions']
+          default: [
+            'name',
+            'accounts',
+            'periodic_display',
+            'executed_amount',
+            'is_active',
+            'actions'
+          ]
         },
         columnsMeta: {
           name: {
@@ -39,13 +60,21 @@ export default {
             }
           },
           accounts: {
-            formatter: function(row) {
-              return _createVNode('span', null, [_createTextVNode(' '), row.accounts.join(', '), _createTextVNode(' ')])
+            formatter: function (row) {
+              return createVNodeCompat('span', null, [
+                createTextVNodeCompat(' '),
+                row.accounts.join(', '),
+                createTextVNodeCompat(' ')
+              ])
             }
           },
           secret_strategy: {
-            formatter: function(row) {
-              return _createVNode('span', null, [_createTextVNode(' '), row.secret_strategy.label, _createTextVNode(' ')])
+            formatter: function (row) {
+              return createVNodeCompat('span', null, [
+                createTextVNodeCompat(' '),
+                row.secret_strategy.label,
+                createTextVNodeCompat(' ')
+              ])
             }
           },
           is_periodic: {
@@ -55,44 +84,46 @@ export default {
             width: '180px'
           },
           executed_amount: {
-            formatter: row => {
+            formatter: (row) => {
               const can = vm.$hasPerm('accounts.view_changesecretexecution')
-              return _createVNode(_resolveComponent('el-link'), {
-                'onClick': () => this.handleExecAmount(row),
-                'disabled': !can
-              }, {
-                default: () => [row.executed_amount]
-              })
+              return createVNodeCompat(
+                resolveComponentCompat('el-link'),
+                {
+                  onClick: () => this.handleExecAmount(row),
+                  disabled: !can
+                },
+                {
+                  default: () => [row.executed_amount]
+                }
+              )
             }
           },
           actions: {
             formatterArgs: {
               updateRoute: 'AccountChangeSecretUpdate',
               cloneRoute: 'AccountChangeSecretCreate',
-              extraActions: [{
-                title: vm.$t('Execute'),
-                name: 'execute',
-                order: 1,
-                can: ({
-                  row
-                }) => {
-                  return row.is_active && vm.$hasPerm('accounts.add_changesecretexecution')
-                },
-                type: 'primary',
-                disabled: ({
-                  row
-                }) => !row.is_active,
-                callback: function({
-                  row
-                }) {
-                  this.$axios.post(`/api/v1/accounts/change-secret-executions/`, {
-                    automation: row.id,
-                    type: row.type.value
-                  }).then(res => {
-                    openTaskPage(res['task'])
-                  })
-                }.bind(this)
-              }]
+              extraActions: [
+                {
+                  title: vm.$t('Execute'),
+                  name: 'execute',
+                  order: 1,
+                  can: ({ row }) => {
+                    return row.is_active && vm.$hasPerm('accounts.add_changesecretexecution')
+                  },
+                  type: 'primary',
+                  disabled: ({ row }) => !row.is_active,
+                  callback: function ({ row }) {
+                    this.$axios
+                      .post(`/api/v1/accounts/change-secret-executions/`, {
+                        automation: row.id,
+                        type: row.type.value
+                      })
+                      .then((res) => {
+                        openTaskPage(res['task'])
+                      })
+                  }.bind(this)
+                }
+              ]
             }
           }
         }
@@ -102,29 +133,26 @@ export default {
         hasExport: false,
         hasImport: false,
         createRoute: 'AccountChangeSecretCreate',
-        extraMoreActions: [{
-          name: 'BatchDisable',
-          title: this.$t('DisableSelected'),
-          icon: 'fa fa-ban',
-          can: ({
-            selectedRows
-          }) => selectedRows.length > 0 && this.$hasPerm('accounts.change_changesecretautomation'),
-          callback: ({
-            selectedRows,
-            reloadTable
-          }) => this.bulkDisableCallback(selectedRows, reloadTable)
-        }, {
-          name: 'BatchActivate',
-          title: this.$t('ActivateSelected'),
-          icon: 'fa fa-check-circle-o',
-          can: ({
-            selectedRows
-          }) => selectedRows.length > 0 && this.$hasPerm('accounts.change_changesecretautomation'),
-          callback: ({
-            selectedRows,
-            reloadTable
-          }) => this.bulkActivateCallback(selectedRows, reloadTable)
-        }]
+        extraMoreActions: [
+          {
+            name: 'BatchDisable',
+            title: this.$t('DisableSelected'),
+            icon: 'fa fa-ban',
+            can: ({ selectedRows }) =>
+              selectedRows.length > 0 && this.$hasPerm('accounts.change_changesecretautomation'),
+            callback: ({ selectedRows, reloadTable }) =>
+              this.bulkDisableCallback(selectedRows, reloadTable)
+          },
+          {
+            name: 'BatchActivate',
+            title: this.$t('ActivateSelected'),
+            icon: 'fa fa-check-circle-o',
+            can: ({ selectedRows }) =>
+              selectedRows.length > 0 && this.$hasPerm('accounts.change_changesecretautomation'),
+            callback: ({ selectedRows, reloadTable }) =>
+              this.bulkActivateCallback(selectedRows, reloadTable)
+          }
+        ]
       }
     }
   },
@@ -140,35 +168,41 @@ export default {
     },
     bulkDisableCallback(selectedRows, reloadTable) {
       const url = '/api/v1/accounts/change-secret-automations/'
-      const data = selectedRows.map(row => {
+      const data = selectedRows.map((row) => {
         return {
           id: row.id,
           is_active: false
         }
       })
       if (data.length === 0) return
-      this.$axios.patch(url, data).then(() => {
-        reloadTable()
-        this.$message.success(this.$t('DisableSuccessMsg'))
-      }).catch(error => {
-        this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error)
-      })
+      this.$axios
+        .patch(url, data)
+        .then(() => {
+          reloadTable()
+          this.$message.success(this.$t('DisableSuccessMsg'))
+        })
+        .catch((error) => {
+          this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error)
+        })
     },
     bulkActivateCallback(selectedRows, reloadTable) {
       const url = '/api/v1/accounts/change-secret-automations/'
-      const data = selectedRows.map(row => {
+      const data = selectedRows.map((row) => {
         return {
           id: row.id,
           is_active: true
         }
       })
       if (data.length === 0) return
-      this.$axios.patch(url, data).then(() => {
-        reloadTable()
-        this.$message.success(this.$t('ActivateSuccessMsg'))
-      }).catch(error => {
-        this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error)
-      })
+      this.$axios
+        .patch(url, data)
+        .then(() => {
+          reloadTable()
+          this.$message.success(this.$t('ActivateSuccessMsg'))
+        })
+        .catch((error) => {
+          this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error)
+        })
     }
   }
 }

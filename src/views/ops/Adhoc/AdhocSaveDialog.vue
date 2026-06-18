@@ -20,7 +20,8 @@ import CodeEditor from '@/components/Form/FormFields/CodeEditor.vue'
 
 export default {
   components: {
-    Dialog, GenericCreateUpdateForm
+    Dialog,
+    GenericCreateUpdateForm
   },
   props: {
     visible: {
@@ -42,9 +43,7 @@ export default {
       ready: false,
       hasSaveContinue: false,
       url: '/api/v1/ops/adhocs/',
-      fields: [
-        ['', ['name', 'module', 'args']]
-      ],
+      fields: [['', ['name', 'module', 'args']]],
       initial: {
         module: 'shell',
         args: ''
@@ -87,5 +86,4 @@ export default {
   float: right;
   padding-right: 30px;
 }
-
 </style>

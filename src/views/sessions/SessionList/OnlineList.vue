@@ -1,5 +1,10 @@
 <template>
-  <BaseList :extra-actions="extraActions" :url="url" :columns-meta="columnsMeta" :columns-exclude="columnsExclude" />
+  <BaseList
+    :extra-actions="extraActions"
+    :url="url"
+    :columns-meta="columnsMeta"
+    :columns-exclude="columnsExclude"
+  />
 </template>
 
 <script>
@@ -22,17 +27,16 @@ export default {
           title: this.$t('Terminate'),
           type: 'danger',
           can: ({ row }) => row['can_terminate'] && vm.$hasPerm('terminal.terminate_session'),
-          callback: function({ reload, row }) {
+          callback: function ({ reload, row }) {
             // 终断 session reload
             const data = [row.id]
-            terminateSession(data).then(res => {
+            terminateSession(data).then((res) => {
               const msg = vm.$t('TerminateTaskSendSuccessMsg')
               this.$message.success(msg)
-              window.setTimeout(function() {
+              window.setTimeout(function () {
                 reload()
               }, 50000)
-            }
-            )
+            })
           }
         },
         {
@@ -46,17 +50,16 @@ export default {
             return supportedType && vm.$hasPerm('terminal.terminate_session')
           },
           has: ({ row }) => !row['is_locked'],
-          callback: function({ reload, row }) {
+          callback: function ({ reload, row }) {
             const data = {
-              'session_id': row.id,
-              'task_name': 'lock_session'
+              session_id: row.id,
+              task_name: 'lock_session'
             }
-            toggleLockSession(data).then(res => {
+            toggleLockSession(data).then((res) => {
               const msg = vm.$t('PauseTaskSendSuccessMsg')
               this.$message.success(msg)
               row['is_locked'] = !row['is_locked']
-            }
-            )
+            })
           }
         },
         {
@@ -70,12 +73,12 @@ export default {
             return supportedType && vm.$hasPerm('terminal.terminate_session')
           },
           has: ({ row }) => row['is_locked'],
-          callback: function({ reload, row }) {
+          callback: function ({ reload, row }) {
             const data = {
-              'session_id': row.id,
-              'task_name': 'unlock_session'
+              session_id: row.id,
+              task_name: 'unlock_session'
             }
-            toggleLockSession(data).then(res => {
+            toggleLockSession(data).then((res) => {
               const msg = vm.$t('ResumeTaskSendSuccessMsg')
               this.$message.success(msg)
               row['is_locked'] = !row['is_locked']
@@ -95,9 +98,13 @@ export default {
             }
             return ''
           },
-          callback: function({ row, tableData }) {
+          callback: function ({ row, tableData }) {
             const monitorUrl = '/luna/monitor/' + row.id
-            window.open(monitorUrl, '_blank', 'height=600, width=850, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
+            window.open(
+              monitorUrl,
+              '_blank',
+              'height=600, width=850, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no'
+            )
           }
         }
       ],

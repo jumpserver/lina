@@ -12,10 +12,13 @@
                     <i class="fa fa-question-circle-o" />
                   </el-tooltip>
                 </template>
-                <component v-bind="item.el" :is="item.component ? item.component : 'el-input'"
+                <component
+                  v-bind="item.el"
+                  :is="item.component ? item.component : 'el-input'"
                   v-model="testData[item.name]"
                   :value="testData[item.name]"
-                  @change="onChange(item.name, $event)" />
+                  @change="onChange(item.name, $event)"
+                />
               </el-form-item>
             </el-col>
           </el-form-item>
@@ -28,10 +31,13 @@
                 <i class="fa fa-question-circle-o" />
               </el-tooltip>
             </template>
-            <component v-bind="field.el" :is="field.component ? field.component : 'el-input'"
+            <component
+              v-bind="field.el"
+              :is="field.component ? field.component : 'el-input'"
               v-model="testData[field.name]"
               :value="testData[field.name]"
-              @change="onChange(field.name, $event)" />
+              @change="onChange(field.name, $event)"
+            />
           </el-form-item>
         </div>
       </div>
@@ -96,7 +102,7 @@ export default {
     safeFields() {
       function mark(fields) {
         if (!Array.isArray(fields)) return fields
-        return fields.map(f => {
+        return fields.map((f) => {
           if (Array.isArray(f)) return mark(f)
           if (f && f.component && typeof f.component !== 'string') {
             return { ...f, component: markRaw(toRaw(f.component)) }
@@ -124,20 +130,20 @@ export default {
       this.setWsCallback()
     },
     setWsCallback() {
-      this.ws.onmessage = e => {
+      this.ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
         this.xterm.write(data.msg)
       }
-      this.ws.onopen = e => {
+      this.ws.onopen = (e) => {
         this.$log.debug('websocket connected: ', e)
         this.ws.send(JSON.stringify(this.iTestData))
         this.isTesting = true
       }
-      this.ws.onerror = e => {
+      this.ws.onerror = (e) => {
         this.xterm.write(this.$tc('WebSocketDisconnect'))
         this.isTesting = false
       }
-      this.ws.onclose = e => {
+      this.ws.onclose = (e) => {
         this.xterm.write(this.$tc('TaskDone'))
         this.isTesting = false
       }
@@ -146,7 +152,7 @@ export default {
       this.testData[key] = val
     },
     submitTest() {
-      this.$refs['testForm'].validate(valid => {
+      this.$refs['testForm'].validate((valid) => {
         if (valid) {
           this.enableWS()
         }

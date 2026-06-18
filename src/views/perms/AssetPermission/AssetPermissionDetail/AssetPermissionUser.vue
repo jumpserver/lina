@@ -49,14 +49,17 @@ export default {
             width: 150,
             objects: this.object.users,
             formatter: DeleteActionFormatter,
-            onDelete: function(col, row, cellValue, reload) {
+            onDelete: function (col, row, cellValue, reload) {
               const url = `/api/v1/perms/asset-permissions-users-relations/?assetpermission=${this.object.id}&user=${cellValue}`
-              this.$axios.delete(url).then(res => {
-                this.$message.success(this.$tc('DeleteSuccessMsg'))
-                this.$store.commit('common/reload')
-              }).catch(error => {
-                this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
-              })
+              this.$axios
+                .delete(url)
+                .then((res) => {
+                  this.$message.success(this.$tc('DeleteSuccessMsg'))
+                  this.$store.commit('common/reload')
+                })
+                .catch((error) => {
+                  this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
+                })
             }.bind(this)
           },
           actions: {
@@ -84,12 +87,12 @@ export default {
           }
         },
         showHasMore: false,
-        hasObjectsId: this.object.users?.map(i => i.id) || [],
+        hasObjectsId: this.object.users?.map((i) => i.id) || [],
         showHasObjects: false,
         performAdd: (items) => {
           const relationUrl = `/api/v1/perms/asset-permissions-users-relations/`
           const objectId = this.object.id
-          const data = items.map(v => {
+          const data = items.map((v) => {
             return {
               user: v.value,
               assetpermission: objectId
@@ -110,11 +113,11 @@ export default {
         objectsAjax: {
           url: '/api/v1/users/groups/'
         },
-        hasObjectsId: this.object.user_groups?.map(i => i.id) || [],
+        hasObjectsId: this.object.user_groups?.map((i) => i.id) || [],
         performAdd: (items) => {
           const relationUrl = `/api/v1/perms/asset-permissions-user-groups-relations/`
           const objectId = this.object.id
-          const data = items.map(v => {
+          const data = items.map((v) => {
             return {
               assetpermission: objectId,
               usergroup: v.value

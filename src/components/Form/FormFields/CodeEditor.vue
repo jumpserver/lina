@@ -90,7 +90,7 @@
                 class="select-dropdown"
                 trigger="click"
                 @command="
-                  command => {
+                  (command) => {
                     item.value = command
                     item.callback(command)
                   }
@@ -233,7 +233,7 @@ export default {
       // 将对象转换为数组
       const actions = Object.values(actionsObj)
 
-      actions.forEach(action => {
+      actions.forEach((action) => {
         if (!Object.prototype.hasOwnProperty.call(this.formModel, action.name)) {
           this.formModel[action.name] = action.value || ''
         }
@@ -250,7 +250,7 @@ export default {
 
       const rules = {}
 
-      Object.values(actionsObj).forEach(action => {
+      Object.values(actionsObj).forEach((action) => {
         if (action.name === this.$t('RunAs') && action.type === 'input') {
           rules[action.name] = [
             { required: true, message: this.$t('RequiredRunas'), trigger: 'blur' }

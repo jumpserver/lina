@@ -43,6 +43,7 @@
 
 <script>
 import i18n from '@/i18n/i18n'
+import _ from 'lodash'
 
 export default {
   props: {
@@ -111,7 +112,7 @@ export default {
       this.filterValue = item.value
       this.handleConfirm()
     },
-    handleChange: _.debounce(function(item) {
+    handleChange: _.debounce(function (item) {
       this.handleConfirm()
     }, 200),
     handleConfirm() {

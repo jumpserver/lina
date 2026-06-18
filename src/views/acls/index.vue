@@ -77,6 +77,6 @@ export default {
 <style lang="scss" scoped>
 :deep(.image img) {
   width: 40px;
-  height: 40px
+  height: 40px;
 }
 </style>

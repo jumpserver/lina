@@ -28,8 +28,7 @@ export default {
       const $scrollWrapper = this.scrollWrapper
       $scrollWrapper.scrollLeft = $scrollWrapper.scrollLeft + eventDelta / 4
     },
-    moveToTarget() {
-    }
+    moveToTarget() {}
   }
 }
 </script>

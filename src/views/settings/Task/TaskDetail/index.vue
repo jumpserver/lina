@@ -1,7 +1,10 @@
 <template>
-  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu"
+  <GenericDetailPage
+    v-bind="config"
+    v-model:active-menu="config.activeMenu"
     v-model:object="taskDetail"
-    :title="getTitle">
+    :title="getTitle"
+  >
     <keep-alive>
       <component :is="config.activeMenu" :object="taskDetail" />
     </keep-alive>
@@ -46,7 +49,9 @@ export default {
   },
   computed: {
     getTitle() {
-      return this.taskDetail.meta && this.taskDetail.meta.comment ? this.taskDetail.meta.comment : this.taskDetail.name
+      return this.taskDetail.meta && this.taskDetail.meta.comment
+        ? this.taskDetail.meta.comment
+        : this.taskDetail.name
     }
   }
 }

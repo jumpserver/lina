@@ -1,6 +1,5 @@
 <template>
-  <BaseList v-bind="config" :header-actions="headerActions"
-    :table-config="tableConfig" />
+  <BaseList v-bind="config" :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>

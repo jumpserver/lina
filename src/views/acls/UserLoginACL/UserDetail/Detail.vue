@@ -1,10 +1,6 @@
 <template>
   <TwoCol>
-    <AutoDetailCard
-      :fields="detailFields"
-      :object="object"
-      :url="url"
-    />
+    <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
   </TwoCol>
 </template>
 
@@ -33,15 +29,15 @@ export default {
           type: 'switch',
           attrs: {},
           callbacks: {
-            change: function(val) {
-              vm.$axios.patch(
-                `/api/v1/acls/login-acls/${vm.object.id}/`,
-                { is_active: val }
-              ).then(res => {
-                vm.$message.success(vm.$tc('UpdateSuccessMsg'))
-              }).catch(err => {
-                vm.$message.error(vm.$tc('UpdateErrorMsg' + ' ' + err))
-              })
+            change: function (val) {
+              vm.$axios
+                .patch(`/api/v1/acls/login-acls/${vm.object.id}/`, { is_active: val })
+                .then((res) => {
+                  vm.$message.success(vm.$tc('UpdateSuccessMsg'))
+                })
+                .catch((err) => {
+                  vm.$message.error(vm.$tc('UpdateErrorMsg' + ' ' + err))
+                })
             }
           }
         }
@@ -49,15 +45,20 @@ export default {
       dataVal: [],
       url: `/api/v1/acls/login-acls/${vm.object.id}/`,
       detailFields: [
-        'name', 'user_display',
+        'name',
+        'user_display',
         {
           key: vm.$t('IpGroup'),
           value: vm.object.rules.ip_group.join(', ')
         },
-        'dataVal', 'action_display', 'priority', 'date_created', 'created_by',
+        'dataVal',
+        'action_display',
+        'priority',
+        'date_created',
+        'created_by',
         {
           key: vm.$t('LoginConfirmUser'),
-          value: vm.object.reviewers.map(item => item.name).join(', ')
+          value: vm.object.reviewers.map((item) => item.name).join(', ')
         },
         'comment'
       ]
@@ -66,5 +67,4 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-</style>
+<style lang="scss" scoped></style>

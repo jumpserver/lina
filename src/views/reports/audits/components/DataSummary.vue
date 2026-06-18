@@ -78,8 +78,12 @@ export default {
           &total_count_commands=1
           &total_count_commands_danger=1
         `)
-      const userLoginSuccessCountDecimal = data.total_count_user_login_success_logs ? new Decimal(data.total_count_user_login_success_logs) : new Decimal(0)
-      const userLoginCountDecimal = data.total_count_user_login_logs ? new Decimal(data.total_count_user_login_logs) : new Decimal(0)
+      const userLoginSuccessCountDecimal = data.total_count_user_login_success_logs
+        ? new Decimal(data.total_count_user_login_success_logs)
+        : new Decimal(0)
+      const userLoginCountDecimal = data.total_count_user_login_logs
+        ? new Decimal(data.total_count_user_login_logs)
+        : new Decimal(0)
 
       let LoginSucceeded = userLoginSuccessCountDecimal.dividedBy(userLoginCountDecimal).times(100)
       LoginSucceeded = isNaN(LoginSucceeded) ? 0 : LoginSucceeded
@@ -94,8 +98,12 @@ export default {
       this.logConfig['active'] = data.total_count_user_login_success_logs
       this.logConfig['weekAdd'] = data.total_count_user_login_success_logs
 
-      const dangerCommandCountDecimal = data.total_count_commands_danger ? new Decimal(data.total_count_commands_danger) : new Decimal(0)
-      const commandCountDecimal = data.total_count_commands ? new Decimal(data.total_count_commands) : new Decimal(0)
+      const dangerCommandCountDecimal = data.total_count_commands_danger
+        ? new Decimal(data.total_count_commands_danger)
+        : new Decimal(0)
+      const commandCountDecimal = data.total_count_commands
+        ? new Decimal(data.total_count_commands)
+        : new Decimal(0)
 
       let dangerCommand = dangerCommandCountDecimal.dividedBy(commandCountDecimal).times(100)
       dangerCommand = isNaN(dangerCommand) ? 0 : dangerCommand

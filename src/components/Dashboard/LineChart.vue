@@ -45,7 +45,7 @@ export default {
       default: () => []
     }
   },
-  data: function() {
+  data: function () {
     return {
       dataUrl: '',
       metricsData: {
@@ -158,17 +158,19 @@ export default {
                 0,
                 0,
                 1,
-                [{
-                  offset: 0,
-                  color: primary
-                }, {
-                  offset: 0.6,
-                  color: TwoLevelColor
-                },
-                {
-                  offset: 0.8,
-                  color: ThreeLevelColor
-                }
+                [
+                  {
+                    offset: 0,
+                    color: primary
+                  },
+                  {
+                    offset: 0.6,
+                    color: TwoLevelColor
+                  },
+                  {
+                    offset: 0.8,
+                    color: ThreeLevelColor
+                  }
                 ],
                 false
               ),
@@ -188,17 +190,19 @@ export default {
                 0,
                 0,
                 1,
-                [{
-                  offset: 0,
-                  color: 'rgba(249, 199, 79, 0.6)'
-                }, {
-                  offset: 0.6,
-                  color: 'rgba(249, 199, 79, 0.2)'
-                },
-                {
-                  offset: 0.8,
-                  color: 'rgba(249, 199, 79, 0.1)'
-                }
+                [
+                  {
+                    offset: 0,
+                    color: 'rgba(249, 199, 79, 0.6)'
+                  },
+                  {
+                    offset: 0.6,
+                    color: 'rgba(249, 199, 79, 0.2)'
+                  },
+                  {
+                    offset: 0.8,
+                    color: 'rgba(249, 199, 79, 0.1)'
+                  }
                 ],
                 false
               ),
@@ -234,7 +238,7 @@ export default {
     // 兼容某些浏览器（Safari）触发 print 媒体切换
     this._mql = window.matchMedia && window.matchMedia('print')
     if (this._mql) {
-      const handler = e => (e.matches ? this._before() : this._after())
+      const handler = (e) => (e.matches ? this._before() : this._after())
       this._mql.addEventListener?.('change', handler)
       this._mql.addListener?.(handler)
       this._mql._handler = handler
@@ -264,7 +268,6 @@ export default {
       }
     }
   }
-
 }
 </script>
 

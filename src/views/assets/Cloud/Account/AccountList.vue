@@ -1,19 +1,14 @@
 <template>
   <div>
     <SmallCard v-bind="table" ref="table" class="account-table" />
-    <CreateDialog v-bind="providerConfig" v-if="visible"
-      :visible="visible" />
+    <CreateDialog v-bind="providerConfig" v-if="visible" :visible="visible" />
     <UpdateDialog
       v-if="updateVisible"
       v-model:visible="updateVisible"
       :object="object"
       @submit-success="onSubmitSuccess"
     />
-    <SyncDialog
-      v-if="onlineSyncVisible"
-      v-model:visible="onlineSyncVisible"
-      :object="object"
-    />
+    <SyncDialog v-if="onlineSyncVisible" v-model:visible="onlineSyncVisible" :object="object" />
   </div>
 </template>
 
@@ -100,7 +95,8 @@ export default {
                 title: this.$t('PublicCloud'),
                 icon: 'public-cloud',
                 callback: () => {
-                  const providers = this.iCategory === 'host' ? publicHostProviders : publicDBProviders
+                  const providers =
+                    this.iCategory === 'host' ? publicHostProviders : publicDBProviders
                   this.providerConfig.providers = providers.map(
                     (item) => ACCOUNT_PROVIDER_ATTRS_MAP[item]
                   )
@@ -196,6 +192,4 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

@@ -18,7 +18,7 @@ export default {
   props: {
     value: {
       type: [Array],
-      default: () => ([])
+      default: () => []
     },
     select2: {
       type: Object,
@@ -71,6 +71,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -163,7 +163,7 @@ export default {
             !this.$hasPerm('accounts.change_accountrisk')
         }
       ]
-      return actions.filter(action => {
+      return actions.filter((action) => {
         return action.has
       })
     }

@@ -29,9 +29,7 @@ export default {
     url() {
       return `/api/v1/tickets/tickets/?applicant=${this.currentUser.id}&state=pending`
     },
-    ...mapGetters([
-      'currentUser'
-    ])
+    ...mapGetters(['currentUser'])
   }
 }
 </script>

@@ -1,11 +1,11 @@
 <template>
-  <div :class="{'collapse':collapse}" class="sidebar-logo-container">
+  <div :class="{ collapse: collapse }" class="sidebar-logo-container">
     <transition name="sidebarLogoFade">
       <a v-if="collapse" key="collapse" class="sidebar-logo-link" @click="handleClick">
-        <img :src="logoSrc" alt="logo" class="sidebar-logo">
+        <img :src="logoSrc" alt="logo" class="sidebar-logo" />
       </a>
       <a v-else key="expand" class="sidebar-logo-link" @click="handleClick">
-        <img :src="logoTextSrc" alt="logo" class="sidebar-logo-text">
+        <img :src="logoTextSrc" alt="logo" class="sidebar-logo-text" />
       </a>
     </transition>
   </div>
@@ -23,14 +23,10 @@ export default {
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
   computed: {
-    ...mapGetters([
-      'viewRoutes',
-      'publicSettings'
-    ]),
+    ...mapGetters(['viewRoutes', 'publicSettings']),
     // eslint-disable-next-line vue/return-in-computed-property
     logoTextSrc() {
       return this.publicSettings['INTERFACE']['logo_index']
@@ -39,12 +35,11 @@ export default {
       return this.publicSettings['INTERFACE']['logo_logout']
     }
   },
-  created() {
-  },
+  created() {},
   methods: {
     handleClick() {
       const currentPath = this.$route.path
-      const matchingRoute = this.viewRoutes.find(route => currentPath.startsWith(route.path))
+      const matchingRoute = this.viewRoutes.find((route) => currentPath.startsWith(route.path))
 
       if (matchingRoute) {
         this.$router.push(matchingRoute.redirect)
@@ -57,7 +52,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use "@/styles/variables" as *;
+@use '@/styles/variables' as *;
 
 .sidebarLogoFade-enter-active {
   transition: opacity 1.5s;
@@ -100,7 +95,12 @@ export default {
       font-weight: 600;
       line-height: $headerHeight;
       font-size: 14px;
-      font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
+      font-family:
+        Avenir,
+        Helvetica Neue,
+        Arial,
+        Helvetica,
+        sans-serif;
       vertical-align: middle;
     }
   }

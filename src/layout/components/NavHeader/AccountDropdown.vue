@@ -36,23 +36,22 @@
 </template>
 
 <script>
+import { LOGOUT_PATH } from '@/utils/env'
 import { mapGetters } from 'vuex'
+import { getAssetUrl } from '@/utils/assets'
 
 export default {
   name: 'AccountDropdown',
   data() {
     return {
-      avatarUrl: require('@/assets/img/avatar.png'),
+      avatarUrl: getAssetUrl('img/avatar.png'),
       showApiKey: false
     }
   },
   computed: {
-    ...mapGetters([
-      'currentUser'
-    ])
+    ...mapGetters(['currentUser'])
   },
-  created() {
-  },
+  created() {},
   methods: {
     handleClick(val) {
       switch (val) {
@@ -75,57 +74,57 @@ export default {
       if (currentOrg && (currentOrg.autoEnter || currentOrg.is_system)) {
         await this.$store.dispatch('users/setCurrentOrg', this.$store.getters.preOrg)
       }
-      window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${this.$route.fullPath}`
+      window.location.href = `${LOGOUT_PATH}?next=${this.$route.fullPath}`
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .header-profile {
+.header-profile {
+  display: flex;
+  align-items: center;
+  height: 100%;
+
+  .el-dropdown {
     display: flex;
     align-items: center;
     height: 100%;
+    color: #fff;
+  }
 
-    .el-dropdown {
-      display: flex;
-      align-items: center;
-      height: 100%;
-      color: #fff;
-    }
+  .el-dropdown-link {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    line-height: 1;
+    color: inherit;
+    outline: none !important;
+    box-shadow: none !important;
 
-    .el-dropdown-link {
-      display: flex;
-      align-items: center;
-      height: 100%;
-      line-height: 1;
-      color: inherit;
+    &:focus,
+    &:focus-visible,
+    &:active {
       outline: none !important;
       box-shadow: none !important;
-
-      &:focus,
-      &:focus-visible,
-      &:active {
-        outline: none !important;
-        box-shadow: none !important;
-      }
     }
   }
+}
 
-  .header-avatar {
-    height: 24px;
-    width: 24px;
-    margin-right: 5px;
-    vertical-align: middle;
-    background: white;
-  }
+.header-avatar {
+  height: 24px;
+  width: 24px;
+  margin-right: 5px;
+  vertical-align: middle;
+  background: white;
+}
 
-  .mobile .header-avatar {
-    display: none;
-  }
+.mobile .header-avatar {
+  display: none;
+}
 
-  .icon {
-    font-size: 14px;
-    margin-right: 3px;
-  }
+.icon {
+  font-size: 14px;
+  margin-right: 3px;
+}
 </style>

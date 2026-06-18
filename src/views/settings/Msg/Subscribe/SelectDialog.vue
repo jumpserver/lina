@@ -1,9 +1,12 @@
 <template>
-  <Dialog v-bind="$attrs" ref="myDialog"
+  <Dialog
+    v-bind="$attrs"
+    ref="myDialog"
     :destroy-on-close="true"
     height="720px"
     width="790px"
-    @confirm="submit">
+    @confirm="submit"
+  >
     <krryPaging v-bind="pagingTransfer" ref="pageTransfer" class="transfer" />
   </Dialog>
 </template>
@@ -16,13 +19,14 @@ import krryPaging from '@/components/Libs/Krry/paging/index.vue'
 export default {
   name: 'ListSelect',
   components: {
-    Dialog, krryPaging
+    Dialog,
+    krryPaging
   },
   inheritAttrs: false,
   props: {
     selectedUsers: {
       type: Array,
-      default: function() {
+      default: function () {
         return []
       }
     }
@@ -34,31 +38,31 @@ export default {
         filterable: true,
         async: true,
         dataList: [],
-        getPageData: async function(pageIndex, pageSize) {
+        getPageData: async function (pageIndex, pageSize) {
           const limit = pageSize
           const offset = (pageIndex - 1) * pageSize
           const params = {
-            'limit': limit,
-            'offset': offset,
-            'oid': 'ROOT'
+            limit: limit,
+            offset: offset,
+            oid: 'ROOT'
           }
           const data = await getUserList(params)
-          const results = data['results'].map(item => {
+          const results = data['results'].map((item) => {
             return { id: item.id, label: _.escape(`${item.name}(${item.username})`) }
           })
           return results
         },
-        getSearchData: async function(keyword, pageIndex, pageSize) {
+        getSearchData: async function (keyword, pageIndex, pageSize) {
           const limit = pageSize
           const offset = (pageIndex - 1) * pageSize
           const params = {
-            'limit': limit,
-            'offset': offset,
-            'oid': 'ROOT',
-            'search': keyword
+            limit: limit,
+            offset: offset,
+            oid: 'ROOT',
+            search: keyword
           }
           const data = await getUserList(params)
-          const results = data['results'].map(item => {
+          const results = data['results'].map((item) => {
             return { id: item.id, label: _.escape(`${item.name}(${item.username})`) }
           })
           return results
@@ -70,7 +74,7 @@ export default {
     }
   },
   mounted() {
-    const selectedUsers = this.selectedUsers.map(item => {
+    const selectedUsers = this.selectedUsers.map((item) => {
       return {
         id: item.id,
         label: item.name

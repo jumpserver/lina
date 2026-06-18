@@ -5,12 +5,15 @@
       :is-fa="true"
       class="right-side-actions right-side-item"
     />
-    <ImExportDialog v-bind="$attrs" v-if="dialogExportVisible"
+    <ImExportDialog
+      v-bind="$attrs"
+      v-if="dialogExportVisible"
       :export-options="iExportOptions"
       :import-options="iImportOptions"
       :selected-rows="selectedRows"
       @import-dialog-close="onImportDialogClose"
-      @import-dialog-confirm="onImportDialogConfirm" />
+      @import-dialog-confirm="onImportDialogConfirm"
+    />
   </div>
 </template>
 

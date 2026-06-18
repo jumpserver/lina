@@ -23,8 +23,7 @@ export default {
   props: {
     message: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     isTerminal: {
       type: Boolean,
@@ -70,7 +69,10 @@ export default {
         }
       })
       this.markdown.use(mila, { attrs: { target: '_blank', rel: 'noopener', class: 'link-style' } })
-      this.markdown.use(mdKatex, { blockClass: 'katexmath-block rounded-md', errorColor: ' #cc0000' })
+      this.markdown.use(mdKatex, {
+        blockClass: 'katexmath-block rounded-md',
+        errorColor: ' #cc0000'
+      })
     },
     highlightBlock(str, lang) {
       let insertSpanHtml = `<span class="code-block-header__insert">${this.$t('Insert')}</span>`
@@ -194,8 +196,7 @@ export default {
     removeBtnClickEvent(selector) {
       const buttons = this.$refs.textRef.querySelectorAll(selector)
       buttons.forEach((btn) => {
-        btn.removeEventListener('click', () => {
-        })
+        btn.removeEventListener('click', () => {})
       })
     },
     removeEvents() {
@@ -211,7 +212,7 @@ export default {
 <style lang="scss" scoped>
 .markdown-body {
   font-size: 13px;
-  max-width: 300px;;
+  max-width: 300px;
 
   &:deep(p) {
     margin-bottom: 0 !important;
@@ -228,7 +229,7 @@ export default {
   }
 
   &:deep(.code-block-wrapper) {
-    background: #1F2329;
+    background: #1f2329;
     padding: 0;
     margin: 5px 0;
     display: flex;
@@ -300,7 +301,7 @@ export default {
   margin-right: 5px;
   border-radius: 50%;
   vertical-align: middle;
-  background: #676A6c;
+  background: #676a6c;
   animation: load 1.2s ease infinite;
 }
 

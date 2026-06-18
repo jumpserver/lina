@@ -3,9 +3,13 @@
 </template>
 
 <script>
-import { createTextVNode as _createTextVNode, createVNode as _createVNode } from 'vue'
+import { createTextVNode as createTextVNodeCompat, createVNode as createVNodeCompat } from 'vue'
 import { DrawerListTable as ListTable } from '@/components'
-import { ChoicesFormatter, DetailFormatter, SwitchFormatter } from '@/components/Table/TableFormatters'
+import {
+  ChoicesFormatter,
+  DetailFormatter,
+  SwitchFormatter
+} from '@/components/Table/TableFormatters'
 import { BASE_URL } from '@/utils/common/index'
 export default {
   name: 'TaskList',
@@ -16,9 +20,26 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/ops/tasks/',
-        columns: ['name', 'queue', 'count', 'state', 'date_last_publish', 'exec_cycle', 'next_exec_time', 'enabled'],
+        columns: [
+          'name',
+          'queue',
+          'count',
+          'state',
+          'date_last_publish',
+          'exec_cycle',
+          'next_exec_time',
+          'enabled'
+        ],
         columnsShow: {
-          default: ['name', 'count', 'state', 'date_last_publish', 'exec_cycle', 'next_exec_time', 'enabled']
+          default: [
+            'name',
+            'count',
+            'state',
+            'date_last_publish',
+            'exec_cycle',
+            'next_exec_time',
+            'enabled'
+          ]
         },
         columnsMeta: {
           name: {
@@ -26,10 +47,7 @@ export default {
             formatterArgs: {
               can: this.$hasPerm('ops.view_celerytask'),
               router: 'TaskDetail',
-              getTitle({
-                row,
-                cellValue
-              }) {
+              getTitle({ row, cellValue }) {
                 if (row.meta && row.meta.comment) {
                   return row.meta.comment
                 }
@@ -40,41 +58,49 @@ export default {
           queue: {
             label: this.$t('Queue'),
             width: '120px',
-            formatter: row => {
+            formatter: (row) => {
               return row.meta.queue
             }
           },
           comment: {
             width: '300px',
-            formatter: row => {
+            formatter: (row) => {
               return row.meta.comment ? row.meta.comment : '-'
             }
           },
           last_published_time: {
             width: '210px',
-            formatter: row => {
+            formatter: (row) => {
               return row.last_published_time != null ? row.last_published_time : '-'
             }
           },
           exec_cycle: {
             width: '120px',
-            formatter: row => {
+            formatter: (row) => {
               return row.exec_cycle ? row.exec_cycle : '-'
             }
           },
           next_exec_time: {
             width: '210px',
-            formatter: row => {
+            formatter: (row) => {
               return row.next_exec_time ? row.next_exec_time : '-'
             }
           },
           count: {
             width: '130px',
             label: `${this.$t('Success')}/${this.$t('Total')}`,
-            formatter: row => {
-              return _createVNode('div', null, [_createVNode('span', {
-                'class': 'text-primary'
-              }, [row.summary.success || 0]), _createTextVNode('/'), _createVNode('span', null, [row.summary.total || 0])])
+            formatter: (row) => {
+              return createVNodeCompat('div', null, [
+                createVNodeCompat(
+                  'span',
+                  {
+                    class: 'text-primary'
+                  },
+                  [row.summary.success || 0]
+                ),
+                createTextVNodeCompat('/'),
+                createVNodeCompat('span', null, [row.summary.total || 0])
+              ])
             }
           },
           state: {
@@ -93,9 +119,7 @@ export default {
               },
               showText: false,
               hasTips: true,
-              getTips: ({
-                cellValue
-              }) => {
+              getTips: ({ cellValue }) => {
                 switch (cellValue) {
                   case 'green':
                     return this.$t('StatusGreen')
@@ -133,20 +157,20 @@ export default {
       headerActions: {
         hasCreate: false,
         hasMoreActions: false,
-        extraActions: [{
-          title: this.$t('TaskMonitor'),
-          type: 'primary',
-          can: this.$hasPerm('ops.view_taskmonitor'),
-          callback: () => {
-            window.open(`${BASE_URL}/core/flower/?_=${Date.now()}`)
+        extraActions: [
+          {
+            title: this.$t('TaskMonitor'),
+            type: 'primary',
+            can: this.$hasPerm('ops.view_taskmonitor'),
+            callback: () => {
+              window.open(`${BASE_URL}/core/flower/?_=${Date.now()}`)
+            }
           }
-        }]
+        ]
       }
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

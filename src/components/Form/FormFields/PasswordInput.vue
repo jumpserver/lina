@@ -1,7 +1,10 @@
 <template>
-  <Password v-bind="{ ...$attrs, ...iAttrs }" :value="value"
+  <Password
+    v-bind="{ ...$attrs, ...iAttrs }"
+    :value="value"
     class="el-input password-input"
-    @input="handleInput">
+    @input="handleInput"
+  >
     hello
   </Password>
 </template>
@@ -19,8 +22,7 @@ export default {
     },
     attrs: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -46,20 +48,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .password-input :deep(.Password__badge--error) {
-    background-color: var(--color-danger);
-  }
+.password-input :deep(.Password__badge--error) {
+  background-color: var(--color-danger);
+}
 
-  .password-input :deep(.Password__strength-meter--fill[data-score="4"]) {
-    background: var(--color-success);
-    width: 100%;
-  }
+.password-input :deep(.Password__strength-meter--fill[data-score='4']) {
+  background: var(--color-success);
+  width: 100%;
+}
 
-  .password-input :deep(.Password__badge--success) {
-    background: var(--color-success);
-  }
+.password-input :deep(.Password__badge--success) {
+  background: var(--color-success);
+}
 
-  .password-input :deep(.Password__strength-meter) {
-    margin-bottom: 10px;
-  }
+.password-input :deep(.Password__strength-meter) {
+  margin-bottom: 10px;
+}
 </style>

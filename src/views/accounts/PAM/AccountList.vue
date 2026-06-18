@@ -53,8 +53,7 @@ export default {
         break
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 

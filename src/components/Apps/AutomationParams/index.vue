@@ -5,17 +5,23 @@
         {{ $tc('Setting') }}
       </el-button>
     </div>
-    <Dialog v-bind="$attrs" v-if="visible"
+    <Dialog
+      v-bind="$attrs"
+      v-if="visible"
       :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
       :title="title"
       :visible="visible"
-      width="60%">
-      <AutoDataForm v-bind="config" ref="autoDataForm"
+      width="60%"
+    >
+      <AutoDataForm
+        v-bind="config"
+        ref="autoDataForm"
         :form="form"
         class="data-form"
-        @submit="onSubmit" />
+        @submit="onSubmit"
+      />
     </Dialog>
   </div>
 </template>
@@ -23,6 +29,7 @@
 <script>
 import Dialog from '../../Dialog'
 import AutoDataForm from '../../Form/AutoDataForm'
+import _ from 'lodash'
 
 export default {
   componentName: 'AutomationParams',
@@ -37,7 +44,7 @@ export default {
     },
     title: {
       type: String,
-      default: function() {
+      default: function () {
         return 'PushParams'
       }
     },
@@ -118,12 +125,12 @@ export default {
       return await this.$axios.post('/api/v1/assets/platforms/filter-nodes-assets/', {
         node_ids: this.nodes,
         asset_ids: this.assets,
-        platform_ids: this.platforms.map(i => i.id || i.pk || i)
+        platform_ids: this.platforms.map((i) => i.id || i.pk || i)
       })
     },
     async handleFieldChange() {
       const platforms = await this.getFilterPlatforms()
-      let pushAccountMethods = platforms.map(i => i.automation[this.method])
+      let pushAccountMethods = platforms.map((i) => i.automation[this.method])
       pushAccountMethods = _.uniq(pushAccountMethods)
       // 检测是否有可设置的推送方式
       const hasCanSettingPushMethods = _.intersection(

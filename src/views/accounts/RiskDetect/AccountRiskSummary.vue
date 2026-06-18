@@ -16,15 +16,10 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/accounts/account-risks/assets/',
-        columns: [
-          'name', 'address', 'platform', 'risk_total', 'risk_summary'
-        ],
+        columns: ['name', 'address', 'platform', 'risk_total', 'risk_summary'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: [
-            'name', 'address', 'platform', 'risk_total',
-            'risk_summary', 'actions'
-          ]
+          default: ['name', 'address', 'platform', 'risk_total', 'risk_summary', 'actions']
         },
         columnsMeta: {
           name: {
@@ -54,8 +49,7 @@ export default {
                 {
                   title: this.$t('View'),
                   type: 'primary',
-                  action: function() {
-                  }
+                  action: function () {}
                 }
               ]
             }

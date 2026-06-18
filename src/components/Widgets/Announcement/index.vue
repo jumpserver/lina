@@ -25,9 +25,9 @@
 
       <template #footer>
         <div class="dialog-footer">
-        <el-button type="primary" @click="onModalConfirm">
-          {{ $t('Confirm') }}
-        </el-button>
+          <el-button type="primary" @click="onModalConfirm">
+            {{ $t('Confirm') }}
+          </el-button>
         </div>
       </template>
     </el-dialog>
@@ -68,9 +68,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'publicSettings'
-    ]),
+    ...mapGetters(['publicSettings']),
     announcement() {
       const ann = this.publicSettings.ANNOUNCEMENT
       return {
@@ -83,7 +81,11 @@ export default {
       }
     },
     enabled() {
-      return this.publicSettings.ANNOUNCEMENT_ENABLED && (this.announcement.content || this.announcement.subject) && this.isDateValid
+      return (
+        this.publicSettings.ANNOUNCEMENT_ENABLED &&
+        (this.announcement.content || this.announcement.subject) &&
+        this.isDateValid
+      )
     },
     title() {
       return this.$t('Announcement') + ': ' + this.announcement.subject
@@ -263,7 +265,12 @@ export default {
     }
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     margin: 0 0 15px 0;
     color: #303133;
     font-weight: 600;
@@ -282,7 +289,9 @@ export default {
     font-size: 16px;
   }
 
-  h4, h5, h6 {
+  h4,
+  h5,
+  h6 {
     font-size: 14px;
   }
 

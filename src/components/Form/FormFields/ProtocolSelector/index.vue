@@ -1,11 +1,14 @@
 <template>
   <div :class="showSetting ? 'show-setting' : 'hide-setting'">
     <div v-for="(item, index) in items" :key="item.name" class="protocol-item">
-      <el-input v-bind="$attrs" v-model="item.port"
+      <el-input
+        v-bind="$attrs"
+        v-model="item.port"
         :class="isPortReadonly(item) ? '' : 'input-with-select'"
         :placeholder="portPlaceholder"
         :readonly="isPortReadonly(item)"
-        :title="isPortReadonly(item) ? '端口由 URL 指定' : ''">
+        :title="isPortReadonly(item) ? '端口由 URL 指定' : ''"
+      >
         <template #prepend>
           <el-select
             :disabled="disableSelect(item)"
@@ -17,11 +20,7 @@
           </el-select>
         </template>
         <template #append>
-          <el-button
-            v-if="showSetting(item)"
-            icon="Setting"
-            @click="onSettingClick(item)"
-          />
+          <el-button v-if="showSetting(item)" icon="Setting" @click="onSettingClick(item)" />
         </template>
       </el-input>
       <div v-if="!readonly" class="input-button">
@@ -94,7 +93,7 @@ export default {
     },
     showSetting: {
       type: Function,
-      default: item => true
+      default: (item) => true
     },
     instance: {
       type: Object,
@@ -111,10 +110,10 @@ export default {
   },
   computed: {
     selectedProtocolNames() {
-      return this.items.map(item => item.name)
+      return this.items.map((item) => item.name)
     },
     remainProtocols() {
-      return this.choices.filter(proto => {
+      return this.choices.filter((proto) => {
         return this.selectedProtocolNames.indexOf(proto.name) === -1
       })
     },
@@ -126,7 +125,7 @@ export default {
       }
     },
     iChoices() {
-      return this.choices.map(item => {
+      return this.choices.map((item) => {
         delete item?.id
         return item
       })
@@ -145,7 +144,7 @@ export default {
     items: {
       handler(value) {
         if (this.settingReadonly) {
-          value = value.map(i => {
+          value = value.map((i) => {
             return { name: i.name, port: i.port }
           })
         }
@@ -203,8 +202,8 @@ export default {
     handleSettingConfirm() {
       if (this.currentProtocol.primary) {
         const others = this.items
-          .filter(item => item.name !== this.currentProtocol.name)
-          .map(item => {
+          .filter((item) => item.name !== this.currentProtocol.name)
+          .map((item) => {
             item.primary = false
             return item
           })
@@ -222,7 +221,7 @@ export default {
       this.items = this.items.filter((value, i) => i !== index)
     },
     isRequired(item) {
-      const full = this.iChoices.find(choice => {
+      const full = this.iChoices.find((choice) => {
         return choice.name === item.name
       })
       return full?.primary || full?.required
@@ -247,7 +246,7 @@ export default {
       this.items.push({ ...this.remainProtocols[0] })
     },
     handleProtocolChange(evt, item) {
-      const selected = this.choices.find(item => item.name === evt)
+      const selected = this.choices.find((item) => item.name === evt)
       item.name = selected.name
       item.port = selected.port
     },
@@ -262,12 +261,12 @@ export default {
       if (this.settingReadonly) {
         return items
       }
-      const primaryProtocols = items.filter(item => item.primary)
+      const primaryProtocols = items.filter((item) => item.primary)
       if (primaryProtocols.length === 0) {
         items[0].default = true
         items[0].public = true
       } else if (primaryProtocols.length > 1) {
-        primaryProtocols.slice(1, primaryProtocols.length).forEach(item => {
+        primaryProtocols.slice(1, primaryProtocols.length).forEach((item) => {
           item.primary = false
         })
       }
@@ -275,11 +274,11 @@ export default {
     },
     setDefaultItems(choices) {
       let items = []
-      const requiredItems = choices.filter(item => item.required || item.primary)
+      const requiredItems = choices.filter((item) => item.required || item.primary)
 
       if (this.value instanceof Array && this.value.length > 0) {
         const protocols = []
-        this.value.forEach(item => {
+        this.value.forEach((item) => {
           // 有默认值的情况下，设置为只读或者有id、有setting是平台
           if (!this.settingReadonly || (item?.id && item?.setting)) {
             protocols.push(item)
@@ -289,12 +288,14 @@ export default {
             protocols.push(...assetDefaultItems)
           }
         })
-        const notFound = requiredItems.filter(item => !protocols.find(p => p.name === item.name))
+        const notFound = requiredItems.filter(
+          (item) => !protocols.find((p) => p.name === item.name)
+        )
         protocols.push(...notFound)
-        const allProtocolNames = protocols.map(item => item.name)
-        items = protocols.filter(item => allProtocolNames.indexOf(item.name) !== -1)
+        const allProtocolNames = protocols.map((item) => item.name)
+        items = protocols.filter((item) => allProtocolNames.indexOf(item.name) !== -1)
       } else {
-        const defaults = choices.filter(item => item.required || item.primary || item.default)
+        const defaults = choices.filter((item) => item.required || item.primary || item.default)
         if (defaults.length === 0 && choices.length !== 0) {
           defaults.push(choices[0])
         }
@@ -305,7 +306,7 @@ export default {
     },
     getAssetDefaultItems(item, choices) {
       const protocols = []
-      const protocol = choices.find(i => i.name === item.name) || {}
+      const protocol = choices.find((i) => i.name === item.name) || {}
       protocols.push({ ...protocol, ...item })
       return protocols
     },

@@ -4,7 +4,11 @@
       {{ $t('AccountTemplateUpdateSecretHelpText') }}
     </el-alert>
     <TwoCol>
-      <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
+      <GenericListTable
+        ref="listTable"
+        :header-actions="headerActions"
+        :table-config="tableConfig"
+      />
       <template #right>
         <QuickActions :actions="quickActions" type="primary" />
       </template>
@@ -56,20 +60,20 @@ export default {
           },
           callbacks: Object.freeze({
             click: () => {
-              this.$axios.patch(
-                `/api/v1/accounts/account-templates/${this.object.id}/sync-related-accounts/`
-              ).then(res => {
-                openTaskPage(res['task'])
-              })
+              this.$axios
+                .patch(
+                  `/api/v1/accounts/account-templates/${this.object.id}/sync-related-accounts/`
+                )
+                .then((res) => {
+                  openTaskPage(res['task'])
+                })
             }
           })
         }
       ],
       tableConfig: {
         url: `/api/v1/accounts/accounts/?source_id=${this.object.id}`,
-        columns: [
-          'name', 'asset', 'secret_type', 'is_active', 'date_created'
-        ],
+        columns: ['name', 'asset', 'secret_type', 'is_active', 'date_created'],
         columnsMeta: {
           name: {
             formatter: DetailFormatter,

@@ -9,7 +9,7 @@
           v-if="d.icon.startsWith('/') || d.icon.startsWith('data:')"
           :alt="d.display_name"
           :src="d.icon"
-        >
+        />
         <Icon v-else :icon="d.icon" />
       </el-col>
       <el-col :span="d.icon ? 16 : 24" class="text-zone">
@@ -17,14 +17,18 @@
           <b>{{ d.display_name }}</b>
         </div>
         <div class="tag-zone">
-          <el-tag v-if="d.version" size="small" style="margin-left: 5px; background-color: #ecf5ff; color: #409eff;">
+          <el-tag
+            v-if="d.version"
+            size="small"
+            style="margin-left: 5px; background-color: #ecf5ff; color: #409eff"
+          >
             {{ d.version }}
           </el-tag>
           <el-tag v-for="tag of d.tags" :key="tag" size="small">
             {{ capitalize(tag) }}
           </el-tag>
         </div>
-        <div :title="d.comment " class="comment">
+        <div :title="d.comment" class="comment">
           {{ d.comment }}
         </div>
       </el-col>

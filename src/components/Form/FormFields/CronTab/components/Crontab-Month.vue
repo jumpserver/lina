@@ -18,7 +18,8 @@
     <el-form-item>
       <el-radio v-model="radioValue" :value="3">
         {{ $t('Every') }}
-        <el-input-number v-model="average02" :max="12" :min="1" size="small" /> {{ $t('Month') }} {{ $t('ExecuteOnce') }}
+        <el-input-number v-model="average02" :max="12" :min="1" size="small" /> {{ $t('Month') }}
+        {{ $t('ExecuteOnce') }}
       </el-radio>
     </el-form-item>
 
@@ -30,7 +31,7 @@
           :placeholder="$tc('ManyChoose')"
           clearable
           multiple
-          style="width:100%"
+          style="width: 100%"
         >
           <el-option v-for="item in 12" :key="item" :value="item">{{ item }}</el-option>
         </el-select>
@@ -51,8 +52,7 @@ export default {
     },
     check: {
       type: Function,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -90,15 +90,14 @@ export default {
         const str = this.checkboxList.join()
         return str === '' ? '*' : str
       },
-      set() {
-      }
+      set() {}
     }
   },
   watch: {
-    'radioValue': 'radioChange',
-    'cycleTotal': 'cycleChange',
-    'averageTotal': 'averageChange',
-    'checkboxString': 'checkboxChange'
+    radioValue: 'radioChange',
+    cycleTotal: 'cycleChange',
+    averageTotal: 'averageChange',
+    checkboxString: 'checkboxChange'
   },
   created() {
     this.$nextTick(() => {
@@ -163,6 +162,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

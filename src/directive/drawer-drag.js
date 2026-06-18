@@ -27,13 +27,14 @@ export function installDrawerDragDirective(app) {
         // 创建触发拖拽的元素
         const dragItem = document.createElement('div')
         // 将元素放置到抽屉的左边边缘
-        dragItem.style.cssText = 'height: 100%;width: 5px;cursor: ew-resize;position: absolute;left: 0;z-index: 1;'
+        dragItem.style.cssText =
+          'height: 100%;width: 5px;cursor: ew-resize;position: absolute;left: 0;z-index: 1;'
         drawerEle.append(dragItem)
 
         dragItem.onmousedown = (downEvent) => {
           // 拖拽时禁用文本选中
           document.body.style.userSelect = 'none'
-          document.onmousemove = function(moveEvent) {
+          document.onmousemove = function (moveEvent) {
             // 获取鼠标距离浏览器右边缘的距离
             let realWidth = document.body.clientWidth - moveEvent.pageX
             const width30 = document.body.clientWidth * 0.2
@@ -43,7 +44,7 @@ export function installDrawerDragDirective(app) {
             drawerEle.style.width = realWidth + 'px'
             localStorage.setItem('drawerWidth', realWidth)
           }
-          document.onmouseup = function() {
+          document.onmouseup = function () {
             // 拖拽时结束时，取消禁用文本选中
             document.body.style.userSelect = 'initial'
             document.onmousemove = null

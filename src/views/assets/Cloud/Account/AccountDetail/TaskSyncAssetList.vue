@@ -1,9 +1,13 @@
 <template>
-  <GenericListTable ref="GenericListTable" :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListTable
+    ref="GenericListTable"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script>
-import { createVNode as _createVNode, resolveComponent as _resolveComponent } from 'vue'
+import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
 import GenericListTable from '@/layout/components/GenericListTable/index'
 import { DateFormatter } from '@/components/Table/TableFormatters'
 export default {
@@ -31,48 +35,62 @@ export default {
         searchConfig: {
           getUrlQuery: false
         },
-        extraMoreActions: [{
-          name: this.$t('DeleteReleasedAssets'),
-          title: this.$t('DeleteReleasedAssets'),
-          type: 'primary',
-          can: true,
-          callback: this.DeleteReleasedAssets.bind(this)
-        }]
+        extraMoreActions: [
+          {
+            name: this.$t('DeleteReleasedAssets'),
+            title: this.$t('DeleteReleasedAssets'),
+            type: 'primary',
+            can: true,
+            callback: this.DeleteReleasedAssets.bind(this)
+          }
+        ]
       },
       tableConfig: {
         url: '',
         hasSelection: false,
-        columns: ['instance_id', {
-          prop: 'asset_ip',
-          label: this.$t('IP')
-        }, {
-          prop: 'asset_display',
-          label: this.$t('Asset')
-        }, 'region', {
-          prop: 'status',
-          label: this.$t('Status'),
-          formatter: row => {
-            const status = {
-              0: this.$t('UnSyncCount'),
-              1: this.$t('NewSyncCount'),
-              2: this.$t('SyncedCount'),
-              3: this.$t('ReleasedCount')
+        columns: [
+          'instance_id',
+          {
+            prop: 'asset_ip',
+            label: this.$t('IP')
+          },
+          {
+            prop: 'asset_display',
+            label: this.$t('Asset')
+          },
+          'region',
+          {
+            prop: 'status',
+            label: this.$t('Status'),
+            formatter: (row) => {
+              const status = {
+                0: this.$t('UnSyncCount'),
+                1: this.$t('NewSyncCount'),
+                2: this.$t('SyncedCount'),
+                3: this.$t('ReleasedCount')
+              }
+              return createVNodeCompat(
+                resolveComponentCompat('el-tag'),
+                {
+                  type: 'primary',
+                  size: 'small'
+                },
+                {
+                  default: () => [status[row.status]]
+                }
+              )
             }
-            return _createVNode(_resolveComponent('el-tag'), {
-              'type': 'primary',
-              'size': 'small'
-            }, {
-              default: () => [status[row.status]]
-            })
+          },
+          {
+            prop: 'date_sync',
+            label: this.$t('DateSync'),
+            formatter: DateFormatter
+          },
+          {
+            prop: 'actions',
+            has: false
           }
-        }, {
-          prop: 'date_sync',
-          label: this.$t('DateSync'),
-          formatter: DateFormatter
-        }, {
-          prop: 'actions',
-          has: false
-        }]
+        ]
       }
     }
   },
@@ -90,17 +108,18 @@ export default {
     DeleteReleasedAssets() {
       const baseUrl = '/api/v1/xpack/cloud/sync-instance-tasks/released-assets/'
       const url = this.object ? `${baseUrl}?task_id=${this.object.task.id}` : baseUrl
-      this.$axios.delete(url).then(res => {
-        this.$message.success(this.$tc('DeleteSuccessMsg'))
-        this.$refs.GenericListTable.$refs.ListTable.reloadTable()
-      }).catch(() => {
-        this.$message.error(this.$tc('DeleteErrorMsg'))
-      })
+      this.$axios
+        .delete(url)
+        .then((res) => {
+          this.$message.success(this.$tc('DeleteSuccessMsg'))
+          this.$refs.GenericListTable.$refs.ListTable.reloadTable()
+        })
+        .catch(() => {
+          this.$message.error(this.$tc('DeleteErrorMsg'))
+        })
     }
   }
 }
 </script>
 
-<style lang='scss' scoped>
-
-</style>
+<style lang="scss" scoped></style>

@@ -109,7 +109,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.chart-container  {
+.chart-container {
   display: flex;
   flex-direction: column;
   height: 100%;

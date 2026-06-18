@@ -20,14 +20,10 @@
 
         <div class="copy-btn">
           <el-tooltip :content="$t('Copy')" placement="top">
-            <el-icon
-              class="copy-btn"
-              @click="copyContent"
-            ><CopyDocument /></el-icon>
+            <el-icon class="copy-btn" @click="copyContent"><CopyDocument /></el-icon>
           </el-tooltip>
         </div>
       </div>
-
     </IBox>
   </div>
 </template>
@@ -81,14 +77,14 @@ export default {
     },
     getSdkInfo() {
       const url = `/api/v1/accounts/integration-applications/sdks/?language=${this.currentLanguage}`
-      this.$axios.get(url).then(res => {
+      this.$axios.get(url).then((res) => {
         this.readme = res.readme
         const highlightMapper = {
-          'curl': 'bash',
-          'python': 'python',
-          'go': 'go',
-          'java': 'java',
-          'node': 'javascript'
+          curl: 'bash',
+          python: 'python',
+          go: 'go',
+          java: 'java',
+          node: 'javascript'
         }
         const language = highlightMapper[this.currentLanguage] || 'bash'
         this.code = `\`\`\`${language}\n${res.code}\n\`\`\``
@@ -111,14 +107,15 @@ export default {
 .code-markdown {
   min-height: 210px;
   padding: 10px 20px;
-  border: 1px solid #DCDFE6;
+  border: 1px solid #dcdfe6;
 
   :deep(.table) {
     border-collapse: collapse;
     border-spacing: 0;
     width: 100%;
 
-    th, td {
+    th,
+    td {
       border: 1px solid #ebeef5;
       padding: 10px;
       text-align: left;
@@ -131,10 +128,10 @@ export default {
 }
 
 .code-demo {
-  @import "~highlight.js/styles/atom-one-light.css";
+  @import '~highlight.js/styles/atom-one-light.css';
   min-height: 210px;
   padding: 10px 20px;
-  border: 1px solid #DCDFE6;
+  border: 1px solid #dcdfe6;
 }
 
 .copy-btn {

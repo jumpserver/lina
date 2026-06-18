@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { createVNode as _createVNode } from 'vue'
+import { createVNode as createVNodeCompat } from 'vue'
 import GenericListTable from '@/layout/components/GenericListTable'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
@@ -33,15 +33,23 @@ export default {
         columnsMeta: {
           is_finished: {
             label: this.$t('IsFinished'),
-            formatter: row => {
+            formatter: (row) => {
               if (row.is_finished) {
-                return _createVNode('i', {
-                  'class': 'fa fa-check text-primary'
-                }, null)
+                return createVNodeCompat(
+                  'i',
+                  {
+                    class: 'fa fa-check text-primary'
+                  },
+                  null
+                )
               }
-              return _createVNode('i', {
-                'class': 'fa fa-times text-danger'
-              }, null)
+              return createVNodeCompat(
+                'i',
+                {
+                  class: 'fa fa-times text-danger'
+                },
+                null
+              )
             },
             formatterArgs: {
               width: '14px'
@@ -49,20 +57,32 @@ export default {
           },
           is_success: {
             label: this.$t('IsSuccess'),
-            formatter: row => {
+            formatter: (row) => {
               if (!row.is_finished) {
-                return _createVNode('i', {
-                  'class': 'fa  fa fa-spinner fa-spin'
-                }, null)
+                return createVNodeCompat(
+                  'i',
+                  {
+                    class: 'fa  fa fa-spinner fa-spin'
+                  },
+                  null
+                )
               }
               if (row.is_success) {
-                return _createVNode('i', {
-                  'class': 'fa fa-check text-primary'
-                }, null)
+                return createVNodeCompat(
+                  'i',
+                  {
+                    class: 'fa fa-check text-primary'
+                  },
+                  null
+                )
               }
-              return _createVNode('i', {
-                'class': 'fa fa-times text-danger'
-              }, null)
+              return createVNodeCompat(
+                'i',
+                {
+                  class: 'fa fa-times text-danger'
+                },
+                null
+              )
             },
             formatterArgs: {
               width: '14px'
@@ -71,7 +91,7 @@ export default {
           time_cost: {
             label: this.$t('Time'),
             width: '100px',
-            formatter: function(row) {
+            formatter: function (row) {
               if (row.time_cost) {
                 return row.time_cost.toFixed(2) + 's'
               }
@@ -84,16 +104,16 @@ export default {
               hasUpdate: false,
               hasDelete: false,
               hasClone: false,
-              extraActions: [{
-                name: 'showLog',
-                title: this.$t('Output'),
-                can: true,
-                callback: ({
-                  row
-                }) => {
-                  openTaskPage(row.task_id)
+              extraActions: [
+                {
+                  name: 'showLog',
+                  title: this.$t('Output'),
+                  can: true,
+                  callback: ({ row }) => {
+                    openTaskPage(row.task_id)
+                  }
                 }
-              }]
+              ]
             }
           }
         }
@@ -115,6 +135,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

@@ -47,11 +47,10 @@ export default {
 
 <style lang="scss" scoped>
 .ibox {
-  margin: 15px
+  margin: 15px;
 }
 
 .drawer :deep(.el-drawer__body) {
   background: #f3f3f3;
 }
-
 </style>

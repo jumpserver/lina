@@ -17,9 +17,7 @@ export default {
       tableConfig: {
         hasSelection: false,
         url: `/api/v1/terminal/commands/?session_id=${this.$route.params.id}`,
-        columns: [
-          'expandCol', 'index', 'input', 'timestamp'
-        ],
+        columns: ['expandCol', 'index', 'input', 'timestamp'],
         columnsMeta: {
           expandCol: {
             type: 'expand',
@@ -37,7 +35,7 @@ export default {
           timestamp: {
             width: '160px',
             sortable: 'custom',
-            formatter: function(row) {
+            formatter: function (row) {
               return toSafeLocalDateStr(row.timestamp * 1000)
             }
           },

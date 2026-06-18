@@ -12,10 +12,7 @@
         @tab-click="handleTabClick"
       >
         <template v-for="item in tabIndices" :key="item.name">
-          <el-tab-pane
-            :disabled="item.disabled"
-            :name="item.name"
-          >
+          <el-tab-pane :disabled="item.disabled" :name="item.name">
             <template #label>
               <Icon v-if="item.icon" :icon="item.icon" class="pre-icon" />
               {{ toSentenceCase(item.title) }}
@@ -125,7 +122,7 @@ export default {
     computeActiveComponent() {
       let needActiveComponent = ''
       for (const i of this.submenu) {
-        if (i.component && (i.name === this.iActiveMenu)) {
+        if (i.component && i.name === this.iActiveMenu) {
           needActiveComponent = this.resolveComponent(i.component)
           break
         }

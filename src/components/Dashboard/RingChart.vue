@@ -1,10 +1,6 @@
 <template>
   <div>
-    <Echart
-      ref="echarts"
-      :autoresize="true"
-      :options="options"
-    />
+    <Echart ref="echarts" :autoresize="true" :options="options" />
   </div>
 </template>
 
@@ -20,8 +16,7 @@ export default {
   props: {
     config: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   computed: {

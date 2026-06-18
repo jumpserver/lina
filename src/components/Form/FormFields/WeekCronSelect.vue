@@ -1,8 +1,8 @@
 <template>
   <div class="c-weektime">
     <div class="c-schedue" />
-    <div :class="{'c-schedue': true, 'c-schedue-notransi': mode}" />
-    <table :class="{'c-min-table': colspan < 2}" :style="tableStyle" class="c-weektime-table">
+    <div :class="{ 'c-schedue': true, 'c-schedue-notransi': mode }" />
+    <table :class="{ 'c-min-table': colspan < 2 }" :style="tableStyle" class="c-weektime-table">
       <thead class="c-weektime-head">
         <tr>
           <th class="week-td" rowspan="8">{{ $t('WeekOrTime') }}</th>
@@ -33,7 +33,9 @@
             <div class="g-clearfix c-weektime-con">
               <span class="g-pull-left">{{ $t('CanDragSelect') }}</span>
               <a class="g-pull-right" @click.prevent="clearWeektime">{{ $t('ClearSelection') }}</a>
-              <a class="g-pull-right g-pull-margin" @click.prevent="selectAll">{{ $t('SelectAll') }}</a>
+              <a class="g-pull-right g-pull-margin" @click.prevent="selectAll">{{
+                $t('SelectAll')
+              }}</a>
             </div>
           </td>
         </tr>
@@ -42,7 +44,7 @@
   </div>
 </template>
 <script>
-const createArr = len => {
+const createArr = (len) => {
   return Array.from(Array(len)).map((ret, id) => id)
 }
 
@@ -125,7 +127,7 @@ export default {
       return 24 * this.colspan + 1
     },
     selectClasses() {
-      return n => n.check ? 'ui-selected' : ''
+      return (n) => (n.check ? 'ui-selected' : '')
     }
   },
   created() {
@@ -201,14 +203,17 @@ export default {
         'm+': date.getMinutes(),
         's+': date.getSeconds(),
         'q+': Math.floor((date.getMonth() + 3) / 3),
-        'S': date.getMilliseconds()
+        S: date.getMilliseconds()
       }
       if (/(y+)/.test(fmt)) {
         fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
       }
-      for (var k in o) {
+      for (const k in o) {
         if (new RegExp('(' + k + ')').test(fmt)) {
-          fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
+          fmt = fmt.replace(
+            RegExp.$1,
+            RegExp.$1.length === 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length)
+          )
         }
       }
       return fmt
@@ -218,7 +223,9 @@ export default {
       const timezone = 8
       const offsetGMT = new Date().getTimezoneOffset() // 本地时间和格林威治的时间差，单位为分钟
       const nowDate = new Date(timeStamp).getTime()
-      const targetStamp = new Date(nowDate + offsetGMT * 60 * 1000 + timezone * 60 * 60 * 1000).getTime()
+      const targetStamp = new Date(
+        nowDate + offsetGMT * 60 * 1000 + timezone * 60 * 60 * 1000
+      ).getTime()
 
       // (2 / this.colspan) 原来是一个单元格 30分钟，现在是一个单元格 30 * 2 / this.colspan 分钟
       const beginStamp = targetStamp + col * 1800000 * (2 / this.colspan) // col * 30 * 60 * 1000
@@ -230,8 +237,8 @@ export default {
     },
     // 清空时间段
     clearWeektime() {
-      this.weekTimeData.forEach(item => {
-        item.child.forEach(t => {
+      this.weekTimeData.forEach((item) => {
+        item.child.forEach((t) => {
           t['check'] = false
         })
       })
@@ -240,8 +247,8 @@ export default {
     },
     // 全选
     selectAll() {
-      this.weekTimeData.forEach(item => {
-        item.child.forEach(t => {
+      this.weekTimeData.forEach((item) => {
+        item.child.forEach((t) => {
           t['check'] = true
         })
       })
@@ -253,7 +260,7 @@ export default {
       this.mode = 0
     },
     setTimeRange() {
-      this.timeRange = this.weekTimeData.map(item => {
+      this.timeRange = this.weekTimeData.map((item) => {
         return {
           id: item.row === 6 ? 0 : item.row + 1,
           value: splicing(item.child)
@@ -320,8 +327,8 @@ export default {
     selectWeek(row, col, check) {
       const [minRow, maxRow] = row
       const [minCol, maxCol] = col
-      this.weekTimeData.forEach(item => {
-        item.child.forEach(t => {
+      this.weekTimeData.forEach((item) => {
+        item.child.forEach((t) => {
           if (t.row >= minRow && t.row <= maxRow && t.col >= minCol && t.col <= maxCol) {
             t['check'] = check
           }
@@ -346,12 +353,16 @@ export default {
   position: absolute;
   width: 0;
   height: 0;
-  opacity: .6;
+  opacity: 0.6;
   pointer-events: none;
 }
 
 .c-schedue-notransi {
-  transition: width .12s ease, height .12s ease, top .12s ease, left .12s ease;
+  transition:
+    width 0.12s ease,
+    height 0.12s ease,
+    top 0.12s ease,
+    left 0.12s ease;
 }
 
 .c-weektime-table {
@@ -369,13 +380,15 @@ export default {
     height: 30px;
   }
 
-  tr, td, th {
+  tr,
+  td,
+  th {
     user-select: none;
     border: 1px solid #dee4f5;
     text-align: center;
     min-width: 10px;
     line-height: 1.6em;
-    transition: background .16s ease;
+    transition: background 0.16s ease;
   }
 
   .c-weektime-head {
@@ -466,15 +479,18 @@ export default {
 }
 
 .c-min-table {
-  tr, td, th {
+  tr,
+  td,
+  th {
     min-width: 17px;
   }
 }
 
 .g-clearfix {
-  &:after, &:before {
+  &:after,
+  &:before {
     clear: both;
-    content: " ";
+    content: ' ';
     display: table;
   }
 }

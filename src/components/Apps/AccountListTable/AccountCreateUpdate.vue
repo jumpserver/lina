@@ -105,14 +105,14 @@ export default {
         .post(url, data, {
           disableFlashErrorMsg: iVisible
         })
-        .then(data => {
+        .then((data) => {
           this.handleResult(data, null)
           this.$emit('update:visible', iVisible)
           if (!iVisible) {
             this.$emit('add', true)
           }
         })
-        .catch(error => {
+        .catch((error) => {
           if (error?.response?.data?.code === 'no_valid_assets') {
             this.$message.error(error?.response?.data?.detail)
             return
@@ -140,7 +140,7 @@ export default {
               this.$emit('add', true)
               this.$message.success(this.$tc('UpdateSuccessMsg'))
             })
-            .catch(error => this.setFieldError(error))
+            .catch((error) => this.setFieldError(error))
       }
     },
     handleResult(resp, error) {
@@ -177,7 +177,7 @@ export default {
           let current = key
           let errorTips = data[current]
           if (errorTips instanceof Array) {
-            errorTips = _.filter(errorTips, item => Object.keys(item).length > 0)
+            errorTips = _.filter(errorTips, (item) => Object.keys(item).length > 0)
             for (const i of errorTips) {
               if (i instanceof Object) {
                 err += i?.port?.join(',')
@@ -202,12 +202,12 @@ export default {
     handleAccountOperation(id, path, data) {
       this.$axios
         .post(`/api/v1/accounts/accounts/${id}/${path}/`, data)
-        .then(res => {
+        .then((res) => {
           this.$emit('update:visible', false)
           this.$emit('add', true)
           this.handleResult(res, null)
         })
-        .catch(error => this.handleResult(null, error))
+        .catch((error) => this.handleResult(null, error))
     }
   }
 }

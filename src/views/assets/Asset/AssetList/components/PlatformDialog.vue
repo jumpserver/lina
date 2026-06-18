@@ -15,12 +15,7 @@
     <template #header>
       <div class="drawer-title">
         <span>{{ $tc('SelectPlatform') }}</span>
-        <el-link
-          underline="never"
-          size="small"
-          type="primary"
-          @click="handleManagePlatform"
-        >
+        <el-link underline="never" size="small" type="primary" @click="handleManagePlatform">
           <i class="fa fa-external-link" />
           {{ $tc('ManagePlatform') }}
         </el-link>
@@ -35,11 +30,7 @@
             :name="cName"
             :title="cName"
           >
-            <el-col
-              v-for="(platform, index) of ps"
-              :key="platform.id"
-              :span="8"
-            >
+            <el-col v-for="(platform, index) of ps" :key="platform.id" :span="8">
               <el-tooltip :content="platform.name">
                 <el-card
                   :style="{ borderLeftColor: randomBorderColor(index) }"
@@ -48,7 +39,7 @@
                   @click="handleSelect(platform)"
                 >
                   <div class="icon-zone">
-                    <img :src="getPlatformLogo(platform)" alt="icon" class="asset-icon">
+                    <img :src="getPlatformLogo(platform)" alt="icon" class="asset-icon" />
                   </div>
                   <span class="platform-name">{{ platform.name }}</span>
                 </el-card>
@@ -90,10 +81,7 @@ export default {
         unix: '',
         macos: 'fa-apple'
       },
-      bottomColors: [
-        '#1c84c6', '#23c6c8', '#1ab394', '#f8ac59',
-        '#783887', '#fc6554'
-      ],
+      bottomColors: ['#1c84c6', '#23c6c8', '#1ab394', '#f8ac59', '#783887', '#fc6554'],
       allRecentPlatforms: []
     }
   },
@@ -118,11 +106,11 @@ export default {
       return _.groupBy(this.platforms, (item) => item.category.label)
     },
     typeSortedPlatforms() {
-      const typedPlatforms = this.platforms.filter(item => item.category.value === this.category)
+      const typedPlatforms = this.platforms.filter((item) => item.category.value === this.category)
       return _.groupBy(typedPlatforms, (item) => item.type.label)
     },
     typeRecentPlatforms() {
-      return this.allRecentPlatforms.filter(item => item.category.value === this.category)
+      return this.allRecentPlatforms.filter((item) => item.category.value === this.category)
     }
   },
   async created() {
@@ -157,7 +145,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 :deep(.el-drawer__body) {
   padding: 0;
   overflow-y: auto;

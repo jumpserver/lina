@@ -1,7 +1,6 @@
 <template>
   <div>
-    <GenericCreateUpdateForm v-bind="formConfig" class="attr-input"
-      @submit="onSubmit" />
+    <GenericCreateUpdateForm v-bind="formConfig" class="attr-input" @submit="onSubmit" />
     <DataTable :config="tableConfig" class="attr-list" />
   </div>
 </template>
@@ -45,7 +44,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 :deep(.el-select) {
   width: 100%;
 }

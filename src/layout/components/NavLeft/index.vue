@@ -16,7 +16,7 @@
             trigger="hover"
           >
             <template #reference>
-              <span style="width: 100%;padding: 0 15px;display: flex;align-items: center;">
+              <span style="width: 100%; padding: 0 15px; display: flex; align-items: center">
                 <span class="text-overflow">{{ isRouteMeta.title || '' }}</span>
                 <span class="icon-zone">
                   <svg-icon class="icon" icon-class="switch" />
@@ -30,14 +30,14 @@
     </div>
     <div class="menu-wrap el-scrollbar">
       <el-menu
-        :active-text-color="variables['menuActiveText']"
-        :background-color="variables['menuBg']"
+        active-text-color="var(--menu-text-active)"
+        background-color="var(--menu-bg)"
         :collapse="isCollapse"
         :collapse-transition="false"
         :default-active="activeMenu"
         :default-openeds="defaultOpensMenu"
-        :text-color="variables['menuText']"
-        :text-weigth="variables['menuTextWeight']"
+        text-color="var(--menu-text)"
+        :text-weigth="600"
         :unique-opened="false"
         class="left-menu"
         mode="vertical"
@@ -72,7 +72,6 @@ import SidebarItem from './SidebarItem'
 import Hamburger from '@/components/Widgets/Hamburger'
 import ViewSwitcher from '../NavHeader/ViewSwitcher'
 import Organization from '../NavHeader/Organization'
-import variables from '@/styles/variables.scss'
 
 export default {
   components: {
@@ -122,9 +121,6 @@ export default {
     showOrgs() {
       return this.$store.getters.hasValidLicense
       // return !this.isCollapse && this.inAdminPage && hasValidLicense
-    },
-    variables() {
-      return variables
     },
     isCollapse() {
       return !this.sidebar.opened
@@ -344,7 +340,6 @@ $hover-border-color: #d2d2d2;
       }
     }
   }
-
 }
 
 @media screen and (max-width: 992px) {

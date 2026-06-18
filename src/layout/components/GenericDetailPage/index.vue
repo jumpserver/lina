@@ -70,13 +70,13 @@ export default {
     },
     getObjectName: {
       type: Function,
-      default: function(obj) {
+      default: function (obj) {
         return obj.name
       }
     },
     getTitle: {
       type: Function,
-      default: function(obj) {
+      default: function (obj) {
         const objectName = obj?.name || ''
         return objectName
       }
@@ -97,7 +97,7 @@ export default {
       // Delete button
       canDelete: vm.$hasCurrentResAction('delete'),
       hasDelete: true,
-      deleteCallback: function(item) {
+      deleteCallback: function (item) {
         vm.defaultDelete(item)
       },
       deleteSuccessRoute: this.$route.name.replace('Detail', 'List'),
@@ -106,7 +106,7 @@ export default {
         return !vm.currentOrgIsRoot && vm.$hasCurrentResAction('change')
       },
       hasUpdate: true,
-      updateCallback: function(item) {
+      updateCallback: function (item) {
         this.defaultUpdate(item)
       },
       updateRoute: this.$route.name.replace('Detail', 'Update')
@@ -262,17 +262,20 @@ export default {
     getObject() {
       // 兼容之前的 detailApiUrl
       const url = this.getDetailUrl()
-      return this.$axios.get(url, { disableFlashErrorMsg: true }).then(data => {
-        this.$emit('update:object', data)
-        this.$emit('getObjectDone', data)
-      }).catch(error => {
-        if (error.response && error.response.status === 404) {
-          const msg = this.$tc('ObjectNotFoundOrDeletedMsg')
-          this.$message.error(msg)
-        } else {
-          flashErrorMsg({ error, response: error.response })
-        }
-      })
+      return this.$axios
+        .get(url, { disableFlashErrorMsg: true })
+        .then((data) => {
+          this.$emit('update:object', data)
+          this.$emit('getObjectDone', data)
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 404) {
+            const msg = this.$tc('ObjectNotFoundOrDeletedMsg')
+            this.$message.error(msg)
+          } else {
+            flashErrorMsg({ error, response: error.response })
+          }
+        })
     },
     handleTabClick(tab) {
       this.$emit('tab-click', tab, this.iActiveMenu)

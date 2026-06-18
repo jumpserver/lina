@@ -9,6 +9,5 @@ module.exports = {
         useBuiltIns: 'usage'
       }
     ]
-  ],
-  plugins: ['@babel/plugin-proposal-optional-chaining']
+  ]
 }

@@ -45,8 +45,7 @@ export default {
         data['rules'] = data['rules'].slice(0, data['approval_level'])
         return data
       },
-      onPerformError() {
-      },
+      onPerformError() {},
       updateSuccessNextRoute: { name: 'TicketFlow' },
       createSuccessNextRoute: { name: 'TicketFlow' }
     }
@@ -65,6 +64,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

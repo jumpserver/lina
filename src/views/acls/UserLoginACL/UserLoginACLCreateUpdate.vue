@@ -55,9 +55,7 @@ export default {
           }
         },
         rules: {
-          fields: [
-            'ip_group', 'time_period'
-          ],
+          fields: ['ip_group', 'time_period'],
           fieldsMeta: {
             ip_group: {
               component: TagInput,
@@ -88,7 +86,7 @@ export default {
       cleanFormValue(value) {
         if (
           Array.isArray(value.rules.time_period) &&
-          value.rules.time_period.every(item => item.value === '')
+          value.rules.time_period.every((item) => item.value === '')
         ) {
           value.rules.time_period = []
         }

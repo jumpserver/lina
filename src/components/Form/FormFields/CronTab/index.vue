@@ -11,11 +11,7 @@
       top="8vh"
       width="650px"
     >
-      <Crontab
-        :expression="expression"
-        @fill="crontabFill"
-        @hide="showCron = false"
-      />
+      <Crontab :expression="expression" @fill="crontabFill" @hide="showCron = false" />
     </Dialog>
   </div>
 </template>
@@ -64,9 +60,8 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-  .el-dialog__body {
-    padding: 12px 16px;
-  }
-
+<style lang="scss" scoped>
+.el-dialog__body {
+  padding: 12px 16px;
+}
 </style>

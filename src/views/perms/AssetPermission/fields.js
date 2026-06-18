@@ -30,9 +30,11 @@ function getFields() {
     hidden: () => false,
     component: AssetSelect,
     label: 'Asset',
-    rules: [{
-      required: false
-    }],
+    rules: [
+      {
+        required: false
+      }
+    ],
     el: {
       value: []
     }

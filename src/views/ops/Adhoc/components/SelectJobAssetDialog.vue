@@ -20,30 +20,26 @@
         role="button"
         tabindex="0"
         aria-label="Select assets"
-        @click=" handleClick()"
+        @click="handleClick()"
       >
         <el-icon class="icon"><Plus /></el-icon>
         <span class="title">{{ $t('pleaseSelectAssets') }}</span>
         <span class="subtitle">{{ $t('clickToAdd') }}</span>
       </div>
       <div v-else class="asset-list">
-        <div
-          v-for="group in groupedAssets"
-          :key="group.key"
-          class="platform-group"
-        >
+        <div v-for="group in groupedAssets" :key="group.key" class="platform-group">
           <div class="platform-group-header">
             <el-checkbox
               :indeterminate="isPlatformIndeterminate(group)"
               :value="isPlatformAllSelected(group)"
-              @change="val => togglePlatformAll(group, val)"
+              @change="(val) => togglePlatformAll(group, val)"
             >
               <span class="platform-title">
                 <img
                   v-if="group.assets.length"
                   :src="getPlatformLogo(group.assets[0])"
                   class="platform-icon"
-                >
+                />
                 {{ group.platformName }} ({{ group.assets.length }})
               </span>
             </el-checkbox>
@@ -53,27 +49,23 @@
             class="platform-group-assets"
             @change="onCheckboxChange"
           >
-            <el-checkbox
-              v-for="item in group.assets"
-              :key="item.id"
-              :label="item.id"
-            >
-              <span
-                :title="item.name"
-                class="asset-name"
-              >{{ item.name }}</span>
+            <el-checkbox v-for="item in group.assets" :key="item.id" :label="item.id">
+              <span :title="item.name" class="asset-name">{{ item.name }}</span>
               <el-icon
                 class="asset-remove-icon"
                 :title="$tc('Remove')"
                 @click.stop="removeAsset(item)"
-              ><Minus /></el-icon>
+                ><Minus
+              /></el-icon>
             </el-checkbox>
           </el-checkbox-group>
         </div>
       </div>
     </el-card>
 
-    <AssetSelectDialog v-bind="$attrs" v-if="dialogVisible"
+    <AssetSelectDialog
+      v-bind="$attrs"
+      v-if="dialogVisible"
       ref="dialog"
       v-model:visible="dialogVisible"
       :base-node-url="baseNodeUrl"
@@ -82,7 +74,8 @@
       :tree-url-query="treeUrlQuery"
       :value="selectAssets"
       @cancel="handleCancel"
-      @confirm="handleConfirm" />
+      @confirm="handleConfirm"
+    />
   </div>
 </template>
 
@@ -108,8 +101,7 @@ export default {
     },
     treeUrlQuery: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     value: {
       type: Array,
@@ -134,7 +126,7 @@ export default {
   computed: {
     groupedAssets() {
       const map = {}
-      this.selectAssetRows.forEach(a => {
+      this.selectAssetRows.forEach((a) => {
         const key = a?.type?.value || 'unknown'
         const name = a?.type?.label || a?.type?.value || 'Unknown'
         if (!map[key]) {
@@ -143,7 +135,7 @@ export default {
         map[key].assets.push(a)
       })
       return Object.values(map)
-        .map(g => {
+        .map((g) => {
           g.assets = g.assets.slice().sort((x, y) => (x.name || '').localeCompare(y.name || ''))
           return g
         })
@@ -159,13 +151,13 @@ export default {
         return
       }
       this.$emit('change', valueSelected)
-      rowsAdd.forEach(item => {
-        if (!this.selectAssetRows.find(i => i.id === item.id)) {
+      rowsAdd.forEach((item) => {
+        if (!this.selectAssetRows.find((i) => i.id === item.id)) {
           this.selectAssetRows.push(item)
         }
       })
       // 移除已经取消选择的资产
-      this.selectAssetRows = this.selectAssetRows.filter(r => valueSelected.includes(r.id))
+      this.selectAssetRows = this.selectAssetRows.filter((r) => valueSelected.includes(r.id))
       this.selectAssets = valueSelected
       this.dialogVisible = false
     },
@@ -180,25 +172,25 @@ export default {
       this.$emit('change', value)
     },
     isPlatformAllSelected(group) {
-      return group.assets.length > 0 && group.assets.every(a => this.selectAssets.includes(a.id))
+      return group.assets.length > 0 && group.assets.every((a) => this.selectAssets.includes(a.id))
     },
     isPlatformIndeterminate(group) {
-      const selected = group.assets.filter(a => this.selectAssets.includes(a.id)).length
+      const selected = group.assets.filter((a) => this.selectAssets.includes(a.id)).length
       return selected > 0 && selected < group.assets.length
     },
     togglePlatformAll(group, checked) {
-      const ids = group.assets.map(a => a.id)
+      const ids = group.assets.map((a) => a.id)
       if (checked) {
         const merged = new Set(this.selectAssets.concat(ids))
         this.selectAssets = Array.from(merged)
       } else {
-        this.selectAssets = this.selectAssets.filter(id => !ids.includes(id))
+        this.selectAssets = this.selectAssets.filter((id) => !ids.includes(id))
       }
       this.$emit('change', this.selectAssets)
     },
     removeAsset(asset) {
-      this.selectAssets = this.selectAssets.filter(id => id !== asset.id)
-      this.selectAssetRows = this.selectAssetRows.filter(r => r.id !== asset.id)
+      this.selectAssets = this.selectAssets.filter((id) => id !== asset.id)
+      this.selectAssetRows = this.selectAssetRows.filter((r) => r.id !== asset.id)
       this.$emit('change', this.selectAssets)
     }
   }
@@ -212,7 +204,7 @@ export default {
   background: #fff;
   color: var(--color-border);
 
-  :deep(){
+  :deep() {
     .el-card {
       flex: 1;
     }
@@ -236,7 +228,7 @@ export default {
         visibility: hidden;
         cursor: pointer;
         font-weight: normal;
-        transition: opacity .15s ease;
+        transition: opacity 0.15s ease;
         margin-left: auto;
         color: var(--color-danger);
       }
@@ -304,7 +296,6 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%); /* 让中心点对齐 */
   }
-
 }
 
 .el-select {
@@ -325,7 +316,10 @@ export default {
   padding: 56px 16px;
   text-align: center;
   cursor: pointer;
-  transition: border-color .2s, background-color .25s, color .2s;
+  transition:
+    border-color 0.2s,
+    background-color 0.25s,
+    color 0.2s;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -339,7 +333,7 @@ export default {
     line-height: 1;
     margin-bottom: 14px;
     color: #c0c4cc;
-    transition: color .2s;
+    transition: color 0.2s;
   }
 
   .title {
@@ -350,7 +344,7 @@ export default {
 
   .subtitle {
     font-size: 12px;
-    opacity: .75;
+    opacity: 0.75;
   }
 }
 
@@ -366,7 +360,7 @@ export default {
 
 .empty-assets.is-disabled {
   cursor: not-allowed;
-  opacity: .55;
+  opacity: 0.55;
   background: #fafafa;
 
   .disabled-tip {

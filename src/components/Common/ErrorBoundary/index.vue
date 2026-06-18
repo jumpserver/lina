@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import { IS_DEV } from '@/utils/env'
+
 export default {
   name: 'ErrorBoundary',
   data() {
@@ -35,14 +37,18 @@ export default {
     },
     errorDetails() {
       if (!this.error) return ''
-      return JSON.stringify({
-        message: this.error.message,
-        stack: this.error.stack,
-        info: this.errorInfo
-      }, null, 2)
+      return JSON.stringify(
+        {
+          message: this.error.message,
+          stack: this.error.stack,
+          info: this.errorInfo
+        },
+        null,
+        2
+      )
     },
     showDetails() {
-      return process.env.NODE_ENV === 'development' && this.error
+      return IS_DEV && this.error
     }
   },
   errorCaptured(err, instance, info) {
@@ -52,7 +58,7 @@ export default {
     this.errorInfo = info
 
     // 在开发环境下打印错误
-    if (process.env.NODE_ENV === 'development') {
+    if (IS_DEV) {
       console.error('ErrorBoundary caught error:', err)
       console.error('Component instance:', instance)
       console.error('Error info:', info)

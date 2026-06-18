@@ -18,10 +18,13 @@
         <span v-if="action.split" :style="{ cursor: action.disabled ? 'not-allowed' : 'pointer' }">
           {{ action.title }}
         </span>
-        <el-button v-bind="{ ...cleanButtonAction(action), icon: '' }" v-else
+        <el-button
+          v-bind="{ ...cleanButtonAction(action), icon: '' }"
+          v-else
           :class="action.name"
           :size="size"
-          class="more-action">
+          class="more-action"
+        >
           <Icon v-if="action.icon" :icon="action.icon" class="pre-icon" />
           <span v-if="action.title">
             {{ action.title }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
@@ -40,10 +43,13 @@
                 :open-delay="500"
                 placement="top"
               >
-                <el-dropdown-item v-bind="{ ...option, icon: '' }" :key="option.name"
+                <el-dropdown-item
+                  v-bind="{ ...option, icon: '' }"
+                  :key="option.name"
                   :command="[option, action]"
                   :title="option.tip"
-                  class="dropdown-item">
+                  class="dropdown-item"
+                >
                   <span v-if="actionsHasIcon(action.dropdown)" class="pre-icon">
                     <Icon v-if="option.icon" :icon="option.icon" />
                   </span>
@@ -55,11 +61,14 @@
         </template>
       </el-dropdown>
 
-      <el-button v-bind="{ ...cleanButtonAction(action), icon: '' }" v-else
+      <el-button
+        v-bind="{ ...cleanButtonAction(action), icon: '' }"
+        v-else
         :class="[action.name, { grouped: action.grouped }]"
         :size="size"
         class="action-item"
-        @click="handleClick(action)">
+        @click="handleClick(action)"
+      >
         <el-tooltip :content="action.tip" :disabled="!action.tip" placement="top">
           <div>
             <Icon v-if="action.icon" :icon="action.icon" class="pre-icon" />
@@ -109,7 +118,7 @@ export default {
   },
   methods: {
     actionsHasIcon(actions) {
-      return actions.some(action => action.icon)
+      return actions.some((action) => action.icon)
     },
     hasIcon(action, type = '') {
       const icon = action.icon
@@ -169,7 +178,7 @@ export default {
     },
     cleanActions(actions) {
       const cleanedActions = []
-      const cloneActions = actions.map(v => v ? { ...v } : v)
+      const cloneActions = actions.map((v) => (v ? { ...v } : v))
       for (const v of cloneActions) {
         if (!v) {
           continue
@@ -348,12 +357,27 @@ $color-drop-menu-border: #e4e7ed;
   :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:focus .el-icon),
   :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:active .pre-icon),
   :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:active .el-icon),
-  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:hover .pre-icon),
-  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:hover .el-icon),
-  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:focus .pre-icon),
-  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:focus .el-icon),
-  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:active .pre-icon),
-  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:active .el-icon) {
+  :deep(
+    .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:hover .pre-icon
+  ),
+  :deep(
+    .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:hover .el-icon
+  ),
+  :deep(
+    .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:focus .pre-icon
+  ),
+  :deep(
+    .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:focus .el-icon
+  ),
+  :deep(
+    .action-item.el-dropdown
+      .el-button-group
+      .el-button.el-button--primary.is-plain:active
+      .pre-icon
+  ),
+  :deep(
+    .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:active .el-icon
+  ) {
     color: var(--color-primary);
   }
 
