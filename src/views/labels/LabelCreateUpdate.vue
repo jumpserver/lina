@@ -27,7 +27,7 @@ export default {
         [this.$t('Basic'), ['name', 'value', 'color']],
         [this.$t('Other'), ['comment']]
       ],
-      continueCleanFields: ['value'],
+      continueCleanFields: ['name', 'value'],
       url: '/api/v1/labels/labels/',
       fieldsMeta: {
         color: {
