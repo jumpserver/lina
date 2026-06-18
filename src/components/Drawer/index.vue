@@ -7,11 +7,13 @@
     :before-close="handleClose"
     :class="['drawer', { 'drawer__no-footer': !hasFooter }]"
     :modal="modal"
-    :size="size"
+    :resizable="resizable"
+    :size="drawerSize"
     :title="title"
     custom-class="drawer"
     destroy-on-close
     direction="rtl"
+    @resize-end="handleResizeEnd"
     @update:model-value="handleUpdateModelValue"
   >
     <div class="drawer__content">
@@ -30,9 +32,8 @@
 </template>
 
 <script>
-import { getDrawerWidth } from '@/utils/common/index'
+import { getStoredDrawerWidth, useDrawerResize } from '@/composables/useDrawerResize'
 import { resolveAsyncComponentCompat } from '@/utils/vue'
-import { useDrawerDrag } from '@/utils/vue/useDrawerDrag'
 
 export default {
   props: {
@@ -41,10 +42,14 @@ export default {
       default: ''
     },
     size: {
-      type: String,
+      type: [String, Number],
       default: () => {
-        return getDrawerWidth()
+        return getStoredDrawerWidth()
       }
+    },
+    resizable: {
+      type: Boolean,
+      default: true
     },
     component: {
       type: [String, Function, Object],
@@ -73,9 +78,10 @@ export default {
   },
   data() {
     return {
+      drawerSize: this.size,
+      drawerResize: useDrawerResize(),
       loading: false,
-      formLabelWidth: '80px',
-      drawerDrag: null
+      formLabelWidth: '80px'
     }
   },
   computed: {
@@ -85,45 +91,16 @@ export default {
     }
   },
   watch: {
-    visible(val) {
-      if (val) {
-        // 抽屉打开时，初始化拖拽功能
-        this.$nextTick(() => {
-          if (!this.drawerDrag) {
-            this.drawerDrag = useDrawerDrag({
-              storageKey: 'drawerWidth'
-            })
-          }
-          this.drawerDrag.start()
-        })
-      } else {
-        // 抽屉关闭时，清理拖拽功能
-        if (this.drawerDrag) {
-          this.drawerDrag.cleanup()
-        }
-      }
-    }
-  },
-  mounted() {
-    if (this.visible) {
-      this.$nextTick(() => {
-        if (!this.drawerDrag) {
-          this.drawerDrag = useDrawerDrag({
-            storageKey: 'drawerWidth'
-          })
-        }
-        this.drawerDrag.start()
-      })
-    }
-  },
-  beforeUnmount() {
-    if (this.drawerDrag) {
-      this.drawerDrag.cleanup()
+    size(val) {
+      this.drawerSize = val
     }
   },
   methods: {
     handleUpdateModelValue(val) {
       this.$emit('update:visible', val)
+    },
+    handleResizeEnd(_event, size) {
+      this.drawerSize = this.drawerResize.persistDrawerWidth(size)
     },
     handleClose(done) {
       this.$emit('close-drawer')
@@ -132,6 +109,14 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.el-drawer.drawer.ltr,
+.el-drawer.drawer.rtl {
+  min-width: max(100px, 20vw);
+  max-width: min(2000px, 80vw);
+}
+</style>
 
 <style lang="scss" scoped>
 .drawer__no-footer {

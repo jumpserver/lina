@@ -14,7 +14,7 @@
 
 <script>
 import SmallCard from '@/components/Table/InfoCardTable/index.vue'
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { ACCOUNT_PROVIDER_ATTRS_MAP } from '@/views/assets/Cloud/const'
 import { lan, privateCloudProviders, publicDBProviders, publicHostProviders } from '../const'
 import CreateDialog from './components/CreateDialog.vue'

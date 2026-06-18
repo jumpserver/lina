@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { riskActions } from './const'
 import IBox from '@/components/Common/IBox/index.vue'
 

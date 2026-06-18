@@ -21,7 +21,6 @@ import { installSvgIcon } from '@/icons' // icon
 import { installElementPlusIcons } from '@/icons/element-plus-icons'
 import '@/guards' // permission control
 import { installDirectives } from '@/directive'
-import { installFilters } from '@/filters'
 import i18n, { fetchTranslationsFromAPI } from './i18n/i18n'
 import ChartsPlugin from '@/libs/charts'
 import { setupErrorHandler } from '@/libs/errors'
@@ -113,7 +112,6 @@ async function initApp() {
   })
 
   installDirectives(app)
-  installFilters(app)
   installSvgIcon(app)
   installElementPlusIcons(app)
 

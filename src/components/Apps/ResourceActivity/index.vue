@@ -27,7 +27,7 @@
 import IBox from '@/components/Common/IBox/index.vue'
 import DiffDetail from '@/components/Dialog/DiffDetail.vue'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { openTaskPage } from '@/utils/jms/index'
 
 export default {

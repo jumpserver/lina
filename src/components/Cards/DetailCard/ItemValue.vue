@@ -1,5 +1,5 @@
 <script>
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { h } from 'vue'
 
 export default {

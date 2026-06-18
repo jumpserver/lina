@@ -7,7 +7,7 @@
 <script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 
 export default {
   name: 'Detail',

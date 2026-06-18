@@ -9,7 +9,6 @@
 import IBox from '@/components/Common/IBox'
 import Page from '@/layout/components/Page'
 import GenericCreateUpdateForm from '../GenericCreateUpdateForm'
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'GenericCreateUpdatePage',
@@ -19,11 +18,10 @@ export default {
     GenericCreateUpdateForm
   },
   computed: {
-    ...mapGetters(['inDrawer']),
     pageAttrs() {
       return {
         ...this.$attrs,
-        hideHeading: this.drawer || this.inDrawer
+        hideHeading: this.drawer
       }
     }
   },

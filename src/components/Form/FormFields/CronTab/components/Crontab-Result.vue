@@ -13,7 +13,7 @@
 
 <script>
 import parser from 'cron-parser'
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 
 export default {
   name: 'CrontabResult',

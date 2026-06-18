@@ -32,10 +32,10 @@
           <span>{{ sshKeyFingerprint }}</span>
         </el-form-item>
         <el-form-item :label="$tc('DateCreated')">
-          <span>{{ $filters.date(account['date_created']) }}</span>
+          <span>{{ toSafeLocalDateStr(account['date_created']) }}</span>
         </el-form-item>
         <el-form-item :label="$tc('DateUpdated')">
-          <span>{{ $filters.date(account['date_updated']) }}</span>
+          <span>{{ toSafeLocalDateStr(account['date_updated']) }}</span>
         </el-form-item>
         <el-form-item
           v-if="showPasswordRecord"
@@ -61,6 +61,7 @@
 <script>
 import Dialog from '@/components/Dialog/index.vue'
 import { SecretViewerFormatter } from '@/components/Table/TableFormatters'
+import { useDateTime } from '@/composables/useDateTime'
 import { encryptPassword } from '@/utils/secure'
 import PasswordHistoryDialog from './PasswordHistoryDialog.vue'
 
@@ -118,6 +119,9 @@ export default {
     secretType() {
       return this.account['secret_type'].value
     }
+  },
+  setup() {
+    return useDateTime()
   },
   mounted() {
     if (this.showPasswordRecord) {

@@ -60,7 +60,7 @@
 <script>
 import { h } from 'vue'
 import IBox from '@/components/Common/IBox'
-import { formatTime, getDateTimeStamp, toSafeLocalDateStr } from '@/utils/common/time'
+import { useDateTime } from '@/composables/useDateTime'
 import { STATE_MAP } from '../const'
 
 export default {
@@ -98,13 +98,10 @@ export default {
       }
     }
   },
+  setup() {
+    return useDateTime()
+  },
   methods: {
-    formatTime(dateStr) {
-      return formatTime(getDateTimeStamp(dateStr))
-    },
-    toSafeLocalDateStr(dataStr) {
-      return toSafeLocalDateStr(dataStr)
-    },
     lookOver(assignees_display) {
       const content = []
       assignees_display.forEach((item) => {

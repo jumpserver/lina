@@ -56,7 +56,6 @@
 import IBox from '@/components/Common/IBox'
 import BasicTree from '@/components/Form/FormFields/BasicTree'
 import Select2 from '@/components/Form/FormFields/Select2'
-import { formatTime, getDateTimeStamp, toSafeLocalDateStr } from '@/utils/common/time'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
 import { AccountLabelMapper } from '@/views/perms/const'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
@@ -256,12 +255,6 @@ export default {
     }
   },
   methods: {
-    formatTime(dateStr) {
-      return formatTime(getDateTimeStamp(dateStr))
-    },
-    toSafeLocalDateStr(dataStr) {
-      return toSafeLocalDateStr(dataStr)
-    },
     reloadPage() {
       window.location.reload()
     },

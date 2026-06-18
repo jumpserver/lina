@@ -14,7 +14,7 @@
 import { getActionMeta } from '@/api/common'
 import IBox from '@/components/Common/IBox/index.vue'
 import { copy } from '@/utils/common/index'
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { h, markRaw } from 'vue'
 import LabelsDetailFormatter from '../Formatters/LabelsDetailFormatter.vue'
 import DetailCard from './index.vue'

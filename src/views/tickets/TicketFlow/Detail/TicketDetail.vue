@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import GenericTicketDetail from '@/views/tickets/TicketFlow/components/GenericTicketDetail'
 
 export default {
@@ -44,11 +44,6 @@ export default {
           value: toSafeLocalDateStr(this.object.date_updated)
         }
       ]
-    }
-  },
-  methods: {
-    toSafeLocalDateStr(dataStr) {
-      return toSafeLocalDateStr(dataStr)
     }
   }
 }

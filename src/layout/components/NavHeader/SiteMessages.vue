@@ -95,7 +95,7 @@
 <script>
 import Dialog from '@/components/Dialog'
 import MarkDown from '@/components/Widgets/MarkDown'
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 
 export default {
   name: 'SiteMessages',

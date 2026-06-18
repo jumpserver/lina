@@ -9,8 +9,7 @@ import {
   createTextVNode as createTextVNodeCompat
 } from 'vue'
 import { STATUS_MAP } from '../const'
-import { formatTime, getDateTimeStamp } from '@/utils/common/time'
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 import { getAssetUrl } from '@/utils/assets'
 export default {
@@ -78,14 +77,6 @@ export default {
           value: toSafeLocalDateStr(object.date_created)
         }
       ]
-    }
-  },
-  methods: {
-    formatTime(dateStr) {
-      return formatTime(getDateTimeStamp(dateStr))
-    },
-    toSafeLocalDateStr(dataStr) {
-      return toSafeLocalDateStr(dataStr)
     }
   }
 }

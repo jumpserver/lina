@@ -13,7 +13,7 @@ import {
   ChoicesFormatter,
   DetailFormatter
 } from '@/components/Table/TableFormatters'
-import { timeOffset } from '@/utils/common/time'
+import { timeOffset } from '@/composables/useDateTime'
 import prettyBytes from 'pretty-bytes'
 
 export default {

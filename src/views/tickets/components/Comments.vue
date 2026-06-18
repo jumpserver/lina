@@ -11,7 +11,7 @@
           </a>
           <div class="media-body">
             <strong>{{ item.user_display }}</strong>
-            <small class="text-muted">{{ $filters.date(item.date_created) }}</small>
+            <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
             <MarkDown :value="item.body" />
           </div>
         </div>
@@ -67,7 +67,7 @@
 <script>
 import IBox from '@/components/Common/IBox'
 import MarkDown from '@/components/Widgets/MarkDown'
-import { formatTime, getDateTimeStamp, toSafeLocalDateStr } from '@/utils/common/time'
+import { useDateTime } from '@/composables/useDateTime'
 import { getAssetUrl } from '@/utils/assets'
 
 export default {
@@ -119,6 +119,9 @@ export default {
       return this.object.applicant === `${profile.name}(${profile.username})`
     }
   },
+  setup() {
+    return useDateTime()
+  },
   mounted() {
     switch (this.object.type.value) {
       case 'login_confirm':
@@ -139,12 +142,6 @@ export default {
     this.getComment()
   },
   methods: {
-    formatTime(dateStr) {
-      return formatTime(getDateTimeStamp(dateStr))
-    },
-    toSafeLocalDateStr(dataStr) {
-      return toSafeLocalDateStr(dataStr)
-    },
     getComment() {
       this.loading = true
       const url = `/api/v1/tickets/comments/?ticket_id=${this.object.id}`

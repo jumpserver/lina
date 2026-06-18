@@ -5,7 +5,7 @@
 <script>
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import i18n from '@/i18n/i18n'
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
 import { mapGetters } from 'vuex'
 import HomeCard from './HomeCard'

@@ -35,7 +35,7 @@
 <script>
 import { createVNode as createVNodeCompat } from 'vue'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import RelationCard from '@/components/Cards/RelationCard'
 import { QuickActions } from '@/components'
 import TimingPanel from '@/views/assets/Cloud/Account/components/TimingPanel'

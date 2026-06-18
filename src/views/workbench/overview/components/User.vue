@@ -20,7 +20,7 @@
             </li>
             <li>
               <span class="title">{{ $t('LoginDate') }}:</span>
-              <span>{{ $filters.date(users.last_login) }}</span>
+              <span>{{ toSafeLocalDateStr(users.last_login) }}</span>
             </li>
           </ul>
         </el-col>
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { useDateTime } from '@/composables/useDateTime'
 import { getAssetUrl } from '@/utils/assets'
 
 export default {
@@ -45,6 +46,9 @@ export default {
       users: {},
       avatarUrl: getAssetUrl('img/avatar.png')
     }
+  },
+  setup() {
+    return useDateTime()
   },
   created() {
     this.users = this.$store.state.users.profile || {}

@@ -1,4 +1,4 @@
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import {
   ActionsFormatter,
   DetailFormatter,
