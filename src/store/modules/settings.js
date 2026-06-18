@@ -1,16 +1,15 @@
-// import defaultSettings from '@/settings'
+import defaultSettings from '@/settings'
 import { getPublicSettings } from '@/api/settings'
 import request from '@/utils/request'
 import { changeMenuColor } from '@/utils/theme/color'
 import { changeElementColor, changeThemeColors } from '@/utils/theme/index'
 
-// const { showSettings, fixedHeader, sidebarLogo, tagsView } = defaultSettings
+const { fixedHeader, sidebarLogo, tagsView } = defaultSettings
 
 const state = {
-  // showSettings: showSettings,
-  // fixedHeader: fixedHeader,
-  // sidebarLogo: sidebarLogo,
-  // tagsView: tagsView,
+  fixedHeader,
+  sidebarLogo,
+  tagsView,
   publicSettings: {},
   hasValidLicense: false,
   authMethods: {},

@@ -68,6 +68,10 @@ $single-menu-height: 38px;
     align-items: center;
     height: $single-menu-height;
     line-height: $single-menu-height;
+
+    &:hover {
+      background-color: var(--menu-hover) !important;
+    }
   }
 
   // 通用 item 样式
