@@ -102,13 +102,14 @@ export default {
       const attrs = { ...this.$attrs }
       delete attrs.class
       delete attrs.style
+      delete attrs['custom-class']
       return attrs
     },
     dialogVisible() {
       return this.visible
     },
     dialogClass() {
-      return ['dialog', { shadow: this.shadow }, this.$attrs.class]
+      return ['dialog', { shadow: this.shadow }, this.$attrs.class, this.$attrs['custom-class']]
     },
     dialogStyle() {
       return this.$attrs.style

@@ -1,67 +1,69 @@
 <template>
-  <IBox v-loading="loading" class="box">
-    <template #header>
-      <div class="clearfix ibox-title"><i class="fa fa-comments" /> {{ $t('Message') }}</div>
-    </template>
-    <template v-if="comments">
-      <div v-for="item in comments" :key="item.id" class="feed-activity-list">
-        <div class="feed-element">
-          <a class="pull-left" href="#">
-            <el-avatar :size="30" :src="imageUrl" class="header-avatar" />
-          </a>
-          <div class="media-body">
-            <strong>{{ item.user_display }}</strong>
-            <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
-            <MarkDown :value="item.body" />
+  <div v-loading="loading">
+    <IBox class="box">
+      <template #header>
+        <div class="clearfix ibox-title"><i class="fa fa-comments" /> {{ $t('Message') }}</div>
+      </template>
+      <template v-if="comments">
+        <div v-for="item in comments" :key="item.id" class="feed-activity-list">
+          <div class="feed-element">
+            <a class="pull-left" href="#">
+              <el-avatar :size="30" :src="imageUrl" class="header-avatar" />
+            </a>
+            <div class="media-body">
+              <strong>{{ item.user_display }}</strong>
+              <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
+              <MarkDown :value="item.body" />
+            </div>
           </div>
         </div>
-      </div>
-    </template>
-    <slot />
-    <el-form ref="comments" :model="form" label-width="45px" style="padding-top: 20px">
-      <el-form-item v-if="!isAuditRoute" :label="$tc('Reply')">
-        <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
-      </el-form-item>
-      <el-form-item style="float: right">
-        <template v-if="hasActionPerm && !isAuditRoute">
+      </template>
+      <slot />
+      <el-form ref="comments" :model="form" label-width="45px" style="padding-top: 20px">
+        <el-form-item v-if="!isAuditRoute" :label="$tc('Reply')">
+          <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
+        </el-form-item>
+        <el-form-item style="float: right">
+          <template v-if="hasActionPerm && !isAuditRoute">
+            <el-button
+              :disabled="isDisabled || object.status.value === 'closed'"
+              size="small"
+              type="primary"
+              @click="handleApprove"
+            >
+              <i class="fa fa-check" /> {{ $t('Accept') }}
+            </el-button>
+            <el-button
+              :disabled="isDisabled || object.status.value === 'closed'"
+              size="small"
+              type="warning"
+              @click="handleReject"
+            >
+              <i class="fa fa-ban" /> {{ $t('Reject') }}
+            </el-button>
+          </template>
           <el-button
+            v-if="isSelfTicket && !isAuditRoute"
             :disabled="isDisabled || object.status.value === 'closed'"
             size="small"
-            type="primary"
-            @click="handleApprove"
+            type="danger"
+            @click="handleClose"
           >
-            <i class="fa fa-check" /> {{ $t('Accept') }}
+            <i class="fa fa-times" /> {{ $t('CancelTicket') }}
           </el-button>
           <el-button
-            :disabled="isDisabled || object.status.value === 'closed'"
+            v-if="!isAuditRoute"
+            :disabled="object.status.value === 'closed'"
             size="small"
-            type="warning"
-            @click="handleReject"
+            type="info"
+            @click="handleComment"
           >
-            <i class="fa fa-ban" /> {{ $t('Reject') }}
+            <i class="fa fa-pencil" /> {{ $t('Reply') }}
           </el-button>
-        </template>
-        <el-button
-          v-if="isSelfTicket && !isAuditRoute"
-          :disabled="isDisabled || object.status.value === 'closed'"
-          size="small"
-          type="danger"
-          @click="handleClose"
-        >
-          <i class="fa fa-times" /> {{ $t('CancelTicket') }}
-        </el-button>
-        <el-button
-          v-if="!isAuditRoute"
-          :disabled="object.status.value === 'closed'"
-          size="small"
-          type="info"
-          @click="handleComment"
-        >
-          <i class="fa fa-pencil" /> {{ $t('Reply') }}
-        </el-button>
-      </el-form-item>
-    </el-form>
-  </IBox>
+        </el-form-item>
+      </el-form>
+    </IBox>
+  </div>
 </template>
 
 <script>

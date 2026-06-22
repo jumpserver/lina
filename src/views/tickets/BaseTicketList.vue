@@ -1,13 +1,14 @@
 <template>
-  <GenericListPage
-    ref="ListPage"
-    v-loading="loading"
-    :get-drawer-title="getDrawerTitle"
-    :create-drawer="createDrawer"
-    :detail-drawer="detailDrawer"
-    :header-actions="iTicketAction"
-    :table-config="ticketTableConfig"
-  />
+  <div v-loading="loading">
+    <GenericListPage
+      ref="ListPage"
+      :get-drawer-title="getDrawerTitle"
+      :create-drawer="createDrawer"
+      :detail-drawer="detailDrawer"
+      :header-actions="iTicketAction"
+      :table-config="ticketTableConfig"
+    />
+  </div>
 </template>
 
 <script>

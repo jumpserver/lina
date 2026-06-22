@@ -1,13 +1,16 @@
 <template>
   <Dialog
+    v-bind="dialogAttrs"
     :close-on-click-modal="false"
+    :visible="visible"
     :title="$tc('Assets')"
-    custom-class="asset-select-dialog"
+    class="asset-dialog"
     top="2vh"
     width="1000px"
     @cancel="handleCancel"
     @close="handleClose"
     @confirm="handleConfirm"
+    @update:visible="handleVisibleChange"
   >
     <AssetTreeTable
       ref="ListPage"
@@ -16,6 +19,7 @@
       :sync-select-to-url="false"
       :table-config="tableConfig"
       :tree-setting="iTreeSetting"
+      :tree-url-query="treeUrlQuery"
       :tree-url="`${baseNodeUrl}children/tree/`"
       :url="baseUrl"
       class="tree-table"
@@ -25,13 +29,14 @@
 </template>
 
 <script>
-import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
-import Dialog from '@/components/Dialog/index.vue'
+import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue';
+import Dialog from '@/components/Dialog/index.vue';
 
 export default {
   componentName: 'AssetSelectDialog',
   components: { AssetTreeTable, Dialog },
   inheritAttrs: false,
+  emits: ['cancel', 'confirm', 'update:visible'],
   props: {
     baseUrl: {
       type: String,
@@ -45,6 +50,10 @@ export default {
       type: Array,
       default: () => []
     },
+    visible: {
+      type: Boolean,
+      default: false
+    },
     canSelect: {
       type: Function,
       default(row, index) {
@@ -55,6 +64,10 @@ export default {
       type: [Boolean, Function],
       default: false
     },
+    treeUrlQuery: {
+      type: Object,
+      default: () => ({})
+    },
     treeSetting: {
       type: Object,
       default: () => ({})
@@ -64,7 +77,6 @@ export default {
     const vm = this
     return {
       isLoaded: false,
-      dialogVisible: false,
       rowSelected: _.cloneDeep(this.value) || [],
       rowsAdd: [],
       tableConfig: {
@@ -119,6 +131,9 @@ export default {
     }
   },
   computed: {
+    dialogAttrs() {
+      return { ...this.$attrs }
+    },
     iTreeSetting() {
       return { ...this.treeSetting, selectSyncToRoute: false }
     }
@@ -130,13 +145,18 @@ export default {
     handleClose() {
       this.$refs.ListPage.$refs.TreeList.componentKey += 1
     },
+    handleVisibleChange(val) {
+      this.$emit('update:visible', val)
+    },
     handleConfirm() {
+      this.$emit('update:visible', false)
       this.$emit('confirm', this.rowSelected, this.rowsAdd)
       if (this.rowSelected.length > 0) {
         this.handleClose()
       }
     },
     handleCancel() {
+      this.$emit('update:visible', false)
       this.$emit('cancel')
       this.handleClose()
     },
@@ -158,28 +178,37 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.asset-dialog {
+  :deep(.el-dialog__body) {
+    padding: 0 !important;
+  }
+}
+
 .page :deep(.page-heading) {
   display: none;
 }
 
 .el-dialog__wrapper :deep(.el-dialog__body) {
-  padding: 0 0 0 3px;
+  padding: 0 0 0 3px !important;
 
   .tree-table {
-    .search {
-    }
-
     .left {
-      padding: 5px;
+      padding: 5px 0;
+
+      .ztree {
+        height: 100%;
+      }
     }
 
     .right {
-      min-height: 500px;
-      overflow: auto;
+      .transition-box {
+        padding-left: 0;
+      }
     }
 
     .mini {
       padding-top: 8px;
+      width: 1px;
     }
 
     .transition-box {
@@ -188,6 +217,7 @@ export default {
   }
 }
 
-.page :deep(.treebox .ztree) {
+.page :deep(.treebox) {
+  height: inherit !important;
 }
 </style>

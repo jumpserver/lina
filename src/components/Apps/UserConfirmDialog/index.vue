@@ -102,7 +102,7 @@
           </el-button>
           <el-button
             v-if="subTypeSelected === 'passkey'"
-            v-loading="passkeyVisible"
+            :loading="passkeyVisible"
             class="confirm-btn"
             size="small"
             type="primary"

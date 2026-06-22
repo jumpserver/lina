@@ -1,13 +1,14 @@
 <template>
   <div>
-    <DataTable
-      v-bind="$attrs"
-      v-if="!loading"
-      ref="dataTable"
-      v-loading="loading"
-      :config="iConfig"
-      @filter-change="filterChange"
-    />
+    <div v-loading="loading">
+      <DataTable
+        v-bind="$attrs"
+        v-if="!loading"
+        ref="dataTable"
+        :config="iConfig"
+        @filter-change="filterChange"
+      />
+    </div>
     <ColumnSettingPopover
       :current-columns="popoverColumns.currentCols"
       :default-columns="popoverColumns.defaultCols"

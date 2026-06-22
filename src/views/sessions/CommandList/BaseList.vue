@@ -1,17 +1,18 @@
 <template>
-  <TreeTable
-    ref="CommandTreeTable"
-    v-loading="loading"
-    :title="title"
-    :header-actions="headerActions"
-    :table-config="tableConfig"
-    :tree-setting="treeSetting"
-    class="command-list-table"
-    @tag-date-change="handleDateChange"
-    @tag-filter="handleFilterChange"
-    @tag-search="handleTagChange"
-    @tree-init-finish="checkFirstNode"
-  />
+  <div v-loading="loading">
+    <TreeTable
+      ref="CommandTreeTable"
+      :title="title"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+      :tree-setting="treeSetting"
+      class="command-list-table"
+      @tag-date-change="handleDateChange"
+      @tag-filter="handleFilterChange"
+      @tag-search="handleTagChange"
+      @tree-init-finish="checkFirstNode"
+    />
+  </div>
 </template>
 
 <script>

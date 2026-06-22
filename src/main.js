@@ -1,4 +1,4 @@
-import { createApp, configureCompat } from 'vue'
+import { createApp } from 'vue'
 import ElementPlus from 'element-plus'
 import enLocale from 'element-plus/dist/locale/en.mjs'
 import 'element-plus/dist/index.css'
@@ -35,44 +35,8 @@ import _ from 'lodash'
 
 moment.locale('zh-cn')
 
-configureCompat({
-  MODE: 2,
-  ATTR_FALSE_VALUE: false,
-  RENDER_FUNCTION: false,
-  COMPONENT_ASYNC: false,
-  WATCH_ARRAY: false,
-  INSTANCE_ATTRS_CLASS_STYLE: false,
-  GLOBAL_PROTOTYPE: false,
-  ATTR_ENUMERATED_COERCION: false,
-  COMPONENT_V_MODEL: false,
-  TRANSITION_GROUP_ROOT: false
-})
-
-function shouldIgnoreVueWarning(msg, trace = '') {
-  if (
-    msg.includes('Enumerated attribute') &&
-    (trace.includes('<ElTooltip>') || trace.includes('<VMd'))
-  ) {
-    return true
-  }
-  if (msg.includes('ATTR_ENUMERATED_COERCION') && trace.includes('<VMd')) {
-    return true
-  }
-  return (
-    msg.includes('Runtime directive used on component with non-element root node') &&
-    (trace.includes('<ElCascader>') || trace.includes('<ElRovingFocusGroupCollectionItem>'))
-  )
-}
-
 async function initApp() {
   const app = createApp(App)
-
-  app.config.warnHandler = (msg, instance, trace) => {
-    if (shouldIgnoreVueWarning(msg, trace)) {
-      return
-    }
-    console.warn(`[Vue warn]: ${msg}${trace || ''}`)
-  }
 
   // i18n helpers (set immediately to avoid undefined)
   const identityT = (key, ...rest) => {
@@ -133,8 +97,7 @@ async function initApp() {
   setupErrorHandler(app, message)
 
   window._ = _
-  // v-html 经 webpack 自定义指令转换为 $xss.process(...),compat with(this) 模式下
-  // $xss 需作为真实全局变量才能被编译后的 render 解析(与 window._ 同理)
+  // v-html 在模板编译阶段统一转换为 window.$xss.process(...)
   window.$xss = xss
 
   // 初始化默认主题变量（确保在应用启动时就注入 CSS 变量）

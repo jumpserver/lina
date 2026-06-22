@@ -44,7 +44,7 @@ export default {
   methods: {
     expressionChange222() {
       this.isShow = true
-      const rule = 0 + ' ' + this.$options.propsData.ex
+      const rule = `0 ${this.ex}`
       try {
         this.resultList = []
         const interval = parser.parseExpression(rule)

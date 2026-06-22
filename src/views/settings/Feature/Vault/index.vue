@@ -1,6 +1,10 @@
 <template>
   <div>
-    <el-alert v-sanitize="helpText" type="info" />
+    <el-alert type="info">
+      <template #default>
+        <div v-sanitize="helpText" />
+      </template>
+    </el-alert>
     <IBox>
       <GenericCreateUpdateForm v-bind="$data" />
     </IBox>

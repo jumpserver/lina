@@ -27,7 +27,7 @@ function createHtmlDirectiveTransform() {
       props: [
         createObjectProperty(
           createSimpleExpression('innerHTML', true),
-          createSimpleExpression(`$xss.process(String(${expression} || ''))`, false)
+          createSimpleExpression(`window.$xss.process(String(${expression} || ''))`, false)
         )
       ]
     }
@@ -88,8 +88,6 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@': resolvePath('src'),
-        vue: '@vue/compat',
-        vue$: '@vue/compat',
         'markdown-it/lib/token$': resolvePath('node_modules/markdown-it/lib/token.mjs')
       },
       extensions: ['.mjs', '.js', '.mts', '.ts', '.jsx', '.tsx', '.json', '.vue']
@@ -105,9 +103,6 @@ export default defineConfig(({ mode }) => {
         template: {
           compilerOptions: {
             preserveWhitespace: true,
-            compatConfig: {
-              MODE: 2
-            },
             directiveTransforms: {
               html: createHtmlDirectiveTransform()
             }

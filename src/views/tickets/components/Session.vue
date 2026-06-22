@@ -1,60 +1,62 @@
 <template>
-  <IBox v-if="session.id" v-loading="loading" class="box">
-    <template #header>
-      <div class="clearfix ibox-title">
-        <i class="fa fa-rocket" />
-        {{ $t('Session') }}
+  <div v-if="session.id" v-loading="loading">
+    <IBox class="box">
+      <template #header>
+        <div class="clearfix ibox-title">
+          <i class="fa fa-rocket" />
+          {{ $t('Session') }}
+        </div>
+      </template>
+      <div class="content">
+        <el-row class="item">
+          <el-col>
+            <span class="item-label">{{ $t('SessionID') }}：</span>
+            <span class="item-value">{{ session.id }}</span>
+          </el-col>
+          <el-col>
+            <span class="item-label">{{ $t('TargetResources') }}：</span>
+            <span class="item-value">{{ session.asset }}</span>
+          </el-col>
+          <el-col>
+            <span class="item-label">{{ $t('Account') }}：</span>
+            <span class="item-value">{{ session.account }}</span>
+          </el-col>
+          <el-col>
+            <span class="item-label">{{ $t('UseProtocol') }}：</span>
+            <span class="item-value">{{ session.protocol }}</span>
+          </el-col>
+          <el-col>
+            <span class="item-label">{{ $t('RemoteAddr') }}：</span>
+            <span class="item-value">{{ session.remote_addr }}</span>
+          </el-col>
+          <el-col>
+            <span class="item-label">{{ $t('SessionState') }}：</span>
+            <span
+              :style="{ background: session.is_finished ? '#ed5565' : '#1ab394' }"
+              class="item-value cur-color"
+            />
+          </el-col>
+        </el-row>
       </div>
-    </template>
-    <div class="content">
-      <el-row class="item">
-        <el-col>
-          <span class="item-label">{{ $t('SessionID') }}：</span>
-          <span class="item-value">{{ session.id }}</span>
-        </el-col>
-        <el-col>
-          <span class="item-label">{{ $t('TargetResources') }}：</span>
-          <span class="item-value">{{ session.asset }}</span>
-        </el-col>
-        <el-col>
-          <span class="item-label">{{ $t('Account') }}：</span>
-          <span class="item-value">{{ session.account }}</span>
-        </el-col>
-        <el-col>
-          <span class="item-label">{{ $t('UseProtocol') }}：</span>
-          <span class="item-value">{{ session.protocol }}</span>
-        </el-col>
-        <el-col>
-          <span class="item-label">{{ $t('RemoteAddr') }}：</span>
-          <span class="item-value">{{ session.remote_addr }}</span>
-        </el-col>
-        <el-col>
-          <span class="item-label">{{ $t('SessionState') }}：</span>
-          <span
-            :style="{ background: session.is_finished ? '#ed5565' : '#1ab394' }"
-            class="item-value cur-color"
-          />
-        </el-col>
-      </el-row>
-    </div>
-    <el-divider />
-    <div v-if="!isAuditRoute" class="bottom-btn">
-      <el-button :disabled="!session.can_terminate" size="small" type="danger" @click="onConnect">
-        {{ $t('Terminate') }}
-      </el-button>
-      <el-button :disabled="!supportedLock" size="small" type="warning" @click="onToggleLock">
-        <template v-if="session.is_locked">
-          {{ $t('Resume') }}
-        </template>
-        <template v-else>
-          {{ $t('Pause') }}
-        </template>
-      </el-button>
-      <el-button :disabled="!session.can_join" size="small" type="primary" @click="onMonitor">
-        {{ $t('Monitor') }}
-      </el-button>
-    </div>
-  </IBox>
+      <el-divider />
+      <div v-if="!isAuditRoute" class="bottom-btn">
+        <el-button :disabled="!session.can_terminate" size="small" type="danger" @click="onConnect">
+          {{ $t('Terminate') }}
+        </el-button>
+        <el-button :disabled="!supportedLock" size="small" type="warning" @click="onToggleLock">
+          <template v-if="session.is_locked">
+            {{ $t('Resume') }}
+          </template>
+          <template v-else>
+            {{ $t('Pause') }}
+          </template>
+        </el-button>
+        <el-button :disabled="!session.can_join" size="small" type="primary" @click="onMonitor">
+          {{ $t('Monitor') }}
+        </el-button>
+      </div>
+    </IBox>
+  </div>
 </template>
 
 <script>

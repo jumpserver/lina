@@ -71,7 +71,7 @@ export default {
         this.$t('Saturday'),
         this.$t('Sunday')
       ],
-      checkNum: this.$options.propsData.check
+      checkNum: this.check
     }
   },
   computed: {

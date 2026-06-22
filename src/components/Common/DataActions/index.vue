@@ -37,25 +37,26 @@
               <div v-if="option.group" class="dropdown-menu-title" style="width: 130px">
                 {{ option.group }}
               </div>
-              <el-tooltip
-                :content="option.tip"
-                :disabled="!option.tip"
-                :open-delay="500"
-                placement="top"
+              <el-dropdown-item
+                v-bind="{ ...option, icon: '' }"
+                :command="[option, action]"
+                :title="option.tip"
+                class="dropdown-item"
               >
-                <el-dropdown-item
-                  v-bind="{ ...option, icon: '' }"
-                  :key="option.name"
-                  :command="[option, action]"
-                  :title="option.tip"
-                  class="dropdown-item"
+                <el-tooltip
+                  :content="option.tip"
+                  :disabled="!option.tip"
+                  :open-delay="500"
+                  placement="top"
                 >
-                  <span v-if="actionsHasIcon(action.dropdown)" class="pre-icon">
-                    <Icon v-if="option.icon" :icon="option.icon" />
-                  </span>
-                  <span class="dropdown-item__label">{{ option.title }}</span>
-                </el-dropdown-item>
-              </el-tooltip>
+                  <div class="dropdown-item__content">
+                    <span v-if="actionsHasIcon(action.dropdown)" class="pre-icon">
+                      <Icon v-if="option.icon" :icon="option.icon" />
+                    </span>
+                    <span class="dropdown-item__label">{{ option.title }}</span>
+                  </div>
+                </el-tooltip>
+              </el-dropdown-item>
             </template>
           </el-dropdown-menu>
         </template>

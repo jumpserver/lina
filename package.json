@@ -31,7 +31,6 @@
     "@element-plus/icons-vue": "^2.3.2",
     "@fontsource/open-sans": "^5.2.7",
     "@traptitech/markdown-it-katex": "^3.6.0",
-    "@vue/compat": "^3.5.35",
     "@ztree/ztree_v3": "3.5.48",
     "axios": "^1.16.1",
     "axios-retry": "^4.5.0",

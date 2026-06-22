@@ -21,16 +21,18 @@
       :table-url="tableUrl"
       @done="handleActionInitialDone"
     />
-    <IBox v-loading="!actionInit" class="table-content">
-      <AutoDataTable
-        v-bind="$attrs"
-        v-if="actionInit"
-        ref="dataTable"
-        :config="iTableConfig"
-        :filter-table="filter"
-        @selection-change="handleSelectionChange"
-      />
-    </IBox>
+    <div v-loading="!actionInit" class="table-content">
+      <IBox>
+        <AutoDataTable
+          v-bind="$attrs"
+          v-if="actionInit"
+          ref="dataTable"
+          :config="iTableConfig"
+          :filter-table="filter"
+          @selection-change="handleSelectionChange"
+        />
+      </IBox>
+    </div>
   </div>
 </template>
 

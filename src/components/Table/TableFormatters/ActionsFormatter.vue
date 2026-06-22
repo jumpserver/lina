@@ -1,12 +1,13 @@
 <template>
-  <ActionsGroup
-    v-loading="loadingStatus"
-    :actions="actions"
-    :more-actions="moreActions"
-    :more-actions-title="moreActionsTitle"
-    :size="'small'"
-    class="table-actions"
-  />
+  <div v-loading="loadingStatus">
+    <ActionsGroup
+      :actions="actions"
+      :more-actions="moreActions"
+      :more-actions-title="moreActionsTitle"
+      :size="'small'"
+      class="table-actions"
+    />
+  </div>
 </template>
 
 <script>

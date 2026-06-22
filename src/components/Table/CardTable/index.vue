@@ -6,31 +6,33 @@
       :search-table="search"
       :table-url="tableUrl"
     />
-    <el-row v-loading="loading" class="the-row">
-      <IBox v-if="totalData.length === 0" class="empty-box">
-        <el-empty
-          :description="$t('NoData')"
-          :image-size="200"
-          class="no-data"
-          style="padding: 20px"
-        />
-      </IBox>
-      <div class="card-container">
-        <el-card
-          v-for="(d, index) in totalData"
-          :key="index"
-          :class="{ 'is-disabled': isDisabled(d) }"
-          class="the-card"
-          shadow="hover"
-        >
-          <keep-alive>
-            <slot :index="index" :item="d" :on-view="onView">
-              <Panel :d="d" @click="onView(d)" />
-            </slot>
-          </keep-alive>
-        </el-card>
-      </div>
-    </el-row>
+    <div v-loading="loading">
+      <el-row class="the-row">
+        <IBox v-if="totalData.length === 0" class="empty-box">
+          <el-empty
+            :description="$t('NoData')"
+            :image-size="200"
+            class="no-data"
+            style="padding: 20px"
+          />
+        </IBox>
+        <div class="card-container">
+          <el-card
+            v-for="(d, index) in totalData"
+            :key="index"
+            :class="{ 'is-disabled': isDisabled(d) }"
+            class="the-card"
+            shadow="hover"
+          >
+            <keep-alive>
+              <slot :index="index" :item="d" :on-view="onView">
+                <Panel :d="d" @click="onView(d)" />
+              </slot>
+            </keep-alive>
+          </el-card>
+        </div>
+      </el-row>
+    </div>
     <Pagination
       v-bind="$data"
       v-show="pagination && total > paginationSize"

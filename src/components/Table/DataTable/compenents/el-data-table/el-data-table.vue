@@ -10,92 +10,93 @@
         导致跨页选择（persistSelection）被覆盖，只剩当页数据。
         选择事件统一走 selectStrategy，在内部维护全量 selected 并向外 emit。
       -->
-      <el-table
-        v-bind="tableAttrs"
-        ref="table"
-        v-loading="tableLoading"
-        :data="data"
-        :row-class-name="rowClassName"
-        @select="selectStrategy.onSelect"
-        v-on="forwardListeners"
-        @selection-change="selectStrategy.onSelectionChange"
-        @select-all="handleSelectAll($event, canSelect)"
-        @sort-change="onSortChange"
-      >
-        <template v-if="isTree">
-          <el-data-table-column
-            v-bind="{ align: columnsAlign, ...columns[0] }"
-            v-if="hasSelect"
-            key="selection-key"
-          />
-          <el-data-table-column
-            v-bind="treeControlColumn"
-            :key="treeControlColumn.prop || 'tree-ctrl'"
-          >
-            <template #default="scope">
-              <span v-for="space in scope.row._level" :key="space" class="ms-tree-space" />
-              <span
-                v-if="iconShow(scope.$index, scope.row)"
-                class="tree-ctrl"
-                @click="toggleExpanded(scope.$index)"
-              >
-                <el-icon><component :is="scope.row._expanded ? 'Minus' : 'Plus'" /></el-icon>
-              </span>
-              {{ scope.row[treeLabelProp] }}
-            </template>
-          </el-data-table-column>
-
-          <el-data-table-column
-            v-bind="{ align: columnsAlign, ...col }"
-            v-for="col in treeDataColumns"
-            :key="col.prop"
-          />
-        </template>
-
-        <!--非树-->
-        <template v-else>
-          <el-data-table-column
-            v-if="hasSelection"
-            :align="selectionAlign"
-            :selectable="canSelect"
-            type="selection"
-          />
-          <el-table-column
-            v-bind="getColumnBindProps(col)"
-            v-for="col in columns"
-            :key="col.prop"
-            :filter-method="typeof col.filterMethod === 'function' ? col.filterMethod : null"
-            :filter-multiple="false"
-            :filters="col.filters || null"
-            :formatter="typeof col.formatter === 'function' ? col.formatter : null"
-            :title="col.label"
-            :prop="col.prop"
-          >
-            <template #header>
-              <span :title="col.label">{{ col.label }}</span>
-            </template>
-
-            <template
-              v-if="col.formatter && typeof col.formatter !== 'function'"
-              #default="{ row: tableRow, column, $index }"
+      <div v-loading="tableLoading">
+        <el-table
+          v-bind="tableAttrs"
+          ref="table"
+          :data="data"
+          :row-class-name="rowClassName"
+          @select="selectStrategy.onSelect"
+          v-on="forwardListeners"
+          @selection-change="selectStrategy.onSelectionChange"
+          @select-all="handleSelectAll($event, canSelect)"
+          @sort-change="onSortChange"
+        >
+          <template v-if="isTree">
+            <el-data-table-column
+              v-bind="{ align: columnsAlign, ...columns[0] }"
+              v-if="hasSelect"
+              key="selection-key"
+            />
+            <el-data-table-column
+              v-bind="treeControlColumn"
+              :key="treeControlColumn.prop || 'tree-ctrl'"
             >
-              <component
-                :is="getFormatterComponent(col)"
-                :key="tableRow.id"
-                :cell-value="tableRow[col.prop]"
-                :col="col"
-                :column="column"
-                :index="$index"
-                :reload="getList"
-                :row="tableRow"
-                :table-data="data"
-                :url="url"
-              />
-            </template>
-          </el-table-column>
-        </template>
-        <slot />
-      </el-table>
+              <template #default="scope">
+                <span v-for="space in scope.row._level" :key="space" class="ms-tree-space" />
+                <span
+                  v-if="iconShow(scope.$index, scope.row)"
+                  class="tree-ctrl"
+                  @click="toggleExpanded(scope.$index)"
+                >
+                  <el-icon><component :is="scope.row._expanded ? 'Minus' : 'Plus'" /></el-icon>
+                </span>
+                {{ scope.row[treeLabelProp] }}
+              </template>
+            </el-data-table-column>
+
+            <el-data-table-column
+              v-bind="{ align: columnsAlign, ...col }"
+              v-for="col in treeDataColumns"
+              :key="col.prop"
+            />
+          </template>
+
+          <!--非树-->
+          <template v-else>
+            <el-data-table-column
+              v-if="hasSelection"
+              :align="selectionAlign"
+              :selectable="canSelect"
+              type="selection"
+            />
+            <el-table-column
+              v-bind="getColumnBindProps(col)"
+              v-for="col in columns"
+              :key="col.prop"
+              :filter-method="typeof col.filterMethod === 'function' ? col.filterMethod : null"
+              :filter-multiple="false"
+              :filters="col.filters || null"
+              :formatter="typeof col.formatter === 'function' ? col.formatter : null"
+              :title="col.label"
+              :prop="col.prop"
+            >
+              <template #header>
+                <span :title="col.label">{{ col.label }}</span>
+              </template>
+
+              <template
+                v-if="col.formatter && typeof col.formatter !== 'function'"
+                #default="{ row: tableRow, column, $index }"
+              >
+                <component
+                  :is="getFormatterComponent(col)"
+                  :key="tableRow.id"
+                  :cell-value="tableRow[col.prop]"
+                  :col="col"
+                  :column="column"
+                  :index="$index"
+                  :reload="getList"
+                  :row="tableRow"
+                  :table-data="data"
+                  :url="url"
+                />
+              </template>
+            </el-table-column>
+          </template>
+          <slot />
+        </el-table>
+      </div>
 
       <el-pagination
         v-if="hasPagination"

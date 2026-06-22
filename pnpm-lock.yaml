@@ -23,9 +23,6 @@ importers:
       '@traptitech/markdown-it-katex':
         specifier: ^3.6.0
         version: 3.6.0
-      '@vue/compat':
-        specifier: ^3.5.35
-        version: 3.5.38(vue@3.5.38)
       '@ztree/ztree_v3':
         specifier: 3.5.48
         version: 3.5.48
@@ -1004,11 +1001,6 @@ packages:
     peerDependenciesMeta:
       vue:
         optional: true
-
-  '@vue/compat@3.5.38':
-    resolution: {integrity: sha512-MiV5OPkT2Qgorfs5BkvVZmvk6y7SMlYkycOGqElMQ8KsWVuSW0CTgTPdGJW53rnKo7JBoyDZcZRraDscqmUXnA==}
-    peerDependencies:
-      vue: 3.5.38
 
   '@vue/compiler-core@3.5.38':
     resolution: {integrity: sha512-s99aGxWYig9ErHbct27KXEGhrBYlRI6c4MwAgXErOAbX9xiW37/uMa+XUDO69zLz83dng8UUZ70CTOJrLrYrEQ==}
@@ -2685,14 +2677,6 @@ snapshots:
       magic-string-ast: 1.0.3
       unplugin-utils: 0.3.1
     optionalDependencies:
-      vue: 3.5.38
-
-  '@vue/compat@3.5.38(vue@3.5.38)':
-    dependencies:
-      '@babel/parser': 7.29.7
-      entities: 7.0.1
-      estree-walker: 2.0.2
-      source-map-js: 1.2.1
       vue: 3.5.38
 
   '@vue/compiler-core@3.5.38':

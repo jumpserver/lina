@@ -53,6 +53,11 @@ const defaultObject = {
   type: Object,
   default: () => ({})
 }
+
+function createDomId(prefix) {
+  return `${prefix}_${Math.random().toString(36).slice(2, 10)}`
+}
+
 export default {
   name: 'ZTree',
   components: {},
@@ -61,8 +66,8 @@ export default {
   },
   data() {
     return {
-      iZTreeID: `zTree_${this._uid}`,
-      iRMenuID: `rMenu_${this._uid}`,
+      iZTreeID: createDomId('zTree'),
+      iRMenuID: createDomId('rMenu'),
       zTree: '',
       rMenu: '',
       init: false,

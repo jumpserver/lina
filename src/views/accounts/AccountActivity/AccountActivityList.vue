@@ -1,10 +1,8 @@
 <template>
   <div>
-    <GenericListPage
-      v-loading="loading"
-      :header-actions="headerActions"
-      :table-config="tableConfig"
-    />
+    <div v-loading="loading">
+      <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
+    </div>
     <DiffDetail ref="DetailDialog" :title="$tc('OperateLog')" />
   </div>
 </template>
