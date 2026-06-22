@@ -72,6 +72,18 @@ export default {
             )
           }
         },
+        {
+          key: this.$t('Clipboard'),
+          value: this.object.clipboard_policy,
+          formatter: (row, p = {}) => {
+            const items = [
+              ['FileUpload', p.file_upload], ['FileDownload', p.file_download],
+              ['TextCopy', p.text_copy, p.text_copy_max_length], ['TextPaste', p.text_paste, p.text_paste_max_length]
+            ]
+            const labels = items.filter(i => i[1]).map(i => this.$t(i[0]) + (i[2] > 0 ? `(${i[2]})` : ''))
+            return labels.length ? labels.join('、') : '-'
+          }
+        },
         'date_start', 'date_expired', 'date_created', 'created_by', 'comment'
       ]
     }

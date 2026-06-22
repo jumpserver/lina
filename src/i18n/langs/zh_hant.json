@@ -7,5 +7,14 @@
     "notAlphanumericUnderscore": "仅支持字母、数字和下划线。",
     "notParenthesis": "不能包含括号。",
     "InvalidJson": "JSON 格式错误.",
-    "requiredHasUserNameMapped": "用户名属性是必需的。"
+    "requiredHasUserNameMapped": "用户名属性是必需的。",
+    "Clipboard": "剪貼簿",
+    "FileUpload": "檔案上行",
+    "FileDownload": "檔案下行",
+    "TextCopy": "字串複製",
+    "TextPaste": "字串貼上",
+    "TextCopyMaxLength": "字串複製字元數限制",
+    "TextPasteMaxLength": "字串貼上字元數限制",
+    "ZeroMeansUnlimited": "0 表示不限制",
+    "ClipboardPolicyTip": "控制該授權在 RDP 工作階段剪貼簿中的檔案上行/下行與字串複製/貼上權限，需搭配動作中的複製、貼上權限生效"
 }

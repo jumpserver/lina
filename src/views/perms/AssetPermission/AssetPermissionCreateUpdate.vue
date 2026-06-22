@@ -14,6 +14,7 @@ import AssetSelect from '@/components/Apps/AssetSelect'
 import AccountFormatter from './components/AccountFormatter'
 import { AllAccount } from '../const'
 import ProtocolsSelect from '@/components/Form/FormFields/AllOrSpec.vue'
+import ClipboardPolicy, { applyActionsToClipboardPolicy, defaultClipboardPolicy } from '@/components/Form/FormFields/ClipboardPolicy.vue'
 
 export default {
   name: 'AccountFormatter',
@@ -33,7 +34,8 @@ export default {
       initial: {
         nodes: nodesInitial,
         assets: assetsInitial,
-        accounts: [AllAccount]
+        accounts: [AllAccount],
+        clipboard_policy: defaultClipboardPolicy()
       },
       fields: [
         [this.$t('Basic'), ['name']],
@@ -43,6 +45,7 @@ export default {
         [this.$t('Account'), ['accounts']],
         [this.$t('Protocol'), ['protocols']],
         [this.$t('Action'), ['actions']],
+        [this.$t('Clipboard'), ['clipboard_policy']],
         [this.$t('Other'), ['is_active', 'date_start', 'date_expired', 'comment']]
       ],
       url: '/api/v1/perms/asset-permissions/',
@@ -124,6 +127,19 @@ export default {
           label: this.$t('Action'),
           helpText: this.$t('ActionsTips')
         },
+        clipboard_policy: {
+          label: this.$t('Clipboard'),
+          component: ClipboardPolicy,
+          helpText: this.$t('ClipboardPolicyTip'),
+          el: {
+            actions: []
+          },
+          hidden: (formValue) => {
+            // Feed the live actions into the component so each clipboard
+            // sub-permission is gated by its matching action.
+            this.fieldsMeta.clipboard_policy.el.actions = formValue.actions || []
+          }
+        },
         date_start: {},
         date_expired: {},
         comment: {},
@@ -135,6 +151,7 @@ export default {
         if (!Array.isArray(value.accounts)) {
           value.accounts = value.accounts ? value.accounts.split(',') : []
         }
+        value.clipboard_policy = applyActionsToClipboardPolicy(value.clipboard_policy, value.actions)
         return value
       }
     }

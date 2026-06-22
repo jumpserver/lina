@@ -21,5 +21,14 @@
     "Confirm": "Confirm",
     "Ignore": "Ignore",
     "Please enter a reason": "Please enter a reason",
-    "PleaseEnterReason": "Please enter a reason | Please enter reasons"
+    "PleaseEnterReason": "Please enter a reason | Please enter reasons",
+    "Clipboard": "Clipboard",
+    "FileUpload": "File upload",
+    "FileDownload": "File download",
+    "TextCopy": "Text copy",
+    "TextPaste": "Text paste",
+    "TextCopyMaxLength": "Text copy character limit",
+    "TextPasteMaxLength": "Text paste character limit",
+    "ZeroMeansUnlimited": "0 means unlimited",
+    "ClipboardPolicyTip": "Controls clipboard file upload/download and text copy/paste for this permission in RDP sessions. Requires the copy/paste actions to take effect."
 }

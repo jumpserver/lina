@@ -19,5 +19,14 @@
     "Other": "其他",
     "Details": "详情",
     "Confirm": "确认",
-    "Ignore": "忽略"
+    "Ignore": "忽略",
+    "Clipboard": "剪贴板",
+    "FileUpload": "文件上行",
+    "FileDownload": "文件下行",
+    "TextCopy": "字符串复制",
+    "TextPaste": "字符串粘贴",
+    "TextCopyMaxLength": "字符串复制字符数限制",
+    "TextPasteMaxLength": "字符串粘贴字符数限制",
+    "ZeroMeansUnlimited": "0 表示不限制",
+    "ClipboardPolicyTip": "控制该授权在 RDP 会话剪贴板中的文件上行/下行与字符串复制/粘贴权限，需配合动作中的复制、粘贴权限生效"
 }
