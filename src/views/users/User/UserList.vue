@@ -93,12 +93,6 @@ export default {
               }
             },
             {
-              label: this.$t('NoLoginLongTime'),
-              filter: {
-                is_long_time_no_login: true
-              }
-            },
-            {
               label: this.$t('NoMFA'),
               filter: {
                 mfa_level: 0
@@ -108,6 +102,39 @@ export default {
               label: this.$t('LoginBlocked'),
               filter: {
                 is_login_blocked: true
+              }
+            }
+          ]
+        },
+        {
+          label: this.$t('NotLoggedInForMoreThan'),
+          options: [
+            {
+              label: `30 ${this.$t('Days')}`,
+              filter: {
+                is_long_time_no_login: true,
+                no_login_days: 30
+              }
+            },
+            {
+              label: `60 ${this.$t('Days')}`,
+              filter: {
+                is_long_time_no_login: true,
+                no_login_days: 60
+              }
+            },
+            {
+              label: `90 ${this.$t('Days')}`,
+              filter: {
+                is_long_time_no_login: true,
+                no_login_days: 90
+              }
+            },
+            {
+              label: `180 ${this.$t('Days')}`,
+              filter: {
+                is_long_time_no_login: true,
+                no_login_days: 180
               }
             }
           ]
