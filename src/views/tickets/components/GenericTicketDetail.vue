@@ -17,7 +17,7 @@
     </el-col>
     <el-col :md="7" :sm="24">
       <Steps :object="object" />
-      <Session v-perms="'tickets.view_ticket'" :object="object" />
+      <Session v-if="$hasPerm('tickets.view_ticket')" :object="object" />
     </el-col>
   </el-row>
 </template>

@@ -3,7 +3,7 @@
     <li class="divider" />
     <li
       id="m_add_asset_to_node"
-      v-perms="'assets.change_assetnodes'"
+      v-if="$hasPerm('assets.change_assetnodes')"
       class="rmenu"
       tabindex="-1"
       @click="rMenuAddAssetToNode"
@@ -12,7 +12,7 @@
     </li>
     <li
       id="m_move_asset_to_node"
-      v-perms="'assets.change_assetnodes'"
+      v-if="$hasPerm('assets.change_assetnodes')"
       class="rmenu"
       tabindex="-1"
       @click="rMenuMoveAssetToNode"
@@ -21,7 +21,7 @@
     </li>
     <li
       id="m_remove_asset_from_node"
-      v-perms="'assets.change_assetnodes'"
+      v-if="$hasPerm('assets.change_assetnodes')"
       class="rmenu"
       tabindex="-1"
       @click="rMenuRemoveAssetFromNode"
@@ -31,7 +31,7 @@
     <li v-if="$hasPerm('assets.change_assetnodes')" class="divider" />
     <li
       id="m_update_node_asset_hardware_info"
-      v-perms="'assets.refresh_assethardwareinfo'"
+      v-if="$hasPerm('assets.refresh_assethardwareinfo')"
       class="rmenu"
       tabindex="-1"
       @click="rMenuUpdateNodeAssetHardwareInfo"
@@ -40,7 +40,7 @@
     </li>
     <li
       id="m_test_node_asset_connectivity"
-      v-perms="'assets.test_assetconnectivity'"
+      v-if="$hasPerm('assets.test_assetconnectivity')"
       class="rmenu"
       tabindex="-1"
       @click="rMenuTestNodeAssetConnectivity"
@@ -70,7 +70,7 @@
     <li class="divider" />
     <li
       id="m_check_assets_amount"
-      v-perms="'assets.change_node'"
+      v-if="$hasPerm('assets.change_node')"
       class="rmenu"
       tabindex="-1"
       @click="rCheckAssetsAmount"

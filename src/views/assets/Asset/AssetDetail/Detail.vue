@@ -7,16 +7,16 @@
     <template #right>
       <QuickActions :actions="quickActions" type="primary" />
       <RelationCard
+        v-if="$hasPerm('assets.change_asset')"
         v-bind="nodeRelationConfig"
         ref="NodeRelation"
-        v-perms="'assets.change_asset'"
         style="margin-top: 15px"
         type="info"
       />
       <RelationCard
+        v-if="$hasPerm('assets.change_asset')"
         v-bind="labelConfig"
         ref="LabelRelation"
-        v-perms="'assets.change_asset'"
         style="margin-top: 15px"
         type="warning"
       />

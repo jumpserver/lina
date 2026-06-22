@@ -38,8 +38,7 @@
           <span>{{ toSafeLocalDateStr(account['date_updated']) }}</span>
         </el-form-item>
         <el-form-item
-          v-if="showPasswordRecord"
-          v-perms="'accounts.view_accountsecret'"
+          v-if="showPasswordRecord && $hasPerm('accounts.view_accountsecret')"
           :label="$tc('PasswordRecord')"
         >
           <el-link underline="never" type="success" @click="showHistoryDialog">

@@ -1,33 +1,30 @@
-import { hasPermission, getRouteRequiredPerms, getApiUrlRequirePerms } from '@/utils/jms/index'
-import permission from './permission'
+import {
+  getCurrentResActionPerms,
+  hasApiActionPerm,
+  hasCurrentResAction,
+  hasLicense,
+  hasPerm,
+  isRootOrg
+} from '@/composables/usePermission'
 
 export function installPermissionDirective(app) {
-  app.directive('perms', permission)
-
-  app.config.globalProperties.$hasPerm = function (perms) {
-    return hasPermission(perms)
-  }
-
-  app.config.globalProperties.$hasApiActionPerm = function (url, action) {
-    const permsRequired = getApiUrlRequirePerms(url, action)
-    return hasPermission(permsRequired)
-  }
+  app.config.globalProperties.$hasPerm = hasPerm
+  app.config.globalProperties.$hasApiActionPerm = hasApiActionPerm
 
   app.config.globalProperties.$getCurrentResActionPerms = function (action) {
-    return getRouteRequiredPerms(this.$route, action)
+    return getCurrentResActionPerms(this.$route, action)
   }
 
   app.config.globalProperties.$hasCurrentResAction = function (action) {
-    const permsRequired = getRouteRequiredPerms(this.$route, action)
-    return hasPermission(permsRequired)
+    return hasCurrentResAction(this.$route, action)
   }
 
   app.config.globalProperties.$hasLicense = function () {
-    return this.$store.getters.hasValidLicense
+    return hasLicense(this.$store)
   }
 
   app.config.globalProperties.$isRootOrg = function () {
-    return this.$store.getters.currentOrgIsRoot
+    return isRootOrg(this.$store)
   }
 }
 

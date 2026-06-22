@@ -25,7 +25,7 @@
           <SiteMessages />
         </el-tooltip>
       </li>
-      <li v-perms="['rbac.view_webterminal']" class="header-item header-icon">
+      <li v-if="$hasPerm(['rbac.view_webterminal'])" class="header-item header-icon">
         <el-tooltip :content="$tc('WebTerminal')" :open-delay="500" effect="dark">
           <WebTerminal />
         </el-tooltip>
@@ -35,7 +35,7 @@
           <Tickets />
         </el-tooltip>
       </li>
-      <li v-perms="'settings.view_setting'" class="header-item header-icon">
+      <li v-if="$hasPerm('settings.view_setting')" class="header-item header-icon">
         <el-tooltip :content="$tc('SystemSetting')" :open-delay="500" effect="dark">
           <SystemSetting />
         </el-tooltip>
