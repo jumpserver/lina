@@ -10,7 +10,11 @@
       :label-position="iLabelPosition"
       class="form-fields"
       :label-width="labelWidth"
-      :style="{ '--label-width': labelWidth }"
+      :style="{
+        '--label-width': labelWidth,
+        '--form-column-gap': '20px',
+        '--form-section-gap': '14px'
+      }"
       :server-errors="serverErrors"
     >
       <!-- named slot 透传给 ElFormRender，保持与字段渲染顺序一致 -->
@@ -277,12 +281,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-form {
-  margin-right: 80px;
-  margin-bottom: 20px;
+.form-fields.el-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--form-section-gap);
+  margin: 0;
+  padding: 20px 0 24px;
 
   .el-form {
     margin-right: 0;
+    margin-bottom: 0;
   }
 
   :deep(.el-input-group__prepend) {
@@ -290,7 +298,6 @@ export default {
   }
 
   :deep(.form-group-header) {
-    margin-left: 50px;
     color: var(--color-text-primary);
   }
 
@@ -319,8 +326,8 @@ export default {
   :deep(.el-form-item) {
     display: flex;
     align-items: flex-start;
-    gap: 20px;
-    margin-bottom: 10px;
+    gap: var(--form-column-gap);
+    margin: 0;
 
     .el-form-item__label-wrap {
       margin-left: 0 !important;
@@ -364,6 +371,10 @@ export default {
       min-width: 0;
       min-height: 30px;
       line-height: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-start;
 
       .el-input:not(.el-date-editor),
       .el-select,
@@ -388,6 +399,12 @@ export default {
         min-height: 30px;
         height: 30px;
         box-sizing: border-box;
+        border-radius: 0;
+      }
+
+      .el-select,
+      .el-select .el-tooltip__trigger {
+        border-radius: 0;
       }
 
       .el-input__inner,
@@ -482,8 +499,7 @@ export default {
 
       .help-block {
         display: block;
-        margin-top: 2px;
-        margin-bottom: 5px;
+        margin: 0;
         color: var(--color-help-text);
         font-size: 12px;
         line-height: 18px;
@@ -501,8 +517,8 @@ export default {
     flex-wrap: wrap;
     align-items: center;
     gap: 10px;
-    margin-top: 30px;
-    margin-left: calc(var(--label-width) + 20px);
+    margin-top: 10px;
+    padding-inline-start: calc(var(--label-width) + var(--form-column-gap));
 
     .el-button {
       min-height: 30px;
@@ -511,6 +527,17 @@ export default {
       font-size: 12px;
       font-weight: 400;
       line-height: 1;
+    }
+
+    .el-button--primary,
+    .el-button--primary > span,
+    .el-button--primary:hover,
+    .el-button--primary:hover > span,
+    .el-button--primary:focus,
+    .el-button--primary:focus > span,
+    .el-button--primary:active,
+    .el-button--primary:active > span {
+      color: #fff;
     }
   }
 }
@@ -529,7 +556,11 @@ export default {
   flex-basis: 100%;
 }
 
-.el-form.mobile :deep(.form-group-header) {
-  margin-left: 0;
+.el-form.mobile {
+  padding: 16px 0 20px;
+
+  :deep(.form-buttons) {
+    padding-inline-start: 0;
+  }
 }
 </style>

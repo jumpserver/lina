@@ -6,31 +6,43 @@
 @use './fonts';
 @import './fonts/font-awesome.min.css';
 
-::-webkit-scrollbar {
-  width: 10px;
+:root {
+  --scrollbar-size: 8px;
+  --scrollbar-track: transparent;
+  --scrollbar-thumb: rgba(130, 139, 149, 0.45);
+  --scrollbar-thumb-hover: rgba(103, 111, 120, 0.68);
 }
 
-::-webkit-scrollbar:horizontal {
-  height: 12px;
+html,
+body,
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
-::-webkit-scrollbar-corner {
-  background-color: transparent;
+*::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
 }
 
-::-webkit-scrollbar-track {
-  border-radius: 10px;
-  border: 1px solid #f0f0f0;
+*::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
-::-webkit-scrollbar-thumb {
-  border-radius: 8px;
-  box-shadow: 8px 10px 20px #c6c6c6 inset;
-  border-left: 2px solid rgba(0, 0, 0, 0);
+*::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 999px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  box-shadow: 8px 10px 20px #878787 inset;
+*::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
 }
 
 body {
@@ -266,10 +278,12 @@ input[type='file'] {
   .el-timeline-item__wrapper {
     .el-timeline-item__content {
       color: var(--color-text-primary);
+      font-size: 13px;
     }
 
     .el-timeline-item__timestamp.is-bottom {
       color: var(--color-help-text);
+      font-size: 12px;
     }
   }
 }
@@ -866,6 +880,26 @@ li.rmenu i.fa {
   &:hover {
     //background-color: #fff;
   }
+}
+
+.el-button--primary,
+.el-button--primary > span,
+.el-button--primary:hover,
+.el-button--primary:hover > span,
+.el-button--primary:focus,
+.el-button--primary:focus > span,
+.el-button--primary:active,
+.el-button--primary:active > span {
+  color: #fff;
+}
+
+.el-message-box__btns .el-button {
+  width: 50px;
+  min-width: 50px;
+  height: 30px;
+  padding: 8px 12px;
+  font-weight: 400;
+  font-size: 13px;
 }
 
 div.el-loading-parent--relative {

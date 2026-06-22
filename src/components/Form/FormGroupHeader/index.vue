@@ -1,14 +1,11 @@
 <template>
   <div ref="formGroup" class="form-group-header">
     <div v-if="line" class="hr-line-dashed" />
-    <div v-if="group['title']">
-      <h3 @click="toggle">{{ group['title'] }}</h3>
-      <span class="compass" @click="toggle">
+    <div v-if="group['title']" class="form-group-header__row">
+      <h3 class="form-group-header__title" @click="toggle">{{ group['title'] }}</h3>
+      <button class="form-group-header__toggle" type="button" @click="toggle">
         <el-icon><component :is="iconClass" /></el-icon>
-      </span>
-    </div>
-    <div v-if="!isVisible" class="ellipsis" @click="toggle">
-      <i class="fa fa-angle-double-down" />
+      </button>
     </div>
   </div>
 </template>
@@ -63,27 +60,49 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.form-group-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-left: 20px;
+}
+
 .hr-line-dashed {
   border-top: 1px dashed #e7eaec;
   color: #ffffff;
   background-color: #ffffff;
   height: 1px;
-  margin: 20px 0;
+  margin: 6px 0 0;
 }
 
-h3 {
-  display: inline-block;
+.form-group-header__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+}
+
+.form-group-header__title {
+  margin: 0;
+  font-size: 1.17em;
+  font-weight: 600;
+  line-height: 1.4;
   cursor: pointer;
+  color: var(--color-text-primary);
 }
 
-.compass {
-  display: inline-block;
-  float: right;
-  cursor: pointer;
-}
-
-.ellipsis {
-  text-align: center;
+.form-group-header__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-icon-primary);
   cursor: pointer;
 }
 </style>

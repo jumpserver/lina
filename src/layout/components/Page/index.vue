@@ -206,6 +206,16 @@ export default {
   }
 }
 
+.page.drawer {
+  height: auto;
+  min-height: 100%;
+  overflow: visible;
+
+  .page-content {
+    overflow: visible !important;
+  }
+}
+
 .page-title-wrap {
   display: inline-flex;
   align-items: center;

@@ -1,6 +1,7 @@
 <template>
   <el-select
     ref="select"
+    v-bind="forwardedAttrs"
     v-model="iValue"
     :allow-create="allowCreate"
     :class="[transformed ? 'hidden-tag' : 'show-tag', { 'is-multiple': multiple }]"
@@ -55,6 +56,7 @@ import _ from 'lodash'
 
 export default {
   name: 'Select2',
+  inheritAttrs: false,
   props: {
     options: {
       type: Array,
@@ -79,6 +81,10 @@ export default {
     },
     // 初始化值，也就是选中的值
     value: {
+      type: [Array, String, Number, Boolean, Object],
+      default: undefined
+    },
+    modelValue: {
       type: [Array, String, Number, Boolean, Object],
       default: undefined
     },
@@ -127,7 +133,9 @@ export default {
     'changeOptions',
     'visible-change',
     'initialized',
-    'loadInitialOptionsDone'
+    'loadInitialOptionsDone',
+    'update:modelValue',
+    'update:model-value'
   ],
   data() {
     const vm = this
@@ -160,10 +168,27 @@ export default {
       remote: true,
       allSelected: false,
       transformed: false, // 这里改回来是因为，acl 中资产选择，category 选择后，再编辑，就看不到了
-      innerValue: this.value !== undefined ? _.cloneDeep(this.value) : this.multiple ? [] : ''
+      innerValue:
+        this.modelValue !== undefined
+          ? _.cloneDeep(this.modelValue)
+          : this.value !== undefined
+            ? _.cloneDeep(this.value)
+            : this.multiple
+              ? []
+              : ''
     }
   },
   computed: {
+    forwardedAttrs() {
+      const attrs = { ...this.$attrs }
+      delete attrs.value
+      delete attrs.modelValue
+      delete attrs['model-value']
+      return attrs
+    },
+    externalValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value
+    },
     selectRef() {
       return this.$refs.select
     },
@@ -171,7 +196,7 @@ export default {
       return (
         this.multiple &&
         this.collapseTagsCount > 0 &&
-        (this.value?.length || 0) > this.collapseTagsCount
+        (this.externalValue?.length || 0) > this.collapseTagsCount
       )
     },
     optionsValues() {
@@ -262,14 +287,22 @@ export default {
         }
       },
       deep: true
+    },
+    modelValue: {
+      handler(newValue) {
+        if (!_.isEqual(this.innerValue, newValue)) {
+          this.innerValue = _.cloneDeep(newValue)
+        }
+      },
+      deep: true
     }
   },
   async mounted() {
     if (!this.initialized) {
       await this.initialSelect()
       setTimeout(() => {
-        this.$log.debug('Value is : ', this.value)
-        this.innerValue = _.cloneDeep(this.value)
+        this.$log.debug('Value is : ', this.externalValue)
+        this.innerValue = _.cloneDeep(this.externalValue)
         this.initialized = true
         this.$emit('initialized', true)
       }, 100)
@@ -326,8 +359,11 @@ export default {
       if (!_.isEqual(this.innerValue, val)) {
         this.innerValue = _.cloneDeep(val)
       }
-      if (!_.isEqual(this.value, val)) {
-        this.$emit('input', _.cloneDeep(val))
+      if (!_.isEqual(this.externalValue, val)) {
+        const payload = _.cloneDeep(val)
+        this.$emit('input', payload)
+        this.$emit('update:modelValue', payload)
+        this.$emit('update:model-value', payload)
       }
     },
     async getInitialOptions() {
@@ -378,9 +414,9 @@ export default {
     async initialSelect() {
       // this.$log.debug('Select ajax config', this.iAjax)
       if (this.iAjax.url) {
-        if (this.value && this.value.length !== 0) {
-          this.$log.debug('Start init select2 value, ', this.value)
-          let value = this.value
+        if (this.externalValue && this.externalValue.length !== 0) {
+          this.$log.debug('Start init select2 value, ', this.externalValue)
+          let value = this.externalValue
           if (!Array.isArray(value)) {
             value = [value]
           }
@@ -415,7 +451,10 @@ export default {
     },
     clearSelected() {
       this.innerValue = this.multiple ? [] : ''
-      this.$emit('input', _.cloneDeep(this.innerValue))
+      const payload = _.cloneDeep(this.innerValue)
+      this.$emit('input', payload)
+      this.$emit('update:modelValue', payload)
+      this.$emit('update:model-value', payload)
     },
     checkDisabled(item) {
       return item.disabled === undefined
@@ -456,7 +495,10 @@ export default {
     async selectAll() {
       await this.loadAll()
       this.innerValue = this.iOptions.map((v) => v.value)
-      this.$emit('input', _.cloneDeep(this.innerValue))
+      const payload = _.cloneDeep(this.innerValue)
+      this.$emit('input', payload)
+      this.$emit('update:modelValue', payload)
+      this.$emit('update:model-value', payload)
     },
     handleSelectAllChange(checked) {
       if (checked) {
@@ -464,6 +506,8 @@ export default {
       } else {
         this.innerValue = []
         this.$emit('input', [])
+        this.$emit('update:modelValue', [])
+        this.$emit('update:model-value', [])
       }
     }
   }

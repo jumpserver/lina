@@ -45,7 +45,7 @@
       v-else
       :disabled="disabled || componentProps.disabled || readonly"
       :model-value="itemValue"
-      :value="itemValue"
+      :value="valueProp"
       v-on="listeners"
     >
       <template v-for="opt in options" :key="opt.value">
@@ -182,6 +182,12 @@ export default {
       const comp = this.data.component || `el-${this.data.type}`
       return typeof comp === 'string' ? comp : markRaw(toRaw(comp))
     },
+    valueProp() {
+      if (this.data.type === 'checkbox') {
+        return undefined
+      }
+      return this.itemValue
+    },
     // 解构运算符会处理 undefined 的情况
     componentProps: ({ data: { el }, propsInner }) => ({ ...el, ...propsInner }),
     hasReadonlyContent: ({ data: { type } }) => _includes(['input', 'select'], type),
@@ -246,6 +252,7 @@ export default {
           })
         },
         change: (value, ...rest) => {
+          value = this.normalizeEmittedValue(value)
           if (typeof value === 'string' && trim) value = value.trim()
           this.$emit('updateValue', { id, value })
           originOnChange([value, ...rest], updateForm)
@@ -313,7 +320,19 @@ export default {
     }
   },
   methods: {
+    normalizeEmittedValue(value) {
+      if (value && typeof value === 'object' && 'target' in value) {
+        if (this.data.type === 'checkbox' && 'checked' in value.target) {
+          return value.target.checked
+        }
+        if ('value' in value.target) {
+          return value.target.value
+        }
+      }
+      return value
+    },
     handleValueUpdate({ id, value, rest = [], atChange = noop, originInput = noop, updateForm }) {
+      value = this.normalizeEmittedValue(value)
       this.$emit('updateValue', { id, value })
       // 更新表单时调用
       atChange(id, value)

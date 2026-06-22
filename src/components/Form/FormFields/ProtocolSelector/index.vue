@@ -12,17 +12,29 @@
         <template #prepend>
           <el-select
             :disabled="disableSelect(item)"
-            :value="item.display_name ? item.display_name : item.name"
+            :model-value="item.name"
             class="prepend"
             @change="handleProtocolChange($event, item)"
           >
-            <el-option v-for="p of remainProtocols" :key="p.name" :label="p.name" :value="p.name" />
+            <el-option
+              v-for="p of protocolOptions(item)"
+              :key="p.name"
+              :label="p.display_name || p.name"
+              :value="p.name"
+            />
           </el-select>
         </template>
         <template #append>
-          <el-button v-if="showSetting(item)" icon="Setting" @click="onSettingClick(item)" />
+          <div v-if="showSetting(item)" class="protocol-setting-append">
+            <el-button
+              class="protocol-setting-button"
+              icon="Setting"
+              @click="onSettingClick(item)"
+            />
+          </div>
         </template>
       </el-input>
+
       <div v-if="!readonly" class="input-button">
         <el-button
           :disabled="disableDelete(item)"
@@ -176,6 +188,11 @@ export default {
     this.$log.debug('Items: ', this.items)
   },
   methods: {
+    protocolOptions(item) {
+      return this.choices.filter((proto) => {
+        return proto.name === item.name || this.selectedProtocolNames.indexOf(proto.name) === -1
+      })
+    },
     getPortFromInstance(instance) {
       if (!instance) {
         return 0
@@ -318,23 +335,34 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.el-select :deep(.el-input__inner) {
+.show-setting,
+.hide-setting {
+  width: 100%;
+}
+
+.prepend {
   width: 120px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 
-.input-with-select {
-  flex-shrink: 1;
-  width: calc(100% - 80px) !important;
-}
+  :deep(.el-select__wrapper) {
+    width: 120px;
+    background-color: #f5f7fa;
+    box-shadow: none !important;
 
-.input-with-select .el-input-group__prepend {
-  background-color: #fff;
+    .el-select__selected-item,
+    .el-select__placeholder {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
 }
 
 .protocol-item {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 58px;
+  align-items: center;
+  column-gap: 20px;
+  min-height: 30px;
   margin: 5px 0;
 
   &:first-of-type {
@@ -342,20 +370,112 @@ export default {
   }
 }
 
+.input-with-select {
+  flex: 1 1 auto;
+  width: auto !important;
+  min-width: 0;
+
+  :deep(.el-input-group__prepend) {
+    background-color: #f5f7fa;
+    border-right: 0;
+  }
+
+  :deep(.el-input-group__prepend),
+  :deep(.el-input-group__append),
+  :deep(.el-input__wrapper) {
+    border-radius: 0;
+  }
+
+  :deep(.el-input__wrapper) {
+    border-left: 0;
+    border-right: 0;
+  }
+
+  :deep(.el-input-group__append) {
+    display: flex;
+    align-items: stretch;
+    padding: 0;
+    background-color: #f5f7fa;
+    border-top: 1px solid var(--el-border-color) !important;
+    border-right: 1px solid var(--el-border-color) !important;
+    border-bottom: 1px solid var(--el-border-color) !important;
+    border-left: 0 !important;
+    box-shadow: none;
+  }
+
+  :deep(.protocol-setting-append) {
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+    width: 57px;
+    min-width: 57px;
+    height: 100%;
+    background-color: #f5f7fa;
+  }
+
+  :deep(.protocol-setting-button) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 auto;
+    width: 57px;
+    min-width: 57px;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    color: #1a1a1a;
+    border: 0 !important;
+    border-radius: 0;
+    background-color: #f5f7fa !important;
+    box-shadow: none !important;
+  }
+
+  :deep(.protocol-setting-button > span) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  :deep(.el-select__selected-item),
+  :deep(.el-select__placeholder) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
 .input-button {
-  margin-top: 2px;
-  display: flex;
-  margin-left: 20px;
-}
+  display: grid;
+  grid-template-columns: repeat(2, 25px);
+  align-items: center;
+  flex: 0 0 auto;
+  height: 30px;
+  gap: 8px;
+  width: 58px;
+  margin-left: 0;
 
-.input-button :deep(.el-button.el-button--small) {
-  height: 25px;
-  padding: 5px;
-}
+  :deep(.el-button.el-button--small) {
+    width: 25px;
+    min-width: 25px;
+    height: 25px;
+    min-height: 25px;
+    padding: 5px;
+    margin-left: 0;
+    align-self: center;
+  }
 
-.el-input-group__append .el-button {
-  font-size: 14px;
-  color: #1a1a1a;
-  padding: 9px 20px;
+  :deep(.el-button + .el-button) {
+    margin-left: 0;
+  }
+
+  :deep(.el-button--danger) {
+    grid-column: 1;
+  }
+
+  :deep(.el-button--primary) {
+    grid-column: 2;
+  }
 }
 </style>

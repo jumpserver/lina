@@ -149,8 +149,10 @@ export const assetFieldsMeta = (vm, category, type) => {
       }
     },
     nodes: {
+      component: Select2,
       rules: [rules.RequiredChange],
       el: {
+        multiple: true,
         ajax: {
           url: '/api/v1/assets/nodes/',
           transformOption: (item) => {

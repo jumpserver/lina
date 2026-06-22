@@ -139,6 +139,9 @@ export default {
   .drawer__content {
     height: 100%;
     background: rgb(243, 243, 243);
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
   }
 
   :deep(.el-drawer__header) {
@@ -154,22 +157,25 @@ export default {
 
   :deep(.el-drawer__body) {
     padding: 0;
+    overflow: hidden;
   }
 
   :deep(.page.tab-page) {
-    height: calc(100vh - 110px);
+    height: auto;
+    min-height: calc(100vh - 110px);
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    overflow: visible;
   }
 
   :deep(.page.tab-page .page-content) {
     padding: 0 !important;
-    overflow: hidden !important;
+    overflow: visible !important;
   }
 
   :deep(.page.tab-page .tab-page-wrapper) {
-    height: 100%;
+    height: auto;
+    min-height: 100%;
     display: flex;
     flex-direction: column;
     min-height: 0;
@@ -234,8 +240,17 @@ export default {
     min-height: 0;
     padding: 10px 30px 22px;
     box-sizing: border-box;
-    overflow-y: auto;
+    overflow: visible;
     background: #f3f3f3;
+  }
+
+  :deep(.page.tab-page .tab-page-content .el-form),
+  :deep(.page.tab-page .tab-page-content .form-fields),
+  :deep(.page.tab-page .tab-page-content .el-card__body),
+  :deep(.page.tab-page .tab-page-content .ibox),
+  :deep(.page.tab-page .tab-page-content .page-content) {
+    overflow: visible !important;
+    max-height: none !important;
   }
 
   :deep(.page.tab-page .tab-page-content .tab-page-alert) {

@@ -124,13 +124,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.setting-dialog :deep(.el-dialog__body) {
+  padding: 16px 20px 20px;
+}
+
+.setting-dialog :deep(.el-form) {
+  margin-right: 0;
+}
+
 .data-form :deep(.el-form-item.form-buttons) {
   padding-top: 10px;
   margin-bottom: 0;
-}
-
-.setting-dialog :deep(.el-dialog__body) {
-  padding-top: 10px;
 }
 
 .link-more {

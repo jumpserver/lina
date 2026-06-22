@@ -262,8 +262,8 @@ export default {
   }
 
   .tab-page-content {
-    overflow: auto;
-    height: 100%;
+    overflow: visible;
+    height: auto;
   }
 }
 
@@ -271,6 +271,24 @@ export default {
   :deep(.el-drawer__header) {
     border-bottom: none;
     padding-bottom: 1px;
+  }
+}
+
+.actions {
+  margin-top: 12px;
+
+  :deep(.el-button) {
+    height: 25px;
+    min-height: 25px;
+    padding: 7px 15px;
+    font-size: 0.7rem;
+    font-weight: 400;
+    line-height: 15px;
+  }
+
+  :deep(.el-button > span) {
+    font-size: 0.7rem;
+    line-height: 15px;
   }
 }
 </style>
