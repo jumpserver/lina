@@ -225,6 +225,33 @@ export default {
   height: 30px;
   line-height: 30px;
 
+  :deep(.layout) {
+    display: flex;
+    align-items: center;
+  }
+
+  :deep(.action-item.el-button),
+  :deep(.action-item.el-dropdown > .el-button),
+  :deep(.action-item.el-dropdown .el-button-group .el-button) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 30px;
+    height: 30px;
+    padding: 0;
+  }
+
+  :deep(.action-item.el-button > span),
+  :deep(.action-item.el-dropdown > .el-button > span),
+  :deep(.action-item.el-dropdown .el-button-group .el-button > span) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    line-height: 1;
+  }
+
   :deep(.el-button) {
     border: none;
     padding: 7px;
@@ -241,8 +268,12 @@ export default {
   :deep(.pre-icon),
   :deep(.el-icon),
   :deep(.fa) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 13px;
     height: 13px;
+    margin: 0 !important;
     font-size: 13px;
     color: var(--color-text-primary) !important;
   }

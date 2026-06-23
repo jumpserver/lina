@@ -141,38 +141,29 @@ export default {
 .dialog :deep(.el-dialog) {
   border-radius: 0.3em;
   max-width: min(100vw, 1500px);
+}
 
-  .form-group-header {
-    margin-left: 20px;
+.dialog :deep(.el-dialog__header) {
+  box-sizing: border-box;
+  padding: 15px 22px;
+  border-bottom: 1px solid #dee2e6;
+  font-weight: 400;
+}
+
+.dialog :deep(.el-dialog__body) {
+  padding: 20px 30px;
+  font-size: 13px;
+
+  &:has(.el-table) {
+    background: #f3f3f4;
   }
+}
 
-  .el-form--label-top {
-    .form-group-header {
-      margin-left: 0;
-    }
-  }
-
-  &.dialog__header {
-    box-sizing: border-box;
-    padding: 15px 22px;
-    border-bottom: 1px solid #dee2e6;
-    font-weight: 400;
-  }
-
-  &.dialog__body {
-    padding: 20px 30px;
-    font-size: 13px;
-
-    &:has(.el-table) {
-      background: #f3f3f4;
-    }
-  }
-
-  &.dialog__footer {
-    border-top: 1px solid #dee2e6;
-    padding: 16px 25px;
-    justify-content: flex-end;
-  }
+.dialog :deep(.el-dialog__footer) {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid #dee2e6;
+  padding: 16px 25px;
 }
 
 @media (max-width: 900px) {

@@ -439,4 +439,30 @@ $color-drop-menu-border: #e4e7ed;
 :global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .dropdown-item__label) {
   min-width: 0;
 }
+
+:global(
+  .action-dropdown.el-dropdown__popper .more-batch-processing.el-dropdown-menu__item--divided
+) {
+  position: relative;
+  margin-top: 8px;
+  color: var(--color-text-primary);
+  cursor: default;
+  font-size: 12px;
+}
+
+:global(
+  .action-dropdown.el-dropdown__popper .more-batch-processing.el-dropdown-menu__item--divided:before
+) {
+  top: -8px;
+  left: 12px;
+  right: 12px;
+  height: 1px;
+  background-color: #e4e7ed;
+}
+
+:global(
+  .action-dropdown.el-dropdown__popper .more-batch-processing.el-dropdown-menu__item--divided:hover
+) {
+  background-color: transparent;
+}
 </style>

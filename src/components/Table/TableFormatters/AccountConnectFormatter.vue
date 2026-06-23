@@ -24,11 +24,11 @@
               {{ dropdownTitle }}
             </div>
           </el-dropdown-item>
-          <el-dropdown-item divided />
           <el-dropdown-item
-            v-for="protocol in protocols"
+            v-for="(protocol, index) in protocols"
             :key="protocol.id"
             :command="protocol.name"
+            :divided="index === 0"
           >
             {{ protocol.name }}
           </el-dropdown-item>
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import BaseFormatter from './base.vue'
+import BaseFormatter from './base.vue';
 
 export default {
   name: 'AccountConnectFormatter',
@@ -122,43 +122,64 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-dropdown-menu__item.is-disabled {
-  font-weight: 500;
-  color: var(--el-text-color-secondary);
+.el-dropdown-menu  {
+  padding: 6px 0;
+  border: 1px solid #EBEEF5;
+  border-radius: 4px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+
+  :deep(.el-dropdown-menu__item) {
+    padding: 0 15px;
+    font-size: 13px;
+    line-height: 27px;
+  }
+
+  :deep(.el-dropdown-menu__item.is-disabled) {
+    font-weight: 500;
+    color: var(--el-text-color-secondary);
+  }
 }
 
-:deep(.action-connect .el-button:hover i),
-:deep(.action-connect .el-button:focus i),
-:deep(.action-connect .el-button:active i) {
-  color: #fff !important;
-}
 
-:deep(.action-connect .el-button.el-button--primary.is-plain) {
-  color: var(--color-primary);
-  background-color: var(--color-primary-light-3, #e8f7f4);
-  border-color: var(--color-primary-light-1, var(--color-primary));
-}
+:deep(.action-connect) {
+  cursor: pointer;
 
-:deep(.action-connect .el-button.el-button--primary.is-plain i) {
-  color: var(--color-primary) !important;
-}
+  .el-button {
+    box-shadow: none !important;
+    outline: none !important;
 
-:deep(.action-connect .el-button.el-button--primary.is-plain:hover),
-:deep(.action-connect .el-button.el-button--primary.is-plain:focus),
-:deep(.action-connect .el-button.el-button--primary.is-plain:active) {
-  color: #fff;
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
-}
+    &:hover,
+    &:focus,
+    &:active {
+      box-shadow: none !important;
+      outline: none !important;
 
-:deep(.el-dropdown-menu__item) {
-  transition:
-    height 0.3s ease-in-out,
-    padding 0.3s ease-in-out;
-  overflow: hidden;
-}
+      i {
+        color: #fff !important;
+      }
+    }
 
-:deep(.el-dropdown-menu) {
-  transition: min-height 0.3s ease-in-out;
+    &.el-button--primary.is-plain {
+      color: var(--color-primary);
+      background-color: var(--color-primary-light-3, #e8f7f4);
+      border-color: var(--color-primary-light-1, var(--color-primary));
+
+      i {
+        color: var(--color-primary);
+      }
+
+      &:hover,
+      &:focus,
+      &:active {
+        color: #fff;
+        background-color: var(--color-primary);
+        border-color: var(--color-primary);
+
+        i {
+          color: #fff;
+        }
+      }
+    }
+  }
 }
 </style>

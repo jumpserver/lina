@@ -196,14 +196,6 @@ textarea {
   padding: 5px;
 }
 
-.el-dialog__body div.table-action-right-side {
-  padding-top: 10px;
-}
-
-.el-dialog__body {
-  padding-top: 10px;
-}
-
 .help-block {
   display: block;
   margin-top: 2px;
@@ -666,24 +658,45 @@ li.rmenu i.fa {
   height: 28px;
 }
 
+.el-checkbox {
+  display: inline-flex;
+  align-items: center;
+}
+
 .el-checkbox__input {
-  padding-right: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  padding-right: 0;
 }
 
 .el-checkbox__label {
   // 这里不能 important page transfer 里面的 checkbox 和 label 会叠加，见用户组选择用户
-  padding-left: 5px;
+  padding-left: 8px;
 }
 
 .el-checkbox__inner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
   border-radius: 1px !important;
   width: 16px !important;
   height: 16px !important;
 
   &::after {
-    left: 5px !important;
+    width: 3px !important;
+    top: 50% !important;
+    left: 50% !important;
     height: 8px !important;
+    margin: 0 !important;
+    transform: translate(-45%, -60%) rotate(45deg) scaleY(0) !important;
   }
+}
+
+.el-checkbox__input.is-checked .el-checkbox__inner::after {
+  transform: translate(-45%, -60%) rotate(45deg) scaleY(1) !important;
 }
 
 .el-table .el-table-column--selection .cell {
