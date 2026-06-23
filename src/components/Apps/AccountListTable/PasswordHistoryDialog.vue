@@ -30,7 +30,7 @@ export default {
       config: {
         title: this.$t('HistoryPassword'),
         visible: false,
-        width: '60%',
+        width: '860px',
         tableConfig: {
           id: 'history_date',
           url: `/api/v1/accounts/account-secrets/${this.account.id}/histories/`,

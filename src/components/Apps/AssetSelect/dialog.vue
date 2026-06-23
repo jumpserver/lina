@@ -177,47 +177,45 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.asset-dialog {
-  :deep(.el-dialog__body) {
-    padding: 0 !important;
-  }
+<style lang="scss">
+.asset-dialog .el-dialog__body {
+  padding: 0 !important;
 }
 
-.page :deep(.page-heading) {
+.asset-dialog .page-heading {
   display: none;
 }
 
-.el-dialog__wrapper :deep(.el-dialog__body) {
-  padding: 0 0 0 3px !important;
+.asset-dialog .tree-table {
+  .left {
+    padding: 5px 0;
 
-  .tree-table {
-    .left {
-      padding: 5px 0;
-
-      .ztree {
-        height: 100%;
-      }
+    .ztree {
+      height: 100%;
     }
+  }
 
-    .right {
-      .transition-box {
-        padding-left: 0;
-      }
-    }
-
-    .mini {
-      padding-top: 8px;
-      width: 1px;
-    }
-
+  .right {
     .transition-box {
-      padding: 10px 5px;
+      padding-left: 0;
     }
+  }
+
+  .mini {
+    width: 1px;
+    padding-top: 8px;
+  }
+
+  .transition-box {
+    padding: 10px 5px;
   }
 }
 
-.page :deep(.treebox) {
+.asset-dialog .transition-box:first-child {
+  background-color: #f3f3f3;
+}
+
+.asset-dialog .treebox {
   height: inherit !important;
 }
 </style>

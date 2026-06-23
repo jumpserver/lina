@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-bind="$attrs" :show-cancel="false" :title="title" @confirm="closeDialog">
+  <Dialog v-bind="$attrs" :show-cancel="false" :title="title" width="960px" @confirm="closeDialog">
     <el-alert style="margin-bottom: 10px" type="info">
       <span v-for="item of summary" :key="item.key"
         ><b>{{ item.label }}</b
@@ -64,7 +64,6 @@ export default {
     }
   },
   data() {
-    const errorProp = this.$t('Error')
     return {
       title: this.$t('AddAccountResult'),
       config: {

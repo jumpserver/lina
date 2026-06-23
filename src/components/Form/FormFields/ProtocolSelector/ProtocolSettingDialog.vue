@@ -98,8 +98,8 @@ export default {
   async mounted() {
     try {
       const drawActionMeta = await this.$store.dispatch('common/getDrawerActionMeta')
-      const platform = drawActionMeta.row.platform.id
-      const name = drawActionMeta.row.platform.name
+      const platform = drawActionMeta?.row?.platform?.id
+      const name = drawActionMeta?.row?.platform?.name
 
       if (platform) {
         this.platformDetail = `/ui/#/settings/platforms?id=${platform}&name=${name}`
@@ -107,7 +107,7 @@ export default {
         this.platformDetail = ''
       }
     } catch (e) {
-      throw new Error(e)
+      this.platformDetail = ''
     }
   },
   methods: {
@@ -123,16 +123,25 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.setting-dialog :deep(.el-dialog__body) {
+<style lang="scss">
+.setting-dialog .el-dialog__body {
   padding: 16px 20px 20px;
+  overflow-x: hidden;
 }
 
-.setting-dialog :deep(.el-form) {
+.setting-dialog .data-form,
+.setting-dialog .el-form {
+  width: 100%;
+  min-width: 0;
   margin-right: 0;
 }
 
-.data-form :deep(.el-form-item.form-buttons) {
+.setting-dialog .el-form-item,
+.setting-dialog .el-form-item__content {
+  min-width: 0;
+}
+
+.setting-dialog .data-form .el-form-item.form-buttons {
   padding-top: 10px;
   margin-bottom: 0;
 }

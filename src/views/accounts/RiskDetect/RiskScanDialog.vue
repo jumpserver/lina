@@ -6,7 +6,7 @@
     :title="$tc('Detecting')"
     :visible="visible"
     top="35vh"
-    width="80%"
+    width="960px"
     @update:visible="$emit('update:visible', $event)"
     @close="loading = true"
   >

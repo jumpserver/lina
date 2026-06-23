@@ -4,6 +4,7 @@
     :show-buttons="false"
     :visible="visible"
     :title="$tc('ResolveSelected')"
+    width="960px"
     @update:visible="$emit('update:visible', $event)"
   >
     <div>

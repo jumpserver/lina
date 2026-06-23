@@ -1,40 +1,69 @@
 /* eslint-disable */
 <template>
-  <el-form size="small">
-    <el-form-item>
+  <el-form class="cron-tab-form" size="small">
+    <el-form-item class="cron-tab-form__item">
       <el-radio v-model="radioValue" :value="1">
-        {{ $t('Day') }}，{{ $t('WildcardsAllowed') }}[, - * /]
+        <span class="cron-tab-form__text">
+          {{ $t('Day') }}，{{ $t('WildcardsAllowed') }}[, - * /]
+        </span>
       </el-radio>
     </el-form-item>
 
-    <el-form-item>
+    <el-form-item class="cron-tab-form__item">
       <el-radio v-model="radioValue" :value="3">
-        {{ $t('From') }}
-        <el-input-number v-model="cycle01" :max="31" :min="0" size="small" /> -
-        <el-input-number v-model="cycle02" :max="31" :min="0" size="small" /> {{ $t('Day') }}
+        <span class="cron-tab-form__text">{{ $t('From') }}</span>
+        <span class="cron-tab-form__group">
+          <el-input-number
+            v-model="cycle01"
+            :max="31"
+            :min="0"
+            size="small"
+            class="cron-tab-form__number"
+          />
+          <span class="cron-tab-form__separator">-</span>
+          <el-input-number
+            v-model="cycle02"
+            :max="31"
+            :min="0"
+            size="small"
+            class="cron-tab-form__number"
+          />
+          <span class="cron-tab-form__text">{{ $t('Day') }}</span>
+        </span>
       </el-radio>
     </el-form-item>
 
-    <el-form-item>
+    <el-form-item class="cron-tab-form__item">
       <el-radio v-model="radioValue" :value="4">
-        {{ $t('Every') }}
-        <el-input-number v-model="average02" :max="31" :min="1" size="small" /> {{ $t('Day') }}
-        {{ $t('ExecuteOnce') }}
+        <span class="cron-tab-form__text">{{ $t('Every') }}</span>
+        <span class="cron-tab-form__group">
+          <el-input-number
+            v-model="average02"
+            :max="31"
+            :min="1"
+            size="small"
+            class="cron-tab-form__number"
+          />
+          <span class="cron-tab-form__text">{{ $t('Day') }} {{ $t('ExecuteOnce') }}</span>
+        </span>
       </el-radio>
     </el-form-item>
 
-    <el-form-item>
+    <el-form-item class="cron-tab-form__item">
       <el-radio v-model="radioValue" :value="7">
-        {{ $t('Appoint') }}
-        <el-select
-          v-model="checkboxList"
-          :placeholder="$tc('ManyChoose')"
-          clearable
-          multiple
-          style="width: 100%"
-        >
-          <el-option v-for="item in 31" :key="item" :value="item">{{ item }}</el-option>
-        </el-select>
+        <span class="cron-tab-form__text">{{ $t('Appoint') }}</span>
+        <span class="cron-tab-form__group">
+          <el-select
+            v-model="checkboxList"
+            :placeholder="$tc('ManyChoose')"
+            clearable
+            multiple
+            size="small"
+            class="cron-tab-form__select"
+          >
+            <el-option v-for="item in 31" :key="item" :value="item">{{ item }}</el-option>
+          </el-select>
+        </span>
       </el-radio>
     </el-form-item>
   </el-form>

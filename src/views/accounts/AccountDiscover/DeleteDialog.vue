@@ -6,7 +6,7 @@
       :show-cancel="false"
       :title="$tc('DeleteGatherAccountTitle')"
       :visible="visible"
-      width="600px"
+      width="680px"
       @update:visible="$emit('update:visible', $event)"
       @confirm="handleConfirm"
     >
@@ -106,7 +106,6 @@ export default {
       assetAccounts: []
     }
   },
-  mounted() {},
   methods: {
     handleConfirm() {
       this.$message.warning(this.$tc('ProcessingMessage'))

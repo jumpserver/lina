@@ -4,7 +4,7 @@
     v-model:visible="show"
     :destroy-on-close="true"
     :show-cancel="false"
-    :width="'50'"
+    width="720px"
     @confirm="accountConfirmHandle"
   />
 </template>
@@ -30,14 +30,12 @@ export default {
   },
   data() {
     return {
-      show: false,
-      mfaDialogVisible: true
+      show: false
     }
   },
-  computed: {},
   mounted() {
     const url = `/api/v1/accounts/accounts/tasks/`
-    this.$axios.post(url, { disableFlashErrorMsg: true, action: 'remove' }).then((resp) => {
+    this.$axios.post(url, { disableFlashErrorMsg: true, action: 'remove' }).then(() => {
       this.$axios
         .post(`/api/v1/accounts/accounts/tasks/`, {
           action: 'remove',
@@ -51,7 +49,6 @@ export default {
   methods: {
     accountConfirmHandle() {
       this.show = false
-      this.mfaDialogVisible = false
     },
     exit() {
       this.$emit('update:visible', false)
@@ -59,50 +56,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.item-textarea :deep(.el-textarea__inner) {
-  height: 110px;
-}
-
-.el-form-item {
-  border-bottom: 1px solid #ebeef5;
-  padding: 5px 0;
-  margin-bottom: 0;
-
-  &:last-child {
-    border-bottom: none;
-  }
-
-  :deep(.el-form-item__label) {
-    padding-right: 20px;
-    line-height: 30px;
-  }
-
-  :deep(.el-form-item__content) {
-    line-height: 30px;
-
-    pre {
-      margin: 0;
-    }
-  }
-}
-
-ul {
-  margin: 0;
-}
-
-li {
-  display: block;
-  font-size: 13px;
-  margin-bottom: 8px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  .title {
-    color: #303133;
-    font-weight: 500;
-  }
-}
-</style>

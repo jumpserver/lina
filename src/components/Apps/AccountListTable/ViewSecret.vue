@@ -6,7 +6,7 @@
       :destroy-on-close="true"
       :show-cancel="false"
       :title="iTitle"
-      :width="'50'"
+      width="720px"
       @confirm="accountConfirmHandle"
     >
       <el-form :model="secretInfo" class="password-form" label-position="right" label-width="130px">

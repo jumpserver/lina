@@ -1,36 +1,37 @@
 <template>
   <Dialog
     v-bind="$attrs"
+    v-model:visible="visible"
     :close-on-click-modal="false"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
     :title="title"
-    :visible="visible"
-    class="dialog-content"
+    class="user-confirm-dialog"
     width="600px"
+    @close="handleDialogClose"
     @confirm="visible = false"
   >
     <div v-if="confirmTypeRequired === 'relogin'">
-      <el-row :gutter="24" style="margin: 0 auto">
+      <el-row class="user-confirm-dialog__row" :gutter="24">
         <el-col :md="24" :sm="24">
           <el-alert :title="$tc('ReLoginTitle')" center style="margin-bottom: 20px" type="error" />
         </el-col>
       </el-row>
-      <el-row :gutter="24" style="margin: 0 auto">
+      <el-row class="user-confirm-dialog__row" :gutter="24">
         <el-col :md="24" :sm="24">
-          <el-button class="confirm-btn" size="small" type="primary" @click="logout">
+          <el-button class="confirm-btn" type="primary" @click="logout">
             {{ $t('ReLogin') }}
           </el-button>
         </el-col>
       </el-row>
     </div>
     <div v-else>
-      <el-row :gutter="24" style="margin: 0 auto">
+      <el-row class="user-confirm-dialog__row user-confirm-dialog__row--field" :gutter="24">
         <el-col :md="24" :sm="24" :span="24" class="add">
           <el-select
             v-model="subTypeSelected"
-            style="width: 100%; margin-bottom: 20px"
+            class="user-confirm-dialog__select"
             @change="handleSubTypeChange"
           >
             <el-option
@@ -43,22 +44,26 @@
           </el-select>
         </el-col>
       </el-row>
-      <el-row v-if="!noCodeMFA.includes(subTypeSelected)" :gutter="24" style="margin: 0 auto">
-        <el-col :md="24" :sm="24" style="display: flex; align-items: center">
+      <el-row
+        v-if="!noCodeMFA.includes(subTypeSelected)"
+        class="user-confirm-dialog__row user-confirm-dialog__row--field"
+        :gutter="24"
+      >
+        <el-col :md="24" :sm="24" class="user-confirm-dialog__code-row">
           <el-input
             v-model="secretValue"
+            class="user-confirm-dialog__input"
             :placeholder="inputPlaceholder"
             :show-password="showPassword"
             @keyup.enter="handleConfirm"
           />
           <span
             v-if="subTypeSelected === 'sms' || subTypeSelected === 'email'"
-            style="margin: -1px 0 0 20px"
+            class="user-confirm-dialog__code-action"
           >
             <el-button
               :disabled="smsBtnDisabled"
-              size="small"
-              style="line-height: 14px; float: right"
+              class="user-confirm-dialog__code-button"
               type="primary"
               @click="sendCode"
             >
@@ -79,12 +84,11 @@
           />
         </el-col>
       </el-row>
-      <el-row :gutter="24" style="margin: 20px auto 10px">
+      <el-row class="user-confirm-dialog__row user-confirm-dialog__row--actions" :gutter="24">
         <el-col :md="24" :sm="24">
           <el-button
             v-if="!noCodeMFA.includes(subTypeSelected)"
             class="confirm-btn"
-            size="small"
             type="primary"
             @click="handleConfirm"
           >
@@ -94,7 +98,6 @@
             v-if="subTypeSelected === 'face'"
             v-show="!isFaceCaptureVisible"
             class="confirm-btn"
-            size="small"
             type="primary"
             @click="handleFaceCapture"
           >
@@ -104,7 +107,6 @@
             v-if="subTypeSelected === 'passkey'"
             :loading="passkeyVisible"
             class="confirm-btn"
-            size="small"
             type="primary"
             @click="handlePasskeyVerify"
           >
@@ -157,7 +159,8 @@ export default {
       noCodeMFA: ['face', 'passkey'],
       sendCodeMFA: ['email', 'sms', 'otp'],
       passkeyVisible: false,
-      passkeyUrl: '/api/v1/authentication/passkeys/login/?mfa=1'
+      passkeyUrl: '/api/v1/authentication/passkeys/login/?mfa=1',
+      closeReason: ''
     }
   },
   computed: {
@@ -201,6 +204,7 @@ export default {
             this.$axios
               .post(confirmUrl, { confirm_type: 'relogin', secret_key: 'x' })
               .then(() => {
+                this.closeReason = 'success'
                 this.callback()
                 this.visible = false
               })
@@ -232,7 +236,7 @@ export default {
     sendCode() {
       this.$axios
         .post(`/api/v1/authentication/mfa/select/`, { type: this.subTypeSelected })
-        .then((res) => {
+        .then(() => {
           this.$message.success(this.$tc('VerificationCodeSent'))
           let time = 60
           this.smsBtnDisabled = true
@@ -259,7 +263,7 @@ export default {
     checkPasskeyStatus() {
       const url = '/api/v1/authentication/confirm/check/?confirm_type=mfa'
       const t = setInterval(() => {
-        this.$axios.get(url).then((data) => {
+        this.$axios.get(url).then(() => {
           this.passkeyVisible = false
           this.onSuccess()
         })
@@ -298,7 +302,28 @@ export default {
     handleFaceCapture() {
       this.startFaceCapture()
     },
+    resetDialogState() {
+      this.secretValue = ''
+      this.smsBtnText = this.$t('SendVerificationCode')
+      this.smsBtnDisabled = false
+      this.passkeyVisible = false
+      this.faceCaptureUrl = null
+      this.isFaceCaptureVisible = false
+      this.processing = false
+    },
+    handleDialogClose() {
+      const shouldCancel = this.closeReason !== 'success'
+      this.resetDialogState()
+      this.visible = false
+      if (shouldCancel && this.cancel) {
+        this.cancel(new Error('confirm dialog closed'))
+      }
+      this.closeReason = ''
+      this.callback = null
+      this.cancel = null
+    },
     onSuccess() {
+      this.closeReason = 'success'
       this.secretValue = ''
       this.visible = false
       this.$nextTick(() => {
@@ -337,22 +362,98 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.dialog-content :deep(.el-dialog__footer) {
-  padding: 0;
-}
-
-.dialog-content :deep(.el-dialog) {
-  padding: 8px;
-
+<style lang="scss">
+.el-dialog.dialog.user-confirm-dialog {
   .el-dialog__body {
-    padding-top: 30px;
-    padding-bottom: 30px;
+    padding: 22px 40px 30px !important;
+  }
+
+  .user-confirm-dialog__select,
+  .user-confirm-dialog__input {
+    min-height: 30px;
+  }
+
+  .user-confirm-dialog__select .el-tooltip__trigger,
+  .user-confirm-dialog__input,
+  .el-input__wrapper,
+  .el-select__wrapper {
+    border-radius: 0;
+  }
+
+  .user-confirm-dialog__input .el-input__wrapper,
+  .user-confirm-dialog__select .el-select__wrapper {
+    min-height: 30px;
+    height: 30px;
+    box-sizing: border-box;
+    padding: 0 11px;
+    overflow: hidden;
+    box-shadow: none !important;
+    border: 1px solid var(--el-border-color) !important;
+  }
+
+  .user-confirm-dialog__input .el-input__wrapper:hover,
+  .user-confirm-dialog__select .el-select__wrapper:hover {
+    border-color: var(--el-border-color-hover) !important;
+  }
+
+  .user-confirm-dialog__input .el-input__wrapper.is-focus,
+  .user-confirm-dialog__select .el-select__wrapper.is-focused {
+    box-shadow: none !important;
+    border-color: var(--el-color-primary) !important;
+  }
+
+  .user-confirm-dialog__input .el-input__inner,
+  .user-confirm-dialog__select .el-select__selection,
+  .user-confirm-dialog__select .el-select__selected-item,
+  .user-confirm-dialog__select .el-select__placeholder {
+    min-height: 100%;
+    height: 100%;
+    line-height: 28px;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
   }
 }
 
+.user-confirm-dialog__row {
+  margin: 0 !important;
+}
+
+.user-confirm-dialog__row--field + .user-confirm-dialog__row--field {
+  margin-top: 16px !important;
+}
+
+.user-confirm-dialog__row--actions {
+  margin-top: 20px !important;
+}
+
+.user-confirm-dialog__select,
+.user-confirm-dialog__input {
+  width: 100%;
+}
+
+.user-confirm-dialog__code-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.user-confirm-dialog__code-action {
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.user-confirm-dialog__code-button,
 .confirm-btn {
   width: 100%;
-  line-height: 20px;
+  min-height: 30px;
+  padding: 8px 12px;
+  line-height: 1;
+}
+
+.user-confirm-dialog__code-button {
+  min-width: 112px;
 }
 </style>

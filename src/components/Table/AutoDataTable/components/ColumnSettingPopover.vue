@@ -1,12 +1,13 @@
 <template>
   <Dialog
+    class="column-setting-dialog"
     v-if="showColumnSettingPopover"
     v-model:visible="showColumnSettingPopover"
     :cancel-title="$tc('RestoreDefault')"
     :destroy-on-close="true"
     :title="$tc('ListPreference')"
     top="10%"
-    width="50%"
+    width="720px"
     @cancel="restoreDefault()"
     @confirm="handleColumnConfirm()"
   >
@@ -136,14 +137,20 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.el-dialog.column-setting-dialog {
+  .el-dialog__body {
+    padding-top: 18px !important;
+  }
+}
+
 .column-setting {
   margin-left: 10px;
 
   .col-item {
     margin-top: 5px;
 
-    :deep(.el-checkbox) {
+    .el-checkbox {
       width: 100%;
 
       .el-checkbox__input {
@@ -151,10 +158,10 @@ export default {
       }
 
       .el-checkbox__label {
+        width: calc(100% - 20px);
+        overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        overflow: hidden;
-        width: calc(100% - 20px); // 20px is the width of the checkbox
         line-height: 16px;
         vertical-align: text-top;
       }

@@ -4,7 +4,7 @@
       v-bind="$attrs"
       :id="id"
       ref="form"
-      :class="[mobile ? 'mobile' : 'desktop']"
+      :class="[mobile ? 'mobile' : 'desktop', { 'dialog-mode': inDialog }]"
       :content="processedFields"
       :form="basicForm"
       :label-position="iLabelPosition"
@@ -167,7 +167,8 @@ export default {
     return {
       basicForm: this.form,
       id: randomString(16),
-      iSubmitBtnText: this.submitBtnText
+      iSubmitBtnText: this.submitBtnText,
+      inDialog: false
     }
   },
   computed: {
@@ -213,9 +214,16 @@ export default {
     }
   },
   mounted() {
+    this.detectDialogMode()
     this.autoSetSubmitBtnText()
   },
   methods: {
+    detectDialogMode() {
+      this.$nextTick(() => {
+        const root = this.$el
+        this.inDialog = !!root?.closest?.('.el-dialog__body')
+      })
+    },
     handlePrimarySubmitClick(event) {
       return this.submitForm('form')
     },
@@ -542,6 +550,21 @@ export default {
   }
 }
 
+.form-fields.el-form.dialog-mode {
+  padding: 0;
+
+  :deep(.form-group-header) {
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  :deep(.form-buttons) {
+    margin-top: 16px;
+    margin-bottom: 0;
+  }
+}
+
 .mobile.el-form :deep(.el-form-item) {
   gap: 8px;
 }
@@ -562,5 +585,9 @@ export default {
   :deep(.form-buttons) {
     padding-inline-start: 0;
   }
+}
+
+.el-form.mobile.dialog-mode {
+  padding: 0;
 }
 </style>

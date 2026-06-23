@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div class="cron-tab-field">
     <div class="box">
       <el-input v-model="input" clearable @clear="onClear" @focus="showDialog" />
     </div>
     <Dialog
       v-model:visible="showCron"
+      class="cron-dialog"
       :show-buttons="false"
       :title="$tc('NewCron')"
       append-to-body
@@ -60,8 +61,14 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.el-dialog__body {
-  padding: 12px 16px;
+<style lang="scss">
+.cron-tab-field,
+.cron-tab-field .box,
+.cron-tab-field .el-input {
+  width: 100%;
+}
+
+.cron-dialog .el-dialog__body {
+  padding: 20px 24px 18px !important;
 }
 </style>

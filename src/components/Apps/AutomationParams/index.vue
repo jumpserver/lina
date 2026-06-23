@@ -13,7 +13,7 @@
       :show-confirm="false"
       :title="title"
       :visible="visible"
-      width="60%"
+      width="860px"
     >
       <AutoDataForm
         v-bind="config"

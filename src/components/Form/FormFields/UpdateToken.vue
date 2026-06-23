@@ -1,21 +1,29 @@
 <template>
   <div class="update-token">
-    <el-button v-show="!isShow" icon="Edit" link @click="isShow = true">
+    <el-button v-if="!isShow" icon="Edit" link @click="isShow = true">
       {{ text }}
     </el-button>
     <el-input
-      v-show="isShow"
+      v-else
       v-model.trim="curValue"
       :disabled="disabled"
       :placeholder="placeholder"
       :type="type"
-      class="password-input"
+      class="update-token__input"
       show-password
       @change="onChange"
-    />
-    <el-button :disabled="disabled" size="small" link @click="randomPassword">
-      <i class="fa fa-refresh" />
-    </el-button>
+    >
+      <template #append>
+        <button
+          :disabled="disabled"
+          class="update-token__refresh"
+          type="button"
+          @click="randomPassword"
+        >
+          <i class="fa fa-refresh" />
+        </button>
+      </template>
+    </el-input>
   </div>
 </template>
 
@@ -74,24 +82,49 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.password-input {
-  flex: 1 1 auto;
-  width: auto;
-  min-width: 0;
-}
-
 .update-token {
   display: flex;
   align-items: center;
-  gap: 8px;
   width: 100%;
 
   :deep(.el-input) {
     width: 100%;
   }
 
+  :deep(.el-input-group__append) {
+    padding: 0;
+    border-radius: 0;
+    background-color: #f5f7fa;
+  }
+
+  :deep(.el-input__wrapper) {
+    border-radius: 0;
+  }
+}
+
+.update-token__input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.update-token__refresh {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
   i {
-    color: var(--color-text-secondary);
     font-size: 14px;
   }
 }

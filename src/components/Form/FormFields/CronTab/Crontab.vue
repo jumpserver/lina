@@ -1,6 +1,6 @@
 /* eslint-disable */
 <template>
-  <div>
+  <div class="crontab-root">
     <el-tabs class="tab-content">
       <el-tab-pane v-if="shouldHide('min')" :label="$tc('Min')" class="crontab-panel">
         <CrontabMin
@@ -51,54 +51,50 @@
     <div class="popup-main">
       <div class="popup-result">
         <p class="title">{{ $t('TimeExpression') }}</p>
-        <table>
-          <thead>
-            <tr>
-              <th v-for="item of tabTitles" :key="item" width="40">{{ item }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <el-input
-                  v-model.trim="contabValueObj.min"
-                  max="5"
-                  min="0"
-                  onkeyup="value = value.replace(/[^\0-9\-\*\,]/g, '')"
-                  size="small"
-                />
-              </td>
-              <td>
-                <el-input
-                  v-model.trim="contabValueObj.hour"
-                  onkeyup="value = value.replace(/[^\0-9\-\*\,]/g, '')"
-                  size="small"
-                />
-              </td>
-              <td>
-                <el-input
-                  v-model.trim="contabValueObj.day"
-                  onkeyup="value = value.replace(/[^\0-9\\-\*\,]/g, '')"
-                  size="small"
-                />
-              </td>
-              <td>
-                <el-input
-                  v-model.trim="contabValueObj.month"
-                  onkeyup="value = value.replace(/[^\0-9\-\*\,]/g, '')"
-                  size="small"
-                />
-              </td>
-              <td>
-                <el-input
-                  v-model.trim="contabValueObj.week"
-                  onkeyup="value = value.replace(/[^\0-9\-\*\,]/g, '')"
-                  size="small"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="cron-expression-grid">
+          <div class="cron-expression-field">
+            <label>{{ $t('Min') }}</label>
+            <el-input
+              v-model.trim="contabValueObj.min"
+              max="5"
+              min="0"
+              onkeyup="value = value.replace(/[^\0-9\-\*\,]/g, '')"
+              size="small"
+            />
+          </div>
+          <div class="cron-expression-field">
+            <label>{{ $t('Hour') }}</label>
+            <el-input
+              v-model.trim="contabValueObj.hour"
+              onkeyup="value = value.replace(/[^\0-9\-\*\,]/g, '')"
+              size="small"
+            />
+          </div>
+          <div class="cron-expression-field">
+            <label>{{ $t('Day') }}</label>
+            <el-input
+              v-model.trim="contabValueObj.day"
+              onkeyup="value = value.replace(/[^\0-9\\-\*\,]/g, '')"
+              size="small"
+            />
+          </div>
+          <div class="cron-expression-field">
+            <label>{{ $t('Month') }}</label>
+            <el-input
+              v-model.trim="contabValueObj.month"
+              onkeyup="value = value.replace(/[^\0-9\-\*\,]/g, '')"
+              size="small"
+            />
+          </div>
+          <div class="cron-expression-field">
+            <label>{{ $t('Week') }}</label>
+            <el-input
+              v-model.trim="contabValueObj.week"
+              onkeyup="value = value.replace(/[^\0-9\-\*\,]/g, '')"
+              size="small"
+            />
+          </div>
+        </div>
         <CrontabResult :ex="contabValueString" @crontab-diff-change="crontabDiffChangeHandle" />
       </div>
 
@@ -148,13 +144,6 @@ export default {
   },
   data() {
     return {
-      tabTitles: [
-        this.$t('Min'),
-        this.$t('Hour'),
-        this.$t('Day'),
-        this.$t('Month'),
-        this.$t('Week')
-      ],
       tabActive: 0,
       myindex: 0,
       contabValueObj: {
@@ -387,16 +376,17 @@ export default {
 </script>
 <style lang="scss" scoped>
 .pop_btn {
-  float: right;
-  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
 }
 
 .popup-main {
   position: relative;
-  margin: 10px auto 0;
+  margin: 0;
   background: #fff;
-  border-radius: 5px;
-  font-size: 12px;
+  font-size: 13px;
   overflow: hidden;
 }
 
@@ -411,9 +401,10 @@ export default {
   position: relative;
   box-sizing: border-box;
   line-height: 24px;
-  margin: 17px auto;
-  padding: 10px 10px 10px;
+  margin: 24px auto 0;
+  padding: 18px 16px 14px;
   border: 1px solid #dcdfe6;
+  background: #fff;
 }
 
 .popup-result .title {
@@ -428,19 +419,25 @@ export default {
   background: #fff;
 }
 
-.popup-result table {
-  text-align: center;
-  width: 100%;
-  margin: 0 auto;
+.cron-expression-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 10px;
 }
 
-.popup-result table span {
-  display: block;
-  width: 100%;
-  line-height: 30px;
-  height: 30px;
-  white-space: nowrap;
-  overflow: hidden;
+.cron-expression-field {
+  min-width: 0;
+
+  label {
+    display: block;
+    margin-bottom: 6px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 20px;
+    color: var(--color-text-primary);
+  }
 }
 
 .popup-result-scroll {
@@ -461,13 +458,212 @@ export default {
   }
 }
 
+:deep(.cron-tab-form) {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .el-form-item {
+    margin-bottom: 0;
+  }
+
+  .el-form-item__content {
+    min-height: 30px;
+    line-height: 30px;
+    align-items: center;
+  }
+
+  .el-radio {
+    display: flex;
+    align-items: center;
+    margin-right: 0;
+    line-height: 30px;
+  }
+
+  .el-radio__input {
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    transform: translateY(-2px);
+  }
+
+  .el-radio__label {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    padding-left: 8px;
+    white-space: normal;
+    min-height: 30px;
+    line-height: 30px;
+  }
+}
+
+:deep(.cron-tab-form__text) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+}
+
+:deep(.cron-tab-form__group) {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 30px;
+  flex-wrap: wrap;
+}
+
+:deep(.cron-tab-form__separator) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 10px;
+  color: var(--color-text-primary);
+}
+
+:deep(.cron-tab-form__select) {
+  width: 220px;
+}
+
+.crontab-root :deep(.el-input),
+.crontab-root :deep(.el-select),
+.crontab-root :deep(.el-input-number),
+.crontab-root :deep(.el-input__wrapper),
+.crontab-root :deep(.el-select__wrapper) {
+  min-height: 30px;
+  height: 30px;
+}
+
 .tab-content {
   position: relative;
   box-sizing: border-box;
   line-height: 24px;
   margin: 0 auto;
-  padding: 10px 10px 10px;
+  padding: 12px 16px 14px;
   border: 1px solid #dcdfe6;
+  background: #fff;
+}
+
+.pop_btn :deep(.el-button) {
+  min-height: 30px;
+  padding: 8px 12px;
+  line-height: 1;
+}
+
+.crontab-root :deep(.el-input__wrapper),
+.crontab-root :deep(.el-select__wrapper),
+.crontab-root :deep(.el-input-number__increase),
+.crontab-root :deep(.el-input-number__decrease) {
+  border-radius: 0;
+}
+
+.crontab-root :deep(.el-input__wrapper),
+.crontab-root :deep(.el-select__wrapper) {
+  box-shadow: none !important;
+  border: 1px solid #dcdfe6 !important;
+  background: #fff;
+  padding: 0 11px;
+  min-height: 30px;
+  height: 30px;
+  box-sizing: border-box;
+}
+
+.crontab-root :deep(.el-input__wrapper:hover),
+.crontab-root :deep(.el-select__wrapper:hover) {
+  border-color: var(--el-border-color-hover) !important;
+}
+
+.crontab-root :deep(.el-input__wrapper.is-focus),
+.crontab-root :deep(.el-select__wrapper.is-focused) {
+  box-shadow: none !important;
+  border-color: var(--el-color-primary) !important;
+}
+
+.crontab-root :deep(.el-input__inner),
+.crontab-root :deep(.el-select__selected-item),
+.crontab-root :deep(.el-select__placeholder) {
+  min-height: 28px;
+  height: 28px;
+  line-height: 28px;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+.crontab-root :deep(.cron-tab-form__select .el-select__selection) {
+  min-height: 28px;
+  align-items: center;
+}
+
+.crontab-root :deep(.cron-tab-form__select .el-select__selected-item) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+}
+
+.crontab-root :deep(.cron-tab-form__select .el-tag) {
+  height: 22px;
+  line-height: 20px;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+}
+
+.crontab-root :deep(.cron-tab-form__select .el-tag__content) {
+  display: inline-flex;
+  align-items: center;
+  line-height: 20px;
+}
+
+.crontab-root :deep(.cron-tab-form__number.el-input-number) {
+  width: 132px;
+  min-height: 30px;
+  height: 30px;
+  box-sizing: border-box;
+  border: 1px solid #dcdfe6;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: none !important;
+  background: #fff;
+}
+
+.crontab-root :deep(.cron-tab-form__number.el-input-number:hover),
+.crontab-root :deep(.cron-tab-form__number.el-input-number:focus-within) {
+  border-color: var(--el-color-primary);
+}
+
+.crontab-root :deep(.cron-tab-form__number.el-input-number .el-input) {
+  min-height: 28px;
+  height: 28px;
+}
+
+.crontab-root :deep(.cron-tab-form__number.el-input-number .el-input__wrapper) {
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 8px;
+  min-height: 28px;
+  height: 28px;
+}
+
+.crontab-root :deep(.cron-tab-form__number .el-input-number__increase),
+.crontab-root :deep(.cron-tab-form__number .el-input-number__decrease) {
+  box-shadow: none !important;
+  border-left: 1px solid #dcdfe6 !important;
+  border-right: 0 !important;
+  top: 1px;
+  bottom: 1px;
+  background: #f5f7fa;
+}
+
+.crontab-root :deep(.cron-tab-form__number .el-input-number__decrease) {
+  border-left: 0 !important;
+  border-right: 1px solid #dcdfe6 !important;
+}
+
+.crontab-root :deep(.cron-tab-form__number .el-input-number__increase:hover ~ .el-input .el-input__wrapper),
+.crontab-root :deep(.cron-tab-form__number .el-input-number__decrease:hover ~ .el-input .el-input__wrapper) {
+  box-shadow: none !important;
 }
 
 :deep(.el-tabs__header) {

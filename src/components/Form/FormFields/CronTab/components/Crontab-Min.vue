@@ -1,32 +1,44 @@
 /* eslint-disable */
 <template>
-  <el-form size="small">
-    <el-form-item>
+  <el-form class="cron-tab-form" size="small">
+    <el-form-item class="cron-tab-form__item">
       <el-radio v-model="radioValue" :value="1" size="small">
-        {{ $t('Min') }}，{{ $t('WildcardsAllowed') }}[, - * /]
+        <span class="cron-tab-form__text">
+          {{ $t('Min') }}，{{ $t('WildcardsAllowed') }}[, - * /]
+        </span>
       </el-radio>
     </el-form-item>
-    <el-form-item>
+    <el-form-item class="cron-tab-form__item">
       <el-radio v-model="radioValue" :value="3">
-        {{ $t('From') }}
-        <el-input-number v-model="average02" :max="59" :min="1" size="small" />
-        {{ $t('Min') }} {{ $t('ExecuteOnce') }}
+        <span class="cron-tab-form__text">{{ $t('From') }}</span>
+        <span class="cron-tab-form__group">
+          <el-input-number
+            v-model="average02"
+            :max="59"
+            :min="1"
+            size="small"
+            class="cron-tab-form__number"
+          />
+          <span class="cron-tab-form__text">{{ $t('Min') }} {{ $t('ExecuteOnce') }}</span>
+        </span>
       </el-radio>
     </el-form-item>
 
-    <el-form-item>
+    <el-form-item class="cron-tab-form__item">
       <el-radio v-model="radioValue" :value="4">
-        {{ $t('Appoint') }}
-        <el-select
-          v-model="checkboxList"
-          :placeholder="$tc('ManyChoose')"
-          clearable
-          multiple
-          size="small"
-          style="width: 100%"
-        >
-          <el-option v-for="item in 60" :key="item" :value="item - 1">{{ item - 1 }}</el-option>
-        </el-select>
+        <span class="cron-tab-form__text">{{ $t('Appoint') }}</span>
+        <span class="cron-tab-form__group">
+          <el-select
+            v-model="checkboxList"
+            :placeholder="$tc('ManyChoose')"
+            clearable
+            multiple
+            size="small"
+            class="cron-tab-form__select"
+          >
+            <el-option v-for="item in 60" :key="item" :value="item - 1">{{ item - 1 }}</el-option>
+          </el-select>
+        </span>
       </el-radio>
     </el-form-item>
   </el-form>

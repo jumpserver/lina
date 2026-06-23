@@ -1,5 +1,6 @@
 <template>
   <Dialog
+    class="platform-detail-update-dialog"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('Update')"
@@ -69,8 +70,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-:deep(.el-dialog .el-dialog__body) {
+<style lang="scss">
+.platform-detail-update-dialog .el-dialog__body {
   padding: 0 20px;
 }
 </style>

@@ -1,38 +1,58 @@
 /* eslint-disable */
 <template>
-  <el-form size="small">
-    <el-form-item>
+  <el-form class="cron-tab-form" size="small">
+    <el-form-item class="cron-tab-form__item">
       <el-radio v-model="radioValue" :value="1">
-        {{ $t('Week') }}，{{ $t('WildcardsAllowed') }}[, - * /]
+        <span class="cron-tab-form__text">
+          {{ $t('Week') }}，{{ $t('WildcardsAllowed') }}[, - * /]
+        </span>
       </el-radio>
     </el-form-item>
 
-    <el-form-item>
+    <el-form-item class="cron-tab-form__item">
       <el-radio v-model="radioValue" :value="3">
-        {{ $t('CycleFromWeek') }}
-        <el-input-number v-model="cycle01" :max="7" :min="1" size="small" /> -
-        <el-input-number v-model="cycle02" :max="7" :min="1" size="small" />
+        <span class="cron-tab-form__text">{{ $t('CycleFromWeek') }}</span>
+        <span class="cron-tab-form__group">
+          <el-input-number
+            v-model="cycle01"
+            :max="7"
+            :min="1"
+            size="small"
+            class="cron-tab-form__number"
+          />
+          <span class="cron-tab-form__separator">-</span>
+          <el-input-number
+            v-model="cycle02"
+            :max="7"
+            :min="1"
+            size="small"
+            class="cron-tab-form__number"
+          />
+        </span>
       </el-radio>
     </el-form-item>
 
-    <el-form-item>
+    <el-form-item class="cron-tab-form__item">
       <el-radio v-model="radioValue" :value="6">
-        {{ $t('Appoint') }}
-        <el-select
-          v-model="checkboxList"
-          :placeholder="$tc('ManyChoose')"
-          clearable
-          multiple
-          style="width: 100%"
-        >
-          <el-option
-            v-for="(item, index) of weekList"
-            :key="index"
-            :value="index === 6 ? 0 : index + 1"
+        <span class="cron-tab-form__text">{{ $t('Appoint') }}</span>
+        <span class="cron-tab-form__group">
+          <el-select
+            v-model="checkboxList"
+            :placeholder="$tc('ManyChoose')"
+            clearable
+            multiple
+            size="small"
+            class="cron-tab-form__select"
           >
-            {{ item }}
-          </el-option>
-        </el-select>
+            <el-option
+              v-for="(item, index) of weekList"
+              :key="index"
+              :value="index === 6 ? 0 : index + 1"
+            >
+              {{ item }}
+            </el-option>
+          </el-select>
+        </span>
       </el-radio>
     </el-form-item>
   </el-form>

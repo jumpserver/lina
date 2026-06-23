@@ -4,7 +4,7 @@
     :append-to-body="true"
     :class="dialogClass"
     :model-value="dialogVisible"
-    :style="dialogStyle"
+    :style="[dialogStyle, { '--dialog-max-width': maxWidth }]"
     :title="title"
     :top="top"
     :width="iWidth"
@@ -14,16 +14,13 @@
       <slot />
     </div>
 
-    <template v-if="showButtons" #footer>
+    <template v-if="shouldRenderFooter" #footer>
       <div class="dialog-footer">
         <slot name="footer">
-          <el-button v-if="showCancel && showButtons" size="small" @click="onCancel">{{
-            cancelTitle
-          }}</el-button>
+          <el-button v-if="showCancel && showButtons" @click="onCancel">{{ cancelTitle }}</el-button>
           <el-button
             v-if="showConfirm && showButtons"
             :disabled="disabledStatus"
-            size="small"
             type="primary"
             @click="onConfirm"
           >
@@ -108,6 +105,9 @@ export default {
     dialogVisible() {
       return this.visible
     },
+    shouldRenderFooter() {
+      return this.showButtons && (this.showCancel || this.showConfirm || !!this.$slots.footer)
+    },
     dialogClass() {
       return ['dialog', { shadow: this.shadow }, this.$attrs.class, this.$attrs['custom-class']]
     },
@@ -133,48 +133,119 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.dialog.shadow :deep(.el-dialog) {
-  box-shadow: 1px 2px 12px 0 rgba(0, 0, 0, 0.6);
-}
-
-.dialog :deep(.el-dialog) {
+<style lang="scss">
+.el-dialog.dialog {
+  --el-dialog-padding-primary: 0;
+  padding: 0 !important;
   border-radius: 0.3em;
-  max-width: min(100vw, 1500px);
-}
+  max-width: min(calc(100vw - 32px), var(--dialog-max-width));
 
-.dialog :deep(.el-dialog__header) {
-  box-sizing: border-box;
-  padding: 15px 22px;
-  border-bottom: 1px solid #dee2e6;
-  font-weight: 400;
-}
-
-.dialog :deep(.el-dialog__body) {
-  padding: 20px 30px;
-  font-size: 13px;
-
-  &:has(.el-table) {
-    background: #f3f3f4;
+  &.shadow {
+    box-shadow: 1px 2px 12px 0 rgba(0, 0, 0, 0.6);
   }
-}
 
-.dialog :deep(.el-dialog__footer) {
-  display: flex;
-  justify-content: flex-end;
-  border-top: 1px solid #dee2e6;
-  padding: 16px 25px;
+  .el-dialog__header {
+    box-sizing: border-box;
+    padding: 15px 22px !important;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  .el-dialog__title {
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--color-text-primary);
+  }
+
+  .el-dialog__body {
+    padding: 20px 30px !important;
+    font-size: 13px;
+  }
+
+  .el-dialog__body .el-form {
+    margin: 0;
+
+    .el-form-item {
+      margin-bottom: 18px;
+    }
+
+    .el-form-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .el-form-item__label {
+      min-height: 30px;
+      line-height: 30px;
+      color: var(--color-text-primary);
+    }
+
+    .el-form-item__content {
+      min-height: 30px;
+      line-height: 30px;
+    }
+
+    .el-input,
+    .el-select,
+    .el-input-number,
+    .el-input__wrapper,
+    .el-select__wrapper,
+    .el-date-editor.el-input,
+    .el-date-editor--daterange,
+    .el-date-editor--datetimerange {
+      min-height: 30px;
+      height: 30px;
+    }
+
+    .el-input__wrapper,
+    .el-select__wrapper,
+    .el-input-group__prepend,
+    .el-input-group__append {
+      box-sizing: border-box;
+      border-radius: 0;
+    }
+
+    .el-input__inner,
+    .el-select__selected-item,
+    .el-select__placeholder,
+    .el-date-editor .el-range-input,
+    .el-date-editor .el-range-separator,
+    .el-date-editor .el-range__icon,
+    .el-date-editor .el-range__close-icon {
+      min-height: 28px;
+      height: 28px;
+      line-height: 28px;
+    }
+  }
+
+  .el-dialog__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    border-top: 1px solid #dee2e6;
+    padding: 16px 25px !important;
+  }
+
+  .dialog-footer {
+    .el-button {
+      min-height: 30px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1;
+
+      > span {
+        display: inline-flex;
+        align-items: center;
+        line-height: 1;
+      }
+    }
+  }
 }
 
 @media (max-width: 900px) {
-  .dialog :deep(.el-dialog) {
+  .el-dialog.dialog {
     max-width: calc(100% - 30px);
   }
-}
-
-.dialog-footer :deep(button.el-button) {
-  font-size: 13px;
-  padding: 8px 12px;
 }
 
 .dialog-fade-enter-active,

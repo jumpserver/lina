@@ -14,7 +14,7 @@
       :show-cancel="false"
       :show-confirm="false"
       :title="title"
-      width="60%"
+      width="860px"
       @close="onDialogClose"
     >
       <AutoDataForm
