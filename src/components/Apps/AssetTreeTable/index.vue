@@ -202,11 +202,11 @@ export default {
         const query = this.setTreeUrlQuery()
         url = query ? `${url}&${query}` : url
         this.$set(this.tableConfig, 'url', url)
-      })
 
-      if (this.treeSetting.selectSyncToRoute !== false) {
-        setRouterQuery(this, url)
-      }
+        if (this.treeSetting.selectSyncToRoute !== false) {
+          setRouterQuery(this, url)
+        }
+      })
     }
   }
 }
