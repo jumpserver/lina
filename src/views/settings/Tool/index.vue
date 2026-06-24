@@ -56,7 +56,8 @@ export default {
         },
         {
           title: 'Tcpdump',
-          name: 'Tcpdump'
+          name: 'Tcpdump',
+          hidden: () => true
         },
         {
           title: 'Traceroute',
@@ -90,6 +91,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
