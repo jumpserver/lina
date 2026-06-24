@@ -48,7 +48,7 @@ export default {
             callback: () => {
               window.open(this.publicSettings?.REMOTE_APP_STORE_URL)
             },
-            has: !!this.publicSettings?.REMOTE_APP_STORE_URL
+            has: () => !!this.publicSettings?.REMOTE_APP_STORE_URL
           }
         ],
         detailRoute: 'AppletDetail',
