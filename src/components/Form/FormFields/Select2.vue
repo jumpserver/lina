@@ -30,9 +30,9 @@
         {{ $t('SelectAll') }}
       </el-checkbox>
       <div v-if="quickAddCallback" style="float: right">
-        <el-link :underline="false" @click="quickAddCallback">{{ $t('QuickAdd') }}</el-link>
+        <el-link underline="never" @click="quickAddCallback">{{ $t('QuickAdd') }}</el-link>
         <el-link
-          :underline="false"
+          underline="never"
           icon="el-icon-refresh"
           style="margin-left: 5px"
           @click="refresh"
@@ -535,29 +535,67 @@ export default {
     min-height: 24px;
     height: 24px;
     line-height: 22px;
-    margin-top: 2px;
-    margin-bottom: 2px;
+    margin-top: 0;
+    margin-bottom: 0;
     margin-left: 5px;
     padding: 0 8px;
     font-family: sans-serif !important;
     white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  :deep(.el-tag__content) {
+    display: inline-flex;
+    align-items: center;
   }
 
   :deep(.el-select__wrapper) {
     min-height: 30px;
     height: 30px;
+    box-sizing: border-box;
+    padding: 0 8px;
     padding-top: 0;
     padding-bottom: 0;
+    border-radius: 0;
+    box-shadow: none !important;
+    border: 1px solid var(--el-border-color) !important;
+  }
+
+  :deep(.el-select__wrapper:hover) {
+    border-color: var(--el-border-color-hover) !important;
+  }
+
+  :deep(.el-select__wrapper.is-focused) {
+    box-shadow: none !important;
+    border-color: var(--el-color-primary) !important;
   }
 
   :deep(.el-select__selection) {
-    min-height: 30px;
+    min-height: 28px;
     align-items: center;
   }
 
   :deep(.el-select__tags) {
-    height: 30px;
-    min-height: 30px;
+    height: 28px;
+    min-height: 28px;
+    align-items: center;
+  }
+
+  :deep(.el-select__selected-item),
+  :deep(.el-select__placeholder),
+  :deep(.el-select__input) {
+    min-height: 28px;
+    height: 28px;
+    line-height: 28px;
+  }
+
+  :deep(.el-select__caret),
+  :deep(.el-select__suffix),
+  :deep(.el-select__prefix) {
+    min-height: 28px;
+    height: 28px;
+    display: inline-flex;
     align-items: center;
   }
 }
@@ -566,7 +604,7 @@ export default {
   :deep(.el-select__wrapper) {
     height: auto;
     min-height: 30px;
-    align-items: flex-start;
+    align-items: center;
   }
 
   :deep(.el-select__selection) {
@@ -588,6 +626,8 @@ export default {
   :deep(.el-select__selected-item) {
     flex: 0 0 auto;
     max-width: 100%;
+    display: inline-flex;
+    align-items: center;
   }
 
   :deep(.el-select__input-wrapper) {

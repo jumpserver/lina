@@ -174,4 +174,19 @@ export default {
 .filter-field :deep(.el-input__inner) {
   height: 28px;
 }
+
+/*
+ * 本表单为原生 el-form（非 DataForm），普通 el-input 会受全局
+ * `.el-form .el-form-item__content { line-height: 32px }` 影响被撑到 ~34px，
+ * 而 TagInput 自管为 30px，导致 sa/da 与 sp/dp 高度不一致。这里统一普通输入框为 30px。
+ */
+:deep(.el-form-item__content) {
+  .el-input {
+    --el-input-height: 30px;
+  }
+
+  .el-input__wrapper {
+    border-radius: 0;
+  }
+}
 </style>

@@ -40,13 +40,13 @@
 
       <div class="tab-page-content">
         <el-alert
-          v-if="helpMessage && helpAlertVisible"
+          v-if="iHelpMessage && helpAlertVisible"
           class="tab-page-alert"
           :closable="true"
           type="info"
           @close="helpAlertVisible = false"
         >
-          <span v-sanitize="helpMessage" class="announcement-main" />
+          <span v-sanitize="iHelpMessage" class="announcement-main" />
         </el-alert>
         <transition v-if="!loading" appear mode="out-in" name="fade-transform">
           <slot>
@@ -85,6 +85,13 @@ export default {
       type: String,
       default: ''
     },
+    // 兼容调用方用 :help-tip 传入提示。若不在此声明，help-tip 会经 $attrs 透传到内层 Page，
+    // 被渲染成 .page-alert（位于 page-heading 与 page-submenu 之间），导致提示与其它页面不一致。
+    // 这里显式接收，统一渲染到 tab-page-content 内的 tab-page-alert。
+    helpTip: {
+      type: String,
+      default: ''
+    },
     title: {
       type: String,
       default: ''
@@ -100,6 +107,9 @@ export default {
     }
   },
   computed: {
+    iHelpMessage() {
+      return this.helpMessage || this.helpTip
+    },
     iActiveMenu: {
       get() {
         return this.activeTab
@@ -136,7 +146,7 @@ export default {
         this.iActiveMenu = newValue
       }
     },
-    helpMessage() {
+    iHelpMessage() {
       this.helpAlertVisible = true
     }
   },
@@ -318,8 +328,48 @@ export default {
     flex-direction: column;
     gap: 8px;
     min-height: 0;
-    padding: 10px 30px 22px;
+    padding: 10px 30px 0;
     overflow-y: auto;
+
+    /*
+     * flex 列 + overflow-y:auto 的容器会裁掉自身 padding-bottom（Chrome 已知行为），
+     * 导致滚到底时最后一块内容贴边。用一个不参与裁剪的 ::after 占位块补回底部间距。
+     */
+    &::after {
+      content: '';
+      display: block;
+      flex: 0 0 22px;
+      height: 22px;
+    }
+  }
+
+  /*
+   * .tab-page-content 是唯一的滚动容器：小屏空间不足时，应由它整体滚动，而不是让内部 card
+   * 自己出现滚动条。故强制卡片相关容器不自带滚动 / 高度上限，把溢出交还给 .tab-page-content。
+   */
+  .tab-page-content :deep(.el-card__body),
+  .tab-page-content :deep(.ibox),
+  .tab-page-content :deep(.el-card) {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  /*
+   * <transition mode="out-in"> 与 <keep-alive> 要求单一根节点，内容组件因此普遍用一个
+   * <div>（无 class 或 class=""）包裹多个区块（如 el-alert + IBox）。该 wrapper 会成为唯一的
+   * flex 子节点，使外层 gap 对其内部区块失效。这里让纯结构 wrapper 自身成为 flex 列并复用同样的
+   * gap，既恢复区块间距，又保留 wrapper 的盒子以维持 fade-transform 过渡动画。
+   *
+   * 过渡动画期间 Vue 会给 wrapper 加上 fade-transform-* 类，此时 :not([class]) 不再命中，
+   * 故补充 [class^="fade-transform"] 让其在动画期间仍保持 flex，避免间距闪烁。
+   * 带 class 的 wrapper（如 .auth-container）class 以自身类名开头，均不命中，保持不变。
+   */
+  .tab-page-content > :deep(div:not([class])),
+  .tab-page-content > :deep(div[class='']),
+  .tab-page-content > :deep(div[class^='fade-transform']) {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 
   .tab-page-content :deep(.tab-page-alert) {

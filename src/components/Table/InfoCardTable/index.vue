@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import CardTable from '@/components/Table/CardTable/index.vue'
-import CardPanel from './Panel.vue'
+import CardTable from '@/components/Table/CardTable/index.vue';
+import CardPanel from './Panel.vue';
 
 export default {
   name: 'SmallCard',
@@ -52,7 +52,22 @@ export default {
 <style lang="scss" scoped>
 .info-card-table {
   :deep(.the-card) {
-    padding: 0;
+    display: flex;
+    height: auto !important;
+    min-height: 180px;
+    padding: 0 !important;
+
+    .el-card__body {
+      display: flex;
+      flex: 1 1 auto;
+      min-height: 0;
+      height: auto !important;
+    }
+
+    .el-card__body > div,
+    .el-card__body > div > div {
+      height: auto !important;
+    }
   }
 }
 </style>

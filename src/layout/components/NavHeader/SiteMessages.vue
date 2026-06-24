@@ -14,23 +14,30 @@
     <el-drawer
       v-model="show"
       :before-close="handleClose"
-      :modal="false"
+      :modal="true"
+      :lock-scroll="false"
+      :show-close="false"
       :size="width"
       :title="$tc('SiteMessage')"
       class="drawer"
-      custom-class="site-msg"
+      modal-class="site-msg-modal"
+      header-class="site-msg-header"
+      body-class="site-msg-body"
       @open="getMessages"
     >
-      <template #header>
-        <div>
-          <span>{{ $t('SiteMessage') }}</span>
-          <div
+      <template #header="{ close }">
+        <span class="msg-header-title">{{ $t('SiteMessage') }}</span>
+        <div class="msg-header-right">
+          <span
             v-if="unreadMsgCount !== 0"
             class="msg-list-all-read-btn"
             @click.stop="oneClickRead(messages)"
           >
-            <a style="vertical-align: sub"> {{ $t('AllClickRead') }}</a>
-          </div>
+            {{ $t('AllClickRead') }}
+          </span>
+          <el-icon class="msg-header-close" :title="$t('Close')" @click="close">
+            <Close />
+          </el-icon>
         </div>
       </template>
       <div v-if="unreadMsgCount !== 0" class="msg-list">
@@ -239,24 +246,6 @@ export default {
   padding: 0 25px 20px;
 }
 
-:deep(.site-msg) {
-  .el-drawer__header {
-    border-bottom: solid 1px rgb(231, 234, 239);
-    margin-bottom: 0;
-    padding-top: 10px;
-    font-size: 16px;
-
-    .msg-list-all-read-btn {
-      font-size: 12px;
-      float: right;
-    }
-  }
-
-  .el-drawer__body {
-    overflow-y: auto;
-  }
-}
-
 .msg-item {
   border-bottom: solid 1px rgb(231, 234, 239);
   padding: 15px 0 10px;
@@ -445,5 +434,74 @@ export default {
 
 :deep(:focus) {
   outline: 0;
+}
+</style>
+
+<style lang="scss">
+/*
+ * el-drawer 默认 teleport 到 body，且 EP 2.14 无 customClass 且 inheritAttrs:false，
+ * 故用 header-class/body-class/modal-class 注入真实类名，并用非 scoped 全局样式命中。
+ * modal-class 设为透明遮罩：保留遮罩以支持点击外部关闭，但视觉上不变暗。
+ */
+.site-msg-modal {
+  background-color: transparent !important;
+}
+
+.site-msg-header.el-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: solid 1px rgb(231, 234, 239);
+  margin-bottom: 0;
+  padding-top: 10px;
+  font-size: 16px;
+
+  .msg-header-title {
+    font-size: 16px;
+    color: var(--color-text-primary);
+  }
+
+  .msg-header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .msg-list-all-read-btn {
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    line-height: 1;
+    color: #72767b;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
+
+  .msg-header-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    color: #909399 !important;
+    cursor: pointer;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      color: var(--color-primary) !important;
+    }
+  }
+}
+
+.site-msg-body {
+  overflow-y: auto;
 }
 </style>

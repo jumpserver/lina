@@ -1,25 +1,28 @@
 <template>
-  <div>
+  <div class="phone-input">
+    <el-select
+      :placeholder="$tc('Select')"
+      :value="rawValue.code"
+      class="phone-input__code"
+      @change="onChange"
+    >
+      <el-option
+        v-for="country in countries"
+        :key="country.name"
+        :label="country.value"
+        :value="country.value"
+      >
+        <span class="country-name">{{ country.name }}</span>
+        <span style="float: right; font-size: 13px">{{ country.value }}</span>
+      </el-option>
+    </el-select>
     <el-input
       v-model="rawValue.phone"
       :placeholder="$tc('InputPhone')"
+      class="phone-input__number"
       required
       @input="onInputChange"
-    >
-      <template #prepend>
-        <el-select :placeholder="$tc('Select')" :value="rawValue.code" @change="onChange">
-          <el-option
-            v-for="country in countries"
-            :key="country.name"
-            :label="country.value"
-            :value="country.value"
-          >
-            <span class="country-name">{{ country.name }}</span>
-            <span style="float: right; font-size: 13px">{{ country.value }}</span>
-          </el-option>
-        </el-select>
-      </template>
-    </el-input>
+    />
   </div>
 </template>
 
@@ -86,22 +89,57 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-select {
-  width: 85px;
-}
-
-:deep(.el-input__wrapper),
-:deep(.el-select__wrapper),
-:deep(.el-input-group__prepend) {
-  min-height: 30px;
+/*
+ * 不使用 EP 的 input-group（el-input + #prepend），因为 prepend 容器与其内部 select 各自带
+ * 一条 box-shadow 边框，叠加成 border 套 border。这里改为自绘单层边框的 flex 容器，内部 select
+ * 与 input 均去边框，只由容器描边，彻底消除双层。整体高度 30px、内部 28px，与表单标准一致。
+ */
+.phone-input {
+  display: flex;
+  align-items: center;
+  width: 100%;
   height: 30px;
   box-sizing: border-box;
+  border: 1px solid var(--el-border-color);
+  background-color: #fff;
+
+  &:hover {
+    border-color: var(--el-border-color-hover);
+  }
+
+  &:focus-within {
+    border-color: var(--el-color-primary);
+  }
 }
 
-:deep(.el-input__inner) {
-  min-height: 28px;
-  height: 28px;
-  line-height: 28px;
+.phone-input__code {
+  flex: 0 0 85px;
+  width: 85px;
+
+  :deep(.el-select__wrapper) {
+    min-height: 28px;
+    height: 28px;
+    padding: 0 8px;
+    border: 0;
+    border-right: 1px solid var(--el-border-color);
+    border-radius: 0;
+    box-shadow: none !important;
+    background: var(--el-fill-color-light);
+  }
+}
+
+.phone-input__number {
+  flex: 1 1 auto;
+  min-width: 0;
+
+  :deep(.el-input__wrapper) {
+    min-height: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none !important;
+    background: transparent;
+  }
 }
 
 .country-name {

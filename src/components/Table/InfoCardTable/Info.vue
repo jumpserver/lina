@@ -34,6 +34,20 @@ export default {
 
 .panel-item {
   text-align: start;
+
+  .item-label {
+    display: block;
+    margin-bottom: 6px;
+    line-height: 18px;
+  }
+
+  .item-value {
+    margin: 0;
+    line-height: 1.35;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
 }
 
 .panel-label {

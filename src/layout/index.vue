@@ -72,6 +72,11 @@ export default {
   height: 100vh;
   width: 100%;
   overflow: hidden;
+  // 导航栏是 position:fixed（脱离文档流），在此为它预留一次性的顶部空间。
+  // 统一放在 app-wrapper 上，避免各路由（console / settings）因 main-container 偏移方式不同
+  // 而出现「有的留白、有的顶到导航栏下」的不一致。
+  padding-top: $headerHeight;
+  box-sizing: border-box;
   &.mobile.openSidebar {
     position: fixed;
     top: 0;

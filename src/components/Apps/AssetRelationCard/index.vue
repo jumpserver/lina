@@ -83,10 +83,6 @@ export default {
 </script>
 
 <style scoped>
-.asset-relation-box :deep(.el-card__body) {
-  padding: 20px;
-}
-
 b,
 strong {
   font-weight: 700;

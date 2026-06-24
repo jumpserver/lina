@@ -13,16 +13,18 @@
           <el-button size="small">
             <el-icon class="el-icon--right"><More /></el-icon>
           </el-button>
-          <el-dropdown-menu default="dropdown">
-            <el-dropdown-item
-              v-for="action in iActions"
-              :key="action.name"
-              :disabled="action.disabled"
-              @click="action.callback(object)"
-            >
-              {{ action.name }}
-            </el-dropdown-item>
-          </el-dropdown-menu>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item
+                v-for="action in iActions"
+                :key="action.name"
+                :disabled="action.disabled"
+                @click="action.callback(object)"
+              >
+                {{ action.name }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
         </el-dropdown>
       </div>
     </div>
@@ -148,9 +150,13 @@ export default {
 <style lang="scss" scoped>
 div.info-panel {
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
+  min-height: 0;
+  height: auto !important;
   padding: 10px;
   gap: 10px;
+  overflow: visible;
   cursor: pointer;
 
   .panel-header {
@@ -192,7 +198,7 @@ div.info-panel {
       display: flex;
       align-items: center;
 
-      :deep(.button.el-button--small) {
+      :deep(.el-button.el-button--small) {
         padding: 5px 7px;
 
         .el-icon--right {
@@ -204,6 +210,10 @@ div.info-panel {
 
   .panel-content {
     display: block;
+    flex: 1 1 auto;
+    min-height: 0;
+    height: auto !important;
+    overflow: visible;
     padding: 1px 25px 10px;
 
     .panel-image {

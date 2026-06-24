@@ -383,10 +383,6 @@ tr.item td {
   margin-bottom: 20px;
 }
 
-.the-box :deep(.el-card__body) {
-  padding: 20px;
-}
-
 .the-box :deep(.select2 .el-select__tags) {
   height: 28px;
   min-height: 28px;

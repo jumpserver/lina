@@ -16,6 +16,8 @@
         '--form-section-gap': '14px'
       }"
       :server-errors="serverErrors"
+      @input="handleFormUpdate"
+      @update:form="handleFormUpdate"
     >
       <!-- named slot 透传给 ElFormRender，保持与字段渲染顺序一致 -->
       <template v-for="item in processedFields" :key="`id:${item.id}`" #[`id:${item.id}`]>
@@ -162,7 +164,7 @@ export default {
       default: '18.2%'
     }
   },
-  emits: ['submit', 'invalid'],
+  emits: ['submit', 'invalid', 'input', 'update:form'],
   data() {
     return {
       basicForm: this.form,
@@ -232,6 +234,10 @@ export default {
     },
     handleResetClick(event) {
       return this.resetForm('form')
+    },
+    handleFormUpdate(value) {
+      this.$emit('input', value)
+      this.$emit('update:form', value)
     },
     autoSetSubmitBtnText() {
       if (this.iSubmitBtnText) {
@@ -408,6 +414,43 @@ export default {
         height: 30px;
         box-sizing: border-box;
         border-radius: 0;
+      }
+
+      .el-input__wrapper,
+      .el-select__wrapper,
+      .el-cascader .el-input__wrapper {
+        box-shadow: none !important;
+        border: 1px solid var(--el-border-color) !important;
+
+        &:hover {
+          border-color: var(--el-border-color-hover) !important;
+        }
+
+        &.is-focus,
+        &.is-focused {
+          box-shadow: none !important;
+          border-color: var(--el-color-primary) !important;
+        }
+      }
+
+      // 自定义复合组件（如 TagInput 的 .filter-field）自带容器边框，其内部输入框不应再被
+      // 上面的强制 border 命中，否则形成 border 套 border 的双层边框。
+      .filter-field {
+        .el-input__wrapper {
+          border: 0 !important;
+        }
+      }
+
+      // 组合型输入框（input-group）：prepend/append 自带外边框，
+      // 内部 wrapper 不再于接缝处重复描边，避免 border 套 border 的双层边框。
+      .el-input-group {
+        .el-input-group__prepend + .el-input__wrapper {
+          border-left: 0 !important;
+        }
+
+        .el-input__wrapper:has(+ .el-input-group__append) {
+          border-right: 0 !important;
+        }
       }
 
       .el-select,

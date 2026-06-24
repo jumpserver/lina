@@ -1,7 +1,7 @@
 <template>
   <div>
     <SmallCard v-bind="table" ref="table" class="account-table" />
-    <CreateDialog v-bind="providerConfig" v-if="visible" :visible="visible" />
+    <CreateDialog v-bind="providerConfig" v-if="visible" v-model:visible="visible" />
     <UpdateDialog
       v-if="updateVisible"
       v-model:visible="updateVisible"

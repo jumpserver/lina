@@ -113,4 +113,51 @@ export default {
 .el-form :deep(.el-form) {
   margin-top: -15px;
 }
+
+:deep(.el-form-item-rule_relation) {
+  .el-form-item__label {
+    min-height: 30px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .el-form-item__content {
+    min-height: 30px;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .el-radio-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    min-height: 30px;
+  }
+
+  .el-radio {
+    margin: 0;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .el-radio__input,
+  .el-radio__label {
+    display: inline-flex;
+    align-items: center;
+    height: 30px;
+  }
+}
+
+:deep(.el-form-item-rule_relation),
+:deep(.el-form-item-strategy_rules),
+:deep(.el-form-item-strategy_actions) {
+  gap: 12px;
+
+  .el-form-item__label-wrap {
+    flex: 0 0 88px;
+    width: 88px;
+  }
+}
 </style>

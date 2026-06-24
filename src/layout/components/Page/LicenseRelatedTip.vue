@@ -1,12 +1,10 @@
 <template>
-  <div v-if="!loading">
-    <el-alert v-if="licenseMsg" type="error">
-      {{ licenseMsg }} !
-      <router-link :to="{ name: 'License' }" style="padding-left: 5px">
-        {{ $t('View') }} <i class="fa fa-external-link" />
-      </router-link>
-    </el-alert>
-  </div>
+  <el-alert v-if="!loading && licenseMsg" type="error">
+    {{ licenseMsg }} !
+    <router-link :to="{ name: 'License' }" style="padding-left: 5px">
+      {{ $t('View') }} <i class="fa fa-external-link" />
+    </router-link>
+  </el-alert>
 </template>
 
 <script>

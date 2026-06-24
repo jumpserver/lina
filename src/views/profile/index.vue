@@ -534,15 +534,39 @@ export default {
     }
   }
 
+  // 统一表单项高度为表单标准 30px（WeChat 等普通 el-input 走 EP 原生高度变量）；
+  // 用真实单层 border 替代 EP 的 inset box-shadow，避免 border 套 border 的双层边框。
+  :deep(.el-input) {
+    --el-input-height: 30px;
+  }
+
+  :deep(.el-input .el-input__wrapper) {
+    border-radius: 0;
+    box-shadow: none !important;
+    border: 1px solid var(--el-border-color);
+
+    &:hover {
+      border-color: var(--el-border-color-hover);
+    }
+
+    &.is-focus {
+      border-color: var(--el-color-primary);
+    }
+  }
+
   table {
     width: 100%;
 
     .label {
       width: 20%;
+      height: 30px;
+      vertical-align: middle;
+      color: var(--color-text-primary);
     }
 
     .value {
       width: 60%;
+      vertical-align: middle;
     }
   }
 }

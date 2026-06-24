@@ -21,8 +21,7 @@
         :placeholder="iPlaceholder"
         :type="inputType"
         class="search-input"
-        @blur="focus = false"
-        @change="handleChange"
+        @blur="handleBlur"
         @focus="focus = true"
         @select="handleSelect"
         @keyup.enter.prevent="handleConfirm"
@@ -43,7 +42,6 @@
 
 <script>
 import i18n from '@/i18n/i18n'
-import _ from 'lodash'
 
 export default {
   props: {
@@ -112,10 +110,14 @@ export default {
       this.filterValue = item.value
       this.handleConfirm()
     },
-    handleChange: _.debounce(function (item) {
-      this.handleConfirm()
-    }, 200),
-    handleConfirm() {
+    // 失焦时把未提交的输入收成一个 tag；不再用 @change 防抖自动提交，
+    // 否则 el-input 的 change 在每次输入后触发会把 "123" 拆成 1/2/3 三个 tag。
+    // blur 路径不回焦，避免点击别处仍把焦点抢回输入框。
+    handleBlur() {
+      this.focus = false
+      this.handleConfirm(false)
+    },
+    handleConfirm(refocus = true) {
       if (this.filterValue === '') return
 
       if (!this.filterTags.includes(this.filterValue)) {
@@ -124,7 +126,10 @@ export default {
       }
       this.$emit('change', this.filterTags)
       this.$emit('input', this.filterTags)
-      this.$refs.SearchInput.focus()
+      // 回车/选中后保持焦点便于连续录入；失焦提交时不抢回焦点
+      if (refocus) {
+        this.$refs.SearchInput.focus()
+      }
     },
     handleTagClick(v, k) {
       delete this.filterTags[k]

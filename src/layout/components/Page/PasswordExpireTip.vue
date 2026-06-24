@@ -1,9 +1,7 @@
 <template>
-  <div>
-    <el-alert v-if="expireMsg" type="error">
-      {{ expireMsg }}
-    </el-alert>
-  </div>
+  <el-alert v-if="expireMsg" type="error">
+    {{ expireMsg }}
+  </el-alert>
 </template>
 
 <script>

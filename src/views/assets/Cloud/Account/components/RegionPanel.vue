@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-link icon="Edit" underline="never" @click="handlerLinkClick">
+  <div class="region-panel">
+    <el-link class="region-trigger" icon="Edit" underline="never" @click="handlerLinkClick">
       {{ content }}
     </el-link>
     <Dialog
@@ -156,6 +156,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.region-panel {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+}
+
+.region-trigger {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  line-height: 30px;
+  font-size: 13px;
+
+  :deep(.el-icon) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 4px;
+  }
+}
+
 .el-checkbox {
   margin-bottom: 10px;
 }

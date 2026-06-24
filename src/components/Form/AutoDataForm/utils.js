@@ -85,6 +85,10 @@ export class FormFieldGenerator {
         field.component = markRaw(NestedField)
         field.label = ''
         field.labelWidth = 0
+        field.attrs = {
+          ...field.attrs,
+          labelWidth: '0px'
+        }
         field.el = { ...field.el, ...fieldMeta }
         field.el.fields = this.generateNestFields(field, fieldMeta, fieldRemoteMeta)
         field.el.errors = {}

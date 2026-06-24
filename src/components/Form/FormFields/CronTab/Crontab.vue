@@ -403,7 +403,7 @@ export default {
   line-height: 24px;
   margin: 24px auto 0;
   padding: 18px 16px 14px;
-  border: 1px solid #dcdfe6;
+  border: 1px solid var(--el-border-color);
   background: #fff;
 }
 
@@ -541,13 +541,15 @@ export default {
   line-height: 24px;
   margin: 0 auto;
   padding: 12px 16px 14px;
-  border: 1px solid #dcdfe6;
+  border: 1px solid var(--el-border-color);
   background: #fff;
 }
 
 .pop_btn :deep(.el-button) {
   min-height: 30px;
   padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 400;
   line-height: 1;
 }
 
@@ -561,7 +563,7 @@ export default {
 .crontab-root :deep(.el-input__wrapper),
 .crontab-root :deep(.el-select__wrapper) {
   box-shadow: none !important;
-  border: 1px solid #dcdfe6 !important;
+  border: 1px solid var(--el-border-color) !important;
   background: #fff;
   padding: 0 11px;
   min-height: 30px;
@@ -621,7 +623,7 @@ export default {
   min-height: 30px;
   height: 30px;
   box-sizing: border-box;
-  border: 1px solid #dcdfe6;
+  border: 1px solid var(--el-border-color);
   border-radius: 0;
   overflow: hidden;
   box-shadow: none !important;
@@ -649,7 +651,7 @@ export default {
 .crontab-root :deep(.cron-tab-form__number .el-input-number__increase),
 .crontab-root :deep(.cron-tab-form__number .el-input-number__decrease) {
   box-shadow: none !important;
-  border-left: 1px solid #dcdfe6 !important;
+  border-left: 1px solid var(--el-border-color) !important;
   border-right: 0 !important;
   top: 1px;
   bottom: 1px;
@@ -658,7 +660,7 @@ export default {
 
 .crontab-root :deep(.cron-tab-form__number .el-input-number__decrease) {
   border-left: 0 !important;
-  border-right: 1px solid #dcdfe6 !important;
+  border-right: 1px solid var(--el-border-color) !important;
 }
 
 .crontab-root :deep(.cron-tab-form__number .el-input-number__increase:hover ~ .el-input .el-input__wrapper),

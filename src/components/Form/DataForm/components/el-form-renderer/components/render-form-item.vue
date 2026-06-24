@@ -376,6 +376,29 @@ export default {
   }
 }
 
+/*
+ * 表单内提示用的 el-alert（.help-warning）字号/图标/内间距与页面级 alert 统一：
+ * 文字 12px、图标 16px，避免表单内提示比页面 alert 偏大或间距不一致。
+ */
+.help-block :deep(.help-warning) {
+  padding: 8px 12px;
+
+  .el-alert__icon,
+  .el-alert__icon.is-big {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+
+  .el-alert__title,
+  .el-alert__content,
+  .el-alert__content span,
+  .el-alert__content p {
+    font-size: 12px !important;
+    line-height: 1.5;
+  }
+}
+
 .help-tip-icon {
   &:hover {
     cursor: pointer;

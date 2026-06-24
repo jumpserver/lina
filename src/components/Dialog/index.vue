@@ -17,7 +17,9 @@
     <template v-if="shouldRenderFooter" #footer>
       <div class="dialog-footer">
         <slot name="footer">
-          <el-button v-if="showCancel && showButtons" @click="onCancel">{{ cancelTitle }}</el-button>
+          <el-button v-if="showCancel && showButtons" @click="onCancel">{{
+            cancelTitle
+          }}</el-button>
           <el-button
             v-if="showConfirm && showButtons"
             :disabled="disabledStatus"
@@ -201,6 +203,26 @@ export default {
     .el-input-group__append {
       box-sizing: border-box;
       border-radius: 0;
+    }
+
+    .el-input__wrapper,
+    .el-select__wrapper,
+    .el-cascader .el-input__wrapper {
+      box-shadow: none !important;
+      border: 1px solid var(--el-border-color) !important;
+    }
+
+    .el-input__wrapper:hover,
+    .el-select__wrapper:hover,
+    .el-cascader .el-input__wrapper:hover {
+      border-color: var(--el-border-color-hover) !important;
+    }
+
+    .el-input__wrapper.is-focus,
+    .el-select__wrapper.is-focused,
+    .el-cascader .el-input__wrapper.is-focus {
+      box-shadow: none !important;
+      border-color: var(--el-color-primary) !important;
     }
 
     .el-input__inner,

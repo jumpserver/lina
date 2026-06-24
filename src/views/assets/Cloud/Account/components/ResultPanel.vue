@@ -8,7 +8,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <div style="margin-top: 20px">
+    <div class="result-panel__actions">
       <el-button size="small" type="primary" @click="handleClick">{{
         $t('CloudAccountDetail')
       }}</el-button>
@@ -63,6 +63,13 @@ export default {
 <style lang="scss" scoped>
 .result-panel {
   padding: 10px;
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 20px;
+  }
 }
 
 :deep(.el-alert__content) {

@@ -178,9 +178,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '@/styles/variables' as *;
+
 .page {
   // 这个不加的话，page title 也会滚动
-  height: calc(100vh - 52px);
+  // 高度需与固定头部 $headerHeight（40px）一致，否则底部内容滚不到 / 顶部留白
+  height: calc(100vh - #{$headerHeight});
   display: flex;
   flex-direction: column;
   overflow-y: hidden;
@@ -192,6 +195,7 @@ export default {
 
   .page-content {
     flex: 1; /* 占用剩余高度 */
+    min-height: 0; /* flex 子项默认 min-height:auto 不会收缩，导致内部滚动底部被裁剪 */
     display: flex;
     flex-direction: column;
     overflow-x: hidden;

@@ -42,8 +42,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/*
+ * 统一约定：
+ * - card 直接外层（.ibox / .el-card）不设任何 padding，padding 全部落在 __body / __header。
+ * - __body 内部统一 flex 列布局，左右 padding 20px。
+ * - __header 同样左右 20px。
+ * 特殊场景（表格类贴边、详情页 quick-update、撑满高度）由各自组件穿透覆盖。
+ */
 .ibox {
-  /*height: 100%;*/
   clear: both;
   padding: 0;
 }
@@ -52,10 +58,16 @@ export default {
   border-color: #e7eaec;
   border-image: none;
   margin-bottom: 0;
-  padding: 10px 15px;
+  padding: 10px 20px;
   min-height: 30px;
   line-height: 1.32;
   font-weight: normal;
+}
+
+.ibox-title {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .ibox-title h5 {
@@ -87,7 +99,9 @@ export default {
 }
 
 .ibox :deep(.el-card__body) {
-  //padding: 30px 30px 20px 30px; // 这个设置会影响详情中的 quick update 和 relations
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
   color: var(--color-icon-primary);
 }
 </style>

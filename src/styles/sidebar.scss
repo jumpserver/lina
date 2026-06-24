@@ -3,9 +3,10 @@
 #app {
   .main-container {
     position: relative;
-    top: $headerHeight;
+    // 导航栏空间已由 .app-wrapper 的 padding-top 统一预留（见 layout/index.vue），
+    // 这里不再用 margin-top/top 二次下移，否则会与 padding 叠加出顶部空白。
     min-height: 100%;
-    height: calc(100vh - #{$headerHeight});
+    height: 100%;
     transition: margin-left 0.28s;
     margin-left: $sideBarWidth;
   }

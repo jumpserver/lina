@@ -21,7 +21,7 @@
 
 <script>
 import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
-import { GenericListPage } from '@/layout/components'
+import GenericListPage from '@/layout/components/GenericListPage'
 import { AutoDataForm, Dialog } from '@/components'
 import passkey from '@/utils/passkey'
 import { getErrorResponseMsg } from '@/utils/common/index'

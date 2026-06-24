@@ -84,7 +84,6 @@ export default {
 }
 
 .permission-account-box :deep(.el-card__body) {
-  padding: 20px;
   overflow-x: hidden;
 }
 

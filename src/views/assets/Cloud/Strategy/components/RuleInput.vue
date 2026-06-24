@@ -37,7 +37,6 @@ export default {
         submitBtnSize: 'small',
         submitBtnText: this.$t('Add'),
         hasReset: false,
-        onSubmit: () => {},
         submitMethod: () => 'post',
         getUrl: () => '',
         fields: [['', ['attr', 'match', 'value']]],
@@ -145,12 +144,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-:deep(.el-form-item) {
-  &:nth-child(-n + 4) {
-    width: 29%;
+.attr-input {
+  :deep(.form-fields.el-form) {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) auto !important;
+    column-gap: 12px;
+    row-gap: 8px;
+    align-items: start;
+    padding: 0 !important;
   }
-  &:last-child {
-    width: 6%;
+
+  :deep(.form-fields > .el-form-item) {
+    min-width: 0;
+    margin: 0 !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .attr-input {
+    :deep(.form-fields.el-form) {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .attr-input {
+    :deep(.form-fields.el-form) {
+      grid-template-columns: minmax(0, 1fr) !important;
+    }
   }
 }
 </style>
