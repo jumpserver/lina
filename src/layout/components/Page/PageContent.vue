@@ -31,6 +31,17 @@ export default {
   display: contents;
 }
 
+/*
+ * 统一原则：卡片自身不出现内部滚动条，只有外层 .wrapper-content（page-content）整体滚动。
+ * 强制卡片相关容器不自带滚动 / 高度上限，把溢出交还给外层滚动容器。
+ */
+.wrapper-content :deep(.el-card__body),
+.wrapper-content :deep(.ibox),
+.wrapper-content :deep(.el-card) {
+  overflow: visible !important;
+  max-height: none !important;
+}
+
 .wrapper-content :deep(.page-alert) {
   margin: 0;
 }

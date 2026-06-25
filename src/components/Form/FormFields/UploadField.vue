@@ -12,9 +12,9 @@
     </div>
     <div v-if="tip !== ''" class="help-block">{{ tip }}</div>
     <input :value="value" hidden type="text" @input="onInput($event.target.value)" />
-    <div v-if="preview" class="upload-field__preview">
+    <div v-if="preview" class="upload-field__preview" :class="{ 'show-bg': showBG }">
       <el-image
-        :class="showBG ? 'show-bg' : ''"
+        :style="previewStyle"
         :preview-src-list="[preview]"
         :src="preview"
         fit="contain"
@@ -42,6 +42,15 @@ export default {
     showBG: {
       type: Boolean,
       default: false
+    },
+    // 预览尺寸（px）。不同字段建议不同大小：方形 logo 82、网站图标 16、登录大图 492×472。
+    width: {
+      type: [String, Number],
+      default: ''
+    },
+    height: {
+      type: [String, Number],
+      default: ''
     }
   },
   data() {
@@ -49,6 +58,19 @@ export default {
       fileName: '',
       initial: this.value,
       preview: this.value
+    }
+  },
+  computed: {
+    previewStyle() {
+      const toPx = (v) => (typeof v === 'number' ? `${v}px` : v)
+      const style = {}
+      if (this.width) {
+        style.width = toPx(this.width)
+      }
+      if (this.height) {
+        style.height = toPx(this.height)
+      }
+      return style
     }
   },
   watch: {
@@ -118,22 +140,27 @@ export default {
 }
 
 .upload-field__preview {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  min-height: 60px;
+  justify-content: center;
+  align-self: flex-start;
+  min-height: 32px;
+  border-radius: 2px;
+  background: #fff;
+  box-sizing: content-box;
 
   :deep(.el-image) {
     display: inline-flex;
-    max-width: 160px;
-    max-height: 120px;
-    border: 1px solid var(--color-border);
-    border-radius: 2px;
-    overflow: hidden;
-    background: #fff;
+  }
+
+  :deep(.el-image__inner) {
+    object-fit: contain;
   }
 }
 
-.show-bg {
+/* 顶部宽 logo 等可能是白底/透明图，给预览盒铺品牌背景色，避免白底图“看不见” */
+.upload-field__preview.show-bg {
   background-color: var(--banner-bg);
+  border-color: var(--banner-bg);
 }
 </style>

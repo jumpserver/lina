@@ -1,6 +1,6 @@
 <template>
   <Page>
-    <div v-if="isDev" style="margin-bottom: 20px">
+    <IBox v-if="isDev" :title="$tc('Preview')" class="preview-box">
       <div class="dz">
         <el-button v-for="(value, tp) in examples" :key="tp" :type="tp" size="small">
           {{ value }}
@@ -17,12 +17,7 @@
         </el-link>
       </div>
       <div class="dz">
-        <el-radio-group v-model="dz.radio">
-          <el-radio v-for="i in 3" :key="i" :value="$tc('Options') + ` ${i}`" />
-        </el-radio-group>
-      </div>
-      <div class="dz">
-        <el-steps :active="1" :space="100">
+        <el-steps :active="1" :space="160">
           <el-step
             v-for="(s, i) in stepStatus"
             :key="s"
@@ -31,8 +26,7 @@
           />
         </el-steps>
       </div>
-      <div class="dz" />
-    </div>
+    </IBox>
     <IBox v-if="!loading">
       <GenericCreateUpdateForm
         :fields="fields"
@@ -103,8 +97,8 @@ export default {
         login_image: {
           component: UploadField,
           el: {
-            width: '10%',
-            height: '10%',
+            width: 492,
+            height: 472,
             accept: 'image/jpg, image/png, image/jpeg',
             tip: this.$t('LoginImageTip')
           },
@@ -117,8 +111,8 @@ export default {
         favicon: {
           component: UploadField,
           el: {
-            width: '5%',
-            height: '5%',
+            width: 16,
+            height: 16,
             accept: 'image/jpg, image/png, image/jpeg',
             tip: this.$t('FaviconTip')
           },
@@ -131,8 +125,7 @@ export default {
         logo_index: {
           component: UploadField,
           el: {
-            width: '10%',
-            height: '10%',
+            height: 40,
             accept: 'image/jpg, image/png, image/jpeg',
             tip: this.$t('LogoIndexTip'),
             showBG: true
@@ -146,8 +139,8 @@ export default {
         logo_logout: {
           component: UploadField,
           el: {
-            width: '5%',
-            height: '5%',
+            width: 82,
+            height: 82,
             accept: 'image/jpg, image/png, image/jpeg',
             tip: this.$t('LogoLogoutTip')
           },
@@ -238,7 +231,38 @@ export default {
 </script>
 
 <style scoped>
+/*
+ * 预览区与表单都置于 IBox 卡片内，页面整体保持一致的卡片化布局
+ * （卡片间距由 PageContent 的 gap 统一提供）。
+ * 预览的按钮/链接/单选/步骤条统一为应用标准字号 13px，并修正内边距。
+ */
+.preview-box :deep(.el-card__body) {
+  gap: 4px;
+}
+
 .dz {
-  padding: 10px 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+}
+
+.preview-box {
+  :deep(.el-button) {
+    height: 30px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 400;
+  }
+
+  :deep(.el-link) {
+    font-size: 13px;
+  }
+
+  :deep(.el-step__title) {
+    font-size: 13px;
+    line-height: 1.4;
+  }
 }
 </style>

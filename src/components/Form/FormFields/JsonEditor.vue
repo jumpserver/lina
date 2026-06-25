@@ -15,7 +15,7 @@
 import { Codemirror } from 'vue-codemirror'
 import { basicSetup } from 'codemirror'
 import { StreamLanguage } from '@codemirror/language'
-import { javascript } from '@codemirror/legacy-modes/mode/javascript'
+import { json } from '@codemirror/legacy-modes/mode/javascript'
 
 function stringifyValue(value) {
   if (typeof value === 'string') {
@@ -52,7 +52,9 @@ export default {
     return {
       editorValue: stringifyValue(this.value),
       emitTimer: null,
-      extensions: [basicSetup, StreamLanguage.define(javascript({ json: true }))]
+      // 该版本 legacy-modes 的 json/javascript 导出已是 StreamParser 对象（非函数），
+      // 直接传给 StreamLanguage.define；JSON 编辑器使用 json 模式。
+      extensions: [basicSetup, StreamLanguage.define(json)]
     }
   },
   computed: {

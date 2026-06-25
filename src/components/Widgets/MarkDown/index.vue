@@ -128,9 +128,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.markdown-body {
+  width: 100%;
+}
+
 .markdown-body * {
   color: #1a1a1a;
   font-size: 13px;
+}
+
+.markdown-body :deep(.el-row) {
+  width: 100%;
 }
 
 :deep(.el-textarea) {
