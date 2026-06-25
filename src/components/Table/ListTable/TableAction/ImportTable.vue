@@ -22,7 +22,8 @@
       <div class="btn-groups">
         <el-button v-if="showCancel" size="small" @click="performCancel">{{
           $t('Cancel')
-        }}</el-button>
+        }}
+        </el-button>
         <el-button
           v-show="!disableImportBtn"
           size="small"
@@ -261,9 +262,10 @@ export default {
           return 0
         })
         let colMaxWidth = Math.max(...dataItemLens) * 10
-        if (colMaxWidth === 0) {
-          continue
-        }
+        // 这里如果字段为空，没法编辑，同时为空的字段无法显示字段 label
+        // if (colMaxWidth === 0) {
+        //   continue
+        // }
         colMaxWidth = Math.min(180, colMaxWidth)
         colMaxWidth = Math.max(colMaxWidth, 100)
         columns.push({
@@ -465,7 +467,8 @@ export default {
       this.tableConfig.totalData.push(item)
     },
     handleClick(btn) {
-      const callback = btn.callback || function () {}
+      const callback = btn.callback || function() {
+      }
       callback(btn)
     }
   }
