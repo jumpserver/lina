@@ -20,6 +20,15 @@ export default {
     const commandType = this.$route.query.type || 'es'
     return {
       successUrl: { name: 'Storage', params: { activeMenu: 'CommandStorage' } },
+      continueCleanFields: [
+        'name',
+        'meta.HOSTS',
+        'meta.INDEX_BY_DATE',
+        'meta.INDEX',
+        'meta.IGNORE_VERIFY_CERTS',
+        'is_default',
+        'comment'
+      ],
       initial: {
         type: commandType,
         doc_type: 'command',

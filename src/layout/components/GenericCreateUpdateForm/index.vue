@@ -21,6 +21,8 @@ import AutoDataForm from '@/components/Form/AutoDataForm'
 import { getUpdateObjURL } from '@/utils/common/index'
 import { encryptPassword } from '@/utils/session-encrypt'
 import deepmerge from 'deepmerge'
+import get from 'lodash/get'
+import set from 'lodash/set'
 
 export default {
   name: 'GenericCreateUpdateForm',
@@ -221,8 +223,9 @@ export default {
           if (this.continueCleanFields?.length) {
             const cleanValues = {}
             this.continueCleanFields.forEach(field => {
-              cleanValues[field] = ''
-              vm.$set(vm.form, field, '')
+              const value = get(this.initial, field, '')
+              set(cleanValues, field, value)
+              set(vm.form, field, value)
             })
             vm.$refs.form?.updateFormFields?.(cleanValues)
           }
