@@ -1,5 +1,8 @@
 {
   "FieldRequiredError": "这个字段是必需的。",
+  "AccessToken": "访问令牌",
+  "AccessTokenTip": "访问令牌是调用 API 的凭证。如不再信任某个令牌，请将其吊销。",
+  "Revoke": "吊销",
   "UploadFileTooLarge": "上传的文件过大",
   "CTYun": "天翼云",
   "InputEmailAddress": "输入一个电子邮件地址。",

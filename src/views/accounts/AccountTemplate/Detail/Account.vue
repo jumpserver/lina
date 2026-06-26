@@ -6,6 +6,7 @@
     <TwoCol>
       <GenericListTable
         ref="listTable"
+        :detail-drawer="detailDrawer"
         :header-actions="headerActions"
         :table-config="tableConfig"
       />
@@ -48,6 +49,7 @@ export default {
   data() {
     const vm = this
     return {
+      detailDrawer: () => import('@/views/accounts/AccountDiscover/TaskDetail/index.vue'),
       visible: false,
       secretUrl: '',
       showViewSecretDialog: false,
@@ -81,8 +83,9 @@ export default {
               drawer: true,
               can: vm.$hasPerm('accounts.view_account'),
               getRoute: ({ row }) => {
+                this.detailDrawer = () => import('@/views/accounts/Account/AccountDetail/index.vue')
                 return {
-                  name: 'AssetAccountDetail',
+                  name: 'AccountDetail',
                   params: { id: row.id }
                 }
               }
@@ -96,6 +99,7 @@ export default {
               can: vm.$hasPerm('assets.view_asset'),
               getTitle: ({ row }) => row.asset.name,
               getRoute: ({ row }) => {
+                this.detailDrawer = () => import('@/views/assets/Asset/AssetDetail')
                 return {
                   name: 'AssetDetail',
                   params: { id: row.asset.id }

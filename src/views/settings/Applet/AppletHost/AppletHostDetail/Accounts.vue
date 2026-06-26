@@ -1,19 +1,25 @@
 <template>
-  <Account
-    :url="url"
-    :columns-meta="columnsMeta"
-    :extra-quick-actions="quickActions"
-    :object="object"
-  />
+  <TwoCol>
+    <template #default>
+      <Account :url="url" :columns-meta="columnsMeta" :object="object" />
+    </template>
+    <template #right>
+      <QuickActions :actions="quickActions" type="primary" />
+    </template>
+  </TwoCol>
 </template>
 
 <script>
 import { createVNode as createVNodeCompat } from 'vue'
+import { QuickActions } from '@/components'
 import Account from '@/views/assets/Asset/AssetDetail/Account'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 export default {
   name: 'Accounts',
   components: {
-    Account
+    TwoCol,
+    Account,
+    QuickActions
   },
   props: {
     object: {
