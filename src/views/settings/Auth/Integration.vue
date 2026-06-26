@@ -1,10 +1,16 @@
 <template>
   <div class="auth-container">
     <IBox :title="$tc('AuthIntegration')" class="auth-box-wrapper auth-method-box">
-      <el-row v-for="[type, items] in Object.entries(groupedAuthItems)" :key="type" :gutter="20">
+      <div
+        v-for="[type, items] in Object.entries(groupedAuthItems)"
+        :key="type"
+        class="auth-method-group"
+      >
         <h4 class="auth-method-type">{{ typeMap[type] }}</h4>
-        <AuthMethod v-bind="item" v-for="item in items" :key="item.title" />
-      </el-row>
+        <el-row :gutter="20">
+          <AuthMethod v-bind="item" v-for="item in items" :key="item.title" />
+        </el-row>
+      </div>
     </IBox>
   </div>
 </template>
@@ -109,6 +115,12 @@ export default {
   }
 }
 
+.auth-method-group {
+  & + .auth-method-group {
+    margin-top: 8px;
+  }
+}
+
 .auth-layout {
   min-height: 400px;
 }
@@ -177,7 +189,6 @@ export default {
 h4.auth-method-type {
   margin-bottom: 8px;
   margin-top: 15px;
-  padding-left: 10px;
   font-size: 13px;
   font-weight: 500;
   color: #666;

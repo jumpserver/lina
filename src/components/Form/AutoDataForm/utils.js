@@ -81,6 +81,14 @@ export class FormFieldGenerator {
         field.el.label = field.label
         break
       case 'nested object':
+        // 属性映射这类字段后端类型是 nested object，但没有 children。调用方通过
+        // fieldMeta.component（如 JsonEditor）指定用自定义组件渲染整个 JSON 值，
+        // 而非展开成嵌套子表单。此时不走 nestedField 逻辑：保留 label，按普通
+        // 自定义组件字段处理（type 置空，由后续 Object.assign 注入的 component 渲染）。
+        if (fieldMeta.component) {
+          type = ''
+          break
+        }
         type = 'nestedField'
         field.component = markRaw(NestedField)
         field.label = ''

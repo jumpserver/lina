@@ -20,7 +20,7 @@ export default {
         fields: [
           [this.$t('Basic'), ['AUTH_CAS', 'CAS_SERVER_URL', 'CAS_ROOT_PROXIED_AS', 'CAS_VERSION']],
           [this.$t('Search'), ['CAS_RENAME_ATTRIBUTES']],
-          [this.$t('Other'), ['CAS_ORG_IDS', 'CAS_CREATE_USER', 'CAS_LOGOUT_COMPLETELY']]
+          [this.$t('Other'), ['CAS_ORG_IDS', 'CAS_LOGOUT_COMPLETELY']]
         ],
         fieldsMeta: {
           CAS_RENAME_ATTRIBUTES: {

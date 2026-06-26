@@ -3,6 +3,7 @@
   "ServerError": "An error occurred while processing your request. Please try again later.",
   "InputEmailAddress": "Please enter a valid email address.",
   "FormatError": "The value entered is not in the correct format.",
+  "Format": "Format",
   "NotSpecialEmoji": "Emoji is not allowed.",
   "notAlphanumericUnderscore": "Only alphanumeric characters and underscores are allowed.",
   "notParenthesis": "Parentheses are not allowed.",

@@ -33,6 +33,12 @@ const mutations = {
   SET_SECURITY_WATERMARK_ENABLED: (state, value) => {
     state.publicSettings['SECURITY_WATERMARK_ENABLED'] = value
   },
+  SET_AUTH_METHODS: (state, methods) => {
+    state.authMethods = methods
+  },
+  SET_AUTH_METHOD_STATUS: (state, { key, value }) => {
+    state.authMethods[key] = value
+  },
   setTheme(state, data) {
     state.themeColors = data
     localStorage.setItem('themeColors', JSON.stringify(data))
@@ -92,7 +98,7 @@ const actions = {
       request
         .patch(url, data)
         .then((res) => {
-          state.authMethods[key] = value
+          commit('SET_AUTH_METHOD_STATUS', { key, value })
           resolve(res)
         })
         .catch((error) => {
@@ -109,7 +115,7 @@ const actions = {
         request
           .get(url)
           .then((res) => {
-            state.authMethods = res
+            commit('SET_AUTH_METHODS', res)
             resolve(res)
           })
           .catch((error) => {
