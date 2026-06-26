@@ -1,7 +1,12 @@
 <template>
   <span>
     <span v-if="iValue === '0'" class="risk-handler">
-      <el-dropdown trigger="click" @command="handleDropdown" @visible-change="handleVisibleChange">
+      <el-dropdown
+        trigger="click"
+        popper-class="action-dropdown"
+        @command="handleDropdown"
+        @visible-change="handleVisibleChange"
+      >
         <el-button class="confirm action" size="small">
           <i class="fa fa-check" />
         </el-button>
