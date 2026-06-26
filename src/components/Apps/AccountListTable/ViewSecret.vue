@@ -63,6 +63,7 @@ import { SecretViewerFormatter } from '@/components/Table/TableFormatters'
 import { useDateTime } from '@/composables/useDateTime'
 import { encryptPassword } from '@/utils/secure'
 import PasswordHistoryDialog from './PasswordHistoryDialog.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ShowSecretInfo',
@@ -112,6 +113,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      publicSettings: 'publicSettings'
+    }),
     secretTypeLabel() {
       return this.account['secret_type'].label || 'Password'
     },
@@ -151,6 +155,10 @@ export default {
       })
     },
     showSecretDialog() {
+      if (!this.publicSettings.SECURITY_ACCOUNT_SECRET_READ) {
+        this.$message.warning(this.$tc('AccountSecretReadDisabled'))
+        return
+      }
       return this.$axios.get(this.url, { disableFlashErrorMsg: true }).then((res) => {
         this.secretInfo = res
         this.sshKeyFingerprint = res?.spec_info?.ssh_key_fingerprint || '-'

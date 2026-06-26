@@ -38,6 +38,7 @@
 <script>
 import { copy, downloadText } from '@/utils/common/index'
 import BaseFormatter from '@/components/Table/TableFormatters/base.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'SecretViewerFormatter',
@@ -69,6 +70,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      publicSettings: 'publicSettings'
+    }),
     hasShow: function () {
       return this.formatterArgs.hasShow
     },
@@ -140,6 +144,10 @@ export default {
   },
   methods: {
     async getAccountSecret() {
+      if (!this.publicSettings.SECURITY_ACCOUNT_SECRET_READ) {
+        this.$message.warning(this.$tc('AccountSecretReadDisabled'))
+        return
+      }
       if (this.formatterArgs.secretFrom === 'cellValue' || this.getIt) {
         return
       }

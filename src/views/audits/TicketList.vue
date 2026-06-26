@@ -19,7 +19,7 @@ export default {
   },
   computed: {
     url() {
-      return `/api/v1/tickets/tickets/`
+      return `/api/v1/audits/tickets/`
     }
   }
 }

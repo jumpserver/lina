@@ -3,6 +3,25 @@ import store from '@/store'
 import moment from 'moment'
 import { getDayFuture, safeDate } from '@/utils/common/time'
 
+/**
+ * 根据浏览器时区获取日期格式
+ * @returns {string} 'YYYY-MM-DD' 或 'MM/DD/YYYY'
+ */
+function getDateFormatByTimezone() {
+  try {
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    // 美洲地区使用 MM/DD/YYYY 格式
+    if (timezone && (timezone.startsWith('America/') || timezone.startsWith('US/'))) {
+      return 'MM/DD/YYYY'
+    }
+    // 其他地区（含 Asia、Europe 等）使用 YYYY-MM-DD 格式
+    return 'YYYY-MM-DD'
+  } catch (e) {
+    // 浏览器不支持获取时区时 fallback
+    return 'YYYY-MM-DD'
+  }
+}
+
 function getTimeUnits(unit) {
   const units = {
     d: '天',
@@ -49,7 +68,8 @@ export function toSafeLocalDateStr(value) {
     return '-'
   }
   const date = safeDate(value)
-  return moment(date).format('L HH:mm:ss')
+  const dateFormat = getDateFormatByTimezone()
+  return moment(date).format(`${dateFormat} HH:mm:ss`)
 }
 
 export function getDefaultExpiredDays() {

@@ -86,7 +86,7 @@ export default {
       }
 
       fieldsMeta['db_name']['rules'] = []
-      if (['mongodb', 'postgresql'].indexOf(platform) !== -1) {
+      if (['mongodb', 'oracle', 'postgresql'].indexOf(platform) !== -1) {
         fieldsMeta['db_name']['rules'] = [rules.Required]
       }
       if (platform === 'oracle') {

@@ -58,8 +58,12 @@ export default {
           },
           callbacks: {
             change: function (val) {
+              const category = this.object.category.value
+              const normalizedCategory = category === 'ds' ? 'directorie' : category
               this.$axios
-                .patch(`/api/v1/assets/assets/${this.object.id}/`, { is_active: val })
+                .patch(`/api/v1/assets/${normalizedCategory}s/${this.object.id}/`, {
+                  is_active: val
+                })
                 .then((res) => {
                   this.$message.success(this.$tc('UpdateSuccessMsg'))
                 })
