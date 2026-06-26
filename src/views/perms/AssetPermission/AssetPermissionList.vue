@@ -99,7 +99,11 @@ export default {
           'is_expired',
           'from_ticket',
           'is_active',
-          'actions'
+          'actions',
+          'date_created',
+          'date_start',
+          'date_expired',
+          'created_by'
         ],
         columnsShow: {
           min: ['name', 'actions'],
