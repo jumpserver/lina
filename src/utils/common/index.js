@@ -413,6 +413,27 @@ export function openNewWindow(url) {
   window.open(url, '_blank', params)
 }
 
+export function getShowCurrentAssetValue(cookie, defaultValue = '0') {
+  const stored =
+    typeof window !== 'undefined' ? window.localStorage.getItem('show_current_asset') : null
+  if (stored === '0' || stored === '1') {
+    return stored
+  }
+  if (cookie && typeof cookie.get === 'function') {
+    return cookie.get('show_current_asset') || defaultValue
+  }
+  return defaultValue
+}
+
+export function setShowCurrentAssetValue(cookie, value) {
+  if (typeof window !== 'undefined') {
+    window.localStorage.setItem('show_current_asset', String(value))
+  }
+  if (cookie && typeof cookie.set === 'function') {
+    cookie.set('show_current_asset', value, 1)
+  }
+}
+
 export class ObjectLocalStorage {
   constructor(key, attr) {
     this.key = key

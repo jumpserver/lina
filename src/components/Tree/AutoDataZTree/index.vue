@@ -32,6 +32,7 @@
 import Icon from '@/components/Widgets/Icon'
 import $ from '@/utils/jquery-vendor'
 import { APP_ENV, withBaseApi } from '@/utils/env'
+import { getShowCurrentAssetValue } from '@/utils/common/index'
 import { omitVueListeners, pickVueListeners } from '@/utils/vue'
 import { mapGetters } from 'vuex'
 import DataZTree from '../DataZTree/index.vue'
@@ -214,7 +215,7 @@ export default {
     },
     // Request URL: http://localhost/api/v1/assets/assets/?node_id=ID&show_current_asset=null&draw=2&limit=15&offset=0&_=1587022917769
     onSelected: function (event, treeNode) {
-      const show_current_asset = this.$cookie.get('show_current_asset') || '0'
+      const show_current_asset = getShowCurrentAssetValue(this.$cookie)
       if (!this.setting.url) {
         return
       }
@@ -321,7 +322,7 @@ export default {
         return
       }
       this.currentNode = treeNode
-      this.currentNodeId = treeNode.meta.data.id
+      this.currentNodeId = treeNode.meta?.data?.id || treeNode.id
       // 屏蔽收藏资产
       if (treeNode?.id === '-12') {
         return
@@ -335,9 +336,7 @@ export default {
         this.showRMenu('root', event.clientX, event.clientY)
       } else if (treeNode && !treeNode.noR) {
         this.zTree.selectNode(treeNode)
-        if (treeNode.meta?.data?.id) {
-          this.currentNodeId = treeNode.meta.data.id
-        }
+        this.currentNodeId = treeNode.meta?.data?.id || treeNode.id
         this.showRMenu('node', event.clientX, event.clientY)
       }
     },

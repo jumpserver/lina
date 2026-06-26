@@ -1,6 +1,7 @@
 {
   "FieldRequiredError": "This field is required.",
   "UploadFileTooLarge": "The uploaded file is too large",
+  "CTYun": "CTYun",
   "ServerError": "An error occurred while processing your request. Please try again later.",
   "InputEmailAddress": "Please enter a valid email address.",
   "FormatError": "The value entered is not in the correct format.",

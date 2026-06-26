@@ -1,6 +1,7 @@
 {
   "FieldRequiredError": "这个字段是必需的。",
   "UploadFileTooLarge": "上传的文件过大",
+  "CTYun": "天翼云",
   "InputEmailAddress": "输入一个电子邮件地址。",
   "ServerError": "服务错误，请联系管理员。",
   "FormatError": "格式错误。",

@@ -312,9 +312,16 @@ export default {
       msg = JSON.stringify({ task: this.currentTaskId })
       this.ws.send(msg)
     },
-    setCostTimeInterval() {
-      this.runButton.icon = 'fa fa-spinner fa-spin'
+    setButtonLoading() {
       this.runButton.disabled = true
+      this.runButton.icon = 'fa fa-spinner fa-spin'
+    },
+    resetButtonState() {
+      this.runButton.disabled = false
+      this.runButton.icon = 'fa fa-play'
+    },
+    setCostTimeInterval() {
+      this.setButtonLoading()
       this.executionInfo.cancel = setInterval(() => {
         this.executionInfo.timeCost += 1
       }, 1000)
@@ -392,6 +399,12 @@ export default {
         this.$message.error(this.$tc('RequiredRunas'))
         return
       }
+
+      // 立即禁用按钮并显示旋转图标
+      this.setButtonLoading()
+      this.showProgress = true
+      this.progressLength = 0
+
       const data = {
         assets: hosts,
         nodes: nodes,
@@ -408,7 +421,6 @@ export default {
         data.chdir = this.chdir
       }
       createJob(data).then((res) => {
-        this.progressLength = 0
         this.executionInfo.timeCost = 0
         this.speedText = ''
         const form = new FormData()
@@ -448,14 +460,15 @@ export default {
           .catch(() => {
             this.execute_stop()
           })
+      }).catch(() => {
+        this.execute_stop()
       })
     },
     execute_stop() {
       this.progressLength = 0
       this.showProgress = false
-      this.runButton.disabled = false
+      this.resetButtonState()
       clearInterval(this.upload_interval)
-      this.runButton.icon = 'fa fa-play'
     },
     handleSelectAssets(assets) {
       this.selectHosts = assets

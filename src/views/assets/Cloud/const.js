@@ -18,6 +18,8 @@ export const ucloud = 'ucloud'
 
 export const volcengine = 'volcengine'
 
+export const ctyun = 'ctyun'
+
 export const qingcloud_private = 'qingcloud_private'
 export const huaweicloud_private = 'huaweicloud_private'
 export const ctyun_private = 'ctyun_private'
@@ -47,7 +49,8 @@ export const publicHostProviders = [
   gcp,
   ucloud,
   volcengine,
-  smartx
+  smartx,
+  ctyun
 ]
 
 export const publicDBProviders = [aliyun]
@@ -151,6 +154,12 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
     title: i18n.t('Volcengine'),
     attrs: ['access_key_id', 'access_key_secret'],
     image: getAssetUrl('img/cloud/volcengine.svg')
+  },
+  [ctyun]: {
+    name: ctyun,
+    title: i18n.t('CTYun'),
+    attrs: ['access_key_id', 'access_key_secret'],
+    image: getAssetUrl('img/cloud/state.svg')
   },
   [vmware]: {
     name: vmware,
