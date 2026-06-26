@@ -44,10 +44,15 @@
 import i18n from '@/i18n/i18n'
 
 export default {
+  emits: ['input', 'change', 'update:modelValue', 'update:model-value'],
   props: {
     value: {
-      type: Array,
+      type: [Array, String],
       default: () => []
+    },
+    modelValue: {
+      type: [Array, String],
+      default: undefined
     },
     tagType: {
       type: Function,
@@ -84,11 +89,14 @@ export default {
     return {
       focus: false,
       filterValue: '',
-      filterTags: this.value,
+      filterTags: this.normalizeTags(this.currentValue),
       isCheckShowPassword: this.replaceShowPassword
     }
   },
   computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value
+    },
     iPlaceholder() {
       return `${this.placeholder} (${this.$t('EnterToContinue')})`
     },
@@ -98,13 +106,30 @@ export default {
   },
   watch: {
     value(val) {
-      this.filterTags = val
+      if (this.modelValue === undefined) {
+        this.filterTags = this.normalizeTags(val)
+      }
+    },
+    modelValue(val) {
+      this.filterTags = this.normalizeTags(val)
     }
   },
   methods: {
+    normalizeTags(value) {
+      if (Array.isArray(value)) return value.slice()
+      if (value === undefined || value === null || value === '') return []
+      return [value]
+    },
+    emitTags(tags = this.filterTags) {
+      const payload = this.normalizeTags(tags)
+      this.$emit('change', payload)
+      this.$emit('input', payload)
+      this.$emit('update:modelValue', payload)
+      this.$emit('update:model-value', payload)
+    },
     handleTagClose(tag) {
-      this.filterTags.splice(this.filterTags.indexOf(tag), 1)
-      this.$emit('change', this.filterTags)
+      this.filterTags = this.filterTags.filter((item) => item !== tag)
+      this.emitTags()
     },
     handleSelect(item) {
       this.filterValue = item.value
@@ -118,23 +143,23 @@ export default {
       this.handleConfirm(false)
     },
     handleConfirm(refocus = true) {
-      if (this.filterValue === '') return
+      const value = this.filterValue.trim()
+      if (value === '') return
 
-      if (!this.filterTags.includes(this.filterValue)) {
-        this.filterTags.push(this.filterValue)
-        this.filterValue = ''
+      if (!this.filterTags.includes(value)) {
+        this.filterTags = [...this.filterTags, value]
       }
-      this.$emit('change', this.filterTags)
-      this.$emit('input', this.filterTags)
+      this.filterValue = ''
+      this.emitTags()
       // 回车/选中后保持焦点便于连续录入；失焦提交时不抢回焦点
       if (refocus) {
-        this.$refs.SearchInput.focus()
+        this.$refs.SearchInput?.focus()
       }
     },
     handleTagClick(v, k) {
-      delete this.filterTags[k]
+      this.filterTags.splice(k, 1)
       this.filterValue = v
-      this.$refs.SearchInput.focus()
+      this.$refs.SearchInput?.focus()
     },
     matchRule(value) {
       const regex = new RegExp(this.replaceRule)
@@ -154,8 +179,7 @@ export default {
     },
     handleClearAll() {
       this.filterTags = []
-      this.$emit('change', this.filterTags)
-      this.$emit('input', this.filterTags)
+      this.emitTags()
     }
   }
 }

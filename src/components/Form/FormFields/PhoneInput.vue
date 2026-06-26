@@ -90,9 +90,11 @@ export default {
 
 <style lang="scss" scoped>
 /*
- * 不使用 EP 的 input-group（el-input + #prepend），因为 prepend 容器与其内部 select 各自带
- * 一条 box-shadow 边框，叠加成 border 套 border。这里改为自绘单层边框的 flex 容器，内部 select
- * 与 input 均去边框，只由容器描边，彻底消除双层。整体高度 30px、内部 28px，与表单标准一致。
+ * 单层边框方案：外层 .phone-input 是唯一描边的 flex 容器；内部的 el-select 与 el-input
+ * 各自会渲染带 inset box-shadow 的 __wrapper（EP 用 box-shadow 充当边框），必须把它们的
+ * box-shadow / border / border-radius 全部清掉，否则就会在容器边框内再套一层，形成
+ * “border 套 border”。两段之间的分隔线由 select 的 border-right 单独提供。
+ * 整体高度 30px，与表单标准一致。
  */
 .phone-input {
   display: flex;
@@ -102,13 +104,10 @@ export default {
   box-sizing: border-box;
   border: 1px solid var(--el-border-color);
   background-color: #fff;
+  overflow: hidden;
 
   &:hover {
     border-color: var(--el-border-color-hover);
-  }
-
-  &:focus-within {
-    border-color: var(--el-color-primary);
   }
 }
 
@@ -119,6 +118,7 @@ export default {
   :deep(.el-select__wrapper) {
     min-height: 28px;
     height: 28px;
+    line-height: 28px;
     padding: 0 8px;
     border: 0;
     border-right: 1px solid var(--el-border-color);
@@ -132,13 +132,31 @@ export default {
   flex: 1 1 auto;
   min-width: 0;
 
+  // 覆盖 EP 的高度变量，避免内部再按默认高度撑出额外尺寸
+  :deep(.el-input) {
+    --el-input-height: 28px;
+    height: 28px;
+  }
+
   :deep(.el-input__wrapper) {
     min-height: 28px;
     height: 28px;
+    padding: 0 8px;
     border: 0;
     border-radius: 0;
     box-shadow: none !important;
     background: transparent;
+  }
+
+  // 激活态只作用于输入框区域：聚焦时仅这一段描边，不影响左侧 select
+  :deep(.el-input__wrapper.is-focus) {
+    box-shadow: 0 0 0 1px var(--el-color-primary) inset !important;
+  }
+
+  :deep(.el-input__inner) {
+    height: 28px;
+    line-height: 28px;
+    border: 0;
   }
 }
 

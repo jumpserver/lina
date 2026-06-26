@@ -167,7 +167,7 @@ export default {
     margin: 0;
 
     .el-form-item {
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
 
     .el-form-item:last-child {

@@ -34,7 +34,7 @@
         <template #dropdown>
           <el-dropdown-menu style="overflow: auto; max-height: 60vh">
             <template v-for="option in action.dropdown" :key="option.name">
-              <div v-if="option.group" class="dropdown-menu-title" style="width: 130px">
+              <div v-if="option.group" class="dropdown-menu-title">
                 {{ option.group }}
               </div>
               <el-dropdown-item
@@ -417,6 +417,24 @@ $color-drop-menu-border: #e4e7ed;
 
 :global(.action-dropdown.el-dropdown__popper .el-dropdown-menu--small) {
   padding: 6px 0;
+}
+
+// 下拉分组标题（如「数据库类型」）：与下拉项同样 0 20px 的左右内边距，分组上方加分隔线，
+// 文字垂直居中、次要色，区别于可点击项。
+:global(.action-dropdown.el-dropdown__popper .dropdown-menu-title) {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  margin-top: 6px;
+  padding: 0 20px;
+  font-size: 12px;
+  color: var(--color-text-secondary, #909399);
+  border-top: 1px solid #e4e7ed;
+}
+
+:global(.action-dropdown.el-dropdown__popper .dropdown-menu-title:first-child) {
+  margin-top: 0;
+  border-top: none;
 }
 
 :global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item) {

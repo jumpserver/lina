@@ -12,8 +12,8 @@
       :label-width="labelWidth"
       :style="{
         '--label-width': labelWidth,
-        '--form-column-gap': '20px',
-        '--form-section-gap': '14px'
+        '--form-column-gap': '8px',
+        '--form-section-gap': '20px'
       }"
       :server-errors="serverErrors"
       @input="handleFormUpdate"
@@ -387,7 +387,7 @@ export default {
       line-height: 30px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
       align-items: flex-start;
 
       .el-input:not(.el-date-editor),

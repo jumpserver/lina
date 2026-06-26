@@ -24,35 +24,19 @@
           class="update-info"
           fa="fa-edit"
         >
-          <table>
-            <tbody>
-              <tr>
-                <td class="label">{{ $t('Phone') }}</td>
-                <td class="value">
-                  <PhoneInput :value="object.phone" />
-                </td>
-              </tr>
-              <tr>
-                <td class="label">{{ $t('WeChat') }}</td>
-                <td class="value">
-                  <el-input v-model="object.wechat" />
-                </td>
-              </tr>
-              <tr>
-                <td class="label" />
-                <td class="value">
-                  <el-button
-                    size="small"
-                    style="margin-top: 10px"
-                    type="primary"
-                    @click="updateProfile"
-                  >
-                    {{ $t('Update') }}
-                  </el-button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <el-form class="update-info-form" label-position="left" label-width="80px">
+            <el-form-item :label="$t('Phone')">
+              <PhoneInput :value="object.phone" />
+            </el-form-item>
+            <el-form-item :label="$t('WeChat')">
+              <el-input v-model="object.wechat" />
+            </el-form-item>
+            <el-form-item label=" ">
+              <el-button type="primary" @click="updateProfile">
+                {{ $t('Update') }}
+              </el-button>
+            </el-form-item>
+          </el-form>
         </IBox>
       </template>
     </TwoCol>
@@ -528,45 +512,54 @@ export default {
 </script>
 <style lang="scss" scoped>
 .update-info {
-  :deep(.el-input-group) {
-    .el-select {
-      width: 80px;
-    }
-  }
+  .update-info-form {
+    // 不沿用全局 .el-card__body .el-form 的 margin-top/right，改为 flex 纵向布局自控间距
+    margin: 0 !important;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; // FormItem 间距统一 20px
 
-  // 统一表单项高度为表单标准 30px（WeChat 等普通 el-input 走 EP 原生高度变量）；
-  // 用真实单层 border 替代 EP 的 inset box-shadow，避免 border 套 border 的双层边框。
-  :deep(.el-input) {
-    --el-input-height: 30px;
-  }
+    :deep(.el-form-item) {
+      margin-bottom: 0;
 
-  :deep(.el-input .el-input__wrapper) {
-    border-radius: 0;
-    box-shadow: none !important;
-    border: 1px solid var(--el-border-color);
-
-    &:hover {
-      border-color: var(--el-border-color-hover);
+      // 标签与 30px 高的输入框垂直居中对齐
+      .el-form-item__label {
+        height: 30px;
+        line-height: 30px;
+        display: inline-flex;
+        align-items: center;
+      }
     }
 
-    &.is-focus {
-      border-color: var(--el-color-primary);
-    }
-  }
+    // 与 DataForm 一致的单层边框方案：边框只画在 .el-input__wrapper 上（box-shadow 关掉、
+    // 用真实 1px border），内部 .el-input__inner 彻底去边框，避免 wrapper 与 inner 各描一层
+    // 形成 border 套 border。整体高度 30px / 内部 28px，与表单标准统一。
+    //
+    // 注意：用直接子选择器把规则限定在「普通 el-input」上，PhoneInput 自带单层容器边框，
+    // 不能被这里的 wrapper 描边规则命中，否则又会双层。
+    :deep(.el-form-item__content > .el-input) {
+      --el-input-height: 30px;
 
-  table {
-    width: 100%;
+      .el-input__wrapper {
+        border-radius: 0;
+        box-shadow: none !important;
+        border: 1px solid var(--el-border-color);
 
-    .label {
-      width: 20%;
-      height: 30px;
-      vertical-align: middle;
-      color: var(--color-text-primary);
-    }
+        &:hover {
+          border-color: var(--el-border-color-hover);
+        }
 
-    .value {
-      width: 60%;
-      vertical-align: middle;
+        &.is-focus {
+          border-color: var(--el-color-primary);
+        }
+      }
+
+      .el-input__inner {
+        height: 28px;
+        line-height: 28px;
+        border: 0 !important;
+        box-shadow: none !important;
+      }
     }
   }
 }

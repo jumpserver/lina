@@ -17,7 +17,7 @@
         </el-link>
       </div>
       <div class="dz">
-        <el-steps :active="1" :space="160">
+        <el-steps :active="1" style="width: 360px">
           <el-step
             v-for="(s, i) in stepStatus"
             :key="s"

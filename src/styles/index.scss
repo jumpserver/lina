@@ -431,6 +431,11 @@ input[type='file'] {
   text-overflow: ellipsis !important;
 }
 
+// 统一所有 Select 下拉选项字体大小为 13px（下拉面板 teleport 到 body，需全局声明）
+.el-select-dropdown .el-select-dropdown__item {
+  font-size: 13px;
+}
+
 .el-link--default {
   color: #1c84c6 !important;
   font-weight: 300;
