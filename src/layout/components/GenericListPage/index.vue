@@ -1,6 +1,6 @@
 <template>
   <Page v-bind="$attrs">
-    <GenericListTable ref="ListTable" v-bind="$attrs" />
+    <GenericListTable v-bind="$attrs" ref="ListTable" />
   </Page>
 </template>
 
@@ -11,7 +11,8 @@ import GenericListTable from '@/layout/components/GenericListTable'
 export default {
   name: 'GenericListPage',
   components: {
-    Page, GenericListTable
+    Page,
+    GenericListTable
   },
   methods: {
     reloadTable() {

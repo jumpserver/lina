@@ -1,5 +1,6 @@
 <template>
   <el-date-picker
+    v-bind="$attrs"
     v-model="value"
     :clearable="false"
     :default-time="['00:00:01', '23:59:59']"
@@ -10,9 +11,7 @@
     class="datepicker"
     range-separator="-"
     size="small"
-    v-bind="$attrs"
     @change="handleDateChange"
-    v-on="$listeners"
   />
 </template>
 
@@ -59,16 +58,20 @@ export default {
           {
             text: this.$t('DateLastWeek'),
             onClick: (picker) => this.onShortcutClick(picker, 7)
-          }, {
+          },
+          {
             text: this.$t('DateLastMonth'),
             onClick: (picker) => this.onShortcutClick(picker, 30)
-          }, {
+          },
+          {
             text: this.$t('DateLast3Months'),
             onClick: (picker) => this.onShortcutClick(picker, 90)
-          }, {
+          },
+          {
             text: this.$t('DateLastHarfYear'),
             onClick: (picker) => this.onShortcutClick(picker, 183)
-          }, {
+          },
+          {
             text: this.$t('DateLastYear'),
             onClick: (picker) => this.onShortcutClick(picker, 365)
           }
@@ -100,34 +103,44 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 html:lang(pt-br) {
-  .datepicker ::v-deep .el-range-separator {
+  .datepicker :deep(.el-range-separator) {
     padding: 0 10px;
   }
 }
 
 .datepicker {
-  &.el-date-editor--daterange.el-input__inner {
-    width: 243px;
-  }
-
   margin-left: 10px;
   border: 1px solid #dcdee2;
   border-radius: 2px;
-  height: 28px;
+  width: 243px !important;
+  min-width: 243px !important;
+  max-width: 243px !important;
+  flex: 0 0 243px !important;
+  display: inline-flex !important;
+  align-items: center;
+  align-self: flex-start;
+  height: 32px !important;
+  min-height: 32px !important;
+  max-height: 32px !important;
+  box-sizing: border-box;
+  background-color: #fff;
 
-  ::v-deep .el-range-separator,
-  ::v-deep .el-input__icon {
-    line-height: 26px;
+  :deep(.el-range-separator),
+  :deep(.el-range__icon),
+  :deep(.el-range__close-icon) {
+    line-height: 30px;
     color: var(--color-icon-primary) !important;
   }
 
-  ::v-deep .el-range-input {
+  :deep(.el-range-input) {
+    height: 30px;
+    line-height: 30px;
     color: var(--color-text-primary) !important;
   }
 
-  ::v-deep .el-range-input {
+  :deep(.el-range-input) {
     width: 49%;
   }
 }

@@ -2,7 +2,6 @@ import empty from '@/layout/empty.vue'
 import i18n from '@/i18n/i18n'
 
 export default [
-
   {
     path: 'sessions',
     name: 'AccountSession',

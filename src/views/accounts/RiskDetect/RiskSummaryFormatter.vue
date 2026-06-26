@@ -1,7 +1,7 @@
 <template>
   <span class="risk">
-    <span v-for="[k, v] of Object.entries(cellValue) " :key="k">
-      <el-tag v-if="v !== 0" :type="getRiskType(k)" effect="plain" size="mini">
+    <span v-for="[k, v] of Object.entries(cellValue)" :key="k">
+      <el-tag v-if="v !== 0" :type="getRiskType(k)" effect="plain" size="small">
         {{ getRiskLabel(k) }}({{ v }})
       </el-tag>
     </span>
@@ -63,7 +63,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .risk {
   font-size: 12px;
   color: #1c84c6;
@@ -72,5 +72,4 @@ export default {
     margin-right: 2px;
   }
 }
-
 </style>

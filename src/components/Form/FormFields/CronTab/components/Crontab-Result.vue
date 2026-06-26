@@ -1,19 +1,19 @@
 /* eslint-disable */
 <template>
   <div class="popup-result-time">
-    <p class="title">{{ this.$t('RunningTimes') }}</p>
+    <p class="title">{{ $t('RunningTimes') }}</p>
     <ul class="popup-result-scroll">
       <template v-if="isShow">
         <li v-for="item in resultList" :key="item">{{ item }}</li>
       </template>
-      <li v-else>{{ this.$t('CalculationResults') }}</li>
+      <li v-else>{{ $t('CalculationResults') }}</li>
     </ul>
   </div>
 </template>
 
 <script>
 import parser from 'cron-parser'
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 
 export default {
   name: 'CrontabResult',
@@ -35,16 +35,16 @@ export default {
     }
   },
   watch: {
-    'ex': 'expressionChange222'
+    ex: 'expressionChange222'
   },
-  mounted: function() {
+  mounted: function () {
     // 初始化 获取一次结果
     this.expressionChange222()
   },
   methods: {
     expressionChange222() {
       this.isShow = true
-      const rule = 0 + ' ' + this.$options.propsData.ex
+      const rule = `0 ${this.ex}`
       try {
         this.resultList = []
         const interval = parser.parseExpression(rule)
@@ -63,14 +63,12 @@ export default {
     }
   }
 }
-
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .popup-result-time {
   margin-top: 10px;
 }
 .title {
   margin-bottom: 0;
 }
-
 </style>

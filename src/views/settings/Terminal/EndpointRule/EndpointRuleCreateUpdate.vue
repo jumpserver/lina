@@ -1,8 +1,8 @@
 <template>
   <GenericCreateUpdatePage
+    v-bind="$data"
     :create-success-next-route="successUrl"
     :update-success-next-route="successUrl"
-    v-bind="$data"
   />
 </template>
 
@@ -52,6 +52,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

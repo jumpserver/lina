@@ -1,18 +1,19 @@
 <template>
   <Drawer
+    v-bind="props"
+    v-model:visible="iVisible"
     :component="component"
     :component-listeners="listener"
     :title="title"
-    :visible.sync="iVisible"
     append-to-body
     class="form-drawer"
-    v-bind="props"
-    v-on="$listeners"
+    v-bind="$attrs"
   />
 </template>
 
 <script>
 import Drawer from '@/components/Drawer/index.vue'
+import { useVModel } from '@/utils/vue/useVModel'
 
 export default {
   components: { Drawer },
@@ -38,21 +39,17 @@ export default {
       default: ''
     }
   },
+  emits: ['update:visible'],
+  setup(props, { emit }) {
+    const iVisible = useVModel(props, emit, 'visible')
+    return {
+      iVisible
+    }
+  },
   data() {
     return {
       listener: {
-        ...this.$listeners
-      }
-    }
-  },
-  computed: {
-    iVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$log.debug('>>> PageDrawer set to: ', val, this)
-        this.$emit('update:visible', val)
+        ...this.$attrs
       }
     }
   },
@@ -61,7 +58,7 @@ export default {
   },
   methods: {
     closeDrawer() {
-      this.iVisible = false
+      this.$emit('update:visible', false)
       // 关闭 Drawer 后，清空所有 params 参数
       // Reflect.ownKeys(this.$route.params).forEach(key => {
       //   Reflect.deleteProperty(this.$route.params, key)
@@ -71,5 +68,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

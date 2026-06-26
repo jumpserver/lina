@@ -33,7 +33,7 @@ export default {
       if (!Array.isArray(this.cellValue)) {
         objects = [this.cellValue]
       }
-      const values = objects.map(object => object?.[this.iKey]) || []
+      const values = objects.map((object) => object?.[this.iKey]) || []
       return values.join(this.formatterArgs.delimiter)
     },
     iKey() {
@@ -62,6 +62,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,18 +1,11 @@
 <template>
   <div>
-    <BaseReport
-      :title="title"
-      :nav="nav"
-      :name="name"
-      v-bind="$attrs"
-    >
+    <BaseReport v-bind="$attrs" :title="title" :nav="nav" :name="name">
       <div class="charts-grid">
         <div class="chart-container full-width">
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('Overview') }}</div>
-            <SummaryCountCard
-              :items="totalData"
-            />
+            <SummaryCountCard :items="totalData" />
           </div>
         </div>
 
@@ -28,10 +21,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('TaskExecutionTrends') }}</div>
             <div class="chart">
-              <Echart
-                :options="ExecutionMetricsOptions"
-                :autoresize="true"
-              />
+              <Echart :options="ExecutionMetricsOptions" :autoresize="true" />
             </div>
           </div>
         </div>
@@ -39,7 +29,12 @@
         <div class="chart-container full-width">
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('AccountResult') }}</div>
-            <AccountSummary :days="days" :is-title="false" :disable-box="true" class="account-summary" />
+            <AccountSummary
+              :days="days"
+              :is-title="false"
+              :disable-box="true"
+              class="account-summary"
+            />
           </div>
         </div>
       </div>
@@ -78,11 +73,11 @@ export default {
       description: '-',
       days: localStorage.getItem(this.name) || '7',
       automation_stats: {
-        'push': 0,
-        'check': 0,
-        'backup': 0,
-        'collect': 0,
-        'change_secret': 0
+        push: 0,
+        check: 0,
+        backup: 0,
+        collect: 0,
+        change_secret: 0
       },
       execution_metrics: {
         dates_metrics_date: [],
@@ -161,9 +156,7 @@ export default {
               }
             },
             axisLabel: {
-              textStyle: {
-                color: '#8F959E'
-              }
+              color: '#8F959E'
             },
             axisTick: {
               show: false
@@ -182,9 +175,7 @@ export default {
               }
             },
             axisLabel: {
-              textStyle: {
-                color: '#8F959E'
-              }
+              color: '#8F959E'
             },
             axisTick: {
               show: false
@@ -215,13 +206,15 @@ export default {
       this.days = val
     },
     async getData() {
-      const data = await this.$axios.get(`/api/v1/reports/reports/account-automation/?days=${this.days}`)
-      this.$set(this.automation_stats, 'push', data.automation_stats.push)
-      this.$set(this.automation_stats, 'check', data.automation_stats.check)
-      this.$set(this.automation_stats, 'backup', data.automation_stats.backup)
-      this.$set(this.automation_stats, 'collect', data.automation_stats.collect)
-      this.$set(this.automation_stats, 'change_secret', data.automation_stats.change_secret)
-      this.$set(this.execution_metrics, 'dates_metrics_date', data.execution_metrics.dates_metrics_date)
+      const data = await this.$axios.get(
+        `/api/v1/reports/reports/account-automation/?days=${this.days}`
+      )
+      this.automation_stats['push'] = data.automation_stats.push
+      this.automation_stats['check'] = data.automation_stats.check
+      this.automation_stats['backup'] = data.automation_stats.backup
+      this.automation_stats['collect'] = data.automation_stats.collect
+      this.automation_stats['change_secret'] = data.automation_stats.change_secret
+      this.execution_metrics['dates_metrics_date'] = data.execution_metrics.dates_metrics_date
 
       const seriesData = Object.entries(data.execution_metrics.data).map(([key, value]) => ({
         name: key,
@@ -242,13 +235,11 @@ export default {
       }))
 
       const keys = Object.keys(data.execution_metrics.data)
-      this.$set(this.execution_metrics, 'legend', keys)
-      this.$set(this.execution_metrics, 'series', seriesData)
+      this.execution_metrics['legend'] = keys
+      this.execution_metrics['series'] = seriesData
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

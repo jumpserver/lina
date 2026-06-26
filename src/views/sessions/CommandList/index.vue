@@ -1,5 +1,5 @@
 <template>
-  <Page v-if="isPage" v-bind="$attrs">
+  <Page v-bind="$attrs" v-if="isPage">
     <CommandList v-bind="$attrs" />
   </Page>
   <div v-else>

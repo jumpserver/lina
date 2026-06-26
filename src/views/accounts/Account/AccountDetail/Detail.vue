@@ -1,41 +1,32 @@
 <template>
   <div>
     <TwoCol>
-      <template>
-        <AutoDetailCard
-          :object="object"
-          v-bind="detail"
-        />
-      </template>
+      <AutoDetailCard v-bind="detail" :object="object" />
       <template #right>
         <QuickActions :actions="quickActions" type="primary" />
         <ViewSecret
           v-if="showViewSecretDialog"
+          v-model:visible="showViewSecretDialog"
           :account="object"
           :url="secretUrl"
-          :visible.sync="showViewSecretDialog"
         />
         <AutomationParamsForm
+          v-model:visible="autoPushVisible"
           :has-button="false"
           :method="pushAccountMethod"
-          :visible.sync="autoPushVisible"
-          @canSetting="onCanSetting"
+          @can-setting="onCanSetting"
           @submit="onSubmit"
         />
       </template>
     </TwoCol>
-    <el-drawer
-      :append-to-body="true"
-      :visible.sync="pamDrawerShow"
-      :with-header="false"
-      size="50%"
-    >
+    <el-drawer v-model="pamDrawerShow" :append-to-body="true" :with-header="false" size="50%">
       <component :is="drawerRefName" />
     </el-drawer>
   </div>
 </template>
 
 <script>
+import { createVNode as createVNodeCompat } from 'vue'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
 import QuickActions from '@/components/Common/QuickActions/index.vue'
 import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret.vue'
@@ -43,7 +34,6 @@ import { openTaskPage } from '@/utils/jms/index'
 import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
 import AssetDetail from '@/views/assets/Asset/AssetDetail'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-
 export default {
   name: 'Detail',
   components: {
@@ -57,8 +47,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -80,12 +69,14 @@ export default {
           },
           callbacks: Object.freeze({
             change: (val) => {
-              this.$axios.patch(
-                `/api/v1/accounts/accounts/${this.object.id}/`,
-                { is_active: val, name: this.object.name }
-              ).then(res => {
-                this.$message.success(this.$tc('UpdateSuccessMsg'))
-              })
+              this.$axios
+                .patch(`/api/v1/accounts/accounts/${this.object.id}/`, {
+                  is_active: val,
+                  name: this.object.name
+                })
+                .then((res) => {
+                  this.$message.success(this.$tc('UpdateSuccessMsg'))
+                })
             }
           })
         },
@@ -98,12 +89,14 @@ export default {
           },
           callbacks: Object.freeze({
             change: (val) => {
-              this.$axios.patch(
-                `/api/v1/accounts/accounts/${this.object.id}/`,
-                { name: this.object?.name, privileged: val }
-              ).then(res => {
-                this.$message.success(this.$tc('UpdateSuccessMsg'))
-              })
+              this.$axios
+                .patch(`/api/v1/accounts/accounts/${this.object.id}/`, {
+                  name: this.object?.name,
+                  privileged: val
+                })
+                .then((res) => {
+                  this.$message.success(this.$tc('UpdateSuccessMsg'))
+                })
             }
           })
         },
@@ -112,24 +105,22 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('Test'),
-            disabled: (
+            disabled:
               !vm.$hasPerm('accounts.verify_account') ||
               !vm.object.asset.auto_config?.ansible_enabled ||
               !vm.object.asset.auto_config?.ping_enabled ||
               this.$store.getters.currentOrgIsRoot
-            )
           },
           callbacks: Object.freeze({
             click: () => {
-              this.$axios.post(
-                `/api/v1/accounts/accounts/tasks/`,
-                {
+              this.$axios
+                .post(`/api/v1/accounts/accounts/tasks/`, {
                   action: 'verify',
                   accounts: [this.object.id]
-                }
-              ).then(res => {
-                openTaskPage(res['task'])
-              })
+                })
+                .then((res) => {
+                  openTaskPage(res['task'])
+                })
             }
           })
         },
@@ -138,23 +129,24 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('Push'),
-            disabled: (
+            disabled:
               !vm.$hasPerm('accounts.push_account') ||
               !vm.object.asset.auto_config?.push_account_enabled ||
               this.$store.getters.currentOrgIsRoot
-            )
           },
           callbacks: Object.freeze({
             click: () => {
               if (this.needSetAutoPushParams) {
                 this.autoPushVisible = true
               } else {
-                this.$axios.post(
-                  `/api/v1/accounts/accounts/tasks/`,
-                  { action: 'push', accounts: [this.object.id] }
-                ).then(res => {
-                  openTaskPage(res['task'])
-                })
+                this.$axios
+                  .post(`/api/v1/accounts/accounts/tasks/`, {
+                    action: 'push',
+                    accounts: [this.object.id]
+                  })
+                  .then((res) => {
+                    openTaskPage(res['task'])
+                  })
               }
             }
           })
@@ -184,12 +176,13 @@ export default {
           },
           callbacks: Object.freeze({
             click: () => {
-              this.$axios.patch(
-                '/api/v1/accounts/accounts/clear-secret/',
-                { account_ids: [this.object.id] }
-              ).then(() => {
-                this.$message.success(this.$tc('ClearSuccessMsg'))
-              })
+              this.$axios
+                .patch('/api/v1/accounts/accounts/clear-secret/', {
+                  account_ids: [this.object.id]
+                })
+                .then(() => {
+                  this.$message.success(this.$tc('ClearSuccessMsg'))
+                })
             }
           })
         },
@@ -202,36 +195,43 @@ export default {
             multiple: false,
             clearable: true,
             model: vm.object.su_from?.id || '',
-            label: vm.object.su_from?.name ? vm.object.su_from?.name + `(${vm.object.su_from?.username})` : '-',
+            label: vm.object.su_from?.name
+              ? vm.object.su_from?.name + `(${vm.object.su_from?.username})`
+              : '-',
             ajax: {
               url: `/api/v1/accounts/accounts/su-from-accounts/?account=${vm.object.id}&fields_size=mini`,
               transformOption: (item) => {
-                return { label: item.name + '(' + item.username + ')', value: item.id }
+                return {
+                  label: item.name + '(' + item.username + ')',
+                  value: item.id
+                }
               }
             },
-            disabled: !vm.$hasPerm('accounts.change_account') ||
-              !vm.object.asset.auto_config?.su_enabled
+            disabled:
+              !vm.$hasPerm('accounts.change_account') || !vm.object.asset.auto_config?.su_enabled
           },
           callbacks: Object.freeze({
             change: (value) => {
               const relationUrl = `/api/v1/accounts/accounts/${this.object.id}/`
-              return this.$axios.patch(relationUrl, { su_from: value, name: this.object.name })
+              return this.$axios.patch(relationUrl, {
+                su_from: value,
+                name: this.object.name
+              })
             }
           })
         }
       ],
       detail: {
         url: `/api/v1/accounts/accounts/${this.object.id}`,
-        excludes: [
-          'template', 'privileged', 'secret',
-          'passphrase', 'spec_info', 'params'
-        ],
+        excludes: ['template', 'privileged', 'secret', 'passphrase', 'spec_info', 'params'],
         formatters: {
           asset: (item, value) => {
-            return <span>{ value?.name }</span>
+            return createVNodeCompat('span', null, [value?.name])
           },
           su_from: (item, value) => {
-            return <span>{value?.name ? value?.name + `(${value?.username})` : ''}</span>
+            return createVNodeCompat('span', null, [
+              value?.name ? value?.name + `(${value?.username})` : ''
+            ])
           }
         }
       }
@@ -247,20 +247,18 @@ export default {
       this.needSetAutoPushParams = item
     },
     onSubmit(form) {
-      this.$axios.post(
-        `/api/v1/accounts/accounts/tasks/`,
-        {
+      this.$axios
+        .post(`/api/v1/accounts/accounts/tasks/`, {
           action: 'push',
           accounts: [this.object.id],
           params: form
-        }
-      ).then(res => {
-        openTaskPage(res['task'])
-      })
+        })
+        .then((res) => {
+          openTaskPage(res['task'])
+        })
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

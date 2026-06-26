@@ -1,18 +1,15 @@
 <template>
   <Dialog
-    v-if="iVisible"
+    v-if="visible"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('setVariable')"
-    :visible.sync="iVisible"
+    :visible="visible"
     width="800px"
+    @update:visible="$emit('update:visible', $event)"
   >
-    <VariableSetForm
-      :form-data="formData"
-      :query-param="queryParam"
-      @confirm="handleConfirm"
-    />
+    <VariableSetForm :form-data="formData" :query-param="queryParam" @confirm="handleConfirm" />
   </Dialog>
 </template>
 
@@ -33,25 +30,16 @@ export default {
     },
     formData: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     queryParam: {
       type: String,
       default: ''
     }
   },
+  emits: ['update:visible', 'submit'],
   data() {
     return {}
-  },
-  computed: {
-    iVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$emit('update:visible', val)
-      }
-    }
   },
   methods: {
     handleConfirm(variable) {
@@ -61,6 +49,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

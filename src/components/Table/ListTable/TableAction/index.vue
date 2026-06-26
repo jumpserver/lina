@@ -2,42 +2,44 @@
   <div :class="device" class="table-header clearfix container">
     <slot name="header">
       <LeftSide
+        v-bind="$attrs"
         v-if="hasLeftActions"
+        :key="leftSideRenderKey"
+        :on-create="onCreate"
         :selected-rows="selectedRows"
         :table-url="tableUrl"
         class="left-side"
-        v-bind="$attrs"
-        v-on="$listeners"
         @init-actions-done="handleActionsDone"
       />
 
       <RightSide
+        v-bind="$attrs"
         v-if="hasRightActions"
+        :quick-filter-expand="quickFilterExpand"
         :selected-rows="selectedRows"
         :table-url="tableUrl"
         class="right-side"
-        v-bind="$attrs"
-        v-on="$listeners"
+        @update:quick-filter-expand="$emit('update:quick-filter-expand', $event)"
       />
 
       <div :class="searchClass" class="search">
         <LabelSearch
           v-if="hasLabelSearch"
-          @labelSearch="handleLabelSearch"
-          @showLabelSearch="handleLabelSearchShowChange"
+          @label-search="handleLabelSearch"
+          @show-label-search="handleLabelSearchShowChange"
         />
         <AutoDataSearch
+          v-bind="iSearchTableConfig"
           v-if="hasSearch"
           :fold="foldSearch"
           class="right-side-item action-search"
-          v-bind="iSearchTableConfig"
-          @tagSearch="handleTagSearch"
+          @tag-search="handleTagSearch"
         />
         <DatetimeRangePicker
+          v-bind="datePicker"
           v-if="hasDatePicker"
           class="datepicker"
-          v-bind="datePicker"
-          @dateChange="handleDateChange"
+          @date-change="handleDateChange"
         />
       </div>
     </slot>
@@ -63,12 +65,21 @@ export default {
     AutoDataSearch,
     DatetimeRangePicker
   },
+  emits: ['update:quick-filter-expand', 'done'],
   props: {
+    quickFilterExpand: {
+      type: Boolean,
+      default: true
+    },
     hasLeftActions: defaultTrue,
     hasSearch: defaultTrue,
     hasRightActions: defaultTrue,
     hasDatePicker: defaultFalse,
     hasLabelSearch: defaultFalse,
+    onCreate: {
+      type: Function,
+      default: null
+    },
     datePicker: {
       type: Object,
       default: () => ({
@@ -86,11 +97,11 @@ export default {
     },
     datePick: {
       type: Function,
-      default: val => {}
+      default: (val) => {}
     },
     searchTable: {
       type: Function,
-      default: val => {}
+      default: (val) => {}
     },
     selectedRows: {
       type: Array,
@@ -101,12 +112,21 @@ export default {
     return {
       keyword: '',
       foldSearch: false,
-      iHasLeftActions: this.hasLeftActions
+      iHasLeftActions: this.hasLeftActions,
+      leftSideRenderVersion: 0
     }
   },
   computed: {
     hasSelectedRows() {
       return this.selectedRows.length > 0
+    },
+    leftSideRenderKey() {
+      const rowKeys = this.selectedRows
+        .map((row, index) => {
+          return row?.id || row?.uuid || row?.pk || row?.name || `row-${index}`
+        })
+        .join(',')
+      return `${this.leftSideRenderVersion}:${this.selectedRows.length}:${rowKeys}`
     },
     iSearchTableConfig() {
       const configDefault = {
@@ -122,6 +142,14 @@ export default {
     },
     searchClass() {
       return this.iHasLeftActions ? 'right' : 'left'
+    }
+  },
+  watch: {
+    selectedRows: {
+      handler() {
+        this.leftSideRenderVersion += 1
+      },
+      deep: true
     }
   },
   created() {
@@ -145,7 +173,7 @@ export default {
       this.foldSearch = val
     },
     handleActionsDone(actions) {
-      this.iHasLeftActions = actions.filter(i => i && i.has !== false).length > 0
+      this.iHasLeftActions = actions.filter((i) => i && i.has !== false).length > 0
     }
   }
 }
@@ -154,14 +182,72 @@ export default {
 <style lang="scss" scoped>
 $innerHeight: 28px;
 $headerHeight: 30px;
+$btn-text-color: #ffffff;
+$color-btn-background: #e8f7f4;
+$color-btn-focus-background: #83cbba;
+$color-divided: #e4e7ed;
+$color-drop-menu-title: #909399;
+$color-drop-menu-border: #e4e7ed;
 
 .table-header {
+  // 主要是 Table 中的操作列
+  // :deep(.data-actions) {
+  //   display: flex;
+  //   justify-content: center;
+  //   align-items: flex-end;
+
+  //   .el-button {
+  //     padding: 2px 5px;
+  //     font-size: 13px;
+  //     display: inline-block !important;
+  //     height: 30px;
+  //     line-height: 30px;
+
+  //     &:not(.is-plain) {
+  //       color: $btn-text-color;
+  //     }
+
+  //     overflow: hidden;
+  //     text-overflow: ellipsis;
+  //     white-space: nowrap;
+
+  //     // 确保按钮内部所有内容都垂直居中
+  //     :deep(span) {
+  //       display: inline-flex;
+  //       align-items: center;
+  //       line-height: 1;
+  //       vertical-align: middle;
+  //     }
+  //   }
+
+  //   :deep(.action-item.el-dropdown .el-button) {
+  //     display: block;
+  //     color: var(--color-primary);
+  //     background-color: $color-btn-background;
+  //     border-color: $color-btn-focus-background;
+
+  //     &:focus {
+  //       color: $btn-text-color;
+  //       background-color: $color-btn-focus-background !important;
+  //     }
+
+  //     &:hover {
+  //       color: $btn-text-color;
+  //       background-color: $color-btn-focus-background;
+  //     }
+  //   }
+  // }
+
   .left-side {
     display: block;
     //float: left;
 
-    ::v-deep .action-item.el-dropdown > .el-button {
-      height: 100%;
+    :deep(.action-item.el-dropdown > .el-button) {
+      min-height: 30px;
+    }
+
+    :deep(.action-item.el-button) {
+      min-height: 30px;
     }
   }
 
@@ -176,11 +262,22 @@ $headerHeight: 30px;
     justify-content: flex-end;
 
     .right-side-item.action-search {
+      height: 30px;
+      min-width: 210px;
+      font-size: 13px;
       border: 1px solid var(--color-border);
       overflow: hidden;
-      border-radius: 4px;
     }
   }
+
+  // .search :deep(.el-input) {
+  //   height: 30px;
+
+  //   .el-input__wrapper {
+  //     width: 100%;
+  //     border-radius: 0;
+  //   }
+  // }
 
   .search.left {
     padding: 0 !important;
@@ -190,8 +287,6 @@ $headerHeight: 30px;
   .search.right {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
     padding-right: 10px;
   }
 }

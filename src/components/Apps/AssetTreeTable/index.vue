@@ -1,26 +1,27 @@
 <template>
   <TreeTable
+    v-bind="$attrs"
     ref="TreeList"
-    :active-menu.sync="treeTableConfig.activeMenu"
+    v-model:active-menu="treeTableConfig.activeMenu"
     :component="treeComponent"
     :table-config="tableConfig"
     :tree-tab-config="treeTableConfig"
     :tree-width="treeWidth"
-    v-bind="$attrs"
-    v-on="$listeners"
   >
     <template #table>
       <slot name="table" />
     </template>
-    <div slot="rMenu" slot-scope="{data}">
-      <slot :data="data" name="rMenu" />
-    </div>
+    <template #rMenu="{ data }">
+      <div>
+        <slot :data="data" name="rMenu" />
+      </div>
+    </template>
   </TreeTable>
 </template>
 
 <script>
 import TreeTable from '../../Table/TreeTable/index.vue'
-import { getShowCurrentAssetValue, setRouterQuery, setUrlParam } from '@/utils/common/index'
+import { setRouterQuery, setUrlParam } from '@/utils/common/index'
 import $ from '@/utils/jquery-vendor'
 
 export default {
@@ -160,7 +161,7 @@ export default {
       return str
     },
     decorateRMenu() {
-      const show_current_asset = getShowCurrentAssetValue(this.$cookie)
+      const show_current_asset = this.$cookie.get('show_current_asset') || '0'
       if (show_current_asset === '1') {
         $('#m_show_asset_all_children_node').css('color', '#606266')
         $('#m_show_asset_only_current_node').css('color', 'green')
@@ -172,7 +173,6 @@ export default {
 
     getAssetsUrl(treeNode) {
       let url = this.treeSetting?.url || this.url
-      const showCurrentAsset = getShowCurrentAssetValue(this.$cookie)
 
       const setParam = (param, value, delay) => {
         setTimeout(() => {
@@ -184,12 +184,10 @@ export default {
         const nodeId = treeNode.meta.data.id
         setParam('node_id', nodeId)
         setParam('asset_id', '')
-        setParam('show_current_asset', showCurrentAsset)
       } else if (treeNode.meta.type === 'asset') {
         const assetId = treeNode.meta.data?.id || treeNode.id
         setParam('node_id', '')
         setParam('asset_id', assetId)
-        setParam('show_current_asset', showCurrentAsset)
       } else if (treeNode.meta.type === 'category') {
         setParam('category', treeNode.meta.category)
       } else if (treeNode.meta.type === 'type') {
@@ -201,7 +199,7 @@ export default {
       setTimeout(() => {
         const query = this.setTreeUrlQuery()
         url = query ? `${url}&${query}` : url
-        this.$set(this.tableConfig, 'url', url)
+        this.tableConfig['url'] = url
       })
 
       if (this.treeSetting.selectSyncToRoute !== false) {

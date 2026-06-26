@@ -5,7 +5,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'WebTerminal',
   computed: {},
@@ -17,5 +16,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

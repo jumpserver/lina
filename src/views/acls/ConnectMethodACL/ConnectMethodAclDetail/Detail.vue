@@ -17,8 +17,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -32,9 +31,11 @@ export default {
         },
         {
           key: this.$t('Reviewer'),
-          value: this.object.reviewers.map(item => item.name).join(', ')
+          value: this.object.reviewers.map((item) => item.name).join(', ')
         },
-        'date_created', 'created_by', 'comment'
+        'date_created',
+        'created_by',
+        'comment'
       ]
     }
   },
@@ -42,6 +43,4 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
-
-</style>
+<style lang="scss" scoped></style>

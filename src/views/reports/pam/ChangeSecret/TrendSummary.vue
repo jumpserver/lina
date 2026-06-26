@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <Title :config="config" style="margin-bottom: 16px;" />
+    <Title :config="config" style="margin-bottom: 16px" />
     <ColumnChart v-bind="columnChartConfig" />
   </div>
 </template>

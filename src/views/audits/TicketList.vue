@@ -1,5 +1,5 @@
 <template>
-  <BaseTicketList :url="url" v-bind="$data" />
+  <BaseTicketList v-bind="$data" :url="url" />
 </template>
 
 <script>
@@ -19,7 +19,7 @@ export default {
   },
   computed: {
     url() {
-      return `/api/v1/audits/tickets/`
+      return `/api/v1/tickets/tickets/`
     }
   }
 }

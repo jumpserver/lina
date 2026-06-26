@@ -1,7 +1,6 @@
 import i18n from '@/i18n/i18n'
 import { message } from '@/utils/vue/message'
-
-const _ = require('lodash')
+import _ from 'lodash'
 
 export function getApiPath(that, objectId) {
   let pagePath = that.$route.path
@@ -100,7 +99,7 @@ export function setUrlParam(url, name, value) {
   } else {
     const oriParam = urlArray[1].split('&')
     const oriParamMap = {}
-    oriParam.forEach(function(value, index) {
+    oriParam.forEach(function (value, index) {
       const v = value.split('=')
       oriParamMap[v[0]] = v[1]
     })
@@ -145,16 +144,15 @@ export function getErrorResponseMsg(error) {
       .map((item, i) => {
         return getErrorResponseMsg(item)
       })
-      .filter(i => i)
+      .filter((i) => i)
       .join('; ')
   } else if (typeof data === 'string') {
     return data
   } else if (_.isPlainObject(data)) {
-    const msg = Object.values(data)
-      .map(item => getErrorResponseMsg(item))
-      .filter(i => i)
-    // 错误信息不要重复提示
-    return [...new Set(msg)].join('; ')
+    return Object.values(data)
+      .map((item) => getErrorResponseMsg(item))
+      .filter((i) => i)
+      .join('; ')
   } else {
     msg = error.toString()
   }
@@ -206,7 +204,7 @@ export function truncateEnd(s, l) {
 
 if (typeof String.prototype.replaceAll === 'undefined') {
   // eslint-disable-next-line no-extend-native
-  String.prototype.replaceAll = function(match, replace) {
+  String.prototype.replaceAll = function (match, replace) {
     return this.replace(new RegExp(match, 'g'), () => replace)
   }
 }
@@ -222,7 +220,7 @@ export function groupedDropdownToCascader(group) {
   return {
     value: firstType.category,
     label: firstType.group,
-    children: group.map(item => {
+    children: group.map((item) => {
       return {
         value: item.name,
         label: item.title
@@ -232,8 +230,8 @@ export function groupedDropdownToCascader(group) {
 }
 
 export function openWindow(url, name = '', iWidth = 900, iHeight = 600) {
-  var iTop = (window.screen.height - 30 - iHeight) / 2
-  var iLeft = (window.screen.width - 10 - iWidth) / 2
+  const iTop = (window.screen.height - 30 - iHeight) / 2
+  const iLeft = (window.screen.width - 10 - iWidth) / 2
   window.open(
     url,
     name,
@@ -260,8 +258,8 @@ export function download(downloadUrl, filename) {
 
   if (filename) {
     fetch(downloadUrl)
-      .then(response => response.blob())
-      .then(blob => {
+      .then((response) => response.blob())
+      .then((blob) => {
         const url = URL.createObjectURL(blob)
         const a = iframe.contentWindow.document.createElement('a')
         a.href = url
@@ -293,7 +291,7 @@ export function diffObject(object, base) {
   })
 }
 
-export const copy = _.throttle(function(value) {
+export const copy = _.throttle(function (value) {
   const inputDom = document.createElement('input')
   inputDom.id = 'createInputDom'
   inputDom.value = value
@@ -313,7 +311,7 @@ export function getQueryFromPath(path) {
   return Object.fromEntries(url.searchParams)
 }
 
-export const pageScroll = _.throttle(id => {
+export const pageScroll = _.throttle((id) => {
   const dom = document.getElementById(id)
   if (dom) {
     dom.scrollTop = dom?.scrollHeight
@@ -335,7 +333,7 @@ export function toTitleCase(string) {
   return string
     .trim()
     .split(' ')
-    .map(item => {
+    .map((item) => {
       if (notUppercase.includes(item.toLowerCase())) {
         return item
       }
@@ -377,9 +375,9 @@ export function toLowerCaseExcludeAbbr(s) {
 
   return s
     .split(' ')
-    .map(word => {
+    .map((word) => {
       // 如果单词包含超过 2 个大写字母，则不转换
-      const uppercaseCount = word.split('').filter(char => {
+      const uppercaseCount = word.split('').filter((char) => {
         return char === char.toUpperCase() && char !== char.toLowerCase()
       }).length
       if (uppercaseCount > 2) {
@@ -412,38 +410,6 @@ export function openNewWindow(url) {
   params = params + `,top=${top},left=${left},width=${screen.width / 3},height=${screen.height / 3}`
   window.sessionStorage.setItem('newWindowCount', `${count + 1}`)
   window.open(url, '_blank', params)
-}
-
-export function getDrawerWidth() {
-  const drawerWidth = localStorage.getItem('drawerWidth')
-  if (drawerWidth && drawerWidth > 100 && drawerWidth < 2000) {
-    return drawerWidth + 'px'
-  }
-  const width = window.innerWidth
-  if (width >= 1500) return '1080px'
-  return '90%'
-}
-
-export function getShowCurrentAssetValue(cookie, defaultValue = '0') {
-  const stored = typeof window !== 'undefined'
-    ? window.localStorage.getItem('show_current_asset')
-    : null
-  if (stored === '0' || stored === '1') {
-    return stored
-  }
-  if (cookie && typeof cookie.get === 'function') {
-    return cookie.get('show_current_asset') || defaultValue
-  }
-  return defaultValue
-}
-
-export function setShowCurrentAssetValue(cookie, value) {
-  if (typeof window !== 'undefined') {
-    window.localStorage.setItem('show_current_asset', String(value))
-  }
-  if (cookie && typeof cookie.set === 'function') {
-    cookie.set('show_current_asset', value, 1)
-  }
 }
 
 export class ObjectLocalStorage {

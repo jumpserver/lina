@@ -1,40 +1,31 @@
 <template>
   <div>
-    <BaseReport
-      :title="title"
-      :nav="nav"
-      :name="name"
-      v-bind="$attrs"
-    >
+    <BaseReport v-bind="$attrs" :title="title" :nav="nav" :name="name">
       <div class="charts-grid">
         <div class="chart-container full-width">
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('Overview') }}</div>
-            <SummaryCountCard
-              :items="totalData"
-            />
+            <SummaryCountCard :items="totalData" />
           </div>
         </div>
 
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('AccountCreationSourceDistribution') }}</div>
+            <div class="chart-container-title-text">
+              {{ $t('AccountCreationSourceDistribution') }}
+            </div>
             <div class="chart">
-              <Echart
-                :options="SourceOptions"
-                :autoresize="true"
-              />
+              <Echart :options="SourceOptions" :autoresize="true" />
             </div>
           </div>
         </div>
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('AccountConnectivityStatusDistribution') }}</div>
+            <div class="chart-container-title-text">
+              {{ $t('AccountConnectivityStatusDistribution') }}
+            </div>
             <div class="chart">
-              <Echart
-                :options="ConnectivityOptions"
-                :autoresize="true"
-              />
+              <Echart :options="ConnectivityOptions" :autoresize="true" />
             </div>
           </div>
         </div>
@@ -42,10 +33,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('AccountPasswordChangeTrends') }}</div>
             <div class="chart">
-              <Echart
-                :options="ChangeSecretOptions"
-                :autoresize="true"
-              />
+              <Echart :options="ChangeSecretOptions" :autoresize="true" />
             </div>
           </div>
         </div>
@@ -92,16 +80,16 @@ export default {
       title: this.$t('AccountStatisticsReport'),
       name: 'AccountStatistics',
       account_stats: {
-        'total': 0,
-        'active': 0,
-        'connected': 0,
-        'su_from': 0,
-        'date_change_secret': 0,
-        'template_total': 0
+        total: 0,
+        active: 0,
+        connected: 0,
+        su_from: 0,
+        date_change_secret: 0,
+        template_total: 0
       },
       change_secret_account_metrics: {
         dates_metrics_date: [],
-        dates_metrics_total: {}
+        dates_metrics_total: []
       },
       config: {
         source_pie: [],
@@ -285,9 +273,7 @@ export default {
               }
             },
             axisLabel: {
-              textStyle: {
-                color: '#8F959E'
-              }
+              color: '#8F959E'
             },
             axisTick: {
               show: false
@@ -306,9 +292,7 @@ export default {
               }
             },
             axisLabel: {
-              textStyle: {
-                color: '#8F959E'
-              }
+              color: '#8F959E'
             },
             axisTick: {
               show: false
@@ -330,28 +314,29 @@ export default {
             smooth: true,
             areaStyle: {
               // 区域填充样式
-              normal: {
-                color: new echarts.graphic.LinearGradient(
-                  0,
-                  0,
-                  0,
-                  1,
-                  [{
+              color: new echarts.graphic.LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                [
+                  {
                     offset: 0,
                     color: primary
-                  }, {
+                  },
+                  {
                     offset: 0.6,
                     color: TwoLevelColor
-                  }, {
+                  },
+                  {
                     offset: 0.8,
                     color: ThreeLevelColor
                   }
-                  ],
-                  false
-                ),
-                shadowColor: shadowColor,
-                shadowBlur: 5
-              }
+                ],
+                false
+              ),
+              shadowColor: shadowColor,
+              shadowBlur: 5
             },
             data: this.change_secret_account_metrics.dates_metrics_total
           }
@@ -365,34 +350,34 @@ export default {
   methods: {
     async getData() {
       const data = await this.$axios.get('/api/v1/reports/reports/account-statistic/?days=30')
-      this.$set(this.account_stats, 'total', data.account_stats.total)
-      this.$set(this.account_stats, 'active', data.account_stats.active)
-      this.$set(this.account_stats, 'connected', data.account_stats.connected)
-      this.$set(this.account_stats, 'su_from', data.account_stats.su_from)
-      this.$set(this.account_stats, 'date_change_secret', data.account_stats.date_change_secret)
-      this.$set(this.account_stats, 'template_total', data.account_stats.template_total)
-      this.$set(this.change_secret_account_metrics, 'dates_metrics_date', data.change_secret_account_metrics.dates_metrics_date)
-      this.$set(this.change_secret_account_metrics, 'dates_metrics_total', data.change_secret_account_metrics.dates_metrics_total)
+      this.account_stats['active'] = data.account_stats.active
+      this.account_stats['active'] = data.account_stats.active
+      this.account_stats['connected'] = data.account_stats.connected
+      this.account_stats['su_from'] = data.account_stats.su_from
+      this.account_stats['date_change_secret'] = data.account_stats.date_change_secret
+      this.account_stats['template_total'] = data.account_stats.template_total
+      this.change_secret_account_metrics['dates_metrics_date'] =
+        data.change_secret_account_metrics.dates_metrics_date
+      this.change_secret_account_metrics['dates_metrics_total'] =
+        data.change_secret_account_metrics.dates_metrics_total
 
       const accountSourcePie = data.source_pie
       if (accountSourcePie.length !== 0) {
-        this.$set(this.config, 'source_pie', accountSourcePie)
+        this.config['source_pie'] = accountSourcePie
       }
 
-      const by_connectivity = data.by_connectivity.map(item => {
+      const by_connectivity = data.by_connectivity.map((item) => {
         return {
           name: item.label,
           value: item.total
         }
       })
-      this.$set(this.config, 'by_connectivity', by_connectivity)
-      this.$set(this.config.top10_asset_accounts, 'data', data.top_assets)
-      this.$set(this.config.top10_version_accounts, 'data', data.top_version_accounts)
+      this.config['by_connectivity'] = by_connectivity
+      this.config.top10_asset_accounts['data'] = data.top_assets
+      this.config.top10_version_accounts['data'] = data.top_version_accounts
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

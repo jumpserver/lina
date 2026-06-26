@@ -4,10 +4,10 @@
   </div>
 </template>
 
-<script type="text/jsx">
+<script>
+import { createTextVNode as createTextVNodeCompat, createVNode as createVNodeCompat } from 'vue'
 import GenericListPage from '@/layout/components/GenericListPage'
 import { SwitchFormatter } from '@/components/Table/TableFormatters'
-
 export default {
   components: {
     GenericListPage
@@ -20,12 +20,27 @@ export default {
         columnsShow: {
           min: ['name', 'args'],
           default: [
-            'name', 'args', 'type', 'crontab', 'interval', 'created_by', 'is_periodic_display', 'is_periodic'
+            'name',
+            'args',
+            'type',
+            'crontab',
+            'interval',
+            'created_by',
+            'is_periodic_display',
+            'is_periodic'
           ]
         },
         columns: [
-          'name', 'args', 'type', 'crontab', 'interval', 'date_last_run', 'summary',
-          'created_by', 'is_periodic_display', 'is_periodic'
+          'name',
+          'args',
+          'type',
+          'crontab',
+          'interval',
+          'date_last_run',
+          'summary',
+          'created_by',
+          'is_periodic_display',
+          'is_periodic'
         ],
         columnsMeta: {
           actions: {
@@ -38,10 +53,17 @@ export default {
             width: '130px',
             label: `${this.$t('Success')}/${this.$t('Total')}`,
             formatter: (row) => {
-              return <div>
-                <span Class='text-primary'>{row.summary.success}</span>/
-                <span>{row.summary.total}</span>
-              </div>
+              return createVNodeCompat('div', null, [
+                createVNodeCompat(
+                  'span',
+                  {
+                    class: 'text-primary'
+                  },
+                  [row.summary.success]
+                ),
+                createTextVNodeCompat('/'),
+                createVNodeCompat('span', null, [row.summary.total])
+              ])
             }
           },
           is_periodic_display: {
@@ -80,5 +102,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

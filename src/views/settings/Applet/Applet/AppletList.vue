@@ -7,8 +7,8 @@
         </el-alert>
       </el-col>
     </el-row>
-    <CardTable ref="CardTable" v-bind="$data" />
-    <UploadDialog :visible.sync="uploadDialogVisible" @upload-event="handleUpload" />
+    <CardTable v-bind="$data" ref="CardTable" />
+    <UploadDialog v-model:visible="uploadDialogVisible" @upload-event="handleUpload" />
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <TwoCol>
-      <IBox :title="title" class="block" v-bind="$attrs">
+      <IBox v-bind="$attrs" :title="title" class="block">
         <el-timeline>
           <el-timeline-item
             v-for="(activity, index) in activities"
@@ -12,11 +12,7 @@
             placement="bottom"
           >
             {{ activity.content }}
-            <el-link
-              v-if="activity['detail_url']"
-              type="primary"
-              @click.native="onClick(activity)"
-            >
+            <el-link v-if="activity['detail_url']" type="primary" @click="onClick(activity)">
               {{ $tc('Detail') }}
             </el-link>
           </el-timeline-item>
@@ -30,9 +26,9 @@
 <script>
 import IBox from '@/components/Common/IBox/index.vue'
 import DiffDetail from '@/components/Dialog/DiffDetail.vue'
-import { openTaskPage } from '@/utils/jms/index'
-import { toSafeLocalDateStr } from '@/utils/common/time'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
+import { openTaskPage } from '@/utils/jms/index'
 
 export default {
   name: 'ResourceActivity',
@@ -65,9 +61,9 @@ export default {
   },
   methods: {
     getActivities() {
-      this.$axios.get(this.activityUrl).then(res => {
+      this.$axios.get(this.activityUrl).then((res) => {
         const activities = res || []
-        activities.forEach(activity => {
+        activities.forEach((activity) => {
           activity.timestamp = toSafeLocalDateStr(activity.timestamp)
           this.activities.push(activity)
         })
@@ -77,11 +73,9 @@ export default {
       const type = activity['r_type']
       const taskUrl = activity['detail_url']
       if (type === 'O') {
-        this.$axios.get(taskUrl).then(
-          res => {
-            this.$refs.DetailDialog.show(res.diff)
-          }
-        )
+        this.$axios.get(taskUrl).then((res) => {
+          this.$refs.DetailDialog.show(res.diff)
+        })
       } else {
         openTaskPage('', 'celery', taskUrl)
       }
@@ -90,6 +84,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

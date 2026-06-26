@@ -9,10 +9,14 @@
 </template>
 
 <script>
+import {
+  resolveComponent as resolveComponentCompat,
+  createVNode as createVNodeCompat,
+  createTextVNode as createTextVNodeCompat
+} from 'vue'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
 import { GenericListTable } from '@/layout/components'
-
 export default {
   name: 'AccountPushList',
   components: {
@@ -26,14 +30,24 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/push-account-automations/',
         columns: [
-          'name', 'accounts', 'secret_strategy', 'is_periodic',
-          'periodic_display', 'executed_amount', 'is_active', 'actions'
+          'name',
+          'accounts',
+          'secret_strategy',
+          'is_periodic',
+          'periodic_display',
+          'executed_amount',
+          'is_active',
+          'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'accounts', 'periodic_display',
-            'executed_amount', 'is_active', 'actions'
+            'name',
+            'accounts',
+            'periodic_display',
+            'executed_amount',
+            'is_active',
+            'actions'
           ]
         },
         columnsMeta: {
@@ -44,13 +58,21 @@ export default {
             }
           },
           accounts: {
-            formatter: function(row) {
-              return <span> {row.accounts.join(', ')} </span>
+            formatter: function (row) {
+              return createVNodeCompat('span', null, [
+                createTextVNodeCompat(' '),
+                row.accounts.join(', '),
+                createTextVNodeCompat(' ')
+              ])
             }
           },
           secret_strategy: {
-            formatter: function(row) {
-              return <span> {row.secret_strategy.label} </span>
+            formatter: function (row) {
+              return createVNodeCompat('span', null, [
+                createTextVNodeCompat(' '),
+                row.secret_strategy.label,
+                createTextVNodeCompat(' ')
+              ])
             }
           },
           assets_amount: {
@@ -66,7 +88,16 @@ export default {
           executed_amount: {
             formatter: (row) => {
               const can = vm.$hasPerm('accounts.view_pushaccountexecution')
-              return <el-link onClick={ () => this.handleExecAmount(row) } disabled={ !can }>{ row.executed_amount }</el-link>
+              return createVNodeCompat(
+                resolveComponentCompat('el-link'),
+                {
+                  onClick: () => this.handleExecAmount(row),
+                  disabled: !can
+                },
+                {
+                  default: () => [row.executed_amount]
+                }
+              )
             }
           },
           actions: {
@@ -83,16 +114,15 @@ export default {
                   can: ({ row }) => {
                     return row.is_active && vm.$hasPerm('accounts.add_pushaccountexecution')
                   },
-                  callback: function({ row }) {
-                    this.$axios.post(
-                      `/api/v1/accounts/push-account-executions/`,
-                      {
+                  callback: function ({ row }) {
+                    this.$axios
+                      .post(`/api/v1/accounts/push-account-executions/`, {
                         automation: row.id,
                         type: row.type.value
-                      }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
+                      })
+                      .then((res) => {
+                        openTaskPage(res['task'])
+                      })
                   }.bind(this)
                 }
               ]
@@ -110,15 +140,19 @@ export default {
             name: 'BatchDisable',
             title: this.$t('DisableSelected'),
             icon: 'fa fa-ban',
-            can: ({ selectedRows }) => selectedRows.length > 0 && this.$hasPerm('accounts.change_pushaccountautomation'),
-            callback: ({ selectedRows, reloadTable }) => this.bulkDisableCallback(selectedRows, reloadTable)
+            can: ({ selectedRows }) =>
+              selectedRows.length > 0 && this.$hasPerm('accounts.change_pushaccountautomation'),
+            callback: ({ selectedRows, reloadTable }) =>
+              this.bulkDisableCallback(selectedRows, reloadTable)
           },
           {
             name: 'BatchActivate',
             title: this.$t('ActivateSelected'),
             icon: 'fa fa-check-circle-o',
-            can: ({ selectedRows }) => selectedRows.length > 0 && this.$hasPerm('accounts.change_pushaccountautomation'),
-            callback: ({ selectedRows, reloadTable }) => this.bulkActivateCallback(selectedRows, reloadTable)
+            can: ({ selectedRows }) =>
+              selectedRows.length > 0 && this.$hasPerm('accounts.change_pushaccountautomation'),
+            callback: ({ selectedRows, reloadTable }) =>
+              this.bulkActivateCallback(selectedRows, reloadTable)
           }
         ]
       }
@@ -136,29 +170,41 @@ export default {
     },
     bulkDisableCallback(selectedRows, reloadTable) {
       const url = '/api/v1/accounts/push-account-automations/'
-      const data = selectedRows.map(row => {
-        return { id: row.id, is_active: false }
+      const data = selectedRows.map((row) => {
+        return {
+          id: row.id,
+          is_active: false
+        }
       })
       if (data.length === 0) return
-      this.$axios.patch(url, data).then(() => {
-        reloadTable()
-        this.$message.success(this.$t('DisableSuccessMsg'))
-      }).catch(error => {
-        this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error)
-      })
+      this.$axios
+        .patch(url, data)
+        .then(() => {
+          reloadTable()
+          this.$message.success(this.$t('DisableSuccessMsg'))
+        })
+        .catch((error) => {
+          this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error)
+        })
     },
     bulkActivateCallback(selectedRows, reloadTable) {
       const url = '/api/v1/accounts/push-account-automations/'
-      const data = selectedRows.map(row => {
-        return { id: row.id, is_active: true }
+      const data = selectedRows.map((row) => {
+        return {
+          id: row.id,
+          is_active: true
+        }
       })
       if (data.length === 0) return
-      this.$axios.patch(url, data).then(() => {
-        reloadTable()
-        this.$message.success(this.$t('DisableSuccessMsg'))
-      }).catch(error => {
-        this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error)
-      })
+      this.$axios
+        .patch(url, data)
+        .then(() => {
+          reloadTable()
+          this.$message.success(this.$t('DisableSuccessMsg'))
+        })
+        .catch((error) => {
+          this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error)
+        })
     }
   }
 }

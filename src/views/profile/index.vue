@@ -1,15 +1,9 @@
 <template>
   <Page v-bind="$attrs">
     <TwoCol>
-      <template>
-        <DetailCard :items="detailCardItems" />
-      </template>
+      <DetailCard :items="detailCardItems" />
       <template #right>
-        <QuickActions
-          :actions="authQuickActions"
-          :title="$tc('AuthSettings')"
-          type="primary"
-        />
+        <QuickActions :actions="authQuickActions" :title="$tc('AuthSettings')" type="primary" />
         <QuickActions
           :actions="messageSubscriptionQuickActions"
           :title="$tc('NotificationConfiguration')"
@@ -18,7 +12,7 @@
           type="info"
         />
         <QuickActions
-          v-if="biometricFeaturesActions.some(action => action.has)"
+          v-if="biometricFeaturesActions.some((action) => action.has)"
           :actions="biometricFeaturesActions"
           :title="$tc('BiometricFeatures')"
           style="margin-top: 15px"
@@ -30,48 +24,34 @@
           class="update-info"
           fa="fa-edit"
         >
-          <table>
-            <tr>
-              <td class="label"> {{ $t('Phone') }}</td>
-              <td class="value">
-                <PhoneInput :value="object.phone" />
-              </td>
-            </tr>
-            <tr>
-              <td class="label"> {{ $t('WeChat') }}</td>
-              <td class="value">
-                <el-input v-model="object.wechat" />
-              </td>
-            </tr>
-            <tr>
-              <td class="label" />
-              <td class="value">
-                <el-button
-                  size="small"
-                  style="margin-top: 10px"
-                  type="primary"
-                  @click="updateProfile"
-                >
-                  {{ $t('Update') }}
-                </el-button>
-              </td>
-            </tr>
-          </table>
+          <el-form class="update-info-form" label-position="left" label-width="80px">
+            <el-form-item :label="$t('Phone')">
+              <PhoneInput :value="object.phone" />
+            </el-form-item>
+            <el-form-item :label="$t('WeChat')">
+              <el-input v-model="object.wechat" />
+            </el-form-item>
+            <el-form-item label=" ">
+              <el-button type="primary" @click="updateProfile">
+                {{ $t('Update') }}
+              </el-button>
+            </el-form-item>
+          </el-form>
         </IBox>
       </template>
     </TwoCol>
   </Page>
 </template>
 
-<script type="text/jsx">
+<script>
+import { createVNode as createVNodeCompat, createTextVNode as createTextVNodeCompat } from 'vue'
 import { IBox, QuickActions } from '@/components'
 import { PhoneInput } from '@/components/Form/FormFields'
 import Page from '@/layout/components/Page'
 import DetailCard from '@/components/Cards/DetailCard'
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import store from '@/store'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-
 export default {
   components: {
     TwoCol,
@@ -95,11 +75,15 @@ export default {
       biometricFeaturesActions: [
         {
           title: this.$t('FacialFeatures'),
-          has: this.$store.getters.publicSettings.FACE_RECOGNITION_ENABLED &&
+          has:
+            this.$store.getters.publicSettings.FACE_RECOGNITION_ENABLED &&
+            this.$store.getters.publicSettings.XPACK_LICENSE_EDITION_ULTIMATE &&
             !store.getters.publicSettings['PRIVACY_MODE'],
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.is_face_code_set ? this.$t('Unbind') : this.$t('Bind')
+            label: this.$store.state.users.profile.is_face_code_set
+              ? this.$t('Unbind')
+              : this.$t('Bind')
           },
           callbacks: {
             click: () => {
@@ -121,10 +105,11 @@ export default {
             showTip: this.isDisabled('wecom'),
             tip: this.$t('UnbindHelpText')
           },
-          has: this.$store.getters.publicSettings.AUTH_WECOM &&
+          has:
+            this.$store.getters.publicSettings.AUTH_WECOM &&
             !store.getters.publicSettings['PRIVACY_MODE'],
           callbacks: {
-            click: function() {
+            click: function () {
               this.currentEdit = 'wecom'
               this.verifyDone()
             }.bind(this)
@@ -139,10 +124,11 @@ export default {
             showTip: this.isDisabled('dingtalk'),
             tip: this.$t('UnbindHelpText')
           },
-          has: this.$store.getters.publicSettings.AUTH_DINGTALK &&
+          has:
+            this.$store.getters.publicSettings.AUTH_DINGTALK &&
             !store.getters.publicSettings['PRIVACY_MODE'],
           callbacks: {
-            click: function() {
+            click: function () {
               this.currentEdit = 'dingtalk'
               this.verifyDone()
             }.bind(this)
@@ -157,10 +143,11 @@ export default {
             showTip: this.isDisabled('feishu'),
             tip: this.$t('UnbindHelpText')
           },
-          has: this.$store.getters.publicSettings.AUTH_FEISHU &&
+          has:
+            this.$store.getters.publicSettings.AUTH_FEISHU &&
             !store.getters.publicSettings['PRIVACY_MODE'],
           callbacks: {
-            click: function() {
+            click: function () {
               this.currentEdit = 'feishu'
               this.verifyDone()
             }.bind(this)
@@ -175,10 +162,11 @@ export default {
             showTip: this.isDisabled('lark'),
             tip: this.$t('UnbindHelpText')
           },
-          has: this.$store.getters.publicSettings.AUTH_LARK &&
+          has:
+            this.$store.getters.publicSettings.AUTH_LARK &&
             !store.getters.publicSettings['PRIVACY_MODE'],
           callbacks: {
-            click: function() {
+            click: function () {
               this.currentEdit = 'lark'
               this.verifyDone()
             }.bind(this)
@@ -193,10 +181,11 @@ export default {
             showTip: this.isDisabled('slack'),
             tip: this.$t('UnbindHelpText')
           },
-          has: this.$store.getters.publicSettings.AUTH_SLACK &&
+          has:
+            this.$store.getters.publicSettings.AUTH_SLACK &&
             !store.getters.publicSettings['PRIVACY_MODE'],
           callbacks: {
-            click: function() {
+            click: function () {
               this.currentEdit = 'slack'
               this.verifyDone()
             }.bind(this)
@@ -209,7 +198,7 @@ export default {
             label: this.$t('Setting')
           },
           callbacks: {
-            click: function() {
+            click: function () {
               window.open('/core/auth/profile/mfa/', '_blank')
             }
           }
@@ -222,8 +211,13 @@ export default {
             disabled: !this.isUserFromSource('local')
           },
           callbacks: {
-            click: function() {
-              this.$router.push({ name: 'SSHKeyList', query: { tab: 'Password' } })
+            click: function () {
+              this.$router.push({
+                name: 'SSHKeyList',
+                query: {
+                  tab: 'Password'
+                }
+              })
             }.bind(this)
           }
         },
@@ -235,8 +229,13 @@ export default {
             disabled: !this.$store.state.users.profile.can_public_key_auth
           },
           callbacks: {
-            click: function() {
-              this.$router.push({ name: 'SSHKeyList', query: { tab: 'SSHKeyList' } })
+            click: function () {
+              this.$router.push({
+                name: 'SSHKeyList',
+                query: {
+                  tab: 'SSHKeyList'
+                }
+              })
             }.bind(this)
           }
         }
@@ -351,7 +350,11 @@ export default {
           key: this.$t('Phone'),
           formatter: (item, val) => {
             if (val) {
-              return <span>{val.code} {val.phone}</span>
+              return createVNodeCompat('span', null, [
+                val.code,
+                createTextVNodeCompat(' '),
+                val.phone
+              ])
             } else {
               return '-'
             }
@@ -359,15 +362,15 @@ export default {
           has: !store.getters.publicSettings['PRIVACY_MODE']
         },
         {
-          value: this.object.groups?.map(item => item.name).join(' ｜ '),
+          value: this.object.groups?.map((item) => item.name).join(' ｜ '),
           key: this.$t('UserGroups')
         },
         {
-          value: this.object.system_roles?.map(item => item.display_name).join(' ｜ '),
+          value: this.object.system_roles?.map((item) => item.display_name).join(' ｜ '),
           key: this.$t('SystemRoles')
         },
         {
-          value: this.object.org_roles?.map(item => item.display_name).join(' ｜ '),
+          value: this.object.org_roles?.map((item) => item.display_name).join(' ｜ '),
           key: this.$t('OrgRoles'),
           has: !!this.object.org_roles
         },
@@ -377,7 +380,13 @@ export default {
           formatter: (item, val) => {
             const comment = val.public_key_comment || '-'
             const md5 = val.public_key_hash_md5 || '-'
-            return <span>{comment} <br/> {md5}</span>
+            return createVNodeCompat('span', null, [
+              comment,
+              createTextVNodeCompat(' '),
+              createVNodeCompat('br', null, null),
+              createTextVNodeCompat(' '),
+              md5
+            ])
           }
         },
         {
@@ -402,7 +411,7 @@ export default {
         },
         {
           value: toSafeLocalDateStr(this.object.date_joined),
-          key: (this.$t('DateJoined'))
+          key: this.$t('DateJoined')
         },
         {
           value: toSafeLocalDateStr(this.object.date_expired),
@@ -434,12 +443,15 @@ export default {
         phone: this.object.phone,
         wechat: this.object.wechat
       }
-      this.$axios.patch(url, data).then(() => {
-        this.$message.success(this.$tc('UpdateSuccessMsg'))
-      }).catch(err => {
-        const errMsg = err.request.response
-        this.$message.error(this.$tc('Error') + ': ' + errMsg)
-      })
+      this.$axios
+        .patch(url, data)
+        .then(() => {
+          this.$message.success(this.$tc('UpdateSuccessMsg'))
+        })
+        .catch((err) => {
+          const errMsg = err.request.response
+          this.$message.error(this.$tc('Error') + ': ' + errMsg)
+        })
     },
     isBind(sourceName) {
       return !!this.$store.state.users.profile[`${sourceName}_id`]
@@ -454,15 +466,17 @@ export default {
       return this.isBind(sourceName) && this.isUserFromSource(sourceName)
     },
     updateUserReceiveBackends(val) {
-      this.$axios.patch(
-        `/api/v1/notifications/user-msg-subscription/${this.object.id}/`,
-        { 'receive_backends': this.getReceiveBackendList() }
-      ).then(res => {
-        this.$message.success(this.$tc('UpdateSuccessMsg'))
-        this.$store.dispatch('users/getProfile', true)
-      }).catch(err => {
-        this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
-      })
+      this.$axios
+        .patch(`/api/v1/notifications/user-msg-subscription/${this.object.id}/`, {
+          receive_backends: this.getReceiveBackendList()
+        })
+        .then((res) => {
+          this.$message.success(this.$tc('UpdateSuccessMsg'))
+          this.$store.dispatch('users/getProfile', true)
+        })
+        .catch((err) => {
+          this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
+        })
     },
     getReceiveBackendList() {
       const backendList = []
@@ -497,28 +511,56 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
 .update-info {
-  ::v-deep {
-    .el-input-group {
-      .el-select {
-        width: 80px;
+  .update-info-form {
+    // 不沿用全局 .el-card__body .el-form 的 margin-top/right，改为 flex 纵向布局自控间距
+    margin: 0 !important;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; // FormItem 间距统一 20px
+
+    :deep(.el-form-item) {
+      margin-bottom: 0;
+
+      // 标签与 30px 高的输入框垂直居中对齐
+      .el-form-item__label {
+        height: 30px;
+        line-height: 30px;
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+
+    // 与 DataForm 一致的单层边框方案：边框只画在 .el-input__wrapper 上（box-shadow 关掉、
+    // 用真实 1px border），内部 .el-input__inner 彻底去边框，避免 wrapper 与 inner 各描一层
+    // 形成 border 套 border。整体高度 30px / 内部 28px，与表单标准统一。
+    //
+    // 注意：用直接子选择器把规则限定在「普通 el-input」上，PhoneInput 自带单层容器边框，
+    // 不能被这里的 wrapper 描边规则命中，否则又会双层。
+    :deep(.el-form-item__content > .el-input) {
+      --el-input-height: 30px;
+
+      .el-input__wrapper {
+        border-radius: 0;
+        box-shadow: none !important;
+        border: 1px solid var(--el-border-color);
+
+        &:hover {
+          border-color: var(--el-border-color-hover);
+        }
+
+        &.is-focus {
+          border-color: var(--el-color-primary);
+        }
+      }
+
+      .el-input__inner {
+        height: 28px;
+        line-height: 28px;
+        border: 0 !important;
+        box-shadow: none !important;
       }
     }
   }
-
-  table {
-    width: 100%;
-
-    .label {
-      width: 20%;
-    }
-
-    .value {
-      width: 60%;
-    }
-
-  }
 }
-
 </style>

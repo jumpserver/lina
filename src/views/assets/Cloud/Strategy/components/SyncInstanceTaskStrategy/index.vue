@@ -6,16 +6,17 @@
       v-if="visible"
       :table-config="tableConfig"
       :value="attrValue"
-      :visible.sync="visible"
+      :visible="visible"
       @confirm="onAttrDialogConfirm"
     />
-    <el-button size="mini" type="primary" @click="handleCreate">
-      {{ this.$t('New') }}
+    <el-button size="small" type="primary" @click="handleCreate">
+      {{ $t('New') }}
     </el-button>
   </div>
 </template>
 
 <script>
+import { h, resolveComponent } from 'vue'
 import DataTable from '@/components/Table/DataTable/index.vue'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
 import { tableFormatter } from '@/views/assets/Cloud/Strategy/components/const'
@@ -43,28 +44,41 @@ export default {
         columns: [
           { prop: 'name', label: this.$t('PolicyName') },
           { prop: 'priority', label: this.$t('Priority') },
-          { prop: 'strategy_rules', label: this.$t('RuleCount'), formatter: tableFormatter('count') },
-          { prop: 'strategy_actions', label: this.$t('ActionCount'), formatter: tableFormatter('count') },
-          { prop: 'action', label: this.$t('Action'), align: 'center', width: '100px', formatter: (row, col, cellValue, index) => {
-            return (
-              <div className='input-button'>
-                <el-button
-                  icon='el-icon-edit'
-                  size='mini'
-                  style={{ 'flexShrink': 0 }}
-                  type='primary'
-                  onClick={this.handleAttrEdit({ row, col, cellValue, index })}
-                />
-                <el-button
-                  icon='el-icon-minus'
-                  size='mini'
-                  style={{ 'flexShrink': 0 }}
-                  type='danger'
-                  onClick={this.handleAttrDelete({ row, col, cellValue, index })}
-                />
-              </div>
-            )
-          } }
+          {
+            prop: 'strategy_rules',
+            label: this.$t('RuleCount'),
+            formatter: tableFormatter('count')
+          },
+          {
+            prop: 'strategy_actions',
+            label: this.$t('ActionCount'),
+            formatter: tableFormatter('count')
+          },
+          {
+            prop: 'action',
+            label: this.$t('Action'),
+            align: 'center',
+            width: '100px',
+            formatter: (row, col, cellValue, index) => {
+              const ElButton = resolveComponent('el-button')
+              return h('div', { class: 'input-button' }, [
+                h(ElButton, {
+                  icon: 'Edit',
+                  size: 'small',
+                  style: { flexShrink: 0 },
+                  type: 'primary',
+                  onClick: this.handleAttrEdit({ row, col, cellValue, index })
+                }),
+                h(ElButton, {
+                  icon: 'Minus',
+                  size: 'small',
+                  style: { flexShrink: 0 },
+                  type: 'danger',
+                  onClick: this.handleAttrDelete({ row, col, cellValue, index })
+                })
+              ])
+            }
+          }
         ],
         totalData: this.value,
         hasPagination: false
@@ -128,5 +142,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

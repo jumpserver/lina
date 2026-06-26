@@ -1,7 +1,6 @@
-
 <template>
-  <!-- eslint-disable vue/require-component-is -->
-  <component v-bind="linkProps(to)">
+  <!-- Use dynamic component with explicit :is to support Vue 3 -->
+  <component v-bind="attrs" :is="tag">
     <slot />
   </component>
 </template>
@@ -16,20 +15,15 @@ export default {
       required: true
     }
   },
-  methods: {
-    linkProps(url) {
-      if (isExternal(url)) {
-        return {
-          is: 'a',
-          href: url,
-          target: '_blank',
-          rel: 'noopener'
-        }
+  computed: {
+    tag() {
+      return 'a'
+    },
+    attrs() {
+      if (isExternal(this.to)) {
+        return { href: this.to, target: '_blank', rel: 'noopener' }
       }
-      return {
-        is: 'router-link',
-        to: url
-      }
+      return { href: `#${this.to}` }
     }
   }
 }

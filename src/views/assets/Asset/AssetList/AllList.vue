@@ -6,18 +6,17 @@
       :table-config="tableConfig"
       :tree-setting="treeSetting"
     >
-      <TreeMenu
-        slot="rMenu"
-        :tree="treeRef"
-        @showAll="showAll"
-      />
-      <BaseList
-        ref="baseList"
-        slot="table"
-        :add-extra-more-actions="addExtraMoreActions"
-        :header-actions="headerActions"
-        v-bind="tableConfig"
-      />
+      <template #rMenu>
+        <TreeMenu :tree="treeRef" @show-all="showAll" />
+      </template>
+      <template #table>
+        <BaseList
+          v-bind="tableConfig"
+          ref="baseList"
+          :add-extra-more-actions="addExtraMoreActions"
+          :header-actions="headerActions"
+        />
+      </template>
     </AssetTreeTable>
   </div>
 </template>
@@ -28,12 +27,7 @@ import { mapGetters } from 'vuex'
 import TreeMenu from './components/TreeMenu'
 import BaseList from './components/BaseList'
 import $ from '@/utils/jquery-vendor'
-import {
-  getShowCurrentAssetValue,
-  setShowCurrentAssetValue,
-  setRouterQuery,
-  setUrlParam
-} from '@/utils/common/index'
+import { setRouterQuery, setUrlParam } from '@/utils/common/index'
 
 export default {
   components: {
@@ -51,13 +45,12 @@ export default {
         url: '/api/v1/assets/assets/',
         showMenu: !this.$store.getters.currentOrgIsRoot,
         showDefaultMenu: true,
-        menu: [
-        ]
+        menu: []
       },
       tableConfig: {
         url: tableUrl,
         category: 'all',
-        extraQuery: { 'order': '-date_updated' }
+        extraQuery: { order: '-date_updated' }
       },
       headerActions: {
         handleImportClick: ({ selectedRows }) => {
@@ -78,7 +71,7 @@ export default {
   },
   methods: {
     decorateRMenu() {
-      const show_current_asset = getShowCurrentAssetValue(this.$cookie)
+      const show_current_asset = this.$cookie.get('show_current_asset') || '0'
       if (show_current_asset === '1') {
         $('#m_show_asset_all_children_node').css('color', '#606266')
         $('#m_show_asset_only_current_node').css('color', 'green')
@@ -88,7 +81,7 @@ export default {
       }
     },
     showAll({ node, showCurrentAsset }) {
-      setShowCurrentAssetValue(this.$cookie, showCurrentAsset)
+      this.$cookie.set('show_current_asset', showCurrentAsset, 1)
       this.decorateRMenu()
       const url = `${this.treeSetting.url}?node_id=${node.meta.data.id}&show_current_asset=${showCurrentAsset}`
       this.$refs.AssetTreeTable.$refs.TreeList.handleUrlChange(url)
@@ -111,15 +104,9 @@ export default {
       } else if (treeNode.meta.type === 'platform') {
         url = setUrlParam(url, 'platform', treeNode.id)
       }
-      this.$set(this.tableConfig, 'url', url)
+      this.tableConfig['url'] = url
       setRouterQuery(this, url)
     }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.asset-select-dialog ::v-deep .transition-box:first-child {
-  background-color: #f3f3f3;
-}
-</style>

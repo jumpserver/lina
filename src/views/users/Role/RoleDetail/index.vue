@@ -1,10 +1,5 @@
 <template>
-  <GenericDetailPage
-    :active-menu.sync="config.activeMenu"
-    :object.sync="role"
-    v-bind="config"
-    v-on="$listeners"
-  >
+  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu" v-model:object="role">
     <keep-alive>
       <component :is="config.activeMenu" :object="role" />
     </keep-alive>

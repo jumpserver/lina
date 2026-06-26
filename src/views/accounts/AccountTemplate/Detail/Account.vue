@@ -4,35 +4,31 @@
       {{ $t('AccountTemplateUpdateSecretHelpText') }}
     </el-alert>
     <TwoCol>
-      <template>
-        <GenericListTable
-          ref="listTable"
-          :detail-drawer="detailDrawer"
-          :header-actions="headerActions"
-          :table-config="tableConfig"
-        />
-      </template>
+      <GenericListTable
+        ref="listTable"
+        :header-actions="headerActions"
+        :table-config="tableConfig"
+      />
       <template #right>
         <QuickActions :actions="quickActions" type="primary" />
       </template>
     </TwoCol>
     <ViewSecret
       v-if="showViewSecretDialog"
+      v-model:visible="showViewSecretDialog"
       :account="account"
       :url="secretUrl"
-      :visible.sync="showViewSecretDialog"
     />
   </div>
 </template>
 
 <script>
+import GenericListTable from '@/layout/components/GenericListTable'
 import { QuickActions } from '@/components'
-import { openTaskPage } from '@/utils/jms/index'
-import { GenericListTable } from '@/layout/components'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
-
-import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret'
+import { openTaskPage } from '@/utils/jms/index'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'AccountTemplateChangeSecret',
@@ -52,7 +48,6 @@ export default {
   data() {
     const vm = this
     return {
-      detailDrawer: () => import('@/views/accounts/AccountDiscover/TaskDetail/index.vue'),
       visible: false,
       secretUrl: '',
       showViewSecretDialog: false,
@@ -69,7 +64,7 @@ export default {
                 .patch(
                   `/api/v1/accounts/account-templates/${this.object.id}/sync-related-accounts/`
                 )
-                .then(res => {
+                .then((res) => {
                   openTaskPage(res['task'])
                 })
             }
@@ -86,9 +81,8 @@ export default {
               drawer: true,
               can: vm.$hasPerm('accounts.view_account'),
               getRoute: ({ row }) => {
-                this.detailDrawer = () => import('@/views/accounts/Account/AccountDetail/index.vue')
                 return {
-                  name: 'AccountDetail',
+                  name: 'AssetAccountDetail',
                   params: { id: row.id }
                 }
               }
@@ -102,7 +96,6 @@ export default {
               can: vm.$hasPerm('assets.view_asset'),
               getTitle: ({ row }) => row.asset.name,
               getRoute: ({ row }) => {
-                this.detailDrawer = () => import('@/views/assets/Asset/AssetDetail')
                 return {
                   name: 'AssetDetail',
                   params: { id: row.asset.id }
@@ -135,6 +128,9 @@ export default {
               ]
             }
           }
+        },
+        tableAttrs: {
+          border: false
         }
       },
       headerActions: {

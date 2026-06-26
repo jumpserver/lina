@@ -16,8 +16,13 @@ export default {
         url: '/api/v1/assets/webs/',
         tableConfig: {
           columnsExclude: [
-            'username_selector', 'password_selector', 'submit_selector',
-            'script', 'spec_info', 'info', 'auto_config'
+            'username_selector',
+            'password_selector',
+            'submit_selector',
+            'script',
+            'spec_info',
+            'info',
+            'auto_config'
           ],
           columnsMeta: {
             autofill: {

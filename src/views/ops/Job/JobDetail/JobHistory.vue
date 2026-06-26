@@ -5,10 +5,10 @@
 </template>
 
 <script>
+import { createVNode as createVNodeCompat } from 'vue'
 import GenericListTable from '@/layout/components/GenericListTable'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
-
 export default {
   components: {
     GenericListTable
@@ -29,17 +29,27 @@ export default {
       showLogId: '',
       tableConfig: {
         url: `/api/v1/ops/job-executions/`,
-        columns: [
-          'material', 'date_start', 'is_finished', 'is_success', 'time_cost', 'actions'
-        ],
+        columns: ['material', 'date_start', 'is_finished', 'is_success', 'time_cost', 'actions'],
         columnsMeta: {
           is_finished: {
             label: this.$t('IsFinished'),
             formatter: (row) => {
               if (row.is_finished) {
-                return <i Class='fa fa-check text-primary'/>
+                return createVNodeCompat(
+                  'i',
+                  {
+                    class: 'fa fa-check text-primary'
+                  },
+                  null
+                )
               }
-              return <i Class='fa fa-times text-danger'/>
+              return createVNodeCompat(
+                'i',
+                {
+                  class: 'fa fa-times text-danger'
+                },
+                null
+              )
             },
             formatterArgs: {
               width: '14px'
@@ -49,12 +59,30 @@ export default {
             label: this.$t('IsSuccess'),
             formatter: (row) => {
               if (!row.is_finished) {
-                return <i Class='fa  fa fa-spinner fa-spin'/>
+                return createVNodeCompat(
+                  'i',
+                  {
+                    class: 'fa  fa fa-spinner fa-spin'
+                  },
+                  null
+                )
               }
               if (row.is_success) {
-                return <i Class='fa fa-check text-primary'/>
+                return createVNodeCompat(
+                  'i',
+                  {
+                    class: 'fa fa-check text-primary'
+                  },
+                  null
+                )
               }
-              return <i Class='fa fa-times text-danger'/>
+              return createVNodeCompat(
+                'i',
+                {
+                  class: 'fa fa-times text-danger'
+                },
+                null
+              )
             },
             formatterArgs: {
               width: '14px'
@@ -63,7 +91,7 @@ export default {
           time_cost: {
             label: this.$t('Time'),
             width: '100px',
-            formatter: function(row) {
+            formatter: function (row) {
               if (row.time_cost) {
                 return row.time_cost.toFixed(2) + 's'
               }
@@ -95,7 +123,8 @@ export default {
         hasLeftActions: false
       }
     }
-  }, mounted() {
+  },
+  mounted() {
     if (this.object) {
       this.tableConfig.url += `?job_id=${this.object.id}`
     }
@@ -106,6 +135,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

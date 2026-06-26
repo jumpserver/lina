@@ -4,7 +4,7 @@ import Select2 from '@/components/Form/FormFields/Select2'
 import AutomationParams from '@/components/Apps/AutomationParams'
 import i18n from '@/i18n/i18n'
 
-export const templateFields = vm => {
+export const templateFields = (vm) => {
   return [
     [vm.$t('Basic'), ['name', 'username', 'privileged', 'su_from']],
     [
@@ -26,7 +26,7 @@ export const templateFields = vm => {
   ]
 }
 
-export const templateFieldsMeta = vm => {
+export const templateFieldsMeta = (vm) => {
   const id = getUuidUpdateFromUrl(vm.$route.path)
   const platformIds = []
   const canRandomSecretTypes = ['password', 'ssh_key']
@@ -41,7 +41,7 @@ export const templateFieldsMeta = vm => {
           url: `/api/v1/accounts/account-templates/su-from-account-templates/?${
             id ? 'template_id=' + id : ''
           }`,
-          transformOption: item => {
+          transformOption: (item) => {
             return { label: `${item.name}(${item.username})`, value: item.id }
           }
         }
@@ -62,14 +62,14 @@ export const templateFieldsMeta = vm => {
       }
     },
     secret_strategy: {
-      hidden: formValue => {
+      hidden: (formValue) => {
         return !canRandomSecretTypes.includes(formValue.secret_type)
       }
     },
     secret: {
       label: vm.$t('Password'),
       component: UpdateToken,
-      hidden: formValue => {
+      hidden: (formValue) => {
         return formValue.secret_type !== 'password' || formValue.secret_strategy === 'random'
       }
     },
@@ -80,13 +80,13 @@ export const templateFieldsMeta = vm => {
         rows: 4
       },
       component: UploadSecret,
-      hidden: formValue =>
+      hidden: (formValue) =>
         formValue.secret_type !== 'ssh_key' || formValue.secret_strategy === 'random'
     },
     passphrase: {
       label: vm.$t('Passphrase'),
       component: UpdateToken,
-      hidden: formValue =>
+      hidden: (formValue) =>
         formValue.secret_type !== 'ssh_key' || formValue.secret_strategy === 'random'
     },
     token: {
@@ -95,7 +95,7 @@ export const templateFieldsMeta = vm => {
         type: 'textarea',
         rows: 4
       },
-      hidden: formValue =>
+      hidden: (formValue) =>
         formValue.secret_type !== 'token' || formValue.secret_strategy === 'random'
     },
     access_key: {
@@ -104,7 +104,7 @@ export const templateFieldsMeta = vm => {
         type: 'textarea',
         rows: 4
       },
-      hidden: formValue =>
+      hidden: (formValue) =>
         formValue.secret_type !== 'access_key' || formValue.secret_strategy === 'random'
     },
     api_key: {
@@ -113,7 +113,7 @@ export const templateFieldsMeta = vm => {
         type: 'textarea',
         rows: 4
       },
-      hidden: formValue =>
+      hidden: (formValue) =>
         formValue.secret_type !== 'api_key' || formValue.secret_strategy === 'random'
     },
     password_rules: {
@@ -127,7 +127,7 @@ export const templateFieldsMeta = vm => {
         multiple: true,
         ajax: {
           url: `/api/v1/assets/platforms/`,
-          transformOption: item => {
+          transformOption: (item) => {
             return { label: item.name, value: item.id }
           }
         }
@@ -138,7 +138,7 @@ export const templateFieldsMeta = vm => {
           platformIds.push(...event)
         }
       },
-      hidden: formValue => {
+      hidden: (formValue) => {
         return !formValue['auto_push']
       }
     },
@@ -151,7 +151,7 @@ export const templateFieldsMeta = vm => {
         platforms: platformIds,
         method: 'push_account_method'
       },
-      hidden: formValue => {
+      hidden: (formValue) => {
         return !formValue['auto_push']
       }
     }

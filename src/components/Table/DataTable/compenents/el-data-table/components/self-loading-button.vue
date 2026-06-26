@@ -2,11 +2,10 @@
 
 <template>
   <component
-    :is="isText ? 'text-button' : 'el-button'"
     v-bind="$attrs"
+    :is="isText ? 'text-button' : 'el-button'"
     :loading="loading"
     :type="type"
-    v-on="$listeners"
     @click="handleClick"
   >
     <slot />
@@ -20,6 +19,7 @@ import TextButton from './text-button.vue'
 
 export default {
   components: { TextButton },
+  inheritAttrs: false,
   props: {
     /**
      * 是否是文字按钮。
@@ -62,13 +62,13 @@ export default {
 
       this.loading = true
       Promise.resolve(this.click(this.params))
-        .then(flag => {
+        .then((flag) => {
           if (flag === false) return
           // 调用父组件中的数据刷新方法
           this.callback()
         })
-        .catch(e => {})
-        .finally(e => {
+        .catch((e) => {})
+        .finally((e) => {
           this.loading = false
         })
     }

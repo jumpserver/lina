@@ -54,26 +54,24 @@ class StrategyPersistSelection extends StrategyAbstract {
     const { id, selected, data } = this.elDataTable
     const selectableRows = data.filter(selectable)
 
-    const selectedIds = new Set(selected.map(r => r[id]))
-    const currentPageIds = new Set(selectableRows.map(row => row[id]))
+    const selectedIds = new Set(selected.map((r) => r[id]))
+    const currentPageIds = new Set(selectableRows.map((row) => row[id]))
 
-    const currentPageSelectedCount = selectableRows.filter(row =>
-      selectedIds.has(row[id])
-    ).length
+    const currentPageSelectedCount = selectableRows.filter((row) => selectedIds.has(row[id])).length
 
     const shouldSelectAll = currentPageSelectedCount < selectableRows.length
 
     this.elTable?.clearSelection()
 
     if (shouldSelectAll) {
-      selectableRows.forEach(row => {
+      selectableRows.forEach((row) => {
         if (!selectedIds.has(row[id])) selected.push(row)
         this.elTable.toggleRowSelection(row, true)
         this.elDataTable.$emit('toggle-row-selection', true, row)
       })
     } else {
       const newSelected = []
-      selected.forEach(row => {
+      selected.forEach((row) => {
         if (!currentPageIds.has(row[id])) {
           newSelected.push(row)
         } else {
@@ -88,7 +86,7 @@ class StrategyPersistSelection extends StrategyAbstract {
 
   toggleRowSelection(row, isSelected) {
     const { id, selected } = this.elDataTable
-    const foundIndex = selected.findIndex(r => r[id] === row[id])
+    const foundIndex = selected.findIndex((r) => r[id] === row[id])
 
     if (typeof isSelected === 'undefined') {
       isSelected = foundIndex <= -1
@@ -115,10 +113,10 @@ class StrategyPersistSelection extends StrategyAbstract {
 
   updateElTableSelection() {
     const { data, id, selected } = this.elDataTable
-    const selectedIds = new Set(selected.map(r => r[id]))
+    const selectedIds = new Set(selected.map((r) => r[id]))
     this.elTable?.clearSelection()
 
-    data.forEach(row => {
+    data.forEach((row) => {
       const shouldBeSelected = selectedIds.has(row[id])
       if (shouldBeSelected) {
         this.elTable.toggleRowSelection(row, true)

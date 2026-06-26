@@ -1,16 +1,15 @@
 <template>
   <el-tag
-    :class="{'no-color': !label.color}"
+    v-bind="{ ...$attrs, ...el }"
+    :class="{ 'no-color': !label.color }"
     :closable="closable"
     :color="label.color"
     :title="label.name + ': ' + label.value"
     class="tag-formatter"
     disable-transitions
     effect="plain"
-    size="mini"
-    v-bind="el"
+    size="small"
     @click="handleClick(label)"
-    v-on="$listeners"
   >
     <span :class="[getColor(label)]">
       <b> {{ getKey(label) }}:</b> {{ getValue(label) }}

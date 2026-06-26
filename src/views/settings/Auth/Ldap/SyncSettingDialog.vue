@@ -1,28 +1,27 @@
 <template>
   <Dialog
+    v-bind="$attrs"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('SyncSetting')"
     top="10%"
-    v-bind="$attrs"
     width="50%"
-    v-on="$listeners"
   >
     <GenericCreateUpdateForm
-      :has-detail-in-msg="false"
       v-bind="settings"
-      @submitSuccess="onSuccess"
+      :has-detail-in-msg="false"
+      @submit-success="onSuccess"
     />
   </Dialog>
 </template>
 
 <script>
-import { GenericCreateUpdateForm } from '@/layout/components'
 import { Dialog } from '@/components'
-import Select2 from '@/components/Form/FormFields/Select2.vue'
 import { Required } from '@/components/Form/DataForm/rules'
+import Select2 from '@/components/Form/FormFields/Select2.vue'
 import { crontab, interval, is_periodic } from '@/components/const'
+import { GenericCreateUpdateForm } from '@/layout/components'
 
 export default {
   name: 'SyncSettingDialog',
@@ -35,7 +34,13 @@ export default {
       settings: {
         visible: false,
         url: '/api/v1/settings/setting/?category=ldap',
-        fields: ['AUTH_LDAP_SYNC_ORG_IDS', 'AUTH_LDAP_SYNC_IS_PERIODIC', 'AUTH_LDAP_SYNC_CRONTAB', 'AUTH_LDAP_SYNC_INTERVAL', 'AUTH_LDAP_SYNC_RECEIVERS'],
+        fields: [
+          'AUTH_LDAP_SYNC_ORG_IDS',
+          'AUTH_LDAP_SYNC_IS_PERIODIC',
+          'AUTH_LDAP_SYNC_CRONTAB',
+          'AUTH_LDAP_SYNC_INTERVAL',
+          'AUTH_LDAP_SYNC_RECEIVERS'
+        ],
         fieldsMeta: {
           AUTH_LDAP_SYNC_ORG_IDS: {
             component: Select2,
@@ -89,6 +94,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

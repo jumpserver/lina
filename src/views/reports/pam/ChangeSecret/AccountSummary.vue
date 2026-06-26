@@ -3,7 +3,7 @@
     <div v-if="isTitle" class="head">
       <Title :config="config" />
     </div>
-    <LineChart v-if="loading" v-bind="lineChartConfig" />
+    <LineChart v-bind="lineChartConfig" v-if="loading" />
   </div>
 </template>
 
@@ -62,7 +62,7 @@ export default {
     async getMetricData() {
       setTimeout(() => {
         const url = `/api/v1/accounts/change-secret-dashboard/?daily_success_and_failure_metrics=1&days=${this.days}`
-        this.$axios.get(url).then(data => {
+        this.$axios.get(url).then((data) => {
           const success = data?.dates_metrics_total_count_success
           const failed = data?.dates_metrics_total_count_failed
           this.lineChartConfig.datesMetrics = data?.dates_metrics_date
@@ -92,4 +92,3 @@ export default {
   }
 }
 </style>
-

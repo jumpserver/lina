@@ -1,17 +1,17 @@
 <template>
   <GenericCreateUpdatePage
+    v-bind="$data"
     :create-success-next-route="successUrl"
     :help-tip="getHelpMessage()"
     :update-success-next-route="successUrl"
-    v-bind="$data"
   />
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
-import { STORAGE_TYPE_META_MAP } from '@/views/sessions/const'
 import { UploadSecret } from '@/components/Form/FormFields'
+import { GenericCreateUpdatePage } from '@/layout/components'
 import { encryptPassword } from '@/utils/secure'
+import { STORAGE_TYPE_META_MAP } from '@/views/sessions/const'
 
 export default {
   name: 'ReplayStorageUpdate',
@@ -102,6 +102,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

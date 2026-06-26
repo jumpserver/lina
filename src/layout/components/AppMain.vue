@@ -1,10 +1,11 @@
 <template>
   <section class="app-main">
-    <transition mode="out-in" name="fade-transform">
+    <router-view v-slot="{ Component }">
       <keep-alive :max="10">
-        <router-view :key="key" />
+        <component :is="Component" :key="key" />
       </keep-alive>
-    </transition>
+    </router-view>
+
     <ChatGPT v-if="chatAiEnabled" />
   </section>
 </template>
@@ -51,8 +52,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '@/styles/variables' as *;
+
 .app-main {
-  background-color: var(--app-main-bg, #f3f3f4);
+  background-color: #f3f3f4;
   height: 100%;
   //height: 100vh !important;
   width: 100%;
@@ -61,18 +64,22 @@ export default {
   /*padding: 10px 20px 10px;*/
 }
 
+// 注意：.main-container 已通过 `position: relative; top: $headerHeight` 整体下移避开固定头部
+// （见 styles/sidebar.scss），因此这里 **不能** 再加 padding-top，否则会双重下移 $headerHeight，
+// 在头部下方留出一条空白（点右键只会命中 app-wrapper，因为那是 app-main padding 区）。
 .fixed-header + .app-main {
-  padding-top: 50px;
+  padding-top: 0;
 }
 
 .hasTagsView {
   .app-main {
-    /* 84 = navbar + tags-view = 50 + 34 */
-    min-height: calc(100vh - 84px);
+    /* navbar + tags-view = $headerHeight + 34 */
+    min-height: calc(100vh - #{$headerHeight} - 34px);
   }
 
+  // tags-view 高 34px，main-container 已偏移 $headerHeight，这里只需再补 tags-view 高度
   .fixed-header + .app-main {
-    padding-top: 84px;
+    padding-top: 34px;
   }
 }
 </style>

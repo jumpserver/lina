@@ -38,7 +38,6 @@
 <script>
 import { copy, downloadText } from '@/utils/common/index'
 import BaseFormatter from '@/components/Table/TableFormatters/base.vue'
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'SecretViewerFormatter',
@@ -70,22 +69,19 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      publicSettings: 'publicSettings'
-    }),
-    hasShow: function() {
+    hasShow: function () {
       return this.formatterArgs.hasShow
     },
-    hasDownload: function() {
+    hasDownload: function () {
       return this.formatterArgs.hasDownload
     },
-    hasCopy: function() {
+    hasCopy: function () {
       return this.formatterArgs.hasCopy
     },
-    hasEdit: function() {
+    hasEdit: function () {
       return this.formatterArgs.hasEdit
     },
-    name: function() {
+    name: function () {
       return this.formatterArgs.name
     },
     iActions() {
@@ -130,7 +126,7 @@ export default {
   },
   watch: {
     cellValue: {
-      handler: function(val) {
+      handler: function (val) {
         this.realValue = val
       },
       immediate: true
@@ -144,10 +140,6 @@ export default {
   },
   methods: {
     async getAccountSecret() {
-      if (!this.publicSettings.SECURITY_ACCOUNT_SECRET_READ) {
-        this.$message.warning(this.$tc('AccountSecretReadDisabled'))
-        return
-      }
       if (this.formatterArgs.secretFrom === 'cellValue' || this.getIt) {
         return
       }
@@ -224,7 +216,7 @@ export default {
   }
 }
 
-.edit-input ::v-deep input {
+.edit-input :deep(input) {
   border-left: none;
   border-right: none;
   border-top: none;

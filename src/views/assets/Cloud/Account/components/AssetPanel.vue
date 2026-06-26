@@ -1,12 +1,12 @@
 <template>
   <div class="asset-panel">
     <el-alert :center="false" :closable="true" style="margin-bottom: 6px">
-      <el-link :icon="linkIcon" :type="linkType" :underline="false"> {{ tip }}</el-link>
+      <el-link :icon="linkIcon" :type="linkType" underline="never"> {{ tip }}</el-link>
     </el-alert>
     <ImportTable
+      v-bind="settings"
       ref="importTable"
       origin="cloudSync"
-      v-bind="settings"
       @cancel="closeDialog"
       @finish="showResult"
     />
@@ -43,7 +43,7 @@ export default {
       importAssets: {},
       tip: this.$tc('PrepareSyncTask'),
       linkType: 'primary',
-      linkIcon: 'el-icon-loading',
+      linkIcon: 'Loading',
       alreadySync: [],
       settings: {
         showCancel: !this.active,
@@ -77,11 +77,11 @@ export default {
             [this.$tc('Platform'), 'platform'],
             [this.$tc('Node'), 'node'],
             [this.$tc('Protocol'), 'protocols'],
-            [this.$tc('Region'), 'region_name']
+            [this.$tc('Region'), 'region_id']
           ],
           data: []
         },
-        performUploadObject: async function(item) {
+        performUploadObject: async function (item) {
           const data = { action: 'sync_import', asset_id: item.id }
           vm.ws.send(JSON.stringify(data))
           vm.importAssets[item.id] = item
@@ -109,7 +109,7 @@ export default {
       const url = '/ws/xpack/cloud/'
       const wsURL = scheme + '://' + document.location.hostname + port + url
       this.ws = new WebSocket(wsURL)
-      this.ws.onopen = e => {
+      this.ws.onopen = (e) => {
         this.settings.disableImportBtn = true
         this.ws.send(
           JSON.stringify({
@@ -121,10 +121,10 @@ export default {
       this.ws.onerror = () => {
         this.$message.error(this.$tc('ConnectWebSocketError'))
       }
-      this.ws.onmessage = e => {
+      this.ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
         if (data.action === 'sync_region') {
-          this.addRegion(data.id, data.name)
+          this.addRegion(data.region_id)
         } else if (data.action === 'import') {
           data['@status'] = 'pending'
           this.$refs.importTable.addTableItem(data)
@@ -132,7 +132,7 @@ export default {
           this.importAssets[data.asset_id]['@status'] = 'ok'
         } else if (data.action === 'finished') {
           this.linkType = 'success'
-          this.linkIcon = 'el-icon-success'
+          this.linkIcon = 'SuccessFilled'
           this.settings.disableImportBtn = false
           this.tip = `${this.$t('SyncSuccessMsg')}`
         } else {
@@ -140,10 +140,10 @@ export default {
         }
       }
     },
-    addRegion(regionId, regionName) {
-      if (!this.alreadySync.includes(regionId)) {
-        this.alreadySync.push(regionId)
-        this.tip = `${this.$t('SyncRegion')}: ${regionName}`
+    addRegion(region) {
+      if (!this.alreadySync.includes(region)) {
+        this.alreadySync.push(region)
+        this.tip = `${this.$t('SyncRegion')}: ${this.alreadySync.at(-1)}`
       }
     },
     showResult() {

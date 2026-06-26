@@ -42,7 +42,8 @@ export default {
         },
         {
           path: 'create',
-          component: () => import('@/views/profile/PasswordAndSSHKey/SSHKey/SSHKeyCreateUpdate.vue'),
+          component: () =>
+            import('@/views/profile/PasswordAndSSHKey/SSHKey/SSHKeyCreateUpdate.vue'),
           name: 'SSHKeyCreate',
           hidden: true,
           meta: {
@@ -52,7 +53,8 @@ export default {
         },
         {
           path: ':id/update',
-          component: () => import('@/views/profile/PasswordAndSSHKey/SSHKey/SSHKeyCreateUpdate.vue'),
+          component: () =>
+            import('@/views/profile/PasswordAndSSHKey/SSHKey/SSHKeyCreateUpdate.vue'),
           name: 'SSHKeyUpdate',
           hidden: true,
           meta: {
@@ -121,16 +123,6 @@ export default {
         title: i18n.t('ConnectionToken'),
         icon: 'token',
         permissions: ['authentication.view_connectiontoken']
-      }
-    },
-    {
-      path: '/profile/access-token',
-      component: () => import('@/views/profile/AccessToken'),
-      name: 'AccessToken',
-      meta: {
-        title: i18n.t('AccessToken'),
-        icon: 'access-token',
-        permissions: ['oauth2_provider.view_accesstoken']
       }
     },
     {

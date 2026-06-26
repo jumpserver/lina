@@ -1,15 +1,31 @@
 <template>
-  <GenericListTable ref="GenericListTable" :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListTable
+    ref="GenericListTable"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script>
+import {
+  createVNode as createVNodeCompat,
+  isVNode as isVNodeCompat,
+  resolveComponent as resolveComponentCompat
+} from 'vue'
 import GenericListTable from '@/layout/components/GenericListTable/index'
 import { ActionsFormatter, DateFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
-
+function _isSlot(s) {
+  return (
+    typeof s === 'function' ||
+    (Object.prototype.toString.call(s) === '[object Object]' && !isVNodeCompat(s))
+  )
+}
 export default {
   name: 'TaskHistoryList',
-  components: { GenericListTable },
+  components: {
+    GenericListTable
+  },
   props: {
     object: {
       type: Object,
@@ -50,11 +66,35 @@ export default {
           {
             prop: 'status',
             label: this.$t('Status'),
-            formatter: row => {
+            formatter: (row) => {
               if (row.status === 1) {
-                return <el-tag type='primary' size='mini'>{this.$t('Success')}</el-tag>
+                let _slot
+                return createVNodeCompat(
+                  resolveComponentCompat('el-tag'),
+                  {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  _isSlot((_slot = this.$t('Success')))
+                    ? _slot
+                    : {
+                        default: () => [_slot]
+                      }
+                )
               } else {
-                return <el-tag type='danger' size='mini'>{this.$t('Failed')}</el-tag>
+                let _slot2
+                return createVNodeCompat(
+                  resolveComponentCompat('el-tag'),
+                  {
+                    type: 'danger',
+                    size: 'small'
+                  },
+                  _isSlot((_slot2 = this.$t('Failed')))
+                    ? _slot2
+                    : {
+                        default: () => [_slot2]
+                      }
+                )
               }
             }
           },
@@ -66,7 +106,7 @@ export default {
           {
             prop: 'trigger',
             label: this.$t('TriggerMode'),
-            formatter: row => {
+            formatter: (row) => {
               return row.trigger.label
             }
           },
@@ -76,8 +116,10 @@ export default {
             align: 'center',
             formatter: ActionsFormatter,
             formatterArgs: {
-              hasUpdate: false, // can set function(row, value)
-              hasDelete: false, // can set function(row, value)
+              hasUpdate: false,
+              // can set function(row, value)
+              hasDelete: false,
+              // can set function(row, value)
               moreActionsTitle: this.$t('Log'),
               hasClone: false,
               extraActions: [
@@ -85,7 +127,7 @@ export default {
                   name: 'View',
                   title: this.$t('View'),
                   type: 'primary',
-                  callback: function(val) {
+                  callback: function (val) {
                     openTaskPage(val.row.id)
                   }
                 }
@@ -99,6 +141,4 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
-
-</style>
+<style lang="scss" scoped></style>

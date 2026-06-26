@@ -1,20 +1,20 @@
 <template>
   <span>
-    <el-button v-if="shouldFold" circle class="search-btn" size="mini" @click="handleManualSearch">
+    <el-button v-if="shouldFold" circle class="search-btn" size="small" @click="handleManualSearch">
       <svg-icon icon-class="search" />
     </el-button>
     <TagSearch
+      v-bind="$attrs"
       v-show="!shouldFold"
       :options="iOption"
-      v-bind="$attrs"
       @blur="handleBlur"
-      v-on="$listeners"
       @tag-search="handleTagSearch"
     />
   </span>
 </template>
 
 <script>
+import { getActionMeta } from '@/api/common'
 import TagSearch from '@/components/Table/TagSearch/index.vue'
 import i18n from '@/i18n/i18n'
 
@@ -78,7 +78,7 @@ export default {
       if (_.isEqual(tags, this.tags)) {
         return
       }
-      this.tags = (tags || [])
+      this.tags = tags || []
       if (tags.length === 0) {
         this.manualSearch = false
       }
@@ -94,7 +94,7 @@ export default {
       const vm = this // 透传This
       vm.internalOptions = [] // 重置
       const data = await this.optionUrlMeta()
-      const meta = data.actions['GET'] || {}
+      const meta = getActionMeta(data, 'GET')
       for (const [name, field] of Object.entries(meta)) {
         if (!field.filter) {
           continue
@@ -108,8 +108,8 @@ export default {
           value: name
         }
         if (['choice', 'labeled_choice'].indexOf(field.type) > -1 && field.choices) {
-          option.children = field.choices.map(item => {
-            if (typeof (item.value) === 'boolean') {
+          option.children = field.choices.map((item) => {
+            if (typeof item.value === 'boolean') {
               if (item.value) {
                 return { label: item.label, value: 'True' }
               } else {
@@ -132,14 +132,17 @@ export default {
       }
     },
     optionUrlMeta() {
-      const url = (this.url.indexOf('?') === -1) ? `${this.url}?draw=1&display=1` : `${this.url}&draw=1&display=1`
+      const url =
+        this.url.indexOf('?') === -1
+          ? `${this.url}?draw=1&display=1`
+          : `${this.url}&draw=1&display=1`
       return this.$store.dispatch('common/getUrlMeta', { url: url })
     }
   }
 }
 </script>
 
-<style lang='less' scoped>
+<style lang="scss" scoped>
 .search-btn {
   margin-top: 1px;
   cursor: pointer;

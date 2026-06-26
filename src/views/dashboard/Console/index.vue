@@ -1,6 +1,6 @@
 <template>
   <Page>
-    <div v-if="this.$hasPerm('rbac.view_console')">
+    <div v-if="$hasPerm('rbac.view_console')">
       <Announcement />
       <ConsoleReport :nav="false" :only-charts="true" />
     </div>
@@ -23,11 +23,9 @@ export default {
     ConsoleReport
   },
   data() {
-    return {
-    }
+    return {}
   }
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

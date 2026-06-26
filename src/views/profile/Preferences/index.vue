@@ -1,15 +1,15 @@
 <template>
-  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="user" v-bind="config" v-on="$listeners">
+  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu" v-model:object="user">
     <keep-alive>
-      <component :is="config.activeMenu" :object="user" @update:activeMenu="handleUpdate" />
+      <component :is="config.activeMenu" :object="user" @update:active-menu="handleUpdate" />
     </keep-alive>
   </GenericDetailPage>
 </template>
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import Luna from './Luna'
 import Lina from './Lina'
+import Luna from './Luna'
 
 export default {
   components: {
@@ -52,5 +52,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

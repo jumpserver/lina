@@ -3,7 +3,6 @@
 </template>
 
 <script>
-
 import Base from './Base'
 
 export default {
@@ -21,5 +20,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

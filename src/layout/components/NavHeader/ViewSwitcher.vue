@@ -1,6 +1,6 @@
 <template>
   <el-tooltip
-    v-model="iShowTip"
+    v-model:visible="iShowTip"
     :content="tipText"
     :manual="true"
     :open-delay="500"
@@ -18,7 +18,7 @@
       <el-menu-item v-for="view of views" :key="view.name" :index="view.name">
         <span class="outline" />
         <Icon :icon="view.meta.icon" class="icons" />
-        <span slot="title" class="icons-title">{{ view.meta.title }}</span>
+        <span class="icons-title">{{ view.meta.title }}</span>
       </el-menu-item>
     </el-menu>
   </el-tooltip>
@@ -53,7 +53,7 @@ export default {
   computed: {
     ...mapGetters(['currentViewRoute', 'viewRoutes']),
     views() {
-      return this.viewRoutes.filter(item => {
+      return this.viewRoutes.filter((item) => {
         let show = item.meta?.showNavSwitcher
         if (typeof show === 'function') {
           show = show()
@@ -121,13 +121,15 @@ export default {
 
 <style lang="scss" scoped>
 .menu-main.el-menu {
-  background-color: var(--menu-bg) !important;
-  padding: 6px;
-  min-width: 180px;
-  box-shadow: none;
-  letter-spacing: 0.05em;
+  background-color: transparent;
+  letter-spacing: 0.09em;
 
-  ::v-deep .el-submenu .el-submenu__title {
+  &.vertical {
+    width: max-content;
+    min-width: 0;
+  }
+
+  :deep(.el-sub-menu .el-sub-menu__title) {
     height: 38px;
     line-height: 32px;
     border-bottom: none;
@@ -137,27 +139,25 @@ export default {
     border-bottom: none;
   }
 
-  & ::v-deep .el-icon-arrow-down {
+  & :deep(.el-sub-menu__icon-arrow) {
     font-size: 13px;
-    color: var(--menu-text);
+    color: #606266;
   }
 
   .el-menu-item {
     height: 38px;
     line-height: 28px;
-    padding: 6px 14px;
-    color: var(--menu-text);
-    // border-radius: 6px;
+    padding: 4px 24px;
 
     &:hover {
-      color: var(--menu-text-active);
-      background: var(--menu-hover-bg, var(--menu-hover));
+      background-color: var(--menu-hover);
     }
+  }
 
-    &.is-active {
-      color: var(--menu-active-text, var(--menu-text-active));
-      background: var(--menu-active-bg, var(--menu-hover-bg, var(--menu-hover)));
-    }
+  &.vertical .el-menu-item {
+    width: auto;
+    min-width: 180px;
+    justify-content: flex-start;
   }
 }
 
@@ -184,7 +184,7 @@ export default {
   }
 }
 
-.el-submenu.is-opened {
+.el-sub-menu.is-opened {
   background-color: transparent;
 }
 
@@ -199,16 +199,16 @@ export default {
   vertical-align: middle !important;
   font-size: 14px;
   text-align: center;
-  color: var(--menu-text);
+  color: #1f2329;
   margin-right: 10px;
 }
 
 .icons-title {
   display: inline-block;
   font-size: 13px;
-  color: inherit;
+  white-space: nowrap;
 
-  .menu-main.mobile-view-switch ::v-deep .el-submenu__icon-arrow {
+  .menu-main.mobile-view-switch :deep(.el-sub-menu__icon-arrow) {
     right: 10px;
   }
 }

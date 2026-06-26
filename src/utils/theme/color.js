@@ -1,6 +1,6 @@
 import color from 'css-color-function'
 import formula from './formula.json'
-import defaultThemeConfig from '@/styles/default-theme.scss'
+import defaultThemeConfig from '@/styles/default-theme'
 
 export function generateColors(themeColors) {
   const colors = {}
@@ -70,44 +70,6 @@ export function mix(color_1, color_2, weight) {
   return color
 }
 
-export function getCssVar(name, fallback = '') {
-  if (typeof window === 'undefined' || typeof document === 'undefined') {
-    return fallback
-  }
-
-  const root = document.documentElement
-  const inlineValue = root.style.getPropertyValue(name)
-  const computedValue = window.getComputedStyle(root).getPropertyValue(name)
-  const defaultValue = fallback || defaultThemeConfig[name] || ''
-  return (inlineValue || computedValue || defaultValue).trim()
-}
-
-export function colorToRgba(color, alpha) {
-  const fallback = alpha === 0 ? 'transparent' : color
-  if (!color) {
-    return alpha === 0 ? 'transparent' : color
-  }
-
-  const normalizedColor = color.trim()
-  if (/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(normalizedColor)) {
-    const hex = normalizedColor.slice(1)
-    const fullHex = hex.length === 3
-      ? hex.split('').map(char => char + char).join('')
-      : hex
-    const r = Number.parseInt(fullHex.slice(0, 2), 16)
-    const g = Number.parseInt(fullHex.slice(2, 4), 16)
-    const b = Number.parseInt(fullHex.slice(4, 6), 16)
-    return `rgba(${r}, ${g}, ${b}, ${alpha})`
-  }
-
-  const rgbValues = normalizedColor.match(/\d+/g)
-  if (normalizedColor.startsWith('rgb') && rgbValues && rgbValues.length >= 3) {
-    return `rgba(${rgbValues[0]}, ${rgbValues[1]}, ${rgbValues[2]}, ${alpha})`
-  }
-
-  return fallback
-}
-
 export function setRootColors() {
   const themeColors = defaultThemeConfig || {}
   for (const [key, value] of Object.entries(themeColors)) {
@@ -115,10 +77,18 @@ export function setRootColors() {
   }
 }
 
-function applyDefaults(colors, menuActiveTextColor, white) {
-  if (menuActiveTextColor && !colors['--menu-hover']) {
-    colors['--menu-hover'] = mix(white, menuActiveTextColor.replace(/#/g, ''), 90)
-  }
+function syncElementPlusColorVars(elementStyle, colorName, currentColor) {
+  const white = 'ffffff'
+  const black = '000000'
+  const elColorKey = `--el-color-${colorName}`
+
+  elementStyle.setProperty(elColorKey, currentColor)
+  elementStyle.setProperty(`${elColorKey}-light-3`, mix(white, currentColor.replace(/#/g, ''), 30))
+  elementStyle.setProperty(`${elColorKey}-light-5`, mix(white, currentColor.replace(/#/g, ''), 50))
+  elementStyle.setProperty(`${elColorKey}-light-7`, mix(white, currentColor.replace(/#/g, ''), 70))
+  elementStyle.setProperty(`${elColorKey}-light-8`, mix(white, currentColor.replace(/#/g, ''), 80))
+  elementStyle.setProperty(`${elColorKey}-light-9`, mix(white, currentColor.replace(/#/g, ''), 90))
+  elementStyle.setProperty(`${elColorKey}-dark-2`, mix(black, currentColor.replace(/#/g, ''), 20))
 }
 
 export function changeMenuColor(themeColors) {
@@ -127,40 +97,25 @@ export function changeMenuColor(themeColors) {
 
   const white = 'ffffff'
   const black = '000000'
-  const primaryColor = colors['--color-primary'] || defaultThemeConfig['--color-primary']
 
   // 后端不用返回 --menu-hover
-  const menuActiveTextColor = colors['--menu-text-active'] || primaryColor
-
-  applyDefaults(colors, menuActiveTextColor, white)
-
-  const hasNavHeaderBg = !!colors['--nav-header-bg']
-  const bannerBg = colors['--banner-bg']
-
-  let navHeaderBase = colors['--nav-header-bg'] || bannerBg || primaryColor
-
-  if (!hasNavHeaderBg && bannerBg && bannerBg.startsWith('#')) {
-    navHeaderBase = mix(white, bannerBg.replace(/#/g, ''), 8)
-  }
-  if (!colors['--nav-header-bg']) {
-    colors['--nav-header-bg'] = navHeaderBase
-  }
-  if (!colors['--nav-header-hover']) {
-    if (navHeaderBase && navHeaderBase.startsWith('#')) {
-      colors['--nav-header-hover'] = mix(white, navHeaderBase.replace(/#/g, ''), 12)
-    } else {
-      colors['--nav-header-hover'] = navHeaderBase
-    }
+  const menuActiveTextColor = colors['--menu-text-active']
+  if (menuActiveTextColor) {
+    colors['--menu-hover'] = mix(white, menuActiveTextColor.replace(/#/g, ''), 90)
   }
 
   const lights = [15, 40, 60, 90]
   const darken = [15, 30, 40, 80]
 
   const colorsGenMore = ['--color-primary']
-
   for (const key in colors) {
     const currentColor = colors[key]
     elementStyle.setProperty(key, currentColor)
+
+    if (/^--color-(primary|success|info|warning|danger)$/.test(key)) {
+      const colorName = key.replace('--color-', '')
+      syncElementPlusColorVars(elementStyle, colorName, currentColor)
+    }
 
     if (colorsGenMore.includes(key)) {
       for (const [i, light] of lights.entries()) {

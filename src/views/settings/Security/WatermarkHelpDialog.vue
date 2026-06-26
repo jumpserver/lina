@@ -3,10 +3,11 @@
     :show-cancel="false"
     :show-confirm="false"
     :title="title"
-    :visible.sync="iVisible"
+    :visible="visible"
     class="help-dialog"
     top="1vh"
     width="50%"
+    @update:visible="$emit('update:visible', $event)"
   >
     <p>{{ variablesHelpText }}</p>
     <table border="1" class="help-table">
@@ -19,8 +20,12 @@
         <td :title="$tc('ClickCopy')" class="item-td text-link" @click="onCopy(item.key)">
           <label class="item-label">{{ item.key }}</label>
         </td>
-        <td><span>{{ item.label }}</span></td>
-        <td><span>{{ item.example }}</span></td>
+        <td>
+          <span>{{ item.label }}</span>
+        </td>
+        <td>
+          <span>{{ item.example }}</span>
+        </td>
       </tr>
     </table>
   </Dialog>
@@ -46,23 +51,14 @@ export default {
     variablesHelpText: {
       type: String,
       default() {
-        return this.$t('WatermarkVariableHelpText')
+        return 'WatermarkVariableHelpText'
       }
     }
   },
+  emits: ['update:visible'],
   data() {
     return {
-      title: this.$t('BuiltinVariable')
-    }
-  },
-  computed: {
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
+      title: 'BuiltinVariable'
     }
   },
   methods: {
@@ -74,7 +70,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .help-dialog.dialog .el-dialog__footer {
+:deep(.help-dialog.dialog .el-dialog__footer) {
   border-top: none;
   padding: 8px;
 }
@@ -85,15 +81,15 @@ export default {
   border: 1px solid #dee2e6;
 }
 
-::v-deep .help-table th,
-::v-deep .help-table td {
+:deep(.help-table th),
+:deep(.help-table td) {
   height: 40px;
   padding: 0 8px;
   text-align: left;
 }
 
-::v-deep .help-table .item-td,
-::v-deep .help-table .item-label {
+:deep(.help-table .item-td),
+:deep(.help-table .item-label) {
   cursor: pointer;
   color: var(--color-primary);
 }

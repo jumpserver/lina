@@ -22,6 +22,5 @@ export default {
       url: `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.object.id}&order=-date_end&is_finished=1`
     }
   }
-
 }
 </script>

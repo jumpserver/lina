@@ -1,8 +1,10 @@
 <template>
-  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu">
-    <div slot="title">
-      {{ Title }}
-    </div>
+  <TabPage v-model:active-menu="config.activeMenu" :submenu="config.submenu">
+    <template #title>
+      <div>
+        {{ Title }}
+      </div>
+    </template>
     <keep-alive>
       <component :is="config.activeMenu" />
     </keep-alive>
@@ -57,6 +59,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

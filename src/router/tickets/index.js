@@ -31,7 +31,6 @@ export default {
       }
     },
     {
-
       path: '/tickets/assigned-tickets',
       name: 'AssignedTicketList',
       component: () => import('@/views/tickets/AssignedTicketList'),
@@ -176,4 +175,3 @@ export default {
     }
   ]
 }
-

@@ -1,13 +1,14 @@
 <template>
   <Dialog
-    v-if="iVisible"
+    v-bind="$attrs"
+    v-if="visible"
+    :visible="visible"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('UpdateSelected')"
-    :visible.sync="iVisible"
     top="1vh"
     width="70%"
-    v-on="$listeners"
+    @update:visible="$emit('update:visible', $event)"
   >
     <el-alert v-if="tips" class="tips" type="info">{{ tips }}</el-alert>
     <el-row :gutter="20">
@@ -17,7 +18,11 @@
         </div>
       </el-col>
       <el-col :md="18" :sm="24">
-        <el-checkbox-group v-model="checkedFields" @change="handleCheckedFieldsChange">
+        <el-checkbox-group
+          :model-value="checkedFields"
+          @change="handleCheckedFieldsChange"
+          @update:model-value="checkedFields = $event"
+        >
           <el-checkbox
             v-for="(value, name) in iFormSetting.fieldsMeta"
             :key="name"
@@ -34,7 +39,7 @@
       <el-divider />
     </el-row>
     <el-row>
-      <GenericCreateUpdateForm :key="internalKey" v-bind="iFormSetting" />
+      <GenericCreateUpdateForm v-bind="iFormSetting" :key="internalKey" />
     </el-row>
   </Dialog>
 </template>
@@ -67,22 +72,13 @@ export default {
       default: false
     }
   },
+  emits: ['update:visible', 'update', 'submitError'],
   data: function () {
     return {
       internalKey: 0,
       selectPropertiesLabel: this.$t('SelectProperties'),
       checkedFields: [],
       iFormSetting: {}
-    }
-  },
-  computed: {
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
     }
   },
   mounted() {
@@ -105,12 +101,12 @@ export default {
       return {
         needGetObjectDetail: false,
         submitMethod: () => 'patch',
-        cleanOtherFormValue: formValue => formValue,
-        cleanFormValue: value => {
+        cleanOtherFormValue: (formValue) => formValue,
+        cleanFormValue: (value) => {
           const filterValue = {}
           Object.keys(value)
-            .filter(key => vm.checkedFields?.includes(key))
-            .forEach(key => {
+            .filter((key) => vm.checkedFields?.includes(key))
+            .forEach((key) => {
               filterValue[key] = value[key]
             })
           let formValue = []
@@ -129,12 +125,12 @@ export default {
           const msg = this.updateSuccessMsg
           this.$axios
             .patch(url, validValues)
-            .then(res => {
+            .then((res) => {
               vm.$emit('update')
               this.$message.success(msg)
-              this.iVisible = false
+              this.$emit('update:visible', false)
             })
-            .catch(error => {
+            .catch((error) => {
               this.$emit('submitError', error)
               const response = error.response
               const data = response.data

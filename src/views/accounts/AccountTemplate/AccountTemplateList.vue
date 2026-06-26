@@ -11,7 +11,8 @@ import { Page } from '@/layout/components'
 export default {
   name: 'AccountTemplateList',
   components: {
-    Page, AccountTemplateTable
+    Page,
+    AccountTemplateTable
   },
   data() {
     return {}

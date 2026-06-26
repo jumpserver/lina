@@ -1,7 +1,7 @@
 <template>
   <Page>
     <el-row :gutter="10">
-      <el-col :span="4" style="padding: 10px;">
+      <el-col :span="4" style="padding: 10px">
         <div class="tag-container">
           <h5>{{ title }}</h5>
           <ul class="folder-list m-b-md" style="padding: 0">
@@ -10,8 +10,8 @@
               :key="chart.name"
               :class="{ active: selectedChart && selectedChart.name === chart.name }"
             >
-              <a style="display: flex; align-items: center;" @click="handleChangeChart(chart)">
-                <i :class="chart.icon" style="margin-right: 6px;" />
+              <a style="display: flex; align-items: center" @click="handleChangeChart(chart)">
+                <i :class="chart.icon" style="margin-right: 6px" />
                 {{ chart.title }}
               </a>
             </li>
@@ -28,7 +28,7 @@
 <script>
 import AssetStatistics from './AssetStatistics.vue'
 import Page from '@/layout/components/Page'
-import { resolveRoute } from '@/utils/vue/index'
+import { resolveAsyncComponentCompat, resolveRoute } from '@/utils/vue/index'
 
 export default {
   name: 'Assets',
@@ -60,7 +60,7 @@ export default {
   },
   computed: {
     chartItems() {
-      return this.charts.filter(chart => chart.hidden)
+      return this.charts.filter((chart) => chart.hidden)
     }
   },
   created() {
@@ -72,7 +72,7 @@ export default {
     handleChangeChart(chart) {
       this.selectedChart = chart
       const route = resolveRoute({ name: chart.name }, this.$router)
-      this.component = route.components.default
+      this.component = resolveAsyncComponentCompat(route.components.default)
       const routePath = route.path
       this.url = '/ui/#' + routePath
       this.name = chart.name
@@ -83,7 +83,7 @@ export default {
 
 <style scoped lang="scss">
 .page {
-  ::v-deep .page-content {
+  :deep(.page-content) {
     padding-right: 20px;
     padding-top: 10px;
   }
@@ -109,7 +109,7 @@ h5 {
 .chart {
   padding: 10px;
 
-  ::v-deep .content {
+  :deep(.content) {
     background-color: #fff;
     overflow: hidden;
     height: 100%;

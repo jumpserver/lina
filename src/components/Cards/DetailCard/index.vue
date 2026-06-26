@@ -2,15 +2,17 @@
   <IBox :fa="fa" :title="title">
     <el-form :label-width="labelWidth" class="content detail-card" label-position="left">
       <template v-for="item in items">
-        <div v-if="item.has !== false" :key="item.key" :class="item.class " :label="item.key" class="el-form-item">
-          <span slot="label" class="el-form-item__label"> {{ formateLabel(item.key) }}</span>
+        <div
+          v-if="item.has !== false"
+          :key="item.key"
+          :class="item.class"
+          :label="item.key"
+          class="el-form-item"
+        >
+          <span class="el-form-item__label"> {{ formateLabel(item.key) }}</span>
           <span class="item-value el-form-item__content">
-            <component
-              :is="item.component"
-              v-if="item.component"
-              v-bind="{...item}"
-            />
-            <ItemValue v-else :value="item.value" v-bind="item" />
+            <component v-bind="{ ...item }" :is="item.component" v-if="item.component" />
+            <ItemValue v-bind="item" v-else :value="item.value" />
           </span>
         </div>
       </template>
@@ -29,7 +31,7 @@ export default {
     title: {
       type: String,
       default() {
-        return this.$t('BasicInfo')
+        return 'BasicInfo'
       }
     },
     fa: {
@@ -51,8 +53,8 @@ export default {
   },
   data() {
     return {
-      iItems: this.items.filter(item => {
-        return !item.hasOwnProperty('has') || item.has === true
+      iItems: this.items.filter((item) => {
+        return !Object.prototype.hasOwnProperty.call(item, 'has') || item.has === true
       })
     }
   },
@@ -76,8 +78,8 @@ export default {
   font-size: 13px;
   line-height: 2;
 
-  ::v-deep .el-form-item {
-    border-bottom: 1px dashed #F4F4F4;
+  :deep(.el-form-item) {
+    border-bottom: 1px dashed #f4f4f4;
     padding: 1px 0;
     margin-bottom: 0;
     display: flex;
@@ -93,12 +95,12 @@ export default {
     &.array-item {
       border-bottom: none;
 
-      ::v-deep .el-form-item__content {
-        border-bottom: 1px dashed #EBEEF5
+      :deep(.el-form-item__content) {
+        border-bottom: 1px dashed #ebeef5;
       }
 
-      ::v-deep .el-form-item__label:last-child {
-        border: 1px dashed #EBEEF5;
+      :deep(.el-form-item__label:last-child) {
+        border: 1px dashed #ebeef5;
       }
     }
 
@@ -127,13 +129,13 @@ export default {
       padding: 5px 0;
     }
 
-    ::v-deep .el-tag--mini {
+    :deep(.el-tag--small) {
       margin-right: 3px;
     }
   }
 
   .item-value {
-    ::v-deep span {
+    :deep(span) {
       //display: -webkit-box;
       overflow: hidden;
       text-overflow: ellipsis;

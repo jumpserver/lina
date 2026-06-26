@@ -5,11 +5,11 @@ import rules from '@/components/Form/DataForm/rules'
 import { JSONManyToManySelect, NestedObjectSelect2, Select2 } from '@/components/Form/FormFields'
 import { message } from '@/utils/vue/message'
 
-export const filterSelectValues = values => {
+export const filterSelectValues = (values) => {
   if (!values) return
   const selects = []
-  values.forEach(item => {
-    if (item.hasOwnProperty('pk')) {
+  values.forEach((item) => {
+    if (Object.prototype.hasOwnProperty.call(item, 'pk')) {
       selects.push(item)
     } else {
       // 格式校验：不以:开头，不以:结尾
@@ -88,7 +88,7 @@ export const assetFieldsMeta = (vm, category, type) => {
             return pre
           }, {})
           const _secretTypes = value
-            .map(v => v.name)
+            .map((v) => v.name)
             .reduce((pre, name) => {
               if (protocolSecretTypes[name]) {
                 return pre.concat(protocolSecretTypes[name])
@@ -104,7 +104,7 @@ export const assetFieldsMeta = (vm, category, type) => {
         multiple: false,
         ajax: {
           url: `/api/v1/assets/platforms/?category=${platformCategory}&type=${platformType}`,
-          transformOption: item => {
+          transformOption: (item) => {
             return { label: item.name, value: item.id }
           }
         }
@@ -149,11 +149,13 @@ export const assetFieldsMeta = (vm, category, type) => {
       }
     },
     nodes: {
+      component: Select2,
       rules: [rules.RequiredChange],
       el: {
+        multiple: true,
         ajax: {
           url: '/api/v1/assets/nodes/',
-          transformOption: item => {
+          transformOption: (item) => {
             return { label: `${item.full_value}`, value: item.id }
           }
         },
@@ -168,7 +170,7 @@ export const assetFieldsMeta = (vm, category, type) => {
         multiple: true,
         url: '/api/v1/labels/labels/',
         ajax: {
-          transformOption: item => {
+          transformOption: (item) => {
             return { label: `${item.name}:${item.value}`, value: `${item.id}` }
           }
         }
@@ -189,19 +191,20 @@ export const assetFieldsMeta = (vm, category, type) => {
   }
 }
 
-export const assetJSONSelectMeta = vm => {
+export const assetJSONSelectMeta = (vm) => {
   const categories = []
   const types = []
   const protocols = []
-  vm.$axios.get('/api/v1/assets/categories/').then(res => {
+  vm.$axios.get('/api/v1/assets/categories/').then((res) => {
     const _types = []
     const _protocols = []
     for (const category of res) {
       categories.push({ value: category.value, label: category.label })
-      _types.push(...category.types.map(item => ({ value: item.value, label: item.label })))
+      _types.push(...category.types.map((item) => ({ value: item.value, label: item.label })))
       for (const type of category.types) {
+        const protocols = type.constraints?.protocols || []
         _protocols.push(
-          ...type.constraints.protocols?.map(item => ({
+          ...protocols.map((item) => ({
             value: item.name,
             label: item.name.toUpperCase()
           }))
@@ -220,7 +223,7 @@ export const assetJSONSelectMeta = vm => {
       select2: {
         url: '/api/v1/assets/assets/',
         ajax: {
-          transformOption: item => {
+          transformOption: (item) => {
             return { label: item.name + '(' + item.address + ')', value: item.id }
           }
         }
@@ -244,7 +247,7 @@ export const assetJSONSelectMeta = vm => {
           el: {
             url: '/api/v1/assets/nodes/',
             ajax: {
-              transformOption: item => {
+              transformOption: (item) => {
                 return { label: item.full_value, value: item.id }
               }
             }
@@ -294,7 +297,7 @@ export const assetJSONSelectMeta = vm => {
             multiple: true,
             url: '/api/v1/assets/labels/',
             ajax: {
-              transformOption: item => {
+              transformOption: (item) => {
                 return { label: `${item.name}:${item.value}`, value: item.id }
               }
             }
@@ -317,7 +320,7 @@ export function getAssetSelect2Meta() {
       select2: {
         ajax: {
           url: '/api/v1/assets/assets/?fields_size=mini',
-          transformOption: item => {
+          transformOption: (item) => {
             return { label: item.name + '(' + item.address + ')', value: item.id }
           }
         }

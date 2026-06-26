@@ -1,12 +1,8 @@
 <template>
   <div class="">
-    <el-input
-      v-model="iValue"
-      :placeholder="placeholder"
-      :rows="rows"
-      type="textarea"
-    />
+    <el-input v-model="iValue" :placeholder="placeholder" :rows="rows" type="textarea" />
     <el-upload
+      v-bind="$attrs"
       ref="upload"
       :accept="accept"
       :action="''"
@@ -16,14 +12,15 @@
       :on-change="handleChange"
       :on-remove="handleRemove"
       class="upload-secret"
-      v-bind="$attrs"
     >
-      <el-button size="mini" type="primary">
+      <el-button size="small" type="primary">
         {{ btnText }}
       </el-button>
-      <div v-if="tip" slot="tip" class="el-upload__tip">
-        {{ tip }}
-      </div>
+      <template #tip>
+        <div v-if="tip" class="el-upload__tip">
+          {{ tip }}
+        </div>
+      </template>
     </el-upload>
   </div>
 </template>
@@ -37,8 +34,8 @@ export default {
     },
     btnText: {
       type: String,
-      default: function() {
-        return this.$t('SelectFile')
+      default: function () {
+        return 'SelectFile'
       }
     },
     rows: {
@@ -80,7 +77,7 @@ export default {
       const newFileList = fileList.slice(-1)
       this.fileList = newFileList
       const reader = new FileReader()
-      reader.onload = function(res) {
+      reader.onload = function (res) {
         const result = res.target.result
         vm.iValue = result
         vm.$emit('input', vm.iValue)
@@ -100,19 +97,30 @@ export default {
 <style lang="scss" scoped>
 .upload-secret {
   display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px;
 
-  &::v-deep .el-list-enter-active,
-  &::v-deep .el-list-leave-active {
+  &:deep(.el-list-enter-active),
+  &:deep(.el-list-leave-active) {
     transition: none;
   }
 
-  &::v-deep .el-list-enter,
-  &::v-deep .el-list-leave-active {
+  &:deep(.el-list-enter),
+  &:deep(.el-list-leave-active) {
     opacity: 0;
   }
 
-  &::v-deep .el-upload-list {
+  &:deep(.el-upload-list) {
     height: 40px;
+  }
+
+  &:deep(.el-button) {
+    min-height: 30px;
+    height: 30px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 400;
   }
 }
 </style>

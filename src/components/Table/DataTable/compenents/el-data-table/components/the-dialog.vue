@@ -1,36 +1,33 @@
 <template>
   <el-dialog
-    ref="dialog"
-    :title="title"
-    :visible.sync="visible"
     v-bind="dialogAttrs"
+    ref="dialog"
+    v-model="visible"
+    :title="title"
     @close="resetFields"
+    @opened="handleOpened"
   >
     <!--https://github.com/FEMessage/el-form-renderer-->
-    <el-form-renderer
-      ref="form"
-      :content="form"
-      v-bind="formAttrs"
-      :disabled="isView"
-    >
+    <el-form-renderer v-bind="formAttrs" ref="form" :content="form" :disabled="isView">
       <!--@slot 额外的弹窗表单内容, 当form不满足需求时可以使用，参考：https://femessage.github.io/el-form-renderer/#/Demo?id=slot -->
       <slot :row="slotData" />
     </el-form-renderer>
 
-    <div v-show="!isView" slot="footer">
-      <el-button :size="buttonSize" @click="visible = false">取 消</el-button>
-      <el-button
-        type="primary"
-        :loading="confirmLoading"
-        :size="buttonSize"
-        @click="confirm"
-      >确 定</el-button>
-    </div>
+    <template v-if="!isView" #footer>
+      <div>
+        <el-button :size="buttonSize" @click="visible = false">取 消</el-button>
+        <el-button type="primary" :loading="confirmLoading" :size="buttonSize" @click="confirm"
+          >确 定</el-button
+        >
+      </div>
+    </template>
   </el-dialog>
 </template>
 
 <script>
 /* eslint-disable vue/require-default-prop */
+import ElFormRenderer from '@/components/Form/DataForm/components/el-form-renderer'
+
 export const dialogModes = {
   new: 'new',
   edit: 'edit',
@@ -38,6 +35,9 @@ export const dialogModes = {
 }
 
 export default {
+  components: {
+    ElFormRenderer
+  },
   props: {
     newTitle: {
       type: String,
@@ -65,12 +65,14 @@ export default {
     },
     buttonSize: String
   },
+  emits: ['confirm'],
   data() {
     return {
       mode: dialogModes.new,
       visible: false,
       confirmLoading: false,
-      slotData: null
+      slotData: null,
+      pendingFormValue: null
     }
   },
   computed: {
@@ -95,14 +97,18 @@ export default {
      */
     show(mode, formValue) {
       this.mode = mode
+      this.pendingFormValue = formValue || null
+      this.slotData = null
       this.visible = true
-      if (formValue) {
-        // $nextTick 有时也拿不到 form ，这样是稳妥的做法
-        this.$refs.dialog.$once('opened', () => {
-          this.$refs.form.updateForm(formValue)
-          this.slotData = formValue
-        })
+    },
+    handleOpened() {
+      if (!this.pendingFormValue) {
+        return
       }
+
+      this.$refs.form.updateForm(this.pendingFormValue)
+      this.slotData = this.pendingFormValue
+      this.pendingFormValue = null
     },
     async confirm() {
       const valid = await new Promise(this.$refs.form.validate)
@@ -120,6 +126,7 @@ export default {
     resetFields() {
       this.$refs.form.resetFields()
       this.slotData = null
+      this.pendingFormValue = null
     }
   }
 }

@@ -1,19 +1,20 @@
 <template>
   <div v-if="!needHidden(item) && (item.alwaysShow || !allChildrenHidden(item))">
     <template
-      v-if="hasOneShowingChild(item.children, item) &&
+      v-if="
+        hasOneShowingChild(item.children, item) &&
         (!onlyOneChild.children || onlyOneChild.noShowingChildren) &&
-        !item.alwaysShow"
+        !item.alwaysShow
+      "
     >
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item
-          :class="{'submenu-title-noDropdown':!isNest, 'level1-menu': !isNest}"
+          :class="{ 'submenu-title-noDropdown': !isNest, 'level1-menu': !isNest }"
           :index="resolvePath(onlyOneChild.path)"
           class="submenu-item level2-menu"
         >
           <item
-            :children="item.children"
-            :icon="onlyOneChild.meta.icon||(item.meta && item.meta.icon)"
+            :icon="onlyOneChild.meta.icon || (item.meta && item.meta.icon)"
             :title="getItemTitle(onlyOneChild)"
           />
         </el-menu-item>
@@ -33,15 +34,15 @@
           class="nest-menu"
         />
       </div>
-      <el-submenu
+      <el-sub-menu
         v-else
         ref="subMenu"
         :index="resolvePath(item.path)"
         class="el-submenu-sidebar submenu-item level1-menu"
         popper-append-to-body
       >
-        <template slot="title">
-          <item v-if="item.meta" :children="item.children" :icon="item.meta && item.meta.icon" :title="getItemTitle(item)" />
+        <template #title>
+          <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="getItemTitle(item)" />
         </template>
         <sidebar-item
           v-for="child in item.children"
@@ -51,23 +52,23 @@
           :item="child"
           class="nest-menu"
         />
-      </el-submenu>
+      </el-sub-menu>
     </div>
   </div>
 </template>
 
 <script>
-import path from 'path'
+import path from 'path-browserify'
 import { isExternal } from '@/utils/secure'
 import Item from './Item'
 import AppLink from './Link'
-import FixiOSBug from './FixiOSBug'
+import { useFixIOSBug } from '@/utils/vue/useFixIOSBug'
 import { toSentenceCase } from '@/utils/common/index'
+import { ref } from 'vue'
 
 export default {
   name: 'SidebarItem',
   components: { Item, AppLink },
-  mixins: [FixiOSBug],
   props: {
     // route object
     item: {
@@ -87,12 +88,18 @@ export default {
       default: false
     }
   },
+  setup() {
+    const subMenu = ref(null)
+    useFixIOSBug(subMenu)
+    return {
+      subMenu
+    }
+  },
   data() {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
     // TODO: refactor with render function
     this.onlyOneChild = null
-    return {
-    }
+    return {}
   },
   methods: {
     needHidden(item) {
@@ -124,7 +131,7 @@ export default {
       return title
     },
     hasOneShowingChild(children = [], parent) {
-      const showingChildren = children.filter(item => {
+      const showingChildren = children.filter((item) => {
         if (item.hidden) {
           return false
         } else {

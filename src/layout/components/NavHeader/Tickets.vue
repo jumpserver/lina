@@ -1,6 +1,11 @@
 <template>
   <div>
-    <el-badge :hidden="assignedTicketCount===0" :value="assignedTicketCount" size="mini" type="primary">
+    <el-badge
+      :hidden="assignedTicketCount === 0"
+      :value="assignedTicketCount"
+      size="small"
+      type="primary"
+    >
       <el-link class="el-link" target="_blank" @click="goToTickets">
         <svg-icon icon-class="ticket" />
       </el-link>
@@ -20,16 +25,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'currentUser'
-    ])
+    ...mapGetters(['currentUser'])
   },
   created() {
     this.ticketsOpenedCount()
   },
   methods: {
     ticketsOpenedCount() {
-      getTicketOpenCount(this.currentUser.id).then(data => {
+      getTicketOpenCount(this.currentUser.id).then((data) => {
         this.assignedTicketCount = data.count
       })
     },
@@ -45,14 +48,14 @@ export default {
 .el-link {
   color: #606266 !important;
   font-size: 13px;
-  font-weight: 400
+  font-weight: 400;
 }
 
-.el-badge ::v-deep .el-badge__content.is-fixed {
+.el-badge :deep(.el-badge__content.is-fixed) {
   top: 10px;
 }
 
 .icon {
-  color: #fff
+  color: #fff;
 }
 </style>

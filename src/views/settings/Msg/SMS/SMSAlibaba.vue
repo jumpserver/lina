@@ -22,39 +22,27 @@ export default {
         {
           title: this.$t('Test'),
           loading: false,
-          callback: function(value, form, btn) {
+          callback: function (value, form, btn) {
             btn.loading = true
-            vm.$axios.post(
-              `/api/v1/settings/sms/alibaba/testing/`,
-              value
-            ).then(res => {
-              vm.$message.success(res['msg'])
-            }).catch((error) => {
-              vm.$log.error('err occur')
-              vm.$refs.baseSms.testPerformError(error)
-            }).finally(() => { btn.loading = false })
+            vm.$axios
+              .post(`/api/v1/settings/sms/alibaba/testing/`, value)
+              .then((res) => {
+                vm.$message.success(res['msg'])
+              })
+              .catch((error) => {
+                vm.$log.error('err occur')
+                vm.$refs.baseSms.testPerformError(error)
+              })
+              .finally(() => {
+                btn.loading = false
+              })
           }
         }
       ],
       fields: [
-        [
-          this.$t('Basic'),
-          [
-            'ALIBABA_ACCESS_KEY_ID', 'ALIBABA_ACCESS_KEY_SECRET'
-          ]
-        ],
-        [
-          this.$t('Template'),
-          [
-            'ALIBABA_VERIFY_SIGN_NAME', 'ALIBABA_VERIFY_TEMPLATE_CODE'
-          ]
-        ],
-        [
-          this.$t('Test'),
-          [
-            'SMS_TEST_PHONE'
-          ]
-        ]
+        [this.$t('Basic'), ['ALIBABA_ACCESS_KEY_ID', 'ALIBABA_ACCESS_KEY_SECRET']],
+        [this.$t('Template'), ['ALIBABA_VERIFY_SIGN_NAME', 'ALIBABA_VERIFY_TEMPLATE_CODE']],
+        [this.$t('Test'), ['SMS_TEST_PHONE']]
       ],
       fieldsMeta: {
         ALIBABA_VERIFY_SIGN_TMPL: {

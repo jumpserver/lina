@@ -3,7 +3,7 @@
     <div class="head">
       <Title :config="config" />
     </div>
-    <LineChart v-if="loading" v-bind="lineChartConfig" />
+    <LineChart v-bind="lineChartConfig" v-if="loading" />
   </div>
 </template>
 
@@ -54,7 +54,7 @@ export default {
     async getMetricData() {
       setTimeout(() => {
         const url = `/api/v1/index/?dates_metrics=1&days=${this.days}`
-        this.$axios.get(url).then(data => {
+        this.$axios.get(url).then((data) => {
           const activeUsers = data?.dates_metrics_total_count_active_users
           const activeAssets = data?.dates_metrics_total_count_active_assets
           this.lineChartConfig.datesMetrics = data.dates_metrics_date
@@ -84,4 +84,3 @@ export default {
   }
 }
 </style>
-

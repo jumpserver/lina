@@ -23,11 +23,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.page ::v-deep .page-heading {
+.page :deep(.page-heading) {
   display: none;
 }
 
-::v-deep .ibox {
+:deep(.ibox) {
   height: 100%;
 
   .el-card__body {

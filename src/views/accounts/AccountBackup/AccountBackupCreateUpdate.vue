@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
-import getChangeSecretFields from '@/views/accounts/AccountBackup/fields'
-import { encryptPassword } from '@/utils/secure'
 import { periodicMeta } from '@/components/const'
+import { GenericCreateUpdatePage } from '@/layout/components'
+import { encryptPassword } from '@/utils/secure'
+import getChangeSecretFields from '@/views/accounts/AccountBackup/fields'
 
 export default {
   name: 'AccountBackupUpdate',
@@ -20,7 +20,8 @@ export default {
       url: '/api/v1/accounts/account-backup-plans/',
       fields: [
         [this.$t('Basic'), ['name', 'types']],
-        [this.$t('Backup'),
+        [
+          this.$t('Backup'),
           [
             'backup_type',
             'is_password_divided_by_email',
@@ -91,6 +92,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -36,7 +36,9 @@ export default {
           key: this.$t('NodeOfNumber'),
           value: this.object.snapshot.node_amount
         },
-        'trigger_display', 'date_start', 'date_finished',
+        'trigger_display',
+        'date_start',
+        'date_finished',
         {
           key: this.$t('Comment'),
           value: this.object.snapshot.common
@@ -48,6 +50,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

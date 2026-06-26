@@ -3,12 +3,12 @@
 </template>
 
 <script>
-import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import rules from '@/components/Form/DataForm/rules'
-import { userJSONSelectMeta } from '@/views/users/const'
+import { TagInput, WeekCronSelect } from '@/components/Form/FormFields'
+import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { assetJSONSelectMeta } from '@/views/assets/const'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter.vue'
-import { WeekCronSelect } from '@/components/Form/FormFields'
+import { userJSONSelectMeta } from '@/views/users/const'
 
 export default {
   name: 'ACLCreateUpdate',
@@ -38,11 +38,14 @@ export default {
         },
         assets: assetJSONSelectMeta(this),
         rules: {
-          fields: [
-            'ip_group', 'time_period'
-          ],
+          fields: ['ip_group', 'time_period'],
           fieldsMeta: {
             ip_group: {
+              component: TagInput,
+              el: {
+                value: ['*'],
+                placeholder: this.$t('IP')
+              },
               helpText: this.$t('IpGroupHelpText')
             },
             time_period: {
@@ -96,5 +99,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

@@ -1,5 +1,5 @@
 <template>
-  <ListTable ref="ListTable" class="list-table" v-bind="$attrs" v-on="$listeners" />
+  <ListTable v-bind="$attrs" ref="ListTable" class="list-table" />
 </template>
 
 <script>
@@ -10,9 +10,7 @@ export default {
   components: {
     ListTable
   },
-  activated() {
-
-  },
+  activated() {},
   methods: {
     reloadTable() {
       this.$refs.ListTable.reloadTable()

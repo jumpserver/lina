@@ -1,14 +1,9 @@
 <template>
-  <IBox :title="title" fa="fa-info-circle" v-bind="$attrs">
+  <IBox v-bind="$attrs" :title="title" fa="fa-info-circle">
     <div class="quick-actions">
       <p v-if="labels.length === 0">{{ $t('Nothing') }}</p>
       <template v-else>
-        <el-tag
-          v-for="i in labels"
-          :key="i.name + i.value"
-          class="tag"
-          type="info"
-        >
+        <el-tag v-for="i in labels" :key="i.name + i.value" class="tag" type="info">
           {{ i.name }}:{{ i.value }}
         </el-tag>
       </template>
@@ -28,7 +23,7 @@ export default {
     title: {
       type: String,
       default() {
-        return this.$t('Tags')
+        return 'Tags'
       }
     },
     labels: {
@@ -44,7 +39,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .tag {
   margin-right: 4px;
   margin-bottom: 4px;

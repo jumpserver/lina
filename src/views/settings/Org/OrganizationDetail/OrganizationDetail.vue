@@ -25,7 +25,8 @@ export default {
     return {
       url: `/api/v1/orgs/orgs/${this.object.id}/`,
       detailFields: [
-        'name', 'created_by',
+        'name',
+        'created_by',
         {
           key: this.$t('UsersAmount'),
           value: this.object.resource_statistics.users_amount
@@ -42,13 +43,12 @@ export default {
           key: this.$t('AssetPermsAmount'),
           value: this.object.resource_statistics.asset_perms_amount
         },
-        'date_created', 'comment'
+        'date_created',
+        'comment'
       ]
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,5 +1,5 @@
 <template>
-  <TabPage :active-menu.sync="config.activeMenu" v-bind="config" />
+  <TabPage v-bind="config" v-model:active-menu="config.activeMenu" />
 </template>
 
 <script>
@@ -32,7 +32,8 @@ export default {
             title: this.$t('SyncInstanceTaskHistoryAssetList'),
             name: 'TaskSyncAssetList',
             hidden: () => !this.$hasLicense() || !this.$hasPerm('xpack.view_syncinstancedetail'),
-            component: () => import('@/views/assets/Cloud/Account/AccountDetail/TaskSyncAssetList.vue')
+            component: () =>
+              import('@/views/assets/Cloud/Account/AccountDetail/TaskSyncAssetList.vue')
           }
         ],
         actions: {

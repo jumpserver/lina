@@ -1,33 +1,33 @@
 <template>
   <Dialog
+    v-model:visible="showImportDialog"
     :close-on-click-modal="false"
     :destroy-on-close="true"
     :loading-status="loadStatus"
     :show-cancel="false"
     :show-confirm="false"
     :title="importTitle"
-    :visible.sync="showImportDialog"
     class="importDialog"
     width="900px"
     @close="handleImportCancel"
   >
     <el-form v-if="!showTable" label-position="left" style="padding-left: 20px">
-      <el-form-item :label="$tc('Import' )" :label-width="'100px'">
-        <el-radio v-if="canImportCreate" v-model="importOption" class="export-item" label="create">
-          {{ this.$t('Create') }}
+      <el-form-item :label="$tc('Import')" :label-width="'100px'">
+        <el-radio v-if="canImportCreate" v-model="importOption" class="export-item" value="create">
+          {{ $t('Create') }}
         </el-radio>
-        <el-radio v-if="canImportUpdate" v-model="importOption" class="export-item" label="update">
-          {{ this.$t('Update') }}
+        <el-radio v-if="canImportUpdate" v-model="importOption" class="export-item" value="update">
+          {{ $t('Update') }}
         </el-radio>
         <div style="line-height: 1.5">
           <span class="el-upload__tip">
             {{ downloadTemplateTitle }}
-            <el-link type="primary" @click="downloadTemplateFile('csv')"> CSV </el-link>
-            <el-link type="primary" @click="downloadTemplateFile('xlsx')"> XLSX </el-link>
+            <el-link type="success" @click="downloadTemplateFile('csv')"> CSV </el-link>
+            <el-link type="success" @click="downloadTemplateFile('xlsx')"> XLSX </el-link>
           </span>
         </div>
       </el-form-item>
-      <el-form-item :label="$tc('Upload' )" :label-width="'100px'" class="file-uploader">
+      <el-form-item :label="$tc('Upload')" :label-width="'100px'" class="file-uploader">
         <el-upload
           ref="upload"
           :auto-upload="false"
@@ -37,28 +37,30 @@
           accept=".csv,.xlsx"
           action="string"
           drag
-          list-type="text/csv"
+          list-type="text"
         >
-          <i class="el-icon-upload" />
+          <el-icon><Upload /></el-icon>
           <div class="el-upload__text">
             {{ $t('DragUploadFileInfo') }}
           </div>
-          <div slot="tip" class="el-upload__tip">
-            <span :class="{'hasError': hasFileFormatOrSizeError }">
-              {{ $t('UploadCsvLth10MHelpText') }}
-            </span>
-            <div v-if="renderError" class="hasError">{{ renderError }}</div>
-          </div>
+          <template #tip>
+            <div class="el-upload__tip">
+              <span :class="{ hasError: hasFileFormatOrSizeError }">
+                {{ $t('UploadCsvLth10MHelpText') }}
+              </span>
+              <div v-if="renderError" class="hasError">{{ renderError }}</div>
+            </div>
+          </template>
         </el-upload>
       </el-form-item>
     </el-form>
     <div v-else class="importTableZone">
       <ImportTable
+        v-bind="$attrs"
         ref="importTable"
         :import-option="importOption"
         :json-data="jsonData"
         :url="url"
-        v-bind="$attrs"
         @cancel="cancelUpload"
         @finish="closeDialog"
       />
@@ -67,10 +69,10 @@
 </template>
 
 <script>
+import { createSourceIdCache } from '@/api/common'
 import Dialog from '@/components/Dialog/index.vue'
 import ImportTable from '@/components/Table/ListTable/TableAction/ImportTable.vue'
 import { download, getErrorResponseMsg } from '@/utils/common/index'
-import { createSourceIdCache } from '@/api/common'
 
 export default {
   name: 'ImportDialog',
@@ -99,7 +101,12 @@ export default {
   data() {
     return {
       showImportDialog: false,
-      importOption: this.canImportCreate && this.canImportUpdate ? 'create' : this.canImportCreate ? 'create' : 'update',
+      importOption:
+        this.canImportCreate && this.canImportUpdate
+          ? 'create'
+          : this.canImportCreate
+            ? 'create'
+            : 'update',
       errorMsg: '',
       loadStatus: false,
       importTypeOption: 'csv',
@@ -143,15 +150,16 @@ export default {
       this.showTable = false
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.$eventBus.$off('showImportDialog', this.showImportEventHandler)
   },
   mounted() {
     this.$eventBus.$on('showImportDialog', this.showImportEventHandler)
   },
   methods: {
-    showImportEventHandler({ url }) {
-      if (url === this.url) {
+    showImportEventHandler(options = {}) {
+      const { url } = options
+      if (!url || url === this.url) {
         this.showImportDialog = true
       }
     },
@@ -178,23 +186,24 @@ export default {
       url.pathname += 'render-to-json/'
       const renderToJsonUrl = url.toString().replace('http://localhost', '')
       const requestMethod = this.importOption === 'create' ? 'post' : 'put'
-      this.$axios(
-        {
-          url: renderToJsonUrl,
-          data: file.raw,
-          method: requestMethod,
-          headers: { 'Content-Type': isCsv ? 'text/csv' : 'text/xlsx' },
-          disableFlashErrorMsg: true
-        }
-      ).then(data => {
-        this.jsonData = data
-        this.showTable = true
-      }).catch(error => {
-        fileList.splice(0, fileList.length)
-        this.renderError = getErrorResponseMsg(error)
-      }).finally(() => {
-        this.loadStatus = false
+      this.$axios({
+        url: renderToJsonUrl,
+        data: file.raw,
+        method: requestMethod,
+        headers: { 'Content-Type': isCsv ? 'text/csv' : 'text/xlsx' },
+        disableFlashErrorMsg: true
       })
+        .then((data) => {
+          this.jsonData = data
+          this.showTable = true
+        })
+        .catch((error) => {
+          fileList.splice(0, fileList.length)
+          this.renderError = getErrorResponseMsg(error)
+        })
+        .finally(() => {
+          this.loadStatus = false
+        })
     },
     beforeUpload(file) {
       const isLt30M = file.size / 1024 / 1024 < 30
@@ -247,25 +256,25 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-@import "~@/styles/variables";
+<style lang="scss" scoped>
+@use '@/styles/variables' as *;
 
 .error-msg {
-  color: $--color-danger;
+  color: $color-danger;
 }
 
 .error-msg.error-results {
   background-color: #f3f3f4;
   max-height: 200px;
-  overflow: auto
+  overflow: auto;
 }
 
-.file-uploader ::v-deep .el-upload {
+.file-uploader :deep(.el-upload) {
   width: 100%;
   //padding-right: 150px;
 }
 
-.file-uploader ::v-deep .el-upload-dragger {
+.file-uploader :deep(.el-upload-dragger) {
   width: 100%;
 }
 
@@ -281,7 +290,7 @@ export default {
   }
 }
 
-.importTable ::v-deep .el-dialog__body {
+.importTable :deep(.el-dialog__body) {
   padding-bottom: 20px;
 }
 
@@ -294,7 +303,7 @@ export default {
 }
 
 .hasError {
-  color: $--color-danger;
+  color: $color-danger;
 }
 
 .el-upload__tip {

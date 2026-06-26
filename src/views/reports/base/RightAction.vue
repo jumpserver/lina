@@ -5,18 +5,16 @@
         :loading="exportLoading"
         :disabled="exportLoading"
         class="export-btn"
-        type="text"
-        icon="el-icon-printer"
+        link
+        icon="Printer"
         @click="exportPdf"
       >
         {{ $t('ExportAsPDF') }}
-
       </el-button>
-      <el-button class="export-btn" type="text" icon="el-icon-message" @click="emailReport">
-
+      <el-button class="export-btn" link icon="Message" @click="emailReport">
         {{ $t('EMailReport') }}
       </el-button>
-      <el-button class="export-btn" type="text" icon="el-icon-printer" @click="printReport">
+      <el-button class="export-btn" link icon="Printer" @click="printReport">
         {{ $t('Print') }}
       </el-button>
     </el-button-group>
@@ -65,15 +63,18 @@ export default {
       }
       const days = this.getDaysParam()
       this.$message.success(this.$t('EMailReport') + '...')
-      this.$axios.post(`/core/reports/send-mail/?chart=${this.name}&days=${days}`,).then((res) => {
-        if (res.error) {
-          this.$message.error(res.error)
-        } else {
-          this.$message.success(res.message)
-        }
-      }).catch(error => {
-        this.$message.error(this.$t('Failed') + ': ' + error.message)
-      })
+      this.$axios
+        .post(`/core/reports/send-mail/?chart=${this.name}&days=${days}`)
+        .then((res) => {
+          if (res.error) {
+            this.$message.error(res.error)
+          } else {
+            this.$message.success(res.message)
+          }
+        })
+        .catch((error) => {
+          this.$message.error(this.$t('Failed') + ': ' + error.message)
+        })
     },
     printReport() {
       window.print()
@@ -98,7 +99,8 @@ export default {
     margin: 0 2px;
     padding: 8px;
 
-    &.el-button--text {
+    &.el-button--text,
+    &.is-link {
       color: #fff;
     }
 
@@ -108,9 +110,7 @@ export default {
     }
   }
 
-  .export-btn .el-icon-document,
-  .export-btn .el-icon-printer,
-  .export-btn .el-icon-message {
+  .export-btn .el-icon {
     margin-right: 4px;
   }
 

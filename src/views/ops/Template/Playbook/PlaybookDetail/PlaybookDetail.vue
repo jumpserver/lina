@@ -4,7 +4,7 @@
   </TwoCol>
 </template>
 
-<script type="text/jsx">
+<script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
@@ -22,9 +22,7 @@ export default {
   data() {
     return {
       url: `/api/v1/ops/playbooks/${this.object.id}/`,
-      excludes: [
-        'variable', 'path', 'create_method', 'vcs_url'
-      ]
+      excludes: ['variable', 'path', 'create_method', 'vcs_url']
     }
   },
   computed: {
@@ -36,6 +34,4 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-
-</style>
+<style lang="scss" scoped></style>

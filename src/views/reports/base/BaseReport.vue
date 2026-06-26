@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'only-charts': onlyCharts, 'nav': nav }">
+  <div :class="{ 'only-charts': onlyCharts, nav: nav }">
     <div v-if="!onlyCharts && nav" class="header nav-bar">
       <div class="nav-bar-logo">
         <Logo />
@@ -11,12 +11,10 @@
         <div class="title">
           {{ title }}
 
-          <span class="datetime">
-            [{{ new Date().toLocaleString() }}]
-          </span>
+          <span class="datetime"> [{{ new Date().toLocaleString() }}] </span>
 
           <!-- <span v-if="!nav && url" class="export-btn">
-            <el-button type="text" @click="openNewWindow">
+            <el-button link @click="openNewWindow">
               <i class="fa fa-external-link" style="font-size: 15px;" />
               {{ $t('Export') }}
             </el-button>
@@ -27,8 +25,8 @@
         </div>
       </div>
       <span v-if="!nav && url && showReportExportBtn" class="export-btn">
-        <el-button type="text" @click="openNewWindow">
-          <i class="fa fa-external-link" style="font-size: 15px;" />
+        <el-button link @click="openNewWindow">
+          <i class="fa fa-external-link" style="font-size: 15px" />
           {{ $t('Export') }}
         </el-button>
       </span>
@@ -175,11 +173,11 @@ export default {
 
 .content {
   // background-color: white;
-  background-color: #F1F1F1;
+  background-color: #f1f1f1;
   height: calc(100vh - 40px);
   overflow-y: auto;
 
-  ::v-deep .export-bar {
+  :deep(.export-bar) {
     float: right;
 
     .export-btn.el-button--text {
@@ -246,8 +244,7 @@ export default {
   }
 
   .charts-zone {
-
-    ::v-deep {
+    :deep() {
       .chart-container {
         break-inside: avoid;
         page-break-inside: avoid;
@@ -268,7 +265,7 @@ export default {
   box-sizing: border-box;
   min-height: 100px; // 添加最小高度确保容器始终存在
 
-  ::v-deep {
+  :deep() {
     .full-width-chart {
       width: 100%;
       margin-bottom: 32px;
@@ -336,6 +333,4 @@ export default {
 .charts-zone--no-padding {
   padding: 0 !important;
 }
-
 </style>
-

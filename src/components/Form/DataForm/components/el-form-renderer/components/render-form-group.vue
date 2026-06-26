@@ -1,10 +1,9 @@
 <template>
   <div>
-    <template v-for="(item, index) in data.items">
+    <template v-for="(item, index) in data.items" :key="item.id || index">
       <slot :name="`id:${item.id}`" />
       <slot :name="`$id:${item.id}`" />
       <render-form-item
-        :key="index"
         :prop="`${data.id}.${item.id}`"
         :data="item"
         :value="value"
@@ -12,7 +11,7 @@
         :disabled="disabled"
         :readonly="readonly"
         :options="options[item.id]"
-        @updateValue="updateValue"
+        @update-value="updateValue"
       />
     </template>
   </div>
@@ -21,11 +20,12 @@
 /* eslint-disable vue/require-default-prop */
 /* eslint-disable vue/require-prop-types */
 
+import { markRaw } from 'vue'
 import RenderFormItem from './render-form-item.vue'
 
 export default {
   components: {
-    RenderFormItem
+    RenderFormItem: markRaw(RenderFormItem)
   },
   props: {
     data: Object,

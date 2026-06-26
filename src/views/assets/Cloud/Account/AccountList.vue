@@ -1,33 +1,25 @@
 <template>
   <div>
-    <SmallCard ref="table" class="account-table" v-bind="table" />
-    <CreateDialog
-      v-if="visible"
-      :visible.sync="visible"
-      v-bind="providerConfig"
-    />
+    <SmallCard v-bind="table" ref="table" class="account-table" />
+    <CreateDialog v-bind="providerConfig" v-if="visible" v-model:visible="visible" />
     <UpdateDialog
       v-if="updateVisible"
+      v-model:visible="updateVisible"
       :object="object"
-      :visible.sync="updateVisible"
-      @submitSuccess="onSubmitSuccess"
+      @submit-success="onSubmitSuccess"
     />
-    <SyncDialog
-      v-if="onlineSyncVisible"
-      :object="object"
-      :visible.sync="onlineSyncVisible"
-    />
+    <SyncDialog v-if="onlineSyncVisible" v-model:visible="onlineSyncVisible" :object="object" />
   </div>
 </template>
 
-<script type="text/jsx">
-import { lan, privateCloudProviders, publicHostProviders, publicDBProviders } from '../const'
-import CreateDialog from './components/CreateDialog.vue'
-import UpdateDialog from './components/UpdateDialog.vue'
-import SyncDialog from './components/SyncDialog.vue'
+<script>
 import SmallCard from '@/components/Table/InfoCardTable/index.vue'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { ACCOUNT_PROVIDER_ATTRS_MAP } from '@/views/assets/Cloud/const'
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { lan, privateCloudProviders, publicDBProviders, publicHostProviders } from '../const'
+import CreateDialog from './components/CreateDialog.vue'
+import SyncDialog from './components/SyncDialog.vue'
+import UpdateDialog from './components/UpdateDialog.vue'
 
 export default {
   name: 'CloudAccountList',
@@ -103,7 +95,8 @@ export default {
                 title: this.$t('PublicCloud'),
                 icon: 'public-cloud',
                 callback: () => {
-                  const providers = this.iCategory === 'host' ? publicHostProviders : publicDBProviders
+                  const providers =
+                    this.iCategory === 'host' ? publicHostProviders : publicDBProviders
                   this.providerConfig.providers = providers.map(
                     (item) => ACCOUNT_PROVIDER_ATTRS_MAP[item]
                   )
@@ -199,6 +192,4 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

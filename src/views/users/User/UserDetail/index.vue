@@ -1,10 +1,5 @@
 <template>
-  <GenericDetailPage
-    :active-menu.sync="config.activeMenu"
-    :object.sync="user"
-    v-bind="config"
-    v-on="$listeners"
-  >
+  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu" v-model:object="user">
     <keep-alive>
       <component :is="config.activeMenu" :object="user" />
     </keep-alive>
@@ -12,18 +7,18 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import { GenericDetailPage } from '@/layout/components'
+import { mapGetters } from 'vuex'
 
-import UserInfo from './UserInfo'
-import UserSession from './UserSession.vue'
-import UserLoginACL from './UserLoginACL.vue'
-import UserGrantedAssets from './UserGrantedAssets'
-import AssetPermissionUser from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionUser.vue'
-import AssetPermissionAsset from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionAsset.vue'
-import AssetPermissionDetail from '@/views/perms/AssetPermission/AssetPermissionDetail/index.vue'
 import AssetPermissionAccount from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionAccount.vue'
+import AssetPermissionAsset from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionAsset.vue'
+import AssetPermissionUser from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionUser.vue'
+import AssetPermissionDetail from '@/views/perms/AssetPermission/AssetPermissionDetail/index.vue'
 import UserAssetPermissionRules from './UserAssetPermissionRules'
+import UserGrantedAssets from './UserGrantedAssets'
+import UserInfo from './UserInfo'
+import UserLoginACL from './UserLoginACL.vue'
+import UserSession from './UserSession.vue'
 
 export default {
   components: {
@@ -47,8 +42,10 @@ export default {
         activeMenu: 'UserInfo',
         actions: {
           canUpdate: () => {
-            return this.$hasPerm('users.change_user') &&
+            return (
+              this.$hasPerm('users.change_user') &&
               !(!this.currentUserIsSuperAdmin && this.user['is_superuser'])
+            )
           }
         },
         submenu: [
@@ -81,9 +78,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'currentUserIsSuperAdmin'
-    ])
+    ...mapGetters(['currentUserIsSuperAdmin'])
   },
   methods: {
     handleTabClick(tab) {

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <img v-if="icon" :src="icon" alt="icon" class="icon">
+    <img v-if="icon" :src="icon" alt="icon" class="icon" />
     <el-link
-      :class="{ 'clicked': linkClicked }"
+      :class="{ clicked: linkClicked }"
       :disabled="disabled"
       :type="col.type || 'info'"
       class="detail"
@@ -14,18 +14,18 @@
     </el-link>
     <Drawer
       v-if="formatterArgs.drawer && drawerComponent && drawerVisible"
+      v-model:visible="drawerVisible"
       :component="drawerComponent"
       :has-footer="false"
       :title="drawerTitle"
-      :visible.sync="drawerVisible"
       class="detail-drawer"
     />
   </div>
 </template>
 
 <script>
-import BaseFormatter from './base.vue'
 import Drawer from '@/components/Drawer/index.vue'
+import BaseFormatter from './base.vue'
 
 export default {
   name: 'DetailFormatter',
@@ -36,7 +36,7 @@ export default {
       type: Object,
       default() {
         return {
-          route: this.$route.name.replace('List', 'Detail'),
+          route: 'GroupDetail',
           can: true,
           getRoute: null,
           routeQuery: null,
@@ -44,8 +44,7 @@ export default {
           onClick: null,
           openInNewPage: false,
           removeColorOnClick: false,
-          beforeClick: () => {
-          },
+          beforeClick: () => {},
           getTitle({ row, cellValue }) {
             return cellValue != null ? cellValue : row.name
           },
@@ -62,7 +61,7 @@ export default {
     }
   },
   data() {
-    const formatterArgs = Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
+    const formatterArgs = Object.assign({}, this.formatterArgsDefault, this.col.formatterArgs)
     return {
       drawerTitle: '',
       linkClicked: false,
@@ -127,7 +126,11 @@ export default {
       }
 
       if (this.formatterArgs.onClick) {
-        return this.formatterArgs.onClick({ ...this.callbackArgs, detailRoute: this.getDetailRoute(), formatterArgs: this.formatterArgs })
+        return this.formatterArgs.onClick({
+          ...this.callbackArgs,
+          detailRoute: this.getDetailRoute(),
+          formatterArgs: this.formatterArgs
+        })
       }
 
       if (this.preventClick) {
@@ -201,17 +204,14 @@ export default {
   height: 28px;
 }
 
-::v-deep .go-back {
+:deep(.go-back) {
   display: none;
 }
 
 .detail-drawer {
-  ::v-deep {
-    .el-drawer__header {
-      border-bottom: none;
-      padding-bottom: 1px;
-    }
+  :deep(.el-drawer__header) {
+    border-bottom: none;
+    padding-bottom: 1px;
   }
 }
-
 </style>
