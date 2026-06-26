@@ -63,7 +63,8 @@ export default {
                 .delete(url)
                 .then((res) => {
                   this.$message.success(this.$tc('DeleteSuccessMsg'))
-                  this.$store.commit('common/reload')
+                  // 局部刷新当前表格，替代 common/reload 的整页重建
+                  this.$refs.ListTable.reloadTable()
                 })
                 .catch((error) => {
                   this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
@@ -102,7 +103,8 @@ export default {
         onAddSuccess: (items, that) => {
           this.$log.debug('AssetSelect value', that.assets)
           this.$message.success(this.$tc('UpdateSuccessMsg'))
-          this.$store.commit('common/reload')
+          // 局部刷新当前表格，替代 common/reload 的整页重建
+          this.$refs.ListTable.reloadTable()
         }
       },
       nodeRelationConfig: {
