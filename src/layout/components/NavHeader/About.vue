@@ -110,7 +110,7 @@ export default {
       return this.publicSettings['INTERFACE']['logo_logout']
     },
     hasXPack() {
-      return this.publicSettings.XPACK_LICENSE_IS_VALID
+      return this.publicSettings.XPACK_ENABLED
     }
   },
   methods: {
