@@ -47,11 +47,6 @@ export default {
     return {
       actions: [
         {
-          name: 'github',
-          label: 'GitHub',
-          icon: 'fa fa-github'
-        },
-        {
           name: 'download',
           label: this.$tc('DownloadCenter'),
           icon: 'fa fa-download'
