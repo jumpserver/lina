@@ -55,7 +55,8 @@ export default {
         hasImport: false,
         hasRefresh: true,
         hasSearch: true,
-        hasMoreActions: false,
+        hasMoreActions: true,
+        hasBulkDelete: this.$hasPerm('acls.delete_commandgroup'),
         createRoute: 'CommandGroupCreate',
         canCreate: () => {
           return this.$hasPerm('acls.add_commandgroup') && !this.$store.getters.currentOrgIsRoot

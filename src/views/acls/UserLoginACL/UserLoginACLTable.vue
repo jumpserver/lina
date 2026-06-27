@@ -64,7 +64,8 @@ export default {
         hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        hasMoreActions: false,
+        hasMoreActions: true,
+        hasBulkDelete: this.$hasPerm('acls.delete_loginacl'),
         createRoute: 'UserLoginACLCreate'
       }
     }

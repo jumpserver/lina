@@ -110,7 +110,8 @@ export default {
           canImportUpdate: this.$hasPerm('accounts.change_accounttemplate')
         },
         hasExport: this.$hasPerm('accounts.view_accounttemplatesecret'),
-        hasMoreActions: false,
+        hasMoreActions: true,
+        hasBulkDelete: this.$hasPerm('accounts.delete_accounttemplate'),
         hasLabelSearch: true,
         exportOptions: {
           url: '/api/v1/accounts/account-template-secrets/',
