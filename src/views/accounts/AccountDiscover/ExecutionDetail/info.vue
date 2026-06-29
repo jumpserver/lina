@@ -23,15 +23,11 @@ export default {
   data() {
     return {
       url: `/api/v1/accounts/gather-account-executions/${this.object.id}/`,
-      detailFields: [
-        'id', 'status', 'trigger_display', 'date_start', 'date_finished'
-      ]
+      detailFields: ['id', 'status', 'trigger_display', 'date_start', 'date_finished']
     }
   },
   computed: {}
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

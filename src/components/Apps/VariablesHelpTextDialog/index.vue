@@ -3,25 +3,32 @@
     :show-cancel="false"
     :show-confirm="false"
     :title="title"
-    :visible.sync="iVisible"
+    :visible="visible"
     class="help-dialog"
     top="1vh"
     width="50%"
+    @update:visible="$emit('update:visible', $event)"
   >
     <p>{{ variablesHelpText }}</p>
     <table border="1" class="help-table">
-      <tr>
-        <th>{{ $tc('Variable') }}</th>
-        <th>{{ $tc('Description') }}</th>
-        <th>{{ $tc('Example') }}</th>
-      </tr>
-      <tr v-for="(item, index) in variables" :key="index">
-        <td :title="$tc('ClickCopy')" class="item-td text-link" @click="onCopy(item.name)">
-          <label class="item-label">{{ item.name }}</label>
-        </td>
-        <td><span>{{ item.label }}</span></td>
-        <td><span>{{ item.default }}</span></td>
-      </tr>
+      <tbody>
+        <tr>
+          <th>{{ $tc('Variable') }}</th>
+          <th>{{ $tc('Description') }}</th>
+          <th>{{ $tc('Example') }}</th>
+        </tr>
+        <tr v-for="(item, index) in variables" :key="index">
+          <td :title="$tc('ClickCopy')" class="item-td text-link" @click="onCopy(item.name)">
+            <label class="item-label">{{ item.name }}</label>
+          </td>
+          <td>
+            <span>{{ item.label }}</span>
+          </td>
+          <td>
+            <span>{{ item.default }}</span>
+          </td>
+        </tr>
+      </tbody>
     </table>
   </Dialog>
 </template>
@@ -46,23 +53,14 @@ export default {
     variablesHelpText: {
       type: String,
       default() {
-        return this.$t('WatermarkVariableHelpText')
+        return 'WatermarkVariableHelpText'
       }
     }
   },
+  emits: ['update:visible'],
   data() {
     return {
       title: this.$t('BuiltinVariable')
-    }
-  },
-  computed: {
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
     }
   },
   methods: {
@@ -74,7 +72,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .help-dialog.dialog .el-dialog__footer {
+:deep(.help-dialog.dialog .el-dialog__footer) {
   border-top: none;
   padding: 8px;
 }
@@ -85,16 +83,18 @@ export default {
   border: 1px solid #dee2e6;
 }
 
-::v-deep .help-table th,
-::v-deep .help-table td {
-  height: 40px;
-  padding: 0 8px;
-  text-align: left;
-}
+:deep(.help-table) {
+  th,
+  td {
+    height: 40px;
+    padding: 0 8px;
+    text-align: left;
+  }
 
-::v-deep .help-table .item-td,
-::v-deep .help-table .item-label {
-  cursor: pointer;
-  color: var(--color-primary);
+  .item-td,
+  .item-label {
+    cursor: pointer;
+    color: var(--color-primary);
+  }
 }
 </style>

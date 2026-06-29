@@ -1,10 +1,5 @@
 <template>
-  <BaseAuth
-    :config="settings"
-    :title="$tc('SAML2')"
-    enable-field="AUTH_SAML2"
-    v-on="$listeners"
-  />
+  <BaseAuth :config="settings" :title="$tc('SAML2')" enable-field="AUTH_SAML2" />
 </template>
 
 <script>
@@ -24,21 +19,22 @@ export default {
       settings: {
         url: '/api/v1/settings/setting/?category=saml2',
         fields: [
-          [this.$t('Basic'), [
-            'AUTH_SAML2',
-            'SAML2_SP_KEY_CONTENT',
-            'SAML2_SP_CERT_CONTENT',
-            'SAML2_IDP_METADATA_URL',
-            'SAML2_IDP_METADATA_XML',
-            'SAML2_SP_ADVANCED_SETTINGS'
-
-          ]],
-          [this.$t('Search'), [
-            'SAML2_RENAME_ATTRIBUTES'
-          ]],
-          [this.$t('Other'), [
-            'SAML2_ORG_IDS', 'AUTH_SAML2_ALWAYS_UPDATE_USER', 'SAML2_LOGOUT_COMPLETELY'
-          ]]
+          [
+            this.$t('Basic'),
+            [
+              'AUTH_SAML2',
+              'SAML2_SP_KEY_CONTENT',
+              'SAML2_SP_CERT_CONTENT',
+              'SAML2_IDP_METADATA_URL',
+              'SAML2_IDP_METADATA_XML',
+              'SAML2_SP_ADVANCED_SETTINGS'
+            ]
+          ],
+          [this.$t('Search'), ['SAML2_RENAME_ATTRIBUTES']],
+          [
+            this.$t('Other'),
+            ['SAML2_ORG_IDS', 'AUTH_SAML2_ALWAYS_UPDATE_USER', 'SAML2_LOGOUT_COMPLETELY']
+          ]
         ],
         fieldsMeta: {
           SAML2_IDP_METADATA_URL: {
@@ -63,7 +59,9 @@ export default {
           },
           SAML2_SP_CERT_CONTENT: {
             component: UploadKey,
-            helpText: this.$t('AuthSAMLCertHelpText') + ` <a href="/core/auth/saml2/metadata/" target="_blank">${this.$t('View')}</a>`
+            helpText:
+              this.$t('AuthSAMLCertHelpText') +
+              ` <a href="/core/auth/saml2/metadata/" target="_blank">${this.$t('View')}</a>`
           },
           SAML2_RENAME_ATTRIBUTES: {
             component: JsonEditor,
@@ -82,12 +80,9 @@ export default {
     }
   },
   methods: {
-    onConfirm() {
-    }
+    onConfirm() {}
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,26 +1,45 @@
 <template>
   <div>
-    <el-badge :hidden="unreadMsgCount === 0" :max="99" :value="unreadMsgCount" size="mini" type="primary">
+    <el-badge
+      :hidden="unreadMsgCount === 0"
+      :max="99"
+      :value="unreadMsgCount"
+      size="small"
+      type="primary"
+    >
       <el-link style="height: 100%" @click="toggleDrawer">
         <svg-icon icon-class="remind" />
       </el-link>
     </el-badge>
     <el-drawer
+      v-model="show"
       :before-close="handleClose"
-      :modal="false"
+      :modal="true"
+      :lock-scroll="false"
+      :show-close="false"
       :size="width"
       :title="$tc('SiteMessage')"
-      :visible.sync="show"
       class="drawer"
-      custom-class="site-msg"
+      modal-class="site-msg-modal"
+      header-class="site-msg-header"
+      body-class="site-msg-body"
       @open="getMessages"
     >
-      <div slot="title">
-        <span>{{ $t('SiteMessage') }}</span>
-        <div v-if="unreadMsgCount !== 0" class="msg-list-all-read-btn" @click.stop="oneClickRead(messages)">
-          <a style="vertical-align: sub;"> {{ $t('AllClickRead') }}</a>
+      <template #header="{ close }">
+        <span class="msg-header-title">{{ $t('SiteMessage') }}</span>
+        <div class="msg-header-right">
+          <span
+            v-if="unreadMsgCount !== 0"
+            class="msg-list-all-read-btn"
+            @click.stop="oneClickRead(messages)"
+          >
+            {{ $t('AllClickRead') }}
+          </span>
+          <el-icon class="msg-header-close" :title="$t('Close')" @click="close">
+            <Close />
+          </el-icon>
         </div>
-      </div>
+      </template>
       <div v-if="unreadMsgCount !== 0" class="msg-list">
         <div
           v-for="msg of messages"
@@ -33,7 +52,10 @@
         >
           <el-row :gutter="10" class="msg-item-head">
             <el-col :span="15" class="msg-item-head-type">
-              <i :class="msg['has_read'] ? 'fa-envelope-open-o' : 'fa-envelope'" class="fa msg-icon" />
+              <i
+                :class="msg['has_read'] ? 'fa-envelope-open-o' : 'fa-envelope'"
+                class="fa msg-icon"
+              />
               {{ msg.content.subject }}
             </el-col>
             <el-col :span="9">
@@ -57,10 +79,10 @@
 
     <Dialog
       v-if="msgDetailVisible"
+      v-model:visible="msgDetailVisible"
       :close-on-click-modal="false"
       :confirm-title="$tc('MarkAsRead')"
       :title="currentMsg.content.subject"
-      :visible.sync="msgDetailVisible"
       @cancel="cancelRead"
       @close="markAsRead([currentMsg])"
       @confirm="markAsRead([currentMsg])"
@@ -78,9 +100,9 @@
 </template>
 
 <script>
-import { toSafeLocalDateStr } from '@/utils/common/time'
 import Dialog from '@/components/Dialog'
 import MarkDown from '@/components/Widgets/MarkDown'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 
 export default {
   name: 'SiteMessages',
@@ -119,7 +141,7 @@ export default {
     },
     getMessages() {
       const url = '/api/v1/notifications/site-messages/?offset=0&limit=15&has_read=false'
-      this.$axios.get(url).then(resp => {
+      this.$axios.get(url).then((resp) => {
         this.messages = [...resp.results]
         this.unreadMsgCount = resp.count
       })
@@ -130,7 +152,7 @@ export default {
       }
       const d = new Date(s)
       const now = new Date()
-      if (now.getTime() - d.getTime() > (3600 * 24 * 7) * 1000) {
+      if (now.getTime() - d.getTime() > 3600 * 24 * 7 * 1000) {
         return toSafeLocalDateStr(s)
       } else {
         return this.$moment(d).fromNow()
@@ -151,12 +173,15 @@ export default {
     },
     markAsReadAll(msgs) {
       const url = `/api/v1/notifications/site-messages/mark-as-read-all/`
-      this.$axios.patch(url, {}).then(res => {
-        this.msgDetailVisible = false
-        this.getMessages()
-      }).catch(err => {
-        this.$message(err.detail)
-      })
+      this.$axios
+        .patch(url, {})
+        .then((res) => {
+          this.msgDetailVisible = false
+          this.getMessages()
+        })
+        .catch((err) => {
+          this.$message(err.detail)
+        })
     },
     markAsRead(msgs) {
       const url = `/api/v1/notifications/site-messages/mark-as-read/`
@@ -164,12 +189,15 @@ export default {
       for (const item of msgs) {
         msgIds.push(item.id)
       }
-      this.$axios.patch(url, { ids: msgIds }).then(res => {
-        this.msgDetailVisible = false
-        this.getMessages()
-      }).catch(err => {
-        this.$message(err.detail)
-      })
+      this.$axios
+        .patch(url, { ids: msgIds })
+        .then((res) => {
+          this.msgDetailVisible = false
+          this.getMessages()
+        })
+        .catch((err) => {
+          this.$message(err.detail)
+        })
     },
     cancelRead() {
       this.msgDetailVisible = false
@@ -210,30 +238,12 @@ export default {
   height: calc(100% - 0px);
 }
 
-.el-badge ::v-deep .el-badge__content.is-fixed {
+.el-badge :deep(.el-badge__content.is-fixed) {
   top: 10px;
 }
 
 .msg-list {
   padding: 0 25px 20px;
-}
-
-::v-deep .site-msg {
-  .el-drawer__header {
-    border-bottom: solid 1px rgb(231, 234, 239);
-    margin-bottom: 0;
-    padding-top: 10px;
-    font-size: 16px;
-
-    .msg-list-all-read-btn {
-      font-size: 12px;
-      float: right;
-    }
-  }
-
-  .el-drawer__body {
-    overflow-y: auto;
-  }
 }
 
 .msg-item {
@@ -270,7 +280,7 @@ export default {
 
   &:after {
     clear: both;
-    content: ".";
+    content: '.';
     display: block;
     height: 0;
     overflow: hidden;
@@ -304,23 +314,23 @@ export default {
   font-size: 12px;
   display: block;
 
-  ::v-deep .ticket-container {
+  :deep(.ticket-container) {
     .title {
       font-size: 12px;
     }
   }
-
 }
 
 .msg-detail {
-
   .msg-detail-time {
     font-weight: 400;
     line-height: 1.1;
     float: right;
-    color: var(--N600, #646A73);
+    color: var(--N600, #646a73);
     text-align: right;
-    font-feature-settings: 'clig' off, 'liga' off;
+    font-feature-settings:
+      'clig' off,
+      'liga' off;
     font-size: 14px;
     font-style: normal;
   }
@@ -329,29 +339,29 @@ export default {
     line-height: 24px;
 
     .el-dialog__title {
-      color: var(--neutral-900, #1F2329);
+      color: var(--neutral-900, #1f2329);
       font-size: 16px;
       font-style: normal;
       font-weight: 500;
       line-height: 24px;
     }
 
-    & ::v-deep a {
+    & :deep(a) {
       color: var(--color-success) !important;
     }
 
-    ::v-deep .ticket-container {
+    :deep(.ticket-container) {
       height: 618px;
       flex-shrink: 0;
       border-radius: 4px;
-      background: #FFF;
+      background: #fff;
       font-style: normal;
       font-weight: 400;
       line-height: 24px; /* 150% */
 
       .title {
         margin-bottom: 8px;
-        color: var(--neutral-900, #1F2329);
+        color: var(--neutral-900, #1f2329);
         font-size: 16px;
         font-weight: 500;
       }
@@ -363,7 +373,7 @@ export default {
           display: inline-flex;
           flex-direction: column;
           align-items: flex-start;
-          color: var(--neutral-900, #1F2329);
+          color: var(--neutral-900, #1f2329);
           font-size: 16px;
           font-style: normal;
           font-weight: 500;
@@ -373,20 +383,20 @@ export default {
         width: 100%;
         display: inline-block;
         border-radius: 4px;
-        background: var(--N100, #F5F6F7);
+        background: var(--N100, #f5f6f7);
       }
 
       .action_group {
         margin-top: 8px;
 
         .view-link {
-          color: #3370FF !important;
+          color: #3370ff !important;
           text-align: right;
           font-size: 14px;
           border-radius: 4px;
 
           &:hover {
-            background: rgba(51, 112, 255, 0.20);
+            background: rgba(51, 112, 255, 0.2);
             display: inline-block;
             border-radius: 4px;
           }
@@ -400,7 +410,7 @@ export default {
 
         .field-name {
           margin: 4px 0 4px 16px;
-          color: var(--N600, #646A73);
+          color: var(--N600, #646a73);
           display: inline-block;
 
           strong {
@@ -409,7 +419,7 @@ export default {
         }
 
         .field-value {
-          color: var(--N900, #1F2329);
+          color: var(--N900, #1f2329);
           display: inline-block;
         }
       }
@@ -422,7 +432,76 @@ export default {
   text-align: center;
 }
 
-::v-deep :focus {
+:deep(:focus) {
   outline: 0;
+}
+</style>
+
+<style lang="scss">
+/*
+ * el-drawer 默认 teleport 到 body，且 EP 2.14 无 customClass 且 inheritAttrs:false，
+ * 故用 header-class/body-class/modal-class 注入真实类名，并用非 scoped 全局样式命中。
+ * modal-class 设为透明遮罩：保留遮罩以支持点击外部关闭，但视觉上不变暗。
+ */
+.site-msg-modal {
+  background-color: transparent !important;
+}
+
+.site-msg-header.el-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: solid 1px rgb(231, 234, 239);
+  margin-bottom: 0;
+  padding-top: 10px;
+  font-size: 16px;
+
+  .msg-header-title {
+    font-size: 16px;
+    color: var(--color-text-primary);
+  }
+
+  .msg-header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .msg-list-all-read-btn {
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    line-height: 1;
+    color: #72767b;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
+
+  .msg-header-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    color: #909399 !important;
+    cursor: pointer;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      color: var(--color-primary) !important;
+    }
+  }
+}
+
+.site-msg-body {
+  overflow-y: auto;
 }
 </style>

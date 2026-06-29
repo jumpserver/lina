@@ -1,10 +1,10 @@
 <template>
   <GenericUpdateFormDialog
+    v-bind="$attrs"
     v-if="visible"
     :form-setting="formSetting"
     :selected-rows="selectedRows"
     :visible="visible"
-    v-on="$listeners"
   />
 </template>
 
@@ -25,7 +25,7 @@ export default {
     },
     selectedRows: {
       type: Array,
-      default: () => ([])
+      default: () => []
     }
   },
   data() {
@@ -82,6 +82,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

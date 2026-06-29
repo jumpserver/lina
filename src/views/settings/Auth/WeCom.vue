@@ -1,9 +1,5 @@
 <template>
-  <BaseAuth
-    :config="settings"
-    enable-field="AUTH_WECOM"
-    v-on="$listeners"
-  />
+  <BaseAuth :config="settings" enable-field="AUTH_WECOM" />
 </template>
 
 <script>
@@ -26,30 +22,35 @@ export default {
           {
             title: this.$t('WeComTest'),
             loading: false,
-            callback: function(value, form, btn) {
+            callback: function (value, form, btn) {
               btn.loading = true
-              vm.$axios.post(
-                '/api/v1/settings/wecom/testing/',
-                value
-              ).then(res => {
-                vm.$message.success(res['msg'])
-              }).catch(() => {
-                vm.$log.error('err occur')
-              }).finally(() => {
-                btn.loading = false
-              })
+              vm.$axios
+                .post('/api/v1/settings/wecom/testing/', value)
+                .then((res) => {
+                  vm.$message.success(res['msg'])
+                })
+                .catch(() => {
+                  vm.$log.error('err occur')
+                })
+                .finally(() => {
+                  btn.loading = false
+                })
             }
           }
         ],
         encryptedFields: ['WECOM_SECRET'],
         fields: [
-          [this.$t('Basic'), [
-            'AUTH_WECOM', 'WECOM_CORPID', 'WECOM_AGENTID',
-            'WECOM_SECRET', 'WECOM_RENAME_ATTRIBUTES'
-          ]],
-          [this.$t('Other'), [
-            'WECOM_ORG_IDS'
-          ]]
+          [
+            this.$t('Basic'),
+            [
+              'AUTH_WECOM',
+              'WECOM_CORPID',
+              'WECOM_AGENTID',
+              'WECOM_SECRET',
+              'WECOM_RENAME_ATTRIBUTES'
+            ]
+          ],
+          [this.$t('Other'), ['WECOM_ORG_IDS']]
         ],
         fieldsMeta: {
           WECOM_SECRET: {
@@ -77,6 +78,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

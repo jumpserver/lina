@@ -1,12 +1,13 @@
 <template>
   <Dialog
     :show-cancel="false"
-    :visible="iVisible"
+    :visible="visible"
     class="processing-dialog"
     height="300"
     :title="$tc('Processing')"
     width="300"
-    @confirm="iVisible=false"
+    @update:visible="$emit('update:visible', $event)"
+    @confirm="$emit('update:visible', false)"
   >
     <div id="load">
       <div class="spinner" />
@@ -26,25 +27,16 @@ export default {
       default: false
     }
   },
+  emits: ['update:visible'],
   data() {
     return {}
-  },
-  computed: {
-    iVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$emit('update:visible', val)
-      }
-    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .processing-dialog {
-  ::v-deep .el-dialog__body {
+  :deep(.el-dialog__body) {
     overflow: hidden;
   }
 }

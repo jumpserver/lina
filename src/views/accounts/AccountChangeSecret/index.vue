@@ -1,5 +1,9 @@
 <template>
-  <TabPage :active-menu.sync="config.activeMenu" :disabled="!hasValidLicense" :submenu="config.submenu" />
+  <TabPage
+    v-model:active-menu="config.activeMenu"
+    :disabled="!hasValidLicense"
+    :submenu="config.submenu"
+  />
 </template>
 
 <script>
@@ -32,18 +36,22 @@ export default {
             title: this.$t('ExecutionHistory'),
             name: 'AccountChangeSecretExecutionList',
             hidden: () => !this.$hasPerm('accounts.view_changesecretexecution'),
-            component: () => import('@/views/accounts/AccountChangeSecret/Executions/AccountChangeSecretExecutionList.vue')
+            component: () =>
+              import('@/views/accounts/AccountChangeSecret/Executions/AccountChangeSecretExecutionList.vue')
           },
           {
             title: this.$t('ExecutionRecord'),
             name: 'ChangeSecretRecord',
             hidden: () => !this.$hasPerm('accounts.view_changesecretrecord'),
-            component: () => import('@/views/accounts/AccountChangeSecret/ExecutionDetail/AccountChangeSecretRecord.vue')
+            component: () =>
+              import('@/views/accounts/AccountChangeSecret/ExecutionDetail/AccountChangeSecretRecord.vue')
           },
           {
             title: this.$t('ChangeSecretStatus'),
             name: 'ChangeSecretStatus',
-            hidden: () => !this.$hasPerm('accounts.view_changesecretexecution') || !this.ChangeSecretAfterSessionEnd,
+            hidden: () =>
+              !this.$hasPerm('accounts.view_changesecretexecution') ||
+              !this.ChangeSecretAfterSessionEnd,
             component: () => import('@/views/accounts/AccountChangeSecret/AccountList.vue')
           }
         ]
@@ -59,7 +67,7 @@ export default {
   mounted() {
     this.$eventBus.$on('change-tab', this.handleChangeTab)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.$eventBus.$off('change-tab', this.handleChangeTab)
   },
   methods: {

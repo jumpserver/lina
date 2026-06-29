@@ -1,5 +1,10 @@
 <template>
-  <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" :create-drawer="createDrawer" />
+  <ListTable
+    ref="ListTable"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+    :create-drawer="createDrawer"
+  />
 </template>
 
 <script>
@@ -22,9 +27,7 @@ export default {
       createDrawer: () => import('@/components/Apps/LeakPasswords/LeakPasswordsCreateUpdate.vue'),
       tableConfig: {
         url: '/api/v1/settings/leak-passwords/',
-        columns: [
-          'password'
-        ],
+        columns: ['password'],
         columnsMeta: {
           actions: {
             formatterArgs: {
@@ -34,7 +37,6 @@ export default {
             }
           }
         }
-
       },
       headerActions: {
         hasExport: true,
@@ -58,6 +60,4 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
-
-</style>
+<style lang="scss" scoped></style>

@@ -3,15 +3,16 @@ import i18n from '@/i18n/i18n'
 import { eventBus } from '@/utils/vue/eventbus'
 import { getTokenFromCookie } from '@/utils/jms/auth'
 import { getErrorResponseMsg } from '@/utils/common'
-import { MessageBox } from 'element-ui'
+import { ElMessageBox as MessageBox } from 'element-plus'
 import { message } from '@/utils/vue/message'
 import store from '@/store'
 import axiosRetry from 'axios-retry'
 import router from '@/router'
+import { BASE_API, LOGIN_PATH, LOGOUT_PATH } from '@/utils/env'
 
 // create an axios instance
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  baseURL: BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 2 * 60 * 1000 // request timeout
 })
@@ -39,14 +40,14 @@ function beforeRequestAddTimezone(config) {
 
 // request interceptor
 service.interceptors.request.use(
-  config => {
+  (config) => {
     // do something before request is sent
     // NProgress.start()
     beforeRequestAddToken(config)
     beforeRequestAddTimezone(config)
     return config
   },
-  error => {
+  (error) => {
     // do something with request error
     // debug(error) // for debug
     return Promise.reject(error)
@@ -55,7 +56,7 @@ service.interceptors.request.use(
 
 function goToLogin() {
   setTimeout(() => {
-    window.location = process.env.VUE_APP_LOGIN_PATH + '?next=' + window.location.pathname
+    window.location = LOGIN_PATH + '?next=' + window.location.pathname
   }, 200)
   localStorage.setItem('next', window.location.hash.replace('#', ''))
 }
@@ -97,7 +98,7 @@ function ifBadRequest({ response, error }) {
 }
 
 export function logout() {
-  window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${location.pathname}`
+  window.location.href = `${LOGOUT_PATH}?next=${location.pathname}`
 }
 
 export function flashErrorMsg({ response, error }) {
@@ -146,7 +147,7 @@ service.interceptors.response.use(
    * Here is just an example
    * You can also judge the status by HTTP Status Code
    */
-  response => {
+  (response) => {
     // NProgress.done()
     const res = response.data
     store.dispatch('common/digestSQLQuery', response).then()
@@ -156,7 +157,7 @@ service.interceptors.response.use(
     }
     return res
   },
-  async error => {
+  async (error) => {
     // NProgress.done()
     if (!error.response) {
       return Promise.reject(error)
@@ -199,7 +200,7 @@ export function fetchAllData(url, params) {
       params: {
         ...params
       }
-    }).then(res => {
+    }).then((res) => {
       allData.push(...res.results)
       if (res.next) {
         return fetchPage(res.next)
@@ -290,7 +291,7 @@ export function reconnect() {
   lockReconnect = true
   // 设置延迟避免请求过多
   timeoutNum && clearTimeout(timeoutNum)
-  timeoutNum = setTimeout(function() {
+  timeoutNum = setTimeout(function () {
     createWebSocket()
     lockReconnect = false
   }, 10000)

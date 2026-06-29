@@ -6,12 +6,8 @@
       </el-tooltip>
     </div>
     <slot>
-      <h3 class="no-margins ">
-        <span
-          :class="{ 'can-direct': canDirect }"
-          class="num"
-          @click="handleClick"
-        >
+      <h3 class="no-margins">
+        <span :class="{ 'can-direct': canDirect }" class="num" @click="handleClick">
           <span v-if="count === null"> - </span>
           <span v-else>{{ count }}</span>
         </span>
@@ -42,8 +38,7 @@ export default {
     },
     callback: {
       type: Function,
-      default: () => {
-      }
+      default: () => {}
     },
     disabled: {
       type: Boolean,

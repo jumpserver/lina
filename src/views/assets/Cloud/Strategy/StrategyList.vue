@@ -7,7 +7,7 @@
   />
 </template>
 
-<script type="text/jsx">
+<script>
 import { DrawerListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 
@@ -27,8 +27,12 @@ export default {
           resource: 'strategy'
         },
         columns: [
-          'name', 'priority', 'strategy_rules',
-          'strategy_actions', 'actions', 'rule_relation'
+          'name',
+          'priority',
+          'strategy_rules',
+          'strategy_actions',
+          'actions',
+          'rule_relation'
         ],
         columnsMeta: {
           name: {
@@ -55,8 +59,11 @@ export default {
                 return this.$hasPerm('xpack.delete_strategy') && row.name !== 'default'
               },
               canUpdate: ({ row }) => {
-                return this.$hasPerm('xpack.change_strategy') && row.name !== 'default' &&
+                return (
+                  this.$hasPerm('xpack.change_strategy') &&
+                  row.name !== 'default' &&
                   !this.$store.getters.currentOrgIsRoot
+                )
               }
             }
           }
@@ -82,6 +89,4 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-
-</style>
+<style lang="scss" scoped></style>

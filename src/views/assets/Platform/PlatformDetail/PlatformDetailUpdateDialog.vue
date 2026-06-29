@@ -1,13 +1,14 @@
 <template>
   <Dialog
+    class="platform-detail-update-dialog"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('Update')"
-    :visible.sync="iVisible"
+    :visible="visible"
     top="1vh"
     width="60%"
   >
-    <GenericCreateUpdateForm v-bind="$data" @submitSuccess="submitSuccess" />
+    <GenericCreateUpdateForm v-bind="$data" @submit-success="submitSuccess" />
   </Dialog>
 </template>
 
@@ -35,6 +36,7 @@ export default {
       default: () => {}
     }
   },
+  emits: ['update:visible'],
   data() {
     return {
       initial: {},
@@ -47,19 +49,11 @@ export default {
       fieldsMeta: platformFieldsMeta(this)
     }
   },
-  computed: {
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() { return this.visible }
-    }
-  },
   created() {
     try {
       this.setOptions()
     } finally {
-      this.iVisible = true
+      this.$emit('update:visible', true)
     }
   },
   methods: {
@@ -70,14 +64,14 @@ export default {
       this.fieldsMeta.protocols.el.choices = res['protocols'] || []
     },
     submitSuccess() {
-      this.iVisible = false
+      this.$emit('update:visible', false)
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-  ::v-deep .el-dialog .el-dialog__body {
-    padding: 0 20px;
-  }
+<style lang="scss">
+.platform-detail-update-dialog .el-dialog__body {
+  padding: 0 20px;
+}
 </style>

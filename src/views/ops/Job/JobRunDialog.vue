@@ -1,10 +1,10 @@
 <template>
   <Dialog
     v-if="iVisible && ready"
+    v-model:visible="iVisible"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('RunJob')"
-    :visible.sync="iVisible"
     top="1vh"
     width="50%"
   >
@@ -33,6 +33,7 @@
 
 <script>
 import Dialog from '@/components/Dialog'
+import { useVModel } from '@/utils/vue/useVModel'
 
 export default {
   components: {
@@ -48,6 +49,13 @@ export default {
       default: () => ({})
     }
   },
+  emits: ['update:visible', 'submit'],
+  setup(props, { emit }) {
+    const iVisible = useVModel(props, emit, 'visible')
+    return {
+      iVisible
+    }
+  },
   data() {
     return {
       ready: false,
@@ -55,27 +63,17 @@ export default {
       form: {}
     }
   },
-  computed: {
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
-    }
-  },
   mounted() {
     this.vars = JSON.parse(this.item.parameters_define)
     for (const key of Object.keys(this.vars)) {
-      this.$set(this.form, key, this.vars[key].default || '')
+      this.form[key] = this.vars[key].default || ''
     }
     this.ready = true
   },
   methods: {
     onSubmit() {
       this.$emit('submit', this.item, JSON.stringify(this.form))
-      this.iVisible = false
+      this.$emit('update:visible', false)
     }
   }
 }
@@ -90,5 +88,4 @@ export default {
   float: right;
   padding-right: 30px;
 }
-
 </style>

@@ -1,4 +1,4 @@
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import {
   ActionsFormatter,
   DetailFormatter,
@@ -67,7 +67,7 @@ export const gatherAccountTableConfig = (vm, url) => {
         width: '120px'
       },
       date_updated: {
-        formatter: function(row, col, cell) {
+        formatter: function (row, col, cell) {
           return toSafeLocalDateStr(row.date_updated)
         }
       },
@@ -84,7 +84,7 @@ export const gatherAccountTableConfig = (vm, url) => {
                 status: statusMap.confirmed,
                 ids: [row.id]
               })
-              .then(res => {
+              .then((res) => {
                 row.status = statusMap.confirmed
               })
               .catch(() => {
@@ -97,7 +97,7 @@ export const gatherAccountTableConfig = (vm, url) => {
                 status: statusMap.ignored,
                 ids: [row.id]
               })
-              .then(res => {
+              .then((res) => {
                 row.status = statusMap.ignored
               })
               .catch(() => {
@@ -126,7 +126,7 @@ export const gatherAccountTableConfig = (vm, url) => {
   }
 }
 
-export const gatherAccountHeaderActions = vm => {
+export const gatherAccountHeaderActions = (vm) => {
   return {
     hasCreate: false,
     hasImport: false,
@@ -153,8 +153,8 @@ export const gatherAccountHeaderActions = vm => {
             !vm.$store.getters.currentOrgIsRoot
           )
         },
-        callback: function({ selectedRows }) {
-          const ids = selectedRows.map(v => {
+        callback: function ({ selectedRows }) {
+          const ids = selectedRows.map((v) => {
             return v.id
           })
           vm.$axios
@@ -165,7 +165,7 @@ export const gatherAccountHeaderActions = vm => {
             .then(() => {
               vm.$message.success(vm.$tc('SyncSuccessMsg'))
             })
-            .catch(err => {
+            .catch((err) => {
               vm.$message.error(vm.$tc('SyncErrorMsg' + ' ' + err))
             })
         }
@@ -182,7 +182,7 @@ export const gatherAccountHeaderActions = vm => {
             !vm.$store.getters.currentOrgIsRoot
           )
         },
-        callback: function({ selectedRows }) {
+        callback: function ({ selectedRows }) {
           vm.gatherAccounts = selectedRows
           vm.showDeleteAccountDialog = false
           setTimeout(() => {

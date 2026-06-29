@@ -67,9 +67,7 @@ export const interval = {
   el: {
     unit: 'hour'
   },
-  rules: [
-    { validator: validatorInterval }
-  ],
+  rules: [{ validator: validatorInterval }],
   on: {
     input: (val, updateForm) => {
       updateForm({

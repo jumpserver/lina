@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO title 拼接形式 -->
   <div :class="{ collapse: collapse }" class="sidebar-logo-container">
     <transition name="sidebarLogoFade">
       <a v-if="collapse" key="collapse" class="sidebar-logo-link" @click="handleClick">
@@ -34,16 +33,13 @@ export default {
     },
     logoSrc() {
       return this.publicSettings['INTERFACE']['logo_logout']
-    },
-    logoTitle() {
-      return this.publicSettings['INTERFACE']['login_title']
     }
   },
   created() {},
   methods: {
     handleClick() {
       const currentPath = this.$route.path
-      const matchingRoute = this.viewRoutes.find(route => currentPath.startsWith(route.path))
+      const matchingRoute = this.viewRoutes.find((route) => currentPath.startsWith(route.path))
 
       if (matchingRoute) {
         this.$router.push(matchingRoute.redirect)
@@ -56,7 +52,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/styles/variables.scss';
+@use '@/styles/variables' as *;
 
 .sidebarLogoFade-enter-active {
   transition: opacity 1.5s;
@@ -68,9 +64,6 @@ export default {
 }
 
 .sidebar-logo-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: relative;
   width: 100%;
   height: $headerHeight;
@@ -79,13 +72,10 @@ export default {
   overflow: hidden;
 
   & .sidebar-logo-link {
-    display: flex;
-    gap: 8px;
-    align-items: center;
     height: 100%;
     width: 100%;
     padding: 5px;
-    margin-left: 10px;
+    display: inline-block;
 
     & .sidebar-logo {
       width: 32px;
@@ -100,11 +90,11 @@ export default {
 
     & .sidebar-title {
       display: inline-block;
+      margin: 0;
       color: #fff;
       font-weight: 600;
-      margin-top: 5px;
       line-height: $headerHeight;
-      font-size: 20px;
+      font-size: 14px;
       font-family:
         Avenir,
         Helvetica Neue,
@@ -112,7 +102,6 @@ export default {
         Helvetica,
         sans-serif;
       vertical-align: middle;
-      letter-spacing: 1.5px;
     }
   }
 

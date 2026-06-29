@@ -9,10 +9,10 @@
 </template>
 
 <script>
+import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
 import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
-
 export default {
   name: 'AccountDiscoverTaskList',
   components: {
@@ -21,7 +21,8 @@ export default {
   data() {
     const vm = this
     return {
-      createDrawer: () => import('@/views/accounts/AccountDiscover/AccountDiscoverTaskCreateUpdate.vue'),
+      createDrawer: () =>
+        import('@/views/accounts/AccountDiscover/AccountDiscoverTaskCreateUpdate.vue'),
       detailDrawer: () => import('@/views/accounts/AccountDiscover/TaskDetail/index.vue'),
       showViewSecretDialog: false,
       showTableUpdateDrawer: false,
@@ -34,16 +35,10 @@ export default {
           app: 'accounts',
           resource: 'gatheraccountsautomation'
         },
-        columns: [
-          'name', 'nodes', 'assets', 'is_periodic',
-          'periodic_display', 'executed_amount'
-        ],
+        columns: ['name', 'nodes', 'assets', 'is_periodic', 'periodic_display', 'executed_amount'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: [
-            'name', 'nodes', 'assets', 'is_periodic',
-            'periodic_display', 'executed_amount'
-          ]
+          default: ['name', 'nodes', 'assets', 'is_periodic', 'periodic_display', 'executed_amount']
         },
         columnsMeta: {
           name: {
@@ -51,14 +46,18 @@ export default {
             formatterArgs: {
               getRoute: ({ row }) => ({
                 name: 'AccountDiscoverTaskDetail',
-                params: { id: row.id },
-                query: { type: 'pam' }
+                params: {
+                  id: row.id
+                },
+                query: {
+                  type: 'pam'
+                }
               })
             }
           },
           nodes: {
-            formatter: function(row, column, cellValue, index) {
-              return cellValue.map(v => v['name']).join(', ')
+            formatter: function (row, column, cellValue, index) {
+              return cellValue.map((v) => v['name']).join(', ')
             }
           },
           is_periodic: {
@@ -71,7 +70,16 @@ export default {
           executed_amount: {
             formatter: (row) => {
               const can = vm.$hasPerm('accounts.view_gatheraccountsexecution')
-              return <el-link onClick={ () => this.handleExecAmount(row) } disabled={ !can }>{ row.executed_amount }</el-link>
+              return createVNodeCompat(
+                resolveComponentCompat('el-link'),
+                {
+                  onClick: () => this.handleExecAmount(row),
+                  disabled: !can
+                },
+                {
+                  default: () => [row.executed_amount]
+                }
+              )
             }
           },
           actions: {
@@ -87,17 +95,16 @@ export default {
                   can: ({ row }) => {
                     return this.$hasPerm('accounts.add_gatheraccountsexecution') && row.is_active
                   },
-                  callback: function(data) {
-                    this.$axios.post(
-                      `/api/v1/accounts/gather-account-executions/`,
-                      {
+                  callback: function (data) {
+                    this.$axios
+                      .post(`/api/v1/accounts/gather-account-executions/`, {
                         automation: data.row.id,
                         type: data.row.type.value
-                      }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    }).catch(res => {
-                    })
+                      })
+                      .then((res) => {
+                        openTaskPage(res['task'])
+                      })
+                      .catch((res) => {})
                   }
                 }
               ]

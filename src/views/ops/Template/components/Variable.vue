@@ -1,4 +1,5 @@
-～<template>
+～
+<template>
   <div>
     <div class="variables el-data-table">
       <el-table :data="variables" class="el-table--fit el-table--border">
@@ -13,12 +14,12 @@
           fixed="right"
           width="135"
         >
-          <template v-slot="scope">
-            <el-button icon="el-icon-minus" size="mini" type="danger" @click="removeVariable(scope.row)" />
+          <template #default="scope">
+            <el-button icon="Minus" size="small" type="danger" @click="removeVariable(scope.row)" />
             <el-button
               :disabled="!!scope.row.template"
-              icon="el-icon-edit"
-              size="mini"
+              icon="Edit"
+              size="small"
               type="primary"
               @click="onEditClick(scope.row)"
             />
@@ -26,14 +27,14 @@
         </el-table-column>
       </el-table>
       <div v-if="!disableEdit" class="actions">
-        <el-button size="mini" type="primary" @click="onAddClick">
+        <el-button size="small" type="primary" @click="onAddClick">
           {{ $t('Add') }}
         </el-button>
       </div>
       <AddVariableDialog
+        v-model:visible="addVariableDialogVisible"
         :variable="variable"
         :variables="variables"
-        :visible.sync="addVariableDialogVisible"
       />
     </div>
   </div>
@@ -122,7 +123,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-data-table ::v-deep .el-table {
+.el-data-table :deep(.el-table) {
   .table {
     margin-top: 15px;
   }
@@ -167,13 +168,13 @@ export default {
       text-overflow: ellipsis;
 
       &:hover {
-        border-right: 2px solid #EBEEF5;
+        border-right: 2px solid #ebeef5;
       }
     }
   }
 }
 
-.el-data-table ::v-deep .el-table .el-table__header > thead > tr .is-sortable {
+.el-data-table :deep(.el-table .el-table__header > thead > tr .is-sortable) {
   padding: 5px 0;
 
   .cell {

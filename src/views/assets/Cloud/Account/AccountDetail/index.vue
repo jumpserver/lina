@@ -1,5 +1,9 @@
 <template>
-  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="Account" v-bind="config" v-on="$listeners">
+  <GenericDetailPage
+    v-bind="config"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="Account"
+  >
     <keep-alive>
       <component :is="config.activeMenu" :object="Account" />
     </keep-alive>
@@ -23,7 +27,14 @@ export default {
   data() {
     return {
       Account: {
-        name: '', provider: '', provider_display: '', validity_display: '', comment: '', date_created: '', created_by: '', task: {}
+        name: '',
+        provider: '',
+        provider_display: '',
+        validity_display: '',
+        comment: '',
+        date_created: '',
+        created_by: '',
+        task: {}
       },
       config: {
         url: `/api/v1/xpack/cloud/accounts`,
@@ -36,12 +47,16 @@ export default {
           {
             title: this.$t('SyncInstanceTaskHistoryList'),
             name: 'TaskHistoryList',
-            hidden: () => { return !this.Account.task?.id }
+            hidden: () => {
+              return !this.Account.task?.id
+            }
           },
           {
             title: this.$t('SyncInstanceTaskHistoryAssetList'),
             name: 'TaskSyncAssetList',
-            hidden: () => { return !this.Account.task?.id }
+            hidden: () => {
+              return !this.Account.task?.id
+            }
           }
         ]
       }
@@ -50,7 +65,4 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-
-</style>
-
+<style lang="scss" scoped></style>

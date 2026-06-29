@@ -1,10 +1,6 @@
 <template>
-  <el-select v-model="value" v-bind="$attrs" class="select2" v-on="$listeners">
-    <el-option-group
-      v-for="group in options"
-      :key="group.org_name"
-      :label="group.org_name"
-    >
+  <el-select v-bind="$attrs" v-model="value" class="select2">
+    <el-option-group v-for="group in options" :key="group.org_name" :label="group.org_name">
       <el-option
         v-for="item in group.org_admins"
         :key="item.id"
@@ -31,17 +27,15 @@ export default {
     }
   },
   created() {
-    this.$axios.get(this.url).then(
-      res => {
-        this.options = res
-      }
-    )
+    this.$axios.get(this.url).then((res) => {
+      this.options = res
+    })
   }
 }
 </script>
 
 <style scoped>
-  .select2 {
-    width: 100%;
-  }
+.select2 {
+  width: 100%;
+}
 </style>

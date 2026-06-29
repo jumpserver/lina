@@ -1,19 +1,11 @@
 <template>
   <div>
-    <BaseReport
-      :title="title"
-      :nav="nav"
-      :name="name"
-      v-bind="$attrs"
-    >
+    <BaseReport v-bind="$attrs" :title="title" :nav="nav" :name="name">
       <div class="charts-grid">
-
         <div class="chart-container full-width">
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('Overview') }}</div>
-            <SummaryCountCard
-              :items="totalData"
-            />
+            <SummaryCountCard :items="totalData" />
           </div>
         </div>
 
@@ -23,11 +15,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('UserLoginTrends') }}</div>
             <div class="chart">
-              <Echart
-                ref="loginTrend"
-                :options="loginTrendOptions"
-                :autoresize="true"
-              />
+              <Echart ref="loginTrend" :options="loginTrendOptions" :autoresize="true" />
             </div>
           </div>
         </div>
@@ -36,10 +24,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('LoginSource') }}</div>
             <div class="chart">
-              <Echart
-                :options="LoginSourceOptions"
-                :autoresize="true"
-              />
+              <Echart :options="LoginSourceOptions" :autoresize="true" />
             </div>
           </div>
         </div>
@@ -48,10 +33,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('VisitTimeDistribution') }}</div>
             <div class="chart">
-              <Echart
-                :options="VisitTimeOptions"
-                :autoresize="true"
-              />
+              <Echart :options="VisitTimeOptions" :autoresize="true" />
             </div>
           </div>
         </div>
@@ -60,10 +42,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('LoginMethodStatistics') }}</div>
             <div class="chart">
-              <Echart
-                :options="loginMethodOptions"
-                :autoresize="true"
-              />
+              <Echart :options="loginMethodOptions" :autoresize="true" />
             </div>
           </div>
         </div>
@@ -73,12 +52,12 @@
 </template>
 
 <script>
-import BaseReport from '@/views/reports/base/BaseReport.vue'
-import SwitchDate from '@/components/Dashboard/SwitchDate'
-import * as echarts from 'echarts'
-import { mixColors } from '@/views/reports/const'
-import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
 import Echart from '@/components/Dashboard/Echart.vue'
+import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
+import SwitchDate from '@/components/Dashboard/SwitchDate'
+import BaseReport from '@/views/reports/base/BaseReport.vue'
+import { mixColors } from '@/views/reports/const'
+import * as echarts from 'echarts'
 
 export default {
   components: {
@@ -107,7 +86,7 @@ export default {
         need_update_password: 0
       },
       pie: {
-        'user_by_source': [{ 'name': this.$t('Nothing'), 'value': 0 }]
+        user_by_source: [{ name: this.$t('Nothing'), value: 0 }]
       },
       config: {
         user_login_failed_metrics: {
@@ -241,9 +220,7 @@ export default {
               }
             },
             axisLabel: {
-              textStyle: {
-                color: '#8F959E'
-              }
+              color: '#8F959E'
             },
             axisTick: {
               show: false
@@ -262,9 +239,7 @@ export default {
               }
             },
             axisLabel: {
-              textStyle: {
-                color: '#8F959E'
-              }
+              color: '#8F959E'
             },
             axisTick: {
               show: false
@@ -286,27 +261,29 @@ export default {
             type: 'line',
             smooth: true,
             areaStyle: {
-              normal: {
-                color: new echarts.graphic.LinearGradient(
-                  0,
-                  0,
-                  0,
-                  1,
-                  [{
+              color: new echarts.graphic.LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                [
+                  {
                     offset: 0,
                     color: primary
-                  }, {
+                  },
+                  {
                     offset: 0.6,
                     color: TwoLevelColor
-                  }, {
+                  },
+                  {
                     offset: 0.8,
                     color: ThreeLevelColor
-                  }],
-                  false
-                ),
-                shadowColor: shadowColor,
-                shadowBlur: 5
-              }
+                  }
+                ],
+                false
+              ),
+              shadowColor: shadowColor,
+              shadowBlur: 5
             },
             data: this.config.user_login_log_metrics.dates_metrics_success_total
           },
@@ -315,27 +292,29 @@ export default {
             type: 'line',
             smooth: true,
             areaStyle: {
-              normal: {
-                color: new echarts.graphic.LinearGradient(
-                  0,
-                  0,
-                  0,
-                  1,
-                  [{
+              color: new echarts.graphic.LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                [
+                  {
                     offset: 0,
                     color: 'rgba(249, 199, 79, 0.6)'
-                  }, {
+                  },
+                  {
                     offset: 0.6,
                     color: 'rgba(249, 199, 79, 0.2)'
-                  }, {
+                  },
+                  {
                     offset: 0.8,
                     color: 'rgba(249, 199, 79, 0.1)'
-                  }],
-                  false
-                ),
-                shadowColor: 'rgba(249, 199, 79, 0.1)',
-                shadowBlur: 6
-              }
+                  }
+                ],
+                false
+              ),
+              shadowColor: 'rgba(249, 199, 79, 0.1)',
+              shadowBlur: 6
             },
             data: this.config.user_login_log_metrics.dates_metrics_failure_total
           }
@@ -359,12 +338,14 @@ export default {
           name: ''
         },
         barCategoryGap: '70%',
-        series: Object.keys(this.config.user_login_method_metrics.dates_metrics_total).map(name => ({
-          name,
-          stack: 'name',
-          type: 'bar',
-          data: this.config.user_login_method_metrics.dates_metrics_total[name]
-        }))
+        series: Object.keys(this.config.user_login_method_metrics.dates_metrics_total).map(
+          (name) => ({
+            name,
+            stack: 'name',
+            type: 'bar',
+            data: this.config.user_login_method_metrics.dates_metrics_total[name]
+          })
+        )
       }
     },
     VisitTimeOptions() {
@@ -414,30 +395,33 @@ export default {
     },
     async getData() {
       const data = await this.$axios.get(`/api/v1/reports/reports/users/?days=${this.days}`)
-      this.$set(this.user_stats, 'total', data.user_stats.total)
-      this.$set(this.user_stats, 'not_enabled_mfa', data.user_stats.not_enabled_mfa)
-      this.$set(this.user_stats, 'valid', data.user_stats.valid)
-      this.$set(this.user_stats, 'first_login', data.user_stats.first_login)
-      this.$set(this.user_stats, 'face_vector', data.user_stats.face_vector)
-      this.$set(this.user_stats, 'need_update_password', data.user_stats.need_update_password)
-      this.$set(this.config.user_login_log_metrics, 'dates_metrics_date', data.user_login_log_metrics.dates_metrics_date)
-      this.$set(this.config.user_login_log_metrics, 'dates_metrics_success_total', data.user_login_log_metrics.dates_metrics_success_total)
-      this.$set(this.config.user_login_log_metrics, 'dates_metrics_failure_total', data.user_login_log_metrics.dates_metrics_failure_total)
-      this.$set(this.config.user_login_method_metrics, 'dates_metrics_date', data.user_login_method_metrics.dates_metrics_date)
-      this.$set(this.config.user_login_method_metrics, 'dates_metrics_total', data.user_login_method_metrics.dates_metrics_total)
-      this.$set(this.config, 'user_login_time_metrics', data.user_login_time_metrics)
+      this.user_stats['need_update_password'] = data.user_stats.need_update_password
+      this.user_stats['not_enabled_mfa'] = data.user_stats.not_enabled_mfa
+      this.user_stats['valid'] = data.user_stats.valid
+      this.user_stats['first_login'] = data.user_stats.first_login
+      this.user_stats['face_vector'] = data.user_stats.face_vector
+      this.user_stats['need_update_password'] = data.user_stats.need_update_password
+      this.config.user_login_log_metrics['dates_metrics_date'] =
+        data.user_login_log_metrics.dates_metrics_date
+      this.config.user_login_log_metrics['dates_metrics_success_total'] =
+        data.user_login_log_metrics.dates_metrics_success_total
+      this.config.user_login_log_metrics['dates_metrics_failure_total'] =
+        data.user_login_log_metrics.dates_metrics_failure_total
+      this.config.user_login_method_metrics['dates_metrics_date'] =
+        data.user_login_method_metrics.dates_metrics_date
+      this.config.user_login_method_metrics['dates_metrics_total'] =
+        data.user_login_method_metrics.dates_metrics_total
+      this.config['user_login_time_metrics'] = data.user_login_time_metrics
 
       const userBySource = data.user_by_source
       if (userBySource.length !== 0) {
-        this.$set(this.pie, 'user_by_source', userBySource)
+        this.pie['user_by_source'] = userBySource
       } else {
-        this.$set(this.pie, 'user_by_source', [{ 'name': this.$t('Nothing'), 'value': 0 }])
+        this.pie['user_by_source'] = [{ name: this.$t('Nothing'), value: 0 }]
       }
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

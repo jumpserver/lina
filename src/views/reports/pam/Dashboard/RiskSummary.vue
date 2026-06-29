@@ -12,7 +12,6 @@
 <script>
 import * as echarts from 'echarts'
 import Title from '@/components/Dashboard/Title.vue'
-import { colorRgbToHex, getCssVar, mix } from '@/utils/theme/color'
 
 export default {
   components: { Title },
@@ -107,17 +106,15 @@ export default {
       let filteredData = []
 
       // 只要有一个大于零 则展示全部的
-      if (data.some(item => item.value > 0)) {
+      if (data.some((item) => item.value > 0)) {
         filteredData = data
       } else {
         filteredData = data.slice(0, 7)
       }
 
       // 找出所有数据中最大的值，并设置为 x 轴的 max。如果全是零则设置为 10
-      const maxValue = Math.max(...filteredData.map(item => item.value))
+      const maxValue = Math.max(...filteredData.map((item) => item.value))
       const max = maxValue > 0 ? maxValue : 10
-      const primaryColor = this.getPrimaryColor()
-      const barColors = this.getPrimaryPalette(filteredData.length, primaryColor)
 
       return {
         grid: {
@@ -148,7 +145,7 @@ export default {
         },
         yAxis: {
           type: 'category',
-          data: filteredData.map(item => item.name),
+          data: filteredData.map((item) => item.name),
           axisLine: { show: false },
           axisTick: { show: false },
           axisLabel: {
@@ -170,7 +167,7 @@ export default {
         series: [
           {
             type: 'bar',
-            data: filteredData.map(item => ({
+            data: filteredData.map((item) => ({
               name: item.name,
               value: item.value,
               description: item.description
@@ -185,13 +182,8 @@ export default {
               distance: 10
             },
             itemStyle: {
-              color: (params) => barColors[params.dataIndex] || barColors[barColors.length - 1],
+              color: '#1AB394',
               borderRadius: [0, 4, 4, 0]
-            },
-            emphasis: {
-              itemStyle: {
-                color: primaryColor
-              }
             }
           }
         ]
@@ -211,7 +203,7 @@ export default {
     this.initChart()
     window.addEventListener('resize', this.resizeChart)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.chart) {
       this.chart.dispose()
       this.chart = null
@@ -219,35 +211,6 @@ export default {
     window.removeEventListener('resize', this.resizeChart)
   },
   methods: {
-    getPrimaryColor() {
-      const color = (getCssVar('--color-primary') || '').trim()
-      if (/^#([0-9a-f]{6})$/i.test(color)) {
-        return color
-      }
-      if (/^#([0-9a-f]{3})$/i.test(color)) {
-        const hex = color
-          .slice(1)
-          .split('')
-          .map((char) => char + char)
-          .join('')
-        return `#${hex}`
-      }
-      if (/^rgb/i.test(color)) {
-        return colorRgbToHex(color)
-      }
-      return '#1AB394'
-    },
-    getPrimaryPalette(length, primaryColor = this.getPrimaryColor()) {
-      const baseHex = primaryColor.replace('#', '')
-      const toneSteps = [-16, -10, -4, 0, 8, 16, 24]
-
-      return Array.from({ length }, (_, index) => {
-        const tone = toneSteps[index % toneSteps.length]
-        return tone < 0
-          ? mix('000000', baseHex, Math.abs(tone))
-          : mix('ffffff', baseHex, tone)
-      })
-    },
     async getResourcesCount() {
       return this.$axios.get('/api/v1/accounts/pam-dashboard/', {
         params: {
@@ -317,7 +280,7 @@ export default {
       cursor: pointer;
       transition: all 0.3s ease-in-out;
 
-      ::v-deep .summary-header {
+      :deep(.summary-header) {
         .title {
           color: #646a73;
           font-size: 0.9rem;
@@ -334,7 +297,7 @@ export default {
       &:hover {
         transform: translateY(-0.2rem);
 
-        ::v-deep .no-margins {
+        :deep(.no-margins) {
           .num {
             color: var(--color-primary);
           }

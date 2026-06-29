@@ -44,8 +44,7 @@ export function getCategoryTypes() {
   return request({
     url: '/api/v1/assets/categories/?limit=1000',
     method: 'get'
-  }).then(res => {
+  }).then((res) => {
     return res.results
   })
 }
-

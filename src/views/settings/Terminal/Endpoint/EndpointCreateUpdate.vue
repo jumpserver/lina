@@ -1,8 +1,8 @@
 <template>
   <GenericCreateUpdatePage
+    v-bind="$data"
     :create-success-next-route="successUrl"
     :update-success-next-route="successUrl"
-    v-bind="$data"
   />
 </template>
 
@@ -20,17 +20,16 @@ export default {
       successUrl: { name: 'TerminalSetting', params: { activeMenu: 'EndpointList' } },
       fields: [
         [this.$t('Basic'), ['name', 'host']],
-        [
-          this.$t('Port'),
-          [
-            'http_port', 'https_port', 'ssh_port', 'rdp_port', 'vnc_port'
-          ]
-        ],
+        [this.$t('Port'), ['http_port', 'https_port', 'ssh_port', 'rdp_port', 'vnc_port']],
         [
           '',
           [
-            'mysql_port', 'mariadb_port', 'postgresql_port',
-            'redis_port', 'sqlserver_port', 'oracle_port',
+            'mysql_port',
+            'mariadb_port',
+            'postgresql_port',
+            'redis_port',
+            'sqlserver_port',
+            'oracle_port',
             'mongodb_port'
           ]
         ],
@@ -48,12 +47,9 @@ export default {
     }
   },
   computed: {},
-  created() {
-  },
+  created() {},
   methods: {}
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

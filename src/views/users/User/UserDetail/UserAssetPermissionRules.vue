@@ -12,7 +12,10 @@
 
 <script>
 import { DrawerListTable } from '@/components'
-import { AssetPermissionTableMeta, UserAssetPermissionListPageSearchConfigOptions } from '@/views/perms/const'
+import {
+  AssetPermissionTableMeta,
+  UserAssetPermissionListPageSearchConfigOptions
+} from '@/views/perms/const'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
@@ -38,8 +41,13 @@ export default {
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'users_amount', 'user_groups_amount',
-            'assets_amount', 'nodes_amount', 'accounts', 'actions'
+            'name',
+            'users_amount',
+            'user_groups_amount',
+            'assets_amount',
+            'nodes_amount',
+            'accounts',
+            'actions'
           ]
         },
         columnsMeta: AssetPermissionTableMeta

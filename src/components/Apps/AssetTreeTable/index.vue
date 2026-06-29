@@ -1,20 +1,21 @@
 <template>
   <TreeTable
+    v-bind="$attrs"
     ref="TreeList"
-    :active-menu.sync="treeTableConfig.activeMenu"
+    v-model:active-menu="treeTableConfig.activeMenu"
     :component="treeComponent"
     :table-config="tableConfig"
     :tree-tab-config="treeTableConfig"
     :tree-width="treeWidth"
-    v-bind="$attrs"
-    v-on="$listeners"
   >
     <template #table>
       <slot name="table" />
     </template>
-    <div slot="rMenu" slot-scope="{data}">
-      <slot :data="data" name="rMenu" />
-    </div>
+    <template #rMenu="{ data }">
+      <div>
+        <slot :data="data" name="rMenu" />
+      </div>
+    </template>
   </TreeTable>
 </template>
 
@@ -201,7 +202,7 @@ export default {
       setTimeout(() => {
         const query = this.setTreeUrlQuery()
         url = query ? `${url}&${query}` : url
-        this.$set(this.tableConfig, 'url', url)
+        this.tableConfig['url'] = url
       })
 
       if (this.treeSetting.selectSyncToRoute !== false) {

@@ -14,13 +14,17 @@
         </div>
         <div class="search-input">
           <DatetimeRangePicker
-            class="datepicker"
             v-bind="datePicker"
-            @dateChange="handleDateChange"
+            class="datepicker"
+            @date-change="handleDateChange"
           />
         </div>
         <div class="search-input">
-          <ActionsGroup :actions="iconActions" :is-fa="true" class="right-side-actions right-side-item" />
+          <ActionsGroup
+            :actions="iconActions"
+            :is-fa="true"
+            class="right-side-actions right-side-item"
+          />
         </div>
       </div>
     </div>
@@ -47,51 +51,52 @@ import { getLokiLog } from '@/api/component'
 import ActionsGroup from '@/components/Common/ActionsGroup'
 import store from '@/store'
 import CardLog from './CardLog.vue'
+import _ from 'lodash'
 
 const all_components = []
 const components_ce = [
   {
-    'title': 'Core',
-    'components': ['core', 'jms_core']
+    title: 'Core',
+    components: ['core', 'jms_core']
   },
   {
-    'title': 'Web',
-    'components': ['web', 'jms_web']
+    title: 'Web',
+    components: ['web', 'jms_web']
   },
   {
-    'title': 'Koko',
-    'components': ['koko', 'jms_koko']
+    title: 'Koko',
+    components: ['koko', 'jms_koko']
   },
   {
-    'title': 'Lion',
-    'components': ['lion', 'jms_lion']
+    title: 'Lion',
+    components: ['lion', 'jms_lion']
   },
   {
-    'title': 'Chen',
-    'components': ['chen', 'jms_chen']
+    title: 'Chen',
+    components: ['chen', 'jms_chen']
   },
   {
-    'title': 'Magnus',
-    'components': ['magnus']
+    title: 'Magnus',
+    components: ['magnus']
   }
 ]
 
 const components_ee = [
   {
-    'title': 'Razor',
-    'components': ['razor', 'jms_razor']
+    title: 'Razor',
+    components: ['razor', 'jms_razor']
   },
   {
-    'title': 'Xrdp',
-    'components': ['xrdp', 'jms_xrdp']
+    title: 'Xrdp',
+    components: ['xrdp', 'jms_xrdp']
   },
   {
-    'title': 'Nec',
-    'components': ['nec', 'jms_nec']
+    title: 'Nec',
+    components: ['nec', 'jms_nec']
   },
   {
-    'title': 'Facelive',
-    'components': ['facelive', 'jms_facelive']
+    title: 'Facelive',
+    components: ['facelive', 'jms_facelive']
   }
 ]
 all_components.push(...components_ce)
@@ -136,16 +141,16 @@ export default {
       return ''
     },
     cardLogs() {
-      const cards = this.cards.map(card => {
+      const cards = this.cards.map((card) => {
         return { title: card.title, components: card.components, logs: [] }
       })
-      this.lokiData.forEach(item => {
+      this.lokiData.forEach((item) => {
         const componentName = item.stream['component']
-        const log = item.values.map(value => {
+        const log = item.values.map((value) => {
           return { component: componentName, time: value[0], message: value[1] }
         })
 
-        cards.forEach(card => {
+        cards.forEach((card) => {
           if (card.components.includes(componentName)) {
             card.logs = card.logs.concat(log)
           }
@@ -162,18 +167,18 @@ export default {
     this.refresh_component_logs()
   },
   methods: {
-    handleDateChange: debounce(function(value) {
+    handleDateChange: debounce(function (value) {
       this.datePicker = {
         dateStart: value[0].toISOString(),
         dateEnd: value[1].toISOString()
       }
       this.refresh_component_logs()
     }, 500),
-    handleInput: debounce(function() {
+    handleInput: debounce(function () {
       this.isearch = this.search
       this.refresh_component_logs()
     }, 1000),
-    selectChange: debounce(function(val) {
+    selectChange: debounce(function (val) {
       this.refresh_component_logs()
     }, 1000),
     refresh_component_logs() {
@@ -186,17 +191,18 @@ export default {
       }
       this.loading = true
       getLokiLog(data)
-        .then(response => {
+        .then((response) => {
           this.lokiData = response
-        }).catch(error => {
+        })
+        .catch((error) => {
           this.$message.error(error)
-        }).finally(() => {
+        })
+        .finally(() => {
           this.loading = false
         })
     }
   }
 }
-
 </script>
 
 <style lang="scss" scoped>
@@ -208,7 +214,7 @@ $headerHeight: 30px;
     display: block;
     float: left;
 
-    ::v-deep .action-item.el-dropdown > .el-button {
+    :deep(.action-item.el-dropdown > .el-button) {
       height: 100%;
     }
   }
@@ -238,7 +244,7 @@ $headerHeight: 30px;
   padding-bottom: 10px;
 }
 
-.search-text ::v-deep.el-input__inner {
+.search-text :deep(.el-input__inner) {
   height: 30px;
 }
 
@@ -270,7 +276,7 @@ $headerHeight: 30px;
   height: 30px;
   line-height: 30px;
 
-  ::v-deep .el-button {
+  :deep(.el-button) {
     border: none;
     padding: 5px;
     font-size: 14px;
@@ -282,7 +288,7 @@ $headerHeight: 30px;
     }
   }
 
-  ::v-deep .fa {
+  :deep(.fa) {
     height: 16px;
     width: 16px;
   }

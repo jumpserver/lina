@@ -1,18 +1,20 @@
 <template>
   <div>
-    <el-button size="mini" type="primary" icon="el-icon-setting" @click="visible=true">{{ $t('Setting') }}</el-button>
+    <el-button size="small" type="primary" icon="Setting" @click="visible = true">{{
+      $t('Setting')
+    }}</el-button>
     <Dialog
       v-if="visible"
       :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
       :title="title"
-      :visible.sync="visible"
+      :visible="visible"
       width="70%"
+      @update:visible="$emit('update:visible', $event)"
       @confirm="onConfirm()"
-      v-on="$listeners"
     >
-      <GenericCreateUpdateForm ref="form" v-bind="iConfig" @submitSuccess="submitSuccess" />
+      <GenericCreateUpdateForm v-bind="iConfig" ref="form" @submit-success="submitSuccess" />
     </Dialog>
   </div>
 </template>
@@ -48,8 +50,7 @@ export default {
     }
   },
   methods: {
-    onConfirm() {
-    },
+    onConfirm() {},
     submitSuccess(res) {
       this.$emit('input', !!res[this.enableField])
       this.visible = false
@@ -58,6 +59,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

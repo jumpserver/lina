@@ -1,10 +1,10 @@
 <template>
-  <GenericCreateUpdatePage v-bind="config" @getObjectDone="handleObjectDone" />
+  <GenericCreateUpdatePage v-bind="config" @get-object-done="handleObjectDone" />
 </template>
 
 <script>
-import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage/index.vue'
 import TextReadonly from '@/components/Form/FormFields/TextReadonly.vue'
+import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage/index.vue'
 
 export default {
   name: 'CreateUpdate',
@@ -45,6 +45,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

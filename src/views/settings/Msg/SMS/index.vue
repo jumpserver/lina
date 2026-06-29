@@ -1,6 +1,6 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm class="form" v-bind="$data" />
+    <GenericCreateUpdateForm v-bind="$data" class="form" />
   </IBox>
 </template>
 
@@ -24,15 +24,10 @@ export default {
     return {
       url: '/api/v1/settings/setting/?category=sms',
       fields: [
+        [this.$t('Basic'), ['SMS_ENABLED', 'SMS_BACKEND', 'SMS_CODE_LENGTH']],
         [
-          this.$t('Basic'), [
-            'SMS_ENABLED', 'SMS_BACKEND', 'SMS_CODE_LENGTH'
-          ]
-        ],
-        [
-          this.$t('Provider'), [
-            'ALIYUN', 'QCLOUD', 'HUAWEICLOUD', 'CMPP2', 'SMSCustom', 'SMSFileCustom'
-          ]
+          this.$t('Provider'),
+          ['ALIYUN', 'QCLOUD', 'HUAWEICLOUD', 'CMPP2', 'SMSCustom', 'SMSFileCustom']
         ]
       ],
       fieldsMeta: {
@@ -84,9 +79,7 @@ export default {
       },
       cleanFormValue(data) {
         // 这个页面不去提交auth这些
-        const removeFields = [
-          'SET_UP'
-        ]
+        const removeFields = ['SET_UP']
         for (const i of removeFields) {
           delete data[i]
         }
@@ -99,7 +92,7 @@ export default {
 </script>
 
 <style scoped>
-.form ::v-deep .form-buttons {
+.form :deep(.form-buttons) {
   padding-top: 30px;
 }
 </style>

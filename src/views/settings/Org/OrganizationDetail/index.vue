@@ -1,5 +1,9 @@
 <template>
-  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="Organization" v-bind="config" v-on="$listeners">
+  <GenericDetailPage
+    v-bind="config"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="Organization"
+  >
     <keep-alive>
       <component :is="config.activeMenu" :object="Organization" />
     </keep-alive>
@@ -10,7 +14,7 @@
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import OrganizationDetail from './OrganizationDetail'
 
-const performDelete = function() {
+const performDelete = function () {
   const url = `${this.url}/${this.$route.params.id}/`
   return this.$axios.delete(url)
 }
@@ -36,7 +40,7 @@ export default {
           deleteApiUrl: `${this.url}/${this.$route.params.id}/`,
           canUpdate: this.$hasPerm('orgs.change_organization'),
           canDelete: this.$hasPerm('orgs.delete_organization'),
-          deleteCallback: function() {
+          deleteCallback: function () {
             const msg = this.$t('DeleteOrgMsg')
             const title = this.$t('DeleteOrgTitle')
             this.$alert(msg, title, {
@@ -68,6 +72,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

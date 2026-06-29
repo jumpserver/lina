@@ -25,13 +25,9 @@ export default {
       url: `/api/v1/terminal/sessions/?user_id=${this.object.id}&order=is_finished,-date_end`,
       columnsShow: {
         min: ['id', 'asset', 'account'],
-        default: [
-          'id', 'asset', 'account', 'protocol',
-          'date_start', 'duration'
-        ]
+        default: ['id', 'asset', 'account', 'protocol', 'date_start', 'duration']
       }
     }
   }
-
 }
 </script>

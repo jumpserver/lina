@@ -1,6 +1,7 @@
 <template>
   <div v-loading="loading">
     <AutoDataForm
+      v-bind="$attrs"
       v-if="!loading"
       ref="form"
       :form="form"
@@ -9,14 +10,14 @@
       :is-submitting="isSubmitting"
       :method="method"
       :url="iUrl"
-      v-bind="$attrs"
-      @afterRemoteMeta="handleAfterRemoteMeta"
+      @after-remote-meta="handleAfterRemoteMeta"
       @submit="handleSubmit"
-      v-on="$listeners"
     />
   </div>
 </template>
 <script>
+import { h } from 'vue'
+import { ElLink } from 'element-plus'
 import AutoDataForm from '@/components/Form/AutoDataForm'
 import { getUpdateObjURL } from '@/utils/common/index'
 import { encryptPassword } from '@/utils/secure'
@@ -76,45 +77,47 @@ export default {
     // 创建成功的msg
     createSuccessMsg: {
       type: String,
-      default: function() {
-        return this.$t('CreateSuccessMsg')
+      default: function () {
+        return 'CreateSuccessMsg'
       }
     },
     // 保存成功，继续添加的msg
     saveSuccessContinueMsg: {
       type: String,
-      default: function() {
-        return this.$t('SaveSuccessContinueMsg')
+      default: function () {
+        return 'SaveSuccessContinueMsg'
       }
     },
     // 更新成功的msg
     updateSuccessMsg: {
       type: String,
-      default: function() {
-        return this.$t('UpdateSuccessMsg')
+      default: function () {
+        return 'UpdateSuccessMsg'
       }
     },
     // 创建成功的跳转路由
     createSuccessNextRoute: {
       type: Object,
-      default: function() {
-        const routeName = this.$route.name?.replace('Create', 'List')
+      default: function () {
+        // const routeName = this.$route.name?.replace('Create', 'List')
+        const routeName = 'GroupCreate'
         return { name: routeName }
       }
     },
     // 更新成功的跳转路由
     updateSuccessNextRoute: {
       type: Object,
-      default: function() {
-        const routeName = this.$route.name?.replace('Update', 'List')
+      default: function () {
+        // const routeName = this.$route.name?.replace('Update', 'List')
+        const routeName = 'GroupUpdate'
         return { name: routeName }
       }
     },
     objectDetailRoute: {
       type: Object,
-      default: function() {
-        const routeName = this.$route.name?.replace('Update', 'Detail')
-          .replace('Create', 'Detail')
+      default: function () {
+        // const routeName = this.$route.name?.replace('Update', 'Detail').replace('Create', 'Detail')
+        const routeName = 'GroupDetail'
         return { name: routeName }
       }
     },
@@ -122,13 +125,14 @@ export default {
     getNextRoute: {
       type: Function,
       default(res, method) {
-        return method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
+        return { name: 'GroupList' }
+        // return method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
       }
     },
     cloneNameSuffix: {
       type: [String, Number],
-      default: function() {
-        return this.$t('Duplicate').toLowerCase()
+      default: function () {
+        return 'Duplicate'.toLowerCase()
       }
     },
     // 获取提交的方法
@@ -139,7 +143,7 @@ export default {
     // 获取创建和更新的url function
     getUrl: {
       type: Function,
-      default: function() {
+      default: function () {
         const objectId = this.getUpdateId()
         let url = this.url
         if (objectId) {
@@ -173,19 +177,20 @@ export default {
         if (res.name) {
           msgLinkName = res.name
         }
-        const h = this.$createElement
         const detailRoute = this.objectDetailRoute
         detailRoute.params = { id: res.id }
         if (this.hasDetailInMsg) {
           msg = msg[0].toLowerCase() + msg.slice(1)
           this.$message({
             message: h('p', null, [
-              h('el-link', {
-                on: {
-                  click: () => this.$router.push(detailRoute)
+              h(
+                ElLink,
+                {
+                  onClick: () => this.$router.push(detailRoute),
+                  style: { 'vertical-align': 'top', 'margin-right': '5px' }
                 },
-                style: { 'vertical-align': 'top', 'margin-right': '5px' }
-              }, msgLinkName),
+                () => msgLinkName
+              ),
               h('span', {}, msg)
             ]),
             type: 'success'
@@ -200,9 +205,12 @@ export default {
       default(res, method, vm, addContinue) {
         const route = this.getNextRoute(res, method)
         if (!(route.params && route.params.id)) {
-          route['params'] = deepmerge(route['params'] || {}, { 'id': res.id })
+          route['params'] = deepmerge(route['params'] || {}, { id: res.id })
         }
-        route['query'] = deepmerge(route['query'], { 'order': this.extraQueryOrder, 'updated': new Date().getTime() })
+        route['query'] = deepmerge(route['query'], {
+          order: this.extraQueryOrder,
+          updated: new Date().getTime()
+        })
 
         this.$emit('submitSuccess', res)
 
@@ -383,7 +391,7 @@ export default {
     },
     async getCloneForm(cloneFrom) {
       const [curUrl, query] = this.url.split('?')
-      const url = `${curUrl}${cloneFrom}/${query ? ('?' + query) : ''}`
+      const url = `${curUrl}${cloneFrom}/${query ? '?' + query : ''}`
       try {
         const object = await this.getObjectDetail(url)
         let name = ''
@@ -438,5 +446,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

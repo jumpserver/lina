@@ -5,17 +5,22 @@
         :data="tableData"
         :span-method="spanMethod"
         :stripe="true"
-        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+        :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         default-expand-all
         row-key="id"
       >
         <el-table-column :label="$tc('MessageType')" width="230">
-          <template v-slot="scope">
+          <template #default="scope">
             <span>{{ scope.row.value }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-for="header in receiveBackends" :key="header.id" :label="getNameDisplay(header)" width="80">
-          <template v-slot="scope">
+        <el-table-column
+          v-for="header in receiveBackends"
+          :key="header.id"
+          :label="getNameDisplay(header)"
+          width="80"
+        >
+          <template #default="scope">
             <span v-if="!scope.row.children">
               <el-checkbox
                 v-if="header.name !== 'site_msg'"
@@ -27,18 +32,28 @@
           </template>
         </el-table-column>
         <el-table-column :label="$tc('Receivers')">
-          <template slot-scope="scope">
-            <el-popover placement="top" popper-class="black-theme-popover" trigger="hover">
+          <template #default="scope">
+            <el-popover
+              v-if="!scope.row.children && scope.row.receivers && scope.row.receivers.length"
+              placement="top"
+              popper-class="black-theme-popover"
+              trigger="hover"
+            >
               <p v-for="item in scope.row.receivers" :key="item.name">{{ item.name }}</p>
-              <span v-if="!scope.row.children" slot="reference" class="name-wrapper">
-                {{ scope.row.receivers.map(item => item.name).join(', ') }}
-              </span>
+              <template #reference>
+                <span class="name-wrapper">
+                  {{ scope.row.receivers.map((item) => item.name).join(', ') }}
+                </span>
+              </template>
             </el-popover>
+            <span v-else-if="!scope.row.children && scope.row.receivers">
+              {{ scope.row.receivers.map((item) => item.name).join(', ') }}
+            </span>
           </template>
         </el-table-column>
         <el-table-column :label="$tc('Actions')" width="200">
-          <template v-slot="scope">
-            <el-button v-if="!scope.row.children" type="small" @click="onOpenDialog(scope.row)">
+          <template #default="scope">
+            <el-button v-if="!scope.row.children" size="small" @click="onOpenDialog(scope.row)">
               {{ $t('EditRecipient') }}
             </el-button>
           </template>
@@ -47,10 +62,10 @@
 
       <SelectDialog
         v-if="dialogVisible"
+        v-model:visible="dialogVisible"
         :selected-users="dialogSelectedUsers"
         :title="$tc('EditRecipient')"
-        :visible.sync="dialogVisible"
-        @cancel="dialogVisible=false"
+        @cancel="dialogVisible = false"
         @submit="onDialogSelectSubmit"
       />
     </div>
@@ -90,36 +105,39 @@ export default {
         }
       }
 
-      this.$axios.patch(
-        `/api/v1/notifications/system-msg-subscription/${sub.id}/`,
-        { receive_backends: backends }
-      ).then(() => {
-        this.$message.success(this.$t('UpdateSuccessMsg'))
-      }).catch(err => {
-        this.$log.error(err)
-      })
+      this.$axios
+        .patch(`/api/v1/notifications/system-msg-subscription/${sub.id}/`, {
+          receive_backends: backends
+        })
+        .then(() => {
+          this.$message.success(this.$t('UpdateSuccessMsg'))
+        })
+        .catch((err) => {
+          this.$log.error(err)
+        })
     },
-    spanMethod({ row, column, rowIndex, columnIndex }) {
-    },
+    spanMethod({ row, column, rowIndex, columnIndex }) {},
     onDialogSelectSubmit(userIds) {
       this.dialogVisible = false
-      this.$axios.patch(
-        `/api/v1/notifications/system-msg-subscription/${this.currentEditSub.id}/`,
-        { users: userIds }
-      ).then(newSub => {
-        const msgType = this.idMessageTypeMapper[newSub.message_type]
-        msgType.receivers = newSub.receivers
-        this.tableData.forEach(i => {
-          for (const item of i.children) {
-            if (item.id === newSub.message_type) {
-              item.receivers = newSub.receivers
-              break
-            }
-          }
+      this.$axios
+        .patch(`/api/v1/notifications/system-msg-subscription/${this.currentEditSub.id}/`, {
+          users: userIds
         })
-      }).catch(() => {
-        // debug(err)
-      })
+        .then((newSub) => {
+          const msgType = this.idMessageTypeMapper[newSub.message_type]
+          msgType.receivers = newSub.receivers
+          this.tableData.forEach((i) => {
+            for (const item of i.children) {
+              if (item.id === newSub.message_type) {
+                item.receivers = newSub.receivers
+                break
+              }
+            }
+          })
+        })
+        .catch(() => {
+          // debug(err)
+        })
     },
     getNameDisplay(header) {
       const displayName = header['name_display']
@@ -136,7 +154,7 @@ export default {
     async initBackends() {
       let backends = []
       backends = await this.$axios.get('/api/v1/notifications/backends/')
-      this.receiveBackends = backends.filter(backend => {
+      this.receiveBackends = backends.filter((backend) => {
         return backend.name // !== 'site_msg'
       })
     },
@@ -154,7 +172,7 @@ export default {
 
         for (const item of category['children']) {
           const backendsChecked = {}
-          this.receiveBackends.forEach(backend => {
+          this.receiveBackends.forEach((backend) => {
             backendsChecked[backend.name] = item['receive_backends'].indexOf(backend.name) > -1
           })
 
@@ -192,7 +210,7 @@ export default {
   width: 50%;
 }
 
-::v-deep .el-table .cell {
+:deep(.el-table .cell) {
   display: flex;
 
   .name-wrapper {
@@ -207,7 +225,7 @@ export default {
   }
 }
 
-::v-deep .black-theme-popover .el-popover__inner {
+:deep(.black-theme-popover .el-popover__inner) {
   background-color: #000 !important;
   color: #fff !important;
   border-color: #000 !important;

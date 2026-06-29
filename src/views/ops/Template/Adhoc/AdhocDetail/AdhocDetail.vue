@@ -3,21 +3,17 @@
     <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
     <template #right>
       <IBox :title="$tc('Variable')">
-        <Variable
-          :value.sync="object.variable"
-          :disable-edit="disableEdit"
-          @input="updateVariable"
-        />
+        <Variable v-model="object.variable" :disable-edit="disableEdit" @input="updateVariable" />
       </IBox>
     </template>
   </TwoCol>
 </template>
 
-<script type="text/jsx">
-import AutoDetailCard from '@/components/Cards/DetailCard/auto'
-import Variable from '@/views/ops/Template/components/Variable'
+<script>
 import { IBox } from '@/components'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import Variable from '@/views/ops/Template/components/Variable'
 
 export default {
   components: {
@@ -55,6 +51,4 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-
-</style>
+<style lang="scss" scoped></style>

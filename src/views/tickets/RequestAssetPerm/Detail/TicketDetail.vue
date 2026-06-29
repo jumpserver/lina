@@ -8,66 +8,78 @@
     :special-card-items="specialCardItems"
   >
     <IBox v-if="hasActionPerm && object.status.value !== 'closed'" class="box">
-      <div slot="header" class="clearfix ibox-title">
-        <i class="fa fa-edit" /> {{ $tc('Actions') }}
-      </div>
-      <template>
-        <el-form ref="requestForm" :model="requestForm" class="assets" label-position="left" label-width="140px">
-          <el-form-item :label="$tc('Node')">
-            <Select2 v-model="requestForm.nodes" style="width: 50% !important" v-bind="nodeSelect2" />
-          </el-form-item>
-          <el-form-item :label="$tc('Asset')">
-            <Select2 v-model="requestForm.assets" style="width: 50% !important" v-bind="assetSelect2" />
-          </el-form-item>
-          <el-form-item :label="$tc('Account')" :rules="isRequired">
-            <AccountFormatter
-              v-model="requestForm.accounts"
-              :assets="requestForm.assets"
-              :nodes="requestForm.nodes"
-              :oid="requestForm.oid"
-              :show-add-template="false"
-              style="width: 50% !important"
-            />
-          </el-form-item>
-          <el-form-item :label="$tc('DateStart')" required>
-            <el-date-picker
-              v-model="requestForm.apply_date_start"
-              type="datetime"
-            />
-          </el-form-item>
-          <el-form-item :label="$tc('DateExpired')" required>
-            <el-date-picker
-              v-model="requestForm.apply_date_expired"
-              type="datetime"
-            />
-          </el-form-item>
-          <el-form-item :label="$tc('Action')">
-            <BasicTree
-              v-model="requestForm.actions"
-              :tree="treeNodes"
-              style="width: 100%"
-            />
-          </el-form-item>
-        </el-form>
+      <template #header>
+        <div class="clearfix ibox-title"><i class="fa fa-edit" /> {{ $tc('Actions') }}</div>
       </template>
+      <el-form
+        ref="requestForm"
+        :model="requestForm"
+        class="assets"
+        label-position="left"
+        label-width="140px"
+      >
+        <el-form-item :label="$tc('Node')">
+          <Select2 v-bind="nodeSelect2" v-model="requestForm.nodes" style="width: 50% !important" />
+        </el-form-item>
+        <el-form-item :label="$tc('Asset')">
+          <Select2
+            v-bind="assetSelect2"
+            v-model="requestForm.assets"
+            style="width: 50% !important"
+          />
+        </el-form-item>
+        <el-form-item :label="$tc('Account')" :rules="isRequired">
+          <AccountFormatter
+            v-model="requestForm.accounts"
+            :assets="requestForm.assets"
+            :nodes="requestForm.nodes"
+            :oid="requestForm.oid"
+            :show-add-template="false"
+            style="width: 50% !important"
+          />
+        </el-form-item>
+        <el-form-item :label="$tc('DateStart')" required>
+          <el-date-picker v-model="requestForm.apply_date_start" type="datetime" />
+        </el-form-item>
+        <el-form-item :label="$tc('DateExpired')" required>
+          <el-date-picker v-model="requestForm.apply_date_expired" type="datetime" />
+        </el-form-item>
+        <el-form-item :label="$tc('Action')">
+          <BasicTree v-model="requestForm.actions" :tree="treeNodes" style="width: 100%" />
+        </el-form-item>
+      </el-form>
     </IBox>
   </GenericTicketDetail>
 </template>
 
 <script>
-import { formatTime, getDateTimeStamp } from '@/utils/common/time'
-import { toSafeLocalDateStr } from '@/utils/common/time'
-import { STATUS_MAP, treeNodes } from '../../const'
-import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
-import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
-import Select2 from '@/components/Form/FormFields/Select2'
-import BasicTree from '@/components/Form/FormFields/BasicTree'
 import IBox from '@/components/Common/IBox'
+import BasicTree from '@/components/Form/FormFields/BasicTree'
+import Select2 from '@/components/Form/FormFields/Select2'
+import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
 import { AccountLabelMapper } from '@/views/perms/const'
-
+import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
+import {
+  createVNode as createVNodeCompat,
+  isVNode as isVNodeCompat,
+  resolveComponent as resolveComponentCompat
+} from 'vue'
+import { STATUS_MAP, treeNodes } from '../../const'
+function _isSlot(s) {
+  return (
+    typeof s === 'function' ||
+    (Object.prototype.toString.call(s) === '[object Object]' && !isVNodeCompat(s))
+  )
+}
 export default {
   name: '',
-  components: { GenericTicketDetail, IBox, Select2, AccountFormatter, BasicTree },
+  components: {
+    GenericTicketDetail,
+    IBox,
+    Select2,
+    AccountFormatter,
+    BasicTree
+  },
   props: {
     object: {
       type: Object,
@@ -77,10 +89,13 @@ export default {
   data() {
     return {
       treeNodes,
-      statusMap: this.object.status.value === 'open' ? STATUS_MAP['pending'] : STATUS_MAP[this.object.state.value],
+      statusMap:
+        this.object.status.value === 'open'
+          ? STATUS_MAP['pending']
+          : STATUS_MAP[this.object.state.value],
       requestForm: {
-        nodes: this.object.apply_nodes?.map(i => i.id),
-        assets: this.object.apply_assets?.map(i => i.id),
+        nodes: this.object.apply_nodes?.map((i) => i.id),
+        assets: this.object.apply_assets?.map((i) => i.id),
         accounts: this.object.apply_accounts,
         actions: this.object.apply_actions,
         oid: this.object.org_id,
@@ -91,12 +106,15 @@ export default {
         multiple: true,
         value: this.object.apply_nodes,
         ajax: {
-          url: (function(object) {
+          url: (function (object) {
             const oid = object.org_id
             return `/api/v1/assets/nodes/?oid=${oid}&protocol__in=rdp,vnc,ssh,telnet`
-          }(this.object)),
+          })(this.object),
           transformOption: (item) => {
-            return { label: `${item.full_value}`, value: item.id }
+            return {
+              label: `${item.full_value}`,
+              value: item.id
+            }
           }
         }
       },
@@ -104,12 +122,15 @@ export default {
         multiple: true,
         value: this.object.apply_assets,
         ajax: {
-          url: (function(object) {
+          url: (function (object) {
             const oid = object.org_id
             return `/api/v1/assets/assets/?oid=${oid}&protocol__in=rdp,vnc,ssh,telnet`
-          }(this.object)),
+          })(this.object),
           transformOption: (item) => {
-            return { label: `${item.name}(${item.address})`, value: item.id }
+            return {
+              label: `${item.name}(${item.address})`,
+              value: item.id
+            }
           }
         }
       }
@@ -118,28 +139,36 @@ export default {
   computed: {
     isRequired() {
       if (this.object.approval_step.value === this.object.process_map.length) {
-        return [{ required: true }]
+        return [
+          {
+            required: true
+          }
+        ]
       }
-      return [{ required: false }]
+      return [
+        {
+          required: false
+        }
+      ]
     },
     specialCardItems() {
       const { object } = this
       return [
         {
           key: this.$tc('Node'),
-          value: object.apply_nodes.map(item => item.name).join(', ')
+          value: object.apply_nodes.map((item) => item.name).join(', ')
         },
         {
           key: this.$tc('Asset'),
-          value: object.apply_assets.map(item => item.name).join(', ')
+          value: object.apply_assets.map((item) => item.name).join(', ')
         },
         {
           key: this.$tc('Account'),
-          value: object.apply_accounts.map(item => AccountLabelMapper[item] || item).join(', ')
+          value: object.apply_accounts.map((item) => AccountLabelMapper[item] || item).join(', ')
         },
         {
           key: this.$tc('Action'),
-          value: object.apply_actions.map(item => item.label).join(', ')
+          value: object.apply_actions.map((item) => item.label).join(', ')
         },
         {
           key: this.$tc('DateStart'),
@@ -158,30 +187,52 @@ export default {
         {
           key: this.$tc('PermissionName'),
           value: object.apply_permission_name,
-          formatter: function(item, value) {
-            const to = { name: 'AssetPermissionDetail', params: { id: object.id }, query: { oid: object.org_id } }
-            if (vm.$hasPerm('perms.view_assetpermission') && object.status.value === 'closed' && object.state.value === 'approved') {
-              return <router-link to={to}>{value}</router-link>
+          formatter: function (item, value) {
+            const to = {
+              name: 'AssetPermissionDetail',
+              params: {
+                id: object.id
+              },
+              query: {
+                oid: object.org_id
+              }
+            }
+            if (
+              vm.$hasPerm('perms.view_assetpermission') &&
+              object.status.value === 'closed' &&
+              object.state.value === 'approved'
+            ) {
+              return createVNodeCompat(
+                resolveComponentCompat('router-link'),
+                {
+                  to: to
+                },
+                _isSlot(value)
+                  ? value
+                  : {
+                      default: () => [value]
+                    }
+              )
             } else {
-              return <span>{value}</span>
+              return createVNodeCompat('span', null, [value])
             }
           }
         },
         {
           key: this.$tc('Node'),
-          value: object.apply_nodes.map(item => item.name).join(', ')
+          value: object.apply_nodes.map((item) => item.name).join(', ')
         },
         {
           key: this.$tc('Asset'),
-          value: object.apply_assets.map(item => item.name).join(', ')
+          value: object.apply_assets.map((item) => item.name).join(', ')
         },
         {
           key: this.$tc('Account'),
-          value: object.apply_accounts.map(item => AccountLabelMapper[item] || item).join(', ')
+          value: object.apply_accounts.map((item) => AccountLabelMapper[item] || item).join(', ')
         },
         {
           key: this.$tc('Action'),
-          value: object.apply_actions.map(item => item.label).join(', ')
+          value: object.apply_actions.map((item) => item.label).join(', ')
         },
         {
           key: this.$tc('DateStart'),
@@ -196,18 +247,14 @@ export default {
     hasActionPerm() {
       const approval_step = this.object.approval_step.value
       const current_user_id = this.$store.state.users.profile.id
-      return this.object.process_map.filter(
-        item => item.approval_level === approval_step
-      )[0].assignees.indexOf(current_user_id) !== -1
+      return (
+        this.object.process_map
+          .filter((item) => item.approval_level === approval_step)[0]
+          .assignees.indexOf(current_user_id) !== -1
+      )
     }
   },
   methods: {
-    formatTime(dateStr) {
-      return formatTime(getDateTimeStamp(dateStr))
-    },
-    toSafeLocalDateStr(dataStr) {
-      return toSafeLocalDateStr(dataStr)
-    },
     reloadPage() {
       window.location.reload()
     },
@@ -217,35 +264,42 @@ export default {
       const accounts = this.requestForm.accounts
       if (this.object.approval_step.value === this.object.process_map.length) {
         if (assets.length === 0 && nodes.length === 0) {
-          this.$message.error(this.$tc('SelectAtLeastOneAssetOrNodeErrMsg'))
-          return false
+          return this.$message.error(this.$tc('SelectAtLeastOneAssetOrNodeErrMsg'))
         } else if (accounts.length === 0) {
-          this.$message.error(this.$tc('RequiredSystemUserErrMsg'))
-          return false
+          return this.$message.error(this.$tc('RequiredSystemUserErrMsg'))
         }
       }
-      return this.$axios.patch(`/api/v1/tickets/apply-asset-tickets/${this.object.id}/approve/`, {
-        apply_nodes: nodes || [],
-        apply_assets: assets || [],
-        apply_accounts: accounts || [],
-        org_id: this.object.org_id,
-        apply_actions: this.requestForm.actions,
-        apply_date_start: this.requestForm.apply_date_start,
-        apply_date_expired: this.requestForm.apply_date_expired
-      }).then(() => {
-        this.$message.success(this.$tc('UpdateSuccessMsg'))
-        this.reloadPage()
-      }).catch(() => {
-        this.$message.success(this.$tc('UpdateErrorMsg'))
-      })
+      this.$axios
+        .patch(`/api/v1/tickets/apply-asset-tickets/${this.object.id}/approve/`, {
+          apply_nodes: nodes || [],
+          apply_assets: assets || [],
+          apply_accounts: accounts || [],
+          org_id: this.object.org_id,
+          apply_actions: this.requestForm.actions,
+          apply_date_start: this.requestForm.apply_date_start,
+          apply_date_expired: this.requestForm.apply_date_expired
+        })
+        .then(() => {
+          this.$message.success(this.$tc('UpdateSuccessMsg'))
+          this.reloadPage()
+        })
+        .catch(() => {
+          this.$message.success(this.$tc('UpdateErrorMsg'))
+        })
     },
     handleClose() {
       const url = `/api/v1/tickets/apply-asset-tickets/${this.object.id}/close/`
-      return this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+      this.$axios
+        .put(url)
+        .then((res) => this.reloadPage())
+        .catch((err) => this.$message.error(err))
     },
     handleReject() {
       const url = `/api/v1/tickets/apply-asset-tickets/${this.object.id}/reject/`
-      return this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+      this.$axios
+        .put(url)
+        .then((res) => this.reloadPage())
+        .catch((err) => this.$message.error(err))
     }
   }
 }

@@ -1,13 +1,8 @@
 <template>
-  <el-form class="account-content" @submit.native.prevent>
+  <el-form class="account-content" @submit.prevent>
     <el-form-item>
       <el-radio-group v-model="realRadioSelected" @input="handleRadioChanged">
-        <el-radio
-          v-for="(i) in iRealChoices"
-          :key="i.label"
-          :disabled="i.disabled"
-          :label="i.value"
-        >
+        <el-radio v-for="i in iRealChoices" :key="i.label" :disabled="i.disabled" :value="i.value">
           {{ i.label }}
           <el-tooltip v-if="i.tip" :content="i.tip" :open-delay="500" placement="top">
             <i class="fa fa-question-circle-o" />
@@ -24,7 +19,7 @@
           @change="handleTagChange"
         />
         <span v-if="showAddTemplate">
-          <el-button size="mini" type="primary" @click="showTemplateDialog=true">
+          <el-button size="small" type="primary" @click="showTemplateDialog = true">
             {{ $t('TemplateAdd') }}
           </el-button>
           <span class="help-block">
@@ -39,7 +34,11 @@
       </div>
 
       <div v-if="enableVirtualAccount" class="spec-zone virtual-choices">
-        <el-checkbox v-model="virtualChecked" @change="handleVirtualChecked">
+        <el-checkbox
+          :model-value="virtualChecked"
+          @change="handleVirtualChecked"
+          @update:model-value="virtualChecked = $event"
+        >
           {{ virtualAccount.label }}
         </el-checkbox>
         <el-select
@@ -49,12 +48,7 @@
           :placeholder="$t('SelectVirtualAccount')"
           @change="handleVirtualChecked"
         >
-          <el-option
-            v-for="i in virtualAccounts"
-            :key="i.label"
-            :label="i.label"
-            :value="i.value"
-          >
+          <el-option v-for="i in virtualAccounts" :key="i.label" :label="i.label" :value="i.value">
             {{ i.label }}
             <el-tooltip :content="i.tip" :open-delay="500" placement="top">
               <i class="fa fa-question-circle-o" />
@@ -66,12 +60,12 @@
 
     <Dialog
       v-if="showTemplateDialog"
+      v-model:visible="showTemplateDialog"
       :title="$tc('AccountTemplate')"
-      :visible.sync="showTemplateDialog"
       @cancel="handleAccountTemplateCancel"
       @confirm="handleAccountTemplateConfirm"
     >
-      <ListTable ref="templateTable" v-bind="accountTemplateTable" />
+      <ListTable v-bind="accountTemplateTable" ref="templateTable" />
     </Dialog>
   </el-form>
 </template>
@@ -136,7 +130,7 @@ export default {
     addTemplateHelpText: {
       type: String,
       default() {
-        return this.$t('TemplateHelpText')
+        return 'TemplateHelpText'
       }
     }
   },
@@ -161,7 +155,7 @@ export default {
       specAccountsTemplate: [],
       showSpecZone: false,
       getTagType: (tag) => {
-        if (vm.specAccountsTemplate.filter(i => i.username === tag).length > 0) {
+        if (vm.specAccountsTemplate.filter((i) => i.username === tag).length > 0) {
           return 'primary'
         } else {
           return 'info'
@@ -173,20 +167,21 @@ export default {
         const data = {
           username: query,
           assets: this.assets.slice(0, 20),
-          nodes: this.nodes.slice(0, 20).map(item => {
+          nodes: this.nodes.slice(0, 20).map((item) => {
             return typeof item === 'object' ? item.pk : item
           })
         }
-        this.$axios.post(
-          '/api/v1/accounts/accounts/username-suggestions/',
-          data, { params: { oid: this.oid } }
-        ).then(res => {
-          if (!res) res = []
-          const data = res
-            .filter(item => vm.value.indexOf(item) === -1)
-            .map(v => ({ value: v, label: v }))
-          cb(data)
-        })
+        this.$axios
+          .post('/api/v1/accounts/accounts/username-suggestions/', data, {
+            params: { oid: this.oid }
+          })
+          .then((res) => {
+            if (!res) res = []
+            const data = res
+              .filter((item) => vm.value.indexOf(item) === -1)
+              .map((v) => ({ value: v, label: v }))
+            cb(data)
+          })
       }
     }
   },
@@ -198,10 +193,10 @@ export default {
       get() {
         let choices = this.realChoices.slice()
         if (!this.enableNoneAccount) {
-          choices = choices.filter(i => i.value !== NoneAccount)
+          choices = choices.filter((i) => i.value !== NoneAccount)
         }
         if (!this.enableExcludeAccounts) {
-          choices = choices.filter(i => i.value !== ExcludeAccount)
+          choices = choices.filter((i) => i.value !== ExcludeAccount)
         }
         return choices
       }
@@ -221,15 +216,17 @@ export default {
   },
   methods: {
     getVirtualChoices(val) {
-      return this.virtualAccounts.filter(i => {
-        return val.includes(i.value)
-      }).map(i => i.value)
+      return this.virtualAccounts
+        .filter((i) => {
+          return val.includes(i.value)
+        })
+        .map((i) => i.value)
     },
     getExcludeChoices(val) {
-      return val.filter(i => i.startsWith('!')).map(i => i.substring(1))
+      return val.filter((i) => i.startsWith('!')).map((i) => i.substring(1))
     },
     getSpecValues(val) {
-      return val.filter(i => !i.startsWith('@') && !i.startsWith('!'))
+      return val.filter((i) => !i.startsWith('@') && !i.startsWith('!'))
     },
     initDefaultChoice() {
       const value = this.value || []
@@ -264,8 +261,10 @@ export default {
     },
     handleAccountTemplateConfirm() {
       this.specAccountsTemplate = this.$refs.templateTable.selectedRows
-      const added = this.specAccountsTemplate.map(i => i.username)
-      this.specAccountsInput = this.specAccountsInput.filter(i => !added.includes(i)).concat(added)
+      const added = this.specAccountsTemplate.map((i) => i.username)
+      this.specAccountsInput = this.specAccountsInput
+        .filter((i) => !added.includes(i))
+        .concat(added)
       this.outputValue()
       setTimeout(() => {
         this.showTemplateDialog = false
@@ -288,12 +287,12 @@ export default {
       if (this.realRadioSelected === this.ALL) {
         choicesSelected = [this.ALL]
       } else if (this.realRadioSelected === this.SPEC && this.showSpecZone) {
-        const templateIds = this.specAccountsTemplate.map(i => `%${i.id}`)
+        const templateIds = this.specAccountsTemplate.map((i) => `%${i.id}`)
         choicesSelected = [this.realRadioSelected, ...this.specAccountsInput, ...templateIds]
       } else if (this.realRadioSelected === NoneAccount) {
         choicesSelected = []
       } else if (this.realRadioSelected === this.EXCLUDE && this.excludeAccountsInput) {
-        choicesSelected = [...this.excludeAccountsInput].map(i => '!' + i)
+        choicesSelected = [...this.excludeAccountsInput].map((i) => '!' + i)
       }
 
       if (this.virtualChecked) {
@@ -310,16 +309,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.select ::v-deep .el-input.el-input--suffix {
-  width: 100px
+.select :deep(.el-input.el-input--suffix) {
+  width: 100px;
 }
 
 .spec-accounts {
-  ::v-deep {
-    .filter-field {
-      width: 100%;
-      margin-bottom: 3px !important;
-    }
+  :deep(.filter-field) {
+    width: 100%;
+    margin-bottom: 3px !important;
   }
 }
 
@@ -335,9 +332,12 @@ export default {
 }
 
 .spec-zone {
+  width: 100%;
+  min-width: 0;
   border-bottom: dashed 1px var(--color-border);
   padding-bottom: 10px;
   padding-top: 5px;
+  overflow: hidden;
 
   &:last-child {
     border-bottom: none;
@@ -345,17 +345,55 @@ export default {
 }
 
 .virtual-choices {
-  .el-select {
-    width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+
+  :deep(.el-checkbox) {
+    margin-right: 0;
+    flex: 0 0 auto;
+  }
+
+  :deep(.el-select) {
+    flex: 1 1 240px;
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
   }
 }
 
 .account-content {
-  ::v-deep {
-    .el-form-item__content {
-      width: 90% !important;
-    }
+  width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+
+  :deep(.el-form-item) {
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  :deep(.el-form-item__content) {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    width: 100% !important;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  :deep(.el-radio-group) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  :deep(.el-radio) {
+    margin-right: 0;
   }
 }
-
 </style>

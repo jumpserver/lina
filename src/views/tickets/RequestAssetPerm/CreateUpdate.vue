@@ -1,19 +1,19 @@
 <template>
   <GenericCreateUpdatePage
+    v-bind="$data"
     v-if="!loading"
     :create-success-next-route="createSuccessNextRoute"
     :perform-submit="performSubmit"
-    v-bind="$data"
   />
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
-import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
 import Select2 from '@/components/Form/FormFields/Select2'
-import { getDaysFuture } from '@/utils/common/time'
-import { mapGetters, mapState } from 'vuex'
+import { GenericCreateUpdatePage } from '@/layout/components'
 import store from '@/store'
+import { getDaysFuture } from '@/utils/common/time'
+import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   components: {
@@ -40,10 +40,17 @@ export default {
       },
       fields: [
         [this.$t('Basic'), ['title', 'org_id']],
-        [this.$t('RequestPerm'), [
-          'apply_nodes', 'apply_assets', 'apply_accounts',
-          'apply_actions', 'apply_date_start', 'apply_date_expired'
-        ]],
+        [
+          this.$t('RequestPerm'),
+          [
+            'apply_nodes',
+            'apply_assets',
+            'apply_accounts',
+            'apply_actions',
+            'apply_date_start',
+            'apply_date_expired'
+          ]
+        ],
         [this.$t('Other'), ['comment']]
       ],
       fieldsMeta: {
@@ -153,13 +160,13 @@ export default {
   },
   computed: {
     ...mapState({
-      workbenchOrgs: state => state.users.noRootWorkbenchOrgs
+      workbenchOrgs: (state) => state.users.noRootWorkbenchOrgs
     }),
     ...mapGetters(['currentOrg'])
   },
   mounted() {
     const currentOrgId = this.currentOrg.id || ''
-    const userAllOrgIds = this.workbenchOrgs.map(i => i.id) || []
+    const userAllOrgIds = this.workbenchOrgs.map((i) => i.id) || []
     if (userAllOrgIds.includes(currentOrgId)) {
       this.initial.org_id = currentOrgId
     } else {
@@ -176,6 +183,4 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-
-</style>
+<style lang="scss" scoped></style>

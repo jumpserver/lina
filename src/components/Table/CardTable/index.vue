@@ -1,44 +1,51 @@
 <template>
   <div class="el-card-table">
     <TableAction
+      v-bind="headerActions"
       :reload-table="reloadTable"
       :search-table="search"
       :table-url="tableUrl"
-      v-bind="headerActions"
     />
-    <el-row v-loading="loading" class="the-row">
-      <IBox v-if="totalData.length === 0" class="empty-box">
-        <el-empty :description="$t('NoData')" :image-size="200" class="no-data" style="padding: 20px" />
-      </IBox>
-      <div class="card-container">
-        <el-card
-          v-for="(d, index) in totalData"
-          :key="index"
-          :class="{'is-disabled': isDisabled(d)}"
-          class="the-card"
-          shadow="hover"
-        >
-          <keep-alive>
-            <slot :index="index" :item="d" :onView="onView">
-              <Panel :d="d" @click.native="onView(d)" />
-            </slot>
-          </keep-alive>
-        </el-card>
-      </div>
-    </el-row>
+    <div v-loading="loading">
+      <el-row class="the-row">
+        <IBox v-if="totalData.length === 0" class="empty-box">
+          <el-empty
+            :description="$t('NoData')"
+            :image-size="200"
+            class="no-data"
+            style="padding: 20px"
+          />
+        </IBox>
+        <div class="card-container">
+          <el-card
+            v-for="(d, index) in totalData"
+            :key="index"
+            :class="{ 'is-disabled': isDisabled(d) }"
+            class="the-card"
+            shadow="hover"
+          >
+            <keep-alive>
+              <slot :index="index" :item="d" :on-view="onView">
+                <Panel :d="d" @click="onView(d)" />
+              </slot>
+            </keep-alive>
+          </el-card>
+        </div>
+      </el-row>
+    </div>
     <Pagination
+      v-bind="$data"
       v-show="pagination && total > paginationSize"
       ref="pagination"
       class="pagination"
-      v-bind="$data"
-      @currentSizeChange="handleCurrentChange"
-      @sizeChange="handleSizeChange"
+      @current-size-change="handleCurrentChange"
+      @size-change="handleSizeChange"
     />
     <Drawer
       v-if="detailDrawer"
+      v-model:visible="detailDrawerVisible"
       :component="detailDrawer"
       :title="detailTitle"
-      :visible.sync="detailDrawerVisible"
     />
   </div>
 </template>
@@ -152,7 +159,9 @@ export default {
       }
       const pageQuery = this.getPageQuery(this.page, this.paginationSize)
       const query = Object.assign(this.extraQuery, pageQuery, this.tableConfig.extraQuery)
-      const queryString = Object.keys(query).map(key => key + '=' + query[key]).join('&')
+      const queryString = Object.keys(query)
+        .map((key) => key + '=' + query[key])
+        .join('&')
       const connector = this.tableUrl.indexOf('?') === -1 ? '?' : '&'
       const url = `${this.tableUrl}${connector}${queryString}`
 
@@ -198,7 +207,10 @@ export default {
       }
       if (this.detailDrawer) {
         await this.$store.dispatch('common/setDrawerActionMeta', {
-          action: 'detail', row: obj, col: {}, id: obj.id
+          action: 'detail',
+          row: obj,
+          col: {},
+          id: obj.id
         })
         this.detailTitle = `${this.$t('Detail')}: ${obj.name}`
         this.detailDrawerVisible = true
@@ -232,10 +244,8 @@ export default {
 .the-row .empty-box {
   display: block;
 
-  ::v-deep {
-    .el-empty {
-      margin: 0 auto;
-    }
+  :deep(.el-empty) {
+    margin: 0 auto;
   }
 }
 
@@ -254,7 +264,8 @@ export default {
     }
   }
 
-  .el-col, div {
+  .el-col,
+  div {
     gap: 20px;
 
     .the-card {
@@ -265,7 +276,7 @@ export default {
       width: 380px;
       padding: 15px;
 
-      ::v-deep .el-card__body {
+      :deep(.el-card__body) {
         height: 100%;
         width: 100%;
         padding: 0;

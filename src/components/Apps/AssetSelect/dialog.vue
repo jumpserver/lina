@@ -1,15 +1,16 @@
 <template>
   <Dialog
+    v-bind="dialogAttrs"
     :close-on-click-modal="false"
+    :visible="visible"
     :title="$tc('Assets')"
-    custom-class="asset-select-dialog"
+    class="asset-dialog"
     top="2vh"
-    v-bind="$attrs"
     width="1000px"
     @cancel="handleCancel"
     @close="handleClose"
     @confirm="handleConfirm"
-    v-on="$listeners"
+    @update:visible="handleVisibleChange"
   >
     <AssetTreeTable
       ref="ListPage"
@@ -18,23 +19,24 @@
       :sync-select-to-url="false"
       :table-config="tableConfig"
       :tree-setting="iTreeSetting"
+      :tree-url-query="treeUrlQuery"
       :tree-url="`${baseNodeUrl}children/tree/`"
       :url="baseUrl"
       class="tree-table"
-      v-bind="$attrs"
       @loaded="handleTableLoaded"
-      v-on="$listeners"
     />
   </Dialog>
 </template>
 
 <script>
-import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
-import Dialog from '@/components/Dialog/index.vue'
+import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue';
+import Dialog from '@/components/Dialog/index.vue';
 
 export default {
   componentName: 'AssetSelectDialog',
   components: { AssetTreeTable, Dialog },
+  inheritAttrs: false,
+  emits: ['cancel', 'confirm', 'update:visible'],
   props: {
     baseUrl: {
       type: String,
@@ -48,6 +50,10 @@ export default {
       type: Array,
       default: () => []
     },
+    visible: {
+      type: Boolean,
+      default: false
+    },
     canSelect: {
       type: Function,
       default(row, index) {
@@ -58,6 +64,10 @@ export default {
       type: [Boolean, Function],
       default: false
     },
+    treeUrlQuery: {
+      type: Object,
+      default: () => ({})
+    },
     treeSetting: {
       type: Object,
       default: () => ({})
@@ -67,7 +77,6 @@ export default {
     const vm = this
     return {
       isLoaded: false,
-      dialogVisible: false,
       rowSelected: _.cloneDeep(this.value) || [],
       rowsAdd: [],
       tableConfig: {
@@ -89,7 +98,7 @@ export default {
             prop: 'platform',
             label: this.$t('Platform'),
             sortable: true,
-            formatter: function(row) {
+            formatter: function (row) {
               return row.platform.name
             }
           },
@@ -122,6 +131,9 @@ export default {
     }
   },
   computed: {
+    dialogAttrs() {
+      return { ...this.$attrs }
+    },
     iTreeSetting() {
       return { ...this.treeSetting, selectSyncToRoute: false }
     }
@@ -133,13 +145,18 @@ export default {
     handleClose() {
       this.$refs.ListPage.$refs.TreeList.componentKey += 1
     },
+    handleVisibleChange(val) {
+      this.$emit('update:visible', val)
+    },
     handleConfirm() {
+      this.$emit('update:visible', false)
       this.$emit('confirm', this.rowSelected, this.rowsAdd)
       if (this.rowSelected.length > 0) {
         this.handleClose()
       }
     },
     handleCancel() {
+      this.$emit('update:visible', false)
       this.$emit('cancel')
       this.handleClose()
     },
@@ -160,42 +177,45 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.page ::v-deep .page-heading {
+<style lang="scss">
+.asset-dialog .el-dialog__body {
+  padding: 0 !important;
+}
+
+.asset-dialog .page-heading {
   display: none;
 }
 
-.el-dialog__wrapper ::v-deep .el-dialog__body {
-  padding: 0 0 0 3px;
+.asset-dialog .tree-table {
+  .left {
+    padding: 5px 0;
 
-  .tree-table {
-    .search {
+    .ztree {
+      height: 100%;
     }
+  }
 
-    .left {
-      padding: 5px;
-    }
-
-    .right {
-      min-height: 500px;
-      overflow: auto;
-    }
-
-    .mini {
-      padding-top: 8px;
-    }
-
+  .right {
     .transition-box {
-      padding: 10px 5px;
+      padding-left: 0;
     }
+  }
+
+  .mini {
+    width: 1px;
+    padding-top: 8px;
+  }
+
+  .transition-box {
+    padding: 10px 5px;
   }
 }
 
-.page ::v-deep .treebox .ztree {
-
+.asset-dialog .transition-box:first-child {
+  background-color: #f3f3f3;
 }
 
-.asset-select-dialog ::v-deep .el-icon-circle-check {
-  display: none;
+.asset-dialog .treebox {
+  height: inherit !important;
 }
 </style>

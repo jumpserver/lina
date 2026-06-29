@@ -1,5 +1,6 @@
 import { constantRoutes } from '@/router'
 import store from '@/store'
+import { getAssetUrlOr } from '@/utils/assets'
 
 let openedTaskWindow = null // 保存已打开的窗口对象
 
@@ -42,13 +43,13 @@ export function checkPermission(permsRequired, permsAll) {
   if (typeof permsRequired === 'string') {
     permsRequired = [permsRequired]
   }
-  return permsRequired.every(perm => {
+  return permsRequired.every((perm) => {
     // 包含 | 是或的关系, 单独处理
     if (perm.indexOf('|') === -1) {
       return permsAll.includes(perm)
     }
-    const permOr = perm.split('|').map(item => item.trim())
-    return permOr.some(perm => {
+    const permOr = perm.split('|').map((item) => item.trim())
+    return permOr.some((perm) => {
       return permsAll.includes(perm)
     })
   })
@@ -124,7 +125,7 @@ export function getPermedViews() {
     ['tickets', hasPermission('tickets.view_ticket')],
     ['settings', hasPermission('settings.view_setting')]
   ]
-  return viewShowMapper.filter(i => i[1]).map(i => i[0])
+  return viewShowMapper.filter((i) => i[1]).map((i) => i[0])
 }
 
 export function isSameView(to, from) {
@@ -194,9 +195,5 @@ export function loadPlatformIcon(name, type) {
 
   const value = platformMap[name] || type
 
-  try {
-    return require(`@/assets/img/icons/${value}.png`)
-  } catch (error) {
-    return require(`@/assets/img/icons/other.png`)
-  }
+  return getAssetUrlOr(`img/icons/${value}.png`, 'img/icons/other.png')
 }

@@ -2,7 +2,6 @@
   <Page :help-tip="helpMsg">
     <UserLoginACLTable />
   </Page>
-
 </template>
 
 <script>

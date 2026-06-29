@@ -20,31 +20,30 @@ export default {
         {
           title: this.$t('Test'),
           loading: false,
-          callback: function(value, form, btn) {
+          callback: function (value, form, btn) {
             btn.loading = true
-            vm.$axios.post(
-              '/api/v1/settings/vault/aws/testing/',
-              value
-            ).then(res => {
-              vm.$message.success(res['msg'])
-            }).catch(() => {
-              vm.$log.error('err occur')
-            }).finally(() => { btn.loading = false })
+            vm.$axios
+              .post('/api/v1/settings/vault/aws/testing/', value)
+              .then((res) => {
+                vm.$message.success(res['msg'])
+              })
+              .catch(() => {
+                vm.$log.error('err occur')
+              })
+              .finally(() => {
+                btn.loading = false
+              })
           }
         }
       ],
       encryptedFields: ['VAULT_AWS_ACCESS_SECRET_KEY'],
       fields: [
-        [this.$t('AccountStorage'),
-          [
-            'VAULT_AWS_REGION_NAME',
-            'VAULT_AWS_ACCESS_KEY_ID',
-            'VAULT_AWS_ACCESS_SECRET_KEY'
-          ]
+        [
+          this.$t('AccountStorage'),
+          ['VAULT_AWS_REGION_NAME', 'VAULT_AWS_ACCESS_KEY_ID', 'VAULT_AWS_ACCESS_SECRET_KEY']
         ]
       ],
-      fieldsMeta: {
-      },
+      fieldsMeta: {},
       submitMethod() {
         return 'patch'
       }
@@ -55,6 +54,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

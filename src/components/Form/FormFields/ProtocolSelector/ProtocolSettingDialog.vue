@@ -1,5 +1,6 @@
 <template>
   <Dialog
+    v-bind="$attrs"
     v-if="$attrs.visible"
     :close-on-click-modal="false"
     :destroy-on-close="true"
@@ -8,9 +9,7 @@
     :show-confirm="false"
     :title="$tc('PlatformProtocolConfig') + '：' + protocol.name"
     class="setting-dialog"
-    v-bind="$attrs"
     width="800px"
-    v-on="$listeners"
   >
     <el-alert v-if="disabled && platformDetail" style="margin-bottom: 10px" type="info">
       {{ $t('InheritPlatformConfig') }}
@@ -20,10 +19,10 @@
       <i class="fa fa-external-link" />
     </el-alert>
     <AutoDataForm
+      v-bind="config"
       :disabled="disabled"
       :form="form"
       class="data-form"
-      v-bind="config"
       @submit="onSubmit"
     />
   </Dialog>
@@ -70,23 +69,23 @@ export default {
             fields: '__all__',
             fieldsMeta: {
               username_selector: {
-                hidden: formValue => formValue['autofill'] !== 'basic'
+                hidden: (formValue) => formValue['autofill'] !== 'basic'
               },
               password_selector: {
-                hidden: formValue => formValue['autofill'] !== 'basic'
+                hidden: (formValue) => formValue['autofill'] !== 'basic'
               },
               submit_selector: {
-                hidden: formValue => formValue['autofill'] !== 'basic'
+                hidden: (formValue) => formValue['autofill'] !== 'basic'
               },
               script: {
                 component: JsonEditor,
-                hidden: formValue => formValue['autofill'] !== 'script'
+                hidden: (formValue) => formValue['autofill'] !== 'script'
               }
             }
           },
           public: {
             disabled: this.protocol.name === 'winrm',
-            hidden: formValue => {
+            hidden: (formValue) => {
               if (this.protocol.name === 'winrm') {
                 formValue['public'] = false
               }
@@ -99,8 +98,8 @@ export default {
   async mounted() {
     try {
       const drawActionMeta = await this.$store.dispatch('common/getDrawerActionMeta')
-      const platform = drawActionMeta.row.platform.id
-      const name = drawActionMeta.row.platform.name
+      const platform = drawActionMeta?.row?.platform?.id
+      const name = drawActionMeta?.row?.platform?.name
 
       if (platform) {
         this.platformDetail = `/ui/#/settings/platforms?id=${platform}&name=${name}`
@@ -108,7 +107,7 @@ export default {
         this.platformDetail = ''
       }
     } catch (e) {
-      throw new Error(e)
+      this.platformDetail = ''
     }
   },
   methods: {
@@ -124,14 +123,27 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.data-form ::v-deep .el-form-item.form-buttons {
-  padding-top: 10px;
-  margin-bottom: 0;
+<style lang="scss">
+.setting-dialog .el-dialog__body {
+  padding: 16px 20px 20px;
+  overflow-x: hidden;
 }
 
-.setting-dialog ::v-deep .el-dialog__body {
+.setting-dialog .data-form,
+.setting-dialog .el-form {
+  width: 100%;
+  min-width: 0;
+  margin-right: 0;
+}
+
+.setting-dialog .el-form-item,
+.setting-dialog .el-form-item__content {
+  min-width: 0;
+}
+
+.setting-dialog .data-form .el-form-item.form-buttons {
   padding-top: 10px;
+  margin-bottom: 0;
 }
 
 .link-more {

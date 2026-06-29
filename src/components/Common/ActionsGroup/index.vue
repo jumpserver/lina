@@ -1,5 +1,5 @@
 <template>
-  <DataActions :actions="iActions" v-bind="$attrs" />
+  <DataActions v-bind="$attrs" :actions="iActions" />
 </template>
 
 <script>
@@ -47,7 +47,8 @@ export default {
         title: '',
         type: 'primary',
         icon: 'el-icon-more',
-        plain: true
+        plain: true,
+        popperClass: 'table-action-dropdown'
       }
       const btn = {
         ...defaultBtn,

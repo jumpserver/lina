@@ -1,32 +1,32 @@
 <template>
   <Dialog
+    v-bind="$attrs"
     ref="myDialog"
     :destroy-on-close="true"
     height="720px"
-    v-bind="$attrs"
     width="790px"
     @confirm="submit"
-    v-on="$listeners"
   >
-    <krryPaging ref="pageTransfer" class="transfer" v-bind="pagingTransfer" />
+    <krryPaging v-bind="pagingTransfer" ref="pageTransfer" class="transfer" />
   </Dialog>
 </template>
 
 <script>
+import { getUserList } from '@/api/users'
 import Dialog from '@/components/Dialog/index.vue'
 import krryPaging from '@/components/Libs/Krry/paging/index.vue'
-import { getUserList } from '@/api/users'
 
 export default {
   name: 'ListSelect',
   components: {
-    Dialog, krryPaging
+    Dialog,
+    krryPaging
   },
   inheritAttrs: false,
   props: {
     selectedUsers: {
       type: Array,
-      default: function() {
+      default: function () {
         return []
       }
     }
@@ -38,31 +38,31 @@ export default {
         filterable: true,
         async: true,
         dataList: [],
-        getPageData: async function(pageIndex, pageSize) {
+        getPageData: async function (pageIndex, pageSize) {
           const limit = pageSize
           const offset = (pageIndex - 1) * pageSize
           const params = {
-            'limit': limit,
-            'offset': offset,
-            'oid': 'ROOT'
+            limit: limit,
+            offset: offset,
+            oid: 'ROOT'
           }
           const data = await getUserList(params)
-          const results = data['results'].map(item => {
+          const results = data['results'].map((item) => {
             return { id: item.id, label: _.escape(`${item.name}(${item.username})`) }
           })
           return results
         },
-        getSearchData: async function(keyword, pageIndex, pageSize) {
+        getSearchData: async function (keyword, pageIndex, pageSize) {
           const limit = pageSize
           const offset = (pageIndex - 1) * pageSize
           const params = {
-            'limit': limit,
-            'offset': offset,
-            'oid': 'ROOT',
-            'search': keyword
+            limit: limit,
+            offset: offset,
+            oid: 'ROOT',
+            search: keyword
           }
           const data = await getUserList(params)
-          const results = data['results'].map(item => {
+          const results = data['results'].map((item) => {
             return { id: item.id, label: _.escape(`${item.name}(${item.username})`) }
           })
           return results
@@ -74,7 +74,7 @@ export default {
     }
   },
   mounted() {
-    const selectedUsers = this.selectedUsers.map(item => {
+    const selectedUsers = this.selectedUsers.map((item) => {
       return {
         id: item.id,
         label: item.name
@@ -98,7 +98,7 @@ export default {
   padding-left: 10px;
 }
 
-.transfer ::v-deep .district-panel {
+.transfer :deep(.district-panel) {
   width: 300px;
 
   .el-transfer-panel__body {
@@ -110,11 +110,11 @@ export default {
   }
 }
 
-.transfer ::v-deep .el-transfer-panel__item:hover {
+.transfer :deep(.el-transfer-panel__item:hover) {
   color: #428bca;
 }
 
-.transfer ::v-deep .el-checkbox {
+.transfer :deep(.el-checkbox) {
   font-weight: normal;
 }
 </style>

@@ -4,10 +4,11 @@
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('Detecting')"
-    :visible.sync="iVisible"
+    :visible="visible"
     top="35vh"
-    width="80%"
-    @close="loading=true"
+    width="960px"
+    @update:visible="$emit('update:visible', $event)"
+    @close="loading = true"
   >
     <div v-loading="loading">
       <iframe :src="url" frameborder="0" @load="onIframeLoad" />
@@ -35,16 +36,6 @@ export default {
     return {
       loading: true,
       url: `/api/v1/accounts/check-account-executions/adhoc/?asset_id=${this.asset}`
-    }
-  },
-  computed: {
-    iVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$emit('update:visible', val)
-      }
     }
   },
   methods: {

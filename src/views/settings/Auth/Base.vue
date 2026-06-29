@@ -1,6 +1,6 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm v-bind="iConfig" @submitSuccess="submitSuccess" />
+    <GenericCreateUpdateForm v-bind="iConfig" @submit-success="submitSuccess" />
   </IBox>
 </template>
 
@@ -43,5 +43,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

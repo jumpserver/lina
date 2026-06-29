@@ -3,12 +3,12 @@
     :show-cancel="true"
     :show-confirm="true"
     :title="$tc('Create')"
-    :visible.sync="iVisible"
+    :visible="visible"
     top="1vh"
     width="25%"
+    @update:visible="$emit('update:visible', $event)"
     @confirm="onConfirm"
   >
-
     <el-form ref="form" label-width="80px">
       <el-form-item :label="$tc('Filename')">
         <el-input v-model="newFileName" />
@@ -34,19 +34,10 @@ export default {
       default: false
     }
   },
+  emits: ['update:visible', 'submit'],
   data() {
     return {
       newFileName: ''
-    }
-  },
-  computed: {
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
     }
   },
   mounted() {
@@ -60,5 +51,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

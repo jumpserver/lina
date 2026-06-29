@@ -194,7 +194,9 @@ export default {
       meta: {
         title: i18n.t('Notifications'),
         icon: 'remind',
-        permissions: ['settings.change_email | settings.change_sms | settings.change_systemmsgsubscription']
+        permissions: [
+          'settings.change_email | settings.change_sms | settings.change_systemmsgsubscription'
+        ]
       }
     },
     {
@@ -206,7 +208,7 @@ export default {
         icon: 'feature',
         permissions: [
           'settings.change_ticket | settings.change_ops | settings.change_vault | ' +
-          'settings.change_chatai | settings.change_virtualapp'
+            'settings.change_chatai | settings.change_virtualapp'
         ]
       }
     },
@@ -355,7 +357,8 @@ export default {
         {
           path: 'endpoint-rule/create',
           name: 'EndpointRuleCreate',
-          component: () => import('@/views/settings/Terminal/EndpointRule/EndpointRuleCreateUpdate'),
+          component: () =>
+            import('@/views/settings/Terminal/EndpointRule/EndpointRuleCreateUpdate'),
           meta: {
             title: i18n.t('CreateEndpointRule'),
             activeMenu: '/settings/terminal',
@@ -366,7 +369,8 @@ export default {
         {
           path: 'endpoint-rule/:id/update',
           name: 'EndpointRuleUpdate',
-          component: () => import('@/views/settings/Terminal/EndpointRule/EndpointRuleCreateUpdate'),
+          component: () =>
+            import('@/views/settings/Terminal/EndpointRule/EndpointRuleCreateUpdate'),
           meta: {
             title: i18n.t('UpdateEndpointRule'),
             activeMenu: '/settings/terminal',
@@ -478,7 +482,8 @@ export default {
         {
           path: 'app-providers/:id',
           name: 'AppProviderDetail',
-          component: () => import('@/views/settings/Applet/AppProvider/AppProviderDetail/index.vue'),
+          component: () =>
+            import('@/views/settings/Applet/AppProvider/AppProviderDetail/index.vue'),
           hidden: true,
           meta: {
             title: i18n.t('AppProviderDetail'),
@@ -565,4 +570,3 @@ export default {
     }
   ]
 }
-

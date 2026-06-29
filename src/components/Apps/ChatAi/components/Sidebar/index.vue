@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="close-sidebar">
-      <i v-if="hasClose" class="el-icon-download" @click="onClose" />
+      <el-icon v-if="hasClose" class="download-icon" @click="onClose"><Download /></el-icon>
     </div>
     <div v-if="!expanded" class="close-sidebar">
       <i class="fa fa-expand" style="font-weight: 200" @click="$emit('expand')" />
@@ -14,6 +14,7 @@
 
 <script>
 import { BASE_URL } from '@/utils/common/index'
+import { IS_PROD } from '@/utils/env'
 
 export default {
   props: {
@@ -46,7 +47,7 @@ export default {
     },
     async openWebsite() {
       let url = `${BASE_URL}/?_=${Date.now()}`
-      if (process.env.NODE_ENV !== 'production') {
+      if (!IS_PROD) {
         url = url.replace('9528', '5173')
       }
 
@@ -77,7 +78,8 @@ export default {
       padding: 4px;
     }
 
-    i, .svg {
+    i,
+    .svg {
       border-radius: 2px;
 
       &:hover {
@@ -88,11 +90,11 @@ export default {
   }
 }
 
-.el-icon-download {
-  transform: rotate(-90deg)
+.download-icon {
+  transform: rotate(-90deg);
 }
 
-::v-deep .el-tabs {
+:deep(.el-tabs) {
   .el-tabs__item {
     padding: 0 10px;
     font-size: 14px;

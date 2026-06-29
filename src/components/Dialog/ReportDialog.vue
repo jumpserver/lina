@@ -1,24 +1,25 @@
 <template>
   <div>
     <Dialog
-      v-if="iVisible"
+      v-if="visible"
+      v-model:visible="iVisible"
       :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
       :title="$tc('Report')"
-      :visible.sync="iVisible"
       top="35vh"
       width="80%"
-      @close="loading=true"
+      @close="loading = true"
     >
       <span v-if="loading" v-loading="loading" class="loading" />
-      <iframe title="dialog" :src="url" style="border: none;" @load="onIframeLoad" />
+      <iframe title="dialog" :src="url" style="border: none" @load="onIframeLoad" />
     </Dialog>
   </div>
 </template>
 
 <script>
 import Dialog from '@/components/Dialog/index.vue'
+import { useVModel } from '@/utils/vue/useVModel'
 
 export default {
   name: 'ReportDialog',
@@ -35,25 +36,20 @@ export default {
       default: ''
     }
   },
+  emits: ['update:visible'],
+  setup(props, { emit }) {
+    const iVisible = useVModel(props, emit, 'visible')
+    return {
+      iVisible
+    }
+  },
   data() {
     return {
       loading: true
     }
   },
-  computed: {
-    iVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$emit('update:visible', val)
-      }
-    }
-  },
-  mounted() {
-  },
-  beforeMount() {
-  },
+  mounted() {},
+  beforeMount() {},
   methods: {
     onIframeLoad() {
       this.loading = false

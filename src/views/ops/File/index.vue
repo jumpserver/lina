@@ -33,7 +33,7 @@
             v-model="runAsInput.value"
             :fetch-suggestions="runAsInput.el.query"
             :placeholder="runAsInput.placeholder"
-            size="mini"
+            size="small"
             style="display: inline-block; margin: 0 2px"
             @change="runAsInput.callback(runAsInput.value)"
             @select="runAsInput.callback(runAsInput.value)"
@@ -45,10 +45,10 @@
             v-if="dstPathInput.type === 'input'"
             v-model="dstPath"
             :placeholder="dstPathInput.placeholder"
-            size="mini"
+            size="small"
             @change="dstPathInput.callback(dstPathInput.value)"
           >
-            <template slot="prepend">/tmp/</template>
+            <template #prepend>/tmp/</template>
           </el-input>
         </div>
         <div class="file-uploader">
@@ -60,40 +60,44 @@
                 :content="$t('ClearSelection')"
                 placement="top"
               >
-                <i class="el-icon-delete" @click="clearAllFiles" />
+                <el-icon @click="clearAllFiles"><Delete /></el-icon>
               </el-tooltip>
             </div>
             <el-upload
               v-if="ready"
               ref="upload"
+              v-model="uploadFileList"
               :auto-upload="false"
               :on-change="onFileChange"
-              :value.sync="uploadFileList"
               action=""
               drag
               multiple
             >
-              <i class="el-icon-upload" />
+              <el-icon><Upload /></el-icon>
               <div class="el-upload__text" style="margin-bottom: 10px; padding: 0 5px 0 5px">
                 {{ $t('DragUploadFileInfo') }}
               </div>
               <span>
                 {{ $t('UploadFileLthHelpText', { limit: sizeLimitMb }) }}
               </span>
-              <div slot="file" slot-scope="{ file }">
-                <li class="el-upload-list__item is-ready" tabindex="0">
-                  <a :style="sameFileStyle(file)" class="el-upload-list__item-name">
-                    <i class="el-icon-document" />{{ file.name }}
-                    <i style="color: #1ab394; float: right; font-weight: normal">
-                      {{ formatFileSize(file.size) }}
-                      <i class="el-icon-close" @click="removeFile(file)" />
-                    </i>
-                  </a>
-                </li>
-              </div>
-              <div v-if="uploadFileList.length === 0" slot="tip" class="empty-file-tip">
-                {{ $tc('NoFiles') }}
-              </div>
+              <template #file="{ file }">
+                <div>
+                  <li class="el-upload-list__item is-ready" tabindex="0">
+                    <a :style="sameFileStyle(file)" class="el-upload-list__item-name">
+                      <el-icon><Document /></el-icon>{{ file.name }}
+                      <i style="color: #1ab394; float: right; font-weight: normal">
+                        {{ formatFileSize(file.size) }}
+                        <el-icon class="remove-icon" @click="removeFile(file)"><Close /></el-icon>
+                      </i>
+                    </a>
+                  </li>
+                </div>
+              </template>
+              <template #tip>
+                <div v-if="uploadFileList.length === 0" class="empty-file-tip">
+                  {{ $tc('NoFiles') }}
+                </div>
+              </template>
             </el-upload>
             <el-progress v-if="showProgress" :percentage="progressLength" />
             <div v-if="showProgress" class="status-info">
@@ -107,7 +111,9 @@
         </div>
         <span v-if="executionInfo.status && summary && !showProgress" style="float: right">
           <span>
-            <span><b>{{ $tc('Status') }}: </b></span>
+            <span
+              ><b>{{ $tc('Status') }}: </b></span
+            >
             <span v-if="executionInfo.status === 'timeout'" class="status_warning">{{
               $tc('Timeout')
             }}</span>
@@ -118,7 +124,9 @@
             </span>
           </span>
           <span>
-            <span><b>{{ $tc('TimeDelta') }}: </b></span>
+            <span
+              ><b>{{ $tc('TimeDelta') }}: </b></span
+            >
             <span>{{ executionInfo.timeCost }}</span>
           </span>
         </span>
@@ -191,8 +199,8 @@ export default {
                 assets: hosts,
                 query: query
               })
-              .then(data => {
-                const ns = data.map(item => {
+              .then((data) => {
+                const ns = data.map((item) => {
                   return { value: item.username }
                 })
                 cb(ns)
@@ -200,7 +208,7 @@ export default {
           }
         },
         options: [],
-        callback: option => {
+        callback: (option) => {
           this.runas = option
         }
       },
@@ -210,7 +218,7 @@ export default {
         align: 'left',
         value: '',
         placeholder: this.$tc('EnterUploadPath'),
-        callback: val => {
+        callback: (val) => {
           this.chdir = val
         }
       },
@@ -251,15 +259,15 @@ export default {
       const url = '/ws/ops/tasks/log/'
       const wsURL = scheme + '://' + document.location.hostname + port + url
       this.ws = new WebSocket(wsURL)
-      this.ws.onerror = e => {
+      this.ws.onerror = (e) => {
         this.xterm.write(this.wrapperError('Connect websocket server error'))
       }
       this.setWsCallback()
     },
     setWsCallback() {
-      this.ws.onmessage = e => {
+      this.ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
-        if (data.hasOwnProperty('message')) {
+        if (Object.prototype.hasOwnProperty.call(data, 'message')) {
           let message = data.message
           message = message.replace(/Task ops\.tasks\.run_ops_job_execution.*/, '')
           this.xterm.write(message)
@@ -285,7 +293,7 @@ export default {
       this.summary['skip'] = excludesKeys.length + skipped.length
     },
     getTaskStatus() {
-      getTaskDetail(this.currentTaskId).then(data => {
+      getTaskDetail(this.currentTaskId).then((data) => {
         this.executionInfo.status = data['status']
         this.taskStatusStat(data['summary'])
         if (this.executionInfo.status === 'success') {
@@ -333,7 +341,7 @@ export default {
       return firstPart + '...' + secondPart
     },
     handleSameFile(fileList) {
-      const filenameList = fileList.map(file => file.name)
+      const filenameList = fileList.map((file) => file.name)
       const filenameCount = _.countBy(filenameList)
       for (const file of fileList) {
         file.isSame = filenameCount[file.name] > 1
@@ -412,7 +420,7 @@ export default {
       if (this.chdir) {
         data.chdir = this.chdir
       }
-      createJob(data).then(res => {
+      createJob(data).then((res) => {
         this.executionInfo.timeCost = 0
         this.speedText = ''
         const form = new FormData()
@@ -428,7 +436,7 @@ export default {
           }
         }, 100)
         JobUploadFile(form, {
-          onUploadProgress: e => {
+          onUploadProgress: (e) => {
             if (!e.total) return
             const percent = Math.floor((e.loaded / e.total) * 100)
             this.progressLength = Math.min(percent, 100)
@@ -441,7 +449,7 @@ export default {
             }
           }
         })
-          .then(res => {
+          .then((res) => {
             this.showProgress = true
             this.executionInfo.status = 'running'
             this.currentTaskId = res.task_id
@@ -502,13 +510,13 @@ export default {
   width: 12px !important;
 }
 
-.vue-codemirror-wrap ::v-deep .CodeMirror {
+.vue-codemirror-wrap :deep(.CodeMirror) {
   width: 600px;
   height: 100px;
   border: 1px solid #eee;
 }
 
-.upload_input ::v-deep .el-input-group__prepend {
+.upload_input :deep(.el-input-group__prepend) {
   padding: 0 10px;
 }
 
@@ -540,7 +548,7 @@ export default {
     padding-bottom: 5px;
   }
 
-  ::v-deep .el-card__body {
+  :deep(.el-card__body) {
     > div:nth-child(2) {
       //不要影响到 el-progress
       display: flex;
@@ -577,7 +585,7 @@ export default {
           }
 
           .el-upload-list__item-name {
-            .el-icon-close {
+            .remove-icon {
               position: relative;
               top: 0;
               left: 10px;
@@ -603,7 +611,7 @@ export default {
   background: #fff;
 }
 
-.output ::v-deep #terminal {
+.output :deep(#terminal) {
   border: dashed 1px #d9d9d9;
 }
 

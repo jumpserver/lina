@@ -5,11 +5,13 @@ import store from '@/store'
 export default {
   name: 'GlobalSubmenu',
   extends: empty,
-  beforeRouteEnter(to, from, next) {
-    store.dispatch('users/enterGlobalOrg').then(() => next())
+  async beforeRouteEnter() {
+    await store.dispatch('users/enterGlobalOrg')
+    return true
   },
-  beforeRouteLeave(to, from, next) {
-    store.dispatch('users/leaveGlobalOrg').then(() => next())
+  async beforeRouteLeave() {
+    await store.dispatch('users/leaveGlobalOrg')
+    return true
   }
 }
 </script>

@@ -1,9 +1,8 @@
 <template>
   <GenericDetailPage
-    :active-menu.sync="config.activeMenu"
-    :object.sync="terminal"
     v-bind="config"
-    v-on="$listeners"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="terminal"
   >
     <keep-alive>
       <component :is="config.activeMenu" :object="terminal" />
@@ -30,8 +29,8 @@ export default {
         activeMenu: 'Detail',
         submenu: [
           {
-            'title': this.$t('Basic'),
-            'name': 'Detail'
+            title: this.$t('Basic'),
+            name: 'Detail'
           }
         ],
         hasRightSide: true,
@@ -44,7 +43,6 @@ export default {
       }
     }
   },
-  mounted() {
-  }
+  mounted() {}
 }
 </script>

@@ -1,8 +1,19 @@
 <template>
   <div v-if="!loading">
     <TagInput v-if="type === 'array'" :value="iValue" @input="handleInput" />
-    <Select2 v-else-if="type === 'select'" :value="iValue" v-bind="attr.el" @change="handleInput" @input="handleInput" />
-    <Switcher v-else-if="type === 'bool'" :value="iValue" @change="handleInput" @input="handleInput" />
+    <Select2
+      v-bind="attr.el"
+      v-else-if="type === 'select'"
+      :value="iValue"
+      @change="handleInput"
+      @input="handleInput"
+    />
+    <Switcher
+      v-else-if="type === 'bool'"
+      :value="iValue"
+      @change="handleInput"
+      @input="handleInput"
+    />
     <el-input v-else :value="iValue" @input="handleInput" />
   </div>
 </template>
@@ -105,6 +116,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

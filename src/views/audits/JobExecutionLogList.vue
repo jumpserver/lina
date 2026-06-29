@@ -4,12 +4,12 @@
   </div>
 </template>
 
-<script type="text/jsx">
+<script>
+import { createVNode as createVNodeCompat } from 'vue'
 import GenericListPage from '@/layout/components/GenericListPage'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
 import { stopJob } from '@/api/ops'
-
 export default {
   components: {
     GenericListPage
@@ -21,14 +21,26 @@ export default {
         columnsShow: {
           min: ['material', 'is_success'],
           default: [
-            'creator_name', 'material', 'job_type', 'is_finished',
-            'is_success', 'time_cost', 'date_start', 'actions'
+            'creator_name',
+            'material',
+            'job_type',
+            'is_finished',
+            'is_success',
+            'time_cost',
+            'date_start',
+            'actions'
           ]
         },
         columns: [
-          'creator_name', 'material', 'job_type', 'is_finished',
-          'is_success', 'time_cost', 'date_start',
-          'date_finished', 'actions'
+          'creator_name',
+          'material',
+          'job_type',
+          'is_finished',
+          'is_success',
+          'time_cost',
+          'date_start',
+          'date_finished',
+          'actions'
         ],
         columnsMeta: {
           actions: {
@@ -55,7 +67,9 @@ export default {
                   },
                   type: 'danger',
                   callback: ({ row }) => {
-                    stopJob({ task_id: row.task_id }).then(() => {
+                    stopJob({
+                      task_id: row.task_id
+                    }).then(() => {
                       this.$refs.ListPage.reloadTable()
                       this.$message.success(this.$t('StopJobMsg'))
                     })
@@ -65,7 +79,7 @@ export default {
             }
           },
           time_cost: {
-            formatter: function(row) {
+            formatter: function (row) {
               if (row.time_cost) {
                 return row.time_cost.toFixed(2) + 's'
               }
@@ -75,20 +89,50 @@ export default {
           is_finished: {
             formatter: (row) => {
               if (row.is_finished) {
-                return <i Class='fa fa-check text-primary'/>
+                return createVNodeCompat(
+                  'i',
+                  {
+                    class: 'fa fa-check text-primary'
+                  },
+                  null
+                )
               }
-              return <i Class='fa fa-times text-danger'/>
+              return createVNodeCompat(
+                'i',
+                {
+                  class: 'fa fa-times text-danger'
+                },
+                null
+              )
             }
           },
           is_success: {
             formatter: (row) => {
               if (!row.is_finished) {
-                return <i Class='fa  fa fa-spinner fa-spin'/>
+                return createVNodeCompat(
+                  'i',
+                  {
+                    class: 'fa  fa fa-spinner fa-spin'
+                  },
+                  null
+                )
               }
               if (row.is_success) {
-                return <i Class='fa fa-check text-primary'/>
+                return createVNodeCompat(
+                  'i',
+                  {
+                    class: 'fa fa-check text-primary'
+                  },
+                  null
+                )
               }
-              return <i Class='fa fa-times text-danger'/>
+              return createVNodeCompat(
+                'i',
+                {
+                  class: 'fa fa-times text-danger'
+                },
+                null
+              )
             }
           }
         }
@@ -111,5 +155,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

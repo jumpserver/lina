@@ -46,7 +46,9 @@ export default {
 <template>
   <span class="copyable">
     <span :style="{ order: 2 }">{{ iCellValue }}</span>
-    <i :style="{ order: iconPosition === 'left' ? 0 : 3 } " class="el-icon-copy-document copy" @click="copy()" />
+    <el-icon :style="{ order: iconPosition === 'left' ? 0 : 3 }" class="copy" @click="copy()"
+      ><CopyDocument
+    /></el-icon>
   </span>
 </template>
 
@@ -64,5 +66,4 @@ export default {
     color: var(--color-primary);
   }
 }
-
 </style>

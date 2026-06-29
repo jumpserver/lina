@@ -2,7 +2,7 @@
   <div v-show="isExpand">
     <div
       v-if="(filters && filters.length > 0) || (summary && summary.length > 0)"
-      :class="isExpand ? 'expand': 'shrink' "
+      :class="isExpand ? 'expand' : 'shrink'"
       class="quick-filter"
     >
       <div v-show="isExpand" class="quick-filter-wrap">
@@ -99,8 +99,8 @@ export default {
   },
   methods: {
     async generateCount() {
-      this.iFilters.forEach(category => {
-        category.options.forEach(option => {
+      this.iFilters.forEach((category) => {
+        category.options.forEach((option) => {
           if (option.hasCount) {
             option.count = null
             this.getCount(option)
@@ -108,7 +108,7 @@ export default {
         })
       })
 
-      this.iSummary.forEach(item => {
+      this.iSummary.forEach((item) => {
         item.count = null
         this.getCount(item)
       })
@@ -132,7 +132,7 @@ export default {
       if (!this.summary) {
         return []
       }
-      return this.summary.map(item => {
+      return this.summary.map((item) => {
         return {
           category: 'summary',
           label: item.title,
@@ -147,10 +147,10 @@ export default {
       if (!this.filters) {
         return []
       }
-      return this.filters.map(category => {
+      return this.filters.map((category) => {
         return {
           ...category,
-          options: category.options.map(option => {
+          options: category.options.map((option) => {
             return {
               category: category.label,
               ...option,
@@ -166,8 +166,8 @@ export default {
     },
     handleFilterClick(option) {
       if (!option.active) {
-        this.activeFilters = this.activeFilters.filter(item => {
-          const conflict = Object.keys(item.filter).some(key => {
+        this.activeFilters = this.activeFilters.filter((item) => {
+          const conflict = Object.keys(item.filter).some((key) => {
             return Object.keys(option.filter).includes(key)
           })
           if (conflict) {
@@ -177,7 +177,7 @@ export default {
         })
         this.activeFilters.push(option)
       } else {
-        this.activeFilters = this.activeFilters.filter(item => {
+        this.activeFilters = this.activeFilters.filter((item) => {
           return item.label !== option.label && item.category !== option.category
         })
       }
@@ -190,7 +190,7 @@ export default {
   }
 }
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .quick-filter {
   background: white;
   padding: 10px 10px 10px 20px;
@@ -199,7 +199,7 @@ export default {
   place-content: stretch flex-end;
   justify-content: center;
   align-content: stretch;
-  box-shadow: 0 1px 1px 0 rgba(54, 58, 80, .32);
+  box-shadow: 0 1px 1px 0 rgba(54, 58, 80, 0.32);
 
   &.shrink {
     background: inherit;
@@ -220,11 +220,11 @@ export default {
 
     .summary-block {
       .active {
-        ::v-deep .no-margins .num {
+        :deep(.no-margins .num) {
           color: var(--color-primary);
 
           &::after {
-            content: "\e720";
+            content: '\e720';
             font-family: element-icons !important;
             font-size: 13px;
             line-height: 1;
@@ -243,7 +243,7 @@ export default {
         font-weight: 600;
         text-transform: uppercase;
         font-size: 12px;
-        margin-bottom: .5rem;
+        margin-bottom: 0.5rem;
         line-height: 1.2;
         display: inline-block;
       }
@@ -261,7 +261,7 @@ export default {
         cursor: pointer;
 
         &::after {
-          content: "";
+          content: '';
           margin-left: 4px;
           margin-bottom: 2px;
           vertical-align: middle;
@@ -324,5 +324,4 @@ export default {
     }
   }
 }
-
 </style>

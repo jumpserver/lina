@@ -51,18 +51,19 @@ export default {
   },
   methods: {
     onChange(val) {
-      this.$axios.patch(this.patchUrl, this.patchData).then(res => {
-        this.formatterArgs.callback(this.row)
-        this.$message.success(this.$t('UpdateSuccessMsg'))
-      }).catch(err => {
-        this.value = !val
-        this.$message.error(this.$t('UpdateErrorMsg' + ' ' + err))
-      })
+      this.$axios
+        .patch(this.patchUrl, this.patchData)
+        .then((res) => {
+          this.formatterArgs.callback(this.row)
+          this.$message.success(this.$t('UpdateSuccessMsg'))
+        })
+        .catch((err) => {
+          this.value = !val
+          this.$message.error(this.$t('UpdateErrorMsg' + ' ' + err))
+        })
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

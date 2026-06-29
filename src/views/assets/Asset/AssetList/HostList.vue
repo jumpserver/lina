@@ -1,15 +1,12 @@
 <template>
   <div>
     <BaseList v-bind="config" />
-    <GatewayDialog
-      :cell="GatewayCell"
-      :port="GatewayPort"
-      :visible.sync="GatewayVisible"
-    />
+    <GatewayDialog v-model:visible="GatewayVisible" :cell="GatewayCell" :port="GatewayPort" />
   </div>
 </template>
 
 <script>
+import { getActionMeta } from '@/api/common'
 import BaseList from './components/BaseList'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
 import GatewayDialog from '@/components/Apps/GatewayTestDialog'
@@ -37,9 +34,8 @@ export default {
               title: this.$t('CloudSync'),
               icon: 'cloud-provider',
               has: () => vm.$hasPerm('xpack.view_account') && vm.$hasLicense(),
-              callback: () => this.$router.push(
-                { name: 'CloudAccountList', query: { category: 'host' } }
-              )
+              callback: () =>
+                this.$router.push({ name: 'CloudAccountList', query: { category: 'host' } })
             }
           ]
         },
@@ -65,7 +61,7 @@ export default {
                     callback: ({ row }) => {
                       if (row.platform.name.startsWith('Gateway')) {
                         this.GatewayVisible = true
-                        const port = row.protocols.find(item => item.name === 'ssh').port
+                        const port = row.protocols.find((item) => item.name === 'ssh').port
                         if (!port) {
                           return this.$message.error(this.$tc('BadRequestErrorMsg'))
                         } else {
@@ -73,12 +69,11 @@ export default {
                           this.GatewayCell = row.id
                         }
                       } else {
-                        this.$axios.post(
-                          `/api/v1/assets/assets/${row.id}/tasks/`,
-                          { action: 'test' }
-                        ).then(res => {
-                          openTaskPage(res['task'])
-                        })
+                        this.$axios
+                          .post(`/api/v1/assets/assets/${row.id}/tasks/`, { action: 'test' })
+                          .then((res) => {
+                            openTaskPage(res['task'])
+                          })
                       }
                     }
                   }
@@ -96,7 +91,7 @@ export default {
   methods: {
     async optionAndGenFields() {
       const data = await this.$store.dispatch('common/getUrlMeta', { url: this.config.url })
-      const remoteMeta = data.actions['GET'] || {}
+      const remoteMeta = getActionMeta(data, 'GET')
       const remoteMetaFields = remoteMeta['info']?.children || {}
       const fields = Object.keys(remoteMetaFields)
       const info = {}

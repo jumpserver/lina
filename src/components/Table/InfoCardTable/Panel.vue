@@ -4,25 +4,27 @@
       <div class="panel-title">
         <el-avatar :src="imageUrl" shape="square" />
         <div class="title-display">
-          <p class="name" :title="object.name">{{ object.name }}</p>
+          <span class="name">{{ object.name }}</span>
           <span class="comment">{{ object.provider.label }}</span>
         </div>
       </div>
       <div v-if="iActions.length !== 0" class="panel-actions" @click="handleClick($event)">
         <el-dropdown>
-          <el-button size="mini">
-            <i class="el-icon-more el-icon--right" />
+          <el-button size="small">
+            <el-icon class="el-icon--right"><More /></el-icon>
           </el-button>
-          <el-dropdown-menu default="dropdown">
-            <el-dropdown-item
-              v-for="action in iActions"
-              :key="action.name"
-              :disabled="action.disabled"
-              @click.native="action.callback(object)"
-            >
-              {{ action.name }}
-            </el-dropdown-item>
-          </el-dropdown-menu>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item
+                v-for="action in iActions"
+                :key="action.name"
+                :disabled="action.disabled"
+                @click="action.callback(object)"
+              >
+                {{ action.name }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
         </el-dropdown>
       </div>
     </div>
@@ -60,11 +62,11 @@ export default {
     },
     getImage: {
       type: Function,
-      default: obj => ''
+      default: (obj) => ''
     },
     getInfos: {
       type: Function,
-      default: obj => []
+      default: (obj) => []
     },
     handleUpdate: {
       type: Function,
@@ -101,10 +103,10 @@ export default {
     },
     iActions() {
       const mergedActions = new Map()
-      this.defaultActions.forEach(a => {
+      this.defaultActions.forEach((a) => {
         mergedActions.set(a.id, { ...a })
       })
-      this.actions.forEach(a => {
+      this.actions.forEach((a) => {
         mergedActions.set(a.id, { ...a })
       })
       return Array.from(mergedActions.values())
@@ -148,11 +150,14 @@ export default {
 <style lang="scss" scoped>
 div.info-panel {
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
+  min-height: 0;
+  height: auto !important;
   padding: 10px;
-  gap: unset;
+  gap: 10px;
+  overflow: visible;
   cursor: pointer;
-  height: initial !important;
 
   .panel-header {
     padding: 10px 20px;
@@ -169,23 +174,12 @@ div.info-panel {
 
       .title-display {
         display: flex;
-        flex-basis: 225px;
         flex-direction: column;
-        justify-content: center;
-        align-items: flex-start;
-        max-width: 225px;
-        min-width: 0;
-        overflow-x: hidden;
+        text-align: left;
 
         .name {
           font-size: 1.1em;
           color: #555555;
-          text-overflow: ellipsis;
-          overflow: hidden;
-          white-space: nowrap;
-          width: 100%;
-          margin: unset;
-          text-align: start;
         }
 
         .comment {
@@ -195,11 +189,8 @@ div.info-panel {
         }
       }
 
-      ::v-deep {
-        .el-avatar {
-          background: #fff;
-          flex-shrink: 0;
-        }
+      :deep(.el-avatar) {
+        background: #fff;
       }
     }
 
@@ -207,13 +198,11 @@ div.info-panel {
       display: flex;
       align-items: center;
 
-      ::v-deep {
-        button.el-button--mini {
-          padding: 5px 7px;
+      :deep(.el-button.el-button--small) {
+        padding: 5px 7px;
 
-          .el-icon--right {
-            margin-left: 0;
-          }
+        .el-icon--right {
+          margin-left: 0;
         }
       }
     }
@@ -221,6 +210,10 @@ div.info-panel {
 
   .panel-content {
     display: block;
+    flex: 1 1 auto;
+    min-height: 0;
+    height: auto !important;
+    overflow: visible;
     padding: 1px 25px 10px;
 
     .panel-image {

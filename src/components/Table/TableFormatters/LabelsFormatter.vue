@@ -1,14 +1,9 @@
 <template>
   <div class="label-container">
     <a class="label-formatter-col">
-      <span v-if="!iLabels || iLabels.length === 0" style="vertical-align: top;">
-        -
-      </span>
+      <span v-if="!iLabels || iLabels.length === 0" style="vertical-align: top"> - </span>
       <span v-else class="label-wrapper">
-        <span
-          v-for="label of iLabels"
-          :key="label.id"
-        >
+        <span v-for="label of iLabels" :key="label.id">
           <ILabel
             :el="formatterArgs.config"
             :label="label"
@@ -21,7 +16,7 @@
     </a>
     <a
       v-if="formatterArgs.showEditBtn"
-      :class="[{ 'disabled-link': this.$store.getters.currentOrgIsRoot },'edit-btn']"
+      :class="[{ 'disabled-link': $store.getters.currentOrgIsRoot }, 'edit-btn']"
       style="padding-left: 5px"
       @click="showDialog = true"
     >
@@ -29,8 +24,8 @@
     </a>
     <Dialog
       v-if="showDialog"
+      v-model:visible="showDialog"
       :title="$tc('BindLabel')"
-      :visible.sync="showDialog"
       class="tag-dialog"
       width="600px"
       @cancel="handleCancel"
@@ -38,14 +33,14 @@
     >
       <el-row class="tag-select">
         <el-col :span="12">
-          <Select2 v-model="keySelect2.value" v-bind="keySelect2" @change="handleKeyChanged" />
+          <Select2 v-bind="keySelect2" v-model="keySelect2.value" @change="handleKeyChanged" />
         </el-col>
         <el-col :span="12" style="padding-left: 5px">
           <Select2
+            v-bind="valueSelect2"
             v-model="valueSelect2.value"
             :disabled="!keySelect2.value"
             style="margin-left: 10px"
-            v-bind="valueSelect2"
             @change="handleAddLabel"
           />
         </el-col>
@@ -74,10 +69,10 @@
 </template>
 
 <script>
-import BaseFormatter from './base.vue'
-import Select2 from '@/components/Form/FormFields/Select2.vue'
 import Dialog from '@/components/Dialog'
+import Select2 from '@/components/Form/FormFields/Select2.vue'
 import ILabel from '@/components/Widgets/ILabel'
+import BaseFormatter from './base.vue'
 
 export default {
   name: 'LabelsFormatter',
@@ -153,7 +148,7 @@ export default {
       return this.formatterArgs.getLabelType(tag)
     },
     handleCloseTag(tag) {
-      this.iLabels = this.iLabels.filter(item => item.id !== tag.id)
+      this.iLabels = this.iLabels.filter((item) => item.id !== tag.id)
     },
     handleKeyChanged(val) {
       this.valueSelect2.url = `/api/v1/labels/labels/?name=${val}`
@@ -173,12 +168,12 @@ export default {
       }
 
       const tag = `${key}:${value}`
-      const include = this.iLabels.find(item => `${item.key}:${item.value}` === tag)
+      const include = this.iLabels.find((item) => `${item.key}:${item.value}` === tag)
       if (include) {
         return
       }
       const url = `/api/v1/labels/labels/?key=${key}&value=${value}`
-      this.$axios.get(url).then(res => {
+      this.$axios.get(url).then((res) => {
         if (res && res.length === 1) {
           this.iLabels.push(res[0])
         } else {
@@ -200,7 +195,7 @@ export default {
       }
       const path = new URL(this.url, location.origin).pathname
       const url = `${path}${this.row.id}/`
-      this.$axios.patch(url, { labels: this.iLabels }).then(res => {
+      this.$axios.patch(url, { labels: this.iLabels }).then((res) => {
         this.$message.success(this.$tc('UpdateSuccessMsg'))
         this.showDialog = false
       })
@@ -273,13 +268,13 @@ export default {
   }
 
   .tag-select {
-    ::v-deep .el-input__inner::placeholder {
+    :deep(.el-input__inner::placeholder) {
       font-size: 13px;
     }
   }
 }
 
-.input-button .el-button.el-button--mini {
+.input-button .el-button.el-button--small {
   padding: 5px;
   height: 28px;
   width: 28px;

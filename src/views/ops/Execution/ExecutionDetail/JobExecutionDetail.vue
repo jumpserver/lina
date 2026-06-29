@@ -1,11 +1,10 @@
 <template>
   <TwoCol>
-    <template>
-      <AutoDetailCard :excludes="excludes" :fields="detailFields" :object="object" :url="url" />
-    </template>
-    <template v-if="hasSummary" #right class="detail-right-quick-actions">
+    <AutoDetailCard :excludes="excludes" :fields="detailFields" :object="object" :url="url" />
+    <template v-if="hasSummary" #right>
       <IBox
         v-if="object.summary.ok"
+        class="detail-right-quick-actions"
         :title="`${$tc('SuccessAsset')} (${object.summary.ok.length})`"
         type="success"
       >
@@ -73,7 +72,7 @@
   </TwoCol>
 </template>
 
-<script type="text/jsx">
+<script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import IBox from '@/components/Common/IBox'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'

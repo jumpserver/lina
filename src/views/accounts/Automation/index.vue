@@ -1,6 +1,6 @@
 <template>
   <Page>
-    <CardTable ref="CardTable" v-bind="$data" />
+    <CardTable v-bind="$data" ref="CardTable" />
   </Page>
 </template>
 
@@ -75,11 +75,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .image {
+:deep(.image) {
   padding-right: 0;
 }
 
-::v-deep .el-tag {
+:deep(.el-tag) {
   margin: 0 3px 0 0;
 }
 </style>

@@ -33,9 +33,7 @@ export default {
         tlsFields = tlsFields.concat(platformFieldsMap[platform])
       }
       if (tlsFields.length > 2) {
-        const secureField = [
-          this.$t('Secure'), tlsFields, 2
-        ]
+        const secureField = [this.$t('Secure'), tlsFields, 2]
         baseFields.push(secureField)
       }
       return baseFields
@@ -100,5 +98,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

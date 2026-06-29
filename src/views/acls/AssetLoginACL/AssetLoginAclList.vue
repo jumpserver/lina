@@ -1,5 +1,9 @@
 <template>
-  <GenericListPage :header-actions="headerActions" :help-tip="helpMsg" :table-config="tableConfig" />
+  <GenericListPage
+    :header-actions="headerActions"
+    :help-tip="helpMsg"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script>
@@ -17,9 +21,7 @@ export default {
         columnsExclude: ['users', 'assets', 'accounts', 'rules'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: [
-            'name', 'priority', 'is_active', 'comment', 'actions'
-          ]
+          default: ['name', 'priority', 'is_active', 'comment', 'actions']
         }
       },
       updateRoute: 'AssetACLUpdate',

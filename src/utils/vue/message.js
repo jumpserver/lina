@@ -1,10 +1,10 @@
-import { Message as elMessage } from 'element-ui'
+import { ElMessage as elMessage } from 'element-plus'
 import { toSentenceCase } from '@/utils/common/index'
 
 let messageDom = null
 const DEFAULT_Z_INDEX = 20000
 
-const message = options => {
+const message = (options) => {
   if (messageDom) messageDom.close()
 
   if (typeof options === 'string') {
@@ -17,8 +17,8 @@ const message = options => {
 }
 
 const typeArray = ['success', 'error', 'warning', 'info']
-typeArray.forEach(type => {
-  message[type] = options => {
+typeArray.forEach((type) => {
+  message[type] = (options) => {
     if (typeof options === 'string') options = { message: options }
     options.type = type
     options.message = toSentenceCase(options.message)

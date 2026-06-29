@@ -1,6 +1,6 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm submit-method="patch" v-bind="config" />
+    <GenericCreateUpdateForm v-bind="config" submit-method="patch" />
   </IBox>
 </template>
 
@@ -34,7 +34,8 @@ export default {
               'SECURITY_MFA_BY_EMAIL',
               'SECURITY_MFA_AUTH_ENABLED_FOR_THIRD_PARTY',
               'SECURITY_MFA_VERIFY_TTL',
-              'OTP_ISSUER_NAME', 'OTP_VALID_WINDOW'
+              'OTP_ISSUER_NAME',
+              'OTP_VALID_WINDOW'
             ]
           ]
         ],
@@ -79,10 +80,7 @@ export default {
             helpText: this.$t('ThirdPartyMfaHelpText')
           },
           SECURITY_UNCOMMON_USERS_TTL: {
-            rules: [
-              rules.LengthCheck,
-              rules.Required
-            ]
+            rules: [rules.LengthCheck, rules.Required]
           }
         }
       }

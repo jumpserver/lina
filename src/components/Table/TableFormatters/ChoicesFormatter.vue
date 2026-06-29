@@ -1,7 +1,15 @@
 <template>
   <span>
-    <el-tooltip v-if="shown" :disabled="!formatterArgs.hasTips" :open-delay="500" effect="dark" placement="bottom">
-      <div slot="content" v-sanitize="tips" />
+    <el-tooltip
+      v-if="shown"
+      :disabled="!formatterArgs.hasTips"
+      :open-delay="500"
+      effect="dark"
+      placement="bottom"
+    >
+      <template #content>
+        <div v-sanitize="tips" />
+      </template>
       <span :class="classes">
         <i v-if="formatterArgs.showIcon && icon" :class="'fa ' + icon" />
         <span v-if="formatterArgs.showText">{{ text }}</span>
@@ -21,11 +29,11 @@ const formatterArgsDefault = {
     false: 'fa-times-circle'
   },
   classChoices: {
-    true: 'text-success',
+    true: 'text-primary',
     false: 'text-danger'
   },
   getKey({ row, cellValue }) {
-    return (cellValue && typeof cellValue === 'object') ? cellValue.value : cellValue
+    return cellValue && typeof cellValue === 'object' ? cellValue.value : cellValue
   },
   getText({ row, cellValue }) {
     const key = this.getKey({ row, cellValue })
@@ -68,24 +76,18 @@ export default {
   },
   computed: {
     key() {
-      const k = this.formatterArgs.getKey(
-        { row: this.row, cellValue: this.cellValue }
-      )
+      const k = this.formatterArgs.getKey({ row: this.row, cellValue: this.cellValue })
       return k
     },
     icon() {
-      const icon = this.formatterArgs.getIcon(
-        { row: this.row, cellValue: this.cellValue }
-      )
+      const icon = this.formatterArgs.getIcon({ row: this.row, cellValue: this.cellValue })
       return icon
     },
     classes() {
       return this.formatterArgs.classChoices[this.key]
     },
     text() {
-      return this.formatterArgs.getText(
-        { row: this.row, cellValue: this.cellValue }
-      )
+      return this.formatterArgs.getText({ row: this.row, cellValue: this.cellValue })
     },
     tips() {
       return this.formatterArgs.getTips({ cellValue: this.cellValue, row: this.row })
@@ -100,3 +102,5 @@ export default {
   methods: {}
 }
 </script>
+
+<style scoped></style>

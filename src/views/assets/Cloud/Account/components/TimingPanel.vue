@@ -1,15 +1,14 @@
 <template>
   <GenericCreateUpdateForm
+    v-bind="settings"
     ref="form"
     class="form"
-    v-bind="settings"
-    @performFinished="handlePerformFinished"
-    @submitSuccess="handleSubmitSuccess"
+    @perform-finished="handlePerformFinished"
+    @submit-success="handleSubmitSuccess"
   />
 </template>
 
 <script>
-
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { periodicMeta } from '@/components/const'
 
@@ -21,8 +20,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -30,9 +28,7 @@ export default {
       submitType: 'timing',
       settings: {
         url: `/api/v1/xpack/cloud/sync-instance-tasks/`,
-        fields: [
-          [this.$t('Timer'), ['is_periodic', 'interval', 'crontab']]
-        ],
+        fields: [[this.$t('Timer'), ['is_periodic', 'interval', 'crontab']]],
         fieldsMeta: {
           ...periodicMeta
         },
@@ -63,8 +59,7 @@ export default {
       }
     }
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     submitForm(form, btn) {
       form.validate((valid) => {
@@ -86,8 +81,8 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-::v-deep .el-form-item.form-buttons {
+<style lang="scss" scoped>
+:deep(.el-form-item.form-buttons) {
   text-align: right;
 }
 

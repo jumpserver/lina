@@ -1,23 +1,19 @@
 <template>
   <div>
     <div>
-      <el-button
-        size="mini"
-        type="primary"
-        @click="onOpenDialog"
-      >
+      <el-button size="small" type="primary" @click="onOpenDialog">
         {{ $tc('View') }}
       </el-button>
     </div>
     <Dialog
+      v-bind="$attrs"
       :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
       :title="title"
-      :visible.sync="visible"
-      v-bind="$attrs"
+      :visible="visible"
       width="40%"
-      v-on="$listeners"
+      @update:visible="$emit('update:visible', $event)"
     >
       <LeakPasswordList />
     </Dialog>
@@ -41,8 +37,8 @@ export default {
     },
     title: {
       type: String,
-      default: function() {
-        return this.$t('LeakPasswordList')
+      default: function () {
+        return 'LeakPasswordList'
       }
     },
     url: {
@@ -72,5 +68,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

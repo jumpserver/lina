@@ -1,5 +1,9 @@
 <template>
-  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="TaskDetail" v-bind="config" v-on="$listeners">
+  <GenericDetailPage
+    v-bind="config"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="TaskDetail"
+  >
     <keep-alive>
       <component :is="config.activeMenu" :object="TaskDetail" />
     </keep-alive>
@@ -7,10 +11,10 @@
 </template>
 
 <script>
+import AssetJsonTab from '@/components/Apps/ManyJsonTabs/AssetJsonTab.vue'
+import UserJsonTab from '@/components/Apps/ManyJsonTabs/UserJsonTab.vue'
 import { GenericDetailPage } from '@/layout/components'
 import Detail from './Detail.vue'
-import UserJsonTab from '@/components/Apps/ManyJsonTabs/UserJsonTab.vue'
-import AssetJsonTab from '@/components/Apps/ManyJsonTabs/AssetJsonTab.vue'
 
 export default {
   components: {
@@ -54,6 +58,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -19,8 +19,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -36,8 +35,14 @@ export default {
         tableConfig: {
           url: `/api/v1/users/users/?${key}=${value}&oid=${org_id}`,
           columns: [
-            'name', 'username', 'email', 'groups', 'system_roles',
-            'org_roles', 'source', 'is_valid'
+            'name',
+            'username',
+            'email',
+            'groups',
+            'system_roles',
+            'org_roles',
+            'source',
+            'is_valid'
           ],
           columnsShow: {
             min: ['name', 'username'],
@@ -59,7 +64,7 @@ export default {
             system_roles: {
               label: this.$t('SystemRoles'),
               formatter: (row) => {
-                return row['system_roles'].map(item => item['display_name']).join(', ') || '-'
+                return row['system_roles'].map((item) => item['display_name']).join(', ') || '-'
               },
               filters: [],
               columnKey: 'system_roles'
@@ -67,7 +72,7 @@ export default {
             org_roles: {
               label: this.$t('OrgRoles'),
               formatter: (row) => {
-                return row['org_roles'].map(item => item['display_name']).join(', ') || '-'
+                return row['org_roles'].map((item) => item['display_name']).join(', ') || '-'
               },
               filters: [],
               columnKey: 'org_roles',

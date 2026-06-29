@@ -1,15 +1,9 @@
 <template>
   <TwoCol>
-    <template>
-      <DrawerListTable
-        ref="listTable"
-        :header-actions="headerActions"
-        :table-config="tableConfig"
-      />
-    </template>
+    <DrawerListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
     <template #right>
-      <AssetRelationCard type="primary" v-bind="assetRelationConfig" />
-      <RelationCard style="margin-top: 15px" type="info" v-bind="nodeRelationConfig" />
+      <AssetRelationCard v-bind="assetRelationConfig" type="primary" />
+      <RelationCard v-bind="nodeRelationConfig" style="margin-top: 15px" type="info" />
     </template>
   </TwoCol>
 </template>
@@ -24,7 +18,10 @@ import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 export default {
   name: 'AccountChangeSecretAsset',
   components: {
-    TwoCol, DrawerListTable, RelationCard, AssetRelationCard
+    TwoCol,
+    DrawerListTable,
+    RelationCard,
+    AssetRelationCard
   },
   props: {
     object: {
@@ -37,9 +34,7 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/accounts/change-secret/${this.object.id}/assets/`,
-        columns: [
-          'name', 'address', 'delete_action'
-        ],
+        columns: ['name', 'address', 'delete_action'],
         columnsMeta: {
           name: {
             formatter: DetailFormatter,
@@ -55,16 +50,18 @@ export default {
             align: 'center',
             objects: this.object.assets,
             formatter: DeleteActionFormatter,
-            onDelete: function(col, row, cellValue, reload) {
-              this.$axios.patch(
-                `/api/v1/accounts/change-secret/${this.object.id}/asset/remove/`,
-                { assets: [row.id] }
-              ).then(res => {
-                this.$message.success(this.$tc('DeleteSuccessMsg'))
-                this.$store.commit('common/reload')
-              }).catch(error => {
-                this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
-              })
+            onDelete: function (col, row, cellValue, reload) {
+              this.$axios
+                .patch(`/api/v1/accounts/change-secret/${this.object.id}/asset/remove/`, {
+                  assets: [row.id]
+                })
+                .then((res) => {
+                  this.$message.success(this.$tc('DeleteSuccessMsg'))
+                  this.$store.commit('common/reload')
+                })
+                .catch((error) => {
+                  this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
+                })
             }.bind(this)
           },
           actions: {
@@ -93,7 +90,7 @@ export default {
         title: this.$t('AddAsset'),
         disabled: this.$store.getters.currentOrgIsRoot,
         canSelect: (row, index) => {
-          return (this.object.assets?.map(i => i.id) || []).indexOf(row.id) === -1
+          return (this.object.assets?.map((i) => i.id) || []).indexOf(row.id) === -1
         },
         performAdd: (items, that) => {
           const relationUrl = `/api/v1/accounts/change-secret/${this.object.id}/asset/add/`
@@ -121,8 +118,8 @@ export default {
         hasObjectsId: this.object.nodes,
         performAdd: (items, that) => {
           const relationUrl = `/api/v1/accounts/change-secret/${this.object.id}/nodes/?action=add`
-          const nodes = items.map(v => v.value)
-          const iHasObjects = that.iHasObjects.map(v => v.value)
+          const nodes = items.map((v) => v.value)
+          const iHasObjects = that.iHasObjects.map((v) => v.value)
           const data = {
             nodes: Array.from(new Set([...iHasObjects, ...nodes]))
           }
@@ -158,6 +155,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

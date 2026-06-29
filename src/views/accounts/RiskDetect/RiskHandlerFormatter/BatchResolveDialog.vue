@@ -1,5 +1,12 @@
 <template>
-  <Dialog :destroy-on-close="true" :show-buttons="false" :title="$tc('ResolveSelected')" :visible.sync="iVisible">
+  <Dialog
+    :destroy-on-close="true"
+    :show-buttons="false"
+    :visible="visible"
+    :title="$tc('ResolveSelected')"
+    width="960px"
+    @update:visible="$emit('update:visible', $event)"
+  >
     <div>
       <el-form class="el-form">
         <el-form-item class="risk-select" prop="selected">
@@ -20,15 +27,10 @@
           :selected-rows="selectedRows"
           :value="1"
           class="risk-handler"
-          @processDone="handleProcessDone"
+          @process-done="handleProcessDone"
         />
       </el-form>
-      <DataTable
-        ref="table"
-        :config="tableConfig"
-        v-on="$listeners"
-        @selection-change="handleSelectionChange"
-      />
+      <DataTable ref="table" :config="tableConfig" @selection-change="handleSelectionChange" />
     </div>
   </Dialog>
 </template>
@@ -92,14 +94,6 @@ export default {
     }
   },
   computed: {
-    iVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$emit('update:visible', val)
-      }
-    },
     riskTypes() {
       const types = {}
       for (const item of this.unconfirmedRisks) {
@@ -107,10 +101,10 @@ export default {
           types[item.risk.value] = item.risk.label
         }
       }
-      return Object.keys(types).map(key => ({ value: key, label: types[key] }))
+      return Object.keys(types).map((key) => ({ value: key, label: types[key] }))
     },
     unconfirmedRisks() {
-      return this.risks.filter(item => item.status.value === '0')
+      return this.risks.filter((item) => item.status.value === '0')
     },
     dataTable() {
       return this.$refs.table.$refs.table
@@ -125,9 +119,13 @@ export default {
   watch: {
     riskSelected(val) {
       if (val) {
-        this.tableConfig.totalData = this.unconfirmedRisks.filter(item => item.risk.value === this.riskSelected)
+        this.tableConfig.totalData = this.unconfirmedRisks.filter(
+          (item) => item.risk.value === this.riskSelected
+        )
       } else {
-        this.tableConfig.totalData = this.unconfirmedRisks.filter(item => item.status.value === '0')
+        this.tableConfig.totalData = this.unconfirmedRisks.filter(
+          (item) => item.status.value === '0'
+        )
       }
       this.fakeRow.risk = {
         value: this.riskSelected
@@ -158,16 +156,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .el-form {
-  ::v-deep .el-form-item {
+  :deep(.el-form-item) {
     margin-bottom: 5px;
   }
 
   .risk-select {
     display: inline-block;
 
-    ::v-deep .el-form-item__content {
+    :deep(.el-form-item__content) {
       width: 100%;
     }
   }
@@ -175,11 +172,9 @@ export default {
   .risk-handler {
     margin-left: 10px;
 
-    ::v-deep button {
+    :deep(button) {
       padding: 8px;
     }
   }
-
 }
-
 </style>

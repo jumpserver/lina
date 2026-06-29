@@ -1,5 +1,5 @@
 <template>
-  <Page :help-tip="helpMsg" v-bind="$attrs">
+  <Page v-bind="$attrs" :help-tip="helpMsg">
     <AssetTreeTable
       ref="AssetTreeTable"
       :header-actions="headerActions"
@@ -7,22 +7,21 @@
       :tree-setting="treeSetting"
       :quick-filters="quickFilter"
       :create-drawer="createDrawer"
-      @relation-change="handleRelationChange"
     />
     <PermBulkUpdateDialog
-      :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
+      v-model:visible="updateSelectedDialogSetting.visible"
       @update="handlePermBulkUpdate"
     />
   </Page>
 </template>
 
 <script>
-import Page from '@/layout/components/Page'
 import AssetTreeTable from '@/components/Apps/AssetTreeTable'
-import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
+import Page from '@/layout/components/Page'
 import { mapGetters } from 'vuex'
 import { AssetPermissionListPageSearchConfigOptions, AssetPermissionTableMeta } from '../const.js'
+import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
 
 export default {
   components: {
@@ -89,15 +88,34 @@ export default {
         hasTree: true,
         columnsExtra: ['action'],
         columns: [
-          'name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount',
-          'accounts', 'labels', 'is_valid', 'is_expired', 'from_ticket', 'is_active', 'actions',
-          'date_created', 'date_start', 'date_expired', 'created_by'
+          'name',
+          'users_amount',
+          'user_groups_amount',
+          'assets_amount',
+          'nodes_amount',
+          'accounts',
+          'labels',
+          'is_valid',
+          'is_expired',
+          'from_ticket',
+          'is_active',
+          'actions',
+          'date_created',
+          'date_start',
+          'date_expired',
+          'created_by'
         ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'users_amount', 'user_groups_amount', 'assets_amount',
-            'nodes_amount', 'accounts', 'is_valid', 'actions'
+            'name',
+            'users_amount',
+            'user_groups_amount',
+            'assets_amount',
+            'nodes_amount',
+            'accounts',
+            'is_valid',
+            'actions'
           ]
         },
         columnsMeta: {
@@ -130,25 +148,34 @@ export default {
       updateSelectedDialogSetting: {
         visible: false,
         selectedRows: []
-      }
+      },
+      activatedReloadTimer: null
     }
   },
   computed: {
     ...mapGetters(['currentOrgIsRoot'])
   },
   activated() {
-    setTimeout(() => {
-      this.$refs.AssetTreeTable.$refs.TreeList.reloadTable()
+    clearTimeout(this.activatedReloadTimer)
+    this.activatedReloadTimer = setTimeout(() => {
+      this.reloadAssetTreeTable()
     }, 500)
   },
+  deactivated() {
+    clearTimeout(this.activatedReloadTimer)
+    this.activatedReloadTimer = null
+  },
+  beforeUnmount() {
+    clearTimeout(this.activatedReloadTimer)
+    this.activatedReloadTimer = null
+  },
   methods: {
-    handleRelationChange() {
-      this.$log.debug('Asset permission relation changed, reloading table')
-      this.$refs.AssetTreeTable.$refs.TreeList.$refs?.ListTable?.reloadTable()
+    reloadAssetTreeTable() {
+      this.$refs.AssetTreeTable?.reloadTable?.()
     },
     handlePermBulkUpdate() {
       this.updateSelectedDialogSetting.visible = false
-      this.$refs.AssetTreeTable.$refs.TreeList.$refs?.ListTable?.reloadTable()
+      this.reloadAssetTreeTable()
     }
   }
 }

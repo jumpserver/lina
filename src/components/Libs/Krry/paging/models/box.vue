@@ -8,9 +8,7 @@
       >
         {{ title }}
       </el-checkbox>
-      <span class="check-number">
-        {{ checkedData.length }}/{{ districtListMock.length }}
-      </span>
+      <span class="check-number"> {{ checkedData.length }}/{{ districtListMock.length }} </span>
     </div>
     <div class="el-transfer-panel__body">
       <div
@@ -25,12 +23,12 @@
           class="el-input__inner"
           type="text"
           @change="handleKeyword"
-        >
+        />
         <span class="el-input__prefix" style="left: 0">
-          <i class="el-input__icon el-icon-search" />
+          <el-icon class="el-input__icon"><Search /></el-icon>
         </span>
         <span v-if="searchWord && showClearBtn" class="clear-input">
-          <i class="el-icon-circle-close" @click="clearInp" />
+          <el-icon @click="clearInp"><CircleClose /></el-icon>
         </span>
       </div>
       <el-checkbox-group
@@ -50,13 +48,13 @@
           <span v-sanitize="isHighlight ? filterHighlight(item.label) : item.label" />
         </el-checkbox>
       </el-checkbox-group>
-      <p v-else class="no-data">{{ this.$t('NoData') }}</p>
+      <p v-else class="no-data">{{ $t('NoData') }}</p>
     </div>
     <div class="vip-footer">
-      <el-button :disabled="disabledPre" class="v-page" plain small @click="prev">
+      <el-button :disabled="disabledPre" class="v-page" plain size="small" @click="prev">
         {{ pageTexts[0] || defaultPrev }}
       </el-button>
-      <el-button :disabled="disabledNex" class="v-page" plain small @click="next">
+      <el-button :disabled="disabledNex" class="v-page" plain size="small" @click="next">
         {{ pageTexts[1] || defaultNext }}
       </el-button>
     </div>
@@ -64,6 +62,8 @@
 </template>
 
 <script>
+import i18n from '@/i18n/i18n'
+
 export default {
   components: {},
   props: {
@@ -131,8 +131,8 @@ export default {
       asyncSearch: false, // 要执行异步搜索的标记
       asyncPageIndex: 1, // 异步分页的 pageIndex
       asyncSearchPageIndex: 1, // 异步搜索的 pageIndex,
-      defaultPrev: '< ' + this.$tc('PagePrev'),
-      defaultNext: this.$tc('PageNext') + ' >'
+      defaultPrev: '< ' + (i18n?.global?.tc?.('PagePrev') || 'Prev'),
+      defaultNext: (i18n?.global?.tc?.('PageNext') || 'Next') + ' >'
     }
   },
   watch: {
@@ -169,11 +169,7 @@ export default {
     handleKeyword() {
       this.asyncSearchPageIndex = 1
       this.asyncSearchFlag &&
-      this.$emit(
-        'get-data-by-keyword',
-        this.searchWord,
-        this.asyncSearchPageIndex
-      )
+        this.$emit('get-data-by-keyword', this.searchWord, this.asyncSearchPageIndex)
     },
     // 分页数据
     initData() {
@@ -185,9 +181,7 @@ export default {
     pageData() {
       this.checkedData = []
       if (this.total > 1 && this.pageIndex < this.total - 1) {
-        this.pageIndex === 0
-          ? (this.disabledPre = true)
-          : (this.disabledPre = false)
+        this.pageIndex === 0 ? (this.disabledPre = true) : (this.disabledPre = false)
         this.disabledNex = false
         this.districtListMock = this.dataShowList.slice(
           this.pageIndex * this.pageSize,
@@ -196,10 +190,7 @@ export default {
       } else {
         this.total > 1 ? (this.disabledPre = false) : (this.disabledPre = true)
         this.disabledNex = true
-        this.districtListMock = this.dataShowList.slice(
-          this.pageIndex * this.pageSize,
-          this.len
-        )
+        this.districtListMock = this.dataShowList.slice(this.pageIndex * this.pageSize, this.len)
       }
     },
     // 异步获取的数据，检查分页按钮可用性
@@ -222,14 +213,11 @@ export default {
         this.disabledPre = true
         this.asyncSearchFlag && this.asyncSearch
           ? this.$emit(
-            'get-data-by-keyword',
-            this.searchWord,
-            this.asyncSearchPageIndex <= 1 ? 1 : --this.asyncSearchPageIndex
-          )
-          : this.$emit(
-            'get-data',
-            this.asyncPageIndex <= 1 ? 1 : --this.asyncPageIndex
-          )
+              'get-data-by-keyword',
+              this.searchWord,
+              this.asyncSearchPageIndex <= 1 ? 1 : --this.asyncSearchPageIndex
+            )
+          : this.$emit('get-data', this.asyncPageIndex <= 1 ? 1 : --this.asyncPageIndex)
       } else {
         this.pageIndex > 0 && --this.pageIndex
         this.pageData()
@@ -241,11 +229,7 @@ export default {
         // 异步获取数据
         this.disabledNex = true
         this.asyncSearchFlag && this.asyncSearch
-          ? this.$emit(
-            'get-data-by-keyword',
-            this.searchWord,
-            ++this.asyncSearchPageIndex
-          )
+          ? this.$emit('get-data-by-keyword', this.searchWord, ++this.asyncSearchPageIndex)
           : this.$emit('get-data', ++this.asyncPageIndex)
       } else {
         this.pageIndex <= this.total - 1 && ++this.pageIndex
@@ -256,14 +240,15 @@ export default {
     handleCheckedChange(value) {
       const checkedCount = value.length
       this.checkAll = checkedCount === this.districtListMock.length
-      this.isIndeterminate =
-        checkedCount > 0 && checkedCount < this.districtListMock.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.districtListMock.length
       // 子传父
       this.$emit('check-district', value)
     },
     // 全选
     handleCheckAllChange(val) {
-      this.checkedData = val ? this.districtListMock.filter(val => !val.disabled).map((val) => val) : []
+      this.checkedData = val
+        ? this.districtListMock.filter((val) => !val.disabled).map((val) => val)
+        : []
       this.isIndeterminate = false
       // 子传父
       this.$emit('check-district', this.checkedData)
@@ -276,7 +261,10 @@ export default {
       label = label && label.trim()
       if (filterWord && label) {
         const reg = new RegExp(filterWord)
-        return label.replace(reg, `<span style="color: ${this.highlightColor}">${filterWord}</span>`)
+        return label.replace(
+          reg,
+          `<span style="color: ${this.highlightColor}">${filterWord}</span>`
+        )
       } else {
         return label
       }
@@ -286,7 +274,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .district-panel {
   width: 298px;
 
@@ -294,7 +281,7 @@ export default {
     .el-checkbox {
       display: inline-block;
 
-      ::v-deep .el-checkbox__label {
+      :deep(.el-checkbox__label) {
         font-size: 14px;
       }
     }
@@ -355,12 +342,12 @@ export default {
       line-height: 28px;
       height: 28px;
 
-      ::v-deep .el-checkbox__label {
+      :deep(.el-checkbox__label) {
         font-weight: 400;
         line-height: 28px;
       }
 
-      ::v-deep .el-checkbox__input {
+      :deep(.el-checkbox__input) {
         top: 7px;
       }
     }

@@ -1,6 +1,11 @@
 <template>
-  <div v-if="isExternal" :style="styleExternalIcon" class="svg-external-icon svg-icon" v-on="$listeners" />
-  <svg v-else :class="svgClass" aria-hidden="true" v-on="$listeners">
+  <div
+    v-bind="$attrs"
+    v-if="isExternal"
+    :style="styleExternalIcon"
+    class="svg-external-icon svg-icon"
+  />
+  <svg v-bind="$attrs" v-else :class="svgClass" aria-hidden="true">
     <use :href="iconName" />
   </svg>
 </template>
@@ -56,10 +61,10 @@ export default {
 
 .svg-external-icon {
   background-color: currentColor;
-  mask-size: cover!important;
+  mask-size: cover !important;
   display: inline-block;
 }
-::v-deep path {
+:deep(path) {
   fill: inherit !important;
 }
 </style>

@@ -39,11 +39,8 @@ export default {
       return classChoices[this.cellValue]
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

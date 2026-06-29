@@ -1,12 +1,7 @@
 <template>
   <span>
-    <el-radio-group
-      v-model="select"
-      class="switch"
-      size="mini"
-      @change="onChange"
-    >
-      <el-radio-button v-for="i in iOptions" :key="i.value" :label="i.value">
+    <el-radio-group v-model="select" class="switch" size="small" @change="onChange">
+      <el-radio-button v-for="i in iOptions" :key="i.value" :value="i.value">
         {{ i.label }}
       </el-radio-button>
     </el-radio-group>
@@ -83,7 +78,7 @@ $origin-color: #ffffff;
 .switch {
   font-weight: 400;
 
-  ::v-deep .el-radio-button {
+  :deep(.el-radio-button) {
     &.is-active {
       .el-radio-button__inner {
         border-color: var(--color-primary);
@@ -93,12 +88,17 @@ $origin-color: #ffffff;
     }
   }
 
-  ::v-deep .el-radio-button {
+  :deep(.el-radio-button) {
     .el-radio-button__inner {
       color: var(--color-text-primary);
       background: $origin-color;
       border-radius: 0;
     }
+  }
+
+  :deep(.el-radio-button__inner) {
+    padding: 7px 15px;
+    font-size: 12px;
   }
 }
 </style>

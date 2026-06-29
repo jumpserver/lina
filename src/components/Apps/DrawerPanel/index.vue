@@ -1,10 +1,16 @@
 <template>
-  <div ref="drawer" :class="{show: show}" class="drawer">
-    <div v-if="modal" :style="{'background-color': modal ? 'rgba(0, 0, 0, .3)' : 'transparent'}" class="modal" />
-    <div ref="panel" :style="{width: width, height: height }" class="drawer-panel">
+  <div ref="drawer" :class="{ show: show }" class="drawer">
+    <div
+      v-if="modal"
+      :style="{ 'background-color': modal ? 'rgba(0, 0, 0, .3)' : 'transparent' }"
+      class="modal"
+    />
+    <div ref="panel" :style="{ width: width, height: height }" class="drawer-panel">
       <div v-show="!show && !defaultShowPanel" ref="dragBox" class="handle-button">
-        <i v-if="icon.startsWith('fa') || icon.startsWith('el')" :class="show ? 'el-icon-close': icon" />
-        <img v-else :src="icon" alt="">
+        <i v-if="currentIcon.startsWith('fa')" :class="currentIcon" />
+        <el-icon v-else-if="elIconComponent"><component :is="elIconComponent" /></el-icon>
+        <i v-else-if="currentIcon.startsWith('el')" :class="currentIcon" />
+        <img v-else :src="icon" alt="" />
       </div>
       <div class="drawer-panel-item">
         <slot :drawer-panel-visible="show" />
@@ -13,6 +19,8 @@
   </div>
 </template>
 <script>
+import { legacyIconComponents } from '@/icons/legacy-icon-map'
+import _ from 'lodash'
 
 export default {
   name: 'DrawerPanel',
@@ -52,6 +60,14 @@ export default {
       clientOffset: {}
     }
   },
+  computed: {
+    currentIcon() {
+      return this.show ? 'el-icon-close' : this.icon
+    },
+    elIconComponent() {
+      return legacyIconComponents[this.currentIcon] || null
+    }
+  },
   watch: {
     show(value) {
       if (value && !this.clickNotClose) {
@@ -74,7 +90,7 @@ export default {
     this.init()
     this.insertToBody()
   },
-  beforeDestroy() {
+  beforeUnmount() {
     const element = this.$refs.drawer
     element.remove()
     // window.removeEventListener('click', this.closeSidebar)
@@ -95,7 +111,7 @@ export default {
       clientOffset.clientX = event.clientX
       clientOffset.clientY = event.clientY
 
-      const handleOnMouseMove = _.debounce(function(event) {
+      const handleOnMouseMove = _.debounce(function (event) {
         const diffY = rect.top - parentRect.top
         const maxY = window.innerHeight - parentRect.height
         let parentY = event.clientY - diffY
@@ -114,7 +130,7 @@ export default {
       })
 
       document.onmousemove = handleOnMouseMove
-      document.onmouseup = function() {
+      document.onmouseup = function () {
         document.removeEventListener('mousemove', handleOnMouseMove)
         setTimeout(() => {
           document.onmousemove = null
@@ -126,8 +142,10 @@ export default {
       const clientOffset = this.clientOffset
       const clientX = event.clientX
       const clientY = event.clientY
-      if (this.isDifferenceWithinThreshold(clientX, clientOffset.clientX) &&
-        this.isDifferenceWithinThreshold(clientY, clientOffset.clientY)) {
+      if (
+        this.isDifferenceWithinThreshold(clientX, clientOffset.clientX) &&
+        this.isDifferenceWithinThreshold(clientY, clientOffset.clientY)
+      ) {
         this.show = !this.show
       }
     },
@@ -142,8 +160,7 @@ export default {
       const difference = Math.abs(num1 - num2)
       return difference <= threshold
     },
-    addEventClick() {
-    },
+    addEventClick() {},
     insertToBody() {
       const element = this.$refs.drawer
       const body = document.querySelector('body')
@@ -159,8 +176,8 @@ export default {
   top: 0;
   left: 0;
   opacity: 0;
-  transition: opacity .3s cubic-bezier(.7, .3, .1, 1);
-  background: rgba(0, 0, 0, .3);
+  transition: opacity 0.3s cubic-bezier(0.7, 0.3, 0.1, 1);
+  background: rgba(0, 0, 0, 0.3);
   z-index: -1;
 }
 
@@ -171,10 +188,10 @@ export default {
   width: 100%;
   min-width: 260px;
   user-select: none;
-  transition: transform .25s cubic-bezier(.7, .3, .1, 1);
+  transition: transform 0.25s cubic-bezier(0.7, 0.3, 0.1, 1);
   box-shadow: 0 0 8px 4px #00000014;
   transform: translate(100%);
-  background: #FFFFFF;
+  background: #ffffff;
   z-index: 1200;
 }
 
@@ -188,7 +205,7 @@ export default {
 }
 
 .show {
-  transition: all .3s cubic-bezier(.7, .3, .1, 1);
+  transition: all 0.3s cubic-bezier(0.7, 0.3, 0.1, 1);
 }
 
 .show .modal {
@@ -216,7 +233,7 @@ export default {
   z-index: 0;
   pointer-events: auto;
   color: #fff;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   opacity: 0.9;
   box-shadow: 0 0 8px 4px #00000014;
   cursor: pointer;

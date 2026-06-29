@@ -10,11 +10,11 @@ import _has from 'lodash/has'
 export default function getEnableWhenStatus(enableWhen, value) {
   if (!enableWhen) return true
   // 处理一个与条件
-  const handleCondition = condition => {
+  const handleCondition = (condition) => {
     // 简单字符串(ID), 只要有值即为true
     if (typeof condition === 'string') return _has(value, condition)
     // 简单对象判断: 是否所有依赖条件都通过
-    return Object.keys(condition).every(path => {
+    return Object.keys(condition).every((path) => {
       const v = _get(value, path)
       return v !== undefined && v === condition[path]
     })

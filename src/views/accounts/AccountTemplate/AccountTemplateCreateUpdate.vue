@@ -1,8 +1,5 @@
 <template>
-  <GenericCreateUpdatePage
-    v-bind="$data"
-    @getObjectDone="getObjectDone"
-  />
+  <GenericCreateUpdatePage v-bind="$data" @get-object-done="getObjectDone" />
 </template>
 
 <script>
@@ -27,7 +24,7 @@ export default {
     return {
       initial: {
         secret_type: 'password',
-        push_params: { }
+        push_params: {}
       },
       url: '/api/v1/accounts/account-templates/',
       hasDetailInMsg: false,
@@ -39,7 +36,7 @@ export default {
           el: {
             icon: 'fa fa-external-link',
             type: 'primary',
-            size: 'mini'
+            size: 'small'
           },
           component: 'el-button',
           on: {

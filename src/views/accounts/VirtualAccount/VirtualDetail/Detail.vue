@@ -1,6 +1,6 @@
 <template>
   <TwoCol>
-    <AutoDetailCard :object="object" v-bind="detail" />
+    <AutoDetailCard v-bind="detail" :object="object" />
   </TwoCol>
 </template>
 
@@ -17,8 +17,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {

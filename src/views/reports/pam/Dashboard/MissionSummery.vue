@@ -6,7 +6,7 @@
 
     <div class="chart-content">
       <!-- eslint-disable-next-line -->
-      <Echart ref="chartRef" :options="chartOption" :autoresize="true"/>
+      <Echart ref="chartRef" :options="chartOption" :autoresize="true" />
     </div>
   </div>
 </template>
@@ -44,7 +44,7 @@ export default {
       return {
         tooltip: {
           trigger: 'item',
-          formatter: params => {
+          formatter: (params) => {
             return `${params.name}: ${params.value} (${params.percent}%)`
           }
         },
@@ -123,7 +123,7 @@ export default {
     // this.updateChart()
     // window.addEventListener('resize', this.resizeChart)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     // if (this.chart) {
     //   this.chart.dispose()
     //   this.chart = null
@@ -181,7 +181,7 @@ export default {
     align-items: center;
     justify-content: center;
 
-    ::v-deep .echarts {
+    :deep(.echarts) {
       height: 14.25rem;
     }
   }

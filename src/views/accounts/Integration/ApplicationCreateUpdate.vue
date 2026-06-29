@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
 import { UploadField } from '@/components'
 import { JSONManyToManySelect } from '@/components/Form/FormFields'
+import { GenericCreateUpdatePage } from '@/layout/components'
 
 export default {
   name: 'IntegrationApplicationCreateUpdate',
@@ -41,7 +41,10 @@ export default {
             attrs: [
               { name: 'name', label: vm.$t('Name'), inTable: true },
               {
-                name: 'asset', label: vm.$t('Asset'), type: 'm2m', inTable: true,
+                name: 'asset',
+                label: vm.$t('Asset'),
+                type: 'm2m',
+                inTable: true,
                 el: {
                   url: '/api/v1/assets/assets/?fields_size=mini'
                 },

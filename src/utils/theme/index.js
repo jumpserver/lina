@@ -19,7 +19,9 @@ export function changeElementColor(themeColors) {
       const blendColor = mix('ffffff', value.replace(/#/g, ''), 35)
       const darken = mix('000000', value.replace(/#/g, ''), 10)
       const tooLightColor = mix('ffffff', value.replace(/#/g, ''), 90)
-      colorsCssText = colorsCssText + `
+      colorsCssText =
+        colorsCssText +
+        `
         .el-button--${key}{
            border-color: var(--color-border);
         }
@@ -68,17 +70,12 @@ export function changeElementColor(themeColors) {
 export function changeThemeColors(themeColors) {
   return new Promise((resolve) => {
     if (!originalStyle) {
-      axios.all([
-        axios.get('/ui/theme/element-ui.css'),
-        axios.get('/ui/theme/element-extra.css')
-      ]).then(
-        axios.spread((file, extraFile) => {
-          const fileData = file.data
-          const extraFileData = extraFile.data.replace(/[\r\n]/g, '')
-          originalStyle = replaceStyleColors(fileData + extraFileData)
-          resolve()
-        })
-      )
+      // Element Plus 不再需要 element-ui.css，只加载 element-extra.css
+      axios.get('/ui/theme/element-extra.css').then((extraFile) => {
+        const extraFileData = extraFile.data.replace(/[\r\n]/g, '')
+        originalStyle = replaceStyleColors(extraFileData)
+        resolve()
+      })
     } else {
       resolve()
     }

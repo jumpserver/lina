@@ -31,10 +31,7 @@ export default {
         columnsExclude: ['rules', 'users'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: [
-            'name', 'priority', 'is_active',
-            'action', 'actions'
-          ]
+          default: ['name', 'priority', 'is_active', 'action', 'actions']
         },
         columnsMeta: {
           name: {
@@ -76,4 +73,3 @@ export default {
   }
 }
 </script>
-
