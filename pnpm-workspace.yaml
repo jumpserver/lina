@@ -1,5 +1,0 @@
-allowBuilds:
-  '@parcel/watcher': true
-  core-js: true
-  deasync: true
-  esbuild: true

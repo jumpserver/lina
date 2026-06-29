@@ -6,7 +6,7 @@ on:
       - 'pr*'
     paths:
       - 'package.json'
-      - 'pnpm-lock.yaml'
+      - 'yarn.lock'
       - 'Dockerfile-base'
   workflow_dispatch:
     inputs:

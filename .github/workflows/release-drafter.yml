@@ -32,17 +32,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-          cache: 'pnpm'
-      - name: Enable pnpm
+          cache: 'yarn'
+      - name: Enable yarn
         run: |
           corepack enable
-          corepack prepare pnpm@10.33.0 --activate
+          corepack prepare yarn@4.13.0 --activate
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: yarn install --immutable
       - name: Build web
         run: |
           sed -i "s@version-dev@${{ steps.get_version.outputs.TAG }}@g" src/layout/components/NavHeader/About.vue
-          pnpm build
+          yarn build
       - name: Create Upload Assets
         run: |
           rm -rf build/*

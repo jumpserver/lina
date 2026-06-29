@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# 该build基于 Node 24 + pnpm
+# 该build基于 Node 24 + yarn
 utils_dir=$(pwd)
 project_dir=$(dirname "$utils_dir")
 release_dir=${project_dir}/release
@@ -18,7 +18,7 @@ function change_version() {
 function install_deps() {
   # 下载依赖模块并构建
   cd "${project_dir}" || exit 3
-  pnpm install --frozen-lockfile || exit 4
+  yarn install --immutable || exit 4
 }
 
 function build() {
@@ -27,7 +27,7 @@ function build() {
   if [[ -n ${VERSION-''} ]]; then
     change_version || exit 2
   fi
-  pnpm build:prod || exit 5
+  yarn build:prod || exit 5
   # 打包
   rm -rf "${release_dir:?}"/*
   mkdir -p "${release_dir}"

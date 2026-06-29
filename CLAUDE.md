@@ -6,28 +6,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Lina is the web frontend for **JumpServer** (a bastion/PAM platform). It is a Vue 3 + Element Plus SPA that talks to the JumpServer API server. It cannot run standalone — a JumpServer API backend must be reachable (set `VITE_CORE_HOST` in `.env.development`).
 
-- Node `>=24 <25`, pnpm `>=10` (`packageManager: pnpm@10.33.0`). Enable via `corepack enable`.
+- Node `>=24 <25`, yarn `>=4` (`packageManager: yarn@4.13.0`, Berry with `nodeLinker: node-modules`). Enable via `corepack enable`.
 - Build tool is **Vite (rolldown-based)**; lin/format use **oxlint / oxfmt** (not eslint/prettier).
 
 ## Commands
 
 ```bash
-pnpm serve            # dev server on :9528 (alias of `pnpm dev`)
-pnpm build:prod       # production build (use this, not bare `pnpm build`)
-pnpm preview          # preview built output on :9526
-pnpm lint             # oxlint over src + vite.config.js
-pnpm fix              # lint:fix + oxfmt --write (run before committing)
-pnpm fmt:check        # formatting check only
+yarn serve            # dev server on :9528 (alias of `yarn dev`)
+yarn build:prod       # production build (use this, not bare `yarn build`)
+yarn preview          # preview built output on :9526
+yarn lint             # oxlint over src + vite.config.js
+yarn fix              # lint:fix + oxfmt --write (run before committing)
+yarn fmt:check        # formatting check only
 ```
 
-There is **no unit-test framework** in this repo — do not assume `pnpm test`. Verify changes with `pnpm lint` and `pnpm build:prod`.
+There is **no unit-test framework** in this repo — do not assume `yarn test`. Verify changes with `yarn lint` and `yarn build:prod`.
 
 i18n tooling (translations live in `src/i18n/langs/*.json`):
 
 ```bash
-pnpm vue-i18n-report      # list missing/unused keys
-pnpm diff-i18n            # python diff en vs ja/zh_Hant
-pnpm apply-i18n           # python apply across locales
+yarn vue-i18n-report      # list missing/unused keys
+yarn diff-i18n            # python diff en vs ja/zh_Hant
+yarn apply-i18n           # python apply across locales
 ```
 
 ## Dev environment / proxying
@@ -73,4 +73,4 @@ pnpm apply-i18n           # python apply across locales
 
 - Reply and write UI text in the user's language; user-facing strings go through i18n (`$t`/`$tc`), with keys in `src/i18n/langs`.
 - This is a Vue 3 migration branch (`v5_vue3`) off Element UI → Element Plus. Watch for Vue-3-specific gotchas the codebase has already hit: prop `default()` factories are **not** bound to the instance (`this` is undefined — import singletons like `@/store` directly); `el-link` `underline` takes `'always'|'hover'|'never'`, not boolean.
-- Run `pnpm fix` (lint:fix + fmt) before committing. Commit messages in this repo use Conventional-Commit prefixes (`fix:`, `feat:`, `perf:`, `style:`).
+- Run `yarn fix` (lint:fix + fmt) before committing. Commit messages in this repo use Conventional-Commit prefixes (`fix:`, `feat:`, `perf:`, `style:`).

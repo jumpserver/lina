@@ -14,14 +14,11 @@ RUN set -ex \
 
 WORKDIR /data
 
-ENV PNPM_HOME="/pnpm"
-ENV PATH="${PNPM_HOME}:${PATH}"
+RUN corepack enable && corepack prepare yarn@4.13.0 --activate
 
-RUN corepack enable && corepack prepare pnpm@10.33.0 --activate
-
-COPY package.json pnpm-lock.yaml ./
+COPY package.json yarn.lock .yarnrc.yml ./
 
 ARG NPM_MIRROR="https://registry.npmjs.org"
-RUN --mount=type=cache,target=/pnpm/store,sharing=locked,id=pnpm-store \
-    pnpm config set registry "${NPM_MIRROR}" \
-    && pnpm install --frozen-lockfile
+RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,sharing=locked,id=yarn-cache \
+    yarn config set npmRegistryServer "${NPM_MIRROR}" \
+    && yarn install --immutable

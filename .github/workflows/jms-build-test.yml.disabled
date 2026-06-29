@@ -5,7 +5,7 @@ on:
       - 'Dockerfile'
       - 'Dockerfile*'
       - 'package.json'
-      - 'pnpm-lock.yaml'
+      - 'yarn.lock'
 
 jobs:
   build:
