@@ -66,6 +66,11 @@ export default {
         return this.visible
       }
     },
+    iVersion() {
+      // 'version-dev' 是构建时 sed 替换的占位符（替换为如 v4.0.0-build01）。
+      // 展示时去掉 -build<编号> 及其后面的内容：v4.0.0-build01 -> v4.0.0
+      return 'version-dev'.replace(/-build\d+.*/i, '')
+    },
     versionType() {
       return this.hasXPack ? this.$t('EnterpriseEdition') : this.$tc('CommunityEdition') + ' GPLv3'
     },
@@ -77,7 +82,7 @@ export default {
         },
         {
           label: this.$t('Version'),
-          value: 'version-dev'
+          value: this.iVersion
         },
         {
           label: this.$t('PermissionCompany'),
