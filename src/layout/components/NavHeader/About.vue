@@ -47,11 +47,6 @@ export default {
     return {
       actions: [
         {
-          name: 'github',
-          label: 'GitHub',
-          icon: 'fa fa-github'
-        },
-        {
           name: 'download',
           label: this.$tc('DownloadCenter'),
           icon: 'fa fa-download'
@@ -115,7 +110,7 @@ export default {
       return this.publicSettings['INTERFACE']['logo_logout']
     },
     hasXPack() {
-      return this.publicSettings.XPACK_LICENSE_IS_VALID
+      return this.publicSettings.XPACK_ENABLED
     }
   },
   methods: {

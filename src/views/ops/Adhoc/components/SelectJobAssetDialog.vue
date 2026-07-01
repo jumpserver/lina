@@ -60,11 +60,14 @@
                 :title="item.name"
                 class="asset-name"
               >{{ item.name }}</span>
-              <i
-                class="el-icon-minus asset-remove-icon"
-                :title="$tc('Remove')"
+              <el-button
+                class="asset-remove-btn"
+                size="mini"
+                type="text"
                 @click.stop="removeAsset(item)"
-              />
+              >
+                {{ $tc('Remove') }}
+              </el-button>
             </el-checkbox>
           </el-checkbox-group>
         </div>
@@ -229,32 +232,41 @@ export default {
     .el-checkbox {
       width: 100%;
       display: flex;
-      padding: 3px 0;
+      padding: 2px 6px;
       margin-right: 0;
       align-items: center;
+      border-radius: 4px;
+      transition: background-color .15s ease;
 
-      .asset-remove-icon {
+      &:hover {
+        background-color: #f5f7fa;
+
+        .asset-remove-btn {
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+
+      .asset-remove-btn {
         opacity: 0;
         visibility: hidden;
-        cursor: pointer;
-        font-weight: normal;
-        transition: opacity .15s ease;
+        flex-shrink: 0;
         margin-left: auto;
-        color: var(--color-danger);
+        padding: 0 6px;
+        min-height: 22px;
+        font-size: 12px;
+        line-height: 22px;
+        color: red;
+        transition: opacity .15s ease, color .15s ease;
       }
 
       .el-checkbox__label {
         width: 100%;
         display: flex;
         align-items: center;
-        gap: 3px;
-        padding-right: 20px;
+        gap: 8px;
+        padding-right: 0;
         padding-left: 3px;
-      }
-
-      .el-checkbox__label:hover .asset-remove-icon {
-        opacity: 1;
-        visibility: visible;
       }
     }
   }
@@ -264,10 +276,11 @@ export default {
   }
 
   .asset-name {
+    flex: 1;
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 180px;
   }
 
   .platform-group {

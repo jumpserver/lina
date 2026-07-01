@@ -14,12 +14,18 @@ import { GenericListTable } from '@/layout/components'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
 import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'AccountChangeSecretRecord',
   components: {
     RecordViewSecret,
     GenericListTable
+  },
+  computed: {
+    ...mapGetters({
+      publicSettings: 'publicSettings'
+    })
   },
   data() {
     const vm = this
@@ -89,6 +95,10 @@ export default {
                   title: this.$t('View'),
                   type: 'primary',
                   callback: ({ row }) => {
+                    if (!this.publicSettings.SECURITY_ACCOUNT_SECRET_READ) {
+                      this.$message.warning(this.$tc('AccountSecretReadDisabled'))
+                      return
+                    }
                     // debugger
                     vm.secretUrl = `/api/v1/accounts/change-secret-records/${row.id}/secret/`
                     vm.showViewSecretDialog = false

@@ -1,9 +1,11 @@
 <template>
   <GenericCreateUpdatePage
+    :continue-clean-fields="continueCleanFields"
     :fields="fields"
     :fields-meta="fieldsMeta"
     :has-detail-in-msg="false"
     :initial="initial"
+    :on-perform-error="onPerformError"
     :url="url"
   />
 </template>
@@ -11,6 +13,7 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { getRandomColor } from '@/utils/common/color'
+import { normalizeLabelFormErrors } from './utils'
 
 export default {
   name: 'LabelCreateUpdate',
@@ -18,6 +21,7 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
+    const vm = this
     return {
       initial: {
         color: getRandomColor()
@@ -26,7 +30,16 @@ export default {
         [this.$t('Basic'), ['name', 'value', 'color']],
         [this.$t('Other'), ['comment']]
       ],
+      continueCleanFields: ['name', 'value'],
       url: '/api/v1/labels/labels/',
+      onPerformError(error, method, formVm) {
+        const response = error.response
+        const data = normalizeLabelFormErrors(response?.data)
+        if (response?.status === 400 && data && typeof data === 'object') {
+          formVm.$refs.form.setErrors(data)
+        }
+        vm.$emit('performError', data)
+      },
       fieldsMeta: {
         color: {
           component: 'el-color-picker',

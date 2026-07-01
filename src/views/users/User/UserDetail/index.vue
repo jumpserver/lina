@@ -19,7 +19,7 @@ import UserInfo from './UserInfo'
 import UserSession from './UserSession.vue'
 import UserLoginACL from './UserLoginACL.vue'
 import UserGrantedAssets from './UserGrantedAssets'
-import UserAuthCert from './UserAuthCert'
+import UserAuthUKey from './UserAuthUKey'
 import AssetPermissionUser from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionUser.vue'
 import AssetPermissionAsset from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionAsset.vue'
 import AssetPermissionDetail from '@/views/perms/AssetPermission/AssetPermissionDetail/index.vue'
@@ -32,7 +32,7 @@ export default {
     UserInfo,
     UserSession,
     UserLoginACL,
-    UserAuthCert,
+    UserAuthUKey,
     GenericDetailPage,
     UserGrantedAssets,
     AssetPermissionUser,
@@ -61,8 +61,8 @@ export default {
           },
           {
             title: this.$t('UserUKey'),
-            name: 'UserAuthCert',
-            hidden: () => !vm.$hasPerm('users.change_user') || !vm.publicSettings.AUTH_CERT
+            name: 'UserAuthUKey',
+            hidden: () => !vm.$hasPerm('users.change_user') || !vm.publicSettings.AUTH_UKEY
           },
           {
             title: this.$t('GrantedAssets'),

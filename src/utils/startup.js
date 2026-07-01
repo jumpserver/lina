@@ -153,7 +153,7 @@ export async function checkUserFirstLogin({ to, from, next }) {
     next({
       name: 'Improvement',
       replace: true,
-      query: { _t: Date.now() } // 添加时间戳，防止 from 一样 next 不触发 guard.js router.beforeEach逻辑
+      query: { _t: Date.now(), _to: to.path } // 添加时间戳，防止 from 一样 next 不触发 guard.js router.beforeEach逻辑
     })
   } else {
     const nextRoute = localStorage.getItem('next')

@@ -572,13 +572,13 @@ export default {
   padding-right: 4px;
 }
 
-.msg-popup-board {
-  padding: 12px;
-  border: 1px solid var(--menu-border, #E9ECEF);
-  border-radius: 12px;
-  background: linear-gradient(180deg, #FCFCFD 0%, #F7F8FA 100%);
-  box-shadow: 0 10px 24px rgba(31, 35, 41, 0.06);
-}
+// .msg-popup-board {
+  // padding: 12px;
+  // border: 1px solid var(--menu-border, #E9ECEF);
+  // border-radius: 12px;
+  // background: linear-gradient(180deg, #FCFCFD 0%, #F7F8FA 100%);
+  // box-shadow: 0 10px 24px rgba(31, 35, 41, 0.06);
+// }
 
 .popup-collapse-title {
   width: 100%;
@@ -649,7 +649,7 @@ export default {
 .msg-popup-detail ::v-deep .msg-popup-item {
   margin-bottom: 12px;
   border: 1px solid rgba(31, 35, 41, 0.08);
-  border-radius: 10px;
+  border-radius: 6px;
   overflow: hidden;
   background: #fff;
   box-shadow: 0 4px 14px rgba(31, 35, 41, 0.05);
@@ -659,10 +659,10 @@ export default {
   margin-bottom: 0;
 }
 
-.msg-popup-detail ::v-deep .msg-popup-item.is-active {
-  border-color: rgba(38, 122, 58, 0.24);
-  box-shadow: 0 8px 20px rgba(38, 122, 58, 0.08);
-}
+// .msg-popup-detail ::v-deep .msg-popup-item.is-active {
+//   border-color: rgba(38, 122, 58, 0.24);
+//   box-shadow: 0 8px 20px rgba(38, 122, 58, 0.08);
+// }
 
 .msg-popup-detail ::v-deep .msg-popup-item .el-collapse-item__arrow {
   color: var(--N600, #646A73);

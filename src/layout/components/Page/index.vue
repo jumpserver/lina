@@ -129,6 +129,9 @@ export default {
       return title
     },
     gobackDisabled() {
+      if (typeof this.$route.meta?.disableGoBack === 'boolean') {
+        return this.$route.meta.disableGoBack
+      }
       if (this.$route.path.endsWith('dashboard')) {
         return true
       }

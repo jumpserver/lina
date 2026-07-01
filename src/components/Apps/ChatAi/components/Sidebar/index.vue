@@ -77,19 +77,19 @@ export default {
       padding: 4px;
     }
 
-    i, .svg {
+    i,
+    .svg {
       border-radius: 2px;
 
       &:hover {
-        color: var(--color-primary);
-        background: var(--menu-hover);
+        background: #cbcbcb;
       }
     }
   }
 }
 
 .el-icon-download {
-  transform: rotate(-90deg)
+  transform: rotate(-90deg);
 }
 
 ::v-deep .el-tabs {
