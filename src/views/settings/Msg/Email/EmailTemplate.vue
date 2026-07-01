@@ -1,22 +1,20 @@
 <template>
   <div>
-    <el-button size="mini" type="primary" icon="el-icon-setting" @click="visible = !visible"> {{
-      $t("Setting")
-    }}
+    <el-button size="small" type="primary" icon="Setting" @click="visible = !visible">
+      {{ $t('Setting') }}
     </el-button>
     <Dialog
       v-if="visible"
       :show-cancel="false"
       :show-confirm="false"
       :title="$tc('EmailTemplate')"
-      :visible.sync="visible"
+      :visible="visible"
       width="70%"
       @confirm="onConfirm()"
     >
       <GenericCreateUpdateForm v-bind="$data" />
     </Dialog>
   </div>
-
 </template>
 
 <script>
@@ -34,15 +32,18 @@ export default {
       visible: false,
       fields: [
         [this.$t('General'), ['EMAIL_SUBJECT_PREFIX']],
-        [this.$t('CreateUserContent'),
+        [
+          this.$t('CreateUserContent'),
           [
-            'EMAIL_CUSTOM_USER_CREATED_SUBJECT', 'EMAIL_CUSTOM_USER_CREATED_HONORIFIC', 'EMAIL_CUSTOM_USER_CREATED_BODY'
+            'EMAIL_CUSTOM_USER_CREATED_SUBJECT',
+            'EMAIL_CUSTOM_USER_CREATED_HONORIFIC',
+            'EMAIL_CUSTOM_USER_CREATED_BODY'
           ]
         ]
       ],
       successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' } },
       fieldsMeta: {
-        'EMAIL_CUSTOM_USER_CREATED_BODY': {
+        EMAIL_CUSTOM_USER_CREATED_BODY: {
           el: {
             type: 'textarea',
             rows: 3
@@ -53,14 +54,11 @@ export default {
       submitMethod() {
         return 'patch'
       },
-      onConfirm() {
-      }
+      onConfirm() {}
     }
   },
   methods: {}
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

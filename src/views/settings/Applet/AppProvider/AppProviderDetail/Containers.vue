@@ -6,7 +6,7 @@
   </el-row>
 </template>
 
-<script type="text/jsx">
+<script>
 import { DrawerListTable as ListTable } from '@/components'
 
 export default {
@@ -17,8 +17,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -31,23 +30,27 @@ export default {
       config: {
         url: `/api/v1/terminal/app-providers/${this.object.id}/containers/`,
         columns: [
-          'container_id', 'container_name', 'container_image', 'container_ports', 'container_status'
+          'container_id',
+          'container_name',
+          'container_image',
+          'container_ports',
+          'container_status'
         ],
         excludes: ['actions'],
         columnsMeta: {
-          'container_id': {
+          container_id: {
             label: this.$t('ID')
           },
-          'container_name': {
+          container_name: {
             label: this.$t('Name')
           },
-          'container_status': {
+          container_status: {
             label: this.$t('Status')
           },
-          'container_ports': {
+          container_ports: {
             label: this.$t('Ports')
           },
-          'container_image': {
+          container_image: {
             label: this.$t('ImageName')
           },
           actions: {
@@ -66,6 +69,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

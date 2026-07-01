@@ -1,8 +1,14 @@
 <template>
-  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu" @tab-click="handleTabClick">
-    <div slot="title">
-      {{ Title }}
-    </div>
+  <TabPage
+    v-model:active-menu="config.activeMenu"
+    :submenu="config.submenu"
+    @tab-click="handleTabClick"
+  >
+    <template #title>
+      <div>
+        {{ Title }}
+      </div>
+    </template>
   </TabPage>
 </template>
 
@@ -31,7 +37,8 @@ export default {
             title: this.$t('OrgRole'),
             name: 'OrgRoleList',
             icon: 'fa-sitemap',
-            hidden: () => !this.$store.getters.hasValidLicense || !this.$hasPerm('rbac.view_orgrole'),
+            hidden: () =>
+              !this.$store.getters.hasValidLicense || !this.$hasPerm('rbac.view_orgrole'),
             component: () => import('@/views/users/Role/RoleList/OrgRoleList.vue'),
             helpTip: this.$t('OrgRoleHelpMsg')
           }

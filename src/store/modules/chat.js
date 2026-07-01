@@ -1,4 +1,3 @@
-
 const state = {
   loading: false,
   activeTab: 0,
@@ -64,8 +63,7 @@ const mutations = {
   }
 }
 
-const actions = {
-}
+const actions = {}
 
 export default {
   namespaced: true,

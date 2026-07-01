@@ -1,47 +1,45 @@
 <template>
   <div class="asset-select">
     <el-card>
-      <div slot="header" class="clearfix">
-        <span>{{ $t('selectedAssets') }}({{ selectAssets.length }})</span>
-        <el-button
-          v-if="selectAssets.length > 0"
-          style="float: right; padding: 3px 0"
-          type="text"
-          @click="handleClick"
-        >
-          {{ $t('pleaseSelectAssets') }}
-        </el-button>
-      </div>
+      <template #header>
+        <div class="clearfix">
+          <span>{{ $t('selectedAssets') }}({{ selectAssets.length }})</span>
+          <el-button
+            v-if="selectAssets.length > 0"
+            style="float: right; padding: 3px 0"
+            link
+            @click="handleClick"
+          >
+            {{ $t('pleaseSelectAssets') }}
+          </el-button>
+        </div>
+      </template>
       <div
         v-if="selectAssets.length === 0"
         class="empty-assets"
         role="button"
         tabindex="0"
         aria-label="Select assets"
-        @click=" handleClick()"
+        @click="handleClick()"
       >
-        <i class="icon el-icon-plus" />
+        <el-icon class="icon"><Plus /></el-icon>
         <span class="title">{{ $t('pleaseSelectAssets') }}</span>
         <span class="subtitle">{{ $t('clickToAdd') }}</span>
       </div>
       <div v-else class="asset-list">
-        <div
-          v-for="group in groupedAssets"
-          :key="group.key"
-          class="platform-group"
-        >
+        <div v-for="group in groupedAssets" :key="group.key" class="platform-group">
           <div class="platform-group-header">
             <el-checkbox
               :indeterminate="isPlatformIndeterminate(group)"
               :value="isPlatformAllSelected(group)"
-              @change="val => togglePlatformAll(group, val)"
+              @change="(val) => togglePlatformAll(group, val)"
             >
               <span class="platform-title">
                 <img
                   v-if="group.assets.length"
                   :src="getPlatformLogo(group.assets[0])"
                   class="platform-icon"
-                >
+                />
                 {{ group.platformName }} ({{ group.assets.length }})
               </span>
             </el-checkbox>
@@ -51,23 +49,14 @@
             class="platform-group-assets"
             @change="onCheckboxChange"
           >
-            <el-checkbox
-              v-for="item in group.assets"
-              :key="item.id"
-              :label="item.id"
-            >
-              <span
-                :title="item.name"
-                class="asset-name"
-              >{{ item.name }}</span>
-              <el-button
-                class="asset-remove-btn"
-                size="mini"
-                type="text"
+            <el-checkbox v-for="item in group.assets" :key="item.id" :label="item.id">
+              <span :title="item.name" class="asset-name">{{ item.name }}</span>
+              <el-icon
+                class="asset-remove-icon"
+                :title="$tc('Remove')"
                 @click.stop="removeAsset(item)"
-              >
-                {{ $tc('Remove') }}
-              </el-button>
+                ><Minus
+              /></el-icon>
             </el-checkbox>
           </el-checkbox-group>
         </div>
@@ -75,18 +64,17 @@
     </el-card>
 
     <AssetSelectDialog
+      v-bind="$attrs"
       v-if="dialogVisible"
       ref="dialog"
+      v-model:visible="dialogVisible"
       :base-node-url="baseNodeUrl"
       :base-url="baseUrl"
       :tree-setting="treeSetting"
       :tree-url-query="treeUrlQuery"
       :value="selectAssets"
-      :visible.sync="dialogVisible"
-      v-bind="$attrs"
       @cancel="handleCancel"
       @confirm="handleConfirm"
-      v-on="$listeners"
     />
   </div>
 </template>
@@ -113,8 +101,7 @@ export default {
     },
     treeUrlQuery: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     value: {
       type: Array,
@@ -139,7 +126,7 @@ export default {
   computed: {
     groupedAssets() {
       const map = {}
-      this.selectAssetRows.forEach(a => {
+      this.selectAssetRows.forEach((a) => {
         const key = a?.type?.value || 'unknown'
         const name = a?.type?.label || a?.type?.value || 'Unknown'
         if (!map[key]) {
@@ -148,7 +135,7 @@ export default {
         map[key].assets.push(a)
       })
       return Object.values(map)
-        .map(g => {
+        .map((g) => {
           g.assets = g.assets.slice().sort((x, y) => (x.name || '').localeCompare(y.name || ''))
           return g
         })
@@ -164,13 +151,13 @@ export default {
         return
       }
       this.$emit('change', valueSelected)
-      rowsAdd.forEach(item => {
-        if (!this.selectAssetRows.find(i => i.id === item.id)) {
+      rowsAdd.forEach((item) => {
+        if (!this.selectAssetRows.find((i) => i.id === item.id)) {
           this.selectAssetRows.push(item)
         }
       })
       // 移除已经取消选择的资产
-      this.selectAssetRows = this.selectAssetRows.filter(r => valueSelected.includes(r.id))
+      this.selectAssetRows = this.selectAssetRows.filter((r) => valueSelected.includes(r.id))
       this.selectAssets = valueSelected
       this.dialogVisible = false
     },
@@ -185,25 +172,25 @@ export default {
       this.$emit('change', value)
     },
     isPlatformAllSelected(group) {
-      return group.assets.length > 0 && group.assets.every(a => this.selectAssets.includes(a.id))
+      return group.assets.length > 0 && group.assets.every((a) => this.selectAssets.includes(a.id))
     },
     isPlatformIndeterminate(group) {
-      const selected = group.assets.filter(a => this.selectAssets.includes(a.id)).length
+      const selected = group.assets.filter((a) => this.selectAssets.includes(a.id)).length
       return selected > 0 && selected < group.assets.length
     },
     togglePlatformAll(group, checked) {
-      const ids = group.assets.map(a => a.id)
+      const ids = group.assets.map((a) => a.id)
       if (checked) {
         const merged = new Set(this.selectAssets.concat(ids))
         this.selectAssets = Array.from(merged)
       } else {
-        this.selectAssets = this.selectAssets.filter(id => !ids.includes(id))
+        this.selectAssets = this.selectAssets.filter((id) => !ids.includes(id))
       }
       this.$emit('change', this.selectAssets)
     },
     removeAsset(asset) {
-      this.selectAssets = this.selectAssets.filter(id => id !== asset.id)
-      this.selectAssetRows = this.selectAssetRows.filter(r => r.id !== asset.id)
+      this.selectAssets = this.selectAssets.filter((id) => id !== asset.id)
+      this.selectAssetRows = this.selectAssetRows.filter((r) => r.id !== asset.id)
       this.$emit('change', this.selectAssets)
     }
   }
@@ -217,7 +204,7 @@ export default {
   background: #fff;
   color: var(--color-border);
 
-  ::v-deep {
+  :deep() {
     .el-card {
       flex: 1;
     }
@@ -232,41 +219,32 @@ export default {
     .el-checkbox {
       width: 100%;
       display: flex;
-      padding: 2px 6px;
+      padding: 3px 0;
       margin-right: 0;
       align-items: center;
-      border-radius: 4px;
-      transition: background-color .15s ease;
 
-      &:hover {
-        background-color: #f5f7fa;
-
-        .asset-remove-btn {
-          opacity: 1;
-          visibility: visible;
-        }
-      }
-
-      .asset-remove-btn {
+      .asset-remove-icon {
         opacity: 0;
         visibility: hidden;
-        flex-shrink: 0;
+        cursor: pointer;
+        font-weight: normal;
+        transition: opacity 0.15s ease;
         margin-left: auto;
-        padding: 0 6px;
-        min-height: 22px;
-        font-size: 12px;
-        line-height: 22px;
-        color: red;
-        transition: opacity .15s ease, color .15s ease;
+        color: var(--color-danger);
       }
 
       .el-checkbox__label {
         width: 100%;
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding-right: 0;
+        gap: 3px;
+        padding-right: 20px;
         padding-left: 3px;
+      }
+
+      .el-checkbox__label:hover .asset-remove-icon {
+        opacity: 1;
+        visibility: visible;
       }
     }
   }
@@ -276,11 +254,10 @@ export default {
   }
 
   .asset-name {
-    flex: 1;
-    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    max-width: 180px;
   }
 
   .platform-group {
@@ -319,18 +296,17 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%); /* 让中心点对齐 */
   }
-
 }
 
 .el-select {
   width: 100%;
 }
 
-.page ::v-deep .page-heading {
+.page :deep(.page-heading) {
   display: none;
 }
 
-.el-dialog__wrapper ::v-deep .el-dialog__body {
+.el-dialog__wrapper :deep(.el-dialog__body) {
   padding: 0 0 0 3px;
 }
 
@@ -340,7 +316,10 @@ export default {
   padding: 56px 16px;
   text-align: center;
   cursor: pointer;
-  transition: border-color .2s, background-color .25s, color .2s;
+  transition:
+    border-color 0.2s,
+    background-color 0.25s,
+    color 0.2s;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -354,7 +333,7 @@ export default {
     line-height: 1;
     margin-bottom: 14px;
     color: #c0c4cc;
-    transition: color .2s;
+    transition: color 0.2s;
   }
 
   .title {
@@ -365,7 +344,7 @@ export default {
 
   .subtitle {
     font-size: 12px;
-    opacity: .75;
+    opacity: 0.75;
   }
 }
 
@@ -381,7 +360,7 @@ export default {
 
 .empty-assets.is-disabled {
   cursor: not-allowed;
-  opacity: .55;
+  opacity: 0.55;
   background: #fafafa;
 
   .disabled-tip {

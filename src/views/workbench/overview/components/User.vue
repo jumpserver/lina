@@ -1,20 +1,26 @@
 <template>
   <el-card class="box-card no-border" shadow="never">
-    <div slot="header" class="title">
-      <span>{{ $t('YourProfile') }}</span>
-    </div>
+    <template #header>
+      <div class="title">
+        <span>{{ $t('YourProfile') }}</span>
+      </div>
+    </template>
     <div class="content">
       <el-row :gutter="20">
         <el-col :span="5" class="left">
           <el-avatar :size="40" :src="avatarUrl" class="avatar" fit="fill" />
         </el-col>
-        <el-col ::md="20" :sm="24">
+        <el-col :md="20" :sm="24">
           <ul>
-            <li><span class="title">{{ $t('Username') }}:</span><span>{{ users.name }}</span></li>
-            <li><span class="title">{{ $t('Email') }}:</span><span>{{ users.email }}</span></li>
+            <li>
+              <span class="title">{{ $t('Username') }}:</span><span>{{ users.name }}</span>
+            </li>
+            <li>
+              <span class="title">{{ $t('Email') }}:</span><span>{{ users.email }}</span>
+            </li>
             <li>
               <span class="title">{{ $t('LoginDate') }}:</span>
-              <span>{{ users.last_login | date }}</span>
+              <span>{{ toSafeLocalDateStr(users.last_login) }}</span>
             </li>
           </ul>
         </el-col>
@@ -24,6 +30,9 @@
 </template>
 
 <script>
+import { useDateTime } from '@/composables/useDateTime'
+import { getAssetUrl } from '@/utils/assets'
+
 export default {
   name: 'Huser',
   props: {
@@ -35,8 +44,11 @@ export default {
   data() {
     return {
       users: {},
-      avatarUrl: require('@/assets/img/avatar.png')
+      avatarUrl: getAssetUrl('img/avatar.png')
     }
+  },
+  setup() {
+    return useDateTime()
   },
   created() {
     this.users = this.$store.state.users.profile || {}
@@ -45,10 +57,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-ul, li {
+ul,
+li {
   padding: 0;
   margin: 0;
-  list-style: none
+  list-style: none;
 }
 
 li {
@@ -65,7 +78,7 @@ li {
 //.box-card {
 //  margin-bottom: 20px;
 //
-//  & ::v-deep .el-card__header {
+//  & :deep(.el-card__header) {
 //    padding-top: 20px;
 //  }
 //}
@@ -78,7 +91,7 @@ li {
     height: 70px;
     text-align: center;
 
-    & ::v-deep .el-avatar--large {
+    & :deep(.el-avatar--large) {
       width: 100%;
       height: 100%;
     }

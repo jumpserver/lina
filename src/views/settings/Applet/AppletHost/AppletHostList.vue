@@ -4,19 +4,19 @@
       <span v-html="$t('AppletHostSelectHelpMessage')" />
     </el-alert>
     <DrawerListTable
+      v-bind="$data"
       ref="table"
       class="applet-host"
       :create-drawer="createDrawer"
       :resource="$t('AppletHosts')"
-      v-bind="$data"
     />
   </div>
 </template>
 
 <script>
 import { DrawerListTable } from '@/components'
-import { openTaskPage } from '@/utils/jms/index'
 import { ProtocolsFormatter } from '@/components/Table/TableFormatters'
+import { openTaskPage } from '@/utils/jms/index'
 
 export default {
   name: 'AppletHost',
@@ -33,10 +33,7 @@ export default {
         columnsExclude: ['info', 'auto_config', 'gathered_info', 'deploy_options'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: [
-            'name', 'address', 'protocols', 'load',
-            'comment', 'actions'
-          ]
+          default: ['name', 'address', 'protocols', 'load', 'comment', 'actions']
         },
         columnsMeta: {
           name: {
@@ -79,12 +76,11 @@ export default {
                   title: this.$t('Test'),
                   can: this.$hasPerm('assets.test_assetconnectivity'),
                   callback: ({ row }) => {
-                    this.$axios.post(
-                      `/api/v1/assets/assets/${row.id}/tasks/`,
-                      { action: 'refresh' },
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
+                    this.$axios
+                      .post(`/api/v1/assets/assets/${row.id}/tasks/`, { action: 'refresh' })
+                      .then((res) => {
+                        openTaskPage(res['task'])
+                      })
                   }
                 }
               ]
@@ -107,7 +103,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.applet-host ::v-deep .protocol {
+.applet-host :deep(.protocol) {
   margin-left: 3px;
 }
 </style>

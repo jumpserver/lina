@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# 该build基于 node:10
+# 该build基于 Node 24 + yarn
 utils_dir=$(pwd)
 project_dir=$(dirname "$utils_dir")
 release_dir=${project_dir}/release
@@ -18,8 +18,7 @@ function change_version() {
 function install_deps() {
   # 下载依赖模块并构建
   cd "${project_dir}" || exit 3
-  yarn install --verbose || exit 4
-  npm rebuild node-sass || exit 5
+  yarn install --immutable || exit 4
 }
 
 function build() {

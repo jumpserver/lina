@@ -1,17 +1,12 @@
 <template>
   <GenericDetailPage
-    :active-menu.sync="config.activeMenu"
-    :object.sync="AssetPermission"
     v-bind="config"
-    v-on="$listeners"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="AssetPermission"
     @tab-click="handleTabClick"
   >
     <keep-alive>
-      <component
-        :is="config.activeMenu"
-        :object="AssetPermission"
-        @relation-changed="handleRelationChanged"
-      />
+      <component :is="config.activeMenu" :object="AssetPermission" />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -34,7 +29,6 @@ export default {
   },
   data() {
     return {
-      relationChanged: false,
       AssetPermission: {
         name: '',
         users_amount: 0,
@@ -56,37 +50,32 @@ export default {
           {
             title: this.$t('UsersAndUserGroups'),
             name: 'AssetPermissionUser',
-            hidden: () => !this.$hasPerm('users.view_user') || !this.$hasPerm('perms.change_assetpermission')
+            hidden: () =>
+              !this.$hasPerm('users.view_user') || !this.$hasPerm('perms.change_assetpermission')
           },
           {
             title: this.$t('AssetAndNode'),
             name: 'AssetPermissionAsset',
-            hidden: () => !this.$hasPerm('assets.view_asset') || !this.$hasPerm('perms.change_assetpermission')
+            hidden: () =>
+              !this.$hasPerm('assets.view_asset') || !this.$hasPerm('perms.change_assetpermission')
           },
           {
             title: this.$t('PermAccount'),
             name: 'AssetPermissionAccount',
-            hidden: () => !this.$hasPerm('accounts.view_account') || !this.$hasPerm('perms.change_assetpermission')
+            hidden: () =>
+              !this.$hasPerm('accounts.view_account') ||
+              !this.$hasPerm('perms.change_assetpermission')
           }
         ]
       }
     }
   },
-  beforeDestroy() {
-    // 当弹窗关闭时，如果关联发生变化，通知父级列表局部刷新
-    if (this.relationChanged) {
-      this.$emit('relation-change')
-    }
-  },
   methods: {
-    handleRelationChanged() {
-      this.relationChanged = true
-    },
     handleTabClick(tab) {
       if (tab.name !== 'AssetPermissionDetail') {
-        this.$set(this.config, 'hasRightSide', false)
+        this.config['hasRightSide'] = false
       } else {
-        this.$set(this.config, 'hasRightSide', true)
+        this.config['hasRightSide'] = true
       }
     }
   }

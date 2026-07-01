@@ -1,10 +1,10 @@
 <template>
   <GenericCreateUpdatePage
+    v-bind="$data"
     :fields="fields"
     :fields-meta="fieldsMeta"
     :initial="initial"
     :url="url"
-    v-bind="$data"
   />
 </template>
 
@@ -81,6 +81,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

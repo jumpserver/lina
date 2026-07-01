@@ -1,8 +1,8 @@
 <template>
-  <TabPage :active-menu.sync="activeMenu" :submenu="submenu">
+  <TabPage v-model:active-menu="activeMenu" :submenu="submenu">
     <div>
       <el-alert v-if="currentTime" :closable="false" type="info">
-        {{ `${this.$t('ServerTime')}: ${currentTime}` }}
+        {{ `${$t('ServerTime')}: ${currentTime}` }}
       </el-alert>
       <keep-alive>
         <component :is="activeMenu" />
@@ -75,7 +75,7 @@ export default {
     if (this.timer) {
       clearInterval(this.timer)
     }
-    this.$axios.get('/api/v1/settings/server-info/').then(info => {
+    this.$axios.get('/api/v1/settings/server-info/').then((info) => {
       const remoteTime = new Date(info.CURRENT_TIME)
       this.timer = setInterval(() => {
         remoteTime.setSeconds(remoteTime.getSeconds() + 1)
@@ -83,7 +83,7 @@ export default {
       }, 1000)
     })
   },
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.timer) {
       clearInterval(this.timer)
     }

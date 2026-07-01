@@ -8,13 +8,12 @@
       </router-link>
     </div>
     <div class="error-404-image-container">
-      <img alt="page error" class="error-404-error-image" src="@/assets/img/robot.png">
+      <img alt="page error" class="error-404-error-image" src="@/assets/img/robot.png" />
     </div>
   </div>
 </template>
 
 <script>
-
 export default {
   name: 'Page404'
 }

@@ -1,71 +1,76 @@
 <template>
   <div class="krry-main">
-    <krry-box
-      ref="noSelect"
-      :async="async"
-      :async-search-flag="asyncSearchFlag"
-      :data-show-list="notSelectDataList"
-      :filter-placeholder="filterPlaceholder[0] || $tc('Search')"
-      :filterable="filterable"
-      :highlight-color="highlightColor"
-      :is-highlight="isHighlight"
-      :is-last-page="isLastPage"
-      :operate-id="0"
-      :page-size="pageSize"
-      :page-texts="pageTexts"
-      :show-clear-btn="showClearBtn"
-      :title="boxTitle[0] || $tc('Selection')"
-      @check-district="noCheckSelect"
-      @search-word="searchWord"
-      @check-disable="checkDisable"
-      @get-data="getData"
-      @get-data-by-keyword="getDataByKeyword"
-      @clear-input="clearQueryInp('left')"
-    />
-
-    <div class="opera">
-      <svg-icon v-if="transferOnCheck" class="arrow" icon-class="arrow" />
-      <template v-else>
-        <el-button
-          :disabled="disablePre"
-          class="el-transfer__button"
-          icon="el-icon-arrow-left"
-          size="mini"
-          @click="deleteData"
+    <el-row :gutter="10">
+      <el-col :md="11" :sm="24">
+        <krry-box
+          ref="noSelect"
+          :async="async"
+          :async-search-flag="asyncSearchFlag"
+          :data-show-list="notSelectDataList"
+          :filter-placeholder="filterPlaceholder[0] || $tc('Search')"
+          :filterable="filterable"
+          :highlight-color="highlightColor"
+          :is-highlight="isHighlight"
+          :is-last-page="isLastPage"
+          :operate-id="0"
+          :page-size="pageSize"
+          :page-texts="pageTexts"
+          :show-clear-btn="showClearBtn"
+          :title="boxTitle[0] || $tc('Selection')"
+          @check-district="noCheckSelect"
+          @search-word="searchWord"
+          @check-disable="checkDisable"
+          @get-data="getData"
+          @get-data-by-keyword="getDataByKeyword"
+          @clear-input="clearQueryInp('left')"
         />
-        <el-button
-          :disabled="disableNex"
-          class="el-transfer__button"
-          icon="el-icon-arrow-right"
-          size="mini"
-          type="primary"
-          @click="addData"
+      </el-col>
+      <el-col :md="2" :sm="24" class="buttons">
+        <div class="opera">
+          <svg-icon v-if="transferOnCheck" class="arrow" icon-class="arrow" />
+          <template v-else>
+            <el-button
+              :disabled="disablePre"
+              class="el-transfer__button"
+              icon="ArrowLeft"
+              size="small"
+              @click="deleteData"
+            />
+            <el-button
+              :disabled="disableNex"
+              class="el-transfer__button"
+              icon="ArrowRight"
+              size="small"
+              type="primary"
+              @click="addData"
+            />
+          </template>
+        </div>
+      </el-col>
+      <el-col :md="11" :sm="24">
+        <krry-box
+          ref="hasSelect"
+          :data-show-list="checkedData"
+          :filter-placeholder="filterPlaceholder[1] || $tc('Search')"
+          :filterable="filterable"
+          :highlight-color="highlightColor"
+          :is-highlight="isHighlight"
+          :operate-id="1"
+          :page-size="pageSize"
+          :page-texts="pageTexts"
+          :show-clear-btn="showClearBtn"
+          :title="boxTitle[1] || $tc('Selected')"
+          @check-district="hasCheckSelect"
+          @search-word="searchWord"
+          @check-disable="checkDisable"
+          @clear-input="clearQueryInp('right')"
         />
-      </template>
-    </div>
-
-    <krry-box
-      ref="hasSelect"
-      :data-show-list="checkedData"
-      :filter-placeholder="filterPlaceholder[1] || $tc('Search')"
-      :filterable="filterable"
-      :highlight-color="highlightColor"
-      :is-highlight="isHighlight"
-      :operate-id="1"
-      :page-size="pageSize"
-      :page-texts="pageTexts"
-      :show-clear-btn="showClearBtn"
-      :title="boxTitle[1] || $tc('Selected')"
-      @check-district="hasCheckSelect"
-      @search-word="searchWord"
-      @check-disable="checkDisable"
-      @clear-input="clearQueryInp('right')"
-    />
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
-/* eslint-disable */
 import krryBox from './models/box'
 
 export default {
@@ -76,7 +81,6 @@ export default {
   props: {
     boxTitle: {
       type: Array,
-      // default: () => [this.$tc('Selection'), this.$tc('Selected')]
       default: () => ['', '']
     },
     pageSize: {
@@ -98,12 +102,10 @@ export default {
     filterPlaceholder: {
       type: Array,
       default: () => ['', '']
-      // default: () => [this.$tc('Search'), this.$tc('Search')]
     },
     pageTexts: {
       type: Array,
       default: () => ['', '']
-      // default: () => ['< ' + this.$tc('PagePrev'), this.$tc('PageNext') + ' >']
     },
     sort: {
       type: Boolean,
@@ -164,7 +166,7 @@ export default {
   computed: {
     // 传递到后台保存的数据（已选中的数据的 id 数组）
     selectIdList() {
-      return this.selectListCheck.map(item => item.id)
+      return this.selectListCheck.map((item) => item.id)
     },
     originList() {
       return this.async ? this.asyncDataList : this.dataList
@@ -178,8 +180,8 @@ export default {
     selectIdList(newVal) {
       // 获取已选数据的监听事件
       const moveKeys = [
-        ...this.noCheckData.map(item => item.id),
-        ...this.hasCheckData.map(item => item.id)
+        ...this.noCheckData.map((item) => item.id),
+        ...this.hasCheckData.map((item) => item.id)
       ]
       this.hasCheckData = []
       this.noCheckData = []
@@ -212,20 +214,20 @@ export default {
       }
       if (!this.async) {
         this.selectListCheck = JSON.parse(JSON.stringify(this.checkedData))
-        const checkDataId = this.selectListCheck.map(ele => ele.id)
-        this.notSelectDataList = this.originList.filter(ele => !checkDataId.includes(ele.id))
+        const checkDataId = this.selectListCheck.map((ele) => ele.id)
+        this.notSelectDataList = this.originList.filter((ele) => !checkDataId.includes(ele.id))
         this.dataListNoCheck = JSON.parse(JSON.stringify(this.notSelectDataList))
       } else {
         if (selectedChange) {
           this.selectListCheck = JSON.parse(JSON.stringify(this.checkedData))
         }
-        const checkDataId = this.selectListCheck.map(ele => ele.id)
+        const checkDataId = this.selectListCheck.map((ele) => ele.id)
         this.notSelectDataList = this.originList.filter(
-          ele =>
+          (ele) =>
             !checkDataId.includes(ele.id) &&
             (ele.label.includes(this.noSelectKeyword) || this.asyncSearchFlag)
         )
-        this.dataListNoCheck = this.originList.filter(ele => !checkDataId.includes(ele.id))
+        this.dataListNoCheck = this.originList.filter((ele) => !checkDataId.includes(ele.id))
       }
     },
     searchWord(keyword, titleId) {
@@ -234,11 +236,11 @@ export default {
       if (titleId === 0) {
         this.noSelectKeyword = keyword
         if (!this.asyncSearchFlag) {
-          this.notSelectDataList = this.dataListNoCheck.filter(val => val.label.includes(keyword))
+          this.notSelectDataList = this.dataListNoCheck.filter((val) => val.label.includes(keyword))
         }
       } else {
         this.haSelectKeyword = keyword
-        this.checkedData = this.selectListCheck.filter(val => val.label.includes(keyword))
+        this.checkedData = this.selectListCheck.filter((val) => val.label.includes(keyword))
       }
       const refsName = titleId === 0 ? 'noSelect' : 'hasSelect'
       // 延迟执行
@@ -269,52 +271,54 @@ export default {
     // 关键：把未选择的数据当做已选择的过滤数组，把已选择的数据当做未选择的过滤数组，在全局data进行过滤，最后进行一次搜索
     // 添加至已选
     addData() {
-      const noCheckDataId = this.noCheckData.map(ele => ele.id)
+      const noCheckDataId = this.noCheckData.map((ele) => ele.id)
       // 待选区数据过滤
       // 如果设置了异步搜索，就不用过滤关键词 this.asyncSearchFlag 为 true
       this.notSelectDataList = this.notSelectDataList.filter(
-        ele =>
+        (ele) =>
           !noCheckDataId.includes(ele.id) &&
           (ele.label.includes(this.noSelectKeyword) || this.asyncSearchFlag)
       )
-      this.dataListNoCheck = this.dataListNoCheck.filter(ele => !noCheckDataId.includes(ele.id))
+      this.dataListNoCheck = this.dataListNoCheck.filter((ele) => !noCheckDataId.includes(ele.id))
       // 已选区数据增加
       if (!this.async && this.sort) {
         // 排序，从固定不变的所有数据中过滤，顺序就不会乱。但若数据量大就会比较卡
         // 异步分页不支持排序
-        const dataListNoCheckId = this.dataListNoCheck.map(ele => ele.id)
+        const dataListNoCheckId = this.dataListNoCheck.map((ele) => ele.id)
         this.checkedData = this.originList.filter(
-          ele => !dataListNoCheckId.includes(ele.id) && ele.label.includes(this.haSelectKeyword)
+          (ele) => !dataListNoCheckId.includes(ele.id) && ele.label.includes(this.haSelectKeyword)
         )
-        this.selectListCheck = this.originList.filter(ele => !dataListNoCheckId.includes(ele.id))
+        this.selectListCheck = this.originList.filter((ele) => !dataListNoCheckId.includes(ele.id))
       } else {
         // 这种效率更高的方法，但不能排序
         this.checkedData.push(...this.noCheckData)
         this.selectListCheck.push(...this.noCheckData)
-        this.checkedData = this.checkedData.filter(ele => ele.label.includes(this.haSelectKeyword))
+        this.checkedData = this.checkedData.filter((ele) =>
+          ele.label.includes(this.haSelectKeyword)
+        )
       }
     },
     // 从已选中删除
     deleteData() {
       // 已选区数据过滤
-      const hasCheckDataId = this.hasCheckData.map(ele => ele.id)
+      const hasCheckDataId = this.hasCheckData.map((ele) => ele.id)
       this.checkedData = this.checkedData.filter(
-        ele => !hasCheckDataId.includes(ele.id) && ele.label.includes(this.haSelectKeyword)
+        (ele) => !hasCheckDataId.includes(ele.id) && ele.label.includes(this.haSelectKeyword)
       )
-      this.selectListCheck = this.selectListCheck.filter(ele => !hasCheckDataId.includes(ele.id))
+      this.selectListCheck = this.selectListCheck.filter((ele) => !hasCheckDataId.includes(ele.id))
 
       this.manualEmpty = !this.checkedData.length
 
       // 待选区数据增加
-      const selectListCheckId = this.selectListCheck.map(ele => ele.id)
+      const selectListCheckId = this.selectListCheck.map((ele) => ele.id)
       // const checkedDataId = this.checkedData.map(ele => ele.id)
       // 如果设置了异步搜索，就不用过滤关键词 this.asyncSearchFlag 为 true
       this.notSelectDataList = this.originList.filter(
-        ele =>
+        (ele) =>
           !selectListCheckId.includes(ele.id) &&
           (ele.label.includes(this.noSelectKeyword) || this.asyncSearchFlag)
       )
-      this.dataListNoCheck = this.originList.filter(ele => !selectListCheckId.includes(ele.id))
+      this.dataListNoCheck = this.originList.filter((ele) => !selectListCheckId.includes(ele.id))
     },
     // 提供获取已选数据的钩子
     getSelectedData() {
@@ -381,34 +385,44 @@ export default {
 
 <style lang="scss" scoped>
 .krry-main {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
   min-width: 600px;
+}
 
-  .opera {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 415px;
+.inner-center {
+  margin: 0 5px;
+}
 
-    .arrow {
-      width: 1.25em;
-      height: 1.25em;
-      color: #888888;
-    }
+.buttons {
+  vertical-align: middle;
+}
 
-    .el-button.is-circle {
-      border-radius: 50%;
-      padding: 12px;
-      display: block;
-      margin: 25px auto;
-    }
+.opera {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 415px;
 
-    .el-transfer__button {
-      padding: 5px;
-    }
+  .arrow {
+    width: 1.25em;
+    height: 1.25em;
+    color: #888888;
+  }
+
+  @media screen and (max-width: 992px) {
+    margin: 8px 8px;
+    text-align: start;
+  }
+
+  .el-button.is-circle {
+    border-radius: 50%;
+    padding: 12px;
+    display: block;
+    margin: 25px auto;
+  }
+
+  .el-transfer__button {
+    padding: 5px;
   }
 }
 </style>

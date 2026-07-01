@@ -16,33 +16,19 @@ export default {
   data() {
     return {
       fields: [
-        [
-          this.$t('Basic'),
-          [
-            'SECURITY_SERVICE_ACCOUNT_REGISTRATION'
-          ]
-        ],
+        [this.$t('Basic'), ['SECURITY_SERVICE_ACCOUNT_REGISTRATION']],
         [
           `SSH & KoKo`,
           [
             'TERMINAL_KOKO_SSH_ENABLED',
-            'TERMINAL_PASSWORD_AUTH', 'TERMINAL_PUBLIC_KEY_AUTH',
+            'TERMINAL_PASSWORD_AUTH',
+            'TERMINAL_PUBLIC_KEY_AUTH',
             'TERMINAL_ASSET_LIST_SORT_BY',
             'TERMINAL_ASSET_LIST_PAGE_SIZE'
           ]
         ],
-        [
-          `RDP & Razor`,
-          [
-            'TERMINAL_RAZOR_ENABLED'
-          ]
-        ],
-        [
-          `DB & Magnus`,
-          [
-            'TERMINAL_MAGNUS_ENABLED'
-          ]
-        ]
+        [`RDP & Razor`, ['TERMINAL_RAZOR_ENABLED']],
+        [`DB & Magnus`, ['TERMINAL_MAGNUS_ENABLED']]
       ],
       fieldsMeta: {
         TERMINAL_RAZOR_ENABLED: {
@@ -68,13 +54,11 @@ export default {
         return 'put'
       },
       cleanFormValue(data) {
-        Object.keys(data).forEach(
-          function(key) {
-            if (data[key] === null) {
-              delete data[key]
-            }
+        Object.keys(data).forEach(function (key) {
+          if (data[key] === null) {
+            delete data[key]
           }
-        )
+        })
         return data
       }
     }
@@ -83,6 +67,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

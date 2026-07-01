@@ -9,20 +9,20 @@ export const GLOBAL_ORG_ID = '00000000-0000-0000-0000-000000000000'
 function getPropOrg() {
   const orgs = store.getters.usingOrgs
   const preOrg = store.getters.preOrg || {}
-  const preFound = orgs.find(item => item.id === preOrg.id)
+  const preFound = orgs.find((item) => item.id === preOrg.id)
   if (preFound) {
     return preFound
   }
-  const defaultOrg = orgs.find(item => item.is_default)
+  const defaultOrg = orgs.find((item) => item.is_default)
   if (defaultOrg) {
     return defaultOrg
   }
   // 优先选择非 SYSTEM 和非 ROOT 的组织
-  const nonSystemOrg = orgs.find(item => !item['is_root'] && !item['is_system'])
+  const nonSystemOrg = orgs.find((item) => !item['is_root'] && !item['is_system'])
   if (nonSystemOrg) {
     return nonSystemOrg
   }
-  // 如果用户只有 SYSTEM 组织，则允许使用 SYSTEM 组织，避免无限循环
+  // 如果用户只有 SYSTEM 组织，则允许使用 SYSTEM 组织，避免登录无限重定向
   return orgs[0]
 }
 
@@ -32,6 +32,11 @@ async function change2PropOrg() {
 }
 
 async function changeOrg(org, reload = true, vm = null) {
+  if (!org || typeof org !== 'object' || !org.id) {
+    console.error('Invalid organization supplied to changeOrg:', org)
+    return false
+  }
+
   await store.dispatch('users/setCurrentOrg', org)
   await store.dispatch('app/reset')
   const fullPath = location.hash.slice(1)
@@ -69,20 +74,23 @@ async function changeOrg(org, reload = true, vm = null) {
   path = path + (queryStr ? '?' + queryStr : '')
 
   if (vm) {
-    const result = vm.$router.resolve({ path })
-    if (result.resolved.name === '404') {
+    const resolvedRoute = vm.$router.resolve({ path })
+    if (['404', 'NotFound'].includes(resolvedRoute?.name)) {
       path = '/'
     }
   }
   location.hash = '#' + path
-  setTimeout(() => location.reload(), 500)
+  if (reload) {
+    setTimeout(() => location.reload(), 500)
+  }
+  return true
 }
 
 function hasCurrentOrgPermission() {
   const currentOrg = store.getters.currentOrg
   const currentOrgId = currentOrg.id
   const orgs = store.getters.usingOrgs
-  return orgs.find(item => item.id === currentOrgId)
+  return orgs.find((item) => item.id === currentOrgId)
 }
 
 export default {

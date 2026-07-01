@@ -6,7 +6,7 @@ for (let i = 0; i < chars.length; i++) {
   lookup[chars.charCodeAt(i)] = i
 }
 
-const encode = function(arraybuffer) {
+const encode = function (arraybuffer) {
   const bytes = new Uint8Array(arraybuffer)
   let i
   const len = bytes.length
@@ -28,7 +28,7 @@ const encode = function(arraybuffer) {
   return base64url
 }
 
-const decode = function(base64string) {
+const decode = function (base64string) {
   const bufferLength = base64string.length * 0.75
   const len = base64string.length
   let i
@@ -54,7 +54,7 @@ const decode = function(base64string) {
   return bytes.buffer
 }
 
-const publicKeyCredentialToJSON = pubKeyCred => {
+const publicKeyCredentialToJSON = (pubKeyCred) => {
   if (pubKeyCred instanceof Array) {
     const arr = []
     for (const i of pubKeyCred) {

@@ -1,26 +1,19 @@
 <template>
   <el-link @click="goto()">
-    <svg-icon icon-class="nav-setting" />
+    <svg-icon icon-class="nav-setting" @click="goto()" />
   </el-link>
 </template>
 
 <script>
-import { getFirstAccessibleChildPath } from '@/utils/vue'
-
 export default {
   name: 'WebTerminal',
   computed: {},
   methods: {
     goto() {
-      const path = getFirstAccessibleChildPath('/settings') || '/settings/basic'
-      if (this.$route.path === path) {
-        return
-      }
-      this.$router.push(path)
+      this.$router.push({ name: 'SystemSetting' })
     }
   }
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

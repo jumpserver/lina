@@ -11,13 +11,18 @@
   >
     <div class="chat">
       <div class="container">
-        <div ref="header" class="header" @mousedown="handleMoveMouseDown" @mouseup="handleMouseMoveUp">
+        <div
+          ref="header"
+          class="header"
+          @mousedown="handleMoveMouseDown"
+          @mouseup="handleMouseMoveUp"
+        >
           <div class="left">
-            <img :src="robotUrl" alt="">
+            <img :src="robotUrl" alt="" />
             <span class="title">{{ title }}</span>
           </div>
           <span class="new" @click="onNewChat">
-            <i class="el-icon-plus" />
+            <el-icon><Plus /></el-icon>
             <span>{{ $tc('NewChat') }}</span>
           </span>
         </div>
@@ -29,13 +34,12 @@
       </div>
       <div class="sidebar">
         <Sidebar
-          :active.sync="active"
-          :expanded="expanded"
           v-bind="$attrs"
+          v-model:active="active"
+          :expanded="expanded"
           @close="onClose"
           @compress="compress"
           @expand="expandFull"
-          v-on="$listeners"
         />
       </div>
     </div>
@@ -46,9 +50,10 @@
 import Sidebar from './components/Sidebar/index.vue'
 import Chat from './components/ChitChat/index.vue'
 import { getInputFocus } from './useChat.js'
-import { ws } from '@/utils/request'
 import DrawerPanel from '@/components/Apps/DrawerPanel/index.vue'
 import { ObjectLocalStorage } from '@/utils/common'
+import i18n from '@/i18n/i18n'
+import { getAssetUrl } from '@/utils/assets'
 import { mapGetters } from 'vuex'
 
 const aiPannelLocalStorage = new ObjectLocalStorage('ai_panel_settings')
@@ -61,8 +66,8 @@ export default {
   props: {
     title: {
       type: String,
-      default: function() {
-        return this.$t('ChatAI')
+      default: function () {
+        return i18n.global.t('ChatAI')
       }
     },
     defaultShowPanel: {
@@ -78,17 +83,16 @@ export default {
     return {
       visible: false,
       active: 'chat',
-      robotUrl: require('@/assets/img/robot-assistant.png'),
+      robotUrl: getAssetUrl('img/robot-assistant.png'),
       height: '400px',
       expanded: false,
       clientOffset: {},
-      currentTerminalContent: {}
+      currentTerminalContent: {},
+      initialized: false
     }
   },
   computed: {
-    ...mapGetters([
-      'publicSettings'
-    ])
+    ...mapGetters(['publicSettings'])
   },
   watch: {
     'publicSettings.CHAT_AI_METHOD': {
@@ -123,11 +127,18 @@ export default {
         document.body.appendChild(script)
       }
     },
+    initAssistant() {
+      if (this.initialized) return
+      this.initialized = true
+      this.$nextTick(() => {
+        this.$refs.component?.init()
+      })
+    },
     handlePostMessage() {
       window.addEventListener('message', (event) => {
         if (event.data === 'show-chat-panel') {
           this.$refs.drawer.show = true
-          this.initWebSocket()
+          this.initAssistant()
           return
         }
         const msg = event.data
@@ -152,11 +163,6 @@ export default {
       }
       this.$refs.drawer.handleHeaderMoveUp(event)
     },
-    initWebSocket() {
-      if (!ws) {
-        this.$refs.component?.init()
-      }
-    },
     onClose() {
       this.$refs.drawer.show = false
     },
@@ -170,7 +176,6 @@ export default {
     },
     save_pannel_settings() {
       aiPannelLocalStorage.set('expanded', this.expanded)
-      console.log('AI panel settings saved:', this.expanded)
     },
     updateExpandedState(expanded) {
       this.expanded = expanded
@@ -184,8 +189,8 @@ export default {
       })
     },
     onToggle(status) {
-      this.initWebSocket()
       if (status) {
+        this.initAssistant()
         getInputFocus()
       }
     }
@@ -207,7 +212,7 @@ export default {
     overflow: hidden;
 
     .header {
-      background: linear-gradient(90deg, #ebf1ff 24.34%, #e5fbf8 56.18%, #f2ebfe 90.18%);;
+      background: linear-gradient(90deg, #ebf1ff 24.34%, #e5fbf8 56.18%, #f2ebfe 90.18%);
       display: flex;
       justify-content: space-between;
       height: 48px;

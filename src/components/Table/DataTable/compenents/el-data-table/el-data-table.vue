@@ -1,5 +1,5 @@
 <template>
-  <div class="el-data-table">
+  <div v-bind="rootAttrs" :class="rootClass" :style="rootStyle">
     <template v-if="showNoData">
       <!--@slot 获取数据为空时的内容-->
       <slot name="no-data" />
@@ -10,142 +10,121 @@
         导致跨页选择（persistSelection）被覆盖，只剩当页数据。
         选择事件统一走 selectStrategy，在内部维护全量 selected 并向外 emit。
       -->
-      <el-table
-        ref="table"
-        v-loading="tableLoading"
-        :data="data"
-        :row-class-name="rowClassName"
-        v-bind="tableAttrs"
-        @select="selectStrategy.onSelect"
-        v-on="forwardListeners"
-        @selection-change="selectStrategy.onSelectionChange"
-        @select-all="handleSelectAll($event, canSelect)"
-        @sort-change="onSortChange"
-      >
-        <!--TODO 不用jsx写, 感觉template逻辑有点不清晰了-->
-        <template v-if="isTree">
-          <!--有多选-->
-          <template v-if="hasSelect">
+      <div v-loading="tableLoading">
+        <el-table
+          v-bind="tableAttrs"
+          ref="table"
+          :data="data"
+          :row-class-name="rowClassName"
+          @select="selectStrategy.onSelect"
+          v-on="forwardListeners"
+          @selection-change="selectStrategy.onSelectionChange"
+          @select-all="handleSelectAll($event, canSelect)"
+          @sort-change="onSortChange"
+        >
+          <template v-if="isTree">
             <el-data-table-column
-              key="selection-key"
               v-bind="{ align: columnsAlign, ...columns[0] }"
+              v-if="hasSelect"
+              key="selection-key"
             />
-
-            <el-data-table-column key="tree-ctrl" v-bind="{ align: columnsAlign, ...columns[1] }">
-              <template slot-scope="scope">
-                <span v-for="space in scope.row._level" :key="space" class="ms-tree-space" />
-                <span
-                  v-if="iconShow(scope.$index, scope.row)"
-                  class="tree-ctrl"
-                  @click="toggleExpanded(scope.$index)"
-                >
-                  <i :class="`el-icon-${scope.row._expanded ? 'minus' : 'plus'}`" />
-                </span>
-                {{ scope.row[columns[1].prop] }}
-              </template>
-            </el-data-table-column>
-
             <el-data-table-column
-              v-for="col in columns.filter((c, i) => i !== 0 && i !== 1)"
-              :key="col.prop"
-              v-bind="{ align: columnsAlign, ...col }"
-            />
-          </template>
-
-          <!--无选择-->
-          <template v-else>
-            <!--展开这列, 丢失 el-data-table-column属性-->
-            <el-data-table-column key="tree-ctrl" v-bind="{ align: columnsAlign, ...columns[0] }">
-              <template slot-scope="scope">
-                <span v-for="space in scope.row._level" :key="space" class="ms-tree-space" />
-
-                <span
-                  v-if="iconShow(scope.$index, scope.row)"
-                  class="tree-ctrl"
-                  @click="toggleExpanded(scope.$index)"
-                >
-                  <i :class="`el-icon-${scope.row._expanded ? 'minus' : 'plus'}`" />
-                </span>
-                {{ scope.row[columns[0].prop] }}
-              </template>
-            </el-data-table-column>
-
-            <el-data-table-column
-              v-for="col in columns.filter((c, i) => i !== 0)"
-              :key="col.prop"
-              v-bind="{ align: columnsAlign, ...col }"
-            />
-          </template>
-        </template>
-
-        <!--非树-->
-        <template v-else>
-          <el-data-table-column
-            v-if="hasSelection"
-            :align="selectionAlign"
-            :selectable="canSelect"
-            type="selection"
-          />
-          <el-data-table-column
-            v-for="col in columns"
-            :key="col.prop"
-            :filter-method="typeof col.filterMethod === 'function' ? col.filterMethod : null"
-            :filter-multiple="false"
-            :filters="col.filters || null"
-            :formatter="typeof col.formatter === 'function' ? col.formatter : null"
-            :title="col.label"
-            v-bind="{ align: columnsAlign, ...col }"
-          >
-            <template #header>
-              <span :title="col.label">{{ col.label }}</span>
-            </template>
-            <template
-              v-if="col.formatter && typeof col.formatter !== 'function'"
-              v-slot:default="{ row, column, $index }"
+              v-bind="treeControlColumn"
+              :key="treeControlColumn.prop || 'tree-ctrl'"
             >
-              <div
-                :is="col.formatter"
-                :key="row.id"
-                :cell-value="row[col.prop]"
-                :col="col"
-                :column="column"
-                :index="$index"
-                :reload="getList"
-                :row="row"
-                :table-data="data"
-                :url="url"
-              />
-            </template>
-          </el-data-table-column>
-        </template>
-        <slot />
-      </el-table>
+              <template #default="scope">
+                <span v-for="space in scope.row._level" :key="space" class="ms-tree-space" />
+                <span
+                  v-if="iconShow(scope.$index, scope.row)"
+                  class="tree-ctrl"
+                  @click="toggleExpanded(scope.$index)"
+                >
+                  <el-icon><component :is="scope.row._expanded ? 'Minus' : 'Plus'" /></el-icon>
+                </span>
+                {{ scope.row[treeLabelProp] }}
+              </template>
+            </el-data-table-column>
+
+            <el-data-table-column
+              v-bind="{ align: columnsAlign, ...col }"
+              v-for="col in treeDataColumns"
+              :key="col.prop"
+            />
+          </template>
+
+          <!--非树-->
+          <template v-else>
+            <el-data-table-column
+              v-if="hasSelection"
+              :align="selectionAlign"
+              :selectable="canSelect"
+              type="selection"
+            />
+            <el-table-column
+              v-bind="getColumnBindProps(col)"
+              v-for="col in columns"
+              :key="col.prop"
+              :filter-method="typeof col.filterMethod === 'function' ? col.filterMethod : null"
+              :filter-multiple="false"
+              :filters="col.filters || null"
+              :formatter="typeof col.formatter === 'function' ? col.formatter : null"
+              :title="col.label"
+              :prop="col.prop"
+            >
+              <template #header>
+                <span :title="col.label">{{ col.label }}</span>
+              </template>
+
+              <template
+                v-if="col.formatter && typeof col.formatter !== 'function'"
+                #default="{ row: tableRow, column, $index }"
+              >
+                <component
+                  :is="getFormatterComponent(col)"
+                  :key="tableRow.id"
+                  :cell-value="tableRow[col.prop]"
+                  :col="col"
+                  :column="column"
+                  :index="$index"
+                  :reload="getList"
+                  :row="tableRow"
+                  :table-data="data"
+                  :url="url"
+                />
+              </template>
+            </el-table-column>
+          </template>
+          <slot />
+        </el-table>
+      </div>
 
       <el-pagination
         v-if="hasPagination"
-        :background="paginationBackground"
-        :current-page="page"
-        :layout="paginationLayout"
-        :page-size="size"
-        :page-sizes="paginationSizes"
-        :total="total"
-        v-bind="extraPaginationAttrs"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
+        v-bind="{
+          ...normalizedExtraPaginationAttrs,
+          currentPage: paginationCurrentPage,
+          pageSize: paginationPageSize,
+          background: paginationBackground,
+          layout: paginationLayout,
+          pageSizes: paginationSizes,
+          total: total || 0,
+          'onUpdate:current-page': handleCurrentChange,
+          'onUpdate:page-size': handleSizeChange
+        }"
       />
 
       <the-dialog
         ref="dialog"
         :button-size="buttonSize"
         :dialog-attrs="dialogAttrs"
-        :edit-title="dialogEditTitle"
+        :edit-title="iDialogEditTitle"
         :form="form"
         :form-attrs="formAttrs"
-        :new-title="dialogNewTitle"
-        :view-title="dialogViewTitle"
+        :new-title="iDialogNewTitle"
+        :view-title="iDialogViewTitle"
         @confirm="onConfirm"
       >
-        <template v-slot="scope">
+        <template #default="scope">
           <!-- @slot 表单作用域插槽。当编辑、查看时传入row；新增时row=null -->
           <slot :row="scope.row" name="form" />
         </template>
@@ -155,18 +134,20 @@
 </template>
 
 <script>
+import { omitVueListeners, pickVueListeners } from '@/utils/vue'
+import { markRaw, toRaw } from 'vue'
+import merge from 'deepmerge'
 import _get from 'lodash/get'
-import _values from 'lodash/values'
 import _isEmpty from 'lodash/isEmpty'
+import _values from 'lodash/values'
+import ElDataTableColumn from './components/el-data-table-column'
 import SelfLoadingButton from './components/self-loading-button.vue'
 import TheDialog, { dialogModes } from './components/the-dialog.vue'
-import ElDataTableColumn from './components/el-data-table-column'
-import * as queryUtil from './utils/query'
-import getSelectStrategy from './utils/select-strategy'
 import getLocatedSlotKeys from './utils/extract-keys'
-import transformSearchImmediatelyItem from './utils/search-immediately-item'
 import isFalsey from './utils/is-falsey'
-import merge from 'deepmerge'
+import * as queryUtil from './utils/query'
+import transformSearchImmediatelyItem from './utils/search-immediately-item'
+import getSelectStrategy from './utils/select-strategy'
 
 const defaultFirstPage = 1
 const noPaginationDataPath = 'payload'
@@ -178,6 +159,7 @@ export default {
     TheDialog,
     ElDataTableColumn
   },
+  inheritAttrs: false,
 
   props: {
     /**
@@ -361,8 +343,8 @@ export default {
      */
     newText: {
       type: String,
-      default: function() {
-        return this.$t('Add')
+      default: function () {
+        return 'Add'
       }
     },
     /**
@@ -370,8 +352,8 @@ export default {
      */
     editText: {
       type: String,
-      default: function() {
-        return this.$t('Modify')
+      default: function () {
+        return 'Modify'
       }
     },
     /**
@@ -379,8 +361,8 @@ export default {
      */
     viewText: {
       type: String,
-      default: function() {
-        return this.$t('View')
+      default: function () {
+        return 'View'
       }
     },
     /**
@@ -388,8 +370,8 @@ export default {
      */
     deleteText: {
       type: String,
-      default: function() {
-        return this.$t('Delete')
+      default: function () {
+        return 'Delete'
       }
     },
     /**
@@ -400,7 +382,7 @@ export default {
     deleteMessage: {
       type: Function,
       default() {
-        return this.$t('Confirm') + this.deleteText + '?'
+        return 'Confirm' + this.deleteText + '?'
       }
     },
     /**
@@ -425,7 +407,7 @@ export default {
     onNew: {
       type: Function,
       default(data) {
-        return this.$axios.post(this.url, data, this.axiosConfig)
+        console.log('onNew', data)
       }
     },
     /**
@@ -443,8 +425,9 @@ export default {
     onDelete: {
       type: Function,
       default(data) {
-        const ids = Array.isArray(data) ? data.map(v => v[this.id]).join(',') : data[this.id]
-        return this.$axios.delete(this.url + '/' + ids + '/', this.axiosConfig)
+        // const ids = Array.isArray(data) ? data.map(v => v[this.id]).join(',') : data[this.id]
+        // return this.$axios.delete(this.url + '/' + ids + '/', this.axiosConfig)
+        console.log('onDelete', data)
       }
     },
     /**
@@ -456,7 +439,7 @@ export default {
     onSuccess: {
       type: Function,
       default() {
-        return this.$message.success(this.$t('SuccessfulOperation'))
+        return this.$message.success('SuccessfulOperation')
       }
     },
     /**
@@ -563,27 +546,21 @@ export default {
      */
     dialogNewTitle: {
       type: String,
-      default() {
-        return this.newText
-      }
+      default: ''
     },
     /**
      * 修改弹窗的标题，默认为editText的值
      */
     dialogEditTitle: {
       type: String,
-      default() {
-        return this.editText
-      }
+      default: ''
     },
     /**
      * 查看弹窗的标题，默认为viewText的值
      */
     dialogViewTitle: {
       type: String,
-      default() {
-        return this.viewText
-      }
+      default: ''
     },
     /**
      * 弹窗表单, 用于新增与修改, 详情配置参考el-form-renderer
@@ -757,6 +734,32 @@ export default {
     }
   },
   computed: {
+    paginationCurrentPage: {
+      get() {
+        return this.page
+      },
+      set(val) {
+        this.handleCurrentChange(val)
+      }
+    },
+    paginationPageSize: {
+      get() {
+        return this.size
+      },
+      set(val) {
+        this.handleSizeChange(val)
+      }
+    },
+    normalizedExtraPaginationAttrs() {
+      const attrs = { ...(this.extraPaginationAttrs || {}) }
+      if ('small' in attrs) {
+        if (attrs.small && !attrs.size) {
+          attrs.size = 'small'
+        }
+        delete attrs.small
+      }
+      return attrs
+    },
     hasSelect() {
       return this.columns.length && this.columns[0].type === 'selection'
     },
@@ -767,13 +770,28 @@ export default {
       return () => true
     },
     columnsAlign() {
-      if (this.columns.some(col => col.columns && col.columns.length)) {
+      if (this.columns.some((col) => col.columns && col.columns.length)) {
         // 多级表头默认居中
         return 'center'
       } else {
         // 默认居中 //修改点
         return this.defaultAlign
       }
+    },
+    treeColumnIndex() {
+      return this.hasSelect ? 1 : 0
+    },
+    treeControlColumn() {
+      const column = this.columns[this.treeColumnIndex] || {}
+      return { align: this.columnsAlign, ...column }
+    },
+    treeDataColumns() {
+      const start = this.hasSelect ? 2 : 1
+      return this.columns.slice(start)
+    },
+    treeLabelProp() {
+      const column = this.columns[this.treeColumnIndex] || {}
+      return column.prop
     },
     routerMode() {
       return this.$router ? this.$router.mode : 'hash'
@@ -787,7 +805,7 @@ export default {
         (this.hasSelect && this.hasDelete) ||
         this.headerButtons.length ||
         this.canSearchCollapse ||
-        this.$scopedSlots.header
+        this.$slots.header
       )
     },
     _extraBody() {
@@ -799,9 +817,30 @@ export default {
     selectStrategy() {
       return getSelectStrategy(this)
     },
+    rootAttrs() {
+      const attrs = omitVueListeners(this.$attrs)
+      delete attrs.class
+      delete attrs.style
+      return attrs
+    },
+    rootClass() {
+      return ['el-data-table', this.$attrs.class]
+    },
+    rootStyle() {
+      return this.$attrs.style
+    },
+    iDialogNewTitle() {
+      return this.dialogNewTitle || this.newText
+    },
+    iDialogEditTitle() {
+      return this.dialogEditTitle || this.editText
+    },
+    iDialogViewTitle() {
+      return this.dialogViewTitle || this.viewText
+    },
     // 过滤会与内部选择策略冲突的事件，避免父组件只拿到当前页 selection
     forwardListeners() {
-      const listeners = { ...this.$listeners }
+      const listeners = { ...pickVueListeners(this.$attrs) }
       delete listeners['selection-change']
       delete listeners['select']
       delete listeners['select-all']
@@ -813,7 +852,7 @@ export default {
       return getLocatedSlotKeys(this.$slots, 'search:')
     },
     collapseForm() {
-      return this.searchForm.map(item => {
+      return this.searchForm.map((item) => {
         if ('collapsible' in item && !item.collapsible) {
           return item
         }
@@ -821,7 +860,7 @@ export default {
         const itemHidden = item.hidden || (() => false)
         return {
           ...item,
-          hidden: data => {
+          hidden: (data) => {
             return this.isSearchCollapse || itemHidden(data)
           }
         }
@@ -859,7 +898,7 @@ export default {
       if (val && val.length !== this.total) {
         this.page = defaultFirstPage
         this.total = val.length
-        this.getList()
+        this.$nextTick(() => this.getList())
       }
     }
   },
@@ -886,6 +925,19 @@ export default {
     this.debouncedGetListFromRemote = _.debounce(this.getListFromRemote, 300)
   },
   methods: {
+    getFormatterComponent(col) {
+      if (!col?.formatter || typeof col.formatter === 'function') {
+        return null
+      }
+      return markRaw(toRaw(col.formatter))
+    },
+    getColumnBindProps(col) {
+      // 排除 formatter，因为组件类型的 formatter 不应该传递给 el-table-column 的 formatter prop
+      // 函数类型的 formatter 已经通过 :formatter 显式传递了
+      // 但是我们需要保留 formatter 在 v-bind 中，以便 template slot 可以访问到
+      // 所以这里不排除 formatter，而是在 el-data-table-column 中处理
+      return { align: this.columnsAlign, ...col }
+    },
     getQuery() {
       // 构造query对象
       let query = {}
@@ -904,7 +956,7 @@ export default {
 
       // 无效值过滤，注意0是有效值
       query = Object.keys(query)
-        .filter(k => !isFalsey(query[k]))
+        .filter((k) => !isFalsey(query[k]))
         .reduce((obj, k) => {
           obj[k] = query[k].toString().trim()
           return obj
@@ -1031,7 +1083,7 @@ export default {
             this.selectStrategy?.updateElTableSelection()
           })
         })
-        .catch(err => {
+        .catch((err) => {
           /**
            * 请求数据失败，返回err对象
            * @event error
@@ -1090,6 +1142,7 @@ export default {
     },
     handleSizeChange(val) {
       if (this.size === val) return
+      this.$emit('update:page-size', val)
       this.$emit('sizeChange', val)
       this.page = defaultFirstPage
       this.size = val
@@ -1097,7 +1150,7 @@ export default {
     },
     handleCurrentChange(val) {
       if (this.page === val) return
-
+      this.$emit('update:current-page', val)
       this.page = val
       this.getList()
     },
@@ -1226,15 +1279,15 @@ export default {
     // https://github.com/PanJiaChen/vue-element-admin/tree/master/@/components/TreeTable
     tree2Array(data, expandAll, parent = null, level = null) {
       let tmp = []
-      data.forEach(record => {
+      data.forEach((record) => {
         if (record._expanded === undefined) {
-          this.$set(record, '_expanded', expandAll)
+          record._expanded = expandAll
         }
         let _level = 0
         if (level !== undefined && level !== null) {
           _level = level + 1
         }
-        this.$set(record, '_level', _level)
+        record._level = _level
         // 如果有父元素
         if (parent) {
           Object.defineProperty(record, 'parent', {
@@ -1285,13 +1338,13 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 // 自定义样式
-@import url(index.less);
+@use './index';
 
 .el-data-table {
-  @color-blue: #2196f3;
-  @space-width: 18px;
+  $color-blue: #2196f3;
+  $space-width: 18px;
 
   .ms-tree-space {
     position: relative;
@@ -1300,7 +1353,7 @@ export default {
     font-style: normal;
     font-weight: 400;
     line-height: 1;
-    width: @space-width;
+    width: $space-width;
     height: 14px;
 
     &::before {
@@ -1311,7 +1364,7 @@ export default {
   .tree-ctrl {
     position: relative;
     cursor: pointer;
-    color: @color-blue;
+    color: $color-blue;
   }
 
   @keyframes treeTableShow {

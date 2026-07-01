@@ -4,7 +4,7 @@
 
 <script>
 import BaseFormatter from './base.vue'
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 
 export default {
   name: 'DateFormatter',

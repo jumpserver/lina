@@ -5,7 +5,7 @@
     </el-col>
     <el-col :lg="14" :md="14" :sm="24">
       <IBox title="README">
-        <markdown-renderer v-if="object.readme" :source="object.readme" />
+        <vue-markdown v-if="object.readme" :source="object.readme" />
         <span v-else>{{ $tc('NoData') }}</span>
       </IBox>
     </el-col>
@@ -13,60 +13,79 @@
 </template>
 
 <script>
-import { IBox } from '@/components'
+import {
+  createTextVNode as createTextVNodeCompat,
+  isVNode as isVNodeCompat,
+  resolveComponent as resolveComponentCompat,
+  createVNode as createVNodeCompat
+} from 'vue'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
-import MarkdownRenderer from '@/components/Widgets/MarkdownRenderer'
-import { copy } from '@/utils/common'
-
+import VueMarkdown from '@/components/Widgets/VueMarkdown/index.vue'
+import { IBox } from '@/components'
+function _isSlot(s) {
+  return (
+    typeof s === 'function' ||
+    (Object.prototype.toString.call(s) === '[object Object]' && !isVNodeCompat(s))
+  )
+}
 export default {
   name: 'Detail',
   components: {
     IBox,
-    MarkdownRenderer,
+    VueMarkdown,
     AutoDetailCard
   },
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
     const vm = this
     return {
-      url: `/api/v1/terminal/applets/${this.object.id}/`,
+      url: `/api/v1/terminal/applets/${this.object.id}`,
       detailFields: [
         {
           key: '',
           formatter: () => {
-            return <img src={this.object.icon} alt='' height='40'/>
-          }
-        },
-        'name', 'display_name',
-        {
-          key: this.$t('Author'),
-          value: this.object.author,
-          has: () => vm.$store.getters.publicSettings?.VENDOR?.toLowerCase() === 'jumpserver',
-          formatter: (item, val) => {
-            if (val === '-' || val === null || val === undefined || val === '') {
-              return <span>{'-'}</span>
-            }
-            return (
-              <span style={{ cursor: 'pointer' }} onClick={() => copy(val)} title={val}>
-                {val}
-              </span>
+            return createVNodeCompat(
+              'img',
+              {
+                src: this.object.icon,
+                alt: '',
+                height: '40'
+              },
+              null
             )
           }
         },
+        'name',
+        'display_name',
+        'author',
         {
           key: this.$t('Protocols'),
           formatter: () => {
             const types = ['primary', 'success', 'warning', 'danger']
             const data = this.object.protocols.map((p, i) => {
-              return <el-tag type={types[i % 4]} size='mini'>{p}</el-tag>
+              return createVNodeCompat(
+                resolveComponentCompat('el-tag'),
+                {
+                  type: types[i % 4],
+                  size: 'small'
+                },
+                _isSlot(p)
+                  ? p
+                  : {
+                      default: () => [p]
+                    }
+              )
             })
-            return <span> {data} </span>
+            return createVNodeCompat('span', null, [
+              createTextVNodeCompat(' '),
+              data,
+              createTextVNodeCompat(' ')
+            ])
           }
         },
         {
@@ -74,9 +93,24 @@ export default {
           formatter: () => {
             const types = ['primary', 'success', 'warning', 'danger']
             const data = this.object.tags.map((p, i) => {
-              return <el-tag type={types[i % 4]} size='mini'>{p}</el-tag>
+              return createVNodeCompat(
+                resolveComponentCompat('el-tag'),
+                {
+                  type: types[i % 4],
+                  size: 'small'
+                },
+                _isSlot(p)
+                  ? p
+                  : {
+                      default: () => [p]
+                    }
+              )
             })
-            return <span> {data} </span>
+            return createVNodeCompat('span', null, [
+              createTextVNodeCompat(' '),
+              data,
+              createTextVNodeCompat(' ')
+            ])
           }
         },
         {
@@ -86,34 +120,46 @@ export default {
         {
           key: this.$t('Active'),
           formatter: () => {
-            return <el-switch
-              v-model={this.object.is_active}
-              disabled={!vm.$hasPerm('terminal.change_applet')}
-              onChange={(v) => {
-                const url = `/api/v1/terminal/applets/${vm.object.id}/`
-                const data = { is_active: v }
-                vm.$axios.patch(url, data).catch(() => {
-                  this.object.is_active = !v
-                }).then(res => {
-                  vm.$message.success(vm.$t('UpdateSuccessMsg'))
-                }).catch(err => {
-                  vm.$message.error(vm.$t('UpdateErrorMsg' + ' ' + err))
-                })
-              }}
-            />
+            return createVNodeCompat(
+              resolveComponentCompat('el-switch'),
+              {
+                modelValue: this.object.is_active,
+                'onUpdate:modelValue': ($event) => (this.object.is_active = $event),
+                disabled: !vm.$hasPerm('terminal.change_applet'),
+                onChange: (v) => {
+                  const url = `/api/v1/terminal/applets/${vm.object.id}/`
+                  const data = {
+                    is_active: v
+                  }
+                  vm.$axios
+                    .patch(url, data)
+                    .catch(() => {
+                      this.object.is_active = !v
+                    })
+                    .then((res) => {
+                      vm.$message.success(vm.$t('UpdateSuccessMsg'))
+                    })
+                    .catch((err) => {
+                      vm.$message.error(vm.$t('UpdateErrorMsg' + ' ' + err))
+                    })
+                }
+              },
+              null
+            )
           }
         },
-        'edition', 'can_concurrent',
-        'date_created', 'date_updated', 'comment'
+        'edition',
+        'can_concurrent',
+        'date_created',
+        'date_updated',
+        'comment'
       ]
     }
   },
   computed: {},
-  mounted() {
-  },
+  mounted() {},
   methods: {}
 }
 </script>
 
-<style lang='scss' scoped>
-</style>
+<style lang="scss" scoped></style>

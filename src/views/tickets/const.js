@@ -7,31 +7,39 @@ export const CLOSED = 'closed'
 
 export const STATUS_MAP = {
   [OPEN]: {
-    type: 'success', title: i18n.t('Pending')
+    type: 'success',
+    title: i18n.t('Pending')
   },
   [APPROVE]: {
-    type: 'primary', title: i18n.t('Approved')
+    type: 'primary',
+    title: i18n.t('Approved')
   },
   [REJECT]: {
-    type: 'danger', title: i18n.t('Rejected')
+    type: 'danger',
+    title: i18n.t('Rejected')
   },
   [CLOSED]: {
-    type: 'info', title: i18n.t('Closed')
+    type: 'info',
+    title: i18n.t('Closed')
   }
 }
 
 export const STATE_MAP = {
   [OPEN]: {
-    type: 'success', title: i18n.t('Pending')
+    type: 'success',
+    title: i18n.t('Pending')
   },
   [APPROVE]: {
-    type: 'primary', title: i18n.t('Approved')
+    type: 'primary',
+    title: i18n.t('Approved')
   },
   [REJECT]: {
-    type: 'danger', title: i18n.t('Rejected')
+    type: 'danger',
+    title: i18n.t('Rejected')
   },
   [CLOSED]: {
-    type: 'warning', title: i18n.t('StateClosed')
+    type: 'warning',
+    title: i18n.t('StateClosed')
   }
 }
 

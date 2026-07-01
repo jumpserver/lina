@@ -7,26 +7,24 @@
         </el-alert>
       </el-col>
     </el-row>
-    <DrawerCardTable ref="CardTable" v-bind="$data" />
-    <UploadDialog :visible.sync="uploadDialogVisible" @upload-event="handleUpload" />
+    <CardTable v-bind="$data" ref="CardTable" />
+    <UploadDialog v-model:visible="uploadDialogVisible" @upload-event="handleUpload" />
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import DrawerCardTable from '@/components/Table/DrawerCardTable'
+import CardTable from '@/components/Table/CardTable'
 import UploadDialog from './UploadDialog'
 
 export default {
   name: 'Applets',
   components: {
-    DrawerCardTable,
+    CardTable,
     UploadDialog
   },
   data() {
     return {
       uploadDialogVisible: false,
-      detailDrawer: () => import('./AppletDetail/index.vue'),
       tableConfig: {
         url: '/api/v1/terminal/applets/',
         deletePerm: 'terminal.delete_applet'
@@ -46,9 +44,8 @@ export default {
             title: this.$t('Marketplace'),
             icon: 'el-icon-shopping-bag-1',
             callback: () => {
-              window.open(this.publicSettings?.REMOTE_APP_STORE_URL)
-            },
-            has: () => !!this.publicSettings?.REMOTE_APP_STORE_URL
+              window.open('https://apps.fit2cloud.com/jumpserver')
+            }
           }
         ],
         detailRoute: 'AppletDetail',
@@ -59,11 +56,6 @@ export default {
         hasColumnSetting: false
       }
     }
-  },
-  computed: {
-    ...mapGetters({
-      publicSettings: 'publicSettings'
-    })
   },
   mounted() {
     this.$store.dispatch('users/enterSettingOrg')

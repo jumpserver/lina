@@ -1,12 +1,9 @@
 <template>
-  <GenericTicketDetail
-    :detail-card-items="detailCardItems"
-    :object="object"
-  />
+  <GenericTicketDetail :detail-card-items="detailCardItems" :object="object" />
 </template>
 
 <script>
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import GenericTicketDetail from '@/views/tickets/TicketFlow/components/GenericTicketDetail'
 
 export default {
@@ -48,27 +45,22 @@ export default {
         }
       ]
     }
-  },
-  methods: {
-    toSafeLocalDateStr(dataStr) {
-      return toSafeLocalDateStr(dataStr)
-    }
   }
 }
 </script>
 
 <style scoped>
-  .feed-activity-list .feed-element {
-    border-bottom: 1px solid #e7eaec;
-  }
-  .feed-element > .pull-left {
-    margin-right: 10px;
-  }
-  .feed-element .header-avatar {
-    width: 38px;
-    height: 38px;
-  }
-  .box {
-    margin-bottom: 15px;
-  }
+.feed-activity-list .feed-element {
+  border-bottom: 1px solid #e7eaec;
+}
+.feed-element > .pull-left {
+  margin-right: 10px;
+}
+.feed-element .header-avatar {
+  width: 38px;
+  height: 38px;
+}
+.box {
+  margin-bottom: 15px;
+}
 </style>

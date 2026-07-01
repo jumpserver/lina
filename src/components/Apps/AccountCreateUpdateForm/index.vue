@@ -1,10 +1,10 @@
 <template>
   <AutoDataForm
+    v-bind="$data"
     v-if="!loading"
     ref="AutoDataForm"
     :class="addTemplate ? '' : 'account-add'"
     :submit-btn-text="submitBtnText"
-    v-bind="$data"
     @submit="confirm"
   />
 </template>
@@ -146,13 +146,13 @@ export default {
         }
       ]
       const secretTypes = []
-      this.iPlatform.protocols?.forEach(p => {
+      this.iPlatform.protocols?.forEach((p) => {
         secretTypes.push(...p['secret_types'])
       })
       if (!this.form?.secret_type) {
         this.form.secret_type = secretTypes[0]
       }
-      this.fieldsMeta.secret_type.options = choices.filter(item => {
+      this.fieldsMeta.secret_type.options = choices.filter((item) => {
         return secretTypes.indexOf(item.value) > -1
       })
     },
@@ -183,7 +183,7 @@ export default {
 
 <style lang="scss" scoped>
 .account-add {
-  ::v-deep .el-form-item {
+  :deep(.el-form-item) {
     //margin-bottom: 5px;
 
     .help-block {
@@ -191,7 +191,7 @@ export default {
     }
   }
 
-  ::v-deep .form-group-header {
+  :deep(.form-group-header) {
     .hr-line-dashed {
       //margin: 5px 0;
     }

@@ -4,7 +4,6 @@
 # full: true
 
 plugins:
-
   # - name
   #
   # or:
@@ -16,5 +15,7 @@ plugins:
   #     param1: 1
   #     param2: 2
 
-- convertColors:
-    currentColor: true
+  - removeAttrs:
+      attrs:
+        - 'fill'
+        - 'fill-rule'

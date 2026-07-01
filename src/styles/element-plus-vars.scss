@@ -1,0 +1,43 @@
+/* Element Plus SCSS Theme Configuration */
+/* 使用 Element Plus 官方推荐的 SCSS map 方式自定义主题 */
+/* 参考: https://element-plus.org/zh-CN/guide/theming.html */
+
+@use 'sass:map';
+@use 'sass:math';
+@use 'sass:color';
+@use './default-theme' as *;
+
+// 定义自定义颜色配置（从统一的颜色文件引用）
+$colors: () !default;
+$colors: map.deep-merge(
+  (
+    'white': #ffffff,
+    'black': #000000,
+    'primary': (
+      'base': $color-primary
+    ),
+    'success': (
+      'base': $color-success
+    ),
+    'warning': (
+      'base': $color-warning
+    ),
+    'danger': (
+      'base': $color-danger
+    ),
+    'error': (
+      'base': $color-error
+    ),
+    'info': (
+      'base': $color-info
+    )
+  ),
+  $colors
+);
+
+// 使用 @forward 将自定义配置传递给 Element Plus
+// 这会覆盖 Element Plus 的默认颜色变量
+// Element Plus 会自动生成 light-1 到 light-9 和 dark-2 等颜色变体
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $colors: $colors
+);

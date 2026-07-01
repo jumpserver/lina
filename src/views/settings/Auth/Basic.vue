@@ -19,11 +19,7 @@ export default {
     return {
       searchQuery: '',
       url: '/api/v1/settings/setting/?category=auth',
-      fields: [
-        'EMAIL_SUFFIX',
-        'FORGOT_PASSWORD_URL',
-        'LOGIN_REDIRECT_MSG_ENABLED'
-      ],
+      fields: ['EMAIL_SUFFIX', 'FORGOT_PASSWORD_URL', 'LOGIN_REDIRECT_MSG_ENABLED'],
       fieldsMeta: {
         FORGOT_PASSWORD_URL: {
           el: {
@@ -39,6 +35,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

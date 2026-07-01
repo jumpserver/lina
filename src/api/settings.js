@@ -38,17 +38,19 @@ export function testLdapSetting(data, refresh = true) {
       url: url,
       method: 'post',
       data: data
-    }).then(res => {
-      if (res.status !== 'running') {
-        resolve(res)
-      } else {
-        setTimeout(() => {
-          resolve(testLdapSetting(data, false))
-        }, 1000)
-      }
-    }).catch(error => {
-      reject(error)
     })
+      .then((res) => {
+        if (res.status !== 'running') {
+          resolve(res)
+        } else {
+          setTimeout(() => {
+            resolve(testLdapSetting(data, false))
+          }, 1000)
+        }
+      })
+      .catch((error) => {
+        reject(error)
+      })
   })
 }
 

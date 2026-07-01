@@ -24,7 +24,7 @@ export default {
     },
     tableData: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     url: {
       type: String,
@@ -43,11 +43,6 @@ export default {
       default: () => ({})
     }
   },
-  data() {
-    return {
-      formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
-    }
-  },
   methods: {
     cellValueIsLabelChoice() {
       return typeof this.cellValue === 'object' && this.cellValue['value'] !== undefined
@@ -56,6 +51,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

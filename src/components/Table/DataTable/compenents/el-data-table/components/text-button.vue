@@ -1,17 +1,12 @@
 <template>
-  <el-button
-    :type="$attrs.type || 'primary'"
-    v-bind="$attrs"
-    plain
-    :style="style"
-    v-on="$listeners"
-  >
+  <el-button v-bind="$attrs" :type="$attrs.type || 'primary'" plain :style="style">
     <slot />
   </el-button>
 </template>
 
 <script>
 export default {
+  inheritAttrs: false,
   data() {
     return {
       style: {

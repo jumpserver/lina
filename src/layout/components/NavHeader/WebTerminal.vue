@@ -6,6 +6,7 @@
 
 <script>
 import { BASE_URL } from '@/utils/common/index'
+import { IS_PROD } from '@/utils/env'
 
 export default {
   name: 'WebTerminal',
@@ -13,7 +14,7 @@ export default {
     webTerminalUrl() {
       const oid = this.$store.getters.currentOrg ? this.$store.getters.currentOrg.id : ''
       let url = `${BASE_URL}/luna/?_=${Date.now()}${oid ? `&oid=${oid}` : ''}`
-      if (process.env.NODE_ENV !== 'production') {
+      if (!IS_PROD) {
         url = url.replace('9528', '4200')
       }
       return url
@@ -22,5 +23,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

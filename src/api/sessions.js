@@ -48,20 +48,16 @@ function SetToDefaultStorage(url) {
   return request({
     url: url,
     method: 'patch',
-    data: { 'is_default': true }
+    data: { is_default: true }
   })
 }
 
 export function SetToDefaultCommandStorage(id) {
-  return SetToDefaultStorage(
-    `/api/v1/terminal/command-storages/${id}/`,
-  )
+  return SetToDefaultStorage(`/api/v1/terminal/command-storages/${id}/`)
 }
 
 export function SetToDefaultReplayStorage(id) {
-  return SetToDefaultStorage(
-    `/api/v1/terminal/replay-storages/${id}/`,
-  )
+  return SetToDefaultStorage(`/api/v1/terminal/replay-storages/${id}/`)
 }
 
 export function getReplayStorage(id) {

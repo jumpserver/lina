@@ -2,19 +2,24 @@
   <div>
     <RecordViewSecret
       v-if="showViewSecretDialog"
+      v-model:visible="showViewSecretDialog"
       :url="secretUrl"
-      :visible.sync="showViewSecretDialog"
     />
-    <HomeCard ref="HomeCard" :table-config="tableConfig" class="failed-accounts" v-bind="cardConfig" />
+    <HomeCard
+      v-bind="cardConfig"
+      ref="HomeCard"
+      :table-config="tableConfig"
+      class="failed-accounts"
+    />
   </div>
 </template>
 
 <script>
-import HomeCard from '@/views/workbench/overview/components/HomeCard.vue'
+import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
-import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue'
-
+import HomeCard from '@/views/workbench/overview/components/HomeCard.vue'
+import { createVNode as createVNodeCompat } from 'vue'
 export default {
   components: {
     RecordViewSecret,
@@ -36,9 +41,7 @@ export default {
       },
       tableConfig: {
         url: vm.tableUrl(),
-        columns: [
-          'asset', 'account', 'date_finished', 'is_success', 'error', 'actions'
-        ],
+        columns: ['asset', 'account', 'date_finished', 'is_success', 'error', 'actions'],
         columnsMeta: {
           asset: {
             label: this.$t('Asset'),
@@ -51,7 +54,9 @@ export default {
               getRoute({ row }) {
                 return {
                   name: 'AssetDetail',
-                  params: { id: row.asset.id }
+                  params: {
+                    id: row.asset.id
+                  }
                 }
               }
             }
@@ -67,7 +72,9 @@ export default {
               getRoute({ row }) {
                 return {
                   name: 'AssetAccountDetail',
-                  params: { id: row.account.id }
+                  params: {
+                    id: row.account.id
+                  }
                 }
               }
             }
@@ -76,12 +83,30 @@ export default {
             label: this.$t('Success'),
             formatter: (row) => {
               if (row.status === 'pending') {
-                return <i Class='fa  fa fa-spinner fa-spin'/>
+                return createVNodeCompat(
+                  'i',
+                  {
+                    class: 'fa  fa fa-spinner fa-spin'
+                  },
+                  null
+                )
               }
               if (row.is_success) {
-                return <i Class='fa fa-check text-primary'/>
+                return createVNodeCompat(
+                  'i',
+                  {
+                    class: 'fa fa-check text-primary'
+                  },
+                  null
+                )
               }
-              return <i Class='fa fa-times text-danger'/>
+              return createVNodeCompat(
+                'i',
+                {
+                  class: 'fa fa-times text-danger'
+                },
+                null
+              )
             }
           },
           actions: {
@@ -111,12 +136,13 @@ export default {
                   can: this.$hasPerm('accounts.add_changesecretexecution'),
                   type: 'primary',
                   callback: ({ row }) => {
-                    this.$axios.post(
-                      '/api/v1/accounts/change-secret-records/execute/',
-                      { record_ids: [row.id] }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
+                    this.$axios
+                      .post('/api/v1/accounts/change-secret-records/execute/', {
+                        record_ids: [row.id]
+                      })
+                      .then((res) => {
+                        openTaskPage(res['task'])
+                      })
                   }
                 },
                 {
@@ -125,12 +151,12 @@ export default {
                   can: this.$hasPerm('accounts.view_changesecretrecord'),
                   type: 'primary',
                   callback: ({ row }) => {
-                    this.$axios.patch(
-                      `/api/v1/accounts/change-secret-records/${row.id}/ignore-fail/`,
-                    ).then(res => {
-                      this.$message.success(this.$tc('UpdateSuccessMsg'))
-                      this.$refs.HomeCard.$refs.ListTable.reloadTable()
-                    })
+                    this.$axios
+                      .patch(`/api/v1/accounts/change-secret-records/${row.id}/ignore-fail/`)
+                      .then((res) => {
+                        this.$message.success(this.$tc('UpdateSuccessMsg'))
+                        this.$refs.HomeCard.$refs.ListTable.reloadTable()
+                      })
                   }
                 }
               ]
@@ -156,11 +182,8 @@ export default {
 
 <style lang="scss" scoped>
 .failed-accounts {
-
-  ::v-deep {
-    .el-table {
-      min-height: 260px;
-    }
+  :deep(.el-table) {
+    min-height: 260px;
   }
 }
 </style>

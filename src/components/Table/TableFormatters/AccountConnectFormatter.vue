@@ -10,41 +10,38 @@
       @command="handleProtocolConnect"
       @visible-change="visibleChange"
     >
-      <el-button
-        plain
-        size="mini"
-        type="primary"
-        :disabled="!hasPerm"
-        @click="handleBtnConnect"
-      >
+      <el-button plain size="small" type="primary" :disabled="!hasPerm" @click="handleBtnConnect">
         <i :class="iButtonIcon" :style="{ color: hasPerm ? '' : '#fff' }" />
       </el-button>
 
-      <el-dropdown-menu v-if="!isClick" slot="dropdown">
-        <el-dropdown-item command="title" disabled>
-          <div v-if="getProtocolsLoading">
-            {{ $t('Loading') }}
-          </div>
-          <div v-else>
-            {{ dropdownTitle }}
-          </div>
-        </el-dropdown-item>
-        <el-dropdown-item divided />
-        <el-dropdown-item
-          v-for="protocol in protocols"
-          :key="protocol.id"
-          :command="protocol.name"
-        >
-          {{ protocol.name }}
-        </el-dropdown-item>
-      </el-dropdown-menu>
+      <template v-if="!isClick" #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item command="title" disabled>
+            <div v-if="getProtocolsLoading">
+              {{ $t('Loading') }}
+            </div>
+            <div v-else>
+              {{ dropdownTitle }}
+            </div>
+          </el-dropdown-item>
+          <el-dropdown-item
+            v-for="(protocol, index) in protocols"
+            :key="protocol.id"
+            :command="protocol.name"
+            :divided="index === 0"
+          >
+            {{ protocol.name }}
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
     </el-dropdown>
   </div>
 </template>
 
 <script>
-import BaseFormatter from './base.vue'
-import { addBasePath } from '@/utils/common/index'
+import store from '@/store';
+
+import BaseFormatter from './base.vue';
 
 export default {
   name: 'AccountConnectFormatter',
@@ -57,12 +54,12 @@ export default {
           can: () => true,
           getConnectUrl: (row, protocol, asset) => {
             const assetId = asset ? asset.id : row.asset.id
-            return addBasePath(`/luna/admin-connect/?
+            return `/luna/admin-connect/?
               asset=${assetId}
               &account=${row.id}
               &protocol=${protocol}
-              &org_id=${this.$store.getters.currentOrg.id}
-            `.replace(/\s+/g, ''))
+              &org_id=${store.getters.currentOrg.id}
+            `.replace(/\s+/g, '')
           },
           asset: null,
           assetUrl: '/api/v1/assets/assets/{id}/',
@@ -117,7 +114,7 @@ export default {
         const url = this.formatterArgs.assetUrl.replace('{id}', assetId)
         const res = await this.$axios.get(url)
 
-        this.protocols = res.protocols.filter(protocol => (protocol.name !== 'winrm')) || []
+        this.protocols = res.protocols.filter((protocol) => protocol.name !== 'winrm') || []
       } catch (e) {
         throw new Error(`Error getting protocols: ${e}`)
       }
@@ -127,17 +124,64 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-dropdown-menu__item.is-disabled {
-  font-weight: 500;
-  color: var(--el-text-color-secondary);
+.el-dropdown-menu  {
+  padding: 6px 0;
+  border: 1px solid #EBEEF5;
+  border-radius: 4px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+
+  :deep(.el-dropdown-menu__item) {
+    padding: 0 15px;
+    font-size: 13px;
+    line-height: 27px;
+  }
+
+  :deep(.el-dropdown-menu__item.is-disabled) {
+    font-weight: 500;
+    color: var(--el-text-color-secondary);
+  }
 }
 
-::v-deep .el-dropdown-menu__item {
-  transition: height 0.3s ease-in-out, padding 0.3s ease-in-out;
-  overflow: hidden;
-}
 
-::v-deep .el-dropdown-menu {
-  transition: min-height 0.3s ease-in-out;
+:deep(.action-connect) {
+  cursor: pointer;
+
+  .el-button {
+    box-shadow: none !important;
+    outline: none !important;
+
+    &:hover,
+    &:focus,
+    &:active {
+      box-shadow: none !important;
+      outline: none !important;
+
+      i {
+        color: #fff !important;
+      }
+    }
+
+    &.el-button--primary.is-plain {
+      color: var(--color-primary);
+      background-color: var(--color-primary-light-3, #e8f7f4);
+      border-color: var(--color-primary-light-1, var(--color-primary));
+
+      i {
+        color: var(--color-primary);
+      }
+
+      &:hover,
+      &:focus,
+      &:active {
+        color: #fff;
+        background-color: var(--color-primary);
+        border-color: var(--color-primary);
+
+        i {
+          color: #fff;
+        }
+      }
+    }
+  }
 }
 </style>

@@ -11,13 +11,10 @@ export default {
   data() {
     return {
       url: '/api/v1/assets/directories/',
-      addFields: [
-        [this.$t('IdentityDomain'), ['domain_name'], 1]
-      ]
+      addFields: [[this.$t('IdentityDomain'), ['domain_name'], 1]]
     }
   }
 }
 </script>
 
-<style>
-</style>
+<style></style>

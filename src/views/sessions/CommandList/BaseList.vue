@@ -1,22 +1,26 @@
 <template>
-  <TreeTable
-    ref="CommandTreeTable"
-    v-loading="loading"
-    :title="title"
-    :header-actions="headerActions"
-    :table-config="tableConfig"
-    :tree-setting="treeSetting"
-    class="command-list-table"
-    @TagDateChange="handleDateChange"
-    @TagFilter="handleFilterChange"
-    @TagSearch="handleTagChange"
-    @TreeInitFinish="checkFirstNode"
-  />
+  <div v-loading="loading">
+    <TreeTable
+      ref="CommandTreeTable"
+      :title="title"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+      :tree-setting="treeSetting"
+      class="command-list-table"
+      @tag-date-change="handleDateChange"
+      @tag-filter="handleFilterChange"
+      @tag-search="handleTagChange"
+      @tree-init-finish="checkFirstNode"
+    />
+  </div>
 </template>
 
 <script>
+import { withBaseApi } from '@/utils/env'
+import { createVNode as createVNodeCompat, createTextVNode as createTextVNodeCompat } from 'vue'
 import TreeTable from '@/components/Table/TreeTable/index.vue'
-import { getDayEnd, getDaysAgo, toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
+import { getDayEnd, getDaysAgo } from '@/utils/common/time'
 import { OutputExpandFormatter } from '../formatters'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import isFalsey from '@/components/Table/DataTable/compenents/el-data-table/utils/is-falsey'
@@ -24,7 +28,6 @@ import deepmerge from 'deepmerge'
 import * as queryUtil from '@/components/Table/DataTable/compenents/el-data-table/utils/query'
 import { createSourceIdCache } from '@/api/common'
 import { download } from '@/utils/common/index'
-
 export default {
   name: 'CommandList',
   components: {
@@ -53,8 +56,14 @@ export default {
           }
         },
         columns: [
-          'expandCol', 'input', 'risk_level', 'user',
-          'asset', 'account', 'session', 'timestamp'
+          'expandCol',
+          'input',
+          'risk_level',
+          'user',
+          'asset',
+          'account',
+          'session',
+          'timestamp'
         ],
         extraQuery: {
           date_to: dateTo,
@@ -73,7 +82,13 @@ export default {
               if (cellValue?.value === 0) {
                 return display
               } else {
-                return <span class='text-danger'> {display} </span>
+                return createVNodeCompat(
+                  'span',
+                  {
+                    class: 'text-danger'
+                  },
+                  [createTextVNodeCompat(' '), display, createTextVNodeCompat(' ')]
+                )
               }
             }
           },
@@ -88,7 +103,9 @@ export default {
               getRoute({ cellValue }) {
                 return {
                   name: 'SessionDetail',
-                  params: { id: cellValue }
+                  params: {
+                    id: cellValue
+                  }
                 }
               }
             }
@@ -97,7 +114,7 @@ export default {
             label: this.$t('Datetime'),
             width: 180,
             sortable: 'custom',
-            formatter: function(row) {
+            formatter: function (row) {
               return toSafeLocalDateStr(row.timestamp * 1000)
             }
           }
@@ -115,9 +132,10 @@ export default {
         canExportSelected: true,
         exportOptions: {
           performExport: async (selectRows, exportOption, q, exportTypeOption) => {
-            let url = this.tableConfig.url
-            url = (process.env.VUE_APP_ENV === 'production') ? (`${url}`) : (`${process.env.VUE_APP_BASE_API}${url}`)
-            const query = { ...q }
+            let url = withBaseApi(this.tableConfig.url)
+            const query = {
+              ...q
+            }
             if (exportOption === 'selected') {
               const resources = []
               for (const item of selectRows) {
@@ -128,8 +146,7 @@ export default {
             }
             query['format'] = exportTypeOption
             const queryStr =
-              (url.indexOf('?') > -1 ? '&' : '?') +
-              queryUtil.stringify(query, '=', '&')
+              (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(query, '=', '&')
             url = url + queryStr
             this.$log.debug('Export url: ', this.url, '=>', url)
             download(url + queryStr)
@@ -146,7 +163,9 @@ export default {
           // 添加禁用颜色区分
           fontCss: (treeId, treeNode) => {
             if (treeNode.chkDisabled) {
-              return { opacity: '0.4' }
+              return {
+                opacity: '0.4'
+              }
             }
             return {}
           }
@@ -190,14 +209,14 @@ export default {
       const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`
       const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(_query, '=', '&')
       const treeUrl = url + queryStr
-      this.$set(this.treeSetting, 'treeUrl', treeUrl)
+      this.treeSetting['treeUrl'] = treeUrl
     },
     handleFilterChange(query) {
       const _query = this.cleanUrl(query)
       const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`
       const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(_query, '=', '&')
       const treeUrl = url + queryStr
-      this.$set(this.treeSetting, 'treeUrl', treeUrl)
+      this.treeSetting['treeUrl'] = treeUrl
     },
     handleDateChange(object) {
       this.query = {
@@ -205,14 +224,15 @@ export default {
         date_to: object[1].toISOString()
       }
       const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`
-      const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(this.query, '=', '&')
+      const queryStr =
+        (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(this.query, '=', '&')
       const treeUrl = url + queryStr
-      this.$set(this.treeSetting, 'treeUrl', treeUrl)
+      this.treeSetting['treeUrl'] = treeUrl
       this.treeTable.forceRerenderTree()
     },
     cleanUrl(query) {
       query = Object.keys(query)
-        .filter(k => !isFalsey(query[k]))
+        .filter((k) => !isFalsey(query[k]))
         .reduce((obj, k) => {
           obj[k] = query[k].toString().trim()
           return obj
@@ -225,12 +245,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.command-list-table ::v-deep .risk-command {
+.command-list-table :deep(.risk-command) {
   background-color: oldlace;
 
   tr {
     color: white;
   }
 }
-
 </style>

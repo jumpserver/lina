@@ -2,29 +2,43 @@
   <ListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
-<script type="text/jsx">
-import { mapGetters } from 'vuex'
-import { ChoicesFormatter, DetailFormatter, SwitchFormatter } from '@/components/Table/TableFormatters'
+<script>
+import { createTextVNode as createTextVNodeCompat, createVNode as createVNodeCompat } from 'vue'
 import { DrawerListTable as ListTable } from '@/components'
-
+import {
+  ChoicesFormatter,
+  DetailFormatter,
+  SwitchFormatter
+} from '@/components/Table/TableFormatters'
+import { BASE_URL } from '@/utils/common/index'
 export default {
   name: 'TaskList',
   components: {
     ListTable
   },
-
   data() {
     return {
       tableConfig: {
         url: '/api/v1/ops/tasks/',
         columns: [
-          'name', 'queue', 'count', 'state', 'date_last_publish',
-          'exec_cycle', 'next_exec_time', 'enabled'
+          'name',
+          'queue',
+          'count',
+          'state',
+          'date_last_publish',
+          'exec_cycle',
+          'next_exec_time',
+          'enabled'
         ],
         columnsShow: {
           default: [
-            'name', 'count', 'state', 'date_last_publish',
-            'exec_cycle', 'next_exec_time', 'enabled'
+            'name',
+            'count',
+            'state',
+            'date_last_publish',
+            'exec_cycle',
+            'next_exec_time',
+            'enabled'
           ]
         },
         columnsMeta: {
@@ -50,7 +64,7 @@ export default {
           },
           comment: {
             width: '300px',
-            formatter: row => {
+            formatter: (row) => {
               return row.meta.comment ? row.meta.comment : '-'
             }
           },
@@ -76,10 +90,17 @@ export default {
             width: '130px',
             label: `${this.$t('Success')}/${this.$t('Total')}`,
             formatter: (row) => {
-              return <div>
-                <span Class='text-primary'>{row.summary.success || 0}</span>/
-                <span>{row.summary.total || 0}</span>
-              </div>
+              return createVNodeCompat('div', null, [
+                createVNodeCompat(
+                  'span',
+                  {
+                    class: 'text-primary'
+                  },
+                  [row.summary.success || 0]
+                ),
+                createTextVNodeCompat('/'),
+                createVNodeCompat('span', null, [row.summary.total || 0])
+              ])
             }
           },
           state: {
@@ -140,26 +161,16 @@ export default {
           {
             title: this.$t('TaskMonitor'),
             type: 'primary',
-            has: () => {
-              return this.publicSettings.FLOWER_ENABLED
-            },
             can: this.$hasPerm('ops.view_taskmonitor'),
             callback: () => {
-              window.open(`/core/flower/?_=${Date.now()}`,)
+              window.open(`${BASE_URL}/core/flower/?_=${Date.now()}`)
             }
           }
         ]
       }
     }
-  },
-  computed: {
-    ...mapGetters({
-      publicSettings: 'publicSettings'
-    })
   }
 }
 </script>
 
-<style lang="less" scoped>
-
-</style>
+<style lang="scss" scoped></style>

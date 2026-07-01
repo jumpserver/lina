@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage :initial="initial" v-bind="$data" />
+  <GenericCreateUpdatePage v-bind="$data" :initial="initial" />
 </template>
 
 <script>
@@ -45,8 +45,7 @@ export default {
         data['rules'] = data['rules'].slice(0, data['approval_level'])
         return data
       },
-      onPerformError() {
-      },
+      onPerformError() {},
       updateSuccessNextRoute: { name: 'TicketFlow' },
       createSuccessNextRoute: { name: 'TicketFlow' }
     }
@@ -65,6 +64,4 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-
-</style>
+<style lang="scss" scoped></style>

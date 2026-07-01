@@ -1,12 +1,12 @@
 <template>
   <Dialog
-    v-if="iVisible"
+    v-if="visible"
     :destroy-on-close="true"
     :model="false"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('AddAccount')"
-    :visible.sync="iVisible"
+    :visible="visible"
     width="800px"
   >
     <AccountCreateForm
@@ -45,35 +45,25 @@ export default {
     },
     accounts: {
       type: Array,
-      default: () => ([])
+      default: () => []
     }
   },
   data() {
     return {}
   },
-  computed: {
-    iVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$emit('update:visible', val)
-      }
-    }
-  },
   methods: {
     addAccount(account) {
-      const i = this.accounts.findIndex(item => item.username === account.username)
+      const i = this.accounts.findIndex((item) => item.username === account.username)
       if (i !== -1) {
         this.accounts.splice(i, 1)
       }
       this.accounts.push(account)
-      this.iVisible = false
+      this.$emit('update:visible', false)
     },
     editAccount(form) {
-      const i = this.accounts.findIndex(item => item.username === this.account.username)
+      const i = this.accounts.findIndex((item) => item.username === this.account.username)
       this.accounts.splice(i, 1, form)
-      this.iVisible = false
+      this.$emit('update:visible', false)
     }
   }
 }

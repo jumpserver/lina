@@ -18,11 +18,13 @@
       @focus="handleCascaderFocus"
       @visible-change="handleCascaderVisibleChange"
     >
-      <template slot-scope="{ node, data }">
+      <template #default="{ node, data }">
         <span>{{ data.label }}</span>
         <span v-if="!node.isLeaf"> ({{ data.children.length - 1 }}) </span>
       </template>
-      <i slot="prefix" class="el-input__icon el-icon-search" />
+      <template #prefix>
+        <el-icon class="el-input__icon"><Search /></el-icon>
+      </template>
     </el-cascader>
   </div>
 </template>
@@ -54,7 +56,7 @@ export default {
         return
       }
 
-      const labelSearch = newValue.map(item => item.join(':')).join(',')
+      const labelSearch = newValue.map((item) => item.join(':')).join(',')
       this.$emit('labelSearch', labelSearch)
     },
     showLabelSearch(newValue) {
@@ -68,7 +70,7 @@ export default {
   mounted() {
     this.$eventBus.$on('labelSearch', this.labelSearchHandler)
   },
-  beforeDestroy(label) {
+  beforeUnmount(label) {
     this.$eventBus.$off('labelSearch', this.labelSearchHandler)
   },
   methods: {
@@ -88,17 +90,23 @@ export default {
       }, 500)
     },
     handleCascaderVisibleChange(visible) {
-      const input = this.$refs.labelCascader.$el
-        .getElementsByClassName('el-input--suffix')[0]
-        .querySelector('input')
+      const cascaderEl = this.$refs.labelCascader?.$el
+      if (!cascaderEl || typeof cascaderEl.getElementsByClassName !== 'function') {
+        // EP cascader 在 Vue 3 中 $el 可能不是 DOM 元素，降级处理
+        if (!visible && this.labelValue.length === 0) {
+          this.showLabelSearch = false
+        }
+        this.$emit('showLabelSearch', this.showLabelSearch)
+        return
+      }
+      const input = cascaderEl.getElementsByClassName('el-input--suffix')[0]?.querySelector('input')
       if (visible) {
         setTimeout(() => {
-          this.$refs.labelCascader.updateStyle()
-          input.style.height = '30px'
+          if (input) input.style.height = '28px'
         })
         return
       } else {
-        input.style.height = '30px'
+        if (input) input.style.height = '28px'
       }
       if (this.labelValue.length === 0) {
         this.showLabelSearch = false
@@ -110,12 +118,12 @@ export default {
         return
       }
       const url = '/api/v1/labels/labels/'
-      this.$axios.get(url).then(data => {
+      this.$axios.get(url).then((data) => {
         const groupedLabelOptions = _.groupBy(data, 'name')
         const labelOptions = []
         for (const [key, labels] of Object.entries(groupedLabelOptions)) {
           const all = { value: '*', label: this.$t('All') }
-          const children = _.sortBy(labels, 'value').map(label => ({
+          const children = _.sortBy(labels, 'value').map((label) => ({
             value: label.value,
             label: label.value
           }))
@@ -130,21 +138,26 @@ export default {
     },
     setSearchFocus() {
       setTimeout(() => {
-        this.$refs.labelCascader.$el.getElementsByClassName('el-cascader__search-input')[0].focus()
+        const cascaderEl = this.$refs.labelCascader?.$el
+        const searchInput =
+          cascaderEl?.querySelector?.('.el-cascader__search-input') ||
+          cascaderEl?.getElementsByClassName?.('el-cascader__search-input')?.[0]
+        if (searchInput) searchInput.focus()
       }, 100)
     },
     showSearchSelect() {
       this.getLabelOptions()
       this.showLabelSearch = true
       setTimeout(() => {
-        this.$refs.labelCascader.toggleDropDownVisible(true)
+        this.$refs.labelCascader?.togglePopperVisible?.(true) ||
+          this.$refs.labelCascader?.toggleDropDownVisible?.(true)
         this.setSearchFocus()
       }, 200)
     },
     listenViewPort() {
       window.addEventListener(
         'resize',
-        debounce(e => {
+        debounce((e) => {
           const viewPort = e?.target?.innerWidth
           this.showLabelSearch = viewPort < 992
         }, 100),
@@ -157,23 +170,31 @@ export default {
 
 <style lang="scss" scoped>
 .label-search {
+  margin-right: 10px;
   border: 1px solid var(--color-border);
   overflow: hidden;
 
-  ::v-deep .el-button.label-button {
+  :deep(.el-button.label-button) {
     height: 28px;
-    border: none;
     padding: 8px;
+    font-weight: 400;
+    border: none;
   }
 
   .label-cascader {
     width: 300px;
-    height: 28px;
-    line-height: unset !important;
+    height: 28px !important;
+    line-height: 32px;
+    font-size: 13px;
 
-    ::v-deep .el-input {
+    :deep(.el-input) {
+      .el-input__wrapper {
+        height: 28px !important;
+      }
+
       .el-input__inner {
         height: 28px !important;
+        line-height: 32px;
         font-size: 13px;
         border: none;
       }
@@ -183,7 +204,7 @@ export default {
       }
     }
 
-    ::v-deep .el-cascader__tags {
+    :deep(.el-cascader__tags) {
       white-space: nowrap;
       flex-wrap: nowrap;
       overflow: hidden;
@@ -194,11 +215,14 @@ export default {
 
       .el-cascader__search-input {
         display: none;
+        height: 28px !important;
+        line-height: 32px;
+        font-size: 13px;
       }
     }
   }
 
-  ::v-deep .svg-icon {
+  :deep(.svg-icon) {
     color: var(--color-icon-primary) !important;
   }
 }

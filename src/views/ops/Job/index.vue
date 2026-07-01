@@ -1,8 +1,5 @@
 <template>
-  <TabPage
-    :active-menu.sync="activeMenu"
-    :submenu="submenu"
-  >
+  <TabPage v-model:active-menu="activeMenu" :submenu="submenu">
     <component :is="activeMenu" />
   </TabPage>
 </template>

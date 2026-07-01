@@ -17,20 +17,21 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
     return {
       url: `/api/v1/assets/zones/${this.object.id}/`,
       detailFields: [
-        'name', 'assets_amount',
+        'name',
+        'assets_amount',
         {
           key: this.$t('Gateway'),
           value: `${this.object.gateways.length}`
         },
-        'date_created', 'comment'
+        'date_created',
+        'comment'
       ]
     }
   },
@@ -38,6 +39,4 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
-
-</style>
+<style lang="scss" scoped></style>

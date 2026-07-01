@@ -1,96 +1,120 @@
-import Vue from 'vue'
-import ElementUI from 'element-ui'
-import locale from 'elementLocale'
+import { createApp } from 'vue'
+import ElementPlus from 'element-plus'
+import enLocale from 'element-plus/dist/locale/en.mjs'
+import 'element-plus/dist/index.css'
+// 导入 Element Plus CSS 变量配置（需要在 Element Plus 样式之后，自定义样式之前）
+import '@/styles/element-plus-vars.scss'
+import '@/styles/element-icons-legacy.scss'
+// 导入默认主题配置（包含 :root CSS 变量定义）
+import '@/styles/default-theme.scss'
 import '@/styles/index.scss' // global css
-import App from './App'
-import { vueCookie as VueCookie } from '@/utils/storage'
+// 导入默认主题配置并初始化
+import { setRootColors } from '@/utils/theme/color'
+import App from './App.vue'
 import store from './store'
 import router from './router'
-import i18n, { fetchTranslationsFromAPI } from './i18n/i18n'
 import { eventBus } from './utils/vue/eventbus'
 import '@/styles/fonts/loadSans'
 import { watchSessions } from './utils/jms/auth'
 
-import '@/icons' // icon
+import { installSvgIcon } from '@/icons' // icon
+import { installElementPlusIcons } from '@/icons/element-plus-icons'
 import '@/guards' // permission control
-import '@/directive'
-import '@/filters'
-import VueLogger from 'vuejs-logger'
-import loggerOptions from './utils/logger'
-import ECharts from 'vue-echarts'
+import { installDirectives } from '@/directive'
+import i18n, { fetchTranslationsFromAPI } from './i18n/i18n'
+import ChartsPlugin from '@/libs/charts'
+import { setupErrorHandler } from '@/libs/errors'
+import CookiePlugin from '@/libs/cookie'
+import ResourceActivity from '@/components/Apps/ResourceActivity'
 import request from '@/utils/request'
 import { message } from '@/utils/vue/message'
 import xss from '@/utils/secure'
-import ElTableTooltipPatch from '@/utils/vue/elTableTooltipPatch.js'
 import moment from 'moment'
+import DOMPurify from 'dompurify'
+import _ from 'lodash'
 
 moment.locale('zh-cn')
 
-/**
- * If you don't want to use mock-server
- * you want to use MockJs for mock api
- * you can execute: mockXHR()
- *
- * Currently MockJs will be used in the production environment,
- * please remove it before going online ! ! !
- */
-// 使用 mockXHR 无法使用 axios 中的 onUploadProgress 回调函数
-// if (process.env.NODE_ENV === 'development') {
-//   const { mockXHR } = require('../mock')
-//   mockXHR()
-// }
-
-// set ElementUI lang to EN
-ElementUI.Tooltip.props.openDelay.default = 1000
-Vue.use(ElementUI, { locale })
-// 如果想要中文版 element-ui，按如下方式声明
-// Vue.use(ElementUI)
-
-Vue.use(ElTableTooltipPatch)
-
-Vue.config.productionTip = false
-
-Vue.use(VueCookie)
-window.$cookie = VueCookie
-
-Vue.prototype.$moment = moment
-
-Vue.use(VueLogger, loggerOptions)
-
-Vue.component('echarts', ECharts)
-
-Vue.prototype.$axios = request
-
-window._ = require('lodash')
-// Vue.set(Vue.prototype, '_', _)
-
-Vue.prototype.$message = message
-
-Vue.prototype.$xss = xss
-
-// 注册全局事件总线
-Vue.prototype.$eventBus = eventBus
-
 async function initApp() {
+  const app = createApp(App)
+
+  // i18n helpers (set immediately to avoid undefined)
+  const identityT = (key, ...rest) => {
+    try {
+      return i18n.global.t(key, ...rest)
+    } catch (e) {
+      return key
+    }
+  }
+  const identityTc = (key, choice, ...rest) => {
+    try {
+      return i18n.global.tc(key, choice, ...rest)
+    } catch (e) {
+      return key
+    }
+  }
+  app.config.globalProperties.$t = identityT
+  app.config.globalProperties.$tc = identityTc
+
+  app.use(store)
+  app.use(router)
+  app.use(i18n)
+  app.use(ElementPlus, { locale: enLocale, size: 'small' })
+  app.use(CookiePlugin)
+  app.use(ChartsPlugin)
+
+  // v-sanitize: 手动注册(v-sanitize npm 包用 Vue.prototype 不兼容 Vue 3)
+  const sanitizeOptions = {
+    ALLOW_DATA_ATTR: true
+  }
+  app.config.globalProperties.$sanitize = (dirty, opts) =>
+    DOMPurify.sanitize(dirty || '', { ...sanitizeOptions, ...opts })
+  app.directive('sanitize', (el, binding) => {
+    if (binding.value !== binding.oldValue) {
+      el.innerHTML = DOMPurify.sanitize(binding.value || '', sanitizeOptions)
+    }
+  })
+
+  installDirectives(app)
+  installSvgIcon(app)
+  installElementPlusIcons(app)
+
+  // 全局注册动态组件(被 GenericDetailPage submenu 按字符串 name 引用)
+  app.component('ResourceActivity', ResourceActivity)
+
+  app.config.globalProperties.$moment = moment
+  app.config.globalProperties.$axios = request
+  app.config.globalProperties.$message = message
+  app.config.globalProperties.$xss = xss
+  app.config.globalProperties.$eventBus = eventBus
+  app.config.globalProperties._ = _
+  app.config.globalProperties.$log = console
+  // Override with i18n-bound functions after plugin install
+  app.config.globalProperties.$t = identityT
+  app.config.globalProperties.$tc = identityTc
+
+  // 设置全局错误处理器
+  setupErrorHandler(app, message)
+
+  window._ = _
+  // v-html 在模板编译阶段统一转换为 window.$xss.process(...)
+  window.$xss = xss
+
+  // 初始化默认主题变量（确保在应用启动时就注入 CSS 变量）
+  setRootColors()
+
   await fetchTranslationsFromAPI()
   watchSessions()
-
-  new Vue({
-    el: '#app',
-    i18n,
-    router,
-    store,
-    mounted() {
-      // 移除加载页面
-      const loadingElement = document.getElementById('loading')
-      if (loadingElement) {
-        setTimeout(() => {
-          loadingElement.style.display = 'none'
-        }, 500)
-      }
-    },
-    render: h => h(App)
-  })
+  // Mount app and remove initial loading overlay
+  app.mount('#app')
+  try {
+    const el = document.getElementById('loading')
+    if (el && el.parentNode) {
+      el.parentNode.removeChild(el)
+    }
+  } catch (e) {
+    // ignore
+  }
 }
 
 initApp().then()

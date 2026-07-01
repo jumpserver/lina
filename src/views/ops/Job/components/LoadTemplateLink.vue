@@ -1,7 +1,11 @@
 <template>
   <div>
-    <AdhocOpenDialog v-if="showOpenAdhocDialog" :visible.sync="showOpenAdhocDialog" @select="onSelectAdhoc" />
-    <el-link :underline="false" type="default" @click="onClick()">
+    <AdhocOpenDialog
+      v-if="showOpenAdhocDialog"
+      v-model:visible="showOpenAdhocDialog"
+      @select="onSelectAdhoc"
+    />
+    <el-link underline="never" type="default" @click="onClick()">
       {{ $t('LoadTemplate') }}
     </el-link>
   </div>
@@ -25,7 +29,7 @@ export default {
       this.showOpenAdhocDialog = true
     },
     onSelectAdhoc(adhoc) {
-      adhoc?.variable.map(item => {
+      adhoc?.variable.map((item) => {
         delete item.id
         delete item.job
         delete item.adhoc
@@ -37,5 +41,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

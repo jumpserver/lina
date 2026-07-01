@@ -1,9 +1,7 @@
 <template>
   <div>
     <TwoCol>
-      <template>
-        <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
-      </template>
+      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
       <template #right>
         <QuickActions
           v-if="object.id"
@@ -34,17 +32,13 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
     return {
       url: `/api/v1/audits/operate-logs/${this.object.id}`,
-      detailFields: [
-        'id', 'user', 'remote_addr', 'resource',
-        'resource_type_display', 'datetime'
-      ],
+      detailFields: ['id', 'user', 'remote_addr', 'resource', 'resource_type_display', 'datetime'],
       quickActions: [
         {
           title: this.$t('ChangeField'),
@@ -53,12 +47,12 @@ export default {
             label: this.$t('Detail')
           },
           callbacks: {
-            click: function() {
-              this.$axios.get(
-                `/api/v1/audits/operate-logs/${this.object.id}/?type=action_detail`
-              ).then(res => {
-                this.$refs.DetailDialog.show(res.diff)
-              })
+            click: function () {
+              this.$axios
+                .get(`/api/v1/audits/operate-logs/${this.object.id}/?type=action_detail`)
+                .then((res) => {
+                  this.$refs.DetailDialog.show(res.diff)
+                })
             }.bind(this)
           }
         }
@@ -69,5 +63,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

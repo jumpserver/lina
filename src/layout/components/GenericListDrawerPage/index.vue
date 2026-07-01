@@ -1,11 +1,10 @@
 <template>
-  <Page v-bind="$attrs">
+  <Page v-bind="pageAttrs">
     <DrawerListTable
+      v-bind="$attrs"
       ref="ListTable"
       :header-actions="headerActions"
       :table-config="tableConfig"
-      v-bind="$attrs"
-      v-on="$listeners"
     />
   </Page>
 </template>
@@ -17,7 +16,8 @@ import DrawerListTable from '@/components/Table/DrawerListTable/index'
 export default {
   name: 'GenericListDrawerPage',
   components: {
-    Page, DrawerListTable
+    Page,
+    DrawerListTable
   },
   props: {
     tableConfig: {
@@ -30,7 +30,24 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      drawer: false
+    }
+  },
+  computed: {
+    pageAttrs() {
+      return {
+        ...this.$attrs,
+        hideHeading: this.drawer
+      }
+    }
+  },
+  mounted() {
+    this.$store.dispatch('common/getDrawerActionMeta').then((res) => {
+      if (res.action) {
+        this.drawer = true
+      }
+    })
   },
   methods: {
     reloadTable() {

@@ -1,11 +1,5 @@
 <template>
-  <Dialog
-    :show-buttons="false"
-    :title="$tc('BindResource')"
-    destroy-on-close
-    v-bind="$attrs"
-    v-on="$listeners"
-  >
+  <Dialog v-bind="$attrs" :show-buttons="false" :title="$tc('BindResource')" destroy-on-close>
     <ListTable :header-actions="headerActions" :table-config="tableConfig" />
   </Dialog>
 </template>
@@ -26,9 +20,7 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/labels/labeled-resources/?label=${this.label.id}`,
-        columns: [
-          'resource', 'res_type', 'actions'
-        ],
+        columns: ['resource', 'res_type', 'actions'],
         columnsMeta: {
           actions: {
             formatterArgs: {
@@ -52,6 +44,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,9 +1,9 @@
 <template>
   <IBox>
     <GenericCreateUpdateForm
+      v-bind="$data"
       :has-detail-in-msg="false"
       :submit-method="submitMethod"
-      v-bind="$data"
     />
   </IBox>
 </template>
@@ -32,5 +32,4 @@ export default {
 }
 </script>
 
-  <style scoped>
-  </style>
+<style scoped></style>

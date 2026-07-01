@@ -34,7 +34,15 @@ export default {
       tableConfig: {
         hasSelection: true,
         url: ajaxUrl,
-        columns: ['id', 'secret', 'ip_group', 'is_active', 'date_created', 'date_last_used', 'actions'],
+        columns: [
+          'id',
+          'secret',
+          'ip_group',
+          'is_active',
+          'date_created',
+          'date_last_used',
+          'actions'
+        ],
         columnsShow: {
           min: ['id', 'actions']
         },
@@ -60,13 +68,16 @@ export default {
             formatterArgs: {
               hasClone: false,
               updateRoute: 'AccessKeyCreateUpdate',
-              onDelete: function({ row }) {
-                this.$axios.delete(`${ajaxUrl}${row.id}/`).then(res => {
-                  this.reloadTable()
-                  this.$message.success(this.$tc('DeleteSuccessMsg'))
-                }).catch(error => {
-                  this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
-                })
+              onDelete: function ({ row }) {
+                this.$axios
+                  .delete(`${ajaxUrl}${row.id}/`)
+                  .then((res) => {
+                    this.reloadTable()
+                    this.$message.success(this.$tc('DeleteSuccessMsg'))
+                  })
+                  .catch((error) => {
+                    this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
+                  })
               }.bind(this),
               extraActions: [
                 {
@@ -76,15 +87,16 @@ export default {
                   },
                   type: 'info',
                   can: () => this.$hasPerm('authentication.change_accesskey'),
-                  callback: function({ row }) {
-                    this.$axios.patch(`${ajaxUrl}${row.id}/`,
-                      { is_active: !row.is_active }
-                    ).then(res => {
-                      this.reloadTable()
-                      this.$message.success(this.$tc('UpdateSuccessMsg'))
-                    }).catch(error => {
-                      this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error)
-                    })
+                  callback: function ({ row }) {
+                    this.$axios
+                      .patch(`${ajaxUrl}${row.id}/`, { is_active: !row.is_active })
+                      .then((res) => {
+                        this.reloadTable()
+                        this.$message.success(this.$tc('UpdateSuccessMsg'))
+                      })
+                      .catch((error) => {
+                        this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error)
+                      })
                   }.bind(this)
                 }
               ]
@@ -104,8 +116,8 @@ export default {
             title: this.$t('Create'),
             type: 'primary',
             can: () => this.$hasPerm('authentication.add_accesskey'),
-            callback: function() {
-              this.$axios.post(ajaxUrl).then(res => {
+            callback: function () {
+              this.$axios.post(ajaxUrl).then((res) => {
                 this.$refs.secretDialog.show(res)
               })
             }.bind(this)

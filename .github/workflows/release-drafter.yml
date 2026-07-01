@@ -29,11 +29,16 @@ jobs:
           config-name: release-config.yml
           version: ${{ steps.get_version.outputs.TAG }}
           tag: ${{ steps.get_version.outputs.TAG }}
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: '20.15'
+          node-version: '24'
+          cache: 'yarn'
+      - name: Enable yarn
+        run: |
+          corepack enable
+          corepack prepare yarn@4.13.0 --activate
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --immutable
       - name: Build web
         run: |
           sed -i "s@version-dev@${{ steps.get_version.outputs.TAG }}@g" src/layout/components/NavHeader/About.vue

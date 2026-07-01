@@ -2,30 +2,24 @@
   <div>
     <RecordViewSecret
       v-if="showViewSecretDialog"
+      v-model:visible="showViewSecretDialog"
       :url="secretUrl"
-      :visible.sync="showViewSecretDialog"
     />
     <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
   </div>
 </template>
 
 <script>
+import { createVNode as createVNodeCompat } from 'vue'
 import { GenericListTable } from '@/layout/components'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
 import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue'
-import { mapGetters } from 'vuex'
-
 export default {
   name: 'AccountChangeSecretRecord',
   components: {
     RecordViewSecret,
     GenericListTable
-  },
-  computed: {
-    ...mapGetters({
-      publicSettings: 'publicSettings'
-    })
   },
   data() {
     const vm = this
@@ -34,9 +28,7 @@ export default {
       showViewSecretDialog: false,
       tableConfig: {
         url: '/api/v1/accounts/change-secret-records/',
-        columns: [
-          'asset', 'account', 'date_finished', 'is_success', 'error', 'actions'
-        ],
+        columns: ['asset', 'account', 'date_finished', 'is_success', 'error', 'actions'],
         columnsMeta: {
           asset: {
             label: this.$t('Asset'),
@@ -49,7 +41,9 @@ export default {
               getRoute: ({ row }) => {
                 return {
                   name: 'AssetDetail',
-                  params: { id: row.asset.id }
+                  params: {
+                    id: row.asset.id
+                  }
                 }
               }
             }
@@ -65,7 +59,9 @@ export default {
               getRoute: ({ row }) => {
                 return {
                   name: 'AssetAccountDetail',
-                  params: { id: row.account.id }
+                  params: {
+                    id: row.account.id
+                  }
                 }
               }
             }
@@ -74,12 +70,30 @@ export default {
             label: this.$t('Success'),
             formatter: (row) => {
               if (row.status === 'pending') {
-                return <i Class='fa  fa fa-spinner fa-spin'/>
+                return createVNodeCompat(
+                  'i',
+                  {
+                    class: 'fa  fa fa-spinner fa-spin'
+                  },
+                  null
+                )
               }
               if (row.is_success) {
-                return <i Class='fa fa-check text-primary'/>
+                return createVNodeCompat(
+                  'i',
+                  {
+                    class: 'fa fa-check text-primary'
+                  },
+                  null
+                )
               }
-              return <i Class='fa fa-times text-danger'/>
+              return createVNodeCompat(
+                'i',
+                {
+                  class: 'fa fa-times text-danger'
+                },
+                null
+              )
             }
           },
           actions: {
@@ -95,10 +109,6 @@ export default {
                   title: this.$t('View'),
                   type: 'primary',
                   callback: ({ row }) => {
-                    if (!this.publicSettings.SECURITY_ACCOUNT_SECRET_READ) {
-                      this.$message.warning(this.$tc('AccountSecretReadDisabled'))
-                      return
-                    }
                     // debugger
                     vm.secretUrl = `/api/v1/accounts/change-secret-records/${row.id}/secret/`
                     vm.showViewSecretDialog = false
@@ -113,12 +123,13 @@ export default {
                   can: this.$hasPerm('accounts.add_changesecretexecution'),
                   type: 'primary',
                   callback: ({ row }) => {
-                    this.$axios.post(
-                      '/api/v1/accounts/change-secret-records/execute/',
-                      { record_ids: [row.id] }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
+                    this.$axios
+                      .post('/api/v1/accounts/change-secret-records/execute/', {
+                        record_ids: [row.id]
+                      })
+                      .then((res) => {
+                        openTaskPage(res['task'])
+                      })
                   }
                 }
               ]
@@ -183,15 +194,17 @@ export default {
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 && vm.$hasPerm('accounts.add_changesecretexecution')
             },
-            callback: function({ selectedRows }) {
-              const ids = selectedRows.map(v => {
+            callback: function ({ selectedRows }) {
+              const ids = selectedRows.map((v) => {
                 return v.id
               })
-              this.$axios.post(
-                '/api/v1/accounts/change-secret-records/execute/',
-                { record_ids: ids }).then(res => {
-                openTaskPage(res['task'])
-              })
+              this.$axios
+                .post('/api/v1/accounts/change-secret-records/execute/', {
+                  record_ids: ids
+                })
+                .then((res) => {
+                  openTaskPage(res['task'])
+                })
             }.bind(this)
           }
         ]

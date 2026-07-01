@@ -1,10 +1,9 @@
 <template>
   <GenericDetailPage
-    :active-menu.sync="config.activeMenu"
-    :object.sync="taskDetail"
-    :title="getTitle"
     v-bind="config"
-    v-on="$listeners"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="taskDetail"
+    :title="getTitle"
   >
     <keep-alive>
       <component :is="config.activeMenu" :object="taskDetail" />
@@ -14,9 +13,9 @@
 
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
+import CeleryTaskLog from '../CeleryTaskLog.vue'
 import TaskDetail from './TaskDetail.vue'
 import TaskHistory from './TaskHistory.vue'
-import CeleryTaskLog from '../CeleryTaskLog.vue'
 
 export default {
   components: {
@@ -50,7 +49,9 @@ export default {
   },
   computed: {
     getTitle() {
-      return this.taskDetail.meta && this.taskDetail.meta.comment ? this.taskDetail.meta.comment : this.taskDetail.name
+      return this.taskDetail.meta && this.taskDetail.meta.comment
+        ? this.taskDetail.meta.comment
+        : this.taskDetail.name
     }
   }
 }

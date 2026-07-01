@@ -12,8 +12,7 @@ export const getChangeSecretFields = () => {
       type: 'radio-group',
       options: [],
       label: i18n.t('PasswordStrategy'),
-      on: ([value], updateForm) => {
-      }
+      on: ([value], updateForm) => {}
     },
     secret: {
       el: {
@@ -30,24 +29,26 @@ export const getChangeSecretFields = () => {
         type: 'textarea',
         rows: 4
       },
-      hidden: ({ secret_strategy, secret_type }) => (secret_strategy !== 'specific' || secret_type !== 'ssh_key')
+      hidden: ({ secret_strategy, secret_type }) =>
+        secret_strategy !== 'specific' || secret_type !== 'ssh_key'
     },
     ssh_key_change_strategy: {
       type: 'radio-group',
       options: [],
-      hidden: ({ secret_strategy, secret_type }) => (secret_type !== 'ssh_key')
+      hidden: ({ secret_strategy, secret_type }) => secret_type !== 'ssh_key'
     },
     passphrase: {
       label: i18n.t('Passphrase'),
       component: UpdateToken,
       hidden: ({ secret_strategy, secret_type }) => {
-        return (secret_strategy !== 'specific' || secret_type !== 'ssh_key')
+        return secret_strategy !== 'specific' || secret_type !== 'ssh_key'
       }
     },
     password_rules: {
       component: PasswordRule,
       label: i18n.t('PasswordRule'),
-      hidden: ({ secret_strategy, secret_type }) => (secret_strategy === 'specific' || secret_type !== 'password')
+      hidden: ({ secret_strategy, secret_type }) =>
+        secret_strategy === 'specific' || secret_type !== 'password'
     },
     pre_notify: {
       label: i18n.t('Pre Recipient'),

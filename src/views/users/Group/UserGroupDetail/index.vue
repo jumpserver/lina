@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="group" v-bind="config" v-on="$listeners">
+  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu" v-model:object="group">
     <keep-alive>
       <component :is="config.activeMenu" :object="group" />
     </keep-alive>
@@ -44,8 +44,8 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-::v-deep table.CardTable {
+<style lang="scss" scoped>
+:deep(table.CardTable) {
   table-layout: auto !important;
 }
 </style>

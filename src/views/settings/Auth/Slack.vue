@@ -1,10 +1,5 @@
 <template>
-  <BaseAuth
-    :config="settings"
-    :title="$tc('Slack')"
-    enable-field="AUTH_SLACK"
-    v-on="$listeners"
-  />
+  <BaseAuth :config="settings" :title="$tc('Slack')" enable-field="AUTH_SLACK" />
 </template>
 
 <script>
@@ -27,28 +22,35 @@ export default {
           {
             title: this.$t('Test'),
             loading: false,
-            callback: function(value, form, btn) {
+            callback: function (value, form, btn) {
               btn.loading = true
-              vm.$axios.post(
-                '/api/v1/settings/slack/testing/',
-                value
-              ).then(res => {
-                vm.$message.success(res['msg'])
-              }).catch(() => {
-                vm.$log.error('err occur')
-              }).finally(() => { btn.loading = false })
+              vm.$axios
+                .post('/api/v1/settings/slack/testing/', value)
+                .then((res) => {
+                  vm.$message.success(res['msg'])
+                })
+                .catch(() => {
+                  vm.$log.error('err occur')
+                })
+                .finally(() => {
+                  btn.loading = false
+                })
             }
           }
         ],
         encryptedFields: ['SLACK_SECRET'],
         fields: [
-          [this.$t('Basic'), [
-            'AUTH_SLACK', 'SLACK_CLIENT_ID', 'SLACK_CLIENT_SECRET',
-            'SLACK_BOT_TOKEN', 'SLACK_RENAME_ATTRIBUTES'
-          ]],
-          [this.$t('Other'), [
-            'SLACK_ORG_IDS'
-          ]]
+          [
+            this.$t('Basic'),
+            [
+              'AUTH_SLACK',
+              'SLACK_CLIENT_ID',
+              'SLACK_CLIENT_SECRET',
+              'SLACK_BOT_TOKEN',
+              'SLACK_RENAME_ATTRIBUTES'
+            ]
+          ],
+          [this.$t('Other'), ['SLACK_ORG_IDS']]
         ],
         fieldsMeta: {
           SLACK_APP_SECRET: {
@@ -82,6 +84,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

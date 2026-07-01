@@ -1,7 +1,7 @@
 <template>
   <TabPage
     v-if="!loading"
-    :active-menu.sync="config.activeMenu"
+    v-model:active-menu="config.activeMenu"
     :submenu="config.submenu"
     @tab-click="handleTabClick"
   />
@@ -83,9 +83,13 @@ export default {
     for (const item of this.config.submenu) {
       nameComponentMap[item.name] = item
     }
-    this.$axios.get('/api/v1/assets/categories/').then(categories => {
+    this.$axios.get('/api/v1/assets/categories/').then((res) => {
+      const categories = Array.isArray(res) ? res : res?.results || []
       for (const item of categories) {
         const name = item.value
+        if (!nameComponentMap[name]) {
+          continue
+        }
         // 如果报错，需要在上面的 submenu 中添加对应的组件
         nameComponentMap[name]['hidden'] = false
         nameComponentMap[name]['title'] = item.label

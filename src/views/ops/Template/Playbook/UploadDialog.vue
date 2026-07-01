@@ -1,16 +1,7 @@
 <template>
-  <Dialog
-    :show-cancel="false"
-    :title="$tc('UploadPlaybook')"
-    v-bind="$attrs"
-    @confirm="onSubmit"
-    v-on="$listeners"
-  >
+  <Dialog v-bind="$attrs" :show-cancel="false" :title="$tc('UploadPlaybook')" @confirm="onSubmit">
     <el-form label-position="top">
-      <el-form-item
-        :label-width="'100px'"
-        class="file-uploader"
-      >
+      <el-form-item :label-width="'100px'" class="file-uploader">
         <el-upload
           ref="upload"
           :auto-upload="false"
@@ -22,22 +13,24 @@
           drag
           list-type="text/csv"
         >
-          <i class="el-icon-upload" />
+          <el-icon><Upload /></el-icon>
           <div class="el-upload__text">
             {{ $t('DragUploadFileInfo') }}
           </div>
-          <div slot="tip" class="el-upload__tip">
-            <span :class="{'hasError': hasFileFormatOrSizeError }" />
-            <div v-if="renderError" class="hasError">{{ renderError }}</div>
-            <h5>{{ $t('UploadHelpText') }}</h5>
-            <pre style="display:flex; line-height: 1.2em">
+          <template #tip>
+            <div class="el-upload__tip">
+              <span :class="{ hasError: hasFileFormatOrSizeError }" />
+              <div v-if="renderError" class="hasError">{{ renderError }}</div>
+              <h5>{{ $t('UploadHelpText') }}</h5>
+              <pre style="display: flex; line-height: 1.2em">
 ./
 ├── roles
 ├── vars
 ├── set_env.yml
 └── main.yml ({{ $tc('RequiredEntryFile') }})
-            </pre>
-          </div>
+              </pre>
+            </div>
+          </template>
         </el-upload>
       </el-form-item>
     </el-form>
@@ -66,15 +59,14 @@ export default {
       }
       this.file = file
     },
-    beforeUpload(file) {
-    },
+    beforeUpload(file) {},
     onSubmit() {
       if (!this.file) {
         return
       }
       const form = new FormData()
       form.append('path', this.file.raw)
-      uploadPlaybook(form).then(res => {
+      uploadPlaybook(form).then((res) => {
         this.$emit('update:visible', false)
         this.$emit('completed')
         this.$message.success(this.$tc('UploadSucceed'))
@@ -88,7 +80,7 @@ export default {
 .file-uploader.el-form-item {
   margin-bottom: 0;
 
-  ::v-deep .el-upload {
+  :deep(.el-upload) {
     width: 100%;
 
     .el-upload-dragger {
@@ -96,5 +88,4 @@ export default {
     }
   }
 }
-
 </style>

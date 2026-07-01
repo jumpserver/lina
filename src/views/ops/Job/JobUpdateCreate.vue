@@ -1,18 +1,18 @@
 <template>
   <div v-if="ready">
-    <VariableHelpDialog :visible.sync="showHelpDialog" />
-    <GenericCreateUpdatePage ref="form" v-bind="$data" />
+    <VariableHelpDialog v-model:visible="showHelpDialog" />
+    <GenericCreateUpdatePage v-bind="$data" ref="form" />
   </div>
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
 import AssetSelect from '@/components/Apps/AssetSelect'
-import CodeEditor from '@/components/Form/FormFields/CodeEditor'
-import i18n from '@/i18n/i18n'
-import VariableHelpDialog from '@/views/ops/Adhoc/VariableHelpDialog.vue'
 import { Required } from '@/components/Form/DataForm/rules'
+import CodeEditor from '@/components/Form/FormFields/CodeEditor'
 import { crontab, interval } from '@/components/const'
+import i18n from '@/i18n/i18n'
+import { GenericCreateUpdatePage } from '@/layout/components'
+import VariableHelpDialog from '@/views/ops/Adhoc/VariableHelpDialog.vue'
 import LoadTemplateLink from '@/views/ops/Job/components/LoadTemplateLink.vue'
 import Variable from '@/views/ops/Template/components/Variable'
 
@@ -30,7 +30,19 @@ export default {
       fields: [
         [this.$t('Basic'), ['name', 'type', 'instant']],
         [this.$t('Asset'), ['assets', 'nodes', 'runas', 'runas_policy']],
-        [this.$t('Task'), ['module', 'argsLoadFromTemplate', 'args', 'playbook', 'variable', 'chdir', 'timeout', 'parameters']],
+        [
+          this.$t('Task'),
+          [
+            'module',
+            'argsLoadFromTemplate',
+            'args',
+            'playbook',
+            'variable',
+            'chdir',
+            'timeout',
+            'parameters'
+          ]
+        ],
         [this.$t('Plan'), ['run_after_save', 'is_periodic', 'interval', 'crontab']],
         [this.$t('Other'), ['comment']]
       ],
@@ -97,9 +109,8 @@ export default {
                 return
               }
               this.queryParam = `playbook=${event.pk}`
-              this.$axios.get(`/api/v1/ops/playbooks/${event.pk}/`,
-              ).then(data => {
-                data?.variable.map(item => {
+              this.$axios.get(`/api/v1/ops/playbooks/${event.pk}/`).then((data) => {
+                data?.variable.map((item) => {
                   delete item.job
                   delete item.playbook
                   delete item.id
@@ -272,9 +283,6 @@ export default {
     }
   }
 }
-
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

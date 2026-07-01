@@ -1,16 +1,15 @@
 <template>
   <GenericCreateUpdateForm
+    v-bind="settings"
     ref="form"
     class="form"
-    v-bind="settings"
-    @performError="handlePerformError"
-    @performFinished="handlePerformFinished"
-    @submitSuccess="handleSubmitSuccess"
+    @perform-error="handlePerformError"
+    @perform-finished="handlePerformFinished"
+    @submit-success="handleSubmitSuccess"
   />
 </template>
 
 <script>
-
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { ACCOUNT_PROVIDER_ATTRS_MAP, encryptAttrsField } from '@/views/assets/Cloud/const'
 import { RequiredChange, specialEmojiCheck } from '@/components/Form/DataForm/rules'
@@ -29,8 +28,7 @@ export default {
     },
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     origin: {
       type: String,
@@ -43,8 +41,15 @@ export default {
     function setFieldAttrs(provider) {
       const fieldsObject = {}
       const updateNotRequiredFields = [
-        'access_key_secret', 'client_secret', 'password', 'sc_password',
-        'oc_password', 'cert_file', 'key_file', 'public_key', 'private_key'
+        'access_key_secret',
+        'client_secret',
+        'password',
+        'sc_password',
+        'oc_password',
+        'cert_file',
+        'key_file',
+        'public_key',
+        'private_key'
       ]
       for (const item of ACCOUNT_PROVIDER_ATTRS_MAP[provider].attrs) {
         fieldsObject[item] = {
@@ -59,6 +64,7 @@ export default {
       submitType: 'auto',
       settings: {
         url: `/api/v1/xpack/cloud/accounts/`,
+        labelWidth: '140px',
         fields: [
           [this.$t('Basic'), ['name']],
           [this.$t('Auth'), ['attrs']],
@@ -69,6 +75,7 @@ export default {
             rules: [RequiredChange, specialEmojiCheck]
           },
           attrs: {
+            labelWidth: '140px',
             encryptedFields: ['access_key_secret'],
             fields: ACCOUNT_PROVIDER_ATTRS_MAP[this.provider].attrs,
             fieldsMeta: {
@@ -204,7 +211,7 @@ export default {
       }
     },
     handlePerformError(errorData) {
-      if (errorData.hasOwnProperty('attrs')) {
+      if (Object.prototype.hasOwnProperty.call(errorData, 'attrs')) {
         for (const f in errorData['attrs']) {
           this.setAttrsFieldError(f, errorData['attrs'][f])
         }
@@ -230,19 +237,97 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-::v-deep .el-form-item.form-buttons {
+<style lang="scss" scoped>
+:deep(.el-form-item.form-buttons) {
   text-align: right;
 }
 
 .form {
+  // 以表单宽度作为容器查询的基准，使抽屉变窄时（即便在大屏下）也能触发响应式
+  container-type: inline-size;
   margin-right: 0;
 
-  ::v-deep {
-    form {
-      margin-right: 0;
-      padding-right: 0;
-      padding-bottom: 10px;
+  :deep(form) {
+    margin-right: 0;
+    padding-right: 0;
+    padding-bottom: 10px;
+  }
+
+  :deep(.el-form-item__label) {
+    min-height: 30px;
+    height: auto;
+    align-items: center;
+  }
+
+  :deep(.el-form-item__label > span) {
+    max-width: none;
+    overflow: visible;
+    white-space: normal;
+    word-break: break-word;
+    text-overflow: clip;
+    line-height: 1.35;
+  }
+
+  :deep(.el-form-item-attrs) {
+    .el-form-item__content {
+      min-width: 0;
+    }
+  }
+
+  :deep(.el-form-item-regions) {
+    .el-form-item__label,
+    .el-form-item__content {
+      min-height: 30px;
+    }
+
+    .el-form-item__content {
+      justify-content: center;
+      gap: 0;
+    }
+  }
+
+  // 正常宽度下：输入框设最小宽度兜底，避免被压缩到无法使用
+  :deep(.el-form-item__content) {
+    .el-input,
+    .el-select,
+    .el-cascader,
+    .el-input-number {
+      min-width: 180px;
+    }
+  }
+
+  // 容器变窄时：label 移到输入框上方，输入框占满整行，保证可用宽度
+  @container (max-width: 480px) {
+    :deep(.el-form-item) {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 6px;
+    }
+
+    :deep(.el-form-item__label-wrap),
+    :deep(.el-form-item__label) {
+      width: 100% !important;
+      flex: 0 0 auto !important;
+      justify-content: flex-start;
+      text-align: left;
+    }
+
+    :deep(.el-form-item__content) {
+      width: 100%;
+      margin-left: 0 !important;
+
+      .el-input,
+      .el-select,
+      .el-cascader,
+      .el-input-number {
+        width: 100%;
+        min-width: 0;
+      }
+    }
+
+    // 子表单（认证设置）内部同步切换为 label-top
+    :deep(.sub-form .el-form-item__label-wrap) {
+      margin-left: 0 !important;
     }
   }
 }

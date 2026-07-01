@@ -16,7 +16,7 @@ export default {
   props: {
     infos: {
       type: Array,
-      default: () => ([])
+      default: () => []
     }
   },
   data() {
@@ -25,7 +25,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @mixin textOverflow {
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -34,10 +34,23 @@ export default {
 
 .panel-item {
   text-align: start;
+
+  .item-label {
+    display: block;
+    margin-bottom: 6px;
+    line-height: 18px;
+  }
+
+  .item-value {
+    margin: 0;
+    line-height: 1.35;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
 }
 
 .panel-label {
-
 }
 
 //
@@ -60,5 +73,4 @@ export default {
 //  }
 //}
 //
-
 </style>

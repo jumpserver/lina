@@ -23,8 +23,7 @@ export default {
   props: {
     message: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     isTerminal: {
       type: Boolean,
@@ -40,7 +39,7 @@ export default {
     text() {
       const value = this.message?.content || ''
       if (value && this.markdown) {
-        return this.markdown?.render(value)
+        return this.renderContentWithDetails(value)
       }
       return this.$xss.process(value)
     }
@@ -51,7 +50,7 @@ export default {
   updated() {
     this.addEvents()
   },
-  destroyed() {
+  unmounted() {
     this.removeEvents()
   },
   methods: {
@@ -70,7 +69,10 @@ export default {
         }
       })
       this.markdown.use(mila, { attrs: { target: '_blank', rel: 'noopener', class: 'link-style' } })
-      this.markdown.use(mdKatex, { blockClass: 'katexmath-block rounded-md', errorColor: ' #cc0000' })
+      this.markdown.use(mdKatex, {
+        blockClass: 'katexmath-block rounded-md',
+        errorColor: ' #cc0000'
+      })
     },
     highlightBlock(str, lang) {
       let insertSpanHtml = `<span class="code-block-header__insert">${this.$t('Insert')}</span>`
@@ -120,11 +122,81 @@ export default {
         btn.addEventListener('click', callback)
       })
     },
+    renderContentWithDetails(value) {
+      // Kael responses may wrap reasoning/thinking in <details type="reasoning">; render them with a custom block.
+      const detailRegex = /<details[^>]*>[\s\S]*?<\/details>/gi
+      let result = ''
+      let lastIndex = 0
+      let match
+      let hasDetails = false
+
+      while ((match = detailRegex.exec(value))) {
+        hasDetails = true
+        const preceding = value.slice(lastIndex, match.index)
+        if (preceding.trim()) {
+          result += this.markdown.render(preceding)
+        }
+        result += this.renderDetailBlock(match[0])
+        lastIndex = match.index + match[0].length
+      }
+
+      if (!hasDetails) {
+        return this.markdown.render(value)
+      }
+
+      const remaining = value.slice(lastIndex)
+      if (remaining.trim()) {
+        result += this.markdown.render(remaining)
+      }
+
+      return result
+    },
+    renderDetailBlock(detailStr) {
+      const attributes = this.extractAttributes(detailStr)
+      const inner = detailStr.replace(/^<details[^>]*>/i, '').replace(/<\/details>$/i, '')
+      const summaryMatch = inner.match(/<summary>([\s\S]*?)<\/summary>/i)
+      const summary = summaryMatch ? this.decodeHtml(summaryMatch[1]) : ''
+      const body = summaryMatch ? inner.replace(summaryMatch[0], '') : inner
+      const bodyHtml = body.trim() ? this.markdown.render(this.decodeHtml(body.trim())) : ''
+
+      const baseClass = 'kael-detail'
+      if (attributes.type === 'reasoning') {
+        const statusClass = attributes.done === 'true' ? 'is-done' : 'is-pending'
+        const title = summary || this.$t('DeeplyThoughtAbout')
+        return `<div class="${baseClass} ${baseClass}--reasoning ${statusClass}">
+          <div class="${baseClass}__header">
+            <span class="${baseClass}__status-dot"></span>
+            <span class="${baseClass}__title">${title}</span>
+          </div>
+          ${bodyHtml ? `<div class="${baseClass}__body">${bodyHtml}</div>` : ''}
+        </div>`
+      }
+
+      return `<div class="${baseClass}">
+        ${summary ? `<div class="${baseClass}__header">${summary}</div>` : ''}
+        ${bodyHtml ? `<div class="${baseClass}__body">${bodyHtml}</div>` : ''}
+      </div>`
+    },
+    extractAttributes(detailStr) {
+      const attrs = {}
+      const attrMatch = detailStr.match(/^<details([^>]*)>/i)
+      const attrStr = (attrMatch && attrMatch[1]) || ''
+      attrStr.replace(/(\w+)="(.*?)"/g, (all, key, val) => {
+        attrs[key] = val
+        return all
+      })
+      return attrs
+    },
+    decodeHtml(str) {
+      if (!str) return ''
+      const textArea = document.createElement('textarea')
+      textArea.innerHTML = str
+      return textArea.value
+    },
     removeBtnClickEvent(selector) {
       const buttons = this.$refs.textRef.querySelectorAll(selector)
       buttons.forEach((btn) => {
-        btn.removeEventListener('click', () => {
-        })
+        btn.removeEventListener('click', () => {})
       })
     },
     removeEvents() {
@@ -140,15 +212,15 @@ export default {
 <style lang="scss" scoped>
 .markdown-body {
   font-size: 13px;
-  max-width: 300px;;
+  max-width: 300px;
 
-  &::v-deep p {
+  &:deep(p) {
     margin-bottom: 0 !important;
   }
 
   background: inherit;
 
-  &::v-deep pre {
+  &:deep(pre) {
     padding: 0 0 6px 0;
 
     .hljs.code-block-body {
@@ -156,8 +228,8 @@ export default {
     }
   }
 
-  &::v-deep .code-block-wrapper {
-    background: #1F2329;
+  &:deep(.code-block-wrapper) {
+    background: #1f2329;
     padding: 0;
     margin: 5px 0;
     display: flex;
@@ -210,7 +282,7 @@ export default {
   }
 }
 
-::v-deep .link-style {
+:deep(.link-style) {
   color: #487bf4;
 
   &:hover {
@@ -229,7 +301,7 @@ export default {
   margin-right: 5px;
   border-radius: 50%;
   vertical-align: middle;
-  background: #676A6c;
+  background: #676a6c;
   animation: load 1.2s ease infinite;
 }
 
@@ -257,5 +329,65 @@ export default {
 
 .loading-box span:nth-child(3) {
   animation-delay: 0.49s;
+}
+
+.kael-detail {
+  margin: 8px 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #e5e5e5;
+  background: #f7f8fa;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #6b7280;
+  }
+
+  &__title {
+    font-weight: 600;
+  }
+
+  &__status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #10b981;
+  }
+
+  &__body {
+    margin-top: 6px;
+    padding-left: 8px;
+    border-left: 2px solid #e5e5e5;
+  }
+
+  &--reasoning.is-pending {
+    border-color: #f59e0b40;
+    background: #fff8e6;
+
+    .kael-detail__status-dot {
+      background: #f59e0b;
+      animation: kael-pulse 1.2s ease-in-out infinite;
+    }
+  }
+
+  &--reasoning.is-done {
+    border-color: #dbeafe;
+    background: #f4f6ff;
+  }
+}
+
+@keyframes kael-pulse {
+  0% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.45;
+  }
 }
 </style>

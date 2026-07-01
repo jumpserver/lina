@@ -1,11 +1,10 @@
 <template>
   <div>
     <Dialog
+      v-bind="$attrs"
       :destroy-on-close="true"
       :show-cancel="false"
       :title="$tc('ImportLdapUserTitle')"
-      v-bind="$attrs"
-      v-on="$listeners"
     >
       <el-alert type="info" style="margin-bottom: 10px"> {{ $t('ImportLdapUserTip') }}</el-alert>
       <ListTable
@@ -14,44 +13,55 @@
         :table-config="tableConfig"
         class="listTable"
       />
-      <div slot="footer">
-        <span v-show="showOrgSelect" class="org-select">
-          <span class="label">{{ $tc('ImportOrg') }}：</span>
-          <Select2
-            ref="select2"
-            v-model="select2.value"
-            popper-class="select-org-dropdown"
-            v-bind="select2"
-          />
-        </span>
-        <el-button :loading="dialogLdapUserSyncStatus" size="small" type="primary" @click="SyncUserClick">
-          {{ $t('SyncUser') }}
-        </el-button>
-        <el-button :loading="dialogLdapUserImportLoginStatus" size="small" type="primary" @click="importUserClick">
-          {{ $t('Import') }}
-        </el-button>
-        <el-button
-          :loading="dialogLdapUserImportAllLoginStatus"
-          size="small"
-          type="primary"
-          @click="importAllUserClick"
-        >{{ $t('ImportAll') }}
-        </el-button>
-        <el-button size="small" @click="hiddenDialog">{{ $t('Cancel') }}</el-button>
-      </div>
+      <template #footer>
+        <div>
+          <span v-show="showOrgSelect" class="org-select">
+            <span class="label">{{ $tc('ImportOrg') }}：</span>
+            <Select2
+              v-bind="select2"
+              ref="select2"
+              v-model="select2.value"
+              popper-class="select-org-dropdown"
+            />
+          </span>
+          <el-button
+            :loading="dialogLdapUserSyncStatus"
+            size="small"
+            type="primary"
+            @click="SyncUserClick"
+          >
+            {{ $t('SyncUser') }}
+          </el-button>
+          <el-button
+            :loading="dialogLdapUserImportLoginStatus"
+            size="small"
+            type="primary"
+            @click="importUserClick"
+          >
+            {{ $t('Import') }}
+          </el-button>
+          <el-button
+            :loading="dialogLdapUserImportAllLoginStatus"
+            size="small"
+            type="primary"
+            @click="importAllUserClick"
+            >{{ $t('ImportAll') }}
+          </el-button>
+          <el-button size="small" @click="hiddenDialog">{{ $t('Cancel') }}</el-button>
+        </div>
+      </template>
     </Dialog>
   </div>
 </template>
 
 <script>
-import store from '@/store'
-import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/jms/org'
-import ListTable from '@/components/Table/ListTable'
 import Dialog from '@/components/Dialog/index.vue'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
+import ListTable from '@/components/Table/ListTable'
 import getStatusColumnMeta from '@/components/Table/ListTable/TableAction/const'
-import { createWsUrl } from '@/utils/common/index'
-
+import store from '@/store'
+import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/jms/org'
+import { createTextVNode as createTextVNodeCompat, createVNode as createVNodeCompat } from 'vue'
 export default {
   name: 'ImportDialog',
   components: {
@@ -97,8 +107,12 @@ export default {
           },
           groups: {
             label: this.$t('UserGroups'),
-            formatter: function(row) {
-              return <span> {row.groups.join(' | ')} </span>
+            formatter: function (row) {
+              return createVNodeCompat('span', null, [
+                createTextVNodeCompat(' '),
+                row.groups.join(' | '),
+                createTextVNodeCompat(' ')
+              ])
             }
           },
           email: {
@@ -119,7 +133,10 @@ export default {
           url: '/api/v1/orgs/orgs/',
           transformOption: (item) => {
             if (item.id !== SYSTEM_ORG_ID) {
-              return { label: item.name, value: item.id }
+              return {
+                label: item.name,
+                value: item.id
+              }
             }
           }
         },
@@ -174,7 +191,12 @@ export default {
     importLdapUser(data) {
       this.enableWS()
       this.ws.onopen = (e) => {
-        this.ws.send(JSON.stringify({ msg_type: 'import_user', ...data }))
+        this.ws.send(
+          JSON.stringify({
+            msg_type: 'import_user',
+            ...data
+          })
+        )
       }
       this.ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
@@ -189,13 +211,21 @@ export default {
       }
     },
     enableWS() {
-      this.ws = new WebSocket(createWsUrl(`/ws/ldap/?category=${this.category}`))
+      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
+      const port = document.location.port ? ':' + document.location.port : ''
+      const url = `/ws/ldap/?category=${this.category}`
+      const wsURL = scheme + '://' + document.location.hostname + port + url
+      this.ws = new WebSocket(wsURL)
     },
     SyncUserClick() {
       this.dialogLdapUserSyncStatus = true
       this.enableWS()
       this.ws.onopen = (e) => {
-        this.ws.send(JSON.stringify({ msg_type: 'sync_user' }))
+        this.ws.send(
+          JSON.stringify({
+            msg_type: 'sync_user'
+          })
+        )
       }
       this.ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
@@ -220,7 +250,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .el-select-dropdown.select-org-dropdown {
+:deep(.el-select-dropdown.select-org-dropdown) {
   max-width: 300px !important;
 }
 

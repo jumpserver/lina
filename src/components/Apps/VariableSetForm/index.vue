@@ -1,9 +1,9 @@
 <template>
   <AutoDataForm
+    v-bind="$data"
     ref="AutoDataForm"
     class="variable-set"
     :submit-btn-text="submitBtnText"
-    v-bind="$data"
     :fields="fields"
     @submit="confirm"
   />
@@ -20,7 +20,7 @@ export default {
   props: {
     formData: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     queryParam: {
       type: String,
@@ -40,7 +40,7 @@ export default {
   },
   computed: {
     fields() {
-      return [['', this.formData.map(item => item.var_name)]]
+      return [['', this.formData.map((item) => item.var_name)]]
     }
   },
   methods: {
@@ -51,9 +51,9 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .variable-set {
-  ::v-deep .el-form-item {
+  :deep(.el-form-item) {
     margin-bottom: 5px;
 
     .help-block {
@@ -61,7 +61,7 @@ export default {
     }
   }
 
-  ::v-deep .form-group-header {
+  :deep(.form-group-header) {
     .hr-line-dashed {
       margin: 5px 0;
     }

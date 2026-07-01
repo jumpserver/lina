@@ -1,11 +1,12 @@
 <template>
   <Dialog
     :title="$t('ConfirmRunningAssets')"
-    :visible.sync="iVisible"
+    :visible="visible"
     :show-buttons="!isRunning"
     :show-confirm="true"
     :show-cancel="true"
     width="1200px"
+    @update:visible="$emit('update:visible', $event)"
     @confirm="onConfirm"
     @cancel="onCancel"
   >
@@ -16,14 +17,20 @@
             {{ $t('RunnableAssets') }}
           </div>
           <el-checkbox
-            v-model="checkAll"
             :indeterminate="isIndeterminate"
+            :model-value="checkAll"
             style="padding-bottom: 5px"
             @change="handleCheckAllChange"
+            @update:model-value="checkAll = $event"
           >
             {{ $t('All') }}
           </el-checkbox>
-          <el-checkbox-group v-model="selectedAssets" class="group-assets" @change="handleCheckedAssetChange">
+          <el-checkbox-group
+            :model-value="selectedAssets"
+            class="group-assets"
+            @change="handleCheckedAssetChange"
+            @update:model-value="selectedAssets = $event"
+          >
             <el-checkbox
               v-for="asset in runnableAssets"
               :key="asset.id"
@@ -31,7 +38,9 @@
               class="asset-item"
             >
               <div class="asset-item">
-                <span>{{ asset.name }}<span v-if="asset.ip">({{ asset.ip }})</span></span>
+                <span
+                  >{{ asset.name }}<span v-if="asset.ip">({{ asset.ip }})</span></span
+                >
               </div>
             </el-checkbox>
           </el-checkbox-group>
@@ -68,14 +77,14 @@ export default {
     },
     assets: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     isRunning: {
       type: Boolean,
       default: false
     }
   },
+  emits: ['update:visible', 'submit'],
   data() {
     return {
       checkAll: true,
@@ -84,14 +93,6 @@ export default {
     }
   },
   computed: {
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
-    },
     runnableAssets() {
       return this.assets.runnable
     },
@@ -137,7 +138,7 @@ export default {
 <style scoped lang="scss">
 .confirm-run-assets-dialog {
   .runnable-assets {
-    padding-right: 10px
+    padding-right: 10px;
   }
 
   display: grid;
@@ -153,7 +154,7 @@ export default {
   }
 
   .group-assets {
-    ::v-deep .el-checkbox__label {
+    :deep(.el-checkbox__label) {
       display: inline-block;
       padding-left: 10px;
       line-height: 19px;
@@ -178,7 +179,7 @@ export default {
 
       .icon {
         color: #ed5565;
-        padding-right: 3px
+        padding-right: 3px;
       }
 
       .asset-ip {
@@ -187,10 +188,9 @@ export default {
 
       .asset-status {
         padding-right: 10px;
-        color: #ed5565
+        color: #ed5565;
       }
     }
-
   }
 
   .group-assets::-webkit-scrollbar {

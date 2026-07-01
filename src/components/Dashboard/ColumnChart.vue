@@ -1,10 +1,6 @@
 <template>
   <div>
-    <Echart
-      ref="echarts"
-      :options="options"
-      :autoresize="true"
-    />
+    <Echart ref="echarts" :options="options" :autoresize="true" />
   </div>
 </template>
 
@@ -59,105 +55,108 @@ export default {
         tooltip: {
           show: true
         },
-        xAxis: [{
-          type: 'category',
-          name: '',
-          nameLocation: 'center',
-          nameGap: 35,
-          nameTextStyle: {
-            color: '#8796AD',
-            fontSize: '16'
-          },
-          axisLabel: {
-            textStyle: {
+        xAxis: [
+          {
+            type: 'category',
+            name: '',
+            nameLocation: 'center',
+            nameGap: 35,
+            nameTextStyle: {
+              color: '#8796AD',
+              fontSize: '16'
+            },
+            axisLabel: {
               color: '#8796AD',
               fontSize: '14'
-            }
-          },
-          data: this.datesMetrics,
-          axisLine: {
-            lineStyle: {
-              width: 2,
-              color: '#BBBFC4'
-            }
-          },
-          axisTick: {
-            show: false
-          }
-        }],
-        yAxis: [{
-          type: 'value',
-          name: '',
-          nameLocation: 'middle',
-          nameGap: 45,
-          nameTextStyle: {
-            color: '#8796AD',
-            fontSize: '16'
-          },
-          axisLabel: {
-            textStyle: {
-              color: '#8796AD',
-              fontSize: '14'
-            }
-          },
-          axisTick: {
-            show: false
-          },
-          axisLine: {
-            show: false
-          },
-          splitLine: {
-            lineStyle: {
-              color: 'rgba(160,160,160,0.3)'
-            }
-          }
-        }],
-        series: [{
-          type: 'bar',
-          name: this.primaryName,
-          stack: 1,
-          barWidth: '20%',
-          borderWidth: 0,
-          itemStyle: {
-            normal: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                offset: 0,
-                color: TwoLevelColor
-              },
-              {
-                offset: 1,
-                color: ThreeLevelColor
+            },
+            data: this.datesMetrics,
+            axisLine: {
+              lineStyle: {
+                width: 2,
+                color: '#BBBFC4'
               }
-              ], false)
-            }
-          },
-          label: {
-            normal: {
+            },
+            axisTick: {
               show: false
             }
-          },
-          data: this.primaryData
-        },
-        {
-          type: 'pictorialBar',
-          name: this.primaryName,
-          symbol: 'rect',
-          symbolSize: ['25%', 6],
-          symbolOffset: [0, -6],
-          z: 12,
-          itemStyle: {
-            normal: {
-              color: primary
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            name: '',
+            nameLocation: 'middle',
+            nameGap: 45,
+            nameTextStyle: {
+              color: '#8796AD',
+              fontSize: '16'
+            },
+            axisLabel: {
+              color: '#8796AD',
+              fontSize: '14'
+            },
+            axisTick: {
+              show: false
+            },
+            axisLine: {
+              show: false
+            },
+            splitLine: {
+              lineStyle: {
+                color: 'rgba(160,160,160,0.3)'
+              }
             }
+          }
+        ],
+        series: [
+          {
+            type: 'bar',
+            name: this.primaryName,
+            stack: 1,
+            barWidth: '20%',
+            borderWidth: 0,
+            itemStyle: {
+              color: new echarts.graphic.LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                [
+                  {
+                    offset: 0,
+                    color: TwoLevelColor
+                  },
+                  {
+                    offset: 1,
+                    color: ThreeLevelColor
+                  }
+                ],
+                false
+              )
+            },
+            label: {
+              show: false
+            },
+            data: this.primaryData
           },
-          label: {
-            show: false,
-            position: 'top',
-            fontSize: 16
-          },
-          symbolPosition: 'end',
-          data: this.primaryData
-        }
+          {
+            type: 'pictorialBar',
+            name: this.primaryName,
+            symbol: 'rect',
+            symbolSize: ['25%', 6],
+            symbolOffset: [0, -6],
+            z: 12,
+            itemStyle: {
+              color: primary
+            },
+            label: {
+              show: false,
+              position: 'top',
+              fontSize: 16
+            },
+            symbolPosition: 'end',
+            data: this.primaryData
+          }
         ]
       }
     }

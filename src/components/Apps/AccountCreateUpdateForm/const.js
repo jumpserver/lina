@@ -231,12 +231,14 @@ export const accountFieldsMeta = (vm) => {
       helpTip: vm.$t('WindowsPushHelpText'),
       hidden: (formValue) => {
         const automation = vm.iPlatform.automation || {}
-        return !automation.push_account_enabled ||
+        return (
+          !automation.push_account_enabled ||
           !automation.ansible_enabled ||
           !vm.$hasPerm('accounts.push_account') ||
           (formValue.secret_type === 'ssh_key' && vm.iPlatform.type.value === 'windows') ||
           vm.addTemplate ||
           !formValue.secret_reset
+        )
       }
     },
     params: {
@@ -250,13 +252,14 @@ export const accountFieldsMeta = (vm) => {
         }
         vm.fieldsMeta.params.el.method = vm.iPlatform.automation.push_account_method
         vm.fieldsMeta.params.el.pushAccountParams = vm.iPlatform.automation.push_account_params
-        return !formValue.push_now ||
+        return (
+          !formValue.push_now ||
           !automation.push_account_enabled ||
           !automation.ansible_enabled ||
-          (formValue.secret_type === 'ssh_key' &&
-            vm.iPlatform.type.value === 'windows') ||
+          (formValue.secret_type === 'ssh_key' && vm.iPlatform.type.value === 'windows') ||
           !vm.$hasPerm('accounts.push_account') ||
           vm.addTemplate
+        )
       }
     },
     is_active: {

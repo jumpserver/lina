@@ -52,8 +52,8 @@ export default [
       permissions: ['terminal.view_session']
     },
     hidden: true,
-    beforeEnter: (to, from, next) => {
-      next({ name: 'SessionDetail', params: to.params, query: to.query })
+    beforeEnter: (to) => {
+      return { name: 'SessionDetail', params: to.params, query: to.query }
     }
   },
   {

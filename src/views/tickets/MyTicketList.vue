@@ -1,10 +1,10 @@
 <template>
-  <BaseTicketList :url="url" v-bind="$data" />
+  <BaseTicketList v-bind="$data" :url="url" />
 </template>
 
 <script>
-import BaseTicketList from './BaseTicketList'
 import { mapGetters } from 'vuex'
+import BaseTicketList from './BaseTicketList'
 
 export default {
   name: 'MyTicketList',
@@ -29,9 +29,7 @@ export default {
     url() {
       return `/api/v1/tickets/tickets/?applicant=${this.currentUser.id}&state=pending`
     },
-    ...mapGetters([
-      'currentUser'
-    ])
+    ...mapGetters(['currentUser'])
   }
 }
 </script>

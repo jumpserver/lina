@@ -1,24 +1,20 @@
 <template>
   <div>
     <div>
-      <el-button
-        size="mini"
-        type="primary"
-        @click="onOpenDialog"
-      >
+      <el-button size="small" type="primary" @click="onOpenDialog">
         {{ $tc('View') }}
-        <span>({{ $tc('LockedIP', ipCounts ) }})</span>
+        <span>({{ $tc('LockedIP', ipCounts) }})</span>
       </el-button>
     </div>
     <Dialog
+      v-bind="$attrs"
       :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
       :title="title"
-      :visible.sync="visible"
-      v-bind="$attrs"
+      :visible="visible"
       width="40%"
-      v-on="$listeners"
+      @update:visible="$emit('update:visible', $event)"
     >
       <BlockedIPList />
     </Dialog>
@@ -42,8 +38,8 @@ export default {
     },
     title: {
       type: String,
-      default: function() {
-        return this.$t('BlockedIPS')
+      default: function () {
+        return 'BlockedIPS'
       }
     },
     url: {
@@ -71,7 +67,7 @@ export default {
   },
   methods: {
     getLockedIp() {
-      this.$axios.get('/api/v1/settings/security/block-ip/').then(res => {
+      this.$axios.get('/api/v1/settings/security/block-ip/').then((res) => {
         this.ipCounts = res.count
       })
     },
@@ -82,5 +78,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

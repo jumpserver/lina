@@ -1,8 +1,8 @@
 <template>
   <Dialog
+    v-model:visible="iVisible"
     :show-cancel="false"
     :title="title"
-    :visible.sync="visible"
     :close-on-click-modal="false"
     width="700px"
     @close="onClose"
@@ -14,12 +14,12 @@
         <div class="row">
           <span class="col">ID:</span>
           <span class="value">{{ keyInfo.id }}</span>
-          <i class="el-icon-copy-document copy-icon" @click="handleCopy(keyInfo.id)" />
+          <el-icon class="copy-icon" @click="handleCopy(keyInfo.id)"><CopyDocument /></el-icon>
         </div>
         <div class="row">
           <span class="col">Secret:</span>
           <span class="value">{{ keyInfo.secret }}</span>
-          <i class="el-icon-copy-document copy-icon" @click="handleCopy(keyInfo.secret)" />
+          <el-icon class="copy-icon" @click="handleCopy(keyInfo.secret)"><CopyDocument /></el-icon>
         </div>
       </div>
     </el-alert>
@@ -52,6 +52,17 @@ export default {
       visible: false
     }
   },
+  computed: {
+    iVisible: {
+      get() {
+        return this.visible
+      },
+      set(val) {
+        this.visible = val
+        this.$emit('update:visible', val)
+      }
+    }
+  },
   methods: {
     show(data) {
       this.keyInfo = data
@@ -65,11 +76,10 @@ export default {
     }
   }
 }
-
 </script>
 
-<style lang='scss' scoped>
- .secret {
+<style lang="scss" scoped>
+.secret {
   color: #2b2f3a;
   margin-top: 20px;
 }

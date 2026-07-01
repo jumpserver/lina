@@ -1,5 +1,9 @@
 <template>
-  <GenericListTableDialog :visible.sync="iVisible" v-bind="config" />
+  <GenericListTableDialog
+    v-bind="config"
+    :visible="visible"
+    @update:visible="$emit('update:visible', $event)"
+  />
 </template>
 
 <script>
@@ -20,12 +24,13 @@ export default {
       default: false
     }
   },
+  emits: ['update:visible'],
   data() {
     return {
       config: {
         title: this.$t('HistoryPassword'),
         visible: false,
-        width: '60%',
+        width: '860px',
         tableConfig: {
           id: 'history_date',
           url: `/api/v1/accounts/account-secrets/${this.account.id}/histories/`,
@@ -59,20 +64,8 @@ export default {
         }
       }
     }
-  },
-  computed: {
-    iVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$emit('update:visible', val)
-      }
-    }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

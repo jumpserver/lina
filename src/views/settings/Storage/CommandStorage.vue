@@ -50,9 +50,7 @@ export default {
         permissions: {
           resource: 'commandstorage'
         },
-        columns: [
-          'id', 'name', 'type', 'comment', 'is_default', 'actions'
-        ],
+        columns: ['id', 'name', 'type', 'comment', 'is_default', 'actions'],
         columnsExclude: ['meta'],
         columnsShow: {
           min: ['name', 'type', 'actions'],
@@ -63,7 +61,7 @@ export default {
             sortable: 'custom'
           },
           name: {
-            formatter: function(row) {
+            formatter: function (row) {
               return row.name
             }
           },
@@ -76,13 +74,19 @@ export default {
           },
           actions: {
             formatterArgs: {
-              canUpdate: function({ row }) {
-                return (row.name !== 'default' && row.name !== 'null' &&
-                  vm.$hasPerm('terminal.change_commandstorage'))
+              canUpdate: function ({ row }) {
+                return (
+                  row.name !== 'default' &&
+                  row.name !== 'null' &&
+                  vm.$hasPerm('terminal.change_commandstorage')
+                )
               },
-              canDelete: function({ row }) {
-                return (row.name !== 'default' && row.name !== 'null' &&
-                  vm.$hasPerm('terminal.delete_commandstorage'))
+              canDelete: function ({ row }) {
+                return (
+                  row.name !== 'default' &&
+                  row.name !== 'null' &&
+                  vm.$hasPerm('terminal.delete_commandstorage')
+                )
               },
               default: {
                 width: '130px'
@@ -94,8 +98,8 @@ export default {
                   title: this.$t('Test'),
                   type: 'primary',
                   can: vm.$hasPerm('terminal.view_commandstorage'),
-                  callback: function({ row, col, cellValue, reload }) {
-                    TestCommandStorage(row.id).then(data => {
+                  callback: function ({ row, col, cellValue, reload }) {
+                    TestCommandStorage(row.id).then((data) => {
                       if (!data['is_valid']) {
                         this.$message.error(data.msg)
                       } else {
@@ -109,13 +113,15 @@ export default {
                   title: this.$t('SetToDefault'),
                   type: 'primary',
                   can: vm.$hasPerm('terminal.change_commandstorage'),
-                  callback: function({ row, col, cellValue, reload }) {
-                    SetToDefaultCommandStorage(row.id).then(data => {
-                      vm.$refs.ListTable.reloadTable()
-                      this.$message.success(this.$tc('SetSuccess'))
-                    }).catch(() => {
-                      this.$message.error(this.$tc('SetFailed'))
-                    })
+                  callback: function ({ row, col, cellValue, reload }) {
+                    SetToDefaultCommandStorage(row.id)
+                      .then((data) => {
+                        vm.$refs.ListTable.reloadTable()
+                        this.$message.success(this.$tc('SetSuccess'))
+                      })
+                      .catch(() => {
+                        this.$message.error(this.$tc('SetFailed'))
+                      })
                   }
                 }
               ]
@@ -125,7 +131,6 @@ export default {
       }
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>

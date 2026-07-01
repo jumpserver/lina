@@ -7,7 +7,7 @@ export default [
     name: 'TicketList',
     component: empty,
     redirect: {
-      name: 'TicketList'
+      name: 'AuditTicketList'
     },
     meta: {
       title: i18n.t('TicketList'),

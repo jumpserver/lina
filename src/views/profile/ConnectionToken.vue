@@ -25,9 +25,7 @@ export default {
         columnsExtra: ['action'],
         columnsShow: {
           min: ['id', 'actions', 'asset_display'],
-          default: [
-            'id', 'asset_display', 'date_expired', 'is_active', 'actions'
-          ]
+          default: ['id', 'asset_display', 'date_expired', 'is_active', 'actions']
         },
         columnsMeta: {
           id: {
@@ -36,10 +34,12 @@ export default {
           },
           action: {
             label: this.$t('PermAction'),
-            formatter: function(row) {
-              return row.actions.map(item => {
-                return item.label
-              }).join(', ')
+            formatter: function (row) {
+              return row.actions
+                .map((item) => {
+                  return item.label
+                })
+                .join(', ')
             }
           },
           actions: {
@@ -52,15 +52,18 @@ export default {
                   name: 'Expired',
                   title: this.$t('Expire'),
                   type: 'info',
-                  can: ({ row }) => !row['is_expired'] && this.$hasPerm('authentication.expire_connectiontoken'),
-                  callback: function({ row }) {
-                    this.$axios.patch(`${ajaxUrl}${row.id}/expire/`,
-                    ).then(res => {
-                      this.reloadTable()
-                      this.$message.success(this.$tc('UpdateSuccessMsg'))
-                    }).catch(error => {
-                      this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
-                    })
+                  can: ({ row }) =>
+                    !row['is_expired'] && this.$hasPerm('authentication.expire_connectiontoken'),
+                  callback: function ({ row }) {
+                    this.$axios
+                      .patch(`${ajaxUrl}${row.id}/expire/`)
+                      .then((res) => {
+                        this.reloadTable()
+                        this.$message.success(this.$tc('UpdateSuccessMsg'))
+                      })
+                      .catch((error) => {
+                        this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
+                      })
                   }.bind(this)
                 }
               ]

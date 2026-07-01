@@ -1,6 +1,6 @@
-import Vue from 'vue'
+import { eventBus } from './vue/eventbus'
 
-export const eventBus = new Vue()
+export { eventBus }
 export default {
   eventBus
 }

@@ -1,11 +1,11 @@
 <template>
   <Dialog
+    v-bind="$attrs"
     :destroy-on-close="true"
     :show-buttons="false"
     :title="$tc('MatchResult')"
-    :v-bind="$attrs"
-    :v-on="$listeners"
-    :visible.sync="iVisible"
+    :visible="visible"
+    @update:visible="$emit('update:visible', $event)"
   >
     <ListTable v-bind="attrMatchTableConfig" />
   </Dialog>
@@ -25,13 +25,14 @@ export default {
     },
     attrs: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     visible: {
       type: Boolean,
       default: false
     }
   },
+  emits: ['update:visible'],
   data() {
     return {
       attrMatchTableConfig: {
@@ -43,13 +44,15 @@ export default {
         },
         tableConfig: {
           url: this.url,
-          columns: this.attrs.filter(item => item.inTable).map(item => {
-            return {
-              prop: item.name,
-              label: item.label,
-              formatter: item.formatter
-            }
-          }),
+          columns: this.attrs
+            .filter((item) => item.inTable)
+            .map((item) => {
+              return {
+                prop: item.name,
+                label: item.label,
+                formatter: item.formatter
+              }
+            }),
           columnsMeta: {
             actions: {
               has: false
@@ -58,20 +61,8 @@ export default {
         }
       }
     }
-  },
-  computed: {
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
-    }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

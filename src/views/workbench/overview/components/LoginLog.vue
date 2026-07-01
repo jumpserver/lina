@@ -1,10 +1,10 @@
 <template>
-  <HomeCard :table-config="tableConfig" v-bind="cardConfig" />
+  <HomeCard v-bind="cardConfig" :table-config="tableConfig" />
 </template>
 
 <script>
+import { createTextVNode as createTextVNodeCompat, createVNode as createVNodeCompat } from 'vue'
 import HomeCard from './HomeCard'
-
 export default {
   name: 'Log',
   components: {
@@ -29,13 +29,16 @@ export default {
       },
       tableConfig: {
         url: '/api/v1/audits/my-login-logs/?limit=5',
-        columns: [
-          'city', 'datetime'
-        ],
+        columns: ['city', 'datetime'],
         columnsMeta: {
           city: {
             formatter: (row) => {
-              return <span>{row.city}({row.ip})</span>
+              return createVNodeCompat('span', null, [
+                row.city,
+                createTextVNodeCompat('('),
+                row.ip,
+                createTextVNodeCompat(')')
+              ])
             }
           },
           actions: {
@@ -50,5 +53,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

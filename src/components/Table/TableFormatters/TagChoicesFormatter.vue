@@ -1,10 +1,5 @@
 <template>
-  <el-tag
-    :size="tag.size"
-    :type="tag.type"
-    class="tag-formatter"
-    disable-transitions
-  >
+  <el-tag :size="tag.size" :type="tag.type" class="tag-formatter" disable-transitions>
     <i v-if="tag.icon" :class="tag.icon" class="fa" /> {{ tag.label }}
   </el-tag>
 </template>
@@ -24,7 +19,7 @@ export default {
             return null
           },
           getTagSize({ row, cellValue }) {
-            return 'mini'
+            return 'small'
           },
           getTagLabel({ row, cellValue }) {
             return cellValue
@@ -66,7 +61,6 @@ export default {
 </script>
 
 <style scoped>
-
 .tag-formatter {
   margin: 2px 0;
 }

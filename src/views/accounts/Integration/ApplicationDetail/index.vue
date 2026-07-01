@@ -1,5 +1,9 @@
 <template>
-  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="object" v-bind="config">
+  <GenericDetailPage
+    v-bind="config"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="object"
+  >
     <keep-alive>
       <component :is="config.activeMenu" :object="object" />
     </keep-alive>
@@ -8,9 +12,9 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import IntegrationApplicationInfo from './ServiceInfo.vue'
-import ServiceCallRecords from '../components/CallRecords.vue'
 import IntegrationApplicationAccount from '../components/AccountList.vue'
+import ServiceCallRecords from '../components/CallRecords.vue'
+import IntegrationApplicationInfo from './ServiceInfo.vue'
 
 export default {
   components: {

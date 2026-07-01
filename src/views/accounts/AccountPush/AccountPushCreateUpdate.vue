@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
-import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
 import { AssetSelect, AutomationParams } from '@/components'
 import { periodicMeta } from '@/components/const'
 import { TagInput } from '@/components/Form/FormFields'
+import { GenericCreateUpdatePage } from '@/layout/components'
+import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
 
 export default {
   name: 'AccountPushCreateUpdate',
@@ -36,14 +36,17 @@ export default {
         [
           this.$t('Account'),
           [
-            'accounts', 'secret_strategy', 'secret_type', 'secret',
-            'password_rules', 'ssh_key_change_strategy', 'ssh_key',
+            'accounts',
+            'secret_strategy',
+            'secret_type',
+            'secret',
+            'password_rules',
+            'ssh_key_change_strategy',
+            'ssh_key',
             'passphrase'
           ]
         ],
-        [
-          this.$t('Params'), ['params']
-        ],
+        [this.$t('Params'), ['params']],
         [this.$t('Periodic'), ['is_periodic', 'interval', 'crontab']],
         [this.$t('Other'), ['check_conn_after_change', 'is_active', 'comment']]
       ],
@@ -53,9 +56,7 @@ export default {
         assets: {
           type: 'assetSelect',
           component: AssetSelect,
-          rules: [
-            { required: false }
-          ],
+          rules: [{ required: false }],
           el: {
             baseUrl: '/api/v1/assets/assets/?push_account_enabled=true'
           },
@@ -77,7 +78,7 @@ export default {
           },
           on: {
             input: ([value]) => {
-              this.nodeIds = value?.map(i => i.pk)
+              this.nodeIds = value?.map((i) => i.pk)
             }
           }
         },
@@ -85,8 +86,8 @@ export default {
           hidden: (formValue) => formValue['dynamic_username']
         },
         ssh_key_change_strategy: {
-          hidden: (formValue) => formValue['action'] !== 'create_and_push' ||
-            formValue['secret_type'] !== 'ssh_key'
+          hidden: (formValue) =>
+            formValue['action'] !== 'create_and_push' || formValue['secret_type'] !== 'ssh_key'
         },
         triggers: {
           el: {
@@ -146,9 +147,7 @@ export default {
   },
   methods: {
     handleAfterGetRemoteMeta(meta) {
-      const needSetOptionFields = [
-        'secret_type', 'secret_strategy', 'ssh_key_change_strategy'
-      ]
+      const needSetOptionFields = ['secret_type', 'secret_strategy', 'ssh_key_change_strategy']
       for (const i of needSetOptionFields) {
         const field = this.fieldsMeta[i] || {}
         field.options = meta[i]?.choices || []
@@ -158,6 +157,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

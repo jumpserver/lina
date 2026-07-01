@@ -1,8 +1,8 @@
 <template>
   <IBox class="box">
-    <div slot="header" class="clearfix ibox-title">
-      <i /> {{ title }}
-    </div>
+    <template #header>
+      <div class="clearfix ibox-title"><i /> {{ title }}</div>
+    </template>
     <div class="content">
       <el-row :gutter="10">
         <el-col
@@ -10,7 +10,7 @@
           :key="'card-' + item.key"
           :md="12"
           :sm="12"
-          style="display: flex;"
+          style="display: flex"
         >
           <div :style="{ 'text-align': 'align' }" class="item-label">
             <label>{{ item.key }}: </label>
@@ -27,7 +27,7 @@
           :key="'card-' + item.key"
           :md="12"
           :sm="12"
-          style="display: flex;"
+          style="display: flex"
         >
           <div :style="{ 'text-align': 'align' }" class="item-label">
             <label>{{ item.key }}: </label>
@@ -50,11 +50,11 @@ export default {
   props: {
     specialCardItems: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     detailCardItems: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     title: {
       type: String,
@@ -67,7 +67,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang="scss" scoped>
 .box {
   margin-bottom: 15px;
 }
@@ -82,7 +82,8 @@ export default {
   white-space: nowrap;
 }
 
-.item-label, .item-text {
+.item-label,
+.item-text {
   display: inline-block;
 }
 </style>
