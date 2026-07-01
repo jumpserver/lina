@@ -26,6 +26,10 @@ export default {
   },
   data() {
     const category = 'ldap'
+    const isLdaps = (formValue = {}) => {
+      const serverUri = formValue.AUTH_LDAP_SERVER_URI || ''
+      return serverUri.trim().toLowerCase().startsWith('ldaps://')
+    }
     return {
       category: category,
       url: `/api/v1/settings/setting/?category=${category}`,
@@ -83,15 +87,18 @@ export default {
         },
         AUTH_LDAP_CACERT_CONTENT: {
           component: UploadKey,
-          helpText: this.$t('AuthLdapCACertHelpText')
+          helpText: this.$t('AuthLdapCACertHelpText'),
+          hidden: (formValue) => !isLdaps(formValue)
         },
         AUTH_LDAP_CERT_CONTENT: {
           component: UploadKey,
-          helpText: this.$t('AuthLdapCertHelpText')
+          helpText: this.$t('AuthLdapCertHelpText'),
+          hidden: (formValue) => !isLdaps(formValue)
         },
         AUTH_LDAP_KEY_CONTENT: {
           component: UploadKey,
-          helpText: this.$t('AuthLdapKeyHelpText')
+          helpText: this.$t('AuthLdapKeyHelpText'),
+          hidden: (formValue) => !isLdaps(formValue)
         }
       },
       hasDetailInMsg: false,
