@@ -1,5 +1,6 @@
 import i18n from '@/i18n/i18n'
 import { message } from '@/utils/vue/message'
+import { getBasePath } from '@/utils/storage'
 import _ from 'lodash'
 
 export function getApiPath(that, objectId) {
@@ -175,6 +176,30 @@ export function newURL(url) {
     obj = new URL(url, location.origin)
   }
   return obj
+}
+
+export function addBasePath(path = '') {
+  if (!path || /^https?:\/\//i.test(path)) {
+    return path
+  }
+
+  const basePath = getBasePath()
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`
+
+  if (!basePath) {
+    return normalizedPath
+  }
+
+  if (
+    normalizedPath === basePath ||
+    normalizedPath.startsWith(basePath + '/') ||
+    normalizedPath.startsWith(basePath + '?') ||
+    normalizedPath.startsWith(basePath + '#')
+  ) {
+    return normalizedPath
+  }
+
+  return `${basePath}${normalizedPath}`
 }
 
 export function getUpdateObjURL(url, objId) {
@@ -517,4 +542,14 @@ export function randomString(length, includeSymbols = false) {
     .split('')
     .sort(() => 0.5 - Math.random())
     .join('')
+}
+
+export function createWsUrl(path) {
+  if (/^wss?:\/\//i.test(path)) {
+    return path
+  }
+
+  const scheme = location.protocol === 'https:' ? 'wss' : 'ws'
+  const port = location.port ? ':' + location.port : ''
+  return scheme + '://' + location.hostname + port + addBasePath(path)
 }
