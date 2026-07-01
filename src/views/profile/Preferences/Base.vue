@@ -17,6 +17,7 @@
 import { getActionMeta } from '@/api/common'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { IBox } from '@/components'
+import { encryptPassword } from '@/utils/session-encrypt'
 
 export default {
   name: 'Base',
@@ -46,6 +47,7 @@ export default {
     return {
       fields: [],
       iFieldsMeta: {},
+      encryptedFields: ['secret_key', 'secret_key_again'],
       loading: true,
       url: `/api/v1/users/preference/?category=${this.category}`
     }
@@ -93,6 +95,16 @@ export default {
           delete value[nameArray[0]]
         }
       })
+
+      if (value.file && typeof value.file === 'object') {
+        this.encryptedFields.forEach(name => {
+          const fieldValue = value.file[name]
+          if (fieldValue && typeof fieldValue === 'string') {
+            value.file[name] = encryptPassword(fieldValue)
+          }
+        })
+      }
+
       return value
     },
     submitMethod() {

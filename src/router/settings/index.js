@@ -1,13 +1,35 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
+import store from '@/store'
+import { openJDMC } from '@/utils/jdmc'
+import { hasPermission } from '@/utils/jms'
+import { getFirstAccessibleChildPath } from '@/utils/vue'
+
+const getSettings = () => store.state.settings.publicSettings || {}
 
 const Setting = () => import('@/views/settings/index')
 const globalSubmenu = () => import('@/layout/globalOrg.vue')
 
+function redirectAfterExternalAction(from, next) {
+  if (from?.name) {
+    next(false)
+    return
+  }
+  next('/settings/basic')
+}
+
 export default {
   path: '/settings',
   component: Setting,
-  redirect: '/settings/basic',
+  // redirect: '/settings/basic',
+  beforeEnter: (to, _from, next) => {
+    if (to.path !== '/settings') {
+      next()
+      return
+    }
+    const redirectPath = getFirstAccessibleChildPath('/settings')
+    next(redirectPath || '/404')
+  },
   name: 'SystemSetting',
   meta: {
     title: i18n.t('Settings'),
@@ -27,7 +49,8 @@ export default {
       meta: {
         title: i18n.t('BasicSettings'),
         icon: 'basic',
-        permissions: ['settings.view_setting']
+        disableGoBack: true,
+        permissions: ['settings.change_other']
       }
     },
     {
@@ -521,7 +544,7 @@ export default {
       meta: {
         title: i18n.t('SystemTools'),
         icon: 'tools',
-        permissions: ['settings.view_setting']
+        permissions: ['settings.change_other']
       }
     },
     {
@@ -533,7 +556,7 @@ export default {
       meta: {
         title: i18n.t('BaseSystemTasks'),
         icon: 'tasks',
-        permissions: ['ops.view_celerytask']
+        permissions: ['settings.change_ops']
       },
       children: [
         {
@@ -559,13 +582,50 @@ export default {
       ]
     },
     {
+      path: '/settings/jdmc',
+      name: 'DeviceManager',
+      meta: {
+        title: i18n.t('DeviceManager'),
+        icon: 'device',
+        permissions: ['rbac.view_jdmc'],
+        externalAction: {
+          type: 'jdmc',
+          nextPath: '/jdmc/'
+        },
+        // 在开启 JDMC 且有 rbac.view_jdmc 权限时，才显示
+        hidden: ({ settings }) => !settings['JDMC_ENABLED']
+      },
+      beforeEnter: (_to, from, next) => {
+        openJDMC('/jdmc/')
+        redirectAfterExternalAction(from, next)
+      }
+    },
+    {
       path: '/settings/license',
       name: 'License',
       component: () => import('@/views/settings/License'),
+      beforeEnter: (_to, from, next) => {
+        const settings = getSettings()
+        if (settings?.JDMC_ENABLED) {
+          openJDMC('/jdmc/sys-management/sys-auth')
+          redirectAfterExternalAction(from, next)
+        } else {
+          next()
+        }
+      },
       meta: {
         title: i18n.t('License'),
         icon: 'license',
-        permissions: ['settings.change_license']
+        permissions: ['settings.change_license'],
+        externalAction: {
+          type: 'jdmc',
+          nextPath: '/jdmc/sys-management/sys-auth',
+          enabled: ({ settings }) => settings?.JDMC_ENABLED
+        },
+        // 开启 JDMC 但没有 rbac.view_jdmc 权限时，隐藏
+        // 开启 JDMC 且有 rbac.view_jdmc 权限时显示
+        // 没有开启 JDMC 时，显示
+        hidden: ({ settings }) => settings['JDMC_ENABLED'] && !hasPermission('rbac.view_jdmc')
       }
     }
   ]

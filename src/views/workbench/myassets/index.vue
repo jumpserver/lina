@@ -16,7 +16,7 @@ import GrantedAssets from '@/components/Apps/GrantedAssets/index.vue'
 import Page from '@/layout/components/Page/index.vue'
 import { EditableInputFormatter } from '@/components/Table/TableFormatters'
 import { getPreference } from '@/api/settings'
-import { openNewWindow } from '@/utils/common/index'
+import { addBasePath, openNewWindow } from '@/utils/common/index'
 
 export default {
   components: {
@@ -49,7 +49,7 @@ export default {
                   openNewWindow(url)
                 } else {
                   const url = `/luna/?login_to=${row.id}${oid ? `&oid=${oid}` : ''}`
-                  window.open(url, '_blank')
+                  window.open(addBasePath(url), '_blank')
                 }
               }
             },

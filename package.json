@@ -58,6 +58,7 @@
     "nprogress": "^0.2.0",
     "path-browserify": "^1.0.1",
     "path-to-regexp": "8.4.2",
+    "sm-crypto": "^0.4.0",
     "socket.io-client": "^4.8.3",
     "sortablejs": "^1.15.7",
     "uuid": "^14.0.0",

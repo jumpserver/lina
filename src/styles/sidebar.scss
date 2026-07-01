@@ -44,6 +44,8 @@
     .el-scrollbar {
       height: 100%;
       overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: color-mix(in srgb, var(--menu-text) 38%, var(--menu-bg)) var(--menu-bg);
     }
 
     &.has-logo {

@@ -35,6 +35,10 @@ export default {
       let key
       if (this.$route.query['_']) {
         key = this.$route.query['_']
+      } else if (this.$route.path.startsWith('/audit/reports/')) {
+        // 报表页面：只用路径作为 key，让同一路径的组件实例被复用
+        // 包含 query 会导致每次 query 变化都创建新的缓存实例，积累的 deactivated 实例会同时响应路由变化形成循环
+        key = _.trimEnd(this.$route.path, '/')
       } else if (this.$route.name.toLowerCase().includes('list')) {
         key = _.trimEnd(this.$route.path, '/') + '?' + new URLSearchParams(query).toString()
       } else {

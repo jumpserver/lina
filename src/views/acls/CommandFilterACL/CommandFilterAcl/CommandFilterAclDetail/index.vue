@@ -5,7 +5,7 @@
     v-model:object="CommandFilterACL"
   >
     <keep-alive>
-      <component :is="config.activeMenu" :object="CommandFilterACL" />
+      <component :is="config.activeMenu" :object="CommandFilterACL" object-app-model="acls.CommandFilterACL" />
     </keep-alive>
   </GenericDetailPage>
 </template>

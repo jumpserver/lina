@@ -5,7 +5,7 @@
     v-model:object="TaskDetail"
   >
     <keep-alive>
-      <component :is="config.activeMenu" :object="TaskDetail" />
+      <component :is="config.activeMenu" :object="TaskDetail" object-app-model="acls.ConnectMethodACL" />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -44,10 +44,6 @@ export default {
           {
             title: this.$t('MenuUsers'),
             name: 'UserJsonTab'
-          },
-          {
-            title: this.$t('Assets'),
-            name: 'AssetJsonTab'
           }
         ],
         hasRightSide: true,

@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
+
 export default {
   props: {
     name: {
@@ -42,6 +44,13 @@ export default {
     return {
       select: this.days,
       iOptions: this.options.length > 0 ? this.options : defaultOptions
+    }
+  },
+  watch: {
+    days(val) {
+      if (val != null && String(val) !== this.select) {
+        this.select = String(val)
+      }
     }
   },
   created() {

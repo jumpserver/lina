@@ -35,6 +35,7 @@
 <script>
 import Title from './Title.vue'
 import SwitchDate from './SwitchDate.vue'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 export default {
   components: {

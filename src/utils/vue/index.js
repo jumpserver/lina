@@ -1,4 +1,5 @@
 import { defineAsyncComponent, markRaw } from 'vue'
+import store from '@/store'
 
 const asyncComponentCache = new WeakMap()
 
@@ -104,4 +105,84 @@ export function getRouteUrl(route, router) {
     return
   }
   return r.path || r.href
+}
+
+function normalizePath(path) {
+  if (!path) {
+    return '/'
+  }
+  const normalized = path.startsWith('/') ? path : `/${path}`
+  return normalized.replace(/\/+/g, '/')
+}
+
+function joinPath(basePath, childPath) {
+  if (!childPath) {
+    return normalizePath(basePath)
+  }
+  if (childPath.startsWith('/')) {
+    return normalizePath(childPath)
+  }
+  const base = normalizePath(basePath).replace(/\/$/, '')
+  return normalizePath(`${base}/${childPath}`)
+}
+
+function shouldSkipRoute(route) {
+  if (!route) {
+    return true
+  }
+  if (route.hidden) {
+    return true
+  }
+  if (route.meta?.hidden === true) {
+    return true
+  }
+  return false
+}
+
+function pickFirstAccessiblePath(route, parentPath, rootPath) {
+  if (shouldSkipRoute(route)) {
+    return ''
+  }
+  const routePath = route.meta?.fullPath || joinPath(parentPath, route.path || '')
+
+  if (route.children?.length) {
+    for (const child of route.children) {
+      const childPath = pickFirstAccessiblePath(child, routePath, rootPath)
+      if (childPath) {
+        return childPath
+      }
+    }
+  }
+
+  if (
+    routePath &&
+    routePath !== rootPath &&
+    !routePath.includes('/:') &&
+    !routePath.endsWith('/:id')
+  ) {
+    return routePath
+  }
+
+  return ''
+}
+
+export function getFirstAccessibleChildPath(rootPath) {
+  const normalizedRootPath = normalizePath(rootPath)
+  const viewRoutes = store.getters?.viewRoutes || []
+  const rootRoute = viewRoutes.find((route) => {
+    const routePath = route?.meta?.fullPath || route?.path
+    return normalizePath(routePath) === normalizedRootPath
+  })
+
+  if (!rootRoute?.children?.length) {
+    return ''
+  }
+
+  for (const child of rootRoute.children) {
+    const targetPath = pickFirstAccessiblePath(child, normalizedRootPath, normalizedRootPath)
+    if (targetPath) {
+      return targetPath
+    }
+  }
+  return ''
 }

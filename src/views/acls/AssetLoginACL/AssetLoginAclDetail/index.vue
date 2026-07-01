@@ -5,7 +5,7 @@
     v-model:object="instance"
   >
     <keep-alive>
-      <component :is="config.activeMenu" :object="instance" />
+      <component :is="config.activeMenu" :object="instance" object-app-model="acls.LoginAssetACL" />
     </keep-alive>
   </GenericDetailPage>
 </template>

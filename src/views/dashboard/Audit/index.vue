@@ -13,6 +13,7 @@ import { Announcement } from '@/components'
 import { Page } from '@/layout/components'
 import Page403 from '@/views/403'
 import AuditReport from '@/views/reports/audits/Dashboard.vue'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 export default {
   components: {

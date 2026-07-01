@@ -58,11 +58,7 @@ export default {
         extraQuery: { order: '-date_updated' }
       },
       headerActions: {
-        handleImportClick: ({ selectedRows }) => {
-          this.$message.warning({
-            message: this.$t('ImportMessage')
-          })
-        }
+        hasImport: false
       },
       addExtraMoreActions: [],
       helpMessage: this.$t('AssetListHelpMessage')

@@ -2,6 +2,7 @@
   <IBox>
     <GenericCreateUpdateForm
       :encrypted-fields="encryptedFields"
+      :need-get-object-detail="false"
       :fields="fields"
       :fields-meta="fieldsMeta"
       :initial="object"

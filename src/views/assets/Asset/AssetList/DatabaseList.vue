@@ -25,7 +25,8 @@ export default {
                 this.$router.push({ name: 'CloudAccountList', query: { category: 'database' } })
             }
           ]
-        }
+        },
+        helpMessage: this.$t('DatabaseConnectivityTestHelpMessage')
       }
     }
   }

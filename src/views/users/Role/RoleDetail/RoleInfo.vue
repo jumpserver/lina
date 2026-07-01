@@ -219,7 +219,7 @@ export default {
         'xpack.view_applicationchangeauthplantask': ['xpack.view_applicationchangeauthplan'],
         'xpack.view_applicationchangeauthplanexecution': ['xpack.view_applicationchangeauthplan']
       },
-      url: `/api/v1/rbac/${this.object.scope.value}-roles/${this.object.id}`,
+      url: `/api/v1/rbac/${this.object.scope.value}-roles/${this.object.id}/`,
       detailFields: [
         'display_name',
         'scope_display',

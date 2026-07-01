@@ -72,7 +72,8 @@ export default {
         title: 'Passkeys',
         icon: 'passkey',
         hidden: ({ settings }) => !settings['AUTH_PASSKEY'],
-        permissions: ['authentication.view_passkey']
+        permissions: ['authentication.view_passkey'],
+        activeMenu: '/profile/passkeys'
       }
     },
     {

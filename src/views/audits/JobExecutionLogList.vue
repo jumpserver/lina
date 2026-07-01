@@ -139,6 +139,7 @@ export default {
       },
       headerActions: {
         hasLeftActions: false,
+        hasReportExport: true,
         hasDatePicker: true,
         hasImport: false,
         searchConfig: {

@@ -16,6 +16,7 @@
 <script>
 import ImportTable from '@/components/Table/ListTable/TableAction/ImportTable'
 import _isequal from 'lodash/isEqual'
+import { createWsUrl } from '@/utils/common/index'
 
 export default {
   name: 'AssetPanel',
@@ -104,10 +105,7 @@ export default {
       if (this.ws) {
         return
       }
-      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
-      const port = document.location.port ? ':' + document.location.port : ''
-      const url = '/ws/xpack/cloud/'
-      const wsURL = scheme + '://' + document.location.hostname + port + url
+      const wsURL = createWsUrl('/ws/xpack/cloud/')
       this.ws = new WebSocket(wsURL)
       this.ws.onopen = (e) => {
         this.settings.disableImportBtn = true

@@ -55,7 +55,7 @@ export default {
       platform: '',
       loading: true,
       form: this.protocol,
-      platformDetail: platform ? '#/console/assets/platforms/' + platform : '',
+      platformDetail: platform ? '#/settings/platforms?id=' + platform : '',
       config: {
         hasSaveContinue: false,
         hasButtons: !this.disabled,
@@ -102,7 +102,7 @@ export default {
       const name = drawActionMeta?.row?.platform?.name
 
       if (platform) {
-        this.platformDetail = `/ui/#/settings/platforms?id=${platform}&name=${name}`
+        this.platformDetail = `${window.__UI_BASE__}#/settings/platforms?id=${platform}&name=${name}`
       } else {
         this.platformDetail = ''
       }

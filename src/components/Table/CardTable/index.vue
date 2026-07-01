@@ -52,7 +52,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { Pagination } from '@/components'
+import Pagination from '@/components/Table/Pagination'
 import TableAction from '@/components/Table/ListTable/TableAction'
 import IBox from '@/components/Common/IBox/index.vue'
 import Panel from './Panel'

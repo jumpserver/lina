@@ -13,7 +13,8 @@ export default {
   data() {
     return {
       extraTicketAction: {
-        hasImport: false
+        hasImport: false,
+        hasLeftActions: false
       }
     }
   },

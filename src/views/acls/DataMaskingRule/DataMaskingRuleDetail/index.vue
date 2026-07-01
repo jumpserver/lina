@@ -5,7 +5,7 @@
     v-model:object="instance"
   >
     <keep-alive>
-      <component :is="config.activeMenu" :object="instance" />
+      <component :is="config.activeMenu" :object="instance" object-app-model="acls.DataMaskingRule" />
     </keep-alive>
   </GenericDetailPage>
 </template>

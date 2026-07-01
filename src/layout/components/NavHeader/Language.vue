@@ -63,9 +63,10 @@ export default {
       document.documentElement.lang = lang
     },
     changeLangTo(item) {
-      this.$axios.get(`/core/i18n/${item.cookieCode}/`).then(() => {
+      this.$axios.get(`/core/i18n/${item.cookieCode}/`).finally(() => {
         window.location.reload()
-      })
+      }
+      )
     }
   }
 }

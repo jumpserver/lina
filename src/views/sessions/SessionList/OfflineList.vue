@@ -9,7 +9,7 @@
 
 <script>
 import BaseList from './BaseList'
-import { download } from '@/utils/common/index'
+import { addBasePath, download } from '@/utils/common/index'
 
 export default {
   name: 'OfflineList',
@@ -37,7 +37,7 @@ export default {
           callback: function ({ row, tableData }) {
             // 跳转到luna页面
             const replayUrl = '/luna/replay/' + row.id
-            window.open(replayUrl)
+            window.open(addBasePath(replayUrl))
           }
         },
         {

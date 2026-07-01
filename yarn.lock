@@ -2640,6 +2640,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jsbn@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "jsbn@npm:1.1.0"
+  checksum: 10c0/4f907fb78d7b712e11dea8c165fe0921f81a657d3443dde75359ed52eb2b5d33ce6773d97985a089f09a65edd80b11cb75c767b57ba47391fee4c969f7215c96
+  languageName: node
+  linkType: hard
+
 "jsencrypt@npm:^3.5.4":
   version: 3.5.4
   resolution: "jsencrypt@npm:3.5.4"
@@ -2851,6 +2858,7 @@ __metadata:
     pretty-bytes: "npm:^7.1.0"
     sass: "npm:^1.100.0"
     semver: "npm:^7.8.1"
+    sm-crypto: "npm:^0.4.0"
     socket.io-client: "npm:^4.8.3"
     sortablejs: "npm:^1.15.7"
     strip-ansi: "npm:^7.2.0"
@@ -3688,6 +3696,15 @@ __metadata:
     ansi-styles: "npm:^6.2.3"
     is-fullwidth-code-point: "npm:^5.1.0"
   checksum: 10c0/0ce4aa91febb7cea4a00c2c27bb820fa53b6d2862ce0f80f7120134719f7914fc416b0ed966cf35250a3169e152916392f35917a2d7cad0fcc5d8b841010fa9a
+  languageName: node
+  linkType: hard
+
+"sm-crypto@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "sm-crypto@npm:0.4.0"
+  dependencies:
+    jsbn: "npm:^1.1.0"
+  checksum: 10c0/76210413b2af8d426403d5f0a7d52adcd85241539e5ad6445d1a3a9eb22d474dba21ae0b58ca9a68f1c76555c42d7fe6133d85c2172d69de608152d3f72ccfdd
   languageName: node
   linkType: hard
 

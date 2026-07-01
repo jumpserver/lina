@@ -60,7 +60,7 @@ export const assetFieldsMeta = (vm, category, type) => {
   const platformType = type || vm.$route.query.type
   const platformProtocols = []
   const secretTypes = []
-  const asset = { address: 'https://jumpserver:330' }
+  const asset = { address: 'https://example:8443' }
   return {
     address: {
       rules: [rules.specialEmojiCheck, rules.RequiredChange],

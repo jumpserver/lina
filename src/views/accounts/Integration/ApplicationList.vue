@@ -82,7 +82,20 @@ export default {
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
-              hasClone: false
+              hasClone: false,
+              extraActions: [
+                {
+                  name: 'refresh-secret',
+                  title: vm.$t('RefreshSecret'),
+                  can: vm.$hasPerm('accounts.change_integrationapplication'),
+                  type: 'primary',
+                  callback: async ({ row }) => {
+                    await vm.$axios.get(`/api/v1/accounts/integration-applications/${row.id}/refresh-secret/`)
+                    vm.$message.success(vm.$t('RefreshSuccessMsg'))
+                    vm.$refs.listTable.getData()
+                  }
+                }
+              ]
             }
           }
         },

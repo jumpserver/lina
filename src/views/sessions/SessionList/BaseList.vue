@@ -182,6 +182,7 @@ export default {
       headerActions: {
         hasLeftActions: false,
         hasImport: false,
+        hasReportExport: true,
         hasDatePicker: true,
         searchConfig: {
           getUrlQuery: false,

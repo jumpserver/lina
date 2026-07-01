@@ -1,4 +1,4 @@
-import Cookies from 'js-cookie'
+import { jsCookie as Cookies } from '@/utils/storage'
 
 const state = {
   sidebar: {

@@ -5,6 +5,7 @@ import { startup } from '@/utils/startup'
 import store from '@/store'
 import { isSameView } from '@/utils/jms/index'
 import { toSentenceCase } from '@/utils/common/index'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 function beforeRouteChange(to, from) {
   localStorage.setItem('activeTab', '')

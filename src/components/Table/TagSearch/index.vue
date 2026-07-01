@@ -370,6 +370,15 @@ export default {
       this.$refs.SearchInput.focus()
     },
     handleKeyUp(event) {
+      // 如果当前有输入框聚焦，不触发搜索
+      const activeElement = event.target
+      const isInputFocused =
+        activeElement &&
+        (activeElement.tagName === 'INPUT' ||
+          activeElement.tagName === 'TEXTAREA' ||
+          activeElement.contentEditable === 'true')
+      if (isInputFocused) return
+
       // 当目标对象为一个 length 为 0 的伪数组时表明此时是在全局情况下调用
       // 若存在遮罩层等组件在调用时，其 length 将会为 1
       if (event.target.classList.length === 0 && event.key === '/') {
