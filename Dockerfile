@@ -10,6 +10,7 @@ RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,sharing=locked \
     corepack enable \
     && corepack prepare yarn@4.13.0 --activate \
     && yarn --version \
+    && yarn install \
     && sed -i "s@version-dev@${VERSION}@g" src/layout/components/NavHeader/About.vue \
     && yarn build
 
