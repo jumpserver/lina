@@ -12,16 +12,19 @@ export function fillKey(key) {
   if (key.length > KeyLength) {
     key = key.slice(0, KeyLength)
   }
-  const filledKey = Buffer.alloc(KeyLength)
-  const keys = Buffer.from(key)
-  for (let i = 0; i < keys.length; i++) {
+  // 浏览器环境没有 Node 的 Buffer：用 Uint8Array + TextEncoder 得到同样的
+  // 「UTF-8 字节、右侧补零到 16 字节」结果
+  const filledKey = new Uint8Array(KeyLength)
+  const keys = new TextEncoder().encode(key)
+  for (let i = 0; i < keys.length && i < KeyLength; i++) {
     filledKey[i] = keys[i]
   }
   return filledKey
 }
 
 function aesEncrypt(text, originKey) {
-  const key = CryptoJS.enc.Utf8.parse(fillKey(originKey))
+  // fillKey 返回 16 字节的 Uint8Array，经 hex 转成 CryptoJS WordArray 作为 AES key
+  const key = CryptoJS.enc.Hex.parse(bytesToHex(fillKey(originKey)))
   return CryptoJS.AES.encrypt(text, key, {
     mode: CryptoJS.mode.ECB,
     padding: CryptoJS.pad.ZeroPadding
@@ -70,6 +73,15 @@ function bytesToBase64(bytes) {
   return btoa(binary)
 }
 
+function bytesToHex(bytes) {
+  // Uint8Array -> hex，等价于 Node 的 Buffer.from(x).toString('hex')
+  let hex = ''
+  for (let i = 0; i < bytes.length; i++) {
+    hex += bytes[i].toString(16).padStart(2, '0')
+  }
+  return hex
+}
+
 function rsaEncryptPassword(password, rsaPublicKey) {
   const aesKey = (Math.random() + 1).toString(36).substring(2)
   // public key 是 base64 存储的
@@ -100,7 +112,7 @@ function gmEncryptPassword(password, sm2PublicKey) {
   // 只适配前端，不改后端：
   // 直接生成 16 字符 key（后端 padding_key 会保持原样，不再补齐）
   const sm4KeyRaw = randomString(16)
-  const sm4KeyHex = Buffer.from(sm4KeyRaw).toString('hex')
+  const sm4KeyHex = bytesToHex(new TextEncoder().encode(sm4KeyRaw))
 
   let keyCipher = ''
   try {
