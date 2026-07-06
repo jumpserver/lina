@@ -3,41 +3,39 @@
     <span v-if="iValue === '0'" class="risk-handler">
       <el-dropdown
         trigger="click"
+        popper-class="action-dropdown"
         @command="handleDropdown"
         @visible-change="handleVisibleChange"
       >
-        <el-button class="confirm action" size="mini">
+        <el-button class="confirm action" size="small">
           <i class="fa fa-check" />
         </el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item
-            v-for="item of actions"
-            :key="item.name"
-            :command="item.name"
-            :disabled="item.disabled"
-          >
-            {{ item.label }}
-          </el-dropdown-item>
-        </el-dropdown-menu>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item
+              v-for="item of actions"
+              :key="item.name"
+              :command="item.name"
+              :disabled="item.disabled"
+            >
+              {{ item.label }}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
       </el-dropdown>
       <el-tooltip :content="$tc('IgnoreAlert')" :open-delay="400">
         <el-button
           class="ignore action"
-          size="mini"
-          :disabled="!this.$hasPerm('accounts.change_accountrisk')"
+          size="small"
+          :disabled="!$hasPerm('accounts.change_accountrisk')"
           @click="handleDropdown('ignore')"
         >
           <svg-icon icon-class="ignore" />
         </el-button>
       </el-tooltip>
     </span>
-    <el-tooltip
-      v-else
-      :content="iLabel"
-      :open-delay="400"
-      class="platform-status"
-    >
-      <el-button size="mini" type="text" @click="showDetail">
+    <el-tooltip v-else :content="iLabel" :open-delay="400" class="platform-status">
+      <el-button size="small" link @click="showDetail">
         <span class="detail-icon">
           <i v-if="iValue === '1'" class="fa fa-check-circle color-primary" />
           <svg-icon v-else icon-class="ignore" />
@@ -45,11 +43,11 @@
       </el-button>
     </el-tooltip>
     <ReviewDraw
+      v-model:visible="reviewDrawer"
       :row="row"
       :rows="rows"
       :selected-rows="selectedRows"
       :show-buttons="reviewButtons"
-      :visible.sync="reviewDrawer"
       @handle="handleDrawerEvent"
     />
     <ProcessingDialog :visible="processing" />
@@ -93,10 +91,7 @@ export default {
       account: {},
       secretUrl: '',
       actions: [],
-      formatterArgs: Object.assign(
-        this.formatterArgsDefault,
-        this.col.formatterArgs
-      )
+      formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
     }
   },
   computed: {
@@ -160,10 +155,7 @@ export default {
         row.status = { value: '3', label: this.$t('Processing') }
         let risk = {}
         try {
-          risk = await this.$axios.post(
-            `/api/v1/accounts/account-risks/handle/`,
-            data
-          )
+          risk = await this.$axios.post(`/api/v1/accounts/account-risks/handle/`, data)
         } catch (e) {
           this.$emit('processDone', { index: i, row })
           continue
@@ -221,7 +213,9 @@ export default {
       const actions = _.cloneDeep(riskActions)
       const filteredActions = []
       for (const action of actions) {
-        action.disabled = await this.checkDisabled(action) || (action.name !== 'review' && this.$store.getters.currentOrgIsRoot)
+        action.disabled =
+          (await this.checkDisabled(action)) ||
+          (action.name !== 'review' && this.$store.getters.currentOrgIsRoot)
         const has = await this.checkHas(action)
         if (has) {
           filteredActions.push(action)
@@ -234,18 +228,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.action.el-button--mini {
+.action.el-button--small {
   cursor: pointer;
   padding: 1px 4px;
 
   &.confirm {
-    ::v-deep i {
+    :deep(i) {
       color: var(--color-primary);
     }
   }
 
   &.remove {
-    ::v-deep i {
+    :deep(i) {
       color: var(--color-danger);
     }
   }

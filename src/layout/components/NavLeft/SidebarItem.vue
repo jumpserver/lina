@@ -1,42 +1,24 @@
 <template>
   <div v-if="!needHidden(item) && (item.alwaysShow || !allChildrenHidden(item))">
     <template
-      v-if="hasOneShowingChild(item.children, item) &&
+      v-if="
+        hasOneShowingChild(item.children, item) &&
         (!onlyOneChild.children || onlyOneChild.noShowingChildren) &&
-        !item.alwaysShow"
+        !item.alwaysShow
+      "
     >
-      <app-link
-        v-if="onlyOneChild.meta && !isExternalAction(onlyOneChild)"
-        :to="resolvePath(onlyOneChild.path)"
-      >
+      <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item
-          :class="{'submenu-title-noDropdown':!isNest, 'level1-menu': !isNest}"
+          :class="{ 'submenu-title-noDropdown': !isNest, 'level1-menu': !isNest }"
           :index="resolvePath(onlyOneChild.path)"
           class="submenu-item level2-menu"
         >
           <item
-            :children="item.children"
-            :icon="onlyOneChild.meta.icon||(item.meta && item.meta.icon)"
+            :icon="onlyOneChild.meta.icon || (item.meta && item.meta.icon)"
             :title="getItemTitle(onlyOneChild)"
           />
         </el-menu-item>
       </app-link>
-      <div
-        v-else-if="onlyOneChild.meta"
-        :class="{'submenu-title-noDropdown':!isNest, 'level1-menu': !isNest}"
-        class="el-menu-item submenu-item level2-menu external-action-menu-item"
-        role="button"
-        tabindex="0"
-        @click.stop.prevent="handleExternalAction(onlyOneChild, $event)"
-        @keydown.enter.stop.prevent="handleExternalAction(onlyOneChild, $event)"
-        @keydown.space.stop.prevent="handleExternalAction(onlyOneChild, $event)"
-      >
-        <item
-          :children="item.children"
-          :icon="onlyOneChild.meta.icon||(item.meta && item.meta.icon)"
-          :title="getItemTitle(onlyOneChild)"
-        />
-      </div>
     </template>
 
     <div v-else>
@@ -52,15 +34,15 @@
           class="nest-menu"
         />
       </div>
-      <el-submenu
+      <el-sub-menu
         v-else
         ref="subMenu"
         :index="resolvePath(item.path)"
         class="el-submenu-sidebar submenu-item level1-menu"
         popper-append-to-body
       >
-        <template slot="title">
-          <item v-if="item.meta" :children="item.children" :icon="item.meta && item.meta.icon" :title="getItemTitle(item)" />
+        <template #title>
+          <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="getItemTitle(item)" />
         </template>
         <sidebar-item
           v-for="child in item.children"
@@ -70,24 +52,23 @@
           :item="child"
           class="nest-menu"
         />
-      </el-submenu>
+      </el-sub-menu>
     </div>
   </div>
 </template>
 
 <script>
-import path from 'path'
+import path from 'path-browserify'
 import { isExternal } from '@/utils/secure'
 import Item from './Item'
 import AppLink from './Link'
-import FixiOSBug from './FixiOSBug'
+import { useFixIOSBug } from '@/utils/vue/useFixIOSBug'
 import { toSentenceCase } from '@/utils/common/index'
-import { openJDMC } from '@/utils/jdmc'
+import { ref } from 'vue'
 
 export default {
   name: 'SidebarItem',
   components: { Item, AppLink },
-  mixins: [FixiOSBug],
   props: {
     // route object
     item: {
@@ -107,12 +88,18 @@ export default {
       default: false
     }
   },
+  setup() {
+    const subMenu = ref(null)
+    useFixIOSBug(subMenu)
+    return {
+      subMenu
+    }
+  },
   data() {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
     // TODO: refactor with render function
     this.onlyOneChild = null
-    return {
-    }
+    return {}
   },
   methods: {
     needHidden(item) {
@@ -144,7 +131,7 @@ export default {
       return title
     },
     hasOneShowingChild(children = [], parent) {
-      const showingChildren = children.filter(item => {
+      const showingChildren = children.filter((item) => {
         if (item.hidden) {
           return false
         } else {
@@ -175,53 +162,7 @@ export default {
         return this.basePath
       }
       return path.resolve(this.basePath, routePath)
-    },
-    isExternalAction(route) {
-      const externalAction = route?.meta?.externalAction
-      if (externalAction?.type !== 'jdmc') {
-        return false
-      }
-      if (typeof externalAction.enabled === 'function') {
-        return externalAction.enabled({
-          route,
-          settings: this.$store.state.settings.publicSettings
-        })
-      }
-      return true
-    },
-    handleExternalAction(route, event) {
-      event?.currentTarget?.blur()
-      const externalAction = route?.meta?.externalAction
-      if (externalAction?.type === 'jdmc') {
-        openJDMC(externalAction.nextPath)
-      }
     }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.external-action-menu-item {
-  color: var(--menu-text) !important;
-  background: var(--menu-bg) !important;
-
-  &:hover {
-    color: var(--menu-text-active) !important;
-    background: var(--menu-hover-bg, var(--menu-hover)) !important;
-  }
-
-  &:focus {
-    color: var(--menu-text) !important;
-    background: var(--menu-bg) !important;
-  }
-
-  &:focus-visible {
-    color: var(--menu-text-active) !important;
-    background: var(--menu-hover-bg, var(--menu-hover)) !important;
-  }
-
-  ::v-deep .svg-icon {
-    color: inherit !important;
-  }
-}
-</style>

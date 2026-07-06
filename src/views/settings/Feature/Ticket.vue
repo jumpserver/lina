@@ -1,6 +1,6 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm v-bind="config" @submitSuccess="submitSuccess" />
+    <GenericCreateUpdateForm v-bind="config" @submit-success="submitSuccess" />
   </IBox>
 </template>
 
@@ -26,13 +26,12 @@ export default {
       config: {
         fields: [
           [this.$t('Basic'), ['TICKETS_ENABLED', 'TICKETS_DIRECT_APPROVE']],
-          [this.$t('AssetPermission'), [
-            'TICKET_AUTHORIZE_DEFAULT_TIME',
-            'TICKET_AUTHORIZE_DEFAULT_TIME_UNIT'
-          ]]
+          [
+            this.$t('AssetPermission'),
+            ['TICKET_AUTHORIZE_DEFAULT_TIME', 'TICKET_AUTHORIZE_DEFAULT_TIME_UNIT']
+          ]
         ],
-        fieldsMeta: {
-        },
+        fieldsMeta: {},
         successUrl: { name: 'Settings', params: { activeMenu: 'Basic' } },
         url: '/api/v1/settings/setting/?category=ticket',
         hasReset: false,
@@ -51,6 +50,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,28 +1,25 @@
 <template>
   <Dialog
     v-if="setting.InviteDialogVisible"
+    v-model:visible="setting.InviteDialogVisible"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('InviteUserInOrg')"
-    :visible.sync="setting.InviteDialogVisible"
     after
     custom-class="asset-select-dialog"
     top="8vh"
     width="710px"
   >
-    <GenericCreateUpdateForm
-      v-bind="formConfig"
-      @submitSuccess="onSubmitSuccess"
-    />
+    <GenericCreateUpdateForm v-bind="formConfig" @submit-success="onSubmitSuccess" />
   </Dialog>
 </template>
 <script>
-import Dialog from '@/components/Dialog'
 import { Select2 } from '@/components'
+import Dialog from '@/components/Dialog'
+import rules from '@/components/Form/DataForm/rules'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { mapGetters } from 'vuex'
-import rules from '@/components/Form/DataForm/rules'
 
 export default {
   components: {
@@ -91,12 +88,3 @@ export default {
   }
 }
 </script>
-
-<style lang="less" scoped>
-.dialog ::v-deep form {
-}
-
-.dialog ::v-deep .el-dialog__footer {
-  padding: 0;
-}
-</style>

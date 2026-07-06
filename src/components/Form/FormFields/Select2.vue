@@ -1,10 +1,10 @@
 <template>
   <el-select
     ref="select"
+    v-bind="forwardedAttrs"
     v-model="iValue"
-    v-loadmore="loadMore"
     :allow-create="allowCreate"
-    :class="transformed ? 'hidden-tag' : 'show-tag'"
+    :class="[transformed ? 'hidden-tag' : 'show-tag', { 'is-multiple': multiple }]"
     :clearable="clearable"
     :collapse-tags="collapseTags"
     :disabled="!!selectDisabled"
@@ -18,16 +18,25 @@
     class="select2"
     popper-append-to-body
     @change="onChange"
-    v-on="$listeners"
+    @popup-scroll="onPopupScroll"
     @visible-change="onVisibleChange"
   >
     <div v-if="showSelectAll" class="el-select-dropdown__header">
-      <el-checkbox v-model="allSelected" :disabled="selectAllDisabled" @change="handleSelectAllChange">
+      <el-checkbox
+        v-model="allSelected"
+        :disabled="selectAllDisabled"
+        @change="handleSelectAllChange"
+      >
         {{ $t('SelectAll') }}
       </el-checkbox>
       <div v-if="quickAddCallback" style="float: right">
-        <el-link :underline="false" @click="quickAddCallback">{{ $t('QuickAdd') }}</el-link>
-        <el-link :underline="false" icon="el-icon-refresh" style="margin-left: 5px;" @click="refresh" />
+        <el-link underline="never" @click="quickAddCallback">{{ $t('QuickAdd') }}</el-link>
+        <el-link
+          underline="never"
+          icon="el-icon-refresh"
+          style="margin-left: 5px"
+          @click="refresh"
+        />
       </div>
     </div>
     <el-option
@@ -37,40 +46,21 @@
       :label="item.label"
       :value="item.value"
     />
-
   </el-select>
 </template>
 
 <script>
 import { createSourceIdCache } from '@/api/common'
+import i18n from '@/i18n/i18n'
+import _ from 'lodash'
 
 export default {
   name: 'Select2',
-  directives: {
-    'loadmore': {
-      bind(el, binding) {
-        // 获取element-ui定义好的scroll盒子
-        const SELECTWRAP_DOM = el.querySelector('.el-select-dropdown .el-select-dropdown__wrap')
-        SELECTWRAP_DOM.addEventListener('scroll', function() {
-          /**
-           * scrollHeight 获取元素内容高度(只读)
-           * scrollTop 获取或者设置元素的偏移值,常用于, 计算滚动条的位置, 当一个元素的容器没有产生垂直方向的滚动条, 那它的scrollTop的值默认为0.
-           * clientHeight 读取元素的可见高度(只读)
-           * 如果元素滚动到底, 下面等式返回true, 没有则返回false:
-           * ele.scrollHeight - ele.scrollTop === ele.clientHeight;
-           */
-          const condition = this.scrollHeight - this.scrollTop - 600 <= this.clientHeight
-          if (condition) {
-            binding.value()
-          }
-        })
-      }
-    }
-  },
+  inheritAttrs: false,
   props: {
     options: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     url: {
       type: String,
@@ -92,9 +82,11 @@ export default {
     // 初始化值，也就是选中的值
     value: {
       type: [Array, String, Number, Boolean, Object],
-      default() {
-        return this.multiple ? [] : ''
-      }
+      default: undefined
+    },
+    modelValue: {
+      type: [Array, String, Number, Boolean, Object],
+      default: undefined
     },
     disabledValues: {
       type: Array,
@@ -114,8 +106,12 @@ export default {
     },
     placeholder: {
       type: String,
-      default: function() {
-        return this.$t('Select')
+      default: function () {
+        try {
+          return i18n?.global?.t?.('Select') || 'Select'
+        } catch (e) {
+          return 'Select'
+        }
       }
     },
     quickAddCallback: {
@@ -131,6 +127,16 @@ export default {
       default: 10
     }
   },
+  emits: [
+    'input',
+    'change',
+    'changeOptions',
+    'visible-change',
+    'initialized',
+    'loadInitialOptionsDone',
+    'update:modelValue',
+    'update:model-value'
+  ],
   data() {
     const vm = this
     const defaultParams = {
@@ -161,39 +167,53 @@ export default {
       initialOptions: [],
       remote: true,
       allSelected: false,
-      transformed: false // 这里改回来是因为，acl 中资产选择，category 选择后，再编辑，就看不到了
+      transformed: false, // 这里改回来是因为，acl 中资产选择，category 选择后，再编辑，就看不到了
+      innerValue:
+        this.modelValue !== undefined
+          ? _.cloneDeep(this.modelValue)
+          : this.value !== undefined
+            ? _.cloneDeep(this.value)
+            : this.multiple
+              ? []
+              : ''
     }
   },
   computed: {
+    forwardedAttrs() {
+      const attrs = { ...this.$attrs }
+      delete attrs.value
+      delete attrs.modelValue
+      delete attrs['model-value']
+      return attrs
+    },
+    externalValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value
+    },
     selectRef() {
       return this.$refs.select
     },
     collapseTags() {
-      return this.multiple && this.collapseTagsCount > 0 && this.value.length > this.collapseTagsCount
+      return (
+        this.multiple &&
+        this.collapseTagsCount > 0 &&
+        (this.externalValue?.length || 0) > this.collapseTagsCount
+      )
     },
     optionsValues() {
       return this.iOptions.map((v) => v.value)
     },
     selectAllDisabled() {
-      const validOptions = this.iOptions.filter(item => this.disabledValues.indexOf(item.value) === -1)
+      const validOptions = this.iOptions.filter(
+        (item) => this.disabledValues.indexOf(item.value) === -1
+      )
       return validOptions.length === 0
     },
     iValue: {
       set(val) {
-        const noValue = !this.value || this.value.length === 0
-        if (noValue && !this.initialized) {
-          return
-        }
-        if (val && val.constructor === Object && val.value) {
-          this.$emit('input', val.value)
-        } else if (val && val.constructor === Object && val.id) {
-          this.$emit('input', val.id)
-        } else {
-          this.$emit('input', val)
-        }
+        this.handleModelUpdate(val)
       },
       get() {
-        return this.value
+        return this.innerValue
       }
     },
     iAjax() {
@@ -249,6 +269,7 @@ export default {
     }
   },
   watch: {
+    // Keep inner state in sync with prop without causing loops
     disabled(newValue, oldValue) {
       this.selectDisabled = newValue
     },
@@ -260,7 +281,18 @@ export default {
       this.refresh()
     },
     value: {
-      handler(newValue, oldValue) {
+      handler(newValue) {
+        if (!_.isEqual(this.innerValue, newValue)) {
+          this.innerValue = _.cloneDeep(newValue)
+        }
+      },
+      deep: true
+    },
+    modelValue: {
+      handler(newValue) {
+        if (!_.isEqual(this.innerValue, newValue)) {
+          this.innerValue = _.cloneDeep(newValue)
+        }
       },
       deep: true
     }
@@ -269,8 +301,8 @@ export default {
     if (!this.initialized) {
       await this.initialSelect()
       setTimeout(() => {
-        this.$log.debug('Value is : ', this.value)
-        this.iValue = this.value
+        this.$log.debug('Value is : ', this.externalValue)
+        this.innerValue = _.cloneDeep(this.externalValue)
         this.initialized = true
         this.$emit('initialized', true)
       }, 100)
@@ -317,6 +349,22 @@ export default {
       this.iOptions = []
       this.params.search = query
       this.getOptions()
+      // 同步输入时避免 value 仍指向旧引用造成递归
+      if (!this.multiple && Array.isArray(this.innerValue)) {
+        this.innerValue = ''
+      }
+    },
+    handleModelUpdate(val) {
+      // avoid loops
+      if (!_.isEqual(this.innerValue, val)) {
+        this.innerValue = _.cloneDeep(val)
+      }
+      if (!_.isEqual(this.externalValue, val)) {
+        const payload = _.cloneDeep(val)
+        this.$emit('input', payload)
+        this.$emit('update:modelValue', payload)
+        this.$emit('update:model-value', payload)
+      }
     },
     async getInitialOptions() {
       const { url, processResults, validateStatus } = this.iAjax
@@ -366,9 +414,9 @@ export default {
     async initialSelect() {
       // this.$log.debug('Select ajax config', this.iAjax)
       if (this.iAjax.url) {
-        if (this.value && this.value.length !== 0) {
-          this.$log.debug('Start init select2 value, ', this.value)
-          let value = this.value
+        if (this.externalValue && this.externalValue.length !== 0) {
+          this.$log.debug('Start init select2 value, ', this.externalValue)
+          let value = this.externalValue
           if (!Array.isArray(value)) {
             value = [value]
           }
@@ -393,7 +441,7 @@ export default {
       this.iOptions.push(option)
     },
     getSelectedOptions() {
-      let values = this.iValue
+      let values = this.innerValue
       if (!Array.isArray(values)) {
         values = [values]
       }
@@ -402,16 +450,32 @@ export default {
       })
     },
     clearSelected() {
-      this.iValue = this.multiple ? [] : ''
+      this.innerValue = this.multiple ? [] : ''
+      const payload = _.cloneDeep(this.innerValue)
+      this.$emit('input', payload)
+      this.$emit('update:modelValue', payload)
+      this.$emit('update:model-value', payload)
     },
     checkDisabled(item) {
-      return item.disabled === undefined ? this.disabledValues.indexOf(item.value) !== -1 : item.disabled
+      return item.disabled === undefined
+        ? this.disabledValues.indexOf(item.value) !== -1
+        : item.disabled
     },
     onChange(values) {
       const options = this.getSelectedOptions()
       this.$log.debug('Current select options: ', options, 'Val: ', this.value)
       this.$emit('changeOptions', options)
-      // this.$emit('change', options) // 事件重复
+      this.$emit('change', _.cloneDeep(values))
+    },
+    onPopupScroll({ scrollTop }) {
+      const wrapRef = this.selectRef?.scrollbarRef?.wrapRef
+      if (!wrapRef) {
+        return
+      }
+      const condition = wrapRef.scrollHeight - scrollTop - 600 <= wrapRef.clientHeight
+      if (condition) {
+        this.loadMore()
+      }
     },
     onVisibleChange(visible) {
       if (!visible && this.params.search) {
@@ -430,44 +494,155 @@ export default {
     },
     async selectAll() {
       await this.loadAll()
-      this.iValue = this.iOptions.map((v) => v.value)
+      this.innerValue = this.iOptions.map((v) => v.value)
+      const payload = _.cloneDeep(this.innerValue)
+      this.$emit('input', payload)
+      this.$emit('update:modelValue', payload)
+      this.$emit('update:model-value', payload)
     },
     handleSelectAllChange(checked) {
       if (checked) {
         this.selectAll()
       } else {
-        this.iValue = []
+        this.innerValue = []
+        this.$emit('input', [])
+        this.$emit('update:modelValue', [])
+        this.$emit('update:model-value', [])
       }
     }
   }
 }
-
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .select2 {
   width: 100%;
 
   &.hidden-tag {
-    ::v-deep .el-select__tags {
+    :deep(.el-select__tags) {
       opacity: 0;
       cursor: not-allowed;
     }
   }
 
   &.show-tag {
-    ::v-deep .el-select__tags {
+    :deep(.el-select__tags) {
       opacity: 1;
     }
   }
 
-  ::v-deep .el-tag.el-tag--info {
-    height: auto;
-    white-space: normal;
+  :deep(.el-tag.el-tag--info) {
+    min-height: 24px;
+    height: 24px;
+    line-height: 22px;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 5px;
+    padding: 0 8px;
+    font-family: sans-serif !important;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
   }
 
-  ::v-deep input::placeholder {
-    padding-left: 2px;
+  :deep(.el-tag__content) {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  :deep(.el-select__wrapper) {
+    min-height: 30px;
+    height: 30px;
+    box-sizing: border-box;
+    padding: 0 8px;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-radius: 0;
+    box-shadow: none !important;
+    border: 1px solid var(--el-border-color) !important;
+  }
+
+  :deep(.el-select__wrapper:hover) {
+    border-color: var(--el-border-color-hover) !important;
+  }
+
+  :deep(.el-select__wrapper.is-focused) {
+    box-shadow: none !important;
+    border-color: var(--el-color-primary) !important;
+  }
+
+  :deep(.el-select__selection) {
+    min-height: 28px;
+    align-items: center;
+  }
+
+  :deep(.el-select__tags) {
+    height: 28px;
+    min-height: 28px;
+    align-items: center;
+  }
+
+  :deep(.el-select__selected-item),
+  :deep(.el-select__placeholder),
+  :deep(.el-select__input) {
+    min-height: 28px;
+    height: 28px;
+    line-height: 28px;
+  }
+
+  :deep(.el-select__caret),
+  :deep(.el-select__suffix),
+  :deep(.el-select__prefix) {
+    min-height: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+.select2.is-multiple {
+  :deep(.el-select__wrapper) {
+    height: auto;
+    min-height: 30px;
+    align-items: center;
+  }
+
+  :deep(.el-select__selection) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: center;
+    gap: 4px;
+    width: 100%;
+    min-height: 28px;
+  }
+
+  :deep(.el-select__tags) {
+    display: contents;
+    min-height: 0;
+    height: auto;
+  }
+
+  :deep(.el-select__selected-item) {
+    flex: 0 0 auto;
+    max-width: 100%;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  :deep(.el-select__input-wrapper) {
+    flex: 1 1 120px;
+    min-width: 120px;
+    margin-left: 0;
+  }
+
+  :deep(.el-select__input) {
+    width: 100% !important;
+    min-height: 28px;
+  }
+
+  :deep(.el-select__placeholder) {
+    margin-left: 0;
   }
 }
 

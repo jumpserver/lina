@@ -25,10 +25,7 @@ export default {
       url: '/api/v1/acls/login-acls/?users=' + this.object.id
     }
   }
-
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

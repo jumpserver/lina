@@ -1,23 +1,17 @@
 <template>
   <TwoCol>
-    <template>
-      <ListTable
-        ref="ListTable"
-        :header-actions="headerActions"
-        :table-config="tableConfig"
-      />
-    </template>
+    <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
     <template #right>
-      <RelationCard v-if="!loading" ref="userRelation" v-bind="relationConfig" />
+      <RelationCard v-bind="relationConfig" v-if="!loading" ref="userRelation" />
     </template>
   </TwoCol>
 </template>
 
 <script>
 import { ListTable, RelationCard } from '@/components'
-import { mapGetters } from 'vuex'
 import { DeleteActionFormatter } from '@/components/Table/TableFormatters'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -47,7 +41,7 @@ export default {
         performAdd: (items) => {
           const relationUrl = `/api/v1/rbac/${this.object.scope.value}-role-bindings/`
           const objectId = this.object.id
-          const data = items.map(v => {
+          const data = items.map((v) => {
             return {
               user: v.value,
               role: objectId,
@@ -64,7 +58,10 @@ export default {
       },
       tableConfig: {
         url: `/api/v1/rbac/${this.object.scope.value}-role-bindings/?role=${this.object.id}`,
-        columns: this.object.scope.value === 'system' ? ['user_display', 'delete_action'] : ['user_display', 'org_name', 'delete_action'],
+        columns:
+          this.object.scope.value === 'system'
+            ? ['user_display', 'delete_action']
+            : ['user_display', 'org_name', 'delete_action'],
         columnsShow: {
           min: ['user_display', 'delete_action']
         },
@@ -85,18 +82,21 @@ export default {
             formatterArgs: {
               disabled: false
             },
-            onDelete: function(col, row, cellValue, reload) {
-              this.$axios.delete(
-                `/api/v1/rbac/${this.object.scope.value}-role-bindings/${row.id}/?role=${this.object.id}`,
-              ).then(res => {
-                this.$message.success(this.$tc('DeleteSuccessMsg'))
-                reload()
-              }).catch(error => {
-                this.$message.error({
-                  message: error.response.data.detail,
-                  duration: 3000
+            onDelete: function (col, row, cellValue, reload) {
+              this.$axios
+                .delete(
+                  `/api/v1/rbac/${this.object.scope.value}-role-bindings/${row.id}/?role=${this.object.id}`
+                )
+                .then((res) => {
+                  this.$message.success(this.$tc('DeleteSuccessMsg'))
+                  reload()
                 })
-              })
+                .catch((error) => {
+                  this.$message.error({
+                    message: error.response.data.detail,
+                    duration: 3000
+                  })
+                })
             }.bind(this)
           },
           actions: {
@@ -138,7 +138,9 @@ export default {
   created() {
     try {
       const scope = this.$route.query['scope']
-      this.relationConfig.disabled = !this.$hasPerm(`rbac.add_${this.object.scope.value}rolebinding`) || (scope === 'org' && this.currentOrgIsRoot)
+      this.relationConfig.disabled =
+        !this.$hasPerm(`rbac.add_${this.object.scope.value}rolebinding`) ||
+        (scope === 'org' && this.currentOrgIsRoot)
     } finally {
       this.loading = false
     }

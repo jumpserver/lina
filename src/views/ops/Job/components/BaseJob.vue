@@ -7,12 +7,17 @@
       :detail-drawer="detailDrawer"
       :table-config="tableConfig"
     />
-    <JobRunDialog v-if="showJobRunDialog" :item="item" :visible.sync="showJobRunDialog" @submit="runJob" />
+    <JobRunDialog
+      v-if="showJobRunDialog"
+      v-model:visible="showJobRunDialog"
+      :item="item"
+      @submit="runJob"
+    />
     <SetVariableDialog
       v-if="showVariableDialog"
+      v-model:visible="showVariableDialog"
       :form-data="formData"
       :query-param="'job=' + item.id"
-      :visible.sync="showVariableDialog"
       @submit="runJobWithParams"
     />
   </div>
@@ -23,7 +28,11 @@ import JobRunDialog from '@/views/ops/Job/JobRunDialog'
 import GenericListTable from '@/components/Table/DrawerListTable'
 import SetVariableDialog from '@/views/ops/Template/components/SetVariableDialog.vue'
 import { openTaskPage } from '@/utils/jms/index'
-import { ActionsFormatter, DateFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import {
+  ActionsFormatter,
+  DateFormatter,
+  DetailFormatter
+} from '@/components/Table/TableFormatters'
 
 export default {
   components: {
@@ -48,13 +57,28 @@ export default {
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'type', 'asset_amount', 'average_time_cost',
-            'summary', 'date_last_run', 'actions'
+            'name',
+            'type',
+            'asset_amount',
+            'average_time_cost',
+            'summary',
+            'date_last_run',
+            'actions'
           ]
         },
         columns: [
-          'name', 'type', 'summary', 'average_time_cost', 'asset_amount', 'is_periodic', 'periodic_display',
-          'date_last_run', 'comment', 'date_updated', 'date_created', 'actions'
+          'name',
+          'type',
+          'summary',
+          'average_time_cost',
+          'asset_amount',
+          'is_periodic',
+          'periodic_display',
+          'date_last_run',
+          'comment',
+          'date_updated',
+          'date_created',
+          'actions'
         ],
         columnsMeta: {
           name: {
@@ -116,7 +140,8 @@ export default {
                   name: 'run',
                   order: 5,
                   type: 'primary',
-                  can: this.$hasPerm('ops.add_jobexecution') && !this.$store.getters.currentOrgIsRoot,
+                  can:
+                    this.$hasPerm('ops.add_jobexecution') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
                     this.item = row
                     if (row?.use_parameter_define && row?.parameters_define) {
@@ -154,17 +179,18 @@ export default {
         return data.form_data
       })
     }
-
   },
   methods: {
     runJob(row, parameters) {
-      this.$axios.post('/api/v1/ops/job-executions/', {
-        job: row.id,
-        parameters: parameters
-      }).then((resp) => {
-        this.showVariableDialog = false
-        openTaskPage(resp.task_id)
-      })
+      this.$axios
+        .post('/api/v1/ops/job-executions/', {
+          job: row.id,
+          parameters: parameters
+        })
+        .then((resp) => {
+          this.showVariableDialog = false
+          openTaskPage(resp.task_id)
+        })
     },
     runJobWithParams(parameters) {
       this.runJob(this.item, parameters)

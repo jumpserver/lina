@@ -1,5 +1,5 @@
 <template>
-  <codemirror v-bind="$attrs" v-on="$listeners" />
+  <codemirror v-bind="$attrs" />
 </template>
 
 <script>
@@ -15,6 +15,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

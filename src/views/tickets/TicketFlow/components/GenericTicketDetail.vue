@@ -25,11 +25,11 @@ export default {
     },
     specialCardItems: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     detailCardItems: {
       type: Array,
-      default: () => ([])
+      default: () => []
     }
   },
   data() {
@@ -38,6 +38,4 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
-
-</style>
+<style lang="scss" scoped></style>

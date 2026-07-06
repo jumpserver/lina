@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import { WeekCronSelect } from '@/components/Form/FormFields'
 import { Required } from '@/components/Form/DataForm/rules'
+import { TagInput, WeekCronSelect } from '@/components/Form/FormFields'
+import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { userJSONSelectMeta } from '@/views/users/const'
 
 export default {
@@ -55,11 +55,14 @@ export default {
           }
         },
         rules: {
-          fields: [
-            'ip_group', 'time_period'
-          ],
+          fields: ['ip_group', 'time_period'],
           fieldsMeta: {
             ip_group: {
+              component: TagInput,
+              el: {
+                value: ['*'],
+                placeholder: this.$t('IP')
+              },
               helpText: this.$t('IpGroupHelpText')
             },
             time_period: {
@@ -83,7 +86,7 @@ export default {
       cleanFormValue(value) {
         if (
           Array.isArray(value.rules.time_period) &&
-          value.rules.time_period.every(item => item.value === '')
+          value.rules.time_period.every((item) => item.value === '')
         ) {
           value.rules.time_period = []
         }

@@ -1,11 +1,11 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" @getObjectDone="getObjectDone" />
+  <GenericCreateUpdatePage v-bind="$data" @get-object-done="getObjectDone" />
 </template>
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { templateFields, templateFieldsMeta } from './const.js'
-import { encryptPassword } from '@/utils/session-encrypt'
+import { encryptPassword } from '@/utils/secure'
 
 export default {
   name: 'GatewayCreateUpdate',
@@ -36,7 +36,7 @@ export default {
           el: {
             icon: 'fa fa-external-link',
             type: 'primary',
-            size: 'mini'
+            size: 'small'
           },
           component: 'el-button',
           on: {

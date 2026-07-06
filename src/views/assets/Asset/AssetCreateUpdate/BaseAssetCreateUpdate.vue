@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-if="!loading" v-bind="iConfig" v-on="$listeners" />
+  <GenericCreateUpdatePage v-bind="iConfig" v-if="!loading" />
 </template>
 
 <script>
@@ -163,7 +163,7 @@ export default {
     async setPlatformConstrains() {
       const { platform } = this
       let protocols = platform?.protocols || []
-      protocols = protocols.map(i => {
+      protocols = protocols.map((i) => {
         if (i.name === 'http') {
           i.display_name = 'http(s)'
         }

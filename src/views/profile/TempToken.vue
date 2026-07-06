@@ -22,9 +22,7 @@ export default {
       tableConfig: {
         hasSelection: true,
         url: ajaxUrl,
-        columns: [
-          'username', 'secret', 'date_expired', 'date_verified', 'is_valid', 'actions'
-        ],
+        columns: ['username', 'secret', 'date_expired', 'date_verified', 'is_valid', 'actions'],
         columnsMeta: {
           secret: {
             label: this.$t('TempToken'),
@@ -43,16 +41,19 @@ export default {
                 {
                   name: 'Expired',
                   title: this.$t('Expire'),
-                  can: ({ row }) => row['is_valid'] && this.$hasPerm('authentication.change_temptoken'),
+                  can: ({ row }) =>
+                    row['is_valid'] && this.$hasPerm('authentication.change_temptoken'),
                   type: 'info',
-                  callback: function({ row }) {
-                    this.$axios.patch(`${ajaxUrl}${row.id}/expire/`,
-                    ).then(res => {
-                      this.reloadTable()
-                      this.$message.success(this.$tc('UpdateSuccessMsg'))
-                    }).catch(error => {
-                      this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
-                    })
+                  callback: function ({ row }) {
+                    this.$axios
+                      .patch(`${ajaxUrl}${row.id}/expire/`)
+                      .then((res) => {
+                        this.reloadTable()
+                        this.$message.success(this.$tc('UpdateSuccessMsg'))
+                      })
+                      .catch((error) => {
+                        this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
+                      })
                   }.bind(this)
                 }
               ]
@@ -74,15 +75,16 @@ export default {
             title: this.$t('Create'),
             type: 'primary',
             can: this.$hasPerm('authentication.add_temptoken'),
-            callback: function() {
-              this.$axios.post(
-                `/api/v1/authentication/temp-tokens/`
-              ).then(res => {
-                this.reloadTable()
-                this.$message.success(this.$tc('UpdateSuccessMsg'))
-              }).catch(error => {
-                this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
-              })
+            callback: function () {
+              this.$axios
+                .post(`/api/v1/authentication/temp-tokens/`)
+                .then((res) => {
+                  this.reloadTable()
+                  this.$message.success(this.$tc('UpdateSuccessMsg'))
+                })
+                .catch((error) => {
+                  this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
+                })
             }.bind(this)
           }
         ]
@@ -97,5 +99,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

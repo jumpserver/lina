@@ -1,5 +1,5 @@
 <template>
-  <TabPage :active-menu.sync="activeMenu" :submenu="submenu">
+  <TabPage v-model:active-menu="activeMenu" :submenu="submenu">
     <keep-alive>
       <component :is="activeMenu" />
     </keep-alive>
@@ -50,7 +50,8 @@ export default {
         {
           title: this.$t('VirtualApps'),
           name: 'VirtualApp',
-          hidden: !this.$hasPerm('settings.change_virtualapp') || !this.$store.getters.hasValidLicense
+          hidden:
+            !this.$hasPerm('settings.change_virtualapp') || !this.$store.getters.hasValidLicense
         }
       ]
     }

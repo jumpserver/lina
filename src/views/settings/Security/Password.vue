@@ -8,7 +8,6 @@
       :url="url"
     />
   </IBox>
-
 </template>
 
 <script>
@@ -38,9 +37,13 @@ export default {
         [
           this.$t('PasswordRule'),
           [
-            'SECURITY_LEAK_PASSWORD_LIST', 'SECURITY_PASSWORD_MIN_LENGTH', 'SECURITY_ADMIN_USER_PASSWORD_MIN_LENGTH',
-            'SECURITY_PASSWORD_UPPER_CASE', 'SECURITY_PASSWORD_LOWER_CASE',
-            'SECURITY_PASSWORD_NUMBER', 'SECURITY_PASSWORD_SPECIAL_CHAR'
+            'SECURITY_LEAK_PASSWORD_LIST',
+            'SECURITY_PASSWORD_MIN_LENGTH',
+            'SECURITY_ADMIN_USER_PASSWORD_MIN_LENGTH',
+            'SECURITY_PASSWORD_UPPER_CASE',
+            'SECURITY_PASSWORD_LOWER_CASE',
+            'SECURITY_PASSWORD_NUMBER',
+            'SECURITY_PASSWORD_SPECIAL_CHAR'
           ]
         ]
       ],
@@ -57,12 +60,9 @@ export default {
     submitMethod() {
       return 'patch'
     },
-    onConfirm() {
-    }
+    onConfirm() {}
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

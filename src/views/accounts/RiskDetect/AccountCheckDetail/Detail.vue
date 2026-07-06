@@ -1,8 +1,6 @@
 <template>
   <TwoCol>
-    <template>
-      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
-    </template>
+    <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     <template #right>
       <QuickActions :actions="quickActions" type="primary" />
     </template>
@@ -40,26 +38,21 @@ export default {
             disabled: !this.$hasPerm('accounts.add_checkaccountexecution') || !this.object.is_active
           },
           callbacks: {
-            click: function() {
-              this.$axios.post(
-                `/api/v1/accounts/check-account-executions/`,
-                { automation: this.object.id }
-              ).then(res => {
-                openTaskPage(res['task'])
-              })
+            click: function () {
+              this.$axios
+                .post(`/api/v1/accounts/check-account-executions/`, { automation: this.object.id })
+                .then((res) => {
+                  openTaskPage(res['task'])
+                })
             }.bind(this)
           }
         }
       ],
       url: `/api/v1/accounts/check-account-automations/${this.object.id}`,
-      detailFields: [
-        'id', 'name', 'date_created', 'date_updated', 'comment'
-      ]
+      detailFields: ['id', 'name', 'date_created', 'date_updated', 'comment']
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

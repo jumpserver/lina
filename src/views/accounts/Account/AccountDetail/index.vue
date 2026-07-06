@@ -1,10 +1,9 @@
 <template>
   <div>
     <GenericDetailPage
-      :active-menu.sync="config.activeMenu"
-      :object.sync="account"
       v-bind="config"
-      v-on="$listeners"
+      v-model:active-menu="config.activeMenu"
+      v-model:object="account"
     >
       <keep-alive>
         <component :is="config.activeMenu" :object="account" />
@@ -12,10 +11,10 @@
     </GenericDetailPage>
     <AccountCreateUpdate
       v-if="AccountVisible"
+      v-model:visible="AccountVisible"
       :account="account"
       :asset="account.asset"
       :title="$tc('UpdateAccount')"
-      :visible.sync="AccountVisible"
       @add="addAccountSuccess"
     />
   </div>

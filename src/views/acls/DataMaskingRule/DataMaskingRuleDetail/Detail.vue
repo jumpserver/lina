@@ -17,16 +17,21 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
     return {
       url: `/api/v1/acls/data-masking-rules/${this.object.id}/`,
       detailFields: [
-        'name', 'fields_pattern', 'masking_method', 'mask_pattern',
-        'priority', 'date_created', 'created_by', 'comment'
+        'name',
+        'fields_pattern',
+        'masking_method',
+        'mask_pattern',
+        'priority',
+        'date_created',
+        'created_by',
+        'comment'
       ]
     }
   },
@@ -34,6 +39,4 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-
-</style>
+<style lang="scss" scoped></style>

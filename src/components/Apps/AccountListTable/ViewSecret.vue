@@ -1,14 +1,13 @@
 <template>
   <div>
     <Dialog
+      v-bind="$attrs"
+      v-model:visible="showSecret"
       :destroy-on-close="true"
       :show-cancel="false"
-      :title="title"
-      :visible.sync="showSecret"
-      :width="'50'"
-      v-bind="$attrs"
+      :title="iTitle"
+      width="720px"
       @confirm="accountConfirmHandle"
-      v-on="$listeners"
     >
       <el-form :model="secretInfo" class="password-form" label-position="right" label-width="130px">
         <el-form-item :label="$tc('Name')">
@@ -33,17 +32,16 @@
           <span>{{ sshKeyFingerprint }}</span>
         </el-form-item>
         <el-form-item :label="$tc('DateCreated')">
-          <span>{{ account['date_created'] | date }}</span>
+          <span>{{ toSafeLocalDateStr(account['date_created']) }}</span>
         </el-form-item>
         <el-form-item :label="$tc('DateUpdated')">
-          <span>{{ account['date_updated'] | date }}</span>
+          <span>{{ toSafeLocalDateStr(account['date_updated']) }}</span>
         </el-form-item>
         <el-form-item
-          v-if="showPasswordRecord"
-          v-perms="'accounts.view_accountsecret'"
+          v-if="showPasswordRecord && $hasPerm('accounts.view_accountsecret')"
           :label="$tc('PasswordRecord')"
         >
-          <el-link :underline="false" type="success" @click="showHistoryDialog">
+          <el-link underline="never" type="success" @click="showHistoryDialog">
             <span style="padding-right: 30px">
               {{ versions }}
             </span>
@@ -53,17 +51,18 @@
     </Dialog>
     <PasswordHistoryDialog
       v-if="showPasswordHistoryDialog"
+      v-model:visible="showPasswordHistoryDialog"
       :account="account"
-      :visible.sync="showPasswordHistoryDialog"
     />
   </div>
 </template>
 
 <script>
 import Dialog from '@/components/Dialog/index.vue'
-import PasswordHistoryDialog from './PasswordHistoryDialog.vue'
 import { SecretViewerFormatter } from '@/components/Table/TableFormatters'
-import { encryptPassword } from '@/utils/session-encrypt'
+import { useDateTime } from '@/composables/useDateTime'
+import { encryptPassword } from '@/utils/secure'
+import PasswordHistoryDialog from './PasswordHistoryDialog.vue'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -92,15 +91,14 @@ export default {
     },
     title: {
       type: String,
-      default: function () {
-        return this.$tc('Detail')
-      }
+      default: ''
     },
     showPasswordRecord: {
       type: Boolean,
       default: true
     }
   },
+  emits: ['update:visible'],
   data() {
     return {
       modifiedSecret: '',
@@ -110,6 +108,7 @@ export default {
       mfaDialogVisible: true,
       sshKeyFingerprint: '-',
       historyCount: 0,
+      iTitle: this.title || this.$tc('Detail'),
       showPasswordHistoryDialog: false
     }
   },
@@ -124,10 +123,13 @@ export default {
       return this.account['secret_type'].value
     }
   },
+  setup() {
+    return useDateTime()
+  },
   mounted() {
     if (this.showPasswordRecord) {
       const url = `/api/v1/accounts/account-secrets/${this.account.id}/histories/?limit=1`
-      this.$axios.get(url, { disableFlashErrorMsg: true }).then(resp => {
+      this.$axios.get(url, { disableFlashErrorMsg: true }).then((resp) => {
         this.versions = resp.count
         this.showSecretDialog()
       })
@@ -157,7 +159,7 @@ export default {
         this.$message.warning(this.$tc('AccountSecretReadDisabled'))
         return
       }
-      return this.$axios.get(this.url).then(res => {
+      return this.$axios.get(this.url, { disableFlashErrorMsg: true }).then((res) => {
         this.secretInfo = res
         this.sshKeyFingerprint = res?.spec_info?.ssh_key_fingerprint || '-'
         this.showSecret = true
@@ -178,7 +180,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.item-textarea ::v-deep .el-textarea__inner {
+.item-textarea :deep(.el-textarea__inner) {
   height: 110px;
 }
 
@@ -191,7 +193,7 @@ export default {
     border-bottom: none;
   }
 
-  ::v-deep .el-form-item__label {
+  :deep(.el-form-item__label) {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -202,7 +204,7 @@ export default {
     white-space: normal;
   }
 
-  ::v-deep .el-form-item__content {
+  :deep(.el-form-item__content) {
     line-height: 30px;
 
     pre {

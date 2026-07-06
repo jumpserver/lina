@@ -3,11 +3,15 @@
 </template>
 
 <script>
+import {
+  createVNode as createVNodeCompat,
+  resolveComponent as resolveComponentCompat,
+  createTextVNode as createTextVNodeCompat
+} from 'vue'
 import { STATUS_MAP } from '../const'
-import { formatTime, getDateTimeStamp } from '@/utils/common/time'
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
-
+import { getAssetUrl } from '@/utils/assets'
 export default {
   name: 'TicketDetail',
   components: {
@@ -21,8 +25,11 @@ export default {
   },
   data() {
     return {
-      statusMap: this.object.status.value === 'open' ? STATUS_MAP['pending'] : STATUS_MAP[this.object.state.value],
-      imageUrl: require('@/assets/img/avatar.png'),
+      statusMap:
+        this.object.status.value === 'open'
+          ? STATUS_MAP['pending']
+          : STATUS_MAP[this.object.state.value],
+      imageUrl: getAssetUrl('img/avatar.png'),
       form: {
         comments: ''
       },
@@ -45,7 +52,16 @@ export default {
           key: this.$t('Status'),
           value: object.status,
           formatter: (item, val) => {
-            return <el-tag type={this.statusMap.type} size='mini'> {this.statusMap.title}</el-tag>
+            return createVNodeCompat(
+              resolveComponentCompat('el-tag'),
+              {
+                type: this.statusMap.type,
+                size: 'small'
+              },
+              {
+                default: () => [createTextVNodeCompat(' '), this.statusMap.title]
+              }
+            )
           }
         },
         {
@@ -62,17 +78,8 @@ export default {
         }
       ]
     }
-  },
-  methods: {
-    formatTime(dateStr) {
-      return formatTime(getDateTimeStamp(dateStr))
-    },
-    toSafeLocalDateStr(dataStr) {
-      return toSafeLocalDateStr(dataStr)
-    }
   }
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

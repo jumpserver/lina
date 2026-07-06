@@ -1,12 +1,11 @@
 <template>
-  <div :class="{ collapse: !sidebar.opened, 'logo-mode-split': logoMode === 'split' }" class="sidebar-logo-container">
+  <div :class="{ collapse: collapse }" class="sidebar-logo-container">
     <transition name="sidebarLogoFade">
-      <a v-if="logoMode === 'split'" key="collapse" class="sidebar-logo-link" @click="handleClick">
-        <img :src="logoSrc" alt="logo" class="sidebar-logo">
-        <span v-if="sidebar.opened" :style="logoTitleStyle" class="sidebar-title">{{ logoTitle }}</span>
+      <a v-if="collapse" key="collapse" class="sidebar-logo-link" @click="handleClick">
+        <img :src="logoSrc" alt="logo" class="sidebar-logo" />
       </a>
       <a v-else key="expand" class="sidebar-logo-link" @click="handleClick">
-        <img :src="logoTextSrc" alt="logo" class="sidebar-logo-text">
+        <img :src="logoTextSrc" alt="logo" class="sidebar-logo-text" />
       </a>
     </transition>
   </div>
@@ -17,45 +16,30 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'SidebarLogo',
+  props: {
+    collapse: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {}
+  },
   computed: {
-    ...mapGetters(['viewRoutes', 'publicSettings', 'logoMode', 'sidebar']),
+    ...mapGetters(['viewRoutes', 'publicSettings']),
     // eslint-disable-next-line vue/return-in-computed-property
     logoTextSrc() {
       return this.publicSettings['INTERFACE']['logo_index']
     },
     logoSrc() {
       return this.publicSettings['INTERFACE']['logo_logout']
-    },
-    logoTitle() {
-      return this.publicSettings['INTERFACE']['login_title']
-    },
-    logoTitleStyle() {
-      const minFontSize = 10
-      const maxFontSize = 16
-      const titleLength = (this.logoTitle || '').trim().length || 1
-      const sidebarWidth = 200
-      const marginLeft = 10
-      const horizontalPadding = 10
-      const logoWidth = 32
-      const gap = 8
-      const letterSpacing = 1.5
-      const availableWidth = sidebarWidth - marginLeft - horizontalPadding - logoWidth - gap
-      const availableTextWidth = Math.max(
-        minFontSize,
-        availableWidth - Math.max(0, titleLength - 1) * letterSpacing
-      )
-      const fontSize = Math.max(minFontSize, Math.floor(availableTextWidth / titleLength))
-
-      return {
-        fontSize: `${Math.min(maxFontSize, fontSize)}px`,
-        maxWidth: `${availableWidth}px`
-      }
     }
   },
+  created() {},
   methods: {
     handleClick() {
       const currentPath = this.$route.path
-      const matchingRoute = this.viewRoutes.find(route => currentPath.startsWith(route.path))
+      const matchingRoute = this.viewRoutes.find((route) => currentPath.startsWith(route.path))
 
       if (matchingRoute) {
         this.$router.push(matchingRoute.redirect)
@@ -68,7 +52,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/styles/variables.scss';
+@use '@/styles/variables' as *;
 
 .sidebarLogoFade-enter-active {
   transition: opacity 1.5s;
@@ -80,9 +64,6 @@ export default {
 }
 
 .sidebar-logo-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: relative;
   width: 100%;
   height: $headerHeight;
@@ -90,21 +71,11 @@ export default {
   text-align: center;
   overflow: hidden;
 
-  &.logo-mode-split {
-    .sidebar-logo-link {
-      margin: 0 5px;
-    }
-  }
-
   & .sidebar-logo-link {
-    box-sizing: border-box;
-    display: flex;
-    gap: 8px;
-    align-items: center;
     height: 100%;
     width: 100%;
     padding: 5px;
-    margin-left: 10px;
+    display: inline-block;
 
     & .sidebar-logo {
       width: 32px;
@@ -119,17 +90,18 @@ export default {
 
     & .sidebar-title {
       display: inline-block;
-      flex: 1;
-      min-width: 0;
+      margin: 0;
       color: #fff;
       font-weight: 600;
       line-height: $headerHeight;
-      font-size: 16px;
-      text-align: left;
+      font-size: 14px;
+      font-family:
+        Avenir,
+        Helvetica Neue,
+        Arial,
+        Helvetica,
+        sans-serif;
       vertical-align: middle;
-      letter-spacing: 1.5px;
-      white-space: nowrap;
-      overflow: hidden;
     }
   }
 

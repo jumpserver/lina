@@ -1,39 +1,33 @@
-import { hasPermission, getRouteRequiredPerms, getApiUrlRequirePerms } from '@/utils/jms/index'
-import permission from './permission'
-import Vue from 'vue'
+import {
+  getCurrentResActionPerms,
+  hasApiActionPerm,
+  hasCurrentResAction,
+  hasLicense,
+  hasPerm,
+  isRootOrg
+} from '@/composables/usePermission'
 
-const install = function(Vue) {
-  Vue.directive('perms', permission)
+export function installPermissionDirective(app) {
+  app.config.globalProperties.$hasPerm = hasPerm
+  app.config.globalProperties.$hasApiActionPerm = hasApiActionPerm
 
-  Vue.prototype.$hasPerm = function(perms) {
-    return hasPermission(perms)
+  app.config.globalProperties.$getCurrentResActionPerms = function (action) {
+    return getCurrentResActionPerms(this.$route, action)
   }
 
-  Vue.prototype.$hasApiActionPerm = function(url, action) {
-    const permsRequired = getApiUrlRequirePerms(url, action)
-    return hasPermission(permsRequired)
+  app.config.globalProperties.$hasCurrentResAction = function (action) {
+    return hasCurrentResAction(this.$route, action)
   }
 
-  Vue.prototype.$getCurrentResActionPerms = function(action) {
-    return getRouteRequiredPerms(this.$route, action)
+  app.config.globalProperties.$hasLicense = function () {
+    return hasLicense(this.$store)
   }
 
-  Vue.prototype.$hasCurrentResAction = function(action) {
-    const permsRequired = getRouteRequiredPerms(this.$route, action)
-    return hasPermission(permsRequired)
-  }
-
-  Vue.prototype.$hasLicense = function() {
-    return this.$store.getters.hasValidLicense
-  }
-
-  Vue.prototype.$isRootOrg = function() {
-    return this.$store.getters.currentOrgIsRoot
+  app.config.globalProperties.$isRootOrg = function () {
+    return isRootOrg(this.$store)
   }
 }
 
-window['permission'] = permission
-Vue.use(install) // eslint-disable-line
-
-permission.install = install
-export default permission
+export default {
+  install: installPermissionDirective
+}

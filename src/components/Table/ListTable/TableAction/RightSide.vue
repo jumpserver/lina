@@ -1,27 +1,29 @@
 <template>
   <div>
-    <ActionsGroup :actions="rightSideActions" :is-fa="true" class="right-side-actions right-side-item" />
+    <ActionsGroup
+      :actions="rightSideActions"
+      :is-fa="true"
+      class="right-side-actions right-side-item"
+    />
     <ImExportDialog
+      v-bind="$attrs"
       v-if="dialogExportVisible"
       :export-options="iExportOptions"
-      :report-export-options="iReportExportOptions"
       :import-options="iImportOptions"
       :selected-rows="selectedRows"
-      v-bind="$attrs"
-      @importDialogClose="onImportDialogClose"
-      @importDialogConfirm="onImportDialogConfirm"
+      @import-dialog-close="onImportDialogClose"
+      @import-dialog-confirm="onImportDialogConfirm"
     />
   </div>
 </template>
 
 <script>
 import ActionsGroup from '@/components/Common/ActionsGroup/index.vue'
+import { assignIfNot } from '@/utils/common/index'
 import ImExportDialog from './ImExportDialog.vue'
 import { cleanActions } from './utils'
-import { assignIfNot } from '@/utils/common/index'
 
 const defaultTrue = { type: [Boolean, Function, String], default: true }
-const defaultFalse = { type: [Boolean, Function, String], default: false }
 
 export default {
   name: 'RightSide',
@@ -41,30 +43,7 @@ export default {
     },
     handleExportClick: {
       type: Function,
-      default: function({ selectedRows }) {
-        // const { exportOptions, tableUrl } = this
-        const url = this.iExportOptions.url
-        this.dialogExportVisible = true
-        this.$nextTick(() => {
-          this.$eventBus.$emit('showExportDialog', { selectedRows, url, name: this.name })
-        })
-      }
-    },
-    hasReportExport: defaultFalse,
-    reportExportOptions: {
-      type: Object,
-      default: () => ({})
-    },
-    handleReportExportClick: {
-      type: Function,
-      default: function({ selectedRows }) {
-        const url = this.iReportExportOptions.url
-        const triggerEvent = this.iReportExportOptions.triggerEvent || 'showReportExportDialog'
-        this.dialogExportVisible = true
-        this.$nextTick(() => {
-          this.$eventBus.$emit(triggerEvent, { selectedRows, url, name: this.name })
-        })
-      }
+      default: null
     },
     hasImport: defaultTrue,
     importOptions: {
@@ -73,28 +52,17 @@ export default {
     },
     handleImportClick: {
       type: Function,
-      default: function({ selectedRows }) {
-        const { importOptions, tableUrl } = this
-        const url = importOptions?.url ? importOptions.url : tableUrl
-        this.dialogExportVisible = true
-        this.$nextTick(() => {
-          this.$eventBus.$emit('showImportDialog', { selectedRows, url, name: this.name })
-        })
-      }
+      default: null
     },
     hasColumnSetting: defaultTrue,
     handleTableSettingClick: {
       type: Function,
-      default: function({ selectedRows }) {
-        this.$eventBus.$emit('showColumnSettingPopover', { url: this.tableUrl, row: selectedRows, name: this.name })
-      }
+      default: null
     },
     hasRefresh: defaultTrue,
     handleRefreshClick: {
       type: Function,
-      default: function() {
-        this.reloadTable()
-      }
+      default: null
     },
     selectedRows: {
       type: Array,
@@ -102,8 +70,7 @@ export default {
     },
     reloadTable: {
       type: Function,
-      default: () => {
-      }
+      default: () => {}
     },
     extraRightSideActions: {
       type: Array,
@@ -123,13 +90,19 @@ export default {
       default: true
     }
   },
+  emits: ['update:quick-filter-expand', 'importDialogClose'],
   data() {
     return {
-      defaultRightSideActions: [
+      dialogExportVisible: false
+    }
+  },
+  computed: {
+    defaultRightSideActions() {
+      return [
         {
           name: 'actionFilter',
           icon: 'filter',
-          tip: this.$t('QuickFilter'),
+          tip: this.$t('Filter'),
           has: this.hasQuickFilter,
           callback: this.handleFilterClick.bind(this)
         },
@@ -138,41 +111,31 @@ export default {
           icon: 'system-setting',
           tip: this.$t('ListPreference'),
           has: this.hasColumnSetting,
-          callback: this.handleTableSettingClick.bind(this)
+          callback: this.handleTableSettingClick || this.defaultHandleTableSettingClickFn
         },
         {
           name: 'actionImport',
           icon: 'upload',
           tip: this.$t('Import'),
           has: this.hasImport,
-          callback: this.handleImportClick.bind(this)
+          callback: this.handleImportClick || this.defaultHandleImportClickFn
         },
         {
           name: 'actionExport',
           icon: 'download',
           tip: this.$t('Export'),
-          has: this.showLegacyExport.bind(this),
-          callback: this.handleExportClick.bind(this)
-        },
-        {
-          name: 'actionReportExport',
-          icon: 'fa-file-excel-o',
-          tip: this.$t('ReportExport'),
-          has: this.showReportExport.bind(this),
-          callback: this.handleReportExportClick.bind(this)
+          has: this.hasExport,
+          callback: this.handleExportClick || this.defaultHandleExportClickFn
         },
         {
           name: 'actionRefresh',
           icon: 'refresh',
           tip: this.$t('Refresh'),
           has: this.hasRefresh,
-          callback: this.handleRefreshClick.bind(this)
+          callback: this.handleRefreshClick || this.defaultHandleRefreshClickFn
         }
-      ],
-      dialogExportVisible: false
-    }
-  },
-  computed: {
+      ]
+    },
     rightSideActions() {
       const actions = [...this.defaultRightSideActions, ...this.extraRightSideActions]
       const params = {
@@ -204,52 +167,31 @@ export default {
         url: this.tableUrl,
         ...this.exportOptions
       }
-    },
-    iReportExportOptions() {
-      const reportExportOptions = this.reportExportOptions || {}
-      const {
-        extraQuery = {},
-        fileTypeOptions,
-        ...restReportExportOptions
-      } = reportExportOptions
-
-      return {
-        url: this.tableUrl,
-        triggerEvent: 'showReportExportDialog',
-        dialogTitle: this.$t('ReportExport'),
-        fixedExportType: 'xlsx',
-        showFileType: false,
-        ...restReportExportOptions,
-        extraQuery: {
-          export_mode: 'report',
-          ...extraQuery
-        },
-        fileTypeOptions: fileTypeOptions || [
-          {
-            label: 'Excel',
-            value: 'xlsx',
-            can: true
-          }
-        ]
-      }
     }
   },
   methods: {
-    getActionVisibility(value, args) {
-      if (typeof value === 'function') {
-        return value(args)
-      }
-      return value
+    defaultHandleExportClickFn({ selectedRows }) {
+      const url = this.iExportOptions.url
+      this.dialogExportVisible = true
+      this.$nextTick(() => {
+        this.$eventBus.$emit('showExportDialog', { selectedRows, url, name: this.name })
+      })
     },
-    showLegacyExport(args) {
-      const reportExportVisibility = this.getActionVisibility(this.hasReportExport, args)
-      if (reportExportVisibility) {
-        return false
-      }
-      return this.getActionVisibility(this.hasExport, args)
+    defaultHandleTableSettingClickFn({ selectedRows }) {
+      this.$eventBus.$emit('showColumnSettingPopover', {
+        url: this.tableUrl,
+        row: selectedRows,
+        name: this.name
+      })
     },
-    showReportExport(args) {
-      return this.getActionVisibility(this.hasReportExport, args)
+    defaultHandleImportClickFn() {
+      this.dialogExportVisible = true
+      this.$nextTick(() => {
+        this.$eventBus.$emit('showImportDialog')
+      })
+    },
+    defaultHandleRefreshClickFn() {
+      this.reloadTable()
     },
     handleFilterClick() {
       this.$emit('update:quick-filter-expand', !this.quickFilterExpand)
@@ -283,11 +225,38 @@ export default {
   height: 30px;
   line-height: 30px;
 
-  ::v-deep .el-button {
+  :deep(.layout) {
+    display: flex;
+    align-items: center;
+  }
+
+  :deep(.action-item.el-button),
+  :deep(.action-item.el-dropdown > .el-button),
+  :deep(.action-item.el-dropdown .el-button-group .el-button) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 30px;
+    height: 30px;
+    padding: 0;
+  }
+
+  :deep(.action-item.el-button > span),
+  :deep(.action-item.el-dropdown > .el-button > span),
+  :deep(.action-item.el-dropdown .el-button-group .el-button > span) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    line-height: 1;
+  }
+
+  :deep(.el-button) {
     border: none;
     padding: 7px;
     font-size: 13px;
-    color: var(--color-icon-primary);
+    color: var(--color-text-primary) !important;
     background-color: transparent;
 
     &:hover {
@@ -295,9 +264,18 @@ export default {
     }
   }
 
-  ::v-deep .fa {
-    height: 16px;
-    width: 16px;
+  :deep(.svg-icon),
+  :deep(.pre-icon),
+  :deep(.el-icon),
+  :deep(.fa) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 13px;
+    height: 13px;
+    margin: 0 !important;
+    font-size: 13px;
+    color: var(--color-text-primary) !important;
   }
 }
 

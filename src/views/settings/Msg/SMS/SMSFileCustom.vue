@@ -26,28 +26,24 @@ export default {
         {
           title: this.$t('Test'),
           loading: false,
-          callback: function(value, form, btn) {
+          callback: function (value, form, btn) {
             btn.loading = true
-            vm.$axios.post(
-              `/api/v1/settings/sms/custom_file/testing/`,
-              value
-            ).then(res => {
-              vm.$message.success(res['msg'])
-            }).catch((error) => {
-              vm.$log.error('err occur')
-              vm.$refs.baseSms.testPerformError(error)
-            }).finally(() => { btn.loading = false })
+            vm.$axios
+              .post(`/api/v1/settings/sms/custom_file/testing/`, value)
+              .then((res) => {
+                vm.$message.success(res['msg'])
+              })
+              .catch((error) => {
+                vm.$log.error('err occur')
+                vm.$refs.baseSms.testPerformError(error)
+              })
+              .finally(() => {
+                btn.loading = false
+              })
           }
         }
       ],
-      fields: [
-        [
-          this.$t('Test'),
-          [
-            'SMS_TEST_PHONE'
-          ]
-        ]
-      ],
+      fields: [[this.$t('Test'), ['SMS_TEST_PHONE']]],
       fieldsMeta: {
         SMS_TEST_PHONE: {
           rules: [Required],

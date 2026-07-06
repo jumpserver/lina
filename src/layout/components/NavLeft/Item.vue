@@ -1,8 +1,12 @@
-<script>
+<template>
+  <i v-if="icon && icon.startsWith('fa-')" :class="`fa ${icon}`" />
+  <svg-icon v-else-if="icon" :icon-class="icon" />
+  <span v-if="title" class="item-title">{{ title }}</span>
+</template>
 
+<script>
 export default {
   name: 'MenuItem',
-  functional: true,
   props: {
     icon: {
       type: String,
@@ -12,23 +16,6 @@ export default {
       type: String,
       default: ''
     }
-  },
-  render(h, context) {
-    const { icon, title } = context.props
-    const vNodes = []
-
-    if (icon) {
-      if (icon.startsWith('fa-')) {
-        vNodes.push(<i class={`fa ${icon}`}/>)
-      } else {
-        vNodes.push(<svg-icon icon-class={icon}/>)
-      }
-    }
-
-    if (title) {
-      vNodes.push(<span class='item-title' slot='title'>{title}</span>)
-    }
-    return vNodes
   }
 }
 </script>

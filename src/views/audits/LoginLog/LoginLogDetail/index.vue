@@ -1,9 +1,8 @@
 <template>
   <GenericDetailPage
-    :active-menu.sync="config.activeMenu"
-    :object.sync="LogDetail"
     v-bind="config"
-    v-on="$listeners"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="LogDetail"
   >
     <keep-alive>
       <component :is="config.activeMenu" :object="LogDetail" />
@@ -37,13 +36,13 @@ export default {
           hasDelete: () => false
         },
         hasActivity: false,
-        getObjectName: (obj) => { return obj.id }
+        getObjectName: (obj) => {
+          return obj.id
+        }
       }
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

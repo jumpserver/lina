@@ -1,5 +1,10 @@
 <template>
-  <span v-if="loading" v-loading="loading" :style="{ height: loadingHeight + 'px'}" class="loading" />
+  <span
+    v-if="loading"
+    v-loading="loading"
+    :style="{ height: loadingHeight + 'px' }"
+    class="loading"
+  />
 </template>
 
 <script>

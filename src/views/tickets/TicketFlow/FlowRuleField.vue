@@ -2,9 +2,11 @@
   <div>
     <div v-for="(item, i) of approveData" :key="i">
       <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span>{{ `${i + 1} ${$t('LevelApproval')}` }}</span>
-        </div>
+        <template #header>
+          <div class="clearfix">
+            <span>{{ `${i + 1} ${$t('LevelApproval')}` }}</span>
+          </div>
+        </template>
         <JSONManyToManySelect
           :value="item.users"
           :resource="userComponentMeta.el.resource"
@@ -46,7 +48,7 @@ export default {
               {
                 match: 'm2m',
                 name: 'system_roles',
-                'value': ['00000000-0000-0000-0000-000000000001']
+                value: ['00000000-0000-0000-0000-000000000001']
               }
             ]
           }
@@ -85,7 +87,7 @@ export default {
       this.$emit('input', this.rules)
     },
     handleInput(index, event) {
-      this.$set(this.rules, index, { 'users': event })
+      this.rules[index] = { users: event }
       this.$emit('input', this.rules)
     }
   }
@@ -93,22 +95,22 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .text {
-    font-size: 14px;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  }
+.text {
+  font-size: 14px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
 
-  .item {
-    padding: 10px 0;
-  }
+.item {
+  padding: 10px 0;
+}
 
-  .box-card {
-    width: 96%;
-    margin-bottom: 10px;
-    box-shadow: unset !important;
+.box-card {
+  width: 96%;
+  margin-bottom: 10px;
+  box-shadow: unset !important;
 
-    ::v-deep .el-card__body {
-      padding: 10px 30px !important;
-    }
+  :deep(.el-card__body) {
+    padding: 10px 30px !important;
   }
+}
 </style>

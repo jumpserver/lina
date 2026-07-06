@@ -29,7 +29,10 @@ export default {
           key: this.$t('DisplayName'),
           value: this.object.snapshot.name
         },
-        'date_start', 'date_finished', 'duration', 'status'
+        'date_start',
+        'date_finished',
+        'duration',
+        'status'
       ]
     }
   },
@@ -37,6 +40,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

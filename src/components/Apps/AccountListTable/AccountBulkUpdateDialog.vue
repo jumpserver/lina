@@ -1,10 +1,10 @@
 <template>
   <GenericUpdateFormDialog
+    v-bind="$attrs"
     v-if="visible"
     :form-setting="formSetting"
     :selected-rows="selectedRows"
     :visible="visible"
-    v-on="$listeners"
   />
 </template>
 

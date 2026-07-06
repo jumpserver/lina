@@ -1,19 +1,19 @@
 <template>
   <div>
     <ListTable
+      v-bind="$attrs"
       ref="ListTable"
       :header-actions="iHeaderActions"
       :table-config="iTableConfig"
-      v-bind="$attrs"
     />
     <Drawer
       v-if="drawerComponent"
+      v-model:visible="drawerVisible"
       :action="action"
       :class="[action]"
       :component="drawerComponent"
       :props="drawerProps"
       :title="drawerTitle"
-      :visible.sync="drawerVisible"
       class="page-drawer"
     />
   </div>
@@ -23,6 +23,7 @@
 import ListTable from '../ListTable'
 import Drawer from '@/components/Drawer/index.vue'
 import { setUrlParam, toLowerCaseExcludeAbbr, toSentenceCase } from '@/utils/common/index'
+import { markRaw, toRaw } from 'vue'
 import { mapGetters } from 'vuex'
 import { resolveRoute } from '@/utils/vue/index'
 
@@ -31,7 +32,8 @@ const drawerType = [String, Function]
 export default {
   name: 'GenericListPage',
   components: {
-    ListTable, Drawer
+    ListTable,
+    Drawer
   },
   props: {
     detailDrawer: {
@@ -76,16 +78,16 @@ export default {
       drawerTitle: '',
       action: '',
       drawerVisible: false,
-      drawerComponent: ''
+      drawerComponent: '',
+      isReopeningDrawer: false // 标志：是否正在重新打开抽屉
     }
   },
   computed: {
     ...mapGetters(['inDrawer']),
     iHeaderActions() {
-      const actions = this.headerActions
-      if (!actions.onCreate) {
-        actions.onCreate = this.onCreate
-      }
+      const actions = { ...this.headerActions }
+      // 始终使用 DrawerListTable 的 onCreate 来打开抽屉
+      actions.onCreate = this.onCreate
       return actions
     },
     iTableConfig() {
@@ -108,7 +110,11 @@ export default {
         // console.log('>>> name: ', key)
         // console.log('>>> formatter: ', formatter)
         const detailFormatters = ['AmountFormatter', 'DetailFormatter']
-        if (formatter && detailFormatters.includes(formatter.name) && formatterArgs.drawer !== false) {
+        if (
+          formatter &&
+          detailFormatters.includes(formatter.name) &&
+          formatterArgs.drawer !== false
+        ) {
           formatterArgs.onClick = this.onDetail
         }
       }
@@ -127,13 +133,45 @@ export default {
     },
     drawerVisible: {
       handler(val, oldVal) {
-        this.$log.debug('>>> drawerVisible changed: ', oldVal, '->', val)
+        this.$log.debug('>>> drawerVisible changed: ', oldVal, '->', val, {
+          drawerComponent: this.drawerComponent ? 'EXISTS' : 'EMPTY',
+          isReopeningDrawer: this.isReopeningDrawer,
+          drawerTitle: this.drawerTitle
+        })
         if (!val && oldVal) {
+          this.$log.debug(
+            '>>> drawerVisible: closing drawer, isReopeningDrawer =',
+            this.isReopeningDrawer
+          )
           this.$nextTick(() => {
-            this.afterCloseDrawer()
+            // 如果正在重新打开抽屉，不清空组件
+            if (!this.isReopeningDrawer) {
+              this.$log.debug('>>> drawerVisible: calling afterCloseDrawer')
+              this.afterCloseDrawer()
+            } else {
+              this.$log.debug(
+                '>>> drawerVisible: skipping afterCloseDrawer (isReopeningDrawer = true)'
+              )
+            }
+            this.isReopeningDrawer = false
+          })
+        } else if (val && !oldVal) {
+          this.$log.debug('>>> drawerVisible: opening drawer', {
+            drawerComponent: this.drawerComponent ? 'EXISTS' : 'EMPTY',
+            drawerTitle: this.drawerTitle
           })
         }
       }
+    },
+    drawerComponent: {
+      handler(val, oldVal) {
+        this.$log.debug('>>> drawerComponent changed: ', {
+          oldVal: oldVal ? (typeof oldVal === 'function' ? 'FUNCTION' : String(oldVal)) : 'EMPTY',
+          newVal: val ? (typeof val === 'function' ? 'FUNCTION' : String(val)) : 'EMPTY',
+          drawerVisible: this.drawerVisible
+        })
+      },
+      immediate: true
     }
   },
   mounted() {
@@ -143,7 +181,7 @@ export default {
     }
     this.$log.debug('>>> DrawerListTable mounted: ', this.routeFreeze)
   },
-  destroyed() {
+  unmounted() {
     this.$log.debug('>>> DrawerListTable destroyed')
   },
   activated() {
@@ -154,6 +192,11 @@ export default {
   },
   methods: {
     afterCloseDrawer() {
+      this.$log.debug('>>> afterCloseDrawer called', {
+        drawerComponent: this.drawerComponent ? 'EXISTS' : 'EMPTY',
+        drawerVisible: this.drawerVisible,
+        isReopeningDrawer: this.isReopeningDrawer
+      })
       // 清空路由参数, 恢复路由参数
       for (const key of ['params', 'query']) {
         const curValue = this.$route[key] || {}
@@ -165,7 +208,11 @@ export default {
           this.$route[key][k] = value[k]
         }
       }
+      this.$log.debug('>>> afterCloseDrawer: clearing drawerComponent')
       this.drawerComponent = ''
+      this.$log.debug('>>> afterCloseDrawer: drawerComponent cleared', {
+        drawerComponent: this.drawerComponent ? 'EXISTS' : 'EMPTY'
+      })
     },
     getDetailDrawerTitle({ col, row, cellValue, payload = {} }) {
       this.$log.debug('>>> getDetailDrawerTitle: ', col, row, cellValue, payload)
@@ -226,24 +273,44 @@ export default {
       return title
     },
     getDefaultDrawer(action) {
-      const route = this.$route.name
-      const actionRouteName = route.replace('List', toSentenceCase(action))
-      return this.getRouteNameComponent(actionRouteName, action)
+      try {
+        const route = this.$route.name
+        if (!route) {
+          this.$log.debug('>>> getDefaultDrawer: no route name')
+          return ''
+        }
+        const actionRouteName = route.replace('List', toSentenceCase(action))
+        this.$log.debug('>>> getDefaultDrawer:', { action, route, actionRouteName })
+        return this.getRouteNameComponent(actionRouteName, action)
+      } catch (error) {
+        this.$log.debug('>>> getDefaultDrawer error:', error, { action })
+        return ''
+      }
     },
     getRouteNameComponent(name, action) {
-      const route = { name: name }
+      try {
+        const route = { name: name }
 
-      if (action === 'detail' || action === 'update') {
-        route.params = { id: '1' }
+        if (action === 'detail' || action === 'update') {
+          route.params = { id: '1' }
+        }
+
+        const resolved = resolveRoute(route, this.$router)
+        this.$log.debug('>>> getRouteNameComponent:', {
+          name,
+          action,
+          resolved: resolved ? 'EXISTS' : 'EMPTY'
+        })
+
+        if (resolved && resolved.components && resolved.components.default) {
+          return resolved.components.default
+        }
+
+        return ''
+      } catch (error) {
+        this.$log.debug('>>> getRouteNameComponent error:', error, { name, action })
+        return ''
       }
-
-      const resolved = resolveRoute(route, this.$router)
-
-      if (resolved && resolved.components && resolved.components.default) {
-        return resolved.components.default
-      }
-
-      return ''
     },
     getDetailComponent({ detailRoute }) {
       if (!detailRoute) {
@@ -264,6 +331,13 @@ export default {
       return component
     },
     getDrawerComponent(action, payload) {
+      console.log('[DrawerListTable] getDrawerComponent:', {
+        action,
+        createDrawer: this.createDrawer,
+        createDrawerType: typeof this.createDrawer,
+        updateDrawer: this.updateDrawer,
+        detailDrawer: this.detailDrawer
+      })
       switch (action) {
         case 'create':
           return this.createDrawer
@@ -278,58 +352,120 @@ export default {
       }
     },
 
-    async showDrawer(action, { row = {}, col = {}, query = {}, cellValue = '', payload = {} } = {}) {
+    async showDrawer(
+      action,
+      { row = {}, col = {}, query = {}, cellValue = '', payload = {} } = {}
+    ) {
+      this.$log.debug('>>> showDrawer START:', {
+        action,
+        currentDrawerVisible: this.drawerVisible,
+        currentDrawerComponent: this.drawerComponent ? 'EXISTS' : 'EMPTY',
+        isReopeningDrawer: this.isReopeningDrawer
+      })
+
       try {
-        // 1. 先重置状态
-        this.drawerVisible = false
+        // 1. 设置 action
         this.action = action
+        this.$log.debug('>>> showDrawer step 1: action set to', action)
 
         for (const key in query) {
           this.$route.query[key] = query[key]
         }
 
-        // 2. 等待下一个 tick，确保状态已重置
-        await this.$nextTick()
+        // 2. 先获取组件
+        const component = this.getDrawerComponent(action, payload) || this.getDefaultDrawer(action)
+        this.$log.debug('>>> showDrawer step 2: got component', {
+          component: component
+            ? typeof component === 'function'
+              ? 'FUNCTION'
+              : String(component)
+            : 'EMPTY',
+          getDrawerComponent: this.getDrawerComponent(action, payload) ? 'EXISTS' : 'EMPTY',
+          getDefaultDrawer: this.getDefaultDrawer(action) ? 'EXISTS' : 'EMPTY'
+        })
 
-        // 3. 设置组件
-        this.drawerComponent = this.getDrawerComponent(action, payload)
-        this.$log.debug('>>> drawerComponent: ', this.drawerComponent)
-
-        // 4. 如果没有组件，尝试获取默认组件
-        if (!this.drawerComponent) {
-          this.drawerComponent = this.getDefaultDrawer(action)
-        }
-
-        // 5. 如果还是没有组件，报错
-        if (!this.drawerComponent) {
+        // 3. 如果还是没有组件，报错
+        if (!component) {
           throw new Error(`No drawer component found for action: ${action}`)
         }
 
-        // 6. 获取标题
+        // 4. 如果组件已存在且相同，且抽屉已打开，直接返回
+        if (this.drawerComponent === component && this.drawerVisible) {
+          this.$log.debug('>>> showDrawer: drawer already open with same component, returning')
+          return
+        }
+
+        // 5. 设置标志，防止关闭时清空组件
+        this.isReopeningDrawer = true
+        this.$log.debug('>>> showDrawer step 5: isReopeningDrawer set to true')
+
+        // 6. 先设置组件（在关闭之前设置）
+        this.drawerComponent = markRaw(toRaw(component))
+        this.$log.debug('>>> showDrawer step 6: drawerComponent set', {
+          drawerComponent: this.drawerComponent ? 'EXISTS' : 'EMPTY',
+          drawerVisible: this.drawerVisible
+        })
+
+        // 7. 如果抽屉已打开，先关闭
+        if (this.drawerVisible) {
+          this.$log.debug('>>> showDrawer step 7: closing existing drawer')
+          this.drawerVisible = false
+          await this.$nextTick()
+          this.$log.debug(
+            '>>> showDrawer step 7: after close, drawerComponent =',
+            this.drawerComponent ? 'EXISTS' : 'EMPTY'
+          )
+          // 确保组件没有被清空
+          if (!this.drawerComponent) {
+            this.$log.debug('>>> showDrawer step 7: drawerComponent was cleared, restoring it')
+            this.drawerComponent = markRaw(toRaw(component))
+          }
+        }
+
+        // 8. 获取标题
         if (this.getDrawerTitle) {
           const actionMeta = await this.$store.getters['common/drawerActionMeta']
           this.title = this.getDrawerTitle({ action, ...actionMeta })
         }
         this.drawerTitle = this.getActionDrawerTitle({ action, row, col, cellValue, payload })
+        this.$log.debug('>>> showDrawer step 8: title set to', this.drawerTitle)
 
-        // 7. 等待下一个 tick，确保组件已设置
+        // 9. 等待下一个 tick，确保组件已设置
         await this.$nextTick()
+        this.$log.debug('>>> showDrawer step 9: after nextTick', {
+          drawerComponent: this.drawerComponent ? 'EXISTS' : 'EMPTY',
+          drawerVisible: this.drawerVisible
+        })
 
-        // 8. 显示抽屉
+        // 10. 显示抽屉
         this.drawerVisible = true
+        this.$log.debug('>>> showDrawer step 10: drawerVisible set to true', {
+          drawerComponent: this.drawerComponent ? 'EXISTS' : 'EMPTY',
+          drawerTitle: this.drawerTitle,
+          action: this.action
+        })
+
+        // 11. 再等待一个 tick，确保 DOM 已更新
+        await this.$nextTick()
+        this.$log.debug('>>> showDrawer step 11: final state', {
+          drawerComponent: this.drawerComponent ? 'EXISTS' : 'EMPTY',
+          drawerVisible: this.drawerVisible,
+          drawerTitle: this.drawerTitle,
+          isReopeningDrawer: this.isReopeningDrawer
+        })
 
         this.$log.debug('Drawer initialized:', {
           title: this.title,
           visible: this.drawerVisible,
           component: this.drawerComponent,
-          action: this.action,
-          'this': this,
-          'vm': this.vm
+          action: this.action
         })
       } catch (error) {
         console.error('Failed to show drawer:', error)
+        this.$log.debug('>>> showDrawer ERROR:', error)
         this.drawerVisible = false
         this.drawerComponent = ''
+        this.isReopeningDrawer = false
       }
     },
     reloadTable() {
@@ -353,22 +489,37 @@ export default {
       // 有可能来自 params 或者 row
       const id = params.id || row.id
       await this.$store.dispatch('common/setDrawerActionMeta', {
-        action: 'detail', row: row, col: col, id: id
+        action: 'detail',
+        row: row,
+        col: col,
+        id: id
       })
-      await this.showDrawer('detail', { row, col, cellValue, payload: { detailRoute, formatterArgs } })
+      await this.showDrawer('detail', {
+        row,
+        col,
+        cellValue,
+        payload: { detailRoute, formatterArgs }
+      })
     },
     async onCreate(meta) {
+      console.log('[DrawerListTable] onCreate called', { meta, createDrawer: this.createDrawer })
+      this.$log.debug('>>> onCreate called', { meta })
       if (!meta) {
         meta = {}
       }
       this.$route.params.id = ''
       await this.$store.dispatch('common/setDrawerActionMeta', { action: 'create', ...meta })
+      this.$log.debug('>>> onCreate: calling showDrawer')
       await this.showDrawer('create', meta)
+      this.$log.debug('>>> onCreate: showDrawer completed')
     },
     async onClone({ row, col, query = {} }) {
       this.$route.params.id = ''
       await this.$store.dispatch('common/setDrawerActionMeta', {
-        action: 'clone', row: row, col: col, id: row.id
+        action: 'clone',
+        row: row,
+        col: col,
+        id: row.id
       })
       await this.showDrawer('clone', { query })
     },
@@ -376,7 +527,10 @@ export default {
       this.$route.params.id = row.id
       this.$route.params.action = 'update'
       await this.$store.dispatch('common/setDrawerActionMeta', {
-        action: 'update', row: row, col: col, id: row.id
+        action: 'update',
+        row: row,
+        col: col,
+        id: row.id
       })
       await this.showDrawer('update', { query })
     }

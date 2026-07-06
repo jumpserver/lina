@@ -1,10 +1,6 @@
 <template>
   <div>
-    <ILabel
-      v-for="item in value"
-      :key="item.key"
-      :label="item"
-    />
+    <ILabel v-for="item in value" :key="item.key" :label="item" />
   </div>
 </template>
 
@@ -27,6 +23,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

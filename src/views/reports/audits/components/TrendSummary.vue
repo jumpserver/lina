@@ -1,6 +1,6 @@
 <template>
   <div class="chart-container full-width">
-    <Title :config="config" style="margin: 10px 0;" />
+    <Title :config="config" style="margin: 10px 0" />
     <ColumnChart v-bind="columnChartConfig" />
   </div>
 </template>

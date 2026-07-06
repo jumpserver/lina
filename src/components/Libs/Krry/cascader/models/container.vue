@@ -32,7 +32,7 @@
       :filter-placeholder="filterPlaceholder"
       @selected-checked="selectedCountry"
     />
-    <span class="inner-center el-icon-d-arrow-right" />
+    <el-icon class="inner-center"><DArrowRight /></el-icon>
     <krry-box
       style="width: 260px"
       :operation="boxOperation[3]"
@@ -216,16 +216,10 @@ export default {
           // 拆分的数组长度大于1，说明有市级以下的区域，合并成一个省级区域
           if (selectId.length > 1 && selectId[0] === val) {
             // 在已选择的区域中删除市级数据，合并成一个省级
-            this.checkedDistrict = this.checkedDistrict.filter(
-              (vl) => vl !== vq
-            )
+            this.checkedDistrict = this.checkedDistrict.filter((vl) => vl !== vq)
             // 当前省级已被合并，从过滤数组中删除该市级和县级数据
-            this.filterCity = this.filterCity.filter(
-              (vf) => vf.toString() !== selectId[1]
-            )
-            this.filterCounty = this.filterCounty.filter(
-              (vs) => vs.toString() !== selectId[2]
-            )
+            this.filterCity = this.filterCity.filter((vf) => vf.toString() !== selectId[1])
+            this.filterCounty = this.filterCounty.filter((vs) => vs.toString() !== selectId[2])
           }
         }
       }
@@ -246,13 +240,9 @@ export default {
           // 拆分的数组长度为3，说明有县级区域，并且该市级区域与当前加入市级区域的id相同，合并成一个市级区域
           if (selectId.length === 3 && selectId[1] === val.toString()) {
             // 在已选择的区域中删除县级数据，合并成一个市级
-            this.checkedDistrict = this.checkedDistrict.filter(
-              (vl) => vl !== vq
-            )
+            this.checkedDistrict = this.checkedDistrict.filter((vl) => vl !== vq)
             // 当前市级已被合并，从过滤数组中删除该县级数据
-            this.filterCounty = this.filterCounty.filter(
-              (vs) => vs.toString() !== selectId[2]
-            )
+            this.filterCounty = this.filterCounty.filter((vs) => vs.toString() !== selectId[2])
           }
         }
       }
@@ -300,18 +290,14 @@ export default {
         switch (length) {
           case 1: {
             // 长度只有1，只有省级数据，删除对应省级的filter中的数据
-            this.filterProvince = this.filterProvince.filter(
-              (vs) => vs !== selectId[0]
-            )
+            this.filterProvince = this.filterProvince.filter((vs) => vs !== selectId[0])
             // 重新获取县级数据
             this.getProvince()
             break
           }
           case 2: {
             // 长度为2，到达市级数据，删除对应市级的filter中的数据
-            this.filterCity = this.filterCity.filter(
-              (vs) => vs.toString() !== selectId[1]
-            )
+            this.filterCity = this.filterCity.filter((vs) => vs.toString() !== selectId[1])
             // 重新获取市级数据
             if (this.$refs.prov.selectedDistrict.length) {
               // 省级已勾选才显示区级
@@ -321,9 +307,7 @@ export default {
           }
           case 3: {
             // 长度为3，到达县级数据，删除对应县级的filter中的数据
-            this.filterCounty = this.filterCounty.filter(
-              (vs) => vs.toString() !== selectId[2]
-            )
+            this.filterCounty = this.filterCounty.filter((vs) => vs.toString() !== selectId[2])
             if (this.$refs.city.selectedDistrict.length) {
               // 市级已勾选才显示区级
               const fatherId = this.$refs.county.father.id.split('-')[1]
@@ -336,9 +320,7 @@ export default {
           }
         }
         // 刷新已选区域
-        this.checkedDistrict = this.checkedDistrict.filter(
-          (vd) => vd.id !== val.id
-        )
+        this.checkedDistrict = this.checkedDistrict.filter((vd) => vd.id !== val.id)
       }
     },
     // 初始化过滤器 参数：addVal：要增加的区域对象数组
@@ -363,7 +345,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .inner-center {
   margin: 0 5px;
 }

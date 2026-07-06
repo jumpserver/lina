@@ -1,16 +1,9 @@
 <template>
-  <el-form
-    ref="elForm"
-    :model="value"
-    class="el-form-renderer"
-    v-bind="$attrs"
-    @submit.native.prevent
-  >
-    <template v-for="item in innerContent">
+  <el-form v-bind="$attrs" ref="elForm" :model="value" class="el-form-renderer" @submit.prevent>
+    <template v-for="item in innerContent" :key="item.id">
       <slot v-if="!isHidden(item)" :name="`id:${item.id}`" />
       <component
         :is="item.type === GROUP ? 'render-form-group' : 'render-form-item'"
-        :key="item.id"
         :data="item"
         :server-errors="serverErrors"
         :disabled="disabled || item.disabled"
@@ -18,7 +11,7 @@
         :options="options[item.id]"
         :readonly="readonly || item.readonly"
         :value="value"
-        @updateValue="updateValue"
+        @update-value="updateValue"
       />
       <slot v-if="!isHidden(item)" :name="`$id:${item.id}`" />
     </template>
@@ -26,9 +19,10 @@
   </el-form>
 </template>
 <script>
-import _set from 'lodash/set'
-import _isequal from 'lodash/isEqual'
 import _clonedeep from 'lodash/cloneDeep'
+import _isequal from 'lodash/isEqual'
+import _set from 'lodash/set'
+import { markRaw, provide } from 'vue'
 import RenderFormGroup from './components/render-form-group.vue'
 import RenderFormItem from './components/render-form-item.vue'
 import transformContent from './util/transform-content'
@@ -41,19 +35,15 @@ import {
 } from './util/utils'
 
 const GROUP = 'group'
+const FORM_RENDERER_KEY = Symbol('formRenderer')
+
+export { FORM_RENDERER_KEY }
 
 export default {
   name: 'ElFormRenderer',
   components: {
-    RenderFormItem,
-    RenderFormGroup
-  },
-  /**
-   * value 已经被内部大量使用，所以换用 form
-   */
-  model: {
-    prop: 'form',
-    event: 'input'
+    RenderFormItem: markRaw(RenderFormItem),
+    RenderFormGroup: markRaw(RenderFormGroup)
   },
   props: {
     content: {
@@ -79,6 +69,18 @@ export default {
       type: Object,
       default: undefined
     }
+  },
+  emits: ['input', 'update:form'],
+  setup() {
+    // Provide form renderer context to child components
+    // This replaces $parent chain access
+    const formRendererContext = {
+      updateForm: null,
+      setOptions: null,
+      getElForm: null
+    }
+    provide(FORM_RENDERER_KEY, formRendererContext)
+    return { formRendererContext }
   },
   data() {
     return {
@@ -120,11 +122,17 @@ export default {
       handler(v, oldV) {
         if (!v || _isequal(v, oldV)) return
         this.$emit('input', transformOutputValue(v, this.innerContent))
+        this.$emit('update:form', transformOutputValue(v, this.innerContent))
       }
       // deep: true, // 应该是没有必要的
     }
   },
   mounted() {
+    // Populate the provided context with actual methods
+    this.formRendererContext.updateForm = this.updateForm
+    this.formRendererContext.setOptions = this.setOptions
+    this.formRendererContext.getElForm = () => this.$refs.elForm
+
     /**
      * 与 element 相同，在 mounted 阶段存储 initValue
      * @see https://github.com/ElemeFE/element/blob/6ec5f8e900ff698cf30e9479d692784af836a108/packages/form/src/form-item.vue#L304
@@ -132,7 +140,9 @@ export default {
     this.initValue = _clonedeep(this.value)
     this.$nextTick(() => {
       // proxy
-      Object.keys(this.$refs.elForm.$options.methods).forEach(item => {
+      const methods = this.$refs.elForm.$options.methods || {}
+
+      Object.keys(methods).forEach((item) => {
         if (item in this) return
         this[item] = this.$refs.elForm[item]
       })
@@ -145,6 +155,23 @@ export default {
     })
   },
   methods: {
+    validate(...args) {
+      const result = this.$refs.elForm?.validate?.(...args)
+      if (result && typeof result.then === 'function') {
+        return result
+          .then((value) => value)
+          .catch((error) => {
+            throw error
+          })
+      }
+      return result
+    },
+    validateField(...args) {
+      return this.$refs.elForm?.validateField?.(...args)
+    },
+    scrollToField(...args) {
+      return this.$refs.elForm?.scrollToField?.(...args)
+    },
     /**
      * 重置表单为初始值
      *
@@ -225,6 +252,9 @@ export default {
         return item.hidden(this.value)
       }
       return false
+    },
+    clearValidate() {
+      return this.$refs.elForm?.clearValidate?.()
     }
   }
 }

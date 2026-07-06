@@ -1,6 +1,6 @@
 <template>
   <Page>
-    <div v-if="this.$hasPerm('rbac.view_audit')">
+    <div v-if="$hasPerm('rbac.view_audit')">
       <Announcement />
       <AuditReport :only-charts="true" :nav="false" />
     </div>

@@ -1,32 +1,34 @@
 <template>
   <el-col :lg="8" :md="8" :sm="12" :span="8" :xl="8" :xs="24" class="auth-item-col">
     <el-card ref="card" class="auth-card" shadow="never">
-      <div slot="header" class="auth-item-header">
-        <div class="auth-item-header-left">
-          <img :src="logo" alt="auth-logo" class="auth-logo">
-          <div :title="title" class="auth-item-header-title">
-            <div>
-              <span>
-                {{ title }}
-              </span>
-              <!-- <el-tag v-if="type" type="success" class="auth-item-type" size="mini">
-                {{ type }}
-              </el-tag> -->
+      <template #header>
+        <div class="auth-item-header">
+          <div class="auth-item-header-left">
+            <img :src="logo" alt="auth-logo" class="auth-logo" />
+            <div :title="title" class="auth-item-header-title">
+              <div>
+                <span>
+                  {{ title }}
+                </span>
+                <!-- <el-tag v-if="type" type="success" class="auth-item-type" size="small">
+                  {{ type }}
+                </el-tag> -->
+              </div>
+              <!-- <div v-if="description" class="auth-item-header-description">
+                {{ description || '' }}
+              </div> -->
             </div>
-            <!-- <div v-if="description" class="auth-item-header-description">
-              {{ description || '' }}
-            </div> -->
+          </div>
+          <div class="auth-item-actions">
+            <el-switch
+              v-model="isEnabled"
+              active-color="#148f76"
+              inactive-color="#e5e6e7"
+              @change="onChangeStatus"
+            />
           </div>
         </div>
-        <div class="auth-item-actions">
-          <el-switch
-            v-model="isEnabled"
-            active-color="#148f76"
-            inactive-color="#e5e6e7"
-            @change="onChangeStatus"
-          />
-        </div>
-      </div>
+      </template>
     </el-card>
   </el-col>
 </template>
@@ -141,7 +143,7 @@ export default {
       }
     }
 
-    ::v-deep .el-card__body {
+    :deep(.el-card__body) {
       display: none;
     }
   }

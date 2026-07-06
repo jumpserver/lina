@@ -1,9 +1,8 @@
 <template>
   <GenericDetailPage
-    :active-menu.sync="config.activeMenu"
-    :object.sync="applet"
     v-bind="config"
-    v-on="$listeners"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="applet"
   >
     <keep-alive>
       <component :is="config.activeMenu" :object="applet" />
@@ -13,8 +12,8 @@
 
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
-import Detail from './Detail'
 import AppletHosts from './AppletHosts'
+import Detail from './Detail'
 
 export default {
   name: 'AppletDetail',
@@ -32,12 +31,12 @@ export default {
         activeMenu: 'Detail',
         submenu: [
           {
-            'title': this.$t('Basic'),
-            'name': 'Detail'
+            title: this.$t('Basic'),
+            name: 'Detail'
           },
           {
-            'title': this.$t('AppletHosts'),
-            'name': 'AppletHosts',
+            title: this.$t('AppletHosts'),
+            name: 'AppletHosts',
             hidden: !this.$hasPerm('terminal.view_appletpublication')
           }
         ],

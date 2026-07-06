@@ -1,0 +1,88 @@
+.el-data-table {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.el-data-table :deep(.el-table td) {
+  //padding: 4px 0;
+}
+
+.el-data-table :deep(.el-table th) {
+  //padding: 4px 0;
+}
+
+.el-data-table :deep(.el-form-item) {
+  margin-bottom: 10px !important;
+  margin-top: 10px;
+}
+
+.el-data-table :deep(.el-pagination) {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 15px 20px;
+
+  .el-pagination__total {
+    margin-right: auto;
+    font-size: 12px;
+    line-height: 28px;
+    white-space: nowrap;
+  }
+
+  .el-pagination__sizes {
+    .el-select {
+      width: 100px;
+      font-size: 13px;
+    }
+
+    .el-select__wrapper {
+      min-height: 28px !important;
+      height: 28px !important;
+      padding-top: 0;
+      padding-bottom: 0;
+      box-sizing: border-box;
+    }
+
+    .el-select__selected-item,
+    .el-select__placeholder {
+      font-size: 13px;
+      line-height: 28px;
+    }
+  }
+
+  &.is-background .el-pager li {
+    margin: 0 1px;
+    padding: 0 2px;
+    min-width: 28px;
+    height: 28px;
+    line-height: 26px;
+    box-sizing: border-box;
+    border: 1px solid #dcdfe6;
+    border-radius: 2px;
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  &.is-background .btn-prev,
+  &.is-background .btn-next {
+    margin: 0 5px;
+    padding: 0 2px;
+    min-width: 28px;
+    height: 28px;
+    line-height: 26px;
+    box-sizing: border-box;
+    border: 1px solid #dcdfe6;
+    border-radius: 2px;
+    background-color: #fff;
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  &.is-background .btn-prev:disabled,
+  &.is-background .btn-next:disabled {
+    background-color: #fff;
+  }
+}

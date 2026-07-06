@@ -4,9 +4,9 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import { userJSONSelectMeta } from '@/views/users/const'
 import { assetJSONSelectMeta } from '@/views/assets/const'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter.vue'
+import { userJSONSelectMeta } from '@/views/users/const'
 
 export default {
   name: 'DataMaskingRuleCreateUpdate',
@@ -58,5 +58,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

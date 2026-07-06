@@ -6,7 +6,6 @@ on:
       - 'pr*'
     paths:
       - 'package.json'
-      - 'package-lock.json'
       - 'yarn.lock'
       - 'Dockerfile-base'
   workflow_dispatch:

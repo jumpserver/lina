@@ -3,7 +3,7 @@
     <div class="head">
       <Title :config="config" />
     </div>
-    <LineChart v-if="loading" v-bind="lineChartConfig" />
+    <LineChart v-bind="lineChartConfig" v-if="loading" />
   </div>
 </template>
 
@@ -20,10 +20,6 @@ export default {
     days: {
       type: [String, Number],
       default: 7
-    },
-    metrics: {
-      type: Object,
-      default: () => ({})
     }
   },
   data() {
@@ -43,49 +39,31 @@ export default {
     }
   },
   watch: {
-    metrics: {
-      handler() {
-        if (this.metrics?.dates_metrics_date?.length) {
-          this.applyMetrics(this.metrics)
-        }
-      },
-      deep: true
-    },
     days() {
-      if (this.metrics?.dates_metrics_date?.length) {
-        return
-      }
       this.getMetricData()
     }
   },
   mounted() {
     try {
-      if (this.metrics?.dates_metrics_date?.length) {
-        this.applyMetrics(this.metrics)
-      } else {
-        this.getMetricData()
-      }
+      this.getMetricData()
     } finally {
       this.loading = true
     }
   },
   methods: {
-    applyMetrics(data) {
-      const activeUsers = data?.dates_metrics_total_count_active_users || []
-      const activeAssets = data?.dates_metrics_total_count_active_assets || []
-      this.lineChartConfig.datesMetrics = data?.dates_metrics_date || []
-      if (activeUsers.length > 0) {
-        this.lineChartConfig.primaryData = activeUsers
-      }
-      if (activeAssets.length > 0) {
-        this.lineChartConfig.secondaryData = activeAssets
-      }
-    },
     async getMetricData() {
       setTimeout(() => {
         const url = `/api/v1/index/?dates_metrics=1&days=${this.days}`
-        this.$axios.get(url).then(data => {
-          this.applyMetrics(data)
+        this.$axios.get(url).then((data) => {
+          const activeUsers = data?.dates_metrics_total_count_active_users
+          const activeAssets = data?.dates_metrics_total_count_active_assets
+          this.lineChartConfig.datesMetrics = data.dates_metrics_date
+          if (activeUsers.length > 0) {
+            this.lineChartConfig.primaryData = activeUsers
+          }
+          if (activeAssets.length > 0) {
+            this.lineChartConfig.secondaryData = activeAssets
+          }
         })
       }, 500)
     }

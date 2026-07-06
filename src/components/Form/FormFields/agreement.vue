@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="{ highlight: highlightBody }">
     <el-checkbox v-model="iValue">
       {{ $t('ReadAgreeTo') }}
     </el-checkbox>
@@ -15,6 +15,16 @@ export default {
     }
   },
   computed: {
+    highlightBody() {
+      if (
+        this.$route.query._to?.includes('dashboard') ||
+        this.$route.query._to?.includes('workbench')
+      ) {
+        return false
+      } else {
+        return true
+      }
+    },
     iValue: {
       get() {
         return this.value
@@ -28,4 +38,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.highlight {
+  color: #f56c6c;
+  border: 2px solid #f56c6c;
+  padding: 10px;
+}
+</style>

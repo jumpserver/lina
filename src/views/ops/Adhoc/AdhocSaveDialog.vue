@@ -1,14 +1,15 @@
 <template>
   <Dialog
-    v-if="iVisible"
+    v-if="visible"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('SaveAdhoc')"
-    :visible.sync="iVisible"
+    :visible="visible"
     top="1vh"
     width="40%"
+    @update:visible="$emit('update:visible', $event)"
   >
-    <GenericCreateUpdateForm v-if="ready" :on-perform-success="onSubmitSuccess" v-bind="$data" />
+    <GenericCreateUpdateForm v-bind="$data" v-if="ready" :on-perform-success="onSubmitSuccess" />
   </Dialog>
 </template>
 
@@ -19,7 +20,8 @@ import CodeEditor from '@/components/Form/FormFields/CodeEditor.vue'
 
 export default {
   components: {
-    Dialog, GenericCreateUpdateForm
+    Dialog,
+    GenericCreateUpdateForm
   },
   props: {
     visible: {
@@ -28,21 +30,20 @@ export default {
     },
     args: {
       type: String,
-      default: () => ({})
+      default: ''
     },
     module: {
       type: String,
       default: 'shell'
     }
   },
+  emits: ['update:visible'],
   data() {
     return {
       ready: false,
       hasSaveContinue: false,
       url: '/api/v1/ops/adhocs/',
-      fields: [
-        ['', ['name', 'module', 'args']]
-      ],
+      fields: [['', ['name', 'module', 'args']]],
       initial: {
         module: 'shell',
         args: ''
@@ -62,16 +63,7 @@ export default {
       }
     }
   },
-  computed: {
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
-    }
-  }, mounted() {
+  mounted() {
     this.initial.args = this.args
     this.initial.module = this.module
     this.ready = true
@@ -79,7 +71,7 @@ export default {
   methods: {
     onSubmitSuccess() {
       this.$message.success(this.$tc('SaveCommandSuccess'))
-      this.iVisible = false
+      this.$emit('update:visible', false)
     }
   }
 }
@@ -94,5 +86,4 @@ export default {
   float: right;
   padding-right: 30px;
 }
-
 </style>

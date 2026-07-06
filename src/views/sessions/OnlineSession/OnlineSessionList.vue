@@ -4,7 +4,7 @@
     :header-actions="headerActions"
     :help-tip="helpMsg"
     :table-config="tableConfig"
-    :title="this.$t('OnlineUserDevices')"
+    :title="$t('OnlineUserDevices')"
   />
 </template>
 
@@ -30,13 +30,24 @@ export default {
         columnsShow: {
           min: ['user_display', 'actions'],
           default: [
-            'user_display', 'backend_display', 'city',
-            'date_created', 'is_active', 'actions'
+            'user_display',
+            'backend_display',
+            'city',
+            'date_created',
+            'is_active',
+            'actions'
           ]
         },
         columns: [
-          'user_display', 'backend_display', 'city', 'type',
-          'date_created', 'is_active', 'date_expired', 'user_agent', 'actions'
+          'user_display',
+          'backend_display',
+          'city',
+          'type',
+          'date_created',
+          'is_active',
+          'date_expired',
+          'user_agent',
+          'actions'
         ],
         columnsMeta: {
           is_active: {
@@ -52,8 +63,12 @@ export default {
             formatterArgs: {
               drawer: true,
               can: this.$hasPerm('users.view_user'),
-              getTitle: ({ row }) => { return row.user.name },
-              getDrawerTitle({ row }) { return row.user.name },
+              getTitle: ({ row }) => {
+                return row.user.name
+              },
+              getDrawerTitle({ row }) {
+                return row.user.name
+              },
               getRoute: ({ row }) => {
                 return {
                   name: 'UserDetail',
@@ -78,13 +93,12 @@ export default {
                   },
                   type: 'danger',
                   callback: ({ row }) => {
-                    this.$axios.post(
-                      '/api/v1/audits/user-sessions/offline/',
-                      { ids: [row.id] }
-                    ).then(() => {
-                      vm.$message.success(this.$tc('OfflineSuccessMsg'))
-                      vm.$refs.GenericListPage.$refs.ListTable.$refs.ListTable.reloadTable()
-                    })
+                    this.$axios
+                      .post('/api/v1/audits/user-sessions/offline/', { ids: [row.id] })
+                      .then(() => {
+                        vm.$message.success(this.$tc('OfflineSuccessMsg'))
+                        vm.$refs.GenericListPage.$refs.ListTable.$refs.ListTable.reloadTable()
+                      })
                   }
                 }
               ]
@@ -121,18 +135,17 @@ export default {
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 && vm.$hasPerm('audits.offline_usersession')
             },
-            callback: function({ selectedRows }) {
-              vm.$axios.post(
-                '/api/v1/audits/user-sessions/offline/',
-                {
-                  ids: selectedRows.map(v => {
+            callback: function ({ selectedRows }) {
+              vm.$axios
+                .post('/api/v1/audits/user-sessions/offline/', {
+                  ids: selectedRows.map((v) => {
                     return v.id
                   })
-                }
-              ).then(res => {
-                vm.$message.success(vm.$tc('OfflineSuccessMsg'))
-                vm.$refs.GenericListPage.$refs.ListTable.$refs.ListTable.reloadTable()
-              })
+                })
+                .then((res) => {
+                  vm.$message.success(vm.$tc('OfflineSuccessMsg'))
+                  vm.$refs.GenericListPage.$refs.ListTable.$refs.ListTable.reloadTable()
+                })
             }
           }
         ]

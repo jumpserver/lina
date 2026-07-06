@@ -1,54 +1,40 @@
 <template>
-  <div>
-    <el-link
-      icon="el-icon-edit"
-      :underline="false"
-      @click="handlerLinkClick"
-    >
+  <div class="region-panel">
+    <el-link class="region-trigger" icon="Edit" underline="never" @click="handlerLinkClick">
       {{ content }}
     </el-link>
     <Dialog
+      v-model:visible="regionVisible"
       :destroy-on-close="true"
       :title="$tc('Region')"
-      :visible.sync="regionVisible"
       :show-cancel="false"
       width="60%"
-      @confirm="regionVisible=false"
+      @confirm="regionVisible = false"
     >
       <el-row>
         <el-col>
-          <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckedAllChange">
+          <el-checkbox
+            :indeterminate="isIndeterminate"
+            :model-value="checkAll"
+            @change="handleCheckedAllChange"
+            @update:model-value="checkAll = $event"
+          >
             {{ $t('All') }}
           </el-checkbox>
         </el-col>
       </el-row>
       <el-checkbox-group
-        v-model="checkedRegion"
-        class="region-grid"
+        :model-value="checkedRegion"
         @change="handleCheckedRegionChange"
+        @update:model-value="checkedRegion = $event"
       >
-        <div
-          v-for="r in allRegions"
-          :key="r.id"
-          class="region-grid__item"
-        >
-          <el-tooltip
-            :content="r.name"
-            :disabled="(r.name || '').length < 20"
-            placement="top"
-            :open-delay="500"
-          >
-            <el-checkbox
-              :label="r.id"
-              :value="r.id"
-              class="region-checkbox"
-            >
-              <span class="region-checkbox__text">
-                {{ r.name }}
-              </span>
+        <el-row v-for="r in allRegions" :key="r.id" type="flex">
+          <el-col>
+            <el-checkbox :label="r.id" :value="r.id">
+              {{ r.name }}
             </el-checkbox>
-          </el-tooltip>
-        </div>
+          </el-col>
+        </el-row>
       </el-checkbox-group>
     </Dialog>
   </div>
@@ -118,23 +104,26 @@ export default {
 
         method = 'post'
         url = `/api/v1/xpack/cloud/regions/?provider=${this.provider}&category=${category}`
-        data = { 'attrs': encryptAttrsField(attrs) }
+        data = { attrs: encryptAttrsField(attrs) }
       }
 
       this.content = this.$t('Loading')
 
-      this.$axios[method](url, data).then(resp => {
-        this.allRegions = resp?.regions
-        this.regionVisible = true
-        this.updateCheckedStatus()
-      }).catch(() => {
-        this.$message.error(this.$tc('CloudRegionTip'))
-      }).finally(() => {
-        this.refreshContent()
-      })
+      this.$axios[method](url, data)
+        .then((resp) => {
+          this.allRegions = resp?.regions
+          this.regionVisible = true
+          this.updateCheckedStatus()
+        })
+        .catch(() => {
+          this.$message.error(this.$tc('CloudRegionTip'))
+        })
+        .finally(() => {
+          this.refreshContent()
+        })
     },
     handleCheckedAllChange(val) {
-      this.checkedRegion = val ? this.allRegions.map(region => region.id) : []
+      this.checkedRegion = val ? this.allRegions.map((region) => region.id) : []
       this.isIndeterminate = false
       this.checkAll = !!val
       this.$emit('input', [])
@@ -146,7 +135,7 @@ export default {
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.allRegions.length
 
       const region = this.allRegions
-        .filter(item => value.includes(item.id))
+        .filter((item) => value.includes(item.id))
         .reduce((acc, region) => {
           acc[region.id] = region.name
           return acc
@@ -166,50 +155,43 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
+.region-panel {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+}
+
+.region-trigger {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  line-height: 30px;
+  font-size: 13px;
+
+  :deep(.el-icon) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 4px;
+  }
+}
+
 .el-checkbox {
   margin-bottom: 10px;
 }
 
-.region-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 12px 24px;
-  width: 100%;
-  min-width: 0;
-}
-
-.region-grid__item {
-  min-width: 0;
-}
-
-.region-checkbox {
+.el-checkbox-group {
   display: flex;
-  align-items: center;
-  width: 100%;
-  min-width: 0;
-  margin-right: 0;
-  margin-bottom: 0;
-}
+  flex-wrap: wrap;
 
-::v-deep .region-checkbox .el-checkbox__input {
-  flex: 0 0 auto;
-}
-
-::v-deep .region-checkbox .el-checkbox__label {
-  display: block;
-  width: 100%;
-  flex: 1 1 auto;
-  min-width: 0;
-  padding-left: 8px;
-  overflow: hidden;
-}
-
-.region-checkbox__text {
-  display: block;
-  min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  :deep(.el-col) {
+    .el-checkbox {
+      display: flex;
+      align-items: center;
+      width: 250px;
+      height: 25px;
+    }
+  }
 }
 </style>

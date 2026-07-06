@@ -1,8 +1,5 @@
 <template>
-  <TabPage
-    :active-menu.sync="config.activeMenu"
-    :submenu="config.submenu"
-  />
+  <TabPage v-model:active-menu="config.activeMenu" :submenu="config.submenu" />
 </template>
 
 <script>
@@ -35,7 +32,8 @@ export default {
             title: this.$t('ExecutionHistory'),
             name: 'AccountDiscoverTaskExecutionList',
             hidden: !this.$hasPerm('accounts.view_gatheraccountsexecution'),
-            component: () => import('@/views/accounts/AccountDiscover/AccountDiscoverExecutionList.vue')
+            component: () =>
+              import('@/views/accounts/AccountDiscover/AccountDiscoverExecutionList.vue')
           }
         ]
       }

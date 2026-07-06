@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { getActionMeta } from '@/api/common'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { IBox } from '@/components'
 import { encryptPassword } from '@/utils/session-encrypt'
@@ -63,7 +64,7 @@ export default {
   methods: {
     async getUrlMeta() {
       const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
-      this.remoteMeta = data.actions['PATCH'] || {}
+      this.remoteMeta = getActionMeta(data, 'PATCH')
     },
     async setFormConfig() {
       const fields = []
@@ -86,7 +87,7 @@ export default {
       this.iFieldsMeta = fieldsMeta
     },
     cleanFormValue(value) {
-      this.fieldsExclude.forEach(name => {
+      this.fieldsExclude.forEach((name) => {
         const nameArray = name.split('.')
         if (nameArray.length === 2) {
           delete value[nameArray[0]][nameArray[1]]
@@ -125,6 +126,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

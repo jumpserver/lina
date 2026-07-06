@@ -1,9 +1,13 @@
 <template>
   <IBox>
     <GenericCreateUpdateForm v-bind="$data" />
-    <ImportDialog v-if="dialogLdapUserImport" :category="category" :visible.sync="dialogLdapUserImport" />
-    <TestLoginDialog :visible.sync="dialogTest" :category="category" />
-    <SyncSettingDialog :visible.sync="dialogSyncSetting" />
+    <ImportDialog
+      v-if="dialogLdapUserImport"
+      v-model:visible="dialogLdapUserImport"
+      :category="category"
+    />
+    <TestLoginDialog v-model:visible="dialogTest" :category="category" />
+    <SyncSettingDialog v-model:visible="dialogSyncSetting" />
   </IBox>
 </template>
 <script>
@@ -14,7 +18,6 @@ import SyncSettingDialog from './SyncSettingDialog.vue'
 import { IBox } from '@/components'
 import rules, { JsonRequired } from '@/components/Form/DataForm/rules'
 import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
-import { createWsUrl } from '@/utils/common/index'
 
 export default {
   name: 'Ldap',
@@ -37,39 +40,32 @@ export default {
       fields: [
         [
           this.$t('Basic'),
-          [
-            'AUTH_LDAP', 'AUTH_LDAP_SERVER_URI',
-            'AUTH_LDAP_BIND_DN', 'AUTH_LDAP_BIND_PASSWORD'
-          ]
+          ['AUTH_LDAP', 'AUTH_LDAP_SERVER_URI', 'AUTH_LDAP_BIND_DN', 'AUTH_LDAP_BIND_PASSWORD']
         ],
         [
           this.$t('Search'),
-          [
-            'AUTH_LDAP_SEARCH_OU', 'AUTH_LDAP_SEARCH_FILTER',
-            'AUTH_LDAP_USER_ATTR_MAP'
-          ]
+          ['AUTH_LDAP_SEARCH_OU', 'AUTH_LDAP_SEARCH_FILTER', 'AUTH_LDAP_USER_ATTR_MAP']
         ],
         [
           this.$t('Other'),
           [
-            'AUTH_LDAP_STRICT_SYNC', 'AUTH_LDAP_CONNECT_TIMEOUT', 'AUTH_LDAP_SEARCH_PAGED_SIZE',
-            'AUTH_LDAP_CACHE_TIMEOUT', 'AUTH_LDAP_ALWAYS_UPDATE_USER'
+            'AUTH_LDAP_STRICT_SYNC',
+            'AUTH_LDAP_CONNECT_TIMEOUT',
+            'AUTH_LDAP_SEARCH_PAGED_SIZE',
+            'AUTH_LDAP_CACHE_TIMEOUT',
+            'AUTH_LDAP_ALWAYS_UPDATE_USER'
           ]
         ]
       ],
       fieldsMeta: {
         AUTH_LDAP_BIND_DN: {
-          rules: [
-            rules.Required
-          ]
+          rules: [rules.Required]
         },
         AUTH_LDAP_BIND_PASSWORD: {
           component: UpdateToken
         },
         AUTH_LDAP_SEARCH_OU: {
-          rules: [
-            rules.Required
-          ]
+          rules: [rules.Required]
         },
         AUTH_LDAP_USER_ATTR_MAP: {
           component: JsonEditor,
@@ -81,7 +77,7 @@ export default {
         {
           title: this.$t('LdapConnectTest'),
           loading: false,
-          callback: function(value, form, btn) {
+          callback: function (value, form, btn) {
             if (value['AUTH_LDAP_BIND_PASSWORD'] === undefined) {
               value['AUTH_LDAP_BIND_PASSWORD'] = ''
             }
@@ -103,19 +99,19 @@ export default {
         },
         {
           title: this.$t('LdapLoginTest'),
-          callback: function(value, form) {
+          callback: function (value, form) {
             this.dialogTest = true
           }.bind(this)
         },
         {
           title: this.$t('LdapBulkImport'),
-          callback: function(value, form) {
+          callback: function (value, form) {
             this.dialogLdapUserImport = true
           }.bind(this)
         },
         {
           title: this.$t('SyncSetting'),
-          callback: function(value, form) {
+          callback: function (value, form) {
             this.dialogSyncSetting = true
           }.bind(this)
         }
@@ -134,15 +130,18 @@ export default {
   },
   methods: {
     enableWS() {
-      this.ws = new WebSocket(createWsUrl('/ws/ldap/'))
+      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
+      const port = document.location.port ? ':' + document.location.port : ''
+      const url = '/ws/ldap/'
+      const wsURL = scheme + '://' + document.location.hostname + port + url
+      this.ws = new WebSocket(wsURL)
     }
   }
 }
 </script>
 
 <style scoped>
-.listTable ::v-deep .table-action-right-side {
+.listTable :deep(.table-action-right-side) {
   padding-top: 0 !important;
 }
-
 </style>

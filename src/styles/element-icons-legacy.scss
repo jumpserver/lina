@@ -1,0 +1,9 @@
+// Element UI 旧图标的间距修饰类（迁移到 Element Plus 后仍被少量模板使用）
+// 字体字形（@font-face + ::before）已随图标组件化迁移移除
+.el-icon--right {
+  margin-left: 5px;
+}
+
+.el-icon--left {
+  margin-right: 5px;
+}

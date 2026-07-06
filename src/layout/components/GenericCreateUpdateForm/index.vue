@@ -1,6 +1,7 @@
 <template>
   <div v-loading="loading">
     <AutoDataForm
+      v-bind="$attrs"
       v-if="!loading"
       ref="form"
       :form="form"
@@ -9,17 +10,17 @@
       :is-submitting="isSubmitting"
       :method="method"
       :url="iUrl"
-      v-bind="$attrs"
-      @afterRemoteMeta="handleAfterRemoteMeta"
+      @after-remote-meta="handleAfterRemoteMeta"
       @submit="handleSubmit"
-      v-on="$listeners"
     />
   </div>
 </template>
 <script>
+import { h } from 'vue'
+import { ElLink } from 'element-plus'
 import AutoDataForm from '@/components/Form/AutoDataForm'
 import { getUpdateObjURL } from '@/utils/common/index'
-import { encryptPassword } from '@/utils/session-encrypt'
+import { encryptPassword } from '@/utils/secure'
 import deepmerge from 'deepmerge'
 
 export default {
@@ -45,12 +46,12 @@ export default {
     },
     afterGetFormValue: {
       type: Function,
-      default: value => value
+      default: (value) => value
     },
     // 提交前，清理form的值
     cleanFormValue: {
       type: Function,
-      default: value => value
+      default: (value) => value
     },
     // 获取 meta
     afterGetRemoteMeta: {
@@ -70,50 +71,53 @@ export default {
     performSubmit: {
       type: Function,
       default(validValues) {
-        return this.$axios[this.method](this.iUrl, validValues, this.getFieldErrorConfig())
+        return this.$axios[this.method](this.iUrl, validValues)
       }
     },
     // 创建成功的msg
     createSuccessMsg: {
       type: String,
-      default: function() {
-        return this.$t('CreateSuccessMsg')
+      default: function () {
+        return 'CreateSuccessMsg'
       }
     },
     // 保存成功，继续添加的msg
     saveSuccessContinueMsg: {
       type: String,
-      default: function() {
-        return this.$t('SaveSuccessContinueMsg')
+      default: function () {
+        return 'SaveSuccessContinueMsg'
       }
     },
     // 更新成功的msg
     updateSuccessMsg: {
       type: String,
-      default: function() {
-        return this.$t('UpdateSuccessMsg')
+      default: function () {
+        return 'UpdateSuccessMsg'
       }
     },
     // 创建成功的跳转路由
     createSuccessNextRoute: {
       type: Object,
-      default: function() {
-        const routeName = this.$route.name?.replace('Create', 'List')
+      default: function () {
+        // const routeName = this.$route.name?.replace('Create', 'List')
+        const routeName = 'GroupCreate'
         return { name: routeName }
       }
     },
     // 更新成功的跳转路由
     updateSuccessNextRoute: {
       type: Object,
-      default: function() {
-        const routeName = this.$route.name?.replace('Update', 'List')
+      default: function () {
+        // const routeName = this.$route.name?.replace('Update', 'List')
+        const routeName = 'GroupUpdate'
         return { name: routeName }
       }
     },
     objectDetailRoute: {
       type: Object,
-      default: function() {
-        const routeName = this.$route.name?.replace('Update', 'Detail').replace('Create', 'Detail')
+      default: function () {
+        // const routeName = this.$route.name?.replace('Update', 'Detail').replace('Create', 'Detail')
+        const routeName = 'GroupDetail'
         return { name: routeName }
       }
     },
@@ -121,13 +125,14 @@ export default {
     getNextRoute: {
       type: Function,
       default(res, method) {
-        return method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
+        return { name: 'GroupList' }
+        // return method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
       }
     },
     cloneNameSuffix: {
       type: [String, Number],
-      default: function() {
-        return this.$t('Duplicate').toLowerCase()
+      default: function () {
+        return 'Duplicate'.toLowerCase()
       }
     },
     // 获取提交的方法
@@ -138,7 +143,7 @@ export default {
     // 获取创建和更新的url function
     getUrl: {
       type: Function,
-      default: function() {
+      default: function () {
         const objectId = this.getUpdateId()
         let url = this.url
         if (objectId) {
@@ -172,7 +177,6 @@ export default {
         if (res.name) {
           msgLinkName = res.name
         }
-        const h = this.$createElement
         const detailRoute = this.objectDetailRoute
         detailRoute.params = { id: res.id }
         if (this.hasDetailInMsg) {
@@ -180,14 +184,12 @@ export default {
           this.$message({
             message: h('p', null, [
               h(
-                'el-link',
+                ElLink,
                 {
-                  on: {
-                    click: () => this.$router.push(detailRoute)
-                  },
+                  onClick: () => this.$router.push(detailRoute),
                   style: { 'vertical-align': 'top', 'margin-right': '5px' }
                 },
-                msgLinkName
+                () => msgLinkName
               ),
               h('span', {}, msg)
             ]),
@@ -347,16 +349,10 @@ export default {
     isUpdateMethod() {
       return ['put', 'patch'].indexOf(this.method.toLowerCase()) > -1
     },
-    getFieldErrorConfig() {
-      const fields = this.$refs.form?.getFieldNames?.() || []
-      return {
-        fieldErrorFields: fields
-      }
-    },
     encryptFields(values) {
       // 批量提交，clean 后可能是个数组
       if (values instanceof Array) {
-        return values.map(item => this.encryptFields(item))
+        return values.map((item) => this.encryptFields(item))
       }
       values = { ...values }
       for (const field of this.encryptedFields) {
@@ -384,8 +380,8 @@ export default {
     defaultOnSubmit(validValues, formName, addContinue) {
       this.isSubmitting = true
       this.performSubmit(validValues)
-        .then(res => this.onPerformSuccess.bind(this)(res, this.method, this, addContinue))
-        .catch(error => this.onPerformError(error, this.method, this))
+        .then((res) => this.onPerformSuccess.bind(this)(res, this.method, this, addContinue))
+        .catch((error) => this.onPerformError(error, this.method, this))
         .finally(() => {
           setTimeout(() => {
             this.isSubmitting = false

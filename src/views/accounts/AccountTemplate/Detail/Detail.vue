@@ -1,8 +1,6 @@
 <template>
   <TwoCol>
-    <template>
-      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
-    </template>
+    <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     <template #right>
       <QuickActions :actions="quickActions" type="primary" />
     </template>
@@ -10,10 +8,10 @@
 </template>
 
 <script>
+import { createVNode as createVNodeCompat, createTextVNode as createTextVNodeCompat } from 'vue'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import { QuickActions } from '@/components'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-
 export default {
   name: 'Detail',
   components: {
@@ -24,8 +22,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -39,15 +36,17 @@ export default {
             disabled: !this.$hasPerm('accounts.change_accounttemplate')
           },
           callbacks: {
-            change: function(val) {
-              this.$axios.patch(
-                `/api/v1/accounts/account-templates/${this.object.id}/`,
-                { privileged: val }
-              ).then(res => {
-                this.$message.success(this.$tc('UpdateSuccessMsg'))
-              }).catch(err => {
-                this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
-              })
+            change: function (val) {
+              this.$axios
+                .patch(`/api/v1/accounts/account-templates/${this.object.id}/`, {
+                  privileged: val
+                })
+                .then((res) => {
+                  this.$message.success(this.$tc('UpdateSuccessMsg'))
+                })
+                .catch((err) => {
+                  this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
+                })
             }.bind(this)
           }
         }
@@ -55,17 +54,30 @@ export default {
       url: `/api/v1/accounts/account-templates/${this.object.id}/`,
       excludes: ['privileged', 'secret', 'passphrase', 'spec_info'],
       detailFields: [
-        'id', 'name', 'username', 'secret_type', 'auto_push',
-        'secret_strategy', 'created_by', 'comment',
+        'id',
+        'name',
+        'username',
+        'secret_type',
+        'auto_push',
+        'secret_strategy',
+        'created_by',
+        'comment',
         {
           key: this.$t('SuFrom'),
           formatter: () => {
             const su_from = this.object.su_from
-            if (!su_from) return <span>-</span>
-            return <span>{su_from.name}({su_from.username})</span>
+            if (!su_from) return createVNodeCompat('span', null, [createTextVNodeCompat('-')])
+            return createVNodeCompat('span', null, [
+              su_from.name,
+              createTextVNodeCompat('('),
+              su_from.username,
+              createTextVNodeCompat(')')
+            ])
           }
         },
-        'is_active', 'date_created', 'date_updated'
+        'is_active',
+        'date_created',
+        'date_updated'
       ]
     }
   },
@@ -73,6 +85,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

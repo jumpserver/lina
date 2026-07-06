@@ -7,13 +7,15 @@ Lina 是 JumpServer 的前端 UI 项目, 主要使用 [Vue](https://cn.vuejs.org
 
 ```
 0. 前置条件: 部署运行好 JumpServer API 服务器
+   Node.js 24.x, yarn 4.x
 
 1. 安装依赖
+$ corepack enable
 $ yarn install
 
-2. 修改 .env.development VUE_APP_CORE_HOST
+2. 修改 `.env.development` 中的 `VITE_CORE_HOST`
 # ...
-VUE_APP_CORE_HOST = 'JUMPSERVER_APIHOST'
+VITE_CORE_HOST = 'JUMPSERVER_APIHOST'
 
 3. 运行
 $ yarn serve

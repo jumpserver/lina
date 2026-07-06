@@ -41,16 +41,14 @@ export default {
           resource: 'replaystorage'
         },
         columnsExclude: ['meta'],
-        columns: [
-          'id', 'name', 'type', 'is_default', 'comment', 'actions'
-        ],
+        columns: ['id', 'name', 'type', 'is_default', 'comment', 'actions'],
         columnsShow: {
           default: ['name', 'type', 'comment', 'is_default', 'actions'],
           min: ['name', 'type', 'actions']
         },
         columnsMeta: {
           name: {
-            formatter: function(row) {
+            formatter: function (row) {
               return row.name
             }
           },
@@ -66,13 +64,19 @@ export default {
           },
           actions: {
             formatterArgs: {
-              canUpdate: function({ row }) {
+              canUpdate: function ({ row }) {
                 return (
-                  row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.change_replaystorage')
+                  row.name !== 'default' &&
+                  row.name !== 'null' &&
+                  vm.$hasPerm('terminal.change_replaystorage')
                 )
               },
-              canDelete: function({ row }) {
-                return (row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.delete_replaystorage'))
+              canDelete: function ({ row }) {
+                return (
+                  row.name !== 'default' &&
+                  row.name !== 'null' &&
+                  vm.$hasPerm('terminal.delete_replaystorage')
+                )
               },
               onUpdate: ({ row }) => {
                 this.$refs.ListTable.onUpdate({ row, query: { type: row.type.value } })
@@ -84,8 +88,8 @@ export default {
                   title: this.$t('Test'),
                   can: vm.$hasPerm('terminal.view_replaystorage'),
                   type: 'primary',
-                  callback: function({ row, col, cellValue, reload }) {
-                    TestReplayStorage(row.id).then(data => {
+                  callback: function ({ row, col, cellValue, reload }) {
+                    TestReplayStorage(row.id).then((data) => {
                       if (!data['is_valid']) {
                         this.$message.error(data.msg)
                       } else {
@@ -97,15 +101,19 @@ export default {
                 {
                   name: 'set_to_default',
                   title: this.$t('SetToDefault'),
-                  can: (value) => this.$hasPerm('terminal.change_replaystorage') && value.row.type.value !== 'sftp',
+                  can: (value) =>
+                    this.$hasPerm('terminal.change_replaystorage') &&
+                    value.row.type.value !== 'sftp',
                   type: 'primary',
-                  callback: function({ row, col, cellValue, reload }) {
-                    SetToDefaultReplayStorage(row.id).then(data => {
-                      vm.$refs.ListTable.reloadTable()
-                      this.$message.success(this.$tc('SetSuccess'))
-                    }).catch(() => {
-                      this.$message.error(this.$tc('SetFailed'))
-                    })
+                  callback: function ({ row, col, cellValue, reload }) {
+                    SetToDefaultReplayStorage(row.id)
+                      .then((data) => {
+                        vm.$refs.ListTable.reloadTable()
+                        this.$message.success(this.$tc('SetSuccess'))
+                      })
+                      .catch(() => {
+                        this.$message.error(this.$tc('SetFailed'))
+                      })
                   }
                 }
               ]
@@ -133,6 +141,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

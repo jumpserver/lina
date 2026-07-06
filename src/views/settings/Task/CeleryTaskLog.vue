@@ -6,11 +6,10 @@
 import 'xterm/css/xterm.css'
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
-import { createWsUrl } from '@/utils/common/index'
+import { WS_PORT } from '@/utils/env'
 export default {
   name: 'CeleryTaskLog',
-  props: {
-  },
+  props: {},
   data() {
     return {
       xterm: null,
@@ -18,15 +17,14 @@ export default {
       taskId: this.$route.params.id,
       type: this.$route.params.type || this.$route.query.type || 'celery',
       url: '/ws/ops/tasks/log/',
-      failOverPort: process.env.VUE_APP_WS_PORT
+      failOverPort: WS_PORT
     }
   },
-  computed: {
-  },
+  computed: {},
   mounted() {
     this.initTermAndWs()
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.xterm.dispose()
   },
   methods: {
@@ -38,28 +36,32 @@ export default {
     },
     initTermAndWs() {
       const terminalContainer = this.$refs.terminal
-      this.xterm = new Terminal(
-        {
-          fontFamily: 'monaco, Consolas, "Lucida Console", monospace',
-          lineHeight: 1.2,
-          fontSize: 13,
-          rightClickSelectsWord: true,
-          theme: {
-            background: '#1f1b1b'
-          }
-        })
+      this.xterm = new Terminal({
+        fontFamily: 'monaco, Consolas, "Lucida Console", monospace',
+        lineHeight: 1.2,
+        fontSize: 13,
+        rightClickSelectsWord: true,
+        theme: {
+          background: '#1f1b1b'
+        }
+      })
       const fitAddon = new FitAddon()
       this.xterm.loadAddon(fitAddon)
       this.xterm.open(terminalContainer)
       fitAddon.fit()
-      window.onresize = function() {
+      window.onresize = function () {
         fitAddon.fit()
       }
       this.xterm.scrollToBottom()
       this.enableWS()
     },
     enableWS() {
-      const wsURL = createWsUrl('/ws/ops/tasks/log/')
+      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
+      const port = document.location.port ? ':' + document.location.port : ''
+      const url = '/ws/ops/tasks/log/'
+      const wsURL = scheme + '://' + document.location.hostname + port + url
+      // const failOverPort = '8070'
+      // const failOverWsURL = scheme + '://' + document.location.hostname + ':' + failOverPort + url
       this.ws = new WebSocket(wsURL)
       this.ws.onerror = (e) => {
         this.xterm.write(this.wrapperError('Connect websocket server error'))
@@ -72,7 +74,7 @@ export default {
         this.xterm.write(data.message)
       }
       this.ws.onopen = (e) => {
-        const msg = { 'task': this.taskId, 'type': this.type }
+        const msg = { task: this.taskId, type: this.type }
         this.ws.send(JSON.stringify(msg))
       }
     },
@@ -88,7 +90,7 @@ export default {
   height: 100%;
   width: 100%;
   background-color: #1f1b1b;
-  padding: 10px
+  padding: 10px;
 }
 #terminal.xterm {
   height: 100vh;

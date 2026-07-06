@@ -3,7 +3,7 @@
     <div v-if="isTitle" class="head">
       <Title :config="config" />
     </div>
-    <LineChart v-if="loading" v-bind="lineChartConfig" />
+    <LineChart v-bind="lineChartConfig" v-if="loading" />
   </div>
 </template>
 
@@ -20,10 +20,6 @@ export default {
     days: {
       type: [Number, String],
       default: '7'
-    },
-    metrics: {
-      type: Object,
-      default: () => ({})
     },
     isTitle: {
       type: Boolean,
@@ -51,49 +47,31 @@ export default {
     }
   },
   watch: {
-    metrics: {
-      handler() {
-        if (this.metrics?.dates_metrics_date?.length) {
-          this.applyMetrics(this.metrics)
-        }
-      },
-      deep: true
-    },
     days() {
-      if (this.metrics?.dates_metrics_date?.length) {
-        return
-      }
       this.getMetricData()
     }
   },
   mounted() {
     try {
-      if (this.metrics?.dates_metrics_date?.length) {
-        this.applyMetrics(this.metrics)
-      } else {
-        this.getMetricData()
-      }
+      this.getMetricData()
     } finally {
       this.loading = true
     }
   },
   methods: {
-    applyMetrics(data) {
-      const success = data?.dates_metrics_total_count_success || []
-      const failed = data?.dates_metrics_total_count_failed || []
-      this.lineChartConfig.datesMetrics = data?.dates_metrics_date || []
-      if (success.length > 0) {
-        this.lineChartConfig.primaryData = success
-      }
-      if (failed.length > 0) {
-        this.lineChartConfig.secondaryData = failed
-      }
-    },
     async getMetricData() {
       setTimeout(() => {
         const url = `/api/v1/accounts/change-secret-dashboard/?daily_success_and_failure_metrics=1&days=${this.days}`
-        this.$axios.get(url).then(data => {
-          this.applyMetrics(data)
+        this.$axios.get(url).then((data) => {
+          const success = data?.dates_metrics_total_count_success
+          const failed = data?.dates_metrics_total_count_failed
+          this.lineChartConfig.datesMetrics = data?.dates_metrics_date
+          if (success.length > 0) {
+            this.lineChartConfig.primaryData = success
+          }
+          if (failed.length > 0) {
+            this.lineChartConfig.secondaryData = failed
+          }
         })
       }, 500)
     }

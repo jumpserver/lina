@@ -1,17 +1,18 @@
 <template>
   <Dialog
+    class="column-setting-dialog"
     v-if="showColumnSettingPopover"
+    v-model:visible="showColumnSettingPopover"
     :cancel-title="$tc('RestoreDefault')"
     :destroy-on-close="true"
     :title="$tc('ListPreference')"
-    :visible.sync="showColumnSettingPopover"
     top="10%"
-    width="50%"
+    width="720px"
     @cancel="restoreDefault()"
     @confirm="handleColumnConfirm()"
   >
     <el-col style="margin-bottom: 5px">
-      <label>{{ this.$t('TableColSetting') }}</label>
+      <label>{{ $t('TableColSetting') }}</label>
     </el-col>
     <el-checkbox
       v-model="checkAll"
@@ -27,15 +28,10 @@
       @change="handleCheckedChange"
     >
       <el-row>
-        <el-col
-          v-for="item in totalColumnsList"
-          :key="item.prop"
-          :span="8"
-          class="col-item"
-        >
+        <el-col v-for="item in totalColumnsList" :key="item.prop" :span="8" class="col-item">
           <el-checkbox
-            :disabled="item.prop==='actions' || minColumns.indexOf(item.prop)!==-1"
-            :label="item.prop"
+            :disabled="item.prop === 'actions' || minColumns.indexOf(item.prop) !== -1"
+            :value="item.prop"
             :title="item.label"
           >
             {{ item.label }}
@@ -91,7 +87,7 @@ export default {
       }
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.$eventBus.$off('showColumnSettingPopover', this.showColumnSettingPopoverHandler)
   },
   mounted() {
@@ -124,7 +120,7 @@ export default {
     handleCheckAllChange(value) {
       if (value) {
         this.iCurrentColumns = this.totalColumnsList.reduce((prev, item) => {
-          return [...prev, (item.prop)]
+          return [...prev, item.prop]
         }, [])
         this.isIndeterminate = false
       } else {
@@ -141,25 +137,31 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss">
+.el-dialog.column-setting-dialog {
+  .el-dialog__body {
+    padding-top: 18px !important;
+  }
+}
+
 .column-setting {
   margin-left: 10px;
 
   .col-item {
     margin-top: 5px;
 
-    ::v-deep .el-checkbox {
+    .el-checkbox {
       width: 100%;
 
       .el-checkbox__input {
-        line-height: 16px
+        line-height: 16px;
       }
 
       .el-checkbox__label {
+        width: calc(100% - 20px);
+        overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        overflow: hidden;
-        width: calc(100% - 20px); // 20px is the width of the checkbox
         line-height: 16px;
         vertical-align: text-top;
       }

@@ -1,6 +1,6 @@
 <template>
-  <div style="padding: 0 20px;" @click="toggleClick">
-    <svg-icon :class="{'is-active':isActive}" class="hamburger" icon-class="arrow-to-left" />
+  <div style="padding: 0 20px" @click="toggleClick">
+    <svg-icon :class="{ 'is-active': isActive }" class="hamburger" icon-class="arrow-to-left" />
   </div>
 </template>
 
@@ -22,7 +22,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/variables";
+@use '@/styles/variables' as *;
 
 .hamburger {
   display: inline-block;

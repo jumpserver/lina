@@ -1,9 +1,8 @@
 <template>
   <GenericDetailPage
-    :active-menu.sync="config.activeMenu"
-    :object.sync="CommandFilterACL"
     v-bind="config"
-    v-on="$listeners"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="CommandFilterACL"
   >
     <keep-alive>
       <component :is="config.activeMenu" :object="CommandFilterACL" object-app-model="acls.CommandFilterACL" />
@@ -52,6 +51,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

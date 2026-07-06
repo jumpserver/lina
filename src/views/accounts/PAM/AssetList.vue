@@ -1,9 +1,5 @@
 <template>
-  <BaseList
-    :header-actions="headerActions"
-    :table-config="tableConfig"
-    v-bind="config"
-  />
+  <BaseList v-bind="config" :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -35,7 +31,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .ibox {
+:deep(.ibox) {
   height: 100%;
 
   .el-card__body {
@@ -43,7 +39,7 @@ export default {
   }
 }
 
-::v-deep .page, .page.tab-page {
+:deep(.page, .page.tab-page) {
   .page-heading .el-row--flex {
     flex-wrap: wrap;
 

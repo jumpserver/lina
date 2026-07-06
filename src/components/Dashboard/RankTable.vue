@@ -4,15 +4,11 @@
       <Title :config="config" />
       <SwitchDate @change="onChange" />
     </div>
-    <el-table
-      :data="tableData"
-      class="table"
-      style="width: 100%"
-    >
+    <el-table :data="tableData" class="table" style="width: 100%">
       <el-table-column :label="$tc('Ranking')" width="100">
         <template #header>
           <el-tooltip :content="$t('Ranking')" placement="top" :open-delay="500">
-            <span style="cursor: pointer;">{{ $t('Ranking') }}</span>
+            <span style="cursor: pointer">{{ $t('Ranking') }}</span>
           </el-tooltip>
         </template>
         <template #default="scope">
@@ -28,7 +24,7 @@
       >
         <template #header>
           <el-tooltip :content="i.label" placement="top" :open-delay="500">
-            <span style="cursor: pointer;">{{ i.label }}</span>
+            <span style="cursor: pointer">{{ i.label }}</span>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -49,8 +45,7 @@ export default {
   props: {
     config: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     url: {
       type: String,
@@ -82,7 +77,7 @@ export default {
       }
     },
     getList() {
-      this.$axios.get(this.tableUrl).then(res => {
+      this.$axios.get(this.tableUrl).then((res) => {
         this.tableData = this.config.data ? res?.[this.config.data] : res
       })
     },
@@ -108,16 +103,15 @@ export default {
   }
 }
 
-::v-deep .el-table td, .el-table th {
+:deep(.el-table td, .el-table th) {
   padding: 5px 0;
 }
 
-::v-deep .el-table th, .el-table tr {
-  background-color: #F5F6F7 !important;
-
+:deep(.el-table th, .el-table tr) {
+  background-color: #f5f6f7 !important;
 }
 
-::v-deep .el-table .cell {
+:deep(.el-table .cell) {
   white-space: nowrap;
 }
 </style>

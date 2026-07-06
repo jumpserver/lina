@@ -1,9 +1,5 @@
 <template>
-  <BaseAuth
-    :config="settings"
-    enable-field="AUTH_RADIUS"
-    v-on="$listeners"
-  />
+  <BaseAuth :config="settings" enable-field="AUTH_RADIUS" />
 </template>
 
 <script>
@@ -37,12 +33,9 @@ export default {
     }
   },
   methods: {
-    onConfirm() {
-    }
+    onConfirm() {}
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

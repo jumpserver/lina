@@ -61,24 +61,24 @@ export default {
   },
   methods: {
     async getValue() {
-      this.attr = this.formatterArgs.attrs.find(attr => attr.name === this.row.name)
+      this.attr = this.formatterArgs.attrs.find((attr) => attr.name === this.row.name)
       const match = this.row.match
       this.$log.debug('ValueFormatter: ', this.attr, this.row.name)
       if (this.attr.type === 'm2m') {
         const url = setUrlParam(this.attr.el.url, 'ids', this.cellValue.join(','))
-        const data = await this.$axios.get(url) || []
+        const data = (await this.$axios.get(url)) || []
         if (data.length > 0) {
           if (this.attr.name === 'labels') {
-            this.value = data.map(item => `${item.name}:${item.value}`).join(', ')
+            this.value = data.map((item) => `${item.name}:${item.value}`).join(', ')
           } else {
             const displayField = this.attr.el.displayField || 'name'
-            this.value = data.map(item => item[displayField]).join(', ')
+            this.value = data.map((item) => item[displayField]).join(', ')
           }
         }
       } else if (this.attr.type === 'select') {
         const options = this.attr.el.options || []
-        const items = options.filter(item => this.cellValue.includes(item.value))
-        this.value = items.map(item => item.label).join(', ')
+        const items = options.filter((item) => this.cellValue.includes(item.value))
+        this.value = items.map((item) => item.label).join(', ')
       } else if (['in', 'ip_in'].includes(match)) {
         this.value = this.cellValue.join(', ')
       } else {
@@ -89,6 +89,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

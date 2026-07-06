@@ -1,4 +1,3 @@
-import VueCookie from 'vue-cookie'
 import Cookies from 'js-cookie'
 
 export function getBasePath() {
@@ -131,23 +130,6 @@ function normalizeCookieOptions(options) {
   return nextOptions
 }
 
-export const vueCookie = VueCookie
-
-if (!vueCookie.__BASE_PATH_SCOPED__) {
-  const originalSet = vueCookie.set.bind(vueCookie)
-  const originalDelete = vueCookie.delete.bind(vueCookie)
-
-  vueCookie.set = (name, value, options) => {
-    return originalSet(name, value, normalizeCookieOptions(options))
-  }
-
-  vueCookie.delete = (name, options) => {
-    return originalDelete(name, normalizeCookieOptions(options))
-  }
-
-  vueCookie.__BASE_PATH_SCOPED__ = true
-}
-
 export const jsCookie = Cookies
 
 if (!jsCookie.__BASE_PATH_SCOPED__) {
@@ -163,4 +145,25 @@ if (!jsCookie.__BASE_PATH_SCOPED__) {
   }
 
   jsCookie.__BASE_PATH_SCOPED__ = true
+}
+
+export const vueCookie = {
+  get(name) {
+    return jsCookie.get(name)
+  },
+  getCookie(name) {
+    return jsCookie.get(name)
+  },
+  set(name, value, options) {
+    return jsCookie.set(name, value, normalizeCookieOptions(options))
+  },
+  setCookie(name, value, options) {
+    return jsCookie.set(name, value, normalizeCookieOptions(options))
+  },
+  delete(name, options) {
+    return jsCookie.remove(name, normalizeCookieOptions(options))
+  },
+  removeCookie(name, options) {
+    return jsCookie.remove(name, normalizeCookieOptions(options))
+  }
 }

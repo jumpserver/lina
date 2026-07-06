@@ -1,12 +1,22 @@
 <template>
-  <HomeCard :table-config="tableConfig" v-bind="cardConfig" />
+  <HomeCard v-bind="cardConfig" :table-config="tableConfig" />
 </template>
 
 <script>
-import HomeCard from './HomeCard.vue'
 import { getPreference } from '@/api/settings'
-import { addBasePath, openNewWindow } from '@/utils/common/index'
-
+import { openNewWindow } from '@/utils/common/index'
+import {
+  createVNode as createVNodeCompat,
+  isVNode as isVNodeCompat,
+  resolveComponent as resolveComponentCompat
+} from 'vue'
+import HomeCard from './HomeCard.vue'
+function _isSlot(s) {
+  return (
+    typeof s === 'function' ||
+    (Object.prototype.toString.call(s) === '[object Object]' && !isVNodeCompat(s))
+  )
+}
 export default {
   name: 'Announcement',
   components: {
@@ -21,19 +31,32 @@ export default {
       },
       tableConfig: {
         url: '/api/v1/terminal/my-sessions/?limit=5',
-        columns: [
-          'id', 'asset', 'account', 'remote_addr', 'protocol'
-        ],
+        columns: ['id', 'asset', 'account', 'remote_addr', 'protocol'],
         columnsMeta: {
           id: {
             prop: 'id',
             align: 'center',
             width: '50px',
-            formatter: function(row, column, cellValue, index) {
+            formatter: function (row, column, cellValue, index) {
               const label = index + 1
-              const route = { to: { name: 'SessionDetail', params: { id: row.id } } }
+              const to = {
+                name: 'SessionDetail',
+                params: {
+                  id: row.id
+                }
+              }
               if (vm.$hasPerm('terminal.view_session')) {
-                return <router-link {...{ attrs: route }} >{label}</router-link>
+                return createVNodeCompat(
+                  resolveComponentCompat('router-link'),
+                  {
+                    to
+                  },
+                  _isSlot(label)
+                    ? label
+                    : {
+                        default: () => [label]
+                      }
+                )
               } else {
                 return label
               }
@@ -77,9 +100,14 @@ export default {
                   can: ({ row }) => row.is_active,
                   callback: ({ row }) => {
                     if (this.preference?.basic?.connect_default_open_method === 'new') {
-                      openNewWindow(`/luna/connect?login_to=${row.asset_id}&login_account=${row.account_id}`)
+                      openNewWindow(
+                        `/luna/connect?login_to=${row.asset_id}&login_account=${row.account_id}`
+                      )
                     } else {
-                      window.open(addBasePath(`/luna/?login_to=${row.asset_id}&login_account=${row.account_id}`), '_blank')
+                      window.open(
+                        `/luna/?login_to=${row.asset_id}&login_account=${row.account_id}`,
+                        '_blank'
+                      )
                     }
                   }
                 }
@@ -93,12 +121,11 @@ export default {
     }
   },
   mounted() {
-    getPreference().then(resp => {
+    getPreference().then((resp) => {
       this.preference = resp
     })
   }
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

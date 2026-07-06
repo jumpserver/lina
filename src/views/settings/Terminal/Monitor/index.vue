@@ -20,41 +20,42 @@ export default {
       loaded: false
     }
   },
-  computed: {
-  },
+  computed: {},
   mounted() {
     this.getMetricsData()
   },
   methods: {
     async getMetricsData() {
       const url = '/api/v1/terminal/components/metrics/'
-      this.$axios.get(url).then((data) => {
-        this.metricsData = data
-      }).finally(() => {
-        this.loaded = true
-      })
+      this.$axios
+        .get(url)
+        .then((data) => {
+          this.metricsData = data
+        })
+        .finally(() => {
+          this.loaded = true
+        })
     }
   }
 }
 </script>
 
-<style lang='less' scoped>
-.monitorCard{
+<style lang="scss" scoped>
+.monitorCard {
   //margin-bottom: 20px;
   padding: 20px 30px;
 }
-@media (min-width: 768px){
+@media (min-width: 768px) {
   .illo-desktop-header {
     position: relative;
     display: block !important;
     margin-bottom: -6%;
   }
 }
-img{
+img {
   vertical-align: middle;
   max-width: 100%;
   height: auto;
   border: 0;
 }
-
 </style>

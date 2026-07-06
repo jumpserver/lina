@@ -38,19 +38,16 @@ export default {
   },
   methods: {
     async init() {
-      const data = await this.$axios.get(
-        '/api/v1/accounts/pam-dashboard/',
-        {
-          params: {
-            total_accounts: 1,
-            total_week_add_accounts: 1,
-            total_privileged_accounts: 1,
-            total_secret_reset_accounts: 1,
-            total_connectivity_ok_accounts: 1,
-            total_valid_accounts: 1
-          }
+      const data = await this.$axios.get('/api/v1/accounts/pam-dashboard/', {
+        params: {
+          total_accounts: 1,
+          total_week_add_accounts: 1,
+          total_privileged_accounts: 1,
+          total_secret_reset_accounts: 1,
+          total_connectivity_ok_accounts: 1,
+          total_valid_accounts: 1
         }
-      )
+      })
 
       this.accountConfig.total = data.total_accounts
       this.accountConfig.weekAdd = data.total_week_add_accounts

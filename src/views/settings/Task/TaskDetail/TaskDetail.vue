@@ -6,7 +6,7 @@
   </el-row>
 </template>
 
-<script type="text/jsx">
+<script>
 import DetailCard from '@/components/Cards/DetailCard/index.vue'
 
 export default {
@@ -55,8 +55,8 @@ export default {
   methods: {}
 }
 </script>
-<style lang="less" scoped>
-.task-detail /deep/ .item-value span {
+<style lang="scss" scoped>
+.task-detail :deep(.item-value span) {
   white-space: normal !important;
 }
 </style>

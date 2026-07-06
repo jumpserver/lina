@@ -23,9 +23,13 @@ export default {
         [
           this.$t('Logging'),
           [
-            'LOGIN_LOG_KEEP_DAYS', 'TASK_LOG_KEEP_DAYS',
-            'OPERATE_LOG_KEEP_DAYS', 'PASSWORD_CHANGE_LOG_KEEP_DAYS', 'FTP_LOG_KEEP_DAYS',
-            'TERMINAL_SESSION_KEEP_DURATION', 'ACTIVITY_LOG_KEEP_DAYS'
+            'LOGIN_LOG_KEEP_DAYS',
+            'TASK_LOG_KEEP_DAYS',
+            'OPERATE_LOG_KEEP_DAYS',
+            'PASSWORD_CHANGE_LOG_KEEP_DAYS',
+            'FTP_LOG_KEEP_DAYS',
+            'TERMINAL_SESSION_KEEP_DURATION',
+            'ACTIVITY_LOG_KEEP_DAYS'
           ]
         ],
         [
@@ -53,6 +57,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -28,7 +28,8 @@ export default [
       },
       {
         path: 'create',
-        component: () => import('@/views/accounts/AccountDiscover/AccountDiscoverTaskCreateUpdate.vue'),
+        component: () =>
+          import('@/views/accounts/AccountDiscover/AccountDiscoverTaskCreateUpdate.vue'),
         name: 'AccountDiscoverTaskCreate',
         hidden: true,
         meta: {
@@ -50,7 +51,8 @@ export default [
       },
       {
         path: ':id/update',
-        component: () => import('@/views/accounts/AccountDiscover/AccountDiscoverTaskCreateUpdate.vue'),
+        component: () =>
+          import('@/views/accounts/AccountDiscover/AccountDiscoverTaskCreateUpdate.vue'),
         name: 'AccountDiscoverTaskUpdate',
         hidden: true,
         meta: {
@@ -62,7 +64,8 @@ export default [
       },
       {
         path: 'executions',
-        component: () => import('@/views/accounts/AccountDiscover/AccountDiscoverExecutionList.vue'),
+        component: () =>
+          import('@/views/accounts/AccountDiscover/AccountDiscoverExecutionList.vue'),
         name: 'AccountDiscoverTaskExecutionList',
         hidden: true,
         meta: {
@@ -167,7 +170,8 @@ export default [
           title: i18n.t('ExecutionDetail'),
           permissions: ['accounts.view_pushaccountexecution']
         }
-      }]
+      }
+    ]
   },
   {
     path: 'account-backup',
@@ -227,14 +231,16 @@ export default [
       },
       {
         path: 'executions',
-        component: () => import('@/views/accounts/AccountBackup/Executions/AccountBackupExecutionList.vue'),
+        component: () =>
+          import('@/views/accounts/AccountBackup/Executions/AccountBackupExecutionList.vue'),
         name: 'AccountBackupExecutionList',
         meta: { title: i18n.t('ExecutionDetail') },
         hidden: true
       },
       {
         path: 'executions/:id',
-        component: () => import('@/views/accounts/AccountBackup/Executions/ExecutionDetail/index.vue'),
+        component: () =>
+          import('@/views/accounts/AccountBackup/Executions/ExecutionDetail/index.vue'),
         name: 'AccountBackupExecutionDetail',
         meta: { title: i18n.t('ExecutionDetail') },
         hidden: true

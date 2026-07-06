@@ -17,15 +17,23 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
     return {
       url: `/api/v1/audits/login-logs/${this.object.id}`,
       detailFields: [
-        'id', 'username', 'city', 'ip', 'backend_display', 'reason_display', 'status', 'type', 'user_agent', 'datetime'
+        'id',
+        'username',
+        'city',
+        'ip',
+        'backend_display',
+        'reason_display',
+        'status',
+        'type',
+        'user_agent',
+        'datetime'
       ]
     }
   },
@@ -33,5 +41,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

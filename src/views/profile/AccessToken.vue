@@ -21,9 +21,7 @@ export default {
       tableConfig: {
         hasSelection: false,
         url: ajaxUrl,
-        columns: [
-          'token_preview', 'scope', 'is_valid', 'expires', 'updated', 'created', 'actions'
-        ],
+        columns: ['token_preview', 'scope', 'is_valid', 'expires', 'updated', 'created', 'actions'],
         columnsMeta: {
           actions: {
             prop: '',
@@ -37,14 +35,16 @@ export default {
                   title: this.$t('Revoke'),
                   can: ({ row }) => this.$hasPerm('oauth2_provider.delete_accesstoken'),
                   type: 'info',
-                  callback: function({ row }) {
-                    this.$axios.delete(`${ajaxUrl}${row.id}/revoke/`,
-                    ).then(res => {
-                      this.reloadTable()
-                      this.$message.success(this.$tc('UpdateSuccessMsg'))
-                    }).catch(error => {
-                      this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
-                    })
+                  callback: function ({ row }) {
+                    this.$axios
+                      .delete(`${ajaxUrl}${row.id}/revoke/`)
+                      .then((res) => {
+                        this.reloadTable()
+                        this.$message.success(this.$tc('UpdateSuccessMsg'))
+                      })
+                      .catch((error) => {
+                        this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
+                      })
                   }.bind(this)
                 }
               ]
@@ -73,5 +73,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

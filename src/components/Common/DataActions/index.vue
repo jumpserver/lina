@@ -1,11 +1,11 @@
 <template>
   <div :class="grouped ? 'el-button-group' : 'el-button-ungroup'" class="layout">
-    <template v-for="action in iActions">
+    <template v-for="action in iActions" :key="action.name">
       <el-dropdown
         v-if="action.dropdown"
         v-show="action.dropdown.length > 0"
-        :key="action.name"
-        :class="[action.name, { grouped: action.grouped, 'table-action-text': isTableActionText }]"
+        :class="[action.name, { grouped: action.grouped }]"
+        :popper-class="action.popperClass"
         :size="action.size"
         :split-button="!!action.split"
         :type="action.type"
@@ -16,76 +16,67 @@
         @command="handleDropdownCallback"
       >
         <span v-if="action.split" :style="{ cursor: action.disabled ? 'not-allowed' : 'pointer' }">
-          <Icon v-if="isEllipsisAction(action)" class="ellipsis-icon" icon="fa-ellipsis-v" />
-          <span v-else>{{ getActionTitle(action) }}</span>
+          {{ action.title }}
         </span>
         <el-button
+          v-bind="{ ...cleanButtonAction(action), icon: '' }"
           v-else
-          :class="[action.name, { 'table-action-text': isTableActionText }]"
+          :class="action.name"
           :size="size"
           class="more-action"
-          v-bind="{ ...cleanButtonAction(action), icon: '' }"
         >
-          <span class="pre-icon">
-            <Icon v-if="action.icon" :icon="action.icon" />
-          </span>
+          <Icon v-if="action.icon" :icon="action.icon" class="pre-icon" />
           <span v-if="action.title">
-            <Icon v-if="isEllipsisAction(action)" class="ellipsis-icon" icon="fa-ellipsis-v" />
-            <span v-else>{{ getActionTitle(action) }}</span>
-            <i class="el-icon-arrow-down el-icon--right" />
+            {{ action.title }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
           </span>
         </el-button>
-        <el-dropdown-menu slot="dropdown" style="overflow: auto; max-height: 60vh">
-          <template v-for="option in action.dropdown">
-            <div
-              v-if="option.group"
-              :key="'group:' + option.name"
-              class="dropdown-menu-title"
-              style="width: 130px"
-            >
-              {{ option.group }}
-            </div>
-            <el-tooltip
-              :key="option.name"
-              :content="option.tip"
-              :disabled="!option.tip"
-              :open-delay="500"
-              placement="top"
-            >
+
+        <template #dropdown>
+          <el-dropdown-menu style="overflow: auto; max-height: 60vh">
+            <template v-for="option in action.dropdown" :key="option.name">
+              <div v-if="option.group" class="dropdown-menu-title">
+                {{ option.group }}
+              </div>
               <el-dropdown-item
-                :key="option.name"
+                v-bind="{ ...option, icon: '' }"
                 :command="[option, action]"
                 :title="option.tip"
                 class="dropdown-item"
-                v-bind="{ ...option, icon: '' }"
               >
-                <span v-if="actionsHasIcon(action.dropdown)" class="pre-icon">
-                  <Icon v-if="option.icon" :icon="option.icon" />
-                </span>
-                {{ option.title }}
+                <el-tooltip
+                  :content="option.tip"
+                  :disabled="!option.tip"
+                  :open-delay="500"
+                  placement="top"
+                >
+                  <div class="dropdown-item__content">
+                    <span v-if="actionsHasIcon(action.dropdown)" class="pre-icon">
+                      <Icon v-if="option.icon" :icon="option.icon" />
+                    </span>
+                    <span class="dropdown-item__label">{{ option.title }}</span>
+                  </div>
+                </el-tooltip>
               </el-dropdown-item>
-            </el-tooltip>
-          </template>
-        </el-dropdown-menu>
+            </template>
+          </el-dropdown-menu>
+        </template>
       </el-dropdown>
 
       <el-button
+        v-bind="{ ...cleanButtonAction(action), icon: '' }"
         v-else
-        :key="action.name"
-        :class="[action.name, { grouped: action.grouped, 'table-action-text': isTableActionText }]"
+        :class="[action.name, { grouped: action.grouped }]"
         :size="size"
         class="action-item"
-        v-bind="{ ...cleanButtonAction(action), icon: '' }"
         @click="handleClick(action)"
       >
         <el-tooltip :content="action.tip" :disabled="!action.tip" placement="top">
-          <span>
-            <span v-if="action.icon" style="vertical-align: initial">
-              <Icon :icon="action.icon" />
+          <div>
+            <Icon v-if="action.icon" :icon="action.icon" class="pre-icon" />
+            <span>
+              {{ action.title }}
             </span>
-            <Icon v-if="isEllipsisAction(action)" class="ellipsis-icon" icon="fa-ellipsis-v" />
-            <span v-else>{{ getActionTitle(action) }}</span>
-          </span>
+          </div>
         </el-tooltip>
       </el-button>
     </template>
@@ -94,12 +85,14 @@
 
 <script>
 import { toSentenceCase } from '@/utils/common/index'
+import { ArrowDown } from '@element-plus/icons-vue'
 import Icon from '@/components/Widgets/Icon/index.vue'
 
 export default {
   name: 'DataActions',
   components: {
-    Icon
+    Icon,
+    ArrowDown
   },
   props: {
     grouped: {
@@ -122,23 +115,11 @@ export default {
   computed: {
     iActions() {
       return this.cleanActions(this.actions)
-    },
-    tableActionButtonType() {
-      return this.$store?.state?.settings?.tableActionButtonType || 'default'
-    },
-    isTableActionText() {
-      return this.tableActionButtonType === 'text'
     }
   },
   methods: {
-    getActionTitle(action) {
-      return action?.title
-    },
-    isEllipsisAction(action) {
-      return this.isTableActionText && action?.title === '...'
-    },
     actionsHasIcon(actions) {
-      return actions.some(action => action.icon)
+      return actions.some((action) => action.icon)
     },
     hasIcon(action, type = '') {
       const icon = action.icon
@@ -192,17 +173,13 @@ export default {
       return ok
     },
     cleanButtonAction(action) {
-      action = _.cloneDeep(action)
-      delete action['dropdown']
-      delete action['callback']
-      delete action['name']
-      delete action['can']
-      delete action['split']
-      return action
+      // 只保留 el-button 接受的属性,避免非法 prop 传入导致 validator 报错
+      const { type, size, disabled, plain, round, circle, link, loading } = action
+      return { type, size, disabled, plain, round, circle, link, loading }
     },
     cleanActions(actions) {
       const cleanedActions = []
-      const cloneActions = _.cloneDeep(actions)
+      const cloneActions = actions.map((v) => (v ? { ...v } : v))
       for (const v of cloneActions) {
         if (!v) {
           continue
@@ -232,6 +209,7 @@ export default {
         }
 
         if (action.dropdown) {
+          action.popperClass = [action.popperClass, 'action-dropdown'].filter(Boolean).join(' ')
           action.dropdown = this.cleanActions(action.dropdown)
         }
         cleanedActions.push(action)
@@ -244,23 +222,35 @@ export default {
 
 <style lang="scss" scoped>
 $btn-text-color: #ffffff;
-$color-btn-background: var(--color-primary-light-3, #e8f7f4);
-$color-btn-focus-background: var(--color-primary-light-1, var(--color-primary));
-$color-text-hover: var(--color-primary-light-1);
+$color-btn-background: #e8f7f4;
+$color-btn-focus-background: #83cbba;
 $color-divided: #e4e7ed;
 $color-drop-menu-title: #909399;
 $color-drop-menu-border: #e4e7ed;
 
 // 通用
 .layout {
-  &.right-side-actions.right-side-item {
-    .action-item {
-      margin-left: 1px;
+  // 确保所有按钮都使用 flex 布局，内容垂直居中
+  :deep(.el-button) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+
+    // 确保按钮内部内容垂直居中
+    > span {
+      display: inline-flex;
+      align-items: center;
+      line-height: 1;
     }
   }
 
   .action-item {
-    margin-left: 2px;
+    margin-left: 5px;
+
+    .pre-icon + span {
+      margin-left: 3px;
+    }
 
     &.grouped {
       margin-left: 0;
@@ -270,27 +260,151 @@ $color-drop-menu-border: #e4e7ed;
       margin-left: 0;
     }
   }
-
-  .el-button.el-button--default {
-    color: var(--color-text-primary) !important;
-  }
 }
 
 // 主要是左侧 LeftSide
 .layout.header-action {
-  .action-item.el-dropdown {
-    font-size: 11px;
+  :deep(.action-item.el-button),
+  :deep(.action-item.el-dropdown > .el-button),
+  :deep(.action-item.el-dropdown .el-button-group .el-button) {
+    min-height: 30px;
+    padding: 8px 12px;
+    font-size: 12px;
+    line-height: 1.3;
+  }
 
-    .more-action {
-      .el-button--default {
-        ::v-deep .el-icon-arrow-down.el-icon--right {
-          color: var(--color-icon-primary) !important;
-        }
+  :deep(.action-item.el-dropdown > .el-button.more-action),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.more-action) {
+    --el-button-hover-text-color: var(--color-primary) !important;
+    --el-button-hover-bg-color: var(--color-primary-light-3, #e8f7f4) !important;
+    --el-button-hover-border-color: var(--color-primary-light, #bae8df) !important;
+    --el-button-active-text-color: var(--color-primary) !important;
+    --el-button-active-bg-color: var(--color-primary-light-3, #e8f7f4) !important;
+    --el-button-active-border-color: var(--color-primary-light, #bae8df) !important;
+  }
+
+  :deep(.action-item.el-button.el-button--default),
+  :deep(.action-item.el-dropdown > .el-button.el-button--default),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default),
+  :deep(.action-item.el-button.el-button--primary.is-plain),
+  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain) {
+    --el-button-hover-text-color: var(--color-primary);
+    --el-button-hover-bg-color: var(--color-primary-light-3, #e8f7f4);
+    --el-button-hover-border-color: var(--color-primary-light, #bae8df);
+    --el-button-active-text-color: var(--color-primary);
+    --el-button-active-bg-color: var(--color-primary-light-3, #e8f7f4);
+    --el-button-active-border-color: var(--color-primary-light, #bae8df);
+
+    &:hover,
+    &:focus,
+    &:active {
+      color: var(--color-primary);
+      background-color: var(--color-primary-light-3, #e8f7f4) !important;
+      border-color: var(--color-primary-light, #bae8df) !important;
+      box-shadow: none !important;
+      outline: none;
+    }
+  }
+
+  :deep(.action-item.el-button.el-button--default .pre-icon),
+  :deep(.action-item.el-button.el-button--default .el-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--default .pre-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--default .el-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default .pre-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default .el-icon) {
+    color: var(--color-icon-primary);
+  }
+
+  :deep(.action-item.el-button.el-button--default:hover .pre-icon),
+  :deep(.action-item.el-button.el-button--default:hover .el-icon),
+  :deep(.action-item.el-button.el-button--default:focus .pre-icon),
+  :deep(.action-item.el-button.el-button--default:focus .el-icon),
+  :deep(.action-item.el-button.el-button--default:active .pre-icon),
+  :deep(.action-item.el-button.el-button--default:active .el-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--default:hover .pre-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--default:hover .el-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--default:focus .pre-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--default:focus .el-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--default:active .pre-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--default:active .el-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default:hover .pre-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default:hover .el-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default:focus .pre-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default:focus .el-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default:active .pre-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default:active .el-icon) {
+    color: var(--color-primary);
+  }
+
+  :deep(.action-item.el-button.el-button--primary.is-plain .pre-icon),
+  :deep(.action-item.el-button.el-button--primary.is-plain .el-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain .pre-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain .el-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain .pre-icon),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain .el-icon) {
+    color: var(--color-primary);
+  }
+
+  :deep(.action-item.el-button.el-button--primary.is-plain:hover .pre-icon),
+  :deep(.action-item.el-button.el-button--primary.is-plain:hover .el-icon),
+  :deep(.action-item.el-button.el-button--primary.is-plain:focus .pre-icon),
+  :deep(.action-item.el-button.el-button--primary.is-plain:focus .el-icon),
+  :deep(.action-item.el-button.el-button--primary.is-plain:active .pre-icon),
+  :deep(.action-item.el-button.el-button--primary.is-plain:active .el-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:hover .pre-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:hover .el-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:focus .pre-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:focus .el-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:active .pre-icon),
+  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:active .el-icon),
+  :deep(
+    .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:hover .pre-icon
+  ),
+  :deep(
+    .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:hover .el-icon
+  ),
+  :deep(
+    .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:focus .pre-icon
+  ),
+  :deep(
+    .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:focus .el-icon
+  ),
+  :deep(
+    .action-item.el-dropdown
+      .el-button-group
+      .el-button.el-button--primary.is-plain:active
+      .pre-icon
+  ),
+  :deep(
+    .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:active .el-icon
+  ) {
+    color: var(--color-primary);
+  }
+
+  .action-item.el-dropdown {
+    font-size: 12px;
+
+    // 确保下拉按钮也垂直居中
+    :deep(.el-button) {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    :deep(.el-button-group) {
+      display: inline-flex;
+      align-items: stretch;
+    }
+
+    .more-action.el-button--default {
+      :deep(.el-icon-arrow-down.el-icon--right) {
+        color: var(--color-icon-primary) !important;
       }
     }
 
     .el-button--primary {
-      ::v-deep .el-icon-arrow-down.el-icon--right {
+      :deep(.el-icon-arrow-down.el-icon--right) {
         color: #ffffff !important;
       }
 
@@ -301,155 +415,72 @@ $color-drop-menu-border: #e4e7ed;
   }
 }
 
-// 主要是 Table 中的操作列
-.layout.table-actions {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-
-  .el-button {
-    padding: 2px 5px;
-    line-height: 1.3;
-    font-size: 13px;
-
-    &:not(.is-plain) {
-      color: $btn-text-color;
-    }
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    * {
-      vertical-align: baseline !important;
-    }
-  }
-
-  ::v-deep .action-item.el-dropdown .el-button {
-    display: block;
-    color: var(--color-primary);
-    background-color: $color-btn-background;
-    border-color: $color-btn-focus-background;
-
-    &:focus {
-      color: $btn-text-color;
-      background-color: $color-btn-focus-background !important;
-    }
-
-    &:hover {
-      color: $btn-text-color;
-      background-color: $color-btn-focus-background;
-    }
-  }
-
-  .action-item.table-action-text.el-button,
-  ::v-deep .action-item.table-action-text.el-dropdown .el-button {
-    color: var(--color-primary) !important;
-    background-color: transparent !important;
-    border-color: transparent !important;
-    transition: color 0.2s ease;
-  }
-
-  .action-item.table-action-text.el-button:hover,
-  .action-item.table-action-text.el-button:focus,
-  ::v-deep .action-item.table-action-text.el-dropdown .el-button:hover,
-  ::v-deep .action-item.table-action-text.el-dropdown .el-button:focus {
-    color: $color-text-hover !important;
-    background-color: transparent !important;
-    border-color: transparent !important;
-    box-shadow: none !important;
-  }
-
-  .action-item.table-action-text.el-button.is-disabled,
-  .action-item.table-action-text.el-button.is-disabled:hover,
-  .action-item.table-action-text.el-button.is-disabled:focus,
-  ::v-deep .action-item.table-action-text.el-dropdown .el-button.is-disabled,
-  ::v-deep .action-item.table-action-text.el-dropdown .el-button.is-disabled:hover,
-  ::v-deep .action-item.table-action-text.el-dropdown .el-button.is-disabled:focus {
-    color: $color-text-hover !important;
-    background-color: transparent !important;
-    border-color: transparent !important;
-    box-shadow: none !important;
-    cursor: not-allowed;
-
-    * {
-      color: inherit !important;
-    }
-  }
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu--small) {
+  padding: 6px 0;
 }
 
-// 下拉 options
-.el-dropdown-menu {
-  ::v-deep .more-batch-processing {
-    &:hover {
-      background-color: transparent !important;
-    }
+// 下拉分组标题（如「数据库类型」）：与下拉项同样 0 20px 的左右内边距，分组上方加分隔线，
+// 文字垂直居中、次要色，区别于可点击项。
+:global(.action-dropdown.el-dropdown__popper .dropdown-menu-title) {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  margin-top: 6px;
+  padding: 0 20px;
+  font-size: 12px;
+  color: var(--color-text-secondary, #909399);
+  border-top: 1px solid #e4e7ed;
+}
 
-    &.el-dropdown-menu__item--divided {
-      margin-top: 0;
-      border-top: none;
-      color: var(--color-text-primary);
-      cursor: auto;
-      font-size: 12px;
-      line-height: 30px;
-      border-bottom: 1px solid $color-divided;
+:global(.action-dropdown.el-dropdown__popper .dropdown-menu-title:first-child) {
+  margin-top: 0;
+  border-top: none;
+}
 
-      &:before {
-        height: 0;
-      }
-    }
-  }
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item) {
+  display: flex;
+  align-items: center;
+  height: 34px;
+  line-height: 34px;
+  padding: 0 20px;
+  font-size: 13px;
+}
 
-  .dropdown-item {
-    color: var(--color-text-primary);
-    line-height: 34px;
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  margin-right: 8px;
+}
 
-    .pre-icon {
-      width: 17px;
-      display: inline-block;
-    }
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .dropdown-item__label) {
+  min-width: 0;
+}
 
-    ::v-deep i.fa {
-      font-size: 13px;
-      height: 13px;
-      width: 13px;
-      margin-right: 0;
-    }
+:global(
+  .action-dropdown.el-dropdown__popper .more-batch-processing.el-dropdown-menu__item--divided
+) {
+  position: relative;
+  margin-top: 8px;
+  color: var(--color-text-primary);
+  cursor: default;
+  font-size: 12px;
+}
 
-    ::v-deep .svg-icon {
-      font-size: 13px;
-      height: 13px;
-      width: 13px;
-    }
-  }
+:global(
+  .action-dropdown.el-dropdown__popper .more-batch-processing.el-dropdown-menu__item--divided:before
+) {
+  top: -8px;
+  left: 12px;
+  right: 12px;
+  height: 1px;
+  background-color: #e4e7ed;
+}
 
-  .el-dropdown-menu__item {
-    padding: 0 20px;
-
-    &.is-disabled {
-      color: var(--color-disabled);
-      cursor: not-allowed;
-      pointer-events: auto;
-    }
-
-    &:not(.is-disabled):hover {
-      background-color: var(--color-disabled-background);
-    }
-  }
-
-  .dropdown-menu-title {
-    text-align: left;
-    font-size: 12px;
-    color: $color-drop-menu-title;
-    line-height: 30px;
-    padding-left: 10px;
-    padding-top: 10px;
-    border-top: solid 1px $color-drop-menu-border;
-
-    &:first-child {
-      padding-top: 0;
-      border-top: none;
-    }
-  }
+:global(
+  .action-dropdown.el-dropdown__popper .more-batch-processing.el-dropdown-menu__item--divided:hover
+) {
+  background-color: transparent;
 }
 </style>

@@ -11,7 +11,7 @@
       :has-reset="false"
       :initial="initial"
       :url="url"
-      @submitSuccess="onSubmitSuccess"
+      @submit-success="onSubmitSuccess"
     />
   </div>
 </template>
@@ -45,14 +45,11 @@ export default {
         }
       },
       fields: [
-        [this.$t('Basic'), [
-          'name', 'category_type'
-        ]],
-        [this.$t('Config'), [
-          'protocols', 'su_enabled', 'su_method',
-          'gateway_enabled', 'ds_enabled',
-          'charset'
-        ]],
+        [this.$t('Basic'), ['name', 'category_type']],
+        [
+          this.$t('Config'),
+          ['protocols', 'su_enabled', 'su_method', 'gateway_enabled', 'ds_enabled', 'charset']
+        ],
         [this.$t('Automations'), ['automation']],
         [this.$t('Other'), ['comment']]
       ],
@@ -63,13 +60,14 @@ export default {
         const automation = values['automation'] || {}
         const category_type = values['category_type']
         const ansibleConfig = automation?.['ansible_config'] || {}
-        automation.ansible_config = ansibleConfig instanceof Object ? ansibleConfig : JSON.parse(ansibleConfig)
+        automation.ansible_config =
+          ansibleConfig instanceof Object ? ansibleConfig : JSON.parse(ansibleConfig)
 
-        if (automation.hasOwnProperty('id')) {
+        if (Object.prototype.hasOwnProperty.call(automation, 'id')) {
           delete automation['id']
         }
-        values['protocols'] = protocols.map(i => {
-          if (i.hasOwnProperty('id')) {
+        values['protocols'] = protocols.map((i) => {
+          if (Object.prototype.hasOwnProperty.call(i, 'id')) {
             delete i['id']
           }
           return i
@@ -83,7 +81,7 @@ export default {
         if (obj['category'] && obj['type']) {
           obj['category_type'] = [obj['category'].value, obj['type'].value]
         }
-        obj.protocols = obj.protocols?.map(i => {
+        obj.protocols = obj.protocols?.map((i) => {
           if (i.name === 'http') {
             i.display_name = 'http(s)'
           }
@@ -108,7 +106,7 @@ export default {
       this.$store.dispatch('assets/cleanPlatforms')
     },
     updateSuMethodOptions() {
-      const options = this.suMethods.filter(i => {
+      const options = this.suMethods.filter((i) => {
         return this.suMethodLimits.includes(i.value)
       })
       this.fieldsMeta.su_method.options = options
@@ -144,7 +142,7 @@ export default {
       this.defaultOptions = constraints
 
       let protocols = constraints?.protocols || []
-      protocols = protocols?.map(i => {
+      protocols = protocols?.map((i) => {
         if (i.name === 'http') {
           i.display_name = 'http(s)'
         }
@@ -173,37 +171,38 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-.platform-form ::v-deep {
+<style lang="scss" scoped>
+.platform-form :deep() {
   .el-cascader {
     width: 100%;
   }
 
-  .item-enable.el-form-item {
-    //margin-bottom: 1px;
-  }
-
+  // 自动化方法行：method 下拉占满（右侧留出齿轮按钮空间）；params 齿轮按钮通过负 margin
+  // 叠加到 method 同一行的最右侧。负 margin = method 行高 30px + FormItem 间距(--form-section-gap)，
+  // 既能精确落在 method 行，又不会挤压后续行；绑定 CSS 变量以适配 flex+gap 布局。
   .item-method.el-form-item {
-    display: inline-block;
-    width: 100%;
-
     .el-form-item__content {
-      width: calc(75% - 50px);
+      width: calc(100% - 50px);
     }
 
     .el-select {
       width: 100%;
     }
-
-    margin-top: -10px;
   }
 
   .item-params.el-form-item {
-    display: inline-block;
-    position: absolute;
-    right: 10px;
-    //margin-top: 22px;
+    margin-top: calc(-30px - var(--form-section-gap, 20px));
+
+    .el-form-item__label-wrap,
+    .el-form-item__label {
+      display: none;
+    }
+
+    .el-form-item__content {
+      width: 100%;
+      align-items: flex-end;
+      padding-right: 10px;
+    }
   }
 }
 </style>
-

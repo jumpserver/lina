@@ -1,4 +1,4 @@
-import JSEncrypt from 'jsencrypt/bin/jsencrypt.min'
+import JSEncrypt from 'jsencrypt'
 import CryptoJS from 'crypto-js'
 import { vueCookie as VueCookie } from '@/utils/storage'
 import { sm2, sm4 } from 'sm-crypto'

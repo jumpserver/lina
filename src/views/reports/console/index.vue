@@ -58,11 +58,14 @@ export default {
     }
   },
   mounted() {
-    this.reportUrl = getRouteUrl('ConsoleReport', this.$router)
+    try {
+      this.reportUrl = getRouteUrl('ConsoleReport', this.$router) || '/reports/dashboard/console'
+    } catch (e) {
+      console.warn('Failed to resolve ConsoleReport route:', e)
+      this.reportUrl = '/reports/dashboard/console'
+    }
   }
-
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

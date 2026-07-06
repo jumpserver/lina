@@ -1,10 +1,10 @@
 <template>
-  <GenericCreateUpdatePage v-bind="config" @getObjectDone="getObjectDone" />
+  <GenericCreateUpdatePage v-bind="config" @get-object-done="getObjectDone" />
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
 import { TextReadonly } from '@/components/Form/FormFields'
+import { GenericCreateUpdatePage } from '@/layout/components'
 
 export default {
   components: {
@@ -56,6 +56,4 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-
-</style>
+<style lang="scss" scoped></style>

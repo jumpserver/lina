@@ -1,35 +1,38 @@
 <template>
-  <div>
+  <div class="list-table">
     <QuickFilter
-      :expand.sync="filterExpand"
+      v-if="iHasQuickFilter"
+      v-model:expand="filterExpand"
       :filters="quickFilters"
       :summary="quickSummary"
       :table-url="tableUrl"
       @filter="filter"
     />
     <TableAction
+      v-bind="iHeaderActions"
       v-if="hasActions"
+      v-model:quick-filter-expand="filterExpand"
       :class="{ 'filter-expand': filterExpand }"
       :date-pick="handleDateChange"
       :has-quick-filter="iHasQuickFilter"
-      :quick-filter-expand.sync="filterExpand"
       :reload-table="reloadTable"
       :search-table="search"
       :selected-rows="selectedRows"
       :table-url="tableUrl"
-      v-bind="iHeaderActions"
       @done="handleActionInitialDone"
     />
-    <IBox v-loading="!actionInit" class="table-content">
-      <AutoDataTable
-        v-if="actionInit"
-        ref="dataTable"
-        :config="iTableConfig"
-        :filter-table="filter"
-        v-on="$listeners"
-        @selection-change="handleSelectionChange"
-      />
-    </IBox>
+    <div v-loading="!actionInit" class="table-content">
+      <IBox>
+        <AutoDataTable
+          v-bind="$attrs"
+          v-if="actionInit"
+          ref="dataTable"
+          :config="iTableConfig"
+          :filter-table="filter"
+          @selection-change="handleSelectionChange"
+        />
+      </IBox>
+    </div>
   </div>
 </template>
 
@@ -37,13 +40,19 @@
 import { getResourceFromApiUrl } from '@/utils/jms/index'
 import deepmerge from 'deepmerge'
 import { mapGetters } from 'vuex'
+import { provide } from 'vue'
 import IBox from '@/components/Common/IBox/index.vue'
 import TableAction from './TableAction/index.vue'
-import Emitter from '@/mixins/emitter'
 import AutoDataTable from '../AutoDataTable/index.vue'
 import QuickFilter from './TableAction/QuickFilter.vue'
 import { getDayEnd, getDaysAgo } from '@/utils/common/time'
 import { ObjectLocalStorage } from '@/utils/common/index'
+import i18n from '@/i18n/i18n'
+import _ from 'lodash'
+
+const LIST_TABLE_KEY = Symbol('listTable')
+
+export { LIST_TABLE_KEY }
 
 export default {
   name: 'ListTable',
@@ -53,7 +62,16 @@ export default {
     TableAction,
     IBox
   },
-  mixins: [Emitter],
+  setup() {
+    // Provide list table instance to child components
+    // This replaces $parent chain access
+    const listTableContext = {
+      dataTable: null,
+      tableConfig: null
+    }
+    provide(LIST_TABLE_KEY, listTableContext)
+    return { listTableContext }
+  },
   props: {
     // 定义 table 的配置
     tableConfig: {
@@ -148,13 +166,13 @@ export default {
       }
       const defaults = {}
       for (const [k, v] of Object.entries(actions)) {
-        const hasPerm = v.action.split('|').some(i => this.hasActionPerm(i.trim()))
+        const hasPerm = v.action.split('|').some((i) => this.hasActionPerm(i.trim()))
         if (!hasPerm) {
-          defaults[k] = this.$t('NoPermission')
+          defaults[k] = i18n.global.t('NoPermission')
           continue
         }
         if (v.checkRoot && this.currentOrgIsRoot) {
-          defaults[k] = this.$t('NoPermissionInGlobal')
+          defaults[k] = i18n.global.t('NoPermissionInGlobal')
           continue
         }
         defaults[k] = true
@@ -172,12 +190,12 @@ export default {
         extraQuery: this.extraQuery
       })
       const checkRoot = !(this.$route.meta?.disableOrgsChange === true)
-      const checkPermAndRoot = action => {
+      const checkPermAndRoot = (action) => {
         if (!this.hasActionPerm(action)) {
-          return this.$t('NoPermission')
+          return i18n.global.t('NoPermission')
         }
         if (checkRoot && this.currentOrgIsRoot) {
-          return this.$t('NoPermissionInGlobal')
+          return i18n.global.t('NoPermissionInGlobal')
         }
         return true
       }
@@ -238,7 +256,14 @@ export default {
     }
   },
   mounted() {
-    this.$set(this.urlUpdated, this.tableUrl, location.href)
+    this.urlUpdated[this.tableUrl] = location.href
+    // Populate the provided context with component references
+    // Note: $refs.dataTable is AutoDataTable, need to access its internal DataTable
+    this.listTableContext.dataTable = this.$refs.dataTable?.$refs.dataTable
+    Object.defineProperty(this.listTableContext, 'tableConfig', {
+      get: () => this.tableConfig,
+      enumerable: true
+    })
   },
   deactivated() {
     this.isDeactivated = true
@@ -251,7 +276,7 @@ export default {
 
       if (!preURL || preURL === location.href) return
 
-      this.$set(this.urlUpdated, this.tableUrl, location.href)
+      this.urlUpdated[this.tableUrl] = location.href
       this.$log.debug('Reload the table get latest data: pre ', preURL, ' current: ', location.href)
       this.reloadTable()
     })
@@ -285,7 +310,7 @@ export default {
       }, 100)
     },
     handleSelectionChange(val) {
-      this.selectedRows = val
+      this.selectedRows = Array.isArray(val) ? [...val] : []
     },
     _reloadTable() {
       this.dataTable?.getList()
@@ -294,13 +319,13 @@ export default {
       if (!this.actionInit) {
         this.initQuery = attrs
         for (const key in attrs) {
-          this.$set(this.extraQuery, key, attrs[key])
+          this.extraQuery[key] = attrs[key]
         }
         return true
       }
-      const removeKeys = Object.keys(this.initQuery).filter(key => !attrs[key])
+      const removeKeys = Object.keys(this.initQuery).filter((key) => !attrs[key])
       for (const key of removeKeys) {
-        this.$delete(this.extraQuery, key)
+        delete this.extraQuery[key]
       }
     },
     getMergedQuery() {
@@ -343,8 +368,8 @@ export default {
         dateTo.setDate(dateTo.getDate() + 1)
         dateTo = dateTo.toISOString()
       }
-      this.$set(this.extraQuery, 'date_from', dateFrom)
-      this.$set(this.extraQuery, 'date_to', dateTo)
+      this.extraQuery['date_from'] = dateFrom
+      this.extraQuery['date_to'] = dateTo
       const query = {
         date_from: dateFrom,
         date_to: dateTo
@@ -360,34 +385,44 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.list-table {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
 .filter-expand {
-  &::v-deep button.actionFilter {
+  :deep(button.actionFilter) {
     background-color: rgb(0, 0, 0, 0.08) !important;
   }
 }
 
 .table-content {
-  margin-top: 10px;
+  min-width: 0;
 
-  ::v-deep {
-    .el-card__body {
-      padding: 0;
-    }
-
-    .el-table__row .cell {
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-
-    .el-table__expanded-cell pre {
-      max-height: 500px;
-      overflow-y: scroll;
-    }
-
-    .el-button-ungroup .el-dropdown > .more-action {
-      //height: 24.6px;
-    }
+  :deep(.el-card__body) {
+    padding: 0;
   }
+
+  :deep(.el-table__row .cell) {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  :deep(.el-table__expanded-cell pre) {
+    max-height: 500px;
+    overflow-y: scroll;
+  }
+
+  // .el-button-ungroup .el-dropdown > .more-action {
+  //   height: 24.6px;
+  // }
+}
+
+//修改颜色
+.el-button--text {
+  color: #409eff;
 }
 </style>

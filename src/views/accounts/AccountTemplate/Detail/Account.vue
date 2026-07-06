@@ -4,35 +4,32 @@
       {{ $t('AccountTemplateUpdateSecretHelpText') }}
     </el-alert>
     <TwoCol>
-      <template>
-        <GenericListTable
-          ref="listTable"
-          :detail-drawer="detailDrawer"
-          :header-actions="headerActions"
-          :table-config="tableConfig"
-        />
-      </template>
+      <GenericListTable
+        ref="listTable"
+        :detail-drawer="detailDrawer"
+        :header-actions="headerActions"
+        :table-config="tableConfig"
+      />
       <template #right>
         <QuickActions :actions="quickActions" type="primary" />
       </template>
     </TwoCol>
     <ViewSecret
       v-if="showViewSecretDialog"
+      v-model:visible="showViewSecretDialog"
       :account="account"
       :url="secretUrl"
-      :visible.sync="showViewSecretDialog"
     />
   </div>
 </template>
 
 <script>
+import GenericListTable from '@/layout/components/GenericListTable'
 import { QuickActions } from '@/components'
-import { openTaskPage } from '@/utils/jms/index'
-import { GenericListTable } from '@/layout/components'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
-
-import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret'
+import { openTaskPage } from '@/utils/jms/index'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'AccountTemplateChangeSecret',
@@ -69,7 +66,7 @@ export default {
                 .patch(
                   `/api/v1/accounts/account-templates/${this.object.id}/sync-related-accounts/`
                 )
-                .then(res => {
+                .then((res) => {
                   openTaskPage(res['task'])
                 })
             }
@@ -135,6 +132,9 @@ export default {
               ]
             }
           }
+        },
+        tableAttrs: {
+          border: false
         }
       },
       headerActions: {

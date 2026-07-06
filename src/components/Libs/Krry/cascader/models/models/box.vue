@@ -5,10 +5,9 @@
         v-model="checkAll"
         :indeterminate="isIndeterminate"
         @change="handleCheckAllChange"
-      >{{ title }}</el-checkbox>
-      <span
-        class="check-number"
-      >{{ selectedDistrict.length }}/{{ districtListMock.length }}</span>
+        >{{ title }}</el-checkbox
+      >
+      <span class="check-number">{{ selectedDistrict.length }}/{{ districtListMock.length }}</span>
     </div>
     <div class="el-transfer-panel__body">
       <div
@@ -21,9 +20,9 @@
           autocomplete="off"
           :placeholder="filterPlaceholder"
           class="el-input__inner"
-        >
+        />
         <span class="el-input__prefix" style="left: 0px">
-          <i class="el-input__icon el-icon-search" />
+          <el-icon class="el-input__icon"><Search /></el-icon>
         </span>
       </div>
       <el-checkbox-group
@@ -39,14 +38,15 @@
           :disabled="city.disabled"
           :title="city.label"
           :label="city"
-        >{{ city.label }}</el-checkbox>
+          >{{ city.label }}</el-checkbox
+        >
       </el-checkbox-group>
       <p v-else class="no-data">无数据</p>
     </div>
     <div class="vip-footer">
       <el-button
-        type="text"
-        :disabled="selectedDistrict.length<=0"
+        link
+        :disabled="selectedDistrict.length <= 0"
         size="small"
         round
         @click="checkedSelected"
@@ -104,9 +104,7 @@ export default {
       // 重新获取数据
       this.districtListMock = this.districtList
       // 过滤掉数据，保留搜索的数据
-      this.districtListMock = this.districtListMock.filter((val) =>
-        val.label.includes(newWord)
-      )
+      this.districtListMock = this.districtListMock.filter((val) => val.label.includes(newWord))
     },
     // 当点击省级或市级，自动监听并更新市级或区级的列表
     districtList() {
@@ -143,13 +141,14 @@ export default {
     handleCheckedChange(value) {
       const checkedCount = value.length
       this.checkAll = checkedCount === this.districtListMock.length
-      this.isIndeterminate =
-        checkedCount > 0 && checkedCount < this.districtListMock.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.districtListMock.length
       this.$emit('check-district', value)
     },
     // 全选
     handleCheckAllChange(val) {
-      this.selectedDistrict = val ? this.districtListMock.filter(val => !val.disabled).map((val) => val) : []
+      this.selectedDistrict = val
+        ? this.districtListMock.filter((val) => !val.disabled).map((val) => val)
+        : []
       this.isIndeterminate = false
     },
     // 添加至已选 或 删除已选区域

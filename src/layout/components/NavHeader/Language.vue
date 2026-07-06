@@ -1,17 +1,19 @@
 <template>
-  <el-dropdown>
+  <el-dropdown popper-class="nav-header-dropdown">
     <span class="el-dropdown-link header-lang">
-      {{ currentLang.title }}<i class="el-icon-arrow-down el-icon--right" />
+      {{ currentLang.title }}<el-icon class="el-icon--right"><ArrowDown /></el-icon>
     </span>
-    <el-dropdown-menu slot="dropdown">
-      <el-dropdown-item
-        v-for="item of supportLanguages"
-        :key="item.code"
-        @click.native="changeLangTo(item)"
-      >
-        {{ item.title }}
-      </el-dropdown-item>
-    </el-dropdown-menu>
+    <template #dropdown>
+      <el-dropdown-menu>
+        <el-dropdown-item
+          v-for="item of supportLanguages"
+          :key="item.code"
+          @click="changeLangTo(item)"
+        >
+          {{ item.title }}
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </template>
   </el-dropdown>
 </template>
 
@@ -45,7 +47,7 @@ export default {
     }
   },
   mounted() {
-    this.supportLanguages = store.getters.publicSettings['LANGUAGES'].map(item => {
+    this.supportLanguages = store.getters.publicSettings['LANGUAGES'].map((item) => {
       return {
         title: item.name,
         code: item.code,

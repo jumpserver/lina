@@ -49,6 +49,7 @@ export default {
       meta: {
         title: i18n.t('BasicSettings'),
         icon: 'basic',
+        disableGoBack: true,
         permissions: ['settings.change_other']
       }
     },

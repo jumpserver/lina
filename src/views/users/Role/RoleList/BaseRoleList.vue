@@ -88,7 +88,7 @@ export default {
               updateRoute: {
                 name: 'RoleUpdate',
                 query: {
-                  'scope': this.scope
+                  scope: this.scope
                 }
               },
               canClone: ({ row }) => {

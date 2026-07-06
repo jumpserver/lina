@@ -17,8 +17,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -34,11 +33,13 @@ export default {
           key: this.$t('Action'),
           value: this.object.action?.label
         },
-        (this.object.action?.value === 'review' && {
+        this.object.action?.value === 'review' && {
           key: this.$t('Reviewer'),
           value: this.object?.reviewers.map((item) => item?.name).join(', ')
-        }),
-        'priority', 'is_active', 'comment'
+        },
+        'priority',
+        'is_active',
+        'comment'
       ]
     }
   },
@@ -46,6 +47,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

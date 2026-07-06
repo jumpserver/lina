@@ -4,7 +4,6 @@
     :form-setting="formSetting"
     :selected-rows="selectedRows"
     :visible="visible"
-    v-on="$listeners"
   />
 </template>
 
@@ -28,7 +27,7 @@ export default {
     },
     selectedRows: {
       type: Array,
-      default: () => ([])
+      default: () => []
     }
   },
   data() {
@@ -50,8 +49,13 @@ export default {
       let url
       const fieldsManager = getFields.bind(this)()
       const fields = [
-        'users', 'user_groups', 'accounts',
-        'actions', 'is_active', 'date_start', 'date_expired'
+        'users',
+        'user_groups',
+        'accounts',
+        'actions',
+        'is_active',
+        'date_start',
+        'date_expired'
       ]
       const fieldsMeta = {
         users: fieldsManager.users,
@@ -84,6 +88,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

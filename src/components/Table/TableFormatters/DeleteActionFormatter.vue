@@ -3,7 +3,7 @@
     ref="deleteButton"
     :disabled="iDisabled"
     :title="$t('Remove')"
-    size="mini"
+    size="small"
     type="danger"
     @click="onDelete(col, row, cellValue, reload)"
   >
@@ -29,18 +29,21 @@ export default {
       if (this.formatterArgs.disabled !== undefined) {
         return this.formatterArgs.disabled
       }
-      return (this.disabled() || this.$store.getters.currentOrgIsRoot)
+      return this.disabled() || this.$store.getters.currentOrgIsRoot
     }
   },
   methods: {
     defaultOnDelete(col, row, cellValue, reload) {
       const url = col.deleteUrl + cellValue
-      this.$axios.delete(url).then(res => {
-        this.$message.success(this.$tc('DeleteSuccessMsg'))
-        reload()
-      }).catch(error => {
-        this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
-      })
+      this.$axios
+        .delete(url)
+        .then((res) => {
+          this.$message.success(this.$tc('DeleteSuccessMsg'))
+          reload()
+        })
+        .catch((error) => {
+          this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
+        })
     },
     onDelete(col, row, cellValue, reload) {
       if (col.onDelete && typeof col.onDelete === 'function') {
@@ -53,13 +56,11 @@ export default {
       if (this.col.objects === 'all') {
         return false
       }
-      const objectIds = this.col.objects.map(i => i.id)
+      const objectIds = this.col.objects.map((i) => i.id)
       return objectIds.indexOf(this.cellValue) === -1
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -2,24 +2,18 @@
   <div :class="{ 'user-role': isUserRole }" class="chat-item">
     <div class="chart-item-container">
       <div class="avatar">
-        <div v-if="isUserRole" class="header-avatar logo-avatar">
-          <img :src="userUrl" alt="logo" class="logo-avatar-img">
-        </div>
-        <el-avatar
-          v-else
-          :src="chatUrl"
-          class="header-avatar"
-        />
+        <el-avatar v-if="isUserRole" :src="userUrl" class="header-avatar" />
+        <el-avatar v-else class="header-avatar" :style="{ backgroundColor: 'transparent' }">
+          <ModelIcon :name="modelIconName" class-name="model-icon" />
+        </el-avatar>
       </div>
       <div class="content">
         <div class="operational">
           <div v-if="!item.message.is_reasoning" class="date">
-            {{
-              $moment(item.message.create_time).format("YYYY-MM-DD HH:mm:ss")
-            }}
+            {{ $moment(item.message.create_time).format('YYYY-MM-DD HH:mm:ss') }}
           </div>
 
-          <div v-else class="thinking-time">{{ $i18n.t('DeeplyThoughtAbout') }}</div>
+          <div v-else class="thinking-time">{{ $t('DeeplyThoughtAbout') }}</div>
         </div>
         <div :class="item.reasoning ? 'reasoning' : 'message'">
           <div class="message-content">
@@ -45,7 +39,12 @@
                 <span v-if="isServerError" class="error">
                   {{ isServerError }}
                 </span>
-                <MessageText :message="item.result" :is-terminal="isTerminal" @insert-code="handleInsertCode" /></div>
+                <MessageText
+                  :message="item.result"
+                  :is-terminal="isTerminal"
+                  @insert-code="handleInsertCode"
+                />
+              </div>
             </div>
           </div>
           <div class="action">
@@ -61,15 +60,17 @@
               <span class="el-dropdown-link">
                 <i class="fa fa-ellipsis-v" />
               </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item
-                  v-for="i in dropdownOptions"
-                  :key="i.action"
-                  :command="i.action"
-                >
-                  {{ i.label }}
-                </el-dropdown-item>
-              </el-dropdown-menu>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item
+                    v-for="i in dropdownOptions"
+                    :key="i.action"
+                    :command="i.action"
+                  >
+                    {{ i.label }}
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
             </el-dropdown>
           </div>
         </div>
@@ -80,6 +81,7 @@
 
 <script>
 import MessageText from './MessageText.vue'
+import ModelIcon from '../../models/ModelIcon.vue'
 import { mapGetters, mapState } from 'vuex'
 import { copy } from '@/utils/common/index'
 import { useChat } from '../../useChat.js'
@@ -89,13 +91,17 @@ const { setLoading, removeLoadingMessageInChat } = useChat()
 
 export default {
   components: {
-    MessageText
+    MessageText,
+    ModelIcon
   },
   props: {
     item: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
+    },
+    selectedModel: {
+      type: String,
+      default: ''
     },
     isTerminal: {
       type: Boolean,
@@ -115,28 +121,27 @@ export default {
   },
   computed: {
     ...mapState({
-      isLoading: state => state.chat.loading
+      isLoading: (state) => state.chat.loading
     }),
-    ...mapGetters([
-      'publicSettings'
-    ]),
+    ...mapGetters(['publicSettings']),
     isUserRole() {
       return this.item.message?.role === 'user'
     },
     isSystemError() {
-      return (
-        this.item.type === 'error' && this.item?.role === 'assistant'
-      )
+      return this.item.type === 'error' && this.item?.role === 'assistant'
     },
     isServerError() {
-      return (this.item.type === 'finish' && this.item.result.content === '')
-        ? this.$i18n.t('ServerBusyRetry')
+      return this.item.type === 'finish' && this.item.result.content === ''
+        ? this.$t('ServerBusyRetry')
         : ''
     },
-    chatUrl() {
-      return this.publicSettings.CHAT_AI_TYPE === 'gpt'
-        ? require('@/assets/img/chat.png')
-        : require('@/assets/img/deepSeek.png')
+    modelIconName() {
+      return (
+        this.item?.message?.model ||
+        this.selectedModel ||
+        this.publicSettings.CHAT_AI_TYPE ||
+        ''
+      ).toString()
     }
   },
   methods: {
@@ -175,28 +180,17 @@ export default {
         width: 100%;
         height: 100%;
         border-radius: 50%;
+        background-color: transparent;
 
-        &::v-deep img {
+        &:deep(img) {
           background-color: #fff;
         }
       }
 
-      .logo-avatar {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        background-color: #fff;
-
-        .logo-avatar-img {
-          display: block;
-          width: 100%;
-          height: 100%;
-          padding: 3px;
-          box-sizing: border-box;
-          object-fit: contain;
-          object-position: center;
-        }
+      .model-icon {
+        width: 100%;
+        height: 100%;
+        display: block;
       }
     }
 
@@ -256,7 +250,7 @@ export default {
               margin: unset;
               padding-left: 0.5rem;
 
-              ::v-deep p {
+              :deep(p) {
                 color: #8b8b8b;
               }
             }
@@ -329,8 +323,7 @@ export default {
         flex-direction: row-reverse;
 
         .message-content {
-          background-color: var(--color-primary-light-8, #d9ecff);
-          color: #1f2d3d;
+          background-color: var(--menu-hover);
           border-radius: 12px 2px 12px 12px;
         }
       }

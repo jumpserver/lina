@@ -1,18 +1,13 @@
 <template>
   <Dialog
+    v-bind="$attrs"
     :destroy-on-close="true"
     :loading-status="testLdapLoginStatus"
     :show-cancel="false"
-    :title="$tc('TestLdapLoginTitle') "
-    v-bind="$attrs"
+    :title="$tc('TestLdapLoginTitle')"
     @confirm="testUserLoginClick()"
-    v-on="$listeners"
   >
-    <el-form
-      :model="userLoginForm"
-      label-position="right"
-      label-width="17%"
-    >
+    <el-form :model="userLoginForm" label-position="right" label-width="17%">
       <el-form-item :label="$tc('Username')">
         <el-input
           v-model="userLoginForm.username"
@@ -80,6 +75,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

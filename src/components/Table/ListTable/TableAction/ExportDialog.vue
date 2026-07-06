@@ -2,9 +2,9 @@
   <div>
     <Dialog
       v-if="exportDialogShow"
+      v-model:visible="exportDialogShow"
       :destroy-on-close="true"
-      :title="iDialogTitle"
-      :visible.sync="exportDialogShow"
+      :title="$tc('Export')"
       width="700px"
       @close="handleExportCancel"
       @cancel="handleExportCancel()"
@@ -14,14 +14,14 @@
         {{ tips }}
       </el-alert>
       <el-form label-position="left" style="padding-left: 20px">
-        <el-form-item v-if="showFileType" :label="$tc('FileType' )" :label-width="'100px'">
+        <el-form-item :label="$tc('FileType')" :label-width="'100px'">
           <el-radio-group v-model="exportTypeOption">
             <el-radio
-              v-for="option of iExportTypeOptions"
+              v-for="option of exportTypeOptions"
               :key="option.value"
               :disabled="!option.can"
-              :label="option.value"
-              style="padding: 10px 20px;"
+              :value="option.value"
+              style="padding: 10px 20px"
             >
               {{ option.label }}
             </el-radio>
@@ -33,7 +33,7 @@
               v-for="option of exportOptions"
               :key="option.value"
               :disabled="!option.can"
-              :label="option.value"
+              :value="option.value"
               class="export-item"
             >
               {{ option.label }}
@@ -46,15 +46,26 @@
 </template>
 
 <script>
+import { withBaseApi } from '@/utils/env'
 import Dialog from '@/components/Dialog/index.vue'
 import { createSourceIdCache } from '@/api/common'
 import * as queryUtil from '@/components/Table/DataTable/compenents/el-data-table/utils/query'
 import { download } from '@/utils/common/index'
+import { inject } from 'vue'
+import { LIST_TABLE_KEY } from '../index.vue'
 
 export default {
   name: 'ExportDialog',
   components: {
     Dialog
+  },
+  setup() {
+    // Inject list table context to replace $parent chain access
+    const listTableContext = inject(LIST_TABLE_KEY, {
+      dataTable: null,
+      tableConfig: null
+    })
+    return { listTableContext }
   },
   props: {
     selectedRows: {
@@ -67,8 +78,7 @@ export default {
     },
     beforeExport: {
       type: Function,
-      default: () => {
-      }
+      default: () => {}
     },
     mfaVerifyRequired: {
       type: Boolean,
@@ -76,9 +86,7 @@ export default {
     },
     performExport: {
       type: Function,
-      default(selectedRows, exportOptions, query, exportType) {
-        return this.defaultPerformExport(selectedRows, exportOptions, query, exportType)
-      }
+      default: null
     },
     canExportAll: {
       type: Boolean,
@@ -99,34 +107,6 @@ export default {
     tipsType: {
       type: String,
       default: 'success'
-    },
-    triggerEvent: {
-      type: String,
-      default: 'showExportDialog'
-    },
-    dialogTitle: {
-      type: String,
-      default: ''
-    },
-    showFileType: {
-      type: Boolean,
-      default: true
-    },
-    defaultExportType: {
-      type: String,
-      default: 'csv'
-    },
-    fixedExportType: {
-      type: String,
-      default: ''
-    },
-    fileTypeOptions: {
-      type: Array,
-      default: () => []
-    },
-    extraQuery: {
-      type: Object,
-      default: () => ({})
     }
   },
   data() {
@@ -144,12 +124,12 @@ export default {
       return this.selectedRows.length > 0
     },
     tableQuery() {
-      const listTableRef = this.$parent?.$parent?.$parent?.$parent
-      if (!listTableRef) {
+      const listTableRef = this.listTableContext
+      if (!listTableRef || !listTableRef.dataTable) {
         return {}
       }
-      const query = listTableRef?.dataTable?.getQuery() || {}
-      const extraQuery = Object.keys(listTableRef?.tableConfig?.extraQuery || {})
+      const query = listTableRef.dataTable.getQuery() || {}
+      const extraQuery = Object.keys(listTableRef.tableConfig?.extraQuery || {})
 
       delete query['limit']
       delete query['offset']
@@ -164,9 +144,6 @@ export default {
     },
     tableHasQuery() {
       return Object.keys(this.tableQuery).length > 0
-    },
-    iDialogTitle() {
-      return this.dialogTitle || this.$tc('Export')
     },
     exportOptions() {
       return [
@@ -187,10 +164,7 @@ export default {
         }
       ]
     },
-    iExportTypeOptions() {
-      if (this.fileTypeOptions.length > 0) {
-        return this.fileTypeOptions
-      }
+    exportTypeOptions() {
       return [
         {
           label: 'CSV',
@@ -205,11 +179,11 @@ export default {
       ]
     }
   },
-  beforeDestroy() {
-    this.$eventBus.$off(this.triggerEvent, this.showExportDialogHandler)
+  beforeUnmount() {
+    this.$eventBus.$off('showExportDialog', this.showExportDialogHandler)
   },
   mounted() {
-    this.$eventBus.$on(this.triggerEvent, this.showExportDialogHandler)
+    this.$eventBus.$on('showExportDialog', this.showExportDialogHandler)
   },
   methods: {
     showExportDialogHandler({ selectedRows, url, name }) {
@@ -218,9 +192,6 @@ export default {
       }
     },
     showExportDialog() {
-      this.exportTypeOption = this.fixedExportType || this.defaultExportType
-      this.exportOption = 'all'
-
       if (!this.mfaVerifyRequired) {
         this.exportDialogShow = true
 
@@ -236,20 +207,13 @@ export default {
       }
       this.$axios.get('/api/v1/authentication/confirm/check/?confirm_type=mfa').then(() => {
         this.exportDialogShow = true
-        if (this.hasSelected) {
-          this.exportOption = 'selected'
-        }
-
-        if (this.tableHasQuery) {
-          this.exportOption = 'filtered'
-        }
       })
     },
     downloadCsv(url) {
       download(url)
     },
     async defaultPerformExport(selectRows, exportOption, q, exportTypeOption) {
-      const url = (process.env.VUE_APP_ENV === 'production') ? (`${this.url}`) : (`${process.env.VUE_APP_BASE_API}${this.url}`)
+      const url = withBaseApi(this.url)
       const query = Object.assign({}, q)
       if (exportOption === 'selected') {
         const resources = []
@@ -260,20 +224,21 @@ export default {
         const spm = await createSourceIdCache(resources)
         query['spm'] = spm.spm
       }
-      Object.assign(query, this.extraQuery)
-      query['format'] = exportTypeOption || this.fixedExportType || this.defaultExportType
-      const queryStr =
-        (url.indexOf('?') > -1 ? '&' : '?') +
-        queryUtil.stringify(query, '=', '&')
+      query['format'] = exportTypeOption
+      const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(query, '=', '&')
       return this.downloadCsv(url + queryStr)
     },
     async handleExport() {
-      const listTableRef = this.$parent.$parent.$parent.$parent
-      const query = listTableRef['dataTable'].getQuery()
+      const listTableRef = this.listTableContext
+      if (!listTableRef || !listTableRef.dataTable) {
+        return
+      }
+      const query = listTableRef.dataTable.getQuery()
       delete query['limit']
       delete query['offset']
       await this.beforeExport()
-      return this.performExport(this.selectedRows, this.exportOption, query, this.exportTypeOption)
+      const performExport = this.performExport || this.defaultPerformExport
+      return performExport(this.selectedRows, this.exportOption, query, this.exportTypeOption)
     },
     async handleExportConfirm() {
       await this.handleExport()
@@ -291,14 +256,14 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-  .export-item {
-    width: 100%;
-    display: block;
-    padding: 10px 20px;
-  }
+<style lang="scss" scoped>
+.export-item {
+  width: 100%;
+  display: block;
+  padding: 10px 20px;
+}
 
-  .export-form ::v-deep .el-form-item__label {
-    line-height: 2
-  }
+.export-form :deep(.el-form-item__label) {
+  line-height: 2;
+}
 </style>

@@ -1,19 +1,17 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" @getObjectDone="disableMFAFieldIfNeed" />
+  <GenericCreateUpdatePage v-bind="$data" @get-object-done="disableMFAFieldIfNeed" />
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
 import { Required } from '@/components/Form/DataForm/rules'
 import { PhoneInput } from '@/components/Form/FormFields'
-import Agreement from '@/components/Form/FormFields/agreement.vue'
+import { GenericCreateUpdatePage } from '@/layout/components'
 import store from '@/store'
 
 export default {
   name: 'Improvement',
   components: {
-    GenericCreateUpdatePage,
-    Agreement
+    GenericCreateUpdatePage
   },
   props: {
     object: {
@@ -28,7 +26,7 @@ export default {
         [this.$t('Account'), ['username', 'name', 'email']],
         [this.$t('Authentication'), ['mfa_level', 'public_key']],
         [this.$t('Other'), ['phone']],
-        [this.$t('TermsOfService'), ['terms']]
+        [this.$t('TermsAndConditions'), ['terms']]
       ],
       fieldsMeta: {
         username: {
@@ -55,14 +53,15 @@ export default {
             type: 'textarea',
             placeholder: 'ssh-rsa AAAA...'
           },
-          hidden: formValue => {
+          hidden: (formValue) => {
             return formValue.source !== 'local'
           },
           helpText: this.$t('SSHKeyOfProfileSSHUpdatePage')
         },
         terms: {
-          label: '',
-          component: Agreement,
+          label: this.$t('IAgree'),
+          type: 'checkbox',
+          checked: false,
           rules: [Required],
           helpText: this.$t('MFAOfUserFirstLoginUserGuidePage')
         }

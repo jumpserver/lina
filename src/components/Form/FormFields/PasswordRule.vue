@@ -1,18 +1,18 @@
 <template>
   <div style="display: block">
-    <el-button size="mini" type="primary" @click="visible=true">
+    <el-button size="small" type="primary" @click="visible = true">
       {{ $t('Setting') }}
     </el-button>
     <Dialog
+      v-model:visible="iVisible"
       :destroy-on-close="true"
       :title="$tc('PasswordRule')"
-      :visible.sync="visible"
       width="600px"
       @cancel="handleCancel"
       @confirm="handleConfirm"
       @open="handleOpen"
     >
-      <AutoDataForm ref="dataform" v-bind="form" />
+      <AutoDataForm v-bind="form" ref="dataform" />
     </Dialog>
   </div>
 </template>
@@ -49,7 +49,7 @@ export default {
             el: {
               min: 8,
               max: 36,
-              size: 'mini'
+              size: 'small'
             }
           },
           {
@@ -81,6 +81,17 @@ export default {
       }
     }
   },
+  computed: {
+    iVisible: {
+      get() {
+        return this.visible
+      },
+      set(val) {
+        this.visible = val
+        this.$emit('update:visible', val)
+      }
+    }
+  },
   methods: {
     handleConfirm() {
       const formValue = this.$refs.dataform.dataForm.getFormValue()
@@ -96,12 +107,9 @@ export default {
         this.visible = false
       }, 100)
     },
-    handleOpen() {
-    }
+    handleOpen() {}
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

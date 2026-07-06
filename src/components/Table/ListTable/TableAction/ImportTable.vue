@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="tableFilter">
-      <el-radio-group v-model="importStatusFilter" size="mini">
-        <el-radio-button label="all">{{ $t('Total') }}: {{ totalCount }}</el-radio-button>
-        <el-radio-button label="ok">{{ $t('Success') }}: {{ successCount }}</el-radio-button>
-        <el-radio-button label="error">{{ $t('Failed') }}: {{ failedCount }}</el-radio-button>
-        <el-radio-button label="pending">{{ $t('Pending') }}: {{ pendingCount }}</el-radio-button>
+      <el-radio-group v-model="importStatusFilter" size="small">
+        <el-radio-button value="all">{{ $t('Total') }}: {{ totalCount }}</el-radio-button>
+        <el-radio-button value="ok">{{ $t('Success') }}: {{ successCount }}</el-radio-button>
+        <el-radio-button value="error">{{ $t('Failed') }}: {{ failedCount }}</el-radio-button>
+        <el-radio-button value="pending">{{ $t('Pending') }}: {{ pendingCount }}</el-radio-button>
       </el-radio-group>
     </div>
     <div class="row">
@@ -32,13 +32,13 @@
           {{ importActionTitle }}
         </el-button>
         <el-button
+          v-bind="button"
           v-for="button in moreButtons"
           v-show="!button.hidden"
           :key="button.title"
           :disabled="disableImportBtn"
           :loading="button.loading"
           size="small"
-          v-bind="button"
           @click="handleClick(button)"
         >
           {{ button.title }}
@@ -53,7 +53,7 @@ import DataTable from '@/components/Table/DataTable/index.vue'
 import { getUpdateObjURL } from '@/utils/common/index'
 import { sleep } from '@/utils/common/time'
 import { EditableInputFormatter } from '@/components/Table/TableFormatters'
-import { encryptPassword } from '@/utils/session-encrypt'
+import { encryptPassword } from '@/utils/secure'
 import getStatusColumnMeta from '@/components/Table/ListTable/TableAction/const'
 
 export default {
@@ -170,17 +170,17 @@ export default {
       return this.importActions[this.importAction]
     },
     successData() {
-      return this.iTotalData.filter(item => {
+      return this.iTotalData.filter((item) => {
         return item['@status'] === 'ok'
       })
     },
     failedData() {
-      return this.iTotalData.filter(item => {
+      return this.iTotalData.filter((item) => {
         return typeof item['@status'] === 'object' && item['@status'].name === 'error'
       })
     },
     pendingData() {
-      return this.iTotalData.filter(item => {
+      return this.iTotalData.filter((item) => {
         return item['@status'] === 'pending'
       })
     },
@@ -226,7 +226,7 @@ export default {
       } else if (val === 'error') {
         this.tableConfig.totalData = this.failedData
       } else {
-        this.tableConfig.totalData = this.iTotalData.filter(item => {
+        this.tableConfig.totalData = this.iTotalData.filter((item) => {
           return item['@status'] === val
         })
       }
@@ -239,7 +239,7 @@ export default {
     generateTableColumns(tableTitles, tableData) {
       const columns = [{ ...getStatusColumnMeta.bind(this)().status }]
       for (const item of tableTitles) {
-        const dataItemLens = tableData.map(d => {
+        const dataItemLens = tableData.map((d) => {
           if (!d) {
             return 0
           }
@@ -278,7 +278,7 @@ export default {
               const prop = col.prop
               row['@status'] = 'pending'
               this.$log.debug(`Set value ${oldValue} => ${newValue}`)
-              this.$set(row, prop, newValue)
+              row[prop] = newValue
             }
           }
         })
@@ -292,8 +292,8 @@ export default {
     },
     generateTableData(tableTitles, tableData) {
       const totalData = []
-      tableData.forEach(item => {
-        this.$set(item, '@status', 'pending')
+      tableData.forEach((item) => {
+        item['@status'] = 'pending'
         const encryptFields = this.getEncryptFields()
         for (const field of encryptFields) {
           if (item[field]) {
@@ -473,21 +473,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/styles/variables';
+@use '@/styles/variables' as *;
 
 .summary-item {
   padding: 0 10px;
 }
 
 .summary-success {
-  color: $--color-primary;
+  color: $color-primary;
 }
 
 .summary-failed {
-  color: $--color-danger;
+  color: $color-danger;
 }
 
-.importTable ::v-deep .cell {
+.importTable :deep(.cell) {
   min-height: 20px;
   height: 100%;
   max-height: 160px;
@@ -497,7 +497,7 @@ export default {
   display: flex;
   justify-content: flex-end;
 
-  ::v-deep .el-button.is-disabled {
+  :deep(.el-button.is-disabled) {
     cursor: not-allowed;
   }
 }
