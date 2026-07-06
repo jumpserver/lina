@@ -1552,15 +1552,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bindings@npm:^1.5.0":
-  version: 1.5.0
-  resolution: "bindings@npm:1.5.0"
-  dependencies:
-    file-uri-to-path: "npm:1.0.0"
-  checksum: 10c0/3dab2491b4bb24124252a91e656803eac24292473e56554e35bbfe3cc1875332cfa77600c3bac7564049dc95075bf6fcc63a4609920ff2d64d0fe405fcf0d4ba
-  languageName: node
-  linkType: hard
-
 "birpc@npm:^2.6.1":
   version: 2.9.0
   resolution: "birpc@npm:2.9.0"
@@ -1914,16 +1905,6 @@ __metadata:
   version: 1.11.21
   resolution: "dayjs@npm:1.11.21"
   checksum: 10c0/bd97dfdc4bfea3c66268635690313828b386faa040fbc1f829ff42a2bd748b72c9d9b3c8f9616ce9e61fcb78923f1461a462c969c54b1084458ae1b715898fb0
-  languageName: node
-  linkType: hard
-
-"deasync@npm:^0.1.31":
-  version: 0.1.31
-  resolution: "deasync@npm:0.1.31"
-  dependencies:
-    bindings: "npm:^1.5.0"
-    node-addon-api: "npm:^1.7.1"
-  checksum: 10c0/e002010dc55048a611d35994f45cc36097aeddd147a650cfc1d96e8b251619971ce8b2692939f2da718d2ca26740337a88c7ee5493f43eb1fc773a52cc055794
   languageName: node
   linkType: hard
 
@@ -2321,13 +2302,6 @@ __metadata:
     picomatch:
       optional: true
   checksum: 10c0/e345083c4306b3aed6cb8ec551e26c36bab5c511e99ea4576a16750ddc8d3240e63826cc624f5ae17ad4dc82e68a253213b60d556c11bfad064b7607847ed07f
-  languageName: node
-  linkType: hard
-
-"file-uri-to-path@npm:1.0.0":
-  version: 1.0.0
-  resolution: "file-uri-to-path@npm:1.0.0"
-  checksum: 10c0/3b545e3a341d322d368e880e1c204ef55f1d45cdea65f7efc6c6ce9e0c4d22d802d5629320eb779d006fe59624ac17b0e848d83cc5af7cd101f206cb704f5519
   languageName: node
   linkType: hard
 
@@ -2827,7 +2801,6 @@ __metadata:
     cron-parser: "npm:^5.5.0"
     crypto-js: "npm:^4.2.0"
     css-color-function: "npm:^1.3.3"
-    deasync: "npm:^0.1.31"
     decimal.js: "npm:^10.6.0"
     deepmerge: "npm:^4.3.1"
     dompurify: "npm:^3.4.7"
@@ -3157,15 +3130,6 @@ __metadata:
   bin:
     nanoid: bin/nanoid.cjs
   checksum: 10c0/e0b12e3a1d361f74150fa4b25631d0ae29f7162dab01a12f0f1be1f53b7a2a219f9b729504e474d4821207d0fe349bd3c97569ab5cf7ec2fff6aa94711956c93
-  languageName: node
-  linkType: hard
-
-"node-addon-api@npm:^1.7.1":
-  version: 1.7.2
-  resolution: "node-addon-api@npm:1.7.2"
-  dependencies:
-    node-gyp: "npm:latest"
-  checksum: 10c0/bcf526f2ce788182730d3c3df5206585873d1e837a6e1378ff84abccf2f19cf3f93a8274f9c1245af0de63a0dbd1bb95ca2f767ecf5c678d6930326aaf396c4e
   languageName: node
   linkType: hard
 
