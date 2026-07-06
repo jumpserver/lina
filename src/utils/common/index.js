@@ -161,6 +161,16 @@ export function getErrorResponseMsg(error) {
   return msg
 }
 
+// 将一组错误信息拼接为单条字符串，过滤掉空值并去重。
+export function joinErrorMessages(messages, separator = ' ') {
+  const list = Array.isArray(messages) ? messages : [messages]
+  const normalized = list
+    .map((item) => (typeof item === 'string' ? item : String(item ?? '')))
+    .map((item) => item.trim())
+    .filter((item) => item)
+  return [...new Set(normalized)].join(separator)
+}
+
 function customizer(objValue, srcValue) {
   return _.isUndefined(objValue) ? srcValue : objValue
 }
