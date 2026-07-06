@@ -213,12 +213,19 @@ export default {
           on = {},
           on: { input: originOnInput = noop, change: originOnChange = noop } = {},
           trim = true
-        },
-        formRendererContext: { updateForm }
+        }
       } = this
+      // updateForm 由父组件 el-form-renderer 在 mounted 阶段才注入到共享 context 中，
+      // 而子组件的 mounted 先于父组件执行，若在此处解构 updateForm 会捕获到初始的 null，
+      // 且 context 为普通对象（非响应式），后续赋值不会让本 computed 重新求值。
+      // 因此必须在事件触发时（调用时）再从 context 读取，保证拿到已注入的函数。
+      const getUpdateForm = () => this.formRendererContext.updateForm
       return {
         ..._frompairs(
-          _topairs(on).map(([eName, handler]) => [eName, (...args) => handler(args, updateForm)])
+          _topairs(on).map(([eName, handler]) => [
+            eName,
+            (...args) => handler(args, getUpdateForm())
+          ])
         ),
         // 手动更新表单数据
         input: (value, ...rest) => {
@@ -228,7 +235,7 @@ export default {
             rest,
             atChange,
             originInput: originOnInput,
-            updateForm
+            updateForm: getUpdateForm()
           })
         },
         'update:model-value': (value, ...rest) => {
@@ -238,7 +245,7 @@ export default {
             rest,
             atChange,
             originInput: originOnInput,
-            updateForm
+            updateForm: getUpdateForm()
           })
         },
         'update:modelValue': (value, ...rest) => {
@@ -248,14 +255,14 @@ export default {
             rest,
             atChange,
             originInput: originOnInput,
-            updateForm
+            updateForm: getUpdateForm()
           })
         },
         change: (value, ...rest) => {
           value = this.normalizeEmittedValue(value)
           if (typeof value === 'string' && trim) value = value.trim()
           this.$emit('updateValue', { id, value })
-          originOnChange([value, ...rest], updateForm)
+          originOnChange([value, ...rest], getUpdateForm())
 
           // FIXME: rules 的 trigger 只写了 blur，依然会在 change 的时候触发校验！
           this.triggerValidate(id)
