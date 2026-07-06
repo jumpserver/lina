@@ -3,9 +3,9 @@
     v-bind="$attrs"
     v-model="value"
     :clearable="false"
-    :default-time="['00:00:01', '23:59:59']"
+    :default-time="defaultTime"
     :end-placeholder="$tc('DateEnd')"
-    :picker-options="pickerOptions"
+    :shortcuts="shortcuts"
     :start-placeholder="$tc('DateStart')"
     :type="type"
     class="datepicker"
@@ -43,40 +43,24 @@ export default {
     const endValue = this.dateEnd || this.$route.query['date_end']
     const dateStart = new Date(startValue)
     const dateTo = new Date(endValue)
-    if (this.toMinMax) {
+    // 无有效初始值时置空，避免把 Invalid Date 绑进 v-model 导致面板异常、无法点选
+    const hasValidRange = !isNaN(dateStart.getTime()) && !isNaN(dateTo.getTime())
+    if (hasValidRange && this.toMinMax) {
       dateStart.setHours(0, 0, 0, 0)
       dateTo.setHours(23, 59, 59, 999)
     }
     return {
-      value: [dateStart, dateTo],
-      pickerOptions: {
-        shortcuts: [
-          {
-            text: this.$t('DateLast24Hours'),
-            onClick: (picker) => this.onShortcutClick(picker, 1)
-          },
-          {
-            text: this.$t('DateLastWeek'),
-            onClick: (picker) => this.onShortcutClick(picker, 7)
-          },
-          {
-            text: this.$t('DateLastMonth'),
-            onClick: (picker) => this.onShortcutClick(picker, 30)
-          },
-          {
-            text: this.$t('DateLast3Months'),
-            onClick: (picker) => this.onShortcutClick(picker, 90)
-          },
-          {
-            text: this.$t('DateLastHarfYear'),
-            onClick: (picker) => this.onShortcutClick(picker, 183)
-          },
-          {
-            text: this.$t('DateLastYear'),
-            onClick: (picker) => this.onShortcutClick(picker, 365)
-          }
-        ]
-      }
+      value: hasValidRange ? [dateStart, dateTo] : null,
+      // Element Plus 的 default-time 需要 Date 数组（起止各一个），不能用字符串
+      defaultTime: [new Date(2000, 0, 1, 0, 0, 1), new Date(2000, 0, 1, 23, 59, 59)],
+      shortcuts: [
+        { text: this.$t('DateLast24Hours'), value: () => this.rangeOfDays(1) },
+        { text: this.$t('DateLastWeek'), value: () => this.rangeOfDays(7) },
+        { text: this.$t('DateLastMonth'), value: () => this.rangeOfDays(30) },
+        { text: this.$t('DateLast3Months'), value: () => this.rangeOfDays(90) },
+        { text: this.$t('DateLastHarfYear'), value: () => this.rangeOfDays(183) },
+        { text: this.$t('DateLastYear'), value: () => this.rangeOfDays(365) }
+      ]
     }
   },
   mounted() {
@@ -84,12 +68,12 @@ export default {
   },
   methods: {
     handleDateChange(val) {
-      if (val[0].getTime() && val[1].getTime()) {
+      if (val && val[0]?.getTime() && val[1]?.getTime()) {
         this.$log.debug('Date change: ', val)
         this.$emit('dateChange', val)
       }
     },
-    onShortcutClick(picker, day) {
+    rangeOfDays(day) {
       let start = new Date()
       let end = new Date()
       start.setTime(start.getTime() - 3600 * 1000 * 24 * day)
@@ -97,7 +81,7 @@ export default {
         start = new Date(start.setHours(0, 0, 0, 0))
         end = new Date(end.setHours(23, 59, 59, 999))
       }
-      picker.$emit('pick', [start, end])
+      return [start, end]
     }
   }
 }
