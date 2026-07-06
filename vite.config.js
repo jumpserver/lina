@@ -9,6 +9,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const assetsDir = 'assets'
 const outputDir = 'lina'
 
+// 配置加载即求值：生产环境下等于 Docker 构建时刻，开发环境下等于 dev server 启动时刻。
+// 容器默认 UTC，这里统一格式化为北京时间避免时区困惑。
+const BUILD_TIME = new Date().toLocaleString('zh-CN', {
+  timeZone: 'Asia/Shanghai',
+  hour12: false
+})
+
 function resolvePath(dir) {
   return path.resolve(__dirname, dir)
 }
@@ -94,6 +101,7 @@ export default defineConfig(({ mode }) => {
     },
     define: {
       'process.env.NODE_ENV': JSON.stringify(env.NODE_ENV),
+      __BUILD_TIME__: JSON.stringify(BUILD_TIME),
       __VUE_OPTIONS_API__: JSON.stringify(true),
       __VUE_PROD_DEVTOOLS__: JSON.stringify(false),
       __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(false)

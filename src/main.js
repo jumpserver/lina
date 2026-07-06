@@ -35,6 +35,15 @@ import _ from 'lodash'
 
 moment.locale('zh-cn')
 
+// 构建时间：生产环境为 Docker 构建时刻，开发环境为 dev server 启动时刻（见 vite.config.js）
+// 用双色徽章样式打印，与其它 console 信息区分开。
+console.log(
+  `%c 🚀 Lina %c Build Time: ${__BUILD_TIME__} %c`,
+  'background:#409eff;color:#fff;padding:4px 8px;border-radius:4px 0 0 4px;font-weight:bold',
+  'background:#1f2d3d;color:#67c23a;padding:4px 8px;border-radius:0 4px 4px 0;font-weight:bold',
+  'background:transparent'
+)
+
 async function initApp() {
   const app = createApp(App)
 

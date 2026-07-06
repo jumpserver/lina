@@ -7,7 +7,8 @@
   },
   "globals": {
     "_": "readonly",
-    "$xss": "readonly"
+    "$xss": "readonly",
+    "__BUILD_TIME__": "readonly"
   },
   "ignorePatterns": ["build/*.js", "node_modules", "public", "dist", "lina", "src/assets"],
   "categories": {
