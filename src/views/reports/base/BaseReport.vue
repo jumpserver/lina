@@ -12,24 +12,22 @@
           {{ title }}
 
           <span class="datetime"> [{{ new Date().toLocaleString() }}] </span>
-
-          <!-- <span v-if="!nav && url" class="export-btn">
-            <el-button link @click="openNewWindow">
-              <i class="fa fa-external-link" style="font-size: 15px;" />
-              {{ $t('Export') }}
-            </el-button>
-          </span> -->
         </div>
         <div v-if="isDescription" class="description">
           {{ description }}
         </div>
       </div>
-      <span v-if="!nav && url && showReportExportBtn" class="export-btn">
-        <el-button link @click="openNewWindow">
-          <i class="fa fa-external-link" style="font-size: 15px" />
+      <!--
+        导出按钮投递到已有的 page-heading 右侧（.page-heading-right），与页面标题两端对齐，
+        避免在文档流里另起一行或用绝对定位。目标不存在时（如无 Page 头的场景）用 :disabled
+        退化为就地渲染，不报错。
+      -->
+      <Teleport v-if="!nav && url && showReportExportBtn" to=".page-heading-right" :disabled="!hasHeadingTarget">
+        <el-button link class="report-export-btn" @click="openNewWindow">
+          <i class="fa fa-external-link" style="margin-right: 4px; font-size: 13px" />
           {{ $t('Export') }}
         </el-button>
-      </span>
+      </Teleport>
       <div class="charts-zone" :class="{ 'charts-zone--no-padding': disableChartsPadding }">
         <slot />
       </div>
@@ -78,7 +76,10 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      // page-heading 右侧插槽是否存在（存在则把导出按钮 teleport 过去）
+      hasHeadingTarget: false
+    }
   },
   computed: {
     isDescription() {
@@ -87,6 +88,12 @@ export default {
     showReportExportBtn() {
       return store.getters.hasValidLicense
     }
+  },
+  mounted() {
+    // 页面（Page）头部渲染在前，这里探测其右侧插槽是否存在，决定导出按钮是否 teleport
+    this.$nextTick(() => {
+      this.hasHeadingTarget = !!document.querySelector('.page-heading-right')
+    })
   },
   methods: {
     handleChangeChart(event) {
@@ -165,10 +172,22 @@ export default {
   background-color: white;
 }
 
-.export-btn {
-  float: right;
-  line-height: 40px;
-  margin-right: 23px;
+.report-export-btn {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-primary);
+
+  &:hover {
+    color: var(--el-color-primary-light-3) !important;
+  }
+
+  // 点击/聚焦时 el-button 的 inset 阴影和 focus 轮廓会造成“内凹”外观，去掉它们（不改颜色）
+  &:focus,
+  &:focus-visible,
+  &:active {
+    box-shadow: none !important;
+    outline: none !important;
+  }
 }
 
 .content {
@@ -199,16 +218,6 @@ export default {
     height: auto;
     overflow-y: hidden;
     overflow-x: hidden;
-
-    .title-bar {
-      margin: 0 30px;
-    }
-
-    .export-btn {
-      position: absolute;
-      top: 5px;
-      right: 20px;
-    }
   }
 
   .charts-zone {

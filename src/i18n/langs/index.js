@@ -38,4 +38,27 @@ const messages = Object.keys(elementLocaleByAppLocale).reduce((acc, appLocale) =
   return acc
 }, {})
 
+// 后端下发的 cookie(django_language)语言码 → Element Plus 内置 locale 对象。
+// 供 main.js 在安装 ElementPlus 插件时按当前语言设置内置组件(messagebox/分页/
+// 空状态/日期选择器等)的文案;语言切换会整页 reload,故静态取当前语言即可。
+const elementLocaleByCookieLang = {
+  'zh-hans': elementZhCn,
+  'zh-cn': elementZhCn,
+  'zh': elementZhCn,
+  'zh-hant': elementZhTw,
+  'zh-tw': elementZhTw,
+  'en': elementEn,
+  'ja': elementJa,
+  'pt-br': elementPtBr,
+  'es': elementEs,
+  'ru': elementRu,
+  'ko': elementKo,
+  'vi': elementVi
+}
+
+export function getElementLocale(cookieLang) {
+  const raw = (cookieLang || 'en').toLowerCase()
+  return elementLocaleByCookieLang[raw] || elementLocaleByCookieLang[raw.split('-')[0]] || elementEn
+}
+
 export default messages

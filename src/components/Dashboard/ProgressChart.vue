@@ -51,7 +51,10 @@ export default {
         const current = this.data[i]
         let num = (current.total / total) * 100
         num = _.floor(num, 2)
-        const color = '#' + Math.floor(Math.random() * (256 * 256 * 256 - 1)).toString(16)
+        const fallback = '#' + Math.floor(Math.random() * (256 * 256 * 256 - 1)).toString(16)
+        // 颜色必须是静态值：ECharts 图例(legend)无法对函数回调求值，
+        // 用回调会导致图例前的颜色小方块渲染不出来。
+        const itemColor = this.colors[i] || fallback
         seriesList.push({
           type: 'bar',
           stack: 'total',
@@ -59,14 +62,10 @@ export default {
           name: current.label,
           itemStyle: {
             borderRadius: 0,
-            color: () => {
-              return this.colors[i] || color
-            }
+            color: itemColor
           },
           data: [num],
-          color: () => {
-            return this.colors[i] || color
-          }
+          color: itemColor
         })
       }
       return {

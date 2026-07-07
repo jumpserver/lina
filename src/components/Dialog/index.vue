@@ -18,7 +18,7 @@
       <div class="dialog-footer">
         <slot name="footer">
           <el-button v-if="showCancel && showButtons" @click="onCancel">{{
-            cancelTitle
+            $t(cancelTitle)
           }}</el-button>
           <el-button
             v-if="showConfirm && showButtons"
@@ -26,7 +26,7 @@
             type="primary"
             @click="onConfirm"
           >
-            {{ confirmTitle }}
+            {{ $t(confirmTitle) }}
           </el-button>
         </slot>
       </div>
