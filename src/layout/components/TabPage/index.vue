@@ -212,7 +212,7 @@ export default {
   background-color: white;
   margin-top: 0;
   margin-bottom: 0;
-  padding: 0 30px;
+  padding: 0 20px;
   display: flex;
   align-items: stretch;
   min-height: 40px;
@@ -328,7 +328,7 @@ export default {
     flex-direction: column;
     gap: 8px;
     min-height: 0;
-    padding: 10px 30px 0;
+    padding: 10px 20px 0;
     overflow-y: auto;
 
     /*

@@ -433,6 +433,24 @@ export default {
         }
       }
 
+      // hover 光标兜底：EP 默认已给 wrapper 设 cursor，但本表单大量重写 wrapper 样式，
+      // 这里显式声明，保证文本输入是 text、可点选控件是 pointer、禁用是 not-allowed，
+      // 不会因某处继承样式导致 hover 不到应有的光标。
+      .el-input__wrapper {
+        cursor: text;
+      }
+
+      .el-select__wrapper,
+      .el-cascader .el-input__wrapper,
+      .el-date-editor .el-input__wrapper {
+        cursor: pointer;
+      }
+
+      .is-disabled .el-input__wrapper,
+      .el-input.is-disabled .el-input__wrapper {
+        cursor: not-allowed;
+      }
+
       // 自定义复合组件（如 TagInput 的 .filter-field）自带容器边框，其内部输入框不应再被
       // 上面的强制 border 命中，否则形成 border 套 border 的双层边框。
       .filter-field {
@@ -450,6 +468,38 @@ export default {
 
         .el-input__wrapper:has(+ .el-input-group__append) {
           border-right: 0 !important;
+        }
+      }
+
+      // 复合字段通用约定：给自定义的「select + input」等组合控件的最外层容器加 .compound-field。
+      // 约定：容器提供唯一的一圈边框；内部各段（el-select / el-input）的 wrapper 一律去边、去
+      // box-shadow；段与段之间由容器统一补一条分隔线。这样就不会再出现「wrapper 自身边框 + 容器
+      // 边框」层层重叠的问题（PhoneInput 即基于此约定，未来的组合控件加这个 class 即可复用）。
+      .compound-field {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 30px;
+        box-sizing: border-box;
+        border: 1px solid var(--el-border-color);
+        background-color: #fff;
+        overflow: hidden;
+
+        &:hover {
+          border-color: var(--el-border-color-hover) !important;
+        }
+
+        // 段间分隔线：除最后一段外，右侧描一条线
+        > *:not(:last-child) {
+          border-right: 1px solid var(--el-border-color);
+        }
+
+        .el-select__wrapper,
+        .el-input__wrapper {
+          height: 100%;
+          border: 0 !important;
+          border-radius: 0 !important;
+          box-shadow: none !important;
         }
       }
 
