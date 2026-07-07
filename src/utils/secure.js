@@ -53,16 +53,26 @@ export function fillKey(key) {
   if (key.length > KeyLength) {
     key = key.slice(0, KeyLength)
   }
-  const filledKey = Buffer.alloc(KeyLength)
-  const keys = Buffer.from(key)
-  for (let i = 0; i < keys.length; i++) {
+  // 浏览器没有 Node 的 Buffer，用 Uint8Array + TextEncoder 生成等价的 16 字节密钥
+  const filledKey = new Uint8Array(KeyLength)
+  const keys = new TextEncoder().encode(key)
+  for (let i = 0; i < keys.length && i < KeyLength; i++) {
     filledKey[i] = keys[i]
   }
   return filledKey
 }
 
+function bytesToHex(bytes) {
+  let hex = ''
+  for (let i = 0; i < bytes.length; i++) {
+    hex += bytes[i].toString(16).padStart(2, '0')
+  }
+  return hex
+}
+
 export function aesEncrypt(text, originKey) {
-  const key = CryptoJS.enc.Utf8.parse(fillKey(originKey))
+  // 与旧实现（Utf8.parse(Buffer)）字节等价：把 16 字节密钥按 Hex 解析成 WordArray
+  const key = CryptoJS.enc.Hex.parse(bytesToHex(fillKey(originKey)))
   return CryptoJS.AES.encrypt(text, key, {
     mode: CryptoJS.mode.ECB,
     padding: CryptoJS.pad.ZeroPadding

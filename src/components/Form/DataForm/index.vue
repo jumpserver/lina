@@ -358,6 +358,7 @@ export default {
       min-height: 30px;
       padding: 0;
       line-height: 30px;
+      font-size: 13px;
       color: var(--color-text-primary);
       box-sizing: border-box;
 
@@ -389,6 +390,16 @@ export default {
       flex-direction: column;
       gap: 4px;
       align-items: flex-start;
+
+      // radio / checkbox 组：撑到 30px 并让选项在垂直方向居中，
+      // 与左侧同为 30px 居中的 label 对齐（content 是 column，单行选项默认会顶在最上方）
+      .el-radio-group,
+      .el-checkbox-group {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        min-height: 30px;
+      }
 
       .el-input:not(.el-date-editor),
       .el-select,

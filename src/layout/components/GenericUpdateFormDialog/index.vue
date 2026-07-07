@@ -39,7 +39,9 @@
       <el-divider />
     </el-row>
     <el-row>
-      <GenericCreateUpdateForm v-bind="iFormSetting" :key="internalKey" />
+      <el-col :span="24">
+        <GenericCreateUpdateForm v-bind="iFormSetting" :key="internalKey" />
+      </el-col>
     </el-row>
   </Dialog>
 </template>
@@ -122,7 +124,7 @@ export default {
         },
         onSubmit: function (validValues) {
           const url = this.url
-          const msg = this.updateSuccessMsg
+          const msg = this.$t(this.updateSuccessMsg)
           this.$axios
             .patch(url, validValues)
             .then((res) => {
@@ -153,9 +155,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-row-divider {
-  margin-bottom: 20px;
-}
+// .el-row-divider {
+  // margin-bottom: 20px;
+// }
 
 .select-prop-label {
   float: right;

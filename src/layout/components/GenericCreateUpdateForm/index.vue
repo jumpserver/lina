@@ -173,6 +173,9 @@ export default {
         if (addContinue) {
           msg = this.saveSuccessContinueMsg
         }
+        // 这些默认值是原始英文 key（如 CreateSuccessMsg），在此翻译；缺 key 时原样返回，
+        // 调用方传入已翻译的文案也不受影响。
+        msg = this.$t(msg)
         let msgLinkName = ''
         if (res.name) {
           msgLinkName = res.name
