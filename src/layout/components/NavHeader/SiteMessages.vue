@@ -44,36 +44,32 @@
         <div
           v-for="msg of messages"
           :key="msg.id"
-          :class="msg['has_read'] ? 'msg-read' : 'msg-unread'"
           class="msg-item"
+          :class="{ 'is-read': msg['has_read'] }"
           @click="showMsgDetail(msg)"
           @mouseleave="hoverMsgId = ''"
           @mouseover="hoverMsgId = msg.id"
         >
-          <el-row :gutter="10" class="msg-item-head">
-            <el-col :span="15" class="msg-item-head-type">
-              <i
-                :class="msg['has_read'] ? 'fa-envelope-open-o' : 'fa-envelope'"
-                class="fa msg-icon"
-              />
-              {{ msg.content.subject }}
-            </el-col>
-            <el-col :span="9">
-              <span v-if="hoverMsgId !== msg.id || msg['has_read']" class="msg-item-head-time">
-                {{ formatDate(msg.date_created) }}
-              </span>
-              <span v-else class="msg-item-read-btn" @click.stop="markAsRead([msg])">
-                <a>{{ $t('MarkAsRead') }}</a>
-              </span>
-            </el-col>
-          </el-row>
-          <div class="msg-item-txt">
-            <span v-sanitize="msg.content.message" />
+          <div class="msg-item__head">
+            <span v-if="!msg['has_read']" class="msg-item__dot" />
+            <span class="msg-item__subject">{{ msg.content.subject }}</span>
+            <span class="msg-item__meta">
+              <a
+                v-if="hoverMsgId === msg.id && !msg['has_read']"
+                class="msg-item__read"
+                @click.stop="markAsRead([msg])"
+              >
+                {{ $t('MarkAsRead') }}
+              </a>
+              <template v-else>{{ formatDate(msg.date_created) }}</template>
+            </span>
           </div>
+          <div class="msg-item__preview">{{ stripMarkdown(msg.content.message) }}</div>
         </div>
       </div>
-      <div v-else class="no-msg">
-        {{ $t('NoUnreadMsg') }}
+      <div v-else class="msg-empty">
+        <svg-icon icon-class="remind" class="msg-empty__icon" />
+        <span>{{ $t('NoUnreadMsg') }}</span>
       </div>
     </el-drawer>
 
@@ -88,11 +84,9 @@
       @confirm="markAsRead([currentMsg])"
     >
       <div class="msg-detail">
-        <div class="msg-detail-head">
-          <span class="msg-detail-time">{{ formatDate(currentMsg.date_created) }}</span>
-        </div>
         <div class="msg-detail-txt">
-          <MarkDown :value="currentMsg.content.message" />
+          <span class="msg-detail-time">{{ formatDate(currentMsg.date_created) }}</span>
+          <MarkDown :value="formattedMsg" />
         </div>
       </div>
     </Dialog>
@@ -123,6 +117,28 @@ export default {
   computed: {
     width() {
       return this.$store.state.app.device === 'mobile' ? '70%' : '450px'
+    },
+    // 站内信正文是 Markdown，且工单类消息把多个 "**字段:** 值" 挤在同一行，
+    // 渲染出来是一坨内联文本。这里把每个 "**字段:**" 拆成独立的列表项（每字段一行），
+    // 再由样式排成信息表（标签/值）的形式。无粗体字段的普通消息保持原样。
+    formattedMsg() {
+      const raw = this.currentMsg?.content?.message
+      if (!raw) return ''
+      return raw
+        .split('\n')
+        .map((line) => {
+          const trimmed = line.trimStart()
+          // 标题/引用行保持原样
+          if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('>') || trimmed.startsWith('- ')) {
+            return line
+          }
+          // 该行含多个 "**字段:** 值" 时，为每个粗体字段起一个列表项
+          if ((line.match(/\*\*/g) || []).length >= 2) {
+            return line.replace(/\s*(\*\*[^*]+?\*\*)/g, '\n- $1').replace(/^\n/, '')
+          }
+          return line
+        })
+        .join('\n')
     }
   },
   mounted() {
@@ -138,6 +154,23 @@ export default {
     showMsgDetail(msg) {
       this.currentMsg = msg
       this.msgDetailVisible = true
+    },
+    // 列表预览：正文是 Markdown（工单类还含 HTML 片段），这里剥离标记语法/标签，
+    // 得到干净的纯文本用于 1~2 行预览，避免像详情那样把 # / ** 直接暴露出来。
+    stripMarkdown(text) {
+      if (!text) return ''
+      return String(text)
+        .replace(/<[^>]+>/g, ' ') // HTML 标签
+        .replace(/!\[[^\]]*\]\([^)]*\)/g, '') // 图片
+        .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1') // 链接 → 文本
+        .replace(/^\s{0,3}#{1,6}\s*/gm, '') // 标题
+        .replace(/\*\*([^*]+)\*\*/g, '$1') // 粗体
+        .replace(/\*([^*]+)\*/g, '$1') // 斜体
+        .replace(/`([^`]+)`/g, '$1') // 行内代码
+        .replace(/^\s{0,3}>\s?/gm, '') // 引用
+        .replace(/^\s{0,3}[-*+]\s+/gm, '') // 列表符号
+        .replace(/\s+/g, ' ') // 折叠空白
+        .trim()
     },
     getMessages() {
       const url = '/api/v1/notifications/site-messages/?offset=0&limit=15&has_read=false'
@@ -243,193 +276,189 @@ export default {
 }
 
 .msg-list {
-  padding: 0 25px 20px;
+  padding: 4px 0 12px;
 }
 
+// 通知列表项：未读圆点 + 标题 + 时间/悬停操作 + 纯文本预览
 .msg-item {
-  border-bottom: solid 1px rgb(231, 234, 239);
-  padding: 15px 0 10px;
-  position: relative;
-  border-bottom: 1px solid #ddd;
+  padding: 12px 24px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+  transition: background-color 0.2s ease;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: var(--el-fill-color-light, #f5f7fa);
+  }
+}
+
+.msg-item__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 20px;
+}
+
+.msg-item__dot {
+  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-primary, #409eff);
+}
+
+.msg-item__subject {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary, #1f2329);
+}
+
+.msg-item__meta {
+  flex: 0 0 auto;
+  font-size: 12px;
+  color: var(--el-text-color-secondary, #909399);
+  white-space: nowrap;
+}
+
+.msg-item__read {
+  color: var(--color-primary, #409eff);
   cursor: pointer;
 
   &:hover {
-    background-color: #f2f2f2;
-    padding: 15px 20px 10px;
-    margin: 0 -20px;
-    border-bottom: 1px solid #fff;
-  }
-
-  .msg-icon {
-    font-size: 13px !important;
-    line-height: 13px;
-    color: gray !important;
-  }
-
-  &.msg-unread {
-    .msg-item-txt {
-      font-weight: bolder;
-    }
+    text-decoration: underline;
   }
 }
 
-.msg-item-head {
-  line-height: 20px;
-  color: #888;
+.msg-item__preview {
+  // 预览与标题左对齐（让开圆点占位），限制两行
+  margin-top: 4px;
+  padding-left: 14px;
   font-size: 12px;
-
-  &:after {
-    clear: both;
-    content: '.';
-    display: block;
-    height: 0;
-    overflow: hidden;
-  }
-
-  .msg-item-head-type {
-    float: left;
-    //width: 220px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: middle;
-    white-space: nowrap;
-  }
-
-  .msg-item-head-time {
-    float: right;
-  }
-
-  .msg-item-read-btn {
-    float: right;
-  }
-}
-
-.msg-item-txt {
-  overflow: hidden;
-  color: #000;
-  padding: 4px 0 0;
-  line-height: 25px;
-  max-height: 25px;
+  line-height: 18px;
+  color: var(--el-text-color-secondary, #909399);
   display: -webkit-box;
-  font-size: 12px;
-  display: block;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+}
 
-  :deep(.ticket-container) {
-    .title {
-      font-size: 12px;
-    }
+// 已读项（一般刷新后即从未读列表移除，此处兜底弱化展示）
+.msg-item.is-read {
+  .msg-item__subject {
+    font-weight: 400;
+    color: var(--el-text-color-regular, #606266);
   }
 }
 
 .msg-detail {
-  .msg-detail-time {
-    font-weight: 400;
-    line-height: 1.1;
-    float: right;
-    color: var(--N600, #646a73);
-    text-align: right;
-    font-feature-settings:
-      'clig' off,
-      'liga' off;
-    font-size: 14px;
-    font-style: normal;
-  }
-
   .msg-detail-txt {
-    line-height: 24px;
+    max-height: 70vh;
+    overflow-y: auto;
+    font-size: 13px;
+    line-height: 22px;
+    color: var(--N900, #1f2329);
 
-    .el-dialog__title {
-      color: var(--neutral-900, #1f2329);
-      font-size: 16px;
-      font-style: normal;
-      font-weight: 500;
+    // 时间浮到正文右上角，与首行标题同行，不再单独占一行
+    .msg-detail-time {
+      float: right;
+      margin: 0 0 4px 12px;
+      color: var(--el-text-color-secondary, #909399);
+      font-size: 12px;
       line-height: 24px;
     }
 
-    & :deep(a) {
-      color: var(--color-success) !important;
+    // 正文为 Markdown 渲染结果（标题 / 字段列表 / 链接），下面按渲染出的标签排版。
+    :deep(.markdown-body) {
+      padding: 0;
     }
 
-    :deep(.ticket-container) {
-      height: 618px;
-      flex-shrink: 0;
-      border-radius: 4px;
-      background: #fff;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 24px; /* 150% */
+    // 段落分节标题（# / ##）
+    :deep(h1),
+    :deep(h2),
+    :deep(h3) {
+      margin: 16px 0 4px;
+      padding: 0;
+      border: 0;
+      color: var(--neutral-900, #1f2329);
+      font-weight: 600;
+      line-height: 1.4;
+    }
 
-      .title {
-        margin-bottom: 8px;
-        color: var(--neutral-900, #1f2329);
-        font-size: 16px;
-        font-weight: 500;
+    :deep(h1) {
+      margin-top: 0;
+      font-size: 15px;
+    }
+
+    :deep(h2) {
+      font-size: 14px;
+    }
+
+    :deep(h3) {
+      font-size: 13px;
+    }
+
+    :deep(p) {
+      margin: 6px 0;
+    }
+
+    // 字段列表：每字段一行，标签（粗体）固定列宽 + 值，逐行下分割线
+    :deep(ul) {
+      margin: 6px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    :deep(li) {
+      padding: 9px 2px;
+      border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+      line-height: 20px;
+
+      &:last-child {
+        border-bottom: none;
       }
 
-      .card {
-        .child_title {
-          padding-top: 16px;
-          margin: 0 0 12px 16px;
-          display: inline-flex;
-          flex-direction: column;
-          align-items: flex-start;
-          color: var(--neutral-900, #1f2329);
-          font-size: 16px;
-          font-style: normal;
-          font-weight: 500;
-        }
-
-        margin-top: 16px;
-        width: 100%;
+      strong {
         display: inline-block;
-        border-radius: 4px;
-        background: var(--N100, #f5f6f7);
+        min-width: 72px;
+        margin-right: 16px;
+        color: var(--el-text-color-secondary, #8a9099);
+        font-weight: 400;
+        vertical-align: top;
       }
+    }
 
-      .action_group {
-        margin-top: 8px;
-
-        .view-link {
-          color: #3370ff !important;
-          text-align: right;
-          font-size: 14px;
-          border-radius: 4px;
-
-          &:hover {
-            background: rgba(51, 112, 255, 0.2);
-            display: inline-block;
-            border-radius: 4px;
-          }
-        }
-      }
-
-      .field-group {
-        font-size: 14px;
-        padding-inline-start: 0;
-        margin: 0;
-
-        .field-name {
-          margin: 4px 0 4px 16px;
-          color: var(--N600, #646a73);
-          display: inline-block;
-
-          strong {
-            font-weight: 400 !important;
-          }
-        }
-
-        .field-value {
-          color: var(--N900, #1f2329);
-          display: inline-block;
-        }
-      }
+    :deep(a) {
+      color: var(--color-success) !important;
+      word-break: break-all;
     }
   }
 }
 
-.no-msg {
-  padding-top: 20px;
-  text-align: center;
+.msg-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 80px 20px;
+  color: var(--el-text-color-secondary, #909399);
+  font-size: 13px;
+
+  .msg-empty__icon {
+    width: 40px;
+    height: 40px;
+    font-size: 40px;
+    opacity: 0.3;
+  }
 }
 
 :deep(:focus) {

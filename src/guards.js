@@ -6,6 +6,7 @@ import store from '@/store'
 import { isSameView } from '@/utils/jms/index'
 import { toSentenceCase } from '@/utils/common/index'
 import { scopedLocalStorage as localStorage } from '@/utils/storage'
+import i18n from '@/i18n/i18n'
 
 function beforeRouteChange(to, from) {
   localStorage.setItem('activeTab', '')
@@ -46,7 +47,10 @@ function generateViewRoutesIfChange({ to, from }) {
 function setPageTitle() {
   const currentRoute = router.currentRoute?.value || router.currentRoute
   const loginTitle = store.getters.publicSettings['INTERFACE']['login_title']
-  const routeTitle = toSentenceCase(currentRoute?.meta?.title)
+  const rawTitle = currentRoute?.meta?.title
+  // meta.title 是在路由模块加载时用 i18n.t(...) 求值的，那时后端多语言尚未拉取，
+  // 值会被冻结成英文 key；这里在运行时（翻译已就绪后）再翻译一次，保证 tab 标题被正确翻译。
+  const routeTitle = rawTitle ? toSentenceCase(i18n.global.t(rawTitle)) : ''
   if (routeTitle) {
     document.title = routeTitle + ' - ' + loginTitle
   }

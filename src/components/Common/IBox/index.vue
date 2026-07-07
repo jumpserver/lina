@@ -4,7 +4,7 @@
       <slot name="header">
         <div v-if="title" class="clearfix ibox-title">
           <i v-if="fa" :class="'fa ' + fa" />
-          <h5>{{ title }}</h5>
+          <h5>{{ $t(title) }}</h5>
         </div>
       </slot>
     </template>
@@ -66,8 +66,19 @@ export default {
 
 .ibox-title {
   display: flex;
-  gap: 8px;
   align-items: center;
+}
+
+// 间距挂在 icon 上（仅在有 icon 时存在），不用容器级 gap，避免无 icon 时也“预留”出间隙的歧义
+.ibox-title > .fa {
+  margin-right: 8px;
+}
+
+// 图标迁移后 <i class="fa fa-xxx"> 的字形（::before）已被移除，这类 fa 图标实际是不可见的
+// 空元素（:empty），却仍占用上面的 margin，导致“没图标却空出一节”。直接隐藏渲染不出内容的
+// fa 图标（连同其 margin），有真实内容的图标不受影响。
+.ibox-title > .fa:empty {
+  display: none;
 }
 
 .ibox-title h5 {

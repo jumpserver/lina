@@ -277,6 +277,28 @@ export default {
     font-size: 13px;
     color: var(--color-text-primary) !important;
   }
+
+  // 纯图标按钮：el-button 内部还隔着 el-tooltip__trigger 和一层 div，
+  // 外层 button 的 flex 居中不会自动传导到图标；这里把中间链路都撑满并居中。
+  :deep(.action-item .el-tooltip__trigger),
+  :deep(.action-item .el-tooltip__trigger > div) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    line-height: 1;
+  }
+
+  // 无标题时那个空 <span> 仍带 DataActions 的 margin-left:3px，会把图标挤离中心。
+  // 图标工具栏里标题恒为空，直接去掉该 span 及其 margin，图标即可真正居中。
+  :deep(.action-item .pre-icon + span) {
+    margin-left: 0;
+  }
+
+  :deep(.action-item .pre-icon + span:empty) {
+    display: none;
+  }
 }
 
 .table-action-right-side {

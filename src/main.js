@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import ElementPlus from 'element-plus'
-import enLocale from 'element-plus/dist/locale/en.mjs'
+import { getElementLocale } from '@/i18n/langs'
+import { getLangCode } from '@/i18n/utils'
 import 'element-plus/dist/index.css'
 // 导入 Element Plus CSS 变量配置（需要在 Element Plus 样式之后，自定义样式之前）
 import '@/styles/element-plus-vars.scss'
@@ -68,7 +69,7 @@ async function initApp() {
   app.use(store)
   app.use(router)
   app.use(i18n)
-  app.use(ElementPlus, { locale: enLocale, size: 'small' })
+  app.use(ElementPlus, { locale: getElementLocale(getLangCode()), size: 'small' })
   app.use(CookiePlugin)
   app.use(ChartsPlugin)
 
