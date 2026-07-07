@@ -116,12 +116,62 @@ export default {
   min-width: max(100px, 20vw);
   max-width: min(2000px, 80vw);
 }
+
+/*
+ * el-drawer 使用 append-to-body（teleport 到 <body>），scoped :deep() 到不了它的内部，
+ * 因此滚动/高度链必须写在非 scoped 块里，以 .el-drawer.drawer 为根匹配 teleport 后的节点。
+ * 目标：__body 本身不滚；tab 详情页由内部 .tab-page-content 滚动、tabs 头固定；
+ * 普通(非 tab)页面仍由 .drawer__content 整体滚动。
+ */
+.el-drawer.drawer {
+  .el-drawer__body {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .drawer__content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+  }
+
+  // tab 详情页：整条链定高，滚动落在 .tab-page-content 上
+  .page.tab-page {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .page.tab-page .page-content {
+    height: 100%;
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
+  }
+
+  .page.tab-page .tab-page-wrapper {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .page.tab-page .tab-page-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
+}
 </style>
 
 <style lang="scss" scoped>
 .drawer__no-footer {
   :deep(.drawer) {
-    .page {
+    // 仅普通(非 tab)页面沿用固定高 + 由 .drawer__content 整体滚动；
+    // tab 页面改为内部 .tab-page-content 滚动(见下方 .page.tab-page 相关规则),
+    // 不能再被这条固定高撑得比抽屉可视区更高,否则滚动条会贯穿到 tab 区域。
+    .page:not(.tab-page) {
       height: calc(100vh - 55px);
     }
   }
@@ -137,7 +187,8 @@ export default {
 
 .drawer {
   .drawer__content {
-    height: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
     background: rgb(243, 243, 243);
     overflow-y: auto;
     overflow-x: hidden;
@@ -156,26 +207,30 @@ export default {
   }
 
   :deep(.el-drawer__body) {
+    display: flex;
+    flex-direction: column;
     padding: 0;
     overflow: hidden;
   }
 
   :deep(.page.tab-page) {
-    height: auto;
-    min-height: calc(100vh - 110px);
+    height: 100%;
+    min-height: 0;
     display: flex;
     flex-direction: column;
-    overflow: visible;
+    overflow: hidden;
   }
 
   :deep(.page.tab-page .page-content) {
+    height: 100%;
+    min-height: 0;
+    flex: 1 1 auto;
     padding: 0 !important;
-    overflow: visible !important;
+    overflow: hidden !important;
   }
 
   :deep(.page.tab-page .tab-page-wrapper) {
-    height: auto;
-    min-height: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     min-height: 0;
@@ -240,7 +295,8 @@ export default {
     min-height: 0;
     padding: 10px 30px 22px;
     box-sizing: border-box;
-    overflow: visible;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     background: #f3f3f3;
   }
 

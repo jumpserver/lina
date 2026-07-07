@@ -15,6 +15,10 @@ const i18n = createI18n({
   fallbackLocale: 'en',
   missingWarn: false,
   fallbackWarn: false,
+  // 后端 i18n 接口下发的部分帮助文案（如 crontab 说明）含 <br/>/<a> 等 HTML，
+  // vue-i18n 默认会对含 HTML 的消息告警提示 XSS 风险。项目渲染这些文案统一走
+  // v-sanitize（DOMPurify）消毒，并非直接 v-html 注入，故此告警为噪音，这里关闭。
+  warnHtmlMessage: false,
   datetimeFormats: date,
   messages
 })
