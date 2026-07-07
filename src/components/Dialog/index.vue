@@ -163,7 +163,10 @@ export default {
     font-size: 13px;
   }
 
-  .el-dialog__body .el-form {
+  // 以下是给「直接放在 dialog 里的普通 el-form」用的兜底样式。
+  // DataForm（.form-fields）有自己的一整套间距/标签/输入框规范（flex gap、margin:0 等），
+  // 不能被这里覆盖，否则会多出 20px 的 margin-bottom 等冲突，故用 :not(.form-fields) 排除。
+  .el-dialog__body .el-form:not(.form-fields) {
     margin: 0;
 
     .el-form-item {

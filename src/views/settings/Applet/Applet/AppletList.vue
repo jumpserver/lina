@@ -1,12 +1,8 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col :md="24" :sm="24">
-        <el-alert type="info">
-          {{ $t('AppletHelpText') }}
-        </el-alert>
-      </el-col>
-    </el-row>
+    <el-alert type="info">
+      <span v-sanitize="$t('AppletHelpText')" />
+    </el-alert>
     <CardTable v-bind="$data" ref="CardTable" />
     <UploadDialog v-model:visible="uploadDialogVisible" @upload-event="handleUpload" />
   </div>
