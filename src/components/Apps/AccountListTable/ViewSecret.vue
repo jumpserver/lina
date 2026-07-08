@@ -155,7 +155,7 @@ export default {
       })
     },
     showSecretDialog() {
-      if (!this.publicSettings.SECURITY_ACCOUNT_SECRET_READ) {
+      if (this.publicSettings.SECURITY_DISABLE_VIEW_SECRET) {
         this.$message.warning(this.$tc('AccountSecretReadDisabled'))
         return
       }
