@@ -19,7 +19,7 @@
         <div class="add">
           <span class="add-num">
             {{ $tc('WeekAdd') }}：
-            <span :class="{ increase: config.weekAdd > 0 }" style="font-size: 14px">
+            <span :class="{'increase': config.weekAdd > 0}" style="font-size: 14px;">
               {{ config.weekAdd }}
             </span>
           </span>
@@ -36,8 +36,8 @@
 </template>
 
 <script>
-import RingChart from './RingChart';
-import Title from './Title.vue';
+import Title from './Title.vue'
+import RingChart from './RingChart'
 
 export default {
   components: {
@@ -60,11 +60,11 @@ export default {
 .card {
   width: 100%;
   padding: 20px;
-  background-color: #fff;
+  background-color: #FFF;
 
   .card-content {
     padding-bottom: 16px;
-    border-bottom: 1px solid #eff0f1;
+    border-bottom: 1px solid #EFF0F1;
 
     .title,
     .num {
@@ -111,7 +111,7 @@ export default {
   .ring {
     padding: 26px 0 10px;
 
-    & :deep(.echarts) {
+    & ::v-deep .echarts {
       width: 100% !important;
       height: 278px !important;
     }
@@ -122,7 +122,7 @@ export default {
   }
 
   .increase {
-    color: var(--color-primary) !important;
+    color: var(--color-primary);
   }
 }
 </style>

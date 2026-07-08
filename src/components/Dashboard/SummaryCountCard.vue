@@ -1,15 +1,15 @@
 <template>
   <div class="box">
-    <div style="margin-bottom: 12px">
+    <div style="margin-bottom: 12px;">
       <Title :config="config" />
     </div>
     <div class="content">
       <SummaryCard
-        v-bind="item.body"
         v-for="item of items"
         :key="item.title"
         :title="item.title"
         class="summary-card"
+        v-bind="item.body"
       />
     </div>
   </div>
@@ -45,7 +45,7 @@ export default {
 <style lang="scss" scoped>
 .box {
   padding: 20px;
-  background: #ffffff;
+  background: #FFFFFF;
 
   .content {
     display: flex;
@@ -54,7 +54,7 @@ export default {
 
     .summary-card {
       padding-left: 16px;
-      border-left: 1px solid #eff0f1;
+      border-left: 1px solid #EFF0F1;
 
       &:first-child {
         padding-left: 0;

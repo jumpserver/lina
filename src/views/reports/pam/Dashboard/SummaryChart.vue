@@ -8,10 +8,10 @@
 
         <div class="total-section">
           <div class="total-title">{{ $t('TotalAccounts') }}</div>
-          <div class="total-account">{{ config.total }}</div>
+          <div class="total-account"> {{ config.total }} </div>
           <div class="week-add">
-            <div class="week-add-title">{{ $t('WeekAdd') }}</div>
-            <div class="week-add-value">+ {{ config.weekAdd }}</div>
+            <div class="week-add-title"> {{ $t('WeekAdd') }} </div>
+            <div class="week-add-value"> + {{ config.weekAdd }} </div>
           </div>
         </div>
       </div>
@@ -29,7 +29,7 @@
         @click="!item.disabled && handleClick(item)"
       >
         <span class="metric-label">{{ $tc(item.label) }}</span>
-        <span class="metric-value" :class="{ increase: config[item.key] > 0 }">
+        <span class="metric-value" :class="{'increase': config[item.key] > 0}">
           {{ config[item.key] }}
         </span>
       </div>
@@ -40,6 +40,7 @@
 <script>
 import * as echarts from 'echarts'
 import Title from '@/components/Dashboard/Title.vue'
+import { colorToRgba, getCssVar } from '@/utils/theme/color'
 
 export default {
   components: {
@@ -79,6 +80,8 @@ export default {
   },
   computed: {
     chartOption() {
+      const primaryColor = getCssVar('--color-primary')
+
       return {
         title: {
           show: false
@@ -99,12 +102,7 @@ export default {
             show: false,
             type: 'category',
             boundaryGap: false,
-            data: [
-              this.$t('Privileged'),
-              this.$t('ResetSecret'),
-              this.$t('Connectable'),
-              this.$t('Active')
-            ]
+            data: [this.$t('Privileged'), this.$t('ResetSecret'), this.$t('Connectable'), this.$t('Active')]
           }
         ],
         yAxis: [
@@ -119,22 +117,22 @@ export default {
             stack: 'Total',
             smooth: true,
             itemStyle: {
-              color: '#1AB394'
+              color: primaryColor
             },
             lineStyle: {
               width: 2,
-              color: '#1AB394'
+              color: primaryColor
             },
             showSymbol: false,
             areaStyle: {
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                 {
                   offset: 0,
-                  color: 'rgba(26, 179, 148, 0.3)'
+                  color: colorToRgba(primaryColor, 0.3)
                 },
                 {
                   offset: 1,
-                  color: 'rgba(26, 179, 148, 0)'
+                  color: colorToRgba(primaryColor, 0)
                 }
               ])
             },
@@ -152,16 +150,9 @@ export default {
       handler(newData) {
         if (this.chart) {
           this.chart.setOption({
-            series: [
-              {
-                data: [
-                  newData.privileged,
-                  newData.resetSecret,
-                  newData.connectable,
-                  newData.is_active
-                ]
-              }
-            ]
+            series: [{
+              data: [newData.privileged, newData.resetSecret, newData.connectable, newData.is_active]
+            }]
           })
         }
       },
@@ -198,7 +189,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$text-color: #646a73;
+$text-color: #646A73;
 
 .el-divider--horizontal {
   margin: unset !important;
@@ -211,7 +202,7 @@ $text-color: #646a73;
   width: 100%;
   height: 100%;
   padding: 1.25rem;
-  background-color: #fff;
+  background-color: #FFF;
   overflow: hidden;
   border-radius: 0.25rem;
 
@@ -232,18 +223,18 @@ $text-color: #646a73;
 
         .total-title {
           font-size: 0.875rem;
-          color: #646a73;
+          color: #646A73;
           font-weight: 400;
         }
 
         .sub-title {
-          color: #646a73;
+          color: #646A73;
           font-size: 0.9rem;
           font-weight: 400;
         }
 
         .total-account {
-          color: #1f2329;
+          color: #1F2329;
           font-size: 2rem;
           font-weight: 500;
           line-height: 2.5rem;
@@ -252,7 +243,7 @@ $text-color: #646a73;
         .week-add {
           display: flex;
           gap: 0.5rem;
-          color: #1f2329;
+          color: #1F2329;
           font-weight: 400;
           line-height: 1.4rem;
 
@@ -263,7 +254,7 @@ $text-color: #646a73;
           }
 
           .week-add-value {
-            color: #f54a45;
+            color: #F54A45;
             font-size: 0.9rem;
             font-weight: inherit;
             line-height: inherit;
@@ -290,14 +281,14 @@ $text-color: #646a73;
       transition: all 0.3s ease-in-out;
 
       .metric-label {
-        color: #646a73;
+        color: #646A73;
         font-weight: 400;
         line-height: 1.4rem;
         font-size: 0.9rem;
       }
 
       .metric-value {
-        color: #1f2329;
+        color: #1F2329;
         line-height: 2rem;
         font-size: 1.5rem;
         font-weight: 500;
@@ -308,7 +299,7 @@ $text-color: #646a73;
         transform: translateY(-0.2rem);
 
         .metric-value {
-          color: #1ab394;
+          color: var(--color-primary);
         }
       }
     }
