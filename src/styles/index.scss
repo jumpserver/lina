@@ -872,6 +872,14 @@ li.rmenu i.fa {
   }
 }
 
+// drawer 内的表单不需要这段额外 margin(card 内边距已负责间距)
+.el-drawer {
+  .el-card__body .el-form {
+    margin-top: 0;
+    margin-right: 0;
+  }
+}
+
 .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label {
   span {
     &::before {

@@ -1,7 +1,6 @@
 <template>
   <Dialog
     class="column-setting-dialog"
-    v-if="showColumnSettingPopover"
     v-model:visible="showColumnSettingPopover"
     :cancel-title="$tc('RestoreDefault')"
     :destroy-on-close="true"

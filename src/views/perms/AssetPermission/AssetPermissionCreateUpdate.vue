@@ -124,7 +124,10 @@ export default {
         },
         actions: {
           label: this.$t('Action'),
-          helpText: this.$t('ActionsTips')
+          helpText: this.$t('ActionsTips'),
+          el: {
+            expandAll: true
+          }
         },
         date_start: {},
         date_expired: {},

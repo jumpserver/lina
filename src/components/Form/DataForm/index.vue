@@ -414,8 +414,6 @@ export default {
       }
 
       .el-input__wrapper,
-      .el-select__wrapper,
-      .el-cascader .el-input__wrapper,
       .el-input-group__prepend,
       .el-input-group__append,
       .el-date-editor.el-input,
@@ -425,6 +423,25 @@ export default {
         height: 30px;
         box-sizing: border-box;
         border-radius: 0;
+      }
+
+      .el-select__wrapper,
+      .el-cascader .el-input__wrapper {
+        min-height: 30px;
+        height: auto;
+        box-sizing: border-box;
+        border-radius: 0;
+      }
+
+      .el-select__wrapper {
+        padding-top: 2px;
+        padding-bottom: 2px;
+      }
+
+      .el-cascader .el-input {
+        --el-input-height: 30px;
+        height: auto;
+        line-height: 30px;
       }
 
       .el-input__wrapper,

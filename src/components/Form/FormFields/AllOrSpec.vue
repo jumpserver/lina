@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="all-or-spec">
     <el-radio-group v-model="type" @input="handleTypeChange">
       <el-radio v-for="tp of types" :key="tp.name" :value="tp.name">
         {{ tp.label }}
@@ -71,4 +71,12 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.all-or-spec {
+  width: 100%;
+
+  :deep(.select2) {
+    width: 100%;
+  }
+}
+</style>
