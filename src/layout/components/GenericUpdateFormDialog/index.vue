@@ -7,40 +7,35 @@
     :show-confirm="false"
     :title="$tc('UpdateSelected')"
     top="1vh"
-    width="70%"
+    width="35%"
     @update:visible="$emit('update:visible', $event)"
   >
     <el-alert v-if="tips" class="tips" type="info">{{ tips }}</el-alert>
-    <el-row :gutter="20">
-      <el-col :md="4" :sm="24">
-        <div class="select-prop-label">
-          <label>{{ selectPropertiesLabel }}</label>
-        </div>
-      </el-col>
-      <el-col :md="18" :sm="24">
-        <el-checkbox-group
-          :model-value="checkedFields"
-          @change="handleCheckedFieldsChange"
-          @update:model-value="checkedFields = $event"
+    <div class="select-prop">
+      <span class="select-prop__label">{{ selectPropertiesLabel }}</span>
+      <el-checkbox-group
+        class="select-prop__group"
+        :model-value="checkedFields"
+        @change="handleCheckedFieldsChange"
+        @update:model-value="checkedFields = $event"
+      >
+        <el-checkbox
+          v-for="(value, name) in iFormSetting.fieldsMeta"
+          :key="name"
+          :checked="true"
+          :disabled="value.disabled"
+          :label="name"
         >
-          <el-checkbox
-            v-for="(value, name) in iFormSetting.fieldsMeta"
-            :key="name"
-            :checked="true"
-            :disabled="value.disabled"
-            :label="name"
-          >
-            {{ value.label }}
-          </el-checkbox>
-        </el-checkbox-group>
-      </el-col>
-    </el-row>
+          {{ value.label }}
+        </el-checkbox>
+      </el-checkbox-group>
+    </div>
     <el-row class="el-row-divider">
       <el-divider />
     </el-row>
     <el-row>
       <el-col :span="24">
-        <GenericCreateUpdateForm v-bind="iFormSetting" :key="internalKey" />
+        <GenericCreateUpdateForm v-bind="iFormSetting" label-width="90px" :key="internalKey" />
       </el-col>
     </el-row>
   </Dialog>
@@ -156,12 +151,33 @@ export default {
 
 <style lang="scss" scoped>
 // .el-row-divider {
-  // margin-bottom: 20px;
+// margin-bottom: 20px;
 // }
 
-.select-prop-label {
-  float: right;
-  padding-right: 30px;
+.select-prop {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.select-prop__label {
+  flex: 0 0 auto;
+  line-height: 30px;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+.select-prop__group {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 24px;
+
+  :deep(.el-checkbox) {
+    height: 30px;
+    margin: 0;
+  }
 }
 
 .tips {

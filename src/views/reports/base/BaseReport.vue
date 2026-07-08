@@ -71,12 +71,20 @@
         </div>
         <div v-if="!nav" class="title-right">
           <RightAction :name="name" :editor-only="true" :delete-only="true" />
-          <span v-if="url && showReportExportBtn" class="export-btn inline-export-btn">
-            <el-button type="text" @click="openNewWindow">
-              <i class="fa fa-external-link" style="font-size: 15px" />
+          <!--
+            导出/自定义按钮投递到已有的 page-heading 右侧（.page-heading-right），与页面标题两端对齐。
+            用 v-if(hasHeadingTarget) 直接挂载到目标（而不是 :disabled 挂载后再从文档流“移动”过去），
+            避免页面过渡期间移动节点触发的 insertBefore null。
+          -->
+          <Teleport
+            v-if="hasHeadingTarget && !nav && url && showReportExportBtn"
+            to=".page-heading-right"
+          >
+            <el-button link class="report-export-btn" @click="openNewWindow">
+              <i class="fa fa-external-link" style="margin-right: 4px; font-size: 13px" />
               {{ $t('Customize') }}
             </el-button>
-          </span>
+          </Teleport>
         </div>
       </div>
       <div class="charts-zone" :class="{ 'charts-zone--no-padding': disableChartsPadding }">
@@ -154,13 +162,15 @@ export default {
   },
   data() {
     const initModes = Array.isArray(this.displayMode) ? this.displayMode : [this.displayMode]
-    const normalizedInit = initModes.filter(m => m === 'chart' || m === 'table')
+    const normalizedInit = initModes.filter((m) => m === 'chart' || m === 'table')
     return {
       selectedChartNames: [],
       selectedTableNames: [],
       headerDateTime: new Date().toLocaleString(),
       visibilityObserver: null,
-      internalDisplayMode: normalizedInit.length ? normalizedInit : ['chart', 'table']
+      internalDisplayMode: normalizedInit.length ? normalizedInit : ['chart', 'table'],
+      // page-heading 右侧插槽是否存在（存在才把导出/自定义按钮 teleport 过去，避免目标缺失时报错）
+      hasHeadingTarget: false
     }
   },
   computed: {
@@ -175,7 +185,7 @@ export default {
     },
     selectedDisplayModes() {
       const modes = this.internalDisplayMode
-      const normalized = modes.filter(mode => mode === 'chart' || mode === 'table')
+      const normalized = modes.filter((mode) => mode === 'chart' || mode === 'table')
       return normalized.length ? normalized : ['chart', 'table']
     },
     chartOptions() {
@@ -191,7 +201,7 @@ export default {
   watch: {
     displayMode(val) {
       const modes = Array.isArray(val) ? val : [val]
-      const normalized = modes.filter(m => m === 'chart' || m === 'table')
+      const normalized = modes.filter((m) => m === 'chart' || m === 'table')
       this.internalDisplayMode = normalized.length ? normalized : ['chart', 'table']
     },
     charts: {
@@ -216,7 +226,11 @@ export default {
   },
   mounted() {
     this.setupVisibilityObserver()
-    this.$nextTick(() => this.applyItemVisibility())
+    this.$nextTick(() => {
+      this.applyItemVisibility()
+      // Page 头部在前渲染，这里探测其右侧插槽是否存在，决定是否把导出/自定义按钮 teleport 过去
+      this.hasHeadingTarget = !!document.querySelector('.page-heading-right')
+    })
   },
   beforeUnmount() {
     if (this.visibilityObserver) {
@@ -227,28 +241,40 @@ export default {
   methods: {
     isDisplayModeEnabled(mode) {
       if (!this.selectedDisplayModes.includes(mode)) return false
-      if (mode === 'chart' && this.chartOptions.length > 0 && this.selectedChartNames.length === 0) return false
-      if (mode === 'table' && this.tableOptions.length > 0 && this.selectedTableNames.length === 0) return false
+      if (
+        mode === 'chart' &&
+        this.chartOptions.length > 0 &&
+        this.selectedChartNames.length === 0
+      ) {
+        return false
+      }
+      if (
+        mode === 'table' &&
+        this.tableOptions.length > 0 &&
+        this.selectedTableNames.length === 0
+      ) {
+        return false
+      }
       return true
     },
     normalizeOptions(items) {
       if (!Array.isArray(items)) return []
       return items
-        .filter(item => item && typeof item.name === 'string' && item.name.trim() !== '')
-        .map(item => ({
+        .filter((item) => item && typeof item.name === 'string' && item.name.trim() !== '')
+        .map((item) => ({
           name: item.name,
           title: String(item.title || item.name)
         }))
     },
     getDefaultSelectedNames(current, options) {
-      const optionNames = options.map(item => item.name)
+      const optionNames = options.map((item) => item.name)
       const selected = Array.isArray(current)
-        ? current.filter(name => optionNames.includes(name))
+        ? current.filter((name) => optionNames.includes(name))
         : []
       return selected.length ? selected : optionNames
     },
     parseQuerySelection(key, options) {
-      const optionNames = options.map(item => item.name)
+      const optionNames = options.map((item) => item.name)
       if (!optionNames.length) return []
       const optionNameSet = new Set(optionNames)
       const titleToName = options.reduce((acc, item) => {
@@ -265,8 +291,8 @@ export default {
       const selected = Array.from(
         new Set(
           rawList
-            .map(v => String(v).trim())
-            .map(v => (optionNameSet.has(v) ? v : (titleToName[v] || '')))
+            .map((v) => String(v).trim())
+            .map((v) => (optionNameSet.has(v) ? v : titleToName[v] || ''))
             .filter(Boolean)
         )
       )
@@ -302,38 +328,46 @@ export default {
     syncSelectionsFromReportDetail() {
       const reportId = this.getCustomReportId()
       if (!reportId) return
-      fetchReportDetailShared(this.$axios, reportId).then(detail => {
-        if (this.getCustomReportId() !== reportId) return
-        const filters = (detail && detail.filters) || {}
-        const chartNames = this.chartOptions.map(item => item.name)
-        const tableNames = this.tableOptions.map(item => item.name)
-        const savedCharts = normalizeVisibleFilterList(filters.visible_charts)
-        const savedTables = normalizeVisibleFilterList(filters.visible_tables)
-        if (savedCharts.length) {
-          this.selectedChartNames = savedCharts.filter(name => chartNames.includes(name))
-        } else if (filters.visible_charts !== undefined) {
-          this.selectedChartNames = []
-        } else {
-          this.selectedChartNames = chartNames
-        }
-        if (savedTables.length) {
-          this.selectedTableNames = savedTables.filter(name => tableNames.includes(name))
-        } else if (filters.visible_tables !== undefined) {
-          this.selectedTableNames = []
-        } else {
-          this.selectedTableNames = tableNames
-        }
-        this.$nextTick(() => this.applyItemVisibility())
-      }).catch(() => {
-        this.selectedChartNames = this.getDefaultSelectedNames(this.selectedChartNames, this.chartOptions)
-        this.selectedTableNames = this.getDefaultSelectedNames(this.selectedTableNames, this.tableOptions)
-        this.$nextTick(() => this.applyItemVisibility())
-      })
+      fetchReportDetailShared(this.$axios, reportId)
+        .then((detail) => {
+          if (this.getCustomReportId() !== reportId) return
+          const filters = (detail && detail.filters) || {}
+          const chartNames = this.chartOptions.map((item) => item.name)
+          const tableNames = this.tableOptions.map((item) => item.name)
+          const savedCharts = normalizeVisibleFilterList(filters.visible_charts)
+          const savedTables = normalizeVisibleFilterList(filters.visible_tables)
+          if (savedCharts.length) {
+            this.selectedChartNames = savedCharts.filter((name) => chartNames.includes(name))
+          } else if (filters.visible_charts !== undefined) {
+            this.selectedChartNames = []
+          } else {
+            this.selectedChartNames = chartNames
+          }
+          if (savedTables.length) {
+            this.selectedTableNames = savedTables.filter((name) => tableNames.includes(name))
+          } else if (filters.visible_tables !== undefined) {
+            this.selectedTableNames = []
+          } else {
+            this.selectedTableNames = tableNames
+          }
+          this.$nextTick(() => this.applyItemVisibility())
+        })
+        .catch(() => {
+          this.selectedChartNames = this.getDefaultSelectedNames(
+            this.selectedChartNames,
+            this.chartOptions
+          )
+          this.selectedTableNames = this.getDefaultSelectedNames(
+            this.selectedTableNames,
+            this.tableOptions
+          )
+          this.$nextTick(() => this.applyItemVisibility())
+        })
     },
     getCustomReportId() {
       const query = (this.$route && this.$route.query) || {}
       const v = query.report_id
-      return Array.isArray(v) ? v[0] : (v || '')
+      return Array.isArray(v) ? v[0] : v || ''
     },
     pushVisibilityQuery() {
       if (!this.$router || !this.$route) return
@@ -389,7 +423,7 @@ export default {
     },
     handleDisplayModeChange(modes) {
       const normalized = Array.isArray(modes)
-        ? Array.from(new Set(modes.filter(mode => mode === 'chart' || mode === 'table')))
+        ? Array.from(new Set(modes.filter((mode) => mode === 'chart' || mode === 'table')))
         : []
       if (!normalized.length) {
         return
@@ -404,26 +438,25 @@ export default {
       if (!checked && idx >= 0) nextModes.splice(idx, 1)
       if (!nextModes.length) return
       if (!checked) {
-        const otherHasItems = mode === 'chart'
-          ? this.selectedTableNames.length > 0
-          : this.selectedChartNames.length > 0
+        const otherHasItems =
+          mode === 'chart' ? this.selectedTableNames.length > 0 : this.selectedChartNames.length > 0
         if (!otherHasItems) return
       }
       this.handleDisplayModeChange(nextModes)
       if (mode === 'chart') {
-        this.selectedChartNames = checked ? this.chartOptions.map(item => item.name) : []
+        this.selectedChartNames = checked ? this.chartOptions.map((item) => item.name) : []
         this.pushVisibilityQuery()
         this.$nextTick(() => this.applyItemVisibility())
       }
       if (mode === 'table') {
-        this.selectedTableNames = checked ? this.tableOptions.map(item => item.name) : []
+        this.selectedTableNames = checked ? this.tableOptions.map((item) => item.name) : []
         this.pushVisibilityQuery()
         this.$nextTick(() => this.applyItemVisibility())
       }
     },
     handleChartSelectionChange(names) {
       const normalized = Array.isArray(names)
-        ? names.filter(name => this.chartOptions.some(item => item.name === name))
+        ? names.filter((name) => this.chartOptions.some((item) => item.name === name))
         : []
       if (!normalized.length && !this.selectedTableNames.length) return
       this.selectedChartNames = normalized
@@ -432,7 +465,7 @@ export default {
     },
     handleTableSelectionChange(names) {
       const normalized = Array.isArray(names)
-        ? names.filter(name => this.tableOptions.some(item => item.name === name))
+        ? names.filter((name) => this.tableOptions.some((item) => item.name === name))
         : []
       if (!normalized.length && !this.selectedChartNames.length) return
       this.selectedTableNames = normalized
@@ -447,16 +480,16 @@ export default {
       const selected = type === 'chart' ? this.selectedChartNames : this.selectedTableNames
       if (!options.length) return true
       if (!selected.length) return false
-      const matchedByName = options.find(item => item.name === name)
+      const matchedByName = options.find((item) => item.name === name)
       if (matchedByName) return selected.includes(matchedByName.name)
-      const matchedByTitle = options.find(item => item.title === name)
+      const matchedByTitle = options.find((item) => item.title === name)
       if (matchedByTitle) return selected.includes(matchedByTitle.name)
       return true
     },
     applyItemVisibility() {
       if (!this.$el) return
       const nodes = this.$el.querySelectorAll('[data-report-type][data-report-name]')
-      nodes.forEach(node => {
+      nodes.forEach((node) => {
         const type = node.getAttribute('data-report-type')
         const name = node.getAttribute('data-report-name')
         const isVisible = this.isItemSelected(type, name)
@@ -602,6 +635,25 @@ export default {
     float: none;
     line-height: 1;
     margin-right: 0;
+  }
+}
+
+.report-export-btn {
+  // teleport 到 page-heading 右侧插槽（本身 flex 靠右），这里只管字号/颜色/去内凹
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-primary);
+
+  &:hover {
+    color: var(--el-color-primary-light-3) !important;
+  }
+
+  // 点击/聚焦时 el-button 的 inset 阴影和 focus 轮廓会造成“内凹”外观，去掉它们（不改颜色）
+  &:focus,
+  &:focus-visible,
+  &:active {
+    box-shadow: none !important;
+    outline: none !important;
   }
 }
 

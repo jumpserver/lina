@@ -4,28 +4,28 @@
     :close-on-click-modal="false"
     :destroy-on-close="true"
     :loading-status="loadStatus"
-    :show-cancel="false"
+    :show-cancel="!showTable"
     :show-confirm="false"
+    :cancel-title="$tc('Cancel')"
     :title="importTitle"
     class="importDialog"
     width="900px"
+    @cancel="handleImportCancel"
     @close="handleImportCancel"
   >
-    <el-form v-if="!showTable" label-position="left" style="padding-left: 20px">
-      <el-form-item :label="$tc('Import')" :label-width="'100px'">
+    <el-form v-if="!showTable" class="import-form" label-position="left">
+      <el-form-item :label="$tc('Import')" :label-width="'100px'" class="import-option">
         <el-radio v-if="canImportCreate" v-model="importOption" class="export-item" value="create">
           {{ $t('Create') }}
         </el-radio>
         <el-radio v-if="canImportUpdate" v-model="importOption" class="export-item" value="update">
           {{ $t('Update') }}
         </el-radio>
-        <div style="line-height: 1.5">
-          <span class="el-upload__tip">
-            {{ downloadTemplateTitle }}
-            <el-link type="success" @click="downloadTemplateFile('csv')"> CSV </el-link>
-            <el-link type="success" @click="downloadTemplateFile('xlsx')"> XLSX </el-link>
-          </span>
-        </div>
+        <span class="el-upload__tip download-tpl">
+          {{ downloadTemplateTitle }}
+          <el-link type="success" @click="downloadTemplateFile('csv')"> CSV </el-link>
+          <el-link type="success" @click="downloadTemplateFile('xlsx')"> XLSX </el-link>
+        </span>
       </el-form-item>
       <el-form-item :label="$tc('Upload')" :label-width="'100px'" class="file-uploader">
         <el-upload
@@ -269,11 +269,11 @@ export default {
   overflow: auto;
 }
 
-.file-uploader :deep(.el-upload) {
-  width: 100%;
-  //padding-right: 150px;
+.file-uploader :deep(.el-form-item__content) {
+  display: block;
 }
 
+.file-uploader :deep(.el-upload),
 .file-uploader :deep(.el-upload-dragger) {
   width: 100%;
 }
@@ -294,12 +294,37 @@ export default {
   padding-bottom: 20px;
 }
 
-.export-item {
-  margin-left: 80px;
+.import-form {
+  padding-left: 20px;
 }
 
-.export-item:first-child {
-  margin-left: 0;
+// 导入选项行用 flex：创建/更新单选项 + 下载模板链接一行内均匀排列、垂直居中、可换行
+.import-option :deep(.el-form-item__content) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0px 120px;
+}
+
+.export-item {
+  margin: 0;
+}
+
+// 下载模板提示单独占一行，展示在「创建/更新」单选项下方；
+// 用 flex + align-items:center 让文字(17)与 el-link(21) 垂直居中对齐，字号统一 13px
+.download-tpl {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+
+  :deep(.el-link) {
+    margin-left: 0;
+    font-size: 13px;
+    vertical-align: middle;
+  }
 }
 
 .hasError {
@@ -309,9 +334,5 @@ export default {
 .el-upload__tip {
   line-height: 1.5;
   padding-top: 0;
-
-  .el-link {
-    margin-left: 10px;
-  }
 }
 </style>

@@ -21,7 +21,6 @@
               :key="option.value"
               :disabled="!option.can"
               :value="option.value"
-              style="padding: 10px 20px"
             >
               {{ option.label }}
             </el-radio>
@@ -257,10 +256,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// 导出选项用 flex 排布：同组单选项一行内均匀排列、可换行、垂直居中，不再 block 堆叠/错落
+:deep(.el-radio-group) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px;
+}
+
 .export-item {
-  width: 100%;
-  display: block;
-  padding: 10px 20px;
+  margin: 0;
+  padding: 0;
 }
 
 .export-form :deep(.el-form-item__label) {
