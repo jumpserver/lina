@@ -472,12 +472,22 @@ export default {
 
       // 组合型输入框（input-group）：prepend/append 自带外边框，
       // 内部 wrapper 不再于接缝处重复描边，避免 border 套 border 的双层边框。
-      .el-input-group {
+      // 加了 .keep-inner-border 的组合控件（如协议端口）例外：分隔线由中间 input 的左右
+      // border 提供（select 右侧、button 左侧不描边），故不在此清除 wrapper 的左右 border。
+      .el-input-group:not(.keep-inner-border) {
         .el-input-group__prepend + .el-input__wrapper {
           border-left: 0 !important;
         }
 
         .el-input__wrapper:has(+ .el-input-group__append) {
+          border-right: 0 !important;
+        }
+      }
+
+      // keep-inner-border 组合控件：分隔线只由中间 input 的左右 border 提供，
+      // 故左侧 select 内部 wrapper 右边不再描边，避免与 input 左 border 叠成双线。
+      .el-input-group.keep-inner-border {
+        .el-input-group__prepend .el-select__wrapper {
           border-right: 0 !important;
         }
       }

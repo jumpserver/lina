@@ -2,9 +2,9 @@
   <div :class="showSetting ? 'show-setting' : 'hide-setting'">
     <div v-for="(item, index) in items" :key="item.name" class="protocol-item">
       <el-input
-        v-bind="$attrs"
+        v-bind="passAttrs"
         v-model="item.port"
-        :class="isPortReadonly(item) ? '' : 'input-with-select'"
+        :class="isPortReadonly(item) ? 'keep-inner-border' : 'input-with-select keep-inner-border'"
         :placeholder="portPlaceholder"
         :readonly="isPortReadonly(item)"
         :title="isPortReadonly(item) ? '端口由 URL 指定' : ''"
@@ -80,6 +80,11 @@ export default {
   components: {
     ProtocolSettingDialog
   },
+  // Vue3 中父组件的事件监听器会合并进 $attrs。若把 $attrs 原样透传给内部端口输入框，
+  // 表单渲染器注入的 onInput/onChange/onUpdate:modelValue 就会绑到内部 el-input 上，
+  // 用户输入端口时把字符串 port 当作整个协议字段的值向上抛出，触发
+  // "value.map is not a function"。因此关闭自动继承，并只透传非事件属性。
+  inheritAttrs: false,
   props: {
     value: {
       type: [String, Array],
@@ -121,6 +126,16 @@ export default {
     }
   },
   computed: {
+    passAttrs() {
+      // 只把非事件监听的属性透传给内部端口输入框，过滤掉 onXxx 事件，
+      // 协议字段的值只经由本组件的 $emit('input', items) 上报。
+      const out = {}
+      for (const key of Object.keys(this.$attrs)) {
+        if (/^on[A-Z]/.test(key)) continue
+        out[key] = this.$attrs[key]
+      }
+      return out
+    },
     selectedProtocolNames() {
       return this.items.map((item) => item.name)
     },
@@ -386,10 +401,8 @@ export default {
     border-radius: 0;
   }
 
-  :deep(.el-input__wrapper) {
-    border-left: 0;
-    border-right: 0;
-  }
+  // 中间 input 保留左右 border 作为分隔线（配合 .keep-inner-border，
+  // 让 DataForm 不再清除接缝处 border）；select 右侧 / button 左侧仍不描边。
 
   :deep(.el-input-group__append) {
     display: flex;
@@ -445,6 +458,10 @@ export default {
     text-overflow: ellipsis;
   }
 }
+
+// focus 时只让中间 input 高亮：input 自身的 .is-focus 会把它四条边（含左右分隔线）变成主色，
+// 右侧分隔线即由 input 右 border 提供。select 与设置按钮（append）保持灰色、不参与聚焦，
+// 因此这里不再对 prepend / append 追加 focus 描边（避免设置按钮被“框”成独立主色块）。
 
 .input-button {
   display: grid;

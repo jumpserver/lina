@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-alert type="info">
-      <span v-html="$t('AppletHostSelectHelpMessage')" />
+      <span ref="helpRef" class="applet-host-help" />
     </el-alert>
     <DrawerListTable
       v-bind="$data"
@@ -97,6 +97,24 @@ export default {
           this.$refs.table.onCreate({ query: appletRouteQuery })
         }
       }
+    }
+  },
+  mounted() {
+    this.renderHelp()
+  },
+  activated() {
+    // keep-alive 切回该 tab 时也重渲，确保帮助文案一定出现
+    this.renderHelp()
+  },
+  methods: {
+    // 命令式渲染帮助文案：绕开 v-html 编译转换在 keep-alive/时序下对内联 $t 不重算的问题。
+    renderHelp() {
+      this.$nextTick(() => {
+        const el = this.$refs.helpRef
+        if (el) {
+          el.innerHTML = this.$xss.process(String(this.$t('AppletHostSelectHelpMessage') || ''))
+        }
+      })
     }
   }
 }

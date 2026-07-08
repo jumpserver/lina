@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="upload-secret-wrapper">
     <el-input v-model="iValue" :placeholder="placeholder" :rows="rows" type="textarea" />
     <el-upload
       v-bind="$attrs"
@@ -14,7 +14,7 @@
       class="upload-secret"
     >
       <el-button size="small" type="primary">
-        {{ btnText }}
+        {{ $t(btnText || 'SelectFile') }}
       </el-button>
       <template #tip>
         <div v-if="tip" class="el-upload__tip">
@@ -34,9 +34,7 @@ export default {
     },
     btnText: {
       type: String,
-      default: function () {
-        return 'SelectFile'
-      }
+      default: () => ''
     },
     rows: {
       type: Number,
@@ -95,6 +93,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.upload-secret-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+
+  :deep(.el-textarea),
+  :deep(.el-textarea__inner) {
+    width: 100%;
+  }
+}
+
 .upload-secret {
   display: flex;
   flex-wrap: wrap;

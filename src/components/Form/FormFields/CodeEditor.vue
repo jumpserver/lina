@@ -320,6 +320,7 @@ $input-border-color: #c0c4cc;
 .code-editor {
   display: flex;
   flex-direction: column;
+  width: 100%;
 
   .el-form {
     display: flex;

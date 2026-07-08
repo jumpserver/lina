@@ -50,6 +50,7 @@ export default {
         showSearch: true,
         showAssets: true,
         notShowBuiltinTree: true,
+        selectSyncToRoute: false,
         url: '/api/v1/accounts/account-risks/',
         nodeUrl: '/api/v1/assets/nodes/',
         // ?assets=0不显示资产. =1显示资产

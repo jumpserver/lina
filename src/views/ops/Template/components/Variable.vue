@@ -1,6 +1,5 @@
-～
 <template>
-  <div>
+  <div class="variable-field">
     <div class="variables el-data-table">
       <el-table :data="variables" class="el-table--fit el-table--border">
         <el-table-column show-overflow-tooltip :label="$tc('Name')" prop="name" />
@@ -34,7 +33,8 @@
       <AddVariableDialog
         v-model:visible="addVariableDialogVisible"
         :variable="variable"
-        :variables="variables"
+        @add="addVariable"
+        @edit="editVariable"
       />
     </div>
   </div>
@@ -95,6 +95,36 @@ export default {
     }
   },
   methods: {
+    normalizeVariable(variable) {
+      return {
+        ...variable,
+        default_value: variable.text_default_value || variable.select_default_value || undefined
+      }
+    },
+    addVariable(variable) {
+      const nextVariable = this.normalizeVariable(variable)
+      const variables = this.variables.filter(
+        (item) => item.name !== nextVariable.name && item.var_name !== nextVariable.var_name
+      )
+      this.variables = [...variables, nextVariable]
+    },
+    editVariable(form) {
+      const nextVariable = this.normalizeVariable(form)
+      const currentVarName = this.variable?.var_name
+      const variables = this.variables.slice()
+      const index = variables.findIndex((item) => item.var_name === currentVarName)
+      const duplicated = variables.some((item, itemIndex) => {
+        if (itemIndex === index) return false
+        return item.var_name === nextVariable.var_name || item.name === nextVariable.name
+      })
+
+      if (duplicated || index === -1) {
+        return
+      }
+
+      variables.splice(index, 1, nextVariable)
+      this.variables = variables
+    },
     removeVariable(variable) {
       this.variables = this.variables.filter((item) => {
         if (variable.id && item.id) {
@@ -123,6 +153,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.variable-field,
+.variables {
+  width: 100%;
+}
+
 .el-data-table :deep(.el-table) {
   .table {
     margin-top: 15px;
