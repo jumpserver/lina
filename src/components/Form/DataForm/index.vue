@@ -401,6 +401,14 @@ export default {
         min-height: 30px;
       }
 
+      .el-tree span {
+        font-size: 13px;
+      }
+
+      .el-radio-group .el-radio__label {
+        font-size: 13px;
+      }
+
       .el-input:not(.el-date-editor),
       .el-select,
       .el-cascader,

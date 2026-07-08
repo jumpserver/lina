@@ -199,8 +199,9 @@ export default {
     checkFirstNode(obj) {
       const ztree = obj
       const nodes = ztree.getNodes()
-      if (nodes[0].children.length > 0) {
-        ztree.selectNode(nodes[0].children[0])
+      const firstChild = nodes[0]?.children?.[0]
+      if (firstChild) {
+        ztree.selectNode(firstChild)
       }
       this.loading = false
     },

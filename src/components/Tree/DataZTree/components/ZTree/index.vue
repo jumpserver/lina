@@ -167,7 +167,7 @@ export default {
       const rootNode = this.zTree.getNodes()[0]
       this.rootNodeAddDom(rootNode)
       // 手动上报事件, Tree加载完成
-      this.$emit('TreeInitFinish', this.zTree)
+      this.$emit('tree-init-finish', this.zTree)
 
       if (this.treeSetting.showMenu) {
         this.rMenu = $(`#${this.iRMenuID}`)
