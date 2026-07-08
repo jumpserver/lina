@@ -19,11 +19,11 @@ export default {
   emits: ["input", "update:modelValue"],
   props: {
     value: {
-      type: Array,
+      type: [Array, String],
       default: () => [],
     },
     modelValue: {
-      type: Array,
+      type: [Array, String],
       default: undefined,
     },
     tree: {
@@ -43,6 +43,7 @@ export default {
       default: () => [],
     },
   },
+  emits: ["change", "input", "update:modelValue", "update:model-value"],
   data() {
     return {
       defaultProps: {
@@ -53,11 +54,17 @@ export default {
   },
   computed: {
     iValue() {
-      const raw = this.modelValue ?? this.value;
-      if (!Array.isArray(raw)) {
+      const value =
+        this.modelValue !== undefined ? this.modelValue : this.value;
+      if (!Array.isArray(value)) {
         return [];
       }
-      return raw.map((item) => (item?.value ? item.value : item));
+      return value.map((item) => {
+        if (item && typeof item === "object" && "value" in item) {
+          return item.value;
+        }
+        return item;
+      });
     },
     iTree() {
       if (!this.readonly) {
@@ -79,6 +86,8 @@ export default {
         .map((node) => node.value);
       this.$emit("input", checkedKeys);
       this.$emit("update:modelValue", checkedKeys);
+      this.$emit("update:model-value", checkedKeys);
+      this.$emit("change", checkedKeys);
     },
     setTreeReadonly(tree) {
       return tree.map((item) => {
@@ -123,96 +132,70 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-tree-custom :deep(.el-tree) {
-  .help-tips {
-    margin-left: 10px;
+.el-tree-custom {
+  --el-tree-node-hover-bg-color: transparent;
+  background-color: transparent;
+
+  :deep(.el-tree-node) {
+    position: relative;
+  }
+
+  :deep(.el-tree-node__content) {
+    height: 26px;
+    background-color: transparent !important;
+  }
+
+  :deep(.el-tree-node__content:hover),
+  :deep(.el-tree-node:focus > .el-tree-node__content),
+  :deep(.el-tree-node.is-current > .el-tree-node__content) {
+    background-color: transparent !important;
+  }
+
+  :deep(.el-tree-node__expand-icon.is-leaf) {
+    visibility: hidden;
+  }
+
+  :deep(> .el-tree-node > .el-tree-node__content > .el-tree-node__expand-icon) {
+    display: none;
+  }
+
+  :deep(.el-tree-node__children) {
+    position: relative;
+    padding-left: 28px;
+  }
+
+  :deep(.el-tree-node__children .el-tree-node)::before {
+    content: "";
+    position: absolute;
+    left: -17px;
+    top: -13px;
+    bottom: 13px;
+    border-left: 1px dashed #d8dce5;
+  }
+
+  :deep(.el-tree-node__children .el-tree-node)::after {
+    content: "";
+    position: absolute;
+    left: -17px;
+    top: 13px;
+    width: 24px;
+    border-top: 1px dashed #d8dce5;
+  }
+
+  :deep(.el-tree-node__children .el-tree-node:first-child)::before {
+    top: -1px;
+  }
+
+  :deep(.el-tree-node__children .el-tree-node:last-child)::before {
+    bottom: auto;
+    height: 26px;
+  }
+
+  :deep(.el-tree-node__label .fa),
+  :deep(.fa-question-circle-o) {
+    margin-left: 4px;
+    color: var(--color-icon-primary);
     font-size: 12px;
-    color: #999;
-  }
-
-  .el-tree > .el-tree-node:after {
-    border-top: none;
-  }
-
-  //节点有间隙，隐藏掉展开按钮就好了,如果觉得空隙没事可以删掉
-  .el-tree-node__expand-icon.is-leaf {
-    display: none;
-  }
-
-  .el-tree > .el-tree-node:before {
-    border-left: none;
-    display: none;
-  }
-
-  .el-tree > .el-tree-node:after {
-    border-top: none;
-    display: none;
-  }
-
-  .el-tree-node__children {
-    padding-left: 13px;
-
-    .el-tree-node {
-      position: relative;
-      padding-left: 13px;
-
-      &:before {
-        content: "";
-        left: -4px;
-        position: absolute;
-        right: auto;
-        border-width: 1px;
-      }
-
-      &:first-child::before {
-        display: none;
-      }
-
-      &:last-child:before {
-        height: 38px;
-      }
-
-      &:before {
-        border-left: 1px dashed #dcdcdc;
-        bottom: 0;
-        height: 100%;
-        top: -26px;
-        width: 1px;
-      }
-
-      &:after {
-        content: "";
-        left: -4px;
-        position: absolute;
-        right: auto;
-        border-width: 1px;
-      }
-
-      &:after {
-        border-top: 1px dashed #dcdcdc;
-        height: 20px;
-        top: 12px;
-        width: 24px;
-      }
-    }
-  }
-
-  .el-tree-node__content:hover {
-    background-color: transparent;
-  }
-
-  .el-tree-node:focus > .el-tree-node__content {
-    background-color: transparent;
-  }
-
-  > .el-tree-node > {
-    .el-tree-node__content > .el-tree-node__expand-icon {
-      display: none;
-    }
-
-    .el-tree-node__children {
-      //margin-left: -25px;
-    }
   }
 }
 </style>

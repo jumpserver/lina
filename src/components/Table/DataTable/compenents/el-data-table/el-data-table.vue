@@ -994,6 +994,10 @@ export default {
       if (loading) {
         this.tableLoading = true
       }
+      // 静态数据(totalData)模式下总数即数据长度。必须在此设置,
+      // 因为 totalData 的 watcher 仅在其"变化"时才更新 total,而初次挂载
+      // (totalData 创建时已就位、不再变化)不会触发,导致分页显示"共 0 条"。
+      this.total = this.totalData.length
       if (!this.hasPagination) {
         this.data = this.totalData
         this.tableLoading = false

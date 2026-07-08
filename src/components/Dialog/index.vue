@@ -147,6 +147,7 @@ export default {
   }
 
   .el-dialog__header {
+    position: relative;
     box-sizing: border-box;
     padding: 15px 22px !important;
     border-bottom: 1px solid #dee2e6;
@@ -156,6 +157,19 @@ export default {
     font-size: 18px;
     font-weight: 400;
     color: var(--color-text-primary);
+  }
+
+  // 关闭按钮在标题栏内垂直居中(默认 top:0 + --el-dialog-padding-primary:0 会贴到顶部)
+  .el-dialog__headerbtn {
+    top: 50%;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    margin: 0;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .el-dialog__body {
@@ -206,6 +220,27 @@ export default {
     .el-input-group__append {
       box-sizing: border-box;
       border-radius: 0;
+    }
+
+    .el-select__wrapper,
+    .el-cascader .el-input__wrapper {
+      min-height: 30px;
+      height: auto;
+    }
+
+    .el-select {
+      height: auto;
+    }
+
+    .el-select__wrapper {
+      padding-top: 2px;
+      padding-bottom: 2px;
+    }
+
+    .el-cascader .el-input {
+      --el-input-height: 30px;
+      height: auto;
+      line-height: 30px;
     }
 
     .el-input__wrapper,
