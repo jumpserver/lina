@@ -19,7 +19,6 @@
       <el-col :lg="8" :md="24">
         <DataSummary :days="days" class="data-summary" />
       </el-col>
-
     </el-row>
     <el-row>
       <AccountSummary :days="days" class="account-summary" />
@@ -73,80 +72,84 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  %card-common {
-    background: #fff;
-    padding: 1.25rem;
+%card-common {
+  background: #fff;
+  padding: 1.25rem;
+  height: 100%;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  transition: all 0.3s;
+
+  ::v-deep {
+    .card-content {
+      padding-bottom: unset;
+      border-bottom: unset;
+    }
+
+    .ring {
+      display: none;
+    }
+
+    .el-card {
+      box-shadow: none;
+      border: none;
+    }
+
+    .el-card__body {
+      padding: 0;
+    }
+  }
+}
+
+.change-secret-container {
+  min-width: 670px;
+}
+
+// .switch-date-wrapper {
+//   margin-bottom: 1.25rem;
+// }
+
+.page ::v-deep .page-heading {
+  display: none;
+}
+
+.account-summary {
+  @extend %card-common;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.failed-account-summary {
+  @extend %card-common;
+  width: 100%;
+  height: 100%;
+  margin-top: 16px;
+
+  ::v-deep #HomeCard .el-card.no-border {
     height: 100%;
-    box-shadow: 0 1px 4px rgba(0,21,41,.08);
-    transition: all .3s;
+    margin-bottom: unset !important;
 
-    ::v-deep {
-      .card-content {
-        padding-bottom: unset;
-        border-bottom: unset;
-      }
-
-      .ring {
-        display: none;
-      }
-
-      .el-card {
-        box-shadow: none;
-        border: none;
-      }
-
-      .el-card__body {
-        padding: 0;
-      }
+    .ListTable .el-pagination {
+      display: flex;
+      flex-wrap: wrap;
+      row-gap: 8px;
     }
   }
+}
 
-  .change-secret-container {
-    min-width: 670px;
+.data-summary {
+  margin-left: 1rem;
+}
+
+.account-summary,
+.data-summary,
+.card-summary,
+.failed-account-summary {
+  min-width: unset;
+}
+
+@media (max-width: 1200px) {
+  ::v-deep .data-summary {
+    margin-left: unset !important;
   }
-
-  // .switch-date-wrapper {
-  //   margin-bottom: 1.25rem;
-  // }
-
-  .page ::v-deep .page-heading {
-    display: none;
-  }
-
-  .account-summary {
-    @extend %card-common;
-    margin-top: 1rem;
-  }
-
-  .failed-account-summary {
-    @extend %card-common;
-    height: 100%;
-    margin-top: 16px;
-
-    ::v-deep #HomeCard .el-card.no-border {
-      height: 100%;
-      margin-bottom: unset !important;
-
-      .ListTable .el-pagination {
-        display: block;
-      }
-    }
-  }
-
-  .data-summary {
-    margin-left: 1rem;
-  }
-
-  .account-summary,
-  .data-summary,
-  .card-summary,
-  .failed-account-summary {
-    min-width: unset;
-  }
-
-  @media (max-width: 1200px) {
-    ::v-deep .data-summary {
-      margin-left: unset !important;
-    }
-  }
+}
 </style>

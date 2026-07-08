@@ -2,134 +2,135 @@
   <div class="code-editor" style="font-size: 12px">
     <el-form ref="form" :model="formModel" :rules="rules" label-position="top" label-width="80px">
       <div class="form-content">
-        <el-form-item
-          v-for="(item, index) in iActions"
-          :key="index"
-          :label="item.name"
-          :prop="item.name"
-        >
-          <template v-if="item.type === 'button' && !item.isVisible">
-            <el-tooltip :disabled="!item.tip" :content="item.tip">
-              <el-button
-                :type="item.el && item.el.type"
-                class="start-stop-btn"
-                :disabled="item.disabled"
-                size="small"
-                @click="item.callback()"
-              >
-                <i :class="item.icon" />
+        <template v-for="(item, index) in iActions" :key="index">
+          <el-form-item
+            v-if="!(item.type === 'button' && item.isVisible)"
+            :label="item.name"
+            :prop="item.name"
+          >
+            <template v-if="item.type === 'button' && !item.isVisible">
+              <el-tooltip :disabled="!item.tip" :content="item.tip">
+                <el-button
+                  :type="item.el && item.el.type"
+                  class="start-stop-btn"
+                  :disabled="item.disabled"
+                  size="small"
+                  @click="item.callback()"
+                >
+                  <i :class="item.icon" />
 
-                {{ item.name }}
-              </el-button>
-            </el-tooltip>
-          </template>
+                  {{ item.name }}
+                </el-button>
+              </el-tooltip>
+            </template>
 
-          <template v-if="item.type === 'input' && item.el && item.el.autoComplete">
-            <el-tooltip :disabled="!item.tip" :content="item.tip">
-              <span class="inline-input">
-                <el-autocomplete
+            <template v-if="item.type === 'input' && item.el && item.el.autoComplete">
+              <el-tooltip :disabled="!item.tip" :content="item.tip">
+                <span class="inline-input">
+                  <el-autocomplete
+                    v-model="formModel[item.name]"
+                    :fetch-suggestions="item.el.query"
+                    :placeholder="item.placeholder"
+                    class="inline-input"
+                    size="small"
+                    clearable
+                    @change="handleInputChange(item)"
+                    @select="handleInputChange(item)"
+                  />
+                </span>
+              </el-tooltip>
+            </template>
+
+            <template v-else-if="item.type === 'input'">
+              <el-tooltip :disabled="!item.tip" :content="item.tip">
+                <el-input
                   v-model="formModel[item.name]"
-                  :fetch-suggestions="item.el.query"
+                  :class="!isFold ? 'special-style' : ''"
                   :placeholder="item.placeholder"
                   class="inline-input"
                   size="small"
-                  clearable
-                  @change="handleInputChange(item)"
-                  @select="handleInputChange(item)"
+                  @change="item.callback(formModel[item.name])"
                 />
-              </span>
-            </el-tooltip>
-          </template>
+              </el-tooltip>
+            </template>
 
-          <template v-else-if="item.type === 'input'">
-            <el-tooltip :disabled="!item.tip" :content="item.tip">
-              <el-input
-                v-model="formModel[item.name]"
-                :class="!isFold ? 'special-style' : ''"
-                :placeholder="item.placeholder"
-                class="inline-input"
-                size="small"
-                @change="item.callback(formModel[item.name])"
-              />
-            </el-tooltip>
-          </template>
+            <template v-if="item.type === 'select' && item.el && item.el.create">
+              <el-tooltip :disabled="!item.tip" :content="item.tip">
+                <span>
+                  <span class="filter-label">{{ item.name }}:</span>
+                  <el-select
+                    v-if="item.type === 'select' && item.el && item.el.create"
+                    :key="index"
+                    v-model="formModel[item.name]"
+                    :allow-create="item.el.create || false"
+                    :filterable="item.el.create || false"
+                    :multiple="item.el.multiple"
+                    :placeholder="item.name"
+                    class="autoWidth-select"
+                    default-first-option
+                    size="small"
+                    @change="item.callback(item.value)"
+                  >
+                    <template #prefix>{{ item.label + ':' + item.value }}</template>
+                    <el-option
+                      v-for="(option, id) in item.options"
+                      :key="id"
+                      :label="option.label"
+                      :title="option.value"
+                      :value="option.value"
+                    />
+                  </el-select>
+                </span>
+              </el-tooltip>
+            </template>
 
-          <template v-if="item.type === 'select' && item.el && item.el.create">
-            <el-tooltip :disabled="!item.tip" :content="item.tip">
-              <span>
-                <span class="filter-label">{{ item.name }}:</span>
-                <el-select
-                  v-if="item.type === 'select' && item.el && item.el.create"
-                  :key="index"
-                  v-model="formModel[item.name]"
-                  :allow-create="item.el.create || false"
-                  :filterable="item.el.create || false"
-                  :multiple="item.el.multiple"
-                  :placeholder="item.name"
-                  class="autoWidth-select"
-                  default-first-option
-                  size="small"
-                  @change="item.callback(item.value)"
+            <template v-if="item.type === 'select' && (!item.el || !item.el.create)">
+              <el-tooltip :disabled="!item.tip" :content="item.tip">
+                <el-dropdown
+                  class="select-dropdown"
+                  trigger="click"
+                  @command="
+                    (command) => {
+                      item.value = command
+                      item.callback(command)
+                    }
+                  "
                 >
-                  <template #prefix>{{ item.label + ':' + item.value }}</template>
-                  <el-option
-                    v-for="(option, id) in item.options"
-                    :key="id"
-                    :label="option.label"
-                    :title="option.value"
-                    :value="option.value"
-                  />
-                </el-select>
-              </span>
-            </el-tooltip>
-          </template>
+                  <el-button size="small" type="primary">
+                    <div class="text-content">
+                      <span class="content">
+                        {{ getLabel(item.value, item.options) }}
+                        <el-icon class="el-icon--right"><ArrowDown /></el-icon>
+                      </span>
+                    </div>
+                  </el-button>
+                  <template #dropdown>
+                    <el-dropdown-menu>
+                      <el-dropdown-item
+                        v-for="(option, i) in item.options"
+                        :key="i"
+                        :command="option.value"
+                      >
+                        {{ option.label }}
+                      </el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
+              </el-tooltip>
+            </template>
 
-          <template v-if="item.type === 'select' && (!item.el || !item.el.create)">
-            <el-tooltip :disabled="!item.tip" :content="item.tip">
-              <el-dropdown
-                class="select-dropdown"
-                trigger="click"
-                @command="
-                  (command) => {
-                    item.value = command
-                    item.callback(command)
-                  }
-                "
-              >
-                <el-button size="small" type="primary">
-                  <div class="text-content">
-                    <span class="content">
-                      {{ getLabel(item.value, item.options) }}
-                      <el-icon class="el-icon--right"><ArrowDown /></el-icon>
-                    </span>
-                  </div>
-                </el-button>
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item
-                      v-for="(option, i) in item.options"
-                      :key="i"
-                      :command="option.value"
-                    >
-                      {{ option.label }}
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
-            </el-tooltip>
-          </template>
-
-          <template v-if="item.type === 'switch'">
-            <el-tooltip :disabled="!item.tip" :content="item.tip">
-              <el-switch
-                v-model="formModel[item.name]"
-                :active-text="item.name"
-                :disabled="item.disabled"
-                @change="item.callback(formModel[item.name])"
-              />
-            </el-tooltip>
-          </template>
-        </el-form-item>
+            <template v-if="item.type === 'switch'">
+              <el-tooltip :disabled="!item.tip" :content="item.tip">
+                <el-switch
+                  v-model="formModel[item.name]"
+                  :active-text="item.name"
+                  :disabled="item.disabled"
+                  @change="item.callback(formModel[item.name])"
+                />
+              </el-tooltip>
+            </template>
+          </el-form-item>
+        </template>
         <div
           v-if="Object.prototype.hasOwnProperty.call(toolbar, 'fold')"
           :class="!isFold ? 'sepcial-icon' : ''"
@@ -287,11 +288,7 @@ export default {
       return exts
     },
     editorStyle() {
-      const style = { height: this.iOptions.height || '300px' }
-      if (this.iActions.length > 0) {
-        style.marginLeft = '30px'
-      }
-      return style
+      return { height: this.iOptions.height || '300px' }
     }
   },
   methods: {
@@ -314,9 +311,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$header-bg-color: #f5f6f7;
-$input-border-color: #c0c4cc;
-
 .code-editor {
   display: flex;
   flex-direction: column;
@@ -325,13 +319,13 @@ $input-border-color: #c0c4cc;
   .el-form {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    margin-left: 30px;
-    margin-bottom: 20px;
+    align-items: flex-end;
+    margin-bottom: 16px;
 
     .form-content {
       display: flex;
       flex: 12;
+      align-items: flex-end;
 
       .el-form-item {
         display: flex;
@@ -353,7 +347,6 @@ $input-border-color: #c0c4cc;
         }
 
         :deep(.el-form-item__content .inline-input .el-input__inner) {
-          //width: 130px;
           min-width: 130px;
         }
 
@@ -361,19 +354,20 @@ $input-border-color: #c0c4cc;
         :deep(.el-form-item__content .start-stop-btn) {
           display: flex;
           align-items: center;
-          height: 28px;
+          height: 30px;
           margin-bottom: 1.5px;
         }
 
         :deep(.el-form-item__content) .select-dropdown .el-button {
           width: 125px;
-          background-color: $header-bg-color;
-          border-color: $input-border-color;
+          height: 30px;
+          background-color: var(--color-disabled-background);
+          border-color: var(--color-input-border);
 
           &:focus,
           &:hover {
-            border-color: $input-border-color !important;
-            background-color: $header-bg-color !important;
+            border-color: var(--color-input-border) !important;
+            background-color: var(--color-disabled-background) !important;
           }
 
           .text-content {
@@ -413,19 +407,18 @@ $input-border-color: #c0c4cc;
       display: flex;
       flex: 1;
       width: 90px;
-      //margin-right: 10px;
 
       .el-button {
         border: none;
         padding: 5px;
         font-size: 14px;
-        width: 28px;
-        height: 28px;
+        width: 30px;
+        height: 30px;
         background: none;
 
         &:hover {
           color: var(--color-text-primary);
-          background-color: #e6e6e6;
+          background-color: var(--color-border);
         }
       }
     }
@@ -433,27 +426,33 @@ $input-border-color: #c0c4cc;
 
   .editor {
     overflow: hidden;
+    border-radius: 4px;
 
     :deep(.cm-editor) {
       border: 1px solid var(--color-border);
+      border-radius: 4px;
+      background: #fff;
+    }
+
+    :deep(.cm-gutters) {
+      background: #fff;
+      border-right: 1px solid var(--color-border);
+      color: var(--color-text-secondary);
     }
 
     :deep(.cm-scroller) {
       overflow: auto;
+    }
+
+    :deep(.cm-activeLine),
+    :deep(.cm-activeLineGutter) {
+      background: var(--color-disabled-background);
     }
   }
 }
 
 :deep(.cm-line) {
   line-height: 18px;
-}
-
-.runas-input {
-  height: 28px;
-
-  :deep(.el-select) {
-    width: 100px;
-  }
 }
 
 .autoWidth-select {
@@ -473,8 +472,8 @@ $input-border-color: #c0c4cc;
   position: absolute;
   padding-left: 0px;
   border: none;
-  color: #606266;
-  background-color: #e6e6e6;
+  color: var(--color-text-primary);
+  background-color: var(--color-border);
   font-size: 12px;
   font-weight: 470;
   line-height: 27px;
@@ -484,25 +483,12 @@ $input-border-color: #c0c4cc;
   top: -1px;
 
   .el-input .el-select__caret {
-    color: #7a7c7f;
+    color: var(--color-text-secondary);
   }
 }
 
 .filter-label {
   font-size: 12px;
   font-weight: 700;
-}
-
-.select-content {
-  display: inline-block;
-  position: relative;
-  top: 1px;
-  height: 28px;
-  line-height: 28px;
-  padding-left: 15px;
-  font-size: 0;
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-  background-color: #e6e6e6;
 }
 </style>

@@ -156,6 +156,7 @@ export default {
       },
       headerActions: {
         hasCreate: false,
+        hasImport: false,
         hasMoreActions: false,
         extraActions: [
           {

@@ -26,7 +26,7 @@
         >
           <el-form class="update-info-form" label-position="left" label-width="80px">
             <el-form-item :label="$t('Phone')">
-              <PhoneInput :value="object.phone" />
+              <PhoneInput :value="object.phone" @change="profilePhone = $event" />
             </el-form-item>
             <el-form-item :label="$t('WeChat')">
               <el-input v-model="object.wechat" />
@@ -70,6 +70,7 @@ export default {
   data() {
     return {
       url: `/api/v1/users/profile/`,
+      profilePhone: null,
       showPasswordDialog: false,
       currentEdit: '',
       biometricFeaturesActions: [
@@ -439,7 +440,7 @@ export default {
     updateProfile() {
       const url = `/api/v1/users/profile/`
       const data = {
-        phone: this.object.phone,
+        phone: this.profilePhone === null ? this.object.phone : this.profilePhone,
         wechat: this.object.wechat
       }
       this.$axios
@@ -557,6 +558,33 @@ export default {
         height: 28px;
         line-height: 28px;
         border: 0 !important;
+        box-shadow: none !important;
+      }
+    }
+
+    :deep(.compound-field) {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 30px;
+      box-sizing: border-box;
+      border: 1px solid var(--el-border-color);
+      background-color: #fff;
+      overflow: hidden;
+
+      &:hover {
+        border-color: var(--el-border-color-hover) !important;
+      }
+
+      > *:not(:last-child) {
+        border-right: 1px solid var(--el-border-color);
+      }
+
+      .el-select__wrapper,
+      .el-input__wrapper {
+        height: 100%;
+        border: 0 !important;
+        border-radius: 0 !important;
         box-shadow: none !important;
       }
     }

@@ -41,7 +41,9 @@ $single-menu-height: 38px;
 
   .submenu-item {
     .item-title {
+      font-size: 12px;
       width: 150px;
+      color: var(--color-text-primary);
       //overflow: hidden;
       //white-space: nowrap;
       //text-overflow: ellipsis;
@@ -143,6 +145,10 @@ $single-menu-height: 38px;
         &.el-sub-menu.is-active {
           .el-sub-menu__title {
             color: var(--color-primary);
+
+            .item-title {
+              color: var(--color-primary);
+            }
           }
 
           .el-sub-menu__title,

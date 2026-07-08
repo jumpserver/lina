@@ -1,6 +1,6 @@
 <template>
-  <div class="filter-field">
-    <div class="filter-field__content">
+  <div class="filter-field" @click="handleFieldClick">
+    <div ref="content" class="filter-field__content">
       <el-tag
         v-for="(v, k) in filterTags"
         :key="k"
@@ -13,19 +13,22 @@
       >
         {{ isCheckShowPassword ? changeTagShowValue(v) : v }}
       </el-tag>
-      <component
-        :is="component"
-        ref="SearchInput"
-        v-model.trim="filterValue"
-        :fetch-suggestions="autocomplete"
-        :placeholder="iPlaceholder"
-        :type="inputType"
-        class="search-input"
-        @blur="handleBlur"
-        @focus="focus = true"
-        @select="handleSelect"
-        @keyup.enter.prevent="handleConfirm"
-      />
+      <div class="search-input-wrap">
+        <component
+          :is="component"
+          ref="SearchInput"
+          v-model.trim="filterValue"
+          :fetch-suggestions="autocomplete"
+          :placeholder="iPlaceholder"
+          :trigger-on-focus="false"
+          :type="inputType"
+          class="search-input"
+          @blur="handleBlur"
+          @focus="handleFocus"
+          @select="handleSelect"
+          @keyup.enter.prevent="handleConfirm"
+        />
+      </div>
     </div>
     <span
       v-if="replaceShowPassword && filterTags.length > 0"
@@ -142,6 +145,9 @@ export default {
       this.focus = false
       this.handleConfirm(false)
     },
+    handleFocus() {
+      this.focus = true
+    },
     handleConfirm(refocus = true) {
       const value = this.filterValue.trim()
       if (value === '') return
@@ -180,6 +186,39 @@ export default {
     handleClearAll() {
       this.filterTags = []
       this.emitTags()
+    },
+    scrollInputIntoView() {
+      const content = this.$refs.content
+      if (content) {
+        content.scrollLeft = content.scrollWidth
+      }
+    },
+    handleFieldClick(event) {
+      const target = event.target
+      if (target?.closest?.('.el-tag, .clear-icon, .show-password')) {
+        return
+      }
+      this.focusInput()
+    },
+    activateAutocomplete(input) {
+      if (!this.autocomplete || !input) {
+        return
+      }
+      if (input.activated && typeof input.activated === 'object') {
+        input.activated.value = true
+      } else {
+        input.activated = true
+      }
+      input.getData?.(String(this.filterValue || ''))
+    },
+    focusInput() {
+      const input = this.$refs.SearchInput
+      this.scrollInputIntoView()
+      input?.focus()
+      this.$nextTick(() => {
+        this.scrollInputIntoView()
+        this.activateAutocomplete(input)
+      })
     }
   }
 }
@@ -195,11 +234,13 @@ export default {
   align-items: center;
   width: 100%;
   min-height: 30px;
+  height: auto;
   padding: 0 8px 0 4px;
   box-sizing: border-box;
   border: 1px solid #dcdee2;
   border-radius: 1px;
   background-color: #fff;
+  cursor: text;
   line-height: 1.4;
   overflow: hidden;
 
@@ -213,9 +254,11 @@ export default {
     flex-wrap: wrap;
     align-items: center;
     min-width: 0;
+    overflow: visible;
   }
 
   & :deep(.el-tag) {
+    flex: 0 0 auto;
     height: 24px;
     line-height: 22px;
     margin-top: 2px;
@@ -225,10 +268,8 @@ export default {
     padding: 0 8px;
   }
 
-  & :deep(.el-input),
-  & :deep(.el-autocomplete) {
-    flex: 1 1 auto;
-    min-width: 120px;
+  & :deep(.el-input) {
+    width: 100%;
     border: none !important;
     box-shadow: none !important;
     background: transparent;
@@ -248,10 +289,17 @@ export default {
   }
 }
 
+.search-input-wrap {
+  display: flex;
+  flex: 1 1 180px;
+  min-width: 80px;
+  max-width: 100%;
+}
+
 .search-input {
-  flex: 1;
-  min-width: 150px;
-  width: auto;
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto !important;
   max-width: 100%;
   border: none !important;
   box-shadow: none !important;

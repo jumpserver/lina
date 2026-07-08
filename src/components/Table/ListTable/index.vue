@@ -257,9 +257,17 @@ export default {
   },
   mounted() {
     this.urlUpdated[this.tableUrl] = location.href
-    // Populate the provided context with component references
-    // Note: $refs.dataTable is AutoDataTable, need to access its internal DataTable
-    this.listTableContext.dataTable = this.$refs.dataTable?.$refs.dataTable
+    // Populate the provided context with component references.
+    // Note: $refs.dataTable is AutoDataTable, whose inner DataTable is rendered
+    // with `v-if="!loading"` and mounts only after its OPTIONS metadata loads —
+    // later than this parent's mounted(). Expose it as a live getter (not a
+    // one-time snapshot) so consumers like ExportDialog always resolve the
+    // real DataTable once it exists.
+    Object.defineProperty(this.listTableContext, 'dataTable', {
+      get: () => this.$refs.dataTable?.$refs.dataTable,
+      enumerable: true,
+      configurable: true
+    })
     Object.defineProperty(this.listTableContext, 'tableConfig', {
       get: () => this.tableConfig,
       enumerable: true

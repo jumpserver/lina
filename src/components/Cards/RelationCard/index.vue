@@ -206,7 +206,7 @@ export default {
   },
   data() {
     return {
-      iHasObjects: this.hasObjects || [],
+      iHasObjects: this.normalizeObjects(this.hasObjects),
       totalHasObjectsLength: 0,
       submitLoading: false,
       selectAllDisabled: false,
@@ -247,11 +247,11 @@ export default {
   watch: {
     hasObjectsId(iNew, iOld) {
       this.$log.debug('hasObject id change')
-      this.select2.disabledValues = iNew
+      this.select2.disabledValues = this.normalizeObjects(iNew)
     },
     iHasObjects(iNew, iOld) {
-      const newValues = iNew.map((v) => v.value)
-      const oldValues = iOld.map((v) => v.value)
+      const newValues = this.normalizeObjects(iNew).map((v) => v.value)
+      const oldValues = this.normalizeObjects(iOld).map((v) => v.value)
       const addValues = _.difference(newValues, oldValues)
       const removeValues = _.difference(oldValues, newValues)
       this.$log.debug('hasObjects change, add ', addValues, 'remove ', removeValues)
@@ -275,6 +275,9 @@ export default {
     }
   },
   methods: {
+    normalizeObjects(value) {
+      return Array.isArray(value) ? value : []
+    },
     async loadMore() {
       if (this.loading) {
         return
@@ -318,11 +321,11 @@ export default {
       if (!this.$refs.select2 || !this.iAjax || !this.safeMakeParams) {
         return
       }
-      this.select2.disabledValues = this.hasObjectsId
+      this.select2.disabledValues = this.normalizeObjects(this.hasObjectsId)
 
       if (this.getHasObjects) {
         this.getHasObjects(this.hasObjectsId).then((data) => {
-          this.iHasObjects = data
+          this.iHasObjects = this.normalizeObjects(data)
         })
       } else {
         const resp = await createSourceIdCache(this.hasObjectsId)
@@ -340,16 +343,34 @@ export default {
         })
     },
     addObjects() {
-      const objects = this.$refs.select2.$refs.select.selected.map((item) => ({
-        label: item.label,
-        value: item.value
-      }))
+      const objects = this.getSelectedObjects()
       if (objects.length === 0) {
         return
       }
       this.performAdd(objects, this).then(() => {
         this.onAddSuccess(objects, this)
       })
+    },
+    getSelectedObjects() {
+      const select2 = this.$refs.select2
+      const selectedOptions = select2?.getSelectedOptions?.() || []
+      if (selectedOptions.length > 0) {
+        return selectedOptions.map((item) => ({
+          label: item.label,
+          value: item.value
+        }))
+      }
+
+      let values = this.select2.value
+      if (!Array.isArray(values)) {
+        values = values === undefined || values === null || values === '' ? [] : [values]
+      }
+      const options = select2?.iOptions || []
+      const labelsByValue = new Map(options.map((item) => [item.value, item.label]))
+      return values.map((value) => ({
+        label: labelsByValue.get(value) || value,
+        value
+      }))
     },
     async selectAll() {
       this.selectAllDisabled = true

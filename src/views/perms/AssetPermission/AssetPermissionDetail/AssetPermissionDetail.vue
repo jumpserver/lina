@@ -69,7 +69,8 @@ export default {
           key: this.$t('Action'),
           value: this.object.actions,
           formatter(row, value) {
-            const actionLabels = value.map((item) => item.label.replace(/ \([^)]*\)/, ''))
+            const actions = Array.isArray(value) ? value : []
+            const actionLabels = actions.map((item) => item.label.replace(/ \([^)]*\)/, ''))
             return createVNodeCompat('div', null, [
               actionLabels.map((item) =>
                 createVNodeCompat(

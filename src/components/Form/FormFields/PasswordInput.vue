@@ -134,14 +134,15 @@ export default {
 
 <style lang="scss" scoped>
 .password-input {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   gap: 10px;
-  width: auto;
+  width: 100%;
   max-width: 100%;
 }
 
 .password-input__field {
+  width: 100%;
   max-width: 100%;
 }
 
