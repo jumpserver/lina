@@ -113,7 +113,7 @@ export default {
     this.lastFetchedReportId = this.reportId
     this.$eventBus.$on('reportForceRefresh', this._handleReportForceRefresh)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.$eventBus.$off('reportForceRefresh', this._handleReportForceRefresh)
   },
   computed: {

@@ -65,11 +65,14 @@ export default {
   },
   methods: {
     async getData() {
-      this.data = await this.$axios.get('/api/v1/accounts/change-secret-dashboard/', {
-        params: {
-          total_count_ongoing_change_secret: 1
+      this.data = await this.$axios.get(
+        '/api/v1/accounts/change-secret-dashboard/',
+        {
+          params: {
+            total_count_ongoing_change_secret: 1
+          }
         }
-      })
+      )
     }
   }
 }
@@ -80,7 +83,7 @@ export default {
   margin-top: 10px;
 }
 
-:deep(.content) .summary-card {
+::v-deep .content .summary-card {
   flex: 1;
   width: 33%;
   max-width: 33%;

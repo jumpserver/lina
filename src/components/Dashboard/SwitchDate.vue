@@ -1,10 +1,16 @@
 <template>
-  <span>
-    <el-radio-group v-model="select" class="switch" size="small" @change="onChange">
-      <el-radio-button v-for="i in iOptions" :key="i.value" :value="i.value">
-        {{ i.label }}
-      </el-radio-button>
-    </el-radio-group>
+  <span class="switch" role="group">
+    <button
+      v-for="i in iOptions"
+      :key="i.value"
+      type="button"
+      class="switch-date-button"
+      :class="{ 'is-active': String(i.value) === String(select) }"
+      :aria-pressed="String(i.value) === String(select)"
+      @click="onChange(i.value)"
+    >
+      {{ i.label }}
+    </button>
   </span>
 </template>
 
@@ -42,7 +48,7 @@ export default {
       }
     ]
     return {
-      select: this.days,
+      select: this.days == null ? null : String(this.days),
       iOptions: this.options.length > 0 ? this.options : defaultOptions
     }
   },
@@ -64,9 +70,9 @@ export default {
     if (!days) {
       days = '7'
     }
-    if (days && days !== this.select) {
-      this.select = days
-      this.$emit('change', days)
+    if (days && String(days) !== this.select) {
+      this.select = String(days)
+      this.$emit('change', this.select)
     }
   },
   mounted() {
@@ -74,40 +80,55 @@ export default {
   },
   methods: {
     onChange(val) {
-      localStorage.setItem(this.name, val)
-      this.$emit('change', val)
+      const days = String(val)
+      this.select = days
+      localStorage.setItem(this.name, days)
+      this.$emit('change', days)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-$origin-color: #ffffff;
-
 .switch {
+  display: inline-flex;
   font-weight: 400;
+  vertical-align: middle;
 
-  :deep(.el-radio-button) {
-    &.is-active {
-      .el-radio-button__inner {
-        border-color: var(--color-primary);
-        color: var(--color-primary);
-        background-color: $origin-color;
-      }
-    }
-  }
-
-  :deep(.el-radio-button) {
-    .el-radio-button__inner {
-      color: var(--color-text-primary);
-      background: $origin-color;
-      border-radius: 0;
-    }
-  }
-
-  :deep(.el-radio-button__inner) {
+  .switch-date-button {
+    min-width: 64px;
+    height: 32px;
     padding: 7px 15px;
+    margin: 0 0 0 -1px;
     font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    outline: none;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:hover,
+    &:focus-visible {
+      position: relative;
+      z-index: 1;
+      color: var(--color-primary);
+      border-color: var(--color-primary);
+    }
+
+    &.is-active {
+      position: relative;
+      z-index: 2;
+      color: var(--color-primary);
+      background: var(--menu-hover);
+      border-color: var(--color-primary);
+    }
   }
 }
 </style>

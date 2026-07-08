@@ -2,24 +2,20 @@
   <div>
     <RecordViewSecret
       v-if="showViewSecretDialog"
-      v-model:visible="showViewSecretDialog"
       :url="secretUrl"
+      :visible.sync="showViewSecretDialog"
     />
-    <HomeCard
-      v-bind="cardConfig"
-      ref="HomeCard"
-      :table-config="tableConfig"
-      class="failed-accounts"
-    />
+    <HomeCard ref="HomeCard" :table-config="tableConfig" class="failed-accounts" v-bind="cardConfig" />
   </div>
 </template>
 
 <script>
-import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue'
+import { createVNode as createVNodeCompat } from 'vue'
+import HomeCard from '@/views/workbench/overview/components/HomeCard.vue'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
-import HomeCard from '@/views/workbench/overview/components/HomeCard.vue'
-import { createVNode as createVNodeCompat } from 'vue'
+import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue'
+
 export default {
   components: {
     RecordViewSecret,
@@ -41,7 +37,9 @@ export default {
       },
       tableConfig: {
         url: vm.tableUrl(),
-        columns: ['asset', 'account', 'date_finished', 'is_success', 'error', 'actions'],
+        columns: [
+          'asset', 'account', 'date_finished', 'is_success', 'error', 'actions'
+        ],
         columnsMeta: {
           asset: {
             label: this.$t('Asset'),
@@ -54,9 +52,7 @@ export default {
               getRoute({ row }) {
                 return {
                   name: 'AssetDetail',
-                  params: {
-                    id: row.asset.id
-                  }
+                  params: { id: row.asset.id }
                 }
               }
             }
@@ -72,9 +68,7 @@ export default {
               getRoute({ row }) {
                 return {
                   name: 'AssetAccountDetail',
-                  params: {
-                    id: row.account.id
-                  }
+                  params: { id: row.account.id }
                 }
               }
             }
@@ -136,13 +130,12 @@ export default {
                   can: this.$hasPerm('accounts.add_changesecretexecution'),
                   type: 'primary',
                   callback: ({ row }) => {
-                    this.$axios
-                      .post('/api/v1/accounts/change-secret-records/execute/', {
-                        record_ids: [row.id]
-                      })
-                      .then((res) => {
-                        openTaskPage(res['task'])
-                      })
+                    this.$axios.post(
+                      '/api/v1/accounts/change-secret-records/execute/',
+                      { record_ids: [row.id] }
+                    ).then(res => {
+                      openTaskPage(res['task'])
+                    })
                   }
                 },
                 {
@@ -151,12 +144,12 @@ export default {
                   can: this.$hasPerm('accounts.view_changesecretrecord'),
                   type: 'primary',
                   callback: ({ row }) => {
-                    this.$axios
-                      .patch(`/api/v1/accounts/change-secret-records/${row.id}/ignore-fail/`)
-                      .then((res) => {
-                        this.$message.success(this.$tc('UpdateSuccessMsg'))
-                        this.$refs.HomeCard.$refs.ListTable.reloadTable()
-                      })
+                    this.$axios.patch(
+                      `/api/v1/accounts/change-secret-records/${row.id}/ignore-fail/`,
+                    ).then(res => {
+                      this.$message.success(this.$tc('UpdateSuccessMsg'))
+                      this.$refs.HomeCard.$refs.ListTable.reloadTable()
+                    })
                   }
                 }
               ]
@@ -182,8 +175,11 @@ export default {
 
 <style lang="scss" scoped>
 .failed-accounts {
-  :deep(.el-table) {
-    min-height: 260px;
+
+  ::v-deep {
+    .el-table {
+      min-height: 260px;
+    }
   }
 }
 </style>

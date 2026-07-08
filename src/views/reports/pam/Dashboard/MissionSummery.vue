@@ -6,7 +6,7 @@
 
     <div class="chart-content">
       <!-- eslint-disable-next-line -->
-      <Echart ref="chartRef" :options="chartOption" :autoresize="true" />
+      <Echart ref="chartRef" :options="chartOption" :autoresize="true"/>
     </div>
   </div>
 </template>
@@ -44,7 +44,7 @@ export default {
       return {
         tooltip: {
           trigger: 'item',
-          formatter: (params) => {
+          formatter: params => {
             return `${params.name}: ${params.value} (${params.percent}%)`
           }
         },
@@ -181,7 +181,7 @@ export default {
     align-items: center;
     justify-content: center;
 
-    :deep(.echarts) {
+    ::v-deep .echarts {
       height: 14.25rem;
     }
   }
