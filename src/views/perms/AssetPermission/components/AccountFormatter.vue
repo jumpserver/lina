@@ -1,7 +1,7 @@
 <template>
   <el-form class="account-content" @submit.prevent>
     <el-form-item>
-      <el-radio-group v-model="realRadioSelected" @input="handleRadioChanged">
+      <el-radio-group v-model="realRadioSelected" @change="handleRadioChanged">
         <el-radio v-for="i in iRealChoices" :key="i.label" :disabled="i.disabled" :value="i.value">
           {{ i.label }}
           <el-tooltip v-if="i.tip" :content="i.tip" :open-delay="500" placement="top">
@@ -23,7 +23,7 @@
             {{ $t('TemplateAdd') }}
           </el-button>
           <span class="help-block">
-            {{ addTemplateHelpText }}
+            {{ $t(addTemplateHelpText) }}
           </span>
         </span>
       </div>
@@ -94,10 +94,15 @@ export default {
     ListTable,
     Dialog
   },
+  emits: ['input', 'change', 'update:modelValue', 'update:model-value'],
   props: {
     value: {
       type: [Array, String],
       default: () => []
+    },
+    modelValue: {
+      type: [Array, String],
+      default: undefined
     },
     assets: {
       type: [Array],
@@ -177,8 +182,9 @@ export default {
           })
           .then((res) => {
             if (!res) res = []
+            const currentValue = vm.normalizeAccountValue(vm.currentValue)
             const data = res
-              .filter((item) => vm.value.indexOf(item) === -1)
+              .filter((item) => currentValue.indexOf(item) === -1)
               .map((v) => ({ value: v, label: v }))
             cb(data)
           })
@@ -186,6 +192,9 @@ export default {
     }
   },
   computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value
+    },
     virtualAccount() {
       return virtualAccount
     },
@@ -222,6 +231,11 @@ export default {
         })
         .map((i) => i.value)
     },
+    normalizeAccountValue(value) {
+      if (Array.isArray(value)) return value
+      if (!value) return []
+      return [value]
+    },
     getExcludeChoices(val) {
       return val.filter((i) => i.startsWith('!')).map((i) => i.substring(1))
     },
@@ -229,7 +243,7 @@ export default {
       return val.filter((i) => !i.startsWith('@') && !i.startsWith('!'))
     },
     initDefaultChoice() {
-      const value = this.value || []
+      const value = this.normalizeAccountValue(this.currentValue)
       const specAccountsInput = this.getSpecValues(value)
 
       const excludeAccountsInput = this.getExcludeChoices(value)
@@ -250,7 +264,7 @@ export default {
       }
 
       // 清理虚拟账号
-      const virtualChoices = this.getVirtualChoices(this.value)
+      const virtualChoices = this.getVirtualChoices(value)
       if (virtualChoices.length > 0) {
         this.virtualChecked = true
         this.virtualSelected = virtualChoices
@@ -303,6 +317,8 @@ export default {
 
       this.$emit('input', choicesSelected)
       this.$emit('change', choicesSelected)
+      this.$emit('update:modelValue', choicesSelected)
+      this.$emit('update:model-value', choicesSelected)
     }
   }
 }

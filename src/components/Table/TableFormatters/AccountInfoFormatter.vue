@@ -9,7 +9,7 @@
       </div>
     </div>
     <template #reference>
-      <el-button class="link-btn" plain size="small" type="primary">
+      <el-button class="link-btn" size="small" type="primary">
         {{ $t('View') }} <el-icon><ArrowDown /></el-icon>
       </el-button>
     </template>

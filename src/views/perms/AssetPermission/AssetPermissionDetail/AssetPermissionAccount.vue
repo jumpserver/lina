@@ -59,10 +59,12 @@ export default {
   },
   computed: {
     assetIds() {
-      return this.object.assets.map((asset) => asset.id)
+      const assets = Array.isArray(this.object.assets) ? this.object.assets : []
+      return assets.map((asset) => asset.id)
     },
     nodeIds() {
-      return this.object.nodes.map((node) => node.id)
+      const nodes = Array.isArray(this.object.nodes) ? this.object.nodes : []
+      return nodes.map((node) => node.id)
     }
   },
   methods: {

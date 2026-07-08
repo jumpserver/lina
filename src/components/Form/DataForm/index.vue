@@ -425,6 +425,11 @@ export default {
         border-radius: 0;
       }
 
+      .el-link--default {
+        font-weight: 500;
+        font-size: 13px;
+      }
+
       .el-select__wrapper,
       .el-cascader .el-input__wrapper {
         min-height: 30px;
@@ -433,9 +438,27 @@ export default {
         border-radius: 0;
       }
 
+      // select 静息(单行)高度对齐输入框的 30px。EP 默认内部按 --el-input-height 把
+      // selection/placeholder 撑到 ~32px，加上 wrapper 纵向 padding 后整体约 34px。
+      // 这里纵向 padding 归零、内部各段限制为 28px，配合上下各 1px 边框 → 单行恰为 30px；
+      // 多选 tag 换行时 selection 会 flex-wrap 增高，wrapper 靠 height:auto + min-height:30px
+      // 自适应长高，不再被裁剪。普通 el-select 与 Select2 由此统一。
       .el-select__wrapper {
-        padding-top: 2px;
-        padding-bottom: 2px;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
+      .el-select__selection {
+        min-height: 28px;
+        align-items: center;
+      }
+
+      .el-select__selected-item,
+      .el-select__placeholder,
+      .el-select__input {
+        min-height: 28px;
+        height: 28px;
+        line-height: 28px;
       }
 
       .el-cascader .el-input {

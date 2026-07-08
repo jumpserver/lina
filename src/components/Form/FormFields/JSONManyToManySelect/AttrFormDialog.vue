@@ -151,5 +151,9 @@ export default {
   :deep(.el-select) {
     width: 100%;
   }
+
+  :deep(.el-form-item__content > div) {
+    width: 100%;
+  }
 }
 </style>

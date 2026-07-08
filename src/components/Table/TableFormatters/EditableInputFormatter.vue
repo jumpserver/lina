@@ -114,6 +114,8 @@ export default {
 .editInput :deep(.el-input__inner) {
   padding: 2px;
   line-height: 12px;
+  border: unset;
+  height: 28px;
 }
 
 .editInput {

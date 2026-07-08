@@ -243,9 +243,18 @@ export default {
 <style lang="scss" scoped>
 .the-row .empty-box {
   display: block;
+  flex: 0 0 100%;
+  width: 100%;
+  box-sizing: border-box;
 
   :deep(.el-empty) {
     margin: 0 auto;
+  }
+
+  :deep(.el-card__body) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 

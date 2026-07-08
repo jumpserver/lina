@@ -28,6 +28,8 @@ export default {
     }
   },
   data() {
+    const users = Array.isArray(this.object.users) ? this.object.users : []
+    const userGroups = Array.isArray(this.object.user_groups) ? this.object.user_groups : []
     return {
       tableConfig: {
         url: '',
@@ -47,7 +49,7 @@ export default {
             label: this.$t('Actions'),
             align: 'center',
             width: 150,
-            objects: this.object.users,
+            objects: users,
             formatter: DeleteActionFormatter,
             onDelete: function (col, row, cellValue, reload) {
               const url = `/api/v1/perms/asset-permissions-users-relations/?assetpermission=${this.object.id}&user=${cellValue}`
@@ -88,7 +90,7 @@ export default {
           }
         },
         showHasMore: false,
-        hasObjectsId: this.object.users?.map((i) => i.id) || [],
+        hasObjectsId: users.map((i) => i.id),
         showHasObjects: false,
         performAdd: (items) => {
           const relationUrl = `/api/v1/perms/asset-permissions-users-relations/`
@@ -114,7 +116,7 @@ export default {
         objectsAjax: {
           url: '/api/v1/users/groups/'
         },
-        hasObjectsId: this.object.user_groups?.map((i) => i.id) || [],
+        hasObjectsId: userGroups.map((i) => i.id),
         performAdd: (items) => {
           const relationUrl = `/api/v1/perms/asset-permissions-user-groups-relations/`
           const objectId = this.object.id

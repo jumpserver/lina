@@ -101,19 +101,11 @@ export default {
           }
         },
         need_update_password: {
-          label: '',
-          type: 'checkbox-group',
-          component: null,
-          // 覆盖默认生成的 component
-          el: {
-            style: 'margin-bottom: -10px'
-          },
-          options: [
-            {
-              label: this.$t('ResetPasswordNextLogin'),
-              value: true
-            }
-          ],
+          label: this.$t('ResetPasswordNextLogin'),
+          // 单个布尔开关，直接用内置 type: 'checkbox'（与上方 update_password 一致）。
+          // render-form-item 对 checkbox 会：valueProp 返回 undefined 不透传 :value（避免
+          // el-checkbox 把表单值当作分组 label 而卡住），并按 target.checked 归一成布尔。
+          type: 'checkbox',
           hidden: (formValue) => {
             if (formValue.source !== 'local') {
               return true
@@ -331,12 +323,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.user-create-update :deep(.el-form-item-need_update_password) {
-  margin-top: -10px;
-
-  .el-form-item__content label {
-    line-height: 30px;
-  }
-}
-</style>
+<style lang="scss" scoped></style>

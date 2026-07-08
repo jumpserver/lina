@@ -10,7 +10,6 @@
       :options="labelOptions"
       :placeholder="placeholder"
       :props="labelProps"
-      class="label-cascader"
       clearable
       filterable
       separator=": "
@@ -22,15 +21,12 @@
         <span>{{ data.label }}</span>
         <span v-if="!node.isLeaf"> ({{ data.children.length - 1 }}) </span>
       </template>
-      <template #prefix>
-        <el-icon class="el-input__icon"><Search /></el-icon>
-      </template>
     </el-cascader>
   </div>
 </template>
 
 <script>
-import { debounce } from 'lodash'
+import _ from 'lodash'
 
 export default {
   name: 'LabelSearch',
@@ -48,14 +44,10 @@ export default {
   watch: {
     labelValue(newValue) {
       if (!newValue || newValue.length === 0) {
-        this.showLabelSearch = false
-      }
-
-      if (!newValue || newValue.length === 0) {
+        // 清空(点 clearable ×)后仍留在 cascader，不再变回标签图标按钮。
         this.$emit('labelSearch', '')
         return
       }
-
       const labelSearch = newValue.map((item) => item.join(':')).join(',')
       this.$emit('labelSearch', labelSearch)
     },
@@ -70,7 +62,7 @@ export default {
   mounted() {
     this.$eventBus.$on('labelSearch', this.labelSearchHandler)
   },
-  beforeUnmount(label) {
+  beforeUnmount() {
     this.$eventBus.$off('labelSearch', this.labelSearchHandler)
   },
   methods: {
@@ -89,28 +81,9 @@ export default {
         this.showLabelSearch = true
       }, 500)
     },
-    handleCascaderVisibleChange(visible) {
-      const cascaderEl = this.$refs.labelCascader?.$el
-      if (!cascaderEl || typeof cascaderEl.getElementsByClassName !== 'function') {
-        // EP cascader 在 Vue 3 中 $el 可能不是 DOM 元素，降级处理
-        if (!visible && this.labelValue.length === 0) {
-          this.showLabelSearch = false
-        }
-        this.$emit('showLabelSearch', this.showLabelSearch)
-        return
-      }
-      const input = cascaderEl.getElementsByClassName('el-input--suffix')[0]?.querySelector('input')
-      if (visible) {
-        setTimeout(() => {
-          if (input) input.style.height = '28px'
-        })
-        return
-      } else {
-        if (input) input.style.height = '28px'
-      }
-      if (this.labelValue.length === 0) {
-        this.showLabelSearch = false
-      }
+    // 展开成 cascader 后就保留输入框形态：关闭下拉/失焦都不再变回标签图标按钮。
+    // 折叠态仅由初始及视口宽度(listenViewPort)决定。
+    handleCascaderVisibleChange() {
       this.$emit('showLabelSearch', this.showLabelSearch)
     },
     getLabelOptions() {
@@ -157,7 +130,7 @@ export default {
     listenViewPort() {
       window.addEventListener(
         'resize',
-        debounce((e) => {
+        _.debounce((e) => {
           const viewPort = e?.target?.innerWidth
           this.showLabelSearch = viewPort < 992
         }, 100),
@@ -169,56 +142,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// el-cascader 一律使用 Element Plus 原生样式，不做任何覆盖（此前的内部 hack 反而导致
+// tags 飞出、双层边框等问题）。这里只保留：与右侧搜索框的间距、折叠态标签图标按钮的外观。
 .label-search {
+  display: inline-flex;
+  align-items: center;
   margin-right: 10px;
-  border: 1px solid var(--color-border);
-  overflow: hidden;
 
+  // 折叠态：标签图标按钮（独立、与工具栏其它控件同高 30px）。
   :deep(.el-button.label-button) {
-    height: 28px;
-    padding: 8px;
-    font-weight: 400;
-    border: none;
-  }
+    height: 30px;
+    padding: 0 10px;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background-color: #fff;
 
-  .label-cascader {
-    width: 300px;
-    height: 28px !important;
-    line-height: 32px;
-    font-size: 13px;
-
-    :deep(.el-input) {
-      .el-input__wrapper {
-        height: 28px !important;
-      }
-
-      .el-input__inner {
-        height: 28px !important;
-        line-height: 32px;
-        font-size: 13px;
-        border: none;
-      }
-
-      .el-input__suffix {
-        color: var(--color-icon-primary) !important;
-      }
-    }
-
-    :deep(.el-cascader__tags) {
-      white-space: nowrap;
-      flex-wrap: nowrap;
-      overflow: hidden;
-
-      .el-tag.el-tag--info {
-        color: var(--color-text-primary) !important;
-      }
-
-      .el-cascader__search-input {
-        display: none;
-        height: 28px !important;
-        line-height: 32px;
-        font-size: 13px;
-      }
+    &:hover {
+      background-color: var(--el-fill-color-light);
     }
   }
 

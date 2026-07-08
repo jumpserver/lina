@@ -32,6 +32,8 @@ export default {
   data() {
     const id = this.object.id
     const url = id ? `/api/v1/perms/asset-permissions/${id}/assets/all/` : ''
+    const assets = Array.isArray(this.object.assets) ? this.object.assets : []
+    const nodes = Array.isArray(this.object.nodes) ? this.object.nodes : []
     return {
       tableConfig: {
         url: url,
@@ -55,7 +57,7 @@ export default {
             label: this.$t('Actions'),
             align: 'center',
             width: 150,
-            objects: this.object.assets,
+            objects: assets,
             formatter: DeleteActionFormatter,
             onDelete: function (col, row, cellValue, reload) {
               const url = `/api/v1/perms/asset-permissions-assets-relations/?assetpermission=${this.object.id}&asset=${cellValue}`
@@ -84,10 +86,14 @@ export default {
       assetRelationConfig: {
         icon: 'fa-edit',
         title: this.$t('AddAssetToThisPermission'),
-        hasObjectsId: this.object.assets?.map((i) => i.id) || [],
+        hasObjectsId: assets.map((i) => i.id),
         disabled: this.$store.getters.currentOrgIsRoot,
         canSelect: (row, index) => {
-          return (this.object.assets?.map((i) => i.id) || []).indexOf(row.id) === -1
+          return (
+            (Array.isArray(this.object.assets) ? this.object.assets : [])
+              .map((i) => i.id)
+              .indexOf(row.id) === -1
+          )
         },
         performAdd: (items, that) => {
           const relationUrl = `/api/v1/perms/asset-permissions-assets-relations/`
@@ -116,7 +122,7 @@ export default {
             return { label: item.full_value, value: item.id }
           }
         },
-        hasObjectsId: this.object.nodes?.map((i) => i.id) || [],
+        hasObjectsId: nodes.map((i) => i.id),
         performAdd: (items) => {
           const relationUrl = `/api/v1/perms/asset-permissions-nodes-relations/`
           const objectId = this.object.id

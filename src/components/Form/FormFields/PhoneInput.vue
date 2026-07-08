@@ -1,8 +1,8 @@
 <template>
   <div class="compound-field phone-input">
     <el-select
+      v-model="rawValue.code"
       :placeholder="$tc('Select')"
-      :value="rawValue.code"
       class="phone-input__code"
       @change="onChange"
     >
@@ -49,17 +49,29 @@ export default {
       return `${this.rawValue.code}${this.rawValue.phone}`
     }
   },
+  created() {
+    this.rawValue = this.normalizeValue(this.value)
+  },
   mounted() {
-    const defaults = { code: this.getDefaultCode(), phone: '' }
-    this.rawValue = this.value || defaults
+    this.rawValue = this.normalizeValue(this.value)
+    this.$emit('input', this.fullPhone)
     this.$axios.get('/api/v1/common/countries/').then((res) => {
       this.countries = res.map((item) => {
         return { name: `${item.flag} ${item.name}`, value: item.phone_code }
       })
     })
-    this.$emit('input', this.fullPhone)
   },
   methods: {
+    normalizeValue(value) {
+      const defaults = { code: this.getDefaultCode(), phone: '' }
+      value = value && typeof value === 'object' ? value : {}
+      return {
+        ...defaults,
+        ...value,
+        code: value.code || defaults.code,
+        phone: value.phone || ''
+      }
+    },
     getDefaultCode() {
       const mapper = {
         zh: '+86',
@@ -83,6 +95,7 @@ export default {
     },
     onInputChange() {
       this.$emit('input', this.fullPhone)
+      this.$emit('change', this.fullPhone)
     }
   }
 }

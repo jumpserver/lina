@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-radio-group v-model="iValue.type" @input="handleTypeChange">
+  <div class="json-m2m-select">
+    <el-radio-group v-model="iValue.type" @change="handleTypeChange">
       <el-radio v-for="tp of types" :key="tp.name" :value="tp.name">
         {{ tp.label }}
       </el-radio>
@@ -110,6 +110,14 @@ const AttrActionFormatter = {
 export default {
   name: 'JSONManyToManySelect',
   components: { AttrActionFormatter, AttrFormDialog, DataTable, Select2, AttrMatchResultDialog },
+  // 根节点是 <div>。父级(DataForm)通过 v-on 绑定了 input/change/update:modelValue 等
+  // 监听器，Vue3 默认会把这些透传成根 <div> 的原生 DOM 监听器；内部 el-radio-group 的
+  // 原生 radio input/change 事件冒泡上来会带上 target.value(如 "all"/"attrs")，污染表单
+  // 值，导致 value prop 收到 String 而非 Object 报错。
+  // inheritAttrs:false 让这些监听器只留在 $attrs、不绑到根节点，组件只通过显式
+  // $emit('input', object) 更新表单值，彻底杜绝原生事件冒泡污染。
+  inheritAttrs: false,
+  emits: ['input'],
   props: {
     value: {
       type: Object,
@@ -291,6 +299,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// 根节点必须撑满：外层 .el-form-item__content 是 flex column + align-items:flex-start，
+// 不会自动拉伸块级子元素，否则本组件(radio + 属性表格)会按内容宽度收缩、不占满表单项宽度。
+.json-m2m-select {
+  width: 100%;
+}
+
 .attr-list {
   width: 99%;
 }
