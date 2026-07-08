@@ -9,10 +9,18 @@
       @tab-click="handleTabClick"
     >
       <template v-for="item in tabIndices" :key="item.name">
-        <el-tab-pane :disabled="item.disabled" :label-content="item.labelContent" :name="item.name">
+        <el-tab-pane
+          :disabled="item.disabled"
+          :label-content="item.labelContent"
+          :name="item.name"
+        >
           <template #label>
             <span class="tab-container">
-              <i v-if="item.icon && !showText" :class="item.icon" class="tab-icon fa" />
+              <i
+                v-if="item.icon && !showText"
+                :class="item.icon"
+                class="tab-icon fa"
+              />
               <span v-if="showText" class="tab-text">{{ item.title }}</span>
               <slot :tab="item.name" name="badge" />
             </span>
@@ -42,24 +50,24 @@
 </template>
 
 <script>
-import AutoDataZTree from '@/components/Tree/AutoDataZTree/index.vue'
+import AutoDataZTree from "@/components/Tree/AutoDataZTree/index.vue";
 
-const ACTIVE_TREE_TAB_KEY = 'activeTreeTab'
+const ACTIVE_TREE_TAB_KEY = "activeTreeTab";
 
 export default {
-  name: 'TabTree',
+  name: "TabTree",
   components: {
-    AutoDataZTree
+    AutoDataZTree,
   },
   props: {
     submenu: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     activeMenu: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -68,123 +76,125 @@ export default {
       renderVersion: 0,
       activeTreeSetting: {},
       showText: true,
-      keyMap: {}
-    }
+      keyMap: {},
+    };
   },
   computed: {
     iActiveMenu: {
       get() {
-        return this.activeMenu
+        return this.activeMenu;
       },
       set(item) {
-        this.$emit('update:activeMenu', item)
-        this.changeTreeSetting(item)
-      }
+        this.$emit("update:activeMenu", item);
+        this.changeTreeSetting(item);
+      },
     },
     tabIndices() {
-      const map = []
+      const map = [];
       this.submenu.forEach((v) => {
-        const hidden = typeof v.hidden === 'function' ? v.hidden() : v.hidden
+        const hidden = typeof v.hidden === "function" ? v.hidden() : v.hidden;
         if (!hidden) {
-          map.push(v)
+          map.push(v);
         }
-      })
-      return map
-    }
+      });
+      return map;
+    },
   },
   watch: {
     activeMenu(val) {
-      this.changeTreeSetting(val)
-    }
+      this.changeTreeSetting(val);
+    },
   },
   async mounted() {
-    this.iActiveMenu = await this.getPropActiveTab()
-    this.hiddenTextIfNeed()
+    this.iActiveMenu = await this.getPropActiveTab();
+    this.hiddenTextIfNeed();
   },
   methods: {
     hiddenTextIfNeed() {
-      const vm = this
+      const vm = this;
       const hideOverflowingText = _.debounce(function () {
-        const tabs = document.querySelector('.tree-tab .el-tabs__nav-wrap.is-scrollable')
-        vm.showText = !tabs
-      }, 800)
+        const tabs = document.querySelector(
+          ".tree-tab .el-tabs__nav-wrap.is-scrollable",
+        );
+        vm.showText = !tabs;
+      }, 800);
 
-      hideOverflowingText()
-      window.addEventListener('resize', hideOverflowingText)
+      hideOverflowingText();
+      window.addEventListener("resize", hideOverflowingText);
     },
     hideRMenu() {
-      this.$refs.AutoDataZTree?.hideRMenu()
+      this.$refs.AutoDataZTree?.hideRMenu();
     },
     getSelectedNodes: function () {
-      return this.$refs.AutoDataZTree.getSelectedNodes()
+      return this.$refs.AutoDataZTree.getSelectedNodes();
     },
     getNodes: function () {
-      return this.$refs.AutoDataZTree.getNodes()
+      return this.$refs.AutoDataZTree.getNodes();
     },
     selectNode: function (node) {
-      return this.$refs.AutoDataZTree.selectNode(node)
+      return this.$refs.AutoDataZTree.selectNode(node);
     },
     handleUrlChange(url) {
-      this.$emit('urlChange', url)
+      this.$emit("urlChange", url);
     },
     handleTabClick(tab) {
-      this.componentKey = this.keyMap[tab.name]
+      this.componentKey = this.keyMap[tab.name];
       if (!this.componentKey) {
-        this.componentKey = this.$route.name + '_' + tab.name
+        this.componentKey = this.$route.name + "_" + tab.name;
       }
-      this.$emit('tab-click', tab)
-      this.$emit('update:activeMenu', tab.name)
-      this.$cookie.set(ACTIVE_TREE_TAB_KEY, tab.name, 1)
+      this.$emit("tab-click", tab);
+      this.$emit("update:activeMenu", tab.name);
+      this.$cookie.set(ACTIVE_TREE_TAB_KEY, tab.name, 1);
 
       if (this.$route?.query?.[ACTIVE_TREE_TAB_KEY]) {
         this.$router.push({
           query: {
             ...this.$route.query,
-            [ACTIVE_TREE_TAB_KEY]: ''
-          }
-        })
+            [ACTIVE_TREE_TAB_KEY]: "",
+          },
+        });
       }
     },
     changeTreeSetting(tabName) {
-      const vm = this
+      const vm = this;
       try {
-        this.flag = false
+        this.flag = false;
         for (const tab of this.submenu) {
           if (tab.name === tabName) {
-            vm.activeTreeSetting = tab.treeSetting
-            this.renderVersion += 1
-            this.componentKey = `${this.$route.name || 'tree'}_${tabName}_${this.renderVersion}`
-            break
+            vm.activeTreeSetting = tab.treeSetting;
+            this.renderVersion += 1;
+            this.componentKey = `${this.$route.name || "tree"}_${tabName}_${this.renderVersion}`;
+            break;
           }
         }
       } finally {
-        this.flag = true
+        this.flag = true;
       }
     },
     getPropActiveTab() {
-      let activeTab = ''
+      let activeTab = "";
 
       const preActiveTabs = [
         this.$route.query[ACTIVE_TREE_TAB_KEY],
         this.$cookie.get(ACTIVE_TREE_TAB_KEY),
-        this.activeMenu
-      ]
+        this.activeMenu,
+      ];
 
       for (const preTab of preActiveTabs) {
-        const currentTab = typeof preTab === 'object' ? preTab?.name : preTab
+        const currentTab = typeof preTab === "object" ? preTab?.name : preTab;
         for (const tabName of this.tabIndices) {
-          const currentTabName = tabName?.name || ''
+          const currentTabName = tabName?.name || "";
           if (currentTab?.toLowerCase() === currentTabName?.toLowerCase()) {
-            return currentTabName
+            return currentTabName;
           }
         }
       }
 
-      activeTab = this.tabIndices[0]?.name || this.activeMenu || ''
-      return activeTab
-    }
-  }
-}
+      activeTab = this.tabIndices[0]?.name || this.activeMenu || "";
+      return activeTab;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -207,6 +217,7 @@ export default {
 
 .only-submenu {
   &:deep(.el-tabs__active-bar) {
+    width: 100% !important;
     transform: none !important;
   }
 
