@@ -325,9 +325,15 @@ export default {
     onSuccess() {
       this.closeReason = 'success'
       this.secretValue = ''
+      // 先捕获 callback 引用：this.visible = false 会触发 Dialog @close →
+      // handleDialogClose，那里会把 this.callback 置 null,若在 nextTick 里再取
+      // this.callback 就会是 null，导致 "this.callback is not a function"。
+      const callback = this.callback
       this.visible = false
       this.$nextTick(() => {
-        this.callback()
+        if (typeof callback === 'function') {
+          callback()
+        }
       })
     },
     handleConfirm() {

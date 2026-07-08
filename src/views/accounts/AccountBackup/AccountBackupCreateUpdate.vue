@@ -7,6 +7,7 @@ import { periodicMeta } from '@/components/const'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { encryptPassword } from '@/utils/secure'
 import getChangeSecretFields from '@/views/accounts/AccountBackup/fields'
+import AssetTypeCascader from './components/AssetTypeCascader.vue'
 
 export default {
   name: 'AccountBackupUpdate',
@@ -14,7 +15,6 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
-    const vm = this
     const fields = getChangeSecretFields.bind(this)()
     return {
       url: '/api/v1/accounts/account-backup-plans/',
@@ -51,19 +51,11 @@ export default {
         obj_recipients_part_one: fields.obj_recipients_part_one,
         obj_recipients_part_two: fields.obj_recipients_part_two,
         types: {
-          component: 'el-cascader',
+          type: 'cascader',
+          component: AssetTypeCascader,
           label: this.$t('Types'),
-          remote: {
-            request: () => vm.$axios.get('/api/v1/assets/categories/')
-          },
           el: {
-            options: [],
-            showAllLevels: false,
-            props: {
-              multiple: true,
-              emitPath: false,
-              children: 'types'
-            },
+            placeholder: this.$t('PleaseSelect'),
             style: {
               width: '100%'
             }

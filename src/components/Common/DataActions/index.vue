@@ -458,29 +458,17 @@ $color-drop-menu-border: #e4e7ed;
   min-width: 0;
 }
 
-:global(
-  .action-dropdown.el-dropdown__popper .more-batch-processing.el-dropdown-menu__item--divided
-) {
-  position: relative;
-  margin-top: 8px;
+// 「批量处理(选中 N 项)」是分组标题:文字在上、分割线在其下方,与下方操作项分隔。
+:global(.action-dropdown.el-dropdown__popper .more-batch-processing) {
+  margin-bottom: 4px;
+  padding-bottom: 4px;
   color: var(--color-text-primary);
   cursor: default;
   font-size: 12px;
+  border-bottom: 1px solid #e4e7ed;
 }
 
-:global(
-  .action-dropdown.el-dropdown__popper .more-batch-processing.el-dropdown-menu__item--divided:before
-) {
-  top: -8px;
-  left: 12px;
-  right: 12px;
-  height: 1px;
-  background-color: #e4e7ed;
-}
-
-:global(
-  .action-dropdown.el-dropdown__popper .more-batch-processing.el-dropdown-menu__item--divided:hover
-) {
+:global(.action-dropdown.el-dropdown__popper .more-batch-processing:hover) {
   background-color: transparent;
 }
 </style>
