@@ -723,7 +723,7 @@ body .v-modal {
     .type-icon {
       margin-right: 6px;
       font-size: 14px;
-      color: #409eff;
+      color: var(--color-primary);
     }
   }
 }

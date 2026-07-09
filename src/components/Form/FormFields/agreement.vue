@@ -40,8 +40,8 @@ export default {
 
 <style lang="scss" scoped>
 .highlight {
-  color: #f56c6c;
-  border: 2px solid #f56c6c;
+  color: var(--color-danger);
+  border: 2px solid var(--color-danger);
   padding: 10px;
 }
 </style>

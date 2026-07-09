@@ -106,7 +106,7 @@ export default {
     },
     highlightColor: {
       type: String,
-      default: () => '#409EFF'
+      default: () => 'var(--color-primary)'
     },
     asyncSearchFlag: {
       // 是否设置了异步搜索方法

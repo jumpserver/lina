@@ -17,6 +17,9 @@
       @focus="handleCascaderFocus"
       @visible-change="handleCascaderVisibleChange"
     >
+      <template #prefix>
+        <el-icon><Search /></el-icon>
+      </template>
       <template #default="{ node, data }">
         <span>{{ data.label }}</span>
         <span v-if="!node.isLeaf"> ({{ data.children.length - 1 }}) </span>
@@ -148,6 +151,25 @@ export default {
   display: inline-flex;
   align-items: center;
   margin-right: 10px;
+
+  // 展开态 cascader 与工具栏其它控件同高 30px（EP small 默认 24px 偏矮）。
+  // 只调高度，不动内部结构，避免此前 hack 导致的 tags 飞出/双边框问题。
+  :deep(.el-cascader) {
+    --el-input-height: 30px;
+    height: 30px;
+    line-height: 30px;
+
+    .el-input {
+      height: inherit;
+      width: 240px;
+    }
+  }
+
+  // 聚焦时隐藏 placeholder：filterable cascader 聚焦后会叠加一个搜索输入框，其光标落在
+  // placeholder 文字上形成重叠。聚焦时把 placeholder 透明化，只留光标；失焦后恢复。
+  :deep(.el-cascader:focus-within input::placeholder) {
+    color: transparent;
+  }
 
   // 折叠态：标签图标按钮（独立、与工具栏其它控件同高 30px）。
   :deep(.el-button.label-button) {

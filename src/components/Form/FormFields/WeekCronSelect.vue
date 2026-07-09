@@ -501,7 +501,7 @@ export default {
 
 .g-pull-right {
   float: right;
-  color: #409eff !important;
+  color: var(--color-primary) !important;
 }
 
 .g-pull-margin {

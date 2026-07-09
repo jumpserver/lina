@@ -431,6 +431,6 @@ export default {
 
 //修改颜色
 .el-button--text {
-  color: #409eff;
+  color: var(--color-primary);
 }
 </style>
