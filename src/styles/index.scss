@@ -123,6 +123,50 @@ small {
   color: $color-primary;
 }
 
+/*
+ * 主题色文字工具类。原先由 Element UI 时代的 element-extra.css 提供，该文件已废弃
+ * （见 utils/theme/index.js）。改用运行时 CSS 变量 --color-*，随主题切换自动更新。
+ */
+.text-primary {
+  color: var(--color-primary);
+}
+
+.text-success {
+  color: var(--color-success);
+}
+
+.text-info {
+  color: var(--color-info);
+}
+
+.text-warning {
+  color: var(--color-warning);
+}
+
+.text-danger {
+  color: var(--color-danger);
+}
+
+.text-link {
+  color: var(--color-info) !important;
+
+  &:hover {
+    filter: opacity(65%);
+  }
+}
+
+/*
+ * el-tag--info(默认 light 效果)恢复 JumpServer 原有的中性灰底深字样式。
+ * 该样式原由已废弃的 element-extra.css 提供；移除后 Element Plus 默认的浅蓝 info 配色
+ * 使下拉多选 tag「看起来没颜色」。通过覆盖 EP 的 tag CSS 变量实现，不用 !important；
+ * :not(.el-tag--dark):not(.el-tag--plain) 保证只改默认效果，深色/朴素 info tag 仍按主题走。
+ */
+.el-tag--info:not(.el-tag--dark):not(.el-tag--plain) {
+  --el-tag-bg-color: #f1f1f1;
+  --el-tag-border-color: #e5e6e7;
+  --el-tag-text-color: var(--color-text-primary);
+}
+
 b,
 strong {
   font-weight: 700;
@@ -763,6 +807,40 @@ li.rmenu i.fa {
   }
 }
 
+/*
+ * Alert 边框。Element Plus 默认 alert 无边框，而 JumpServer 之前(element-extra.css)
+ * 的 alert 带一圈细边框、并按类型着色。该文件已废弃，这里恢复原有观感。
+ * 类型色用运行时 --color-*-light（由 changeMenuColor 生成，随主题变化）；未生成时
+ * 回退到基础 --color-border。注意 EP 的 danger alert 类名是 --error。
+ */
+.el-alert {
+  border: solid 1px var(--color-border);
+}
+
+.el-alert.el-alert--success.is-light {
+  border-color: var(--color-success-light);
+}
+
+.el-alert.el-alert--info.is-light {
+  border-color: var(--color-info-light);
+}
+
+.el-alert.el-alert--warning.is-light {
+  border-color: var(--color-warning-light);
+}
+
+.el-alert.el-alert--error.is-light {
+  border-color: var(--color-danger-light);
+}
+
+.el-alert__content {
+  line-height: 1.5;
+}
+
+.el-alert .el-alert__description {
+  margin: 1px 0 0;
+}
+
 //.link-btn {
 //  span {
 //    color: var(--color-link);
@@ -829,6 +907,25 @@ li.rmenu i.fa {
 .el-date-editor.el-range-editor .el-range__close-icon {
   height: 30px;
   line-height: 30px;
+}
+
+// Picker panels are Element Plus-owned poppers. Form-level input border overrides can leak
+// into non-teleported panels and draw a real border outside Element Plus' inset border.
+.el-picker-panel {
+  .el-date-picker__time-header,
+  .el-date-range-picker__time-header,
+  .el-time-spinner__input {
+    .el-input__wrapper {
+      border: 0 !important;
+      border-radius: var(--el-input-border-radius, var(--el-border-radius-base));
+      box-shadow: 0 0 0 1px var(--el-input-border-color, var(--el-border-color)) inset !important;
+    }
+
+    .el-input__inner {
+      border: 0 !important;
+      box-shadow: none !important;
+    }
+  }
 }
 
 .el-input-number {

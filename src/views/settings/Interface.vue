@@ -50,6 +50,7 @@ import MarkDown from '@/components/Widgets/MarkDown'
 import { Page } from '@/layout/components'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { IS_DEV } from '@/utils/env'
+import { getLangCode } from '@/i18n/utils'
 
 export default {
   name: 'InterfaceSettings',
@@ -181,18 +182,40 @@ export default {
       ]
     }
   },
-  mounted() {
-    getInterfaceInfo().then((data) => {
-      this.interfaceInfo = data
-      this.loading = false
-    })
-    this.getPreviewThemes()
+  async mounted() {
+    // 主题下拉选项在表单渲染前就绪：后端 OPTIONS 下发的 theme choices 未按当前语言本地化，
+    // 这里用 previewThemes 返回的 display 映射构建本地化选项，覆盖后端 choices。
+    const [data] = await Promise.all([getInterfaceInfo(), this.getPreviewThemes()])
+    this.interfaceInfo = data
+    this.loading = false
   },
   methods: {
     getPreviewThemes() {
-      previewThemes().then((res) => {
-        this.themeConfigs = res
+      return previewThemes()
+        .then((res) => {
+          this.themeConfigs = res || []
+          this.applyThemeOptions()
+        })
+        .catch(() => {})
+    },
+    applyThemeOptions() {
+      const raw = (getLangCode() || 'en').toLowerCase()
+      let key = 'en'
+      if (raw.startsWith('zh')) {
+        key = 'zh'
+      } else if (raw.startsWith('ja')) {
+        key = 'ja'
+      }
+      const options = this.themeConfigs.map((theme) => {
+        const display = theme.display || {}
+        return {
+          value: theme.name,
+          label: display[key] || display.en || display.zh || theme.name
+        }
       })
+      if (options.length > 0 && this.fieldsMeta.theme) {
+        this.fieldsMeta.theme.options = options
+      }
     },
     getSelectThemeConfig(value) {
       let themeConfig
