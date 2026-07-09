@@ -130,6 +130,12 @@ export default {
     overflow: hidden;
   }
 
+  .form-fields.el-form {
+    margin-right: 1px;
+    padding-right: 15px;
+    height: 100%;
+  }
+
   .drawer__content {
     flex: 1 1 auto;
     min-height: 0;

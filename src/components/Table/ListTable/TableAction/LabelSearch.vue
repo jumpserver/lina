@@ -149,6 +149,13 @@ export default {
   align-items: center;
   margin-right: 10px;
 
+  :deep(.el-cascader) {
+    .el-input__wrapper {
+      padding: 4px 8px;
+      border-radius: 0;
+    }
+  }
+
   // 折叠态：标签图标按钮（独立、与工具栏其它控件同高 30px）。
   :deep(.el-button.label-button) {
     height: 30px;

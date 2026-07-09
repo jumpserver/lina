@@ -12,8 +12,8 @@
       :label-width="labelWidth"
       :style="{
         '--label-width': labelWidth,
-        '--form-column-gap': '8px',
-        '--form-section-gap': '20px'
+        '--form-column-gap': '18px',
+        '--form-section-gap': '15px'
       }"
       :server-errors="serverErrors"
       @input="handleFormUpdate"

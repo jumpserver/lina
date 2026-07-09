@@ -542,6 +542,15 @@ input[type='file'] {
   color: var(--color-text-primary) !important;
 }
 
+.el-cascader--small {
+  .el-cascader__tags {
+    padding: 3px;
+  }
+  .el-input__suffix {
+    width: 20px;
+  }
+}
+
 .el-card .el-card__header {
   color: var(--color-text-primary);
 }
