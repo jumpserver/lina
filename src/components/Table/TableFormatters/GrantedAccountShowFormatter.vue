@@ -1,6 +1,6 @@
 <template>
   <span v-if="!accounts"
-    ><a style="color: #1c84c6" @click="showAccount">{{ $t('Show') }}</a></span
+    ><a style="color: var(--color-link)" @click="showAccount">{{ $t('Show') }}</a></span
   >
   <span v-else>{{ accounts.toString() }}</span>
 </template>

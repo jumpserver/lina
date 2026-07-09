@@ -23,8 +23,8 @@
         </el-radio>
         <span class="el-upload__tip download-tpl">
           {{ downloadTemplateTitle }}
-          <el-link type="success" @click="downloadTemplateFile('csv')"> CSV </el-link>
-          <el-link type="success" @click="downloadTemplateFile('xlsx')"> XLSX </el-link>
+          <el-link type="primary" @click="downloadTemplateFile('csv')"> CSV </el-link>
+          <el-link type="primary" @click="downloadTemplateFile('xlsx')"> XLSX </el-link>
         </span>
       </el-form-item>
       <el-form-item :label="$tc('Upload')" :label-width="'100px'" class="file-uploader">

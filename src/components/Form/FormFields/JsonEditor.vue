@@ -170,7 +170,7 @@ export default {
 
       &:hover {
         background-color: #e9eaec;
-        color: var(--color-primary, #1ab394);
+        color: var(--color-primary);
       }
 
       .format-icon {

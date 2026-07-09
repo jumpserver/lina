@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import { Search } from '@element-plus/icons-vue'
 import { createSourceIdCache } from '@/api/common'
 import AssetSelectDialog from './dialog.vue'
 

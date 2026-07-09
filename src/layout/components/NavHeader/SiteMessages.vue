@@ -129,7 +129,12 @@ export default {
         .map((line) => {
           const trimmed = line.trimStart()
           // 标题/引用行保持原样
-          if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('>') || trimmed.startsWith('- ')) {
+          if (
+            !trimmed ||
+            trimmed.startsWith('#') ||
+            trimmed.startsWith('>') ||
+            trimmed.startsWith('- ')
+          ) {
             return line
           }
           // 该行含多个 "**字段:** 值" 时，为每个粗体字段起一个列表项
@@ -307,7 +312,7 @@ export default {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--color-primary, #409eff);
+  background: var(--color-primary);
 }
 
 .msg-item__subject {
@@ -329,7 +334,7 @@ export default {
 }
 
 .msg-item__read {
-  color: var(--color-primary, #409eff);
+  color: var(--color-primary);
   cursor: pointer;
 
   &:hover {
