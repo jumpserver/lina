@@ -277,7 +277,7 @@ $color-drop-menu-border: #e4e7ed;
     --el-button-hover-bg-color: var(--color-primary-light-3, #e8f7f4) !important;
     --el-button-hover-border-color: var(--color-primary-light, #bae8df) !important;
     --el-button-active-text-color: var(--color-primary) !important;
-    --el-button-active-bg-color: var(--color-primary-light-3, #e8f7f4) !important;
+    --el-button-active-bg-color: var(--color-primary-light-10, #e8f7f4) !important;
     --el-button-active-border-color: var(--color-primary-light, #bae8df) !important;
   }
 
@@ -291,7 +291,7 @@ $color-drop-menu-border: #e4e7ed;
     --el-button-hover-bg-color: var(--color-primary-light-3, #e8f7f4);
     --el-button-hover-border-color: var(--color-primary-light, #bae8df);
     --el-button-active-text-color: var(--color-primary);
-    --el-button-active-bg-color: var(--color-primary-light-3, #e8f7f4);
+    --el-button-active-bg-color: var(--color-primary-light-10, #e8f7f4);
     --el-button-active-border-color: var(--color-primary-light, #bae8df);
 
     &:hover,

@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <span :class="{ 'is-folded': shouldFold }" class="auto-data-search">
     <el-button v-if="shouldFold" circle class="search-btn" size="small" @click="handleManualSearch">
       <svg-icon icon-class="search" />
     </el-button>
@@ -56,8 +56,17 @@ export default {
       const options = this.options.concat(this.internalOptions)
       return _.uniqWith(options, _.isEqual)
     },
+    hasTags() {
+      if (Array.isArray(this.tags)) {
+        return this.tags.length > 0
+      }
+      if (this.tags && typeof this.tags === 'object') {
+        return Object.keys(this.tags).length > 0
+      }
+      return !!this.tags
+    },
     shouldFold() {
-      return this.fold && (!this.tags || this.tags.length === 0) && !this.manualSearch
+      return this.fold && !this.hasTags && !this.manualSearch
     }
   },
   watch: {
@@ -78,8 +87,8 @@ export default {
       if (_.isEqual(tags, this.tags)) {
         return
       }
-      this.tags = tags || []
-      if (tags.length === 0) {
+      this.tags = tags || {}
+      if (!tags || Object.keys(tags).length === 0) {
         this.manualSearch = false
       }
       this.$emit('tagSearch', tags)
@@ -143,11 +152,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.search-btn {
-  margin-top: 1px;
-  cursor: pointer;
-  &:hover {
-    color: var(--color-primary);
+.auto-data-search {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+
+  &.is-folded {
+    width: auto;
   }
+}
+
+.search-btn {
+  width: 30px;
+  min-width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background-color: #fff;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--el-fill-color-light);
+  }
+}
+
+:deep(.search-btn .svg-icon) {
+  color: var(--color-icon-primary) !important;
 }
 </style>

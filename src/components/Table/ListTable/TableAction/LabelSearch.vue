@@ -1,5 +1,5 @@
 <template>
-  <div class="label-search">
+  <div :class="{ 'is-expanded': showLabelSearch }" class="label-search">
     <el-button v-if="!showLabelSearch" class="label-button" size="small" @click="showSearchSelect">
       <svg-icon icon-class="tag" />
     </el-button>
@@ -33,6 +33,7 @@ export default {
   data() {
     return {
       showLabelSearch: false,
+      isMobileView: false,
       labelProps: {
         multiple: true
       },
@@ -56,7 +57,7 @@ export default {
     }
   },
   created() {
-    this.showLabelSearch = window.innerWidth < 992
+    this.syncLabelSearchState(window.innerWidth)
     this.listenViewPort()
   },
   mounted() {
@@ -72,7 +73,7 @@ export default {
     labelSearchHandler(label) {
       if (!label) {
         this.labelValue = []
-        this.showLabelSearch = true
+        this.showLabelSearch = this.isMobileView
         return
       }
       this.labelValue = [...this.labelValue, [label.name, label.value]]
@@ -81,10 +82,18 @@ export default {
         this.showLabelSearch = true
       }, 500)
     },
-    // 展开成 cascader 后就保留输入框形态：关闭下拉/失焦都不再变回标签图标按钮。
-    // 折叠态仅由初始及视口宽度(listenViewPort)决定。
-    handleCascaderVisibleChange() {
-      this.$emit('showLabelSearch', this.showLabelSearch)
+    handleCascaderVisibleChange(visible) {
+      if (visible) {
+        this.$emit('showLabelSearch', true)
+        return
+      }
+
+      if (this.labelValue?.length > 0) {
+        this.$emit('showLabelSearch', true)
+        return
+      }
+
+      this.showLabelSearch = this.isMobileView
     },
     getLabelOptions() {
       if (this.labelOptions.length > 0) {
@@ -127,12 +136,16 @@ export default {
         this.setSearchFocus()
       }, 200)
     },
+    syncLabelSearchState(viewPort) {
+      this.isMobileView = viewPort < 992
+      this.showLabelSearch = this.isMobileView || this.labelValue.length > 0
+    },
     listenViewPort() {
       window.addEventListener(
         'resize',
         _.debounce((e) => {
           const viewPort = e?.target?.innerWidth
-          this.showLabelSearch = viewPort < 992
+          this.syncLabelSearchState(viewPort)
         }, 100),
         false
       )
@@ -147,17 +160,26 @@ export default {
 .label-search {
   display: inline-flex;
   align-items: center;
-  margin-right: 10px;
+  max-width: 100%;
+
+  &.is-expanded {
+    flex: 1 1 240px;
+    min-width: 180px;
+    max-width: 320px;
+  }
 
   // 展开态 cascader 与工具栏其它控件同高 30px（EP small 默认 24px 偏矮）。
   // 只调高度，不动内部结构，避免此前 hack 导致的 tags 飞出/双边框问题。
   :deep(.el-cascader) {
     --el-input-height: 30px;
+    width: 100%;
+    min-width: 0;
     line-height: 30px;
 
     .el-input {
       height: inherit;
-      width: 240px;
+      width: 100%;
+      min-width: 0;
 
       .el-input__wrapper {
         padding: 4px 8px;

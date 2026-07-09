@@ -41,7 +41,7 @@ export default {
         },
         columnsMeta: {
           user: {
-            'min-width': '120px'
+            minWidth: '120px'
           },
           actions: {
             formatter: ActionsFormatter,

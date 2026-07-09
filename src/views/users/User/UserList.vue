@@ -192,7 +192,7 @@ export default {
             collapsible: false
           },
           email: {
-            'min-width': '160px'
+            minWidth: '220px'
           },
           wecom_id: {
             width: '120px'

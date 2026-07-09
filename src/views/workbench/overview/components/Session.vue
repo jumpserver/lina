@@ -63,11 +63,11 @@ export default {
             }
           },
           asset: {
-            'min-width': 200,
+            minWidth: 200,
             label: this.$t('Asset')
           },
           account: {
-            'min-width': 100
+            minWidth: 100
           },
           command_amount: {
             align: 'center',

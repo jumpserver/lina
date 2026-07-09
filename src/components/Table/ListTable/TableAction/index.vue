@@ -260,15 +260,27 @@ $color-drop-menu-border: #e4e7ed;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
 
     // 标签筛选与搜索框是两个相互独立的控件，各自单一边框、圆角，中间留间距。
     .right-side-item.action-search {
+      flex: 0 1 210px;
       height: 30px;
       min-width: 210px;
+      max-width: 100%;
       font-size: 13px;
       border: 1px solid var(--color-border);
       border-radius: 4px;
       overflow: hidden;
+    }
+
+    .right-side-item.action-search.is-folded {
+      flex: 0 0 auto;
+      min-width: 30px;
+      border: 0;
+      overflow: visible;
     }
   }
 
@@ -283,12 +295,11 @@ $color-drop-menu-border: #e4e7ed;
 
   .search.left {
     padding: 0 !important;
-    gap: 10px;
   }
 
   .search.right {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     padding-right: 10px;
   }
 }
@@ -320,7 +331,8 @@ $color-drop-menu-border: #e4e7ed;
 
 .search {
   order: 2;
-  flex-grow: 1; /* This allows it to grow and fill available space */
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .right-side {

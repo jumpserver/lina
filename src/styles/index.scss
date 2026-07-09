@@ -578,6 +578,7 @@ input[type='file'] {
 }
 
 .el-form {
+  margin-bottom: 20px;
   label {
     font-weight: 400;
     line-height: 32px;
@@ -657,6 +658,7 @@ $tooltip-arrow-color: #c2d1e1;
     border-bottom-color: $tooltip-arrow-color !important;
   }
 }
+
 
 .el-button.help-msg-btn,
 .el-button.el-button--default.help-msg-btn,
@@ -1061,6 +1063,37 @@ div.el-loading-parent--relative {
 .el-message {
   z-index: 999999 !important;
 }
+
+.el-button-group.el-button-group--horizontal {
+  .el-button--small.el-dropdown__caret-button {
+    width: 27px;
+  }
+}
+
+.el-dropdown .el-dropdown__caret-button {
+  &::before {
+    top: 4px;
+    bottom: 4px;
+    opacity: 0.7;
+    transition:
+      top 0.12s ease,
+      bottom 0.12s ease,
+      background-color 0.1s ease,
+      opacity 0.1s ease;
+  }
+
+  &:hover,
+  &:focus,
+  &:active {
+    &::before {
+      top: -1px;
+      bottom: -1px;
+      background: var(--el-button-hover-border-color);
+      opacity: 1;
+    }
+  }
+}
+
 
 // // Element Plus dropdown menu 样式（通过 teleport 渲染到 body，需要使用全局样式）
 // // 注意：不要强制显示 popper，只在打开时显示
