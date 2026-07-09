@@ -215,7 +215,8 @@ $height: 28px;
   :deep(.el-select__wrapper.is-hovering:not(.is-focused)),
   :deep(.el-select__wrapper.is-focused) {
     background: rgba(255, 255, 255, 0.14);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    box-shadow: none;
+    border: none;
   }
 
   :deep(.el-select__wrapper.is-disabled) {

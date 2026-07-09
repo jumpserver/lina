@@ -396,8 +396,13 @@ export default {
         height: 100%;
       }
 
+      :deep(.el-input__prefix-inner) {
+        display: flex;
+        align-items: center;
+      }
+
       :deep(.el-input__prefix-inner > :last-child) {
-        margin-right: 0;
+        margin-right: 8px;
       }
 
       :deep(.el-input__icon),
@@ -532,6 +537,10 @@ body .v-modal {
       border: 0 !important;
       box-shadow: none !important;
       background: transparent !important;
+    }
+
+    .el-input__prefix-inner > :last-child {
+      margin-right: 8px;
     }
 
     .el-input__suffix {
