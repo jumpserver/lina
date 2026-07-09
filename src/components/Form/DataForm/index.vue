@@ -433,6 +433,23 @@ export default {
         border-radius: 0;
       }
 
+      // date-editor(含 datetime)显式钉到 30px。只靠 --el-input-height / wrapper height 仍会被
+      // EP 内部默认高度撑高，这里同时固定 wrapper 30px、inner 28px（与 PhoneInput 同一套做法）。
+      .el-date-editor.el-input {
+        --el-input-height: 30px;
+        height: 30px;
+
+        .el-input__wrapper {
+          height: 30px;
+          min-height: 30px;
+        }
+
+        .el-input__inner {
+          height: 28px;
+          line-height: 28px;
+        }
+      }
+
       .el-link--default {
         font-weight: 500;
         font-size: 13px;

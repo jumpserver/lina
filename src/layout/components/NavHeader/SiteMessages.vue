@@ -441,8 +441,10 @@ export default {
       }
     }
 
+    // 消息内容里的链接（资产地址、查看详情等）用统一的链接色，而非 --color-success
+    // （在 Deep black 等主题下是绿色，语义也不对）。--color-link 各主题都是蓝色，稳定一致。
     :deep(a) {
-      color: var(--color-success) !important;
+      color: var(--color-link) !important;
       word-break: break-all;
     }
   }

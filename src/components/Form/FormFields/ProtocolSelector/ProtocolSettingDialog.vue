@@ -5,11 +5,13 @@
     :close-on-click-modal="false"
     :destroy-on-close="true"
     :modal="false"
-    :show-cancel="false"
+    :show-cancel="disabled"
     :show-confirm="false"
+    :cancel-title="$tc('Close')"
     :title="$tc('PlatformProtocolConfig') + '：' + protocol.name"
     class="setting-dialog"
     width="800px"
+    @cancel="$emit('update:visible', false)"
   >
     <el-alert v-if="disabled && platformDetail" style="margin-bottom: 10px" type="info">
       {{ $t('InheritPlatformConfig') }}
@@ -38,6 +40,7 @@ export default {
     Dialog,
     AutoDataForm
   },
+  emits: ['update:visible'],
   props: {
     protocol: {
       type: Object,
