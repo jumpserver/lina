@@ -20,7 +20,11 @@
           <el-tag
             v-if="d.version"
             size="small"
-            style="margin-left: 5px; background-color: #ecf5ff; color: #409eff"
+            style="
+              margin-left: 5px;
+              background-color: var(--el-color-primary-light-9);
+              color: var(--color-primary);
+            "
           >
             {{ d.version }}
           </el-tag>

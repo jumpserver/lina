@@ -238,7 +238,6 @@ export default {
     }
 
     .el-cascader .el-input {
-      --el-input-height: 30px;
       height: auto;
       line-height: 30px;
     }

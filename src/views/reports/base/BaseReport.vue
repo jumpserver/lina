@@ -774,8 +774,8 @@ export default {
 
       .el-checkbox__input.is-checked .el-checkbox__inner,
       .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-        background-color: #1890ff !important;
-        border-color: #1890ff !important;
+        background-color: var(--color-primary) !important;
+        border-color: var(--color-primary) !important;
       }
 
       .el-checkbox__input.is-checked .el-checkbox__inner::after {

@@ -596,7 +596,8 @@ input[type='file'] {
 
 .el-input input::placeholder {
   font-weight: 400 !important;
-  font-family: 'Open Sans', sans-serif;
+  // 不强制 'Open Sans'（纯拉丁字体）：中日文 placeholder（如「请输入手机号码」）会回退到
+  // 与输入实际文字不一致的字体，观感突兀。去掉后 placeholder 继承输入框自身字体，保持一致。
   font-size: 13px;
 }
 
@@ -850,6 +851,21 @@ li.rmenu i.fa {
   margin: 1px 0 0;
 }
 
+/*
+ * Dialog 垂直居中。Element Plus 默认弹窗贴顶（margin-top:15vh），而 JumpServer 之前
+ * 的弹窗是居中的。这里完全复用 EP 原生 align-center 的做法：overlay 设 flex，dialog 用
+ * margin:auto 居中。overlay 本身 overflow:auto，超高弹窗整体在 overlay 内滚动、不裁切。
+ * 不对 el-dialog 强加 flex-column / max-height / body overflow —— 那会破坏部分弹窗自身
+ * 的内容布局，导致内容溢出。
+ */
+.el-overlay-dialog {
+  display: flex;
+}
+
+.el-overlay-dialog .el-dialog {
+  margin: auto;
+}
+
 //.link-btn {
 //  span {
 //    color: var(--color-link);
@@ -975,23 +991,13 @@ li.rmenu i.fa {
 }
 
 .el-card__body {
-  // DataForm（.form-fields）在 Vue 3 / Element Plus 下已经自己维护了 padding、gap 与标签宽度，
-  // 这里仅保留旧式普通表单的卡片内边距补偿，避免迁移后的表单出现双倍顶部留白与额外右侧缩进。
+  // DataForm（.form-fields）在 Vue 3 / Element Plus 下已经自己维护了 padding、gap 与标签宽度。
+  // 旧式普通表单（含 detail-card）也不需要额外 margin —— 卡片体本身已有 20px 内边距，
+  // 之前这里补的 margin-top:20px（顶部双倍留白）+ margin-right:80px（右侧空出一大块）纯属多余。
   .el-form:not(.form-fields) {
-    margin-top: 20px;
-    margin-right: 80px;
-
     form {
       margin-top: 0;
     }
-  }
-}
-
-// drawer 内的表单不需要这段额外 margin(card 内边距已负责间距)
-.el-drawer {
-  .el-card__body .el-form {
-    margin-top: 0;
-    margin-right: 0;
   }
 }
 

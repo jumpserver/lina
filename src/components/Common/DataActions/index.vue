@@ -85,14 +85,12 @@
 
 <script>
 import { toSentenceCase } from '@/utils/common/index'
-import { ArrowDown } from '@element-plus/icons-vue'
 import Icon from '@/components/Widgets/Icon/index.vue'
 
 export default {
   name: 'DataActions',
   components: {
-    Icon,
-    ArrowDown
+    Icon
   },
   props: {
     grouped: {
@@ -451,6 +449,9 @@ $color-drop-menu-border: #e4e7ed;
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
+  // 固定宽度：无图标的项（如「批量处理」标题）也占满同样的图标列宽，
+  // 保证所有项的文字左边缘对齐，不会因空图标塌成 0 宽而左移。
+  width: 16px;
   margin-right: 8px;
 }
 

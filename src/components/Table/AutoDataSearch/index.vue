@@ -147,7 +147,7 @@ export default {
   margin-top: 1px;
   cursor: pointer;
   &:hover {
-    color: #409eff;
+    color: var(--color-primary);
   }
 }
 </style>
