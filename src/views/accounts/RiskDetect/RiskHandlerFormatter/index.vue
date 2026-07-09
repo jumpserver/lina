@@ -23,7 +23,7 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-      <el-tooltip :content="$tc('IgnoreAlert')" :open-delay="400">
+      <el-tooltip :content="$tc('IgnoreAlert')" :show-after="400">
         <el-button
           class="ignore action"
           size="small"
@@ -34,7 +34,7 @@
         </el-button>
       </el-tooltip>
     </span>
-    <el-tooltip v-else :content="iLabel" :open-delay="400" class="platform-status">
+    <el-tooltip v-else :content="iLabel" :show-after="400" class="platform-status">
       <el-button size="small" link @click="showDetail">
         <span class="detail-icon">
           <i v-if="iValue === '1'" class="fa fa-check-circle color-primary" />

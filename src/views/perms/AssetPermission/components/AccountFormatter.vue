@@ -4,7 +4,7 @@
       <el-radio-group v-model="realRadioSelected" @change="handleRadioChanged">
         <el-radio v-for="i in iRealChoices" :key="i.label" :disabled="i.disabled" :value="i.value">
           {{ i.label }}
-          <el-tooltip v-if="i.tip" :content="i.tip" :open-delay="500" placement="top">
+          <el-tooltip v-if="i.tip" :content="i.tip" :show-after="500" placement="top">
             <i class="fa fa-question-circle-o" />
           </el-tooltip>
         </el-radio>
@@ -50,7 +50,7 @@
         >
           <el-option v-for="i in virtualAccounts" :key="i.label" :label="i.label" :value="i.value">
             {{ i.label }}
-            <el-tooltip :content="i.tip" :open-delay="500" placement="top">
+            <el-tooltip :content="i.tip" :show-after="500" placement="top">
               <i class="fa fa-question-circle-o" />
             </el-tooltip>
           </el-option>

@@ -7,7 +7,7 @@
             <td class="name-cell">
               <el-tooltip
                 :content="obj.label"
-                :open-delay="500"
+                :show-after="500"
                 effect="dark"
                 placement="left"
                 style="margin: 4px"

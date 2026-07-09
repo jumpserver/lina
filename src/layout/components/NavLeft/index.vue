@@ -10,7 +10,7 @@
       <div class="nav-title">
         <span :class="switchViewOtherClasses" class="switch-view active-switch-view">
           <el-popover
-            :open-delay="200"
+            :show-after="200"
             placement="right-start"
             popper-class="view-switcher-popper"
             trigger="hover"

@@ -51,7 +51,7 @@
             <el-tooltip
               v-if="isSystemError && isLoading"
               :content="$tc('Reconnect')"
-              :open-delay="500"
+              :show-after="500"
               placement="top"
             >
               <svg-icon icon-class="refresh" @click="onRefresh" />

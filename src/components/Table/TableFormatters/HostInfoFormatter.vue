@@ -1,7 +1,7 @@
 <template>
   <DetailFormatter :col="col" :row="row">
     <el-popover
-      :open-delay="parseInt('500')"
+      :show-after="parseInt('500')"
       :title="title"
       placement="top-start"
       trigger="hover"

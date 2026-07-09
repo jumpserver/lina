@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tooltip v-if="formatterArgs.hasTips" :open-delay="500" effect="dark" placement="bottom">
+    <el-tooltip v-if="formatterArgs.hasTips" :show-after="500" effect="dark" placement="bottom">
       <template #content>
         <div>
           <template v-if="tipsIsArray">

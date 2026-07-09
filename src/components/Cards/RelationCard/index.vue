@@ -32,7 +32,7 @@
             <td style="width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
               <el-tooltip
                 :content="obj.label.toString()"
-                :open-delay="500"
+                :show-after="500"
                 effect="dark"
                 placement="left"
                 style="margin: 4px"

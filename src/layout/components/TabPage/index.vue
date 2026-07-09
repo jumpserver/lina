@@ -19,7 +19,7 @@
               <slot :tab="item.name" name="badge" />
               <el-tooltip
                 v-if="item.helpTip"
-                :open-delay="500"
+                :show-after="500"
                 effect="dark"
                 placement="bottom"
                 popper-class="help-tips"

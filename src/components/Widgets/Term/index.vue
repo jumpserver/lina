@@ -5,7 +5,7 @@
         <el-tooltip
           v-if="!item.isScrollButton || showScrollButton"
           :content="item.tip"
-          :open-delay="500"
+          :show-after="500"
         >
           <el-button size="small" type="default" @click="item.callback()">
             <svg-icon :icon-class="item.icon" />

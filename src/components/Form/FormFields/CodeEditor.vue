@@ -136,7 +136,7 @@
           :class="!isFold ? 'sepcial-icon' : ''"
           class="fold"
         >
-          <el-tooltip :content="$tc('MoreActions')" :open-delay="500" placement="top">
+          <el-tooltip :content="$tc('MoreActions')" :show-after="500" placement="top">
             <i
               :class="[isFold ? 'fa-angle-double-right' : 'fa-angle-double-down']"
               class="fa"
@@ -147,7 +147,7 @@
       </div>
       <div class="right-side">
         <div v-for="(item, index) in toolbar.right" :key="index">
-          <el-tooltip :content="item.tip" :open-delay="500">
+          <el-tooltip :content="item.tip" :show-after="500">
             <el-button
               v-if="item.type === 'button'"
               :disabled="item.disabled"

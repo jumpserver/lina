@@ -1,13 +1,7 @@
 <template>
   <div class="content">
     <span class="title">{{ config.title }}</span>
-    <el-tooltip
-      v-if="hasTip"
-      :content="config.tip"
-      :open-delay="500"
-      effect="dark"
-      placement="top"
-    >
+    <el-tooltip v-if="hasTip" :content="config.tip" :show-after="500" effect="dark" placement="top">
       <i class="fa fa-exclamation-circle icon" />
     </el-tooltip>
   </div>
@@ -26,8 +20,7 @@ export default {
     }
   },
   data() {
-    return {
-    }
+    return {}
   }
 }
 </script>
@@ -38,10 +31,10 @@ export default {
   .title {
     font-weight: 500;
     font-size: 16px;
-    color: #1F2329;
+    color: #1f2329;
   }
   .icon {
-    color: #BBBFC4;
+    color: #bbbfc4;
     font-size: 16px;
     cursor: pointer;
   }
@@ -50,8 +43,7 @@ export default {
     font-weight: 400;
     font-size: 10px;
     margin-left: 8px;
-    color: #8F959E;
+    color: #8f959e;
   }
 }
-
 </style>

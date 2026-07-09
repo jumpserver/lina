@@ -16,7 +16,7 @@
           {{ iTitle }}
           <el-tooltip
             v-if="helpTip"
-            :open-delay="500"
+            :show-after="500"
             effect="dark"
             placement="top"
             popper-class="help-tips"

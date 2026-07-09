@@ -1,7 +1,7 @@
 <template>
   <div class="json-editor">
     <div class="json-editor-toolbar">
-      <el-tooltip :content="$t('Format')" placement="top" :open-delay="300">
+      <el-tooltip :content="$t('Format')" placement="top" :show-after="300">
         <button type="button" class="format-btn" @click="formatJson">
           <svg class="format-icon" viewBox="0 0 16 16" aria-hidden="true">
             <rect x="1" y="2.3" width="14" height="1.4" rx="0.7" />

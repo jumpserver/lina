@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="summary-header">
-      <el-tooltip :content="title" :open-delay="500" placement="top">
+      <el-tooltip :content="title" :show-after="500" placement="top">
         <span class="title">{{ title }}</span>
       </el-tooltip>
     </div>

@@ -6,7 +6,7 @@
           v-if="item.has"
           :key="index"
           :content="item.tooltip"
-          :open-delay="500"
+          :show-after="500"
           effect="dark"
           placement="top"
         >
@@ -23,7 +23,7 @@
       v-if="!isEdit"
       :content="currentValue"
       :disabled="!isShow"
-      :open-delay="500"
+      :show-after="500"
       placement="top"
     >
       <pre class="text" style="cursor: pointer">{{ currentValue }}</pre>

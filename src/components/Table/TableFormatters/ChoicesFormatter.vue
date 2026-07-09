@@ -3,14 +3,14 @@
     <el-tooltip
       v-if="shown"
       :disabled="!formatterArgs.hasTips"
-      :open-delay="500"
+      :show-after="500"
       effect="dark"
       placement="bottom"
     >
       <template #content>
         <div v-sanitize="tips" />
       </template>
-      <span :class="classes">
+      <span :class="classes" class="choices-formatter">
         <i v-if="formatterArgs.showIcon && icon" :class="'fa ' + icon" />
         <span v-if="formatterArgs.showText">{{ text }}</span>
       </span>
@@ -103,4 +103,10 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.choices-formatter {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+</style>

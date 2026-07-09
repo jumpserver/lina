@@ -3,7 +3,7 @@
     v-model:visible="iShowTip"
     :content="tipText"
     :manual="true"
-    :open-delay="500"
+    :show-after="500"
     class="item"
     effect="dark"
     placement="bottom-start"

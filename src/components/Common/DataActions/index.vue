@@ -46,7 +46,7 @@
                 <el-tooltip
                   :content="option.tip"
                   :disabled="!option.tip"
-                  :open-delay="500"
+                  :show-after="500"
                   placement="top"
                 >
                   <div class="dropdown-item__content">
@@ -70,7 +70,7 @@
         class="action-item"
         @click="handleClick(action)"
       >
-        <el-tooltip :content="action.tip" :disabled="!action.tip" placement="top">
+        <el-tooltip :content="action.tip" :disabled="!action.tip" :show-after="500" placement="top">
           <div>
             <Icon v-if="action.icon" :icon="action.icon" class="pre-icon" />
             <span>

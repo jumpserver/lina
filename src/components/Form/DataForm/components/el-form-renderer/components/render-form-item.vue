@@ -14,7 +14,7 @@
         {{ data.label }}
         <el-tooltip
           v-if="data.helpTip"
-          :open-delay="500"
+          :show-after="500"
           :tabindex="-1"
           effect="dark"
           placement="right"
@@ -64,7 +64,7 @@
           :label="'value' in opt ? opt.value : opt.label"
         >
           {{ opt.label }}
-          <el-tooltip v-if="opt.tip" :content="opt.tip" :open-delay="500" placement="top">
+          <el-tooltip v-if="opt.tip" :content="opt.tip" :show-after="500" placement="top">
             <el-icon><Warning /></el-icon>
           </el-tooltip>
           <span v-if="data.helpText">{{ data.helpText }}</span>
@@ -77,7 +77,7 @@
           :value="'value' in opt ? opt.value : opt.label"
         >
           {{ opt.label }}
-          <el-tooltip v-if="opt.tip" :content="opt.tip" :open-delay="500" placement="top">
+          <el-tooltip v-if="opt.tip" :content="opt.tip" :show-after="500" placement="top">
             <el-icon><Warning /></el-icon>
           </el-tooltip>
         </el-radio>
