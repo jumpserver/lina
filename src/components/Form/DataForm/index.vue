@@ -574,6 +574,12 @@ export default {
           border-color: var(--el-border-color-hover) !important;
         }
 
+        // 聚焦时整圈容器边框高亮为主色,与普通输入框(.el-input__wrapper.is-focus)保持一致。
+        // 放在 hover 之后 + !important,使「聚焦中同时 hover」时仍显示主色而非 hover 灰。
+        &:focus-within {
+          border-color: var(--el-color-primary) !important;
+        }
+
         // 段间分隔线：除最后一段外，右侧描一条线
         > *:not(:last-child) {
           border-right: 1px solid var(--el-border-color);
