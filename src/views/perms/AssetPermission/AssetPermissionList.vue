@@ -74,6 +74,9 @@ export default {
         showMenu: false,
         showAssets: true,
         notShowBuiltinTree: true,
+        // 选中节点只过滤表格，不把选择同步到路由。否则路由变化会触发整棵树重新初始化、闪烁。
+        // 与资产列表(AllList)、账号发现、风险列表等页面保持一致。
+        selectSyncToRoute: false,
         url: '/api/v1/perms/asset-permissions/',
         nodeUrl: '/api/v1/perms/asset-permissions/',
         treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1&asset_amount=0',

@@ -35,7 +35,7 @@
                 <el-card
                   :style="{ borderLeftColor: randomBorderColor(index) }"
                   class="platform-item"
-                  shadow="hover"
+                  shadow="never"
                   @click="handleSelect(platform)"
                 >
                   <div class="icon-zone">
@@ -159,6 +159,9 @@ export default {
 .platform-item {
   width: 100%;
   margin: 5px 0;
+  // 每个平台卡片显式描一圈边框（左侧 4px 为随机强调色）。el-card 默认边框在部分主题/
+  // 场景下不可见，这里固定给一圈浅色边框，保证卡片轮廓始终存在。
+  border: 1px solid var(--color-border);
 
   & :deep(.el-card__body) {
     padding: 10px;
