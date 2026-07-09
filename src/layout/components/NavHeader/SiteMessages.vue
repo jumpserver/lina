@@ -129,7 +129,7 @@ export default {
       if (now.getTime() - d.getTime() > (3600 * 24 * 7) * 1000) {
         return toSafeLocalDateStr(s)
       } else {
-        return this.$moment(d).fromNow()
+        return this.$dayjs(d).fromNow()
       }
     },
     oneClickRead(msgs) {

@@ -43,9 +43,9 @@ export default {
   methods: {
     getIntervalDays(date) {
       date = new Date(date)
-      const dateExpired = this.$moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD')
-      const dateNow = this.$moment(new Date()).format('YYYY-MM-DD')
-      return this.$moment(dateNow).diff(this.$moment(dateExpired), 'days')
+      const dateExpired = this.$dayjs(date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+      const dateNow = this.$dayjs(new Date()).format('YYYY-MM-DD')
+      return this.$dayjs(dateNow).diff(this.$dayjs(dateExpired), 'days')
     }
   }
 }

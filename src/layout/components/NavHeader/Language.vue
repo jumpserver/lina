@@ -66,13 +66,13 @@ export default {
     },
     changeMomentLang() {
       if (this.currentLang.code.indexOf('en') > -1) {
-        this.$moment.locale('en')
+        this.$dayjs.locale('en')
       } else if (this.currentLang.code.indexOf('ja') > -1) {
-        this.$moment.locale('ja')
+        this.$dayjs.locale('ja')
       } else if (this.currentLang.code.indexOf('zh_hant') > -1) {
-        this.$moment.locale('zh-tw')
+        this.$dayjs.locale('zh-tw')
       } else {
-        this.$moment.locale('zh-cn')
+        this.$dayjs.locale('zh-cn')
       }
     },
     changeLangTo(item) {

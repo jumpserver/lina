@@ -38,7 +38,7 @@ export default {
   data() {
     const vm = this
     const dateFrom = getDaysAgo(7).toISOString()
-    const dateTo = this.$moment(getDayEnd()).add(1, 'day').toISOString()
+    const dateTo = this.$dayjs(getDayEnd()).add(1, 'day').toISOString()
     return {
       loading: true,
       tableConfig: {

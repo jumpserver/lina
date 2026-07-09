@@ -12,7 +12,7 @@ export default {
   name: 'Footer',
   data() {
     return {
-      curYear: this.$moment().year() || ''
+      curYear: this.$dayjs().year() || ''
     }
   },
   computed: {

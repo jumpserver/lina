@@ -2,7 +2,7 @@ import i18n from '@/i18n/i18n'
 import { message } from '@/utils/message'
 
 const _ = require('lodash')
-const moment = require('moment')
+const dayjs = require('@/utils/dayjs').default
 
 function getTimeUnits(u) {
   const units = {
@@ -83,7 +83,7 @@ export function toSafeLocalDateStr(d) {
     return '-'
   }
   const date = safeDate(d)
-  return moment(date).format('L LTS')
+  return dayjs(date).format('L LTS')
 }
 
 export function forMatAction(vm, d) {
@@ -206,8 +206,8 @@ export function getDayEnd(now) {
   if (!now) {
     now = new Date()
   }
-  const zoneTime = moment(now).utc().endOf('day').format('YYYY-MM-DD HH:mm:ss')
-  return moment(zoneTime).utc().toDate()
+  const zoneTime = dayjs.utc(now).endOf('day').format('YYYY-MM-DD HH:mm:ss')
+  return dayjs(zoneTime).toDate()
 }
 
 export function setUrlParam(url, name, value) {

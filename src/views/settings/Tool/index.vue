@@ -71,7 +71,7 @@ export default {
       const remoteTime = new Date(info.CURRENT_TIME)
       this.timer = setInterval(() => {
         remoteTime.setSeconds(remoteTime.getSeconds() + 1)
-        this.currentTime = this.$moment(remoteTime).format('YYYY-MM-DD HH:mm:ss')
+        this.currentTime = this.$dayjs(remoteTime).format('YYYY-MM-DD HH:mm:ss')
       }, 1000)
     })
   },
