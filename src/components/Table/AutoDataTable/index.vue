@@ -94,6 +94,15 @@ export default {
     this.isDeactivated = false
   },
   methods: {
+    normalizeColumnNames(value, fallback = []) {
+      if (Array.isArray(value)) {
+        return value.filter((item) => item !== undefined && item !== null)
+      }
+      if (Array.isArray(fallback)) {
+        return [...fallback]
+      }
+      return []
+    },
     isConfigChanged(iNew, iOld) {
       const _iNew = _.cloneDeep(iNew)
       const _iOld = _.cloneDeep(iOld)
@@ -148,7 +157,7 @@ export default {
             if (newIndex > 0) newIndex -= 1
           }
 
-          let columnNames = [...this.cleanedColumnsShow.show]
+          let columnNames = this.normalizeColumnNames(this.cleanedColumnsShow.show)
           if (columnNames.includes('actions')) {
             columnNames = columnNames.filter((item) => item !== 'actions')
             columnNames.push('actions')
@@ -239,9 +248,9 @@ export default {
       )
 
       const configShowColumnsNames = this.tableColumnsStorage.get()
-      let showColumnsNames = configShowColumnsNames || defaultColumnsNames
+      let showColumnsNames = this.normalizeColumnNames(configShowColumnsNames, defaultColumnsNames)
       if (showColumnsNames.length === 0) {
-        showColumnsNames = totalColumnsNames
+        showColumnsNames = [...totalColumnsNames]
       }
       // 校对显示的列，是不是包含最小列
       minColumnsNames.forEach((v, i) => {
@@ -260,7 +269,7 @@ export default {
     },
     filterShowColumns() {
       this.cleanColumnsShow()
-      const showFieldNames = this.cleanedColumnsShow.show
+      const showFieldNames = this.normalizeColumnNames(this.cleanedColumnsShow.show)
       let showFields = this.totalColumns.filter((obj) => {
         return showFieldNames.indexOf(obj.prop) > -1
       })
@@ -279,7 +288,7 @@ export default {
     },
     orderingColumns(columns) {
       const cols = _.cloneDeep(this.config.columns)
-      const show = this.cleanedColumnsShow.show
+      const show = this.normalizeColumnNames(this.cleanedColumnsShow.show, cols)
       const ordering = (show || cols || []).map((item) => {
         let prop = item
         if (typeof item === 'object') {
@@ -300,7 +309,7 @@ export default {
           return { prop: obj.prop, label: obj.label }
         }
       })
-      this.popoverColumns.currentCols = this.cleanedColumnsShow.show
+      this.popoverColumns.currentCols = this.normalizeColumnNames(this.cleanedColumnsShow.show)
       this.popoverColumns.minCols = this.cleanedColumnsShow.min
       this.popoverColumns.defaultCols = this.cleanedColumnsShow.default
 
@@ -311,6 +320,7 @@ export default {
       if (columns === null) {
         columns = this.cleanedColumnsShow.default
       }
+      columns = this.normalizeColumnNames(columns, this.cleanedColumnsShow.default)
       this.popoverColumns.currentCols = columns
       this.tableColumnsStorage.set(columns)
       this.filterShowColumns()

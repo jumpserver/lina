@@ -5,7 +5,7 @@
     :class="rootClass"
     :style="rootStyle"
     @size-change="handleSizeChange"
-    @update="onUpdate"
+    @data-update="onUpdate"
     v-on="iListeners"
   />
 </template>
@@ -161,6 +161,9 @@ export default {
       return this.$refs.table.toggleRowSelection(row, isSelected)
     },
     onUpdate(data, response) {
+      if (!Array.isArray(data)) {
+        return
+      }
       const theRowDefaultIsSelected = this.tableConfig.theRowDefaultIsSelected
       if (!theRowDefaultIsSelected || typeof theRowDefaultIsSelected !== 'function') {
         return

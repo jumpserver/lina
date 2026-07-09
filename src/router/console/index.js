@@ -81,7 +81,7 @@ export default {
     {
       path: '/console/more',
       component: empty,
-      name: 'More',
+      name: 'ConsoleMore',
       meta: {
         title: i18n.t('MenuMore'),
         icon: 'more'

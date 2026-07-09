@@ -260,7 +260,7 @@ export default {
     {
       path: '/workbench/system-tools',
       component: empty,
-      name: 'More',
+      name: 'WorkbenchMore',
       alwaysShow: true,
       meta: {
         title: i18n.t('MenuMore'),
