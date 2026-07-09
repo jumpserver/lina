@@ -46,7 +46,9 @@ body,
 }
 
 body {
-  height: calc(100% - 50px);
+  min-height: 100%;
+  height: 100%;
+  margin: 0;
   overflow: hidden;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: auto;
@@ -67,6 +69,11 @@ label {
 html {
   height: 100%;
   box-sizing: border-box;
+}
+
+#app {
+  min-height: 100%;
+  height: 100%;
 }
 
 *,
@@ -862,7 +869,9 @@ li.rmenu i.fa {
 }
 
 .el-card__body {
-  .el-form {
+  // DataForm（.form-fields）在 Vue 3 / Element Plus 下已经自己维护了 padding、gap 与标签宽度，
+  // 这里仅保留旧式普通表单的卡片内边距补偿，避免迁移后的表单出现双倍顶部留白与额外右侧缩进。
+  .el-form:not(.form-fields) {
     margin-top: 20px;
     margin-right: 80px;
 

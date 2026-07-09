@@ -289,6 +289,18 @@ export default {
         height: 100%;
       }
 
+      & :deep(.el-dropdown-link) {
+        outline: none;
+        box-shadow: none;
+
+        &:focus,
+        &:focus-visible,
+        &:active {
+          outline: none;
+          box-shadow: none;
+        }
+      }
+
       & :deep(i) {
         display: flex;
         align-items: center;

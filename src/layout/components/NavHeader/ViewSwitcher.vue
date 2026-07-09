@@ -29,6 +29,7 @@ import { mapGetters } from 'vuex'
 import Icon from '@/components/Widgets/Icon'
 import store from '@/store'
 import { scopedLocalStorage as localStorage } from '@/utils/storage'
+import { getFirstAccessibleChildPath } from '@/utils/vue'
 
 export default {
   name: 'ViewSwitcher',
@@ -104,8 +105,26 @@ export default {
     }
   },
   methods: {
+    getViewTarget(viewRoute) {
+      if (!viewRoute || typeof viewRoute !== 'object') {
+        return '/'
+      }
+
+      const redirect = viewRoute.redirect
+      if (typeof redirect === 'string' && redirect) {
+        return redirect
+      }
+      if (redirect && typeof redirect === 'object') {
+        return redirect
+      }
+
+      const rootPath = viewRoute.meta?.fullPath || viewRoute.path
+      const firstChildPath = getFirstAccessibleChildPath(rootPath)
+      return firstChildPath || rootPath || '/'
+    },
     async handleSelectView(key, keyPath) {
-      const routeName = this.viewsMapper[key] || '/'
+      const viewRoute = this.viewsMapper[key]
+      const routeTarget = this.getViewTarget(viewRoute)
       localStorage.setItem('preView', key)
       // Next 之前要重置 init 状态，否则这些路由守卫就不走了
       await store.dispatch('app/reset')
@@ -113,8 +132,8 @@ export default {
         this.tipHasRead = '1'
         this.iShowTip = false
       }
-      this.$router.push(routeName)
-      this.$emit('view-change', routeName)
+      await this.$router.push(routeTarget)
+      this.$emit('view-change', routeTarget)
     }
   }
 }

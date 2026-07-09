@@ -353,17 +353,18 @@ export default {
     display: flex;
     align-items: center;
     width: 100%;
-    height: 30px;
+    height: 28px;
     line-height: 1;
     cursor: pointer;
 
     .search-input {
       width: 100%;
-      height: 30px;
+      height: 28px;
       pointer-events: none;
 
       :deep(.el-input__wrapper) {
-        height: 30px;
+        min-height: 28px;
+        height: 28px;
         padding: 0 12px;
         background-color: rgba(255, 255, 255, 0.08);
         border-radius: 4px;
@@ -433,7 +434,6 @@ export default {
     }
   }
 }
-
 </style>
 
 <style lang="scss">

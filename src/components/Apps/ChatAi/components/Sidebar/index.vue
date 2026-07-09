@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <div class="close-sidebar">
-      <el-icon v-if="hasClose" class="download-icon" @click="onClose"><Download /></el-icon>
+      <i v-if="hasClose" class="close-icon" @click="onClose">
+        <el-icon-download />
+      </i>
     </div>
     <div v-if="!expanded" class="close-sidebar">
       <i class="fa fa-expand" style="font-weight: 200" @click="$emit('expand')" />
@@ -69,17 +71,21 @@ export default {
     height: 48px;
     padding: 12px 0;
     text-align: center;
-    font-size: 16px;
     cursor: pointer;
 
+    :deep(.el-icon),
+    :deep(.el-icon svg),
+    :deep(.svg-icon),
     i {
       font-size: 16px;
       font-weight: 600;
       padding: 4px;
+      box-sizing: content-box;
     }
 
-    i,
-    .svg {
+    :deep(.el-icon),
+    :deep(.svg-icon),
+    i {
       border-radius: 2px;
 
       &:hover {
@@ -90,8 +96,15 @@ export default {
   }
 }
 
-.download-icon {
+.close-icon {
+  display: inline-block;
   transform: rotate(-90deg);
+}
+
+.close-icon :deep(svg) {
+  width: 16px;
+  height: 16px;
+  display: block;
 }
 
 :deep(.el-tabs) {
