@@ -106,7 +106,8 @@ export default {
 </script>
 
 <style scoped>
+/* 详情值里的链接用统一链接色（各主题皆蓝），而非 --color-success（Deep black 下为绿、语义也不对）。 */
 a {
-  color: var(--color-success);
+  color: var(--color-link);
 }
 </style>

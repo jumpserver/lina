@@ -169,8 +169,9 @@ export default {
       }
       this.searchTable({ labels: val })
     },
-    handleLabelSearchShowChange(val) {
-      this.foldSearch = val
+    handleLabelSearchShowChange() {
+      // 标签搜索的展开不应联动折叠旁边的普通搜索框(action-search)——两者相互独立。
+      // 原先 `this.foldSearch = val` 会在标签搜索展开时把 action-search 折成图标并一直保持。
     },
     handleActionsDone(actions) {
       this.iHasLeftActions = actions.filter((i) => i && i.has !== false).length > 0
