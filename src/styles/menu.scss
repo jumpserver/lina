@@ -43,7 +43,9 @@ $single-menu-height: 38px;
     .item-title {
       font-size: 12px;
       width: 150px;
-      color: var(--color-text-primary);
+      // 用主题感知的 --menu-text（Deep black 等深色主题会覆盖为浅色），而非固定的
+      // --color-text-primary，否则深色菜单底 + 深色文字会导致文字不可见。
+      color: var(--menu-text);
       //overflow: hidden;
       //white-space: nowrap;
       //text-overflow: ellipsis;
@@ -91,7 +93,7 @@ $single-menu-height: 38px;
     display: flex;
     align-items: center;
     height: $single-menu-height;
-    color: var(--color-text-primary);
+    color: var(--menu-text);
     letter-spacing: 0.02em;
     font-size: 12px;
     min-width: 200px;
