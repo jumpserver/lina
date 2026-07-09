@@ -61,133 +61,170 @@
 </template>
 
 <script>
-import Icon from "@/components/Widgets/Icon";
-import { toSentenceCase } from "@/utils/common/index";
-import { resolveAsyncComponentCompat } from "@/utils/vue";
-import Page from "../Page/";
+import Icon from '@/components/Widgets/Icon'
+import { toSentenceCase } from '@/utils/common/index'
+import { resolveAsyncComponentCompat } from '@/utils/vue'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
+import Page from '../Page/'
 
 export default {
-  name: "TabPage",
+  name: 'TabPage',
   components: {
     Page,
-    Icon,
+    Icon
   },
   props: {
     submenu: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     activeMenu: {
       type: String,
-      required: true,
+      required: true
     },
     helpMessage: {
       type: String,
-      default: "",
+      default: ''
     },
     // 兼容调用方用 :help-tip 传入提示。若不在此声明，help-tip 会经 $attrs 透传到内层 Page，
     // 被渲染成 .page-alert（位于 page-heading 与 page-submenu 之间），导致提示与其它页面不一致。
     // 这里显式接收，统一渲染到 tab-page-content 内的 tab-page-alert。
     helpTip: {
       type: String,
-      default: "",
+      default: ''
     },
     title: {
       type: String,
-      default: "",
-    },
+      default: ''
+    }
   },
-  emits: ["update:activeMenu", "tab-click"],
+  emits: ['update:activeMenu', 'tab-click'],
   data() {
     return {
       loading: false,
       helpAlertVisible: true,
       toSentenceCase: toSentenceCase,
-      activeTab: this.activeMenu,
-    };
+      activeTab: this.activeMenu
+    }
   },
   computed: {
     iHelpMessage() {
-      return this.helpMessage || this.helpTip;
+      return this.helpMessage || this.helpTip
+    },
+    activeTabStorageKey() {
+      const routeKey =
+        this.$route.name || this.$route.meta?.fullPath || this.$route.path || 'default'
+      return `activeTab:${routeKey}`
     },
     iActiveMenu: {
       get() {
-        return this.activeTab;
+        return this.activeTab
       },
       set(item) {
-        this.activeTab = item;
-        this.$emit("update:activeMenu", item);
-      },
+        this.activeTab = item
+        this.$emit('update:activeMenu', item)
+      }
     },
     tabIndices() {
-      const map = [];
+      const map = []
       this.submenu.forEach((v) => {
-        const hidden = typeof v.hidden === "function" ? v.hidden() : v.hidden;
+        const hidden = typeof v.hidden === 'function' ? v.hidden() : v.hidden
         if (!hidden) {
-          map.push(v);
+          map.push(v)
         }
-      });
-      return map;
+      })
+      return map
     },
     computeActiveComponent() {
-      let needActiveComponent = "";
+      let needActiveComponent = ''
       for (const i of this.submenu) {
         if (i.component && i.name === this.iActiveMenu) {
-          needActiveComponent = this.resolveComponent(i.component);
-          break;
+          needActiveComponent = this.resolveComponent(i.component)
+          break
         }
       }
-      return needActiveComponent;
-    },
+      return needActiveComponent
+    }
   },
   watch: {
     activeMenu: {
       handler(newValue) {
-        this.iActiveMenu = newValue;
-      },
+        this.activeTab = newValue
+      }
+    },
+    '$route.query.tab'() {
+      this.syncActiveTab()
+    },
+    activeTabStorageKey() {
+      this.syncActiveTab()
+    },
+    iActiveMenu(newValue) {
+      if (!newValue) {
+        return
+      }
+      localStorage.setItem(this.activeTabStorageKey, newValue)
+      if (this.$route.query?.tab === newValue) {
+        return
+      }
+      this.$router.replace({
+        path: this.$route.path,
+        query: {
+          ...this.$route.query,
+          tab: newValue
+        },
+        hash: this.$route.hash
+      })
     },
     iHelpMessage() {
-      this.helpAlertVisible = true;
-    },
+      this.helpAlertVisible = true
+    }
   },
   created() {
-    this.iActiveMenu = this.getPropActiveTab();
-    this.loading = false;
+    this.syncActiveTab()
+    this.loading = false
   },
   methods: {
     handleTabClick(tab) {
-      this.$emit("tab-click", tab);
-      this.iActiveMenu = tab.name;
-      localStorage.setItem("activeTab", tab.name);
+      this.$emit('tab-click', tab)
+      this.iActiveMenu = tab.name
     },
     resolveComponent(component) {
-      return resolveAsyncComponentCompat(component);
+      return resolveAsyncComponentCompat(component)
     },
     getPropActiveTab() {
-      let activeTab = "";
+      let activeTab = ''
 
       const preActiveTabs = [
-        this.$route.query["tab"],
-        localStorage.getItem("activeTab"),
-        this.activeMenu,
-      ];
+        this.$route.query['tab'],
+        localStorage.getItem(this.activeTabStorageKey),
+        this.activeMenu
+      ]
 
       for (const preTab of preActiveTabs) {
-        const currentTab =
-          typeof preTab === "object" ? preTab?.name || "" : preTab;
+        const currentTab = typeof preTab === 'object' ? preTab?.name || '' : preTab
         for (const tabName of this.tabIndices) {
-          const currentTabName = tabName?.name || "";
+          const currentTabName = tabName?.name || ''
           if (currentTab?.toLowerCase() === currentTabName?.toLowerCase()) {
-            return currentTabName;
+            return currentTabName
           }
         }
       }
 
-      activeTab = this.tabIndices[0].name;
-      return activeTab;
+      activeTab = this.tabIndices[0].name
+      return activeTab
     },
-  },
-};
+    syncActiveTab() {
+      const activeTab = this.getPropActiveTab()
+      if (!activeTab) {
+        return
+      }
+      this.activeTab = activeTab
+      if (this.activeMenu !== activeTab) {
+        this.$emit('update:activeMenu', activeTab)
+      }
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -337,7 +374,7 @@ export default {
      * 导致滚到底时最后一块内容贴边。用一个不参与裁剪的 ::after 占位块补回底部间距。
      */
     &::after {
-      content: "";
+      content: '';
       display: block;
       flex: 0 0 22px;
       height: 22px;
@@ -366,8 +403,8 @@ export default {
    * 带 class 的 wrapper（如 .auth-container）class 以自身类名开头，均不命中，保持不变。
    */
   .tab-page-content > :deep(div:not([class])),
-  .tab-page-content > :deep(div[class=""]),
-  .tab-page-content > :deep(div[class^="fade-transform"]) {
+  .tab-page-content > :deep(div[class='']),
+  .tab-page-content > :deep(div[class^='fade-transform']) {
     display: flex;
     flex-direction: column;
     gap: 8px;

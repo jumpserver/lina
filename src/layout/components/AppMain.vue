@@ -26,7 +26,7 @@ export default {
       // query 去掉这两个，如果变了再刷新
       const query = {}
       for (const [k, v] of Object.entries(this.$route.query)) {
-        if (k.includes('updated') || k.includes('order') || k.startsWith('_')) {
+        if (k === 'tab' || k.includes('updated') || k.includes('order') || k.startsWith('_')) {
           continue
         }
         query[k] = v
@@ -39,11 +39,17 @@ export default {
         // 报表页面：只用路径作为 key，让同一路径的组件实例被复用
         // 包含 query 会导致每次 query 变化都创建新的缓存实例，积累的 deactivated 实例会同时响应路由变化形成循环
         key = _.trimEnd(this.$route.path, '/')
-      } else if (this.$route.name.toLowerCase().includes('list')) {
-        key = _.trimEnd(this.$route.path, '/') + '?' + new URLSearchParams(query).toString()
       } else {
-        key = new Date().getTime()
-        // key = this.$route.fullPath
+        const routeName = this.$route.name?.toLowerCase?.() || ''
+        const queryString = new URLSearchParams(query).toString()
+        if (routeName.includes('list')) {
+          key = _.trimEnd(this.$route.path, '/') + '?' + queryString
+        } else {
+          key = _.trimEnd(this.$route.path, '/')
+          if (queryString) {
+            key += '?' + queryString
+          }
+        }
       }
       return key
     },
