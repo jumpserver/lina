@@ -263,8 +263,9 @@ export default {
   :deep(.more-action.el-button--primary.is-plain),
   :deep(.el-dropdown > .more-action.el-button--primary.is-plain) {
     color: var(--color-primary);
-    background-color: var(--color-primary-light-3, #e8f7f4);
-    border-color: var(--color-primary-light-1, var(--color-primary));
+    // 用主题系统维护的 EP 主色浅色阶替换硬编码 #e8f7f4,保证非默认主题下也跟随主色
+    background-color: var(--el-color-primary-light-9);
+    border-color: var(--el-color-primary-light-5);
 
     &:hover,
     &:focus,
