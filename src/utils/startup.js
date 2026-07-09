@@ -176,6 +176,16 @@ export async function generatePageRoutes({ to, from }) {
   }
 }
 
+async function regenerateMissingRoute({ to, from }) {
+  await store.dispatch('users/getProfile', true)
+  const pageRoutesResult = await generatePageRoutes({ to, from })
+  const resolvedRoute = router.resolve({ path: to.path, query: to.query, hash: to.hash })
+  if (['404', 'NotFound'].includes(resolvedRoute?.name)) {
+    return true
+  }
+  return pageRoutesResult
+}
+
 export async function checkUserFirstLogin({ to, from, next }) {
   // 防止递归调用
   if (to.path === '/profile/improvement') return true
@@ -239,6 +249,9 @@ function onI18nLoaded() {
 export async function startup({ to, from, next }) {
   // if (store.getters.inited) { return true }
   if (store.getters.inited) {
+    if (['404', 'NotFound'].includes(to?.name)) {
+      return regenerateMissingRoute({ to, from })
+    }
     // 页面初始化后也需要检测
     const firstLoginResult = await checkUserFirstLogin({ to, from })
     if (firstLoginResult && firstLoginResult !== true) {

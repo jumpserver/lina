@@ -16,7 +16,7 @@ export default {
   '--banner-bg': '#148f76',
   '--submenu-bg': '#ffffff',
   '--menu-bg': '#ffffff',
-  '--menu-text': '#646a73',
+  '--menu-text': '#292827',
   '--menu-text-active': '#1ab394',
   '--menu-hover': '#ffffff'
 }

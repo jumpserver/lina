@@ -222,7 +222,9 @@ $hover-border-color: #d2d2d2;
       white-space: nowrap;
       cursor: pointer;
       transition: all 0.3s;
-      color: var(--color-text-primary);
+      // 跟随 --menu-text（深色主题会覆盖为浅色）；底色是 --menu-bg，用固定深色会在
+      // Deep black 主题下不可见。
+      color: var(--menu-text);
       background-color: var(--menu-bg);
       border-bottom: 1px solid var(--color-border);
 
