@@ -130,6 +130,13 @@
     padding: 1px 11px;
   }
 
+  // 普通表单项的直接输入框必须由 wrapper 提供水平留白。inner 的 padding 会在下方
+  // 统一清零；若页面或组件样式把 wrapper 重置为 0，placeholder 会紧贴边框。
+  // 仅匹配直接子节点，避免影响 TagInput、输入组等需要自行管理间距的复合控件。
+  > .el-input:not(.el-input-group) > .el-input__wrapper {
+    padding: 1px 11px !important;
+  }
+
   .el-select__wrapper,
   .el-cascader .el-input__wrapper,
   .el-date-editor .el-input__wrapper {

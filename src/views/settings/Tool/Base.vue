@@ -1,6 +1,6 @@
 <template>
   <IBox>
-    <el-form ref="testForm" :model="testData" :rules="rules" label-width="15%">
+    <el-form ref="testForm" class="tool-form" :model="testData" :rules="rules" label-width="15%">
       <div v-for="field in safeFields" :key="field.name">
         <div v-if="Array.isArray(field)">
           <el-form-item label-width="8%">
@@ -42,9 +42,14 @@
         </div>
       </div>
       <el-form-item :label="$tc('Output')">
-        <Term ref="xterm" :xterm-config="xtermConfig" style="border: solid 1px #dddddd" />
+        <Term
+          ref="xterm"
+          class="tool-output"
+          :xterm-config="xtermConfig"
+          style="border: solid 1px #dddddd"
+        />
       </el-form-item>
-      <el-form-item>
+      <el-form-item class="tool-actions">
         <el-button v-if="!isTesting" size="small" type="primary" @click="submitTest">
           <i class="fa fa-play" style="margin-right: 4px" />{{ $t('Test') }}
         </el-button>
@@ -171,18 +176,37 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-:deep(.el-form-item) {
-  margin-bottom: 20px;
+:deep(.tool-form) {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
-  .el-form-item__label {
-    height: 30px;
-    line-height: 30px;
-    display: inline-flex;
-    align-items: center;
-  }
+:deep(.tool-form > .el-form-item),
+:deep(.tool-form > div > .el-form-item) {
+  // 由容器 gap 统一管理字段间距，避免被全局 el-form 规则覆盖或叠加。
+  margin-bottom: 0 !important;
+}
 
-  .el-form-item {
-    margin-bottom: 0;
-  }
+:deep(.tool-form .el-form-item__label) {
+  height: 30px;
+  line-height: 30px;
+  display: inline-flex;
+  align-items: center;
+}
+
+:deep(.tool-form .el-form-item .el-form-item) {
+  margin-bottom: 0;
+}
+
+:deep(.tool-form > .tool-actions .el-form-item__content) {
+  // 小尺寸按钮默认按 30px 行高基线居中，会让可见边框比其它控件多出约 5px 间隙。
+  align-items: flex-start;
+  line-height: normal;
+}
+
+:deep(.tool-output) {
+  width: 100%;
+  min-width: 0;
 }
 </style>

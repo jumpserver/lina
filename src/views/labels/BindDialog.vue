@@ -10,10 +10,8 @@
     @confirm="handleConfirm"
   >
     <div style="padding: 0 20px 20px">
-      <el-row>
-        <div class="label-zone">
-          <label class="type-label" for="">{{ $t('ResourceType') }}: </label>
-        </div>
+      <el-row class="type-row jms-form-controls">
+        <label class="type-label" for="">{{ $t('ResourceType') }}: </label>
         <el-select v-model="select2.value" class="select2" @change="handleChangeType">
           <el-option-group v-for="group in select2.options" :key="group.label" :label="group.label">
             <el-option
@@ -156,17 +154,23 @@ export default {
   margin: 20px;
 }
 
-.type-label {
-  width: 200px;
-  display: block;
-}
-
-.select2 {
-  width: 300px;
-}
-
 .el-row {
   margin: 20px 0;
+}
+
+// 资源类型行:label 在左,select 占满剩余宽度(右边缘与下方穿梭框对齐)
+.type-row {
+  display: flex;
+  align-items: center;
+
+  .type-label {
+    margin-right: 12px;
+    white-space: nowrap;
+  }
+
+  .select2 {
+    flex: 1;
+  }
 }
 
 .label-zone {

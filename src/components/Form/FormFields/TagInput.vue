@@ -243,7 +243,8 @@ export default {
   width: 100%;
   min-height: 30px;
   height: auto;
-  padding: 0 8px 0 4px;
+  // 边框由当前容器承担，输入文字的水平留白统一交由内部 wrapper（11px）处理。
+  padding: 0;
   box-sizing: border-box;
   border: 1px solid #dcdee2;
   border-radius: 1px;
@@ -320,7 +321,6 @@ export default {
     -webkit-appearance: none !important;
     box-shadow: none !important;
     background: transparent !important;
-    padding-left: 8px;
     height: 28px;
     line-height: 28px;
   }
@@ -333,6 +333,8 @@ export default {
 
   & :deep(.el-input__wrapper) {
     width: 100%;
+    // 与标准 el-input 一样由 wrapper 承担留白；inner 的 padding 会被公共规则清零。
+    padding: 0 11px !important;
     border: none !important;
     box-shadow: none !important;
     background: transparent !important;

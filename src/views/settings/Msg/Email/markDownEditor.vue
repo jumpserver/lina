@@ -75,6 +75,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .markdown-editor {
+  // 表单项内容区是 flex 容器,不设宽度会按内容收缩成窄条,这里撑满可用宽度
+  width: 100%;
+  box-sizing: border-box;
   position: relative;
   padding: 10px;
   border: 1px solid #dcdfe6;

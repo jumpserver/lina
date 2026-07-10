@@ -34,7 +34,6 @@ export default {
   meta: {
     title: i18n.t('Settings'),
     icon: 'system-setting',
-    activeMenu: '/settings',
     view: 'settings',
     type: 'view',
     showNavSwitcher: false,
