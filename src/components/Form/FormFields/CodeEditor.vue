@@ -5,7 +5,7 @@
         <template v-for="(item, index) in iActions" :key="index">
           <el-form-item
             v-if="!(item.type === 'button' && item.isVisible)"
-            :label="item.name"
+            :label="item.type === 'button' ? '' : item.name"
             :prop="item.name"
           >
             <template v-if="item.type === 'button' && !item.isVisible">
@@ -18,8 +18,6 @@
                   @click="item.callback()"
                 >
                   <i :class="item.icon" />
-
-                  {{ item.name }}
                 </el-button>
               </el-tooltip>
             </template>
@@ -86,36 +84,23 @@
 
             <template v-if="item.type === 'select' && (!item.el || !item.el.create)">
               <el-tooltip :disabled="!item.tip" :content="item.tip">
-                <el-dropdown
-                  class="select-dropdown"
-                  trigger="click"
-                  @command="
-                    (command) => {
-                      item.value = command
-                      item.callback(command)
+                <el-select
+                  v-model="formModel[item.name]"
+                  class="toolbar-select"
+                  @change="
+                    (val) => {
+                      item.value = val
+                      item.callback(val)
                     }
                   "
                 >
-                  <el-button size="small" type="primary">
-                    <div class="text-content">
-                      <span class="content">
-                        {{ getLabel(item.value, item.options) }}
-                        <el-icon class="el-icon--right"><ArrowDown /></el-icon>
-                      </span>
-                    </div>
-                  </el-button>
-                  <template #dropdown>
-                    <el-dropdown-menu>
-                      <el-dropdown-item
-                        v-for="(option, i) in item.options"
-                        :key="i"
-                        :command="option.value"
-                      >
-                        {{ option.label }}
-                      </el-dropdown-item>
-                    </el-dropdown-menu>
-                  </template>
-                </el-dropdown>
+                  <el-option
+                    v-for="(option, i) in item.options"
+                    :key="i"
+                    :label="option.label"
+                    :value="option.value"
+                  />
+                </el-select>
               </el-tooltip>
             </template>
 
@@ -346,48 +331,60 @@ export default {
           font-size: 11px;
         }
 
+        // 全局 .el-form .el-form-item__content 设了 line-height:32px,会让 runas 的 autocomplete
+        // (外层是 inline 的 <span>)按 32px 行高基线排布,与右侧块级 el-select 竖直错位("歪")。
+        // 这里重置行高,让各控件按 flex-end 正常对齐。
+        :deep(.el-form-item__content) {
+          line-height: normal;
+        }
+
+        // 输入框统一 30px 标准控件高度,与 select / 按钮底部对齐
+        :deep(.el-form-item__content .inline-input),
+        :deep(.el-form-item__content .inline-input .el-input__wrapper) {
+          height: 30px;
+          min-height: 30px;
+        }
+
         :deep(.el-form-item__content .inline-input .el-input__inner) {
           min-width: 130px;
+          height: 28px;
+          line-height: 28px;
+          // 全局 .el-form ... .el-input__wrapper{padding:0} 会清掉 wrapper 内边距,
+          // 优先级高于组件 scoped 规则;改由 inner 提供左内边距,让 placeholder 不贴边。
+          padding: 0 11px;
         }
 
-        // 执行、暂停按钮
+        // 执行、停止按钮:图标 + 文字,30px,与输入框/下拉等高
         :deep(.el-form-item__content .start-stop-btn) {
-          display: flex;
+          display: inline-flex;
           align-items: center;
+          gap: 4px;
           height: 30px;
-          margin-bottom: 1.5px;
         }
 
-        :deep(.el-form-item__content) .select-dropdown .el-button {
-          width: 125px;
-          height: 30px;
-          background-color: var(--color-disabled-background);
-          border-color: var(--color-input-border);
+        // 账号策略 / 模块 / 超时:标准 el-select(30px、原生下拉),替换旧的灰色假按钮
+        :deep(.el-form-item__content .toolbar-select) {
+          width: 130px;
 
-          &:focus,
-          &:hover {
-            border-color: var(--color-input-border) !important;
-            background-color: var(--color-disabled-background) !important;
-          }
-
-          .text-content {
-            color: var(--color-text-primary);
-
-            .content {
-              display: flex;
-              justify-content: space-between;
-            }
+          .el-select__wrapper {
+            min-height: 30px;
+            height: 30px;
           }
         }
 
+        // 必填项(运行用户)此前用 -1px 负 margin 微调,导致与其它字段错位(看起来"歪");
+        // 统一为 0,与相邻 select/输入框底部对齐。
         &.is-required {
-          margin-bottom: -1px;
+          margin-bottom: 0;
         }
       }
 
       .fold {
         display: flex;
         align-items: center;
+        justify-content: center;
+        // 撑到与控件等高(30px),底部对齐后图标即与右侧 select/输入框竖直居中对齐
+        height: 30px;
         margin-left: 15px;
 
         &.sepcial-icon {
@@ -432,6 +429,11 @@ export default {
       border: 1px solid var(--color-border);
       border-radius: 4px;
       background: #fff;
+    }
+
+    // 去掉 CodeMirror 聚焦时的默认虚线 outline(CM6 默认 outline:1px dotted)
+    :deep(.cm-editor.cm-focused) {
+      outline: none;
     }
 
     :deep(.cm-gutters) {
