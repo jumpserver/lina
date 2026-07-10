@@ -146,13 +146,12 @@ export default {
   cursor: pointer;
 
   .el-button {
-    // 只含一个图标,做成紧凑的方形按钮(EP small 的默认 padding 会把它撑得又扁又宽)
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    min-width: 28px;
-    height: 28px;
+    width: 24px;
+    min-width: 24px;
+    height: 24px;
     padding: 0;
     line-height: 1;
     box-shadow: none !important;
@@ -162,7 +161,7 @@ export default {
     i {
       display: block;
       line-height: 1;
-      transform: translateY(1px);
+      transform: translateX(1px) translateY(1px);
     }
 
     &:hover,
