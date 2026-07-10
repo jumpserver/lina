@@ -634,8 +634,10 @@ export default {
   }
 
   :deep(.el-select__input-wrapper) {
-    flex: 1 1 120px;
-    min-width: 120px;
+    // 只需容纳光标即可，避免因 120px 硬门槛在标签后剩余宽度不足时把光标挤到下一行、
+    // 撑高整个控件;flex-grow 让它在同一行内自动填满剩余空间。
+    flex: 1 1 30px;
+    min-width: 30px;
     margin-left: 0;
   }
 

@@ -9,5 +9,6 @@
   "notParenthesis": "不能包含括号。",
   "InvalidJson": "JSON 格式错误.",
   "requiredHasUserNameMapped": "用户名属性是必需的。",
-  "Diff": ""
+  "Diff": "",
+  "FailedToSendVerificationCode": "認証コードの送信に失敗しました"
 }

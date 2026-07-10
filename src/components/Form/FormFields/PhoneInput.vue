@@ -134,7 +134,7 @@ export default {
   :deep(.el-input__wrapper) {
     min-height: 28px;
     height: 28px;
-    padding: 0 8px;
+    padding: 0 11px;
   }
 
   // 激活态只作用于输入框区域：聚焦时仅这一段描边，不影响左侧 select
@@ -146,6 +146,9 @@ export default {
     height: 28px;
     line-height: 28px;
     border: 0;
+    // 全局 .el-form ... .el-input__wrapper{padding:0}(0,4,0)会清掉 wrapper 的内边距，
+    // 优先级高于组件 scoped 规则；因此改由 inner 提供左内边距，让 placeholder/文字不贴分隔线。
+    padding-left: 11px;
   }
 }
 
