@@ -37,7 +37,7 @@
       :center="false"
       :title="title"
       class="announcement"
-      type="success"
+      type="info"
       @close="onAlertClose"
     >
       <MarkDown :value="announcement.content" class="markdown" />

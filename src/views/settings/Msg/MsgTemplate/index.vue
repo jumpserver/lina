@@ -74,6 +74,9 @@ export default {
           }
         },
         template_content: {
+          // 保留表单 label 列的占位，使编辑器左边界与上方名称控件对齐。
+          // 不能用空格：字段生成器会 trim；零宽空格不会显示，也不会被 trim。
+          label: '\u200B',
           component: MarkDownEditor,
           on: {
             htmlChange: ([html]) => {
