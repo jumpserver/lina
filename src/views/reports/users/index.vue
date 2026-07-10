@@ -1,17 +1,13 @@
 <template>
   <Page>
     <el-row :gutter="10">
-      <el-col :span="4" style="padding: 10px;">
+      <el-col :span="4" style="padding: 10px">
         <div class="tag-container">
           <h5>{{ title }}</h5>
           <ul class="folder-list m-b-md" style="padding: 0">
-            <li
-              v-for="chart in chartItems"
-              :key="chart.key"
-              :class="{ active: isActive(chart) }"
-            >
+            <li v-for="chart in chartItems" :key="chart.key" :class="{ active: isActive(chart) }">
               <a class="menu-link" @click="handleChangeChart(chart)">
-                <i :class="chart.icon" style="margin-right: 6px;" />
+                <i :class="chart.icon" style="margin-right: 6px" />
                 {{ chart.title }}
               </a>
               <ul v-if="chart.children && chart.children.length" class="report-children">
@@ -40,7 +36,11 @@
 import Page from '@/layout/components/Page'
 import UserActivity from '@/views/reports/users/UserActivity.vue'
 import ChangePassword from '@/views/reports/users/ChangePassword.vue'
-import { appendQuery, buildCustomReportRouteQuery, reportDebugLog } from '@/views/reports/base/reportUtils'
+import {
+  appendQuery,
+  buildCustomReportRouteQuery,
+  reportDebugLog
+} from '@/views/reports/base/reportUtils'
 
 const TEMPLATE_ROUTE_MAP = {
   UserLoginReport: {
@@ -141,7 +141,10 @@ export default {
         }))
     },
     async loadCatalog() {
-      reportDebugLog('users.index.loadCatalog.start', { routePath: this.$route.path, query: this.$route.query })
+      reportDebugLog('users.index.loadCatalog.start', {
+        routePath: this.$route.path,
+        query: this.$route.query
+      })
       this.catalogLoaded = false
       const templates = this.getBuiltInTemplates()
       const chartMap = templates.reduce((acc, item) => {
@@ -155,7 +158,7 @@ export default {
           if (!target) {
             return
           }
-          target.children = (group.children || []).map(child => ({
+          target.children = (group.children || []).map((child) => ({
             key: `report-${child.id}`,
             title: child.name,
             component: target.component,
@@ -174,19 +177,22 @@ export default {
       this.chartItems = templates
       this.catalogLoaded = true
       reportDebugLog('users.index.loadCatalog.done', {
-        items: templates.map(item => ({ key: item.key, childCount: (item.children || []).length }))
+        items: templates.map((item) => ({
+          key: item.key,
+          childCount: (item.children || []).length
+        }))
       })
       this.syncSelectedFromRoute()
     },
     syncSelectedFromRoute() {
-      const normalizeRouteValue = (v) => (Array.isArray(v) ? v[0] : (v || ''))
+      const normalizeRouteValue = (v) => (Array.isArray(v) ? v[0] : v || '')
       const raw = this.$route.query.report_id
       const reportId = Array.isArray(raw) ? raw[0] : raw
       let target = null
       if (reportId) {
         target = this.chartItems
-          .flatMap(item => item.children || [])
-          .find(item => String(item.reportId) === String(reportId))
+          .flatMap((item) => item.children || [])
+          .find((item) => String(item.reportId) === String(reportId))
         if (!target) {
           if (!this.catalogLoaded) {
             return
@@ -207,8 +213,9 @@ export default {
       }
       if (!target) {
         const chartKey = this.$route.query.chart_key
-        target = this.chartItems.find(item => item.key === chartKey) ||
-          this.chartItems.find(item => item.key === this.selectedChartKey) ||
+        target =
+          this.chartItems.find((item) => item.key === chartKey) ||
+          this.chartItems.find((item) => item.key === this.selectedChartKey) ||
           this.chartItems[0]
       }
       if (target?.isCustom) {
@@ -222,7 +229,8 @@ export default {
           report_id: normalizeRouteValue(rq.report_id)
         }
         const baseNeedsCorrection = JSON.stringify(currentBase) !== JSON.stringify(desiredBase)
-        const hasStaleVisibleParams = rq.visible_charts !== undefined || rq.visible_tables !== undefined
+        const hasStaleVisibleParams =
+          rq.visible_charts !== undefined || rq.visible_tables !== undefined
         if (baseNeedsCorrection || hasStaleVisibleParams) {
           const correctedQuery = { ...desiredBase }
           if (rq.days) correctedQuery.days = rq.days
@@ -249,7 +257,11 @@ export default {
         return
       }
       const nextUrl = appendQuery('/ui/#' + chart.path, chart.query || {})
-      if (this.component === chart.component && this.componentKey === chart.key && this.url === nextUrl) {
+      if (
+        this.component === chart.component &&
+        this.componentKey === chart.key &&
+        this.url === nextUrl
+      ) {
         return
       }
       this.component = chart.component
@@ -296,7 +308,7 @@ export default {
 
 <style scoped lang="scss">
 .page {
-  ::v-deep .page-content {
+  :deep(.page-content) {
     padding-right: 20px;
     padding-top: 10px;
   }
@@ -345,7 +357,7 @@ h5 {
 .chart {
   padding: 10px;
 
-  ::v-deep .content {
+  :deep(.content) {
     background-color: #fff;
     overflow: hidden;
     height: 100%;

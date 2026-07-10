@@ -102,7 +102,7 @@ export default {
   .account-secret-summary {
     margin-top: unset;
 
-    ::v-deep .echarts {
+    :deep(.echarts) {
       height: 16rem;
     }
   }
