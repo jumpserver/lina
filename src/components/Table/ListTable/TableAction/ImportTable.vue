@@ -310,11 +310,9 @@ export default {
       const columns = this.generateTableColumns(tableTitles, tableData)
       const totalData = this.generateTableData(tableTitles, tableData)
       this.tableConfig.columns = columns
+      this.iTotalData = totalData
+      this.tableConfig.totalData = totalData
       this.tableGenDone = true
-      setTimeout(() => {
-        this.iTotalData = totalData
-        this.tableConfig.totalData = totalData
-      }, 200)
     },
     beautifyErrorData(errorData) {
       if (typeof errorData === 'string') {

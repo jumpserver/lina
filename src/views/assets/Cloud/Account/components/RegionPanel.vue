@@ -124,14 +124,11 @@ export default {
     },
     handleCheckedAllChange(val) {
       this.checkedRegion = val ? this.allRegions.map((region) => region.id) : []
-      this.isIndeterminate = false
-      this.checkAll = !!val
-      this.$emit('input', [])
-      this.refreshContent()
+      this.handleCheckedRegionChange(this.checkedRegion)
     },
     handleCheckedRegionChange(value) {
       const checkedCount = value.length
-      this.checkAll = checkedCount === 0 || checkedCount === this.allRegions.length
+      this.checkAll = checkedCount > 0 && checkedCount === this.allRegions.length
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.allRegions.length
 
       const region = this.allRegions
@@ -145,11 +142,7 @@ export default {
       this.refreshContent()
     },
     updateCheckedStatus() {
-      const checkedCount = this.checkedRegion.length
-      this.checkAll = checkedCount === this.allRegions.length
-      if (checkedCount === 0 || checkedCount === this.allRegions.length) {
-        this.handleCheckedAllChange(this.allRegions)
-      }
+      this.handleCheckedRegionChange(this.checkedRegion)
     }
   }
 }
