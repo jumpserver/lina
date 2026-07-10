@@ -26,5 +26,6 @@
   "Other": "其他",
   "Details": "详情",
   "Confirm": "确认",
-  "Ignore": "忽略"
+  "Ignore": "忽略",
+  "FailedToSendVerificationCode": "发送验证码失败"
 }

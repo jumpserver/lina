@@ -440,10 +440,20 @@ export default {
   width: 100%;
 }
 
-.user-confirm-dialog__code-row {
+// 验证码行:输入框自适应宽度 + 「发送验证码」按钮固定宽度,始终同一行(修复按钮掉到下一行)。
+// 用 .user-confirm-dialog 作用域提升优先级:既确保 .code-row 的 flex 生效(不被 .el-col 覆盖回 block),
+// 又覆盖 __input 的全局 width:100%,让输入框在 flex 行内自适应剩余空间。
+.user-confirm-dialog .user-confirm-dialog__code-row {
   display: flex;
   align-items: center;
   gap: 16px;
+  flex-wrap: nowrap;
+}
+
+.user-confirm-dialog .user-confirm-dialog__code-row .user-confirm-dialog__input {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
 }
 
 .user-confirm-dialog__code-action {
@@ -451,7 +461,6 @@ export default {
   flex: 0 0 auto;
 }
 
-.user-confirm-dialog__code-button,
 .confirm-btn {
   width: 100%;
   min-height: 30px;
@@ -460,6 +469,11 @@ export default {
 }
 
 .user-confirm-dialog__code-button {
+  width: auto;
   min-width: 112px;
+  min-height: 30px;
+  padding: 8px 12px;
+  line-height: 1;
+  white-space: nowrap;
 }
 </style>

@@ -28,5 +28,6 @@
   "Confirm": "Confirm",
   "Ignore": "Ignore",
   "Please enter a reason": "Please enter a reason",
-  "PleaseEnterReason": "Please enter a reason | Please enter reasons"
+  "PleaseEnterReason": "Please enter a reason | Please enter reasons",
+  "FailedToSendVerificationCode": "Failed to send verification code"
 }
