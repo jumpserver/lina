@@ -177,44 +177,11 @@ export default {
     width: 100%;
   }
 
-  // 自动化方法行:把 method 下拉与 params 齿轮按钮组合成 Element Plus 的 input-group 形态
-  // ——下拉在左、齿轮按钮作为 append 贴在右侧,等高、共用边框、右侧圆角。
-  // params 行通过负 margin 上移到 method 同一行右侧;负 margin = method 行高 30px + FormItem
-  // 间距(--form-section-gap)。整行覆盖层设 pointer-events:none,避免遮挡下方下拉的点击。
+  // 自动化方法行:method 下拉与参数设置按钮已由 AutomationMethodField 组件拼成一体的
+  // input-group(下拉在左、齿轮按钮 append 在右),整个控件占满整行即可。
   .item-method.el-form-item {
     .el-form-item__content {
-      width: calc(100% - 32px);
-    }
-
-    .el-select {
       width: 100%;
-    }
-
-    .el-select__wrapper {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-  }
-
-  .item-params.el-form-item {
-    margin-top: calc(-30px - var(--form-section-gap, 20px));
-
-    .el-form-item__label-wrap,
-    .el-form-item__label {
-      display: none;
-    }
-
-    .el-form-item__content {
-      width: 100%;
-      justify-content: flex-end;
-      align-items: center;
-      padding-right: 0;
-      pointer-events: none;
-    }
-
-    .content,
-    .proto-setting {
-      pointer-events: auto;
     }
   }
 }

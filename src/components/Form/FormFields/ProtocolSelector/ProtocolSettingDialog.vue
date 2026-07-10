@@ -40,7 +40,7 @@ export default {
     Dialog,
     AutoDataForm
   },
-  emits: ['update:visible'],
+  emits: ['update:visible', 'confirm'],
   props: {
     protocol: {
       type: Object,
@@ -115,9 +115,11 @@ export default {
   },
   methods: {
     onSubmit(form) {
-      this.protocol = Object.assign(this.protocol, form)
+      // protocol 是只读 prop，不能重新赋值或就地 mutate（会触发 proxy set 陷阱报错）。
+      // 先把编辑后的表单值通过 confirm 抛给父组件（由父组件合并到自己的协议项数据上），
+      // 再关闭弹窗，避免关闭触发 v-if 卸载导致 confirm 尚未派发。
+      this.$emit('confirm', form)
       this.$emit('update:visible', false)
-      this.$emit('confirm', this.protocol)
     },
     openInNewTab() {
       window.open(this.platformDetail, '_blank')

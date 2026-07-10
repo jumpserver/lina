@@ -231,7 +231,11 @@ export default {
       }
       return port
     },
-    handleSettingConfirm() {
+    handleSettingConfirm(form) {
+      // 弹窗内 protocol 为只读 prop，配置在此合并到当前协议项（父组件自有的响应式数据，可写）。
+      if (form) {
+        Object.assign(this.currentProtocol, form)
+      }
       if (this.currentProtocol.primary) {
         const others = this.items
           .filter((item) => item.name !== this.currentProtocol.name)
@@ -382,6 +386,10 @@ export default {
 
   &:first-of-type {
     margin-top: 0;
+  }
+
+  & .el-input {
+    height: 30px !important;
   }
 }
 
