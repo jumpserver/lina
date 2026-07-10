@@ -16,7 +16,7 @@
           v-model="specAccountsInput"
           :autocomplete="autocomplete"
           :tag-type="getTagType"
-          @change="handleTagChange"
+          @change="handleSpecAccountsChange"
         />
         <span v-if="showAddTemplate">
           <el-button size="small" type="primary" @click="showTemplateDialog = true">
@@ -30,7 +30,7 @@
 
       <div v-if="showExcludeZone" class="not-accounts spec-zone">
         <!-- <div class="group-title">{{ $t('ExcludeAccount') }}</div> -->
-        <TagInput v-model="excludeAccountsInput" @change="handleTagChange" />
+        <TagInput v-model="excludeAccountsInput" @change="handleExcludeAccountsChange" />
       </div>
 
       <div v-if="enableVirtualAccount" class="spec-zone virtual-choices">
@@ -212,16 +212,20 @@ export default {
     }
   },
   watch: {
+    currentValue: {
+      handler() {
+        this.initDefaultChoice()
+      },
+      immediate: true,
+      deep: true
+    },
     realRadioSelected: {
       handler(val) {
         this.showSpecZone = val === this.SPEC
         this.showExcludeZone = val === this.EXCLUDE
       },
-      sync: true
+      immediate: true
     }
-  },
-  mounted() {
-    this.initDefaultChoice()
   },
   methods: {
     getVirtualChoices(val) {
@@ -245,8 +249,12 @@ export default {
     initDefaultChoice() {
       const value = this.normalizeAccountValue(this.currentValue)
       const specAccountsInput = this.getSpecValues(value)
-
       const excludeAccountsInput = this.getExcludeChoices(value)
+
+      // 每次都完整同步外部值，避免同一组件切换记录时保留上一条记录的账号。
+      this.specAccountsInput = specAccountsInput
+      this.excludeAccountsInput = excludeAccountsInput
+
       // 先清理 radio
       const isAll = value.includes(this.ALL)
 
@@ -254,21 +262,16 @@ export default {
         this.realRadioSelected = this.ALL
       } else if (specAccountsInput.length > 0 || value.includes(this.SPEC)) {
         this.realRadioSelected = this.SPEC
-        this.specAccountsInput = specAccountsInput
       } else if (excludeAccountsInput.length > 0) {
         this.realRadioSelected = this.EXCLUDE
-        this.excludeAccountsInput = excludeAccountsInput
-        this.showExcludeZone = true
       } else {
         this.realRadioSelected = NoneAccount
       }
 
       // 清理虚拟账号
       const virtualChoices = this.getVirtualChoices(value)
-      if (virtualChoices.length > 0) {
-        this.virtualChecked = true
-        this.virtualSelected = virtualChoices
-      }
+      this.virtualChecked = virtualChoices.length > 0
+      this.virtualSelected = virtualChoices
     },
     handleAccountTemplateCancel() {
       this.showTemplateDialog = false
@@ -291,7 +294,12 @@ export default {
     handleRadioChanged(value) {
       this.outputValue()
     },
-    handleTagChange() {
+    handleSpecAccountsChange(value) {
+      this.specAccountsInput = this.normalizeAccountValue(value)
+      this.outputValue()
+    },
+    handleExcludeAccountsChange(value) {
+      this.excludeAccountsInput = this.normalizeAccountValue(value)
       this.outputValue()
     },
     outputValue() {
@@ -315,10 +323,10 @@ export default {
 
       this.$log.debug('choicesSelected', choicesSelected)
 
-      this.$emit('input', choicesSelected)
-      this.$emit('change', choicesSelected)
       this.$emit('update:modelValue', choicesSelected)
       this.$emit('update:model-value', choicesSelected)
+      this.$emit('input', choicesSelected)
+      this.$emit('change', choicesSelected)
     }
   }
 }

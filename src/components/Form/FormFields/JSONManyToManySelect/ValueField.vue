@@ -14,7 +14,7 @@
       @change="handleInput"
       @input="handleInput"
     />
-    <el-input v-else :value="iValue" @input="handleInput" />
+    <el-input v-else :model-value="iValue" @update:model-value="handleInput" />
   </div>
 </template>
 

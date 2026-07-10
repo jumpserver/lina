@@ -1,7 +1,11 @@
 <template>
   <div>
-    <div v-for="(item, index) in value || []" :key="index" class="value-item">
-      <el-input :value="item" class="input-z" @input="updateValue($event, index)" />
+    <div v-for="(item, index) in currentValue" :key="index" class="value-item">
+      <el-input
+        :model-value="item"
+        class="input-z"
+        @update:model-value="updateValue($event, index)"
+      />
       <div class="input-button">
         <el-button
           :disabled="disableDelete(item)"
@@ -27,27 +31,37 @@
 <script>
 export default {
   name: 'ListField',
+  emits: ['input', 'update:modelValue'],
   props: {
     value: {
       type: [Array, String],
       default: () => []
+    },
+    modelValue: {
+      type: [Array, String],
+      default: undefined
     }
   },
-  data() {
-    return {}
+  computed: {
+    currentValue() {
+      const value = this.modelValue !== undefined ? this.modelValue : this.value
+      return Array.isArray(value) ? value : []
+    }
   },
-  computed: {},
   mounted() {
-    const value = this.value
-    if (!value || !Array.isArray(value) || value.length === 0) {
-      this.$emit('input', [''])
+    if (this.currentValue.length === 0) {
+      this.emitValue([''])
     }
   },
   methods: {
-    updateValue(v, index) {
-      const value = this.value
-      value[index] = v
+    emitValue(value) {
+      this.$emit('update:modelValue', value)
       this.$emit('input', value)
+    },
+    updateValue(v, index) {
+      const value = [...this.currentValue]
+      value[index] = v
+      this.emitValue(value)
     },
     disableDelete() {
       return false
@@ -56,14 +70,14 @@ export default {
       return false
     },
     handleAdd(index) {
-      const value = this.value
+      const value = [...this.currentValue]
       value.splice(index + 1, 0, '')
-      this.$emit('input', value)
+      this.emitValue(value)
     },
     handleDelete(index) {
-      const value = this.value
+      const value = [...this.currentValue]
       value.splice(index, 1)
-      this.$emit('input', value)
+      this.emitValue(value)
     }
   }
 }
