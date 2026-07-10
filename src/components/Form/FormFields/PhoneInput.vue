@@ -103,10 +103,8 @@ export default {
 
 <style lang="scss" scoped>
 /*
- * 边框方案已抽象为 DataForm 的通用约定 .compound-field：外层容器描唯一一圈边框、内部 wrapper
- * 去边、段间分隔线由容器统一提供（见 DataForm/index.vue 的 .compound-field）。这里只保留
- * PhoneInput 特有的样式：左侧区号段的尺寸/底色、以及号码输入段聚焦时的高亮描边。
- * 整体高度 30px，与表单标准一致。
+ * 边框方案见全局 .compound-field（element-form-controls.scss）。
+ * 这里只保留 PhoneInput 特有的样式：左侧区号段的尺寸/底色、以及号码输入段聚焦时的高亮描边。
  */
 .phone-input__code {
   flex: 0 0 85px;
@@ -146,8 +144,6 @@ export default {
     height: 28px;
     line-height: 28px;
     border: 0;
-    // 全局 .el-form ... .el-input__wrapper{padding:0}(0,4,0)会清掉 wrapper 的内边距，
-    // 优先级高于组件 scoped 规则；因此改由 inner 提供左内边距，让 placeholder/文字不贴分隔线。
     padding-left: 11px;
   }
 }

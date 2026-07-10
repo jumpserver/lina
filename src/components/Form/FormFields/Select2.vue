@@ -549,62 +549,10 @@ export default {
     display: inline-flex;
     align-items: center;
   }
-
-  :deep(.el-select__wrapper) {
-    min-height: 30px;
-    height: 30px !important;
-    box-sizing: border-box;
-    padding: 0 8px;
-    padding-top: 0;
-    padding-bottom: 0;
-    border-radius: 0;
-    box-shadow: none !important;
-    border: 1px solid var(--el-border-color) !important;
-  }
-
-  :deep(.el-select__wrapper:hover) {
-    border-color: var(--el-border-color-hover) !important;
-  }
-
-  :deep(.el-select__wrapper.is-focused) {
-    box-shadow: none !important;
-    border-color: var(--el-color-primary) !important;
-  }
-
-  :deep(.el-select__selection) {
-    min-height: 28px;
-    align-items: center;
-  }
-
-  :deep(.el-select__tags) {
-    height: 28px;
-    min-height: 28px;
-    align-items: center;
-  }
-
-  :deep(.el-select__selected-item),
-  :deep(.el-select__placeholder),
-  :deep(.el-select__input) {
-    min-height: 28px;
-    height: 28px;
-    line-height: 28px;
-  }
-
-  :deep(.el-select__caret),
-  :deep(.el-select__suffix),
-  :deep(.el-select__prefix) {
-    min-height: 28px;
-    height: 28px;
-    display: inline-flex;
-    align-items: center;
-  }
 }
 
 .select2.is-multiple {
   :deep(.el-select__wrapper) {
-    // 多选需要随 tag 换行长高：基础规则用了 height: 30px !important，
-    // 这里必须同样加 !important 且靠更高特异性(.is-multiple)才能覆盖它，
-    // 否则 wrapper 被锁死在 30px 导致 tag 溢出/换行错乱、内容被挤窄。
     height: auto !important;
     min-height: 30px;
     align-items: center;

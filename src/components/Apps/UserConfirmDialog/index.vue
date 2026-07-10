@@ -26,7 +26,7 @@
         </el-col>
       </el-row>
     </div>
-    <div v-else>
+    <div v-else class="jms-form-controls">
       <el-row class="user-confirm-dialog__row user-confirm-dialog__row--field" :gutter="24">
         <el-col :md="24" :sm="24" :span="24" class="add">
           <el-select
@@ -372,54 +372,6 @@ export default {
 .el-dialog.dialog.user-confirm-dialog {
   .el-dialog__body {
     padding: 22px 40px 30px !important;
-  }
-
-  .user-confirm-dialog__select,
-  .user-confirm-dialog__input {
-    min-height: 30px;
-  }
-
-  .user-confirm-dialog__select .el-tooltip__trigger,
-  .user-confirm-dialog__input,
-  .el-input__wrapper,
-  .el-select__wrapper {
-    border-radius: 0;
-  }
-
-  .user-confirm-dialog__input .el-input__wrapper,
-  .user-confirm-dialog__select .el-select__wrapper {
-    min-height: 30px;
-    height: 30px;
-    box-sizing: border-box;
-    padding: 0 11px;
-    overflow: hidden;
-    box-shadow: none !important;
-    border: 1px solid var(--el-border-color) !important;
-  }
-
-  .user-confirm-dialog__input .el-input__wrapper:hover,
-  .user-confirm-dialog__select .el-select__wrapper:hover {
-    border-color: var(--el-border-color-hover) !important;
-  }
-
-  .user-confirm-dialog__input .el-input__wrapper.is-focus,
-  .user-confirm-dialog__select .el-select__wrapper.is-focused {
-    box-shadow: none !important;
-    border-color: var(--el-color-primary) !important;
-  }
-
-  .user-confirm-dialog__input .el-input__inner,
-  .user-confirm-dialog__select .el-select__selection,
-  .user-confirm-dialog__select .el-select__selected-item,
-  .user-confirm-dialog__select .el-select__placeholder {
-    min-height: 100%;
-    height: 100%;
-    line-height: 28px;
-    background: transparent !important;
-    border: 0 !important;
-    box-shadow: none !important;
-    padding-left: 0 !important;
-    margin-left: 0 !important;
   }
 }
 

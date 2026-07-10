@@ -519,70 +519,11 @@ export default {
     :deep(.el-form-item) {
       margin-bottom: 0;
 
-      // 标签与 30px 高的输入框垂直居中对齐
       .el-form-item__label {
         height: 30px;
         line-height: 30px;
         display: inline-flex;
         align-items: center;
-      }
-    }
-
-    // 与 DataForm 一致的单层边框方案：边框只画在 .el-input__wrapper 上（box-shadow 关掉、
-    // 用真实 1px border），内部 .el-input__inner 彻底去边框，避免 wrapper 与 inner 各描一层
-    // 形成 border 套 border。整体高度 30px / 内部 28px，与表单标准统一。
-    //
-    // 注意：用直接子选择器把规则限定在「普通 el-input」上，PhoneInput 自带单层容器边框，
-    // 不能被这里的 wrapper 描边规则命中，否则又会双层。
-    :deep(.el-form-item__content > .el-input) {
-      --el-input-height: 30px;
-
-      .el-input__wrapper {
-        border-radius: 0;
-        box-shadow: none !important;
-        border: 1px solid var(--el-border-color);
-
-        &:hover {
-          border-color: var(--el-border-color-hover);
-        }
-
-        &.is-focus {
-          border-color: var(--el-color-primary);
-        }
-      }
-
-      .el-input__inner {
-        height: 28px;
-        line-height: 28px;
-        border: 0 !important;
-        box-shadow: none !important;
-      }
-    }
-
-    :deep(.compound-field) {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      height: 30px;
-      box-sizing: border-box;
-      border: 1px solid var(--el-border-color);
-      background-color: #fff;
-      overflow: hidden;
-
-      &:hover {
-        border-color: var(--el-border-color-hover) !important;
-      }
-
-      > *:not(:last-child) {
-        border-right: 1px solid var(--el-border-color);
-      }
-
-      .el-select__wrapper,
-      .el-input__wrapper {
-        height: 100%;
-        border: 0 !important;
-        border-radius: 0 !important;
-        box-shadow: none !important;
       }
     }
   }

@@ -5,7 +5,6 @@ import { getLangCode } from '@/i18n/utils'
 import 'element-plus/dist/index.css'
 // 导入 Element Plus CSS 变量配置（需要在 Element Plus 样式之后，自定义样式之前）
 import '@/styles/element-plus-vars.scss'
-import '@/styles/element-icons-legacy.scss'
 // 导入默认主题配置（包含 :root CSS 变量定义）
 import '@/styles/default-theme.scss'
 import '@/styles/index.scss' // global css
@@ -69,7 +68,10 @@ async function initApp() {
   app.use(store)
   app.use(router)
   app.use(i18n)
-  app.use(ElementPlus, { locale: getElementLocale(getLangCode()), size: 'small' })
+  app.use(ElementPlus, {
+    locale: getElementLocale(getLangCode()),
+    size: 'small'
+  })
   app.use(CookiePlugin)
   app.use(ChartsPlugin)
 
