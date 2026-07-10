@@ -68,7 +68,8 @@ export default {
           title: this.$t('IPType'),
           type: 'updateSelect',
           attrs: {
-            model: this.object.task.sync_ip_type,
+            value: this.object.task.sync_ip_type === 1 ? 1 : 0,
+            model: this.object.task.sync_ip_type === 1 ? 1 : 0,
             type: 'primary',
             multiple: false,
             clearable: false,

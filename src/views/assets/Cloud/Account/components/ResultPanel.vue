@@ -64,6 +64,14 @@ export default {
 .result-panel {
   padding: 10px;
 
+  :deep(.el-table) {
+    font-size: 13px;
+  }
+
+  :deep(.el-link) {
+    font-size: 13px;
+  }
+
   &__actions {
     display: flex;
     justify-content: flex-end;
