@@ -90,6 +90,10 @@ export default {
       type: [String, Array],
       default: () => []
     },
+    modelValue: {
+      type: [String, Array],
+      default: undefined
+    },
     title: {
       type: String,
       default: ''
@@ -126,6 +130,9 @@ export default {
     }
   },
   computed: {
+    externalValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value
+    },
     passAttrs() {
       // 只把非事件监听的属性透传给内部端口输入框，过滤掉 onXxx 事件，
       // 协议字段的值只经由本组件的 $emit('input', items) 上报。
@@ -159,6 +166,15 @@ export default {
     }
   },
   watch: {
+    externalValue: {
+      handler(value) {
+        if (this.hasSamePorts(this.items, value)) {
+          return
+        }
+        this.setDefaultItems(this.iChoices)
+      },
+      deep: true
+    },
     choices: {
       handler(value, oldValue) {
         setTimeout(() => {
@@ -169,6 +185,7 @@ export default {
       immediate: true
     },
     items: {
+      // 初始化时不能立即上报：items 还未根据接口值生成，空数组会覆盖表单中的 protocols。
       handler(value) {
         if (this.settingReadonly) {
           value = value.map((i) => {
@@ -177,7 +194,6 @@ export default {
         }
         this.$emit('input', value)
       },
-      immediate: true,
       deep: true
     },
     instance: {
@@ -312,9 +328,9 @@ export default {
       let items = []
       const requiredItems = choices.filter((item) => item.required || item.primary)
 
-      if (this.value instanceof Array && this.value.length > 0) {
+      if (this.externalValue instanceof Array && this.externalValue.length > 0) {
         const protocols = []
-        this.value.forEach((item) => {
+        this.externalValue.forEach((item) => {
           // 有默认值的情况下，设置为只读或者有id、有setting是平台
           if (!this.settingReadonly || (item?.id && item?.setting)) {
             protocols.push(item)
@@ -339,6 +355,15 @@ export default {
       }
       items = this.setPrimaryIfNeed(items)
       this.items = items
+    },
+    hasSamePorts(items, value) {
+      if (!Array.isArray(value) || items.length !== value.length) {
+        return false
+      }
+      return items.every((item, index) => {
+        const incoming = value[index]
+        return incoming?.name === item.name && String(incoming?.port) === String(item.port)
+      })
     },
     getAssetDefaultItems(item, choices) {
       const protocols = []
