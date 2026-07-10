@@ -1,6 +1,6 @@
 <template>
   <div class="all-or-spec">
-    <el-radio-group v-model="type" @input="handleTypeChange">
+    <el-radio-group v-model="type" @change="handleTypeChange">
       <el-radio v-for="tp of types" :key="tp.name" :value="tp.name">
         {{ tp.label }}
       </el-radio>
