@@ -184,6 +184,14 @@ export default {
   border-radius: 2px;
   font-size: 12px;
   font-weight: 400;
+  /* 非当前页统一白底(覆盖 is-background 默认的浅灰填充),仅当前页保留主色填充 */
+  background-color: #fff;
+}
+
+:deep(.el-pagination.is-background .el-pager li.is-active) {
+  background-color: var(--el-color-primary);
+  border-color: var(--el-color-primary);
+  color: #fff;
 }
 
 :deep(.el-pagination.is-background .btn-prev),

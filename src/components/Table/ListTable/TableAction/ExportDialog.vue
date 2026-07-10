@@ -267,6 +267,10 @@ export default {
 .export-item {
   margin: 0;
   padding: 0;
+
+  :deep(.el-radio__label) {
+    font-size: 13px;
+  }
 }
 
 .export-form :deep(.el-form-item__label) {

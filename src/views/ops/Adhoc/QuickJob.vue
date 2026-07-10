@@ -101,7 +101,7 @@ export default {
         left: {
           run: {
             type: 'button',
-            name: '',
+            name: this.$t('Execute'),
             align: 'left',
             icon: 'fa fa-play',
             tip: this.$t('RunCommand'),
@@ -119,7 +119,7 @@ export default {
           },
           stop: {
             type: 'button',
-            name: '',
+            name: this.$t('Stop'),
             align: 'left',
             icon: 'fa fa-stop',
             tip: this.$t('StopJob'),
