@@ -198,9 +198,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// 作为 method 下拉右侧的 append 按钮:等高、去掉左侧圆角与左边框,和下拉拼成一体的 input-group。
 .proto-setting {
-  margin-top: 1px;
+  width: 32px;
+  min-width: 32px;
   height: 30px;
-  vertical-align: super;
+  margin-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 </style>
