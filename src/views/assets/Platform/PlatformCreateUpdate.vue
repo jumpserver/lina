@@ -177,16 +177,22 @@ export default {
     width: 100%;
   }
 
-  // 自动化方法行：method 下拉占满（右侧留出齿轮按钮空间）；params 齿轮按钮通过负 margin
-  // 叠加到 method 同一行的最右侧。负 margin = method 行高 30px + FormItem 间距(--form-section-gap)，
-  // 既能精确落在 method 行，又不会挤压后续行；绑定 CSS 变量以适配 flex+gap 布局。
+  // 自动化方法行:把 method 下拉与 params 齿轮按钮组合成 Element Plus 的 input-group 形态
+  // ——下拉在左、齿轮按钮作为 append 贴在右侧,等高、共用边框、右侧圆角。
+  // params 行通过负 margin 上移到 method 同一行右侧;负 margin = method 行高 30px + FormItem
+  // 间距(--form-section-gap)。整行覆盖层设 pointer-events:none,避免遮挡下方下拉的点击。
   .item-method.el-form-item {
     .el-form-item__content {
-      width: calc(100% - 50px);
+      width: calc(100% - 32px);
     }
 
     .el-select {
       width: 100%;
+    }
+
+    .el-select__wrapper {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
     }
   }
 
@@ -200,8 +206,15 @@ export default {
 
     .el-form-item__content {
       width: 100%;
-      align-items: flex-end;
-      padding-right: 10px;
+      justify-content: flex-end;
+      align-items: center;
+      padding-right: 0;
+      pointer-events: none;
+    }
+
+    .content,
+    .proto-setting {
+      pointer-events: auto;
     }
   }
 }
