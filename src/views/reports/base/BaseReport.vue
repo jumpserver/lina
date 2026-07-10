@@ -672,7 +672,7 @@ export default {
     }
   }
 
-  ::v-deep .export-bar {
+  :deep(.export-bar) {
     float: right;
 
     .export-btn.el-button--text {
@@ -744,15 +744,13 @@ export default {
   }
 
   .charts-zone {
-    ::v-deep {
-      .chart-container {
-        break-inside: avoid;
-        page-break-inside: avoid;
-      }
+    :deep(.chart-container) {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
 
-      .box-container {
-        display: block !important;
-      }
+    :deep(.box-container) {
+      display: block !important;
     }
   }
 
@@ -761,26 +759,24 @@ export default {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
 
-    ::v-deep {
-      .el-checkbox__inner {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-        border-color: #dcdfe6 !important;
-      }
+    :deep(.el-checkbox__inner) {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      border-color: #dcdfe6 !important;
+    }
 
-      .el-checkbox__label {
-        padding-left: 2px;
-      }
+    :deep(.el-checkbox__label) {
+      padding-left: 2px;
+    }
 
-      .el-checkbox__input.is-checked .el-checkbox__inner,
-      .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-        background-color: var(--color-primary) !important;
-        border-color: var(--color-primary) !important;
-      }
+    :deep(.el-checkbox__input.is-checked .el-checkbox__inner),
+    :deep(.el-checkbox__input.is-indeterminate .el-checkbox__inner) {
+      background-color: var(--color-primary) !important;
+      border-color: var(--color-primary) !important;
+    }
 
-      .el-checkbox__input.is-checked .el-checkbox__inner::after {
-        border-color: #fff !important;
-      }
+    :deep(.el-checkbox__input.is-checked .el-checkbox__inner::after) {
+      border-color: #fff !important;
     }
   }
 }
@@ -792,112 +788,110 @@ export default {
   box-sizing: border-box;
   min-height: 100px; // 添加最小高度确保容器始终存在
 
-  ::v-deep {
-    .full-width-chart {
-      width: 100%;
-      margin-bottom: 32px;
-      position: relative; // 添加相对定位
-    }
+  :deep(.full-width-chart) {
+    width: 100%;
+    margin-bottom: 32px;
+    position: relative; // 添加相对定位
+  }
 
-    .chart {
-      height: 260px;
-      position: relative; // 添加相对定位
-    }
+  :deep(.chart) {
+    height: 260px;
+    position: relative; // 添加相对定位
+  }
 
-    .charts-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-      width: 100%;
-      margin: 0 auto;
-    }
+  :deep(.charts-grid) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    width: 100%;
+    margin: 0 auto;
+  }
 
-    .full-width {
-      grid-column: 1 / -1;
-    }
+  :deep(.full-width) {
+    grid-column: 1 / -1;
+  }
 
-    .chart-container {
-      background-color: white;
-      border-radius: 4px;
-      padding: 16px;
-      border: 1px solid var(--color-border);
-      transition: all 0.3s ease;
-      max-width: calc(50vw - 30px);
-      min-width: 300px;
+  :deep(.chart-container) {
+    background-color: white;
+    border-radius: 4px;
+    padding: 16px;
+    border: 1px solid var(--color-border);
+    transition: all 0.3s ease;
+    max-width: calc(50vw - 30px);
+    min-width: 300px;
 
-      &.full-width {
-        max-width: calc(100vw - 60px);
-      }
-
-      &.transport-box {
-        background: transparent;
-      }
-    }
-
-    .chart-container-title {
-      margin-bottom: 16px;
-    }
-
-    .chart-container-title-text {
-      font-size: 14px;
-      font-weight: 500;
-      color: #333;
-      margin-bottom: 8px;
-    }
-
-    .report-toolbar-wrap {
-      min-width: 0;
+    &.full-width {
       max-width: calc(100vw - 60px);
-      padding: 10px 12px;
-
-      .report-toolbar {
-        margin-bottom: 0;
-      }
     }
 
-    /* Tables rendered as cards */
-    .report-tables {
-      display: flex;
+    &.transport-box {
+      background: transparent;
+    }
+  }
+
+  :deep(.chart-container-title) {
+    margin-bottom: 16px;
+  }
+
+  :deep(.chart-container-title-text) {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 8px;
+  }
+
+  :deep(.report-toolbar-wrap) {
+    min-width: 0;
+    max-width: calc(100vw - 60px);
+    padding: 10px 12px;
+
+    .report-toolbar {
+      margin-bottom: 0;
+    }
+  }
+
+  /* Tables rendered as cards */
+  :deep(.report-tables) {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  :deep(.report-table-wrap) {
+    width: 100%;
+  }
+
+  :deep(.report-card) {
+    padding: 12px;
+    box-sizing: border-box;
+  }
+
+  :deep(.report-card .chart-container-title) {
+    margin-bottom: 8px;
+  }
+
+  :deep(.report-card-body) {
+    padding-top: 6px;
+  }
+
+  :deep(.report-card-body) {
+    .title-bar {
       flex-direction: column;
-      gap: 16px;
+      gap: 10px;
     }
 
-    .report-table-wrap {
+    .title-right {
       width: 100%;
+      justify-content: flex-end;
     }
+  }
 
-    .report-card {
-      padding: 12px;
-      box-sizing: border-box;
-    }
-
-    .report-card .chart-container-title {
-      margin-bottom: 8px;
-    }
-
-    .report-card-body {
-      padding-top: 6px;
-    }
-
-    .report-card-body {
-      .title-bar {
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .title-right {
-        width: 100%;
-        justify-content: flex-end;
-      }
-    }
-
-    .charts-zone--no-padding {
-      padding: 0 !important;
-    }
+  :deep(.charts-zone--no-padding) {
+    padding: 0 !important;
   }
 }
 
-::v-deep .report-item-hidden {
+:deep(.report-item-hidden) {
   display: none !important;
 }
 </style>
