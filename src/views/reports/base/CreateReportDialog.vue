@@ -266,7 +266,7 @@ export default {
   line-height: 1.4;
 }
 
-::v-deep .el-input__count {
+:deep(.el-input__count) {
   color: #909399;
 }
 </style>

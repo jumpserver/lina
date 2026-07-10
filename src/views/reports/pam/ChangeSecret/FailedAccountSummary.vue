@@ -160,10 +160,8 @@ export default {
 
 <style lang="scss" scoped>
 .failed-accounts {
-  ::v-deep {
-    .el-table {
-      min-height: 260px;
-    }
+  :deep(.el-table) {
+    min-height: 260px;
   }
 }
 </style>

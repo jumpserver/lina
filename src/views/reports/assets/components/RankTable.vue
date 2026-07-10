@@ -70,17 +70,17 @@ export default {
   }
 }
 
-::v-deep .el-table td,
+:deep(.el-table td),
 .el-table th {
   padding: 5px 0;
 }
 
-::v-deep .el-table th,
+:deep(.el-table th),
 .el-table tr {
   background-color: #f5f6f7 !important;
 }
 
-::v-deep .el-table .cell {
+:deep(.el-table .cell) {
   white-space: nowrap;
 }
 </style>

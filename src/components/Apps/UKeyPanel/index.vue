@@ -1231,7 +1231,7 @@ export default {
     text-align: right;
     white-space: nowrap;
 
-    ::v-deep .el-button {
+    :deep(.el-button) {
       width: 100%;
     }
   }
