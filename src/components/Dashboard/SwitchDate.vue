@@ -97,7 +97,7 @@ export default {
 
   .switch-date-button {
     min-width: 64px;
-    height: 32px;
+    height: 28px;
     padding: 7px 15px;
     margin: 0 0 0 -1px;
     font-size: 12px;
