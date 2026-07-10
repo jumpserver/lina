@@ -2,12 +2,7 @@
   <GenericTicketDetail :detail-card-items="detailCardItems" :object="object" />
 </template>
 
-<script>
-import {
-  createVNode as createVNodeCompat,
-  resolveComponent as resolveComponentCompat,
-  createTextVNode as createTextVNodeCompat
-} from 'vue'
+<script lang="jsx">
 import { STATUS_MAP } from '../const'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
@@ -52,15 +47,11 @@ export default {
           key: this.$t('Status'),
           value: object.status,
           formatter: (item, val) => {
-            return createVNodeCompat(
-              resolveComponentCompat('el-tag'),
-              {
-                type: this.statusMap.type,
-                size: 'small'
-              },
-              {
-                default: () => [createTextVNodeCompat(' '), this.statusMap.title]
-              }
+            return (
+              <el-tag type={this.statusMap.type} size="small">
+                {' '}
+                {this.statusMap.title}
+              </el-tag>
             )
           }
         },

@@ -1,11 +1,7 @@
 <template>
   <div class="markdown-editor">
     <div class="action-bar">
-      <i
-        class="fa"
-        :class="[showPreview ? 'fa-eye-slash' : 'fa-eye']"
-        @click="togglePreview"
-      />
+      <i class="fa" :class="[showPreview ? 'fa-eye-slash' : 'fa-eye']" @click="togglePreview" />
     </div>
     <el-row :gutter="12">
       <el-col :span="showPreview ? 12 : 24">

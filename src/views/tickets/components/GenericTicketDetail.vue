@@ -22,8 +22,7 @@
   </el-row>
 </template>
 
-<script>
-import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
+<script lang="jsx">
 import Comments from './Comments'
 import Details from './Details'
 import Session from './Session'
@@ -81,15 +80,10 @@ export default {
           value: object.state.value,
           formatter: (item, val) => {
             const tp = this.statusMap[val]
-            return createVNodeCompat(
-              resolveComponentCompat('el-tag'),
-              {
-                type: tp,
-                size: 'small'
-              },
-              {
-                default: () => [this.object.state.label]
-              }
+            return (
+              <el-tag type={tp} size="small">
+                {this.object.state.label}
+              </el-tag>
             )
           }
         },

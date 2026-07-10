@@ -32,8 +32,7 @@
   </div>
 </template>
 
-<script>
-import { createVNode as createVNodeCompat } from 'vue'
+<script lang="jsx">
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import RelationCard from '@/components/Cards/RelationCard'
@@ -226,11 +225,13 @@ export default {
           key: this.$t('Region'),
           value: this.object.task?.regions_display,
           formatter(row, value) {
-            return createVNodeCompat('div', null, [
-              value?.map((content) => {
-                return createVNodeCompat('div', null, [content])
-              })
-            ])
+            return (
+              <div>
+                {value?.map((content) => (
+                  <div>{content}</div>
+                ))}
+              </div>
+            )
           }
         },
         {

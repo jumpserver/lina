@@ -8,12 +8,9 @@ export const REPORT_RANGE_PRESET_OPTIONS = [
   { label: i18n.t('Last30Days'), value: '30', days: 30 }
 ]
 
-export const REPORT_ALLOWED_DAYS = REPORT_RANGE_PRESET_OPTIONS.map(item => String(item.value))
+export const REPORT_ALLOWED_DAYS = REPORT_RANGE_PRESET_OPTIONS.map((item) => String(item.value))
 
-export const REPORT_FILTER_QUERY_KEYS = [
-  'days',
-  'report_id'
-]
+export const REPORT_FILTER_QUERY_KEYS = ['days', 'report_id']
 
 export const REPORT_PRESET_DAYS_MAP = REPORT_RANGE_PRESET_OPTIONS.reduce((acc, item) => {
   if (item.days) {
@@ -46,7 +43,7 @@ export function appendQuery(url, query = {}) {
 }
 
 export function getPresetLabel(value) {
-  const preset = REPORT_RANGE_PRESET_OPTIONS.find(item => item.value === value)
+  const preset = REPORT_RANGE_PRESET_OPTIONS.find((item) => item.value === value)
   return preset ? preset.label : value
 }
 
@@ -61,14 +58,14 @@ export function normalizeReportDays(value, fallback = '7') {
 
 export function normalizeVisibleFilterList(value) {
   if (Array.isArray(value)) {
-    return value.map(item => String(item).trim()).filter(Boolean)
+    return value.map((item) => String(item).trim()).filter(Boolean)
   }
   if (value === undefined || value === null || value === '') {
     return []
   }
   return String(value)
     .split(',')
-    .map(item => item.trim())
+    .map((item) => item.trim())
     .filter(Boolean)
 }
 
@@ -102,13 +99,14 @@ export function fetchReportDetailShared(axios, reportId) {
   const url = `/api/v1/reports/reports/${reportId}/`
   const now = Date.now()
   const cached = _reportDetailCache[url]
-  if (cached && (now - cached.ts) < REPORT_DETAIL_CACHE_TTL) {
+  if (cached && now - cached.ts < REPORT_DETAIL_CACHE_TTL) {
     return Promise.resolve(cached.data)
   }
   if (_reportDetailInFlight[url]) {
     return _reportDetailInFlight[url]
   }
-  const request = axios.get(url)
+  const request = axios
+    .get(url)
     .then((res) => {
       _reportDetailCache[url] = { ts: Date.now(), data: res }
       return res

@@ -38,7 +38,7 @@ export default {
     },
     updateInitial: {
       type: Function,
-      default: initial => {
+      default: (initial) => {
         return initial
       }
     }
@@ -82,7 +82,7 @@ export default {
             delete values['accounts']
           } else {
             const accounts = values?.accounts || []
-            values.accounts = accounts.map(item => {
+            values.accounts = accounts.map((item) => {
               item['secret'] = encryptPassword(item['secret'])
               return item
             })

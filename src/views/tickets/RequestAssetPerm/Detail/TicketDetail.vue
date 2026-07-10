@@ -52,25 +52,14 @@
   </GenericTicketDetail>
 </template>
 
-<script>
+<script lang="jsx">
 import IBox from '@/components/Common/IBox'
 import BasicTree from '@/components/Form/FormFields/BasicTree'
 import Select2 from '@/components/Form/FormFields/Select2'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
 import { AccountLabelMapper } from '@/views/perms/const'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
-import {
-  createVNode as createVNodeCompat,
-  isVNode as isVNodeCompat,
-  resolveComponent as resolveComponentCompat
-} from 'vue'
 import { STATUS_MAP, treeNodes } from '../../const'
-function _isSlot(s) {
-  return (
-    typeof s === 'function' ||
-    (Object.prototype.toString.call(s) === '[object Object]' && !isVNodeCompat(s))
-  )
-}
 export default {
   name: '',
   components: {
@@ -202,19 +191,9 @@ export default {
               object.status.value === 'closed' &&
               object.state.value === 'approved'
             ) {
-              return createVNodeCompat(
-                resolveComponentCompat('router-link'),
-                {
-                  to: to
-                },
-                _isSlot(value)
-                  ? value
-                  : {
-                      default: () => [value]
-                    }
-              )
+              return <router-link to={to}>{value}</router-link>
             } else {
-              return createVNodeCompat('span', null, [value])
+              return <span>{value}</span>
             }
           }
         },

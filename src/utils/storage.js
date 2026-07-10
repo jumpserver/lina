@@ -108,14 +108,13 @@ export const scopedLocalStorage = {
         keys.push(key)
       }
     }
-    keys.forEach(key => storage.removeItem(key))
+    keys.forEach((key) => storage.removeItem(key))
   }
 }
 
 function normalizeCookieOptions(options) {
-  const nextOptions = options && typeof options === 'object' && !(options instanceof Date)
-    ? { ...options }
-    : {}
+  const nextOptions =
+    options && typeof options === 'object' && !(options instanceof Date) ? { ...options } : {}
 
   if (
     options !== undefined &&

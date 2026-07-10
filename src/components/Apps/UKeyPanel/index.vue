@@ -49,11 +49,7 @@
         <!-- 左下：操作日志 -->
         <IBox v-if="logs.length > 0" :title="$t('OperationLogs')" style="margin-top: 10px">
           <div ref="logBox" class="cp-logs-box">
-            <div
-              v-for="(log, i) in logs"
-              :key="i"
-              :class="['cp-log-item', `cp-log-${log.level}`]"
-            >
+            <div v-for="(log, i) in logs" :key="i" :class="['cp-log-item', `cp-log-${log.level}`]">
               <span class="cp-log-time">{{ log.time }}</span>
               <span class="cp-log-msg">{{ log.message }}</span>
             </div>
@@ -73,7 +69,13 @@
               <tr v-for="item in certInfoItems" :key="item.key">
                 <td class="cp-label">{{ item.label }}</td>
                 <td class="cp-value">
-                  <el-tag v-if="item.tag !== undefined" :type="item.tag" size="mini" effect="plain" :title="item.value">
+                  <el-tag
+                    v-if="item.tag !== undefined"
+                    :type="item.tag"
+                    size="mini"
+                    effect="plain"
+                    :title="item.value"
+                  >
                     {{ item.value }}
                   </el-tag>
                   <span v-else class="cp-text" :title="item.value">{{ item.value || '-' }}</span>
@@ -157,7 +159,7 @@ export default {
     mode: {
       type: String,
       default: 'user',
-      validator: v => ['admin', 'user'].includes(v)
+      validator: (v) => ['admin', 'user'].includes(v)
     },
     /** 被管理的用户对象（admin 模式必传） */
     object: {
@@ -237,8 +239,8 @@ export default {
           tag: this.sdkLoaded ? 'success' : 'warning'
         }
       ]
-      const dynamic = this.deviceInfoItems.filter(item =>
-        this.mode === 'admin' || (item.scope || 'both') !== 'admin'
+      const dynamic = this.deviceInfoItems.filter(
+        (item) => this.mode === 'admin' || (item.scope || 'both') !== 'admin'
       )
       if (!this.infoWhenPassed) return fixed
       return [...fixed, ...dynamic]
@@ -261,26 +263,28 @@ export default {
         settings: this.publicSettings || {},
         config: this.config
       }
-      return operationItems.filter(op => {
-        const scope = op.scope || 'both'
-        if (scope === 'admin' && this.mode !== 'admin') return false
-        if (scope === 'user' && this.mode !== 'user') return false
-        if (!this.evaluateWhen(op.when, ctx)) return false
-        // hidden 支持布尔值或 {{ }} 模板（解析结果为真值时隐藏）
-        if (op.hidden !== undefined) {
-          const resolved = this.resolveValue(op.hidden, ctx)
-          if (resolved === true || resolved === 'true' || resolved === 1) return false
-        }
-        return true
-      }).map(op => {
-        // disabled 支持布尔值或 {{ }} 模板（解析结果为真值时禁用）
-        let opDisabled = false
-        if (op.disabled !== undefined) {
-          const resolved = this.resolveValue(op.disabled, ctx)
-          opDisabled = !!resolved
-        }
-        return { ...op, _disabled: opDisabled }
-      })
+      return operationItems
+        .filter((op) => {
+          const scope = op.scope || 'both'
+          if (scope === 'admin' && this.mode !== 'admin') return false
+          if (scope === 'user' && this.mode !== 'user') return false
+          if (!this.evaluateWhen(op.when, ctx)) return false
+          // hidden 支持布尔值或 {{ }} 模板（解析结果为真值时隐藏）
+          if (op.hidden !== undefined) {
+            const resolved = this.resolveValue(op.hidden, ctx)
+            if (resolved === true || resolved === 'true' || resolved === 1) return false
+          }
+          return true
+        })
+        .map((op) => {
+          // disabled 支持布尔值或 {{ }} 模板（解析结果为真值时禁用）
+          let opDisabled = false
+          if (op.disabled !== undefined) {
+            const resolved = this.resolveValue(op.disabled, ctx)
+            opDisabled = !!resolved
+          }
+          return { ...op, _disabled: opDisabled }
+        })
     },
 
     deviceReady() {
@@ -330,7 +334,9 @@ export default {
       const ctx = customCtx || this.buildContext({ vars: {}, input: {} })
       const resolved = this.resolveValue(whenExpr, ctx)
 
-      if (resolved === false || resolved === 'false' || resolved === 0 || resolved === '0') return false
+      if (resolved === false || resolved === 'false' || resolved === 0 || resolved === '0') {
+        return false
+      }
       if (resolved == null) return false
       if (typeof resolved === 'string' && resolved.trim() === '') return false
       return true
@@ -386,7 +392,9 @@ export default {
       try {
         const constructorName = this.sdkConfig.sdk?.create?.constructor
         if (!constructorName || !window[constructorName]) {
-          throw new Error(`${this.$t('Constructor')} "${constructorName}" ${this.$t('NotFoundOnWindow')}`)
+          throw new Error(
+            `${this.$t('Constructor')} "${constructorName}" ${this.$t('NotFoundOnWindow')}`
+          )
         }
         const ctorArgs = this.sdkConfig.sdk.create?.args || []
         _instance = new window[constructorName](...ctorArgs)
@@ -406,7 +414,10 @@ export default {
           const ctx = this.buildContext({ vars: {}, input: {} })
           const result = this.callUKeyMethod(step, ctx)
           if (step.register) this.applyRegister(step.register, result, {})
-          this.appendLog(`${this.$t('Initialize')}: ${step.label || step.name || step.call} ${this.$t('Success')}`, 'success')
+          this.appendLog(
+            `${this.$t('Initialize')}: ${step.label || step.name || step.call} ${this.$t('Success')}`,
+            'success'
+          )
         }
       } catch (e) {
         this.appendLog(`${this.$t('DeviceInitFailed')}: ${e.message}`, 'error')
@@ -437,41 +448,44 @@ export default {
       }
       const fields = this.sdkConfig?.info?.device || []
       const ctx = this.buildContext({ vars: {}, input: {} })
-      this.deviceInfoItems = fields.map(field => {
-        // hidden 支持布尔值或 {{ }} 模板，为真时跳过该字段
-        if (field.hidden !== undefined) {
-          const resolved = this.resolveValue(field.hidden, ctx)
-          if (resolved) return null
-        }
-        const raw = this.resolveFieldValue(field, ctx)
-        const value = raw == null ? '-' : raw
-        const item = { key: field.key, label: field.label, value, scope: field.scope || 'both' }
+      this.deviceInfoItems = fields
+        .map((field) => {
+          // hidden 支持布尔值或 {{ }} 模板，为真时跳过该字段
+          if (field.hidden !== undefined) {
+            const resolved = this.resolveValue(field.hidden, ctx)
+            if (resolved) return null
+          }
+          const raw = this.resolveFieldValue(field, ctx)
+          const value = raw == null ? '-' : raw
+          const item = { key: field.key, label: field.label, value, scope: field.scope || 'both' }
 
-        // status.cases：通过 source 表达式的值匹配 case，决定显示文本和标签颜色
-        if (field.status && Array.isArray(field.status.cases)) {
-          const sourceVal = field.source !== undefined ? this.resolveValue(field.source, ctx) : raw
-          const matchedIndex = field.status.cases.findIndex(c => {
-            if (c.match === 'truthy') return !!sourceVal
-            if (c.match === 'falsy') return !sourceVal
-            return String(sourceVal) === String(c.match)
-          })
-          const matched = matchedIndex !== -1 ? field.status.cases[matchedIndex] : null
-          if (matched) {
-            item.value = matched.text || value
-            if (matched.type) item.tag = matched.type
+          // status.cases：通过 source 表达式的值匹配 case，决定显示文本和标签颜色
+          if (field.status && Array.isArray(field.status.cases)) {
+            const sourceVal =
+              field.source !== undefined ? this.resolveValue(field.source, ctx) : raw
+            const matchedIndex = field.status.cases.findIndex((c) => {
+              if (c.match === 'truthy') return !!sourceVal
+              if (c.match === 'falsy') return !sourceVal
+              return String(sourceVal) === String(c.match)
+            })
+            const matched = matchedIndex !== -1 ? field.status.cases[matchedIndex] : null
+            if (matched) {
+              item.value = matched.text || value
+              if (matched.type) item.tag = matched.type
+            }
+            // register：将匹配 case 的 value 写入指定路径
+            if (field.register && matched && 'value' in matched) {
+              this.applyRegister(field.register, matched.value, {})
+            }
+          } else if (field.compare !== undefined) {
+            const match = this.resolveCompare(field.compare, raw, ctx)
+            if (match !== null) {
+              item.tag = match === false ? 'danger' : 'success'
+            }
           }
-          // register：将匹配 case 的 value 写入指定路径
-          if (field.register && matched && 'value' in matched) {
-            this.applyRegister(field.register, matched.value, {})
-          }
-        } else if (field.compare !== undefined) {
-          const match = this.resolveCompare(field.compare, raw, ctx)
-          if (match !== null) {
-            item.tag = match === false ? 'danger' : 'success'
-          }
-        }
-        return item
-      }).filter(item => item !== null)
+          return item
+        })
+        .filter((item) => item !== null)
       // 同步响应式镜像，触发 visibleOperations 重算
       this.syncUkeySnapshot()
       this.syncWhenGateLogs()
@@ -515,8 +529,10 @@ export default {
       }
       const certConfig = this.sdkConfig && this.sdkConfig.info && this.sdkConfig.info.cert
       // 兼容数组（旧格式）和对象（新格式 { check?, fields }）
-      const fields = Array.isArray(certConfig) ? certConfig : (certConfig && certConfig.fields || [])
-      const certCheck = Array.isArray(certConfig) ? undefined : (certConfig && (certConfig.when))
+      const fields = Array.isArray(certConfig)
+        ? certConfig
+        : (certConfig && certConfig.fields) || []
+      const certCheck = Array.isArray(certConfig) ? undefined : certConfig && certConfig.when
 
       const ctx = this.buildContext({ vars: {}, input: {} })
 
@@ -528,7 +544,10 @@ export default {
             // call + 可选 expr
             const result = this.callUKeyMethod(certCheck, ctx)
             if (certCheck.expr) {
-              passed = !!this.resolveValue(certCheck.expr, Object.assign({}, ctx, { result: result }))
+              passed = !!this.resolveValue(
+                certCheck.expr,
+                Object.assign({}, ctx, { result: result })
+              )
             } else {
               passed = result != null
             }
@@ -547,11 +566,16 @@ export default {
         }
       }
 
-      if (!fields.length) { this.certInfoItems = []; this.hasCert = false; this.certLoading = false; return }
+      if (!fields.length) {
+        this.certInfoItems = []
+        this.hasCert = false
+        this.certLoading = false
+        return
+      }
 
       let hasAny = false
 
-      const items = fields.map(field => {
+      const items = fields.map((field) => {
         const rawVal = this.resolveFieldValue(field, ctx)
 
         const item = {
@@ -564,7 +588,7 @@ export default {
           hasAny = true
           if (field.compare !== undefined) {
             const match = this.resolveCompare(field.compare, rawVal, ctx)
-            item.tag = (match === null || match) ? 'success' : 'danger'
+            item.tag = match === null || match ? 'success' : 'danger'
           }
         }
 
@@ -587,9 +611,14 @@ export default {
      * 无 event 配置时默认刷新 cert
      */
     async handleEvents(event) {
-      const events = event === undefined
-        ? ['refresh.info.cert']
-        : (event == null ? [] : (Array.isArray(event) ? event : [event]))
+      const events =
+        event === undefined
+          ? ['refresh.info.cert']
+          : event == null
+            ? []
+            : Array.isArray(event)
+              ? event
+              : [event]
       for (const e of events) {
         if (e === 'refresh.info.device') await this.readDeviceInfo()
         else if (e === 'refresh.info.cert') await this.readCertInfo()
@@ -608,7 +637,9 @@ export default {
               cancelButtonText: this.$t('Cancel')
             }
           )
-        } catch (_) { return }
+        } catch (_) {
+          return
+        }
       }
 
       this.running = true
@@ -616,13 +647,16 @@ export default {
       try {
         const operationVars = {} // vars.* 命名空间，仅当前操作可见
         const collectedInput = {} // input.* 命名空间，跨步骤累积
-        for (const step of (op.steps || [])) {
+        for (const step of op.steps || []) {
           await this.executeStep(step, operationVars, collectedInput)
         }
         this.appendLog(`${this.$t('Operation')}「${op.label}」${this.$t('Completed')}`, 'success')
         await this.handleEvents(op.event)
       } catch (e) {
-        this.appendLog(`${this.$t('Operation')}「${op.label}」${this.$t('Failed')}: ${e.message}`, 'error')
+        this.appendLog(
+          `${this.$t('Operation')}「${op.label}」${this.$t('Failed')}: ${e.message}`,
+          'error'
+        )
       } finally {
         this.running = false
         this.currentOperation = ''
@@ -699,31 +733,40 @@ export default {
     // ═══════════════════════════════════════════════════════════════════════════
     async executeApiStep(step, ctx) {
       const method = (step.method || 'post').toLowerCase()
-      const apiConfig = (this.config && typeof this.config.api === 'object' && this.config.api) || {}
+      const apiConfig =
+        (this.config && typeof this.config.api === 'object' && this.config.api) || {}
       const stepUrlTpl = step && step.url
-      const apiKeyMatch = typeof stepUrlTpl === 'string'
-        ? stepUrlTpl.match(/config\.api\.([A-Za-z0-9_]+)/)
-        : null
+      const apiKeyMatch =
+        typeof stepUrlTpl === 'string' ? stepUrlTpl.match(/config\.api\.([A-Za-z0-9_]+)/) : null
       const apiKey = apiKeyMatch ? apiKeyMatch[1] : ''
       let url = apiKey ? apiConfig[apiKey] : ''
 
       // URL 仅允许从 config.api.xxx 的 xxx 获取
       if (typeof url !== 'string' || !url) {
-        throw new Error(`API key "${apiKey || stepUrlTpl}" ${this.$t('ApiNotConfiguredUnsupported')}`)
+        throw new Error(
+          `API key "${apiKey || stepUrlTpl}" ${this.$t('ApiNotConfiguredUnsupported')}`
+        )
       }
 
       // method 仅允许从 api_method[apiKey] 中读取
-      const apiMethodConfig = (this.config && typeof this.config.api_method === 'object' && this.config.api_method) || {}
+      const apiMethodConfig =
+        (this.config && typeof this.config.api_method === 'object' && this.config.api_method) || {}
       const allowedMethods = apiKey ? apiMethodConfig[apiKey] : undefined
       if (!Array.isArray(allowedMethods) || allowedMethods.length === 0) {
         throw new Error(`API key "${apiKey}" ${this.$t('ApiMethodNotDefinedUnsupported')}`)
       }
       const normalizedAllowedMethods = allowedMethods
-        .map(m => String(m || '').trim().toUpperCase())
+        .map((m) =>
+          String(m || '')
+            .trim()
+            .toUpperCase()
+        )
         .filter(Boolean)
       const requestMethod = method.toUpperCase()
       if (!normalizedAllowedMethods.includes(requestMethod)) {
-        throw new Error(`API key "${apiKey}" ${this.$t('MethodNotAllowed')} ${requestMethod} ${this.$t('MethodOnlyAllowed')} ${normalizedAllowedMethods.join(', ')} ${this.$t('Method')}`)
+        throw new Error(
+          `API key "${apiKey}" ${this.$t('MethodNotAllowed')} ${requestMethod} ${this.$t('MethodOnlyAllowed')} ${normalizedAllowedMethods.join(', ')} ${this.$t('Method')}`
+        )
       }
 
       // url_format: 将 {key} 占位符替换为解析后的值
@@ -744,9 +787,7 @@ export default {
 
         // api_body 未配置该 URL（或字段列表为空）时，不限制 body
         if (Array.isArray(allowedFields) && allowedFields.length > 0) {
-          body = Object.fromEntries(
-            Object.entries(body).filter(([k]) => allowedFields.includes(k))
-          )
+          body = Object.fromEntries(Object.entries(body).filter(([k]) => allowedFields.includes(k)))
         }
       }
 
@@ -782,7 +823,7 @@ export default {
     resolveCompare(compare, fieldValue, ctx) {
       if (!fieldValue) return null
 
-      const normalize = v => {
+      const normalize = (v) => {
         const r = Array.isArray(v) && v.length === 1 ? v[0] : v
         return r == null ? null : String(r)
       }
@@ -806,10 +847,13 @@ export default {
         let result
         try {
           result = this.callUKeyMethod(field, ctx)
-        } catch (_) { return null }
+        } catch (_) {
+          return null
+        }
         // 调用成功后对返回值做校验（check 配置），未通过则不显示该字段
         if (field.check !== undefined) {
-          const checkExpr = typeof field.check === 'string' ? field.check : field.check && field.check.expr
+          const checkExpr =
+            typeof field.check === 'string' ? field.check : field.check && field.check.expr
           if (checkExpr) {
             const checkCtx = Object.assign({}, ctx, { result: result })
             const passed = this.resolveValue(checkExpr, checkCtx)
@@ -826,9 +870,10 @@ export default {
 
     /** 构建上下文对象，供模板解析使用 */
     buildContext({ vars = {}, input = {} }) {
-      const ukey = (_ukey && typeof _ukey === 'object' && Object.keys(_ukey).length > 0)
-        ? _ukey
-        : (this.ukeySnapshot || {})
+      const ukey =
+        _ukey && typeof _ukey === 'object' && Object.keys(_ukey).length > 0
+          ? _ukey
+          : this.ukeySnapshot || {}
       return {
         ukey,
         instance: _instance,
@@ -860,7 +905,10 @@ export default {
         config: ctx.config,
         // 透传 ctx 中的其他临时变量（如 result）
         ...Object.fromEntries(
-          Object.entries(ctx).filter(([k]) => !['ukey', 'instance', 'vars', 'input', 'user', 'settings', 'config'].includes(k))
+          Object.entries(ctx).filter(
+            ([k]) =>
+              !['ukey', 'instance', 'vars', 'input', 'user', 'settings', 'config'].includes(k)
+          )
         )
       }
 
@@ -883,7 +931,7 @@ export default {
           // 兼容配置里常见的路径写法：ukey.devSN.0 -> ukey.devSN[0]
           const normalizedExpr = e.replace(/\.([0-9]+)(?=\b)/g, '[$1]')
           const keys = Object.keys(nsMap)
-          const vals = keys.map(k => nsMap[k])
+          const vals = keys.map((k) => nsMap[k])
           // eslint-disable-next-line no-new-func
           return new Function(...keys, `return (${normalizedExpr})`)(...vals)
         } catch (_) {
@@ -912,7 +960,7 @@ export default {
      * 支持：字符串模板、复杂对象参数 { type: 'csv'|'json', value: {...} }
      */
     resolveArgs(argsDef, ctx) {
-      return argsDef.map(arg => {
+      return argsDef.map((arg) => {
         if (arg == null || typeof arg !== 'object') {
           return this.resolveValue(arg, ctx)
         }
@@ -923,7 +971,9 @@ export default {
             resolved[k] = this.resolveValue(v, ctx)
           }
           if (arg.type === 'csv') {
-            return Object.entries(resolved).map(([k, v]) => `${k}=${v}`).join(',')
+            return Object.entries(resolved)
+              .map(([k, v]) => `${k}=${v}`)
+              .join(',')
           }
           return JSON.stringify(resolved)
         }
@@ -935,7 +985,7 @@ export default {
     /** 递归解析对象（或数组）中所有字符串模板值 */
     resolveObjectValues(obj, ctx) {
       if (obj == null || typeof obj !== 'object') return this.resolveValue(obj, ctx)
-      if (Array.isArray(obj)) return obj.map(i => this.resolveObjectValues(i, ctx))
+      if (Array.isArray(obj)) return obj.map((i) => this.resolveObjectValues(i, ctx))
       const result = {}
       for (const [k, v] of Object.entries(obj)) {
         result[k] = this.resolveObjectValues(v, ctx)
@@ -952,10 +1002,10 @@ export default {
       // 无点号：整体替换命名空间
       if (dot === -1) {
         if (register === 'ukey') {
-          _ukey = (value && typeof value === 'object') ? value : {}
+          _ukey = value && typeof value === 'object' ? value : {}
           this.syncUkeySnapshot()
         } else if (register === 'user') {
-          _userOverride = (value && typeof value === 'object') ? value : {}
+          _userOverride = value && typeof value === 'object' ? value : {}
         }
         return
       }
@@ -1005,7 +1055,7 @@ export default {
     showInputDialog(fields, title, ctx = {}) {
       return new Promise((resolve, reject) => {
         const form = {}
-        fields.forEach(f => {
+        fields.forEach((f) => {
           const defaultVal = f.value !== undefined ? this.resolveValue(f.value, ctx) : ''
           form[f.key] = defaultVal == null ? '' : String(defaultVal)
         })
@@ -1030,21 +1080,25 @@ export default {
         if (f.validate.minLength !== undefined) {
           const minLength = Number(f.validate.minLength)
           if (!Number.isNaN(minLength) && String(val || '').length < minLength) {
-            this.inputDialog.error = f.validate.message || `「${f.label}」${this.$t('Length')} < ${minLength}`
+            this.inputDialog.error =
+              f.validate.message || `「${f.label}」${this.$t('Length')} < ${minLength}`
             return
           }
         }
         if (f.validate.maxLength !== undefined) {
           const maxLength = Number(f.validate.maxLength)
           if (!Number.isNaN(maxLength) && String(val || '').length > maxLength) {
-            this.inputDialog.error = f.validate.message || `「${f.label}」${this.$t('Length')} > ${maxLength}`
+            this.inputDialog.error =
+              f.validate.message || `「${f.label}」${this.$t('Length')} > ${maxLength}`
             return
           }
         }
         if (f.validate.equals !== undefined) {
           const target = this.inputDialog.form[f.validate.equals]
           if (val !== target) {
-            this.inputDialog.error = f.validate.message || `「${f.label}」${this.$t('And')}「${f.validate.equals}」${this.$t('NotMatch')}`
+            this.inputDialog.error =
+              f.validate.message ||
+              `「${f.label}」${this.$t('And')}「${f.validate.equals}」${this.$t('NotMatch')}`
             return
           }
         }
@@ -1081,7 +1135,9 @@ export default {
 
   tr {
     border-bottom: 1px solid #f0f0f0;
-    &:last-child { border-bottom: none; }
+    &:last-child {
+      border-bottom: none;
+    }
   }
 
   td {
@@ -1132,7 +1188,9 @@ export default {
   color: #909399;
   font-size: 13px;
 
-  .el-icon-loading { font-size: 16px; }
+  .el-icon-loading {
+    font-size: 16px;
+  }
 }
 
 // ── 操作按钮表格（左中）─────────────────────────────────────────────────────────
@@ -1142,16 +1200,30 @@ export default {
 
   tr {
     border-bottom: 1px solid #f0f0f0;
-    &:last-child { border-bottom: none; }
+    &:last-child {
+      border-bottom: none;
+    }
   }
 
-  td { padding: 10px 0; vertical-align: middle; }
+  td {
+    padding: 10px 0;
+    vertical-align: middle;
+  }
 
   .cp-action-desc {
     padding-right: 12px;
 
-    .cp-action-title { font-size: 13px; color: #303133; line-height: 1.4; }
-    .cp-action-hint  { font-size: 12px; color: #909399; margin-top: 2px; line-height: 1.4; }
+    .cp-action-title {
+      font-size: 13px;
+      color: #303133;
+      line-height: 1.4;
+    }
+    .cp-action-hint {
+      font-size: 12px;
+      color: #909399;
+      margin-top: 2px;
+      line-height: 1.4;
+    }
   }
 
   .cp-action-btn {
@@ -1159,7 +1231,9 @@ export default {
     text-align: right;
     white-space: nowrap;
 
-    ::v-deep .el-button { width: 100%; }
+    ::v-deep .el-button {
+      width: 100%;
+    }
   }
 }
 
@@ -1179,24 +1253,41 @@ export default {
   display: flex;
   gap: 10px;
 
-  .cp-log-time { color: #6a9955; flex-shrink: 0; }
-  .cp-log-msg  { color: #d4d4d4; }
+  .cp-log-time {
+    color: #6a9955;
+    flex-shrink: 0;
+  }
+  .cp-log-msg {
+    color: #d4d4d4;
+  }
 
-  &.cp-log-success .cp-log-msg { color: #4ec9b0; }
-  &.cp-log-error   .cp-log-msg { color: #f48771; }
-  &.cp-log-warn    .cp-log-msg { color: #dcdcaa; }
+  &.cp-log-success .cp-log-msg {
+    color: #4ec9b0;
+  }
+  &.cp-log-error .cp-log-msg {
+    color: #f48771;
+  }
+  &.cp-log-warn .cp-log-msg {
+    color: #dcdcaa;
+  }
 }
 </style>
 
 <style lang="scss">
 // ── 输入弹框（custom-class 不受 scoped 限制）────────────────────────────────────
 .cp-input-dialog {
-  .el-dialog__body { padding: 16px 20px 8px; }
-  .el-dialog__footer { padding: 8px 20px 16px; }
+  .el-dialog__body {
+    padding: 16px 20px 8px;
+  }
+  .el-dialog__footer {
+    padding: 8px 20px 16px;
+  }
 }
 
 .cp-input-form {
-  .el-form-item { margin-bottom: 14px; }
+  .el-form-item {
+    margin-bottom: 14px;
+  }
 
   // 英文标签更长，固定单行避免中间断行
   .el-form-item__label {

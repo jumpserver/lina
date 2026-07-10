@@ -84,7 +84,7 @@ export default {
     async getMetricData() {
       setTimeout(() => {
         const url = `/api/v1/index/?dates_metrics=1&days=${this.days}`
-        this.$axios.get(url).then(data => {
+        this.$axios.get(url).then((data) => {
           this.applyMetrics(data)
         })
       }, 500)

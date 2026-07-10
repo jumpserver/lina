@@ -1,7 +1,11 @@
 <template>
   <IBox>
     <GenericCreateUpdateForm v-bind="$data" />
-    <ImportDialog v-if="dialogLdapUserImport" :category="category" :visible.sync="dialogLdapUserImport" />
+    <ImportDialog
+      v-if="dialogLdapUserImport"
+      :category="category"
+      :visible.sync="dialogLdapUserImport"
+    />
     <TestLoginDialog :visible.sync="dialogTest" :category="category" />
     <SyncSettingDialog :visible.sync="dialogSyncSetting" />
   </IBox>
@@ -46,40 +50,39 @@ export default {
         [
           this.$t('Basic'),
           [
-            'AUTH_LDAP', 'AUTH_LDAP_SERVER_URI',
-            'AUTH_LDAP_BIND_DN', 'AUTH_LDAP_BIND_PASSWORD',
+            'AUTH_LDAP',
+            'AUTH_LDAP_SERVER_URI',
+            'AUTH_LDAP_BIND_DN',
+            'AUTH_LDAP_BIND_PASSWORD',
             'AUTH_LDAP_START_TLS',
-            'AUTH_LDAP_CACERT_CONTENT', 'AUTH_LDAP_CERT_CONTENT', 'AUTH_LDAP_KEY_CONTENT'
+            'AUTH_LDAP_CACERT_CONTENT',
+            'AUTH_LDAP_CERT_CONTENT',
+            'AUTH_LDAP_KEY_CONTENT'
           ]
         ],
         [
           this.$t('Search'),
-          [
-            'AUTH_LDAP_SEARCH_OU', 'AUTH_LDAP_SEARCH_FILTER',
-            'AUTH_LDAP_USER_ATTR_MAP'
-          ]
+          ['AUTH_LDAP_SEARCH_OU', 'AUTH_LDAP_SEARCH_FILTER', 'AUTH_LDAP_USER_ATTR_MAP']
         ],
         [
           this.$t('Other'),
           [
-            'AUTH_LDAP_STRICT_SYNC', 'AUTH_LDAP_CONNECT_TIMEOUT', 'AUTH_LDAP_SEARCH_PAGED_SIZE',
+            'AUTH_LDAP_STRICT_SYNC',
+            'AUTH_LDAP_CONNECT_TIMEOUT',
+            'AUTH_LDAP_SEARCH_PAGED_SIZE',
             'AUTH_LDAP_CACHE_TIMEOUT'
           ]
         ]
       ],
       fieldsMeta: {
         AUTH_LDAP_BIND_DN: {
-          rules: [
-            rules.Required
-          ]
+          rules: [rules.Required]
         },
         AUTH_LDAP_BIND_PASSWORD: {
           component: UpdateToken
         },
         AUTH_LDAP_SEARCH_OU: {
-          rules: [
-            rules.Required
-          ]
+          rules: [rules.Required]
         },
         AUTH_LDAP_USER_ATTR_MAP: {
           component: JsonEditor,
@@ -106,11 +109,15 @@ export default {
         {
           title: this.$t('LdapConnectTest'),
           loading: false,
-          callback: function(value, form, btn) {
+          callback: function (value, form, btn) {
             if (value['AUTH_LDAP_BIND_PASSWORD'] === undefined) {
               value['AUTH_LDAP_BIND_PASSWORD'] = ''
             }
-            ['AUTH_LDAP_CACERT_CONTENT', 'AUTH_LDAP_CERT_CONTENT', 'AUTH_LDAP_KEY_CONTENT'].forEach((key) => {
+            ;[
+              'AUTH_LDAP_CACERT_CONTENT',
+              'AUTH_LDAP_CERT_CONTENT',
+              'AUTH_LDAP_KEY_CONTENT'
+            ].forEach((key) => {
               if (value[key] === undefined) {
                 value[key] = ''
               }
@@ -133,19 +140,19 @@ export default {
         },
         {
           title: this.$t('LdapLoginTest'),
-          callback: function(value, form) {
+          callback: function (value, form) {
             this.dialogTest = true
           }.bind(this)
         },
         {
           title: this.$t('LdapBulkImport'),
-          callback: function(value, form) {
+          callback: function (value, form) {
             this.dialogLdapUserImport = true
           }.bind(this)
         },
         {
           title: this.$t('SyncSetting'),
-          callback: function(value, form) {
+          callback: function (value, form) {
             this.dialogSyncSetting = true
           }.bind(this)
         }
@@ -158,11 +165,13 @@ export default {
         if (data['AUTH_LDAP_BIND_PASSWORD'] === '') {
           delete data['AUTH_LDAP_BIND_PASSWORD']
         }
-        ['AUTH_LDAP_CACERT_CONTENT', 'AUTH_LDAP_CERT_CONTENT', 'AUTH_LDAP_KEY_CONTENT'].forEach((key) => {
-          if (data[key] === '') {
-            delete data[key]
+        ;['AUTH_LDAP_CACERT_CONTENT', 'AUTH_LDAP_CERT_CONTENT', 'AUTH_LDAP_KEY_CONTENT'].forEach(
+          (key) => {
+            if (data[key] === '') {
+              delete data[key]
+            }
           }
-        })
+        )
         return data
       }
     }
@@ -183,5 +192,4 @@ export default {
 .listTable ::v-deep .table-action-right-side {
   padding-top: 0 !important;
 }
-
 </style>

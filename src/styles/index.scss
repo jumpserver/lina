@@ -167,6 +167,18 @@ small {
   --el-tag-text-color: var(--color-text-primary);
 }
 
+/*
+ * Radio / Checkbox 选中态标签文字。Element Plus 默认会把 label 染成 primary；
+ * 原先由 element-extra.css 覆盖为普通文字色，该文件已废弃（见 utils/theme/index.js）。
+ */
+.el-radio__input.is-checked + .el-radio__label {
+  color: inherit;
+}
+
+.el-checkbox__input.is-checked + .el-checkbox__label {
+  color: var(--el-text-color-regular);
+}
+
 b,
 strong {
   font-weight: 700;
@@ -659,7 +671,6 @@ $tooltip-arrow-color: #c2d1e1;
   }
 }
 
-
 .el-button.help-msg-btn,
 .el-button.el-button--default.help-msg-btn,
 .el-tooltip__trigger .help-msg-btn {
@@ -1064,6 +1075,10 @@ div.el-loading-parent--relative {
   z-index: 999999 !important;
 }
 
+.fa {
+  margin-right: 2px;
+}
+
 .el-button-group.el-button-group--horizontal {
   .el-button--small.el-dropdown__caret-button {
     width: 27px;
@@ -1093,7 +1108,6 @@ div.el-loading-parent--relative {
     }
   }
 }
-
 
 // // Element Plus dropdown menu 样式（通过 teleport 渲染到 body，需要使用全局样式）
 // // 注意：不要强制显示 popper，只在打开时显示

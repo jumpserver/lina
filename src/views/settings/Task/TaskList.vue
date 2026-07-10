@@ -2,8 +2,7 @@
   <ListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
-<script>
-import { createTextVNode as createTextVNodeCompat, createVNode as createVNodeCompat } from 'vue'
+<script lang="jsx">
 import { DrawerListTable as ListTable } from '@/components'
 import {
   ChoicesFormatter,
@@ -89,19 +88,13 @@ export default {
           count: {
             width: '130px',
             label: `${this.$t('Success')}/${this.$t('Total')}`,
-            formatter: (row) => {
-              return createVNodeCompat('div', null, [
-                createVNodeCompat(
-                  'span',
-                  {
-                    class: 'text-primary'
-                  },
-                  [row.summary.success || 0]
-                ),
-                createTextVNodeCompat('/'),
-                createVNodeCompat('span', null, [row.summary.total || 0])
-              ])
-            }
+            formatter: (row) => (
+              <div>
+                <span class="text-primary">{row.summary.success || 0}</span>
+                /
+                <span>{row.summary.total || 0}</span>
+              </div>
+            )
           },
           state: {
             label: this.$t('State'),

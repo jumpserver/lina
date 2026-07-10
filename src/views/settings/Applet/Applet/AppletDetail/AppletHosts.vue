@@ -8,8 +8,7 @@
   </el-row>
 </template>
 
-<script>
-import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
+<script lang="jsx">
 import { DrawerListTable as ListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
@@ -93,15 +92,10 @@ export default {
                 unknown: 'warning'
               }
               const tp = typeMapper[row.status.value] || 'warning'
-              return createVNodeCompat(
-                resolveComponentCompat('el-tag'),
-                {
-                  size: 'small',
-                  type: tp
-                },
-                {
-                  default: () => [row.status.label]
-                }
+              return (
+                <el-tag size="small" type={tp}>
+                  {row.status.label}
+                </el-tag>
               )
             }
           },

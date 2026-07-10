@@ -22,12 +22,7 @@
   </TwoCol>
 </template>
 
-<script>
-import {
-  createVNode as createVNodeCompat,
-  resolveComponent as resolveComponentCompat,
-  createTextVNode as createTextVNodeCompat
-} from 'vue'
+<script lang="jsx">
 import { GenericListTable } from '@/layout/components'
 import GatewayTestDialog from '@/components/Apps/GatewayTestDialog'
 import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
@@ -101,27 +96,16 @@ export default {
           },
           protocols: {
             formatter: (row) => {
-              const data = row.protocols.map((p) =>
-                createVNodeCompat(
-                  resolveComponentCompat('el-tag'),
-                  {
-                    size: 'small'
-                  },
-                  {
-                    default: () => [
-                      p.name,
-                      createTextVNodeCompat('/'),
-                      p.port,
-                      createTextVNodeCompat(' ')
-                    ]
-                  }
-                )
+              return (
+                <span>
+                  {' '}
+                  {row.protocols.map((p) => (
+                    <el-tag size="small">
+                      {p.name}/{p.port}{' '}
+                    </el-tag>
+                  ))}{' '}
+                </span>
               )
-              return createVNodeCompat('span', null, [
-                createTextVNodeCompat(' '),
-                data,
-                createTextVNodeCompat(' ')
-              ])
             }
           },
           nodes_display: {

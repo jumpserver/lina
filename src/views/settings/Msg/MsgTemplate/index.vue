@@ -15,14 +15,13 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import { IBox } from '@/components'
 import VariablesHelpTextDialog from '@/components/Apps/VariablesHelpTextDialog'
 import { Select2 } from '@/components/Form/FormFields'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import variable from '@/views/ops/Template/components/Variable.vue'
 import MarkDownEditor from '@/views/settings/Msg/Email/markDownEditor.vue'
-import { createVNode as createVNodeCompat } from 'vue'
 export default {
   name: 'MsgTemplate',
   components: {
@@ -45,14 +44,10 @@ export default {
             const handleClick = () => {
               this.showHelpDialog = true
             }
-            return createVNodeCompat(
-              'i',
-              {
-                onClick: handleClick,
-                class: 'fa fa-question-circle',
-                style: 'cursor: pointer'
-              },
-              [this.$t('Help')]
+            return (
+              <i onClick={handleClick} class="fa fa-question-circle" style="cursor: pointer">
+                {this.$t('Help')}
+              </i>
             )
           },
           component: Select2,

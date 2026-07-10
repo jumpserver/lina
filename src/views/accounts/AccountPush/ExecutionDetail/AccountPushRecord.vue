@@ -2,8 +2,7 @@
   <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
-<script>
-import { createVNode as createVNodeCompat } from 'vue'
+<script lang="jsx">
 import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 export default {
@@ -72,30 +71,12 @@ export default {
             label: this.$t('Success'),
             formatter: (row) => {
               if (row.status === 'pending') {
-                return createVNodeCompat(
-                  'i',
-                  {
-                    class: 'fa  fa fa-spinner fa-spin'
-                  },
-                  null
-                )
+                return <i class="fa  fa fa-spinner fa-spin" />
               }
               if (row.is_success) {
-                return createVNodeCompat(
-                  'i',
-                  {
-                    class: 'fa fa-check text-primary'
-                  },
-                  null
-                )
+                return <i class="fa fa-check text-primary" />
               }
-              return createVNodeCompat(
-                'i',
-                {
-                  class: 'fa fa-times text-danger'
-                },
-                null
-              )
+              return <i class="fa fa-times text-danger" />
             }
           },
           actions: {

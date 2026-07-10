@@ -97,11 +97,7 @@ export default {
         dateExpired.getDate()
       )
 
-      const nowDay = new Date(
-        dateNow.getFullYear(),
-        dateNow.getMonth(),
-        dateNow.getDate()
-      )
+      const nowDay = new Date(dateNow.getFullYear(), dateNow.getMonth(), dateNow.getDate())
 
       const intervalTime = expiredDay.getTime() - nowDay.getTime()
       return Math.floor(intervalTime / (24 * 3600 * 1000))

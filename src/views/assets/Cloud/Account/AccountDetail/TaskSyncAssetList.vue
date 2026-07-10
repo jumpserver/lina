@@ -6,8 +6,7 @@
   />
 </template>
 
-<script>
-import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
+<script lang="jsx">
 import GenericListTable from '@/layout/components/GenericListTable/index'
 import { DateFormatter } from '@/components/Table/TableFormatters'
 export default {
@@ -69,15 +68,10 @@ export default {
                 2: this.$t('SyncedCount'),
                 3: this.$t('ReleasedCount')
               }
-              return createVNodeCompat(
-                resolveComponentCompat('el-tag'),
-                {
-                  type: 'primary',
-                  size: 'small'
-                },
-                {
-                  default: () => [status[row.status]]
-                }
+              return (
+                <el-tag type="primary" size="small">
+                  {status[row.status]}
+                </el-tag>
               )
             }
           },

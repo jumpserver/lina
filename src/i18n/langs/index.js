@@ -44,16 +44,16 @@ const messages = Object.keys(elementLocaleByAppLocale).reduce((acc, appLocale) =
 const elementLocaleByCookieLang = {
   'zh-hans': elementZhCn,
   'zh-cn': elementZhCn,
-  'zh': elementZhCn,
+  zh: elementZhCn,
   'zh-hant': elementZhTw,
   'zh-tw': elementZhTw,
-  'en': elementEn,
-  'ja': elementJa,
+  en: elementEn,
+  ja: elementJa,
   'pt-br': elementPtBr,
-  'es': elementEs,
-  'ru': elementRu,
-  'ko': elementKo,
-  'vi': elementVi
+  es: elementEs,
+  ru: elementRu,
+  ko: elementKo,
+  vi: elementVi
 }
 
 export function getElementLocale(cookieLang) {

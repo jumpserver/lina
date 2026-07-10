@@ -63,18 +63,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .box {
-    margin-top: 16px;
-    padding: 20px;
-    background: #fff;
-    .head {
-      display: flex;
-      justify-content: space-between;
-    }
+.box {
+  margin-top: 16px;
+  padding: 20px;
+  background: #fff;
+  .head {
+    display: flex;
+    justify-content: space-between;
   }
-  .no-data {
-    text-align: center;
-    font-size: 14px;
-    margin-top: 6px;
-  }
+}
+.no-data {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 6px;
+}
 </style>

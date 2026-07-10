@@ -43,8 +43,7 @@
   </Page>
 </template>
 
-<script>
-import { createVNode as createVNodeCompat, createTextVNode as createTextVNodeCompat } from 'vue'
+<script lang="jsx">
 import { IBox, QuickActions } from '@/components'
 import { PhoneInput } from '@/components/Form/FormFields'
 import Page from '@/layout/components/Page'
@@ -350,11 +349,11 @@ export default {
           key: this.$t('Phone'),
           formatter: (item, val) => {
             if (val) {
-              return createVNodeCompat('span', null, [
-                val.code,
-                createTextVNodeCompat(' '),
-                val.phone
-              ])
+              return (
+                <span>
+                  {val.code} {val.phone}
+                </span>
+              )
             } else {
               return '-'
             }
@@ -380,13 +379,11 @@ export default {
           formatter: (item, val) => {
             const comment = val.public_key_comment || '-'
             const md5 = val.public_key_hash_md5 || '-'
-            return createVNodeCompat('span', null, [
-              comment,
-              createTextVNodeCompat(' '),
-              createVNodeCompat('br', null, null),
-              createTextVNodeCompat(' '),
-              md5
-            ])
+            return (
+              <span>
+                {comment} <br /> {md5}
+              </span>
+            )
           }
         },
         {

@@ -20,34 +20,38 @@
       </template>
       <template #default>
         <div v-if="showChart" class="charts-grid">
-          <div class="chart-container full-width" data-report-type="chart" data-report-name="Overview">
+          <div
+            class="chart-container full-width"
+            data-report-type="chart"
+            data-report-name="Overview"
+          >
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('Overview') }}</div>
-              <SummaryCountCard
-                :items="totalData"
-              />
+              <SummaryCountCard :items="totalData" />
             </div>
           </div>
 
-          <div class="chart-container full-width" data-report-type="chart" data-report-name="AssetTypeDistribution">
+          <div
+            class="chart-container full-width"
+            data-report-type="chart"
+            data-report-name="AssetTypeDistribution"
+          >
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('AssetTypeDistribution') }}</div>
               <div class="chart">
-                <Echart
-                  :options="AssetTypeOptions"
-                  :autoresize="true"
-                />
+                <Echart :options="AssetTypeOptions" :autoresize="true" />
               </div>
             </div>
           </div>
-          <div class="chart-container full-width" data-report-type="chart" data-report-name="WeeklyGrowthTrend">
+          <div
+            class="chart-container full-width"
+            data-report-type="chart"
+            data-report-name="WeeklyGrowthTrend"
+          >
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('WeeklyGrowthTrend') }}</div>
               <div class="chart">
-                <Echart
-                  :options="AddedAssetOptions"
-                  :autoresize="true"
-                />
+                <Echart :options="AddedAssetOptions" :autoresize="true" />
               </div>
             </div>
           </div>
@@ -152,17 +156,17 @@ export default {
       ],
       days: localStorage.getItem(this.name) || '7',
       asset_stats: {
-        'total': 0,
-        'active': 0,
-        'connected': 0,
-        'zone': 0,
-        'directory_services': 0,
-        'platform_count': 0
+        total: 0,
+        active: 0,
+        connected: 0,
+        zone: 0,
+        directory_services: 0,
+        platform_count: 0
       },
       assets_by_type_category: {
-        'categories': [],
-        'typeLabelMap': new Map(),
-        'series': []
+        categories: [],
+        typeLabelMap: new Map(),
+        series: []
       },
       added_asset_metrics: {
         dates_metrics_date: [],
@@ -219,9 +223,9 @@ export default {
           axisPointer: { type: 'shadow' },
           formatter: (params) => {
             const currentCategoryIndex = params[0].dataIndex
-            const filtered = params.filter(p => p.data > 0)
+            const filtered = params.filter((p) => p.data > 0)
             let result = `${this.assets_by_type_category.categories[currentCategoryIndex]}<br/>`
-            filtered.forEach(p => {
+            filtered.forEach((p) => {
               result += `${p.marker}${p.seriesName}: ${p.value}<br/>`
             })
             return result
@@ -334,16 +338,19 @@ export default {
                   0,
                   0,
                   1,
-                  [{
-                    offset: 0,
-                    color: primary
-                  }, {
-                    offset: 0.6,
-                    color: TwoLevelColor
-                  }, {
-                    offset: 0.8,
-                    color: ThreeLevelColor
-                  }
+                  [
+                    {
+                      offset: 0,
+                      color: primary
+                    },
+                    {
+                      offset: 0.6,
+                      color: TwoLevelColor
+                    },
+                    {
+                      offset: 0.8,
+                      color: ThreeLevelColor
+                    }
                   ],
                   false
                 ),
@@ -369,8 +376,10 @@ export default {
       this.asset_stats.zone = data.asset_stats?.zone || 0
       this.asset_stats.directory_services = data.asset_stats?.directory_services || 0
       this.asset_stats.platform_count = data.asset_stats?.platform_count || 0
-      this.added_asset_metrics.dates_metrics_date = data.added_asset_metrics?.dates_metrics_date || []
-      this.added_asset_metrics.dates_metrics_total = data.added_asset_metrics?.dates_metrics_total || []
+      this.added_asset_metrics.dates_metrics_date =
+        data.added_asset_metrics?.dates_metrics_date || []
+      this.added_asset_metrics.dates_metrics_total =
+        data.added_asset_metrics?.dates_metrics_total || []
 
       const assetsByTypeCategory = data.assets_by_type_category || {}
 
@@ -379,8 +388,8 @@ export default {
       const typeLabelMap = new Map()
       const typeSet = new Set()
 
-      categories.forEach(cat => {
-        assetsByTypeCategory[cat].forEach(item => {
+      categories.forEach((cat) => {
+        assetsByTypeCategory[cat].forEach((item) => {
           typeSet.add(item.type)
           typeLabelMap.set(item.type, item.label)
         })
@@ -388,9 +397,9 @@ export default {
 
       const types = Array.from(typeSet)
 
-      const series = types.map(type => {
-        const data = categories.map(cat => {
-          const found = assetsByTypeCategory[cat].find(item => item.type === type)
+      const series = types.map((type) => {
+        const data = categories.map((cat) => {
+          const found = assetsByTypeCategory[cat].find((item) => item.type === type)
           return found ? found.total : 0
         })
 
@@ -412,6 +421,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

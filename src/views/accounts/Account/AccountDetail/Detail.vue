@@ -25,8 +25,7 @@
   </div>
 </template>
 
-<script>
-import { createVNode as createVNodeCompat } from 'vue'
+<script lang="jsx">
 import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
 import QuickActions from '@/components/Common/QuickActions/index.vue'
 import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret.vue'
@@ -226,12 +225,10 @@ export default {
         excludes: ['template', 'privileged', 'secret', 'passphrase', 'spec_info', 'params'],
         formatters: {
           asset: (item, value) => {
-            return createVNodeCompat('span', null, [value?.name])
+            return <span>{value?.name}</span>
           },
           su_from: (item, value) => {
-            return createVNodeCompat('span', null, [
-              value?.name ? value?.name + `(${value?.username})` : ''
-            ])
+            return <span>{value?.name ? value?.name + `(${value?.username})` : ''}</span>
           }
         }
       }

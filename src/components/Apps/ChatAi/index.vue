@@ -23,7 +23,7 @@
           </div>
           <span class="new" @click="onNewChat">
             <el-icon><Plus /></el-icon>
-            <span>{{ $tc("NewChat") }}</span>
+            <span>{{ $tc('NewChat') }}</span>
           </span>
         </div>
         <div class="content">
@@ -47,158 +47,158 @@
 </template>
 
 <script>
-import Sidebar from "./components/Sidebar/index.vue";
-import Chat from "./components/ChitChat/index.vue";
-import { getInputFocus } from "./useChat.js";
-import DrawerPanel from "@/components/Apps/DrawerPanel/index.vue";
-import { ObjectLocalStorage } from "@/utils/common";
-import i18n from "@/i18n/i18n";
-import { getAssetUrl } from "@/utils/assets";
-import { mapGetters } from "vuex";
+import Sidebar from './components/Sidebar/index.vue'
+import Chat from './components/ChitChat/index.vue'
+import { getInputFocus } from './useChat.js'
+import DrawerPanel from '@/components/Apps/DrawerPanel/index.vue'
+import { ObjectLocalStorage } from '@/utils/common'
+import i18n from '@/i18n/i18n'
+import { getAssetUrl } from '@/utils/assets'
+import { mapGetters } from 'vuex'
 
-const aiPannelLocalStorage = new ObjectLocalStorage("ai_panel_settings");
+const aiPannelLocalStorage = new ObjectLocalStorage('ai_panel_settings')
 export default {
   components: {
     DrawerPanel,
     Chat,
-    Sidebar,
+    Sidebar
   },
   props: {
     title: {
       type: String,
       default: function () {
-        return i18n.global.t("ChatAI");
-      },
+        return i18n.global.t('ChatAI')
+      }
     },
     defaultShowPanel: {
       type: Boolean,
-      default: false,
+      default: false
     },
     drawerPanelVisible: {
       type: Boolean,
-      default: () => false,
-    },
+      default: () => false
+    }
   },
   data() {
     return {
       visible: false,
-      active: "chat",
-      robotUrl: getAssetUrl("img/robot-assistant.png"),
-      height: "400px",
+      active: 'chat',
+      robotUrl: getAssetUrl('img/robot-assistant.png'),
+      height: '400px',
       expanded: false,
       clientOffset: {},
       currentTerminalContent: {},
-      initialized: false,
-    };
+      initialized: false
+    }
   },
   computed: {
-    ...mapGetters(["publicSettings"]),
+    ...mapGetters(['publicSettings'])
   },
   watch: {
-    "publicSettings.CHAT_AI_METHOD": {
+    'publicSettings.CHAT_AI_METHOD': {
       handler(newVal) {
-        this.visible = newVal === "api";
-      },
-    },
+        this.visible = newVal === 'api'
+      }
+    }
   },
   mounted() {
-    this.handleStartChat();
+    this.handleStartChat()
   },
   methods: {
     handleStartChat() {
-      if (this.publicSettings.CHAT_AI_METHOD === "api") {
-        this.visible = true;
-        const expanded = aiPannelLocalStorage.get("expanded");
-        this.updateExpandedState(expanded);
-        this.handlePostMessage();
-      } else if (this.publicSettings.CHAT_AI_METHOD === "embed") {
-        const embedScriptId = "chat-ai-embed-id";
+      if (this.publicSettings.CHAT_AI_METHOD === 'api') {
+        this.visible = true
+        const expanded = aiPannelLocalStorage.get('expanded')
+        this.updateExpandedState(expanded)
+        this.handlePostMessage()
+      } else if (this.publicSettings.CHAT_AI_METHOD === 'embed') {
+        const embedScriptId = 'chat-ai-embed-id'
         if (document.getElementById(embedScriptId)) {
-          return;
+          return
         }
-        const script = document.createElement("script");
-        script.id = embedScriptId;
-        script.src = this.publicSettings.CHAT_AI_EMBED_URL;
-        script.async = true;
+        const script = document.createElement('script')
+        script.id = embedScriptId
+        script.src = this.publicSettings.CHAT_AI_EMBED_URL
+        script.async = true
         script.onload = () => {
-          const loadEvent = new Event("load", {
+          const loadEvent = new Event('load', {
             bubbles: false,
-            cancelable: false,
-          });
-          window.dispatchEvent(loadEvent);
-        };
-        document.body.appendChild(script);
+            cancelable: false
+          })
+          window.dispatchEvent(loadEvent)
+        }
+        document.body.appendChild(script)
       }
     },
     initAssistant() {
-      if (this.initialized) return;
-      this.initialized = true;
+      if (this.initialized) return
+      this.initialized = true
       this.$nextTick(() => {
-        this.$refs.component?.init();
-      });
+        this.$refs.component?.init()
+      })
     },
     handlePostMessage() {
-      window.addEventListener("message", (event) => {
-        if (event.data === "show-chat-panel") {
-          this.$refs.drawer.show = true;
-          this.initAssistant();
-          return;
+      window.addEventListener('message', (event) => {
+        if (event.data === 'show-chat-panel') {
+          this.$refs.drawer.show = true
+          this.initAssistant()
+          return
         }
-        const msg = event.data;
+        const msg = event.data
         switch (msg.name) {
-          case "current_terminal_content":
+          case 'current_terminal_content':
             // {content: '...', terminalId: '',sessionId: '',viewId: '',viewName: ''}
-            this.$log.debug("current_terminal_content", msg);
-            this.currentTerminalContent = msg.data;
-            this.$refs.component?.onTerminalContext(msg.data);
-            break;
+            this.$log.debug('current_terminal_content', msg)
+            this.currentTerminalContent = msg.data
+            this.$refs.component?.onTerminalContext(msg.data)
+            break
         }
-      });
+      })
     },
     handleMoveMouseDown(event) {
-      this.$refs.drawer.handleHeaderMoveDown(event);
+      this.$refs.drawer.handleHeaderMoveDown(event)
     },
     handleMouseMoveUp(event) {
       // Prevent the new chat button from triggering the header move up
-      const newButton = event.target.closest(".new");
+      const newButton = event.target.closest('.new')
       if (newButton) {
-        return;
+        return
       }
-      this.$refs.drawer.handleHeaderMoveUp(event);
+      this.$refs.drawer.handleHeaderMoveUp(event)
     },
     onClose() {
-      this.$refs.drawer.show = false;
+      this.$refs.drawer.show = false
     },
     expandFull() {
-      this.updateExpandedState(true);
-      this.savePanelSettings();
+      this.updateExpandedState(true)
+      this.savePanelSettings()
     },
     compress() {
-      this.updateExpandedState(false);
-      this.savePanelSettings();
+      this.updateExpandedState(false)
+      this.savePanelSettings()
     },
     savePanelSettings() {
-      aiPannelLocalStorage.set("expanded", this.expanded);
+      aiPannelLocalStorage.set('expanded', this.expanded)
     },
     updateExpandedState(expanded) {
-      this.expanded = expanded;
-      this.height = expanded ? "100%" : "400px";
+      this.expanded = expanded
+      this.height = expanded ? '100%' : '400px'
     },
     onNewChat() {
-      this.active = "chat";
+      this.active = 'chat'
       this.$nextTick(() => {
-        this.$refs.component?.onNewChat();
-        getInputFocus();
-      });
+        this.$refs.component?.onNewChat()
+        getInputFocus()
+      })
     },
     onToggle(status) {
       if (status) {
-        this.initAssistant();
-        getInputFocus();
+        this.initAssistant()
+        getInputFocus()
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -215,12 +215,7 @@ export default {
     overflow: hidden;
 
     .header {
-      background: linear-gradient(
-        90deg,
-        #ebf1ff 24.34%,
-        #e5fbf8 56.18%,
-        #f2ebfe 90.18%
-      );
+      background: linear-gradient(90deg, #ebf1ff 24.34%, #e5fbf8 56.18%, #f2ebfe 90.18%);
       display: flex;
       justify-content: space-between;
       height: 48px;

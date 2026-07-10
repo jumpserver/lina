@@ -18,24 +18,26 @@
       </template>
       <template #default>
         <div v-if="showChart" class="charts-grid">
-          <div class="chart-container full-width" data-report-type="chart" data-report-name="Overview">
+          <div
+            class="chart-container full-width"
+            data-report-type="chart"
+            data-report-name="Overview"
+          >
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('Overview') }}</div>
-              <SummaryCountCard
-                :items="totalData"
-              />
+              <SummaryCountCard :items="totalData" />
             </div>
           </div>
 
-          <div class="chart-container full-width" data-report-type="chart" data-report-name="UserLoginTrends">
+          <div
+            class="chart-container full-width"
+            data-report-type="chart"
+            data-report-name="UserLoginTrends"
+          >
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('UserLoginTrends') }}</div>
               <div class="chart">
-                <Echart
-                  ref="loginTrend"
-                  :options="loginTrendOptions"
-                  :autoresize="true"
-                />
+                <Echart ref="loginTrend" :options="loginTrendOptions" :autoresize="true" />
               </div>
             </div>
           </div>
@@ -44,34 +46,33 @@
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('LoginSource') }}</div>
               <div class="chart">
-                <Echart
-                  :options="LoginSourceOptions"
-                  :autoresize="true"
-                />
+                <Echart :options="LoginSourceOptions" :autoresize="true" />
               </div>
             </div>
           </div>
 
-          <div class="chart-container" data-report-type="chart" data-report-name="VisitTimeDistribution">
+          <div
+            class="chart-container"
+            data-report-type="chart"
+            data-report-name="VisitTimeDistribution"
+          >
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('VisitTimeDistribution') }}</div>
               <div class="chart">
-                <Echart
-                  :options="VisitTimeOptions"
-                  :autoresize="true"
-                />
+                <Echart :options="VisitTimeOptions" :autoresize="true" />
               </div>
             </div>
           </div>
 
-          <div class="chart-container full-width" data-report-type="chart" data-report-name="LoginMethodStatistics">
+          <div
+            class="chart-container full-width"
+            data-report-type="chart"
+            data-report-name="LoginMethodStatistics"
+          >
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('LoginMethodStatistics') }}</div>
               <div class="chart">
-                <Echart
-                  :options="loginMethodOptions"
-                  :autoresize="true"
-                />
+                <Echart :options="loginMethodOptions" :autoresize="true" />
               </div>
             </div>
           </div>
@@ -90,7 +91,13 @@
                 <div class="chart-container-title-text">{{ tableData[0].name }}</div>
               </div>
               <el-table :data="tableData[0].rows" border>
-                <el-table-column v-for="column in tableData[0].columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+                <el-table-column
+                  v-for="column in tableData[0].columns"
+                  :key="column.key"
+                  :label="column.label"
+                  :prop="column.key"
+                  min-width="140"
+                />
               </el-table>
             </div>
             <div
@@ -104,13 +111,25 @@
                 <div class="chart-container-title-text">{{ t.name }}</div>
               </div>
               <el-table :data="t.rows" border>
-                <el-table-column v-for="column in t.columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+                <el-table-column
+                  v-for="column in t.columns"
+                  :key="column.key"
+                  :label="column.label"
+                  :prop="column.key"
+                  min-width="140"
+                />
               </el-table>
             </div>
           </div>
           <div v-else>
             <el-table :data="tableData.rows" border>
-              <el-table-column v-for="column in tableData.columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+              <el-table-column
+                v-for="column in tableData.columns"
+                :key="column.key"
+                :label="column.label"
+                :prop="column.key"
+                min-width="140"
+              />
             </el-table>
           </div>
         </div>
@@ -200,7 +219,7 @@ export default {
         need_update_password: 0
       },
       pie: {
-        'user_by_source': [{ 'name': this.$t('Nothing'), 'value': 0 }]
+        user_by_source: [{ name: this.$t('Nothing'), value: 0 }]
       },
       config: {
         user_login_failed_metrics: {
@@ -266,7 +285,7 @@ export default {
           }
         }
       ]
-      return items.filter(item => !(item.key === 'face_vector' && Number(item.body.count) === 0))
+      return items.filter((item) => !(item.key === 'face_vector' && Number(item.body.count) === 0))
     },
     LoginSourceOptions() {
       return {
@@ -395,16 +414,20 @@ export default {
                   0,
                   0,
                   1,
-                  [{
-                    offset: 0,
-                    color: primary
-                  }, {
-                    offset: 0.6,
-                    color: TwoLevelColor
-                  }, {
-                    offset: 0.8,
-                    color: ThreeLevelColor
-                  }],
+                  [
+                    {
+                      offset: 0,
+                      color: primary
+                    },
+                    {
+                      offset: 0.6,
+                      color: TwoLevelColor
+                    },
+                    {
+                      offset: 0.8,
+                      color: ThreeLevelColor
+                    }
+                  ],
                   false
                 ),
                 shadowColor: shadowColor,
@@ -424,16 +447,20 @@ export default {
                   0,
                   0,
                   1,
-                  [{
-                    offset: 0,
-                    color: 'rgba(249, 199, 79, 0.6)'
-                  }, {
-                    offset: 0.6,
-                    color: 'rgba(249, 199, 79, 0.2)'
-                  }, {
-                    offset: 0.8,
-                    color: 'rgba(249, 199, 79, 0.1)'
-                  }],
+                  [
+                    {
+                      offset: 0,
+                      color: 'rgba(249, 199, 79, 0.6)'
+                    },
+                    {
+                      offset: 0.6,
+                      color: 'rgba(249, 199, 79, 0.2)'
+                    },
+                    {
+                      offset: 0.8,
+                      color: 'rgba(249, 199, 79, 0.1)'
+                    }
+                  ],
                   false
                 ),
                 shadowColor: 'rgba(249, 199, 79, 0.1)',
@@ -462,12 +489,14 @@ export default {
           name: ''
         },
         barCategoryGap: '70%',
-        series: Object.keys(this.config.user_login_method_metrics.dates_metrics_total).map(name => ({
-          name,
-          stack: 'name',
-          type: 'bar',
-          data: this.config.user_login_method_metrics.dates_metrics_total[name]
-        }))
+        series: Object.keys(this.config.user_login_method_metrics.dates_metrics_total).map(
+          (name) => ({
+            name,
+            stack: 'name',
+            type: 'bar',
+            data: this.config.user_login_method_metrics.dates_metrics_total[name]
+          })
+        )
       }
     },
     VisitTimeOptions() {
@@ -515,24 +544,27 @@ export default {
       this.user_stats.first_login = data.user_stats.first_login
       this.user_stats.face_vector = data.user_stats.face_vector
       this.user_stats.need_update_password = data.user_stats.need_update_password
-      this.config.user_login_log_metrics.dates_metrics_date = data.user_login_log_metrics.dates_metrics_date
-      this.config.user_login_log_metrics.dates_metrics_success_total = data.user_login_log_metrics.dates_metrics_success_total
-      this.config.user_login_log_metrics.dates_metrics_failure_total = data.user_login_log_metrics.dates_metrics_failure_total
-      this.config.user_login_method_metrics.dates_metrics_date = data.user_login_method_metrics.dates_metrics_date
-      this.config.user_login_method_metrics.dates_metrics_total = data.user_login_method_metrics.dates_metrics_total
+      this.config.user_login_log_metrics.dates_metrics_date =
+        data.user_login_log_metrics.dates_metrics_date
+      this.config.user_login_log_metrics.dates_metrics_success_total =
+        data.user_login_log_metrics.dates_metrics_success_total
+      this.config.user_login_log_metrics.dates_metrics_failure_total =
+        data.user_login_log_metrics.dates_metrics_failure_total
+      this.config.user_login_method_metrics.dates_metrics_date =
+        data.user_login_method_metrics.dates_metrics_date
+      this.config.user_login_method_metrics.dates_metrics_total =
+        data.user_login_method_metrics.dates_metrics_total
       this.config.user_login_time_metrics = data.user_login_time_metrics
 
       const userBySource = data.user_by_source
       if (userBySource.length !== 0) {
         this.pie.user_by_source = userBySource
       } else {
-        this.pie.user_by_source = [{ 'name': this.$t('Nothing'), 'value': 0 }]
+        this.pie.user_by_source = [{ name: this.$t('Nothing'), value: 0 }]
       }
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

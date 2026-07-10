@@ -8,8 +8,7 @@
   />
 </template>
 
-<script>
-import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
+<script lang="jsx">
 import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
@@ -70,15 +69,10 @@ export default {
           executed_amount: {
             formatter: (row) => {
               const can = vm.$hasPerm('accounts.view_gatheraccountsexecution')
-              return createVNodeCompat(
-                resolveComponentCompat('el-link'),
-                {
-                  onClick: () => this.handleExecAmount(row),
-                  disabled: !can
-                },
-                {
-                  default: () => [row.executed_amount]
-                }
+              return (
+                <el-link onClick={() => this.handleExecAmount(row)} disabled={!can}>
+                  {row.executed_amount}
+                </el-link>
               )
             }
           },

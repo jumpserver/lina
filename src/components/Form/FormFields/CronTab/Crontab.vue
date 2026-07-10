@@ -663,8 +663,10 @@ export default {
   border-right: 1px solid var(--el-border-color) !important;
 }
 
-.crontab-root :deep(.cron-tab-form__number .el-input-number__increase:hover ~ .el-input .el-input__wrapper),
-.crontab-root :deep(.cron-tab-form__number .el-input-number__decrease:hover ~ .el-input .el-input__wrapper) {
+.crontab-root
+  :deep(.cron-tab-form__number .el-input-number__increase:hover ~ .el-input .el-input__wrapper),
+.crontab-root
+  :deep(.cron-tab-form__number .el-input-number__decrease:hover ~ .el-input .el-input__wrapper) {
   box-shadow: none !important;
 }
 

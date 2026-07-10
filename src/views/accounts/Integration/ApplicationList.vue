@@ -8,8 +8,7 @@
   />
 </template>
 
-<script>
-import { createVNode as createVNodeCompat } from 'vue'
+<script lang="jsx">
 import CopyableFormatter from '@/components/Table/TableFormatters/CopyableFormatter.vue'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { GenericListTable } from '@/layout/components'
@@ -37,14 +36,12 @@ export default {
           logo: {
             width: '80px',
             formatter: (row) => {
-              return createVNodeCompat(
-                'img',
-                {
-                  src: row.logo,
-                  alt: row.name,
-                  style: 'width: 40px; height: 40px; border-radius: 50%;'
-                },
-                null
+              return (
+                <img
+                  src={row.logo}
+                  alt={row.name}
+                  style="width: 40px; height: 40px; border-radius: 50%;"
+                />
               )
             }
           },

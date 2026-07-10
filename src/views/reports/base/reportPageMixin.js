@@ -1,4 +1,12 @@
-import { appendQuery, normalizeReportDays, normalizeVisibleFilterList, pickReportQuery, reportDebugLog, fetchReportDetailShared, invalidateReportDetailCache } from './reportUtils'
+import {
+  appendQuery,
+  normalizeReportDays,
+  normalizeVisibleFilterList,
+  pickReportQuery,
+  reportDebugLog,
+  fetchReportDetailShared,
+  invalidateReportDetailCache
+} from './reportUtils'
 
 const TABLE_LABEL_KEY_MAP = {
   user_stats: 'Overview',
@@ -119,7 +127,7 @@ export default {
   computed: {
     displayModes() {
       const modes = Array.isArray(this.displayMode) ? this.displayMode : [this.displayMode]
-      const normalized = modes.filter(mode => mode === 'chart' || mode === 'table')
+      const normalized = modes.filter((mode) => mode === 'chart' || mode === 'table')
       return normalized.length ? normalized : ['chart', 'table']
     },
     showChart() {
@@ -140,12 +148,10 @@ export default {
       return this.reportDetail?.name || this.title
     },
     currentFilters() {
-      const fallbackDays = this.isCustomReport
-        ? (this.reportDetail?.days || 7)
-        : (this.days || 7)
+      const fallbackDays = this.isCustomReport ? this.reportDetail?.days || 7 : this.days || 7
       const activeDays = this.isCustomReport
-        ? (this.sessionDays || fallbackDays)
-        : (this.$route.query.days || fallbackDays)
+        ? this.sessionDays || fallbackDays
+        : this.$route.query.days || fallbackDays
       return {
         days: normalizeReportDays(activeDays, '7')
       }
@@ -173,7 +179,7 @@ export default {
       const now = Date.now()
       const cached = this.reportFetchCache[url]
       // Reuse recent same-url result to absorb rapid duplicate triggers.
-      if (cached && (now - cached.ts) < 600) {
+      if (cached && now - cached.ts < 600) {
         reportDebugLog('mixin.fetch.cacheHit', { name: this.name, requestUrl: url })
         return cached.data
       }
@@ -181,7 +187,8 @@ export default {
         reportDebugLog('mixin.fetch.inFlightJoin', { name: this.name, requestUrl: url })
         return this.reportFetchInFlight[url]
       }
-      const request = this.$axios.get(url)
+      const request = this.$axios
+        .get(url)
         .then((res) => {
           this.reportFetchCache[url] = { ts: Date.now(), data: res }
           return res
@@ -235,7 +242,9 @@ export default {
           this.sessionDays || (this.reportDetail && this.reportDetail.days) || '7',
           '7'
         )
-        const requestUrl = appendQuery(`/api/v1/reports/reports/${reportId}/data/`, { days: effectiveDays })
+        const requestUrl = appendQuery(`/api/v1/reports/reports/${reportId}/data/`, {
+          days: effectiveDays
+        })
         reportDebugLog('mixin.fetch.custom', {
           name: this.name,
           requestUrl,
@@ -258,7 +267,10 @@ export default {
         if (!k) return ''
         const labelKey = TABLE_LABEL_KEY_MAP[k]
         if (labelKey) return this.$t(labelKey)
-        return k.replace(/_/g, ' ').replace(/metrics/gi, '').trim()
+        return k
+          .replace(/_/g, ' ')
+          .replace(/metrics/gi, '')
+          .trim()
       }
 
       const translateColumnLabel = (label) => {
@@ -267,10 +279,22 @@ export default {
         const labelKey = COLUMN_LABEL_KEY_MAP[l]
         if (labelKey) return this.$t(labelKey)
         // specific patterns first to avoid generic 'total' overriding them
-        if (l.includes('active_users') || l.includes('total_count_active_users')) return this.$t('ActiveUsers')
-        if (l.includes('active_assets') || l.includes('total_count_active_assets')) return this.$t('ActiveAssets')
-        if (l.includes('success') || l === 'dates_metrics_total_count_success') return this.$t('Success')
-        if (l.includes('failure') || l.includes('failed') || l === 'dates_metrics_total_count_failed') return this.$t('Failed')
+        if (l.includes('active_users') || l.includes('total_count_active_users')) {
+          return this.$t('ActiveUsers')
+        }
+        if (l.includes('active_assets') || l.includes('total_count_active_assets')) {
+          return this.$t('ActiveAssets')
+        }
+        if (l.includes('success') || l === 'dates_metrics_total_count_success') {
+          return this.$t('Success')
+        }
+        if (
+          l.includes('failure') ||
+          l.includes('failed') ||
+          l === 'dates_metrics_total_count_failed'
+        ) {
+          return this.$t('Failed')
+        }
         if (l.includes('count')) return this.$t('Count')
         if (l.includes('total')) return this.$t('Total')
         return String(label).replace(/_/g, ' ')
@@ -292,7 +316,7 @@ export default {
           // Helper to build date-based table from a metric object
           const buildDateTable = (groupKey, groupVal) => {
             const dates = groupVal.dates_metrics_date || []
-            const rows = dates.map(d => ({ date: d }))
+            const rows = dates.map((d) => ({ date: d }))
             const columns = [{ key: 'date', label: this.$t('Date') }]
 
             Object.entries(groupVal).forEach(([k, v]) => {
@@ -304,7 +328,7 @@ export default {
                 const label = translateColumnLabel(raw)
                 columns.push({ key: colKey, label })
                 rows.forEach((row, idx) => {
-                  row[colKey] = (v && v[idx] !== undefined && v[idx] !== null) ? v[idx] : 0
+                  row[colKey] = v && v[idx] !== undefined && v[idx] !== null ? v[idx] : 0
                 })
                 return
               }
@@ -316,7 +340,10 @@ export default {
                   const label = translateColumnLabel(innerKey)
                   columns.push({ key: colKey, label })
                   rows.forEach((row, idx) => {
-                    row[colKey] = (innerArr && innerArr[idx] !== undefined && innerArr[idx] !== null) ? innerArr[idx] : 0
+                    row[colKey] =
+                      innerArr && innerArr[idx] !== undefined && innerArr[idx] !== null
+                        ? innerArr[idx]
+                        : 0
                   })
                 })
               }
@@ -335,9 +362,27 @@ export default {
               continue
             }
 
-            if (Array.isArray(v) && v.length && typeof v[0] === 'object' && ('name' in v[0] || 'label' in v[0])) {
-              const columns = [{ key: 'name', label: this.$t('Name') }, { key: 'value', label: this.$t('Value') }]
-              const rows = v.map(item => ({ name: item.name || item.label || '', value: (item.value !== undefined && item.value !== null) ? item.value : (item.count !== undefined && item.count !== null) ? item.count : (item.total !== undefined && item.total !== null) ? item.total : 0 }))
+            if (
+              Array.isArray(v) &&
+              v.length &&
+              typeof v[0] === 'object' &&
+              ('name' in v[0] || 'label' in v[0])
+            ) {
+              const columns = [
+                { key: 'name', label: this.$t('Name') },
+                { key: 'value', label: this.$t('Value') }
+              ]
+              const rows = v.map((item) => ({
+                name: item.name || item.label || '',
+                value:
+                  item.value !== undefined && item.value !== null
+                    ? item.value
+                    : item.count !== undefined && item.count !== null
+                      ? item.count
+                      : item.total !== undefined && item.total !== null
+                        ? item.total
+                        : 0
+              }))
               tables.push({ name: buildLabel(k) || k, columns, rows })
               continue
             }
@@ -345,10 +390,12 @@ export default {
             if (Array.isArray(v) && v.length && typeof v[0] === 'object') {
               const firstItem = v[0]
               const itemKeys = Object.keys(firstItem)
-              const columns = itemKeys.map(ik => ({ key: ik, label: translateColumnLabel(ik) }))
-              const rows = v.map(item => {
+              const columns = itemKeys.map((ik) => ({ key: ik, label: translateColumnLabel(ik) }))
+              const rows = v.map((item) => {
                 const row = {}
-                itemKeys.forEach(ik => { row[ik] = (item[ik] !== undefined && item[ik] !== null) ? item[ik] : 0 })
+                itemKeys.forEach((ik) => {
+                  row[ik] = item[ik] !== undefined && item[ik] !== null ? item[ik] : 0
+                })
                 return row
               })
               tables.push({ name: buildLabel(k) || k, columns, rows })
@@ -357,11 +404,16 @@ export default {
 
             if (typeof v === 'object') {
               const entries = Object.entries(v)
-              const primitive = entries.every(([, val]) => (typeof val !== 'object'))
+              const primitive = entries.every(([, val]) => typeof val !== 'object')
               if (primitive) {
-                const columns = [{ key: 'metric', label: this.$t('Metric') }, { key: 'value', label: this.$t('Value') }]
+                const columns = [
+                  { key: 'metric', label: this.$t('Metric') },
+                  { key: 'value', label: this.$t('Value') }
+                ]
                 const rows = entries
-                  .filter(([kk, vv]) => !(k === 'user_stats' && kk === 'face_vector' && Number(vv) === 0))
+                  .filter(
+                    ([kk, vv]) => !(k === 'user_stats' && kk === 'face_vector' && Number(vv) === 0)
+                  )
                   .map(([kk, vv]) => ({ metric: translateColumnLabel(kk) || kk, value: vv }))
                 tables.push({ name: buildLabel(k) || k, columns, rows })
                 continue
@@ -375,16 +427,21 @@ export default {
                   tables.push(buildDateTable(k, v))
                   continue
                 }
-                const firstNonEmpty = entries.find(([, val]) => Array.isArray(val) && val.length > 0)
+                const firstNonEmpty = entries.find(
+                  ([, val]) => Array.isArray(val) && val.length > 0
+                )
                 const subKeys = firstNonEmpty ? Object.keys(firstNonEmpty[1][0]) : []
-                const nestedCols = [{ key: '__category', label: this.$t('Category') }]
-                  .concat(subKeys.map(sk => ({ key: sk, label: translateColumnLabel(sk) })))
+                const nestedCols = [{ key: '__category', label: this.$t('Category') }].concat(
+                  subKeys.map((sk) => ({ key: sk, label: translateColumnLabel(sk) }))
+                )
                 const flatRows = []
                 for (const [catKey, catList] of entries) {
                   if (Array.isArray(catList)) {
-                    catList.forEach(item => {
+                    catList.forEach((item) => {
                       const row = { __category: catKey }
-                      subKeys.forEach(sk => { row[sk] = (item[sk] !== undefined && item[sk] !== null) ? item[sk] : 0 })
+                      subKeys.forEach((sk) => {
+                        row[sk] = item[sk] !== undefined && item[sk] !== null ? item[sk] : 0
+                      })
                       flatRows.push(row)
                     })
                   }
@@ -407,7 +464,9 @@ export default {
 
       // fallback: request export=table
       try {
-        const fallback = await this.$axios.get(appendQuery(this.buildTemplateUrl(baseUrl), { export: 'table' }))
+        const fallback = await this.$axios.get(
+          appendQuery(this.buildTemplateUrl(baseUrl), { export: 'table' })
+        )
         this.tableData = fallback
         return
       } catch (e) {
@@ -442,12 +501,14 @@ export default {
       if (!this.isCustomReport) {
         const routeVC = this.$route.query.visible_charts
         const routeVT = this.$route.query.visible_tables
-        const chartsSource = routeVC !== undefined && routeVC !== null
-          ? routeVC
-          : this.reportDetail?.filters?.visible_charts
-        const tablesSource = routeVT !== undefined && routeVT !== null
-          ? routeVT
-          : this.reportDetail?.filters?.visible_tables
+        const chartsSource =
+          routeVC !== undefined && routeVC !== null
+            ? routeVC
+            : this.reportDetail?.filters?.visible_charts
+        const tablesSource =
+          routeVT !== undefined && routeVT !== null
+            ? routeVT
+            : this.reportDetail?.filters?.visible_tables
         if (chartsSource !== undefined && chartsSource !== null) {
           const list = normalizeVisibleFilterList(chartsSource)
           query.visible_charts = list.length ? list.join(',') : ''

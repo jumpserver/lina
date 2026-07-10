@@ -145,7 +145,7 @@ export default {
       if (Array.isArray(raw) && raw.length === 0) return []
       const safeOptions = Array.isArray(options) ? options : []
       const optionNames = safeOptions
-        .map(item => String(item && item.name ? item.name : '').trim())
+        .map((item) => String(item && item.name ? item.name : '').trim())
         .filter(Boolean)
       const optionNameSet = new Set(optionNames)
       const titleToName = safeOptions.reduce((acc, item) => {
@@ -158,15 +158,11 @@ export default {
         if (optionNameSet.has(s)) return s
         return titleToName[s] || ''
       }
-      const picked = (Array.isArray(raw) ? raw : [])
-        .map(toName)
-        .filter(Boolean)
+      const picked = (Array.isArray(raw) ? raw : []).map(toName).filter(Boolean)
       if (picked.length) {
         return Array.from(new Set(picked))
       }
-      const fallbackPicked = (Array.isArray(fallback) ? fallback : [])
-        .map(toName)
-        .filter(Boolean)
+      const fallbackPicked = (Array.isArray(fallback) ? fallback : []).map(toName).filter(Boolean)
       return fallbackPicked.length ? Array.from(new Set(fallbackPicked)) : optionNames
     },
     getInitialForm() {
@@ -220,10 +216,13 @@ export default {
       if (this.isEdit && name === (this.report?.name || '').trim()) {
         return callback()
       }
-      this.$axios.get('/api/v1/reports/reports/', { params: { name } })
-        .then(res => {
-          const list = Array.isArray(res) ? res : (res.results || [])
-          const conflicting = list.filter(item => !this.isEdit || String(item.id) !== String(this.report?.id))
+      this.$axios
+        .get('/api/v1/reports/reports/', { params: { name } })
+        .then((res) => {
+          const list = Array.isArray(res) ? res : res.results || []
+          const conflicting = list.filter(
+            (item) => !this.isEdit || String(item.id) !== String(this.report?.id)
+          )
           if (conflicting.length > 0) {
             callback(new Error(this.$t('ReportNameAlreadyExists')))
           } else {
@@ -240,10 +239,14 @@ export default {
         }
         this.submitting = true
         try {
-          const url = this.isEdit ? `/api/v1/reports/reports/${this.report.id}/` : '/api/v1/reports/reports/'
+          const url = this.isEdit
+            ? `/api/v1/reports/reports/${this.report.id}/`
+            : '/api/v1/reports/reports/'
           const method = this.isEdit ? 'put' : 'post'
           const res = await this.$axios[method](url, payload)
-          this.$message.success(this.isEdit ? this.$t('UpdateSuccessMsg') : this.$t('CreateSuccessMsg'))
+          this.$message.success(
+            this.isEdit ? this.$t('UpdateSuccessMsg') : this.$t('CreateSuccessMsg')
+          )
           this.$emit('created', res)
           this.handleClose()
         } finally {

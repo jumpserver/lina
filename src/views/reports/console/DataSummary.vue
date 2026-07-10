@@ -60,8 +60,12 @@ export default {
           &total_count_today_active_assets=1
         `)
 
-      const loginUserCountDecimal = data.total_count_login_users ? new Decimal(data.total_count_login_users) : new Decimal(0)
-      const userCountDecimal = data.total_count_users ? new Decimal(data.total_count_users) : new Decimal(0)
+      const loginUserCountDecimal = data.total_count_login_users
+        ? new Decimal(data.total_count_login_users)
+        : new Decimal(0)
+      const userCountDecimal = data.total_count_users
+        ? new Decimal(data.total_count_users)
+        : new Decimal(0)
 
       let userActive = loginUserCountDecimal.dividedBy(userCountDecimal).times(100)
       userActive = isNaN(userActive) ? 0 : userActive
@@ -76,8 +80,12 @@ export default {
       this.userConfig.active = data.total_count_login_users
       this.userConfig.weekAdd = data.total_count_users_this_week
 
-      const ActiveAssetCountDecimal = data.total_count_today_active_assets ? new Decimal(data.total_count_today_active_assets) : new Decimal(0)
-      const AssetCountDecimal = data.total_count_assets ? new Decimal(data.total_count_assets) : new Decimal(0)
+      const ActiveAssetCountDecimal = data.total_count_today_active_assets
+        ? new Decimal(data.total_count_today_active_assets)
+        : new Decimal(0)
+      const AssetCountDecimal = data.total_count_assets
+        ? new Decimal(data.total_count_assets)
+        : new Decimal(0)
 
       let assetActive = ActiveAssetCountDecimal.dividedBy(AssetCountDecimal).times(100)
       assetActive = isNaN(assetActive) ? 0 : assetActive
@@ -97,7 +105,8 @@ export default {
 </script>
 
 <style scoped>
-.left, .right {
+.left,
+.right {
   display: inline-block;
 }
 </style>

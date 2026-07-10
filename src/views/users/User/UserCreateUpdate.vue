@@ -9,12 +9,7 @@
   </div>
 </template>
 
-<script>
-import {
-  resolveComponent as resolveComponentCompat,
-  createTextVNode as createTextVNodeCompat,
-  createVNode as createVNodeCompat
-} from 'vue'
+<script lang="jsx">
 import store from '@/store'
 import { mapGetters } from 'vuex'
 import { Select2 } from '@/components'
@@ -145,29 +140,13 @@ export default {
           rules: this.$store.getters.currentOrgIsRoot ? [] : [rules.RequiredChange],
           helpTextFormatter: () => {
             const handleClick = () => {
-              this.$router.push({
-                name: 'RoleList'
-              })
+              this.$router.push({ name: 'RoleList' })
               // window.open('/settings/roles', '_blank')
             }
-            return createVNodeCompat(
-              resolveComponentCompat('el-link'),
-              {
-                onClick: handleClick
-              },
-              {
-                default: () => [
-                  createVNodeCompat(
-                    'i',
-                    {
-                      class: 'fa fa-external-link'
-                    },
-                    null
-                  ),
-                  createTextVNodeCompat(' '),
-                  roleManage
-                ]
-              }
+            return (
+              <el-link onClick={handleClick}>
+                <i class="fa fa-external-link" /> {roleManage}
+              </el-link>
             )
           },
           el: {

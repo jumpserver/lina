@@ -35,7 +35,7 @@ export default {
         hasSaveContinue: false,
         fields: [],
         fieldsMeta: accountFieldsMeta(this),
-        cleanOtherFormValue: formValue => {
+        cleanOtherFormValue: (formValue) => {
           for (const value of formValue) {
             Object.keys(value).forEach((item, index, arr) => {
               if (['ssh_key', 'token', 'access_key', 'api_key', 'password'].includes(item)) {

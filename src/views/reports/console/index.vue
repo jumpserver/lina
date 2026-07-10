@@ -60,9 +60,7 @@ export default {
   mounted() {
     this.reportUrl = getRouteUrl('ConsoleReport', this.$router)
   }
-
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

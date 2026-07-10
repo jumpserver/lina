@@ -65,14 +65,11 @@ export default {
   },
   methods: {
     async getData() {
-      this.data = await this.$axios.get(
-        '/api/v1/accounts/change-secret-dashboard/',
-        {
-          params: {
-            total_count_ongoing_change_secret: 1
-          }
+      this.data = await this.$axios.get('/api/v1/accounts/change-secret-dashboard/', {
+        params: {
+          total_count_ongoing_change_secret: 1
         }
-      )
+      })
     }
   }
 }

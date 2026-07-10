@@ -1,12 +1,12 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm v-bind="config" @submit-success="submitSuccess"/>
+    <GenericCreateUpdateForm v-bind="config" @submit-success="submitSuccess" />
   </IBox>
 </template>
 
 <script>
-import {GenericCreateUpdateForm} from '@/layout/components'
-import {IBox} from '@/components'
+import { GenericCreateUpdateForm } from '@/layout/components'
+import { IBox } from '@/components'
 
 export default {
   name: 'Ops',
@@ -24,9 +24,13 @@ export default {
     return {
       visible: false,
       config: {
-        fields: ['SECURITY_COMMAND_EXECUTION', 'ANSIBLE_DOCKER_ENABLED', 'SECURITY_COMMAND_BLACKLIST'],
+        fields: [
+          'SECURITY_COMMAND_EXECUTION',
+          'ANSIBLE_DOCKER_ENABLED',
+          'SECURITY_COMMAND_BLACKLIST'
+        ],
         fieldsMeta: {},
-        successUrl: {name: 'Settings', params: {activeMenu: 'Basic'}},
+        successUrl: { name: 'Settings', params: { activeMenu: 'Basic' } },
         url: '/api/v1/settings/setting/?category=ops',
         hasReset: false,
         submitMethod() {

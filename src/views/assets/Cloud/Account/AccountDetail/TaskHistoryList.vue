@@ -6,21 +6,10 @@
   />
 </template>
 
-<script>
-import {
-  createVNode as createVNodeCompat,
-  isVNode as isVNodeCompat,
-  resolveComponent as resolveComponentCompat
-} from 'vue'
+<script lang="jsx">
 import GenericListTable from '@/layout/components/GenericListTable/index'
 import { ActionsFormatter, DateFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
-function _isSlot(s) {
-  return (
-    typeof s === 'function' ||
-    (Object.prototype.toString.call(s) === '[object Object]' && !isVNodeCompat(s))
-  )
-}
 export default {
   name: 'TaskHistoryList',
   components: {
@@ -68,32 +57,16 @@ export default {
             label: this.$t('Status'),
             formatter: (row) => {
               if (row.status === 1) {
-                let _slot
-                return createVNodeCompat(
-                  resolveComponentCompat('el-tag'),
-                  {
-                    type: 'primary',
-                    size: 'small'
-                  },
-                  _isSlot((_slot = this.$t('Success')))
-                    ? _slot
-                    : {
-                        default: () => [_slot]
-                      }
+                return (
+                  <el-tag type="primary" size="small">
+                    {this.$t('Success')}
+                  </el-tag>
                 )
               } else {
-                let _slot2
-                return createVNodeCompat(
-                  resolveComponentCompat('el-tag'),
-                  {
-                    type: 'danger',
-                    size: 'small'
-                  },
-                  _isSlot((_slot2 = this.$t('Failed')))
-                    ? _slot2
-                    : {
-                        default: () => [_slot2]
-                      }
+                return (
+                  <el-tag type="danger" size="small">
+                    {this.$t('Failed')}
+                  </el-tag>
                 )
               }
             }

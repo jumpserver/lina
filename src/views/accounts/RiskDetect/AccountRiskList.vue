@@ -20,8 +20,7 @@
   </div>
 </template>
 
-<script>
-import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
+<script lang="jsx">
 import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
 import RiskHandleFormatter from './RiskHandlerFormatter/index.vue'
 import BatchResolveDialog from '@/views/accounts/RiskDetect/RiskHandlerFormatter/BatchResolveDialog.vue'
@@ -120,16 +119,10 @@ export default {
           },
           risk: {
             formatter: (row) => {
-              return createVNodeCompat(
-                resolveComponentCompat('el-tag'),
-                {
-                  size: 'small',
-                  type: 'danger',
-                  effect: 'plain'
-                },
-                {
-                  default: () => [row.risk.label]
-                }
+              return (
+                <el-tag size="small" type="danger" effect="plain">
+                  {row.risk.label}
+                </el-tag>
               )
             }
           },

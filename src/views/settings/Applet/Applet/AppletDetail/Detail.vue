@@ -12,22 +12,10 @@
   </el-row>
 </template>
 
-<script>
-import {
-  createTextVNode as createTextVNodeCompat,
-  isVNode as isVNodeCompat,
-  resolveComponent as resolveComponentCompat,
-  createVNode as createVNodeCompat
-} from 'vue'
+<script lang="jsx">
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import VueMarkdown from '@/components/Widgets/VueMarkdown/index.vue'
 import { IBox } from '@/components'
-function _isSlot(s) {
-  return (
-    typeof s === 'function' ||
-    (Object.prototype.toString.call(s) === '[object Object]' && !isVNodeCompat(s))
-  )
-}
 export default {
   name: 'Detail',
   components: {
@@ -48,17 +36,7 @@ export default {
       detailFields: [
         {
           key: '',
-          formatter: () => {
-            return createVNodeCompat(
-              'img',
-              {
-                src: this.object.icon,
-                alt: '',
-                height: '40'
-              },
-              null
-            )
-          }
+          formatter: () => <img src={this.object.icon} alt="" height="40" />
         },
         'name',
         'display_name',
@@ -67,50 +45,32 @@ export default {
           key: this.$t('Protocols'),
           formatter: () => {
             const types = ['primary', 'success', 'warning', 'danger']
-            const data = this.object.protocols.map((p, i) => {
-              return createVNodeCompat(
-                resolveComponentCompat('el-tag'),
-                {
-                  type: types[i % 4],
-                  size: 'small'
-                },
-                _isSlot(p)
-                  ? p
-                  : {
-                      default: () => [p]
-                    }
-              )
-            })
-            return createVNodeCompat('span', null, [
-              createTextVNodeCompat(' '),
-              data,
-              createTextVNodeCompat(' ')
-            ])
+            return (
+              <span>
+                {' '}
+                {this.object.protocols.map((p, i) => (
+                  <el-tag key={i} type={types[i % 4]} size="small">
+                    {p}
+                  </el-tag>
+                ))}{' '}
+              </span>
+            )
           }
         },
         {
           key: this.$t('Tags'),
           formatter: () => {
             const types = ['primary', 'success', 'warning', 'danger']
-            const data = this.object.tags.map((p, i) => {
-              return createVNodeCompat(
-                resolveComponentCompat('el-tag'),
-                {
-                  type: types[i % 4],
-                  size: 'small'
-                },
-                _isSlot(p)
-                  ? p
-                  : {
-                      default: () => [p]
-                    }
-              )
-            })
-            return createVNodeCompat('span', null, [
-              createTextVNodeCompat(' '),
-              data,
-              createTextVNodeCompat(' ')
-            ])
+            return (
+              <span>
+                {' '}
+                {this.object.tags.map((p, i) => (
+                  <el-tag key={i} type={types[i % 4]} size="small">
+                    {p}
+                  </el-tag>
+                ))}{' '}
+              </span>
+            )
           }
         },
         {
@@ -119,34 +79,30 @@ export default {
         },
         {
           key: this.$t('Active'),
-          formatter: () => {
-            return createVNodeCompat(
-              resolveComponentCompat('el-switch'),
-              {
-                modelValue: this.object.is_active,
-                'onUpdate:modelValue': ($event) => (this.object.is_active = $event),
-                disabled: !vm.$hasPerm('terminal.change_applet'),
-                onChange: (v) => {
-                  const url = `/api/v1/terminal/applets/${vm.object.id}/`
-                  const data = {
-                    is_active: v
-                  }
-                  vm.$axios
-                    .patch(url, data)
-                    .catch(() => {
-                      this.object.is_active = !v
-                    })
-                    .then((res) => {
-                      vm.$message.success(vm.$t('UpdateSuccessMsg'))
-                    })
-                    .catch((err) => {
-                      vm.$message.error(vm.$t('UpdateErrorMsg' + ' ' + err))
-                    })
+          formatter: () => (
+            <el-switch
+              modelValue={this.object.is_active}
+              onUpdate:modelValue={($event) => (this.object.is_active = $event)}
+              disabled={!vm.$hasPerm('terminal.change_applet')}
+              onChange={(v) => {
+                const url = `/api/v1/terminal/applets/${vm.object.id}/`
+                const data = {
+                  is_active: v
                 }
-              },
-              null
-            )
-          }
+                vm.$axios
+                  .patch(url, data)
+                  .catch(() => {
+                    this.object.is_active = !v
+                  })
+                  .then((res) => {
+                    vm.$message.success(vm.$t('UpdateSuccessMsg'))
+                  })
+                  .catch((err) => {
+                    vm.$message.error(vm.$t('UpdateErrorMsg' + ' ' + err))
+                  })
+              }}
+            />
+          )
         },
         'edition',
         'can_concurrent',

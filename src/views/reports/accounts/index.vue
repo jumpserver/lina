@@ -1,17 +1,13 @@
 <template>
   <Page>
     <el-row :gutter="10">
-      <el-col :span="4" style="padding: 10px;">
+      <el-col :span="4" style="padding: 10px">
         <div class="tag-container">
           <h5>{{ title }}</h5>
           <ul class="folder-list m-b-md" style="padding: 0">
-            <li
-              v-for="chart in chartItems"
-              :key="chart.key"
-              :class="{ active: isActive(chart) }"
-            >
+            <li v-for="chart in chartItems" :key="chart.key" :class="{ active: isActive(chart) }">
               <a class="menu-link" @click="handleChangeChart(chart)">
-                <i :class="chart.icon" style="margin-right: 6px;" />
+                <i :class="chart.icon" style="margin-right: 6px" />
                 {{ chart.title }}
               </a>
               <ul v-if="chart.children && chart.children.length" class="report-children">
@@ -40,7 +36,11 @@
 import Page from '@/layout/components/Page'
 import AccountStatistics from '@/views/reports/accounts/AccountStatistics.vue'
 import AccountAutomation from '@/views/reports/accounts/AccountAutomation.vue'
-import { appendQuery, buildCustomReportRouteQuery, reportDebugLog } from '@/views/reports/base/reportUtils'
+import {
+  appendQuery,
+  buildCustomReportRouteQuery,
+  reportDebugLog
+} from '@/views/reports/base/reportUtils'
 
 const MENU_ITEMS = [
   {
@@ -112,24 +112,25 @@ export default {
   },
   methods: {
     getBaseItems() {
-      return MENU_ITEMS
-        .filter(item => this.$hasPerm(item.perm))
-        .map(item => ({
-          key: item.key,
-          title: this.$t(item.titleKey),
-          component: item.component,
-          path: item.path,
-          icon: item.icon,
-          isCustom: false,
-          reportType: item.reportType,
-          query: {
-            chart_key: item.key
-          },
-          children: []
-        }))
+      return MENU_ITEMS.filter((item) => this.$hasPerm(item.perm)).map((item) => ({
+        key: item.key,
+        title: this.$t(item.titleKey),
+        component: item.component,
+        path: item.path,
+        icon: item.icon,
+        isCustom: false,
+        reportType: item.reportType,
+        query: {
+          chart_key: item.key
+        },
+        children: []
+      }))
     },
     async loadCatalog() {
-      reportDebugLog('accounts.index.loadCatalog.start', { routePath: this.$route.path, query: this.$route.query })
+      reportDebugLog('accounts.index.loadCatalog.start', {
+        routePath: this.$route.path,
+        query: this.$route.query
+      })
       this.catalogLoaded = false
       const items = this.getBaseItems()
       const itemMap = items.reduce((acc, item) => {
@@ -145,7 +146,7 @@ export default {
           if (!target) {
             return
           }
-          target.children = (group.children || []).map(child => ({
+          target.children = (group.children || []).map((child) => ({
             key: `report-${child.id}`,
             title: child.name,
             component: target.component,
@@ -164,19 +165,19 @@ export default {
       this.chartItems = items
       this.catalogLoaded = true
       reportDebugLog('accounts.index.loadCatalog.done', {
-        items: items.map(item => ({ key: item.key, childCount: (item.children || []).length }))
+        items: items.map((item) => ({ key: item.key, childCount: (item.children || []).length }))
       })
       this.syncSelectedFromRoute()
     },
     syncSelectedFromRoute() {
-      const normalizeRouteValue = (v) => (Array.isArray(v) ? v[0] : (v || ''))
+      const normalizeRouteValue = (v) => (Array.isArray(v) ? v[0] : v || '')
       const raw = this.$route.query.report_id
       const reportId = Array.isArray(raw) ? raw[0] : raw
       let target = null
       if (reportId) {
         target = this.chartItems
-          .flatMap(item => item.children || [])
-          .find(item => String(item.reportId) === String(reportId))
+          .flatMap((item) => item.children || [])
+          .find((item) => String(item.reportId) === String(reportId))
         if (!target) {
           if (!this.catalogLoaded) {
             return
@@ -196,8 +197,9 @@ export default {
       }
       if (!target) {
         const chartKey = this.$route.query.chart_key
-        target = this.chartItems.find(item => item.key === chartKey) ||
-          this.chartItems.find(item => item.key === this.selectedChartKey) ||
+        target =
+          this.chartItems.find((item) => item.key === chartKey) ||
+          this.chartItems.find((item) => item.key === this.selectedChartKey) ||
           this.chartItems[0]
       }
       if (target?.isCustom) {
@@ -211,7 +213,8 @@ export default {
           report_id: normalizeRouteValue(rq.report_id)
         }
         const baseNeedsCorrection = JSON.stringify(currentBase) !== JSON.stringify(desiredBase)
-        const hasStaleVisibleParams = rq.visible_charts !== undefined || rq.visible_tables !== undefined
+        const hasStaleVisibleParams =
+          rq.visible_charts !== undefined || rq.visible_tables !== undefined
         if (baseNeedsCorrection || hasStaleVisibleParams) {
           const correctedQuery = { ...desiredBase }
           if (rq.days) correctedQuery.days = rq.days
