@@ -102,30 +102,29 @@ export default {
   width: 100%;
 
   .icon-zone {
-    flex: 0 0 44px;
-    width: 44px;
-    height: 44px;
+    flex: 0 0 80px;
+    width: 80px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 2px;
 
     img {
-      max-width: 44px;
-      max-height: 44px;
+      max-width: 60px;
+      max-height: 60px;
       object-fit: contain;
     }
 
     // 命名图标统一尺寸
     :deep(svg) {
-      width: 32px;
-      height: 32px;
+      width: 40px;
+      height: 40px;
     }
 
     // 无图/图裂时的文字占位块:方形 6px 圆角,取名称前两字
     .text-icon {
-      width: 44px;
-      height: 44px;
+      width: 60px;
+      height: 60px;
       display: flex;
       align-items: center;
       justify-content: center;
