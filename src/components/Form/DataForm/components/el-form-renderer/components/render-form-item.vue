@@ -83,17 +83,17 @@
         </el-radio>
       </template>
     </component>
-    <div v-if="data.helpText" :class="data.type" class="help-block">
+    <div v-if="helpText" :class="data.type" class="help-block">
       <el-alert
-        v-if="data.helpText.startsWith('!')"
+        v-if="helpText.startsWith('!')"
         :closable="false"
         class="help-warning"
         show-icon
         type="info"
       >
-        <span v-sanitize="data.helpText.replace(/^!/, '')" />
+        <span v-sanitize="helpText.replace(/^!/, '')" />
       </el-alert>
-      <span v-else v-sanitize="data.helpText" />
+      <span v-else v-sanitize="helpText" />
     </div>
     <div v-if="data.helpTextFormatter" class="help-block">
       <RenderHelpTextSafe :render-content="data.helpTextFormatter" />
@@ -175,6 +175,9 @@ export default {
     }
   },
   computed: {
+    helpText() {
+      return typeof this.data.helpText === 'string' ? this.data.helpText : ''
+    },
     itemProp() {
       return this.prop || this.data.id
     },

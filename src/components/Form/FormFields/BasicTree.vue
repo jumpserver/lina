@@ -3,7 +3,7 @@
     :data="iTree"
     :default-checked-keys="iValue"
     :default-expand-all="expandAll"
-    :default-expanded-keys="defaultExpanded"
+    :default-expanded-keys="iDefaultExpanded"
     :props="defaultProps"
     :render-content="renderContent"
     class="el-tree-custom"
@@ -71,11 +71,17 @@ export default {
       } else {
         return this.setTreeReadonly(this.tree)
       }
-    }
-  },
-  mounted() {
-    if (this.iTree && this.iTree.length > 0) {
-      this.defaultExpanded.push(this.iTree[0].value)
+    },
+    // 默认展开一层:根节点 value 与外部传入的 defaultExpanded 合并。
+    // el-tree 只在初始化时读取 default-expanded-keys,必须在首次渲染前就备好
+    // (原先在 mounted 里 push 太晚,且改动了 prop,故从不生效)
+    iDefaultExpanded() {
+      const keys = [...this.defaultExpanded]
+      const rootValue = this.iTree?.[0]?.value
+      if (rootValue !== undefined && !keys.includes(rootValue)) {
+        keys.push(rootValue)
+      }
+      return keys
     }
   },
   methods: {

@@ -16,7 +16,7 @@
         :model="requestForm"
         class="assets"
         label-position="left"
-        label-width="140px"
+        label-width="auto"
       >
         <el-form-item :label="$tc('Node')">
           <Select2 v-bind="nodeSelect2" v-model="requestForm.nodes" style="width: 50% !important" />
@@ -287,6 +287,23 @@ export default {
 <style scoped>
 .assets {
   margin-top: 14px;
+}
+
+/* 开始/失效日期:与上方字段一致 50% 宽度;并修正时钟前缀图标
+   (全站 mixin 的 .el-input__icon{vertical-align:super} 会让图标偏上/错位) */
+.assets :deep(.el-date-editor.el-input) {
+  width: 50%;
+
+  .el-input__prefix,
+  .el-input__prefix-inner {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .el-input__icon {
+    vertical-align: middle;
+    height: auto;
+  }
 }
 
 .feed-activity-list .feed-element {
