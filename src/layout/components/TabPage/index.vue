@@ -62,6 +62,7 @@
 
 <script>
 import Icon from '@/components/Widgets/Icon'
+import { TAB_NAVIGATION_CONTEXT, TAB_NAVIGATION_SCOPE } from '@/components/Drawer/context'
 import { toSentenceCase } from '@/utils/common/index'
 import { resolveAsyncComponentCompat } from '@/utils/vue'
 import { scopedLocalStorage as localStorage } from '@/utils/storage'
@@ -72,6 +73,12 @@ export default {
   components: {
     Page,
     Icon
+  },
+  inject: {
+    tabNavigationContext: {
+      from: TAB_NAVIGATION_CONTEXT,
+      default: () => ({ scope: TAB_NAVIGATION_SCOPE.ROUTE })
+    }
   },
   props: {
     submenu: {
@@ -96,6 +103,11 @@ export default {
     title: {
       type: String,
       default: ''
+    },
+    navigationScope: {
+      type: String,
+      default: 'auto',
+      validator: (value) => ['auto', ...Object.values(TAB_NAVIGATION_SCOPE)].includes(value)
     }
   },
   emits: ['update:activeMenu', 'tab-click'],
@@ -110,6 +122,15 @@ export default {
   computed: {
     iHelpMessage() {
       return this.helpMessage || this.helpTip
+    },
+    effectiveNavigationScope() {
+      if (this.navigationScope !== 'auto') {
+        return this.navigationScope
+      }
+      return this.tabNavigationContext.scope
+    },
+    shouldSyncTabState() {
+      return this.effectiveNavigationScope === TAB_NAVIGATION_SCOPE.ROUTE
     },
     activeTabStorageKey() {
       const routeKey =
@@ -153,6 +174,9 @@ export default {
       }
     },
     '$route.query.tab'() {
+      if (!this.shouldSyncTabState) {
+        return
+      }
       this.syncActiveTab()
     },
     activeTabStorageKey() {
@@ -160,6 +184,9 @@ export default {
     },
     iActiveMenu(newValue) {
       if (!newValue) {
+        return
+      }
+      if (!this.shouldSyncTabState) {
         return
       }
       localStorage.setItem(this.activeTabStorageKey, newValue)
@@ -194,11 +221,13 @@ export default {
     getPropActiveTab() {
       let activeTab = ''
 
-      const preActiveTabs = [
-        this.$route.query['tab'],
-        localStorage.getItem(this.activeTabStorageKey),
-        this.activeMenu
-      ]
+      const preActiveTabs = this.shouldSyncTabState
+        ? [
+            this.$route.query['tab'],
+            localStorage.getItem(this.activeTabStorageKey),
+            this.activeMenu
+          ]
+        : [this.activeMenu]
 
       for (const preTab of preActiveTabs) {
         const currentTab = typeof preTab === 'object' ? preTab?.name || '' : preTab

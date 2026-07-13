@@ -34,8 +34,16 @@
 <script>
 import { getStoredDrawerWidth, useDrawerResize } from '@/composables/useDrawerResize'
 import { resolveAsyncComponentCompat } from '@/utils/vue'
+import { TAB_NAVIGATION_CONTEXT, TAB_NAVIGATION_SCOPE } from './context'
 
 export default {
+  provide() {
+    return {
+      [TAB_NAVIGATION_CONTEXT]: {
+        scope: TAB_NAVIGATION_SCOPE.LOCAL
+      }
+    }
+  },
   props: {
     title: {
       type: String,

@@ -7,6 +7,8 @@ import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage
 import { templateFields, templateFieldsMeta } from './const.js'
 import { encryptPassword } from '@/utils/secure'
 
+const typedSecretFields = ['ssh_key', 'token', 'access_key', 'api_key']
+
 export default {
   name: 'GatewayCreateUpdate',
   components: {
@@ -52,13 +54,32 @@ export default {
         }
       },
       cleanFormValue(value) {
-        Object.keys(value).forEach((item, index, arr) => {
-          if (['ssh_key', 'token', 'access_key', 'api_key'].includes(item)) {
-            value['secret'] = value[item]
-            delete value[item]
-          }
-        })
-        value['secret'] = encryptPassword(value['secret'])
+        const isRandomSecret = value.secret_strategy === 'random'
+        const typedSecretField = typedSecretFields.includes(value.secret_type)
+          ? value.secret_type
+          : null
+
+        if (isRandomSecret) {
+          delete value.secret
+        } else if (typedSecretField) {
+          value.secret = value[typedSecretField]
+        }
+
+        typedSecretFields.forEach((field) => delete value[field])
+
+        if (value.secret) {
+          value.secret = encryptPassword(value.secret)
+        } else {
+          delete value.secret
+        }
+
+        if (value.secret_type !== 'ssh_key' || isRandomSecret) {
+          delete value.passphrase
+        }
+        if (value.secret_type !== 'password' || !isRandomSecret) {
+          delete value.password_rules
+        }
+
         delete value.is_sync_account
         return value
       },

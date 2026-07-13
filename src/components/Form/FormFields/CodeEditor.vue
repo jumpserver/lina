@@ -259,7 +259,6 @@ export default {
       const defaultOptions = {
         tabSize: 4,
         mode: 'shell',
-        placeholder: 'Code goes here...',
         autofocus: true
       }
       return Object.assign(defaultOptions, this.options)
