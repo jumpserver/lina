@@ -183,9 +183,6 @@ export default {
       return this.iHeaderActions.has === undefined ? true : this.iHeaderActions.has
     },
     iTableConfig() {
-      if (this.isDeactivated) {
-        return
-      }
       const config = deepmerge(this.tableConfig, {
         extraQuery: this.extraQuery
       })
