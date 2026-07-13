@@ -280,8 +280,14 @@ export default {
           margin-left: -3px;
         }
 
+        // 高亮不只靠颜色:Deep black 等主题下 --color-primary 接近正文色,单纯变色看不出;
+        // 叠加加粗 + 下划线,任何主题下选中态都清晰可辨
         &.active {
           color: var(--color-primary);
+          font-weight: 600;
+          text-decoration: underline;
+          text-decoration-thickness: 2px;
+          text-underline-offset: 3px;
 
           i {
             visibility: visible;
