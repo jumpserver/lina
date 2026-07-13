@@ -99,6 +99,10 @@ export default {
     encryptFields: {
       type: Array,
       default: () => []
+    },
+    valueFormatters: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -268,6 +272,7 @@ export default {
           showOverflowTooltip: true,
           formatterArgs: {
             canEdit: this.canEdit,
+            getDisplayValue: this.valueFormatters[item[1]],
             onEnter: ({ row, col, oldValue, newValue }) => {
               const prop = col.prop
               row['@status'] = 'pending'
