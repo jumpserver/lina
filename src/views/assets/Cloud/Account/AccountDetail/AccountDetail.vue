@@ -1,7 +1,12 @@
 <template>
   <div>
     <TwoCol>
-      <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
+      <AutoDetailCard
+        :excludes="excludes"
+        :formatters="accountFormatters"
+        :object="object"
+        :url="url"
+      />
       <AutoDetailCard
         :fields="detailFields"
         :object="object"
@@ -62,6 +67,16 @@ export default {
       showTimer: false,
       url: `/api/v1/xpack/cloud/accounts/${this.object.id}/`,
       excludes: ['attrs', 'task'],
+      accountFormatters: {
+        category: (item, value) => {
+          const categoryMap = {
+            host: 'Host',
+            database: 'Database'
+          }
+          const i18nKey = categoryMap[value]
+          return i18nKey ? this.$t(i18nKey) : value
+        }
+      },
       quickEditActions: [
         {
           title: this.$t('IPType'),
