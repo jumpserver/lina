@@ -125,7 +125,7 @@ export default {
     &.is-active {
       position: relative;
       z-index: 2;
-      color: var(--color-primary);
+      color: var(--menu-active-text, var(--menu-text-active));
       background: var(--menu-hover);
       border-color: var(--color-primary);
     }

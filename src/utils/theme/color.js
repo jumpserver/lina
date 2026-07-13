@@ -133,28 +133,18 @@ function syncElementPlusColorVars(elementStyle, colorName, currentColor) {
   elementStyle.setProperty(`${elColorKey}-dark-2`, mix(black, currentColor.replace(/#/g, ''), 20))
 }
 
-// 判断颜色是否为深色（按相对亮度）。用于识别 Deep black 这类深色侧栏主题。
-function isDarkColor(hex) {
-  if (!hex || typeof hex !== 'string') return false
-  const c = hex.replace(/#/g, '').trim()
-  if (c.length < 6) return false
-  const r = Number.parseInt(c.slice(0, 2), 16)
-  const g = Number.parseInt(c.slice(2, 4), 16)
-  const b = Number.parseInt(c.slice(4, 6), 16)
-  if ([r, g, b].some(Number.isNaN)) return false
-  return 0.299 * r + 0.587 * g + 0.114 * b < 128
-}
-
 export function changeMenuColor(themeColors) {
   const elementStyle = document.documentElement.style
-  const colors = Object.keys(themeColors).length > 0 ? themeColors : defaultThemeConfig
+  const colors = {
+    ...(Object.keys(themeColors).length > 0 ? themeColors : defaultThemeConfig)
+  }
 
   const white = 'ffffff'
   const black = '000000'
 
-  // 后端不用返回 --menu-hover
+  // 兼容未返回 --menu-hover 的旧主题；新主题以 theme_info 为准。
   const menuActiveTextColor = colors['--menu-text-active']
-  if (menuActiveTextColor) {
+  if (!colors['--menu-hover'] && menuActiveTextColor) {
     colors['--menu-hover'] = mix(white, menuActiveTextColor.replace(/#/g, ''), 90)
   }
 
@@ -187,32 +177,6 @@ export function changeMenuColor(themeColors) {
       const darkColor = mix(black, currentColor.replace(/#/g, ''), 70)
       elementStyle.setProperty(key + '-light', lightColor)
       elementStyle.setProperty(key + '-dark', darkColor)
-    }
-  }
-
-  // 左侧菜单始终保持浅色。像 Deep black 这类主题会下发深色的 --menu-bg/--menu-text，
-  // 导致整个侧栏变黑（与其余主题“白底侧栏 + 强调色高亮”的设计不一致）。当主题的
-  // --menu-bg 判定为深色时，用主题强调色 --color-primary 派生一套浅色侧栏变量覆盖之，
-  // 复刻浅色主题的观感；顶栏、强调色等其余变量仍随主题变化。
-  const menuBg = colors['--menu-bg']
-  if (isDarkColor(menuBg)) {
-    const primary = colors['--color-primary'] || defaultThemeConfig['--color-primary']
-    const paleAccent = mix(white, primary.replace(/#/g, ''), 90)
-    const lightMenuVars = {
-      '--menu-bg': '#ffffff',
-      '--submenu-bg': '#ffffff',
-      '--menu-is-open-bg': '#ffffff',
-      '--menu-text': '#292827',
-      '--menu-border': '#e9ecef',
-      '--menu-text-active': primary,
-      '--menu-active-text': primary,
-      '--menu-active-indicator': primary,
-      '--menu-hover': paleAccent,
-      '--menu-hover-bg': paleAccent,
-      '--menu-active-bg': paleAccent
-    }
-    for (const [key, value] of Object.entries(lightMenuVars)) {
-      elementStyle.setProperty(key, value)
     }
   }
 }

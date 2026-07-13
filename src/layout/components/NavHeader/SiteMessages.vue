@@ -97,6 +97,7 @@
 import Dialog from '@/components/Dialog'
 import MarkDown from '@/components/Widgets/MarkDown'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
+import { formatSiteMessage } from './siteMessage'
 
 export default {
   name: 'SiteMessages',
@@ -120,30 +121,9 @@ export default {
     },
     // 站内信正文是 Markdown，且工单类消息把多个 "**字段:** 值" 挤在同一行，
     // 渲染出来是一坨内联文本。这里把每个 "**字段:**" 拆成独立的列表项（每字段一行），
-    // 再由样式排成信息表（标签/值）的形式。无粗体字段的普通消息保持原样。
+    // 再由样式排成信息表（标签/值）的形式。已有列表和无需拆分的消息保持原样。
     formattedMsg() {
-      const raw = this.currentMsg?.content?.message
-      if (!raw) return ''
-      return raw
-        .split('\n')
-        .map((line) => {
-          const trimmed = line.trimStart()
-          // 标题/引用行保持原样
-          if (
-            !trimmed ||
-            trimmed.startsWith('#') ||
-            trimmed.startsWith('>') ||
-            trimmed.startsWith('- ')
-          ) {
-            return line
-          }
-          // 该行含多个 "**字段:** 值" 时，为每个粗体字段起一个列表项
-          if ((line.match(/\*\*/g) || []).length >= 2) {
-            return line.replace(/\s*(\*\*[^*]+?\*\*)/g, '\n- $1').replace(/^\n/, '')
-          }
-          return line
-        })
-        .join('\n')
+      return formatSiteMessage(this.currentMsg?.content?.message)
     }
   },
   mounted() {

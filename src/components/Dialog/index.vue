@@ -170,6 +170,17 @@ export default {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+
+    .el-dialog__close {
+      color: var(--el-text-color-secondary);
+    }
+
+    &:hover,
+    &:focus {
+      .el-dialog__close {
+        color: var(--el-color-primary);
+      }
+    }
   }
 
   .el-dialog__body {
