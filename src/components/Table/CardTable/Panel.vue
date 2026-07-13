@@ -104,7 +104,8 @@ export default {
   .icon-zone {
     flex: 0 0 80px;
     width: 80px;
-    height: 60px;
+    height: auto;
+    align-self: stretch;
     display: flex;
     align-items: center;
     justify-content: center;
