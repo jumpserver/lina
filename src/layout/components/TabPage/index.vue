@@ -212,8 +212,12 @@ export default {
   },
   methods: {
     handleTabClick(tab) {
-      this.$emit('tab-click', tab)
-      this.iActiveMenu = tab.name
+      // Element Plus exposes the pane name as `paneName`. Keep `name` in the
+      // forwarded event for existing consumers, but let el-tabs' v-model be
+      // the single source of truth for the active tab. Reassigning from the
+      // obsolete `tab.name` clears the active component on repeated clicks.
+      const name = tab.paneName ?? tab.name ?? tab.props?.name
+      this.$emit('tab-click', tab.name === name ? tab : { ...tab, name })
     },
     resolveComponent(component) {
       return resolveAsyncComponentCompat(component)
