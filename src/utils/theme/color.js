@@ -142,9 +142,11 @@ export function changeMenuColor(themeColors) {
   const white = 'ffffff'
   const black = '000000'
 
-  // 兼容未返回 --menu-hover 的旧主题；新主题以 theme_info 为准。
+  // 旧主题的 --menu-hover 是占位值，需要根据强调色生成浅色 hover 背景。
+  // 返回了完整菜单状态的新主题（如 deep_black）则直接使用 theme_info。
   const menuActiveTextColor = colors['--menu-text-active']
-  if (!colors['--menu-hover'] && menuActiveTextColor) {
+  const hasCompleteMenuState = colors['--menu-hover-bg'] || colors['--menu-active-bg']
+  if (!hasCompleteMenuState && menuActiveTextColor) {
     colors['--menu-hover'] = mix(white, menuActiveTextColor.replace(/#/g, ''), 90)
   }
 

@@ -10,6 +10,7 @@
       />
     </div>
     <ColumnSettingPopover
+      ref="columnSettingPopover"
       :current-columns="popoverColumns.currentCols"
       :default-columns="popoverColumns.defaultCols"
       :min-columns="popoverColumns.minCols"
@@ -94,6 +95,9 @@ export default {
     this.isDeactivated = false
   },
   methods: {
+    openColumnSetting() {
+      this.$refs.columnSettingPopover?.open()
+    },
     normalizeColumnNames(value, fallback = []) {
       if (Array.isArray(value)) {
         return value.filter((item) => item !== undefined && item !== null)

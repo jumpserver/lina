@@ -122,7 +122,6 @@ export const assetFieldsMeta = (vm, category, type) => {
       }
     },
     zone: {
-      component: Select2,
       disabled: false,
       el: {
         multiple: false,

@@ -177,6 +177,7 @@ export default {
         }
         defaults[k] = true
       }
+      defaults.handleTableSettingClick = this.handleTableSettingClick
       return Object.assign(defaults, this.headerActions)
     },
     hasActions() {
@@ -287,6 +288,9 @@ export default {
     })
   },
   methods: {
+    handleTableSettingClick() {
+      this.$refs.dataTable?.openColumnSetting()
+    },
     handleFilterExpandChanged(expand) {
       this.filterExpand = expand
     },

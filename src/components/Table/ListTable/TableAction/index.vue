@@ -15,6 +15,7 @@
       <RightSide
         v-bind="$attrs"
         v-if="hasRightActions"
+        :handle-table-setting-click="handleTableSettingClick"
         :quick-filter-expand="quickFilterExpand"
         :selected-rows="selectedRows"
         :table-url="tableUrl"
@@ -67,6 +68,10 @@ export default {
   },
   emits: ['update:quick-filter-expand', 'done'],
   props: {
+    handleTableSettingClick: {
+      type: Function,
+      default: null
+    },
     quickFilterExpand: {
       type: Boolean,
       default: true
