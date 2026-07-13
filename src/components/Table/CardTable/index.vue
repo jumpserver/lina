@@ -7,7 +7,7 @@
       :table-url="tableUrl"
     />
     <div v-loading="loading">
-      <el-row class="the-row">
+      <el-row :class="{ 'is-empty': totalData.length === 0 }" class="the-row">
         <IBox v-if="totalData.length === 0" class="empty-box">
           <el-empty
             :description="$t('NoData')"
@@ -262,6 +262,11 @@ export default {
   margin-top: 15px;
   max-width: 1600px;
   text-align: center;
+
+  // 空状态时不受卡片网格 1600px 上限约束,让 empty 卡片撑满整行宽度
+  &.is-empty {
+    max-width: none;
+  }
 
   .card-container {
     display: flex;
