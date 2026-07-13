@@ -3,6 +3,7 @@
 </template>
 
 <script lang="jsx">
+import { mapGetters } from 'vuex'
 import { DrawerListTable as ListTable } from '@/components'
 import {
   ChoicesFormatter,
@@ -14,6 +15,11 @@ export default {
   name: 'TaskList',
   components: {
     ListTable
+  },
+  computed: {
+    ...mapGetters({
+      vendor: 'vendor'
+    })
   },
   data() {
     return {
@@ -156,6 +162,7 @@ export default {
             title: this.$t('TaskMonitor'),
             type: 'primary',
             can: this.$hasPerm('ops.view_taskmonitor'),
+            has: () => this.vendor !== 'OSM',
             callback: () => {
               window.open(`${BASE_URL}/core/flower/?_=${Date.now()}`)
             }
