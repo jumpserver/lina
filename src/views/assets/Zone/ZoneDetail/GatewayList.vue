@@ -4,6 +4,7 @@
       ref="ListTable"
       :create-drawer="createDrawer"
       :detail-drawer="detailDrawer"
+      :drawer-props="{ zone: object }"
       :header-actions="headerActions"
       :resource="$tc('Gateway')"
       :table-config="tableConfig"
