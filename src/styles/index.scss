@@ -627,6 +627,8 @@ $tooltip-arrow-color: #c2d1e1;
   a {
     color: var(--color-link);
   }
+  max-width: 500px;
+  padding: 10px;
 }
 
 .el-upload--text {
