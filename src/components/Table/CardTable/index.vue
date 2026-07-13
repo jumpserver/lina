@@ -272,7 +272,7 @@ export default {
     .the-card {
       position: relative;
       height: 180px;
-      padding: 15px;
+      padding: 20px;
 
       ::v-deep .el-card__body {
         height: 100%;

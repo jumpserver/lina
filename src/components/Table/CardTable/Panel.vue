@@ -149,8 +149,7 @@ export default {
     align-items: flex-start;
     text-align: left;
     height: 100%;
-    padding-right: 8px;
-    padding-top: 10px;
+    padding: 5px 8px 0 0;
     overflow: hidden;
 
     .name {
