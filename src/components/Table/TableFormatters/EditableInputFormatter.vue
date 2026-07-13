@@ -85,6 +85,14 @@ export default {
       }
     },
     getCellValue(val) {
+      if (typeof this.formatterArgs.getDisplayValue === 'function') {
+        const displayValue = this.formatterArgs.getDisplayValue({
+          row: this.row,
+          col: this.col,
+          cellValue: val
+        })
+        return displayValue === undefined ? val : displayValue
+      }
       let v = ''
       if (val && typeof val === 'object') {
         v = val['name'] || val['display_name'] || JSON.stringify(val)

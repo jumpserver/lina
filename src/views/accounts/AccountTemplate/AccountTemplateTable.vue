@@ -110,7 +110,10 @@ export default {
           this.$hasPerm('accounts.change_accounttemplate'),
         importOptions: {
           canImportCreate: this.$hasPerm('accounts.add_accounttemplate'),
-          canImportUpdate: this.$hasPerm('accounts.change_accounttemplate')
+          canImportUpdate: this.$hasPerm('accounts.change_accounttemplate'),
+          valueFormatters: {
+            secret_type: ({ cellValue }) => vm.formatSecretType(cellValue)
+          }
         },
         hasExport: this.$hasPerm('accounts.view_accounttemplatesecret'),
         hasMoreActions: false,
@@ -126,6 +129,19 @@ export default {
           }
         }
       }
+    }
+  },
+  methods: {
+    formatSecretType(value) {
+      const secretTypeMap = {
+        password: 'Password',
+        ssh_key: 'SSHKey',
+        access_key: 'AccessKey',
+        token: 'Token',
+        api_key: 'APIKey'
+      }
+      const i18nKey = secretTypeMap[value]
+      return i18nKey ? `${this.$t(i18nKey)} (${value})` : value
     }
   }
 }
