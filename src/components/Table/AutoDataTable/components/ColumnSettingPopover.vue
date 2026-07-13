@@ -1,6 +1,7 @@
 <template>
   <Dialog
     class="column-setting-dialog"
+    v-if="showColumnSettingPopover"
     v-model:visible="showColumnSettingPopover"
     :cancel-title="$tc('RestoreDefault')"
     :destroy-on-close="true"
@@ -94,11 +95,15 @@ export default {
   },
   methods: {
     showColumnSettingPopoverHandler({ url }) {
-      if (url === this.url) {
-        this.checkAll = false
-        this.showColumnSettingPopover = true
-        this.iCurrentColumns = this.currentColumns
+      if (url !== this.url) {
+        return
       }
+      this.open()
+    },
+    open() {
+      this.checkAll = false
+      this.showColumnSettingPopover = true
+      this.iCurrentColumns = this.currentColumns
 
       if (this.iCurrentColumns.length === this.totalColumnsList.length) {
         this.checkAll = true

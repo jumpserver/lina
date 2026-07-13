@@ -92,7 +92,6 @@ $single-menu-height: 38px;
     }
 
     &:hover {
-      color: var(--menu-text-active);
       background-color: var(--menu-hover-bg, var(--menu-hover)) !important;
     }
   }
@@ -118,7 +117,6 @@ $single-menu-height: 38px;
     }
 
     &:hover {
-      color: var(--menu-text-active);
       background-color: var(--menu-hover-bg, var(--menu-hover));
     }
 

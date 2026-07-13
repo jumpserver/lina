@@ -338,6 +338,14 @@ export default {
           line-height: normal;
         }
 
+        // 全局表单样式会让错误提示参与横向 flex 布局，导致文案显示在输入框右侧。
+        // 恢复 Element Plus 的定位方式，使提示固定显示在控件下方且不挤动工具栏。
+        :deep(.el-form-item__error) {
+          position: absolute;
+          top: 100%;
+          left: 0;
+        }
+
         // 输入框统一 30px 标准控件高度,与 select / 按钮底部对齐
         :deep(.el-form-item__content .inline-input),
         :deep(.el-form-item__content .inline-input .el-input__wrapper) {
