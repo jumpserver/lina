@@ -143,6 +143,9 @@ export default {
       this.emitTags()
     },
     handleSelect(item) {
+      if (!this.autocomplete || typeof item?.value !== 'string') {
+        return
+      }
       this.filterValue = item.value
       this.handleConfirm()
     },

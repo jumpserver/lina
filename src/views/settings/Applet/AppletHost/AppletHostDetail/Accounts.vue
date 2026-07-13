@@ -1,7 +1,7 @@
 <template>
   <TwoCol>
     <template #default>
-      <Account :url="url" :columns-meta="columnsMeta" :object="object" />
+      <Account :columns-meta="columnsMeta" :object="object" />
     </template>
     <template #right>
       <QuickActions :actions="quickActions" type="primary" />
