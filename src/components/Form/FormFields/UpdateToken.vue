@@ -9,6 +9,7 @@
       :disabled="disabled"
       :placeholder="placeholder"
       :type="type"
+      autocomplete="new-password"
       class="update-token__input"
       show-password
       @change="onChange"

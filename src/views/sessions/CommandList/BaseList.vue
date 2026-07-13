@@ -177,6 +177,7 @@ export default {
             if (this.assetId) {
               this.tableConfig.url += `&asset_id=${this.assetId}`
             }
+            this.treeTable.handleUrlChange(this.tableConfig.url)
           }
         }
       }
