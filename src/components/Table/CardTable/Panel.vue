@@ -150,6 +150,7 @@ export default {
     text-align: left;
     height: 100%;
     padding-right: 8px;
+    padding-top: 10px;
     overflow: hidden;
 
     .name {
