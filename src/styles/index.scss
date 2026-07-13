@@ -353,10 +353,6 @@ input[type="file"] {
     line-height: 1.5;
     border-right: none;
     color: var(--color-text-primary);
-
-    a {
-      color: #1c84c6;
-    }
   }
 
   th {
@@ -486,13 +482,22 @@ input[type="file"] {
   font-size: 13px;
 }
 
-.el-link--default {
-  color: #1c84c6 !important;
-  font-weight: 300;
+a.el-link.el-link--info,
+a.el-link.el-link--default {
+  color: var(--color-link) !important;
 }
 
-.el-link.is-underline:hover:after {
-  border-bottom: 1px solid #007bff !important;
+a.el-link.el-link--info:hover,
+a.el-link.el-link--default:hover {
+  color: var(--color-link) !important;
+
+  &.is-hover-underline {
+    border-bottom-color: var(--color-link) !important;
+  }
+}
+
+a.el-link.el-link--info.is-hover-underline:hover:after {
+  border-bottom: 1px solid var(--color-link) !important;
 }
 
 .el-dialog__title {
@@ -620,7 +625,7 @@ $tooltip-arrow-color: #c2d1e1;
 
 .help-tips {
   a {
-    color: #1c84c6;
+    color: var(--color-link);
   }
 }
 

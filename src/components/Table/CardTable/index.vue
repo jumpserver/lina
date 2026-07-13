@@ -239,22 +239,14 @@ export default {
   }
 }
 </script>
-
 <style lang="scss" scoped>
 .the-row .empty-box {
   display: block;
-  flex: 0 0 100%;
-  width: 100%;
-  box-sizing: border-box;
 
-  :deep(.el-empty) {
-    margin: 0 auto;
-  }
-
-  :deep(.el-card__body) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  ::v-deep {
+    .el-empty {
+      margin: 0 auto;
+    }
   }
 }
 
@@ -264,28 +256,20 @@ export default {
   text-align: center;
 
   .card-container {
-    display: flex;
-    justify-content: left;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 20px;
 
     .el-card .el-card__body div {
       height: inherit;
     }
-  }
-
-  .el-col,
-  div {
-    gap: 20px;
 
     .the-card {
-      min-width: 330px;
       position: relative;
-      margin-bottom: 20px;
       height: 180px;
-      width: 380px;
       padding: 15px;
 
-      :deep(.el-card__body) {
+      ::v-deep .el-card__body {
         height: 100%;
         width: 100%;
         padding: 0;
@@ -321,9 +305,9 @@ export default {
   border-top: 1px solid #e7eaec;
 }
 
-.el-col {
-  //min-width: 330px; 设置完后，remote app 列表会有问题
-}
+// .el-col {
+//   min-width: 330px; 设置完后，remote app 列表会有问题
+// }
 
 .no-data {
   display: flex;

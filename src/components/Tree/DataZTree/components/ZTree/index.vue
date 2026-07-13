@@ -312,7 +312,12 @@ export default {
         let name = this.$t('Search')
         const assetsAmount = matchedNodes.length
         name = `${name} (${assetsAmount})`
-        const newNode = { id: 'search', name: name, isParent: false, open: false }
+        const newNode = {
+          id: 'search',
+          name: name,
+          isParent: false,
+          open: false
+        }
         tree.addNodes(null, newNode)
       }
 
@@ -362,7 +367,13 @@ export default {
         let name = this.$t('Search')
         const assetsAmount = nodes.length
         name = `${name} (${assetsAmount})`
-        const newNode = { id: 'search', name: name, isParent: true, open: true, zAsync: true }
+        const newNode = {
+          id: 'search',
+          name: name,
+          isParent: true,
+          open: true,
+          zAsync: true
+        }
         searchNode = this.zTree.addNodes(null, newNode)[0]
         searchNode.zAsync = true
         this.rootNodeAddDom(searchNode)
@@ -386,7 +397,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 10px 10px 0 10px;
+  padding: 5px 0 0 5px;
 
   .ztree {
     width: 100%;

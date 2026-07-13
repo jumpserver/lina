@@ -282,6 +282,7 @@ export default {
 
         &.active {
           color: var(--color-primary);
+          font-weight: bold;
 
           i {
             visibility: visible;
