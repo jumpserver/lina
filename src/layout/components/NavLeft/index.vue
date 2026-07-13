@@ -163,9 +163,6 @@ export default {
 
 $mobileHeight: 40px;
 $origin-color: #ffffff;
-$hover-bg-color: #e6e6e6;
-$hover-text-color: #606266;
-$hover-border-color: #d2d2d2;
 
 .left-side-wrapper {
   .nav-header {
@@ -222,11 +219,9 @@ $hover-border-color: #d2d2d2;
       white-space: nowrap;
       cursor: pointer;
       transition: all 0.3s;
-      // 跟随 --menu-text（深色主题会覆盖为浅色）；底色是 --menu-bg，用固定深色会在
-      // Deep black 主题下不可见。
       color: var(--menu-text);
       background-color: var(--menu-bg);
-      border-bottom: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--menu-border, var(--color-border));
 
       .switch-view {
         width: 100%;
@@ -261,9 +256,8 @@ $hover-border-color: #d2d2d2;
             }
 
             &:hover {
-              color: $hover-text-color;
-              border-color: $hover-border-color;
-              background-color: $hover-bg-color;
+              color: var(--menu-text-active);
+              background-color: var(--nav-header-hover, var(--menu-hover));
               border-radius: 4px;
             }
           }
@@ -275,7 +269,8 @@ $hover-border-color: #d2d2d2;
   .nav-footer {
     display: flex;
     justify-content: flex-start;
-    border-top: 1px solid rgba(31, 35, 41, 0.15);
+    color: var(--menu-text);
+    border-top: 1px solid var(--menu-border, rgba(31, 35, 41, 0.15));
     background-color: $subMenuBg;
 
     .toggle-bar {
@@ -301,9 +296,8 @@ $hover-border-color: #d2d2d2;
       }
 
       &:hover {
-        color: $hover-text-color;
-        border-color: $hover-border-color;
-        background-color: $hover-bg-color;
+        color: var(--menu-text-active);
+        background-color: var(--menu-hover-bg, var(--menu-hover));
       }
     }
   }
@@ -352,9 +346,23 @@ $hover-border-color: #d2d2d2;
 </style>
 
 <style lang="scss">
-.view-switcher-popper.el-popover {
+.el-popper.is-light.el-tooltip.el-popover.view-switcher-popper {
+  --el-popper-bg-color-light: var(--menu-bg);
+  --el-border-color-light: var(--menu-border, var(--color-border));
+  --el-popover-bg-color: var(--menu-bg);
+  --el-popover-border-color: var(--menu-border, var(--color-border));
+  --el-popover-padding: 0;
+
   min-width: 0 !important;
   width: max-content !important;
-  // padding: 8px 0 !important;
+  padding: 6px !important;
+  color: var(--menu-text);
+  background: var(--menu-bg);
+  border: 1px solid var(--menu-border, var(--color-border));
+
+  > .el-popper__arrow::before {
+    background: var(--menu-bg);
+    border-color: var(--menu-border, var(--color-border));
+  }
 }
 </style>

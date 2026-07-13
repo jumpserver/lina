@@ -141,12 +141,15 @@ export default {
 
 <style lang="scss" scoped>
 .menu-main.el-menu {
-  background-color: transparent;
-  letter-spacing: 0.09em;
+  min-width: 180px;
+  padding: 6px;
+  color: var(--menu-text);
+  background-color: var(--menu-bg) !important;
+  box-shadow: none;
+  letter-spacing: 0.05em;
 
   &.vertical {
     width: max-content;
-    min-width: 0;
   }
 
   :deep(.el-sub-menu .el-sub-menu__title) {
@@ -161,22 +164,30 @@ export default {
 
   & :deep(.el-sub-menu__icon-arrow) {
     font-size: 13px;
-    color: #606266;
+    color: var(--menu-text);
   }
 
   .el-menu-item {
     height: 38px;
     line-height: 28px;
-    padding: 4px 24px;
+    padding: 6px 14px;
+    color: var(--menu-text);
 
     &:hover {
-      background-color: var(--menu-hover);
+      color: var(--menu-text-active);
+      background-color: var(--menu-hover-bg, var(--menu-hover));
+    }
+
+    &.is-active {
+      color: var(--menu-active-text, var(--menu-text-active));
+      background-color: var(--menu-active-bg, var(--menu-hover));
     }
   }
 
   &.vertical .el-menu-item {
     width: auto;
-    min-width: 180px;
+    min-width: 200px;
+    padding: 6px 14px;
     justify-content: flex-start;
   }
 }
@@ -219,7 +230,7 @@ export default {
   vertical-align: middle !important;
   font-size: 14px;
   text-align: center;
-  color: #1f2329;
+  color: inherit;
   margin-right: 10px;
 }
 
@@ -227,6 +238,7 @@ export default {
   display: inline-block;
   font-size: 13px;
   white-space: nowrap;
+  color: inherit;
 
   .menu-main.mobile-view-switch :deep(.el-sub-menu__icon-arrow) {
     right: 10px;
