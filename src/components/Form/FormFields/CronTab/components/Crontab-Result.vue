@@ -67,8 +67,16 @@ export default {
 <style lang="scss" scoped>
 .popup-result-time {
   margin-top: 10px;
+  font-size: 12px;
 }
 .title {
   margin-bottom: 0;
+  font-size: 12px;
+}
+.popup-result-scroll {
+  height: 10em;
+  overflow-y: auto;
+  font-size: 12px;
+  line-height: 24px;
 }
 </style>
