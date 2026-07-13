@@ -42,8 +42,7 @@
               />
             </el-tab-pane>
           </el-tabs>
-          <div style="display: flex; margin-top: 10px; justify-content: space-between" />
-          <el-form ref="form" label-position="left" label-width="30px">
+          <el-form ref="form" label-position="left" label-width="0">
             <div class="form-content">
               <el-form-item label="" prop="variable">
                 <Variable
@@ -344,8 +343,9 @@ export default {
 }
 
 .workspace-tab {
+  // 标签页头与下方编辑器/变量表左对齐(原先 margin-left:30px 让 main.yml 标签比编辑器右移错位)
   :deep(.el-tabs__header) {
-    margin: 0 0 15px 30px !important;
+    margin: 0 0 15px 0 !important;
   }
 }
 
