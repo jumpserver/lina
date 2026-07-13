@@ -170,7 +170,8 @@ export class FormFieldGenerator {
   }
 
   setHelpText(field, remoteFieldMeta) {
-    let helpText = toSentenceCase(remoteFieldMeta['help_text'])
+    const remoteHelpText = remoteFieldMeta['help_text']
+    let helpText = typeof remoteHelpText === 'string' ? toSentenceCase(remoteHelpText) : ''
 
     if (!helpText) {
       return field

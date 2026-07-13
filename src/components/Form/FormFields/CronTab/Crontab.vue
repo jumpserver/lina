@@ -440,13 +440,6 @@ export default {
   }
 }
 
-.popup-result-scroll {
-  font-size: 12px;
-  line-height: 24px;
-  height: 10em;
-  overflow-y: auto;
-}
-
 :deep(.el-form-item) {
   &.el-form-item--small,
   &.el-form-item--small {

@@ -280,6 +280,24 @@ export default {
   line-height: 1.5;
 }
 
+// 底部通过/拒绝/撤销/回复按钮统一到全站 30px 规范(原 size="small" 偏矮),图标与文字留 4px 间距
+:deep(.el-form-item .el-button) {
+  height: 30px;
+  min-height: 30px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1;
+
+  .fa {
+    margin-right: 4px;
+  }
+
+  & + .el-button {
+    margin-left: 8px;
+  }
+}
+
 .feed-activity-list .feed-element {
   border-bottom: 1px solid #e7eaec;
 }

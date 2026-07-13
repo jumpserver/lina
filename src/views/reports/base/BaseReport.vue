@@ -72,14 +72,9 @@
         <div v-if="!nav" class="title-right">
           <RightAction :name="name" :editor-only="true" :delete-only="true" />
           <!--
-            导出/自定义按钮投递到已有的 page-heading 右侧（.page-heading-right），与页面标题两端对齐。
-            用 v-if(hasHeadingTarget) 直接挂载到目标（而不是 :disabled 挂载后再从文档流“移动”过去），
-            避免页面过渡期间移动节点触发的 insertBefore null。
+            绑定当前 Page 的标题栏；全局选择器会让缓存报表把按钮投到同一个目标。
           -->
-          <Teleport
-            v-if="hasHeadingTarget && !nav && url && showReportExportBtn"
-            to=".page-heading-right"
-          >
+          <Teleport v-if="headingTarget && !nav && url && showReportExportBtn" :to="headingTarget">
             <el-button link class="report-export-btn" @click="openNewWindow">
               <i class="fa fa-external-link" style="margin-right: 4px; font-size: 13px" />
               {{ $t('Customize') }}
@@ -169,8 +164,7 @@ export default {
       headerDateTime: new Date().toLocaleString(),
       visibilityObserver: null,
       internalDisplayMode: normalizedInit.length ? normalizedInit : ['chart', 'table'],
-      // page-heading 右侧插槽是否存在（存在才把导出/自定义按钮 teleport 过去，避免目标缺失时报错）
-      hasHeadingTarget: false
+      headingTarget: null
     }
   },
   computed: {
@@ -228,8 +222,7 @@ export default {
     this.setupVisibilityObserver()
     this.$nextTick(() => {
       this.applyItemVisibility()
-      // Page 头部在前渲染，这里探测其右侧插槽是否存在，决定是否把导出/自定义按钮 teleport 过去
-      this.hasHeadingTarget = !!document.querySelector('.page-heading-right')
+      this.headingTarget = this.$el.closest('.page')?.querySelector('.page-heading-right') || null
     })
   },
   beforeUnmount() {

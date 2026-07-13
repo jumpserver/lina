@@ -1,5 +1,5 @@
 import { ElMessage as elMessage } from 'element-plus'
-import { toSentenceCase } from '@/utils/common/index'
+import { toSentenceCase } from '@/utils/common/string'
 
 let messageDom = null
 const DEFAULT_Z_INDEX = 20000

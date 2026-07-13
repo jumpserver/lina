@@ -12,7 +12,7 @@
       :action="action"
       :class="[action]"
       :component="drawerComponent"
-      :props="drawerProps"
+      :component-props="drawerProps"
       :title="drawerTitle"
       class="page-drawer"
     />
