@@ -186,7 +186,7 @@ export default {
   },
   methods: {
     showExportDialogHandler({ selectedRows, url, name }) {
-      if (url === this.url || url.indexOf(this.url) > -1) {
+      if (url && (url === this.url || url.indexOf(this.url) > -1)) {
         this.showExportDialog()
       }
     },

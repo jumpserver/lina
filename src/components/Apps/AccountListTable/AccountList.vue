@@ -161,8 +161,6 @@ export default {
       showResultDialog: false,
       showAddDialog: false,
       showAddTemplateDialog: false,
-      iExportUrl:
-        this.exportUrl || this.url.replace('/accounts/accounts/', '/accounts/account-secrets/'),
       detailDrawer: () => import('@/views/accounts/Account/AccountDetail/index.vue'),
       createAccountResults: [],
       iAsset: this.asset,
@@ -311,7 +309,8 @@ export default {
         hasImport: this.hasImport,
         hasExport: this.hasExport && this.$hasPerm('accounts.view_accountsecret'),
         exportOptions: {
-          url: this.exportUrl,
+          url:
+            this.exportUrl || this.url.replace('/accounts/accounts/', '/accounts/account-secrets/'),
           mfaVerifyRequired: true,
           tips: this.$t('AccountExportTips')
         },
