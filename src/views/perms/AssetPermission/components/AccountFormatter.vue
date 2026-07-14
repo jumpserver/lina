@@ -34,11 +34,7 @@
       </div>
 
       <div v-if="enableVirtualAccount" class="spec-zone virtual-choices">
-        <el-checkbox
-          :model-value="virtualChecked"
-          @change="handleVirtualChecked"
-          @update:model-value="virtualChecked = $event"
-        >
+        <el-checkbox v-model="virtualChecked" @change="handleVirtualChecked">
           {{ virtualAccount.label }}
         </el-checkbox>
         <el-select
@@ -46,7 +42,7 @@
           v-model="virtualSelected"
           :multiple="true"
           :placeholder="$t('SelectVirtualAccount')"
-          @change="handleVirtualChecked"
+          @change="handleVirtualSelectionChanged"
         >
           <el-option v-for="i in virtualAccounts" :key="i.label" :label="i.label" :value="i.value">
             {{ i.label }}
@@ -153,6 +149,7 @@ export default {
       virtualChecked: false,
       virtualSelected: [],
       output: [],
+      pendingValueSync: null,
       excludeAccountsInput: [],
       virtualAccounts: virtualAccounts,
       virtualAccountsNames: [ManualAccount, SameAccount, AnonymousAccount],
@@ -213,7 +210,12 @@ export default {
   },
   watch: {
     currentValue: {
-      handler() {
+      handler(value) {
+        const normalizedValue = this.normalizeAccountValue(value)
+        if (this.isSameAccountValue(normalizedValue, this.pendingValueSync)) {
+          return
+        }
+        this.pendingValueSync = null
         this.initDefaultChoice()
       },
       immediate: true,
@@ -240,6 +242,10 @@ export default {
       if (!value) return []
       return [value]
     },
+    isSameAccountValue(value, expected) {
+      if (!Array.isArray(expected) || value.length !== expected.length) return false
+      return value.every((item, index) => item === expected[index])
+    },
     getExcludeChoices(val) {
       return val.filter((i) => i.startsWith('!')).map((i) => i.substring(1))
     },
@@ -262,7 +268,7 @@ export default {
         this.realRadioSelected = this.ALL
       } else if (specAccountsInput.length > 0 || value.includes(this.SPEC)) {
         this.realRadioSelected = this.SPEC
-      } else if (excludeAccountsInput.length > 0) {
+      } else if (excludeAccountsInput.length > 0 || value.includes(this.EXCLUDE)) {
         this.realRadioSelected = this.EXCLUDE
       } else {
         this.realRadioSelected = NoneAccount
@@ -288,7 +294,11 @@ export default {
         this.outputValue()
       }, 100)
     },
-    handleVirtualChecked(evt, checked) {
+    handleVirtualChecked(checked) {
+      this.virtualChecked = Boolean(checked)
+      this.outputValue()
+    },
+    handleVirtualSelectionChanged() {
       this.outputValue()
     },
     handleRadioChanged(value) {
@@ -323,10 +333,19 @@ export default {
 
       this.$log.debug('choicesSelected', choicesSelected)
 
+      // 空的“排除账号”与“无”都会输出 []。记录本次内部输出，避免父表单将
+      // 同一个值同步回来时把当前 radio 误判成“无”；外部真正变更时仍会完整重置。
+      const pendingValueSync = choicesSelected.slice()
+      this.pendingValueSync = pendingValueSync
       this.$emit('update:modelValue', choicesSelected)
       this.$emit('update:model-value', choicesSelected)
       this.$emit('input', choicesSelected)
       this.$emit('change', choicesSelected)
+      this.$nextTick(() => {
+        if (this.pendingValueSync === pendingValueSync) {
+          this.pendingValueSync = null
+        }
+      })
     }
   }
 }

@@ -10,6 +10,7 @@
       :options="labelOptions"
       :placeholder="placeholder"
       :props="labelProps"
+      class="jms-input-spacing"
       clearable
       filterable
       separator=": "
@@ -158,6 +159,9 @@ export default {
 // el-cascader 一律使用 Element Plus 原生样式，不做任何覆盖（此前的内部 hack 反而导致
 // tags 飞出、双层边框等问题）。这里只保留：与右侧搜索框的间距、折叠态标签图标按钮的外观。
 .label-search {
+  --jms-input-padding-block: 4px;
+  --jms-input-padding-inline: 8px;
+
   display: inline-flex;
   align-items: center;
   max-width: 100%;
@@ -182,7 +186,6 @@ export default {
       min-width: 0;
 
       .el-input__wrapper {
-        padding: 4px 8px;
         border-radius: 0;
       }
     }

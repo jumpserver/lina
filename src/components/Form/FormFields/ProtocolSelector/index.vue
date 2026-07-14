@@ -4,6 +4,7 @@
       <el-input
         v-bind="passAttrs"
         v-model="item.port"
+        class="jms-input-spacing"
         :class="isPortReadonly(item) ? 'keep-inner-border' : 'input-with-select keep-inner-border'"
         :placeholder="portPlaceholder"
         :readonly="isPortReadonly(item)"

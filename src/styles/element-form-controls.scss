@@ -8,6 +8,25 @@
 //   .el-form .el-form-item__content  — 标准 el-form
 //   .jms-form-controls               — 非 el-form 场景（Crontab、UserConfirmDialog 等）
 
+@mixin jms-input-wrapper-spacing {
+  padding-block: var(--jms-input-padding-block, 1px);
+  padding-inline: var(--jms-input-padding-inline, 11px);
+  padding-inline-start: var(
+    --jms-input-padding-inline-start,
+    var(--jms-input-padding-inline, 11px)
+  );
+  padding-inline-end: var(--jms-input-padding-inline-end, var(--jms-input-padding-inline, 11px));
+}
+
+// 输入文字与 placeholder 的间距只属于 wrapper。普通表单输入由下方直接子节点规则
+// 自动应用默认值；TagInput、Autocomplete、InputNumber 等复合控件显式挂载此契约，
+// 并通过变量声明视觉特例，不再修改 Element Plus 内部节点的 text padding。
+.jms-input-spacing.el-input > .el-input__wrapper,
+.jms-input-spacing.el-autocomplete > .el-input > .el-input__wrapper,
+.jms-input-spacing .el-input > .el-input__wrapper {
+  @include jms-input-wrapper-spacing;
+}
+
 @mixin jms-form-control-items {
   --el-input-height: 30px;
   font-size: 13px;
@@ -127,14 +146,12 @@
 
   .el-input__wrapper {
     cursor: text;
-    padding: 1px 11px;
   }
 
-  // 普通表单项的直接输入框必须由 wrapper 提供水平留白。inner 的 padding 会在下方
-  // 统一清零；若页面或组件样式把 wrapper 重置为 0，placeholder 会紧贴边框。
-  // 仅匹配直接子节点，避免影响 TagInput、输入组等需要自行管理间距的复合控件。
-  > .el-input:not(.el-input-group) > .el-input__wrapper {
-    padding: 1px 11px !important;
+  // 普通表单项的直接输入框使用默认契约。仅匹配直接子节点，避免替复合控件
+  // 决定特例值；变量继承允许调用方通过 .jms-input-spacing 覆盖默认间距。
+  > .el-input > .el-input__wrapper {
+    @include jms-input-wrapper-spacing;
   }
 
   .el-select__wrapper,
@@ -217,13 +234,17 @@
     line-height: 28px;
   }
 
-  .el-input__wrapper .el-input__inner,
+  .el-input__wrapper .el-input__inner {
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
   .el-select__wrapper .el-select__selected-item,
   .el-select__wrapper .el-select__placeholder {
     border: 0 !important;
     box-shadow: none !important;
-    padding-left: 0 !important;
-    margin-left: 0 !important;
+    padding-inline-start: 0 !important;
+    margin-inline-start: 0 !important;
   }
 
   .el-input.is-disabled .el-input__inner {
@@ -373,7 +394,7 @@
 .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label {
   span {
     &::before {
-      content: "*";
+      content: '*';
       margin-right: 4px;
       color: #ed5565;
     }
@@ -495,12 +516,8 @@
   .el-time-spinner__input {
     .el-input__wrapper {
       border: 0 !important;
-      border-radius: var(
-        --el-input-border-radius,
-        var(--el-border-radius-base)
-      );
-      box-shadow: 0 0 0 1px var(--el-input-border-color, var(--el-border-color))
-        inset !important;
+      border-radius: var(--el-input-border-radius, var(--el-border-radius-base));
+      box-shadow: 0 0 0 1px var(--el-input-border-color, var(--el-border-color)) inset !important;
     }
 
     .el-input__inner {

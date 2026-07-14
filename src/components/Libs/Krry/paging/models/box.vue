@@ -20,7 +20,7 @@
           :class="{ showClear: showClearBtn }"
           :placeholder="filterPlaceholder"
           autocomplete="off"
-          class="el-input__inner"
+          class="paging-filter__input el-input__inner"
           type="text"
           @change="handleKeyword"
         />
@@ -325,7 +325,7 @@ export default {
       // margin: 10px 15px;
       line-height: normal;
 
-      .el-input__inner {
+      .paging-filter__input {
         display: block;
         width: 100%;
         height: 30px;
@@ -361,7 +361,7 @@ export default {
         }
       }
 
-      .showClear {
+      .paging-filter__input.showClear {
         padding-right: 30px;
       }
 

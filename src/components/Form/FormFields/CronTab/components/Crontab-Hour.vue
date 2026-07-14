@@ -18,7 +18,7 @@
             :max="23"
             :min="0"
             size="small"
-            class="cron-tab-form__number"
+            class="cron-tab-form__number jms-input-spacing"
           />
           <span class="cron-tab-form__separator">-</span>
           <el-input-number
@@ -26,7 +26,7 @@
             :max="23"
             :min="0"
             size="small"
-            class="cron-tab-form__number"
+            class="cron-tab-form__number jms-input-spacing"
           />
           <span class="cron-tab-form__text">{{ $t('Hour') }}</span>
         </span>
@@ -42,7 +42,7 @@
             :max="23"
             :min="1"
             size="small"
-            class="cron-tab-form__number"
+            class="cron-tab-form__number jms-input-spacing"
           />
           <span class="cron-tab-form__text">{{ $t('Hour') }} {{ $t('ExecuteOnce') }}</span>
         </span>

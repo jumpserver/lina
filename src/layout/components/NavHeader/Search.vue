@@ -6,7 +6,7 @@
         v-model="search"
         :placeholder="$t('Search')"
         :prefix-icon="searchIcon"
-        class="search-input"
+        class="search-input jms-input-spacing"
         readonly
         @keydown.esc.prevent="closePanel"
         @clear="clearSearch"
@@ -41,7 +41,7 @@
             :placeholder="$t('Search')"
             :clearable="true"
             :prefix-icon="searchIcon"
-            class="search-panel-input"
+            class="search-panel-input jms-input-spacing"
             @input="onInput"
             @keydown.enter.prevent="onEnter"
           />
@@ -358,6 +358,9 @@ export default {
     cursor: pointer;
 
     .search-input {
+      --jms-input-padding-block: 0;
+      --jms-input-padding-inline: 12px;
+
       width: 100%;
       height: 28px;
       pointer-events: none;
@@ -365,7 +368,6 @@ export default {
       :deep(.el-input__wrapper) {
         min-height: 28px;
         height: 28px;
-        padding: 0 12px;
         background-color: rgba(255, 255, 255, 0.08);
         border-radius: 4px;
         border: none !important;
@@ -492,6 +494,9 @@ body .v-modal {
   background: #fff;
 
   .search-panel-input {
+    --jms-input-padding-block: 0;
+    --jms-input-padding-inline: 12px;
+
     width: 100% !important;
 
     &.el-input {
@@ -502,7 +507,6 @@ body .v-modal {
       width: 100%;
       min-height: 32px;
       height: 32px;
-      padding: 0 12px;
       border-radius: 0;
       border: 1px solid var(--el-border-color) !important;
       box-shadow: none !important;

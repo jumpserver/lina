@@ -563,6 +563,9 @@ export default {
 }
 
 .crontab-root :deep(.cron-tab-form__number.el-input-number) {
+  --jms-input-padding-block: 0;
+  --jms-input-padding-inline: 8px;
+
   width: 132px;
   min-height: 30px;
   height: 30px;
@@ -587,7 +590,6 @@ export default {
 .crontab-root :deep(.cron-tab-form__number.el-input-number .el-input__wrapper) {
   border: 0 !important;
   box-shadow: none !important;
-  padding: 0 8px;
   min-height: 28px;
   height: 28px;
 }

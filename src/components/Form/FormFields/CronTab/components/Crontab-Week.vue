@@ -18,7 +18,7 @@
             :max="7"
             :min="1"
             size="small"
-            class="cron-tab-form__number"
+            class="cron-tab-form__number jms-input-spacing"
           />
           <span class="cron-tab-form__separator">-</span>
           <el-input-number
@@ -26,7 +26,7 @@
             :max="7"
             :min="1"
             size="small"
-            class="cron-tab-form__number"
+            class="cron-tab-form__number jms-input-spacing"
           />
         </span>
       </el-radio>
