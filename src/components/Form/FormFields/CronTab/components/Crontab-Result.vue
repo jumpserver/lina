@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import parser from 'cron-parser'
+import { CronExpressionParser } from 'cron-parser'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 
 export default {
@@ -47,7 +47,7 @@ export default {
       const rule = `0 ${this.ex}`
       try {
         this.resultList = []
-        const interval = parser.parseExpression(rule)
+        const interval = CronExpressionParser.parse(rule)
         for (let index = 0; index < 5; index++) {
           const cur = interval.next().toString()
           this.resultList.push(toSafeLocalDateStr(cur))

@@ -72,15 +72,15 @@
           </span>
         </el-col>
       </el-row>
-      <el-row>
+      <el-row class="user-confirm-dialog__row user-confirm-dialog__row--face" :gutter="24">
         <el-col>
           <iframe v-if="passkeyVisible" :src="passkeyUrl" style="display: none" />
           <iframe
             v-if="isFaceCaptureVisible && subTypeSelected === 'face' && faceCaptureUrl"
+            class="user-confirm-dialog__face-frame"
             :src="faceCaptureUrl"
             allow="camera"
             sandbox="allow-scripts allow-same-origin"
-            style="width: 100%; height: 600px; border: none"
           />
         </el-col>
       </el-row>
@@ -383,6 +383,10 @@ export default {
   margin-top: 16px !important;
 }
 
+.user-confirm-dialog__row--face {
+  margin-top: 16px !important;
+}
+
 .user-confirm-dialog__row--actions {
   margin-top: 20px !important;
 }
@@ -390,6 +394,13 @@ export default {
 .user-confirm-dialog__select,
 .user-confirm-dialog__input {
   width: 100%;
+}
+
+.user-confirm-dialog__face-frame {
+  display: block;
+  width: 100%;
+  height: 600px;
+  border: 0;
 }
 
 // 验证码行:输入框自适应宽度 + 「发送验证码」按钮固定宽度,始终同一行(修复按钮掉到下一行)。

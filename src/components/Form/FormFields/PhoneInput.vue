@@ -19,7 +19,7 @@
     <el-input
       v-model="rawValue.phone"
       :placeholder="$tc('InputPhone')"
-      class="phone-input__number"
+      class="phone-input__number jms-input-spacing"
       required
       @blur="numberFocused = false"
       @focus="numberFocused = true"
@@ -159,6 +159,9 @@ export default {
 }
 
 .phone-input__number {
+  --jms-input-padding-block: 0;
+  --jms-input-padding-inline: 11px;
+
   flex: 1 1 auto;
   min-width: 0;
 
@@ -171,14 +174,12 @@ export default {
   :deep(.el-input__wrapper) {
     min-height: 28px;
     height: 28px;
-    padding: 0 11px;
   }
 
   :deep(.el-input__inner) {
     height: 28px;
     line-height: 28px;
     border: 0;
-    padding-left: 11px;
   }
 }
 

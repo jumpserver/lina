@@ -15,7 +15,11 @@
         <span class="gateway-test__label">{{ $t('SSHPort') }}</span>
         <div class="gateway-test__field">
           <div class="gateway-test__control">
-            <el-input v-model="iPort" :placeholder="$t('SSHPort')" class="gateway-test__input" />
+            <el-input
+              v-model="iPort"
+              :placeholder="$t('SSHPort')"
+              class="gateway-test__input jms-input-spacing"
+            />
             <el-button
               :loading="loading"
               class="gateway-test__btn"

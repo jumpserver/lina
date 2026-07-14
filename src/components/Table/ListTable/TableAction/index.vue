@@ -273,6 +273,7 @@ $color-drop-menu-border: #e4e7ed;
     // 标签筛选与搜索框是两个相互独立的控件，各自单一边框、圆角，中间留间距。
     .right-side-item.action-search {
       flex: 0 1 210px;
+      box-sizing: border-box;
       height: 30px;
       min-width: 210px;
       max-width: 100%;
@@ -289,15 +290,6 @@ $color-drop-menu-border: #e4e7ed;
       overflow: visible;
     }
   }
-
-  // .search :deep(.el-input) {
-  //   height: 30px;
-
-  //   .el-input__wrapper {
-  //     width: 100%;
-  //     border-radius: 0;
-  //   }
-  // }
 
   .search.left {
     padding: 0 !important;

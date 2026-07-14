@@ -10,7 +10,7 @@
       :placeholder="placeholder"
       :type="type"
       autocomplete="new-password"
-      class="update-token__input"
+      class="update-token__input jms-input-spacing"
       show-password
       @change="onChange"
     >

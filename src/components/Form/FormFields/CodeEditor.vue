@@ -29,7 +29,7 @@
                     v-model="formModel[item.name]"
                     :fetch-suggestions="item.el.query"
                     :placeholder="item.placeholder"
-                    class="inline-input"
+                    class="inline-input jms-input-spacing"
                     size="small"
                     clearable
                     @change="handleInputChange(item)"
@@ -45,7 +45,7 @@
                   v-model="formModel[item.name]"
                   :class="!isFold ? 'special-style' : ''"
                   :placeholder="item.placeholder"
-                  class="inline-input"
+                  class="inline-input jms-input-spacing"
                   size="small"
                   @change="item.callback(formModel[item.name])"
                 />
@@ -356,9 +356,6 @@ export default {
           min-width: 130px;
           height: 28px;
           line-height: 28px;
-          // 全局 .el-form ... .el-input__wrapper{padding:0} 会清掉 wrapper 内边距,
-          // 优先级高于组件 scoped 规则;改由 inner 提供左内边距,让 placeholder 不贴边。
-          padding: 0 11px;
         }
 
         // 执行、停止按钮:图标 + 文字,30px,与输入框/下拉等高

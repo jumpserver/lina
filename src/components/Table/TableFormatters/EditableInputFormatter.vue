@@ -4,7 +4,7 @@
       v-if="inEditMode"
       ref="inputRef"
       v-model="value"
-      class="editInput"
+      class="editInput jms-input-spacing"
       size="small"
       @blur="onInputEnter"
       @keyup.enter="onInputEnter"
@@ -120,13 +120,15 @@ export default {
 
 <style lang="scss" scoped>
 .editInput :deep(.el-input__inner) {
-  padding: 2px;
   line-height: 12px;
   border: unset;
   height: 28px;
 }
 
 .editInput {
+  --jms-input-padding-block: 2px;
+  --jms-input-padding-inline: 2px;
+
   padding: -6px;
 }
 

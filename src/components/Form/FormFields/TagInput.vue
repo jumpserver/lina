@@ -1,5 +1,5 @@
 <template>
-  <div class="filter-field" @click="handleFieldClick">
+  <div class="filter-field jms-input-spacing" @click="handleFieldClick">
     <div ref="content" class="filter-field__content">
       <el-tag
         v-for="(v, k) in filterTags"
@@ -241,6 +241,9 @@ export default {
 }
 
 .filter-field {
+  --jms-input-padding-block: 0;
+  --jms-input-padding-inline: 11px;
+
   display: flex;
   align-items: center;
   width: 100%;
@@ -290,7 +293,6 @@ export default {
   & :deep(.el-input__wrapper) {
     min-height: 28px;
     height: 28px;
-    padding: 0;
     border: none !important;
     background: transparent;
     box-shadow: none !important;
@@ -329,15 +331,6 @@ export default {
   }
 
   & :deep(.el-input) {
-    border: none !important;
-    box-shadow: none !important;
-    background: transparent !important;
-  }
-
-  & :deep(.el-input__wrapper) {
-    width: 100%;
-    // 与标准 el-input 一样由 wrapper 承担留白；inner 的 padding 会被公共规则清零。
-    padding: 0 11px !important;
     border: none !important;
     box-shadow: none !important;
     background: transparent !important;

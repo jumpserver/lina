@@ -6,7 +6,7 @@
           v-show="showTreeSearch"
           v-model="treeSearchValue"
           :placeholder="$tc('Search')"
-          class="fixed-tree-search"
+          class="fixed-tree-search jms-input-spacing"
           size="small"
           @input="treeSearchHandle"
         >
@@ -648,12 +648,13 @@ div.rMenu li {
 }
 
 .fixed-tree-search {
+  --jms-input-padding-inline-end: 32px;
+
   margin-bottom: 10px;
 
   & :deep(.el-input__inner) {
     border-radius: 4px;
     background: #fafafa;
-    padding-right: 32px;
     color: var(--color-text-primary);
   }
 
