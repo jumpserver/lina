@@ -107,6 +107,14 @@ export function getAuthItems() {
       authKey: 'AUTH_RADIUS',
       type: 'common',
       description: t('RadiusSummary')
+    },
+    {
+      name: 'UKey',
+      logo: getAssetUrl('@/assets/img/auth/ukey_logo.png'),
+      title: t('UKey'),
+      authKey: 'AUTH_UKEY',
+      description: t('UKeySummary'),
+      type: 'device'
     }
   ]
 
