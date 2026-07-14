@@ -74,7 +74,6 @@ export default {
                 {
                   name: 'connect',
                   icon: 'fa-desktop',
-                  plain: true,
                   type: 'primary',
                   can: ({ row }) => row.is_active,
                   callback: ({ row }) => {
@@ -107,4 +106,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+// 纯图标操作仍会渲染一个空标题占位，向右微调图标以保持视觉居中
+:deep(.table-actions .connect .pre-icon) {
+  display: inline-block;
+  transform: translateX(2px);
+}
+</style>

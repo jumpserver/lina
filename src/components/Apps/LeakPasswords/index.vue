@@ -10,7 +10,7 @@
       :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
-      :title="title"
+      :title="$tc(title)"
       :visible="visible"
       width="40%"
       @update:visible="$emit('update:visible', $event)"

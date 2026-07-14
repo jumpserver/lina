@@ -1,5 +1,5 @@
 <template>
-  <div class="compound-field phone-input">
+  <div :class="{ 'phone-input--number-focused': numberFocused }" class="compound-field phone-input">
     <el-select
       v-model="rawValue.code"
       :placeholder="$tc('Select')"
@@ -21,6 +21,8 @@
       :placeholder="$tc('InputPhone')"
       class="phone-input__number"
       required
+      @blur="numberFocused = false"
+      @focus="numberFocused = true"
       @input="onInputChange"
     />
   </div>
@@ -38,6 +40,7 @@ export default {
   data() {
     return {
       rawValue: {},
+      numberFocused: false,
       countries: [{ name: 'China', value: '+86' }]
     }
   },
@@ -104,8 +107,44 @@ export default {
 <style lang="scss" scoped>
 /*
  * 边框方案见全局 .compound-field（element-form-controls.scss）。
- * 这里只保留 PhoneInput 特有的样式：左侧区号段的尺寸/底色、以及号码输入段聚焦时的高亮描边。
+ * PhoneInput 聚焦时只高亮当前号码段，不影响左侧区号段的外边框。
  */
+.phone-input {
+  position: relative;
+}
+
+.phone-input--number-focused {
+  // Element Plus 内层会覆盖外容器的顶部边框，因此两个分段都在前景层明确描边。
+  overflow: visible !important;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    box-sizing: border-box;
+    pointer-events: none;
+  }
+
+  // 号码输入段：四边及左侧分隔线均使用主色，避免顶部被内部 wrapper 遮住。
+  &::before {
+    z-index: 2;
+    right: -1px;
+    left: 84px;
+    border: 1px solid var(--el-color-primary);
+  }
+
+  // 区号段：上、左、下保持灰色，仅右侧分隔线使用主色。
+  &::after {
+    z-index: 1;
+    left: -1px;
+    width: 86px;
+    border: 1px solid var(--el-border-color);
+    border-right-color: var(--el-color-primary);
+  }
+}
+
 .phone-input__code {
   flex: 0 0 85px;
   width: 85px;
@@ -133,11 +172,6 @@ export default {
     min-height: 28px;
     height: 28px;
     padding: 0 11px;
-  }
-
-  // 激活态只作用于输入框区域：聚焦时仅这一段描边，不影响左侧 select
-  :deep(.el-input__wrapper.is-focus) {
-    box-shadow: 0 0 0 1px var(--el-color-primary) inset !important;
   }
 
   :deep(.el-input__inner) {
