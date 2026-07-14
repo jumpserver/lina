@@ -49,7 +49,7 @@ export default {
     AddVariableDialog
   },
   props: {
-    value: {
+    modelValue: {
       type: [Array],
       default: () => []
     },
@@ -68,10 +68,10 @@ export default {
   computed: {
     variables: {
       get() {
-        return this.value
+        return this.modelValue
       },
       set(val) {
-        this.$emit('update:value', val)
+        this.$emit('update:modelValue', val)
         this.$emit('change', val)
       }
     }
