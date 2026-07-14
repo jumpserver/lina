@@ -7,6 +7,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { Watermark } from 'watermark-js-plus'
+import { start as startSessionMonitor, stop as stopSessionMonitor } from '@/utils/sessionMonitor'
 
 export default {
   name: 'App',
@@ -27,6 +28,7 @@ export default {
   watch: {
     currentUser: {
       handler(newVal) {
+        this.checkSessionMonitor()
         this.createWatermark()
       }
     },
@@ -41,9 +43,23 @@ export default {
 
         this.createWatermark()
       }
+    },
+    'publicSettings.AUTO_RELOGIN_AT_SESSION_EXPIRE': {
+      handler() {
+        this.checkSessionMonitor()
+      }
     }
   },
   methods: {
+    checkSessionMonitor() {
+      const enabled = this.publicSettings?.AUTO_RELOGIN_AT_SESSION_EXPIRE
+      const loggedIn = this.currentUser?.username
+      if (enabled && loggedIn) {
+        startSessionMonitor()
+      } else {
+        stopSessionMonitor()
+      }
+    },
     getWaterMarkFields() {
       const user = this.currentUser
       const userId = user?.id || ''
