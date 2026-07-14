@@ -115,7 +115,7 @@ export function setUrlParam(url, name, value) {
   return url
 }
 
-export function setRouterQuery(vm, url = '') {
+export function setRouterQuery(vm, url = '', { browserOnly = false } = {}) {
   url = url || vm.tableConfig.url
   const params = url.split('?')[1]
   const query = Object.fromEntries(new URLSearchParams(params))
@@ -123,9 +123,22 @@ export function setRouterQuery(vm, url = '') {
     ...vm.$route.query,
     ...query
   }
+  if (browserOnly) {
+    const { href } = vm.$router.resolve({
+      path: vm.$route.path,
+      query: newQuery,
+      hash: vm.$route.hash
+    })
+    window.history.replaceState(window.history.state, '', href)
+    return
+  }
   vm.$nextTick(() => {
     vm.$router.replace({ query: newQuery })
   })
+}
+
+export function getBrowserQueryParam(name) {
+  return new URLSearchParams(window.location.search).get(name) || ''
 }
 
 export function getErrorResponseMsg(error) {

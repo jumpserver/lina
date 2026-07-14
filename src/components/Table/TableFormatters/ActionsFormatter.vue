@@ -253,7 +253,8 @@ export default {
   }
 
   :deep(.el-button > span) {
-    line-height: 1.3;
+    line-height: 1.2;
+    font-size: 13px;
   }
 
   :deep(.el-icon--right) {

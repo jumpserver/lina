@@ -51,7 +51,6 @@ export default {
         url: '/api/v1/assets/assets/',
         showMenu: !this.$store.getters.currentOrgIsRoot,
         showDefaultMenu: true,
-        selectSyncToRoute: false,
         menu: []
       },
       tableConfig: {
@@ -94,6 +93,7 @@ export default {
         ...this.tableConfig,
         url
       }
+      setRouterQuery(this, url, { browserOnly: true })
       this.$nextTick(() => {
         this.$refs.baseList?.$refs.ListTable?.reloadTable?.()
       })
@@ -117,7 +117,7 @@ export default {
         url = setUrlParam(url, 'platform', treeNode.id)
       }
       this.tableConfig['url'] = url
-      setRouterQuery(this, url)
+      setRouterQuery(this, url, { browserOnly: true })
     }
   }
 }

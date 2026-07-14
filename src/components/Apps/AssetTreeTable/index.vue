@@ -92,9 +92,9 @@ export default {
               callback: {
                 onSelected: (event, treeNode) => this.getAssetsUrl(treeNode),
                 beforeRefresh: () => {
-                  const query = { ...this.$route.query, node_id: '', asset_id: '' }
+                  const query = { ...vm.$route.query, node_id: '', asset_id: '' }
                   setTimeout(() => {
-                    vm.$router.replace({ query: query })
+                    setRouterQuery(vm, `?${new URLSearchParams(query)}`, { browserOnly: true })
                   }, 100)
                 }
               },
@@ -211,7 +211,7 @@ export default {
       this.updateTableUrl(url)
 
       if (this.treeSetting.selectSyncToRoute !== false) {
-        setRouterQuery(this, url)
+        setRouterQuery(this, url, { browserOnly: true })
       }
     }
   }
