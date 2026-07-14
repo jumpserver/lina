@@ -23,15 +23,18 @@ export default {
   computed: {
     ...mapGetters([
       'publicSettings',
-      'currentUser'
+      'currentUser',
+      'hasValidLicense'
     ]),
     licenseMsg() {
       if (this.jdmcMsg) {
         return this.jdmcMsg
       } else if (this.expireMsg) {
         return this.expireMsg
-      } else {
+      } else if (this.reachLimitsMsg) {
         return this.reachLimitsMsg
+      } else {
+        return this.noLicenseMsg
       }
     },
     jdmcMsg() {
@@ -48,6 +51,22 @@ export default {
         return this.$t('LicenseWillExpire')
       }
       return false
+    },
+
+    noLicenseMsg() {
+      if (!this.publicSettings['XPACK_ENABLED'] || !this.$hasPerm('settings.change_license')) {
+        return false
+      }
+      if (this.loading) {
+        return false
+      }
+      if (this.hasValidLicense) {
+        return false
+      }
+      if (this.jdmcMsg || this.expireMsg || this.reachLimitsMsg) {
+        return false
+      }
+      return this.$t('LicenseNotImported')
     },
     expireMsg() {
       if (!this.publicSettings['XPACK_ENABLED'] || !this.$hasPerm('settings.change_license')) {
