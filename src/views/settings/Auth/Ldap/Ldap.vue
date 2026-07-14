@@ -3,11 +3,11 @@
     <GenericCreateUpdateForm v-bind="$data" />
     <ImportDialog
       v-if="dialogLdapUserImport"
+      v-model:visible="dialogLdapUserImport"
       :category="category"
-      :visible.sync="dialogLdapUserImport"
     />
-    <TestLoginDialog :visible.sync="dialogTest" :category="category" />
-    <SyncSettingDialog :visible.sync="dialogSyncSetting" />
+    <TestLoginDialog v-model:visible="dialogTest" :category="category" />
+    <SyncSettingDialog v-if="dialogSyncSetting" v-model:visible="dialogSyncSetting" />
   </IBox>
 </template>
 <script>

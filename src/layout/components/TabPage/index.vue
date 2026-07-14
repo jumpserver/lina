@@ -447,12 +447,6 @@ export default {
     margin: 0;
   }
 
-  // tab 内容包裹层是 flex 列（见上），el-alert 默认 flex-shrink:1 会被下方表格挤压，
-  // 高度被压缩、文字被裁切。固定不收缩，保证提示按内容完整撑开。
-  .tab-page-content :deep(.el-alert) {
-    flex-shrink: 0;
-  }
-
   .tab-page-content :deep(.tab-page-alert .el-alert__icon) {
     font-size: 16px;
   }

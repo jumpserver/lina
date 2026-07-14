@@ -753,6 +753,8 @@ li.rmenu i.fa {
  */
 .el-alert {
   border: solid 1px var(--color-border);
+  // Alert 在页面、TabPage、弹窗等纵向 flex 容器中都应保持内容高度，由容器负责滚动。
+  flex-shrink: 0;
 }
 
 .el-alert.el-alert--success.is-light {

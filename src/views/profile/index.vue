@@ -377,11 +377,16 @@ export default {
           value: this.object,
           key: 'SSH Key',
           formatter: (item, val) => {
-            const comment = val.public_key_comment || '-'
-            const md5 = val.public_key_hash_md5 || '-'
+            const comment = val.public_key_comment
+            const md5 = val.public_key_hash_md5
+            if (!comment && !md5) {
+              return '-'
+            }
             return (
               <span>
-                {comment} <br /> {md5}
+                {comment}
+                {comment && md5 ? <br /> : null}
+                {md5}
               </span>
             )
           }
