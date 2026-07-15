@@ -1,7 +1,7 @@
 <template>
   <div>
     <TwoCol>
-      <template>
+      <template #default>
         <!-- 左上：设备驱动状态 -->
         <IBox :title="$t('DeviceDriverStatus')">
           <table class="cp-info-table">
@@ -9,7 +9,12 @@
               <tr v-for="item in statusItems" :key="item.key">
                 <td class="cp-label">{{ item.label }}</td>
                 <td class="cp-value">
-                  <el-tag v-if="item.tag !== undefined" :type="item.tag" size="mini" effect="plain">
+                  <el-tag
+                    v-if="item.tag !== undefined"
+                    :type="item.tag"
+                    size="small"
+                    effect="plain"
+                  >
                     {{ item.value }}
                   </el-tag>
                   <span v-else class="cp-text">{{ item.value || '-' }}</span>
@@ -72,7 +77,7 @@
                   <el-tag
                     v-if="item.tag !== undefined"
                     :type="item.tag"
-                    size="mini"
+                    size="small"
                     effect="plain"
                     :title="item.value"
                   >
@@ -96,7 +101,7 @@
     <!-- 通用输入弹框（步骤内 input 配置驱动） -->
     <el-dialog
       :title="inputDialog.title"
-      :visible.sync="inputDialog.visible"
+      v-model="inputDialog.visible"
       :before-close="cancelInputDialog"
       :close-on-click-modal="false"
       :close-on-press-escape="true"
@@ -105,7 +110,7 @@
       append-to-body
       custom-class="cp-input-dialog"
     >
-      <el-form label-width="0px" class="cp-input-form" @submit.native.prevent="confirmInputDialog">
+      <el-form label-width="0px" class="cp-input-form" @submit.prevent="confirmInputDialog">
         <el-form-item
           v-for="f in inputDialog.fields"
           :key="f.key"
@@ -128,10 +133,10 @@
           style="margin-top: 6px"
         />
       </el-form>
-      <span slot="footer">
+      <template #footer>
         <el-button @click="cancelInputDialog">{{ $t('Cancel') }}</el-button>
         <el-button type="primary" @click="confirmInputDialog">{{ $t('Confirm') }}</el-button>
-      </span>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -298,7 +303,7 @@ export default {
     this.loadSDKScript()
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.pollTimer) clearInterval(this.pollTimer)
   },
 
