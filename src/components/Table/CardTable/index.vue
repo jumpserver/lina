@@ -242,11 +242,19 @@ export default {
 <style lang="scss" scoped>
 .the-row .empty-box {
   display: block;
+  // max-width controls the row; the empty card still needs an explicit flex size to fill it.
+  flex: 0 0 100%;
+  width: 100%;
+  box-sizing: border-box;
 
-  ::v-deep {
-    .el-empty {
-      margin: 0 auto;
-    }
+  :deep(.el-empty) {
+    margin: 0 auto;
+  }
+
+  :deep(.el-card__body) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 

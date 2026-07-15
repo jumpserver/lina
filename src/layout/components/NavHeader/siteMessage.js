@@ -1,27 +1,73 @@
 const listItemPattern = /^(?:[-*+]\s+|\d+[.)]\s+)/
-const strongFieldPattern = /\*\*[^*]+?\*\*/g
+const strongFieldPattern = /\*\*[^*\n]+?[：:]\*\*/g
+const fencePattern = /^\s*(`{3,}|~{3,})/
+
+function splitFieldLine(line) {
+  const trimmed = line.trimStart()
+  if (
+    !trimmed ||
+    trimmed.startsWith('#') ||
+    trimmed.startsWith('>') ||
+    listItemPattern.test(trimmed)
+  ) {
+    return null
+  }
+
+  const fields = [...line.matchAll(strongFieldPattern)]
+  if (!fields.length || line.slice(0, fields[0].index).trim()) return null
+
+  return fields.map((field, index) => {
+    const nextField = fields[index + 1]
+    return line.slice(field.index, nextField?.index ?? line.length).trim()
+  })
+}
 
 export function formatSiteMessage(message) {
   if (!message) return ''
 
-  return String(message)
-    .split('\n')
-    .map((line) => {
-      const trimmed = line.trimStart()
+  const lines = String(message).split('\n')
+  const formatted = []
+  let fence = null
 
-      if (
-        !trimmed ||
-        trimmed.startsWith('#') ||
-        trimmed.startsWith('>') ||
-        listItemPattern.test(trimmed)
-      ) {
-        return line
-      }
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index]
+    const fenceMatch = line.match(fencePattern)
 
-      const fields = line.match(strongFieldPattern)
-      if (!fields || fields.length < 2) return line
+    if (fence) {
+      formatted.push(line)
+      if (fenceMatch?.[1].startsWith(fence)) fence = null
+      continue
+    }
 
-      return line.replace(/\s*(\*\*[^*]+?\*\*)/g, '\n- $1').replace(/^\n/, '')
-    })
-    .join('\n')
+    if (fenceMatch) {
+      fence = fenceMatch[1][0]
+      formatted.push(line)
+      continue
+    }
+
+    const firstFields = splitFieldLine(line)
+    if (!firstFields) {
+      formatted.push(line)
+      continue
+    }
+
+    const sourceLines = [line]
+    const fields = [...firstFields]
+    while (index + 1 < lines.length) {
+      const nextFields = splitFieldLine(lines[index + 1])
+      if (!nextFields) break
+      index += 1
+      sourceLines.push(lines[index])
+      fields.push(...nextFields)
+    }
+
+    if (fields.length < 2) {
+      formatted.push(...sourceLines)
+      continue
+    }
+
+    formatted.push(...fields.map((field) => `- ${field}`))
+  }
+
+  return formatted.join('\n')
 }
