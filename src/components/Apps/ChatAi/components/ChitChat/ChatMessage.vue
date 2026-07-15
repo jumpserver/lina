@@ -128,7 +128,7 @@ export default {
       return this.item.message?.role === 'user'
     },
     isSystemError() {
-      return this.item.type === 'error' && this.item?.role === 'assistant'
+      return this.item.type === 'error' && this.item?.message?.role === 'assistant'
     },
     isServerError() {
       return this.item.type === 'finish' && this.item.result.content === ''
