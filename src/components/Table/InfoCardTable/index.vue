@@ -71,7 +71,7 @@ export default {
   }
 
   :deep(.the-row) {
-    max-width: unset;
+    max-width: 100% !important;
   }
 }
 </style>
