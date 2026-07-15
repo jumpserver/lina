@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import { ElTooltip } from 'element-plus'
+
 export default {
   inheritAttrs: false,
   emits: ['input', 'update:modelValue'],
@@ -101,7 +103,7 @@ export default {
         return item
       })
     },
-    renderContent(h, { node, data, store }) {
+    renderContent(h, { node }) {
       let label = node.label
       let helpText = ''
       const regex = /(.*?)\s*\((.*?)\)/
@@ -116,14 +118,21 @@ export default {
       if (helpText) {
         children.push(
           h(
-            'el-tooltip',
+            ElTooltip,
             {
-              props: {
-                content: helpText,
-                placement: 'top'
-              }
+              content: helpText,
+              placement: 'top',
+              popperClass: 'help-tips',
+              showAfter: 300,
+              trigger: 'hover'
             },
-            [h('i', { class: 'fa fa-question-circle-o' })]
+            {
+              default: () =>
+                h('i', {
+                  class: 'fa fa-question-circle-o',
+                  onClick: (event) => event.stopPropagation()
+                })
+            }
           )
         )
       }
