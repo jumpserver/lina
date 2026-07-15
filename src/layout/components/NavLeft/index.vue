@@ -5,7 +5,7 @@
   >
     <div class="nav-header">
       <div class="active-mobile">
-        <Organization v-if="$hasLicense()" class="organization" />
+        <Organization v-if="showOrgs" class="organization" />
       </div>
       <div class="nav-title">
         <span :class="switchViewOtherClasses" class="switch-view active-switch-view">
@@ -119,8 +119,7 @@ export default {
       return this.$store.state.settings.sidebarLogo
     },
     showOrgs() {
-      return this.$store.getters.hasValidLicense
-      // return !this.isCollapse && this.inAdminPage && hasValidLicense
+      return this.$route.meta?.showOrganization !== false && this.$hasLicense()
     },
     isCollapse() {
       return !this.sidebar.opened
@@ -172,13 +171,19 @@ $origin-color: #ffffff;
     align-items: center;
 
     .active-mobile {
+      width: 100%;
       display: none;
 
       :deep(.organization) {
         height: $mobileHeight;
-        padding-left: 20px;
+        width: 100%;
+        padding: 0 15px;
         background: var(--color-primary-dark-1);
         color: $origin-color;
+
+        .el-select__wrapper {
+          width: 100%;
+        }
 
         .el-input--prefix {
           display: flex;

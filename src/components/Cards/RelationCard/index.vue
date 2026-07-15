@@ -193,7 +193,6 @@ export default {
           ...that.iHasObjects,
           ...objects.filter((item) => !oldValues.includes(item.value))
         ]
-        that.$refs.select2.clearSelected()
         that.$message.success(that.$t('AddSuccessMsg'))
         that.$refs.select2.refresh()
         that.$emit('addSuccess')
@@ -348,8 +347,17 @@ export default {
         return
       }
       this.performAdd(objects, this).then(() => {
-        this.onAddSuccess(objects, this)
+        try {
+          this.onAddSuccess(objects, this)
+        } finally {
+          this.clearSelection()
+        }
       })
+    },
+    clearSelection() {
+      const select2 = this.$refs.select2
+      this.select2.value = select2?.multiple === false ? '' : []
+      select2?.clearSelected()
     },
     getSelectedObjects() {
       const select2 = this.$refs.select2

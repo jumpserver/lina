@@ -28,6 +28,14 @@ export default {
   components: {
     AutoDataForm
   },
+  emits: [
+    'afterRemoteMeta',
+    'getObjectDone',
+    'performError',
+    'performFinished',
+    'submitSuccess',
+    'update:object'
+  ],
   props: {
     // 创建对象的地址
     url: {
@@ -369,9 +377,12 @@ export default {
       return values
     },
     handleAfterRemoteMeta(meta) {
+      let result
       if (this.afterGetRemoteMeta) {
-        return this.afterGetRemoteMeta(meta)
+        result = this.afterGetRemoteMeta(meta)
       }
+      this.$emit('afterRemoteMeta', meta)
+      return result
     },
     handleSubmit(values, formName, addContinue) {
       let handler = this.onSubmit || this.defaultOnSubmit

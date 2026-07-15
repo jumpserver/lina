@@ -3,7 +3,6 @@ import AccountFormatter from './components/AccountFormatter'
 
 function getFields() {
   const users = {
-    label: 'Users',
     hidden: () => false,
     el: {
       value: [],
@@ -17,7 +16,6 @@ function getFields() {
   }
 
   const user_groups = {
-    label: 'UserGroups',
     hidden: () => false,
     el: {
       value: [],
@@ -29,7 +27,6 @@ function getFields() {
     type: 'assetSelect',
     hidden: () => false,
     component: AssetSelect,
-    label: 'Asset',
     rules: [
       {
         required: false
@@ -41,7 +38,6 @@ function getFields() {
   }
 
   const nodes = {
-    label: 'Node',
     hidden: () => false,
     el: {
       value: [],
@@ -56,27 +52,22 @@ function getFields() {
 
   const accounts = {
     type: 'input',
-    label: 'Account',
     component: AccountFormatter
   }
 
   const date_start = {
-    label: 'DateStart',
     hidden: () => false
   }
 
   const date_expired = {
-    label: 'DateExpired',
     hidden: () => false
   }
 
   const is_active = {
-    label: 'IsActive',
     type: 'checkbox'
   }
 
   const applications = {
-    label: 'Applications',
     hidden: () => false,
     el: {
       value: [],

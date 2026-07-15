@@ -400,7 +400,15 @@ export default {
     gap: 8px;
     min-height: 0;
     padding: 10px 20px 0;
-    overflow-y: auto;
+    overflow: auto;
+
+    // Tab 内容保留统一的可用宽度；视口或抽屉继续收窄时由内容区滚动，
+    // 不再让表单、帮助文案和复杂控件无限压缩。
+    > :deep(*) {
+      flex-shrink: 0;
+      min-width: 600px;
+      box-sizing: border-box;
+    }
 
     /*
      * flex 列 + overflow-y:auto 的容器会裁掉自身 padding-bottom（Chrome 已知行为），
@@ -423,6 +431,17 @@ export default {
   .tab-page-content :deep(.el-card) {
     overflow: visible !important;
     max-height: none !important;
+  }
+
+  // 设置页表单标签在固定 label 列内统一左对齐，避免窄宽度下贴到控件右侧。
+  .tab-page-content :deep(.form-fields .el-form-item__label-wrap) {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .tab-page-content :deep(.form-fields .el-form-item__label) {
+    justify-content: flex-start;
+    text-align: left;
   }
 
   /*

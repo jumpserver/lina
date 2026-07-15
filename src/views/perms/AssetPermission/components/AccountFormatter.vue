@@ -389,18 +389,17 @@ export default {
 
 .virtual-choices {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
 
   :deep(.el-checkbox) {
+    align-self: flex-start;
     margin-right: 0;
-    flex: 0 0 auto;
   }
 
   :deep(.el-select) {
-    flex: 1 1 240px;
-    width: auto;
+    width: 100%;
     min-width: 0;
     max-width: 100%;
   }

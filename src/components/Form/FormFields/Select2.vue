@@ -450,6 +450,7 @@ export default {
       })
     },
     clearSelected() {
+      this.allSelected = false
       this.innerValue = this.multiple ? [] : ''
       const payload = _.cloneDeep(this.innerValue)
       this.$emit('input', payload)

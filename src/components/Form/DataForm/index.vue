@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="data-form-container">
     <ElFormRender
       v-bind="$attrs"
       :id="id"
@@ -295,6 +295,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.data-form-container {
+  width: 100%;
+  min-width: 0;
+  container-name: data-form;
+  container-type: inline-size;
+}
+
 .form-fields.el-form {
   display: flex;
   flex-direction: column;
@@ -442,5 +449,53 @@ export default {
 
 .el-form.mobile.dialog-mode {
   padding: 0;
+}
+
+/*
+ * 设置页即使运行在 desktop 设备上，也可能因抽屉或分栏被压缩。此处按表单自身宽度
+ * 切换布局，避免百分比 label 被挤成逐字换行，并让帮助文案跟随控件完整展示。
+ */
+@container data-form (max-width: 520px) {
+  .form-fields.el-form {
+    :deep(.el-form-item) {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+    }
+
+    :deep(.el-form-item__label-wrap) {
+      flex: 0 0 auto !important;
+      width: 100% !important;
+    }
+
+    :deep(.el-form-item__label) {
+      width: 100% !important;
+      justify-content: flex-start;
+      text-align: left;
+
+      span {
+        display: inline-flex;
+        max-width: 100%;
+        overflow: visible;
+        overflow-wrap: anywhere;
+      }
+    }
+
+    :deep(.el-form-item__content) {
+      width: 100%;
+      min-width: 0;
+      flex-basis: auto;
+    }
+
+    :deep(.help-block) {
+      width: 100%;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    :deep(.form-buttons) {
+      padding-inline-start: 0;
+    }
+  }
 }
 </style>

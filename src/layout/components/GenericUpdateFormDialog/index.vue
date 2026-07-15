@@ -22,11 +22,10 @@
         <el-checkbox
           v-for="(value, name) in iFormSetting.fieldsMeta"
           :key="name"
-          :checked="true"
           :disabled="value.disabled"
           :label="name"
         >
-          {{ value.label }}
+          {{ value.label || name }}
         </el-checkbox>
       </el-checkbox-group>
     </div>
@@ -35,7 +34,12 @@
     </el-row>
     <el-row>
       <el-col :span="24">
-        <GenericCreateUpdateForm v-bind="iFormSetting" label-width="90px" :key="internalKey" />
+        <GenericCreateUpdateForm
+          v-bind="iFormSetting"
+          :key="internalKey"
+          label-width="90px"
+          @after-remote-meta="handleAfterRemoteMeta"
+        />
       </el-col>
     </el-row>
   </Dialog>
@@ -75,20 +79,55 @@ export default {
       internalKey: 0,
       selectPropertiesLabel: this.$t('SelectProperties'),
       checkedFields: [],
-      iFormSetting: {}
+      iFormSetting: {},
+      originalHidden: {}
     }
   },
-  mounted() {
-    const defaultFormSetting = this.getDefaultFormSetting()
-    this.iFormSetting = Object.assign({}, defaultFormSetting, this.formSetting)
+  watch: {
+    visible: {
+      immediate: true,
+      handler(visible, oldVisible) {
+        if (visible && !oldVisible) {
+          this.initializeFormSetting()
+        }
+      }
+    }
   },
   methods: {
+    initializeFormSetting() {
+      const defaultFormSetting = this.getDefaultFormSetting()
+      const sourceFieldsMeta = this.formSetting.fieldsMeta || {}
+      const fieldsMeta = {}
+      const originalHidden = {}
+
+      for (const [name, meta] of Object.entries(sourceFieldsMeta)) {
+        fieldsMeta[name] = { ...meta }
+        originalHidden[name] = meta.hidden
+      }
+
+      this.originalHidden = originalHidden
+      this.checkedFields = Object.keys(fieldsMeta)
+      this.iFormSetting = {
+        ...defaultFormSetting,
+        ...this.formSetting,
+        fieldsMeta
+      }
+      this.internalKey++
+    },
+    handleAfterRemoteMeta(meta) {
+      for (const [name, fieldMeta] of Object.entries(this.iFormSetting.fieldsMeta)) {
+        const remoteLabel = meta?.[name]?.label
+        if (remoteLabel) {
+          fieldMeta.label = remoteLabel
+        }
+      }
+    },
     handleCheckedFieldsChange(values) {
       for (const field of Object.keys(this.iFormSetting.fieldsMeta)) {
         if (values.indexOf(field) === -1) {
           this.iFormSetting.fieldsMeta[field].hidden = () => true
         } else {
-          this.iFormSetting.fieldsMeta[field].hidden = () => false
+          this.iFormSetting.fieldsMeta[field].hidden = this.originalHidden[field] || (() => false)
         }
       }
       this.internalKey++
@@ -125,10 +164,10 @@ export default {
             .then((res) => {
               vm.$emit('update')
               this.$message.success(msg)
-              this.$emit('update:visible', false)
+              vm.$emit('update:visible', false)
             })
             .catch((error) => {
-              this.$emit('submitError', error)
+              vm.$emit('submitError', error)
               const response = error.response
               const data = response.data
               // 不要逐个设置字段的 attrs.error 或改动 fields 引用。
