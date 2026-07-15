@@ -78,13 +78,7 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
-  ...commonRoutes,
-  {
-    path: '/:pathMatch(.*)*',
-    name: 'NotFound',
-    component: () => import('@/views/404'),
-    hidden: true
-  }
+  ...commonRoutes
 ]
 
 /**
