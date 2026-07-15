@@ -4,7 +4,6 @@
     v-model:active-menu="tab.activeMenu"
     :help-tip="platformPageHelpMsg"
     :submenu="tab.submenu"
-    @tab-click="changeMoreCreates"
   >
     <keep-alive>
       <GenericListTable
@@ -160,11 +159,17 @@ export default {
       return `/api/v1/assets/platforms/?category=${this.tab.activeMenu}`
     }
   },
+  watch: {
+    'tab.activeMenu'() {
+      this.changeMoreCreates()
+    }
+  },
   activated() {},
   async mounted() {
     try {
       await this.setCategoriesTab()
     } finally {
+      this.changeMoreCreates()
       this.loading = false
     }
 
@@ -176,9 +181,6 @@ export default {
         this.$refs.genericListTable.onDetail({ row: { id: platform, name } })
       })
     }
-  },
-  updated() {
-    this.changeMoreCreates()
   },
   methods: {
     changeMoreCreates() {

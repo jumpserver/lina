@@ -68,10 +68,25 @@ export default {
     }
   },
   watch: {
+    'config.url': {
+      handler: _.debounce(function (newUrl, oldUrl) {
+        if (this.isDeactivated || !this.inited || !newUrl || newUrl === oldUrl) {
+          return
+        }
+
+        this.optionUrlMetaAndGenCols()
+        this.$log.debug('AutoDataTable URL change found')
+      }, 200)
+    },
     config: {
       immediate: false,
       handler: _.debounce(function (iNew, iOld) {
         if (this.isDeactivated || !this.inited) {
+          return
+        }
+        // URL changes are handled separately so later column/config updates
+        // cannot overwrite the pending URL refresh in this debounced watcher.
+        if (iNew?.url !== iOld?.url) {
           return
         }
         const changed = this.isConfigChanged(iNew, iOld)
