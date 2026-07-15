@@ -15,6 +15,7 @@ import AssetPermissionAsset from '@/views/perms/AssetPermission/AssetPermissionD
 import AssetPermissionUser from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionUser.vue'
 import AssetPermissionDetail from '@/views/perms/AssetPermission/AssetPermissionDetail/index.vue'
 import UserAssetPermissionRules from './UserAssetPermissionRules'
+import UserAuthUKey from './UserAuthUKey'
 import UserGrantedAssets from './UserGrantedAssets'
 import UserInfo from './UserInfo'
 import UserLoginACL from './UserLoginACL.vue'
@@ -31,7 +32,8 @@ export default {
     AssetPermissionAsset,
     AssetPermissionDetail,
     AssetPermissionAccount,
-    UserAssetPermissionRules
+    UserAssetPermissionRules,
+    UserAuthUKey
   },
   data() {
     const vm = this
@@ -52,6 +54,11 @@ export default {
           {
             title: this.$t('Basic'),
             name: 'UserInfo'
+          },
+          {
+            title: this.$t('UserUKey'),
+            name: 'UserAuthUKey',
+            hidden: () => !vm.$hasPerm('users.change_user') || !vm.publicSettings.AUTH_UKEY
           },
           {
             title: this.$t('GrantedAssets'),
@@ -78,7 +85,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentUserIsSuperAdmin'])
+    ...mapGetters([
+        'currentUserIsSuperAdmin',
+        'publicSettings'
+      ])
   },
   methods: {
     handleTabClick(tab) {
