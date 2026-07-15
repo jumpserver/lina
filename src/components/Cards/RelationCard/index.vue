@@ -404,12 +404,6 @@ tr.item td {
   margin-bottom: 20px;
 }
 
-.the-box :deep(.select2 .el-select__tags) {
-  height: 28px;
-  min-height: 28px;
-  align-items: center;
-}
-
 .the-box :deep(.el-button) {
   height: 30px;
   min-height: 30px;

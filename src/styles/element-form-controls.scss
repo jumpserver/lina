@@ -27,6 +27,33 @@
   @include jms-input-wrapper-spacing;
 }
 
+// 所有 Element Plus 多选框使用同一套标签尺寸与间距。契约锚定 selection，
+// 以同时覆盖主控件和 collapse-tags-tooltip teleport 出去的标签列表。
+.el-select__selection:has(.el-tag) {
+  gap: 0;
+
+  .el-tag {
+    margin: 2px 0 2px 6px;
+  }
+
+  .el-tag.el-tag--small {
+    min-height: 24px;
+    height: 24px;
+    padding: 0 8px;
+    line-height: 22px;
+    font-size: 12px;
+
+    .el-tag__close {
+      margin-top: -1px !important;
+    }
+  }
+
+  // Tag 的起始 margin 负责 tag-to-tag 间距；输入容器单独补齐末尾 Tag 到光标的间距。
+  > .el-select__input-wrapper:not(.is-hidden) {
+    margin-inline-start: 6px;
+  }
+}
+
 @mixin jms-form-control-items {
   --el-input-height: 30px;
   font-size: 13px;
@@ -114,7 +141,6 @@
     align-items: center;
   }
 
-  .el-select__selected-item,
   .el-select__placeholder,
   .el-select__input {
     min-height: 28px;
@@ -239,7 +265,6 @@
     box-shadow: none !important;
   }
 
-  .el-select__wrapper .el-select__selected-item,
   .el-select__wrapper .el-select__placeholder {
     border: 0 !important;
     box-shadow: none !important;
@@ -281,18 +306,6 @@
 
   .el-form-item__error {
     position: inherit;
-  }
-
-  .el-select {
-    .el-select__tags > span > .el-tag.el-tag--info {
-      min-height: 24px;
-      height: 24px;
-      line-height: 22px;
-
-      .el-tag__close {
-        margin-top: -1px !important;
-      }
-    }
   }
 
   .el-textarea .el-textarea__inner {
