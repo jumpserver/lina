@@ -73,7 +73,7 @@
         <el-tooltip :content="action.tip" :disabled="!action.tip" :show-after="500" placement="top">
           <div>
             <Icon v-if="action.icon" :icon="action.icon" class="pre-icon" />
-            <span>
+            <span v-if="action.title">
               {{ action.title }}
             </span>
           </div>

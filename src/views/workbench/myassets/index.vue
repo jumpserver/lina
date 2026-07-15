@@ -2,6 +2,7 @@
   <Page>
     <GrantedAssets
       ref="grantedAssets"
+      class="my-assets-table"
       :actions="actions"
       :comment="comment"
       :name="name"
@@ -12,10 +13,10 @@
 </template>
 
 <script>
-import GrantedAssets from '@/components/Apps/GrantedAssets/index.vue'
-import Page from '@/layout/components/Page/index.vue'
-import { EditableInputFormatter } from '@/components/Table/TableFormatters'
 import { getPreference } from '@/api/settings'
+import GrantedAssets from '@/components/Apps/GrantedAssets/index.vue'
+import { EditableInputFormatter } from '@/components/Table/TableFormatters'
+import Page from '@/layout/components/Page/index.vue'
 import { addBasePath, openNewWindow } from '@/utils/common/index'
 
 export default {
@@ -174,5 +175,11 @@ export default {
   margin-left: 10px;
   border-bottom: solid 1px;
   font-size: 12px;
+}
+
+.my-assets-table .table-actions {
+  .el-button .el-tooltip__trigger .pre-icon .fa {
+    margin-right: 0px;
+  }
 }
 </style>
