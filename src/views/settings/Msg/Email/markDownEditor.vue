@@ -3,19 +3,21 @@
     <div class="action-bar">
       <i class="fa" :class="[showPreview ? 'fa-eye-slash' : 'fa-eye']" @click="togglePreview" />
     </div>
-    <el-row :gutter="12">
-      <el-col :span="showPreview ? 12 : 24">
-        <el-input
-          v-model="localValue"
-          :autosize="{ minRows: 16 }"
-          class="editor-input"
-          type="textarea"
-        />
-      </el-col>
-      <el-col v-show="showPreview" :span="12">
-        <div class="preview markdown-body" v-html="html" />
-      </el-col>
-    </el-row>
+    <div class="editor-scroll">
+      <el-row :gutter="12" :class="{ 'is-split': showPreview }" class="editor-panes">
+        <el-col :span="showPreview ? 12 : 24" class="editor-pane">
+          <el-input
+            v-model="localValue"
+            :autosize="{ minRows: 16 }"
+            class="editor-input"
+            type="textarea"
+          />
+        </el-col>
+        <el-col v-show="showPreview" :span="12" class="editor-pane">
+          <div class="preview markdown-body" v-html="html" />
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 <script>
@@ -77,6 +79,8 @@ export default {
 .markdown-editor {
   // 表单项内容区是 flex 容器,不设宽度会按内容收缩成窄条,这里撑满可用宽度
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   box-sizing: border-box;
   position: relative;
   padding: 10px;
@@ -93,6 +97,31 @@ export default {
   i {
     cursor: pointer;
   }
+}
+
+.editor-scroll {
+  width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.editor-panes {
+  flex-wrap: nowrap;
+}
+
+.editor-panes.is-split {
+  flex-wrap: wrap;
+  row-gap: 12px;
+}
+
+.editor-pane {
+  min-width: 0;
+}
+
+.editor-panes.is-split .editor-pane {
+  flex: 1 1 280px;
+  width: auto;
+  max-width: 100%;
 }
 
 .editor-input :deep(.el-textarea__inner) {

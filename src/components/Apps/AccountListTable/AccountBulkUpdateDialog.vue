@@ -5,6 +5,8 @@
     :form-setting="formSetting"
     :selected-rows="selectedRows"
     :visible="visible"
+    @update="$emit('update', $event)"
+    @update:visible="$emit('update:visible', $event)"
   />
 </template>
 
@@ -18,6 +20,7 @@ export default {
   components: {
     GenericUpdateFormDialog
   },
+  emits: ['update', 'update:visible'],
   props: {
     visible: {
       type: Boolean,

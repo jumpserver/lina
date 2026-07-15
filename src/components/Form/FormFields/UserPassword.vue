@@ -12,6 +12,7 @@ export default {
   name: 'UserPassword',
   components: { PasswordInput },
   inheritAttrs: false,
+  emits: ['input'],
   props: {
     value: {
       type: String,
@@ -64,9 +65,9 @@ export default {
   computed: {
     ...mapGetters(['publicSettings']),
     inputAttrs() {
-      const { userIsOrgAdmin, ...attrs } = this.$attrs
+      const { modelValue, userIsOrgAdmin, ...attrs } = this.$attrs
       return {
-        ...attrs,
+        ...Object.fromEntries(Object.entries(attrs).filter(([name]) => !/^on[A-Z]/.test(name))),
         showStrengthMeter: true
       }
     }
