@@ -70,7 +70,8 @@ export default {
             'AUTH_LDAP_HA_STRICT_SYNC',
             'AUTH_LDAP_HA_CONNECT_TIMEOUT',
             'AUTH_LDAP_HA_SEARCH_PAGED_SIZE',
-            'AUTH_LDAP_HA_CACHE_TIMEOUT'
+            'AUTH_LDAP_HA_CACHE_TIMEOUT',
+            'AUTH_LDAP_HA_ALWAYS_UPDATE_USER'
           ]
         ]
       ],
