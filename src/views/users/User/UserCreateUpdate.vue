@@ -55,7 +55,10 @@ export default {
           uniqueCheck: true
         },
         username: {
-          uniqueCheck: true
+          uniqueCheck: true,
+          el: {
+            autocomplete: 'off'
+          }
         },
         password_strategy: {
           hidden: (formValue) => {
@@ -91,6 +94,7 @@ export default {
             return true
           },
           el: {
+            autocomplete: 'new-password',
             required: false,
             userIsOrgAdmin: false
           }
