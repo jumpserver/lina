@@ -542,26 +542,6 @@ export default {
   border-radius: 0;
 }
 
-.crontab-root :deep(.cron-tab-form__select .el-select__selected-item) {
-  display: inline-flex;
-  align-items: center;
-  min-height: 28px;
-}
-
-.crontab-root :deep(.cron-tab-form__select .el-tag) {
-  height: 22px;
-  line-height: 20px;
-  margin: 0;
-  display: inline-flex;
-  align-items: center;
-}
-
-.crontab-root :deep(.cron-tab-form__select .el-tag__content) {
-  display: inline-flex;
-  align-items: center;
-  line-height: 20px;
-}
-
 .crontab-root :deep(.cron-tab-form__number.el-input-number) {
   --jms-input-padding-block: 0;
   --jms-input-padding-inline: 8px;

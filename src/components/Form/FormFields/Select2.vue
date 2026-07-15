@@ -519,35 +519,16 @@ export default {
   width: 100%;
 
   &.hidden-tag {
-    :deep(.el-select__tags) {
+    :deep(.el-select__selected-item:has(> .el-tag)) {
       opacity: 0;
-      cursor: not-allowed;
+      pointer-events: none;
     }
   }
 
   &.show-tag {
-    :deep(.el-select__tags) {
+    :deep(.el-select__selected-item:has(> .el-tag)) {
       opacity: 1;
     }
-  }
-
-  :deep(.el-tag.el-tag--info) {
-    min-height: 24px;
-    height: 24px;
-    line-height: 22px;
-    margin-top: 0;
-    margin-bottom: 0;
-    margin-left: 5px;
-    padding: 0 8px;
-    font-family: sans-serif !important;
-    white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
-  }
-
-  :deep(.el-tag__content) {
-    display: inline-flex;
-    align-items: center;
   }
 }
 
@@ -563,15 +544,8 @@ export default {
     flex-wrap: wrap;
     align-items: center;
     align-content: center;
-    gap: 4px;
     width: 100%;
     min-height: 28px;
-  }
-
-  :deep(.el-select__tags) {
-    display: contents;
-    min-height: 0;
-    height: auto;
   }
 
   :deep(.el-select__selected-item) {
@@ -586,7 +560,6 @@ export default {
     // 撑高整个控件;flex-grow 让它在同一行内自动填满剩余空间。
     flex: 1 1 30px;
     min-width: 30px;
-    margin-left: 0;
   }
 
   :deep(.el-select__input) {
