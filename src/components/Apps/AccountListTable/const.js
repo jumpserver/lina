@@ -342,7 +342,7 @@ export const accountQuickFilters = (vm) => [
       {
         label: vm.$t('Directories'),
         filter: {
-          category: 'directories'
+          category: 'ds'
         }
       },
       {
