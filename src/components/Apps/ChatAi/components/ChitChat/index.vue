@@ -19,7 +19,7 @@
       </div>
       <ChatMessage
         v-for="(item, index) in activeChat.chats"
-        :key="index"
+        :key="item?.message?.id || `message-${index}`"
         :item="item"
         :is-terminal="isTerminal"
         :selected-model="selectedModel"
@@ -39,18 +39,11 @@
       <ChatInput
         ref="chatInput"
         :expanded="expanded"
-        :model-options="models"
-        :selected-model="selectedModel"
-        :loading="modelsLoading"
-        :tool-options="toolOptions"
-        :tool-server-options="toolServerOptions"
-        :selected-tools="selectedToolIds"
-        :selected-tool-servers="selectedToolServerIds"
-        :tools-loading="toolsLoading"
+        :prompt-options="promptOptions"
+        :prompts-loading="promptsLoading"
+        :selected-prompt="prompt"
         @send="onSendHandle"
-        @select-model="onSelectModel"
-        @select-tools="onSelectTools"
-        @select-tool-servers="onSelectToolServers"
+        @select-prompt="onSelectPromptHandle"
       />
     </div>
   </div>
@@ -61,17 +54,20 @@ import { KAEL_HOST } from '@/utils/env'
 import ChatInput from './ChatInput.vue'
 import ChatMessage from './ChatMessage.vue'
 import { mapGetters, mapState } from 'vuex'
-import { getInputFocus, useChat } from '../../useChat.js'
+import { useChat } from '../../useChat.js'
 import io from 'socket.io-client'
 import { v4 as uuidv4 } from 'uuid'
 import yaml from 'js-yaml'
+import request from '@/utils/request'
 
 const {
   setLoading,
   clearChats,
   addChatMessageById,
+  addMessageToActiveChat,
   newChatAndAddMessageById,
-  removeLoadingMessageInChat
+  removeLoadingMessageInChat,
+  getInputFocus
 } = useChat()
 
 export default {
@@ -103,6 +99,8 @@ export default {
       terminalContext: null,
       isTerminal: false,
       sessionChat: {},
+      prompts: [],
+      promptsLoading: false,
       modelsLoaded: false,
       modelsLoading: false,
       modelsInitialized: false,
@@ -129,6 +127,12 @@ export default {
       activeChat: (state) => state.chat.activeChat
     }),
     ...mapGetters(['publicSettings']),
+    promptOptions() {
+      return this.prompts.map((prompt) => ({
+        label: prompt.name,
+        value: prompt.content
+      }))
+    },
     toolOptions() {
       return (this.tools || [])
         .map((item) => ({
@@ -145,6 +149,9 @@ export default {
         }))
         .filter((server) => !!server.value)
     }
+  },
+  beforeUnmount() {
+    this.socket?.close()
   },
   methods: {
     replaceLoadingChat(chat) {
@@ -173,13 +180,101 @@ export default {
       if (!this.activeChat?.chats || this.activeChat.chats.length === 0) {
         this.initChatMessage()
       }
-      this.initSocket()
-      if (!this.modelsInitialized) {
-        this.modelsInitialized = true
-        this.ensureModels()
-        this.ensureToolServers()
-        this.ensureTools()
+      this.initWebSocket()
+      this.fetchPrompts()
+    },
+    initWebSocket() {
+      if (
+        this.socket?.readyState === WebSocket.OPEN ||
+        this.socket?.readyState === WebSocket.CONNECTING
+      ) {
+        return
       }
+
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+      const endpoint = '/kael/chat/system/'
+      this.socket = new WebSocket(`${protocol}//${window.location.host}${endpoint}`)
+      this.socket.onmessage = this.handleWebSocketMessage
+      this.socket.onerror = () => this.handleSocketDisconnect()
+      this.socket.onclose = () => this.handleSocketDisconnect()
+    },
+    async fetchPrompts() {
+      if (this.promptsLoading || this.prompts.length) return
+
+      this.promptsLoading = true
+      try {
+        const data = await request.get('/api/v1/settings/chatai-prompts/', {
+          disableFlashErrorMsg: true
+        })
+        const prompts = Array.isArray(data) ? data : data?.results || []
+        this.prompts = prompts.filter((prompt) => prompt?.name && prompt?.content)
+      } catch (error) {
+        console.warn('fetch chat prompts failed', error)
+      } finally {
+        this.promptsLoading = false
+      }
+    },
+    handleWebSocketMessage(event) {
+      let data
+      try {
+        data = JSON.parse(event.data)
+      } catch (error) {
+        console.warn('invalid Kael WebSocket message', error)
+        return
+      }
+
+      if (data.type === 'error') {
+        this.onSystemMessage(data)
+      } else if (data.message) {
+        this.onChatMessage(data)
+      }
+    },
+    onChatMessage(data) {
+      const message = data.message
+      const chats = this.activeChat?.chats || []
+      const chat = {
+        message: {
+          id: message.id,
+          content: message.content,
+          role: message.role || 'assistant',
+          create_time: message.create_time || new Date(),
+          is_reasoning: message.is_reasoning
+        },
+        type: message.type
+      }
+      const index = chats.findIndex((item) => item?.message?.id === message.id)
+
+      removeLoadingMessageInChat()
+      if (index === -1) {
+        addChatMessageById(chat)
+      } else {
+        chats.splice(index, 1, chat)
+      }
+      this.chatId = data.conversation_id || this.chatId
+
+      if (message.type === 'finish') {
+        setLoading(false)
+        getInputFocus()
+      }
+    },
+    onSystemMessage(data) {
+      removeLoadingMessageInChat()
+      addMessageToActiveChat({
+        message: {
+          id: this.genId(),
+          content: data.system_message || this.$t('ConnectionDropped'),
+          role: 'assistant',
+          create_time: new Date()
+        },
+        type: 'error'
+      })
+      setLoading(false)
+    },
+    handleSocketDisconnect() {
+      if (!this.isLoading) return
+
+      this.socket = null
+      this.onSystemMessage({})
     },
     initSocket() {
       if (this.socket) return
@@ -248,14 +343,12 @@ export default {
       this.prompt = ''
       this.showIntroduction = true
       this.chatId = ''
-      if (this.$refs.chatInput?.select) {
-        this.$refs.chatInput.select.value = ''
-      }
       if (this.terminalContext) {
         this.prompt = this.terminalContext.content || ''
       }
       const chat = {
         message: {
+          id: this.genId(),
           content: this.$t('ChatHello'),
           role: 'assistant',
           create_time: new Date()
@@ -944,17 +1037,24 @@ export default {
           console.warn('fetch models failed', res.status)
         } else {
           const data = await res.json()
-          this.models = data?.data || []
-          if (!this.selectedModel) {
-            const fromProvider = provider?.model
-            this.selectedModel = fromProvider || this.models[0]?.id || ''
-          }
+          this.models = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : []
+          this.ensureSelectedModel(provider)
           this.modelsLoaded = true
         }
       } catch (err) {
         console.warn('fetch models error', err)
+        this.ensureSelectedModel(provider)
       } finally {
         this.modelsLoading = false
+      }
+    },
+    ensureSelectedModel(provider) {
+      const defaultModel = provider?.model
+      if (defaultModel && !this.models.some((model) => model?.id === defaultModel)) {
+        this.models = [...this.models, { id: defaultModel, name: defaultModel }]
+      }
+      if (!this.selectedModel) {
+        this.selectedModel = defaultModel || this.models[0]?.id || ''
       }
     },
     async ensureModels() {
@@ -1413,48 +1513,43 @@ export default {
     },
     onSendHandle(value) {
       this.showIntroduction = false
-      this.startRequest()
-      const responseId = this.genId()
-      this.pendingResponseId = responseId
-      const userMessageId = this.genId()
-      this.addUserMessage(value, userMessageId)
-      this.addLoadingMessage(responseId)
-      this.sendToKael(value, userMessageId, responseId)
-    },
-    addUserMessage(value, id) {
-      const model = this.selectedModel || this.getActiveProvider()?.model || ''
-      const chat = {
+      if (this.socket?.readyState !== WebSocket.OPEN) {
+        this.onSystemMessage({})
+        this.initWebSocket()
+        return
+      }
+
+      addChatMessageById({
         message: {
-          id: id || this.genId(),
+          id: this.genId(),
           content: value,
           role: 'user',
-          create_time: new Date(),
-          ...(model ? { models: [model] } : {})
+          create_time: new Date()
         }
-      }
-      addChatMessageById(chat)
-    },
-    onSelectModel(val) {
-      this.selectedModel = val || this.selectedModel
+      })
+      this.socket.send(
+        JSON.stringify({
+          content: value,
+          prompt: this.prompt,
+          conversation_id: this.chatId || undefined
+        })
+      )
+      this.addLoadingMessage(this.genId())
     },
     onSelectPromptHandle(value) {
       this.prompt = value
       this.chatId = ''
-      this.showIntroduction = false
-      this.onSendHandle(value)
     },
     onNewChat() {
       clearChats()
       this.initChatMessage()
     },
     onStopHandle() {
-      if (this.controller) {
-        this.controller.abort()
-        this.controller = null
+      if (this.socket?.readyState === WebSocket.OPEN) {
+        this.socket.send(JSON.stringify({ conversation_id: this.chatId || '', interrupt: true }))
       }
       removeLoadingMessageInChat()
       setLoading(false)
-      this.markDone('manual stop')
     },
     sendIntroduction(item) {
       this.showIntroduction = false

@@ -122,10 +122,17 @@ export default {
           stripe: true, // 斑马纹表格
           border: true, // 表格边框
           fit: true, // 宽度自适应,
-          // 单元格溢出 tooltip 走自定义 popperClass 限宽,避免密文等超长内容横铺撑破页面
+          // 单元格溢出 tooltip 限宽并断词，避免密文等超长内容横向撑破页面。
+          // popperStyle 直接传给 Element Plus 生成的浮层，不能只依赖 CSS 类名。
           tooltipOptions: {
             effect: 'dark',
-            popperClass: 'import-cell-tooltip'
+            popperClass: 'import-cell-tooltip',
+            popperStyle: {
+              maxWidth: 'min(600px, calc(100vw - 32px))',
+              overflowWrap: 'anywhere',
+              whiteSpace: 'normal',
+              wordBreak: 'break-all'
+            }
           },
           maxHeight: this.tableHeight
         }
@@ -545,7 +552,8 @@ export default {
 <!-- 表格单元格溢出 tooltip 会 teleport 到 body,须用非 scoped 样式限宽 -->
 <style lang="scss">
 .import-cell-tooltip.el-popper {
-  max-width: 460px;
+  max-width: min(600px, calc(100vw - 32px));
+  overflow-wrap: anywhere;
   word-break: break-all;
   white-space: normal;
   line-height: 1.5;
