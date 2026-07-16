@@ -56,8 +56,13 @@
             >
               <svg-icon icon-class="refresh" @click="onRefresh" />
             </el-tooltip>
-            <el-dropdown v-else size="small" @command="handleCommand">
-              <span class="el-dropdown-link">
+            <el-dropdown
+              v-else
+              popper-class="chat-message-dropdown"
+              size="small"
+              @command="handleCommand"
+            >
+              <span class="el-dropdown-link chat-message-dropdown-trigger">
                 <i class="fa fa-ellipsis-v" />
               </span>
               <template #dropdown>
@@ -276,13 +281,27 @@ export default {
           }
 
           .el-dropdown {
+            display: inline-flex;
+            align-items: center;
             height: 32px;
-            line-height: 37px;
             font-size: 13px;
 
-            .el-dropdown-link {
+            .chat-message-dropdown-trigger {
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              width: 24px;
+              height: 24px;
+              border-radius: 4px;
+              cursor: pointer;
+              outline: none;
+
+              &:focus,
+              &:focus-visible {
+                outline: none;
+              }
+
               i {
-                padding: 4px 5px;
                 font-size: 15px;
                 color: #8d9091;
 
@@ -329,5 +348,20 @@ export default {
       }
     }
   }
+}
+</style>
+
+<style lang="scss">
+.chat-message-dropdown.el-dropdown__popper .el-dropdown-menu--small {
+  padding: 6px 0;
+}
+
+.chat-message-dropdown.el-dropdown__popper .el-dropdown-menu__item {
+  display: flex;
+  align-items: center;
+  height: 34px;
+  padding: 0 20px;
+  font-size: 13px;
+  line-height: 34px;
 }
 </style>
