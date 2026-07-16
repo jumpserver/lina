@@ -6,21 +6,19 @@
       </keep-alive>
     </router-view>
 
-    <ChatGPT v-if="chatAiEnabled" />
+    <ChatAI v-if="chatAiEnabled" />
   </section>
 </template>
 
 <script>
-import ChatGPT from '@/components/Apps/ChatAi'
-import { mapGetters } from 'vuex'
+import ChatAI from '@/components/Apps/ChatAi'
 
 export default {
   name: 'AppMain',
   components: {
-    ChatGPT
+    ChatAI
   },
   computed: {
-    ...mapGetters(['publicSettings']),
     key() {
       // 想让创建后回来 List 页面不刷新，但是完全不刷新 table 会不对，所以创建完成后，会更新 order 和 updated
       // query 去掉这两个，如果变了再刷新
@@ -54,7 +52,7 @@ export default {
       return key
     },
     chatAiEnabled() {
-      return this.publicSettings?.CHAT_AI_ENABLED
+      return this.$route.name !== 'ChatAi'
     }
   },
   methods: {}
