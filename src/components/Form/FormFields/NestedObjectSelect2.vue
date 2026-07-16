@@ -71,6 +71,15 @@ export default {
       this.$emit('changeOptions', val)
     },
     valuesToObjects(values) {
+      if (
+        !this.multiple &&
+        (values === null ||
+          values === undefined ||
+          values === '' ||
+          (Array.isArray(values) && values.length === 0))
+      ) {
+        return ''
+      }
       let value = values
       if (!this.multiple && !Array.isArray(value)) {
         value = [value]

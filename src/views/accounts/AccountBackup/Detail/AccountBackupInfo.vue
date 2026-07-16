@@ -7,8 +7,7 @@
   </TwoCol>
 </template>
 
-<script>
-import { createVNode as createVNodeCompat } from 'vue'
+<script lang="jsx">
 import { QuickActions } from '@/components'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
 import { openTaskPage } from '@/utils/jms/index'
@@ -61,14 +60,14 @@ export default {
           key: this.$t('Crontab'),
           value: this.object.crontab,
           formatter: (item, val) => {
-            return createVNodeCompat('span', null, [this.object.is_periodic ? val : '-'])
+            return <span>{this.object.is_periodic ? val : '-'}</span>
           }
         },
         {
           key: this.$t('Interval'),
           value: this.object.interval,
           formatter: (item, val) => {
-            return createVNodeCompat('span', null, [this.object.is_periodic ? val : '-'])
+            return <span>{this.object.is_periodic ? val : '-'}</span>
           }
         },
         {
@@ -76,7 +75,7 @@ export default {
           value: this.object.recipients_part_one,
           formatter: (item, val) => {
             const recipientA = this.isEmail ? val.map((item) => item.name).join(', ') : '-'
-            return createVNodeCompat('span', null, [recipientA])
+            return <span>{recipientA}</span>
           }
         },
         {
@@ -84,7 +83,7 @@ export default {
           value: this.object.recipients_part_two,
           formatter: (item, val) => {
             const recipientB = this.isEmail ? val.map((item) => item.name).join(', ') : '-'
-            return createVNodeCompat('span', null, [recipientB])
+            return <span>{recipientB}</span>
           }
         },
         {
@@ -92,7 +91,7 @@ export default {
           value: this.object.obj_recipients_part_one,
           formatter: (item, val) => {
             const recipientServerA = this.isEmail ? '-' : val.map((item) => item.name).join(', ')
-            return createVNodeCompat('span', null, [recipientServerA])
+            return <span>{recipientServerA}</span>
           }
         },
         {
@@ -100,7 +99,7 @@ export default {
           value: this.object.obj_recipients_part_two,
           formatter: (item, val) => {
             const recipientServerB = this.isEmail ? '-' : val.map((item) => item.name).join(', ')
-            return createVNodeCompat('span', null, [recipientServerB])
+            return <span>{recipientServerB}</span>
           }
         },
         'date_created',

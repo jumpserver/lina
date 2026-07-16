@@ -1,11 +1,11 @@
 import { joinErrorMessages } from '@/utils/common'
 
 function normalizeErrorMessage(error) {
-  if (Array.isArray(error) && error.every(item => typeof item === 'string')) {
+  if (Array.isArray(error) && error.every((item) => typeof item === 'string')) {
     return joinErrorMessages(error)
   }
 
-  if (Array.isArray(error) && error.every(item => _.isPlainObject(item))) {
+  if (Array.isArray(error) && error.every((item) => _.isPlainObject(item))) {
     const nestedMessages = []
     error.forEach((item) => {
       Object.values(item).forEach((value) => {
@@ -25,7 +25,9 @@ function normalizeErrorMessage(error) {
 }
 
 function isDuplicateLikeMessage(message) {
-  return /unique|duplicate|already exists|must be unique|must make a unique set|已存在|重复|唯一/i.test(message)
+  return /unique|duplicate|already exists|must be unique|must make a unique set|已存在|重复|唯一/i.test(
+    message
+  )
 }
 
 export function normalizeLabelFormErrors(errors = {}) {
@@ -42,7 +44,8 @@ export function normalizeLabelFormErrors(errors = {}) {
 
   const shouldPreferValueField =
     normalizedNameMessage === normalizedValueMessage ||
-    (isDuplicateLikeMessage(normalizedNameMessage) && isDuplicateLikeMessage(normalizedValueMessage))
+    (isDuplicateLikeMessage(normalizedNameMessage) &&
+      isDuplicateLikeMessage(normalizedValueMessage))
 
   if (!shouldPreferValueField) {
     return errors

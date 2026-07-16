@@ -2,11 +2,10 @@
   <HomeCard v-bind="cardConfig" :table-config="tableConfig" />
 </template>
 
-<script>
+<script lang="jsx">
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import i18n from '@/i18n/i18n'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
-import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
 import { mapGetters } from 'vuex'
 import HomeCard from './HomeCard'
 export default {
@@ -72,26 +71,18 @@ export default {
             width: '120px',
             formatter: (row) => {
               if (row.status.value === 'open') {
-                return createVNodeCompat(
-                  resolveComponentCompat('el-tag'),
-                  {
-                    type: 'primary',
-                    size: 'small'
-                  },
-                  {
-                    default: () => [' ', i18n.global.t('OpenStatus')]
-                  }
+                return (
+                  <el-tag type="primary" size="small">
+                    {' '}
+                    {i18n.global.t('OpenStatus')}
+                  </el-tag>
                 )
               } else {
-                return createVNodeCompat(
-                  resolveComponentCompat('el-tag'),
-                  {
-                    type: 'danger',
-                    size: 'small'
-                  },
-                  {
-                    default: () => [' ', i18n.global.t('CloseStatus')]
-                  }
+                return (
+                  <el-tag type="danger" size="small">
+                    {' '}
+                    {i18n.global.t('CloseStatus')}
+                  </el-tag>
                 )
               }
             }

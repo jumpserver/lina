@@ -147,7 +147,6 @@ export default {
             }
           })
 
-          this.$message.success(this.$tc('AddSuccessMsg'))
           return this.$axios.post(relationUrl, data)
         }
       },

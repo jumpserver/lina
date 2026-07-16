@@ -99,12 +99,6 @@ tr td {
   width: 100%;
 }
 
-.asset-relation-box :deep(.select2 .el-select__tags) {
-  height: 28px;
-  min-height: 28px;
-  align-items: center;
-}
-
 .asset-relation-box :deep(.el-button) {
   height: 30px;
   min-height: 30px;

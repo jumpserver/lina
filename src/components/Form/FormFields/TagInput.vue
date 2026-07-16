@@ -1,5 +1,5 @@
 <template>
-  <div class="filter-field" @click="handleFieldClick">
+  <div class="filter-field jms-input-spacing" @click="handleFieldClick">
     <div ref="content" class="filter-field__content">
       <el-tag
         v-for="(v, k) in filterTags"
@@ -45,6 +45,12 @@
 
 <script>
 import i18n from '@/i18n/i18n'
+
+function normalizeTags(value) {
+  if (Array.isArray(value)) return value.slice()
+  if (value === undefined || value === null || value === '') return []
+  return [value]
+}
 
 export default {
   emits: ['input', 'change', 'update:modelValue', 'update:model-value'],
@@ -92,7 +98,7 @@ export default {
     return {
       focus: false,
       filterValue: '',
-      filterTags: this.normalizeTags(this.currentValue),
+      filterTags: [],
       isCheckShowPassword: this.replaceShowPassword
     }
   },
@@ -108,33 +114,38 @@ export default {
     }
   },
   watch: {
-    value(val) {
-      if (this.modelValue === undefined) {
+    // Vue 3 的 data 初始化早于 computed。通过 immediate watcher 在 computed
+    // 可用后统一初始化，首次打开和后续外部更新都会同步服务器值。
+    currentValue: {
+      handler(val) {
         this.filterTags = this.normalizeTags(val)
-      }
-    },
-    modelValue(val) {
-      this.filterTags = this.normalizeTags(val)
+      },
+      immediate: true,
+      deep: true
     }
   },
   methods: {
     normalizeTags(value) {
-      if (Array.isArray(value)) return value.slice()
-      if (value === undefined || value === null || value === '') return []
-      return [value]
+      return normalizeTags(value)
     },
     emitTags(tags = this.filterTags) {
       const payload = this.normalizeTags(tags)
-      this.$emit('change', payload)
-      this.$emit('input', payload)
+      // 先同步双向绑定，再通知 change 监听器。父组件常见的
+      // `v-model + @change` 用法会在 change 回调中读取绑定值，若 change
+      // 先触发，读取到的仍是上一次输入。
       this.$emit('update:modelValue', payload)
       this.$emit('update:model-value', payload)
+      this.$emit('input', payload)
+      this.$emit('change', payload)
     },
     handleTagClose(tag) {
       this.filterTags = this.filterTags.filter((item) => item !== tag)
       this.emitTags()
     },
     handleSelect(item) {
+      if (!this.autocomplete || typeof item?.value !== 'string') {
+        return
+      }
       this.filterValue = item.value
       this.handleConfirm()
     },
@@ -230,12 +241,16 @@ export default {
 }
 
 .filter-field {
+  --jms-input-padding-block: 0;
+  --jms-input-padding-inline: 11px;
+
   display: flex;
   align-items: center;
   width: 100%;
   min-height: 30px;
   height: auto;
-  padding: 0 8px 0 4px;
+  // 边框由当前容器承担，输入文字的水平留白统一交由内部 wrapper（11px）处理。
+  padding: 0;
   box-sizing: border-box;
   border: 1px solid #dcdee2;
   border-radius: 1px;
@@ -278,7 +293,6 @@ export default {
   & :deep(.el-input__wrapper) {
     min-height: 28px;
     height: 28px;
-    padding: 0;
     border: none !important;
     background: transparent;
     box-shadow: none !important;
@@ -312,19 +326,11 @@ export default {
     -webkit-appearance: none !important;
     box-shadow: none !important;
     background: transparent !important;
-    padding-left: 8px;
     height: 28px;
     line-height: 28px;
   }
 
   & :deep(.el-input) {
-    border: none !important;
-    box-shadow: none !important;
-    background: transparent !important;
-  }
-
-  & :deep(.el-input__wrapper) {
-    width: 100%;
     border: none !important;
     box-shadow: none !important;
     background: transparent !important;

@@ -2,11 +2,9 @@
   <div class="markdown-body">
     <el-row v-if="preview">
       <div class="action-bar">
-        <div class="action">
-          <span>
-            <i class="fa" :class="[!isShow ? 'fa-eye' : 'fa-eye-slash']" @click="onView" />
-          </span>
-        </div>
+        <button class="preview-toggle" type="button" :title="$t('View')" @click="onView">
+          <i class="fa" :class="[!isShow ? 'fa-eye' : 'fa-eye-slash']" />
+        </button>
       </div>
       <el-col :span="span" :style="{ height: height + 'px' }">
         <el-input v-model="iValue" autosize :rows="rows" type="textarea" @change="onChange" />
@@ -138,6 +136,7 @@ export default {
 }
 
 .markdown-body :deep(.el-row) {
+  position: relative;
   width: 100%;
 }
 
@@ -163,17 +162,32 @@ export default {
 }
 
 .action-bar {
-  position: relative;
-  height: 0;
-  border-bottom: none;
-  z-index: 999;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
 
-  .action {
-    position: absolute;
-    right: 6px;
+  .preview-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    color: #606266;
+    cursor: pointer;
+    background: rgb(255 255 255 / 90%);
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
 
-    i {
-      cursor: pointer;
+    &:hover {
+      color: var(--el-color-primary);
+      border-color: var(--el-color-primary-light-5);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--el-color-primary-light-5);
+      outline-offset: 1px;
     }
   }
 }

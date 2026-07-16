@@ -19,8 +19,7 @@
   </div>
 </template>
 
-<script>
-import { createVNode as createVNodeCompat } from 'vue'
+<script lang="jsx">
 import { createSourceIdCache } from '@/api/common'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 import DetailFormatter from '@/components/Table/TableFormatters/DetailFormatter.vue'
@@ -244,9 +243,14 @@ export default {
             width: '120px',
             formatter: (row) => {
               const phoneObj = row.phone
-              return phoneObj?.phone
-                ? createVNodeCompat('div', null, [phoneObj?.code, phoneObj?.phone])
-                : ''
+              return phoneObj?.phone ? (
+                <div>
+                  {phoneObj?.code}
+                  {phoneObj?.phone}
+                </div>
+              ) : (
+                ''
+              )
             }
           },
           login_blocked: {

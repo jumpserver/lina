@@ -38,7 +38,7 @@ export default {
     },
     updateInitial: {
       type: Function,
-      default: initial => {
+      default: (initial) => {
         return initial
       }
     }
@@ -48,6 +48,8 @@ export default {
       loading: true,
       platform: {},
       initing: false,
+      initPromise: null,
+      pendingInit: false,
       // 在 meta 中，可能改变 platform id
       platformID: this.$route.query.platform || '',
       meta: {},
@@ -82,7 +84,7 @@ export default {
             delete values['accounts']
           } else {
             const accounts = values?.accounts || []
-            values.accounts = accounts.map(item => {
+            values.accounts = accounts.map((item) => {
               item['secret'] = encryptPassword(item['secret'])
               return item
             })
@@ -100,15 +102,24 @@ export default {
       // 更改平台时，就不重新 loading 了
       this.$log.debug('Initing asset base upcate create', this.initing)
       if (this.initing) {
-        return
+        this.pendingInit = true
+        return this.initPromise
       }
       this.initing = true
+      this.initPromise = (async () => {
+        do {
+          this.pendingInit = false
+          await this.genConfig()
+          await this.setInitial()
+          await this.setPlatformConstrains()
+        } while (this.pendingInit)
+      })()
       try {
-        await this.genConfig()
-        await this.setInitial()
-        await this.setPlatformConstrains()
+        await this.initPromise
       } finally {
         this.initing = false
+        this.initPromise = null
+        this.pendingInit = false
         this.loading = false
       }
     },

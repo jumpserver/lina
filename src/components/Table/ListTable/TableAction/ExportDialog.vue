@@ -186,7 +186,7 @@ export default {
   },
   methods: {
     showExportDialogHandler({ selectedRows, url, name }) {
-      if (url === this.url || url.indexOf(this.url) > -1) {
+      if (url && (url === this.url || url.indexOf(this.url) > -1)) {
         this.showExportDialog()
       }
     },
@@ -267,6 +267,10 @@ export default {
 .export-item {
   margin: 0;
   padding: 0;
+
+  :deep(.el-radio__label) {
+    font-size: 13px;
+  }
 }
 
 .export-form :deep(.el-form-item__label) {

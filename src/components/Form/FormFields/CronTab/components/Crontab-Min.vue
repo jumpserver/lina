@@ -17,7 +17,7 @@
             :max="59"
             :min="1"
             size="small"
-            class="cron-tab-form__number"
+            class="cron-tab-form__number jms-input-spacing"
           />
           <span class="cron-tab-form__text">{{ $t('Min') }} {{ $t('ExecuteOnce') }}</span>
         </span>

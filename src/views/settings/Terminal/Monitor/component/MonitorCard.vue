@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="card">
     <el-card class="box-card" shadow="never">
       <el-row :gutter="10">
         <el-col :md="19" :sm="24" style="padding-right: 15px">
@@ -44,7 +44,7 @@
                 </span>
               </span>
             </div>
-            <div :class="componentMetric.type + '-progress'" class="progress">
+            <div ref="progress" :class="componentMetric.type + '-progress'" class="progress">
               <div style="position: absolute; height: 100%; padding: 2px 0">
                 <span v-for="(bar, index) in barArray" :key="index" class="box-bar" />
               </div>
@@ -156,14 +156,13 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.resizeObserver = new ResizeObserver(this.setBarColor)
-      this.resizeObserver.observe(document.querySelector('.box-card'))
+      if (this.$refs.card instanceof Element) {
+        this.resizeObserver.observe(this.$refs.card)
+      }
     })
   },
   beforeUnmount() {
-    const el = document.querySelector('.box-card')
-    if (el) {
-      this.resizeObserver.unobserve(el)
-    }
+    this.resizeObserver?.disconnect()
     this.resizeObserver = null
   },
   methods: {
@@ -171,8 +170,7 @@ export default {
       return legacyIconComponents[name] || null
     },
     setElementsColor(numArray) {
-      const className = `.${this.componentMetric.type}-progress .box-bar`
-      const elements = document.querySelectorAll(className)
+      const elements = this.$el.querySelectorAll('.box-bar')
       numArray.reduce((prev, cur) => {
         for (let i = prev; i < cur.num + prev && i < elements.length; i++) {
           elements[i].style.backgroundColor = cur.color
@@ -181,7 +179,7 @@ export default {
       }, 0)
     },
     setBarColor() {
-      const el = document.querySelector(`.${this.componentMetric.type}-progress`)
+      const el = this.$refs.progress
       if (!el) return
 
       const numArray = []

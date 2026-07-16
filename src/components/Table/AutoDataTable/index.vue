@@ -10,6 +10,7 @@
       />
     </div>
     <ColumnSettingPopover
+      ref="columnSettingPopover"
       :current-columns="popoverColumns.currentCols"
       :default-columns="popoverColumns.defaultCols"
       :min-columns="popoverColumns.minCols"
@@ -67,10 +68,25 @@ export default {
     }
   },
   watch: {
+    'config.url': {
+      handler: _.debounce(function (newUrl, oldUrl) {
+        if (this.isDeactivated || !this.inited || !newUrl || newUrl === oldUrl) {
+          return
+        }
+
+        this.optionUrlMetaAndGenCols()
+        this.$log.debug('AutoDataTable URL change found')
+      }, 200)
+    },
     config: {
       immediate: false,
       handler: _.debounce(function (iNew, iOld) {
         if (this.isDeactivated || !this.inited) {
+          return
+        }
+        // URL changes are handled separately so later column/config updates
+        // cannot overwrite the pending URL refresh in this debounced watcher.
+        if (iNew?.url !== iOld?.url) {
           return
         }
         const changed = this.isConfigChanged(iNew, iOld)
@@ -94,6 +110,9 @@ export default {
     this.isDeactivated = false
   },
   methods: {
+    openColumnSetting() {
+      this.$refs.columnSettingPopover?.open()
+    },
     normalizeColumnNames(value, fallback = []) {
       if (Array.isArray(value)) {
         return value.filter((item) => item !== undefined && item !== null)

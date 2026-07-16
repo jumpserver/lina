@@ -1,14 +1,23 @@
 <template>
   <span>
-    <span v-if="iValue === '0'" class="risk-handler">
+    <span
+      v-if="iValue === '0'"
+      class="risk-handler"
+      :class="{ 'risk-handler--labeled': showLabels }"
+    >
       <el-dropdown
         trigger="click"
         popper-class="action-dropdown"
         @command="handleDropdown"
         @visible-change="handleVisibleChange"
       >
-        <el-button class="confirm action" size="small">
-          <i class="fa fa-check" />
+        <el-button class="confirm action" size="small" :type="showLabels ? 'primary' : ''">
+          <i
+            class="fa fa-check action-leading-icon"
+            :class="{ 'action-leading-icon--compact': !showLabels }"
+          />
+          <span v-if="showLabels">{{ $t('Actions') }}</span>
+          <i v-if="showLabels" class="fa fa-caret-down dropdown-indicator" />
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
@@ -31,6 +40,7 @@
           @click="handleDropdown('ignore')"
         >
           <svg-icon icon-class="ignore" />
+          <span v-if="showLabels">{{ $t('Ignore') }}</span>
         </el-button>
       </el-tooltip>
     </span>
@@ -80,6 +90,10 @@ export default {
     selectedRows: {
       type: Array,
       default: () => []
+    },
+    showLabels: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -228,6 +242,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.risk-handler {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.action-leading-icon--compact {
+  transform: translate(1px, 1px);
+}
+
 .action.el-button--small {
   cursor: pointer;
   padding: 1px 4px;
@@ -241,6 +265,35 @@ export default {
   &.remove {
     :deep(i) {
       color: var(--color-danger);
+    }
+  }
+}
+
+.risk-handler--labeled {
+  gap: 8px;
+
+  .action.el-button--small {
+    min-width: 72px;
+    min-height: 30px;
+    height: 30px;
+    padding: 8px 12px;
+    border-radius: 2px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1;
+
+    &.confirm {
+      :deep(i) {
+        color: var(--el-color-white);
+      }
+
+      .action-leading-icon {
+        margin-right: 6px;
+      }
+
+      .dropdown-indicator {
+        margin-left: 6px;
+      }
     }
   }
 }

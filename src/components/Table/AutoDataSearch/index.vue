@@ -4,9 +4,10 @@
       <svg-icon icon-class="search" />
     </el-button>
     <TagSearch
-      v-bind="$attrs"
+      v-bind="tagSearchAttrs()"
       v-show="!shouldFold"
       :options="iOption"
+      class="auto-data-search__field"
       @blur="handleBlur"
       @tag-search="handleTagSearch"
     />
@@ -23,6 +24,7 @@ export default {
   components: {
     TagSearch
   },
+  emits: ['tagSearch'],
   props: {
     url: {
       type: String,
@@ -83,6 +85,12 @@ export default {
     }
   },
   methods: {
+    tagSearchAttrs() {
+      const attrs = { ...this.$attrs }
+      delete attrs.class
+      delete attrs.style
+      return attrs
+    },
     handleTagSearch(tags) {
       if (_.isEqual(tags, this.tags)) {
         return
@@ -155,10 +163,22 @@ export default {
 .auto-data-search {
   display: inline-flex;
   align-items: center;
+  box-sizing: border-box;
   min-width: 0;
 
   &.is-folded {
     width: auto;
+  }
+}
+
+.auto-data-search__field {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+
+  :deep(.search-input) {
+    min-width: 0;
+    height: 100%;
   }
 }
 

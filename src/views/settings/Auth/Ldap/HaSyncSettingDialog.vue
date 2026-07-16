@@ -5,8 +5,10 @@
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('SyncSetting')"
+    :visible="visible"
     top="10%"
     width="50%"
+    @update:visible="onVisibleChange"
   >
     <GenericCreateUpdateForm
       v-bind="settings"
@@ -25,10 +27,18 @@ import { GenericCreateUpdateForm } from '@/layout/components'
 
 export default {
   name: 'SyncSettingDialog',
+  inheritAttrs: false,
   components: {
     GenericCreateUpdateForm,
     Dialog
   },
+  props: {
+    visible: {
+      type: Boolean,
+      default: false
+    }
+  },
+  emits: ['update:visible'],
   data() {
     return {
       settings: {
@@ -77,6 +87,10 @@ export default {
           }
         },
         submitMethod: () => 'patch',
+        onPerformSuccess(res, method) {
+          this.$emit('submitSuccess', res)
+          this.emitPerformSuccessMsg(method, res)
+        },
         cleanFormValue(value) {
           if (value['AUTH_LDAP_HA_SYNC_INTERVAL'] === '') {
             value['AUTH_LDAP_HA_SYNC_INTERVAL'] = null
@@ -88,7 +102,10 @@ export default {
   },
   methods: {
     onSuccess() {
-      this.$emit('update:visible', false)
+      this.onVisibleChange(false)
+    },
+    onVisibleChange(visible) {
+      this.$emit('update:visible', visible)
     }
   }
 }

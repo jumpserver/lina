@@ -3,7 +3,7 @@
     <div v-show="options.length > 0" class="filter-cascader-wrap">
       <el-cascader
         ref="Cascade"
-        class="filter-cascader"
+        class="filter-cascader jms-input-spacing"
         :options="options"
         :props="config"
         @change="handleMenuItemChange"
@@ -32,7 +32,7 @@
     <el-input
       ref="SearchInput"
       v-model="filterValue"
-      class="search-input"
+      class="search-input jms-input-spacing"
       :class="options.length > 0 ? '' : 'no-options'"
       :placeholder="placeholder"
       :suffix-icon="suffixIcon"
@@ -416,31 +416,44 @@ $origin-white-color: #ffffff;
   min-width: 210px;
   background-color: $origin-white-color;
 
-  :deep(.el-cascader) {
+  :deep(.filter-cascader) {
+    width: 20px;
     height: 28px;
     line-height: 28px;
+  }
 
-    .el-input {
-      .el-input__wrapper {
-        width: 0;
-        height: 28px;
-        padding-right: 20px;
-        border: none;
-        box-shadow: unset;
+  :deep(.filter-cascader > .el-input) {
+    width: 20px;
+    height: 28px;
+  }
 
-        .el-input__inner {
-          display: none;
-        }
-      }
-    }
+  :deep(.filter-cascader > .el-input > .el-input__wrapper) {
+    width: 20px;
+    min-width: 20px;
+    height: 28px;
+    flex: 0 0 20px;
+    border: none;
+    box-shadow: unset;
+  }
 
-    :deep(.el-input__suffix) {
-      color: var(--color-icon-primary) !important;
+  :deep(.filter-cascader > .el-input > .el-input__wrapper > .el-input__inner) {
+    display: none;
+  }
 
-      .el-input__suffix-inner .el-input__icon {
-        line-height: 30px;
-      }
-    }
+  :deep(.filter-cascader > .el-input > .el-input__wrapper > .el-input__suffix) {
+    width: 20px;
+    color: var(--color-icon-primary) !important;
+    justify-content: center;
+  }
+
+  :deep(.filter-cascader .el-input__suffix-inner) {
+    width: 100%;
+  }
+
+  :deep(.filter-cascader .el-input__suffix-inner > .el-input__icon) {
+    width: 20px;
+    margin-inline-start: 0;
+    line-height: 28px;
   }
 
   .filter-title {
@@ -461,16 +474,17 @@ $origin-white-color: #ffffff;
   }
 
   .search-input {
+    --jms-input-padding-inline: 11px;
+    --jms-input-padding-inline-start: 1px;
+
     height: 30px;
 
     :deep(.el-input__wrapper) {
       max-width: 180px;
       box-shadow: unset;
-      padding-left: 0;
 
       .el-input__inner {
         height: 28px;
-        padding-left: 1px;
         font-size: 13px;
         box-shadow: unset;
         border: none;
@@ -512,8 +526,12 @@ $origin-white-color: #ffffff;
   }
 }
 
-.search-input2 :deep(.el-input__inner) {
-  text-indent: 5px;
+.filter-cascader-wrap {
+  width: 20px;
+  height: 28px;
+  flex: 0 0 20px;
+  --jms-input-padding-block: 1px;
+  --jms-input-padding-inline: 0;
 }
 
 .el-icon--right {

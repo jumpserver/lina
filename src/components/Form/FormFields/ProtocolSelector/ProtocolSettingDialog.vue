@@ -1,7 +1,8 @@
 <template>
   <Dialog
+    v-if="visible"
     v-bind="$attrs"
-    v-if="$attrs.visible"
+    :visible="visible"
     :close-on-click-modal="false"
     :destroy-on-close="true"
     :modal="false"
@@ -11,7 +12,8 @@
     :title="$tc('PlatformProtocolConfig') + '：' + protocol.name"
     class="setting-dialog"
     width="800px"
-    @cancel="$emit('update:visible', false)"
+    @cancel="closeDialog"
+    @update:visible="handleVisibleChange"
   >
     <el-alert v-if="disabled && platformDetail" style="margin-bottom: 10px" type="info">
       {{ $t('InheritPlatformConfig') }}
@@ -36,12 +38,17 @@ import JsonEditor from '@/components/Form/FormFields/JsonEditor.vue'
 
 export default {
   name: 'ProtocolSetting',
+  inheritAttrs: false,
   components: {
     Dialog,
     AutoDataForm
   },
-  emits: ['update:visible'],
+  emits: ['update:visible', 'confirm'],
   props: {
+    visible: {
+      type: Boolean,
+      default: false
+    },
     protocol: {
       type: Object,
       default: () => ({})
@@ -114,10 +121,18 @@ export default {
     }
   },
   methods: {
-    onSubmit(form) {
-      this.protocol = Object.assign(this.protocol, form)
+    closeDialog() {
       this.$emit('update:visible', false)
-      this.$emit('confirm', this.protocol)
+    },
+    handleVisibleChange(visible) {
+      this.$emit('update:visible', visible)
+    },
+    onSubmit(form) {
+      // protocol 是只读 prop，不能重新赋值或就地 mutate（会触发 proxy set 陷阱报错）。
+      // 先把编辑后的表单值通过 confirm 抛给父组件（由父组件合并到自己的协议项数据上），
+      // 再关闭弹窗，避免关闭触发 v-if 卸载导致 confirm 尚未派发。
+      this.$emit('confirm', form)
+      this.closeDialog()
     },
     openInNewTab() {
       window.open(this.platformDetail, '_blank')

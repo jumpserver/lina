@@ -13,7 +13,8 @@ const state = {
   publicSettings: {},
   hasValidLicense: false,
   authMethods: {},
-  themeColors: JSON.parse(localStorage.getItem('themeColors')) || {}
+  themeColors: JSON.parse(localStorage.getItem('themeColors')) || {},
+  vendor: ''
 }
 
 const mutations = {
@@ -42,6 +43,9 @@ const mutations = {
   setTheme(state, data) {
     state.themeColors = data
     localStorage.setItem('themeColors', JSON.stringify(data))
+  },
+  SET_VENDOR: (state, value) => {
+    state.vendor = value
   }
 }
 
@@ -71,7 +75,9 @@ const actions = {
             document.title = data?.INTERFACE?.login_title || ''
           }
           const themeColors = data?.INTERFACE?.theme_info?.colors || {}
+          const vendor = data?.INTERFACE?.vendor || ''
           commit('SET_PUBLIC_SETTINGS', data)
+          commit('SET_VENDOR', vendor)
           changeThemeColors(themeColors)
           resolve(response)
         })

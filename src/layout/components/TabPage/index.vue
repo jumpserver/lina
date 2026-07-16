@@ -62,6 +62,7 @@
 
 <script>
 import Icon from '@/components/Widgets/Icon'
+import { TAB_NAVIGATION_CONTEXT, TAB_NAVIGATION_SCOPE } from '@/components/Drawer/context'
 import { toSentenceCase } from '@/utils/common/index'
 import { resolveAsyncComponentCompat } from '@/utils/vue'
 import { scopedLocalStorage as localStorage } from '@/utils/storage'
@@ -72,6 +73,12 @@ export default {
   components: {
     Page,
     Icon
+  },
+  inject: {
+    tabNavigationContext: {
+      from: TAB_NAVIGATION_CONTEXT,
+      default: () => ({ scope: TAB_NAVIGATION_SCOPE.ROUTE })
+    }
   },
   props: {
     submenu: {
@@ -96,6 +103,11 @@ export default {
     title: {
       type: String,
       default: ''
+    },
+    navigationScope: {
+      type: String,
+      default: 'auto',
+      validator: (value) => ['auto', ...Object.values(TAB_NAVIGATION_SCOPE)].includes(value)
     }
   },
   emits: ['update:activeMenu', 'tab-click'],
@@ -110,6 +122,15 @@ export default {
   computed: {
     iHelpMessage() {
       return this.helpMessage || this.helpTip
+    },
+    effectiveNavigationScope() {
+      if (this.navigationScope !== 'auto') {
+        return this.navigationScope
+      }
+      return this.tabNavigationContext.scope
+    },
+    shouldSyncTabState() {
+      return this.effectiveNavigationScope === TAB_NAVIGATION_SCOPE.ROUTE
     },
     activeTabStorageKey() {
       const routeKey =
@@ -153,6 +174,9 @@ export default {
       }
     },
     '$route.query.tab'() {
+      if (!this.shouldSyncTabState) {
+        return
+      }
       this.syncActiveTab()
     },
     activeTabStorageKey() {
@@ -160,6 +184,9 @@ export default {
     },
     iActiveMenu(newValue) {
       if (!newValue) {
+        return
+      }
+      if (!this.shouldSyncTabState) {
         return
       }
       localStorage.setItem(this.activeTabStorageKey, newValue)
@@ -185,8 +212,12 @@ export default {
   },
   methods: {
     handleTabClick(tab) {
-      this.$emit('tab-click', tab)
-      this.iActiveMenu = tab.name
+      // Element Plus exposes the pane name as `paneName`. Keep `name` in the
+      // forwarded event for existing consumers, but let el-tabs' v-model be
+      // the single source of truth for the active tab. Reassigning from the
+      // obsolete `tab.name` clears the active component on repeated clicks.
+      const name = tab.paneName ?? tab.name ?? tab.props?.name
+      this.$emit('tab-click', tab.name === name ? tab : { ...tab, name })
     },
     resolveComponent(component) {
       return resolveAsyncComponentCompat(component)
@@ -194,11 +225,13 @@ export default {
     getPropActiveTab() {
       let activeTab = ''
 
-      const preActiveTabs = [
-        this.$route.query['tab'],
-        localStorage.getItem(this.activeTabStorageKey),
-        this.activeMenu
-      ]
+      const preActiveTabs = this.shouldSyncTabState
+        ? [
+            this.$route.query['tab'],
+            localStorage.getItem(this.activeTabStorageKey),
+            this.activeMenu
+          ]
+        : [this.activeMenu]
 
       for (const preTab of preActiveTabs) {
         const currentTab = typeof preTab === 'object' ? preTab?.name || '' : preTab
@@ -367,7 +400,15 @@ export default {
     gap: 8px;
     min-height: 0;
     padding: 10px 20px 0;
-    overflow-y: auto;
+    overflow: auto;
+
+    // Tab 内容保留统一的可用宽度；视口或抽屉继续收窄时由内容区滚动，
+    // 不再让表单、帮助文案和复杂控件无限压缩。
+    > :deep(*) {
+      flex-shrink: 0;
+      min-width: 600px;
+      box-sizing: border-box;
+    }
 
     /*
      * flex 列 + overflow-y:auto 的容器会裁掉自身 padding-bottom（Chrome 已知行为），
@@ -392,6 +433,17 @@ export default {
     max-height: none !important;
   }
 
+  // 设置页表单标签在固定 label 列内统一左对齐，避免窄宽度下贴到控件右侧。
+  .tab-page-content :deep(.form-fields .el-form-item__label-wrap) {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .tab-page-content :deep(.form-fields .el-form-item__label) {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
   /*
    * <transition mode="out-in"> 与 <keep-alive> 要求单一根节点，内容组件因此普遍用一个
    * <div>（无 class 或 class=""）包裹多个区块（如 el-alert + IBox）。该 wrapper 会成为唯一的
@@ -412,12 +464,6 @@ export default {
 
   .tab-page-content :deep(.tab-page-alert) {
     margin: 0;
-  }
-
-  // tab 内容包裹层是 flex 列（见上），el-alert 默认 flex-shrink:1 会被下方表格挤压，
-  // 高度被压缩、文字被裁切。固定不收缩，保证提示按内容完整撑开。
-  .tab-page-content :deep(.el-alert) {
-    flex-shrink: 0;
   }
 
   .tab-page-content :deep(.tab-page-alert .el-alert__icon) {

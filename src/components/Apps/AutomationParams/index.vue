@@ -8,11 +8,11 @@
     <Dialog
       v-bind="$attrs"
       v-if="visible"
+      v-model:visible="visible"
       :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
       :title="title"
-      :visible="visible"
       width="860px"
     >
       <AutoDataForm
@@ -32,6 +32,10 @@ import Dialog from '../../Dialog'
 import AutoDataForm from '../../Form/AutoDataForm'
 import _ from 'lodash'
 
+function normalizeParams(value) {
+  return value && typeof value === 'object' && !Array.isArray(value) ? value : {}
+}
+
 export default {
   componentName: 'AutomationParams',
   components: {
@@ -40,8 +44,9 @@ export default {
   },
   props: {
     value: {
-      type: Object,
-      default: () => ({})
+      type: [Object, Boolean],
+      default: () => ({}),
+      validator: (value) => value !== true
     },
     title: {
       type: String,
@@ -76,7 +81,7 @@ export default {
       remoteMeta: {},
       visible: false,
       isDisabled: true,
-      form: this.value,
+      form: normalizeParams(this.value),
       config: {
         url: this.url,
         hasSaveContinue: false,
@@ -94,6 +99,12 @@ export default {
     }
   },
   watch: {
+    value: {
+      handler(value) {
+        this.form = normalizeParams(value)
+      },
+      deep: true
+    },
     nodes: {
       handler() {
         this.onFieldChangeHandler()
@@ -107,15 +118,15 @@ export default {
       deep: true
     },
     platforms: {
-      handler(newVal) {
+      handler() {
         this.onFieldChangeHandler()
       },
-      deep: true,
-      immediate: true
+      deep: true
     }
   },
   async mounted() {
     await this.getUrlMeta()
+    await this.handleFieldChange()
   },
   methods: {
     async getUrlMeta() {

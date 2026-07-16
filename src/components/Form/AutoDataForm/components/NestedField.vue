@@ -12,7 +12,6 @@
 
 <script>
 import DataForm from '@/components/Form/DataForm/index.vue'
-import _ from 'lodash'
 
 export default {
   name: 'NestedField',
@@ -107,10 +106,10 @@ export default {
     }
   },
   methods: {
-    outputValue: _.debounce(function (val) {
+    outputValue(val) {
       this.$emit('input', val)
       this.$emit('update:form', val)
-    }),
+    },
     updateValue(val) {
       if (val && typeof val !== 'object') {
         return

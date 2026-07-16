@@ -7,8 +7,7 @@
   </TwoCol>
 </template>
 
-<script>
-import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
+<script lang="jsx">
 import { ListTable, QuickActions } from '@/components'
 import { openTaskPage } from '@/utils/jms/index'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
@@ -52,15 +51,10 @@ export default {
                 unknown: 'warning'
               }
               const tp = typeMapper[row.status.value] || 'info'
-              return createVNodeCompat(
-                resolveComponentCompat('el-tag'),
-                {
-                  size: 'small',
-                  type: tp
-                },
-                {
-                  default: () => [row.status.label]
-                }
+              return (
+                <el-tag size="small" type={tp}>
+                  {row.status.label}
+                </el-tag>
               )
             }
           },

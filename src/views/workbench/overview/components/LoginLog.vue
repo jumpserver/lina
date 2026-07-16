@@ -2,8 +2,7 @@
   <HomeCard v-bind="cardConfig" :table-config="tableConfig" />
 </template>
 
-<script>
-import { createTextVNode as createTextVNodeCompat, createVNode as createVNodeCompat } from 'vue'
+<script lang="jsx">
 import HomeCard from './HomeCard'
 export default {
   name: 'Log',
@@ -33,12 +32,11 @@ export default {
         columnsMeta: {
           city: {
             formatter: (row) => {
-              return createVNodeCompat('span', null, [
-                row.city,
-                createTextVNodeCompat('('),
-                row.ip,
-                createTextVNodeCompat(')')
-              ])
+              return (
+                <span>
+                  {row.city}({row.ip})
+                </span>
+              )
             }
           },
           actions: {

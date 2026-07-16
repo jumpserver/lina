@@ -97,7 +97,7 @@ export default {
       })
 
       if (value.file && typeof value.file === 'object') {
-        this.encryptedFields.forEach(name => {
+        this.encryptedFields.forEach((name) => {
           const fieldValue = value.file[name]
           if (fieldValue && typeof fieldValue === 'string') {
             value.file[name] = encryptPassword(fieldValue)

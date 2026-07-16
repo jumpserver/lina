@@ -7,8 +7,7 @@
   </TwoCol>
 </template>
 
-<script>
-import { createVNode as createVNodeCompat, createTextVNode as createTextVNodeCompat } from 'vue'
+<script lang="jsx">
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import { QuickActions } from '@/components'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
@@ -66,13 +65,12 @@ export default {
           key: this.$t('SuFrom'),
           formatter: () => {
             const su_from = this.object.su_from
-            if (!su_from) return createVNodeCompat('span', null, [createTextVNodeCompat('-')])
-            return createVNodeCompat('span', null, [
-              su_from.name,
-              createTextVNodeCompat('('),
-              su_from.username,
-              createTextVNodeCompat(')')
-            ])
+            if (!su_from) return <span>-</span>
+            return (
+              <span>
+                {su_from.name}({su_from.username})
+              </span>
+            )
           }
         },
         'is_active',

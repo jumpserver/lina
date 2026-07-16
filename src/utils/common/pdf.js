@@ -96,7 +96,7 @@ export async function exportElementToPdf(element, options = {}) {
     element.style.overflowX = 'visible'
     element.scrollTop = 0
 
-    await new Promise(resolve => setTimeout(resolve, waitMs))
+    await new Promise((resolve) => setTimeout(resolve, waitMs))
 
     const captureWidth = element.scrollWidth || element.clientWidth
     const captureHeight = element.scrollHeight || element.clientHeight

@@ -109,7 +109,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.chart-container  {
+.chart-container {
   padding: 0 !important;
 }
 
@@ -122,6 +122,5 @@ export default {
     justify-content: space-between;
     margin-bottom: 8px;
   }
-
 }
 </style>

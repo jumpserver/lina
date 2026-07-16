@@ -15,9 +15,8 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import { withBaseApi } from '@/utils/env'
-import { createVNode as createVNodeCompat, createTextVNode as createTextVNodeCompat } from 'vue'
 import TreeTable from '@/components/Table/TreeTable/index.vue'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { getDayEnd, getDaysAgo } from '@/utils/common/time'
@@ -82,13 +81,7 @@ export default {
               if (cellValue?.value === 0) {
                 return display
               } else {
-                return createVNodeCompat(
-                  'span',
-                  {
-                    class: 'text-danger'
-                  },
-                  [createTextVNodeCompat(' '), display, createTextVNodeCompat(' ')]
-                )
+                return <span class="text-danger"> {display} </span>
               }
             }
           },
@@ -184,6 +177,7 @@ export default {
             if (this.assetId) {
               this.tableConfig.url += `&asset_id=${this.assetId}`
             }
+            this.treeTable.handleUrlChange(this.tableConfig.url)
           }
         }
       }

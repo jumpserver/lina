@@ -79,24 +79,22 @@ export default {
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   transition: all 0.3s;
 
-  ::v-deep {
-    .card-content {
-      padding-bottom: unset;
-      border-bottom: unset;
-    }
+  :deep(.card-content) {
+    padding-bottom: unset;
+    border-bottom: unset;
+  }
 
-    .ring {
-      display: none;
-    }
+  :deep(.ring) {
+    display: none;
+  }
 
-    .el-card {
-      box-shadow: none;
-      border: none;
-    }
+  :deep(.el-card) {
+    box-shadow: none;
+    border: none;
+  }
 
-    .el-card__body {
-      padding: 0;
-    }
+  :deep(.el-card__body) {
+    padding: 0;
   }
 }
 
@@ -108,7 +106,7 @@ export default {
 //   margin-bottom: 1.25rem;
 // }
 
-.page ::v-deep .page-heading {
+.page :deep(.page-heading) {
   display: none;
 }
 
@@ -124,7 +122,7 @@ export default {
   height: 100%;
   margin-top: 16px;
 
-  ::v-deep #HomeCard .el-card.no-border {
+  :deep(#HomeCard .el-card.no-border) {
     height: 100%;
     margin-bottom: unset !important;
 
@@ -148,7 +146,7 @@ export default {
 }
 
 @media (max-width: 1200px) {
-  ::v-deep .data-summary {
+  :deep(.data-summary) {
     margin-left: unset !important;
   }
 }

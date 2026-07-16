@@ -105,15 +105,15 @@ const createRouterInstance = () =>
   })
 
 const router = createRouterInstance()
+const dynamicRouteRemovers = []
+
+export function addDynamicRoute(route) {
+  const removeRoute = router.addRoute(route)
+  dynamicRouteRemovers.push(removeRoute)
+}
 
 export function resetRouter() {
-  // Remove dynamic routes
-  router.getRoutes().forEach((route) => {
-    const name = route.name
-    if (name && name !== 'home' && name !== '404' && router.hasRoute(name)) {
-      router.removeRoute(name)
-    }
-  })
+  dynamicRouteRemovers.splice(0).forEach((removeRoute) => removeRoute())
 }
 
 export default router

@@ -20,35 +20,46 @@
       </template>
       <template #default>
         <div v-if="showChart" class="charts-grid">
-          <div class="chart-container full-width" data-report-type="chart" data-report-name="Overview">
+          <div
+            class="chart-container full-width"
+            data-report-type="chart"
+            data-report-name="Overview"
+          >
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('Overview') }}</div>
-              <SummaryCountCard
-                :items="totalData"
-              />
+              <SummaryCountCard :items="totalData" />
             </div>
           </div>
 
-          <div data-report-type="chart" data-report-name="RiskyAccount" class="chart-container full-width">
+          <div
+            data-report-type="chart"
+            data-report-name="RiskyAccount"
+            class="chart-container full-width"
+          >
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('RiskyAccount') }}</div>
               <RiskSummary :is-title="false" class="risk-summary" />
             </div>
           </div>
 
-          <div class="chart-container full-width" data-report-type="chart" data-report-name="TaskExecutionTrends">
+          <div
+            class="chart-container full-width"
+            data-report-type="chart"
+            data-report-name="TaskExecutionTrends"
+          >
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('TaskExecutionTrends') }}</div>
               <div class="chart">
-                <Echart
-                  :options="ExecutionMetricsOptions"
-                  :autoresize="true"
-                />
+                <Echart :options="ExecutionMetricsOptions" :autoresize="true" />
               </div>
             </div>
           </div>
 
-          <div class="chart-container full-width" data-report-type="chart" data-report-name="AccountResult">
+          <div
+            class="chart-container full-width"
+            data-report-type="chart"
+            data-report-name="AccountResult"
+          >
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('AccountResult') }}</div>
               <AccountSummary
@@ -64,7 +75,11 @@
       </template>
       <template #table>
         <div v-if="showTable" class="full-width">
-          <div data-report-type="table" data-report-name="RiskyAccount" class="report-table-wrap full-width">
+          <div
+            data-report-type="table"
+            data-report-name="RiskyAccount"
+            class="report-table-wrap full-width"
+          >
             <el-card class="report-card" shadow="hover">
               <div class="chart-container-title">
                 <div class="chart-container-title-text">{{ $t('RiskyAccount') }}</div>
@@ -88,7 +103,13 @@
                 <div class="chart-container-title-text">{{ tableData[0].name }}</div>
               </div>
               <el-table :data="tableData[0].rows" border>
-                <el-table-column v-for="column in tableData[0].columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+                <el-table-column
+                  v-for="column in tableData[0].columns"
+                  :key="column.key"
+                  :label="column.label"
+                  :prop="column.key"
+                  min-width="140"
+                />
               </el-table>
             </div>
             <div
@@ -102,13 +123,25 @@
                 <div class="chart-container-title-text">{{ t.name }}</div>
               </div>
               <el-table :data="t.rows" border>
-                <el-table-column v-for="column in t.columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+                <el-table-column
+                  v-for="column in t.columns"
+                  :key="column.key"
+                  :label="column.label"
+                  :prop="column.key"
+                  min-width="140"
+                />
               </el-table>
             </div>
           </div>
           <div v-else>
             <el-table :data="tableData.rows" border>
-              <el-table-column v-for="column in tableData.columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+              <el-table-column
+                v-for="column in tableData.columns"
+                :key="column.key"
+                :label="column.label"
+                :prop="column.key"
+                min-width="140"
+              />
             </el-table>
           </div>
         </div>
@@ -162,11 +195,11 @@ export default {
       description: '-',
       days: localStorage.getItem(this.name) || '7',
       automation_stats: {
-        'push': 0,
-        'check': 0,
-        'backup': 0,
-        'collect': 0,
-        'change_secret': 0
+        push: 0,
+        check: 0,
+        backup: 0,
+        collect: 0,
+        change_secret: 0
       },
       execution_metrics: {
         dates_metrics_date: [],
@@ -323,7 +356,10 @@ export default {
           { name: this.$t('NewAccountsFound'), value: riskData.total_new_found_accounts },
           { name: this.$t('GroupsChanged'), value: riskData.total_groups_changed_accounts },
           { name: this.$t('SudoersChanged'), value: riskData.total_sudoers_changed_accounts },
-          { name: this.$t('AuthorizedKeysChanged'), value: riskData.total_authorized_keys_changed_accounts },
+          {
+            name: this.$t('AuthorizedKeysChanged'),
+            value: riskData.total_authorized_keys_changed_accounts
+          },
           { name: this.$t('AccountDeleted'), value: riskData.total_account_deleted_accounts },
           { name: this.$t('PasswordExpired'), value: riskData.total_password_expired_accounts },
           { name: this.$t('LongTimePassword'), value: riskData.total_long_time_password_accounts },
@@ -362,14 +398,15 @@ export default {
       const keys = Object.keys(data.execution_metrics.data)
       this.execution_metrics.legend = keys
       this.execution_metrics.series = seriesData
-      this.account_result_metrics.dates_metrics_date = data.account_result_metrics?.dates_metrics_date || []
-      this.account_result_metrics.dates_metrics_total_count_success = data.account_result_metrics?.dates_metrics_total_count_success || []
-      this.account_result_metrics.dates_metrics_total_count_failed = data.account_result_metrics?.dates_metrics_total_count_failed || []
+      this.account_result_metrics.dates_metrics_date =
+        data.account_result_metrics?.dates_metrics_date || []
+      this.account_result_metrics.dates_metrics_total_count_success =
+        data.account_result_metrics?.dates_metrics_total_count_success || []
+      this.account_result_metrics.dates_metrics_total_count_failed =
+        data.account_result_metrics?.dates_metrics_total_count_failed || []
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

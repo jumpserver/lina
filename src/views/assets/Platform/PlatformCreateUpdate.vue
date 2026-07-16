@@ -177,31 +177,11 @@ export default {
     width: 100%;
   }
 
-  // 自动化方法行：method 下拉占满（右侧留出齿轮按钮空间）；params 齿轮按钮通过负 margin
-  // 叠加到 method 同一行的最右侧。负 margin = method 行高 30px + FormItem 间距(--form-section-gap)，
-  // 既能精确落在 method 行，又不会挤压后续行；绑定 CSS 变量以适配 flex+gap 布局。
+  // 自动化方法行:method 下拉与参数设置按钮已由 AutomationMethodField 组件拼成一体的
+  // input-group(下拉在左、齿轮按钮 append 在右),整个控件占满整行即可。
   .item-method.el-form-item {
     .el-form-item__content {
-      width: calc(100% - 50px);
-    }
-
-    .el-select {
       width: 100%;
-    }
-  }
-
-  .item-params.el-form-item {
-    margin-top: calc(-30px - var(--form-section-gap, 20px));
-
-    .el-form-item__label-wrap,
-    .el-form-item__label {
-      display: none;
-    }
-
-    .el-form-item__content {
-      width: 100%;
-      align-items: flex-end;
-      padding-right: 10px;
     }
   }
 }

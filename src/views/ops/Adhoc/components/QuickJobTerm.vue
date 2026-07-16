@@ -223,6 +223,10 @@ export default {
         display: flex;
         align-items: center;
 
+        :deep(.el-button > span) {
+          color: inherit;
+        }
+
         .el-button {
           border: none;
           padding: 2px;

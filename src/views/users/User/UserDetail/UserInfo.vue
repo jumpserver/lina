@@ -13,16 +13,11 @@
   </TwoCol>
 </template>
 
-<script>
+<script lang="jsx">
 import { QuickActions } from '@/components'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import RelationCard from '@/components/Cards/RelationCard'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-import {
-  createTextVNode as createTextVNodeCompat,
-  createVNode as createVNodeCompat,
-  resolveComponent as resolveComponentCompat
-} from 'vue'
 export default {
   name: 'UserInfo',
   components: {
@@ -189,56 +184,32 @@ export default {
       detailFormatters: {
         phone: () => {
           const phoneObj = vm.object.phone
-          return createVNodeCompat('div', null, [
-            phoneObj?.code,
-            createTextVNodeCompat(' '),
-            phoneObj?.phone
-          ])
+          return (
+            <div>
+              {phoneObj?.code} {phoneObj?.phone}
+            </div>
+          )
         },
         system_roles: () => {
           const rolesDisplay = vm.object.system_roles || []
           const dom = rolesDisplay.map((item) => {
-            return createVNodeCompat(
-              resolveComponentCompat('el-tag'),
-              {
-                size: 'small'
-              },
-              {
-                default: () => [item.display_name]
-              }
-            )
+            return <el-tag size="small">{item.display_name}</el-tag>
           })
-          return createVNodeCompat('div', null, [dom])
+          return <div>{dom}</div>
         },
         org_roles: () => {
           const rolesDisplay = vm.object.org_roles || []
           const dom = rolesDisplay.map((item) => {
-            return createVNodeCompat(
-              resolveComponentCompat('el-tag'),
-              {
-                size: 'small'
-              },
-              {
-                default: () => [item.display_name]
-              }
-            )
+            return <el-tag size="small">{item.display_name}</el-tag>
           })
-          return createVNodeCompat('div', null, [dom])
+          return <div>{dom}</div>
         }
       },
       detailFields: [
         {
           key: '',
           formatter: () => {
-            return createVNodeCompat(
-              'img',
-              {
-                src: this.object.avatar_url,
-                alt: '',
-                height: '50'
-              },
-              null
-            )
+            return <img src={this.object.avatar_url} alt="" height="50" />
           }
         },
         'id',
@@ -264,9 +235,9 @@ export default {
                 prettyKey = key.substring(0, allowKeyMaxLength - 3) + '...'
               }
               const item = prettyKey + ': ' + value.join(', ')
-              doms.push([item, createVNodeCompat('br', null, null)])
+              doms.push([item, <br />])
             })
-            return createVNodeCompat('div', null, [doms])
+            return <div>{doms}</div>
           }
         },
         'wecom_id',

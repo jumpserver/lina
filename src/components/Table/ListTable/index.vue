@@ -177,15 +177,13 @@ export default {
         }
         defaults[k] = true
       }
+      defaults.handleTableSettingClick = this.handleTableSettingClick
       return Object.assign(defaults, this.headerActions)
     },
     hasActions() {
       return this.iHeaderActions.has === undefined ? true : this.iHeaderActions.has
     },
     iTableConfig() {
-      if (this.isDeactivated) {
-        return
-      }
       const config = deepmerge(this.tableConfig, {
         extraQuery: this.extraQuery
       })
@@ -290,6 +288,9 @@ export default {
     })
   },
   methods: {
+    handleTableSettingClick() {
+      this.$refs.dataTable?.openColumnSetting()
+    },
     handleFilterExpandChanged(expand) {
       this.filterExpand = expand
     },

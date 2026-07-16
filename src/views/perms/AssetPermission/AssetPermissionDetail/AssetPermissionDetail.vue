@@ -7,21 +7,10 @@
   </TwoCol>
 </template>
 
-<script>
-import {
-  createVNode as createVNodeCompat,
-  isVNode as isVNodeCompat,
-  resolveComponent as resolveComponentCompat
-} from 'vue'
+<script lang="jsx">
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import { QuickActions } from '@/components'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-function _isSlot(s) {
-  return (
-    typeof s === 'function' ||
-    (Object.prototype.toString.call(s) === '[object Object]' && !isVNodeCompat(s))
-  )
-}
 export default {
   name: 'AssetPermissionDetail',
   components: {
@@ -71,25 +60,15 @@ export default {
           formatter(row, value) {
             const actions = Array.isArray(value) ? value : []
             const actionLabels = actions.map((item) => item.label.replace(/ \([^)]*\)/, ''))
-            return createVNodeCompat('div', null, [
-              actionLabels.map((item) =>
-                createVNodeCompat(
-                  resolveComponentCompat('el-tag'),
-                  {
-                    size: 'small',
-                    style: {
-                      marginRight: '3px'
-                    },
-                    key: item
-                  },
-                  _isSlot(item)
-                    ? item
-                    : {
-                        default: () => [item]
-                      }
-                )
-              )
-            ])
+            return (
+              <div>
+                {actionLabels.map((item) => (
+                  <el-tag size="small" style={{ marginRight: '3px' }} key={item}>
+                    {item}
+                  </el-tag>
+                ))}
+              </div>
+            )
           }
         },
         'date_start',

@@ -54,14 +54,13 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import Dialog from '@/components/Dialog/index.vue'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
 import ListTable from '@/components/Table/ListTable'
 import getStatusColumnMeta from '@/components/Table/ListTable/TableAction/const'
 import store from '@/store'
 import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/jms/org'
-import { createTextVNode as createTextVNodeCompat, createVNode as createVNodeCompat } from 'vue'
 export default {
   name: 'ImportDialog',
   components: {
@@ -108,11 +107,7 @@ export default {
           groups: {
             label: this.$t('UserGroups'),
             formatter: function (row) {
-              return createVNodeCompat('span', null, [
-                createTextVNodeCompat(' '),
-                row.groups.join(' | '),
-                createTextVNodeCompat(' ')
-              ])
+              return <span> {row.groups.join(' | ')} </span>
             }
           },
           email: {

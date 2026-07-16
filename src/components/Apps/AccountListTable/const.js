@@ -316,6 +316,12 @@ export const accountQuickFilters = (vm) => [
         }
       },
       {
+        label: vm.$t('Device'),
+        filter: {
+          category: 'device'
+        }
+      },
+      {
         label: vm.$t('Database'),
         filter: {
           category: 'database'
@@ -328,15 +334,15 @@ export const accountQuickFilters = (vm) => [
         }
       },
       {
-        label: vm.$t('Device'),
-        filter: {
-          category: 'device'
-        }
-      },
-      {
         label: 'Web',
         filter: {
           category: 'web'
+        }
+      },
+      {
+        label: vm.$t('Directories'),
+        filter: {
+          category: 'ds'
         }
       },
       {

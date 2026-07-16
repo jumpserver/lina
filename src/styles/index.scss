@@ -1,10 +1,11 @@
-@use './mixin';
-@use './variables' as *;
+@use "./mixin";
+@use "./variables" as *;
 //@import './transition.scss';
-@use './sidebar';
-@use './menu';
-@use './fonts';
-@import './fonts/font-awesome.min.css';
+@use "./sidebar";
+@use "./menu";
+@use "./fonts";
+@use "./element-form-controls";
+@import "./fonts/font-awesome.min.css";
 
 :root {
   --scrollbar-size: 8px;
@@ -53,7 +54,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: auto;
   color: var(--color-text-primary);
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 1.428;
 }
@@ -104,7 +105,7 @@ div:focus {
     visibility: hidden;
     display: block;
     font-size: 0;
-    content: ' ';
+    content: " ";
     clear: both;
     height: 0;
   }
@@ -165,6 +166,19 @@ small {
   --el-tag-bg-color: #f1f1f1;
   --el-tag-border-color: #e5e6e7;
   --el-tag-text-color: var(--color-text-primary);
+  --el-tag-hover-color: var(--el-text-color-secondary);
+}
+
+/*
+ * Radio / Checkbox 选中态标签文字。Element Plus 默认会把 label 染成 primary；
+ * 原先由 element-extra.css 覆盖为普通文字色，该文件已废弃（见 utils/theme/index.js）。
+ */
+.el-radio__input.is-checked + .el-radio__label {
+  color: inherit;
+}
+
+.el-checkbox__input.is-checked + .el-checkbox__label {
+  color: var(--el-text-color-regular);
 }
 
 b,
@@ -224,7 +238,7 @@ input,
 optgroup,
 select,
 textarea {
-  font-family: 'Open Sans', sans-serif !important;
+  font-family: "Open Sans", sans-serif !important;
 }
 
 // main-container global css
@@ -247,17 +261,7 @@ textarea {
   padding: 5px;
 }
 
-.help-block {
-  display: block;
-  margin-top: 2px;
-  margin-bottom: 5px;
-  color: #999;
-  font-size: 12px;
-  line-height: 18px;
-  word-break: keep-all;
-}
-
-input[type='file'] {
+input[type="file"] {
   font-size: 12px;
   opacity: 80;
 }
@@ -292,10 +296,6 @@ input[type='file'] {
 .el-table-filter {
   max-height: 60vh;
   overflow: auto;
-}
-
-.el-input.is-disabled .el-input__inner {
-  color: #737373 !important;
 }
 
 .el-select-dropdown.switch-org {
@@ -354,10 +354,6 @@ input[type='file'] {
     line-height: 1.5;
     border-right: none;
     color: var(--color-text-primary);
-
-    a {
-      color: #1c84c6;
-    }
   }
 
   th {
@@ -487,21 +483,26 @@ input[type='file'] {
   font-size: 13px;
 }
 
-.el-link--default {
-  color: #1c84c6 !important;
-  font-weight: 300;
+a.el-link.el-link--info,
+a.el-link.el-link--default {
+  color: var(--color-link) !important;
 }
 
-.el-link.is-underline:hover:after {
-  border-bottom: 1px solid #007bff !important;
+a.el-link.el-link--info:hover,
+a.el-link.el-link--default:hover {
+  color: var(--color-link) !important;
+
+  &.is-hover-underline {
+    border-bottom-color: var(--color-link) !important;
+  }
+}
+
+a.el-link.el-link--info.is-hover-underline:hover:after {
+  border-bottom: 1px solid var(--color-link) !important;
 }
 
 .el-dialog__title {
   font-size: 16px;
-}
-
-.el-input__inner::placeholder {
-  font-weight: 400;
 }
 
 .el-drawer.rtl,
@@ -542,95 +543,12 @@ input[type='file'] {
   color: var(--color-text-primary) !important;
 }
 
-.el-cascader--small {
-  .el-cascader__tags {
-    padding: 3px;
-  }
-  .el-input__suffix {
-    width: 20px;
-  }
-}
-
 .el-card .el-card__header {
   color: var(--color-text-primary);
 }
 
-.el-form .el-form-item__content {
-  font-size: 13px;
-  line-height: 32px;
-
-  .el-input {
-    border-radius: 0;
-
-    .el-input__wrapper {
-      border-radius: 0;
-      padding: 0;
-
-      .el-input__inner {
-        border-radius: 0;
-      }
-    }
-  }
-}
-
 .el-tabs__item > span {
   padding: 0 6px;
-}
-
-.el-form {
-  margin-bottom: 20px;
-  label {
-    font-weight: 400;
-    line-height: 32px;
-  }
-
-  .el-input__icon {
-    vertical-align: super;
-  }
-}
-
-.el-form .el-input__inner,
-.el-dialog__body .el-input__inner {
-  height: 30px;
-  font-size: 13px;
-}
-
-.el-input input::placeholder {
-  font-weight: 400 !important;
-  // 不强制 'Open Sans'（纯拉丁字体）：中日文 placeholder（如「请输入手机号码」）会回退到
-  // 与输入实际文字不一致的字体，观感突兀。去掉后 placeholder 继承输入框自身字体，保持一致。
-  font-size: 13px;
-}
-
-.el-form-item__label {
-  overflow: hidden;
-
-  span {
-    line-height: inherit;
-    display: inline-block;
-    vertical-align: middle;
-    word-break: break-word;
-  }
-}
-
-.form-group-header {
-  text-align: left;
-}
-
-.el-picker-panel__sidebar .el-picker-panel__shortcut {
-  font-size: 12px;
-}
-
-.el-cascader .el-input__inner {
-  border-radius: 2px;
-}
-
-.el-select .el-input .el-select__caret {
-  line-height: 1;
-}
-
-.el-select .el-input .el-input__inner {
-  height: 30px;
 }
 
 button .el-icon--right {
@@ -642,23 +560,22 @@ $tooltip-arrow-color: #c2d1e1;
 
 // 使用 SCSS 的嵌套和变量来简化代码
 .el-tooltip__popper.is-light {
-  &[x-placement^='right'] .popper__arrow {
+  &[x-placement^="right"] .popper__arrow {
     border-right-color: $tooltip-arrow-color !important;
   }
 
-  &[x-placement^='left'] .popper__arrow {
+  &[x-placement^="left"] .popper__arrow {
     border-left-color: $tooltip-arrow-color !important;
   }
 
-  &[x-placement^='top'] .popper__arrow {
+  &[x-placement^="top"] .popper__arrow {
     border-top-color: $tooltip-arrow-color !important;
   }
 
-  &[x-placement^='bottom'] .popper__arrow {
+  &[x-placement^="bottom"] .popper__arrow {
     border-bottom-color: $tooltip-arrow-color !important;
   }
 }
-
 
 .el-button.help-msg-btn,
 .el-button.el-button--default.help-msg-btn,
@@ -709,8 +626,10 @@ $tooltip-arrow-color: #c2d1e1;
 
 .help-tips {
   a {
-    color: #1c84c6;
+    color: var(--color-link);
   }
+  max-width: 500px;
+  padding: 10px;
 }
 
 .el-upload--text {
@@ -813,6 +732,14 @@ li.rmenu i.fa {
   }
 }
 
+.el-icon--right {
+  margin-left: 5px;
+}
+
+.el-icon--left {
+  margin-right: 5px;
+}
+
 .el-alert__description {
   a {
     color: var(--color-link);
@@ -827,6 +754,8 @@ li.rmenu i.fa {
  */
 .el-alert {
   border: solid 1px var(--color-border);
+  // Alert 在页面、TabPage、弹窗等纵向 flex 容器中都应保持内容高度，由容器负责滚动。
+  flex-shrink: 0;
 }
 
 .el-alert.el-alert--success.is-light {
@@ -902,82 +831,6 @@ li.rmenu i.fa {
   padding: 0;
 }
 
-.datepicker.el-date-editor,
-.datepicker.el-date-editor.el-range-editor,
-.datepicker.el-date-editor--daterange,
-.el-date-editor.el-date-editor--daterange,
-.el-date-editor.el-range-editor {
-  width: 243px !important;
-  min-width: 243px !important;
-  max-width: 243px !important;
-  flex: 0 0 243px !important;
-  display: inline-flex !important;
-  align-items: center;
-  align-self: flex-start;
-  height: 32px !important;
-  min-height: 32px !important;
-  max-height: 32px !important;
-  box-sizing: border-box;
-}
-
-.datepicker.el-date-editor .el-range-input,
-.datepicker.el-date-editor .el-range-separator,
-.datepicker.el-date-editor .el-range__icon,
-.datepicker.el-date-editor .el-range__close-icon,
-.el-date-editor.el-date-editor--daterange .el-range-input,
-.el-date-editor.el-date-editor--daterange .el-range-separator,
-.el-date-editor.el-date-editor--daterange .el-range__icon,
-.el-date-editor.el-date-editor--daterange .el-range__close-icon,
-.el-date-editor.el-range-editor .el-range-input,
-.el-date-editor.el-range-editor .el-range-separator,
-.el-date-editor.el-range-editor .el-range__icon,
-.el-date-editor.el-range-editor .el-range__close-icon {
-  height: 30px;
-  line-height: 30px;
-}
-
-// Picker panels are Element Plus-owned poppers. Form-level input border overrides can leak
-// into non-teleported panels and draw a real border outside Element Plus' inset border.
-.el-picker-panel {
-  .el-date-picker__time-header,
-  .el-date-range-picker__time-header,
-  .el-time-spinner__input {
-    .el-input__wrapper {
-      border: 0 !important;
-      border-radius: var(--el-input-border-radius, var(--el-border-radius-base));
-      box-shadow: 0 0 0 1px var(--el-input-border-color, var(--el-border-color)) inset !important;
-    }
-
-    .el-input__inner {
-      border: 0 !important;
-      box-shadow: none !important;
-    }
-  }
-}
-
-.el-input-number {
-  .el-input-number__decrease,
-  .el-input-number__increase {
-    line-height: 26px;
-  }
-}
-
-.el-form--label-top.el-form {
-  //.el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:after {
-  //  content: '*';
-  //  margin-left: 4px;
-  //}
-
-  .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:before {
-  }
-}
-
-.el-form-item {
-  .CodeMirror {
-    height: 200px;
-  }
-}
-
 .black-theme-popover {
   width: 300px;
   max-height: 700px;
@@ -990,31 +843,6 @@ li.rmenu i.fa {
   white-space: nowrap;
   display: inline-block;
   width: 100%;
-}
-
-.el-card__body {
-  // DataForm（.form-fields）在 Vue 3 / Element Plus 下已经自己维护了 padding、gap 与标签宽度。
-  // 旧式普通表单（含 detail-card）也不需要额外 margin —— 卡片体本身已有 20px 内边距，
-  // 之前这里补的 margin-top:20px（顶部双倍留白）+ margin-right:80px（右侧空出一大块）纯属多余。
-  .el-form:not(.form-fields) {
-    form {
-      margin-top: 0;
-    }
-  }
-}
-
-.el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label {
-  span {
-    &::before {
-      content: '*';
-      margin-right: 4px;
-      color: #ed5565;
-    }
-  }
-
-  &::before {
-    display: none;
-  }
 }
 
 .el-button.el-button--default {
@@ -1036,12 +864,13 @@ li.rmenu i.fa {
 }
 
 .el-message-box__btns .el-button {
-  width: 50px;
+  width: auto;
   min-width: 50px;
   height: 30px;
   padding: 8px 12px;
   font-weight: 400;
   font-size: 13px;
+  white-space: nowrap;
 }
 
 div.el-loading-parent--relative {
@@ -1062,6 +891,10 @@ div.el-loading-parent--relative {
 
 .el-message {
   z-index: 999999 !important;
+}
+
+.fa {
+  margin-right: 2px;
 }
 
 .el-button-group.el-button-group--horizontal {
@@ -1093,121 +926,3 @@ div.el-loading-parent--relative {
     }
   }
 }
-
-
-// // Element Plus dropdown menu 样式（通过 teleport 渲染到 body，需要使用全局样式）
-// // 注意：不要强制显示 popper，只在打开时显示
-// .el-dropdown__popper:not([style*='display: none']) {
-//   .el-scrollbar {
-//     height: auto !important;
-//     min-height: auto !important;
-//   }
-
-//   .el-scrollbar__wrap {
-//     height: auto !important;
-//     min-height: auto !important;
-//     overflow: visible !important;
-
-//     &.el-scrollbar__wrap--hidden-default {
-//       overflow: visible !important;
-//     }
-//   }
-
-//   .el-scrollbar__view {
-//     height: auto !important;
-//     min-height: auto !important;
-//   }
-
-//   .el-dropdown__list {
-//     height: auto !important;
-//     min-height: auto !important;
-//   }
-// }
-
-// .el-dropdown-menu {
-//   padding: 4px 0 !important;
-
-//   .el-dropdown-menu__item {
-//     height: auto !important;
-//     min-height: 34px !important;
-//     line-height: 34px !important;
-//     color: var(--color-text-primary) !important;
-//     font-size: 14px !important;
-
-//     &:not(.is-disabled) {
-//       color: var(--color-text-primary) !important;
-//     }
-//   }
-
-//   .more-batch-processing {
-//     &:hover {
-//       background-color: transparent !important;
-//     }
-
-//     &.el-dropdown-menu__item--divided {
-//       margin-top: 0;
-//       border-top: none;
-//       color: var(--color-text-primary);
-//       cursor: auto;
-//       font-size: 12px;
-//       line-height: 30px;
-//       border-bottom: 1px solid #e4e7ed;
-
-//       &:before {
-//         height: 0;
-//       }
-//     }
-//   }
-
-//   .dropdown-item {
-//     color: var(--color-text-primary);
-//     line-height: 34px;
-
-//     .pre-icon {
-//       width: 17px;
-//       display: inline-block;
-//     }
-
-//     i.fa {
-//       font-size: 13px;
-//       height: 13px;
-//       width: 13px;
-//       margin-right: 0;
-//     }
-
-//     .svg-icon {
-//       font-size: 13px;
-//       height: 13px;
-//       width: 13px;
-//     }
-//   }
-
-//   .el-dropdown-menu__item {
-//     padding: 0 20px;
-
-//     &.is-disabled {
-//       color: var(--color-disabled);
-//       cursor: not-allowed;
-//       pointer-events: auto;
-//     }
-
-//     &:not(.is-disabled):hover {
-//       background-color: var(--color-disabled-background);
-//     }
-//   }
-
-//   .dropdown-menu-title {
-//     text-align: left;
-//     font-size: 12px;
-//     color: #909399;
-//     line-height: 30px;
-//     padding-left: 10px;
-//     padding-top: 10px;
-//     border-top: solid 1px #e4e7ed;
-
-//     &:first-child {
-//       padding-top: 0;
-//       border-top: none;
-//     }
-//   }
-// }

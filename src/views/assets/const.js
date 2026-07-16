@@ -30,8 +30,11 @@ function updatePlatformProtocols(vm, platformType, updateForm, platformChanged =
   setTimeout(
     () =>
       vm.init().then(() => {
+        const drawerAction = vm.$store.state.common.drawerActionMeta?.action
         const isCreate =
-          vm.$route.query.action === 'create' && vm?.$route?.query.clone_from === undefined
+          !vm.$route.params.id &&
+          vm.$route.query.clone_from === undefined &&
+          drawerAction !== 'clone'
         const needModify = isCreate || platformChanged
         const platformProtocols = vm.platform.protocols
         if (!needModify) return
@@ -61,6 +64,14 @@ export const assetFieldsMeta = (vm, category, type) => {
   const platformProtocols = []
   const secretTypes = []
   const asset = { address: 'https://example:8443' }
+  const updatePlatform = _.debounce(([event], updateForm) => {
+    const pk = event?.pk
+    const platformChanged = pk !== undefined && String(pk) !== String(vm.platformID)
+    if (platformChanged) {
+      vm.platformID = pk
+    }
+    updatePlatformProtocols(vm, platformType, updateForm, platformChanged)
+  }, 200)
   return {
     address: {
       rules: [rules.specialEmojiCheck, rules.RequiredChange],
@@ -110,19 +121,12 @@ export const assetFieldsMeta = (vm, category, type) => {
         }
       },
       on: {
-        change: _.debounce(([event], updateForm) => {
-          const pk = event.pk
-          vm.platformID = pk
-          updatePlatformProtocols(vm, platformType, updateForm, true)
-        }, 200),
-        input: _.debounce(([event], updateForm) => {
-          // 初始化的时候，mounted 中没有这个逻辑
-          updatePlatformProtocols(vm, platformType, updateForm)
-        }, 200)
+        change: updatePlatform,
+        // 初始化和用户选择都会触发 input；与 change 共用防抖，避免同一次选择重复初始化。
+        input: updatePlatform
       }
     },
     zone: {
-      component: Select2,
       disabled: false,
       el: {
         multiple: false,

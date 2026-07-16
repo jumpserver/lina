@@ -5,7 +5,7 @@
       class="export-btn delete-btn"
       type="text"
       icon="el-icon-delete"
-      style="color: #f56c6c;"
+      style="color: #f56c6c"
       @click="handleDelete"
     >
       {{ $t('Delete') }}
@@ -18,12 +18,21 @@
             <i class="el-icon-arrow-down el-icon--right" />
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-if="canSaveReport" command="edit">{{ $t('Edit') }}</el-dropdown-item>
-            <el-dropdown-item v-if="canDeleteReport" :divided="canSaveReport" command="delete">{{ $t('Delete') }}</el-dropdown-item>
+            <el-dropdown-item v-if="canSaveReport" command="edit">{{
+              $t('Edit')
+            }}</el-dropdown-item>
+            <el-dropdown-item v-if="canDeleteReport" :divided="canSaveReport" command="delete">{{
+              $t('Delete')
+            }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <template v-if="!showOperationOnlyInEditor || !editorOnly">
-          <el-button class="export-btn" type="text" icon="el-icon-download" @click="showExportDialog = true">
+          <el-button
+            class="export-btn"
+            type="text"
+            icon="el-icon-download"
+            @click="showExportDialog = true"
+          >
             {{ $t('Export') }}
           </el-button>
           <el-button class="export-btn" type="text" icon="el-icon-printer" @click="printReport">
@@ -78,7 +87,12 @@
 <script>
 import CreateReportDialog from './CreateReportDialog.vue'
 import ReportExportDialog from './ReportExportDialog.vue'
-import { buildCustomReportRouteQuery, normalizeReportDays, fetchReportDetailShared, invalidateReportDetailCache } from './reportUtils'
+import {
+  buildCustomReportRouteQuery,
+  normalizeReportDays,
+  fetchReportDetailShared,
+  invalidateReportDetailCache
+} from './reportUtils'
 import { exportElementToPdf } from '@/utils/common/pdf'
 
 const REPORT_ACTION_PERM_MAP = {
@@ -223,9 +237,13 @@ export default {
     },
     editingReport() {
       const query = this.$route.query || {}
-      const reportDays = parseInt(normalizeReportDays(query.days || this.reportData?.days || this.getDaysParam(), '7'), 10)
+      const reportDays = parseInt(
+        normalizeReportDays(query.days || this.reportData?.days || this.getDaysParam(), '7'),
+        10
+      )
       if (this.isCustomReport) {
-        const savedFilters = (this.reportData && this.reportData.filters) ? { ...this.reportData.filters } : {}
+        const savedFilters =
+          this.reportData && this.reportData.filters ? { ...this.reportData.filters } : {}
         return {
           ...(this.reportData || {}),
           days: reportDays,
@@ -262,13 +280,16 @@ export default {
     getReportContainer() {
       const contentFromCurrent = this.$el.closest('.content')
       const header = this.$el.closest('.header')
-      const contentFromHeaderSibling = header &&
-      header.nextElementSibling &&
-      header.nextElementSibling.classList &&
-      header.nextElementSibling.classList.contains('content')
-        ? header.nextElementSibling
-        : null
-      return contentFromCurrent || contentFromHeaderSibling || window.document.querySelector('.content')
+      const contentFromHeaderSibling =
+        header &&
+        header.nextElementSibling &&
+        header.nextElementSibling.classList &&
+        header.nextElementSibling.classList.contains('content')
+          ? header.nextElementSibling
+          : null
+      return (
+        contentFromCurrent || contentFromHeaderSibling || window.document.querySelector('.content')
+      )
     },
     async loadReportDetail() {
       this.reportData = await fetchReportDetailShared(this.$axios, this.reportId)
@@ -308,13 +329,18 @@ export default {
         await this.$nextTick()
         await exportElementToPdf(reportContainer, {
           filename: `${this.title}.pdf`,
-          ignoreElements: function(el) {
+          ignoreElements: function (el) {
             if (!el || !el.classList) return false
-            return el.classList.contains('report-visibility-panel') || el.classList.contains('report-item-hidden')
+            return (
+              el.classList.contains('report-visibility-panel') ||
+              el.classList.contains('report-item-hidden')
+            )
           }
         })
       } catch (error) {
-        this.$message.error(this.$t('Failed') + ': ' + (error && error.message ? error.message : String(error)))
+        this.$message.error(
+          this.$t('Failed') + ': ' + (error && error.message ? error.message : String(error))
+        )
       } finally {
         this.exportLoading = false
       }

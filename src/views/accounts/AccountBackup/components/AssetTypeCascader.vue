@@ -6,7 +6,7 @@
     :options="options"
     :placeholder="iPlaceholder"
     :props="cascaderProps"
-    class="account-backup-asset-type-cascader"
+    class="account-backup-asset-type-cascader jms-input-spacing"
     clearable
     filterable
     style="width: 100%"

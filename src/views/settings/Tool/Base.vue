@@ -1,6 +1,6 @@
 <template>
   <IBox>
-    <el-form ref="testForm" :model="testData" :rules="rules" label-width="15%">
+    <el-form ref="testForm" class="tool-form" :model="testData" :rules="rules" label-width="15%">
       <div v-for="field in safeFields" :key="field.name">
         <div v-if="Array.isArray(field)">
           <el-form-item label-width="8%">
@@ -42,9 +42,14 @@
         </div>
       </div>
       <el-form-item :label="$tc('Output')">
-        <Term ref="xterm" :xterm-config="xtermConfig" style="border: solid 1px #dddddd" />
+        <Term
+          ref="xterm"
+          class="tool-output"
+          :xterm-config="xtermConfig"
+          style="border: solid 1px #dddddd"
+        />
       </el-form-item>
-      <el-form-item>
+      <el-form-item class="tool-actions">
         <el-button v-if="!isTesting" size="small" type="primary" @click="submitTest">
           <i class="fa fa-play" style="margin-right: 4px" />{{ $t('Test') }}
         </el-button>
@@ -171,68 +176,37 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/*
- * 本表单为原生 el-form（非 DataForm）。统一为与 DataForm / profile 信息更改一致的单层边框方案：
- * 边框只画在 .el-input__wrapper / .el-select__wrapper 上（关掉 EP 的 inset box-shadow、改用真实
- * 1px border），内部 .el-input__inner 彻底去边框，避免 wrapper 与 inner 各描一层形成 border 套 border。
- * 整体高度 30px / 内部 28px，与表单标准统一。
- *
- * 注意：TagInput 的 .filter-field 自带单层容器边框，必须排除在 wrapper 描边规则之外，否则双层。
- */
-:deep(.el-form-item) {
-  // FormItem 间距统一 20px
-  margin-bottom: 20px;
-
-  // 标签与 30px 高的输入框垂直居中对齐（覆盖全局 line-height: 32px 造成的错位）
-  .el-form-item__label {
-    height: 30px;
-    line-height: 30px;
-    display: inline-flex;
-    align-items: center;
-  }
-
-  // 内部嵌套的 el-form-item（数组字段的 el-col 组合）不再叠加底部间距
-  .el-form-item {
-    margin-bottom: 0;
-  }
+:deep(.tool-form) {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-:deep(.el-form-item__content) {
-  // 普通输入框 / 下拉框：单层 wrapper 边框
-  .el-input:not(.filter-field .el-input),
-  .el-select {
-    --el-input-height: 30px;
-  }
+:deep(.tool-form > .el-form-item),
+:deep(.tool-form > div > .el-form-item) {
+  // 由容器 gap 统一管理字段间距，避免被全局 el-form 规则覆盖或叠加。
+  margin-bottom: 0 !important;
+}
 
-  .el-input:not(.filter-field .el-input) .el-input__wrapper,
-  .el-select__wrapper {
-    min-height: 30px;
-    height: 30px;
-    border-radius: 0;
-    box-shadow: none !important;
-    border: 1px solid var(--el-border-color);
+:deep(.tool-form .el-form-item__label) {
+  height: 30px;
+  line-height: 30px;
+  display: inline-flex;
+  align-items: center;
+}
 
-    &:hover {
-      border-color: var(--el-border-color-hover);
-    }
+:deep(.tool-form .el-form-item .el-form-item) {
+  margin-bottom: 0;
+}
 
-    &.is-focus,
-    &.is-focused {
-      border-color: var(--el-color-primary);
-    }
-  }
+:deep(.tool-form > .tool-actions .el-form-item__content) {
+  // 小尺寸按钮默认按 30px 行高基线居中，会让可见边框比其它控件多出约 5px 间隙。
+  align-items: flex-start;
+  line-height: normal;
+}
 
-  // 内部 inner 去除自身边框 / box-shadow，仅保留 28px 高度
-  .el-input:not(.filter-field .el-input) .el-input__inner {
-    height: 28px;
-    line-height: 28px;
-    border: 0 !important;
-    box-shadow: none !important;
-  }
-
-  // TagInput 自带容器边框，内部 input 不再描边
-  .filter-field .el-input__inner {
-    height: 28px;
-  }
+:deep(.tool-output) {
+  width: 100%;
+  min-width: 0;
 }
 </style>

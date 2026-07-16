@@ -19,7 +19,7 @@
       :show-close="false"
       :size="width"
       :title="$tc('SiteMessage')"
-      class="drawer"
+      class="site-msg-drawer"
       modal-class="site-msg-modal"
       header-class="site-msg-header"
       body-class="site-msg-body"
@@ -97,6 +97,7 @@
 import Dialog from '@/components/Dialog'
 import MarkDown from '@/components/Widgets/MarkDown'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
+import { formatSiteMessage } from './siteMessage'
 
 export default {
   name: 'SiteMessages',
@@ -118,32 +119,10 @@ export default {
     width() {
       return this.$store.state.app.device === 'mobile' ? '70%' : '450px'
     },
-    // 站内信正文是 Markdown，且工单类消息把多个 "**字段:** 值" 挤在同一行，
-    // 渲染出来是一坨内联文本。这里把每个 "**字段:**" 拆成独立的列表项（每字段一行），
-    // 再由样式排成信息表（标签/值）的形式。无粗体字段的普通消息保持原样。
+    // 将后端 Markdown 中连续的 "**字段:** 值" 归一化成列表，
+    // 再由样式排成信息表。已有列表和普通 Markdown 保持原样。
     formattedMsg() {
-      const raw = this.currentMsg?.content?.message
-      if (!raw) return ''
-      return raw
-        .split('\n')
-        .map((line) => {
-          const trimmed = line.trimStart()
-          // 标题/引用行保持原样
-          if (
-            !trimmed ||
-            trimmed.startsWith('#') ||
-            trimmed.startsWith('>') ||
-            trimmed.startsWith('- ')
-          ) {
-            return line
-          }
-          // 该行含多个 "**字段:** 值" 时，为每个粗体字段起一个列表项
-          if ((line.match(/\*\*/g) || []).length >= 2) {
-            return line.replace(/\s*(\*\*[^*]+?\*\*)/g, '\n- $1').replace(/^\n/, '')
-          }
-          return line
-        })
-        .join('\n')
+      return formatSiteMessage(this.currentMsg?.content?.message)
     }
   },
   mounted() {
@@ -272,10 +251,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.drawer {
-  height: calc(100% - 0px);
-}
-
 .el-badge :deep(.el-badge__content.is-fixed) {
   top: 10px;
 }
@@ -415,14 +390,14 @@ export default {
       margin: 6px 0;
     }
 
-    // 字段列表：每字段一行，标签（粗体）固定列宽 + 值，逐行下分割线
-    :deep(ul) {
+    // 只把“粗体字段名开头”的列表排成信息表，普通 Markdown 列表仍保留项目符号。
+    :deep(ul:has(> li > strong:first-child)) {
       margin: 6px 0 0;
       padding: 0;
       list-style: none;
     }
 
-    :deep(li) {
+    :deep(ul:has(> li > strong:first-child) > li) {
       padding: 9px 2px;
       border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
       line-height: 20px;
@@ -483,13 +458,26 @@ export default {
   background-color: transparent !important;
 }
 
+/*
+ * 站内信不是通用 Drawer 组件，避免复用 `.drawer` 后误命中全局抽屉的
+ * `overflow: hidden` 规则。抽屉根节点锁定视口高度，body 作为唯一滚动容器。
+ */
+.site-msg-drawer {
+  height: 100%;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
 .site-msg-header.el-drawer__header {
   display: flex;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: space-between;
+  min-height: 56px;
   border-bottom: solid 1px rgb(231, 234, 239);
   margin-bottom: 0;
-  padding-top: 10px;
+  padding: 10px 20px;
+  box-sizing: border-box;
   font-size: 16px;
 
   .msg-header-title {
@@ -538,6 +526,11 @@ export default {
 }
 
 .site-msg-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0;
+  overflow-x: hidden;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 </style>

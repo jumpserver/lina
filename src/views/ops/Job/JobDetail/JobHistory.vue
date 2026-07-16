@@ -4,8 +4,7 @@
   </div>
 </template>
 
-<script>
-import { createVNode as createVNodeCompat } from 'vue'
+<script lang="jsx">
 import GenericListTable from '@/layout/components/GenericListTable'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
@@ -35,21 +34,9 @@ export default {
             label: this.$t('IsFinished'),
             formatter: (row) => {
               if (row.is_finished) {
-                return createVNodeCompat(
-                  'i',
-                  {
-                    class: 'fa fa-check text-primary'
-                  },
-                  null
-                )
+                return <i class="fa fa-check text-primary" />
               }
-              return createVNodeCompat(
-                'i',
-                {
-                  class: 'fa fa-times text-danger'
-                },
-                null
-              )
+              return <i class="fa fa-times text-danger" />
             },
             formatterArgs: {
               width: '14px'
@@ -59,30 +46,12 @@ export default {
             label: this.$t('IsSuccess'),
             formatter: (row) => {
               if (!row.is_finished) {
-                return createVNodeCompat(
-                  'i',
-                  {
-                    class: 'fa  fa fa-spinner fa-spin'
-                  },
-                  null
-                )
+                return <i class="fa  fa fa-spinner fa-spin" />
               }
               if (row.is_success) {
-                return createVNodeCompat(
-                  'i',
-                  {
-                    class: 'fa fa-check text-primary'
-                  },
-                  null
-                )
+                return <i class="fa fa-check text-primary" />
               }
-              return createVNodeCompat(
-                'i',
-                {
-                  class: 'fa fa-times text-danger'
-                },
-                null
-              )
+              return <i class="fa fa-times text-danger" />
             },
             formatterArgs: {
               width: '14px'

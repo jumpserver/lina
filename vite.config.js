@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url'
 import autoprefixer from 'autoprefixer'
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
 import { createObjectProperty, createSimpleExpression } from '@vue/compiler-core'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -116,7 +117,8 @@ export default defineConfig(({ mode }) => {
             }
           }
         }
-      })
+      }),
+      vueJsx()
     ],
     css: {
       devSourcemap: mode === 'development',

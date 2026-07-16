@@ -7,7 +7,7 @@
       :table-url="tableUrl"
     />
     <div v-loading="loading">
-      <el-row class="the-row">
+      <el-row :class="{ 'is-empty': totalData.length === 0 }" class="the-row">
         <IBox v-if="totalData.length === 0" class="empty-box">
           <el-empty
             :description="$t('NoData')"
@@ -239,10 +239,10 @@ export default {
   }
 }
 </script>
-
 <style lang="scss" scoped>
 .the-row .empty-box {
   display: block;
+  // max-width controls the row; the empty card still needs an explicit flex size to fill it.
   flex: 0 0 100%;
   width: 100%;
   box-sizing: border-box;
@@ -263,29 +263,26 @@ export default {
   max-width: 1600px;
   text-align: center;
 
+  // 空状态时不受卡片网格 1600px 上限约束,让 empty 卡片撑满整行宽度
+  &.is-empty {
+    max-width: none;
+  }
+
   .card-container {
-    display: flex;
-    justify-content: left;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 20px;
 
     .el-card .el-card__body div {
       height: inherit;
     }
-  }
-
-  .el-col,
-  div {
-    gap: 20px;
 
     .the-card {
-      min-width: 330px;
       position: relative;
-      margin-bottom: 20px;
       height: 180px;
-      width: 380px;
-      padding: 15px;
+      padding: 20px;
 
-      :deep(.el-card__body) {
+      ::v-deep .el-card__body {
         height: 100%;
         width: 100%;
         padding: 0;
@@ -321,9 +318,9 @@ export default {
   border-top: 1px solid #e7eaec;
 }
 
-.el-col {
-  //min-width: 330px; 设置完后，remote app 列表会有问题
-}
+// .el-col {
+//   min-width: 330px; 设置完后，remote app 列表会有问题
+// }
 
 .no-data {
   display: flex;

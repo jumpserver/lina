@@ -1,7 +1,12 @@
 <template>
   <div>
     <TwoCol>
-      <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
+      <AutoDetailCard
+        :excludes="excludes"
+        :formatters="accountFormatters"
+        :object="object"
+        :url="url"
+      />
       <AutoDetailCard
         :fields="detailFields"
         :object="object"
@@ -32,8 +37,7 @@
   </div>
 </template>
 
-<script>
-import { createVNode as createVNodeCompat } from 'vue'
+<script lang="jsx">
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import RelationCard from '@/components/Cards/RelationCard'
@@ -63,12 +67,23 @@ export default {
       showTimer: false,
       url: `/api/v1/xpack/cloud/accounts/${this.object.id}/`,
       excludes: ['attrs', 'task'],
+      accountFormatters: {
+        category: (item, value) => {
+          const categoryMap = {
+            host: 'Host',
+            database: 'Database'
+          }
+          const i18nKey = categoryMap[value]
+          return i18nKey ? this.$t(i18nKey) : value
+        }
+      },
       quickEditActions: [
         {
           title: this.$t('IPType'),
           type: 'updateSelect',
           attrs: {
-            model: this.object.task.sync_ip_type,
+            value: this.object.task.sync_ip_type === 1 ? 1 : 0,
+            model: this.object.task.sync_ip_type === 1 ? 1 : 0,
             type: 'primary',
             multiple: false,
             clearable: false,
@@ -225,11 +240,13 @@ export default {
           key: this.$t('Region'),
           value: this.object.task?.regions_display,
           formatter(row, value) {
-            return createVNodeCompat('div', null, [
-              value?.map((content) => {
-                return createVNodeCompat('div', null, [content])
-              })
-            ])
+            return (
+              <div>
+                {value?.map((content) => (
+                  <div>{content}</div>
+                ))}
+              </div>
+            )
           }
         },
         {

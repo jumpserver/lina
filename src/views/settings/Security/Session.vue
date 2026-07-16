@@ -6,11 +6,10 @@
   </IBox>
 </template>
 
-<script>
+<script lang="jsx">
 import WatermarkHelpDialog from '@/components/Apps/VariablesHelpTextDialog'
 import IBox from '@/components/Common/IBox/index.vue'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index.vue'
-import { createVNode as createVNodeCompat } from 'vue'
 export default {
   name: 'SessionSecurity',
   components: {
@@ -117,14 +116,10 @@ export default {
               const handleClick = () => {
                 this.showSessionHelpDialog = true
               }
-              return createVNodeCompat(
-                'i',
-                {
-                  onClick: handleClick,
-                  class: 'fa fa-question-circle',
-                  style: 'cursor: pointer'
-                },
-                [this.$t('Help')]
+              return (
+                <i onClick={handleClick} class="fa fa-question-circle" style="cursor: pointer">
+                  {this.$t('Help')}
+                </i>
               )
             }
           },
@@ -133,14 +128,10 @@ export default {
               const handleClick = () => {
                 this.showConsoleHelpDialog = true
               }
-              return createVNodeCompat(
-                'i',
-                {
-                  onClick: handleClick,
-                  class: 'fa fa-question-circle',
-                  style: 'cursor: pointer'
-                },
-                [this.$t('Help')]
+              return (
+                <i onClick={handleClick} class="fa fa-question-circle" style="cursor: pointer">
+                  {this.$t('Help')}
+                </i>
               )
             }
           },

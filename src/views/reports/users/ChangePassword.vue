@@ -20,27 +20,29 @@
       </template>
       <template #default>
         <div v-if="showChart" class="charts-grid">
-          <div class="chart-container full-width" data-report-type="chart" data-report-name="Overview">
+          <div
+            class="chart-container full-width"
+            data-report-type="chart"
+            data-report-name="Overview"
+          >
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('Overview') }}</div>
-              <SummaryCountCard
-                :items="totalData"
-              />
+              <SummaryCountCard :items="totalData" />
             </div>
           </div>
 
-          <div class="chart-container full-width" data-report-type="chart" data-report-name="UserModificationTrends">
+          <div
+            class="chart-container full-width"
+            data-report-type="chart"
+            data-report-name="UserModificationTrends"
+          >
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('UserModificationTrends') }}</div>
               <div class="chart">
-                <Echart
-                  :options="UserModificationOptions"
-                  :autoresize="true"
-                />
+                <Echart :options="UserModificationOptions" :autoresize="true" />
               </div>
             </div>
           </div>
-
         </div>
       </template>
 
@@ -48,19 +50,37 @@
         <div v-if="showTable" class="full-width">
           <div v-if="Array.isArray(tableData)" class="report-tables full-width">
             <template v-for="(t, idx) in tableData">
-              <div v-if="rankingTableConfigs[t.name]" :key="'rank-' + idx" class="report-table-wrap chart-container full-width" data-report-type="table" :data-report-name="t.name">
+              <div
+                v-if="rankingTableConfigs[t.name]"
+                :key="'rank-' + idx"
+                class="report-table-wrap chart-container full-width"
+                data-report-type="table"
+                :data-report-name="t.name"
+              >
                 <div class="chart-container-title">
                   <div class="chart-container-title-text">{{ t.name }}</div>
                 </div>
                 <RankTable :config="rankingTableConfigs[t.name]" />
               </div>
-              <div v-else :key="t.name || idx" class="report-table-wrap chart-container full-width" data-report-type="table" :data-report-name="t.name">
+              <div
+                v-else
+                :key="t.name || idx"
+                class="report-table-wrap chart-container full-width"
+                data-report-type="table"
+                :data-report-name="t.name"
+              >
                 <div v-if="t.name" class="chart-container-title">
                   <div class="chart-container-title-text">{{ t.name }}</div>
                 </div>
                 <div class="report-card-body">
                   <el-table :data="t.rows" border>
-                    <el-table-column v-for="column in t.columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+                    <el-table-column
+                      v-for="column in t.columns"
+                      :key="column.key"
+                      :label="column.label"
+                      :prop="column.key"
+                      min-width="140"
+                    />
                   </el-table>
                 </div>
               </div>
@@ -68,7 +88,13 @@
           </div>
           <div v-else>
             <el-table :data="tableData.rows" border>
-              <el-table-column v-for="column in tableData.columns" :key="column.key" :label="column.label" :prop="column.key" min-width="140" />
+              <el-table-column
+                v-for="column in tableData.columns"
+                :key="column.key"
+                :label="column.label"
+                :prop="column.key"
+                min-width="140"
+              />
             </el-table>
           </div>
         </div>
@@ -116,9 +142,9 @@ export default {
       ],
       days: localStorage.getItem(this.name) || '7',
       total_count_change_password: {
-        'total': 0,
-        'user_total': 0,
-        'change_by_total': 0
+        total: 0,
+        user_total: 0,
+        change_by_total: 0
       },
       config: {
         user_change_password_metrics: {
@@ -251,16 +277,19 @@ export default {
                   0,
                   0,
                   1,
-                  [{
-                    offset: 0,
-                    color: primary
-                  }, {
-                    offset: 0.6,
-                    color: TwoLevelColor
-                  }, {
-                    offset: 0.8,
-                    color: ThreeLevelColor
-                  }
+                  [
+                    {
+                      offset: 0,
+                      color: primary
+                    },
+                    {
+                      offset: 0.6,
+                      color: TwoLevelColor
+                    },
+                    {
+                      offset: 0.8,
+                      color: ThreeLevelColor
+                    }
                   ],
                   false
                 ),
@@ -283,14 +312,15 @@ export default {
       await this.loadTableData('/api/v1/reports/reports/user-change-password/')
       this.total_count_change_password.total = data.total_count_change_password.total
       this.total_count_change_password.user_total = data.total_count_change_password.user_total
-      this.total_count_change_password.change_by_total = data.total_count_change_password.change_by_total
-      this.config.user_change_password_metrics.dates_metrics_date = data.user_change_password_metrics.dates_metrics_date
-      this.config.user_change_password_metrics.dates_metrics_total = data.user_change_password_metrics.dates_metrics_total
+      this.total_count_change_password.change_by_total =
+        data.total_count_change_password.change_by_total
+      this.config.user_change_password_metrics.dates_metrics_date =
+        data.user_change_password_metrics.dates_metrics_date
+      this.config.user_change_password_metrics.dates_metrics_total =
+        data.user_change_password_metrics.dates_metrics_total
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

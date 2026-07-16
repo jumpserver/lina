@@ -20,45 +20,54 @@
       </template>
       <template #default>
         <div v-if="showChart" class="charts-grid">
-          <div class="chart-container full-width" data-report-type="chart" data-report-name="Overview">
+          <div
+            class="chart-container full-width"
+            data-report-type="chart"
+            data-report-name="Overview"
+          >
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('Overview') }}</div>
-              <SummaryCountCard
-                :items="totalData"
-              />
+              <SummaryCountCard :items="totalData" />
             </div>
           </div>
 
-          <div class="chart-container" data-report-type="chart" data-report-name="AccountCreationSourceDistribution">
+          <div
+            class="chart-container"
+            data-report-type="chart"
+            data-report-name="AccountCreationSourceDistribution"
+          >
             <div class="chart-container-title">
-              <div class="chart-container-title-text">{{ $t('AccountCreationSourceDistribution') }}</div>
+              <div class="chart-container-title-text">
+                {{ $t('AccountCreationSourceDistribution') }}
+              </div>
               <div class="chart">
-                <Echart
-                  :options="SourceOptions"
-                  :autoresize="true"
-                />
+                <Echart :options="SourceOptions" :autoresize="true" />
               </div>
             </div>
           </div>
-          <div class="chart-container" data-report-type="chart" data-report-name="AccountConnectivityStatusDistribution">
+          <div
+            class="chart-container"
+            data-report-type="chart"
+            data-report-name="AccountConnectivityStatusDistribution"
+          >
             <div class="chart-container-title">
-              <div class="chart-container-title-text">{{ $t('AccountConnectivityStatusDistribution') }}</div>
+              <div class="chart-container-title-text">
+                {{ $t('AccountConnectivityStatusDistribution') }}
+              </div>
               <div class="chart">
-                <Echart
-                  :options="ConnectivityOptions"
-                  :autoresize="true"
-                />
+                <Echart :options="ConnectivityOptions" :autoresize="true" />
               </div>
             </div>
           </div>
-          <div class="chart-container full-width" data-report-type="chart" data-report-name="AccountPasswordChangeTrends">
+          <div
+            class="chart-container full-width"
+            data-report-type="chart"
+            data-report-name="AccountPasswordChangeTrends"
+          >
             <div class="chart-container-title">
               <div class="chart-container-title-text">{{ $t('AccountPasswordChangeTrends') }}</div>
               <div class="chart">
-                <Echart
-                  :options="ChangeSecretOptions"
-                  :autoresize="true"
-                />
+                <Echart :options="ChangeSecretOptions" :autoresize="true" />
               </div>
             </div>
           </div>
@@ -68,13 +77,25 @@
         <div v-if="showTable" class="full-width">
           <div v-if="Array.isArray(tableData)" class="report-tables full-width">
             <template v-for="(t, idx) in tableData">
-              <div v-if="rankingTableConfigs[t.name]" :key="'rank-' + idx" class="report-table-wrap chart-container full-width" data-report-type="table" :data-report-name="t.name">
+              <div
+                v-if="rankingTableConfigs[t.name]"
+                :key="'rank-' + idx"
+                class="report-table-wrap chart-container full-width"
+                data-report-type="table"
+                :data-report-name="t.name"
+              >
                 <div class="chart-container-title">
                   <div class="chart-container-title-text">{{ t.name }}</div>
                 </div>
                 <RankTable :config="rankingTableConfigs[t.name]" />
               </div>
-              <div v-else :key="t.name || idx" class="report-table-wrap chart-container full-width" data-report-type="table" :data-report-name="t.name">
+              <div
+                v-else
+                :key="t.name || idx"
+                class="report-table-wrap chart-container full-width"
+                data-report-type="table"
+                :data-report-name="t.name"
+              >
                 <div v-if="t.name" class="chart-container-title">
                   <div class="chart-container-title-text">{{ t.name }}</div>
                 </div>
@@ -140,26 +161,38 @@ export default {
       name: 'AccountStatistics',
       charts: [
         { name: 'Overview', title: this.$t('Overview') },
-        { name: 'AccountCreationSourceDistribution', title: this.$t('AccountCreationSourceDistribution') },
-        { name: 'AccountConnectivityStatusDistribution', title: this.$t('AccountConnectivityStatusDistribution') },
+        {
+          name: 'AccountCreationSourceDistribution',
+          title: this.$t('AccountCreationSourceDistribution')
+        },
+        {
+          name: 'AccountConnectivityStatusDistribution',
+          title: this.$t('AccountConnectivityStatusDistribution')
+        },
         { name: 'AccountPasswordChangeTrends', title: this.$t('AccountPasswordChangeTrends') }
       ],
       tables: [
         { name: 'Overview', title: this.$t('Overview') },
-        { name: 'AccountCreationSourceDistribution', title: this.$t('AccountCreationSourceDistribution') },
-        { name: 'AccountConnectivityStatusDistribution', title: this.$t('AccountConnectivityStatusDistribution') },
+        {
+          name: 'AccountCreationSourceDistribution',
+          title: this.$t('AccountCreationSourceDistribution')
+        },
+        {
+          name: 'AccountConnectivityStatusDistribution',
+          title: this.$t('AccountConnectivityStatusDistribution')
+        },
         { name: 'AccountPasswordChangeTrends', title: this.$t('AccountPasswordChangeTrends') },
         { name: 'RankByNumberOfAssetAccounts', title: this.$t('RankByNumberOfAssetAccounts') },
         { name: 'AccountAndPasswordChangeRank', title: this.$t('AccountAndPasswordChangeRank') }
       ],
       days: localStorage.getItem(this.name) || '7',
       account_stats: {
-        'total': 0,
-        'active': 0,
-        'connected': 0,
-        'su_from': 0,
-        'date_change_secret': 0,
-        'template_total': 0
+        total: 0,
+        active: 0,
+        connected: 0,
+        su_from: 0,
+        date_change_secret: 0,
+        template_total: 0
       },
       change_secret_account_metrics: {
         dates_metrics_date: [],
@@ -407,16 +440,19 @@ export default {
                   0,
                   0,
                   1,
-                  [{
-                    offset: 0,
-                    color: primary
-                  }, {
-                    offset: 0.6,
-                    color: TwoLevelColor
-                  }, {
-                    offset: 0.8,
-                    color: ThreeLevelColor
-                  }
+                  [
+                    {
+                      offset: 0,
+                      color: primary
+                    },
+                    {
+                      offset: 0.6,
+                      color: TwoLevelColor
+                    },
+                    {
+                      offset: 0.8,
+                      color: ThreeLevelColor
+                    }
                   ],
                   false
                 ),
@@ -442,15 +478,17 @@ export default {
       this.account_stats.su_from = data.account_stats?.su_from || 0
       this.account_stats.date_change_secret = data.account_stats?.date_change_secret || 0
       this.account_stats.template_total = data.account_stats?.template_total || 0
-      this.change_secret_account_metrics.dates_metrics_date = data.change_secret_account_metrics?.dates_metrics_date || []
-      this.change_secret_account_metrics.dates_metrics_total = data.change_secret_account_metrics?.dates_metrics_total || []
+      this.change_secret_account_metrics.dates_metrics_date =
+        data.change_secret_account_metrics?.dates_metrics_date || []
+      this.change_secret_account_metrics.dates_metrics_total =
+        data.change_secret_account_metrics?.dates_metrics_total || []
 
       const accountSourcePie = data.source_pie || []
       if (accountSourcePie.length !== 0) {
         this.config.source_pie = accountSourcePie
       }
 
-      const by_connectivity = (data.by_connectivity || []).map(item => {
+      const by_connectivity = (data.by_connectivity || []).map((item) => {
         return {
           name: item.label,
           value: item.total
@@ -466,6 +504,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

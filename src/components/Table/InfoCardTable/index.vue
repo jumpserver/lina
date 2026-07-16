@@ -71,7 +71,11 @@ export default {
   }
 
   :deep(.the-row) {
-    max-width: unset;
+    max-width: 100% !important;
+
+    .card-container {
+      width: 100%;
+    }
   }
 }
 </style>

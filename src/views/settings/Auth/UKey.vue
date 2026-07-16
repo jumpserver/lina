@@ -1,9 +1,5 @@
 <template>
-  <BaseAuth
-    :config="settings"
-    enable-field="AUTH_UKEY"
-    v-on="$listeners"
-  />
+  <BaseAuth :config="settings" enable-field="AUTH_UKEY" v-on="$listeners" />
 </template>
 
 <script>
@@ -21,19 +17,18 @@ export default {
       settings: {
         url: '/api/v1/settings/setting/?category=ukey',
         fields: [
-          [this.$t('Basic'), [
-            'AUTH_UKEY',
-            'AUTH_UKEY_CHALLENGE_TTL',
-            'AUTH_UKEY_DEFAULT_PIN'
-          ]],
-          [this.$t('Enrollment'), [
-            'AUTH_UKEY_ENROLL_ENABLED',
-            'AUTH_UKEY_CA_CERT_ALGORITHM',
-            'AUTH_UKEY_CA_CERT_CONTENT',
-            'AUTH_UKEY_CA_KEY_CONTENT',
-            'AUTH_UKEY_CA_KEY_PASS',
-            'AUTH_UKEY_ENROLL_VALIDITY_DAYS'
-          ]]
+          [this.$t('Basic'), ['AUTH_UKEY', 'AUTH_UKEY_CHALLENGE_TTL', 'AUTH_UKEY_DEFAULT_PIN']],
+          [
+            this.$t('Enrollment'),
+            [
+              'AUTH_UKEY_ENROLL_ENABLED',
+              'AUTH_UKEY_CA_CERT_ALGORITHM',
+              'AUTH_UKEY_CA_CERT_CONTENT',
+              'AUTH_UKEY_CA_KEY_CONTENT',
+              'AUTH_UKEY_CA_KEY_PASS',
+              'AUTH_UKEY_ENROLL_VALIDITY_DAYS'
+            ]
+          ]
         ],
         fieldsMeta: {
           AUTH_UKEY_ENROLL_VALIDITY_DAYS: {
@@ -69,12 +64,9 @@ export default {
     }
   },
   methods: {
-    onConfirm() {
-    }
+    onConfirm() {}
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

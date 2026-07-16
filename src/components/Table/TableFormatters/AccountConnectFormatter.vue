@@ -39,9 +39,9 @@
 </template>
 
 <script>
-import store from '@/store';
+import store from '@/store'
 
-import BaseFormatter from './base.vue';
+import BaseFormatter from './base.vue'
 
 export default {
   name: 'AccountConnectFormatter',
@@ -124,11 +124,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-dropdown-menu  {
+.el-dropdown-menu {
   padding: 6px 0;
-  border: 1px solid #EBEEF5;
+  border: 1px solid #ebeef5;
   border-radius: 4px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 
   :deep(.el-dropdown-menu__item) {
     padding: 0 15px;
@@ -142,13 +142,27 @@ export default {
   }
 }
 
-
 :deep(.action-connect) {
   cursor: pointer;
 
   .el-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    min-width: 24px;
+    height: 24px;
+    padding: 0;
+    line-height: 1;
     box-shadow: none !important;
     outline: none !important;
+
+    // fa 图标字形在自身 em 盒内偏上(flex 居中的是行盒而非字形),下移 1px 做视觉居中
+    i {
+      display: block;
+      line-height: 1;
+      transform: translateX(1px) translateY(1px);
+    }
 
     &:hover,
     &:focus,
@@ -163,8 +177,10 @@ export default {
 
     &.el-button--primary.is-plain {
       color: var(--color-primary);
-      background-color: var(--color-primary-light-3, #e8f7f4);
-      border-color: var(--color-primary-light-1, var(--color-primary));
+      // 用主题系统维护的 EP 主色浅色阶(由当前主色 mix 白色生成),
+      // 替换此前硬编码的 #e8f7f4 —— 后者在非默认(如深蓝黑)主题下不跟随、显脏。
+      background-color: var(--el-color-primary-light-9);
+      border-color: var(--el-color-primary-light-5);
 
       i {
         color: var(--color-primary);

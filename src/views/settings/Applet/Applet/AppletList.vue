@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import CardTable from '@/components/Table/CardTable'
 import UploadDialog from './UploadDialog'
 
@@ -40,7 +41,7 @@ export default {
             title: this.$t('Marketplace'),
             icon: 'el-icon-shopping-bag-1',
             callback: () => {
-              window.open('https://apps.fit2cloud.com/jumpserver')
+              window.open(this.publicSettings?.REMOTE_APP_STORE_URL)
             }
           }
         ],
@@ -55,6 +56,11 @@ export default {
   },
   mounted() {
     this.$store.dispatch('users/enterSettingOrg')
+  },
+  computed: {
+    ...mapGetters({
+      publicSettings: 'publicSettings'
+    })
   },
   methods: {
     handleUpload(res) {

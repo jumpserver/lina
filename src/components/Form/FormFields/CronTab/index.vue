@@ -1,7 +1,7 @@
 <template>
   <div class="cron-tab-field">
     <div class="box">
-      <el-input v-model="input" clearable @clear="onClear" @focus="showDialog" />
+      <el-input v-model="input" clearable @clear="onClear" @click="showDialog" />
     </div>
     <Dialog
       v-model:visible="showCron"
@@ -49,7 +49,10 @@ export default {
       this.input = value
       this.$emit('change', value)
     },
-    showDialog() {
+    showDialog(event) {
+      if (event?.target?.closest('.el-input__clear')) {
+        return
+      }
       this.expression = this.input
       this.showCron = true
     },

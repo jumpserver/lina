@@ -92,7 +92,7 @@ export default {
     async getMetricData() {
       setTimeout(() => {
         const url = `/api/v1/accounts/change-secret-dashboard/?daily_success_and_failure_metrics=1&days=${this.days}`
-        this.$axios.get(url).then(data => {
+        this.$axios.get(url).then((data) => {
           this.applyMetrics(data)
         })
       }, 500)

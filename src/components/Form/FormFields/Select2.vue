@@ -450,6 +450,7 @@ export default {
       })
     },
     clearSelected() {
+      this.allSelected = false
       this.innerValue = this.multiple ? [] : ''
       const payload = _.cloneDeep(this.innerValue)
       this.$emit('input', payload)
@@ -519,92 +520,21 @@ export default {
   width: 100%;
 
   &.hidden-tag {
-    :deep(.el-select__tags) {
+    :deep(.el-select__selected-item:has(> .el-tag)) {
       opacity: 0;
-      cursor: not-allowed;
+      pointer-events: none;
     }
   }
 
   &.show-tag {
-    :deep(.el-select__tags) {
+    :deep(.el-select__selected-item:has(> .el-tag)) {
       opacity: 1;
     }
-  }
-
-  :deep(.el-tag.el-tag--info) {
-    min-height: 24px;
-    height: 24px;
-    line-height: 22px;
-    margin-top: 0;
-    margin-bottom: 0;
-    margin-left: 5px;
-    padding: 0 8px;
-    font-family: sans-serif !important;
-    white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
-  }
-
-  :deep(.el-tag__content) {
-    display: inline-flex;
-    align-items: center;
-  }
-
-  :deep(.el-select__wrapper) {
-    min-height: 30px;
-    height: 30px !important;
-    box-sizing: border-box;
-    padding: 0 8px;
-    padding-top: 0;
-    padding-bottom: 0;
-    border-radius: 0;
-    box-shadow: none !important;
-    border: 1px solid var(--el-border-color) !important;
-  }
-
-  :deep(.el-select__wrapper:hover) {
-    border-color: var(--el-border-color-hover) !important;
-  }
-
-  :deep(.el-select__wrapper.is-focused) {
-    box-shadow: none !important;
-    border-color: var(--el-color-primary) !important;
-  }
-
-  :deep(.el-select__selection) {
-    min-height: 28px;
-    align-items: center;
-  }
-
-  :deep(.el-select__tags) {
-    height: 28px;
-    min-height: 28px;
-    align-items: center;
-  }
-
-  :deep(.el-select__selected-item),
-  :deep(.el-select__placeholder),
-  :deep(.el-select__input) {
-    min-height: 28px;
-    height: 28px;
-    line-height: 28px;
-  }
-
-  :deep(.el-select__caret),
-  :deep(.el-select__suffix),
-  :deep(.el-select__prefix) {
-    min-height: 28px;
-    height: 28px;
-    display: inline-flex;
-    align-items: center;
   }
 }
 
 .select2.is-multiple {
   :deep(.el-select__wrapper) {
-    // 多选需要随 tag 换行长高：基础规则用了 height: 30px !important，
-    // 这里必须同样加 !important 且靠更高特异性(.is-multiple)才能覆盖它，
-    // 否则 wrapper 被锁死在 30px 导致 tag 溢出/换行错乱、内容被挤窄。
     height: auto !important;
     min-height: 30px;
     align-items: center;
@@ -615,15 +545,8 @@ export default {
     flex-wrap: wrap;
     align-items: center;
     align-content: center;
-    gap: 4px;
     width: 100%;
     min-height: 28px;
-  }
-
-  :deep(.el-select__tags) {
-    display: contents;
-    min-height: 0;
-    height: auto;
   }
 
   :deep(.el-select__selected-item) {
@@ -634,9 +557,10 @@ export default {
   }
 
   :deep(.el-select__input-wrapper) {
-    flex: 1 1 120px;
-    min-width: 120px;
-    margin-left: 0;
+    // 只需容纳光标即可，避免因 120px 硬门槛在标签后剩余宽度不足时把光标挤到下一行、
+    // 撑高整个控件;flex-grow 让它在同一行内自动填满剩余空间。
+    flex: 1 1 30px;
+    min-width: 30px;
   }
 
   :deep(.el-select__input) {

@@ -34,8 +34,16 @@
 <script>
 import { getStoredDrawerWidth, useDrawerResize } from '@/composables/useDrawerResize'
 import { resolveAsyncComponentCompat } from '@/utils/vue'
+import { TAB_NAVIGATION_CONTEXT, TAB_NAVIGATION_SCOPE } from './context'
 
 export default {
+  provide() {
+    return {
+      [TAB_NAVIGATION_CONTEXT]: {
+        scope: TAB_NAVIGATION_SCOPE.LOCAL
+      }
+    }
+  },
   props: {
     title: {
       type: String,
@@ -127,6 +135,7 @@ export default {
   .el-drawer__body {
     display: flex;
     flex-direction: column;
+    min-width: 0;
     overflow: hidden;
   }
 
@@ -138,10 +147,25 @@ export default {
 
   .drawer__content {
     flex: 1 1 auto;
+    min-width: 0;
     min-height: 0;
     overflow-y: auto;
     overflow-x: hidden;
     overscroll-behavior: contain;
+  }
+
+  // 可调整宽度的抽屉中，表单及自定义字段可能带有固有宽度。逐级允许收缩，
+  // 并限制控件不超过当前内容区，避免收窄时先被裁切、继续收窄后再横向溢出。
+  .drawer__content > *,
+  .drawer__content .el-form,
+  .drawer__content .el-form-item,
+  .drawer__content .el-form-item__content {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .drawer__content .el-form-item__content > * {
+    max-width: 100%;
   }
 
   // tab 详情页：整条链定高，滚动落在 .tab-page-content 上
@@ -180,14 +204,6 @@ export default {
     .page:not(.tab-page) {
       height: calc(100vh - 55px);
     }
-  }
-}
-
-@media (max-width: 992px) {
-  .drawer :deep(.el-form-item) {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
   }
 }
 
@@ -301,7 +317,7 @@ export default {
     min-height: 0;
     padding: 10px 30px 22px;
     box-sizing: border-box;
-    overflow-y: auto;
+    overflow: auto;
     overscroll-behavior: contain;
     background: #f3f3f3;
   }

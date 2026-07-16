@@ -97,7 +97,7 @@ export default {
 
   .switch-date-button {
     min-width: 64px;
-    height: 32px;
+    height: 28px;
     padding: 7px 15px;
     margin: 0 0 0 -1px;
     font-size: 12px;
@@ -125,7 +125,7 @@ export default {
     &.is-active {
       position: relative;
       z-index: 2;
-      color: var(--color-primary);
+      color: var(--menu-active-text, var(--menu-text-active));
       background: var(--menu-hover);
       border-color: var(--color-primary);
     }

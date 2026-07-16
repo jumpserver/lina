@@ -3,7 +3,7 @@
     :data="iTree"
     :default-checked-keys="iValue"
     :default-expand-all="expandAll"
-    :default-expanded-keys="defaultExpanded"
+    :default-expanded-keys="iDefaultExpanded"
     :props="defaultProps"
     :render-content="renderContent"
     class="el-tree-custom"
@@ -14,121 +14,133 @@
 </template>
 
 <script>
+import { ElTooltip } from 'element-plus'
+
 export default {
   inheritAttrs: false,
-  emits: ["input", "update:modelValue"],
+  emits: ['input', 'update:modelValue'],
   props: {
     value: {
       type: [Array, String],
-      default: () => [],
+      default: () => []
     },
     modelValue: {
       type: [Array, String],
-      default: undefined,
+      default: undefined
     },
     tree: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     readonly: {
       type: Boolean,
-      default: false,
+      default: false
     },
     expandAll: {
       type: Boolean,
-      default: false,
+      default: false
     },
     defaultExpanded: {
       type: Array,
-      default: () => [],
-    },
+      default: () => []
+    }
   },
-  emits: ["change", "input", "update:modelValue", "update:model-value"],
+  emits: ['change', 'input', 'update:modelValue', 'update:model-value'],
   data() {
     return {
       defaultProps: {
-        children: "children",
-        label: "label",
-      },
-    };
+        children: 'children',
+        label: 'label'
+      }
+    }
   },
   computed: {
     iValue() {
-      const value =
-        this.modelValue !== undefined ? this.modelValue : this.value;
+      const value = this.modelValue !== undefined ? this.modelValue : this.value
       if (!Array.isArray(value)) {
-        return [];
+        return []
       }
       return value.map((item) => {
-        if (item && typeof item === "object" && "value" in item) {
-          return item.value;
+        if (item && typeof item === 'object' && 'value' in item) {
+          return item.value
         }
-        return item;
-      });
+        return item
+      })
     },
     iTree() {
       if (!this.readonly) {
-        return this.tree;
+        return this.tree
       } else {
-        return this.setTreeReadonly(this.tree);
+        return this.setTreeReadonly(this.tree)
       }
     },
-  },
-  mounted() {
-    if (this.iTree && this.iTree.length > 0) {
-      this.defaultExpanded.push(this.iTree[0].value);
+    // 默认展开一层:根节点 value 与外部传入的 defaultExpanded 合并。
+    // el-tree 只在初始化时读取 default-expanded-keys,必须在首次渲染前就备好
+    // (原先在 mounted 里 push 太晚,且改动了 prop,故从不生效)
+    iDefaultExpanded() {
+      const keys = [...this.defaultExpanded]
+      const rootValue = this.iTree?.[0]?.value
+      if (rootValue !== undefined && !keys.includes(rootValue)) {
+        keys.push(rootValue)
+      }
+      return keys
     }
   },
   methods: {
     handleCheckChange(node, { checkedNodes }) {
-      const checkedKeys = checkedNodes
-        .filter((item) => !item.children)
-        .map((node) => node.value);
-      this.$emit("input", checkedKeys);
-      this.$emit("update:modelValue", checkedKeys);
-      this.$emit("update:model-value", checkedKeys);
-      this.$emit("change", checkedKeys);
+      const checkedKeys = checkedNodes.filter((item) => !item.children).map((node) => node.value)
+      this.$emit('input', checkedKeys)
+      this.$emit('update:modelValue', checkedKeys)
+      this.$emit('update:model-value', checkedKeys)
+      this.$emit('change', checkedKeys)
     },
     setTreeReadonly(tree) {
       return tree.map((item) => {
-        item.disabled = true;
+        item.disabled = true
         if (item.children) {
-          item.children = this.setTreeReadonly(item.children);
+          item.children = this.setTreeReadonly(item.children)
         }
-        return item;
-      });
+        return item
+      })
     },
-    renderContent(h, { node, data, store }) {
-      let label = node.label;
-      let helpText = "";
-      const regex = /(.*?)\s*\((.*?)\)/;
-      const match = label.match(regex);
+    renderContent(h, { node }) {
+      let label = node.label
+      let helpText = ''
+      const regex = /(.*?)\s*\((.*?)\)/
+      const match = label.match(regex)
       if (match) {
-        label = match[1];
-        helpText = match[2];
+        label = match[1]
+        helpText = match[2]
       }
 
-      const children = [h("span", `${label} `)];
+      const children = [h('span', `${label} `)]
 
       if (helpText) {
         children.push(
           h(
-            "el-tooltip",
+            ElTooltip,
             {
-              props: {
-                content: helpText,
-                placement: "top",
-              },
+              content: helpText,
+              placement: 'top',
+              popperClass: 'help-tips',
+              showAfter: 300,
+              trigger: 'hover'
             },
-            [h("i", { class: "fa fa-question-circle-o" })],
-          ),
-        );
+            {
+              default: () =>
+                h('i', {
+                  class: 'fa fa-question-circle-o',
+                  onClick: (event) => event.stopPropagation()
+                })
+            }
+          )
+        )
       }
 
-      return h("span", children);
-    },
-  },
-};
+      return h('span', children)
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -165,7 +177,7 @@ export default {
   }
 
   :deep(.el-tree-node__children .el-tree-node)::before {
-    content: "";
+    content: '';
     position: absolute;
     left: -17px;
     top: -13px;
@@ -174,7 +186,7 @@ export default {
   }
 
   :deep(.el-tree-node__children .el-tree-node)::after {
-    content: "";
+    content: '';
     position: absolute;
     left: -17px;
     top: 13px;
