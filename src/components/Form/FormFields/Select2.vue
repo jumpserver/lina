@@ -329,16 +329,16 @@ export default {
       if (typeof value !== 'object') {
         return value
       }
-      if (this.valueKey && Object.prototype.hasOwnProperty.call(value, this.valueKey)) {
+      if (this.valueKey && Object.hasOwn(value, this.valueKey)) {
         return value[this.valueKey]
       }
-      if (Object.prototype.hasOwnProperty.call(value, 'value')) {
+      if (Object.hasOwn(value, 'value')) {
         return value.value
       }
-      if (Object.prototype.hasOwnProperty.call(value, 'id')) {
+      if (Object.hasOwn(value, 'id')) {
         return value.id
       }
-      if (Object.prototype.hasOwnProperty.call(value, 'pk')) {
+      if (Object.hasOwn(value, 'pk')) {
         return value.pk
       }
       return undefined
