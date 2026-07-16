@@ -27,14 +27,9 @@
       />
     </div>
     <div class="input-box">
-      <el-button
-        v-if="showStopButton"
-        class="stop"
-        icon="fa fa-stop-circle-o"
-        round
-        size="small"
-        @click="onStopHandle"
-        >{{ $tc('Stop') }}
+      <el-button v-show="isLoading" class="stop" round size="small" @click="onStopHandle">
+        <i class="fa fa-stop-circle-o" />
+        {{ $tc('Stop') }}
       </el-button>
       <ChatInput
         ref="chatInput"
@@ -119,9 +114,6 @@ export default {
     }
   },
   computed: {
-    showStopButton() {
-      return this.isLoading && this.socket?.readyState === WebSocket.OPEN
-    },
     ...mapState({
       isLoading: (state) => state.chat.loading,
       activeChat: (state) => state.chat.activeChat
