@@ -27,5 +27,8 @@
   "Details": "详情",
   "Confirm": "确认",
   "Ignore": "忽略",
-  "FailedToSendVerificationCode": "发送验证码失败"
+  "FailedToSendVerificationCode": "发送验证码失败",
+  "Role": "角色",
+  "DeeplyThoughtAbout": "已深度思考",
+  "ChatAIThinking": "正在思考"
 }

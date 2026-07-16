@@ -9,11 +9,14 @@
       </div>
       <div class="content">
         <div class="operational">
-          <div v-if="!item.message.is_reasoning" class="date">
+          <div v-if="!hasReasoning" class="date">
             {{ $moment(item.message.create_time).format('YYYY-MM-DD HH:mm:ss') }}
           </div>
 
-          <div v-else class="thinking-time">{{ $t('DeeplyThoughtAbout') }}</div>
+          <div v-else :class="{ 'is-thinking': isThinking }" class="thinking-time">
+            <span v-if="isThinking" class="thinking-dot" />
+            {{ $t(isThinking ? 'ChatAIThinking' : 'DeeplyThoughtAbout') }}
+          </div>
         </div>
         <div :class="item.reasoning ? 'reasoning' : 'message'">
           <div class="message-content">
@@ -22,7 +25,11 @@
                 {{ item.message.content }}
               </span>
               <span v-else class="chat-text">
-                <MessageText :message="item.message" />
+                <MessageText
+                  :is-terminal="isTerminal"
+                  :message="item.message"
+                  @insert-code="handleInsertCode"
+                />
               </span>
             </div>
 
@@ -102,7 +109,7 @@ export default {
   props: {
     item: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     },
     selectedModel: {
       type: String,
@@ -135,8 +142,17 @@ export default {
     isSystemError() {
       return this.item.type === 'error' && this.item?.message?.role === 'assistant'
     },
+    hasReasoning() {
+      return Boolean(this.item.reasoning)
+    },
+    isThinking() {
+      return this.hasReasoning && this.item.status === 'thinking'
+    },
+    messageContent() {
+      return this.item.result?.content ?? this.item.message?.content ?? ''
+    },
     isServerError() {
-      return this.item.type === 'finish' && this.item.result.content === ''
+      return this.item.type === 'finish' && this.messageContent === ''
         ? this.$t('ServerBusyRetry')
         : ''
     },
@@ -157,7 +173,7 @@ export default {
     },
     handleCommand(value) {
       if (value === 'copy') {
-        copy(this.item.result.content)
+        copy(this.messageContent)
       }
     },
     handleInsertCode(code) {
@@ -215,12 +231,30 @@ export default {
         }
 
         .thinking-time {
-          width: 6rem;
-          display: flex;
-          justify-content: center;
-          padding: 5px 10px;
-          border-radius: 0.5rem;
-          background-color: #f5f5f5;
+          display: inline-flex;
+          width: fit-content;
+          min-height: 28px;
+          align-items: center;
+          gap: 6px;
+          box-sizing: border-box;
+          padding: 4px 10px;
+          border: 1px solid transparent;
+          border-radius: 14px;
+          color: rgba(0, 0, 0, 0.45);
+          background-color: #f7f7f8;
+
+          &.is-thinking {
+            color: #148f76;
+            background-color: rgb(26 179 148 / 8%);
+          }
+
+          .thinking-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #1ab394;
+            animation: thinking-pulse 1.2s ease-in-out infinite;
+          }
         }
 
         .copy {
@@ -347,6 +381,19 @@ export default {
         }
       }
     }
+  }
+}
+
+@keyframes thinking-pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 </style>
