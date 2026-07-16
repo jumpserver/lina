@@ -6,7 +6,7 @@
 
 <script>
 import { DrawerListTable as ListTable } from '@/components'
-import { toM2MJsonParams } from '@/utils/jms/index'
+import { toM2MInstanceJsonParams } from '@/utils/jms/index'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 
@@ -19,11 +19,15 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => ({})
+    },
+    objectAppModel: {
+      type: String,
+      required: true
     }
   },
   data() {
-    const [key, value] = toM2MJsonParams(this.object.users)
+    const [key, value] = toM2MInstanceJsonParams(this.objectAppModel, this.object.id)
     const org_id = this.object.org_id || this.$store.getters.currentOrg.id
     return {
       config: {
