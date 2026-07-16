@@ -9,5 +9,8 @@
   "notParenthesis": "不能包含括号。",
   "InvalidJson": "JSON 格式错误.",
   "requiredHasUserNameMapped": "用户名属性是必需的。",
-  "FailedToSendVerificationCode": "發送驗證碼失敗"
+  "FailedToSendVerificationCode": "發送驗證碼失敗",
+  "Role": "角色",
+  "DeeplyThoughtAbout": "已深度思考",
+  "ChatAIThinking": "正在思考"
 }

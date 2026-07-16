@@ -23,7 +23,7 @@ export default {
   props: {
     message: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     },
     isTerminal: {
       type: Boolean,
@@ -46,6 +46,7 @@ export default {
   },
   mounted() {
     this.init()
+    this.$nextTick(() => this.addEvents())
   },
   updated() {
     this.addEvents()
@@ -117,8 +118,9 @@ export default {
       }
     },
     addBtnClickEvents(selector, callback) {
-      const buttons = this.$refs.textRef.querySelectorAll(selector)
+      const buttons = this.$refs.textRef?.querySelectorAll(selector) || []
       buttons.forEach((btn) => {
+        btn.removeEventListener('click', callback)
         btn.addEventListener('click', callback)
       })
     },
@@ -193,16 +195,16 @@ export default {
       textArea.innerHTML = str
       return textArea.value
     },
-    removeBtnClickEvent(selector) {
-      const buttons = this.$refs.textRef.querySelectorAll(selector)
+    removeBtnClickEvent(selector, callback) {
+      const buttons = this.$refs.textRef?.querySelectorAll(selector) || []
       buttons.forEach((btn) => {
-        btn.removeEventListener('click', () => {})
+        btn.removeEventListener('click', callback)
       })
     },
     removeEvents() {
       if (this.$refs.textRef) {
-        this.removeBtnClickEvent('.code-block-header__copy')
-        this.addBtnClickEvents('.code-block-header__insert')
+        this.removeBtnClickEvent('.code-block-header__copy', this.handlerClickCopy)
+        this.removeBtnClickEvent('.code-block-header__insert', this.handlerClickInsert)
       }
     }
   }
