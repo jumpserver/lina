@@ -3,12 +3,12 @@
     <Dialog
       v-bind="$attrs"
       v-if="visible"
+      v-model:visible="dialogVisible"
       :close-on-click-modal="false"
       :confirm-title="$tc('Add')"
       :destroy-on-close="true"
       :model="false"
       :title="$tc('SelectTemplate')"
-      :visible="visible"
       width="800px"
       @cancel="handleCancel"
       @confirm="handleConfirm"
@@ -104,6 +104,14 @@ export default {
     }
   },
   computed: {
+    dialogVisible: {
+      get() {
+        return this.visible
+      },
+      set(value) {
+        this.$emit('update:visible', value)
+      }
+    },
     refTable() {
       return this.$refs.listTable.$refs.ListTable.$refs.dataTable.$refs.dataTable
     }

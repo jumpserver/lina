@@ -1,12 +1,12 @@
 <template>
   <Dialog
     v-if="visible"
+    v-model:visible="dialogVisible"
     :destroy-on-close="true"
     :model="false"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('AddAccount')"
-    :visible="visible"
     width="800px"
   >
     <AccountCreateForm
@@ -30,6 +30,7 @@ export default {
     Dialog,
     AccountCreateForm
   },
+  emits: ['update:visible'],
   props: {
     platform: {
       type: Object,
@@ -50,6 +51,16 @@ export default {
   },
   data() {
     return {}
+  },
+  computed: {
+    dialogVisible: {
+      get() {
+        return this.visible
+      },
+      set(value) {
+        this.$emit('update:visible', value)
+      }
+    }
   },
   methods: {
     addAccount(account) {
