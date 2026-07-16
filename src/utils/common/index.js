@@ -141,7 +141,19 @@ export function setRouterQuery(vm, url = '', { browserOnly = false } = {}) {
 }
 
 export function getBrowserQueryParam(name) {
-  return new URLSearchParams(window.location.search).get(name) || ''
+  const searchValue = new URLSearchParams(window.location.search).get(name)
+  if (searchValue) {
+    return searchValue
+  }
+
+  const hash = window.location.hash || ''
+  const hashQueryIndex = hash.indexOf('?')
+  if (hashQueryIndex === -1) {
+    return ''
+  }
+
+  const hashQuery = hash.slice(hashQueryIndex + 1).split('#')[0]
+  return new URLSearchParams(hashQuery).get(name) || ''
 }
 
 export function getErrorResponseMsg(error) {

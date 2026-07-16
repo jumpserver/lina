@@ -171,12 +171,10 @@ export default {
       initialOptions: [],
       remote: true,
       allSelected: false,
-      transformed: false, // 这里改回来是因为，acl 中资产选择，category 选择后，再编辑，就看不到了
-      innerValue: this.shouldDeferValueDisplay(
+      transformed: this.shouldHidePendingLabel(
         this.modelValue !== undefined ? this.modelValue : this.value
-      )
-        ? this.getEmptyValue()
-        : this.normalizeValue(this.modelValue !== undefined ? this.modelValue : this.value)
+      ),
+      innerValue: this.normalizeValue(this.modelValue !== undefined ? this.modelValue : this.value)
     }
   },
   computed: {
@@ -319,9 +317,6 @@ export default {
     })
   },
   methods: {
-    getEmptyValue() {
-      return this.multiple ? [] : ''
-    },
     hasValue(value) {
       return Array.isArray(value)
         ? value.length > 0
@@ -369,7 +364,7 @@ export default {
       const normalized = Array.isArray(value) ? value[0] : value
       return this.getOptionValue(normalized) ?? ''
     },
-    shouldDeferValueDisplay(value) {
+    shouldHidePendingLabel(value) {
       const ajaxUrl = this.url || this.ajax?.url
       if (!ajaxUrl) {
         return false
@@ -384,8 +379,8 @@ export default {
     },
     async syncExternalValue(value) {
       const normalizedValue = this.normalizeValue(value)
-      if (this.shouldDeferValueDisplay(value)) {
-        this.innerValue = this.getEmptyValue()
+      this.transformed = this.shouldHidePendingLabel(value)
+      if (this.transformed) {
         await this.hydrateSelectedOptions(normalizedValue)
       }
       if (!_.isEqual(this.innerValue, normalizedValue)) {
@@ -402,6 +397,7 @@ export default {
       const data = await createSourceIdCache(values)
       this.params.spm = data['spm']
       await this.getInitialOptions()
+      this.transformed = false
     },
     async loadMore(load) {
       if (!this.iAjax.url) {
