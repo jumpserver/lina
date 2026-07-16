@@ -178,6 +178,19 @@ export function toM2MJsonParams(attrFilter) {
   return ['attr_rules', encodeURIComponent(btoa(String.fromCharCode(...data)))]
 }
 
+export function toM2MInstanceJsonParams(instanceAppModel, instanceId) {
+  const encoder = new TextEncoder()
+  const [app, model] = instanceAppModel.split('.')
+  const data = encoder.encode(
+    JSON.stringify({
+      app,
+      model,
+      id: instanceId
+    })
+  )
+  return ['attr_rules_instance', encodeURIComponent(btoa(String.fromCharCode(...data)))]
+}
+
 export function IsSupportPauseSessionType(terminalType) {
   const supportedType = ['koko', 'lion', 'chen', 'kael']
   return supportedType.includes(terminalType)
