@@ -248,11 +248,17 @@ export default {
     createAsset(platform) {
       this.showPlatform = false
       this.createDrawer = this.drawer[platform.category.value]
+      const tableQuery = new URLSearchParams(this.url.split('?')[1] || '')
       const createProps = {
         platform: platform.id,
         type: platform.type.value,
         category: platform.category.value,
-        node: this.$route.query?.node || this.$route.query?.node_id || ''
+        node:
+          tableQuery.get('node_id') ||
+          tableQuery.get('node') ||
+          this.$route.query?.node ||
+          this.$route.query?.node_id ||
+          ''
       }
       this.$log.debug('createProps', createProps)
       this.$refs.ListTable.onCreate({ query: createProps })
