@@ -7,6 +7,7 @@
     :show-confirm="false"
     :title="$tc('UpdateSelected')"
     top="1vh"
+    min-width="720px"
     width="35%"
     @update:visible="$emit('update:visible', $event)"
   >
@@ -23,7 +24,7 @@
           v-for="(value, name) in iFormSetting.fieldsMeta"
           :key="name"
           :disabled="value.disabled"
-          :label="name"
+          :value="name"
         >
           {{ value.label || name }}
         </el-checkbox>

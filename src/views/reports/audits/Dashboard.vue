@@ -10,12 +10,12 @@
     <SwitchDate class="switch-date" :name="name" :days="days" @change="onChange" />
     <template v-if="initialized">
       <CardSummary :days="days" />
-      <el-row :gutter="10">
-        <el-col :span="12" :md="12">
-          <DataSummary class="chart-container" :days="days" />
+      <el-row class="summary-row" :gutter="10">
+        <el-col class="summary-column" :span="12" :md="12">
+          <DataSummary class="chart-container summary-card" :days="days" />
         </el-col>
-        <el-col :span="12" :md="12">
-          <RightSummary class="chart-container" :days="days" />
+        <el-col class="summary-column" :span="12" :md="12">
+          <RightSummary class="chart-container summary-card" :days="days" />
         </el-col>
       </el-row>
       <TrendSummary :days="days" />
@@ -73,5 +73,17 @@ export default {
 <style lang="scss" scoped>
 .chart-container {
   margin-top: 16px;
+}
+
+.summary-row {
+  align-items: stretch;
+}
+
+.summary-column {
+  display: flex;
+}
+
+.summary-card {
+  flex: 1 1 auto;
 }
 </style>

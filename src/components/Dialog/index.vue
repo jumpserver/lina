@@ -4,7 +4,7 @@
     :append-to-body="true"
     :class="dialogClass"
     :model-value="dialogVisible"
-    :style="[dialogStyle, { '--dialog-max-width': maxWidth }]"
+    :style="[dialogStyle, dialogCssVariables]"
     :title="title"
     :top="top"
     :width="iWidth"
@@ -87,6 +87,10 @@ export default {
       type: String,
       default: '1200px'
     },
+    minWidth: {
+      type: String,
+      default: ''
+    },
     shadow: {
       type: Boolean,
       default: true
@@ -116,6 +120,13 @@ export default {
     dialogStyle() {
       return this.$attrs.style
     },
+    dialogCssVariables() {
+      const variables = { '--dialog-max-width': this.maxWidth }
+      if (this.minWidth) {
+        variables['--dialog-min-width'] = this.minWidth
+      }
+      return variables
+    },
     iWidth() {
       return this.$store.getters.isMobile ? '1000px' : this.width
     }
@@ -141,6 +152,7 @@ export default {
   padding: 0 !important;
   border-radius: 0.3em;
   max-width: min(calc(100vw - 32px), var(--dialog-max-width));
+  min-width: min(var(--dialog-min-width, 0px), calc(100vw - 32px));
 
   &.shadow {
     box-shadow: 1px 2px 12px 0 rgba(0, 0, 0, 0.6);
