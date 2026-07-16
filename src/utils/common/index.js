@@ -118,7 +118,7 @@ export function setUrlParam(url, name, value) {
   return url
 }
 
-export function setRouterQuery(vm, url = '') {
+export function setRouterQuery(vm, url = '', { browserOnly = false } = {}) {
   url = url || vm.tableConfig.url
   const params = url.split('?')[1]
   const query = Object.fromEntries(new URLSearchParams(params))
@@ -126,9 +126,34 @@ export function setRouterQuery(vm, url = '') {
     ...vm.$route.query,
     ...query
   }
+  if (browserOnly) {
+    const { href } = vm.$router.resolve({
+      path: vm.$route.path,
+      query: newQuery,
+      hash: vm.$route.hash
+    })
+    window.history.replaceState(window.history.state, '', href)
+    return
+  }
   vm.$nextTick(() => {
     vm.$router.replace({ query: newQuery })
   })
+}
+
+export function getBrowserQueryParam(name) {
+  const searchValue = new URLSearchParams(window.location.search).get(name)
+  if (searchValue) {
+    return searchValue
+  }
+
+  const hash = window.location.hash || ''
+  const hashQueryIndex = hash.indexOf('?')
+  if (hashQueryIndex === -1) {
+    return ''
+  }
+
+  const hashQuery = hash.slice(hashQueryIndex + 1).split('#')[0]
+  return new URLSearchParams(hashQuery).get(name) || ''
 }
 
 export function getErrorResponseMsg(error) {

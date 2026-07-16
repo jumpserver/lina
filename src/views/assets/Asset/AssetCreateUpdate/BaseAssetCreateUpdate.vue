@@ -5,7 +5,7 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { encryptPassword } from '@/utils/session-encrypt'
-import { getUpdateObjURL, setUrlParam } from '@/utils/common/index'
+import { getUpdateObjURL, setUrlParam, getBrowserQueryParam } from '@/utils/common/index'
 import { assetFieldsMeta } from '@/views/assets/const'
 
 export default {
@@ -154,8 +154,8 @@ export default {
     },
     async setInitial() {
       const { defaultConfig } = this
-      const { node } = this.$route.query
-      const nodesInitial = node ? [node] : []
+      const nodeId = getBrowserQueryParam('node_id')
+      const nodesInitial = nodeId ? [nodeId] : []
       const platformId = this.platformID || 'Linux'
       const url = `/api/v1/assets/platforms/${platformId}/`
       this.platform = await this.$axios.get(url)
