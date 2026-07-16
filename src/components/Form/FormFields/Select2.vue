@@ -92,6 +92,10 @@ export default {
       type: Array,
       default: () => []
     },
+    valueKey: {
+      type: String,
+      default: 'id'
+    },
     disabled: {
       type: Boolean,
       default: false
@@ -168,14 +172,11 @@ export default {
       remote: true,
       allSelected: false,
       transformed: false, // 这里改回来是因为，acl 中资产选择，category 选择后，再编辑，就看不到了
-      innerValue:
-        this.modelValue !== undefined
-          ? _.cloneDeep(this.modelValue)
-          : this.value !== undefined
-            ? _.cloneDeep(this.value)
-            : this.multiple
-              ? []
-              : ''
+      innerValue: this.shouldDeferValueDisplay(
+        this.modelValue !== undefined ? this.modelValue : this.value
+      )
+        ? this.getEmptyValue()
+        : this.normalizeValue(this.modelValue !== undefined ? this.modelValue : this.value)
     }
   },
   computed: {
@@ -281,18 +282,16 @@ export default {
       this.refresh()
     },
     value: {
-      handler(newValue) {
-        if (!_.isEqual(this.innerValue, newValue)) {
-          this.innerValue = _.cloneDeep(newValue)
+      async handler(newValue) {
+        if (this.modelValue === undefined) {
+          await this.syncExternalValue(newValue)
         }
       },
       deep: true
     },
     modelValue: {
-      handler(newValue) {
-        if (!_.isEqual(this.innerValue, newValue)) {
-          this.innerValue = _.cloneDeep(newValue)
-        }
+      async handler(newValue) {
+        await this.syncExternalValue(newValue)
       },
       deep: true
     }
@@ -302,7 +301,7 @@ export default {
       await this.initialSelect()
       setTimeout(() => {
         this.$log.debug('Value is : ', this.externalValue)
-        this.innerValue = _.cloneDeep(this.externalValue)
+        this.innerValue = this.normalizeValue(this.externalValue)
         this.initialized = true
         this.$emit('initialized', true)
       }, 100)
@@ -320,6 +319,90 @@ export default {
     })
   },
   methods: {
+    getEmptyValue() {
+      return this.multiple ? [] : ''
+    },
+    hasValue(value) {
+      return Array.isArray(value)
+        ? value.length > 0
+        : value !== '' && value !== null && value !== undefined
+    },
+    getOptionValue(value) {
+      if (value === null || value === undefined) {
+        return undefined
+      }
+      if (typeof value !== 'object') {
+        return value
+      }
+      if (this.valueKey && Object.prototype.hasOwnProperty.call(value, this.valueKey)) {
+        return value[this.valueKey]
+      }
+      if (Object.prototype.hasOwnProperty.call(value, 'value')) {
+        return value.value
+      }
+      if (Object.prototype.hasOwnProperty.call(value, 'id')) {
+        return value.id
+      }
+      if (Object.prototype.hasOwnProperty.call(value, 'pk')) {
+        return value.pk
+      }
+      return undefined
+    },
+    normalizeValue(value) {
+      if (this.multiple) {
+        if (value === null || value === undefined || value === '') {
+          return []
+        }
+        const list = Array.isArray(value) ? value : [value]
+        return list
+          .map((item) => this.getOptionValue(item))
+          .filter((item) => item !== undefined && item !== null && item !== '')
+      }
+      if (
+        value === null ||
+        value === undefined ||
+        value === '' ||
+        (Array.isArray(value) && value.length === 0)
+      ) {
+        return ''
+      }
+      const normalized = Array.isArray(value) ? value[0] : value
+      return this.getOptionValue(normalized) ?? ''
+    },
+    shouldDeferValueDisplay(value) {
+      const ajaxUrl = this.url || this.ajax?.url
+      if (!ajaxUrl) {
+        return false
+      }
+      const normalizedValue = this.normalizeValue(value)
+      return this.hasValue(normalizedValue) && this.hasMissingOptions(normalizedValue)
+    },
+    hasMissingOptions(value) {
+      const optionValues = (this.iOptions || this.options || []).map((item) => item.value)
+      const values = Array.isArray(value) ? value : [value]
+      return values.some((item) => optionValues.indexOf(item) === -1)
+    },
+    async syncExternalValue(value) {
+      const normalizedValue = this.normalizeValue(value)
+      if (this.shouldDeferValueDisplay(value)) {
+        this.innerValue = this.getEmptyValue()
+        await this.hydrateSelectedOptions(normalizedValue)
+      }
+      if (!_.isEqual(this.innerValue, normalizedValue)) {
+        this.innerValue = _.cloneDeep(normalizedValue)
+      }
+    },
+    async hydrateSelectedOptions(value) {
+      if (!this.hasValue(value) || !this.iAjax.url) {
+        return
+      }
+      const values = Array.isArray(value) ? value : [value]
+      this.initialOptions = []
+      this.resetParams()
+      const data = await createSourceIdCache(values)
+      this.params.spm = data['spm']
+      await this.getInitialOptions()
+    },
     async loadMore(load) {
       if (!this.iAjax.url) {
         return
@@ -349,18 +432,14 @@ export default {
       this.iOptions = []
       this.params.search = query
       this.getOptions()
-      // 同步输入时避免 value 仍指向旧引用造成递归
-      if (!this.multiple && Array.isArray(this.innerValue)) {
-        this.innerValue = ''
-      }
     },
     handleModelUpdate(val) {
-      // avoid loops
-      if (!_.isEqual(this.innerValue, val)) {
-        this.innerValue = _.cloneDeep(val)
+      const normalizedValue = this.normalizeValue(val)
+      if (!_.isEqual(this.innerValue, normalizedValue)) {
+        this.innerValue = _.cloneDeep(normalizedValue)
       }
-      if (!_.isEqual(this.externalValue, val)) {
-        const payload = _.cloneDeep(val)
+      if (!_.isEqual(this.normalizeValue(this.externalValue), normalizedValue)) {
+        const payload = _.cloneDeep(normalizedValue)
         this.$emit('input', payload)
         this.$emit('update:modelValue', payload)
         this.$emit('update:model-value', payload)
@@ -414,15 +493,10 @@ export default {
     async initialSelect() {
       // this.$log.debug('Select ajax config', this.iAjax)
       if (this.iAjax.url) {
-        if (this.externalValue && this.externalValue.length !== 0) {
-          this.$log.debug('Start init select2 value, ', this.externalValue)
-          let value = this.externalValue
-          if (!Array.isArray(value)) {
-            value = [value]
-          }
-          const data = await createSourceIdCache(value)
-          this.params.spm = data['spm']
-          await this.getInitialOptions()
+        const normalizedValue = this.normalizeValue(this.externalValue)
+        if (this.hasValue(normalizedValue)) {
+          this.$log.debug('Start init select2 value, ', normalizedValue)
+          await this.hydrateSelectedOptions(normalizedValue)
         }
         await this.getOptions()
         if (this.iOptions.length === 0) {
