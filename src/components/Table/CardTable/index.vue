@@ -270,6 +270,7 @@ export default {
 
   .card-container {
     display: grid;
+    width: 100%;
     grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
     gap: 20px;
 

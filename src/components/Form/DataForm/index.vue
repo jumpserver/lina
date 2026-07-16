@@ -322,28 +322,6 @@ export default {
     color: var(--color-text-primary);
   }
 
-  &.label-top {
-    :deep(.el-form-item) {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 8px;
-
-      .el-form-item__label-wrap {
-        width: 100%;
-        flex-basis: auto;
-      }
-
-      .el-form-item__label {
-        justify-content: flex-start;
-      }
-
-      .el-form-item__content {
-        width: 100%;
-        min-width: 100%;
-      }
-    }
-  }
-
   :deep(.el-form-item) {
     display: flex;
     align-items: flex-start;
@@ -408,6 +386,47 @@ export default {
     margin-top: 10px;
     padding-inline-start: calc(var(--label-width) + var(--form-column-gap));
   }
+
+  &.el-form--label-top,
+  &.label-top {
+    :deep(.el-form-item) {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+    }
+
+    :deep(.el-form-item__label-wrap) {
+      flex: 0 0 auto !important;
+      width: 100% !important;
+    }
+
+    :deep(.el-form-item__label) {
+      width: 100% !important;
+      justify-content: flex-start;
+      text-align: left;
+    }
+
+    :deep(.el-form-item__label > span) {
+      display: inline-flex;
+      max-width: 100%;
+      overflow: visible;
+      overflow-wrap: anywhere;
+    }
+
+    :deep(.el-form-item__content) {
+      flex-basis: auto;
+      width: 100%;
+      min-width: 0;
+    }
+
+    :deep(.form-buttons) {
+      padding-inline-start: 0;
+    }
+
+    :deep(.form-group-header) {
+      margin-left: 0;
+    }
+  }
 }
 
 .form-fields.el-form.dialog-mode {
@@ -463,25 +482,25 @@ export default {
       gap: 8px;
     }
 
-    :deep(.el-form-item__label-wrap) {
+    :deep(.el-form-item .el-form-item__label-wrap) {
       flex: 0 0 auto !important;
       width: 100% !important;
     }
 
-    :deep(.el-form-item__label) {
+    :deep(.el-form-item .el-form-item__label) {
       width: 100% !important;
       justify-content: flex-start;
       text-align: left;
-
-      span {
-        display: inline-flex;
-        max-width: 100%;
-        overflow: visible;
-        overflow-wrap: anywhere;
-      }
     }
 
-    :deep(.el-form-item__content) {
+    :deep(.el-form-item .el-form-item__label > span) {
+      display: inline-flex;
+      max-width: 100%;
+      overflow: visible;
+      overflow-wrap: anywhere;
+    }
+
+    :deep(.el-form-item .el-form-item__content) {
       width: 100%;
       min-width: 0;
       flex-basis: auto;
@@ -491,6 +510,10 @@ export default {
       width: 100%;
       overflow-wrap: anywhere;
       word-break: break-word;
+    }
+
+    :deep(.form-group-header) {
+      margin-left: 0;
     }
 
     :deep(.form-buttons) {

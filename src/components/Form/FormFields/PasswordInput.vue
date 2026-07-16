@@ -1,23 +1,29 @@
 <template>
   <div class="password-input">
     <el-input
+      ref="passwordInput"
       :model-value="modelValue"
       v-bind="inputAttrs"
       :show-password="showPassword"
       class="password-input__field"
       type="password"
+      @blur="handleNativeBlur"
+      @change="syncNativeValue"
+      @focus="startNativeValueObserver"
       @update:model-value="handleInput"
     />
-    <div v-if="showStrengthMeter && modelValue" class="password-input__meter-wrap">
-      <PasswordStrengthMeter
-        v-bind="meterAttrs"
-        v-model="modelValue"
-        :strength-meter-only="true"
-        class="password-input__meter"
-        @feedback="handleFeedback"
-        @score="handleScore"
-      />
-    </div>
+    <template v-if="showStrengthMeter">
+      <div v-show="modelValue" class="password-input__meter-wrap">
+        <PasswordStrengthMeter
+          v-bind="meterAttrs"
+          v-model="modelValue"
+          :strength-meter-only="true"
+          class="password-input__meter"
+          @feedback="handleFeedback"
+          @score="handleScore"
+        />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -42,6 +48,12 @@ export default {
     }
   },
   emits: ['feedback', 'input', 'score', 'update:modelValue'],
+  data() {
+    return {
+      lastEmittedValue: this.value,
+      nativeValueCheckTimer: null
+    }
+  },
   computed: {
     modelValue: {
       get() {
@@ -117,16 +129,56 @@ export default {
       }
     }
   },
+  watch: {
+    value(value) {
+      this.lastEmittedValue = value
+    }
+  },
+  beforeUnmount() {
+    this.clearNativeValueObserver()
+  },
   methods: {
+    clearNativeValueObserver() {
+      if (this.nativeValueCheckTimer === null) {
+        return
+      }
+      window.clearInterval(this.nativeValueCheckTimer)
+      this.nativeValueCheckTimer = null
+    },
+    getNativeInput() {
+      return this.$refs.passwordInput?.input
+    },
     handleFeedback(value) {
       this.$emit('feedback', value)
     },
     handleInput(value) {
+      this.lastEmittedValue = value
       this.$emit('input', value)
       this.$emit('update:modelValue', value)
     },
+    handleNativeBlur() {
+      this.syncNativeValue()
+      this.clearNativeValueObserver()
+    },
     handleScore(value) {
       this.$emit('score', value)
+    },
+    startNativeValueObserver() {
+      this.clearNativeValueObserver()
+      this.syncNativeValue()
+      this.nativeValueCheckTimer = window.setInterval(() => {
+        this.syncNativeValue()
+      }, 120)
+    },
+    syncNativeValue() {
+      const value = this.getNativeInput()?.value
+      if (typeof value !== 'string') {
+        return
+      }
+      if (value === this.value || value === this.lastEmittedValue) {
+        return
+      }
+      this.handleInput(value)
     }
   }
 }
