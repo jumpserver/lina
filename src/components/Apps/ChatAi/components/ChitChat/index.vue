@@ -207,15 +207,7 @@ export default {
         this.promptsLoading = false
       }
     },
-    handleWebSocketMessage(event) {
-      let data
-      try {
-        data = JSON.parse(event.data)
-      } catch (error) {
-        console.warn('invalid Kael WebSocket message', error)
-        return
-      }
-
+    handleWebSocketMessage(data) {
       if (data.type === 'message') {
         this.onChatMessage(data)
       } else if (data.type === 'error') {
@@ -1629,7 +1621,24 @@ export default {
     top: -37px;
     left: 50%;
     z-index: 11;
+    min-height: 28px;
+    height: 28px;
+    padding: 0 12px;
+    border-color: transparent;
+    border-radius: 14px;
+    background-color: #f7f7f8;
+    box-shadow: none;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.45);
     transform: translateX(-50%);
+
+    &:hover,
+    &:focus,
+    &:active {
+      border-color: transparent;
+      background-color: #f7f7f8;
+      color: rgba(0, 0, 0, 0.45);
+    }
 
     :deep(i) {
       margin-right: 4px;
