@@ -59,6 +59,7 @@ import io from 'socket.io-client'
 import { v4 as uuidv4 } from 'uuid'
 import yaml from 'js-yaml'
 import request from '@/utils/request'
+import { closeWebSocket, createWebSocket, onSend, ws } from '@/utils/request'
 
 const {
   setLoading,
@@ -119,8 +120,7 @@ export default {
   },
   computed: {
     showStopButton() {
-      // 持续显示到请求真正结束（收到 DONE/关闭）才隐藏
-      return this.stopVisible
+      return this.isLoading && this.socket?.readyState === WebSocket.OPEN
     },
     ...mapState({
       isLoading: (state) => state.chat.loading,
@@ -151,7 +151,7 @@ export default {
     }
   },
   beforeUnmount() {
-    this.socket?.close()
+    closeWebSocket()
   },
   methods: {
     replaceLoadingChat(chat) {
@@ -191,12 +191,13 @@ export default {
         return
       }
 
-      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
-      const endpoint = '/kael/chat/system/'
-      this.socket = new WebSocket(`${protocol}//${window.location.host}${endpoint}`)
-      this.socket.onmessage = this.handleWebSocketMessage
-      this.socket.onerror = () => this.handleSocketDisconnect()
-      this.socket.onclose = () => this.handleSocketDisconnect()
+      const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
+      const endpoint = '/koko/ws/chat/system/'
+      createWebSocket(
+        `${protocol}://${window.location.host}${endpoint}`,
+        this.handleWebSocketMessage
+      )
+      this.socket = ws || {}
     },
     async fetchPrompts() {
       if (this.promptsLoading || this.prompts.length) return
@@ -223,14 +224,16 @@ export default {
         return
       }
 
-      if (data.type === 'error') {
-        this.onSystemMessage(data)
-      } else if (data.message) {
+      if (data.type === 'message') {
         this.onChatMessage(data)
+      } else if (data.type === 'error') {
+        this.onSystemMessage(data)
       }
     },
     onChatMessage(data) {
       const message = data.message
+      if (!data.id || !message) return
+
       const chats = this.activeChat?.chats || []
       const chat = {
         message: {
@@ -250,7 +253,7 @@ export default {
       } else {
         chats.splice(index, 1, chat)
       }
-      this.chatId = data.conversation_id || this.chatId
+      this.chatId = data.id || this.chatId
 
       if (message.type === 'finish') {
         setLoading(false)
@@ -262,19 +265,13 @@ export default {
       addMessageToActiveChat({
         message: {
           id: this.genId(),
-          content: data.system_message || this.$t('ConnectionDropped'),
+          content: data.data || data.system_message || this.$t('ConnectionDropped'),
           role: 'assistant',
           create_time: new Date()
         },
         type: 'error'
       })
       setLoading(false)
-    },
-    handleSocketDisconnect() {
-      if (!this.isLoading) return
-
-      this.socket = null
-      this.onSystemMessage({})
     },
     initSocket() {
       if (this.socket) return
@@ -1513,7 +1510,8 @@ export default {
     },
     onSendHandle(value) {
       this.showIntroduction = false
-      if (this.socket?.readyState !== WebSocket.OPEN) {
+      this.socket = ws || {}
+      if (ws?.readyState !== WebSocket.OPEN) {
         this.onSystemMessage({})
         this.initWebSocket()
         return
@@ -1527,13 +1525,11 @@ export default {
           create_time: new Date()
         }
       })
-      this.socket.send(
-        JSON.stringify({
-          content: value,
-          prompt: this.prompt,
-          conversation_id: this.chatId || undefined
-        })
-      )
+      onSend({
+        data: value,
+        prompt: this.prompt,
+        id: this.chatId || ''
+      })
       this.addLoadingMessage(this.genId())
     },
     onSelectPromptHandle(value) {
@@ -1545,8 +1541,8 @@ export default {
       this.initChatMessage()
     },
     onStopHandle() {
-      if (this.socket?.readyState === WebSocket.OPEN) {
-        this.socket.send(JSON.stringify({ conversation_id: this.chatId || '', interrupt: true }))
+      if (ws?.readyState === WebSocket.OPEN) {
+        onSend({ id: this.chatId || '', interrupt: true })
       }
       removeLoadingMessageInChat()
       setLoading(false)

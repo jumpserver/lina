@@ -104,22 +104,28 @@ export default {
     &:deep(.el-select) {
       width: 50%;
 
-      .el-input__inner {
+      .el-select__wrapper {
+        box-sizing: border-box;
+        min-height: 28px;
         height: 28px;
-        line-height: 28px;
         border-radius: 14px;
-        border-color: transparent;
+        border-color: rgba(0, 0, 0, 0);
+        box-shadow: 0 0 0 1px transparent inset;
         background-color: #f7f7f8;
         font-size: 13px;
         color: rgba(0, 0, 0, 0.45);
 
         &:hover {
           background-color: #ededed;
+          box-shadow: 0 0 0 1px transparent inset;
         }
       }
 
-      .el-input__icon {
-        line-height: 0;
+      .el-select__selected-item,
+      .el-select__placeholder,
+      .el-select__caret {
+        font-size: 13px;
+        color: rgba(0, 0, 0, 0.45);
       }
     }
   }
