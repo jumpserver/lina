@@ -57,6 +57,12 @@ import request from '@/utils/request'
 import { closeWebSocket, createWebSocket, onSend, ws } from '@/utils/request'
 
 const DEFAULT_CHAT_SESSION = '__default__'
+const TERMINAL_COMMAND_FORMAT_PROMPT = [
+  'When answering in a terminal session, put every executable command in its own fenced Markdown code block.',
+  'Always include the correct language tag, such as bash, shell, cmd, or powershell.',
+  'Do not place executable commands only in Markdown tables or inline code.',
+  'The client uses fenced code blocks to provide Insert and Copy actions.'
+].join(' ')
 
 const {
   setLoading,
@@ -133,7 +139,11 @@ export default {
       return this.prompts.find((prompt) => prompt.roleKey === this.selectedRoleId)?.content || ''
     },
     requestPrompt() {
-      return this.selectedRolePrompt || this.terminalContext?.content || ''
+      const prompts = [this.selectedRolePrompt, this.terminalContext?.content].filter(Boolean)
+      if (this.isTerminal) {
+        prompts.push(TERMINAL_COMMAND_FORMAT_PROMPT)
+      }
+      return [...new Set(prompts)].join('\n\n')
     },
     toolOptions() {
       return (this.tools || [])
