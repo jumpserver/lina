@@ -10,39 +10,37 @@
       @command="handleProtocolConnect"
       @visible-change="visibleChange"
     >
-      <el-button
-        plain
-        size="mini"
-        type="primary"
-        :disabled="!hasPerm"
-        @click="handleBtnConnect"
-      >
+      <el-button plain size="small" type="primary" :disabled="!hasPerm" @click="handleBtnConnect">
         <i :class="iButtonIcon" :style="{ color: hasPerm ? '' : '#fff' }" />
       </el-button>
 
-      <el-dropdown-menu v-if="!isClick" slot="dropdown">
-        <el-dropdown-item command="title" disabled>
-          <div v-if="getProtocolsLoading">
-            {{ $t('Loading') }}
-          </div>
-          <div v-else>
-            {{ dropdownTitle }}
-          </div>
-        </el-dropdown-item>
-        <el-dropdown-item divided />
-        <el-dropdown-item
-          v-for="protocol in protocols"
-          :key="protocol.id"
-          :command="protocol.name"
-        >
-          {{ protocol.name }}
-        </el-dropdown-item>
-      </el-dropdown-menu>
+      <template v-if="!isClick" #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item command="title" disabled>
+            <div v-if="getProtocolsLoading">
+              {{ $t('Loading') }}
+            </div>
+            <div v-else>
+              {{ dropdownTitle }}
+            </div>
+          </el-dropdown-item>
+          <el-dropdown-item
+            v-for="(protocol, index) in protocols"
+            :key="protocol.id"
+            :command="protocol.name"
+            :divided="index === 0"
+          >
+            {{ protocol.name }}
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
     </el-dropdown>
   </div>
 </template>
 
 <script>
+import store from '@/store'
+
 import BaseFormatter from './base.vue'
 
 export default {
@@ -60,7 +58,7 @@ export default {
               asset=${assetId}
               &account=${row.id}
               &protocol=${protocol}
-              &org_id=${this.$store.getters.currentOrg.id}
+              &org_id=${store.getters.currentOrg.id}
             `.replace(/\s+/g, '')
           },
           asset: null,
@@ -116,7 +114,7 @@ export default {
         const url = this.formatterArgs.assetUrl.replace('{id}', assetId)
         const res = await this.$axios.get(url)
 
-        this.protocols = res.protocols.filter(protocol => (protocol.name !== 'winrm')) || []
+        this.protocols = res.protocols.filter((protocol) => protocol.name !== 'winrm') || []
       } catch (e) {
         throw new Error(`Error getting protocols: ${e}`)
       }
@@ -126,17 +124,80 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-dropdown-menu__item.is-disabled {
-  font-weight: 500;
-  color: var(--el-text-color-secondary);
+.el-dropdown-menu {
+  padding: 6px 0;
+  border: 1px solid #ebeef5;
+  border-radius: 4px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+
+  :deep(.el-dropdown-menu__item) {
+    padding: 0 15px;
+    font-size: 13px;
+    line-height: 27px;
+  }
+
+  :deep(.el-dropdown-menu__item.is-disabled) {
+    font-weight: 500;
+    color: var(--el-text-color-secondary);
+  }
 }
 
-::v-deep .el-dropdown-menu__item {
-  transition: height 0.3s ease-in-out, padding 0.3s ease-in-out;
-  overflow: hidden;
-}
+:deep(.action-connect) {
+  cursor: pointer;
 
-::v-deep .el-dropdown-menu {
-  transition: min-height 0.3s ease-in-out;
+  .el-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    min-width: 24px;
+    height: 24px;
+    padding: 0;
+    line-height: 1;
+    box-shadow: none !important;
+    outline: none !important;
+
+    // fa 图标字形在自身 em 盒内偏上(flex 居中的是行盒而非字形),下移 1px 做视觉居中
+    i {
+      display: block;
+      line-height: 1;
+      transform: translateX(1px) translateY(1px);
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+      box-shadow: none !important;
+      outline: none !important;
+
+      i {
+        color: #fff !important;
+      }
+    }
+
+    &.el-button--primary.is-plain {
+      color: var(--color-primary);
+      // 用主题系统维护的 EP 主色浅色阶(由当前主色 mix 白色生成),
+      // 替换此前硬编码的 #e8f7f4 —— 后者在非默认(如深蓝黑)主题下不跟随、显脏。
+      background-color: var(--el-color-primary-light-9);
+      border-color: var(--el-color-primary-light-5);
+
+      i {
+        color: var(--color-primary);
+      }
+
+      &:hover,
+      &:focus,
+      &:active {
+        color: #fff;
+        background-color: var(--color-primary);
+        border-color: var(--color-primary);
+
+        i {
+          color: #fff;
+        }
+      }
+    }
+  }
 }
 </style>

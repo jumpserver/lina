@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
 import { AssetSelect } from '@/components'
 import { periodicMeta } from '@/components/const'
-import i18n from '@/i18n/i18n'
 import { Select2 } from '@/components/Form/FormFields'
+import i18n from '@/i18n/i18n'
+import { GenericCreateUpdatePage } from '@/layout/components'
 
 export default {
   name: 'AccountPushCreateUpdate',
@@ -34,9 +34,7 @@ export default {
         assets: {
           type: 'assetSelect',
           component: AssetSelect,
-          rules: [
-            { required: false }
-          ],
+          rules: [{ required: false }],
           el: {
             baseUrl: '/api/v1/assets/assets/?push_account_enabled=true'
           },
@@ -88,7 +86,7 @@ export default {
           },
           on: {
             input: ([value]) => {
-              this.nodeIds = value?.map(i => i.pk)
+              this.nodeIds = value?.map((i) => i.pk)
             }
           }
         },
@@ -117,6 +115,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,16 +1,24 @@
 <template>
-  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="instance" v-bind="config" v-on="$listeners">
+  <GenericDetailPage
+    v-bind="config"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="instance"
+  >
     <keep-alive>
-      <component :is="config.activeMenu" :object="instance" />
+      <component
+        :is="config.activeMenu"
+        :object="instance"
+        object-app-model="acls.DataMaskingRule"
+      />
     </keep-alive>
   </GenericDetailPage>
 </template>
 
 <script>
+import AssetJsonTab from '@/components/Apps/ManyJsonTabs/AssetJsonTab.vue'
+import UserJsonTab from '@/components/Apps/ManyJsonTabs/UserJsonTab.vue'
 import { GenericDetailPage } from '@/layout/components'
 import Detail from './Detail.vue'
-import UserJsonTab from '@/components/Apps/ManyJsonTabs/UserJsonTab.vue'
-import AssetJsonTab from '@/components/Apps/ManyJsonTabs/AssetJsonTab.vue'
 
 export default {
   components: {
@@ -46,6 +54,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

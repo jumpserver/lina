@@ -1,18 +1,19 @@
 <template>
   <DataActions
-    v-if="hasLeftActions && iActions.length > 0"
-    :actions="iActions"
-    class="header-action"
     v-bind="$attrs"
+    v-if="hasLeftActions && iActions.length > 0"
+    :key="actionsRenderKey"
+    :actions="iActions"
+    size="small"
+    class="header-action"
   />
 </template>
 
 <script>
-import { cleanActions } from './utils'
 import { createSourceIdCache } from '@/api/common'
 import { getErrorResponseMsg } from '@/utils/common/index'
+import { cleanActions } from './utils'
 
-import i18n from '@/i18n/i18n'
 import DataActions from '@/components/Common/DataActions/index.vue'
 
 const defaultTrue = { type: [Boolean, Function, String], default: true }
@@ -29,9 +30,7 @@ export default {
     canCreate: defaultTrue,
     createRoute: {
       type: [String, Object, Function],
-      default() {
-        return this.$route.name?.replace('List', 'Create')
-      }
+      default: ''
     },
     beforeCreate: {
       type: Function,
@@ -51,8 +50,7 @@ export default {
     canBulkUpdate: defaultTrue,
     handleBulkUpdate: {
       type: Function,
-      default: () => {
-      }
+      default: () => {}
     },
     hasMoreActions: defaultTrue,
     tableUrl: {
@@ -61,8 +59,7 @@ export default {
     },
     reloadTable: {
       type: Function,
-      default: () => {
-      }
+      default: () => {}
     },
     performBulkDelete: {
       type: Function,
@@ -70,15 +67,15 @@ export default {
     },
     selectedRows: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     extraActions: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     extraMoreActions: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     moreActionsTitle: {
       type: String,
@@ -94,7 +91,7 @@ export default {
     },
     createTitle: {
       type: String,
-      default: () => i18n.t('Create')
+      default: ''
     }
   },
   data() {
@@ -116,7 +113,7 @@ export default {
           name: 'actionUpdateSelected',
           has: this.hasBulkUpdate,
           icon: 'batch-update',
-          can: function({ selectedRows }) {
+          can: function ({ selectedRows }) {
             let canBulkUpdate = vm.canBulkUpdate
             if (typeof canBulkUpdate === 'function') {
               canBulkUpdate = canBulkUpdate({ selectedRows })
@@ -129,11 +126,17 @@ export default {
     }
   },
   computed: {
+    iCreateTitle() {
+      return this.createTitle || this.$t('Create')
+    },
+    iCreateRoute() {
+      return this.createRoute || this.$route?.name?.replace('List', 'Create')
+    },
     defaultActions() {
       const defaultActions = [
         {
           name: 'actionCreate',
-          title: this.createTitle,
+          title: this.iCreateTitle,
           type: 'primary',
           has: this.hasCreate && !this.moreCreates,
           can: this.canCreate,
@@ -148,7 +151,7 @@ export default {
       if (this.moreCreates) {
         const defaultMoreCreate = {
           name: 'actionMoreCreate',
-          title: this.createTitle,
+          title: this.iCreateTitle,
           type: 'primary',
           has: true,
           icon: 'plus',
@@ -168,6 +171,9 @@ export default {
     iActions() {
       return [...this.actions, this.moreAction]
     },
+    actionsRenderKey() {
+      return this.selectedRows.map((row) => row.id).join(',') || 'empty'
+    },
     actions() {
       const actions = [...this.defaultActions, ...this.extraActions]
       return cleanActions(actions, true, {
@@ -182,16 +188,18 @@ export default {
       const invariantActions = [
         {
           name: 'batch',
-          title: this.$t('BatchProcessing', { 'number': this.selectedRows.length }),
-          divided: true,
-          has: function({ selectedRows }) {
+          title: this.$t('BatchProcessing', { number: this.selectedRows.length }),
+          has: function ({ selectedRows }) {
             return selectedRows.length > 0
           },
           class: 'more-batch-processing',
           can: true
         }
       ]
-      let dropdown = _.uniqBy([...invariantActions, ...this.extraMoreActions, ...this.defaultMoreActions], 'name')
+      let dropdown = _.uniqBy(
+        [...invariantActions, ...this.extraMoreActions, ...this.defaultMoreActions],
+        'name'
+      )
       dropdown = cleanActions(dropdown, true, {
         selectedRows: this.selectedRows,
         reloadTable: this.reloadTable
@@ -214,13 +222,12 @@ export default {
     handleCreate() {
       let route
 
-      if (typeof this.createRoute === 'string') {
-        route = { name: this.createRoute }
-        route.name = this.createRoute
-      } else if (typeof this.createRoute === 'function') {
-        route = this.createRoute()
-      } else if (typeof this.createRoute === 'object') {
-        route = this.createRoute
+      if (typeof this.iCreateRoute === 'string') {
+        route = { name: this.iCreateRoute }
+      } else if (typeof this.iCreateRoute === 'function') {
+        route = this.iCreateRoute()
+      } else if (typeof this.iCreateRoute === 'object') {
+        route = this.iCreateRoute
       }
 
       this.$log.debug('handle create')
@@ -233,7 +240,8 @@ export default {
       }
     },
     defaultBulkDeleteCallback({ selectedRows, reloadTable }) {
-      const msg = this.$t('DeleteWarningMsg') + ' ' + selectedRows.length + ' ' + this.$t('Rows') + ' ?'
+      const msg =
+        this.$t('DeleteWarningMsg') + ' ' + selectedRows.length + ' ' + this.$t('Rows') + ' ?'
       const title = this.$tc('Info')
       const performDelete = this.performBulkDelete || this.defaultPerformBulkDelete
       this.$alert(msg, title, {
@@ -264,12 +272,14 @@ export default {
         return v.id
       })
       const data = await createSourceIdCache(ids)
-      const url = (this.tableUrl.indexOf('?') === -1) ? `${this.tableUrl}?spm=` + data.spm : `${this.tableUrl}&spm=` + data.spm
+      const url =
+        this.tableUrl.indexOf('?') === -1
+          ? `${this.tableUrl}?spm=` + data.spm
+          : `${this.tableUrl}&spm=` + data.spm
       return this.$axios.delete(url)
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

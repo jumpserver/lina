@@ -1,5 +1,5 @@
 <template>
-  <Page :help-tip="helpMsg" v-bind="$attrs">
+  <Page v-bind="$attrs" :help-tip="helpMsg">
     <AssetTreeTable
       ref="AssetTreeTable"
       :header-actions="headerActions"
@@ -9,19 +9,19 @@
       :create-drawer="createDrawer"
     />
     <PermBulkUpdateDialog
-      :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
+      v-model:visible="updateSelectedDialogSetting.visible"
       @update="handlePermBulkUpdate"
     />
   </Page>
 </template>
 
 <script>
-import Page from '@/layout/components/Page'
 import AssetTreeTable from '@/components/Apps/AssetTreeTable'
-import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
+import Page from '@/layout/components/Page'
 import { mapGetters } from 'vuex'
 import { AssetPermissionListPageSearchConfigOptions, AssetPermissionTableMeta } from '../const.js'
+import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
 
 export default {
   components: {
@@ -74,6 +74,9 @@ export default {
         showMenu: false,
         showAssets: true,
         notShowBuiltinTree: true,
+        // 选中节点只过滤表格，不把选择同步到路由。否则路由变化会触发整棵树重新初始化、闪烁。
+        // 与资产列表(AllList)、账号发现、风险列表等页面保持一致。
+        selectSyncToRoute: false,
         url: '/api/v1/perms/asset-permissions/',
         nodeUrl: '/api/v1/perms/asset-permissions/',
         treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1&asset_amount=0',
@@ -88,14 +91,34 @@ export default {
         hasTree: true,
         columnsExtra: ['action'],
         columns: [
-          'name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount',
-          'accounts', 'labels', 'is_valid', 'is_expired', 'from_ticket', 'is_active', 'actions'
+          'name',
+          'users_amount',
+          'user_groups_amount',
+          'assets_amount',
+          'nodes_amount',
+          'accounts',
+          'labels',
+          'is_valid',
+          'is_expired',
+          'from_ticket',
+          'is_active',
+          'actions',
+          'date_created',
+          'date_start',
+          'date_expired',
+          'created_by'
         ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'users_amount', 'user_groups_amount', 'assets_amount',
-            'nodes_amount', 'accounts', 'is_valid', 'actions'
+            'name',
+            'users_amount',
+            'user_groups_amount',
+            'assets_amount',
+            'nodes_amount',
+            'accounts',
+            'is_valid',
+            'actions'
           ]
         },
         columnsMeta: {
@@ -128,21 +151,34 @@ export default {
       updateSelectedDialogSetting: {
         visible: false,
         selectedRows: []
-      }
+      },
+      activatedReloadTimer: null
     }
   },
   computed: {
     ...mapGetters(['currentOrgIsRoot'])
   },
   activated() {
-    setTimeout(() => {
-      this.$refs.AssetTreeTable.$refs.TreeList.reloadTable()
+    clearTimeout(this.activatedReloadTimer)
+    this.activatedReloadTimer = setTimeout(() => {
+      this.reloadAssetTreeTable()
     }, 500)
   },
+  deactivated() {
+    clearTimeout(this.activatedReloadTimer)
+    this.activatedReloadTimer = null
+  },
+  beforeUnmount() {
+    clearTimeout(this.activatedReloadTimer)
+    this.activatedReloadTimer = null
+  },
   methods: {
+    reloadAssetTreeTable() {
+      this.$refs.AssetTreeTable?.reloadTable?.()
+    },
     handlePermBulkUpdate() {
       this.updateSelectedDialogSetting.visible = false
-      this.$refs.AssetTreeTable.$refs.TreeList.$refs?.ListTable?.reloadTable()
+      this.reloadAssetTreeTable()
     }
   }
 }

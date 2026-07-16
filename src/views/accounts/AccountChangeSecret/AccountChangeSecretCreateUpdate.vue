@@ -3,9 +3,9 @@
 </template>
 
 <script>
+import { AssetSelect, AutomationParams } from '@/components'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
-import { AssetSelect, AutomationParams } from '@/components'
 
 export default {
   name: 'AccountChangeSecretCreateUpdate',
@@ -35,9 +35,13 @@ export default {
         [
           this.$t('SecretKeyStrategy'),
           [
-            'secret_strategy', 'secret_type', 'secret',
-            'password_rules', 'ssh_key_change_strategy',
-            'ssh_key', 'passphrase'
+            'secret_strategy',
+            'secret_type',
+            'secret',
+            'password_rules',
+            'ssh_key_change_strategy',
+            'ssh_key',
+            'passphrase'
           ]
         ],
         [this.$t('Params'), ['params']],
@@ -49,9 +53,7 @@ export default {
         assets: {
           type: 'assetSelect',
           component: AssetSelect,
-          rules: [
-            { required: false }
-          ],
+          rules: [{ required: false }],
           el: {
             baseUrl: '/api/v1/assets/assets/?change_secret_enabled=true'
           },
@@ -73,7 +75,7 @@ export default {
           },
           on: {
             input: ([value]) => {
-              this.node_ids = value?.map(i => i.pk)
+              this.node_ids = value?.map((i) => i.pk)
             }
           }
         },
@@ -131,9 +133,7 @@ export default {
   },
   methods: {
     handleAfterGetRemoteMeta(meta) {
-      const needSetOptionFields = [
-        'secret_type', 'secret_strategy', 'ssh_key_change_strategy'
-      ]
+      const needSetOptionFields = ['secret_type', 'secret_strategy', 'ssh_key_change_strategy']
       for (const i of needSetOptionFields) {
         const field = this.fieldsMeta[i] || {}
         field.options = meta[i]?.choices || []
@@ -143,6 +143,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

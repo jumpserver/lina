@@ -10,29 +10,25 @@
     />
     <GenericUpdateFormDialog
       v-if="updateSelectedDialogSetting.visible"
+      v-model:visible="updateSelectedDialogSetting.visible"
       :form-setting="updateSelectedDialogSetting.formSetting"
       :selected-rows="updateSelectedDialogSetting.selectedRows"
-      :visible.sync="updateSelectedDialogSetting.visible"
       @update="handleDialogUpdate"
     />
-    <InviteUsersDialog
-      :setting="InviteDialogSetting"
-      @close="handleInviteDialogClose"
-    />
+    <InviteUsersDialog :setting="InviteDialogSetting" @close="handleInviteDialogClose" />
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import { createSourceIdCache } from '@/api/common'
-import { GenericListPage, GenericUpdateFormDialog } from '@/layout/components'
-import { mapGetters } from 'vuex'
-import { getDayFuture } from '@/utils/common/time'
-import InviteUsersDialog from './components/InviteUsersDialog'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
-import store from '@/store'
-import { MFASystemSetting } from '../const'
 import DetailFormatter from '@/components/Table/TableFormatters/DetailFormatter.vue'
-
+import { GenericListPage, GenericUpdateFormDialog } from '@/layout/components'
+import store from '@/store'
+import { getDayFuture } from '@/utils/common/time'
+import { mapGetters } from 'vuex'
+import { MFASystemSetting } from '../const'
+import InviteUsersDialog from './components/InviteUsersDialog'
 export default {
   components: {
     InviteUsersDialog,
@@ -93,12 +89,6 @@ export default {
               }
             },
             {
-              label: this.$t('NoLoginLongTime'),
-              filter: {
-                is_long_time_no_login: true
-              }
-            },
-            {
               label: this.$t('NoMFA'),
               filter: {
                 mfa_level: 0
@@ -111,6 +101,39 @@ export default {
               }
             }
           ]
+        },
+        {
+          label: this.$t('NotLoggedInForMoreThan'),
+          options: [
+            {
+              label: `30 ${this.$t('Days')}`,
+              filter: {
+                is_long_time_no_login: true,
+                no_login_days: 30
+              }
+            },
+            {
+              label: `60 ${this.$t('Days')}`,
+              filter: {
+                is_long_time_no_login: true,
+                no_login_days: 60
+              }
+            },
+            {
+              label: `90 ${this.$t('Days')}`,
+              filter: {
+                is_long_time_no_login: true,
+                no_login_days: 90
+              }
+            },
+            {
+              label: `180 ${this.$t('Days')}`,
+              filter: {
+                is_long_time_no_login: true,
+                no_login_days: 180
+              }
+            }
+          ]
         }
       ],
       tableConfig: {
@@ -119,15 +142,16 @@ export default {
           resource: 'user'
         },
         columnsExclude: [
-          'password', 'password_strategy', 'public_key',
-          'mfa_force_enabled', 'is_service_account', 'avatar_url'
+          'password',
+          'password_strategy',
+          'public_key',
+          'mfa_force_enabled',
+          'is_service_account',
+          'avatar_url'
         ],
         columnsShow: {
           min: ['name', 'username', 'actions'],
-          default: [
-            'name', 'username', 'email',
-            'groups', 'is_valid', 'actions'
-          ]
+          default: ['name', 'username', 'email', 'groups', 'is_valid', 'actions']
         },
         columnsMeta: {
           name: {
@@ -152,7 +176,10 @@ export default {
               const securityMFAAuth = store.getters.publicSettings['SECURITY_MFA_AUTH']
               if (securityMFAAuth === MFASystemSetting.allUsers) {
                 return this.$t('MFAAllUsers')
-              } else if (securityMFAAuth === MFASystemSetting.onlyAdminUsers && (row?.is_superuser || row?.is_org_admin)) {
+              } else if (
+                securityMFAAuth === MFASystemSetting.onlyAdminUsers &&
+                (row?.is_superuser || row?.is_org_admin)
+              ) {
                 return this.$t('MFAOnlyAdminUsers')
               } else {
                 return row['mfa_level'].label
@@ -164,9 +191,9 @@ export default {
             collapsible: false
           },
           email: {
-            'min-width': '160px'
+            minWidth: '220px'
           },
-          'wecom_id': {
+          wecom_id: {
             width: '120px'
           },
           username: {
@@ -184,14 +211,14 @@ export default {
           },
           system_roles: {
             formatter: (row) => {
-              return row['system_roles'].map(item => item['display_name']).join(', ') || '-'
+              return row['system_roles'].map((item) => item['display_name']).join(', ') || '-'
             },
             filters: [],
             columnKey: 'system_roles'
           },
           org_roles: {
             formatter: (row) => {
-              return row['org_roles'].map(item => item['display_name']).join(', ') || '-'
+              return row['org_roles'].map((item) => item['display_name']).join(', ') || '-'
             },
             filters: [],
             columnKey: 'org_roles',
@@ -216,7 +243,14 @@ export default {
             width: '120px',
             formatter: (row) => {
               const phoneObj = row.phone
-              return phoneObj?.phone ? <div>{phoneObj?.code}{phoneObj?.phone}</div> : ''
+              return phoneObj?.phone ? (
+                <div>
+                  {phoneObj?.code}
+                  {phoneObj?.phone}
+                </div>
+              ) : (
+                ''
+              )
             }
           },
           login_blocked: {
@@ -254,8 +288,10 @@ export default {
             formatterArgs: {
               hasDelete: hasDelete,
               canUpdate: ({ row }) => {
-                return this.$hasPerm('users.change_user') &&
+                return (
+                  this.$hasPerm('users.change_user') &&
                   !(!this.currentUserIsSuperAdmin && row['is_superuser'])
+                )
               },
               extraActions: [
                 {
@@ -301,8 +337,7 @@ export default {
         ],
         hasBulkUpdate: true,
         canBulkUpdate: ({ selectedRows }) => {
-          return selectedRows.length > 0 &&
-            vm.$hasPerm('users.change_user')
+          return selectedRows.length > 0 && vm.$hasPerm('users.change_user')
         },
         handleBulkUpdate: ({ selectedRows }) => {
           vm.updateSelectedDialogSetting.visible = true
@@ -322,14 +357,16 @@ export default {
             title: this.$t('DisableSelected'),
             icon: 'fa fa-ban',
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
-            callback: ({ selectedRows, reloadTable }) => vm.bulkActionCallback(selectedRows, reloadTable, 'disable')
+            callback: ({ selectedRows, reloadTable }) =>
+              vm.bulkActionCallback(selectedRows, reloadTable, 'disable')
           },
           {
             name: 'BatchActivate',
             title: this.$t('ActivateSelected'),
             icon: 'fa fa-check-circle-o',
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
-            callback: ({ selectedRows, reloadTable }) => vm.bulkActionCallback(selectedRows, reloadTable, 'activate')
+            callback: ({ selectedRows, reloadTable }) =>
+              vm.bulkActionCallback(selectedRows, reloadTable, 'activate')
           }
         ]
       },
@@ -373,8 +410,12 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentOrgIsRoot', 'currentUser', 'publicSettings',
-      'device', 'currentOrgIsDefault', 'currentUserIsSuperAdmin'
+      'currentOrgIsRoot',
+      'currentUser',
+      'publicSettings',
+      'device',
+      'currentOrgIsDefault',
+      'currentUserIsSuperAdmin'
     ])
   },
   mounted() {
@@ -382,13 +423,25 @@ export default {
   },
   methods: {
     setRolesFilter() {
-      const roleTypes = [{ name: 'system-roles', perm: 'systemrole' }, { name: 'org-roles', perm: 'orgrole' }]
+      const roleTypes = [
+        {
+          name: 'system-roles',
+          perm: 'systemrole'
+        },
+        {
+          name: 'org-roles',
+          perm: 'orgrole'
+        }
+      ]
       for (const roleType of roleTypes) {
         if (this.$hasPerm(`rbac.${roleType.perm}`)) {
           this.$axios.get(`/api/v1/rbac/${roleType}/`).then((roles) => {
             const fieldName = roleType.name.replace('-', '_')
-            this.tableConfig.columnsMeta[fieldName].filters = roles.map(r => {
-              return { text: r['display_name'], value: r.id }
+            this.tableConfig.columnsMeta[fieldName].filters = roles.map((r) => {
+              return {
+                text: r['display_name'],
+                value: r.id
+              }
             })
           })
         }
@@ -397,17 +450,18 @@ export default {
     removeUserFromOrg({ row, reload }) {
       this.$confirm(this.$t('RemoveWarningMsg') + ' ' + row.name + ' ?', this.$tc('Info'), {
         type: 'warning'
-      }).then(() => {
-        const url = `/api/v1/users/users/${row.id}/remove/`
-        this.$axios.post(url).then(() => {
-          reload()
-          this.$message.success(this.$tc('RemoveSuccessMsg'))
-        })
-      }).catch(() => {
       })
+        .then(() => {
+          const url = `/api/v1/users/users/${row.id}/remove/`
+          this.$axios.post(url).then(() => {
+            reload()
+            this.$message.success(this.$tc('RemoveSuccessMsg'))
+          })
+        })
+        .catch(() => {})
     },
     async bulkRemoveCallback({ selectedRows, reloadTable }) {
-      const ids = selectedRows.map(v => {
+      const ids = selectedRows.map((v) => {
         return v.id
       })
       const data = await createSourceIdCache(ids)
@@ -422,15 +476,18 @@ export default {
     },
     bulkActionCallback(selectedRows, reloadTable, actionType) {
       const msgs = {
-        'disable': 'DisableSuccessMsg',
-        'activate': 'ActivateSuccessMsg',
-        'remove': 'RemoveSuccessMsg',
-        'delete': 'DeleteSuccessMsg'
+        disable: 'DisableSuccessMsg',
+        activate: 'ActivateSuccessMsg',
+        remove: 'RemoveSuccessMsg',
+        delete: 'DeleteSuccessMsg'
       }
       const vm = this
       const url = '/api/v1/users/users/'
-      const data = selectedRows.map(row => {
-        return { id: row.id, is_active: actionType === 'activate' }
+      const data = selectedRows.map((row) => {
+        return {
+          id: row.id,
+          is_active: actionType === 'activate'
+        }
       })
       if (data.length === 0) return
       this.$axios.patch(url, data).then(() => {
@@ -459,13 +516,3 @@ export default {
   }
 }
 </script>
-
-<style lang="less" scoped>
-.asset-select-dialog ::v-deep .transition-box:first-child {
-  background-color: #f3f3f3;
-}
-
-.dialog ::v-deep .el-dialog__footer {
-  padding: 0;
-}
-</style>

@@ -6,7 +6,7 @@
 
 <script>
 import { DrawerListTable as ListTable } from '@/components'
-import { toM2MJsonParams } from '@/utils/jms/index'
+import { toM2MInstanceJsonParams } from '@/utils/jms/index'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 
@@ -19,12 +19,15 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => ({})
+    },
+    objectAppModel: {
+      type: String,
+      required: true
     }
   },
   data() {
-    const [key, value] = toM2MJsonParams(this.object.users)
+    const [key, value] = toM2MInstanceJsonParams(this.objectAppModel, this.object.id)
     const org_id = this.object.org_id || this.$store.getters.currentOrg.id
     return {
       config: {
@@ -36,8 +39,14 @@ export default {
         tableConfig: {
           url: `/api/v1/users/users/?${key}=${value}&oid=${org_id}`,
           columns: [
-            'name', 'username', 'email', 'groups', 'system_roles',
-            'org_roles', 'source', 'is_valid'
+            'name',
+            'username',
+            'email',
+            'groups',
+            'system_roles',
+            'org_roles',
+            'source',
+            'is_valid'
           ],
           columnsShow: {
             min: ['name', 'username'],
@@ -59,7 +68,7 @@ export default {
             system_roles: {
               label: this.$t('SystemRoles'),
               formatter: (row) => {
-                return row['system_roles'].map(item => item['display_name']).join(', ') || '-'
+                return row['system_roles'].map((item) => item['display_name']).join(', ') || '-'
               },
               filters: [],
               columnKey: 'system_roles'
@@ -67,7 +76,7 @@ export default {
             org_roles: {
               label: this.$t('OrgRoles'),
               formatter: (row) => {
-                return row['org_roles'].map(item => item['display_name']).join(', ') || '-'
+                return row['org_roles'].map((item) => item['display_name']).join(', ') || '-'
               },
               filters: [],
               columnKey: 'org_roles',

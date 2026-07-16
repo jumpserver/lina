@@ -8,11 +8,10 @@
   </el-row>
 </template>
 
-<script>
+<script lang="jsx">
 import { DrawerListTable as ListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
-
 export default {
   name: 'Publications',
   components: {
@@ -21,8 +20,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -45,28 +43,24 @@ export default {
             can: ({ selectedRows }) => {
               return selectedRows.length > 0
             },
-            callback: function({ selectedRows }) {
-              vm.$axios.post(
-                `/api/v1/terminal/applet-host-deployments/applets/`,
-                {
-                  hosts: selectedRows.map(v => {
+            callback: function ({ selectedRows }) {
+              vm.$axios
+                .post(`/api/v1/terminal/applet-host-deployments/applets/`, {
+                  hosts: selectedRows.map((v) => {
                     return v.host.id
                   }),
                   applet_id: vm.object.id
-                }
-              ).then(res => {
-                openTaskPage(res['task'])
-              })
+                })
+                .then((res) => {
+                  openTaskPage(res['task'])
+                })
             }
           }
         ]
       },
       config: {
         url: `/api/v1/terminal/applet-publications/?applet=${this.object.id}`,
-        columns: [
-          'host.display_name', 'applet.version',
-          'date_updated', 'status', 'actions'
-        ],
+        columns: ['host.display_name', 'applet.version', 'date_updated', 'status', 'actions'],
         columnsMeta: {
           'host.display_name': {
             label: this.$t('DisplayName'),
@@ -78,7 +72,9 @@ export default {
               getDrawerTitle: ({ row }) => row.host.name,
               getRoute: ({ row }) => ({
                 name: 'AppletHostDetail',
-                params: { id: row.host.id }
+                params: {
+                  id: row.host.id
+                }
               })
             },
             id: ({ row }) => row.host.id
@@ -90,13 +86,17 @@ export default {
             label: this.$t('PublishStatus'),
             formatter: (row) => {
               const typeMapper = {
-                'pending': 'success',
-                'success': 'primary',
-                'failed': 'danger',
-                'unknown': 'warning'
+                pending: 'success',
+                success: 'primary',
+                failed: 'danger',
+                unknown: 'warning'
               }
               const tp = typeMapper[row.status.value] || 'warning'
-              return <el-tag size='mini' type={tp}>{row.status.label}</el-tag>
+              return (
+                <el-tag size="small" type={tp}>
+                  {row.status.label}
+                </el-tag>
+              )
             }
           },
           date_updated: {
@@ -110,16 +110,15 @@ export default {
               extraActions: [
                 {
                   title: this.$t('Deploy'),
-                  callback: function({ row }) {
-                    this.$axios.post(
-                      `/api/v1/terminal/applet-host-deployments/applets/`,
-                      {
+                  callback: function ({ row }) {
+                    this.$axios
+                      .post(`/api/v1/terminal/applet-host-deployments/applets/`, {
                         hosts: [row.host.id],
                         applet_id: vm.object.id
-                      }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
+                      })
+                      .then((res) => {
+                        openTaskPage(res['task'])
+                      })
                   }
                 }
               ]

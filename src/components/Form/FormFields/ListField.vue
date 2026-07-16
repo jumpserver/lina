@@ -1,21 +1,25 @@
 <template>
   <div>
-    <div v-for="(item, index) in value || []" :key="index" class="value-item">
-      <el-input :value="item" class="input-z" @input="updateValue($event, index)" />
+    <div v-for="(item, index) in currentValue" :key="index" class="value-item">
+      <el-input
+        :model-value="item"
+        class="input-z"
+        @update:model-value="updateValue($event, index)"
+      />
       <div class="input-button">
         <el-button
           :disabled="disableDelete(item)"
-          icon="el-icon-minus"
-          size="mini"
-          style="flex-shrink: 0;"
+          icon="Minus"
+          size="small"
+          style="flex-shrink: 0"
           type="danger"
           @click="handleDelete(index)"
         />
         <el-button
           :disabled="disableAdd(item, index)"
-          icon="el-icon-plus"
-          size="mini"
-          style="flex-shrink: 0;"
+          icon="Plus"
+          size="small"
+          style="flex-shrink: 0"
           type="primary"
           @click="handleAdd(index)"
         />
@@ -27,29 +31,37 @@
 <script>
 export default {
   name: 'ListField',
+  emits: ['input', 'update:modelValue'],
   props: {
     value: {
       type: [Array, String],
-      default: () => ([])
-    }
-  },
-  data() {
-    return {
+      default: () => []
+    },
+    modelValue: {
+      type: [Array, String],
+      default: undefined
     }
   },
   computed: {
+    currentValue() {
+      const value = this.modelValue !== undefined ? this.modelValue : this.value
+      return Array.isArray(value) ? value : []
+    }
   },
   mounted() {
-    const value = this.value
-    if (!value || !Array.isArray(value) || value.length === 0) {
-      this.$emit('input', [''])
+    if (this.currentValue.length === 0) {
+      this.emitValue([''])
     }
   },
   methods: {
-    updateValue(v, index) {
-      const value = this.value
-      value[index] = v
+    emitValue(value) {
+      this.$emit('update:modelValue', value)
       this.$emit('input', value)
+    },
+    updateValue(v, index) {
+      const value = [...this.currentValue]
+      value[index] = v
+      this.emitValue(value)
     },
     disableDelete() {
       return false
@@ -58,21 +70,20 @@ export default {
       return false
     },
     handleAdd(index) {
-      const value = this.value
+      const value = [...this.currentValue]
       value.splice(index + 1, 0, '')
-      this.$emit('input', value)
+      this.emitValue(value)
     },
     handleDelete(index) {
-      const value = this.value
+      const value = [...this.currentValue]
       value.splice(index, 1)
-      this.$emit('input', value)
+      this.emitValue(value)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-
 .input-z {
   flex-shrink: 1;
   width: calc(100% - 80px) !important;
@@ -89,9 +100,8 @@ export default {
   margin-top: 4px;
 }
 
-.input-button ::v-deep .el-button.el-button--mini {
+.input-button :deep(.el-button.el-button--small) {
   height: 25px;
   padding: 5px;
 }
-
 </style>

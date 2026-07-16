@@ -29,6 +29,7 @@ export default {
       meta: {
         icon: 'overview',
         title: i18n.t('Overview'),
+        disableGoBack: true,
         permissions: []
       }
     },
@@ -259,7 +260,7 @@ export default {
     {
       path: '/workbench/system-tools',
       component: empty,
-      name: 'More',
+      name: 'WorkbenchMore',
       alwaysShow: true,
       meta: {
         title: i18n.t('MenuMore'),

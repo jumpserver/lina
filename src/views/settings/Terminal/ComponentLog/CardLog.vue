@@ -1,20 +1,26 @@
 <template>
   <el-card class="log-card">
-    <div slot="header">
-      <span> {{ title }}</span>
-      <el-button style="float: right" type="text" @click="tailLog"> {{ $tc('TailLog') }} </el-button>
-    </div>
-    <table v-if="logs.length>0" class="log-table">
-      <tr v-for="(o,i) in logs" :key="i">
-        <td>{{ o['message'] }}</td>
-      </tr>
+    <template #header>
+      <div>
+        <span> {{ title }}</span>
+        <el-button style="float: right" link @click="tailLog"> {{ $tc('TailLog') }} </el-button>
+      </div>
+    </template>
+    <table v-if="logs.length > 0" class="log-table">
+      <tbody>
+        <tr v-for="(o, i) in logs" :key="i">
+          <td>{{ o['message'] }}</td>
+        </tr>
+      </tbody>
     </table>
     <table v-else class="log-table">
-      <tr>
-        <td>{{ $tc('NoLog') }}</td>
-      </tr>
-    </table></el-card>
-
+      <tbody>
+        <tr>
+          <td>{{ $tc('NoLog') }}</td>
+        </tr>
+      </tbody>
+    </table></el-card
+  >
 </template>
 <script>
 import { openWindow } from '@/utils/common/index'
@@ -46,7 +52,7 @@ export default {
         search: this.search
       }
       const params = new URLSearchParams(data)
-      const url = '/ui/#/terminal/components/loki/tail/?' + params.toString()
+      const url = window.__UI_BASE__ + '#/terminal/components/loki/tail/?' + params.toString()
       openWindow(url)
     }
   }
@@ -60,17 +66,16 @@ export default {
   display: block;
 }
 
-.log-table ::v-deep td {
+.log-table :deep(td) {
   padding: 5px 5px;
 }
 
-.log-table ::v-deep tr {
+.log-table :deep(tr) {
   overflow-x: auto;
   white-space: nowrap;
 }
 
-.log-card ::v-deep .el-card__body {
+.log-card :deep(.el-card__body) {
   padding: 10px 10px 5px;
 }
-
 </style>

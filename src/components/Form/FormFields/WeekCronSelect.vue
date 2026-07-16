@@ -1,11 +1,11 @@
 <template>
   <div class="c-weektime">
     <div class="c-schedue" />
-    <div :class="{'c-schedue': true, 'c-schedue-notransi': mode}" />
-    <table :class="{'c-min-table': colspan < 2}" class="c-weektime-table">
+    <div :class="{ 'c-schedue': true, 'c-schedue-notransi': mode }" />
+    <table :class="{ 'c-min-table': colspan < 2 }" :style="tableStyle" class="c-weektime-table">
       <thead class="c-weektime-head">
         <tr>
-          <th class="week-td" rowspan="8">{{ this.$t('WeekOrTime') }}</th>
+          <th class="week-td" rowspan="8">{{ $t('WeekOrTime') }}</th>
           <th :colspan="12 * colspan">00:00 - 12:00</th>
           <th :colspan="12 * colspan">12:00 - 24:00</th>
         </tr>
@@ -29,11 +29,13 @@
           />
         </tr>
         <tr>
-          <td class="c-weektime-preview" colspan="49">
+          <td :colspan="totalColumns" class="c-weektime-preview">
             <div class="g-clearfix c-weektime-con">
-              <span class="g-pull-left">{{ this.$t('CanDragSelect') }}</span>
-              <a class="g-pull-right" @click.prevent="clearWeektime">{{ this.$t('ClearSelection') }}</a>
-              <a class="g-pull-right g-pull-margin" @click.prevent="selectAll">{{ this.$t('SelectAll') }}</a>
+              <span class="g-pull-left">{{ $t('CanDragSelect') }}</span>
+              <a class="g-pull-right" @click.prevent="clearWeektime">{{ $t('ClearSelection') }}</a>
+              <a class="g-pull-right g-pull-margin" @click.prevent="selectAll">{{
+                $t('SelectAll')
+              }}</a>
             </div>
           </td>
         </tr>
@@ -42,7 +44,7 @@
   </div>
 </template>
 <script>
-const createArr = len => {
+const createArr = (len) => {
   return Array.from(Array(len)).map((ret, id) => id)
 }
 
@@ -115,8 +117,17 @@ export default {
         top: `${this.top}px`
       }
     },
+    tableStyle() {
+      return {
+        '--week-label-width': '112px',
+        '--week-cols': String(24 * this.colspan)
+      }
+    },
+    totalColumns() {
+      return 24 * this.colspan + 1
+    },
     selectClasses() {
-      return n => n.check ? 'ui-selected' : ''
+      return (n) => (n.check ? 'ui-selected' : '')
     }
   },
   created() {
@@ -192,14 +203,17 @@ export default {
         'm+': date.getMinutes(),
         's+': date.getSeconds(),
         'q+': Math.floor((date.getMonth() + 3) / 3),
-        'S': date.getMilliseconds()
+        S: date.getMilliseconds()
       }
       if (/(y+)/.test(fmt)) {
         fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
       }
-      for (var k in o) {
+      for (const k in o) {
         if (new RegExp('(' + k + ')').test(fmt)) {
-          fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
+          fmt = fmt.replace(
+            RegExp.$1,
+            RegExp.$1.length === 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length)
+          )
         }
       }
       return fmt
@@ -209,7 +223,9 @@ export default {
       const timezone = 8
       const offsetGMT = new Date().getTimezoneOffset() // 本地时间和格林威治的时间差，单位为分钟
       const nowDate = new Date(timeStamp).getTime()
-      const targetStamp = new Date(nowDate + offsetGMT * 60 * 1000 + timezone * 60 * 60 * 1000).getTime()
+      const targetStamp = new Date(
+        nowDate + offsetGMT * 60 * 1000 + timezone * 60 * 60 * 1000
+      ).getTime()
 
       // (2 / this.colspan) 原来是一个单元格 30分钟，现在是一个单元格 30 * 2 / this.colspan 分钟
       const beginStamp = targetStamp + col * 1800000 * (2 / this.colspan) // col * 30 * 60 * 1000
@@ -221,9 +237,9 @@ export default {
     },
     // 清空时间段
     clearWeektime() {
-      this.weekTimeData.forEach(item => {
-        item.child.forEach(t => {
-          this.$set(t, 'check', false)
+      this.weekTimeData.forEach((item) => {
+        item.child.forEach((t) => {
+          t['check'] = false
         })
       })
       this.timeRange = []
@@ -231,9 +247,9 @@ export default {
     },
     // 全选
     selectAll() {
-      this.weekTimeData.forEach(item => {
-        item.child.forEach(t => {
-          this.$set(t, 'check', true)
+      this.weekTimeData.forEach((item) => {
+        item.child.forEach((t) => {
+          t['check'] = true
         })
       })
       this.setTimeRange()
@@ -244,7 +260,7 @@ export default {
       this.mode = 0
     },
     setTimeRange() {
-      this.timeRange = this.weekTimeData.map(item => {
+      this.timeRange = this.weekTimeData.map((item) => {
         return {
           id: item.row === 6 ? 0 : item.row + 1,
           value: splicing(item.child)
@@ -311,10 +327,10 @@ export default {
     selectWeek(row, col, check) {
       const [minRow, maxRow] = row
       const [minCol, maxCol] = col
-      this.weekTimeData.forEach(item => {
-        item.child.forEach(t => {
+      this.weekTimeData.forEach((item) => {
+        item.child.forEach((t) => {
           if (t.row >= minRow && t.row <= maxRow && t.col >= minCol && t.col <= maxCol) {
-            this.$set(t, 'check', check)
+            t['check'] = check
           }
         })
       })
@@ -324,10 +340,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 .c-weektime {
-  //min-width: 440px;
   position: relative;
-  display: inline-block;
-  padding-right: 20px;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding-right: 0;
+  overflow: hidden;
 }
 
 .c-schedue {
@@ -335,15 +353,22 @@ export default {
   position: absolute;
   width: 0;
   height: 0;
-  opacity: .6;
+  opacity: 0.6;
   pointer-events: none;
 }
 
 .c-schedue-notransi {
-  transition: width .12s ease, height .12s ease, top .12s ease, left .12s ease;
+  transition:
+    width 0.12s ease,
+    height 0.12s ease,
+    top 0.12s ease,
+    left 0.12s ease;
 }
 
 .c-weektime-table {
+  width: 100%;
+  min-width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
 
   th {
@@ -355,31 +380,51 @@ export default {
     height: 30px;
   }
 
-  tr, td, th {
+  tr,
+  td,
+  th {
     user-select: none;
     border: 1px solid #dee4f5;
     text-align: center;
     min-width: 10px;
     line-height: 1.6em;
-    transition: background .16s ease;
+    transition: background 0.16s ease;
   }
 
   .c-weektime-head {
     font-size: 12px;
 
     .week-td {
-      width: 72px;
+      width: var(--week-label-width);
+      min-width: var(--week-label-width);
+      max-width: var(--week-label-width);
+    }
+
+    tr:nth-child(2) > td {
+      width: calc((100% - var(--week-label-width)) / var(--week-cols));
+      min-width: calc((100% - var(--week-label-width)) / var(--week-cols));
+      max-width: calc((100% - var(--week-label-width)) / var(--week-cols));
+      padding: 0;
     }
   }
 
   .c-weektime-body {
     font-size: 12px;
 
+    tr > td:first-child {
+      width: var(--week-label-width);
+      min-width: var(--week-label-width);
+      max-width: var(--week-label-width);
+    }
+
     td {
       &.weektime-atom-item {
         user-select: unset;
         background-color: #f5f5f5;
-        width: 18px;
+        width: calc((100% - var(--week-label-width)) / var(--week-cols));
+        min-width: calc((100% - var(--week-label-width)) / var(--week-cols));
+        max-width: calc((100% - var(--week-label-width)) / var(--week-cols));
+        padding: 0;
       }
 
       &.ui-selected {
@@ -389,13 +434,34 @@ export default {
   }
 
   .c-weektime-preview {
+    width: 100%;
     line-height: 2.4em;
     padding: 0 10px;
     font-size: 11px;
 
     .c-weektime-con {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
       line-height: 42px;
       user-select: none;
+
+      .g-pull-left,
+      .g-pull-right {
+        float: none;
+      }
+    }
+
+    :deep(a) {
+      flex: 0 0 auto;
+    }
+
+    :deep(span) {
+      flex: 1 1 auto;
+      min-width: 0;
+      text-align: left;
     }
 
     .c-weektime-time {
@@ -413,15 +479,18 @@ export default {
 }
 
 .c-min-table {
-  tr, td, th {
+  tr,
+  td,
+  th {
     min-width: 17px;
   }
 }
 
 .g-clearfix {
-  &:after, &:before {
+  &:after,
+  &:before {
     clear: both;
-    content: " ";
+    content: ' ';
     display: table;
   }
 }
@@ -432,7 +501,7 @@ export default {
 
 .g-pull-right {
   float: right;
-  color: #409eff !important;
+  color: var(--color-primary) !important;
 }
 
 .g-pull-margin {

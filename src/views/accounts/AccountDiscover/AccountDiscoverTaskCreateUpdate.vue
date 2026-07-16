@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
-import i18n from '@/i18n/i18n'
 import { periodicMeta } from '@/components/const'
+import i18n from '@/i18n/i18n'
+import { GenericCreateUpdatePage } from '@/layout/components'
 
 export default {
   name: 'AccountDiscoverTaskCreate',
@@ -76,5 +76,4 @@ export default {
     }
   }
 }
-
 </script>

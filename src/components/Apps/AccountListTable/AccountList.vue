@@ -9,49 +9,54 @@
     />
     <ViewSecret
       v-if="showViewSecretDialog"
+      v-model:visible="showViewSecretDialog"
       :account="account"
       :url="secretUrl"
-      :visible.sync="showViewSecretDialog"
     />
     <UpdateSecretInfo
       v-if="showUpdateSecretDialog"
+      v-model:visible="showUpdateSecretDialog"
       :account="account"
-      :visible.sync="showUpdateSecretDialog"
-      @updateAuthDone="onUpdateAuthDone"
+      @update-auth-done="onUpdateAuthDone"
     />
     <AccountCreateUpdate
       v-if="showAddDialog"
+      v-model:visible="showAddDialog"
       :account="account"
       :add-template="addTemplate"
       :asset="iAsset"
       :title="accountCreateUpdateTitle"
-      :visible.sync="showAddDialog"
       @add="addAccountSuccess"
       @bulk-create-done="showBulkCreateResult($event)"
     />
     <ResultDialog
       v-if="showResultDialog"
+      v-model:visible="showResultDialog"
       :result="createAccountResults"
-      :visible.sync="showResultDialog"
       @close-all="closeAll"
     />
     <AccountBulkUpdateDialog
-      v-if="updateSelectedDialogSetting.visible"
-      :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
+      v-if="updateSelectedDialogSetting.visible"
+      v-model:visible="updateSelectedDialogSetting.visible"
       @update="handleAccountBulkUpdate"
     />
     <PasswordHistoryDialog
       v-if="showPasswordHistoryDialog"
+      v-model:visible="showPasswordHistoryDialog"
       :account="currentAccountColumn"
-      :visible.sync="showPasswordHistoryDialog"
     />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { accountOtherActions, accountQuickFilters, connectivityMeta, isDirectoryServiceAccount } from './const'
+import {
+  accountOtherActions,
+  accountQuickFilters,
+  connectivityMeta,
+  isDirectoryServiceAccount
+} from './const'
 import { openTaskPage } from '@/utils/jms/index'
 import {
   AccountConnectFormatter,
@@ -85,9 +90,7 @@ export default {
     },
     exportUrl: {
       type: String,
-      default() {
-        return this.url.replace('/accounts/accounts/', '/accounts/account-secrets/')
-      }
+      default: ''
     },
     hasLeftActions: {
       type: Boolean,
@@ -123,14 +126,11 @@ export default {
     },
     columnsMeta: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     columnsDefault: {
       type: Array,
-      default: () => ([
-        'name', 'username', 'secret', 'asset', 'platform', 'connect'
-      ])
+      default: () => ['name', 'username', 'secret', 'asset', 'platform', 'connect']
     },
     headerExtraActions: {
       type: Array,
@@ -242,13 +242,13 @@ export default {
           },
           asset: {
             minWidth: '100px',
-            formatter: function(row) {
+            formatter: function (row) {
               return row.asset.name
             }
           },
           username: {
             minWidth: '60px',
-            formatter: function(row) {
+            formatter: function (row) {
               if (row.ds && row.ds['domain_name']) {
                 return `${row.username}@${row.ds['domain_name']}`
               } else {
@@ -257,12 +257,12 @@ export default {
             }
           },
           secret_type: {
-            formatter: function(row) {
+            formatter: function (row) {
               return row.secret_type.label
             }
           },
           source: {
-            formatter: function(row) {
+            formatter: function (row) {
               return row.source.label
             }
           },
@@ -292,7 +292,8 @@ export default {
               hasUpdate: false, // can set function(row, value)
               hasDelete: true, // can set function(row, value)
               hasClone: false,
-              canDelete: ({ row }) => vm.$hasPerm('accounts.delete_account') && !isDirectoryServiceAccount(row, this),
+              canDelete: ({ row }) =>
+                vm.$hasPerm('accounts.delete_account') && !isDirectoryServiceAccount(row, this),
               moreActionsTitle: this.$t('More'),
               extraActions: accountOtherActions(this)
             }
@@ -308,7 +309,8 @@ export default {
         hasImport: this.hasImport,
         hasExport: this.hasExport && this.$hasPerm('accounts.view_accountsecret'),
         exportOptions: {
-          url: this.exportUrl,
+          url:
+            this.exportUrl || this.url.replace('/accounts/accounts/', '/accounts/account-secrets/'),
           mfaVerifyRequired: true,
           tips: this.$t('AccountExportTips')
         },
@@ -360,21 +362,27 @@ export default {
             type: 'primary',
             icon: 'verify',
             can: ({ selectedRows }) => {
-              return selectedRows.length > 0 &&
-                ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(selectedRows[0].asset.type.value) === -1 &&
-                !this.$store.getters.currentOrgIsRoot && vm.$hasPerm('accounts.verify_account')
+              return (
+                selectedRows.length > 0 &&
+                ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(
+                  selectedRows[0].asset.type.value
+                ) === -1 &&
+                !this.$store.getters.currentOrgIsRoot &&
+                vm.$hasPerm('accounts.verify_account')
+              )
             },
-            callback: function({ selectedRows }) {
-              const ids = selectedRows.map(v => {
+            callback: function ({ selectedRows }) {
+              const ids = selectedRows.map((v) => {
                 return v.id
               })
-              this.$axios.post(
-                '/api/v1/accounts/accounts/tasks/',
-                { action: 'verify', accounts: ids }).then(res => {
-                openTaskPage(res['task'])
-              }).catch(err => {
-                this.$message.error(this.$tc('BulkVerifyErrorMsg' + ' ' + err))
-              })
+              this.$axios
+                .post('/api/v1/accounts/accounts/tasks/', { action: 'verify', accounts: ids })
+                .then((res) => {
+                  openTaskPage(res['task'])
+                })
+                .catch((err) => {
+                  this.$message.error(this.$tc('BulkVerifyErrorMsg' + ' ' + err))
+                })
             }.bind(this)
           },
           {
@@ -385,17 +393,18 @@ export default {
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 && vm.$hasPerm('accounts.change_account')
             },
-            callback: function({ selectedRows }) {
-              const ids = selectedRows.map(v => {
+            callback: function ({ selectedRows }) {
+              const ids = selectedRows.map((v) => {
                 return v.id
               })
-              this.$axios.patch(
-                '/api/v1/accounts/accounts/clear-secret/',
-                { account_ids: ids }).then(() => {
-                this.$message.success(this.$tc('ClearSuccessMsg'))
-              }).catch(err => {
-                this.$message.error(this.$tc('ClearErrorMsg' + ' ' + err))
-              })
+              this.$axios
+                .patch('/api/v1/accounts/accounts/clear-secret/', { account_ids: ids })
+                .then(() => {
+                  this.$message.success(this.$tc('ClearSuccessMsg'))
+                })
+                .catch((err) => {
+                  this.$message.error(this.$tc('ClearErrorMsg' + ' ' + err))
+                })
             }.bind(this)
           },
           {
@@ -403,10 +412,12 @@ export default {
             title: this.$t('UpdateSelected'),
             icon: 'batch-update',
             can: ({ selectedRows }) => {
-              return selectedRows.length > 0 &&
+              return (
+                selectedRows.length > 0 &&
                 !this.$store.getters.currentOrgIsRoot &&
                 vm.$hasPerm('accounts.change_account') &&
-                selectedRows.every(i => i.secret_type.value === selectedRows[0].secret_type.value)
+                selectedRows.every((i) => i.secret_type.value === selectedRows[0].secret_type.value)
+              )
             },
             callback: ({ selectedRows }) => {
               vm.updateSelectedDialogSetting.selectedRows = selectedRows
@@ -441,8 +452,8 @@ export default {
   },
   watch: {
     url(iNew) {
-      this.$set(this.tableConfig, 'url', iNew)
-      this.$set(this.headerActions.exportOptions, 'url', iNew.replace(/(.*)accounts/, '$1account-secrets'))
+      this.tableConfig['url'] = iNew
+      this.headerActions.exportOptions['url'] = iNew.replace(/(.*)accounts/, '$1account-secrets')
     }
   },
   mounted() {
@@ -478,7 +489,9 @@ export default {
       this.$refs.ListTable.reloadTable()
     },
     async getAssetDetail() {
-      const { query: { asset } } = this.$route
+      const {
+        query: { asset }
+      } = this.$route
       if (asset) {
         this.iAsset = await this.$axios.get(`/api/v1/assets/assets/${asset}/`)
       }

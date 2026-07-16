@@ -1,74 +1,76 @@
 <template>
-  <IBox v-loading="loading" class="box">
-    <div slot="header" class="clearfix ibox-title">
-      <i class="fa fa-comments" /> {{ $t('Message') }}
-    </div>
-    <template v-if="comments">
-      <div v-for="item in comments" :key="item.id" class="feed-activity-list">
-        <div class="feed-element">
-          <a class="pull-left" href="#">
-            <el-avatar :size="30" :src="imageUrl" class="header-avatar" />
-          </a>
-          <div class="media-body ">
-            <strong>{{ item.user_display }}</strong>
-            <small class="text-muted">{{ item.date_created | date }}</small>
-            <MarkDown :value="item.body" />
+  <div v-loading="loading">
+    <IBox class="box">
+      <template #header>
+        <div class="clearfix ibox-title"><i class="fa fa-comments" /> {{ $t('Message') }}</div>
+      </template>
+      <template v-if="comments">
+        <div v-for="item in comments" :key="item.id" class="feed-activity-list">
+          <div class="feed-element">
+            <a class="pull-left" href="#">
+              <el-avatar :size="30" :src="imageUrl" class="header-avatar" />
+            </a>
+            <div class="media-body">
+              <strong>{{ item.user_display }}</strong>
+              <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
+              <MarkDown :value="item.body" />
+            </div>
           </div>
         </div>
-      </div>
-    </template>
-    <slot />
-    <el-form ref="comments" :model="form" label-width="45px" style="padding-top: 20px">
-      <el-form-item v-if="!isAuditRoute" :label="$tc('Reply')">
-        <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
-      </el-form-item>
-      <el-form-item style="float: right">
-        <template v-if="hasActionPerm && !isAuditRoute">
+      </template>
+      <slot />
+      <el-form ref="comments" :model="form" label-width="45px" style="padding-top: 20px">
+        <el-form-item v-if="!isAuditRoute" :label="$tc('Reply')">
+          <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
+        </el-form-item>
+        <el-form-item style="float: right">
+          <template v-if="hasActionPerm && !isAuditRoute">
+            <el-button
+              :disabled="isDisabled || object.status.value === 'closed'"
+              size="small"
+              type="primary"
+              @click="handleApprove"
+            >
+              <i class="fa fa-check" /> {{ $t('Accept') }}
+            </el-button>
+            <el-button
+              :disabled="isDisabled || object.status.value === 'closed'"
+              size="small"
+              type="warning"
+              @click="handleReject"
+            >
+              <i class="fa fa-ban" /> {{ $t('Reject') }}
+            </el-button>
+          </template>
           <el-button
+            v-if="isSelfTicket && !isAuditRoute"
             :disabled="isDisabled || object.status.value === 'closed'"
             size="small"
-            type="primary"
-            @click="handleApprove"
+            type="danger"
+            @click="handleClose"
           >
-            <i class="fa fa-check" /> {{ $t('Accept') }}
+            <i class="fa fa-times" /> {{ $t('CancelTicket') }}
           </el-button>
           <el-button
-            :disabled="isDisabled || object.status.value === 'closed'"
+            v-if="!isAuditRoute"
+            :disabled="object.status.value === 'closed'"
             size="small"
-            type="warning"
-            @click="handleReject"
+            type="info"
+            @click="handleComment"
           >
-            <i class="fa fa-ban" /> {{ $t('Reject') }}
+            <i class="fa fa-pencil" /> {{ $t('Reply') }}
           </el-button>
-        </template>
-        <el-button
-          v-if="isSelfTicket && !isAuditRoute"
-          :disabled="isDisabled || object.status.value === 'closed'"
-          size="small"
-          type="danger"
-          @click="handleClose"
-        >
-          <i class="fa fa-times" /> {{ $t('CancelTicket') }}
-        </el-button>
-        <el-button
-          v-if="!isAuditRoute"
-          :disabled="object.status.value === 'closed'"
-          size="small"
-          type="info"
-          @click="handleComment"
-        >
-          <i class="fa fa-pencil" /> {{ $t('Reply') }}
-        </el-button>
-      </el-form-item>
-    </el-form>
-  </IBox>
+        </el-form-item>
+      </el-form>
+    </IBox>
+  </div>
 </template>
 
 <script>
 import IBox from '@/components/Common/IBox'
-import { formatTime, getDateTimeStamp } from '@/utils/common/time'
-import { toSafeLocalDateStr } from '@/utils/common/time'
 import MarkDown from '@/components/Widgets/MarkDown'
+import { useDateTime } from '@/composables/useDateTime'
+import { getAssetUrl } from '@/utils/assets'
 
 export default {
   name: 'Comments',
@@ -96,7 +98,7 @@ export default {
       isDisabled: false,
       comments: '',
       type_api: '',
-      imageUrl: require('@/assets/img/avatar.png'),
+      imageUrl: getAssetUrl('img/avatar.png'),
       form: {
         comments: ''
       },
@@ -108,14 +110,19 @@ export default {
       return this.$route.name === 'AuditTicketList'
     },
     hasActionPerm() {
-      return this.object.process_map.filter(
-        item => item.approval_level === this.object.approval_step.value
-      )[0].assignees.indexOf(this.$store.state.users.profile.id) !== -1
+      return (
+        this.object.process_map
+          .filter((item) => item.approval_level === this.object.approval_step.value)[0]
+          .assignees.indexOf(this.$store.state.users.profile.id) !== -1
+      )
     },
     isSelfTicket() {
       const profile = this.$store.state.users.profile
       return this.object.applicant === `${profile.name}(${profile.username})`
     }
+  },
+  setup() {
+    return useDateTime()
   },
   mounted() {
     switch (this.object.type.value) {
@@ -137,57 +144,65 @@ export default {
     this.getComment()
   },
   methods: {
-    formatTime(dateStr) {
-      return formatTime(getDateTimeStamp(dateStr))
-    },
-    toSafeLocalDateStr(dataStr) {
-      return toSafeLocalDateStr(dataStr)
-    },
     getComment() {
       this.loading = true
       const url = `/api/v1/tickets/comments/?ticket_id=${this.object.id}`
-      this.$axios.get(url).then(res => {
-        this.comments = res
-      }).catch(err => {
-        this.$message.error(err)
-      }).finally(() => {
-        this.loading = false
-        this.form.comments = ''
-      })
+      this.$axios
+        .get(url)
+        .then((res) => {
+          this.comments = res
+        })
+        .catch((err) => {
+          this.$message.error(err)
+        })
+        .finally(() => {
+          this.loading = false
+          this.form.comments = ''
+        })
     },
     defaultApprove() {
-      this.createComment(function() {
-      })
+      this.createComment(function () {})
       const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/approve/`
-      this.$axios.put(url).then(res => {
-        this.reloadPage()
-      }).catch(err => {
-        this.$message.error(err)
-      }).finally(() => {
-        this.isDisabled = false
-      })
+      this.$axios
+        .put(url)
+        .then((res) => {
+          this.reloadPage()
+        })
+        .catch((err) => {
+          this.$message.error(err)
+        })
+        .finally(() => {
+          this.isDisabled = false
+        })
     },
     defaultReject() {
-      this.createComment(function() {
-      })
+      this.createComment(function () {})
       const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/reject/`
-      this.$axios.put(url).then(res => {
-        this.reloadPage()
-      }).catch(err => {
-        this.$message.error(err)
-      }).finally(() => {
-        this.isDisabled = false
-      })
+      this.$axios
+        .put(url)
+        .then((res) => {
+          this.reloadPage()
+        })
+        .catch((err) => {
+          this.$message.error(err)
+        })
+        .finally(() => {
+          this.isDisabled = false
+        })
     },
     defaultClose() {
       const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/close/`
-      this.$axios.put(url).then(res => {
-        this.reloadPage()
-      }).catch(err => {
-        this.$message.error(err)
-      }).finally(() => {
-        this.isDisabled = false
-      })
+      this.$axios
+        .put(url)
+        .then((res) => {
+          this.reloadPage()
+        })
+        .catch((err) => {
+          this.$message.error(err)
+        })
+        .finally(() => {
+          this.isDisabled = false
+        })
     },
     createComment(successCallback) {
       const commentText = this.form.comments
@@ -200,7 +215,7 @@ export default {
         body: commentText,
         ticket: ticketId
       }
-      this.$axios.post(commentUrl, body).then(res => {
+      this.$axios.post(commentUrl, body).then((res) => {
         if (successCallback) {
           successCallback()
         } else {
@@ -231,16 +246,7 @@ export default {
       }
 
       if (handler) {
-        const result = handler()
-        if (result === false) {
-          this.isDisabled = false
-          return
-        }
-        if (result && typeof result.finally === 'function') {
-          result.finally(() => {
-            this.isDisabled = false
-          })
-        }
+        handler()
       } else {
         this.$message.error('No handler for action')
       }
@@ -255,19 +261,16 @@ export default {
       this.handleAction('close')
     },
     handleComment() {
-      this.createComment(
-        this.getComment
-      )
+      this.createComment(this.getComment)
     },
     reloadPage() {
       window.location.reload()
     }
   }
-
 }
 </script>
 
-<style lang='less' scoped>
+<style lang="scss" scoped>
 .box {
   margin-bottom: 15px;
 }
@@ -275,6 +278,24 @@ export default {
 .feed-activity-list {
   //padding-top: 20px;
   line-height: 1.5;
+}
+
+// 底部通过/拒绝/撤销/回复按钮统一到全站 30px 规范(原 size="small" 偏矮),图标与文字留 4px 间距
+:deep(.el-form-item .el-button) {
+  height: 30px;
+  min-height: 30px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1;
+
+  .fa {
+    margin-right: 4px;
+  }
+
+  & + .el-button {
+    margin-left: 8px;
+  }
 }
 
 .feed-activity-list .feed-element {

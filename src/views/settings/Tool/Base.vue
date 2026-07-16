@@ -1,22 +1,22 @@
 <template>
   <IBox>
-    <el-form ref="testForm" :model="testData" :rules="rules" label-width="15%">
-      <div v-for="field in fields" :key="field.name">
+    <el-form ref="testForm" class="tool-form" :model="testData" :rules="rules" label-width="15%">
+      <div v-for="field in safeFields" :key="field.name">
         <div v-if="Array.isArray(field)">
           <el-form-item label-width="8%">
             <el-col v-for="item in field" :key="item.name" :span="getSpan(field)">
               <el-form-item :label="item.label" :prop="item.name" label-width="80px">
                 <template #label>
                   {{ item.label }}
-                  <el-tooltip v-if="item.tip" :content="item.tip" :open-delay="500" placement="top">
+                  <el-tooltip v-if="item.tip" :content="item.tip" :show-after="500" placement="top">
                     <i class="fa fa-question-circle-o" />
                   </el-tooltip>
                 </template>
                 <component
+                  v-bind="item.el"
                   :is="item.component ? item.component : 'el-input'"
                   v-model="testData[item.name]"
                   :value="testData[item.name]"
-                  v-bind="item.el"
                   @change="onChange(item.name, $event)"
                 />
               </el-form-item>
@@ -27,39 +27,34 @@
           <el-form-item :label="field.label" :prop="field.name">
             <template #label>
               {{ field.label }}
-              <el-tooltip v-if="field.tip" :content="field.tip" :open-delay="500" placement="top">
+              <el-tooltip v-if="field.tip" :content="field.tip" :show-after="500" placement="top">
                 <i class="fa fa-question-circle-o" />
               </el-tooltip>
             </template>
             <component
+              v-bind="field.el"
               :is="field.component ? field.component : 'el-input'"
               v-model="testData[field.name]"
               :value="testData[field.name]"
-              v-bind="field.el"
               @change="onChange(field.name, $event)"
             />
           </el-form-item>
         </div>
       </div>
       <el-form-item :label="$tc('Output')">
-        <Term ref="xterm" :xterm-config="xtermConfig" style="border: solid 1px #dddddd" />
+        <Term
+          ref="xterm"
+          class="tool-output"
+          :xterm-config="xtermConfig"
+          style="border: solid 1px #dddddd"
+        />
       </el-form-item>
-      <el-form-item>
-        <el-button
-          v-if="!isTesting"
-          size="mini"
-          type="primary"
-          @click="submitTest"
-        >
-          <i class="fa fa-play" style="margin-right: 4px;" />{{ $t('Test') }}
+      <el-form-item class="tool-actions">
+        <el-button v-if="!isTesting" size="small" type="primary" @click="submitTest">
+          <i class="fa fa-play" style="margin-right: 4px" />{{ $t('Test') }}
         </el-button>
-        <el-button
-          v-if="hasStop && isTesting"
-          size="mini"
-          type="danger"
-          @click="interruptTest"
-        >
-          <i class="fa fa-stop" style="margin-right: 4px;" />{{ $t('Stop') }}
+        <el-button v-if="hasStop && isTesting" size="small" type="danger" @click="interruptTest">
+          <i class="fa fa-stop" style="margin-right: 4px" />{{ $t('Stop') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -67,9 +62,10 @@
 </template>
 
 <script>
+import { markRaw, toRaw } from 'vue'
 import { IBox } from '@/components'
-import Term from '@/components/Widgets/Term'
 import { Select2, TagInput } from '@/components/Form/FormFields'
+import Term from '@/components/Widgets/Term'
 
 export default {
   name: 'Base',
@@ -92,8 +88,7 @@ export default {
     },
     rules: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     fields: {
       type: Array,
@@ -109,6 +104,19 @@ export default {
     }
   },
   computed: {
+    safeFields() {
+      function mark(fields) {
+        if (!Array.isArray(fields)) return fields
+        return fields.map((f) => {
+          if (Array.isArray(f)) return mark(f)
+          if (f && f.component && typeof f.component !== 'string') {
+            return { ...f, component: markRaw(toRaw(f.component)) }
+          }
+          return f
+        })
+      }
+      return mark(this.fields)
+    },
     xterm() {
       return this.$refs.xterm
     },
@@ -168,7 +176,37 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.filter-field ::v-deep .el-input__inner {
-  height: 28px;
+:deep(.tool-form) {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+:deep(.tool-form > .el-form-item),
+:deep(.tool-form > div > .el-form-item) {
+  // 由容器 gap 统一管理字段间距，避免被全局 el-form 规则覆盖或叠加。
+  margin-bottom: 0 !important;
+}
+
+:deep(.tool-form .el-form-item__label) {
+  height: 30px;
+  line-height: 30px;
+  display: inline-flex;
+  align-items: center;
+}
+
+:deep(.tool-form .el-form-item .el-form-item) {
+  margin-bottom: 0;
+}
+
+:deep(.tool-form > .tool-actions .el-form-item__content) {
+  // 小尺寸按钮默认按 30px 行高基线居中，会让可见边框比其它控件多出约 5px 间隙。
+  align-items: flex-start;
+  line-height: normal;
+}
+
+:deep(.tool-output) {
+  width: 100%;
+  min-width: 0;
 }
 </style>

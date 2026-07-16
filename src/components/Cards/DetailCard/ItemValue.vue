@@ -1,5 +1,6 @@
-<script type="text/jsx">
-import { toSafeLocalDateStr } from '@/utils/common/time'
+<script>
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
+import { h } from 'vue'
 
 export default {
   name: 'ItemValue',
@@ -30,13 +31,15 @@ export default {
       } else if (typeof this.value === 'object') {
         return this.value
       } else if (this.value instanceof Array) {
-        return this.value.map(item => {
-          if (typeof item === 'object') {
-            return item.label || item.title
-          } else {
-            return item
-          }
-        }).join(', ')
+        return this.value
+          .map((item) => {
+            if (typeof item === 'object') {
+              return item.label || item.title
+            } else {
+              return item
+            }
+          })
+          .join(', ')
       } else if (this.isDatetime(this.value)) {
         return toSafeLocalDateStr(this.value)
       } else {
@@ -66,40 +69,45 @@ export default {
       }
     }
   },
-  render(h) {
+  render() {
     let formatterData = ''
     if (typeof this.formatter === 'function') {
       const data = this.formatter(this.item, this.value)
       if (data instanceof Promise) {
-        data.then(res => {
+        data.then((res) => {
           formatterData = res
         })
       } else {
         formatterData = data
       }
-      return (
-        <span style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: '1.2' }}>{formatterData}</span>
+      return h(
+        'span',
+        { style: { whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: '1.2' } },
+        [formatterData]
       )
     }
     if (this.value instanceof Array) {
       const newArr = this.value || []
-      return (
-        <span>
-          {
-            newArr.map((item, index) => <div key={index}>{item.key}：{item.value} </div>)
-          }
-        </span>
+      return h(
+        'span',
+        newArr.map((item, index) => h('div', { key: index }, `${item.key}：${item.value} `))
       )
     }
-    return (
-      <span style='white-space: pre-wrap;' title={this.displayValue}>{this.displayValue}</span>
+    return h(
+      'span',
+      {
+        style: { whiteSpace: 'pre-wrap' },
+        title: this.displayValue
+      },
+      this.displayValue
     )
   }
 }
 </script>
 
 <style scoped>
+/* 详情值里的链接用统一链接色（各主题皆蓝），而非 --color-success（Deep black 下为绿、语义也不对）。 */
 a {
-  color: var(--color-success);
+  color: var(--color-link);
 }
 </style>

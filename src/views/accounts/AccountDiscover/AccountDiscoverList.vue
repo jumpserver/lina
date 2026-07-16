@@ -2,13 +2,13 @@
   <div>
     <RemoveAccount
       v-if="showDeleteAccountDialog"
+      v-model:visible="showDeleteAccountDialog"
       :accounts="gatherAccounts"
-      :visible.sync="showDeleteAccountDialog"
     />
     <DeleteDialog
       v-if="deleteDialog.visible"
+      v-model:visible="deleteDialog.visible"
       :account="deleteDialog.account"
-      :visible.sync="deleteDialog.visible"
       :closeable="false"
       @deleted="afterDeleteGatheredAccount"
     />
@@ -20,7 +20,10 @@
       :table-config="tableConfig"
       :tree-setting="treeSetting"
     />
-    <AccountDiscoverDialog :asset="discoveryDialog.asset" :visible.sync="discoveryDialog.visible" />
+    <AccountDiscoverDialog
+      v-model:visible="discoveryDialog.visible"
+      :asset="discoveryDialog.asset"
+    />
   </div>
 </template>
 
@@ -59,6 +62,7 @@ export default {
         showSearch: true,
         showAssets: true,
         notShowBuiltinTree: true,
+        selectSyncToRoute: false,
         url: '/api/v1/accounts/gathered-accounts/',
         nodeUrl: '/api/v1/assets/nodes/',
         // ?assets=0不显示资产. =1显示资产
@@ -80,13 +84,13 @@ export default {
           title: this.$t('DateLastWeek'),
           hasCount: true,
           filter: {
-            'days': '7'
+            days: '7'
           }
         },
         {
           title: this.$t('DateLastMonth'),
           filter: {
-            'days': '30'
+            days: '30'
           }
         },
         {
@@ -101,8 +105,7 @@ export default {
       headerActions: gatherAccountHeaderActions(this)
     }
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     afterDeleteGatheredAccount() {
       this.$refs.AssetTreeTable.reloadTable()

@@ -1,23 +1,26 @@
 <template>
   <GenericUpdateFormDialog
+    v-bind="$attrs"
     v-if="visible"
     :form-setting="formSetting"
     :selected-rows="selectedRows"
     :visible="visible"
-    v-on="$listeners"
+    @update="$emit('update', $event)"
+    @update:visible="$emit('update:visible', $event)"
   />
 </template>
 
 <script>
 import { GenericUpdateFormDialog } from '@/layout/components'
 import { accountFieldsMeta } from '@/components/Apps/AccountCreateUpdateForm/const'
-import { encryptPassword } from '@/utils/secure'
+import { encryptPassword } from '@/utils/session-encrypt'
 
 export default {
   name: 'AccountBulkUpdateDialog',
   components: {
     GenericUpdateFormDialog
   },
+  emits: ['update', 'update:visible'],
   props: {
     visible: {
       type: Boolean,
@@ -25,7 +28,7 @@ export default {
     },
     selectedRows: {
       type: Array,
-      default: () => ([])
+      default: () => []
     }
   },
   data() {
@@ -82,6 +85,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

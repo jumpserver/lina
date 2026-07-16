@@ -1,12 +1,11 @@
 <template>
-  <HomeCard :table-config="tableConfig" v-bind="cardConfig" />
+  <HomeCard v-bind="cardConfig" :table-config="tableConfig" />
 </template>
 
-<script>
-import HomeCard from './HomeCard.vue'
+<script lang="jsx">
 import { getPreference } from '@/api/settings'
 import { openNewWindow } from '@/utils/common/index'
-
+import HomeCard from './HomeCard.vue'
 export default {
   name: 'Announcement',
   components: {
@@ -21,30 +20,33 @@ export default {
       },
       tableConfig: {
         url: '/api/v1/terminal/my-sessions/?limit=5',
-        columns: [
-          'id', 'asset', 'account', 'remote_addr', 'protocol'
-        ],
+        columns: ['id', 'asset', 'account', 'remote_addr', 'protocol'],
         columnsMeta: {
           id: {
             prop: 'id',
             align: 'center',
             width: '50px',
-            formatter: function(row, column, cellValue, index) {
+            formatter: function (row, column, cellValue, index) {
               const label = index + 1
-              const route = { to: { name: 'SessionDetail', params: { id: row.id } } }
+              const to = {
+                name: 'SessionDetail',
+                params: {
+                  id: row.id
+                }
+              }
               if (vm.$hasPerm('terminal.view_session')) {
-                return <router-link {...{ attrs: route }} >{label}</router-link>
+                return <router-link to={to}>{label}</router-link>
               } else {
                 return label
               }
             }
           },
           asset: {
-            'min-width': 200,
+            minWidth: 200,
             label: this.$t('Asset')
           },
           account: {
-            'min-width': 100
+            minWidth: 100
           },
           command_amount: {
             align: 'center',
@@ -72,14 +74,18 @@ export default {
                 {
                   name: 'connect',
                   icon: 'fa-desktop',
-                  plain: true,
                   type: 'primary',
                   can: ({ row }) => row.is_active,
                   callback: ({ row }) => {
                     if (this.preference?.basic?.connect_default_open_method === 'new') {
-                      openNewWindow(`/luna/connect?login_to=${row.asset_id}&login_account=${row.account_id}`)
+                      openNewWindow(
+                        `/luna/connect?login_to=${row.asset_id}&login_account=${row.account_id}`
+                      )
                     } else {
-                      window.open(`/luna/?login_to=${row.asset_id}&login_account=${row.account_id}`, '_blank')
+                      window.open(
+                        `/luna/?login_to=${row.asset_id}&login_account=${row.account_id}`,
+                        '_blank'
+                      )
                     }
                   }
                 }
@@ -93,7 +99,7 @@ export default {
     }
   },
   mounted() {
-    getPreference().then(resp => {
+    getPreference().then((resp) => {
       this.preference = resp
     })
   }
@@ -101,4 +107,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// 纯图标操作仍会渲染一个空标题占位，向右微调图标以保持视觉居中
+:deep(.table-actions .connect .pre-icon) {
+  display: inline-block;
+  transform: translateX(2px);
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
-  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="user" v-bind="config" v-on="$listeners">
+  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu" v-model:object="user">
     <keep-alive>
-      <component :is="config.activeMenu" :object="user" @update:activeMenu="handleUpdate" />
+      <component :is="config.activeMenu" :object="user" @update:active-menu="handleUpdate" />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -10,12 +10,14 @@
 import { GenericDetailPage } from '@/layout/components'
 import Password from './Password/Password.vue'
 import SSHKeyList from './SSHKey/SSHKeyList.vue'
+import UKey from './UKey/UKey.vue'
 
 export default {
   components: {
     GenericDetailPage,
     Password,
-    SSHKeyList
+    SSHKeyList,
+    UKey: UKey
   },
   data() {
     return {
@@ -60,6 +62,11 @@ export default {
           title: this.$t('LoginSSHKeySetting'),
           name: 'SSHKeyList',
           disabled: !this.$store.state.users.profile.can_public_key_auth
+        },
+        {
+          title: this.$t('LoginUKeySetting'),
+          name: 'UKey',
+          hidden: !this.$store.state.users.profile.can_ukey_auth
         }
       ]
     },
@@ -70,5 +77,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

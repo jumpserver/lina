@@ -46,6 +46,15 @@ export const STORAGE_TYPE_META_MAP = {
   [SFTP]: {
     name: SFTP,
     title: 'SFTP',
-    meta: ['SFTP_HOST', 'SFTP_PORT', 'SFTP_USERNAME', 'STP_SECRET_TYPE', 'SFTP_PASSWORD', 'STP_PRIVATE_KEY', 'STP_PASSPHRASE', 'SFTP_ROOT_PATH']
+    meta: [
+      'SFTP_HOST',
+      'SFTP_PORT',
+      'SFTP_USERNAME',
+      'STP_SECRET_TYPE',
+      'SFTP_PASSWORD',
+      'STP_PRIVATE_KEY',
+      'STP_PASSPHRASE',
+      'SFTP_ROOT_PATH'
+    ]
   }
 }

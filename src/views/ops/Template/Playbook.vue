@@ -9,7 +9,7 @@
     />
     <UploadDialog
       v-if="uploadDialogVisible"
-      :visible.sync="uploadDialogVisible"
+      v-model:visible="uploadDialogVisible"
       @completed="refreshTable"
     />
   </div>
@@ -56,7 +56,10 @@ export default {
               updateRoute: 'PlaybookUpdate',
               hasDelete: true,
               canDelete: ({ row }) => {
-                return this.$hasPerm('ops.delete_playbook') && row.creator === currentUserID || isSuperuser
+                return (
+                  (this.$hasPerm('ops.delete_playbook') && row.creator === currentUserID) ||
+                  isSuperuser
+                )
               },
               hasClone: true,
               cloneRoute: 'PlaybookCreate'
@@ -108,6 +111,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

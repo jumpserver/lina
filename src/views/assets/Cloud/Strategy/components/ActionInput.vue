@@ -8,19 +8,20 @@
   />
 </template>
 
-<script>
-import { AttrInput, Select2 } from '@/components/Form/FormFields'
+<script lang="jsx">
 import { Required } from '@/components/Form/DataForm/rules'
+import { AttrInput, Select2 } from '@/components/Form/FormFields'
 import ProtocolSelector from '@/components/Form/FormFields/ProtocolSelector'
 import { resourceTypeOptions, tableFormatter } from './const'
-
 export default {
   name: 'ActionInput',
-  components: { AttrInput },
+  components: {
+    AttrInput
+  },
   props: {
     value: {
       type: Array,
-      default: () => ([])
+      default: () => []
     }
   },
   data() {
@@ -29,18 +30,25 @@ export default {
       globalResource: {},
       globalProtocols: {},
       nameOptions: [
-        { label: this.$t('InstanceName'), value: 'full_name' },
-        { label: this.$t('InstanceNamePartIp'), value: 'part_name' }
+        {
+          label: this.$t('InstanceName'),
+          value: 'full_name'
+        },
+        {
+          label: this.$t('InstanceNamePartIp'),
+          value: 'part_name'
+        }
       ],
       formConfig: {
-        initial: { attr: '', value: '' },
+        initial: {
+          attr: '',
+          value: ''
+        },
         inline: true,
         hasSaveContinue: false,
-        submitBtnSize: 'mini',
+        submitBtnSize: 'small',
         submitBtnText: this.$t('Add'),
         hasReset: false,
-        onSubmit: () => {
-        },
         submitMethod: () => 'post',
         getUrl: () => '',
         cleanFormValue(data) {
@@ -63,7 +71,9 @@ export default {
             },
             on: {
               change: ([val], updateForm) => {
-                updateForm({ value: '' })
+                updateForm({
+                  value: ''
+                })
                 let url = ''
                 let options = []
                 switch (val) {
@@ -134,7 +144,10 @@ export default {
                       display = item?.name
                       this.globalResource[item.id] = display
                   }
-                  return { label: display, value: item.id }
+                  return {
+                    label: display,
+                    value: item.id
+                  }
                 }
               },
               multiple: false
@@ -164,13 +177,23 @@ export default {
       },
       tableConfig: {
         columns: [
-          { prop: 'attr', label: this.$t('ResourceType'), formatter: tableFormatter('resource_type') },
           {
-            prop: 'value', label: this.$t('Resource'), formatter: tableFormatter('resource', () => {
+            prop: 'attr',
+            label: this.$t('ResourceType'),
+            formatter: tableFormatter('resource_type')
+          },
+          {
+            prop: 'value',
+            label: this.$t('Resource'),
+            formatter: tableFormatter('resource', () => {
               return this.globalResource
             })
           },
-          { prop: 'protocols', label: this.$t('Other'), formatter: tableFormatter('protocols') },
+          {
+            prop: 'protocols',
+            label: this.$t('Other'),
+            formatter: tableFormatter('protocols')
+          },
           {
             prop: 'action',
             label: this.$t('Action'),
@@ -178,12 +201,12 @@ export default {
             width: '100px',
             formatter: (row, col, cellValue, index) => {
               return (
-                <div className='input-button'>
+                <div class="input-button">
                   <el-button
-                    icon='el-icon-minus'
-                    size='mini'
-                    style={{ 'flexShrink': 0 }}
-                    type='danger'
+                    icon="Minus"
+                    size="small"
+                    style={{ flexShrink: 0 }}
+                    type="danger"
                     onClick={this.handleDelete(index)}
                   />
                 </div>
@@ -211,10 +234,11 @@ export default {
     beforeSubmit(data) {
       let status = true
       const labelMap = {
-        platform: this.$tc('Platform'), zone: this.$tc('Zone'),
+        platform: this.$tc('Platform'),
+        zone: this.$tc('Zone'),
         name_strategy: this.$tc('Strategy')
       }
-      this.tableConfig.totalData.map(item => {
+      this.tableConfig.totalData.map((item) => {
         const iValue = item.value?.id || item.value
         const iAttr = item.attr?.value || item.attr
         if (iValue === data.value) {
@@ -241,15 +265,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .el-form-item:nth-child(-n+3) {
-  width: 43.5%;
-}
-
-::v-deep .el-form-item:last-child {
-  width: 6%;
-}
-
 .action-input {
+  :deep(.form-fields.el-form) {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) auto !important;
+    column-gap: 12px;
+    row-gap: 8px;
+    align-items: start;
+    padding: 0 !important;
+  }
+
+  :deep(.form-fields > .el-form-item) {
+    min-width: 0;
+    margin: 0 !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .action-input {
+    :deep(.form-fields.el-form) {
+      grid-template-columns: minmax(0, 1fr) !important;
+    }
+  }
 }
 </style>
-

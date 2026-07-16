@@ -1,31 +1,25 @@
 <template>
   <div>
     <div>
-      <el-button
-        :disabled="isDisabled"
-        size="mini"
-        type="primary"
-        @click="onOpenDialog"
-      >
+      <el-button :disabled="isDisabled" size="small" type="primary" @click="onOpenDialog">
         {{ $tc('Setting') }}
       </el-button>
     </div>
     <Dialog
+      v-bind="$attrs"
       v-if="visible"
+      v-model:visible="visible"
       :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
       :title="title"
-      :visible.sync="visible"
-      v-bind="$attrs"
-      width="60%"
-      v-on="$listeners"
+      width="860px"
     >
       <AutoDataForm
+        v-bind="config"
         ref="autoDataForm"
         :form="form"
         class="data-form"
-        v-bind="config"
         @submit="onSubmit"
       />
     </Dialog>
@@ -33,8 +27,14 @@
 </template>
 
 <script>
+import { getActionMeta } from '@/api/common'
 import Dialog from '../../Dialog'
 import AutoDataForm from '../../Form/AutoDataForm'
+import _ from 'lodash'
+
+function normalizeParams(value) {
+  return value && typeof value === 'object' && !Array.isArray(value) ? value : {}
+}
 
 export default {
   componentName: 'AutomationParams',
@@ -44,13 +44,14 @@ export default {
   },
   props: {
     value: {
-      type: Object,
-      default: () => ({})
+      type: [Object, Boolean],
+      default: () => ({}),
+      validator: (value) => value !== true
     },
     title: {
       type: String,
-      default: function() {
-        return this.$t('PushParams')
+      default: function () {
+        return 'PushParams'
       }
     },
     assets: {
@@ -80,7 +81,7 @@ export default {
       remoteMeta: {},
       visible: false,
       isDisabled: true,
-      form: this.value,
+      form: normalizeParams(this.value),
       config: {
         url: this.url,
         hasSaveContinue: false,
@@ -98,6 +99,12 @@ export default {
     }
   },
   watch: {
+    value: {
+      handler(value) {
+        this.form = normalizeParams(value)
+      },
+      deep: true
+    },
     nodes: {
       handler() {
         this.onFieldChangeHandler()
@@ -111,37 +118,37 @@ export default {
       deep: true
     },
     platforms: {
-      handler(newVal) {
+      handler() {
         this.onFieldChangeHandler()
       },
-      deep: true,
-      immediate: true
+      deep: true
     }
   },
   async mounted() {
     await this.getUrlMeta()
+    await this.handleFieldChange()
   },
   methods: {
     async getUrlMeta() {
       const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
-      this.remoteMeta = data.actions[this.config.method.toUpperCase()] || {}
+      this.remoteMeta = getActionMeta(data, this.config.method)
     },
     async getFilterPlatforms() {
-      return await this.$axios.post(
-        '/api/v1/assets/platforms/filter-nodes-assets/',
-        {
-          'node_ids': this.nodes,
-          'asset_ids': this.assets,
-          'platform_ids': this.platforms.map(i => i.id || i.pk || i)
-        }
-      )
+      return await this.$axios.post('/api/v1/assets/platforms/filter-nodes-assets/', {
+        node_ids: this.nodes,
+        asset_ids: this.assets,
+        platform_ids: this.platforms.map((i) => i.id || i.pk || i)
+      })
     },
     async handleFieldChange() {
       const platforms = await this.getFilterPlatforms()
-      let pushAccountMethods = platforms.map(i => i.automation[this.method])
+      let pushAccountMethods = platforms.map((i) => i.automation[this.method])
       pushAccountMethods = _.uniq(pushAccountMethods)
       // 检测是否有可设置的推送方式
-      const hasCanSettingPushMethods = _.intersection(pushAccountMethods, Object.keys(this.remoteMeta))
+      const hasCanSettingPushMethods = _.intersection(
+        pushAccountMethods,
+        Object.keys(this.remoteMeta)
+      )
       this.setFormConfig(hasCanSettingPushMethods)
       this.isDisabled = hasCanSettingPushMethods.length <= 0
     },
@@ -152,14 +159,14 @@ export default {
       this.config.fields = []
       // Todo: 未来改成后端处理，生成 serializer, 这里就不用判断类型了
       const typeMapper = {
-        'string': 'input',
-        'boolean': 'switch'
+        string: 'input',
+        boolean: 'switch'
       }
 
       for (const method of methods) {
         const filterField = this.remoteMeta[method] || {}
         // 修改资产、节点时不点击设置按钮也需要获取form表单值暴露出去
-        if (this.form.hasOwnProperty(method)) {
+        if (Object.prototype.hasOwnProperty.call(this.form, method)) {
           newForm[method] = this.form[method]
         }
         fields.push([filterField.label, [method]])
@@ -199,5 +206,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

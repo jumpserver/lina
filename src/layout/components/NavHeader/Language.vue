@@ -1,17 +1,19 @@
 <template>
-  <el-dropdown>
+  <el-dropdown popper-class="nav-header-dropdown">
     <span class="el-dropdown-link header-lang">
-      {{ currentLang.title }}<i class="el-icon-arrow-down el-icon--right" />
+      {{ currentLang.title }}<el-icon class="el-icon--right"><ArrowDown /></el-icon>
     </span>
-    <el-dropdown-menu slot="dropdown">
-      <el-dropdown-item
-        v-for="item of supportLanguages"
-        :key="item.code"
-        @click.native="changeLangTo(item)"
-      >
-        {{ item.title }}
-      </el-dropdown-item>
-    </el-dropdown-menu>
+    <template #dropdown>
+      <el-dropdown-menu>
+        <el-dropdown-item
+          v-for="item of supportLanguages"
+          :key="item.code"
+          @click="changeLangTo(item)"
+        >
+          {{ item.title }}
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </template>
   </el-dropdown>
 </template>
 
@@ -45,7 +47,7 @@ export default {
     }
   },
   mounted() {
-    this.supportLanguages = store.getters.publicSettings['LANGUAGES'].map(item => {
+    this.supportLanguages = store.getters.publicSettings['LANGUAGES'].map((item) => {
       return {
         title: item.name,
         code: item.code,
@@ -61,7 +63,7 @@ export default {
       document.documentElement.lang = lang
     },
     changeLangTo(item) {
-      this.$axios.get(`/core/i18n/${item.cookieCode}/`).then(() => {
+      this.$axios.get(`/core/i18n/${item.cookieCode}/`).finally(() => {
         window.location.reload()
       })
     }
@@ -70,7 +72,15 @@ export default {
 </script>
 
 <style scoped>
-  .header-lang {
-    color: white;
-  }
+.header-lang {
+  color: white;
+  cursor: pointer;
+  /* el-dropdown 触发器聚焦(点击)时浏览器/EP 会描一圈 outline，顶栏深色背景上很突兀，去掉。 */
+  outline: none;
+}
+
+.header-lang:focus,
+.header-lang:focus-visible {
+  outline: none;
+}
 </style>

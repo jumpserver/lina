@@ -32,7 +32,7 @@ export default {
         },
         columnsMeta: {
           name: {
-            formatter: function(row) {
+            formatter: function (row) {
               return row.name || '-'
             }
           },

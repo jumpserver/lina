@@ -1,7 +1,10 @@
 import i18n from '@/i18n/i18n'
 import { message } from '@/utils/vue/message'
+import { getBasePath } from '@/utils/storage'
+import { toSentenceCase } from './string'
+import _ from 'lodash'
 
-const _ = require('lodash')
+export { toSentenceCase }
 
 export function getApiPath(that, objectId) {
   let pagePath = that.$route.path
@@ -100,7 +103,7 @@ export function setUrlParam(url, name, value) {
   } else {
     const oriParam = urlArray[1].split('&')
     const oriParamMap = {}
-    oriParam.forEach(function(value, index) {
+    oriParam.forEach(function (value, index) {
       const v = value.split('=')
       oriParamMap[v[0]] = v[1]
     })
@@ -115,7 +118,7 @@ export function setUrlParam(url, name, value) {
   return url
 }
 
-export function setRouterQuery(vm, url = '') {
+export function setRouterQuery(vm, url = '', { browserOnly = false } = {}) {
   url = url || vm.tableConfig.url
   const params = url.split('?')[1]
   const query = Object.fromEntries(new URLSearchParams(params))
@@ -123,9 +126,34 @@ export function setRouterQuery(vm, url = '') {
     ...vm.$route.query,
     ...query
   }
+  if (browserOnly) {
+    const { href } = vm.$router.resolve({
+      path: vm.$route.path,
+      query: newQuery,
+      hash: vm.$route.hash
+    })
+    window.history.replaceState(window.history.state, '', href)
+    return
+  }
   vm.$nextTick(() => {
     vm.$router.replace({ query: newQuery })
   })
+}
+
+export function getBrowserQueryParam(name) {
+  const searchValue = new URLSearchParams(window.location.search).get(name)
+  if (searchValue) {
+    return searchValue
+  }
+
+  const hash = window.location.hash || ''
+  const hashQueryIndex = hash.indexOf('?')
+  if (hashQueryIndex === -1) {
+    return ''
+  }
+
+  const hashQuery = hash.slice(hashQueryIndex + 1).split('#')[0]
+  return new URLSearchParams(hashQuery).get(name) || ''
 }
 
 export function getErrorResponseMsg(error) {
@@ -145,20 +173,30 @@ export function getErrorResponseMsg(error) {
       .map((item, i) => {
         return getErrorResponseMsg(item)
       })
-      .filter(i => i)
+      .filter((i) => i)
       .join('; ')
   } else if (typeof data === 'string') {
     return data
   } else if (_.isPlainObject(data)) {
     const msg = Object.values(data)
-      .map(item => getErrorResponseMsg(item))
-      .filter(i => i)
+      .map((item) => getErrorResponseMsg(item))
+      .filter((i) => i)
     // 错误信息不要重复提示
     return [...new Set(msg)].join('; ')
   } else {
     msg = error.toString()
   }
   return msg
+}
+
+// 将一组错误信息拼接为单条字符串，过滤掉空值并去重。
+export function joinErrorMessages(messages, separator = ' ') {
+  const list = Array.isArray(messages) ? messages : [messages]
+  const normalized = list
+    .map((item) => (typeof item === 'string' ? item : String(item ?? '')))
+    .map((item) => item.trim())
+    .filter((item) => item)
+  return [...new Set(normalized)].join(separator)
 }
 
 function customizer(objValue, srcValue) {
@@ -176,6 +214,30 @@ export function newURL(url) {
     obj = new URL(url, location.origin)
   }
   return obj
+}
+
+export function addBasePath(path = '') {
+  if (!path || /^https?:\/\//i.test(path)) {
+    return path
+  }
+
+  const basePath = getBasePath()
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`
+
+  if (!basePath) {
+    return normalizedPath
+  }
+
+  if (
+    normalizedPath === basePath ||
+    normalizedPath.startsWith(basePath + '/') ||
+    normalizedPath.startsWith(basePath + '?') ||
+    normalizedPath.startsWith(basePath + '#')
+  ) {
+    return normalizedPath
+  }
+
+  return `${basePath}${normalizedPath}`
 }
 
 export function getUpdateObjURL(url, objId) {
@@ -206,7 +268,7 @@ export function truncateEnd(s, l) {
 
 if (typeof String.prototype.replaceAll === 'undefined') {
   // eslint-disable-next-line no-extend-native
-  String.prototype.replaceAll = function(match, replace) {
+  String.prototype.replaceAll = function (match, replace) {
     return this.replace(new RegExp(match, 'g'), () => replace)
   }
 }
@@ -222,7 +284,7 @@ export function groupedDropdownToCascader(group) {
   return {
     value: firstType.category,
     label: firstType.group,
-    children: group.map(item => {
+    children: group.map((item) => {
       return {
         value: item.name,
         label: item.title
@@ -232,8 +294,8 @@ export function groupedDropdownToCascader(group) {
 }
 
 export function openWindow(url, name = '', iWidth = 900, iHeight = 600) {
-  var iTop = (window.screen.height - 30 - iHeight) / 2
-  var iLeft = (window.screen.width - 10 - iWidth) / 2
+  const iTop = (window.screen.height - 30 - iHeight) / 2
+  const iLeft = (window.screen.width - 10 - iWidth) / 2
   window.open(
     url,
     name,
@@ -260,8 +322,8 @@ export function download(downloadUrl, filename) {
 
   if (filename) {
     fetch(downloadUrl)
-      .then(response => response.blob())
-      .then(blob => {
+      .then((response) => response.blob())
+      .then((blob) => {
         const url = URL.createObjectURL(blob)
         const a = iframe.contentWindow.document.createElement('a')
         a.href = url
@@ -293,7 +355,7 @@ export function diffObject(object, base) {
   })
 }
 
-export const copy = _.throttle(function(value) {
+export const copy = _.throttle(function (value) {
   const inputDom = document.createElement('input')
   inputDom.id = 'createInputDom'
   inputDom.value = value
@@ -313,7 +375,7 @@ export function getQueryFromPath(path) {
   return Object.fromEntries(url.searchParams)
 }
 
-export const pageScroll = _.throttle(id => {
+export const pageScroll = _.throttle((id) => {
   const dom = document.getElementById(id)
   if (dom) {
     dom.scrollTop = dom?.scrollHeight
@@ -335,7 +397,7 @@ export function toTitleCase(string) {
   return string
     .trim()
     .split(' ')
-    .map(item => {
+    .map((item) => {
       if (notUppercase.includes(item.toLowerCase())) {
         return item
       }
@@ -344,42 +406,14 @@ export function toTitleCase(string) {
     .join(' ')
 }
 
-export function toSentenceCase(string) {
-  if (!string) return string
-  if (string.indexOf('/') > 0) return string
-  const s = string
-    .trim()
-    .split(' ')
-    .map((item, index) => {
-      if (item.length === 0) return ''
-      if (item.length === 1) return item.toLowerCase()
-
-      // 如果首字母大写，且第二个字母也大写，不处理
-      if (item[0] === item[0].toUpperCase() && item[1] === item[1].toUpperCase()) {
-        return item
-      }
-
-      if (index === 0) {
-        return item[0].toUpperCase() + item.slice(1)
-      }
-      // 仅处理首字母大写，别的是小写的情况
-      if (item[0] !== item[0].toLowerCase() && item.slice(1) === item.slice(1).toLowerCase()) {
-        return item[0].toLowerCase() + item.slice(1)
-      }
-      return item
-    })
-    .join(' ')
-  return s[0].toUpperCase() + s.slice(1)
-}
-
 export function toLowerCaseExcludeAbbr(s) {
   if (!s) return ''
 
   return s
     .split(' ')
-    .map(word => {
+    .map((word) => {
       // 如果单词包含超过 2 个大写字母，则不转换
-      const uppercaseCount = word.split('').filter(char => {
+      const uppercaseCount = word.split('').filter((char) => {
         return char === char.toUpperCase() && char !== char.toLowerCase()
       }).length
       if (uppercaseCount > 2) {
@@ -414,20 +448,9 @@ export function openNewWindow(url) {
   window.open(url, '_blank', params)
 }
 
-export function getDrawerWidth() {
-  const drawerWidth = localStorage.getItem('drawerWidth')
-  if (drawerWidth && drawerWidth > 100 && drawerWidth < 2000) {
-    return drawerWidth + 'px'
-  }
-  const width = window.innerWidth
-  if (width >= 1500) return '1080px'
-  return '90%'
-}
-
 export function getShowCurrentAssetValue(cookie, defaultValue = '0') {
-  const stored = typeof window !== 'undefined'
-    ? window.localStorage.getItem('show_current_asset')
-    : null
+  const stored =
+    typeof window !== 'undefined' ? window.localStorage.getItem('show_current_asset') : null
   if (stored === '0' || stored === '1') {
     return stored
   }
@@ -529,4 +552,14 @@ export function randomString(length, includeSymbols = false) {
     .split('')
     .sort(() => 0.5 - Math.random())
     .join('')
+}
+
+export function createWsUrl(path) {
+  if (/^wss?:\/\//i.test(path)) {
+    return path
+  }
+
+  const scheme = location.protocol === 'https:' ? 'wss' : 'ws'
+  const port = location.port ? ':' + location.port : ''
+  return scheme + '://' + location.hostname + port + addBasePath(path)
 }

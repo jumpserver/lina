@@ -6,11 +6,16 @@
           v-if="item.has"
           :key="index"
           :content="item.tooltip"
-          :open-delay="500"
+          :show-after="500"
           effect="dark"
           placement="top"
         >
-          <i :class="[item.class, item.icon]" class="fa" @click="item.action()" />
+          <i
+            :class="[item.class, item.icon]"
+            class="fa"
+            @mousedown.prevent
+            @click="item.action()"
+          />
         </el-tooltip>
       </template>
     </span>
@@ -18,7 +23,7 @@
       v-if="!isEdit"
       :content="currentValue"
       :disabled="!isShow"
-      :open-delay="500"
+      :show-after="500"
       placement="top"
     >
       <pre class="text" style="cursor: pointer">{{ currentValue }}</pre>
@@ -73,19 +78,19 @@ export default {
     ...mapGetters({
       publicSettings: 'publicSettings'
     }),
-    hasShow: function() {
+    hasShow: function () {
       return this.formatterArgs.hasShow
     },
-    hasDownload: function() {
+    hasDownload: function () {
       return this.formatterArgs.hasDownload
     },
-    hasCopy: function() {
+    hasCopy: function () {
       return this.formatterArgs.hasCopy
     },
-    hasEdit: function() {
+    hasEdit: function () {
       return this.formatterArgs.hasEdit
     },
-    name: function() {
+    name: function () {
       return this.formatterArgs.name
     },
     iActions() {
@@ -130,7 +135,7 @@ export default {
   },
   watch: {
     cellValue: {
-      handler: function(val) {
+      handler: function (val) {
         this.realValue = val
       },
       immediate: true
@@ -144,7 +149,7 @@ export default {
   },
   methods: {
     async getAccountSecret() {
-      if (!this.publicSettings.SECURITY_ACCOUNT_SECRET_READ) {
+      if (this.publicSettings.SECURITY_DISABLE_VIEW_SECRET) {
         this.$message.warning(this.$tc('AccountSecretReadDisabled'))
         return
       }
@@ -170,17 +175,29 @@ export default {
       downloadText(this.realValue, this.name + '.txt')
     },
     async onEdit() {
-      await this.getAccountSecret()
-      this.isEdit = !this.isEdit
+      // 编辑态下点击(对号)即确认退出；非编辑态点击(铅笔)进入编辑。
+      // 不再用 this.isEdit = !this.isEdit,避免 action 图标的 click 与 input blur
+      // 竞态导致的重复取反(点对号又被翻回编辑态)。
       if (this.isEdit) {
-        this.$nextTick(() => {
-          this.$refs.editInput.focus()
-        })
+        this.confirmEdit()
+        return
       }
+      await this.getAccountSecret()
+      this.isEdit = true
+      this.$nextTick(() => {
+        this.$refs.editInput?.focus()
+      })
     },
-    onEditBlur() {
+    confirmEdit() {
       this.isEdit = false
       this.$emit('input', this.realValue)
+    },
+    onEditBlur() {
+      // action 图标已 @mousedown.prevent,点它们不会触发 blur;
+      // 这里只处理点击输入框外部的失焦(同样视为确认)。
+      if (this.isEdit) {
+        this.confirmEdit()
+      }
     }
   }
 }
@@ -224,7 +241,7 @@ export default {
   }
 }
 
-.edit-input ::v-deep input {
+.edit-input :deep(input) {
   border-left: none;
   border-right: none;
   border-top: none;

@@ -1,41 +1,56 @@
 <template>
   <Dialog
+    v-bind="$attrs"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('SyncSetting')"
+    :visible="visible"
     top="10%"
-    v-bind="$attrs"
     width="50%"
-    v-on="$listeners"
+    @update:visible="onVisibleChange"
   >
     <GenericCreateUpdateForm
-      :has-detail-in-msg="false"
       v-bind="settings"
-      @submitSuccess="onSuccess"
+      :has-detail-in-msg="false"
+      @submit-success="onSuccess"
     />
   </Dialog>
 </template>
 
 <script>
-import { GenericCreateUpdateForm } from '@/layout/components'
 import { Dialog } from '@/components'
-import Select2 from '@/components/Form/FormFields/Select2.vue'
 import { Required } from '@/components/Form/DataForm/rules'
+import Select2 from '@/components/Form/FormFields/Select2.vue'
 import { crontab, interval, is_periodic } from '@/components/const'
+import { GenericCreateUpdateForm } from '@/layout/components'
 
 export default {
   name: 'SyncSettingDialog',
+  inheritAttrs: false,
   components: {
     GenericCreateUpdateForm,
     Dialog
   },
+  props: {
+    visible: {
+      type: Boolean,
+      default: false
+    }
+  },
+  emits: ['update:visible'],
   data() {
     return {
       settings: {
         visible: false,
         url: '/api/v1/settings/setting/?category=ldap',
-        fields: ['AUTH_LDAP_SYNC_ORG_IDS', 'AUTH_LDAP_SYNC_IS_PERIODIC', 'AUTH_LDAP_SYNC_CRONTAB', 'AUTH_LDAP_SYNC_INTERVAL', 'AUTH_LDAP_SYNC_RECEIVERS'],
+        fields: [
+          'AUTH_LDAP_SYNC_ORG_IDS',
+          'AUTH_LDAP_SYNC_IS_PERIODIC',
+          'AUTH_LDAP_SYNC_CRONTAB',
+          'AUTH_LDAP_SYNC_INTERVAL',
+          'AUTH_LDAP_SYNC_RECEIVERS'
+        ],
         fieldsMeta: {
           AUTH_LDAP_SYNC_ORG_IDS: {
             component: Select2,
@@ -72,6 +87,10 @@ export default {
           }
         },
         submitMethod: () => 'patch',
+        onPerformSuccess(res, method) {
+          this.$emit('submitSuccess', res)
+          this.emitPerformSuccessMsg(method, res)
+        },
         cleanFormValue(value) {
           if (value['AUTH_LDAP_SYNC_INTERVAL'] === '') {
             value['AUTH_LDAP_SYNC_INTERVAL'] = null
@@ -83,12 +102,13 @@ export default {
   },
   methods: {
     onSuccess() {
-      this.$emit('update:visible', false)
+      this.onVisibleChange(false)
+    },
+    onVisibleChange(visible) {
+      this.$emit('update:visible', visible)
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

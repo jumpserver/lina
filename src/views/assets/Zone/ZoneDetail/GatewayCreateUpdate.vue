@@ -10,14 +10,22 @@ export default {
   components: {
     BaseAssetCreateUpdate
   },
+  props: {
+    zone: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data() {
+    const getZoneId = () => this.zone.id || this.$route.query.zone
+
     return {
       url: '/api/v1/assets/gateways/',
       updateInitial: async (initial) => {
         const url = `/api/v1/assets/platforms/?name__startswith=Gateway`
         const platform = await this.$axios.get(url)
         initial.platform = parseInt(platform[0].id)
-        initial.zone = this.$route.query.zone
+        initial.zone = getZoneId()
         return initial
       },
       addFieldsMeta: {
@@ -40,7 +48,7 @@ export default {
       createSuccessNextRoute: {
         name: 'ZoneDetail',
         params: {
-          id: this.$route.query.zone
+          id: getZoneId()
         },
         query: {
           tab: 'GatewayList'
@@ -49,7 +57,7 @@ export default {
       updateSuccessNextRoute: {
         name: 'ZoneDetail',
         params: {
-          id: this.$route.query.zone
+          id: getZoneId()
         },
         query: {
           tab: 'GatewayList'

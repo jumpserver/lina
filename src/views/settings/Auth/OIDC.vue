@@ -1,9 +1,5 @@
 <template>
-  <BaseAuth
-    :config="settings"
-    enable-field="AUTH_OPENID"
-    v-on="$listeners"
-  />
+  <BaseAuth :config="settings" enable-field="AUTH_OPENID" />
 </template>
 
 <script>
@@ -24,27 +20,44 @@ export default {
         url: '/api/v1/settings/setting/?category=oidc',
         encryptedFields: ['AUTH_OPENID_CLIENT_SECRET'],
         fields: [
-          [this.$t('Basic'), [
-            'AUTH_OPENID', 'BASE_SITE_URL', 'AUTH_OPENID_CLIENT_ID',
-            'AUTH_OPENID_CLIENT_SECRET', 'AUTH_OPENID_CLIENT_AUTH_METHOD'
-          ]],
-          [this.$t('Server'), [
-            'AUTH_OPENID_KEYCLOAK', 'AUTH_OPENID_SERVER_URL', 'AUTH_OPENID_REALM_NAME',
-            'AUTH_OPENID_PROVIDER_ENDPOINT', 'AUTH_OPENID_PROVIDER_AUTHORIZATION_ENDPOINT',
-            'AUTH_OPENID_PROVIDER_TOKEN_ENDPOINT', 'AUTH_OPENID_PROVIDER_JWKS_ENDPOINT',
-            'AUTH_OPENID_PROVIDER_USERINFO_ENDPOINT', 'AUTH_OPENID_PROVIDER_END_SESSION_ENDPOINT',
-            'AUTH_OPENID_PROVIDER_SIGNATURE_ALG', 'AUTH_OPENID_PROVIDER_SIGNATURE_KEY',
-            'AUTH_OPENID_PKCE', 'AUTH_OPENID_CODE_CHALLENGE_METHOD',
-            'AUTH_OPENID_SCOPES', 'AUTH_OPENID_ID_TOKEN_MAX_AGE', 'AUTH_OPENID_ID_TOKEN_INCLUDE_CLAIMS',
-            'AUTH_OPENID_USE_STATE', 'AUTH_OPENID_USE_NONCE', 'AUTH_OPENID_ALWAYS_UPDATE_USER',
-            'AUTH_OPENID_IGNORE_SSL_VERIFICATION', 'AUTH_OPENID_SHARE_SESSION'
-          ]],
-          [this.$t('Search'), [
-            'AUTH_OPENID_USER_ATTR_MAP'
-          ]],
-          [this.$t('Other'), [
-            'OPENID_ORG_IDS'
-          ]]
+          [
+            this.$t('Basic'),
+            [
+              'AUTH_OPENID',
+              'BASE_SITE_URL',
+              'AUTH_OPENID_CLIENT_ID',
+              'AUTH_OPENID_CLIENT_SECRET',
+              'AUTH_OPENID_CLIENT_AUTH_METHOD'
+            ]
+          ],
+          [
+            this.$t('Server'),
+            [
+              'AUTH_OPENID_KEYCLOAK',
+              'AUTH_OPENID_SERVER_URL',
+              'AUTH_OPENID_REALM_NAME',
+              'AUTH_OPENID_PROVIDER_ENDPOINT',
+              'AUTH_OPENID_PROVIDER_AUTHORIZATION_ENDPOINT',
+              'AUTH_OPENID_PROVIDER_TOKEN_ENDPOINT',
+              'AUTH_OPENID_PROVIDER_JWKS_ENDPOINT',
+              'AUTH_OPENID_PROVIDER_USERINFO_ENDPOINT',
+              'AUTH_OPENID_PROVIDER_END_SESSION_ENDPOINT',
+              'AUTH_OPENID_PROVIDER_SIGNATURE_ALG',
+              'AUTH_OPENID_PROVIDER_SIGNATURE_KEY',
+              'AUTH_OPENID_PKCE',
+              'AUTH_OPENID_CODE_CHALLENGE_METHOD',
+              'AUTH_OPENID_SCOPES',
+              'AUTH_OPENID_ID_TOKEN_MAX_AGE',
+              'AUTH_OPENID_ID_TOKEN_INCLUDE_CLAIMS',
+              'AUTH_OPENID_USE_STATE',
+              'AUTH_OPENID_USE_NONCE',
+              'AUTH_OPENID_ALWAYS_UPDATE_USER',
+              'AUTH_OPENID_IGNORE_SSL_VERIFICATION',
+              'AUTH_OPENID_SHARE_SESSION'
+            ]
+          ],
+          [this.$t('Search'), ['AUTH_OPENID_USER_ATTR_MAP']],
+          [this.$t('Other'), ['OPENID_ORG_IDS']]
         ],
         fieldsMeta: {
           AUTH_OPENID_CLIENT_SECRET: {
@@ -60,7 +73,7 @@ export default {
             helpTextAsTip: false,
             hidden: (form) => form['AUTH_OPENID_KEYCLOAK'],
             on: {
-              input: _.debounce(function([value], updateForm) {
+              input: _.debounce(function ([value], updateForm) {
                 if (value.endsWith('/')) {
                   value = value.slice(0, -1)
                 }
@@ -95,26 +108,24 @@ export default {
           AUTH_OPENID_CODE_CHALLENGE_METHOD: {
             hidden: (form) => form['AUTH_OPENID_KEYCLOAK'] || !form['AUTH_OPENID_PKCE']
           },
-          'AUTH_OPENID_SCOPES': {
+          AUTH_OPENID_SCOPES: {
             hidden: (form) => form['AUTH_OPENID_KEYCLOAK']
           },
-          'AUTH_OPENID_ID_TOKEN_MAX_AGE': {
+          AUTH_OPENID_ID_TOKEN_MAX_AGE: {
             hidden: (form) => form['AUTH_OPENID_KEYCLOAK']
           },
-          'AUTH_OPENID_ID_TOKEN_INCLUDE_CLAIMS': {
+          AUTH_OPENID_ID_TOKEN_INCLUDE_CLAIMS: {
             hidden: (form) => form['AUTH_OPENID_KEYCLOAK']
           },
-          'AUTH_OPENID_USE_STATE': {
+          AUTH_OPENID_USE_STATE: {
             hidden: (form) => form['AUTH_OPENID_KEYCLOAK']
           },
-          'AUTH_OPENID_USE_NONCE': {
+          AUTH_OPENID_USE_NONCE: {
             hidden: (form) => form['AUTH_OPENID_KEYCLOAK']
           },
-          'AUTH_OPENID_IGNORE_SSL_VERIFICATION': {
-          },
-          'AUTH_OPENID_SHARE_SESSION': {
-          },
-          'AUTH_OPENID_USER_ATTR_MAP': {
+          AUTH_OPENID_IGNORE_SSL_VERIFICATION: {},
+          AUTH_OPENID_SHARE_SESSION: {},
+          AUTH_OPENID_USER_ATTR_MAP: {
             component: JsonEditor,
             rules: [JsonRequired]
           },
@@ -156,19 +167,15 @@ export default {
         AUTH_OPENID_PROVIDER_USERINFO_ENDPOINT: 'userinfo_endpoint',
         AUTH_OPENID_PROVIDER_END_SESSION_ENDPOINT: 'end_session_endpoint'
       }
-      try {
-        const res = await this.$axios.get(url, config)
-        const data = {}
-        for (const [k, v] of Object.entries(configMap)) {
-          data[k] = res[v]
-        }
-        if (Object.keys(data).length < 5) {
-          throw new Error('Invalid issuer, missing required fields')
-        }
-        return data
-      } catch (err) {
-        throw err
+      const res = await this.$axios.get(url, config)
+      const data = {}
+      for (const [k, v] of Object.entries(configMap)) {
+        data[k] = res[v]
       }
+      if (Object.keys(data).length < 5) {
+        throw new Error('Invalid issuer, missing required fields')
+      }
+      return data
     },
     setDefault(issuer) {
       const fields = {
@@ -188,6 +195,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

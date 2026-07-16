@@ -2,133 +2,126 @@
   <div class="code-editor" style="font-size: 12px">
     <el-form ref="form" :model="formModel" :rules="rules" label-position="top" label-width="80px">
       <div class="form-content">
-        <el-form-item
-          v-for="(item, index) in iActions"
-          :key="index"
-          :label="item.name"
-          :prop="item.name"
-        >
-
-          <template v-if="item.type === 'button' && !item.isVisible">
-            <el-tooltip :disabled="!item.tip" :content="item.tip">
-              <el-button
-                :type="item.el && item.el.type"
-                class="start-stop-btn"
-                :disabled="item.disabled"
-                size="mini"
-                @click="item.callback()"
-              >
-                <i :class="item.icon" />
-
-                {{ item.name }}
-              </el-button>
-            </el-tooltip>
-          </template>
-
-          <template v-if="item.type === 'input' && item.el && item.el.autoComplete">
-            <el-tooltip :disabled="!item.tip" :content="item.tip">
-              <el-autocomplete
-                v-model="formModel[item.name]"
-                :fetch-suggestions="item.el.query"
-                :placeholder="item.placeholder"
-                class="inline-input"
-                size="mini"
-                clearable
-                @change="handleInputChange(item)"
-                @select="handleInputChange(item)"
-              />
-            </el-tooltip>
-          </template>
-
-          <template v-else-if="item.type === 'input'">
-            <el-tooltip :disabled="!item.tip" :content="item.tip">
-              <el-input
-                v-model="formModel[item.name]"
-                :class="!isFold ? 'special-style' : ''"
-                :placeholder="item.placeholder"
-                class="inline-input"
-                size="mini"
-                @change="item.callback(formModel[item.name])"
-              />
-            </el-tooltip>
-          </template>
-
-          <template v-if="item.type === 'select' && item.el && item.el.create">
-            <el-tooltip :disabled="!item.tip" :content="item.tip">
-              <span class="filter-label">{{ item.name }}:</span>
-              <el-select
-                v-if="item.type === 'select' && item.el && item.el.create"
-                :key="index"
-                v-model="formModel[item.name]"
-                :allow-create="item.el.create || false"
-                :filterable="item.el.create || false"
-                :multiple="item.el.multiple"
-                :placeholder="item.name"
-                class="autoWidth-select"
-                default-first-option
-                size="mini"
-                @change="item.callback(item.value)"
-              >
-                <template slot="prefix">{{ item.label + ':' + item.value }}</template>
-                <el-option
-                  v-for="(option, id) in item.options"
-                  :key="id"
-                  :label="option.label"
-                  :title="option.value"
-                  :value="option.value"
-                />
-              </el-select>
-            </el-tooltip>
-          </template>
-
-          <template v-if="item.type === 'select' && (!item.el || !item.el.create)">
-            <el-tooltip :disabled="!item.tip" :content="item.tip">
-              <el-dropdown
-                class="select-dropdown"
-                trigger="click"
-                @command="(command) => {
-                  item.value = command
-                  item.callback(command)
-                }"
-              >
-                <el-button size="mini" type="primary">
-                  <div class="text-content">
-                    <span class="content">
-                      {{ getLabel(item.value, item.options) }}
-                      <i class="el-icon-arrow-down el-icon--right" />
-                    </span>
-                  </div>
+        <template v-for="(item, index) in iActions" :key="index">
+          <el-form-item
+            v-if="!(item.type === 'button' && item.isVisible)"
+            :label="item.type === 'button' ? '' : item.name"
+            :prop="item.name"
+          >
+            <template v-if="item.type === 'button' && !item.isVisible">
+              <el-tooltip :disabled="!item.tip" :content="item.tip">
+                <el-button
+                  :type="item.el && item.el.type"
+                  class="start-stop-btn"
+                  :disabled="item.disabled"
+                  size="small"
+                  @click="item.callback()"
+                >
+                  <i :class="item.icon" />
                 </el-button>
-                <el-dropdown-menu v-slot="dropdown">
-                  <el-dropdown-item
+              </el-tooltip>
+            </template>
+
+            <template v-if="item.type === 'input' && item.el && item.el.autoComplete">
+              <el-tooltip :disabled="!item.tip" :content="item.tip">
+                <span class="inline-input">
+                  <el-autocomplete
+                    v-model="formModel[item.name]"
+                    :fetch-suggestions="item.el.query"
+                    :placeholder="item.placeholder"
+                    class="inline-input jms-input-spacing"
+                    size="small"
+                    clearable
+                    @change="handleInputChange(item)"
+                    @select="handleInputChange(item)"
+                  />
+                </span>
+              </el-tooltip>
+            </template>
+
+            <template v-else-if="item.type === 'input'">
+              <el-tooltip :disabled="!item.tip" :content="item.tip">
+                <el-input
+                  v-model="formModel[item.name]"
+                  :class="!isFold ? 'special-style' : ''"
+                  :placeholder="item.placeholder"
+                  class="inline-input jms-input-spacing"
+                  size="small"
+                  @change="item.callback(formModel[item.name])"
+                />
+              </el-tooltip>
+            </template>
+
+            <template v-if="item.type === 'select' && item.el && item.el.create">
+              <el-tooltip :disabled="!item.tip" :content="item.tip">
+                <span>
+                  <span class="filter-label">{{ item.name }}:</span>
+                  <el-select
+                    v-if="item.type === 'select' && item.el && item.el.create"
+                    :key="index"
+                    v-model="formModel[item.name]"
+                    :allow-create="item.el.create || false"
+                    :filterable="item.el.create || false"
+                    :multiple="item.el.multiple"
+                    :placeholder="item.name"
+                    class="autoWidth-select"
+                    default-first-option
+                    size="small"
+                    @change="item.callback(item.value)"
+                  >
+                    <template #prefix>{{ item.label + ':' + item.value }}</template>
+                    <el-option
+                      v-for="(option, id) in item.options"
+                      :key="id"
+                      :label="option.label"
+                      :title="option.value"
+                      :value="option.value"
+                    />
+                  </el-select>
+                </span>
+              </el-tooltip>
+            </template>
+
+            <template v-if="item.type === 'select' && (!item.el || !item.el.create)">
+              <el-tooltip :disabled="!item.tip" :content="item.tip">
+                <el-select
+                  v-model="formModel[item.name]"
+                  class="toolbar-select"
+                  @change="
+                    (val) => {
+                      item.value = val
+                      item.callback(val)
+                    }
+                  "
+                >
+                  <el-option
                     v-for="(option, i) in item.options"
                     :key="i"
-                    :command="option.value"
-                  >
-                    {{ option.label }}
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </el-tooltip>
-          </template>
+                    :label="option.label"
+                    :value="option.value"
+                  />
+                </el-select>
+              </el-tooltip>
+            </template>
 
-          <template v-if="item.type === 'switch'">
-            <el-tooltip :disabled="!item.tip" :content="item.tip">
-              <el-switch
-                v-model="formModel[item.name]"
-                :active-text="item.name"
-                :disabled="item.disabled"
-                @change="item.callback(formModel[item.name])"
-              />
-            </el-tooltip>
-          </template>
-        </el-form-item>
+            <template v-if="item.type === 'switch'">
+              <el-tooltip :disabled="!item.tip" :content="item.tip">
+                <el-switch
+                  v-model="formModel[item.name]"
+                  :active-text="item.name"
+                  :disabled="item.disabled"
+                  @change="item.callback(formModel[item.name])"
+                />
+              </el-tooltip>
+            </template>
+          </el-form-item>
+        </template>
         <div
-          v-if="toolbar.hasOwnProperty('fold')"
+          v-if="Object.prototype.hasOwnProperty.call(toolbar, 'fold')"
           :class="!isFold ? 'sepcial-icon' : ''"
           class="fold"
         >
-          <el-tooltip :content="$tc('MoreActions')" :open-delay="500" placement="top">
+          <el-tooltip :content="$tc('MoreActions')" :show-after="500" placement="top">
             <i
               :class="[isFold ? 'fa-angle-double-right' : 'fa-angle-double-down']"
               class="fa"
@@ -139,16 +132,16 @@
       </div>
       <div class="right-side">
         <div v-for="(item, index) in toolbar.right" :key="index">
-          <el-tooltip :content="item.tip" :open-delay="500">
+          <el-tooltip :content="item.tip" :show-after="500">
             <el-button
               v-if="item.type === 'button'"
               :disabled="item.disabled"
-              size="mini"
+              size="small"
               type="default"
               @click="item.callback()"
             >
               <i v-if="item.icon.startsWith('fa')" :class="'fa ' + item.icon" />
-              <svg-icon v-else :icon-class="item.icon" style="font-size: 14px;" />
+              <svg-icon v-else :icon-class="item.icon" style="font-size: 14px" />
             </el-button>
           </el-tooltip>
         </div>
@@ -157,37 +150,48 @@
     <codemirror
       ref="myCm"
       v-model="iValue"
-      :options="iOptions"
+      :extensions="extensions"
+      :tab-size="iOptions.tabSize || 4"
+      :placeholder="iOptions.placeholder"
+      :autofocus="iOptions.autofocus"
+      :disabled="!!iOptions.readOnly"
+      :style="editorStyle"
       class="editor"
-      :style="iActions.length > 0 ? { marginLeft: '30px' } : {}"
     />
   </div>
 </template>
 
 <script>
-import { codemirror } from 'vue-codemirror'
+import { Codemirror } from 'vue-codemirror'
+import { basicSetup } from 'codemirror'
+import { StreamLanguage } from '@codemirror/language'
+import { shell } from '@codemirror/legacy-modes/mode/shell'
+import { powerShell } from '@codemirror/legacy-modes/mode/powershell'
+import { python } from '@codemirror/legacy-modes/mode/python'
+import { yaml } from '@codemirror/legacy-modes/mode/yaml'
+import { ruby } from '@codemirror/legacy-modes/mode/ruby'
 
-import 'codemirror/mode/shell/shell'
-import 'codemirror/mode/powershell/powershell'
-import 'codemirror/mode/python/python'
-import 'codemirror/mode/yaml/yaml'
-import 'codemirror/mode/ruby/ruby' // theme css
-import 'codemirror/theme/base16-light.css'
-import 'codemirror/theme/idea.css'
-import 'codemirror/theme/mbo.css'
-import 'codemirror/theme/duotone-light.css'
-import 'codemirror/lib/codemirror.css'
+const MODE_MAP = {
+  shell,
+  bash: shell,
+  sh: shell,
+  powershell: powerShell,
+  win_shell: powerShell,
+  python,
+  yaml,
+  ruby
+}
 
 export default {
   components: {
-    codemirror
+    codemirror: Codemirror
   },
   props: {
     toolbar: {
       type: [Array, Object],
       default: () => []
     },
-    value: {
+    modelValue: {
       type: [String, Object],
       default: () => ''
     },
@@ -215,9 +219,9 @@ export default {
       // 将对象转换为数组
       const actions = Object.values(actionsObj)
 
-      actions.forEach(action => {
-        if (!this.formModel.hasOwnProperty(action.name)) {
-          this.$set(this.formModel, action.name, action.value || '')
+      actions.forEach((action) => {
+        if (!Object.prototype.hasOwnProperty.call(this.formModel, action.name)) {
+          this.formModel[action.name] = action.value || ''
         }
       })
 
@@ -232,9 +236,11 @@ export default {
 
       const rules = {}
 
-      Object.values(actionsObj).forEach(action => {
+      Object.values(actionsObj).forEach((action) => {
         if (action.name === this.$t('RunAs') && action.type === 'input') {
-          rules[action.name] = [{ required: true, message: this.$t('RequiredRunas'), trigger: 'blur' }]
+          rules[action.name] = [
+            { required: true, message: this.$t('RequiredRunas'), trigger: 'blur' }
+          ]
         }
       })
 
@@ -242,10 +248,10 @@ export default {
     },
     iValue: {
       get() {
-        return this.value
+        return this.modelValue
       },
       set(val) {
-        this.$emit('update:value', val)
+        this.$emit('update:modelValue', val)
         this.$emit('input', val)
       }
     },
@@ -253,12 +259,20 @@ export default {
       const defaultOptions = {
         tabSize: 4,
         mode: 'shell',
-        lineNumbers: true,
-        theme: 'idea',
-        placeholder: 'Code goes here...',
         autofocus: true
       }
       return Object.assign(defaultOptions, this.options)
+    },
+    extensions() {
+      const exts = [basicSetup]
+      const mode = MODE_MAP[this.iOptions.mode]
+      if (mode) {
+        exts.push(StreamLanguage.define(mode))
+      }
+      return exts
+    },
+    editorStyle() {
+      return { height: this.iOptions.height || '300px' }
     }
   },
   methods: {
@@ -281,23 +295,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$header-bg-color: #F5F6F7;
-$input-border-color: #C0C4CC;
-
 .code-editor {
   display: flex;
   flex-direction: column;
+  width: 100%;
 
   .el-form {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    margin-left: 30px;
-    margin-bottom: 20px;
+    align-items: flex-end;
+    margin-bottom: 16px;
 
     .form-content {
       display: flex;
       flex: 12;
+      align-items: flex-end;
 
       .el-form-item {
         display: flex;
@@ -307,7 +319,7 @@ $input-border-color: #C0C4CC;
         margin-right: 5px;
 
         // input 框与 label 相关样式
-        ::v-deep .el-form-item__label {
+        :deep(.el-form-item__label) {
           display: flex;
           justify-items: flex-start;
           align-items: center;
@@ -318,49 +330,65 @@ $input-border-color: #C0C4CC;
           font-size: 11px;
         }
 
-        ::v-deep .el-form-item__content .inline-input .el-input__inner {
-          //width: 130px;
+        // 全局 .el-form .el-form-item__content 设了 line-height:32px,会让 runas 的 autocomplete
+        // (外层是 inline 的 <span>)按 32px 行高基线排布,与右侧块级 el-select 竖直错位("歪")。
+        // 这里重置行高,让各控件按 flex-end 正常对齐。
+        :deep(.el-form-item__content) {
+          line-height: normal;
+        }
+
+        // 全局表单样式会让错误提示参与横向 flex 布局，导致文案显示在输入框右侧。
+        // 恢复 Element Plus 的定位方式，使提示固定显示在控件下方且不挤动工具栏。
+        :deep(.el-form-item__error) {
+          position: absolute;
+          top: 100%;
+          left: 0;
+        }
+
+        // 输入框统一 30px 标准控件高度,与 select / 按钮底部对齐
+        :deep(.el-form-item__content .inline-input),
+        :deep(.el-form-item__content .inline-input .el-input__wrapper) {
+          height: 30px;
+          min-height: 30px;
+        }
+
+        :deep(.el-form-item__content .inline-input .el-input__inner) {
           min-width: 130px;
-        }
-
-        // 执行、暂停按钮
-        ::v-deep .el-form-item__content .start-stop-btn {
-          display: flex;
-          align-items: center;
           height: 28px;
-          margin-bottom: 1.5px;
+          line-height: 28px;
         }
 
-        ::v-deep .el-form-item__content .select-dropdown .el-button {
-          width: 125px;
-          background-color: $header-bg-color;
-          border-color: $input-border-color;
+        // 执行、停止按钮:图标 + 文字,30px,与输入框/下拉等高
+        :deep(.el-form-item__content .start-stop-btn) {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          height: 30px;
+        }
 
-          &:focus,
-          &:hover {
-            border-color: $input-border-color !important;
-            background-color: $header-bg-color !important;
-          }
+        // 账号策略 / 模块 / 超时:标准 el-select(30px、原生下拉),替换旧的灰色假按钮
+        :deep(.el-form-item__content .toolbar-select) {
+          width: 130px;
 
-          .text-content {
-            color: var(--color-text-primary);
-
-            .content {
-              display: flex;
-              justify-content: space-between;
-            }
-          ;
+          .el-select__wrapper {
+            min-height: 30px;
+            height: 30px;
           }
         }
 
+        // 必填项(运行用户)此前用 -1px 负 margin 微调,导致与其它字段错位(看起来"歪");
+        // 统一为 0,与相邻 select/输入框底部对齐。
         &.is-required {
-          margin-bottom: -1px;
+          margin-bottom: 0;
         }
       }
 
       .fold {
         display: flex;
         align-items: center;
+        justify-content: center;
+        // 撑到与控件等高(30px),底部对齐后图标即与右侧 select/输入框竖直居中对齐
+        height: 30px;
         margin-left: 15px;
 
         &.sepcial-icon {
@@ -380,50 +408,64 @@ $input-border-color: #C0C4CC;
       display: flex;
       flex: 1;
       width: 90px;
-      //margin-right: 10px;
 
       .el-button {
         border: none;
         padding: 5px;
         font-size: 14px;
-        width: 28px;
-        height: 28px;
+        width: 30px;
+        height: 30px;
         background: none;
 
         &:hover {
           color: var(--color-text-primary);
-          background-color: #e6e6e6;
+          background-color: var(--color-border);
         }
       }
     }
   }
 
   .editor {
-    border: 1px solid var(--color-border);
     overflow: hidden;
-  }
-}
+    border-radius: 4px;
 
-::v-deep .CodeMirror pre.CodeMirror-line,
-::v-deep .CodeMirror-linenumber.CodeMirror-gutter-elt {
-  line-height: 18px !important;
-}
+    :deep(.cm-editor) {
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      background: #fff;
+    }
 
-.runas-input {
-  height: 28px;
+    // 去掉 CodeMirror 聚焦时的默认虚线 outline(CM6 默认 outline:1px dotted)
+    :deep(.cm-editor.cm-focused) {
+      outline: none;
+    }
 
-  ::v-deep {
-    .el-select {
-      width: 100px;
+    :deep(.cm-gutters) {
+      background: #fff;
+      border-right: 1px solid var(--color-border);
+      color: var(--color-text-secondary);
+    }
+
+    :deep(.cm-scroller) {
+      overflow: auto;
+    }
+
+    :deep(.cm-activeLine),
+    :deep(.cm-activeLineGutter) {
+      background: var(--color-disabled-background);
     }
   }
+}
+
+:deep(.cm-line) {
+  line-height: 18px;
 }
 
 .autoWidth-select {
   min-width: 100px;
 }
 
-.autoWidth-select ::v-deep .el-input__prefix {
+.autoWidth-select :deep(.el-input__prefix) {
   position: relative;
   left: 0;
   box-sizing: border-box;
@@ -432,40 +474,27 @@ $input-border-color: #C0C4CC;
   visibility: hidden;
 }
 
-.autoWidth-select ::v-deep input {
+.autoWidth-select :deep(input) {
   position: absolute;
   padding-left: 0px;
   border: none;
-  color: #606266;
-  background-color: #e6e6e6;
+  color: var(--color-text-primary);
+  background-color: var(--color-border);
   font-size: 12px;
   font-weight: 470;
   line-height: 27px;
 }
 
-::v-deep .el-select {
+:deep(.el-select) {
   top: -1px;
 
   .el-input .el-select__caret {
-    color: #7a7c7f;
+    color: var(--color-text-secondary);
   }
 }
 
 .filter-label {
   font-size: 12px;
   font-weight: 700;
-}
-
-.select-content {
-  display: inline-block;
-  position: relative;
-  top: 1px;
-  height: 28px;
-  line-height: 28px;
-  padding-left: 15px;
-  font-size: 0;
-  border: 1px solid #DCDFE6;
-  border-radius: 4px;
-  background-color: #e6e6e6;
 }
 </style>

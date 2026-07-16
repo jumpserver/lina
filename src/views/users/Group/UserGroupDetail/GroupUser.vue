@@ -1,15 +1,13 @@
 <template>
   <div>
     <TwoCol>
-      <template>
-        <GenericListTable
-          ref="listTable"
-          :header-actions="headerActions"
-          :table-config="tableConfig"
-        />
-      </template>
+      <GenericListTable
+        ref="listTable"
+        :header-actions="headerActions"
+        :table-config="tableConfig"
+      />
       <template #right>
-        <RelationCard :key="relationKey" v-bind="relationConfig" @addSuccess="addSuccess" />
+        <RelationCard v-bind="relationConfig" :key="relationKey" @add-success="addSuccess" />
       </template>
     </TwoCol>
     <TwoCol />
@@ -17,9 +15,9 @@
 </template>
 
 <script>
-import GenericListTable from '@/layout/components/GenericListTable'
 import RelationCard from '@/components/Cards/RelationCard'
 import { DeleteActionFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import GenericListTable from '@/layout/components/GenericListTable'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
@@ -54,25 +52,22 @@ export default {
                 confirmButtonClass: 'el-button--danger',
                 beforeClose: async (action, instance, done) => {
                   if (action !== 'confirm') return done()
-                  this.$axios.post(
-                    `/api/v1/users/groups/${this.object.id}/add-all-users/`,
-                  ).then(res => {
-                    this.$message.success(this.$tc('AddSuccessMsg'))
-                    done()
-                    window.location.reload()
-                  })
+                  this.$axios
+                    .post(`/api/v1/users/groups/${this.object.id}/add-all-users/`)
+                    .then((res) => {
+                      this.$message.success(this.$tc('AddSuccessMsg'))
+                      done()
+                      window.location.reload()
+                    })
                 }
-              }).catch(() => {
-              })
+              }).catch(() => {})
             }
           })
         }
       ],
       tableConfig: {
         url: `/api/v1/users/users/?group_id=${this.object.id}`,
-        columns: [
-          'name', 'delete_action'
-        ],
+        columns: ['name', 'delete_action'],
         columnsMeta: {
           name: {
             formatter: DetailFormatter,
@@ -91,21 +86,22 @@ export default {
             formatterArgs: {
               disabled: !this.$hasPerm('users.change_usergroup')
             },
-            onDelete: function(col, row, cellValue, reload) {
-              this.$axios.delete(
-                '/api/v1/users/users-groups-relations/', {
+            onDelete: function (col, row, cellValue, reload) {
+              this.$axios
+                .delete('/api/v1/users/users-groups-relations/', {
                   params: {
                     usergroup: this.object.id,
                     user: row.id
                   }
-                }
-              ).then(res => {
-                this.$message.success(this.$tc('DeleteSuccessMsg'))
-                this.relationKey += 1
-                reload()
-              }).catch(error => {
-                this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
-              })
+                })
+                .then((res) => {
+                  this.$message.success(this.$tc('DeleteSuccessMsg'))
+                  this.relationKey += 1
+                  reload()
+                })
+                .catch((error) => {
+                  this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
+                })
             }.bind(this)
           },
           actions: {
@@ -144,14 +140,13 @@ export default {
         performAdd: (items) => {
           const relationUrl = `/api/v1/users/users-groups-relations/`
           const groupId = this.object.id
-          const data = items.map(v => {
+          const data = items.map((v) => {
             return {
               user: v.value,
               usergroup: groupId
             }
           })
 
-          this.$message.success(this.$tc('AddSuccessMsg'))
           return this.$axios.post(relationUrl, data)
         }
       },

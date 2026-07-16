@@ -2,7 +2,7 @@
   <div>
     <el-dialog
       v-if="enabled && showModal"
-      :visible.sync="dialogVisible"
+      v-model="dialogVisible"
       :title="title"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
@@ -23,11 +23,13 @@
         </div>
       </div>
 
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="onModalConfirm">
-          {{ $t('Confirm') }}
-        </el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="onModalConfirm">
+            {{ $t('Confirm') }}
+          </el-button>
+        </div>
+      </template>
     </el-dialog>
 
     <el-alert
@@ -50,8 +52,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import MarkDown from '@/components/Widgets/MarkDown'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Announcement',
@@ -66,9 +68,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'publicSettings'
-    ]),
+    ...mapGetters(['publicSettings']),
     announcement() {
       const ann = this.publicSettings.ANNOUNCEMENT
       return {
@@ -81,7 +81,11 @@ export default {
       }
     },
     enabled() {
-      return this.publicSettings.ANNOUNCEMENT_ENABLED && (this.announcement.content || this.announcement.subject) && this.isDateValid
+      return (
+        this.publicSettings.ANNOUNCEMENT_ENABLED &&
+        (this.announcement.content || this.announcement.subject) &&
+        this.isDateValid
+      )
     },
     title() {
       return this.$t('Announcement') + ': ' + this.announcement.subject
@@ -164,16 +168,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.announcement-dialog ::v-deep .el-dialog {
+.announcement-dialog :deep(.el-dialog) {
   border-radius: 5px;
 }
 
-.announcement-dialog ::v-deep .el-dialog__wrapper {
+.announcement-dialog :deep(.el-dialog__wrapper) {
   backdrop-filter: blur(4px);
 }
 
 @media (max-width: 768px) {
-  .announcement-dialog ::v-deep .el-dialog {
+  .announcement-dialog :deep(.el-dialog) {
     width: 95% !important;
     margin: 0 auto;
   }
@@ -194,7 +198,7 @@ export default {
   }
 }
 
-.announcement-dialog ::v-deep .el-dialog__header {
+.announcement-dialog :deep(.el-dialog__header) {
   border-radius: 8px 8px 0 0;
   padding: 10px 20px 10px 20px;
 
@@ -204,7 +208,7 @@ export default {
   }
 }
 
-.announcement-dialog ::v-deep .el-dialog__body {
+.announcement-dialog :deep(.el-dialog__body) {
   padding: 0;
 }
 
@@ -230,7 +234,7 @@ export default {
   }
 }
 
-.announcement ::v-deep .el-alert__content {
+.announcement :deep(.el-alert__content) {
   width: 100%;
 }
 
@@ -248,20 +252,25 @@ export default {
 
   .link-more {
     font-size: 13px;
-    color: #409eff !important;
+    color: var(--color-primary) !important;
     text-decoration: none;
     padding: 4px 8px;
     border-radius: 4px;
-    background: rgba(64, 158, 255, 0.1);
+    background: var(--el-color-primary-light-9);
     transition: all 0.3s;
 
     &:hover {
-      background: #409eff;
+      background: var(--color-primary);
       color: white !important;
     }
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     margin: 0 0 15px 0;
     color: #303133;
     font-weight: 600;
@@ -280,7 +289,9 @@ export default {
     font-size: 16px;
   }
 
-  h4, h5, h6 {
+  h4,
+  h5,
+  h6 {
     font-size: 14px;
   }
 

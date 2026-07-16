@@ -13,13 +13,9 @@ export const queryPattern = new RegExp(queryFlag + '.*' + paramSeparator)
  * @param {string} delimiter - 键值对之间的分隔符
  * @return {string}
  */
-export function stringify(
-  query,
-  equal = valueSeparator,
-  delimiter = paramSeparator
-) {
+export function stringify(query, equal = valueSeparator, delimiter = paramSeparator) {
   return Object.keys(query)
-    .map(k => `${k}${equal}${encodeURIComponent(query[k])}`)
+    .map((k) => `${k}${equal}${encodeURIComponent(query[k])}`)
     .join(delimiter)
 }
 
@@ -33,14 +29,10 @@ export function stringify(
  * @param {string} delimiter - 键值对之间的分隔符
  * @return {object}
  */
-export function parse(
-  query,
-  equal = valueSeparator,
-  delimiter = paramSeparator
-) {
+export function parse(query, equal = valueSeparator, delimiter = paramSeparator) {
   return query
     .split(delimiter)
-    .map(param => param.split(equal))
+    .map((param) => param.split(equal))
     .reduce((obj, [k, v]) => {
       obj[k] = decodeURIComponent(v)
       return obj
@@ -57,7 +49,7 @@ export function parse(
  */
 export function set(url, query, routerMode) {
   const queryStr = queryFlag + stringify(query) + paramSeparator
-  const queryPrefix = str => (str.indexOf('?') > -1 ? '&' : '?')
+  const queryPrefix = (str) => (str.indexOf('?') > -1 ? '&' : '?')
 
   if (queryPattern.test(url)) {
     return url.replace(queryPattern, queryStr)

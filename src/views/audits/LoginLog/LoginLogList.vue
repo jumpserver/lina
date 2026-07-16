@@ -18,10 +18,7 @@ export default {
         },
         columnsShow: {
           min: ['username', 'status'],
-          default: [
-            'username', 'backend_display', 'city',
-            'reason_display', 'status', 'datetime'
-          ]
+          default: ['username', 'backend_display', 'city', 'reason_display', 'status', 'datetime']
         },
         url: '/api/v1/audits/login-logs/',
         columnsMeta: {
@@ -36,6 +33,7 @@ export default {
       headerActions: {
         hasLeftActions: false,
         hasImport: false,
+        hasReportExport: true,
         hasDatePicker: true,
         searchConfig: {
           getUrlQuery: true

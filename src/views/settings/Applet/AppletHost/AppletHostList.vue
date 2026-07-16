@@ -1,22 +1,22 @@
 <template>
   <div>
     <el-alert type="info">
-      <span v-html="$t('AppletHostSelectHelpMessage')" />
+      <span ref="helpRef" class="applet-host-help" />
     </el-alert>
     <DrawerListTable
+      v-bind="$data"
       ref="table"
       class="applet-host"
       :create-drawer="createDrawer"
       :resource="$t('AppletHosts')"
-      v-bind="$data"
     />
   </div>
 </template>
 
 <script>
 import { DrawerListTable } from '@/components'
-import { openTaskPage } from '@/utils/jms/index'
 import { ProtocolsFormatter } from '@/components/Table/TableFormatters'
+import { openTaskPage } from '@/utils/jms/index'
 
 export default {
   name: 'AppletHost',
@@ -33,10 +33,7 @@ export default {
         columnsExclude: ['info', 'auto_config', 'gathered_info', 'deploy_options'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: [
-            'name', 'address', 'protocols', 'load',
-            'comment', 'actions'
-          ]
+          default: ['name', 'address', 'protocols', 'load', 'comment', 'actions']
         },
         columnsMeta: {
           name: {
@@ -79,12 +76,11 @@ export default {
                   title: this.$t('Test'),
                   can: this.$hasPerm('assets.test_assetconnectivity'),
                   callback: ({ row }) => {
-                    this.$axios.post(
-                      `/api/v1/assets/assets/${row.id}/tasks/`,
-                      { action: 'refresh' },
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
+                    this.$axios
+                      .post(`/api/v1/assets/assets/${row.id}/tasks/`, { action: 'refresh' })
+                      .then((res) => {
+                        openTaskPage(res['task'])
+                      })
                   }
                 }
               ]
@@ -102,12 +98,30 @@ export default {
         }
       }
     }
+  },
+  mounted() {
+    this.renderHelp()
+  },
+  activated() {
+    // keep-alive 切回该 tab 时也重渲，确保帮助文案一定出现
+    this.renderHelp()
+  },
+  methods: {
+    // 命令式渲染帮助文案：绕开 v-html 编译转换在 keep-alive/时序下对内联 $t 不重算的问题。
+    renderHelp() {
+      this.$nextTick(() => {
+        const el = this.$refs.helpRef
+        if (el) {
+          el.innerHTML = this.$xss.process(String(this.$t('AppletHostSelectHelpMessage') || ''))
+        }
+      })
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.applet-host ::v-deep .protocol {
+.applet-host :deep(.protocol) {
   margin-left: 3px;
 }
 </style>

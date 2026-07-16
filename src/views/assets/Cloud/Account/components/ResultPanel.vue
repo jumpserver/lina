@@ -1,19 +1,17 @@
 <template>
   <div class="result-panel">
-    <el-table
-      :data="tableData"
-      :show-header="false"
-      size="medium"
-    >
+    <el-table :data="tableData" :show-header="false" size="small">
       <el-table-column prop="key" width="120" />
       <el-table-column prop="value">
-        <template v-slot="scope">
-          <el-link :underline="false"> {{ scope.row.value }}</el-link>
+        <template #default="scope">
+          <el-link underline="never"> {{ scope.row.value }}</el-link>
         </template>
       </el-table-column>
     </el-table>
-    <div style="margin-top: 20px">
-      <el-button size="small" type="primary" @click="handleClick">{{ $t('CloudAccountDetail') }}</el-button>
+    <div class="result-panel__actions">
+      <el-button size="small" type="primary" @click="handleClick">{{
+        $t('CloudAccountDetail')
+      }}</el-button>
       <el-button size="small" @click="handleClose">{{ $t('Close') }}</el-button>
     </div>
   </div>
@@ -26,8 +24,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -44,7 +41,10 @@ export default {
           key: this.$t('IPType'),
           value: this.object.task.sync_ip_type === 1 ? this.$t('PublicIP') : this.$t('PrivateIP')
         },
-        { key: this.$t('Timer'), value: this.object.task.is_periodic ? this.$t('Yes') : this.$t('No') }
+        {
+          key: this.$t('Timer'),
+          value: this.object.task.is_periodic ? this.$t('Yes') : this.$t('No')
+        }
       ]
     }
   },
@@ -60,16 +60,31 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .result-panel {
   padding: 10px;
+
+  :deep(.el-table) {
+    font-size: 13px;
+  }
+
+  :deep(.el-link) {
+    font-size: 13px;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 20px;
+  }
 }
 
-::v-deep .el-alert__content {
+:deep(.el-alert__content) {
   width: 100%;
 }
 
-::v-deep .el-divider__text {
+:deep(.el-divider__text) {
   background-color: transparent;
   font-size: 18px;
   font-weight: 400;

@@ -2,20 +2,12 @@
   <div class="markdown-body">
     <el-row v-if="preview">
       <div class="action-bar">
-        <div class="action">
-          <span>
-            <i class="fa" :class="[!isShow ? 'fa-eye' : 'fa-eye-slash']" @click="onView" />
-          </span>
-        </div>
+        <button class="preview-toggle" type="button" :title="$t('View')" @click="onView">
+          <i class="fa" :class="[!isShow ? 'fa-eye' : 'fa-eye-slash']" />
+        </button>
       </div>
-      <el-col :span="span" :style="{'height': height + 'px' }">
-        <el-input
-          v-model="iValue"
-          autosize
-          :rows="rows"
-          type="textarea"
-          @change="onChange"
-        />
+      <el-col :span="span" :style="{ height: height + 'px' }">
+        <el-input v-model="iValue" autosize :rows="rows" type="textarea" @change="onChange" />
       </el-col>
       <el-col v-show="isShow" :span="span">
         <VueMarkdown class="result-html" :source="sanitizedValue" :html="false" :show="true" />
@@ -27,7 +19,7 @@
 
 <script>
 import DOMPurify from 'dompurify'
-import VueMarkdown from 'vue-markdown'
+import VueMarkdown from '@/components/Widgets/VueMarkdown/index.vue'
 
 export default {
   components: {
@@ -70,7 +62,7 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.resizeObserver = new ResizeObserver(entries => {
+      this.resizeObserver = new ResizeObserver((entries) => {
         const height = entries[0].target.offsetHeight
         if (height) {
           this.height = height
@@ -82,7 +74,7 @@ export default {
       }
     })
   },
-  beforeDestroy() {
+  beforeUnmount() {
     const el = document.querySelector('.result-html')
     if (el) {
       this.resizeObserver.unobserve(el)
@@ -94,7 +86,24 @@ export default {
       if (!content) return ''
 
       return DOMPurify.sanitize(content, {
-        ALLOWED_TAGS: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'strong', 'em', 'code', 'pre', 'blockquote', 'a'],
+        ALLOWED_TAGS: [
+          'p',
+          'h1',
+          'h2',
+          'h3',
+          'h4',
+          'h5',
+          'h6',
+          'ul',
+          'ol',
+          'li',
+          'strong',
+          'em',
+          'code',
+          'pre',
+          'blockquote',
+          'a'
+        ],
         FORBID_TAGS: ['script', 'style', 'iframe', 'frame', 'object', 'embed'],
         FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover']
       })
@@ -116,13 +125,22 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
+.markdown-body {
+  width: 100%;
+}
+
 .markdown-body * {
   color: #1a1a1a;
   font-size: 13px;
 }
 
-::v-deep .el-textarea {
+.markdown-body :deep(.el-row) {
+  position: relative;
+  width: 100%;
+}
+
+:deep(.el-textarea) {
   height: 100% !important;
 
   .el-textarea__inner {
@@ -135,27 +153,41 @@ export default {
   padding: 6px;
 }
 
-::v-deep .result-html {
+:deep(.result-html) {
   min-height: 210px;
   margin-left: 4px;
   padding: 5px 10px;
-  border: 1px solid #DCDFE6;
-  border-radius: 2px;
-  @import "~github-markdown-css/github-markdown-light.css";
+  border: 1px solid #dcdfe6;
+  @import '~github-markdown-css/github-markdown-light.css';
 }
 
 .action-bar {
-  position: relative;
-  height: 0;
-  border-bottom: none;
-  z-index: 999;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
 
-  .action {
-    position: absolute;
-    right: 6px;
+  .preview-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    color: #606266;
+    cursor: pointer;
+    background: rgb(255 255 255 / 90%);
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
 
-    i {
-      cursor: pointer;
+    &:hover {
+      color: var(--el-color-primary);
+      border-color: var(--el-color-primary-light-5);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--el-color-primary-light-5);
+      outline-offset: 1px;
     }
   }
 }

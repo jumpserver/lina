@@ -1,17 +1,14 @@
 <template>
   <div id="HomeCard">
     <el-card class="box-card no-border" shadow="never">
-      <div v-show="title || btnText" slot="header" class="clearfix">
-        <span v-show="title" class="title">{{ title }}</span>
-        <el-button
-          v-show="btnText"
-          style="float: right; padding: 3px 0"
-          type="text"
-          @click="btnChange"
-        >
-          {{ btnText }}
-        </el-button>
-      </div>
+      <template #header>
+        <div v-show="title || btnText" class="clearfix">
+          <span v-show="title" class="title">{{ title }}</span>
+          <el-button v-show="btnText" style="float: right; padding: 3px 0" link @click="btnChange">
+            {{ btnText }}
+          </el-button>
+        </div>
+      </template>
       <ListTable
         ref="ListTable"
         :header-actions="headerActions"
@@ -51,8 +48,7 @@ export default {
     },
     tableConfig: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -69,51 +65,49 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  #HomeCard {
-    position: relative;
+#HomeCard {
+  position: relative;
+  width: 100%;
+  background-color: #fff;
+  transition: all 0.4s ease;
+  overflow: hidden;
+
+  &:nth-child(n) {
+    margin-bottom: 20px;
+  }
+
+  .fa {
+    position: absolute;
+    right: -4px;
+    top: -19px;
+  }
+
+  .fa:before {
+    font-size: 110px;
+    opacity: 0.1;
+  }
+
+  .others {
     width: 100%;
-    background-color: #fff;
-    transition: all 0.4s ease;
-    overflow: hidden;
+    height: auto;
+    text-align: center;
 
-    &:nth-child(n) {
-      margin-bottom: 20px;
-    }
-
-    .fa {
-      position: absolute;
-      right: -4px;
-      top: -19px;
-    }
-
-    .fa:before {
-      font-size: 110px;
-      opacity: .1;
-    }
-
-    .others {
-      width: 100%;
-      height: auto;
+    .icon {
       text-align: center;
-
-      .icon {
-        text-align: center;
-        font-size: 30px;
-      }
+      font-size: 30px;
     }
   }
+}
 
-  .public-height {
-    min-height: .1px;
-  }
+.public-height {
+  min-height: 0.1px;
+}
 
-  ::v-deep {
-    .el-card__body {
-      padding-top: 10px
-    }
-  }
+:deep(.el-card__body) {
+  padding-top: 10px;
+}
 
-  .ListTable ::v-deep .el-data-table .el-pagination {
-    display: none;
-  }
+.ListTable :deep(.el-data-table .el-pagination) {
+  display: none;
+}
 </style>

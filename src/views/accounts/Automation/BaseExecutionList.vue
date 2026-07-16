@@ -1,10 +1,7 @@
 <template>
   <div>
-    <DrawerListTable
-      :header-actions="headerActions"
-      :table-config="tableConfig"
-    />
-    <ReportDialog :url="reportUrl" :visible.sync="visible" />
+    <DrawerListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <ReportDialog v-model:visible="visible" :url="reportUrl" />
   </div>
 </template>
 
@@ -56,8 +53,13 @@ export default {
       tableConfig: {
         url: this.url,
         columns: [
-          'id', 'automation', 'status', 'trigger',
-          'date_start', 'date_finished', 'actions'
+          'id',
+          'automation',
+          'status',
+          'trigger',
+          'date_start',
+          'date_finished',
+          'actions'
         ],
         columnsMeta: {
           id: {
@@ -112,7 +114,7 @@ export default {
                   name: 'log',
                   type: 'primary',
                   title: this.$t('Log'),
-                  callback: function({ row }) {
+                  callback: function ({ row }) {
                     openTaskPage(row['id'])
                   }
                 },
@@ -121,7 +123,7 @@ export default {
                   title: this.$t('Report'),
                   type: 'success',
                   can: this.$hasPerm('accounts.view_' + this.resource),
-                  callback: function({ row }) {
+                  callback: function ({ row }) {
                     vm.visible = true
                     const url = this.url.split('?')[0]
                     vm.reportUrl = `${url}${row.id}/report/`
@@ -137,8 +139,8 @@ export default {
           getUrlQuery: true,
           options: [
             {
-              label: this.$t('ID'),
-              value: 'id'
+              label: this.$t('TaskID'),
+              value: 'automation_id'
             },
             {
               label: this.$t('DisplayName'),

@@ -1,25 +1,24 @@
 <template>
   <CardTable
+    v-bind="$attrs"
     ref="table"
     :columns="3"
     :table-config="tableConfig"
     class="info-card-table"
-    v-bind="$attrs"
-    v-on="$listeners"
   >
-    <template v-slot:default="slotProps">
+    <template #default="slotProps">
       <CardPanel
+        v-bind="subComponentProps"
         :object="slotProps.item"
         :on-view="slotProps.onView"
         :table-config="tableConfig"
-        v-bind="subComponentProps"
         @refresh="reloadTable"
       />
     </template>
   </CardTable>
 </template>
 
-<script type="text/jsx">
+<script>
 import CardTable from '@/components/Table/CardTable/index.vue'
 import CardPanel from './Panel.vue'
 
@@ -52,9 +51,30 @@ export default {
 
 <style lang="scss" scoped>
 .info-card-table {
-  ::v-deep {
-    div.the-card {
-      padding: 0;
+  :deep(.the-card) {
+    display: flex;
+    height: auto !important;
+    min-height: 180px;
+    padding: 0 !important;
+
+    .el-card__body {
+      display: flex;
+      flex: 1 1 auto;
+      min-height: 0;
+      height: auto !important;
+    }
+
+    .el-card__body > div,
+    .el-card__body > div > div {
+      height: auto !important;
+    }
+  }
+
+  :deep(.the-row) {
+    max-width: 100% !important;
+
+    .card-container {
+      width: 100%;
     }
   }
 }

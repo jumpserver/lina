@@ -3,23 +3,20 @@
     <el-tabs
       v-if="tabIndices.length > 0"
       v-model="iActiveMenu"
-      :class="{ 'only-submenu': tabIndices.length === 1}"
+      :class="{ 'only-submenu': tabIndices.length === 1 }"
       class="page-submenu"
       stretch
       @tab-click="handleTabClick"
     >
-      <template v-for="item in tabIndices">
-        <el-tab-pane
-          :key="item.name"
-          :disabled="item.disabled"
-          :label-content="item.labelContent"
-          :name="item.name"
-        >
-          <span slot="label" class="tab-container">
-            <i v-if="item.icon && !showText" :class="item.icon" class="tab-icon fa " />
-            <span v-if="showText" class="tab-text">{{ item.title }}</span>
-            <slot :tab="item.name" name="badge" />
-          </span>
+      <template v-for="item in tabIndices" :key="item.name">
+        <el-tab-pane :disabled="item.disabled" :label-content="item.labelContent" :name="item.name">
+          <template #label>
+            <span class="tab-container">
+              <i v-if="item.icon && !showText" :class="item.icon" class="tab-icon fa" />
+              <span v-if="showText" class="tab-text">{{ item.title }}</span>
+              <slot :tab="item.name" name="badge" />
+            </span>
+          </template>
         </el-tab-pane>
       </template>
     </el-tabs>
@@ -30,11 +27,13 @@
             :key="componentKey"
             ref="AutoDataZTree"
             :setting="activeTreeSetting"
-            @urlChange="handleUrlChange"
+            @url-change="handleUrlChange"
           >
-            <div slot="rMenu" slot-scope="{data}">
-              <slot :data="data" name="rMenu" />
-            </div>
+            <template #rMenu="{ data }">
+              <div>
+                <slot :data="data" name="rMenu" />
+              </div>
+            </template>
           </AutoDataZTree>
         </keep-alive>
       </slot>
@@ -44,7 +43,6 @@
 
 <script>
 import AutoDataZTree from '@/components/Tree/AutoDataZTree/index.vue'
-import merge from 'webpack-merge'
 
 const ACTIVE_TREE_TAB_KEY = 'activeTreeTab'
 
@@ -67,6 +65,7 @@ export default {
     return {
       flag: false,
       componentKey: 1,
+      renderVersion: 0,
       activeTreeSetting: {},
       showText: true,
       keyMap: {}
@@ -105,7 +104,7 @@ export default {
   methods: {
     hiddenTextIfNeed() {
       const vm = this
-      const hideOverflowingText = _.debounce(function() {
+      const hideOverflowingText = _.debounce(function () {
         const tabs = document.querySelector('.tree-tab .el-tabs__nav-wrap.is-scrollable')
         vm.showText = !tabs
       }, 800)
@@ -116,13 +115,13 @@ export default {
     hideRMenu() {
       this.$refs.AutoDataZTree?.hideRMenu()
     },
-    getSelectedNodes: function() {
+    getSelectedNodes: function () {
       return this.$refs.AutoDataZTree.getSelectedNodes()
     },
-    getNodes: function() {
+    getNodes: function () {
       return this.$refs.AutoDataZTree.getNodes()
     },
-    selectNode: function(node) {
+    selectNode: function (node) {
       return this.$refs.AutoDataZTree.selectNode(node)
     },
     handleUrlChange(url) {
@@ -137,9 +136,12 @@ export default {
       this.$emit('update:activeMenu', tab.name)
       this.$cookie.set(ACTIVE_TREE_TAB_KEY, tab.name, 1)
 
-      if (this.$router.currentRoute.query[ACTIVE_TREE_TAB_KEY]) {
+      if (this.$route?.query?.[ACTIVE_TREE_TAB_KEY]) {
         this.$router.push({
-          query: merge(this.$route.query, { [ACTIVE_TREE_TAB_KEY]: '' })
+          query: {
+            ...this.$route.query,
+            [ACTIVE_TREE_TAB_KEY]: ''
+          }
         })
       }
     },
@@ -150,6 +152,8 @@ export default {
         for (const tab of this.submenu) {
           if (tab.name === tabName) {
             vm.activeTreeSetting = tab.treeSetting
+            this.renderVersion += 1
+            this.componentKey = `${this.$route.name || 'tree'}_${tabName}_${this.renderVersion}`
             break
           }
         }
@@ -176,7 +180,7 @@ export default {
         }
       }
 
-      activeTab = this.tabIndices[0].name
+      activeTab = this.tabIndices[0]?.name || this.activeMenu || ''
       return activeTab
     }
   }
@@ -184,11 +188,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .data-z-tree {
+:deep(.data-z-tree) {
   padding: 0;
 }
 
-.page-submenu ::v-deep .el-tabs__nav-wrap {
+.page-submenu :deep(.el-tabs__nav-wrap) {
   position: static;
 
   .el-tabs__item {
@@ -202,19 +206,18 @@ export default {
 }
 
 .only-submenu {
-  &::v-deep .el-tabs__active-bar {
+  &:deep(.el-tabs__active-bar) {
+    width: 100% !important;
     transform: none !important;
   }
 
-  &::v-deep .el-tabs__item.is-active {
+  &:deep(.el-tabs__item.is-active) {
     text-align: left;
     padding: 0 20px;
   }
 }
 
-::v-deep {
-  .ztree {
-    padding: 0;
-  }
+:deep(.ztree) {
+  padding: 0;
 }
 </style>

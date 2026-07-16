@@ -2,24 +2,24 @@
   <Page>
     <AdhocOpenDialog
       v-if="showOpenAdhocDialog"
-      :visible.sync="showOpenAdhocDialog"
+      v-model:visible="showOpenAdhocDialog"
       @select="onSelectAdhoc"
     />
     <AdhocSaveDialog
       v-if="showOpenAdhocSaveDialog"
+      v-model:visible="showOpenAdhocSaveDialog"
       :args="command"
       :module="module"
-      :visible.sync="showOpenAdhocSaveDialog"
     />
-    <VariableHelpDialog :visible.sync="showHelpDialog" />
+    <VariableHelpDialog v-model:visible="showHelpDialog" />
     <SetVariableDialog
+      v-model:visible="showSetVariableDialog"
       :form-data="variableFormData"
       :query-param="variableQueryParam"
-      :visible.sync="showSetVariableDialog"
       @submit="onSubmitVariable"
     />
     <ConfirmRunAssetsDialog
-      :visible.sync="showConfirmRunAssetsDialog"
+      v-model:visible="showConfirmRunAssetsDialog"
       :is-running="isRunning"
       :assets="classifiedAssets"
       @submit="onConfirmRunAsset"
@@ -28,15 +28,8 @@
       <div class="select-assets">
         <SelectJobAssetDialog @change="handleSelectAssets" />
       </div>
-      <div class="transition-box" style="width: calc(100% - 17px)">
-        <CodeEditor
-          v-if="ready"
-          :options="cmOptions"
-          :toolbar="toolbar"
-          :value.sync="command"
-          style="margin-bottom: 20px"
-        />
-        <span v-if="executionInfo.status" style="float: right" />
+      <div class="transition-box">
+        <CodeEditor v-if="ready" v-model="command" :options="cmOptions" :toolbar="toolbar" />
         <div class="xterm-container">
           <QuickJobTerm
             ref="xterm"
@@ -47,7 +40,6 @@
             @view-assets="viewConfirmRunAssets"
           />
         </div>
-        <div style="display: flex; margin-top: 10px; justify-content: space-between" />
       </div>
     </div>
   </Page>
@@ -64,6 +56,7 @@ import VariableHelpDialog from './VariableHelpDialog.vue'
 import ConfirmRunAssetsDialog from './components/ConfirmRunAssetsDialog.vue'
 import SetVariableDialog from '@/views/ops/Template/components/SetVariableDialog.vue'
 import { createJob, getJob, getTaskDetail, stopJob } from '@/api/ops'
+import { createWsUrl } from '@/utils/common/index'
 import SelectJobAssetDialog from './components/SelectJobAssetDialog.vue'
 
 export default {
@@ -108,7 +101,7 @@ export default {
         left: {
           run: {
             type: 'button',
-            name: '',
+            name: this.$t('Execute'),
             align: 'left',
             icon: 'fa fa-play',
             tip: this.$t('RunCommand'),
@@ -126,7 +119,7 @@ export default {
           },
           stop: {
             type: 'button',
-            name: '',
+            name: this.$t('Stop'),
             align: 'left',
             icon: 'fa fa-stop',
             tip: this.$t('StopJob'),
@@ -161,8 +154,8 @@ export default {
                     assets: hosts,
                     query: query
                   })
-                  .then(data => {
-                    const ns = data.map(item => {
+                  .then((data) => {
+                    const ns = data.map((item) => {
                       return { value: item.username }
                     })
                     cb(ns)
@@ -170,7 +163,7 @@ export default {
               }
             },
             options: [],
-            callback: option => {
+            callback: (option) => {
               this.runas = option
             }
           },
@@ -194,7 +187,7 @@ export default {
                 value: 'privileged_only'
               }
             ],
-            callback: option => {
+            callback: (option) => {
               this.runasPolicy = option
             }
           },
@@ -237,7 +230,7 @@ export default {
                 value: 'huawei'
               }
             ],
-            callback: option => {
+            callback: (option) => {
               this.cmOptions.mode = option === 'win_shell' ? 'powershell' : option
               this.module = option
             }
@@ -254,7 +247,7 @@ export default {
               { label: '30', value: 30 },
               { label: '60', value: 60 }
             ],
-            callback: option => {
+            callback: (option) => {
               this.timeout = option
             }
           },
@@ -265,7 +258,7 @@ export default {
             value: '',
             placeholder: this.$tc('EnterRunningPath'),
             tip: this.$tc('RunningPathHelpText'),
-            callback: val => {
+            callback: (val) => {
               this.chdir = val
             }
           }
@@ -351,8 +344,8 @@ export default {
     recoverStatus() {
       if (this.$route.query.taskId) {
         this.currentTaskId = this.$route.query.taskId
-        getTaskDetail(this.currentTaskId).then(data => {
-          getJob(data.job_id).then(res => {
+        getTaskDetail(this.currentTaskId).then((data) => {
+          getJob(data.job_id).then((res) => {
             this.toolbar.left.runas.value = res.runas
             this.toolbar.left.runas.callback(res.runas)
             this.toolbar.left.runasPolicy.value = res.runas_policy.value
@@ -371,27 +364,24 @@ export default {
       }
     },
     onSelectAdhoc(adhoc) {
-      this.variableFormData = adhoc?.variable.map(data => {
+      this.variableFormData = adhoc?.variable.map((data) => {
         return data.form_data
       })
       this.variableQueryParam = 'adhoc=' + adhoc.id
       this.command = adhoc.args
     },
     enableWS() {
-      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
-      const port = document.location.port ? ':' + document.location.port : ''
-      const url = '/ws/ops/tasks/log/'
-      const wsURL = scheme + '://' + document.location.hostname + port + url
+      const wsURL = createWsUrl('/ws/ops/tasks/log/')
       this.ws = new WebSocket(wsURL)
-      this.ws.onerror = e => {
+      this.ws.onerror = (e) => {
         this.xterm.write(this.wrapperError('Connect websocket server error'))
       }
       this.setWsCallback()
     },
     setWsCallback() {
-      this.ws.onmessage = e => {
+      this.ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
-        if (data.hasOwnProperty('message')) {
+        if (Object.prototype.hasOwnProperty.call(data, 'message')) {
           let message = data.message
           message = message.replace(
             /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} Task ops\.tasks\.run_ops_job_execution.*/,
@@ -399,7 +389,7 @@ export default {
           )
           this.xterm.write(message)
         }
-        if (data.hasOwnProperty('event')) {
+        if (Object.prototype.hasOwnProperty.call(data, 'event')) {
           const event = data.event
           switch (event) {
             case 'end':
@@ -412,7 +402,7 @@ export default {
       }
     },
     getTaskStatus() {
-      getTaskDetail(this.currentTaskId).then(data => {
+      getTaskDetail(this.currentTaskId).then((data) => {
         this.executionInfo.status = data['status']
         this.setBtn()
       })
@@ -478,7 +468,7 @@ export default {
         .post('/api/v1/ops/classified-hosts/', {
           ...payload
         })
-        .then(data => {
+        .then((data) => {
           this.classifiedAssets = data
           if (this.classifiedAssets.error.length === 0) {
             this.onConfirmRunAsset(hosts, nodes)
@@ -505,19 +495,21 @@ export default {
       if (this.parameters) {
         data.parameters = this.parameters
       }
-      createJob(data).then(res => {
-        this.executionInfo.timeCost = 0
-        this.executionInfo.status = { value: 'running', label: this.$t('Running') }
-        this.currentTaskId = res.task_id
-        this.xtermConfig = { taskId: this.currentTaskId, type: 'shortcut_cmd' }
-        this.setCostTimeInterval()
-        this.writeExecutionOutput()
-        this.setBtn()
-        this.selectAssets = assets
-        this.selectNodes = nodes
-      }).catch(() => {
-        this.lastRequestPayload = null
-      })
+      createJob(data)
+        .then((res) => {
+          this.executionInfo.timeCost = 0
+          this.executionInfo.status = { value: 'running', label: this.$t('Running') }
+          this.currentTaskId = res.task_id
+          this.xtermConfig = { taskId: this.currentTaskId, type: 'shortcut_cmd' }
+          this.setCostTimeInterval()
+          this.writeExecutionOutput()
+          this.setBtn()
+          this.selectAssets = assets
+          this.selectNodes = nodes
+        })
+        .catch(() => {
+          this.lastRequestPayload = null
+        })
     },
     viewConfirmRunAssets() {
       this.showConfirmRunAssetsDialog = true
@@ -527,13 +519,13 @@ export default {
         .then(() => {
           this.xterm.write(
             '\x1b[31m' +
-            this.$tc('StopLogOutput').replace('currentTaskId', this.currentTaskId) +
-            '\x1b[0m'
+              this.$tc('StopLogOutput').replace('currentTaskId', this.currentTaskId) +
+              '\x1b[0m'
           )
           this.xterm.write(this.wrapperError(''))
           this.getTaskStatus()
         })
-        .catch(e => {
+        .catch((e) => {
           this.$log.error(e)
         })
         .finally(() => {
@@ -558,64 +550,48 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$container-bg-color: #f7f7f7;
 .job-container {
   display: flex;
+  flex: 1;
+  min-height: 0;
+  gap: 20px;
 
   .select-assets {
-    width: 23.6%;
+    flex: 0 0 24%;
+    min-width: 240px;
   }
-}
 
-.transition-box {
-  display: flex;
-  flex-direction: column;
+  .transition-box {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    gap: 20px;
 
-  .xterm-container {
-    margin-left: 30px;
-    height: calc(100vh - 549px);
-    min-height: 255px;
-    border: 1px solid var(--color-border);
-    border-radius: 5px;
-    background-color: $container-bg-color;
-    overflow: hidden;
+    // 编辑器区套一层白色面板，避免直接露出内容区灰底（AppMain #f3f3f4）
+    :deep(.code-editor) {
+      padding: 14px 16px;
+      background: #fff;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+    }
 
-    & > div {
-      height: 100%;
+    .xterm-container {
+      flex: 1;
+      min-height: 240px;
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
 
-      & ::v-deep .xterm {
-        height: calc(100% - 8px);
-        overflow-y: hidden;
+      & > div {
+        height: 100%;
+
+        & :deep(.xterm) {
+          height: calc(100% - 8px);
+          overflow-y: hidden;
+        }
       }
     }
   }
-}
-
-.mini-button {
-  width: 12px;
-  float: right;
-  text-align: center;
-  padding: 5px 0;
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
-  color: #ffffff;
-  border-radius: 2px;
-}
-
-.mini {
-  margin-right: 5px;
-  width: 12px !important;
-}
-
-.vue-codemirror-wrap ::v-deep .CodeMirror {
-  width: 600px;
-  height: 100px;
-  border: 1px solid #eee;
-}
-
-.output {
-  padding-left: 30px;
-  background-color: rgb(247 247 247);
-  border: solid 1px #f3f3f3;
 }
 </style>

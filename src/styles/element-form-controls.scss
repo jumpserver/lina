@@ -1,0 +1,552 @@
+// JumpServer 表单控件统一样式（Element Plus 单层边框方案）
+//
+// Element UI 时代由 element-extra.css 全局处理 .el-input__inner；
+// Element Plus 改用 .el-input__wrapper + inset box-shadow，旧 CSS 会导致 border 套 border。
+// 控件外观集中在此；DataForm 等组件只保留布局（label 宽度、flex、mobile 等）。
+//
+// 作用域：
+//   .el-form .el-form-item__content  — 标准 el-form
+//   .jms-form-controls               — 非 el-form 场景（Crontab、UserConfirmDialog 等）
+
+@mixin jms-input-wrapper-spacing {
+  padding-block: var(--jms-input-padding-block, 1px);
+  padding-inline: var(--jms-input-padding-inline, 11px);
+  padding-inline-start: var(
+    --jms-input-padding-inline-start,
+    var(--jms-input-padding-inline, 11px)
+  );
+  padding-inline-end: var(--jms-input-padding-inline-end, var(--jms-input-padding-inline, 11px));
+}
+
+// 输入文字与 placeholder 的间距只属于 wrapper。普通表单输入由下方直接子节点规则
+// 自动应用默认值；TagInput、Autocomplete、InputNumber 等复合控件显式挂载此契约，
+// 并通过变量声明视觉特例，不再修改 Element Plus 内部节点的 text padding。
+.jms-input-spacing.el-input > .el-input__wrapper,
+.jms-input-spacing.el-autocomplete > .el-input > .el-input__wrapper,
+.jms-input-spacing .el-input > .el-input__wrapper {
+  @include jms-input-wrapper-spacing;
+}
+
+// 所有 Element Plus 多选框使用同一套标签尺寸与间距。契约锚定 selection，
+// 以同时覆盖主控件和 collapse-tags-tooltip teleport 出去的标签列表。
+.el-select__selection:has(.el-tag) {
+  gap: 0;
+
+  .el-tag {
+    margin: 2px 0 2px 6px;
+  }
+
+  .el-tag.el-tag--small {
+    min-height: 24px;
+    height: 24px;
+    padding: 0 8px;
+    line-height: 22px;
+    font-size: 12px;
+
+    .el-tag__close {
+      margin-top: -1px !important;
+    }
+  }
+
+  // Tag 的起始 margin 负责 tag-to-tag 间距；输入容器单独补齐末尾 Tag 到光标的间距。
+  > .el-select__input-wrapper:not(.is-hidden) {
+    margin-inline-start: 6px;
+  }
+}
+
+@mixin jms-form-control-items {
+  --el-input-height: 30px;
+  font-size: 13px;
+  line-height: 30px;
+
+  .el-checkbox.el-checkbox--small {
+    height: 30px;
+  }
+
+  .el-radio-group,
+  .el-checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    min-height: 30px;
+  }
+
+  .el-tree span {
+    font-size: 13px;
+  }
+
+  .el-radio-group .el-radio__label {
+    font-size: 13px;
+  }
+
+  .el-input:not(.el-date-editor),
+  .el-select,
+  .el-cascader,
+  .el-input-number,
+  .el-date-editor.el-input,
+  .el-date-editor.el-date-editor--date,
+  .el-date-editor.el-date-editor--datetime,
+  .el-date-editor.el-date-editor--daterange,
+  .el-date-editor.el-date-editor--datetimerange {
+    min-height: 30px;
+  }
+
+  .el-input__wrapper,
+  .el-input-group__prepend,
+  .el-input-group__append,
+  .el-date-editor.el-input,
+  .el-date-editor--daterange,
+  .el-date-editor--datetimerange {
+    min-height: 30px;
+    height: 30px;
+    box-sizing: border-box;
+    border-radius: 0;
+  }
+
+  .el-date-editor.el-input {
+    --el-input-height: 30px;
+    height: 30px;
+
+    .el-input__wrapper {
+      height: 30px;
+      min-height: 30px;
+    }
+
+    .el-input__inner {
+      height: 28px;
+      line-height: 28px;
+    }
+  }
+
+  .el-link--default {
+    font-weight: 500;
+    font-size: 13px;
+  }
+
+  .el-select__wrapper,
+  .el-cascader .el-input__wrapper {
+    min-height: 30px;
+    height: auto;
+    box-sizing: border-box;
+    border-radius: 0;
+  }
+
+  .el-select__wrapper {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .el-select__selection {
+    min-height: 28px;
+    align-items: center;
+  }
+
+  .el-select__placeholder,
+  .el-select__input {
+    min-height: 28px;
+    height: 28px;
+    line-height: 28px;
+  }
+
+  .el-cascader .el-input {
+    height: auto;
+    line-height: 30px;
+  }
+
+  .el-input__wrapper,
+  .el-select__wrapper,
+  .el-cascader .el-input__wrapper {
+    box-shadow: none !important;
+    border: 1px solid var(--el-border-color) !important;
+
+    &:hover {
+      border-color: var(--el-border-color-hover) !important;
+    }
+
+    &.is-focus,
+    &.is-focused {
+      box-shadow: none !important;
+      border-color: var(--el-color-primary) !important;
+    }
+  }
+
+  .el-input__wrapper {
+    cursor: text;
+  }
+
+  // 普通表单项的直接输入框使用默认契约。仅匹配直接子节点，避免替复合控件
+  // 决定特例值；变量继承允许调用方通过 .jms-input-spacing 覆盖默认间距。
+  > .el-input > .el-input__wrapper {
+    @include jms-input-wrapper-spacing;
+  }
+
+  .el-select__wrapper,
+  .el-cascader .el-input__wrapper,
+  .el-date-editor .el-input__wrapper {
+    cursor: pointer;
+  }
+
+  .is-disabled .el-input__wrapper,
+  .el-input.is-disabled .el-input__wrapper {
+    cursor: not-allowed;
+  }
+
+  .filter-field {
+    .el-input__wrapper {
+      border: 0 !important;
+    }
+  }
+
+  .el-input-group:not(.keep-inner-border) {
+    .el-input-group__prepend + .el-input__wrapper {
+      border-left: 0 !important;
+    }
+
+    .el-input__wrapper:has(+ .el-input-group__append) {
+      border-right: 0 !important;
+    }
+  }
+
+  .el-input-group.keep-inner-border {
+    .el-input-group__prepend .el-select__wrapper {
+      border-right: 0 !important;
+    }
+  }
+
+  .compound-field {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 30px;
+    box-sizing: border-box;
+    border: 1px solid var(--el-border-color);
+    background-color: #fff;
+    overflow: hidden;
+
+    &:hover {
+      border-color: var(--el-border-color-hover) !important;
+    }
+
+    &:focus-within {
+      border-color: var(--el-color-primary) !important;
+    }
+
+    > *:not(:last-child) {
+      border-right: 1px solid var(--el-border-color);
+    }
+
+    .el-select__wrapper,
+    .el-input__wrapper {
+      height: 100%;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+    }
+  }
+
+  .el-select,
+  .el-select .el-tooltip__trigger {
+    border-radius: 0;
+  }
+
+  .el-input__inner,
+  .el-select .el-input__inner,
+  .el-date-editor .el-range-input,
+  .el-date-editor .el-range-separator,
+  .el-date-editor .el-range__icon,
+  .el-date-editor .el-range__close-icon {
+    min-height: 28px;
+    height: 28px;
+    line-height: 28px;
+  }
+
+  .el-input__wrapper .el-input__inner {
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .el-select__wrapper .el-select__placeholder {
+    border: 0 !important;
+    box-shadow: none !important;
+    padding-inline-start: 0 !important;
+    margin-inline-start: 0 !important;
+  }
+
+  .el-input.is-disabled .el-input__inner {
+    color: var(--color-icon-primary) !important;
+    background-color: var(--color-disabled-background);
+  }
+
+  .el-input.el-input-group {
+    .el-input-group__prepend .el-select {
+      min-height: 30px;
+
+      .el-input__wrapper {
+        min-height: 28px;
+        height: 28px;
+        box-shadow: none;
+      }
+
+      .el-input__inner {
+        border: none;
+        height: 28px;
+        line-height: 28px;
+      }
+    }
+
+    .el-input__inner {
+      border-radius: 0;
+      color: var(--color-text-primary);
+    }
+  }
+
+  .el-input .el-input__inner {
+    color: var(--color-text-primary);
+  }
+
+  .el-form-item__error {
+    position: inherit;
+  }
+
+  .el-textarea .el-textarea__inner {
+    border-radius: 0;
+  }
+
+  .el-data-table .el-table {
+    margin: 5px 0;
+  }
+}
+
+.el-form .el-form-item__content,
+.jms-form-controls {
+  @include jms-form-control-items;
+}
+
+// 普通 el-form（非 DataForm）的间距与标签对齐
+.el-form:not(.form-fields) {
+  .el-form-item {
+    margin-bottom: 20px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .el-form-item__label {
+    min-height: 30px;
+    line-height: 30px;
+    color: var(--color-text-primary);
+  }
+
+  .el-form-item__content {
+    min-height: 30px;
+  }
+}
+
+.el-dialog__body .el-form {
+  margin-bottom: 0;
+}
+
+.el-form .form-buttons {
+  .el-button {
+    min-height: 30px;
+    height: 30px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1;
+  }
+}
+
+.el-dialog.dialog .dialog-footer .el-button {
+  min-height: 30px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1;
+
+  > span {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Form 结构与标签
+// ---------------------------------------------------------------------------
+
+.el-form {
+  margin-bottom: 20px;
+
+  label {
+    font-weight: 400;
+    line-height: 30px;
+  }
+
+  .el-input__icon {
+    vertical-align: super;
+  }
+}
+
+.el-form-item__label {
+  overflow: hidden;
+
+  span {
+    line-height: inherit;
+    display: inline-block;
+    vertical-align: middle;
+    word-break: break-word;
+  }
+}
+
+.form-group-header {
+  text-align: left;
+}
+
+.el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label {
+  span {
+    &::before {
+      content: '*';
+      margin-right: 4px;
+      color: #ed5565;
+    }
+  }
+
+  &::before {
+    display: none;
+  }
+}
+
+.el-form-item {
+  .CodeMirror {
+    height: 200px;
+  }
+}
+
+.el-card__body {
+  // DataForm（.form-fields）自己维护 padding/gap；卡片体已有 20px 内边距，不再额外 margin。
+  .el-form:not(.form-fields) {
+    form {
+      margin-top: 0;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 帮助文案、placeholder
+// ---------------------------------------------------------------------------
+
+.help-block {
+  display: block;
+  margin-top: 2px;
+  margin-bottom: 5px;
+  color: var(--color-help-text);
+  font-size: 12px;
+  line-height: 18px;
+  word-break: keep-all;
+
+  a {
+    color: var(--color-primary);
+  }
+}
+
+.el-form .el-form-item__content .help-block,
+.jms-form-controls .help-block {
+  margin: 0;
+}
+
+.el-input input::placeholder {
+  font-weight: 400 !important;
+  // 不强制 'Open Sans'：中日文 placeholder 继承输入框字体，保持一致。
+  font-size: 13px;
+}
+
+.el-input__inner::placeholder {
+  font-weight: 400;
+}
+
+// ---------------------------------------------------------------------------
+// Cascader / Select 微调
+// ---------------------------------------------------------------------------
+
+.el-cascader--small {
+  .el-cascader__tags {
+    padding: 3px;
+  }
+
+  .el-input__suffix {
+    width: 20px;
+  }
+}
+
+.el-select .el-input .el-select__caret {
+  line-height: 1;
+}
+
+// ---------------------------------------------------------------------------
+// 日期范围选择器（表单字段 DatetimeRangePicker + 表格筛选 .datepicker）
+// ---------------------------------------------------------------------------
+
+.datepicker.el-date-editor,
+.datepicker.el-date-editor.el-range-editor,
+.datepicker.el-date-editor--daterange,
+.el-date-editor.el-date-editor--daterange,
+.el-date-editor.el-range-editor {
+  width: 243px !important;
+  min-width: 243px !important;
+  max-width: 243px !important;
+  flex: 0 0 243px !important;
+  display: inline-flex !important;
+  align-items: center;
+  align-self: flex-start;
+  height: 32px !important;
+  min-height: 32px !important;
+  max-height: 32px !important;
+  box-sizing: border-box;
+}
+
+.datepicker.el-date-editor .el-range-input,
+.datepicker.el-date-editor .el-range-separator,
+.datepicker.el-date-editor .el-range__icon,
+.datepicker.el-date-editor .el-range__close-icon,
+.el-date-editor.el-date-editor--daterange .el-range-input,
+.el-date-editor.el-date-editor--daterange .el-range-separator,
+.el-date-editor.el-date-editor--daterange .el-range__icon,
+.el-date-editor.el-date-editor--daterange .el-range__close-icon,
+.el-date-editor.el-range-editor .el-range-input,
+.el-date-editor.el-range-editor .el-range-separator,
+.el-date-editor.el-range-editor .el-range__icon,
+.el-date-editor.el-range-editor .el-range__close-icon {
+  height: 30px;
+  line-height: 30px;
+}
+
+// Picker panels teleport 到 body；表单 wrapper 边框 override 可能泄漏进面板，此处恢复 EP inset 边框。
+.el-picker-panel {
+  .el-date-picker__time-header,
+  .el-date-range-picker__time-header,
+  .el-time-spinner__input {
+    .el-input__wrapper {
+      border: 0 !important;
+      border-radius: var(--el-input-border-radius, var(--el-border-radius-base));
+      box-shadow: 0 0 0 1px var(--el-input-border-color, var(--el-border-color)) inset !important;
+    }
+
+    .el-input__inner {
+      border: 0 !important;
+      box-shadow: none !important;
+    }
+  }
+}
+
+.el-picker-panel__sidebar .el-picker-panel__shortcut {
+  font-size: 12px;
+}
+
+.el-input-number {
+  .el-input-number__decrease,
+  .el-input-number__increase {
+    line-height: 26px;
+  }
+}

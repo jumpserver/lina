@@ -1,5 +1,5 @@
 const mixin = {
-  data: function() {
+  data: function () {
     return {
       page_size: 10,
       current_page: 1,
@@ -8,15 +8,9 @@ const mixin = {
     }
   },
   methods: {
-    handleSizeChange(val) {
-
-    },
-    handleCurrentChange(val) {
-
-    }
+    handleSizeChange(val) {},
+    handleCurrentChange(val) {}
   },
-  watch: {
-
-  }
+  watch: {}
 }
 export default mixin

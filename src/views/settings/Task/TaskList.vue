@@ -2,28 +2,48 @@
   <ListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
-<script type="text/jsx">
-import { ChoicesFormatter, DetailFormatter, SwitchFormatter } from '@/components/Table/TableFormatters'
-import { BASE_URL } from '@/utils/common/index'
+<script lang="jsx">
+import { mapGetters } from 'vuex'
 import { DrawerListTable as ListTable } from '@/components'
-
+import {
+  ChoicesFormatter,
+  DetailFormatter,
+  SwitchFormatter
+} from '@/components/Table/TableFormatters'
+import { BASE_URL } from '@/utils/common/index'
 export default {
   name: 'TaskList',
   components: {
     ListTable
+  },
+  computed: {
+    ...mapGetters({
+      vendor: 'vendor'
+    })
   },
   data() {
     return {
       tableConfig: {
         url: '/api/v1/ops/tasks/',
         columns: [
-          'name', 'queue', 'count', 'state', 'date_last_publish',
-          'exec_cycle', 'next_exec_time', 'enabled'
+          'name',
+          'queue',
+          'count',
+          'state',
+          'date_last_publish',
+          'exec_cycle',
+          'next_exec_time',
+          'enabled'
         ],
         columnsShow: {
           default: [
-            'name', 'count', 'state', 'date_last_publish',
-            'exec_cycle', 'next_exec_time', 'enabled'
+            'name',
+            'count',
+            'state',
+            'date_last_publish',
+            'exec_cycle',
+            'next_exec_time',
+            'enabled'
           ]
         },
         columnsMeta: {
@@ -49,7 +69,7 @@ export default {
           },
           comment: {
             width: '300px',
-            formatter: row => {
+            formatter: (row) => {
               return row.meta.comment ? row.meta.comment : '-'
             }
           },
@@ -74,12 +94,13 @@ export default {
           count: {
             width: '130px',
             label: `${this.$t('Success')}/${this.$t('Total')}`,
-            formatter: (row) => {
-              return <div>
-                <span Class='text-primary'>{row.summary.success || 0}</span>/
+            formatter: (row) => (
+              <div>
+                <span class="text-primary">{row.summary.success || 0}</span>
+                /
                 <span>{row.summary.total || 0}</span>
               </div>
-            }
+            )
           },
           state: {
             label: this.$t('State'),
@@ -134,14 +155,16 @@ export default {
       },
       headerActions: {
         hasCreate: false,
+        hasImport: false,
         hasMoreActions: false,
         extraActions: [
           {
             title: this.$t('TaskMonitor'),
             type: 'primary',
             can: this.$hasPerm('ops.view_taskmonitor'),
+            has: () => this.vendor !== 'OSM',
             callback: () => {
-              window.open(`${BASE_URL}/core/flower/?_=${Date.now()}`,)
+              window.open(`${BASE_URL}/core/flower/?_=${Date.now()}`)
             }
           }
         ]
@@ -151,6 +174,4 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-
-</style>
+<style lang="scss" scoped></style>

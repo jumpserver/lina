@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ListTable class="App-Provider" v-bind="$data" />
+    <ListTable v-bind="$data" class="App-Provider" />
   </div>
 </template>
 
@@ -19,9 +19,7 @@ export default {
         url: '/api/v1/terminal/app-providers/',
         columnsShow: {
           min: ['name'],
-          default: [
-            'name', 'hostname', 'load', 'actions'
-          ]
+          default: ['name', 'hostname', 'load', 'actions']
         },
         columnsMeta: {
           name: {
@@ -67,7 +65,6 @@ export default {
         hasExport: false,
         hasImport: false,
         canBulkDelete: false
-
       }
     }
   }
@@ -75,7 +72,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.App-Provider ::v-deep .protocol {
+.App-Provider :deep(.protocol) {
   margin-left: 3px;
 }
 </style>

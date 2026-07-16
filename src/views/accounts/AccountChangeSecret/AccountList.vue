@@ -4,10 +4,9 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import { GenericListTable } from '@/layout/components'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
-
 export default {
   name: 'AccountChangeSecret',
   components: {
@@ -20,9 +19,7 @@ export default {
       showViewSecretDialog: false,
       tableConfig: {
         url: '/api/v1/accounts/change-secret-status/',
-        columns: [
-          'execution_id', 'asset', 'account', 'status', 'ttl', 'actions'
-        ],
+        columns: ['execution_id', 'asset', 'account', 'status', 'ttl', 'actions'],
         columnsMeta: {
           asset: {
             formatter: DetailFormatter,
@@ -33,8 +30,12 @@ export default {
               getDrawerTitle: ({ row }) => row.asset.name,
               getRoute: ({ row }) => ({
                 name: 'AssetDetail',
-                params: { id: row.asset.id },
-                query: { tab: 'Basic' }
+                params: {
+                  id: row.asset.id
+                },
+                query: {
+                  tab: 'Basic'
+                }
               })
             }
           },
@@ -48,8 +49,12 @@ export default {
               getDrawerTitle: ({ row }) => row.username,
               getRoute: ({ row }) => ({
                 name: 'AssetAccountDetail',
-                params: { id: row.id },
-                query: { tab: 'Basic' }
+                params: {
+                  id: row.id
+                },
+                query: {
+                  tab: 'Basic'
+                }
               })
             }
           },
@@ -63,11 +68,13 @@ export default {
             formatterArgs: {
               drawer: true,
               can: true,
-              getTitle: ({ row }) => row.meta?.execution_id ? row.meta.execution_id : '-',
+              getTitle: ({ row }) => (row.meta?.execution_id ? row.meta.execution_id : '-'),
               getDrawerTitle: ({ row }) => row.meta?.execution_id,
               getRoute: ({ row }) => ({
                 name: 'AccountChangeSecretExecutionDetail',
-                params: { id: row.meta?.execution_id }
+                params: {
+                  id: row.meta?.execution_id
+                }
               })
             }
           },
@@ -80,9 +87,8 @@ export default {
                 ready: 'Ready',
                 processing: 'Processing'
               }
-
               if (statusMap[row.meta.status]) {
-                return <span>{ vm.$t(statusMap[row.meta.status]) }</span>
+                return <span>{vm.$t(statusMap[row.meta.status])}</span>
               }
               return <span>–</span>
             }
@@ -101,14 +107,11 @@ export default {
                   can: this.$hasPerm('accounts.add_changesecretexecution'),
                   type: 'danger',
                   callback: ({ row }) => {
-                    this.$axios.delete(
-                      '/api/v1/accounts/change-secret-status/',
-                      {
-                        data: {
-                          account_ids: [row.id]
-                        }
+                    this.$axios.delete('/api/v1/accounts/change-secret-status/', {
+                      data: {
+                        account_ids: [row.id]
                       }
-                    )
+                    })
                     vm.$refs.ListTable.reloadTable()
                   }
                 }
@@ -169,18 +172,15 @@ export default {
             can: ({ selectedRows }) => {
               return selectedRows.length > 0
             },
-            callback: function({ selectedRows }) {
-              const ids = selectedRows.map(v => {
+            callback: function ({ selectedRows }) {
+              const ids = selectedRows.map((v) => {
                 return v.id
               })
-              this.$axios.delete(
-                '/api/v1/accounts/change-secret-status/',
-                {
-                  data: {
-                    account_ids: ids
-                  }
+              this.$axios.delete('/api/v1/accounts/change-secret-status/', {
+                data: {
+                  account_ids: ids
                 }
-              )
+              })
               vm.$refs.ListTable.reloadTable()
             }.bind(this)
           }

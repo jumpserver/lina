@@ -5,31 +5,24 @@
   >
     <div class="nav-header">
       <div class="active-mobile">
-        <Organization v-if="$hasLicense()" class="organization" />
+        <Organization v-if="showOrgs" class="organization" />
       </div>
       <div class="nav-title">
         <span :class="switchViewOtherClasses" class="switch-view active-switch-view">
           <el-popover
-            :open-delay="200"
+            :show-after="200"
             placement="right-start"
-            popper-class="switcher-popper"
+            popper-class="view-switcher-popper"
             trigger="hover"
           >
-            <span slot="reference" style="width: 100%">
-              <el-tooltip
-                v-show="!isCollapse"
-                :content="isRouteMeta.title"
-                :open-delay="1000"
-                placement="bottom"
-                effect="dark"
-                class="view-title"
-              >
+            <template #reference>
+              <span style="width: 100%; padding: 0 15px; display: flex; align-items: center">
                 <span class="text-overflow">{{ isRouteMeta.title || '' }}</span>
-              </el-tooltip>
-              <span class="icon-zone">
-                <svg-icon class="icon" icon-class="switch" />
+                <span class="icon-zone">
+                  <svg-icon class="icon" icon-class="switch" />
+                </span>
               </span>
-            </span>
+            </template>
             <ViewSwitcher mode="vertical" @view-change="handleViewChange" />
           </el-popover>
         </span>
@@ -37,14 +30,14 @@
     </div>
     <div class="menu-wrap el-scrollbar">
       <el-menu
-        :active-text-color="variables['menuActiveText']"
-        :background-color="variables['menuBg']"
+        active-text-color="var(--menu-text-active)"
+        background-color="var(--menu-bg)"
         :collapse="isCollapse"
         :collapse-transition="false"
         :default-active="activeMenu"
         :default-openeds="defaultOpensMenu"
-        :text-color="variables['menuText']"
-        :text-weigth="variables['menuTextWeight']"
+        text-color="var(--menu-text)"
+        :text-weigth="600"
         :unique-opened="false"
         class="left-menu"
         mode="vertical"
@@ -63,7 +56,7 @@
         <Hamburger
           :is-active="sidebar.opened"
           class="hamburger-container"
-          @toggleClick="toggleSideBar"
+          @toggle-click="toggleSideBar"
         />
       </div>
     </div>
@@ -79,7 +72,6 @@ import SidebarItem from './SidebarItem'
 import Hamburger from '@/components/Widgets/Hamburger'
 import ViewSwitcher from '../NavHeader/ViewSwitcher'
 import Organization from '../NavHeader/Organization'
-import variables from '@/styles/variables.scss'
 
 export default {
   components: {
@@ -110,9 +102,10 @@ export default {
       if (meta.activeMenu) {
         return meta.activeMenu
       }
-      const { location } = this.$router.resolve('_Mark_')
-      let locPath = location.path.replace('_Mark_', '')
-      const parmaId = location.params?.id || route.params?.id
+      // hidden 路由且未显式指定 activeMenu:用当前路径剥掉动态 id 段,高亮父级菜单
+      // 注意:vue-router 5 的 router.resolve() 直接返回路由对象,没有 .location(VR3 才有)
+      let locPath = path
+      const parmaId = route.params?.id
       if (parmaId) {
         locPath = locPath.replace('/' + parmaId, '')
       }
@@ -126,11 +119,7 @@ export default {
       return this.$store.state.settings.sidebarLogo
     },
     showOrgs() {
-      return this.$store.getters.hasValidLicense
-      // return !this.isCollapse && this.inAdminPage && hasValidLicense
-    },
-    variables() {
-      return variables
+      return this.$route.meta?.showOrganization !== false && this.$hasLicense()
     },
     isCollapse() {
       return !this.sidebar.opened
@@ -155,12 +144,12 @@ export default {
     },
     setLeastMenuOpen() {
       const hasOpened = document.querySelector(
-        '.el-submenu-sidebar.submenu-item.el-submenu.is-opened'
+        '.el-submenu-sidebar.submenu-item.el-sub-menu.is-opened'
       )
       if (hasOpened) {
         return
       }
-      const el = document.querySelector('.el-submenu__title')
+      const el = document.querySelector('.el-sub-menu__title')
       if (el) {
         el.click()
       }
@@ -169,13 +158,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import '~@/styles/variables.scss';
+@use '@/styles/variables' as *;
 
 $mobileHeight: 40px;
 $origin-color: #ffffff;
-$hover-bg-color: var(--menu-hover);
-$hover-text-color: var(--menu-text-active);
-$hover-border-color: transparent;
 
 .left-side-wrapper {
   .nav-header {
@@ -185,13 +171,19 @@ $hover-border-color: transparent;
     align-items: center;
 
     .active-mobile {
+      width: 100%;
       display: none;
 
-      ::v-deep .organization {
+      :deep(.organization) {
         height: $mobileHeight;
-        padding-left: 20px;
+        width: 100%;
+        padding: 0 15px;
         background: var(--color-primary-dark-1);
         color: $origin-color;
+
+        .el-select__wrapper {
+          width: 100%;
+        }
 
         .el-input--prefix {
           display: flex;
@@ -206,12 +198,12 @@ $hover-border-color: transparent;
         }
       }
 
-      & ::v-deep .title-label {
+      & :deep(.title-label) {
         color: $origin-color !important;
       }
 
       .mobile-view-switch {
-        &::v-deep .el-menu-item.is-active {
+        :deep(.el-menu-item.is-active) {
           color: var(--menu-text-active) !important;
 
           .svg-icon {
@@ -234,13 +226,19 @@ $hover-border-color: transparent;
       transition: all 0.3s;
       color: var(--menu-text);
       background-color: var(--menu-bg);
-      border-bottom: 1px solid var(--menu-border, #e9ecef);
+      border-bottom: 1px solid var(--menu-border, var(--color-border));
+      border-top: 1px solid var(--menu-border, var(--color-border));
 
       .switch-view {
         width: 100%;
         padding: 5px;
 
-        ::v-deep .el-popover__reference {
+        .text-overflow {
+          width: calc(100% - 15px);
+          display: inline-block;
+        }
+
+        :deep(.el-popover__reference) {
           display: flex;
           justify-content: center;
           align-items: center;
@@ -264,9 +262,8 @@ $hover-border-color: transparent;
             }
 
             &:hover {
-              color: $hover-text-color;
-              border-color: $hover-border-color;
-              background-color: $hover-bg-color;
+              color: var(--menu-text-active);
+              background-color: var(--nav-header-hover, var(--menu-hover));
               border-radius: 4px;
             }
           }
@@ -278,9 +275,9 @@ $hover-border-color: transparent;
   .nav-footer {
     display: flex;
     justify-content: flex-start;
-    border-top: 1px solid var(--menu-border,rgba(31, 35, 41, 0.15));
-    background-color: $subMenuBg;
     color: var(--menu-text);
+    border-top: 1px solid var(--menu-border, rgba(31, 35, 41, 0.15));
+    background-color: $subMenuBg;
 
     .toggle-bar {
       display: flex;
@@ -291,7 +288,7 @@ $hover-border-color: transparent;
       border: 0;
       cursor: pointer;
 
-      ::v-deep .hamburger-container {
+      :deep(.hamburger-container) {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -305,9 +302,8 @@ $hover-border-color: transparent;
       }
 
       &:hover {
-        color: $hover-text-color;
-        border-color: $hover-border-color;
-        background-color: $hover-bg-color;
+        color: var(--menu-text-active);
+        background-color: var(--menu-hover-bg, var(--menu-hover));
       }
     }
   }
@@ -329,7 +325,14 @@ $hover-border-color: transparent;
   }
 
   &.collapsed .nav-title .switch-view {
-    ::v-deep .el-popover__reference {
+    .text-overflow {
+      display: none;
+    }
+
+    :deep(.el-popover__reference) {
+      justify-content: center;
+      padding: 0 !important;
+
       .icon-zone {
         margin-right: 0;
       }
@@ -339,13 +342,33 @@ $hover-border-color: transparent;
       }
     }
   }
-
-  // view switcher popover uses global menu styles
 }
 
 @media screen and (max-width: 992px) {
-  ::v-deep .active-mobile {
+  :deep(.active-mobile) {
     display: block !important;
+  }
+}
+</style>
+
+<style lang="scss">
+.el-popper.is-light.el-tooltip.el-popover.view-switcher-popper {
+  --el-popper-bg-color-light: var(--menu-bg);
+  --el-border-color-light: var(--menu-border, var(--color-border));
+  --el-popover-bg-color: var(--menu-bg);
+  --el-popover-border-color: var(--menu-border, var(--color-border));
+  --el-popover-padding: 0;
+
+  min-width: 0 !important;
+  width: max-content !important;
+  padding: 6px !important;
+  color: var(--menu-text);
+  background: var(--menu-bg);
+  border: 1px solid var(--menu-border, var(--color-border));
+
+  > .el-popper__arrow::before {
+    background: var(--menu-bg);
+    border-color: var(--menu-border, var(--color-border));
   }
 }
 </style>

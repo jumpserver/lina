@@ -1,28 +1,23 @@
 <template>
   <div>
-    <IBox>
-      <GenericCreateUpdateForm
-        :create-success-next-route="successUrl"
-        :update-success-next-route="successUrl"
-        v-bind="$data"
-      />
+    <IBox v-loading="loading">
+      <GenericCreateUpdateForm v-if="!loading" v-bind="$data" />
     </IBox>
     <VariablesHelpTextDialog
+      v-model:visible="showHelpDialog"
       :variables-help-text="variablesHelpText"
       :variables="variables"
-      :visible.sync="showHelpDialog"
     />
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import { IBox } from '@/components'
-import { GenericCreateUpdateForm } from '@/layout/components'
-import MarkDownEditor from '@/views/settings/Msg/Email/markDownEditor.vue'
-import { Select2 } from '@/components/Form/FormFields'
 import VariablesHelpTextDialog from '@/components/Apps/VariablesHelpTextDialog'
+import { Select2 } from '@/components/Form/FormFields'
+import { GenericCreateUpdateForm } from '@/layout/components'
 import variable from '@/views/ops/Template/components/Variable.vue'
-
+import MarkDownEditor from '@/views/settings/Msg/Email/markDownEditor.vue'
 export default {
   name: 'MsgTemplate',
   components: {
@@ -34,14 +29,10 @@ export default {
     const vm = this
     return {
       initial: {
-        template_name: localStorage.getItem('selectTemplateName') || 'terminal/_msg_session_sharing.html'
+        template_name:
+          localStorage.getItem('selectTemplateName') || 'terminal/_msg_session_sharing.html'
       },
-      fields: [
-        [this.$t('Basic'), [
-          'template_name',
-          'template_content'
-        ]]
-      ],
+      fields: [[this.$t('Basic'), ['template_name', 'template_content']]],
       fieldsMeta: {
         template_name: {
           label: this.$t('Name'),
@@ -50,7 +41,9 @@ export default {
               this.showHelpDialog = true
             }
             return (
-              <i onClick={handleClick} class='fa fa-question-circle' style='cursor: pointer'>{this.$t('Help')}</i>
+              <i onClick={handleClick} class="fa fa-question-circle" style="cursor: pointer">
+                {this.$t('Help')}
+              </i>
             )
           },
           component: Select2,
@@ -60,25 +53,15 @@ export default {
           },
           on: {
             input: ([event], updateForm) => {
-              setTimeout(() => {
-                vm.templates.map(item => {
-                  if (item.template_name === event) {
-                    this.selectTemplateName = item.template_name
-                    localStorage.setItem('selectTemplateName', item.template_name)
-                    this.variables = item.contexts
-                    this.source = item.source
-                    updateForm({
-                      template_content: item.content.trimStart()
-                    })
-                  }
-                })
-              },
-              500
-              )
+              const template = vm.templates.find((item) => item.template_name === event)
+              vm.selectTemplate(template, updateForm)
             }
           }
         },
         template_content: {
+          // 保留表单 label 列的占位，使编辑器左边界与上方名称控件对齐。
+          // 不能用空格：字段生成器会 trim；零宽空格不会显示，也不会被 trim。
+          label: '\u200B',
           component: MarkDownEditor,
           on: {
             htmlChange: ([html]) => {
@@ -88,21 +71,31 @@ export default {
         }
       },
       templates: [],
-      successUrl: { name: 'Msg' },
+      loading: true,
       showHelpDialog: false,
       variables: [],
       html: '',
       source: 'original',
       selectTemplateName: '',
-      variablesHelpText: this.$t('TemplateVariablesHelpText'),
+      variablesHelpText: 'TemplateVariablesHelpText',
       hasSaveContinue: false,
-      onPerformError() {
+      hasReset: false,
+      hasDetailInMsg: false,
+      needGetObjectDetail: false,
+      submitMethod: () => 'patch',
+      cleanFormValue(validValues) {
+        return {
+          template_name: validValues.template_name,
+          template_content: validValues.template_content,
+          render_html: vm.html
+        }
       },
       performSubmit(validValues) {
-        validValues['render_html'] = vm.html
-        return this.$axios['patch']('/api/v1/notifications/templates/edit/', validValues).then(res => {
-          this.$router.push({ name: 'Msg', query: { t: new Date().getTime() } })
-        })
+        return this.$axios.patch('/api/v1/notifications/templates/edit/', validValues)
+      },
+      onPerformSuccess(res, method) {
+        vm.source = 'custom'
+        this.emitPerformSuccessMsg(method, res)
       },
       moreButtons: [
         {
@@ -110,12 +103,14 @@ export default {
           type: 'default',
           // hidden: () => this.source === 'original',
           callback: (value, form, btn) => {
-            return this.$axios['post']('/api/v1/notifications/templates/reset/', { template_name: this.selectTemplateName }).then(
-              () => {
-                this.$router.push({ name: 'Msg', query: { t: new Date().getTime() } })
+            const templateName = value.template_name || this.selectTemplateName
+            return this.$axios['post']('/api/v1/notifications/templates/reset/', {
+              template_name: templateName
+            }).then(() => {
+              return this.fetchTemplates(templateName).then(() => {
                 this.$message.success(this.$t('ResetSuccessfully'))
-              }
-            )
+              })
+            })
           }
         }
       ]
@@ -130,21 +125,48 @@ export default {
     this.fetchTemplates()
   },
   methods: {
-    fetchTemplates() {
-      this.$axios.get('/api/v1/notifications/templates/').then(data => {
-        if (data.length > 0) {
-          this.templates = data
-          this.fieldsMeta.template_name.el.options = data.map(item => ({
-            label: item.subject,
-            value: item.template_name
-          }))
-        }
-      })
+    async fetchTemplates(preferredTemplateName) {
+      this.loading = true
+      try {
+        const data = await this.$axios.get('/api/v1/notifications/templates/')
+        this.templates = data
+        this.fieldsMeta.template_name.el.options = data.map((item) => ({
+          label: item.subject,
+          value: item.template_name
+        }))
+
+        const selectedName =
+          preferredTemplateName ||
+          localStorage.getItem('selectTemplateName') ||
+          this.initial.template_name
+        const selectedTemplate = data.find((item) => item.template_name === selectedName) || data[0]
+        this.selectTemplate(selectedTemplate)
+      } finally {
+        this.loading = false
+      }
+    },
+    selectTemplate(template, updateForm) {
+      if (!template) {
+        return
+      }
+
+      const formValue = {
+        template_name: template.template_name,
+        template_content: (template.content || '').trimStart()
+      }
+      this.selectTemplateName = template.template_name
+      this.variables = template.contexts || []
+      this.source = template.source
+      localStorage.setItem('selectTemplateName', template.template_name)
+
+      if (updateForm) {
+        updateForm(formValue)
+      } else {
+        this.initial = formValue
+      }
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

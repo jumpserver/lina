@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 100,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "none",
+  "ignorePatterns": [
+    "node_modules",
+    "dist",
+    "build",
+    "lina",
+    "public",
+    "src/assets",
+    "src/styles/fonts",
+    "*.min.js",
+    "*.min.css",
+    "*.md"
+  ]
+}

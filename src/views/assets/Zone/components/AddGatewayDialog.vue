@@ -1,20 +1,17 @@
 <template>
   <Dialog
     v-if="setting.addGatewayDialogVisible"
+    v-model:visible="setting.addGatewayDialogVisible"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('AddGatewayInZone')"
-    :visible.sync="setting.addGatewayDialogVisible"
     after
     custom-class="asset-select-dialog"
     top="15vh"
     width="50vw"
   >
-    <GenericCreateUpdateForm
-      v-bind="formConfig"
-      @submitSuccess="onSubmitSuccess"
-    />
+    <GenericCreateUpdateForm v-bind="formConfig" @submit-success="onSubmitSuccess" />
   </Dialog>
 </template>
 <script>
@@ -36,8 +33,7 @@ export default {
     },
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -67,13 +63,13 @@ export default {
               ajax: {
                 url: '/api/v1/assets/assets/?is_gateway=1'
               },
-              disabledValues: this.object.gateways.map(item => item.id)
+              disabledValues: this.object.gateways.map((item) => item.id)
             }
           }
         },
         cleanFormValue(values) {
           const data = []
-          values.gateways.forEach(item => {
+          values.gateways.forEach((item) => {
             const d = { id: item.pk, zone: vm.object.id }
             data.push(d)
           })
@@ -90,9 +86,3 @@ export default {
   }
 }
 </script>
-
-<style lang="less" scoped>
-.dialog ::v-deep .el-dialog__footer {
-  padding: 0;
-}
-</style>

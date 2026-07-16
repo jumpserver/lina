@@ -8,11 +8,10 @@
   />
 </template>
 
-<script>
+<script lang="jsx">
 import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
-
 export default {
   name: 'AccountChangeSecretList',
   components: {
@@ -21,20 +20,31 @@ export default {
   data() {
     const vm = this
     return {
-      createDrawer: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretCreateUpdate.vue'),
+      createDrawer: () =>
+        import('@/views/accounts/AccountChangeSecret/AccountChangeSecretCreateUpdate.vue'),
       detailDrawer: () => import('@/views/accounts/AccountChangeSecret/Detail/index.vue'),
       tableConfig: {
         url: '/api/v1/accounts/change-secret-automations/',
         columnsExclude: ['password_rules'],
         columns: [
-          'name', 'accounts', 'secret_strategy', 'is_periodic',
-          'periodic_display', 'executed_amount', 'is_active', 'actions'
+          'name',
+          'accounts',
+          'secret_strategy',
+          'is_periodic',
+          'periodic_display',
+          'executed_amount',
+          'is_active',
+          'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'accounts', 'periodic_display',
-            'executed_amount', 'is_active', 'actions'
+            'name',
+            'accounts',
+            'periodic_display',
+            'executed_amount',
+            'is_active',
+            'actions'
           ]
         },
         columnsMeta: {
@@ -45,12 +55,12 @@ export default {
             }
           },
           accounts: {
-            formatter: function(row) {
+            formatter: function (row) {
               return <span> {row.accounts.join(', ')} </span>
             }
           },
           secret_strategy: {
-            formatter: function(row) {
+            formatter: function (row) {
               return <span> {row.secret_strategy.label} </span>
             }
           },
@@ -63,7 +73,11 @@ export default {
           executed_amount: {
             formatter: (row) => {
               const can = vm.$hasPerm('accounts.view_changesecretexecution')
-              return <el-link onClick={() => this.handleExecAmount(row)} disabled={!can}>{row.executed_amount}</el-link>
+              return (
+                <el-link onClick={() => this.handleExecAmount(row)} disabled={!can}>
+                  {row.executed_amount}
+                </el-link>
+              )
             }
           },
           actions: {
@@ -80,16 +94,15 @@ export default {
                   },
                   type: 'primary',
                   disabled: ({ row }) => !row.is_active,
-                  callback: function({ row }) {
-                    this.$axios.post(
-                      `/api/v1/accounts/change-secret-executions/`,
-                      {
+                  callback: function ({ row }) {
+                    this.$axios
+                      .post(`/api/v1/accounts/change-secret-executions/`, {
                         automation: row.id,
                         type: row.type.value
-                      }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
+                      })
+                      .then((res) => {
+                        openTaskPage(res['task'])
+                      })
                   }.bind(this)
                 }
               ]
@@ -107,15 +120,19 @@ export default {
             name: 'BatchDisable',
             title: this.$t('DisableSelected'),
             icon: 'fa fa-ban',
-            can: ({ selectedRows }) => selectedRows.length > 0 && this.$hasPerm('accounts.change_changesecretautomation'),
-            callback: ({ selectedRows, reloadTable }) => this.bulkDisableCallback(selectedRows, reloadTable)
+            can: ({ selectedRows }) =>
+              selectedRows.length > 0 && this.$hasPerm('accounts.change_changesecretautomation'),
+            callback: ({ selectedRows, reloadTable }) =>
+              this.bulkDisableCallback(selectedRows, reloadTable)
           },
           {
             name: 'BatchActivate',
             title: this.$t('ActivateSelected'),
             icon: 'fa fa-check-circle-o',
-            can: ({ selectedRows }) => selectedRows.length > 0 && this.$hasPerm('accounts.change_changesecretautomation'),
-            callback: ({ selectedRows, reloadTable }) => this.bulkActivateCallback(selectedRows, reloadTable)
+            can: ({ selectedRows }) =>
+              selectedRows.length > 0 && this.$hasPerm('accounts.change_changesecretautomation'),
+            callback: ({ selectedRows, reloadTable }) =>
+              this.bulkActivateCallback(selectedRows, reloadTable)
           }
         ]
       }
@@ -133,29 +150,41 @@ export default {
     },
     bulkDisableCallback(selectedRows, reloadTable) {
       const url = '/api/v1/accounts/change-secret-automations/'
-      const data = selectedRows.map(row => {
-        return { id: row.id, is_active: false }
+      const data = selectedRows.map((row) => {
+        return {
+          id: row.id,
+          is_active: false
+        }
       })
       if (data.length === 0) return
-      this.$axios.patch(url, data).then(() => {
-        reloadTable()
-        this.$message.success(this.$t('DisableSuccessMsg'))
-      }).catch(error => {
-        this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error)
-      })
+      this.$axios
+        .patch(url, data)
+        .then(() => {
+          reloadTable()
+          this.$message.success(this.$t('DisableSuccessMsg'))
+        })
+        .catch((error) => {
+          this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error)
+        })
     },
     bulkActivateCallback(selectedRows, reloadTable) {
       const url = '/api/v1/accounts/change-secret-automations/'
-      const data = selectedRows.map(row => {
-        return { id: row.id, is_active: true }
+      const data = selectedRows.map((row) => {
+        return {
+          id: row.id,
+          is_active: true
+        }
       })
       if (data.length === 0) return
-      this.$axios.patch(url, data).then(() => {
-        reloadTable()
-        this.$message.success(this.$t('ActivateSuccessMsg'))
-      }).catch(error => {
-        this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error)
-      })
+      this.$axios
+        .patch(url, data)
+        .then(() => {
+          reloadTable()
+          this.$message.success(this.$t('ActivateSuccessMsg'))
+        })
+        .catch((error) => {
+          this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error)
+        })
     }
   }
 }

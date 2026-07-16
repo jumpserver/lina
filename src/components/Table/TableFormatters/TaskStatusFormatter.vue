@@ -1,5 +1,5 @@
 <template>
-  <ChoicesFormatter :formatter-args-default="iFormatterArgsDefault" v-bind="$props" />
+  <ChoicesFormatter v-bind="$props" :formatter-args-default="iFormatterArgsDefault" />
 </template>
 
 <script>
@@ -31,13 +31,13 @@ export default {
             error: 'text-danger'
           },
           textChoices: {
-            ready: this.$t('Ready'),
-            pending: this.$t('Pending'),
-            running: this.$t('Running'),
-            success: this.$t('Success'),
-            failed: this.$t('Failed'),
-            error: this.$t('Error'),
-            canceled: this.$t('Canceled')
+            ready: 'Ready',
+            pending: 'Pending',
+            running: 'Running',
+            success: 'Success',
+            failed: 'Failed',
+            error: 'Error',
+            canceled: 'Canceled'
           }
         }
       }
@@ -45,14 +45,15 @@ export default {
   },
   data() {
     return {
-      iFormatterArgsDefault: Object.assign({}, ChoicesFormatter.formatterArgsDefault, this.formatterArgsDefault)
+      iFormatterArgsDefault: Object.assign(
+        {},
+        ChoicesFormatter.formatterArgsDefault,
+        this.formatterArgsDefault
+      )
     }
   },
-  mounted() {
-  }
+  mounted() {}
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

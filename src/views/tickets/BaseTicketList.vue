@@ -1,20 +1,20 @@
 <template>
-  <GenericListPage
-    ref="ListPage"
-    v-loading="loading"
-    :get-drawer-title="getDrawerTitle"
-    :create-drawer="createDrawer"
-    :detail-drawer="detailDrawer"
-    :header-actions="iTicketAction"
-    :quick-filters="quickFilters"
-    :table-config="ticketTableConfig"
-  />
+  <div v-loading="loading">
+    <GenericListPage
+      ref="ListPage"
+      :get-drawer-title="getDrawerTitle"
+      :create-drawer="createDrawer"
+      :detail-drawer="detailDrawer"
+      :header-actions="iTicketAction"
+      :table-config="ticketTableConfig"
+    />
+  </div>
 </template>
 
 <script>
 import { GenericListPage } from '@/layout/components'
 import { DetailFormatter, TagChoicesFormatter } from '@/components/Table/TableFormatters'
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { APPROVE, CLOSED, OPEN, REJECT } from './const'
 
 export default {
@@ -42,77 +42,11 @@ export default {
       loading: true,
       getDrawerTitle: () => ' ',
       createDrawer: () => import('@/views/tickets/RequestAssetPerm/CreateUpdate'),
-      quickFilters: [
-        {
-          label: this.$t('Type'),
-          options: [
-            {
-              label: this.$t('ApplyAsset'),
-              filter: {
-                type: 'apply_asset'
-              }
-            },
-            {
-              label: this.$t('LoginConfirm'),
-              filter: {
-                type: 'login_confirm'
-              }
-            },
-            {
-              label: this.$t('CommandConfirm'),
-              filter: {
-                type: 'command_confirm'
-              }
-            },
-            {
-              label: this.$t('LoginAssetConfirm'),
-              filter: {
-                type: 'login_asset_confirm'
-              }
-            }
-          ]
-        },
-        {
-          label: this.$t('State'),
-          options: [
-            {
-              label: this.$t('All'),
-              filter: {
-                state: 'all'
-              }
-            },
-            {
-              label: this.$t('Open'),
-              filter: {
-                state: 'pending'
-              }
-            },
-            {
-              label: this.$t('Cancel'),
-              filter: {
-                state: 'closed'
-              }
-            },
-            {
-              label: this.$t('Approved'),
-              filter: {
-                state: 'approved'
-              }
-            },
-            {
-              label: this.$t('Rejected'),
-              filter: {
-                state: 'rejected'
-              }
-            }
-          ]
-        }
-      ],
       detailDrawer: null,
       ticketTableConfig: {
         url: this.url,
         extraQuery: this.extraQuery,
-        columnsExclude: ['process_map', 'rel_snapshot', 'status'],
+        columnsExclude: ['process_map', 'rel_snapshot'],
         columnsShow: {
           min: ['title', 'serial_num', 'type', 'state', 'date_created'],
           default: ['title', 'serial_num', 'type', 'state', 'date_created']
@@ -138,7 +72,10 @@ export default {
                 }
 
                 this.$store.dispatch('common/setDrawerActionMeta', {
-                  action: 'detail', row: {}, col: {}, id: row.id
+                  action: 'detail',
+                  row: {},
+                  col: {},
+                  id: row.id
                 })
 
                 return {
@@ -151,18 +88,35 @@ export default {
           applicant: {
             label: this.$t('Applicant'),
             sortable: 'custom',
-            formatter: row => {
+            formatter: (row) => {
               return row['rel_snapshot'].applicant
             }
           },
           type: {
             label: this.$t('Type'),
-            formatter: row => {
+            formatter: (row) => {
               return row.type.label
             }
           },
+          status: {
+            align: 'center',
+            sortable: 'custom',
+            formatter: TagChoicesFormatter,
+            formatterArgs: {
+              getTagLabel({ row }) {
+                return row.status.label
+              },
+              getTagType({ row }) {
+                if (row.status.value === 'open') {
+                  return 'primary'
+                } else {
+                  return 'danger'
+                }
+              }
+            }
+          },
           state: {
-            label: this.$t('State'),
+            label: this.$t('Action'),
             align: 'center',
             sortable: 'custom',
             formatter: TagChoicesFormatter,
@@ -193,6 +147,7 @@ export default {
       },
       defaultTicketActions: {
         hasImport: false,
+        hasReportExport: true,
         hasMoreActions: false,
         hasLeftActions: true,
         canCreate: this.$hasPerm('tickets.view_ticket'),
@@ -238,6 +193,10 @@ export default {
             {
               value: 'relevant_asset',
               label: this.$t('RelevantAsset')
+            },
+            {
+              value: 'relevant_system_user',
+              label: this.$t('RelevantCommand')
             },
             {
               value: 'relevant_command',

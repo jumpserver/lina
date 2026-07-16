@@ -37,12 +37,9 @@ export default {
     }
   },
   methods: {
-    handleNodeClick(data) {
-    }
+    handleNodeClick(data) {}
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,12 +1,10 @@
 <template>
-  <div v-if="!loading">
-    <el-alert v-if="licenseMsg" type="error">
-      {{ licenseMsg }} !
-      <router-link :to="{ name: 'License' }" style="padding-left: 5px">
-        {{ $t('View') }} <i class="fa fa-external-link" />
-      </router-link>
-    </el-alert>
-  </div>
+  <el-alert v-if="!loading && licenseMsg" type="error">
+    {{ licenseMsg }} !
+    <router-link :to="{ name: 'License' }" style="padding-left: 5px">
+      {{ $t('View') }} <i class="fa fa-external-link" />
+    </router-link>
+  </el-alert>
 </template>
 
 <script>
@@ -21,16 +19,30 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'publicSettings',
-      'currentUser'
-    ]),
+    ...mapGetters(['publicSettings', 'currentUser']),
     licenseMsg() {
-      if (this.expireMsg) {
+      if (this.jdmcMsg) {
+        return this.jdmcMsg
+      } else if (this.expireMsg) {
         return this.expireMsg
       } else {
         return this.reachLimitsMsg
       }
+    },
+    jdmcMsg() {
+      if (!this.publicSettings['XPACK_ENABLED'] || !this.$hasPerm('settings.change_license')) {
+        return false
+      }
+      if (this.licenseData.message === 'license_expired') {
+        return this.$t('LicenseExpired')
+      }
+      if (this.licenseData.message === 'license_maintenance_expired') {
+        return this.$t('LicenseMaintenanceExpired')
+      }
+      if (this.licenseData.message === 'license_will_expire') {
+        return this.$t('LicenseWillExpire')
+      }
+      return false
     },
     expireMsg() {
       if (!this.publicSettings['XPACK_ENABLED'] || !this.$hasPerm('settings.change_license')) {
@@ -41,7 +53,9 @@ export default {
         return this.$t('LicenseExpired')
       }
       if (intervalDays < 7) {
-        return this.$t('LicenseWillBe') + ' ' + this.licenseData.date_expired + ' ' + this.$t('Expire')
+        return (
+          this.$t('LicenseWillBe') + ' ' + this.licenseData.date_expired + ' ' + this.$t('Expire')
+        )
       }
       return false
     },
@@ -60,11 +74,14 @@ export default {
   },
   mounted() {
     if (this.publicSettings['XPACK_ENABLED'] && this.$hasPerm('settings.change_license')) {
-      this.$axios.get('/api/v1/xpack/license/detail').then(res => {
-        this.licenseData = res
-      }).finally(() => {
-        this.loading = false
-      })
+      this.$axios
+        .get('/api/v1/xpack/license/detail')
+        .then((res) => {
+          this.licenseData = res
+        })
+        .finally(() => {
+          this.loading = false
+        })
     } else {
       this.loading = false
     }
@@ -73,13 +90,20 @@ export default {
     getIntervalDays(date) {
       const dateExpired = new Date(date)
       const dateNow = new Date()
-      const intervalTime = dateExpired.getTime() - dateNow.getTime()
+      // 只保留年月日，去掉时分秒
+      const expiredDay = new Date(
+        dateExpired.getFullYear(),
+        dateExpired.getMonth(),
+        dateExpired.getDate()
+      )
+
+      const nowDay = new Date(dateNow.getFullYear(), dateNow.getMonth(), dateNow.getDate())
+
+      const intervalTime = expiredDay.getTime() - nowDay.getTime()
       return Math.floor(intervalTime / (24 * 3600 * 1000))
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

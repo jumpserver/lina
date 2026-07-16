@@ -1,19 +1,31 @@
-export default {
-  name: 'el-data-table-column',
-  functional: true,
-  render(h, { data, props }) {
-    let children = []
-    const align = props.align
-    if (props.columns) {
-      children = props.columns.map(column =>
-        h('el-data-table-column', {
-          props: Object.assign({}, { align }, column)
-        })
-      )
-    }
-    data.props = {
-      ...data.props
-    }
-    return h('el-table-column', data, children)
+import { h, resolveComponent } from 'vue'
+
+function ElDataTableColumn(props, { attrs, slots }) {
+  const columnProps = { ...attrs }
+  if (props.align !== undefined) {
+    columnProps.align = props.align
+  }
+
+  const children = props.columns?.length
+    ? () =>
+        props.columns.map((column, index) =>
+          h(ElDataTableColumn, {
+            key: column.prop || index,
+            align: props.align,
+            ...column
+          })
+        )
+    : slots
+
+  return h(resolveComponent('el-table-column'), columnProps, children)
+}
+
+ElDataTableColumn.props = {
+  align: String,
+  columns: {
+    type: Array,
+    default: null
   }
 }
+
+export default ElDataTableColumn

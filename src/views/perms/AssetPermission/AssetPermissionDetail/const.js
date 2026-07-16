@@ -43,4 +43,3 @@ export const ACTIONS_FIELDS_MAP = {
     action: i18n.t('Clipboard')
   }
 }
-

@@ -1,18 +1,12 @@
 <template>
   <Dialog
+    v-bind="$attrs"
     :destroy-on-close="true"
     :show-buttons="false"
     :title="$tc('SelectAttrs')"
-    v-bind="$attrs"
-    v-on="$listeners"
   >
     <div v-if="!loading">
-      <DataForm
-        :form="form"
-        class="attr-form"
-        v-bind="formConfig"
-        @submit="onAttrDialogConfirm"
-      />
+      <DataForm v-bind="formConfig" :form="form" class="attr-form" @submit="onAttrDialogConfirm" />
     </div>
   </Dialog>
 </template>
@@ -29,11 +23,11 @@ export default {
   props: {
     attrs: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     attrsAdded: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     form: {
       type: Object,
@@ -53,7 +47,7 @@ export default {
             id: 'name',
             label: this.$t('AttrName'),
             type: 'select',
-            options: this.attrs.map(attr => {
+            options: this.attrs.map((attr) => {
               let disabled = this.attrsAdded.includes(attr.name) && this.form.name !== attr.name
               if (attr.disabled) {
                 disabled = true
@@ -63,7 +57,7 @@ export default {
             on: {
               change: ([val], updateForm) => {
                 // 变化会影响 match 的选项
-                const attr = this.attrs.find(attr => attr.name === val)
+                const attr = this.attrs.find((attr) => attr.name === val)
                 if (!attr) return
                 const matchOption = vm.updateMatchOptions(attr)
                 setTimeout(() => {
@@ -114,8 +108,8 @@ export default {
   },
   methods: {
     getDefaultAttrForm() {
-      const attrKeys = this.attrs.map(attr => attr.name)
-      const diff = attrKeys.filter(attr => !this.attrsAdded.includes(attr))
+      const attrKeys = this.attrs.map((attr) => attr.name)
+      const diff = attrKeys.filter((attr) => !this.attrsAdded.includes(attr))
       let name = this.attrs[0].name
       if (diff.length > 0) {
         name = diff[0]
@@ -134,7 +128,7 @@ export default {
     },
     updateMatchOptions(attr) {
       if (!attr) {
-        attr = this.attrs.find(attr => attr.name === this.form.name)
+        attr = this.attrs.find((attr) => attr.name === this.form.name)
       }
       if (!attr) return
       const attrType = attr.type || 'str'
@@ -143,8 +137,8 @@ export default {
         option.hidden = !matchSupports.includes(option.value)
       })
       this.formConfig.fields[2].el.attr = attr
-      const supports = attrMatchOptions.filter(option => !option.hidden)
-      const matchOption = supports.find(item => item.value === this.form.match) || supports[0]
+      const supports = attrMatchOptions.filter((option) => !option.hidden)
+      const matchOption = supports.find((item) => item.value === this.form.match) || supports[0]
       this.formConfig.fields[2].el.match = matchOption.value
       return matchOption
     }
@@ -153,11 +147,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .attr-form {
-  ::v-deep .el-select {
+  :deep(.el-select) {
+    width: 100%;
+  }
+
+  :deep(.el-form-item__content > div) {
     width: 100%;
   }
 }
 </style>
-

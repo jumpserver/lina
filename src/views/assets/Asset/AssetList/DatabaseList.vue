@@ -21,12 +21,12 @@ export default {
               title: this.$t('CloudSync'),
               icon: 'cloud-provider',
               has: () => this.$hasPerm('xpack.view_account') && this.$hasLicense(),
-              callback: () => this.$router.push(
-                { name: 'CloudAccountList', query: { category: 'database' } }
-              )
+              callback: () =>
+                this.$router.push({ name: 'CloudAccountList', query: { category: 'database' } })
             }
           ]
-        }
+        },
+        helpMessage: this.$t('DatabaseConnectivityTestHelpMessage')
       }
     }
   }

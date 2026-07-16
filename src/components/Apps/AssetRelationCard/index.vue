@@ -1,16 +1,25 @@
 <template>
-  <IBox :fa="icon" :title="title" :type="type" v-bind="$attrs">
-    <table style="width: 100%">
-      <tr>
-        <td colspan="2">
-          <AssetSelect ref="assetSelect" :can-select="canSelect" :disabled="disabled" />
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
-          <el-button :disabled="disabled" :type="type" size="small" @click="addObjects">{{ $t('Add') }}</el-button>
-        </td>
-      </tr>
+  <IBox v-bind="$attrs" :fa="icon" :title="title" :type="type" class="asset-relation-box the-box">
+    <table class="CardTable" style="width: 100%; table-layout: fixed">
+      <tbody>
+        <tr>
+          <td colspan="2">
+            <AssetSelect
+              ref="assetSelect"
+              :can-select="canSelect"
+              :disabled="disabled"
+              class="asset-relation-card__select"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <el-button :disabled="disabled" :type="type" size="small" @click="addObjects">{{
+              $t('Add')
+            }}</el-button>
+          </td>
+        </tr>
+      </tbody>
     </table>
   </IBox>
 </template>
@@ -48,13 +57,11 @@ export default {
     },
     performAdd: {
       type: Function,
-      default: (objects, that) => {
-      }
+      default: (objects, that) => {}
     },
     onAddSuccess: {
       type: Function,
-      default: (objects, that) => {
-      }
+      default: (objects, that) => {}
     },
     canSelect: {
       type: Function,
@@ -68,28 +75,42 @@ export default {
   },
   methods: {
     addObjects() {
-      const objects = this.$refs.assetSelect.$refs.select2.iValue
-      this.performAdd(objects, this).then(
-        () => this.onAddSuccess(objects, this)
-      )
+      const objects = this.$refs.assetSelect.getSelectedValue()
+      this.performAdd(objects, this).then(() => this.onAddSuccess(objects, this))
     }
   }
 }
 </script>
 
 <style scoped>
-b, strong {
+b,
+strong {
   font-weight: 700;
   font-size: 13px;
 }
 
 tr td {
-  line-height: 1.42857;
-  padding: 8px;
+  line-height: 1.4;
+  padding: 8px 0;
   vertical-align: top;
 }
 
-tr.item td {
-  border-top: 1px solid #e7eaec;
+.asset-relation-card__select {
+  width: 100%;
+}
+
+.asset-relation-box :deep(.el-button) {
+  height: 30px;
+  min-height: 30px;
+  width: auto;
+  font-weight: 400;
+  padding: 8px 12px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.asset-relation-box :deep(.el-button--primary),
+.asset-relation-box :deep(.el-button--danger) {
+  color: #fff;
 }
 </style>

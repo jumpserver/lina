@@ -9,10 +9,7 @@
               <el-row>
                 <el-col :md="16" :xs="24" class="content-left">
                   <Session />
-                  <Ticket
-                    v-if="$hasLicense() && $hasPerm('tickets.view_ticket')"
-                    :url="url"
-                  />
+                  <Ticket v-if="$hasLicense() && $hasPerm('tickets.view_ticket')" :url="url" />
                 </el-col>
                 <el-col :md="8" :xs="24">
                   <User />
@@ -50,45 +47,42 @@ export default {
     url() {
       return `/api/v1/tickets/tickets/?assignees__id=${this.currentUser.id}&state=pending`
     },
-    ...mapGetters([
-      'currentUser'
-    ])
+    ...mapGetters(['currentUser'])
   }
 }
-
 </script>
 
 <style lang="scss" scoped>
-  .home {
+.home {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  .container {
     position: relative;
-    height: 100%;
-    width: 100%;
-    .container {
-      position: relative;
-      overflow: hidden;
-      .main {
-        padding: 0;
-        .content {
-          position: relative;
+    overflow: hidden;
+    .main {
+      padding: 0;
+      .content {
+        position: relative;
+        width: 100%;
+        height: calc(100% - 50px);
+        display: flex;
+        flex-direction: column;
+        .content-body {
+          height: 100%;
           width: 100%;
-          height: calc(100% - 50px);
-          display: flex;
-          flex-direction: column;
-          .content-body {
-            height: 100%;
-            width: 100%;
-            margin: 0 auto;
-          }
+          margin: 0 auto;
         }
       }
     }
   }
+}
+.content-left {
+  padding-right: 20px;
+}
+@media screen and (max-width: 992px) {
   .content-left {
-    padding-right: 20px;
+    padding-right: 0;
   }
-  @media screen and (max-width: 992px) {
-    .content-left {
-      padding-right: 0;
-    }
-  }
+}
 </style>

@@ -26,8 +26,11 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .input-text {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
   line-height: 32px;
   padding-left: 8px;
   height: 32px;
@@ -36,5 +39,4 @@ export default {
 .bolder {
   border: solid 1px #dcdfe6;
 }
-
 </style>

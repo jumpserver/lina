@@ -1,22 +1,30 @@
 <template>
   <div>
-    <GenericListPage ref="GenericListPage" :header-actions="headerActions" :table-config="tableConfig" />
-    <BindDialog v-if="bindVisible" :label="label" :visible.sync="bindVisible" @bind-success="handleDialogConfirm" />
+    <GenericListPage
+      ref="GenericListPage"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+    />
+    <BindDialog
+      v-if="bindVisible"
+      v-model:visible="bindVisible"
+      :label="label"
+      @bind-success="handleDialogConfirm"
+    />
     <LabelResourcesDialog
       v-if="resDialogVisible"
+      v-model:visible="resDialogVisible"
       :label="label"
-      :visible.sync="resDialogVisible"
-      @addResource="handleAddResource"
+      @add-resource="handleAddResource"
     />
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import { GenericListPage } from '@/layout/components'
 import BindDialog from './BindDialog.vue'
 import LabelResourcesDialog from '@/views/labels/LabelResourcesDialog.vue'
 import { mapGetters } from 'vuex'
-
 export default {
   components: {
     LabelResourcesDialog,
@@ -45,19 +53,24 @@ export default {
                 vm.handleClickResCount(row)
               }
               return (
-                <el-link type='primary' onClick={onClick}>{row['res_count']}</el-link>
+                <el-link type="success" onClick={onClick}>
+                  {row['res_count']}
+                </el-link>
               )
             }
           },
           color: {
             formatter: (row) => {
               const onChange = () => {
-                vm.$axios.patch(`/api/v1/labels/labels/${row.id}/`, { color: row.color })
+                vm.$axios.patch(`/api/v1/labels/labels/${row.id}/`, {
+                  color: row.color
+                })
               }
               return (
                 <el-color-picker
-                  v-model={row.color}
-                  size='small'
+                  modelValue={row.color}
+                  onUpdate:modelValue={($event) => (row.color = $event)}
+                  size="small"
                   onChange={onChange}
                 />
               )
@@ -80,7 +93,6 @@ export default {
               ]
             }
           }
-
         }
       },
       headerActions: {
@@ -114,7 +126,6 @@ export default {
 .el-color-picker__trigger {
   width: 30px;
   height: 30px;
-  display: block
+  display: block;
 }
-
 </style>

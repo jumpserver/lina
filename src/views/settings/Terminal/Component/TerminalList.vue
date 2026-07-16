@@ -8,11 +8,11 @@
       :detail-drawer="detailDrawer"
     />
     <Dialog
+      v-model:visible="dialogSettings.visible"
       :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
       :title="$tc('TerminalUpdateStorage')"
-      :visible.sync="dialogSettings.visible"
     >
       <GenericCreateUpdateForm v-bind="dialogSettings.iFormSetting" />
     </Dialog>
@@ -44,9 +44,7 @@ export default {
         iFormSetting: {
           url: '/api/v1/terminal/terminals/',
           getUrl: () => '/api/v1/terminal/terminals/',
-          fields: [
-            ['', ['command_storage', 'replay_storage']]
-          ],
+          fields: [['', ['command_storage', 'replay_storage']]],
           fieldsMeta: {
             command_storage: {
               label: this.$t('CommandStorage'),
@@ -83,23 +81,26 @@ export default {
             const url = '/api/v1/terminal/terminals/'
             const msg = this.$t('UpdateSuccessMsg')
             validValues = Object.values(validValues)
-            this.$axios.patch(url, validValues).then((res) => {
-              this.$message.success(msg)
-              this.dialogSettings.visible = false
-            }).catch(error => {
-              this.$emit('submitError', error)
-              const response = error.response
-              const data = response.data
-              if (response.status === 400) {
-                for (const key of Object.keys(data)) {
-                  let value = data[key]
-                  if (value instanceof Array) {
-                    value = value.join(';')
+            this.$axios
+              .patch(url, validValues)
+              .then((res) => {
+                this.$message.success(msg)
+                this.dialogSettings.visible = false
+              })
+              .catch((error) => {
+                this.$emit('submitError', error)
+                const response = error.response
+                const data = response.data
+                if (response.status === 400) {
+                  for (const key of Object.keys(data)) {
+                    let value = data[key]
+                    if (value instanceof Array) {
+                      value = value.join(';')
+                    }
+                    this.$refs.form.setFieldError(key, value)
                   }
-                  this.$refs.form.setFieldError(key, value)
                 }
-              }
-            })
+              })
           },
           hasSaveContinue: false
         }
@@ -112,10 +113,7 @@ export default {
         },
         columnsShow: {
           min: ['name', 'actions'],
-          default: [
-            'name', 'session_online', 'stat',
-            'load', 'actions'
-          ]
+          default: ['name', 'session_online', 'stat', 'load', 'actions']
         },
         columnsMeta: {
           name: {
@@ -162,10 +160,8 @@ export default {
           is_active: {
             align: 'center'
           },
-          is_alive: {
-          },
-          session_online: {
-          },
+          is_alive: {},
+          session_online: {},
           actions: {
             formatterArgs: {
               hasClone: false,
@@ -195,5 +191,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

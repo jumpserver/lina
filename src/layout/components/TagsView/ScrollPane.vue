@@ -3,7 +3,7 @@
     ref="scrollContainer"
     :vertical="false"
     class="scroll-container"
-    @wheel.native.prevent="handleScroll"
+    @wheel.prevent="handleScroll"
   >
     <slot />
   </el-scrollbar>
@@ -28,8 +28,7 @@ export default {
       const $scrollWrapper = this.scrollWrapper
       $scrollWrapper.scrollLeft = $scrollWrapper.scrollLeft + eventDelta / 4
     },
-    moveToTarget() {
-    }
+    moveToTarget() {}
   }
 }
 </script>
@@ -41,7 +40,7 @@ export default {
   overflow: hidden;
   width: 100%;
 
-  ::v-deep {
+  :deep() {
     .el-scrollbar__bar {
       bottom: 0;
     }

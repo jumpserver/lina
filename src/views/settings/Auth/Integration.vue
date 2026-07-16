@@ -1,23 +1,25 @@
 <template>
   <div class="auth-container">
     <IBox :title="$tc('AuthIntegration')" class="auth-box-wrapper auth-method-box">
-      <el-row v-for="[type, items] in Object.entries(groupedAuthItems)" :key="type" :gutter="20">
+      <div
+        v-for="[type, items] in Object.entries(groupedAuthItems)"
+        :key="type"
+        class="auth-method-group"
+      >
         <h4 class="auth-method-type">{{ typeMap[type] }}</h4>
-        <AuthMethod
-          v-for="item in items"
-          :key="item.title"
-          v-bind="item"
-        />
-      </el-row>
+        <el-row :gutter="20">
+          <AuthMethod v-bind="item" v-for="item in items" :key="item.title" />
+        </el-row>
+      </div>
     </IBox>
   </div>
 </template>
 
 <script>
-import AuthMethod from './components/AuthMethod.vue'
 import IBox from '@/components/Common/IBox'
-import { getAuthItems } from './const'
 import { mapState } from 'vuex'
+import AuthMethod from './components/AuthMethod.vue'
+import { getAuthItems } from './const'
 
 export default {
   components: {
@@ -30,19 +32,20 @@ export default {
       typeMap: {
         common: this.$t('Common'),
         SSO: this.$t('SSO'),
-        IdP: this.$t('IdP')
+        IdP: this.$t('IdP'),
+        device: this.$t('Device')
       }
     }
   },
   computed: {
     ...mapState({
-      authMethodsSetting: state => state.settings.authMethods
+      authMethodsSetting: (state) => state.settings.authMethods
     }),
     // 未启用的认证方法（按类型分组）
     disabledAuthItems() {
       const disabled = {}
       Object.entries(this.authItems).forEach(([type, items]) => {
-        const disabledItems = items.filter(item => !item.enabled)
+        const disabledItems = items.filter((item) => !item.enabled)
         if (disabledItems.length > 0) {
           disabled[type] = disabledItems
         }
@@ -52,8 +55,8 @@ export default {
     // 已开启的认证方法（平铺列表，不分类）
     enabledAuthMethodsList() {
       const enabled = []
-      Object.values(this.authItems).forEach(items => {
-        items.forEach(item => {
+      Object.values(this.authItems).forEach((items) => {
+        items.forEach((item) => {
           if (item.enabled) {
             enabled.push(item)
           }
@@ -63,7 +66,7 @@ export default {
     },
     // 是否有未启用的认证方法
     hasDisabledMethods() {
-      return Object.values(this.disabledAuthItems).some(items => items.length > 0)
+      return Object.values(this.disabledAuthItems).some((items) => items.length > 0)
     },
     // 是否有已开启的认证方法
     hasEnabledMethods() {
@@ -77,7 +80,7 @@ export default {
   methods: {
     async initAuthItems() {
       let authItems = await getAuthItems(this)
-      authItems = authItems.map(item => {
+      authItems = authItems.map((item) => {
         return {
           ...item,
           enabled: this.authMethodsSetting[item.authKey]
@@ -106,12 +109,16 @@ export default {
 
 <style lang="scss" scoped>
 .auth-method-box {
-  ::v-deep {
-    .el-card__body {
-      padding-top: 10px;
-      padding-left: 30px;
-      padding-right: 30px;
-    }
+  :deep(.el-card__body) {
+    padding-top: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
+.auth-method-group {
+  & + .auth-method-group {
+    margin-top: 8px;
   }
 }
 
@@ -172,7 +179,7 @@ export default {
 .auth-method-item {
   margin-bottom: 10px;
 
-  ::v-deep .auth-item-col {
+  :deep(.auth-item-col) {
     width: 100%;
     max-width: none;
     margin: 0;
@@ -183,7 +190,6 @@ export default {
 h4.auth-method-type {
   margin-bottom: 8px;
   margin-top: 15px;
-  padding-left: 10px;
   font-size: 13px;
   font-weight: 500;
   color: #666;

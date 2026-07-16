@@ -1,8 +1,6 @@
 <template>
   <TwoCol>
-    <template>
-      <DetailCard v-if="object" :items="detailItems" />
-    </template>
+    <DetailCard v-if="object" :items="detailItems" />
     <template #right>
       <QuickActions v-if="object" :actions="quickActions" type="primary" />
     </template>
@@ -13,7 +11,7 @@
 import DetailCard from '@/components/Cards/DetailCard/index'
 import { QuickActions } from '@/components'
 import { terminateSession } from '@/api/sessions'
-import { toSafeLocalDateStr } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
@@ -46,12 +44,12 @@ export default {
             disabled: !this.session['can_terminate'] || !vm.$hasPerm('terminal.terminate_session')
           },
           callbacks: {
-            click: function() {
+            click: function () {
               // 终断 session reload
-              terminateSession(vm.session.id).then(res => {
+              terminateSession(vm.session.id).then((res) => {
                 const msg = vm.$t('TerminateTaskSendSuccessMsg')
                 vm.$message.success(msg)
-                window.setTimeout(function() {
+                window.setTimeout(function () {
                   window.location.reload()
                 }, 50000)
               })
@@ -63,14 +61,19 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('Monitor'),
-            disabled: !this.session['can_join'] || !vm.$hasPerm('terminal.monitor_session') ||
+            disabled:
+              !this.session['can_join'] ||
+              !vm.$hasPerm('terminal.monitor_session') ||
               vm.session.type.value === 'sftp'
           },
           callbacks: {
-            click: function() {
+            click: function () {
               // 跳转到luna页面
               const joinUrl = '/luna/monitor/' + vm.session.id
-              window.open(joinUrl, 'height=600, width=800, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
+              window.open(
+                joinUrl,
+                'height=600, width=800, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no'
+              )
             }
           }
         }
@@ -87,7 +90,7 @@ export default {
             disabled: !this.session['can_replay'] || !vm.$hasPerm('terminal.view_sessionreplay')
           },
           callbacks: {
-            click: function() {
+            click: function () {
               const replayUrl = '/luna/replay/' + vm.session.id
               window.open(replayUrl)
             }
@@ -101,7 +104,7 @@ export default {
             disabled: !this.session['can_replay'] || !vm.$hasPerm('terminal.download_sessionreplay')
           },
           callbacks: {
-            click: function() {
+            click: function () {
               const oid = vm.session.org_id || ''
               const downloadUrl = `/api/v1/terminal/sessions/${vm.session.id}/replay/download/${oid ? '?oid=' + oid : ''}`
               window.open(downloadUrl)
@@ -123,7 +126,6 @@ export default {
         {
           key: this.$t('Account'),
           value: this.session.account
-
         },
         {
           key: this.$t('Protocol'),
@@ -159,6 +161,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

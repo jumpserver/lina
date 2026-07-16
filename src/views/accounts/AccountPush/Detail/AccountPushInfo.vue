@@ -1,20 +1,17 @@
 <template>
   <TwoCol>
-    <template>
-      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
-    </template>
+    <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     <template #right>
       <QuickActions :actions="quickActions" type="primary" />
     </template>
   </TwoCol>
 </template>
 
-<script>
+<script lang="jsx">
 import { QuickActions } from '@/components'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
 import { openTaskPage } from '@/utils/jms/index'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-
 export default {
   name: 'AccountPushInfo',
   components: {
@@ -40,20 +37,22 @@ export default {
             disabled: !this.$hasPerm('accounts.add_pushaccountexecution') || !this.object.is_active
           },
           callbacks: {
-            click: function() {
-              this.$axios.post(
-                `/api/v1/accounts/push-account-executions/`,
-                { automation: this.object.id }
-              ).then(res => {
-                openTaskPage(res['task'])
-              })
+            click: function () {
+              this.$axios
+                .post(`/api/v1/accounts/push-account-executions/`, {
+                  automation: this.object.id
+                })
+                .then((res) => {
+                  openTaskPage(res['task'])
+                })
             }.bind(this)
           }
         }
       ],
       url: `/api/v1/accounts/push-account-automations/${this.object.id}`,
       detailFields: [
-        'id', 'name',
+        'id',
+        'name',
         {
           key: this.$t('Accounts'),
           value: this.object.accounts.join(', ')
@@ -84,7 +83,10 @@ export default {
             return <span>{this.object.is_periodic ? val : '-'}</span>
           }
         },
-        'date_created', 'date_updated', 'comment', 'is_active'
+        'date_created',
+        'date_updated',
+        'comment',
+        'is_active'
       ]
     }
   },
@@ -92,6 +94,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

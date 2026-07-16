@@ -1,56 +1,68 @@
 // i18n.js
-import Vue from 'vue'
-import locale from 'element-ui/lib/locale'
-import VueI18n from 'vue-i18n'
-import messages from './langs'
-import date from './date'
-import axios from 'axios'
-import { getLangCode } from './utils'
 import store from '@/store'
+import axios from 'axios'
+import { createI18n } from 'vue-i18n'
+import date from './date'
+import messages from './langs'
+import { getLangCode } from './utils'
 
-Vue.use(VueI18n)
 const lang = getLangCode()
 
-const i18n = new VueI18n({
+const i18n = createI18n({
+  legacy: false, // Use Composition API mode
+  globalInjection: true, // Keep $t/$tc available globally
   locale: lang,
   fallbackLocale: 'en',
-  silentFallbackWarn: true,
-  silentTranslationWarn: true,
-  dateTimeFormats: date,
+  missingWarn: false,
+  fallbackWarn: false,
+  // 后端 i18n 接口下发的部分帮助文案（如 crontab 说明）含 <br/>/<a> 等 HTML，
+  // vue-i18n 默认会对含 HTML 的消息告警提示 XSS 风险。项目渲染这些文案统一走
+  // v-sanitize（DOMPurify）消毒，并非直接 v-html 注入，故此告警为噪音，这里关闭。
+  warnHtmlMessage: false,
+  datetimeFormats: date,
   messages
 })
-locale.i18n((key, value) => i18n.t(key, value)) // 重点: 为了实现element插件的多语言切换
 
-// 自定义 tc 方法, 默认添加 s
-const originalTc = i18n.tc.bind(i18n)
+function getCurrentLocale() {
+  const locale = i18n.global.locale
+  return typeof locale === 'string' ? locale : locale?.value
+}
 
-i18n.tc = function(key, choice, ...args) {
-  // 获取原始翻译结果
-  const translation = i18n.t(key, choice).toString()
+function compatTc(key, choice, ...args) {
+  const hasNumericChoice = typeof choice === 'number'
+  const locale = getCurrentLocale()
 
-  // 仅处理英语且翻译不包含复数形式的情况
-  if (this.locale === 'en') {
+  if (!hasNumericChoice) {
+    if (typeof choice === 'undefined' && args.length === 0) {
+      return i18n.global.t(key)
+    }
+    return i18n.global.t(key, choice, ...args)
+  }
+
+  const translation = i18n.global.t(key, choice, ...args).toString()
+
+  if (locale === 'en') {
     const parts = translation.split('|')
     if (parts.length === 1) {
-      // 自动添加 's'（当数量不等于1时）
       return choice > 1 ? `${translation}s` : translation
     }
   }
-  return originalTc(key, choice, ...args)
+
+  return translation
 }
 
-Vue.prototype.$tc = i18n.tc.bind(i18n)
-Vue.prototype.$tr = key => {
-  return i18n.t('' + key)
-}
+// Provide Vue2-style helpers for legacy imports
+i18n.t = i18n.global.t.bind(i18n.global)
+i18n.global.tc = compatTc
+i18n.tc = compatTc.bind(i18n.global)
 
 export async function fetchTranslationsFromAPI() {
   try {
     const res = await axios.get(`/api/v1/settings/i18n/lina/?lang=${lang}&flat=0`)
     const data = res.data
     for (const key in data) {
-      if (data.hasOwnProperty(key)) {
-        i18n.mergeLocaleMessage(key, data[key])
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        i18n.global.mergeLocaleMessage(key, data[key])
       }
     }
   } catch (error) {

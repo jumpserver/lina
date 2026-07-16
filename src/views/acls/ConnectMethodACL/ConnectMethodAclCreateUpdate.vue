@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import rules from '@/components/Form/DataForm/rules'
-import { userJSONSelectMeta } from '@/views/users/const'
-import { assetJSONSelectMeta } from '@/views/assets/const'
 import { Select2 } from '@/components/Form/FormFields'
+import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import { assetJSONSelectMeta } from '@/views/assets/const'
+import { userJSONSelectMeta } from '@/views/users/const'
 
 export default {
   name: 'ACLCreateUpdate',
@@ -32,7 +32,7 @@ export default {
           el: {
             url: '/api/v1/terminal/components/connect-methods/?flat=1&limit=10&os=all',
             ajax: {
-              processResults: data => {
+              processResults: (data) => {
                 return {
                   results: data,
                   more: false
@@ -42,13 +42,13 @@ export default {
           }
         },
         reviewers: {
-          hidden: item => item.action !== 'review',
+          hidden: (item) => item.action !== 'review',
           rules: [rules.RequiredChange],
           el: {
             value: [],
             ajax: {
               url: '/api/v1/users/users/?fields_size=mini',
-              transformOption: item => {
+              transformOption: (item) => {
                 return { label: item.name + '(' + item.username + ')', value: item.id }
               }
             }

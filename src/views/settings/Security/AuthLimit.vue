@@ -1,20 +1,20 @@
 <template>
   <IBox>
     <GenericCreateUpdateForm
+      v-bind="$data"
       :fields="fields"
       :fields-meta="fieldsMeta"
       :has-detail-in-msg="false"
       :submit-method="submitMethod"
       :url="url"
-      v-bind="$data"
     />
   </IBox>
 </template>
 
 <script>
-import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
-import IBox from '@/components/Common/IBox/index.vue'
 import { BlockedIPs } from '@/components'
+import IBox from '@/components/Common/IBox/index.vue'
+import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 
 export default {
   name: 'EmailContent',
@@ -29,13 +29,7 @@ export default {
       },
       visible: false,
       fields: [
-        [
-          this.$t('User'),
-          [
-            'SECURITY_LOGIN_LIMIT_COUNT',
-            'SECURITY_LOGIN_LIMIT_TIME'
-          ]
-        ],
+        [this.$t('User'), ['SECURITY_LOGIN_LIMIT_COUNT', 'SECURITY_LOGIN_LIMIT_TIME']],
         [
           this.$t('IP'),
           [
@@ -85,12 +79,9 @@ export default {
     submitMethod() {
       return 'patch'
     },
-    onConfirm() {
-    }
+    onConfirm() {}
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

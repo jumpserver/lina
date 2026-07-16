@@ -1,21 +1,18 @@
 <template>
   <Dialog
     v-if="setting.addAssetDialogVisible"
+    v-model:visible="setting.addAssetDialogVisible"
     :destroy-on-close="true"
     :modal="false"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('AddAssetInZone')"
-    :visible.sync="setting.addAssetDialogVisible"
     after
     custom-class="asset-select-dialog"
     top="15vh"
     width="600px"
   >
-    <GenericCreateUpdateForm
-      v-bind="formConfig"
-      @submitSuccess="onSubmitSuccess"
-    />
+    <GenericCreateUpdateForm v-bind="formConfig" @submit-success="onSubmitSuccess" />
   </Dialog>
 </template>
 <script>
@@ -37,8 +34,7 @@ export default {
     },
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -62,16 +58,19 @@ export default {
             type: 'select2',
             el: {
               value: [],
-              url: '/api/v1/assets/assets/',
+              url: '/api/v1/assets/assets/?exclude_category=web',
               canSelect: (row) => {
-                return !row.platform?.name.startsWith('Gateway') && this.object.assets.map(item => item.id).indexOf(row.id) === -1
+                return (
+                  !row.platform?.name.startsWith('Gateway') &&
+                  this.object.assets.map((item) => item.id).indexOf(row.id) === -1
+                )
               }
             }
           }
         },
         cleanFormValue(values) {
           const data = []
-          values.assets.forEach(item => {
+          values.assets.forEach((item) => {
             const d = { id: item, zone: vm.object.id }
             data.push(d)
           })
@@ -88,9 +87,3 @@ export default {
   }
 }
 </script>
-
-<style lang="less" scoped>
-.dialog ::v-deep .el-dialog__footer {
-  padding: 0;
-}
-</style>

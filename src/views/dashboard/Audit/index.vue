@@ -1,6 +1,6 @@
 <template>
   <Page>
-    <div v-if="this.$hasPerm('rbac.view_audit')">
+    <div v-if="$hasPerm('rbac.view_audit')">
       <Announcement />
       <AuditReport :only-charts="true" :nav="false" />
     </div>
@@ -13,6 +13,7 @@ import { Announcement } from '@/components'
 import { Page } from '@/layout/components'
 import Page403 from '@/views/403'
 import AuditReport from '@/views/reports/audits/Dashboard.vue'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 export default {
   components: {

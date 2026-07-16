@@ -1,8 +1,8 @@
 <template>
   <Select2
+    v-bind="attrsWithoutValue"
     v-model="iValue"
     :multiple="multiple"
-    v-bind="attrsWithoutValue"
     @change="onChange"
     @change-options="onChangeOptions"
   />
@@ -71,11 +71,20 @@ export default {
       this.$emit('changeOptions', val)
     },
     valuesToObjects(values) {
+      if (
+        !this.multiple &&
+        (values === null ||
+          values === undefined ||
+          values === '' ||
+          (Array.isArray(values) && values.length === 0))
+      ) {
+        return ''
+      }
       let value = values
       if (!this.multiple && !Array.isArray(value)) {
         value = [value]
       }
-      value = value.map(v => {
+      value = value.map((v) => {
         // uuid v4
         const uuid = /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
         return typeof v === 'object'
@@ -97,7 +106,7 @@ export default {
       if (!Array.isArray(val)) {
         val = [val]
       }
-      val = val.map(v => {
+      val = val.map((v) => {
         if (v && typeof v === 'object') {
           return (
             v.pk ||

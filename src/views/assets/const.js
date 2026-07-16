@@ -5,11 +5,11 @@ import rules from '@/components/Form/DataForm/rules'
 import { JSONManyToManySelect, NestedObjectSelect2, Select2 } from '@/components/Form/FormFields'
 import { message } from '@/utils/vue/message'
 
-export const filterSelectValues = values => {
+export const filterSelectValues = (values) => {
   if (!values) return
   const selects = []
-  values.forEach(item => {
-    if (item.hasOwnProperty('pk')) {
+  values.forEach((item) => {
+    if (Object.prototype.hasOwnProperty.call(item, 'pk')) {
       selects.push(item)
     } else {
       // 格式校验：不以:开头，不以:结尾
@@ -30,8 +30,11 @@ function updatePlatformProtocols(vm, platformType, updateForm, platformChanged =
   setTimeout(
     () =>
       vm.init().then(() => {
+        const drawerAction = vm.$store.state.common.drawerActionMeta?.action
         const isCreate =
-          vm.$route.query.action === 'create' && vm?.$route?.query.clone_from === undefined
+          !vm.$route.params.id &&
+          vm.$route.query.clone_from === undefined &&
+          drawerAction !== 'clone'
         const needModify = isCreate || platformChanged
         const platformProtocols = vm.platform.protocols
         if (!needModify) return
@@ -60,7 +63,15 @@ export const assetFieldsMeta = (vm, category, type) => {
   const platformType = type || vm.$route.query.type
   const platformProtocols = []
   const secretTypes = []
-  const asset = { address: 'https://jumpserver:330' }
+  const asset = { address: 'https://example:8443' }
+  const updatePlatform = _.debounce(([event], updateForm) => {
+    const pk = event?.pk
+    const platformChanged = pk !== undefined && String(pk) !== String(vm.platformID)
+    if (platformChanged) {
+      vm.platformID = pk
+    }
+    updatePlatformProtocols(vm, platformType, updateForm, platformChanged)
+  }, 200)
   return {
     address: {
       rules: [rules.specialEmojiCheck, rules.RequiredChange],
@@ -88,7 +99,7 @@ export const assetFieldsMeta = (vm, category, type) => {
             return pre
           }, {})
           const _secretTypes = value
-            .map(v => v.name)
+            .map((v) => v.name)
             .reduce((pre, name) => {
               if (protocolSecretTypes[name]) {
                 return pre.concat(protocolSecretTypes[name])
@@ -104,25 +115,18 @@ export const assetFieldsMeta = (vm, category, type) => {
         multiple: false,
         ajax: {
           url: `/api/v1/assets/platforms/?category=${platformCategory}&type=${platformType}`,
-          transformOption: item => {
+          transformOption: (item) => {
             return { label: item.name, value: item.id }
           }
         }
       },
       on: {
-        change: _.debounce(([event], updateForm) => {
-          const pk = event.pk
-          vm.platformID = pk
-          updatePlatformProtocols(vm, platformType, updateForm, true)
-        }, 200),
-        input: _.debounce(([event], updateForm) => {
-          // 初始化的时候，mounted 中没有这个逻辑
-          updatePlatformProtocols(vm, platformType, updateForm)
-        }, 200)
+        change: updatePlatform,
+        // 初始化和用户选择都会触发 input；与 change 共用防抖，避免同一次选择重复初始化。
+        input: updatePlatform
       }
     },
     zone: {
-      component: Select2,
       disabled: false,
       el: {
         multiple: false,
@@ -149,11 +153,13 @@ export const assetFieldsMeta = (vm, category, type) => {
       }
     },
     nodes: {
+      component: Select2,
       rules: [rules.RequiredChange],
       el: {
+        multiple: true,
         ajax: {
           url: '/api/v1/assets/nodes/',
-          transformOption: item => {
+          transformOption: (item) => {
             return { label: `${item.full_value}`, value: item.id }
           }
         },
@@ -168,7 +174,7 @@ export const assetFieldsMeta = (vm, category, type) => {
         multiple: true,
         url: '/api/v1/labels/labels/',
         ajax: {
-          transformOption: item => {
+          transformOption: (item) => {
             return { label: `${item.name}:${item.value}`, value: `${item.id}` }
           }
         }
@@ -189,19 +195,20 @@ export const assetFieldsMeta = (vm, category, type) => {
   }
 }
 
-export const assetJSONSelectMeta = vm => {
+export const assetJSONSelectMeta = (vm) => {
   const categories = []
   const types = []
   const protocols = []
-  vm.$axios.get('/api/v1/assets/categories/').then(res => {
+  vm.$axios.get('/api/v1/assets/categories/').then((res) => {
     const _types = []
     const _protocols = []
     for (const category of res) {
       categories.push({ value: category.value, label: category.label })
-      _types.push(...category.types.map(item => ({ value: item.value, label: item.label })))
+      _types.push(...category.types.map((item) => ({ value: item.value, label: item.label })))
       for (const type of category.types) {
+        const protocols = type.constraints?.protocols || []
         _protocols.push(
-          ...type.constraints.protocols?.map(item => ({
+          ...protocols.map((item) => ({
             value: item.name,
             label: item.name.toUpperCase()
           }))
@@ -220,7 +227,7 @@ export const assetJSONSelectMeta = vm => {
       select2: {
         url: '/api/v1/assets/assets/',
         ajax: {
-          transformOption: item => {
+          transformOption: (item) => {
             return { label: item.name + '(' + item.address + ')', value: item.id }
           }
         }
@@ -244,7 +251,7 @@ export const assetJSONSelectMeta = vm => {
           el: {
             url: '/api/v1/assets/nodes/',
             ajax: {
-              transformOption: item => {
+              transformOption: (item) => {
                 return { label: item.full_value, value: item.id }
               }
             }
@@ -294,7 +301,7 @@ export const assetJSONSelectMeta = vm => {
             multiple: true,
             url: '/api/v1/assets/labels/',
             ajax: {
-              transformOption: item => {
+              transformOption: (item) => {
                 return { label: `${item.name}:${item.value}`, value: item.id }
               }
             }
@@ -317,7 +324,7 @@ export function getAssetSelect2Meta() {
       select2: {
         ajax: {
           url: '/api/v1/assets/assets/?fields_size=mini',
-          transformOption: item => {
+          transformOption: (item) => {
             return { label: item.name + '(' + item.address + ')', value: item.id }
           }
         }

@@ -8,11 +8,10 @@
   />
 </template>
 
-<script type="text/jsx">
+<script lang="jsx">
 import CopyableFormatter from '@/components/Table/TableFormatters/CopyableFormatter.vue'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { GenericListTable } from '@/layout/components'
-
 export default {
   name: 'CloudAccountList',
   components: {
@@ -38,8 +37,10 @@ export default {
             width: '80px',
             formatter: (row) => {
               return (
-                <img src={row.logo} alt={row.name}
-                  style='width: 40px; height: 40px; border-radius: 50%;'
+                <img
+                  src={row.logo}
+                  alt={row.name}
+                  style="width: 40px; height: 40px; border-radius: 50%;"
                 />
               )
             }
@@ -54,7 +55,9 @@ export default {
             formatterArgs: {
               getRoute: ({ row }) => ({
                 name: 'IntegrationApplicationDetail',
-                params: { id: row.id }
+                params: {
+                  id: row.id
+                }
               }),
               drawer: true
             },
@@ -65,8 +68,10 @@ export default {
             formatter: CopyableFormatter,
             formatterArgs: {
               shadow: true,
-              getText: async function({ row }) {
-                const app = await vm.$axios.get(`/api/v1/accounts/integration-applications/${row.id}/secret/`)
+              getText: async function ({ row }) {
+                const app = await vm.$axios.get(
+                  `/api/v1/accounts/integration-applications/${row.id}/secret/`
+                )
                 return app.secret
               }
             }
@@ -74,17 +79,33 @@ export default {
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
-              hasClone: false
+              hasClone: false,
+              extraActions: [
+                {
+                  name: 'refresh-secret',
+                  title: vm.$t('RefreshSecret'),
+                  can: vm.$hasPerm('accounts.change_integrationapplication'),
+                  type: 'primary',
+                  callback: async ({ row }) => {
+                    await vm.$axios.get(
+                      `/api/v1/accounts/integration-applications/${row.id}/refresh-secret/`
+                    )
+                    vm.$message.success(vm.$t('RefreshSuccessMsg'))
+                    vm.$refs.listTable.reloadTable()
+                  }
+                }
+              ]
             }
           }
         },
         columnsExtra: ['secret'],
         columnsShow: {
-          default: [
-            'logo', 'name', 'id', 'secret', 'accounts_amount', 'date_last_used', 'active'
-          ]
+          default: ['logo', 'name', 'id', 'secret', 'accounts_amount', 'date_last_used', 'active']
         },
-        permissions: { app: 'accounts', resource: 'integrationapplication' }
+        permissions: {
+          app: 'accounts',
+          resource: 'integrationapplication'
+        }
       },
       headerActions: {
         hasImport: false,
@@ -96,4 +117,3 @@ export default {
   }
 }
 </script>
-

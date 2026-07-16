@@ -1,36 +1,47 @@
 /* eslint-disable */
 <template>
-  <el-form size="small">
-    <el-form-item>
-      <el-radio v-model="radioValue" :label="1" size="mini">
-        {{ this.$t('Min') }}，{{ this.$t('WildcardsAllowed') }}[, - * /]
+  <el-form class="cron-tab-form" size="small">
+    <el-form-item class="cron-tab-form__item">
+      <el-radio v-model="radioValue" :value="1" size="small">
+        <span class="cron-tab-form__text">
+          {{ $t('Min') }}，{{ $t('WildcardsAllowed') }}[, - * /]
+        </span>
       </el-radio>
     </el-form-item>
-    <el-form-item>
-      <el-radio v-model="radioValue" :label="3">
-        {{ this.$t('From') }}
-        <el-input-number v-model="average02" :max="59" :min="1" size="mini" />
-        {{ this.$t('Min') }} {{ this.$t('ExecuteOnce') }}
+    <el-form-item class="cron-tab-form__item">
+      <el-radio v-model="radioValue" :value="3">
+        <span class="cron-tab-form__text">{{ $t('From') }}</span>
+        <span class="cron-tab-form__group">
+          <el-input-number
+            v-model="average02"
+            :max="59"
+            :min="1"
+            size="small"
+            class="cron-tab-form__number jms-input-spacing"
+          />
+          <span class="cron-tab-form__text">{{ $t('Min') }} {{ $t('ExecuteOnce') }}</span>
+        </span>
       </el-radio>
     </el-form-item>
 
-    <el-form-item>
-      <el-radio v-model="radioValue" :label="4">
-        {{ this.$t('Appoint') }}
-        <el-select
-          v-model="checkboxList"
-          :placeholder="$tc('ManyChoose')"
-          clearable
-          multiple
-          size="small"
-          style="width:100%"
-        >
-          <el-option v-for="item in 60" :key="item" :value="item-1">{{ item - 1 }}</el-option>
-        </el-select>
+    <el-form-item class="cron-tab-form__item">
+      <el-radio v-model="radioValue" :value="4">
+        <span class="cron-tab-form__text">{{ $t('Appoint') }}</span>
+        <span class="cron-tab-form__group">
+          <el-select
+            v-model="checkboxList"
+            :placeholder="$tc('ManyChoose')"
+            clearable
+            multiple
+            size="small"
+            class="cron-tab-form__select"
+          >
+            <el-option v-for="item in 60" :key="item" :value="item - 1">{{ item - 1 }}</el-option>
+          </el-select>
+        </span>
       </el-radio>
     </el-form-item>
   </el-form>
-
 </template>
 
 <script>
@@ -45,8 +56,7 @@ export default {
     },
     check: {
       type: Function,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -57,7 +67,7 @@ export default {
       average01: 0,
       average02: 1,
       checkboxList: [],
-      checkNum: this.$options.propsData.check
+      checkNum: this.check
     }
   },
   computed: {
@@ -84,15 +94,14 @@ export default {
         const str = this.checkboxList.join()
         return str === '' ? '*' : str
       },
-      set() {
-      }
+      set() {}
     }
   },
   watch: {
-    'radioValue': 'radioChange',
-    'cycleTotal': 'cycleChange',
-    'averageTotal': 'averageChange',
-    'checkboxString': 'checkboxChange'
+    radioValue: 'radioChange',
+    cycleTotal: 'cycleChange',
+    averageTotal: 'averageChange',
+    checkboxString: 'checkboxChange'
   },
   created() {
     this.$nextTick(() => {
@@ -144,10 +153,8 @@ export default {
         this.$emit('update', 'min', this.checkboxString, 'min')
       }
     }
-
   }
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -1,16 +1,23 @@
 <template>
   <div>
-    <ExecutionDetailDialog v-if="showExecutionDetailDialog" :item="item" :visible.sync="showExecutionDetailDialog" />
-    <GenericListPage ref="GenericListPage" :header-actions="headerActions" :table-config="tableConfig" />
+    <ExecutionDetailDialog
+      v-if="showExecutionDetailDialog"
+      v-model:visible="showExecutionDetailDialog"
+      :item="item"
+    />
+    <GenericListPage
+      ref="GenericListPage"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+    />
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import { GenericListPage } from '@/layout/components'
 import { openTaskPage } from '@/utils/jms/index'
 import ExecutionDetailDialog from '@/views/ops/Execution/ExecutionDetail'
 import detailFormatter from '@/components/Table/TableFormatters/DetailFormatter.vue'
-
 export default {
   components: {
     GenericListPage,
@@ -23,14 +30,18 @@ export default {
       showExecutionDetailDialog: false,
       tableConfig: {
         url: '/api/v1/ops/job-executions/',
-        columnsExclude: [
-          'summary', 'parameters', 'timedelta'
-        ],
+        columnsExclude: ['summary', 'parameters', 'timedelta'],
         columnsShow: {
           min: ['material', 'actions'],
           default: [
-            'id', 'material', 'job_type', 'is_finished', 'is_success',
-            'time_cost', 'date_created', 'actions'
+            'id',
+            'material',
+            'job_type',
+            'is_finished',
+            'is_success',
+            'time_cost',
+            'date_created',
+            'actions'
           ]
         },
         columnsMeta: {
@@ -45,33 +56,31 @@ export default {
             }
           },
           job: {
-            formatter: (row) => {
-              return <span>{row.job?.name || '-'}</span>
-            }
+            formatter: (row) => <span>{row.job?.name || '-'}</span>
           },
           is_finished: {
             width: '100px',
             formatter: (row) => {
               if (row.is_finished) {
-                return <i Class='fa fa-check text-primary'/>
+                return <i class="fa fa-check text-primary" />
               }
-              return <i Class='fa fa-times text-danger'/>
+              return <i class="fa fa-times text-danger" />
             }
           },
           is_success: {
             width: '100px',
             formatter: (row) => {
               if (!row.is_finished) {
-                return <i Class='fa  fa fa-spinner fa-spin'/>
+                return <i class="fa  fa fa-spinner fa-spin" />
               }
               if (row.is_success) {
-                return <i Class='fa fa-check text-primary'/>
+                return <i class="fa fa-check text-primary" />
               }
-              return <i Class='fa fa-times text-danger'/>
+              return <i class="fa fa-times text-danger" />
             }
           },
           time_cost: {
-            formatter: function(row) {
+            formatter: function (row) {
               if (row.time_cost) {
                 return row.time_cost.toFixed(2) + 's'
               }

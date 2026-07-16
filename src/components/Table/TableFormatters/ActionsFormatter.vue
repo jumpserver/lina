@@ -1,19 +1,20 @@
 <template>
-  <ActionsGroup
-    v-loading="loadingStatus"
-    :actions="actions"
-    :more-actions="moreActions"
-    :more-actions-title="moreActionsTitle"
-    :size="'mini'"
-    class="table-actions"
-  />
+  <div v-loading="loadingStatus">
+    <ActionsGroup
+      :actions="actions"
+      :more-actions="moreActions"
+      :more-actions-title="moreActionsTitle"
+      :size="'small'"
+      class="table-actions"
+    />
+  </div>
 </template>
 
 <script>
 import BaseFormatter from './base.vue'
 import ActionsGroup from '@/components/Common/ActionsGroup/index.vue'
 
-const defaultPerformDelete = function({ row, col }) {
+const defaultPerformDelete = function ({ row, col }) {
   const id = row.id
   const url = new URL(this.url, location.origin)
   url.pathname += `${id}/`
@@ -21,7 +22,7 @@ const defaultPerformDelete = function({ row, col }) {
   return this.$axios.delete(deleteUrl)
 }
 
-const defaultUpdateCallback = function({ row, col }) {
+const defaultUpdateCallback = function ({ row, col }) {
   const id = row.id
   let route = { params: { id: id } }
   const updateRoute = this.colActions.updateRoute
@@ -37,7 +38,7 @@ const defaultUpdateCallback = function({ row, col }) {
   this.$router.push(route)
 }
 
-const defaultViewCallback = function({ row, col }) {
+const defaultViewCallback = function ({ row, col }) {
   const id = row.id
   let route = { params: { id: id } }
   const viewRoute = this.colActions.viewRoute
@@ -53,7 +54,7 @@ const defaultViewCallback = function({ row, col }) {
   this.$router.push(route)
 }
 
-const defaultCloneCallback = function({ row, col }) {
+const defaultCloneCallback = function ({ row, col }) {
   const id = row.id
   let route = { query: { clone_from: id } }
   const cloneRoute = this.colActions.cloneRoute
@@ -68,7 +69,7 @@ const defaultCloneCallback = function({ row, col }) {
   this.$router.push(route)
 }
 
-const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
+const defaultDeleteCallback = function ({ row, col, cellValue, reload }) {
   let msg = this.$t('DeleteWarningMsg')
   const name = row.name || row.hostname
   if (name) {
@@ -109,7 +110,7 @@ export default {
   props: {
     formatterArgsDefault: {
       type: Object,
-      default: function() {
+      default: function () {
         return {
           hasUpdate: true, // can set function(row, value)
           canUpdate: true, // can set function(row, value)
@@ -117,8 +118,8 @@ export default {
           canDelete: true,
           hasClone: true,
           canClone: true,
-          updateRoute: this.$route.name.replace('List', 'Update'),
-          cloneRoute: this.$route.name.replace('List', 'Create'),
+          updateRoute: 'GroupUpdate',
+          cloneRoute: 'GroupCreate',
           performDelete: defaultPerformDelete,
           onUpdate: defaultUpdateCallback,
           onView: defaultViewCallback,
@@ -243,10 +244,51 @@ export default {
 
 <style lang="scss" scoped>
 .table-actions {
-  ::v-deep {
-    .el-icon-arrow-down {
-      display: none;
+  :deep(.el-button) {
+    height: auto;
+    min-height: 0;
+    padding: 2px 5px;
+    font-size: 13px;
+    line-height: 1.3;
+  }
+
+  :deep(.el-button > span) {
+    line-height: 1.2;
+    font-size: 13px;
+  }
+
+  :deep(.el-icon--right) {
+    display: none;
+  }
+
+  :deep(.more-action.el-button--primary.is-plain),
+  :deep(.el-dropdown > .more-action.el-button--primary.is-plain) {
+    color: var(--color-primary);
+    // 用主题系统维护的 EP 主色浅色阶替换硬编码 #e8f7f4,保证非默认主题下也跟随主色
+    background-color: var(--el-color-primary-light-9);
+    border-color: var(--el-color-primary-light-5);
+
+    &:hover,
+    &:focus,
+    &:active {
+      color: #fff;
+      background-color: var(--color-primary);
+      border-color: var(--color-primary);
     }
+  }
+
+  :deep(.more-action.el-button--primary.is-plain .pre-icon),
+  :deep(.more-action.el-button--primary.is-plain .el-icon) {
+    color: var(--color-primary);
+  }
+
+  :deep(.more-action.el-button--primary.is-plain:hover .pre-icon),
+  :deep(.more-action.el-button--primary.is-plain:hover .el-icon),
+  :deep(.more-action.el-button--primary.is-plain:focus .pre-icon),
+  :deep(.more-action.el-button--primary.is-plain:focus .el-icon),
+  :deep(.more-action.el-button--primary.is-plain:active .pre-icon),
+  :deep(.more-action.el-button--primary.is-plain:active .el-icon) {
+    color: #fff;
   }
 }
 </style>

@@ -1,5 +1,6 @@
 import { getCategoryTypes as apiGetCategoryTypes } from '@/api/asset'
 import request from '@/utils/request'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 const state = {
   assetCategories: [],
@@ -15,7 +16,7 @@ let isFetchingPlatforms = false
 const mutations = {
   SET_CATEGORIES: (state, categories) => {
     state.assetCategories = categories
-    state.assetCategoriesCascader = categories.map(category => {
+    state.assetCategoriesCascader = categories.map((category) => {
       category['children'] = category['types']
       return category
     })
@@ -43,11 +44,11 @@ const mutations = {
 
 const actions = {
   getAssetCategories({ commit, dispatch, state }) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (state.assetCategories.length > 0) {
         resolve(state)
       }
-      apiGetCategoryTypes().then(data => {
+      apiGetCategoryTypes().then((data) => {
         commit('SET_CATEGORIES', data)
         commit('SET_CATEGORIES_DROPDOWN', data)
         resolve(state)
@@ -78,12 +79,12 @@ const actions = {
 
       request
         .get('/api/v1/assets/platforms/')
-        .then(data => {
+        .then((data) => {
           state.platforms = data
           isFetchingPlatforms = false // 请求完成，重置标志位
           resolve(data)
         })
-        .catch(error => {
+        .catch((error) => {
           isFetchingPlatforms = false // 请求失败也要重置标志位
           reject(error)
         })
@@ -93,7 +94,7 @@ const actions = {
     state.platforms = []
   },
   addToRecentPlatforms({ commit, display, state }, platform) {
-    const recentPlatformIds = state.recentPlatformIds.filter(i => i !== platform.id)
+    const recentPlatformIds = state.recentPlatformIds.filter((i) => i !== platform.id)
     recentPlatformIds.unshift(platform.id)
     if (recentPlatformIds.length > 8) {
       recentPlatformIds.pop()
@@ -103,13 +104,13 @@ const actions = {
   },
   getRecentPlatforms({ commit, dispatch, state }) {
     const recentPlatformIds = state.recentPlatformIds
-    return new Promise(resolve => {
-      dispatch('getPlatforms').then(platforms => {
+    return new Promise((resolve) => {
+      dispatch('getPlatforms').then((platforms) => {
         const platformsMap = {}
-        platforms.forEach(p => {
+        platforms.forEach((p) => {
           platformsMap[p.id] = p
         })
-        const recentPlatforms = recentPlatformIds.map(id => platformsMap[id]).filter(p => p)
+        const recentPlatforms = recentPlatformIds.map((id) => platformsMap[id]).filter((p) => p)
         resolve(recentPlatforms)
       })
     })

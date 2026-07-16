@@ -1,10 +1,8 @@
 <template>
   <div>
-    <GenericListPage
-      v-loading="loading"
-      :header-actions="headerActions"
-      :table-config="tableConfig"
-    />
+    <div v-loading="loading">
+      <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
+    </div>
     <DiffDetail ref="DetailDialog" :title="$tc('OperateLog')" />
   </div>
 </template>
@@ -32,12 +30,18 @@ export default {
         columnsShow: {
           min: ['user', 'resource'],
           default: [
-            'user', 'action_display', 'resource', 'remote_addr', 'datetime', 'action', 'actions'
+            'user',
+            'action_display',
+            'resource',
+            'remote_addr',
+            'datetime',
+            'action',
+            'actions'
           ]
         },
         columnsMeta: {
           user: {
-            'min-width': '120px'
+            minWidth: '120px'
           },
           actions: {
             formatter: ActionsFormatter,
@@ -52,13 +56,14 @@ export default {
                   type: 'primary',
                   callback: ({ row }) => {
                     vm.loading = true
-                    this.$axios.get(
-                      `/api/v1/audits/operate-logs/${row.id}/?type=action_detail`
-                    ).then(res => {
-                      this.$refs.DetailDialog.show(res.diff)
-                    }).finally(() => {
-                      vm.loading = false
-                    })
+                    this.$axios
+                      .get(`/api/v1/audits/operate-logs/${row.id}/?type=action_detail`)
+                      .then((res) => {
+                        this.$refs.DetailDialog.show(res.diff)
+                      })
+                      .finally(() => {
+                        vm.loading = false
+                      })
                   }
                 }
               ]
@@ -72,26 +77,28 @@ export default {
         hasDatePicker: true,
         searchConfig: {
           exclude: ['resource_type', 'action'],
-          options: [{
-            value: 'action',
-            label: this.$t('Action'),
-            type: 'choice',
-            children: [
-              {
-                default: true,
-                value: 'view',
-                label: this.$t('View')
-              },
-              {
-                value: 'update',
-                label: this.$t('Update')
-              },
-              {
-                value: 'delete',
-                label: this.$t('Delete')
-              }
-            ]
-          }]
+          options: [
+            {
+              value: 'action',
+              label: this.$t('Action'),
+              type: 'choice',
+              children: [
+                {
+                  default: true,
+                  value: 'view',
+                  label: this.$t('View')
+                },
+                {
+                  value: 'update',
+                  label: this.$t('Update')
+                },
+                {
+                  value: 'delete',
+                  label: this.$t('Delete')
+                }
+              ]
+            }
+          ]
         }
       }
     }
@@ -99,6 +106,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

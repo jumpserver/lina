@@ -1,6 +1,16 @@
-import Vue from 'vue'
+import mitt from 'mitt'
 
-export const eventBus = new Vue()
+const emitter = mitt()
+
+export const eventBus = {
+  $on: emitter.on,
+  $off: emitter.off,
+  $emit: emitter.emit,
+  on: emitter.on,
+  off: emitter.off,
+  emit: emitter.emit
+}
+
 export default {
   eventBus
 }

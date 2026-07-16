@@ -1,49 +1,39 @@
 <template>
   <div>
-    <IBox
-      :fa="icon"
-      :title="title"
-      :type="type"
-      v-bind="$attrs"
-    >
+    <IBox v-bind="$attrs" :fa="icon" :title="title" :type="type">
       <table class="card-table">
         <div v-cloak v-if="iObjects.length > 0">
           <tr v-for="obj of iObjects" :key="obj.value" class="item">
-            <td>
+            <td class="name-cell">
               <el-tooltip
                 :content="obj.label"
-                :open-delay="500"
+                :show-after="500"
                 effect="dark"
                 placement="left"
-                style="margin: 4px;"
+                style="margin: 4px"
               >
                 <el-link class="detail" @click="goDetail(obj)">
                   {{ obj.label }}
                 </el-link>
               </el-tooltip>
             </td>
-            <td>
-              <el-button
-                size="mini"
-                style="float: right"
-                type="primary"
-                @click="buttonClickCallback(obj)"
-              >
+            <td class="action-cell">
+              <el-button size="small" type="primary" @click="buttonClickCallback(obj)">
                 {{ buttonTitle }}
               </el-button>
             </td>
           </tr>
         </div>
-        <div v-cloak v-else style="text-align: center;">
+        <div v-cloak v-else style="text-align: center">
           {{ $t('NoData') }}
         </div>
       </table>
     </IBox>
     <Drawer
+      v-model:visible="drawerVisible"
       :component="detailDrawer"
       :has-footer="false"
       :title="title"
-      :visible.sync="drawerVisible"
     />
   </div>
 </template>
@@ -85,8 +75,7 @@ export default {
     },
     buttonClickCallback: {
       type: Function,
-      default: (obj) => {
-      }
+      default: (obj) => {}
     }
   },
   data() {
@@ -114,13 +103,15 @@ export default {
     },
     goDetail(obj) {
       this.detailDrawer = this.detailRoute
-      this.$store.dispatch('common/setDrawerActionMeta', {
-        action: 'create',
-        row: {},
-        id: obj.id
-      }).then(() => {
-        this.drawerVisible = true
-      })
+      this.$store
+        .dispatch('common/setDrawerActionMeta', {
+          action: 'create',
+          row: {},
+          id: obj.id
+        })
+        .then(() => {
+          this.drawerVisible = true
+        })
     }
   }
 }
@@ -136,31 +127,43 @@ export default {
   display: none !important;
 }
 
-b, strong {
+b,
+strong {
   font-size: 13px;
 }
 
-tr td {
-  line-height: 1.2;
-  padding: 4px 8px;
-  vertical-align: top;
-  display: inline;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 tr.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  // 行内用 flex 居中对齐：按钮（small）比文字高，原先 float + inline 单元格无法把按钮
+  // 纳入行高计算，按钮溢出贴到 border-bottom。flex 居中后按钮垂直居中，padding 在上下
+  // 各留出与 border 的间距。
+  padding: 6px 8px;
   border-bottom: 1px solid #e7eaec;
-  padding: 4px 8px;
-  display: block;
-  //&:last-child {
-  //   border-bottom: 0;
-  //}
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  .name-cell {
+    flex: 1 1 auto;
+    min-width: 0;
+    line-height: 1.2;
+    padding: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .action-cell {
+    flex: 0 0 auto;
+    padding: 0;
+  }
 }
 
 .box-margin {
   margin-bottom: 20px;
 }
-
 </style>

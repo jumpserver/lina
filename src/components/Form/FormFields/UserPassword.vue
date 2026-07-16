@@ -1,9 +1,5 @@
 <template>
-  <PasswordInput
-    :attrs="attrs"
-    :value="value"
-    @input="handleInput"
-  />
+  <PasswordInput :attrs="inputAttrs" :value="value" @input="handleInput" />
 </template>
 
 <script>
@@ -15,6 +11,8 @@ import i18n from '@/i18n/i18n'
 export default {
   name: 'UserPassword',
   components: { PasswordInput },
+  inheritAttrs: false,
+  emits: ['input'],
   props: {
     value: {
       type: String,
@@ -24,10 +22,11 @@ export default {
   rules(item) {
     let userIsOrgAdmin = item.el.userIsOrgAdmin
     // undefined 个人信息更新或用户更改密码页面，使用当前用户；否则使用更新用户表单中传递的值
-    userIsOrgAdmin = userIsOrgAdmin === undefined ? store.getters.currentUserIsAdmin : userIsOrgAdmin
+    userIsOrgAdmin =
+      userIsOrgAdmin === undefined ? store.getters.currentUserIsAdmin : userIsOrgAdmin
 
     const passwordRule = store.getters.publicSettings.PASSWORD_RULE
-    const validatePassword = function(rule, value, callback) {
+    const validatePassword = function (rule, value, callback) {
       if (!value) {
         return callback()
       }
@@ -42,7 +41,9 @@ export default {
         patterns.push([/\d/, i18n.t('NUMBER_REQUIRED')])
       }
       if (passwordRule['SECURITY_PASSWORD_SPECIAL_CHAR']) {
-        const pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？_+-]")
+        const pattern = new RegExp(
+          "[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？_+-]"
+        )
         patterns.push([pattern, i18n.t('SPECIAL_CHAR_REQUIRED')])
       }
       for (const [pattern, msg] of patterns) {
@@ -59,19 +60,17 @@ export default {
       }
       callback()
     }
-    return [
-      { required: false, trigger: 'change', validator: validatePassword }
-    ]
+    return [{ required: false, trigger: 'change', validator: validatePassword }]
   },
-  data() {
-    return {
-      attrs: {
+  computed: {
+    ...mapGetters(['publicSettings']),
+    inputAttrs() {
+      const { modelValue, userIsOrgAdmin, ...attrs } = this.$attrs
+      return {
+        ...Object.fromEntries(Object.entries(attrs).filter(([name]) => !/^on[A-Z]/.test(name))),
         showStrengthMeter: true
       }
     }
-  },
-  computed: {
-    ...mapGetters(['publicSettings'])
   },
   methods: {
     handleInput(value) {
@@ -81,5 +80,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

@@ -9,10 +9,10 @@
     />
     <ViewSecret
       v-if="showViewSecretDialog"
+      v-model:visible="showViewSecretDialog"
       :account="account"
       :show-password-record="false"
       :url="secretUrl"
-      :visible.sync="showViewSecretDialog"
       type="template"
     />
   </div>
@@ -35,7 +35,8 @@ export default {
     const vm = this
     return {
       showViewSecretDialog: false,
-      createDrawer: () => import('@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'),
+      createDrawer: () =>
+        import('@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'),
       detailDrawer: () => import('@/views/accounts/AccountTemplate/Detail/index.vue'),
       account: {},
       secretUrl: '',
@@ -104,10 +105,15 @@ export default {
       },
       headerActions: {
         hasRefresh: true,
-        hasImport: this.$hasPerm('accounts.add_accounttemplate') || this.$hasPerm('accounts.change_accounttemplate'),
+        hasImport:
+          this.$hasPerm('accounts.add_accounttemplate') ||
+          this.$hasPerm('accounts.change_accounttemplate'),
         importOptions: {
           canImportCreate: this.$hasPerm('accounts.add_accounttemplate'),
-          canImportUpdate: this.$hasPerm('accounts.change_accounttemplate')
+          canImportUpdate: this.$hasPerm('accounts.change_accounttemplate'),
+          valueFormatters: {
+            secret_type: ({ cellValue }) => vm.formatSecretType(cellValue)
+          }
         },
         hasExport: this.$hasPerm('accounts.view_accounttemplatesecret'),
         hasMoreActions: false,
@@ -123,6 +129,19 @@ export default {
           }
         }
       }
+    }
+  },
+  methods: {
+    formatSecretType(value) {
+      const secretTypeMap = {
+        password: 'Password',
+        ssh_key: 'SSHKey',
+        access_key: 'AccessKey',
+        token: 'Token',
+        api_key: 'APIKey'
+      }
+      const i18nKey = secretTypeMap[value]
+      return i18nKey ? `${this.$t(i18nKey)} (${value})` : value
     }
   }
 }

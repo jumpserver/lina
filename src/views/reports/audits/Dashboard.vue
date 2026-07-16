@@ -7,17 +7,19 @@
     name="AuditsDashboard"
     v-bind="$attrs"
   >
-    <SwitchDate class="switch-date" :name="name" @change="onChange" />
-    <CardSummary :days="days" />
-    <el-row :gutter="10">
-      <el-col :span="12" :md="12">
-        <DataSummary class="chart-container" :days="days" />
-      </el-col>
-      <el-col :span="12" :md="12">
-        <RightSummary class="chart-container" :days="days" />
-      </el-col>
-    </el-row>
-    <TrendSummary :days="days" />
+    <SwitchDate class="switch-date" :name="name" :days="days" @change="onChange" />
+    <template v-if="initialized">
+      <CardSummary :days="days" />
+      <el-row class="summary-row" :gutter="10">
+        <el-col class="summary-column" :span="12" :md="12">
+          <DataSummary class="chart-container summary-card" :days="days" />
+        </el-col>
+        <el-col class="summary-column" :span="12" :md="12">
+          <RightSummary class="chart-container summary-card" :days="days" />
+        </el-col>
+      </el-row>
+      <TrendSummary :days="days" />
+    </template>
   </BaseReport>
 </template>
 
@@ -29,6 +31,7 @@ import CardSummary from './components/CardSummary.vue'
 import RightSummary from './components/RightSummary.vue'
 import BaseReport from '../base/BaseReport.vue'
 import { getRouteUrl } from '@/utils/vue'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 export default {
   components: {
@@ -48,13 +51,21 @@ export default {
   data() {
     return {
       name: 'AuditsDashboard',
-      days: localStorage.getItem(this.name) || '7',
+      days: '',
+      initialized: false,
       url: getRouteUrl('AuditsReport', this.$router)
     }
   },
+  created() {
+    this.days = this.resolveDays()
+    this.initialized = true
+  },
   methods: {
+    resolveDays() {
+      return String(this.$route.query.days || localStorage.getItem(this.name) || '7')
+    },
     onChange(val) {
-      this.days = val
+      this.days = String(val)
     }
   }
 }
@@ -62,5 +73,17 @@ export default {
 <style lang="scss" scoped>
 .chart-container {
   margin-top: 16px;
+}
+
+.summary-row {
+  align-items: stretch;
+}
+
+.summary-column {
+  display: flex;
+}
+
+.summary-card {
+  flex: 1 1 auto;
 }
 </style>

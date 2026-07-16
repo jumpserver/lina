@@ -14,9 +14,7 @@ export default {
       config: {
         initial: {},
         url: '/api/v1/orgs/orgs/',
-        fields: [
-          ['', ['name', 'comment']]
-        ],
+        fields: [['', ['name', 'comment']]],
         hasSaveContinue: false,
         fieldsMeta: {},
         onPerformSuccess(res, method, vm) {

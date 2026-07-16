@@ -1,13 +1,17 @@
 <template>
   <Dialog
+    v-bind="$attrs"
     :show-cancel="false"
     :title="title"
-    v-bind="$attrs"
+    class="bulk-create-result-dialog"
+    width="960px"
     @confirm="closeDialog"
-    v-on="$listeners"
   >
     <el-alert style="margin-bottom: 10px" type="info">
-      <span v-for="item of summary" :key="item.key"><b>{{ item.label }}</b>: {{ item.value }} </span>
+      <span v-for="item of summary" :key="item.key"
+        ><b>{{ item.label }}</b
+        >: {{ item.value }}
+      </span>
     </el-alert>
     <DataTable :config="config" />
   </Dialog>
@@ -16,10 +20,47 @@
 <script>
 import Dialog from '@/components/Dialog/index.vue'
 import DataTable from '@/components/Table/DataTable/index.vue'
+import { h } from 'vue'
+
+const StateFormatter = {
+  name: 'BulkCreateResultStateFormatter',
+  props: {
+    row: {
+      type: Object,
+      default: () => ({})
+    }
+  },
+  render() {
+    if (this.row.error) {
+      return h('span', { class: 'color-error' }, [this.$t('Error'), ': ', this.row.error])
+    }
+
+    if (this.row.state) {
+      const stateMap = {
+        created: this.$tc('Created'),
+        updated: this.$tc('Updated'),
+        skipped: this.$tc('Skipped')
+      }
+      const stateClsMap = {
+        created: 'color-primary',
+        updated: 'color-success',
+        skipped: 'color-default'
+      }
+      return h(
+        'span',
+        { class: stateClsMap[this.row.state] },
+        stateMap[this.row.state] || this.row.state
+      )
+    }
+
+    return h('span', '-')
+  }
+}
 
 export default {
   name: 'ResultDialog',
   components: {
+    StateFormatter,
     DataTable,
     Dialog
   },
@@ -30,17 +71,6 @@ export default {
     }
   },
   data() {
-    const errorProp = this.$t('Error')
-    const stateMap = {
-      'created': this.$tc('Created'),
-      'updated': this.$tc('Updated'),
-      'skipped': this.$tc('Skipped')
-    }
-    const stateClsMap = {
-      'created': 'color-primary',
-      'updated': 'color-success',
-      'skipped': 'color-default'
-    }
     return {
       title: this.$t('AddAccountResult'),
       config: {
@@ -57,15 +87,7 @@ export default {
             prop: 'state',
             label: this.$t('Status'),
             width: '200px',
-            formatter: (row) => {
-              if (row.error) {
-                return <span class='color-error'>{ errorProp }: { row.error }</span>
-              } else if (row.state) {
-                const colorCls = stateClsMap[row.state]
-                const state = stateMap[row.state]
-                return <span class={ colorCls }>{ state }</span>
-              }
-            }
+            formatter: StateFormatter
           }
         ],
         totalData: this.result
@@ -81,16 +103,21 @@ export default {
         skipped: this.$tc('Skipped'),
         error: this.$tc('Error')
       }
-      const grouped = _.groupBy(this.result, 'state')
-      const groupedLength = _.mapValues(grouped, 'length')
-      groupedLength['total'] = this.result.length
-      return _.map(groupedLength, (value, key) => {
-        return {
-          label: labels[key],
-          value: value,
-          key: key
+      // 与 StateFormatter 一致:优先按 error 归类,其次按 state。
+      // 旧实现用 _.groupBy(result, 'state'),错误行没有 state 会被归到
+      // 'undefined' 组,既生成无标签的汇总项、又永远统计不到 error,导致条数不对。
+      const counts = { total: this.result.length, created: 0, updated: 0, skipped: 0, error: 0 }
+      for (const row of this.result) {
+        if (row.error) {
+          counts.error += 1
+        } else if (counts[row.state] !== undefined) {
+          counts[row.state] += 1
         }
-      })
+      }
+      const order = ['total', 'created', 'updated', 'skipped', 'error']
+      return order
+        .filter((key) => key === 'total' || counts[key] > 0)
+        .map((key) => ({ label: labels[key], value: counts[key], key }))
     }
   },
   methods: {
@@ -114,11 +141,15 @@ export default {
   color: var(--color-success);
 }
 
-.color-default {
-}
-
-::v-deep .el-data-table .el-table .el-table__row > td > div > span {
+:deep(.el-data-table .el-table .el-table__row > td > div > span) {
   white-space: inherit;
 }
+</style>
 
+<!-- el-dialog teleport 到 body,内部样式须用非 scoped 块;selector 特异度 (0,4,0)
+     高于 el-data-table 的 .el-data-table[data-v] .el-pagination (0,3,0),故无需 !important -->
+<style lang="scss">
+.el-dialog.dialog.bulk-create-result-dialog .el-pagination {
+  padding: 1px 0;
+}
 </style>

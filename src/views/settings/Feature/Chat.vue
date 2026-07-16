@@ -1,7 +1,7 @@
 <template>
   <div>
     <IBox>
-      <GenericCreateUpdateForm v-bind="$data" @submitSuccess="submitSuccess" />
+      <GenericCreateUpdateForm v-bind="$data" @submit-success="submitSuccess" />
     </IBox>
   </div>
 </template>
@@ -25,18 +25,19 @@ export default {
         {
           title: this.$t('Test'),
           loading: false,
-          callback: function(value, form, btn) {
+          callback: function (value, form, btn) {
             btn.loading = true
-            vm.$axios.post(
-              '/api/v1/settings/chatai/testing/',
-              value
-            ).then(res => {
-              vm.$message.success(res['msg'])
-            }).catch(() => {
-              vm.$log.error('err occur')
-            }).finally(() => {
-              btn.loading = false
-            })
+            vm.$axios
+              .post('/api/v1/settings/chatai/testing/', value)
+              .then((res) => {
+                vm.$message.success(res['msg'])
+              })
+              .catch(() => {
+                vm.$log.error('err occur')
+              })
+              .finally(() => {
+                btn.loading = false
+              })
           }
         }
       ],
@@ -120,12 +121,20 @@ export default {
         },
         CUSTOM_GPT_MODEL: {
           hidden: (formValue) => {
-            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'gpt' || formValue.GPT_MODEL !== 'custom'
+            return (
+              formValue.CHAT_AI_METHOD !== 'api' ||
+              formValue.CHAT_AI_TYPE !== 'gpt' ||
+              formValue.GPT_MODEL !== 'custom'
+            )
           }
         },
         CUSTOM_DEEPSEEK_MODEL: {
           hidden: (formValue) => {
-            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'deep-seek' || formValue.DEEPSEEK_MODEL !== 'custom'
+            return (
+              formValue.CHAT_AI_METHOD !== 'api' ||
+              formValue.CHAT_AI_TYPE !== 'deep-seek' ||
+              formValue.DEEPSEEK_MODEL !== 'custom'
+            )
           }
         }
       },
@@ -135,9 +144,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'publicSettings'
-    ])
+    ...mapGetters(['publicSettings'])
   },
   methods: {
     submitSuccess(res) {
@@ -151,6 +158,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

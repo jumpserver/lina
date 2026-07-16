@@ -1,18 +1,16 @@
 <template>
   <div>
     <DataForm
+      v-bind="forwardedAttrs"
       v-if="!loading"
       ref="dataForm"
       :fields="totalFields"
       :form="iForm"
       :server-errors="serverErrors"
-      v-bind="$attrs"
-      v-on="$listeners"
+      @submit="handleSubmit"
+      @invalid="handleInvalid"
     >
-      <template
-        v-for="(group, i) in groups"
-        :slot="'id:'+group.name"
-      >
+      <template v-for="(group, i) in groups" #[`id:${group.name}`]>
         <FormGroupHeader
           v-if="!groupHidden(group, i)"
           :key="'group-' + group.name"
@@ -26,10 +24,11 @@
 </template>
 
 <script>
-import DataForm from '../DataForm/index.vue'
-import FormGroupHeader from '@/components/Form/FormGroupHeader/index.vue'
+import { getActionMeta } from '@/api/common'
 import { FormFieldGenerator } from '@/components/Form/AutoDataForm/utils'
 import { UniqueCheck } from '@/components/Form/DataForm/rules'
+import FormGroupHeader from '@/components/Form/FormGroupHeader/index.vue'
+import DataForm from '../DataForm/index.vue'
 
 export default {
   name: 'AutoDataForm',
@@ -37,6 +36,8 @@ export default {
     DataForm,
     FormGroupHeader
   },
+  inheritAttrs: false,
+  emits: ['submit', 'invalid', 'afterRemoteMeta', 'afterGenerateColumns'],
   props: {
     url: {
       type: String,
@@ -72,6 +73,12 @@ export default {
     }
   },
   computed: {
+    forwardedAttrs() {
+      const attrs = { ...this.$attrs }
+      delete attrs.onSubmit
+      delete attrs.onInvalid
+      return attrs
+    },
     dataForm() {
       return this.$refs.dataForm
     },
@@ -81,9 +88,14 @@ export default {
         // 初始值是 choice 对象
         if (value && typeof value === 'object' && value.label && value.value !== undefined) {
           iForm[key] = value.value
-        } else if (Array.isArray(value) && value.length > 0 && typeof value[0] === 'object' &&
-          value[0].label && value[0].value !== undefined) {
-          iForm[key] = value.map(item => item.value)
+        } else if (
+          Array.isArray(value) &&
+          value.length > 0 &&
+          typeof value[0] === 'object' &&
+          value[0].label &&
+          value[0].value !== undefined
+        ) {
+          iForm[key] = value.map((item) => item.value)
         } else {
           iForm[key] = value
         }
@@ -96,12 +108,18 @@ export default {
     this.optionUrlMetaAndGenerateColumns()
   },
   methods: {
+    handleSubmit(...args) {
+      this.$emit('submit', ...args)
+    },
+    handleInvalid(...args) {
+      this.$emit('invalid', ...args)
+    },
     async optionUrlMetaAndGenerateColumns() {
       let data = { actions: {} }
       if (this.url) {
         data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
       }
-      this.remoteMeta = data.actions[this.method.toUpperCase()] || {}
+      this.remoteMeta = getActionMeta(data, this.method)
       this.$emit('afterRemoteMeta', this.remoteMeta)
       this.generateColumns()
       this.$emit('afterGenerateColumns', this.totalFields)
@@ -127,19 +145,25 @@ export default {
       const defaultListUrl = (() => {
         try {
           const u = new URL(this.url, location.origin)
-          u.pathname = u.pathname.replace(/\/(\d+|[0-9a-fA-F-]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12})\/?$/, '/')
+          u.pathname = u.pathname.replace(
+            /\/(\d+|[0-9a-fA-F-]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12})\/?$/,
+            '/'
+          )
           return u.origin ? u.origin + u.pathname : u.pathname
         } catch (e) {
-          return (this.url || '').replace(/\/(\d+|[0-9a-fA-F-]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12})\/?($|\?)/, '/$2')
+          return (this.url || '').replace(
+            /\/(\d+|[0-9a-fA-F-]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12})\/?($|\?)/,
+            '/$2'
+          )
         }
       })()
 
-      fields.forEach(field => {
+      fields.forEach((field) => {
         const conf = field?.uniqueCheck
 
         if (!conf) return
 
-        const confObj = (typeof conf === 'object') ? conf : {}
+        const confObj = typeof conf === 'object' ? conf : {}
         const param = confObj.param || field.prop || field.id
         const url = confObj.url || defaultListUrl
         const label = confObj.label || field.label || param
@@ -147,14 +171,16 @@ export default {
 
         if (!Array.isArray(field.rules)) field.rules = []
 
-        field.rules.push(UniqueCheck({
-          url,
-          param,
-          label,
-          entityName,
-          getIgnoreId: currentIdGetter,
-          fieldName: field.prop || field.id
-        }))
+        field.rules.push(
+          UniqueCheck({
+            url,
+            param,
+            label,
+            entityName,
+            getIgnoreId: currentIdGetter,
+            fieldName: field.prop || field.id
+          })
+        )
       })
     },
     _cleanFormValue(form, remoteMeta) {
@@ -210,14 +236,17 @@ export default {
       error = (error || '').toString().replace(/[。.]+$/, '')
       const elForm = this._getElFormInstance()
       if (elForm && Array.isArray(elForm.fields)) {
-        const item = elForm.fields.find(f => f.prop === name)
+        const item = elForm.fields.find((f) => f.prop === name)
         if (item) {
           item.validateMessage = error
           item.validateState = error ? 'error' : ''
         }
       }
       // 不写入 totalFields，避免触发 innerContent 变化导致表单值被覆盖
-      this.$set(this.serverErrors, name, error)
+      this.serverErrors = {
+        ...this.serverErrors,
+        [name]: error
+      }
     },
     setErrors(errors) {
       const mapped = {}
@@ -225,9 +254,9 @@ export default {
         let msg = v
         console.log(k, v)
         // v是数组并且数组都是字符串，则拼接为字符串
-        if (Array.isArray(v) && v.every(item => typeof item === 'string')) msg = v.join('; ')
+        if (Array.isArray(v) && v.every((item) => typeof item === 'string')) msg = v.join('; ')
         // 处理 [{"port":["请确保该值小于或者等于 65535。"]},{},{}] 这种情况
-        else if (Array.isArray(v) && v.every(item => _.isPlainObject(item))) {
+        else if (Array.isArray(v) && v.every((item) => _.isPlainObject(item))) {
           const subMsg = []
           v.forEach((subItem) => {
             Object.values(subItem).forEach((subMsgArr) => {
@@ -263,6 +292,5 @@ export default {
       return true
     }
   }
-
 }
 </script>

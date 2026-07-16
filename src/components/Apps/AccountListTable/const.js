@@ -40,7 +40,7 @@ export function isDirectoryServiceAccount(account, vm) {
   return vm.asset && vm.asset.id !== account.asset.id
 }
 
-export const accountOtherActions = vm => {
+export const accountOtherActions = (vm) => {
   return [
     {
       name: 'View',
@@ -146,7 +146,7 @@ export const accountOtherActions = vm => {
       callback: ({ row }) => {
         vm.$axios
           .post(`/api/v1/accounts/accounts/tasks/`, { action: 'verify', accounts: [row.id] })
-          .then(res => {
+          .then((res) => {
             openTaskPage(res['task'])
           })
       }
@@ -229,7 +229,7 @@ export const accountOtherActions = vm => {
   ]
 }
 
-export const accountQuickFilters = vm => [
+export const accountQuickFilters = (vm) => [
   {
     label: vm.$t('Recent (7 days)'),
     options: [
@@ -316,6 +316,12 @@ export const accountQuickFilters = vm => [
         }
       },
       {
+        label: vm.$t('Device'),
+        filter: {
+          category: 'device'
+        }
+      },
+      {
         label: vm.$t('Database'),
         filter: {
           category: 'database'
@@ -328,15 +334,15 @@ export const accountQuickFilters = vm => [
         }
       },
       {
-        label: vm.$t('Device'),
-        filter: {
-          category: 'device'
-        }
-      },
-      {
         label: 'Web',
         filter: {
           category: 'web'
+        }
+      },
+      {
+        label: vm.$t('Directories'),
+        filter: {
+          category: 'ds'
         }
       },
       {

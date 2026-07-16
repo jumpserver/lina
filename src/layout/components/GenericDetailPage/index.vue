@@ -1,6 +1,6 @@
 <template>
   <TabPage
-    :active-menu.sync="iActiveMenu"
+    v-model:active-menu="iActiveMenu"
     :submenu="iSubmenu"
     :title="iTitle"
     class="generic-detail-page"
@@ -8,7 +8,7 @@
   >
     <template #headingRightSide>
       <span v-if="hasRightSide">
-        <ActionsGroup slot="headingRightSide" :actions="pageActions" class="header-buttons" />
+        <ActionsGroup :actions="pageActions" class="header-buttons" />
       </span>
     </template>
     <div v-if="!loading">
@@ -22,11 +22,7 @@ import TabPage from '../TabPage'
 import { flashErrorMsg } from '@/utils/request'
 import { getApiPath } from '@/utils/common/index'
 import ActionsGroup from '@/components/Common/ActionsGroup'
-import ResourceActivity from '@/components/Apps/ResourceActivity/index.vue'
 import { mapGetters } from 'vuex'
-import Vue from 'vue'
-
-Vue.component('ResourceActivity', ResourceActivity)
 
 export default {
   name: 'GenericDetailPage',
@@ -74,36 +70,34 @@ export default {
     },
     getObjectName: {
       type: Function,
-      default: function(obj) {
+      default: function (obj) {
         return obj.name
       }
     },
     getTitle: {
       type: Function,
-      default: function(obj) {
-        const objectType = this.$route.meta.title
-          .replace('Details', '')
-          .replace('Detail', '')
-          .replace('详情', '')
-          .trim()
-        this.$log.debug('Object is: ', obj)
-        const titlePrefix = this.titlePrefix || objectType
-        const objectName = this.getObjectName(obj)
-        let title = `${titlePrefix}: ${objectName}`
-        if (title.length > 80) {
-          title = title.slice(0, 80) + '...'
-        }
-        return title
+      default: function (obj) {
+        const objectName = obj?.name || ''
+        return objectName
       }
     }
   },
+  emits: [
+    'update:activeMenu',
+    'tab-click',
+    'update:object',
+    'getObjectDone',
+    'close-drawer',
+    'detail-delete-success',
+    'reload-table'
+  ],
   data() {
     const vm = this
     const defaultActions = {
       // Delete button
       canDelete: vm.$hasCurrentResAction('delete'),
       hasDelete: true,
-      deleteCallback: function(item) {
+      deleteCallback: function (item) {
         vm.defaultDelete(item)
       },
       deleteSuccessRoute: this.$route.name.replace('Detail', 'List'),
@@ -112,7 +106,7 @@ export default {
         return !vm.currentOrgIsRoot && vm.$hasCurrentResAction('change')
       },
       hasUpdate: true,
-      updateCallback: function(item) {
+      updateCallback: function (item) {
         this.defaultUpdate(item)
       },
       updateRoute: this.$route.name.replace('Detail', 'Update')
@@ -268,17 +262,20 @@ export default {
     getObject() {
       // 兼容之前的 detailApiUrl
       const url = this.getDetailUrl()
-      return this.$axios.get(url, { disableFlashErrorMsg: true }).then(data => {
-        this.$emit('update:object', data)
-        this.$emit('getObjectDone', data)
-      }).catch(error => {
-        if (error.response && error.response.status === 404) {
-          const msg = this.$tc('ObjectNotFoundOrDeletedMsg')
-          this.$message.error(msg)
-        } else {
-          flashErrorMsg({ error, response: error.response })
-        }
-      })
+      return this.$axios
+        .get(url, { disableFlashErrorMsg: true })
+        .then((data) => {
+          this.$emit('update:object', data)
+          this.$emit('getObjectDone', data)
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 404) {
+            const msg = this.$tc('ObjectNotFoundOrDeletedMsg')
+            this.$message.error(msg)
+          } else {
+            flashErrorMsg({ error, response: error.response })
+          }
+        })
     },
     handleTabClick(tab) {
       this.$emit('tab-click', tab, this.iActiveMenu)
@@ -292,14 +289,5 @@ export default {
 <style lang="scss" scoped>
 .header-buttons {
   z-index: 999;
-}
-
-.generic-detail-page {
-  ::v-deep {
-    .tab-page-content {
-      padding-left: 20px;
-      padding-right: 15px;
-    }
-  }
 }
 </style>

@@ -1,21 +1,19 @@
 <template>
   <TwoCol>
-    <template>
-      <AccountListTable
-        ref="ListTable"
-        :columns-default="columns"
-        :has-clone="false"
-        :has-column-actions="false"
-        :has-delete-action="false"
-        :has-export="false"
-        :has-import="false"
-        :has-left-actions="false"
-        :show-quick-filters="false"
-        :url="url"
-      />
-    </template>
+    <AccountListTable
+      ref="ListTable"
+      :columns-default="columns"
+      :has-clone="false"
+      :has-column-actions="false"
+      :has-delete-action="false"
+      :has-export="false"
+      :has-import="false"
+      :has-left-actions="false"
+      :show-quick-filters="false"
+      :url="url"
+    />
     <template #right>
-      <IBox :title="$tc('Account')" type="primary">
+      <IBox :title="$tc('Account')" class="permission-account-box" type="primary">
         <AccountFormatter
           :assets="assetIds"
           :nodes="nodeIds"
@@ -61,10 +59,12 @@ export default {
   },
   computed: {
     assetIds() {
-      return this.object.assets.map(asset => asset.id)
+      const assets = Array.isArray(this.object.assets) ? this.object.assets : []
+      return assets.map((asset) => asset.id)
     },
     nodeIds() {
-      return this.object.nodes.map(node => node.id)
+      const nodes = Array.isArray(this.object.nodes) ? this.object.nodes : []
+      return nodes.map((node) => node.id)
     }
   },
   methods: {
@@ -80,9 +80,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.checkbox-accounts {
+  width: 100%;
+  min-width: 0;
+}
 
-.checkbox-accounts ::v-deep .el-checkbox-group {
-  line-height: 40px;
+.permission-account-box :deep(.el-card__body) {
+  overflow-x: hidden;
+}
+
+.checkbox-accounts :deep(.el-radio),
+.checkbox-accounts :deep(.el-checkbox) {
+  line-height: 30px;
 }
 
 .item-name {

@@ -8,10 +8,8 @@ import {
 } from '@/utils/jms/auth'
 import orgUtil from '@/utils/jms/org'
 import { resetRouter } from '@/router'
-import Vue from 'vue'
 import store from '@/store'
-
-const _ = require('lodash')
+import _ from 'lodash'
 
 const getDefaultState = () => {
   return {
@@ -37,7 +35,7 @@ const getDefaultState = () => {
 const state = getDefaultState()
 
 const mutations = {
-  RESET_STATE: state => {
+  RESET_STATE: (state) => {
     Object.assign(state, getDefaultState())
   },
   SET_TOKEN: (state, token) => {
@@ -51,7 +49,7 @@ const mutations = {
     state.consoleOrgs = profile['console_orgs']
     state.pamOrgs = profile['pam_orgs']
     state.workbenchOrgs = profile['workbench_orgs']
-    state.noRootWorkbenchOrgs = profile['workbench_orgs'].filter(item => {
+    state.noRootWorkbenchOrgs = profile['workbench_orgs'].filter((item) => {
       return item.id !== '00000000-0000-0000-0000-000000000000'
     })
     state.auditOrgs = profile['audit_orgs']
@@ -62,7 +60,7 @@ const mutations = {
     state.usingOrgs = orgs
   },
   MODIFY_ORG: (state, org) => {
-    state.consoleOrgs = state.consoleOrgs.map(oldOrg => {
+    state.consoleOrgs = state.consoleOrgs.map((oldOrg) => {
       if (oldOrg.id === org.id) {
         oldOrg.name = org.name
       }
@@ -73,7 +71,7 @@ const mutations = {
     state.consoleOrgs.push(org)
   },
   DELETE_ORG: (state, org) => {
-    state.consoleOrgs = state.consoleOrgs.filter(i => i.id !== org.id)
+    state.consoleOrgs = state.consoleOrgs.filter((i) => i.id !== org.id)
   },
   SET_CURRENT_ORG(state, org) {
     // 系统组织不设置成 Pre org
@@ -105,7 +103,7 @@ const actions = {
         return
       }
       apiGetProfile()
-        .then(response => {
+        .then((response) => {
           if (!response) {
             reject('Verification failed, please Login again.')
           }
@@ -117,7 +115,7 @@ const actions = {
           commit('SET_PROFILE', response)
           resolve(response)
         })
-        .catch(error => {
+        .catch((error) => {
           // debug(error)
           reject(error)
         })
@@ -142,7 +140,7 @@ const actions = {
           commit('RESET_STATE')
           resolve()
         })
-        .catch(error => {
+        .catch((error) => {
           reject(error)
         })
     })
@@ -207,7 +205,7 @@ const actions = {
       settings: state.consoleOrgs
     }
     const usingOrgs = mapper[viewName] || state.consoleOrgs
-    Vue.$log.debug('Set using orgs: ', viewName, usingOrgs)
+    console.debug('Set using orgs: ', viewName, usingOrgs)
     commit('SET_USING_ORGS', usingOrgs)
   },
   ifFirstLogin({ commit }, flag) {

@@ -1,12 +1,8 @@
 import { changeMenuColor, generateColors, mix, setRootColors } from './color'
-import axios from 'axios'
-import formula from './formula.json'
-
-let originalStyle = ''
 
 export function changeElementColor(themeColors) {
   let colorsCssText = ''
-  let cssText = originalStyle
+  let cssText = ''
   const colors = generateColors(themeColors)
   for (const [key, value] of Object.entries(colors)) {
     cssText = cssText.replace(new RegExp('(:|\\s+)' + key, 'g'), '$1' + `${value}`)
@@ -19,7 +15,9 @@ export function changeElementColor(themeColors) {
       const blendColor = mix('ffffff', value.replace(/#/g, ''), 35)
       const darken = mix('000000', value.replace(/#/g, ''), 10)
       const tooLightColor = mix('ffffff', value.replace(/#/g, ''), 90)
-      colorsCssText = colorsCssText + `
+      colorsCssText =
+        colorsCssText +
+        `
         .el-button--${key}{
            border-color: var(--color-border);
         }
@@ -66,39 +64,10 @@ export function changeElementColor(themeColors) {
 }
 
 export function changeThemeColors(themeColors) {
-  return new Promise((resolve) => {
-    if (!originalStyle) {
-      axios.all([
-        axios.get('/ui/theme/element-ui.css'),
-        axios.get('/ui/theme/element-extra.css')
-      ]).then(
-        axios.spread((file, extraFile) => {
-          const fileData = file.data
-          const extraFileData = extraFile.data.replace(/[\r\n]/g, '')
-          originalStyle = replaceStyleColors(fileData + extraFileData)
-          resolve()
-        })
-      )
-    } else {
-      resolve()
-    }
-  }).then(() => {
-    setRootColors()
-    changeMenuColor(themeColors)
-    changeElementColor(themeColors)
-  })
-}
-
-export function replaceStyleColors(data) {
-  const colors = generateColors()
-  const colorMap = new Map()
-  Object.keys(formula).forEach((key) => {
-    colorMap.set(colors[key], key)
-  })
-
-  for (const [key, value] of colorMap) {
-    data = data.replace(new RegExp(key, 'ig'), value)
-  }
-
-  return data
+  // 主题色现在完全由 CSS 变量驱动（setRootColors / changeMenuColor 同步 --color-* 与
+  // --el-color-*），不再拉取并注入 Element UI 时代的 element-extra.css——那份样式里的
+  // `.el-input__inner { border }` 正是 Element Plus 下输入框「border 套 border」的根源。
+  setRootColors()
+  changeMenuColor(themeColors)
+  changeElementColor(themeColors)
 }

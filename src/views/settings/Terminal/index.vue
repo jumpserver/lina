@@ -1,5 +1,5 @@
 <template>
-  <TabPage :active-menu.sync="activeMenu" :submenu="submenu">
+  <TabPage v-model:active-menu="activeMenu" :submenu="submenu">
     <keep-alive>
       <component :is="activeMenu" />
     </keep-alive>
@@ -74,16 +74,8 @@ export default {
     componentData() {
       return {}
     }
-  },
-  beforeRouteUpdate(to, from, next) {
-    if (to.name === from.name && to.path === from.path && to.query?.tab) {
-      this.$store.commit('common/reload')
-    }
-    next()
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -3,23 +3,28 @@
     :show-cancel="false"
     :show-confirm="false"
     :title="title"
-    :visible.sync="iVisible"
+    :visible="visible"
     class="help-dialog"
     top="1vh"
     width="50%"
+    @update:visible="$emit('update:visible', $event)"
   >
     <p>{{ $t('VariableHelpText') }}</p>
     <table border="1" class="help-table">
-      <tr>
-        <th>{{ $tc('Variable') }}</th>
-        <th>{{ $tc('Description') }}</th>
-      </tr>
-      <tr v-for="(val, key, index) in variables" :key="index">
-        <td :title="$tc('ClickCopy')" class="item-td text-link" @click="onCopy(key)">
-          <label class="item-label">{{ key }}</label>
-        </td>
-        <td><span>{{ val }}</span></td>
-      </tr>
+      <tbody>
+        <tr>
+          <th>{{ $tc('Variable') }}</th>
+          <th>{{ $tc('Description') }}</th>
+        </tr>
+        <tr v-for="(val, key, index) in variables" :key="index">
+          <td :title="$tc('ClickCopy')" class="item-td text-link" @click="onCopy(key)">
+            <label class="item-label">{{ key }}</label>
+          </td>
+          <td>
+            <span>{{ val }}</span>
+          </td>
+        </tr>
+      </tbody>
     </table>
   </Dialog>
 </template>
@@ -38,20 +43,11 @@ export default {
       default: false
     }
   },
+  emits: ['update:visible'],
   data() {
     return {
       title: this.$t('BuiltinVariable'),
       variables: {}
-    }
-  },
-  computed: {
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
     }
   },
   mounted() {
@@ -68,7 +64,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .help-dialog.dialog .el-dialog__footer {
+:deep(.help-dialog.dialog .el-dialog__footer) {
   border-top: none;
   padding: 8px;
 }
@@ -79,15 +75,17 @@ export default {
   border: 1px solid #dee2e6;
 }
 
-::v-deep .help-table th,
-::v-deep .help-table td {
-  height: 40px;
-  padding: 0 8px;
-  text-align: left;
+:deep(.help-table) {
+  th,
+  td {
+    height: 40px;
+    padding: 0 8px;
+    text-align: left;
+  }
 }
 
-::v-deep .help-table .item-td,
-::v-deep .help-table .item-label {
+:deep(.help-table .item-td),
+:deep(.help-table .item-label) {
   cursor: pointer;
   color: var(--color-primary);
 }

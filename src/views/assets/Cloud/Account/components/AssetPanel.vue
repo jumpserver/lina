@@ -1,12 +1,12 @@
 <template>
   <div class="asset-panel">
     <el-alert :center="false" :closable="true" style="margin-bottom: 6px">
-      <el-link :icon="linkIcon" :type="linkType" :underline="false"> {{ tip }}</el-link>
+      <el-link :icon="linkIcon" :type="linkType" underline="never"> {{ tip }}</el-link>
     </el-alert>
     <ImportTable
+      v-bind="settings"
       ref="importTable"
       origin="cloudSync"
-      v-bind="settings"
       @cancel="closeDialog"
       @finish="showResult"
     />
@@ -16,6 +16,7 @@
 <script>
 import ImportTable from '@/components/Table/ListTable/TableAction/ImportTable'
 import _isequal from 'lodash/isEqual'
+import { createWsUrl } from '@/utils/common/index'
 
 export default {
   name: 'AssetPanel',
@@ -43,7 +44,7 @@ export default {
       importAssets: {},
       tip: this.$tc('PrepareSyncTask'),
       linkType: 'primary',
-      linkIcon: 'el-icon-loading',
+      linkIcon: 'Loading',
       alreadySync: [],
       settings: {
         showCancel: !this.active,
@@ -81,7 +82,7 @@ export default {
           ],
           data: []
         },
-        performUploadObject: async function(item) {
+        performUploadObject: async function (item) {
           const data = { action: 'sync_import', asset_id: item.id }
           vm.ws.send(JSON.stringify(data))
           vm.importAssets[item.id] = item
@@ -104,12 +105,9 @@ export default {
       if (this.ws) {
         return
       }
-      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
-      const port = document.location.port ? ':' + document.location.port : ''
-      const url = '/ws/xpack/cloud/'
-      const wsURL = scheme + '://' + document.location.hostname + port + url
+      const wsURL = createWsUrl('/ws/xpack/cloud/')
       this.ws = new WebSocket(wsURL)
-      this.ws.onopen = e => {
+      this.ws.onopen = (e) => {
         this.settings.disableImportBtn = true
         this.ws.send(
           JSON.stringify({
@@ -121,7 +119,7 @@ export default {
       this.ws.onerror = () => {
         this.$message.error(this.$tc('ConnectWebSocketError'))
       }
-      this.ws.onmessage = e => {
+      this.ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
         if (data.action === 'sync_region') {
           this.addRegion(data.id, data.name)
@@ -132,7 +130,7 @@ export default {
           this.importAssets[data.asset_id]['@status'] = 'ok'
         } else if (data.action === 'finished') {
           this.linkType = 'success'
-          this.linkIcon = 'el-icon-success'
+          this.linkIcon = 'SuccessFilled'
           this.settings.disableImportBtn = false
           this.tip = `${this.$t('SyncSuccessMsg')}`
         } else {

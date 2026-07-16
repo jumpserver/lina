@@ -55,12 +55,12 @@ export default {
         const replayOptions = await getAllReplayStorage()
 
         if (commandOptions) {
-          commandOptions.forEach(item => {
+          commandOptions.forEach((item) => {
             this.fieldsMeta.command_storage.options.push({ label: item.name, value: item.name })
           })
         }
         if (replayOptions) {
-          replayOptions.forEach(item => {
+          replayOptions.forEach((item) => {
             if (item.type.value === 'sftp') return
             this.fieldsMeta.replay_storage.options.push({ label: item.name, value: item.name })
           })

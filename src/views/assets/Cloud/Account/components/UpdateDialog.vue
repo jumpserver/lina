@@ -3,17 +3,16 @@
     :destroy-on-close="true"
     :show-buttons="false"
     :title="$tc('CloudAccountUpdate')"
-    :visible.sync="iVisible"
+    :visible="visible"
     class="drawer"
-    v-on="$listeners"
   >
     <IBox>
       <AuthPanel
         :object="object"
         :provider="object.provider.value"
-        :visible.sync="iVisible"
+        :visible="visible"
         origin="update"
-        @submitSuccess="onSubmitSuccess"
+        @submit-success="onSubmitSuccess"
       />
     </IBox>
   </Drawer>
@@ -37,16 +36,7 @@ export default {
       default: false
     }
   },
-  computed: {
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
-    }
-  },
+  emits: ['update:visible', 'submitSuccess'],
   methods: {
     onSubmitSuccess() {
       this.$emit('submitSuccess')
@@ -57,13 +47,10 @@ export default {
 
 <style lang="scss" scoped>
 .ibox {
-  margin: 15px
+  margin: 15px;
 }
 
-.drawer ::v-deep {
-  .el-drawer__body {
-    background: #f3f3f3;
-  }
+.drawer :deep(.el-drawer__body) {
+  background: #f3f3f3;
 }
-
 </style>

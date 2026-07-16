@@ -1,6 +1,6 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm v-bind="config" @submitSuccess="submitSuccess" />
+    <GenericCreateUpdateForm v-bind="config" @submit-success="submitSuccess" />
   </IBox>
 </template>
 
@@ -25,10 +25,11 @@ export default {
       visible: false,
       config: {
         fields: [
-          'SECURITY_COMMAND_EXECUTION', 'SECURITY_COMMAND_BLACKLIST'
+          'SECURITY_COMMAND_EXECUTION',
+          'ANSIBLE_DOCKER_ENABLED',
+          'SECURITY_COMMAND_BLACKLIST'
         ],
-        fieldsMeta: {
-        },
+        fieldsMeta: {},
         successUrl: { name: 'Settings', params: { activeMenu: 'Basic' } },
         url: '/api/v1/settings/setting/?category=ops',
         hasReset: false,
@@ -47,6 +48,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

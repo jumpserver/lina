@@ -1,26 +1,24 @@
 <template>
   <TwoCol>
-    <template>
-      <AutoDetailCard v-bind="basicInfoConfig" />
-      <AutoDetailCard v-if="isShowSpecInfo" v-bind="specInfoConfig" />
-      <AutoDetailCard v-bind="customInfoConfig" />
-      <AutoDetailCard v-bind="gatheredInfoConfig" />
-    </template>
+    <AutoDetailCard v-bind="basicInfoConfig" />
+    <AutoDetailCard v-bind="specInfoConfig" v-if="isShowSpecInfo" />
+    <AutoDetailCard v-bind="customInfoConfig" />
+    <AutoDetailCard v-bind="gatheredInfoConfig" />
     <template #right>
       <QuickActions :actions="quickActions" type="primary" />
       <RelationCard
+        v-if="$hasPerm('assets.change_asset')"
+        v-bind="nodeRelationConfig"
         ref="NodeRelation"
-        v-perms="'assets.change_asset'"
         style="margin-top: 15px"
         type="info"
-        v-bind="nodeRelationConfig"
       />
       <RelationCard
+        v-if="$hasPerm('assets.change_asset')"
+        v-bind="labelConfig"
         ref="LabelRelation"
-        v-perms="'assets.change_asset'"
         style="margin-top: 15px"
         type="warning"
-        v-bind="labelConfig"
       />
     </template>
   </TwoCol>
@@ -43,12 +41,13 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => ({})
     }
   },
   data() {
     const vm = this
+    const nodes = Array.isArray(this.object.nodes) ? this.object.nodes : []
+    const labels = Array.isArray(this.object.labels) ? this.object.labels : []
     return {
       quickActions: [
         {
@@ -60,18 +59,19 @@ export default {
             disabled: !vm.$hasPerm('assets.change_asset')
           },
           callbacks: {
-            change: function(val) {
+            change: function (val) {
               const category = this.object.category.value
-              const normalizedCategory =
-                category === 'ds' ? 'directorie' : category
-              this.$axios.patch(
-                `/api/v1/assets/${normalizedCategory}s/${this.object.id}/`,
-                { is_active: val }
-              ).then(res => {
-                this.$message.success(this.$tc('UpdateSuccessMsg'))
-              }).catch(err => {
-                this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
-              })
+              const normalizedCategory = category === 'ds' ? 'directorie' : category
+              this.$axios
+                .patch(`/api/v1/assets/${normalizedCategory}s/${this.object.id}/`, {
+                  is_active: val
+                })
+                .then((res) => {
+                  this.$message.success(this.$tc('UpdateSuccessMsg'))
+                })
+                .catch((err) => {
+                  this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
+                })
             }.bind(this)
           }
         },
@@ -80,19 +80,19 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('Refresh'),
-            disabled: !vm.$hasPerm('assets.refresh_assethardwareinfo') ||
+            disabled:
+              !vm.$hasPerm('assets.refresh_assethardwareinfo') ||
               !this.object['auto_config'].gather_facts_enabled ||
               !this.object['auto_config'].ansible_enabled ||
               this.$store.getters.currentOrgIsRoot
           },
           callbacks: {
-            click: function() {
-              this.$axios.post(
-                `/api/v1/assets/assets/${this.object.id}/tasks/`,
-                { action: 'refresh' }
-              ).then(res => {
-                openTaskPage(res['task'])
-              })
+            click: function () {
+              this.$axios
+                .post(`/api/v1/assets/assets/${this.object.id}/tasks/`, { action: 'refresh' })
+                .then((res) => {
+                  openTaskPage(res['task'])
+                })
             }.bind(this)
           }
         },
@@ -101,20 +101,19 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('Test'),
-            disabled: !vm.$hasPerm('assets.test_assetconnectivity') ||
+            disabled:
+              !vm.$hasPerm('assets.test_assetconnectivity') ||
               !this.object['auto_config'].ansible_enabled ||
               !this.object['auto_config']['ping_enabled'] ||
               this.$store.getters.currentOrgIsRoot
           },
           callbacks: {
-            click: function() {
-              this.$axios.post(
-                `/api/v1/assets/assets/${this.object.id}/tasks/`,
-                { action: 'test' }
-              ).then(res => {
-                openTaskPage(res['task'])
-              }
-              )
+            click: function () {
+              this.$axios
+                .post(`/api/v1/assets/assets/${this.object.id}/tasks/`, { action: 'test' })
+                .then((res) => {
+                  openTaskPage(res['task'])
+                })
             }.bind(this)
           }
         }
@@ -128,15 +127,15 @@ export default {
             return { label: item.full_value, value: item.id }
           }
         },
-        hasObjectsId: this.object.nodes?.map(i => i.id) || [],
+        hasObjectsId: nodes.map((i) => i.id),
         performAdd: (items) => {
           const newData = []
-          const value = this.$refs.NodeRelation.iHasObjects
-          value.map(v => {
+          const value = this.$refs.NodeRelation?.iHasObjects || []
+          value.map((v) => {
             newData.push(v.value)
           })
           const relationUrl = `/api/v1/assets/assets/${this.object.id}/`
-          items.map(v => {
+          items.map((v) => {
             newData.push(v.value)
           })
           return this.$axios.patch(relationUrl, { nodes: newData })
@@ -144,8 +143,8 @@ export default {
         performDelete: (item) => {
           const itemId = item.value
           const newData = []
-          const value = this.$refs.NodeRelation.iHasObjects
-          value.map(v => {
+          const value = this.$refs.NodeRelation?.iHasObjects || []
+          value.map((v) => {
             if (v.value !== itemId) {
               newData.push(v.value)
             }
@@ -165,19 +164,19 @@ export default {
             return { label: label, value: item.id }
           }
         },
-        hasObjectsId: this.object.labels.map(item => item.id),
+        hasObjectsId: labels.map((item) => item.id),
         performAdd: (items) => {
           const newData = []
-          const value = this.$refs.LabelRelation.iHasObjects
-          value.map(v => newData.push(v.label))
+          const value = this.$refs.LabelRelation?.iHasObjects || []
+          value.map((v) => newData.push(v.label))
           const relationUrl = `/api/v1/assets/assets/${this.object.id}/`
-          items.map(v => newData.push(v.label))
+          items.map((v) => newData.push(v.label))
           return this.$axios.patch(relationUrl, { labels: newData })
         },
         performDelete: (item) => {
           const itemId = item.value
-          const value = this.$refs.LabelRelation.iHasObjects
-          const newData = value.filter(v => v.value !== itemId).map(v => v.value)
+          const value = this.$refs.LabelRelation?.iHasObjects || []
+          const newData = value.filter((v) => v.value !== itemId).map((v) => v.value)
           const relationUrl = `/api/v1/assets/assets/${this.object.id}/`
           return this.$axios.patch(relationUrl, { labels: newData })
         }
@@ -186,18 +185,29 @@ export default {
         url: `/api/v1/assets/assets/${this.object.id}/`,
         object: this.object,
         fields: [
-          'id', 'name', 'category', 'type', 'address',
-          'platform', 'protocols', 'zone', 'directory_services',
-          'is_active', 'date_created', 'date_updated',
-          'created_by', 'comment'
+          'id',
+          'name',
+          'category',
+          'type',
+          'address',
+          'platform',
+          'protocols',
+          'zone',
+          'directory_services',
+          'is_active',
+          'date_created',
+          'date_updated',
+          'created_by',
+          'comment'
         ],
         formatters: {
           protocols: () => {
-            return vm.object.protocols.map(
-              i => (
-                this.object.address.startsWith('https://') ? 'https' : i.name
-              ) + '/' + i.port
-            ).join(', ')
+            return vm.object.protocols
+              .map(
+                (i) =>
+                  (this.object.address.startsWith('https://') ? 'https' : i.name) + '/' + i.port
+              )
+              .join(', ')
           }
         }
       },
@@ -229,15 +239,15 @@ export default {
       const object = this.object
       const type = object.type.value
       const autofill = object.spec_info?.autofill
-      return !(type === 'website' && autofill === 'script') && Object.keys(object.spec_info || {}).length > 0
+      return (
+        !(type === 'website' && autofill === 'script') &&
+        Object.keys(object.spec_info || {}).length > 0
+      )
     }
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {}
 }
 </script>
 
-<style lang='less' scoped>
-
-</style>
+<style lang="scss" scoped></style>

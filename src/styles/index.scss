@@ -1,44 +1,60 @@
-@import './mixin.scss';
+@use "./mixin";
+@use "./variables" as *;
 //@import './transition.scss';
-@import './sidebar.scss';
-@import './menu.scss';
-@import './fonts.scss';
-@import './fonts/font-awesome.min.css';
+@use "./sidebar";
+@use "./menu";
+@use "./fonts";
+@use "./element-form-controls";
+@import "./fonts/font-awesome.min.css";
 
-::-webkit-scrollbar {
-  width: 10px;
+:root {
+  --scrollbar-size: 8px;
+  --scrollbar-track: transparent;
+  --scrollbar-thumb: rgba(130, 139, 149, 0.45);
+  --scrollbar-thumb-hover: rgba(103, 111, 120, 0.68);
 }
 
-::-webkit-scrollbar:horizontal {
-  height: 12px;
+html,
+body,
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
-::-webkit-scrollbar-corner {
-  background-color: transparent;
+*::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
 }
 
-::-webkit-scrollbar-track {
-  border-radius: 10px;
-  border: 1px solid #f0f0f0;
+*::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
-::-webkit-scrollbar-thumb {
-  border-radius: 8px;
-  box-shadow: 8px 10px 20px #c6c6c6 inset;
-  border-left: 2px solid rgba(0, 0, 0, 0);
+*::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 999px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  box-shadow: 8px 10px 20px #878787 inset;
+*::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
 }
 
 body {
-  height: calc(100% - 50px);
+  min-height: 100%;
+  height: 100%;
+  margin: 0;
   overflow: hidden;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: auto;
   color: var(--color-text-primary);
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 1.428;
 }
@@ -54,6 +70,11 @@ label {
 html {
   height: 100%;
   box-sizing: border-box;
+}
+
+#app {
+  min-height: 100%;
+  height: 100%;
 }
 
 *,
@@ -84,7 +105,7 @@ div:focus {
     visibility: hidden;
     display: block;
     font-size: 0;
-    content: ' ';
+    content: " ";
     clear: both;
     height: 0;
   }
@@ -100,7 +121,64 @@ small {
 }
 
 .text-navy {
-  color: $--color-primary;
+  color: $color-primary;
+}
+
+/*
+ * 主题色文字工具类。原先由 Element UI 时代的 element-extra.css 提供，该文件已废弃
+ * （见 utils/theme/index.js）。改用运行时 CSS 变量 --color-*，随主题切换自动更新。
+ */
+.text-primary {
+  color: var(--color-primary);
+}
+
+.text-success {
+  color: var(--color-success);
+}
+
+.text-info {
+  color: var(--color-info);
+}
+
+.text-warning {
+  color: var(--color-warning);
+}
+
+.text-danger {
+  color: var(--color-danger);
+}
+
+.text-link {
+  color: var(--color-info) !important;
+
+  &:hover {
+    filter: opacity(65%);
+  }
+}
+
+/*
+ * el-tag--info(默认 light 效果)恢复 JumpServer 原有的中性灰底深字样式。
+ * 该样式原由已废弃的 element-extra.css 提供；移除后 Element Plus 默认的浅蓝 info 配色
+ * 使下拉多选 tag「看起来没颜色」。通过覆盖 EP 的 tag CSS 变量实现，不用 !important；
+ * :not(.el-tag--dark):not(.el-tag--plain) 保证只改默认效果，深色/朴素 info tag 仍按主题走。
+ */
+.el-tag--info:not(.el-tag--dark):not(.el-tag--plain) {
+  --el-tag-bg-color: #f1f1f1;
+  --el-tag-border-color: #e5e6e7;
+  --el-tag-text-color: var(--color-text-primary);
+  --el-tag-hover-color: var(--el-text-color-secondary);
+}
+
+/*
+ * Radio / Checkbox 选中态标签文字。Element Plus 默认会把 label 染成 primary；
+ * 原先由 element-extra.css 覆盖为普通文字色，该文件已废弃（见 utils/theme/index.js）。
+ */
+.el-radio__input.is-checked + .el-radio__label {
+  color: inherit;
+}
+
+.el-checkbox__input.is-checked + .el-checkbox__label {
+  color: var(--el-text-color-regular);
 }
 
 b,
@@ -160,7 +238,7 @@ input,
 optgroup,
 select,
 textarea {
-  font-family: 'Open Sans', sans-serif !important;
+  font-family: "Open Sans", sans-serif !important;
 }
 
 // main-container global css
@@ -183,25 +261,7 @@ textarea {
   padding: 5px;
 }
 
-.el-dialog__body div.table-action-right-side {
-  padding-top: 10px;
-}
-
-.el-dialog__body {
-  padding-top: 10px;
-}
-
-.help-block {
-  display: block;
-  margin-top: 2px;
-  margin-bottom: 5px;
-  color: #999;
-  font-size: 12px;
-  line-height: 18px;
-  word-break: keep-all;
-}
-
-input[type='file'] {
+input[type="file"] {
   font-size: 12px;
   opacity: 80;
 }
@@ -238,10 +298,6 @@ input[type='file'] {
   overflow: auto;
 }
 
-.el-input.is-disabled .el-input__inner {
-  color: #737373 !important;
-}
-
 .el-select-dropdown.switch-org {
   width: 220px;
 }
@@ -265,26 +321,39 @@ input[type='file'] {
   .el-timeline-item__wrapper {
     .el-timeline-item__content {
       color: var(--color-text-primary);
+      font-size: 13px;
     }
 
     .el-timeline-item__timestamp.is-bottom {
       color: var(--color-help-text);
+      font-size: 12px;
     }
   }
 }
 
 // table 相关通用样式
 .el-data-table .el-table {
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+
+  .el-table__inner-wrapper,
+  .el-table__header-wrapper,
+  .el-table__body-wrapper,
+  .el-table__footer-wrapper {
+    border-radius: inherit;
+  }
+
+  .el-table__header-wrapper {
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+  }
+
   th,
   td {
     font-size: 13px;
     line-height: 1.5;
     border-right: none;
     color: var(--color-text-primary);
-
-    a {
-      color: #1c84c6;
-    }
   }
 
   th {
@@ -323,12 +392,19 @@ input[type='file'] {
 
   // 表头
   .el-table__header thead > tr > th {
+    &:first-child {
+      border-top-left-radius: 5px;
+    }
+
+    &:last-child {
+      border-top-right-radius: 5px;
+    }
+
     .cell {
       color: var(--color-text-primary);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      // background-color: var(--table-header-bg, #fff);
 
       &:hover {
         border-right: 2px solid #ebeef5;
@@ -402,21 +478,31 @@ input[type='file'] {
   text-overflow: ellipsis !important;
 }
 
-.el-link--default {
-  color: #1c84c6 !important;
-  font-weight: 300;
+// 统一所有 Select 下拉选项字体大小为 13px（下拉面板 teleport 到 body，需全局声明）
+.el-select-dropdown .el-select-dropdown__item {
+  font-size: 13px;
 }
 
-.el-link.is-underline:hover:after {
-  border-bottom: 1px solid #007bff !important;
+a.el-link.el-link--info,
+a.el-link.el-link--default {
+  color: var(--color-link) !important;
+}
+
+a.el-link.el-link--info:hover,
+a.el-link.el-link--default:hover {
+  color: var(--color-link) !important;
+
+  &.is-hover-underline {
+    border-bottom-color: var(--color-link) !important;
+  }
+}
+
+a.el-link.el-link--info.is-hover-underline:hover:after {
+  border-bottom: 1px solid var(--color-link) !important;
 }
 
 .el-dialog__title {
   font-size: 16px;
-}
-
-.el-input__inner::placeholder {
-  font-weight: 400;
 }
 
 .el-drawer.rtl,
@@ -433,19 +519,24 @@ input[type='file'] {
   font-weight: 400;
   padding: 8px 12px;
   border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+
+  // 确保按钮内容垂直居中
+  > span {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+  }
 }
 
-.el-button.el-button--mini,
-.el-button--mini.is-round {
+.el-button.el-button--small,
+.el-button--small.is-round {
   font-size: 0.7rem;
   font-weight: 400;
   border-radius: 2px;
-}
-
-.el-button--text {
-  &:hover {
-    background-color: unset !important;
-  }
 }
 
 .el-cascader__dropdown .el-cascader-panel .el-cascader-menu {
@@ -456,67 +547,8 @@ input[type='file'] {
   color: var(--color-text-primary);
 }
 
-.el-form .el-form-item__content {
-  font-size: 13px;
-  line-height: 32px;
-}
-
 .el-tabs__item > span {
   padding: 0 6px;
-}
-
-.el-form {
-  label {
-    font-weight: 400;
-    line-height: 32px;
-  }
-
-  .el-input__icon {
-    vertical-align: super;
-  }
-}
-
-.el-form .el-input__inner,
-.el-dialog__body .el-input__inner {
-  height: 30px;
-  font-size: 13px;
-}
-
-.el-input input::placeholder {
-  font-weight: 400 !important;
-  font-family: 'Open Sans', sans-serif;
-  font-size: 13px;
-}
-
-.el-form-item__label {
-  overflow: hidden;
-
-  span {
-    line-height: inherit;
-    display: inline-block;
-    vertical-align: middle;
-    word-break: break-word;
-  }
-}
-
-.form-group-header {
-  text-align: left;
-}
-
-.el-picker-panel__sidebar .el-picker-panel__shortcut {
-  font-size: 12px;
-}
-
-.el-cascader .el-input__inner {
-  border-radius: 2px;
-}
-
-.el-select .el-input .el-select__caret {
-  line-height: 1;
-}
-
-.el-select .el-input .el-input__inner {
-  height: 30px;
 }
 
 button .el-icon--right {
@@ -528,35 +560,62 @@ $tooltip-arrow-color: #c2d1e1;
 
 // 使用 SCSS 的嵌套和变量来简化代码
 .el-tooltip__popper.is-light {
-  &[x-placement^='right'] .popper__arrow {
+  &[x-placement^="right"] .popper__arrow {
     border-right-color: $tooltip-arrow-color !important;
   }
 
-  &[x-placement^='left'] .popper__arrow {
+  &[x-placement^="left"] .popper__arrow {
     border-left-color: $tooltip-arrow-color !important;
   }
 
-  &[x-placement^='top'] .popper__arrow {
+  &[x-placement^="top"] .popper__arrow {
     border-top-color: $tooltip-arrow-color !important;
   }
 
-  &[x-placement^='bottom'] .popper__arrow {
+  &[x-placement^="bottom"] .popper__arrow {
     border-bottom-color: $tooltip-arrow-color !important;
   }
 }
 
-.el-button.el-button--default.help-msg-btn {
-  padding: 5px;
+.el-button.help-msg-btn,
+.el-button.el-button--default.help-msg-btn,
+.el-tooltip__trigger .help-msg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 13px;
+  height: 13px;
+  min-height: 13px;
+  padding: 0;
   border: none;
+  background: transparent !important;
+  box-shadow: none;
+  vertical-align: middle;
 
-  &:hover {
-    background-color: white !important;
+  &:hover,
+  &:focus,
+  &:active {
+    background: transparent !important;
+    border-color: transparent !important;
   }
 
+  .el-icon,
+  .el-icon svg,
   i {
+    width: 13px;
+    height: 13px;
+    font-size: 13px;
     color: var(--color-info);
     opacity: 1;
   }
+}
+
+.page-heading .help-msg-btn,
+.page-heading .el-tooltip__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
 }
 
 .page-help-content {
@@ -567,8 +626,10 @@ $tooltip-arrow-color: #c2d1e1;
 
 .help-tips {
   a {
-    color: #1c84c6;
+    color: var(--color-link);
   }
+  max-width: 500px;
+  padding: 10px;
 }
 
 .el-upload--text {
@@ -584,39 +645,76 @@ li.rmenu i.fa {
   height: 28px;
 }
 
+.el-checkbox {
+  display: inline-flex;
+  align-items: center;
+}
+
 .el-checkbox__input {
-  padding-right: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  padding-right: 0;
 }
 
 .el-checkbox__label {
   // 这里不能 important page transfer 里面的 checkbox 和 label 会叠加，见用户组选择用户
-  padding-left: 5px;
+  padding-left: 8px;
 }
 
 .el-checkbox__inner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
   border-radius: 1px !important;
   width: 16px !important;
   height: 16px !important;
 
   &::after {
-    left: 5px !important;
+    width: 3px !important;
+    top: 50% !important;
+    left: 50% !important;
     height: 8px !important;
+    margin: 0 !important;
+    transform: translate(-45%, -60%) rotate(45deg) scaleY(0) !important;
   }
 }
 
-.fa-check-circle {
-  color: var(--color-primary) !important;
+.el-checkbox__input.is-checked .el-checkbox__inner::after {
+  transform: translate(-45%, -60%) rotate(45deg) scaleY(1) !important;
 }
 
-.el-alert.el-alert--info.is-light {
-  i.el-icon-info.is-big {
-    font-size: 16px;
-    width: 18px;
-  }
+.el-table .el-table-column--selection .cell {
+  display: flex;
+  align-items: center;
+  justify-content: center !important;
+  width: 100%;
+  padding: 0 !important;
+}
+
+.el-table .el-table-column--selection .el-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto !important;
+}
+
+.el-table .el-table-column--selection .el-checkbox__input {
+  padding-right: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.el-table .el-table-column--selection .el-checkbox__inner {
+  display: block;
+  margin: 0 auto;
 }
 
 .el-table__header thead > tr > th {
-  // background-color: var(--table-header-bg, #fff);
+  background-color: white;
   font-weight: 600;
 }
 
@@ -634,10 +732,69 @@ li.rmenu i.fa {
   }
 }
 
+.el-icon--right {
+  margin-left: 5px;
+}
+
+.el-icon--left {
+  margin-right: 5px;
+}
+
 .el-alert__description {
   a {
     color: var(--color-link);
   }
+}
+
+/*
+ * Alert 边框。Element Plus 默认 alert 无边框，而 JumpServer 之前(element-extra.css)
+ * 的 alert 带一圈细边框、并按类型着色。该文件已废弃，这里恢复原有观感。
+ * 类型色用运行时 --color-*-light（由 changeMenuColor 生成，随主题变化）；未生成时
+ * 回退到基础 --color-border。注意 EP 的 danger alert 类名是 --error。
+ */
+.el-alert {
+  border: solid 1px var(--color-border);
+  // Alert 在页面、TabPage、弹窗等纵向 flex 容器中都应保持内容高度，由容器负责滚动。
+  flex-shrink: 0;
+}
+
+.el-alert.el-alert--success.is-light {
+  border-color: var(--color-success-light);
+}
+
+.el-alert.el-alert--info.is-light {
+  border-color: var(--color-info-light);
+}
+
+.el-alert.el-alert--warning.is-light {
+  border-color: var(--color-warning-light);
+}
+
+.el-alert.el-alert--error.is-light {
+  border-color: var(--color-danger-light);
+}
+
+.el-alert__content {
+  line-height: 1.5;
+}
+
+.el-alert .el-alert__description {
+  margin: 1px 0 0;
+}
+
+/*
+ * Dialog 垂直居中。Element Plus 默认弹窗贴顶（margin-top:15vh），而 JumpServer 之前
+ * 的弹窗是居中的。这里完全复用 EP 原生 align-center 的做法：overlay 设 flex，dialog 用
+ * margin:auto 居中。overlay 本身 overflow:auto，超高弹窗整体在 overlay 内滚动、不裁切。
+ * 不对 el-dialog 强加 flex-column / max-height / body overflow —— 那会破坏部分弹窗自身
+ * 的内容布局，导致内容溢出。
+ */
+.el-overlay-dialog {
+  display: flex;
+}
+
+.el-overlay-dialog .el-dialog {
+  margin: auto;
 }
 
 //.link-btn {
@@ -657,33 +814,21 @@ li.rmenu i.fa {
   }
 }
 
+.el-drawer.drawer .el-drawer__header,
 .el-drawer__wrapper .el-drawer__header {
-  margin-bottom: 10px;
-  font-weight: 600;
+  min-height: 56px;
+  margin-bottom: 0;
+  padding: 15px 20px;
+  border-bottom: 1px solid #ebeef5;
   font-size: 16px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  box-sizing: border-box;
 }
 
-.el-input-number {
-  .el-input-number__decrease,
-  .el-input-number__increase {
-    line-height: 26px;
-  }
-}
-
-.el-form--label-top.el-form {
-  //.el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:after {
-  //  content: '*';
-  //  margin-left: 4px;
-  //}
-
-  .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:before {
-  }
-}
-
-.el-form-item {
-  .CodeMirror {
-    height: 200px;
-  }
+.el-drawer.drawer .el-drawer__body,
+.el-drawer__wrapper .el-drawer__body {
+  padding: 0;
 }
 
 .black-theme-popover {
@@ -700,43 +845,32 @@ li.rmenu i.fa {
   width: 100%;
 }
 
-.el-card__body {
-  .el-form {
-    margin-top: 20px;
-    margin-right: 80px;
-
-    form {
-      margin-top: 0;
-    }
-  }
-}
-
-.el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label {
-  span {
-    &::before {
-      content: '*';
-      margin-right: 4px;
-      color: #ed5565;
-    }
-  }
-
-  &::before {
-    display: none;
-  }
-}
-
-.el-button:not(:disabled):not(.disabled):active:focus,
-.el-button:not(:disabled):not(.disabled).active:focus,
-.show > .btn-primary.dropdown-toggle:focus {
-  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-}
-
 .el-button.el-button--default {
   &:focus,
   &:hover {
     //background-color: #fff;
   }
+}
+
+.el-button--primary,
+.el-button--primary > span,
+.el-button--primary:hover,
+.el-button--primary:hover > span,
+.el-button--primary:focus,
+.el-button--primary:focus > span,
+.el-button--primary:active,
+.el-button--primary:active > span {
+  color: #fff;
+}
+
+.el-message-box__btns .el-button {
+  width: auto;
+  min-width: 50px;
+  height: 30px;
+  padding: 8px 12px;
+  font-weight: 400;
+  font-size: 13px;
+  white-space: nowrap;
 }
 
 div.el-loading-parent--relative {
@@ -757,4 +891,38 @@ div.el-loading-parent--relative {
 
 .el-message {
   z-index: 999999 !important;
+}
+
+.fa {
+  margin-right: 2px;
+}
+
+.el-button-group.el-button-group--horizontal {
+  .el-button--small.el-dropdown__caret-button {
+    width: 27px;
+  }
+}
+
+.el-dropdown .el-dropdown__caret-button {
+  &::before {
+    top: 4px;
+    bottom: 4px;
+    opacity: 0.7;
+    transition:
+      top 0.12s ease,
+      bottom 0.12s ease,
+      background-color 0.1s ease,
+      opacity 0.1s ease;
+  }
+
+  &:hover,
+  &:focus,
+  &:active {
+    &::before {
+      top: -1px;
+      bottom: -1px;
+      background: var(--el-button-hover-border-color);
+      opacity: 1;
+    }
+  }
 }

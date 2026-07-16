@@ -1,11 +1,6 @@
 <template>
   <div>
-    <Echart
-      ref="echarts"
-      :options="options"
-      :autoresize="true"
-      class="disabled-when-print"
-    />
+    <Echart ref="echarts" :options="options" :autoresize="true" class="disabled-when-print" />
   </div>
 </template>
 
@@ -26,8 +21,14 @@ export default {
         const colorValue = themeColor.replace(/#/g, '')
         const subCOlor = mix(colorValue, 'ffffff', 40)
         return [
-          themeColor, subCOlor, '#F3B44B', 'rgba(243, 180, 75, 0.5)',
-          '#535C65', 'rgba(83, 92, 101, 0.5)', '#29448A', 'rgba(41, 68, 138, 0.5)'
+          themeColor,
+          subCOlor,
+          '#F3B44B',
+          'rgba(243, 180, 75, 0.5)',
+          '#535C65',
+          'rgba(83, 92, 101, 0.5)',
+          '#29448A',
+          'rgba(41, 68, 138, 0.5)'
         ]
       }
     },
@@ -42,15 +43,18 @@ export default {
   computed: {
     options() {
       const seriesList = []
-      const labels = this.data.map(item => item.label)
-      const total = _.sumBy(this.data, function(i) {
+      const labels = this.data.map((item) => item.label)
+      const total = _.sumBy(this.data, function (i) {
         return i.total
       })
       for (let i = 0, len = this.data.length; i < len; i++) {
         const current = this.data[i]
         let num = (current.total / total) * 100
         num = _.floor(num, 2)
-        const color = '#' + Math.floor(Math.random() * (256 * 256 * 256 - 1)).toString(16)
+        const fallback = '#' + Math.floor(Math.random() * (256 * 256 * 256 - 1)).toString(16)
+        // 颜色必须是静态值：ECharts 图例(legend)无法对函数回调求值，
+        // 用回调会导致图例前的颜色小方块渲染不出来。
+        const itemColor = this.colors[i] || fallback
         seriesList.push({
           type: 'bar',
           stack: 'total',
@@ -58,14 +62,10 @@ export default {
           name: current.label,
           itemStyle: {
             borderRadius: 0,
-            color: () => {
-              return this.colors[i] || color
-            }
+            color: itemColor
           },
           data: [num],
-          color: () => {
-            return this.colors[i] || color
-          }
+          color: itemColor
         })
       }
       return {
@@ -80,7 +80,6 @@ export default {
           },
           bottom: 30,
           data: labels
-
         },
         color: [
           {
@@ -100,7 +99,8 @@ export default {
             y2: 0,
             type: 'linear',
             global: false
-          }, {
+          },
+          {
             colorStops: [
               {
                 offset: 0,

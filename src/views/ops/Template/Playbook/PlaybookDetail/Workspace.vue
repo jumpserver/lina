@@ -1,8 +1,12 @@
 <template>
   <div>
-    <NewNodeDialog v-if="createDialogVisible" :visible.sync="createDialogVisible" @confirm="doCreate" />
+    <NewNodeDialog
+      v-if="createDialogVisible"
+      v-model:visible="createDialogVisible"
+      @confirm="doCreate"
+    />
     <TreeTable ref="TreeTable" :tree-setting="treeSetting" :table-config="{}">
-      <template v-if="!disableEdit" slot="rMenu">
+      <template v-if="!disableEdit" #rMenu>
         <li id="m_create_file" class="rmenu" tabindex="-1" @click="onCreate('file')">
           {{ $tc('NewFile') }}
         </li>
@@ -16,28 +20,36 @@
           {{ $tc('Delete') }}
         </li>
       </template>
-      <template slot="table">
-        <div class="transition-box" style="width: calc(100% - 17px);">
-          <el-tabs v-model="activeEditorId" :closable="true" class="workspace-tab" @tab-remove="onCloseEditor">
+      <template #table>
+        <div class="transition-box" style="width: calc(100% - 17px)">
+          <el-tabs
+            v-model="activeEditorId"
+            :closable="true"
+            class="workspace-tab"
+            @tab-remove="onCloseEditor"
+          >
             <el-tab-pane
-              v-for="(editor,key) in openedEditor"
+              v-for="(editor, key) in openedEditor"
               :key="key"
               :label="tabLabel(editor)"
               :name="key"
             >
               <CodeEditor
+                v-model="editor.value"
                 :options="cmOptions"
                 :toolbar="toolbar"
-                :value.sync="editor.value"
                 style="margin-bottom: 20px"
               />
             </el-tab-pane>
           </el-tabs>
-          <div style="display: flex;margin-top:10px;justify-content: space-between" />
-          <el-form ref="form" label-position="left" label-width="30px">
+          <el-form ref="form" label-position="left" label-width="0">
             <div class="form-content">
               <el-form-item label="" prop="variable">
-                <Variable :value.sync="variables" :disable-edit.sync="disableEdit" @input="setVariable" />
+                <Variable
+                  v-model="variables"
+                  v-model:disable-edit="disableEdit"
+                  @input="setVariable"
+                />
               </el-form-item>
             </div>
           </el-form>
@@ -66,8 +78,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -124,14 +135,13 @@ export default {
         showUpdate: false,
         showSearch: false,
         callback: {
-          onSelected: function(event, treeNode) {
+          onSelected: function (event, treeNode) {
             if (!treeNode.isParent) {
               this.onOpenEditor(treeNode)
             }
           }.bind(this),
-          refresh: function(event, treeNode) {
-          },
-          onRename: function(event, treeId, treeNode, isCancel) {
+          refresh: function (event, treeNode) {},
+          onRename: function (event, treeId, treeNode, isCancel) {
             if (isCancel) {
               return
             }
@@ -139,7 +149,8 @@ export default {
               key: treeNode.id,
               new_name: treeNode.name,
               is_directory: treeNode.isParent
-            }).then()
+            })
+              .then()
               .finally(() => {
                 this.refreshTree()
               })
@@ -190,14 +201,18 @@ export default {
     },
     onSave() {
       const editor = this.activeEditor
-      this.$axios.patch(`/api/v1/ops/playbook/${this.object.id}/file/`,
-        { key: this.activeEditorId, content: editor.value }).then(data => {
-        editor.originValue = editor.value
-        if (this.closing) {
-          this.remoteTab(editor.key)
-        }
-        this.$message.success(this.$tc('SaveSuccess'))
-      })
+      this.$axios
+        .patch(`/api/v1/ops/playbook/${this.object.id}/file/`, {
+          key: this.activeEditorId,
+          content: editor.value
+        })
+        .then((data) => {
+          editor.originValue = editor.value
+          if (this.closing) {
+            this.remoteTab(editor.key)
+          }
+          this.$message.success(this.$tc('SaveSuccess'))
+        })
     },
     onCreate(type) {
       this.dataztree.hideRMenu()
@@ -215,7 +230,7 @@ export default {
         is_directory: this.createType === 'directory',
         name: name
       }
-      this.$axios.post(`/api/v1/ops/playbook/${this.object.id}/file/`, req).then(data => {
+      this.$axios.post(`/api/v1/ops/playbook/${this.object.id}/file/`, req).then((data) => {
         this.refreshTree()
       })
     },
@@ -230,16 +245,18 @@ export default {
         cancelButtonText: this.$tc('Cancel'),
         type: 'warning'
       }).then(() => {
-        this.$axios.delete(`/api/v1/ops/playbook/${this.object.id}/file/?key=${node.id}`).then(() => {
-          if (!node.isParent) {
-            this.remoteTab(node.id)
-          }
-          this.refreshTree()
-          this.$message({
-            type: 'success',
-            message: this.$tc('DeleteSuccess')
+        this.$axios
+          .delete(`/api/v1/ops/playbook/${this.object.id}/file/?key=${node.id}`)
+          .then(() => {
+            if (!node.isParent) {
+              this.remoteTab(node.id)
+            }
+            this.refreshTree()
+            this.$message({
+              type: 'success',
+              message: this.$tc('DeleteSuccess')
+            })
           })
-        })
       })
     },
     onRename() {
@@ -251,8 +268,7 @@ export default {
       this.zTree.editName(node)
     },
     onOpenEditor(node) {
-      this.$set(this.openedEditor, node.id,
-        { key: node.id, name: node.name, originValue: '', value: '' })
+      this.openedEditor[node.id] = { key: node.id, name: node.name, originValue: '', value: '' }
       this.activeEditorId = node.id
       this.getFileContent(node.id)
     },
@@ -269,15 +285,17 @@ export default {
         confirmButtonText: this.$tc('Confirm'),
         cancelButtonText: this.$tc('Cancel'),
         type: 'warning'
-      }).then(() => {
-        this.closing = true
-        this.onSave()
-      }).catch(() => {
-        this.remoteTab(key)
       })
+        .then(() => {
+          this.closing = true
+          this.onSave()
+        })
+        .catch(() => {
+          this.remoteTab(key)
+        })
     },
     remoteTab(key) {
-      this.$delete(this.openedEditor, key)
+      delete this.openedEditor[key]
       const keys = Object.keys(this.openedEditor)
       if (keys.length !== 0) {
         this.activeEditorId = keys[keys.length - 1]
@@ -302,10 +320,11 @@ export default {
       if (this.disableEdit) {
         return
       }
-      this.$axios.patch(`/api/v1/ops/playbooks/${this.object.id}/`,
-        { variable: variables }).catch(err => {
-        this.$message.error(this.$tc('UpdateErrorMsg') + ' ' + err)
-      })
+      this.$axios
+        .patch(`/api/v1/ops/playbooks/${this.object.id}/`, { variable: variables })
+        .catch((err) => {
+          this.$message.error(this.$tc('UpdateErrorMsg') + ' ' + err)
+        })
     }
   }
 }
@@ -319,13 +338,14 @@ export default {
   padding: 5px 0;
   background-color: var(--color-primary);
   border-color: var(--color-primary);
-  color: #FFFFFF;
+  color: #ffffff;
   border-radius: 2px;
 }
 
 .workspace-tab {
-  ::v-deep .el-tabs__header {
-    margin: 0 0 15px 30px !important;
+  // 标签页头与下方编辑器/变量表左对齐(原先 margin-left:30px 让 main.yml 标签比编辑器右移错位)
+  :deep(.el-tabs__header) {
+    margin: 0 0 15px 0 !important;
   }
 }
 
@@ -343,7 +363,7 @@ export default {
   /*border-right: solid 1px red;*/
 }
 
-.vue-codemirror-wrap ::v-deep .CodeMirror {
+.vue-codemirror-wrap :deep(.CodeMirror) {
   width: 600px;
   height: 100px;
   border: 1px solid #eee;
@@ -357,7 +377,7 @@ export default {
 .output {
   padding-left: 30px;
   background-color: rgb(247 247 247);
-  border: solid 1px #f3f3f3;;
+  border: solid 1px #f3f3f3;
 }
 
 .status_success {

@@ -1,6 +1,10 @@
 <template>
   <div>
-    <el-alert v-sanitize="helpMessage" type="info" />
+    <el-alert type="info">
+      <template #default>
+        <div v-sanitize="helpMessage" />
+      </template>
+    </el-alert>
     <ListTable
       ref="ListTable"
       :header-actions="headerActions"
@@ -27,9 +31,7 @@ export default {
         url: '/api/v1/terminal/endpoint-rules/',
         columnsShow: {
           min: ['name', 'actions'],
-          default: [
-            'name', 'ip_group', 'priority', 'endpoint', 'actions'
-          ]
+          default: ['name', 'ip_group', 'priority', 'endpoint', 'actions']
         },
         columnsMeta: {
           name: {

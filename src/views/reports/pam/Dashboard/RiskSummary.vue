@@ -107,14 +107,14 @@ export default {
       let filteredData = []
 
       // 只要有一个大于零 则展示全部的
-      if (data.some(item => item.value > 0)) {
+      if (data.some((item) => item.value > 0)) {
         filteredData = data
       } else {
         filteredData = data.slice(0, 7)
       }
 
       // 找出所有数据中最大的值，并设置为 x 轴的 max。如果全是零则设置为 10
-      const maxValue = Math.max(...filteredData.map(item => item.value))
+      const maxValue = Math.max(...filteredData.map((item) => item.value))
       const max = maxValue > 0 ? maxValue : 10
       const primaryColor = this.getPrimaryColor()
       const barColors = this.getPrimaryPalette(filteredData.length, primaryColor)
@@ -148,7 +148,7 @@ export default {
         },
         yAxis: {
           type: 'category',
-          data: filteredData.map(item => item.name),
+          data: filteredData.map((item) => item.name),
           axisLine: { show: false },
           axisTick: { show: false },
           axisLabel: {
@@ -170,7 +170,7 @@ export default {
         series: [
           {
             type: 'bar',
-            data: filteredData.map(item => ({
+            data: filteredData.map((item) => ({
               name: item.name,
               value: item.value,
               description: item.description
@@ -211,7 +211,7 @@ export default {
     this.initChart()
     window.addEventListener('resize', this.resizeChart)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.chart) {
       this.chart.dispose()
       this.chart = null
@@ -243,9 +243,7 @@ export default {
 
       return Array.from({ length }, (_, index) => {
         const tone = toneSteps[index % toneSteps.length]
-        return tone < 0
-          ? mix('000000', baseHex, Math.abs(tone))
-          : mix('ffffff', baseHex, tone)
+        return tone < 0 ? mix('000000', baseHex, Math.abs(tone)) : mix('ffffff', baseHex, tone)
       })
     },
     async getResourcesCount() {
@@ -317,7 +315,7 @@ export default {
       cursor: pointer;
       transition: all 0.3s ease-in-out;
 
-      ::v-deep .summary-header {
+      :deep(.summary-header) {
         .title {
           color: #646a73;
           font-size: 0.9rem;
@@ -334,7 +332,7 @@ export default {
       &:hover {
         transform: translateY(-0.2rem);
 
-        ::v-deep .no-margins {
+        :deep(.no-margins) {
           .num {
             color: var(--color-primary);
           }

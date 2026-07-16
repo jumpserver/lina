@@ -45,7 +45,7 @@ export default {
       default: () => []
     }
   },
-  data: function() {
+  data: function () {
     return {
       dataUrl: '',
       metricsData: {
@@ -86,16 +86,19 @@ export default {
           }
         },
         legend: {
-          left: 'auto',
+          top: 0,
+          left: 0,
           icon: 'rect',
           // 图例标记的图形宽度
           itemWidth: 10,
-          itemHeight: 10
+          itemHeight: 10,
+          itemGap: 12
         },
         grid: {
           left: '3%',
           right: '4%',
-          bottom: '3%',
+          top: 42,
+          bottom: 8,
           containLabel: true
         },
         color: [primary, '#F3B44B'],
@@ -109,9 +112,7 @@ export default {
               }
             },
             axisLabel: {
-              textStyle: {
-                color: '#8F959E'
-              }
+              color: '#8F959E'
             },
             axisTick: {
               show: false
@@ -130,9 +131,7 @@ export default {
               }
             },
             axisLabel: {
-              textStyle: {
-                color: '#8F959E'
-              }
+              color: '#8F959E'
             },
             axisTick: {
               show: false
@@ -155,16 +154,17 @@ export default {
             smooth: true,
             areaStyle: {
               // 区域填充样式
-              normal: {
-                color: new echarts.graphic.LinearGradient(
-                  0,
-                  0,
-                  0,
-                  1,
-                  [{
+              color: new echarts.graphic.LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                [
+                  {
                     offset: 0,
                     color: primary
-                  }, {
+                  },
+                  {
                     offset: 0.6,
                     color: TwoLevelColor
                   },
@@ -172,12 +172,11 @@ export default {
                     offset: 0.8,
                     color: ThreeLevelColor
                   }
-                  ],
-                  false
-                ),
-                shadowColor: shadowColor,
-                shadowBlur: 5
-              }
+                ],
+                false
+              ),
+              shadowColor: shadowColor,
+              shadowBlur: 5
             },
             data: this.primaryData
           },
@@ -187,16 +186,17 @@ export default {
             smooth: true,
             areaStyle: {
               // 区域填充样式
-              normal: {
-                color: new echarts.graphic.LinearGradient(
-                  0,
-                  0,
-                  0,
-                  1,
-                  [{
+              color: new echarts.graphic.LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                [
+                  {
                     offset: 0,
                     color: 'rgba(249, 199, 79, 0.6)'
-                  }, {
+                  },
+                  {
                     offset: 0.6,
                     color: 'rgba(249, 199, 79, 0.2)'
                   },
@@ -204,12 +204,11 @@ export default {
                     offset: 0.8,
                     color: 'rgba(249, 199, 79, 0.1)'
                   }
-                  ],
-                  false
-                ),
-                shadowColor: 'rgba(249, 199, 79, 0.1)',
-                shadowBlur: 6
-              }
+                ],
+                false
+              ),
+              shadowColor: 'rgba(249, 199, 79, 0.1)',
+              shadowBlur: 6
             },
             data: this.secondaryData
           }
@@ -240,13 +239,13 @@ export default {
     // 兼容某些浏览器（Safari）触发 print 媒体切换
     this._mql = window.matchMedia && window.matchMedia('print')
     if (this._mql) {
-      const handler = e => (e.matches ? this._before() : this._after())
+      const handler = (e) => (e.matches ? this._before() : this._after())
       this._mql.addEventListener?.('change', handler)
       this._mql.addListener?.(handler)
       this._mql._handler = handler
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('beforeprint', this._before)
     window.removeEventListener('afterprint', this._after)
     if (this._mql) {
@@ -270,7 +269,6 @@ export default {
       }
     }
   }
-
 }
 </script>
 

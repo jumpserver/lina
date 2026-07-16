@@ -4,10 +4,9 @@
   </div>
 </template>
 
-<script type="text/jsx">
+<script lang="jsx">
 import GenericListPage from '@/layout/components/GenericListPage'
 import { SwitchFormatter } from '@/components/Table/TableFormatters'
-
 export default {
   components: {
     GenericListPage
@@ -20,12 +19,27 @@ export default {
         columnsShow: {
           min: ['name', 'args'],
           default: [
-            'name', 'args', 'type', 'crontab', 'interval', 'created_by', 'is_periodic_display', 'is_periodic'
+            'name',
+            'args',
+            'type',
+            'crontab',
+            'interval',
+            'created_by',
+            'is_periodic_display',
+            'is_periodic'
           ]
         },
         columns: [
-          'name', 'args', 'type', 'crontab', 'interval', 'date_last_run', 'summary',
-          'created_by', 'is_periodic_display', 'is_periodic'
+          'name',
+          'args',
+          'type',
+          'crontab',
+          'interval',
+          'date_last_run',
+          'summary',
+          'created_by',
+          'is_periodic_display',
+          'is_periodic'
         ],
         columnsMeta: {
           actions: {
@@ -37,12 +51,13 @@ export default {
           summary: {
             width: '130px',
             label: `${this.$t('Success')}/${this.$t('Total')}`,
-            formatter: (row) => {
-              return <div>
-                <span Class='text-primary'>{row.summary.success}</span>/
+            formatter: (row) => (
+              <div>
+                <span class="text-primary">{row.summary.success}</span>
+                /
                 <span>{row.summary.total}</span>
               </div>
-            }
+            )
           },
           is_periodic_display: {
             width: '100px',
@@ -73,6 +88,7 @@ export default {
       },
       headerActions: {
         hasLeftActions: false,
+        hasReportExport: true,
         hasImport: false
       }
     }
@@ -80,5 +96,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import Layout from '@/layout'
 import i18n from '@/i18n/i18n'
 /**
@@ -37,8 +36,6 @@ import reportsViewRoutes from './reports'
 import { getPropView } from '@/utils/jms/index'
 import store from '@/store'
 
-Vue.use(Router)
-
 /**
  * constantRoutes
  * a base page that does not have permission requirements
@@ -47,13 +44,13 @@ Vue.use(Router)
 // 全局路由
 export const constantRoutes = [
   {
-    path: '',
+    path: '/',
     component: Layout,
-    redirect: '',
+    redirect: '/console',
     meta: {
       type: 'view',
       view: 'home',
-      title: i18n.t('Index')
+      title: i18n.global.t('Index')
     },
     children: [
       {
@@ -62,17 +59,15 @@ export const constantRoutes = [
         component: () => import('@/views/workbench/overview/index'),
         meta: {
           icon: 'dashboard',
-          title: i18n.t('Overview')
+          title: i18n.global.t('Overview')
         },
-        beforeEnter: async (to, from, next) => {
+        beforeEnter: async () => {
           const preferView = getPropView()
           if (preferView) {
             await store.dispatch('app/reset')
-            next(`/${preferView}/`)
-            return false
+            return `/${preferView}`
           }
-          next()
-          return false
+          return true
         }
       }
     ]
@@ -101,20 +96,24 @@ export const viewRoutes = [
   reportsViewRoutes
 ]
 
-const createRouter = () =>
-  new Router({
+const createRouterInstance = () =>
+  createRouter({
     // mode: 'history', // require service support
-    scrollBehavior: () => ({ y: 0 }),
-    base: '/ui/',
+    scrollBehavior: () => ({ top: 0 }),
+    history: createWebHashHistory('/ui/'),
     routes: constantRoutes
   })
 
-const router = createRouter()
+const router = createRouterInstance()
+const dynamicRouteRemovers = []
 
-// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
+export function addDynamicRoute(route) {
+  const removeRoute = router.addRoute(route)
+  dynamicRouteRemovers.push(removeRoute)
+}
+
 export function resetRouter() {
-  const newRouter = createRouter()
-  router.matcher = newRouter.matcher // reset router
+  dynamicRouteRemovers.splice(0).forEach((removeRoute) => removeRoute())
 }
 
 export default router

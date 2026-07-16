@@ -5,13 +5,13 @@
       <el-input
         v-model="search"
         :placeholder="$t('Search')"
-        class="search-input"
+        :prefix-icon="searchIcon"
+        class="search-input jms-input-spacing"
         readonly
-        prefix-icon="el-icon-search"
         @keydown.esc.prevent="closePanel"
         @clear="clearSearch"
       >
-        <template slot="suffix">
+        <template #suffix>
           <span class="search-shortcut">{{ shortcutText }}</span>
         </template>
       </el-input>
@@ -19,12 +19,17 @@
 
     <!-- 搜索模态框 -->
     <el-dialog
-      :visible.sync="isOpen"
+      v-model="isOpen"
       :close-on-click-modal="true"
       :close-on-press-escape="true"
       :append-to-body="true"
-      custom-class="search-modal"
+      :show-close="false"
+      class="search-modal"
+      header-class="search-modal-header"
+      modal-class="search-modal-overlay"
+      body-class="search-modal-body"
       width="70%"
+      top="5px"
       @close="closePanel"
     >
       <div class="search-modal-content">
@@ -35,8 +40,8 @@
             v-model="search"
             :placeholder="$t('Search')"
             :clearable="true"
-            size="large"
-            prefix-icon="el-icon-search"
+            :prefix-icon="searchIcon"
+            class="search-panel-input jms-input-spacing"
             @input="onInput"
             @keydown.enter.prevent="onEnter"
           />
@@ -60,9 +65,9 @@
                 class="item"
                 @click="applyHistory(item)"
               >
-                <i class="el-icon-time icon" />
+                <el-icon class="icon"><Timer /></el-icon>
                 <span class="label">{{ item.q }}</span>
-                <i class="el-icon-arrow-right go" />
+                <el-icon class="go"><ArrowRight /></el-icon>
               </li>
             </ul>
           </template>
@@ -76,7 +81,7 @@
                 class="item"
                 @click="navigateRoute(route)"
               >
-                <i class="el-icon-location-outline icon" />
+                <el-icon class="icon"><LocationInformation /></el-icon>
                 <span class="label">{{ route.title || route.name || route.path }}</span>
                 <span class="sub">{{ route.path }}</span>
               </li>
@@ -125,10 +130,12 @@
 </template>
 
 <script>
-import _ from 'lodash'
-import { mapGetters } from 'vuex'
-import { ObjectLocalStorage } from '@/utils/common'
 import Icon from '@/components/Widgets/Icon/index.vue'
+import { ObjectLocalStorage } from '@/utils/common'
+import { Search as SearchIcon } from '@element-plus/icons-vue'
+import _ from 'lodash'
+import { markRaw } from 'vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Search',
@@ -151,6 +158,7 @@ export default {
         UserGroup: 'user-group',
         AssetPermission: 'permission'
       },
+      searchIcon: markRaw(SearchIcon),
       historyStore: new ObjectLocalStorage('globalSearchHistory')
     }
   },
@@ -174,7 +182,7 @@ export default {
     this.buildRouteSuggestions()
     this.bindKeyboardShortcut()
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.unbindKeyboardShortcut()
   },
   methods: {
@@ -202,7 +210,7 @@ export default {
         this.handleSearch(this.options[0].options[0])
       }
     },
-    debouncedQuery: _.debounce(function() {
+    debouncedQuery: _.debounce(function () {
       this.searchQuery(this.search)
     }, 300),
     async searchQuery(q) {
@@ -216,7 +224,7 @@ export default {
         const res = await this.$axios.get(url)
         let options = res || []
         options = _.groupBy(res, 'model_label')
-        this.options = Object.keys(options).map(key => ({
+        this.options = Object.keys(options).map((key) => ({
           label: key,
           options: options[key]
         }))
@@ -246,7 +254,7 @@ export default {
         return
       }
       this.routeSuggestions = this.routes
-        .filter(r => {
+        .filter((r) => {
           const title = r.title || r.name || r.path
           return (
             title.toLowerCase().includes(q.toLowerCase()) ||
@@ -281,12 +289,12 @@ export default {
       this.routes = flat
     },
     loadHistory() {
-      this.history = (this.historyStore.get('list') || []).filter(i => i.q)
+      this.history = (this.historyStore.get('list') || []).filter((i) => i.q)
     },
     addToHistory(q) {
       const entry = { q: q }
       const list = this.historyStore.get('list') || []
-      const next = [entry, ...list.filter(i => i.q !== entry.q)].slice(0, 10)
+      const next = [entry, ...list.filter((i) => i.q !== entry.q)].slice(0, 10)
       this.historyStore.set('list', next)
       this.history = next
     },
@@ -333,129 +341,229 @@ export default {
 <style lang="scss" scoped>
 .global-search {
   position: relative;
-  width: 200px;
+  display: flex;
+  align-items: center;
+  width: 220px;
   height: 40px;
   padding: 5px 0;
-  min-width: 200px;
+  min-width: 220px;
   margin-right: 5px;
 
   .search-trigger {
-    height: 30px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 28px;
     line-height: 1;
+    cursor: pointer;
 
     .search-input {
-      height: 30px;
-      line-height: 1;
-      background-color: var(--nav-header-bg, var(--color-primary));
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.2s;
+      --jms-input-padding-block: 0;
+      --jms-input-padding-inline: 12px;
 
-      &:hover {
-        background-color: var(--nav-header-hover, var(--color-primary));
+      width: 100%;
+      height: 28px;
+      pointer-events: none;
+
+      :deep(.el-input__wrapper) {
+        min-height: 28px;
+        height: 28px;
+        background-color: rgba(255, 255, 255, 0.08);
+        border-radius: 4px;
+        border: none !important;
+        box-shadow: inset 0 0 0 1px transparent !important;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
       }
 
-      ::v-deep {
-        .el-input__inner {
-          height: 30px;
-          line-height: 1;
-          background: transparent;
-          border: none;
+      :deep(.el-input__inner) {
+        height: 100%;
+        line-height: 1;
+        background: transparent;
+        border: unset !important;
+        cursor: pointer;
+
+        &::placeholder {
           color: #fff;
-          cursor: pointer;
-
-          &::placeholder {
-            color: #fff;
-            opacity: 0.7;
-          }
-        }
-
-        .el-input__prefix .el-input__icon {
-          font-size: 15px;
-          line-height: 32px;
-        }
-
-        .el-input__suffix {
-          display: flex;
-          align-items: center;
-          height: 100%;
+          opacity: 0.7;
         }
       }
 
-      .search-shortcut {
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 11px;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        font-weight: 500;
-        letter-spacing: 0.5px;
-        padding: 2px 6px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 3px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        user-select: none;
-        pointer-events: none;
-        display: inline-flex;
+      :deep(.el-input__prefix),
+      :deep(.el-input__suffix),
+      :deep(.el-input__suffix-inner) {
+        display: flex;
         align-items: center;
         justify-content: center;
-        height: 18px;
+        height: 100%;
+      }
+
+      :deep(.el-input__prefix-inner) {
+        display: flex;
+        align-items: center;
+      }
+
+      :deep(.el-input__prefix-inner > :last-child) {
+        margin-right: 8px;
+      }
+
+      :deep(.el-input__icon),
+      :deep(.el-icon) {
+        color: #fff;
+        font-size: 15px;
         line-height: 1;
       }
     }
-  }
-}
 
-/* 搜索模态框全局样式 */
-::v-deep .search-modal {
-  &.el-dialog {
-    position: fixed;
-    top: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    max-height: calc(100vh - 10px);
-    max-width: calc(100vw - 10px);
-    border-radius: 5px;
-    box-shadow: 0 0 8px 4px #00000014;
-
-    .el-dialog__body {
-      padding: 0;
+    &:hover {
+      .search-input :deep(.el-input__wrapper) {
+        background-color: rgba(255, 255, 255, 0.14);
+      }
     }
 
-    .el-dialog__header {
-      display: none;
+    .search-shortcut {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 11px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      padding: 2px 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      user-select: none;
+      pointer-events: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 18px;
+      line-height: 1;
     }
   }
 }
+</style>
 
-::v-deep body .v-modal {
+<style lang="scss">
+body .v-modal {
   opacity: 0.3;
 }
 
-::v-deep .search-modal-content {
-  height: 70vh;
-  display: flex;
-  flex-direction: column;
+.search-modal.el-dialog {
+  --el-dialog-padding-primary: 0;
+  padding: 0 !important;
+  margin: 5px auto 0 !important;
+  width: 70% !important;
+  max-width: min(1280px, calc(100vw - 48px));
+  max-height: calc(100vh - 40px);
+  border-radius: 6px;
+  box-shadow: 0 0 8px 4px #00000014;
+  overflow: hidden;
+  background: #fff;
 }
 
-::v-deep .search-input-wrapper {
+.search-modal-overlay {
+  overflow-y: auto;
+
+  .el-overlay-dialog {
+    display: block;
+    overflow-y: auto;
+  }
+}
+
+.search-modal-header {
+  display: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.search-modal-body {
+  padding: 0 !important;
+}
+
+.search-modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background: #fff;
+  height: 70vh;
+}
+
+.search-input-wrapper {
   padding: 20px;
   border-bottom: 1px solid #f0f0f0;
-  // background: #fff;
+  background: #fff;
 
-  .el-input {
+  .search-panel-input {
+    --jms-input-padding-block: 0;
+    --jms-input-padding-inline: 12px;
+
+    width: 100% !important;
+
+    &.el-input {
+      width: 100% !important;
+    }
+
+    .el-input__wrapper {
+      width: 100%;
+      min-height: 32px;
+      height: 32px;
+      border-radius: 0;
+      border: 1px solid var(--el-border-color) !important;
+      box-shadow: none !important;
+      box-sizing: border-box;
+
+      &.is-focus {
+        border-color: var(--el-color-primary) !important;
+        box-shadow: none !important;
+      }
+    }
+
     .el-input__inner {
+      min-height: 30px;
+      height: 30px;
+      line-height: 30px;
       font-size: 14px;
-      height: 34px;
-      line-height: 34px;
+      border: none !important;
+      box-shadow: none !important;
+      outline: none !important;
+      background: transparent;
+    }
+
+    .el-input__prefix,
+    .el-input__suffix,
+    .el-input__prefix-inner,
+    .el-input__suffix-inner {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 30px;
+      height: 30px;
+      border: 0 !important;
+      box-shadow: none !important;
+      background: transparent !important;
+    }
+
+    .el-input__prefix-inner > :last-child {
+      margin-right: 8px;
+    }
+
+    .el-input__suffix {
+      padding-left: 0;
+    }
+
+    .el-input__clear,
+    .el-input__icon {
+      border: 0 !important;
+      box-shadow: none !important;
     }
   }
 }
 
-::v-deep .search-results {
-  flex: 1;
+.search-results {
   overflow-y: auto;
   overflow-x: hidden;
+  max-height: calc(100vh - 140px);
 
-  /* 自定义滚动条 */
   &::-webkit-scrollbar {
     width: 6px;
   }
@@ -475,53 +583,48 @@ export default {
   }
 }
 
-::v-deep .section-title {
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 12px 24px 6px;
+  border-top: 1px solid #f0f0f0;
   font-size: 12px;
   line-height: 1.5;
   color: #909399;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  border-top: 1px solid #f0f0f0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 
   .clear-history-btn {
-    background: none;
-    border: none;
     padding: 4px;
-    cursor: pointer;
+    border: none;
     border-radius: 4px;
-    transition: all 0.2s ease;
+    background: none;
     color: red;
+    cursor: pointer;
+    transition: all 0.2s ease;
 
     &:hover {
       background: #f5f5f5;
       color: #f56c6c;
     }
-
-    .clear-icon {
-      font-size: 14px;
-      color: red;
-    }
   }
 }
 
-::v-deep .list {
-  list-style: none;
+.list {
   margin: 0;
   padding: 0;
+  list-style: none;
 
   .item {
+    position: relative;
     display: flex;
     align-items: center;
     padding: 8px 24px;
-    cursor: pointer;
     border-bottom: 1px solid #f8f9fa;
+    cursor: pointer;
     transition: all 0.2s ease;
-    position: relative;
 
     &:before {
       content: '';
@@ -543,7 +646,6 @@ export default {
     }
 
     .icon {
-      // color: var(--color-primary, #409eff);
       margin-right: 12px;
       font-size: 14px;
       font-weight: 400;
@@ -551,87 +653,90 @@ export default {
 
     .label {
       flex: 1;
-      font-size: 14px;
-      color: #333;
-      font-weight: 500;
+      max-width: 60%;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      max-width: 60%;
+      font-size: 14px;
+      color: #333;
+      font-weight: 500;
     }
 
     .sub {
-      color: #909399;
-      font-size: 12px;
+      width: 40%;
       margin-left: 12px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       flex-shrink: 0;
-      width: 40%;
       text-align: right;
+      color: #909399;
+      font-size: 12px;
     }
 
     .go {
+      flex-shrink: 0;
       color: #c0c4cc;
       font-size: 12px;
-      flex-shrink: 0;
     }
   }
 }
 
-::v-deep .loading,
-::v-deep .empty {
+.loading,
+.empty {
   padding: 32px 24px;
   color: #909399;
   text-align: center;
   font-size: 14px;
 }
 
-::v-deep .section.placeholder {
+.section.placeholder {
   padding: 32px 24px;
 
   .placeholder-content {
     text-align: center;
+  }
 
-    .supported-types {
-      margin-bottom: 24px;
+  .supported-types {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
 
-      .types-title {
-        margin-bottom: 12px;
-        font-size: 14px;
-        font-weight: 500;
-        color: #333;
-      }
+  .types-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+  }
 
-      .types-list {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 16px;
+  .types-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
 
-        .type-item {
-          display: flex;
-          align-items: center;
-          padding: 8px 12px;
-          background: #f8f9fa;
-          border-radius: 6px;
-          font-size: 13px;
-          color: #666;
-          transition: all 0.2s ease;
+  .type-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #666;
+    transition: all 0.2s ease;
 
-          &:hover {
-            background: #e9ecef;
-            color: #333;
-          }
+    &:hover {
+      background: #e9ecef;
+      color: #333;
+    }
 
-          .type-icon {
-            margin-right: 6px;
-            font-size: 14px;
-            color: #409eff;
-          }
-        }
-      }
+    .type-icon {
+      margin-right: 6px;
+      font-size: 14px;
+      color: var(--color-primary);
     }
   }
 }

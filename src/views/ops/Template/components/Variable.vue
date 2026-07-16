@@ -1,5 +1,5 @@
-～<template>
-  <div>
+<template>
+  <div class="variable-field">
     <div class="variables el-data-table">
       <el-table :data="variables" class="el-table--fit el-table--border">
         <el-table-column show-overflow-tooltip :label="$tc('Name')" prop="name" />
@@ -13,12 +13,12 @@
           fixed="right"
           width="135"
         >
-          <template v-slot="scope">
-            <el-button icon="el-icon-minus" size="mini" type="danger" @click="removeVariable(scope.row)" />
+          <template #default="scope">
+            <el-button icon="Minus" size="small" type="danger" @click="removeVariable(scope.row)" />
             <el-button
               :disabled="!!scope.row.template"
-              icon="el-icon-edit"
-              size="mini"
+              icon="Edit"
+              size="small"
               type="primary"
               @click="onEditClick(scope.row)"
             />
@@ -26,14 +26,15 @@
         </el-table-column>
       </el-table>
       <div v-if="!disableEdit" class="actions">
-        <el-button size="mini" type="primary" @click="onAddClick">
+        <el-button size="small" type="primary" @click="onAddClick">
           {{ $t('Add') }}
         </el-button>
       </div>
       <AddVariableDialog
+        v-model:visible="addVariableDialogVisible"
         :variable="variable"
-        :variables="variables"
-        :visible.sync="addVariableDialogVisible"
+        @add="addVariable"
+        @edit="editVariable"
       />
     </div>
   </div>
@@ -48,7 +49,7 @@ export default {
     AddVariableDialog
   },
   props: {
-    value: {
+    modelValue: {
       type: [Array],
       default: () => []
     },
@@ -67,10 +68,10 @@ export default {
   computed: {
     variables: {
       get() {
-        return this.value
+        return this.modelValue
       },
       set(val) {
-        this.$emit('update:value', val)
+        this.$emit('update:modelValue', val)
         this.$emit('change', val)
       }
     }
@@ -94,6 +95,36 @@ export default {
     }
   },
   methods: {
+    normalizeVariable(variable) {
+      return {
+        ...variable,
+        default_value: variable.text_default_value || variable.select_default_value || undefined
+      }
+    },
+    addVariable(variable) {
+      const nextVariable = this.normalizeVariable(variable)
+      const variables = this.variables.filter(
+        (item) => item.name !== nextVariable.name && item.var_name !== nextVariable.var_name
+      )
+      this.variables = [...variables, nextVariable]
+    },
+    editVariable(form) {
+      const nextVariable = this.normalizeVariable(form)
+      const currentVarName = this.variable?.var_name
+      const variables = this.variables.slice()
+      const index = variables.findIndex((item) => item.var_name === currentVarName)
+      const duplicated = variables.some((item, itemIndex) => {
+        if (itemIndex === index) return false
+        return item.var_name === nextVariable.var_name || item.name === nextVariable.name
+      })
+
+      if (duplicated || index === -1) {
+        return
+      }
+
+      variables.splice(index, 1, nextVariable)
+      this.variables = variables
+    },
     removeVariable(variable) {
       this.variables = this.variables.filter((item) => {
         if (variable.id && item.id) {
@@ -122,7 +153,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-data-table ::v-deep .el-table {
+.variable-field,
+.variables {
+  width: 100%;
+}
+
+.el-data-table :deep(.el-table) {
   .table {
     margin-top: 15px;
   }
@@ -167,13 +203,13 @@ export default {
       text-overflow: ellipsis;
 
       &:hover {
-        border-right: 2px solid #EBEEF5;
+        border-right: 2px solid #ebeef5;
       }
     }
   }
 }
 
-.el-data-table ::v-deep .el-table .el-table__header > thead > tr .is-sortable {
+.el-data-table :deep(.el-table .el-table__header > thead > tr .is-sortable) {
   padding: 5px 0;
 
   .cell {

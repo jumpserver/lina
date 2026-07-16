@@ -1,51 +1,58 @@
 <template>
   <div class="el-card-table">
     <TableAction
+      v-bind="headerActions"
       :reload-table="reloadTable"
       :search-table="search"
       :table-url="tableUrl"
-      v-bind="headerActions"
     />
-    <el-row v-loading="loading" class="the-row">
-      <IBox v-if="totalData.length === 0" class="empty-box">
-        <el-empty :description="$t('NoData')" :image-size="200" class="no-data" style="padding: 20px" />
-      </IBox>
-      <div class="card-container">
-        <el-card
-          v-for="(d, index) in totalData"
-          :key="index"
-          :class="{'is-disabled': isDisabled(d)}"
-          class="the-card"
-          shadow="hover"
-        >
-          <keep-alive>
-            <slot :index="index" :item="d" :onView="onView">
-              <Panel :d="d" @click.native="onView(d)" />
-            </slot>
-          </keep-alive>
-        </el-card>
-      </div>
-    </el-row>
+    <div v-loading="loading">
+      <el-row :class="{ 'is-empty': totalData.length === 0 }" class="the-row">
+        <IBox v-if="totalData.length === 0" class="empty-box">
+          <el-empty
+            :description="$t('NoData')"
+            :image-size="200"
+            class="no-data"
+            style="padding: 20px"
+          />
+        </IBox>
+        <div class="card-container">
+          <el-card
+            v-for="(d, index) in totalData"
+            :key="index"
+            :class="{ 'is-disabled': isDisabled(d) }"
+            class="the-card"
+            shadow="hover"
+          >
+            <keep-alive>
+              <slot :index="index" :item="d" :on-view="onView">
+                <Panel :d="d" @click="onView(d)" />
+              </slot>
+            </keep-alive>
+          </el-card>
+        </div>
+      </el-row>
+    </div>
     <Pagination
+      v-bind="$data"
       v-show="pagination && total > paginationSize"
       ref="pagination"
       class="pagination"
-      v-bind="$data"
-      @currentSizeChange="handleCurrentChange"
-      @sizeChange="handleSizeChange"
+      @current-size-change="handleCurrentChange"
+      @size-change="handleSizeChange"
     />
     <Drawer
       v-if="detailDrawer"
+      v-model:visible="detailDrawerVisible"
       :component="detailDrawer"
       :title="detailTitle"
-      :visible.sync="detailDrawerVisible"
     />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { Pagination } from '@/components'
+import Pagination from '@/components/Table/Pagination'
 import TableAction from '@/components/Table/ListTable/TableAction'
 import IBox from '@/components/Common/IBox/index.vue'
 import Panel from './Panel'
@@ -152,7 +159,9 @@ export default {
       }
       const pageQuery = this.getPageQuery(this.page, this.paginationSize)
       const query = Object.assign(this.extraQuery, pageQuery, this.tableConfig.extraQuery)
-      const queryString = Object.keys(query).map(key => key + '=' + query[key]).join('&')
+      const queryString = Object.keys(query)
+        .map((key) => key + '=' + query[key])
+        .join('&')
       const connector = this.tableUrl.indexOf('?') === -1 ? '?' : '&'
       const url = `${this.tableUrl}${connector}${queryString}`
 
@@ -198,7 +207,10 @@ export default {
       }
       if (this.detailDrawer) {
         await this.$store.dispatch('common/setDrawerActionMeta', {
-          action: 'detail', row: obj, col: {}, id: obj.id
+          action: 'detail',
+          row: obj,
+          col: {},
+          id: obj.id
         })
         this.detailTitle = `${this.$t('Detail')}: ${obj.name}`
         this.detailDrawerVisible = true
@@ -227,15 +239,22 @@ export default {
   }
 }
 </script>
-
 <style lang="scss" scoped>
 .the-row .empty-box {
   display: block;
+  // max-width controls the row; the empty card still needs an explicit flex size to fill it.
+  flex: 0 0 100%;
+  width: 100%;
+  box-sizing: border-box;
 
-  ::v-deep {
-    .el-empty {
-      margin: 0 auto;
-    }
+  :deep(.el-empty) {
+    margin: 0 auto;
+  }
+
+  :deep(.el-card__body) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
@@ -244,26 +263,25 @@ export default {
   max-width: 1600px;
   text-align: center;
 
+  // 空状态时不受卡片网格 1600px 上限约束,让 empty 卡片撑满整行宽度
+  &.is-empty {
+    max-width: none;
+  }
+
   .card-container {
-    display: flex;
-    justify-content: left;
-    flex-wrap: wrap;
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 20px;
 
     .el-card .el-card__body div {
       height: inherit;
     }
-  }
-
-  .el-col, div {
-    gap: 20px;
 
     .the-card {
-      min-width: 330px;
       position: relative;
-      margin-bottom: 20px;
       height: 180px;
-      width: 380px;
-      padding: 15px;
+      padding: 20px;
 
       ::v-deep .el-card__body {
         height: 100%;
@@ -301,9 +319,9 @@ export default {
   border-top: 1px solid #e7eaec;
 }
 
-.el-col {
-  //min-width: 330px; 设置完后，remote app 列表会有问题
-}
+// .el-col {
+//   min-width: 330px; 设置完后，remote app 列表会有问题
+// }
 
 .no-data {
   display: flex;

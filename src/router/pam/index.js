@@ -79,7 +79,7 @@ export default {
     },
     {
       path: '/pam/activity',
-      name: 'AccountActivity',
+      name: 'AccountActivityMenu',
       component: empty,
       meta: {
         title: i18n.t('Activity'),

@@ -1,4 +1,4 @@
-import Cookies from 'js-cookie'
+import { jsCookie as Cookies } from '@/utils/storage'
 
 const state = {
   sidebar: {
@@ -13,7 +13,7 @@ const state = {
 }
 
 const mutations = {
-  TOGGLE_SIDEBAR: state => {
+  TOGGLE_SIDEBAR: (state) => {
     state.sidebar.opened = !state.sidebar.opened
     state.sidebar.withoutAnimation = false
     if (state.sidebar.opened) {

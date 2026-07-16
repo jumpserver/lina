@@ -3,19 +3,19 @@
     <GenericTicketDetail :object="object" :special-card-items="specialCardItems" />
 
     <Drawer
-      :title="this.$t('Session')"
-      :visible.sync="drawerVisible"
+      v-model:visible="drawerVisible"
+      :title="$t('Session')"
       :has-footer="false"
       :component="SessionDetail"
     />
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import { STATUS_MAP } from '../../const'
 import Drawer from '@/components/Drawer/index.vue'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
-
+import { getAssetUrl } from '@/utils/assets'
 export default {
   name: 'CommandConfirmTicketDetail',
   components: {
@@ -32,8 +32,11 @@ export default {
     return {
       drawerVisible: false,
       SessionDetail: () => import('@/views/sessions/SessionDetail'),
-      statusMap: this.object.status.value === 'open' ? STATUS_MAP['pending'] : STATUS_MAP[this.object.state.value],
-      imageUrl: require('@/assets/img/avatar.png'),
+      statusMap:
+        this.object.status.value === 'open'
+          ? STATUS_MAP['pending']
+          : STATUS_MAP[this.object.state.value],
+      imageUrl: getAssetUrl('img/avatar.png'),
       form: {
         comments: ''
       },
@@ -67,8 +70,9 @@ export default {
             if (!this.$hasPerm('terminal.view_session')) {
               return <span>{this.$t('Session')}</span>
             }
-
-            return <el-link onClick={ () => this.handleSideEffect(value) }>{this.$t('Session')}</el-link>
+            return (
+              <el-link onClick={() => this.handleSideEffect(value)}>{this.$t('Session')}</el-link>
+            )
           }
         },
         {
@@ -77,11 +81,16 @@ export default {
             cmdFilterRuleId: object.apply_from_cmd_filter_rule,
             cmdFilterId: object.apply_from_cmd_filter
           },
-          formatter: function(item, value) {
+          formatter: function (item, value) {
             const to = {
               name: 'CommandFilterRulesUpdate',
-              params: { id: value.cmdFilterRuleId },
-              query: { filter: value.cmdFilterId, oid: object.org_id }
+              params: {
+                id: value.cmdFilterRuleId
+              },
+              query: {
+                filter: value.cmdFilterId,
+                oid: object.org_id
+              }
             }
             if (!this.$hasPerm('assets.change_commandfilterrule')) {
               return <span>{this.$t('CommandFilterRules')}</span>
@@ -95,9 +104,11 @@ export default {
   methods: {
     handleSideEffect(value) {
       this.$store.dispatch('common/setDrawerActionMeta', {
-        action: 'detail', row: {}, col: {}, id: value.id
+        action: 'detail',
+        row: {},
+        col: {},
+        id: value.id
       })
-
       this.$nextTick(() => {
         this.drawerVisible = true
       })

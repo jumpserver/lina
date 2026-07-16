@@ -2,41 +2,38 @@
   <Page v-bind="$attrs">
     <div v-if="!loading">
       <el-alert v-if="publicSettings.XPACK_ENABLED" type="info">
-        {{ this.$t('ImportLicenseTip') }}
+        {{ $t('ImportLicenseTip') }}
       </el-alert>
       <TwoCol>
-        <template>
-          <DetailCard :items="detailItems" :title="cardTitle" />
-        </template>
+        <DetailCard :items="detailItems" :title="cardTitle" />
         <template #right>
           <QuickActions :actions="quickActions" type="primary" />
         </template>
       </TwoCol>
       <Dialog
+        v-model:visible="dialogLicenseImport"
         :title="$tc('ImportLicense')"
-        :visible.sync="dialogLicenseImport"
         top="20vh"
         width="600px"
         @cancel="dialogLicenseImport = false"
         @confirm="importLicense"
       >
         <div style="padding-bottom: 10px">
-          {{ this.$t('LicenseFile') }}
+          {{ $t('LicenseFile') }}
         </div>
-        <input type="file" @change="fileChange">
+        <input type="file" @change="fileChange" />
       </Dialog>
     </div>
   </Page>
 </template>
 
-<script>
+<script lang="jsx">
 import Page from '@/layout/components/Page'
 import { Dialog, QuickActions } from '@/components'
 import DetailCard from '@/components/Cards/DetailCard/index'
 import { importLicense } from '@/api/settings'
 import { mapGetters } from 'vuex'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-
 export default {
   name: 'License',
   components: {
@@ -49,8 +46,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -85,9 +81,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'publicSettings', 'hasValidLicense'
-    ]),
+    ...mapGetters(['publicSettings', 'hasValidLicense']),
     cardTitle() {
       return ''
     },
@@ -109,7 +103,11 @@ export default {
           {
             key: 'Github',
             formatter: () => {
-              return (<a href='https://github.com/jumpserver/jumpserver' target='_blank'> JumpServer </a>)
+              return (
+                <a href="https://github.com/jumpserver/jumpserver" target="_blank">
+                  {' JumpServer '}
+                </a>
+              )
             }
           }
         ]
@@ -145,20 +143,23 @@ export default {
   mounted() {
     this.quickActions[0].attrs.disabled = !this.publicSettings.XPACK_ENABLED
     if (this.publicSettings.XPACK_ENABLED) {
-      this.$axios.get('/api/v1/xpack/license/detail').then(res => {
-        this.licenseData = res
-      }).finally(() => {
-        this.loading = false
-      })
+      this.$axios
+        .get('/api/v1/xpack/license/detail')
+        .then((res) => {
+          this.licenseData = res
+        })
+        .finally(() => {
+          this.loading = false
+        })
     } else {
       this.loading = false
     }
   },
   methods: {
-    importAction: function() {
+    importAction: function () {
       this.dialogLicenseImport = true
     },
-    consultAction: function() {
+    consultAction: function () {
       const url = 'https://www.lxware.hk/pages/about'
       window.open(url, '_blank')
     },
@@ -168,7 +169,7 @@ export default {
       }
       const formData = new FormData()
       formData.append('file', this.licenseFile['file'])
-      importLicense(formData).then(res => {
+      importLicense(formData).then((res) => {
         if (res.status) {
           this.$message.success(res.msg)
           setTimeout(() => location.reload(), 500)
@@ -184,6 +185,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

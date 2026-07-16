@@ -3,6 +3,7 @@
     :create-drawer="createDrawer"
     :detail-drawer="detailDrawer"
     :header-actions="headerActions"
+    help-alert-type="info"
     :help-tip="notice"
     :table-config="tableConfig"
   />

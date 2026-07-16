@@ -5,19 +5,19 @@
       :help-tip="helpMessage"
       :table-config="tableConfig"
       :tree-setting="treeSetting"
+      @url-change="handleTreeUrlChange"
     >
-      <TreeMenu
-        slot="rMenu"
-        :tree="treeRef"
-        @showAll="showAll"
-      />
-      <BaseList
-        ref="baseList"
-        slot="table"
-        :add-extra-more-actions="addExtraMoreActions"
-        :header-actions="headerActions"
-        v-bind="tableConfig"
-      />
+      <template #rMenu>
+        <TreeMenu :tree="treeRef" @show-all="showAll" />
+      </template>
+      <template #table>
+        <BaseList
+          v-bind="tableConfig"
+          ref="baseList"
+          :add-extra-more-actions="addExtraMoreActions"
+          :header-actions="headerActions"
+        />
+      </template>
     </AssetTreeTable>
   </div>
 </template>
@@ -30,8 +30,8 @@ import BaseList from './components/BaseList'
 import $ from '@/utils/jquery-vendor'
 import {
   getShowCurrentAssetValue,
-  setShowCurrentAssetValue,
   setRouterQuery,
+  setShowCurrentAssetValue,
   setUrlParam
 } from '@/utils/common/index'
 
@@ -51,20 +51,16 @@ export default {
         url: '/api/v1/assets/assets/',
         showMenu: !this.$store.getters.currentOrgIsRoot,
         showDefaultMenu: true,
-        menu: [
-        ]
+        selectSyncToRoute: false,
+        menu: []
       },
       tableConfig: {
         url: tableUrl,
         category: 'all',
-        extraQuery: { 'order': '-date_updated' }
+        extraQuery: { order: '-date_updated' }
       },
       headerActions: {
-        handleImportClick: ({ selectedRows }) => {
-          this.$message.warning({
-            message: this.$t('ImportMessage')
-          })
-        }
+        hasImport: false
       },
       addExtraMoreActions: [],
       helpMessage: this.$t('AssetListHelpMessage')
@@ -91,7 +87,17 @@ export default {
       setShowCurrentAssetValue(this.$cookie, showCurrentAsset)
       this.decorateRMenu()
       const url = `${this.treeSetting.url}?node_id=${node.meta.data.id}&show_current_asset=${showCurrentAsset}`
-      this.$refs.AssetTreeTable.$refs.TreeList.handleUrlChange(url)
+      this.handleTreeUrlChange(url)
+    },
+    handleTreeUrlChange(url) {
+      this.tableConfig = {
+        ...this.tableConfig,
+        url
+      }
+      setRouterQuery(this, url, { browserOnly: true })
+      this.$nextTick(() => {
+        this.$refs.baseList?.$refs.ListTable?.reloadTable?.()
+      })
     },
     getAssetsUrl(treeNode) {
       let url = '/api/v1/assets/assets/'
@@ -111,15 +117,9 @@ export default {
       } else if (treeNode.meta.type === 'platform') {
         url = setUrlParam(url, 'platform', treeNode.id)
       }
-      this.$set(this.tableConfig, 'url', url)
-      setRouterQuery(this, url)
+      this.tableConfig['url'] = url
+      setRouterQuery(this, url, { browserOnly: true })
     }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.asset-select-dialog ::v-deep .transition-box:first-child {
-  background-color: #f3f3f3;
-}
-</style>

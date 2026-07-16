@@ -1,20 +1,21 @@
 <template>
   <TwoCol>
-    <template>
-      <ListTable :header-actions="headerConfig" :table-config="config" :detail-drawer="detailDrawer" />
-    </template>
+    <ListTable
+      :header-actions="headerConfig"
+      :table-config="config"
+      :detail-drawer="detailDrawer"
+    />
     <template #right>
       <QuickActions :actions="quickActions" type="primary" />
     </template>
   </TwoCol>
 </template>
 
-<script type="text/jsx">
+<script lang="jsx">
 import { DrawerListTable as ListTable, QuickActions } from '@/components'
 import { openTaskPage } from '@/utils/jms/index'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-
 export default {
   name: 'Publications',
   components: {
@@ -25,8 +26,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -38,15 +38,10 @@ export default {
       },
       config: {
         url: `/api/v1/terminal/applet-publications/?host=${this.object.id}`,
-        columns: [
-          'applet.display_name', 'applet.version',
-          'date_updated', 'status', 'actions'
-        ],
+        columns: ['applet.display_name', 'applet.version', 'date_updated', 'status', 'actions'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: [
-            'applet.display_name', 'status', 'actions'
-          ]
+          default: ['applet.display_name', 'status', 'actions']
         },
         columnsMeta: {
           'applet.display_name': {
@@ -59,7 +54,9 @@ export default {
               getTitle: ({ row }) => row.applet.display_name,
               getRoute: ({ row }) => ({
                 name: 'AppletDetail',
-                params: { id: row.applet.id }
+                params: {
+                  id: row.applet.id
+                }
               })
             },
             id: ({ row }) => row.applet.id
@@ -71,13 +68,17 @@ export default {
             label: this.$t('Status'),
             formatter: (row) => {
               const typeMapper = {
-                'pending': 'success',
-                'success': 'primary',
-                'failed': 'danger',
-                'unknown': 'warning'
+                pending: 'success',
+                success: 'primary',
+                failed: 'danger',
+                unknown: 'warning'
               }
               const tp = typeMapper[row.status.value] || 'warning'
-              return <el-tag size='mini' type={tp}>{row.status.label}</el-tag>
+              return (
+                <el-tag size="small" type={tp}>
+                  {row.status.label}
+                </el-tag>
+              )
             }
           },
           date_updated: {
@@ -92,30 +93,28 @@ export default {
               extraActions: [
                 {
                   title: this.$t('Deploy'),
-                  callback: function({ row }) {
-                    this.$axios.post(
-                      `/api/v1/terminal/applet-host-deployments/applets/`,
-                      {
+                  callback: function ({ row }) {
+                    this.$axios
+                      .post(`/api/v1/terminal/applet-host-deployments/applets/`, {
                         hosts: [row.host.id],
                         applet_id: row.applet.id
-                      }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
+                      })
+                      .then((res) => {
+                        openTaskPage(res['task'])
+                      })
                   }
                 },
                 {
                   title: this.$t('Uninstall'),
-                  callback: function({ row }) {
-                    this.$axios.post(
-                      `/api/v1/terminal/applet-host-deployments/uninstall/`,
-                      {
+                  callback: function ({ row }) {
+                    this.$axios
+                      .post(`/api/v1/terminal/applet-host-deployments/uninstall/`, {
                         hosts: [row.host.id],
                         applet_id: row.applet.id
-                      }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
+                      })
+                      .then((res) => {
+                        openTaskPage(res['task'])
+                      })
                   }
                 }
               ]
@@ -131,13 +130,14 @@ export default {
             label: this.$t('Deploy')
           },
           callbacks: {
-            click: function() {
-              this.$axios.post(
-                `/api/v1/terminal/applet-host-deployments/`,
-                { host: this.object.id }
-              ).then(res => {
-                openTaskPage(res['task'])
-              })
+            click: function () {
+              this.$axios
+                .post(`/api/v1/terminal/applet-host-deployments/`, {
+                  host: this.object.id
+                })
+                .then((res) => {
+                  openTaskPage(res['task'])
+                })
             }.bind(this)
           }
         },
@@ -148,13 +148,15 @@ export default {
             label: this.$t('Deploy')
           },
           callbacks: {
-            click: function() {
-              this.$axios.post(
-                `/api/v1/terminal/applet-host-deployments/`,
-                { host: this.object.id, install_applets: false }
-              ).then(res => {
-                openTaskPage(res['task'])
-              })
+            click: function () {
+              this.$axios
+                .post(`/api/v1/terminal/applet-host-deployments/`, {
+                  host: this.object.id,
+                  install_applets: false
+                })
+                .then((res) => {
+                  openTaskPage(res['task'])
+                })
             }.bind(this)
           }
         },
@@ -165,13 +167,14 @@ export default {
             label: this.$t('Publish')
           },
           callbacks: {
-            click: function() {
-              this.$axios.post(
-                `/api/v1/terminal/applet-host-deployments/applets/`,
-                { hosts: [this.object.id] }
-              ).then(res => {
-                openTaskPage(res['task'])
-              })
+            click: function () {
+              this.$axios
+                .post(`/api/v1/terminal/applet-host-deployments/applets/`, {
+                  hosts: [this.object.id]
+                })
+                .then((res) => {
+                  openTaskPage(res['task'])
+                })
             }.bind(this)
           }
         }

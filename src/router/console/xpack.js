@@ -124,6 +124,4 @@ function setChildrenActiveMenu(children, activeMenu) {
 }
 
 setChildrenActiveMenu(clouds.children, '/console/assets/assets')
-export default [
-  clouds
-]
+export default [clouds]

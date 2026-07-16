@@ -1,16 +1,18 @@
 <template>
-  <div>
+  <div ref="card">
     <el-card class="box-card" shadow="never">
       <el-row :gutter="10">
-        <el-col :md="19" :sm="24" style="padding-right: 15px;">
+        <el-col :md="19" :sm="24" style="padding-right: 15px">
           <div>
-            <div style="text-align: left;font-weight: 350; color: #000000;">
+            <div style="text-align: left; font-weight: 350; color: #000000">
               <span class="name">{{ componentName }}</span>
             </div>
             <div class="type">
-              <span v-for="(item) in componentTypes" :key="item.key">
-                <i v-if="item.icon" :class="item.icon" :style="{color: item.color}" />
-                <span style="color: #a3a3a4;">{{ item.name }}</span>
+              <span v-for="item in componentTypes" :key="item.key">
+                <el-icon v-if="item.icon" :style="{ color: item.color }"
+                  ><component :is="iconComponent(item.icon)"
+                /></el-icon>
+                <span style="color: #a3a3a4">{{ item.name }}</span>
                 <el-popover
                   v-if="componentMetric[item.key].length > 0"
                   placement="bottom"
@@ -19,33 +21,43 @@
                   width="280"
                 >
                   <ul>
-                    <li v-for="(i, index) in componentMetric[item.key]" :key="index" @click="routeToList(i)">
+                    <li
+                      v-for="(i, index) in componentMetric[item.key]"
+                      :key="index"
+                      @click="routeToList(i)"
+                    >
                       {{ i }}
                     </li>
                   </ul>
-                  <span slot="reference" class="num">
-                    {{ componentMetric[item.key].length || 0 }}
-                  </span>
+                  <template #reference>
+                    <span class="num">
+                      {{ componentMetric[item.key].length || 0 }}
+                    </span>
+                  </template>
                 </el-popover>
                 <span v-else>
-                  {{ componentMetric[item.key] instanceof Array ? componentMetric[item.key].length : componentMetric[item.key] }}
+                  {{
+                    componentMetric[item.key] instanceof Array
+                      ? componentMetric[item.key].length
+                      : componentMetric[item.key]
+                  }}
                 </span>
               </span>
             </div>
-            <div :class="componentMetric.type + '-progress'" class="progress">
-              <div style="position: absolute; height: 100%; padding: 2px 0;">
+            <div ref="progress" :class="componentMetric.type + '-progress'" class="progress">
+              <div style="position: absolute; height: 100%; padding: 2px 0">
                 <span v-for="(bar, index) in barArray" :key="index" class="box-bar" />
               </div>
             </div>
           </div>
         </el-col>
-        <el-col :md="5" :sm="24" style="padding-left: 10px;">
+        <el-col :md="5" :sm="24" style="padding-left: 10px">
           <div class="session">
             <div class="session-title" style="">
               {{ $t('OnlineSessions') }}
             </div>
-            <div style="text-align: center;font-size: 22px;">
-              <i class="fa fa-comments-o" style="color: #00c360;" />
+            <div style="text-align: center; font-size: 22px">
+              <i class="fa fa-comments-o" style="color: #00c360" />
               {{ componentMetric.session_active }}
             </div>
           </div>
@@ -56,6 +68,7 @@
 </template>
 
 <script>
+import { legacyIconComponents } from '@/icons/legacy-icon-map'
 
 export default {
   name: 'MonitorCard',
@@ -143,39 +156,40 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.resizeObserver = new ResizeObserver(this.setBarColor)
-      this.resizeObserver.observe(document.querySelector('.box-card'))
+      if (this.$refs.card instanceof Element) {
+        this.resizeObserver.observe(this.$refs.card)
+      }
     })
   },
-  beforeDestroy() {
-    const el = document.querySelector('.box-card')
-    if (el) {
-      this.resizeObserver.unobserve(el)
-    }
+  beforeUnmount() {
+    this.resizeObserver?.disconnect()
     this.resizeObserver = null
   },
   methods: {
+    iconComponent(name) {
+      return legacyIconComponents[name] || null
+    },
     setElementsColor(numArray) {
-      const className = `.${this.componentMetric.type}-progress .box-bar`
-      const elements = document.querySelectorAll(className)
+      const elements = this.$el.querySelectorAll('.box-bar')
       numArray.reduce((prev, cur) => {
-        for (let i = prev; i < (cur.num + prev) && i < elements.length; i++) {
+        for (let i = prev; i < cur.num + prev && i < elements.length; i++) {
           elements[i].style.backgroundColor = cur.color
         }
         return cur.num + prev
       }, 0)
     },
     setBarColor() {
-      const el = document.querySelector(`.${this.componentMetric.type}-progress`)
+      const el = this.$refs.progress
       if (!el) return
 
       const numArray = []
       const { normal, high, critical, offline } = this.typeWidths
       const width = _.round(parseFloat(window.getComputedStyle(el).width), 2)
 
-      const normalWidth = normal ? width * normal / 100 : normal
-      const highWidth = high ? width * high / 100 : high
-      const criticalWidth = critical ? width * critical / 100 : critical
-      const offlineWidth = offline ? width * offline / 100 : offline
+      const normalWidth = normal ? (width * normal) / 100 : normal
+      const highWidth = high ? (width * high) / 100 : high
+      const criticalWidth = critical ? (width * critical) / 100 : critical
+      const offlineWidth = offline ? (width * offline) / 100 : offline
 
       const normalBarNum = _.round(normalWidth / 10)
       const highBarNum = _.round(highWidth / 10)
@@ -204,7 +218,7 @@ export default {
     },
     toPercent(num) {
       num = num instanceof Array ? num.length : num
-      return (Math.round(num / this.componentMetric.total * 10000) / 100.00) // 小数点后两位百分比
+      return Math.round((num / this.componentMetric.total) * 10000) / 100.0 // 小数点后两位百分比
     },
     routeToList(name) {
       this.$router.replace({

@@ -1,39 +1,69 @@
 <template>
   <Page>
     <el-row :gutter="10">
-      <el-col :span="4" style="padding: 10px;">
+      <el-col :span="4" style="padding: 10px">
         <div class="tag-container">
           <h5>{{ title }}</h5>
           <ul class="folder-list m-b-md" style="padding: 0">
-            <li
-              v-for="chart in chartItems"
-              :key="chart.name"
-              :class="{ active: selectedChart && selectedChart.name === chart.name }"
-            >
-              <a style="display: flex; align-items: center;" @click="handleChangeChart(chart)">
-                <i :class="chart.icon" style="margin-right: 6px;" />
+            <li v-for="chart in chartItems" :key="chart.key" :class="{ active: isActive(chart) }">
+              <a class="menu-link" @click="handleChangeChart(chart)">
+                <i :class="chart.icon" style="margin-right: 6px" />
                 {{ chart.title }}
               </a>
+              <ul v-if="chart.children && chart.children.length" class="report-children">
+                <li
+                  v-for="child in chart.children"
+                  :key="child.key"
+                  :class="{ active: isActive(child) }"
+                >
+                  <a class="menu-link child-link" @click="handleChangeChart(child)">
+                    {{ child.title }}
+                  </a>
+                </li>
+              </ul>
             </li>
           </ul>
         </div>
       </el-col>
       <el-col :span="20" style="background-color: #fff" class="chart">
-        <component :is="component" :nav="false" :url="url" />
+        <component :is="component" :key="componentKey" :nav="false" :url="url" />
       </el-col>
     </el-row>
   </Page>
 </template>
 
 <script>
-import UserReport from './UserActivity.vue'
 import Page from '@/layout/components/Page'
-import { resolveRoute } from '@/utils/vue/index'
+import UserActivity from '@/views/reports/users/UserActivity.vue'
+import ChangePassword from '@/views/reports/users/ChangePassword.vue'
+import {
+  appendQuery,
+  buildCustomReportRouteQuery,
+  reportDebugLog
+} from '@/views/reports/base/reportUtils'
+
+const TEMPLATE_ROUTE_MAP = {
+  UserLoginReport: {
+    key: 'UserReport',
+    titleKey: 'UserLoginReport',
+    icon: 'fa fa-sign-in',
+    component: UserActivity,
+    path: '/reports/users/user-activity',
+    perm: 'rbac.view_userloginreport'
+  },
+  UserChangePasswordReport: {
+    key: 'ChangePassword',
+    titleKey: 'UserChangePasswordReport',
+    icon: 'fa fa-key',
+    component: ChangePassword,
+    path: '/reports/users/change-password',
+    perm: 'rbac.view_userchangepasswordreport'
+  }
+}
 
 export default {
   name: 'Users',
   components: {
-    UserReport,
     Page
   },
   data() {
@@ -41,41 +71,236 @@ export default {
       url: '',
       title: this.$t('ReportType'),
       component: '',
-      selectedChart: null,
-      charts: [
-        {
-          title: this.$t('UserLoginReport'),
-          name: 'UserReport',
-          icon: 'fa fa-sign-in',
-          hidden: this.$hasPerm('rbac.view_userloginreport')
-        },
-        {
-          title: this.$t('UserChangePasswordReport'),
-          name: 'ChangePassword',
-          icon: 'fa fa-key',
-          hidden: this.$hasPerm('rbac.view_userchangepasswordreport')
-        }
-      ]
+      componentKey: '',
+      selectedChartKey: '',
+      chartItems: [],
+      catalogLoaded: false,
+      lastSyncQueryKey: '',
+      isPageActive: true,
+      syncRetryPending: false
     }
   },
-  computed: {
-    chartItems() {
-      return this.charts.filter(chart => chart.hidden)
+  watch: {
+    '$route.fullPath'() {
+      if (!this.isPageActive) return
+      const routeKey = this.buildRouteSyncKey(this.$route.query)
+      if (routeKey === this.lastSyncQueryKey) {
+        return
+      }
+      this.lastSyncQueryKey = routeKey
+      reportDebugLog('users.index.route.fullPath', {
+        routePath: this.$route.path,
+        query: this.$route.query,
+        selectedChartKey: this.selectedChartKey
+      })
+      this.syncSelectedFromRoute()
     }
   },
-  created() {
-    if (this.chartItems.length > 0) {
-      this.handleChangeChart(this.chartItems[0])
-    }
+  async created() {
+    await this.loadCatalog()
+    this.$eventBus.$on('reportCatalogChanged', this.handleCatalogChanged)
+  },
+  beforeUnmount() {
+    this.$eventBus.$off('reportCatalogChanged', this.handleCatalogChanged)
+  },
+  activated() {
+    this.isPageActive = true
+    this.syncSelectedFromRoute()
+  },
+  deactivated() {
+    this.isPageActive = false
   },
   methods: {
+    buildRouteSyncKey(query = {}) {
+      return JSON.stringify({
+        report_id: query.report_id || '',
+        chart_key: query.chart_key || '',
+        days: query.days || '',
+        visible_charts: query.visible_charts || '',
+        visible_tables: query.visible_tables || ''
+      })
+    },
+    handleCatalogChanged() {
+      this.loadCatalog()
+    },
+    getBuiltInTemplates() {
+      return Object.entries(TEMPLATE_ROUTE_MAP)
+        .filter(([, item]) => this.$hasPerm(item.perm))
+        .map(([reportType, item]) => ({
+          key: item.key,
+          reportType,
+          title: this.$t(item.titleKey),
+          component: item.component,
+          path: item.path,
+          icon: item.icon,
+          isCustom: false,
+          query: {
+            chart_key: item.key
+          },
+          children: []
+        }))
+    },
+    async loadCatalog() {
+      reportDebugLog('users.index.loadCatalog.start', {
+        routePath: this.$route.path,
+        query: this.$route.query
+      })
+      this.catalogLoaded = false
+      const templates = this.getBuiltInTemplates()
+      const chartMap = templates.reduce((acc, item) => {
+        acc[item.reportType] = item
+        return acc
+      }, {})
+      try {
+        const data = await this.$axios.get('/api/v1/reports/reports/catalog/')
+        data.forEach((group) => {
+          const target = chartMap[group.tp]
+          if (!target) {
+            return
+          }
+          target.children = (group.children || []).map((child) => ({
+            key: `report-${child.id}`,
+            title: child.name,
+            component: target.component,
+            path: target.path,
+            reportId: String(child.id),
+            isCustom: true,
+            query: {
+              ...buildCustomReportRouteQuery(child),
+              chart_key: target.key
+            }
+          }))
+        })
+      } catch (error) {
+        console.error('load report catalog failed', error)
+      }
+      this.chartItems = templates
+      this.catalogLoaded = true
+      reportDebugLog('users.index.loadCatalog.done', {
+        items: templates.map((item) => ({
+          key: item.key,
+          childCount: (item.children || []).length
+        }))
+      })
+      this.syncSelectedFromRoute()
+    },
+    syncSelectedFromRoute() {
+      const normalizeRouteValue = (v) => (Array.isArray(v) ? v[0] : v || '')
+      const raw = this.$route.query.report_id
+      const reportId = Array.isArray(raw) ? raw[0] : raw
+      let target = null
+      if (reportId) {
+        target = this.chartItems
+          .flatMap((item) => item.children || [])
+          .find((item) => String(item.reportId) === String(reportId))
+        if (!target) {
+          if (!this.catalogLoaded) {
+            return
+          }
+          // catalog 已加载但找不到 report_id，可能是 API 返回了旧数据（竞争条件），重试一次
+          if (!this.syncRetryPending) {
+            this.syncRetryPending = true
+            this.loadCatalog()
+            return
+          }
+          this.syncRetryPending = false
+          const nextQuery = { ...(this.$route.query || {}) }
+          delete nextQuery.report_id
+          this.$router.replace({ path: this.$route.path, query: nextQuery })
+          return
+        }
+        this.syncRetryPending = false
+      }
+      if (!target) {
+        const chartKey = this.$route.query.chart_key
+        target =
+          this.chartItems.find((item) => item.key === chartKey) ||
+          this.chartItems.find((item) => item.key === this.selectedChartKey) ||
+          this.chartItems[0]
+      }
+      if (target?.isCustom) {
+        const rq = this.$route.query || {}
+        const desiredBase = {
+          chart_key: target.query?.chart_key || target.key,
+          report_id: String(target.reportId || target.query?.report_id || '')
+        }
+        const currentBase = {
+          chart_key: normalizeRouteValue(rq.chart_key),
+          report_id: normalizeRouteValue(rq.report_id)
+        }
+        const baseNeedsCorrection = JSON.stringify(currentBase) !== JSON.stringify(desiredBase)
+        const hasStaleVisibleParams =
+          rq.visible_charts !== undefined || rq.visible_tables !== undefined
+        if (baseNeedsCorrection || hasStaleVisibleParams) {
+          const correctedQuery = { ...desiredBase }
+          if (rq.days) correctedQuery.days = rq.days
+          if (rq.customize) correctedQuery.customize = rq.customize
+          this.$router.replace({ path: this.$route.path, query: correctedQuery })
+          return
+        }
+      }
+      if (target && (this.selectedChartKey !== target.key || !this.component)) {
+        this.applyChart(target)
+      }
+      reportDebugLog('users.index.syncSelectedFromRoute', {
+        reportId,
+        selectedChartKey: this.selectedChartKey,
+        targetKey: target?.key || ''
+      })
+    },
+    isActive(item) {
+      return this.selectedChartKey === item.key
+    },
+    applyChart(chart) {
+      this.selectedChartKey = chart.key
+      if (!chart.component || !chart.path) {
+        return
+      }
+      const nextUrl = appendQuery('/ui/#' + chart.path, chart.query || {})
+      if (
+        this.component === chart.component &&
+        this.componentKey === chart.key &&
+        this.url === nextUrl
+      ) {
+        return
+      }
+      this.component = chart.component
+      this.componentKey = chart.key
+      this.url = nextUrl
+      reportDebugLog('users.index.applyChart', {
+        chartKey: chart.key,
+        reportId: chart.reportId || '',
+        url: this.url,
+        routePath: this.$route.path,
+        query: this.$route.query
+      })
+    },
     handleChangeChart(chart) {
-      this.selectedChart = chart
-      const route = resolveRoute({ name: chart.name }, this.$router)
-      this.component = route.components.default
-      const routePath = route.path
-      this.url = '/ui/#' + routePath
-      this.name = chart.name
+      const nextQuery = {
+        ...(this.$route.query.days && !chart.isCustom ? { days: this.$route.query.days } : {}),
+        ...(chart.query || {})
+      }
+      reportDebugLog('users.index.handleChangeChart', {
+        chartKey: chart.key,
+        reportId: chart.reportId || '',
+        nextQuery,
+        currentQuery: this.$route.query
+      })
+      const normalize = (query = {}) => ({
+        days: query.days || '',
+        report_id: query.report_id || '',
+        chart_key: query.chart_key || '',
+        visible_charts: query.visible_charts || '',
+        visible_tables: query.visible_tables || ''
+      })
+      if (JSON.stringify(normalize(this.$route.query)) === JSON.stringify(normalize(nextQuery))) {
+        this.applyChart(chart)
+        return
+      }
+      this.$router.replace({
+        path: this.$route.path,
+        query: nextQuery
+      })
     }
   }
 }
@@ -83,7 +308,7 @@ export default {
 
 <style scoped lang="scss">
 .page {
-  ::v-deep .page-content {
+  :deep(.page-content) {
     padding-right: 20px;
     padding-top: 10px;
   }
@@ -99,25 +324,48 @@ h5 {
   font-size: 13px;
   padding: 5px 0;
 
+  .report-children {
+    li {
+      border-bottom: none;
+    }
+  }
+
   .fa {
     margin-right: 10px;
   }
 }
+
+.menu-link {
+  display: flex;
+  align-items: center;
+}
+
+.report-children {
+  margin: 6px 0 0 18px;
+  padding: 0;
+}
+
+.child-link {
+  color: #606266;
+  font-size: 12px;
+}
+
 .tag-container {
   border-radius: 5px;
 }
+
 .chart {
   padding: 10px;
 
-  ::v-deep .content {
+  :deep(.content) {
     background-color: #fff;
     overflow: hidden;
     height: 100%;
   }
 }
-.folder-list li.active {
+
+.folder-list li.active > .menu-link {
   color: var(--color-primary);
-  background-color: var(--menu-hover);
   border-radius: 4px;
 }
 </style>

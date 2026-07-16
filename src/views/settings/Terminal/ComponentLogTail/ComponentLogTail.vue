@@ -1,4 +1,3 @@
-
 <template>
   <div id="terminal" ref="terminal" class="xterm" />
 </template>
@@ -7,6 +6,7 @@
 import 'xterm/css/xterm.css'
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
+import { createWsUrl } from '@/utils/common/index'
 const spinChars = ['|', '/', '-', '\\']
 export default {
   name: 'ComponentLogTail',
@@ -30,33 +30,29 @@ export default {
     },
     initTermAndWs() {
       const terminalContainer = this.$refs.terminal
-      this.xterm = new Terminal(
-        {
-          cursorBlink: false,
-          screenKeys: false,
-          fontFamily: '"Monaco", "Consolas", "monospace"',
-          fontSize: 13,
-          lineHeight: 1.2,
-          rightClickSelectsWord: true,
-          theme: {
-            background: '#1f1b1b'
-          }
-        })
+      this.xterm = new Terminal({
+        cursorBlink: false,
+        screenKeys: false,
+        fontFamily: '"Monaco", "Consolas", "monospace"',
+        fontSize: 13,
+        lineHeight: 1.2,
+        rightClickSelectsWord: true,
+        theme: {
+          background: '#1f1b1b'
+        }
+      })
       const fitAddon = new FitAddon()
       this.xterm.loadAddon(fitAddon)
       this.xterm.open(terminalContainer)
       fitAddon.fit()
-      window.onresize = function() {
+      window.onresize = function () {
         fitAddon.fit()
       }
       this.xterm.scrollToBottom()
       this.enableWS()
     },
     enableWS() {
-      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
-      const port = document.location.port ? ':' + document.location.port : ''
-      const url = '/ws/component-log-tail/'
-      const wsURL = scheme + '://' + document.location.hostname + port + url
+      const wsURL = createWsUrl('/ws/component-log-tail/')
       this.ws = new WebSocket(wsURL)
       this.ws.onerror = (e) => {
         this.xterm.write(this.wrapperError('Connect websocket server error'))
@@ -80,7 +76,7 @@ export default {
       this.ws.onopen = (e) => {
         const components = this.$route.query.components
         const search = this.$route.query.search
-        const msg = { 'components': components, 'search': search }
+        const msg = { components: components, search: search }
         this.ws.send(JSON.stringify(msg))
       }
     },
@@ -103,7 +99,7 @@ export default {
   height: 100%;
   width: 100%;
   background-color: #1f1b1b;
-  padding:5px
+  padding: 5px;
 }
 #terminal.xterm {
   height: 100vh;

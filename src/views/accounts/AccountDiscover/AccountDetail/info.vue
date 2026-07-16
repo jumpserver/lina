@@ -25,10 +25,14 @@ export default {
     return {
       url: `/api/v1/accounts/gathered-accounts/${this.object.id}/`,
       detailFields: [
-        'id', 'username',
-        'date_last_login', 'address_last_login',
-        'remote_present', 'present',
-        'date_updated', 'status'
+        'id',
+        'username',
+        'date_last_login',
+        'address_last_login',
+        'remote_present',
+        'present',
+        'date_updated',
+        'status'
       ],
       moreConfig: {
         url: `/api/v1/accounts/gathered-accounts/${this.object.id}/details/`,
@@ -43,6 +47,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

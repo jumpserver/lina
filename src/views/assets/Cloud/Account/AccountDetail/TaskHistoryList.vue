@@ -1,15 +1,20 @@
 <template>
-  <GenericListTable ref="GenericListTable" :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListTable
+    ref="GenericListTable"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
-<script>
+<script lang="jsx">
 import GenericListTable from '@/layout/components/GenericListTable/index'
 import { ActionsFormatter, DateFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
-
 export default {
   name: 'TaskHistoryList',
-  components: { GenericListTable },
+  components: {
+    GenericListTable
+  },
   props: {
     object: {
       type: Object,
@@ -50,11 +55,19 @@ export default {
           {
             prop: 'status',
             label: this.$t('Status'),
-            formatter: row => {
+            formatter: (row) => {
               if (row.status === 1) {
-                return <el-tag type='primary' size='mini'>{this.$t('Success')}</el-tag>
+                return (
+                  <el-tag type="primary" size="small">
+                    {this.$t('Success')}
+                  </el-tag>
+                )
               } else {
-                return <el-tag type='danger' size='mini'>{this.$t('Failed')}</el-tag>
+                return (
+                  <el-tag type="danger" size="small">
+                    {this.$t('Failed')}
+                  </el-tag>
+                )
               }
             }
           },
@@ -66,7 +79,7 @@ export default {
           {
             prop: 'trigger',
             label: this.$t('TriggerMode'),
-            formatter: row => {
+            formatter: (row) => {
               return row.trigger.label
             }
           },
@@ -76,8 +89,10 @@ export default {
             align: 'center',
             formatter: ActionsFormatter,
             formatterArgs: {
-              hasUpdate: false, // can set function(row, value)
-              hasDelete: false, // can set function(row, value)
+              hasUpdate: false,
+              // can set function(row, value)
+              hasDelete: false,
+              // can set function(row, value)
               moreActionsTitle: this.$t('Log'),
               hasClone: false,
               extraActions: [
@@ -85,7 +100,7 @@ export default {
                   name: 'View',
                   title: this.$t('View'),
                   type: 'primary',
-                  callback: function(val) {
+                  callback: function (val) {
                     openTaskPage(val.row.id)
                   }
                 }
@@ -99,6 +114,4 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
-
-</style>
+<style lang="scss" scoped></style>

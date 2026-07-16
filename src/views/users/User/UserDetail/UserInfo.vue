@@ -1,28 +1,23 @@
 <template>
   <TwoCol>
-    <template>
-      <AutoDetailCard
-        :fields="detailFields"
-        :formatters="detailFormatters"
-        :object="object"
-        :url="url"
-      />
-    </template>
+    <AutoDetailCard
+      :fields="detailFields"
+      :formatters="detailFormatters"
+      :object="object"
+      :url="url"
+    />
     <template #right>
       <QuickActions :actions="quickActions" type="primary" />
-      <RelationCard type="info" v-bind="relationConfig" />
+      <RelationCard v-bind="relationConfig" type="info" />
     </template>
   </TwoCol>
 </template>
 
-<script>
+<script lang="jsx">
 import { QuickActions } from '@/components'
-import RelationCard from '@/components/Cards/RelationCard'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import RelationCard from '@/components/Cards/RelationCard'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-import store from '@/store'
-import { MFASystemSetting } from '@/views/users/const'
-
 export default {
   name: 'UserInfo',
   components: {
@@ -49,16 +44,22 @@ export default {
             disabled: !vm.$hasPerm('users.change_user')
           },
           callbacks: {
-            change: function(v, item) {
+            change: function (v, item) {
               const url = `/api/v1/users/users/${vm.object.id}/`
-              const data = { is_active: v }
-              vm.$axios.patch(url, data).catch(() => {
-                item.attrs.model = !v
-              }).then(res => {
-                vm.$message.success(vm.$t('UpdateSuccessMsg'))
-              }).catch(err => {
-                vm.$message.error(vm.$t('UpdateErrorMsg' + ' ' + err))
-              })
+              const data = {
+                is_active: v
+              }
+              vm.$axios
+                .patch(url, data)
+                .catch(() => {
+                  item.attrs.model = !v
+                })
+                .then((res) => {
+                  vm.$message.success(vm.$t('UpdateSuccessMsg'))
+                })
+                .catch((err) => {
+                  vm.$message.error(vm.$t('UpdateErrorMsg' + ' ' + err))
+                })
             }
           }
         },
@@ -70,7 +71,7 @@ export default {
             label: this.$t('Send')
           },
           callbacks: {
-            click: function() {
+            click: function () {
               const warnMsg = vm.$t('ResetPasswordWarningMsg')
               const warnTitle = vm.$t('Info')
               const url = `/api/v1/users/users/${vm.object.id}/password/reset/`
@@ -98,11 +99,13 @@ export default {
           title: this.$t('ResetSSHKey'),
           attrs: {
             type: 'primary',
-            disabled: !this.$store.state.users.profile.can_public_key_auth || !vm.$hasPerm('users.change_user'),
+            disabled:
+              !this.$store.state.users.profile.can_public_key_auth ||
+              !vm.$hasPerm('users.change_user'),
             label: this.$t('Send')
           },
           callbacks: {
-            click: function() {
+            click: function () {
               const warnMsg = vm.$t('ResetSSHKeyWarningMsg')
               const warnTitle = vm.$t('Info')
               const url = `/api/v1/users/users/${vm.object.id}/pubkey/reset/`
@@ -134,7 +137,7 @@ export default {
             label: this.$t('Reset')
           },
           callbacks: {
-            click: function() {
+            click: function () {
               const warnMsg = vm.$t('ResetMFAWarningMsg')
               const warnTitle = vm.$t('Info')
               const url = `/api/v1/users/users/${vm.object.id}/mfa/reset/`
@@ -166,7 +169,7 @@ export default {
             disabled: !this.object.login_blocked || !vm.$hasPerm('users.change_user')
           },
           callbacks: {
-            click: function(v, item) {
+            click: function (v, item) {
               const url = `/api/v1/users/users/${vm.object.id}/unblock/`
               const unblockSuccessMsg = vm.$t('UnblockSuccessMsg')
               vm.$axios.patch(url).then(() => {
@@ -181,19 +184,23 @@ export default {
       detailFormatters: {
         phone: () => {
           const phoneObj = vm.object.phone
-          return <div>{phoneObj?.code} {phoneObj?.phone}</div>
+          return (
+            <div>
+              {phoneObj?.code} {phoneObj?.phone}
+            </div>
+          )
         },
         system_roles: () => {
           const rolesDisplay = vm.object.system_roles || []
-          const dom = rolesDisplay.map(item => {
-            return <el-tag size='mini'>{item.display_name}</el-tag>
+          const dom = rolesDisplay.map((item) => {
+            return <el-tag size="small">{item.display_name}</el-tag>
           })
           return <div>{dom}</div>
         },
         org_roles: () => {
           const rolesDisplay = vm.object.org_roles || []
-          const dom = rolesDisplay.map(item => {
-            return <el-tag size='mini'>{item.display_name}</el-tag>
+          const dom = rolesDisplay.map((item) => {
+            return <el-tag size="small">{item.display_name}</el-tag>
           })
           return <div>{dom}</div>
         }
@@ -202,11 +209,16 @@ export default {
         {
           key: '',
           formatter: () => {
-            return <img src={this.object.avatar_url} alt='' height='50'/>
+            return <img src={this.object.avatar_url} alt="" height="50" />
           }
         },
-        'id', 'name', 'username', 'email', 'phone',
-        'system_roles', 'org_roles',
+        'id',
+        'name',
+        'username',
+        'email',
+        'phone',
+        'system_roles',
+        'org_roles',
         {
           key: this.$t('OrgsAndRoles'),
           has: this.$store.getters.currentOrgIsRoot,
@@ -223,30 +235,23 @@ export default {
                 prettyKey = key.substring(0, allowKeyMaxLength - 3) + '...'
               }
               const item = prettyKey + ': ' + value.join(', ')
-              doms.push([item, <br/>])
+              doms.push([item, <br />])
             })
             return <div>{doms}</div>
           }
         },
-        'wecom_id', 'dingtalk_id', 'feishu_id',
-        {
-          key: this.$t('MFA'),
-          formatter: (item, val) => {
-            const user = vm.object
-            const securityMFAAuth = store.getters.publicSettings['SECURITY_MFA_AUTH']
-            const adminUserIsNeed = (user?.is_superuser || user?.is_org_admin) && securityMFAAuth === MFASystemSetting.onlyAdminUsers
-            if (securityMFAAuth === MFASystemSetting.allUsers) {
-              return this.$t('MFAAllUsers')
-            }
-            if (securityMFAAuth === MFASystemSetting.onlyAdminUsers && adminUserIsNeed) {
-              return this.$t('MFAOnlyAdminUsers')
-            }
-            return user?.mfa_level.label
-          }
-        },
-        'source', 'labels',
-        'created_by', 'date_joined', 'date_expired',
-        'date_password_last_updated', 'last_login', 'comment'
+        'wecom_id',
+        'dingtalk_id',
+        'feishu_id',
+        'mfa_level',
+        'source',
+        'labels',
+        'created_by',
+        'date_joined',
+        'date_expired',
+        'date_password_last_updated',
+        'last_login',
+        'comment'
       ],
       relationConfig: {
         icon: 'fa-user',
@@ -264,7 +269,7 @@ export default {
         performAdd: (items) => {
           const relationUrl = `/api/v1/users/users-groups-relations/`
           const objectId = this.object.id
-          const data = items.map(v => {
+          const data = items.map((v) => {
             return {
               usergroup: v.value,
               user: objectId
@@ -287,7 +292,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.mfa-setting ::v-deep .el-slider__runway {
+.mfa-setting :deep(.el-slider__runway) {
   margin-top: 0;
   margin-bottom: 0;
 }
@@ -304,5 +309,4 @@ export default {
     margin-right: 0; /* 清除最后一个元素的多余间距 */
   }
 }
-
 </style>

@@ -1,11 +1,6 @@
 <template>
   <span class="protocol-cell">
-    <el-tag
-      v-for="(p, index) of cellValue"
-      :key="p.name"
-      :type="getTagType(index)"
-      size="mini"
-    >
+    <el-tag v-for="(p, index) of cellValue" :key="p.name" :type="getTagType(index)" size="small">
       {{ p.name }}/{{ p.port }}
     </el-tag>
   </span>
@@ -39,7 +34,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .protocol-cell {
   display: flex;
   flex-wrap: wrap;
@@ -50,5 +45,4 @@ export default {
     margin-right: 2px;
   }
 }
-
 </style>

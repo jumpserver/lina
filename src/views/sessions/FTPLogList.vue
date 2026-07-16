@@ -16,9 +16,16 @@ export default {
       tableConfig: {
         columnsShow: {
           default: [
-            'id', 'user', 'asset', 'account', 'operate',
-            'filename', 'date_start', 'is_success', 'actions'
-          ]
+            'user',
+            'asset',
+            'account',
+            'operate',
+            'filename',
+            'date_start',
+            'is_success',
+            'actions'
+          ],
+          min: ['user', 'asset', 'filename']
         },
         url: '/api/v1/audits/ftp-logs/',
         columnsMeta: {
@@ -56,7 +63,7 @@ export default {
                       return unknownStorageStateTip
                     }
                   },
-                  callback: function({ row }) {
+                  callback: function ({ row }) {
                     // 跳转下载页面
                     download(`/api/v1/audits/ftp-logs/${row.id}/file/download/`)
                   }
@@ -69,13 +76,15 @@ export default {
       headerActions: {
         hasLeftActions: false,
         hasImport: false,
-        hasDatePicker: true
+        hasReportExport: true,
+        hasDatePicker: true,
+        searchConfig: {
+          getUrlQuery: true
+        }
       }
     }
   }
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

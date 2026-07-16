@@ -1,11 +1,11 @@
 <template>
   <el-form-item
+    v-bind="data.attrs"
     v-if="_show"
     :class="classes"
     :label="data.label"
-    :prop="prop"
+    :prop="itemProp"
     :rules="_show && Array.isArray(data.rules) ? data.rules : []"
-    v-bind="data.attrs"
     :error="errorText"
   >
     <template v-if="data.label" #label>
@@ -14,13 +14,15 @@
         {{ data.label }}
         <el-tooltip
           v-if="data.helpTip"
-          :open-delay="500"
+          :show-after="500"
           :tabindex="-1"
           effect="dark"
           placement="right"
           popper-class="help-tips"
         >
-          <div slot="content" v-sanitize="data.helpTip" class="help-tip-content" />
+          <template #content>
+            <div v-sanitize="data.helpTip" class="help-tip-content" />
+          </template>
           <!-- Noncompliant -->
           <i class="fa fa-question-circle-o help-tip-icon" />
         </el-tooltip>
@@ -34,68 +36,64 @@
         {{ itemValue }}
       </div>
       <div v-else-if="data.type === 'select'">
-        <template>
-          {{ multipleValue }}
-        </template>
+        {{ multipleValue }}
       </div>
     </template>
-    <custom-component
-      v-else
-      :component="data.component || `el-${data.type}`"
-      :disabled="disabled || componentProps.disabled || readonly"
-      :value="itemValue"
+    <component
       v-bind="componentProps"
+      :is="rawComponent"
+      v-else
+      :disabled="disabled || componentProps.disabled || readonly"
+      :model-value="itemValue"
+      :value="valueProp"
       v-on="listeners"
     >
-      <template v-for="opt in options">
-        <el-option v-if="data.type === 'select'" :key="opt.label" v-bind="opt" />
+      <template v-for="opt in options" :key="opt.value">
+        <el-option v-bind="opt" v-if="data.type === 'select'" />
         <el-checkbox-button
-          v-else-if="data.type === 'checkbox-group' && data.style === 'button'"
-          :key="opt.value"
-          :label="'value' in opt ? opt.value : opt.label"
           v-bind="opt"
+          v-else-if="data.type === 'checkbox-group' && data.style === 'button'"
+          :label="'value' in opt ? opt.value : opt.label"
         >
           {{ opt.label }}
         </el-checkbox-button>
 
         <el-checkbox
-          v-else-if="data.type === 'checkbox-group' && data.style !== 'button'"
-          :key="opt.value"
-          :label="'value' in opt ? opt.value : opt.label"
           v-bind="opt"
+          v-else-if="data.type === 'checkbox-group' && data.style !== 'button'"
+          :label="'value' in opt ? opt.value : opt.label"
         >
           {{ opt.label }}
-          <el-tooltip v-if="opt.tip" :content="opt.tip" :open-delay="500" placement="top">
-            <i class="el-icon-warning-outline" />
+          <el-tooltip v-if="opt.tip" :content="opt.tip" :show-after="500" placement="top">
+            <el-icon><Warning /></el-icon>
           </el-tooltip>
           <span v-if="data.helpText">{{ data.helpText }}</span>
         </el-checkbox>
-        <!-- WARNING: radio 用 label 属性来表示 value 的含义 -->
+        <!-- radio 使用 value 属性来表示选中值 -->
         <!-- FYI: radio 的 value 属性可以在没有 radio-group 时用来关联到同一个 v-model -->
         <el-radio
-          v-else-if="data.type === 'radio-group'"
-          :key="opt.label"
-          :label="'value' in opt ? opt.value : opt.label"
           v-bind="opt"
+          v-else-if="data.type === 'radio-group'"
+          :value="'value' in opt ? opt.value : opt.label"
         >
           {{ opt.label }}
-          <el-tooltip v-if="opt.tip" :content="opt.tip" :open-delay="500" placement="top">
-            <i class="el-icon-warning-outline" />
+          <el-tooltip v-if="opt.tip" :content="opt.tip" :show-after="500" placement="top">
+            <el-icon><Warning /></el-icon>
           </el-tooltip>
         </el-radio>
       </template>
-    </custom-component>
-    <div v-if="data.helpText" :class="data.type" class="help-block">
+    </component>
+    <div v-if="helpText" :class="data.type" class="help-block">
       <el-alert
-        v-if="data.helpText.startsWith('!')"
+        v-if="helpText.startsWith('!')"
         :closable="false"
         class="help-warning"
         show-icon
         type="info"
       >
-        <span v-sanitize="data.helpText.replace(/^!/, '')" />
+        <span v-sanitize="helpText.replace(/^!/, '')" />
       </el-alert>
-      <span v-else v-sanitize="data.helpText" />
+      <span v-else v-sanitize="helpText" />
     </div>
     <div v-if="data.helpTextFormatter" class="help-block">
       <RenderHelpTextSafe :render-content="data.helpTextFormatter" />
@@ -103,12 +101,14 @@
   </el-form-item>
 </template>
 <script>
-import getEnableWhenStatus from '../util/enable-when'
-import { noop } from '../util/utils'
+import _frompairs from 'lodash/fromPairs'
 import _get from 'lodash/get'
 import _includes from 'lodash/includes'
 import _topairs from 'lodash/toPairs'
-import _frompairs from 'lodash/fromPairs'
+import { markRaw, toRaw, inject } from 'vue'
+import { FORM_RENDERER_KEY } from '../el-form-renderer.vue'
+import getEnableWhenStatus from '../util/enable-when'
+import { noop } from '../util/utils'
 
 function validator(data) {
   if (!data) {
@@ -123,24 +123,15 @@ function validator(data) {
 export default {
   components: {
     RenderHelpTextSafe: {
-      functional: true,
       props: {
         renderContent: {
           type: Function,
           required: true
         }
       },
-      render(h, { props }) {
-        return props.renderContent()
+      render() {
+        return this.renderContent()
       }
-    },
-    /**
-     * 🐂🍺只需要有组件选项对象，就可以立刻包装成函数式组件在 template 中使用
-     * FYI: https://cn.vuejs.org/v2/guide/render-function.html#%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BB%84%E4%BB%B6
-     */
-    CustomComponent: {
-      functional: true,
-      render: (h, ctx) => h(ctx.props.component, ctx.data, ctx.children)
     }
   },
   props: {
@@ -152,9 +143,7 @@ export default {
     },
     prop: {
       type: String,
-      default() {
-        return this.data.id
-      }
+      default: ''
     },
     // eslint-disable-next-line vue/require-prop-types,vue/require-default-prop
     itemValue: {},
@@ -165,17 +154,43 @@ export default {
     // eslint-disable-next-line vue/require-default-prop
     options: Array
   },
+  emits: ['updateValue'],
+  setup() {
+    // Inject form renderer context to replace $parent chain access
+    const formRendererContext = inject(FORM_RENDERER_KEY, {
+      updateForm: null,
+      setOptions: null,
+      getElForm: null
+    })
+    return { formRendererContext }
+  },
   data() {
     return {
       propsInner: {},
       isBlurTrigger:
         this.data.rules &&
-        this.data.rules.some(rule => {
+        this.data.rules.some((rule) => {
           return rule.required && rule.trigger === 'blur'
         })
     }
   },
   computed: {
+    helpText() {
+      return typeof this.data.helpText === 'string' ? this.data.helpText : ''
+    },
+    itemProp() {
+      return this.prop || this.data.id
+    },
+    rawComponent() {
+      const comp = this.data.component || `el-${this.data.type}`
+      return typeof comp === 'string' ? comp : markRaw(toRaw(comp))
+    },
+    valueProp() {
+      if (this.data.type === 'checkbox') {
+        return undefined
+      }
+      return this.itemValue
+    },
     // 解构运算符会处理 undefined 的情况
     componentProps: ({ data: { el }, propsInner }) => ({ ...el, ...propsInner }),
     hasReadonlyContent: ({ data: { type } }) => _includes(['input', 'select'], type),
@@ -201,29 +216,56 @@ export default {
           on = {},
           on: { input: originOnInput = noop, change: originOnChange = noop } = {},
           trim = true
-        },
-        $parent: {
-          $parent: { updateForm }
         }
       } = this
+      // updateForm 由父组件 el-form-renderer 在 mounted 阶段才注入到共享 context 中，
+      // 而子组件的 mounted 先于父组件执行，若在此处解构 updateForm 会捕获到初始的 null，
+      // 且 context 为普通对象（非响应式），后续赋值不会让本 computed 重新求值。
+      // 因此必须在事件触发时（调用时）再从 context 读取，保证拿到已注入的函数。
+      const getUpdateForm = () => this.formRendererContext.updateForm
       return {
         ..._frompairs(
-          _topairs(on).map(([eName, handler]) => [eName, (...args) => handler(args, updateForm)])
+          _topairs(on).map(([eName, handler]) => [
+            eName,
+            (...args) => handler(args, getUpdateForm())
+          ])
         ),
         // 手动更新表单数据
         input: (value, ...rest) => {
-          this.$emit('updateValue', { id, value })
-          // 更新表单时调用
-          atChange(id, value)
-          originOnInput([value, ...rest], updateForm)
-
-          // FIXME: rules 的 trigger 只写了 blur，依然会在 input 的时候触发校验！
-          this.triggerValidate(id)
+          this.handleValueUpdate({
+            id,
+            value,
+            rest,
+            atChange,
+            originInput: originOnInput,
+            updateForm: getUpdateForm()
+          })
+        },
+        'update:model-value': (value, ...rest) => {
+          this.handleValueUpdate({
+            id,
+            value,
+            rest,
+            atChange,
+            originInput: originOnInput,
+            updateForm: getUpdateForm()
+          })
+        },
+        'update:modelValue': (value, ...rest) => {
+          this.handleValueUpdate({
+            id,
+            value,
+            rest,
+            atChange,
+            originInput: originOnInput,
+            updateForm: getUpdateForm()
+          })
         },
         change: (value, ...rest) => {
+          value = this.normalizeEmittedValue(value)
           if (typeof value === 'string' && trim) value = value.trim()
           this.$emit('updateValue', { id, value })
-          originOnChange([value, ...rest], updateForm)
+          originOnChange([value, ...rest], getUpdateForm())
 
           // FIXME: rules 的 trigger 只写了 blur，依然会在 change 的时候触发校验！
           this.triggerValidate(id)
@@ -235,7 +277,7 @@ export default {
       const multipleSelectValue =
         _get(data, 'el.multiple') && Array.isArray(itemValue) ? itemValue : [itemValue]
       return multipleSelectValue
-        .map(val => (options.find(op => op.value === val) || {}).label)
+        .map((val) => (options.find((op) => op.value === val) || {}).label)
         .join()
     }
   },
@@ -256,13 +298,13 @@ export default {
           ['select', 'checkbox-group', 'radio-group'].indexOf(this.data.type) > -1
         const {
           url,
-          request = () => this.$axios.get(url).then(resp => resp.data),
+          request = () => this.$axios.get(url).then((resp) => resp.data),
           prop = 'options', // 默认处理 el-cascader 的情况
           dataPath = '',
-          onResponse = resp => {
+          onResponse = (resp) => {
             if (dataPath) resp = _get(resp, dataPath)
             if (isOptionsCase) {
-              return resp.map(item => ({
+              return resp.map((item) => ({
                 label: item[label],
                 value: item[value]
               }))
@@ -270,19 +312,15 @@ export default {
               return resp
             }
           },
-          onError = error => console.error(error.message),
+          onError = (error) => console.error(error.message),
           label = 'label',
           value = 'value'
         } = v
         Promise.resolve(request())
           .then(onResponse, onError)
-          .then(resp => {
+          .then((resp) => {
             if (isOptionsCase) {
-              let formRenderer = this.$parent
-              while (formRenderer.$options._componentTag !== 'el-form-renderer') {
-                formRenderer = formRenderer.$parent
-              }
-              formRenderer.setOptions(this.prop, resp)
+              this.formRendererContext?.setOptions?.(this.itemProp, resp)
             } else {
               this.propsInner = { [prop]: resp }
             }
@@ -292,30 +330,40 @@ export default {
     }
   },
   methods: {
-    triggerValidate(id) {
-      if (!this.data.rules || !this.data.rules.length) return
-
-      /**
-       * 下面代码可参考 `emitter`
-       * 目的: 为了清除表单校验信息
-       * 因为有部分表单项的值变更时没有清除校验信息, 因此需要触发一次校验用于清除
-       * https://github.com/ElemeFE/element/blob/dev/src/mixins/emitter.js
-       */
-      let parent = this.$parent
-      let name = parent.$options.componentName
-
-      while (parent && name !== 'ElForm') {
-        parent = parent.$parent
-
-        if (parent) {
-          name = parent.$options.componentName
+    normalizeEmittedValue(value) {
+      if (value && typeof value === 'object' && 'target' in value) {
+        if (this.data.type === 'checkbox' && 'checked' in value.target) {
+          return value.target.checked
+        }
+        if ('value' in value.target) {
+          return value.target.value
         }
       }
+      return value
+    },
+    handleValueUpdate({ id, value, rest = [], atChange = noop, originInput = noop, updateForm }) {
+      value = this.normalizeEmittedValue(value)
+      this.$emit('updateValue', { id, value })
+      // 更新表单时调用
+      atChange(id, value)
+      originInput([value, ...rest], updateForm)
 
-      if (!parent || this.isBlurTrigger) return
+      // FIXME: rules 的 trigger 只写了 blur，依然会在 input 的时候触发校验！
+      this.triggerValidate(id)
+    },
+    triggerValidate(id) {
+      if (!this.data.rules || !this.data.rules.length) return
+      if (this.isBlurTrigger) return
+
+      /**
+       * 使用注入的 formRendererContext 获取 ElForm 实例
+       * 替代原来的 $parent 链式访问
+       */
+      const elForm = this.formRendererContext?.getElForm?.()
+      if (!elForm) return
 
       this.$nextTick(() => {
-        parent.validateField(id)
+        elForm.validateField(id)
       })
     }
   }
@@ -329,12 +377,35 @@ export default {
 }
 
 .help-block {
-  ::v-deep .el-alert__icon {
+  :deep(.el-alert__icon) {
     font-size: 16px;
   }
 
   &.checkbox {
     //display: inline;
+  }
+}
+
+/*
+ * 表单内提示用的 el-alert（.help-warning）字号/图标/内间距与页面级 alert 统一：
+ * 文字 12px、图标 16px，避免表单内提示比页面 alert 偏大或间距不一致。
+ */
+.help-block :deep(.help-warning) {
+  padding: 8px 12px;
+
+  .el-alert__icon,
+  .el-alert__icon.is-big {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+
+  .el-alert__title,
+  .el-alert__content,
+  .el-alert__content span,
+  .el-alert__content p {
+    font-size: 12px !important;
+    line-height: 1.5;
   }
 }
 

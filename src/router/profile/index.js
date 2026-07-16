@@ -42,7 +42,8 @@ export default {
         },
         {
           path: 'create',
-          component: () => import('@/views/profile/PasswordAndSSHKey/SSHKey/SSHKeyCreateUpdate.vue'),
+          component: () =>
+            import('@/views/profile/PasswordAndSSHKey/SSHKey/SSHKeyCreateUpdate.vue'),
           name: 'SSHKeyCreate',
           hidden: true,
           meta: {
@@ -52,7 +53,8 @@ export default {
         },
         {
           path: ':id/update',
-          component: () => import('@/views/profile/PasswordAndSSHKey/SSHKey/SSHKeyCreateUpdate.vue'),
+          component: () =>
+            import('@/views/profile/PasswordAndSSHKey/SSHKey/SSHKeyCreateUpdate.vue'),
           name: 'SSHKeyUpdate',
           hidden: true,
           meta: {
@@ -70,7 +72,8 @@ export default {
         title: 'Passkeys',
         icon: 'passkey',
         hidden: ({ settings }) => !settings['AUTH_PASSKEY'],
-        permissions: ['authentication.view_passkey']
+        permissions: ['authentication.view_passkey'],
+        activeMenu: '/profile/passkeys'
       }
     },
     {

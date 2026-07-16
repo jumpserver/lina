@@ -6,26 +6,26 @@
           v-show="showTreeSearch"
           v-model="treeSearchValue"
           :placeholder="$tc('Search')"
-          class="fixed-tree-search"
-          prefix-icon="fa fa-search"
-          size="mini"
+          class="fixed-tree-search jms-input-spacing"
+          size="small"
           @input="treeSearchHandle"
         >
-          <span slot="suffix">
-            <i
-              class="el-icon-close"
-              style="font-size: 12px; cursor: pointer"
-              @click="onClose"
-            />
-          </span>
+          <template #prefix>
+            <i class="fa fa-search fixed-tree-search__prefix" />
+          </template>
+          <template #suffix>
+            <el-icon style="font-size: 12px; cursor: pointer" @click="onClose"><Close /></el-icon>
+          </template>
         </el-input>
       </div>
       <ul v-show="loading" class="zloading">
-        {{ this.$t('Loading') }}...
+        {{
+          $t('Loading')
+        }}...
       </ul>
       <ul v-show="!loading" :id="iZTreeID" :key="iZTreeID" class="ztree" />
-      <div v-if="treeSetting.treeUrl===''" class="tree-empty">
-        {{ this.$t('Empty') }}
+      <div v-if="treeSetting.treeUrl === ''" class="tree-empty">
+        {{ $t('Empty') }}
         <a id="tree-refresh"><i class="fa fa-refresh" /></a>
       </div>
     </div>
@@ -47,11 +47,17 @@ import '@ztree/ztree_v3/js/jquery.ztree.exhide.min.js'
 import '@/styles/ztree.css'
 import '@/styles/ztree_icon.scss'
 import axiosRetry from 'axios-retry'
+import _ from 'lodash'
 
 const defaultObject = {
   type: Object,
   default: () => ({})
 }
+
+function createDomId(prefix) {
+  return `${prefix}_${Math.random().toString(36).slice(2, 10)}`
+}
+
 export default {
   name: 'ZTree',
   components: {},
@@ -60,8 +66,8 @@ export default {
   },
   data() {
     return {
-      iZTreeID: `zTree_${this._uid}`,
-      iRMenuID: `rMenu_${this._uid}`,
+      iZTreeID: createDomId('zTree'),
+      iRMenuID: createDomId('rMenu'),
       zTree: '',
       rMenu: '',
       init: false,
@@ -85,7 +91,7 @@ export default {
     })
     window.addEventListener('resize', this.updateTreeHeight)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     $.fn.zTree.destroy(this.iZTreeID)
     window.removeEventListener('resize', this.updateTreeHeight)
   },
@@ -96,7 +102,7 @@ export default {
       }
       menu.callback()
     },
-    updateTreeHeight: _.debounce(function() {
+    updateTreeHeight: _.debounce(function () {
       const tree = document.getElementById(this.iZTreeID)
       if (!tree) {
         return
@@ -120,12 +126,15 @@ export default {
       const vm = this
       let treeUrl
       this.loading = true
-      if (refresh && this.treeSetting.treeUrl.indexOf('/perms/') !== -1 &&
+      if (
+        refresh &&
+        this.treeSetting.treeUrl.indexOf('/perms/') !== -1 &&
         this.treeSetting.treeUrl.indexOf('rebuild_tree') === -1
       ) {
-        treeUrl = (this.treeSetting.treeUrl.indexOf('?') === -1)
-          ? `${this.treeSetting.treeUrl}?rebuild_tree=1`
-          : `${this.treeSetting.treeUrl}&rebuild_tree=1`
+        treeUrl =
+          this.treeSetting.treeUrl.indexOf('?') === -1
+            ? `${this.treeSetting.treeUrl}?rebuild_tree=1`
+            : `${this.treeSetting.treeUrl}&rebuild_tree=1`
       } else {
         treeUrl = this.treeSetting.treeUrl
       }
@@ -137,7 +146,7 @@ export default {
       let res = await this.$axios.get(treeUrl, {
         'axios-retry': {
           retries: 20,
-          retryCondition: e => {
+          retryCondition: (e) => {
             return axiosRetry.isNetworkOrIdempotentRequestError(e) || e.response.status === 409
           },
           shouldResetTimeout: true,
@@ -158,7 +167,7 @@ export default {
       const rootNode = this.zTree.getNodes()[0]
       this.rootNodeAddDom(rootNode)
       // 手动上报事件, Tree加载完成
-      this.$emit('TreeInitFinish', this.zTree)
+      this.$emit('tree-init-finish', this.zTree)
 
       if (this.treeSetting.showMenu) {
         this.rMenu = $(`#${this.iRMenuID}`)
@@ -189,7 +198,11 @@ export default {
         </span>`
       if (rootNode) {
         const $rootNodeRef = $('#' + rootNode.tId + '_a')
-        $rootNodeRef.css({ 'width': 'calc(100% - 68px)', 'overflow': 'hidden', 'text-overflow': 'ellipsis' })
+        $rootNodeRef.css({
+          width: 'calc(100% - 68px)',
+          overflow: 'hidden',
+          'text-overflow': 'ellipsis'
+        })
         $rootNodeRef.after(icons)
       }
     },
@@ -214,20 +227,20 @@ export default {
       }
       searchInput.onblur = (e) => {
         e.stopPropagation()
-        if (!(e.target.value)) {
+        if (!e.target.value) {
           searchIcon.classList.toggle('active')
         }
       }
-      searchInput.oninput = e => this.treeSearchHandle((e.target.value || ''))
+      searchInput.oninput = (e) => this.treeSearchHandle(e.target.value || '')
     },
-    treeSearchHandle: _.debounce(function(value) {
+    treeSearchHandle: _.debounce(function (value) {
       if (this.treeSetting.async.enable) {
         this.filterAssetsServer(value)
       } else {
         this.filterTree(value)
       }
     }, 600),
-    getCheckedNodes: function() {
+    getCheckedNodes: function () {
       return this.zTree.getCheckedNodes(true)
     },
     recurseParent(node) {
@@ -256,12 +269,12 @@ export default {
     },
     groupBy(array, filter) {
       const groups = {}
-      array.forEach(function(o) {
+      array.forEach(function (o) {
         const group = JSON.stringify(filter(o))
         groups[group] = groups[group] || []
         groups[group].push(o)
       })
-      return Object.keys(groups).map(function(group) {
+      return Object.keys(groups).map(function (group) {
         return groups[group]
       })
     },
@@ -299,7 +312,12 @@ export default {
         let name = this.$t('Search')
         const assetsAmount = matchedNodes.length
         name = `${name} (${assetsAmount})`
-        const newNode = { id: 'search', name: name, isParent: false, open: false }
+        const newNode = {
+          id: 'search',
+          name: name,
+          isParent: false,
+          open: false
+        }
         tree.addNodes(null, newNode)
       }
 
@@ -337,17 +355,25 @@ export default {
         this.zTree.hideNodes(treeNodes)
       }
 
-      let treeUrl = this.treeSetting.searchUrl ? this.treeSetting.searchUrl : this.treeSetting.treeUrl
+      let treeUrl = this.treeSetting.searchUrl
+        ? this.treeSetting.searchUrl
+        : this.treeSetting.treeUrl
       const filterField = treeUrl.includes('?') ? `&search=${keyword}` : `?search=${keyword}`
       if (treeUrl.indexOf('assets/nodes/children/tree') > -1) {
         treeUrl = treeUrl + '&all=all'
       }
       const searchUrl = `${treeUrl}${filterField}`
-      this.$axios.get(searchUrl).then(nodes => {
+      this.$axios.get(searchUrl).then((nodes) => {
         let name = this.$t('Search')
         const assetsAmount = nodes.length
         name = `${name} (${assetsAmount})`
-        const newNode = { id: 'search', name: name, isParent: true, open: true, zAsync: true }
+        const newNode = {
+          id: 'search',
+          name: name,
+          isParent: true,
+          open: true,
+          zAsync: true
+        }
         searchNode = this.zTree.addNodes(null, newNode)[0]
         searchNode.zAsync = true
         this.rootNodeAddDom(searchNode)
@@ -363,7 +389,6 @@ export default {
       })
     }
   }
-
 }
 </script>
 
@@ -372,7 +397,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 10px 10px 0 10px;
+  padding: 5px 0 0 5px;
 
   .ztree {
     width: 100%;
@@ -402,7 +427,7 @@ export default {
   }
 
   &:hover {
-    ::v-deep .tree-action-btn {
+    :deep(.tree-action-btn) {
       display: inline;
 
       &:hover {
@@ -411,7 +436,6 @@ export default {
       }
     }
   }
-
 }
 
 div.rMenu {
@@ -429,7 +453,7 @@ div.rMenu {
 }
 
 .dataTables_wrapper .dataTables_processing {
-  opacity: .9;
+  opacity: 0.9;
   border: none;
 }
 
@@ -478,12 +502,12 @@ div.rMenu li {
   overflow: auto;
 }
 
-.ztree ::v-deep .fa {
+.ztree :deep(.fa) {
   font: normal normal normal 14px/1 FontAwesome !important;
 }
 
 .dropdown a:hover {
-  background-color: #f1f1f1
+  background-color: #f1f1f1;
 }
 
 .dropdown-menu > li > a {
@@ -500,28 +524,29 @@ div.rMenu li {
   width: 20px;
 }
 
-.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
   color: #262626;
   text-decoration: none;
   background-color: #f5f5f5;
 }
 
-::v-deep .tree-banner-icon-zone {
+:deep(.tree-banner-icon-zone) {
   position: absolute;
   right: 7px;
   height: 30px;
   overflow: hidden;
 
   .fa {
-    color: #838385 !important;;
+    color: #838385 !important;
 
     &:hover {
-      color: #606266 !important;;
+      color: #606266 !important;
     }
   }
 }
 
-::v-deep .tree-search {
+:deep(.tree-search) {
   position: relative;
   top: -2px;
   width: 20px;
@@ -529,7 +554,7 @@ div.rMenu li {
   display: inline-block;
   border-radius: 12px;
   vertical-align: sub;
-  transition: .25s;
+  transition: 0.25s;
   overflow: hidden;
 
   .fa {
@@ -541,7 +566,7 @@ div.rMenu li {
   }
 }
 
-::v-deep .tree-search .tree-banner-icon {
+:deep(.tree-search .tree-banner-icon) {
   position: absolute;
   top: 4px;
   left: 6px;
@@ -554,16 +579,16 @@ div.rMenu li {
   cursor: pointer;
 }
 
-::v-deep .tree-search.active {
+:deep(.tree-search.active) {
   width: 160px;
   background-color: #ffffff !important;
 }
 
-::v-deep .tree-search.active:hover {
+:deep(.tree-search.active:hover) {
   border-radius: 12px;
 }
 
-::v-deep .tree-search input {
+:deep(.tree-search input) {
   position: relative;
   left: 20px;
   width: 133px;
@@ -601,7 +626,7 @@ div.rMenu li {
     box-sizing: border-box;
     overflow: hidden;
     cursor: pointer;
-    background-color: #D7D8DC;
+    background-color: #d7d8dc;
 
     .rotate {
       transition: all 0.8s ease-in-out;
@@ -623,16 +648,17 @@ div.rMenu li {
 }
 
 .fixed-tree-search {
+  --jms-input-padding-inline-end: 32px;
+
   margin-bottom: 10px;
 
-  & ::v-deep .el-input__inner {
+  & :deep(.el-input__inner) {
     border-radius: 4px;
     background: #fafafa;
-    padding-right: 32px;
-    color: var(--color-text-primary)
+    color: var(--color-text-primary);
   }
 
-  & ::v-deep .el-input__suffix {
+  & :deep(.el-input__suffix) {
     padding-right: 8px;
 
     .el-input__suffix-inner:hover {
@@ -640,8 +666,9 @@ div.rMenu li {
     }
   }
 
-  & ::v-deep .el-input__prefix {
+  & :deep(.el-input__prefix) {
     display: flex;
+    align-items: center;
 
     .el-input__icon {
       display: flex;
@@ -650,9 +677,20 @@ div.rMenu li {
     }
   }
 
-  & ::v-deep .el-input__suffix-inner {
+  & :deep(.el-input__suffix-inner) {
     line-height: 30px;
   }
+}
+
+.fixed-tree-search__prefix {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  color: var(--N500);
+  font-size: 12px;
+  line-height: 1;
 }
 
 .icon-refresh {
@@ -672,8 +710,7 @@ div.rMenu li {
   cursor: pointer;
 }
 
-::v-deep .tree-action-btn {
+:deep(.tree-action-btn) {
   display: none;
 }
-
 </style>

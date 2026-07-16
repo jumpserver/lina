@@ -1,21 +1,25 @@
 <template>
   <div>
-    <el-alert v-sanitize="helpText" type="info" />
+    <el-alert type="info">
+      <template #default>
+        <div v-sanitize="helpText" />
+      </template>
+    </el-alert>
     <IBox>
       <GenericCreateUpdateForm
+        v-bind="$data"
         :create-success-next-route="successUrl"
         :update-success-next-route="successUrl"
-        v-bind="$data"
       />
     </IBox>
   </div>
 </template>
 
 <script>
-import { IBox } from '@/components'
-import { GenericCreateUpdateForm } from '@/layout/components'
 import { testEmailSetting } from '@/api/settings'
+import { IBox } from '@/components'
 import rules from '@/components/Form/DataForm/rules'
+import { GenericCreateUpdateForm } from '@/layout/components'
 import EmailTemplate from './EmailTemplate.vue'
 
 export default {
@@ -47,7 +51,7 @@ export default {
       ],
       fieldsMeta: {
         EMAIL_PORT: {
-          hidden: formValue => formValue.EMAIL_PROTOCOL !== 'smtp'
+          hidden: (formValue) => formValue.EMAIL_PROTOCOL !== 'smtp'
         },
         EMAIL_CUSTOM_USER_CREATED_BODY: {
           el: {
@@ -62,7 +66,7 @@ export default {
           rules: [rules.EmailCheck]
         },
         EMAIL_SECURITY_PROTOCOL: {
-          hidden: formValue => formValue.EMAIL_PROTOCOL !== 'smtp',
+          hidden: (formValue) => formValue.EMAIL_PROTOCOL !== 'smtp',
           label: this.$t('UseSSL'),
           type: 'radio-group',
           value: 'ssl',
@@ -102,10 +106,10 @@ export default {
             testValue['EMAIL_RECIPIENT'] = value['EMAIL_RECIPIENT']
             btn.loading = true
             testEmailSetting(value)
-              .then(res => {
+              .then((res) => {
                 vm.$message.success(res['msg'])
               })
-              .catch(res => {
+              .catch((res) => {
                 vm.$message.error(res['response']['data']['error'])
               })
               .finally(() => {

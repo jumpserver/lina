@@ -1,29 +1,31 @@
 <template>
   <ElDatableTable
+    v-bind="mergedTableConfig"
     ref="table"
-    class="el-data-table"
-    v-bind="tableConfig"
-    @sizeChange="handleSizeChange"
-    @update="onUpdate"
+    :class="rootClass"
+    :style="rootStyle"
+    @size-change="handleSizeChange"
+    @data-update="onUpdate"
     v-on="iListeners"
   />
 </template>
 
 <script>
 import { newURL, ObjectLocalStorage } from '@/utils/common/index'
-import { default as ElDatableTable } from './compenents/el-data-table'
+import { omitVueListeners, pickVueListeners } from '@/utils/vue'
 import { mapGetters } from 'vuex'
+import { default as ElDatableTable } from './compenents/el-data-table'
 
 export default {
   name: 'DataTable',
   components: {
     ElDatableTable
   },
+  inheritAttrs: false,
   props: {
     config: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -57,7 +59,7 @@ export default {
           fit: true, // 宽度自适应,
           tooltipEffect: 'dark',
           rowClassName: ({ row }) => {
-            const selected = this.dataTable.selected.find(item => item.id === row.id)
+            const selected = this.dataTable.selected.find((item) => item.id === row.id)
             return selected ? 'selected-row' : ''
           }
         },
@@ -78,7 +80,7 @@ export default {
         paginationSize: objTableSize.get(pathName) || 15,
         paginationSizes: [15, 30, 50, 100],
         paginationBackground: true,
-        transformQuery: query => {
+        transformQuery: (query) => {
           if (query.page && query.size) {
             const page = query.page > 0 ? query.page : 1
             const offset = (page - 1) * query.size
@@ -104,26 +106,37 @@ export default {
     }
   },
   computed: {
+    mergedTableConfig() {
+      const attrs = omitVueListeners(this.$attrs)
+      delete attrs.class
+      delete attrs.style
+      return Object.assign({}, this.tableConfig, attrs)
+    },
+    rootClass() {
+      return ['el-data-table', this.$attrs.class]
+    },
+    rootStyle() {
+      return this.$attrs.style
+    },
     iListeners() {
-      const defaultListeners = {}
-      return Object.assign(defaultListeners, this.$listeners, this.tableConfig?.listeners)
+      return Object.assign({}, pickVueListeners(this.$attrs), this.tableConfig?.listeners)
     },
     dataTable() {
       return this.$refs.table
     },
     tableConfig() {
       const tableDefaultConfig = this.defaultConfig || {}
-      let tableAttrs = tableDefaultConfig.tableAttrs
-      if (this.config.tableAttrs) {
-        tableAttrs = Object.assign(tableAttrs, this.config.tableAttrs)
-      }
-      const config = Object.assign(tableDefaultConfig, this.config)
+      // 注意:必须用 Object.assign({}, ...) 生成新对象,不能直接 Object.assign(tableDefaultConfig, ...)
+      // 否则会就地修改响应式的 this.defaultConfig —— 而本计算属性又依赖 this.defaultConfig,
+      // 形成「计算属性修改自身依赖」的自触发循环,导致 Maximum recursive updates。
+      const tableAttrs = Object.assign({}, tableDefaultConfig.tableAttrs, this.config.tableAttrs)
+      const config = Object.assign({}, tableDefaultConfig, this.config)
       config.tableAttrs = tableAttrs
       this.$log.debug('elTableConfig', config)
       return config
     },
     ...mapGetters({
-      'globalTableConfig': 'tableConfig'
+      globalTableConfig: 'tableConfig'
     })
   },
   watch: {},
@@ -148,6 +161,9 @@ export default {
       return this.$refs.table.toggleRowSelection(row, isSelected)
     },
     onUpdate(data, response) {
+      if (!Array.isArray(data)) {
+        return
+      }
       const theRowDefaultIsSelected = this.tableConfig.theRowDefaultIsSelected
       if (!theRowDefaultIsSelected || typeof theRowDefaultIsSelected !== 'function') {
         return
@@ -167,11 +183,5 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.el-data-table {
-  ::v-deep .el-pagination.is-background .el-pager li {
-    margin: 0 1px;
-    padding: 0 2px;
-  }
-}
-</style>
+
+<style lang="scss" scoped></style>

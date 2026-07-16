@@ -3,26 +3,47 @@
     :show-cancel="false"
     :show-confirm="false"
     :title="title"
-    :visible.sync="iVisible"
+    :visible="visible"
     class="help-dialog"
-    top="1vh"
-    width="50%"
+    top="8vh"
+    width="720px"
+    @update:visible="$emit('update:visible', $event)"
   >
-    <p>{{ variablesHelpText }}</p>
-    <table border="1" class="help-table">
-      <tr>
-        <th>{{ $tc('Variable') }}</th>
-        <th>{{ $tc('Description') }}</th>
-        <th>{{ $tc('Example') }}</th>
-      </tr>
-      <tr v-for="(item, index) in variables" :key="index">
-        <td :title="$tc('ClickCopy')" class="item-td text-link" @click="onCopy(item.name)">
-          <label class="item-label">{{ item.name }}</label>
-        </td>
-        <td><span>{{ item.label }}</span></td>
-        <td><span>{{ item.default }}</span></td>
-      </tr>
-    </table>
+    <div class="variables-help-content">
+      <el-alert
+        :closable="false"
+        :title="variablesHelpMessage"
+        class="help-intro"
+        show-icon
+        type="info"
+      />
+
+      <el-table :data="variables" class="help-table" max-height="420" table-layout="fixed">
+        <el-table-column :label="$t('Variable')" min-width="220">
+          <template #default="{ row }">
+            <button
+              :aria-label="$t('ClickCopy') + ': ' + row.name"
+              class="variable-button"
+              type="button"
+              @click="onCopy(row.name)"
+            >
+              <code>{{ row.name }}</code>
+              <i aria-hidden="true" class="fa fa-copy" />
+            </button>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('Description')" min-width="180">
+          <template #default="{ row }">
+            <span class="variable-description">{{ row.label || '—' }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('Example')" min-width="240">
+          <template #default="{ row }">
+            <code class="example-value">{{ row.default || '—' }}</code>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
   </Dialog>
 </template>
 
@@ -46,23 +67,20 @@ export default {
     variablesHelpText: {
       type: String,
       default() {
-        return this.$t('WatermarkVariableHelpText')
+        return 'WatermarkVariableHelpText'
       }
     }
   },
+  emits: ['update:visible'],
   data() {
     return {
       title: this.$t('BuiltinVariable')
     }
   },
   computed: {
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
+    variablesHelpMessage() {
+      const message = this.$tm(this.variablesHelpText)
+      return typeof message === 'string' ? message : this.variablesHelpText
     }
   },
   methods: {
@@ -74,27 +92,102 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .help-dialog.dialog .el-dialog__footer {
-  border-top: none;
-  padding: 8px;
+.variables-help-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.help-intro {
+  --el-alert-padding: 12px 14px;
+
+  align-items: flex-start;
+
+  :deep(.el-alert__icon) {
+    margin-top: 3px;
+  }
+
+  :deep(.el-alert__title) {
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: normal;
+  }
 }
 
 .help-table {
-  width: 100%;
-  border-collapse: collapse;
-  border: 1px solid #dee2e6;
+  --el-table-header-bg-color: var(--el-fill-color-light);
+  --el-table-row-hover-bg-color: var(--el-color-primary-light-9);
+
+  border: 1px solid var(--el-border-color-lighter);
+  border-radius: 6px;
+
+  :deep(&::before) {
+    display: none;
+  }
+
+  :deep(th.el-table__cell) {
+    height: 42px;
+    padding: 0;
+    color: var(--el-text-color-primary);
+    font-weight: 600;
+  }
+
+  :deep(td.el-table__cell) {
+    padding: 10px 0;
+  }
 }
 
-::v-deep .help-table th,
-::v-deep .help-table td {
-  height: 40px;
-  padding: 0 8px;
-  text-align: left;
-}
-
-::v-deep .help-table .item-td,
-::v-deep .help-table .item-label {
+.variable-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 0;
+  color: var(--el-color-primary);
+  background: transparent;
+  border: 0;
   cursor: pointer;
-  color: var(--color-primary);
+
+  code {
+    min-width: 0;
+    padding: 3px 8px;
+    font-family: Monaco, Menlo, Consolas, 'Courier New', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+    background: var(--el-color-primary-light-9);
+    border: 1px solid var(--el-color-primary-light-8);
+    border-radius: 4px;
+  }
+
+  .fa {
+    flex-shrink: 0;
+    font-size: 12px;
+    opacity: 0.55;
+    transition: opacity 0.15s ease;
+  }
+
+  &:hover .fa,
+  &:focus-visible .fa {
+    opacity: 1;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--el-color-primary-light-5);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+.variable-description {
+  color: var(--el-text-color-regular);
+}
+
+.example-value {
+  color: var(--el-text-color-secondary);
+  font-family: Monaco, Menlo, Consolas, 'Courier New', monospace;
+  font-size: 12px;
+  overflow-wrap: anywhere;
 }
 </style>

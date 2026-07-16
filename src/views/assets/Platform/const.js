@@ -2,7 +2,7 @@ import i18n from '@/i18n/i18n'
 import rules from '@/components/Form/DataForm/rules'
 import { JsonEditor } from '@/components/Form/FormFields'
 import { assetFieldsMeta } from '@/views/assets/const'
-import AutomationParamsSetting from './AutomationParamsSetting'
+import AutomationMethodField from './AutomationMethodField'
 
 const needSettingParamsFields = ['push_account', 'change_secret']
 
@@ -14,14 +14,29 @@ export const platformFieldsMeta = (vm) => {
         ansible_config: ''
       },
       fields: [
-        'ansible_enabled', 'ansible_config',
-        'ping_enabled', 'ping_method', 'ping_params',
-        'gather_facts_enabled', 'gather_facts_method', 'gather_facts_params',
-        'change_secret_enabled', 'change_secret_method', 'change_secret_params',
-        'push_account_enabled', 'push_account_method', 'push_account_params',
-        'verify_account_enabled', 'verify_account_method', 'verify_account_params',
-        'gather_accounts_enabled', 'gather_accounts_method', 'gather_accounts_params',
-        'remove_account_enabled', 'remove_account_method', 'remove_account_params'
+        'ansible_enabled',
+        'ansible_config',
+        'ping_enabled',
+        'ping_method',
+        'ping_params',
+        'gather_facts_enabled',
+        'gather_facts_method',
+        'gather_facts_params',
+        'change_secret_enabled',
+        'change_secret_method',
+        'change_secret_params',
+        'push_account_enabled',
+        'push_account_method',
+        'push_account_params',
+        'verify_account_enabled',
+        'verify_account_method',
+        'verify_account_params',
+        'gather_accounts_enabled',
+        'gather_accounts_method',
+        'gather_accounts_params',
+        'remove_account_enabled',
+        'remove_account_method',
+        'remove_account_params'
       ],
       fieldsMeta: {
         ansible_config: {
@@ -61,9 +76,7 @@ export const platformFieldsMeta = (vm) => {
     category_type: {
       type: 'cascader',
       label: i18n.t('Type'),
-      rules: [
-        rules.Required
-      ],
+      rules: [rules.Required],
       el: {
         multiple: false,
         options: [],
@@ -107,8 +120,8 @@ export const setAutomations = (vm) => {
   const automation = vm.defaultOptions.automation || {}
   const autoFieldsMeta = vm.fieldsMeta.automation.fieldsMeta
   const autoFields = vm.fieldsMeta.automation.fields
-    .filter(item => item.endsWith('_method'))
-    .map(item => item.replace('_method', ''))
+    .filter((item) => item.endsWith('_method'))
+    .map((item) => item.replace('_method', ''))
 
   const initial = vm.initial.automation || {}
   initial['ansible_enabled'] = automation['ansible_enabled']
@@ -143,26 +156,41 @@ export const setAutomations = (vm) => {
     // 设置 enableMethod className
     _.set(autoFieldsMeta, `${itemMethodKey}.attrs.class`, 'item-method')
     // 设置 enableParams Hidden
-    _.set(autoFieldsMeta, `${itemParamsKey}.hidden`, (formValue) => {
-      return !formValue[itemEnabledKey] || !formValue['ansible_enabled']
-    })
-    // 设置 method 类型和 options
-    _.set(autoFieldsMeta, `${itemMethodKey}.type`, 'select')
+    // params 字段不再单独渲染(齿轮按钮已并入 method 的组合组件),但其值仍需随表单提交,
+    // 因此恒隐藏其表单行、只保留取值。
+    _.set(autoFieldsMeta, `${itemParamsKey}.hidden`, () => true)
+    // method 字段改用组合组件:el-select 与参数设置按钮拼成一体的 input-group
     const methods = automation[itemMethodKey + 's'] || []
-    autoFieldsMeta[itemMethodKey].options = methods.map(method => {
+    const options = methods.map((method) => {
       return { value: method['id'], label: method['name'] }
     })
-    _.set(initial, `${itemMethodKey}`, autoFieldsMeta[itemMethodKey].options[0]?.value)
+    _.set(autoFieldsMeta, `${itemMethodKey}.component`, AutomationMethodField)
+    _.set(autoFieldsMeta, `${itemMethodKey}.el.options`, options)
+    _.set(
+      autoFieldsMeta,
+      `${itemMethodKey}.el.paramsUrl`,
+      '/api/v1/assets/platform-automation-methods/'
+    )
+    _.set(
+      autoFieldsMeta,
+      `${itemMethodKey}.el.paramsTitle`,
+      autoFieldsMeta[itemParamsKey]?.el?.title
+    )
+    _.set(autoFieldsMeta, `${itemMethodKey}.el.paramsKey`, itemParamsKey)
+    _.set(autoFieldsMeta, `${itemMethodKey}.el.paramsValue`, initial[itemParamsKey] || {})
+    _.set(initial, `${itemMethodKey}`, options[0]?.value)
 
-    // 设置 params 类型字段的组件和组件参数
-    // if (needSettingParamsFields.includes(item)) {
-    // 设置 enableParams label
-    _.set(autoFieldsMeta, `${itemParamsKey}.label`, '')
-    // 设置 enableParams className
-    _.set(autoFieldsMeta, `${itemParamsKey}.attrs.class`, 'item-params')
-    _.set(autoFieldsMeta, `${itemParamsKey}.component`, AutomationParamsSetting)
-    _.set(autoFieldsMeta, `${itemParamsKey}.el.method`, initial[itemMethodKey])
-    // }
+    // 参数写回:组合组件抛出的 paramsChange 事件,借助 updateForm 合并回 _params 字段;
+    // 保留 method 已有的 on(如 change_secret 的联动 change)。
+    const existingOn = autoFieldsMeta[itemMethodKey].on || {}
+    _.set(autoFieldsMeta, `${itemMethodKey}.on`, {
+      ...existingOn,
+      paramsChange: (args, updateForm) => {
+        if (updateForm) {
+          updateForm({ [itemParamsKey]: args[0] })
+        }
+      }
+    })
   }
 }
 

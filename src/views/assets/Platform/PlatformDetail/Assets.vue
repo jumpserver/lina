@@ -17,8 +17,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -26,9 +25,7 @@ export default {
       config: {
         category: 'all',
         url: `/api/v1/assets/assets/?platform=${this.object.id}`,
-        defaultColumns: [
-          'name', 'address'
-        ],
+        defaultColumns: ['name', 'address'],
         tableConfig: {
           columnsShow: {
             min: ['name'],
@@ -59,6 +56,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

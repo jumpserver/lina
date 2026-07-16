@@ -8,25 +8,24 @@
       :tree-setting="treeSetting"
     />
     <BatchResolveDialog
-      v-if="batchResolveDialog.visible"
-      :visible.sync="batchResolveDialog.visible"
       v-bind="batchResolveDialog"
+      v-if="batchResolveDialog.visible"
+      v-model:visible="batchResolveDialog.visible"
     />
     <RiskScanDialog
       v-if="detectDialog.visible"
+      v-model:visible="detectDialog.visible"
       :asset="detectDialog.asset"
-      :visible.sync="detectDialog.visible"
     />
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
 import RiskHandleFormatter from './RiskHandlerFormatter/index.vue'
 import BatchResolveDialog from '@/views/accounts/RiskDetect/RiskHandlerFormatter/BatchResolveDialog.vue'
 import RiskScanDialog from './RiskScanDialog.vue'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
-
 export default {
   components: {
     RiskScanDialog,
@@ -50,6 +49,7 @@ export default {
         showSearch: true,
         showAssets: true,
         notShowBuiltinTree: true,
+        selectSyncToRoute: false,
         url: '/api/v1/accounts/account-risks/',
         nodeUrl: '/api/v1/assets/nodes/',
         // ?assets=0不显示资产. =1显示资产
@@ -72,13 +72,13 @@ export default {
         {
           title: this.$t('DateLastWeek'),
           filter: {
-            'days': '7'
+            days: '7'
           }
         },
         {
           title: this.$t('DateLastMonth'),
           filter: {
-            'days': '30'
+            days: '30'
           }
         },
         {
@@ -94,10 +94,7 @@ export default {
       },
       tableConfig: {
         url: '/api/v1/accounts/account-risks/',
-        columns: [
-          'asset', 'username', 'risk', 'status',
-          'date_created'
-        ],
+        columns: ['asset', 'username', 'risk', 'status', 'date_created'],
         columnsMeta: {
           asset: {
             formatter: DetailFormatter,
@@ -108,7 +105,9 @@ export default {
               getRoute({ row }) {
                 return {
                   name: 'AssetDetail',
-                  params: { id: row.asset.id }
+                  params: {
+                    id: row.asset.id
+                  }
                 }
               },
               drawer: true
@@ -120,7 +119,11 @@ export default {
           },
           risk: {
             formatter: (row) => {
-              return (<el-tag size='mini' type='danger' effect='plain'>{row.risk.label}</el-tag>)
+              return (
+                <el-tag size="small" type="danger" effect="plain">
+                  {row.risk.label}
+                </el-tag>
+              )
             }
           },
           status: {
@@ -144,11 +147,11 @@ export default {
             name: 'resolveSelected',
             title: this.$t('ResolveSelected'),
             icon: 'el-icon-check',
-            callback: function({ selectedRows }) {
+            callback: function ({ selectedRows }) {
               vm.batchResolveDialog.risks = selectedRows
               vm.batchResolveDialog.visible = true
             },
-            can: function({ selectedRows }) {
+            can: function ({ selectedRows }) {
               return selectedRows.length > 0 && vm.$hasPerm('accounts.change_accountrisk')
             }
           }
@@ -162,11 +165,8 @@ export default {
   methods: {
     checkPayload() {
       const payload = this.$route.query.payload
-
       if (!payload) return
-
       const queryParams = `&risk=${payload}`
-
       if (queryParams) {
         this.tableConfig.url += queryParams
       }
@@ -174,6 +174,3 @@ export default {
   }
 }
 </script>
-<style lang='scss' scoped>
-
-</style>

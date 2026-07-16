@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <div class="close-sidebar">
-      <i v-if="hasClose" class="el-icon-download" @click="onClose" />
+      <i v-if="hasClose" class="close-icon" @click="onClose">
+        <el-icon-download />
+      </i>
     </div>
     <div v-if="!expanded" class="close-sidebar">
       <i class="fa fa-expand" style="font-weight: 200" @click="$emit('expand')" />
@@ -14,6 +16,7 @@
 
 <script>
 import { BASE_URL } from '@/utils/common/index'
+import { IS_PROD } from '@/utils/env'
 
 export default {
   props: {
@@ -46,7 +49,7 @@ export default {
     },
     async openWebsite() {
       let url = `${BASE_URL}/?_=${Date.now()}`
-      if (process.env.NODE_ENV !== 'production') {
+      if (!IS_PROD) {
         url = url.replace('9528', '5173')
       }
 
@@ -68,16 +71,21 @@ export default {
     height: 48px;
     padding: 12px 0;
     text-align: center;
-    font-size: 16px;
     cursor: pointer;
 
+    :deep(.el-icon),
+    :deep(.el-icon svg),
+    :deep(.svg-icon),
     i {
       font-size: 16px;
       font-weight: 600;
       padding: 4px;
+      box-sizing: content-box;
     }
 
-    i, .svg {
+    :deep(.el-icon),
+    :deep(.svg-icon),
+    i {
       border-radius: 2px;
 
       &:hover {
@@ -88,11 +96,18 @@ export default {
   }
 }
 
-.el-icon-download {
-  transform: rotate(-90deg)
+.close-icon {
+  display: inline-block;
+  transform: rotate(-90deg);
 }
 
-::v-deep .el-tabs {
+.close-icon :deep(svg) {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+:deep(.el-tabs) {
   .el-tabs__item {
     padding: 0 10px;
     font-size: 14px;

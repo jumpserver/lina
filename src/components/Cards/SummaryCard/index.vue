@@ -1,17 +1,13 @@
 <template>
   <div>
     <div class="summary-header">
-      <el-tooltip :content="title" :open-delay="500" placement="top">
+      <el-tooltip :content="title" :show-after="500" placement="top">
         <span class="title">{{ title }}</span>
       </el-tooltip>
     </div>
     <slot>
-      <h3 class="no-margins ">
-        <span
-          :class="{ 'can-direct': canDirect }"
-          class="num"
-          @click="handleClick"
-        >
+      <h3 class="no-margins">
+        <span :class="{ 'can-direct': canDirect }" class="num" @click="handleClick">
           <span v-if="count === null"> - </span>
           <span v-else>{{ count }}</span>
         </span>
@@ -42,8 +38,7 @@ export default {
     },
     callback: {
       type: Function,
-      default: () => {
-      }
+      default: () => {}
     },
     disabled: {
       type: Boolean,

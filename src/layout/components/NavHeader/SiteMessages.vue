@@ -1,76 +1,92 @@
 <template>
   <div>
-    <el-badge :hidden="unreadMsgCount === 0" :max="99" :value="unreadMsgCount" size="mini" type="primary">
+    <el-badge
+      :hidden="unreadMsgCount === 0"
+      :max="99"
+      :value="unreadMsgCount"
+      size="small"
+      type="primary"
+    >
       <el-link style="height: 100%" @click="toggleDrawer">
         <svg-icon icon-class="remind" />
       </el-link>
     </el-badge>
     <el-drawer
+      v-model="show"
       :before-close="handleClose"
-      :modal="false"
+      :modal="true"
+      :lock-scroll="false"
+      :show-close="false"
       :size="width"
       :title="$tc('SiteMessage')"
-      :visible.sync="show"
-      class="drawer"
-      custom-class="site-msg"
+      class="site-msg-drawer"
+      modal-class="site-msg-modal"
+      header-class="site-msg-header"
+      body-class="site-msg-body"
       @open="getMessages"
     >
-      <div slot="title">
-        <span>{{ $t('SiteMessage') }}</span>
-        <div v-if="unreadMsgCount !== 0" class="msg-list-all-read-btn" @click.stop="oneClickRead(messages)">
-          <a style="vertical-align: sub;"> {{ $t('AllClickRead') }}</a>
+      <template #header="{ close }">
+        <span class="msg-header-title">{{ $t('SiteMessage') }}</span>
+        <div class="msg-header-right">
+          <span
+            v-if="unreadMsgCount !== 0"
+            class="msg-list-all-read-btn"
+            @click.stop="oneClickRead(messages)"
+          >
+            {{ $t('AllClickRead') }}
+          </span>
+          <el-icon class="msg-header-close" :title="$t('Close')" @click="close">
+            <Close />
+          </el-icon>
         </div>
-      </div>
+      </template>
       <div v-if="unreadMsgCount !== 0" class="msg-list">
         <div
           v-for="msg of messages"
           :key="msg.id"
-          :class="msg['has_read'] ? 'msg-read' : 'msg-unread'"
           class="msg-item"
+          :class="{ 'is-read': msg['has_read'] }"
           @click="showMsgDetail(msg)"
           @mouseleave="hoverMsgId = ''"
           @mouseover="hoverMsgId = msg.id"
         >
-          <el-row :gutter="10" class="msg-item-head">
-            <el-col :span="15" class="msg-item-head-type">
-              <i :class="msg['has_read'] ? 'fa-envelope-open-o' : 'fa-envelope'" class="fa msg-icon" />
-              {{ msg.content.subject }}
-            </el-col>
-            <el-col :span="9">
-              <span v-if="hoverMsgId !== msg.id || msg['has_read']" class="msg-item-head-time">
-                {{ formatDate(msg.date_created) }}
-              </span>
-              <span v-else class="msg-item-read-btn" @click.stop="markAsRead([msg])">
-                <a>{{ $t('MarkAsRead') }}</a>
-              </span>
-            </el-col>
-          </el-row>
-          <div class="msg-item-txt">
-            <span v-sanitize="msg.content.message" />
+          <div class="msg-item__head">
+            <span v-if="!msg['has_read']" class="msg-item__dot" />
+            <span class="msg-item__subject">{{ msg.content.subject }}</span>
+            <span class="msg-item__meta">
+              <a
+                v-if="hoverMsgId === msg.id && !msg['has_read']"
+                class="msg-item__read"
+                @click.stop="markAsRead([msg])"
+              >
+                {{ $t('MarkAsRead') }}
+              </a>
+              <template v-else>{{ formatDate(msg.date_created) }}</template>
+            </span>
           </div>
+          <div class="msg-item__preview">{{ stripMarkdown(msg.content.message) }}</div>
         </div>
       </div>
-      <div v-else class="no-msg">
-        {{ $t('NoUnreadMsg') }}
+      <div v-else class="msg-empty">
+        <svg-icon icon-class="remind" class="msg-empty__icon" />
+        <span>{{ $t('NoUnreadMsg') }}</span>
       </div>
     </el-drawer>
 
     <Dialog
       v-if="msgDetailVisible"
+      v-model:visible="msgDetailVisible"
       :close-on-click-modal="false"
       :confirm-title="$tc('MarkAsRead')"
       :title="currentMsg.content.subject"
-      :visible.sync="msgDetailVisible"
       @cancel="cancelRead"
       @close="markAsRead([currentMsg])"
       @confirm="markAsRead([currentMsg])"
     >
       <div class="msg-detail">
-        <div class="msg-detail-head">
-          <span class="msg-detail-time">{{ formatDate(currentMsg.date_created) }}</span>
-        </div>
         <div class="msg-detail-txt">
-          <MarkDown :value="currentMsg.content.message" />
+          <span class="msg-detail-time">{{ formatDate(currentMsg.date_created) }}</span>
+          <MarkDown :value="formattedMsg" />
         </div>
       </div>
     </Dialog>
@@ -78,9 +94,10 @@
 </template>
 
 <script>
-import { toSafeLocalDateStr } from '@/utils/common/time'
 import Dialog from '@/components/Dialog'
 import MarkDown from '@/components/Widgets/MarkDown'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
+import { formatSiteMessage } from './siteMessage'
 
 export default {
   name: 'SiteMessages',
@@ -101,6 +118,11 @@ export default {
   computed: {
     width() {
       return this.$store.state.app.device === 'mobile' ? '70%' : '450px'
+    },
+    // 将后端 Markdown 中连续的 "**字段:** 值" 归一化成列表，
+    // 再由样式排成信息表。已有列表和普通 Markdown 保持原样。
+    formattedMsg() {
+      return formatSiteMessage(this.currentMsg?.content?.message)
     }
   },
   mounted() {
@@ -117,9 +139,26 @@ export default {
       this.currentMsg = msg
       this.msgDetailVisible = true
     },
+    // 列表预览：正文是 Markdown（工单类还含 HTML 片段），这里剥离标记语法/标签，
+    // 得到干净的纯文本用于 1~2 行预览，避免像详情那样把 # / ** 直接暴露出来。
+    stripMarkdown(text) {
+      if (!text) return ''
+      return String(text)
+        .replace(/<[^>]+>/g, ' ') // HTML 标签
+        .replace(/!\[[^\]]*\]\([^)]*\)/g, '') // 图片
+        .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1') // 链接 → 文本
+        .replace(/^\s{0,3}#{1,6}\s*/gm, '') // 标题
+        .replace(/\*\*([^*]+)\*\*/g, '$1') // 粗体
+        .replace(/\*([^*]+)\*/g, '$1') // 斜体
+        .replace(/`([^`]+)`/g, '$1') // 行内代码
+        .replace(/^\s{0,3}>\s?/gm, '') // 引用
+        .replace(/^\s{0,3}[-*+]\s+/gm, '') // 列表符号
+        .replace(/\s+/g, ' ') // 折叠空白
+        .trim()
+    },
     getMessages() {
       const url = '/api/v1/notifications/site-messages/?offset=0&limit=15&has_read=false'
-      this.$axios.get(url).then(resp => {
+      this.$axios.get(url).then((resp) => {
         this.messages = [...resp.results]
         this.unreadMsgCount = resp.count
       })
@@ -130,7 +169,7 @@ export default {
       }
       const d = new Date(s)
       const now = new Date()
-      if (now.getTime() - d.getTime() > (3600 * 24 * 7) * 1000) {
+      if (now.getTime() - d.getTime() > 3600 * 24 * 7 * 1000) {
         return toSafeLocalDateStr(s)
       } else {
         return this.$moment(d).fromNow()
@@ -151,12 +190,15 @@ export default {
     },
     markAsReadAll(msgs) {
       const url = `/api/v1/notifications/site-messages/mark-as-read-all/`
-      this.$axios.patch(url, {}).then(res => {
-        this.msgDetailVisible = false
-        this.getMessages()
-      }).catch(err => {
-        this.$message(err.detail)
-      })
+      this.$axios
+        .patch(url, {})
+        .then((res) => {
+          this.msgDetailVisible = false
+          this.getMessages()
+        })
+        .catch((err) => {
+          this.$message(err.detail)
+        })
     },
     markAsRead(msgs) {
       const url = `/api/v1/notifications/site-messages/mark-as-read/`
@@ -164,12 +206,15 @@ export default {
       for (const item of msgs) {
         msgIds.push(item.id)
       }
-      this.$axios.patch(url, { ids: msgIds }).then(res => {
-        this.msgDetailVisible = false
-        this.getMessages()
-      }).catch(err => {
-        this.$message(err.detail)
-      })
+      this.$axios
+        .patch(url, { ids: msgIds })
+        .then((res) => {
+          this.msgDetailVisible = false
+          this.getMessages()
+        })
+        .catch((err) => {
+          this.$message(err.detail)
+        })
     },
     cancelRead() {
       this.msgDetailVisible = false
@@ -206,223 +251,286 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.drawer {
-  height: calc(100% - 0px);
-}
-
-.el-badge ::v-deep .el-badge__content.is-fixed {
+.el-badge :deep(.el-badge__content.is-fixed) {
   top: 10px;
 }
 
 .msg-list {
-  padding: 0 25px 20px;
+  padding: 4px 0 12px;
 }
 
-::v-deep .site-msg {
-  .el-drawer__header {
-    border-bottom: solid 1px rgb(231, 234, 239);
-    margin-bottom: 0;
-    padding-top: 10px;
-    font-size: 16px;
-
-    .msg-list-all-read-btn {
-      font-size: 12px;
-      float: right;
-    }
-  }
-
-  .el-drawer__body {
-    overflow-y: auto;
-  }
-}
-
+// 通知列表项：未读圆点 + 标题 + 时间/悬停操作 + 纯文本预览
 .msg-item {
-  border-bottom: solid 1px rgb(231, 234, 239);
-  padding: 15px 0 10px;
-  position: relative;
-  border-bottom: 1px solid #ddd;
+  padding: 12px 24px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+  transition: background-color 0.2s ease;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: var(--el-fill-color-light, #f5f7fa);
+  }
+}
+
+.msg-item__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 20px;
+}
+
+.msg-item__dot {
+  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+.msg-item__subject {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary, #1f2329);
+}
+
+.msg-item__meta {
+  flex: 0 0 auto;
+  font-size: 12px;
+  color: var(--el-text-color-secondary, #909399);
+  white-space: nowrap;
+}
+
+.msg-item__read {
+  color: var(--color-primary);
   cursor: pointer;
 
   &:hover {
-    background-color: #f2f2f2;
-    padding: 15px 20px 10px;
-    margin: 0 -20px;
-    border-bottom: 1px solid #fff;
-  }
-
-  .msg-icon {
-    font-size: 13px !important;
-    line-height: 13px;
-    color: gray !important;
-  }
-
-  &.msg-unread {
-    .msg-item-txt {
-      font-weight: bolder;
-    }
+    text-decoration: underline;
   }
 }
 
-.msg-item-head {
-  line-height: 20px;
-  color: #888;
+.msg-item__preview {
+  // 预览与标题左对齐（让开圆点占位），限制两行
+  margin-top: 4px;
+  padding-left: 14px;
   font-size: 12px;
-
-  &:after {
-    clear: both;
-    content: ".";
-    display: block;
-    height: 0;
-    overflow: hidden;
-  }
-
-  .msg-item-head-type {
-    float: left;
-    //width: 220px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: middle;
-    white-space: nowrap;
-  }
-
-  .msg-item-head-time {
-    float: right;
-  }
-
-  .msg-item-read-btn {
-    float: right;
-  }
-}
-
-.msg-item-txt {
-  overflow: hidden;
-  color: #000;
-  padding: 4px 0 0;
-  line-height: 25px;
-  max-height: 25px;
+  line-height: 18px;
+  color: var(--el-text-color-secondary, #909399);
   display: -webkit-box;
-  font-size: 12px;
-  display: block;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+}
 
-  ::v-deep .ticket-container {
-    .title {
-      font-size: 12px;
-    }
+// 已读项（一般刷新后即从未读列表移除，此处兜底弱化展示）
+.msg-item.is-read {
+  .msg-item__subject {
+    font-weight: 400;
+    color: var(--el-text-color-regular, #606266);
   }
-
 }
 
 .msg-detail {
-
-  .msg-detail-time {
-    font-weight: 400;
-    line-height: 1.1;
-    float: right;
-    color: var(--N600, #646A73);
-    text-align: right;
-    font-feature-settings: 'clig' off, 'liga' off;
-    font-size: 14px;
-    font-style: normal;
-  }
-
   .msg-detail-txt {
-    line-height: 24px;
+    max-height: 70vh;
+    overflow-y: auto;
+    font-size: 13px;
+    line-height: 22px;
+    color: var(--N900, #1f2329);
 
-    .el-dialog__title {
-      color: var(--neutral-900, #1F2329);
-      font-size: 16px;
-      font-style: normal;
-      font-weight: 500;
+    // 时间浮到正文右上角，与首行标题同行，不再单独占一行
+    .msg-detail-time {
+      float: right;
+      margin: 0 0 4px 12px;
+      color: var(--el-text-color-secondary, #909399);
+      font-size: 12px;
       line-height: 24px;
     }
 
-    & ::v-deep a {
-      color: var(--color-success) !important;
+    // 正文为 Markdown 渲染结果（标题 / 字段列表 / 链接），下面按渲染出的标签排版。
+    :deep(.markdown-body) {
+      padding: 0;
     }
 
-    ::v-deep .ticket-container {
-      height: 618px;
-      flex-shrink: 0;
-      border-radius: 4px;
-      background: #FFF;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 24px; /* 150% */
+    // 段落分节标题（# / ##）
+    :deep(h1),
+    :deep(h2),
+    :deep(h3) {
+      margin: 16px 0 4px;
+      padding: 0;
+      border: 0;
+      color: var(--neutral-900, #1f2329);
+      font-weight: 600;
+      line-height: 1.4;
+    }
 
-      .title {
-        margin-bottom: 8px;
-        color: var(--neutral-900, #1F2329);
-        font-size: 16px;
-        font-weight: 500;
+    :deep(h1) {
+      margin-top: 0;
+      font-size: 15px;
+    }
+
+    :deep(h2) {
+      font-size: 14px;
+    }
+
+    :deep(h3) {
+      font-size: 13px;
+    }
+
+    :deep(p) {
+      margin: 6px 0;
+    }
+
+    // 只把“粗体字段名开头”的列表排成信息表，普通 Markdown 列表仍保留项目符号。
+    :deep(ul:has(> li > strong:first-child)) {
+      margin: 6px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    :deep(ul:has(> li > strong:first-child) > li) {
+      padding: 9px 2px;
+      border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+      line-height: 20px;
+
+      &:last-child {
+        border-bottom: none;
       }
 
-      .card {
-        .child_title {
-          padding-top: 16px;
-          margin: 0 0 12px 16px;
-          display: inline-flex;
-          flex-direction: column;
-          align-items: flex-start;
-          color: var(--neutral-900, #1F2329);
-          font-size: 16px;
-          font-style: normal;
-          font-weight: 500;
-        }
-
-        margin-top: 16px;
-        width: 100%;
+      strong {
         display: inline-block;
-        border-radius: 4px;
-        background: var(--N100, #F5F6F7);
+        min-width: 72px;
+        margin-right: 16px;
+        color: var(--el-text-color-secondary, #8a9099);
+        font-weight: 400;
+        vertical-align: top;
       }
+    }
 
-      .action_group {
-        margin-top: 8px;
-
-        .view-link {
-          color: #3370FF !important;
-          text-align: right;
-          font-size: 14px;
-          border-radius: 4px;
-
-          &:hover {
-            background: rgba(51, 112, 255, 0.20);
-            display: inline-block;
-            border-radius: 4px;
-          }
-        }
-      }
-
-      .field-group {
-        font-size: 14px;
-        padding-inline-start: 0;
-        margin: 0;
-
-        .field-name {
-          margin: 4px 0 4px 16px;
-          color: var(--N600, #646A73);
-          display: inline-block;
-
-          strong {
-            font-weight: 400 !important;
-          }
-        }
-
-        .field-value {
-          color: var(--N900, #1F2329);
-          display: inline-block;
-        }
-      }
+    // 消息内容里的链接（资产地址、查看详情等）用统一的链接色，而非 --color-success
+    // （在 Deep black 等主题下是绿色，语义也不对）。--color-link 各主题都是蓝色，稳定一致。
+    :deep(a) {
+      color: var(--color-link) !important;
+      word-break: break-all;
     }
   }
 }
 
-.no-msg {
-  padding-top: 20px;
-  text-align: center;
+.msg-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 80px 20px;
+  color: var(--el-text-color-secondary, #909399);
+  font-size: 13px;
+
+  .msg-empty__icon {
+    width: 40px;
+    height: 40px;
+    font-size: 40px;
+    opacity: 0.3;
+  }
 }
 
-::v-deep :focus {
+:deep(:focus) {
   outline: 0;
+}
+</style>
+
+<style lang="scss">
+/*
+ * el-drawer 默认 teleport 到 body，且 EP 2.14 无 customClass 且 inheritAttrs:false，
+ * 故用 header-class/body-class/modal-class 注入真实类名，并用非 scoped 全局样式命中。
+ * modal-class 设为透明遮罩：保留遮罩以支持点击外部关闭，但视觉上不变暗。
+ */
+.site-msg-modal {
+  background-color: transparent !important;
+}
+
+/*
+ * 站内信不是通用 Drawer 组件，避免复用 `.drawer` 后误命中全局抽屉的
+ * `overflow: hidden` 规则。抽屉根节点锁定视口高度，body 作为唯一滚动容器。
+ */
+.site-msg-drawer {
+  height: 100%;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+.site-msg-header.el-drawer__header {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+  border-bottom: solid 1px rgb(231, 234, 239);
+  margin-bottom: 0;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  font-size: 16px;
+
+  .msg-header-title {
+    font-size: 16px;
+    color: var(--color-text-primary);
+  }
+
+  .msg-header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .msg-list-all-read-btn {
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    line-height: 1;
+    color: #72767b;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
+
+  .msg-header-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    color: #909399 !important;
+    cursor: pointer;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      color: var(--color-primary) !important;
+    }
+  }
+}
+
+.site-msg-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 </style>

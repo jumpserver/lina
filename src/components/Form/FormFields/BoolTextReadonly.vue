@@ -16,25 +16,25 @@ export default {
     },
     trueText: {
       type: String,
-      default: function() {
-        return this.$t('Yes')
+      default: function () {
+        return 'Yes'
       }
     },
     falseText: {
       type: String,
-      default: function() {
-        return this.$t('No')
+      default: function () {
+        return 'No'
       }
     },
     trueIcon: {
       type: String,
-      default: function() {
+      default: function () {
         return 'fa-check-circle'
       }
     },
     falseIcon: {
       type: String,
-      default: function() {
+      default: function () {
         return ''
       }
     }
@@ -44,7 +44,10 @@ export default {
   },
   computed: {
     iText() {
-      return this.value ? this.trueText : this.falseText
+      const text = this.value ? this.trueText : this.falseText
+      // trueText/falseText 默认为 'Yes'/'No',走 i18n 翻译(后端下发的翻译已合并进 vue-i18n);
+      // 缺键时 $t 原样返回,不影响自定义文案
+      return text ? this.$t(text) : text
     },
     iIcon() {
       return this.value ? this.trueIcon : this.falseIcon
@@ -56,6 +59,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

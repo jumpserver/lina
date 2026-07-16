@@ -1,37 +1,60 @@
 /* eslint-disable */
 <template>
-  <el-form size="small">
-    <el-form-item>
-      <el-radio v-model="radioValue" :label="1">
-        {{ this.$t('Week') }}，{{ this.$t('WildcardsAllowed') }}[, - * /]
+  <el-form class="cron-tab-form" size="small">
+    <el-form-item class="cron-tab-form__item">
+      <el-radio v-model="radioValue" :value="1">
+        <span class="cron-tab-form__text">
+          {{ $t('Week') }}，{{ $t('WildcardsAllowed') }}[, - * /]
+        </span>
       </el-radio>
     </el-form-item>
 
-    <el-form-item>
-      <el-radio v-model="radioValue" :label="3">
-        {{ this.$t('CycleFromWeek') }}
-        <el-input-number v-model="cycle01" :max="7" :min="1" size="mini" /> -
-        <el-input-number v-model="cycle02" :max="7" :min="1" size="mini" />
+    <el-form-item class="cron-tab-form__item">
+      <el-radio v-model="radioValue" :value="3">
+        <span class="cron-tab-form__text">{{ $t('CycleFromWeek') }}</span>
+        <span class="cron-tab-form__group">
+          <el-input-number
+            v-model="cycle01"
+            :max="7"
+            :min="1"
+            size="small"
+            class="cron-tab-form__number jms-input-spacing"
+          />
+          <span class="cron-tab-form__separator">-</span>
+          <el-input-number
+            v-model="cycle02"
+            :max="7"
+            :min="1"
+            size="small"
+            class="cron-tab-form__number jms-input-spacing"
+          />
+        </span>
       </el-radio>
     </el-form-item>
 
-    <el-form-item>
-      <el-radio v-model="radioValue" :label="6">
-        {{ this.$t('Appoint') }}
-        <el-select
-          v-model="checkboxList"
-          :placeholder="$tc('ManyChoose')"
-          clearable
-          multiple
-          style="width:100%"
-        >
-          <el-option v-for="(item,index) of weekList" :key="index" :value="index === 6 ? 0 : (index + 1)">
-            {{ item }}
-          </el-option>
-        </el-select>
+    <el-form-item class="cron-tab-form__item">
+      <el-radio v-model="radioValue" :value="6">
+        <span class="cron-tab-form__text">{{ $t('Appoint') }}</span>
+        <span class="cron-tab-form__group">
+          <el-select
+            v-model="checkboxList"
+            :placeholder="$tc('ManyChoose')"
+            clearable
+            multiple
+            size="small"
+            class="cron-tab-form__select"
+          >
+            <el-option
+              v-for="(item, index) of weekList"
+              :key="index"
+              :value="index === 6 ? 0 : index + 1"
+            >
+              {{ item }}
+            </el-option>
+          </el-select>
+        </span>
       </el-radio>
     </el-form-item>
-
   </el-form>
 </template>
 
@@ -47,8 +70,7 @@ export default {
     },
     check: {
       type: Function,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -60,8 +82,16 @@ export default {
       average01: 1,
       average02: 1,
       checkboxList: [],
-      weekList: [this.$t('Monday'), this.$t('Tuesday'), this.$t('Wednesday'), this.$t('Thursday'), this.$t('Friday'), this.$t('Saturday'), this.$t('Sunday')],
-      checkNum: this.$options.propsData.check
+      weekList: [
+        this.$t('Monday'),
+        this.$t('Tuesday'),
+        this.$t('Wednesday'),
+        this.$t('Thursday'),
+        this.$t('Friday'),
+        this.$t('Saturday'),
+        this.$t('Sunday')
+      ],
+      checkNum: this.check
     }
   },
   computed: {
@@ -88,16 +118,15 @@ export default {
         const str = this.checkboxList.join()
         return str === '' ? '*' : str
       },
-      set() {
-      }
+      set() {}
     }
   },
   watch: {
-    'radioValue': 'radioChange',
-    'cycleTotal': 'cycleChange',
-    'averageTotal': 'averageChange',
-    'weekdayCheck': 'weekdayChange',
-    'checkboxString': 'checkboxChange'
+    radioValue: 'radioChange',
+    cycleTotal: 'cycleChange',
+    averageTotal: 'averageChange',
+    weekdayCheck: 'weekdayChange',
+    checkboxString: 'checkboxChange'
   },
   created() {
     this.$nextTick(() => {
@@ -180,6 +209,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

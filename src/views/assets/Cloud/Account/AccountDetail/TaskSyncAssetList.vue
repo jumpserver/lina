@@ -1,19 +1,23 @@
 <template>
-  <GenericListTable ref="GenericListTable" :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListTable
+    ref="GenericListTable"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
-<script>
+<script lang="jsx">
 import GenericListTable from '@/layout/components/GenericListTable/index'
 import { DateFormatter } from '@/components/Table/TableFormatters'
-
 export default {
   name: 'TaskSyncAssetList',
-  components: { GenericListTable },
+  components: {
+    GenericListTable
+  },
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -57,14 +61,18 @@ export default {
           {
             prop: 'status',
             label: this.$t('Status'),
-            formatter: row => {
+            formatter: (row) => {
               const status = {
                 0: this.$t('UnSyncCount'),
                 1: this.$t('NewSyncCount'),
                 2: this.$t('SyncedCount'),
                 3: this.$t('ReleasedCount')
               }
-              return <el-tag type='primary' size='mini'>{status[row.status]}</el-tag>
+              return (
+                <el-tag type="primary" size="small">
+                  {status[row.status]}
+                </el-tag>
+              )
             }
           },
           {
@@ -94,19 +102,18 @@ export default {
     DeleteReleasedAssets() {
       const baseUrl = '/api/v1/xpack/cloud/sync-instance-tasks/released-assets/'
       const url = this.object ? `${baseUrl}?task_id=${this.object.task.id}` : baseUrl
-      this.$axios.delete(url).then(
-        res => {
+      this.$axios
+        .delete(url)
+        .then((res) => {
           this.$message.success(this.$tc('DeleteSuccessMsg'))
           this.$refs.GenericListTable.$refs.ListTable.reloadTable()
-        }
-      ).catch(() => {
-        this.$message.error(this.$tc('DeleteErrorMsg'))
-      })
+        })
+        .catch(() => {
+          this.$message.error(this.$tc('DeleteErrorMsg'))
+        })
     }
   }
 }
 </script>
 
-<style lang='less' scoped>
-
-</style>
+<style lang="scss" scoped></style>

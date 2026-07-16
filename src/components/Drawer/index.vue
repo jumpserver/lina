@@ -1,26 +1,28 @@
 <template>
   <el-drawer
+    v-bind="$attrs"
     ref="drawer"
-    v-el-drawer-drag-width
+    :model-value="visible"
     :append-to-body="true"
     :before-close="handleClose"
     :class="['drawer', { 'drawer__no-footer': !hasFooter }]"
     :modal="modal"
-    :size="size"
+    :resizable="resizable"
+    :size="drawerSize"
     :title="title"
-    :visible.sync="iVisible"
     custom-class="drawer"
     destroy-on-close
     direction="rtl"
-    v-on="$listeners"
+    @resize-end="handleResizeEnd"
+    @update:model-value="handleUpdateModelValue"
   >
     <div class="drawer__content">
       <slot name="default">
         <component
-          :is="component"
-          v-if="component"
-          ref="dynamicComponent"
           v-bind="componentProps"
+          :is="resolvedComponent"
+          v-if="resolvedComponent"
+          ref="dynamicComponent"
           v-on="componentListeners"
         />
       </slot>
@@ -30,19 +32,32 @@
 </template>
 
 <script>
-import { getDrawerWidth } from '@/utils/common/index'
+import { getStoredDrawerWidth, useDrawerResize } from '@/composables/useDrawerResize'
+import { resolveAsyncComponentCompat } from '@/utils/vue'
+import { TAB_NAVIGATION_CONTEXT, TAB_NAVIGATION_SCOPE } from './context'
 
 export default {
+  provide() {
+    return {
+      [TAB_NAVIGATION_CONTEXT]: {
+        scope: TAB_NAVIGATION_SCOPE.LOCAL
+      }
+    }
+  },
   props: {
     title: {
       type: String,
       default: ''
     },
     size: {
-      type: String,
+      type: [String, Number],
       default: () => {
-        return getDrawerWidth()
+        return getStoredDrawerWidth()
       }
+    },
+    resizable: {
+      type: Boolean,
+      default: true
     },
     component: {
       type: [String, Function, Object],
@@ -71,23 +86,30 @@ export default {
   },
   data() {
     return {
+      drawerSize: this.size,
+      drawerResize: useDrawerResize(),
       loading: false,
       formLabelWidth: '80px'
     }
   },
   computed: {
-    iVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$emit('update:visible', val)
-      }
+    resolvedComponent() {
+      if (!this.component) return null
+      return resolveAsyncComponentCompat(this.component)
     }
   },
-  mounted() {
+  watch: {
+    size(val) {
+      this.drawerSize = val
+    }
   },
   methods: {
+    handleUpdateModelValue(val) {
+      this.$emit('update:visible', val)
+    },
+    handleResizeEnd(_event, size) {
+      this.drawerSize = this.drawerResize.persistDrawerWidth(size)
+    },
     handleClose(done) {
       this.$emit('close-drawer')
       done()
@@ -96,44 +118,257 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-.drawer__no-footer {
-  ::v-deep {
-    .drawer {
-      .page {
-        height: calc(100vh - 55px);
-      }
-    }
-  }
+<style lang="scss">
+.el-drawer.drawer.ltr,
+.el-drawer.drawer.rtl {
+  min-width: max(100px, 20vw);
+  max-width: min(2000px, 80vw);
 }
 
-@media (max-width: 992px) {
-  .drawer ::v-deep {
-    .el-form-item {
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
+/*
+ * el-drawer 使用 append-to-body（teleport 到 <body>），scoped :deep() 到不了它的内部，
+ * 因此滚动/高度链必须写在非 scoped 块里，以 .el-drawer.drawer 为根匹配 teleport 后的节点。
+ * 目标：__body 本身不滚；tab 详情页由内部 .tab-page-content 滚动、tabs 头固定；
+ * 普通(非 tab)页面仍由 .drawer__content 整体滚动。
+ */
+.el-drawer.drawer {
+  .el-drawer__body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .form-fields.el-form {
+    margin-right: 1px;
+    padding-right: 15px;
+    height: 100%;
+  }
+
+  .drawer__content {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+  }
+
+  // 可调整宽度的抽屉中，表单及自定义字段可能带有固有宽度。逐级允许收缩，
+  // 并限制控件不超过当前内容区，避免收窄时先被裁切、继续收窄后再横向溢出。
+  .drawer__content > *,
+  .drawer__content .el-form,
+  .drawer__content .el-form-item,
+  .drawer__content .el-form-item__content {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .drawer__content .el-form-item__content > * {
+    max-width: 100%;
+  }
+
+  // tab 详情页：整条链定高，滚动落在 .tab-page-content 上
+  .page.tab-page {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .page.tab-page .page-content {
+    height: 100%;
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
+  }
+
+  .page.tab-page .tab-page-wrapper {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .page.tab-page .tab-page-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
+}
+</style>
+
+<style lang="scss" scoped>
+.drawer__no-footer {
+  :deep(.drawer) {
+    // 仅普通(非 tab)页面沿用固定高 + 由 .drawer__content 整体滚动；
+    // tab 页面改为内部 .tab-page-content 滚动(见下方 .page.tab-page 相关规则),
+    // 不能再被这条固定高撑得比抽屉可视区更高,否则滚动条会贯穿到 tab 区域。
+    .page:not(.tab-page) {
+      height: calc(100vh - 55px);
     }
   }
 }
 
 .drawer {
-  ::v-deep {
+  .drawer__content {
+    flex: 1 1 auto;
+    min-height: 0;
+    background: rgb(243, 243, 243);
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+  }
+
+  :deep(.el-drawer__header) {
+    min-height: 56px;
+    margin-bottom: 0 !important;
+    padding: 15px 20px;
+    border-bottom: 1px solid #ebeef5;
+    box-sizing: border-box;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+  }
+
+  :deep(.el-drawer__body) {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  :deep(.page.tab-page) {
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  :deep(.page.tab-page .page-content) {
+    height: 100%;
+    min-height: 0;
+    flex: 1 1 auto;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  :deep(.page.tab-page .tab-page-wrapper) {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  :deep(.page.tab-page .page-submenu) {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    background: #fff;
+  }
+
+  :deep(.page.tab-page .page-submenu .el-tabs__header) {
+    display: flex;
+    align-items: stretch;
+    min-height: 40px;
+    margin: 0;
+    padding: 0 30px;
+    background: #fff;
+    border-bottom: 1px solid #ebeef5;
+  }
+
+  :deep(.page.tab-page .page-submenu .el-tabs__nav-wrap),
+  :deep(.page.tab-page .page-submenu .el-tabs__nav-scroll),
+  :deep(.page.tab-page .page-submenu .el-tabs__nav) {
+    display: flex;
+    align-items: stretch;
+  }
+
+  :deep(.page.tab-page .page-submenu .el-tabs__nav-wrap) {
+    position: static;
+    flex: 1 1 auto;
+    margin: 0;
+
+    &::after {
+      display: none;
+    }
+  }
+
+  :deep(.page.tab-page .page-submenu .el-tabs__active-bar) {
+    height: 2px;
+  }
+
+  :deep(.page.tab-page .page-submenu .el-tabs__item),
+  :deep(.page.tab-page .page-submenu .el-tabs__item.is-top) {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 18px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+  }
+
+  :deep(.page.tab-page .tab-page-content) {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 0;
+    padding: 10px 30px 22px;
+    box-sizing: border-box;
+    overflow: auto;
+    overscroll-behavior: contain;
+    background: #f3f3f3;
+  }
+
+  :deep(.page.tab-page .tab-page-content .el-form),
+  :deep(.page.tab-page .tab-page-content .form-fields),
+  :deep(.page.tab-page .tab-page-content .el-card__body),
+  :deep(.page.tab-page .tab-page-content .ibox),
+  :deep(.page.tab-page .tab-page-content .page-content) {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  :deep(.page.tab-page .tab-page-content .tab-page-alert) {
+    margin: 0;
+  }
+
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__icon),
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__icon .el-icon),
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__icon .el-icon svg) {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__title),
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__description),
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__content),
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__description p),
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__content p),
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__content span),
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .announcement-main) {
+    font-size: 12px !important;
+    line-height: 1.5;
+  }
+
+  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__closebtn) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+
+  :deep(.el-form-item) {
     min-width: 565px;
 
     .el-card__body {
       padding-top: 10px;
       padding-bottom: 20px;
-    }
-
-    .page-submenu {
-      .el-tabs__header {
-        padding: 0 15px;
-      }
-
-      .el-tabs__item.is-top {
-        padding: 0 10px;
-      }
     }
 
     .form-buttons {
@@ -241,31 +476,11 @@ export default {
       }
     }
 
-    .el-drawer__header {
-      border-bottom: 1px solid #EBEEF5;
-      margin-bottom: 0;
-      padding: 15px 20px;
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--color-text-primary);
-    }
-
     .sql.container {
       display: none;
     }
 
     .page {
-      overflow-y: auto;
-
-      height: calc(100vh - 110px);
-
-      &.tab-page {
-        .page-content {
-          padding-right: 0;
-          padding-left: 0;
-        }
-      }
-
       .page-content {
         height: unset;
         padding-right: 10px;
@@ -282,7 +497,8 @@ export default {
       }
     }
 
-    .drawer__content, .tab-page-content {
+    .drawer__content,
+    .tab-page-content {
       height: 100%;
       background: #f3f3f3;
     }

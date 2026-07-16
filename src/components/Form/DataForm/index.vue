@@ -1,30 +1,31 @@
 <template>
-  <div>
+  <div class="data-form-container">
     <ElFormRender
+      v-bind="$attrs"
       :id="id"
       ref="form"
-      :class="[mobile ? 'mobile' : 'desktop']"
-      :content="fields"
+      :class="[mobile ? 'mobile' : 'desktop', { 'dialog-mode': inDialog }]"
+      :content="processedFields"
       :form="basicForm"
       :label-position="iLabelPosition"
       class="form-fields"
       :label-width="labelWidth"
-      :style="{ '--label-width': labelWidth }"
-      v-bind="$attrs"
+      :style="{
+        '--label-width': labelWidth,
+        '--form-column-gap': '18px',
+        '--form-section-gap': '15px'
+      }"
       :server-errors="serverErrors"
-      v-on="$listeners"
+      @input="handleFormUpdate"
+      @update:form="handleFormUpdate"
     >
-      <!-- slot 透传 -->
-      <slot
-        v-for="item in fields"
-        :slot="`id:${item.id}`"
-        :name="`id:${item.id}`"
-      />
-      <slot
-        v-for="item in fields"
-        :slot="`$id:${item.id}`"
-        :name="`$id:${item.id}`"
-      />
+      <!-- named slot 透传给 ElFormRender，保持与字段渲染顺序一致 -->
+      <template v-for="item in processedFields" :key="`id:${item.id}`" #[`id:${item.id}`]>
+        <slot :name="`id:${item.id}`" />
+      </template>
+      <template v-for="item in processedFields" :key="`$id:${item.id}`" #[`$id:${item.id}`]>
+        <slot :name="`$id:${item.id}`" />
+      </template>
 
       <div v-if="hasButtons" class="form-buttons">
         <el-button
@@ -32,35 +33,36 @@
           :disabled="!canSubmit"
           :loading="isSubmitting"
           :size="submitBtnSize"
+          class="form-submit-button"
           type="primary"
-          @click="submitForm('form')"
+          @click="handlePrimarySubmitClick"
         >
           {{ iSubmitBtnText }}
         </el-button>
 
         <el-button
           v-if="defaultButton && hasSaveContinue"
-          size="small"
-          @click="submitForm('form', true)"
+          class="form-secondary-button"
+          @click="handleSaveContinueClick"
         >
-          {{ $t("SaveAndAddAnother") }}
+          {{ $t('SaveAndAddAnother') }}
         </el-button>
 
         <el-button
           v-if="defaultButton && hasReset"
-          size="small"
-          @click="resetForm('form')"
+          class="form-secondary-button"
+          @click="handleResetClick"
         >
-          {{ $t("Reset") }}
+          {{ $t('Reset') }}
         </el-button>
 
         <el-button
+          v-bind="button"
           v-for="button in moreButtons"
           v-show="!iHidden(button)"
           :key="button.title"
+          class="form-secondary-button"
           :loading="button.loading"
-          size="small"
-          v-bind="button"
           @click="handleClick(button)"
         >
           {{ button.title }}
@@ -71,26 +73,36 @@
 </template>
 
 <script>
-import ElFormRender from './components/el-form-renderer'
 import { randomString } from '@/utils/common/index'
+import { markRaw, toRaw } from 'vue'
+import ElFormRender from './components/el-form-renderer'
 
 const scrollToError = (
-  el,
+  formInstance,
   scrollOption = {
     behavior: 'smooth',
     block: 'center'
   }
 ) => {
   setTimeout(() => {
-    const isError = el.getElementsByClassName('is-error')
-    isError[0].scrollIntoView(scrollOption)
+    // formInstance 是 ElFormRender 组件实例，需要访问内部的 el-form 元素
+    const elForm = formInstance.$refs?.elForm
+    if (!elForm || !elForm.$el) {
+      return
+    }
+    const formEl = elForm.$el
+    const errorElements = formEl.getElementsByClassName('is-error')
+    if (errorElements && errorElements.length > 0) {
+      errorElements[0].scrollIntoView(scrollOption)
+    }
   }, 0)
 }
 
 export default {
   components: {
-    ElFormRender
+    ElFormRender: markRaw(ElFormRender)
   },
+  inheritAttrs: true,
   props: {
     defaultButton: {
       type: Boolean,
@@ -110,7 +122,7 @@ export default {
     },
     submitBtnSize: {
       type: String,
-      default: 'small'
+      default: 'default'
     },
     submitBtnText: {
       type: String,
@@ -149,14 +161,16 @@ export default {
     },
     labelWidth: {
       type: String,
-      default: '25%'
+      default: '18.2%'
     }
   },
+  emits: ['submit', 'invalid', 'input', 'update:form'],
   data() {
     return {
       basicForm: this.form,
       id: randomString(16),
-      iSubmitBtnText: this.submitBtnText
+      iSubmitBtnText: this.submitBtnText,
+      inDialog: false
     }
   },
   computed: {
@@ -178,19 +192,60 @@ export default {
       // }
       // return this.drawer || this.mobile ? 'top' : 'right'
       return this.mobile ? 'top' : 'right'
+    },
+    processedFields() {
+      function markComponents(fields) {
+        if (!Array.isArray(fields)) return fields
+        return fields.map((field) => {
+          if (!field) return field
+          if (typeof field === 'string') return field
+          const f = { ...field }
+          if (f.component && typeof f.component !== 'string') {
+            f.component = markRaw(toRaw(f.component))
+          }
+          if (f.fields) {
+            f.fields = markComponents(f.fields)
+          }
+          if (f.children) {
+            f.children = markComponents(f.children)
+          }
+          return f
+        })
+      }
+      return markComponents(this.fields)
     }
   },
   mounted() {
+    this.detectDialogMode()
     this.autoSetSubmitBtnText()
   },
   methods: {
+    detectDialogMode() {
+      this.$nextTick(() => {
+        const root = this.$el
+        this.inDialog = !!root?.closest?.('.el-dialog__body')
+      })
+    },
+    handlePrimarySubmitClick(event) {
+      return this.submitForm('form')
+    },
+    handleSaveContinueClick(event) {
+      return this.submitForm('form', true)
+    },
+    handleResetClick(event) {
+      return this.resetForm('form')
+    },
+    handleFormUpdate(value) {
+      this.$emit('input', value)
+      this.$emit('update:form', value)
+    },
     autoSetSubmitBtnText() {
       if (this.iSubmitBtnText) {
         return
       }
       const dialogs = [...document.getElementsByClassName('el-dialog__body')]
       if (dialogs.length > 0) {
-        const dialog = dialogs.find(d => d.innerHTML.indexOf(this.id) !== -1)
+        const dialog = dialogs.find((d) => d.innerHTML.indexOf(this.id) !== -1)
         if (dialog) {
           this.iSubmitBtnText = this.$t('Confirm')
           return
@@ -203,17 +258,17 @@ export default {
      * @param {string} formName - 表单的引用名称
      * @param {boolean} [addContinue] - 是否继续添加
      */
-    submitForm(formName, addContinue) {
+    async submitForm(formName, addContinue) {
       const form = this.$refs[formName]
-      form.validate(valid => {
-        if (valid) {
-          this.$emit('submit', form.getFormValue(), form, addContinue)
-        } else {
-          this.$emit('invalid', valid)
-          scrollToError(form.$el)
-          return false
-        }
-      })
+      try {
+        await form.validate()
+        const formValue = form.getFormValue()
+        this.$emit('submit', formValue, form, addContinue)
+      } catch (error) {
+        this.$emit('invalid', false)
+        scrollToError(form)
+        return false
+      }
     },
     // 重置表单
     resetForm() {
@@ -222,7 +277,7 @@ export default {
     handleClick(button) {
       const callback =
         button.callback ||
-        function(values, form) {
+        function (values, form) {
           // debug('Click ', button.title, ': ', values)
         }
       const form = this.$refs['form']
@@ -239,39 +294,58 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-.el-form {
-  margin-right: 80px;
-  margin-bottom: 20px;
+<style lang="scss" scoped>
+.data-form-container {
+  width: 100%;
+  min-width: 0;
+  container-name: data-form;
+  container-type: inline-size;
+}
+
+.form-fields.el-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--form-section-gap);
+  margin: 0;
+  padding: 20px 0 24px;
 
   .el-form {
     margin-right: 0;
+    margin-bottom: 0;
   }
 
-  ::v-deep .el-input-group__prepend {
+  :deep(.el-input-group__prepend) {
     border-radius: 0;
   }
 
-  ::v-deep .form-group-header {
-    margin-left: 50px;
+  :deep(.form-group-header) {
     color: var(--color-text-primary);
   }
 
-  &.label-top {
-    ::v-deep .el-form-item {
-      .el-form-item__content {
-        width: 100%;
-      }
-    }
-  }
+  :deep(.el-form-item) {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--form-column-gap);
+    margin: 0;
 
-  ::v-deep .el-form-item {
-    margin-bottom: 10px;
+    .el-form-item__label-wrap {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      flex: 0 0 var(--label-width);
+      width: var(--label-width);
+      min-width: 0;
+    }
 
     .el-form-item__label {
-      padding: 0 30px 0 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      min-height: 30px;
+      padding: 0;
       line-height: 30px;
+      font-size: 13px;
       color: var(--color-text-primary);
+      box-sizing: border-box;
 
       span {
         display: unset;
@@ -292,89 +366,159 @@ export default {
     }
 
     .el-form-item__content {
-      width: calc(100% - var(--label-width));
-      line-height: 32px;
-
-      // 禁用的输入框
-      .el-input.is-disabled .el-input__inner {
-        color: var(--color-icon-primary) !important;
-        background-color: var(--color-disabled-background);
-      }
-
-      // 复合型输入框
-      .el-input.el-input-group {
-        .el-input-group__prepend .el-select {
-          .el-input__inner {
-            border: none;
-            height: 28px;
-          }
-        }
-
-        .el-input__inner {
-          border-radius: 0;
-          color: var(--color-text-primary);
-        }
-      }
-
-      // 普通的输入框
-      .el-input .el-input__inner {
-        color: var(--color-text-primary);
-      }
-
-      // 不符合校验规则的提示信息
-      .el-form-item__error {
-        position: inherit;
-      }
-
-      .el-select {
-        // 选择 tag 时的额外自定义样式
-        .el-select__tags > span > .el-tag.el-tag--info {
-          .el-tag__close.el-icon-close {
-            margin-top: -1px !important;
-          }
-        }
-
-        // 选择普通 item 时的样式
-        .el-input .el-input__inner {
-          color: var(--color-text-primary);
-        }
-      }
-
-      .el-textarea .el-textarea__inner {
-        border-radius: 0;
-      }
-
-      .el-data-table .el-table {
-        margin: 5px 0;
-      }
-
-      .help-block {
-        display: block;
-        margin-top: 2px;
-        margin-bottom: 5px;
-        color: var(--color-help-text);
-        font-size: 12px;
-        line-height: 18px;
-        word-break: keep-all;
-
-        a {
-          color: var(--color-primary);
-        }
-      }
+      flex: 1 1 auto;
+      width: auto;
+      min-width: 0;
+      min-height: 30px;
+      line-height: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-start;
     }
   }
 
-  ::v-deep .form-buttons {
-    margin-top: 30px;
-    margin-left: var(--label-width);
+  :deep(.form-buttons) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    padding-inline-start: calc(var(--label-width) + var(--form-column-gap));
+  }
+
+  &.el-form--label-top,
+  &.label-top {
+    :deep(.el-form-item) {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+    }
+
+    :deep(.el-form-item__label-wrap) {
+      flex: 0 0 auto !important;
+      width: 100% !important;
+    }
+
+    :deep(.el-form-item__label) {
+      width: 100% !important;
+      justify-content: flex-start;
+      text-align: left;
+    }
+
+    :deep(.el-form-item__label > span) {
+      display: inline-flex;
+      max-width: 100%;
+      overflow: visible;
+      overflow-wrap: anywhere;
+    }
+
+    :deep(.el-form-item__content) {
+      flex-basis: auto;
+      width: 100%;
+      min-width: 0;
+    }
+
+    :deep(.form-buttons) {
+      padding-inline-start: 0;
+    }
+
+    :deep(.form-group-header) {
+      margin-left: 0;
+    }
   }
 }
 
-.mobile.el-form ::v-deep .el-form-item__content {
-  width: 100%;
+.form-fields.el-form.dialog-mode {
+  padding: 0;
+
+  :deep(.form-group-header) {
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  :deep(.form-buttons) {
+    margin-top: 16px;
+    margin-bottom: 0;
+  }
 }
 
-.el-form.mobile ::v-deep .form-group-header {
-  margin-left: 0;
+.mobile.el-form :deep(.el-form-item) {
+  gap: 8px;
+}
+
+.mobile.el-form :deep(.el-form-item__label-wrap) {
+  width: 100%;
+  flex-basis: auto;
+}
+
+.mobile.el-form :deep(.el-form-item__content) {
+  width: 100%;
+  flex-basis: 100%;
+}
+
+.el-form.mobile {
+  padding: 16px 0 20px;
+
+  :deep(.form-buttons) {
+    padding-inline-start: 0;
+  }
+}
+
+.el-form.mobile.dialog-mode {
+  padding: 0;
+}
+
+/*
+ * 设置页即使运行在 desktop 设备上，也可能因抽屉或分栏被压缩。此处按表单自身宽度
+ * 切换布局，避免百分比 label 被挤成逐字换行，并让帮助文案跟随控件完整展示。
+ */
+@container data-form (max-width: 520px) {
+  .form-fields.el-form {
+    :deep(.el-form-item) {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+    }
+
+    :deep(.el-form-item .el-form-item__label-wrap) {
+      flex: 0 0 auto !important;
+      width: 100% !important;
+    }
+
+    :deep(.el-form-item .el-form-item__label) {
+      width: 100% !important;
+      justify-content: flex-start;
+      text-align: left;
+    }
+
+    :deep(.el-form-item .el-form-item__label > span) {
+      display: inline-flex;
+      max-width: 100%;
+      overflow: visible;
+      overflow-wrap: anywhere;
+    }
+
+    :deep(.el-form-item .el-form-item__content) {
+      width: 100%;
+      min-width: 0;
+      flex-basis: auto;
+    }
+
+    :deep(.help-block) {
+      width: 100%;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    :deep(.form-group-header) {
+      margin-left: 0;
+    }
+
+    :deep(.form-buttons) {
+      padding-inline-start: 0;
+    }
+  }
 }
 </style>

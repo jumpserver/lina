@@ -1,10 +1,5 @@
 <template>
-  <GenericDetailPage
-    :active-menu.sync="config.activeMenu"
-    :object.sync="user"
-    v-bind="config"
-    v-on="$listeners"
-  >
+  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu" v-model:object="user">
     <keep-alive>
       <component :is="config.activeMenu" :object="user" />
     </keep-alive>
@@ -12,18 +7,19 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import { GenericDetailPage } from '@/layout/components'
+import { mapGetters } from 'vuex'
 
-import UserInfo from './UserInfo'
-import UserSession from './UserSession.vue'
-import UserLoginACL from './UserLoginACL.vue'
-import UserGrantedAssets from './UserGrantedAssets'
-import AssetPermissionUser from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionUser.vue'
-import AssetPermissionAsset from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionAsset.vue'
-import AssetPermissionDetail from '@/views/perms/AssetPermission/AssetPermissionDetail/index.vue'
 import AssetPermissionAccount from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionAccount.vue'
+import AssetPermissionAsset from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionAsset.vue'
+import AssetPermissionUser from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionUser.vue'
+import AssetPermissionDetail from '@/views/perms/AssetPermission/AssetPermissionDetail/index.vue'
 import UserAssetPermissionRules from './UserAssetPermissionRules'
+import UserAuthUKey from './UserAuthUKey'
+import UserGrantedAssets from './UserGrantedAssets'
+import UserInfo from './UserInfo'
+import UserLoginACL from './UserLoginACL.vue'
+import UserSession from './UserSession.vue'
 
 export default {
   components: {
@@ -36,7 +32,8 @@ export default {
     AssetPermissionAsset,
     AssetPermissionDetail,
     AssetPermissionAccount,
-    UserAssetPermissionRules
+    UserAssetPermissionRules,
+    UserAuthUKey
   },
   data() {
     const vm = this
@@ -47,14 +44,21 @@ export default {
         activeMenu: 'UserInfo',
         actions: {
           canUpdate: () => {
-            return this.$hasPerm('users.change_user') &&
+            return (
+              this.$hasPerm('users.change_user') &&
               !(!this.currentUserIsSuperAdmin && this.user['is_superuser'])
+            )
           }
         },
         submenu: [
           {
             title: this.$t('Basic'),
             name: 'UserInfo'
+          },
+          {
+            title: this.$t('UserUKey'),
+            name: 'UserAuthUKey',
+            hidden: () => !vm.$hasPerm('users.change_user') || !vm.publicSettings.AUTH_UKEY
           },
           {
             title: this.$t('GrantedAssets'),
@@ -82,8 +86,9 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentUserIsSuperAdmin'
-    ])
+        'currentUserIsSuperAdmin',
+        'publicSettings'
+      ])
   },
   methods: {
     handleTabClick(tab) {

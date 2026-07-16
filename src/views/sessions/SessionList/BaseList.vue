@@ -6,11 +6,15 @@
   />
 </template>
 
-<script type="text/jsx">
-import prettyBytes from 'pretty-bytes'
+<script>
 import { DrawerListTable as ListTable } from '@/components'
-import { timeOffset } from '@/utils/common/time'
-import { ActionsFormatter, ChoicesFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import {
+  ActionsFormatter,
+  ChoicesFormatter,
+  DetailFormatter
+} from '@/components/Table/TableFormatters'
+import { timeOffset } from '@/composables/useDateTime'
+import prettyBytes from 'pretty-bytes'
 
 export default {
   name: 'BaseList',
@@ -31,17 +35,13 @@ export default {
       default: () => {
         return {
           min: ['id', 'actions'],
-          default: [
-            'id', 'user', 'asset', 'account', 'protocol',
-            'date_start', 'actions'
-          ]
+          default: ['id', 'user', 'asset', 'account', 'protocol', 'date_start', 'actions']
         }
       }
     },
     columnsMeta: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     columnsExclude: {
       type: Array,
@@ -146,7 +146,7 @@ export default {
           },
           duration: {
             label: this.$t('Duration'),
-            formatter: function(row) {
+            formatter: function (row) {
               return timeOffset(row.date_start, row.date_end)
             }
           },
@@ -166,7 +166,8 @@ export default {
           actions: {
             prop: 'actions',
             label: this.$t('Actions'),
-            width: this.dynamicActionWidth,
+            // data 初始化早于 computed，不能在这里读取 dynamicActionWidth。
+            width: this.$i18n.locale === 'pt-br' ? '160px' : '130px',
             formatter: ActionsFormatter,
             formatterArgs: {
               hasEdit: false,
@@ -182,20 +183,13 @@ export default {
       headerActions: {
         hasLeftActions: false,
         hasImport: false,
+        hasReportExport: true,
         hasDatePicker: true,
         searchConfig: {
           getUrlQuery: false,
           exclude: ['is_finished']
         }
       }
-    }
-  },
-  computed: {
-    dynamicActionWidth() {
-      if (this.$i18n.locale === 'pt-br') {
-        return '160px'
-      }
-      return '130px'
     }
   }
 }

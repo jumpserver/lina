@@ -1,26 +1,42 @@
 <template>
   <div class="navbar">
+    <hamburger
+      v-if="isMobile"
+      :is-active="sidebar.opened"
+      class="hamburger-container is-show-menu"
+      @toggle-click="toggleSideBar"
+    />
+    <ul class="navbar-left">
+      <li class="left-item">
+        <div class="nav-logo">
+          <Logo v-if="showLogo" :collapse="false" />
+        </div>
+      </li>
+      <li v-if="orgsShow" class="left-item organization-item">
+        <Organization :disabled="orgsDisabled" class="organization" />
+      </li>
+    </ul>
     <ul class="navbar-right">
       <li class="header-item header-icon none-hover">
         <Search @search-open="handleSearchOpen" />
       </li>
       <li class="header-item header-icon">
-        <el-tooltip :content="$tc('SiteMessageList')" :open-delay="500" effect="dark">
+        <el-tooltip :content="$tc('SiteMessageList')" :show-after="500" effect="dark">
           <SiteMessages />
         </el-tooltip>
       </li>
-      <li v-perms="['rbac.view_webterminal']" class="header-item header-icon">
-        <el-tooltip :content="$tc('WebTerminal')" :open-delay="500" effect="dark">
+      <li v-if="$hasPerm(['rbac.view_webterminal'])" class="header-item header-icon">
+        <el-tooltip :content="$tc('WebTerminal')" :show-after="500" effect="dark">
           <WebTerminal />
         </el-tooltip>
       </li>
       <li v-if="ticketsEnabled" class="header-item header-hover">
-        <el-tooltip :content="$tc('Ticket')" :open-delay="500" effect="dark">
+        <el-tooltip :content="$tc('Ticket')" :show-after="500" effect="dark">
           <Tickets />
         </el-tooltip>
       </li>
-      <li v-perms="'settings.view_setting'" class="header-item header-icon">
-        <el-tooltip :content="$tc('SystemSetting')" :open-delay="500" effect="dark">
+      <li v-if="$hasPerm('settings.view_setting')" class="header-item header-icon">
+        <el-tooltip :content="$tc('SystemSetting')" :show-after="500" effect="dark">
           <SystemSetting />
         </el-tooltip>
       </li>
@@ -32,21 +48,6 @@
       </li>
       <li class="header-item header-profile">
         <AccountDropdown />
-      </li>
-    </ul>
-    <hamburger
-      :is-active="sidebar.opened"
-      class="hamburger-container is-show-menu"
-      @toggleClick="toggleSideBar"
-    />
-    <ul class="navbar-left">
-      <li class="left-item">
-        <div class="nav-logo">
-          <Logo v-if="showLogo" :collapse="false" />
-        </div>
-      </li>
-      <li v-if="orgsShow" class="left-item" style="margin-left: 20px">
-        <Organization :disabled="orgsDisabled" class="organization" />
       </li>
     </ul>
   </div>
@@ -115,16 +116,32 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import '~@/styles/variables.scss';
+@use '@/styles/variables' as *;
+
+:global(.nav-header-dropdown.el-dropdown__popper .el-dropdown-menu) {
+  padding: 10px 0;
+  margin: 5px 0;
+  border-radius: 4px;
+}
+
+:global(.nav-header-dropdown.el-dropdown__popper .el-dropdown-menu__item) {
+  height: 36px;
+  line-height: 36px;
+  padding: 0 20px;
+  font-size: 13px;
+}
 
 .navbar {
   position: relative;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: $headerHeight;
   background-color: var(--banner-bg);
 
   ul {
     margin: 0;
     padding-inline-start: 0;
+    list-style: none;
   }
 
   .is-show-menu {
@@ -132,13 +149,16 @@ export default {
   }
 
   .hamburger-container {
-    float: left;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 25px;
     line-height: 25px;
-    margin: 8px;
+    margin: 0 8px;
     padding: 1px 8px !important;
     border-radius: 5px;
-    border-color: $--color-primary;
+    border-color: $color-primary;
     background-color: white;
     color: var(--text-primary);
     cursor: pointer;
@@ -147,16 +167,22 @@ export default {
   }
 
   .navbar-left {
-    float: left;
     display: flex;
-    height: 100%;
+    align-items: stretch;
+    flex: 1 1 auto;
+    gap: 16px;
+    min-width: 0;
+    height: $headerHeight;
 
     .left-item {
       display: flex;
       align-items: center;
-      list-style: none;
+      flex: 0 0 auto;
 
       .nav-logo {
+        display: flex;
+        align-items: center;
+        height: 100%;
         width: 200px;
 
         &:hover {
@@ -164,28 +190,20 @@ export default {
         }
       }
 
+      &.organization-item {
+        min-width: 0;
+      }
+
       .organization {
         display: flex;
         align-items: center;
-        padding: 0 0 0 15px;
-        border-radius: 3px;
-        // background-color: rgba(5, 5, 5, 0.1);
-        color: #fff;
-        font-weight: 600;
-        font-size: 15px;
-        max-width: 250px;
-
-        ::v-deep .el-input__inner {
-          padding-left: 20px;
-        }
-
-        ::v-deep .el-input.is-disabled > input {
-          background: none;
-        }
+        min-width: 180px;
+        max-width: min(360px, 28vw);
+        height: 100%;
       }
 
       // 未找到与之对应的
-      & ::v-deep .el-submenu__title {
+      & :deep(.el-sub-menu__title) {
         font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
         padding: 0 8px;
         line-height: $headerHeight;
@@ -193,7 +211,7 @@ export default {
       }
 
       // 未找到与之对应的
-      & ::v-deep .svg-icon {
+      & :deep(.svg-icon) {
         color: #fff !important;
       }
     }
@@ -201,26 +219,49 @@ export default {
 
   .navbar-right {
     display: flex;
-    float: right;
     align-items: center;
+    flex: 0 0 auto;
+    margin-left: auto;
     margin-right: 10px;
+    height: $headerHeight;
 
     .header-item {
       display: flex;
-      line-height: $headerHeight;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      height: 100%;
+      line-height: 1;
       padding-right: 10px;
       padding-left: 10px;
 
-      & ::v-deep .svg-icon {
-        line-height: 40px;
-        color: #eef3fb;
+      > * {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+      }
+
+      & :deep(.svg-icon) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        color: #fff;
         font-size: 15px;
       }
 
-      & ::v-deep .el-badge {
+      & :deep(.el-badge) {
+        display: flex;
+        align-items: center;
+        height: 100%;
         vertical-align: top;
 
         .el-link {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
           vertical-align: baseline;
         }
 
@@ -237,28 +278,55 @@ export default {
         }
       }
 
-      & ::v-deep i {
-        color: #eef3fb;
+      & :deep(.el-link),
+      & :deep(.el-dropdown),
+      & :deep(.el-dropdown-link),
+      & :deep(.el-tooltip__trigger),
+      & :deep(.header-tools) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+      }
+
+      & :deep(.el-dropdown-link) {
+        outline: none;
+        box-shadow: none;
+
+        &:focus,
+        &:focus-visible,
+        &:active {
+          outline: none;
+          box-shadow: none;
+        }
+      }
+
+      & :deep(i) {
+        display: flex;
+        align-items: center;
+        line-height: 1;
+        color: #fff;
         font-size: 16px;
 
-        &.el-icon-arrow-down {
+        &.el-icon--right {
           font-size: 13px;
         }
       }
 
-      & ::v-deep i.el-dialog__close.el-icon-close {
+      & :deep(i.el-dialog__close) {
         color: #7c7e7f;
       }
 
       &.none-hover {
         padding: 0;
+
         &:hover {
           background: none;
         }
       }
 
       &:hover {
-        background: rgba(255, 255, 255, 0.08);
+        background: rgba(0, 0, 0, 12%);
       }
     }
   }
@@ -266,10 +334,6 @@ export default {
 
 @media screen and (max-width: 1006px) {
   .navbar {
-    .is-show-menu {
-      display: block;
-    }
-
     .navbar-left {
       display: none;
     }

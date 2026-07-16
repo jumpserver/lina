@@ -1,10 +1,11 @@
 <template>
   <Dialog
-    :visible="iVisible"
+    :visible="visible"
     height="300"
     title="Processing"
     width="300"
     class="processing-dialog"
+    @update:visible="$emit('update:visible', $event)"
   >
     <div id="load">
       <div class="spinner" />
@@ -24,36 +25,27 @@ export default {
       default: false
     }
   },
+  emits: ['update:visible'],
   data() {
     return {}
-  },
-  computed: {
-    iVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$emit('update:visible', val)
-      }
-    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .processing-dialog {
-  ::v-deep .el-dialog__body {
+  :deep(.el-dialog__body) {
     overflow: hidden;
   }
 }
 
 .spinner {
-    width: 100px;
-    height: 100px;
-    border: 5px solid rgba(0, 0, 0, 0.1);
-    border-radius: 50%;
-    border-top-color: var(--color-primary);
-    animation: spin 1s infinite linear;
+  width: 100px;
+  height: 100px;
+  border: 5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--color-primary);
+  animation: spin 1s infinite linear;
 }
 
 #load {
@@ -62,8 +54,8 @@ export default {
 }
 
 @keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>

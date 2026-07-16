@@ -5,6 +5,7 @@ export default [
   {
     path: 'labels',
     component: empty,
+    name: 'ConsoleLabels',
     redirect: {
       name: 'LabelList'
     },

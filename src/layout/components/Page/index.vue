@@ -1,52 +1,47 @@
 <template>
   <div :class="{ 'no-title': noTitle }" class="page">
-    <TagsView />
-    <PageHeading
-      v-if="iTitle || helpMessage"
-      :help-msg="helpMessage"
-      class="disabled-when-print page-head"
-    >
+    <PageHeading v-if="showHeading" :help-msg="helpMessage" class="disabled-when-print page-head">
       <el-button
         :disabled="gobackDisabled"
         class="go-back"
-        icon="el-icon-back"
+        icon="back"
         @click="handleGoBack"
         @mouseleave="endLongPress"
         @mouseup="endLongPress"
-        @mousedown.native="startLongPress"
-      />
-
+        @mousedown="startLongPress"
+      >
+      </el-button>
       <slot name="title">
-        <span style="padding-left: 10px">
+        <span class="page-title-wrap">
           {{ iTitle }}
           <el-tooltip
             v-if="helpTip"
-            :open-delay="500"
+            :show-after="500"
             effect="dark"
             placement="top"
             popper-class="help-tips"
           >
-            <div slot="content" v-sanitize="helpTip" class="page-help-content" />
+            <template #content>
+              <div v-sanitize="helpTip" class="page-help-content" />
+            </template>
             <span>
               <el-button class="help-msg-btn">
-                <i class="el-icon-info" />
+                <el-icon><InfoFilled /></el-icon>
               </el-button>
             </span>
           </el-tooltip>
         </span>
       </slot>
-
       <template #rightSide>
         <slot name="headingRightSide" />
       </template>
     </PageHeading>
-
     <PageContent :class="{ disabled: disabled }" class="page-content">
       <div v-if="disabled" class="content-disabled-mask">
         <IBox shadow="always">
           <div class="disabled-content">
             <div class="lock-icon">
-              <i class="el-icon-unlock" />
+              <el-icon><Unlock /></el-icon>
             </div>
             <div class="disabled-text">
               {{ $t('UpgradeEnterpriseEditionHelpText') }}
@@ -57,7 +52,13 @@
           </div>
         </IBox>
       </div>
-      <el-alert v-if="iHelpMessage" type="info">
+      <el-alert
+        v-if="iHelpMessage && helpAlertVisible"
+        class="page-alert"
+        :closable="true"
+        :type="helpAlertType"
+        @close="helpAlertVisible = false"
+      >
         <span v-sanitize="iHelpMessage" class="announcement-main" />
       </el-alert>
       <slot />
@@ -70,9 +71,9 @@
 import PageHeading from './PageHeading'
 import PageContent from './PageContent'
 import UserConfirmDialog from '@/components/Apps/UserConfirmDialog/index.vue'
-import TagsView from '../TagsView/index.vue'
 import { toSentenceCase } from '@/utils/common/index'
 import IBox from '@/components/Common/IBox/index.vue'
+import i18n from '@/i18n/i18n'
 
 export default {
   name: 'Page',
@@ -80,7 +81,6 @@ export default {
     UserConfirmDialog,
     PageHeading,
     PageContent,
-    TagsView,
     IBox
   },
   props: {
@@ -100,21 +100,35 @@ export default {
       type: String,
       default: ''
     },
+    helpAlertType: {
+      type: String,
+      default: 'info'
+    },
+    hideHeading: {
+      type: Boolean,
+      default: false
+    },
     goBack: {
       type: Function,
-      default: function(obj) {
-        return this.$router.back()
+      default: function (obj) {
+        if (window.history.length > 1) {
+          window.history.back()
+        }
       }
     }
   },
   data() {
     return {
-      showHistory: false
+      showHistory: false,
+      helpAlertVisible: true
     }
   },
   computed: {
     noTitle() {
       return this.title === 'null' || this.title === null
+    },
+    showHeading() {
+      return !this.hideHeading && (this.iTitle || this.iHelpMessage)
     },
     iTitle() {
       if (this.noTitle) {
@@ -122,7 +136,7 @@ export default {
       }
       let title = this.title || this.$route.meta.title
       if (!title) {
-        title = this.$t('NoTitle')
+        title = i18n.global.t('NoTitle')
       }
       title = toSentenceCase(title)
       return title
@@ -135,6 +149,11 @@ export default {
     },
     iHelpMessage() {
       return this.helpMessage || this.helpTip
+    }
+  },
+  watch: {
+    iHelpMessage() {
+      this.helpAlertVisible = true
     }
   },
   methods: {
@@ -160,25 +179,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '@/styles/variables' as *;
+
 .page {
   // 这个不加的话，page title 也会滚动
-  height: calc(100vh - 52px);
+  // 高度需与固定头部 $headerHeight（40px）一致，否则底部内容滚不到 / 顶部留白
+  height: calc(100vh - #{$headerHeight});
   display: flex;
   flex-direction: column;
   overflow-y: hidden;
   overflow-x: hidden;
 
   .el-alert {
-    margin: -5px 0 5px 0 !important;
+    margin: 0 !important;
   }
 
   .page-content {
     flex: 1; /* 占用剩余高度 */
-    //height: calc(100% - 50px);
+    min-height: 0; /* flex 子项默认 min-height:auto 不会收缩，导致内部滚动底部被裁剪 */
+    display: flex;
+    flex-direction: column;
     overflow-x: hidden;
     overflow-y: auto !important;
 
-    ::v-deep > div {
+    :deep(> div) {
       // 这个当时为什么设置的
       //margin-bottom: 50px;
       // 别设置，用户列页面会被撑开
@@ -187,14 +211,46 @@ export default {
   }
 }
 
-.go-back {
-  border: none;
-  padding: 6px;
+.page.drawer {
+  height: auto;
+  min-height: 100%;
+  overflow: visible;
+
+  .page-content {
+    overflow: visible !important;
+  }
 }
 
-.go-back ::v-deep i {
+.page-title-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 10px;
+}
+
+.go-back {
+  border: none;
+  width: 30px;
+  height: 30px;
+  padding: 6px;
+  min-height: 30px;
+  min-width: 30px;
+}
+
+.go-back :deep(.el-icon) {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: 18px;
   font-weight: 600;
+}
+
+.go-back :deep(.el-icon svg) {
+  width: 18px;
+  height: 18px;
+  display: block;
 }
 
 @media print {

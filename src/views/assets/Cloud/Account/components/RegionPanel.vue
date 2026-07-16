@@ -1,41 +1,36 @@
 <template>
-  <div>
-    <el-link
-      icon="el-icon-edit"
-      :underline="false"
-      @click="handlerLinkClick"
-    >
+  <div class="region-panel">
+    <el-link class="region-trigger" icon="Edit" underline="never" @click="handlerLinkClick">
       {{ content }}
     </el-link>
     <Dialog
+      v-model:visible="regionVisible"
       :destroy-on-close="true"
       :title="$tc('Region')"
-      :visible.sync="regionVisible"
       :show-cancel="false"
       width="60%"
-      @confirm="regionVisible=false"
+      @confirm="regionVisible = false"
     >
       <el-row>
         <el-col>
-          <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckedAllChange">
+          <el-checkbox
+            :indeterminate="isIndeterminate"
+            :model-value="checkAll"
+            @change="handleCheckedAllChange"
+            @update:model-value="checkAll = $event"
+          >
             {{ $t('All') }}
           </el-checkbox>
         </el-col>
       </el-row>
       <el-checkbox-group
-        v-model="checkedRegion"
+        :model-value="checkedRegion"
         @change="handleCheckedRegionChange"
+        @update:model-value="checkedRegion = $event"
       >
-        <el-row
-          v-for="r in allRegions"
-          :key="r.id"
-          type="flex"
-        >
+        <el-row v-for="r in allRegions" :key="r.id" type="flex">
           <el-col>
-            <el-checkbox
-              :label="r.id"
-              :value="r.id"
-            >
+            <el-checkbox :label="r.id" :value="r.id">
               {{ r.name }}
             </el-checkbox>
           </el-col>
@@ -109,35 +104,35 @@ export default {
 
         method = 'post'
         url = `/api/v1/xpack/cloud/regions/?provider=${this.provider}&category=${category}`
-        data = { 'attrs': encryptAttrsField(attrs) }
+        data = { attrs: encryptAttrsField(attrs) }
       }
 
       this.content = this.$t('Loading')
 
-      this.$axios[method](url, data).then(resp => {
-        this.allRegions = resp?.regions
-        this.regionVisible = true
-        this.updateCheckedStatus()
-      }).catch(() => {
-        this.$message.error(this.$tc('CloudRegionTip'))
-      }).finally(() => {
-        this.refreshContent()
-      })
+      this.$axios[method](url, data)
+        .then((resp) => {
+          this.allRegions = resp?.regions
+          this.regionVisible = true
+          this.updateCheckedStatus()
+        })
+        .catch(() => {
+          this.$message.error(this.$tc('CloudRegionTip'))
+        })
+        .finally(() => {
+          this.refreshContent()
+        })
     },
     handleCheckedAllChange(val) {
-      this.checkedRegion = val ? this.allRegions.map(region => region.id) : []
-      this.isIndeterminate = false
-      this.checkAll = !!val
-      this.$emit('input', [])
-      this.refreshContent()
+      this.checkedRegion = val ? this.allRegions.map((region) => region.id) : []
+      this.handleCheckedRegionChange(this.checkedRegion)
     },
     handleCheckedRegionChange(value) {
       const checkedCount = value.length
-      this.checkAll = checkedCount === 0 || checkedCount === this.allRegions.length
+      this.checkAll = checkedCount > 0 && checkedCount === this.allRegions.length
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.allRegions.length
 
       const region = this.allRegions
-        .filter(item => value.includes(item.id))
+        .filter((item) => value.includes(item.id))
         .reduce((acc, region) => {
           acc[region.id] = region.name
           return acc
@@ -147,17 +142,34 @@ export default {
       this.refreshContent()
     },
     updateCheckedStatus() {
-      const checkedCount = this.checkedRegion.length
-      this.checkAll = checkedCount === this.allRegions.length
-      if (checkedCount === 0 || checkedCount === this.allRegions.length) {
-        this.handleCheckedAllChange(this.allRegions)
-      }
+      this.handleCheckedRegionChange(this.checkedRegion)
     }
   }
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
+.region-panel {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+}
+
+.region-trigger {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  line-height: 30px;
+  font-size: 13px;
+
+  :deep(.el-icon) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 4px;
+  }
+}
+
 .el-checkbox {
   margin-bottom: 10px;
 }
@@ -166,8 +178,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
 
-  ::v-deep .el-col {
-
+  :deep(.el-col) {
     .el-checkbox {
       display: flex;
       align-items: center;

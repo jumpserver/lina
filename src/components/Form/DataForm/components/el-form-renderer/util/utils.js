@@ -6,7 +6,7 @@ export function noop() {}
 export function collect(content, key) {
   return _frompairs(
     content
-      .map(item => ({
+      .map((item) => ({
         id: item.id,
         type: item.type,
         value: item.type === 'group' ? collect(item.items, key) : item[key]
@@ -25,8 +25,8 @@ export function collect(content, key) {
  * 3. 如果是，则递归执行步骤 1 到 3
  */
 export function mergeValue(oldV, newV, content) {
-  Object.keys(newV).forEach(k => {
-    const item = content.find(item => item.id === k)
+  Object.keys(newV).forEach((k) => {
+    const item = content.find((item) => item.id === k)
     if (!item) return
     if (item.type !== 'group') oldV[k] = newV[k]
     else mergeValue(oldV[k], newV[k], item.items)
@@ -39,8 +39,8 @@ export function mergeValue(oldV, newV, content) {
  */
 export function transformOutputValue(value, content) {
   const newVal = {}
-  Object.keys(value).forEach(id => {
-    const item = content.find(item => item.id === id)
+  Object.keys(value).forEach((id) => {
+    const item = content.find((item) => item.id === id)
     if (item.type !== 'group') {
       if (item.outputFormat) {
         const v = item.outputFormat(value[id])
@@ -64,7 +64,7 @@ export function transformOutputValue(value, content) {
  */
 export function transformInputValue(value, content) {
   const newVal = {}
-  content.forEach(item => {
+  content.forEach((item) => {
     const { id } = item
     if (item.inputFormat) {
       const v = item.inputFormat(value)

@@ -13,24 +13,28 @@
         :title="$tc('AssignedInfo')"
       />
       <slot id="MoreDetails" />
-      <Comments :object="object" v-bind="$attrs" />
+      <Comments v-bind="$attrs" :object="object" />
     </el-col>
     <el-col :md="7" :sm="24">
       <Steps :object="object" />
-      <Session v-perms="'tickets.view_ticket'" :object="object" />
+      <Session v-if="$hasPerm('tickets.view_ticket')" :object="object" />
     </el-col>
   </el-row>
 </template>
 
-<script>
-import Details from './Details'
+<script lang="jsx">
 import Comments from './Comments'
-import Steps from './Steps'
+import Details from './Details'
 import Session from './Session'
-
+import Steps from './Steps'
 export default {
   name: 'GenericTicketDetail',
-  components: { Steps, Comments, Details, Session },
+  components: {
+    Steps,
+    Comments,
+    Details,
+    Session
+  },
   props: {
     object: {
       type: Object,
@@ -38,7 +42,7 @@ export default {
     },
     specialCardItems: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     detailCardItems: {
       type: Array,
@@ -46,7 +50,7 @@ export default {
     },
     assignedCardItems: {
       type: Array,
-      default: () => ([])
+      default: () => []
     }
   },
   data() {
@@ -76,7 +80,11 @@ export default {
           value: object.state.value,
           formatter: (item, val) => {
             const tp = this.statusMap[val]
-            return <el-tag type={tp} size='small'>{this.object.state.label}</el-tag>
+            return (
+              <el-tag type={tp} size="small">
+                {this.object.state.label}
+              </el-tag>
+            )
           }
         },
         {
@@ -102,6 +110,5 @@ export default {
       ]
     }
   }
-
 }
 </script>

@@ -1,20 +1,20 @@
 <template>
   <DetailFormatter :col="col" :row="row">
-    <template>
-      <el-popover
-        :open-delay="parseInt('500')"
-        :title="title"
-        placement="top-start"
-        trigger="hover"
-        width="400"
-      >
-        <el-row v-for="(item, key) of items" :key="key" class="detail-item">
-          <el-col :span="12">{{ formatterArgs.info[key] }}</el-col>
-          <el-col :span="12">{{ item }}</el-col>
-        </el-row>
-        <span slot="reference">{{ viewText }}</span>
-      </el-popover>
-    </template>
+    <el-popover
+      :show-after="parseInt('500')"
+      :title="title"
+      placement="top-start"
+      trigger="hover"
+      width="400"
+    >
+      <el-row v-for="(item, key) of items" :key="key" class="detail-item">
+        <el-col :span="12">{{ formatterArgs.info[key] }}</el-col>
+        <el-col :span="12">{{ item }}</el-col>
+      </el-row>
+      <template #reference>
+        <span>{{ viewText }}</span>
+      </template>
+    </el-popover>
   </DetailFormatter>
 </template>
 
@@ -43,6 +43,9 @@ export default {
     title() {
       return `${this.$t('HardwareInfo')}`
     },
+    formatterArgs() {
+      return Object.assign({}, this.formatterArgsNew, this.col.formatterArgs)
+    },
     items() {
       const cellValue = { ...this.cellValue }
       const memory = this.cellValue?.memory
@@ -61,7 +64,7 @@ export default {
       let summary = ''
 
       if (cpuCount) {
-        const coreCount = cpuVcpus || (cpuCores * cpuCount)
+        const coreCount = cpuVcpus || cpuCores * cpuCount
         summary = `${coreCount} Core`
 
         if (memory) {
@@ -129,13 +132,12 @@ export default {
   overflow-y: auto;
 }
 .detail-item {
-  border-bottom: 1px solid #EBEEF5;
+  border-bottom: 1px solid #ebeef5;
   padding: 5px 0;
   margin-bottom: 0;
 
   &:hover {
-     background-color: #F5F7FA;
+    background-color: #f5f7fa;
   }
 }
-
 </style>

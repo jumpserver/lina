@@ -1,11 +1,6 @@
 <template>
-  <GenericDetailPage
-    :active-menu.sync="config.activeMenu"
-    :object.sync="asset"
-    v-bind="config"
-    v-on="$listeners"
-  >
-    <keep-alive>
+  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu" v-model:object="asset">
+    <keep-alive v-if="config.activeMenu">
       <component :is="config.activeMenu" :exclude="'Account'" :object="asset" />
     </keep-alive>
   </GenericDetailPage>

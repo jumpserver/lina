@@ -1,5 +1,9 @@
 <template>
-  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="execution" v-bind="config" v-on="$listeners">
+  <GenericDetailPage
+    v-bind="config"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="execution"
+  >
     <keep-alive>
       <component :is="config.activeMenu" :object="execution" />
     </keep-alive>
@@ -35,7 +39,6 @@ export default {
           }
         ],
         getTitle: this.getExecutionTitle
-
       }
     }
   },
@@ -47,6 +50,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

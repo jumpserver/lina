@@ -2,11 +2,15 @@ import i18n from '@/i18n/i18n'
 import request from '@/utils/request'
 
 export const Required = {
-  required: true, message: i18n.t('FieldRequiredError'), trigger: 'blur'
+  required: true,
+  message: i18n.t('FieldRequiredError'),
+  trigger: 'blur'
 }
 
 export const RequiredChange = {
-  required: true, message: i18n.t('FieldRequiredError'), trigger: 'change'
+  required: true,
+  message: i18n.t('FieldRequiredError'),
+  trigger: 'change'
 }
 
 export const EmailCheck = {
@@ -119,6 +123,7 @@ export default {
   matchAlphanumericUnderscore,
   MatchExcludeParenthesis
 }
+
 /**
  * @description 表单唯一性校验
  *
@@ -142,8 +147,8 @@ export function UniqueCheck(options = {}) {
   }
 
   function extractIds(res) {
-    if (Array.isArray(res)) return res.map(i => i?.id).filter(Boolean)
-    if (res && Array.isArray(res.results)) return res.results.map(i => i?.id).filter(Boolean)
+    if (Array.isArray(res)) return res.map((i) => i?.id).filter(Boolean)
+    if (res && Array.isArray(res.results)) return res.results.map((i) => i?.id).filter(Boolean)
     return []
   }
 
@@ -165,7 +170,7 @@ export function UniqueCheck(options = {}) {
             const ids = extractIds(res)
 
             // 查询结果只包含自身,因此不被视为重复
-            if (ids.length >= 1 && ids.every(id => id === curId)) {
+            if (ids.length >= 1 && ids.every((id) => id === curId)) {
               duplicated = false
             }
           }

@@ -1,30 +1,33 @@
 <template>
   <div>
     <Dialog
+      v-bind="$attrs"
+      v-model:visible="showSecret"
       :destroy-on-close="true"
       :show-cancel="false"
-      :title="title"
-      :visible.sync="showSecret"
-      :width="'50'"
-      v-bind="$attrs"
+      :title="iTitle"
+      width="720px"
       @confirm="accountConfirmHandle"
-      v-on="$listeners"
     >
       <el-form :model="secretInfo" class="password-form" label-position="right" label-width="100px">
         <el-form-item :label="$tc('OldSecret')">
           <SecretViewerFormatter
             :cell-value="secretInfo.old_secret"
-            :col="{ formatterArgs: {
-              name: 'old_secret'
-            }}"
+            :col="{
+              formatterArgs: {
+                name: 'old_secret'
+              }
+            }"
           />
         </el-form-item>
         <el-form-item :label="$tc('NewSecret')">
           <SecretViewerFormatter
             :cell-value="secretInfo.new_secret"
-            :col="{ formatterArgs: {
-              name: 'new_secret'
-            }}"
+            :col="{
+              formatterArgs: {
+                name: 'new_secret'
+              }
+            }"
           />
         </el-form-item>
       </el-form>
@@ -53,16 +56,15 @@ export default {
     },
     title: {
       type: String,
-      default: function() {
-        return this.$tc('ViewSecret')
-      }
+      default: ''
     }
   },
   data() {
     return {
       secretInfo: {},
       showSecret: false,
-      mfaDialogVisible: true
+      mfaDialogVisible: true,
+      iTitle: this.title || this.$tc('ViewSecret')
     }
   },
   computed: {},
@@ -88,48 +90,48 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .item-textarea ::v-deep .el-textarea__inner {
-    height: 110px;
+.item-textarea :deep(.el-textarea__inner) {
+  height: 110px;
+}
+
+.el-form-item {
+  border-bottom: 1px solid #ebeef5;
+  padding: 5px 0;
+  margin-bottom: 0;
+
+  &:last-child {
+    border-bottom: none;
   }
 
-  .el-form-item {
-    border-bottom: 1px solid #EBEEF5;
-    padding: 5px 0;
-    margin-bottom: 0;
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    ::v-deep .el-form-item__label {
-      padding-right: 20px;
-      line-height: 30px;
-    }
-
-    ::v-deep .el-form-item__content {
-      line-height: 30px;
-
-      pre {
-        margin: 0;
-      }
-    }
+  :deep(.el-form-item__label) {
+    padding-right: 20px;
+    line-height: 30px;
   }
 
-  ul {
-    margin: 0;
-  }
+  :deep(.el-form-item__content) {
+    line-height: 30px;
 
-  li {
-    display: block;
-    font-size: 13px;
-    margin-bottom: 8px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    .title {
-      color: #303133;
-      font-weight: 500;
+    pre {
+      margin: 0;
     }
   }
+}
+
+ul {
+  margin: 0;
+}
+
+li {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  .title {
+    color: #303133;
+    font-weight: 500;
+  }
+}
 </style>

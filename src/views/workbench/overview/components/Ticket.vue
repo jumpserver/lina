@@ -1,13 +1,13 @@
 <template>
-  <HomeCard :table-config="tableConfig" v-bind="cardConfig" />
+  <HomeCard v-bind="cardConfig" :table-config="tableConfig" />
 </template>
 
-<script>
-import HomeCard from './HomeCard'
-import { mapGetters } from 'vuex'
-import { toSafeLocalDateStr } from '@/utils/common/time'
+<script lang="jsx">
 import { DetailFormatter } from '@/components/Table/TableFormatters'
-
+import i18n from '@/i18n/i18n'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
+import { mapGetters } from 'vuex'
+import HomeCard from './HomeCard'
 export default {
   name: 'HomeAnnouncement',
   components: {
@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       cardConfig: {
-        title: this.$t('AwaitingMyApproval'),
+        title: i18n.global.t('AwaitingMyApproval'),
         icon: 'fa-check-square-o',
         dataArr: []
       },
@@ -31,10 +31,10 @@ export default {
         columns: ['title', 'applicant', 'type', 'status', 'date_created'],
         columnsMeta: {
           title: {
-            label: this.$t('Title'),
+            label: i18n.global.t('Title'),
             formatter: DetailFormatter,
             formatterArgs: {
-              getRoute: function({ row }) {
+              getRoute: function ({ row }) {
                 const type = row.type.value
                 if (type === 'apply_asset') {
                   return 'AssetsTicketDetail'
@@ -50,36 +50,45 @@ export default {
               }
             }
           },
-
           actions: {
             has: false
           },
           applicant: {
-            label: this.$t('User'),
-            formatter: row => {
+            label: i18n.global.t('User'),
+            formatter: (row) => {
               return row.rel_snapshot.applicant
             }
           },
           type: {
-            label: this.$t('Type'),
+            label: i18n.global.t('Type'),
             width: '130px',
-            formatter: row => {
+            formatter: (row) => {
               return row.type.label
             }
           },
           status: {
             align: 'center',
             width: '120px',
-            formatter: row => {
+            formatter: (row) => {
               if (row.status.value === 'open') {
-                return <el-tag type='primary' size='mini'> {this.$t('OpenStatus')}</el-tag>
+                return (
+                  <el-tag type="primary" size="small">
+                    {' '}
+                    {i18n.global.t('OpenStatus')}
+                  </el-tag>
+                )
               } else {
-                return <el-tag type='danger' size='mini'>  {this.$t('CloseStatus')}</el-tag>
+                return (
+                  <el-tag type="danger" size="small">
+                    {' '}
+                    {i18n.global.t('CloseStatus')}
+                  </el-tag>
+                )
               }
             }
           },
           date_created: {
-            label: this.$t('Date'),
+            label: i18n.global.t('Date'),
             formatter: (row) => toSafeLocalDateStr(row.date_created)
           }
         },
@@ -88,19 +97,15 @@ export default {
       }
     }
   },
-
   computed: {
-    ...mapGetters([
-      'currentUser'
-    ])
+    ...mapGetters(['currentUser'])
   },
   watch: {
     url(iNew) {
-      this.$set(this.tableConfig, 'url', `${iNew}?assignees__id=${this.currentUser.id}&state=pending`)
+      this.tableConfig['url'] = `${iNew}?assignees__id=${this.currentUser.id}&state=pending`
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

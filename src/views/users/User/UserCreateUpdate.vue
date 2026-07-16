@@ -1,16 +1,15 @@
 <template>
   <div v-loading="loading">
     <GenericCreateUpdatePage
+      v-bind="{ ...$data, ...$attrs }"
       v-if="!loading"
       class="user-create-update"
-      v-bind="$data"
-      @getObjectDone="afterGetUser"
-      v-on="$listeners"
+      @get-object-done="afterGetUser"
     />
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import store from '@/store'
 import { mapGetters } from 'vuex'
 import { Select2 } from '@/components'
@@ -18,7 +17,6 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import { PhoneInput, UserPassword } from '@/components/Form/FormFields'
 import rules from '@/components/Form/DataForm/rules'
 import { MFALevel, MFASystemSetting } from '../const'
-
 export default {
   components: {
     GenericCreateUpdatePage
@@ -33,14 +31,21 @@ export default {
         org_roles: []
       },
       user: {
-        'can_public_key_auth': false
+        can_public_key_auth: false
       },
       fields: [
         [this.$t('Basic'), ['name', 'username', 'email', 'groups']],
-        [this.$t('Authentication'), [
-          'password_strategy', 'update_password', 'password',
-          'need_update_password', 'mfa_level', 'source'
-        ]],
+        [
+          this.$t('Authentication'),
+          [
+            'password_strategy',
+            'update_password',
+            'password',
+            'need_update_password',
+            'mfa_level',
+            'source'
+          ]
+        ],
         [this.$t('Secure'), ['system_roles', 'org_roles', 'is_active', 'date_expired']],
         [this.$t('Other'), ['phone', 'comment']]
       ],
@@ -50,7 +55,10 @@ export default {
           uniqueCheck: true
         },
         username: {
-          uniqueCheck: true
+          uniqueCheck: true,
+          el: {
+            autocomplete: 'off'
+          }
         },
         password_strategy: {
           hidden: (formValue) => {
@@ -61,10 +69,7 @@ export default {
           disabled: false
         },
         email: {
-          rules: [
-            rules.EmailCheck,
-            rules.Required
-          ],
+          rules: [rules.EmailCheck, rules.Required],
           uniqueCheck: true
         },
         update_password: {
@@ -89,23 +94,17 @@ export default {
             return true
           },
           el: {
+            autocomplete: 'new-password',
             required: false,
             userIsOrgAdmin: false
           }
         },
         need_update_password: {
-          label: '',
-          type: 'checkbox-group',
-          component: null, // 覆盖默认生成的 component
-          el: {
-            style: 'margin-bottom: -10px'
-          },
-          options: [
-            {
-              label: this.$t('ResetPasswordNextLogin'),
-              value: true
-            }
-          ],
+          label: this.$t('ResetPasswordNextLogin'),
+          // 单个布尔开关，直接用内置 type: 'checkbox'（与上方 update_password 一致）。
+          // render-form-item 对 checkbox 会：valueProp 返回 undefined 不透传 :value（避免
+          // el-checkbox 把表单值当作分组 label 而卡住），并按 target.checked 归一成布尔。
+          type: 'checkbox',
           hidden: (formValue) => {
             if (formValue.source !== 'local') {
               return true
@@ -121,15 +120,16 @@ export default {
         },
         system_roles: {
           component: Select2,
-          rules: [
-            rules.Required
-          ],
+          rules: [rules.Required],
           el: {
             multiple: true,
             ajax: {
               url: '/api/v1/rbac/system-roles/?id!=00000000-0000-0000-0000-000000000004',
               transformOption: (item) => {
-                return { label: item.display_name, value: item.id }
+                return {
+                  label: item.display_name,
+                  value: item.id
+                }
               }
             }
           },
@@ -149,7 +149,7 @@ export default {
             }
             return (
               <el-link onClick={handleClick}>
-                <i class='fa fa-external-link'></i> {roleManage}
+                <i class="fa fa-external-link" /> {roleManage}
               </el-link>
             )
           },
@@ -158,16 +158,21 @@ export default {
             ajax: {
               url: '/api/v1/rbac/org-roles/',
               transformOption: (item) => {
-                return { label: item.display_name, value: item.id }
+                return {
+                  label: item.display_name,
+                  value: item.id
+                }
               }
             },
             disabled: this.$store.getters.currentOrgIsRoot,
             value: []
           },
           hidden: () => {
-            return !this.$store.getters.hasValidLicense ||
+            return (
+              !this.$store.getters.hasValidLicense ||
               !this.$hasPerm('rbac.add_orgrolebinding') ||
               this.$store.getters.currentOrgIsRoot
+            )
           }
         },
         groups: {
@@ -242,8 +247,10 @@ export default {
       this.user = user
       if (this.user.id === this.currentUser.id) {
         const fieldsToUpdate = ['system_roles', 'org_roles', 'is_active']
-        fieldsToUpdate.forEach(field => {
-          const msg = this.$t('disallowSelfUpdateFields', { attr: this.fieldsMeta[field]['label'] })
+        fieldsToUpdate.forEach((field) => {
+          const msg = this.$t('disallowSelfUpdateFields', {
+            attr: this.fieldsMeta[field]['label']
+          })
           this.fieldsMeta[field].el.disabled = true
           this.fieldsMeta[field].helpTip = msg
         })
@@ -256,25 +263,38 @@ export default {
     },
     async setDefaultRoles() {
       const roles = await this.$axios.get('/api/v1/rbac/roles/')
-      this.initial.system_roles = roles.filter(role => role.name === 'User').map(role => role.id)
-      this.initial.org_roles = roles.filter(role => role.name === 'OrgUser').map(role => role.id)
+      this.initial.system_roles = roles
+        .filter((role) => role.name === 'User')
+        .map((role) => role.id)
+      this.initial.org_roles = roles
+        .filter((role) => role.name === 'OrgUser')
+        .map((role) => role.id)
     },
     disableMFAFieldIfNeed(user) {
       let options = null
       let mfa_level = null
       // SECURITY_MFA_AUTH 0 不开启 1 全局开启 2 管理员开启
       const securityMFAAuth = store.getters.publicSettings['SECURITY_MFA_AUTH']
-      const adminUserIsNeed = (user?.is_superuser || user?.is_org_admin) && this.$route.params.action === 'update' &&
+      const adminUserIsNeed =
+        (user?.is_superuser || user?.is_org_admin) &&
+        this.$route.meta.action === 'update' &&
         securityMFAAuth === MFASystemSetting.onlyAdminUsers
       if (securityMFAAuth === MFASystemSetting.allUsers) {
-        options = [{ 'value': MFALevel.allUsers, 'label': this.$t('MFAAllUsers') }]
+        options = [
+          {
+            value: MFALevel.allUsers,
+            label: this.$t('MFAAllUsers')
+          }
+        ]
         mfa_level = MFALevel.allUsers
       }
       if (securityMFAAuth === MFASystemSetting.onlyAdminUsers && adminUserIsNeed) {
-        options = [{
-          'value': MFALevel.onlyAdminUsers,
-          'label': this.$t('MFAOnlyAdminUsers')
-        }]
+        options = [
+          {
+            value: MFALevel.onlyAdminUsers,
+            label: this.$t('MFAOnlyAdminUsers')
+          }
+        ]
         mfa_level = MFALevel.onlyAdminUsers
       }
       if (mfa_level !== null && options !== null) {
@@ -286,13 +306,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.user-create-update ::v-deep .el-form-item-need_update_password {
-  margin-top: -10px;
-
-  .el-form-item__content label {
-    line-height: 30px;
-  }
-}
-
-</style>
+<style lang="scss" scoped></style>

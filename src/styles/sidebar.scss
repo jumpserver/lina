@@ -1,12 +1,13 @@
-@import "./variables";
+@use './variables' as *;
 
 #app {
   .main-container {
     position: relative;
-    top: $headerHeight;
+    // 导航栏空间已由 .app-wrapper 的 padding-top 统一预留（见 layout/index.vue），
+    // 这里不再用 margin-top/top 二次下移，否则会与 padding 叠加出顶部空白。
     min-height: 100%;
-    height: calc(100vh - #{$headerHeight});
-    transition: margin-left .28s;
+    height: 100%;
+    transition: margin-left 0.28s;
     margin-left: $sideBarWidth;
   }
 
@@ -26,7 +27,10 @@
 
     // reset element-ui css
     .horizontal-collapse-transition {
-      transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out;
+      transition:
+        0s width ease-in-out,
+        0s padding-left ease-in-out,
+        0s padding-right ease-in-out;
     }
 
     .scrollbar-wrapper {
@@ -40,12 +44,16 @@
     .el-scrollbar {
       height: 100%;
       overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: color-mix(in srgb, var(--menu-text) 38%, var(--menu-bg)) var(--menu-bg);
     }
 
     &.has-logo {
       .el-scrollbar {
         margin-top: 5px;
-        height: calc(100% - #{$headerHeight} - 50px - 42px - 5px); // header-height, view-header, footer-height + bolder, margin-top
+        height: calc(
+          100% - #{$headerHeight} - 50px - 42px - 5px
+        ); // header-height, view-header, footer-height + bolder, margin-top
       }
     }
 
@@ -72,15 +80,13 @@
     .submenu-title-noDropdown {
       padding: 0 !important;
       position: relative;
-
     }
 
     .el-submenu-sidebar {
       overflow: hidden;
 
-      & > .el-submenu__title {
-
-        .el-submenu__icon-arrow {
+      & > .el-sub-menu__title {
+        .el-sub-menu__icon-arrow {
           display: none;
         }
       }
@@ -88,7 +94,7 @@
 
     .el-menu--collapse {
       .el-submenu-sidebar {
-        & > .el-submenu__title {
+        & > .el-sub-menu__title {
           & > span {
             height: 0;
             width: 0;
@@ -108,7 +114,7 @@
     }
 
     .sidebar-container {
-      transition: transform .28s;
+      transition: transform 0.28s;
       width: $sideBarWidth !important;
     }
 
@@ -128,4 +134,3 @@
     }
   }
 }
-

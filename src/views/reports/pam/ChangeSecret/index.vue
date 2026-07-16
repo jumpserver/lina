@@ -19,7 +19,6 @@
       <el-col :lg="8" :md="24">
         <DataSummary :days="days" class="data-summary" />
       </el-col>
-
     </el-row>
     <el-row>
       <AccountSummary :days="days" class="account-summary" />
@@ -38,6 +37,7 @@ import AccountSummary from './AccountSummary.vue'
 import FailedAccountSummary from './FailedAccountSummary.vue'
 import BaseReport from '../../base/BaseReport.vue'
 import { getRouteUrl } from '@/utils/vue'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 export default {
   name: 'ChangeSecret',
@@ -72,80 +72,82 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  %card-common {
-    background: #fff;
-    padding: 1.25rem;
-    height: 100%;
-    box-shadow: 0 1px 4px rgba(0,21,41,.08);
-    transition: all .3s;
+%card-common {
+  background: #fff;
+  padding: 1.25rem;
+  height: 100%;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  transition: all 0.3s;
 
-    ::v-deep {
-      .card-content {
-        padding-bottom: unset;
-        border-bottom: unset;
-      }
-
-      .ring {
-        display: none;
-      }
-
-      .el-card {
-        box-shadow: none;
-        border: none;
-      }
-
-      .el-card__body {
-        padding: 0;
-      }
-    }
+  :deep(.card-content) {
+    padding-bottom: unset;
+    border-bottom: unset;
   }
 
-  .change-secret-container {
-    min-width: 670px;
-  }
-
-  // .switch-date-wrapper {
-  //   margin-bottom: 1.25rem;
-  // }
-
-  .page ::v-deep .page-heading {
+  :deep(.ring) {
     display: none;
   }
 
-  .account-summary {
-    @extend %card-common;
-    margin-top: 1rem;
+  :deep(.el-card) {
+    box-shadow: none;
+    border: none;
   }
 
-  .failed-account-summary {
-    @extend %card-common;
+  :deep(.el-card__body) {
+    padding: 0;
+  }
+}
+
+.change-secret-container {
+  min-width: 670px;
+}
+
+// .switch-date-wrapper {
+//   margin-bottom: 1.25rem;
+// }
+
+.page :deep(.page-heading) {
+  display: none;
+}
+
+.account-summary {
+  @extend %card-common;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.failed-account-summary {
+  @extend %card-common;
+  width: 100%;
+  height: 100%;
+  margin-top: 16px;
+
+  :deep(#HomeCard .el-card.no-border) {
     height: 100%;
-    margin-top: 16px;
+    margin-bottom: unset !important;
 
-    ::v-deep #HomeCard .el-card.no-border {
-      height: 100%;
-      margin-bottom: unset !important;
-
-      .ListTable .el-pagination {
-        display: block;
-      }
+    .ListTable .el-pagination {
+      display: flex;
+      flex-wrap: wrap;
+      row-gap: 8px;
     }
   }
+}
 
-  .data-summary {
-    margin-left: 1rem;
-  }
+.data-summary {
+  margin-left: 1rem;
+}
 
-  .account-summary,
-  .data-summary,
-  .card-summary,
-  .failed-account-summary {
-    min-width: unset;
-  }
+.account-summary,
+.data-summary,
+.card-summary,
+.failed-account-summary {
+  min-width: unset;
+}
 
-  @media (max-width: 1200px) {
-    ::v-deep .data-summary {
-      margin-left: unset !important;
-    }
+@media (max-width: 1200px) {
+  :deep(.data-summary) {
+    margin-left: unset !important;
   }
+}
 </style>

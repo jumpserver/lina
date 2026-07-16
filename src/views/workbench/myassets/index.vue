@@ -2,6 +2,7 @@
   <Page>
     <GrantedAssets
       ref="grantedAssets"
+      class="my-assets-table"
       :actions="actions"
       :comment="comment"
       :name="name"
@@ -12,11 +13,11 @@
 </template>
 
 <script>
-import GrantedAssets from '@/components/Apps/GrantedAssets/index.vue'
-import Page from '@/layout/components/Page/index.vue'
-import { EditableInputFormatter } from '@/components/Table/TableFormatters'
 import { getPreference } from '@/api/settings'
-import { openNewWindow } from '@/utils/common/index'
+import GrantedAssets from '@/components/Apps/GrantedAssets/index.vue'
+import { EditableInputFormatter } from '@/components/Table/TableFormatters'
+import Page from '@/layout/components/Page/index.vue'
+import { addBasePath, openNewWindow } from '@/utils/common/index'
 
 export default {
   components: {
@@ -49,7 +50,7 @@ export default {
                   openNewWindow(url)
                 } else {
                   const url = `/luna/?login_to=${row.id}${oid ? `&oid=${oid}` : ''}`
-                  window.open(url, '_blank')
+                  window.open(addBasePath(url), '_blank')
                 }
               }
             },
@@ -97,7 +98,7 @@ export default {
     refreshAllFavorites() {
       const formatterArgs = this.actions.formatterArgs
       formatterArgs.loading = true
-      this.$axios.get('/api/v1/assets/favorite-assets/').then(resp => {
+      this.$axios.get('/api/v1/assets/favorite-assets/').then((resp) => {
         this.allFavorites = resp
         formatterArgs.loading = false
       })
@@ -113,7 +114,7 @@ export default {
     disfavor(assetId) {
       const url = `/api/v1/assets/favorite-assets/?asset=${assetId}`
       this.$axios.delete(url).then(() => {
-        this.allFavorites = this.allFavorites.filter(item => item['asset'] !== assetId)
+        this.allFavorites = this.allFavorites.filter((item) => item['asset'] !== assetId)
         this.$message.success(this.$t('UnFavoriteSucceed'))
       })
     },
@@ -127,7 +128,7 @@ export default {
     },
     checkFavorite(assetId) {
       let ok = false
-      this.allFavorites.forEach(element => {
+      this.allFavorites.forEach((element) => {
         if (element['asset'] === assetId) {
           ok = true
         }
@@ -140,16 +141,19 @@ export default {
       }
       const colProp = col.prop
 
-      this.$axios.post('/api/v1/assets/my-asset/', {
-        asset: row.id,
-        [colProp]: newValue
-      }).catch((e) => {
-        this.$message.error(e?.response?.request?.responseText || this.$t('BadRequestErrorMsg'))
-        return Promise.reject(e)
-      }).then(() => {
-        this.$set(row, colProp, newValue)
-        this.$message.success(this.$t('UpdateSuccessMsg'))
-      })
+      this.$axios
+        .post('/api/v1/assets/my-asset/', {
+          asset: row.id,
+          [colProp]: newValue
+        })
+        .catch((e) => {
+          this.$message.error(e?.response?.request?.responseText || this.$t('BadRequestErrorMsg'))
+          return Promise.reject(e)
+        })
+        .then(() => {
+          row[colProp] = newValue
+          this.$message.success(this.$t('UpdateSuccessMsg'))
+        })
     }
   }
 }
@@ -160,7 +164,9 @@ export default {
   border: 0 !important;
 }
 
-.row_disabled, .row_disabled:hover, .row_disabled:hover > td {
+.row_disabled,
+.row_disabled:hover,
+.row_disabled:hover > td {
   cursor: not-allowed;
   background-color: rgba(192, 196, 204, 0.28) !important;
 }
@@ -168,6 +174,12 @@ export default {
 .link-more {
   margin-left: 10px;
   border-bottom: solid 1px;
-  font-size: 12px
+  font-size: 12px;
+}
+
+.my-assets-table .table-actions {
+  .el-button .el-tooltip__trigger .pre-icon .fa {
+    margin-right: 0px;
+  }
 }
 </style>

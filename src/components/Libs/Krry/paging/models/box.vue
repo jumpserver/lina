@@ -8,9 +8,7 @@
       >
         {{ title }}
       </el-checkbox>
-      <span class="check-number">
-        {{ checkedData.length }}/{{ districtListMock.length }}
-      </span>
+      <span class="check-number"> {{ checkedData.length }}/{{ districtListMock.length }} </span>
     </div>
     <div class="el-transfer-panel__body">
       <div
@@ -22,15 +20,15 @@
           :class="{ showClear: showClearBtn }"
           :placeholder="filterPlaceholder"
           autocomplete="off"
-          class="el-input__inner"
+          class="paging-filter__input el-input__inner"
           type="text"
           @change="handleKeyword"
-        >
-        <span class="el-input__prefix" style="left: 0">
-          <i class="el-input__icon el-icon-search" />
+        />
+        <span class="el-input__prefix">
+          <el-icon class="el-input__icon"><Search /></el-icon>
         </span>
         <span v-if="searchWord && showClearBtn" class="clear-input">
-          <i class="el-icon-circle-close" @click="clearInp" />
+          <el-icon @click="clearInp"><CircleClose /></el-icon>
         </span>
       </div>
       <el-checkbox-group
@@ -50,13 +48,13 @@
           <span v-sanitize="isHighlight ? filterHighlight(item.label) : item.label" />
         </el-checkbox>
       </el-checkbox-group>
-      <p v-else class="no-data">{{ this.$t('NoData') }}</p>
+      <p v-else class="no-data">{{ $t('NoData') }}</p>
     </div>
     <div class="vip-footer">
-      <el-button :disabled="disabledPre" class="v-page" plain small @click="prev">
+      <el-button :disabled="disabledPre" class="v-page" plain size="small" @click="prev">
         {{ pageTexts[0] || defaultPrev }}
       </el-button>
-      <el-button :disabled="disabledNex" class="v-page" plain small @click="next">
+      <el-button :disabled="disabledNex" class="v-page" plain size="small" @click="next">
         {{ pageTexts[1] || defaultNext }}
       </el-button>
     </div>
@@ -64,6 +62,8 @@
 </template>
 
 <script>
+import i18n from '@/i18n/i18n'
+
 export default {
   components: {},
   props: {
@@ -106,7 +106,7 @@ export default {
     },
     highlightColor: {
       type: String,
-      default: () => '#409EFF'
+      default: () => 'var(--color-primary)'
     },
     asyncSearchFlag: {
       // 是否设置了异步搜索方法
@@ -131,8 +131,8 @@ export default {
       asyncSearch: false, // 要执行异步搜索的标记
       asyncPageIndex: 1, // 异步分页的 pageIndex
       asyncSearchPageIndex: 1, // 异步搜索的 pageIndex,
-      defaultPrev: '< ' + this.$tc('PagePrev'),
-      defaultNext: this.$tc('PageNext') + ' >'
+      defaultPrev: '< ' + (i18n?.global?.tc?.('PagePrev') || 'Prev'),
+      defaultNext: (i18n?.global?.tc?.('PageNext') || 'Next') + ' >'
     }
   },
   watch: {
@@ -169,11 +169,7 @@ export default {
     handleKeyword() {
       this.asyncSearchPageIndex = 1
       this.asyncSearchFlag &&
-      this.$emit(
-        'get-data-by-keyword',
-        this.searchWord,
-        this.asyncSearchPageIndex
-      )
+        this.$emit('get-data-by-keyword', this.searchWord, this.asyncSearchPageIndex)
     },
     // 分页数据
     initData() {
@@ -185,9 +181,7 @@ export default {
     pageData() {
       this.checkedData = []
       if (this.total > 1 && this.pageIndex < this.total - 1) {
-        this.pageIndex === 0
-          ? (this.disabledPre = true)
-          : (this.disabledPre = false)
+        this.pageIndex === 0 ? (this.disabledPre = true) : (this.disabledPre = false)
         this.disabledNex = false
         this.districtListMock = this.dataShowList.slice(
           this.pageIndex * this.pageSize,
@@ -196,10 +190,7 @@ export default {
       } else {
         this.total > 1 ? (this.disabledPre = false) : (this.disabledPre = true)
         this.disabledNex = true
-        this.districtListMock = this.dataShowList.slice(
-          this.pageIndex * this.pageSize,
-          this.len
-        )
+        this.districtListMock = this.dataShowList.slice(this.pageIndex * this.pageSize, this.len)
       }
     },
     // 异步获取的数据，检查分页按钮可用性
@@ -222,14 +213,11 @@ export default {
         this.disabledPre = true
         this.asyncSearchFlag && this.asyncSearch
           ? this.$emit(
-            'get-data-by-keyword',
-            this.searchWord,
-            this.asyncSearchPageIndex <= 1 ? 1 : --this.asyncSearchPageIndex
-          )
-          : this.$emit(
-            'get-data',
-            this.asyncPageIndex <= 1 ? 1 : --this.asyncPageIndex
-          )
+              'get-data-by-keyword',
+              this.searchWord,
+              this.asyncSearchPageIndex <= 1 ? 1 : --this.asyncSearchPageIndex
+            )
+          : this.$emit('get-data', this.asyncPageIndex <= 1 ? 1 : --this.asyncPageIndex)
       } else {
         this.pageIndex > 0 && --this.pageIndex
         this.pageData()
@@ -241,11 +229,7 @@ export default {
         // 异步获取数据
         this.disabledNex = true
         this.asyncSearchFlag && this.asyncSearch
-          ? this.$emit(
-            'get-data-by-keyword',
-            this.searchWord,
-            ++this.asyncSearchPageIndex
-          )
+          ? this.$emit('get-data-by-keyword', this.searchWord, ++this.asyncSearchPageIndex)
           : this.$emit('get-data', ++this.asyncPageIndex)
       } else {
         this.pageIndex <= this.total - 1 && ++this.pageIndex
@@ -256,14 +240,15 @@ export default {
     handleCheckedChange(value) {
       const checkedCount = value.length
       this.checkAll = checkedCount === this.districtListMock.length
-      this.isIndeterminate =
-        checkedCount > 0 && checkedCount < this.districtListMock.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.districtListMock.length
       // 子传父
       this.$emit('check-district', value)
     },
     // 全选
     handleCheckAllChange(val) {
-      this.checkedData = val ? this.districtListMock.filter(val => !val.disabled).map((val) => val) : []
+      this.checkedData = val
+        ? this.districtListMock.filter((val) => !val.disabled).map((val) => val)
+        : []
       this.isIndeterminate = false
       // 子传父
       this.$emit('check-district', this.checkedData)
@@ -276,7 +261,10 @@ export default {
       label = label && label.trim()
       if (filterWord && label) {
         const reg = new RegExp(filterWord)
-        return label.replace(reg, `<span style="color: ${this.highlightColor}">${filterWord}</span>`)
+        return label.replace(
+          reg,
+          `<span style="color: ${this.highlightColor}">${filterWord}</span>`
+        )
       } else {
         return label
       }
@@ -286,16 +274,36 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .district-panel {
   width: 298px;
+  display: inline-block;
+  box-sizing: border-box;
+  vertical-align: middle;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--el-border-color, #dcdfe6);
+  border-radius: 4px;
 
   .el-transfer-panel__header {
-    .el-checkbox {
-      display: inline-block;
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    margin: 0;
+    padding: 0 15px;
+    box-sizing: border-box;
+    background: var(--el-fill-color-light, #f5f7fa);
+    border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
 
-      ::v-deep .el-checkbox__label {
+    .el-checkbox {
+      display: inline-flex;
+      align-items: center;
+      height: auto;
+      margin-right: 0;
+
+      :deep(.el-checkbox__label) {
         font-size: 14px;
+        line-height: 1;
       }
     }
   }
@@ -304,16 +312,57 @@ export default {
     height: 335px;
 
     .el-transfer-panel__filter {
-      margin: 6px 14px;
-      line-height: 0;
+      // 该 div 同时带了 EP 的 .el-input 类(inline-flex + width:100%),会把 input 与图标当作
+      // flex 项并排错位,且 width:100% 叠加左右 margin 会溢出面板。强制 block + width:auto:
+      // 块级自动填满(减去 margin),input 独占整行,图标绝对定位覆盖在左侧。
+      display: block;
+      width: auto;
+      // 该 div 还带 EP 的 .el-input 类,会被赋予固定 height:var(--el-input-height,32px);
+      // 这里改回 auto,让容器高度由内部 30px 的 input 决定,避免 32/30 错位
+      height: auto;
+      box-sizing: border-box;
+      position: relative;
+      // margin: 10px 15px;
+      line-height: normal;
 
-      .el-input__inner {
+      .paging-filter__input {
+        display: block;
+        width: 100%;
         height: 30px;
+        line-height: 30px;
+        box-sizing: border-box;
+        padding-left: 25px;
+        border: 1px solid var(--el-border-color, #dcdfe6);
+        border-radius: 4px;
+        font-size: 13px;
+
+        &:focus {
+          outline: none;
+          border-color: var(--el-color-primary);
+        }
       }
 
-      .showClear {
+      .el-input__prefix {
+        position: absolute;
+        height: 30px;
+        left: 15px;
+        top: 15px;
+        width: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--el-text-color-placeholder, #a8abb2);
+        pointer-events: none;
+
+        .el-input__icon {
+          height: 30px;
+          font-size: 14px;
+          margin: 0;
+        }
+      }
+
+      .paging-filter__input.showClear {
         padding-right: 30px;
-        border-radius: 0;
       }
 
       .clear-input {
@@ -355,12 +404,12 @@ export default {
       line-height: 28px;
       height: 28px;
 
-      ::v-deep .el-checkbox__label {
+      :deep(.el-checkbox__label) {
         font-weight: 400;
         line-height: 28px;
       }
 
-      ::v-deep .el-checkbox__input {
+      :deep(.el-checkbox__input) {
         top: 7px;
       }
     }
@@ -369,7 +418,8 @@ export default {
   .check-number {
     position: absolute;
     right: 15px;
-    top: 0;
+    top: 50%;
+    transform: translateY(-50%);
     color: #909399;
     font-size: 12px;
     font-weight: 400;
@@ -388,16 +438,21 @@ export default {
   .vip-footer {
     display: flex;
     position: relative;
+    width: 100%;
+    box-sizing: border-box;
     margin: 0;
     text-align: center;
     border-top: 1px solid #ebeef5;
 
     .v-page {
       width: 50%;
+      height: 30px;
+      padding: 0;
       border: none;
       margin: 0;
       border-radius: 0;
-      padding: 10px 15px;
+      font-size: 13px;
+      line-height: 1;
 
       &:first-child {
         border-right: 1px solid #ebeef5;

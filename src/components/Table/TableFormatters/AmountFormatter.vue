@@ -1,23 +1,27 @@
 <template>
   <DetailFormatter :col="col" :row="row" :prevent-click="formatterArgs.preventClick">
-    <template>
-      <el-popover
-        :disabled="!showItems"
-        :open-delay="500"
-        :title="title"
-        placement="top-start"
-        trigger="hover"
-        width="400"
-        @show="getAsyncItems"
-      >
-        <div class="detail-content">
-          <div v-for="[index, item] of Object.entries(items)" :key="getKey(item, index)" class="detail-item">
-            <span class="detail-item-name">{{ item }}</span>
-          </div>
+    <el-popover
+      :disabled="!showItems"
+      :show-after="500"
+      :title="title"
+      placement="top-start"
+      trigger="hover"
+      width="400"
+      @show="getAsyncItems"
+    >
+      <div class="detail-content">
+        <div
+          v-for="[index, item] of Object.entries(items)"
+          :key="getKey(item, index)"
+          class="detail-item"
+        >
+          <span class="detail-item-name">{{ item }}</span>
         </div>
-        <span slot="reference">{{ amount }}</span>
-      </el-popover>
-    </template>
+      </div>
+      <template #reference>
+        <span>{{ amount }}</span>
+      </template>
+    </el-popover>
   </DetailFormatter>
 </template>
 
@@ -52,14 +56,18 @@ export default {
     const formatterArgs = Object.assign(this.formatterArgsDefault, this.col.formatterArgs || {})
     return {
       formatterArgs: formatterArgs,
-      listData: formatterArgs.async ? [] : (this.cellValue || []),
+      listData: formatterArgs.async ? [] : this.cellValue || [],
       amount: '',
       asyncGetDone: false
     }
   },
   computed: {
     title() {
-      return this.formatterArgs.title || this.col.label.replace('amount', '').replace('数量', '')
+      if (this.formatterArgs.title) {
+        return this.formatterArgs.title
+      }
+      const label = this.col?.label || this.col?.prop || ''
+      return String(label).replace('amount', '').replace('数量', '')
     },
     cellValueToRemove() {
       return this.formatterArgs.cellValueToRemove || []
@@ -68,17 +76,19 @@ export default {
       if (this.formatterArgs.async && !this.asyncGetDone) {
         return [this.$t('Loading') + '...']
       }
-      const getItem = this.formatterArgs.getItem || (item => item.name)
+      const getItem = this.formatterArgs.getItem || ((item) => item.name)
 
       let data = []
 
       if (Array.isArray(this.listData)) {
-        data = this.listData.map(item => getItem(item)).filter(Boolean)
+        data = this.listData.map((item) => getItem(item)).filter(Boolean)
       } else if (this.listData && typeof this.listData === 'object') {
-        data = Object.entries(this.listData).map(([key, value]) => {
-          const item = { key: key, value: value }
-          return getItem(item)
-        }).filter(Boolean)
+        data = Object.entries(this.listData)
+          .map(([key, value]) => {
+            const item = { key: key, value: value }
+            return getItem(item)
+          })
+          .filter(Boolean)
       }
 
       return data
@@ -107,12 +117,15 @@ export default {
         let cellValue = []
         if (Array.isArray(this.cellValue)) {
           cellValue = this.cellValue
-        } else {
-          // object {key: [value]}
+        } else if (this.cellValue && typeof this.cellValue === 'object') {
           cellValue = Object.keys(this.cellValue)
+        } else {
+          cellValue = []
         }
 
-        this.amount = (cellValue?.filter(value => !this.cellValueToRemove.includes(value)) || []).length
+        this.amount = (
+          cellValue?.filter((value) => !this.cellValueToRemove.includes(value)) || []
+        ).length
       }
     },
     getKey(item, index) {
@@ -132,7 +145,8 @@ export default {
       }
       const url = this.formatterArgs.ajax.url || this.getDefaultUrl()
       const params = this.formatterArgs.ajax.params || {}
-      const transform = this.formatterArgs.ajax.transform || (resp => resp[this.col.prop.replace('_amount', '')])
+      const transform =
+        this.formatterArgs.ajax.transform || ((resp) => resp[this.col.prop.replace('_amount', '')])
       const response = await this.$axios.get(url, { params: params })
       this.listData = transform(response)
       this.asyncGetDone = true
@@ -154,11 +168,11 @@ export default {
   margin-bottom: 0;
 
   &:hover {
-    background-color: #F5F7FA;
+    background-color: #f5f7fa;
   }
 }
 
-::v-deep .detail {
+:deep(.detail) {
   padding: 0 5px;
 }
 

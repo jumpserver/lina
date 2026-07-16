@@ -1,19 +1,22 @@
 <template>
-  <span>
-    <el-radio-group
-      v-model="select"
-      class="switch"
-      size="mini"
-      @change="onChange"
+  <span class="switch" role="group">
+    <button
+      v-for="i in iOptions"
+      :key="i.value"
+      type="button"
+      class="switch-date-button"
+      :class="{ 'is-active': String(i.value) === String(select) }"
+      :aria-pressed="String(i.value) === String(select)"
+      @click="onChange(i.value)"
     >
-      <el-radio-button v-for="i in iOptions" :key="i.value" :label="i.value">
-        {{ i.label }}
-      </el-radio-button>
-    </el-radio-group>
+      {{ i.label }}
+    </button>
   </span>
 </template>
 
 <script>
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
+
 export default {
   props: {
     name: {
@@ -45,8 +48,15 @@ export default {
       }
     ]
     return {
-      select: this.days,
+      select: this.days == null ? null : String(this.days),
       iOptions: this.options.length > 0 ? this.options : defaultOptions
+    }
+  },
+  watch: {
+    days(val) {
+      if (val != null && String(val) !== this.select) {
+        this.select = String(val)
+      }
     }
   },
   created() {
@@ -60,9 +70,9 @@ export default {
     if (!days) {
       days = '7'
     }
-    if (days && days !== this.select) {
-      this.select = days
-      this.$emit('change', days)
+    if (days && String(days) !== this.select) {
+      this.select = String(days)
+      this.$emit('change', this.select)
     }
   },
   mounted() {
@@ -70,34 +80,54 @@ export default {
   },
   methods: {
     onChange(val) {
-      localStorage.setItem(this.name, val)
-      this.$emit('change', val)
+      const days = String(val)
+      this.select = days
+      localStorage.setItem(this.name, days)
+      this.$emit('change', days)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-$origin-color: #ffffff;
-
 .switch {
+  display: inline-flex;
   font-weight: 400;
+  vertical-align: middle;
 
-  ::v-deep .el-radio-button {
-    &.is-active {
-      .el-radio-button__inner {
-        border-color: var(--color-primary);
-        color: var(--color-primary);
-        background-color: $origin-color;
-      }
+  .switch-date-button {
+    min-width: 64px;
+    height: 28px;
+    padding: 7px 15px;
+    margin: 0 0 0 -1px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    outline: none;
+
+    &:first-child {
+      margin-left: 0;
     }
-  }
 
-  ::v-deep .el-radio-button {
-    .el-radio-button__inner {
-      color: var(--color-text-primary);
-      background: $origin-color;
-      border-radius: 0;
+    &:hover,
+    &:focus-visible {
+      position: relative;
+      z-index: 1;
+      color: var(--color-primary);
+      border-color: var(--color-primary);
+    }
+
+    &.is-active {
+      position: relative;
+      z-index: 2;
+      color: var(--menu-active-text, var(--menu-text-active));
+      background: var(--menu-hover);
+      border-color: var(--color-primary);
     }
   }
 }

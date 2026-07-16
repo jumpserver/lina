@@ -5,7 +5,8 @@
     :selected-rows="selectedRows"
     :tips="tips"
     :visible="visible"
-    v-on="$listeners"
+    @update="$emit('update', $event)"
+    @update:visible="$emit('update:visible', $event)"
   />
 </template>
 
@@ -18,6 +19,7 @@ export default {
   components: {
     GenericUpdateFormDialog
   },
+  emits: ['update', 'update:visible'],
   props: {
     visible: {
       type: Boolean,
@@ -25,7 +27,7 @@ export default {
     },
     selectedRows: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     category: {
       type: String,
@@ -53,9 +55,7 @@ export default {
                 }
               }
             },
-            rules: [
-              { required: false }
-            ],
+            rules: [{ required: false }],
             label: this.$t('Platform'),
             helpText: this.$t('UpdatePlatformHelpText')
           },
@@ -87,6 +87,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

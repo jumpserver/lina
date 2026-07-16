@@ -1,37 +1,84 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm submit-method="patch" v-bind="config" />
-    <WatermarkHelpDialog :variables="sessionVariables" :visible.sync="showSessionHelpDialog" />
-    <WatermarkHelpDialog :variables="consoleVariables" :visible.sync="showConsoleHelpDialog" />
+    <GenericCreateUpdateForm v-bind="config" submit-method="patch" />
+    <WatermarkHelpDialog v-model:visible="showSessionHelpDialog" :variables="sessionVariables" />
+    <WatermarkHelpDialog v-model:visible="showConsoleHelpDialog" :variables="consoleVariables" />
   </IBox>
 </template>
 
-<script>
+<script lang="jsx">
+import WatermarkHelpDialog from '@/components/Apps/VariablesHelpTextDialog'
 import IBox from '@/components/Common/IBox/index.vue'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index.vue'
-import WatermarkHelpDialog from '@/components/Apps/VariablesHelpTextDialog'
-
 export default {
   name: 'SessionSecurity',
-  components: { GenericCreateUpdateForm, IBox, WatermarkHelpDialog },
+  components: {
+    GenericCreateUpdateForm,
+    IBox,
+    WatermarkHelpDialog
+  },
   data() {
     return {
       showSessionHelpDialog: false,
       showConsoleHelpDialog: false,
       sessionVariables: [
-        { name: 'userId', label: this.$t('userId'), default: '00000000-0000-0000-0000-000000000001' },
-        { name: 'name', label: this.$t('name'), default: '张三' },
-        { name: 'userName', label: this.$t('userName'), default: 'zhangsan' },
-        { name: 'currentTime', label: this.$t('currentTime'), default: '2025-06-01 12:00:00' },
-        { name: 'assetId', label: this.$t('assetId'), default: '00000000-0000-0000-0000-000000000001' },
-        { name: 'assetName', label: this.$t('assetName'), default: '服务器01' },
-        { name: 'assetAddress', label: this.$t('assetAddress'), default: '192.168.1.1' }
+        {
+          name: 'userId',
+          label: this.$t('userId'),
+          default: '00000000-0000-0000-0000-000000000001'
+        },
+        {
+          name: 'name',
+          label: this.$t('name'),
+          default: '张三'
+        },
+        {
+          name: 'userName',
+          label: this.$t('userName'),
+          default: 'zhangsan'
+        },
+        {
+          name: 'currentTime',
+          label: this.$t('currentTime'),
+          default: '2025-06-01 12:00:00'
+        },
+        {
+          name: 'assetId',
+          label: this.$t('assetId'),
+          default: '00000000-0000-0000-0000-000000000001'
+        },
+        {
+          name: 'assetName',
+          label: this.$t('assetName'),
+          default: '服务器01'
+        },
+        {
+          name: 'assetAddress',
+          label: this.$t('assetAddress'),
+          default: '192.168.1.1'
+        }
       ],
       consoleVariables: [
-        { name: 'userId', label: this.$t('userId'), default: '00000000-0000-0000-0000-000000000001' },
-        { name: 'name', label: this.$t('name'), default: '张三' },
-        { name: 'userName', label: this.$t('userName'), default: 'zhangsan' },
-        { name: 'currentTime', label: this.$t('currentTime'), default: '2025-06-01 12:00:00' }
+        {
+          name: 'userId',
+          label: this.$t('userId'),
+          default: '00000000-0000-0000-0000-000000000001'
+        },
+        {
+          name: 'name',
+          label: this.$t('name'),
+          default: '张三'
+        },
+        {
+          name: 'userName',
+          label: this.$t('userName'),
+          default: 'zhangsan'
+        },
+        {
+          name: 'currentTime',
+          label: this.$t('currentTime'),
+          default: '2025-06-01 12:00:00'
+        }
       ],
       config: {
         url: '/api/v1/settings/setting/?category=security_session',
@@ -49,16 +96,18 @@ export default {
           ],
           [
             this.$t('Watermark'),
-            this.$store.getters.hasValidLicense ? [
-              'SECURITY_WATERMARK_ENABLED',
-              'SECURITY_WATERMARK_SESSION_CONTENT',
-              'SECURITY_WATERMARK_CONSOLE_CONTENT',
-              'SECURITY_WATERMARK_COLOR',
-              'SECURITY_WATERMARK_FONT_SIZE',
-              'SECURITY_WATERMARK_HEIGHT',
-              'SECURITY_WATERMARK_WIDTH',
-              'SECURITY_WATERMARK_ROTATE'
-            ] : ['SECURITY_WATERMARK_ENABLED']
+            this.$store.getters.hasValidLicense
+              ? [
+                  'SECURITY_WATERMARK_ENABLED',
+                  'SECURITY_WATERMARK_SESSION_CONTENT',
+                  'SECURITY_WATERMARK_CONSOLE_CONTENT',
+                  'SECURITY_WATERMARK_COLOR',
+                  'SECURITY_WATERMARK_FONT_SIZE',
+                  'SECURITY_WATERMARK_HEIGHT',
+                  'SECURITY_WATERMARK_WIDTH',
+                  'SECURITY_WATERMARK_ROTATE'
+                ]
+              : ['SECURITY_WATERMARK_ENABLED']
           ]
         ],
         fieldsMeta: {
@@ -68,7 +117,9 @@ export default {
                 this.showSessionHelpDialog = true
               }
               return (
-                <i onClick={handleClick} class='fa fa-question-circle' style='cursor: pointer'>{this.$t('Help')}</i>
+                <i onClick={handleClick} class="fa fa-question-circle" style="cursor: pointer">
+                  {this.$t('Help')}
+                </i>
               )
             }
           },
@@ -78,7 +129,9 @@ export default {
                 this.showConsoleHelpDialog = true
               }
               return (
-                <i onClick={handleClick} class='fa fa-question-circle' style='cursor: pointer'>{this.$t('Help')}</i>
+                <i onClick={handleClick} class="fa fa-question-circle" style="cursor: pointer">
+                  {this.$t('Help')}
+                </i>
               )
             }
           },
@@ -102,13 +155,14 @@ export default {
         },
         onSubmit: async (validValues) => {
           const url = '/api/v1/settings/setting/?category=security_session'
-
           try {
             const res = await this.$axios.patch(url, validValues)
-
             if (res) {
               this.$message.success(this.$t('UpdateSuccessMsg'))
-              this.$store.commit('settings/SET_SECURITY_WATERMARK_ENABLED', res['SECURITY_WATERMARK_ENABLED'])
+              this.$store.commit(
+                'settings/SET_SECURITY_WATERMARK_ENABLED',
+                res['SECURITY_WATERMARK_ENABLED']
+              )
             }
           } catch (error) {
             throw new Error(error)

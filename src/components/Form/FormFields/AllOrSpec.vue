@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <el-radio-group v-model="type" @input="handleTypeChange">
-      <el-radio v-for="tp of types" :key="tp.name" :label="tp.name">
+  <div class="all-or-spec">
+    <el-radio-group v-model="type" @change="handleTypeChange">
+      <el-radio v-for="tp of types" :key="tp.name" :value="tp.name">
         {{ tp.label }}
       </el-radio>
     </el-radio-group>
-    <Select2 v-if="type === 'spec'" v-model="selected" v-bind="select2" @change="onChangeEmit" />
+    <Select2 v-bind="select2" v-if="type === 'spec'" v-model="selected" @change="onChangeEmit" />
   </div>
 </template>
 
@@ -18,7 +18,7 @@ export default {
   props: {
     value: {
       type: [Array],
-      default: () => ([])
+      default: () => []
     },
     select2: {
       type: Object,
@@ -71,6 +71,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.all-or-spec {
+  width: 100%;
 
+  :deep(.select2) {
+    width: 100%;
+  }
+}
 </style>

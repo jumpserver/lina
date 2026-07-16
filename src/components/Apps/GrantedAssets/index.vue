@@ -35,7 +35,7 @@ export default {
         const initialUrl = vm.tableConfig.initialUrl
         const nodeId = node.meta.data.id
         const url = initialUrl.replace('/assets/', `/nodes/${nodeId}/assets/`)
-        vm.tableConfig.url = url
+        vm.$refs.AssetTreeTable.updateTableUrl(url)
       }
     },
     actions: {
@@ -44,9 +44,7 @@ export default {
     },
     getShowUrl: {
       type: Function,
-      default({ row, col }) {
-        return this.tableUrl.replace('/assets/', `/assets/${row.id}/accounts/`)
-      }
+      default: ({ row, col }) => this.tableUrl.replace('/assets/', `/assets/${row.id}/accounts/`)
     },
     name: {
       type: Object,
@@ -85,7 +83,17 @@ export default {
         hasTree: true,
         columnsExtra: ['view_account'],
         columnsExclude: ['spec_info'],
-        columns: ['id', 'name', 'address', 'comment', 'labels', 'connectivity', 'platform', 'view_account', 'actions'],
+        columns: [
+          'id',
+          'name',
+          'address',
+          'comment',
+          'labels',
+          'connectivity',
+          'platform',
+          'view_account',
+          'actions'
+        ],
         columnsShow: {
           min: ['name', 'address', 'accounts'],
           default: ['name', 'address', 'platform', 'view_account', 'actions']
@@ -131,7 +139,9 @@ export default {
 </script>
 
 <style scoped>
-.row_disabled, .row_disabled:hover, .row_disabled:hover > td {
+.row_disabled,
+.row_disabled:hover,
+.row_disabled:hover > td {
   cursor: not-allowed;
   background-color: rgba(192, 196, 204, 0.28) !important;
 }

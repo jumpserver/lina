@@ -1,23 +1,32 @@
 <template>
   <div class="container">
-    <div v-if="hasPrompt" class="chat-action">
-      <Select2
-        v-model="select.value"
-        :disabled="isLoading || isSelectDisabled"
-        v-bind="select"
-        @change="onSelectChange"
-      />
+    <div class="chat-action">
+      <el-select
+        :model-value="selectedPrompt"
+        :disabled="isLoading || promptsLoading"
+        :loading="promptsLoading"
+        :placeholder="$t('Role')"
+        clearable
+        @update:model-value="onSelectPrompt"
+      >
+        <el-option
+          v-for="option in promptOptions"
+          :key="option.value"
+          :label="option.label"
+          :value="option.value"
+        />
+      </el-select>
     </div>
     <div class="chat-input">
       <el-input
         v-model="inputValue"
         :disabled="isLoading"
         :placeholder="$tc('InputMessage')"
-        :rows="expanded ? 3 :2"
+        :rows="expanded ? 3 : 2"
         type="textarea"
         @compositionend="isIM = false"
         @compositionstart="isIM = true"
-        @keypress.native="onKeyEnter"
+        @keypress="onKeyEnter"
       />
     </div>
   </div>
@@ -26,46 +35,38 @@
 <script>
 import { mapState } from 'vuex'
 import { useChat } from '../../useChat.js'
-import Select2 from '../../../../Form/FormFields/Select2.vue'
 
 const { setLoading } = useChat()
 
 export default {
-  components: { Select2 },
   props: {
     expanded: {
       type: Boolean,
       default: false
     },
-    hasPrompt: {
+    promptOptions: {
+      type: Array,
+      default: () => []
+    },
+    selectedPrompt: {
+      type: String,
+      default: ''
+    },
+    promptsLoading: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   data() {
     return {
       isIM: false,
-      inputValue: '',
-      select: {
-        url: '/api/v1/settings/chatai-prompts/',
-        value: '',
-        multiple: false,
-        placeholder: this.$t('Role'),
-        ajax: {
-          transformOption: (item) => {
-            return { label: item.name, value: item.content }
-          }
-        }
-      }
+      inputValue: ''
     }
   },
   computed: {
     ...mapState({
-      isLoading: state => state.chat.loading
-    }),
-    isSelectDisabled() {
-      return !!this.select.value
-    }
+      isLoading: (state) => state.chat.loading
+    })
   },
   methods: {
     onKeyEnter(event) {
@@ -83,8 +84,8 @@ export default {
       this.$emit('send', this.inputValue)
       this.inputValue = ''
     },
-    onSelectChange(value) {
-      this.$emit('select-prompt', value)
+    onSelectPrompt(value) {
+      this.$emit('select-prompt', value || '')
     }
   }
 }
@@ -100,25 +101,31 @@ export default {
     width: 100%;
     margin: 6px 0;
 
-    &::v-deep .el-select {
+    &:deep(.el-select) {
       width: 50%;
 
-      .el-input__inner {
+      .el-select__wrapper {
+        box-sizing: border-box;
+        min-height: 28px;
         height: 28px;
-        line-height: 28px;
         border-radius: 14px;
-        border-color: transparent;
+        border-color: rgba(0, 0, 0, 0);
+        box-shadow: 0 0 0 1px transparent inset;
         background-color: #f7f7f8;
         font-size: 13px;
         color: rgba(0, 0, 0, 0.45);
 
         &:hover {
           background-color: #ededed;
+          box-shadow: 0 0 0 1px transparent inset;
         }
       }
 
-      .el-input__icon {
-        line-height: 0;
+      .el-select__selected-item,
+      .el-select__placeholder,
+      .el-select__caret {
+        font-size: 13px;
+        color: rgba(0, 0, 0, 0.45);
       }
     }
   }
@@ -129,7 +136,7 @@ export default {
     flex-direction: column;
     border-radius: 12px;
 
-    &::v-deep .el-textarea {
+    &:deep(.el-textarea) {
       height: 100%;
 
       .el-textarea__inner {
@@ -141,15 +148,6 @@ export default {
         &::-webkit-scrollbar {
           width: 12px;
         }
-      }
-    }
-
-    .el-textarea.is-disabled + .input-action {
-      background-color: #F5F7FA;
-      cursor: no-drop;
-
-      i {
-        cursor: no-drop;
       }
     }
   }

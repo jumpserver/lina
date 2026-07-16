@@ -2,28 +2,25 @@
   <div class="term-wrapper">
     <div class="term-header">
       <div class="header-text">{{ $tc('Output') }}</div>
-      <div
-        v-if="executionInfo.status"
-        class="header-status"
-      >
+      <div v-if="executionInfo.status" class="header-status">
         <span class="status-item">
-          <el-link
-            @click="viewConfirmRunAssets"
-          >
+          <el-link @click="viewConfirmRunAssets">
             <span>{{ selectAssets.length }}</span>
           </el-link>
-          <span style="display: inline-block;" @click="viewConfirmRunAssets">
+          <span style="display: inline-block" @click="viewConfirmRunAssets">
             {{ $t('AssetsSelected') }}
           </span>
         </span>
         <span class="status-item">
           <span>{{ $tc('Status') }}: </span>
           <span
-            :class="{'status_success':executionInfo.status.value==='success',
-                     'status_warning':executionInfo.status.value==='timeout',
-                     'status_danger':executionInfo.status.value==='failed'
+            :class="{
+              status_success: executionInfo.status.value === 'success',
+              status_warning: executionInfo.status.value === 'timeout',
+              status_danger: executionInfo.status.value === 'failed'
             }"
-          >{{ $tc('' + executionInfo.status.label) }}</span>
+            >{{ $tc('' + executionInfo.status.label) }}</span
+          >
         </span>
         <span class="status-item">
           <span>{{ $tc('TimeDelta') }}: </span>
@@ -31,18 +28,13 @@
         </span>
       </div>
       <div v-if="showToolBar" class="actions">
-        <div
-          v-for="(item,index) in toolbar"
-          :key="index"
-          class="action-item"
-        >
-          <el-tooltip :content="item.tip" :open-delay="500">
-            <el-button
-              v-if="!item.isScrollButton || showScrollButton"
-              size="mini"
-              type="primary"
-              @click="item.callback()"
-            >
+        <div v-for="(item, index) in toolbar" :key="index" class="action-item">
+          <el-tooltip
+            v-if="!item.isScrollButton || showScrollButton"
+            :content="item.tip"
+            :show-after="500"
+          >
+            <el-button size="small" type="primary" @click="item.callback()">
               <svg-icon :icon-class="item.icon" />
             </el-button>
           </el-tooltip>
@@ -54,10 +46,11 @@
 </template>
 
 <script>
-import 'xterm/css/xterm.css'
+import { markRaw } from 'vue'
+import { downloadText } from '@/utils/common/index'
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
-import { downloadText } from '@/utils/common/index'
+import 'xterm/css/xterm.css'
 
 export default {
   name: 'Term',
@@ -70,8 +63,7 @@ export default {
     },
     xtermConfig: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     executionInfo: {
       type: Object,
@@ -85,18 +77,25 @@ export default {
   },
   data() {
     return {
-      xterm: new Terminal(Object.assign({
-        fontFamily: 'monaco, Consolas, "Lucida Console", monospace',
-        lineHeight: 1.2,
-        fontSize: 13,
-        scrollback: 9999999,
-        rightClickSelectsWord: true,
-        theme: {
-          background: '#fff',
-          foreground: '#000',
-          selection: '#363535'
-        }
-      }, this.xtermConfig)),
+      xterm: markRaw(
+        new Terminal(
+          Object.assign(
+            {
+              fontFamily: 'monaco, Consolas, "Lucida Console", monospace',
+              lineHeight: 1.2,
+              fontSize: 13,
+              scrollback: 9999999,
+              rightClickSelectsWord: true,
+              theme: {
+                background: '#fff',
+                foreground: '#000',
+                selection: '#363535'
+              }
+            },
+            this.xtermConfig
+          )
+        )
+      ),
       toolbar: [
         {
           tip: this.$tc('ScrollToTop'),
@@ -131,7 +130,7 @@ export default {
       showScrollButton: false
     }
   },
-  mounted: function() {
+  mounted: function () {
     const terminalContainer = this.$refs.terminal
     const fitAddon = new FitAddon()
     this.xterm.loadAddon(fitAddon)
@@ -140,14 +139,14 @@ export default {
     this.xterm.scrollToBottom()
     this.xterm.onScroll(this.checkScroll)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.xterm.dispose()
   },
   methods: {
-    reset: function() {
+    reset: function () {
       this.xterm.reset()
     },
-    write: function(val) {
+    write: function (val) {
       this.xterm.write(val)
     },
     checkScroll(position) {
@@ -173,23 +172,18 @@ export default {
     }
   }
 }
-
 </script>
 
 <style scoped lang="scss">
-$header-bg-color: #F5F6F7;
-$actions-hover-bg-color: #d2d2d2;
-
 .term-wrapper {
   position: relative;
 
   .term-header {
-    position: relative;
     display: flex;
     align-items: center;
     height: 45px;
-    padding-left: 15px;
-    background-color: $header-bg-color;
+    padding: 0 10px 0 15px;
+    background-color: var(--color-disabled-background);
 
     .header-text {
       font-size: 16px;
@@ -220,19 +214,18 @@ $actions-hover-bg-color: #d2d2d2;
     }
 
     .actions {
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
       display: flex;
-      justify-content: flex-end;
       align-items: center;
-      margin-right: 10px;
-      background-color: $header-bg-color;
+      justify-content: flex-end;
+      margin-left: auto;
 
       .action-item {
         display: flex;
         align-items: center;
+
+        :deep(.el-button > span) {
+          color: inherit;
+        }
 
         .el-button {
           border: none;
@@ -240,17 +233,13 @@ $actions-hover-bg-color: #d2d2d2;
           font-size: 14px;
           width: 26px;
           height: 26px;
-          color: #888;
-          background-color: transparent;
           margin-left: 2px;
+          color: var(--color-icon-primary);
+          background-color: transparent;
 
-          &:hover {
-            background-color: $actions-hover-bg-color !important;
-            color: var(--color-text-primary);
-          }
-
+          &:hover,
           &:focus {
-            background-color: $actions-hover-bg-color !important;
+            background-color: var(--color-border) !important;
             color: var(--color-text-primary);
           }
         }
@@ -261,7 +250,7 @@ $actions-hover-bg-color: #d2d2d2;
   .xterm {
     overflow: auto;
     padding: 10px 0 0 20px;
-    background-color: #FFFFFF;
+    background-color: #fff;
   }
 }
 </style>

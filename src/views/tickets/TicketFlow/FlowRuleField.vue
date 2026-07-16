@@ -1,10 +1,12 @@
 <template>
-  <div>
+  <div class="flow-rule-field">
     <div v-for="(item, i) of approveData" :key="i">
       <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span>{{ `${i + 1} ${$t('LevelApproval')}` }}</span>
-        </div>
+        <template #header>
+          <div class="clearfix">
+            <span>{{ `${i + 1} ${$t('LevelApproval')}` }}</span>
+          </div>
+        </template>
         <JSONManyToManySelect
           :value="item.users"
           :resource="userComponentMeta.el.resource"
@@ -25,6 +27,11 @@ export default {
   components: {
     JSONManyToManySelect
   },
+  // 根节点是 <div>。若不声明 emits / 关闭 inheritAttrs,DataForm 绑定的 onInput 等会落到根 div,
+  // 内部单选按钮(值 all/ids/attrs)的原生 input 事件冒泡上来即触发表单更新,把字符串(如 "ids")
+  // 当成整个 rules 的值(再经 cleanFormValue 的 slice 变成 "i"),污染 PUT 参数。
+  inheritAttrs: false,
+  emits: ['input'],
   props: {
     value: {
       type: [String, Array],
@@ -46,7 +53,7 @@ export default {
               {
                 match: 'm2m',
                 name: 'system_roles',
-                'value': ['00000000-0000-0000-0000-000000000001']
+                value: ['00000000-0000-0000-0000-000000000001']
               }
             ]
           }
@@ -85,7 +92,7 @@ export default {
       this.$emit('input', this.rules)
     },
     handleInput(index, event) {
-      this.$set(this.rules, index, { 'users': event })
+      this.rules[index] = { users: event }
       this.$emit('input', this.rules)
     }
   }
@@ -93,22 +100,28 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .text {
-    font-size: 14px;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  }
+.text {
+  font-size: 14px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
 
-  .item {
-    padding: 10px 0;
-  }
+.item {
+  padding: 10px 0;
+}
 
-  .box-card {
-    width: 96%;
-    margin-bottom: 10px;
-    box-shadow: unset !important;
+// 根容器需占满表单项内容区(其父 .el-form-item__content 为 flex+align-items:flex-start,
+// 不设宽度会按内容收缩,导致审批流程卡片无法 100%)
+.flow-rule-field {
+  width: 100%;
+}
 
-    ::v-deep .el-card__body {
-      padding: 10px 30px !important;
-    }
+.box-card {
+  width: 100%;
+  margin-bottom: 10px;
+  box-shadow: unset !important;
+
+  :deep(.el-card__body) {
+    padding: 10px 30px !important;
   }
+}
 </style>

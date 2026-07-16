@@ -2,27 +2,33 @@
   <div>
     <el-checkbox
       v-if="hasCheckAll && options.length > 0"
-      v-model="checkAll"
       :indeterminate="isIndeterminate"
+      :model-value="checkAll"
       @change="handleCheckAllChange"
+      @update:model-value="checkAll = $event"
     >
       {{ $tc('SelectAll') }}
     </el-checkbox>
-    <el-checkbox-group v-model="checked" @change="onChange">
+    <el-checkbox-group
+      :model-value="checked"
+      @change="onChange"
+      @update:model-value="checked = $event"
+    >
       <el-alert v-show="tipShow" type="error"> {{ noOptionTip }}</el-alert>
-      <el-checkbox v-for="item in options" :key="item.value" :label="item.value">{{ item.label }}</el-checkbox>
+      <el-checkbox v-for="item in options" :key="item.value" :label="item.value">{{
+        item.label
+      }}</el-checkbox>
     </el-checkbox-group>
   </div>
 </template>
 
 <script>
-
 export default {
   name: 'Checkbox',
   props: {
     value: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     url: {
       type: String,
@@ -86,8 +92,6 @@ export default {
     }
   }
 }
-
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

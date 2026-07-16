@@ -1,15 +1,15 @@
 <template>
   <el-select
     :disabled="disabled"
+    :model-value="currentOrgId"
     :placeholder="$tc('Select')"
-    :value="currentOrgId"
     class="org-select"
-    :style="{ width: selectWidth }"
+    :style="{ '--org-select-width': selectWidth }"
     filterable
     popper-class="switch-org"
     @change="changeOrg"
   >
-    <template slot="prefix">
+    <template #prefix>
       <svg-icon icon-class="organization" />
     </template>
 
@@ -66,7 +66,7 @@ export default {
       if (!currentOrgId) {
         return this.$tc('Select')
       }
-      const matchedOrg = this.usingOrgs.find(item => item.id === currentOrgId)
+      const matchedOrg = this.usingOrgs.find((item) => item.id === currentOrgId)
       if (matchedOrg?.name) {
         return matchedOrg.name
       }
@@ -104,8 +104,8 @@ export default {
       return [this.orgActionsGroup, this.orgChoicesGroup]
     },
     currentOrgId() {
-      const usingOrgIds = this.usingOrgs.map(o => o.id)
-      let currentOrgId = this.currentOrg.id
+      const usingOrgIds = this.usingOrgs.map((o) => o.id)
+      let currentOrgId = this.currentOrg?.id
       const find = usingOrgIds.indexOf(currentOrgId) > -1
       if (!find) {
         currentOrgId = null
@@ -145,14 +145,14 @@ export default {
         const textWidth = tempSpan.offsetWidth
 
         // 固定空间：左侧图标 + padding + 右侧箭头
-        const iconWidth = 15 // 左侧图标
-        const paddingWidth = 35 // 左右 padding
-        const arrowWidth = 20 // 右侧箭头
+        const iconWidth = 18
+        const paddingWidth = 48
+        const arrowWidth = 24
         const totalWidth = textWidth + iconWidth + paddingWidth + arrowWidth
 
         // 设置合理的边界
-        const minWidth = 100
-        const maxWidth = 400
+        const minWidth = 120
+        const maxWidth = 360
         const finalWidth = Math.max(minWidth, Math.min(maxWidth, totalWidth))
 
         this.selectWidth = finalWidth + 'px'
@@ -162,7 +162,7 @@ export default {
       })
     },
     changeOrg(orgId) {
-      const org = this.usingOrgs.find(item => item.id === orgId)
+      const org = this.usingOrgs.find((item) => item.id === orgId)
 
       switch (orgId) {
         case 'create':
@@ -172,6 +172,9 @@ export default {
           this.$router.push({ name: 'OrganizationList' })
           break
         default:
+          if (!org) {
+            return
+          }
           orgUtil.changeOrg(org, true, this)
       }
       this.updateWidth()
@@ -181,35 +184,72 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/styles/variables.scss';
+@use '@/styles/variables' as *;
 
 $height: 28px;
 
 .org-select {
+  display: flex;
+  align-items: center;
   line-height: $height;
-  background-color: var(--nav-header-bg, var(--color-primary));
-  transition: all 0.2s;
 
-  &:hover {
-    background-color: var(--nav-header-hover, var(--color-primary));
-  }
-}
-
-::v-deep .el-input {
-  .el-input__inner {
+  :deep(.el-select__wrapper) {
+    width: var(--org-select-width, 180px);
+    display: inline-flex;
     height: $height;
-    line-height: $height;
-    background: none;
+    padding: 0 12px;
+    border-radius: 2px;
     border: none;
-    padding-left: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: none;
+    transition:
+      background-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+  :deep(.el-select__wrapper.is-hovering:not(.is-focused)) {
+    .el-select__input {
+      cursor: pointer;
+    }
   }
 
-  .el-input__prefix {
-    left: 0;
+  :deep(.el-select__wrapper.is-hovering:not(.is-focused)),
+  :deep(.el-select__wrapper.is-focused) {
+    background: rgba(255, 255, 255, 0.14);
+    box-shadow: none;
+    border: none;
   }
 
-  .el-input__suffix > .el-input__suffix-inner i {
+  :deep(.el-select__wrapper.is-disabled) {
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+
+  :deep(.el-select__prefix),
+  :deep(.el-select__suffix) {
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  :deep(.el-select__selection) {
+    min-width: 0;
+  }
+
+  :deep(.el-select__selected-item),
+  :deep(.el-select__placeholder) {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     color: #fff;
+  }
+
+  :deep(.el-select__placeholder.is-transparent) {
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  :deep(.el-select__caret),
+  :deep(.svg-icon) {
+    color: #fff !important;
   }
 }
 
@@ -221,26 +261,23 @@ $height: 28px;
   .option-group {
     padding-right: 8px;
     padding-left: 8px;
+    margin-top: 8px;
     max-width: 400px;
 
-    ::v-deep .el-select-group__title {
+    :deep(.el-select-group__title) {
       color: var(--color-icon-primary);
-      padding-left: 15px;
-      font-size: 12px;
+      padding-left: 10px;
+      font-size: 13px;
       line-height: 30px;
     }
 
-    ::v-deep .el-select-dropdown__item {
+    :deep(.el-select-dropdown__item) {
       padding: 0 15px;
       line-height: 30px;
       height: 30px;
+      font-size: 12px;
     }
   }
-}
-
-.org-select ::v-deep .el-input.is-disabled .el-input__inner {
-  color: #ffffff !important;
-  background-color: transparent;
 }
 
 .icon {

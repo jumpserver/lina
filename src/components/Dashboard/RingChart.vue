@@ -1,10 +1,6 @@
 <template>
   <div>
-    <Echart
-      ref="echarts"
-      :autoresize="true"
-      :options="options"
-    />
+    <Echart ref="echarts" :autoresize="true" :options="options" />
   </div>
 </template>
 
@@ -20,8 +16,7 @@ export default {
   props: {
     config: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   computed: {
@@ -94,16 +89,8 @@ export default {
             minAngle: 5,
             radius: ['72%', '90%'],
             avoidLabelOverlap: false,
-            itemStyle: {
-              normal: {
-                label: {
-                  show: false
-                },
-                labelLine: {
-                  show: false
-                }
-
-              }
+            label: {
+              show: false
             },
             emphasis: {
               label: {

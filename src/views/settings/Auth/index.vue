@@ -1,5 +1,5 @@
 <template>
-  <TabPage v-if="!loading" :active-menu.sync="activeMenu" :submenu="submenu">
+  <TabPage v-if="!loading" v-model:active-menu="activeMenu" :submenu="submenu">
     <keep-alive>
       <component :is="activeMenu" />
     </keep-alive>
@@ -27,6 +27,7 @@ import Slack from './Slack.vue'
 import { getAuthItems } from './const'
 import { mapState } from 'vuex'
 import Integration from './Integration.vue'
+import UKey from './UKey.vue'
 
 export default {
   components: {
@@ -47,6 +48,7 @@ export default {
     OAuth2,
     Passkey,
     Slack,
+    UKey,
     Integration
   },
   data() {
@@ -58,7 +60,7 @@ export default {
   },
   computed: {
     ...mapState({
-      authMethodsSetting: state => state.settings.authMethods
+      authMethodsSetting: (state) => state.settings.authMethods
     }),
     submenu() {
       return [
@@ -70,7 +72,7 @@ export default {
           title: this.$t('Integration'),
           name: 'Integration'
         },
-        ...this.authMethods.map(item => {
+        ...this.authMethods.map((item) => {
           return {
             ...item,
             hidden: () => !this.authMethodsSetting[item.authKey]
@@ -89,9 +91,8 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-::v-deep .el-tabs__item .fa {
+<style lang="scss" scoped>
+:deep(.el-tabs__item .fa) {
   font-size: 11px;
 }
-
 </style>

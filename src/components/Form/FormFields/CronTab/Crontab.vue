@@ -1,6 +1,6 @@
 /* eslint-disable */
 <template>
-  <div>
+  <div class="crontab-root jms-form-controls">
     <el-tabs class="tab-content">
       <el-tab-pane v-if="shouldHide('min')" :label="$tc('Min')" class="crontab-panel">
         <CrontabMin
@@ -50,67 +50,60 @@
 
     <div class="popup-main">
       <div class="popup-result">
-        <p class="title">{{ this.$t('TimeExpression') }}</p>
-        <table>
-          <thead>
-            <th v-for="item of tabTitles" :key="item" width="40">{{ item }}</th>
-          </thead>
-          <tbody>
-            <td>
-              <el-input
-                v-model.trim="contabValueObj.min"
-                max="5"
-                min="0"
-                onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
-                size="mini"
-              />
-            </td>
-            <td>
-              <el-input
-                v-model.trim="contabValueObj.hour"
-                onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
-                size="mini"
-              />
-            </td>
-            <td>
-              <el-input
-                v-model.trim="contabValueObj.day"
-                onkeyup="value=value.replace(/[^\0-9\\-\*\,]/g,'')"
-                size="mini"
-              />
-            </td>
-            <td>
-              <el-input
-                v-model.trim="contabValueObj.month"
-                onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
-                size="mini"
-              />
-            </td>
-            <td>
-              <el-input
-                v-model.trim="contabValueObj.week"
-                onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
-                size="mini"
-              />
-            </td>
-          </tbody>
-        </table>
-        <CrontabResult :ex="contabValueString" @crontabDiffChange="crontabDiffChangeHandle" />
+        <p class="title">{{ $t('TimeExpression') }}</p>
+        <div class="cron-expression-grid">
+          <div class="cron-expression-field">
+            <label>{{ $t('Min') }}</label>
+            <el-input
+              v-model.trim="contabValueObj.min"
+              max="5"
+              min="0"
+              onkeyup="value = value.replace(/[^\0-9\-\*\,]/g, '')"
+              size="small"
+            />
+          </div>
+          <div class="cron-expression-field">
+            <label>{{ $t('Hour') }}</label>
+            <el-input
+              v-model.trim="contabValueObj.hour"
+              onkeyup="value = value.replace(/[^\0-9\-\*\,]/g, '')"
+              size="small"
+            />
+          </div>
+          <div class="cron-expression-field">
+            <label>{{ $t('Day') }}</label>
+            <el-input
+              v-model.trim="contabValueObj.day"
+              onkeyup="value = value.replace(/[^\0-9\\-\*\,]/g, '')"
+              size="small"
+            />
+          </div>
+          <div class="cron-expression-field">
+            <label>{{ $t('Month') }}</label>
+            <el-input
+              v-model.trim="contabValueObj.month"
+              onkeyup="value = value.replace(/[^\0-9\-\*\,]/g, '')"
+              size="small"
+            />
+          </div>
+          <div class="cron-expression-field">
+            <label>{{ $t('Week') }}</label>
+            <el-input
+              v-model.trim="contabValueObj.week"
+              onkeyup="value = value.replace(/[^\0-9\-\*\,]/g, '')"
+              size="small"
+            />
+          </div>
+        </div>
+        <CrontabResult :ex="contabValueString" @crontab-diff-change="crontabDiffChangeHandle" />
       </div>
 
       <div class="pop_btn">
-        <el-button
-          size="small"
-          @click="clearCron"
-        >
-          {{ this.$t('Reset') }}
+        <el-button size="small" @click="clearCron">
+          {{ $t('Reset') }}
         </el-button>
-        <el-button
-          size="small"
-          type="primary"
-          @click="submitFill"
-        >
-          {{ this.$t('Confirm') }}
+        <el-button size="small" type="primary" @click="submitFill">
+          {{ $t('Confirm') }}
         </el-button>
       </div>
     </div>
@@ -151,7 +144,6 @@ export default {
   },
   data() {
     return {
-      tabTitles: [this.$t('Min'), this.$t('Hour'), this.$t('Day'), this.$t('Month'), this.$t('Week')],
       tabActive: 0,
       myindex: 0,
       contabValueObj: {
@@ -171,20 +163,10 @@ export default {
     contabValueString: {
       get() {
         const obj = this.contabValueObj
-        const str =
-          obj.min +
-          ' ' +
-          obj.hour +
-          ' ' +
-          obj.day +
-          ' ' +
-          obj.month +
-          ' ' +
-          obj.week
+        const str = obj.min + ' ' + obj.hour + ' ' + obj.day + ' ' + obj.month + ' ' + obj.week
         return str
       },
-      set() {
-      }
+      set() {}
     }
   },
   watch: {
@@ -193,7 +175,7 @@ export default {
       // 隐藏部分组件
     }
   },
-  mounted: function() {
+  mounted: function () {
     this.resolveExp()
   },
   methods: {
@@ -392,18 +374,19 @@ export default {
   }
 }
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .pop_btn {
-  float: right;
-  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
 }
 
 .popup-main {
   position: relative;
-  margin: 10px auto 0;
+  margin: 0;
   background: #fff;
-  border-radius: 5px;
-  font-size: 12px;
+  font-size: 13px;
   overflow: hidden;
 }
 
@@ -418,9 +401,10 @@ export default {
   position: relative;
   box-sizing: border-box;
   line-height: 24px;
-  margin: 17px auto;
-  padding: 10px 10px 10px;
-  border: 1px solid #dcdfe6;
+  margin: 24px auto 0;
+  padding: 18px 16px 14px;
+  border: 1px solid var(--el-border-color);
+  background: #fff;
 }
 
 .popup-result .title {
@@ -435,37 +419,104 @@ export default {
   background: #fff;
 }
 
-.popup-result table {
-  text-align: center;
-  width: 100%;
-  margin: 0 auto;
+.cron-expression-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 10px;
 }
 
-.popup-result table span {
-  display: block;
-  width: 100%;
-  line-height: 30px;
-  height: 30px;
-  white-space: nowrap;
-  overflow: hidden;
+.cron-expression-field {
+  min-width: 0;
+
+  label {
+    display: block;
+    margin-bottom: 6px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 20px;
+    color: var(--color-text-primary);
+  }
 }
 
-.popup-result-scroll {
-  font-size: 12px;
-  line-height: 24px;
-  height: 10em;
-  overflow-y: auto;
-}
-
-::v-deep {
-  .el-form-item--mini.el-form-item,
-  .el-form-item--small.el-form-item {
+:deep(.el-form-item) {
+  &.el-form-item--small,
+  &.el-form-item--small {
     margin-bottom: 5px;
   }
 
   .el-input-number {
-    margin: 0 5px
+    margin: 0 5px;
   }
+}
+
+:deep(.cron-tab-form) {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .el-form-item {
+    margin-bottom: 0;
+  }
+
+  .el-form-item__content {
+    min-height: 30px;
+    line-height: 30px;
+    align-items: center;
+  }
+
+  .el-radio {
+    display: flex;
+    align-items: center;
+    margin-right: 0;
+    line-height: 30px;
+  }
+
+  .el-radio__input {
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    transform: translateY(-2px);
+  }
+
+  .el-radio__label {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    padding-left: 8px;
+    white-space: normal;
+    min-height: 30px;
+    line-height: 30px;
+  }
+}
+
+:deep(.cron-tab-form__text) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+}
+
+:deep(.cron-tab-form__group) {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 30px;
+  flex-wrap: wrap;
+}
+
+:deep(.cron-tab-form__separator) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 10px;
+  color: var(--color-text-primary);
+}
+
+:deep(.cron-tab-form__select) {
+  width: 220px;
 }
 
 .tab-content {
@@ -473,11 +524,79 @@ export default {
   box-sizing: border-box;
   line-height: 24px;
   margin: 0 auto;
-  padding: 10px 10px 10px;
-  border: 1px solid #dcdfe6;
+  padding: 12px 16px 14px;
+  border: 1px solid var(--el-border-color);
+  background: #fff;
 }
 
-::v-deep .el-tabs__header {
+.pop_btn :deep(.el-button) {
+  min-height: 30px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.crontab-root :deep(.el-input-number__increase),
+.crontab-root :deep(.el-input-number__decrease) {
+  border-radius: 0;
+}
+
+.crontab-root :deep(.cron-tab-form__number.el-input-number) {
+  --jms-input-padding-block: 0;
+  --jms-input-padding-inline: 8px;
+
+  width: 132px;
+  min-height: 30px;
+  height: 30px;
+  box-sizing: border-box;
+  border: 1px solid var(--el-border-color);
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: none !important;
+  background: #fff;
+}
+
+.crontab-root :deep(.cron-tab-form__number.el-input-number:hover),
+.crontab-root :deep(.cron-tab-form__number.el-input-number:focus-within) {
+  border-color: var(--el-color-primary);
+}
+
+.crontab-root :deep(.cron-tab-form__number.el-input-number .el-input) {
+  min-height: 28px;
+  height: 28px;
+}
+
+.crontab-root :deep(.cron-tab-form__number.el-input-number .el-input__wrapper) {
+  border: 0 !important;
+  box-shadow: none !important;
+  min-height: 28px;
+  height: 28px;
+}
+
+.crontab-root :deep(.cron-tab-form__number .el-input-number__increase),
+.crontab-root :deep(.cron-tab-form__number .el-input-number__decrease) {
+  box-shadow: none !important;
+  border-left: 1px solid var(--el-border-color) !important;
+  border-right: 0 !important;
+  top: 1px;
+  bottom: 1px;
+  background: #f5f7fa;
+}
+
+.crontab-root :deep(.cron-tab-form__number .el-input-number__decrease) {
+  border-left: 0 !important;
+  border-right: 1px solid var(--el-border-color) !important;
+}
+
+.crontab-root
+  :deep(.cron-tab-form__number .el-input-number__increase:hover ~ .el-input .el-input__wrapper),
+.crontab-root
+  :deep(.cron-tab-form__number .el-input-number__decrease:hover ~ .el-input .el-input__wrapper) {
+  box-shadow: none !important;
+}
+
+:deep(.el-tabs__header) {
   background-color: white;
   margin-top: -10px;
   padding: 0 30px;
@@ -499,11 +618,11 @@ export default {
 }
 
 .tab-page {
-  ::v-deep .page-heading {
+  :deep(.page-heading) {
     border-bottom: none;
   }
 
-  ::v-deep .page-content {
+  :deep(.page-content) {
     overflow-y: hidden;
     padding: 0;
   }
@@ -520,7 +639,7 @@ export default {
   }
 }
 
-::v-deep .el-tabs__nav-wrap {
+:deep(.el-tabs__nav-wrap) {
   position: static;
 }
 </style>

@@ -1,4 +1,4 @@
-FROM node:20.15-bullseye-slim
+FROM node:24-bullseye-slim
 
 ARG DEPENDENCIES="                    \
         g++                           \
@@ -14,9 +14,11 @@ RUN set -ex \
 
 WORKDIR /data
 
-COPY package.json yarn.lock ./
+RUN corepack enable && corepack prepare yarn@4.13.0 --activate
+
+COPY package.json yarn.lock .yarnrc.yml ./
 
 ARG NPM_MIRROR="https://registry.npmjs.org"
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,sharing=locked,id=yarn-cache \
-    sed -i "s|https://registry.npmmirror.com|${NPM_MIRROR}|g" yarn.lock \
-    && yarn install
+    yarn config set npmRegistryServer "${NPM_MIRROR}" \
+    && yarn install --immutable

@@ -1,5 +1,10 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :fields-meta="fieldsMeta" :initial="initial" :url="url" />
+  <GenericCreateUpdatePage
+    :fields="fields"
+    :fields-meta="fieldsMeta"
+    :initial="initial"
+    :url="url"
+  />
 </template>
 
 <script>

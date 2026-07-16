@@ -2,6 +2,11 @@
  * Created by PanJiaChen on 16/11/18.
  */
 
+import xss from 'xss'
+import JSEncrypt from 'jsencrypt'
+import CryptoJS from 'crypto-js'
+import { VueCookieNext as VueCookie } from 'vue-cookie-next'
+
 /**
  * @param {string} path
  * @returns {Boolean}
@@ -19,7 +24,6 @@ export function validUsername(str) {
   return valid_map.indexOf(str.trim()) >= 0
 }
 
-const xss = require('xss')
 const excludeTags = ['iframe', 'script']
 
 const options = {
@@ -44,25 +48,31 @@ const options = {
 }
 const filter = new xss.FilterXSS(options)
 
-import JSEncrypt from 'jsencrypt/bin/jsencrypt.min'
-import CryptoJS from 'crypto-js'
-import VueCookie from 'vue-cookie'
-
 export function fillKey(key) {
   const KeyLength = 16
   if (key.length > KeyLength) {
     key = key.slice(0, KeyLength)
   }
-  const filledKey = Buffer.alloc(KeyLength)
-  const keys = Buffer.from(key)
-  for (let i = 0; i < keys.length; i++) {
+  // 浏览器没有 Node 的 Buffer，用 Uint8Array + TextEncoder 生成等价的 16 字节密钥
+  const filledKey = new Uint8Array(KeyLength)
+  const keys = new TextEncoder().encode(key)
+  for (let i = 0; i < keys.length && i < KeyLength; i++) {
     filledKey[i] = keys[i]
   }
   return filledKey
 }
 
+function bytesToHex(bytes) {
+  let hex = ''
+  for (let i = 0; i < bytes.length; i++) {
+    hex += bytes[i].toString(16).padStart(2, '0')
+  }
+  return hex
+}
+
 export function aesEncrypt(text, originKey) {
-  const key = CryptoJS.enc.Utf8.parse(fillKey(originKey))
+  // 与旧实现（Utf8.parse(Buffer)）字节等价：把 16 字节密钥按 Hex 解析成 WordArray
+  const key = CryptoJS.enc.Hex.parse(bytesToHex(fillKey(originKey)))
   return CryptoJS.AES.encrypt(text, key, {
     mode: CryptoJS.mode.ECB,
     padding: CryptoJS.pad.ZeroPadding
@@ -76,7 +86,7 @@ export function rsaEncrypt(text, pubKey) {
 }
 
 export function getCookie(name) {
-  return VueCookie.get(name)
+  return VueCookie.getCookie(name)
 }
 
 export function encryptPassword(password) {

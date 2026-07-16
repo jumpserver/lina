@@ -1,11 +1,9 @@
 <template>
   <TwoCol>
-    <template>
-      <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
-    </template>
+    <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
     <template #right>
-      <RelationCard type="primary" v-bind="userRelationConfig" />
-      <RelationCard style="margin-top: 15px" type="info" v-bind="groupRelationConfig" />
+      <RelationCard v-bind="userRelationConfig" type="primary" />
+      <RelationCard v-bind="groupRelationConfig" style="margin-top: 15px" type="info" />
     </template>
   </TwoCol>
 </template>
@@ -30,6 +28,8 @@ export default {
     }
   },
   data() {
+    const users = Array.isArray(this.object.users) ? this.object.users : []
+    const userGroups = Array.isArray(this.object.user_groups) ? this.object.user_groups : []
     return {
       tableConfig: {
         url: '',
@@ -49,16 +49,20 @@ export default {
             label: this.$t('Actions'),
             align: 'center',
             width: 150,
-            objects: this.object.users,
+            objects: users,
             formatter: DeleteActionFormatter,
-            onDelete: function(col, row, cellValue, reload) {
+            onDelete: function (col, row, cellValue, reload) {
               const url = `/api/v1/perms/asset-permissions-users-relations/?assetpermission=${this.object.id}&user=${cellValue}`
-              this.$axios.delete(url).then(res => {
-                this.$message.success(this.$tc('DeleteSuccessMsg'))
-                this.$store.commit('common/reload')
-              }).catch(error => {
-                this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
-              })
+              this.$axios
+                .delete(url)
+                .then((res) => {
+                  this.$message.success(this.$tc('DeleteSuccessMsg'))
+                  // 局部刷新当前表格，替代 common/reload 的整页重建
+                  this.$refs.ListTable.reloadTable()
+                })
+                .catch((error) => {
+                  this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
+                })
             }.bind(this)
           },
           actions: {
@@ -86,12 +90,12 @@ export default {
           }
         },
         showHasMore: false,
-        hasObjectsId: this.object.users?.map(i => i.id) || [],
+        hasObjectsId: users.map((i) => i.id),
         showHasObjects: false,
         performAdd: (items) => {
           const relationUrl = `/api/v1/perms/asset-permissions-users-relations/`
           const objectId = this.object.id
-          const data = items.map(v => {
+          const data = items.map((v) => {
             return {
               user: v.value,
               assetpermission: objectId
@@ -112,11 +116,11 @@ export default {
         objectsAjax: {
           url: '/api/v1/users/groups/'
         },
-        hasObjectsId: this.object.user_groups?.map(i => i.id) || [],
+        hasObjectsId: userGroups.map((i) => i.id),
         performAdd: (items) => {
           const relationUrl = `/api/v1/perms/asset-permissions-user-groups-relations/`
           const objectId = this.object.id
-          const data = items.map(v => {
+          const data = items.map((v) => {
             return {
               assetpermission: objectId,
               usergroup: v.value

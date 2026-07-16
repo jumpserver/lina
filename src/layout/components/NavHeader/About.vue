@@ -1,27 +1,39 @@
 <template>
   <Dialog
-    v-if="iVisible"
+    v-if="visible"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('About')"
-    :visible.sync="iVisible"
+    :visible="visible"
     class="about-dialog"
     top="10%"
     width="50%"
+    @update:visible="$emit('update:visible', $event)"
   >
     <div class="box">
       <div class="head">
-        <img :src="logoSrc" alt="logo" class="sidebar-logo-text" height="70">
+        <img :src="logoSrc" alt="logo" class="sidebar-logo-text" height="70" />
       </div>
-      <tr v-for="item of items" v-show="item.has || item.has === undefined" :key="item.label" class="text">
-        <td class="title">{{ item.label }}: </td>
+      <tr
+        v-for="item of items"
+        v-show="item.has || item.has === undefined"
+        :key="item.label"
+        class="text"
+      >
+        <td class="title">{{ item.label }}:</td>
         <td class="value">{{ item.value }}</td>
       </tr>
       <el-divider class="divider" />
       <div class="text">
-        <span v-for="(i, index) in actions" :key="index" class="text-link" @click="onClick(i.name)">
-          <i :class="i.icon" class="icon" />{{ i.label }}
-          <el-divider v-if="index !== actions.length - 1" direction="vertical" />
+        <span
+          v-for="(i, index) in visibleActions"
+          :key="i.name"
+          class="text-link"
+          @click="onClick(i.name)"
+        >
+          <i :class="i.icon" class="icon" />
+          {{ i.label }}
+          <el-divider v-if="index !== visibleActions.length - 1" direction="vertical" />
         </span>
       </div>
     </div>
@@ -42,14 +54,10 @@ export default {
       default: false
     }
   },
+  emits: ['update:visible'],
   data() {
     return {
       actions: [
-        {
-          name: 'github',
-          label: 'GitHub',
-          icon: 'fa fa-github'
-        },
         {
           name: 'download',
           label: this.$tc('DownloadCenter'),
@@ -59,9 +67,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'publicSettings'
-    ]),
+    ...mapGetters(['publicSettings']),
     iVisible: {
       set(val) {
         this.$emit('update:visible', val)
@@ -70,6 +76,11 @@ export default {
         return this.visible
       }
     },
+    iVersion() {
+      // 'version-dev' 是构建时 sed 替换的占位符（替换为如 v4.0.0-build01）。
+      // 展示时去掉 -build<编号> 及其后面的内容：v4.0.0-build01 -> v4.0.0
+      return 'version-dev'.replace(/-build\d+.*/i, '')
+    },
     versionType() {
       return this.hasXPack ? this.$t('EnterpriseEdition') : this.$tc('CommunityEdition') + ' GPLv3'
     },
@@ -77,11 +88,11 @@ export default {
       return [
         {
           label: this.$t('Product'),
-          value: 'JumpServer ' + this.versionType
+          value: this.versionType
         },
         {
           label: this.$t('Version'),
-          value: 'version-dev'
+          value: this.iVersion
         },
         {
           label: this.$t('PermissionCompany'),
@@ -95,11 +106,16 @@ export default {
         }
       ]
     },
+    visibleActions() {
+      return this.actions.filter((action) => {
+        return !(action.name === 'github' && this.publicSettings.XPACK_LICENSE_IS_VALID)
+      })
+    },
     corporation() {
       return this.publicSettings.XPACK_LICENSE_INFO.corporation
     },
     copyright() {
-      if (this.corporation.indexOf('FIT2CLOUD 飞致云') > -1) {
+      if (this.corporation?.indexOf('FIT2CLOUD 飞致云') > -1) {
         return this.corporation
       } else {
         return ''
@@ -109,7 +125,7 @@ export default {
       return this.publicSettings['INTERFACE']['logo_logout']
     },
     hasXPack() {
-      return this.publicSettings.XPACK_LICENSE_IS_VALID
+      return this.publicSettings.XPACK_ENABLED
     }
   },
   methods: {
@@ -129,11 +145,11 @@ export default {
 
 <style lang="scss" scoped>
 .about-dialog {
-  &.dialog ::v-deep .el-dialog__body {
+  &.dialog :deep(.el-dialog__body) {
     padding: 20px 30px;
   }
 
-  &.dialog ::v-deep .el-dialog__footer {
+  &.dialog :deep(.el-dialog__footer) {
     border-top: none;
     display: none;
   }
@@ -167,7 +183,7 @@ export default {
   }
 }
 
-::v-deep .divider.el-divider {
+:deep(.divider.el-divider) {
   margin: 15px 0 !important;
 }
 </style>

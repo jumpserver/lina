@@ -1,9 +1,8 @@
 <template>
   <GenericDetailPage
-    :active-menu.sync="config.activeMenu"
-    :object.sync="AssetPermission"
     v-bind="config"
-    v-on="$listeners"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="AssetPermission"
     @tab-click="handleTabClick"
   >
     <keep-alive>
@@ -51,17 +50,21 @@ export default {
           {
             title: this.$t('UsersAndUserGroups'),
             name: 'AssetPermissionUser',
-            hidden: () => !this.$hasPerm('users.view_user') || !this.$hasPerm('perms.change_assetpermission')
+            hidden: () =>
+              !this.$hasPerm('users.view_user') || !this.$hasPerm('perms.change_assetpermission')
           },
           {
             title: this.$t('AssetAndNode'),
             name: 'AssetPermissionAsset',
-            hidden: () => !this.$hasPerm('assets.view_asset') || !this.$hasPerm('perms.change_assetpermission')
+            hidden: () =>
+              !this.$hasPerm('assets.view_asset') || !this.$hasPerm('perms.change_assetpermission')
           },
           {
             title: this.$t('PermAccount'),
             name: 'AssetPermissionAccount',
-            hidden: () => !this.$hasPerm('accounts.view_account') || !this.$hasPerm('perms.change_assetpermission')
+            hidden: () =>
+              !this.$hasPerm('accounts.view_account') ||
+              !this.$hasPerm('perms.change_assetpermission')
           }
         ]
       }
@@ -70,9 +73,9 @@ export default {
   methods: {
     handleTabClick(tab) {
       if (tab.name !== 'AssetPermissionDetail') {
-        this.$set(this.config, 'hasRightSide', false)
+        this.config['hasRightSide'] = false
       } else {
-        this.$set(this.config, 'hasRightSide', true)
+        this.config['hasRightSide'] = true
       }
     }
   }

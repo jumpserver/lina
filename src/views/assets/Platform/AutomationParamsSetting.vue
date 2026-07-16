@@ -10,26 +10,26 @@
       @click="onSetting"
     />
     <Dialog
+      v-model:visible="isVisible"
       :show-cancel="false"
       :show-confirm="false"
       :title="title"
-      :visible.sync="isVisible"
-      width="60%"
+      width="860px"
       @close="onDialogClose"
     >
       <AutoDataForm
+        v-bind="config"
         ref="autoDataForm"
         :form="form"
         class="data-form"
-        v-bind="config"
         @submit="onSubmit"
-        v-on="$listeners"
       />
     </Dialog>
   </div>
 </template>
 
 <script>
+import { getActionMeta } from '@/api/common'
 import Dialog from '@/components/Dialog'
 import AutoDataForm from '@/components/Form/AutoDataForm'
 import { DynamicInput, Switcher } from '@/components/Form/FormFields'
@@ -46,19 +46,19 @@ export default {
     },
     title: {
       type: String,
-      default: function() {
-        return this.$t('PushParams')
+      default: function () {
+        return 'PushParams'
       }
     },
     btnText: {
       type: String,
-      default: function() {
+      default: function () {
         return ''
       }
     },
     icon: {
       type: String,
-      default: 'el-icon-setting'
+      default: 'Setting'
     },
     url: {
       type: String,
@@ -96,7 +96,7 @@ export default {
         method: 'get'
       },
       preFieldsMeta: {
-        'change_secret_by_ssh': {
+        change_secret_by_ssh: {
           commands: {
             helpTextAsTip: false
           }
@@ -120,7 +120,7 @@ export default {
   methods: {
     async getUrlMeta() {
       const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
-      this.remoteMeta = data.actions[this.config.method.toUpperCase()] || {}
+      this.remoteMeta = getActionMeta(data, this.config.method)
 
       if (this.onCanSetting()) {
         this.setFormConfig()
@@ -198,9 +198,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// 作为 method 下拉右侧的 append 按钮:等高、去掉左侧圆角与左边框,和下拉拼成一体的 input-group。
 .proto-setting {
-  margin-top: 1px;
+  width: 32px;
+  min-width: 32px;
   height: 30px;
-  vertical-align: super;
+  margin-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 </style>

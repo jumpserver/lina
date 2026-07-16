@@ -1,22 +1,21 @@
 <template>
   <el-drawer
-    :modal="false"
+    class="drawer"
+    :modal="true"
+    :close-on-click-modal="true"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('SelectPlatform')"
-    :visible.sync="iVisible"
+    :model-value="visible"
+    custom-class="drawer"
     size="700px"
     top="1vh"
+    @update:model-value="$emit('update:visible', $event)"
   >
-    <template #title>
+    <template #header>
       <div class="drawer-title">
         <span>{{ $tc('SelectPlatform') }}</span>
-        <el-link
-          :underline="false"
-          size="small"
-          type="text"
-          @click="handleManagePlatform"
-        >
+        <el-link underline="never" size="small" type="primary" @click="handleManagePlatform">
           <i class="fa fa-external-link" />
           {{ $tc('ManagePlatform') }}
         </el-link>
@@ -31,20 +30,16 @@
             :name="cName"
             :title="cName"
           >
-            <el-col
-              v-for="(platform, index) of ps"
-              :key="platform.id"
-              :span="8"
-            >
+            <el-col v-for="(platform, index) of ps" :key="platform.id" :span="8">
               <el-tooltip :content="platform.name">
                 <el-card
                   :style="{ borderLeftColor: randomBorderColor(index) }"
                   class="platform-item"
-                  shadow="hover"
-                  @click.native="handleSelect(platform)"
+                  shadow="never"
+                  @click="handleSelect(platform)"
                 >
                   <div class="icon-zone">
-                    <img :src="getPlatformLogo(platform)" alt="icon" class="asset-icon">
+                    <img :src="getPlatformLogo(platform)" alt="icon" class="asset-icon" />
                   </div>
                   <span class="platform-name">{{ platform.name }}</span>
                 </el-card>
@@ -72,6 +67,7 @@ export default {
       default: 'all'
     }
   },
+  emits: ['update:visible', 'select-platform'],
   data() {
     return {
       platforms: [],
@@ -85,22 +81,11 @@ export default {
         unix: '',
         macos: 'fa-apple'
       },
-      bottomColors: [
-        '#1c84c6', '#23c6c8', '#1ab394', '#f8ac59',
-        '#783887', '#fc6554'
-      ],
+      bottomColors: ['#1c84c6', '#23c6c8', '#1ab394', '#f8ac59', '#783887', '#fc6554'],
       allRecentPlatforms: []
     }
   },
   computed: {
-    iVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
-    },
     iPlatforms() {
       let recentPlatforms = {}
       let platforms = {}
@@ -121,11 +106,11 @@ export default {
       return _.groupBy(this.platforms, (item) => item.category.label)
     },
     typeSortedPlatforms() {
-      const typedPlatforms = this.platforms.filter(item => item.category.value === this.category)
+      const typedPlatforms = this.platforms.filter((item) => item.category.value === this.category)
       return _.groupBy(typedPlatforms, (item) => item.type.label)
     },
     typeRecentPlatforms() {
-      return this.allRecentPlatforms.filter(item => item.category.value === this.category)
+      return this.allRecentPlatforms.filter((item) => item.category.value === this.category)
     }
   },
   async created() {
@@ -139,7 +124,7 @@ export default {
       return loadPlatformIcon(platform.name, platform.type.value)
     },
     onConfirm() {
-      this.iVisible = false
+      this.$emit('update:visible', false)
     },
     randomBorderColor(i) {
       const length = this.bottomColors.length
@@ -153,27 +138,32 @@ export default {
     },
     handleManagePlatform() {
       this.$router.push({ name: 'PlatformList' })
-      this.iVisible = false
+      this.$emit('update:visible', false)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-
-::v-deep .el-drawer__body {
-  padding: 0 20px;
-  overflow-y: scroll;
+:deep(.el-drawer__body) {
+  padding: 0;
+  overflow-y: auto;
 }
 
 .platform-content {
-  padding: 0 10px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 30px 22px;
 }
 
 .platform-item {
+  width: 100%;
   margin: 5px 0;
+  // 每个平台卡片显式描一圈边框（左侧 4px 为随机强调色）。el-card 默认边框在部分主题/
+  // 场景下不可见，这里固定给一圈浅色边框，保证卡片轮廓始终存在。
+  border: 1px solid var(--color-border);
 
-  & ::v-deep .el-card__body {
+  & :deep(.el-card__body) {
     padding: 10px;
     flex-wrap: nowrap;
     overflow: hidden;
@@ -193,11 +183,23 @@ export default {
   color: #303133;
 }
 
-::v-deep .el-collapse {
+:deep(.el-collapse) {
+  width: 100%;
   border: none;
 
   .el-collapse-item__content {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 0 -10px;
     padding-bottom: 10px;
+  }
+
+  .el-collapse-item__content > .el-col {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+    padding: 0 10px;
+    box-sizing: border-box;
   }
 
   .el-collapse-item:last-child {
@@ -211,7 +213,21 @@ export default {
   }
 }
 
-::v-deep .el-card__body {
+@media (max-width: 992px) {
+  :deep(.el-collapse .el-collapse-item__content > .el-col) {
+    flex-basis: 50%;
+    max-width: 50%;
+  }
+}
+
+@media (max-width: 768px) {
+  :deep(.el-collapse .el-collapse-item__content > .el-col) {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
+}
+
+:deep(.el-card__body) {
   display: flex;
   align-items: center;
 }
