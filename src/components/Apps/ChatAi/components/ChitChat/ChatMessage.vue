@@ -190,9 +190,13 @@ export default {
 
   .chart-item-container {
     display: flex;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
     gap: 0.5rem;
 
     .avatar {
+      flex: 0 0 24px;
       width: 24px;
       height: 24px;
       margin-top: 2px;
@@ -217,9 +221,11 @@ export default {
 
     .content {
       display: flex;
+      flex: 1;
+      width: 0;
+      min-width: 0;
+      max-width: 100%;
       flex-direction: column;
-      // gap: 0.5rem;
-      overflow: hidden;
 
       .operational {
         display: flex;
@@ -265,11 +271,20 @@ export default {
 
       .reasoning {
         display: flex;
+        min-width: 0;
+        max-width: 100%;
         gap: 0.5rem;
         align-items: flex-end;
 
+        .message-content {
+          min-width: 0;
+          max-width: calc(100% - 24px);
+        }
+
         .message-content .thinking-wrapper {
           display: flex;
+          min-width: 0;
+          max-width: 100%;
           flex-direction: column;
           gap: 0.5rem;
 
@@ -298,16 +313,24 @@ export default {
       }
 
       .message {
-        display: -webkit-box;
+        display: flex;
+        min-width: 0;
+        max-width: 100%;
+        align-items: flex-end;
 
         .message-content {
           flex: 1;
+          min-width: 0;
+          max-width: calc(100% - 24px);
+          overflow: hidden;
           padding: 6px 10px;
           border-radius: 2px 12px 12px;
           background-color: #f0f1f5;
         }
 
         .action {
+          flex: 0 0 24px;
+
           .svg-icon {
             transform: translateY(50%);
             margin-left: 3px;
@@ -350,6 +373,13 @@ export default {
         .error {
           color: red;
         }
+      }
+
+      .chat-text {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
       }
     }
   }

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div ref="textRef" class="leading-relaxed break-words">
+  <div class="message-text">
+    <div ref="textRef" class="message-text__content leading-relaxed break-words">
       <span v-if="message.content === 'loading'" class="loading-box">
         <span />
         <span />
@@ -76,7 +76,10 @@ export default {
       })
     },
     highlightBlock(str, lang) {
-      let insertSpanHtml = `<span class="code-block-header__insert">${this.$t('Insert')}</span>`
+      let insertSpanHtml = `<button class="code-block-header__insert" type="button">
+        <i aria-hidden="true" class="fa fa-level-down"></i>
+        <span>${this.$t('Insert')}</span>
+      </button>`
       if (!this.isTerminal) {
         insertSpanHtml = ''
       }
@@ -85,7 +88,10 @@ export default {
         <span class="code-block-header__lang">${lang}</span>  
         <span class="code-block-header__actions">
         ${insertSpanHtml}
-          <span class="code-block-header__copy">${this.$t('Copy')}</span>
+          <button class="code-block-header__copy" type="button">
+            <i aria-hidden="true" class="fa fa-copy"></i>
+            <span>${this.$t('Copy')}</span>
+          </button>
         </span>
         </div>
         <code class="hljs code-block-body ${lang}">${str}</code></pre>`
@@ -213,8 +219,12 @@ export default {
 
 <style lang="scss" scoped>
 .markdown-body {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   font-size: 13px;
-  max-width: 300px;
+  overflow-wrap: anywhere;
 
   &:deep(p) {
     margin-bottom: 0 !important;
@@ -222,7 +232,24 @@ export default {
 
   background: inherit;
 
+  &:deep(table) {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    white-space: nowrap;
+  }
+
+  &:deep(th),
+  &:deep(td) {
+    padding: 4px 8px;
+    text-align: left;
+    vertical-align: top;
+  }
+
   &:deep(pre) {
+    max-width: 100%;
     padding: 0 0 6px 0;
 
     .hljs.code-block-body {
@@ -235,11 +262,19 @@ export default {
     padding: 0;
     margin: 5px 0;
     display: flex;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
     flex-direction: column;
     overflow: hidden;
 
     .code-block-body {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
       padding: 5px 10px;
+      overflow-x: auto;
     }
 
     .code-block-header {
@@ -256,21 +291,29 @@ export default {
 
       .code-block-header__actions {
         display: flex;
+        flex-shrink: 0;
         gap: 8px;
 
-        .code-block-header__copy {
-          cursor: pointer;
-
-          &:hover {
-            color: #6e747b;
-          }
-        }
-
+        .code-block-header__copy,
         .code-block-header__insert {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          padding: 0;
+          border: 0;
+          color: inherit;
+          background: transparent;
           cursor: pointer;
+          font: inherit;
 
           &:hover {
-            color: #6e747b;
+            color: #fff;
+          }
+
+          &:focus-visible {
+            border-radius: 2px;
+            outline: 1px solid currentColor;
+            outline-offset: 2px;
           }
         }
       }
@@ -282,6 +325,14 @@ export default {
       }
     }
   }
+}
+
+.message-text,
+.message-text__content {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
 }
 
 :deep(.link-style) {
