@@ -25,6 +25,7 @@ export default {
         {
           name: 'terminate',
           title: this.$t('Terminate'),
+          icon: 'fa-stop',
           type: 'danger',
           can: ({ row }) => row['can_terminate'] && vm.$hasPerm('terminal.terminate_session'),
           callback: function ({ reload, row }) {
@@ -42,6 +43,7 @@ export default {
         {
           name: 'pause',
           title: this.$t('Pause'),
+          icon: 'fa-pause',
           type: 'warning',
           can: ({ row }) => {
             const terminalType = row['terminal']['type']
