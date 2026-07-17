@@ -86,8 +86,7 @@ export default {
     ...mapGetters(['inDrawer']),
     iHeaderActions() {
       const actions = { ...this.headerActions }
-      // 始终使用 DrawerListTable 的 onCreate 来打开抽屉
-      actions.onCreate = this.onCreate
+      actions.onCreate = actions.onCreate || this.onCreate
       return actions
     },
     iTableConfig() {

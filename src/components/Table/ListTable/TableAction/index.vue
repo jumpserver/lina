@@ -252,6 +252,13 @@ $color-drop-menu-border: #e4e7ed;
       min-height: 30px;
     }
 
+    :deep(.action-item) {
+      margin-left: 5px;
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+
     :deep(.action-item.el-button) {
       min-height: 30px;
     }

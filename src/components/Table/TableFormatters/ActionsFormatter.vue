@@ -1,18 +1,105 @@
 <template>
   <div v-loading="loadingStatus">
-    <ActionsGroup
-      :actions="actions"
-      :more-actions="moreActions"
-      :more-actions-title="moreActionsTitle"
-      :size="'small'"
-      class="table-actions"
-    />
+    <div v-if="actions.length > 0 || moreActions.length > 0" class="table-actions-group">
+      <el-tooltip
+        v-for="action in actions"
+        :key="action.name"
+        :content="getActionTip(action)"
+        :disabled="!getActionTip(action)"
+        :show-after="500"
+        placement="top"
+      >
+        <span class="table-action-trigger">
+          <el-button
+            v-bind="getButtonProps(action)"
+            class="table-action-btn"
+            @click="handleActionClick(action)"
+          >
+            <Icon v-if="action.icon" :icon="action.icon" class="pre-icon" />
+            <span v-else>{{ action.title }}</span>
+          </el-button>
+        </span>
+      </el-tooltip>
+
+      <el-dropdown
+        v-if="moreActions.length > 0"
+        class="table-action-dropdown"
+        popper-class="action-dropdown"
+        trigger="click"
+        @command="handleDropdownCommand"
+      >
+        <span class="table-action-trigger">
+          <el-button v-bind="moreButtonProps" class="table-action-btn more-action">
+            <Icon :icon="moreActionIcon" class="pre-icon" />
+          </el-button>
+        </span>
+
+        <template #dropdown>
+          <el-dropdown-menu style="overflow: auto; max-height: 60vh">
+            <template v-for="action in moreActions" :key="action.name">
+              <el-dropdown-item :command="action" :disabled="action.disabled" :title="action.tip">
+                <div class="dropdown-item__content">
+                  <span v-if="action.icon" class="pre-icon">
+                    <Icon :icon="action.icon" />
+                  </span>
+                  <span class="dropdown-item__label">{{ action.title }}</span>
+                </div>
+              </el-dropdown-item>
+            </template>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+    </div>
   </div>
 </template>
 
 <script>
 import BaseFormatter from './base.vue'
-import ActionsGroup from '@/components/Common/ActionsGroup/index.vue'
+import Icon from '@/components/Widgets/Icon/index.vue'
+
+const ACTION_ICON_MAP = {
+  update: 'fa-pencil-square-o',
+  edit: 'fa-pencil-square-o',
+  view: 'fa-eye',
+  detail: 'fa-eye',
+  delete: 'fa-trash-o',
+  remove: 'fa-minus-square-o',
+  clone: 'fa-files-o',
+  duplicate: 'fa-files-o',
+  copy: 'fa-files-o',
+  connect: 'fa-desktop',
+  login: 'fa-sign-in',
+  execute: 'fa-play-circle-o',
+  run: 'fa-play-circle-o',
+  test: 'fa-play-circle-o',
+  stop: 'fa-stop-circle-o',
+  retry: 'fa-refresh',
+  refresh: 'fa-refresh',
+  sync: 'fa-refresh',
+  download: 'fa-download',
+  upload: 'fa-upload',
+  enable: 'fa-check-circle-o',
+  disable: 'fa-ban',
+  active: 'fa-check-circle-o',
+  inactive: 'fa-ban',
+  reject: 'fa-ban',
+  accept: 'fa-check',
+  approve: 'fa-check',
+  revoke: 'fa-times',
+  cancel: 'fa-times',
+  close: 'fa-times',
+  reset: 'fa-refresh',
+  invite: 'fa-user-plus',
+  user: 'fa-user',
+  account: 'fa-user',
+  password: 'fa-key',
+  secret: 'fa-key',
+  permission: 'fa-lock',
+  asset: 'fa-desktop',
+  info: 'fa-info-circle-o',
+  detail_info: 'fa-info-circle-o',
+  more: 'el-icon-more'
+}
 
 const defaultPerformDelete = function ({ row, col }) {
   const id = row.id
@@ -105,16 +192,16 @@ const defaultDeleteCallback = function ({ row, col, cellValue, reload }) {
 
 export default {
   name: 'ActionsFormatter',
-  components: { ActionsGroup },
+  components: { Icon },
   extends: BaseFormatter,
   props: {
     formatterArgsDefault: {
       type: Object,
-      default: function () {
+      default() {
         return {
-          hasUpdate: true, // can set function(row, value)
-          canUpdate: true, // can set function(row, value)
-          hasDelete: true, // can set function(row, value)
+          hasUpdate: true,
+          canUpdate: true,
+          hasDelete: true,
           canDelete: true,
           hasClone: true,
           canClone: true,
@@ -137,6 +224,8 @@ export default {
         name: 'update',
         title: this.$t('Edit'),
         type: 'primary',
+        plain: true,
+        icon: 'fa-pencil-square-o',
         has: colActions.hasUpdate,
         can: colActions.canUpdate,
         callback: colActions.onUpdate,
@@ -145,6 +234,7 @@ export default {
       {
         name: 'delete',
         title: this.$t('Delete'),
+        icon: 'fa-trash-o',
         type: 'danger',
         has: colActions.hasDelete,
         can: colActions.canDelete,
@@ -154,7 +244,7 @@ export default {
       {
         name: 'clone',
         title: this.$t('Duplicate'),
-        type: 'primary',
+        icon: 'fa-files-o',
         has: colActions.hasClone,
         can: colActions.canClone,
         callback: colActions.onClone,
@@ -162,28 +252,29 @@ export default {
       }
     ]
     return {
-      colActions: colActions,
-      defaultActions: defaultActions,
-      extraActions: colActions.extraActions,
-      // moreActionsTitle: colActions.moreActionsTitle || null
-      moreActionsTitle: ''
+      colActions,
+      defaultActions,
+      extraActions: colActions.extraActions
     }
   },
   computed: {
     cleanedActions() {
       let actions = [...this.defaultActions, ...this.extraActions]
       actions = _.cloneDeep(actions)
-      actions = actions.map((v) => {
-        v.has = this.cleanBoolean(v, 'has', true)
-        v.can = this.cleanBoolean(v, 'can', true)
-        v.callback = this.cleanCallback(v, 'callback')
-        v.icon = this.cleanValue(v, 'icon')
-        v.order = v.order || 100
-        v.tip = this.cleanValue(v, 'tip')
-        v.title = this.cleanValue(v, 'title')
-        return v
+      actions = actions.map((action) => {
+        action.has = this.cleanBoolean(action, 'has', true)
+        action.can = this.cleanBoolean(action, 'can', true)
+        action.callback = this.cleanCallback(action, 'callback')
+        action.icon = this.cleanValue(action, 'icon') || this.inferActionIcon(action)
+        action.order = action.order || 100
+        action.tip = this.cleanValue(action, 'tip')
+        action.title = this.cleanValue(action, 'title')
+        action.type = action.type || ''
+        action.plain = action.type === 'danger' ? action.plain !== false : false
+        action.disabled = !action.can
+        return action
       })
-      actions = actions.filter((v) => v.has)
+      actions = actions.filter((action) => action.has)
       actions.sort((a, b) => a.order - b.order)
       return actions
     },
@@ -197,7 +288,17 @@ export default {
       if (this.cleanedActions.length <= 2) {
         return []
       }
-      return this.cleanedActions.slice(1, this.cleanedActions.length)
+      return this.cleanedActions.slice(1)
+    },
+    moreActionIcon() {
+      return ACTION_ICON_MAP.more
+    },
+    moreButtonProps() {
+      return {
+        size: 'small',
+        type: '',
+        plain: false
+      }
     },
     loadingStatus() {
       return this.col.formatterArgs.loading
@@ -211,6 +312,50 @@ export default {
       }
       return this.cleanValue(item, attr)
     },
+    inferActionIcon(action) {
+      const candidates = [action.name]
+      const normalized = candidates
+        .filter(Boolean)
+        .map((value) => String(value).trim().toLowerCase())
+
+      for (const value of normalized) {
+        if (ACTION_ICON_MAP[value]) {
+          return ACTION_ICON_MAP[value]
+        }
+      }
+      return ''
+    },
+    getButtonProps(action) {
+      const { type, disabled, plain, loading } = action
+      return {
+        size: 'small',
+        type,
+        disabled,
+        plain,
+        loading
+      }
+    },
+    getActionTip(action) {
+      if (action.tip) {
+        return action.tip
+      }
+      if (action.icon && action.title) {
+        return action.title
+      }
+      return ''
+    },
+    handleActionClick(action) {
+      if (!action || action.disabled || !action.callback) {
+        return
+      }
+      action.callback(action)
+    },
+    handleDropdownCommand(action) {
+      if (!action || action.disabled || !action.callback) {
+        return
+      }
+      action.callback(action)
+    },
     cleanCallback(item, attr) {
       const callback = item[attr]
       const attrs = {
@@ -220,9 +365,7 @@ export default {
         cellValue: this.cellValue,
         tableData: this.tableData
       }
-      return () => {
-        return callback.bind(this)(attrs)
-      }
+      return () => callback.bind(this)(attrs)
     },
     cleanValue(item, attr) {
       const value = item[attr]
@@ -243,52 +386,64 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table-actions {
-  :deep(.el-button) {
-    height: auto;
-    min-height: 0;
-    padding: 2px 5px;
-    font-size: 13px;
+.table-actions-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  vertical-align: middle;
+
+  .table-action-trigger {
+    display: inline-flex;
+  }
+
+  :deep(.table-action-btn) {
+    min-height: 24px;
+    padding: 4px 8px;
+    font-size: 12px;
     line-height: 1.3;
-  }
+    box-shadow: none;
 
-  :deep(.el-button > span) {
-    line-height: 1.2;
-    font-size: 13px;
-  }
+    &.more-action {
+      padding: 4px 6px;
+    }
 
-  :deep(.el-icon--right) {
-    display: none;
-  }
+    > span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.2;
+      font-size: 12px;
+    }
 
-  :deep(.more-action.el-button--primary.is-plain),
-  :deep(.el-dropdown > .more-action.el-button--primary.is-plain) {
-    color: var(--color-primary);
-    // 用主题系统维护的 EP 主色浅色阶替换硬编码 #e8f7f4,保证非默认主题下也跟随主色
-    background-color: var(--el-color-primary-light-9);
-    border-color: var(--el-color-primary-light-5);
-
-    &:hover,
-    &:focus,
-    &:active {
-      color: #fff;
-      background-color: var(--color-primary);
-      border-color: var(--color-primary);
+    .pre-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 
-  :deep(.more-action.el-button--primary.is-plain .pre-icon),
-  :deep(.more-action.el-button--primary.is-plain .el-icon) {
-    color: var(--color-primary);
+  :deep(.table-action-dropdown) {
+    display: inline-flex;
   }
+}
 
-  :deep(.more-action.el-button--primary.is-plain:hover .pre-icon),
-  :deep(.more-action.el-button--primary.is-plain:hover .el-icon),
-  :deep(.more-action.el-button--primary.is-plain:focus .pre-icon),
-  :deep(.more-action.el-button--primary.is-plain:focus .el-icon),
-  :deep(.more-action.el-button--primary.is-plain:active .pre-icon),
-  :deep(.more-action.el-button--primary.is-plain:active .el-icon) {
-    color: #fff;
-  }
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu--small) {
+  padding: 6px 0;
+}
+
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item) {
+  line-height: 1.4;
+}
+
+:global(.action-dropdown.el-dropdown__popper .dropdown-item__content) {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+:global(.action-dropdown.el-dropdown__popper .dropdown-item__content .pre-icon) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

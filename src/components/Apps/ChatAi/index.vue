@@ -218,16 +218,17 @@ export default {
       background: linear-gradient(90deg, #ebf1ff 24.34%, #e5fbf8 56.18%, #f2ebfe 90.18%);
       display: flex;
       justify-content: space-between;
+      align-items: center;
       height: 48px;
-      line-height: 48px;
       padding: 0 16px;
       overflow: hidden;
       border-bottom: 1px solid #ececec;
       .left {
+        display: flex;
+        align-items: center;
         img {
           width: 22px;
           height: 22px;
-          vertical-align: sub;
         }
         .title {
           display: inline-block;
@@ -236,12 +237,12 @@ export default {
         }
       }
       .new {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
         height: 28px;
         line-height: 28px;
         border-radius: 16px;
         padding: 0 10px;
-        transform: translateY(32%);
         color: var(--color-primary);
         background-color: #f7f7f8;
         cursor: pointer;

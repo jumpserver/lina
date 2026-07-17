@@ -244,7 +244,7 @@ $color-drop-menu-border: #e4e7ed;
   }
 
   .action-item {
-    margin-left: 5px;
+    margin-left: 1px;
 
     .pre-icon + span {
       margin-left: 3px;
@@ -452,7 +452,7 @@ $color-drop-menu-border: #e4e7ed;
   // 固定宽度：无图标的项（如「批量处理」标题）也占满同样的图标列宽，
   // 保证所有项的文字左边缘对齐，不会因空图标塌成 0 宽而左移。
   width: 16px;
-  margin-right: 8px;
+  margin-right: 1px;
 }
 
 :global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .dropdown-item__label) {
