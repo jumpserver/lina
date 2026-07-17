@@ -29,6 +29,7 @@ export default {
         {
           name: 'replay',
           title: this.$t('Replay'),
+          icon: 'fa-play',
           type: 'warning',
           // TODO 当前版本 magnus 代理的 mongodb 协议的 session 不支持 replay
           can: ({ row }) =>
