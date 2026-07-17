@@ -11,7 +11,8 @@
 </template>
 
 <script>
-import { newURL, ObjectLocalStorage } from '@/utils/common/index'
+import { newURL } from '@/utils/common/index'
+import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
 import { omitVueListeners, pickVueListeners } from '@/utils/vue'
 import { mapGetters } from 'vuex'
 import { default as ElDatableTable } from './compenents/el-data-table'

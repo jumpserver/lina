@@ -46,7 +46,7 @@ import TableAction from './TableAction/index.vue'
 import AutoDataTable from '../AutoDataTable/index.vue'
 import QuickFilter from './TableAction/QuickFilter.vue'
 import { getDayEnd, getDaysAgo } from '@/utils/common/time'
-import { ObjectLocalStorage } from '@/utils/common/index'
+import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
 import i18n from '@/i18n/i18n'
 import _ from 'lodash'
 

@@ -24,7 +24,8 @@
 <script>
 import { getActionMeta } from '@/api/common'
 import DataTable from '@/components/Table/DataTable/index.vue'
-import { newURL, ObjectLocalStorage, replaceAllUUID } from '@/utils/common/index'
+import { newURL, replaceAllUUID } from '@/utils/common/index'
+import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
 import Sortable from 'sortablejs'
 import ColumnSettingPopover from './components/ColumnSettingPopover.vue'
 import { TableColumnsGenerator } from './utils'
