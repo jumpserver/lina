@@ -221,6 +221,9 @@ export default {
     getFormValue() {
       return transformOutputValue(this.value, this.innerContent)
     },
+    getInitialFormValue() {
+      return transformOutputValue(_clonedeep(this.initValue || {}), this.innerContent)
+    },
     /**
      * update form values
      * @param {object} newValue - key is item's id, value is the new value

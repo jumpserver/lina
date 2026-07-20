@@ -12,6 +12,7 @@
       v-bind="iHeaderActions"
       v-if="hasActions"
       v-model:quick-filter-expand="filterExpand"
+      ref="tableAction"
       :class="{ 'filter-expand': filterExpand }"
       :date-pick="handleDateChange"
       :has-quick-filter="iHasQuickFilter"
@@ -29,6 +30,7 @@
           ref="dataTable"
           :config="iTableConfig"
           :filter-table="filter"
+          @loaded="handleTableLoaded"
           @selection-change="handleSelectionChange"
         />
       </IBox>
@@ -288,6 +290,12 @@ export default {
     })
   },
   methods: {
+    handleTableLoaded() {
+      this.$refs.tableAction?.preloadNodeSearch()
+    },
+    closeNodeSearch() {
+      return this.$refs.tableAction?.closeNodeSearch()
+    },
     handleTableSettingClick() {
       this.$refs.dataTable?.openColumnSetting()
     },
@@ -320,6 +328,7 @@ export default {
     },
     handleSelectionChange(val) {
       this.selectedRows = Array.isArray(val) ? [...val] : []
+      this.$emit('selection-change', this.selectedRows)
     },
     _reloadTable() {
       this.dataTable?.getList()
