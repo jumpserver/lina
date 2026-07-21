@@ -33,5 +33,7 @@
   "NodeFilterCollapse": "段階的に折りたたむ",
   "TreeResourceSelectShowSelected": "選択済みノードのみ表示",
   "TreeResourceSelectShowAll": "すべてのノードを表示",
-  "TreeResourceSelectClearSelected": "選択済みノードをすべて解除"
+  "TreeResourceSelectClearSelected": "選択済みノードをすべて解除",
+  "TreeResourceSelectExpandSelected": "選択済みノードまで展開",
+  "TreeResourceSelectCollapseAll": "すべてのノードを折りたたむ"
 }

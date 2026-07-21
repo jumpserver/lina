@@ -32,5 +32,7 @@
   "NodeFilterCollapse": "逐級摺疊",
   "TreeResourceSelectShowSelected": "僅查看已選節點",
   "TreeResourceSelectShowAll": "查看全部節點",
-  "TreeResourceSelectClearSelected": "清除所有已選節點"
+  "TreeResourceSelectClearSelected": "清除所有已選節點",
+  "TreeResourceSelectExpandSelected": "展開到已選節點",
+  "TreeResourceSelectCollapseAll": "摺疊所有節點"
 }

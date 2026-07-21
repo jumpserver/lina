@@ -6,6 +6,7 @@
     <TagSearch
       v-bind="tagSearchAttrs()"
       v-show="!shouldFold"
+      ref="tagSearch"
       :options="iOption"
       class="auto-data-search__field"
       @blur="handleBlur"
@@ -85,6 +86,11 @@ export default {
     }
   },
   methods: {
+    async focusSearch() {
+      this.manualSearch = true
+      await this.$nextTick()
+      return this.$refs.tagSearch?.focusSearch()
+    },
     tagSearchAttrs() {
       const attrs = { ...this.$attrs }
       delete attrs.class

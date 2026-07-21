@@ -82,16 +82,17 @@
           </el-tabs>
 
           <div class="node-search-panel__tree-actions">
-            <el-tooltip :content="$t('NodeFilterExpandAll')" placement="top" :show-after="300">
+            <el-tooltip :content="activeExpandTitle" placement="top" :show-after="300">
               <span class="node-search-panel__tree-action-trigger">
                 <el-button
-                  :aria-label="$t('NodeFilterExpandAll')"
+                  :aria-label="activeExpandTitle"
                   :disabled="!treeState[activeTree].loaded || treeState[activeTree].loading"
                   class="node-search-panel__tree-action"
                   link
                   @click.stop="setActiveTreeExpanded(true)"
                 >
-                  <svg-icon icon-class="tree-expand-all" />
+                  <svg-icon v-if="activeExpandUsesAll" icon-class="tree-expand-all" />
+                  <el-icon v-else><Aim /></el-icon>
                 </el-button>
               </span>
             </el-tooltip>
@@ -177,11 +178,17 @@ export default {
       activeTree: 'asset',
       triggerElement: null,
       triggerObserver: null,
+      triggerIntersectionRatio: null,
       dialogBoundary: null,
       reopenPopoverWhenVisible: false,
       popoverVisible: false,
       popoverForceHidden: false,
       popoverInstant: false,
+      preserveExpansionOnNextOpen: false,
+      treeExpandAllNext: {
+        asset: false,
+        type: false
+      },
       selectedNode: null,
       selectedNodePath: '',
       selectedTreeKey: '',
@@ -247,13 +254,30 @@ export default {
     },
     buttonTitle() {
       return this.selectedNodeLabel || this.$t('NodeFilterTitle')
+    },
+    hasActiveTreeSelection() {
+      return this.selectedTreeType === this.activeTree && Boolean(this.selectedTreeKey)
+    },
+    activeExpandUsesAll() {
+      return !this.hasActiveTreeSelection || this.treeExpandAllNext[this.activeTree]
+    },
+    activeExpandTitle() {
+      return this.activeExpandUsesAll
+        ? this.$t('NodeFilterExpandAll')
+        : this.$t('TreeResourceSelectExpandSelected')
     }
   },
   watch: {
     popoverVisible(visible) {
       if (visible) {
         this.popoverForceHidden = false
-        this.loadTree(this.activeTree)
+        const preserveExpansion = this.preserveExpansionOnNextOpen
+        this.preserveExpansionOnNextOpen = false
+        if (preserveExpansion) {
+          this.loadTree(this.activeTree)
+        } else {
+          this.prepareTreeExpansionForOpen()
+        }
       }
     },
     activeTree(treeType) {
@@ -267,27 +291,34 @@ export default {
     this.dialogBoundary = this.triggerElement?.closest('.el-dialog') || null
     const scrollContainer = this.triggerElement?.closest('.el-dialog__body')
     if (this.triggerElement && scrollContainer && typeof IntersectionObserver !== 'undefined') {
+      const visibilityThresholds = Array.from({ length: 21 }, (_, index) => index / 20)
       this.triggerObserver = new IntersectionObserver(
         ([entry]) => {
-          const rootBounds = entry.rootBounds
-          if (!rootBounds) {
+          const triggerHeight = entry.boundingClientRect.height
+          if (triggerHeight <= 0) {
             return
           }
-          const tolerance = 1
-          const fullyVisibleVertically =
-            entry.boundingClientRect.top >= rootBounds.top - tolerance &&
-            entry.boundingClientRect.bottom <= rootBounds.bottom + tolerance
-          if (!fullyVisibleVertically && this.popoverVisible) {
+          const visibleRatio = Math.min(entry.intersectionRect.height / triggerHeight, 1)
+          const previousRatio = this.triggerIntersectionRatio
+          this.triggerIntersectionRatio = visibleRatio
+          if (previousRatio === null) {
+            return
+          }
+
+          const visibilityDelta = visibleRatio - previousRatio
+          const movingOutOfView = visibilityDelta < -0.001
+          const movingIntoView = visibilityDelta > 0.001
+          if (movingOutOfView && visibleRatio < 0.96 && this.popoverVisible) {
             this.reopenPopoverWhenVisible = true
             this.hidePopover(true)
-          } else if (fullyVisibleVertically && this.reopenPopoverWhenVisible) {
+          } else if (movingIntoView && visibleRatio >= 0.05 && this.reopenPopoverWhenVisible) {
             this.reopenPopoverWhenVisible = false
-            this.showPopover(true)
+            this.showPopover(true, true)
           }
         },
         {
           root: scrollContainer,
-          threshold: [0, 1]
+          threshold: visibilityThresholds
         }
       )
       this.triggerObserver.observe(this.triggerElement)
@@ -304,8 +335,9 @@ export default {
       this.reopenPopoverWhenVisible = false
       return this.forceHidePopover()
     },
-    showPopover(instant = false) {
+    showPopover(instant = false, preserveExpansion = false) {
       this.popoverInstant = instant
+      this.preserveExpansionOnNextOpen = preserveExpansion
       this.popoverVisible = true
       return this.$nextTick()
     },
@@ -420,6 +452,62 @@ export default {
         state.loading = false
       }
     },
+    async prepareTreeExpansionForOpen() {
+      await this.preloadTrees()
+      if (this.selectedTreeType) {
+        this.activeTree = this.selectedTreeType
+      }
+      await this.$nextTick()
+      this.resetTreeExpansionToSelection()
+    },
+    resetTreeExpansionToSelection() {
+      const treeTypes = ['asset', 'type']
+      treeTypes.forEach((treeType) => {
+        const tree = this.$refs[`${treeType}Tree`]
+        if (!tree) {
+          return
+        }
+
+        const expandableNodes = []
+        const visit = (nodes) => {
+          nodes.forEach((item) => {
+            if (item.children.length === 0) {
+              return
+            }
+            expandableNodes.push(item)
+            visit(item.children)
+          })
+        }
+        visit(this.treeState[treeType].data)
+
+        const selectedAncestorKeys = new Set()
+        const hasSelectedNode = this.selectedTreeType === treeType && Boolean(this.selectedTreeKey)
+        let selectedTreeNode = hasSelectedNode ? tree.getNode(this.selectedTreeKey) : null
+        const selectedNodeFound = Boolean(selectedTreeNode)
+        const initialExpandedKeys = new Set(
+          this.treeState[treeType].defaultExpandedKeys.map((key) => String(key))
+        )
+        selectedTreeNode = selectedTreeNode?.parent
+        while (selectedTreeNode?.level > 0) {
+          selectedAncestorKeys.add(String(this.getTreeKey(selectedTreeNode.data)))
+          selectedTreeNode = selectedTreeNode.parent
+        }
+
+        expandableNodes.forEach((item) => {
+          const node = tree.getNode(item.id)
+          const itemKey = String(item.id)
+          const shouldExpand = selectedNodeFound
+            ? selectedAncestorKeys.has(itemKey)
+            : initialExpandedKeys.has(itemKey)
+          if (shouldExpand) {
+            node?.expand()
+          } else {
+            node?.collapse()
+          }
+        })
+        this.treeExpandAllNext[treeType] = selectedNodeFound
+      })
+    },
     setActiveTreeExpanded(expanded) {
       const treeType = this.activeTree
       const tree = this.$refs[`${treeType}Tree`]
@@ -439,6 +527,31 @@ export default {
       }
       visit(this.treeState[treeType].data)
 
+      if (expanded) {
+        if (this.activeExpandUsesAll) {
+          expandableNodes.forEach((item) => tree.getNode(item.id)?.expand())
+          this.treeExpandAllNext[treeType] = false
+          return
+        }
+
+        const selectedAncestorKeys = new Set()
+        let selectedTreeNode = tree.getNode(this.selectedTreeKey)?.parent
+        while (selectedTreeNode?.level > 0) {
+          selectedAncestorKeys.add(String(this.getTreeKey(selectedTreeNode.data)))
+          selectedTreeNode = selectedTreeNode.parent
+        }
+        expandableNodes.forEach((item) => {
+          const node = tree.getNode(item.id)
+          if (selectedAncestorKeys.has(String(item.id))) {
+            node?.expand()
+          } else {
+            node?.collapse()
+          }
+        })
+        this.treeExpandAllNext[treeType] = true
+        return
+      }
+
       const initialExpandedKeys = new Set(
         this.treeState[treeType].defaultExpandedKeys.map((key) => String(key))
       )
@@ -446,6 +559,10 @@ export default {
         const node = tree.getNode(item.id)
         return Boolean(node?.expanded) === initialExpandedKeys.has(String(item.id))
       })
+      const allCollapsed = expandableNodes.every((item) => !tree.getNode(item.id)?.expanded)
+      if (!expanded && allCollapsed) {
+        return
+      }
       const restoreInitialState = !expanded && !isInitialState
 
       expandableNodes.forEach((item) => {
@@ -453,8 +570,7 @@ export default {
         if (!node) {
           return
         }
-        const shouldExpand =
-          expanded || (restoreInitialState && initialExpandedKeys.has(String(item.id)))
+        const shouldExpand = restoreInitialState && initialExpandedKeys.has(String(item.id))
         if (shouldExpand) {
           node.expand()
         } else {
@@ -526,6 +642,7 @@ export default {
       this.selectedNodePath = this.getNodePathLabel(treeType, treeKey, node)
       this.selectedTreeKey = normalizedTreeKey
       this.selectedTreeType = treeType
+      this.treeExpandAllNext[treeType] = false
       this.$emit('nodeSearch', query)
     },
     clearSelection() {
@@ -535,6 +652,8 @@ export default {
       this.selectedNodePath = ''
       this.selectedTreeKey = ''
       this.selectedTreeType = ''
+      this.treeExpandAllNext.asset = false
+      this.treeExpandAllNext.type = false
       this.$emit('nodeSearch', this.getEmptyFilterQuery())
     }
   }
@@ -647,10 +766,11 @@ export default {
     .el-tabs__header {
       margin: 0;
       padding: 0 94px 0 12px;
+      border-bottom: 1px solid var(--el-border-color-light);
     }
 
     .el-tabs__nav-wrap::after {
-      height: 1px;
+      display: none;
     }
 
     .el-tabs__item {

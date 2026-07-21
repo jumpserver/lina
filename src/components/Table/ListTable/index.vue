@@ -30,7 +30,6 @@
           ref="dataTable"
           :config="iTableConfig"
           :filter-table="filter"
-          @loaded="handleTableLoaded"
           @selection-change="handleSelectionChange"
         />
       </IBox>
@@ -290,8 +289,8 @@ export default {
     })
   },
   methods: {
-    handleTableLoaded() {
-      this.$refs.tableAction?.preloadNodeSearch()
+    focusSearch() {
+      return this.$refs.tableAction?.focusSearch()
     },
     closeNodeSearch() {
       return this.$refs.tableAction?.closeNodeSearch()

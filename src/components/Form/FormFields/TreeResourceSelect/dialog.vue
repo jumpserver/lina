@@ -22,7 +22,35 @@
             class="tree-resource-select-dialog__toolbar-button tree-resource-select-dialog__selected-only"
             @click="toggleSelectedOnly"
           >
-            <el-icon><View /></el-icon>
+            <el-icon>
+              <Hide v-if="showSelectedOnly" />
+              <View v-else />
+            </el-icon>
+          </el-button>
+        </el-tooltip>
+        <el-tooltip :content="expandTitle" placement="top" :show-after="300">
+          <el-button
+            :aria-label="expandTitle"
+            :disabled="loading || treeData.length === 0"
+            class="tree-resource-select-dialog__toolbar-button"
+            @click="setTreeExpanded(true)"
+          >
+            <svg-icon v-if="expandAllNext" icon-class="tree-expand-all" />
+            <el-icon v-else><Aim /></el-icon>
+          </el-button>
+        </el-tooltip>
+        <el-tooltip
+          :content="$t('TreeResourceSelectCollapseAll')"
+          placement="top"
+          :show-after="300"
+        >
+          <el-button
+            :aria-label="$t('TreeResourceSelectCollapseAll')"
+            :disabled="loading || treeData.length === 0"
+            class="tree-resource-select-dialog__toolbar-button"
+            @click="setTreeExpanded(false)"
+          >
+            <svg-icon icon-class="tree-collapse-all" />
           </el-button>
         </el-tooltip>
         <el-tooltip
@@ -40,14 +68,22 @@
           </el-button>
         </el-tooltip>
         <el-input
+          ref="searchInput"
           v-model="searchValue"
           :placeholder="$t('Search')"
           class="tree-resource-select-dialog__search"
           clearable
+          @blur="searchFocused = false"
+          @focus="searchFocused = true"
           @input="applyTreeFilter"
         >
           <template #prefix>
             <el-icon><Search /></el-icon>
+          </template>
+          <template #suffix>
+            <span v-if="!searchFocused" class="tree-resource-select-dialog__search-shortcut"
+              >/</span
+            >
           </template>
         </el-input>
       </div>
@@ -117,7 +153,9 @@ export default {
     return {
       draftValue: [...this.value],
       searchValue: '',
+      searchFocused: false,
       showSelectedOnly: this.initialSelectedOnly,
+      expandAllNext: false,
       loading: false,
       treeData: [],
       defaultExpandedKeys: [],
@@ -141,12 +179,39 @@ export default {
       return this.showSelectedOnly
         ? this.$t('TreeResourceSelectShowAll')
         : this.$t('TreeResourceSelectShowSelected')
+    },
+    expandTitle() {
+      return this.expandAllNext
+        ? this.$t('NodeFilterExpandAll')
+        : this.$t('TreeResourceSelectExpandSelected')
     }
   },
   mounted() {
+    document.addEventListener('keydown', this.handleSearchShortcut)
     this.loadTree()
   },
+  beforeUnmount() {
+    document.removeEventListener('keydown', this.handleSearchShortcut)
+  },
   methods: {
+    handleSearchShortcut(event) {
+      if (
+        event.key !== '/' ||
+        event.defaultPrevented ||
+        event.ctrlKey ||
+        event.metaKey ||
+        event.altKey
+      ) {
+        return
+      }
+      const target = event.target
+      if (target?.closest?.('input, textarea, select, [contenteditable="true"]')) {
+        return
+      }
+
+      event.preventDefault()
+      this.$refs.searchInput?.focus()
+    },
     getQueryParams() {
       const params = typeof this.queryParams === 'function' ? this.queryParams() : this.queryParams
       return { ...(params || {}) }
@@ -230,11 +295,13 @@ export default {
           params: this.getQueryParams()
         })
         this.treeData = this.buildTree(response)
-        this.defaultExpandedKeys = this.treeData.map((node) => node.treeKey)
+        this.defaultExpandedKeys = this.getSelectedAncestorKeys()
         await this.$nextTick()
         this.syncLoadedChecks()
         if (this.showSelectedOnly) {
           this.applyTreeFilter()
+        } else {
+          this.applyDefaultExpandedState()
         }
       } catch (error) {
         this.treeData = []
@@ -259,6 +326,48 @@ export default {
       }
       sync(this.treeData)
       tree.setCheckedKeys(checkedTreeKeys)
+    },
+    getSelectedAncestorKeys() {
+      const expandedKeys = []
+      const visit = (node) => {
+        let childSelected = false
+        const children = node.children || []
+        children.forEach((child) => {
+          if (visit(child)) {
+            childSelected = true
+          }
+        })
+        if (childSelected) {
+          expandedKeys.push(node.treeKey)
+        }
+        const id = this.getNodeId(node)
+        const currentSelected =
+          id !== undefined && id !== null && this.selectedIdSet.has(String(id))
+        return currentSelected || childSelected
+      }
+      this.treeData.forEach((node) => visit(node))
+      return expandedKeys
+    },
+    applyDefaultExpandedState() {
+      const tree = this.$refs.tree
+      if (!tree) {
+        return
+      }
+      const expandedKeys = new Set(this.defaultExpandedKeys.map((key) => String(key)))
+      const visit = (nodes) => {
+        nodes.forEach((node) => {
+          const treeNode = tree.getNode(node.treeKey)
+          if (treeNode && node.children?.length) {
+            if (expandedKeys.has(String(node.treeKey))) {
+              treeNode.expand()
+            } else {
+              treeNode.collapse()
+            }
+          }
+          visit(node.children || [])
+        })
+      }
+      visit(this.treeData)
     },
     getPathKeySet(predicate) {
       const visibleKeys = new Set()
@@ -321,10 +430,77 @@ export default {
     },
     toggleSelectedOnly() {
       this.showSelectedOnly = !this.showSelectedOnly
+      this.expandAllNext = false
       this.applyTreeFilter()
+    },
+    setTreeExpanded(expanded) {
+      const tree = this.$refs.tree
+      if (!tree) {
+        return
+      }
+
+      const expandableNodes = []
+      const visit = (nodes) => {
+        nodes.forEach((node) => {
+          if (!node.children?.length) {
+            return
+          }
+          expandableNodes.push(node)
+          visit(node.children)
+        })
+      }
+      visit(this.treeData)
+
+      if (!expanded) {
+        const firstLevelExpandedKeys = new Set(
+          this.treeData.filter((node) => node.children?.length).map((node) => String(node.treeKey))
+        )
+        const isFirstLevelState = expandableNodes.every((node) => {
+          const treeNode = tree.getNode(node.treeKey)
+          return Boolean(treeNode?.expanded) === firstLevelExpandedKeys.has(String(node.treeKey))
+        })
+        const allCollapsed = expandableNodes.every((node) => !tree.getNode(node.treeKey)?.expanded)
+        if (allCollapsed) {
+          return
+        }
+
+        const restoreFirstLevelState = !isFirstLevelState
+        expandableNodes.forEach((node) => {
+          const treeNode = tree.getNode(node.treeKey)
+          const shouldExpand =
+            restoreFirstLevelState && firstLevelExpandedKeys.has(String(node.treeKey))
+          if (shouldExpand) {
+            treeNode?.expand()
+          } else {
+            treeNode?.collapse()
+          }
+        })
+        this.expandAllNext = false
+        return
+      }
+
+      if (this.expandAllNext) {
+        expandableNodes.forEach((node) => tree.getNode(node.treeKey)?.expand())
+        this.expandAllNext = false
+        return
+      }
+
+      const selectedExpandedKeys = this.getSelectedAncestorKeys()
+      const selectedExpandedKeySet = new Set(selectedExpandedKeys.map((key) => String(key)))
+      this.defaultExpandedKeys = selectedExpandedKeys
+      expandableNodes.forEach((node) => {
+        const treeNode = tree.getNode(node.treeKey)
+        if (selectedExpandedKeySet.has(String(node.treeKey))) {
+          treeNode?.expand()
+        } else {
+          treeNode?.collapse()
+        }
+      })
+      this.expandAllNext = true
     },
     clearAllSelected() {
       this.draftValue = []
+      this.expandAllNext = false
       this.$refs.tree?.setCheckedKeys([])
       if (this.showSelectedOnly) {
         this.showSelectedOnly = false
@@ -344,6 +520,7 @@ export default {
       } else if (!checked) {
         this.draftValue = this.draftValue.filter((item) => String(item) !== normalizedId)
       }
+      this.expandAllNext = false
       if (this.showSelectedOnly) {
         this.$nextTick(() => this.applyTreeFilter())
       }
@@ -433,6 +610,22 @@ export default {
     .el-input__prefix {
       color: var(--color-icon-primary);
     }
+
+    .tree-resource-select-dialog__search-shortcut {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 4px;
+      border: 1px solid #afb8c133;
+      border-radius: 5px;
+      background: var(--bgColor-muted, #f6f8fa);
+      box-shadow: inset 0 -1px 0 #afb8c133;
+      color: var(--color-text-primary);
+      font-size: 11px;
+      line-height: 16px;
+    }
   }
 
   .tree-resource-select-dialog__toolbar-actions {
@@ -458,6 +651,11 @@ export default {
       width: 13px;
       height: 13px;
       font-size: 13px;
+    }
+
+    .svg-icon {
+      width: 14px;
+      height: 14px;
     }
 
     &:hover:not(.is-disabled),

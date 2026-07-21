@@ -38,6 +38,7 @@
         <AutoDataSearch
           v-bind="iSearchTableConfig"
           v-if="hasSearch"
+          ref="autoDataSearch"
           :fold="foldSearch"
           class="right-side-item action-search"
           @tag-search="handleTagSearch"
@@ -177,8 +178,8 @@ export default {
     this.$emit('done')
   },
   methods: {
-    preloadNodeSearch() {
-      return this.$refs.nodeSearch?.preloadTrees()
+    focusSearch() {
+      return this.$refs.autoDataSearch?.focusSearch()
     },
     closeNodeSearch() {
       return this.$refs.nodeSearch?.closePopover()

@@ -52,5 +52,7 @@
   "NodeFilterCollapse": "Collapse stepwise",
   "TreeResourceSelectShowSelected": "Show selected nodes only",
   "TreeResourceSelectShowAll": "Show all nodes",
-  "TreeResourceSelectClearSelected": "Clear all selected nodes"
+  "TreeResourceSelectClearSelected": "Clear all selected nodes",
+  "TreeResourceSelectExpandSelected": "Expand to selected nodes",
+  "TreeResourceSelectCollapseAll": "Collapse all nodes"
 }

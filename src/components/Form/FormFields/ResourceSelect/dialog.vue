@@ -311,7 +311,36 @@ export default {
       })
     }
   },
+  mounted() {
+    document.addEventListener('keydown', this.handleSearchShortcut)
+  },
+  beforeUnmount() {
+    document.removeEventListener('keydown', this.handleSearchShortcut)
+  },
   methods: {
+    handleSearchShortcut(event) {
+      if (
+        event.key !== '/' ||
+        event.defaultPrevented ||
+        event.ctrlKey ||
+        event.metaKey ||
+        event.altKey
+      ) {
+        return
+      }
+      const target = event.target
+      if (target?.closest?.('input, textarea, select, [contenteditable="true"]')) {
+        return
+      }
+
+      const tableRef = this.activeTab === 'selected' ? 'selectedTable' : 'availableTable'
+      const table = this.$refs[tableRef]
+      if (!table) {
+        return
+      }
+      event.preventDefault()
+      table.focusSearch()
+    },
     async closeNodeSearchPopovers() {
       await Promise.all([
         this.$refs.availableTable?.closeNodeSearch(),
