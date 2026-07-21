@@ -312,16 +312,17 @@ export default {
     }
   },
   mounted() {
-    document.addEventListener('keydown', this.handleSearchShortcut)
+    document.addEventListener('keydown', this.handleDialogShortcut)
   },
   beforeUnmount() {
-    document.removeEventListener('keydown', this.handleSearchShortcut)
+    document.removeEventListener('keydown', this.handleDialogShortcut)
   },
   methods: {
-    handleSearchShortcut(event) {
+    handleDialogShortcut(event) {
       if (
-        event.key !== '/' ||
         event.defaultPrevented ||
+        event.isComposing ||
+        event.repeat ||
         event.ctrlKey ||
         event.metaKey ||
         event.altKey
@@ -329,7 +330,24 @@ export default {
         return
       }
       const target = event.target
-      if (target?.closest?.('input, textarea, select, [contenteditable="true"]')) {
+      if (event.key === 'Enter') {
+        const isInsideDialog = target?.closest?.('.resource-select-dialog')
+        const isInteractive =
+          isInsideDialog &&
+          target?.closest?.(
+            'input, textarea, select, button, a, [contenteditable="true"], [role="button"], [role="checkbox"], [role="treeitem"]'
+          )
+        if (!isInteractive) {
+          event.preventDefault()
+          this.handleConfirm()
+        }
+        return
+      }
+
+      if (
+        event.key !== '/' ||
+        target?.closest?.('input, textarea, select, [contenteditable="true"]')
+      ) {
         return
       }
 

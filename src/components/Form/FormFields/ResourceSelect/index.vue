@@ -5,7 +5,7 @@
         :disabled="isDisabled"
         class="resource-select__text"
         type="button"
-        @click="openDialog('selected')"
+        @click="openDialog(selectedValue.length > 0 ? 'selected' : 'available')"
       >
         {{
           selectedValue.length

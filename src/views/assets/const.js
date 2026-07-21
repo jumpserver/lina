@@ -226,6 +226,11 @@ export const assetJSONSelectMeta = (vm) => {
       resource: vm.$t('Asset'),
       select2: {
         url: '/api/v1/assets/assets/',
+        nodeFilter: {
+          treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
+          typeTreeUrl: '/api/v1/assets/nodes/category/tree/?count_resource=none',
+          includeDescendants: true
+        },
         ajax: {
           transformOption: (item) => {
             return { label: item.name + '(' + item.address + ')', value: item.id }

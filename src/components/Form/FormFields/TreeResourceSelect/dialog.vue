@@ -187,17 +187,18 @@ export default {
     }
   },
   mounted() {
-    document.addEventListener('keydown', this.handleSearchShortcut)
+    document.addEventListener('keydown', this.handleDialogShortcut)
     this.loadTree()
   },
   beforeUnmount() {
-    document.removeEventListener('keydown', this.handleSearchShortcut)
+    document.removeEventListener('keydown', this.handleDialogShortcut)
   },
   methods: {
-    handleSearchShortcut(event) {
+    handleDialogShortcut(event) {
       if (
-        event.key !== '/' ||
         event.defaultPrevented ||
+        event.isComposing ||
+        event.repeat ||
         event.ctrlKey ||
         event.metaKey ||
         event.altKey
@@ -205,7 +206,24 @@ export default {
         return
       }
       const target = event.target
-      if (target?.closest?.('input, textarea, select, [contenteditable="true"]')) {
+      if (event.key === 'Enter') {
+        const isInsideDialog = target?.closest?.('.tree-resource-select-dialog')
+        const isInteractive =
+          isInsideDialog &&
+          target?.closest?.(
+            'input, textarea, select, button, a, [contenteditable="true"], [role="button"], [role="checkbox"], [role="treeitem"]'
+          )
+        if (!isInteractive) {
+          event.preventDefault()
+          this.handleConfirm()
+        }
+        return
+      }
+
+      if (
+        event.key !== '/' ||
+        target?.closest?.('input, textarea, select, [contenteditable="true"]')
+      ) {
         return
       }
 
@@ -295,7 +313,10 @@ export default {
           params: this.getQueryParams()
         })
         this.treeData = this.buildTree(response)
-        this.defaultExpandedKeys = this.getSelectedAncestorKeys()
+        this.defaultExpandedKeys =
+          this.selectedCount > 0
+            ? this.getSelectedAncestorKeys()
+            : this.treeData.filter((node) => node.children?.length).map((node) => node.treeKey)
         await this.$nextTick()
         this.syncLoadedChecks()
         if (this.showSelectedOnly) {
