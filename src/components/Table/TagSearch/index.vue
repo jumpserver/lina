@@ -1,5 +1,5 @@
 <template>
-  <div class="filter-field">
+  <div :class="{ 'has-options': options.length > 0 }" class="filter-field">
     <div v-show="options.length > 0" class="filter-cascader-wrap">
       <el-cascader
         ref="Cascade"
@@ -413,8 +413,17 @@ $origin-white-color: #ffffff;
   position: relative;
   display: flex;
   align-items: center;
-  min-width: 210px;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 28px;
   background-color: $origin-white-color;
+
+  &.has-options {
+    padding-left: 20px;
+  }
 
   :deep(.filter-cascader) {
     width: 20px;
@@ -470,17 +479,31 @@ $origin-white-color: #ffffff;
   }
 
   .filter-tag {
+    min-width: 0;
+    max-width: calc(100% - 4px);
     margin: 2px 4px 2px 0;
+
+    :deep(.el-tag__content) {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 
   .search-input {
     --jms-input-padding-inline: 11px;
     --jms-input-padding-inline-start: 1px;
 
-    height: 30px;
+    flex: 1 1 120px;
+    width: auto;
+    min-width: 120px;
+    max-width: 100%;
+    height: 28px;
 
     :deep(.el-input__wrapper) {
-      max-width: 180px;
+      width: 100%;
+      max-width: none;
       box-shadow: unset;
 
       .el-input__inner {
@@ -509,6 +532,7 @@ $origin-white-color: #ffffff;
   .keydown-focus {
     position: absolute;
     right: 0;
+    bottom: 5px;
     display: inline-block;
     margin-right: 10px;
     padding: 3px 5px;
@@ -527,9 +551,12 @@ $origin-white-color: #ffffff;
 }
 
 .filter-cascader-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
   width: 20px;
   height: 28px;
-  flex: 0 0 20px;
   --jms-input-padding-block: 1px;
   --jms-input-padding-inline: 0;
 }
