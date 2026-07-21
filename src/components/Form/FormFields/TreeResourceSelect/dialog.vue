@@ -206,20 +206,6 @@ export default {
         return
       }
       const target = event.target
-      if (event.key === 'Enter') {
-        const isInsideDialog = target?.closest?.('.tree-resource-select-dialog')
-        const isInteractive =
-          isInsideDialog &&
-          target?.closest?.(
-            'input, textarea, select, button, a, [contenteditable="true"], [role="button"], [role="checkbox"], [role="treeitem"]'
-          )
-        if (!isInteractive) {
-          event.preventDefault()
-          this.handleConfirm()
-        }
-        return
-      }
-
       if (
         event.key !== '/' ||
         target?.closest?.('input, textarea, select, [contenteditable="true"]')

@@ -33,6 +33,10 @@
       :node-filter="nodeFilter"
       :query-params="queryParams"
       :resource-name="resourceName"
+      :can-select="canSelect"
+      :columns="columns"
+      :columns-meta="columnsMeta"
+      :columns-show="columnsShow"
       :url="resourceUrl"
       :value="selectedValue"
       :value-key="valueKey"
@@ -99,6 +103,22 @@ export default {
     nodeFilter: {
       type: [Boolean, Object],
       default: false
+    },
+    canSelect: {
+      type: Function,
+      default: () => true
+    },
+    columnsMeta: {
+      type: Object,
+      default: () => ({})
+    },
+    columns: {
+      type: Array,
+      default: () => []
+    },
+    columnsShow: {
+      type: Object,
+      default: () => ({})
     },
     pageSize: {
       type: Number,

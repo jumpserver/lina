@@ -2,7 +2,13 @@ import i18n from '@/i18n/i18n'
 import ProtocolSelector from '@/components/Form/FormFields/ProtocolSelector'
 import AssetAccounts from '@/views/assets/Asset/AssetCreateUpdate/components/AssetAccounts'
 import rules from '@/components/Form/DataForm/rules'
-import { JSONManyToManySelect, NestedObjectSelect2, Select2 } from '@/components/Form/FormFields'
+import { ColorSwatchFormatter } from '@/components/Table/TableFormatters'
+import {
+  JSONManyToManySelect,
+  ResourceSelect,
+  Select2,
+  TreeResourceSelect
+} from '@/components/Form/FormFields'
 import { message } from '@/utils/vue/message'
 
 export const filterSelectValues = (values) => {
@@ -153,29 +159,32 @@ export const assetFieldsMeta = (vm, category, type) => {
       }
     },
     nodes: {
-      component: Select2,
+      type: 'treeResourceSelect',
+      component: TreeResourceSelect,
       rules: [rules.RequiredChange],
       el: {
-        multiple: true,
-        ajax: {
-          url: '/api/v1/assets/nodes/',
-          transformOption: (item) => {
-            return { label: `${item.full_value}`, value: item.id }
-          }
-        },
-        clearable: true
+        value: [],
+        url: '/api/v1/assets/nodes/?fields_size=mini',
+        treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
+        resourceName: vm.$t('Node')
       }
     },
     labels: {
       name: 'labels',
-      type: 'm2m',
-      component: NestedObjectSelect2,
+      type: 'resourceSelect',
+      component: ResourceSelect,
       el: {
-        multiple: true,
+        value: [],
         url: '/api/v1/labels/labels/',
-        ajax: {
-          transformOption: (item) => {
-            return { label: `${item.name}:${item.value}`, value: `${item.id}` }
+        resourceName: vm.$t('Label'),
+        columns: ['name', 'id', 'value', 'color', 'comment'],
+        columnsShow: {
+          default: ['name', 'value', 'color', 'actions'],
+          min: ['name', 'actions']
+        },
+        columnsMeta: {
+          color: {
+            formatter: ColorSwatchFormatter
           }
         }
       }

@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { ResourceSelect } from '@/components/Form/FormFields'
 import { GenericCreateUpdatePage } from '@/layout/components'
 
 export default {
@@ -25,14 +26,12 @@ export default {
             uniqueCheck: true
           },
           users: {
+            type: 'resourceSelect',
+            component: ResourceSelect,
             el: {
+              value: [],
               url: '/api/v1/users/users/?fields_size=mini&order=name',
-              ajax: {
-                transformOption: (item) => {
-                  return { label: item.name + '(' + item.username + ')', value: item.id }
-                }
-              },
-              resource: this.$t('User')
+              resourceName: this.$t('User')
             }
           }
         }

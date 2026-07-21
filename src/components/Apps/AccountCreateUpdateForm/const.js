@@ -1,6 +1,10 @@
-import { UpdateToken, UploadSecret } from '@/components/Form/FormFields'
+import {
+  ResourceSelect,
+  TreeResourceSelect,
+  UpdateToken,
+  UploadSecret
+} from '@/components/Form/FormFields'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
-import AssetSelect from '@/components/Apps/AssetSelect/index.vue'
 import { Required, RequiredChange } from '@/components/Form/DataForm/rules'
 import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
 
@@ -16,26 +20,32 @@ export const accountFieldsMeta = (vm) => {
 
   return {
     nodes: {
-      component: Select2,
+      type: 'treeResourceSelect',
+      component: TreeResourceSelect,
       label: vm.$t('Node'),
       el: {
         value: [],
-        ajax: {
-          url: '/api/v1/assets/nodes/',
-          transformOption: (item) => {
-            return { label: item.full_value, value: item.id }
-          }
-        }
+        url: '/api/v1/assets/nodes/?fields_size=mini',
+        treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
+        resourceName: vm.$t('Node')
       },
       hidden: () => {
         return !vm.addTemplate
       }
     },
     assets: {
-      component: AssetSelect,
+      type: 'resourceSelect',
+      component: ResourceSelect,
       label: vm.$t('Asset'),
       el: {
-        multiple: false
+        value: [],
+        url: '/api/v1/assets/assets/?fields_size=mini',
+        resourceName: vm.$t('Asset'),
+        nodeFilter: {
+          treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
+          typeTreeUrl: '/api/v1/assets/nodes/category/tree/?count_resource=none',
+          includeDescendants: true
+        }
       },
       hidden: () => {
         return vm.platform || vm.asset

@@ -86,6 +86,22 @@ export default {
       type: [Boolean, Object],
       default: false
     },
+    canSelect: {
+      type: Function,
+      default: () => true
+    },
+    columnsMeta: {
+      type: Object,
+      default: () => ({})
+    },
+    columns: {
+      type: Array,
+      default: () => []
+    },
+    columnsShow: {
+      type: Object,
+      default: () => ({})
+    },
     pageSize: {
       type: Number,
       default: 15
@@ -205,12 +221,14 @@ export default {
     },
     tableName() {
       const pathname = new URL(this.url, location.origin).pathname.replaceAll('/', '_')
-      return `ResourceSelect${pathname}`
+      const columnsKey = this.columns.length > 0 ? `_${this.columns.join('_')}` : ''
+      return `ResourceSelect${pathname}${columnsKey}`
     },
     commonTableConfig() {
       return {
         url: this.url,
         id: this.valueKey,
+        ...(this.columns.length > 0 ? { columns: this.columns } : {}),
         paginationSize: this.effectivePageSize,
         paginationSizes: [...new Set([this.effectivePageSize, 30, 50, 100])]
           .filter((size) => size <= 100)
@@ -218,14 +236,16 @@ export default {
         persistSelection: false,
         saveQuery: false,
         columnsShow: {
-          min: ['name', 'actions']
+          min: ['name', 'actions'],
+          ...this.columnsShow
         },
         columnsMeta: {
           name: {
             formatterArgs: {
               can: false
             }
-          }
+          },
+          ...this.columnsMeta
         }
       }
     },
@@ -233,6 +253,7 @@ export default {
       return {
         ...this.commonTableConfig,
         name: `${this.tableName}Resources`,
+        canSelect: this.canSelect,
         request: this.requestAvailablePage,
         columnsMeta: {
           ...this.commonTableConfig.columnsMeta,
@@ -246,6 +267,7 @@ export default {
                   name: 'add',
                   title: this.$t('Add'),
                   icon: 'fa-plus',
+                  can: ({ row }) => this.canSelect(row),
                   callback: ({ row }) => this.addResources([row])
                 }
               ]
@@ -330,20 +352,6 @@ export default {
         return
       }
       const target = event.target
-      if (event.key === 'Enter') {
-        const isInsideDialog = target?.closest?.('.resource-select-dialog')
-        const isInteractive =
-          isInsideDialog &&
-          target?.closest?.(
-            'input, textarea, select, button, a, [contenteditable="true"], [role="button"], [role="checkbox"], [role="treeitem"]'
-          )
-        if (!isInteractive) {
-          event.preventDefault()
-          this.handleConfirm()
-        }
-        return
-      }
-
       if (
         event.key !== '/' ||
         target?.closest?.('input, textarea, select, [contenteditable="true"]')
@@ -627,13 +635,15 @@ export default {
     },
     addResources(rows) {
       const addedIds = []
-      rows.forEach((row) => {
-        const id = row[this.valueKey]
-        if (!this.selectedIdSet.has(id)) {
-          this.draftValue.push(id)
-          addedIds.push(id)
-        }
-      })
+      rows
+        .filter((row) => this.canSelect(row))
+        .forEach((row) => {
+          const id = row[this.valueKey]
+          if (!this.selectedIdSet.has(id)) {
+            this.draftValue.push(id)
+            addedIds.push(id)
+          }
+        })
       if (addedIds.length === 0) {
         return
       }

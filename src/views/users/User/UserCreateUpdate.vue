@@ -14,7 +14,7 @@ import store from '@/store'
 import { mapGetters } from 'vuex'
 import { Select2 } from '@/components'
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { PhoneInput, UserPassword } from '@/components/Form/FormFields'
+import { PhoneInput, ResourceSelect, UserPassword } from '@/components/Form/FormFields'
 import rules from '@/components/Form/DataForm/rules'
 import { MFALevel, MFASystemSetting } from '../const'
 export default {
@@ -176,14 +176,14 @@ export default {
           }
         },
         groups: {
+          type: 'resourceSelect',
+          component: ResourceSelect,
           helpTextAsPlaceholder: true,
           el: {
-            multiple: true,
+            value: [],
             disabled: this.$store.getters.currentOrgIsRoot,
-            ajax: {
-              url: '/api/v1/users/groups/'
-            },
-            value: []
+            url: '/api/v1/users/groups/?fields_size=mini&order=name',
+            resourceName: this.$t('UserGroups')
           }
         },
         phone: {
