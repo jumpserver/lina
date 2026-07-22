@@ -86,7 +86,7 @@
       <div class="msg-detail">
         <div class="msg-detail-txt">
           <span class="msg-detail-time">{{ formatDate(currentMsg.date_created) }}</span>
-          <MarkDown :value="formattedMsg" />
+          <MarkDown :value="currentMsg.content.message" />
         </div>
       </div>
     </Dialog>
@@ -97,7 +97,6 @@
 import Dialog from '@/components/Dialog'
 import MarkDown from '@/components/Widgets/MarkDown'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
-import { formatSiteMessage } from './siteMessage'
 
 export default {
   name: 'SiteMessages',
@@ -118,11 +117,6 @@ export default {
   computed: {
     width() {
       return this.$store.state.app.device === 'mobile' ? '70%' : '450px'
-    },
-    // 将后端 Markdown 中连续的 "**字段:** 值" 归一化成列表，
-    // 再由样式排成信息表。已有列表和普通 Markdown 保持原样。
-    formattedMsg() {
-      return formatSiteMessage(this.currentMsg?.content?.message)
     }
   },
   mounted() {
