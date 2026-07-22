@@ -5,11 +5,11 @@
     }}</el-button>
     <Dialog
       v-if="visible"
+      v-model:visible="visible"
       :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
       :title="title"
-      :visible="visible"
       width="70%"
       @update:visible="$emit('update:visible', $event)"
       @confirm="onConfirm()"

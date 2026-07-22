@@ -26,36 +26,97 @@ export const filterSelectValues = (values) => {
   return selects
 }
 
-function updatePlatformProtocols(vm, platformType, updateForm, platformChanged = false) {
-  setTimeout(
-    () =>
-      vm.init().then(() => {
-        const drawerAction = vm.$store.state.common.drawerActionMeta?.action
-        const isCreate =
-          !vm.$route.params.id &&
-          vm.$route.query.clone_from === undefined &&
-          drawerAction !== 'clone'
-        const needModify = isCreate || platformChanged
-        const platformProtocols = vm.platform.protocols
-        if (!needModify) return
-        if (platformType === 'website') {
-          const setting = Array.isArray(platformProtocols)
-            ? platformProtocols[0].setting
-            : platformProtocols.setting
-          updateForm({
-            autofill: setting.autofill ? setting.autofill : 'basic',
-            password_selector: setting.password_selector,
-            script: setting.script,
-            submit_selector: setting.submit_selector,
-            username_selector: setting.username_selector
-          })
-        }
-        // 这里不能清空，比如 gateway 切换时，protocol 没有变化，就会出现 bug, tapd: 1053282
-        // updateForm({ protocols: [] })
-        vm.iConfig.fieldsMeta.protocols.el.choices = platformProtocols
-      }),
-    100
+const reconcileAssetProtocols = (
+  currentProtocols = [],
+  platformProtocols = [],
+  restoreCurrent = false
+) => {
+  const currentPorts = new Map(currentProtocols.map((protocol) => [protocol.name, protocol.port]))
+  const supported = new Map(platformProtocols.map((protocol) => [protocol.name, protocol]))
+  const initialDefaults = platformProtocols.filter(
+    (protocol) => protocol.primary || protocol.required || protocol.default
   )
+  const requiredProtocols = platformProtocols.filter(
+    (protocol) => protocol.primary || protocol.required
+  )
+  let protocols = restoreCurrent
+    ? currentProtocols
+        .filter((protocol) => supported.has(protocol.name))
+        .map((protocol) => supported.get(protocol.name))
+    : initialDefaults
+  const missingProtocols = restoreCurrent ? requiredProtocols : initialDefaults
+  missingProtocols.forEach((protocol) => {
+    if (!protocols.some((item) => item.name === protocol.name)) {
+      protocols.push(protocol)
+    }
+  })
+  if (protocols.length === 0) {
+    protocols = platformProtocols.slice(0, 1)
+  }
+  return protocols.map((protocol) => ({
+    name: protocol.name,
+    port: currentPorts.has(protocol.name) ? currentPorts.get(protocol.name) : protocol.port
+  }))
+}
+
+async function updatePlatformProtocols(
+  vm,
+  platformType,
+  updateForm,
+  platformChanged,
+  currentProtocols,
+  savedPlatformProtocols,
+  selectedPlatform,
+  isLatest,
+  onApplied
+) {
+  const requestedPlatformID = vm.platformID
+  const initialized = await vm.setInitial(requestedPlatformID)
+  if (!initialized || !isLatest() || String(vm.platformID) !== String(requestedPlatformID)) {
+    return
+  }
+
+  await vm.setPlatformConstrains()
+  if (!isLatest()) return
+  const platformProtocols = vm.platform.protocols || []
+  const protocolNames = platformProtocols.map((protocol) => protocol.name)
+  console.info('[AssetPlatformProtocol] loaded', {
+    selected: selectedPlatform,
+    requestedId: requestedPlatformID,
+    returnedId: vm.platform.id,
+    returnedName: vm.platform.name,
+    protocols: protocolNames
+  })
+
+  if (platformChanged) {
+    const restoreSaved = savedPlatformProtocols !== undefined
+    const protocols = reconcileAssetProtocols(
+      restoreSaved ? savedPlatformProtocols : currentProtocols,
+      platformProtocols,
+      restoreSaved
+    )
+    onApplied(protocols, requestedPlatformID)
+    updateForm({ protocols })
+    console.info('[AssetPlatformProtocol] applied', {
+      platformId: requestedPlatformID,
+      choices: protocolNames,
+      value: protocols.map((protocol) => protocol.name),
+      restored: restoreSaved
+    })
+  }
+
+  if (platformType === 'website') {
+    const setting = Array.isArray(platformProtocols)
+      ? platformProtocols[0].setting
+      : platformProtocols.setting
+    updateForm({
+      autofill: setting.autofill ? setting.autofill : 'basic',
+      password_selector: setting.password_selector,
+      script: setting.script,
+      submit_selector: setting.submit_selector,
+      username_selector: setting.username_selector
+    })
+  }
 }
 
 export const assetFieldsMeta = (vm, category, type) => {
@@ -64,13 +125,57 @@ export const assetFieldsMeta = (vm, category, type) => {
   const platformProtocols = []
   const secretTypes = []
   const asset = { address: 'https://example:8443' }
-  const updatePlatform = _.debounce(([event], updateForm) => {
-    const pk = event?.pk
-    const platformChanged = pk !== undefined && String(pk) !== String(vm.platformID)
+  let currentProtocols = []
+  const savedProtocols = new Map()
+  let appliedPlatformID
+  let pendingPlatformID
+  let refreshSequence = 0
+  let selectedPlatform
+  const updatePlatform = _.debounce(async ([event], updateForm) => {
+    // Select2 emits the selected id in Vue 3, while older form controls emitted
+    // the selected option object. Accept both shapes so the platform detail and
+    // its protocol choices are refreshed after a platform change.
+    const pk = event?.pk ?? event?.id ?? event?.value ?? event
+    const hasPlatform = pk !== undefined && pk !== null && pk !== ''
+    const platformChanged = hasPlatform && String(pk) !== String(vm.platformID)
+    const sequence = ++refreshSequence
+    console.info('[AssetPlatformProtocol] selected', {
+      id: pk,
+      label: selectedPlatform?.label,
+      previousId: vm.platformID,
+      changed: platformChanged
+    })
     if (platformChanged) {
+      if (appliedPlatformID !== undefined) {
+        savedProtocols.set(appliedPlatformID, _.cloneDeep(currentProtocols))
+      }
+      pendingPlatformID = String(pk)
       vm.platformID = pk
     }
-    updatePlatformProtocols(vm, platformType, updateForm, platformChanged)
+    const requestedPlatformID = String(vm.platformID)
+    try {
+      await updatePlatformProtocols(
+        vm,
+        platformType,
+        updateForm,
+        platformChanged,
+        _.cloneDeep(currentProtocols),
+        savedProtocols.get(requestedPlatformID),
+        _.cloneDeep(selectedPlatform),
+        () => sequence === refreshSequence,
+        (protocols, platformID) => {
+          appliedPlatformID = String(platformID)
+          currentProtocols = _.cloneDeep(protocols)
+          if (pendingPlatformID === appliedPlatformID) {
+            pendingPlatformID = undefined
+          }
+        }
+      )
+    } finally {
+      if (sequence === refreshSequence && pendingPlatformID === requestedPlatformID) {
+        pendingPlatformID = undefined
+      }
+    }
   }, 200)
   return {
     address: {
@@ -94,6 +199,18 @@ export const assetFieldsMeta = (vm, category, type) => {
       helpText: i18n.t('AssetProtocolHelpText'),
       on: {
         input: ([value]) => {
+          if (pendingPlatformID !== undefined) return
+          currentProtocols = Array.isArray(value)
+            ? value.map((protocol) => ({ name: protocol.name, port: protocol.port }))
+            : []
+          if (
+            appliedPlatformID === undefined &&
+            vm.platformID !== undefined &&
+            vm.platformID !== null &&
+            vm.platformID !== ''
+          ) {
+            appliedPlatformID = String(vm.platformID)
+          }
           const protocolSecretTypes = platformProtocols.reduce((pre, cur) => {
             pre[cur.name] = cur['secret_types']
             return pre
@@ -121,6 +238,9 @@ export const assetFieldsMeta = (vm, category, type) => {
         }
       },
       on: {
+        changeOptions: ([option]) => {
+          selectedPlatform = option
+        },
         change: updatePlatform,
         // 初始化和用户选择都会触发 input；与 change 共用防抖，避免同一次选择重复初始化。
         input: updatePlatform
