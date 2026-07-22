@@ -50,6 +50,24 @@ import { createSourceIdCache } from '@/api/common'
 import Dialog from '@/components/Dialog/index.vue'
 import ListTable from '@/components/Table/ListTable/index.vue'
 
+const defaultColumnsByResource = {
+  '/api/v1/accounts/accounts/': [
+    'name',
+    'username',
+    'asset',
+    'secret_type',
+    'privileged',
+    'is_active',
+    'actions'
+  ],
+  '/api/v1/assets/assets/': ['name', 'address', 'platform', 'category', 'type', 'zone', 'actions'],
+  '/api/v1/labels/labels/': ['name', 'value', 'color', 'actions'],
+  '/api/v1/users/groups/': ['name', 'users_amount', 'comment', 'actions'],
+  '/api/v1/users/users/': ['name', 'username', 'email', 'source', 'is_active', 'actions']
+}
+
+const genericDefaultColumns = ['name', 'value', 'address', 'username', 'actions']
+
 export default {
   name: 'ResourceSelectDialog',
   components: { Dialog, ListTable },
@@ -219,6 +237,14 @@ export default {
     effectivePageSize() {
       return Math.min(Math.max(this.pageSize, 1), 100)
     },
+    defaultColumns() {
+      if (Array.isArray(this.columnsShow.default)) {
+        return this.columnsShow.default
+      }
+      const urlPathname = new URL(this.url, location.origin).pathname
+      const pathname = urlPathname.endsWith('/') ? urlPathname : `${urlPathname}/`
+      return defaultColumnsByResource[pathname] || genericDefaultColumns
+    },
     tableName() {
       const pathname = new URL(this.url, location.origin).pathname.replaceAll('/', '_')
       const columnsKey = this.columns.length > 0 ? `_${this.columns.join('_')}` : ''
@@ -237,7 +263,8 @@ export default {
         saveQuery: false,
         columnsShow: {
           min: ['name', 'actions'],
-          ...this.columnsShow
+          ...this.columnsShow,
+          default: this.defaultColumns
         },
         columnsMeta: {
           name: {
