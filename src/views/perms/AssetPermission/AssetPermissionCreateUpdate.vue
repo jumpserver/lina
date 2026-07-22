@@ -16,6 +16,20 @@ import AccountFormatter from './components/AccountFormatter'
 import { AllAccount } from '../const'
 import ProtocolsSelect from '@/components/Form/FormFields/AllOrSpec.vue'
 
+function normalizeResourceIds(values) {
+  if (!Array.isArray(values)) {
+    return []
+  }
+  return values
+    .map((item) => {
+      if (item && typeof item === 'object') {
+        return item.id ?? item.pk ?? item.value
+      }
+      return item
+    })
+    .filter((item) => item !== undefined && item !== null && item !== '')
+}
+
 export default {
   name: 'AccountFormatter',
   components: {
@@ -135,7 +149,7 @@ export default {
             nodes: []
           },
           hidden: (formValue) => {
-            this.fieldsMeta.accounts.el.assets = formValue.assets
+            this.fieldsMeta.accounts.el.assets = normalizeResourceIds(formValue.assets)
             this.fieldsMeta.accounts.el.nodes = formValue.nodes
           }
         },
