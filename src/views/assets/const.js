@@ -1,5 +1,6 @@
 import i18n from '@/i18n/i18n'
 import ProtocolSelector from '@/components/Form/FormFields/ProtocolSelector'
+import AddressInput from '@/components/Form/FormFields/AddressInput'
 import AssetAccounts from '@/views/assets/Asset/AssetCreateUpdate/components/AssetAccounts'
 import rules from '@/components/Form/DataForm/rules'
 import { JSONManyToManySelect, NestedObjectSelect2, Select2 } from '@/components/Form/FormFields'
@@ -63,6 +64,7 @@ export const assetFieldsMeta = (vm, category, type) => {
   const asset = { address: 'https://example:8443' }
   return {
     address: {
+      component: AddressInput,
       rules: [rules.specialEmojiCheck, rules.RequiredChange],
       on: {
         change: ([event], updateForm) => {
@@ -181,6 +183,7 @@ export const assetFieldsMeta = (vm, category, type) => {
       label: i18n.t('Cluster')
     },
     url: {
+      component: AddressInput,
       label: 'url'
     },
     comment: {

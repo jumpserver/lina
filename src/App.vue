@@ -7,7 +7,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { Watermark } from 'watermark-js-plus'
-import { start as startSessionMonitor, stop as stopSessionMonitor } from '@/utils/sessionMonitor'
+import { start as startSessionMonitor, stop as stopSessionMonitor } from '@/utils/session-monitor'
 
 export default {
   name: 'App',
@@ -15,6 +15,12 @@ export default {
     return {
       watermark: null
     }
+  },
+  mounted() {
+    this.checkSessionMonitor()
+  },
+  beforeDestroy() {
+    stopSessionMonitor()
   },
   computed: {
     ...mapState({
