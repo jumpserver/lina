@@ -97,7 +97,7 @@ export default {
         if (key.startsWith(keyword)) {
           data[keyword] = (data[keyword] ? data[keyword] + ',' : '') + value
         } else {
-          data[key] = value
+          data[this.getQueryKey(key)] = value
         }
       }
       return data
@@ -186,8 +186,9 @@ export default {
           continue
         }
 
-        if (queryInfoValues.includes(key)) {
-          searchFieldOptions[key] = this.getInQueryInfoFields(key, value)
+        const normalizedKey = this.getTagKeyFromQueryKey(key)
+        if (queryInfoValues.includes(normalizedKey)) {
+          searchFieldOptions[normalizedKey] = this.getInQueryInfoFields(normalizedKey, value)
         }
       }
       return searchFieldOptions
@@ -263,6 +264,28 @@ export default {
         }
       }
       return ''
+    },
+    getOptionByKey(key) {
+      return this.options.find(field => field.value === key)
+    },
+    shouldUseExactQuery(key) {
+      const option = this.getOptionByKey(key)
+      return (
+        key.includes('__') ||
+        option?.type === 'boolean' ||
+        option?.type === 'choice' ||
+        option?.type === 'labeled_choice' ||
+        (option?.children && option.children.length > 0)
+      )
+    },
+    getQueryKey(key) {
+      if (this.shouldUseExactQuery(key)) {
+        return key
+      }
+      return `${key}__icontains`
+    },
+    getTagKeyFromQueryKey(key) {
+      return key.endsWith('__icontains') ? key.slice(0, -'__icontains'.length) : key
     },
     handleMenuItemChange(keys) {
       if (keys.length === 0) {
@@ -384,7 +407,7 @@ export default {
     },
     // 删除查询条件时改变url
     checkUrlFields(evt) {
-      let newQuery = _.omit(this.$route.query, evt)
+      let newQuery = _.omit(this.$route.query, [evt, this.getQueryKey(evt)])
       if (this.getUrlQuery && evt.startsWith('search')) {
         if (newQuery.search) delete newQuery.search
         const filterMapsSearch = this.filterMaps.search || ''
