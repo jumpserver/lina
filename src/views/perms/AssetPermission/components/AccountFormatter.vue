@@ -84,6 +84,12 @@ import {
 import ListTable from '@/components/Table/ListTable'
 import Dialog from '@/components/Dialog'
 
+function normalizeIds(items) {
+  return items
+    .slice(0, 20)
+    .map((item) => (item && typeof item === 'object' ? item.id || item.pk : item))
+}
+
 export default {
   components: {
     TagInput,
@@ -168,10 +174,8 @@ export default {
       autocomplete: (query, cb) => {
         const data = {
           username: query,
-          assets: this.assets.slice(0, 20),
-          nodes: this.nodes.slice(0, 20).map((item) => {
-            return typeof item === 'object' ? item.pk : item
-          })
+          assets: normalizeIds(this.assets),
+          nodes: normalizeIds(this.nodes)
         }
         this.$axios
           .post('/api/v1/accounts/accounts/username-suggestions/', data, {
