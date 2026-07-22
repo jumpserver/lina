@@ -152,13 +152,20 @@ export default {
       }
       this.iConfig = config
     },
-    async setInitial() {
+    async setInitial(requestedPlatformID) {
       const { defaultConfig } = this
       const nodeId = getBrowserQueryParam('node_id')
       const nodesInitial = nodeId ? [nodeId] : []
-      const platformId = this.platformID || 'Linux'
+      const platformId = requestedPlatformID || this.platformID || 'Linux'
       const url = `/api/v1/assets/platforms/${platformId}/`
-      this.platform = await this.$axios.get(url)
+      const platform = await this.$axios.get(url)
+      if (
+        requestedPlatformID !== undefined &&
+        String(this.platformID) !== String(requestedPlatformID)
+      ) {
+        return false
+      }
+      this.platform = platform
       const initial = {
         labels: [],
         is_active: true,
@@ -170,6 +177,7 @@ export default {
         await this.updateInitial(initial)
       }
       this.iConfig.initial = Object.assign({}, initial, defaultConfig.initial)
+      return true
     },
     async setPlatformConstrains() {
       const { platform } = this
@@ -184,6 +192,7 @@ export default {
       })
       const protocolChoices = this.iConfig.fieldsMeta.protocols.el.choices
       protocolChoices.splice(0, protocolChoices.length, ...protocols)
+      this.iConfig.fieldsMeta.protocols.el.key = `asset-protocols-${platform.id}`
       this.iConfig.fieldsMeta.accounts.el.platform = platform
     }
   }
