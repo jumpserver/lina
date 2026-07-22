@@ -13,13 +13,19 @@ import Select2 from './Select2.vue'
 
 export default {
   name: 'NestedObjectSelect2',
+  inheritAttrs: false,
   components: {
     Select2
   },
+  emits: ['input', 'change', 'changeOptions', 'update:modelValue'],
   props: {
     value: {
       type: [Array, String, Number, Boolean, Object],
       default: () => []
+    },
+    modelValue: {
+      type: [Array, String, Number, Boolean, Object],
+      default: undefined
     },
     multiple: {
       type: Boolean,
@@ -38,16 +44,24 @@ export default {
     attrsWithoutValue() {
       const attrs = Object.assign({ clearable: this.clearable }, this.$attrs)
       delete attrs.value
+      delete attrs.modelValue
+      delete attrs['model-value']
+      delete attrs['onUpdate:modelValue']
+      delete attrs['onUpdate:model-value']
       return attrs
+    },
+    externalValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value
     },
     iValue: {
       set(val) {
         const value = this.valuesToObjects(val)
         this.$log.debug('set iValue', value)
         this.$emit('input', value)
+        this.$emit('update:modelValue', value)
       },
       get() {
-        const value = this.objectsToValues(this.value)
+        const value = this.objectsToValues(this.externalValue)
         return value
       }
     },
