@@ -126,8 +126,8 @@ async function updatePlatformProtocols(
 }
 
 export const assetFieldsMeta = (vm, category, type) => {
-  const platformCategory = category || vm.$route.query.category
-  const platformType = type || vm.$route.query.type
+  const platformCategory = category || vm.$context.get('category')
+  const platformType = type || vm.$context.get('type')
   const platformProtocols = []
   const secretTypes = []
   const asset = { address: 'https://example:8443' }

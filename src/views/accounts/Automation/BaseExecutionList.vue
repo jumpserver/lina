@@ -47,9 +47,6 @@ export default {
     return {
       visible: false,
       reportUrl: '',
-      showTableUpdateDrawer: false,
-      currentTemplate: null,
-      drawerTitle: '',
       tableConfig: {
         url: this.url,
         columns: [
@@ -164,12 +161,6 @@ export default {
         ...defaultExtraActions,
         this.customActions
       ]
-    }
-  },
-  methods: {
-    handleDetailCallback(row) {
-      this.$route.params.id = row.id
-      this.showTableUpdateDrawer = true
     }
   }
 }

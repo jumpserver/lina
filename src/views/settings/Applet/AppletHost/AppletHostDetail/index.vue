@@ -53,12 +53,13 @@ export default {
           canDelete: this.$hasPerm('terminal.delete_applethost'),
           canUpdate: this.$hasPerm('terminal.change_applethost'),
           deleteSuccessRoute: 'Applets',
-          updateCallback: () => {
-            this.$router.push({
+          updateRoute: () => {
+            const platformId = this.host?.platform?.id || 'RemoteAppHost'
+            return {
               name: 'AppletHostUpdate',
-              params: { id: this.$route.params.id },
-              query: { platform: this.host.platform.id }
-            })
+              params: { id: this.host.id },
+              query: { platform: platformId }
+            }
           }
         }
       }

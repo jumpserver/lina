@@ -254,8 +254,8 @@ export default {
         type: platform.type.value,
         category: platform.category.value,
         node:
-          this.$route.query?.node ||
-          this.$route.query?.node_id ||
+          this.$context.get('node') ||
+          this.$context.get('node_id') ||
           getBrowserQueryParam('node_id') ||
           ''
       }

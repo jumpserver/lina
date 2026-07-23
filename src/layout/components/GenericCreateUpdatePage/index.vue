@@ -8,6 +8,7 @@
 <script>
 import IBox from '@/components/Common/IBox'
 import Page from '@/layout/components/Page'
+import { getRuntimeActionMeta, isOverlayRuntime } from '@/libs/context/runtime'
 import GenericCreateUpdateForm from '../GenericCreateUpdateForm'
 
 export default {
@@ -30,12 +31,15 @@ export default {
       drawer: false
     }
   },
-  mounted() {
-    this.$store.dispatch('common/getDrawerActionMeta').then((res) => {
-      if (res.action) {
-        this.drawer = true
-      }
-    })
+  async mounted() {
+    if (isOverlayRuntime(this)) {
+      this.drawer = true
+      return
+    }
+    const actionMeta = await getRuntimeActionMeta(this)
+    if (actionMeta?.action) {
+      this.drawer = true
+    }
   }
 }
 </script>

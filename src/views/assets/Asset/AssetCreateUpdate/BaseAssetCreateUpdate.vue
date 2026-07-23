@@ -51,7 +51,7 @@ export default {
       initPromise: null,
       pendingInit: false,
       // 在 meta 中，可能改变 platform id
-      platformID: this.$route.query.platform || '',
+      platformID: this.$context.get('platform'),
       meta: {},
       iConfig: {},
       defaultConfig: {
@@ -71,7 +71,7 @@ export default {
         fieldsMeta: {},
         performSubmit(validValues) {
           let url = this.url
-          const { id = '' } = this.$route.params
+          const id = this.$context.get('id')
           const values = _.cloneDeep(validValues)
           const submitMethod = id ? 'put' : 'post'
 
@@ -127,7 +127,7 @@ export default {
       const { addFields, addFieldsMeta, defaultConfig } = this
       defaultConfig.fieldsMeta = assetFieldsMeta(this)
       let url = this.url
-      const id = this.$route.params.id
+      const id = this.$context.get('id')
       if (!id) {
         url = setUrlParam(url, 'platform', this.platformID)
       }
@@ -154,7 +154,8 @@ export default {
     },
     async setInitial(requestedPlatformID) {
       const { defaultConfig } = this
-      const nodeId = getBrowserQueryParam('node_id')
+      const nodeId =
+        this.$context.get('node') || this.$context.get('node_id') || getBrowserQueryParam('node_id')
       const nodesInitial = nodeId ? [nodeId] : []
       const platformId = requestedPlatformID || this.platformID || 'Linux'
       const url = `/api/v1/assets/platforms/${platformId}/`

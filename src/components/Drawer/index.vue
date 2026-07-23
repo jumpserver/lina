@@ -34,11 +34,12 @@
 <script>
 import { getStoredDrawerWidth, useDrawerResize } from '@/composables/useDrawerResize'
 import { resolveAsyncComponentCompat } from '@/utils/vue'
-import { TAB_NAVIGATION_CONTEXT, TAB_NAVIGATION_SCOPE } from './context'
+import { DRAWER_RUNTIME_CONTEXT, TAB_NAVIGATION_CONTEXT, TAB_NAVIGATION_SCOPE } from './context'
 
 export default {
   provide() {
     return {
+      [DRAWER_RUNTIME_CONTEXT]: this.componentProps?.drawerContext || null,
       [TAB_NAVIGATION_CONTEXT]: {
         scope: TAB_NAVIGATION_SCOPE.LOCAL
       }

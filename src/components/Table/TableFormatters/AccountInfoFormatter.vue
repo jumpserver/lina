@@ -9,11 +9,8 @@
       </div>
     </div>
     <template #reference>
-      <el-button class="link-btn" size="small" type="primary">
-        <span class="link-btn__content">
-          <span>{{ $t('View') }}</span>
-          <el-icon><ArrowDown /></el-icon>
-        </span>
+      <el-button class="link-btn" plain size="small" type="primary">
+        <span class="link-btn__content">{{ $t('View') }}</span>
       </el-button>
     </template>
   </el-popover>

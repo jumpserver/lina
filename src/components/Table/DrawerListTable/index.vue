@@ -12,9 +12,11 @@
       :action="action"
       :class="[action]"
       :component="drawerComponent"
-      :component-props="drawerProps"
+      :component-listeners="drawerListeners"
+      :component-props="mergedDrawerProps"
       :title="drawerTitle"
       class="page-drawer"
+      @close-drawer="handleDrawerShellClose"
     />
   </div>
 </template>
@@ -23,11 +25,13 @@
 import ListTable from '../ListTable'
 import Drawer from '@/components/Drawer/index.vue'
 import { setUrlParam, toLowerCaseExcludeAbbr, toSentenceCase } from '@/utils/common/index'
+import { getRuntimeActionMeta } from '@/libs/context/runtime'
 import { markRaw, toRaw } from 'vue'
 import { mapGetters } from 'vuex'
 import { resolveRoute } from '@/utils/vue/index'
 
 const drawerType = [String, Function]
+const ROUTE_KEY_NOT_FOUND = Symbol('route-key-not-found')
 
 export default {
   name: 'GenericListPage',
@@ -79,11 +83,26 @@ export default {
       action: '',
       drawerVisible: false,
       drawerComponent: '',
+      drawerContext: null,
       isReopeningDrawer: false // 标志：是否正在重新打开抽屉
     }
   },
   computed: {
     ...mapGetters(['inDrawer']),
+    drawerListeners() {
+      return {
+        'close-drawer': this.handleDrawerRequestClose,
+        'detail-delete-success': this.handleDetailDeleteSuccess,
+        'open-update-drawer': this.handleDrawerRequestUpdate,
+        'reload-table': this.reloadTable
+      }
+    },
+    mergedDrawerProps() {
+      return {
+        ...this.drawerProps,
+        drawerContext: this.drawerContext
+      }
+    },
     iHeaderActions() {
       const actions = { ...this.headerActions }
       actions.onCreate = actions.onCreate || this.onCreate
@@ -174,11 +193,11 @@ export default {
     }
   },
   mounted() {
-    this.routeFreeze = {
-      params: _.cloneDeep(this.$route.params),
-      query: _.cloneDeep(this.$route.query)
+    this.routeMutationState = {
+      params: {},
+      query: {}
     }
-    this.$log.debug('>>> DrawerListTable mounted: ', this.routeFreeze)
+    this.$log.debug('>>> DrawerListTable mounted')
   },
   unmounted() {
     this.$log.debug('>>> DrawerListTable destroyed')
@@ -196,22 +215,70 @@ export default {
         drawerVisible: this.drawerVisible,
         isReopeningDrawer: this.isReopeningDrawer
       })
-      // 清空路由参数, 恢复路由参数
-      for (const key of ['params', 'query']) {
-        const curValue = this.$route[key] || {}
-        for (const k in curValue) {
-          this.$route[key][k] = ''
-        }
-        const value = this.routeFreeze[key] || {}
-        for (const k in value) {
-          this.$route[key][k] = value[k]
-        }
-      }
+      this.restoreLegacyRouteState()
       this.$log.debug('>>> afterCloseDrawer: clearing drawerComponent')
       this.drawerComponent = ''
+      this.drawerContext = null
       this.$log.debug('>>> afterCloseDrawer: drawerComponent cleared', {
         drawerComponent: this.drawerComponent ? 'EXISTS' : 'EMPTY'
       })
+    },
+    buildDrawerContext(meta = {}, extra = {}) {
+      return {
+        isDrawer: true,
+        action: meta.action || '',
+        row: meta.row || {},
+        col: meta.col || {},
+        id: meta.id || meta.row?.id || '',
+        query: _.cloneDeep(extra.query || {}),
+        params: _.cloneDeep(extra.params || {}),
+        routeName: this.$route.name || ''
+      }
+    },
+    async setDrawerRuntime(actionMeta = {}, extra = {}) {
+      await this.$store.dispatch('common/setDrawerActionMeta', actionMeta)
+      this.drawerContext = this.buildDrawerContext(actionMeta, extra)
+      return this.drawerContext
+    },
+    setLegacyRouteState(routeKey, name, value) {
+      const routeBucket = this.$route?.[routeKey]
+      if (!routeBucket) {
+        return
+      }
+      if (!Object.prototype.hasOwnProperty.call(this.routeMutationState[routeKey], name)) {
+        this.routeMutationState[routeKey][name] = Object.prototype.hasOwnProperty.call(
+          routeBucket,
+          name
+        )
+          ? routeBucket[name]
+          : ROUTE_KEY_NOT_FOUND
+      }
+      routeBucket[name] = value
+    },
+    syncLegacyRouteState({ params = {}, query = {} } = {}) {
+      Object.entries(params).forEach(([key, value]) => {
+        this.setLegacyRouteState('params', key, value)
+      })
+      Object.entries(query).forEach(([key, value]) => {
+        this.setLegacyRouteState('query', key, value)
+      })
+    },
+    restoreLegacyRouteState() {
+      for (const routeKey of ['params', 'query']) {
+        const routeBucket = this.$route?.[routeKey]
+        const mutationBucket = this.routeMutationState?.[routeKey] || {}
+        if (!routeBucket) {
+          continue
+        }
+        Object.entries(mutationBucket).forEach(([key, value]) => {
+          if (value === ROUTE_KEY_NOT_FOUND) {
+            Reflect.deleteProperty(routeBucket, key)
+            return
+          }
+          routeBucket[key] = value
+        })
+        this.routeMutationState[routeKey] = {}
+      }
     },
     getDetailDrawerTitle({ col, row, cellValue, payload = {} }) {
       this.$log.debug('>>> getDetailDrawerTitle: ', col, row, cellValue, payload)
@@ -367,9 +434,7 @@ export default {
         this.action = action
         this.$log.debug('>>> showDrawer step 1: action set to', action)
 
-        for (const key in query) {
-          this.$route.query[key] = query[key]
-        }
+        this.syncLegacyRouteState({ query })
 
         // 2. 先获取组件
         const component = this.getDrawerComponent(action, payload) || this.getDefaultDrawer(action)
@@ -423,7 +488,7 @@ export default {
 
         // 8. 获取标题
         if (this.getDrawerTitle) {
-          const actionMeta = await this.$store.getters['common/drawerActionMeta']
+          const actionMeta = this.drawerContext || (await getRuntimeActionMeta(this))
           this.title = this.getDrawerTitle({ action, ...actionMeta })
         }
         this.drawerTitle = this.getActionDrawerTitle({ action, row, col, cellValue, payload })
@@ -473,26 +538,48 @@ export default {
       }
       this.$refs.ListTable.reloadTable()
     },
+    handleDetailDeleteSuccess(payload) {
+      this.$emit('detail-delete-success', payload)
+    },
+    handleDrawerShellClose() {
+      this.$store.dispatch('common/cleanDrawerActionMeta')
+    },
+    handleDrawerRequestClose() {
+      this.drawerVisible = false
+      this.$nextTick(() => {
+        this.$store.dispatch('common/cleanDrawerActionMeta')
+      })
+    },
+    handleDrawerRequestUpdate({ row, col, query = {} } = {}) {
+      const nextRow = row || this.drawerContext?.row || {}
+      if (!nextRow?.id) {
+        return
+      }
+      this.onUpdate({ row: nextRow, col, query })
+    },
     async onDetail({ row, col, cellValue, detailRoute, formatterArgs }) {
       this.$log.debug('>>> onDetail: ', detailRoute, formatterArgs)
-      this.$route.params.id = row.id
       // 因为使用 detail formatter 时，id 可能并非 row 的，比如 execution 的 task id
       const query = detailRoute?.query || {}
       const params = detailRoute?.params || {}
-      for (const key in query) {
-        this.$route.query[key] = query[key]
-      }
-      for (const key in params) {
-        this.$route.params[key] = params[key]
-      }
       // 有可能来自 params 或者 row
       const id = params.id || row.id
-      await this.$store.dispatch('common/setDrawerActionMeta', {
-        action: 'detail',
-        row: row,
-        col: col,
-        id: id
+      this.syncLegacyRouteState({
+        params: {
+          id: row.id,
+          ...params
+        },
+        query
       })
+      await this.setDrawerRuntime(
+        {
+          action: 'detail',
+          row,
+          col,
+          id
+        },
+        { query, params }
+      )
       await this.showDrawer('detail', {
         row,
         col,
@@ -506,30 +593,54 @@ export default {
       if (!meta) {
         meta = {}
       }
-      this.$route.params.id = ''
-      await this.$store.dispatch('common/setDrawerActionMeta', { action: 'create', ...meta })
+      this.syncLegacyRouteState({
+        params: {
+          id: ''
+        },
+        query: meta.query || {}
+      })
+      const actionMeta = { action: 'create', ...meta }
+      await this.setDrawerRuntime(actionMeta, {
+        query: meta.query,
+        params: meta.params
+      })
       this.$log.debug('>>> onCreate: calling showDrawer')
       await this.showDrawer('create', meta)
       this.$log.debug('>>> onCreate: showDrawer completed')
     },
     async onClone({ row, col, query = {} }) {
-      this.$route.params.id = ''
-      await this.$store.dispatch('common/setDrawerActionMeta', {
+      this.syncLegacyRouteState({
+        params: {
+          id: ''
+        },
+        query
+      })
+      const actionMeta = {
         action: 'clone',
         row: row,
         col: col,
         id: row.id
-      })
+      }
+      await this.setDrawerRuntime(actionMeta, { query })
       await this.showDrawer('clone', { query })
     },
     async onUpdate({ row, col, query = {} }) {
-      this.$route.params.id = row.id
-      this.$route.params.action = 'update'
-      await this.$store.dispatch('common/setDrawerActionMeta', {
+      this.syncLegacyRouteState({
+        params: {
+          id: row.id,
+          action: 'update'
+        },
+        query
+      })
+      const actionMeta = {
         action: 'update',
         row: row,
         col: col,
         id: row.id
+      }
+      await this.setDrawerRuntime(actionMeta, {
+        query,
+        params: { id: row.id, action: 'update' }
       })
       await this.showDrawer('update', { query })
     }

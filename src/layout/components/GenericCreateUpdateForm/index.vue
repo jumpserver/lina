@@ -22,6 +22,7 @@ import { ElLink } from 'element-plus'
 import AutoDataForm from '@/components/Form/AutoDataForm'
 import { getUpdateObjURL } from '@/utils/common/index'
 import { encryptPassword } from '@/utils/secure'
+import { getRuntimeActionMeta } from '@/libs/context/runtime'
 import deepmerge from 'deepmerge'
 
 export default {
@@ -327,13 +328,16 @@ export default {
     }
   },
   methods: {
+    async getDrawerMeta() {
+      return getRuntimeActionMeta(this)
+    },
     async setDrawerMeta() {
-      const drawActionMeta = await this.$store.dispatch('common/getDrawerActionMeta')
+      const drawActionMeta = await this.getDrawerMeta()
       if (drawActionMeta && drawActionMeta.action) {
         this.drawer = true
         this.action = drawActionMeta.action
         this.row = drawActionMeta.row
-        this.actionId = this.row?.id
+        this.actionId = drawActionMeta.id || this.row?.id
       }
     },
     setMethod() {
@@ -344,7 +348,7 @@ export default {
       }
       // this.$log.debug('Drawer: ', this.drawer, this.submitMethod, this.action)
       if (!this.drawer && !this.method) {
-        this.method = this.$route.params['id'] ? 'put' : 'post'
+        this.method = this.$context.get('id') ? 'put' : 'post'
       }
       if (this.drawer && !this.submitMethod) {
         if (this.action === 'clone' || this.action === 'create') {
@@ -357,16 +361,14 @@ export default {
     getUpdateId() {
       if (this.actionId && this.action === 'update') {
         return this.actionId
-      } else {
-        return this.$route.params['id']
       }
+      return this.$context.get('id')
     },
     getCloneId() {
       if (this.actionId && this.action === 'clone') {
         return this.actionId
-      } else {
-        return this.$route.query['clone_from']
       }
+      return this.$context.get('clone_from')
     },
     isUpdateMethod() {
       return ['put', 'patch'].indexOf(this.method.toLowerCase()) > -1
