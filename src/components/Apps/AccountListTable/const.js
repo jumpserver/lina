@@ -198,7 +198,7 @@ export const accountOtherActions = (vm) => {
       },
       callback: ({ row }) => {
         vm.accountCreateUpdateTitle = vm.$t('CopyToOther')
-        vm.$route.query.flag = 'copy'
+        vm.accountOperationFlag = 'copy'
         vm.iAsset = vm.asset
         vm.account = row
         vm.showAddDialog = true
@@ -220,7 +220,7 @@ export const accountOtherActions = (vm) => {
       },
       callback: ({ row }) => {
         vm.accountCreateUpdateTitle = vm.$t('MoveToOther')
-        vm.$route.query.flag = 'move'
+        vm.accountOperationFlag = 'move'
         vm.iAsset = vm.asset
         vm.account = row
         vm.showAddDialog = true

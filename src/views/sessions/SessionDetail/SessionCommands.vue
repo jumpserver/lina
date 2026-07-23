@@ -13,10 +13,11 @@ export default {
     ListTable
   },
   data() {
+    const sessionId = this.$context.get('id')
     return {
       tableConfig: {
         hasSelection: false,
-        url: `/api/v1/terminal/commands/?session_id=${this.$route.params.id}`,
+        url: `/api/v1/terminal/commands/?session_id=${sessionId}`,
         columns: ['expandCol', 'index', 'input', 'timestamp'],
         columnsMeta: {
           expandCol: {
@@ -55,13 +56,6 @@ export default {
         hasSearch: false,
         hasRightActions: false
       }
-    }
-  },
-  async mounted() {
-    const drawActionMeta = await this.$store.dispatch('common/getDrawerActionMeta')
-
-    if (drawActionMeta && drawActionMeta.id) {
-      this.tableConfig.url = `/api/v1/terminal/commands/?session_id=${drawActionMeta.id}`
     }
   }
 }

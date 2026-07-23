@@ -12,6 +12,7 @@
 <script>
 import Page from '@/layout/components/Page'
 import DrawerListTable from '@/components/Table/DrawerListTable/index'
+import { getRuntimeActionMeta, isOverlayRuntime } from '@/libs/context/runtime'
 
 export default {
   name: 'GenericListDrawerPage',
@@ -42,12 +43,15 @@ export default {
       }
     }
   },
-  mounted() {
-    this.$store.dispatch('common/getDrawerActionMeta').then((res) => {
-      if (res.action) {
-        this.drawer = true
-      }
-    })
+  async mounted() {
+    if (isOverlayRuntime(this)) {
+      this.drawer = true
+      return
+    }
+    const actionMeta = await getRuntimeActionMeta(this)
+    if (actionMeta?.action) {
+      this.drawer = true
+    }
   },
   methods: {
     reloadTable() {

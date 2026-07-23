@@ -23,6 +23,7 @@ import '@/guards' // permission control
 import { installDirectives } from '@/directive'
 import i18n, { fetchTranslationsFromAPI } from './i18n/i18n'
 import ChartsPlugin from '@/libs/charts'
+import createContextService from '@/libs/context'
 import { setupErrorHandler } from '@/libs/errors'
 import CookiePlugin from '@/libs/cookie'
 import ResourceActivity from '@/components/Apps/ResourceActivity'
@@ -76,6 +77,7 @@ async function initApp() {
   })
   app.use(CookiePlugin)
   app.use(ChartsPlugin)
+  app.use(createContextService({ router }))
 
   // v-sanitize: 手动注册(v-sanitize npm 包用 Vue.prototype 不兼容 Vue 3)
   const sanitizeOptions = {

@@ -1,44 +1,46 @@
 <template>
   <Page v-bind="$attrs" :title="title" class="tab-page">
-    <template #headingRightSide>
-      <slot name="headingRightSide" />
-    </template>
-
     <div class="tab-page-wrapper">
-      <el-tabs
-        v-if="tabIndices.length > 1"
-        v-model="iActiveMenu"
-        class="page-submenu"
-        @tab-click="handleTabClick"
-      >
-        <template v-for="item in tabIndices" :key="item.name">
-          <el-tab-pane :disabled="item.disabled" :name="item.name">
-            <template #label>
-              <div class="tab-page-submenu-item-wrapper">
-                <Icon v-if="item.icon" :icon="item.icon" class="pre-icon" />
-                {{ toSentenceCase(item.title) }}
-                <slot :tab="item.name" name="badge" />
-                <el-tooltip
-                  v-if="item.helpTip"
-                  :show-after="500"
-                  effect="dark"
-                  placement="bottom"
-                  popper-class="help-tips"
-                >
-                  <template #content>
-                    <div v-sanitize="item.helpTip" class="page-help-content" />
-                  </template>
-                  <span>
-                    <el-button class="help-msg-btn">
-                      <el-icon><InfoFilled /></el-icon>
-                    </el-button>
-                  </span>
-                </el-tooltip>
-              </div>
-            </template>
-          </el-tab-pane>
-        </template>
-      </el-tabs>
+      <div v-if="tabIndices.length > 1 || $slots.headingRightSide" class="tab-page-submenu">
+        <el-tabs
+          v-if="tabIndices.length > 1"
+          v-model="iActiveMenu"
+          class="page-submenu"
+          @tab-click="handleTabClick"
+        >
+          <template v-for="item in tabIndices" :key="item.name">
+            <el-tab-pane :disabled="item.disabled" :name="item.name">
+              <template #label>
+                <div class="tab-page-submenu-item-wrapper">
+                  <Icon v-if="item.icon" :icon="item.icon" class="pre-icon" />
+                  {{ toSentenceCase(item.title) }}
+                  <slot :tab="item.name" name="badge" />
+                  <el-tooltip
+                    v-if="item.helpTip"
+                    :show-after="500"
+                    effect="dark"
+                    placement="bottom"
+                    popper-class="help-tips"
+                  >
+                    <template #content>
+                      <div v-sanitize="item.helpTip" class="page-help-content" />
+                    </template>
+                    <span>
+                      <el-button class="help-msg-btn">
+                        <el-icon><InfoFilled /></el-icon>
+                      </el-button>
+                    </span>
+                  </el-tooltip>
+                </div>
+              </template>
+            </el-tab-pane>
+          </template>
+        </el-tabs>
+
+        <div v-if="$slots.headingRightSide" class="tab-page-submenu-right">
+          <slot name="headingRightSide" />
+        </div>
+      </div>
 
       <div class="tab-page-content">
         <el-alert
@@ -384,6 +386,32 @@ export default {
     display: flex;
     flex-direction: column;
     min-height: 0;
+  }
+
+  .tab-page-submenu {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    margin-bottom: 5px;
+    overflow: visible;
+  }
+
+  .tab-page-submenu .page-submenu {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .tab-page-submenu-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-left: 12px;
+    padding-right: 20px;
+    flex-shrink: 0;
+  }
+
+  .tab-page-submenu-right :deep(.el-button) {
+    padding: 5px 8px;
   }
 
   :deep(.page-heading) {

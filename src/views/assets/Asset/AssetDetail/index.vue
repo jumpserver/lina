@@ -59,17 +59,17 @@ export default {
         ],
         hasRightSide: true,
         actions: {
-          updateCallback: () => {
+          updateRoute: () => {
             const category = this.asset.category.value || 'host'
             const routerName = _.capitalize(category) + 'Update'
-            this.$router.push({
+            return {
               name: routerName,
-              params: { id: this.$route.params.id },
+              params: { id: this.asset.id },
               query: {
                 platform: this.asset.platform.id,
                 type: this.asset.type.value
               }
-            })
+            }
           }
         }
       }

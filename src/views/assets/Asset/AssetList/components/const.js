@@ -15,7 +15,7 @@ export function getDefaultConfig(vm) {
   const onAction = async (row, action) => {
     await vm.updateOrCloneAsset(row, action.toLowerCase())
   }
-  const extraQuery = vm.$route.params?.extraQuery || {}
+  const extraQuery = vm.$context.get('extraQuery') ?? {}
   const defaultHeaderActions = {
     onCreate: () => {
       vm.showPlatform = false

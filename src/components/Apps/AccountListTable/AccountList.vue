@@ -25,6 +25,7 @@
       :account="account"
       :add-template="addTemplate"
       :asset="iAsset"
+      :operation-flag="accountOperationFlag"
       :title="accountCreateUpdateTitle"
       @add="addAccountSuccess"
       @bulk-create-done="showBulkCreateResult($event)"
@@ -161,6 +162,7 @@ export default {
       showResultDialog: false,
       showAddDialog: false,
       showAddTemplateDialog: false,
+      accountOperationFlag: null,
       detailDrawer: () => import('@/views/accounts/Account/AccountDetail/index.vue'),
       createAccountResults: [],
       iAsset: this.asset,
@@ -484,7 +486,7 @@ export default {
       Object.assign(this.account, account)
     },
     addAccountSuccess() {
-      // Reflect.deleteProperty(this.$route.query, 'flag')
+      this.accountOperationFlag = null
       this.isUpdateAccount = false
       this.$refs.ListTable.reloadTable()
     },
@@ -516,6 +518,7 @@ export default {
 
       setTimeout(() => {
         this.showAddDialog = false
+        this.accountOperationFlag = null
       }, 800)
 
       setTimeout(() => {

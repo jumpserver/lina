@@ -29,16 +29,13 @@ export default {
       },
       config: {
         activeMenu: 'TicketDetail',
-        url: '',
+        url: '/api/v1/tickets/flows',
         submenu: [
           {
             title: this.$t('TicketDetail'),
             name: 'TicketDetail'
           }
         ],
-        actions: {
-          detailApiUrl: `/api/v1/tickets/flows/${this.$route.params.id}/`
-        },
         hasRightSide: false
       }
     }

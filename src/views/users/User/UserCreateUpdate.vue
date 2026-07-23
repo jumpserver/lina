@@ -62,7 +62,7 @@ export default {
         },
         password_strategy: {
           hidden: (formValue) => {
-            return this.$route.params.id || formValue.source !== 'local'
+            return this.$context.get('id') || formValue.source !== 'local'
           }
         },
         mfa_level: {
@@ -79,7 +79,7 @@ export default {
             if (formValue.update_password) {
               return true
             }
-            return formValue.source !== 'local' || this.$route.params.action !== 'update'
+            return formValue.source !== 'local' || this.$context.get('action') !== 'update'
           }
         },
         password: {
@@ -194,9 +194,8 @@ export default {
           el: {}
         }
       },
-      submitMethod() {
-        const params = this.$route.params
-        if (params.id) {
+      submitMethod: () => {
+        if (this.$context.get('id')) {
           return 'put'
         } else {
           return 'post'
@@ -256,7 +255,7 @@ export default {
         })
       }
       this.fieldsMeta.password.el.userIsOrgAdmin = user['is_org_admin']
-      if (this.$route.query.clone_from) {
+      if (this.$context.get('clone_from')) {
         this.user.groups = []
       }
       this.disableMFAFieldIfNeed(user)
@@ -277,7 +276,7 @@ export default {
       const securityMFAAuth = store.getters.publicSettings['SECURITY_MFA_AUTH']
       const adminUserIsNeed =
         (user?.is_superuser || user?.is_org_admin) &&
-        this.$route.meta.action === 'update' &&
+        this.$context.get('action') === 'update' &&
         securityMFAAuth === MFASystemSetting.onlyAdminUsers
       if (securityMFAAuth === MFASystemSetting.allUsers) {
         options = [
