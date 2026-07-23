@@ -73,8 +73,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.password-update :deep(.password-input) {
+.password-update :deep(.el-input) {
   width: 600px;
-  max-width: 100%;
+  max-width: 600px;
 }
 </style>
