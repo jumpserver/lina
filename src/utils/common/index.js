@@ -3,6 +3,7 @@ import { message } from '@/utils/vue/message'
 import { getBasePath } from '@/utils/storage'
 import { toSentenceCase } from './string'
 import { ObjectLocalStorage } from './objectLocalStorage'
+import { toPlainTextMessage } from './message'
 import _ from 'lodash'
 
 export { toSentenceCase }
@@ -177,7 +178,7 @@ export function getErrorResponseMsg(error) {
       .filter((i) => i)
       .join('; ')
   } else if (typeof data === 'string') {
-    return data
+    return toPlainTextMessage(data)
   } else if (_.isPlainObject(data)) {
     const msg = Object.values(data)
       .map((item) => getErrorResponseMsg(item))
@@ -187,7 +188,7 @@ export function getErrorResponseMsg(error) {
   } else {
     msg = error.toString()
   }
-  return msg
+  return toPlainTextMessage(msg)
 }
 
 // 将一组错误信息拼接为单条字符串，过滤掉空值并去重。
