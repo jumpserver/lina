@@ -169,6 +169,10 @@ export default {
       type: String,
       default: ''
     },
+    request: {
+      type: Function,
+      default: null
+    },
     /**
      * 主键，默认值 id，
      * 修改/删除时会用到,请求会根据定义的属性值获取主键,即row[this.id]
@@ -1061,8 +1065,8 @@ export default {
         history.replaceState(history.state, 'el-data-table search', newUrl)
       }
 
-      this.$axios
-        .get(url + queryStr, this.axiosConfig)
+      const request = this.request || ((requestUrl, config) => this.$axios.get(requestUrl, config))
+      Promise.resolve(request(url + queryStr, this.axiosConfig))
         .then(({ data: resp }) => {
           let data = []
 

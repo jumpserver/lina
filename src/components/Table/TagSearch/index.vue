@@ -7,6 +7,7 @@
         :options="options"
         :props="config"
         @change="handleMenuItemChange"
+        @visible-change="handleCascaderVisibleChange"
       />
     </div>
 
@@ -78,7 +79,8 @@ export default {
       filterTags: this.default || {},
       focus: false,
       showCascade: true,
-      isFocus: false
+      isFocus: false,
+      pendingFocusSearchInput: false
     }
   },
   computed: {
@@ -102,7 +104,7 @@ export default {
         if (key.startsWith(keyword)) {
           data[keyword] = (data[keyword] ? data[keyword] + ',' : '') + value
         } else {
-          data[key] = value
+          data[this.getQueryKey(key)] = value
         }
       }
       return data
@@ -159,6 +161,13 @@ export default {
     document.removeEventListener('keyup', this.handleKeyUp)
   },
   methods: {
+    focusSearch() {
+      if (!this.$refs.SearchInput) {
+        return false
+      }
+      this.$refs.SearchInput.focus()
+      return true
+    },
     handleFocus() {
       this.focus = true
       this.isFocus = true
@@ -191,8 +200,9 @@ export default {
           continue
         }
 
-        if (queryInfoValues.includes(key)) {
-          searchFieldOptions[key] = this.getInQueryInfoFields(key, value)
+        const normalizedKey = this.getTagKeyFromQueryKey(key)
+        if (queryInfoValues.includes(normalizedKey)) {
+          searchFieldOptions[normalizedKey] = this.getInQueryInfoFields(normalizedKey, value)
         }
       }
       return searchFieldOptions
@@ -269,20 +279,63 @@ export default {
       }
       return ''
     },
+    getOptionByKey(key) {
+      return this.options.find((field) => field.value === key)
+    },
+    shouldUseExactQuery(key) {
+      const option = this.getOptionByKey(key)
+      return (
+        key.includes('__') ||
+        option?.type === 'boolean' ||
+        option?.type === 'choice' ||
+        option?.type === 'labeled_choice' ||
+        (option?.children && option.children.length > 0)
+      )
+    },
+    getQueryKey(key) {
+      if (this.shouldUseExactQuery(key)) {
+        return key
+      }
+      return `${key}__icontains`
+    },
+    getTagKeyFromQueryKey(key) {
+      return key.endsWith('__icontains') ? key.slice(0, -'__icontains'.length) : key
+    },
     handleMenuItemChange(keys) {
       if (keys.length === 0) {
         return
       }
       if (keys.length === 1) {
         this.filterKey = keys[0]
-        this.$refs.SearchInput.focus()
+        this.pendingFocusSearchInput = true
       } else if (keys.length === 2) {
         this.filterKey = keys[0]
         this.filterValue = keys[1]
         this.valueLabel = this.getValueLabel(keys[0], keys[1])
         this.handleConfirm()
       }
-      this.$nextTick(() => this.$refs.Cascade.handleClear())
+      this.$nextTick(() => {
+        this.$refs.Cascade.handleClear()
+      })
+    },
+    handleCascaderVisibleChange(visible) {
+      if (visible || !this.pendingFocusSearchInput) {
+        return
+      }
+      this.pendingFocusSearchInput = false
+      this.$nextTick(() => this.focusSearchInput())
+    },
+    focusSearchInput() {
+      setTimeout(() => {
+        const searchInput = this.$refs.SearchInput
+        const nativeInput = searchInput?.input || searchInput?.$el?.querySelector?.('input')
+        if (nativeInput) {
+          nativeInput.focus()
+        } else {
+          searchInput?.focus?.()
+        }
+        this.handleFocus()
+      }, 0)
     },
     handleTagClose(evt) {
       delete this.filterTags[evt]
@@ -367,7 +420,7 @@ export default {
 
       this.filterKey = v.key
       this.filterValue = v.value
-      this.$refs.SearchInput.focus()
+      this.focusSearchInput()
     },
     handleKeyUp(event) {
       // 如果当前有输入框聚焦，不触发搜索
@@ -389,7 +442,7 @@ export default {
     },
     // 删除查询条件时改变url
     checkUrlFields(evt) {
-      let newQuery = _.omit(this.$route.query, evt)
+      let newQuery = _.omit(this.$route.query, [evt, this.getQueryKey(evt)])
       if (this.getUrlQuery && evt.startsWith('search')) {
         if (newQuery.search) delete newQuery.search
         const filterMapsSearch = this.filterMaps.search || ''

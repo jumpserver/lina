@@ -126,13 +126,15 @@ export default {
         this.iCurrentColumns = this.totalColumnsList.reduce((prev, item) => {
           return [...prev, item.prop]
         }, [])
-        this.isIndeterminate = false
       } else {
-        this.iCurrentColumns = this.defaultColumns
-        this.isIndeterminate = true
+        this.iCurrentColumns = [...this.minColumns]
       }
+      this.updateCheckState()
     },
     handleCheckedChange(value) {
+      this.updateCheckState(value)
+    },
+    updateCheckState(value = this.iCurrentColumns) {
       const checkedCount = value.length
       this.checkAll = checkedCount === this.totalColumnsList.length
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.totalColumnsList.length

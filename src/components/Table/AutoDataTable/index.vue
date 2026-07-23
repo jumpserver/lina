@@ -7,6 +7,7 @@
         ref="dataTable"
         :config="iConfig"
         @filter-change="filterChange"
+        @loaded="handleLoaded"
       />
     </div>
     <ColumnSettingPopover
@@ -37,6 +38,7 @@ export default {
     DataTable,
     ColumnSettingPopover
   },
+  emits: ['loaded'],
   props: {
     config: {
       type: Object,
@@ -111,6 +113,9 @@ export default {
     this.isDeactivated = false
   },
   methods: {
+    handleLoaded() {
+      this.$emit('loaded')
+    },
     openColumnSetting() {
       this.$refs.columnSettingPopover?.open()
     },
