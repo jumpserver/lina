@@ -12,7 +12,9 @@ export function changeElementColor(themeColors) {
     .border-${key}{border-color: ${value}!important;}
     `
     if (['primary', 'success', 'info', 'warning', 'danger'].includes(key)) {
-      const blendColor = mix('ffffff', value.replace(/#/g, ''), 35)
+      // Disabled filled buttons should use a clearly lightened theme color.
+      // 35% white leaves too much of the base color and looks almost enabled.
+      const disabledColor = mix('ffffff', value.replace(/#/g, ''), 50)
       const darken = mix('000000', value.replace(/#/g, ''), 10)
       const tooLightColor = mix('ffffff', value.replace(/#/g, ''), 90)
       colorsCssText =
@@ -30,7 +32,7 @@ export function changeElementColor(themeColors) {
         .el-button--${key}.is-disabled,
         .el-button--${key}.is-disabled:active,
         .el-button--${key}.is-disabled:focus {
-          background-color: ${blendColor}!important;
+          background-color: ${disabledColor}!important;
           border-color: var(--color-border);
         }
         .el-link.el-link--${key}{

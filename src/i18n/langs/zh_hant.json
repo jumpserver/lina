@@ -12,5 +12,8 @@
   "FailedToSendVerificationCode": "發送驗證碼失敗",
   "Role": "角色",
   "DeeplyThoughtAbout": "已深度思考",
-  "ChatAIThinking": "正在思考"
+  "ChatAIThinking": "正在思考",
+  "Package": "套件包",
+  "UploadZipTips": "僅支援上傳 ZIP 套件包，檔案大小需小於 {size} MB。",
+  "UploadSucceed": "上傳成功"
 }

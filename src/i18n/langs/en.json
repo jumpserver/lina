@@ -32,5 +32,8 @@
   "FailedToSendVerificationCode": "Failed to send verification code",
   "Role": "Role",
   "DeeplyThoughtAbout": "Thought deeply",
-  "ChatAIThinking": "Thinking"
+  "ChatAIThinking": "Thinking",
+  "Package": "Package",
+  "UploadZipTips": "Only ZIP package files are supported, and the file size must be less than {size} MB.",
+  "UploadSucceed": "Upload succeeded"
 }

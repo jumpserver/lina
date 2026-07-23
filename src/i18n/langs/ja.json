@@ -13,5 +13,8 @@
   "FailedToSendVerificationCode": "認証コードの送信に失敗しました",
   "Role": "ロール",
   "DeeplyThoughtAbout": "深く考えました",
-  "ChatAIThinking": "考え中"
+  "ChatAIThinking": "考え中",
+  "Package": "パッケージ",
+  "UploadZipTips": "ZIP パッケージファイルのみアップロード可能で、ファイルサイズは {size} MB 未満である必要があります。",
+  "UploadSucceed": "アップロードに成功しました"
 }

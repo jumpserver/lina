@@ -135,7 +135,13 @@ export default {
         canCreate: () => this.$hasPerm('assets.add_platform'),
         // eslint-disable-next-line vue/no-computed-properties-in-data
         importOptions: {
-          url: vm.url
+          url: vm.url,
+          canImportPackage: true,
+          importPackageLabel: vm.$t('Package'),
+          packageUploadUrl: '/api/v1/assets/platforms/upload/',
+          packageUploadAccept: '.zip',
+          packageUploadConfirmText: vm.$t('Upload'),
+          packageUploadTitle: vm.$t('Package')
         },
         // eslint-disable-next-line vue/no-computed-properties-in-data
         exportOptions: {

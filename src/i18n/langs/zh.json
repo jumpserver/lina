@@ -30,5 +30,8 @@
   "FailedToSendVerificationCode": "发送验证码失败",
   "Role": "角色",
   "DeeplyThoughtAbout": "已深度思考",
-  "ChatAIThinking": "正在思考"
+  "ChatAIThinking": "正在思考",
+  "Package": "包",
+  "UploadZipTips": "仅支持 ZIP 包上传，文件大小需小于 {size} MB。",
+  "UploadSucceed": "上传成功"
 }
