@@ -270,7 +270,7 @@ export default {
         action.tip = this.cleanValue(action, 'tip')
         action.title = this.cleanValue(action, 'title')
         action.type = action.type || ''
-        action.plain = action.type === 'danger' ? action.plain !== false : false
+        action.plain = true
         action.disabled = !action.can
         return action
       })

@@ -283,10 +283,7 @@ $color-drop-menu-border: #e4e7ed;
 
   :deep(.action-item.el-button.el-button--default),
   :deep(.action-item.el-dropdown > .el-button.el-button--default),
-  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default),
-  :deep(.action-item.el-button.el-button--primary.is-plain),
-  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain),
-  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain) {
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default) {
     --el-button-hover-text-color: var(--color-primary);
     --el-button-hover-bg-color: var(--color-primary-light-3, #e8f7f4);
     --el-button-hover-border-color: var(--color-primary-light, #bae8df);
@@ -300,6 +297,20 @@ $color-drop-menu-border: #e4e7ed;
       color: var(--color-primary);
       background-color: var(--color-primary-light-3, #e8f7f4) !important;
       border-color: var(--color-primary-light, #bae8df) !important;
+      box-shadow: none !important;
+      outline: none;
+    }
+  }
+
+  :deep(.action-item.el-button.el-button--primary.is-plain),
+  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain) {
+    &:hover,
+    &:focus,
+    &:active {
+      color: #fff;
+      background-color: var(--color-primary) !important;
+      border-color: var(--color-primary) !important;
       box-shadow: none !important;
       outline: none;
     }
@@ -377,7 +388,7 @@ $color-drop-menu-border: #e4e7ed;
   :deep(
     .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:active .el-icon
   ) {
-    color: var(--color-primary);
+    color: #fff;
   }
 
   .action-item.el-dropdown {

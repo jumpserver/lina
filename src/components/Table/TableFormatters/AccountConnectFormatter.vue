@@ -174,30 +174,6 @@ export default {
         color: #fff !important;
       }
     }
-
-    &.el-button--primary.is-plain {
-      color: var(--color-primary);
-      // 用主题系统维护的 EP 主色浅色阶(由当前主色 mix 白色生成),
-      // 替换此前硬编码的 #e8f7f4 —— 后者在非默认(如深蓝黑)主题下不跟随、显脏。
-      background-color: var(--el-color-primary-light-9);
-      border-color: var(--el-color-primary-light-5);
-
-      i {
-        color: var(--color-primary);
-      }
-
-      &:hover,
-      &:focus,
-      &:active {
-        color: #fff;
-        background-color: var(--color-primary);
-        border-color: var(--color-primary);
-
-        i {
-          color: #fff;
-        }
-      }
-    }
   }
 }
 </style>

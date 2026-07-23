@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import getters from './getters'
+import { setStore } from './registry'
 
 const moduleFiles = import.meta.glob('./modules/**/*.js', {
   eager: true
@@ -15,5 +16,7 @@ const store = createStore({
   modules,
   getters
 })
+
+setStore(store)
 
 export default store
