@@ -28,10 +28,12 @@ import CookiePlugin from '@/libs/cookie'
 import ResourceActivity from '@/components/Apps/ResourceActivity'
 import request from '@/utils/request'
 import { message } from '@/utils/vue/message'
+import { toPlainTextMessage } from '@/utils/common/message'
 import xss from '@/utils/secure'
 import moment from 'moment'
 import DOMPurify from 'dompurify'
 import _ from 'lodash'
+import { ElMessageBox } from 'element-plus'
 
 moment.locale('zh-cn')
 
@@ -97,6 +99,10 @@ async function initApp() {
   app.config.globalProperties.$moment = moment
   app.config.globalProperties.$axios = request
   app.config.globalProperties.$message = message
+  app.config.globalProperties.$alert = (msg, title, options = {}) => {
+    const plainText = typeof msg === 'string' ? toPlainTextMessage(msg) : msg
+    return ElMessageBox.alert(plainText, title, options)
+  }
   app.config.globalProperties.$xss = xss
   app.config.globalProperties.$eventBus = eventBus
   app.config.globalProperties._ = _

@@ -14,25 +14,27 @@
         <template v-for="item in tabIndices" :key="item.name">
           <el-tab-pane :disabled="item.disabled" :name="item.name">
             <template #label>
-              <Icon v-if="item.icon" :icon="item.icon" class="pre-icon" />
-              {{ toSentenceCase(item.title) }}
-              <slot :tab="item.name" name="badge" />
-              <el-tooltip
-                v-if="item.helpTip"
-                :show-after="500"
-                effect="dark"
-                placement="bottom"
-                popper-class="help-tips"
-              >
-                <template #content>
-                  <div v-sanitize="item.helpTip" class="page-help-content" />
-                </template>
-                <span>
-                  <el-button class="help-msg-btn">
-                    <el-icon><InfoFilled /></el-icon>
-                  </el-button>
-                </span>
-              </el-tooltip>
+              <div class="tab-page-submenu-item-wrapper">
+                <Icon v-if="item.icon" :icon="item.icon" class="pre-icon" />
+                {{ toSentenceCase(item.title) }}
+                <slot :tab="item.name" name="badge" />
+                <el-tooltip
+                  v-if="item.helpTip"
+                  :show-after="500"
+                  effect="dark"
+                  placement="bottom"
+                  popper-class="help-tips"
+                >
+                  <template #content>
+                    <div v-sanitize="item.helpTip" class="page-help-content" />
+                  </template>
+                  <span>
+                    <el-button class="help-msg-btn">
+                      <el-icon><InfoFilled /></el-icon>
+                    </el-button>
+                  </span>
+                </el-tooltip>
+              </div>
             </template>
           </el-tab-pane>
         </template>

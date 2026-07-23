@@ -5,15 +5,14 @@
     :help-tip="platformPageHelpMsg"
     :submenu="tab.submenu"
   >
-    <keep-alive>
-      <GenericListTable
-        ref="genericListTable"
-        :create-drawer="createDrawer"
-        :detail-drawer="detailDrawer"
-        :header-actions="headerActions"
-        :table-config="tableConfig"
-      />
-    </keep-alive>
+    <GenericListTable
+      :key="tab.activeMenu"
+      ref="genericListTable"
+      :create-drawer="createDrawer"
+      :detail-drawer="detailDrawer"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+    />
   </TabPage>
 </template>
 

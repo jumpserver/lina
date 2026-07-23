@@ -168,9 +168,10 @@ export default {
 <style lang="scss" scoped>
 .auto-data-search {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   box-sizing: border-box;
   min-width: 0;
+  max-width: 100%;
 
   &.is-folded {
     width: auto;
@@ -180,12 +181,7 @@ export default {
 .auto-data-search__field {
   width: 100%;
   min-width: 0;
-  height: 100%;
-
-  :deep(.search-input) {
-    min-width: 0;
-    height: 100%;
-  }
+  min-height: 28px;
 }
 
 .search-btn {

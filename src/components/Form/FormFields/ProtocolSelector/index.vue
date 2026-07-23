@@ -177,7 +177,7 @@ export default {
       deep: true
     },
     choices: {
-      handler(value, oldValue) {
+      handler(value) {
         setTimeout(() => {
           this.setDefaultItems(value)
         })
@@ -367,10 +367,11 @@ export default {
       })
     },
     getAssetDefaultItems(item, choices) {
-      const protocols = []
-      const protocol = choices.find((i) => i.name === item.name) || {}
-      protocols.push({ ...protocol, ...item })
-      return protocols
+      const protocol = choices.find((i) => i.name === item.name)
+      if (!protocol) {
+        return []
+      }
+      return [{ ...protocol, ...item }]
     },
     onSettingClick(item) {
       this.currentProtocol = item

@@ -88,7 +88,8 @@ export default {
       expanded: false,
       clientOffset: {},
       currentTerminalContent: {},
-      initialized: false
+      initialized: false,
+      messageListenerAttached: false
     }
   },
   computed: {
@@ -104,12 +105,18 @@ export default {
   mounted() {
     this.handleStartChat()
   },
+  beforeUnmount() {
+    if (this.messageListenerAttached) {
+      window.removeEventListener('message', this.onWindowMessage)
+      this.messageListenerAttached = false
+    }
+  },
   methods: {
     handleStartChat() {
       if (this.publicSettings.CHAT_AI_METHOD === 'api') {
         this.visible = true
         const expanded = aiPannelLocalStorage.get('expanded')
-        this.updateExpandedState(expanded)
+        this.updateExpandedState(expanded, false)
         this.handlePostMessage()
       } else if (this.publicSettings.CHAT_AI_METHOD === 'embed') {
         const embedScriptId = 'chat-ai-embed-id'
@@ -138,22 +145,70 @@ export default {
       })
     },
     handlePostMessage() {
-      window.addEventListener('message', (event) => {
-        if (event.data === 'show-chat-panel') {
-          this.$refs.drawer.show = true
+      if (this.messageListenerAttached) return
+      window.addEventListener('message', this.onWindowMessage)
+      this.messageListenerAttached = true
+    },
+    isTrustedParentMessage(event) {
+      const trustedSource = event.source === window.parent || event.source === window
+      return trustedSource && event.origin === window.location.origin
+    },
+    onWindowMessage(event) {
+      if (!this.isTrustedParentMessage(event)) return
+
+      const msg = event.data
+      if (msg === 'show-chat-panel') {
+        this.setPanelVisibility(true)
+        return
+      }
+      if (msg === 'hide-chat-panel') {
+        this.setPanelVisibility(false)
+        return
+      }
+      if (!msg || typeof msg !== 'object') return
+
+      switch (msg.name) {
+        case 'CHAT_PANEL_COMMAND':
+          if (msg.data?.action === 'open') {
+            this.setPanelVisibility(true)
+          } else if (msg.data?.action === 'close') {
+            this.setPanelVisibility(false)
+          }
+          break
+        case 'current_terminal_content':
+          // {content: '...', terminalId: '',sessionId: '',viewId: '',viewName: ''}
+          this.$log.debug('current_terminal_content', msg)
+          this.currentTerminalContent = msg.data
+          this.$refs.component?.onTerminalContext(msg.data)
+          break
+      }
+    },
+    setPanelVisibility(show) {
+      const drawer = this.$refs.drawer
+      if (!drawer) return
+
+      if (drawer.show === show) {
+        this.postPanelState(show)
+        if (show) {
           this.initAssistant()
-          return
+          getInputFocus()
         }
-        const msg = event.data
-        switch (msg.name) {
-          case 'current_terminal_content':
-            // {content: '...', terminalId: '',sessionId: '',viewId: '',viewName: ''}
-            this.$log.debug('current_terminal_content', msg)
-            this.currentTerminalContent = msg.data
-            this.$refs.component?.onTerminalContext(msg.data)
-            break
-        }
-      })
+        return
+      }
+
+      drawer.show = show
+    },
+    postPanelState(open) {
+      window.parent.postMessage(
+        {
+          name: 'CHAT_PANEL_STATE',
+          data: {
+            open,
+            mode: this.expanded ? 'expanded' : 'compact'
+          }
+        },
+        window.location.origin
+      )
     },
     handleMoveMouseDown(event) {
       this.$refs.drawer.handleHeaderMoveDown(event)
@@ -167,7 +222,7 @@ export default {
       this.$refs.drawer.handleHeaderMoveUp(event)
     },
     onClose() {
-      this.$refs.drawer.show = false
+      this.setPanelVisibility(false)
     },
     expandFull() {
       this.updateExpandedState(true)
@@ -180,9 +235,12 @@ export default {
     savePanelSettings() {
       aiPannelLocalStorage.set('expanded', this.expanded)
     },
-    updateExpandedState(expanded) {
-      this.expanded = expanded
-      this.height = expanded ? '100%' : '400px'
+    updateExpandedState(expanded, notify = true) {
+      this.expanded = !!expanded
+      this.height = this.expanded ? '100%' : '400px'
+      if (notify) {
+        this.postPanelState(this.$refs.drawer?.show ?? false)
+      }
     },
     onNewChat() {
       this.active = 'chat'
@@ -192,6 +250,7 @@ export default {
       })
     },
     onToggle(status) {
+      this.postPanelState(status)
       if (status) {
         this.initAssistant()
         getInputFocus()

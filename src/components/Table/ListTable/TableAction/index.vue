@@ -304,21 +304,23 @@ $color-drop-menu-border: #e4e7ed;
   .right-side {
     //float: right;
     height: 30px;
+    align-self: flex-start;
   }
 
   .search {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
     min-width: 0;
 
     // 标签筛选与搜索框是两个相互独立的控件，各自单一边框、圆角，中间留间距。
     .right-side-item.action-search {
-      flex: 0 1 210px;
+      flex: 0 1 auto;
       box-sizing: border-box;
-      height: 30px;
+      width: max-content;
+      min-height: 30px;
       min-width: 210px;
       max-width: 100%;
       font-size: 13px;
@@ -329,6 +331,8 @@ $color-drop-menu-border: #e4e7ed;
 
     .right-side-item.action-search.is-folded {
       flex: 0 0 auto;
+      width: auto;
+      height: 30px;
       min-width: 30px;
       border: 0;
       overflow: visible;
@@ -369,6 +373,7 @@ $color-drop-menu-border: #e4e7ed;
 
 .left-side {
   order: 1;
+  align-self: flex-start;
 }
 
 .search {

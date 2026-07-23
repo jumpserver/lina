@@ -1,5 +1,5 @@
 <template>
-  <div class="filter-field">
+  <div :class="{ 'has-options': options.length > 0 }" class="filter-field">
     <div v-show="options.length > 0" class="filter-cascader-wrap">
       <el-cascader
         ref="Cascade"
@@ -7,6 +7,7 @@
         :options="options"
         :props="config"
         @change="handleMenuItemChange"
+        @visible-change="handleCascaderVisibleChange"
       />
     </div>
 
@@ -78,7 +79,8 @@ export default {
       filterTags: this.default || {},
       focus: false,
       showCascade: true,
-      isFocus: false
+      isFocus: false,
+      pendingFocusSearchInput: false
     }
   },
   computed: {
@@ -102,7 +104,7 @@ export default {
         if (key.startsWith(keyword)) {
           data[keyword] = (data[keyword] ? data[keyword] + ',' : '') + value
         } else {
-          data[key] = value
+          data[this.getQueryKey(key)] = value
         }
       }
       return data
@@ -198,8 +200,9 @@ export default {
           continue
         }
 
-        if (queryInfoValues.includes(key)) {
-          searchFieldOptions[key] = this.getInQueryInfoFields(key, value)
+        const normalizedKey = this.getTagKeyFromQueryKey(key)
+        if (queryInfoValues.includes(normalizedKey)) {
+          searchFieldOptions[normalizedKey] = this.getInQueryInfoFields(normalizedKey, value)
         }
       }
       return searchFieldOptions
@@ -276,20 +279,63 @@ export default {
       }
       return ''
     },
+    getOptionByKey(key) {
+      return this.options.find((field) => field.value === key)
+    },
+    shouldUseExactQuery(key) {
+      const option = this.getOptionByKey(key)
+      return (
+        key.includes('__') ||
+        option?.type === 'boolean' ||
+        option?.type === 'choice' ||
+        option?.type === 'labeled_choice' ||
+        (option?.children && option.children.length > 0)
+      )
+    },
+    getQueryKey(key) {
+      if (this.shouldUseExactQuery(key)) {
+        return key
+      }
+      return `${key}__icontains`
+    },
+    getTagKeyFromQueryKey(key) {
+      return key.endsWith('__icontains') ? key.slice(0, -'__icontains'.length) : key
+    },
     handleMenuItemChange(keys) {
       if (keys.length === 0) {
         return
       }
       if (keys.length === 1) {
         this.filterKey = keys[0]
-        this.$refs.SearchInput.focus()
+        this.pendingFocusSearchInput = true
       } else if (keys.length === 2) {
         this.filterKey = keys[0]
         this.filterValue = keys[1]
         this.valueLabel = this.getValueLabel(keys[0], keys[1])
         this.handleConfirm()
       }
-      this.$nextTick(() => this.$refs.Cascade.handleClear())
+      this.$nextTick(() => {
+        this.$refs.Cascade.handleClear()
+      })
+    },
+    handleCascaderVisibleChange(visible) {
+      if (visible || !this.pendingFocusSearchInput) {
+        return
+      }
+      this.pendingFocusSearchInput = false
+      this.$nextTick(() => this.focusSearchInput())
+    },
+    focusSearchInput() {
+      setTimeout(() => {
+        const searchInput = this.$refs.SearchInput
+        const nativeInput = searchInput?.input || searchInput?.$el?.querySelector?.('input')
+        if (nativeInput) {
+          nativeInput.focus()
+        } else {
+          searchInput?.focus?.()
+        }
+        this.handleFocus()
+      }, 0)
     },
     handleTagClose(evt) {
       delete this.filterTags[evt]
@@ -374,7 +420,7 @@ export default {
 
       this.filterKey = v.key
       this.filterValue = v.value
-      this.$refs.SearchInput.focus()
+      this.focusSearchInput()
     },
     handleKeyUp(event) {
       // 如果当前有输入框聚焦，不触发搜索
@@ -396,7 +442,7 @@ export default {
     },
     // 删除查询条件时改变url
     checkUrlFields(evt) {
-      let newQuery = _.omit(this.$route.query, evt)
+      let newQuery = _.omit(this.$route.query, [evt, this.getQueryKey(evt)])
       if (this.getUrlQuery && evt.startsWith('search')) {
         if (newQuery.search) delete newQuery.search
         const filterMapsSearch = this.filterMaps.search || ''
@@ -420,8 +466,17 @@ $origin-white-color: #ffffff;
   position: relative;
   display: flex;
   align-items: center;
-  min-width: 210px;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 28px;
   background-color: $origin-white-color;
+
+  &.has-options {
+    padding-left: 20px;
+  }
 
   :deep(.filter-cascader) {
     width: 20px;
@@ -477,17 +532,31 @@ $origin-white-color: #ffffff;
   }
 
   .filter-tag {
+    min-width: 0;
+    max-width: calc(100% - 4px);
     margin: 2px 4px 2px 0;
+
+    :deep(.el-tag__content) {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 
   .search-input {
     --jms-input-padding-inline: 11px;
     --jms-input-padding-inline-start: 1px;
 
-    height: 30px;
+    flex: 1 1 120px;
+    width: auto;
+    min-width: 120px;
+    max-width: 100%;
+    height: 28px;
 
     :deep(.el-input__wrapper) {
-      max-width: 180px;
+      width: 100%;
+      max-width: none;
       box-shadow: unset;
 
       .el-input__inner {
@@ -516,6 +585,7 @@ $origin-white-color: #ffffff;
   .keydown-focus {
     position: absolute;
     right: 0;
+    bottom: 5px;
     display: inline-block;
     margin-right: 10px;
     padding: 3px 5px;
@@ -534,9 +604,12 @@ $origin-white-color: #ffffff;
 }
 
 .filter-cascader-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
   width: 20px;
   height: 28px;
-  flex: 0 0 20px;
   --jms-input-padding-block: 1px;
   --jms-input-padding-inline: 0;
 }

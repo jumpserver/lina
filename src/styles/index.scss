@@ -547,7 +547,7 @@ a.el-link.el-link--info.is-hover-underline:hover:after {
   color: var(--color-text-primary);
 }
 
-.el-tabs__item > span {
+.el-tabs__item > * {
   padding: 0 6px;
 }
 
@@ -861,6 +861,35 @@ li.rmenu i.fa {
 .el-button--primary:active,
 .el-button--primary:active > span {
   color: #fff;
+}
+
+.el-button--primary.is-plain {
+  color: var(--color-primary);
+  background-color: var(--el-color-primary-light-9);
+  border-color: var(--el-color-primary-light-5);
+
+  > span {
+    color: inherit;
+  }
+
+  i,
+  .el-icon {
+    color: var(--color-primary);
+  }
+
+  &:hover,
+  &:focus,
+  &:active {
+    color: #fff;
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+
+    > span,
+    i,
+    .el-icon {
+      color: #fff;
+    }
+  }
 }
 
 .el-message-box__btns .el-button {
