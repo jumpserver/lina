@@ -24,6 +24,12 @@
       />
 
       <div :class="searchClass" class="search">
+        <NodeSearch
+          v-bind="nodeSearchConfig"
+          v-if="hasNodeSearch"
+          ref="nodeSearch"
+          @node-search="handleNodeSearch"
+        />
         <LabelSearch
           v-if="hasLabelSearch"
           @label-search="handleLabelSearch"
@@ -32,6 +38,7 @@
         <AutoDataSearch
           v-bind="iSearchTableConfig"
           v-if="hasSearch"
+          ref="autoDataSearch"
           :fold="foldSearch"
           class="right-side-item action-search"
           @tag-search="handleTagSearch"
@@ -54,6 +61,7 @@ import AutoDataSearch from '@/components/Table/AutoDataSearch/index.vue'
 import DatetimeRangePicker from '@/components/Form/FormFields/DatetimeRangePicker.vue'
 import { getDaysAgo, getDaysFuture } from '@/utils/common/time'
 import LabelSearch from '@/components/Table/ListTable/TableAction/LabelSearch.vue'
+import NodeSearch from '@/components/Table/ListTable/TableAction/NodeSearch.vue'
 
 const defaultTrue = { type: Boolean, default: true }
 const defaultFalse = { type: Boolean, default: false }
@@ -61,6 +69,7 @@ export default {
   name: 'TableAction',
   components: {
     LabelSearch,
+    NodeSearch,
     LeftSide,
     RightSide,
     AutoDataSearch,
@@ -81,6 +90,7 @@ export default {
     hasRightActions: defaultTrue,
     hasDatePicker: defaultFalse,
     hasLabelSearch: defaultFalse,
+    hasNodeSearch: defaultFalse,
     onCreate: {
       type: Function,
       default: null
@@ -93,6 +103,10 @@ export default {
       })
     },
     searchConfig: {
+      type: Object,
+      default: () => ({})
+    },
+    nodeSearchConfig: {
       type: Object,
       default: () => ({})
     },
@@ -118,7 +132,10 @@ export default {
       keyword: '',
       foldSearch: false,
       iHasLeftActions: this.hasLeftActions,
-      leftSideRenderVersion: 0
+      leftSideRenderVersion: 0,
+      tagSearchQuery: {},
+      labelSearchQuery: {},
+      nodeSearchQuery: {}
     }
   },
   computed: {
@@ -161,18 +178,38 @@ export default {
     this.$emit('done')
   },
   methods: {
+    focusSearch() {
+      return this.$refs.autoDataSearch?.focusSearch()
+    },
+    closeNodeSearch() {
+      return this.$refs.nodeSearch?.closePopover()
+    },
     handleTagSearch(val) {
-      this.searchTable(val)
+      this.tagSearchQuery = val || {}
+      this.searchWithFilters()
     },
     handleDateChange(val) {
       this.datePick(val)
     },
     handleLabelSearch(val) {
       if (!val || val.length === 0) {
-        this.searchTable({ labels: '' })
+        this.labelSearchQuery = {}
+        this.searchWithFilters()
         return
       }
-      this.searchTable({ labels: val })
+      this.labelSearchQuery = { labels: val }
+      this.searchWithFilters()
+    },
+    handleNodeSearch(val) {
+      this.nodeSearchQuery = val || {}
+      this.searchWithFilters()
+    },
+    searchWithFilters() {
+      this.searchTable({
+        ...this.tagSearchQuery,
+        ...this.labelSearchQuery,
+        ...this.nodeSearchQuery
+      })
     },
     handleLabelSearchShowChange() {
       // 标签搜索的展开不应联动折叠旁边的普通搜索框(action-search)——两者相互独立。

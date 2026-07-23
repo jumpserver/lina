@@ -84,10 +84,24 @@ import {
 import ListTable from '@/components/Table/ListTable'
 import Dialog from '@/components/Dialog'
 
-function normalizeIds(items) {
-  return items
-    .slice(0, 20)
-    .map((item) => (item && typeof item === 'object' ? item.id || item.pk : item))
+function normalizeResourceIds(values, objectKeys = ['id', 'pk', 'value']) {
+  if (!Array.isArray(values)) {
+    return []
+  }
+  return values
+    .map((item) => {
+      if (!item || typeof item !== 'object') {
+        return item
+      }
+      for (const key of objectKeys) {
+        const value = item[key]
+        if (value !== undefined && value !== null && value !== '') {
+          return value
+        }
+      }
+      return undefined
+    })
+    .filter((item) => item !== undefined && item !== null && item !== '')
 }
 
 export default {
@@ -174,8 +188,8 @@ export default {
       autocomplete: (query, cb) => {
         const data = {
           username: query,
-          assets: normalizeIds(this.assets),
-          nodes: normalizeIds(this.nodes)
+          assets: normalizeResourceIds(this.assets).slice(0, 20),
+          nodes: normalizeResourceIds(this.nodes, ['pk', 'id', 'value']).slice(0, 20)
         }
         this.$axios
           .post('/api/v1/accounts/accounts/username-suggestions/', data, {

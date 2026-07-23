@@ -161,6 +161,13 @@ export default {
     document.removeEventListener('keyup', this.handleKeyUp)
   },
   methods: {
+    focusSearch() {
+      if (!this.$refs.SearchInput) {
+        return false
+      }
+      this.$refs.SearchInput.focus()
+      return true
+    },
     handleFocus() {
       this.focus = true
       this.isFocus = true
