@@ -5,10 +5,10 @@
     </el-button>
     <Dialog
       v-if="visible"
-      v-model:visible="visible"
       :show-cancel="false"
       :show-confirm="false"
       :title="$tc('EmailTemplate')"
+      :visible="visible"
       width="70%"
       @confirm="onConfirm()"
     >

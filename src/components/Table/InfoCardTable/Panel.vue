@@ -9,11 +9,7 @@
         </div>
       </div>
       <div v-if="iActions.length !== 0" class="panel-actions" @click="handleClick($event)">
-        <el-dropdown
-          popper-class="info-card-action-dropdown"
-          trigger="click"
-          @command="handleAction"
-        >
+        <el-dropdown>
           <el-button size="small">
             <el-icon class="el-icon--right"><More /></el-icon>
           </el-button>
@@ -22,8 +18,8 @@
               <el-dropdown-item
                 v-for="action in iActions"
                 :key="action.name"
-                :command="action"
                 :disabled="action.disabled"
+                @click="action.callback(object)"
               >
                 {{ action.name }}
               </el-dropdown-item>
@@ -131,11 +127,6 @@ export default {
     handleClick(event) {
       event.stopPropagation()
     },
-    handleAction(action) {
-      if (!action.disabled) {
-        action.callback(this.object)
-      }
-    },
     handleDelete() {
       const url = this.tableConfig.url
       this.$confirm(this.$tc('DeleteConfirmMessage'), this.$tc('Delete'), {
@@ -239,23 +230,6 @@ div.info-panel {
 
   .el-divider--horizontal {
     margin: 5px 0;
-  }
-}
-</style>
-
-<style lang="scss">
-.info-card-action-dropdown.el-dropdown__popper {
-  .el-dropdown-menu--small {
-    padding: 6px 0;
-  }
-
-  .el-dropdown-menu__item {
-    display: flex;
-    align-items: center;
-    height: 34px;
-    padding: 0 20px;
-    font-size: 13px;
-    line-height: 34px;
   }
 }
 </style>

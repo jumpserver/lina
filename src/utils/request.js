@@ -22,8 +22,7 @@ function beforeRequestAddToken(config) {
   if (csrfToken) {
     config.headers['X-CSRFToken'] = csrfToken
   }
-  const currentRoute = router.currentRoute?.value || router.currentRoute
-  const queryOrgId = currentRoute?.query?.oid
+  const queryOrgId = router.currentRoute.query?.oid
   const storeOrgId = store.getters.currentOrg?.id
   const orgId = queryOrgId || storeOrgId
   if (orgId) {

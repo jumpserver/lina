@@ -1,10 +1,10 @@
 <template>
   <Dialog
-    v-model:visible="iVisible"
     class="platform-detail-update-dialog"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('Update')"
+    :visible="visible"
     top="1vh"
     width="60%"
   >
@@ -15,7 +15,6 @@
 <script>
 import Dialog from '@/components/Dialog'
 import { GenericCreateUpdateForm } from '@/layout/components'
-import { useVModel } from '@/utils/vue/useVModel'
 import { platformFieldsMeta } from '../const'
 
 export default {
@@ -38,12 +37,6 @@ export default {
     }
   },
   emits: ['update:visible'],
-  setup(props, { emit }) {
-    const iVisible = useVModel(props, emit, 'visible')
-    return {
-      iVisible
-    }
-  },
   data() {
     return {
       initial: {},
@@ -60,7 +53,7 @@ export default {
     try {
       this.setOptions()
     } finally {
-      this.iVisible = true
+      this.$emit('update:visible', true)
     }
   },
   methods: {
@@ -71,7 +64,7 @@ export default {
       this.fieldsMeta.protocols.el.choices = res['protocols'] || []
     },
     submitSuccess() {
-      this.iVisible = false
+      this.$emit('update:visible', false)
     }
   }
 }

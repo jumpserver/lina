@@ -8,11 +8,11 @@
     </div>
     <Dialog
       v-bind="$attrs"
-      v-model:visible="visible"
       :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
       :title="title"
+      :visible="visible"
       width="40%"
       @update:visible="$emit('update:visible', $event)"
     >

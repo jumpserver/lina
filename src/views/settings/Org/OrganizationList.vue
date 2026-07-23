@@ -1,7 +1,7 @@
 <template>
   <div>
     <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
-    <Dialog v-model:visible="visible" :show-buttons="false" :title="$tc('General')">
+    <Dialog :show-buttons="false" :title="$tc('General')" :visible="visible">
       <GenericCreateUpdateForm v-bind="form" @submit-success="visible = false" />
     </Dialog>
   </div>
