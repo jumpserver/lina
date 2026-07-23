@@ -374,6 +374,10 @@ input[type="file"] {
 
     .el-table__column-filter-trigger {
       line-height: 24px;
+
+      i {
+        font-size: 12px;
+      }
     }
   }
 
@@ -920,10 +924,6 @@ div.el-loading-parent--relative {
 
 .el-message {
   z-index: 999999 !important;
-}
-
-.fa {
-  margin-right: 2px;
 }
 
 .el-button-group.el-button-group--horizontal {

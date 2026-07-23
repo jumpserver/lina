@@ -3,15 +3,17 @@
     v-model:visible="showImportDialog"
     :close-on-click-modal="false"
     :destroy-on-close="true"
-    :loading-status="loadStatus"
-    :show-cancel="!showTable"
-    :show-confirm="false"
+    :disabled-status="loadStatus"
+    :show-cancel="!showTable || isPackageMode"
+    :show-confirm="isPackageMode"
     :cancel-title="$tc('Cancel')"
-    :title="importTitle"
+    :confirm-title="packageConfirmTitle"
+    :title="dialogTitle"
     class="importDialog"
     width="900px"
     @cancel="handleImportCancel"
     @close="handleImportCancel"
+    @confirm="handlePackageConfirm"
   >
     <el-form v-if="!showTable" class="import-form" label-position="left">
       <el-form-item :label="$tc('Import')" :label-width="'100px'" class="import-option">
@@ -21,38 +23,76 @@
         <el-radio v-if="canImportUpdate" v-model="importOption" class="export-item" value="update">
           {{ $t('Update') }}
         </el-radio>
-        <span class="el-upload__tip download-tpl">
+        <el-radio
+          v-if="canImportPackage"
+          v-model="importOption"
+          class="export-item"
+          value="package"
+        >
+          {{ importPackageLabel }}
+        </el-radio>
+        <span v-if="!isPackageMode" class="el-upload__tip download-tpl">
           {{ downloadTemplateTitle }}
           <el-link type="primary" @click="downloadTemplateFile('csv')"> CSV </el-link>
           <el-link type="primary" @click="downloadTemplateFile('xlsx')"> XLSX </el-link>
         </span>
       </el-form-item>
-      <el-form-item :label="$tc('Upload')" :label-width="'100px'" class="file-uploader">
-        <el-upload
-          ref="upload"
-          :auto-upload="false"
-          :before-upload="beforeUpload"
-          :limit="1"
-          :on-change="onFileChange"
-          accept=".csv,.xlsx"
-          action="string"
-          drag
-          list-type="text"
-        >
-          <el-icon><Upload /></el-icon>
-          <div class="el-upload__text">
-            {{ $t('DragUploadFileInfo') }}
-          </div>
-          <template #tip>
-            <div class="el-upload__tip">
-              <span :class="{ hasError: hasFileFormatOrSizeError }">
-                {{ $t('UploadCsvLth10MHelpText') }}
-              </span>
-              <div v-if="renderError" class="hasError">{{ renderError }}</div>
+      <template v-if="!isPackageMode">
+        <el-form-item :label="$tc('Upload')" :label-width="'100px'" class="file-uploader">
+          <el-upload
+            ref="upload"
+            :auto-upload="false"
+            :before-upload="beforeTableUpload"
+            :limit="1"
+            :on-change="onFileChange"
+            accept=".csv,.xlsx"
+            action="string"
+            drag
+            list-type="text"
+          >
+            <el-icon><Upload /></el-icon>
+            <div class="el-upload__text">
+              {{ $t('DragUploadFileInfo') }}
             </div>
-          </template>
-        </el-upload>
-      </el-form-item>
+            <template #tip>
+              <div class="el-upload__tip">
+                <span :class="{ hasError: hasFileFormatOrSizeError }">
+                  {{ $t('UploadCsvLth10MHelpText') }}
+                </span>
+                <div v-if="renderError" class="hasError">{{ renderError }}</div>
+              </div>
+            </template>
+          </el-upload>
+        </el-form-item>
+      </template>
+      <template v-else>
+        <el-form-item :label="$tc('Upload')" :label-width="'100px'" class="file-uploader">
+          <el-upload
+            ref="upload"
+            :auto-upload="false"
+            :before-upload="beforePackageUpload"
+            :limit="1"
+            :on-change="onPackageFileChange"
+            :accept="packageUploadAccept"
+            action="string"
+            drag
+            list-type="text"
+          >
+            <el-icon><Upload /></el-icon>
+            <div class="el-upload__text">
+              {{ $t('DragUploadFileInfo') }}
+            </div>
+            <template #tip>
+              <div class="el-upload__tip">
+                <span :class="{ hasError: hasFileFormatOrSizeError }">
+                  {{ packageTipText }}
+                </span>
+                <div v-if="renderError" class="hasError">{{ renderError }}</div>
+              </div>
+            </template>
+          </el-upload>
+        </el-form-item>
+      </template>
     </el-form>
     <div v-else class="importTableZone">
       <ImportTable
@@ -96,6 +136,46 @@ export default {
     canImportUpdate: {
       type: [Boolean, Function, String],
       default: false
+    },
+    canImportPackage: {
+      type: [Boolean, Function, String],
+      default: false
+    },
+    importPackageLabel: {
+      type: String,
+      default: 'Package'
+    },
+    packageUploadUrl: {
+      type: String,
+      default: ''
+    },
+    packageUploadAccept: {
+      type: String,
+      default: '.zip'
+    },
+    packageUploadTip: {
+      type: String,
+      default: ''
+    },
+    packageUploadConfirmText: {
+      type: String,
+      default: 'Upload'
+    },
+    packageUploadTitle: {
+      type: String,
+      default: ''
+    },
+    packageUploadRequestMethod: {
+      type: String,
+      default: 'post'
+    },
+    packageUploadRequestParams: {
+      type: Object,
+      default: () => ({})
+    },
+    packageUploadMaxSizeMB: {
+      type: Number,
+      default: 30
     }
   },
   data() {
@@ -106,7 +186,9 @@ export default {
           ? 'create'
           : this.canImportCreate
             ? 'create'
-            : 'update',
+            : this.canImportPackage
+              ? 'package'
+              : 'update',
       errorMsg: '',
       loadStatus: false,
       importTypeOption: 'csv',
@@ -114,10 +196,14 @@ export default {
       showTable: false,
       renderError: '',
       hasFileFormatOrSizeError: false,
-      jsonData: {}
+      jsonData: {},
+      uploadFile: null
     }
   },
   computed: {
+    isPackageMode() {
+      return this.importOption === 'package'
+    },
     hasSelected() {
       return this.selectedRows.length > 0
     },
@@ -136,6 +222,9 @@ export default {
       }
     },
     importTitle() {
+      if (this.isPackageMode) {
+        return this.packageUploadTitle || this.importPackageLabel
+      }
       let option = ''
       if (this.importOption === 'create') {
         option = this.$t('Create')
@@ -143,11 +232,26 @@ export default {
         option = this.$t('Update')
       }
       return `${this.$t('Import')} & ${option}`
+    },
+    dialogTitle() {
+      return this.importTitle
+    },
+    packageConfirmTitle() {
+      return this.packageUploadConfirmText || this.$t('Upload')
+    },
+    packageTipText() {
+      return (
+        this.packageUploadTip || this.$t('UploadZipTips', { size: this.packageUploadMaxSizeMB })
+      )
     }
   },
   watch: {
     importOption(val) {
       this.showTable = false
+      this.renderError = ''
+      this.jsonData = {}
+      this.uploadFile = null
+      this.$refs.upload?.clearFiles()
     }
   },
   beforeUnmount() {
@@ -171,6 +275,18 @@ export default {
       this.showTable = false
       this.renderError = ''
       this.jsonData = {}
+      this.uploadFile = null
+      this.$refs.upload?.clearFiles()
+    },
+    onPackageFileChange(file, fileList) {
+      if (file.status !== 'ready') {
+        return
+      }
+      if (!this.beforePackageUpload(file)) {
+        fileList.splice(0, fileList.length)
+        return
+      }
+      this.uploadFile = file
     },
     onFileChange(file, fileList) {
       fileList.splice(0, fileList.length)
@@ -178,7 +294,7 @@ export default {
         return
       }
       // const isCsv = file.raw.type = 'text/csv'
-      if (!this.beforeUpload(file)) {
+      if (!this.beforeTableUpload(file)) {
         return
       }
       const isCsv = file.name.indexOf('csv') > -1
@@ -205,12 +321,51 @@ export default {
           this.loadStatus = false
         })
     },
-    beforeUpload(file) {
-      const isLt30M = file.size / 1024 / 1024 < 30
-      if (!isLt30M) {
+    beforeTableUpload(file) {
+      this.hasFileFormatOrSizeError = false
+      const isLtSize = file.size / 1024 / 1024 < 10
+      if (!isLtSize) {
         this.hasFileFormatOrSizeError = true
       }
-      return isLt30M
+      return isLtSize
+    },
+    beforePackageUpload(file) {
+      this.hasFileFormatOrSizeError = false
+      const isLtSize = file.size / 1024 / 1024 < this.packageUploadMaxSizeMB
+      if (!isLtSize) {
+        this.hasFileFormatOrSizeError = true
+      }
+      return isLtSize
+    },
+    async handlePackageConfirm() {
+      if (!this.uploadFile || !this.packageUploadUrl) {
+        return
+      }
+      this.loadStatus = true
+      this.renderError = ''
+      const form = new FormData()
+      form.append('file', this.uploadFile.raw)
+      try {
+        const data = await this.$axios({
+          url: this.packageUploadUrl,
+          data: form,
+          method: this.packageUploadRequestMethod,
+          headers: { 'Content-Type': 'multipart/form-data' },
+          timeout: 60 * 60 * 1000,
+          disableFlashErrorMsg: true,
+          params: this.packageUploadRequestParams
+        })
+        this.$message.success(this.$tc('UploadSucceed'))
+        this.showImportDialog = false
+        this.$emit('importDialogClose')
+        this.$emit('upload-event', data)
+      } catch (error) {
+        this.renderError = getErrorResponseMsg(error)
+      } finally {
+        this.loadStatus = false
+        this.uploadFile = null
+        this.$refs.upload?.clearFiles()
+      }
     },
     async downloadTemplateFile(tp) {
       const downloadUrl = await this.getDownloadTemplateUrl(tp)
@@ -250,6 +405,8 @@ export default {
       this.showTable = false
       this.renderError = ''
       this.jsonData = {}
+      this.uploadFile = null
+      this.$refs.upload?.clearFiles()
       this.$emit('importDialogClose')
     }
   }

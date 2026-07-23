@@ -455,19 +455,60 @@ $color-drop-menu-border: #e4e7ed;
   font-size: 13px;
 }
 
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .dropdown-item__content) {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+
 :global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon) {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   flex: 0 0 auto;
   // 固定宽度：无图标的项（如「批量处理」标题）也占满同样的图标列宽，
   // 保证所有项的文字左边缘对齐，不会因空图标塌成 0 宽而左移。
+  width: 18px;
+  height: 16px;
+  margin-right: 6px;
+  line-height: 1;
+}
+
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon > span) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 18px;
+  height: 16px;
+  line-height: 1;
+}
+
+:global(
+  .action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon .fa,
+  .action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon .el-icon,
+  .action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon .svg-icon
+) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
   width: 16px;
-  margin-right: 1px;
+  height: 16px;
+  font-size: 14px;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon .el-icon svg) {
+  width: 14px;
+  height: 14px;
 }
 
 :global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .dropdown-item__label) {
+  display: inline-flex;
+  align-items: center;
   min-width: 0;
+  line-height: 1.4;
 }
 
 // 「批量处理(选中 N 项)」是分组标题:文字在上、分割线在其下方,与下方操作项分隔。
