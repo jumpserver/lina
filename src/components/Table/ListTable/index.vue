@@ -1,13 +1,5 @@
 <template>
   <div class="list-table">
-    <QuickFilter
-      v-if="iHasQuickFilter"
-      v-model:expand="filterExpand"
-      :filters="quickFilters"
-      :summary="quickSummary"
-      :table-url="tableUrl"
-      @filter="filter"
-    />
     <TableAction
       v-bind="iHeaderActions"
       v-if="hasActions"
@@ -21,6 +13,14 @@
       :selected-rows="selectedRows"
       :table-url="tableUrl"
       @done="handleActionInitialDone"
+    />
+    <QuickFilter
+      v-if="iHasQuickFilter"
+      v-model:expand="filterExpand"
+      :filters="quickFilters"
+      :summary="quickSummary"
+      :table-url="tableUrl"
+      @filter="filter"
     />
     <div v-loading="!actionInit" class="table-content">
       <IBox>
@@ -407,12 +407,6 @@ export default {
   flex-direction: column;
   gap: 8px;
   min-width: 0;
-}
-
-.filter-expand {
-  :deep(button.actionFilter) {
-    background-color: rgb(0, 0, 0, 0.08) !important;
-  }
 }
 
 .table-content {

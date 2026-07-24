@@ -363,6 +363,51 @@ export default {
       const params = typeof this.queryParams === 'function' ? this.queryParams() : this.queryParams
       return { ...(params || {}) }
     },
+    getSelectionSnapshot() {
+      if (!this.selectedNode || !this.selectedTreeType || !this.selectedTreeKey) {
+        return null
+      }
+      return {
+        treeType: this.selectedTreeType,
+        treeKey: this.selectedTreeKey,
+        label: this.selectedNodeLabel,
+        query: this.getFilterQuery(this.selectedTreeType, this.selectedNode)
+      }
+    },
+    async applySelectionSnapshot(snapshot) {
+      if (!snapshot?.treeType || !snapshot?.treeKey) {
+        this.clearSelection()
+        return
+      }
+      await this.loadTree(snapshot.treeType)
+      const findNode = (nodes) => {
+        for (const node of nodes || []) {
+          if (String(this.getTreeKey(node)) === String(snapshot.treeKey)) {
+            return node
+          }
+          const matched = findNode(node.children)
+          if (matched) {
+            return matched
+          }
+        }
+        return null
+      }
+      const node = findNode(this.treeState[snapshot.treeType]?.data)
+      if (!node) {
+        this.clearSelection()
+        return
+      }
+      const treeKey = this.getTreeKey(node)
+      this.$refs.assetTree?.setCheckedKeys(snapshot.treeType === 'asset' ? [treeKey] : [])
+      this.$refs.typeTree?.setCheckedKeys(snapshot.treeType === 'type' ? [treeKey] : [])
+      this.selectedNode = node
+      this.selectedNodePath =
+        snapshot.label || this.getNodePathLabel(snapshot.treeType, treeKey, node)
+      this.selectedTreeKey = String(treeKey)
+      this.selectedTreeType = snapshot.treeType
+      const query = snapshot.query || this.getFilterQuery(snapshot.treeType, node)
+      this.$emit('nodeSearch', query, this.getSelectionSnapshot())
+    },
     getTreeKey(node) {
       return node?.meta?.data?.key ?? node?.id
     },
@@ -643,7 +688,7 @@ export default {
       this.selectedTreeKey = normalizedTreeKey
       this.selectedTreeType = treeType
       this.treeExpandAllNext[treeType] = false
-      this.$emit('nodeSearch', query)
+      this.$emit('nodeSearch', query, this.getSelectionSnapshot())
     },
     clearSelection() {
       this.$refs.assetTree?.setCheckedKeys([])
@@ -654,7 +699,7 @@ export default {
       this.selectedTreeType = ''
       this.treeExpandAllNext.asset = false
       this.treeExpandAllNext.type = false
-      this.$emit('nodeSearch', this.getEmptyFilterQuery())
+      this.$emit('nodeSearch', this.getEmptyFilterQuery(), null)
     }
   }
 }

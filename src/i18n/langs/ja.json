@@ -35,5 +35,18 @@
   "TreeResourceSelectShowAll": "すべてのノードを表示",
   "TreeResourceSelectClearSelected": "選択済みノードをすべて解除",
   "TreeResourceSelectExpandSelected": "選択済みノードまで展開",
-  "TreeResourceSelectCollapseAll": "すべてのノードを折りたたむ"
+  "TreeResourceSelectCollapseAll": "すべてのノードを折りたたむ",
+  "SearchConditionsClear": "クリア",
+  "SearchConditionsSave": "保存",
+  "SavedSearchConditions": "保存済み条件",
+  "SavedSearchHistoryHint": "保存済みのフィルター履歴",
+  "SearchPresetNamePlaceholder": "クイック検索条件に名前を付ける",
+  "LabelFilterTitle": "ラベルフィルター",
+  "Label": "ラベル",
+  "LabelFilterSearchKey": "ラベルキーを検索",
+  "LabelFilterSearchValue": "ラベル値を検索",
+  "LabelFilterAllValues": "すべての値",
+  "LabelFilterSelectKey": "ラベルキーを選択",
+  "LabelFilterKeyLabel": "キー",
+  "LabelFilterValueLabel": "値"
 }

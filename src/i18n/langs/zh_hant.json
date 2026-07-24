@@ -34,5 +34,18 @@
   "TreeResourceSelectShowAll": "查看全部節點",
   "TreeResourceSelectClearSelected": "清除所有已選節點",
   "TreeResourceSelectExpandSelected": "展開到已選節點",
-  "TreeResourceSelectCollapseAll": "摺疊所有節點"
+  "TreeResourceSelectCollapseAll": "摺疊所有節點",
+  "SearchConditionsClear": "清除",
+  "SearchConditionsSave": "儲存",
+  "SavedSearchConditions": "已儲存條件",
+  "SavedSearchHistoryHint": "已儲存的歷史篩選條件",
+  "SearchPresetNamePlaceholder": "為快捷搜尋條件命名",
+  "LabelFilterTitle": "標籤篩選",
+  "Label": "標籤",
+  "LabelFilterSearchKey": "搜尋標籤鍵",
+  "LabelFilterSearchValue": "搜尋標籤值",
+  "LabelFilterAllValues": "全部值",
+  "LabelFilterSelectKey": "請選擇標籤鍵",
+  "LabelFilterKeyLabel": "鍵",
+  "LabelFilterValueLabel": "值"
 }

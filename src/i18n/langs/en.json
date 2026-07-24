@@ -54,5 +54,18 @@
   "TreeResourceSelectShowAll": "Show all nodes",
   "TreeResourceSelectClearSelected": "Clear all selected nodes",
   "TreeResourceSelectExpandSelected": "Expand to selected nodes",
-  "TreeResourceSelectCollapseAll": "Collapse all nodes"
+  "TreeResourceSelectCollapseAll": "Collapse all nodes",
+  "SearchConditionsClear": "Clear",
+  "SearchConditionsSave": "Save",
+  "SavedSearchConditions": "Saved filters",
+  "SavedSearchHistoryHint": "Saved filter history",
+  "SearchPresetNamePlaceholder": "Name this quick search",
+  "LabelFilterTitle": "Filter by labels",
+  "Label": "Label",
+  "LabelFilterSearchKey": "Search label keys",
+  "LabelFilterSearchValue": "Search label values",
+  "LabelFilterAllValues": "All values",
+  "LabelFilterSelectKey": "Select a label key",
+  "LabelFilterKeyLabel": "Key",
+  "LabelFilterValueLabel": "Value"
 }

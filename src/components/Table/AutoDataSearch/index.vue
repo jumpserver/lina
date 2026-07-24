@@ -10,6 +10,7 @@
       :options="iOption"
       class="auto-data-search__field"
       @blur="handleBlur"
+      @conditions-change="$emit('conditionsChange', $event)"
       @tag-search="handleTagSearch"
     />
   </span>
@@ -25,7 +26,7 @@ export default {
   components: {
     TagSearch
   },
-  emits: ['tagSearch'],
+  emits: ['conditionsChange', 'tagSearch'],
   props: {
     url: {
       type: String,
@@ -56,8 +57,8 @@ export default {
   },
   computed: {
     iOption() {
-      const options = this.options.concat(this.internalOptions)
-      return _.uniqWith(options, _.isEqual)
+      const options = [...this.options, ...this.internalOptions]
+      return _.uniqBy(options, 'value')
     },
     hasTags() {
       if (Array.isArray(this.tags)) {
@@ -91,6 +92,15 @@ export default {
       await this.$nextTick()
       return this.$refs.tagSearch?.focusSearch()
     },
+    removeCondition(key) {
+      return this.$refs.tagSearch?.handleTagClose(key)
+    },
+    clearConditions() {
+      return this.$refs.tagSearch?.clearConditions()
+    },
+    applyConditions(conditions) {
+      return this.$refs.tagSearch?.applyConditions(conditions)
+    },
     tagSearchAttrs() {
       const attrs = { ...this.$attrs }
       delete attrs.class
@@ -110,8 +120,10 @@ export default {
     handleBlur() {
       this.manualSearch = false
     },
-    handleManualSearch() {
+    async handleManualSearch() {
       this.manualSearch = true
+      await this.$nextTick()
+      this.$refs.tagSearch?.focusSearch()
     },
     async genericOptions() {
       const vm = this // 透传This

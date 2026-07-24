@@ -192,25 +192,28 @@ export default {
 </script>
 <style lang="scss" scoped>
 .quick-filter {
-  background: white;
-  padding: 10px 10px 10px 20px;
-  margin-bottom: 10px;
   display: flex;
-  place-content: stretch flex-end;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 0;
   justify-content: center;
-  align-content: stretch;
-  box-shadow: 0 1px 1px 0 rgba(54, 58, 80, 0.32);
+  border: 1px solid var(--el-border-color-lighter);
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: none;
 
   &.shrink {
     background: inherit;
     padding: 0;
     margin-bottom: 0;
+    border: 0;
     box-shadow: none;
   }
 
   .quick-filter-wrap {
-    display: inline-block;
-    width: calc(100% - 70px);
+    display: block;
+    width: 100%;
 
     .summary-zone {
       padding-top: 10px;
