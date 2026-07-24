@@ -42,7 +42,7 @@
     "css-color-function": "^1.3.3",
     "decimal.js": "^10.6.0",
     "deepmerge": "^4.3.1",
-    "dompurify": "^3.4.7",
+    "dompurify": "^3.4.12",
     "echarts": "^6.1.0",
     "element-plus": "^2.14.0",
     "highlight.js": "^11.11.1",
