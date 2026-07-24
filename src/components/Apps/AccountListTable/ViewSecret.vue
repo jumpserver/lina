@@ -28,8 +28,14 @@
             @input="onShowKeyCopyFormatterChange"
           />
         </el-form-item>
-        <el-form-item v-if="secretType === 'ssh_key'" :label="$tc('SshKeyFingerprint')">
+        <el-form-item v-if="secretType === 'ssh_key'" :label="`${$tc('SshKeyFingerprint')} (MD5)`">
           <span>{{ sshKeyFingerprint }}</span>
+        </el-form-item>
+        <el-form-item
+          v-if="secretType === 'ssh_key'"
+          :label="`${$tc('SshKeyFingerprint')} (SHA256)`"
+        >
+          <span>{{ sshKeyFingerprintSha256 }}</span>
         </el-form-item>
         <el-form-item :label="$tc('DateCreated')">
           <span>{{ toSafeLocalDateStr(account['date_created']) }}</span>
@@ -107,6 +113,7 @@ export default {
       showSecret: false,
       mfaDialogVisible: true,
       sshKeyFingerprint: '-',
+      sshKeyFingerprintSha256: '-',
       historyCount: 0,
       iTitle: this.title || this.$tc('Detail'),
       showPasswordHistoryDialog: false
@@ -162,6 +169,7 @@ export default {
       return this.$axios.get(this.url, { disableFlashErrorMsg: true }).then((res) => {
         this.secretInfo = res
         this.sshKeyFingerprint = res?.spec_info?.ssh_key_fingerprint || '-'
+        this.sshKeyFingerprintSha256 = res?.spec_info?.ssh_key_fingerprint_sha256 || '-'
         this.showSecret = true
       })
     },
