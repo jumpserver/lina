@@ -1,4 +1,4 @@
-FROM jumpserver/lina-base:20260716_035619 AS stage-build
+FROM jumpserver/lina-base:20260726_074712 AS stage-build
 
 ARG VERSION
 ENV VERSION=$VERSION
