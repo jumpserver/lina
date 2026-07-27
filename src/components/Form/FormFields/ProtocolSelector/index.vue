@@ -367,10 +367,7 @@ export default {
       })
     },
     getAssetDefaultItems(item, choices) {
-      const protocol = choices.find((i) => i.name === item.name)
-      if (!protocol) {
-        return []
-      }
+      const protocol = choices.find((i) => i.name === item.name) || {}
       return [{ ...protocol, ...item }]
     },
     onSettingClick(item) {
