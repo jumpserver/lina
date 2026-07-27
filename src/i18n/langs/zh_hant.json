@@ -63,6 +63,7 @@
   "TreeResourceSelectCollapseAll": "摺疊所有節點",
   "SearchConditionsClear": "清除",
   "SearchShortcutPlaceholder": "輸入 / 進行搜尋",
+  "SearchMultipleValuesPlaceholder": "多個值使用 , 分隔",
   "SearchConditionsSave": "儲存",
   "SavedSearchConditions": "已儲存條件",
   "SavedSearchHistoryHint": "已儲存的歷史篩選條件",

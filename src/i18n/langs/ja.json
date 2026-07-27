@@ -64,6 +64,7 @@
   "TreeResourceSelectCollapseAll": "すべてのノードを折りたたむ",
   "SearchConditionsClear": "クリア",
   "SearchShortcutPlaceholder": "/ を入力して検索",
+  "SearchMultipleValuesPlaceholder": "複数の値は , で区切る",
   "SearchConditionsSave": "保存",
   "SavedSearchConditions": "保存済み条件",
   "SavedSearchHistoryHint": "保存済みのフィルター履歴",
