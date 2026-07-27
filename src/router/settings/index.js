@@ -1,11 +1,11 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
-import { getStore } from '@/store/registry'
+import store from '@/store'
 import { openJDMC } from '@/utils/jdmc'
 import { hasPermission } from '@/utils/jms'
 import { getFirstAccessibleChildPath } from '@/utils/vue'
 
-const getSettings = () => getStore()?.state?.settings?.publicSettings || {}
+const getSettings = () => store.state.settings.publicSettings || {}
 
 const Setting = () => import('@/views/settings/index')
 const globalSubmenu = () => import('@/layout/globalOrg.vue')
