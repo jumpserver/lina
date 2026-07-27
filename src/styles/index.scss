@@ -1,11 +1,11 @@
-@use "./mixin";
-@use "./variables" as *;
+@use './mixin';
+@use './variables' as *;
 //@import './transition.scss';
-@use "./sidebar";
-@use "./menu";
-@use "./fonts";
-@use "./element-form-controls";
-@import "./fonts/font-awesome.min.css";
+@use './sidebar';
+@use './menu';
+@use './fonts';
+@use './element-form-controls';
+@import './fonts/font-awesome.min.css';
 
 :root {
   --scrollbar-size: 8px;
@@ -54,7 +54,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: auto;
   color: var(--color-text-primary);
-  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 1.428;
 }
@@ -105,7 +105,7 @@ div:focus {
     visibility: hidden;
     display: block;
     font-size: 0;
-    content: " ";
+    content: ' ';
     clear: both;
     height: 0;
   }
@@ -238,7 +238,7 @@ input,
 optgroup,
 select,
 textarea {
-  font-family: "Open Sans", sans-serif !important;
+  font-family: 'Open Sans', sans-serif !important;
 }
 
 // main-container global css
@@ -265,7 +265,7 @@ textarea {
   font-size: 12px;
 }
 
-input[type="file"] {
+input[type='file'] {
   font-size: 12px;
   opacity: 80;
 }
@@ -568,19 +568,19 @@ $tooltip-arrow-color: #c2d1e1;
 
 // 使用 SCSS 的嵌套和变量来简化代码
 .el-tooltip__popper.is-light {
-  &[x-placement^="right"] .popper__arrow {
+  &[x-placement^='right'] .popper__arrow {
     border-right-color: $tooltip-arrow-color !important;
   }
 
-  &[x-placement^="left"] .popper__arrow {
+  &[x-placement^='left'] .popper__arrow {
     border-left-color: $tooltip-arrow-color !important;
   }
 
-  &[x-placement^="top"] .popper__arrow {
+  &[x-placement^='top'] .popper__arrow {
     border-top-color: $tooltip-arrow-color !important;
   }
 
-  &[x-placement^="bottom"] .popper__arrow {
+  &[x-placement^='bottom'] .popper__arrow {
     border-bottom-color: $tooltip-arrow-color !important;
   }
 }
