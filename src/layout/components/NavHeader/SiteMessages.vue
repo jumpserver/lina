@@ -86,7 +86,7 @@
       <div class="msg-detail">
         <div class="msg-detail-txt">
           <span class="msg-detail-time">{{ formatDate(currentMsg.date_created) }}</span>
-          <MarkDown :value="currentMsg.content.message" />
+          <MarkDown :html="true" :value="currentMsg.content.message" />
         </div>
       </div>
     </Dialog>
