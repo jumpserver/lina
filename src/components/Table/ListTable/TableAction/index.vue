@@ -767,6 +767,9 @@ $color-drop-menu-border: #e4e7ed;
   }
 
   .search.left {
+    justify-content: flex-start;
+    margin-right: auto;
+    margin-left: 0;
     padding: 0 !important;
   }
 
@@ -1033,6 +1036,12 @@ $color-drop-menu-border: #e4e7ed;
   :deep(.el-input) {
     min-width: 0;
     flex: 1 1 auto;
+  }
+
+  :deep(.el-input__wrapper),
+  :deep(.el-input__wrapper:hover),
+  :deep(.el-input__wrapper.is-focus) {
+    box-shadow: 0 0 0 1px var(--el-border-color) inset !important;
   }
 
   &__save {
