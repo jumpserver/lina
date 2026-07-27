@@ -83,6 +83,7 @@
   "TreeResourceSelectCollapseAll": "Collapse all nodes",
   "SearchConditionsClear": "Clear",
   "SearchShortcutPlaceholder": "Type / to search",
+  "SearchMultipleValuesPlaceholder": "Separate multiple values with commas",
   "SearchConditionsSave": "Save",
   "SavedSearchConditions": "Saved filters",
   "SavedSearchHistoryHint": "Saved filter history",

@@ -201,7 +201,7 @@ export default {
     },
     placeholder() {
       if (this.focus) {
-        return ''
+        return this.$t('SearchMultipleValuesPlaceholder')
       }
       return this.$t('SearchShortcutPlaceholder')
     }
@@ -645,7 +645,7 @@ export default {
         this.filterKey = 'search' + '_' + this.filterValue
       }
       const existingTag = this.filterTags[this.filterKey]
-      const shouldMerge = this.filterKey !== this.defaultFilterKey && !!existingTag
+      const shouldMerge = !!existingTag
       const value = shouldMerge
         ? this.mergeConditionValues(existingTag.value, this.filterValue)
         : this.mergeConditionValues(this.filterValue)
@@ -859,7 +859,7 @@ $origin-white-color: #ffffff;
     }
 
     &.no-options {
-      padding-left: 0;
+      --jms-input-padding-inline-start: 11px;
     }
   }
 
