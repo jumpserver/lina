@@ -15,16 +15,15 @@
       <template #reference>
         <el-button
           :aria-label="$t('LabelFilterTitle')"
-          :class="{ 'is-active': popoverVisible }"
           :title="$t('LabelFilterTitle')"
           class="label-button"
           size="small"
         >
-          <el-icon><CollectionTag /></el-icon>
+          <svg-icon icon-class="tag" />
         </el-button>
       </template>
 
-      <div v-loading="loading" class="label-filter">
+      <div class="label-filter">
         <section class="label-filter__panel label-filter__keys">
           <div class="label-filter__search">
             <el-input
@@ -38,7 +37,7 @@
               </template>
             </el-input>
           </div>
-          <div class="label-filter__list">
+          <div v-loading="keyLoading" class="label-filter__list">
             <button
               v-for="option in filteredKeyOptions"
               :key="option.value"
@@ -52,7 +51,7 @@
               </span>
               <el-icon><ArrowRight /></el-icon>
             </button>
-            <div v-if="!loading && filteredKeyOptions.length === 0" class="label-filter__empty">
+            <div v-if="!keyLoading && filteredKeyOptions.length === 0" class="label-filter__empty">
               {{ $t('NoData') }}
             </div>
           </div>
@@ -106,13 +105,13 @@ export default {
   data() {
     return {
       popoverVisible: false,
-      loading: false,
+      keyLoading: false,
       labelOptions: [],
       labelValue: [],
       activeKey: '',
       keyQuery: '',
       valueQuery: '',
-      loadPromise: null
+      keyRequestId: 0
     }
   },
   computed: {
@@ -137,13 +136,7 @@ export default {
       }
     },
     filteredKeyOptions() {
-      const query = this.keyQuery.trim().toLocaleLowerCase()
-      if (!query) {
-        return this.labelOptions
-      }
-      return this.labelOptions.filter((option) => {
-        return option.label.toLocaleLowerCase().includes(query)
-      })
+      return this.labelOptions
     },
     activeKeyOption() {
       return this.labelOptions.find((option) => option.value === this.activeKey)
@@ -171,6 +164,11 @@ export default {
     }
   },
   watch: {
+    keyQuery() {
+      if (this.popoverVisible) {
+        this.debouncedSearchKeys()
+      }
+    },
     labelValue: {
       handler(newValue) {
         const selection = _.cloneDeep(newValue || [])
@@ -180,10 +178,16 @@ export default {
       deep: true
     }
   },
+  created() {
+    this.debouncedSearchKeys = _.debounce(() => {
+      this.getLabelOptions(this.keyQuery)
+    }, 300)
+  },
   mounted() {
     this.$eventBus.$on('labelSearch', this.labelSearchHandler)
   },
   beforeUnmount() {
+    this.debouncedSearchKeys?.cancel()
     this.$eventBus.$off('labelSearch', this.labelSearchHandler)
   },
   methods: {
@@ -205,41 +209,50 @@ export default {
         return
       }
       this.addSelection(label.name, label.value)
-      this.getLabelOptions()
     },
     handlePopoverShow() {
       this.handlePopoverVisibleChange(true)
-      this.getLabelOptions().then(() => {
+      this.getLabelOptions('').then(() => {
         this.$nextTick(() => this.$refs.keySearchInput?.focus())
       })
     },
     handlePopoverVisibleChange(visible) {
       this.$emit('showLabelSearch', visible)
       if (!visible) {
+        this.debouncedSearchKeys?.cancel()
+        this.keyRequestId += 1
+        this.keyLoading = false
         this.keyQuery = ''
         this.valueQuery = ''
       }
     },
-    async getLabelOptions() {
-      if (this.labelOptions.length > 0) {
-        return
-      }
-      if (this.loadPromise) {
-        return this.loadPromise
-      }
-
-      this.loading = true
-      this.loadPromise = this.$axios
-        .get('/api/v1/labels/labels/')
+    normalizeListResponse(data) {
+      const results = Array.isArray(data) ? data : data?.results
+      return Array.isArray(results) ? results : []
+    },
+    async getLabelOptions(query = '') {
+      const requestId = ++this.keyRequestId
+      this.keyLoading = true
+      return this.$axios
+        .get('/api/v1/labels/labels/', {
+          params: {
+            limit: 200,
+            ...(query.trim() && { search: query.trim() })
+          }
+        })
         .then((data) => {
-          const groupedLabels = _.groupBy(data, 'name')
+          if (requestId !== this.keyRequestId) {
+            return
+          }
+          const labels = this.normalizeListResponse(data).slice(0, 200)
+          const groupedLabels = _.groupBy(labels, 'name')
           this.labelOptions = _.sortBy(
-            Object.entries(groupedLabels).map(([key, labels]) => ({
+            Object.entries(groupedLabels).map(([key, values]) => ({
               value: key,
               label: key,
               values: _.uniqBy(
                 _.sortBy(
-                  labels.map((label) => ({
+                  values.map((label) => ({
                     value: label.value,
                     label: label.value
                   })),
@@ -256,11 +269,10 @@ export default {
           }
         })
         .finally(() => {
-          this.loading = false
-          this.loadPromise = null
+          if (requestId === this.keyRequestId) {
+            this.keyLoading = false
+          }
         })
-
-      return this.loadPromise
     },
     selectKey(key) {
       this.activeKey = key
@@ -299,23 +311,32 @@ export default {
   align-items: center;
 
   :deep(.el-button.label-button) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    min-width: 30px;
     height: 30px;
-    padding: 0 10px;
-    color: var(--color-icon-primary);
+    margin: 0;
+    padding: 0;
+    color: var(--color-text-primary) !important;
     border: 1px solid var(--color-border);
     border-radius: 4px;
     background-color: #fff;
 
-    &:hover,
-    &.is-active {
-      color: var(--el-color-primary);
-      border-color: var(--el-color-primary);
-      background-color: var(--el-color-primary-light-9);
+    &:hover {
+      color: var(--color-text-primary) !important;
+      background-color: rgba(0, 0, 0, 0.05);
     }
   }
 
-  :deep(.el-icon) {
-    font-size: 16px;
+  :deep(.label-button .svg-icon) {
+    width: 12px;
+    height: 12px;
+    margin: 0;
+    color: inherit !important;
+    fill: currentColor !important;
+    opacity: 0.72;
   }
 }
 </style>
@@ -362,6 +383,12 @@ export default {
       .el-input__wrapper {
         min-height: 32px;
         border-radius: 3px;
+        box-shadow: 0 0 0 1px var(--el-border-color) inset !important;
+
+        &:hover,
+        &.is-focus {
+          box-shadow: 0 0 0 1px var(--el-border-color) inset !important;
+        }
       }
     }
 

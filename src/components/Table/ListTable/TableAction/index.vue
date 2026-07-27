@@ -1,6 +1,9 @@
 <template>
   <div class="table-action">
-    <div :class="device" class="table-header table-action__toolbar">
+    <div
+      :class="[device, { 'has-left-actions': iHasLeftActions }]"
+      class="table-header table-action__toolbar"
+    >
       <slot name="header">
         <LeftSide
           v-bind="$attrs"
@@ -22,7 +25,21 @@
           class="right-side"
         />
 
-        <div :class="searchClass" class="search">
+        <div :class="[searchClass, { 'has-label-filter': hasLabelSearch }]" class="search">
+          <NodeSearch
+            v-bind="nodeSearchConfig"
+            v-if="hasNodeSearch"
+            ref="nodeSearch"
+            class="search-filter"
+            @node-search="handleNodeSearch"
+          />
+          <LabelSearch
+            v-if="hasLabelSearch"
+            ref="labelSearch"
+            class="search-filter"
+            @label-search="handleLabelSearch"
+            @show-label-search="handleLabelSearchShowChange"
+          />
           <AutoDataSearch
             v-bind="iSearchTableConfig"
             v-if="hasSearch"
@@ -35,22 +52,21 @@
           <el-popover
             v-if="savedSearchPresets.length"
             v-model:visible="searchHistoryVisible"
-            :fallback-placements="['bottom-start']"
+            :fallback-placements="['bottom-end']"
             :popper-options="searchHistoryPopperOptions"
             :show-arrow="false"
-            placement="bottom-start"
+            placement="bottom-end"
             popper-class="search-history-popper"
             trigger="click"
           >
             <template #reference>
               <el-button
                 :aria-label="$t('SavedSearchConditions')"
-                :class="{ 'is-active': searchHistoryVisible }"
                 :title="$t('SavedSearchConditions')"
                 class="search-history-button search-filter"
                 size="small"
               >
-                <el-icon><Clock /></el-icon>
+                <svg-icon icon-class="history" />
               </el-button>
             </template>
             <div class="search-history-menu">
@@ -85,20 +101,6 @@
               </el-tooltip>
             </div>
           </el-popover>
-          <NodeSearch
-            v-bind="nodeSearchConfig"
-            v-if="hasNodeSearch"
-            ref="nodeSearch"
-            class="search-filter"
-            @node-search="handleNodeSearch"
-          />
-          <LabelSearch
-            v-if="hasLabelSearch"
-            ref="labelSearch"
-            class="search-filter"
-            @label-search="handleLabelSearch"
-            @show-label-search="handleLabelSearchShowChange"
-          />
           <DatetimeRangePicker
             v-bind="datePicker"
             v-if="hasDatePicker"
@@ -118,7 +120,7 @@
               class="quick-filter-toggle search-filter"
               @click="$emit('update:quick-filter-expand', !quickFilterExpand)"
             >
-              <el-icon><Filter /></el-icon>
+              <svg-icon icon-class="filter" />
             </el-button>
           </el-tooltip>
         </div>
@@ -426,9 +428,9 @@ export default {
         ? {
             id: 'node',
             source: 'node',
-            displayKey: this.$t('NodeFilterTitle'),
+            displayKey: this.$t('NodeFilterConditionLabel'),
             displayValue: snapshot.label,
-            title: `${this.$t('NodeFilterTitle')}: ${snapshot.label}`
+            title: `${this.$t('NodeFilterConditionLabel')}: ${snapshot.label}`
           }
         : null
       this.searchWithFilters()
@@ -506,7 +508,7 @@ export default {
         return `${key}: ${displayValue}`
       })
       const nodeTitles = preset?.nodeSelection?.label
-        ? [`${this.$t('NodeFilterTitle')}: ${preset.nodeSelection.label}`]
+        ? [`${this.$t('NodeFilterConditionLabel')}: ${preset.nodeSelection.label}`]
         : []
 
       return [...tagTitles, ...labelTitles, ...nodeTitles]
@@ -679,26 +681,26 @@ $color-drop-menu-border: #e4e7ed;
   .search {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: 10px;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 2px;
     min-width: 0;
 
     .search-primary {
-      order: 0;
+      margin-right: 6px;
     }
 
-    .search-filter {
-      order: 1;
+    &.has-label-filter .search-primary {
+      margin-left: 6px;
     }
 
-    // 标签筛选与搜索框是两个相互独立的控件，各自单一边框、圆角，中间留间距。
+    // 搜索框与前后的图标按钮保持清晰间距。
     .right-side-item.action-search {
-      flex: 0 1 360px;
+      flex: 0 1 240px;
       box-sizing: border-box;
-      width: 360px;
+      width: 240px;
       min-height: 30px;
-      min-width: min(280px, 100%);
+      min-width: min(240px, 100%);
       max-width: 100%;
       font-size: 13px;
       border: 1px solid var(--color-border);
@@ -709,12 +711,12 @@ $color-drop-menu-border: #e4e7ed;
         box-shadow 0.2s;
 
       &:hover {
-        border-color: var(--el-color-primary);
+        border-color: var(--color-border);
       }
 
       &:focus-within {
-        border-color: var(--el-color-primary);
-        box-shadow: 0 0 0 1px var(--el-color-primary-light-7);
+        border-color: var(--color-border);
+        box-shadow: none;
       }
     }
 
@@ -727,43 +729,39 @@ $color-drop-menu-border: #e4e7ed;
       overflow: visible;
     }
 
-    .quick-filter-toggle {
-      height: 30px;
-      padding: 0 10px;
-      color: var(--el-text-color-primary);
-      border: 1px solid var(--color-border);
-      border-radius: 4px;
-      background-color: #fff;
-
-      .el-icon {
-        font-size: 16px;
-      }
-
-      &:hover,
-      &.is-active {
-        color: var(--el-color-primary);
-        border-color: var(--el-color-primary);
-        background-color: var(--el-color-primary-light-9);
-      }
-    }
-
+    .quick-filter-toggle,
     .search-history-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      width: 30px;
+      min-width: 30px;
       height: 30px;
-      padding: 0 10px;
-      color: var(--el-text-color-primary);
-      border: 1px solid var(--color-border);
+      margin: 0;
+      padding: 0;
+      color: var(--color-text-primary) !important;
+      border: 0;
       border-radius: 4px;
-      background-color: #fff;
+      background-color: transparent;
 
-      .el-icon {
-        font-size: 16px;
+      .svg-icon {
+        width: 13px;
+        height: 13px;
+        margin: 0;
+        color: inherit !important;
+        fill: currentColor !important;
+        opacity: 1;
       }
 
-      &:hover,
+      &:hover {
+        color: var(--color-text-primary) !important;
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+
       &.is-active {
-        color: var(--el-color-primary);
-        border-color: var(--el-color-primary);
-        background-color: var(--el-color-primary-light-9);
+        color: var(--color-text-primary) !important;
+        background-color: rgba(0, 0, 0, 0.05);
       }
     }
   }
@@ -789,7 +787,7 @@ $color-drop-menu-border: #e4e7ed;
   max-width: none;
   margin: 0;
   padding: 0;
-  gap: 10px;
+  gap: 10px 4px;
 
   &.mobile {
     justify-content: flex-start;
@@ -812,12 +810,102 @@ $color-drop-menu-border: #e4e7ed;
 
 .search {
   order: 2;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   min-width: 0;
+  margin-left: auto;
 }
 
 .right-side {
   order: 3;
+}
+
+@media (max-width: 1100px) {
+  .table-action__toolbar {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr);
+    align-items: center;
+    gap: 12px 4px;
+
+    .left-side {
+      grid-row: 1;
+      grid-column: 1 / -1;
+      justify-self: start;
+    }
+
+    .search {
+      grid-row: 1;
+      grid-column: 1;
+      justify-content: flex-start;
+      justify-self: start;
+      margin-left: 0;
+      gap: 2px;
+
+      .right-side-item.action-search {
+        flex: 0 1 clamp(160px, 20vw, 220px);
+        width: clamp(160px, 20vw, 220px);
+        min-width: min(160px, 100%);
+      }
+    }
+
+    .right-side {
+      grid-row: 1;
+      grid-column: 2;
+      align-self: center;
+      justify-self: start;
+    }
+
+    &.has-left-actions {
+      .search,
+      .right-side {
+        grid-row: 2;
+      }
+    }
+  }
+
+  .table-action__toolbar.mobile .search {
+    justify-content: flex-start;
+    gap: 2px;
+  }
+}
+
+@media (max-width: 640px) {
+  .table-action__toolbar {
+    grid-template-columns: minmax(0, 1fr);
+
+    .search {
+      grid-row: 1;
+      grid-column: 1;
+      justify-content: flex-start;
+      justify-self: start;
+      width: 100%;
+
+      .right-side-item.action-search {
+        flex: 0 1 clamp(140px, 50vw, 240px);
+        width: clamp(140px, 50vw, 240px);
+        min-width: 120px;
+      }
+    }
+
+    .right-side {
+      grid-row: 2;
+      grid-column: 1;
+      justify-self: start;
+    }
+
+    &.has-left-actions {
+      .search {
+        grid-row: 2;
+      }
+
+      .right-side {
+        grid-row: 3;
+      }
+    }
+  }
+
+  .table-action__toolbar.mobile .search {
+    justify-content: flex-start;
+  }
 }
 
 .condition-bar {
@@ -828,7 +916,7 @@ $color-drop-menu-border: #e4e7ed;
   padding: 8px 10px;
   border: 1px solid var(--el-border-color-lighter);
   border-radius: 4px;
-  background-color: var(--el-fill-color-extra-light);
+  background-color: #fff;
 
   &__active,
   &__saved {
@@ -867,7 +955,10 @@ $color-drop-menu-border: #e4e7ed;
 .condition-chip {
   height: 28px;
   padding: 0 8px;
+  color: var(--el-text-color-regular);
   line-height: 26px;
+  border-color: var(--el-border-color);
+  background-color: transparent;
   max-width: min(480px, 100%);
   cursor: pointer;
 
@@ -882,9 +973,27 @@ $color-drop-menu-border: #e4e7ed;
   }
 
   &:hover {
-    color: var(--el-color-primary);
-    border-color: var(--el-color-primary-light-5);
-    background-color: var(--el-color-primary-light-9);
+    color: var(--el-text-color-regular);
+    border-color: var(--el-border-color);
+    background-color: var(--el-fill-color-light);
+  }
+
+  :deep(.el-tag__close) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    margin-left: 6px;
+    color: var(--el-text-color-primary) !important;
+    font-size: 10px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.08);
+
+    &:hover {
+      color: #000 !important;
+      background-color: rgba(0, 0, 0, 0.16);
+    }
   }
 }
 
@@ -904,7 +1013,7 @@ $color-drop-menu-border: #e4e7ed;
 
   &__key {
     margin-right: 4px;
-    color: inherit;
+    color: var(--el-text-color-secondary);
     cursor: text;
     user-select: text;
   }
@@ -940,14 +1049,14 @@ $color-drop-menu-border: #e4e7ed;
 <style lang="scss">
 .search-history-popper {
   width: max-content !important;
-  min-width: 220px !important;
-  max-width: min(420px, calc(100vw - 32px)) !important;
+  min-width: 110px !important;
+  max-width: min(210px, calc(100vw - 32px)) !important;
   padding: 6px !important;
 
   .search-history-menu {
     width: max-content;
-    min-width: 208px;
-    max-width: min(408px, calc(100vw - 44px));
+    min-width: 98px;
+    max-width: min(198px, calc(100vw - 44px));
     max-height: min(300px, calc(100vh - 160px));
     overflow: auto;
 
@@ -973,8 +1082,8 @@ $color-drop-menu-border: #e4e7ed;
       display: flex;
       align-items: center;
       box-sizing: border-box;
-      width: max-content;
-      min-width: 100%;
+      width: 100%;
+      min-width: 0;
       height: 34px;
       padding: 0 8px;
       color: var(--el-text-color-regular);
@@ -996,7 +1105,10 @@ $color-drop-menu-border: #e4e7ed;
 
     &__name {
       flex: 1 1 auto;
-      padding-right: 16px;
+      min-width: 0;
+      padding-right: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
       white-space: nowrap;
     }
 

@@ -1,6 +1,10 @@
 <template>
   <div
-    :class="{ 'has-options': options.length > 0, 'is-input-focus': isFocus }"
+    :class="{
+      'has-options': options.length > 0,
+      'has-search-action': showSearchAction,
+      'is-input-focus': isFocus
+    }"
     class="filter-field"
   >
     <div
@@ -9,11 +13,10 @@
       class="filter-selector"
       @mouseenter="openFilterMenu"
     >
-      <el-icon aria-hidden="true" class="search-leading-icon"><Search /></el-icon>
       <span v-if="hasSelectedField" :title="filterSelectorLabel" class="filter-selector__label">
         {{ filterSelectorLabel }}
       </span>
-      <el-icon v-if="hasSelectedField" class="filter-selector__arrow"><ArrowDown /></el-icon>
+      <el-icon aria-hidden="true" class="filter-selector__leading"><ArrowDown /></el-icon>
 
       <el-cascader
         ref="Cascade"
@@ -35,7 +38,6 @@
       v-model="filterValue"
       class="search-input jms-input-spacing"
       :class="options.length > 0 ? '' : 'no-options'"
-      clearable
       :placeholder="placeholder"
       :validate-event="false"
       @blur="handleBlur"
@@ -44,9 +46,23 @@
       @focus="handleFocus"
       @keydown.backspace="handleFieldBackspace"
       @keydown.down="handleFieldMenuKeydown"
+      @keydown.esc.stop.prevent="handleSearchEscape"
       @keyup.enter="handleEnter"
-    />
-    <span :class="isFocus ? 'is-focus ' : ''" class="keydown-focus">/</span>
+    >
+      <template #suffix>
+        <button
+          v-if="showSearchAction"
+          :aria-label="$t('Search')"
+          class="search-submit-button"
+          type="button"
+          @click.stop="handleConfirm"
+          @mousedown.prevent
+        >
+          <el-icon><Search /></el-icon>
+        </button>
+      </template>
+    </el-input>
+    <span v-if="!showSearchAction" class="keydown-focus">/</span>
   </div>
 </template>
 
@@ -121,6 +137,15 @@ export default {
     hasSelectedField() {
       return this.filterKey !== 'search' && !!this.keyLabel
     },
+    hasSearchValue() {
+      if (typeof this.filterValue === 'string') {
+        return this.filterValue.trim() !== ''
+      }
+      return this.filterValue != null
+    },
+    showSearchAction() {
+      return this.focus || this.hasSearchValue
+    },
     keyLabel() {
       if (!this.filterKey) return ''
       for (const field of this.options) {
@@ -157,10 +182,10 @@ export default {
       return data
     },
     placeholder() {
-      if (this.focus && this.filterKey) {
-        return this.$t('EnterForSearch')
+      if (this.focus) {
+        return ''
       }
-      return this.$t('Search')
+      return this.$t('SearchShortcutPlaceholder')
     }
   },
   watch: {
@@ -454,6 +479,10 @@ export default {
       this.valueLabel = ''
       this.$refs.Cascade?.handleClear?.()
     },
+    handleSearchEscape() {
+      this.$refs.Cascade?.togglePopperVisible?.(false)
+      this.$nextTick(() => this.$refs.SearchInput?.blur?.())
+    },
     focusSearchInput() {
       setTimeout(() => {
         const searchInput = this.$refs.SearchInput
@@ -587,7 +616,7 @@ export default {
       event.preventDefault()
       event.stopPropagation()
       this.$refs.Cascade?.togglePopperVisible?.(false)
-      this.$nextTick(() => this.focusSearchInput())
+      this.$nextTick(() => this.$refs.SearchInput?.blur?.())
     },
     // 删除查询条件时改变url
     checkUrlFields(evt) {
@@ -624,14 +653,6 @@ $origin-white-color: #ffffff;
   overflow: hidden;
   background-color: $origin-white-color;
 
-  .search-leading-icon {
-    width: 14px;
-    height: 14px;
-    color: var(--el-text-color-placeholder);
-    font-size: 14px;
-    flex: 0 0 14px;
-  }
-
   .filter-selector {
     position: relative;
     display: inline-flex;
@@ -650,14 +671,17 @@ $origin-white-color: #ffffff;
       background-color: var(--el-fill-color-light);
     }
 
-    &.is-open {
-      color: var(--el-color-primary);
-      background-color: var(--el-color-primary-light-9);
+    &.is-open .filter-selector__leading {
+      transform: rotate(180deg);
+    }
 
-      .search-leading-icon,
-      .filter-selector__arrow {
-        color: var(--el-color-primary);
-      }
+    &__leading {
+      width: 12px;
+      height: 12px;
+      color: var(--el-text-color-placeholder);
+      font-size: 12px;
+      flex: 0 0 12px;
+      transition: transform 0.2s;
     }
 
     &__label {
@@ -665,19 +689,6 @@ $origin-white-color: #ffffff;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-    }
-
-    &__arrow {
-      width: 12px;
-      height: 12px;
-      font-size: 12px;
-      color: var(--el-text-color-placeholder);
-      flex: 0 0 auto;
-      transition: transform 0.2s;
-    }
-
-    &.is-open .filter-selector__arrow {
-      transform: rotate(180deg);
     }
   }
 
@@ -720,13 +731,7 @@ $origin-white-color: #ffffff;
       }
 
       .el-input__suffix {
-        cursor: pointer;
-
-        i {
-          line-height: 30px;
-          font-weight: 500;
-          color: var(--color-icon-primary);
-        }
+        margin-left: 4px;
       }
     }
 
@@ -735,7 +740,7 @@ $origin-white-color: #ffffff;
     }
   }
 
-  &:not(.is-input-focus) .search-input {
+  &:not(.is-input-focus):not(.has-search-action) .search-input {
     :deep(.el-input__wrapper) {
       padding-right: 32px;
     }
@@ -748,16 +753,36 @@ $origin-white-color: #ffffff;
     display: inline-block;
     margin-right: 10px;
     padding: 3px 5px;
-    font-size: 11px;
     color: var(--color-text-primary);
+    font-size: 11px;
+    line-height: 10px;
     border: solid 1px $borderColor-neutral-muted;
     border-radius: 6px;
-    line-height: 10px;
-    background-color: var(--bgColor-muted);
+    background-color: $bgColor-muted;
     box-shadow: inset 0 -1px 0 $borderColor-neutral-muted;
+  }
 
-    &.is-focus {
-      display: none;
+  .search-submit-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 24px;
+    margin: 0;
+    padding: 0;
+    color: var(--el-text-color-regular);
+    border: 0;
+    border-radius: 3px;
+    background-color: transparent;
+    cursor: pointer;
+
+    .el-icon {
+      font-size: 12px;
+    }
+
+    &:hover {
+      color: var(--el-text-color-primary);
+      background-color: rgba(0, 0, 0, 0.05);
     }
   }
 }
