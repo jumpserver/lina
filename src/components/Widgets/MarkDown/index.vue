@@ -13,7 +13,7 @@
         <VueMarkdown class="result-html" :source="sanitizedValue" :html="false" :show="true" />
       </el-col>
     </el-row>
-    <VueMarkdown v-else class="source" :html="false" :source="sanitizedValue" />
+    <VueMarkdown v-else class="source" :html="html" :source="sanitizedValue" />
   </div>
 </template>
 
@@ -31,6 +31,10 @@ export default {
       default: ''
     },
     preview: {
+      type: Boolean,
+      default: false
+    },
+    html: {
       type: Boolean,
       default: false
     },
@@ -104,6 +108,7 @@ export default {
           'blockquote',
           'a'
         ],
+        ADD_ATTR: ['target'],
         FORBID_TAGS: ['script', 'style', 'iframe', 'frame', 'object', 'embed'],
         FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover']
       })

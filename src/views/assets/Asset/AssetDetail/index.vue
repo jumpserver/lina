@@ -1,5 +1,10 @@
 <template>
-  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu" v-model:object="asset">
+  <GenericDetailPage
+    v-bind="config"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="asset"
+    :has-right-side="!inDrawer"
+  >
     <keep-alive v-if="config.activeMenu">
       <component :is="config.activeMenu" :exclude="'Account'" :object="asset" />
     </keep-alive>
@@ -7,6 +12,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
 import Account from './Account.vue'
@@ -74,6 +80,9 @@ export default {
         }
       }
     }
+  },
+  computed: {
+    ...mapGetters(['inDrawer'])
   }
 }
 </script>

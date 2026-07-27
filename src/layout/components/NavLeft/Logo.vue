@@ -13,6 +13,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { getFirstAccessibleChildPath } from '@/utils/vue'
 
 export default {
   name: 'SidebarLogo',
@@ -42,7 +43,14 @@ export default {
       const matchingRoute = this.viewRoutes.find((route) => currentPath.startsWith(route.path))
 
       if (matchingRoute) {
-        this.$router.push(matchingRoute.redirect)
+        const redirect = matchingRoute.redirect
+        const rootPath = matchingRoute.meta?.fullPath || matchingRoute.path
+        const targetPath =
+          (typeof redirect === 'string' && redirect) ||
+          (redirect && typeof redirect === 'object' ? redirect : '') ||
+          getFirstAccessibleChildPath(rootPath) ||
+          rootPath
+        this.$router.push(targetPath)
       } else {
         this.$router.push('/')
       }
