@@ -193,7 +193,8 @@ export default {
         if (key.startsWith(keyword)) {
           data[keyword] = (data[keyword] ? data[keyword] + ',' : '') + value
         } else {
-          data[this.getQueryKey(key)] = value
+          const queryKey = this.hasMultipleConditionValues(value) ? key : this.getQueryKey(key)
+          data[queryKey] = value
         }
       }
       return data
@@ -400,6 +401,34 @@ export default {
       const value =
         tag?.valueLabel !== '' && tag?.valueLabel != null ? tag.valueLabel : (tag?.value ?? '')
       return `${label}${value}`
+    },
+    normalizeConditionValues(value) {
+      const values = Array.isArray(value) ? value : [value]
+      return values
+        .flatMap((item) => {
+          if (typeof item !== 'string') {
+            return item == null ? [] : [String(item)]
+          }
+          return item.split(/[,，\r\n]+/)
+        })
+        .map((item) => item.trim())
+        .filter(Boolean)
+    },
+    mergeConditionValues(...values) {
+      const seen = new Set()
+      return values
+        .flatMap((value) => this.normalizeConditionValues(value))
+        .filter((value) => {
+          if (seen.has(value)) {
+            return false
+          }
+          seen.add(value)
+          return true
+        })
+        .join(',')
+    },
+    hasMultipleConditionValues(value) {
+      return this.normalizeConditionValues(value).length > 1
     },
     getOptionByKey(key) {
       return this.options.find((field) => field.value === key)
@@ -615,11 +644,19 @@ export default {
       if (this.filterValue && !this.filterKey) {
         this.filterKey = 'search' + '_' + this.filterValue
       }
+      const existingTag = this.filterTags[this.filterKey]
+      const shouldMerge = this.filterKey !== this.defaultFilterKey && !!existingTag
+      const value = shouldMerge
+        ? this.mergeConditionValues(existingTag.value, this.filterValue)
+        : this.mergeConditionValues(this.filterValue)
+      const valueLabel = shouldMerge
+        ? this.mergeConditionValues(existingTag.valueLabel, this.valueLabel)
+        : this.mergeConditionValues(this.valueLabel)
       const tag = {
         key: this.filterKey,
         label: this.keyLabel,
-        value: this.filterValue,
-        valueLabel: this.valueLabel
+        value,
+        valueLabel
       }
       this.filterTags[this.filterKey] = tag
       // this.$emit('tagSearch', this.filterMaps)
