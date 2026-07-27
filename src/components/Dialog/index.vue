@@ -4,7 +4,7 @@
     :append-to-body="true"
     :class="dialogClass"
     :model-value="dialogVisible"
-    :style="[dialogStyle, { '--dialog-max-width': maxWidth }]"
+    :style="[dialogStyle, dialogCssVariables]"
     :title="title"
     :top="top"
     :width="iWidth"
@@ -87,6 +87,10 @@ export default {
       type: String,
       default: '1200px'
     },
+    minWidth: {
+      type: String,
+      default: ''
+    },
     shadow: {
       type: Boolean,
       default: true
@@ -116,6 +120,13 @@ export default {
     dialogStyle() {
       return this.$attrs.style
     },
+    dialogCssVariables() {
+      const variables = { '--dialog-max-width': this.maxWidth }
+      if (this.minWidth) {
+        variables['--dialog-min-width'] = this.minWidth
+      }
+      return variables
+    },
     iWidth() {
       return this.$store.getters.isMobile ? '1000px' : this.width
     }
@@ -141,12 +152,14 @@ export default {
   padding: 0 !important;
   border-radius: 0.3em;
   max-width: min(calc(100vw - 32px), var(--dialog-max-width));
+  min-width: min(var(--dialog-min-width, 0px), calc(100vw - 32px));
 
   &.shadow {
     box-shadow: 1px 2px 12px 0 rgba(0, 0, 0, 0.6);
   }
 
   .el-dialog__header {
+    position: relative;
     box-sizing: border-box;
     padding: 15px 22px !important;
     border-bottom: 1px solid #dee2e6;
@@ -158,87 +171,33 @@ export default {
     color: var(--color-text-primary);
   }
 
+  // 关闭按钮在标题栏内垂直居中(默认 top:0 + --el-dialog-padding-primary:0 会贴到顶部)
+  .el-dialog__headerbtn {
+    top: 50%;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    margin: 0;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    .el-dialog__close {
+      color: var(--el-text-color-secondary);
+    }
+
+    &:hover,
+    &:focus {
+      .el-dialog__close {
+        color: var(--el-color-primary);
+      }
+    }
+  }
+
   .el-dialog__body {
     padding: 20px 30px !important;
     font-size: 13px;
-  }
-
-  // 以下是给「直接放在 dialog 里的普通 el-form」用的兜底样式。
-  // DataForm（.form-fields）有自己的一整套间距/标签/输入框规范（flex gap、margin:0 等），
-  // 不能被这里覆盖，否则会多出 20px 的 margin-bottom 等冲突，故用 :not(.form-fields) 排除。
-  .el-dialog__body .el-form:not(.form-fields) {
-    margin: 0;
-
-    .el-form-item {
-      margin-bottom: 20px;
-    }
-
-    .el-form-item:last-child {
-      margin-bottom: 0;
-    }
-
-    .el-form-item__label {
-      min-height: 30px;
-      line-height: 30px;
-      color: var(--color-text-primary);
-    }
-
-    .el-form-item__content {
-      min-height: 30px;
-      line-height: 30px;
-    }
-
-    .el-input,
-    .el-select,
-    .el-input-number,
-    .el-input__wrapper,
-    .el-select__wrapper,
-    .el-date-editor.el-input,
-    .el-date-editor--daterange,
-    .el-date-editor--datetimerange {
-      min-height: 30px;
-      height: 30px;
-    }
-
-    .el-input__wrapper,
-    .el-select__wrapper,
-    .el-input-group__prepend,
-    .el-input-group__append {
-      box-sizing: border-box;
-      border-radius: 0;
-    }
-
-    .el-input__wrapper,
-    .el-select__wrapper,
-    .el-cascader .el-input__wrapper {
-      box-shadow: none !important;
-      border: 1px solid var(--el-border-color) !important;
-    }
-
-    .el-input__wrapper:hover,
-    .el-select__wrapper:hover,
-    .el-cascader .el-input__wrapper:hover {
-      border-color: var(--el-border-color-hover) !important;
-    }
-
-    .el-input__wrapper.is-focus,
-    .el-select__wrapper.is-focused,
-    .el-cascader .el-input__wrapper.is-focus {
-      box-shadow: none !important;
-      border-color: var(--el-color-primary) !important;
-    }
-
-    .el-input__inner,
-    .el-select__selected-item,
-    .el-select__placeholder,
-    .el-date-editor .el-range-input,
-    .el-date-editor .el-range-separator,
-    .el-date-editor .el-range__icon,
-    .el-date-editor .el-range__close-icon {
-      min-height: 28px;
-      height: 28px;
-      line-height: 28px;
-    }
   }
 
   .el-dialog__footer {
@@ -248,22 +207,6 @@ export default {
     gap: 12px;
     border-top: 1px solid #dee2e6;
     padding: 16px 25px !important;
-  }
-
-  .dialog-footer {
-    .el-button {
-      min-height: 30px;
-      padding: 8px 12px;
-      font-size: 13px;
-      font-weight: 400;
-      line-height: 1;
-
-      > span {
-        display: inline-flex;
-        align-items: center;
-        line-height: 1;
-      }
-    }
   }
 }
 

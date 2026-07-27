@@ -8,8 +8,7 @@
   />
 </template>
 
-<script>
-import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
+<script lang="jsx">
 import { Required } from '@/components/Form/DataForm/rules'
 import { AttrInput, Select2 } from '@/components/Form/FormFields'
 import ProtocolSelector from '@/components/Form/FormFields/ProtocolSelector'
@@ -201,26 +200,16 @@ export default {
             align: 'center',
             width: '100px',
             formatter: (row, col, cellValue, index) => {
-              return createVNodeCompat(
-                'div',
-                {
-                  class: 'input-button'
-                },
-                [
-                  createVNodeCompat(
-                    resolveComponentCompat('el-button'),
-                    {
-                      icon: 'Minus',
-                      size: 'small',
-                      style: {
-                        flexShrink: 0
-                      },
-                      type: 'danger',
-                      onClick: this.handleDelete(index)
-                    },
-                    null
-                  )
-                ]
+              return (
+                <div class="input-button">
+                  <el-button
+                    icon="Minus"
+                    size="small"
+                    style={{ flexShrink: 0 }}
+                    type="danger"
+                    onClick={this.handleDelete(index)}
+                  />
+                </div>
               )
             }
           }

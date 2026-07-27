@@ -1,7 +1,7 @@
 // i18n.js
-import store from '@/store'
 import axios from 'axios'
 import { createI18n } from 'vue-i18n'
+import { getStore } from '@/store/registry'
 import date from './date'
 import messages from './langs'
 import { getLangCode } from './utils'
@@ -68,7 +68,7 @@ export async function fetchTranslationsFromAPI() {
   } catch (error) {
     console.log(error)
   } finally {
-    await store.dispatch('app/setI18nLoaded', true)
+    await getStore()?.dispatch('app/setI18nLoaded', true)
   }
 }
 

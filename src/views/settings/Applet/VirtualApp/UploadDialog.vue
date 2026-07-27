@@ -22,7 +22,7 @@
           list-type="text/csv"
           upload-files="uploadFiles"
         >
-          <el-icon><Upload /></el-icon>
+          <el-icon class="el-icon--upload"><Upload /></el-icon>
           <div class="el-upload__text">
             {{ $t('DragUploadFileInfo') }}
           </div>
@@ -109,13 +109,14 @@ export default {
 <style lang="scss" scoped>
 .file-uploader.el-form-item {
   margin-bottom: 0;
+}
 
-  :deep(.el-upload) {
-    width: 100%;
+.file-uploader :deep(.el-form-item__content) {
+  display: block;
+}
 
-    .el-upload-dragger {
-      width: 100%;
-    }
-  }
+.file-uploader :deep(.el-upload),
+.file-uploader :deep(.el-upload-dragger) {
+  width: 100%;
 }
 </style>

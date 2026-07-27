@@ -34,10 +34,10 @@ export default {
         }
       },
       getUrl() {
-        const params = this.$route.params
         let url = `/api/v1/tickets/flows/`
-        if (params.id) {
-          url = `${url}${params.id}/`
+        const id = this.$context.get('id')
+        if (id) {
+          url = `${url}${id}/`
         }
         return `${url}`
       },
@@ -52,7 +52,7 @@ export default {
   },
   computed: {
     initial() {
-      return this.$route.query
+      return this.$context.getScope('overlay')?.query || this.$route.query
     }
   },
   mounted() {

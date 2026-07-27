@@ -4,8 +4,7 @@
   </div>
 </template>
 
-<script>
-import { createTextVNode as createTextVNodeCompat, createVNode as createVNodeCompat } from 'vue'
+<script lang="jsx">
 import { GenericListTable } from '@/layout/components'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 export default {
@@ -89,9 +88,9 @@ export default {
                 processing: 'Processing'
               }
               if (statusMap[row.meta.status]) {
-                return createVNodeCompat('span', null, [vm.$t(statusMap[row.meta.status])])
+                return <span>{vm.$t(statusMap[row.meta.status])}</span>
               }
-              return createVNodeCompat('span', null, [createTextVNodeCompat('\u2013')])
+              return <span>–</span>
             }
           },
           actions: {

@@ -1,6 +1,6 @@
 // import getPageTitle from '@/utils/get-page-title'
 import store from '@/store'
-import router, { resetRouter } from '@/router'
+import router, { addDynamicRoute, resetRouter } from '@/router'
 import { message } from '@/utils/vue/message'
 import orgUtil from '@/utils/jms/org'
 import orgs from '@/api/orgs'
@@ -110,18 +110,7 @@ export async function generatePageRoutes({ to, from }) {
   try {
     // try get user profile
     // generate accessible routes map based on roles
-    let accessRoutes = await store.dispatch('permission/generateRoutes', { to, from })
-
-    // Incorrect route, jump to 404
-    accessRoutes = [
-      ...accessRoutes,
-      {
-        path: '/:pathMatch(.*)*',
-        name: 'NotFound',
-        component: () => import('@/views/404'),
-        hidden: true
-      }
-    ]
+    const accessRoutes = await store.dispatch('permission/generateRoutes', { to, from })
     // dynamically add accessible routes
     console.debug(
       'All routes:',
@@ -156,7 +145,7 @@ export async function generatePageRoutes({ to, from }) {
 
     accessRoutes.forEach((route) => {
       try {
-        router.addRoute(route)
+        addDynamicRoute(route)
       } catch (e) {
         console.warn('addRoute failed:', route.name || route.path, e.message)
       }
@@ -174,6 +163,16 @@ export async function generatePageRoutes({ to, from }) {
     message.error(error || 'Has Error')
     console.error('Error occur: ', error)
   }
+}
+
+async function regenerateMissingRoute({ to, from }) {
+  await store.dispatch('users/getProfile', true)
+  const pageRoutesResult = await generatePageRoutes({ to, from })
+  const resolvedRoute = router.resolve({ path: to.path, query: to.query, hash: to.hash })
+  if (['404', 'NotFound'].includes(resolvedRoute?.name)) {
+    return true
+  }
+  return pageRoutesResult
 }
 
 export async function checkUserFirstLogin({ to, from, next }) {
@@ -239,6 +238,9 @@ function onI18nLoaded() {
 export async function startup({ to, from, next }) {
   // if (store.getters.inited) { return true }
   if (store.getters.inited) {
+    if (['404', 'NotFound'].includes(to?.name)) {
+      return regenerateMissingRoute({ to, from })
+    }
     // 页面初始化后也需要检测
     const firstLoginResult = await checkUserFirstLogin({ to, from })
     if (firstLoginResult && firstLoginResult !== true) {

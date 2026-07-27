@@ -2,21 +2,10 @@
   <HomeCard v-bind="cardConfig" :table-config="tableConfig" />
 </template>
 
-<script>
+<script lang="jsx">
 import { getPreference } from '@/api/settings'
 import { openNewWindow } from '@/utils/common/index'
-import {
-  createVNode as createVNodeCompat,
-  isVNode as isVNodeCompat,
-  resolveComponent as resolveComponentCompat
-} from 'vue'
 import HomeCard from './HomeCard.vue'
-function _isSlot(s) {
-  return (
-    typeof s === 'function' ||
-    (Object.prototype.toString.call(s) === '[object Object]' && !isVNodeCompat(s))
-  )
-}
 export default {
   name: 'Announcement',
   components: {
@@ -46,28 +35,18 @@ export default {
                 }
               }
               if (vm.$hasPerm('terminal.view_session')) {
-                return createVNodeCompat(
-                  resolveComponentCompat('router-link'),
-                  {
-                    to
-                  },
-                  _isSlot(label)
-                    ? label
-                    : {
-                        default: () => [label]
-                      }
-                )
+                return <router-link to={to}>{label}</router-link>
               } else {
                 return label
               }
             }
           },
           asset: {
-            'min-width': 200,
+            minWidth: 200,
             label: this.$t('Asset')
           },
           account: {
-            'min-width': 100
+            minWidth: 100
           },
           command_amount: {
             align: 'center',
@@ -95,7 +74,6 @@ export default {
                 {
                   name: 'connect',
                   icon: 'fa-desktop',
-                  plain: true,
                   type: 'primary',
                   can: ({ row }) => row.is_active,
                   callback: ({ row }) => {
@@ -128,4 +106,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+// 纯图标操作仍会渲染一个空标题占位，向右微调图标以保持视觉居中
+:deep(.table-actions .connect .pre-icon) {
+  display: inline-block;
+  transform: translateX(2px);
+}
+</style>

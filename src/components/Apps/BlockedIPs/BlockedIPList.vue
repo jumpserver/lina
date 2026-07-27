@@ -23,6 +23,7 @@ export default {
       tableConfig: {
         url: '/api/v1/settings/security/block-ip/',
         columns: ['ip', 'actions'],
+        totalData: [],
         columnsMeta: {
           ip: {
             label: this.$t('IP')
@@ -40,7 +41,9 @@ export default {
                   type: 'primary',
                   callback: ({ row }) => {
                     this.$axios
-                      .post('/api/v1/settings/security/unlock-ip/', { ips: [row.ip] })
+                      .post('/api/v1/settings/security/unlock-ip/', {
+                        ips: [row.ip]
+                      })
                       .then(() => {
                         vm.$message.success(this.$tc('UnlockSuccessMsg'))
                         vm.$refs.ListTable.reloadTable()
@@ -56,7 +59,7 @@ export default {
         hasExport: false,
         hasImport: false,
         hasCreate: false,
-        hasSearch: false,
+        hasSearch: true,
         hasRefresh: true,
         hasBulkDelete: false,
         hasBulkUpdate: false,
@@ -86,6 +89,11 @@ export default {
         ]
       }
     }
+  },
+  mounted() {
+    this.$axios.get('/api/v1/settings/security/block-ip/').then((res) => {
+      this.tableConfig.totalData = res.results
+    })
   }
 }
 </script>

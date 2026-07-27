@@ -22,6 +22,7 @@ import TabPage from '../TabPage'
 import { flashErrorMsg } from '@/utils/request'
 import { getApiPath } from '@/utils/common/index'
 import ActionsGroup from '@/components/Common/ActionsGroup'
+import { getRuntimeActionMeta } from '@/libs/context/runtime'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -89,6 +90,7 @@ export default {
     'getObjectDone',
     'close-drawer',
     'detail-delete-success',
+    'open-update-drawer',
     'reload-table'
   ],
   data() {
@@ -131,7 +133,7 @@ export default {
           icon: 'el-icon-edit-outline',
           size: 'small',
           can: this.validActions.canUpdate,
-          has: this.validActions.hasUpdate && !this.drawer,
+          has: this.validActions.hasUpdate,
           callback: this.validActions.updateCallback.bind(this)
         },
         {
@@ -142,7 +144,7 @@ export default {
           icon: 'el-icon-delete',
           size: 'small',
           can: this.validActions.canDelete,
-          has: this.validActions.hasDelete && !this.drawer,
+          has: this.validActions.hasDelete,
           callback: this.validActions.deleteCallback.bind(this)
         }
       ]
@@ -183,8 +185,11 @@ export default {
     }
   },
   methods: {
+    async getDrawerMeta() {
+      return getRuntimeActionMeta(this)
+    },
     async checkDrawer() {
-      const drawActionMeta = await this.$store.dispatch('common/getDrawerActionMeta')
+      const drawActionMeta = await this.getDrawerMeta()
       if (drawActionMeta && drawActionMeta.action) {
         this.drawer = true
         this.row = drawActionMeta.row
@@ -193,7 +198,7 @@ export default {
     },
     getDetailUrl() {
       const vm = this
-      const objectId = this.actionId || this.$route.params.id
+      const objectId = this.actionId || this.$context.get('id')
       // 兼容之前的 detailApiUrl
       if (vm.validActions.detailApiUrl || vm.detailApiUrl) {
         return vm.validActions.detailApiUrl || vm.detailApiUrl
@@ -247,16 +252,37 @@ export default {
       })
     },
     defaultUpdate() {
-      const id = this.$route.params.id
+      const id = this.actionId || this.$context.get('id')
       let route = this.validActions.updateRoute
+      if (typeof route === 'function') {
+        route = route({
+          object: this.object,
+          row: this.row,
+          id
+        })
+      }
+      if (this.drawer) {
+        const row = this.object?.id ? this.object : { ...(this.row || {}), id }
+        this.$emit('open-update-drawer', {
+          row,
+          query: route?.query || {}
+        })
+        return
+      }
       if (typeof route === 'string') {
         route = { name: route, params: {} }
       }
       route = {
         ...route,
-        query: this.$route.query || {}
+        query: {
+          ...(this.$route.query || {}),
+          ...(route?.query || {})
+        }
       }
-      route.params.id = id
+      route.params = {
+        ...(route.params || {}),
+        id
+      }
       this.$router.push(route)
     },
     getObject() {

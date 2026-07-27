@@ -98,7 +98,7 @@ export default {
 
 .error-title {
   font-size: 24px;
-  color: #f56c6c;
+  color: var(--color-danger);
   margin-bottom: 16px;
 }
 

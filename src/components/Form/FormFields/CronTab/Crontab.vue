@@ -1,6 +1,6 @@
 /* eslint-disable */
 <template>
-  <div class="crontab-root">
+  <div class="crontab-root jms-form-controls">
     <el-tabs class="tab-content">
       <el-tab-pane v-if="shouldHide('min')" :label="$tc('Min')" class="crontab-panel">
         <CrontabMin
@@ -440,13 +440,6 @@ export default {
   }
 }
 
-.popup-result-scroll {
-  font-size: 12px;
-  line-height: 24px;
-  height: 10em;
-  overflow-y: auto;
-}
-
 :deep(.el-form-item) {
   &.el-form-item--small,
   &.el-form-item--small {
@@ -526,15 +519,6 @@ export default {
   width: 220px;
 }
 
-.crontab-root :deep(.el-input),
-.crontab-root :deep(.el-select),
-.crontab-root :deep(.el-input-number),
-.crontab-root :deep(.el-input__wrapper),
-.crontab-root :deep(.el-select__wrapper) {
-  min-height: 30px;
-  height: 30px;
-}
-
 .tab-content {
   position: relative;
   box-sizing: border-box;
@@ -553,72 +537,15 @@ export default {
   line-height: 1;
 }
 
-.crontab-root :deep(.el-input__wrapper),
-.crontab-root :deep(.el-select__wrapper),
 .crontab-root :deep(.el-input-number__increase),
 .crontab-root :deep(.el-input-number__decrease) {
   border-radius: 0;
 }
 
-.crontab-root :deep(.el-input__wrapper),
-.crontab-root :deep(.el-select__wrapper) {
-  box-shadow: none !important;
-  border: 1px solid var(--el-border-color) !important;
-  background: #fff;
-  padding: 0 11px;
-  min-height: 30px;
-  height: 30px;
-  box-sizing: border-box;
-}
-
-.crontab-root :deep(.el-input__wrapper:hover),
-.crontab-root :deep(.el-select__wrapper:hover) {
-  border-color: var(--el-border-color-hover) !important;
-}
-
-.crontab-root :deep(.el-input__wrapper.is-focus),
-.crontab-root :deep(.el-select__wrapper.is-focused) {
-  box-shadow: none !important;
-  border-color: var(--el-color-primary) !important;
-}
-
-.crontab-root :deep(.el-input__inner),
-.crontab-root :deep(.el-select__selected-item),
-.crontab-root :deep(.el-select__placeholder) {
-  min-height: 28px;
-  height: 28px;
-  line-height: 28px;
-  background: transparent !important;
-  box-shadow: none !important;
-  border: 0 !important;
-}
-
-.crontab-root :deep(.cron-tab-form__select .el-select__selection) {
-  min-height: 28px;
-  align-items: center;
-}
-
-.crontab-root :deep(.cron-tab-form__select .el-select__selected-item) {
-  display: inline-flex;
-  align-items: center;
-  min-height: 28px;
-}
-
-.crontab-root :deep(.cron-tab-form__select .el-tag) {
-  height: 22px;
-  line-height: 20px;
-  margin: 0;
-  display: inline-flex;
-  align-items: center;
-}
-
-.crontab-root :deep(.cron-tab-form__select .el-tag__content) {
-  display: inline-flex;
-  align-items: center;
-  line-height: 20px;
-}
-
 .crontab-root :deep(.cron-tab-form__number.el-input-number) {
+  --jms-input-padding-block: 0;
+  --jms-input-padding-inline: 8px;
+
   width: 132px;
   min-height: 30px;
   height: 30px;
@@ -643,7 +570,6 @@ export default {
 .crontab-root :deep(.cron-tab-form__number.el-input-number .el-input__wrapper) {
   border: 0 !important;
   box-shadow: none !important;
-  padding: 0 8px;
   min-height: 28px;
   height: 28px;
 }
@@ -663,8 +589,10 @@ export default {
   border-right: 1px solid var(--el-border-color) !important;
 }
 
-.crontab-root :deep(.cron-tab-form__number .el-input-number__increase:hover ~ .el-input .el-input__wrapper),
-.crontab-root :deep(.cron-tab-form__number .el-input-number__decrease:hover ~ .el-input .el-input__wrapper) {
+.crontab-root
+  :deep(.cron-tab-form__number .el-input-number__increase:hover ~ .el-input .el-input__wrapper),
+.crontab-root
+  :deep(.cron-tab-form__number .el-input-number__decrease:hover ~ .el-input .el-input__wrapper) {
   box-shadow: none !important;
 }
 

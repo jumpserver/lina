@@ -4,18 +4,19 @@
       <el-button
         :disabled="gobackDisabled"
         class="go-back"
-        icon="Back"
+        icon="back"
         @click="handleGoBack"
         @mouseleave="endLongPress"
         @mouseup="endLongPress"
         @mousedown="startLongPress"
-      />
+      >
+      </el-button>
       <slot name="title">
         <span class="page-title-wrap">
           {{ iTitle }}
           <el-tooltip
             v-if="helpTip"
-            :open-delay="500"
+            :show-after="500"
             effect="dark"
             placement="top"
             popper-class="help-tips"
@@ -229,12 +230,27 @@ export default {
 
 .go-back {
   border: none;
+  width: 30px;
+  height: 30px;
   padding: 6px;
+  min-height: 30px;
+  min-width: 30px;
 }
 
-.go-back :deep(i) {
+.go-back :deep(.el-icon) {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: 18px;
   font-weight: 600;
+}
+
+.go-back :deep(.el-icon svg) {
+  width: 18px;
+  height: 18px;
+  display: block;
 }
 
 @media print {

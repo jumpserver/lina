@@ -207,6 +207,7 @@ export default {
 
 .only-submenu {
   &:deep(.el-tabs__active-bar) {
+    width: 100% !important;
     transform: none !important;
   }
 

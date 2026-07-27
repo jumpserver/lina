@@ -5,7 +5,7 @@
       <el-tooltip
         v-if="action.attrs.showTip"
         :content="action.attrs.tip"
-        :open-delay="500"
+        :show-after="500"
         effect="dark"
       >
         <i class="fa fa-question-circle-o" />

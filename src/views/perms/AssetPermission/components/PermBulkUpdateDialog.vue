@@ -4,6 +4,8 @@
     :form-setting="formSetting"
     :selected-rows="selectedRows"
     :visible="visible"
+    @update="$emit('update', $event)"
+    @update:visible="$emit('update:visible', $event)"
   />
 </template>
 
@@ -16,6 +18,7 @@ export default {
   components: {
     GenericUpdateFormDialog
   },
+  emits: ['update', 'update:visible'],
   props: {
     permType: {
       type: String,
@@ -64,9 +67,7 @@ export default {
         date_start: fieldsManager.date_start,
         date_expired: fieldsManager.date_expired,
         is_active: fieldsManager.is_active,
-        actions: {
-          label: this.$t('Action')
-        }
+        actions: {}
       }
       if (this.permType !== 'asset') {
         url = '/api/v1/perms/application-permissions/'

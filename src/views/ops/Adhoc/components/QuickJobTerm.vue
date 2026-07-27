@@ -32,7 +32,7 @@
           <el-tooltip
             v-if="!item.isScrollButton || showScrollButton"
             :content="item.tip"
-            :open-delay="500"
+            :show-after="500"
           >
             <el-button size="small" type="primary" @click="item.callback()">
               <svg-icon :icon-class="item.icon" />
@@ -175,19 +175,15 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$header-bg-color: #f5f6f7;
-$actions-hover-bg-color: #d2d2d2;
-
 .term-wrapper {
   position: relative;
 
   .term-header {
-    position: relative;
     display: flex;
     align-items: center;
     height: 45px;
-    padding-left: 15px;
-    background-color: $header-bg-color;
+    padding: 0 10px 0 15px;
+    background-color: var(--color-disabled-background);
 
     .header-text {
       font-size: 16px;
@@ -218,19 +214,18 @@ $actions-hover-bg-color: #d2d2d2;
     }
 
     .actions {
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
       display: flex;
-      justify-content: flex-end;
       align-items: center;
-      margin-right: 10px;
-      background-color: $header-bg-color;
+      justify-content: flex-end;
+      margin-left: auto;
 
       .action-item {
         display: flex;
         align-items: center;
+
+        :deep(.el-button > span) {
+          color: inherit;
+        }
 
         .el-button {
           border: none;
@@ -238,17 +233,13 @@ $actions-hover-bg-color: #d2d2d2;
           font-size: 14px;
           width: 26px;
           height: 26px;
-          color: #888;
-          background-color: transparent;
           margin-left: 2px;
+          color: var(--color-icon-primary);
+          background-color: transparent;
 
-          &:hover {
-            background-color: $actions-hover-bg-color !important;
-            color: var(--color-text-primary);
-          }
-
+          &:hover,
           &:focus {
-            background-color: $actions-hover-bg-color !important;
+            background-color: var(--color-border) !important;
             color: var(--color-text-primary);
           }
         }
@@ -259,7 +250,7 @@ $actions-hover-bg-color: #d2d2d2;
   .xterm {
     overflow: auto;
     padding: 10px 0 0 20px;
-    background-color: #ffffff;
+    background-color: #fff;
   }
 }
 </style>

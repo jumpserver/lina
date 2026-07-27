@@ -166,7 +166,8 @@ export default {
           actions: {
             prop: 'actions',
             label: this.$t('Actions'),
-            width: this.dynamicActionWidth,
+            // data 初始化早于 computed，不能在这里读取 dynamicActionWidth。
+            width: this.$i18n.locale === 'pt-br' ? '160px' : '130px',
             formatter: ActionsFormatter,
             formatterArgs: {
               hasEdit: false,
@@ -189,14 +190,6 @@ export default {
           exclude: ['is_finished']
         }
       }
-    }
-  },
-  computed: {
-    dynamicActionWidth() {
-      if (this.$i18n.locale === 'pt-br') {
-        return '160px'
-      }
-      return '130px'
     }
   }
 }

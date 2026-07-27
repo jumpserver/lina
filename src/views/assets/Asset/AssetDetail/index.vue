@@ -1,5 +1,10 @@
 <template>
-  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu" v-model:object="asset">
+  <GenericDetailPage
+    v-bind="config"
+    v-model:active-menu="config.activeMenu"
+    v-model:object="asset"
+    :has-right-side="!inDrawer"
+  >
     <keep-alive v-if="config.activeMenu">
       <component :is="config.activeMenu" :exclude="'Account'" :object="asset" />
     </keep-alive>
@@ -7,6 +12,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
 import Account from './Account.vue'
@@ -59,21 +65,24 @@ export default {
         ],
         hasRightSide: true,
         actions: {
-          updateCallback: () => {
+          updateRoute: () => {
             const category = this.asset.category.value || 'host'
             const routerName = _.capitalize(category) + 'Update'
-            this.$router.push({
+            return {
               name: routerName,
-              params: { id: this.$route.params.id },
+              params: { id: this.asset.id },
               query: {
                 platform: this.asset.platform.id,
                 type: this.asset.type.value
               }
-            })
+            }
           }
         }
       }
     }
+  },
+  computed: {
+    ...mapGetters(['inDrawer'])
   }
 }
 </script>

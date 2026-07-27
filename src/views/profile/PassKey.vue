@@ -19,8 +19,7 @@
   </div>
 </template>
 
-<script>
-import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
+<script lang="jsx">
 import GenericListPage from '@/layout/components/GenericListPage'
 import { AutoDataForm, Dialog } from '@/components'
 import passkey from '@/utils/passkey'
@@ -61,9 +60,7 @@ export default {
         columnsMeta: {
           name: {
             formatter: (row) => {
-              return createVNodeCompat(resolveComponentCompat('el-link'), null, {
-                default: () => [row.name]
-              })
+              return <el-link>{row.name}</el-link>
             }
           },
           actions: {

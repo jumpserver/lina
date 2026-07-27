@@ -110,14 +110,10 @@ export default {
 
 <style lang="scss" scoped>
 .chart-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
   padding: 0 !important;
 }
 
 .box {
-  flex: 1;
   background: #fff;
   padding: 30px;
 
@@ -126,9 +122,5 @@ export default {
     justify-content: space-between;
     margin-bottom: 8px;
   }
-}
-
-:deep(.margin-top-10) {
-  margin-top: 10px;
 }
 </style>

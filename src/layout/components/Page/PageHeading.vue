@@ -63,7 +63,7 @@ $origin-color: #ffffff;
 
   .el-row {
     width: 100%;
-    padding: 0 24px;
+    padding: 0 20px;
 
     .page-heading-left,
     h2 {

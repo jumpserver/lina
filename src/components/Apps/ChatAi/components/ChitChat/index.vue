@@ -19,7 +19,7 @@
       </div>
       <ChatMessage
         v-for="(item, index) in activeChat.chats"
-        :key="index"
+        :key="item?.message?.id || `message-${index}`"
         :item="item"
         :is-terminal="isTerminal"
         :selected-model="selectedModel"
@@ -27,30 +27,18 @@
       />
     </div>
     <div class="input-box">
-      <el-button
-        v-if="showStopButton"
-        class="stop"
-        icon="fa fa-stop-circle-o"
-        round
-        size="small"
-        @click="onStopHandle"
-        >{{ $tc('Stop') }}
+      <el-button v-show="isLoading" class="stop" round size="small" @click="onStopHandle">
+        <i class="fa fa-stop-circle-o" />
+        {{ $tc('Stop') }}
       </el-button>
       <ChatInput
         ref="chatInput"
         :expanded="expanded"
-        :model-options="models"
-        :selected-model="selectedModel"
-        :loading="modelsLoading"
-        :tool-options="toolOptions"
-        :tool-server-options="toolServerOptions"
-        :selected-tools="selectedToolIds"
-        :selected-tool-servers="selectedToolServerIds"
-        :tools-loading="toolsLoading"
+        :prompt-options="promptOptions"
+        :prompts-loading="promptsLoading"
+        :selected-prompt="selectedRoleId"
         @send="onSendHandle"
-        @select-model="onSelectModel"
-        @select-tools="onSelectTools"
-        @select-tool-servers="onSelectToolServers"
+        @select-prompt="onSelectPromptHandle"
       />
     </div>
   </div>
@@ -61,17 +49,28 @@ import { KAEL_HOST } from '@/utils/env'
 import ChatInput from './ChatInput.vue'
 import ChatMessage from './ChatMessage.vue'
 import { mapGetters, mapState } from 'vuex'
-import { getInputFocus, useChat } from '../../useChat.js'
+import { useChat } from '../../useChat.js'
 import io from 'socket.io-client'
 import { v4 as uuidv4 } from 'uuid'
 import yaml from 'js-yaml'
+import request from '@/utils/request'
+import { closeWebSocket, createWebSocket, onSend, ws } from '@/utils/request'
+
+const DEFAULT_CHAT_SESSION = '__default__'
+const TERMINAL_COMMAND_FORMAT_PROMPT = [
+  'When answering in a terminal session, put every executable command in its own fenced Markdown code block.',
+  'Always include the correct language tag, such as bash, shell, cmd, or powershell.',
+  'Do not place executable commands only in Markdown tables or inline code.',
+  'The client uses fenced code blocks to provide Insert and Copy actions.'
+].join(' ')
 
 const {
   setLoading,
   clearChats,
   addChatMessageById,
   newChatAndAddMessageById,
-  removeLoadingMessageInChat
+  removeLoadingMessageInChat,
+  getInputFocus
 } = useChat()
 
 export default {
@@ -88,7 +87,7 @@ export default {
   data() {
     return {
       controller: null,
-      prompt: '',
+      selectedRoleId: '',
       chatId: '',
       showIntroduction: false,
       introduction: [],
@@ -103,6 +102,10 @@ export default {
       terminalContext: null,
       isTerminal: false,
       sessionChat: {},
+      pendingSessionKey: '',
+      conversationSessionMap: {},
+      prompts: [],
+      promptsLoading: false,
       modelsLoaded: false,
       modelsLoading: false,
       modelsInitialized: false,
@@ -120,15 +123,28 @@ export default {
     }
   },
   computed: {
-    showStopButton() {
-      // 持续显示到请求真正结束（收到 DONE/关闭）才隐藏
-      return this.stopVisible
-    },
     ...mapState({
       isLoading: (state) => state.chat.loading,
       activeChat: (state) => state.chat.activeChat
     }),
     ...mapGetters(['publicSettings']),
+    promptOptions() {
+      return this.prompts.map((prompt) => ({
+        label: prompt.name,
+        value: prompt.roleKey
+      }))
+    },
+    selectedRolePrompt() {
+      if (!this.selectedRoleId) return ''
+      return this.prompts.find((prompt) => prompt.roleKey === this.selectedRoleId)?.content || ''
+    },
+    requestPrompt() {
+      const prompts = [this.selectedRolePrompt, this.terminalContext?.content].filter(Boolean)
+      if (this.isTerminal) {
+        prompts.push(TERMINAL_COMMAND_FORMAT_PROMPT)
+      }
+      return [...new Set(prompts)].join('\n\n')
+    },
     toolOptions() {
       return (this.tools || [])
         .map((item) => ({
@@ -145,6 +161,9 @@ export default {
         }))
         .filter((server) => !!server.value)
     }
+  },
+  beforeUnmount() {
+    closeWebSocket()
   },
   methods: {
     replaceLoadingChat(chat) {
@@ -173,13 +192,253 @@ export default {
       if (!this.activeChat?.chats || this.activeChat.chats.length === 0) {
         this.initChatMessage()
       }
-      this.initSocket()
-      if (!this.modelsInitialized) {
-        this.modelsInitialized = true
-        this.ensureModels()
-        this.ensureToolServers()
-        this.ensureTools()
+      this.initWebSocket()
+      this.fetchPrompts()
+    },
+    initWebSocket() {
+      if (
+        this.socket?.readyState === WebSocket.OPEN ||
+        this.socket?.readyState === WebSocket.CONNECTING
+      ) {
+        return
       }
+
+      const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
+      const endpoint = '/koko/ws/chat/system/'
+      createWebSocket(`${protocol}://${window.location.host}${endpoint}`, (data) =>
+        this.handleWebSocketMessage(data)
+      )
+      this.socket = ws || {}
+    },
+    async fetchPrompts() {
+      if (this.promptsLoading || this.prompts.length) return
+
+      this.promptsLoading = true
+      try {
+        const data = await request.get('/api/v1/settings/chatai-prompts/', {
+          disableFlashErrorMsg: true
+        })
+        const prompts = Array.isArray(data) ? data : data?.results || []
+        const roleKeys = new Set()
+        this.prompts = prompts
+          .filter((prompt) => prompt?.name && prompt?.content)
+          .map((prompt) => {
+            const roleKeyPrefix =
+              prompt.id !== undefined && prompt.id !== null && prompt.id !== ''
+                ? `id:${prompt.id}`
+                : `name:${prompt.name}`
+            let roleKey = roleKeyPrefix
+            let suffix = 1
+            while (roleKeys.has(roleKey)) {
+              roleKey = `${roleKeyPrefix}:${suffix}`
+              suffix += 1
+            }
+            roleKeys.add(roleKey)
+            return {
+              ...prompt,
+              roleKey
+            }
+          })
+      } catch (error) {
+        console.warn('fetch chat prompts failed', error)
+      } finally {
+        this.promptsLoading = false
+      }
+    },
+    handleWebSocketMessage(data) {
+      if (data.type === 'message') {
+        this.onChatMessage(data)
+      } else if (data.type === 'error') {
+        this.onSystemMessage(data)
+      }
+    },
+    getActiveSessionKey() {
+      return this.terminalContext?.sessionId || DEFAULT_CHAT_SESSION
+    },
+    isActiveSession(sessionKey) {
+      return sessionKey === this.getActiveSessionKey()
+    },
+    getSessionState(sessionKey) {
+      const saved = this.sessionChat[sessionKey]
+      if (!saved) return null
+
+      if (Array.isArray(saved)) {
+        const state = {
+          chats: saved,
+          chatId: '',
+          selectedRoleId: '',
+          showIntroduction: false
+        }
+        this.sessionChat[sessionKey] = state
+        return state
+      }
+      return saved
+    },
+    ensureSessionState(sessionKey) {
+      const saved = this.getSessionState(sessionKey)
+      if (saved) return saved
+
+      const state = {
+        chats: [],
+        chatId: '',
+        selectedRoleId: '',
+        showIntroduction: false
+      }
+      this.sessionChat[sessionKey] = state
+      return state
+    },
+    getChatsForSession(sessionKey) {
+      if (this.isActiveSession(sessionKey)) {
+        return this.activeChat?.chats || []
+      }
+      return this.ensureSessionState(sessionKey).chats
+    },
+    removeLoadingFromChats(chats) {
+      let index = -1
+      for (let i = chats.length - 1; i >= 0; i -= 1) {
+        const message = chats[i]?.message
+        if (message?.content === 'loading' || message?.is_loading === true) {
+          index = i
+          break
+        }
+      }
+      if (index !== -1) {
+        chats.splice(index, 1)
+      }
+      this.loadingMessageId = ''
+    },
+    markInFlightMessages(chats, status) {
+      chats.forEach((chat) => {
+        if (chat.status === 'thinking' || chat.status === 'streaming') {
+          chat.status = status
+        }
+      })
+    },
+    addChatToSession(sessionKey, chat) {
+      if (this.isActiveSession(sessionKey)) {
+        addChatMessageById(chat)
+      } else {
+        this.ensureSessionState(sessionKey).chats.push(chat)
+      }
+    },
+    setSessionConversationId(sessionKey, conversationId) {
+      if (!conversationId) return
+
+      this.conversationSessionMap[conversationId] = sessionKey
+      if (this.isActiveSession(sessionKey)) {
+        this.chatId = conversationId
+      } else {
+        this.ensureSessionState(sessionKey).chatId = conversationId
+      }
+    },
+    resolveMessageSession(data) {
+      return (
+        this.conversationSessionMap[data.id] || this.pendingSessionKey || this.getActiveSessionKey()
+      )
+    },
+    onChatMessage(data) {
+      const message = data.message
+      if (!data.id || !message) return
+
+      const sessionKey = this.resolveMessageSession(data)
+      const chats = this.getChatsForSession(sessionKey)
+      const role = message.role || 'assistant'
+      const createTime = message.create_time || new Date()
+      const status =
+        message.type === 'finish' ? 'finished' : message.is_reasoning ? 'thinking' : 'streaming'
+
+      this.removeLoadingFromChats(chats)
+      const index = chats.findIndex((item) => item?.message?.id === message.id)
+      if (index === -1) {
+        if (message.is_reasoning) {
+          this.addChatToSession(sessionKey, {
+            message: {
+              id: message.id,
+              role,
+              create_time: createTime,
+              is_reasoning: true
+            },
+            reasoning: {
+              content: message.content || ''
+            },
+            result: {
+              content: ''
+            },
+            type: message.type,
+            status
+          })
+        } else {
+          this.addChatToSession(sessionKey, {
+            message: {
+              id: message.id,
+              content: message.content || '',
+              role,
+              create_time: createTime,
+              is_reasoning: false
+            },
+            type: message.type,
+            status
+          })
+        }
+      } else {
+        const chat = chats[index]
+        chat.message = {
+          ...chat.message,
+          id: message.id,
+          role,
+          create_time: chat.message?.create_time || createTime,
+          is_reasoning: Boolean(chat.reasoning || message.is_reasoning)
+        }
+        chat.type = message.type
+        chat.status = status
+
+        if (message.is_reasoning) {
+          chat.reasoning = {
+            content: message.content || ''
+          }
+          chat.result ||= { content: '' }
+        } else if (chat.reasoning) {
+          chat.result = {
+            content: message.content || ''
+          }
+          chat.message.content = message.content || ''
+        } else {
+          chat.message.content = message.content || ''
+        }
+
+        chats.splice(index, 1, { ...chat })
+      }
+      this.setSessionConversationId(sessionKey, data.id)
+
+      if (message.type === 'finish') {
+        if (this.pendingSessionKey === sessionKey) {
+          this.pendingSessionKey = ''
+        }
+        setLoading(false)
+        if (this.isActiveSession(sessionKey)) {
+          getInputFocus()
+        }
+      }
+    },
+    onSystemMessage(data) {
+      const sessionKey = this.resolveMessageSession(data)
+      const chats = this.getChatsForSession(sessionKey)
+      this.removeLoadingFromChats(chats)
+      this.markInFlightMessages(chats, 'error')
+      this.addChatToSession(sessionKey, {
+        message: {
+          id: this.genId(),
+          content: data.data || data.system_message || this.$t('ConnectionDropped'),
+          role: 'assistant',
+          create_time: new Date()
+        },
+        type: 'error',
+        status: 'error'
+      })
+      if (this.pendingSessionKey === sessionKey) {
+        this.pendingSessionKey = ''
+      }
+      setLoading(false)
     },
     initSocket() {
       if (this.socket) return
@@ -244,22 +503,20 @@ export default {
       }
       addChatMessageById(loadingChat)
     },
-    initChatMessage() {
-      this.prompt = ''
+    initChatMessage({ resetRole = true } = {}) {
+      if (resetRole) {
+        this.selectedRoleId = ''
+      }
       this.showIntroduction = true
       this.chatId = ''
-      if (this.$refs.chatInput?.select) {
-        this.$refs.chatInput.select.value = ''
-      }
-      if (this.terminalContext) {
-        this.prompt = this.terminalContext.content || ''
-      }
       const chat = {
         message: {
+          id: this.genId(),
           content: this.$t('ChatHello'),
           role: 'assistant',
           create_time: new Date()
-        }
+        },
+        status: 'finished'
       }
       newChatAndAddMessageById(chat)
       setLoading(false)
@@ -944,17 +1201,24 @@ export default {
           console.warn('fetch models failed', res.status)
         } else {
           const data = await res.json()
-          this.models = data?.data || []
-          if (!this.selectedModel) {
-            const fromProvider = provider?.model
-            this.selectedModel = fromProvider || this.models[0]?.id || ''
-          }
+          this.models = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : []
+          this.ensureSelectedModel(provider)
           this.modelsLoaded = true
         }
       } catch (err) {
         console.warn('fetch models error', err)
+        this.ensureSelectedModel(provider)
       } finally {
         this.modelsLoading = false
+      }
+    },
+    ensureSelectedModel(provider) {
+      const defaultModel = provider?.model
+      if (defaultModel && !this.models.some((model) => model?.id === defaultModel)) {
+        this.models = [...this.models, { id: defaultModel, name: defaultModel }]
+      }
+      if (!this.selectedModel) {
+        this.selectedModel = defaultModel || this.models[0]?.id || ''
       }
     },
     async ensureModels() {
@@ -1383,78 +1647,107 @@ export default {
       }
     },
     onTerminalContext(terminalContext) {
-      const originSessionId = this.terminalContext?.sessionId
-      const newSessionId = terminalContext.sessionId || ''
-      if (newSessionId) {
-        this.sessionId = newSessionId
-        this.chatId = newSessionId
-      }
-      if (originSessionId) {
-        this.saveSessionChat(originSessionId)
+      const originSessionKey = this.getActiveSessionKey()
+      const newSessionKey = terminalContext.sessionId || DEFAULT_CHAT_SESSION
+      const sessionChanged = originSessionKey !== newSessionKey
+
+      if (sessionChanged) {
+        this.saveSessionChat(originSessionKey)
       }
       this.terminalContext = terminalContext
       this.isTerminal = true
-      this.prompt = terminalContext.content || ''
-      if (originSessionId !== newSessionId) {
-        if (this.sessionChat[newSessionId]) {
-          clearChats()
-          for (const chat of this.sessionChat[newSessionId]) {
-            addChatMessageById(chat)
-          }
-        } else {
-          this.onNewChat()
-        }
+      this.sessionId = terminalContext.sessionId || ''
+
+      if (!sessionChanged) {
+        return
+      }
+
+      const saved = this.getSessionState(newSessionKey)
+      if (saved) {
+        this.restoreSessionChat(newSessionKey)
+      } else {
+        this.initChatMessage()
       }
     },
-    saveSessionChat(sessionId) {
-      if (this.terminalContext) {
-        this.sessionChat[sessionId] = JSON.parse(JSON.stringify(this.activeChat.chats))
+    saveSessionChat(sessionKey) {
+      if (!sessionKey) return
+
+      this.sessionChat[sessionKey] = {
+        chats: JSON.parse(JSON.stringify(this.activeChat?.chats || [])),
+        chatId: this.chatId,
+        selectedRoleId: this.selectedRoleId,
+        showIntroduction: this.showIntroduction
+      }
+      if (this.chatId) {
+        this.conversationSessionMap[this.chatId] = sessionKey
+      }
+    },
+    restoreSessionChat(sessionKey) {
+      const saved = this.getSessionState(sessionKey)
+      if (!saved) return
+
+      clearChats()
+      for (const chat of saved.chats || []) {
+        addChatMessageById(JSON.parse(JSON.stringify(chat)))
+      }
+      this.chatId = saved.chatId || ''
+      this.selectedRoleId = saved.selectedRoleId || ''
+      this.showIntroduction = Boolean(saved.showIntroduction)
+      if (this.chatId) {
+        this.conversationSessionMap[this.chatId] = sessionKey
       }
     },
     onSendHandle(value) {
       this.showIntroduction = false
-      this.startRequest()
-      const responseId = this.genId()
-      this.pendingResponseId = responseId
-      const userMessageId = this.genId()
-      this.addUserMessage(value, userMessageId)
-      this.addLoadingMessage(responseId)
-      this.sendToKael(value, userMessageId, responseId)
-    },
-    addUserMessage(value, id) {
-      const model = this.selectedModel || this.getActiveProvider()?.model || ''
-      const chat = {
+      this.socket = ws || {}
+      if (ws?.readyState !== WebSocket.OPEN) {
+        this.onSystemMessage({})
+        this.initWebSocket()
+        return
+      }
+
+      addChatMessageById({
         message: {
-          id: id || this.genId(),
+          id: this.genId(),
           content: value,
           role: 'user',
-          create_time: new Date(),
-          ...(model ? { models: [model] } : {})
+          create_time: new Date()
         }
+      })
+      const sessionKey = this.getActiveSessionKey()
+      this.pendingSessionKey = sessionKey
+      if (this.chatId) {
+        this.conversationSessionMap[this.chatId] = sessionKey
       }
-      addChatMessageById(chat)
-    },
-    onSelectModel(val) {
-      this.selectedModel = val || this.selectedModel
+      onSend({
+        data: value,
+        prompt: this.requestPrompt,
+        id: this.chatId || ''
+      })
+      this.addLoadingMessage(this.genId())
     },
     onSelectPromptHandle(value) {
-      this.prompt = value
+      this.selectedRoleId = value || ''
       this.chatId = ''
-      this.showIntroduction = false
-      this.onSendHandle(value)
     },
     onNewChat() {
       clearChats()
       this.initChatMessage()
     },
     onStopHandle() {
-      if (this.controller) {
-        this.controller.abort()
-        this.controller = null
+      const sessionKey = this.pendingSessionKey || this.getActiveSessionKey()
+      const sessionState = this.getSessionState(sessionKey)
+      const conversationId = this.isActiveSession(sessionKey)
+        ? this.chatId
+        : sessionState?.chatId || ''
+      if (ws?.readyState === WebSocket.OPEN) {
+        onSend({ id: conversationId, interrupt: true })
       }
-      removeLoadingMessageInChat()
+      const chats = this.getChatsForSession(sessionKey)
+      this.removeLoadingFromChats(chats)
+      this.markInFlightMessages(chats, 'interrupted')
+      this.pendingSessionKey = ''
       setLoading(false)
-      this.markDone('manual stop')
     },
     sendIntroduction(item) {
       this.showIntroduction = false
@@ -1546,7 +1839,24 @@ export default {
     top: -37px;
     left: 50%;
     z-index: 11;
+    min-height: 28px;
+    height: 28px;
+    padding: 0 12px;
+    border-color: transparent;
+    border-radius: 14px;
+    background-color: #f7f7f8;
+    box-shadow: none;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.45);
     transform: translateX(-50%);
+
+    &:hover,
+    &:focus,
+    &:active {
+      border-color: transparent;
+      background-color: #f7f7f8;
+      color: rgba(0, 0, 0, 0.45);
+    }
 
     :deep(i) {
       margin-right: 4px;

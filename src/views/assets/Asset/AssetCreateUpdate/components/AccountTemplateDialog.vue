@@ -3,12 +3,12 @@
     <Dialog
       v-bind="$attrs"
       v-if="visible"
+      v-model:visible="dialogVisible"
       :close-on-click-modal="false"
       :confirm-title="$tc('Add')"
       :destroy-on-close="true"
       :model="false"
       :title="$tc('SelectTemplate')"
-      :visible="visible"
       width="800px"
       @cancel="handleCancel"
       @confirm="handleConfirm"
@@ -23,8 +23,7 @@
   </div>
 </template>
 
-<script>
-import { createVNode as createVNodeCompat } from 'vue'
+<script lang="jsx">
 import Dialog from '@/components/Dialog'
 import CreateAccountTemplateDialog from './CreateAccountTemplateDialog'
 import { DrawerListTable as ListTable } from '@/components'
@@ -64,7 +63,7 @@ export default {
         columns: ['name', 'username', 'secret_type', 'privileged'],
         columnsMeta: {
           name: {
-            formatter: (row) => createVNodeCompat('span', null, [row.name])
+            formatter: (row) => <span>{row.name}</span>
             // 暂禁用远程应用中账号模板的详情跳转
             // formatterArgs: {
             //   route: 'AccountTemplateDetail'
@@ -105,6 +104,14 @@ export default {
     }
   },
   computed: {
+    dialogVisible: {
+      get() {
+        return this.visible
+      },
+      set(value) {
+        this.$emit('update:visible', value)
+      }
+    },
     refTable() {
       return this.$refs.listTable.$refs.ListTable.$refs.dataTable.$refs.dataTable
     }

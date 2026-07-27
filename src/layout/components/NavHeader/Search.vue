@@ -6,7 +6,7 @@
         v-model="search"
         :placeholder="$t('Search')"
         :prefix-icon="searchIcon"
-        class="search-input"
+        class="search-input jms-input-spacing"
         readonly
         @keydown.esc.prevent="closePanel"
         @clear="clearSearch"
@@ -41,7 +41,7 @@
             :placeholder="$t('Search')"
             :clearable="true"
             :prefix-icon="searchIcon"
-            class="search-panel-input"
+            class="search-panel-input jms-input-spacing"
             @input="onInput"
             @keydown.enter.prevent="onEnter"
           />
@@ -131,7 +131,7 @@
 
 <script>
 import Icon from '@/components/Widgets/Icon/index.vue'
-import { ObjectLocalStorage } from '@/utils/common'
+import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
 import { Search as SearchIcon } from '@element-plus/icons-vue'
 import _ from 'lodash'
 import { markRaw } from 'vue'
@@ -353,18 +353,21 @@ export default {
     display: flex;
     align-items: center;
     width: 100%;
-    height: 30px;
+    height: 28px;
     line-height: 1;
     cursor: pointer;
 
     .search-input {
+      --jms-input-padding-block: 0;
+      --jms-input-padding-inline: 12px;
+
       width: 100%;
-      height: 30px;
+      height: 28px;
       pointer-events: none;
 
       :deep(.el-input__wrapper) {
-        height: 30px;
-        padding: 0 12px;
+        min-height: 28px;
+        height: 28px;
         background-color: rgba(255, 255, 255, 0.08);
         border-radius: 4px;
         border: none !important;
@@ -395,8 +398,13 @@ export default {
         height: 100%;
       }
 
+      :deep(.el-input__prefix-inner) {
+        display: flex;
+        align-items: center;
+      }
+
       :deep(.el-input__prefix-inner > :last-child) {
-        margin-right: 0;
+        margin-right: 8px;
       }
 
       :deep(.el-input__icon),
@@ -433,7 +441,6 @@ export default {
     }
   }
 }
-
 </style>
 
 <style lang="scss">
@@ -487,6 +494,9 @@ body .v-modal {
   background: #fff;
 
   .search-panel-input {
+    --jms-input-padding-block: 0;
+    --jms-input-padding-inline: 12px;
+
     width: 100% !important;
 
     &.el-input {
@@ -497,7 +507,6 @@ body .v-modal {
       width: 100%;
       min-height: 32px;
       height: 32px;
-      padding: 0 12px;
       border-radius: 0;
       border: 1px solid var(--el-border-color) !important;
       box-shadow: none !important;
@@ -532,6 +541,10 @@ body .v-modal {
       border: 0 !important;
       box-shadow: none !important;
       background: transparent !important;
+    }
+
+    .el-input__prefix-inner > :last-child {
+      margin-right: 8px;
     }
 
     .el-input__suffix {
@@ -723,7 +736,7 @@ body .v-modal {
     .type-icon {
       margin-right: 6px;
       font-size: 14px;
-      color: #409eff;
+      color: var(--color-primary);
     }
   }
 }

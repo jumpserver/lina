@@ -7,7 +7,7 @@
             <td class="name-cell">
               <el-tooltip
                 :content="obj.label"
-                :open-delay="500"
+                :show-after="500"
                 effect="dark"
                 placement="left"
                 style="margin: 4px"
@@ -32,6 +32,7 @@
     <Drawer
       v-model:visible="drawerVisible"
       :component="detailDrawer"
+      :component-props="detailDrawerProps"
       :has-footer="false"
       :title="title"
     />
@@ -81,6 +82,7 @@ export default {
   data() {
     return {
       detailDrawer: '',
+      detailDrawerProps: {},
       drawerVisible: false,
       objects: []
     }
@@ -103,15 +105,19 @@ export default {
     },
     goDetail(obj) {
       this.detailDrawer = this.detailRoute
-      this.$store
-        .dispatch('common/setDrawerActionMeta', {
-          action: 'create',
+      this.detailDrawerProps = {
+        drawerContext: {
+          isDrawer: true,
+          action: 'detail',
           row: {},
-          id: obj.id
-        })
-        .then(() => {
-          this.drawerVisible = true
-        })
+          col: {},
+          id: obj.id,
+          params: { id: obj.id },
+          query: {},
+          routeName: this.$route.name || ''
+        }
+      }
+      this.drawerVisible = true
     }
   }
 }

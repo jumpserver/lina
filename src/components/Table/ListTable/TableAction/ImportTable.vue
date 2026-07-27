@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="import-table-body">
     <div class="tableFilter">
       <el-radio-group v-model="importStatusFilter" size="small">
         <el-radio-button value="all">{{ $t('Total') }}: {{ totalCount }}</el-radio-button>
@@ -8,7 +8,7 @@
         <el-radio-button value="pending">{{ $t('Pending') }}: {{ pendingCount }}</el-radio-button>
       </el-radio-group>
     </div>
-    <div class="row">
+    <div class="progress-row">
       <el-progress :percentage="processedPercent" />
     </div>
     <DataTable
@@ -18,32 +18,22 @@
       :config="tableConfig"
       class="importTable"
     />
-    <div class="row" style="padding-top: 20px">
-      <div class="btn-groups">
-        <el-button v-if="showCancel" size="small" @click="performCancel">{{
-          $t('Cancel')
-        }}</el-button>
-        <el-button
-          v-show="!disableImportBtn"
-          size="small"
-          type="primary"
-          @click="performImportAction"
-        >
-          {{ importActionTitle }}
-        </el-button>
-        <el-button
-          v-bind="button"
-          v-for="button in moreButtons"
-          v-show="!button.hidden"
-          :key="button.title"
-          :disabled="disableImportBtn"
-          :loading="button.loading"
-          size="small"
-          @click="handleClick(button)"
-        >
-          {{ button.title }}
-        </el-button>
-      </div>
+    <div class="import-footer">
+      <el-button v-if="showCancel" @click="performCancel">{{ $t('Cancel') }}</el-button>
+      <el-button v-show="!disableImportBtn" type="primary" @click="performImportAction">
+        {{ importActionTitle }}
+      </el-button>
+      <el-button
+        v-bind="button"
+        v-for="button in moreButtons"
+        v-show="!button.hidden"
+        :key="button.title"
+        :disabled="disableImportBtn"
+        :loading="button.loading"
+        @click="handleClick(button)"
+      >
+        {{ button.title }}
+      </el-button>
     </div>
   </div>
 </template>
@@ -109,6 +99,10 @@ export default {
     encryptFields: {
       type: Array,
       default: () => []
+    },
+    valueFormatters: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -128,7 +122,18 @@ export default {
           stripe: true, // 斑马纹表格
           border: true, // 表格边框
           fit: true, // 宽度自适应,
-          tooltipEffect: 'dark',
+          // 单元格溢出 tooltip 限宽并断词，避免密文等超长内容横向撑破页面。
+          // popperStyle 直接传给 Element Plus 生成的浮层，不能只依赖 CSS 类名。
+          tooltipOptions: {
+            effect: 'dark',
+            popperClass: 'import-cell-tooltip',
+            popperStyle: {
+              maxWidth: 'min(600px, calc(100vw - 32px))',
+              overflowWrap: 'anywhere',
+              whiteSpace: 'normal',
+              wordBreak: 'break-all'
+            }
+          },
           maxHeight: this.tableHeight
         }
       },
@@ -274,6 +279,7 @@ export default {
           showOverflowTooltip: true,
           formatterArgs: {
             canEdit: this.canEdit,
+            getDisplayValue: this.valueFormatters[item[1]],
             onEnter: ({ row, col, oldValue, newValue }) => {
               const prop = col.prop
               row['@status'] = 'pending'
@@ -310,11 +316,9 @@ export default {
       const columns = this.generateTableColumns(tableTitles, tableData)
       const totalData = this.generateTableData(tableTitles, tableData)
       this.tableConfig.columns = columns
+      this.iTotalData = totalData
+      this.tableConfig.totalData = totalData
       this.tableGenDone = true
-      setTimeout(() => {
-        this.iTotalData = totalData
-        this.tableConfig.totalData = totalData
-      }, 200)
     },
     beautifyErrorData(errorData) {
       if (typeof errorData === 'string') {
@@ -475,6 +479,26 @@ export default {
 <style lang="scss" scoped>
 @use '@/styles/variables' as *;
 
+// 状态 tab / 进度条 / 表格 / 按钮统一 flex 纵向布局,间距一致
+.import-table-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+// 顶部状态 tab 统一 30px 高度
+.tableFilter :deep(.el-radio-button__inner) {
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.progress-row {
+  display: flex;
+  align-items: center;
+}
+
 .summary-item {
   padding: 0 10px;
 }
@@ -493,12 +517,45 @@ export default {
   max-height: 160px;
 }
 
-.btn-groups {
+// 底部按钮对齐 Dialog footer 规范:分隔线 + 右对齐 + 12px 间距 + 默认尺寸
+.import-footer {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #dee2e6;
+
+  // 按钮在 dialog body 内,吃不到 .dialog-footer 的全站规范,这里对齐同款 30px 高度
+  :deep(.el-button) {
+    min-height: 30px;
+    height: 30px;
+    padding: 8px 12px;
+    margin-left: 0;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1;
+
+    > span {
+      display: inline-flex;
+      align-items: center;
+      line-height: 1;
+    }
+  }
 
   :deep(.el-button.is-disabled) {
     cursor: not-allowed;
   }
+}
+</style>
+
+<!-- 表格单元格溢出 tooltip 会 teleport 到 body,须用非 scoped 样式限宽 -->
+<style lang="scss">
+.import-cell-tooltip.el-popper {
+  max-width: min(600px, calc(100vw - 32px));
+  overflow-wrap: anywhere;
+  word-break: break-all;
+  white-space: normal;
+  line-height: 1.5;
 }
 </style>

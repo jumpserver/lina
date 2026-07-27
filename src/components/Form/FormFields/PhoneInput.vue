@@ -1,8 +1,8 @@
 <template>
-  <div class="compound-field phone-input">
+  <div :class="{ 'phone-input--number-focused': numberFocused }" class="compound-field phone-input">
     <el-select
+      v-model="rawValue.code"
       :placeholder="$tc('Select')"
-      :value="rawValue.code"
       class="phone-input__code"
       @change="onChange"
     >
@@ -19,8 +19,10 @@
     <el-input
       v-model="rawValue.phone"
       :placeholder="$tc('InputPhone')"
-      class="phone-input__number"
+      class="phone-input__number jms-input-spacing"
       required
+      @blur="numberFocused = false"
+      @focus="numberFocused = true"
       @input="onInputChange"
     />
   </div>
@@ -38,6 +40,7 @@ export default {
   data() {
     return {
       rawValue: {},
+      numberFocused: false,
       countries: [{ name: 'China', value: '+86' }]
     }
   },
@@ -49,17 +52,29 @@ export default {
       return `${this.rawValue.code}${this.rawValue.phone}`
     }
   },
+  created() {
+    this.rawValue = this.normalizeValue(this.value)
+  },
   mounted() {
-    const defaults = { code: this.getDefaultCode(), phone: '' }
-    this.rawValue = this.value || defaults
+    this.rawValue = this.normalizeValue(this.value)
+    this.$emit('input', this.fullPhone)
     this.$axios.get('/api/v1/common/countries/').then((res) => {
       this.countries = res.map((item) => {
         return { name: `${item.flag} ${item.name}`, value: item.phone_code }
       })
     })
-    this.$emit('input', this.fullPhone)
   },
   methods: {
+    normalizeValue(value) {
+      const defaults = { code: this.getDefaultCode(), phone: '' }
+      value = value && typeof value === 'object' ? value : {}
+      return {
+        ...defaults,
+        ...value,
+        code: value.code || defaults.code,
+        phone: value.phone || ''
+      }
+    },
     getDefaultCode() {
       const mapper = {
         zh: '+86',
@@ -83,6 +98,7 @@ export default {
     },
     onInputChange() {
       this.$emit('input', this.fullPhone)
+      this.$emit('change', this.fullPhone)
     }
   }
 }
@@ -90,11 +106,45 @@ export default {
 
 <style lang="scss" scoped>
 /*
- * 边框方案已抽象为 DataForm 的通用约定 .compound-field：外层容器描唯一一圈边框、内部 wrapper
- * 去边、段间分隔线由容器统一提供（见 DataForm/index.vue 的 .compound-field）。这里只保留
- * PhoneInput 特有的样式：左侧区号段的尺寸/底色、以及号码输入段聚焦时的高亮描边。
- * 整体高度 30px，与表单标准一致。
+ * 边框方案见全局 .compound-field（element-form-controls.scss）。
+ * PhoneInput 聚焦时只高亮当前号码段，不影响左侧区号段的外边框。
  */
+.phone-input {
+  position: relative;
+}
+
+.phone-input--number-focused {
+  // Element Plus 内层会覆盖外容器的顶部边框，因此两个分段都在前景层明确描边。
+  overflow: visible !important;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    box-sizing: border-box;
+    pointer-events: none;
+  }
+
+  // 号码输入段：四边及左侧分隔线均使用主色，避免顶部被内部 wrapper 遮住。
+  &::before {
+    z-index: 2;
+    right: -1px;
+    left: 84px;
+    border: 1px solid var(--el-color-primary);
+  }
+
+  // 区号段：上、左、下保持灰色，仅右侧分隔线使用主色。
+  &::after {
+    z-index: 1;
+    left: -1px;
+    width: 86px;
+    border: 1px solid var(--el-border-color);
+    border-right-color: var(--el-color-primary);
+  }
+}
+
 .phone-input__code {
   flex: 0 0 85px;
   width: 85px;
@@ -109,6 +159,9 @@ export default {
 }
 
 .phone-input__number {
+  --jms-input-padding-block: 0;
+  --jms-input-padding-inline: 11px;
+
   flex: 1 1 auto;
   min-width: 0;
 
@@ -121,12 +174,6 @@ export default {
   :deep(.el-input__wrapper) {
     min-height: 28px;
     height: 28px;
-    padding: 0 8px;
-  }
-
-  // 激活态只作用于输入框区域：聚焦时仅这一段描边，不影响左侧 select
-  :deep(.el-input__wrapper.is-focus) {
-    box-shadow: 0 0 0 1px var(--el-color-primary) inset !important;
   }
 
   :deep(.el-input__inner) {

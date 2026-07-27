@@ -4,7 +4,7 @@ export default {
   '--color-info': '#1c84c6',
   '--color-warning': '#f8ac59',
   '--color-danger': '#ed5565',
-  '--color-link': '#1c84c6',
+  '--color-link': '#1c84c5',
   '--color-text-primary': '#292827',
   '--color-text-secondary': '#7c7c7c',
   '--color-icon-primary': '#605e5c',
@@ -16,7 +16,7 @@ export default {
   '--banner-bg': '#148f76',
   '--submenu-bg': '#ffffff',
   '--menu-bg': '#ffffff',
-  '--menu-text': '#646a73',
+  '--menu-text': '#292827',
   '--menu-text-active': '#1ab394',
   '--menu-hover': '#ffffff'
 }

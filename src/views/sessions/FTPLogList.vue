@@ -16,7 +16,6 @@ export default {
       tableConfig: {
         columnsShow: {
           default: [
-            'id',
             'user',
             'asset',
             'account',
@@ -25,7 +24,8 @@ export default {
             'date_start',
             'is_success',
             'actions'
-          ]
+          ],
+          min: ['user', 'asset', 'filename']
         },
         url: '/api/v1/audits/ftp-logs/',
         columnsMeta: {

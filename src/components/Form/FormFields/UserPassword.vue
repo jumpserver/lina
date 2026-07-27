@@ -1,5 +1,5 @@
 <template>
-  <PasswordInput :attrs="attrs" :value="value" @input="handleInput" />
+  <PasswordInput :attrs="inputAttrs" :value="value" @input="handleInput" />
 </template>
 
 <script>
@@ -11,6 +11,8 @@ import i18n from '@/i18n/i18n'
 export default {
   name: 'UserPassword',
   components: { PasswordInput },
+  inheritAttrs: false,
+  emits: ['input'],
   props: {
     value: {
       type: String,
@@ -60,15 +62,15 @@ export default {
     }
     return [{ required: false, trigger: 'change', validator: validatePassword }]
   },
-  data() {
-    return {
-      attrs: {
+  computed: {
+    ...mapGetters(['publicSettings']),
+    inputAttrs() {
+      const { modelValue, userIsOrgAdmin, ...attrs } = this.$attrs
+      return {
+        ...Object.fromEntries(Object.entries(attrs).filter(([name]) => !/^on[A-Z]/.test(name))),
         showStrengthMeter: true
       }
     }
-  },
-  computed: {
-    ...mapGetters(['publicSettings'])
   },
   methods: {
     handleInput(value) {

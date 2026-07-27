@@ -9,8 +9,7 @@
   />
 </template>
 
-<script>
-import { createVNode as createVNodeCompat, createTextVNode as createTextVNodeCompat } from 'vue'
+<script lang="jsx">
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
 import { GenericListTable } from '@/layout/components'
@@ -78,11 +77,7 @@ export default {
           },
           secret_strategy: {
             formatter: function (row) {
-              return createVNodeCompat('span', null, [
-                createTextVNodeCompat(' '),
-                row.secret_strategy.label,
-                createTextVNodeCompat(' ')
-              ])
+              return <span> {row.secret_strategy.label} </span>
             }
           },
           username: {

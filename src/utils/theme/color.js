@@ -70,6 +70,48 @@ export function mix(color_1, color_2, weight) {
   return color
 }
 
+export function getCssVar(name, fallback = '') {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return fallback
+  }
+
+  const root = document.documentElement
+  const inlineValue = root.style.getPropertyValue(name)
+  const computedValue = window.getComputedStyle(root).getPropertyValue(name)
+  const defaultValue = fallback || defaultThemeConfig[name] || ''
+  return (inlineValue || computedValue || defaultValue).trim()
+}
+
+export function colorToRgba(inputColor, alpha) {
+  const fallback = alpha === 0 ? 'transparent' : inputColor
+  if (!inputColor) {
+    return fallback
+  }
+
+  const normalizedColor = inputColor.trim()
+  if (/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(normalizedColor)) {
+    const hex = normalizedColor.slice(1)
+    const fullHex =
+      hex.length === 3
+        ? hex
+            .split('')
+            .map((char) => char + char)
+            .join('')
+        : hex
+    const r = Number.parseInt(fullHex.slice(0, 2), 16)
+    const g = Number.parseInt(fullHex.slice(2, 4), 16)
+    const b = Number.parseInt(fullHex.slice(4, 6), 16)
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`
+  }
+
+  const rgbValues = normalizedColor.match(/\d+/g)
+  if (normalizedColor.startsWith('rgb') && rgbValues && rgbValues.length >= 3) {
+    return `rgba(${rgbValues[0]}, ${rgbValues[1]}, ${rgbValues[2]}, ${alpha})`
+  }
+
+  return fallback
+}
+
 export function setRootColors() {
   const themeColors = defaultThemeConfig || {}
   for (const [key, value] of Object.entries(themeColors)) {
@@ -93,14 +135,18 @@ function syncElementPlusColorVars(elementStyle, colorName, currentColor) {
 
 export function changeMenuColor(themeColors) {
   const elementStyle = document.documentElement.style
-  const colors = Object.keys(themeColors).length > 0 ? themeColors : defaultThemeConfig
+  const colors = {
+    ...(Object.keys(themeColors).length > 0 ? themeColors : defaultThemeConfig)
+  }
 
   const white = 'ffffff'
   const black = '000000'
 
-  // 后端不用返回 --menu-hover
+  // 旧主题的 --menu-hover 是占位值，需要根据强调色生成浅色 hover 背景。
+  // 返回了完整菜单状态的新主题（如 deep_black）则直接使用 theme_info。
   const menuActiveTextColor = colors['--menu-text-active']
-  if (menuActiveTextColor) {
+  const hasCompleteMenuState = colors['--menu-hover-bg'] || colors['--menu-active-bg']
+  if (!hasCompleteMenuState && menuActiveTextColor) {
     colors['--menu-hover'] = mix(white, menuActiveTextColor.replace(/#/g, ''), 90)
   }
 

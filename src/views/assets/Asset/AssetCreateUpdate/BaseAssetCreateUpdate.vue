@@ -5,7 +5,7 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { encryptPassword } from '@/utils/session-encrypt'
-import { getUpdateObjURL, setUrlParam } from '@/utils/common/index'
+import { getUpdateObjURL, setUrlParam, getBrowserQueryParam } from '@/utils/common/index'
 import { assetFieldsMeta } from '@/views/assets/const'
 
 export default {
@@ -38,7 +38,7 @@ export default {
     },
     updateInitial: {
       type: Function,
-      default: initial => {
+      default: (initial) => {
         return initial
       }
     }
@@ -48,8 +48,10 @@ export default {
       loading: true,
       platform: {},
       initing: false,
+      initPromise: null,
+      pendingInit: false,
       // 在 meta 中，可能改变 platform id
-      platformID: this.$route.query.platform || '',
+      platformID: this.$context.get('platform'),
       meta: {},
       iConfig: {},
       defaultConfig: {
@@ -69,7 +71,7 @@ export default {
         fieldsMeta: {},
         performSubmit(validValues) {
           let url = this.url
-          const { id = '' } = this.$route.params
+          const id = this.$context.get('id')
           const values = _.cloneDeep(validValues)
           const submitMethod = id ? 'put' : 'post'
 
@@ -82,7 +84,7 @@ export default {
             delete values['accounts']
           } else {
             const accounts = values?.accounts || []
-            values.accounts = accounts.map(item => {
+            values.accounts = accounts.map((item) => {
               item['secret'] = encryptPassword(item['secret'])
               return item
             })
@@ -100,15 +102,24 @@ export default {
       // 更改平台时，就不重新 loading 了
       this.$log.debug('Initing asset base upcate create', this.initing)
       if (this.initing) {
-        return
+        this.pendingInit = true
+        return this.initPromise
       }
       this.initing = true
+      this.initPromise = (async () => {
+        do {
+          this.pendingInit = false
+          await this.genConfig()
+          await this.setInitial()
+          await this.setPlatformConstrains()
+        } while (this.pendingInit)
+      })()
       try {
-        await this.genConfig()
-        await this.setInitial()
-        await this.setPlatformConstrains()
+        await this.initPromise
       } finally {
         this.initing = false
+        this.initPromise = null
+        this.pendingInit = false
         this.loading = false
       }
     },
@@ -116,7 +127,7 @@ export default {
       const { addFields, addFieldsMeta, defaultConfig } = this
       defaultConfig.fieldsMeta = assetFieldsMeta(this)
       let url = this.url
-      const id = this.$route.params.id
+      const id = this.$context.get('id')
       if (!id) {
         url = setUrlParam(url, 'platform', this.platformID)
       }
@@ -141,13 +152,21 @@ export default {
       }
       this.iConfig = config
     },
-    async setInitial() {
+    async setInitial(requestedPlatformID) {
       const { defaultConfig } = this
-      const { node } = this.$route.query
-      const nodesInitial = node ? [node] : []
-      const platformId = this.platformID || 'Linux'
+      const nodeId =
+        this.$context.get('node') || this.$context.get('node_id') || getBrowserQueryParam('node_id')
+      const nodesInitial = nodeId ? [nodeId] : []
+      const platformId = requestedPlatformID || this.platformID || 'Linux'
       const url = `/api/v1/assets/platforms/${platformId}/`
-      this.platform = await this.$axios.get(url)
+      const platform = await this.$axios.get(url)
+      if (
+        requestedPlatformID !== undefined &&
+        String(this.platformID) !== String(requestedPlatformID)
+      ) {
+        return false
+      }
+      this.platform = platform
       const initial = {
         labels: [],
         is_active: true,
@@ -159,6 +178,7 @@ export default {
         await this.updateInitial(initial)
       }
       this.iConfig.initial = Object.assign({}, initial, defaultConfig.initial)
+      return true
     },
     async setPlatformConstrains() {
       const { platform } = this
@@ -173,6 +193,7 @@ export default {
       })
       const protocolChoices = this.iConfig.fieldsMeta.protocols.el.choices
       protocolChoices.splice(0, protocolChoices.length, ...protocols)
+      this.iConfig.fieldsMeta.protocols.el.key = `asset-protocols-${platform.id}`
       this.iConfig.fieldsMeta.accounts.el.platform = platform
     }
   }

@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     getAddFields() {
-      const platform = this.$route.query.type
+      const platform = this.$context.get('type')
       const baseFields = [[this.$t('Basic'), ['db_name']]]
       let tlsFields = ['use_ssl', 'ca_cert']
       const platformFieldsMap = {
@@ -39,7 +39,7 @@ export default {
       return baseFields
     },
     getAddFieldsMeta() {
-      const platform = this.$route.query.type
+      const platform = this.$context.get('type')
       const fieldsMeta = {
         db_name: {
           label: this.$t('DefaultDatabase')

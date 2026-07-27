@@ -9,8 +9,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import AssetSelect from '@/components/Apps/AssetSelect'
-import { TextReadonly } from '@/components/Form/FormFields'
+import { ResourceSelect, TextReadonly } from '@/components/Form/FormFields'
 
 export default {
   name: 'GatewayCreateUpdate',
@@ -26,11 +25,17 @@ export default {
       ],
       fieldsMeta: {
         assets: {
-          type: 'assetSelect',
-          component: AssetSelect,
+          type: 'resourceSelect',
+          component: ResourceSelect,
           el: {
             value: [],
-            baseUrl: '/api/v1/assets/assets/',
+            url: '/api/v1/assets/assets/',
+            resourceName: this.$t('Asset'),
+            nodeFilter: {
+              treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
+              typeTreeUrl: '/api/v1/assets/nodes/category/tree/?count_resource=none',
+              includeDescendants: true
+            },
             canSelect: (row) => {
               return !row.platform?.name.startsWith('Gateway')
             }

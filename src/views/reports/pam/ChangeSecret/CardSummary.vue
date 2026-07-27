@@ -136,7 +136,7 @@ export default {
   margin-top: 10px;
 }
 
-:deep(.content) .summary-card {
+:deep(.content .summary-card) {
   flex: 1;
   width: 33%;
   max-width: 33%;

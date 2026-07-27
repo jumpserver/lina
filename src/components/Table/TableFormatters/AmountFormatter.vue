@@ -2,7 +2,7 @@
   <DetailFormatter :col="col" :row="row" :prevent-click="formatterArgs.preventClick">
     <el-popover
       :disabled="!showItems"
-      :open-delay="500"
+      :show-after="500"
       :title="title"
       placement="top-start"
       trigger="hover"

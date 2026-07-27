@@ -10,7 +10,7 @@
     </div>
     <template #reference>
       <el-button class="link-btn" plain size="small" type="primary">
-        {{ $t('View') }} <el-icon><ArrowDown /></el-icon>
+        <span class="link-btn__content">{{ $t('View') }}</span>
       </el-button>
     </template>
   </el-popover>
@@ -78,5 +78,11 @@ export default {
   &:hover {
     background-color: #f5f7fa;
   }
+}
+
+.link-btn__content {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 </style>

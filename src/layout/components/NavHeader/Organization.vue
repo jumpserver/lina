@@ -4,7 +4,7 @@
     :model-value="currentOrgId"
     :placeholder="$tc('Select')"
     class="org-select"
-    :style="{ width: selectWidth }"
+    :style="{ '--org-select-width': selectWidth }"
     filterable
     popper-class="switch-org"
     @change="changeOrg"
@@ -151,7 +151,7 @@ export default {
         const totalWidth = textWidth + iconWidth + paddingWidth + arrowWidth
 
         // 设置合理的边界
-        const minWidth = 180
+        const minWidth = 120
         const maxWidth = 360
         const finalWidth = Math.max(minWidth, Math.min(maxWidth, totalWidth))
 
@@ -194,21 +194,29 @@ $height: 28px;
   line-height: $height;
 
   :deep(.el-select__wrapper) {
-    width: 100%;
-    min-height: 32px;
+    width: var(--org-select-width, 180px);
+    display: inline-flex;
+    height: $height;
     padding: 0 12px;
-    border-radius: 6px;
+    border-radius: 2px;
+    border: none;
     background: rgba(255, 255, 255, 0.08);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    box-shadow: none;
     transition:
       background-color 0.2s ease,
       box-shadow 0.2s ease;
+  }
+  :deep(.el-select__wrapper.is-hovering:not(.is-focused)) {
+    .el-select__input {
+      cursor: pointer;
+    }
   }
 
   :deep(.el-select__wrapper.is-hovering:not(.is-focused)),
   :deep(.el-select__wrapper.is-focused) {
     background: rgba(255, 255, 255, 0.14);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    box-shadow: none;
+    border: none;
   }
 
   :deep(.el-select__wrapper.is-disabled) {
@@ -253,12 +261,13 @@ $height: 28px;
   .option-group {
     padding-right: 8px;
     padding-left: 8px;
+    margin-top: 8px;
     max-width: 400px;
 
     :deep(.el-select-group__title) {
       color: var(--color-icon-primary);
-      padding-left: 15px;
-      font-size: 12px;
+      padding-left: 10px;
+      font-size: 13px;
       line-height: 30px;
     }
 
@@ -266,6 +275,7 @@ $height: 28px;
       padding: 0 15px;
       line-height: 30px;
       height: 30px;
+      font-size: 12px;
     }
   }
 }

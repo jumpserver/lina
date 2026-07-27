@@ -41,11 +41,13 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     }
   },
   data() {
     const vm = this
+    const nodes = Array.isArray(this.object.nodes) ? this.object.nodes : []
+    const labels = Array.isArray(this.object.labels) ? this.object.labels : []
     return {
       quickActions: [
         {
@@ -125,10 +127,10 @@ export default {
             return { label: item.full_value, value: item.id }
           }
         },
-        hasObjectsId: this.object.nodes?.map((i) => i.id) || [],
+        hasObjectsId: nodes.map((i) => i.id),
         performAdd: (items) => {
           const newData = []
-          const value = this.$refs.NodeRelation.iHasObjects
+          const value = this.$refs.NodeRelation?.iHasObjects || []
           value.map((v) => {
             newData.push(v.value)
           })
@@ -141,7 +143,7 @@ export default {
         performDelete: (item) => {
           const itemId = item.value
           const newData = []
-          const value = this.$refs.NodeRelation.iHasObjects
+          const value = this.$refs.NodeRelation?.iHasObjects || []
           value.map((v) => {
             if (v.value !== itemId) {
               newData.push(v.value)
@@ -162,10 +164,10 @@ export default {
             return { label: label, value: item.id }
           }
         },
-        hasObjectsId: this.object.labels.map((item) => item.id),
+        hasObjectsId: labels.map((item) => item.id),
         performAdd: (items) => {
           const newData = []
-          const value = this.$refs.LabelRelation.iHasObjects
+          const value = this.$refs.LabelRelation?.iHasObjects || []
           value.map((v) => newData.push(v.label))
           const relationUrl = `/api/v1/assets/assets/${this.object.id}/`
           items.map((v) => newData.push(v.label))
@@ -173,7 +175,7 @@ export default {
         },
         performDelete: (item) => {
           const itemId = item.value
-          const value = this.$refs.LabelRelation.iHasObjects
+          const value = this.$refs.LabelRelation?.iHasObjects || []
           const newData = value.filter((v) => v.value !== itemId).map((v) => v.value)
           const relationUrl = `/api/v1/assets/assets/${this.object.id}/`
           return this.$axios.patch(relationUrl, { labels: newData })

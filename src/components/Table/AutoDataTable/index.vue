@@ -7,9 +7,11 @@
         ref="dataTable"
         :config="iConfig"
         @filter-change="filterChange"
+        @loaded="handleLoaded"
       />
     </div>
     <ColumnSettingPopover
+      ref="columnSettingPopover"
       :current-columns="popoverColumns.currentCols"
       :default-columns="popoverColumns.defaultCols"
       :min-columns="popoverColumns.minCols"
@@ -23,7 +25,8 @@
 <script>
 import { getActionMeta } from '@/api/common'
 import DataTable from '@/components/Table/DataTable/index.vue'
-import { newURL, ObjectLocalStorage, replaceAllUUID } from '@/utils/common/index'
+import { newURL, replaceAllUUID } from '@/utils/common/index'
+import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
 import Sortable from 'sortablejs'
 import ColumnSettingPopover from './components/ColumnSettingPopover.vue'
 import { TableColumnsGenerator } from './utils'
@@ -35,6 +38,7 @@ export default {
     DataTable,
     ColumnSettingPopover
   },
+  emits: ['loaded'],
   props: {
     config: {
       type: Object,
@@ -67,10 +71,25 @@ export default {
     }
   },
   watch: {
+    'config.url': {
+      handler: _.debounce(function (newUrl, oldUrl) {
+        if (this.isDeactivated || !this.inited || !newUrl || newUrl === oldUrl) {
+          return
+        }
+
+        this.optionUrlMetaAndGenCols()
+        this.$log.debug('AutoDataTable URL change found')
+      }, 200)
+    },
     config: {
       immediate: false,
       handler: _.debounce(function (iNew, iOld) {
         if (this.isDeactivated || !this.inited) {
+          return
+        }
+        // URL changes are handled separately so later column/config updates
+        // cannot overwrite the pending URL refresh in this debounced watcher.
+        if (iNew?.url !== iOld?.url) {
           return
         }
         const changed = this.isConfigChanged(iNew, iOld)
@@ -94,6 +113,21 @@ export default {
     this.isDeactivated = false
   },
   methods: {
+    handleLoaded() {
+      this.$emit('loaded')
+    },
+    openColumnSetting() {
+      this.$refs.columnSettingPopover?.open()
+    },
+    normalizeColumnNames(value, fallback = []) {
+      if (Array.isArray(value)) {
+        return value.filter((item) => item !== undefined && item !== null)
+      }
+      if (Array.isArray(fallback)) {
+        return [...fallback]
+      }
+      return []
+    },
     isConfigChanged(iNew, iOld) {
       const _iNew = _.cloneDeep(iNew)
       const _iOld = _.cloneDeep(iOld)
@@ -148,7 +182,7 @@ export default {
             if (newIndex > 0) newIndex -= 1
           }
 
-          let columnNames = [...this.cleanedColumnsShow.show]
+          let columnNames = this.normalizeColumnNames(this.cleanedColumnsShow.show)
           if (columnNames.includes('actions')) {
             columnNames = columnNames.filter((item) => item !== 'actions')
             columnNames.push('actions')
@@ -239,9 +273,9 @@ export default {
       )
 
       const configShowColumnsNames = this.tableColumnsStorage.get()
-      let showColumnsNames = configShowColumnsNames || defaultColumnsNames
+      let showColumnsNames = this.normalizeColumnNames(configShowColumnsNames, defaultColumnsNames)
       if (showColumnsNames.length === 0) {
-        showColumnsNames = totalColumnsNames
+        showColumnsNames = [...totalColumnsNames]
       }
       // 校对显示的列，是不是包含最小列
       minColumnsNames.forEach((v, i) => {
@@ -260,7 +294,7 @@ export default {
     },
     filterShowColumns() {
       this.cleanColumnsShow()
-      const showFieldNames = this.cleanedColumnsShow.show
+      const showFieldNames = this.normalizeColumnNames(this.cleanedColumnsShow.show)
       let showFields = this.totalColumns.filter((obj) => {
         return showFieldNames.indexOf(obj.prop) > -1
       })
@@ -279,7 +313,7 @@ export default {
     },
     orderingColumns(columns) {
       const cols = _.cloneDeep(this.config.columns)
-      const show = this.cleanedColumnsShow.show
+      const show = this.normalizeColumnNames(this.cleanedColumnsShow.show, cols)
       const ordering = (show || cols || []).map((item) => {
         let prop = item
         if (typeof item === 'object') {
@@ -300,7 +334,7 @@ export default {
           return { prop: obj.prop, label: obj.label }
         }
       })
-      this.popoverColumns.currentCols = this.cleanedColumnsShow.show
+      this.popoverColumns.currentCols = this.normalizeColumnNames(this.cleanedColumnsShow.show)
       this.popoverColumns.minCols = this.cleanedColumnsShow.min
       this.popoverColumns.defaultCols = this.cleanedColumnsShow.default
 
@@ -311,6 +345,7 @@ export default {
       if (columns === null) {
         columns = this.cleanedColumnsShow.default
       }
+      columns = this.normalizeColumnNames(columns, this.cleanedColumnsShow.default)
       this.popoverColumns.currentCols = columns
       this.tableColumnsStorage.set(columns)
       this.filterShowColumns()

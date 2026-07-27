@@ -18,7 +18,7 @@
 
       <div v-if="exportType === 'table'" v-loading="loading" class="table-preview">
         <div v-if="Array.isArray(tableData)">
-          <div v-for="(t, idx) in tableData" :key="t.name || idx" style="margin-bottom:12px">
+          <div v-for="(t, idx) in tableData" :key="t.name || idx" style="margin-bottom: 12px">
             <div class="chart-container-title" v-if="t.name">
               <div class="chart-container-title-text">{{ t.name }}</div>
             </div>
@@ -118,10 +118,12 @@ export default {
       }
       this.loading = true
       try {
-        const data = await this.$axios.get(appendQuery(`/api/v1/reports/reports/${this.reportId}/data/`, {
-          ...pickReportQuery(this.reportQuery),
-          export: 'table'
-        }))
+        const data = await this.$axios.get(
+          appendQuery(`/api/v1/reports/reports/${this.reportId}/data/`, {
+            ...pickReportQuery(this.reportQuery),
+            export: 'table'
+          })
+        )
         this.tableData = {
           columns: data.columns || [],
           rows: data.rows || []
@@ -139,10 +141,12 @@ export default {
       if (!this.reportId) {
         return
       }
-      download(appendQuery(`/api/v1/reports/reports/${this.reportId}/data/`, {
-        ...pickReportQuery(this.reportQuery),
-        export: this.exportType
-      }))
+      download(
+        appendQuery(`/api/v1/reports/reports/${this.reportId}/data/`, {
+          ...pickReportQuery(this.reportQuery),
+          export: this.exportType
+        })
+      )
       this.handleClose()
     },
     handleClose() {

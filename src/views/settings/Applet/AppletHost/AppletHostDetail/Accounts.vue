@@ -1,7 +1,7 @@
 <template>
   <TwoCol>
     <template #default>
-      <Account :url="url" :columns-meta="columnsMeta" :object="object" />
+      <Account :columns-meta="columnsMeta" :object="object" />
     </template>
     <template #right>
       <QuickActions :actions="quickActions" type="primary" />
@@ -9,8 +9,7 @@
   </TwoCol>
 </template>
 
-<script>
-import { createVNode as createVNodeCompat } from 'vue'
+<script lang="jsx">
 import { QuickActions } from '@/components'
 import Account from '@/views/assets/Asset/AssetDetail/Account'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
@@ -31,11 +30,11 @@ export default {
     return {
       columnsMeta: {
         name: {
-          formatter: (row) => createVNodeCompat('span', null, [row.name])
+          formatter: (row) => <span>{row.name}</span>
         },
         asset: {
           label: this.$t('Asset'),
-          formatter: (row) => createVNodeCompat('span', null, [row.asset.name])
+          formatter: (row) => <span>{row.asset.name}</span>
         }
       },
       quickActions: [

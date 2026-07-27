@@ -26,7 +26,7 @@
         </el-col>
       </el-row>
     </div>
-    <div v-else>
+    <div v-else class="jms-form-controls">
       <el-row class="user-confirm-dialog__row user-confirm-dialog__row--field" :gutter="24">
         <el-col :md="24" :sm="24" :span="24" class="add">
           <el-select
@@ -72,15 +72,15 @@
           </span>
         </el-col>
       </el-row>
-      <el-row>
+      <el-row class="user-confirm-dialog__row user-confirm-dialog__row--face" :gutter="24">
         <el-col>
           <iframe v-if="passkeyVisible" :src="passkeyUrl" style="display: none" />
           <iframe
             v-if="isFaceCaptureVisible && subTypeSelected === 'face' && faceCaptureUrl"
+            class="user-confirm-dialog__face-frame"
             :src="faceCaptureUrl"
             allow="camera"
             sandbox="allow-scripts allow-same-origin"
-            style="width: 100%; height: 600px; border: none"
           />
         </el-col>
       </el-row>
@@ -325,9 +325,15 @@ export default {
     onSuccess() {
       this.closeReason = 'success'
       this.secretValue = ''
+      // 先捕获 callback 引用：this.visible = false 会触发 Dialog @close →
+      // handleDialogClose，那里会把 this.callback 置 null,若在 nextTick 里再取
+      // this.callback 就会是 null，导致 "this.callback is not a function"。
+      const callback = this.callback
       this.visible = false
       this.$nextTick(() => {
-        this.callback()
+        if (typeof callback === 'function') {
+          callback()
+        }
       })
     },
     handleConfirm() {
@@ -367,54 +373,6 @@ export default {
   .el-dialog__body {
     padding: 22px 40px 30px !important;
   }
-
-  .user-confirm-dialog__select,
-  .user-confirm-dialog__input {
-    min-height: 30px;
-  }
-
-  .user-confirm-dialog__select .el-tooltip__trigger,
-  .user-confirm-dialog__input,
-  .el-input__wrapper,
-  .el-select__wrapper {
-    border-radius: 0;
-  }
-
-  .user-confirm-dialog__input .el-input__wrapper,
-  .user-confirm-dialog__select .el-select__wrapper {
-    min-height: 30px;
-    height: 30px;
-    box-sizing: border-box;
-    padding: 0 11px;
-    overflow: hidden;
-    box-shadow: none !important;
-    border: 1px solid var(--el-border-color) !important;
-  }
-
-  .user-confirm-dialog__input .el-input__wrapper:hover,
-  .user-confirm-dialog__select .el-select__wrapper:hover {
-    border-color: var(--el-border-color-hover) !important;
-  }
-
-  .user-confirm-dialog__input .el-input__wrapper.is-focus,
-  .user-confirm-dialog__select .el-select__wrapper.is-focused {
-    box-shadow: none !important;
-    border-color: var(--el-color-primary) !important;
-  }
-
-  .user-confirm-dialog__input .el-input__inner,
-  .user-confirm-dialog__select .el-select__selection,
-  .user-confirm-dialog__select .el-select__selected-item,
-  .user-confirm-dialog__select .el-select__placeholder {
-    min-height: 100%;
-    height: 100%;
-    line-height: 28px;
-    background: transparent !important;
-    border: 0 !important;
-    box-shadow: none !important;
-    padding-left: 0 !important;
-    margin-left: 0 !important;
-  }
 }
 
 .user-confirm-dialog__row {
@@ -422,6 +380,10 @@ export default {
 }
 
 .user-confirm-dialog__row--field + .user-confirm-dialog__row--field {
+  margin-top: 16px !important;
+}
+
+.user-confirm-dialog__row--face {
   margin-top: 16px !important;
 }
 
@@ -434,10 +396,27 @@ export default {
   width: 100%;
 }
 
-.user-confirm-dialog__code-row {
+.user-confirm-dialog__face-frame {
+  display: block;
+  width: 100%;
+  height: 600px;
+  border: 0;
+}
+
+// 验证码行:输入框自适应宽度 + 「发送验证码」按钮固定宽度,始终同一行(修复按钮掉到下一行)。
+// 用 .user-confirm-dialog 作用域提升优先级:既确保 .code-row 的 flex 生效(不被 .el-col 覆盖回 block),
+// 又覆盖 __input 的全局 width:100%,让输入框在 flex 行内自适应剩余空间。
+.user-confirm-dialog .user-confirm-dialog__code-row {
   display: flex;
   align-items: center;
   gap: 16px;
+  flex-wrap: nowrap;
+}
+
+.user-confirm-dialog .user-confirm-dialog__code-row .user-confirm-dialog__input {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
 }
 
 .user-confirm-dialog__code-action {
@@ -445,7 +424,6 @@ export default {
   flex: 0 0 auto;
 }
 
-.user-confirm-dialog__code-button,
 .confirm-btn {
   width: 100%;
   min-height: 30px;
@@ -454,6 +432,11 @@ export default {
 }
 
 .user-confirm-dialog__code-button {
+  width: auto;
   min-width: 112px;
+  min-height: 30px;
+  padding: 8px 12px;
+  line-height: 1;
+  white-space: nowrap;
 }
 </style>

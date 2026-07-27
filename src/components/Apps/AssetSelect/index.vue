@@ -1,18 +1,29 @@
 <template>
   <div :class="rootClass" :style="rootStyle">
-    <el-input
-      ref="input"
-      class="asset-select__input"
-      :disabled="isDisabled"
-      :model-value="displayValue"
-      :placeholder="inputPlaceholder"
-      :suffix-icon="searchIcon"
-      readonly
+    <div
+      class="asset-select__trigger"
+      :class="{ 'is-disabled': isDisabled, 'is-empty': selectedRows.length === 0 }"
+      :title="displayValue"
       @click="openDialog"
-      @focus="handleInputFocus"
-      @keydown.enter.prevent="openDialog"
-      @keydown.space.prevent="openDialog"
-    />
+    >
+      <span v-if="selectedRows.length === 0" class="asset-select__placeholder">
+        {{ inputPlaceholder }}
+      </span>
+      <el-tag
+        v-for="item in selectedRows"
+        v-else
+        :key="item.id"
+        class="asset-select__tag"
+        :closable="!isDisabled"
+        disable-transitions
+        size="small"
+        type="info"
+        @close="removeAsset(item)"
+      >
+        {{ formatAssetLabel(item) }}
+      </el-tag>
+      <el-icon class="asset-select__icon"><Search /></el-icon>
+    </div>
     <AssetSelectDialog
       v-if="dialogVisible"
       ref="dialog"
@@ -29,7 +40,6 @@
 </template>
 
 <script>
-import { Search } from '@element-plus/icons-vue'
 import { createSourceIdCache } from '@/api/common'
 import AssetSelectDialog from './dialog.vue'
 
@@ -104,9 +114,6 @@ export default {
     }
   },
   computed: {
-    searchIcon() {
-      return Search
-    },
     isDisabled() {
       return typeof this.disabled === 'function' ? this.disabled() : this.disabled
     },
@@ -124,7 +131,10 @@ export default {
         return ''
       }
 
-      return this.selectedRows.map((item) => formatAssetLabel(item)).filter(Boolean).join(', ')
+      return this.selectedRows
+        .map((item) => formatAssetLabel(item))
+        .filter(Boolean)
+        .join(', ')
     }
   },
   watch: {
@@ -137,9 +147,17 @@ export default {
     }
   },
   methods: {
-    handleInputFocus(event) {
-      event?.target?.blur?.()
-      this.openDialog()
+    // 暴露给模板使用(formatAssetLabel 是模块级函数,模板无法直接访问)
+    formatAssetLabel(item) {
+      return formatAssetLabel(item)
+    },
+    removeAsset(item) {
+      if (this.isDisabled || !item) {
+        return
+      }
+      this.selectedValue = this.selectedValue.filter((id) => id !== item.id)
+      this.selectedRows = this.selectedRows.filter((row) => row.id !== item.id)
+      this.emitValue(this.selectedValue)
     },
     openDialog() {
       if (this.isDisabled || this.dialogVisible) {
@@ -239,26 +257,54 @@ export default {
   width: 100%;
 }
 
-.asset-select__input,
-.asset-select :deep(.el-input),
-.asset-select :deep(.el-input__wrapper) {
-  width: 100% !important;
-}
-
-.asset-select :deep(.el-input__wrapper),
-.asset-select :deep(.el-input__inner),
-.asset-select :deep(.el-input__suffix) {
-  cursor: pointer;
-}
-
-.asset-select :deep(.el-input__inner) {
-  text-overflow: ellipsis;
-}
-
-.asset-select :deep(.el-input__suffix),
-.asset-select :deep(.el-input__suffix-inner) {
-  display: inline-flex !important;
+.asset-select__trigger {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  color: var(--color-text-placeholder);
+  gap: 4px;
+  width: 100%;
+  min-height: 30px;
+  padding: 3px 28px 3px 8px;
+  box-sizing: border-box;
+  border: 1px solid var(--el-border-color);
+  border-radius: var(--el-border-radius-base, 4px);
+  background-color: var(--el-fill-color-blank, #fff);
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--el-border-color-hover);
+  }
+
+  &.is-disabled {
+    background-color: var(--el-disabled-bg-color, #f5f7fa);
+    border-color: var(--el-disabled-border-color, #e4e7ed);
+    cursor: not-allowed;
+  }
+}
+
+.asset-select__placeholder {
+  color: var(--el-text-color-placeholder, var(--color-text-placeholder));
+  font-size: 13px;
+  line-height: 22px;
+}
+
+.asset-select__tag {
+  max-width: 100%;
+
+  :deep(.el-tag__content) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.asset-select__icon {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  color: var(--el-text-color-placeholder, var(--color-text-placeholder));
+  pointer-events: none;
 }
 </style>

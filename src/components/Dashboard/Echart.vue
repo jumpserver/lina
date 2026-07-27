@@ -27,8 +27,6 @@ export default {
     const isExport = urlParams.get('export') === 'true'
     return {
       isExport: isExport,
-      // 仅当容器真正有了宽高后再创建图表,彻底规避
-      // echarts 0 尺寸初始化导致的 "Can't get DOM width or height"
       ready: false
     }
   },
@@ -67,15 +65,12 @@ export default {
     if (this.tryReady()) {
       return
     }
-    // 容器初始尺寸为 0(异步组件 / 隐藏 / 尚未布局),
-    // 用 ResizeObserver 等到它有了尺寸再渲染图表
     if (typeof ResizeObserver !== 'undefined') {
       this._ro = new ResizeObserver(() => {
         this.tryReady()
       })
       this._ro.observe(this.$refs.wrap)
     } else {
-      // 兜底:下一帧再尝试
       this._rafId = window.requestAnimationFrame(() => {
         this.ready = true
       })
@@ -126,8 +121,6 @@ export default {
 }
 </script>
 
-<!-- 非 scoped:为 vue-echarts 渲染的自定义元素 <x-vue-echarts> 兜底尺寸规则,
-     确保即使 vue-echarts/style.css 未生效,容器也能撑开,避免 0 尺寸 -->
 <style>
 x-vue-echarts {
   display: block;
@@ -140,6 +133,7 @@ x-vue-echarts {
 <style scoped lang="scss">
 .echart-wrap {
   width: 100%;
+  height: 100%;
   min-width: 0;
 }
 </style>

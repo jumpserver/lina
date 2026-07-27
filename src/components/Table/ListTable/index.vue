@@ -1,17 +1,10 @@
 <template>
   <div class="list-table">
-    <QuickFilter
-      v-if="iHasQuickFilter"
-      v-model:expand="filterExpand"
-      :filters="quickFilters"
-      :summary="quickSummary"
-      :table-url="tableUrl"
-      @filter="filter"
-    />
     <TableAction
       v-bind="iHeaderActions"
       v-if="hasActions"
       v-model:quick-filter-expand="filterExpand"
+      ref="tableAction"
       :class="{ 'filter-expand': filterExpand }"
       :date-pick="handleDateChange"
       :has-quick-filter="iHasQuickFilter"
@@ -20,6 +13,14 @@
       :selected-rows="selectedRows"
       :table-url="tableUrl"
       @done="handleActionInitialDone"
+    />
+    <QuickFilter
+      v-if="iHasQuickFilter"
+      v-model:expand="filterExpand"
+      :filters="quickFilters"
+      :summary="quickSummary"
+      :table-url="tableUrl"
+      @filter="filter"
     />
     <div v-loading="!actionInit" class="table-content">
       <IBox>
@@ -46,7 +47,7 @@ import TableAction from './TableAction/index.vue'
 import AutoDataTable from '../AutoDataTable/index.vue'
 import QuickFilter from './TableAction/QuickFilter.vue'
 import { getDayEnd, getDaysAgo } from '@/utils/common/time'
-import { ObjectLocalStorage } from '@/utils/common/index'
+import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
 import i18n from '@/i18n/i18n'
 import _ from 'lodash'
 
@@ -177,15 +178,13 @@ export default {
         }
         defaults[k] = true
       }
+      defaults.handleTableSettingClick = this.handleTableSettingClick
       return Object.assign(defaults, this.headerActions)
     },
     hasActions() {
       return this.iHeaderActions.has === undefined ? true : this.iHeaderActions.has
     },
     iTableConfig() {
-      if (this.isDeactivated) {
-        return
-      }
       const config = deepmerge(this.tableConfig, {
         extraQuery: this.extraQuery
       })
@@ -257,9 +256,17 @@ export default {
   },
   mounted() {
     this.urlUpdated[this.tableUrl] = location.href
-    // Populate the provided context with component references
-    // Note: $refs.dataTable is AutoDataTable, need to access its internal DataTable
-    this.listTableContext.dataTable = this.$refs.dataTable?.$refs.dataTable
+    // Populate the provided context with component references.
+    // Note: $refs.dataTable is AutoDataTable, whose inner DataTable is rendered
+    // with `v-if="!loading"` and mounts only after its OPTIONS metadata loads —
+    // later than this parent's mounted(). Expose it as a live getter (not a
+    // one-time snapshot) so consumers like ExportDialog always resolve the
+    // real DataTable once it exists.
+    Object.defineProperty(this.listTableContext, 'dataTable', {
+      get: () => this.$refs.dataTable?.$refs.dataTable,
+      enumerable: true,
+      configurable: true
+    })
     Object.defineProperty(this.listTableContext, 'tableConfig', {
       get: () => this.tableConfig,
       enumerable: true
@@ -282,6 +289,15 @@ export default {
     })
   },
   methods: {
+    focusSearch() {
+      return this.$refs.tableAction?.focusSearch()
+    },
+    closeNodeSearch() {
+      return this.$refs.tableAction?.closeNodeSearch()
+    },
+    handleTableSettingClick() {
+      this.$refs.dataTable?.openColumnSetting()
+    },
     handleFilterExpandChanged(expand) {
       this.filterExpand = expand
     },
@@ -311,6 +327,7 @@ export default {
     },
     handleSelectionChange(val) {
       this.selectedRows = Array.isArray(val) ? [...val] : []
+      this.$emit('selection-change', this.selectedRows)
     },
     _reloadTable() {
       this.dataTable?.getList()
@@ -392,12 +409,6 @@ export default {
   min-width: 0;
 }
 
-.filter-expand {
-  :deep(button.actionFilter) {
-    background-color: rgb(0, 0, 0, 0.08) !important;
-  }
-}
-
 .table-content {
   min-width: 0;
 
@@ -423,6 +434,6 @@ export default {
 
 //修改颜色
 .el-button--text {
-  color: #409eff;
+  color: var(--color-primary);
 }
 </style>

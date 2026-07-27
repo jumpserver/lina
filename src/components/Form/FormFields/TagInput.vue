@@ -1,6 +1,6 @@
 <template>
-  <div class="filter-field">
-    <div class="filter-field__content">
+  <div class="filter-field jms-input-spacing" @click="handleFieldClick">
+    <div ref="content" class="filter-field__content">
       <el-tag
         v-for="(v, k) in filterTags"
         :key="k"
@@ -13,19 +13,22 @@
       >
         {{ isCheckShowPassword ? changeTagShowValue(v) : v }}
       </el-tag>
-      <component
-        :is="component"
-        ref="SearchInput"
-        v-model.trim="filterValue"
-        :fetch-suggestions="autocomplete"
-        :placeholder="iPlaceholder"
-        :type="inputType"
-        class="search-input"
-        @blur="handleBlur"
-        @focus="focus = true"
-        @select="handleSelect"
-        @keyup.enter.prevent="handleConfirm"
-      />
+      <div class="search-input-wrap">
+        <component
+          :is="component"
+          ref="SearchInput"
+          v-model.trim="filterValue"
+          :fetch-suggestions="autocomplete"
+          :placeholder="iPlaceholder"
+          :trigger-on-focus="false"
+          :type="inputType"
+          class="search-input"
+          @blur="handleBlur"
+          @focus="handleFocus"
+          @select="handleSelect"
+          @keyup.enter.prevent="handleConfirm"
+        />
+      </div>
     </div>
     <span
       v-if="replaceShowPassword && filterTags.length > 0"
@@ -42,6 +45,12 @@
 
 <script>
 import i18n from '@/i18n/i18n'
+
+function normalizeTags(value) {
+  if (Array.isArray(value)) return value.slice()
+  if (value === undefined || value === null || value === '') return []
+  return [value]
+}
 
 export default {
   emits: ['input', 'change', 'update:modelValue', 'update:model-value'],
@@ -89,7 +98,7 @@ export default {
     return {
       focus: false,
       filterValue: '',
-      filterTags: this.normalizeTags(this.currentValue),
+      filterTags: [],
       isCheckShowPassword: this.replaceShowPassword
     }
   },
@@ -105,33 +114,38 @@ export default {
     }
   },
   watch: {
-    value(val) {
-      if (this.modelValue === undefined) {
+    // Vue 3 的 data 初始化早于 computed。通过 immediate watcher 在 computed
+    // 可用后统一初始化，首次打开和后续外部更新都会同步服务器值。
+    currentValue: {
+      handler(val) {
         this.filterTags = this.normalizeTags(val)
-      }
-    },
-    modelValue(val) {
-      this.filterTags = this.normalizeTags(val)
+      },
+      immediate: true,
+      deep: true
     }
   },
   methods: {
     normalizeTags(value) {
-      if (Array.isArray(value)) return value.slice()
-      if (value === undefined || value === null || value === '') return []
-      return [value]
+      return normalizeTags(value)
     },
     emitTags(tags = this.filterTags) {
       const payload = this.normalizeTags(tags)
-      this.$emit('change', payload)
-      this.$emit('input', payload)
+      // 先同步双向绑定，再通知 change 监听器。父组件常见的
+      // `v-model + @change` 用法会在 change 回调中读取绑定值，若 change
+      // 先触发，读取到的仍是上一次输入。
       this.$emit('update:modelValue', payload)
       this.$emit('update:model-value', payload)
+      this.$emit('input', payload)
+      this.$emit('change', payload)
     },
     handleTagClose(tag) {
       this.filterTags = this.filterTags.filter((item) => item !== tag)
       this.emitTags()
     },
     handleSelect(item) {
+      if (!this.autocomplete || typeof item?.value !== 'string') {
+        return
+      }
       this.filterValue = item.value
       this.handleConfirm()
     },
@@ -141,6 +155,9 @@ export default {
     handleBlur() {
       this.focus = false
       this.handleConfirm(false)
+    },
+    handleFocus() {
+      this.focus = true
     },
     handleConfirm(refocus = true) {
       const value = this.filterValue.trim()
@@ -180,6 +197,39 @@ export default {
     handleClearAll() {
       this.filterTags = []
       this.emitTags()
+    },
+    scrollInputIntoView() {
+      const content = this.$refs.content
+      if (content) {
+        content.scrollLeft = content.scrollWidth
+      }
+    },
+    handleFieldClick(event) {
+      const target = event.target
+      if (target?.closest?.('.el-tag, .clear-icon, .show-password')) {
+        return
+      }
+      this.focusInput()
+    },
+    activateAutocomplete(input) {
+      if (!this.autocomplete || !input) {
+        return
+      }
+      if (input.activated && typeof input.activated === 'object') {
+        input.activated.value = true
+      } else {
+        input.activated = true
+      }
+      input.getData?.(String(this.filterValue || ''))
+    },
+    focusInput() {
+      const input = this.$refs.SearchInput
+      this.scrollInputIntoView()
+      input?.focus()
+      this.$nextTick(() => {
+        this.scrollInputIntoView()
+        this.activateAutocomplete(input)
+      })
     }
   }
 }
@@ -191,15 +241,21 @@ export default {
 }
 
 .filter-field {
+  --jms-input-padding-block: 0;
+  --jms-input-padding-inline: 11px;
+
   display: flex;
   align-items: center;
   width: 100%;
   min-height: 30px;
-  padding: 0 8px 0 4px;
+  height: auto;
+  // 边框由当前容器承担，输入文字的水平留白统一交由内部 wrapper（11px）处理。
+  padding: 0;
   box-sizing: border-box;
   border: 1px solid #dcdee2;
   border-radius: 1px;
   background-color: #fff;
+  cursor: text;
   line-height: 1.4;
   overflow: hidden;
 
@@ -213,9 +269,11 @@ export default {
     flex-wrap: wrap;
     align-items: center;
     min-width: 0;
+    overflow: visible;
   }
 
   & :deep(.el-tag) {
+    flex: 0 0 auto;
     height: 24px;
     line-height: 22px;
     margin-top: 2px;
@@ -225,10 +283,8 @@ export default {
     padding: 0 8px;
   }
 
-  & :deep(.el-input),
-  & :deep(.el-autocomplete) {
-    flex: 1 1 auto;
-    min-width: 120px;
+  & :deep(.el-input) {
+    width: 100%;
     border: none !important;
     box-shadow: none !important;
     background: transparent;
@@ -237,7 +293,6 @@ export default {
   & :deep(.el-input__wrapper) {
     min-height: 28px;
     height: 28px;
-    padding: 0;
     border: none !important;
     background: transparent;
     box-shadow: none !important;
@@ -248,10 +303,17 @@ export default {
   }
 }
 
+.search-input-wrap {
+  display: flex;
+  flex: 1 1 180px;
+  min-width: 80px;
+  max-width: 100%;
+}
+
 .search-input {
-  flex: 1;
-  min-width: 150px;
-  width: auto;
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto !important;
   max-width: 100%;
   border: none !important;
   box-shadow: none !important;
@@ -264,19 +326,11 @@ export default {
     -webkit-appearance: none !important;
     box-shadow: none !important;
     background: transparent !important;
-    padding-left: 8px;
     height: 28px;
     line-height: 28px;
   }
 
   & :deep(.el-input) {
-    border: none !important;
-    box-shadow: none !important;
-    background: transparent !important;
-  }
-
-  & :deep(.el-input__wrapper) {
-    width: 100%;
     border: none !important;
     box-shadow: none !important;
     background: transparent !important;

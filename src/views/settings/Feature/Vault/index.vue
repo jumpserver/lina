@@ -16,6 +16,7 @@ import { GenericCreateUpdateForm } from '@/layout/components'
 import IBox from '@/components/Common/IBox/index.vue'
 import { openTaskPage } from '@/utils/jms/index'
 import store from '@/store'
+import OpenBaoKV from './OpenBao.vue'
 import HashiCorpKV from './HCP.vue'
 import AzureKV from './Azure.vue'
 import AwsSM from './Aws.vue'
@@ -54,7 +55,7 @@ export default {
       ],
       fields: [
         [this.$t('Basic'), ['VAULT_ENABLED', 'VAULT_BACKEND', 'HISTORY_ACCOUNT_CLEAN_LIMIT']],
-        [this.$t('Provider'), ['HCP', 'AZURE', 'AWS']]
+        [this.$t('Provider'), ['OPENBAO', 'HCP', 'AZURE', 'AWS']]
       ],
       fieldsMeta: {
         HISTORY_ACCOUNT_CLEAN_LIMIT: {
@@ -71,6 +72,13 @@ export default {
             return !formValue.VAULT_ENABLED || formValue['VAULT_BACKEND'] === 'local'
           },
           disabled: true
+        },
+        OPENBAO: {
+          label: this.$t('OpenBao'),
+          component: OpenBaoKV,
+          hidden: (formValue) => {
+            return !formValue.VAULT_ENABLED || formValue['VAULT_BACKEND'] !== 'openbao'
+          }
         },
         HCP: {
           label: this.$t('HashicorpVault'),

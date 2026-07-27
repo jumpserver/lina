@@ -1,15 +1,12 @@
 <template>
   <div class="asset-select">
-    <el-card>
+    <IBox title="selectedAssets" class="asset-card">
       <template #header>
-        <div class="clearfix">
-          <span>{{ $t('selectedAssets') }}({{ selectAssets.length }})</span>
-          <el-button
-            v-if="selectAssets.length > 0"
-            style="float: right; padding: 3px 0"
-            link
-            @click="handleClick"
+        <div class="asset-card-header">
+          <span class="asset-card-title"
+            >{{ $t('selectedAssets') }} ({{ selectAssets.length }})</span
           >
+          <el-button v-if="selectAssets.length > 0" link @click="handleClick">
             {{ $t('pleaseSelectAssets') }}
           </el-button>
         </div>
@@ -31,7 +28,7 @@
           <div class="platform-group-header">
             <el-checkbox
               :indeterminate="isPlatformIndeterminate(group)"
-              :value="isPlatformAllSelected(group)"
+              :model-value="isPlatformAllSelected(group)"
               @change="(val) => togglePlatformAll(group, val)"
             >
               <span class="platform-title">
@@ -61,7 +58,7 @@
           </el-checkbox-group>
         </div>
       </div>
-    </el-card>
+    </IBox>
 
     <AssetSelectDialog
       v-bind="$attrs"
@@ -81,11 +78,12 @@
 
 <script>
 import AssetSelectDialog from '@/components/Apps/AssetSelect/dialog.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 import { loadPlatformIcon } from '@/utils/jms/index'
 
 export default {
   componentName: 'SelectJobAssetDialog',
-  components: { AssetSelectDialog },
+  components: { AssetSelectDialog, IBox },
   props: {
     baseUrl: {
       type: String,
@@ -201,22 +199,25 @@ export default {
 .asset-select {
   display: flex;
   flex-direction: column;
-  background: #fff;
-  color: var(--color-border);
+  height: 100%;
+  color: var(--color-text-primary);
 
-  :deep() {
-    .el-card {
+  .asset-card {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+
+    // 卡片体撑满剩余高度并内部滚动，替代固定的 calc(100vh - 200px)
+    :deep(.el-card__body) {
       flex: 1;
-    }
-
-    .el-card__body {
-      height: calc(100vh - 200px);
+      min-height: 0;
+      padding: 10px 16px;
       overflow-y: auto;
       overflow-x: hidden;
-      padding: 10px 16px;
     }
 
-    .el-checkbox {
+    :deep(.el-checkbox) {
       width: 100%;
       display: flex;
       padding: 3px 0;
@@ -249,8 +250,16 @@ export default {
     }
   }
 
-  .asset-list {
-    margin: auto;
+  .asset-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .asset-card-title {
+    font-weight: 500;
+    color: var(--color-text-primary);
   }
 
   .asset-name {
@@ -274,7 +283,7 @@ export default {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    color: #a2aabd;
+    color: var(--color-text-secondary);
     font-weight: 800;
     font-size: 12px;
   }
@@ -289,29 +298,10 @@ export default {
     margin-left: 3px;
     border-left: 2px solid var(--color-border);
   }
-
-  .select-asset-button {
-    position: relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* 让中心点对齐 */
-  }
-}
-
-.el-select {
-  width: 100%;
-}
-
-.page :deep(.page-heading) {
-  display: none;
-}
-
-.el-dialog__wrapper :deep(.el-dialog__body) {
-  padding: 0 0 0 3px;
 }
 
 .empty-assets {
-  border: 2px dashed #d9d9d9;
+  border: 2px dashed var(--color-input-border);
   border-radius: 6px;
   padding: 56px 16px;
   text-align: center;
@@ -324,15 +314,14 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #909399;
+  color: var(--color-text-secondary);
   height: 100%;
-  background: #fff;
 
   .icon {
     font-size: 42px;
     line-height: 1;
     margin-bottom: 14px;
-    color: #c0c4cc;
+    color: var(--color-disabled);
     transition: color 0.2s;
   }
 
@@ -350,7 +339,7 @@ export default {
 
 .empty-assets:hover:not(.is-disabled) {
   border-color: var(--color-primary);
-  background: #f5f9ff;
+  background: var(--color-disabled-background);
   color: var(--color-primary);
 
   .icon {
@@ -361,10 +350,10 @@ export default {
 .empty-assets.is-disabled {
   cursor: not-allowed;
   opacity: 0.55;
-  background: #fafafa;
+  background: var(--color-disabled-background);
 
   .disabled-tip {
-    color: #c0c4cc;
+    color: var(--color-disabled);
   }
 }
 </style>

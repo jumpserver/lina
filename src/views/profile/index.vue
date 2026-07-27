@@ -26,7 +26,7 @@
         >
           <el-form class="update-info-form" label-position="left" label-width="80px">
             <el-form-item :label="$t('Phone')">
-              <PhoneInput :value="object.phone" />
+              <PhoneInput :value="object.phone" @change="profilePhone = $event" />
             </el-form-item>
             <el-form-item :label="$t('WeChat')">
               <el-input v-model="object.wechat" />
@@ -43,8 +43,7 @@
   </Page>
 </template>
 
-<script>
-import { createVNode as createVNodeCompat, createTextVNode as createTextVNodeCompat } from 'vue'
+<script lang="jsx">
 import { IBox, QuickActions } from '@/components'
 import { PhoneInput } from '@/components/Form/FormFields'
 import Page from '@/layout/components/Page'
@@ -70,6 +69,7 @@ export default {
   data() {
     return {
       url: `/api/v1/users/profile/`,
+      profilePhone: null,
       showPasswordDialog: false,
       currentEdit: '',
       biometricFeaturesActions: [
@@ -349,11 +349,11 @@ export default {
           key: this.$t('Phone'),
           formatter: (item, val) => {
             if (val) {
-              return createVNodeCompat('span', null, [
-                val.code,
-                createTextVNodeCompat(' '),
-                val.phone
-              ])
+              return (
+                <span>
+                  {val.code} {val.phone}
+                </span>
+              )
             } else {
               return '-'
             }
@@ -377,15 +377,18 @@ export default {
           value: this.object,
           key: 'SSH Key',
           formatter: (item, val) => {
-            const comment = val.public_key_comment || '-'
-            const md5 = val.public_key_hash_md5 || '-'
-            return createVNodeCompat('span', null, [
-              comment,
-              createTextVNodeCompat(' '),
-              createVNodeCompat('br', null, null),
-              createTextVNodeCompat(' '),
-              md5
-            ])
+            const comment = val.public_key_comment
+            const md5 = val.public_key_hash_md5
+            if (!comment && !md5) {
+              return '-'
+            }
+            return (
+              <span>
+                {comment}
+                {comment && md5 ? <br /> : null}
+                {md5}
+              </span>
+            )
           }
         },
         {
@@ -439,7 +442,7 @@ export default {
     updateProfile() {
       const url = `/api/v1/users/profile/`
       const data = {
-        phone: this.object.phone,
+        phone: this.profilePhone === null ? this.object.phone : this.profilePhone,
         wechat: this.object.wechat
       }
       this.$axios
@@ -521,43 +524,11 @@ export default {
     :deep(.el-form-item) {
       margin-bottom: 0;
 
-      // 标签与 30px 高的输入框垂直居中对齐
       .el-form-item__label {
         height: 30px;
         line-height: 30px;
         display: inline-flex;
         align-items: center;
-      }
-    }
-
-    // 与 DataForm 一致的单层边框方案：边框只画在 .el-input__wrapper 上（box-shadow 关掉、
-    // 用真实 1px border），内部 .el-input__inner 彻底去边框，避免 wrapper 与 inner 各描一层
-    // 形成 border 套 border。整体高度 30px / 内部 28px，与表单标准统一。
-    //
-    // 注意：用直接子选择器把规则限定在「普通 el-input」上，PhoneInput 自带单层容器边框，
-    // 不能被这里的 wrapper 描边规则命中，否则又会双层。
-    :deep(.el-form-item__content > .el-input) {
-      --el-input-height: 30px;
-
-      .el-input__wrapper {
-        border-radius: 0;
-        box-shadow: none !important;
-        border: 1px solid var(--el-border-color);
-
-        &:hover {
-          border-color: var(--el-border-color-hover);
-        }
-
-        &.is-focus {
-          border-color: var(--el-color-primary);
-        }
-      }
-
-      .el-input__inner {
-        height: 28px;
-        line-height: 28px;
-        border: 0 !important;
-        box-shadow: none !important;
       }
     }
   }

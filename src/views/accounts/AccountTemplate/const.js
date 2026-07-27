@@ -3,6 +3,7 @@ import { PasswordRule, UpdateToken, UploadSecret } from '@/components/Form/FormF
 import Select2 from '@/components/Form/FormFields/Select2'
 import AutomationParams from '@/components/Apps/AutomationParams'
 import i18n from '@/i18n/i18n'
+import { ref } from 'vue'
 
 export const templateFields = (vm) => {
   return [
@@ -28,7 +29,7 @@ export const templateFields = (vm) => {
 
 export const templateFieldsMeta = (vm) => {
   const id = getUuidUpdateFromUrl(vm.$route.path)
-  const platformIds = []
+  const platformIds = ref([])
   const canRandomSecretTypes = ['password', 'ssh_key']
   const autoPushEl = { disabled: false }
   return {
@@ -134,8 +135,7 @@ export const templateFieldsMeta = (vm) => {
       },
       on: {
         input: ([event], updateForm) => {
-          platformIds.splice(0, platformIds.length)
-          platformIds.push(...event)
+          platformIds.value.splice(0, platformIds.value.length, ...event)
         }
       },
       hidden: (formValue) => {
@@ -148,7 +148,7 @@ export const templateFieldsMeta = (vm) => {
     push_params: {
       component: AutomationParams,
       el: {
-        platforms: platformIds,
+        platforms: platformIds.value,
         method: 'push_account_method'
       },
       hidden: (formValue) => {

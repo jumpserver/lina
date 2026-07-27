@@ -3,7 +3,7 @@
     <div class="head">
       <Title :config="titleConfig" />
     </div>
-    <ProgressChart v-bind="config" v-if="config.data.length > 0" />
+    <ProgressChart v-if="config.data.length > 0" v-bind="config" />
     <div v-else class="no-data">{{ $tc('NoData') }}</div>
   </div>
 </template>
@@ -35,7 +35,7 @@ export default {
     async getChartData() {
       const url = '/api/v1/index/?total_count_type_to_assets_amount=1'
       const data = await this.$axios.get(url)
-      this.config['data'] = data.total_count_type_to_assets_amount
+      this.config.data = data.total_count_type_to_assets_amount
     }
   }
 }

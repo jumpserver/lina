@@ -36,8 +36,8 @@
 </template>
 
 <script>
-import RingChart from './RingChart';
-import Title from './Title.vue';
+import Title from './Title.vue'
+import RingChart from './RingChart'
 
 export default {
   components: {
@@ -122,7 +122,7 @@ export default {
   }
 
   .increase {
-    color: var(--color-primary) !important;
+    color: var(--color-primary);
   }
 }
 </style>

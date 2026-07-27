@@ -89,15 +89,16 @@ export default {
           top: 0,
           left: 0,
           icon: 'rect',
+          // 图例标记的图形宽度
           itemWidth: 10,
           itemHeight: 10,
-          itemGap: 16
+          itemGap: 12
         },
         grid: {
-          top: 42,
           left: '3%',
           right: '4%',
-          bottom: '3%',
+          top: 42,
+          bottom: 8,
           containLabel: true
         },
         color: [primary, '#F3B44B'],

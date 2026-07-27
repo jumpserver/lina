@@ -1,11 +1,11 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
-import store from '@/store'
+import { getStore } from '@/store/registry'
 import { openJDMC } from '@/utils/jdmc'
 import { hasPermission } from '@/utils/jms'
 import { getFirstAccessibleChildPath } from '@/utils/vue'
 
-const getSettings = () => store.state.settings.publicSettings || {}
+const getSettings = () => getStore()?.state?.settings?.publicSettings || {}
 
 const Setting = () => import('@/views/settings/index')
 const globalSubmenu = () => import('@/layout/globalOrg.vue')
@@ -34,7 +34,6 @@ export default {
   meta: {
     title: i18n.t('Settings'),
     icon: 'system-setting',
-    activeMenu: '/settings',
     view: 'settings',
     type: 'view',
     showNavSwitcher: false,

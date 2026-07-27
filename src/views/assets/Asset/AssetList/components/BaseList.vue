@@ -53,6 +53,7 @@ import GatewayDialog from '@/components/Apps/GatewayTestDialog'
 import AccountDiscoverDialog from './AccountDiscoverDialog.vue'
 import AccountCreateUpdate from '@/components/Apps/AccountListTable/AccountCreateUpdate.vue'
 import { getDefaultConfig } from './const'
+import { getBrowserQueryParam } from '@/utils/common/index'
 import { mapState } from 'vuex'
 
 export default {
@@ -252,7 +253,11 @@ export default {
         platform: platform.id,
         type: platform.type.value,
         category: platform.category.value,
-        node: this.$route.query?.node || this.$route.query?.node_id || ''
+        node:
+          this.$context.get('node') ||
+          this.$context.get('node_id') ||
+          getBrowserQueryParam('node_id') ||
+          ''
       }
       this.$log.debug('createProps', createProps)
       this.$refs.ListTable.onCreate({ query: createProps })

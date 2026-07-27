@@ -9,17 +9,12 @@
   </div>
 </template>
 
-<script>
-import {
-  resolveComponent as resolveComponentCompat,
-  createTextVNode as createTextVNodeCompat,
-  createVNode as createVNodeCompat
-} from 'vue'
+<script lang="jsx">
 import store from '@/store'
 import { mapGetters } from 'vuex'
 import { Select2 } from '@/components'
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { PhoneInput, UserPassword } from '@/components/Form/FormFields'
+import { PhoneInput, ResourceSelect, UserPassword } from '@/components/Form/FormFields'
 import rules from '@/components/Form/DataForm/rules'
 import { MFALevel, MFASystemSetting } from '../const'
 export default {
@@ -60,11 +55,14 @@ export default {
           uniqueCheck: true
         },
         username: {
-          uniqueCheck: true
+          uniqueCheck: true,
+          el: {
+            autocomplete: 'off'
+          }
         },
         password_strategy: {
           hidden: (formValue) => {
-            return this.$route.params.id || formValue.source !== 'local'
+            return this.$context.get('id') || formValue.source !== 'local'
           }
         },
         mfa_level: {
@@ -81,7 +79,7 @@ export default {
             if (formValue.update_password) {
               return true
             }
-            return formValue.source !== 'local' || this.$route.params.action !== 'update'
+            return formValue.source !== 'local' || this.$context.get('action') !== 'update'
           }
         },
         password: {
@@ -96,24 +94,17 @@ export default {
             return true
           },
           el: {
+            autocomplete: 'new-password',
             required: false,
             userIsOrgAdmin: false
           }
         },
         need_update_password: {
-          label: '',
-          type: 'checkbox-group',
-          component: null,
-          // 覆盖默认生成的 component
-          el: {
-            style: 'margin-bottom: -10px'
-          },
-          options: [
-            {
-              label: this.$t('ResetPasswordNextLogin'),
-              value: true
-            }
-          ],
+          label: this.$t('ResetPasswordNextLogin'),
+          // 单个布尔开关，直接用内置 type: 'checkbox'（与上方 update_password 一致）。
+          // render-form-item 对 checkbox 会：valueProp 返回 undefined 不透传 :value（避免
+          // el-checkbox 把表单值当作分组 label 而卡住），并按 target.checked 归一成布尔。
+          type: 'checkbox',
           hidden: (formValue) => {
             if (formValue.source !== 'local') {
               return true
@@ -153,29 +144,13 @@ export default {
           rules: this.$store.getters.currentOrgIsRoot ? [] : [rules.RequiredChange],
           helpTextFormatter: () => {
             const handleClick = () => {
-              this.$router.push({
-                name: 'RoleList'
-              })
+              this.$router.push({ name: 'RoleList' })
               // window.open('/settings/roles', '_blank')
             }
-            return createVNodeCompat(
-              resolveComponentCompat('el-link'),
-              {
-                onClick: handleClick
-              },
-              {
-                default: () => [
-                  createVNodeCompat(
-                    'i',
-                    {
-                      class: 'fa fa-external-link'
-                    },
-                    null
-                  ),
-                  createTextVNodeCompat(' '),
-                  roleManage
-                ]
-              }
+            return (
+              <el-link onClick={handleClick}>
+                <i class="fa fa-external-link" /> {roleManage}
+              </el-link>
             )
           },
           el: {
@@ -201,14 +176,14 @@ export default {
           }
         },
         groups: {
+          type: 'resourceSelect',
+          component: ResourceSelect,
           helpTextAsPlaceholder: true,
           el: {
-            multiple: true,
+            value: [],
             disabled: this.$store.getters.currentOrgIsRoot,
-            ajax: {
-              url: '/api/v1/users/groups/'
-            },
-            value: []
+            url: '/api/v1/users/groups/?fields_size=mini&order=name',
+            resourceName: this.$t('UserGroups')
           }
         },
         phone: {
@@ -219,9 +194,8 @@ export default {
           el: {}
         }
       },
-      submitMethod() {
-        const params = this.$route.params
-        if (params.id) {
+      submitMethod: () => {
+        if (this.$context.get('id')) {
           return 'put'
         } else {
           return 'post'
@@ -281,7 +255,7 @@ export default {
         })
       }
       this.fieldsMeta.password.el.userIsOrgAdmin = user['is_org_admin']
-      if (this.$route.query.clone_from) {
+      if (this.$context.get('clone_from')) {
         this.user.groups = []
       }
       this.disableMFAFieldIfNeed(user)
@@ -302,7 +276,7 @@ export default {
       const securityMFAAuth = store.getters.publicSettings['SECURITY_MFA_AUTH']
       const adminUserIsNeed =
         (user?.is_superuser || user?.is_org_admin) &&
-        this.$route.meta.action === 'update' &&
+        this.$context.get('action') === 'update' &&
         securityMFAAuth === MFASystemSetting.onlyAdminUsers
       if (securityMFAAuth === MFASystemSetting.allUsers) {
         options = [
@@ -331,12 +305,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.user-create-update :deep(.el-form-item-need_update_password) {
-  margin-top: -10px;
-
-  .el-form-item__content label {
-    line-height: 30px;
-  }
-}
-</style>
+<style lang="scss" scoped></style>

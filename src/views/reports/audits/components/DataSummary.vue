@@ -93,10 +93,10 @@ export default {
         { name: this.$t('LoginSucceeded'), value: LoginSucceeded.toString() },
         { name: this.$t('LoginFailed'), value: LoginFailed.toString() }
       ]
-      this.logConfig['data'] = logs
-      this.logConfig['total'] = data.total_count_user_login_logs
-      this.logConfig['active'] = data.total_count_user_login_success_logs
-      this.logConfig['weekAdd'] = data.total_count_user_login_success_logs
+      this.logConfig.data = logs
+      this.logConfig.total = data.total_count_user_login_logs
+      this.logConfig.active = data.total_count_user_login_success_logs
+      this.logConfig.weekAdd = data.total_count_user_login_success_logs
 
       const dangerCommandCountDecimal = data.total_count_commands_danger
         ? new Decimal(data.total_count_commands_danger)
@@ -113,25 +113,13 @@ export default {
         { name: this.$t('DangerCommand'), value: dangerCommand },
         { name: this.$t('SafeCommand'), value: SafeCommand }
       ]
-      this.assetConfig['data'] = commandCounts
-      this.assetConfig['total'] = data.total_count_commands
-      this.assetConfig['active'] = data.total_count_commands_danger
-      this.assetConfig['weekAdd'] = data.total_count_commands_danger
+      this.assetConfig.data = commandCounts
+      this.assetConfig.total = data.total_count_commands
+      this.assetConfig.active = data.total_count_commands_danger
+      this.assetConfig.weekAdd = data.total_count_commands_danger
     }
   }
 }
 </script>
 
-<style scoped lang="scss">
-:deep(.el-row) {
-  height: 100%;
-}
-
-:deep(.el-col) {
-  display: flex;
-}
-
-:deep(.card) {
-  height: 100%;
-}
-</style>
+<style scoped></style>

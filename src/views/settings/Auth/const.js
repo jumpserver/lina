@@ -1,7 +1,7 @@
 import store from '@/store'
 import { Select2 } from '@/components/Form/FormFields'
 import i18n from '@/i18n/i18n'
-import { ObjectLocalStorage } from '@/utils/common/index'
+import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
 import { getAssetUrl } from '@/utils/assets'
 
 const t = i18n.global.t.bind(i18n.global)
@@ -107,6 +107,14 @@ export function getAuthItems() {
       authKey: 'AUTH_RADIUS',
       type: 'common',
       description: t('RadiusSummary')
+    },
+    {
+      name: 'UKey',
+      logo: getAssetUrl('@/assets/img/auth/ukey_logo.png'),
+      title: t('UKey'),
+      authKey: 'AUTH_UKEY',
+      description: t('UKeySummary'),
+      type: 'device'
     }
   ]
 

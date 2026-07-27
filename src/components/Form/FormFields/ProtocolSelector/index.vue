@@ -2,9 +2,10 @@
   <div :class="showSetting ? 'show-setting' : 'hide-setting'">
     <div v-for="(item, index) in items" :key="item.name" class="protocol-item">
       <el-input
-        v-bind="$attrs"
+        v-bind="passAttrs"
         v-model="item.port"
-        :class="isPortReadonly(item) ? '' : 'input-with-select'"
+        class="jms-input-spacing"
+        :class="isPortReadonly(item) ? 'keep-inner-border' : 'input-with-select keep-inner-border'"
         :placeholder="portPlaceholder"
         :readonly="isPortReadonly(item)"
         :title="isPortReadonly(item) ? '端口由 URL 指定' : ''"
@@ -80,10 +81,19 @@ export default {
   components: {
     ProtocolSettingDialog
   },
+  // Vue3 中父组件的事件监听器会合并进 $attrs。若把 $attrs 原样透传给内部端口输入框，
+  // 表单渲染器注入的 onInput/onChange/onUpdate:modelValue 就会绑到内部 el-input 上，
+  // 用户输入端口时把字符串 port 当作整个协议字段的值向上抛出，触发
+  // "value.map is not a function"。因此关闭自动继承，并只透传非事件属性。
+  inheritAttrs: false,
   props: {
     value: {
       type: [String, Array],
       default: () => []
+    },
+    modelValue: {
+      type: [String, Array],
+      default: undefined
     },
     title: {
       type: String,
@@ -121,6 +131,19 @@ export default {
     }
   },
   computed: {
+    externalValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value
+    },
+    passAttrs() {
+      // 只把非事件监听的属性透传给内部端口输入框，过滤掉 onXxx 事件，
+      // 协议字段的值只经由本组件的 $emit('input', items) 上报。
+      const out = {}
+      for (const key of Object.keys(this.$attrs)) {
+        if (/^on[A-Z]/.test(key)) continue
+        out[key] = this.$attrs[key]
+      }
+      return out
+    },
     selectedProtocolNames() {
       return this.items.map((item) => item.name)
     },
@@ -144,8 +167,17 @@ export default {
     }
   },
   watch: {
+    externalValue: {
+      handler(value) {
+        if (this.hasSamePorts(this.items, value)) {
+          return
+        }
+        this.setDefaultItems(this.iChoices)
+      },
+      deep: true
+    },
     choices: {
-      handler(value, oldValue) {
+      handler(value) {
         setTimeout(() => {
           this.setDefaultItems(value)
         })
@@ -154,6 +186,7 @@ export default {
       immediate: true
     },
     items: {
+      // 初始化时不能立即上报：items 还未根据接口值生成，空数组会覆盖表单中的 protocols。
       handler(value) {
         if (this.settingReadonly) {
           value = value.map((i) => {
@@ -162,7 +195,6 @@ export default {
         }
         this.$emit('input', value)
       },
-      immediate: true,
       deep: true
     },
     instance: {
@@ -216,7 +248,11 @@ export default {
       }
       return port
     },
-    handleSettingConfirm() {
+    handleSettingConfirm(form) {
+      // 弹窗内 protocol 为只读 prop，配置在此合并到当前协议项（父组件自有的响应式数据，可写）。
+      if (form) {
+        Object.assign(this.currentProtocol, form)
+      }
       if (this.currentProtocol.primary) {
         const others = this.items
           .filter((item) => item.name !== this.currentProtocol.name)
@@ -293,9 +329,9 @@ export default {
       let items = []
       const requiredItems = choices.filter((item) => item.required || item.primary)
 
-      if (this.value instanceof Array && this.value.length > 0) {
+      if (this.externalValue instanceof Array && this.externalValue.length > 0) {
         const protocols = []
-        this.value.forEach((item) => {
+        this.externalValue.forEach((item) => {
           // 有默认值的情况下，设置为只读或者有id、有setting是平台
           if (!this.settingReadonly || (item?.id && item?.setting)) {
             protocols.push(item)
@@ -321,11 +357,18 @@ export default {
       items = this.setPrimaryIfNeed(items)
       this.items = items
     },
+    hasSamePorts(items, value) {
+      if (!Array.isArray(value) || items.length !== value.length) {
+        return false
+      }
+      return items.every((item, index) => {
+        const incoming = value[index]
+        return incoming?.name === item.name && String(incoming?.port) === String(item.port)
+      })
+    },
     getAssetDefaultItems(item, choices) {
-      const protocols = []
       const protocol = choices.find((i) => i.name === item.name) || {}
-      protocols.push({ ...protocol, ...item })
-      return protocols
+      return [{ ...protocol, ...item }]
     },
     onSettingClick(item) {
       this.currentProtocol = item
@@ -368,6 +411,10 @@ export default {
   &:first-of-type {
     margin-top: 0;
   }
+
+  & .el-input {
+    height: 30px !important;
+  }
 }
 
 .input-with-select {
@@ -386,10 +433,8 @@ export default {
     border-radius: 0;
   }
 
-  :deep(.el-input__wrapper) {
-    border-left: 0;
-    border-right: 0;
-  }
+  // 中间 input 保留左右 border 作为分隔线（配合 .keep-inner-border，
+  // 让 DataForm 不再清除接缝处 border）；select 右侧 / button 左侧仍不描边。
 
   :deep(.el-input-group__append) {
     display: flex;
@@ -445,6 +490,10 @@ export default {
     text-overflow: ellipsis;
   }
 }
+
+// focus 时只让中间 input 高亮：input 自身的 .is-focus 会把它四条边（含左右分隔线）变成主色，
+// 右侧分隔线即由 input 右 border 提供。select 与设置按钮（append）保持灰色、不参与聚焦，
+// 因此这里不再对 prepend / append 追加 focus 描边（避免设置按钮被“框”成独立主色块）。
 
 .input-button {
   display: grid;

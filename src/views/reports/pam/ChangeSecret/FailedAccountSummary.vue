@@ -2,24 +2,24 @@
   <div>
     <RecordViewSecret
       v-if="showViewSecretDialog"
-      v-model:visible="showViewSecretDialog"
       :url="secretUrl"
+      :visible.sync="showViewSecretDialog"
     />
     <HomeCard
-      v-bind="cardConfig"
       ref="HomeCard"
       :table-config="tableConfig"
       class="failed-accounts"
+      v-bind="cardConfig"
     />
   </div>
 </template>
 
-<script>
-import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue'
+<script lang="jsx">
+import HomeCard from '@/views/workbench/overview/components/HomeCard.vue'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
-import HomeCard from '@/views/workbench/overview/components/HomeCard.vue'
-import { createVNode as createVNodeCompat } from 'vue'
+import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue'
+
 export default {
   components: {
     RecordViewSecret,
@@ -54,9 +54,7 @@ export default {
               getRoute({ row }) {
                 return {
                   name: 'AssetDetail',
-                  params: {
-                    id: row.asset.id
-                  }
+                  params: { id: row.asset.id }
                 }
               }
             }
@@ -72,9 +70,7 @@ export default {
               getRoute({ row }) {
                 return {
                   name: 'AssetAccountDetail',
-                  params: {
-                    id: row.account.id
-                  }
+                  params: { id: row.account.id }
                 }
               }
             }
@@ -83,30 +79,12 @@ export default {
             label: this.$t('Success'),
             formatter: (row) => {
               if (row.status === 'pending') {
-                return createVNodeCompat(
-                  'i',
-                  {
-                    class: 'fa  fa fa-spinner fa-spin'
-                  },
-                  null
-                )
+                return <i class="fa  fa fa-spinner fa-spin" />
               }
               if (row.is_success) {
-                return createVNodeCompat(
-                  'i',
-                  {
-                    class: 'fa fa-check text-primary'
-                  },
-                  null
-                )
+                return <i class="fa fa-check text-primary" />
               }
-              return createVNodeCompat(
-                'i',
-                {
-                  class: 'fa fa-times text-danger'
-                },
-                null
-              )
+              return <i class="fa fa-times text-danger" />
             }
           },
           actions: {

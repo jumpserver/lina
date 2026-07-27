@@ -27,8 +27,7 @@
   </Page>
 </template>
 
-<script>
-import { createVNode as createVNodeCompat, createTextVNode as createTextVNodeCompat } from 'vue'
+<script lang="jsx">
 import Page from '@/layout/components/Page'
 import { Dialog, QuickActions } from '@/components'
 import DetailCard from '@/components/Cards/DetailCard/index'
@@ -104,13 +103,10 @@ export default {
           {
             key: 'Github',
             formatter: () => {
-              return createVNodeCompat(
-                'a',
-                {
-                  href: 'https://github.com/jumpserver/jumpserver',
-                  target: '_blank'
-                },
-                [createTextVNodeCompat(' JumpServer ')]
+              return (
+                <a href="https://github.com/jumpserver/jumpserver" target="_blank">
+                  {' JumpServer '}
+                </a>
               )
             }
           }

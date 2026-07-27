@@ -1,7 +1,12 @@
 import i18n from '@/i18n/i18n'
 import { message } from '@/utils/vue/message'
 import { getBasePath } from '@/utils/storage'
+import { toSentenceCase } from './string'
+import { ObjectLocalStorage } from './objectLocalStorage'
+import { toPlainTextMessage } from './message'
 import _ from 'lodash'
+
+export { toSentenceCase }
 
 export function getApiPath(that, objectId) {
   let pagePath = that.$route.path
@@ -115,7 +120,7 @@ export function setUrlParam(url, name, value) {
   return url
 }
 
-export function setRouterQuery(vm, url = '') {
+export function setRouterQuery(vm, url = '', { browserOnly = false } = {}) {
   url = url || vm.tableConfig.url
   const params = url.split('?')[1]
   const query = Object.fromEntries(new URLSearchParams(params))
@@ -123,9 +128,34 @@ export function setRouterQuery(vm, url = '') {
     ...vm.$route.query,
     ...query
   }
+  if (browserOnly) {
+    const { href } = vm.$router.resolve({
+      path: vm.$route.path,
+      query: newQuery,
+      hash: vm.$route.hash
+    })
+    window.history.replaceState(window.history.state, '', href)
+    return
+  }
   vm.$nextTick(() => {
     vm.$router.replace({ query: newQuery })
   })
+}
+
+export function getBrowserQueryParam(name) {
+  const searchValue = new URLSearchParams(window.location.search).get(name)
+  if (searchValue) {
+    return searchValue
+  }
+
+  const hash = window.location.hash || ''
+  const hashQueryIndex = hash.indexOf('?')
+  if (hashQueryIndex === -1) {
+    return ''
+  }
+
+  const hashQuery = hash.slice(hashQueryIndex + 1).split('#')[0]
+  return new URLSearchParams(hashQuery).get(name) || ''
 }
 
 export function getErrorResponseMsg(error) {
@@ -148,7 +178,7 @@ export function getErrorResponseMsg(error) {
       .filter((i) => i)
       .join('; ')
   } else if (typeof data === 'string') {
-    return data
+    return toPlainTextMessage(data)
   } else if (_.isPlainObject(data)) {
     const msg = Object.values(data)
       .map((item) => getErrorResponseMsg(item))
@@ -158,7 +188,7 @@ export function getErrorResponseMsg(error) {
   } else {
     msg = error.toString()
   }
-  return msg
+  return toPlainTextMessage(msg)
 }
 
 // 将一组错误信息拼接为单条字符串，过滤掉空值并去重。
@@ -378,34 +408,6 @@ export function toTitleCase(string) {
     .join(' ')
 }
 
-export function toSentenceCase(string) {
-  if (!string) return string
-  if (string.indexOf('/') > 0) return string
-  const s = string
-    .trim()
-    .split(' ')
-    .map((item, index) => {
-      if (item.length === 0) return ''
-      if (item.length === 1) return item.toLowerCase()
-
-      // 如果首字母大写，且第二个字母也大写，不处理
-      if (item[0] === item[0].toUpperCase() && item[1] === item[1].toUpperCase()) {
-        return item
-      }
-
-      if (index === 0) {
-        return item[0].toUpperCase() + item.slice(1)
-      }
-      // 仅处理首字母大写，别的是小写的情况
-      if (item[0] !== item[0].toLowerCase() && item.slice(1) === item.slice(1).toLowerCase()) {
-        return item[0].toLowerCase() + item.slice(1)
-      }
-      return item
-    })
-    .join(' ')
-  return s[0].toUpperCase() + s.slice(1)
-}
-
 export function toLowerCaseExcludeAbbr(s) {
   if (!s) return ''
 
@@ -469,54 +471,7 @@ export function setShowCurrentAssetValue(cookie, value) {
   }
 }
 
-export class ObjectLocalStorage {
-  constructor(key, attr) {
-    this.key = key
-    this.attr = attr
-  }
-
-  b64(val) {
-    return btoa(unescape(encodeURIComponent(val)))
-  }
-
-  getObject() {
-    const stored = window.localStorage.getItem(this.key)
-    let value = {}
-    try {
-      value = JSON.parse(stored)
-    } catch (e) {
-      console.warn('localStorage value is not a valid JSON: ', this.key)
-    }
-    if (!value || typeof value !== 'object') {
-      value = {}
-    }
-    return value
-  }
-
-  get(attr, defaults) {
-    const obj = this.getObject(this.key)
-    if (!attr && this.attr) {
-      attr = this.attr
-    }
-    const attrSafe = this.b64(attr)
-    const val = obj[attrSafe]
-    if (val === undefined) {
-      return defaults
-    }
-    return val
-  }
-
-  set(attr, value) {
-    const obj = this.getObject(this.key)
-    if (value === undefined && this.attr) {
-      value = attr
-      attr = this.attr
-    }
-    const attrSafe = this.b64(attr)
-    obj[attrSafe] = value
-    window.localStorage.setItem(this.key, JSON.stringify(obj))
-  }
-}
+export { ObjectLocalStorage }
 
 export function randomString(length, includeSymbols = false) {
   const upperCase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'

@@ -7,7 +7,7 @@
     <el-table :data="tableData" class="table" style="width: 100%">
       <el-table-column :label="$tc('Ranking')" width="100">
         <template #header>
-          <el-tooltip :content="$t('Ranking')" placement="top" :open-delay="500">
+          <el-tooltip :content="$t('Ranking')" placement="top" :show-after="500">
             <span style="cursor: pointer">{{ $t('Ranking') }}</span>
           </el-tooltip>
         </template>
@@ -23,7 +23,7 @@
         :width="getColumnWidth(i)"
       >
         <template #header>
-          <el-tooltip :content="i.label" placement="top" :open-delay="500">
+          <el-tooltip :content="i.label" placement="top" :show-after="500">
             <span style="cursor: pointer">{{ i.label }}</span>
           </el-tooltip>
         </template>
@@ -103,11 +103,13 @@ export default {
   }
 }
 
-:deep(.el-table td, .el-table th) {
+:deep(.el-table td),
+.el-table th {
   padding: 5px 0;
 }
 
-:deep(.el-table th, .el-table tr) {
+:deep(.el-table th),
+.el-table tr {
   background-color: #f5f6f7 !important;
 }
 

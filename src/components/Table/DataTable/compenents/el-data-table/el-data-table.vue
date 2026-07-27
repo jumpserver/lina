@@ -169,6 +169,10 @@ export default {
       type: String,
       default: ''
     },
+    request: {
+      type: Function,
+      default: null
+    },
     /**
      * 主键，默认值 id，
      * 修改/删除时会用到,请求会根据定义的属性值获取主键,即row[this.id]
@@ -982,20 +986,38 @@ export default {
     },
     getList({ loading = true } = {}) {
       const { url } = this
-      if (url) {
-        return this.debouncedGetListFromRemote({ loading })
-      }
       if (this.totalData) {
         return this.getListFromStaticData({ loading: true })
       }
+      if (url) {
+        return this.debouncedGetListFromRemote({ loading })
+      }
       // this.$log.debug("last page is: ", this.lastPageNum)
+    },
+    filterTotalData() {
+      const query = this.getQuery()
+      const keyword = query.search || ''
+      let totalData = this.totalData
+      if (keyword) {
+        totalData = totalData.filter((item) => {
+          return Object.values(item).some((value) => {
+            return value.toString().includes(keyword)
+          })
+        })
+      }
+      return totalData
     },
     getListFromStaticData({ loading = true } = {}) {
       if (loading) {
         this.tableLoading = true
       }
+      // 静态数据(totalData)模式下总数即数据长度。必须在此设置,
+      // 因为 totalData 的 watcher 仅在其"变化"时才更新 total,而初次挂载
+      // (totalData 创建时已就位、不再变化)不会触发,导致分页显示"共 0 条"。
+      this.total = this.totalData.length
+      const totalData = this.filterTotalData()
       if (!this.hasPagination) {
-        this.data = this.totalData
+        this.data = totalData
         this.tableLoading = false
         if (this.isTree) {
           this.data = this.tree2Array(this.data, this.expandAll)
@@ -1008,7 +1030,7 @@ export default {
       const start = (page + pageOffset - 1) * this.size
       const end = (page + pageOffset) * this.size
       this.$log.debug(`page: ${page}, size: ${this.size}, start: ${start}, end: ${end}`)
-      this.data = this.totalData.slice(start, end)
+      this.data = totalData.slice(start, end)
       this.tableLoading = false
       this.data = this.tree2Array(this.data, this.expandAll)
       return this.data
@@ -1043,8 +1065,8 @@ export default {
         history.replaceState(history.state, 'el-data-table search', newUrl)
       }
 
-      this.$axios
-        .get(url + queryStr, this.axiosConfig)
+      const request = this.request || ((requestUrl, config) => this.$axios.get(requestUrl, config))
+      Promise.resolve(request(url + queryStr, this.axiosConfig))
         .then(({ data: resp }) => {
           let data = []
 
@@ -1076,7 +1098,7 @@ export default {
            * @property {object} data - table的数据
            * @property {object} resp - 请求返回的完整response
            */
-          this.$emit('update', data, resp)
+          this.$emit('data-update', data, resp)
 
           // 开启persistSelection时，需要同步selected状态到el-table中
           this.$nextTick(() => {

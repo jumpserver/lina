@@ -1,5 +1,6 @@
 import { ElMessage as elMessage } from 'element-plus'
-import { toSentenceCase } from '@/utils/common/index'
+import { toSentenceCase } from '@/utils/common/string'
+import { toPlainTextMessage } from '@/utils/common/message'
 
 let messageDom = null
 const DEFAULT_Z_INDEX = 20000
@@ -9,6 +10,10 @@ const message = (options) => {
 
   if (typeof options === 'string') {
     options = { message: options }
+  }
+
+  if (typeof options.message === 'string') {
+    options.message = toPlainTextMessage(options.message)
   }
 
   options.zIndex = options.zIndex || DEFAULT_Z_INDEX

@@ -89,9 +89,8 @@ export default {
             minAngle: 5,
             radius: ['72%', '90%'],
             avoidLabelOverlap: false,
-            itemStyle: {},
             label: {
-              show: !this.config.hideRingLabels
+              show: false
             },
             emphasis: {
               label: {

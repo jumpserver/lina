@@ -20,11 +20,11 @@
           :class="{ showClear: showClearBtn }"
           :placeholder="filterPlaceholder"
           autocomplete="off"
-          class="el-input__inner"
+          class="paging-filter__input el-input__inner"
           type="text"
           @change="handleKeyword"
         />
-        <span class="el-input__prefix" style="left: 0">
+        <span class="el-input__prefix">
           <el-icon class="el-input__icon"><Search /></el-icon>
         </span>
         <span v-if="searchWord && showClearBtn" class="clear-input">
@@ -106,7 +106,7 @@ export default {
     },
     highlightColor: {
       type: String,
-      default: () => '#409EFF'
+      default: () => 'var(--color-primary)'
     },
     asyncSearchFlag: {
       // 是否设置了异步搜索方法
@@ -276,13 +276,34 @@ export default {
 <style lang="scss" scoped>
 .district-panel {
   width: 298px;
+  display: inline-block;
+  box-sizing: border-box;
+  vertical-align: middle;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--el-border-color, #dcdfe6);
+  border-radius: 4px;
 
   .el-transfer-panel__header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    margin: 0;
+    padding: 0 15px;
+    box-sizing: border-box;
+    background: var(--el-fill-color-light, #f5f7fa);
+    border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+
     .el-checkbox {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      height: auto;
+      margin-right: 0;
 
       :deep(.el-checkbox__label) {
         font-size: 14px;
+        line-height: 1;
       }
     }
   }
@@ -291,16 +312,57 @@ export default {
     height: 335px;
 
     .el-transfer-panel__filter {
-      margin: 6px 14px;
-      line-height: 0;
+      // 该 div 同时带了 EP 的 .el-input 类(inline-flex + width:100%),会把 input 与图标当作
+      // flex 项并排错位,且 width:100% 叠加左右 margin 会溢出面板。强制 block + width:auto:
+      // 块级自动填满(减去 margin),input 独占整行,图标绝对定位覆盖在左侧。
+      display: block;
+      width: auto;
+      // 该 div 还带 EP 的 .el-input 类,会被赋予固定 height:var(--el-input-height,32px);
+      // 这里改回 auto,让容器高度由内部 30px 的 input 决定,避免 32/30 错位
+      height: auto;
+      box-sizing: border-box;
+      position: relative;
+      // margin: 10px 15px;
+      line-height: normal;
 
-      .el-input__inner {
+      .paging-filter__input {
+        display: block;
+        width: 100%;
         height: 30px;
+        line-height: 30px;
+        box-sizing: border-box;
+        padding-left: 25px;
+        border: 1px solid var(--el-border-color, #dcdfe6);
+        border-radius: 4px;
+        font-size: 13px;
+
+        &:focus {
+          outline: none;
+          border-color: var(--el-color-primary);
+        }
       }
 
-      .showClear {
+      .el-input__prefix {
+        position: absolute;
+        height: 30px;
+        left: 15px;
+        top: 15px;
+        width: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--el-text-color-placeholder, #a8abb2);
+        pointer-events: none;
+
+        .el-input__icon {
+          height: 30px;
+          font-size: 14px;
+          margin: 0;
+        }
+      }
+
+      .paging-filter__input.showClear {
         padding-right: 30px;
-        border-radius: 0;
       }
 
       .clear-input {
@@ -356,7 +418,8 @@ export default {
   .check-number {
     position: absolute;
     right: 15px;
-    top: 0;
+    top: 50%;
+    transform: translateY(-50%);
     color: #909399;
     font-size: 12px;
     font-weight: 400;
@@ -375,16 +438,21 @@ export default {
   .vip-footer {
     display: flex;
     position: relative;
+    width: 100%;
+    box-sizing: border-box;
     margin: 0;
     text-align: center;
     border-top: 1px solid #ebeef5;
 
     .v-page {
       width: 50%;
+      height: 30px;
+      padding: 0;
       border: none;
       margin: 0;
       border-radius: 0;
-      padding: 10px 15px;
+      font-size: 13px;
+      line-height: 1;
 
       &:first-child {
         border-right: 1px solid #ebeef5;

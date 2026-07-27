@@ -1,5 +1,5 @@
 <template>
-  <div class="update-token">
+  <div class="update-token" :class="{ 'compound-field': isShow }">
     <el-button v-if="!isShow" icon="Edit" link @click="isShow = true">
       {{ text }}
     </el-button>
@@ -9,7 +9,8 @@
       :disabled="disabled"
       :placeholder="placeholder"
       :type="type"
-      class="update-token__input"
+      autocomplete="new-password"
+      class="update-token__input jms-input-spacing"
       show-password
       @change="onChange"
     >
@@ -87,18 +88,46 @@ export default {
   align-items: center;
   width: 100%;
 
+  // 展开输入态:整控件做成单边框容器(compound-field 约定,与 PhoneInput 同一套)。
+  // 容器出唯一一圈边框,内部 input wrapper 与 append 全部去边、融为一体,
+  // 避免 EP input-group 各段自带边框叠成「右侧一个独立灰按钮」。
+  &.compound-field {
+    height: 30px;
+    box-sizing: border-box;
+    border: 1px solid var(--el-border-color);
+    border-radius: 0;
+    background-color: #fff;
+    overflow: hidden;
+
+    &:hover {
+      border-color: var(--el-border-color-hover);
+    }
+
+    // 聚焦时高亮整圈容器边框(而非某一段),刷新图标本身不产生高亮
+    &:focus-within {
+      border-color: var(--el-color-primary);
+    }
+  }
+
   :deep(.el-input) {
     width: 100%;
+    height: 100%;
   }
 
-  :deep(.el-input-group__append) {
-    padding: 0;
-    border-radius: 0;
-    background-color: #f5f7fa;
-  }
-
+  // 内部输入框 wrapper 去边、去 box-shadow:边框统一由容器提供
   :deep(.el-input__wrapper) {
+    border: 0 !important;
     border-radius: 0;
+    box-shadow: none !important;
+  }
+
+  // append(刷新按钮)去边、透明,与输入框无缝融为一体
+  :deep(.el-input-group__append) {
+    padding: 0 2px;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: transparent;
   }
 }
 
@@ -118,6 +147,16 @@ export default {
   background-color: transparent;
   color: var(--color-text-secondary);
   cursor: pointer;
+  outline: none; // 去掉原生 button 点击后的 focus 描边,图标本身不产生高亮
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+  }
+
+  &:hover {
+    color: var(--color-primary);
+  }
 
   &:disabled {
     cursor: not-allowed;

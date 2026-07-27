@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="data-form-container">
     <ElFormRender
       v-bind="$attrs"
       :id="id"
@@ -12,8 +12,8 @@
       :label-width="labelWidth"
       :style="{
         '--label-width': labelWidth,
-        '--form-column-gap': '8px',
-        '--form-section-gap': '20px'
+        '--form-column-gap': '18px',
+        '--form-section-gap': '15px'
       }"
       :server-errors="serverErrors"
       @input="handleFormUpdate"
@@ -295,6 +295,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.data-form-container {
+  width: 100%;
+  min-width: 0;
+  container-name: data-form;
+  container-type: inline-size;
+}
+
 .form-fields.el-form {
   display: flex;
   flex-direction: column;
@@ -313,28 +320,6 @@ export default {
 
   :deep(.form-group-header) {
     color: var(--color-text-primary);
-  }
-
-  &.label-top {
-    :deep(.el-form-item) {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 8px;
-
-      .el-form-item__label-wrap {
-        width: 100%;
-        flex-basis: auto;
-      }
-
-      .el-form-item__label {
-        justify-content: flex-start;
-      }
-
-      .el-form-item__content {
-        width: 100%;
-        min-width: 100%;
-      }
-    }
   }
 
   :deep(.el-form-item) {
@@ -390,237 +375,6 @@ export default {
       flex-direction: column;
       gap: 4px;
       align-items: flex-start;
-
-      // radio / checkbox 组：撑到 30px 并让选项在垂直方向居中，
-      // 与左侧同为 30px 居中的 label 对齐（content 是 column，单行选项默认会顶在最上方）
-      .el-radio-group,
-      .el-checkbox-group {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        min-height: 30px;
-      }
-
-      .el-input:not(.el-date-editor),
-      .el-select,
-      .el-cascader,
-      .el-input-number,
-      .el-date-editor.el-input,
-      .el-date-editor.el-date-editor--date,
-      .el-date-editor.el-date-editor--datetime,
-      .el-date-editor.el-date-editor--daterange,
-      .el-date-editor.el-date-editor--datetimerange {
-        min-height: 30px;
-      }
-
-      .el-input__wrapper,
-      .el-select__wrapper,
-      .el-cascader .el-input__wrapper,
-      .el-input-group__prepend,
-      .el-input-group__append,
-      .el-date-editor.el-input,
-      .el-date-editor--daterange,
-      .el-date-editor--datetimerange {
-        min-height: 30px;
-        height: 30px;
-        box-sizing: border-box;
-        border-radius: 0;
-      }
-
-      .el-input__wrapper,
-      .el-select__wrapper,
-      .el-cascader .el-input__wrapper {
-        box-shadow: none !important;
-        border: 1px solid var(--el-border-color) !important;
-
-        &:hover {
-          border-color: var(--el-border-color-hover) !important;
-        }
-
-        &.is-focus,
-        &.is-focused {
-          box-shadow: none !important;
-          border-color: var(--el-color-primary) !important;
-        }
-      }
-
-      // hover 光标兜底：EP 默认已给 wrapper 设 cursor，但本表单大量重写 wrapper 样式，
-      // 这里显式声明，保证文本输入是 text、可点选控件是 pointer、禁用是 not-allowed，
-      // 不会因某处继承样式导致 hover 不到应有的光标。
-      .el-input__wrapper {
-        cursor: text;
-      }
-
-      .el-select__wrapper,
-      .el-cascader .el-input__wrapper,
-      .el-date-editor .el-input__wrapper {
-        cursor: pointer;
-      }
-
-      .is-disabled .el-input__wrapper,
-      .el-input.is-disabled .el-input__wrapper {
-        cursor: not-allowed;
-      }
-
-      // 自定义复合组件（如 TagInput 的 .filter-field）自带容器边框，其内部输入框不应再被
-      // 上面的强制 border 命中，否则形成 border 套 border 的双层边框。
-      .filter-field {
-        .el-input__wrapper {
-          border: 0 !important;
-        }
-      }
-
-      // 组合型输入框（input-group）：prepend/append 自带外边框，
-      // 内部 wrapper 不再于接缝处重复描边，避免 border 套 border 的双层边框。
-      .el-input-group {
-        .el-input-group__prepend + .el-input__wrapper {
-          border-left: 0 !important;
-        }
-
-        .el-input__wrapper:has(+ .el-input-group__append) {
-          border-right: 0 !important;
-        }
-      }
-
-      // 复合字段通用约定：给自定义的「select + input」等组合控件的最外层容器加 .compound-field。
-      // 约定：容器提供唯一的一圈边框；内部各段（el-select / el-input）的 wrapper 一律去边、去
-      // box-shadow；段与段之间由容器统一补一条分隔线。这样就不会再出现「wrapper 自身边框 + 容器
-      // 边框」层层重叠的问题（PhoneInput 即基于此约定，未来的组合控件加这个 class 即可复用）。
-      .compound-field {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        height: 30px;
-        box-sizing: border-box;
-        border: 1px solid var(--el-border-color);
-        background-color: #fff;
-        overflow: hidden;
-
-        &:hover {
-          border-color: var(--el-border-color-hover) !important;
-        }
-
-        // 段间分隔线：除最后一段外，右侧描一条线
-        > *:not(:last-child) {
-          border-right: 1px solid var(--el-border-color);
-        }
-
-        .el-select__wrapper,
-        .el-input__wrapper {
-          height: 100%;
-          border: 0 !important;
-          border-radius: 0 !important;
-          box-shadow: none !important;
-        }
-      }
-
-      .el-select,
-      .el-select .el-tooltip__trigger {
-        border-radius: 0;
-      }
-
-      .el-input__inner,
-      .el-select .el-input__inner,
-      .el-date-editor .el-range-input,
-      .el-date-editor .el-range-separator,
-      .el-date-editor .el-range__icon,
-      .el-date-editor .el-range__close-icon {
-        min-height: 28px;
-        height: 28px;
-        line-height: 28px;
-      }
-
-      .el-input__wrapper .el-input__inner,
-      .el-select__wrapper .el-select__selected-item,
-      .el-select__wrapper .el-select__placeholder {
-        border: 0 !important;
-        box-shadow: none !important;
-        padding-left: 0 !important;
-        margin-left: 0 !important;
-      }
-
-      .el-input__wrapper {
-        padding: 1px 11px;
-      }
-
-      // 禁用的输入框
-      .el-input.is-disabled .el-input__inner {
-        color: var(--color-icon-primary) !important;
-        background-color: var(--color-disabled-background);
-      }
-
-      // 复合型输入框
-      .el-input.el-input-group {
-        .el-input-group__prepend .el-select {
-          min-height: 30px;
-
-          .el-input__wrapper {
-            min-height: 28px;
-            height: 28px;
-            box-shadow: none;
-          }
-
-          .el-input__inner {
-            border: none;
-            height: 28px;
-            line-height: 28px;
-          }
-        }
-
-        .el-input__inner {
-          border-radius: 0;
-          color: var(--color-text-primary);
-        }
-      }
-
-      // 普通的输入框
-      .el-input .el-input__inner {
-        color: var(--color-text-primary);
-      }
-
-      // 不符合校验规则的提示信息
-      .el-form-item__error {
-        position: inherit;
-      }
-
-      .el-select {
-        // 选择 tag 时的额外自定义样式
-        .el-select__tags > span > .el-tag.el-tag--info {
-          min-height: 24px;
-          height: 24px;
-          line-height: 22px;
-
-          .el-tag__close {
-            margin-top: -1px !important;
-          }
-        }
-
-        // 选择普通 item 时的样式
-        .el-input .el-input__inner {
-          color: var(--color-text-primary);
-        }
-      }
-
-      .el-textarea .el-textarea__inner {
-        border-radius: 0;
-      }
-
-      .el-data-table .el-table {
-        margin: 5px 0;
-      }
-
-      .help-block {
-        display: block;
-        margin: 0;
-        color: var(--color-help-text);
-        font-size: 12px;
-        line-height: 18px;
-        word-break: keep-all;
-
-        a {
-          color: var(--color-primary);
-        }
-      }
     }
   }
 
@@ -631,25 +385,46 @@ export default {
     gap: 10px;
     margin-top: 10px;
     padding-inline-start: calc(var(--label-width) + var(--form-column-gap));
+  }
 
-    .el-button {
-      min-height: 30px;
-      height: 30px;
-      padding: 8px 12px;
-      font-size: 12px;
-      font-weight: 400;
-      line-height: 1;
+  &.el-form--label-top,
+  &.label-top {
+    :deep(.el-form-item) {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
     }
 
-    .el-button--primary,
-    .el-button--primary > span,
-    .el-button--primary:hover,
-    .el-button--primary:hover > span,
-    .el-button--primary:focus,
-    .el-button--primary:focus > span,
-    .el-button--primary:active,
-    .el-button--primary:active > span {
-      color: #fff;
+    :deep(.el-form-item__label-wrap) {
+      flex: 0 0 auto !important;
+      width: 100% !important;
+    }
+
+    :deep(.el-form-item__label) {
+      width: 100% !important;
+      justify-content: flex-start;
+      text-align: left;
+    }
+
+    :deep(.el-form-item__label > span) {
+      display: inline-flex;
+      max-width: 100%;
+      overflow: visible;
+      overflow-wrap: anywhere;
+    }
+
+    :deep(.el-form-item__content) {
+      flex-basis: auto;
+      width: 100%;
+      min-width: 0;
+    }
+
+    :deep(.form-buttons) {
+      padding-inline-start: 0;
+    }
+
+    :deep(.form-group-header) {
+      margin-left: 0;
     }
   }
 }
@@ -693,5 +468,57 @@ export default {
 
 .el-form.mobile.dialog-mode {
   padding: 0;
+}
+
+/*
+ * 设置页即使运行在 desktop 设备上，也可能因抽屉或分栏被压缩。此处按表单自身宽度
+ * 切换布局，避免百分比 label 被挤成逐字换行，并让帮助文案跟随控件完整展示。
+ */
+@container data-form (max-width: 520px) {
+  .form-fields.el-form {
+    :deep(.el-form-item) {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+    }
+
+    :deep(.el-form-item .el-form-item__label-wrap) {
+      flex: 0 0 auto !important;
+      width: 100% !important;
+    }
+
+    :deep(.el-form-item .el-form-item__label) {
+      width: 100% !important;
+      justify-content: flex-start;
+      text-align: left;
+    }
+
+    :deep(.el-form-item .el-form-item__label > span) {
+      display: inline-flex;
+      max-width: 100%;
+      overflow: visible;
+      overflow-wrap: anywhere;
+    }
+
+    :deep(.el-form-item .el-form-item__content) {
+      width: 100%;
+      min-width: 0;
+      flex-basis: auto;
+    }
+
+    :deep(.help-block) {
+      width: 100%;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    :deep(.form-group-header) {
+      margin-left: 0;
+    }
+
+    :deep(.form-buttons) {
+      padding-inline-start: 0;
+    }
+  }
 }
 </style>

@@ -41,15 +41,12 @@ export default {
             formatterArgs: {
               drawer: true,
               permissions: 'tickets.view_ticketflow',
-              getRoute: ({ row }) => {
-                this.$route.params.id = row.id
-                return {
-                  name: 'FlowDetail',
-                  params: {
-                    id: row.id
-                  }
+              getRoute: ({ row }) => ({
+                name: 'FlowDetail',
+                params: {
+                  id: row.id
                 }
-              },
+              }),
               getDrawerTitle: ({ row }) => {
                 return row.type.label
               },

@@ -46,7 +46,7 @@
                 <el-tooltip
                   :content="option.tip"
                   :disabled="!option.tip"
-                  :open-delay="500"
+                  :show-after="500"
                   placement="top"
                 >
                   <div class="dropdown-item__content">
@@ -70,10 +70,10 @@
         class="action-item"
         @click="handleClick(action)"
       >
-        <el-tooltip :content="action.tip" :disabled="!action.tip" placement="top">
+        <el-tooltip :content="action.tip" :disabled="!action.tip" :show-after="500" placement="top">
           <div>
             <Icon v-if="action.icon" :icon="action.icon" class="pre-icon" />
-            <span>
+            <span v-if="action.title">
               {{ action.title }}
             </span>
           </div>
@@ -85,14 +85,12 @@
 
 <script>
 import { toSentenceCase } from '@/utils/common/index'
-import { ArrowDown } from '@element-plus/icons-vue'
 import Icon from '@/components/Widgets/Icon/index.vue'
 
 export default {
   name: 'DataActions',
   components: {
-    Icon,
-    ArrowDown
+    Icon
   },
   props: {
     grouped: {
@@ -246,7 +244,7 @@ $color-drop-menu-border: #e4e7ed;
   }
 
   .action-item {
-    margin-left: 5px;
+    margin-left: 1px;
 
     .pre-icon + span {
       margin-left: 3px;
@@ -279,21 +277,18 @@ $color-drop-menu-border: #e4e7ed;
     --el-button-hover-bg-color: var(--color-primary-light-3, #e8f7f4) !important;
     --el-button-hover-border-color: var(--color-primary-light, #bae8df) !important;
     --el-button-active-text-color: var(--color-primary) !important;
-    --el-button-active-bg-color: var(--color-primary-light-3, #e8f7f4) !important;
+    --el-button-active-bg-color: var(--color-primary-light-10, #e8f7f4) !important;
     --el-button-active-border-color: var(--color-primary-light, #bae8df) !important;
   }
 
   :deep(.action-item.el-button.el-button--default),
   :deep(.action-item.el-dropdown > .el-button.el-button--default),
-  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default),
-  :deep(.action-item.el-button.el-button--primary.is-plain),
-  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain),
-  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain) {
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default) {
     --el-button-hover-text-color: var(--color-primary);
     --el-button-hover-bg-color: var(--color-primary-light-3, #e8f7f4);
     --el-button-hover-border-color: var(--color-primary-light, #bae8df);
     --el-button-active-text-color: var(--color-primary);
-    --el-button-active-bg-color: var(--color-primary-light-3, #e8f7f4);
+    --el-button-active-bg-color: var(--color-primary-light-10, #e8f7f4);
     --el-button-active-border-color: var(--color-primary-light, #bae8df);
 
     &:hover,
@@ -302,6 +297,20 @@ $color-drop-menu-border: #e4e7ed;
       color: var(--color-primary);
       background-color: var(--color-primary-light-3, #e8f7f4) !important;
       border-color: var(--color-primary-light, #bae8df) !important;
+      box-shadow: none !important;
+      outline: none;
+    }
+  }
+
+  :deep(.action-item.el-button.el-button--primary.is-plain),
+  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain),
+  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain) {
+    &:hover,
+    &:focus,
+    &:active {
+      color: #fff;
+      background-color: var(--color-primary) !important;
+      border-color: var(--color-primary) !important;
       box-shadow: none !important;
       outline: none;
     }
@@ -379,7 +388,7 @@ $color-drop-menu-border: #e4e7ed;
   :deep(
     .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:active .el-icon
   ) {
-    color: var(--color-primary);
+    color: #fff;
   }
 
   .action-item.el-dropdown {
@@ -446,41 +455,73 @@ $color-drop-menu-border: #e4e7ed;
   font-size: 13px;
 }
 
-:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon) {
-  display: inline-flex;
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .dropdown-item__content) {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;
-  margin-right: 8px;
-}
-
-:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .dropdown-item__label) {
+  width: 100%;
   min-width: 0;
 }
 
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 0 0 auto;
+  // 固定宽度：无图标的项（如「批量处理」标题）也占满同样的图标列宽，
+  // 保证所有项的文字左边缘对齐，不会因空图标塌成 0 宽而左移。
+  width: 18px;
+  height: 16px;
+  margin-right: 6px;
+  line-height: 1;
+}
+
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon > span) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 18px;
+  height: 16px;
+  line-height: 1;
+}
+
 :global(
-  .action-dropdown.el-dropdown__popper .more-batch-processing.el-dropdown-menu__item--divided
+  .action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon .fa,
+  .action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon .el-icon,
+  .action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon .svg-icon
 ) {
-  position: relative;
-  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 16px;
+  height: 16px;
+  font-size: 14px;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon .el-icon svg) {
+  width: 14px;
+  height: 14px;
+}
+
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .dropdown-item__label) {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  line-height: 1.4;
+}
+
+// 「批量处理(选中 N 项)」是分组标题:文字在上、分割线在其下方,与下方操作项分隔。
+:global(.action-dropdown.el-dropdown__popper .more-batch-processing) {
+  margin-bottom: 4px;
+  padding-bottom: 4px;
   color: var(--color-text-primary);
   cursor: default;
   font-size: 12px;
+  border-bottom: 1px solid #e4e7ed;
 }
 
-:global(
-  .action-dropdown.el-dropdown__popper .more-batch-processing.el-dropdown-menu__item--divided:before
-) {
-  top: -8px;
-  left: 12px;
-  right: 12px;
-  height: 1px;
-  background-color: #e4e7ed;
-}
-
-:global(
-  .action-dropdown.el-dropdown__popper .more-batch-processing.el-dropdown-menu__item--divided:hover
-) {
+:global(.action-dropdown.el-dropdown__popper .more-batch-processing:hover) {
   background-color: transparent;
 }
 </style>

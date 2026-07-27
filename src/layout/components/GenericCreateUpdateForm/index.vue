@@ -4,6 +4,7 @@
       v-bind="$attrs"
       v-if="!loading"
       ref="form"
+      :fields-meta="fieldsMeta"
       :form="form"
       :has-reset="iHasReset"
       :has-save-continue="iHasSaveContinue"
@@ -21,6 +22,7 @@ import { ElLink } from 'element-plus'
 import AutoDataForm from '@/components/Form/AutoDataForm'
 import { getUpdateObjURL } from '@/utils/common/index'
 import { encryptPassword } from '@/utils/secure'
+import { getRuntimeActionMeta } from '@/libs/context/runtime'
 import deepmerge from 'deepmerge'
 
 export default {
@@ -28,6 +30,14 @@ export default {
   components: {
     AutoDataForm
   },
+  emits: [
+    'afterRemoteMeta',
+    'getObjectDone',
+    'performError',
+    'performFinished',
+    'submitSuccess',
+    'update:object'
+  ],
   props: {
     // 创建对象的地址
     url: {
@@ -52,6 +62,14 @@ export default {
     cleanFormValue: {
       type: Function,
       default: (value) => value
+    },
+    fieldsMeta: {
+      type: Object,
+      default: () => ({})
+    },
+    omitUnchangedManyToMany: {
+      type: Boolean,
+      default: true
     },
     // 获取 meta
     afterGetRemoteMeta: {
@@ -270,7 +288,8 @@ export default {
       action: '',
       actionId: '',
       row: {},
-      method: 'post'
+      method: 'post',
+      initialFormValue: {}
     }
   },
   computed: {
@@ -303,18 +322,22 @@ export default {
       this.$log.debug('Final object is: ', values)
       const formValue = Object.assign(this.form, values)
       this.form = this.afterGetFormValue(formValue)
+      this.initialFormValue = _.cloneDeep(this.form)
     } finally {
       this.loading = false
     }
   },
   methods: {
+    async getDrawerMeta() {
+      return getRuntimeActionMeta(this)
+    },
     async setDrawerMeta() {
-      const drawActionMeta = await this.$store.dispatch('common/getDrawerActionMeta')
+      const drawActionMeta = await this.getDrawerMeta()
       if (drawActionMeta && drawActionMeta.action) {
         this.drawer = true
         this.action = drawActionMeta.action
         this.row = drawActionMeta.row
-        this.actionId = this.row?.id
+        this.actionId = drawActionMeta.id || this.row?.id
       }
     },
     setMethod() {
@@ -325,7 +348,7 @@ export default {
       }
       // this.$log.debug('Drawer: ', this.drawer, this.submitMethod, this.action)
       if (!this.drawer && !this.method) {
-        this.method = this.$route.params['id'] ? 'put' : 'post'
+        this.method = this.$context.get('id') ? 'put' : 'post'
       }
       if (this.drawer && !this.submitMethod) {
         if (this.action === 'clone' || this.action === 'create') {
@@ -338,16 +361,14 @@ export default {
     getUpdateId() {
       if (this.actionId && this.action === 'update') {
         return this.actionId
-      } else {
-        return this.$route.params['id']
       }
+      return this.$context.get('id')
     },
     getCloneId() {
       if (this.actionId && this.action === 'clone') {
         return this.actionId
-      } else {
-        return this.$route.query['clone_from']
       }
+      return this.$context.get('clone_from')
     },
     isUpdateMethod() {
       return ['put', 'patch'].indexOf(this.method.toLowerCase()) > -1
@@ -369,16 +390,78 @@ export default {
       return values
     },
     handleAfterRemoteMeta(meta) {
+      let result
       if (this.afterGetRemoteMeta) {
-        return this.afterGetRemoteMeta(meta)
+        result = this.afterGetRemoteMeta(meta)
       }
+      this.$emit('afterRemoteMeta', meta)
+      return result
     },
     handleSubmit(values, formName, addContinue) {
       let handler = this.onSubmit || this.defaultOnSubmit
       handler = handler.bind(this)
       values = this.cleanFormValue(values)
+      const initialValues = formName?.getInitialFormValue?.() || this.initialFormValue
+      values = this.removeUnchangedManyToManyFields(values, initialValues, formName)
       values = this.encryptFields(values)
       return handler(values, formName, addContinue)
+    },
+    normalizeManyToManyValue(value, valueKey = 'id') {
+      const values = Array.isArray(value) ? value : value == null || value === '' ? [] : [value]
+      const normalized = values
+        .map((item) => {
+          if (!item || typeof item !== 'object') {
+            return item
+          }
+          return item[valueKey] ?? item.value ?? item.id
+        })
+        .filter((item) => item !== undefined && item !== null && item !== '')
+        .map((item) => String(item))
+      return [...new Set(normalized)].sort()
+    },
+    getManyToManyFields(formInstance) {
+      const fields = new Map(Object.entries(this.fieldsMeta))
+      const collectFields = (items = []) => {
+        items.forEach((item) => {
+          if (!item || typeof item !== 'object') {
+            return
+          }
+          const componentName = item.component?.name || item.component?.__name
+          if (
+            ['resourceSelect', 'treeResourceSelect'].includes(item.type) ||
+            ['ResourceSelect', 'TreeResourceSelect'].includes(componentName)
+          ) {
+            fields.set(item.id || item.prop, item)
+          }
+          collectFields(item.fields || item.children || [])
+        })
+      }
+      collectFields(formInstance?.innerContent)
+      return fields
+    },
+    removeUnchangedManyToManyFields(values, initialValues = this.initialFormValue, formInstance) {
+      if (!this.omitUnchangedManyToMany || !this.isUpdateMethod() || !values) {
+        return values
+      }
+
+      const payload = { ...values }
+      this.getManyToManyFields(formInstance).forEach((fieldMeta, fieldName) => {
+        const componentName = fieldMeta?.component?.name || fieldMeta?.component?.__name
+        const isRelationSelect =
+          ['resourceSelect', 'treeResourceSelect'].includes(fieldMeta?.type) ||
+          ['ResourceSelect', 'TreeResourceSelect'].includes(componentName)
+        if (!isRelationSelect || !Object.prototype.hasOwnProperty.call(payload, fieldName)) {
+          return
+        }
+
+        const valueKey = fieldMeta?.el?.valueKey || 'id'
+        const initialValue = this.normalizeManyToManyValue(initialValues?.[fieldName], valueKey)
+        const currentValue = this.normalizeManyToManyValue(payload[fieldName], valueKey)
+        if (JSON.stringify(initialValue) === JSON.stringify(currentValue)) {
+          delete payload[fieldName]
+        }
+      })
+      return payload
     },
     defaultOnSubmit(validValues, formName, addContinue) {
       this.isSubmitting = true

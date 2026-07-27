@@ -1,11 +1,6 @@
 <template>
   <el-checkbox-group :model-value="iValue" @update:model-value="handleChange">
-    <el-checkbox
-      v-for="item in options"
-      :key="item.value"
-      :label="item.value"
-      :value="item.value"
-    >
+    <el-checkbox v-for="item in options" :key="item.value" :label="item.value" :value="item.value">
       {{ item.label }}
     </el-checkbox>
   </el-checkbox-group>

@@ -6,19 +6,8 @@
   />
 </template>
 
-<script>
-import {
-  createVNode as createVNodeCompat,
-  isVNode as isVNodeCompat,
-  resolveComponent as resolveComponentCompat
-} from 'vue'
+<script lang="jsx">
 import { GenericListPage } from '@/layout/components'
-function _isSlot(s) {
-  return (
-    typeof s === 'function' ||
-    (Object.prototype.toString.call(s) === '[object Object]' && !isVNodeCompat(s))
-  )
-}
 export default {
   name: 'ConnectMethodListACL',
   components: {
@@ -40,28 +29,14 @@ export default {
             formatter: (row) => {
               const methods = Array.isArray(row.connect_methods) ? row.connect_methods : []
               const colors = ['success', 'warning', 'info', 'danger']
-              return createVNodeCompat(
-                'div',
-                {
-                  style: 'display: flex; flex-wrap: wrap; gap: 4px;'
-                },
-                [
-                  methods.map((item, idx) =>
-                    createVNodeCompat(
-                      resolveComponentCompat('el-tag'),
-                      {
-                        key: idx,
-                        size: 'small',
-                        type: colors[idx % colors.length]
-                      },
-                      _isSlot(item)
-                        ? item
-                        : {
-                            default: () => [item]
-                          }
-                    )
-                  )
-                ]
+              return (
+                <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                  {methods.map((item, idx) => (
+                    <el-tag key={idx} size="small" type={colors[idx % colors.length]}>
+                      {item}
+                    </el-tag>
+                  ))}
+                </div>
               )
             }
           }

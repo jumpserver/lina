@@ -7,40 +7,40 @@
     :show-confirm="false"
     :title="$tc('UpdateSelected')"
     top="1vh"
-    width="70%"
+    min-width="720px"
+    width="35%"
     @update:visible="$emit('update:visible', $event)"
   >
     <el-alert v-if="tips" class="tips" type="info">{{ tips }}</el-alert>
-    <el-row :gutter="20">
-      <el-col :md="4" :sm="24">
-        <div class="select-prop-label">
-          <label>{{ selectPropertiesLabel }}</label>
-        </div>
-      </el-col>
-      <el-col :md="18" :sm="24">
-        <el-checkbox-group
-          :model-value="checkedFields"
-          @change="handleCheckedFieldsChange"
-          @update:model-value="checkedFields = $event"
+    <div class="select-prop">
+      <span class="select-prop__label">{{ selectPropertiesLabel }}</span>
+      <el-checkbox-group
+        class="select-prop__group"
+        :model-value="checkedFields"
+        @change="handleCheckedFieldsChange"
+        @update:model-value="checkedFields = $event"
+      >
+        <el-checkbox
+          v-for="(value, name) in iFormSetting.fieldsMeta"
+          :key="name"
+          :disabled="value.disabled"
+          :value="name"
         >
-          <el-checkbox
-            v-for="(value, name) in iFormSetting.fieldsMeta"
-            :key="name"
-            :checked="true"
-            :disabled="value.disabled"
-            :label="name"
-          >
-            {{ value.label }}
-          </el-checkbox>
-        </el-checkbox-group>
-      </el-col>
-    </el-row>
+          {{ value.label || name }}
+        </el-checkbox>
+      </el-checkbox-group>
+    </div>
     <el-row class="el-row-divider">
       <el-divider />
     </el-row>
     <el-row>
       <el-col :span="24">
-        <GenericCreateUpdateForm v-bind="iFormSetting" :key="internalKey" />
+        <GenericCreateUpdateForm
+          v-bind="iFormSetting"
+          :key="internalKey"
+          label-width="90px"
+          @after-remote-meta="handleAfterRemoteMeta"
+        />
       </el-col>
     </el-row>
   </Dialog>
@@ -80,20 +80,55 @@ export default {
       internalKey: 0,
       selectPropertiesLabel: this.$t('SelectProperties'),
       checkedFields: [],
-      iFormSetting: {}
+      iFormSetting: {},
+      originalHidden: {}
     }
   },
-  mounted() {
-    const defaultFormSetting = this.getDefaultFormSetting()
-    this.iFormSetting = Object.assign({}, defaultFormSetting, this.formSetting)
+  watch: {
+    visible: {
+      immediate: true,
+      handler(visible, oldVisible) {
+        if (visible && !oldVisible) {
+          this.initializeFormSetting()
+        }
+      }
+    }
   },
   methods: {
+    initializeFormSetting() {
+      const defaultFormSetting = this.getDefaultFormSetting()
+      const sourceFieldsMeta = this.formSetting.fieldsMeta || {}
+      const fieldsMeta = {}
+      const originalHidden = {}
+
+      for (const [name, meta] of Object.entries(sourceFieldsMeta)) {
+        fieldsMeta[name] = { ...meta }
+        originalHidden[name] = meta.hidden
+      }
+
+      this.originalHidden = originalHidden
+      this.checkedFields = Object.keys(fieldsMeta)
+      this.iFormSetting = {
+        ...defaultFormSetting,
+        ...this.formSetting,
+        fieldsMeta
+      }
+      this.internalKey++
+    },
+    handleAfterRemoteMeta(meta) {
+      for (const [name, fieldMeta] of Object.entries(this.iFormSetting.fieldsMeta)) {
+        const remoteLabel = meta?.[name]?.label
+        if (remoteLabel) {
+          fieldMeta.label = remoteLabel
+        }
+      }
+    },
     handleCheckedFieldsChange(values) {
       for (const field of Object.keys(this.iFormSetting.fieldsMeta)) {
         if (values.indexOf(field) === -1) {
           this.iFormSetting.fieldsMeta[field].hidden = () => true
         } else {
-          this.iFormSetting.fieldsMeta[field].hidden = () => false
+          this.iFormSetting.fieldsMeta[field].hidden = this.originalHidden[field] || (() => false)
         }
       }
       this.internalKey++
@@ -130,10 +165,10 @@ export default {
             .then((res) => {
               vm.$emit('update')
               this.$message.success(msg)
-              this.$emit('update:visible', false)
+              vm.$emit('update:visible', false)
             })
             .catch((error) => {
-              this.$emit('submitError', error)
+              vm.$emit('submitError', error)
               const response = error.response
               const data = response.data
               // 不要逐个设置字段的 attrs.error 或改动 fields 引用。
@@ -156,12 +191,33 @@ export default {
 
 <style lang="scss" scoped>
 // .el-row-divider {
-  // margin-bottom: 20px;
+// margin-bottom: 20px;
 // }
 
-.select-prop-label {
-  float: right;
-  padding-right: 30px;
+.select-prop {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.select-prop__label {
+  flex: 0 0 auto;
+  line-height: 30px;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+.select-prop__group {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 24px;
+
+  :deep(.el-checkbox) {
+    height: 30px;
+    margin: 0;
+  }
 }
 
 .tips {

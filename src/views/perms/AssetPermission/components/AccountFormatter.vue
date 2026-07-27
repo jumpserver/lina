@@ -1,10 +1,10 @@
 <template>
   <el-form class="account-content" @submit.prevent>
     <el-form-item>
-      <el-radio-group v-model="realRadioSelected" @input="handleRadioChanged">
+      <el-radio-group v-model="realRadioSelected" @change="handleRadioChanged">
         <el-radio v-for="i in iRealChoices" :key="i.label" :disabled="i.disabled" :value="i.value">
           {{ i.label }}
-          <el-tooltip v-if="i.tip" :content="i.tip" :open-delay="500" placement="top">
+          <el-tooltip v-if="i.tip" :content="i.tip" :show-after="500" placement="top">
             <i class="fa fa-question-circle-o" />
           </el-tooltip>
         </el-radio>
@@ -16,29 +16,25 @@
           v-model="specAccountsInput"
           :autocomplete="autocomplete"
           :tag-type="getTagType"
-          @change="handleTagChange"
+          @change="handleSpecAccountsChange"
         />
         <span v-if="showAddTemplate">
           <el-button size="small" type="primary" @click="showTemplateDialog = true">
             {{ $t('TemplateAdd') }}
           </el-button>
           <span class="help-block">
-            {{ addTemplateHelpText }}
+            {{ $t(addTemplateHelpText) }}
           </span>
         </span>
       </div>
 
       <div v-if="showExcludeZone" class="not-accounts spec-zone">
         <!-- <div class="group-title">{{ $t('ExcludeAccount') }}</div> -->
-        <TagInput v-model="excludeAccountsInput" @change="handleTagChange" />
+        <TagInput v-model="excludeAccountsInput" @change="handleExcludeAccountsChange" />
       </div>
 
       <div v-if="enableVirtualAccount" class="spec-zone virtual-choices">
-        <el-checkbox
-          :model-value="virtualChecked"
-          @change="handleVirtualChecked"
-          @update:model-value="virtualChecked = $event"
-        >
+        <el-checkbox v-model="virtualChecked" @change="handleVirtualChecked">
           {{ virtualAccount.label }}
         </el-checkbox>
         <el-select
@@ -46,11 +42,11 @@
           v-model="virtualSelected"
           :multiple="true"
           :placeholder="$t('SelectVirtualAccount')"
-          @change="handleVirtualChecked"
+          @change="handleVirtualSelectionChanged"
         >
           <el-option v-for="i in virtualAccounts" :key="i.label" :label="i.label" :value="i.value">
             {{ i.label }}
-            <el-tooltip :content="i.tip" :open-delay="500" placement="top">
+            <el-tooltip :content="i.tip" :show-after="500" placement="top">
               <i class="fa fa-question-circle-o" />
             </el-tooltip>
           </el-option>
@@ -88,16 +84,41 @@ import {
 import ListTable from '@/components/Table/ListTable'
 import Dialog from '@/components/Dialog'
 
+function normalizeResourceIds(values, objectKeys = ['id', 'pk', 'value']) {
+  if (!Array.isArray(values)) {
+    return []
+  }
+  return values
+    .map((item) => {
+      if (!item || typeof item !== 'object') {
+        return item
+      }
+      for (const key of objectKeys) {
+        const value = item[key]
+        if (value !== undefined && value !== null && value !== '') {
+          return value
+        }
+      }
+      return undefined
+    })
+    .filter((item) => item !== undefined && item !== null && item !== '')
+}
+
 export default {
   components: {
     TagInput,
     ListTable,
     Dialog
   },
+  emits: ['input', 'change', 'update:modelValue', 'update:model-value'],
   props: {
     value: {
       type: [Array, String],
       default: () => []
+    },
+    modelValue: {
+      type: [Array, String],
+      default: undefined
     },
     assets: {
       type: [Array],
@@ -148,6 +169,7 @@ export default {
       virtualChecked: false,
       virtualSelected: [],
       output: [],
+      pendingValueSync: null,
       excludeAccountsInput: [],
       virtualAccounts: virtualAccounts,
       virtualAccountsNames: [ManualAccount, SameAccount, AnonymousAccount],
@@ -166,10 +188,8 @@ export default {
       autocomplete: (query, cb) => {
         const data = {
           username: query,
-          assets: this.assets.slice(0, 20),
-          nodes: this.nodes.slice(0, 20).map((item) => {
-            return typeof item === 'object' ? item.pk : item
-          })
+          assets: normalizeResourceIds(this.assets).slice(0, 20),
+          nodes: normalizeResourceIds(this.nodes, ['pk', 'id', 'value']).slice(0, 20)
         }
         this.$axios
           .post('/api/v1/accounts/accounts/username-suggestions/', data, {
@@ -177,8 +197,9 @@ export default {
           })
           .then((res) => {
             if (!res) res = []
+            const currentValue = vm.normalizeAccountValue(vm.currentValue)
             const data = res
-              .filter((item) => vm.value.indexOf(item) === -1)
+              .filter((item) => currentValue.indexOf(item) === -1)
               .map((v) => ({ value: v, label: v }))
             cb(data)
           })
@@ -186,6 +207,9 @@ export default {
     }
   },
   computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value
+    },
     virtualAccount() {
       return virtualAccount
     },
@@ -203,16 +227,25 @@ export default {
     }
   },
   watch: {
+    currentValue: {
+      handler(value) {
+        const normalizedValue = this.normalizeAccountValue(value)
+        if (this.isSameAccountValue(normalizedValue, this.pendingValueSync)) {
+          return
+        }
+        this.pendingValueSync = null
+        this.initDefaultChoice()
+      },
+      immediate: true,
+      deep: true
+    },
     realRadioSelected: {
       handler(val) {
         this.showSpecZone = val === this.SPEC
         this.showExcludeZone = val === this.EXCLUDE
       },
-      sync: true
+      immediate: true
     }
-  },
-  mounted() {
-    this.initDefaultChoice()
   },
   methods: {
     getVirtualChoices(val) {
@@ -222,6 +255,15 @@ export default {
         })
         .map((i) => i.value)
     },
+    normalizeAccountValue(value) {
+      if (Array.isArray(value)) return value
+      if (!value) return []
+      return [value]
+    },
+    isSameAccountValue(value, expected) {
+      if (!Array.isArray(expected) || value.length !== expected.length) return false
+      return value.every((item, index) => item === expected[index])
+    },
     getExcludeChoices(val) {
       return val.filter((i) => i.startsWith('!')).map((i) => i.substring(1))
     },
@@ -229,10 +271,14 @@ export default {
       return val.filter((i) => !i.startsWith('@') && !i.startsWith('!'))
     },
     initDefaultChoice() {
-      const value = this.value || []
+      const value = this.normalizeAccountValue(this.currentValue)
       const specAccountsInput = this.getSpecValues(value)
-
       const excludeAccountsInput = this.getExcludeChoices(value)
+
+      // 每次都完整同步外部值，避免同一组件切换记录时保留上一条记录的账号。
+      this.specAccountsInput = specAccountsInput
+      this.excludeAccountsInput = excludeAccountsInput
+
       // 先清理 radio
       const isAll = value.includes(this.ALL)
 
@@ -240,21 +286,16 @@ export default {
         this.realRadioSelected = this.ALL
       } else if (specAccountsInput.length > 0 || value.includes(this.SPEC)) {
         this.realRadioSelected = this.SPEC
-        this.specAccountsInput = specAccountsInput
-      } else if (excludeAccountsInput.length > 0) {
+      } else if (excludeAccountsInput.length > 0 || value.includes(this.EXCLUDE)) {
         this.realRadioSelected = this.EXCLUDE
-        this.excludeAccountsInput = excludeAccountsInput
-        this.showExcludeZone = true
       } else {
         this.realRadioSelected = NoneAccount
       }
 
       // 清理虚拟账号
-      const virtualChoices = this.getVirtualChoices(this.value)
-      if (virtualChoices.length > 0) {
-        this.virtualChecked = true
-        this.virtualSelected = virtualChoices
-      }
+      const virtualChoices = this.getVirtualChoices(value)
+      this.virtualChecked = virtualChoices.length > 0
+      this.virtualSelected = virtualChoices
     },
     handleAccountTemplateCancel() {
       this.showTemplateDialog = false
@@ -271,13 +312,22 @@ export default {
         this.outputValue()
       }, 100)
     },
-    handleVirtualChecked(evt, checked) {
+    handleVirtualChecked(checked) {
+      this.virtualChecked = Boolean(checked)
+      this.outputValue()
+    },
+    handleVirtualSelectionChanged() {
       this.outputValue()
     },
     handleRadioChanged(value) {
       this.outputValue()
     },
-    handleTagChange() {
+    handleSpecAccountsChange(value) {
+      this.specAccountsInput = this.normalizeAccountValue(value)
+      this.outputValue()
+    },
+    handleExcludeAccountsChange(value) {
+      this.excludeAccountsInput = this.normalizeAccountValue(value)
       this.outputValue()
     },
     outputValue() {
@@ -301,8 +351,19 @@ export default {
 
       this.$log.debug('choicesSelected', choicesSelected)
 
+      // 空的“排除账号”与“无”都会输出 []。记录本次内部输出，避免父表单将
+      // 同一个值同步回来时把当前 radio 误判成“无”；外部真正变更时仍会完整重置。
+      const pendingValueSync = choicesSelected.slice()
+      this.pendingValueSync = pendingValueSync
+      this.$emit('update:modelValue', choicesSelected)
+      this.$emit('update:model-value', choicesSelected)
       this.$emit('input', choicesSelected)
       this.$emit('change', choicesSelected)
+      this.$nextTick(() => {
+        if (this.pendingValueSync === pendingValueSync) {
+          this.pendingValueSync = null
+        }
+      })
     }
   }
 }
@@ -346,18 +407,17 @@ export default {
 
 .virtual-choices {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
 
   :deep(.el-checkbox) {
+    align-self: flex-start;
     margin-right: 0;
-    flex: 0 0 auto;
   }
 
   :deep(.el-select) {
-    flex: 1 1 240px;
-    width: auto;
+    width: 100%;
     min-width: 0;
     max-width: 100%;
   }

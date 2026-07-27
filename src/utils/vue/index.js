@@ -104,7 +104,7 @@ export function getRouteUrl(route, router) {
   if (!r) {
     return
   }
-  return r.path || r.href
+  return r.href || r.path
 }
 
 function normalizePath(path) {

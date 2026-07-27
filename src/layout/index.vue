@@ -16,7 +16,8 @@
 </template>
 
 <script>
-import { AppMain, NavHeader } from './components'
+import AppMain from './components/AppMain.vue'
+import NavHeader from './components/NavHeader/index.vue'
 import NavLeft from './components/NavLeft/index.vue'
 import { useResizeHandler } from '@/utils/vue/useResizeHandler'
 

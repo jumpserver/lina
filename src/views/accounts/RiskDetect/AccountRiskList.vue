@@ -20,8 +20,7 @@
   </div>
 </template>
 
-<script>
-import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
+<script lang="jsx">
 import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
 import RiskHandleFormatter from './RiskHandlerFormatter/index.vue'
 import BatchResolveDialog from '@/views/accounts/RiskDetect/RiskHandlerFormatter/BatchResolveDialog.vue'
@@ -50,6 +49,7 @@ export default {
         showSearch: true,
         showAssets: true,
         notShowBuiltinTree: true,
+        selectSyncToRoute: false,
         url: '/api/v1/accounts/account-risks/',
         nodeUrl: '/api/v1/assets/nodes/',
         // ?assets=0不显示资产. =1显示资产
@@ -119,16 +119,10 @@ export default {
           },
           risk: {
             formatter: (row) => {
-              return createVNodeCompat(
-                resolveComponentCompat('el-tag'),
-                {
-                  size: 'small',
-                  type: 'danger',
-                  effect: 'plain'
-                },
-                {
-                  default: () => [row.risk.label]
-                }
+              return (
+                <el-tag size="small" type="danger" effect="plain">
+                  {row.risk.label}
+                </el-tag>
               )
             }
           },

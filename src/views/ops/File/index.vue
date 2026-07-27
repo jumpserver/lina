@@ -14,45 +14,42 @@
       <div class="select-assets">
         <SelectJobAssetDialog @change="handleSelectAssets" />
       </div>
-      <div class="transition-box" style="width: calc(100% - 17px)">
-        <div class="upload_input">
+      <div class="transition-box">
+        <div class="transfer-toolbar">
           <el-button
             :disabled="runButton.disabled"
+            :loading="running"
             :type="runButton.el && runButton.el.type"
-            size="small"
-            style="display: inline-block; padding: 6px 10px"
             @click="runButton.callback()"
           >
-            <i :class="runButton.icon" style="margin-right: 4px" />{{ runButton.name }}
+            <el-icon v-if="!running"><VideoPlay /></el-icon>
+            <span>{{ runButton.name }}</span>
           </el-button>
-        </div>
-        <span style="color: red">*</span>
-        <div class="upload_input">{{ $t('Account') }}:</div>
-        <div class="upload_input">
+
           <el-autocomplete
             v-model="runAsInput.value"
             :fetch-suggestions="runAsInput.el.query"
             :placeholder="runAsInput.placeholder"
-            size="small"
-            style="display: inline-block; margin: 0 2px"
+            class="toolbar-field account-field"
             @change="runAsInput.callback(runAsInput.value)"
             @select="runAsInput.callback(runAsInput.value)"
-          />
-        </div>
-        <div class="upload_input">{{ $t('UploadDir') }}:</div>
-        <div class="upload_input">
+          >
+            <template #prepend> <span class="required-mark">*</span>{{ $t('Account') }} </template>
+          </el-autocomplete>
+
           <el-input
             v-if="dstPathInput.type === 'input'"
             v-model="dstPath"
             :placeholder="dstPathInput.placeholder"
-            size="small"
+            class="toolbar-field dstpath-field"
             @change="dstPathInput.callback(dstPathInput.value)"
           >
             <template #prepend>/tmp/</template>
           </el-input>
         </div>
-        <div class="file-uploader">
-          <el-card>
+
+        <IBox title="selectFiles" class="file-uploader">
+          <template #header>
             <div class="file-uploader-header">
               <span>{{ $t('selectFiles', { number: uploadFileList.length }) }}</span>
               <el-tooltip
@@ -60,9 +57,12 @@
                 :content="$t('ClearSelection')"
                 placement="top"
               >
-                <el-icon @click="clearAllFiles"><Delete /></el-icon>
+                <el-icon class="clear-icon" @click="clearAllFiles"><Delete /></el-icon>
               </el-tooltip>
             </div>
+          </template>
+
+          <div class="uploader-body">
             <el-upload
               v-if="ready"
               ref="upload"
@@ -73,25 +73,19 @@
               drag
               multiple
             >
-              <el-icon><Upload /></el-icon>
-              <div class="el-upload__text" style="margin-bottom: 10px; padding: 0 5px 0 5px">
-                {{ $t('DragUploadFileInfo') }}
-              </div>
-              <span>
+              <el-icon class="uploader-icon"><Upload /></el-icon>
+              <div class="el-upload__text">{{ $t('DragUploadFileInfo') }}</div>
+              <div class="uploader-limit">
                 {{ $t('UploadFileLthHelpText', { limit: sizeLimitMb }) }}
-              </span>
+              </div>
               <template #file="{ file }">
-                <div>
-                  <li class="el-upload-list__item is-ready" tabindex="0">
-                    <a :style="sameFileStyle(file)" class="el-upload-list__item-name">
-                      <el-icon><Document /></el-icon>{{ file.name }}
-                      <i style="color: #1ab394; float: right; font-weight: normal">
-                        {{ formatFileSize(file.size) }}
-                        <el-icon class="remove-icon" @click="removeFile(file)"><Close /></el-icon>
-                      </i>
-                    </a>
-                  </li>
-                </div>
+                <a :style="sameFileStyle(file)" class="el-upload-list__item-name">
+                  <el-icon><Document /></el-icon>{{ file.name }}
+                  <span class="file-size">
+                    {{ formatFileSize(file.size) }}
+                    <el-icon class="remove-icon" @click="removeFile(file)"><Close /></el-icon>
+                  </span>
+                </a>
               </template>
               <template #tip>
                 <div v-if="uploadFileList.length === 0" class="empty-file-tip">
@@ -99,42 +93,47 @@
                 </div>
               </template>
             </el-upload>
-            <el-progress v-if="showProgress" :percentage="progressLength" />
-            <div v-if="showProgress" class="status-info">
+          </div>
+
+          <template v-if="showProgress">
+            <el-progress :percentage="progressLength" />
+            <div class="status-info">
               <span class="left">{{ speedText }}</span>
               <span class="right">{{ loadedSize }} / {{ totalSize }}</span>
             </div>
-          </el-card>
-        </div>
-        <div style="margin-bottom: 5px; font-weight: bold; display: inline-block">
-          {{ $tc('Output') }}:
-        </div>
-        <span v-if="executionInfo.status && summary && !showProgress" style="float: right">
-          <span>
-            <span
-              ><b>{{ $tc('Status') }}: </b></span
-            >
-            <span v-if="executionInfo.status === 'timeout'" class="status_warning">{{
-              $tc('Timeout')
-            }}</span>
-            <span v-else>
-              <span class="status_success">{{ $tc('Success') + ': ' + summary.success }}</span>
-              <span class="status_warning">{{ $tc('Skip') + ': ' + summary.skip }}</span>
-              <span class="status_danger">{{ $tc('Failed') + ': ' + summary.failed }}</span>
-            </span>
-          </span>
-          <span>
-            <span
-              ><b>{{ $tc('TimeDelta') }}: </b></span
-            >
-            <span>{{ executionInfo.timeCost }}</span>
-          </span>
-        </span>
-        <div class="output">
-          <Term ref="xterm" :show-tool-bar="true" :xterm-config="xtermConfig" />
-          <div style="height: 2px" />
-        </div>
-        <div style="display: flex; margin-top: 10px; justify-content: space-between" />
+          </template>
+        </IBox>
+
+        <IBox title="Output" class="output-box">
+          <template #header>
+            <div class="output-header">
+              <span class="output-title">{{ $tc('Output') }}</span>
+              <span v-if="executionInfo.status && summary && !showProgress" class="output-summary">
+                <span class="summary-group">
+                  <b>{{ $tc('Status') }}: </b>
+                  <span v-if="executionInfo.status === 'timeout'" class="status_warning">
+                    {{ $tc('Timeout') }}
+                  </span>
+                  <span v-else>
+                    <span class="status_success">{{
+                      $tc('Success') + ': ' + summary.success
+                    }}</span>
+                    <span class="status_warning">{{ $tc('Skip') + ': ' + summary.skip }}</span>
+                    <span class="status_danger">{{ $tc('Failed') + ': ' + summary.failed }}</span>
+                  </span>
+                </span>
+                <span class="summary-group">
+                  <b>{{ $tc('TimeDelta') }}: </b>
+                  <span>{{ executionInfo.timeCost }}</span>
+                </span>
+              </span>
+            </div>
+          </template>
+
+          <div class="output">
+            <Term ref="xterm" :show-tool-bar="true" :xterm-config="xtermConfig" />
+          </div>
+        </IBox>
       </div>
     </div>
   </Page>
@@ -143,6 +142,7 @@
 <script>
 import Term from '@/components/Widgets/Term'
 import Page from '@/layout/components/Page'
+import IBox from '@/components/Common/IBox/index.vue'
 import { createJob, getTaskDetail, JobUploadFile } from '@/api/ops'
 import { formatFileSize } from '@/utils/common/index'
 import store from '@/store'
@@ -153,11 +153,13 @@ export default {
   components: {
     SelectJobAssetDialog,
     Page,
+    IBox,
     Term
   },
   data() {
     return {
       ready: true,
+      running: false,
       currentStatus: '',
       currentTaskId: '',
       executionInfo: {
@@ -172,7 +174,6 @@ export default {
         type: 'button',
         name: this.$t('Transfer'),
         align: 'left',
-        icon: 'fa fa-play',
         disabled: this.$store.getters.currentOrgIsRoot || !this.$hasPerm('ops.add_job'),
         el: {
           type: 'primary'
@@ -313,12 +314,10 @@ export default {
       this.ws.send(msg)
     },
     setButtonLoading() {
-      this.runButton.disabled = true
-      this.runButton.icon = 'fa fa-spinner fa-spin'
+      this.running = true
     },
     resetButtonState() {
-      this.runButton.disabled = false
-      this.runButton.icon = 'fa fa-play'
+      this.running = false
     },
     setCostTimeInterval() {
       this.setButtonLoading()
@@ -420,49 +419,51 @@ export default {
       if (this.chdir) {
         data.chdir = this.chdir
       }
-      createJob(data).then((res) => {
-        this.executionInfo.timeCost = 0
-        this.speedText = ''
-        const form = new FormData()
-        const start = Date.now()
-        for (const file of this.uploadFileList) {
-          form.append('files', file.raw)
-          form.append('job_id', res.id)
-        }
-        this.upload_interval = setInterval(() => {
-          if (this.progressLength >= 99) {
-            clearInterval(this.upload_interval)
-            return
+      createJob(data)
+        .then((res) => {
+          this.executionInfo.timeCost = 0
+          this.speedText = ''
+          const form = new FormData()
+          const start = Date.now()
+          for (const file of this.uploadFileList) {
+            form.append('files', file.raw)
+            form.append('job_id', res.id)
           }
-        }, 100)
-        JobUploadFile(form, {
-          onUploadProgress: (e) => {
-            if (!e.total) return
-            const percent = Math.floor((e.loaded / e.total) * 100)
-            this.progressLength = Math.min(percent, 100)
-            this.loadedSize = formatFileSize(e.loaded)
-            this.totalSize = formatFileSize(e.total)
-            const elapsedSec = (Date.now() - start) / 1000
-            if (elapsedSec > 0) {
-              const speed = e.loaded / elapsedSec
-              this.speedText = this.formatSpeed(speed)
+          this.upload_interval = setInterval(() => {
+            if (this.progressLength >= 99) {
+              clearInterval(this.upload_interval)
+              return
             }
-          }
+          }, 100)
+          JobUploadFile(form, {
+            onUploadProgress: (e) => {
+              if (!e.total) return
+              const percent = Math.floor((e.loaded / e.total) * 100)
+              this.progressLength = Math.min(percent, 100)
+              this.loadedSize = formatFileSize(e.loaded)
+              this.totalSize = formatFileSize(e.total)
+              const elapsedSec = (Date.now() - start) / 1000
+              if (elapsedSec > 0) {
+                const speed = e.loaded / elapsedSec
+                this.speedText = this.formatSpeed(speed)
+              }
+            }
+          })
+            .then((res) => {
+              this.showProgress = true
+              this.executionInfo.status = 'running'
+              this.currentTaskId = res.task_id
+              this.xtermConfig = { taskId: this.currentTaskId, type: 'shortcut_cmd' }
+              this.setCostTimeInterval()
+              this.writeExecutionOutput()
+            })
+            .catch(() => {
+              this.execute_stop()
+            })
         })
-          .then((res) => {
-            this.showProgress = true
-            this.executionInfo.status = 'running'
-            this.currentTaskId = res.task_id
-            this.xtermConfig = { taskId: this.currentTaskId, type: 'shortcut_cmd' }
-            this.setCostTimeInterval()
-            this.writeExecutionOutput()
-          })
-          .catch(() => {
-            this.execute_stop()
-          })
-      }).catch(() => {
-        this.execute_stop()
-      })
+        .catch(() => {
+          this.execute_stop()
+        })
     },
     execute_stop() {
       this.progressLength = 0
@@ -491,33 +492,41 @@ export default {
 }
 
 .transition-box {
+  flex: 1;
+  min-width: 0;
   margin-left: 30px;
 }
 
-.mini-button {
-  width: 12px;
-  float: right;
-  text-align: center;
-  padding: 5px 0;
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
-  color: #ffffff;
-  border-radius: 2px;
-}
+/* 顶部工具条：传输按钮 + 账号 + 上传目录 */
+.transfer-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
 
-.mini {
-  margin-right: 5px;
-  width: 12px !important;
-}
+  // el-autocomplete 根节点是 ElTooltip(多根 fragment),拿不到 scoped data-v,
+  // 普通 scoped class 选不中,需用 :deep 才能定宽;el-input 单根节点则两者皆可。
+  // 统一用 :deep 保证两个输入框宽度一致生效。
+  :deep(.account-field) {
+    height: 30px;
+    width: 280px;
+  }
 
-.vue-codemirror-wrap :deep(.CodeMirror) {
-  width: 600px;
-  height: 100px;
-  border: 1px solid #eee;
-}
+  :deep(.dstpath-field) {
+    height: 30px;
+    width: 360px;
+  }
 
-.upload_input :deep(.el-input-group__prepend) {
-  padding: 0 10px;
+  // 让 prepend 里的必填星号与文字对齐
+  .required-mark {
+    color: var(--color-danger);
+    margin-right: 2px;
+  }
+
+  :deep(.el-button) {
+    height: 30px;
+  }
 }
 
 .status_success {
@@ -532,92 +541,154 @@ export default {
   color: var(--color-danger);
 }
 
-.upload_input {
-  display: inline-block;
-  margin: 0 2px;
-}
-
 .file-uploader {
-  margin: 10px 0;
-  min-width: 925px;
+  margin-bottom: 16px;
 
   .file-uploader-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 5px;
+    width: 100%;
+
+    .clear-icon {
+      cursor: pointer;
+      color: var(--color-text-secondary);
+
+      &:hover {
+        color: var(--color-danger);
+      }
+    }
   }
 
-  :deep(.el-card__body) {
-    > div:nth-child(2) {
-      //不要影响到 el-progress
+  // 拖拽区（左）与文件列表（右）并排
+  .uploader-body {
+    position: relative;
+
+    // el-upload 根节点是无 class 的 div，仅它直接包含 .el-upload-list
+    :deep(div:has(> .el-upload-list)) {
       display: flex;
-      position: relative;
+      gap: 16px;
+      width: 100%;
+    }
 
-      .el-upload > .el-upload-dragger {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
+    :deep(.el-upload) {
+      flex: 0 0 auto;
+    }
 
-      .empty-file-tip {
-        position: absolute;
-        right: calc(50% - 230px);
-        top: 50%;
-        font-size: 18px;
-        color: #c5c9cc;
-        transform: translateY(-50%);
-      }
+    :deep(.el-upload-dragger) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 260px;
+      height: 180px;
+      padding: 0 16px;
+    }
 
-      .el-upload-list {
-        margin-left: 20px;
-        padding: 0 10px 0 10px;
-        list-style: none;
-        width: 100%;
-        height: 180px;
-        border: 1px dashed #d9d9d9;
-        overflow-y: auto;
-        font-weight: 500;
+    .uploader-icon {
+      font-size: 28px;
+      color: var(--color-text-secondary);
+      margin-bottom: 8px;
+    }
 
-        .el-upload-list__item {
-          &:first-child {
-            margin-top: 5px;
+    :deep(.el-upload__text) {
+      margin-bottom: 6px;
+    }
+
+    .uploader-limit {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+    }
+
+    :deep(.el-upload-list) {
+      flex: 1;
+      min-width: 0;
+      height: 180px;
+      margin: 0;
+      padding: 8px 10px;
+      border: 1px dashed var(--color-border);
+      border-radius: 4px;
+      overflow-y: auto;
+      font-weight: 500;
+
+      .el-upload-list__item {
+        margin-top: 0;
+
+        .el-upload-list__item-name {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+
+          .file-size {
+            margin-left: auto;
+            color: var(--color-primary);
+            font-weight: normal;
           }
 
-          .el-upload-list__item-name {
-            .remove-icon {
-              position: relative;
-              top: 0;
-              left: 10px;
-            }
+          .remove-icon {
+            margin-left: 8px;
+            cursor: pointer;
+            color: var(--color-danger);
           }
         }
       }
     }
 
-    .el-progress-bar {
-      padding-right: 0;
+    .empty-file-tip {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: calc(260px + 16px);
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--color-disabled);
+      pointer-events: none;
     }
+  }
 
-    .el-progress__text {
-      display: none;
-    }
+  :deep(.el-progress-bar) {
+    padding-right: 0;
+  }
+
+  :deep(.el-progress__text) {
+    display: none;
+  }
+
+  .status-info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 6px;
   }
 }
 
-.output {
-  min-width: 925px;
-  padding: 0 20px 20px;
-  background: #fff;
-}
+.output-box {
+  .output-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 
-.output :deep(#terminal) {
-  border: dashed 1px #d9d9d9;
-}
+    .output-title {
+      font-weight: 500;
+    }
 
-.status-info {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
+    .output-summary {
+      display: inline-flex;
+      gap: 16px;
+      font-weight: normal;
+    }
+  }
+
+  .output {
+    width: 100%;
+  }
+
+  .output :deep(#terminal) {
+    border: dashed 1px var(--color-border);
+  }
 }
 </style>

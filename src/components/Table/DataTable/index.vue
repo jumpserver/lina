@@ -5,13 +5,14 @@
     :class="rootClass"
     :style="rootStyle"
     @size-change="handleSizeChange"
-    @update="onUpdate"
+    @data-update="onUpdate"
     v-on="iListeners"
   />
 </template>
 
 <script>
-import { newURL, ObjectLocalStorage } from '@/utils/common/index'
+import { newURL } from '@/utils/common/index'
+import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
 import { omitVueListeners, pickVueListeners } from '@/utils/vue'
 import { mapGetters } from 'vuex'
 import { default as ElDatableTable } from './compenents/el-data-table'
@@ -161,6 +162,9 @@ export default {
       return this.$refs.table.toggleRowSelection(row, isSelected)
     },
     onUpdate(data, response) {
+      if (!Array.isArray(data)) {
+        return
+      }
       const theRowDefaultIsSelected = this.tableConfig.theRowDefaultIsSelected
       if (!theRowDefaultIsSelected || typeof theRowDefaultIsSelected !== 'function') {
         return

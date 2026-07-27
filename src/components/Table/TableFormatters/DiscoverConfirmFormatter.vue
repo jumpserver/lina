@@ -18,7 +18,7 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-      <el-tooltip :content="$tc('Ignore')" :open-delay="400">
+      <el-tooltip :content="$tc('Ignore')" :show-after="400">
         <el-button
           :disabled="!$hasPerm('accounts.change_accountrisk')"
           class="ignore action"
@@ -32,7 +32,7 @@
         </el-button>
       </el-tooltip>
     </span>
-    <el-tooltip v-else :content="iLabel" :open-delay="400" class="platform-status">
+    <el-tooltip v-else :content="iLabel" :show-after="400" class="platform-status">
       <span v-if="iValue === statusMap.confirmed">
         <i class="fa fa-check color-primary" />
       </span>

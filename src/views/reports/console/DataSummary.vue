@@ -31,7 +31,6 @@ export default {
         subIcon: 'broken-line',
         color: '#FFD260',
         chartTitle: this.$t('LoginUserToday'),
-        hideRingLabels: true,
         data: [],
         route: { name: 'UserList' }
       },
@@ -43,7 +42,6 @@ export default {
         subIcon: 'broken-line',
         color: themeColor,
         chartTitle: this.$t('LoginAssetToday'),
-        hideRingLabels: true,
         data: [],
         route: { name: 'AssetList' }
       }
@@ -77,10 +75,10 @@ export default {
         { name: this.$t('ActiveUser'), value: userActive.toString() },
         { name: this.$t('InActiveUser'), value: userTotal.toString() }
       ]
-      this.userConfig['data'] = users
-      this.userConfig['total'] = data.total_count_users
-      this.userConfig['active'] = data.total_count_login_users
-      this.userConfig['weekAdd'] = data.total_count_users_this_week
+      this.userConfig.data = users
+      this.userConfig.total = data.total_count_users
+      this.userConfig.active = data.total_count_login_users
+      this.userConfig.weekAdd = data.total_count_users_this_week
 
       const ActiveAssetCountDecimal = data.total_count_today_active_assets
         ? new Decimal(data.total_count_today_active_assets)
@@ -97,10 +95,10 @@ export default {
         { name: this.$t('ActiveAsset'), value: assetActive.toString() },
         { name: this.$t('InActiveAsset'), value: assetTotal.toString() }
       ]
-      this.assetConfig['data'] = assets
-      this.assetConfig['total'] = data.total_count_assets
-      this.assetConfig['active'] = data.total_count_today_active_assets
-      this.assetConfig['weekAdd'] = data.total_count_assets_this_week
+      this.assetConfig.data = assets
+      this.assetConfig.total = data.total_count_assets
+      this.assetConfig.active = data.total_count_today_active_assets
+      this.assetConfig.weekAdd = data.total_count_assets_this_week
     }
   }
 }

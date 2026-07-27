@@ -28,15 +28,8 @@
       <div class="select-assets">
         <SelectJobAssetDialog @change="handleSelectAssets" />
       </div>
-      <div class="transition-box" style="width: calc(100% - 17px)">
-        <CodeEditor
-          v-if="ready"
-          v-model="command"
-          :options="cmOptions"
-          :toolbar="toolbar"
-          style="margin-bottom: 20px"
-        />
-        <span v-if="executionInfo.status" style="float: right" />
+      <div class="transition-box">
+        <CodeEditor v-if="ready" v-model="command" :options="cmOptions" :toolbar="toolbar" />
         <div class="xterm-container">
           <QuickJobTerm
             ref="xterm"
@@ -47,7 +40,6 @@
             @view-assets="viewConfirmRunAssets"
           />
         </div>
-        <div style="display: flex; margin-top: 10px; justify-content: space-between" />
       </div>
     </div>
   </Page>
@@ -109,7 +101,7 @@ export default {
         left: {
           run: {
             type: 'button',
-            name: '',
+            name: this.$t('Execute'),
             align: 'left',
             icon: 'fa fa-play',
             tip: this.$t('RunCommand'),
@@ -127,7 +119,7 @@ export default {
           },
           stop: {
             type: 'button',
-            name: '',
+            name: this.$t('Stop'),
             align: 'left',
             icon: 'fa fa-stop',
             tip: this.$t('StopJob'),
@@ -558,64 +550,48 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$container-bg-color: #f7f7f7;
 .job-container {
   display: flex;
+  flex: 1;
+  min-height: 0;
+  gap: 20px;
 
   .select-assets {
-    width: 23.6%;
+    flex: 0 0 24%;
+    min-width: 240px;
   }
-}
 
-.transition-box {
-  display: flex;
-  flex-direction: column;
+  .transition-box {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    gap: 20px;
 
-  .xterm-container {
-    margin-left: 30px;
-    height: calc(100vh - 549px);
-    min-height: 255px;
-    border: 1px solid var(--color-border);
-    border-radius: 5px;
-    background-color: $container-bg-color;
-    overflow: hidden;
+    // 编辑器区套一层白色面板，避免直接露出内容区灰底（AppMain #f3f3f4）
+    :deep(.code-editor) {
+      padding: 14px 16px;
+      background: #fff;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+    }
 
-    & > div {
-      height: 100%;
+    .xterm-container {
+      flex: 1;
+      min-height: 240px;
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
 
-      & :deep(.xterm) {
-        height: calc(100% - 8px);
-        overflow-y: hidden;
+      & > div {
+        height: 100%;
+
+        & :deep(.xterm) {
+          height: calc(100% - 8px);
+          overflow-y: hidden;
+        }
       }
     }
   }
-}
-
-.mini-button {
-  width: 12px;
-  float: right;
-  text-align: center;
-  padding: 5px 0;
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
-  color: #ffffff;
-  border-radius: 2px;
-}
-
-.mini {
-  margin-right: 5px;
-  width: 12px !important;
-}
-
-.vue-codemirror-wrap :deep(.CodeMirror) {
-  width: 600px;
-  height: 100px;
-  border: 1px solid #eee;
-}
-
-.output {
-  padding-left: 30px;
-  background-color: rgb(247 247 247);
-  border: solid 1px #f3f3f3;
 }
 </style>

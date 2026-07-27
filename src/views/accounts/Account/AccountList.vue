@@ -1,5 +1,10 @@
 <template>
-  <AssetTreeTable ref="TreeTablePage" :table-config="tableConfig" :tree-setting="treeSetting">
+  <AssetTreeTable
+    ref="TreeTablePage"
+    :table-config="tableConfig"
+    :tree-setting="treeSetting"
+    @url-change="handleTreeUrlChange"
+  >
     <template #table>
       <AccountListTable v-bind="tableConfig" ref="table" />
     </template>
@@ -10,6 +15,7 @@
 import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
 import AccountListTable from '@/components/Apps/AccountListTable/AccountList.vue'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import { setRouterQuery } from '@/utils/common/index'
 
 export default {
   name: 'AssetAccountList',
@@ -46,6 +52,7 @@ export default {
       treeSetting: {
         showMenu: false,
         showAssets: true,
+        selectSyncToRoute: false,
         url: '/api/v1/accounts/accounts/',
         countResource: 'account',
         edit: {
@@ -54,6 +61,18 @@ export default {
           }
         }
       }
+    }
+  },
+  methods: {
+    handleTreeUrlChange(url) {
+      this.tableConfig = {
+        ...this.tableConfig,
+        url
+      }
+      setRouterQuery(this, url, { browserOnly: true })
+      this.$nextTick(() => {
+        this.$refs.table?.refresh?.()
+      })
     }
   }
 }

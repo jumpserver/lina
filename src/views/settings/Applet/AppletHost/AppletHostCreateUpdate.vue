@@ -82,8 +82,8 @@ export default {
       }
     }
   },
-  async mounted() {
-    this.$route.query.platform = 'RemoteAppHost'
+  async created() {
+    this.config.url = `${this.config.url}?platform=RemoteAppHost`
     this.loading = false
   },
   methods: {}

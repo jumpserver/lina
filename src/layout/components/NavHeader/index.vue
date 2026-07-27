@@ -21,22 +21,22 @@
         <Search @search-open="handleSearchOpen" />
       </li>
       <li class="header-item header-icon">
-        <el-tooltip :content="$tc('SiteMessageList')" :open-delay="500" effect="dark">
+        <el-tooltip :content="$tc('SiteMessageList')" :show-after="500" effect="dark">
           <SiteMessages />
         </el-tooltip>
       </li>
       <li v-if="$hasPerm(['rbac.view_webterminal'])" class="header-item header-icon">
-        <el-tooltip :content="$tc('WebTerminal')" :open-delay="500" effect="dark">
+        <el-tooltip :content="$tc('WebTerminal')" :show-after="500" effect="dark">
           <WebTerminal />
         </el-tooltip>
       </li>
       <li v-if="ticketsEnabled" class="header-item header-hover">
-        <el-tooltip :content="$tc('Ticket')" :open-delay="500" effect="dark">
+        <el-tooltip :content="$tc('Ticket')" :show-after="500" effect="dark">
           <Tickets />
         </el-tooltip>
       </li>
       <li v-if="$hasPerm('settings.view_setting')" class="header-item header-icon">
-        <el-tooltip :content="$tc('SystemSetting')" :open-delay="500" effect="dark">
+        <el-tooltip :content="$tc('SystemSetting')" :show-after="500" effect="dark">
           <SystemSetting />
         </el-tooltip>
       </li>
@@ -287,6 +287,18 @@ export default {
         align-items: center;
         justify-content: center;
         height: 100%;
+      }
+
+      & :deep(.el-dropdown-link) {
+        outline: none;
+        box-shadow: none;
+
+        &:focus,
+        &:focus-visible,
+        &:active {
+          outline: none;
+          box-shadow: none;
+        }
       }
 
       & :deep(i) {

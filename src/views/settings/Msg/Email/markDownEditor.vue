@@ -1,30 +1,24 @@
 <template>
   <div class="markdown-editor">
-    <div class="action-bar">
-      <i
-        class="fa"
-        :class="[showPreview ? 'fa-eye-slash' : 'fa-eye']"
-        @click="togglePreview"
-      />
-    </div>
-    <el-row :gutter="12">
-      <el-col :span="showPreview ? 12 : 24">
-        <el-input
-          v-model="localValue"
-          :autosize="{ minRows: 16 }"
-          class="editor-input"
-          type="textarea"
-        />
-      </el-col>
-      <el-col v-show="showPreview" :span="12">
-        <div class="preview markdown-body" v-html="html" />
-      </el-col>
-    </el-row>
+    <VueMarkdownEditor
+      v-model="localValue"
+      :left-toolbar="leftToolbar"
+      :right-toolbar="rightToolbar"
+      height="400px"
+    />
   </div>
 </template>
+
 <script>
+import VueMarkdownEditor from '@kangc/v-md-editor'
+import '@kangc/v-md-editor/lib/style/base-editor.css'
+import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js'
+import '@kangc/v-md-editor/lib/theme/style/vuepress.css'
 import DOMPurify from 'dompurify'
 import MarkdownIt from 'markdown-it'
+import Prism from 'prismjs'
+
+VueMarkdownEditor.use(vuepressTheme, { Prism })
 
 const markdown = new MarkdownIt({
   html: true,
@@ -39,6 +33,7 @@ function renderHtml(source) {
 
 export default {
   name: 'RichEditor',
+  components: { VueMarkdownEditor },
   props: {
     value: {
       type: String,
@@ -48,7 +43,8 @@ export default {
   data() {
     return {
       localValue: this.value,
-      showPreview: true
+      leftToolbar: 'undo redo clear | h bold italic strikethrough quote | ul ol hr | link code',
+      rightToolbar: 'preview sync-scroll fullscreen'
     }
   },
   computed: {
@@ -69,45 +65,16 @@ export default {
   },
   mounted() {
     this.$emit('htmlChange', this.html)
-  },
-  methods: {
-    togglePreview() {
-      this.showPreview = !this.showPreview
-    }
   }
 }
 </script>
+
 <style lang="scss" scoped>
 .markdown-editor {
-  position: relative;
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
   padding: 10px;
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-}
-
-.action-bar {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  z-index: 1;
-
-  i {
-    cursor: pointer;
-  }
-}
-
-.editor-input :deep(.el-textarea__inner) {
-  min-height: 400px !important;
-  font-family: Monaco, Menlo, Consolas, 'Courier New', monospace;
-}
-
-.preview {
-  min-height: 400px;
-  padding: 12px;
-  overflow: auto;
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-  background: #fff;
-  @import 'github-markdown-css/github-markdown-light.css';
 }
 </style>

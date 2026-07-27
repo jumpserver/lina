@@ -1,5 +1,12 @@
 <template>
-  <Dialog v-bind="$attrs" :show-cancel="false" :title="title" width="960px" @confirm="closeDialog">
+  <Dialog
+    v-bind="$attrs"
+    :show-cancel="false"
+    :title="title"
+    class="bulk-create-result-dialog"
+    width="960px"
+    @confirm="closeDialog"
+  >
     <el-alert style="margin-bottom: 10px" type="info">
       <span v-for="item of summary" :key="item.key"
         ><b>{{ item.label }}</b
@@ -80,6 +87,7 @@ export default {
             prop: 'state',
             label: this.$t('Status'),
             width: '200px',
+            showOverflowTooltip: true,
             formatter: StateFormatter
           }
         ],
@@ -96,16 +104,21 @@ export default {
         skipped: this.$tc('Skipped'),
         error: this.$tc('Error')
       }
-      const grouped = _.groupBy(this.result, 'state')
-      const groupedLength = _.mapValues(grouped, 'length')
-      groupedLength['total'] = this.result.length
-      return _.map(groupedLength, (value, key) => {
-        return {
-          label: labels[key],
-          value: value,
-          key: key
+      // 与 StateFormatter 一致:优先按 error 归类,其次按 state。
+      // 旧实现用 _.groupBy(result, 'state'),错误行没有 state 会被归到
+      // 'undefined' 组,既生成无标签的汇总项、又永远统计不到 error,导致条数不对。
+      const counts = { total: this.result.length, created: 0, updated: 0, skipped: 0, error: 0 }
+      for (const row of this.result) {
+        if (row.error) {
+          counts.error += 1
+        } else if (counts[row.state] !== undefined) {
+          counts[row.state] += 1
         }
-      })
+      }
+      const order = ['total', 'created', 'updated', 'skipped', 'error']
+      return order
+        .filter((key) => key === 'total' || counts[key] > 0)
+        .map((key) => ({ label: labels[key], value: counts[key], key }))
     }
   },
   methods: {
@@ -131,5 +144,13 @@ export default {
 
 :deep(.el-data-table .el-table .el-table__row > td > div > span) {
   white-space: inherit;
+}
+</style>
+
+<!-- el-dialog teleport 到 body,内部样式须用非 scoped 块;selector 特异度 (0,4,0)
+     高于 el-data-table 的 .el-data-table[data-v] .el-pagination (0,3,0),故无需 !important -->
+<style lang="scss">
+.el-dialog.dialog.bulk-create-result-dialog .el-pagination {
+  padding: 1px 0;
 }
 </style>

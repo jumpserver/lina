@@ -20,8 +20,7 @@
   </div>
 </template>
 
-<script>
-import { createVNode as createVNodeCompat, resolveComponent as resolveComponentCompat } from 'vue'
+<script lang="jsx">
 import { GenericListPage } from '@/layout/components'
 import BindDialog from './BindDialog.vue'
 import LabelResourcesDialog from '@/views/labels/LabelResourcesDialog.vue'
@@ -53,15 +52,10 @@ export default {
               const onClick = () => {
                 vm.handleClickResCount(row)
               }
-              return createVNodeCompat(
-                resolveComponentCompat('el-link'),
-                {
-                  type: 'success',
-                  onClick: onClick
-                },
-                {
-                  default: () => [row['res_count']]
-                }
+              return (
+                <el-link type="success" onClick={onClick}>
+                  {row['res_count']}
+                </el-link>
               )
             }
           },
@@ -72,15 +66,13 @@ export default {
                   color: row.color
                 })
               }
-              return createVNodeCompat(
-                resolveComponentCompat('el-color-picker'),
-                {
-                  modelValue: row.color,
-                  'onUpdate:modelValue': ($event) => (row.color = $event),
-                  size: 'small',
-                  onChange: onChange
-                },
-                null
+              return (
+                <el-color-picker
+                  modelValue={row.color}
+                  onUpdate:modelValue={($event) => (row.color = $event)}
+                  size="small"
+                  onChange={onChange}
+                />
               )
             }
           },

@@ -1,11 +1,11 @@
 <template>
   <BaseReport
-    v-bind="$attrs"
     :nav="nav"
     :title="$t('ChangeSecretDashboard')"
     :disable-charts-padding="true"
     name="ChangeSecretDashboard"
     :url="reportUrl"
+    v-bind="$attrs"
   >
     <div class="switch-date-wrapper">
       <SwitchDate class="switch-date" :name="name" @change="onChange" />
@@ -21,26 +21,23 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="24">
-        <AccountSummary :days="days" class="account-summary" />
-      </el-col>
+      <AccountSummary :days="days" class="account-summary" />
     </el-row>
     <el-row>
-      <el-col :span="24">
-        <FailedAccountSummary :days="days" class="failed-account-summary" />
-      </el-col>
+      <FailedAccountSummary :days="days" class="failed-account-summary" />
     </el-row>
   </BaseReport>
 </template>
 
 <script>
-import SwitchDate from '@/components/Dashboard/SwitchDate'
-import { getRouteUrl } from '@/utils/vue'
-import BaseReport from '../../base/BaseReport.vue'
-import AccountSummary from './AccountSummary.vue'
-import CardSummary from './CardSummary.vue'
 import DataSummary from './DataSummary.vue'
+import CardSummary from './CardSummary.vue'
+import SwitchDate from '@/components/Dashboard/SwitchDate'
+import AccountSummary from './AccountSummary.vue'
 import FailedAccountSummary from './FailedAccountSummary.vue'
+import BaseReport from '../../base/BaseReport.vue'
+import { getRouteUrl } from '@/utils/vue'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 export default {
   name: 'ChangeSecret',
@@ -59,16 +56,10 @@ export default {
     }
   },
   data() {
-    let reportUrl = '/reports/dashboard/change-secret'
-    try {
-      reportUrl = getRouteUrl('ChangeSecretReport', this.$router) || reportUrl
-    } catch (e) {
-      console.warn('Failed to resolve ChangeSecretReport route:', e)
-    }
     return {
       name: 'ChangeSecretDashboard',
       days: localStorage.getItem(this.name) || '7',
-      reportUrl: reportUrl
+      reportUrl: getRouteUrl('ChangeSecretReport', this.$router)
     }
   },
   methods: {
@@ -88,24 +79,22 @@ export default {
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   transition: all 0.3s;
 
-  :deep() {
-    .card-content {
-      padding-bottom: unset;
-      border-bottom: unset;
-    }
+  :deep(.card-content) {
+    padding-bottom: unset;
+    border-bottom: unset;
+  }
 
-    .ring {
-      display: none;
-    }
+  :deep(.ring) {
+    display: none;
+  }
 
-    .el-card {
-      box-shadow: none;
-      border: none;
-    }
+  :deep(.el-card) {
+    box-shadow: none;
+    border: none;
+  }
 
-    .el-card__body {
-      padding: 0;
-    }
+  :deep(.el-card__body) {
+    padding: 0;
   }
 }
 
@@ -123,18 +112,15 @@ export default {
 
 .account-summary {
   @extend %card-common;
-  margin-top: 1rem;
   width: 100%;
+  margin-top: 1rem;
 }
 
 .failed-account-summary {
   @extend %card-common;
+  width: 100%;
   height: 100%;
   margin-top: 16px;
-
-  :deep(#HomeCard) {
-    width: 100%;
-  }
 
   :deep(#HomeCard .el-card.no-border) {
     height: 100%;
@@ -142,8 +128,8 @@ export default {
 
     .ListTable .el-pagination {
       display: flex;
-      width: 100%;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
+      row-gap: 8px;
     }
   }
 }

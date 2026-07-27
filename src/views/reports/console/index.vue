@@ -58,12 +58,7 @@ export default {
     }
   },
   mounted() {
-    try {
-      this.reportUrl = getRouteUrl('ConsoleReport', this.$router) || '/reports/dashboard/console'
-    } catch (e) {
-      console.warn('Failed to resolve ConsoleReport route:', e)
-      this.reportUrl = '/reports/dashboard/console'
-    }
+    this.reportUrl = getRouteUrl('ConsoleReport', this.$router)
   }
 }
 </script>

@@ -37,7 +37,7 @@
       :center="false"
       :title="title"
       class="announcement"
-      type="success"
+      type="info"
       @close="onAlertClose"
     >
       <MarkDown :value="announcement.content" class="markdown" />
@@ -252,15 +252,15 @@ export default {
 
   .link-more {
     font-size: 13px;
-    color: #409eff !important;
+    color: var(--color-primary) !important;
     text-decoration: none;
     padding: 4px 8px;
     border-radius: 4px;
-    background: rgba(64, 158, 255, 0.1);
+    background: var(--el-color-primary-light-9);
     transition: all 0.3s;
 
     &:hover {
-      background: #409eff;
+      background: var(--color-primary);
       color: white !important;
     }
   }

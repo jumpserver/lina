@@ -1,34 +1,37 @@
 <template>
   <BaseReport
-    v-bind="$attrs"
     :url="url"
     :nav="nav"
     :title="$t('AuditsDashboard')"
     :disable-charts-padding="true"
     name="AuditsDashboard"
+    v-bind="$attrs"
   >
-    <SwitchDate class="switch-date" :name="name" @change="onChange" />
-    <CardSummary :days="days" />
-    <el-row :gutter="10" class="summary-row">
-      <el-col :span="12" :md="12" class="summary-col">
-        <DataSummary class="chart-container audit-data-summary" :days="days" />
-      </el-col>
-      <el-col :span="12" :md="12" class="summary-col">
-        <RightSummary class="chart-container audit-right-summary" :days="days" />
-      </el-col>
-    </el-row>
-    <TrendSummary :days="days" />
+    <SwitchDate class="switch-date" :name="name" :days="days" @change="onChange" />
+    <template v-if="initialized">
+      <CardSummary :days="days" />
+      <el-row class="summary-row" :gutter="10">
+        <el-col class="summary-column" :span="12" :md="12">
+          <DataSummary class="chart-container summary-card" :days="days" />
+        </el-col>
+        <el-col class="summary-column" :span="12" :md="12">
+          <RightSummary class="chart-container summary-card" :days="days" />
+        </el-col>
+      </el-row>
+      <TrendSummary :days="days" />
+    </template>
   </BaseReport>
 </template>
 
 <script>
 import SwitchDate from '@/components/Dashboard/SwitchDate'
-import { getRouteUrl } from '@/utils/vue'
-import BaseReport from '../base/BaseReport.vue'
-import CardSummary from './components/CardSummary.vue'
-import DataSummary from './components/DataSummary'
-import RightSummary from './components/RightSummary.vue'
 import TrendSummary from './components/TrendSummary'
+import DataSummary from './components/DataSummary'
+import CardSummary from './components/CardSummary.vue'
+import RightSummary from './components/RightSummary.vue'
+import BaseReport from '../base/BaseReport.vue'
+import { getRouteUrl } from '@/utils/vue'
+import { scopedLocalStorage as localStorage } from '@/utils/storage'
 
 export default {
   components: {
@@ -46,21 +49,23 @@ export default {
     }
   },
   data() {
-    let reportUrl = '/reports/dashboard/audits'
-    try {
-      reportUrl = getRouteUrl('AuditsReport', this.$router) || reportUrl
-    } catch (e) {
-      console.warn('Failed to resolve AuditsReport route:', e)
-    }
     return {
       name: 'AuditsDashboard',
-      days: localStorage.getItem(this.name) || '7',
-      url: reportUrl
+      days: '',
+      initialized: false,
+      url: getRouteUrl('AuditsReport', this.$router)
     }
   },
+  created() {
+    this.days = this.resolveDays()
+    this.initialized = true
+  },
   methods: {
+    resolveDays() {
+      return String(this.$route.query.days || localStorage.getItem(this.name) || '7')
+    },
     onChange(val) {
-      this.days = val
+      this.days = String(val)
     }
   }
 }
@@ -74,13 +79,11 @@ export default {
   align-items: stretch;
 }
 
-.summary-col {
+.summary-column {
   display: flex;
 }
 
-:deep(.audit-data-summary),
-:deep(.audit-right-summary) {
-  width: 100%;
-  height: 100%;
+.summary-card {
+  flex: 1 1 auto;
 }
 </style>

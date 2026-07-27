@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <span class="title">{{ config.title }}</span>
-    <el-tooltip v-if="hasTip" :content="config.tip" :open-delay="500" effect="dark" placement="top">
+    <el-tooltip v-if="hasTip" :content="config.tip" :show-after="500" effect="dark" placement="top">
       <i class="fa fa-exclamation-circle icon" />
     </el-tooltip>
   </div>

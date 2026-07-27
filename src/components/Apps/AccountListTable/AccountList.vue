@@ -25,6 +25,7 @@
       :account="account"
       :add-template="addTemplate"
       :asset="iAsset"
+      :operation-flag="accountOperationFlag"
       :title="accountCreateUpdateTitle"
       @add="addAccountSuccess"
       @bulk-create-done="showBulkCreateResult($event)"
@@ -161,8 +162,7 @@ export default {
       showResultDialog: false,
       showAddDialog: false,
       showAddTemplateDialog: false,
-      iExportUrl:
-        this.exportUrl || this.url.replace('/accounts/accounts/', '/accounts/account-secrets/'),
+      accountOperationFlag: null,
       detailDrawer: () => import('@/views/accounts/Account/AccountDetail/index.vue'),
       createAccountResults: [],
       iAsset: this.asset,
@@ -311,7 +311,8 @@ export default {
         hasImport: this.hasImport,
         hasExport: this.hasExport && this.$hasPerm('accounts.view_accountsecret'),
         exportOptions: {
-          url: this.exportUrl,
+          url:
+            this.exportUrl || this.url.replace('/accounts/accounts/', '/accounts/account-secrets/'),
           mfaVerifyRequired: true,
           tips: this.$t('AccountExportTips')
         },
@@ -485,7 +486,7 @@ export default {
       Object.assign(this.account, account)
     },
     addAccountSuccess() {
-      // Reflect.deleteProperty(this.$route.query, 'flag')
+      this.accountOperationFlag = null
       this.isUpdateAccount = false
       this.$refs.ListTable.reloadTable()
     },
@@ -517,6 +518,7 @@ export default {
 
       setTimeout(() => {
         this.showAddDialog = false
+        this.accountOperationFlag = null
       }, 800)
 
       setTimeout(() => {

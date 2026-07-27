@@ -92,6 +92,10 @@ export default {
       type: Array,
       default: () => []
     },
+    valueKey: {
+      type: String,
+      default: 'id'
+    },
     disabled: {
       type: Boolean,
       default: false
@@ -167,15 +171,10 @@ export default {
       initialOptions: [],
       remote: true,
       allSelected: false,
-      transformed: false, // 这里改回来是因为，acl 中资产选择，category 选择后，再编辑，就看不到了
-      innerValue:
-        this.modelValue !== undefined
-          ? _.cloneDeep(this.modelValue)
-          : this.value !== undefined
-            ? _.cloneDeep(this.value)
-            : this.multiple
-              ? []
-              : ''
+      transformed: this.shouldHidePendingLabel(
+        this.modelValue !== undefined ? this.modelValue : this.value
+      ),
+      innerValue: this.normalizeValue(this.modelValue !== undefined ? this.modelValue : this.value)
     }
   },
   computed: {
@@ -281,18 +280,16 @@ export default {
       this.refresh()
     },
     value: {
-      handler(newValue) {
-        if (!_.isEqual(this.innerValue, newValue)) {
-          this.innerValue = _.cloneDeep(newValue)
+      async handler(newValue) {
+        if (this.modelValue === undefined) {
+          await this.syncExternalValue(newValue)
         }
       },
       deep: true
     },
     modelValue: {
-      handler(newValue) {
-        if (!_.isEqual(this.innerValue, newValue)) {
-          this.innerValue = _.cloneDeep(newValue)
-        }
+      async handler(newValue) {
+        await this.syncExternalValue(newValue)
       },
       deep: true
     }
@@ -302,7 +299,7 @@ export default {
       await this.initialSelect()
       setTimeout(() => {
         this.$log.debug('Value is : ', this.externalValue)
-        this.innerValue = _.cloneDeep(this.externalValue)
+        this.innerValue = this.normalizeValue(this.externalValue)
         this.initialized = true
         this.$emit('initialized', true)
       }, 100)
@@ -320,6 +317,88 @@ export default {
     })
   },
   methods: {
+    hasValue(value) {
+      return Array.isArray(value)
+        ? value.length > 0
+        : value !== '' && value !== null && value !== undefined
+    },
+    getOptionValue(value) {
+      if (value === null || value === undefined) {
+        return undefined
+      }
+      if (typeof value !== 'object') {
+        return value
+      }
+      if (this.valueKey && Object.hasOwn(value, this.valueKey)) {
+        return value[this.valueKey]
+      }
+      if (Object.hasOwn(value, 'value')) {
+        return value.value
+      }
+      if (Object.hasOwn(value, 'id')) {
+        return value.id
+      }
+      if (Object.hasOwn(value, 'pk')) {
+        return value.pk
+      }
+      return undefined
+    },
+    normalizeValue(value) {
+      if (this.multiple) {
+        if (value === null || value === undefined || value === '') {
+          return []
+        }
+        const list = Array.isArray(value) ? value : [value]
+        return list
+          .map((item) => this.getOptionValue(item))
+          .filter((item) => item !== undefined && item !== null && item !== '')
+      }
+      if (
+        value === null ||
+        value === undefined ||
+        value === '' ||
+        (Array.isArray(value) && value.length === 0)
+      ) {
+        return ''
+      }
+      const normalized = Array.isArray(value) ? value[0] : value
+      return this.getOptionValue(normalized) ?? ''
+    },
+    shouldHidePendingLabel(value) {
+      const ajaxUrl = this.url || this.ajax?.url
+      if (!ajaxUrl) {
+        return false
+      }
+      const normalizedValue = this.normalizeValue(value)
+      return this.hasValue(normalizedValue) && this.hasMissingOptions(normalizedValue)
+    },
+    hasMissingOptions(value) {
+      const optionValues = (this.iOptions || this.options || []).map((item) => item.value)
+      const values = Array.isArray(value) ? value : [value]
+      return values.some((item) => optionValues.indexOf(item) === -1)
+    },
+    async syncExternalValue(value) {
+      const normalizedValue = this.normalizeValue(value)
+      this.transformed = this.shouldHidePendingLabel(value)
+      if (this.transformed) {
+        await this.hydrateSelectedOptions(normalizedValue)
+      }
+      if (!_.isEqual(this.innerValue, normalizedValue)) {
+        this.innerValue = _.cloneDeep(normalizedValue)
+      }
+    },
+    async hydrateSelectedOptions(value) {
+      if (!this.hasValue(value) || !this.iAjax.url) {
+        return
+      }
+      const values = Array.isArray(value) ? value : [value]
+      this.initialOptions = []
+      this.resetParams()
+      const data = await createSourceIdCache(values)
+      this.params.spm = data['spm']
+      await this.getInitialOptions()
+      this.transformed = false
+    },
     async loadMore(load) {
       if (!this.iAjax.url) {
         return
@@ -349,18 +428,14 @@ export default {
       this.iOptions = []
       this.params.search = query
       this.getOptions()
-      // 同步输入时避免 value 仍指向旧引用造成递归
-      if (!this.multiple && Array.isArray(this.innerValue)) {
-        this.innerValue = ''
-      }
     },
     handleModelUpdate(val) {
-      // avoid loops
-      if (!_.isEqual(this.innerValue, val)) {
-        this.innerValue = _.cloneDeep(val)
+      const normalizedValue = this.normalizeValue(val)
+      if (!_.isEqual(this.innerValue, normalizedValue)) {
+        this.innerValue = _.cloneDeep(normalizedValue)
       }
-      if (!_.isEqual(this.externalValue, val)) {
-        const payload = _.cloneDeep(val)
+      if (!_.isEqual(this.normalizeValue(this.externalValue), normalizedValue)) {
+        const payload = _.cloneDeep(normalizedValue)
         this.$emit('input', payload)
         this.$emit('update:modelValue', payload)
         this.$emit('update:model-value', payload)
@@ -414,15 +489,10 @@ export default {
     async initialSelect() {
       // this.$log.debug('Select ajax config', this.iAjax)
       if (this.iAjax.url) {
-        if (this.externalValue && this.externalValue.length !== 0) {
-          this.$log.debug('Start init select2 value, ', this.externalValue)
-          let value = this.externalValue
-          if (!Array.isArray(value)) {
-            value = [value]
-          }
-          const data = await createSourceIdCache(value)
-          this.params.spm = data['spm']
-          await this.getInitialOptions()
+        const normalizedValue = this.normalizeValue(this.externalValue)
+        if (this.hasValue(normalizedValue)) {
+          this.$log.debug('Start init select2 value, ', normalizedValue)
+          await this.hydrateSelectedOptions(normalizedValue)
         }
         await this.getOptions()
         if (this.iOptions.length === 0) {
@@ -450,6 +520,7 @@ export default {
       })
     },
     clearSelected() {
+      this.allSelected = false
       this.innerValue = this.multiple ? [] : ''
       const payload = _.cloneDeep(this.innerValue)
       this.$emit('input', payload)
@@ -519,90 +590,22 @@ export default {
   width: 100%;
 
   &.hidden-tag {
-    :deep(.el-select__tags) {
+    :deep(.el-select__selected-item:has(> .el-tag)) {
       opacity: 0;
-      cursor: not-allowed;
+      pointer-events: none;
     }
   }
 
   &.show-tag {
-    :deep(.el-select__tags) {
+    :deep(.el-select__selected-item:has(> .el-tag)) {
       opacity: 1;
     }
-  }
-
-  :deep(.el-tag.el-tag--info) {
-    min-height: 24px;
-    height: 24px;
-    line-height: 22px;
-    margin-top: 0;
-    margin-bottom: 0;
-    margin-left: 5px;
-    padding: 0 8px;
-    font-family: sans-serif !important;
-    white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
-  }
-
-  :deep(.el-tag__content) {
-    display: inline-flex;
-    align-items: center;
-  }
-
-  :deep(.el-select__wrapper) {
-    min-height: 30px;
-    height: 30px;
-    box-sizing: border-box;
-    padding: 0 8px;
-    padding-top: 0;
-    padding-bottom: 0;
-    border-radius: 0;
-    box-shadow: none !important;
-    border: 1px solid var(--el-border-color) !important;
-  }
-
-  :deep(.el-select__wrapper:hover) {
-    border-color: var(--el-border-color-hover) !important;
-  }
-
-  :deep(.el-select__wrapper.is-focused) {
-    box-shadow: none !important;
-    border-color: var(--el-color-primary) !important;
-  }
-
-  :deep(.el-select__selection) {
-    min-height: 28px;
-    align-items: center;
-  }
-
-  :deep(.el-select__tags) {
-    height: 28px;
-    min-height: 28px;
-    align-items: center;
-  }
-
-  :deep(.el-select__selected-item),
-  :deep(.el-select__placeholder),
-  :deep(.el-select__input) {
-    min-height: 28px;
-    height: 28px;
-    line-height: 28px;
-  }
-
-  :deep(.el-select__caret),
-  :deep(.el-select__suffix),
-  :deep(.el-select__prefix) {
-    min-height: 28px;
-    height: 28px;
-    display: inline-flex;
-    align-items: center;
   }
 }
 
 .select2.is-multiple {
   :deep(.el-select__wrapper) {
-    height: auto;
+    height: auto !important;
     min-height: 30px;
     align-items: center;
   }
@@ -612,15 +615,8 @@ export default {
     flex-wrap: wrap;
     align-items: center;
     align-content: center;
-    gap: 4px;
     width: 100%;
     min-height: 28px;
-  }
-
-  :deep(.el-select__tags) {
-    display: contents;
-    min-height: 0;
-    height: auto;
   }
 
   :deep(.el-select__selected-item) {
@@ -631,9 +627,10 @@ export default {
   }
 
   :deep(.el-select__input-wrapper) {
-    flex: 1 1 120px;
-    min-width: 120px;
-    margin-left: 0;
+    // 只需容纳光标即可，避免因 120px 硬门槛在标签后剩余宽度不足时把光标挤到下一行、
+    // 撑高整个控件;flex-grow 让它在同一行内自动填满剩余空间。
+    flex: 1 1 30px;
+    min-width: 30px;
   }
 
   :deep(.el-select__input) {

@@ -4,8 +4,7 @@
   </div>
 </template>
 
-<script>
-import { createTextVNode as createTextVNodeCompat, createVNode as createVNodeCompat } from 'vue'
+<script lang="jsx">
 import GenericListPage from '@/layout/components/GenericListPage'
 import { SwitchFormatter } from '@/components/Table/TableFormatters'
 export default {
@@ -52,19 +51,13 @@ export default {
           summary: {
             width: '130px',
             label: `${this.$t('Success')}/${this.$t('Total')}`,
-            formatter: (row) => {
-              return createVNodeCompat('div', null, [
-                createVNodeCompat(
-                  'span',
-                  {
-                    class: 'text-primary'
-                  },
-                  [row.summary.success]
-                ),
-                createTextVNodeCompat('/'),
-                createVNodeCompat('span', null, [row.summary.total])
-              ])
-            }
+            formatter: (row) => (
+              <div>
+                <span class="text-primary">{row.summary.success}</span>
+                /
+                <span>{row.summary.total}</span>
+              </div>
+            )
           },
           is_periodic_display: {
             width: '100px',

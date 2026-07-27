@@ -4,12 +4,7 @@
   </TwoCol>
 </template>
 
-<script>
-import {
-  resolveComponent as resolveComponentCompat,
-  createVNode as createVNodeCompat,
-  createTextVNode as createTextVNodeCompat
-} from 'vue'
+<script lang="jsx">
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 export default {
@@ -34,58 +29,37 @@ export default {
           key: this.$t('Rule'),
           formatter: () => {
             const newArr = this.object.strategy_rules || []
-            return createVNodeCompat('ul', null, [
-              newArr.map((r, index) => {
-                return createVNodeCompat('li', null, [
-                  createVNodeCompat(
-                    resolveComponentCompat('el-tag'),
-                    {
-                      size: 'small',
-                      key: index
-                    },
-                    {
-                      default: () => [
-                        r.attr.label,
-                        createVNodeCompat('strong', null, [
-                          createTextVNodeCompat(' '),
-                          `${r.match.label}`,
-                          createTextVNodeCompat(' ')
-                        ]),
-                        r.value
-                      ]
-                    }
-                  )
-                ])
-              })
-            ])
+            return (
+              <ul>
+                {newArr.map((r, index) => (
+                  <li key={index}>
+                    <el-tag size="small">
+                      {r.attr.label}
+                      <strong> {r.match.label} </strong>
+                      {r.value}
+                    </el-tag>
+                  </li>
+                ))}
+              </ul>
+            )
           }
         },
         {
           key: this.$t('Action'),
           formatter: () => {
             const newArr = this.object.strategy_actions || []
-            return createVNodeCompat('ul', null, [
-              newArr.map((a, index) => {
-                return createVNodeCompat('li', null, [
-                  createVNodeCompat(
-                    resolveComponentCompat('el-tag'),
-                    {
-                      size: 'small',
-                      key: index
-                    },
-                    {
-                      default: () => [
-                        createVNodeCompat('strong', null, [
-                          a.attr.label,
-                          createTextVNodeCompat(': ')
-                        ]),
-                        `${a.value.label}`
-                      ]
-                    }
-                  )
-                ])
-              })
-            ])
+            return (
+              <ul>
+                {newArr.map((a, index) => (
+                  <li key={index}>
+                    <el-tag size="small">
+                      <strong>{a.attr.label}: </strong>
+                      {a.value.label}
+                    </el-tag>
+                  </li>
+                ))}
+              </ul>
+            )
           }
         },
         'comment',

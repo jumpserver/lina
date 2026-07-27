@@ -11,22 +11,11 @@
   </div>
 </template>
 
-<script>
-import {
-  isVNode as isVNodeCompat,
-  resolveComponent as resolveComponentCompat,
-  createVNode as createVNodeCompat
-} from 'vue'
+<script lang="jsx">
 import { STATUS_MAP } from '../../const'
 import Drawer from '@/components/Drawer/index.vue'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 import { getAssetUrl } from '@/utils/assets'
-function _isSlot(s) {
-  return (
-    typeof s === 'function' ||
-    (Object.prototype.toString.call(s) === '[object Object]' && !isVNodeCompat(s))
-  )
-}
 export default {
   name: 'CommandConfirmTicketDetail',
   components: {
@@ -78,20 +67,11 @@ export default {
           key: this.$t('ApplyFromSession'),
           value: object.apply_from_session,
           formatter: (_item, value) => {
-            let _slot
             if (!this.$hasPerm('terminal.view_session')) {
-              return createVNodeCompat('span', null, [this.$t('Session')])
+              return <span>{this.$t('Session')}</span>
             }
-            return createVNodeCompat(
-              resolveComponentCompat('el-link'),
-              {
-                onClick: () => this.handleSideEffect(value)
-              },
-              _isSlot((_slot = this.$t('Session')))
-                ? _slot
-                : {
-                    default: () => [_slot]
-                  }
+            return (
+              <el-link onClick={() => this.handleSideEffect(value)}>{this.$t('Session')}</el-link>
             )
           }
         },
@@ -102,7 +82,6 @@ export default {
             cmdFilterId: object.apply_from_cmd_filter
           },
           formatter: function (item, value) {
-            let _slot2
             const to = {
               name: 'CommandFilterRulesUpdate',
               params: {
@@ -114,19 +93,9 @@ export default {
               }
             }
             if (!this.$hasPerm('assets.change_commandfilterrule')) {
-              return createVNodeCompat('span', null, [this.$t('CommandFilterRules')])
+              return <span>{this.$t('CommandFilterRules')}</span>
             }
-            return createVNodeCompat(
-              resolveComponentCompat('router-link'),
-              {
-                to: to
-              },
-              _isSlot((_slot2 = this.$t('CommandFilterRules')))
-                ? _slot2
-                : {
-                    default: () => [_slot2]
-                  }
-            )
+            return <router-link to={to}>{this.$t('CommandFilterRules')}</router-link>
           }
         }
       ]
