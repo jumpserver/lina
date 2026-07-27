@@ -2,6 +2,7 @@
   <div
     :class="{
       'has-options': options.length > 0,
+      'has-selected-field': hasSelectedField,
       'has-search-action': showSearchAction,
       'is-input-focus': isFocus
     }"
@@ -11,7 +12,9 @@
       v-show="options.length > 0"
       :class="{ 'is-open': cascaderVisible }"
       class="filter-selector"
+      @click.capture.stop.prevent="keepFilterMenuOpen"
       @mouseenter="openFilterMenu"
+      @mouseleave="scheduleFilterMenuClose"
     >
       <span v-if="hasSelectedField" :title="filterSelectorLabel" class="filter-selector__label">
         {{ filterSelectorLabel }}
@@ -20,6 +23,7 @@
 
       <el-cascader
         ref="Cascade"
+        v-model="fieldMenuValue"
         :aria-label="$t('Filter')"
         class="filter-cascader"
         :fallback-placements="['bottom-start']"
@@ -30,7 +34,17 @@
         popper-class="tag-search-field-popper"
         @change="handleMenuItemChange"
         @visible-change="handleCascaderVisibleChange"
-      />
+      >
+        <template #default="{ node, data }">
+          <span
+            :class="{ 'is-current-field': isCurrentFieldOption(node, data) }"
+            class="field-menu-option"
+            @click="handleFieldOptionClick($event, node, data)"
+          >
+            {{ data.label }}
+          </span>
+        </template>
+      </el-cascader>
     </div>
 
     <el-input
@@ -93,12 +107,15 @@ export default {
       filterKey: 'search',
       filterValue: '',
       valueLabel: '',
+      fieldMenuValue: null,
       filterTags: this.default || {},
       focus: false,
       showCascade: true,
       isFocus: false,
       pendingFocusSearchInput: false,
       cascaderVisible: false,
+      fieldMenuCloseTimer: null,
+      fieldMenuPopperElement: null,
       isComposing: false,
       skipNextEnter: false
     }
@@ -176,7 +193,8 @@ export default {
         if (key.startsWith(keyword)) {
           data[keyword] = (data[keyword] ? data[keyword] + ',' : '') + value
         } else {
-          data[this.getQueryKey(key)] = value
+          const queryKey = this.hasMultipleConditionValues(value) ? key : this.getQueryKey(key)
+          data[queryKey] = value
         }
       }
       return data
@@ -236,6 +254,8 @@ export default {
   beforeUnmount() {
     document.removeEventListener('keyup', this.handleKeyUp)
     document.removeEventListener('keydown', this.handleDocumentKeyDown, true)
+    this.removeFieldMenuHoverListeners()
+    clearTimeout(this.fieldMenuCloseTimer)
   },
   methods: {
     focusSearch() {
@@ -382,6 +402,34 @@ export default {
         tag?.valueLabel !== '' && tag?.valueLabel != null ? tag.valueLabel : (tag?.value ?? '')
       return `${label}${value}`
     },
+    normalizeConditionValues(value) {
+      const values = Array.isArray(value) ? value : [value]
+      return values
+        .flatMap((item) => {
+          if (typeof item !== 'string') {
+            return item == null ? [] : [String(item)]
+          }
+          return item.split(/[,，\r\n]+/)
+        })
+        .map((item) => item.trim())
+        .filter(Boolean)
+    },
+    mergeConditionValues(...values) {
+      const seen = new Set()
+      return values
+        .flatMap((value) => this.normalizeConditionValues(value))
+        .filter((value) => {
+          if (seen.has(value)) {
+            return false
+          }
+          seen.add(value)
+          return true
+        })
+        .join(',')
+    },
+    hasMultipleConditionValues(value) {
+      return this.normalizeConditionValues(value).length > 1
+    },
     getOptionByKey(key) {
       return this.options.find((field) => field.value === key)
     },
@@ -425,6 +473,17 @@ export default {
       }
       return this.findOptionPath(value) || [value]
     },
+    isCurrentFieldOption(node, option) {
+      return this.hasSelectedField && node?.level === 1 && option?.value === this.filterKey
+    },
+    handleFieldOptionClick(event, node, option) {
+      if (!this.isCurrentFieldOption(node, option)) {
+        return
+      }
+      event.preventDefault()
+      event.stopPropagation()
+      this.clearSelectedField()
+    },
     handleMenuItemChange(value) {
       if (value == null || (Array.isArray(value) && value.length === 0)) {
         return
@@ -438,13 +497,20 @@ export default {
         this.filterValue = selectedPath[selectedPath.length - 1]
         this.valueLabel = this.getValueLabel(this.filterKey, this.filterValue)
         this.handleConfirm()
+        this.filterKey = this.defaultFilterKey
       }
       this.$nextTick(() => {
+        this.fieldMenuValue = null
         this.$refs.Cascade.handleClear()
       })
     },
     handleCascaderVisibleChange(visible) {
       this.cascaderVisible = visible
+      if (visible) {
+        this.$nextTick(() => this.addFieldMenuHoverListeners())
+      } else {
+        this.removeFieldMenuHoverListeners()
+      }
       if (visible || !this.pendingFocusSearchInput) {
         return
       }
@@ -452,7 +518,41 @@ export default {
       this.$nextTick(() => this.focusSearchInput())
     },
     openFilterMenu() {
+      clearTimeout(this.fieldMenuCloseTimer)
       this.$refs.Cascade?.togglePopperVisible?.(true)
+    },
+    keepFilterMenuOpen() {
+      clearTimeout(this.fieldMenuCloseTimer)
+      this.$refs.Cascade?.togglePopperVisible?.(true)
+    },
+    scheduleFilterMenuClose() {
+      clearTimeout(this.fieldMenuCloseTimer)
+      this.fieldMenuCloseTimer = setTimeout(() => {
+        const selector = this.$el?.querySelector?.('.filter-selector')
+        if (selector?.matches(':hover') || this.fieldMenuPopperElement?.matches(':hover')) {
+          return
+        }
+        this.$refs.Cascade?.togglePopperVisible?.(false)
+      }, 100)
+    },
+    addFieldMenuHoverListeners() {
+      this.removeFieldMenuHoverListeners()
+      const content = this.$refs.Cascade?.contentRef
+      const popper = content?.closest?.('.tag-search-field-popper') || content
+      if (!popper) {
+        return
+      }
+      this.fieldMenuPopperElement = popper
+      popper.addEventListener('mouseenter', this.openFilterMenu)
+      popper.addEventListener('mouseleave', this.scheduleFilterMenuClose)
+    },
+    removeFieldMenuHoverListeners() {
+      if (!this.fieldMenuPopperElement) {
+        return
+      }
+      this.fieldMenuPopperElement.removeEventListener('mouseenter', this.openFilterMenu)
+      this.fieldMenuPopperElement.removeEventListener('mouseleave', this.scheduleFilterMenuClose)
+      this.fieldMenuPopperElement = null
     },
     handleFieldMenuKeydown(event) {
       if (this.filterValue !== '' || this.options.length === 0) {
@@ -475,9 +575,15 @@ export default {
         return
       }
       event.preventDefault()
+      this.clearSelectedField()
+    },
+    clearSelectedField() {
       this.filterKey = this.defaultFilterKey
       this.valueLabel = ''
+      this.fieldMenuValue = null
       this.$refs.Cascade?.handleClear?.()
+      this.$refs.Cascade?.togglePopperVisible?.(false)
+      this.$nextTick(() => this.focusSearchInput())
     },
     handleSearchEscape() {
       this.$refs.Cascade?.togglePopperVisible?.(false)
@@ -538,11 +644,19 @@ export default {
       if (this.filterValue && !this.filterKey) {
         this.filterKey = 'search' + '_' + this.filterValue
       }
+      const existingTag = this.filterTags[this.filterKey]
+      const shouldMerge = this.filterKey !== this.defaultFilterKey && !!existingTag
+      const value = shouldMerge
+        ? this.mergeConditionValues(existingTag.value, this.filterValue)
+        : this.mergeConditionValues(this.filterValue)
+      const valueLabel = shouldMerge
+        ? this.mergeConditionValues(existingTag.valueLabel, this.valueLabel)
+        : this.mergeConditionValues(this.valueLabel)
       const tag = {
         key: this.filterKey,
         label: this.keyLabel,
-        value: this.filterValue,
-        valueLabel: this.valueLabel
+        value,
+        valueLabel
       }
       this.filterTags[this.filterKey] = tag
       // this.$emit('tagSearch', this.filterMaps)
@@ -657,30 +771,31 @@ $origin-white-color: #ffffff;
     position: relative;
     display: inline-flex;
     align-items: center;
-    gap: 7px;
+    justify-content: center;
+    width: 28px;
+    min-width: 28px;
     height: 28px;
     max-width: 180px;
-    padding: 0 10px;
+    padding: 0;
     font-size: 13px;
     color: var(--el-text-color-secondary);
     cursor: pointer;
     flex: 0 1 auto;
-
-    &:hover {
-      color: var(--el-text-color-regular);
-      background-color: var(--el-fill-color-light);
-    }
 
     &.is-open .filter-selector__leading {
       transform: rotate(180deg);
     }
 
     &__leading {
-      width: 12px;
-      height: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      width: 28px;
+      height: 28px;
       color: var(--el-text-color-placeholder);
       font-size: 12px;
-      flex: 0 0 12px;
+      flex: 0 0 28px;
       transition: transform 0.2s;
     }
 
@@ -690,6 +805,13 @@ $origin-white-color: #ffffff;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+  }
+
+  &.has-selected-field .filter-selector {
+    justify-content: flex-start;
+    width: auto;
+    min-width: 0;
+    padding-left: 10px;
   }
 
   :deep(.filter-cascader) {
@@ -710,10 +832,11 @@ $origin-white-color: #ffffff;
 
   .search-input {
     --jms-input-padding-inline: 11px;
-    --jms-input-padding-inline-start: 8px;
+    --jms-input-padding-inline-start: 0;
 
     flex: 1 1 120px;
     width: auto;
+    margin-left: 0;
     min-width: 80px;
     max-width: 100%;
     height: 28px;
@@ -839,10 +962,21 @@ a {
     font-size: 13px;
   }
 
-  // 字段选择只负责切换搜索维度，不保留菜单内的“已选”视觉状态。
-  // 一级、二级菜单均隐藏对勾，并清除选中路径的主色和背景。
+  // 字段选择只负责切换搜索维度，一级、二级菜单均隐藏对勾和选中背景。
   .el-cascader-node__prefix {
     display: none;
+  }
+
+  .field-menu-option {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 0 30px 0 22px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .el-cascader-node.is-active,
@@ -854,6 +988,10 @@ a {
     background-color: transparent !important;
   }
 
+  .field-menu-option.is-current-field {
+    color: var(--el-color-primary) !important;
+  }
+
   .el-cascader-node:not(.is-disabled):hover {
     color: var(--el-text-color-regular) !important;
     background-color: var(--el-fill-color-light) !important;
@@ -863,7 +1001,6 @@ a {
   .el-cascader-node:not(.is-disabled):focus-visible {
     color: var(--el-text-color-primary) !important;
     background-color: var(--el-color-primary-light-9) !important;
-    box-shadow: inset 3px 0 0 var(--el-color-primary);
     outline: none;
   }
 }

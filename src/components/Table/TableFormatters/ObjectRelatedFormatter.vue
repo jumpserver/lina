@@ -4,6 +4,8 @@
 
 <script>
 import BaseFormatter from './base.vue'
+import { getDisplayValue } from './displayValue'
+
 export default {
   name: 'ObjectRelatedFormatter',
   extends: BaseFormatter,
@@ -26,37 +28,10 @@ export default {
   },
   computed: {
     value() {
-      if (this.cellValue === null || this.cellValue?.length === 0) {
-        return ''
-      }
-      let objects = this.cellValue
-      if (!Array.isArray(this.cellValue)) {
-        objects = [this.cellValue]
-      }
-      const values = objects.map((object) => object?.[this.iKey]) || []
-      return values.join(this.formatterArgs.delimiter)
-    },
-    iKey() {
-      if (this.formatterArgs.displayKey) {
-        return this.formatterArgs.displayKey
-      }
-      let object
-      if (this.isM2M()) {
-        object = this.cellValue[0]
-      } else {
-        object = this.cellValue
-      }
-      for (const key of ['label', 'name', 'value']) {
-        if (object?.[key]) {
-          return key
-        }
-      }
-      return ''
-    }
-  },
-  methods: {
-    isM2M() {
-      return Array.isArray(this.cellValue)
+      return getDisplayValue(this.cellValue, {
+        displayKey: this.formatterArgs.displayKey,
+        delimiter: this.formatterArgs.delimiter
+      })
     }
   }
 }

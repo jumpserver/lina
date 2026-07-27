@@ -4,6 +4,8 @@
 
 <script>
 import BaseFormatter from './base.vue'
+import { getDisplayValue } from './displayValue'
+
 export default {
   name: 'ArrayFormatter',
   extends: BaseFormatter,
@@ -24,10 +26,9 @@ export default {
   },
   computed: {
     value() {
-      if (!(this.cellValue instanceof Array)) {
-        return this.cellValue
-      }
-      return this.cellValue.join(this.formatterArgs.delimiter)
+      return getDisplayValue(this.cellValue, {
+        delimiter: this.formatterArgs.delimiter
+      })
     }
   }
 }

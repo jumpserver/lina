@@ -13,6 +13,7 @@ import {
   ObjectRelatedFormatter
 } from '@/components/Table/TableFormatters'
 import LabelsFormatter from '@/components/Table/TableFormatters/LabelsFormatter.vue'
+import { getDisplayValue } from '@/components/Table/TableFormatters/displayValue'
 
 export class TableColumnsGenerator {
   constructor(config, meta, vm) {
@@ -198,6 +199,9 @@ export class TableColumnsGenerator {
       case 'm2m_related_field':
         col.formatter = ObjectRelatedFormatter
         break
+      case 'nested object':
+        col.formatter = ObjectRelatedFormatter
+        break
       case 'list':
         col.formatter = ArrayFormatter
         break
@@ -215,7 +219,7 @@ export class TableColumnsGenerator {
   setDefaultFormatterIfNeed(col) {
     if (!col.formatter) {
       col.formatter = (row, column, cellValue) => {
-        let value = cellValue
+        let value = getDisplayValue(cellValue)
         let padding = '0'
         const excludes = [undefined, null, '']
         if (excludes.indexOf(value) !== -1) {
