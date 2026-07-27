@@ -51,15 +51,7 @@ import Dialog from '@/components/Dialog/index.vue'
 import ListTable from '@/components/Table/ListTable/index.vue'
 
 const defaultColumnsByResource = {
-  '/api/v1/accounts/accounts/': [
-    'name',
-    'username',
-    'asset',
-    'secret_type',
-    'privileged',
-    'is_active',
-    'actions'
-  ],
+  '/api/v1/accounts/accounts/': ['name', 'username', 'asset', 'secret_type', 'actions'],
   '/api/v1/assets/assets/': ['name', 'address', 'platform', 'category', 'type', 'zone', 'actions'],
   '/api/v1/labels/labels/': ['name', 'value', 'color', 'actions'],
   '/api/v1/users/groups/': ['name', 'users_amount', 'comment', 'actions'],
@@ -247,7 +239,8 @@ export default {
     },
     tableName() {
       const pathname = new URL(this.url, location.origin).pathname.replaceAll('/', '_')
-      const columnsKey = this.columns.length > 0 ? `_${this.columns.join('_')}` : ''
+      const tableColumns = this.columns.length > 0 ? this.columns : this.defaultColumns
+      const columnsKey = tableColumns.length > 0 ? `_${tableColumns.join('_')}` : ''
       return `ResourceSelect${pathname}${columnsKey}`
     },
     commonTableConfig() {
