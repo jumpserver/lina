@@ -32,50 +32,7 @@ export const filterSelectValues = (values) => {
   return selects
 }
 
-const reconcileAssetProtocols = (
-  currentProtocols = [],
-  platformProtocols = [],
-  restoreCurrent = false
-) => {
-  const currentPorts = new Map(currentProtocols.map((protocol) => [protocol.name, protocol.port]))
-  const supported = new Map(platformProtocols.map((protocol) => [protocol.name, protocol]))
-  const initialDefaults = platformProtocols.filter(
-    (protocol) => protocol.primary || protocol.required || protocol.default
-  )
-  const requiredProtocols = platformProtocols.filter(
-    (protocol) => protocol.primary || protocol.required
-  )
-  let protocols = restoreCurrent
-    ? currentProtocols
-        .filter((protocol) => supported.has(protocol.name))
-        .map((protocol) => supported.get(protocol.name))
-    : initialDefaults
-  const missingProtocols = restoreCurrent ? requiredProtocols : initialDefaults
-  missingProtocols.forEach((protocol) => {
-    if (!protocols.some((item) => item.name === protocol.name)) {
-      protocols.push(protocol)
-    }
-  })
-  if (protocols.length === 0) {
-    protocols = platformProtocols.slice(0, 1)
-  }
-  return protocols.map((protocol) => ({
-    name: protocol.name,
-    port: currentPorts.has(protocol.name) ? currentPorts.get(protocol.name) : protocol.port
-  }))
-}
-
-async function updatePlatformProtocols(
-  vm,
-  platformType,
-  updateForm,
-  platformChanged,
-  currentProtocols,
-  savedPlatformProtocols,
-  selectedPlatform,
-  isLatest,
-  onApplied
-) {
+async function updatePlatformProtocols(vm, platformType, updateForm, platformChanged, isLatest) {
   const requestedPlatformID = vm.platformID
   const initialized = await vm.setInitial(requestedPlatformID)
   if (!initialized || !isLatest() || String(vm.platformID) !== String(requestedPlatformID)) {
@@ -85,33 +42,9 @@ async function updatePlatformProtocols(
   await vm.setPlatformConstrains()
   if (!isLatest()) return
   const platformProtocols = vm.platform.protocols || []
-  const protocolNames = platformProtocols.map((protocol) => protocol.name)
-  console.info('[AssetPlatformProtocol] loaded', {
-    selected: selectedPlatform,
-    requestedId: requestedPlatformID,
-    returnedId: vm.platform.id,
-    returnedName: vm.platform.name,
-    protocols: protocolNames
-  })
 
-  if (platformChanged) {
-    const restoreSaved = savedPlatformProtocols !== undefined
-    const protocols = reconcileAssetProtocols(
-      restoreSaved ? savedPlatformProtocols : currentProtocols,
-      platformProtocols,
-      restoreSaved
-    )
-    onApplied(protocols, requestedPlatformID)
-    updateForm({ protocols })
-    console.info('[AssetPlatformProtocol] applied', {
-      platformId: requestedPlatformID,
-      choices: protocolNames,
-      value: protocols.map((protocol) => protocol.name),
-      restored: restoreSaved
-    })
-  }
-
-  if (platformType === 'website') {
+  const isCreate = !vm.$context.get('id') && !vm.$context.get('clone_from')
+  if (platformType === 'website' && (isCreate || platformChanged)) {
     const setting = Array.isArray(platformProtocols)
       ? platformProtocols[0].setting
       : platformProtocols.setting
@@ -131,12 +64,7 @@ export const assetFieldsMeta = (vm, category, type) => {
   const platformProtocols = []
   const secretTypes = []
   const asset = { address: 'https://example:8443' }
-  let currentProtocols = []
-  const savedProtocols = new Map()
-  let appliedPlatformID
-  let pendingPlatformID
   let refreshSequence = 0
-  let selectedPlatform
   const updatePlatform = _.debounce(async ([event], updateForm) => {
     // Select2 emits the selected id in Vue 3, while older form controls emitted
     // the selected option object. Accept both shapes so the platform detail and
@@ -145,43 +73,16 @@ export const assetFieldsMeta = (vm, category, type) => {
     const hasPlatform = pk !== undefined && pk !== null && pk !== ''
     const platformChanged = hasPlatform && String(pk) !== String(vm.platformID)
     const sequence = ++refreshSequence
-    console.info('[AssetPlatformProtocol] selected', {
-      id: pk,
-      label: selectedPlatform?.label,
-      previousId: vm.platformID,
-      changed: platformChanged
-    })
     if (platformChanged) {
-      if (appliedPlatformID !== undefined) {
-        savedProtocols.set(appliedPlatformID, _.cloneDeep(currentProtocols))
-      }
-      pendingPlatformID = String(pk)
       vm.platformID = pk
     }
-    const requestedPlatformID = String(vm.platformID)
-    try {
-      await updatePlatformProtocols(
-        vm,
-        platformType,
-        updateForm,
-        platformChanged,
-        _.cloneDeep(currentProtocols),
-        savedProtocols.get(requestedPlatformID),
-        _.cloneDeep(selectedPlatform),
-        () => sequence === refreshSequence,
-        (protocols, platformID) => {
-          appliedPlatformID = String(platformID)
-          currentProtocols = _.cloneDeep(protocols)
-          if (pendingPlatformID === appliedPlatformID) {
-            pendingPlatformID = undefined
-          }
-        }
-      )
-    } finally {
-      if (sequence === refreshSequence && pendingPlatformID === requestedPlatformID) {
-        pendingPlatformID = undefined
-      }
-    }
+    await updatePlatformProtocols(
+      vm,
+      platformType,
+      updateForm,
+      platformChanged,
+      () => sequence === refreshSequence
+    )
   }, 200)
   return {
     address: {
@@ -205,18 +106,6 @@ export const assetFieldsMeta = (vm, category, type) => {
       helpText: i18n.t('AssetProtocolHelpText'),
       on: {
         input: ([value]) => {
-          if (pendingPlatformID !== undefined) return
-          currentProtocols = Array.isArray(value)
-            ? value.map((protocol) => ({ name: protocol.name, port: protocol.port }))
-            : []
-          if (
-            appliedPlatformID === undefined &&
-            vm.platformID !== undefined &&
-            vm.platformID !== null &&
-            vm.platformID !== ''
-          ) {
-            appliedPlatformID = String(vm.platformID)
-          }
           const protocolSecretTypes = platformProtocols.reduce((pre, cur) => {
             pre[cur.name] = cur['secret_types']
             return pre
@@ -244,9 +133,6 @@ export const assetFieldsMeta = (vm, category, type) => {
         }
       },
       on: {
-        changeOptions: ([option]) => {
-          selectedPlatform = option
-        },
         change: updatePlatform,
         // 初始化和用户选择都会触发 input；与 change 共用防抖，避免同一次选择重复初始化。
         input: updatePlatform
