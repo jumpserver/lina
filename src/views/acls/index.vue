@@ -46,6 +46,15 @@ export default {
             tags: ['client', 'cli']
           },
           {
+            id: 'clipboard-acl',
+            display_name: this.$t('ClipboardACLs'),
+            name: 'ClipboardACLList',
+            comment: this.$t('ClipboardACLHelpText'),
+            icon: 'copy',
+            edition: 'enterprise',
+            tags: ['clipboard']
+          },
+          {
             id: 'UserLoginACL',
             display_name: this.$t('UserLoginACLs'),
             name: 'UserLoginACLList',
