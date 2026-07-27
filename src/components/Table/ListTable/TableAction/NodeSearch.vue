@@ -16,7 +16,9 @@
       <template #reference>
         <el-button
           ref="triggerButton"
+          :aria-label="buttonTitle"
           :class="{ 'is-active': selectedNode !== null }"
+          :title="buttonTitle"
           class="node-search__button"
           size="small"
         >
@@ -35,6 +37,17 @@
         <div class="node-search-panel__tabs-wrap">
           <el-tabs v-model="activeTree" class="node-search-panel__tabs">
             <el-tab-pane :label="$t('AssetTree')" name="asset">
+              <div class="node-search-panel__search">
+                <el-input
+                  v-model="nodeQueries.asset"
+                  :placeholder="$t('NodeFilterSearch')"
+                  clearable
+                >
+                  <template #prefix>
+                    <el-icon><Search /></el-icon>
+                  </template>
+                </el-input>
+              </div>
               <div v-loading="treeState.asset.loading" class="node-search-panel__tree">
                 <el-tree
                   ref="assetTree"
@@ -43,6 +56,7 @@
                   :data="treeState.asset.data"
                   :default-expanded-keys="treeState.asset.defaultExpandedKeys"
                   :expand-on-click-node="true"
+                  :filter-node-method="filterNode"
                   :props="treeProps"
                   node-key="id"
                   show-checkbox
@@ -58,6 +72,17 @@
             </el-tab-pane>
 
             <el-tab-pane :label="$t('TypeTree')" name="type">
+              <div class="node-search-panel__search">
+                <el-input
+                  v-model="nodeQueries.type"
+                  :placeholder="$t('NodeFilterSearch')"
+                  clearable
+                >
+                  <template #prefix>
+                    <el-icon><Search /></el-icon>
+                  </template>
+                </el-input>
+              </div>
               <div v-loading="treeState.type.loading" class="node-search-panel__tree">
                 <el-tree
                   ref="typeTree"
@@ -66,6 +91,7 @@
                   :data="treeState.type.data"
                   :default-expanded-keys="treeState.type.defaultExpandedKeys"
                   :expand-on-click-node="true"
+                  :filter-node-method="filterNode"
                   :props="treeProps"
                   node-key="id"
                   show-checkbox
@@ -193,6 +219,10 @@ export default {
       selectedNodePath: '',
       selectedTreeKey: '',
       selectedTreeType: '',
+      nodeQueries: {
+        asset: '',
+        type: ''
+      },
       localTreeState: {
         asset: {
           data: [],
@@ -278,12 +308,23 @@ export default {
         } else {
           this.prepareTreeExpansionForOpen()
         }
+      } else {
+        this.nodeQueries.asset = ''
+        this.nodeQueries.type = ''
       }
     },
     activeTree(treeType) {
       if (this.popoverVisible) {
-        this.loadTree(treeType)
+        this.loadTree(treeType).then(() => {
+          this.filterTree(treeType, this.nodeQueries[treeType])
+        })
       }
+    },
+    'nodeQueries.asset'(value) {
+      this.filterTree('asset', value)
+    },
+    'nodeQueries.type'(value) {
+      this.filterTree('type', value)
     }
   },
   mounted() {
@@ -363,6 +404,51 @@ export default {
       const params = typeof this.queryParams === 'function' ? this.queryParams() : this.queryParams
       return { ...(params || {}) }
     },
+    getSelectionSnapshot() {
+      if (!this.selectedNode || !this.selectedTreeType || !this.selectedTreeKey) {
+        return null
+      }
+      return {
+        treeType: this.selectedTreeType,
+        treeKey: this.selectedTreeKey,
+        label: this.selectedNodeLabel,
+        query: this.getFilterQuery(this.selectedTreeType, this.selectedNode)
+      }
+    },
+    async applySelectionSnapshot(snapshot) {
+      if (!snapshot?.treeType || !snapshot?.treeKey) {
+        this.clearSelection()
+        return
+      }
+      await this.loadTree(snapshot.treeType)
+      const findNode = (nodes) => {
+        for (const node of nodes || []) {
+          if (String(this.getTreeKey(node)) === String(snapshot.treeKey)) {
+            return node
+          }
+          const matched = findNode(node.children)
+          if (matched) {
+            return matched
+          }
+        }
+        return null
+      }
+      const node = findNode(this.treeState[snapshot.treeType]?.data)
+      if (!node) {
+        this.clearSelection()
+        return
+      }
+      const treeKey = this.getTreeKey(node)
+      this.$refs.assetTree?.setCheckedKeys(snapshot.treeType === 'asset' ? [treeKey] : [])
+      this.$refs.typeTree?.setCheckedKeys(snapshot.treeType === 'type' ? [treeKey] : [])
+      this.selectedNode = node
+      this.selectedNodePath =
+        snapshot.label || this.getNodePathLabel(snapshot.treeType, treeKey, node)
+      this.selectedTreeKey = String(treeKey)
+      this.selectedTreeType = snapshot.treeType
+      const query = snapshot.query || this.getFilterQuery(snapshot.treeType, node)
+      this.$emit('nodeSearch', query, this.getSelectionSnapshot())
+    },
     getTreeKey(node) {
       return node?.meta?.data?.key ?? node?.id
     },
@@ -371,6 +457,18 @@ export default {
     },
     getNodeLabel(node) {
       return node?.name || node?.meta?.data?.value || ''
+    },
+    filterNode(query, node) {
+      const keyword = query.trim().toLocaleLowerCase()
+      if (!keyword) {
+        return true
+      }
+      return this.getNodeLabel(node).toLocaleLowerCase().includes(keyword)
+    },
+    filterTree(treeType, query) {
+      this.$nextTick(() => {
+        this.$refs[`${treeType}Tree`]?.filter(query)
+      })
     },
     getParentTreeKey(node) {
       return node?.pId ?? node?.parent_key ?? node?.meta?.data?.parent_key
@@ -446,6 +544,7 @@ export default {
         }
         state.data = treeData
         state.loaded = true
+        this.filterTree(treeType, this.nodeQueries[treeType])
       } catch (error) {
         state.data = []
       } finally {
@@ -643,7 +742,7 @@ export default {
       this.selectedTreeKey = normalizedTreeKey
       this.selectedTreeType = treeType
       this.treeExpandAllNext[treeType] = false
-      this.$emit('nodeSearch', query)
+      this.$emit('nodeSearch', query, this.getSelectionSnapshot())
     },
     clearSelection() {
       this.$refs.assetTree?.setCheckedKeys([])
@@ -654,7 +753,7 @@ export default {
       this.selectedTreeType = ''
       this.treeExpandAllNext.asset = false
       this.treeExpandAllNext.type = false
-      this.$emit('nodeSearch', this.getEmptyFilterQuery())
+      this.$emit('nodeSearch', this.getEmptyFilterQuery(), null)
     }
   }
 }
@@ -666,25 +765,32 @@ export default {
 
   &__button.el-button {
     position: relative;
-    width: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    min-width: 30px;
     height: 30px;
+    margin: 0;
     padding: 0;
     border: 1px solid var(--color-border);
     border-radius: 4px;
     background: #fff;
-    color: var(--color-icon-primary);
+    color: var(--color-text-primary) !important;
 
     &:hover,
     &:focus-visible {
-      border-color: var(--el-color-primary-light-5);
-      background: var(--el-fill-color-light);
-      color: var(--el-color-primary);
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--color-text-primary) !important;
     }
 
-    &.is-active {
-      border-color: var(--el-color-primary-light-5);
-      background: var(--el-color-primary-light-9);
-      color: var(--el-color-primary);
+    .svg-icon {
+      width: 12px;
+      height: 12px;
+      margin: 0;
+      color: inherit !important;
+      fill: currentColor !important;
+      opacity: 0.72;
     }
   }
 
@@ -794,6 +900,21 @@ export default {
     align-items: center;
     gap: 2px;
     height: 36px;
+  }
+
+  .node-search-panel__search {
+    padding: 10px 10px 2px;
+
+    .el-input__wrapper {
+      min-height: 30px;
+      border-radius: 3px;
+      box-shadow: 0 0 0 1px var(--el-border-color) inset !important;
+
+      &:hover,
+      &.is-focus {
+        box-shadow: 0 0 0 1px var(--el-border-color) inset !important;
+      }
+    }
   }
 
   .node-search-panel__tree-action-trigger {
