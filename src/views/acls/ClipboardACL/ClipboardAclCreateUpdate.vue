@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       initial: {
-        action: 'reject',
+        action: 'accept',
         accounts: ['@ALL'],
         operations: ['copy', 'paste'],
         copy_text_limit: 0,
