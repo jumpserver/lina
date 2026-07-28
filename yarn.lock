@@ -4653,7 +4653,7 @@ __metadata:
     prismjs: "npm:^1.30.0"
     sass: "npm:^1.100.0"
     semver: "npm:^7.8.1"
-    sm-crypto: "npm:^0.4.0"
+    sm-crypto: "npm:^0.5.0"
     socket.io-client: "npm:^4.8.3"
     sortablejs: "npm:^1.15.7"
     strip-ansi: "npm:^7.2.0"
@@ -6214,12 +6214,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sm-crypto@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "sm-crypto@npm:0.4.0"
+"sm-crypto@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "sm-crypto@npm:0.5.0"
   dependencies:
     jsbn: "npm:^1.1.0"
-  checksum: 10c0/76210413b2af8d426403d5f0a7d52adcd85241539e5ad6445d1a3a9eb22d474dba21ae0b58ca9a68f1c76555c42d7fe6133d85c2172d69de608152d3f72ccfdd
+  checksum: 10c0/a224d55e6b7e4494fb9a0b86c9b298ab044fe693c4696346d69d3cb038089d2e0d7de5e5b7219853b69cb6cf438a87648629b19bb96ad4b330fd07e8c4d1c465
   languageName: node
   linkType: hard
 
