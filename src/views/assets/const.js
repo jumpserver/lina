@@ -26,7 +26,28 @@ export const filterSelectValues = (values) => {
   return selects
 }
 
-async function updatePlatformProtocols(vm, platformType, updateForm, platformChanged, isLatest) {
+export const reloadPlatformProtocols = (platformProtocols, currentProtocols) => {
+  const currentByName = new Map(
+    (Array.isArray(currentProtocols) ? currentProtocols : []).map((protocol) => [
+      protocol.name,
+      protocol
+    ])
+  )
+
+  return (Array.isArray(platformProtocols) ? platformProtocols : []).map(({ name, port }) => ({
+    name,
+    port: currentByName.get(name)?.port ?? port
+  }))
+}
+
+async function updatePlatformProtocols(
+  vm,
+  platformType,
+  updateForm,
+  platformChanged,
+  currentProtocols,
+  isLatest
+) {
   const requestedPlatformID = vm.platformID
   const initialized = await vm.setInitial(requestedPlatformID)
   if (!initialized || !isLatest() || String(vm.platformID) !== String(requestedPlatformID)) {
@@ -37,18 +58,27 @@ async function updatePlatformProtocols(vm, platformType, updateForm, platformCha
   if (!isLatest()) return
   const platformProtocols = vm.platform.protocols || []
 
-  const isCreate = !vm.$context.get('id') && !vm.$context.get('clone_from')
+  const formUpdates = {}
+  if (platformChanged) {
+    formUpdates.protocols = reloadPlatformProtocols(platformProtocols, currentProtocols)
+  }
+
+  const isCreate = !vm.$route?.params?.id && !vm.$route?.query?.clone_from
   if (platformType === 'website' && (isCreate || platformChanged)) {
     const setting = Array.isArray(platformProtocols)
       ? platformProtocols[0].setting
       : platformProtocols.setting
-    updateForm({
+    Object.assign(formUpdates, {
       autofill: setting.autofill ? setting.autofill : 'basic',
       password_selector: setting.password_selector,
       script: setting.script,
       submit_selector: setting.submit_selector,
       username_selector: setting.username_selector
     })
+  }
+
+  if (Object.keys(formUpdates).length > 0) {
+    updateForm(formUpdates)
   }
 }
 
@@ -58,6 +88,7 @@ export const assetFieldsMeta = (vm, category, type) => {
   const platformProtocols = []
   const secretTypes = []
   const asset = { address: 'https://example:8443' }
+  let selectedProtocols = []
   let refreshSequence = 0
   const updatePlatform = _.debounce(async ([event], updateForm) => {
     // Select2 emits the selected id in Vue 3, while older form controls emitted
@@ -70,11 +101,14 @@ export const assetFieldsMeta = (vm, category, type) => {
     if (platformChanged) {
       vm.platformID = pk
     }
+    const currentProtocols =
+      selectedProtocols.length > 0 ? selectedProtocols : vm.iConfig.initial?.protocols
     await updatePlatformProtocols(
       vm,
       platformType,
       updateForm,
       platformChanged,
+      currentProtocols,
       () => sequence === refreshSequence
     )
   }, 200)
@@ -100,6 +134,9 @@ export const assetFieldsMeta = (vm, category, type) => {
       helpText: i18n.t('AssetProtocolHelpText'),
       on: {
         input: ([value]) => {
+          selectedProtocols = Array.isArray(value)
+            ? value.map(({ name, port }) => ({ name, port }))
+            : []
           const protocolSecretTypes = platformProtocols.reduce((pre, cur) => {
             pre[cur.name] = cur['secret_types']
             return pre
