@@ -139,16 +139,20 @@ export default {
         }
         const option = {
           label: field.label,
+          operators: field.filter_operators,
           type: field.type,
           value: name
         }
         if (['choice', 'labeled_choice'].indexOf(field.type) > -1 && field.choices) {
+          option.isBooleanChoice =
+            field.choices.length > 0 &&
+            field.choices.every((item) => typeof item.value === 'boolean')
           option.children = field.choices.map((item) => {
             if (typeof item.value === 'boolean') {
               if (item.value) {
-                return { label: item.label, value: 'True' }
+                return { label: item.label, value: 'true' }
               } else {
-                return { label: item.label, value: 'False' }
+                return { label: item.label, value: 'false' }
               }
             }
             return { label: item.label, value: item.value }
@@ -156,8 +160,8 @@ export default {
         }
         if (field.type === 'boolean') {
           option.children = [
-            { label: i18n.t('Yes'), value: true },
-            { label: i18n.t('No'), value: false }
+            { label: i18n.t('Yes'), value: 'true' },
+            { label: i18n.t('No'), value: 'false' }
           ]
         }
         if (option.value === 'id') {
@@ -180,8 +184,9 @@ export default {
 <style lang="scss" scoped>
 .auto-data-search {
   display: inline-flex;
-  align-items: flex-start;
+  align-items: center;
   box-sizing: border-box;
+  width: 100%;
   min-width: 0;
   max-width: 100%;
 
