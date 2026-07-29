@@ -3,6 +3,9 @@ import empty from '@/layout/empty'
 import { openJDMC } from '@/utils/jdmc'
 import { getFirstAccessibleChildPath } from '@/utils/vue'
 
+const getSettings = () => getStore()?.state?.settings?.publicSettings || {}
+const useJDMCLicense = (settings) => settings?.JDMC_ENABLED && !settings?.KOTL_ENABLED
+
 const Setting = () => import('@/views/settings/index')
 const globalSubmenu = () => import('@/layout/globalOrg.vue')
 
@@ -599,10 +602,26 @@ export default {
       path: '/settings/license',
       name: 'License',
       component: () => import('@/views/settings/License'),
+      beforeEnter: (_to, from, next) => {
+        const settings = getSettings()
+        if (useJDMCLicense(settings)) {
+          openJDMC('/jdmc/sys-management/sys-auth')
+          redirectAfterExternalAction(from, next)
+        } else {
+          next()
+        }
+      },
       meta: {
         title: i18n.t('License'),
         icon: 'license',
-        permissions: ['settings.change_license']
+        permissions: ['settings.change_license'],
+        externalAction: {
+          type: 'jdmc',
+          nextPath: '/jdmc/sys-management/sys-auth',
+          enabled: ({ settings }) => useJDMCLicense(settings)
+        },
+        // 旧 JDMC 许可证模式需要 rbac.view_jdmc 权限，KOTL 和普通模式均由 Core 管理
+        hidden: ({ settings }) => useJDMCLicense(settings) && !hasPermission('rbac.view_jdmc')
       }
     }
   ]
