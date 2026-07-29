@@ -1,6 +1,8 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
+import { getStore } from '@/store/registry'
 import { openJDMC } from '@/utils/jdmc'
+import { hasPermission } from '@/utils/jms'
 import { getFirstAccessibleChildPath } from '@/utils/vue'
 
 const getSettings = () => getStore()?.state?.settings?.publicSettings || {}
