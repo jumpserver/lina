@@ -1,11 +1,7 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
-import { getStore } from '@/store/registry'
 import { openJDMC } from '@/utils/jdmc'
-import { hasPermission } from '@/utils/jms'
 import { getFirstAccessibleChildPath } from '@/utils/vue'
-
-const getSettings = () => getStore()?.state?.settings?.publicSettings || {}
 
 const Setting = () => import('@/views/settings/index')
 const globalSubmenu = () => import('@/layout/globalOrg.vue')
@@ -603,28 +599,10 @@ export default {
       path: '/settings/license',
       name: 'License',
       component: () => import('@/views/settings/License'),
-      beforeEnter: (_to, from, next) => {
-        const settings = getSettings()
-        if (settings?.JDMC_ENABLED) {
-          openJDMC('/jdmc/sys-management/sys-auth')
-          redirectAfterExternalAction(from, next)
-        } else {
-          next()
-        }
-      },
       meta: {
         title: i18n.t('License'),
         icon: 'license',
-        permissions: ['settings.change_license'],
-        externalAction: {
-          type: 'jdmc',
-          nextPath: '/jdmc/sys-management/sys-auth',
-          enabled: ({ settings }) => settings?.JDMC_ENABLED
-        },
-        // 开启 JDMC 但没有 rbac.view_jdmc 权限时，隐藏
-        // 开启 JDMC 且有 rbac.view_jdmc 权限时显示
-        // 没有开启 JDMC 时，显示
-        hidden: ({ settings }) => settings['JDMC_ENABLED'] && !hasPermission('rbac.view_jdmc')
+        permissions: ['settings.change_license']
       }
     }
   ]
