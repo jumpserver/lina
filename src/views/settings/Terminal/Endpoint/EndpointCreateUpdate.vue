@@ -20,18 +20,9 @@ export default {
       successUrl: { name: 'TerminalSetting', params: { activeMenu: 'EndpointList' } },
       fields: [
         [this.$t('Basic'), ['name', 'host']],
-        [this.$t('Port'), ['http_port', 'https_port', 'ssh_port', 'rdp_port', 'vnc_port']],
         [
-          '',
-          [
-            'mysql_port',
-            'mariadb_port',
-            'postgresql_port',
-            'redis_port',
-            'sqlserver_port',
-            'oracle_port',
-            'mongodb_port'
-          ]
+          this.$t('Port'),
+          ['http_port', 'https_port', 'ssh_port', 'rdp_port', 'vnc_port', 'magnus_port']
         ],
         [this.$t('Other'), ['is_active', 'comment']]
       ],
