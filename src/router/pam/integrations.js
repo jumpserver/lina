@@ -13,7 +13,7 @@ export default [
       app: 'accounts',
       name: 'Service',
       icon: 'service',
-      resource: 'integrationapplicaion'
+      resource: 'integrationapplication'
     },
     children: [
       {

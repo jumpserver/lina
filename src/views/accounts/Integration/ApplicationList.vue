@@ -51,6 +51,22 @@ export default {
               return row.accounts_amount
             }
           },
+          owner: {
+            formatter: (row) => row.owner?.name || '-'
+          },
+          agent: {
+            label: this.$t('AgentStatus'),
+            formatter: (row) => {
+              const status = row.agent?.status
+              const type = {
+                online: 'success',
+                offline: 'warning',
+                error: 'danger',
+                unregistered: 'info'
+              }[status?.value]
+              return <el-tag type={type}>{status?.label || '-'}</el-tag>
+            }
+          },
           name: {
             formatterArgs: {
               getRoute: ({ row }) => ({
@@ -100,7 +116,17 @@ export default {
         },
         columnsExtra: ['secret'],
         columnsShow: {
-          default: ['logo', 'name', 'id', 'secret', 'accounts_amount', 'date_last_used', 'active']
+          default: [
+            'logo',
+            'name',
+            'id',
+            'secret',
+            'owner',
+            'accounts_amount',
+            'agent',
+            'date_last_used',
+            'is_active'
+          ]
         },
         permissions: {
           app: 'accounts',

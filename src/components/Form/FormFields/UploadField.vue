@@ -6,9 +6,6 @@
         {{ $t('SelectFile') }}
       </el-button>
       <span v-if="fileName" class="upload-field__filename">{{ fileName }}</span>
-      <el-button v-if="fileName" size="small" type="danger" @click.stop="resetUpload">
-        {{ $t('Cancel') }}
-      </el-button>
     </div>
     <div v-if="tip !== ''" class="help-block">{{ tip }}</div>
     <input :value="value" hidden type="text" @input="onInput($event.target.value)" />
@@ -21,6 +18,15 @@
         preview-teleported
       />
     </div>
+    <el-button
+      v-if="fileName"
+      class="upload-field__cancel"
+      size="small"
+      type="danger"
+      @click.stop="resetUpload"
+    >
+      {{ $t('Cancel') }}
+    </el-button>
   </div>
 </template>
 
@@ -124,6 +130,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 100%;
 }
 
 .upload-field__actions {
@@ -142,8 +149,8 @@ export default {
 .upload-field__preview {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  align-self: flex-start;
+  justify-content: flex-start;
+  align-self: stretch;
   min-height: 32px;
   border-radius: 2px;
   background: #fff;
@@ -156,6 +163,10 @@ export default {
   :deep(.el-image__inner) {
     object-fit: contain;
   }
+}
+
+.upload-field__cancel {
+  align-self: flex-start;
 }
 
 /* 顶部宽 logo 等可能是白底/透明图，给预览盒铺品牌背景色，避免白底图“看不见” */

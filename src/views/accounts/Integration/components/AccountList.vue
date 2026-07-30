@@ -1,16 +1,38 @@
 <template>
-  <AccountListTable v-bind="tableConfig" ref="table" :show-actions="false" />
+  <div class="binding-list">
+    <el-alert :closable="false" :title="$t('CredentialBindingIDHint')" show-icon type="info" />
+    <el-table :data="object.account_bindings || []" border>
+      <el-table-column :label="$t('Asset')" min-width="180">
+        <template #default="{ row }">
+          {{ row.asset?.name || '-' }}
+          <span v-if="row.asset?.address" class="secondary">({{ row.asset.address }})</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('Account')" min-width="180">
+        <template #default="{ row }">
+          {{ row.account?.name || '-' }}
+          <span v-if="row.account?.username" class="secondary">({{ row.account.username }})</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('CredentialBindingID')" min-width="330">
+        <template #default="{ row }">
+          <span class="binding-id">
+            <code>{{ row.id }}</code>
+            <el-button link type="primary" @click="copy(row.id)">
+              <el-icon><CopyDocument /></el-icon>
+            </el-button>
+          </span>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
 </template>
 
 <script>
-import AccountListTable from '@/components/Apps/AccountListTable/AccountList.vue'
-import { DetailFormatter } from '@/components/Table/TableFormatters'
+import { copy } from '@/utils/common/index'
 
 export default {
-  name: 'AssetAccountList',
-  components: {
-    AccountListTable
-  },
+  name: 'IntegrationApplicationAccountList',
   props: {
     object: {
       type: Object,
@@ -18,80 +40,24 @@ export default {
       default: () => ({})
     }
   },
-  data() {
-    return {
-      tableConfig: {
-        url: `/api/v1/accounts/accounts/?integrationapplication=${this.object.id}`,
-        hasLeftActions: false,
-        hasImport: false,
-        hasExport: false,
-        showQuickFilters: false,
-        columnsMeta: {
-          asset: {
-            formatter: DetailFormatter,
-            formatterArgs: {
-              drawer: true,
-              can: this.$hasPerm('assets.view_asset'),
-              getTitle: ({ row }) => row.asset.name,
-              getRoute: ({ row }) => ({
-                name: 'AssetDetail',
-                params: { id: row.asset.id },
-                query: { tab: 'Basic' }
-              })
-            }
-          }
-        }
-      }
-    }
-  },
-  mounted() {},
-  methods: {}
+  methods: { copy }
 }
 </script>
 
 <style lang="scss" scoped>
-.asset-table :deep(.row-clicked),
-.asset-user-table :deep(.row-background-color) {
-  background-color: #f5f7fa;
-}
-
-.asset-table {
-  &:hover {
-    cursor: pointer;
-  }
-
-  & :deep(.table-content) {
-    margin-left: 21px;
-  }
-
-  & :deep(.el-table__row) {
-    height: 40px;
-
-    & > td {
-      padding: 0;
-    }
-  }
-}
-
-.noDataR {
-  width: 100%;
-  height: 40vh;
+.binding-list {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
   flex-direction: column;
-
-  .hintWrap {
-    color: #d4d6e6;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    flex-direction: column;
-  }
+  gap: 16px;
 }
 
-.asset-user-table {
-  padding-left: 20px;
+.binding-id {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.secondary {
+  color: var(--el-text-color-secondary);
 }
 </style>
