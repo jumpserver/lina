@@ -72,7 +72,20 @@
               :prop="col.prop"
             >
               <template #header>
-                <span :title="col.label">{{ col.label }}</span>
+                <span class="column-header-content">
+                  <span :title="col.label">{{ col.label }}</span>
+                  <button
+                    v-if="col.pinState?.visible"
+                    :aria-label="$t(col.pinState.pinned ? 'UnpinColumn' : 'PinColumn')"
+                    :class="['column-pin-button', { 'is-pinned': col.pinState.pinned }]"
+                    :title="$t(col.pinState.pinned ? 'UnpinColumn' : 'PinColumn')"
+                    type="button"
+                    @click.stop="$emit('column-pin-toggle', col.prop)"
+                    @mousedown.stop
+                  >
+                    <i class="fa fa-thumb-tack" />
+                  </button>
+                </span>
               </template>
 
               <template
@@ -940,7 +953,8 @@ export default {
       // 函数类型的 formatter 已经通过 :formatter 显式传递了
       // 但是我们需要保留 formatter 在 v-bind 中，以便 template slot 可以访问到
       // 所以这里不排除 formatter，而是在 el-data-table-column 中处理
-      return { align: this.columnsAlign, ...col }
+      const { pinOriginalFixed, pinState, ...columnProps } = col
+      return { align: this.columnsAlign, ...columnProps }
     },
     getQuery() {
       // 构造query对象
@@ -1387,6 +1401,88 @@ export default {
     position: relative;
     cursor: pointer;
     color: $color-blue;
+  }
+
+  .column-header-content {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .column-pin-button {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    visibility: hidden;
+    opacity: 0;
+    padding: 2px 4px;
+    border: 0;
+    color: var(--el-text-color-placeholder);
+    background: transparent;
+    cursor: pointer;
+    transition:
+      opacity 0.15s ease,
+      color 0.15s ease;
+
+    i {
+      transform: rotate(45deg);
+    }
+
+    &:hover {
+      color: var(--el-color-primary);
+    }
+
+    &.is-pinned {
+      visibility: visible;
+      opacity: 1;
+      color: var(--el-color-primary);
+    }
+  }
+
+  :deep(th:hover) .column-pin-button {
+    right: 8px;
+    visibility: visible;
+    opacity: 1;
+  }
+
+  :deep(th .cell) {
+    position: relative;
+  }
+
+  :deep(.column-header-content + .caret-wrapper),
+  :deep(.column-header-content + .el-table__column-filter-trigger) {
+    margin-left: 5px;
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .column-pin-button {
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      visibility: visible;
+      opacity: 0.55;
+      border-radius: 4px;
+
+      &:not(.is-pinned),
+      &:not(.is-pinned):hover {
+        color: var(--el-text-color-placeholder);
+      }
+
+      &:not(.is-pinned):active {
+        color: var(--el-color-primary);
+        background: var(--el-color-primary-light-9);
+      }
+
+      &.is-pinned {
+        opacity: 1;
+      }
+    }
+  }
+
+  @media (max-width: 991px) {
+    .column-pin-button {
+      display: none;
+    }
   }
 
   @keyframes treeTableShow {

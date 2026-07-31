@@ -1,4 +1,6 @@
 {
+  "PinColumn": "Pin column",
+  "UnpinColumn": "Unpin column",
   "FieldRequiredError": "This field is required.",
   "AccessToken": "Access token",
   "AccessTokenTip": "Access tokens are credentials used to call the API. Revoke any token you no longer trust.",

@@ -1,4 +1,6 @@
 {
+  "PinColumn": "列を固定",
+  "UnpinColumn": "固定を解除",
   "FieldRequiredError": "这个字段是必需的。",
   "InputEmailAddress": "输入一个电子邮件地址。",
   "ServerError": "服务错误，请联系管理员。",

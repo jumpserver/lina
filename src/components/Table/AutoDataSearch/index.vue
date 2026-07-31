@@ -8,6 +8,7 @@
       v-show="!shouldFold"
       ref="tagSearch"
       :options="iOption"
+      :search-config="searchMeta"
       class="auto-data-search__field"
       @blur="handleBlur"
       @conditions-change="$emit('conditionsChange', $event)"
@@ -17,9 +18,11 @@
 </template>
 
 <script>
-import { getActionMeta } from '@/api/common'
+import { getFilterMeta, getSearchMeta } from '@/api/common'
 import TagSearch from '@/components/Table/TagSearch/index.vue'
 import i18n from '@/i18n/i18n'
+
+const HIDDEN_FILTER_FIELDS = new Set(['days', 'days__lt'])
 
 export default {
   name: 'AutoDataSearch',
@@ -52,12 +55,15 @@ export default {
     return {
       internalOptions: [],
       tags: [],
-      manualSearch: false
+      manualSearch: false,
+      searchMeta: {}
     }
   },
   computed: {
     iOption() {
-      const options = [...this.options, ...this.internalOptions]
+      const options = [...this.options, ...this.internalOptions].filter(
+        (option) => !HIDDEN_FILTER_FIELDS.has(option.value)
+      )
       return _.uniqBy(options, 'value')
     },
     hasTags() {
@@ -129,17 +135,15 @@ export default {
       const vm = this // 透传This
       vm.internalOptions = [] // 重置
       const data = await this.optionUrlMeta()
-      const meta = getActionMeta(data, 'GET')
-      for (const [name, field] of Object.entries(meta)) {
-        if (!field.filter) {
-          continue
-        }
+      const filters = getFilterMeta(data)
+      this.searchMeta = getSearchMeta(data)
+      for (const [name, field] of Object.entries(filters)) {
         if (vm.exclude.includes(name)) {
           continue
         }
         const option = {
           label: field.label,
-          operators: field.filter_operators,
+          operators: field.operators,
           type: field.type,
           value: name
         }

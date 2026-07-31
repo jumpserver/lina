@@ -15,6 +15,50 @@ import {
 import LabelsFormatter from '@/components/Table/TableFormatters/LabelsFormatter.vue'
 import { getDisplayValue } from '@/components/Table/TableFormatters/displayValue'
 
+const textDisplayWidthCache = new Map()
+
+export function getTextDisplayWidth(value) {
+  const text = String(value ?? '')
+  const cachedWidth = textDisplayWidthCache.get(text)
+  if (cachedWidth !== undefined) {
+    return cachedWidth
+  }
+
+  const width = Array.from(text).reduce((total, char) => {
+    return total + (/[^\u0000-\u00ff]/.test(char) ? 13 : 7)
+  }, 0)
+  if (textDisplayWidthCache.size >= 2000) {
+    textDisplayWidthCache.clear()
+  }
+  textDisplayWidthCache.set(text, width)
+  return width
+}
+
+export function getColumnHeaderWidth(col) {
+  if (!col?.label) {
+    return 0
+  }
+  return Math.ceil(getTextDisplayWidth(col.label) + 100)
+}
+
+export function getBooleanColumnWidth(col) {
+  const cellHorizontalPadding = 29
+  const filterWidth = col?.filters?.length ? 18 : 0
+  const sortWidth = col?.sortable ? 24 : 0
+  const helpTipWidth = col?.helpTip ? 18 : 0
+  const pinWidth = 32
+  const extraSpacing = 10
+  return Math.ceil(
+    getTextDisplayWidth(col?.label) +
+      cellHorizontalPadding +
+      filterWidth +
+      sortWidth +
+      helpTipWidth +
+      pinWidth +
+      extraSpacing
+  )
+}
+
 export class TableColumnsGenerator {
   constructor(config, meta, vm) {
     this.config = config
@@ -36,7 +80,7 @@ export class TableColumnsGenerator {
   // }
 
   generateColumns() {
-    const config = _.cloneDeep(this.config)
+    const config = { ...this.config }
     let columns = []
     const allColumnNames = Object.entries(this.meta)
       .filter(([name, meta]) => !meta['write_only'])
@@ -57,7 +101,7 @@ export class TableColumnsGenerator {
 
     for (let col of configColumns) {
       if (typeof col === 'object') {
-        columns.push(col)
+        columns.push(this.prepareAdaptiveColumn({ ...col }))
       } else if (typeof col === 'string') {
         col = this.generateColumn(col)
         columns.push(col)
@@ -66,7 +110,7 @@ export class TableColumnsGenerator {
 
     columns = columns.filter((item) => {
       if (item?.showFullContent) {
-        item.className = 'show-full-content'
+        item.className = this.appendClassName(item.className, 'show-full-content')
       }
       let has = item.has
       if (has === undefined) {
@@ -77,9 +121,6 @@ export class TableColumnsGenerator {
       return has
     })
 
-    // columns = this.orderingColumns(columns)
-    // 第一次初始化时记录 totalColumns
-    config.columns = columns
     return columns
   }
 
@@ -98,7 +139,7 @@ export class TableColumnsGenerator {
   generateColumn(name) {
     const colMeta = this.meta[name] || {}
     const customMeta = this.config.columnsMeta ? this.config.columnsMeta[name] : {}
-    let col = { prop: name, label: colMeta.label, showOverflowTooltip: true }
+    let col = { prop: name, label: colMeta.label, showOverflowTooltip: false }
 
     col = this.generateColumnByType(colMeta.type, col, colMeta)
     col = this.generateColumnByName(name, col)
@@ -108,16 +149,13 @@ export class TableColumnsGenerator {
     col = this.addFilterIfNeed(col)
     col = this.addOrderingIfNeed(col)
     col = this.updateLabelIfNeed(col)
-    col = this.setDefaultWidthIfNeed(col)
+    col = this.prepareAdaptiveColumn(col)
     return col
   }
 
   generateColumnByName(name, col) {
     switch (name) {
       case 'id':
-        if (!col.width) {
-          col.width = '299px'
-        }
         if (!col.formatter) {
           col.formatter = CopyableFormatter
           col.iconPosition = 'left'
@@ -126,8 +164,6 @@ export class TableColumnsGenerator {
       case 'name':
         col.formatter = DetailFormatter
         col.sortable = 'custom'
-        col.showOverflowTooltip = true
-        col.minWidth = '150px'
         break
       case 'actions':
         col = {
@@ -149,7 +185,6 @@ export class TableColumnsGenerator {
             false: i18n.t('No')
           }
         }
-        col.width = '80px'
         break
       case 'is_active':
         col.formatter = ChoicesFormatter
@@ -159,7 +194,6 @@ export class TableColumnsGenerator {
             false: i18n.t('Inactive')
           }
         }
-        col.width = '100px'
         break
       case 'datetime':
       case 'date_start':
@@ -167,9 +201,9 @@ export class TableColumnsGenerator {
         break
       case 'labels':
         col.formatter = LabelsFormatter
-        col.width = '200px'
         break
       case 'comment':
+        col.contentMaxWidth = 300
         col.showOverflowTooltip = true
     }
     return col
@@ -187,11 +221,9 @@ export class TableColumnsGenerator {
         break
       case 'boolean':
         col.formatter = ChoicesFormatter
-        // col.width = '80px'
         break
       case 'datetime':
         col.formatter = DateFormatter
-        col.width = '155px'
         break
       case 'object_related_field':
         col.formatter = ObjectRelatedFormatter
@@ -241,20 +273,96 @@ export class TableColumnsGenerator {
   }
 
   setDefaultWidthIfNeed(col) {
-    const lang = i18n.locale
-    let factor = 10
-    if (lang === 'zh') {
-      factor = 20
+    if (!col || !col.label) {
+      return col
     }
-    let [sortable, filters] = [0, 0]
-    if (col && col?.sortable === 'custom') {
-      sortable = 10
+
+    const formatterName = col.formatter?.name || col.formatter?.__name || ''
+    let typeWidth = 180
+    if (col.contentMaxWidth) {
+      typeWidth = col.contentMaxWidth
+    } else if (col.prop === 'platform' || formatterName === 'PlatformFormatter') {
+      typeWidth = 220
+    } else if (formatterName === 'DateFormatter') {
+      typeWidth = 190
+    } else if (col.prop === 'labels' || col.prop === 'protocols' || col.isCustomRender) {
+      typeWidth = 280
     }
-    if (col && col?.filters?.length > 0) {
-      filters = 12
+
+    const preferredWidth = Math.max(getColumnHeaderWidth(col), typeWidth)
+    const preferredWidthPx = `${preferredWidth}px`
+
+    const configuredWidth = col.width ?? col.minWidth
+    const configuredPixels =
+      typeof configuredWidth === 'number'
+        ? configuredWidth
+        : Number.parseFloat(String(configuredWidth || '').replace(/px$/, ''))
+    const isPixelWidth =
+      typeof configuredWidth === 'number' || /^\d+(\.\d+)?px$/.test(String(configuredWidth))
+
+    if (!configuredWidth || !isPixelWidth || configuredPixels < preferredWidth) {
+      if (col.width) {
+        col.width = preferredWidthPx
+      } else {
+        col.minWidth = preferredWidthPx
+      }
     }
-    if (col && !col.width && col.label && !col.minWidth) {
-      col.minWidth = `${col.label.length * factor + sortable + filters + 30}px`
+    return col
+  }
+
+  appendClassName(className, value) {
+    return [className, value].filter(Boolean).join(' ')
+  }
+
+  prepareAdaptiveColumn(col) {
+    if (!col || typeof col !== 'object') {
+      return col
+    }
+
+    if (Array.isArray(col.columns)) {
+      col.columns = col.columns.map((item) => this.prepareAdaptiveColumn({ ...item }))
+    }
+
+    if (col.prop === 'comment' && !col.contentMaxWidth) {
+      col.contentMaxWidth = 300
+    }
+
+    if (col.contentMaxWidth) {
+      if (col.showOverflowTooltip === undefined) {
+        col.showOverflowTooltip = true
+      }
+      col.className = this.appendClassName(col.className, 'bounded-content-table-column')
+    }
+
+    const fieldMeta = this.meta[col.prop] || {}
+    const isBooleanChoice =
+      Array.isArray(fieldMeta.choices) &&
+      fieldMeta.choices.length > 0 &&
+      fieldMeta.choices.every((item) => typeof item.value === 'boolean')
+    const isBooleanField = fieldMeta.type === 'boolean' || isBooleanChoice
+    const isIdField = col.prop === 'id' || String(col.prop || '').includes('_id')
+    if (isBooleanField) {
+      col.width = `${getBooleanColumnWidth(col)}px`
+      delete col.minWidth
+      col.fitWidth = false
+    } else if (isIdField) {
+      col.width = '308px'
+      delete col.minWidth
+      col.fitWidth = false
+    }
+
+    const isCompactColumn = col.prop === 'actions' || col.type === 'selection'
+    col.isCustomRender =
+      col.isCustomRender ?? Boolean(col.formatter && typeof col.formatter !== 'function')
+    if (!isCompactColumn && !isBooleanField && !isIdField) {
+      this.setDefaultWidthIfNeed(col)
+    }
+
+    if (!isCompactColumn && !col.contentMaxWidth) {
+      const contentClass = col.isCustomRender
+        ? 'custom-render-table-column'
+        : 'full-content-table-column'
+      col.className = this.appendClassName(col.className, contentClass)
     }
     return col
   }

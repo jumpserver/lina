@@ -184,6 +184,10 @@ export default {
     default: {
       type: Object,
       default: null
+    },
+    searchConfig: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -200,8 +204,6 @@ export default {
       cascaderVisible: false,
       fieldMenuOpenTimer: null,
       operatorMenuVisible: false,
-      pendingOpenOperatorMenu: false,
-      operatorOpenTimer: null,
       pendingOperatorFocusSearchInput: false,
       operatorFocusTimer: null,
       isComposing: false,
@@ -264,7 +266,7 @@ export default {
       return this.keyLabel
     },
     supportsOperatorSelection() {
-      return this.hasOperatorDisplay && this.supportedOperators.length > 1
+      return this.hasOperatorDisplay && this.supportedOperators.length > 0
     },
     hasOperatorDisplay() {
       if (!this.hasSelectedField) {
@@ -359,6 +361,27 @@ export default {
           ? this.mergeConditionValues(value)
           : this.mergeConditionValues(data[queryKey], value)
       }
+      const appendContainsValue = (queryKey, value, forceAll = false) => {
+        const baseKey = queryKey.replace(
+          /__(?:icontains|icontains_all)$/,
+          ''
+        )
+        const containsKey = `${baseKey}__icontains`
+        const containsAllKey = `${baseKey}__icontains_all`
+        const hasPreviousValue =
+          data[containsKey] !== undefined ||
+          data[containsAllKey] !== undefined
+
+        if (!forceAll && !hasPreviousValue) {
+          data[containsKey] = value
+          return
+        }
+        if (data[containsKey] !== undefined) {
+          appendMergedValues(containsAllKey, data[containsKey])
+          delete data[containsKey]
+        }
+        appendMergedValues(containsAllKey, value)
+      }
       const appendDefaultSearchBatch = (value) => {
         const batch = this.normalizeConditionValues(value).join('|')
         if (!batch) {
@@ -390,7 +413,9 @@ export default {
             condition.operator || this.getDefaultOperator(key, value)
           const queryKey = this.getQueryKeyForOperator(key, operator)
           if (operator === 'icontains_all') {
-            appendMergedValues(queryKey, value)
+            appendContainsValue(queryKey, value, true)
+          } else if (operator === 'icontains') {
+            appendContainsValue(queryKey, value)
           } else if (operator === 'exact' && !this.hasExplicitLookup(key)) {
             const exactQueryKey = `${queryKey}__exact`
             if (data[exactQueryKey] !== undefined) {
@@ -467,7 +492,6 @@ export default {
     document.removeEventListener('keyup', this.handleKeyUp)
     document.removeEventListener('keydown', this.handleDocumentKeyDown, true)
     clearTimeout(this.operatorFocusTimer)
-    clearTimeout(this.operatorOpenTimer)
     clearTimeout(this.fieldMenuOpenTimer)
   },
   methods: {
@@ -742,13 +766,13 @@ export default {
       return this.getQueryKeyForOperator(key, 'in')
     },
     getQueryKeyForOperator(key, operator) {
-      if (this.options.some((field) => field.value === key) && this.hasExplicitLookup(key)) {
-        return key
-      }
       const baseKey = key.replace(
         /__(?:exact|icontains|startswith|in|icontains_any|icontains_all)$/,
         ''
       )
+      if (this.options.some((field) => field.value === key) && this.hasExplicitLookup(key)) {
+        return key
+      }
       if (operator === 'exact') {
         return baseKey
       }
@@ -806,7 +830,9 @@ export default {
     },
     getSupportedOperators(key) {
       if (this.isSearchKey(key)) {
-        return ['icontains_any']
+        return Array.isArray(this.searchConfig.operators)
+          ? this.searchConfig.operators
+          : ['icontains_any']
       }
       if (this.hasExplicitLookup(key)) {
         return [this.getOperatorFromQueryKey(key)]
@@ -877,9 +903,6 @@ export default {
     },
     handleOperatorVisibleChange(visible) {
       this.operatorMenuVisible = visible
-      if (visible) {
-        this.pendingOpenOperatorMenu = false
-      }
       if (!visible) {
         this.focusPendingOperatorSearchInput()
       }
@@ -1078,12 +1101,11 @@ export default {
       }
       const selectedPath = this.normalizeSelectedPath(value)
       let keepMenuOpen = false
-      let openOperatorMenu = false
       if (selectedPath.length === 1) {
         this.filterKey = selectedPath[0]
-        this.filterOperator = this.getDefaultOperator(this.filterKey, '')
-        openOperatorMenu = this.supportsOperatorSelection
-        this.pendingOpenOperatorMenu = openOperatorMenu
+        this.filterOperator =
+          this.getSupportedOperators(this.filterKey)[0] ||
+          this.getDefaultOperator(this.filterKey, '')
       } else if (selectedPath.length >= 2) {
         this.filterKey = selectedPath[0]
         this.filterValue = selectedPath[selectedPath.length - 1]
@@ -1105,11 +1127,6 @@ export default {
           this.fieldMenuValue = null
           this.$refs.Cascade.handleClear()
           this.$refs.Cascade?.togglePopperVisible?.(false)
-        } else if (openOperatorMenu) {
-          this.fieldMenuValue = null
-          this.$refs.Cascade.handleClear()
-          this.$refs.Cascade?.togglePopperVisible?.(false)
-          this.scheduleOperatorMenuOpen(180)
         } else if (selectedPath.length === 1) {
           this.fieldMenuValue = null
           this.$refs.Cascade.handleClear()
@@ -1120,23 +1137,6 @@ export default {
     },
     handleCascaderVisibleChange(visible) {
       this.cascaderVisible = visible
-      if (!visible && this.pendingOpenOperatorMenu) {
-        this.scheduleOperatorMenuOpen()
-      }
-    },
-    scheduleOperatorMenuOpen(delay = 60) {
-      clearTimeout(this.operatorOpenTimer)
-      this.operatorOpenTimer = setTimeout(() => {
-        if (!this.pendingOpenOperatorMenu) {
-          return
-        }
-        if (!this.supportsOperatorSelection) {
-          this.pendingOpenOperatorMenu = false
-          return
-        }
-        this.pendingOpenOperatorMenu = false
-        this.$nextTick(() => this.$refs.OperatorDropdown?.handleOpen?.())
-      }, delay)
     },
     openFilterMenu() {
       this.$refs.Cascade?.togglePopperVisible?.(true)
@@ -1389,7 +1389,6 @@ export default {
       this.filterValue = ''
       this.valueLabel = ''
       this.fieldMenuValue = null
-      this.pendingOpenOperatorMenu = false
     },
     handleTagClick(v, k) {
       let unableChange = false
@@ -1720,6 +1719,7 @@ a {
   }
 
   .el-cascader-menu {
+    width: max-content;
     min-width: 180px;
     height: auto;
     max-height: min(300px, calc(100vh - 160px));
@@ -1736,9 +1736,19 @@ a {
   }
 
   .el-cascader-node {
+    width: max-content;
+    min-width: 100%;
     height: 36px;
-    padding: 0 14px;
+    padding: 0;
     font-size: 13px;
+  }
+
+  .el-cascader-node__label {
+    width: max-content;
+    padding: 0;
+    overflow: visible;
+    text-overflow: clip;
+    flex: 0 0 auto;
   }
 
   // 字段选择只负责切换搜索维度，一级、二级菜单均隐藏对勾和选中背景。
@@ -1747,14 +1757,16 @@ a {
   }
 
   .field-menu-option {
-    position: absolute;
-    inset: 0;
+    position: relative;
     display: flex;
     align-items: center;
     box-sizing: border-box;
+    width: max-content;
+    min-width: 100%;
+    height: 36px;
     padding: 0 30px 0 22px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    overflow: visible;
+    text-overflow: clip;
     white-space: nowrap;
 
     &.has-checkbox,
@@ -1764,9 +1776,9 @@ a {
     }
 
     &__label {
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      min-width: max-content;
+      overflow: visible;
+      text-overflow: clip;
       white-space: nowrap;
     }
   }
