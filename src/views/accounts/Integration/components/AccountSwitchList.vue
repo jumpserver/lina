@@ -172,6 +172,21 @@ import { GenericListTable } from '@/layout/components'
 import { copy } from '@/utils/common/index'
 import SwitchTaskDialog from './SwitchTaskDialog.vue'
 
+const SWITCH_STATUS_TYPE_MAP = {
+  completed: 'success',
+  confirmed: 'success',
+  delivered: 'warning',
+  ended: 'info',
+  failed: 'danger',
+  pending: 'info',
+  rolled_back: 'info',
+  rollback_delivered: 'warning',
+  rollback_pending: 'warning',
+  rolling_back: 'warning',
+  running: 'primary',
+  waiting_confirmation: 'warning'
+}
+
 export default {
   name: 'ApplicationAccountSwitchList',
   components: { Drawer, GenericListTable, IBox, SwitchTaskDialog },
@@ -322,22 +337,7 @@ export default {
       return value ? toSafeLocalDateStr(value) : '-'
     },
     statusType(status) {
-      return (
-        {
-          completed: 'success',
-          confirmed: 'success',
-          delivered: 'warning',
-          ended: 'info',
-          failed: 'danger',
-          pending: 'info',
-          rolled_back: 'info',
-          rollback_delivered: 'warning',
-          rollback_pending: 'warning',
-          rolling_back: 'warning',
-          running: 'primary',
-          waiting_confirmation: 'warning'
-        }[status] || 'info'
-      )
+      return SWITCH_STATUS_TYPE_MAP[status] || 'info'
     },
     taskCreated() {
       this.$refs.table.reloadTable()

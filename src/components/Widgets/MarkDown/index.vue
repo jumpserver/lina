@@ -54,7 +54,9 @@ export default {
   },
   computed: {
     sanitizedValue() {
-      return this.sanitizeContent(this.iValue)
+      const content = this.iValue.replace(/\\/g, '\\\\').replace(/\$/g, '\\$')
+
+      return this.sanitizeContent(content)
     }
   },
   watch: {

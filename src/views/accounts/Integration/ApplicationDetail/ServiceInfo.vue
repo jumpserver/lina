@@ -20,6 +20,13 @@ import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import { h, resolveComponent } from 'vue'
 
+const AGENT_STATUS_TYPE_MAP = {
+  online: 'success',
+  offline: 'warning',
+  error: 'danger',
+  unregistered: 'info'
+}
+
 export default {
   name: 'IntegrationApplicationInfo',
   components: {
@@ -77,22 +84,15 @@ export default {
     }
   },
   computed: {
-    agentStatusType() {
-      return {
-        online: 'success',
-        offline: 'warning',
-        error: 'danger',
-        unregistered: 'info'
-      }[this.object.agent?.status?.value]
-    },
     agentDetailItems() {
       const agent = this.object.agent || {}
+      const statusType = AGENT_STATUS_TYPE_MAP[agent.status?.value] || 'info'
       return [
         {
           key: this.$t('Status'),
           value: agent.status?.label || '-',
           formatter: (item, value) =>
-            h(resolveComponent('el-tag'), { type: this.agentStatusType }, () => value)
+            h(resolveComponent('el-tag'), { type: statusType }, () => value)
         },
         { key: this.$t('AgentID'), value: agent.id },
         { key: this.$t('Hostname'), value: agent.hostname },
