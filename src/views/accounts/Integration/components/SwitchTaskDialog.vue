@@ -1,112 +1,105 @@
 <template>
-  <el-dialog
+  <Drawer
     :close-on-click-modal="false"
-    :model-value="visible"
     :title="$t('CreateSwitchTask')"
-    append-to-body
-    width="760px"
-    @update:model-value="$emit('update:visible', $event)"
+    :visible="visible"
+    @update:visible="$emit('update:visible', $event)"
   >
-    <el-steps :active="step" finish-status="success" simple>
-      <el-step :title="$t('SelectAccounts')" />
-      <el-step :title="$t('ConfirmImpact')" />
-      <el-step :title="$t('SubmitTask')" />
-    </el-steps>
+    <div v-loading="loading" class="switch-task-page">
+      <IBox>
+        <section class="form-section">
+          <h3 class="section-title">{{ $t('SelectAccounts') }}</h3>
+          <el-form label-width="18.2%" class="task-form">
+            <el-form-item :label="$t('SourceAccount')" required>
+              <el-select
+                v-model="form.source_account"
+                filterable
+                style="width: 100%"
+                @change="sourceChanged"
+              >
+                <el-option
+                  v-for="account in sourceAccounts"
+                  :key="account.id"
+                  :label="accountLabel(account)"
+                  :value="account.id"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item :label="$t('TargetAccount')" required>
+              <div class="field-control">
+                <el-select v-model="form.target_account" filterable style="width: 100%">
+                  <el-option
+                    v-for="account in targetAccounts"
+                    :key="account.id"
+                    :label="accountLabel(account)"
+                    :value="account.id"
+                  />
+                </el-select>
+                <div class="field-help">{{ $t('TargetAccountSameAssetRequired') }}</div>
+              </div>
+            </el-form-item>
+            <el-form-item :label="$t('Comment')">
+              <el-input v-model="form.comment" :rows="4" type="textarea" />
+            </el-form-item>
+            <el-form-item :label="$t('ConfirmImpact')">
+              <div class="impact-field">
+                <div class="section-summary">
+                  {{ $t('AffectedBindingsSummary', { count: affectedBindings.length }) }}
+                </div>
+                <div v-if="form.source_account" class="el-data-table impact-table">
+                  <el-table :data="affectedBindings" class="el-table--fit el-table--border">
+                    <el-table-column
+                      show-overflow-tooltip
+                      :label="$t('RelevantApp')"
+                      min-width="180"
+                    >
+                      <template #default="{ row }">{{ row.application?.name || '-' }}</template>
+                    </el-table-column>
+                    <el-table-column :label="$t('CredentialBindingID')" min-width="330">
+                      <template #default="{ row }">
+                        <span class="binding-id">
+                          <code>{{ row.credential_id }}</code>
+                          <el-button link type="primary" @click="copy(row.credential_id)">
+                            <el-icon><CopyDocument /></el-icon>
+                          </el-button>
+                        </span>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                </div>
+              </div>
+            </el-form-item>
 
-    <div v-loading="loading" class="task-body">
-      <template v-if="step === 0">
-        <el-alert
-          :closable="false"
-          :title="$t('SwitchTaskDoesNotChangePassword')"
-          show-icon
-          type="warning"
-        />
-        <el-form label-width="120px" class="task-form">
-          <el-form-item :label="$t('SourceAccount')" required>
-            <el-select
-              v-model="form.source_account"
-              filterable
-              style="width: 100%"
-              @change="sourceChanged"
-            >
-              <el-option
-                v-for="account in sourceAccounts"
-                :key="account.id"
-                :label="accountLabel(account)"
-                :value="account.id"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item :label="$t('TargetAccount')" required>
-            <el-select v-model="form.target_account" filterable style="width: 100%">
-              <el-option
-                v-for="account in targetAccounts"
-                :key="account.id"
-                :label="accountLabel(account)"
-                :value="account.id"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item :label="$t('Comment')">
-            <el-input v-model="form.comment" :rows="3" type="textarea" />
-          </el-form-item>
-        </el-form>
-      </template>
-
-      <template v-else-if="step === 1">
-        <el-alert
-          :closable="false"
-          :title="$t('AffectedBindingsSummary', { count: affectedBindings.length })"
-          show-icon
-          type="info"
-        />
-        <el-table :data="affectedBindings" border class="impact-table">
-          <el-table-column :label="$t('Application')" min-width="180">
-            <template #default="{ row }">{{ row.application?.name || '-' }}</template>
-          </el-table-column>
-          <el-table-column :label="$t('CredentialBindingID')" min-width="330">
-            <template #default="{ row }">
-              <span class="binding-id">
-                <code>{{ row.credential_id }}</code>
-                <el-button link type="primary" @click="copy(row.credential_id)">
-                  <el-icon><CopyDocument /></el-icon>
-                </el-button>
-              </span>
-            </template>
-          </el-table-column>
-        </el-table>
-        <p class="impact-note">{{ $t('TargetAccountSameAssetRequired') }}</p>
-      </template>
-
-      <el-result
-        v-else
-        :sub-title="$t('SwitchTaskCreatedHint')"
-        :title="$t('SwitchTaskCreated')"
-        icon="success"
-      />
+            <div class="form-buttons task-actions">
+              <el-button
+                :disabled="!canContinue"
+                :loading="submitting"
+                class="form-submit-button"
+                size="default"
+                type="primary"
+                @click="submit"
+              >
+                {{ $t('SubmitTask') }}
+              </el-button>
+              <el-button class="form-secondary-button" @click="$emit('update:visible', false)">
+                {{ $t('Cancel') }}
+              </el-button>
+            </div>
+          </el-form>
+        </section>
+      </IBox>
     </div>
-
-    <template #footer>
-      <el-button v-if="step < 2" @click="$emit('update:visible', false)">
-        {{ $t('Cancel') }}
-      </el-button>
-      <el-button v-if="step === 1" @click="step = 0">{{ $t('Previous') }}</el-button>
-      <el-button v-if="step === 0" :disabled="!canContinue" type="primary" @click="step = 1">
-        {{ $t('Next') }}
-      </el-button>
-      <el-button v-if="step === 1" :loading="submitting" type="primary" @click="submit">
-        {{ $t('SubmitTask') }}
-      </el-button>
-      <el-button v-if="step === 2" type="primary" @click="done">{{ $t('Done') }}</el-button>
-    </template>
-  </el-dialog>
+  </Drawer>
 </template>
 
 <script>
+import IBox from '@/components/Common/IBox'
+import Drawer from '@/components/Drawer'
 import { copy } from '@/utils/common/index'
 
 export default {
   name: 'SwitchTaskDialog',
+  components: { Drawer, IBox },
   props: { visible: { type: Boolean, default: false } },
   emits: ['update:visible', 'created'],
   data() {
@@ -114,7 +107,6 @@ export default {
       form: { source_account: '', target_account: '', comment: '' },
       loading: false,
       credentials: [],
-      step: 0,
       submitting: false,
       targetAccounts: []
     }
@@ -156,7 +148,6 @@ export default {
     async open() {
       this.form = { source_account: '', target_account: '', comment: '' }
       this.targetAccounts = []
-      this.step = 0
       this.loading = true
       try {
         const result = await this.$axios.get(
@@ -200,43 +191,97 @@ export default {
           '/api/v1/accounts/application-account-switches/',
           this.form
         )
-        this.step = 2
         this.$emit('created', result)
+        this.$message.success(this.$t('SwitchTaskCreated'))
+        this.$emit('update:visible', false)
       } finally {
         this.submitting = false
       }
-    },
-    done() {
-      this.$emit('update:visible', false)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.task-body {
-  min-height: 360px;
-  padding-top: 16px;
-  max-height: 62vh;
-  overflow-y: auto;
+.switch-task-page {
+  padding: 12px 12px 30px;
+  box-sizing: border-box;
+}
+
+.section-title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.section-summary {
+  color: var(--el-text-color-secondary);
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 .task-form {
   margin-top: 20px;
 }
 
-.impact-table {
-  margin-top: 16px;
+.field-control {
+  width: 100%;
 }
 
-.impact-note {
+.field-help {
+  margin-top: 4px;
   color: var(--el-text-color-secondary);
-  margin: 12px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.task-actions {
+  display: flex;
+  gap: 10px;
+  padding-left: calc(18.2% + 12px);
+  margin-top: 10px;
+}
+
+.impact-field {
+  width: 100%;
+}
+
+.impact-table {
+  margin-top: 8px;
 }
 
 .binding-id {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+}
+
+.el-data-table :deep(.el-table) {
+  .el-table__row > td {
+    padding: 6px 0;
+    border-right: none;
+    font-size: 13px;
+    line-height: 1.5;
+
+    * {
+      vertical-align: middle;
+    }
+  }
+
+  .el-table__header > thead > tr > th {
+    padding: 6px 0;
+    border-right: none;
+    background-color: #fff;
+    font-size: 13px;
+    line-height: 1.5;
+
+    .cell {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap !important;
+    }
+  }
 }
 </style>
