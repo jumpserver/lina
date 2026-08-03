@@ -9,7 +9,7 @@
 <script>
 import { GenericListPage } from '@/layout/components'
 import { createVNode, resolveComponent } from 'vue'
-import { filterClipboardOperations, getClipboardOperationOptions } from './const'
+import { filterClipboardOperations } from './const'
 
 export default {
   name: 'ClipboardAclList',
@@ -77,15 +77,7 @@ export default {
       headerActions: {
         createRoute: 'ClipboardACLCreate',
         searchConfig: {
-          exclude: ['operations'],
-          options: [
-            {
-              label: this.$t('Operations'),
-              type: 'choice',
-              value: 'operations',
-              children: getClipboardOperationOptions(this)
-            }
-          ]
+          exclude: ['operations', 'users', 'assets']
         },
         hasRefresh: true,
         hasExport: false,
