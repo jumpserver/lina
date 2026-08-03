@@ -15,7 +15,7 @@
       :show-confirm="false"
       :title="title"
       width="860px"
-      @close="onDialogClose"
+      @update:visible="handleVisibleChange"
     >
       <AutoDataForm
         v-bind="config"
@@ -190,8 +190,9 @@ export default {
       this.isVisible = false
       this.$emit('update:visible', this.isVisible)
     },
-    onDialogClose() {
-      this.$emit('update:visible', this.isVisible)
+    handleVisibleChange(visible) {
+      this.isVisible = visible
+      this.$emit('update:visible', visible)
     }
   }
 }
