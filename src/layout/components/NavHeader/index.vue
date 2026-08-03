@@ -24,6 +24,11 @@
           <SystemSetting />
         </el-tooltip>
       </li>
+      <li v-if="publicSettings['JDMC_ENABLED']" v-perms="['rbac.view_jdmc']" class="header-item header-icon">
+        <el-tooltip :content="$tc('DeviceManager')" :open-delay="500" effect="dark">
+          <DeviceManager />
+        </el-tooltip>
+      </li>
       <li class="header-item active-menu">
         <Help />
       </li>
@@ -62,6 +67,7 @@ import WebTerminal from './WebTerminal'
 import Tickets from './Tickets'
 import Organization from './Organization'
 import SystemSetting from './SystemSetting'
+import DeviceManager from './DeviceManager'
 import Logo from '../NavLeft/Logo'
 import Language from './Language'
 import Search from './Search'
@@ -76,6 +82,7 @@ export default {
     WebTerminal,
     SiteMessages,
     SystemSetting,
+    DeviceManager,
     Logo,
     Language,
     Search
