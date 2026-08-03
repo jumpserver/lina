@@ -19,14 +19,24 @@
           <Tickets />
         </el-tooltip>
       </li>
-      <li v-perms="'settings.view_setting'" class="header-item header-icon">
+      <li v-if="showDeviceManager" class="header-item header-icon header-dropdown">
+        <el-dropdown trigger="click" @command="handleSettingCommand">
+          <span class="el-dropdown-link">
+            <svg-icon icon-class="nav-setting" />
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-if="$hasPerm('settings.view_setting')" command="system">
+              {{ $tc('SystemSetting') }}
+            </el-dropdown-item>
+            <el-dropdown-item command="device">
+              {{ $tc('DeviceManager') }}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </li>
+      <li v-else v-perms="'settings.view_setting'" class="header-item header-icon">
         <el-tooltip :content="$tc('SystemSetting')" :open-delay="500" effect="dark">
           <SystemSetting />
-        </el-tooltip>
-      </li>
-      <li v-if="publicSettings['JDMC_ENABLED']" v-perms="['rbac.view_jdmc']" class="header-item header-icon">
-        <el-tooltip :content="$tc('DeviceManager')" :open-delay="500" effect="dark">
-          <DeviceManager />
         </el-tooltip>
       </li>
       <li class="header-item active-menu">
@@ -59,6 +69,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { getFirstAccessibleChildPath } from '@/utils/vue'
+import { openJDMC } from '@/utils/jdmc'
 import Hamburger from '@/components/Widgets/Hamburger'
 import AccountDropdown from './AccountDropdown'
 import SiteMessages from './SiteMessages'
@@ -67,7 +79,6 @@ import WebTerminal from './WebTerminal'
 import Tickets from './Tickets'
 import Organization from './Organization'
 import SystemSetting from './SystemSetting'
-import DeviceManager from './DeviceManager'
 import Logo from '../NavLeft/Logo'
 import Language from './Language'
 import Search from './Search'
@@ -82,7 +93,6 @@ export default {
     WebTerminal,
     SiteMessages,
     SystemSetting,
-    DeviceManager,
     Logo,
     Language,
     Search
@@ -101,6 +111,12 @@ export default {
         this.$hasPerm('tickets.view_ticket')
       )
     },
+    showDeviceManager() {
+      return (
+        this.publicSettings['JDMC_ENABLED'] &&
+        this.$hasPerm('rbac.view_jdmc')
+      )
+    },
     showLogo() {
       return this.$store.state.settings.sidebarLogo
     },
@@ -117,6 +133,16 @@ export default {
     },
     handleSearchOpen(val) {
       // this.searchOpen = val
+    },
+    handleSettingCommand(command) {
+      if (command === 'system') {
+        const path = getFirstAccessibleChildPath('/settings') || '/settings/basic'
+        if (this.$route.path !== path) {
+          this.$router.push(path)
+        }
+      } else if (command === 'device') {
+        openJDMC('/jdmc/')
+      }
     }
   }
 }
@@ -216,6 +242,12 @@ export default {
     float: right;
     align-items: center;
     margin-right: 10px;
+
+    .header-dropdown {
+      .el-dropdown-link {
+        cursor: pointer;
+      }
+    }
 
     .header-item {
       display: flex;
