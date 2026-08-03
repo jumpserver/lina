@@ -8,6 +8,17 @@ import { encryptPassword } from '@/utils/session-encrypt'
 import { getUpdateObjURL, setUrlParam, getBrowserQueryParam } from '@/utils/common/index'
 import { assetFieldsMeta } from '@/views/assets/const'
 
+const getRelatedId = (value) => value?.pk ?? value?.id ?? value?.value ?? value
+
+const hasRemovedPlatformProtocol = (selectedProtocols, platformProtocols) => {
+  const selectedNames = new Set(
+    (Array.isArray(selectedProtocols) ? selectedProtocols : []).map(({ name }) => name)
+  )
+  return (Array.isArray(platformProtocols) ? platformProtocols : []).some(
+    ({ name }) => !selectedNames.has(name)
+  )
+}
+
 export default {
   components: { GenericCreateUpdatePage },
   props: {
@@ -89,7 +100,27 @@ export default {
               return item
             })
           }
-          return this.$axios[submitMethod](url, values)
+
+          const initialPlatformId = getRelatedId(this.initialFormValue?.platform)
+          const selectedPlatformId = getRelatedId(values.platform)
+          const platformChanged =
+            submitMethod === 'put' && String(initialPlatformId) !== String(selectedPlatformId)
+          const platformProtocols = this.fieldsMeta?.protocols?.el?.choices
+          const shouldSyncProtocols =
+            platformChanged && hasRemovedPlatformProtocol(values.protocols, platformProtocols)
+
+          const request = this.$axios[submitMethod](url, values)
+          if (!shouldSyncProtocols) {
+            return request
+          }
+
+          // 平台切换时后端会补齐新平台协议；待平台更新完成后再同步用户最终选择。
+          // 返回完整 Promise 链，确保抽屉关闭和列表刷新发生在第二次请求之后。
+          return request.then(() =>
+            this.$axios.patch(url, {
+              protocols: values.protocols
+            })
+          )
         }
       }
     }
