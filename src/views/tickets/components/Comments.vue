@@ -20,7 +20,7 @@
       </template>
       <slot />
       <el-form ref="comments" :model="form" label-width="45px" style="padding-top: 20px">
-        <el-form-item v-if="!isAuditRoute" :label="$tc('Reply')">
+        <el-form-item v-if="canComment && !isAuditRoute" :label="$tc('Reply')">
           <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
         </el-form-item>
         <el-form-item style="float: right">
@@ -52,7 +52,7 @@
             <i class="fa fa-times" /> {{ $t('CancelTicket') }}
           </el-button>
           <el-button
-            v-if="!isAuditRoute"
+            v-if="canComment && !isAuditRoute"
             :disabled="object.status.value === 'closed'"
             size="small"
             type="info"
@@ -119,6 +119,11 @@ export default {
     isSelfTicket() {
       const profile = this.$store.state.users.profile
       return this.object.applicant === `${profile.name}(${profile.username})`
+    },
+    canComment() {
+      const profile = this.$store.state.users.profile
+      const isCcUser = (this.object.cc_users || []).some((user) => user.id === profile.id)
+      return !isCcUser || this.hasActionPerm || this.isSelfTicket
     }
   },
   setup() {

@@ -3,12 +3,14 @@
 </template>
 
 <script>
+import { h } from 'vue'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import GenericTicketDetail from '@/views/tickets/TicketFlow/components/GenericTicketDetail'
+import CcUsers from '@/views/tickets/components/CcUsers'
 
 export default {
   name: '',
-  components: { GenericTicketDetail },
+  components: { CcUsers, GenericTicketDetail },
   props: {
     object: {
       type: Object,
@@ -24,12 +26,17 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('Type'),
-          value: this.object.type.label
+          key: this.$t('Name'),
+          value: this.object.name || this.object.type.label
         },
         {
           key: this.$t('ApprovalLevel'),
           value: this.object.approval_level.label
+        },
+        {
+          key: this.$t('CcUsers'),
+          value: this.object.cc_users,
+          formatter: (item, users) => h(CcUsers, { users })
         },
         {
           key: this.$t('CreatedBy'),
