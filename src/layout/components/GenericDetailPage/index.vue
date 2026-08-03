@@ -153,6 +153,9 @@ export default {
       if (this.drawer) {
         return 'null'
       }
+      return this.detailTitle
+    },
+    detailTitle() {
       return this.title || this.getTitle(this.object)
     },
     iActiveMenu: {
@@ -217,7 +220,7 @@ export default {
       }
     },
     defaultDelete() {
-      const msg = this.$t('DeleteWarningMsg') + ' ' + this.iTitle + ' ?'
+      const msg = this.$t('DeleteWarningMsg') + ' ' + this.detailTitle + ' ?'
       const title = this.$t('Info')
       const performDelete = () => {
         const url = this.getDetailUrl()
