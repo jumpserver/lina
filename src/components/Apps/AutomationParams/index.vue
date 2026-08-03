@@ -6,7 +6,6 @@
       </el-button>
     </div>
     <Dialog
-      v-bind="$attrs"
       v-if="visible"
       v-model:visible="visible"
       :destroy-on-close="true"
@@ -42,6 +41,8 @@ export default {
     Dialog,
     AutoDataForm
   },
+  inheritAttrs: false,
+  emits: ['input'],
   props: {
     value: {
       type: [Object, Boolean],

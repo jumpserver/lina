@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" />
+  <GenericCreateUpdatePage v-bind="$data" @get-object-done="handleObjectDone" />
 </template>
 
 <script>
@@ -132,6 +132,10 @@ export default {
     }
   },
   methods: {
+    handleObjectDone({ assets = [], nodes = [] }) {
+      this.asset_ids = assets.map((item) => item.id || item.pk || item)
+      this.node_ids = nodes.map((item) => item.id || item.pk || item)
+    },
     handleAfterGetRemoteMeta(meta) {
       const needSetOptionFields = ['secret_type', 'secret_strategy', 'ssh_key_change_strategy']
       for (const i of needSetOptionFields) {
