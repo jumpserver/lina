@@ -67,6 +67,7 @@ export default {
         {
           name: 'resume',
           title: this.$t('Resume'),
+          icon: 'fa-unlock',
           type: 'warning',
           can: ({ row }) => {
             const terminalType = row['terminal']['type']
@@ -90,6 +91,7 @@ export default {
         {
           name: 'join',
           title: this.$t('Monitor'),
+          icon: 'fa-eye',
           type: 'primary',
           can: ({ row, cellValue }) => {
             return row['can_join'] && this.$hasPerm('terminal.monitor_session')
