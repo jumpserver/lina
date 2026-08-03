@@ -5,11 +5,13 @@
 <script lang="jsx">
 import { STATUS_MAP } from '../const'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
+import CcUsers from '@/views/tickets/components/CcUsers'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 import { getAssetUrl } from '@/utils/assets'
 export default {
   name: 'TicketDetail',
   components: {
+    CcUsers,
     GenericTicketDetail
   },
   props: {
@@ -44,6 +46,10 @@ export default {
           value: object.type.lable
         },
         {
+          key: this.$t('TicketFlow'),
+          value: object.flow?.name || object.type.label
+        },
+        {
           key: this.$t('Status'),
           value: object.status,
           formatter: (item, val) => {
@@ -62,6 +68,11 @@ export default {
         {
           key: this.$t('Assignee'),
           value: object.process_map[object.approval_step.value - 1].processor_display
+        },
+        {
+          key: this.$t('CcUsers'),
+          value: object.cc_users,
+          formatter: (item, users) => <CcUsers users={users} />
         },
         {
           key: this.$t('DateCreated'),

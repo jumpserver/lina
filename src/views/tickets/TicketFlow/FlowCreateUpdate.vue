@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { ResourceSelect } from '@/components/Form/FormFields'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import FlowRuleField from './FlowRuleField'
 
@@ -15,13 +16,10 @@ export default {
     return {
       loading: true,
       fields: [
-        [this.$t('Basic'), ['type']],
+        [this.$t('Basic'), ['name', 'cc_users']],
         [this.$t('ApprovalLevel'), ['approval_level', 'rules']]
       ],
       fieldsMeta: {
-        type: {
-          disabled: true
-        },
         rules: {
           label: this.$t('ApprovalProcess'),
           component: FlowRuleField,
@@ -30,6 +28,16 @@ export default {
           },
           hidden: (form) => {
             this.fieldsMeta.rules.el.level = form['approval_level']
+          }
+        },
+        cc_users: {
+          type: 'resourceSelect',
+          component: ResourceSelect,
+          label: this.$t('CcUsers'),
+          el: {
+            value: [],
+            url: '/api/v1/users/users/?fields_size=mini',
+            resourceName: this.$t('Users')
           }
         }
       },
@@ -42,7 +50,12 @@ export default {
         return `${url}`
       },
       cleanFormValue(data) {
-        data['rules'] = data['rules'].slice(0, data['approval_level'])
+        const approvalLevel = Number(data['approval_level']) || 1
+        const rules = Array.isArray(data['rules']) ? data['rules'] : []
+        data['rules'] = rules.slice(0, approvalLevel).map((rule, index) => ({
+          level: index + 1,
+          users: rule.users
+        }))
         return data
       },
       onPerformError() {},

@@ -24,6 +24,7 @@
 
 <script lang="jsx">
 import Comments from './Comments'
+import CcUsers from './CcUsers'
 import Details from './Details'
 import Session from './Session'
 import Steps from './Steps'
@@ -31,6 +32,7 @@ export default {
   name: 'GenericTicketDetail',
   components: {
     Steps,
+    CcUsers,
     Comments,
     Details,
     Session
@@ -92,8 +94,17 @@ export default {
           value: object.type.label
         },
         {
+          key: this.$t('TicketFlow'),
+          value: object.flow?.name || object.type.label
+        },
+        {
           key: this.$tc('User'),
           value: object.rel_snapshot.applicant
+        },
+        {
+          key: this.$t('CcUsers'),
+          value: object.cc_users,
+          formatter: (item, users) => <CcUsers users={users} />
         },
         {
           key: this.$tc('OrgName'),

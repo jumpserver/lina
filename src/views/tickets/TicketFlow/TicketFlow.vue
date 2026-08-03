@@ -24,10 +24,21 @@ export default {
       detailDrawer: () => import('@/views/tickets/TicketFlow/Detail'),
       tableConfig: {
         url: '/api/v1/tickets/flows/',
+        permissions: {
+          resource: 'ticketflow'
+        },
         columnsExclude: ['rules'],
         columnsShow: {
-          min: ['type', 'actions'],
-          default: ['type', 'created_by', 'org_name', 'date_created', 'date_updated', 'actions']
+          min: ['name', 'approval_level', 'actions'],
+          default: [
+            'name',
+            'approval_level',
+            'created_by',
+            'org_name',
+            'date_created',
+            'date_updated',
+            'actions'
+          ]
         },
         columnsMeta: {
           org_name: {
@@ -36,7 +47,7 @@ export default {
               return currentOrg['is_root'] ? row.org_name : currentOrg.name
             }
           },
-          type: {
+          name: {
             formatter: DetailFormatter,
             formatterArgs: {
               drawer: true,
@@ -48,10 +59,10 @@ export default {
                 }
               }),
               getDrawerTitle: ({ row }) => {
-                return row.type.label
+                return row.name || row.type.label
               },
               getTitle: function ({ row }) {
-                return row.type.label
+                return row.name || row.type.label
               }
             }
           },
@@ -68,7 +79,9 @@ export default {
         }
       },
       headerActions: {
-        hasLeftActions: false,
+        hasLeftActions: true,
+        hasBulkDelete: false,
+        createRoute: { name: 'TicketFlowCreate' },
         hasSearch: false,
         hasImport: false
       }

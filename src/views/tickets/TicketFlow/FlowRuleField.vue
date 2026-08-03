@@ -22,6 +22,8 @@
 <script>
 import { JSONManyToManySelect } from '@/components/Form/FormFields'
 import { userJSONSelectMeta } from '@/views/users/const'
+import cloneDeep from 'lodash/cloneDeep'
+import isEqual from 'lodash/isEqual'
 
 export default {
   components: {
@@ -45,20 +47,6 @@ export default {
   data() {
     return {
       userComponentMeta: userJSONSelectMeta(this),
-      defaultRule: [
-        {
-          users: {
-            type: 'attrs',
-            attrs: [
-              {
-                match: 'm2m',
-                name: 'system_roles',
-                value: ['00000000-0000-0000-0000-000000000001']
-              }
-            ]
-          }
-        }
-      ],
       rules: []
     }
   },
@@ -68,32 +56,76 @@ export default {
     }
   },
   watch: {
+    value: {
+      immediate: true,
+      deep: true,
+      handler(value) {
+        this.syncRules(value)
+      }
+    },
     level: {
       handler() {
-        this.updateApproveData()
+        this.resizeRules()
       }
     }
-  },
-  mounted() {
-    this.updateApproveData()
   },
   methods: {
     getSortedRules() {
       return [...this.rules].sort((a, b) => a.level - b.level)
     },
-    updateApproveData() {
-      let rules = [...this.value]
-      if (this.value.length === 2 && this.level === 1) {
-        rules = this.value.slice(0, this.level)
-      } else if (this.value.length === 1 && this.level === 2) {
-        rules = this.value.concat(this.defaultRule)
+    getApprovalLevel() {
+      return Math.min(Math.max(Number(this.level) || 1, 1), 5)
+    },
+    normalizeRules(value) {
+      const level = this.getApprovalLevel()
+      const source = Array.isArray(value) ? cloneDeep(value) : []
+      const rules = source.slice(0, level).map((rule, index) => {
+        const defaultRule = this.createDefaultRule(index + 1)
+        return {
+          level: index + 1,
+          users: rule?.users || defaultRule.users
+        }
+      })
+      while (rules.length < level) {
+        rules.push(this.createDefaultRule(rules.length + 1))
       }
-      this.rules = rules
-      this.$emit('input', this.rules)
+      return rules
+    },
+    syncRules(value) {
+      const rules = this.normalizeRules(value)
+      if (!isEqual(this.rules, rules)) {
+        this.rules = rules
+      }
+    },
+    resizeRules() {
+      const level = Math.min(Math.max(Number(this.level) || 1, 1), 5)
+      const valueRules = Array.isArray(this.value) ? this.value : []
+      const source = valueRules.length > this.rules.length ? valueRules : this.rules
+      this.rules = this.normalizeRules(source).slice(0, level)
+      this.emitRules()
+    },
+    createDefaultRule(level) {
+      return {
+        level,
+        users: {
+          type: 'attrs',
+          attrs: [
+            {
+              match: 'm2m',
+              name: 'system_roles',
+              value: ['00000000-0000-0000-0000-000000000001']
+            }
+          ]
+        }
+      }
     },
     handleInput(index, event) {
-      this.rules[index] = { users: event }
-      this.$emit('input', this.rules)
+      const level = this.rules[index]?.level || index + 1
+      this.rules.splice(index, 1, { level, users: cloneDeep(event) })
+      this.emitRules()
+    },
+    emitRules() {
+      this.$emit('input', cloneDeep(this.getSortedRules()))
     }
   }
 }
