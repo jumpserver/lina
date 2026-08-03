@@ -28,7 +28,7 @@ export default {
         'name',
         {
           key: this.$t('Clipboard'),
-          value: filterClipboardOperations(this.object.operations)
+          value: filterClipboardOperations(this.object.operations, this)
             .map((item) => item.label)
             .join(', ')
         },
