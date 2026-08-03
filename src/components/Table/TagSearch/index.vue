@@ -412,20 +412,14 @@ export default {
           const operator =
             condition.operator || this.getDefaultOperator(key, value)
           const queryKey = this.getQueryKeyForOperator(key, operator)
-          if (operator === 'icontains_all') {
+          if (this.isMethodOption(key)) {
+            data[queryKey] = value
+          } else if (this.isOverwriteOperator(operator)) {
+            data[queryKey] = value
+          } else if (operator === 'icontains_all') {
             appendContainsValue(queryKey, value, true)
           } else if (operator === 'icontains') {
             appendContainsValue(queryKey, value)
-          } else if (operator === 'exact' && !this.hasExplicitLookup(key)) {
-            const exactQueryKey = `${queryKey}__exact`
-            if (data[exactQueryKey] !== undefined) {
-              appendValue(exactQueryKey, value)
-            } else if (data[queryKey] !== undefined) {
-              data[exactQueryKey] = [data[queryKey], value]
-              delete data[queryKey]
-            } else {
-              data[queryKey] = value
-            }
           } else {
             appendValue(queryKey, value)
           }
@@ -749,6 +743,15 @@ export default {
     isBooleanOption(option) {
       return option?.type === 'boolean' || option?.isBooleanChoice === true
     },
+    isMethodOption(key) {
+      return this.getOptionByKey(key)?.custom === true
+    },
+    isOverwriteOperator(operator) {
+      return operator === 'exact' || operator === 'in'
+    },
+    shouldOverwriteCondition(key, operator) {
+      return this.isMethodOption(key) || this.isOverwriteOperator(operator)
+    },
     hasExplicitLookup(key) {
       return /__(?:exact|icontains|startswith|in|icontains_any|icontains_all)$/.test(key)
     },
@@ -766,6 +769,9 @@ export default {
       return this.getQueryKeyForOperator(key, 'in')
     },
     getQueryKeyForOperator(key, operator) {
+      if (this.isMethodOption(key)) {
+        return key
+      }
       const baseKey = key.replace(
         /__(?:exact|icontains|startswith|in|icontains_any|icontains_all)$/,
         ''
@@ -1239,11 +1245,24 @@ export default {
           tag.value,
           tag.key
         )
-        const conditionKey = this.getUniqueConditionStorageKey(
-          tag.key,
-          operator,
-          result
-        )
+        if (this.shouldOverwriteCondition(tag.key, operator)) {
+          for (const conditionKey of Object.keys(result)) {
+            const current = result[conditionKey]
+            if (
+              current?.key === tag.key &&
+              this.shouldOverwriteCondition(tag.key, current.operator)
+            ) {
+              delete result[conditionKey]
+            }
+          }
+        }
+        const conditionKey = this.shouldOverwriteCondition(tag.key, operator)
+          ? this.getConditionStorageKey(tag.key, operator)
+          : this.getUniqueConditionStorageKey(
+              tag.key,
+              operator,
+              result
+            )
         result[conditionKey] = {
           ...tag,
           operator
@@ -1279,6 +1298,34 @@ export default {
         this.filterOperator,
         incomingValue
       )
+      if (this.shouldOverwriteCondition(this.filterKey, requestedOperator)) {
+        for (const conditionKey of Object.keys(this.filterTags)) {
+          const condition = this.filterTags[conditionKey]
+          if (
+            condition?.key === this.filterKey &&
+            this.shouldOverwriteCondition(
+              this.filterKey,
+              condition.operator
+            )
+          ) {
+            delete this.filterTags[conditionKey]
+          }
+        }
+        this.filterTags[
+          this.getConditionStorageKey(this.filterKey, requestedOperator)
+        ] = {
+          key: this.filterKey,
+          label: this.keyLabel,
+          value: incomingValue,
+          valueLabel: this.mergeConditionValues(this.valueLabel),
+          operator: requestedOperator
+        }
+        this.resetFilterInputState()
+        if (!keepFieldMenuOpen) {
+          this.$nextTick(() => this.focusSearchInput())
+        }
+        return
+      }
       if (!shouldMergeCondition) {
         const conditionKey = this.getUniqueConditionStorageKey(
           this.filterKey,

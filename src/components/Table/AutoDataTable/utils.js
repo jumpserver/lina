@@ -16,6 +16,17 @@ import LabelsFormatter from '@/components/Table/TableFormatters/LabelsFormatter.
 import { getDisplayValue } from '@/components/Table/TableFormatters/displayValue'
 
 const textDisplayWidthCache = new Map()
+const primaryColumnNames = ['id', 'name']
+
+export function orderPrimaryColumns(columns) {
+  const getColumnName = (column) => (typeof column === 'object' ? column?.prop : column)
+  return [
+    ...primaryColumnNames.flatMap((name) =>
+      columns.filter((column) => getColumnName(column) === name)
+    ),
+    ...columns.filter((column) => !primaryColumnNames.includes(getColumnName(column)))
+  ]
+}
 
 export function getTextDisplayWidth(value) {
   const text = String(value ?? '')
@@ -90,7 +101,13 @@ export class TableColumnsGenerator {
     let configColumns = config.columns || allColumnNames
     const columnsExclude = config.columnsExclude || []
     const columnsAdd = config.columnsAdd || []
-    configColumns = configColumns.concat(columnsAdd)
+    const configuredColumnNames = new Set(
+      configColumns.map((column) => (typeof column === 'object' ? column?.prop : column))
+    )
+    const primaryColumns = primaryColumnNames.filter(
+      (name) => this.meta[name] && !this.meta[name].write_only && !configuredColumnNames.has(name)
+    )
+    configColumns = primaryColumns.concat(configColumns, columnsAdd)
     configColumns = configColumns.filter((item) => !columnsExclude.includes(item))
 
     // 解决后端 API 返回字段中包含 actions 的问题;
@@ -98,6 +115,7 @@ export class TableColumnsGenerator {
     if (!hasColumnActions) {
       configColumns = [...configColumns.filter((i) => i !== 'actions'), 'actions']
     }
+    configColumns = orderPrimaryColumns(configColumns)
 
     for (let col of configColumns) {
       if (typeof col === 'object') {

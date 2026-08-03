@@ -143,8 +143,19 @@ export default {
   watch: {},
   methods: {
     getList() {
-      this.$refs.table?.clearSelection()
-      return this.$refs.table.getList()
+      const reload = () => {
+        const table = this.$refs.table
+        if (!table) {
+          return
+        }
+        table.clearSelection()
+        return table.getList()
+      }
+
+      if (this.$refs.table) {
+        return reload()
+      }
+      return this.$nextTick(reload)
     },
     getData() {
       return this.$refs.table.data

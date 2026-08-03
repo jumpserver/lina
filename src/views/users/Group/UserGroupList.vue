@@ -22,7 +22,7 @@ export default {
       detailDrawer: () => import('./UserGroupDetail/index.vue'),
       tableConfig: {
         url: '/api/v1/users/groups/',
-        columns: ['name', 'users_amount', 'comment', 'actions', 'labels'],
+        columns: ['id', 'name', 'users_amount', 'comment', 'actions', 'labels'],
         columnsShow: {
           default: ['name', 'users_amount', 'comment', 'actions'],
           min: ['name', 'action']

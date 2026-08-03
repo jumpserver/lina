@@ -2,8 +2,6 @@ import { optionUrlMeta } from '@/api/common'
 
 const getDefaultState = () => {
   return {
-    metaMap: {},
-    metaPromiseMap: {},
     isRouterAlive: true,
     sqlQueryCounter: [],
     showSqlQueryCounter: true,
@@ -17,9 +15,6 @@ const getDefaultState = () => {
 const state = getDefaultState()
 
 const mutations = {
-  SET_URL_META: (state, { url, meta }) => {
-    state.metaMap[url] = meta
-  },
   reload: (state) => {
     // 通过切换 key 来强制 router-view 重新渲染，避免使用 v-if 反复销毁/重建根节点导致的 DOM 插入错误
     state.isRouterAlive = !state.isRouterAlive
@@ -40,34 +35,8 @@ const mutations = {
 }
 
 const actions = {
-  // get user info
-  getUrlMeta({ commit, state }, { url }) {
-    const ignoreCache = url.includes('_meta_cache')
-    const meta = state.metaMap[url]
-    if (meta && !ignoreCache) {
-      return new Promise((resolve, reject) => {
-        resolve(meta)
-      })
-    }
-    let promise = state.metaPromiseMap[url]
-    if (promise) {
-      return promise
-    }
-    promise = new Promise((resolve, reject) => {
-      optionUrlMeta(url)
-        .then((meta) => {
-          commit('SET_URL_META', { url, meta })
-          resolve(meta)
-        })
-        .catch((error) => {
-          reject(error)
-        })
-        .finally(() => {
-          state.metaPromiseMap[url] = null
-        })
-    })
-    state.metaPromiseMap[url] = promise
-    return promise
+  getUrlMeta(_, { url }) {
+    return optionUrlMeta(url)
   },
   digestSQLQuery({ commit, state }, resp) {
     if (!resp || !resp.status.toString().startsWith('20')) {

@@ -7,7 +7,7 @@
       v-bind="tagSearchAttrs()"
       v-show="!shouldFold"
       ref="tagSearch"
-      :options="iOption"
+      :options="internalOptions"
       :search-config="searchMeta"
       class="auto-data-search__field"
       @blur="handleBlur"
@@ -22,8 +22,6 @@ import { getFilterMeta, getSearchMeta } from '@/api/common'
 import TagSearch from '@/components/Table/TagSearch/index.vue'
 import i18n from '@/i18n/i18n'
 
-const HIDDEN_FILTER_FIELDS = new Set(['days', 'days__lt'])
-
 export default {
   name: 'AutoDataSearch',
   components: {
@@ -34,16 +32,6 @@ export default {
     url: {
       type: String,
       default: ''
-    },
-    // 增加选项
-    options: {
-      type: Array,
-      default: () => []
-    },
-    // 排除选项
-    exclude: {
-      type: Array,
-      default: () => []
     },
     // 建议折叠
     fold: {
@@ -56,16 +44,11 @@ export default {
       internalOptions: [],
       tags: [],
       manualSearch: false,
-      searchMeta: {}
+      searchMeta: {},
+      optionsRequestId: 0
     }
   },
   computed: {
-    iOption() {
-      const options = [...this.options, ...this.internalOptions].filter(
-        (option) => !HIDDEN_FILTER_FIELDS.has(option.value)
-      )
-      return _.uniqBy(options, 'value')
-    },
     hasTags() {
       if (Array.isArray(this.tags)) {
         return this.tags.length > 0
@@ -80,9 +63,6 @@ export default {
     }
   },
   watch: {
-    options() {
-      // 空函数，方便子组件刷新
-    },
     url() {
       this.genericOptions()
     }
@@ -132,16 +112,13 @@ export default {
       this.$refs.tagSearch?.focusSearch()
     },
     async genericOptions() {
-      const vm = this // 透传This
-      vm.internalOptions = [] // 重置
+      const requestId = ++this.optionsRequestId
       const data = await this.optionUrlMeta()
       const filters = getFilterMeta(data)
-      this.searchMeta = getSearchMeta(data)
+      const options = []
       for (const [name, field] of Object.entries(filters)) {
-        if (vm.exclude.includes(name)) {
-          continue
-        }
         const option = {
+          custom: field.custom === true,
           label: field.label,
           operators: field.operators,
           type: field.type,
@@ -171,15 +148,20 @@ export default {
         if (option.value === 'id') {
           option.label = 'ID'
         }
-        vm.internalOptions.push(option)
+        options.push(option)
       }
+      if (requestId !== this.optionsRequestId) {
+        return
+      }
+      this.searchMeta = getSearchMeta(data)
+      this.internalOptions = options
     },
     optionUrlMeta() {
       const url =
         this.url.indexOf('?') === -1
           ? `${this.url}?draw=1&display=1`
           : `${this.url}&draw=1&display=1`
-      return this.$store.dispatch('common/getUrlMeta', { url: url })
+      return this.$store.dispatch('common/getUrlMeta', { url })
     }
   }
 }

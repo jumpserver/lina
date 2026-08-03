@@ -152,58 +152,6 @@ export default {
         hasLeftActions: true,
         canCreate: this.$hasPerm('tickets.view_ticket'),
         hasBulkDelete: false,
-        searchConfig: {
-          exclude: ['id', 'title', 'type', 'applicant'],
-          options: [
-            {
-              value: 'id',
-              label: 'ID'
-            },
-            {
-              value: 'title',
-              label: this.$t('Title')
-            },
-            {
-              value: 'type',
-              label: this.$t('Type'),
-              type: 'choice',
-              children: [
-                {
-                  value: 'apply_asset',
-                  label: this.$t('ApplyAsset')
-                },
-                {
-                  value: 'login_confirm',
-                  label: this.$t('LoginConfirm')
-                },
-                {
-                  value: 'command_confirm',
-                  label: this.$t('CommandConfirm')
-                },
-                {
-                  value: 'login_asset_confirm',
-                  label: this.$t('LoginAssetConfirm')
-                }
-              ]
-            },
-            {
-              value: 'applicant_username_name',
-              label: this.$t('Applicant')
-            },
-            {
-              value: 'relevant_asset',
-              label: this.$t('RelevantAsset')
-            },
-            {
-              value: 'relevant_system_user',
-              label: this.$t('RelevantCommand')
-            },
-            {
-              value: 'relevant_command',
-              label: this.$t('ApplyRunCommand')
-            }
-          ]
-        },
         moreCreates: {},
         createTitle: this.$t('RequestTickets')
       }

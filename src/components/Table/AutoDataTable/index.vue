@@ -30,7 +30,7 @@ import { newURL, replaceAllUUID } from '@/utils/common/index'
 import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
 import Sortable from 'sortablejs'
 import ColumnSettingPopover from './components/ColumnSettingPopover.vue'
-import { TableColumnsGenerator } from './utils'
+import { orderPrimaryColumns, TableColumnsGenerator } from './utils'
 import _ from 'lodash'
 
 export default {
@@ -275,10 +275,10 @@ export default {
     },
     normalizeColumnNames(value, fallback = []) {
       if (Array.isArray(value)) {
-        return value.filter((item) => item !== undefined && item !== null)
+        return orderPrimaryColumns(value.filter((item) => item !== undefined && item !== null))
       }
       if (Array.isArray(fallback)) {
-        return [...fallback]
+        return orderPrimaryColumns([...fallback])
       }
       return []
     },
@@ -412,7 +412,7 @@ export default {
        * 这导致在首次加载时，currentOrder总是为空数组，因为此时cleanedColumnsShow.show还未初始化
        */
       try {
-        const data = await this.$store.dispatch('common/getUrlMeta', { url: url })
+        const data = await this.$store.dispatch('common/getUrlMeta', { url })
         const method = this.method.toUpperCase()
         const actionMeta = getActionMeta(data, method)
         const filters = getFilterMeta(data)

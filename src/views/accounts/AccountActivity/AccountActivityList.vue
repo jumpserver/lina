@@ -74,32 +74,7 @@ export default {
       headerActions: {
         hasLeftActions: false,
         hasImport: false,
-        hasDatePicker: true,
-        searchConfig: {
-          exclude: ['resource_type', 'action'],
-          options: [
-            {
-              value: 'action',
-              label: this.$t('Action'),
-              type: 'choice',
-              children: [
-                {
-                  default: true,
-                  value: 'view',
-                  label: this.$t('View')
-                },
-                {
-                  value: 'update',
-                  label: this.$t('Update')
-                },
-                {
-                  value: 'delete',
-                  label: this.$t('Delete')
-                }
-              ]
-            }
-          ]
-        }
+        hasDatePicker: true
       }
     }
   }
