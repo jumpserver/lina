@@ -203,6 +203,7 @@ export default {
       isFocus: false,
       cascaderVisible: false,
       fieldMenuOpenTimer: null,
+      pendingFieldFocusSearchInput: false,
       operatorMenuVisible: false,
       pendingOperatorFocusSearchInput: false,
       operatorFocusTimer: null,
@@ -1180,14 +1181,19 @@ export default {
           this.$refs.Cascade?.togglePopperVisible?.(false)
         } else if (selectedPath.length === 1) {
           this.fieldMenuValue = null
+          this.pendingFieldFocusSearchInput = true
           this.$refs.Cascade.handleClear()
           this.$refs.Cascade?.togglePopperVisible?.(false)
-          this.$nextTick(() => this.focusSearchInput())
         }
       })
     },
     handleCascaderVisibleChange(visible) {
       this.cascaderVisible = visible
+      if (visible || !this.pendingFieldFocusSearchInput) {
+        return
+      }
+      this.pendingFieldFocusSearchInput = false
+      this.$nextTick(() => this.focusSearchInput())
     },
     openFilterMenu() {
       this.$refs.Cascade?.togglePopperVisible?.(true)
