@@ -207,7 +207,11 @@ export default {
       pendingOperatorFocusSearchInput: false,
       operatorFocusTimer: null,
       isComposing: false,
-      skipNextEnter: false
+      skipNextEnter: false,
+      visibilityObserver: null,
+      searchInViewport: true,
+      restoreFieldMenuOnVisible: false,
+      restoreOperatorMenuOnVisible: false
     }
   },
   computed: {
@@ -481,14 +485,55 @@ export default {
   mounted() {
     document.addEventListener('keyup', this.handleKeyUp)
     document.addEventListener('keydown', this.handleDocumentKeyDown, true)
+    this.initVisibilityObserver()
   },
   beforeUnmount() {
     document.removeEventListener('keyup', this.handleKeyUp)
     document.removeEventListener('keydown', this.handleDocumentKeyDown, true)
+    this.visibilityObserver?.disconnect()
     clearTimeout(this.operatorFocusTimer)
     clearTimeout(this.fieldMenuOpenTimer)
   },
   methods: {
+    initVisibilityObserver() {
+      if (typeof IntersectionObserver === 'undefined' || !this.$el) {
+        return
+      }
+      this.visibilityObserver = new IntersectionObserver(
+        ([entry]) => this.handleSearchVisibilityChange(entry?.isIntersecting === true),
+        { threshold: 0 }
+      )
+      this.visibilityObserver.observe(this.$el)
+    },
+    handleSearchVisibilityChange(visible) {
+      if (visible === this.searchInViewport) {
+        return
+      }
+      this.searchInViewport = visible
+      if (!visible) {
+        this.restoreFieldMenuOnVisible = this.cascaderVisible
+        this.restoreOperatorMenuOnVisible = this.operatorMenuVisible
+        if (this.cascaderVisible) {
+          this.$refs.Cascade?.togglePopperVisible?.(false)
+        }
+        if (this.operatorMenuVisible) {
+          this.$refs.OperatorDropdown?.handleClose?.()
+        }
+        return
+      }
+
+      const restoreFieldMenu = this.restoreFieldMenuOnVisible
+      const restoreOperatorMenu = this.restoreOperatorMenuOnVisible
+      this.restoreFieldMenuOnVisible = false
+      this.restoreOperatorMenuOnVisible = false
+      this.$nextTick(() => {
+        if (restoreFieldMenu) {
+          this.$refs.Cascade?.togglePopperVisible?.(true)
+        } else if (restoreOperatorMenu) {
+          this.$refs.OperatorDropdown?.handleOpen?.()
+        }
+      })
+    },
     focusSearch() {
       if (!this.$refs.SearchInput) {
         return false

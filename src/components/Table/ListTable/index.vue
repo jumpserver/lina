@@ -11,6 +11,7 @@
       :reload-table="reloadTable"
       :search-table="search"
       :selected-rows="selectedRows"
+      :get-table-metadata="getTableMetadata"
       :table-url="tableUrl"
       @done="handleActionInitialDone"
     />
@@ -30,6 +31,7 @@
           ref="dataTable"
           :config="iTableConfig"
           :filter-table="filter"
+          :get-table-metadata="getTableMetadata"
           @selection-change="handleSelectionChange"
         />
       </IBox>
@@ -128,7 +130,9 @@ export default {
       iFilterExpand: null,
       reloadTable: _.debounce(this._reloadTable, 300),
       searchQuery: {},
-      filterQuery: {}
+      filterQuery: {},
+      metadataRequestUrl: '',
+      metadataRequest: null
     }
   },
   computed: {
@@ -289,6 +293,30 @@ export default {
     })
   },
   methods: {
+    getTableMetadata() {
+      if (!this.tableUrl) {
+        return Promise.resolve({})
+      }
+      const url =
+        this.tableUrl.indexOf('?') === -1
+          ? `${this.tableUrl}?display=1`
+          : `${this.tableUrl}&display=1`
+      if (this.metadataRequest && this.metadataRequestUrl === url) {
+        return this.metadataRequest
+      }
+
+      this.metadataRequestUrl = url
+      const request = this.$store.dispatch('common/getUrlMeta', { url })
+      const sharedRequest = request.catch((error) => {
+        if (this.metadataRequest === sharedRequest) {
+          this.metadataRequest = null
+          this.metadataRequestUrl = ''
+        }
+        throw error
+      })
+      this.metadataRequest = sharedRequest
+      return this.metadataRequest
+    },
     focusSearch() {
       return this.$refs.tableAction?.focusSearch()
     },

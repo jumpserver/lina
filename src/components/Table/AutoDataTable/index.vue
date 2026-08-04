@@ -48,6 +48,10 @@ export default {
     filterTable: {
       type: Function,
       default: () => ({})
+    },
+    getTableMetadata: {
+      type: Function,
+      default: null
     }
   },
   data() {
@@ -412,7 +416,9 @@ export default {
        * 这导致在首次加载时，currentOrder总是为空数组，因为此时cleanedColumnsShow.show还未初始化
        */
       try {
-        const data = await this.$store.dispatch('common/getUrlMeta', { url })
+        const data = this.getTableMetadata
+          ? await this.getTableMetadata()
+          : await this.$store.dispatch('common/getUrlMeta', { url })
         const method = this.method.toUpperCase()
         const actionMeta = getActionMeta(data, method)
         const filters = getFilterMeta(data)
@@ -647,6 +653,21 @@ export default {
     line-height: 1.5;
     text-overflow: clip !important;
     white-space: nowrap !important;
+  }
+
+  :deep(.el-table__body td.overflow-content-table-column .cell),
+  :deep(.el-table__body td.overflow-content-table-column .cell > span),
+  :deep(.el-table__body td.overflow-content-table-column .detail) {
+    max-width: 100%;
+    overflow: hidden !important;
+    line-height: 1.5;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  :deep(.el-table__body td.overflow-content-table-column .cell > span),
+  :deep(.el-table__body td.overflow-content-table-column .detail) {
+    display: block;
   }
 
   :deep(.el-table__body td.custom-render-table-column .cell),

@@ -45,6 +45,7 @@
             v-if="hasSearch"
             ref="autoDataSearch"
             :fold="foldSearch"
+            :get-table-metadata="getTableMetadata"
             class="right-side-item action-search search-primary"
             @conditions-change="handleTagConditionsChange"
             @tag-search="handleTagSearch"
@@ -254,6 +255,10 @@ export default {
       type: String,
       default: ''
     },
+    getTableMetadata: {
+      type: Function,
+      default: null
+    },
     datePick: {
       type: Function,
       default: (val) => {}
@@ -462,9 +467,7 @@ export default {
     },
     removeSearchCondition(condition) {
       if (condition.source === 'tag') {
-        this.$refs.autoDataSearch?.removeCondition(
-          condition.conditionKey || condition.key
-        )
+        this.$refs.autoDataSearch?.removeCondition(condition.conditionKey || condition.key)
       } else if (condition.source === 'label') {
         this.$refs.labelSearch?.removeLabel(condition.value)
       } else if (condition.source === 'node') {
@@ -512,9 +515,7 @@ export default {
         condition?.label ||
         (condition?.key?.startsWith('search') ? this.$t('Search') : condition?.key || '')
       const operatorLabel = this.getConditionOperatorLabel(condition)
-      const label = operatorLabel
-        ? `${baseLabel} ${operatorLabel}`.trim()
-        : baseLabel
+      const label = operatorLabel ? `${baseLabel} ${operatorLabel}`.trim() : baseLabel
       let value =
         condition?.valueLabel !== '' && condition?.valueLabel != null
           ? condition.valueLabel
@@ -524,10 +525,8 @@ export default {
         const queryKey = Object.keys(preset.tagSearchQuery).find((key) => {
           return (
             key === condition?.key ||
-            key.replace(
-              /__(?:exact|icontains|icontains_any|icontains_all|in)$/,
-              ''
-            ) === condition?.key
+            key.replace(/__(?:exact|icontains|icontains_any|icontains_all|in)$/, '') ===
+              condition?.key
           )
         })
         value = queryKey ? preset.tagSearchQuery[queryKey] : value

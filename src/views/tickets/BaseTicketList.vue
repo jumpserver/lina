@@ -53,13 +53,11 @@ export default {
         },
         columnsMeta: {
           serial_num: {
-            label: this.$t('Number'),
-            sortable: 'custom'
+            label: this.$t('Number')
           },
           title: {
             label: this.$t('Title'),
             formatter: DetailFormatter,
-            sortable: 'custom',
             formatterArgs: {
               drawer: true,
               getRoute: ({ row }) => {
@@ -87,7 +85,6 @@ export default {
           },
           applicant: {
             label: this.$t('Applicant'),
-            sortable: 'custom',
             formatter: (row) => {
               return row['rel_snapshot'].applicant
             }
@@ -100,7 +97,6 @@ export default {
           },
           status: {
             align: 'center',
-            sortable: 'custom',
             formatter: TagChoicesFormatter,
             formatterArgs: {
               getTagLabel({ row }) {
@@ -118,7 +114,6 @@ export default {
           state: {
             label: this.$t('Action'),
             align: 'center',
-            sortable: 'custom',
             formatter: TagChoicesFormatter,
             formatterArgs: {
               getTagType({ row }) {
@@ -137,7 +132,6 @@ export default {
           },
           date_created: {
             label: this.$t('Date'),
-            sortable: 'custom',
             formatter: (row) => toSafeLocalDateStr(row.date_created)
           },
           actions: {

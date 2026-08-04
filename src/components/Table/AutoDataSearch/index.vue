@@ -33,6 +33,10 @@ export default {
       type: String,
       default: ''
     },
+    getTableMetadata: {
+      type: Function,
+      default: null
+    },
     // 建议折叠
     fold: {
       type: Boolean,
@@ -157,10 +161,10 @@ export default {
       this.internalOptions = options
     },
     optionUrlMeta() {
-      const url =
-        this.url.indexOf('?') === -1
-          ? `${this.url}?draw=1&display=1`
-          : `${this.url}&draw=1&display=1`
+      if (this.getTableMetadata) {
+        return this.getTableMetadata()
+      }
+      const url = this.url.indexOf('?') === -1 ? `${this.url}?display=1` : `${this.url}&display=1`
       return this.$store.dispatch('common/getUrlMeta', { url })
     }
   }

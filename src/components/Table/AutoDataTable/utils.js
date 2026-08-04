@@ -18,6 +18,17 @@ import { getDisplayValue } from '@/components/Table/TableFormatters/displayValue
 const textDisplayWidthCache = new Map()
 const primaryColumnNames = ['id', 'name']
 
+function getOverflowTooltipOptions() {
+  return {
+    popperStyle: {
+      maxWidth: 'min(500px, calc(100vw - 32px))',
+      overflowWrap: 'anywhere',
+      whiteSpace: 'normal',
+      wordBreak: 'break-word'
+    }
+  }
+}
+
 export function orderPrimaryColumns(columns) {
   const getColumnName = (column) => (typeof column === 'object' ? column?.prop : column)
   return [
@@ -157,7 +168,7 @@ export class TableColumnsGenerator {
   generateColumn(name) {
     const colMeta = this.meta[name] || {}
     const customMeta = this.config.columnsMeta ? this.config.columnsMeta[name] : {}
-    let col = { prop: name, label: colMeta.label, showOverflowTooltip: false }
+    let col = { prop: name, label: colMeta.label }
 
     col = this.generateColumnByType(colMeta.type, col, colMeta)
     col = this.generateColumnByName(name, col)
@@ -377,9 +388,14 @@ export class TableColumnsGenerator {
     }
 
     if (!isCompactColumn && !col.contentMaxWidth) {
-      const contentClass = col.isCustomRender
-        ? 'custom-render-table-column'
-        : 'full-content-table-column'
+      let contentClass = 'overflow-content-table-column'
+      if (col.isCustomRender) {
+        contentClass = 'custom-render-table-column'
+      } else if (col.showFullContent) {
+        contentClass = 'full-content-table-column'
+      } else if (col.showOverflowTooltip === undefined) {
+        col.showOverflowTooltip = getOverflowTooltipOptions()
+      }
       col.className = this.appendClassName(col.className, contentClass)
     }
     return col
