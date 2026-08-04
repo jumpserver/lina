@@ -51,14 +51,14 @@ import Dialog from '@/components/Dialog/index.vue'
 import ListTable from '@/components/Table/ListTable/index.vue'
 
 const defaultColumnsByResource = {
-  '/api/v1/accounts/accounts/': ['name', 'username', 'asset', 'secret_type', 'actions'],
-  '/api/v1/assets/assets/': ['name', 'address', 'platform', 'category', 'type', 'zone', 'actions'],
-  '/api/v1/labels/labels/': ['name', 'value', 'color', 'actions'],
-  '/api/v1/users/groups/': ['name', 'users_amount', 'comment', 'actions'],
-  '/api/v1/users/users/': ['name', 'username', 'email', 'source', 'is_active', 'actions']
+  '/api/v1/accounts/accounts/': ['name', 'username', 'asset', 'secret_type'],
+  '/api/v1/assets/assets/': ['name', 'address', 'platform', 'category', 'type', 'zone'],
+  '/api/v1/labels/labels/': ['name', 'value', 'color'],
+  '/api/v1/users/groups/': ['name', 'users_amount', 'comment'],
+  '/api/v1/users/users/': ['name', 'username', 'email', 'source', 'is_active']
 }
 
-const genericDefaultColumns = ['name', 'value', 'address', 'username', 'actions']
+const genericDefaultColumns = ['name', 'value', 'address', 'username']
 
 export default {
   name: 'ResourceSelectDialog',
@@ -229,13 +229,31 @@ export default {
     effectivePageSize() {
       return Math.min(Math.max(this.pageSize, 1), 100)
     },
+    tableUrl() {
+      const url = new URL(this.url, location.origin)
+      url.searchParams.delete('fields_size')
+      return `${url.pathname}${url.search}${url.hash}`
+    },
     defaultColumns() {
+      let columns
       if (Array.isArray(this.columnsShow.default)) {
-        return this.columnsShow.default
+        columns = this.columnsShow.default
+      } else {
+        const urlPathname = new URL(this.url, location.origin).pathname
+        const pathname = urlPathname.endsWith('/') ? urlPathname : `${urlPathname}/`
+        columns = defaultColumnsByResource[pathname] || genericDefaultColumns
       }
-      const urlPathname = new URL(this.url, location.origin).pathname
-      const pathname = urlPathname.endsWith('/') ? urlPathname : `${urlPathname}/`
-      return defaultColumnsByResource[pathname] || genericDefaultColumns
+      const filteredColumns = columns.filter((column) => {
+        const name = typeof column === 'object' ? column?.prop : column
+        return name !== 'id' && name !== 'actions'
+      })
+      return filteredColumns.length > 0 ? filteredColumns : ['name']
+    },
+    minimumColumns() {
+      const configured = Array.isArray(this.columnsShow.min) ? this.columnsShow.min : []
+      return [...new Set(['name', ...configured])].filter(
+        (column) => column !== 'id' && column !== 'actions'
+      )
     },
     tableName() {
       const pathname = new URL(this.url, location.origin).pathname.replaceAll('/', '_')
@@ -245,9 +263,8 @@ export default {
     },
     commonTableConfig() {
       return {
-        url: this.url,
+        url: this.tableUrl,
         id: this.valueKey,
-        ...(this.columns.length > 0 ? { columns: this.columns } : {}),
         paginationSize: this.effectivePageSize,
         paginationSizes: [...new Set([this.effectivePageSize, 30, 50, 100])]
           .filter((size) => size <= 100)
@@ -255,8 +272,8 @@ export default {
         persistSelection: false,
         saveQuery: false,
         columnsShow: {
-          min: ['name', 'actions'],
           ...this.columnsShow,
+          min: this.minimumColumns,
           default: this.defaultColumns
         },
         columnsMeta: {
@@ -265,7 +282,10 @@ export default {
               can: false
             }
           },
-          ...this.columnsMeta
+          ...this.columnsMeta,
+          actions: {
+            has: false
+          }
         }
       }
     },
@@ -274,51 +294,14 @@ export default {
         ...this.commonTableConfig,
         name: `${this.tableName}Resources`,
         canSelect: this.canSelect,
-        request: this.requestAvailablePage,
-        columnsMeta: {
-          ...this.commonTableConfig.columnsMeta,
-          actions: {
-            formatterArgs: {
-              hasUpdate: false,
-              hasDelete: false,
-              hasClone: false,
-              extraActions: [
-                {
-                  name: 'add',
-                  title: this.$t('Add'),
-                  icon: 'fa-plus',
-                  can: ({ row }) => this.canSelect(row),
-                  callback: ({ row }) => this.addResources([row])
-                }
-              ]
-            }
-          }
-        }
+        request: this.requestAvailablePage
       }
     },
     selectedTableConfig() {
       return {
         ...this.commonTableConfig,
         name: `${this.tableName}Resources`,
-        request: this.requestSelectedPage,
-        columnsMeta: {
-          ...this.commonTableConfig.columnsMeta,
-          actions: {
-            formatterArgs: {
-              hasUpdate: false,
-              hasDelete: false,
-              hasClone: false,
-              extraActions: [
-                {
-                  name: 'remove',
-                  title: this.$t('Remove'),
-                  type: 'danger',
-                  callback: ({ row }) => this.removeResources([row])
-                }
-              ]
-            }
-          }
-        }
+        request: this.requestSelectedPage
       }
     }
   },
@@ -435,7 +418,9 @@ export default {
     },
     getQueryParams() {
       const params = typeof this.queryParams === 'function' ? this.queryParams() : this.queryParams
-      return { ...(params || {}) }
+      const normalizedParams = { ...(params || {}) }
+      delete normalizedParams.fields_size
+      return normalizedParams
     },
     normalizeResponse(response) {
       if (Array.isArray(response)) {
@@ -460,7 +445,7 @@ export default {
       }
     },
     createTablePageRequest(table, page = table.page) {
-      const request = this.parseTableRequest(this.url, table.axiosConfig)
+      const request = this.parseTableRequest(this.tableUrl, table.axiosConfig)
       const limit = table.size || this.effectivePageSize
       const offset = Math.max((page - table.firstPage) * limit, 0)
       return {
@@ -712,6 +697,44 @@ export default {
     },
     async handleConfirm() {
       await this.closeNodeSearchPopovers()
+      const pendingAdditions = this.availableChecked.filter(
+        (row) => this.canSelect(row) && !this.selectedIdSet.has(row[this.valueKey])
+      )
+      const pendingRemovals = this.selectedChecked.filter((row) =>
+        this.selectedIdSet.has(row[this.valueKey])
+      )
+
+      if (pendingAdditions.length > 0 || pendingRemovals.length > 0) {
+        let message
+        if (pendingAdditions.length > 0 && pendingRemovals.length > 0) {
+          message = this.$t('ResourceSelectPendingChangesConfirm', {
+            addCount: pendingAdditions.length,
+            removeCount: pendingRemovals.length
+          })
+        } else if (pendingAdditions.length > 0) {
+          message = this.$t('ResourceSelectPendingAddConfirm', {
+            count: pendingAdditions.length
+          })
+        } else {
+          message = this.$t('ResourceSelectPendingRemoveConfirm', {
+            count: pendingRemovals.length
+          })
+        }
+
+        try {
+          await this.$confirm(message, this.$t('Confirm'), {
+            type: 'warning',
+            confirmButtonText: this.$t('Confirm'),
+            cancelButtonText: this.$t('Cancel')
+          })
+        } catch (_) {
+          return
+        }
+
+        this.addResources(pendingAdditions)
+        this.removeResources(pendingRemovals)
+      }
+
       this.$emit('confirm', [...this.draftValue])
       this.$emit('update:visible', false)
     },
@@ -738,6 +761,14 @@ export default {
 
   .el-dialog__body > .el-loading-parent--relative {
     min-height: 100%;
+  }
+
+  .el-dialog__body .table-action .table-action__toolbar .search {
+    gap: 8px;
+
+    &.has-label-filter .search-primary {
+      margin-left: 0;
+    }
   }
 }
 </style>
