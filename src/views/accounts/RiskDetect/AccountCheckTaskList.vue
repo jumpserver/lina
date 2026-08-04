@@ -14,6 +14,7 @@ import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
 import { GenericListTable } from '@/layout/components'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
+import AutomationAssetAmountFormatter from '@/views/accounts/components/AutomationAssetAmountFormatter.vue'
 export default {
   name: 'AccountCheckTaskList',
   components: {
@@ -60,7 +61,7 @@ export default {
             }
           },
           assets: {
-            formatter: AmountFormatter,
+            formatter: AutomationAssetAmountFormatter,
             formatterArgs: {
               async: false,
               drawer: false,

@@ -11,7 +11,9 @@
 <script lang="jsx">
 import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 import { openTaskPage } from '@/utils/jms/index'
+import AutomationAssetAmountFormatter from '@/views/accounts/components/AutomationAssetAmountFormatter.vue'
 export default {
   name: 'AccountChangeSecretList',
   components: {
@@ -29,6 +31,8 @@ export default {
         columns: [
           'name',
           'accounts',
+          'assets',
+          'nodes',
           'secret_strategy',
           'is_periodic',
           'periodic_display',
@@ -41,6 +45,8 @@ export default {
           default: [
             'name',
             'accounts',
+            'assets',
+            'nodes',
             'periodic_display',
             'executed_amount',
             'is_active',
@@ -57,6 +63,22 @@ export default {
           accounts: {
             formatter: function (row) {
               return <span> {row.accounts.join(', ')} </span>
+            }
+          },
+          assets: {
+            formatter: AutomationAssetAmountFormatter,
+            formatterArgs: {
+              async: false,
+              drawer: false,
+              preventClick: true
+            }
+          },
+          nodes: {
+            formatter: AmountFormatter,
+            formatterArgs: {
+              async: false,
+              drawer: false,
+              preventClick: true
             }
           },
           secret_strategy: {
