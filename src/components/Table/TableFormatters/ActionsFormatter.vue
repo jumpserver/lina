@@ -420,6 +420,11 @@ export default {
       align-items: center;
       justify-content: center;
     }
+
+    &.is-disabled .pre-icon,
+    &.is-disabled .pre-icon .fa {
+      color: inherit;
+    }
   }
 
   :deep(.table-action-dropdown) {
