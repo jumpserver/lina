@@ -3,7 +3,7 @@
     <a class="label-formatter-col">
       <span v-if="!iLabels || iLabels.length === 0" style="vertical-align: top"> - </span>
       <span v-else class="label-wrapper">
-        <span v-for="label of iLabels" :key="label.id">
+        <span v-for="label of iLabels" :key="label.id" @click.stop>
           <ILabel
             :el="formatterArgs.config"
             :label="label"
@@ -15,10 +15,10 @@
       </span>
     </a>
     <a
-      v-if="formatterArgs.showEditBtn"
-      :class="[{ 'disabled-link': $store.getters.currentOrgIsRoot }, 'edit-btn']"
-      style="padding-left: 5px"
-      @click="showDialog = true"
+      v-if="formatterArgs.showEditBtn && !$store.getters.currentOrgIsRoot"
+      class="edit-btn"
+      role="button"
+      @click.stop.prevent="openEditDialog"
     >
       <i class="fa fa-edit" />
     </a>
@@ -90,7 +90,8 @@ export default {
             return cellValue
           },
           config: {},
-          showEditBtn: true
+          showEditBtn: true,
+          searchOnClick: false
         }
       }
     }
@@ -142,7 +143,13 @@ export default {
   },
   methods: {
     handleLabelSearch(label) {
+      if (!this.formatterArgs.searchOnClick) {
+        return
+      }
       this.$eventBus.$emit('labelSearch', label)
+    },
+    openEditDialog() {
+      this.showDialog = true
     },
     getLabelType(tag) {
       return this.formatterArgs.getLabelType(tag)
@@ -220,22 +227,35 @@ export default {
 }
 
 .edit-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
   visibility: hidden;
-  position: relative;
-  transition: all 1s;
+  opacity: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
 
   & > i {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    position: static;
+    transform: none;
   }
 }
 
 .label-container {
+  position: relative;
   display: flex;
   height: 28px;
 
   .label-formatter-col {
+    box-sizing: border-box;
+    width: 100%;
+    padding-right: 28px;
     overflow: hidden;
 
     &:hover {
@@ -246,6 +266,7 @@ export default {
   &:hover {
     .edit-btn {
       visibility: visible;
+      opacity: 1;
     }
   }
 
@@ -287,12 +308,5 @@ export default {
 
 .tag-tip {
   margin-top: 10px;
-}
-
-.disabled-link {
-  pointer-events: none;
-  color: grey;
-  cursor: default;
-  text-decoration: none;
 }
 </style>

@@ -431,6 +431,7 @@ export default {
     min-height: 0;
     padding: 10px 20px 0;
     overflow: auto;
+    scrollbar-gutter: stable;
 
     // Tab 内容保留统一的可用宽度；视口或抽屉继续收窄时由内容区滚动，
     // 不再让表单、帮助文案和复杂控件无限压缩。

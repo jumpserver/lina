@@ -186,8 +186,7 @@ export default {
         hasReportExport: true,
         hasDatePicker: true,
         searchConfig: {
-          getUrlQuery: false,
-          exclude: ['is_finished']
+          getUrlQuery: false
         }
       }
     }

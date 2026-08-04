@@ -110,15 +110,7 @@ export default {
         hasLeftActions: false,
         hasReportExport: true,
         hasDatePicker: true,
-        hasImport: false,
-        searchConfig: {
-          options: [
-            {
-              label: this.$t('User'),
-              value: 'creator__name'
-            }
-          ]
-        }
+        hasImport: false
       }
     }
   }

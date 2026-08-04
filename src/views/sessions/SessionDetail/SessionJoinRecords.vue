@@ -56,10 +56,7 @@ export default {
       },
       headerActions: {
         hasImport: false,
-        hasLeftActions: false,
-        searchConfig: {
-          exclude: ['date_joined', 'date_left']
-        }
+        hasLeftActions: false
       }
     }
   }

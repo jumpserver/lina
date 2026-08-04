@@ -131,37 +131,7 @@ export default {
         hasBulkDelete: false,
         hasBulkUpdate: false,
         searchConfig: {
-          getUrlQuery: true,
-          options: [
-            {
-              label: this.$t('AssetName'),
-              value: 'asset_name'
-            },
-            {
-              label: this.$t('ExecutionID'),
-              value: 'execution_id'
-            },
-            {
-              value: 'status',
-              label: this.$t('Status'),
-              type: 'choice',
-              children: [
-                {
-                  default: true,
-                  value: 'queued',
-                  label: this.$t('Queued')
-                },
-                {
-                  value: 'ready',
-                  label: this.$t('Ready')
-                },
-                {
-                  value: 'processing',
-                  label: this.$t('Processing')
-                }
-              ]
-            }
-          ]
+          getUrlQuery: true
         },
         extraMoreActions: [
           {

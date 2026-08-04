@@ -131,15 +131,6 @@ export const gatherAccountHeaderActions = (vm) => {
     hasCreate: false,
     hasImport: false,
     hasExport: true,
-    searchConfig: {
-      exclude: ['asset', 'id'],
-      options: [
-        {
-          label: vm.$t('AssetName'),
-          value: 'asset_name'
-        }
-      ]
-    },
     extraMoreActions: [
       {
         name: 'SyncSelected',

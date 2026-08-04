@@ -389,6 +389,11 @@ input[type='file'] {
     padding: 6px 0;
   }
 
+  th:not(:first-child) > .cell,
+  td:not(:first-child) > .cell {
+    padding-left: 17px;
+  }
+
   .table {
     margin-top: 15px;
   }
@@ -399,7 +404,8 @@ input[type='file'] {
   }
 
   // 表头
-  .el-table__header thead > tr > th {
+  .el-table__header thead > tr > th,
+  .el-table__body-header > tr > th {
     &:first-child {
       border-top-left-radius: 5px;
     }

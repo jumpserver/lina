@@ -4,39 +4,6 @@ import DetailFormatter from '@/components/Table/TableFormatters/DetailFormatter.
 
 const t = i18n.global.t.bind(i18n.global)
 
-export const UserAssetPermissionListPageSearchConfigOptions = [
-  { label: t('Name'), value: 'name' },
-  { label: t('Username'), value: 'username' },
-  { label: t('UserGroups'), value: 'user_group' },
-  { label: t('AssetName'), value: 'asset_name' },
-  { label: t('AssetAddress'), value: 'address' },
-  { label: t('Account'), value: 'accounts' },
-  {
-    label: t('Valid'),
-    value: 'is_valid',
-    children: [
-      { value: '1', label: t('Yes') },
-      { value: '0', label: t('No') }
-    ]
-  },
-  {
-    label: t('Effective'),
-    value: 'is_effective',
-    children: [
-      { value: '1', label: t('Yes') },
-      { value: '0', label: t('No') }
-    ]
-  },
-  {
-    label: t('FromTicket'),
-    value: 'from_ticket',
-    children: [
-      { value: '1', label: t('Yes') },
-      { value: '0', label: t('No') }
-    ]
-  }
-]
-
 export const AssetPermissionTableMeta = {
   name: {
     formatter: DetailFormatter,
@@ -150,18 +117,6 @@ export const AssetPermissionTableMeta = {
     }
   }
 }
-
-export const AssetPermissionListPageSearchConfigOptions = [
-  ...UserAssetPermissionListPageSearchConfigOptions,
-  {
-    label: t('NodeSearchStrategy'),
-    value: 'all',
-    children: [
-      { value: '0', label: t('OnlySearchCurrentNodePerm') },
-      { value: '1', label: t('SearchAncestorNodePerm') }
-    ]
-  }
-]
 
 export const AllAccount = '@ALL'
 export const SpecAccount = '@SPEC'

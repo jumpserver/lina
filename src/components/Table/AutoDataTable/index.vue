@@ -1,11 +1,12 @@
 <template>
-  <div>
+  <div class="auto-data-table">
     <div v-loading="loading">
       <DataTable
         v-bind="$attrs"
         v-if="!loading"
         ref="dataTable"
         :config="iConfig"
+        @column-pin-toggle="toggleColumnPin"
         @filter-change="filterChange"
         @loaded="handleLoaded"
       />
@@ -23,13 +24,13 @@
 </template>
 
 <script>
-import { getActionMeta } from '@/api/common'
+import { getActionMeta, getFilterMeta, getOrderingMeta } from '@/api/common'
 import DataTable from '@/components/Table/DataTable/index.vue'
 import { newURL, replaceAllUUID } from '@/utils/common/index'
 import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
 import Sortable from 'sortablejs'
 import ColumnSettingPopover from './components/ColumnSettingPopover.vue'
-import { TableColumnsGenerator } from './utils'
+import { orderPrimaryColumns, TableColumnsGenerator } from './utils'
 import _ from 'lodash'
 
 export default {
@@ -47,6 +48,10 @@ export default {
     filterTable: {
       type: Function,
       default: () => ({})
+    },
+    getTableMetadata: {
+      type: Function,
+      default: null
     }
   },
   data() {
@@ -67,17 +72,26 @@ export default {
       isDeactivated: false,
       tableColumnsStorage: this.getTableColumnsStorage(),
       sortable: null,
+      columnResizeObserver: null,
+      columnResizeFrame: null,
+      pinningMediaQuery: null,
+      pinningDisabled: typeof window !== 'undefined' ? window.innerWidth < 992 : false,
+      naturalColumnWidths: {},
+      pinnedColumnProps: [],
       inited: false
     }
   },
   watch: {
+    pinningDisabled() {
+      this.refreshPinningAvailability()
+    },
     'config.url': {
       handler: _.debounce(function (newUrl, oldUrl) {
         if (this.isDeactivated || !this.inited || !newUrl || newUrl === oldUrl) {
           return
         }
 
-        this.optionUrlMetaAndGenCols()
+        this.optionUrlMetaAndGenCols({ reload: false })
         this.$log.debug('AutoDataTable URL change found')
       }, 200)
     },
@@ -97,7 +111,7 @@ export default {
           return
         }
 
-        this.optionUrlMetaAndGenCols()
+        this.optionUrlMetaAndGenCols({ reload: true })
         this.$log.debug('AutoDataTable Config change found')
       }, 200)
     }
@@ -105,6 +119,33 @@ export default {
   async created() {
     await this.optionUrlMetaAndGenCols()
     this.loading = false
+  },
+  mounted() {
+    this.initPinningMediaQuery()
+    if (typeof ResizeObserver === 'undefined') {
+      return
+    }
+    this.columnResizeObserver = new ResizeObserver(() => {
+      if (this.columnResizeFrame) {
+        cancelAnimationFrame(this.columnResizeFrame)
+      }
+      this.columnResizeFrame = requestAnimationFrame(() => this.fitColumnsToContainer())
+    })
+    this.columnResizeObserver.observe(this.$el)
+    this.initializeStaticColumnWidths()
+  },
+  beforeUnmount() {
+    if (this.pinningMediaQuery) {
+      if (typeof this.pinningMediaQuery.removeEventListener === 'function') {
+        this.pinningMediaQuery.removeEventListener('change', this.handlePinningMediaChange)
+      } else {
+        this.pinningMediaQuery.removeListener(this.handlePinningMediaChange)
+      }
+    }
+    this.columnResizeObserver?.disconnect()
+    if (this.columnResizeFrame) {
+      cancelAnimationFrame(this.columnResizeFrame)
+    }
   },
   deactivated() {
     this.isDeactivated = true
@@ -116,37 +157,154 @@ export default {
     handleLoaded() {
       this.$emit('loaded')
     },
+    initPinningMediaQuery() {
+      if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+        return
+      }
+      this.pinningMediaQuery = window.matchMedia('(max-width: 991px)')
+      this.pinningDisabled = this.pinningMediaQuery.matches
+      if (typeof this.pinningMediaQuery.addEventListener === 'function') {
+        this.pinningMediaQuery.addEventListener('change', this.handlePinningMediaChange)
+      } else {
+        this.pinningMediaQuery.addListener(this.handlePinningMediaChange)
+      }
+    },
+    handlePinningMediaChange(event) {
+      this.pinningDisabled = event.matches
+    },
+    initializeStaticColumnWidths() {
+      if (!Array.isArray(this.iConfig.columns)) {
+        return
+      }
+
+      const columns = this.iConfig.columns.map((currentColumn) => {
+        const col = { ...currentColumn }
+        col.width = col.width || col.minWidth
+        delete col.minWidth
+        return col
+      })
+
+      this.naturalColumnWidths = Object.fromEntries(columns.map((item) => [item.prop, item.width]))
+      this.fitColumnsToContainer(columns)
+    },
+    fitColumnsToContainer(sourceColumns = this.iConfig.columns) {
+      if (
+        !Array.isArray(sourceColumns) ||
+        sourceColumns.length === 0 ||
+        Object.keys(this.naturalColumnWidths).length === 0
+      ) {
+        return
+      }
+
+      const table = this.$el.querySelector('.el-table')
+      const containerWidth = table?.clientWidth || this.$el.clientWidth
+      if (!containerWidth) {
+        this.commitColumnWidths(sourceColumns)
+        return
+      }
+
+      const selectionColumn = this.$el.querySelector(
+        [
+          '.el-table__header .el-table-column--selection',
+          '.el-table__body-header .el-table-column--selection'
+        ].join(', ')
+      )
+      const selectionWidth = selectionColumn?.getBoundingClientRect().width || 0
+      const availableWidth = Math.max(0, Math.floor(containerWidth - selectionWidth - 2))
+
+      const naturalColumns = sourceColumns.map((currentColumn) => {
+        const col = { ...currentColumn }
+        const naturalWidth = this.naturalColumnWidths[col.prop]
+        if (naturalWidth) {
+          col.width = naturalWidth
+          delete col.minWidth
+        }
+        return col
+      })
+      const pixelWidths = naturalColumns.map((col) => Number.parseFloat(col.width) || 0)
+      const naturalTotalWidth = pixelWidths.reduce((total, width) => total + width, 0)
+      if (!naturalTotalWidth) {
+        return
+      }
+
+      const flexibleColumnIndexes = naturalColumns
+        .map((col, index) => ({ col, index }))
+        .filter(({ col }) => col.prop !== 'actions' && !col.fixed && col.fitWidth !== false)
+        .map(({ index }) => index)
+      const flexibleColumnIndexSet = new Set(flexibleColumnIndexes)
+      const fixedTotalWidth = pixelWidths.reduce((total, width, index) => {
+        return flexibleColumnIndexSet.has(index) ? total : total + width
+      }, 0)
+      const flexibleTotalWidth = naturalTotalWidth - fixedTotalWidth
+      const flexibleAvailableWidth = Math.max(0, availableWidth - fixedTotalWidth)
+      const scale =
+        naturalTotalWidth < availableWidth && flexibleTotalWidth > 0
+          ? flexibleAvailableWidth / flexibleTotalWidth
+          : 1
+      const fittedColumns = naturalColumns.map((col, index) => {
+        const isFlexible = flexibleColumnIndexSet.has(index)
+        const width = Math.floor(pixelWidths[index] * (isFlexible ? scale : 1))
+        col.width = `${width}px`
+        return col
+      })
+
+      if (scale > 1) {
+        const fittedTotalWidth = fittedColumns.reduce(
+          (total, col) => total + (Number.parseFloat(col.width) || 0),
+          0
+        )
+        const remainingWidth = Math.max(0, availableWidth - fittedTotalWidth)
+        const stretchColumnIndex = flexibleColumnIndexes[0] ?? -1
+        const targetIndex = stretchColumnIndex === -1 ? 0 : stretchColumnIndex
+        const targetWidth = Number.parseFloat(fittedColumns[targetIndex].width) || 0
+        fittedColumns[targetIndex].width = `${targetWidth + remainingWidth}px`
+      }
+
+      this.commitColumnWidths(fittedColumns)
+    },
+    commitColumnWidths(columns) {
+      const currentSignature = this.iConfig.columns.map((item) => [item.prop, item.width])
+      const nextSignature = columns.map((item) => [item.prop, item.width])
+      if (_.isEqual(currentSignature, nextSignature)) {
+        return
+      }
+
+      this.iConfig = {
+        ...this.iConfig,
+        columns
+      }
+    },
     openColumnSetting() {
       this.$refs.columnSettingPopover?.open()
     },
     normalizeColumnNames(value, fallback = []) {
       if (Array.isArray(value)) {
-        return value.filter((item) => item !== undefined && item !== null)
+        return orderPrimaryColumns(value.filter((item) => item !== undefined && item !== null))
       }
       if (Array.isArray(fallback)) {
-        return [...fallback]
+        return orderPrimaryColumns([...fallback])
       }
       return []
     },
     isConfigChanged(iNew, iOld) {
-      const _iNew = _.cloneDeep(iNew)
-      const _iOld = _.cloneDeep(iOld)
-      delete _iNew.columns
-      delete _iOld.columns
-      const oldMeta = _iNew.columnsMeta
-      const newMeta = _iOld.columnsMeta
-      const metas = [oldMeta, newMeta]
-      for (const meta of metas) {
-        if (!meta) {
-          continue
-        }
-        for (const [key, value] of Object.entries(meta)) {
-          if (!key || !value || typeof value !== 'object') {
-            continue
-          }
-          delete value['formatter']
-        }
+      const normalizeConfig = (config) => {
+        const rest = { ...(config || {}) }
+        delete rest.columns
+        const columnsMeta = rest.columnsMeta
+        const normalizedMeta = Object.fromEntries(
+          Object.entries(columnsMeta || {}).map(([key, value]) => {
+            if (!value || typeof value !== 'object') {
+              return [key, value]
+            }
+            const meta = { ...value }
+            delete meta.formatter
+            return [key, meta]
+          })
+        )
+        return { ...rest, columnsMeta: normalizedMeta }
       }
+      const _iNew = normalizeConfig(iNew)
+      const _iOld = normalizeConfig(iOld)
 
       try {
         if (JSON.stringify(_iNew) === JSON.stringify(_iOld)) {
@@ -158,7 +316,9 @@ export default {
       return true
     },
     setColumnDraggable() {
-      const el = this.$el.querySelector('.el-table__header-wrapper thead tr')
+      const el = this.$el.querySelector(
+        '.el-table__header-wrapper thead tr, .el-table__body-header tr'
+      )
       if (!el) {
         setTimeout(() => this.setColumnDraggable(), 500)
         return
@@ -169,6 +329,13 @@ export default {
 
       this.sortable = Sortable.create(el, {
         animation: 150,
+        filter: '.column-pin-button',
+        preventOnFilter: false,
+        onMove: ({ dragged, related }) => {
+          const draggedIsPinned = dragged.querySelector('.column-pin-button.is-pinned')
+          const relatedIsPinned = related?.querySelector('.column-pin-button.is-pinned')
+          return !draggedIsPinned && !relatedIsPinned
+        },
         onEnd: (evt) => {
           let { oldIndex, newIndex } = evt
           if (oldIndex === newIndex) {
@@ -182,20 +349,22 @@ export default {
             if (newIndex > 0) newIndex -= 1
           }
 
-          let columnNames = this.normalizeColumnNames(this.cleanedColumnsShow.show)
-          if (columnNames.includes('actions')) {
-            columnNames = columnNames.filter((item) => item !== 'actions')
-            columnNames.push('actions')
-          }
+          const displayedColumnNames = this.iConfig.columns.map((item) => item.prop)
           // 边界
           if (
             oldIndex >= 0 &&
-            oldIndex < columnNames.length &&
+            oldIndex < displayedColumnNames.length &&
             newIndex >= 0 &&
-            newIndex < columnNames.length
+            newIndex < displayedColumnNames.length
           ) {
-            const movedItem = columnNames.splice(oldIndex, 1)[0]
-            columnNames.splice(newIndex, 0, movedItem)
+            const movedItem = displayedColumnNames.splice(oldIndex, 1)[0]
+            displayedColumnNames.splice(newIndex, 0, movedItem)
+
+            let columnNames = displayedColumnNames
+            if (columnNames.includes('actions')) {
+              columnNames = columnNames.filter((item) => item !== 'actions')
+              columnNames.push('actions')
+            }
 
             this.$log.debug('Column moved: ', movedItem, oldIndex, ' => ', newIndex)
             // 保存更新的列顺序
@@ -224,9 +393,16 @@ export default {
       const generator = new TableColumnsGenerator(this.config, this.meta, this)
       this.totalColumns = generator.generateColumns()
       this.config.columns = this.totalColumns
-      this.iConfig = _.cloneDeep(this.config)
+      this.iConfig = {
+        ...this.config,
+        columns: [...this.totalColumns],
+        tableAttrs: {
+          tableLayout: 'auto',
+          ...this.config.tableAttrs
+        }
+      }
     },
-    async optionUrlMetaAndGenCols() {
+    async optionUrlMetaAndGenCols({ reload = false } = {}) {
       if (!this.config.url) {
         return
       }
@@ -240,18 +416,40 @@ export default {
        * 这导致在首次加载时，currentOrder总是为空数组，因为此时cleanedColumnsShow.show还未初始化
        */
       try {
-        const data = await this.$store.dispatch('common/getUrlMeta', { url: url })
+        const data = this.getTableMetadata
+          ? await this.getTableMetadata()
+          : await this.$store.dispatch('common/getUrlMeta', { url })
         const method = this.method.toUpperCase()
-        this.meta = getActionMeta(data, method)
+        const actionMeta = getActionMeta(data, method)
+        const filters = getFilterMeta(data)
+        const ordering = getOrderingMeta(data)
+        this.meta = this.applyQueryCapabilities(actionMeta, filters, ordering)
 
         this.generateTotalColumns()
         this.cleanColumnsShow()
-        this.filterShowColumns()
+        this.filterShowColumns({ reload })
         this.generatePopoverColumns()
         this.setColumnDraggable()
       } catch (error) {
         this.$log.error('Error occur: ', error)
       }
+    },
+    applyQueryCapabilities(actionMeta, filters, ordering) {
+      const meta = Object.fromEntries(
+        Object.entries(actionMeta).map(([name, value]) => [name, { ...value }])
+      )
+      for (const name of Object.keys(filters)) {
+        if (!meta[name]) {
+          continue
+        }
+        meta[name].filter = true
+      }
+      for (const { name } of ordering.fields || []) {
+        if (name && meta[name]) {
+          meta[name].order = true
+        }
+      }
+      return meta
     },
     getTableColumnsStorage() {
       let tableName = this.config.name || this.$route.name + '_' + newURL(this.config.url).pathname
@@ -292,27 +490,26 @@ export default {
       }
       this.$log.debug('Cleaned columns show: ', this.cleanedColumnsShow)
     },
-    filterShowColumns() {
+    filterShowColumns({ reload = false } = {}) {
       this.cleanColumnsShow()
       const showFieldNames = this.normalizeColumnNames(this.cleanedColumnsShow.show)
       let showFields = this.totalColumns.filter((obj) => {
         return showFieldNames.indexOf(obj.prop) > -1
       })
       showFields = this.orderingColumns(showFields)
-      this.iConfig.columns = showFields
-
-      // 确保最新的列配置也应用到config对象上，保持同步
-      this.config.columns = this.iConfig.columns
+      this.config.columns = showFields
+      this.iConfig.columns = this.applyPinnedColumns(showFields)
 
       this.$nextTick(() => {
-        if (this.$refs.dataTable) {
+        this.initializeStaticColumnWidths()
+        if (reload && this.$refs.dataTable) {
           this.$refs.dataTable.getList()
         }
         this.inited = true
       })
     },
     orderingColumns(columns) {
-      const cols = _.cloneDeep(this.config.columns)
+      const cols = Array.isArray(this.config.columns) ? [...this.config.columns] : []
       const show = this.normalizeColumnNames(this.cleanedColumnsShow.show, cols)
       const ordering = (show || cols || []).map((item) => {
         let prop = item
@@ -327,6 +524,75 @@ export default {
         return i === -1 ? 999 : i
       })
       return sorted
+    },
+    applyPinnedColumns(columns) {
+      const getOriginalFixed = (item) => {
+        return Object.prototype.hasOwnProperty.call(item, 'pinOriginalFixed')
+          ? item.pinOriginalFixed
+          : item.fixed
+      }
+      const pinnableProps = new Set(
+        columns
+          .filter((item) => {
+            const originalFixed = getOriginalFixed(item)
+            return item.prop !== 'actions' && originalFixed !== 'left' && originalFixed !== 'right'
+          })
+          .map((item) => item.prop)
+      )
+      this.pinnedColumnProps = this.pinnedColumnProps.filter((prop) => pinnableProps.has(prop))
+      if (this.pinningDisabled) {
+        this.pinnedColumnProps = []
+      }
+      const pinnedSet = new Set(this.pinnedColumnProps)
+      const pinLimitReached = this.pinnedColumnProps.length >= 3
+
+      return columns.map((item) => {
+        const col = { ...item }
+        const originalFixed = getOriginalFixed(col)
+        const isPinned = pinnedSet.has(col.prop)
+
+        col.pinOriginalFixed = originalFixed
+        col.fixed = isPinned ? 'left' : originalFixed
+        col.pinState = {
+          pinned: isPinned,
+          visible:
+            !this.pinningDisabled && pinnableProps.has(col.prop) && (isPinned || !pinLimitReached)
+        }
+        return col
+      })
+    },
+    refreshPinningAvailability() {
+      if (!Array.isArray(this.iConfig.columns) || this.iConfig.columns.length === 0) {
+        return
+      }
+      this.iConfig.columns = this.applyPinnedColumns(this.iConfig.columns)
+    },
+    toggleColumnPin(prop) {
+      const columnIndex = this.iConfig.columns.findIndex((item) => item.prop === prop)
+      const column = this.iConfig.columns[columnIndex]
+      if (columnIndex === -1 || !column.pinState?.visible) {
+        return
+      }
+
+      const pinnedIndex = this.pinnedColumnProps.indexOf(prop)
+      const isPinned = pinnedIndex !== -1
+      if (pinnedIndex !== -1) {
+        this.pinnedColumnProps.splice(pinnedIndex, 1)
+      } else {
+        if (this.pinnedColumnProps.length >= 3) {
+          return
+        }
+        this.pinnedColumnProps.push(prop)
+      }
+
+      this.iConfig.columns.splice(columnIndex, 1, {
+        ...column,
+        fixed: isPinned ? column.pinOriginalFixed : 'left',
+        pinState: {
+          ...column.pinState,
+          pinned: !isPinned
+        }
+      })
     },
     generatePopoverColumns() {
       this.popoverColumns.totalColumnsList = this.totalColumns.filter((obj) => {
@@ -359,3 +625,136 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.auto-data-table {
+  // Headers always stay on one line. The column generator reserves enough width for
+  // the complete label, and the table scrolls horizontally when the viewport is narrow.
+  :deep(.el-table__header th .cell),
+  :deep(.el-table__body-header th .cell) {
+    height: auto;
+    overflow: visible;
+    line-height: 1.4;
+    text-overflow: clip;
+    white-space: nowrap;
+  }
+
+  :deep(.el-table__header th .cell > span),
+  :deep(.el-table__body-header th .cell > span) {
+    white-space: nowrap;
+  }
+
+  :deep(.el-table__body td.full-content-table-column .cell),
+  :deep(.el-table__body td.full-content-table-column .cell > span),
+  :deep(.el-table__body td.full-content-table-column .detail) {
+    height: auto;
+    max-width: none;
+    overflow: visible !important;
+    line-height: 1.5;
+    text-overflow: clip !important;
+    white-space: nowrap !important;
+  }
+
+  :deep(.el-table__body td.overflow-content-table-column .cell),
+  :deep(.el-table__body td.overflow-content-table-column .cell > span),
+  :deep(.el-table__body td.overflow-content-table-column .detail) {
+    max-width: 100%;
+    overflow: hidden !important;
+    line-height: 1.5;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  :deep(.el-table__body td.overflow-content-table-column .cell > span),
+  :deep(.el-table__body td.overflow-content-table-column .detail) {
+    display: block;
+  }
+
+  :deep(.el-table__body td.custom-render-table-column .cell),
+  :deep(.el-table__body td.custom-render-table-column .cell > span),
+  :deep(.el-table__body td.custom-render-table-column .detail),
+  :deep(.el-table__body td.custom-render-table-column .platform-name) {
+    height: auto;
+    max-width: 100%;
+    overflow: visible !important;
+    line-height: 1.5;
+    text-overflow: clip !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  :deep(.el-table__body td.custom-render-table-column .platform-td) {
+    flex-wrap: wrap;
+  }
+
+  :deep(.el-table__body td.custom-render-table-column .tag),
+  :deep(.el-table__body td.custom-render-table-column .protocol-cell) {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  :deep(.el-table__body td.custom-render-table-column .tag > span),
+  :deep(.el-table__body td.custom-render-table-column .el-tag) {
+    max-width: 100%;
+    height: auto;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  :deep(.el-table__body td.custom-render-table-column .label-formatter-col) {
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: 100%;
+    padding-right: 28px;
+    overflow: visible;
+  }
+
+  :deep(.el-table__body td.custom-render-table-column .label-container),
+  :deep(.el-table__body td.custom-render-table-column .label-wrapper) {
+    max-width: none;
+    overflow: visible;
+    white-space: normal;
+  }
+
+  :deep(.el-table__body td.custom-render-table-column .label-container) {
+    width: 100%;
+    height: auto;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  :deep(.el-table__body td.custom-render-table-column .label-wrapper) {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  :deep(.el-table__body td.custom-render-table-column .label-wrapper > span) {
+    max-width: 100%;
+  }
+
+  :deep(.el-table__body td.custom-render-table-column .label-container .tag-formatter) {
+    max-width: 100%;
+    height: auto;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+  }
+
+  :deep(.el-table__body td.custom-render-table-column .label-container .edit-btn) {
+    flex: 0 0 28px;
+    width: 28px;
+    min-width: 28px;
+    z-index: 1;
+  }
+
+  :deep(.el-table__body td.bounded-content-table-column .cell) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+</style>

@@ -49,27 +49,16 @@ export default {
       reportUrl: '',
       tableConfig: {
         url: this.url,
-        columns: [
-          'id',
-          'automation',
-          'status',
-          'trigger',
-          'date_start',
-          'date_finished',
-          'actions'
-        ],
         columnsMeta: {
           id: {
             label: this.$t('ID'),
             formatter: DetailFormatter,
-            width: '100px',
             formatterArgs: {
               route: this.detailRoute,
               getRoute: ({ row }) => ({
                 name: this.detailRoute,
                 params: { id: row.id }
               }),
-              getTitle: ({ row }) => row.id.slice(0, 8),
               drawer: true
             }
           },
@@ -133,17 +122,7 @@ export default {
       },
       headerActions: {
         searchConfig: {
-          getUrlQuery: true,
-          options: [
-            {
-              label: this.$t('TaskID'),
-              value: 'automation_id'
-            },
-            {
-              label: this.$t('DisplayName'),
-              value: 'automation__name'
-            }
-          ]
+          getUrlQuery: true
         },
         hasLeftActions: false,
         hasMoreActions: false,

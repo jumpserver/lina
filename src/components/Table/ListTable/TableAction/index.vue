@@ -45,6 +45,7 @@
             v-if="hasSearch"
             ref="autoDataSearch"
             :fold="foldSearch"
+            :get-table-metadata="getTableMetadata"
             class="right-side-item action-search search-primary"
             @conditions-change="handleTagConditionsChange"
             @tag-search="handleTagSearch"
@@ -141,7 +142,11 @@
         >
           <span class="condition-chip__text">
             <span v-if="condition.displayKey" class="condition-chip__key">
-              {{ condition.displayKey }}:
+              {{ condition.displayKey }}
+              <span v-if="!condition.displayOperator">:</span>
+            </span>
+            <span v-if="condition.displayOperator" class="condition-chip__operator">
+              {{ condition.displayOperator }}
             </span>
             <span class="condition-chip__value">
               {{ condition.displayValue }}
@@ -250,6 +255,10 @@ export default {
       type: String,
       default: ''
     },
+    getTableMetadata: {
+      type: Function,
+      default: null
+    },
     datePick: {
       type: Function,
       default: (val) => {}
@@ -319,18 +328,22 @@ export default {
     },
     activeSearchConditions() {
       return [
-        ...this.tagConditions.map((condition) => ({
-          ...condition,
-          id: `tag:${condition.key}`,
-          source: 'tag',
-          displayKey:
+        ...this.tagConditions.map((condition) => {
+          const fieldLabel =
             condition.label ||
-            (condition.key?.startsWith('search') ? this.$t('Search') : condition.key),
-          displayValue:
-            condition.valueLabel !== '' && condition.valueLabel != null
-              ? condition.valueLabel
-              : condition.value
-        })),
+            (condition.key?.startsWith('search') ? this.$t('Search') : condition.key)
+          return {
+            ...condition,
+            id: `tag:${condition.conditionKey || condition.key}`,
+            source: 'tag',
+            displayKey: fieldLabel,
+            displayOperator: this.getConditionOperatorLabel(condition),
+            displayValue:
+              condition.valueLabel !== '' && condition.valueLabel != null
+                ? condition.valueLabel
+                : condition.value
+          }
+        }),
         ...this.labelConditions,
         ...(this.nodeCondition ? [this.nodeCondition] : [])
       ]
@@ -454,7 +467,7 @@ export default {
     },
     removeSearchCondition(condition) {
       if (condition.source === 'tag') {
-        this.$refs.autoDataSearch?.removeCondition(condition.key)
+        this.$refs.autoDataSearch?.removeCondition(condition.conditionKey || condition.key)
       } else if (condition.source === 'label') {
         this.$refs.labelSearch?.removeLabel(condition.value)
       } else if (condition.source === 'node') {
@@ -474,10 +487,35 @@ export default {
         nodeSelection: _.cloneDeep(this.nodeSelectionSnapshot)
       }
     },
+    getConditionOperator(condition) {
+      let operator = condition?.operator
+      const values = String(condition?.value || '')
+        .split(',')
+        .map((value) => value.trim())
+        .filter(Boolean)
+      if (condition?.key?.startsWith('search') && values.length <= 1) {
+        operator = 'icontains'
+      }
+      return operator
+    },
+    getConditionOperatorLabel(condition) {
+      const operator = this.getConditionOperator(condition)
+      const labels = {
+        exact: this.$t('SearchOperatorEquals'),
+        icontains: this.$t('SearchOperatorContains'),
+        startswith: this.$t('SearchOperatorStartsWith'),
+        icontains_any: this.$t('SearchOperatorContainsAny'),
+        icontains_all: this.$t('SearchOperatorContainsAll'),
+        in: this.$t('SearchOperatorEqualsAny')
+      }
+      return labels[operator] || ''
+    },
     getTagConditionTitle(condition, preset) {
-      const label =
+      const baseLabel =
         condition?.label ||
         (condition?.key?.startsWith('search') ? this.$t('Search') : condition?.key || '')
+      const operatorLabel = this.getConditionOperatorLabel(condition)
+      const label = operatorLabel ? `${baseLabel} ${operatorLabel}`.trim() : baseLabel
       let value =
         condition?.valueLabel !== '' && condition?.valueLabel != null
           ? condition.valueLabel
@@ -485,7 +523,11 @@ export default {
 
       if ((value === '' || value == null) && preset?.tagSearchQuery) {
         const queryKey = Object.keys(preset.tagSearchQuery).find((key) => {
-          return key === condition?.key || key.replace(/__icontains$/, '') === condition?.key
+          return (
+            key === condition?.key ||
+            key.replace(/__(?:exact|icontains|icontains_any|icontains_all|in)$/, '') ===
+              condition?.key
+          )
         })
         value = queryKey ? preset.tagSearchQuery[queryKey] : value
       }
@@ -696,27 +738,27 @@ $color-drop-menu-border: #e4e7ed;
 
     // 搜索框与前后的图标按钮保持清晰间距。
     .right-side-item.action-search {
-      flex: 0 1 240px;
+      flex: 0 0 360px;
       box-sizing: border-box;
-      width: 240px;
+      width: 360px;
       min-height: 30px;
-      min-width: min(240px, 100%);
-      max-width: 100%;
+      min-width: 360px;
+      max-width: 360px;
       font-size: 13px;
       border: 1px solid var(--color-border);
       border-radius: 4px;
       overflow: hidden;
-      transition:
-        border-color 0.2s,
-        box-shadow 0.2s;
+      outline: none;
+      box-shadow: none;
+      transition: none;
 
-      &:hover {
-        border-color: var(--color-border);
-      }
-
+      &:hover,
+      &:focus,
+      &:focus-visible,
       &:focus-within {
-        border-color: var(--color-border);
-        box-shadow: none;
+        border-color: var(--color-border) !important;
+        outline: none;
+        box-shadow: none !important;
       }
     }
 
@@ -844,9 +886,10 @@ $color-drop-menu-border: #e4e7ed;
       gap: 2px;
 
       .right-side-item.action-search {
-        flex: 0 1 clamp(160px, 20vw, 220px);
-        width: clamp(160px, 20vw, 220px);
-        min-width: min(160px, 100%);
+        flex: 0 0 clamp(280px, 34vw, 340px);
+        width: clamp(280px, 34vw, 340px);
+        min-width: clamp(280px, 34vw, 340px);
+        max-width: clamp(280px, 34vw, 340px);
       }
     }
 
@@ -881,11 +924,19 @@ $color-drop-menu-border: #e4e7ed;
       justify-content: flex-start;
       justify-self: start;
       width: 100%;
+      min-width: 0;
 
       .right-side-item.action-search {
-        flex: 0 1 clamp(140px, 50vw, 240px);
-        width: clamp(140px, 50vw, 240px);
-        min-width: 120px;
+        flex: 1 1 0;
+        width: 0;
+        min-width: 0;
+        max-width: 100%;
+      }
+
+      .search-filter,
+      .quick-filter-toggle,
+      .search-history-button {
+        flex: 0 0 auto;
       }
     }
 
@@ -1015,10 +1066,28 @@ $color-drop-menu-border: #e4e7ed;
   }
 
   &__key {
-    margin-right: 4px;
     color: var(--el-text-color-secondary);
     cursor: text;
     user-select: text;
+  }
+
+  &__operator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    margin: 0 7px;
+    padding: 3px 5px;
+    color: var(--el-text-color-primary);
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 10px;
+    border: 1px solid var(--el-border-color-lighter);
+    border-radius: 6px;
+    background-color: var(--el-fill-color-light);
+    box-shadow: inset 0 -1px 0 var(--el-border-color-lighter);
+    cursor: default;
+    flex: 0 0 auto;
   }
 
   &__value {

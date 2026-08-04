@@ -76,9 +76,6 @@ export default {
       updateRoute: 'ClipboardACLUpdate',
       headerActions: {
         createRoute: 'ClipboardACLCreate',
-        searchConfig: {
-          exclude: ['operations', 'users', 'assets']
-        },
         hasRefresh: true,
         hasExport: false,
         hasImport: false

@@ -129,42 +129,7 @@ export default {
         hasBulkDelete: false,
         hasBulkUpdate: false,
         searchConfig: {
-          getUrlQuery: true,
-          exclude: ['id', 'status', 'execution'],
-          options: [
-            {
-              label: this.$t('Asset'),
-              value: 'asset_name'
-            },
-            {
-              label: this.$t('Accounts'),
-              value: 'account_username'
-            },
-            {
-              value: 'status',
-              label: this.$t('Status'),
-              type: 'choice',
-              children: [
-                {
-                  default: true,
-                  value: 'success',
-                  label: this.$t('Success')
-                },
-                {
-                  value: 'failed',
-                  label: this.$t('Failed')
-                },
-                {
-                  value: 'pending',
-                  label: this.$t('Pending')
-                }
-              ]
-            },
-            {
-              label: this.$t('ExecutionID'),
-              value: 'execution_id'
-            }
-          ]
+          getUrlQuery: true
         },
         extraMoreActions: [
           {

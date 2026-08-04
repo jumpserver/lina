@@ -61,8 +61,16 @@ export default {
             }
           },
           accounts: {
+            contentMaxWidth: 300,
+            showOverflowTooltip: {
+              popperStyle: {
+                maxWidth: '500px',
+                overflowWrap: 'anywhere',
+                whiteSpace: 'normal'
+              }
+            },
             formatter: function (row) {
-              return <span> {row.accounts.join(', ')} </span>
+              return row.accounts.join(', ')
             }
           },
           assets: {
