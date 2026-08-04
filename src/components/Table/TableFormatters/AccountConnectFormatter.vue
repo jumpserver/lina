@@ -161,7 +161,7 @@ export default {
     i {
       display: block;
       line-height: 1;
-      transform: translateX(1px) translateY(1px);
+      transform: translateX(0px) translateY(1px);
     }
 
     &:hover,
