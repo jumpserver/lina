@@ -11,7 +11,9 @@
 <script lang="jsx">
 import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 import { openTaskPage } from '@/utils/jms/index'
+import AutomationAssetAmountFormatter from '@/views/accounts/components/AutomationAssetAmountFormatter.vue'
 export default {
   name: 'AccountDiscoverTaskList',
   components: {
@@ -54,9 +56,20 @@ export default {
               })
             }
           },
+          assets: {
+            formatter: AutomationAssetAmountFormatter,
+            formatterArgs: {
+              async: false,
+              drawer: false,
+              preventClick: true
+            }
+          },
           nodes: {
-            formatter: function (row, column, cellValue, index) {
-              return cellValue.map((v) => v['name']).join(', ')
+            formatter: AmountFormatter,
+            formatterArgs: {
+              async: false,
+              drawer: false,
+              preventClick: true
             }
           },
           is_periodic: {

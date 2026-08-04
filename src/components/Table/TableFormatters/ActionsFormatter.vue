@@ -420,6 +420,11 @@ export default {
       align-items: center;
       justify-content: center;
     }
+
+    &.el-button--danger.is-plain.is-disabled .pre-icon,
+    &.el-button--danger.is-plain.is-disabled .pre-icon .fa {
+      color: var(--el-button-disabled-text-color);
+    }
   }
 
   :deep(.table-action-dropdown) {

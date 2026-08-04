@@ -57,7 +57,7 @@ export default {
                 })
                 .then((res) => {
                   this.$message.success(this.$tc('DeleteSuccessMsg'))
-                  this.$store.commit('common/reload')
+                  this.$refs.listTable.reloadTable()
                 })
                 .catch((error) => {
                   this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
@@ -102,7 +102,7 @@ export default {
         onAddSuccess: (items, that) => {
           this.$log.debug('AssetSelect value', that.assets)
           this.$message.success(this.$tc('UpdateSuccessMsg'))
-          this.$store.commit('common/reload')
+          this.$refs.listTable.reloadTable()
         }
       },
       nodeRelationConfig: {
@@ -129,7 +129,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$tc('UpdateSuccessMsg'))
-          window.location.reload()
+          this.$refs.listTable.reloadTable()
         },
         performDelete: (item) => {
           const data = {
@@ -146,7 +146,6 @@ export default {
             that.select2.disabledValues.splice(i, 1)
           }
           this.$message.success(this.$tc('DeleteSuccessMsg'))
-          window.location.reload()
           this.$refs.listTable.reloadTable()
         }
       }

@@ -6,6 +6,7 @@
       :create-drawer="createDrawer"
       :detail-drawer="detailDrawer"
       :header-actions="iTicketAction"
+      :quick-filters="quickFilters"
       :table-config="ticketTableConfig"
     />
   </div>
@@ -42,11 +43,77 @@ export default {
       loading: true,
       getDrawerTitle: () => ' ',
       createDrawer: () => import('@/views/tickets/RequestAssetPerm/CreateUpdate'),
+      quickFilters: [
+        {
+          label: this.$t('Type'),
+          options: [
+            {
+              label: this.$t('ApplyAsset'),
+              filter: {
+                type: 'apply_asset'
+              }
+            },
+            {
+              label: this.$t('LoginConfirm'),
+              filter: {
+                type: 'login_confirm'
+              }
+            },
+            {
+              label: this.$t('CommandConfirm'),
+              filter: {
+                type: 'command_confirm'
+              }
+            },
+            {
+              label: this.$t('LoginAssetConfirm'),
+              filter: {
+                type: 'login_asset_confirm'
+              }
+            }
+          ]
+        },
+        {
+          label: this.$t('State'),
+          options: [
+            {
+              label: this.$t('All'),
+              filter: {
+                state: 'all'
+              }
+            },
+            {
+              label: this.$t('Open'),
+              filter: {
+                state: 'pending'
+              }
+            },
+            {
+              label: this.$t('Cancel'),
+              filter: {
+                state: 'closed'
+              }
+            },
+            {
+              label: this.$t('Approved'),
+              filter: {
+                state: 'approved'
+              }
+            },
+            {
+              label: this.$t('Rejected'),
+              filter: {
+                state: 'rejected'
+              }
+            }
+          ]
+        }
+      ],
       detailDrawer: null,
       ticketTableConfig: {
         url: this.url,
         extraQuery: this.extraQuery,
-        columnsExclude: ['process_map', 'rel_snapshot'],
+        columnsExclude: ['process_map', 'rel_snapshot', 'cc_users'],
         columnsShow: {
           min: ['title', 'serial_num', 'type', 'state', 'date_created'],
           default: ['title', 'serial_num', 'type', 'state', 'date_created']

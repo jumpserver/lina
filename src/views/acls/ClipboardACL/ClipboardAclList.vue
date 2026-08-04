@@ -43,7 +43,7 @@ export default {
           },
           operations: {
             formatter: (row) => {
-              const operations = filterClipboardOperations(row.operations)
+              const operations = filterClipboardOperations(row.operations, this)
               return createVNode(
                 'div',
                 {

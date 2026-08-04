@@ -13,6 +13,8 @@ export default {
   data() {
     return {
       category: 'luna',
+      autoSave: true,
+      canRestoreDefault: true,
       // todo: remove this when we have a better solution
       fieldsExclude: ['command_line.terminal_theme_name']
     }

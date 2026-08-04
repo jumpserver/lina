@@ -1,5 +1,13 @@
 <template>
   <div class="list-table">
+    <QuickFilter
+      v-if="iHasQuickFilter"
+      v-model:expand="filterExpand"
+      :filters="quickFilters"
+      :summary="quickSummary"
+      :table-url="tableUrl"
+      @filter="filter"
+    />
     <TableAction
       v-bind="iHeaderActions"
       v-if="hasActions"
@@ -14,14 +22,6 @@
       :get-table-metadata="getTableMetadata"
       :table-url="tableUrl"
       @done="handleActionInitialDone"
-    />
-    <QuickFilter
-      v-if="iHasQuickFilter"
-      v-model:expand="filterExpand"
-      :filters="quickFilters"
-      :summary="quickSummary"
-      :table-url="tableUrl"
-      @filter="filter"
     />
     <div v-loading="!actionInit" class="table-content">
       <IBox>
