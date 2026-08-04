@@ -421,8 +421,7 @@ export default {
       justify-content: center;
     }
 
-    &.el-button--danger.is-plain.is-disabled .pre-icon,
-    &.el-button--danger.is-plain.is-disabled .pre-icon .fa {
+    &.el-button--danger.is-plain.is-disabled {
       color: var(--el-button-disabled-text-color);
     }
   }
