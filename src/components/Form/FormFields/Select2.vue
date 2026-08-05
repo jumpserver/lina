@@ -11,6 +11,8 @@
     :filterable="true"
     :loading="!initialized"
     :multiple="multiple"
+    :no-data-text="requestError ? $t('SelectLoadFailed') : undefined"
+    :no-match-text="requestError ? $t('SelectLoadFailed') : undefined"
     :options="iOptions"
     :placeholder="placeholder"
     :remote="remote"
@@ -164,6 +166,7 @@ export default {
       validateStatus,
       selectDisabled: this.disabled,
       loading: false,
+      requestError: false,
       initialized: false,
       defaultParams: _.cloneDeep(defaultParams),
       params: _.cloneDeep(defaultParams),
@@ -296,13 +299,19 @@ export default {
   },
   async mounted() {
     if (!this.initialized) {
-      await this.initialSelect()
-      setTimeout(() => {
-        this.$log.debug('Value is : ', this.externalValue)
-        this.innerValue = this.normalizeValue(this.externalValue)
-        this.initialized = true
-        this.$emit('initialized', true)
-      }, 100)
+      try {
+        await this.initialSelect()
+      } catch {
+        // 请求错误已由 axios 拦截器提示，选择器仍需结束初始化才能继续搜索
+        this.requestError = true
+      } finally {
+        setTimeout(() => {
+          this.$log.debug('Value is : ', this.externalValue)
+          this.innerValue = this.normalizeValue(this.externalValue)
+          this.initialized = true
+          this.$emit('initialized', true)
+        }, 100)
+      }
     }
     // 由于在新增时有些 Select 会存在初始值，而有些没有，就会导致动态类名判断出现相反的情况
     // 此处强制设置没有初始值的动态类名
@@ -406,14 +415,25 @@ export default {
       if (!this.params.hasMore) {
         return
       }
+      if (this.loading && !load) {
+        return
+      }
       this.loading = true
-      this.params.page = this.params.page ? this.params.page + 1 : 1
+      const previousPage = this.params.page
+      this.params.page = previousPage ? previousPage + 1 : 1
       const defaultLoad = this.getOptions
       if (!load) {
         load = defaultLoad
       }
-      await load()
-      this.loading = false
+      try {
+        await load()
+      } catch {
+        // 失败后保留当前页，允许下次滚动重试同一页
+        this.params.page = previousPage
+        this.requestError = true
+      } finally {
+        this.loading = false
+      }
     },
     resetParams() {
       this.params = _.cloneDeep(this.defaultParams)
@@ -423,11 +443,17 @@ export default {
       delete params['hasMore']
       return this.iAjax.makeParams(params)
     },
-    filterOptions(query) {
+    async filterOptions(query) {
       this.resetParams()
       this.iOptions = []
       this.params.search = query
-      this.getOptions()
+      this.requestError = false
+      try {
+        await this.getOptions()
+      } catch {
+        // 请求错误后保持可搜索状态，下一次输入可正常重试
+        this.requestError = true
+      }
     },
     handleModelUpdate(val) {
       const normalizedValue = this.normalizeValue(val)
@@ -502,10 +528,16 @@ export default {
         this.remote = false
       }
     },
-    refresh() {
+    async refresh() {
       this.resetParams()
       this.iOptions = []
-      this.getOptions()
+      this.requestError = false
+      try {
+        await this.getOptions()
+      } catch {
+        // 请求错误已统一提示，保留组件交互能力
+        this.requestError = true
+      }
     },
     addOption(option) {
       this.iOptions.push(option)

@@ -55,6 +55,7 @@
   "Reject": "拒绝",
   "Limit": "限制",
   "FailedToSendVerificationCode": "发送验证码失败",
+  "SelectLoadFailed": "选项加载失败，请重新输入搜索内容后重试",
   "Role": "角色",
   "DeeplyThoughtAbout": "已深度思考",
   "ChatAIThinking": "正在思考",

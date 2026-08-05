@@ -112,6 +112,10 @@ export default {
       type: String,
       default: 'auto',
       validator: (value) => ['auto', ...Object.values(TAB_NAVIGATION_SCOPE)].includes(value)
+    },
+    rememberActiveTab: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['update:activeMenu', 'tab-click'],
@@ -193,7 +197,9 @@ export default {
       if (!this.shouldSyncTabState) {
         return
       }
-      localStorage.setItem(this.activeTabStorageKey, newValue)
+      if (this.rememberActiveTab) {
+        localStorage.setItem(this.activeTabStorageKey, newValue)
+      }
       if (this.$route.query?.tab === newValue) {
         return
       }
@@ -232,7 +238,7 @@ export default {
       const preActiveTabs = this.shouldSyncTabState
         ? [
             this.$route.query['tab'],
-            localStorage.getItem(this.activeTabStorageKey),
+            this.rememberActiveTab ? localStorage.getItem(this.activeTabStorageKey) : undefined,
             this.activeMenu
           ]
         : [this.activeMenu]
@@ -247,7 +253,7 @@ export default {
         }
       }
 
-      activeTab = this.tabIndices[0].name
+      activeTab = this.tabIndices[0]?.name || ''
       return activeTab
     },
     syncActiveTab() {

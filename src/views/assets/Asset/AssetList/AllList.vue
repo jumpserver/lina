@@ -59,6 +59,9 @@ export default {
         category: 'all',
         extraQuery: { order: '-date_updated' }
       },
+      headerActions: {
+        hasImport: false
+      },
       addExtraMoreActions: [],
       helpMessage: this.$t('AssetListHelpMessage')
     }
