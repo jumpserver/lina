@@ -26,7 +26,7 @@
           ref="availableTable"
           :header-actions="availableHeaderActions"
           :table-config="availableTableConfig"
-          @selection-change="availableChecked = $event"
+          @selection-change="handleAvailableSelectionChange"
         />
       </el-tab-pane>
 
@@ -38,7 +38,7 @@
           ref="selectedTable"
           :header-actions="selectedHeaderActions"
           :table-config="selectedTableConfig"
-          @selection-change="selectedChecked = $event"
+          @selection-change="handleSelectedSelectionChange"
         />
       </el-tab-pane>
     </el-tabs>
@@ -49,6 +49,9 @@
 import { createSourceIdCache } from '@/api/common'
 import Dialog from '@/components/Dialog/index.vue'
 import ListTable from '@/components/Table/ListTable/index.vue'
+import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
+
+const autoActionStorage = new ObjectLocalStorage('resourceSelectAutoAction')
 
 const defaultColumnsByResource = {
   '/api/v1/accounts/accounts/': ['name', 'username', 'asset', 'secret_type'],
@@ -125,6 +128,10 @@ export default {
       availableCount: null,
       availableChecked: [],
       selectedChecked: [],
+      autoAddOnCheck: autoActionStorage.get('add', false) === true,
+      autoRemoveOnCheck: autoActionStorage.get('remove', false) === true,
+      autoAddArmed: true,
+      autoRemoveArmed: true,
       sharedPageSize: Math.min(Math.max(this.pageSize, 1), 100),
       availableDirty: false,
       selectedDirty: false,
@@ -185,10 +192,21 @@ export default {
             title: this.$t('ResourceSelectAddSelected', {
               count: this.availableChecked.length
             }),
-            icon: 'plus',
+            class: this.getBatchActionClass(this.autoAddOnCheck, this.availableChecked.length > 0),
+            showTimeout: 0,
+            split: true,
+            trigger: 'hover',
             type: 'primary',
-            can: ({ selectedRows }) => selectedRows.length > 0,
-            callback: ({ selectedRows }) => this.addResources(selectedRows)
+            can: () => this.availableChecked.length > 0,
+            callback: () => this.addResources(this.availableChecked),
+            dropdown: [
+              {
+                name: 'toggleAutoAdd',
+                title: this.$t('ResourceSelectAutoAdd'),
+                icon: this.autoAddOnCheck ? 'fa-check-square-o' : 'fa-square-o',
+                callback: () => this.toggleAutoAdd()
+              }
+            ]
           }
         ]
       }
@@ -202,10 +220,24 @@ export default {
             title: this.$t('ResourceSelectRemoveSelected', {
               count: this.selectedChecked.length
             }),
-            icon: 'fa-minus-square-o',
+            class: this.getBatchActionClass(
+              this.autoRemoveOnCheck,
+              this.selectedChecked.length > 0
+            ),
+            showTimeout: 0,
+            split: true,
+            trigger: 'hover',
             type: 'danger',
-            can: ({ selectedRows }) => selectedRows.length > 0,
-            callback: ({ selectedRows }) => this.removeResources(selectedRows)
+            can: () => this.selectedChecked.length > 0,
+            callback: () => this.removeResources(this.selectedChecked),
+            dropdown: [
+              {
+                name: 'toggleAutoRemove',
+                title: this.$t('ResourceSelectAutoRemove'),
+                icon: this.autoRemoveOnCheck ? 'fa-check-square-o' : 'fa-square-o',
+                callback: () => this.toggleAutoRemove()
+              }
+            ]
           },
           {
             name: 'clearSelectedResources',
@@ -343,6 +375,53 @@ export default {
     document.removeEventListener('keydown', this.handleDialogShortcut)
   },
   methods: {
+    getBatchActionClass(autoEnabled, hasSelection) {
+      return {
+        'resource-select-split-action': true,
+        'resource-select-auto-enabled': autoEnabled,
+        'resource-select-no-selection': !hasSelection
+      }
+    },
+    toggleAutoAdd() {
+      this.autoAddOnCheck = !this.autoAddOnCheck
+      autoActionStorage.set('add', this.autoAddOnCheck)
+      this.autoAddArmed = !this.autoAddOnCheck || this.availableChecked.length === 0
+    },
+    toggleAutoRemove() {
+      this.autoRemoveOnCheck = !this.autoRemoveOnCheck
+      autoActionStorage.set('remove', this.autoRemoveOnCheck)
+      this.autoRemoveArmed = !this.autoRemoveOnCheck || this.selectedChecked.length === 0
+    },
+    handleAvailableSelectionChange(rows) {
+      this.availableChecked = rows
+      if (!this.autoAddOnCheck) {
+        return
+      }
+      if (!this.autoAddArmed) {
+        if (rows.length === 0) {
+          this.autoAddArmed = true
+        }
+        return
+      }
+      if (rows.length > 0) {
+        this.addResources(rows)
+      }
+    },
+    handleSelectedSelectionChange(rows) {
+      this.selectedChecked = rows
+      if (!this.autoRemoveOnCheck) {
+        return
+      }
+      if (!this.autoRemoveArmed) {
+        if (rows.length === 0) {
+          this.autoRemoveArmed = true
+        }
+        return
+      }
+      if (rows.length > 0) {
+        this.removeResources(rows)
+      }
+    },
     handleDialogShortcut(event) {
       if (
         event.defaultPrevented ||
@@ -768,6 +847,63 @@ export default {
 
     &.has-label-filter .search-primary {
       margin-left: 0;
+    }
+  }
+
+  .resource-select-auto-enabled .el-dropdown__caret-button {
+    position: relative;
+
+    &::after {
+      position: absolute;
+      top: 3px;
+      right: 4px;
+      color: rgba(255, 255, 255, 0.95);
+      content: '\f0e7';
+      font-family: FontAwesome;
+      font-size: 7px;
+      line-height: 1;
+    }
+  }
+
+  .resource-select-split-action.el-dropdown {
+    .el-dropdown__caret-button {
+      &::before {
+        top: 4px !important;
+        bottom: 4px !important;
+        display: block;
+        background: rgba(255, 255, 255, 0.5) !important;
+        opacity: 1 !important;
+        transition: none !important;
+      }
+
+      .el-dropdown__icon {
+        transition: transform 0.18s ease;
+      }
+
+      &:hover .el-dropdown__icon {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .resource-select-no-selection.el-dropdown {
+    .el-dropdown__caret-button::before {
+      display: none;
+    }
+
+    .el-button-group > .el-button:first-child {
+      --el-button-hover-text-color: var(--el-button-text-color);
+      --el-button-hover-bg-color: var(--el-button-bg-color);
+      --el-button-hover-border-color: var(--el-button-border-color);
+      --el-button-active-text-color: var(--el-button-text-color);
+      --el-button-active-bg-color: var(--el-button-bg-color);
+      --el-button-active-border-color: var(--el-button-border-color);
+      z-index: auto !important;
+      cursor: not-allowed;
+      opacity: 0.5;
+      box-shadow: none !important;
+      outline: none !important;
+      transform: none !important;
     }
   }
 }
