@@ -168,6 +168,9 @@ export default {
         hasExport: false,
         hasRefresh: false,
         hasLabelSearch: true,
+        labelSearchConfig: {
+          boundarySelector: '.resource-select-dialog.el-dialog'
+        },
         hasNodeSearch: Boolean(this.nodeFilter),
         nodeSearchConfig: {
           ...(typeof this.nodeFilter === 'object' ? this.nodeFilter : {}),
@@ -214,7 +217,7 @@ export default {
               {
                 name: 'clearSelectedResources',
                 title: this.$t('ResourceSelectRemoveAll'),
-                icon: 'fa-minus',
+                icon: 'fa-minus-square-o',
                 can: () => this.selectedCount > 0,
                 callback: () => this.clearSelected()
               }
@@ -277,6 +280,7 @@ export default {
         saveQuery: false,
         leadingColumn: 'actions',
         selectionFixed: 'left',
+        selectionWidth: 48,
         columnsShow: {
           ...this.columnsShow,
           min: this.minimumColumns,
@@ -300,6 +304,7 @@ export default {
         columnsMeta: {
           ...this.commonTableConfig.columnsMeta,
           actions: {
+            fitWidth: false,
             fixed: 'left',
             width: '80px',
             formatterArgs: {
@@ -329,6 +334,7 @@ export default {
         columnsMeta: {
           ...this.commonTableConfig.columnsMeta,
           actions: {
+            fitWidth: false,
             fixed: 'left',
             width: '80px',
             formatterArgs: {

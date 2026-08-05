@@ -248,16 +248,17 @@ export default {
         return col
       })
 
-      if (scale > 1) {
+      if (flexibleColumnIndexes.length > 0) {
         const fittedTotalWidth = fittedColumns.reduce(
           (total, col) => total + (Number.parseFloat(col.width) || 0),
           0
         )
         const remainingWidth = Math.max(0, availableWidth - fittedTotalWidth)
-        const stretchColumnIndex = flexibleColumnIndexes[0] ?? -1
-        const targetIndex = stretchColumnIndex === -1 ? 0 : stretchColumnIndex
-        const targetWidth = Number.parseFloat(fittedColumns[targetIndex].width) || 0
-        fittedColumns[targetIndex].width = `${targetWidth + remainingWidth}px`
+        if (remainingWidth > 0) {
+          const targetIndex = flexibleColumnIndexes[0]
+          const targetWidth = Number.parseFloat(fittedColumns[targetIndex].width) || 0
+          fittedColumns[targetIndex].width = `${targetWidth + remainingWidth}px`
+        }
       }
 
       this.commitColumnWidths(fittedColumns)
