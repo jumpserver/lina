@@ -53,14 +53,14 @@ import Dialog from '@/components/Dialog/index.vue'
 import ListTable from '@/components/Table/ListTable/index.vue'
 
 const defaultColumnsByResource = {
-  '/api/v1/accounts/accounts/': ['name', 'username', 'asset', 'secret_type'],
-  '/api/v1/assets/assets/': ['name', 'address', 'platform', 'category', 'type', 'zone'],
-  '/api/v1/labels/labels/': ['name', 'value', 'color'],
-  '/api/v1/users/groups/': ['name', 'users_amount', 'comment'],
-  '/api/v1/users/users/': ['name', 'username', 'email', 'source', 'is_active']
+  '/api/v1/accounts/accounts/': ['name', 'username', 'asset', 'secret_type', 'actions'],
+  '/api/v1/assets/assets/': ['name', 'address', 'platform', 'category', 'type', 'zone', 'actions'],
+  '/api/v1/labels/labels/': ['name', 'value', 'color', 'actions'],
+  '/api/v1/users/groups/': ['name', 'users_amount', 'comment', 'actions'],
+  '/api/v1/users/users/': ['name', 'username', 'email', 'source', 'is_active', 'actions']
 }
 
-const genericDefaultColumns = ['name', 'value', 'address', 'username']
+const genericDefaultColumns = ['name', 'value', 'address', 'username', 'actions']
 
 export default {
   name: 'ResourceSelectDialog',
@@ -214,7 +214,7 @@ export default {
               {
                 name: 'clearSelectedResources',
                 title: this.$t('ResourceSelectRemoveAll'),
-                icon: 'trash',
+                icon: 'fa-minus',
                 can: () => this.selectedCount > 0,
                 callback: () => this.clearSelected()
               }
@@ -253,13 +253,11 @@ export default {
         const name = typeof column === 'object' ? column?.prop : column
         return name !== 'id' && name !== 'actions'
       })
-      return filteredColumns.length > 0 ? filteredColumns : ['name']
+      return [...(filteredColumns.length > 0 ? filteredColumns : ['name']), 'actions']
     },
     minimumColumns() {
       const configured = Array.isArray(this.columnsShow.min) ? this.columnsShow.min : []
-      return [...new Set(['name', ...configured])].filter(
-        (column) => column !== 'id' && column !== 'actions'
-      )
+      return [...new Set(['name', 'actions', ...configured])].filter((column) => column !== 'id')
     },
     tableName() {
       const pathname = new URL(this.url, location.origin).pathname.replaceAll('/', '_')
@@ -277,6 +275,8 @@ export default {
           .sort((a, b) => a - b),
         persistSelection: false,
         saveQuery: false,
+        leadingColumn: 'actions',
+        selectionFixed: 'left',
         columnsShow: {
           ...this.columnsShow,
           min: this.minimumColumns,
@@ -288,10 +288,7 @@ export default {
               can: false
             }
           },
-          ...this.columnsMeta,
-          actions: {
-            has: false
-          }
+          ...this.columnsMeta
         }
       }
     },
@@ -300,6 +297,28 @@ export default {
         ...this.commonTableConfig,
         name: `${this.tableName}Resources`,
         canSelect: this.canSelect,
+        columnsMeta: {
+          ...this.commonTableConfig.columnsMeta,
+          actions: {
+            fixed: 'left',
+            width: '80px',
+            formatterArgs: {
+              hasUpdate: false,
+              hasDelete: false,
+              hasClone: false,
+              extraActions: [
+                {
+                  name: 'add',
+                  title: this.$t('Add'),
+                  icon: 'fa-plus',
+                  showTip: false,
+                  can: ({ row }) => this.canSelect(row),
+                  callback: ({ row }) => this.addResources([row])
+                }
+              ]
+            }
+          }
+        },
         request: this.requestAvailablePage
       }
     },
@@ -307,6 +326,29 @@ export default {
       return {
         ...this.commonTableConfig,
         name: `${this.tableName}Resources`,
+        columnsMeta: {
+          ...this.commonTableConfig.columnsMeta,
+          actions: {
+            fixed: 'left',
+            width: '80px',
+            formatterArgs: {
+              hasUpdate: false,
+              hasDelete: false,
+              hasClone: false,
+              extraActions: [
+                {
+                  name: 'remove',
+                  title: this.$t('Remove'),
+                  icon: 'fa-minus',
+                  iconStyle: { transform: 'scale(0.78)' },
+                  showTip: false,
+                  hoverType: 'danger',
+                  callback: ({ row }) => this.removeResources([row])
+                }
+              ]
+            }
+          }
+        },
         request: this.requestSelectedPage
       }
     }
