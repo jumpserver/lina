@@ -209,7 +209,7 @@ export const assetFieldsMeta = (vm, category, type) => {
         value: [],
         url: '/api/v1/assets/nodes/?fields_size=mini',
         treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
-        resourceName: vm.$t('Node')
+        resourceName: vm.$t('Nodes')
       }
     },
     labels: {
@@ -219,7 +219,7 @@ export const assetFieldsMeta = (vm, category, type) => {
       el: {
         value: [],
         url: '/api/v1/labels/labels/',
-        resourceName: vm.$t('Label'),
+        resourceName: vm.$t('Labels'),
         columns: ['name', 'id', 'value', 'color', 'comment'],
         columnsShow: {
           default: ['name', 'value', 'color', 'actions'],
@@ -275,7 +275,7 @@ export const assetJSONSelectMeta = (vm) => {
     component: JSONManyToManySelect,
     el: {
       value: [],
-      resource: vm.$t('Asset'),
+      resource: vm.$t('Assets'),
       select2: {
         url: '/api/v1/assets/assets/',
         nodeFilter: {

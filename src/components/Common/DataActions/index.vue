@@ -4,14 +4,15 @@
       <el-dropdown
         v-if="action.dropdown"
         v-show="action.dropdown.length > 0"
-        :class="[action.name, { grouped: action.grouped }]"
+        :class="[action.name, action.class, { grouped: action.grouped }]"
         :popper-class="action.popperClass"
+        :show-timeout="action.showTimeout ?? 150"
         :size="action.size"
         :split-button="!!action.split"
         :type="action.type"
+        :trigger="action.trigger || 'click'"
         class="action-item"
         placement="bottom-start"
-        trigger="click"
         @click="handleClick(action)"
         @command="handleDropdownCallback"
       >

@@ -30,7 +30,7 @@ export default {
           el: {
             value: [],
             url: '/api/v1/assets/assets/',
-            resourceName: this.$t('Asset'),
+            resourceName: this.$t('Assets'),
             nodeFilter: {
               treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
               typeTreeUrl: '/api/v1/assets/nodes/category/tree/?count_resource=none',

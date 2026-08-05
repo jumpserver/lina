@@ -1,29 +1,10 @@
 <template>
   <div :class="rootClass" :style="$attrs.style">
-    <div class="resource-select__summary" :class="{ 'is-disabled': isDisabled }">
-      <button
-        :disabled="isDisabled"
-        class="resource-select__text"
-        type="button"
-        @click="openDialog(selectedValue.length > 0 ? 'selected' : 'available')"
-      >
-        {{
-          selectedValue.length
-            ? $t('ResourceSelectSelectedCount', { count: selectedValue.length })
-            : $t('ResourceSelectEmpty')
-        }}
-      </button>
-      <button
-        :aria-label="$t('Edit')"
-        :disabled="isDisabled"
-        :title="$t('Edit')"
-        class="resource-select__edit"
-        type="button"
-        @click="openDialog('available')"
-      >
-        <el-icon><Edit /></el-icon>
-      </button>
-    </div>
+    <ResourceSelectSummary
+      :disabled="isDisabled"
+      :text="summaryText"
+      @click="openDialog(selectedValue.length > 0 ? 'selected' : 'available')"
+    />
 
     <ResourceSelectDialog
       v-if="dialogVisible"
@@ -47,29 +28,14 @@
 </template>
 
 <script>
+import ResourceSelectSummary from '../ResourceSelectSummary.vue'
+import resourceSelectSummary, { normalizeResourceValue } from '../resourceSelectSummary'
 import ResourceSelectDialog from './dialog.vue'
-
-function getResourceId(item, valueKey) {
-  if (item && typeof item === 'object') {
-    return item[valueKey] ?? item.value ?? item.id
-  }
-  return item
-}
-
-function normalizeValue(value, valueKey) {
-  if (!Array.isArray(value)) {
-    return value === undefined || value === null || value === ''
-      ? []
-      : [getResourceId(value, valueKey)]
-  }
-  return value
-    .map((item) => getResourceId(item, valueKey))
-    .filter((item) => item !== undefined && item !== null && item !== '')
-}
 
 export default {
   name: 'ResourceSelect',
-  components: { ResourceSelectDialog },
+  components: { ResourceSelectDialog, ResourceSelectSummary },
+  mixins: [resourceSelectSummary],
   inheritAttrs: false,
   props: {
     value: {
@@ -134,7 +100,7 @@ export default {
     return {
       dialogVisible: false,
       initialTab: 'available',
-      selectedValue: normalizeValue(
+      selectedValue: normalizeResourceValue(
         this.modelValue !== undefined ? this.modelValue : this.value,
         this.valueKey
       )
@@ -158,7 +124,7 @@ export default {
     externalValue: {
       deep: true,
       handler(value) {
-        this.selectedValue = normalizeValue(value, this.valueKey)
+        this.selectedValue = normalizeResourceValue(value, this.valueKey)
       }
     }
   },
@@ -192,88 +158,5 @@ export default {
 .resource-select {
   width: 100%;
   min-width: 0;
-}
-
-.resource-select__summary {
-  display: grid;
-  grid-template-columns: minmax(0, 132px) 22px;
-  align-items: center;
-  gap: 4px;
-  width: min(100%, 158px);
-  min-height: 30px;
-  color: var(--el-text-color-secondary);
-  font-size: 13px;
-
-  &.is-disabled {
-    color: var(--el-disabled-text-color);
-  }
-}
-
-.resource-select__text {
-  box-sizing: border-box;
-  width: 100%;
-  overflow: hidden;
-  min-height: 28px;
-  padding: 0 8px;
-  border: 1px solid var(--el-border-color-light);
-  border-radius: 4px;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
-  font: inherit;
-  text-overflow: ellipsis;
-  text-align: left;
-  white-space: nowrap;
-  transition:
-    color 0.15s ease,
-    border-color 0.15s ease;
-
-  &:hover:not(:disabled) {
-    border-color: var(--el-color-primary-light-5);
-    color: var(--el-color-primary);
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-  }
-}
-
-.resource-select__edit {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 0;
-  padding: 2px;
-  border: 0;
-  background: transparent;
-  color: var(--el-color-primary);
-  cursor: pointer;
-  opacity: 1;
-  visibility: visible;
-  border-radius: 4px;
-  transition:
-    color 0.15s ease,
-    background-color 0.15s ease,
-    transform 0.15s ease;
-
-  &:hover:not(:disabled) {
-    background: var(--el-color-primary-light-9);
-    color: var(--el-color-primary-dark-2);
-    transform: translateY(-1px);
-  }
-
-  &:active:not(:disabled) {
-    transform: translateY(0);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--el-color-primary-light-5);
-    outline-offset: 1px;
-  }
-
-  &:disabled {
-    color: var(--el-disabled-text-color);
-    cursor: not-allowed;
-  }
 }
 </style>

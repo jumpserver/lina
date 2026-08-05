@@ -15,7 +15,12 @@
             class="table-action-btn"
             @click="handleActionClick(action)"
           >
-            <Icon v-if="action.icon" :icon="action.icon" class="pre-icon" />
+            <Icon
+              v-if="action.icon"
+              :icon="action.icon"
+              :style="action.iconStyle"
+              class="pre-icon"
+            />
             <span v-else>{{ action.title }}</span>
           </el-button>
         </span>
@@ -326,16 +331,26 @@ export default {
       return ''
     },
     getButtonProps(action) {
-      const { type, disabled, plain, loading } = action
+      const { type, disabled, plain, loading, hoverType } = action
       return {
         size: 'small',
         type,
         disabled,
         plain,
-        loading
+        loading,
+        style: hoverType
+          ? {
+              '--el-button-hover-text-color': `var(--el-color-${hoverType})`,
+              '--el-button-hover-border-color': `var(--el-color-${hoverType})`,
+              '--el-button-hover-bg-color': 'var(--el-button-bg-color)'
+            }
+          : undefined
       }
     },
     getActionTip(action) {
+      if (action.showTip === false) {
+        return ''
+      }
       if (action.tip) {
         return action.tip
       }

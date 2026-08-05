@@ -27,7 +27,7 @@ export const accountFieldsMeta = (vm) => {
         value: [],
         url: '/api/v1/assets/nodes/?fields_size=mini',
         treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
-        resourceName: vm.$t('Node')
+        resourceName: vm.$t('Nodes')
       },
       hidden: () => {
         return !vm.addTemplate
@@ -40,7 +40,7 @@ export const accountFieldsMeta = (vm) => {
       el: {
         value: [],
         url: '/api/v1/assets/assets/?fields_size=mini',
-        resourceName: vm.$t('Asset'),
+        resourceName: vm.$t('Assets'),
         nodeFilter: {
           treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
           typeTreeUrl: '/api/v1/assets/nodes/category/tree/?count_resource=none',

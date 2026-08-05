@@ -3,7 +3,7 @@
     <AssetDialog
       v-if="visible"
       :base-url="assetsUrl"
-      :title="$tc('Assets')"
+      :title="$tc('AssetManagement')"
       :visible="visible"
       @cancel="assetTreeTableDialogHandleCancel"
       @confirm="assetTreeTableDialogHandleConfirm"

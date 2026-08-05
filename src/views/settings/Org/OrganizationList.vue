@@ -70,7 +70,7 @@ export default {
             width: '100px'
           },
           'resource_statistics.assets_amount': {
-            label: this.$t('Assets'),
+            label: this.$t('AssetManagement'),
             width: '100px'
           },
           'resource_statistics.asset_perms_amount': {

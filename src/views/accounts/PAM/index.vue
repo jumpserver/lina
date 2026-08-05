@@ -28,7 +28,7 @@ export default {
           },
           {
             name: 'asset',
-            title: this.$t('Assets'),
+            title: this.$t('AssetManagement'),
             icon: 'fa-inbox',
             hidden: !this.$hasPerm('assets.view_asset'),
             component: () => import('@/views/accounts/PAM/AssetList.vue')

@@ -57,12 +57,13 @@
             <el-data-table-column
               v-if="hasSelection"
               :align="selectionAlign"
+              :fixed="selectionFixed"
               :selectable="canSelect"
               type="selection"
             />
             <el-table-column
               v-bind="getColumnBindProps(col)"
-              v-for="col in columns"
+              v-for="col in displayColumns"
               :key="col.prop"
               :filter-method="typeof col.filterMethod === 'function' ? col.filterMethod : null"
               :filter-multiple="false"
@@ -701,6 +702,14 @@ export default {
       type: String,
       default: 'center'
     },
+    selectionFixed: {
+      type: [Boolean, String],
+      default: false
+    },
+    leadingColumn: {
+      type: String,
+      default: ''
+    },
     paginationBackground: {
       type: Boolean,
       default: true
@@ -751,6 +760,16 @@ export default {
     }
   },
   computed: {
+    displayColumns() {
+      if (!this.leadingColumn) {
+        return this.columns
+      }
+      const leading = this.columns.find((column) => column.prop === this.leadingColumn)
+      if (!leading) {
+        return this.columns
+      }
+      return [leading, ...this.columns.filter((column) => column !== leading)]
+    },
     paginationCurrentPage: {
       get() {
         return this.page

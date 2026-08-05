@@ -53,7 +53,7 @@ export default {
         fields: ['assets'],
         fieldsMeta: {
           assets: {
-            label: this.$t('Assets'),
+            label: this.$t('AssetManagement'),
             component: Select2,
             type: 'select2',
             el: {

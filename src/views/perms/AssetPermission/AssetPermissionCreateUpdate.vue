@@ -102,7 +102,7 @@ export default {
           el: {
             value: [],
             url: '/api/v1/assets/assets/?fields_size=mini',
-            resourceName: this.$t('Asset'),
+            resourceName: this.$t('Assets'),
             nodeFilter: {
               treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
               typeTreeUrl: '/api/v1/assets/nodes/category/tree/?count_resource=none',
@@ -122,13 +122,13 @@ export default {
             value: [],
             url: '/api/v1/assets/nodes/?fields_size=mini',
             treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
-            resourceName: this.$t('Node')
+            resourceName: this.$t('Nodes')
           }
         },
         protocols: {
           component: ProtocolsSelect,
           el: {
-            resource: this.$t('Protocol'),
+            resource: this.$t('Protocols'),
             select2: {
               url: '/api/v1/assets/protocols/',
               ajax: {

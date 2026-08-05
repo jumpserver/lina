@@ -31,7 +31,7 @@ export default {
             el: {
               value: [],
               url: '/api/v1/users/users/?fields_size=mini&order=name',
-              resourceName: this.$t('User')
+              resourceName: this.$t('Users')
             }
           }
         }
