@@ -37,6 +37,7 @@
   "Reject": "拒絕",
   "Limit": "限制",
   "FailedToSendVerificationCode": "發送驗證碼失敗",
+  "SelectLoadFailed": "選項載入失敗，請重新輸入搜尋內容後重試",
   "Role": "角色",
   "DeeplyThoughtAbout": "已深度思考",
   "ChatAIThinking": "正在思考",

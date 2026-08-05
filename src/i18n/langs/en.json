@@ -57,6 +57,7 @@
   "Reject": "Reject",
   "Limit": "Limit",
   "FailedToSendVerificationCode": "Failed to send verification code",
+  "SelectLoadFailed": "Failed to load options. Edit your search to retry.",
   "Role": "Role",
   "DeeplyThoughtAbout": "Thought deeply",
   "ChatAIThinking": "Thinking",

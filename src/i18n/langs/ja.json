@@ -38,6 +38,7 @@
   "Reject": "拒否",
   "Limit": "制限",
   "FailedToSendVerificationCode": "認証コードの送信に失敗しました",
+  "SelectLoadFailed": "選択肢の読み込みに失敗しました。検索内容を変更して再試行してください",
   "Role": "ロール",
   "DeeplyThoughtAbout": "深く考えました",
   "ChatAIThinking": "考え中",
