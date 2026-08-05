@@ -23,15 +23,16 @@ export function changeElementColor(themeColors) {
         .el-button--${key}{
            border-color: var(--color-border);
         }
-        .el-button--${key}:focus,
-        .el-button--${key}:active,
-        .el-button--${key}:hover {
+        .el-button--${key}:not(.is-disabled):focus,
+        .el-button--${key}:not(.is-disabled):active,
+        .el-button--${key}:not(.is-disabled):hover {
           background-color: ${darken}!important;
           border-color: var(--color-border)!important;
         }
-        .el-button--${key}.is-disabled,
-        .el-button--${key}.is-disabled:active,
-        .el-button--${key}.is-disabled:focus {
+        .el-button--${key}.is-disabled:not(.is-plain):not(.is-text):not(.is-link):not(.is-dashed),
+        .el-button--${key}.is-disabled:not(.is-plain):not(.is-text):not(.is-link):not(.is-dashed):active,
+        .el-button--${key}.is-disabled:not(.is-plain):not(.is-text):not(.is-link):not(.is-dashed):focus,
+        .el-button--${key}.is-disabled:not(.is-plain):not(.is-text):not(.is-link):not(.is-dashed):hover {
           background-color: ${disabledColor}!important;
           border-color: var(--color-border);
         }
