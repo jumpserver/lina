@@ -17,6 +17,10 @@ import { getDisplayValue } from '@/components/Table/TableFormatters/displayValue
 
 const textDisplayWidthCache = new Map()
 const primaryColumnNames = ['id', 'name']
+const compactColumnWidth = {
+  min: 120,
+  max: 180
+}
 
 function getOverflowTooltipOptions() {
   return {
@@ -70,14 +74,34 @@ export function getBooleanColumnWidth(col) {
   const helpTipWidth = col?.helpTip ? 18 : 0
   const pinWidth = 32
   const extraSpacing = 10
-  return Math.ceil(
-    getTextDisplayWidth(col?.label) +
-      cellHorizontalPadding +
-      filterWidth +
-      sortWidth +
-      helpTipWidth +
-      pinWidth +
-      extraSpacing
+  return Math.min(
+    compactColumnWidth.max,
+    Math.max(
+      compactColumnWidth.min,
+      Math.ceil(
+        getTextDisplayWidth(col?.label) +
+          cellHorizontalPadding +
+          filterWidth +
+          sortWidth +
+          helpTipWidth +
+          pinWidth +
+          extraSpacing
+      )
+    )
+  )
+}
+
+export function isAmountColumn(col) {
+  const formatterName = col?.formatter?.name || col?.formatter?.__name || ''
+  return (
+    formatterName === 'AmountFormatter' || /(?:^|[._])(amount|count)$/.test(String(col?.prop || ''))
+  )
+}
+
+export function getAmountColumnWidth(col) {
+  return Math.min(
+    compactColumnWidth.max,
+    Math.max(compactColumnWidth.min, getColumnHeaderWidth(col))
   )
 }
 
@@ -310,6 +334,8 @@ export class TableColumnsGenerator {
     let typeWidth = 180
     if (col.contentMaxWidth) {
       typeWidth = col.contentMaxWidth
+    } else if (col.prop === 'name') {
+      typeWidth = 260
     } else if (col.prop === 'platform' || formatterName === 'PlatformFormatter') {
       typeWidth = 220
     } else if (formatterName === 'DateFormatter') {
@@ -370,8 +396,14 @@ export class TableColumnsGenerator {
       fieldMeta.choices.every((item) => typeof item.value === 'boolean')
     const isBooleanField = fieldMeta.type === 'boolean' || isBooleanChoice
     const isIdField = col.prop === 'id' || String(col.prop || '').includes('_id')
+    const isAmountField = isAmountColumn(col)
     if (isBooleanField) {
       col.width = `${getBooleanColumnWidth(col)}px`
+      delete col.minWidth
+      col.fitWidth = false
+    } else if (isAmountField) {
+      const configuredWidth = col.width ?? col.minWidth
+      col.width = configuredWidth || `${getAmountColumnWidth(col)}px`
       delete col.minWidth
       col.fitWidth = false
     } else if (isIdField) {
@@ -383,13 +415,17 @@ export class TableColumnsGenerator {
     const isCompactColumn = col.prop === 'actions' || col.type === 'selection'
     col.isCustomRender =
       col.isCustomRender ?? Boolean(col.formatter && typeof col.formatter !== 'function')
-    if (!isCompactColumn && !isBooleanField && !isIdField) {
+    if (!isCompactColumn && !isBooleanField && !isAmountField && !isIdField) {
       this.setDefaultWidthIfNeed(col)
     }
 
     if (!isCompactColumn && !col.contentMaxWidth) {
       let contentClass = 'overflow-content-table-column'
-      if (col.isCustomRender) {
+      if (col.prop === 'name') {
+        if (col.showOverflowTooltip === undefined) {
+          col.showOverflowTooltip = getOverflowTooltipOptions()
+        }
+      } else if (col.isCustomRender) {
         contentClass = 'custom-render-table-column'
       } else if (col.showFullContent) {
         contentClass = 'full-content-table-column'

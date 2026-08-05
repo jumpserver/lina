@@ -4,8 +4,9 @@
       v-model:visible="popoverVisible"
       :fallback-placements="['bottom-start']"
       :popper-options="popperOptions"
+      :popper-style="popperStyle"
       :show-arrow="false"
-      :width="600"
+      :width="popoverWidth"
       placement="bottom-start"
       popper-class="label-filter-popper"
       trigger="click"
@@ -18,6 +19,7 @@
           :title="$t('LabelFilterTitle')"
           class="label-button"
           size="small"
+          @click="preparePopoverBoundary"
         >
           <svg-icon icon-class="tag" />
         </el-button>
@@ -102,6 +104,16 @@ import _ from 'lodash'
 export default {
   name: 'LabelSearch',
   emits: ['labelSearch', 'showLabelSearch'],
+  props: {
+    boundarySelector: {
+      type: String,
+      default: ''
+    },
+    maxWidth: {
+      type: Number,
+      default: 600
+    }
+  },
   data() {
     return {
       popoverVisible: false,
@@ -111,10 +123,24 @@ export default {
       activeKey: '',
       keyQuery: '',
       valueQuery: '',
+      boundaryVersion: 0,
+      popoverAvailableWidth: null,
       keyRequestId: 0
     }
   },
   computed: {
+    boundaryElement() {
+      this.boundaryVersion
+      return this.findBoundaryElement()
+    },
+    popoverWidth() {
+      return Math.max(Math.min(this.maxWidth, this.popoverAvailableWidth ?? this.maxWidth), 1)
+    },
+    popperStyle() {
+      return {
+        '--label-filter-max-width': `${this.popoverWidth}px`
+      }
+    },
     popperOptions() {
       return {
         modifiers: [
@@ -128,7 +154,7 @@ export default {
               mainAxis: true,
               altAxis: false,
               tether: false,
-              boundary: 'viewport',
+              boundary: this.boundaryElement || 'viewport',
               padding: 16
             }
           }
@@ -191,6 +217,26 @@ export default {
     this.$eventBus.$off('labelSearch', this.labelSearchHandler)
   },
   methods: {
+    findBoundaryElement() {
+      if (!this.boundarySelector) {
+        return null
+      }
+      return [...document.querySelectorAll(this.boundarySelector)].find(
+        (element) => element.getBoundingClientRect().width > 0
+      )
+    },
+    preparePopoverBoundary() {
+      this.boundaryVersion += 1
+      const boundaryElement = this.findBoundaryElement()
+      const referenceElement = this.$el?.querySelector('.label-button')
+      if (!boundaryElement || !referenceElement) {
+        this.popoverAvailableWidth = null
+        return
+      }
+      const boundaryRect = boundaryElement.getBoundingClientRect()
+      const referenceRect = referenceElement.getBoundingClientRect()
+      this.popoverAvailableWidth = boundaryRect.right - referenceRect.left - 16
+    },
     getSelectionSnapshot() {
       return _.cloneDeep(this.labelValue)
     },
@@ -343,7 +389,7 @@ export default {
 
 <style lang="scss">
 .label-filter-popper {
-  width: min(600px, calc(100vw - 32px)) !important;
+  width: min(var(--label-filter-max-width, 600px), calc(100vw - 32px)) !important;
   max-width: calc(100vw - 32px);
   padding: 0 !important;
   overflow: hidden;

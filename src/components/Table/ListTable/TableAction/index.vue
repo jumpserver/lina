@@ -34,6 +34,7 @@
             @node-search="handleNodeSearch"
           />
           <LabelSearch
+            v-bind="labelSearchConfig"
             v-if="hasLabelSearch"
             ref="labelSearch"
             class="search-filter"
@@ -244,6 +245,10 @@ export default {
       })
     },
     searchConfig: {
+      type: Object,
+      default: () => ({})
+    },
+    labelSearchConfig: {
       type: Object,
       default: () => ({})
     },
@@ -738,12 +743,12 @@ $color-drop-menu-border: #e4e7ed;
 
     // 搜索框与前后的图标按钮保持清晰间距。
     .right-side-item.action-search {
-      flex: 0 0 360px;
+      flex: 0 0 280px;
       box-sizing: border-box;
-      width: 360px;
+      width: 280px;
       min-height: 30px;
-      min-width: 360px;
-      max-width: 360px;
+      min-width: 280px;
+      max-width: 280px;
       font-size: 13px;
       border: 1px solid var(--color-border);
       border-radius: 4px;
@@ -886,10 +891,10 @@ $color-drop-menu-border: #e4e7ed;
       gap: 2px;
 
       .right-side-item.action-search {
-        flex: 0 0 clamp(280px, 34vw, 340px);
-        width: clamp(280px, 34vw, 340px);
-        min-width: clamp(280px, 34vw, 340px);
-        max-width: clamp(280px, 34vw, 340px);
+        flex: 0 0 clamp(240px, 28vw, 280px);
+        width: clamp(240px, 28vw, 280px);
+        min-width: clamp(240px, 28vw, 280px);
+        max-width: clamp(240px, 28vw, 280px);
       }
     }
 

@@ -59,6 +59,7 @@
               :align="selectionAlign"
               :fixed="selectionFixed"
               :selectable="canSelect"
+              :width="selectionWidth || undefined"
               type="selection"
             />
             <el-table-column
@@ -705,6 +706,10 @@ export default {
     selectionFixed: {
       type: [Boolean, String],
       default: false
+    },
+    selectionWidth: {
+      type: [Number, String],
+      default: 0
     },
     leadingColumn: {
       type: String,
