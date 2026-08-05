@@ -44,7 +44,7 @@ export default {
             name: 'UserJsonTab'
           },
           {
-            title: this.$t('Assets'),
+            title: this.$t('AssetManagement'),
             name: 'AssetJsonTab'
           }
         ],

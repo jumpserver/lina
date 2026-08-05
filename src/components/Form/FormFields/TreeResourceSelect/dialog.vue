@@ -12,7 +12,12 @@
     @update:visible="handleVisibleChange"
   >
     <div class="tree-resource-select-dialog__toolbar">
-      <span>{{ $t('ResourceSelectSelectedCount', { count: selectedCount }) }}</span>
+      <span>{{
+        $t('ResourceSelectSelectedCount', {
+          count: selectedCount,
+          resource: displayResourceName
+        })
+      }}</span>
       <div class="tree-resource-select-dialog__toolbar-actions">
         <el-tooltip :content="selectedOnlyTitle" placement="top" :show-after="300">
           <el-button
