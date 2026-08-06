@@ -118,5 +118,21 @@
   "LabelFilterAllValues": "All values",
   "LabelFilterSelectKey": "Select a label key",
   "LabelFilterKeyLabel": "Key",
-  "LabelFilterValueLabel": "Value"
+  "LabelFilterValueLabel": "Value",
+  "SelectedLabels": "Selected labels",
+  "NoSelectedLabels": "No labels selected",
+  "LabelFilterSearchSelected": "Search selected labels",
+  "Remove": "Remove",
+  "QuickCreateLabel": "Quick create label",
+  "QuickCreate": "Quick create",
+  "LabelKey": "Key",
+  "LabelKeyPlaceholder": "Enter a label key",
+  "LabelValue": "Value",
+  "LabelValuePlaceholder": "Enter a label value",
+  "CreateLabel": "Create and select",
+  "LabelName": "Name",
+  "LabelNamePlaceholder": "Enter a name",
+  "LabelColor": "Color",
+  "CreateAndSelect": "Create and select",
+  "LabelCreateSuccess": "Label created and selected"
 }

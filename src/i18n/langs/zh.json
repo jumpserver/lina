@@ -116,5 +116,21 @@
   "LabelFilterAllValues": "全部值",
   "LabelFilterSelectKey": "请选择标签键",
   "LabelFilterKeyLabel": "键",
-  "LabelFilterValueLabel": "值"
+  "LabelFilterValueLabel": "值",
+  "SelectedLabels": "已选标签",
+  "NoSelectedLabels": "暂未选择标签",
+  "LabelFilterSearchSelected": "搜索已选标签",
+  "Remove": "移除",
+  "QuickCreateLabel": "快速创建标签",
+  "QuickCreate": "快速创建",
+  "LabelKey": "Key",
+  "LabelKeyPlaceholder": "请输入标签键",
+  "LabelValue": "Value",
+  "LabelValuePlaceholder": "请输入标签值",
+  "CreateLabel": "创建并选择",
+  "LabelName": "名称",
+  "LabelNamePlaceholder": "请输入名称",
+  "LabelColor": "颜色",
+  "CreateAndSelect": "创建并选择",
+  "LabelCreateSuccess": "标签已创建并选择"
 }

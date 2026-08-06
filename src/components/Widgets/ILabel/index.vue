@@ -11,8 +11,9 @@
     size="small"
     @click="handleClick(label)"
   >
-    <span :class="[getColor(label)]">
-      <b> {{ getKey(label) }}:</b> {{ getValue(label) }}
+    <span :class="[getColor(label)]" class="label-content">
+      <b class="label-key">{{ getKey(label) }}:</b>
+      <span class="label-value">&nbsp;{{ getValue(label) }}</span>
     </span>
   </el-tag>
 </template>
@@ -79,8 +80,30 @@ export default {
 .tag-formatter {
   border: none;
 
-  span {
+  .label-content {
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    gap: 0;
     line-height: 20px;
+    vertical-align: middle;
+  }
+
+  .label-key,
+  .label-value {
+    display: inline-block;
+    line-height: inherit;
+    white-space: nowrap;
+  }
+
+  .label-key {
+    flex: 0 0 auto;
+  }
+
+  .label-value {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &.no-color {

@@ -72,7 +72,7 @@
               </template>
             </el-input>
           </div>
-          <div v-if="activeKey" class="label-filter__list">
+          <div v-if="activeKey" v-loading="valueLoading" class="label-filter__list">
             <button
               v-for="option in filteredValueOptions"
               :key="option.value"
@@ -81,11 +81,15 @@
               type="button"
               @click="selectValue(option.value)"
             >
+              <el-checkbox :model-value="isValueSelected(option.value)" tabindex="-1" />
               <span :title="option.label" class="label-filter__option-text">
                 {{ option.label }}
               </span>
             </button>
-            <div v-if="filteredValueOptions.length === 0" class="label-filter__empty">
+            <div
+              v-if="!valueLoading && filteredValueOptions.length === 0"
+              class="label-filter__empty"
+            >
               {{ $t('NoData') }}
             </div>
           </div>
@@ -100,9 +104,11 @@
 
 <script>
 import _ from 'lodash'
+import LabelSelector from '../../labelSelector'
 
 export default {
   name: 'LabelSearch',
+  mixins: [LabelSelector],
   emits: ['labelSearch', 'showLabelSearch'],
   props: {
     boundarySelector: {
@@ -117,18 +123,15 @@ export default {
   data() {
     return {
       popoverVisible: false,
-      keyLoading: false,
-      labelOptions: [],
       labelValue: [],
-      activeKey: '',
-      keyQuery: '',
-      valueQuery: '',
       boundaryVersion: 0,
-      popoverAvailableWidth: null,
-      keyRequestId: 0
+      popoverAvailableWidth: null
     }
   },
   computed: {
+    labelSelectorVisible() {
+      return this.popoverVisible
+    },
     boundaryElement() {
       this.boundaryVersion
       return this.findBoundaryElement()
@@ -160,41 +163,9 @@ export default {
           }
         ]
       }
-    },
-    filteredKeyOptions() {
-      return this.labelOptions
-    },
-    activeKeyOption() {
-      return this.labelOptions.find((option) => option.value === this.activeKey)
-    },
-    valueOptions() {
-      if (!this.activeKeyOption) {
-        return []
-      }
-      return [
-        {
-          value: '*',
-          label: this.$t('LabelFilterAllValues')
-        },
-        ...this.activeKeyOption.values
-      ]
-    },
-    filteredValueOptions() {
-      const query = this.valueQuery.trim().toLocaleLowerCase()
-      if (!query) {
-        return this.valueOptions
-      }
-      return this.valueOptions.filter((option) => {
-        return option.label.toLocaleLowerCase().includes(query)
-      })
     }
   },
   watch: {
-    keyQuery() {
-      if (this.popoverVisible) {
-        this.debouncedSearchKeys()
-      }
-    },
     labelValue: {
       handler(newValue) {
         const selection = _.cloneDeep(newValue || [])
@@ -204,19 +175,22 @@ export default {
       deep: true
     }
   },
-  created() {
-    this.debouncedSearchKeys = _.debounce(() => {
-      this.getLabelOptions(this.keyQuery)
-    }, 300)
-  },
   mounted() {
     this.$eventBus.$on('labelSearch', this.labelSearchHandler)
   },
   beforeUnmount() {
-    this.debouncedSearchKeys?.cancel()
     this.$eventBus.$off('labelSearch', this.labelSearchHandler)
   },
   methods: {
+    decorateLabelValueOptions(options) {
+      return [
+        {
+          value: '*',
+          label: this.$t('LabelFilterAllValues')
+        },
+        ...options
+      ]
+    },
     findBoundaryElement() {
       if (!this.boundarySelector) {
         return null
@@ -265,64 +239,8 @@ export default {
     handlePopoverVisibleChange(visible) {
       this.$emit('showLabelSearch', visible)
       if (!visible) {
-        this.debouncedSearchKeys?.cancel()
-        this.keyRequestId += 1
-        this.keyLoading = false
-        this.keyQuery = ''
-        this.valueQuery = ''
+        this.resetLabelSelectorSearch()
       }
-    },
-    normalizeListResponse(data) {
-      const results = Array.isArray(data) ? data : data?.results
-      return Array.isArray(results) ? results : []
-    },
-    async getLabelOptions(query = '') {
-      const requestId = ++this.keyRequestId
-      this.keyLoading = true
-      return this.$axios
-        .get('/api/v1/labels/labels/', {
-          params: {
-            limit: 200,
-            ...(query.trim() && { search: query.trim() })
-          }
-        })
-        .then((data) => {
-          if (requestId !== this.keyRequestId) {
-            return
-          }
-          const labels = this.normalizeListResponse(data).slice(0, 200)
-          const groupedLabels = _.groupBy(labels, 'name')
-          this.labelOptions = _.sortBy(
-            Object.entries(groupedLabels).map(([key, values]) => ({
-              value: key,
-              label: key,
-              values: _.uniqBy(
-                _.sortBy(
-                  values.map((label) => ({
-                    value: label.value,
-                    label: label.value
-                  })),
-                  'label'
-                ),
-                'value'
-              )
-            })),
-            'label'
-          )
-
-          if (!this.activeKey || !this.labelOptions.some((item) => item.value === this.activeKey)) {
-            this.activeKey = this.labelOptions[0]?.value || ''
-          }
-        })
-        .finally(() => {
-          if (requestId === this.keyRequestId) {
-            this.keyLoading = false
-          }
-        })
-    },
-    selectKey(key) {
-      this.activeKey = key
-      this.valueQuery = ''
     },
     selectValue(value) {
       this.addSelection(this.activeKey, value)
@@ -388,6 +306,8 @@ export default {
 </style>
 
 <style lang="scss">
+@use '../../labelSelector' as labelSelector;
+
 .label-filter-popper {
   width: min(var(--label-filter-max-width, 600px), calc(100vw - 32px)) !important;
   max-width: calc(100vw - 32px);
@@ -423,19 +343,7 @@ export default {
 
     &__search {
       flex: 0 0 auto;
-      padding: 14px;
-      border-bottom: 1px solid var(--el-border-color-lighter);
-
-      .el-input__wrapper {
-        min-height: 32px;
-        border-radius: 3px;
-        box-shadow: 0 0 0 1px var(--el-border-color) inset !important;
-
-        &:hover,
-        &.is-focus {
-          box-shadow: 0 0 0 1px var(--el-border-color) inset !important;
-        }
-      }
+      @include labelSelector.search-input;
     }
 
     &__list {
@@ -486,6 +394,17 @@ export default {
 
       .el-icon {
         flex: 0 0 auto;
+      }
+    }
+
+    &__value {
+      gap: 10px;
+
+      .el-checkbox {
+        flex: 0 0 auto;
+        height: auto;
+        margin-right: 0;
+        pointer-events: none;
       }
     }
 
