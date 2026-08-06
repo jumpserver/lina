@@ -14,6 +14,7 @@
 <script>
 import { IBox } from '@/components'
 import { GenericCreateUpdateForm } from '@/layout/components'
+import { testSyslogSetting } from '@/api/settings'
 
 export default {
   name: 'Syslog',
@@ -22,6 +23,7 @@ export default {
     IBox
   },
   data() {
+    const vm = this
     return {
       helpText: this.$t('SyslogHelpText'),
       fields: [
@@ -68,7 +70,30 @@ export default {
       url: '/api/v1/settings/setting/?category=syslog',
       submitMethod() {
         return 'put'
-      }
+      },
+      moreButtons: [
+        {
+          title: this.$t('SyslogTest'),
+          loading: false,
+          callback: function(value, form, btn) {
+            const testValue = {}
+            testValue['SYSLOG_ADDR'] = value['SYSLOG_ADDR']
+            testValue['SYSLOG_FACILITY'] = value['SYSLOG_FACILITY']
+            testValue['SYSLOG_SOCKTYPE'] = value['SYSLOG_SOCKTYPE']
+            btn.loading = true
+            testSyslogSetting(value)
+              .then(res => {
+                vm.$message.success(res['msg'])
+              })
+              .catch(res => {
+                vm.$message.error(res['response']['data']['error'])
+              })
+              .finally(() => {
+                btn.loading = false
+              })
+          }
+        }
+      ]
     }
   },
   methods: {}

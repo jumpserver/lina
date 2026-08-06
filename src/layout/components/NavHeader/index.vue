@@ -20,7 +20,7 @@
         </el-tooltip>
       </li>
       <li v-if="showDeviceManager" class="header-item header-icon header-dropdown">
-        <el-dropdown trigger="click" @command="handleSettingCommand">
+        <el-dropdown trigger="hover" @command="handleSettingCommand">
           <span class="el-dropdown-link">
             <svg-icon icon-class="nav-setting" />
           </span>
