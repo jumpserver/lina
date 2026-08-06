@@ -50,7 +50,10 @@
                   placement="top"
                 >
                   <div class="dropdown-item__content">
-                    <span v-if="actionsHasIcon(action.dropdown)" class="pre-icon">
+                    <span
+                      v-if="actionsHasIcon(action.dropdown) && option.iconPlaceholder !== false"
+                      class="pre-icon"
+                    >
                       <Icon v-if="option.icon" :icon="option.icon" />
                     </span>
                     <span class="dropdown-item__label">{{ option.title }}</span>
@@ -467,8 +470,7 @@ $color-drop-menu-border: #e4e7ed;
   align-items: center;
   justify-content: flex-start;
   flex: 0 0 auto;
-  // 固定宽度：无图标的项（如「批量处理」标题）也占满同样的图标列宽，
-  // 保证所有项的文字左边缘对齐，不会因空图标塌成 0 宽而左移。
+  // 固定图标列宽，保证使用图标占位的下拉项文字左边缘对齐。
   width: 18px;
   height: 16px;
   margin-right: 6px;

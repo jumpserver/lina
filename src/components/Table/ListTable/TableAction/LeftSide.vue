@@ -189,6 +189,7 @@ export default {
         {
           name: 'batch',
           title: this.$t('BatchProcessing', { number: this.selectedRows.length }),
+          iconPlaceholder: false,
           has: function ({ selectedRows }) {
             return selectedRows.length > 0
           },
