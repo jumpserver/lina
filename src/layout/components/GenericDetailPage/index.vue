@@ -231,6 +231,7 @@ export default {
       this.$alert(msg, title, {
         type: 'warning',
         confirmButtonClass: 'el-button--danger',
+        closeOnPressEscape: true,
         showCancelButton: true,
         beforeClose: async (action, instance, done) => {
           if (action !== 'confirm') return done()
@@ -318,5 +319,6 @@ export default {
 <style lang="scss" scoped>
 .header-buttons {
   z-index: 999;
+  margin-right: 20px;
 }
 </style>

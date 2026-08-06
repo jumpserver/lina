@@ -281,6 +281,8 @@ export default {
       this.quickLabelCanSubmit = Boolean(form?.name?.trim() && form?.value?.trim())
     },
     addCreatedLabelOption(label) {
+      this.cancelLabelKeySearch()
+      this.addLabelToDefaultCache(label)
       const valueOption = {
         value: label.value,
         label: label.value,
@@ -395,12 +397,13 @@ export default {
   width: 100%;
   min-width: 0;
   max-width: 100%;
-  min-height: 36px;
+  height: 23px;
+  min-height: 23px;
   overflow: hidden;
   contain: inline-size;
 
   &.is-editable {
-    padding: 3px 6px;
+    padding: 0 6px;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.15s ease;
@@ -415,6 +418,7 @@ export default {
 
 .label-formatter-col {
   width: 100%;
+  height: 23px;
   min-width: 0;
   max-width: 100%;
   overflow: hidden;
@@ -424,6 +428,7 @@ export default {
   display: flex;
   align-items: center;
   width: 100%;
+  height: 23px;
   min-width: 0;
   max-width: 100%;
   gap: 6px;
