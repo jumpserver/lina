@@ -149,19 +149,26 @@ export default {
         visible: false,
         selectedRows: []
       },
-      activatedReloadTimer: null
+      activatedReloadTimer: null,
+      hasBeenDeactivated: false
     }
   },
   computed: {
     ...mapGetters(['currentOrgIsRoot'])
   },
   activated() {
+    // activated is also called after the first mount. The table has just loaded
+    // at that point, so scheduling another reload only duplicates the initial GET.
+    if (!this.hasBeenDeactivated) {
+      return
+    }
     clearTimeout(this.activatedReloadTimer)
     this.activatedReloadTimer = setTimeout(() => {
       this.reloadAssetTreeTable()
     }, 500)
   },
   deactivated() {
+    this.hasBeenDeactivated = true
     clearTimeout(this.activatedReloadTimer)
     this.activatedReloadTimer = null
   },

@@ -162,6 +162,8 @@ export default {
       showResultDialog: false,
       showAddDialog: false,
       showAddTemplateDialog: false,
+      activatedReloadTimer: null,
+      tabDeactivated: false,
       accountOperationFlag: null,
       detailDrawer: () => import('@/views/accounts/Account/AccountDetail/index.vue'),
       createAccountResults: [],
@@ -463,11 +465,18 @@ export default {
   activated() {
     // 由于组件嵌套较深，有可能导致 Error in activated hook: "TypeError: Cannot read properties of undefined (reading 'getList')" 的问题
     if (this.tabDeactivated) {
-      setTimeout(() => this.refresh(), 300)
+      clearTimeout(this.activatedReloadTimer)
+      this.activatedReloadTimer = setTimeout(() => this.refresh(), 300)
     }
   },
   deactivated() {
     this.tabDeactivated = true
+    clearTimeout(this.activatedReloadTimer)
+    this.activatedReloadTimer = null
+  },
+  beforeUnmount() {
+    clearTimeout(this.activatedReloadTimer)
+    this.activatedReloadTimer = null
   },
   methods: {
     setActions() {

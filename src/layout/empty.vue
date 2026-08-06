@@ -1,12 +1,18 @@
 <template>
   <div>
-    <router-view />
+    <CachedRouterView />
   </div>
 </template>
 
 <script>
+import CachedRouterView from '@/layout/components/CachedRouterView.vue'
+
 export default {
-  name: 'Layout'
+  name: 'EmptyLayout',
+  routeViewShell: true,
+  components: {
+    CachedRouterView
+  }
 }
 </script>
 
