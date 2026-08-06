@@ -26,6 +26,10 @@ import Switcher from '@/components/Form/FormFields/Switcher.vue'
 export default {
   name: 'ValueField',
   components: { Switcher, TagInput, Select2 },
+  // DataForm listeners must only receive the explicit component event below.
+  // Letting them fall through to the root div captures Select2's native search input event.
+  inheritAttrs: false,
+  emits: ['input'],
   props: {
     value: {
       type: [String, Number, Boolean, Array, Object],
