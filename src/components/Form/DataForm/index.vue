@@ -431,6 +431,7 @@ export default {
 
 .form-fields.el-form.dialog-mode {
   padding: 0;
+  margin-right: 30px;
 
   :deep(.form-group-header) {
     &:first-child {
