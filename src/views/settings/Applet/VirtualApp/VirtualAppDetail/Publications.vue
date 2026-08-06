@@ -1,34 +1,31 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="20" :sm="24">
-      <ListTable :header-actions="headerConfig" :table-config="config" />
-    </el-col>
-  </el-row>
+  <ListTable ref="table" :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script lang="jsx">
 import { DrawerListTable as ListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
+
 export default {
-  name: 'Apps',
-  components: {
-    ListTable
-  },
+  name: 'Publications',
+  components: { ListTable },
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     }
   },
   data() {
+    const vm = this
     return {
-      headerConfig: {
+      headerActions: {
         hasImport: false,
         hasExport: false,
+        hasBulkDelete: false,
         createRoute: {
-          name: 'AppProviderPublicationCreate',
-          params: { providerId: this.object.id }
+          name: 'VirtualAppPublicationCreate',
+          params: { id: this.object.id }
         },
         createTitle: this.$t('Publish'),
         extraMoreActions: [
@@ -38,17 +35,17 @@ export default {
             type: 'primary',
             can: ({ selectedRows }) => selectedRows.length > 0,
             callback: ({ selectedRows }) =>
-              Promise.all(selectedRows.map((row) => this.publish(row, false))).then((results) => {
+              Promise.all(selectedRows.map((row) => vm.publish(row, false))).then((results) => {
                 if (results[0]?.task) openTaskPage(results[0].task)
               })
           }
         ]
       },
-      config: {
-        url: `/api/v1/terminal/virtual-app-publications/?provider=${this.object.id}`,
+      tableConfig: {
+        url: `/api/v1/terminal/virtual-app-publications/?app=${this.object.id}`,
         columns: [
-          'app.name',
-          'app.image_name',
+          'provider.name',
+          'provider.hostname',
           'app_version',
           'image_digest',
           'date_synced',
@@ -56,62 +53,40 @@ export default {
           'actions'
         ],
         columnsMeta: {
-          'app.name': {
-            label: this.$t('Name'),
+          'provider.name': {
+            label: this.$t('AppProvider'),
             formatter: DetailFormatter,
             formatterArgs: {
-              getTitle: ({ row }) => row.app.name,
+              getTitle: ({ row }) => row.provider.name,
               getRoute: ({ row }) => ({
-                name: 'VirtualAppDetail',
-                params: {
-                  id: row.app.id
-                }
+                name: 'AppProviderDetail',
+                params: { id: row.provider.id }
               })
-            },
-            id: ({ row }) => row.app.id
+            }
           },
-          'app.image_name': {
-            label: this.$t('ImageName')
-          },
-          app_version: {
-            label: this.$t('Version')
-          },
+          'provider.hostname': { label: this.$t('Hostname') },
+          app_version: { label: this.$t('Version') },
           image_digest: {
             label: 'Digest',
             formatter: (row) => (
-              <span title={row.image_digest}>{this.shortDigest(row.image_digest)}</span>
+              <span title={row.image_digest}>{vm.shortDigest(row.image_digest)}</span>
             )
           },
+          date_synced: { label: this.$t('DateSynced') },
           status: {
             label: this.$t('PublishStatus'),
-            formatter: (row) => {
-              const typeMapper = {
-                pending: 'warning',
-                success: 'success',
-                failed: 'danger',
-                mismatch: 'warning'
-              }
-              const tp = typeMapper[row.status.value] || 'warning'
-              return (
-                <el-tag size="small" type={tp}>
-                  {row.status.label}
-                </el-tag>
-              )
-            }
-          },
-          date_synced: {
-            label: this.$t('DateSynced')
+            formatter: (row) => vm.statusTag(row.status)
           },
           actions: {
             formatterArgs: {
               hasUpdate: false,
-              hasDelete: true,
               hasClone: false,
+              hasDelete: true,
               extraActions: [
                 {
                   title: this.$t('Publish'),
                   can: this.$hasPerm('terminal.change_virtualapppublication'),
-                  callback: ({ row, reloadTable }) => this.publish(row).then(reloadTable)
+                  callback: ({ row, reloadTable }) => vm.publish(row).then(reloadTable)
                 }
               ]
             }
@@ -133,9 +108,21 @@ export default {
       if (!digest) return '-'
       const value = digest.includes('@') ? digest.split('@').pop() : digest
       return value.length > 20 ? `${value.slice(0, 20)}…` : value
+    },
+    statusTag(status = {}) {
+      const type =
+        {
+          pending: 'warning',
+          success: 'success',
+          failed: 'danger',
+          mismatch: 'warning'
+        }[status.value] || 'info'
+      return (
+        <el-tag size="small" type={type}>
+          {status.label || status.value}
+        </el-tag>
+      )
     }
   }
 }
 </script>
-
-<style scoped></style>

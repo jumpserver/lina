@@ -17,9 +17,10 @@ export default {
       config: {
         url: '/api/v1/terminal/virtual-apps/',
         fields: [
-          [this.$t('Basic'), ['name', 'image_name']],
+          [this.$t('Basic'), ['name', 'display_name', 'version', 'author']],
+          [this.$t('Image'), ['image_name', 'image_protocol', 'image_port']],
           [this.$t('Protocol'), ['protocols']],
-          [this.$t('Other'), ['is_active', 'comment']]
+          [this.$t('Other'), ['tags', 'is_active', 'comment']]
         ],
         addFieldsMeta: {
           name: {
@@ -30,8 +31,8 @@ export default {
             formatter: ProtocolsFormatter
           }
         },
-        createSuccessNextRoute: { name: 'Applets' },
-        updateSuccessNextRoute: { name: 'Applets' }
+        createSuccessNextRoute: { name: 'VirtualAppDetail' },
+        updateSuccessNextRoute: { name: 'VirtualAppDetail' }
       }
     }
   },
