@@ -708,48 +708,39 @@ export default {
   :deep(.el-table__body td.custom-render-table-column .label-formatter-col) {
     flex: 1 1 auto;
     width: 100%;
+    min-width: 0;
     max-width: 100%;
-    padding-right: 28px;
-    overflow: visible;
-  }
-
-  :deep(.el-table__body td.custom-render-table-column .label-container),
-  :deep(.el-table__body td.custom-render-table-column .label-wrapper) {
-    max-width: none;
-    overflow: visible;
-    white-space: normal;
+    padding-right: 0;
+    overflow: hidden;
   }
 
   :deep(.el-table__body td.custom-render-table-column .label-container) {
     width: 100%;
+    min-width: 0;
+    max-width: 100%;
     height: auto;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: flex-start;
+    overflow: hidden;
   }
 
   :deep(.el-table__body td.custom-render-table-column .label-wrapper) {
-    display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-
-  :deep(.el-table__body td.custom-render-table-column .label-wrapper > span) {
+    display: flex;
+    width: 100%;
+    min-width: 0;
     max-width: 100%;
+    flex-wrap: nowrap;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
   }
 
   :deep(.el-table__body td.custom-render-table-column .label-container .tag-formatter) {
-    max-width: 100%;
-    height: auto;
+    max-width: none;
     overflow: visible;
     text-overflow: clip;
-    white-space: normal;
-  }
-
-  :deep(.el-table__body td.custom-render-table-column .label-container .edit-btn) {
-    flex: 0 0 28px;
-    width: 28px;
-    min-width: 28px;
-    z-index: 1;
+    white-space: nowrap;
   }
 
   :deep(.el-table__body td.bounded-content-table-column .cell) {
