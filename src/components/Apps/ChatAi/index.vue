@@ -1,326 +1,275 @@
 <template>
-  <DrawerPanel
-    v-if="visible"
-    ref="drawer"
-    :default-show-panel="!!defaultShowPanel"
-    :expanded="expanded"
-    :height="height"
-    :icon="robotUrl"
-    :modal="false"
-    @toggle="onToggle"
-  >
-    <div class="chat">
-      <div class="container">
-        <div
-          ref="header"
-          class="header"
-          @mousedown="handleMoveMouseDown"
-          @mouseup="handleMouseMoveUp"
+  <AssistantWorkspace v-if="standalone" ref="workspace" :standalone="true" />
+
+  <Teleport v-else to="body">
+    <div :class="['chat-ai-portal', { 'is-open': panelOpen, 'is-expanded': expanded }]">
+      <Transition name="launcher-pop">
+        <button
+          v-if="!panelOpen"
+          class="assistant-launcher"
+          type="button"
+          :aria-label="t('ChatAIName')"
+          :title="t('ChatAIName')"
+          @click="open"
         >
-          <div class="left">
-            <img :src="robotUrl" alt="" />
-            <span class="title">{{ title }}</span>
-          </div>
-          <span class="new" @click="onNewChat">
-            <el-icon><Plus /></el-icon>
-            <span>{{ $tc('NewChat') }}</span>
+          <span class="assistant-launcher__icon">
+            <img :src="assistantIcon" alt="" />
           </span>
-        </div>
-        <div class="content">
-          <keep-alive>
-            <component :is="active" ref="component" :expanded="expanded" />
-          </keep-alive>
-        </div>
-      </div>
-      <div class="sidebar">
-        <Sidebar
-          v-bind="$attrs"
-          v-model:active="active"
-          :expanded="expanded"
-          @close="onClose"
-          @compress="compress"
-          @expand="expandFull"
-        />
-      </div>
+          <span class="assistant-launcher__label">
+            <strong>{{ t('ChatAIName') }}</strong>
+            <small>{{ t('ChatAIReady') }}</small>
+          </span>
+        </button>
+      </Transition>
+
+      <Transition name="panel-slide">
+        <section v-show="panelOpen" class="assistant-panel" :aria-label="t('ChatAIName')">
+          <AssistantWorkspace
+            ref="workspace"
+            :expanded="expanded"
+            @close="close"
+            @compress="setExpanded(false)"
+            @expand="setExpanded(true)"
+          />
+        </section>
+      </Transition>
     </div>
-  </DrawerPanel>
+  </Teleport>
 </template>
 
-<script>
-import Sidebar from './components/Sidebar/index.vue'
-import Chat from './components/ChitChat/index.vue'
-import { getInputFocus } from './useChat.js'
-import DrawerPanel from '@/components/Apps/DrawerPanel/index.vue'
-import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
-import i18n from '@/i18n/i18n'
+<script setup>
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+
 import { getAssetUrl } from '@/utils/assets'
-import { mapGetters } from 'vuex'
+import AssistantWorkspace from './AssistantWorkspace.vue'
 
-const aiPannelLocalStorage = new ObjectLocalStorage('ai_panel_settings')
-export default {
-  components: {
-    DrawerPanel,
-    Chat,
-    Sidebar
+const props = defineProps({
+  defaultShowPanel: {
+    type: Boolean,
+    default: false
   },
-  props: {
-    title: {
-      type: String,
-      default: function () {
-        return i18n.global.t('ChatAI')
-      }
-    },
-    defaultShowPanel: {
-      type: Boolean,
-      default: false
-    },
-    drawerPanelVisible: {
-      type: Boolean,
-      default: () => false
-    }
-  },
-  data() {
-    return {
-      visible: false,
-      active: 'chat',
-      robotUrl: getAssetUrl('img/robot-assistant.png'),
-      height: '400px',
-      expanded: false,
-      clientOffset: {},
-      currentTerminalContent: {},
-      initialized: false,
-      messageListenerAttached: false
-    }
-  },
-  computed: {
-    ...mapGetters(['publicSettings'])
-  },
-  watch: {
-    'publicSettings.CHAT_AI_METHOD': {
-      handler(newVal) {
-        this.visible = newVal === 'api'
-      }
-    }
-  },
-  mounted() {
-    this.handleStartChat()
-  },
-  beforeUnmount() {
-    if (this.messageListenerAttached) {
-      window.removeEventListener('message', this.onWindowMessage)
-      this.messageListenerAttached = false
-    }
-  },
-  methods: {
-    handleStartChat() {
-      if (this.publicSettings.CHAT_AI_METHOD === 'api') {
-        this.visible = true
-        const expanded = aiPannelLocalStorage.get('expanded')
-        this.updateExpandedState(expanded, false)
-        this.handlePostMessage()
-      } else if (this.publicSettings.CHAT_AI_METHOD === 'embed') {
-        const embedScriptId = 'chat-ai-embed-id'
-        if (document.getElementById(embedScriptId)) {
-          return
-        }
-        const script = document.createElement('script')
-        script.id = embedScriptId
-        script.src = this.publicSettings.CHAT_AI_EMBED_URL
-        script.async = true
-        script.onload = () => {
-          const loadEvent = new Event('load', {
-            bubbles: false,
-            cancelable: false
-          })
-          window.dispatchEvent(loadEvent)
-        }
-        document.body.appendChild(script)
-      }
-    },
-    initAssistant() {
-      if (this.initialized) return
-      this.initialized = true
-      this.$nextTick(() => {
-        this.$refs.component?.init()
-      })
-    },
-    handlePostMessage() {
-      if (this.messageListenerAttached) return
-      window.addEventListener('message', this.onWindowMessage)
-      this.messageListenerAttached = true
-    },
-    isTrustedParentMessage(event) {
-      const trustedSource = event.source === window.parent || event.source === window
-      return trustedSource && event.origin === window.location.origin
-    },
-    onWindowMessage(event) {
-      if (!this.isTrustedParentMessage(event)) return
-
-      const msg = event.data
-      if (msg === 'show-chat-panel') {
-        this.setPanelVisibility(true)
-        return
-      }
-      if (msg === 'hide-chat-panel') {
-        this.setPanelVisibility(false)
-        return
-      }
-      if (!msg || typeof msg !== 'object') return
-
-      switch (msg.name) {
-        case 'CHAT_PANEL_COMMAND':
-          if (msg.data?.action === 'open') {
-            this.setPanelVisibility(true)
-          } else if (msg.data?.action === 'close') {
-            this.setPanelVisibility(false)
-          }
-          break
-        case 'current_terminal_content':
-          // {content: '...', terminalId: '',sessionId: '',viewId: '',viewName: ''}
-          this.$log.debug('current_terminal_content', msg)
-          this.currentTerminalContent = msg.data
-          this.$refs.component?.onTerminalContext(msg.data)
-          break
-      }
-    },
-    setPanelVisibility(show) {
-      const drawer = this.$refs.drawer
-      if (!drawer) return
-
-      if (drawer.show === show) {
-        this.postPanelState(show)
-        if (show) {
-          this.initAssistant()
-          getInputFocus()
-        }
-        return
-      }
-
-      drawer.show = show
-    },
-    postPanelState(open) {
-      window.parent.postMessage(
-        {
-          name: 'CHAT_PANEL_STATE',
-          data: {
-            open,
-            mode: this.expanded ? 'expanded' : 'compact'
-          }
-        },
-        window.location.origin
-      )
-    },
-    handleMoveMouseDown(event) {
-      this.$refs.drawer.handleHeaderMoveDown(event)
-    },
-    handleMouseMoveUp(event) {
-      // Prevent the new chat button from triggering the header move up
-      const newButton = event.target.closest('.new')
-      if (newButton) {
-        return
-      }
-      this.$refs.drawer.handleHeaderMoveUp(event)
-    },
-    onClose() {
-      this.setPanelVisibility(false)
-    },
-    expandFull() {
-      this.updateExpandedState(true)
-      this.savePanelSettings()
-    },
-    compress() {
-      this.updateExpandedState(false)
-      this.savePanelSettings()
-    },
-    savePanelSettings() {
-      aiPannelLocalStorage.set('expanded', this.expanded)
-    },
-    updateExpandedState(expanded, notify = true) {
-      this.expanded = !!expanded
-      this.height = this.expanded ? '100%' : '400px'
-      if (notify) {
-        this.postPanelState(this.$refs.drawer?.show ?? false)
-      }
-    },
-    onNewChat() {
-      this.active = 'chat'
-      this.$nextTick(() => {
-        this.$refs.component?.onNewChat()
-        getInputFocus()
-      })
-    },
-    onToggle(status) {
-      this.postPanelState(status)
-      if (status) {
-        this.initAssistant()
-        getInputFocus()
-      }
-    }
+  drawerPanelVisible: {
+    type: Boolean,
+    default: false
   }
+})
+
+const { t } = useI18n()
+const workspace = ref(null)
+const panelOpen = ref(props.defaultShowPanel)
+const expanded = ref(localStorage.getItem('chat_ai_expanded') === 'true')
+const initialized = ref(false)
+const standalone = computed(() => props.drawerPanelVisible)
+const assistantIcon = getAssetUrl('img/ai-assistant.svg')
+
+async function initWorkspace() {
+  if (initialized.value) return
+  initialized.value = true
+  await nextTick()
+  await workspace.value?.init()
 }
+
+async function open() {
+  panelOpen.value = true
+  await initWorkspace()
+  await nextTick()
+  workspace.value?.focus()
+}
+
+function close() {
+  panelOpen.value = false
+}
+
+function setExpanded(value) {
+  expanded.value = value
+  localStorage.setItem('chat_ai_expanded', String(value))
+}
+
+async function handleWindowMessage(event) {
+  if (event.data !== 'show-chat-panel' || standalone.value) return
+  await open()
+}
+
+onMounted(async () => {
+  window.addEventListener('message', handleWindowMessage)
+  if (standalone.value || panelOpen.value) await initWorkspace()
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('message', handleWindowMessage)
+})
 </script>
 
 <style lang="scss" scoped>
-.chat {
+.chat-ai-portal {
+  --ai-primary: var(--el-color-primary, #1ab394);
+  --ai-primary-dark: var(--el-color-primary-dark-2, #148f76);
+  --ai-border: var(--color-border, #e9ecef);
+  --ai-text: var(--color-text-primary, #292827);
+  --ai-text-secondary: var(--color-text-secondary, #7c7c7c);
+  position: fixed;
+  z-index: 2600;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.assistant-launcher {
+  position: fixed;
+  right: 18px;
+  bottom: 116px;
   display: flex;
-  width: 100%;
-  height: 100%;
+  height: 52px;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px 5px 5px;
+  border: 1px solid var(--ai-border);
+  border-radius: 6px;
+  color: var(--ai-text);
+  background: #fff;
+  box-shadow: 0 2px 10px rgb(0 0 0 / 14%);
+  cursor: pointer;
   pointer-events: auto;
+  isolation: isolate;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 
-  .container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+  &:hover {
+    border-color: var(--ai-primary);
+    box-shadow: 0 4px 12px rgb(0 0 0 / 16%);
+    transform: translateY(-1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--el-color-primary-light-8, #d1efe8);
+    outline-offset: 3px;
+  }
+
+  &__icon {
+    display: grid;
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    place-items: center;
     overflow: hidden;
+    border-radius: 4px;
 
-    .header {
-      background: linear-gradient(90deg, #ebf1ff 24.34%, #e5fbf8 56.18%, #f2ebfe 90.18%);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      height: 48px;
-      padding: 0 16px;
-      overflow: hidden;
-      border-bottom: 1px solid #ececec;
-      .left {
-        display: flex;
-        align-items: center;
-        img {
-          width: 22px;
-          height: 22px;
-        }
-        .title {
-          display: inline-block;
-          font-size: 18px;
-          color: black;
-        }
-      }
-      .new {
-        display: inline-flex;
-        align-items: center;
-        height: 28px;
-        line-height: 28px;
-        border-radius: 16px;
-        padding: 0 10px;
-        color: var(--color-primary);
-        background-color: #f7f7f8;
-        cursor: pointer;
-        font-size: 13px;
-        &:hover {
-          background-color: #ededed;
-        }
-      }
-    }
-    .content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
+    img {
+      display: block;
+      width: 40px;
+      height: 40px;
     }
   }
-  .sidebar {
-    height: 100%;
-    width: 42px;
+
+  &__label {
+    display: flex;
+    min-width: 86px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    text-align: left;
+
+    strong {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    small {
+      color: var(--ai-text-secondary);
+      font-size: 10px;
+      white-space: nowrap;
+    }
+  }
+}
+
+.assistant-panel {
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  width: min(520px, calc(100vw - 24px));
+  height: min(760px, calc(100dvh - 24px));
+  overflow: hidden;
+  border: 1px solid var(--ai-border);
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 4px 18px rgb(0 0 0 / 18%);
+  pointer-events: auto;
+  transition:
+    width 0.28s ease,
+    height 0.28s ease,
+    right 0.28s ease,
+    bottom 0.28s ease,
+    border-radius 0.28s ease;
+}
+
+.is-expanded .assistant-panel {
+  right: 0;
+  bottom: 0;
+  width: min(1080px, 100vw);
+  height: 100dvh;
+  border-radius: 0;
+}
+
+.launcher-pop-enter-active,
+.launcher-pop-leave-active,
+.panel-slide-enter-active,
+.panel-slide-leave-active {
+  transition:
+    opacity 0.22s ease,
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.launcher-pop-enter-from,
+.launcher-pop-leave-to {
+  opacity: 0;
+  transform: translateY(12px) scale(0.88);
+}
+
+.panel-slide-enter-from,
+.panel-slide-leave-to {
+  opacity: 0;
+  transform: translateX(36px) scale(0.97);
+}
+
+@media (max-width: 620px) {
+  .assistant-launcher {
+    right: 12px;
+    bottom: 82px;
+    width: 50px;
+    height: 50px;
+    padding: 5px;
+    border-radius: 6px;
+
+    &__icon,
+    &__icon img {
+      width: 38px;
+      height: 38px;
+    }
+
+    &__label {
+      display: none;
+    }
+  }
+
+  .assistant-panel,
+  .is-expanded .assistant-panel {
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100dvh;
+    border: 0;
+    border-radius: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .assistant-launcher,
+  .assistant-panel {
+    transition: none;
+    animation: none;
   }
 }
 </style>
