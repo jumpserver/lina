@@ -60,7 +60,8 @@ export default {
         }
       },
       headerActions: {
-        hasCreate: false,
+        hasCreate: true,
+        createRoute: 'AppProviderCreate',
         hasRefresh: true,
         hasExport: false,
         hasImport: false,

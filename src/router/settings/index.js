@@ -503,6 +503,28 @@ export default {
           }
         },
         {
+          path: 'virtual-apps/:id/publications/create',
+          name: 'VirtualAppPublicationCreate',
+          component: () => import('@/views/settings/Applet/VirtualApp/PublicationCreate'),
+          hidden: true,
+          meta: {
+            title: i18n.t('Publish'),
+            permissions: ['terminal.add_virtualapppublication'],
+            activeMenu: '/settings/applets'
+          }
+        },
+        {
+          path: 'app-providers/create',
+          name: 'AppProviderCreate',
+          component: () => import('@/views/settings/Applet/AppProvider/AppProviderCreateUpdate'),
+          hidden: true,
+          meta: {
+            title: i18n.t('AppProviderCreate'),
+            permissions: ['terminal.add_appprovider'],
+            activeMenu: '/settings/applets'
+          }
+        },
+        {
           path: 'app-providers/:id',
           name: 'AppProviderDetail',
           component: () =>
@@ -511,6 +533,28 @@ export default {
           meta: {
             title: i18n.t('AppProviderDetail'),
             permissions: ['terminal.view_appprovider'],
+            activeMenu: '/settings/applets'
+          }
+        },
+        {
+          path: 'app-providers/:id/update',
+          name: 'AppProviderUpdate',
+          component: () => import('@/views/settings/Applet/AppProvider/AppProviderCreateUpdate'),
+          hidden: true,
+          meta: {
+            title: i18n.t('AppProviderUpdate'),
+            permissions: ['terminal.change_appprovider'],
+            activeMenu: '/settings/applets'
+          }
+        },
+        {
+          path: 'app-providers/:providerId/publications/create',
+          name: 'AppProviderPublicationCreate',
+          component: () => import('@/views/settings/Applet/VirtualApp/PublicationCreate'),
+          hidden: true,
+          meta: {
+            title: i18n.t('Publish'),
+            permissions: ['terminal.add_virtualapppublication'],
             activeMenu: '/settings/applets'
           }
         }

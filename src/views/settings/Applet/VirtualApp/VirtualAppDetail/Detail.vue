@@ -40,7 +40,11 @@ export default {
         },
         'name',
         'display_name',
+        'version',
         'author',
+        'image_name',
+        'image_protocol',
+        'image_port',
         {
           key: this.$t('Protocols'),
           formatter: () => {
