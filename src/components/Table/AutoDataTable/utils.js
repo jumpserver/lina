@@ -21,6 +21,7 @@ const compactColumnWidth = {
   min: 120,
   max: 180
 }
+const expandColumnWidth = '48px'
 
 function getOverflowTooltipOptions() {
   return {
@@ -397,7 +398,13 @@ export class TableColumnsGenerator {
     const isBooleanField = fieldMeta.type === 'boolean' || isBooleanChoice
     const isIdField = col.prop === 'id' || String(col.prop || '').includes('_id')
     const isAmountField = isAmountColumn(col)
-    if (isBooleanField) {
+    const isExpandColumn = col.type === 'expand'
+    if (isExpandColumn) {
+      const configuredWidth = col.width ?? col.minWidth
+      col.width = configuredWidth || expandColumnWidth
+      delete col.minWidth
+      col.fitWidth = false
+    } else if (isBooleanField) {
       col.width = `${getBooleanColumnWidth(col)}px`
       delete col.minWidth
       col.fitWidth = false
@@ -412,7 +419,7 @@ export class TableColumnsGenerator {
       col.fitWidth = false
     }
 
-    const isCompactColumn = col.prop === 'actions' || col.type === 'selection'
+    const isCompactColumn = col.prop === 'actions' || col.type === 'selection' || isExpandColumn
     col.isCustomRender =
       col.isCustomRender ?? Boolean(col.formatter && typeof col.formatter !== 'function')
     if (!isCompactColumn && !isBooleanField && !isAmountField && !isIdField) {
