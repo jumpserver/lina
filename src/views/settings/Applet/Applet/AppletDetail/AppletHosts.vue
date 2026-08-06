@@ -1,11 +1,5 @@
 <template>
-  <el-row :gutter="20">
-    <ListTable
-      :header-actions="headerActions"
-      :table-config="config"
-      :detail-drawer="detailDrawer"
-    />
-  </el-row>
+  <ListTable :header-actions="headerActions" :table-config="config" :detail-drawer="detailDrawer" />
 </template>
 
 <script lang="jsx">

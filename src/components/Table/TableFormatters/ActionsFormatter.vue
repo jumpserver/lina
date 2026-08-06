@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loadingStatus">
+  <div v-loading="loadingStatus" class="actions-formatter">
     <div v-if="actions.length > 0 || moreActions.length > 0" class="table-actions-group">
       <el-tooltip
         v-for="action in actions"
@@ -401,11 +401,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.actions-formatter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
 .table-actions-group {
   display: inline-flex;
   align-items: center;
+  min-width: max-content;
   gap: 4px;
   vertical-align: middle;
+  white-space: nowrap;
 
   .table-action-trigger {
     display: inline-flex;
