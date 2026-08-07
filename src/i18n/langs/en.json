@@ -1,4 +1,5 @@
 {
+  "RowNumber": "No.",
   "PinColumn": "Pin column",
   "UnpinColumn": "Unpin column",
   "FieldRequiredError": "This field is required.",

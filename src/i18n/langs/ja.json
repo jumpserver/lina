@@ -1,4 +1,5 @@
 {
+  "RowNumber": "番号",
   "PinColumn": "列を固定",
   "UnpinColumn": "固定を解除",
   "FieldRequiredError": "这个字段是必需的。",

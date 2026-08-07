@@ -667,7 +667,11 @@ export default {
         item.order = i
         return i === -1 ? 999 : i
       })
-      return sorted
+      return [
+        ...sorted.filter((item) => item.type === 'expand'),
+        ...sorted.filter((item) => item.type === 'index'),
+        ...sorted.filter((item) => !['expand', 'index'].includes(item.type))
+      ]
     },
     applyPinnedColumns(columns) {
       const getOriginalFixed = (item) => {

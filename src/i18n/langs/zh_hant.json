@@ -1,4 +1,5 @@
 {
+  "RowNumber": "序號",
   "PinColumn": "釘住欄",
   "UnpinColumn": "解除釘住",
   "FieldRequiredError": "这个字段是必需的。",
