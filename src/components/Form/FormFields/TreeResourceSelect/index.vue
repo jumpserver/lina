@@ -1,9 +1,13 @@
 <template>
   <div :class="rootClass" :style="$attrs.style">
     <ResourceSelectSummary
+      :count-text="summaryCountText"
       :disabled="isDisabled"
+      :items="selectedSummaryItems"
+      :selected-count="selectedValue.length"
       :text="summaryText"
       @click="openDialog(selectedValue.length > 0)"
+      @remove="removeSummaryResource"
     />
 
     <TreeResourceSelectDialog
@@ -100,7 +104,7 @@ export default {
     externalValue: {
       deep: true,
       handler(value) {
-        this.selectedValue = normalizeResourceValue(value, this.valueKey)
+        this.syncSelectedValue(value)
       }
     }
   },
@@ -112,12 +116,7 @@ export default {
       }
     },
     handleConfirm(value) {
-      const payload = [...value]
-      this.selectedValue = payload
-      this.$emit('input', payload)
-      this.$emit('update:modelValue', payload)
-      this.$emit('update:model-value', payload)
-      this.$emit('change', payload)
+      this.updateSelectedValue(value)
       this.dialogVisible = false
     },
     handleCancel() {

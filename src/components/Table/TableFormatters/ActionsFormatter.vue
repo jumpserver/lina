@@ -1,5 +1,9 @@
 <template>
-  <div v-loading="loadingStatus" class="table-actions-formatter">
+  <div
+    v-loading="loadingStatus"
+    :class="{ 'is-compact': compact }"
+    class="table-actions-formatter"
+  >
     <div v-if="actions.length > 0 || moreActions.length > 0" class="table-actions-group">
       <el-tooltip
         v-for="action in actions"
@@ -307,6 +311,9 @@ export default {
     },
     loadingStatus() {
       return this.col.formatterArgs.loading
+    },
+    compact() {
+      return Boolean(this.colActions.compact)
     }
   },
   methods: {
@@ -407,6 +414,16 @@ export default {
   justify-content: center;
   width: 100%;
   min-height: 24px;
+}
+
+.table-actions-formatter.is-compact {
+  min-height: 20px;
+
+  .table-actions-group :deep(.table-action-btn) {
+    height: 20px;
+    min-height: 20px;
+    padding: 2px 6px;
+  }
 }
 
 .table-actions-group {

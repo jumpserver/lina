@@ -315,6 +315,7 @@ export default {
             fixed: 'left',
             width: '80px',
             formatterArgs: {
+              compact: true,
               hasUpdate: false,
               hasDelete: false,
               hasClone: false,
@@ -345,6 +346,7 @@ export default {
             fixed: 'left',
             width: '80px',
             formatterArgs: {
+              compact: true,
               hasUpdate: false,
               hasDelete: false,
               hasClone: false,
