@@ -82,6 +82,11 @@
               @click="selectValue(option.value)"
             >
               <el-checkbox :model-value="isValueSelected(option.value)" tabindex="-1" />
+              <span
+                :style="{ backgroundColor: option.labelData?.color || 'transparent' }"
+                aria-hidden="true"
+                class="label-value-color"
+              />
               <span :title="option.label" class="label-filter__option-text">
                 {{ option.label }}
               </span>
@@ -399,6 +404,7 @@ export default {
 
     &__value {
       gap: 10px;
+      @include labelSelector.value-color-swatch;
 
       .el-checkbox {
         flex: 0 0 auto;

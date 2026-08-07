@@ -20,3 +20,14 @@
     }
   }
 }
+
+@mixin value-color-swatch {
+  .label-value-color {
+    box-sizing: border-box;
+    width: 14px;
+    height: 14px;
+    flex: 0 0 14px;
+    border: 1px solid var(--el-border-color-darker);
+    border-radius: 2px;
+  }
+}

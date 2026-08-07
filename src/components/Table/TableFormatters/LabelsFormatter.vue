@@ -40,7 +40,7 @@
             size="small"
           />
 
-          <el-link class="label-bind-toolbar__list-link" @click="goToLabelList">
+          <el-link class="label-bind-toolbar__list-link" underline="never" @click="goToLabelList">
             {{ $t('TagList') }} <i class="fa fa-external-link" />
           </el-link>
         </template>
@@ -116,6 +116,11 @@
               @keydown.space.prevent="toggleLabel(option.labelData)"
             >
               <el-checkbox :model-value="isLabelSelected(activeKey, option.value)" tabindex="-1" />
+              <span
+                :style="{ backgroundColor: option.labelData?.color || 'transparent' }"
+                aria-hidden="true"
+                class="label-value-color"
+              />
               <span :title="option.label" class="label-panel__option-text">
                 {{ option.label }}
               </span>
@@ -719,6 +724,8 @@ export default {
   }
 
   .label-panel__value {
+    @include labelSelector.value-color-swatch;
+
     .el-checkbox {
       flex: 0 0 auto;
       height: auto;
