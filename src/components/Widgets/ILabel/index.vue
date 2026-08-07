@@ -3,7 +3,7 @@
     v-bind="{ ...$attrs, ...el }"
     :class="{ 'no-color': !label.color }"
     :closable="closable"
-    :style="{ '--label-color': label.color || 'var(--el-color-primary)' }"
+    :style="getLabelStyle(label)"
     :title="getKey(label) + ': ' + getValue(label)"
     class="tag-formatter"
     disable-transitions
@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import { isDarkness } from '@/utils/common/color'
+
 export default {
   name: 'Label',
   props: {
@@ -54,6 +56,16 @@ export default {
       } else {
         return tag.value
       }
+    },
+    getLabelStyle(tag) {
+      const color = typeof tag === 'object' ? tag?.color : ''
+      if (!color) {
+        return {}
+      }
+      return {
+        backgroundColor: color,
+        color: isDarkness(color) ? '#ffffff' : '#1f2328'
+      }
     }
   }
 }
@@ -64,20 +76,18 @@ export default {
   box-sizing: border-box;
   max-width: 180px;
   height: 22px;
-  padding: 0 7px 0 6px;
+  padding: 0 8px;
   overflow: hidden;
-  color: var(--el-text-color-primary);
+  font-size: 12px;
+  font-weight: 500;
   white-space: nowrap;
-  border: 1px solid var(--el-border-color-lighter);
-  border-color: color-mix(in srgb, var(--label-color) 32%, var(--el-border-color-lighter));
-  border-radius: 4px;
-  background-color: var(--el-fill-color-lighter);
-  background-color: color-mix(in srgb, var(--label-color) 10%, var(--el-bg-color));
+  border: 0;
+  border-radius: 2em;
+  box-shadow:
+    inset 0 0 0 1px rgb(27 31 36 / 15%),
+    inset 0 1px 0 rgb(255 255 255 / 12%);
   opacity: 1;
-  transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
+  transition: box-shadow 0.15s ease;
 
   .label-content {
     display: inline-flex;
@@ -86,19 +96,6 @@ export default {
     gap: 0;
     line-height: 20px;
     vertical-align: middle;
-
-    &::before {
-      box-sizing: border-box;
-      width: 6px;
-      height: 6px;
-      flex: 0 0 6px;
-      margin-right: 6px;
-      border: 1px solid color-mix(in srgb, var(--label-color) 72%, #000);
-      border-radius: 50%;
-      background-color: var(--label-color);
-      box-shadow: 0 0 0 2px color-mix(in srgb, var(--label-color) 15%, transparent);
-      content: '';
-    }
   }
 
   .label-key,
@@ -110,27 +107,29 @@ export default {
 
   .label-key {
     flex: 0 0 auto;
-    color: var(--el-text-color-primary);
+    color: inherit;
     font-weight: 600;
   }
 
   .label-value {
     min-width: 0;
     overflow: hidden;
-    color: var(--el-text-color-regular);
+    color: inherit;
+    font-weight: 500;
     text-overflow: ellipsis;
   }
 
   &:hover {
-    border-color: color-mix(in srgb, var(--label-color) 48%, var(--el-border-color));
-    background-color: color-mix(in srgb, var(--label-color) 15%, var(--el-bg-color));
-    box-shadow: 0 1px 2px rgb(0 0 0 / 8%);
+    box-shadow:
+      inset 0 0 0 1px rgb(27 31 36 / 24%),
+      inset 0 1px 0 rgb(255 255 255 / 16%),
+      0 1px 2px rgb(27 31 36 / 12%);
   }
 
-  &.no-color .label-content::before {
-    border-color: var(--el-color-primary);
+  &.no-color {
+    color: var(--el-color-primary);
     background-color: var(--el-bg-color);
-    box-shadow: none;
+    box-shadow: inset 0 0 0 1px var(--el-color-primary);
   }
 }
 </style>

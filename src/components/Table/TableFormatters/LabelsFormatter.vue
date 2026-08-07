@@ -778,7 +778,7 @@ export default {
       height: 28px;
       margin: 0;
       padding: 0 11px;
-      border-radius: 6px;
+      border-radius: 2em;
       opacity: 1;
       pointer-events: none;
 
