@@ -160,6 +160,7 @@ export default {
       searchValue: '',
       searchFocused: false,
       showSelectedOnly: this.initialSelectedOnly,
+      selectedOnlyIds: this.initialSelectedOnly ? [...this.value] : [],
       expandAllNext: false,
       loading: false,
       treeData: [],
@@ -179,6 +180,9 @@ export default {
     },
     selectedIdSet() {
       return new Set(this.draftValue.map((id) => String(id)))
+    },
+    selectedOnlyIdSet() {
+      return new Set(this.selectedOnlyIds.map((id) => String(id)))
     },
     selectedOnlyTitle() {
       return this.showSelectedOnly
@@ -406,7 +410,7 @@ export default {
       if (this.showSelectedOnly) {
         visibleKeys = this.getPathKeySet((node) => {
           const id = this.getNodeId(node)
-          return id !== undefined && id !== null && this.selectedIdSet.has(String(id))
+          return id !== undefined && id !== null && this.selectedOnlyIdSet.has(String(id))
         })
       }
 
@@ -441,7 +445,9 @@ export default {
       }
     },
     toggleSelectedOnly() {
-      this.showSelectedOnly = !this.showSelectedOnly
+      const showSelectedOnly = !this.showSelectedOnly
+      this.selectedOnlyIds = showSelectedOnly ? [...this.draftValue] : []
+      this.showSelectedOnly = showSelectedOnly
       this.expandAllNext = false
       this.applyTreeFilter()
     },
@@ -515,6 +521,7 @@ export default {
       this.expandAllNext = false
       this.$refs.tree?.setCheckedKeys([])
       if (this.showSelectedOnly) {
+        this.selectedOnlyIds = []
         this.showSelectedOnly = false
       }
       this.$nextTick(() => this.applyTreeFilter())
