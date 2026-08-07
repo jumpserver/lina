@@ -68,6 +68,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    max-width: 100%;
     min-height: 30px;
   }
 
@@ -75,8 +76,30 @@
     font-size: 13px;
   }
 
+  // Element Plus 默认将 radio 文案限制为单行且固定高度。多语言长文案需要
+  // 在内容区内换行并撑高选项，同时让选中圆点与首行文字对齐。
+  .el-radio-group .el-radio {
+    align-items: flex-start;
+    max-width: 100%;
+    min-height: 30px;
+    height: auto;
+    white-space: normal;
+  }
+
+  .el-radio-group .el-radio__input {
+    flex: 0 0 auto;
+    margin-top: 8px;
+  }
+
   .el-radio-group .el-radio__label {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    overflow-wrap: anywhere;
+    line-height: 20px;
     font-size: 13px;
+    white-space: normal;
   }
 
   .el-input:not(.el-date-editor),

@@ -100,5 +100,21 @@
   "LabelFilterAllValues": "すべての値",
   "LabelFilterSelectKey": "ラベルキーを選択",
   "LabelFilterKeyLabel": "キー",
-  "LabelFilterValueLabel": "値"
+  "LabelFilterValueLabel": "値",
+  "SelectedLabels": "選択済みラベル",
+  "NoSelectedLabels": "ラベルが選択されていません",
+  "LabelFilterSearchSelected": "選択済みラベルを検索",
+  "Remove": "選択解除",
+  "QuickCreateLabel": "ラベルをクイック作成",
+  "QuickCreate": "クイック作成",
+  "LabelKey": "キー",
+  "LabelKeyPlaceholder": "ラベルキーを入力",
+  "LabelValue": "値",
+  "LabelValuePlaceholder": "ラベル値を入力",
+  "CreateLabel": "作成して選択",
+  "LabelName": "名前",
+  "LabelNamePlaceholder": "名前を入力",
+  "LabelColor": "色",
+  "CreateAndSelect": "作成して選択",
+  "LabelCreateSuccess": "ラベルを作成して選択しました"
 }

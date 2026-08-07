@@ -5,6 +5,7 @@
       :class="{ clicked: linkClicked }"
       :disabled="disabled"
       :type="col.type || 'info'"
+      underline="never"
       class="detail"
       @click="handleClick"
     >
@@ -192,6 +193,13 @@ export default {
 .detail {
   line-height: 25px;
   font-size: 13px;
+
+  &:hover {
+    :deep(.el-link__inner) {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+  }
 }
 
 .clicked,

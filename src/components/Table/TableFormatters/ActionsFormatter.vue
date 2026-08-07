@@ -404,14 +404,18 @@ export default {
 .table-actions-formatter {
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 100%;
   min-height: 24px;
 }
 
 .table-actions-group {
   display: inline-flex;
   align-items: center;
+  min-width: max-content;
   gap: 4px;
   vertical-align: middle;
+  white-space: nowrap;
 
   .table-action-trigger {
     display: inline-flex;

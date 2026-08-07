@@ -21,6 +21,7 @@ const compactColumnWidth = {
   min: 120,
   max: 180
 }
+const defaultActionColumnWidth = '120px'
 const expandColumnWidth = '48px'
 
 function getOverflowTooltipOptions() {
@@ -224,7 +225,8 @@ export class TableColumnsGenerator {
           prop: 'actions',
           label: i18n.t('Actions'),
           align: 'center',
-          width: '120px',
+          headerAlign: 'center',
+          width: defaultActionColumnWidth,
           formatter: ActionsFormatter,
           fixed: 'right',
           formatterArgs: {}
@@ -388,6 +390,16 @@ export class TableColumnsGenerator {
         col.showOverflowTooltip = true
       }
       col.className = this.appendClassName(col.className, 'bounded-content-table-column')
+    }
+
+    if (col.prop === 'actions') {
+      col.width = col.width || col.minWidth || defaultActionColumnWidth
+      delete col.minWidth
+      col.align = 'center'
+      col.headerAlign = 'center'
+      col.fixed = 'right'
+      col.fitWidth = false
+      col.resizable = false
     }
 
     const fieldMeta = this.meta[col.prop] || {}

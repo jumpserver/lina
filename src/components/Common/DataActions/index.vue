@@ -72,10 +72,10 @@
         :class="[action.name, { grouped: action.grouped }]"
         :size="size"
         class="action-item"
-        @click="handleClick(action)"
+        @click="handleClick(action, $event)"
       >
         <el-tooltip :content="action.tip" :disabled="!action.tip" :show-after="500" placement="top">
-          <div>
+          <div class="action-content">
             <Icon v-if="action.icon" :icon="action.icon" class="pre-icon" />
             <span v-if="action.title">
               {{ action.title }}
@@ -151,9 +151,12 @@ export default {
     toSentenceCase(s) {
       return toSentenceCase(s)
     },
-    handleClick(action) {
+    handleClick(action, event) {
       if (action.disabled) {
         return
+      }
+      if (event?.detail > 0) {
+        event.currentTarget?.blur?.()
       }
       if (action && action.callback) {
         action.callback(action)
@@ -263,6 +266,14 @@ $color-drop-menu-border: #e4e7ed;
 
   .action-item {
     margin-left: 1px;
+
+    .action-content,
+    .action-content .pre-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
 
     .pre-icon + span {
       margin-left: 2px;

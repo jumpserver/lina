@@ -1,5 +1,5 @@
 <template>
-  <div class="auto-data-table">
+  <div class="auto-data-table" @wheel="handleCellWheel">
     <div v-loading="loading">
       <DataTable
         v-bind="$attrs"
@@ -32,6 +32,58 @@ import Sortable from 'sortablejs'
 import ColumnSettingPopover from './components/ColumnSettingPopover.vue'
 import { orderPrimaryColumns, TableColumnsGenerator } from './utils'
 import _ from 'lodash'
+
+const CELL_WHEEL_GESTURE_GAP = 120
+const CELL_WHEEL_ACCELERATION_RATIO = 1.35
+const CELL_WHEEL_ACCELERATION_EPSILON = 0.5
+const COLUMN_WIDTH_CHANGE_TOLERANCE = 1
+const TABLE_CELL_SELECTOR = '.el-table__body td.el-table__cell .cell'
+
+function getWheelEventTarget(event) {
+  return event.target instanceof Element ? event.target : event.target?.parentElement
+}
+
+function getHorizontalWheelDelta(event, hasActiveGesture, pageWidth) {
+  let delta = 0
+  if (event.shiftKey) {
+    delta = event.deltaX || event.deltaY
+  } else if (hasActiveGesture && event.deltaX) {
+    delta = event.deltaX
+  } else if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
+    delta = event.deltaX
+  }
+
+  if (!delta) {
+    return 0
+  }
+
+  const scale = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? pageWidth || 1 : 1
+  return delta * scale
+}
+
+function findCellScrollTarget(root, target) {
+  const cell = target?.closest(TABLE_CELL_SELECTOR)
+  if (!cell || !root.contains(cell)) {
+    return null
+  }
+
+  const scrollContainer = [target.closest('.label-wrapper'), cell].find(
+    (element) => element && element.scrollWidth > element.clientWidth + 1
+  )
+  return scrollContainer ? { cell, scrollContainer } : null
+}
+
+function shouldRestartCellWheelGesture(gesture, target, delta, now) {
+  if (target && gesture.cell.contains(target)) {
+    return false
+  }
+
+  const directionChanged = Math.sign(delta) !== Math.sign(gesture.lastDelta)
+  const accelerated =
+    Math.abs(delta) >
+    Math.abs(gesture.lastDelta) * CELL_WHEEL_ACCELERATION_RATIO + CELL_WHEEL_ACCELERATION_EPSILON
+  return now - gesture.lastTime > CELL_WHEEL_GESTURE_GAP || directionChanged || accelerated
+}
 
 export default {
   name: 'AutoDataTable',
@@ -74,10 +126,12 @@ export default {
       sortable: null,
       columnResizeObserver: null,
       columnResizeFrame: null,
+      columnContainerWidth: 0,
       pinningMediaQuery: null,
       pinningDisabled: typeof window !== 'undefined' ? window.innerWidth < 992 : false,
       naturalColumnWidths: {},
       pinnedColumnProps: [],
+      cellWheelGesture: null,
       inited: false
     }
   },
@@ -125,16 +179,20 @@ export default {
     if (typeof ResizeObserver === 'undefined') {
       return
     }
-    this.columnResizeObserver = new ResizeObserver(() => {
-      if (this.columnResizeFrame) {
-        cancelAnimationFrame(this.columnResizeFrame)
+    this.columnResizeObserver = new ResizeObserver(([entry]) => {
+      const width = Math.floor(entry?.contentRect.width || 0)
+      if (!width || Math.abs(width - this.columnContainerWidth) <= COLUMN_WIDTH_CHANGE_TOLERANCE) {
+        return
       }
-      this.columnResizeFrame = requestAnimationFrame(() => this.fitColumnsToContainer())
+
+      this.columnContainerWidth = width
+      this.scheduleColumnFit(width)
     })
     this.columnResizeObserver.observe(this.$el)
     this.initializeStaticColumnWidths()
   },
   beforeUnmount() {
+    this.clearCellWheelGesture()
     if (this.pinningMediaQuery) {
       if (typeof this.pinningMediaQuery.removeEventListener === 'function') {
         this.pinningMediaQuery.removeEventListener('change', this.handlePinningMediaChange)
@@ -143,12 +201,13 @@ export default {
       }
     }
     this.columnResizeObserver?.disconnect()
-    if (this.columnResizeFrame) {
-      cancelAnimationFrame(this.columnResizeFrame)
-    }
+    this.cancelColumnFit()
   },
   deactivated() {
     this.isDeactivated = true
+    this.clearCellWheelGesture()
+    this.cancelColumnFit()
+    this.columnContainerWidth = 0
   },
   activated() {
     this.isDeactivated = false
@@ -156,6 +215,58 @@ export default {
   methods: {
     handleLoaded() {
       this.$emit('loaded')
+    },
+    handleCellWheel(event) {
+      const delta = getHorizontalWheelDelta(
+        event,
+        Boolean(this.cellWheelGesture),
+        this.$el.clientWidth
+      )
+      if (!delta) {
+        return
+      }
+
+      const target = getWheelEventTarget(event)
+      const now = performance.now()
+      let gesture = this.cellWheelGesture
+      if (
+        gesture &&
+        (!gesture.scrollContainer.isConnected ||
+          !this.$el.contains(gesture.scrollContainer) ||
+          shouldRestartCellWheelGesture(gesture, target, delta, now))
+      ) {
+        this.clearCellWheelGesture()
+        gesture = null
+      }
+
+      if (!gesture) {
+        const scrollTarget = findCellScrollTarget(this.$el, target)
+        if (!scrollTarget) {
+          return
+        }
+        gesture = {
+          ...scrollTarget,
+          lastDelta: delta,
+          lastTime: now,
+          timer: null
+        }
+        this.cellWheelGesture = gesture
+      }
+
+      event.preventDefault()
+      event.stopPropagation()
+      gesture.scrollContainer.scrollLeft += delta
+      gesture.lastDelta = delta
+      gesture.lastTime = now
+      this.scheduleCellWheelGestureEnd(gesture)
+    },
+    scheduleCellWheelGestureEnd(gesture) {
+      clearTimeout(gesture.timer)
+      gesture.timer = setTimeout(this.clearCellWheelGesture, CELL_WHEEL_GESTURE_GAP)
+    },
+    clearCellWheelGesture() {
+      clearTimeout(this.cellWheelGesture?.timer)
+      this.cellWheelGesture = null
     },
     initPinningMediaQuery() {
       if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
@@ -172,6 +283,20 @@ export default {
     handlePinningMediaChange(event) {
       this.pinningDisabled = event.matches
     },
+    scheduleColumnFit(containerWidth) {
+      this.cancelColumnFit()
+      this.columnResizeFrame = requestAnimationFrame(() => {
+        this.columnResizeFrame = null
+        this.fitColumnsToContainer(undefined, containerWidth)
+      })
+    },
+    cancelColumnFit() {
+      if (!this.columnResizeFrame) {
+        return
+      }
+      cancelAnimationFrame(this.columnResizeFrame)
+      this.columnResizeFrame = null
+    },
     initializeStaticColumnWidths() {
       if (!Array.isArray(this.iConfig.columns)) {
         return
@@ -185,9 +310,13 @@ export default {
       })
 
       this.naturalColumnWidths = Object.fromEntries(columns.map((item) => [item.prop, item.width]))
-      this.fitColumnsToContainer(columns)
+      const containerWidth = Math.floor(this.$el.clientWidth || 0)
+      if (containerWidth) {
+        this.columnContainerWidth = containerWidth
+      }
+      this.fitColumnsToContainer(columns, containerWidth)
     },
-    fitColumnsToContainer(sourceColumns = this.iConfig.columns) {
+    fitColumnsToContainer(sourceColumns = this.iConfig.columns, observedWidth = 0) {
       if (
         !Array.isArray(sourceColumns) ||
         sourceColumns.length === 0 ||
@@ -196,8 +325,7 @@ export default {
         return
       }
 
-      const table = this.$el.querySelector('.el-table')
-      const containerWidth = table?.clientWidth || this.$el.clientWidth
+      const containerWidth = observedWidth || this.$el.clientWidth
       if (!containerWidth) {
         this.commitColumnWidths(sourceColumns)
         return
@@ -227,10 +355,22 @@ export default {
         return
       }
 
-      const flexibleColumnIndexes = naturalColumns
+      let flexibleColumnIndexes = naturalColumns
         .map((col, index) => ({ col, index }))
-        .filter(({ col }) => col.prop !== 'actions' && !col.fixed && col.fitWidth !== false)
+        .filter(({ col }) => !col.fixed && col.fitWidth !== false)
         .map(({ index }) => index)
+
+      // Compact-only views (for example, id + actions) have no naturally flexible
+      // column. Let the first data column absorb the empty space so the fixed-width
+      // actions column still reaches the right edge of the table.
+      if (naturalTotalWidth < availableWidth && flexibleColumnIndexes.length === 0) {
+        const fallbackIndex = naturalColumns.findIndex(
+          (col) => col.prop !== 'actions' && !col.fixed
+        )
+        if (fallbackIndex !== -1) {
+          flexibleColumnIndexes = [fallbackIndex]
+        }
+      }
       const flexibleColumnIndexSet = new Set(flexibleColumnIndexes)
       const fixedTotalWidth = pixelWidths.reduce((total, width, index) => {
         return flexibleColumnIndexSet.has(index) ? total : total + width
@@ -629,6 +769,9 @@ export default {
 
 <style lang="scss" scoped>
 .auto-data-table {
+  width: 100%;
+  min-width: 0;
+
   // Headers always stay on one line. The column generator reserves enough width for
   // the complete label, and the table scrolls horizontally when the viewport is narrow.
   :deep(.el-table__header th .cell),
@@ -645,116 +788,87 @@ export default {
     white-space: nowrap;
   }
 
-  :deep(.el-table__body td.full-content-table-column .cell),
-  :deep(.el-table__body td.full-content-table-column .cell > span),
-  :deep(.el-table__body td.full-content-table-column .detail) {
-    height: auto;
-    max-width: none;
-    overflow: visible !important;
+  // All body cells remain on one line. Overflow belongs to the cell itself so
+  // mouse wheels with Shift, trackpads and touch gestures can reveal the full
+  // value without changing the row height.
+  :deep(.el-table__body td.el-table__cell .cell) {
+    max-width: 100%;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
     line-height: 1.5;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     text-overflow: clip !important;
     white-space: nowrap !important;
   }
 
-  :deep(.el-table__body td.overflow-content-table-column .cell),
-  :deep(.el-table__body td.overflow-content-table-column .cell > span),
-  :deep(.el-table__body td.overflow-content-table-column .detail) {
-    max-width: 100%;
-    overflow: hidden !important;
-    line-height: 1.5;
-    text-overflow: ellipsis !important;
+  :deep(.el-table__body td.el-table__cell .cell::-webkit-scrollbar) {
+    display: none;
+  }
+
+  :deep(.el-table__body td.el-table__cell .cell *) {
     white-space: nowrap !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
   }
 
-  :deep(.el-table__body td.overflow-content-table-column .cell > span),
-  :deep(.el-table__body td.overflow-content-table-column .detail) {
-    display: block;
+  :deep(.el-table__body td.el-table__cell .cell > :not(.label-container)) {
+    min-width: max-content;
+    max-width: none !important;
   }
 
-  :deep(.el-table__body td.custom-render-table-column .cell),
-  :deep(.el-table__body td.custom-render-table-column .cell > span),
-  :deep(.el-table__body td.custom-render-table-column .detail),
-  :deep(.el-table__body td.custom-render-table-column .platform-name) {
-    height: auto;
-    max-width: 100%;
-    overflow: visible !important;
-    line-height: 1.5;
-    text-overflow: clip !important;
-    white-space: normal !important;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-  }
-
-  :deep(.el-table__body td.custom-render-table-column .platform-td) {
-    flex-wrap: wrap;
-  }
-
+  :deep(.el-table__body td.custom-render-table-column .platform-td),
   :deep(.el-table__body td.custom-render-table-column .tag),
   :deep(.el-table__body td.custom-render-table-column .protocol-cell) {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
   }
 
   :deep(.el-table__body td.custom-render-table-column .tag > span),
   :deep(.el-table__body td.custom-render-table-column .el-tag) {
-    max-width: 100%;
-    height: auto;
+    max-width: none;
     overflow: visible;
     text-overflow: clip;
-    white-space: normal;
-    overflow-wrap: anywhere;
+    white-space: nowrap;
   }
 
   :deep(.el-table__body td.custom-render-table-column .label-formatter-col) {
     flex: 1 1 auto;
     width: 100%;
+    min-width: 0;
     max-width: 100%;
-    padding-right: 28px;
-    overflow: visible;
-  }
-
-  :deep(.el-table__body td.custom-render-table-column .label-container),
-  :deep(.el-table__body td.custom-render-table-column .label-wrapper) {
-    max-width: none;
-    overflow: visible;
-    white-space: normal;
+    padding-right: 0;
+    overflow: hidden;
   }
 
   :deep(.el-table__body td.custom-render-table-column .label-container) {
     width: 100%;
-    height: auto;
-    flex-wrap: wrap;
+    min-width: 0;
+    max-width: 100%;
+    height: 23px;
+    min-height: 23px;
+    flex-wrap: nowrap;
     justify-content: flex-start;
+    overflow: hidden;
   }
 
   :deep(.el-table__body td.custom-render-table-column .label-wrapper) {
-    display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-
-  :deep(.el-table__body td.custom-render-table-column .label-wrapper > span) {
+    display: flex;
+    width: 100%;
+    height: 23px;
+    min-width: 0;
     max-width: 100%;
+    flex-wrap: nowrap;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
   }
 
   :deep(.el-table__body td.custom-render-table-column .label-container .tag-formatter) {
-    max-width: 100%;
-    height: auto;
+    max-width: none;
     overflow: visible;
     text-overflow: clip;
-    white-space: normal;
-  }
-
-  :deep(.el-table__body td.custom-render-table-column .label-container .edit-btn) {
-    flex: 0 0 28px;
-    width: 28px;
-    min-width: 28px;
-    z-index: 1;
-  }
-
-  :deep(.el-table__body td.bounded-content-table-column .cell) {
-    overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
   }
 }
