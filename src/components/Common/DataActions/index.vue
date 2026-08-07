@@ -248,6 +248,20 @@ $color-drop-menu-border: #e4e7ed;
       align-items: center;
       line-height: 1;
     }
+
+    > span > .el-tooltip__trigger {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+  }
+
+  .pre-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
   }
 
   .action-item {
@@ -262,7 +276,7 @@ $color-drop-menu-border: #e4e7ed;
     }
 
     .pre-icon + span {
-      margin-left: 3px;
+      margin-left: 2px;
     }
 
     &.grouped {
@@ -485,7 +499,7 @@ $color-drop-menu-border: #e4e7ed;
   // 固定图标列宽，保证使用图标占位的下拉项文字左边缘对齐。
   width: 18px;
   height: 16px;
-  margin-right: 6px;
+  margin-right: 2px;
   line-height: 1;
 }
 

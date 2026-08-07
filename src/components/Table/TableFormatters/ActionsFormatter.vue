@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loadingStatus" class="actions-formatter">
+  <div v-loading="loadingStatus" class="table-actions-formatter">
     <div v-if="actions.length > 0 || moreActions.length > 0" class="table-actions-group">
       <el-tooltip
         v-for="action in actions"
@@ -401,11 +401,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.actions-formatter {
+.table-actions-formatter {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
+  min-height: 24px;
 }
 
 .table-actions-group {
@@ -421,10 +422,11 @@ export default {
   }
 
   :deep(.table-action-btn) {
+    height: 24px;
     min-height: 24px;
     padding: 4px 8px;
     font-size: 12px;
-    line-height: 1.3;
+    line-height: 14px;
     box-shadow: none;
 
     &.more-action {
@@ -435,7 +437,7 @@ export default {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      line-height: 1.2;
+      line-height: 14px;
       font-size: 12px;
     }
 
