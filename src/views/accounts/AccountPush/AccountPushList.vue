@@ -13,7 +13,6 @@ import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableForma
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 import { openTaskPage } from '@/utils/jms/index'
 import { GenericListTable } from '@/layout/components'
-import AutomationAssetAmountFormatter from '@/views/accounts/components/AutomationAssetAmountFormatter.vue'
 export default {
   name: 'AccountPushList',
   components: {
@@ -29,8 +28,8 @@ export default {
         columns: [
           'name',
           'accounts',
-          'assets',
-          'nodes',
+          'assets_amount',
+          'nodes_amount',
           'secret_strategy',
           'is_periodic',
           'periodic_display',
@@ -43,8 +42,8 @@ export default {
           default: [
             'name',
             'accounts',
-            'assets',
-            'nodes',
+            'assets_amount',
+            'nodes_amount',
             'periodic_display',
             'executed_amount',
             'is_active',
@@ -63,32 +62,28 @@ export default {
               return <span> {row.accounts.join(', ')} </span>
             }
           },
-          assets: {
-            formatter: AutomationAssetAmountFormatter,
-            formatterArgs: {
-              async: false,
-              drawer: false,
-              preventClick: true
-            }
-          },
-          nodes: {
-            formatter: AmountFormatter,
-            formatterArgs: {
-              async: false,
-              drawer: false,
-              preventClick: true
-            }
-          },
           secret_strategy: {
             formatter: function (row) {
               return <span> {row.secret_strategy.label} </span>
             }
           },
           assets_amount: {
-            label: vm.$t('AssetsOfNumber')
+            label: vm.$t('AssetsOfNumber'),
+            formatter: AmountFormatter,
+            formatterArgs: {
+              async: true,
+              drawer: false,
+              preventClick: true
+            }
           },
           nodes_amount: {
-            label: vm.$t('NodeOfNumber')
+            label: vm.$t('NodeOfNumber'),
+            formatter: AmountFormatter,
+            formatterArgs: {
+              async: true,
+              drawer: false,
+              preventClick: true
+            }
           },
           password_strategy_display: {
             label: vm.$t('PasswordStrategy'),
