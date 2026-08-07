@@ -469,6 +469,10 @@ export default {
     }
   }
 
+  :deep(.table-action-btn.is-disabled:hover .fa-play-circle-o) {
+    color: var(--el-color-primary-light-3) !important;
+  }
+
   :deep(.table-action-dropdown) {
     display: inline-flex;
   }
