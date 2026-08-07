@@ -64,6 +64,19 @@ export default {
           'session',
           'timestamp'
         ],
+        columnsShow: {
+          min: ['output'],
+          default: [
+            'output',
+            'input',
+            'risk_level',
+            'user',
+            'asset',
+            'account',
+            'session',
+            'timestamp'
+          ]
+        },
         extraQuery: {
           date_to: dateTo,
           date_from: dateFrom

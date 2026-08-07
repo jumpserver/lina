@@ -19,6 +19,10 @@ export default {
         hasSelection: false,
         url: `/api/v1/terminal/commands/?session_id=${sessionId}`,
         columns: ['expandCol', 'index', 'input', 'timestamp'],
+        columnsShow: {
+          min: ['expandCol', 'index'],
+          default: ['expandCol', 'index', 'input', 'timestamp']
+        },
         columnsMeta: {
           expandCol: {
             type: 'expand',
@@ -26,8 +30,7 @@ export default {
           },
           index: {
             type: 'index',
-            label: 'ID',
-            sortable: 'custom'
+            label: this.$t('RowNumber')
           },
           input: {
             label: this.$t('Command'),
