@@ -89,7 +89,9 @@ export default {
       clientOffset: {},
       currentTerminalContent: {},
       initialized: false,
-      messageListenerAttached: false
+      messageListenerAttached: false,
+      pendingPanelVisibility: null,
+      iframeReadyPosted: false
     }
   },
   computed: {
@@ -98,7 +100,15 @@ export default {
   watch: {
     'publicSettings.CHAT_AI_METHOD': {
       handler(newVal) {
-        this.visible = newVal === 'api'
+        if (newVal === 'api') {
+          this.startApiMode()
+          return
+        }
+
+        this.visible = false
+        this.iframeReadyPosted = false
+        this.pendingPanelVisibility = null
+        this.initialized = false
       }
     }
   },
@@ -114,10 +124,7 @@ export default {
   methods: {
     handleStartChat() {
       if (this.publicSettings.CHAT_AI_METHOD === 'api') {
-        this.visible = true
-        const expanded = aiPannelLocalStorage.get('expanded')
-        this.updateExpandedState(expanded, false)
-        this.handlePostMessage()
+        this.startApiMode()
       } else if (this.publicSettings.CHAT_AI_METHOD === 'embed') {
         const embedScriptId = 'chat-ai-embed-id'
         if (document.getElementById(embedScriptId)) {
@@ -137,11 +144,60 @@ export default {
         document.body.appendChild(script)
       }
     },
+    startApiMode() {
+      this.visible = true
+      const expanded = aiPannelLocalStorage.get('expanded')
+      this.updateExpandedState(expanded, false)
+      this.handlePostMessage()
+      this.ensureApiModeReady()
+    },
+    ensureApiModeReady(attempt = 0) {
+      if (this.publicSettings.CHAT_AI_METHOD !== 'api' || !this.visible) return
+
+      this.$nextTick(() => {
+        const drawer = this.$refs.drawer
+        const component = this.$refs.component
+
+        if (!drawer || !component) {
+          if (attempt < 20) {
+            this.ensureApiModeReady(attempt + 1)
+          }
+          return
+        }
+
+        if (this.pendingPanelVisibility !== null && drawer.show !== this.pendingPanelVisibility) {
+          drawer.show = this.pendingPanelVisibility
+        }
+
+        if (!this.iframeReadyPosted) {
+          window.parent.postMessage(
+            {
+              name: 'CHAT_IFRAME_READY'
+            },
+            window.location.origin
+          )
+          this.iframeReadyPosted = true
+        }
+
+        if (this.currentTerminalContent && Object.keys(this.currentTerminalContent).length > 0) {
+          component.onTerminalContext?.(this.currentTerminalContent)
+        }
+
+        if (drawer.show) {
+          this.initAssistant()
+        }
+
+        this.pendingPanelVisibility = null
+      })
+    },
     initAssistant() {
       if (this.initialized) return
-      this.initialized = true
       this.$nextTick(() => {
-        this.$refs.component?.init()
+        if (this.initialized) return
+        const component = this.$refs.component
+        if (!component) return
+        this.initialized = true
+        component.init()
       })
     },
     handlePostMessage() {
@@ -185,7 +241,11 @@ export default {
     },
     setPanelVisibility(show) {
       const drawer = this.$refs.drawer
-      if (!drawer) return
+      if (!drawer) {
+        this.pendingPanelVisibility = show
+        this.ensureApiModeReady()
+        return
+      }
 
       if (drawer.show === show) {
         this.postPanelState(show)
