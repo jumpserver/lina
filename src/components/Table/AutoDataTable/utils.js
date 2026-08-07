@@ -24,6 +24,22 @@ const compactColumnWidth = {
 const defaultActionColumnWidth = '120px'
 const expandColumnWidth = '48px'
 
+function getColumnName(column) {
+  return typeof column === 'object' ? column?.prop : column
+}
+
+export function orderActionColumn(columns, position = 'end') {
+  const actionColumn = columns.find((column) => getColumnName(column) === 'actions')
+  if (!actionColumn) {
+    return columns
+  }
+
+  const otherColumns = columns.filter((column) => column !== actionColumn)
+  return position === 'start'
+    ? [actionColumn, ...otherColumns]
+    : [...otherColumns, actionColumn]
+}
+
 function getOverflowTooltipOptions() {
   return {
     popperStyle: {
@@ -152,7 +168,10 @@ export class TableColumnsGenerator {
     if (!hasColumnActions) {
       configColumns = [...configColumns.filter((i) => i !== 'actions'), 'actions']
     }
-    configColumns = orderPrimaryColumns(configColumns)
+    configColumns = orderActionColumn(
+      orderPrimaryColumns(configColumns),
+      config.actionsColumnPosition
+    )
 
     for (let col of configColumns) {
       if (typeof col === 'object') {
@@ -397,7 +416,7 @@ export class TableColumnsGenerator {
       delete col.minWidth
       col.align = 'center'
       col.headerAlign = 'center'
-      col.fixed = 'right'
+      col.fixed = this.config.actionsColumnPosition === 'start' ? 'left' : 'right'
       col.fitWidth = false
       col.resizable = false
     }

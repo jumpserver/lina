@@ -4,6 +4,7 @@
 
 <script>
 import { periodicMeta } from '@/components/const'
+import { ResourceSelect, TreeResourceSelect } from '@/components/Form/FormFields'
 import i18n from '@/i18n/i18n'
 import { GenericCreateUpdatePage } from '@/layout/components'
 
@@ -30,27 +31,29 @@ export default {
         },
         check_risk: {},
         assets: {
+          type: 'resourceSelect',
+          component: ResourceSelect,
+          rules: [{ required: false }],
           el: {
-            multiple: true,
             value: [],
-            ajax: {
-              transformOption: (item) => {
-                return { label: item.name + '(' + item.address + ')', value: item.id }
-              },
-              url: '/api/v1/assets/assets/?gather_accounts_enabled=true'
+            url: '/api/v1/assets/assets/?gather_accounts_enabled=true&fields_size=mini',
+            resourceName: this.$t('Assets'),
+            nodeFilter: {
+              treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
+              typeTreeUrl: '/api/v1/assets/nodes/category/tree/?count_resource=none',
+              includeDescendants: true
             }
           }
         },
         nodes: {
+          type: 'treeResourceSelect',
+          component: TreeResourceSelect,
+          rules: [{ required: false }],
           el: {
-            multiple: true,
             value: [],
-            ajax: {
-              transformOption: (item) => {
-                return { label: item['full_value'], value: item.id }
-              },
-              url: '/api/v1/assets/nodes/'
-            }
+            url: '/api/v1/assets/nodes/?fields_size=mini',
+            treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
+            resourceName: this.$t('Nodes')
           }
         },
         recipients: {

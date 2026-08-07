@@ -3,15 +3,15 @@
     v-bind="{ ...$attrs, ...el }"
     :class="{ 'no-color': !label.color }"
     :closable="closable"
-    :color="label.color"
-    :title="label.name + ': ' + label.value"
+    :style="getLabelStyle(label)"
+    :title="getKey(label) + ': ' + getValue(label)"
     class="tag-formatter"
     disable-transitions
     effect="plain"
     size="small"
     @click="handleClick(label)"
   >
-    <span :class="[getColor(label)]" class="label-content">
+    <span class="label-content">
       <b class="label-key">{{ getKey(label) }}:</b>
       <span class="label-value">&nbsp;{{ getValue(label) }}</span>
     </span>
@@ -57,28 +57,37 @@ export default {
         return tag.value
       }
     },
-    getColor(tag) {
-      if (isDarkness(tag.color)) {
-        return 'white'
-      } else {
-        return 'black'
+    getLabelStyle(tag) {
+      const color = typeof tag === 'object' ? tag?.color : ''
+      if (!color) {
+        return {}
+      }
+      return {
+        backgroundColor: color,
+        color: isDarkness(color) ? '#ffffff' : '#1f2328'
       }
     }
   }
 }
 </script>
 
-<style scoped>
-.white {
-  color: white;
-}
-
-.black {
-  color: black;
-}
-
+<style lang="scss" scoped>
 .tag-formatter {
-  border: none;
+  box-sizing: border-box;
+  max-width: 180px;
+  height: 22px;
+  padding: 0 8px;
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  border: 0;
+  border-radius: 2em;
+  box-shadow:
+    inset 0 0 0 1px rgb(27 31 36 / 15%),
+    inset 0 1px 0 rgb(255 255 255 / 12%);
+  opacity: 1;
+  transition: box-shadow 0.15s ease;
 
   .label-content {
     display: inline-flex;
@@ -98,26 +107,29 @@ export default {
 
   .label-key {
     flex: 0 0 auto;
+    color: inherit;
+    font-weight: 600;
   }
 
   .label-value {
     min-width: 0;
     overflow: hidden;
+    color: inherit;
+    font-weight: 500;
     text-overflow: ellipsis;
   }
 
-  &.no-color {
-    border: solid 1px var(--color-primary);
-
-    span.black {
-      color: var(--color-primary);
-    }
+  &:hover {
+    box-shadow:
+      inset 0 0 0 1px rgb(27 31 36 / 24%),
+      inset 0 1px 0 rgb(255 255 255 / 16%),
+      0 1px 2px rgb(27 31 36 / 12%);
   }
 
-  max-width: 180px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  opacity: 0.8;
+  &.no-color {
+    color: var(--el-color-primary);
+    background-color: var(--el-bg-color);
+    box-shadow: inset 0 0 0 1px var(--el-color-primary);
+  }
 }
 </style>

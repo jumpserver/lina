@@ -1,11 +1,11 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" />
+  <GenericCreateUpdatePage v-bind="$data" @get-object-done="handleObjectDone" />
 </template>
 
 <script>
-import { AssetSelect, AutomationParams } from '@/components'
+import { AutomationParams } from '@/components'
 import { periodicMeta } from '@/components/const'
-import { TagInput } from '@/components/Form/FormFields'
+import { ResourceSelect, TagInput, TreeResourceSelect } from '@/components/Form/FormFields'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
 
@@ -54,11 +54,18 @@ export default {
         ...periodicMeta,
         ...getChangeSecretFields(),
         assets: {
-          type: 'assetSelect',
-          component: AssetSelect,
+          type: 'resourceSelect',
+          component: ResourceSelect,
           rules: [{ required: false }],
           el: {
-            baseUrl: '/api/v1/assets/assets/?push_account_enabled=true'
+            value: [],
+            url: '/api/v1/assets/assets/?push_account_enabled=true&fields_size=mini',
+            resourceName: this.$t('Assets'),
+            nodeFilter: {
+              treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
+              typeTreeUrl: '/api/v1/assets/nodes/category/tree/?count_resource=none',
+              includeDescendants: true
+            }
           },
           on: {
             input: ([value]) => {
@@ -67,18 +74,18 @@ export default {
           }
         },
         nodes: {
+          type: 'treeResourceSelect',
+          component: TreeResourceSelect,
+          rules: [{ required: false }],
           el: {
-            multiple: true,
-            ajax: {
-              transformOption: (item) => {
-                return { label: item['full_value'], value: item.id }
-              },
-              url: '/api/v1/assets/nodes/'
-            }
+            value: [],
+            url: '/api/v1/assets/nodes/?fields_size=mini',
+            treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
+            resourceName: this.$t('Nodes')
           },
           on: {
             input: ([value]) => {
-              this.nodeIds = value?.map((i) => i.pk)
+              this.nodeIds = value || []
             }
           }
         },
@@ -146,6 +153,10 @@ export default {
     }
   },
   methods: {
+    handleObjectDone({ assets = [], nodes = [] }) {
+      this.assetIds = assets.map((item) => item.id || item.pk || item)
+      this.nodeIds = nodes.map((item) => item.id || item.pk || item)
+    },
     handleAfterGetRemoteMeta(meta) {
       const needSetOptionFields = ['secret_type', 'secret_strategy', 'ssh_key_change_strategy']
       for (const i of needSetOptionFields) {
