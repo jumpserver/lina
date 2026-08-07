@@ -12,6 +12,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter.vue'
 import rules from '@/components/Form/DataForm/rules'
+import { ResourceSelect } from '@/components/Form/FormFields'
 import { userJSONSelectMeta } from '@/views/users/const'
 import { assetJSONSelectMeta } from '@/views/assets/const'
 
@@ -49,14 +50,12 @@ export default {
         },
         action: {},
         command_groups: {
+          type: 'resourceSelect',
+          component: ResourceSelect,
           el: {
             value: [],
-            ajax: {
-              url: '/api/v1/acls/command-groups/?fields_size=mini',
-              transformOption: (item) => {
-                return { label: item.name, value: item.id }
-              }
-            }
+            url: '/api/v1/acls/command-groups/?fields_size=mini',
+            resourceName: this.$tc('CommandGroup', 2)
           }
         },
         reviewers: {

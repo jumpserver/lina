@@ -5,9 +5,9 @@
     :title="$t('ResourceSelectDialogTitle', { resource: displayResourceName })"
     :visible="visible"
     class="resource-select-dialog"
-    max-width="1200px"
-    top="3vh"
-    width="88vw"
+    max-width="1000px"
+    top="7vh"
+    width="74vw"
     @cancel="handleCancel"
     @confirm="handleConfirm"
     @update:visible="handleVisibleChange"
@@ -26,6 +26,7 @@
           ref="availableTable"
           :header-actions="availableHeaderActions"
           :table-config="availableTableConfig"
+          :table-metadata-provider="getSharedTableMetadata"
           @selection-change="handleAvailableSelectionChange"
         />
       </el-tab-pane>
@@ -40,6 +41,7 @@
           ref="selectedTable"
           :header-actions="selectedHeaderActions"
           :table-config="selectedTableConfig"
+          :table-metadata-provider="getSharedTableMetadata"
           @selection-change="handleSelectedSelectionChange"
         />
       </el-tab-pane>
@@ -138,6 +140,8 @@ export default {
       selectionSpmPromiseVersion: -1,
       availableRequestQueue: Promise.resolve(),
       selectedRequestQueue: Promise.resolve(),
+      tableMetadataRequestUrl: '',
+      tableMetadataRequest: null,
       sharedNodeTreeState: {
         asset: {
           data: [],
@@ -278,7 +282,10 @@ export default {
           .sort((a, b) => a - b),
         persistSelection: false,
         saveQuery: false,
-        leadingColumn: 'actions',
+        tableAttrs: {
+          size: 'small'
+        },
+        actionsColumnPosition: 'start',
         selectionFixed: 'left',
         selectionWidth: 48,
         columnsShow: {
@@ -370,17 +377,11 @@ export default {
         const tableRef = value === 'selected' ? 'selectedTable' : 'availableTable'
         const pageSizeSynced = this.syncTablePageSize(tableRef)
         const columnsSynced = this.syncTableColumns(tableRef)
-        if (pageSizeSynced && !columnsSynced) {
+        const dataDirty = value === 'selected' ? this.selectedDirty : this.availableDirty
+        if (dataDirty) {
+          this.$refs[tableRef]?.reloadTable()
+        } else if (pageSizeSynced && !columnsSynced) {
           this.$refs[tableRef]?.dataTable?.dataTable?.getList()
-        }
-        const tableSynced = pageSizeSynced || columnsSynced
-        if (value === 'selected' && this.selectedDirty && !tableSynced) {
-          this.$refs.selectedTable?.reloadTable()
-          this.selectedDirty = false
-        }
-        if (value === 'available' && this.availableDirty && !tableSynced) {
-          this.$refs.availableTable?.reloadTable()
-          this.availableDirty = false
         }
         if (value === 'selected') {
           this.selectedDirty = false
@@ -397,6 +398,23 @@ export default {
     document.removeEventListener('keydown', this.handleDialogShortcut)
   },
   methods: {
+    getSharedTableMetadata(url) {
+      if (this.tableMetadataRequest && this.tableMetadataRequestUrl === url) {
+        return this.tableMetadataRequest
+      }
+
+      this.tableMetadataRequestUrl = url
+      const request = this.$store.dispatch('common/getUrlMeta', { url })
+      const sharedRequest = request.catch((error) => {
+        if (this.tableMetadataRequest === sharedRequest) {
+          this.tableMetadataRequest = null
+          this.tableMetadataRequestUrl = ''
+        }
+        throw error
+      })
+      this.tableMetadataRequest = sharedRequest
+      return sharedRequest
+    },
     handleAvailableSelectionChange(rows) {
       this.availableChecked = rows
     },
@@ -816,7 +834,7 @@ export default {
 
 <style lang="scss">
 .resource-select-dialog.el-dialog {
-  height: min(820px, 86vh);
+  height: min(700px, 76vh);
   display: flex;
   flex-direction: column;
 

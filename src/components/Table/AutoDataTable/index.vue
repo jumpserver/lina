@@ -30,7 +30,7 @@ import { newURL, replaceAllUUID } from '@/utils/common/index'
 import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
 import Sortable from 'sortablejs'
 import ColumnSettingPopover from './components/ColumnSettingPopover.vue'
-import { orderPrimaryColumns, TableColumnsGenerator } from './utils'
+import { orderActionColumn, orderPrimaryColumns, TableColumnsGenerator } from './utils'
 import _ from 'lodash'
 
 const CELL_WHEEL_GESTURE_GAP = 120
@@ -420,10 +420,14 @@ export default {
     },
     normalizeColumnNames(value, fallback = []) {
       if (Array.isArray(value)) {
-        return orderPrimaryColumns(value.filter((item) => item !== undefined && item !== null))
+        const columns = orderPrimaryColumns(
+          value.filter((item) => item !== undefined && item !== null)
+        )
+        return orderActionColumn(columns, this.config.actionsColumnPosition)
       }
       if (Array.isArray(fallback)) {
-        return orderPrimaryColumns([...fallback])
+        const columns = orderPrimaryColumns([...fallback])
+        return orderActionColumn(columns, this.config.actionsColumnPosition)
       }
       return []
     },
@@ -501,11 +505,10 @@ export default {
             const movedItem = displayedColumnNames.splice(oldIndex, 1)[0]
             displayedColumnNames.splice(newIndex, 0, movedItem)
 
-            let columnNames = displayedColumnNames
-            if (columnNames.includes('actions')) {
-              columnNames = columnNames.filter((item) => item !== 'actions')
-              columnNames.push('actions')
-            }
+            const columnNames = orderActionColumn(
+              displayedColumnNames,
+              this.config.actionsColumnPosition
+            )
 
             this.$log.debug('Column moved: ', movedItem, oldIndex, ' => ', newIndex)
             // 保存更新的列顺序

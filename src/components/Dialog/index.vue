@@ -216,12 +216,7 @@ export default {
   }
 }
 
-.dialog-fade-enter-active,
 .dialog-fade-leave-active {
-  transition: opacity 1s ease;
-}
-
-.dialog-fade-enter, .dialog-fade-leave-to /* .dialog-fade-leave-active 在 <2.1.8 中以及被重复声明 */ {
-  opacity: 0;
+  pointer-events: none;
 }
 </style>

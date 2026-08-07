@@ -3,9 +3,8 @@
 </template>
 
 <script>
-import { AssetSelect } from '@/components'
 import { periodicMeta } from '@/components/const'
-import { Select2 } from '@/components/Form/FormFields'
+import { ResourceSelect, Select2, TreeResourceSelect } from '@/components/Form/FormFields'
 import i18n from '@/i18n/i18n'
 import { GenericCreateUpdatePage } from '@/layout/components'
 
@@ -32,11 +31,18 @@ export default {
       ],
       fieldsMeta: {
         assets: {
-          type: 'assetSelect',
-          component: AssetSelect,
+          type: 'resourceSelect',
+          component: ResourceSelect,
           rules: [{ required: false }],
           el: {
-            baseUrl: '/api/v1/assets/assets/?push_account_enabled=true'
+            value: [],
+            url: '/api/v1/assets/assets/?push_account_enabled=true&fields_size=mini',
+            resourceName: this.$t('Assets'),
+            nodeFilter: {
+              treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
+              typeTreeUrl: '/api/v1/assets/nodes/category/tree/?count_resource=none',
+              includeDescendants: true
+            }
           },
           on: {
             input: ([value]) => {
@@ -75,18 +81,18 @@ export default {
           }
         },
         nodes: {
+          type: 'treeResourceSelect',
+          component: TreeResourceSelect,
+          rules: [{ required: false }],
           el: {
-            multiple: true,
-            ajax: {
-              transformOption: (item) => {
-                return { label: item['full_value'], value: item.id }
-              },
-              url: '/api/v1/assets/nodes/'
-            }
+            value: [],
+            url: '/api/v1/assets/nodes/?fields_size=mini',
+            treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
+            resourceName: this.$t('Nodes')
           },
           on: {
             input: ([value]) => {
-              this.nodeIds = value?.map((i) => i.pk)
+              this.nodeIds = value || []
             }
           }
         },

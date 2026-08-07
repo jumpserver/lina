@@ -3,7 +3,8 @@
 </template>
 
 <script>
-import { AssetSelect, AutomationParams } from '@/components'
+import { AutomationParams } from '@/components'
+import { ResourceSelect, TreeResourceSelect } from '@/components/Form/FormFields'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
 
@@ -51,11 +52,18 @@ export default {
       fieldsMeta: {
         ...getChangeSecretFields(),
         assets: {
-          type: 'assetSelect',
-          component: AssetSelect,
+          type: 'resourceSelect',
+          component: ResourceSelect,
           rules: [{ required: false }],
           el: {
-            baseUrl: '/api/v1/assets/assets/?change_secret_enabled=true'
+            value: [],
+            url: '/api/v1/assets/assets/?change_secret_enabled=true&fields_size=mini',
+            resourceName: this.$t('Assets'),
+            nodeFilter: {
+              treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
+              typeTreeUrl: '/api/v1/assets/nodes/category/tree/?count_resource=none',
+              includeDescendants: true
+            }
           },
           on: {
             input: ([value]) => {
@@ -64,18 +72,18 @@ export default {
           }
         },
         nodes: {
+          type: 'treeResourceSelect',
+          component: TreeResourceSelect,
+          rules: [{ required: false }],
           el: {
             value: [],
-            ajax: {
-              url: '/api/v1/assets/nodes/',
-              transformOption: (item) => {
-                return { label: item.full_value, value: item.id }
-              }
-            }
+            url: '/api/v1/assets/nodes/?fields_size=mini',
+            treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
+            resourceName: this.$t('Nodes')
           },
           on: {
             input: ([value]) => {
-              this.node_ids = value?.map((i) => i.pk)
+              this.node_ids = value || []
             }
           }
         },

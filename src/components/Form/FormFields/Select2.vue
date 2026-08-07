@@ -9,12 +9,16 @@
     :collapse-tags="collapseTags"
     :disabled="!!selectDisabled"
     :filterable="true"
+    :fallback-placements="fallbackPlacements"
+    :fit-input-width="fitInputWidth"
     :loading="!initialized"
     :multiple="multiple"
     :no-data-text="requestError ? $t('SelectLoadFailed') : undefined"
     :no-match-text="requestError ? $t('SelectLoadFailed') : undefined"
     :options="iOptions"
     :placeholder="placeholder"
+    :placement="placement"
+    :popper-class="selectPopperClass"
     :remote="remote"
     :remote-method="filterOptions"
     class="select2"
@@ -131,6 +135,22 @@ export default {
     defaultPageSize: {
       type: Number,
       default: 10
+    },
+    placement: {
+      type: String,
+      default: 'bottom-start'
+    },
+    fallbackPlacements: {
+      type: Array,
+      default: () => ['bottom-start']
+    },
+    fitInputWidth: {
+      type: Boolean,
+      default: true
+    },
+    popperClass: {
+      type: String,
+      default: ''
     }
   },
   emits: [
@@ -193,6 +213,9 @@ export default {
     },
     selectRef() {
       return this.$refs.select
+    },
+    selectPopperClass() {
+      return ['select2-popper', this.popperClass].filter(Boolean).join(' ')
     },
     collapseTags() {
       return (
@@ -678,5 +701,35 @@ export default {
 .el-select-dropdown__header {
   padding: 10px 20px;
   border-bottom: solid 1px #ebeef5;
+}
+</style>
+
+<style lang="scss">
+.select2-popper {
+  .el-select-dropdown__wrap {
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+  }
+
+  .el-select-dropdown__list {
+    width: max-content;
+    min-width: 100%;
+  }
+
+  .el-select-dropdown__item {
+    max-width: none;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: nowrap;
+  }
+
+  .el-scrollbar__bar.is-horizontal {
+    display: none;
+  }
 }
 </style>

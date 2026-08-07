@@ -711,9 +711,10 @@ export default {
       type: [Number, String],
       default: 0
     },
-    leadingColumn: {
+    actionsColumnPosition: {
       type: String,
-      default: ''
+      default: 'end',
+      validator: (value) => ['start', 'end'].includes(value)
     },
     paginationBackground: {
       type: Boolean,
@@ -766,14 +767,14 @@ export default {
   },
   computed: {
     displayColumns() {
-      if (!this.leadingColumn) {
+      if (this.actionsColumnPosition !== 'start') {
         return this.columns
       }
-      const leading = this.columns.find((column) => column.prop === this.leadingColumn)
-      if (!leading) {
+      const actions = this.columns.find((column) => column.prop === 'actions')
+      if (!actions) {
         return this.columns
       }
-      return [leading, ...this.columns.filter((column) => column !== leading)]
+      return [actions, ...this.columns.filter((column) => column !== actions)]
     },
     paginationCurrentPage: {
       get() {
