@@ -440,7 +440,12 @@ export default {
       return fields
     },
     removeUnchangedManyToManyFields(values, initialValues = this.initialFormValue, formInstance) {
-      if (!this.omitUnchangedManyToMany || !this.isUpdateMethod() || !values) {
+      if (
+        !this.omitUnchangedManyToMany ||
+        !this.isUpdateMethod() ||
+        !values ||
+        Array.isArray(values)
+      ) {
         return values
       }
 
