@@ -78,6 +78,14 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
+  {
+    // The dynamic tickets route removes this branch when the user lacks its
+    // permission. Keep a lower-priority fallback so direct access is not blank.
+    path: '/tickets/flow/:pathMatch(.*)*',
+    name: 'TicketFlowForbidden',
+    component: () => import('@/views/403'),
+    hidden: true
+  },
   ...commonRoutes
 ]
 
