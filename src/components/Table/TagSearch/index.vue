@@ -58,6 +58,18 @@
               class="boolean-value-radio"
             />
             <span class="field-menu-option__label">{{ data.label }}</span>
+            <el-tooltip
+              v-if="node.level === 1 && data.helpText"
+              :content="data.helpText"
+              :show-after="300"
+              placement="right"
+            >
+              <i
+                :aria-label="data.helpText"
+                class="fa fa-question-circle-o field-menu-option__help"
+                @click.stop
+              />
+            </el-tooltip>
           </span>
         </template>
       </el-cascader>
@@ -76,11 +88,7 @@
       @command="handleOperatorChange"
       @visible-change="handleOperatorVisibleChange"
     >
-      <span
-        :aria-label="operatorLabel"
-        :title="operatorLabel"
-        class="operator-selector__trigger"
-      >
+      <span :aria-label="operatorLabel" :title="operatorLabel" class="operator-selector__trigger">
         <span class="operator-selector__symbol">{{ operatorSymbol }}</span>
       </span>
       <template #dropdown>
@@ -328,9 +336,7 @@ export default {
       return groups
         .map((group) => ({
           ...group,
-          options: group.options.filter((option) =>
-            this.supportedOperators.includes(option.value)
-          )
+          options: group.options.filter((option) => this.supportedOperators.includes(option.value))
         }))
         .filter((group) => group.options.length > 0)
     },
@@ -358,24 +364,21 @@ export default {
         } else {
           data[queryKey] = Array.isArray(currentValue)
             ? [...currentValue, value]
-          : [currentValue, value]
+            : [currentValue, value]
         }
       }
       const appendMergedValues = (queryKey, value) => {
-        data[queryKey] = data[queryKey] === undefined
-          ? this.mergeConditionValues(value)
-          : this.mergeConditionValues(data[queryKey], value)
+        data[queryKey] =
+          data[queryKey] === undefined
+            ? this.mergeConditionValues(value)
+            : this.mergeConditionValues(data[queryKey], value)
       }
       const appendContainsValue = (queryKey, value, forceAll = false) => {
-        const baseKey = queryKey.replace(
-          /__(?:icontains|icontains_all)$/,
-          ''
-        )
+        const baseKey = queryKey.replace(/__(?:icontains|icontains_all)$/, '')
         const containsKey = `${baseKey}__icontains`
         const containsAllKey = `${baseKey}__icontains_all`
         const hasPreviousValue =
-          data[containsKey] !== undefined ||
-          data[containsAllKey] !== undefined
+          data[containsKey] !== undefined || data[containsAllKey] !== undefined
 
         if (!forceAll && !hasPreviousValue) {
           data[containsKey] = value
@@ -392,9 +395,7 @@ export default {
         if (!batch) {
           return
         }
-        data[keyword] = data[keyword]
-          ? `${data[keyword]},${batch}`
-          : batch
+        data[keyword] = data[keyword] ? `${data[keyword]},${batch}` : batch
       }
       for (const conditionKey in this.filterTags) {
         const condition = this.filterTags[conditionKey]
@@ -406,16 +407,14 @@ export default {
           key = keyword
         }
         if (key.startsWith(keyword)) {
-          const operator =
-            condition.operator || this.getDefaultOperator(key, value)
+          const operator = condition.operator || this.getDefaultOperator(key, value)
           if (operator === 'icontains_all') {
             appendValue('search__icontains_all', value)
           } else {
             appendDefaultSearchBatch(value)
           }
         } else {
-          const operator =
-            condition.operator || this.getDefaultOperator(key, value)
+          const operator = condition.operator || this.getDefaultOperator(key, value)
           const queryKey = this.getQueryKeyForOperator(key, operator)
           if (this.isMethodOption(key)) {
             data[queryKey] = value
@@ -436,9 +435,7 @@ export default {
       if (!this.focus) {
         return this.$t('SearchShortcutPlaceholder')
       }
-      const operator = this.hasSelectedField
-        ? this.filterOperator
-        : 'icontains_any'
+      const operator = this.hasSelectedField ? this.filterOperator : 'icontains_any'
       return this.getOperatorDescription(operator)
     }
   },
@@ -550,11 +547,7 @@ export default {
       }
     },
     handleInputMouseDown() {
-      if (
-        !this.cascaderVisible &&
-        !this.hasSelectedField &&
-        this.selectorOptions.length > 0
-      ) {
+      if (!this.cascaderVisible && !this.hasSelectedField && this.selectorOptions.length > 0) {
         this.scheduleFilterMenuOpen()
       }
     },
@@ -597,20 +590,14 @@ export default {
         const values = Array.isArray(rawValue) ? rawValue : [rawValue]
         for (const value of values) {
           const valueDecode = decodeURI(value)
-          const isSearch = [
-            'search',
-            'search__icontains_any',
-            'search__icontains_all'
-          ].includes(key)
+          const isSearch = ['search', 'search__icontains_any', 'search__icontains_all'].includes(
+            key
+          )
 
           if (isSearch) {
-            const operator =
-              key === 'search__icontains_all'
-                ? 'icontains_all'
-                : 'icontains_any'
-            const batches = key === 'search'
-              ? valueDecode.split(',').filter(Boolean)
-              : [valueDecode]
+            const operator = key === 'search__icontains_all' ? 'icontains_all' : 'icontains_any'
+            const batches =
+              key === 'search' ? valueDecode.split(',').filter(Boolean) : [valueDecode]
             for (const batch of batches) {
               const conditionKey = this.getUniqueConditionStorageKey(
                 'search',
@@ -710,18 +697,12 @@ export default {
       return ''
     },
     getTagTitle(tag) {
-      let operator = tag?.operator ||
-        this.getDefaultOperator(tag?.key, tag?.value)
-      if (
-        this.isSearchKey(tag?.key) &&
-        !this.hasMultipleConditionValues(tag?.value)
-      ) {
+      let operator = tag?.operator || this.getDefaultOperator(tag?.key, tag?.value)
+      if (this.isSearchKey(tag?.key) && !this.hasMultipleConditionValues(tag?.value)) {
         operator = 'icontains'
       }
       const operatorLabel = this.getOperatorLabel(operator)
-      const label = tag?.label
-        ? `${tag.label} ${operatorLabel}: `
-        : `${operatorLabel}: `
+      const label = tag?.label ? `${tag.label} ${operatorLabel}: ` : `${operatorLabel}: `
       const value =
         tag?.valueLabel !== '' && tag?.valueLabel != null ? tag.valueLabel : (tag?.value ?? '')
       return `${label}${value}`
@@ -760,11 +741,7 @@ export default {
     getConditionStorageKey(key, operator) {
       return `${key}::${operator}`
     },
-    getUniqueConditionStorageKey(
-      key,
-      operator,
-      conditions = this.filterTags
-    ) {
+    getUniqueConditionStorageKey(key, operator, conditions = this.filterTags) {
       const baseKey = this.getConditionStorageKey(key, operator)
       if (!conditions[baseKey]) {
         return baseKey
@@ -806,10 +783,7 @@ export default {
       return this.hasExplicitLookup(key) || this.isFixedChoiceOption(option)
     },
     getQueryKey(key) {
-      return this.getQueryKeyForOperator(
-        key,
-        this.shouldUseExactQuery(key) ? 'exact' : 'icontains'
-      )
+      return this.getQueryKeyForOperator(key, this.shouldUseExactQuery(key) ? 'exact' : 'icontains')
     },
     getMultipleQueryKey(key) {
       return this.getQueryKeyForOperator(key, 'in')
@@ -834,15 +808,10 @@ export default {
       if (this.options.some((field) => field.value === key)) {
         return key
       }
-      return key.replace(
-        /__(?:exact|icontains|startswith|in|icontains_any|icontains_all)$/,
-        ''
-      )
+      return key.replace(/__(?:exact|icontains|startswith|in|icontains_any|icontains_all)$/, '')
     },
     getOperatorFromQueryKey(key) {
-      const match = key.match(
-        /__(exact|icontains|startswith|in|icontains_any|icontains_all)$/
-      )
+      const match = key.match(/__(exact|icontains|startswith|in|icontains_any|icontains_all)$/)
       return match?.[1] || 'exact'
     },
     getDefaultOperator(key, value) {
@@ -865,9 +834,7 @@ export default {
     },
     getCompatibleOperator(operator, value, key = this.filterKey) {
       if (this.isSearchKey(key)) {
-        return operator === 'icontains_all'
-          ? 'icontains_all'
-          : 'icontains_any'
+        return operator === 'icontains_all' ? 'icontains_all' : 'icontains_any'
       }
       if (this.hasExplicitLookup(key)) {
         return this.getOperatorFromQueryKey(key)
@@ -876,9 +843,7 @@ export default {
         return this.hasMultipleConditionValues(value) ? 'in' : 'exact'
       }
       const supportedOperators = this.getSupportedOperators(key)
-      return supportedOperators.includes(operator)
-        ? operator
-        : supportedOperators[0] || 'icontains'
+      return supportedOperators.includes(operator) ? operator : supportedOperators[0] || 'icontains'
     },
     getSupportedOperators(key) {
       if (this.isSearchKey(key)) {
@@ -892,23 +857,11 @@ export default {
       const option = this.getOptionByKey(key)
       const operators = Array.isArray(option?.operators)
         ? option.operators
-        : [
-            'icontains',
-            'exact',
-            'startswith',
-            'icontains_any',
-            'icontains_all',
-            'in'
-          ]
+        : ['icontains', 'exact', 'startswith', 'icontains_any', 'icontains_all', 'in']
       return operators.filter((operator) =>
-        [
-          'icontains',
-          'exact',
-          'startswith',
-          'icontains_any',
-          'icontains_all',
-          'in'
-        ].includes(operator)
+        ['icontains', 'exact', 'startswith', 'icontains_any', 'icontains_all', 'in'].includes(
+          operator
+        )
       )
     },
     getOperatorLabel(operator) {
@@ -983,27 +936,18 @@ export default {
     },
     getConditionQueryKeys(key) {
       if (this.isSearchKey(key)) {
-        return [
-          'search',
-          'search__icontains_any',
-          'search__icontains_all'
-        ]
+        return ['search', 'search__icontains_any', 'search__icontains_all']
       }
       const baseKey = this.getTagKeyFromQueryKey(key)
-      const operators = [
-        'icontains',
-        'icontains_any',
-        'icontains_all',
-        'in'
+      const operators = ['icontains', 'icontains_any', 'icontains_all', 'in']
+      return [
+        ...new Set([
+          key,
+          baseKey,
+          `${baseKey}__exact`,
+          ...operators.map((operator) => this.getQueryKeyForOperator(baseKey, operator))
+        ])
       ]
-      return [...new Set([
-        key,
-        baseKey,
-        `${baseKey}__exact`,
-        ...operators.map((operator) =>
-          this.getQueryKeyForOperator(baseKey, operator)
-        )
-      ])]
     },
     findOptionPath(value, options = this.options, parentPath = []) {
       for (const option of options) {
@@ -1030,28 +974,25 @@ export default {
       return this.hasSelectedField && node?.level === 1 && option?.value === this.filterKey
     },
     getCascaderRootValue(node) {
-      return node?.pathValues?.[0] ||
+      return (
+        node?.pathValues?.[0] ||
         node?.pathNodes?.[0]?.value ||
         node?.parent?.value ||
         node?.parent?.data?.value
+      )
     },
     isMultiChoiceNode(node) {
       if (!node || node.level < 2) {
         return false
       }
       const field = this.getOptionByKey(this.getCascaderRootValue(node))
-      return (
-        !this.isBooleanOption(field) &&
-        ['choice', 'labeled_choice'].includes(field?.type)
-      )
+      return !this.isBooleanOption(field) && ['choice', 'labeled_choice'].includes(field?.type)
     },
     isBooleanChoiceNode(node) {
       if (!node || node.level < 2) {
         return false
       }
-      return this.isBooleanOption(
-        this.getOptionByKey(this.getCascaderRootValue(node))
-      )
+      return this.isBooleanOption(this.getOptionByKey(this.getCascaderRootValue(node)))
     },
     getChoiceConditionValues(fieldKey) {
       const values = []
@@ -1064,14 +1005,12 @@ export default {
     },
     isChoiceValueSelected(node, option) {
       const fieldKey = this.getCascaderRootValue(node)
-      return this.getChoiceConditionValues(fieldKey).includes(
-        String(option.value)
-      )
+      return this.getChoiceConditionValues(fieldKey).includes(String(option.value))
     },
     isBooleanValueSelected(node, option) {
       const fieldKey = this.getCascaderRootValue(node)
-      const selectedValues = this.getChoiceConditionValues(fieldKey).map(
-        (value) => value.toLowerCase()
+      const selectedValues = this.getChoiceConditionValues(fieldKey).map((value) =>
+        value.toLowerCase()
       )
       return selectedValues.includes(String(option.value).toLowerCase())
     },
@@ -1097,9 +1036,7 @@ export default {
       }
 
       const operator = nextValues.length === 1 ? 'exact' : 'in'
-      const valueLabels = nextValues.map(
-        (item) => this.getValueLabel(fieldKey, item) || item
-      )
+      const valueLabels = nextValues.map((item) => this.getValueLabel(fieldKey, item) || item)
       this.filterTags[this.getConditionStorageKey(fieldKey, operator)] = {
         key: fieldKey,
         label: field.label,
@@ -1161,10 +1098,7 @@ export default {
       } else if (selectedPath.length >= 2) {
         this.filterKey = selectedPath[0]
         this.filterValue = selectedPath[selectedPath.length - 1]
-        this.filterOperator = this.getDefaultOperator(
-          this.filterKey,
-          this.filterValue
-        )
+        this.filterOperator = this.getDefaultOperator(this.filterKey, this.filterValue)
         this.valueLabel = this.getValueLabel(this.filterKey, this.filterValue)
         this.handleConfirm({ keepFieldMenuOpen: true })
         this.filterKey = this.defaultFilterKey
@@ -1275,9 +1209,7 @@ export default {
       this.filterTags = {}
       if (this.getUrlQuery && conditionKeys.length > 0) {
         const queryKeys = conditionKeys.flatMap((conditionKey) =>
-          this.getConditionQueryKeys(
-            conditions[conditionKey]?.key || conditionKey
-          )
+          this.getConditionQueryKeys(conditions[conditionKey]?.key || conditionKey)
         )
         const query = _.omit(this.$route.query, [...queryKeys, 'search'])
         this.$router.replace({ query })
@@ -1309,11 +1241,7 @@ export default {
         }
         const conditionKey = this.shouldOverwriteCondition(tag.key, operator)
           ? this.getConditionStorageKey(tag.key, operator)
-          : this.getUniqueConditionStorageKey(
-              tag.key,
-              operator,
-              result
-            )
+          : this.getUniqueConditionStorageKey(tag.key, operator, result)
         result[conditionKey] = {
           ...tag,
           operator
@@ -1345,26 +1273,18 @@ export default {
         }
       }
       const incomingValue = this.mergeConditionValues(this.filterValue)
-      const requestedOperator = this.getCompatibleOperator(
-        this.filterOperator,
-        incomingValue
-      )
+      const requestedOperator = this.getCompatibleOperator(this.filterOperator, incomingValue)
       if (this.shouldOverwriteCondition(this.filterKey, requestedOperator)) {
         for (const conditionKey of Object.keys(this.filterTags)) {
           const condition = this.filterTags[conditionKey]
           if (
             condition?.key === this.filterKey &&
-            this.shouldOverwriteCondition(
-              this.filterKey,
-              condition.operator
-            )
+            this.shouldOverwriteCondition(this.filterKey, condition.operator)
           ) {
             delete this.filterTags[conditionKey]
           }
         }
-        this.filterTags[
-          this.getConditionStorageKey(this.filterKey, requestedOperator)
-        ] = {
+        this.filterTags[this.getConditionStorageKey(this.filterKey, requestedOperator)] = {
           key: this.filterKey,
           label: this.keyLabel,
           value: incomingValue,
@@ -1378,10 +1298,7 @@ export default {
         return
       }
       if (!shouldMergeCondition) {
-        const conditionKey = this.getUniqueConditionStorageKey(
-          this.filterKey,
-          requestedOperator
-        )
+        const conditionKey = this.getUniqueConditionStorageKey(this.filterKey, requestedOperator)
         this.filterTags[conditionKey] = {
           key: this.filterKey,
           label: this.keyLabel,
@@ -1397,10 +1314,7 @@ export default {
       }
       const requestedConditionKey = shouldMergeCondition
         ? this.getConditionStorageKey(this.filterKey, requestedOperator)
-        : this.getUniqueConditionStorageKey(
-            this.filterKey,
-            requestedOperator
-          )
+        : this.getUniqueConditionStorageKey(this.filterKey, requestedOperator)
       let existingConditionKey = requestedConditionKey
       let existingTag = this.filterTags[existingConditionKey]
       if (
@@ -1409,10 +1323,7 @@ export default {
         this.isFixedChoiceOption(selectedOption) &&
         requestedOperator === 'exact'
       ) {
-        const multipleConditionKey = this.getConditionStorageKey(
-          this.filterKey,
-          'in'
-        )
+        const multipleConditionKey = this.getConditionStorageKey(this.filterKey, 'in')
         if (this.filterTags[multipleConditionKey]) {
           existingConditionKey = multipleConditionKey
           existingTag = this.filterTags[multipleConditionKey]
@@ -1425,18 +1336,10 @@ export default {
       const valueLabel = shouldMerge
         ? this.mergeConditionValues(existingTag.valueLabel, this.valueLabel)
         : this.mergeConditionValues(this.valueLabel)
-      const operator = this.getCompatibleOperator(
-        requestedOperator,
-        value
-      )
-      const conditionKey = this.getConditionStorageKey(
-        this.filterKey,
-        operator
-      )
+      const operator = this.getCompatibleOperator(requestedOperator, value)
+      const conditionKey = this.getConditionStorageKey(this.filterKey, operator)
       const compatibleTag =
-        conditionKey === existingConditionKey
-          ? null
-          : this.filterTags[conditionKey]
+        conditionKey === existingConditionKey ? null : this.filterTags[conditionKey]
       const finalValue = compatibleTag
         ? this.mergeConditionValues(compatibleTag.value, value)
         : value
@@ -1515,8 +1418,7 @@ export default {
 
       this.filterKey = v.key
       this.filterValue = v.value
-      this.filterOperator =
-        v.operator || this.getDefaultOperator(v.key, v.value)
+      this.filterOperator = v.operator || this.getDefaultOperator(v.key, v.value)
       this.focusSearchInput()
     },
     handleKeyUp(event) {
@@ -1547,10 +1449,7 @@ export default {
     },
     // 删除查询条件时改变url
     checkUrlFields(evt) {
-      let newQuery = _.omit(
-        this.$route.query,
-        this.getConditionQueryKeys(evt)
-      )
+      let newQuery = _.omit(this.$route.query, this.getConditionQueryKeys(evt))
       if (this.getUrlQuery && evt.startsWith('search')) {
         if (newQuery.search) delete newQuery.search
         const filterMapsSearch = this.filterMaps.search || ''
@@ -1878,6 +1777,12 @@ a {
       overflow: visible;
       text-overflow: clip;
       white-space: nowrap;
+    }
+
+    &__help {
+      margin-left: 6px;
+      color: var(--el-text-color-placeholder);
+      cursor: help;
     }
   }
 
