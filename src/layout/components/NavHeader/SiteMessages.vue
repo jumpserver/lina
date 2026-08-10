@@ -120,6 +120,11 @@ export default {
       return this.$store.state.app.device === 'mobile' ? '70%' : '450px'
     }
   },
+  watch: {
+    '$route.fullPath'() {
+      this.msgDetailVisible = false
+    }
+  },
   mounted() {
     this.enablePullMsgCount()
   },
@@ -183,28 +188,52 @@ export default {
         /* 取消*/
       })
     },
-    handleMessageContentClick(event) {
-      const target = event.target
-      if (!(target instanceof Element)) return
-
-      const anchor = target.closest('a')
+    async handleMessageContentClick(event) {
+      const anchor = event.composedPath().find((element) => element?.nodeName === 'A')
       if (!anchor || !this.currentMsg) return
 
-      event.preventDefault()
+      const href = anchor.getAttribute('href')
+      if (!href) return
 
-      const href = anchor.href
+      let url
+      try {
+        url = new URL(href, window.location.href)
+      } catch {
+        return
+      }
+
       const openInNewTab = anchor.target === '_blank' || event.ctrlKey || event.metaKey
       const currentMsg = this.currentMsg
 
+      event.preventDefault()
       this.msgDetailVisible = false
       this.markAsRead([currentMsg])
 
-      if (!href) return
       if (openInNewTab) {
-        window.open(href, '_blank', 'noopener,noreferrer')
-      } else {
-        window.location.assign(href)
+        window.open(url.href, '_blank', 'noopener,noreferrer')
+        return
       }
+
+      // 先让 Dialog 完成卸载，再执行导航，避免 Hash 路由切换与弹窗关闭竞争。
+      await this.$nextTick()
+
+      const routerBase = this.$router.options.history.base.replace(/\/$/, '')
+      const targetBase = url.pathname.replace(/\/$/, '')
+      const isLinaRoute =
+        url.origin === window.location.origin &&
+        targetBase === routerBase &&
+        url.hash.startsWith('#/')
+
+      if (isLinaRoute) {
+        try {
+          await this.$router.push(url.hash.slice(1))
+        } catch {
+          window.location.assign(url.href)
+        }
+        return
+      }
+
+      window.location.assign(url.href)
     },
     markAsReadAll(msgs) {
       const url = `/api/v1/notifications/site-messages/mark-as-read-all/`
