@@ -84,7 +84,7 @@
       @confirm="markAsRead([currentMsg])"
     >
       <div class="msg-detail">
-        <div class="msg-detail-txt">
+        <div class="msg-detail-txt" @click="handleMessageContentClick">
           <span class="msg-detail-time">{{ formatDate(currentMsg.date_created) }}</span>
           <MarkDown :html="true" :value="currentMsg.content.message" />
         </div>
@@ -111,7 +111,8 @@ export default {
       hoverMsgId: '',
       msgDetailVisible: false,
       currentMsg: null,
-      unreadMsgCount: 0
+      unreadMsgCount: 0,
+      markingMessageIds: []
     }
   },
   computed: {
@@ -182,6 +183,15 @@ export default {
         /* 取消*/
       })
     },
+    handleMessageContentClick(event) {
+      const target = event.target
+      if (!(target instanceof Element)) return
+
+      if (!target.closest('a') || !this.currentMsg) return
+
+      this.markAsRead([this.currentMsg])
+      this.msgDetailVisible = false
+    },
     markAsReadAll(msgs) {
       const url = `/api/v1/notifications/site-messages/mark-as-read-all/`
       this.$axios
@@ -196,10 +206,12 @@ export default {
     },
     markAsRead(msgs) {
       const url = `/api/v1/notifications/site-messages/mark-as-read/`
-      const msgIds = []
-      for (const item of msgs) {
-        msgIds.push(item.id)
-      }
+      const msgIds = [...new Set(msgs.filter(Boolean).map((item) => item.id))].filter(
+        (id) => !this.markingMessageIds.includes(id)
+      )
+      if (!msgIds.length) return
+
+      this.markingMessageIds.push(...msgIds)
       this.$axios
         .patch(url, { ids: msgIds })
         .then((res) => {
@@ -208,6 +220,9 @@ export default {
         })
         .catch((err) => {
           this.$message(err.detail)
+        })
+        .finally(() => {
+          this.markingMessageIds = this.markingMessageIds.filter((id) => !msgIds.includes(id))
         })
     },
     cancelRead() {
