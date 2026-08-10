@@ -25,6 +25,24 @@ export function testSyslogSetting(data) {
   })
 }
 
+export function testNasSetting(data) {
+  return request({
+    disableFlashErrorMsg: true,
+    url: '/api/v1/settings/nas/testing/',
+    method: 'post',
+    data: data
+  })
+}
+
+export function archiveStorage(data) {
+  return request({
+    disableFlashErrorMsg: true,
+    url: '/api/v1/settings/nas/archive/',
+    method: 'post',
+    data: data
+  })
+}
+
 export function importLicense(formData) {
   return request({
     url: '/api/v1/xpack/license/import',
