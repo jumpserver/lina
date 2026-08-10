@@ -450,7 +450,8 @@ export default {
     }
 
     :deep(ul:has(> li > strong:first-child) > li) {
-      padding: 9px 2px;
+      // 为字段值预留固定起始列，长文本换行后继续与值对齐，而不是退回字段名左侧。
+      padding: 9px 2px 9px 90px;
       border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
       line-height: 20px;
 
@@ -461,6 +462,7 @@ export default {
       strong {
         display: inline-block;
         min-width: 72px;
+        margin-left: -88px;
         margin-right: 16px;
         color: var(--el-text-color-secondary, #8a9099);
         font-weight: 400;

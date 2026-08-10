@@ -58,7 +58,6 @@ export default {
         }))
         return data
       },
-      onPerformError() {},
       updateSuccessNextRoute: { name: 'TicketFlow' },
       createSuccessNextRoute: { name: 'TicketFlow' }
     }

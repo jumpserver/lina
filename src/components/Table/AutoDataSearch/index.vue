@@ -123,6 +123,7 @@ export default {
       for (const [name, field] of Object.entries(filters)) {
         const option = {
           custom: field.custom === true,
+          helpText: field.help_text,
           label: field.label,
           operators: field.operators,
           type: field.type,
