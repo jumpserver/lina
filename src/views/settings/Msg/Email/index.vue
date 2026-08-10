@@ -17,7 +17,7 @@
 
 <script>
 import { testEmailSetting } from '@/api/settings'
-import { IBox } from '@/components'
+import { IBox, UploadKey } from '@/components'
 import rules from '@/components/Form/DataForm/rules'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import EmailTemplate from './EmailTemplate.vue'
@@ -32,7 +32,7 @@ export default {
     const vm = this
     return {
       helpText: this.$t('EmailHelpText'),
-      encryptedFields: ['EMAIL_HOST_PASSWORD'],
+      encryptedFields: ['EMAIL_HOST_PASSWORD', 'EMAIL_CACERT_CONTENT'],
       fields: [
         [
           this.$t('Server'),
@@ -43,7 +43,9 @@ export default {
             'EMAIL_HOST_USER',
             'EMAIL_HOST_PASSWORD',
             'EMAIL_FROM',
-            'EMAIL_SECURITY_PROTOCOL'
+            'EMAIL_SECURITY_PROTOCOL',
+            'EMAIL_CERT_VERIFY_MODE',
+            'EMAIL_CACERT_CONTENT'
           ]
         ],
         [this.$t('Other'), ['CREATE_USER_MSG']],
@@ -75,6 +77,20 @@ export default {
             { label: this.$t('SSL'), value: 'ssl' },
             { label: this.$t('TLS'), value: 'tls' }
           ]
+        },
+        EMAIL_CERT_VERIFY_MODE: {
+          hidden: (formValue) =>
+            formValue.EMAIL_PROTOCOL !== 'smtp' || formValue.EMAIL_SECURITY_PROTOCOL === 'none'
+        },
+        EMAIL_CACERT_CONTENT: {
+          component: UploadKey,
+          hidden: (formValue) =>
+            formValue.EMAIL_PROTOCOL !== 'smtp' ||
+            formValue.EMAIL_SECURITY_PROTOCOL === 'none' ||
+            formValue.EMAIL_CERT_VERIFY_MODE !== 'custom_ca',
+          el: {
+            accept: '.crt,.pem,.cer'
+          }
         },
 
         CREATE_USER_MSG: {
@@ -125,6 +141,9 @@ export default {
           }
           if (!data['EMAIL_HOST_PASSWORD']) {
             delete data['EMAIL_HOST_PASSWORD']
+          }
+          if (!data['EMAIL_CACERT_CONTENT']) {
+            delete data['EMAIL_CACERT_CONTENT']
           }
           switch (data['EMAIL_SECURITY_PROTOCOL']) {
             case 'ssl':
