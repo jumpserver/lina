@@ -84,7 +84,7 @@
       @confirm="markAsRead([currentMsg])"
     >
       <div class="msg-detail">
-        <div class="msg-detail-txt" @click="handleMessageContentClick">
+        <div class="msg-detail-txt" @click.capture="handleMessageContentClick">
           <span class="msg-detail-time">{{ formatDate(currentMsg.date_created) }}</span>
           <MarkDown :html="true" :value="currentMsg.content.message" />
         </div>
@@ -187,10 +187,24 @@ export default {
       const target = event.target
       if (!(target instanceof Element)) return
 
-      if (!target.closest('a') || !this.currentMsg) return
+      const anchor = target.closest('a')
+      if (!anchor || !this.currentMsg) return
 
-      this.markAsRead([this.currentMsg])
+      event.preventDefault()
+
+      const href = anchor.href
+      const openInNewTab = anchor.target === '_blank' || event.ctrlKey || event.metaKey
+      const currentMsg = this.currentMsg
+
       this.msgDetailVisible = false
+      this.markAsRead([currentMsg])
+
+      if (!href) return
+      if (openInNewTab) {
+        window.open(href, '_blank', 'noopener,noreferrer')
+      } else {
+        window.location.assign(href)
+      }
     },
     markAsReadAll(msgs) {
       const url = `/api/v1/notifications/site-messages/mark-as-read-all/`

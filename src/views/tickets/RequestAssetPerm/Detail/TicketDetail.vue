@@ -243,12 +243,14 @@ export default {
       const accounts = this.requestForm.accounts
       if (this.object.approval_step.value === this.object.process_map.length) {
         if (assets.length === 0 && nodes.length === 0) {
-          return this.$message.error(this.$tc('SelectAtLeastOneAssetOrNodeErrMsg'))
+          this.$message.error(this.$tc('SelectAtLeastOneAssetOrNodeErrMsg'))
+          return
         } else if (accounts.length === 0) {
-          return this.$message.error(this.$tc('RequiredSystemUserErrMsg'))
+          this.$message.error(this.$tc('RequiredSystemUserErrMsg'))
+          return
         }
       }
-      this.$axios
+      return this.$axios
         .patch(`/api/v1/tickets/apply-asset-tickets/${this.object.id}/approve/`, {
           apply_nodes: nodes || [],
           apply_assets: assets || [],
@@ -261,9 +263,6 @@ export default {
         .then(() => {
           this.$message.success(this.$tc('UpdateSuccessMsg'))
           this.reloadPage()
-        })
-        .catch(() => {
-          this.$message.success(this.$tc('UpdateErrorMsg'))
         })
     },
     handleClose() {
