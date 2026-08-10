@@ -168,46 +168,22 @@ export default {
     defaultApprove() {
       this.createComment(function () {})
       const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/approve/`
-      this.$axios
-        .put(url)
-        .then((res) => {
-          this.reloadPage()
-        })
-        .catch((err) => {
-          this.$message.error(err)
-        })
-        .finally(() => {
-          this.isDisabled = false
-        })
+      return this.$axios.put(url).then((res) => {
+        this.reloadPage()
+      })
     },
     defaultReject() {
       this.createComment(function () {})
       const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/reject/`
-      this.$axios
-        .put(url)
-        .then((res) => {
-          this.reloadPage()
-        })
-        .catch((err) => {
-          this.$message.error(err)
-        })
-        .finally(() => {
-          this.isDisabled = false
-        })
+      return this.$axios.put(url).then((res) => {
+        this.reloadPage()
+      })
     },
     defaultClose() {
       const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/close/`
-      this.$axios
-        .put(url)
-        .then((res) => {
-          this.reloadPage()
-        })
-        .catch((err) => {
-          this.$message.error(err)
-        })
-        .finally(() => {
-          this.isDisabled = false
-        })
+      return this.$axios.put(url).then((res) => {
+        this.reloadPage()
+      })
     },
     createComment(successCallback) {
       const commentText = this.form.comments
@@ -228,7 +204,7 @@ export default {
         }
       })
     },
-    handleAction(actionType) {
+    async handleAction(actionType) {
       if (this.isDisabled) {
         return
       }
@@ -251,9 +227,16 @@ export default {
       }
 
       if (handler) {
-        handler()
+        try {
+          await handler()
+        } catch (err) {
+          this.$message.error(err)
+        } finally {
+          this.isDisabled = false
+        }
       } else {
         this.$message.error('No handler for action')
+        this.isDisabled = false
       }
     },
     handleApprove() {
