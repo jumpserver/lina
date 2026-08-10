@@ -79,19 +79,22 @@ export default {
       publicSettings: 'publicSettings'
     }),
     hasShow: function () {
-      return this.formatterArgs.hasShow
+      return this.formatterArgs.hasShow && !this.isSSHCertificate
     },
     hasDownload: function () {
-      return this.formatterArgs.hasDownload
+      return this.formatterArgs.hasDownload && !this.isSSHCertificate
     },
     hasCopy: function () {
-      return this.formatterArgs.hasCopy
+      return this.formatterArgs.hasCopy && !this.isSSHCertificate
     },
     hasEdit: function () {
-      return this.formatterArgs.hasEdit
+      return this.formatterArgs.hasEdit && !this.isSSHCertificate
     },
     name: function () {
       return this.formatterArgs.name
+    },
+    isSSHCertificate() {
+      return this.row?.secret_type?.value === 'ssh_certificate'
     },
     iActions() {
       const actions = [
@@ -126,6 +129,9 @@ export default {
       return actions
     },
     currentValue() {
+      if (this.isSSHCertificate) {
+        return this.$t('DynamicCredential')
+      }
       if (this.isShow) {
         return this.realValue || '-'
       } else {

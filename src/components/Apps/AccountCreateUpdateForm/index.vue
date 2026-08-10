@@ -54,7 +54,14 @@ export default {
         protocols: [
           {
             name: 'ssh',
-            secret_types: ['password', 'ssh_key', 'token', 'access_key', 'api_key']
+            secret_types: [
+              'password',
+              'ssh_key',
+              'ssh_certificate',
+              'token',
+              'access_key',
+              'api_key'
+            ]
           }
         ]
       },
@@ -131,6 +138,10 @@ export default {
         {
           label: this.$t('SSHKey'),
           value: 'ssh_key'
+        },
+        {
+          label: this.$t('SSHCertificate'),
+          value: 'ssh_certificate'
         },
         {
           label: this.$t('Token'),

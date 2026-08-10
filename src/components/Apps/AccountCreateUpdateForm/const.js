@@ -137,7 +137,9 @@ export const accountFieldsMeta = (vm) => {
     su_from: {
       component: Select2,
       hidden: (formValue) => {
-        return !vm.asset?.id || !vm.iPlatform.su_enabled
+        return (
+          formValue.secret_type === 'ssh_certificate' || !vm.asset?.id || !vm.iPlatform.su_enabled
+        )
       },
       el: {
         multiple: false,
@@ -158,7 +160,9 @@ export const accountFieldsMeta = (vm) => {
         }
       },
       hidden: (formValue) => {
-        return vm.platform || vm.asset || vm.addTemplate
+        return (
+          formValue.secret_type === 'ssh_certificate' || vm.platform || vm.asset || vm.addTemplate
+        )
       }
     },
     password: {
@@ -228,6 +232,18 @@ export const accountFieldsMeta = (vm) => {
     secret_type: {
       type: 'radio-group',
       options: [],
+      on: {
+        change: ([value], updateForm) => {
+          if (value === 'ssh_certificate') {
+            updateForm({
+              su_from: null,
+              su_from_username: '',
+              secret_reset: false,
+              push_now: false
+            })
+          }
+        }
+      },
       el: {
         get disabled() {
           return vm.isDisabled
@@ -245,6 +261,7 @@ export const accountFieldsMeta = (vm) => {
           !automation.push_account_enabled ||
           !automation.ansible_enabled ||
           !vm.$hasPerm('accounts.push_account') ||
+          formValue.secret_type === 'ssh_certificate' ||
           (formValue.secret_type === 'ssh_key' && vm.iPlatform.type.value === 'windows') ||
           vm.addTemplate ||
           !formValue.secret_reset
@@ -266,6 +283,7 @@ export const accountFieldsMeta = (vm) => {
           !formValue.push_now ||
           !automation.push_account_enabled ||
           !automation.ansible_enabled ||
+          formValue.secret_type === 'ssh_certificate' ||
           (formValue.secret_type === 'ssh_key' && vm.iPlatform.type.value === 'windows') ||
           !vm.$hasPerm('accounts.push_account') ||
           vm.addTemplate
@@ -290,6 +308,7 @@ export const accountFieldsMeta = (vm) => {
     },
     secret_reset: {
       label: vm.$t('SecretReset'),
+      hidden: (formValue) => formValue.secret_type === 'ssh_certificate',
       el: {
         get disabled() {
           return vm.isDisabled

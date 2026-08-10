@@ -35,6 +35,7 @@ export const templateFieldsMeta = (vm) => {
   return {
     su_from: {
       component: Select2,
+      hidden: (formValue) => formValue.secret_type === 'ssh_certificate',
       el: {
         multiple: false,
         clearable: true,
@@ -58,6 +59,9 @@ export const templateFieldsMeta = (vm) => {
             autoPushEl.disabled = true
           } else {
             autoPushEl.disabled = false
+          }
+          if (event === 'ssh_certificate') {
+            updateForm({ su_from: null })
           }
         }
       }

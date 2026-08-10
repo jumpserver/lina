@@ -116,5 +116,11 @@
   "LabelNamePlaceholder": "請輸入名稱",
   "LabelColor": "顏色",
   "CreateAndSelect": "建立並選擇",
-  "LabelCreateSuccess": "標籤已建立並選擇"
+  "LabelCreateSuccess": "標籤已建立並選擇",
+  "OpenBaoSSHCA": "OpenBao SSH CA",
+  "OpenBaoSSHCAHelpText": "透過 OpenBao 簽發短期 SSH 使用者憑證。目標 SSH 伺服器只需信任下方顯示的 CA 公鑰，臨時私鑰僅保留在 Koko 記憶體中。",
+  "CAPublicKey": "CA 公鑰",
+  "LoadCAPublicKey": "取得 CA 公鑰",
+  "SSHCertificate": "SSH 憑證",
+  "DynamicCredential": "動態憑據"
 }

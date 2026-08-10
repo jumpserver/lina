@@ -368,6 +368,7 @@ export default {
             can: ({ selectedRows }) => {
               return (
                 selectedRows.length > 0 &&
+                selectedRows.every((item) => item.secret_type.value !== 'ssh_certificate') &&
                 ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(
                   selectedRows[0].asset.type.value
                 ) === -1 &&
@@ -395,7 +396,11 @@ export default {
             type: 'primary',
             icon: 'clean',
             can: ({ selectedRows }) => {
-              return selectedRows.length > 0 && vm.$hasPerm('accounts.change_account')
+              return (
+                selectedRows.length > 0 &&
+                selectedRows.every((item) => item.secret_type.value !== 'ssh_certificate') &&
+                vm.$hasPerm('accounts.change_account')
+              )
             },
             callback: function ({ selectedRows }) {
               const ids = selectedRows.map((v) => {

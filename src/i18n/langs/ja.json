@@ -117,5 +117,11 @@
   "LabelNamePlaceholder": "名前を入力",
   "LabelColor": "色",
   "CreateAndSelect": "作成して選択",
-  "LabelCreateSuccess": "ラベルを作成して選択しました"
+  "LabelCreateSuccess": "ラベルを作成して選択しました",
+  "OpenBaoSSHCA": "OpenBao SSH CA",
+  "OpenBaoSSHCAHelpText": "OpenBao を使用して短期間有効な SSH ユーザー証明書を発行します。対象の SSH サーバーは表示された CA 公開鍵を信頼するだけでよく、一時秘密鍵は Koko のメモリ内にのみ保持されます。",
+  "CAPublicKey": "CA 公開鍵",
+  "LoadCAPublicKey": "CA 公開鍵を取得",
+  "SSHCertificate": "SSH 証明書",
+  "DynamicCredential": "動的認証情報"
 }

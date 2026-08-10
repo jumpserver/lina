@@ -136,5 +136,11 @@
   "LabelNamePlaceholder": "Enter a name",
   "LabelColor": "Color",
   "CreateAndSelect": "Create and select",
-  "LabelCreateSuccess": "Label created and selected"
+  "LabelCreateSuccess": "Label created and selected",
+  "OpenBaoSSHCA": "OpenBao SSH CA",
+  "OpenBaoSSHCAHelpText": "Issue short-lived SSH user certificates through OpenBao. Target SSH servers only need to trust the displayed CA public key; ephemeral private keys remain in Koko memory.",
+  "CAPublicKey": "CA public key",
+  "LoadCAPublicKey": "Load CA public key",
+  "SSHCertificate": "SSH certificate",
+  "DynamicCredential": "Dynamic credential"
 }

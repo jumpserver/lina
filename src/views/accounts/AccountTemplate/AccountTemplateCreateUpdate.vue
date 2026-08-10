@@ -102,6 +102,10 @@ export default {
           value: 'ssh_key'
         },
         {
+          label: this.$t('SSHCertificate'),
+          value: 'ssh_certificate'
+        },
+        {
           label: this.$t('Token'),
           value: 'token'
         },
@@ -117,7 +121,7 @@ export default {
       this.fieldsMeta.secret_type.options = choices
     },
     getObjectDone(obj) {
-      if (['token', 'access_key', 'api_key'].includes(obj.secret_type.value)) {
+      if (['token', 'access_key', 'api_key', 'ssh_certificate'].includes(obj.secret_type.value)) {
         this.fieldsMeta.auto_push.el.disabled = true
       }
     }
