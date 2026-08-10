@@ -316,4 +316,36 @@ export default {
 .text-muted {
   color: #888888;
 }
+
+:deep(.markdown-body) {
+  padding: 0;
+}
+
+:deep(.markdown-body table) {
+  width: 100%;
+  margin: 10px 0 0;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+:deep(.markdown-body th),
+:deep(.markdown-body td) {
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  border: 1px solid var(--el-border-color-lighter);
+}
+
+:deep(.markdown-body th) {
+  color: var(--el-text-color-regular);
+  font-weight: 600;
+  background: var(--el-fill-color-lighter);
+}
+
+:deep(.markdown-body th:first-child),
+:deep(.markdown-body td:first-child) {
+  width: 18%;
+}
 </style>
