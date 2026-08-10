@@ -54,6 +54,7 @@ export default {
         engines: {
           component: Select2,
           rules: [RequiredChange],
+          helpText: i18n.t('RiskDetectionAccountSourceHelpText'),
           el: {
             url: '/api/v1/accounts/account-check-engines/',
             multiple: true,
