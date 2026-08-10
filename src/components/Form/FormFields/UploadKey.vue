@@ -1,6 +1,6 @@
 <template>
   <div class="upload-key">
-    <input ref="upLoadFile" style="display: none" type="file" @change="onChange" />
+    <input ref="upLoadFile" :accept="accept" style="display: none" type="file" @change="onChange" />
     <div class="upload-key__actions">
       <el-button v-if="!fingerprint" size="small" @click.stop="onUpLoad">
         {{ $t('SelectFile') }}
@@ -20,6 +20,10 @@
 <script>
 export default {
   props: {
+    accept: {
+      type: String,
+      default: ''
+    },
     tip: {
       type: String,
       default: () => ''
