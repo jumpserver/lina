@@ -11,6 +11,7 @@
     "build:prod": "vite build --mode production",
     "build:stage": "vite build --mode staging",
     "preview": "vite preview --host 0.0.0.0 --port 9526",
+    "test": "node --test tests/*.test.mjs",
     "lint": "oxlint src vite.config.js",
     "lint:fix": "oxlint --fix src vite.config.js",
     "fmt": "oxfmt --write src package.json vite.config.js .env.development .env.development.example .env.production .env.staging .oxlintrc.json .oxfmtrc.json",
