@@ -46,7 +46,7 @@
               >
                 <el-tooltip
                   :content="option.tip"
-                  :disabled="!option.tip"
+                  :disabled="!option.tip || option.showHelp"
                   :show-after="500"
                   placement="top"
                 >
@@ -58,6 +58,16 @@
                       <Icon v-if="option.icon" :icon="option.icon" />
                     </span>
                     <span class="dropdown-item__label">{{ option.title }}</span>
+                    <el-tooltip
+                      v-if="option.showHelp && option.tip"
+                      :content="option.tip"
+                      :show-after="300"
+                      placement="right"
+                    >
+                      <span class="dropdown-item__help" @click.stop>
+                        <Icon icon="fa-question-circle-o" />
+                      </span>
+                    </el-tooltip>
                   </div>
                 </el-tooltip>
               </el-dropdown-item>
@@ -262,6 +272,19 @@ $color-drop-menu-border: #e4e7ed;
     align-items: center;
     justify-content: center;
     line-height: 1;
+  }
+
+  .dropdown-item__help {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 2px;
+    color: var(--el-text-color-placeholder);
+    cursor: help;
+
+    &:hover {
+      color: var(--el-color-primary);
+    }
   }
 
   .action-item {

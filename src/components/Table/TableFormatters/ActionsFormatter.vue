@@ -1,9 +1,5 @@
 <template>
-  <div
-    v-loading="loadingStatus"
-    :class="{ 'is-compact': compact }"
-    class="table-actions-formatter"
-  >
+  <div v-loading="loadingStatus" :class="{ 'is-compact': compact }" class="table-actions-formatter">
     <div v-if="actions.length > 0 || moreActions.length > 0" class="table-actions-group">
       <el-tooltip
         v-for="action in actions"
@@ -46,12 +42,22 @@
         <template #dropdown>
           <el-dropdown-menu style="overflow: auto; max-height: 60vh">
             <template v-for="action in moreActions" :key="action.name">
-              <el-dropdown-item :command="action" :disabled="action.disabled" :title="action.tip">
+              <el-dropdown-item :command="action" :disabled="action.disabled">
                 <div class="dropdown-item__content">
                   <span v-if="action.icon" class="pre-icon">
                     <Icon :icon="action.icon" />
                   </span>
                   <span class="dropdown-item__label">{{ action.title }}</span>
+                  <el-tooltip
+                    v-if="action.tip"
+                    :content="action.tip"
+                    :show-after="300"
+                    placement="right"
+                  >
+                    <span class="dropdown-item__help" @click.stop>
+                      <Icon icon="fa-question-circle-o" />
+                    </span>
+                  </el-tooltip>
                 </div>
               </el-dropdown-item>
             </template>
@@ -496,5 +502,18 @@ export default {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+:global(.action-dropdown.el-dropdown__popper .dropdown-item__help) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 2px;
+  color: var(--el-text-color-placeholder);
+  cursor: help;
+}
+
+:global(.action-dropdown.el-dropdown__popper .dropdown-item__help:hover) {
+  color: var(--el-color-primary);
 }
 </style>
