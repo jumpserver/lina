@@ -84,6 +84,7 @@ import { loadPlatformIcon } from '@/utils/jms/index'
 export default {
   componentName: 'SelectJobAssetDialog',
   components: { AssetSelectDialog, IBox },
+  emits: ['change'],
   props: {
     baseUrl: {
       type: String,
