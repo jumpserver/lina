@@ -2,30 +2,22 @@ import { constantRoutes } from '@/router'
 import store from '@/store'
 import { getAssetUrlOr } from '@/utils/assets'
 
-let openedTaskWindow = null // 保存已打开的窗口对象
+let taskWindowOffset = 0
 
-function openOrReuseWindow(
-  url,
-  windowName = 'task',
-  windowFeatures = '',
-  iWidth = 900,
-  iHeight = 600
-) {
-  const iTop = (window.screen.height - 30 - iHeight) / 2
-  const iLeft = (window.screen.width - 10 - iWidth) / 2
+function openTaskWindow(url, iWidth = 900, iHeight = 600) {
+  const offset = taskWindowOffset * 30
+  const maxTop = Math.max(0, window.screen.height - iHeight)
+  const maxLeft = Math.max(0, window.screen.width - iWidth)
+  const iTop = Math.min(maxTop, Math.max(0, (maxTop - 30) / 2 + offset))
+  const iLeft = Math.min(maxLeft, Math.max(0, (maxLeft - 10) / 2 + offset))
 
-  // 检查窗口是否已经打开
-  if (openedTaskWindow && !openedTaskWindow.closed) {
-    openedTaskWindow.location.href = url // 如果窗口未关闭，更新其地址
-    openedTaskWindow.focus() // 将窗口置于前台
-  } else {
-    // 如果窗口未打开或已关闭，创建新窗口
-    openedTaskWindow = window.open(
-      url,
-      windowName,
-      'height=' + iHeight + ',width=' + iWidth + ',top=' + iTop + ',left=' + iLeft
-    )
-  }
+  taskWindowOffset = (taskWindowOffset + 1) % 6
+
+  window.open(
+    url,
+    '_blank',
+    'height=' + iHeight + ',width=' + iWidth + ',top=' + iTop + ',left=' + iLeft
+  )
 }
 
 export function openTaskPage(taskId, taskType, taskUrl) {
@@ -33,7 +25,7 @@ export function openTaskPage(taskId, taskType, taskUrl) {
   if (!taskUrl) {
     taskUrl = `/core/ops/${taskType}/task/${taskId}/log/?type=${taskType}`
   }
-  openOrReuseWindow(taskUrl)
+  openTaskWindow(taskUrl)
 }
 
 export function checkPermission(permsRequired, permsAll) {
