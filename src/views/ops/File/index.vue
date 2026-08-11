@@ -226,7 +226,8 @@ export default {
               .post('/api/v1/ops/username-hints/', {
                 nodes: nodes,
                 assets: hosts,
-                query: query
+                query: query,
+                action: 'upload'
               })
               .then((data) => {
                 const ns = data.map((item) => {
