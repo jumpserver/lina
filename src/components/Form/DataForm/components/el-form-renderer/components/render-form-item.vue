@@ -232,6 +232,9 @@ export default {
         ),
         // 手动更新表单数据
         input: (value, ...rest) => {
+          if (this.data.type === 'checkbox-group' && value?.target) {
+            return
+          }
           this.handleValueUpdate({
             id,
             value,
