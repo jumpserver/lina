@@ -700,18 +700,13 @@ $color-drop-menu-border: #e4e7ed;
   // }
 
   .left-side {
-    display: block;
+    --data-actions-gap: 5px;
+
+    display: inline-flex;
     //float: left;
 
     :deep(.action-item.el-dropdown > .el-button) {
       min-height: 30px;
-    }
-
-    :deep(.action-item) {
-      margin-left: 5px;
-      &:first-child {
-        margin-left: 0;
-      }
     }
 
     :deep(.action-item.el-button) {

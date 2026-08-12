@@ -30,6 +30,7 @@
     "@codemirror/legacy-modes": "^6",
     "@element-plus/icons-vue": "^2.3.2",
     "@fontsource/open-sans": "^5.2.7",
+    "@fortawesome/fontawesome-free": "7.3.1",
     "@kangc/v-md-editor": "^2.3.18",
     "@traptitech/markdown-it-katex": "^3.6.0",
     "@ztree/ztree_v3": "3.5.48",

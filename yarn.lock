@@ -704,6 +704,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fortawesome/fontawesome-free@npm:7.3.1":
+  version: 7.3.1
+  resolution: "@fortawesome/fontawesome-free@npm:7.3.1"
+  checksum: 10c0/85b70ea64e69b9635ff0b949871acaaf0e6c6fd41860b8a78a5067123a42dd71144f7f7feea7aee013a485166ee8bf8ee3aafb15146dc0f55512d07015adddee
+  languageName: node
+  linkType: hard
+
 "@intlify/core-base@npm:11.4.6":
   version: 11.4.6
   resolution: "@intlify/core-base@npm:11.4.6"
@@ -4602,6 +4609,7 @@ __metadata:
     "@codemirror/legacy-modes": "npm:^6"
     "@element-plus/icons-vue": "npm:^2.3.2"
     "@fontsource/open-sans": "npm:^5.2.7"
+    "@fortawesome/fontawesome-free": "npm:7.3.1"
     "@kangc/v-md-editor": "npm:^2.3.18"
     "@traptitech/markdown-it-katex": "npm:^3.6.0"
     "@vitejs/plugin-vue": "npm:^6.0.0"

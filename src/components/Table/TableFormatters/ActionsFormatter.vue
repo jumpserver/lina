@@ -1,9 +1,5 @@
 <template>
-  <div
-    v-loading="loadingStatus"
-    :class="{ 'is-compact': compact }"
-    class="table-actions-formatter"
-  >
+  <div v-loading="loadingStatus" :class="{ 'is-compact': compact }" class="table-actions-formatter">
     <div v-if="actions.length > 0 || moreActions.length > 0" class="table-actions-group">
       <el-tooltip
         v-for="action in actions"
@@ -66,47 +62,48 @@
 import BaseFormatter from './base.vue'
 import Icon from '@/components/Widgets/Icon/index.vue'
 
+// Icons default to Free Regular in the Icon component; declare Solid explicitly when needed.
 const ACTION_ICON_MAP = {
-  update: 'fa-pencil-square-o',
-  edit: 'fa-pencil-square-o',
+  update: 'fa-pen-to-square',
+  edit: 'fa-pen-to-square',
   view: 'fa-eye',
   detail: 'fa-eye',
-  delete: 'fa-trash-o',
-  remove: 'fa-minus-square-o',
-  clone: 'fa-files-o',
-  duplicate: 'fa-files-o',
-  copy: 'fa-files-o',
-  connect: 'fa-desktop',
-  login: 'fa-sign-in',
-  execute: 'fa-play-circle-o',
-  run: 'fa-play-circle-o',
-  test: 'fa-play-circle-o',
-  stop: 'fa-stop-circle-o',
-  retry: 'fa-refresh',
-  refresh: 'fa-refresh',
-  sync: 'fa-refresh',
-  download: 'fa-download',
-  upload: 'fa-upload',
-  enable: 'fa-check-circle-o',
-  disable: 'fa-ban',
-  active: 'fa-check-circle-o',
-  inactive: 'fa-ban',
-  reject: 'fa-ban',
-  accept: 'fa-check',
-  approve: 'fa-check',
-  revoke: 'fa-times',
-  cancel: 'fa-times',
-  close: 'fa-times',
-  reset: 'fa-refresh',
-  invite: 'fa-user-plus',
+  delete: 'fa-trash-can',
+  remove: 'fa-square-minus',
+  clone: 'fa-copy',
+  duplicate: 'fa-copy',
+  copy: 'fa-copy',
+  connect: 'fa-solid fa-desktop',
+  login: 'fa-solid fa-right-to-bracket',
+  execute: 'fa-solid fa-play',
+  run: 'fa-solid fa-play',
+  test: 'fa-solid fa-plug',
+  stop: 'fa-circle-stop',
+  retry: 'fa-solid fa-rotate',
+  refresh: 'fa-solid fa-rotate',
+  sync: 'fa-solid fa-rotate',
+  download: 'fa-solid fa-download',
+  upload: 'fa-solid fa-upload',
+  enable: 'fa-circle-check',
+  disable: 'fa-solid fa-ban',
+  active: 'fa-circle-check',
+  inactive: 'fa-solid fa-ban',
+  reject: 'fa-solid fa-ban',
+  accept: 'fa-solid fa-check',
+  approve: 'fa-solid fa-check',
+  revoke: 'fa-solid fa-xmark',
+  cancel: 'fa-solid fa-xmark',
+  close: 'fa-solid fa-xmark',
+  reset: 'fa-solid fa-rotate',
+  invite: 'fa-solid fa-user-plus',
   user: 'fa-user',
   account: 'fa-user',
-  password: 'fa-key',
-  secret: 'fa-key',
-  permission: 'fa-lock',
-  asset: 'fa-desktop',
-  info: 'fa-info-circle-o',
-  detail_info: 'fa-info-circle-o',
+  password: 'fa-solid fa-key',
+  secret: 'fa-solid fa-key',
+  permission: 'fa-solid fa-lock',
+  asset: 'fa-solid fa-desktop',
+  info: 'fa-solid fa-circle-info',
+  detail_info: 'fa-solid fa-circle-info',
   more: 'el-icon-more'
 }
 
@@ -234,7 +231,7 @@ export default {
         title: this.$t('Edit'),
         type: 'primary',
         plain: true,
-        icon: 'fa-pencil-square-o',
+        icon: ACTION_ICON_MAP.update,
         has: colActions.hasUpdate,
         can: colActions.canUpdate,
         callback: colActions.onUpdate,
@@ -243,7 +240,7 @@ export default {
       {
         name: 'delete',
         title: this.$t('Delete'),
-        icon: 'fa-trash-o',
+        icon: ACTION_ICON_MAP.delete,
         type: 'danger',
         has: colActions.hasDelete,
         can: colActions.canDelete,
@@ -253,7 +250,7 @@ export default {
       {
         name: 'clone',
         title: this.$t('Duplicate'),
-        icon: 'fa-files-o',
+        icon: ACTION_ICON_MAP.clone,
         has: colActions.hasClone,
         can: colActions.canClone,
         callback: colActions.onClone,
@@ -469,7 +466,7 @@ export default {
     }
   }
 
-  :deep(.table-action-btn.is-disabled:hover .fa-play-circle-o) {
+  :deep(.table-action-btn.is-disabled:hover .fa-play) {
     color: var(--el-color-primary-light-3) !important;
   }
 

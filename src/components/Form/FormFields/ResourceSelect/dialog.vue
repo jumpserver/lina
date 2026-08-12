@@ -19,7 +19,11 @@
     >
       <el-tab-pane name="available">
         <template #label>
-          {{ $t('ResourceSelectUnselectedResources', { resource: displayResourceName }) }}
+          {{
+            $t('ResourceSelectUnselectedResources', {
+              resource: displayResourceName
+            })
+          }}
           <span v-if="availableCount !== null">({{ availableCount }})</span>
         </template>
         <ListTable
@@ -33,9 +37,12 @@
 
       <el-tab-pane name="selected">
         <template #label>
-          {{ $t('ResourceSelectSelectedResources', { resource: displayResourceName }) }} ({{
-            selectedCount
-          }})
+          {{
+            $t('ResourceSelectSelectedResources', {
+              resource: displayResourceName
+            })
+          }}
+          ({{ selectedCount }})
         </template>
         <ListTable
           ref="selectedTable"
