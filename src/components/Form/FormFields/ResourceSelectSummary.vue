@@ -12,27 +12,35 @@
       @keydown.space.prevent="handleClick"
     >
       <template v-if="selectedCount > 0">
-        <span class="resource-select-summary__content">
+        <div class="resource-select-summary__content">
           <span class="resource-select-summary__count">{{ countText }}</span>
-          <span v-if="items.length > 0" class="resource-select-summary__names">
-            <span
-              v-for="item in items"
-              :key="String(item.value)"
-              class="resource-select-summary__name"
-            >
-              <span class="resource-select-summary__name-text">{{ item.name }}</span>
-              <button
-                v-if="!disabled"
-                :aria-label="`${$t('Remove')} ${item.name}`"
-                class="resource-select-summary__remove"
-                type="button"
-                @click.stop="$emit('remove', item.value)"
+          <div
+            v-if="items.length > 0"
+            ref="names"
+            class="resource-select-summary__names"
+            @scroll.passive="handleScroll"
+            @wheel.passive="handleWheel"
+          >
+            <span class="resource-select-summary__names-content">
+              <span
+                v-for="item in items"
+                :key="String(item.value)"
+                class="resource-select-summary__name"
               >
-                <el-icon><CircleCloseFilled /></el-icon>
-              </button>
+                <span class="resource-select-summary__name-text">{{ item.name }}</span>
+                <button
+                  v-if="!disabled"
+                  :aria-label="`${$t('Remove')} ${item.name}`"
+                  class="resource-select-summary__remove"
+                  type="button"
+                  @click.stop="$emit('remove', item.value)"
+                >
+                  <el-icon><CircleCloseFilled /></el-icon>
+                </button>
+              </span>
             </span>
-          </span>
-        </span>
+          </div>
+        </div>
       </template>
       <span v-else class="resource-select-summary__placeholder">{{ text }}</span>
     </div>
@@ -59,12 +67,21 @@ export default {
       type: String,
       default: ''
     },
+    hasMore: {
+      type: Boolean,
+      default: false
+    },
     disabled: {
       type: Boolean,
       default: false
     }
   },
-  emits: ['click', 'remove'],
+  emits: ['click', 'load-more', 'remove'],
+  data() {
+    return {
+      loadMoreRequested: false
+    }
+  },
   computed: {
     ariaLabel() {
       if (this.selectedCount === 0) {
@@ -78,6 +95,32 @@ export default {
       if (!this.disabled) {
         this.$emit('click')
       }
+    },
+    handleScroll(event) {
+      const container = event.currentTarget
+      if (!container) {
+        return
+      }
+      const scrollableDistance = container.scrollHeight - container.clientHeight
+      if (scrollableDistance > 0 && container.scrollTop >= scrollableDistance / 2) {
+        this.requestLoadMore()
+      }
+    },
+    handleWheel(event) {
+      const container = this.$refs.names
+      if (event.deltaY > 0 && container && container.scrollHeight <= container.clientHeight + 1) {
+        this.requestLoadMore()
+      }
+    },
+    requestLoadMore() {
+      if (!this.hasMore || this.loadMoreRequested) {
+        return
+      }
+      this.loadMoreRequested = true
+      this.$emit('load-more')
+      this.$nextTick(() => {
+        this.loadMoreRequested = false
+      })
     }
   }
 }
@@ -137,19 +180,55 @@ export default {
 }
 
 .resource-select-summary__names {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 10px;
+  width: 100%;
+  min-height: 29px;
+  max-height: 85px;
   margin-top: 4px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding-top: 7px;
-  padding-right: 7px;
-  scrollbar-width: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-color: transparent transparent;
+  scrollbar-width: thin;
+
+  &:hover,
+  &:focus-within {
+    scrollbar-color: var(--el-border-color) transparent;
+  }
 
   &::-webkit-scrollbar {
-    display: none;
+    width: 4px;
   }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background: transparent;
+  }
+
+  &:hover::-webkit-scrollbar-thumb,
+  &:focus-within::-webkit-scrollbar-thumb {
+    background: var(--el-border-color);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--el-text-color-placeholder);
+  }
+}
+
+.resource-select-summary__names-content {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+  column-gap: 10px;
+  row-gap: 6px;
+  width: 100%;
+  min-height: 29px;
+  padding-top: 7px;
+  padding-right: 7px;
 }
 
 .resource-select-summary__count,
@@ -163,6 +242,7 @@ export default {
   flex: 0 0 auto;
   align-items: center;
   position: relative;
+  max-width: calc(100% - 7px);
   min-height: 22px;
   padding: 1px 10px 1px 6px;
   border: 1px solid #e5e6e7;
@@ -170,7 +250,7 @@ export default {
   background: #f1f1f1;
   color: var(--el-text-color-regular);
   line-height: 18px;
-  white-space: nowrap;
+  white-space: normal;
   transition:
     background-color var(--el-transition-duration-fast),
     border-color var(--el-transition-duration-fast),
@@ -193,6 +273,10 @@ export default {
   &:focus-within .resource-select-summary__remove:focus-visible {
     opacity: 1;
   }
+}
+
+.resource-select-summary__name-text {
+  overflow-wrap: anywhere;
 }
 
 .resource-select-summary__remove {

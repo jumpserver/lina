@@ -3,10 +3,12 @@
     <ResourceSelectSummary
       :count-text="summaryCountText"
       :disabled="isDisabled"
+      :has-more="summaryHasMore"
       :items="selectedSummaryItems"
       :selected-count="selectedValue.length"
       :text="summaryText"
       @click="openDialog(selectedValue.length > 0)"
+      @load-more="loadNextSummaryBatch"
       @remove="removeSummaryResource"
     />
 
@@ -16,6 +18,7 @@
       :initial-selected-only="initialSelectedOnly"
       :query-params="queryParams"
       :resource-name="resourceName"
+      :selected-resources="getSelectedSummaryResources()"
       :tree-url="resourceTreeUrl"
       :value="selectedValue"
       :value-key="valueKey"
@@ -115,7 +118,8 @@ export default {
         this.dialogVisible = true
       }
     },
-    handleConfirm(value) {
+    handleConfirm(value, resources) {
+      this.cacheSummaryResources(resources)
       this.updateSelectedValue(value)
       this.dialogVisible = false
     },
