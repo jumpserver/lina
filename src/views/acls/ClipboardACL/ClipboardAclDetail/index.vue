@@ -3,6 +3,7 @@
     v-bind="config"
     v-model:active-menu="config.activeMenu"
     v-model:object="instance"
+    class="clipboard-acl-detail"
   >
     <keep-alive>
       <component :is="config.activeMenu" :object="instance" object-app-model="acls.ClipboardACL" />
@@ -29,6 +30,10 @@ export default {
       config: {
         url: `/api/v1/acls/clipboard-acls/`,
         activeMenu: 'Detail',
+        actions: {
+          canUpdate: () => this.$hasPerm('acls.change_clipboardacl') || this.$t('NoPermission'),
+          canDelete: () => this.$hasPerm('acls.delete_clipboardacl') || this.$t('NoPermission')
+        },
         submenu: [
           {
             title: this.$t('Basic'),
@@ -49,3 +54,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.clipboard-acl-detail :deep(.action-item.el-button--danger.is-plain.is-disabled) {
+  color: var(--el-button-disabled-text-color);
+}
+</style>
