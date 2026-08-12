@@ -104,7 +104,9 @@ export default {
         {
           has: this.hasShow,
           class: this.isShow ? 'fa-eye-slash' : 'fa-eye',
-          action: this.onShow,
+          action: () => {
+            this.onShow()
+          },
           tooltip: this.$t('View')
         },
         {
