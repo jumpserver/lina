@@ -51,10 +51,10 @@
       </el-form-item>
       <el-form-item class="tool-actions">
         <el-button v-if="!isTesting" size="small" type="primary" @click="submitTest">
-          <i class="fa fa-play" style="margin-right: 4px" />{{ $t('Test') }}
+          <i class="fa fa-solid fa-play" style="margin-right: 4px" />{{ $t('Test') }}
         </el-button>
         <el-button v-if="hasStop && isTesting" size="small" type="danger" @click="interruptTest">
-          <i class="fa fa-stop" style="margin-right: 4px" />{{ $t('Stop') }}
+          <i class="fa fa-solid fa-stop" style="margin-right: 4px" />{{ $t('Stop') }}
         </el-button>
       </el-form-item>
     </el-form>

@@ -136,7 +136,7 @@ export const gatherAccountHeaderActions = (vm) => {
         name: 'SyncSelected',
         title: vm.$t('SyncSelected'),
         type: 'primary',
-        icon: 'fa fa-check',
+        icon: 'fa-solid fa-check',
         can: ({ selectedRows }) => {
           return (
             selectedRows.length > 0 &&
@@ -165,7 +165,7 @@ export const gatherAccountHeaderActions = (vm) => {
         name: 'SyncDeleteSelected',
         title: vm.$t('SyncDeleteSelected'),
         type: 'primary',
-        icon: 'fa fa-exchange',
+        icon: 'fa-solid fa-right-left',
         can: ({ selectedRows }) => {
           return (
             selectedRows.length > 0 &&

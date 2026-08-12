@@ -49,6 +49,7 @@ export default {
           {
             name: 'ApproveSelected',
             title: this.$t('ApprovalSelected'),
+            icon: 'fa-solid fa-check',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0
             },

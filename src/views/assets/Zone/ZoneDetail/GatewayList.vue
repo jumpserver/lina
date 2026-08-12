@@ -186,7 +186,7 @@ export default {
             name: this.$t('RemoveSelected'),
             title: this.$t('RemoveSelected'),
             type: 'primary',
-            icon: 'fa fa-minus',
+            icon: 'fa-solid fa-minus',
             can({ selectedRows }) {
               return selectedRows.length > 0
             },

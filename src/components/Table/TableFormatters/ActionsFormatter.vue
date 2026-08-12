@@ -80,6 +80,8 @@ const ACTION_ICON_MAP = {
   detail: 'fa-eye',
   delete: 'fa-trash-can',
   remove: 'fa-square-minus',
+  add: 'fa-solid fa-plus',
+  create: 'fa-solid fa-plus',
   clone: 'fa-copy',
   duplicate: 'fa-copy',
   copy: 'fa-copy',
@@ -89,6 +91,11 @@ const ACTION_ICON_MAP = {
   run: 'fa-solid fa-play',
   test: 'fa-solid fa-plug',
   stop: 'fa-circle-stop',
+  log: 'fa-solid fa-file-lines',
+  logging: 'fa-solid fa-file-lines',
+  output: 'fa-solid fa-file-lines',
+  report: 'fa-solid fa-chart-column',
+  record: 'fa-eye',
   retry: 'fa-solid fa-rotate',
   refresh: 'fa-solid fa-rotate',
   sync: 'fa-solid fa-rotate',
@@ -105,6 +112,13 @@ const ACTION_ICON_MAP = {
   cancel: 'fa-solid fa-xmark',
   close: 'fa-solid fa-xmark',
   reset: 'fa-solid fa-rotate',
+  clear: 'fa-solid fa-eraser',
+  unlock: 'fa-solid fa-unlock',
+  bind: 'fa-solid fa-link',
+  select: 'fa-solid fa-check',
+  ignore: 'fa-solid fa-forward',
+  expire: 'fa-solid fa-clock',
+  expired: 'fa-solid fa-clock',
   invite: 'fa-solid fa-user-plus',
   user: 'fa-user',
   account: 'fa-user',
@@ -332,10 +346,15 @@ export default {
       return this.cleanValue(item, attr)
     },
     inferActionIcon(action) {
-      const candidates = [action.name]
-      const normalized = candidates
-        .filter(Boolean)
-        .map((value) => String(value).trim().toLowerCase())
+      const name = String(action.name || '').trim()
+      const normalized = [
+        name.toLowerCase(),
+        ...name
+          .replace(/([a-z\d])([A-Z])/g, '$1 $2')
+          .toLowerCase()
+          .split(/[^a-z\d]+/)
+          .filter(Boolean)
+      ]
 
       for (const value of normalized) {
         if (ACTION_ICON_MAP[value]) {

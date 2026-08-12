@@ -241,7 +241,7 @@ export default {
               {
                 name: 'clearSelectedResources',
                 title: this.$t('ResourceSelectRemoveAll'),
-                icon: 'fa-minus-square-o',
+                icon: 'fa-square-minus',
                 can: () => this.selectedCount > 0,
                 callback: () => this.clearSelected()
               }
@@ -343,7 +343,7 @@ export default {
                 {
                   name: 'add',
                   title: this.$t('Add'),
-                  icon: 'fa-plus',
+                  icon: 'fa-solid fa-plus',
                   showTip: false,
                   can: ({ row }) => this.canSelect(row),
                   callback: ({ row }) => this.addResources([row])
@@ -374,7 +374,7 @@ export default {
                 {
                   name: 'remove',
                   title: this.$t('Remove'),
-                  icon: 'fa-minus',
+                  icon: 'fa-solid fa-minus',
                   iconStyle: { transform: 'scale(0.78)' },
                   showTip: false,
                   hoverType: 'danger',

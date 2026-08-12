@@ -69,6 +69,7 @@ export default {
           {
             name: 'UnlockSelected',
             title: this.$t('UnblockSelected'),
+            icon: 'fa-solid fa-unlock',
             type: 'primary',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0
