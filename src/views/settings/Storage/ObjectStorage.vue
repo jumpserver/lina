@@ -101,6 +101,7 @@ export default {
                 {
                   name: 'set_to_default',
                   title: this.$t('SetToDefault'),
+                  icon: 'fa-circle-check',
                   can: (value) =>
                     this.$hasPerm('terminal.change_replaystorage') &&
                     value.row.type.value !== 'sftp',

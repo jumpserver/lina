@@ -92,7 +92,7 @@ export default {
                 {
                   name: 'Test',
                   title: this.$t('Test'),
-                  icon: 'fa-play-circle-o',
+                  icon: 'fa-circle-play',
                   tip: this.$t('PushAccountRecordTestTip'),
                   can: () =>
                     !this.$store.getters.currentOrgIsRoot &&
@@ -103,7 +103,7 @@ export default {
                 {
                   name: 'Push',
                   title: this.$t('Push'),
-                  icon: 'fa-upload',
+                  icon: 'fa-solid fa-upload',
                   tip: this.$t('PushAccountRecordPushTip'),
                   can: () =>
                     !this.$store.getters.currentOrgIsRoot && this.$hasPerm('accounts.push_account'),
@@ -133,7 +133,7 @@ export default {
             name: 'TestSelected',
             title: this.$t('TestSelected'),
             type: 'primary',
-            icon: 'fa-play-circle-o',
+            icon: 'fa-circle-play',
             tip: this.$t('PushAccountRecordsTestTip'),
             showHelp: true,
             can: ({ selectedRows }) =>
@@ -151,7 +151,7 @@ export default {
             name: 'PushSelected',
             title: this.$t('Push'),
             type: 'primary',
-            icon: 'fa-upload',
+            icon: 'fa-solid fa-upload',
             tip: this.$t('PushAccountRecordsPushTip'),
             showHelp: true,
             can: ({ selectedRows }) =>

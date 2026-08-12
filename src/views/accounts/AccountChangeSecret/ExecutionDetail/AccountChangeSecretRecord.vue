@@ -128,7 +128,7 @@ export default {
                 {
                   name: 'Test',
                   title: this.$t('Test'),
-                  icon: 'fa-play-circle-o',
+                  icon: 'fa-circle-play',
                   tip: this.$t('ChangeSecretRecordTestTip'),
                   can: () =>
                     !this.$store.getters.currentOrgIsRoot &&
@@ -139,7 +139,7 @@ export default {
                 {
                   name: 'Restore',
                   title: this.$t('Resume'),
-                  icon: 'fa-database',
+                  icon: 'fa-solid fa-database',
                   tip: this.$t('ChangeSecretRecordRestoreTip'),
                   can: ({ row }) =>
                     row.verification_status !== 'pending' &&
@@ -151,7 +151,7 @@ export default {
                 {
                   name: 'Retry',
                   title: this.$t('Retry'),
-                  icon: 'fa-refresh',
+                  icon: 'fa-solid fa-rotate',
                   tip: this.$t('ChangeSecretRecordRetryTip'),
                   can: this.$hasPerm('accounts.add_changesecretexecution'),
                   type: 'primary',
@@ -188,7 +188,7 @@ export default {
             name: 'TestSelected',
             title: this.$t('TestSelected'),
             type: 'primary',
-            icon: 'fa-play-circle-o',
+            icon: 'fa-circle-play',
             tip: this.$t('ChangeSecretRecordsTestTip'),
             showHelp: true,
             can: ({ selectedRows }) =>
@@ -203,7 +203,7 @@ export default {
             name: 'RestoreSelected',
             title: this.$t('RestoreSelected'),
             type: 'primary',
-            icon: 'fa-database',
+            icon: 'fa-solid fa-database',
             tip: this.$t('ChangeSecretRecordsRestoreTip'),
             showHelp: true,
             can: ({ selectedRows }) =>
@@ -219,7 +219,7 @@ export default {
             name: 'RetrySelected',
             title: this.$t('RetrySelected'),
             type: 'primary',
-            icon: 'fa-refresh',
+            icon: 'fa-solid fa-rotate',
             tip: this.$t('ChangeSecretRecordsRetryTip'),
             showHelp: true,
             can: ({ selectedRows }) => {

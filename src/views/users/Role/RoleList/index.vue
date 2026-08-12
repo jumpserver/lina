@@ -28,7 +28,7 @@ export default {
           {
             title: this.$t('SystemRole'),
             name: 'SysRoleList',
-            icon: 'fa-globe',
+            icon: 'fa-solid fa-globe',
             hidden: () => !this.$hasPerm('rbac.view_systemrole'),
             component: () => import('@/views/users/Role/RoleList/SysRoleList.vue'),
             helpTip: this.$t('SystemRoleHelpMsg')
@@ -36,7 +36,7 @@ export default {
           {
             title: this.$t('OrgRole'),
             name: 'OrgRoleList',
-            icon: 'fa-sitemap',
+            icon: 'fa-solid fa-sitemap',
             hidden: () =>
               !this.$store.getters.hasValidLicense || !this.$hasPerm('rbac.view_orgrole'),
             component: () => import('@/views/users/Role/RoleList/OrgRoleList.vue'),

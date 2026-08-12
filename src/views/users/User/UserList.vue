@@ -355,7 +355,7 @@ export default {
           {
             name: 'BatchDisable',
             title: this.$t('DisableSelected'),
-            icon: 'fa fa-ban',
+            icon: 'fa-solid fa-ban',
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
             callback: ({ selectedRows, reloadTable }) =>
               vm.bulkActionCallback(selectedRows, reloadTable, 'disable')
@@ -363,7 +363,7 @@ export default {
           {
             name: 'BatchActivate',
             title: this.$t('ActivateSelected'),
-            icon: 'fa fa-check-circle-o',
+            icon: 'fa-circle-check',
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
             callback: ({ selectedRows, reloadTable }) =>
               vm.bulkActionCallback(selectedRows, reloadTable, 'activate')

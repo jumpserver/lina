@@ -111,6 +111,7 @@ export default {
                 {
                   name: 'set_to_default',
                   title: this.$t('SetToDefault'),
+                  icon: 'fa-circle-check',
                   type: 'primary',
                   can: vm.$hasPerm('terminal.change_commandstorage'),
                   callback: function ({ row, col, cellValue, reload }) {

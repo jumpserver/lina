@@ -38,6 +38,7 @@ export default {
           {
             name: this.$t('DeleteReleasedAssets'),
             title: this.$t('DeleteReleasedAssets'),
+            icon: 'fa-solid fa-trash-can',
             type: 'primary',
             can: true,
             callback: this.DeleteReleasedAssets.bind(this)
