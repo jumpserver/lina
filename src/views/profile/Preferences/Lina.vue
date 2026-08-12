@@ -20,12 +20,28 @@ export default {
             has_secret_key: {
               label: this.$t('Configured'),
               component: BoolTextReadonly
+            },
+            secret_key: {
+              el: {
+                autocomplete: 'new-password',
+                name: 'file-encryption-password'
+              }
+            },
+            secret_key_again: {
+              el: {
+                autocomplete: 'new-password',
+                name: 'file-encryption-password-confirmation'
+              }
             }
           }
         },
         basic: {
           fieldsMeta: {
             lang: {
+              el: {
+                autocomplete: 'language',
+                name: 'preference-language'
+              },
               on: {
                 change: ([value], updateForm) => {
                   this.$axios.get(`/core/i18n/${value}/`).then(() => {
