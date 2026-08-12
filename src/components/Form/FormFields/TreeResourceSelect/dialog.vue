@@ -132,6 +132,10 @@ export default {
       type: Array,
       default: () => []
     },
+    selectedResources: {
+      type: Array,
+      default: () => []
+    },
     initialSelectedOnly: {
       type: Boolean,
       default: false
@@ -155,6 +159,14 @@ export default {
   },
   emits: ['cancel', 'confirm', 'update:visible'],
   data() {
+    const resourceCache = new Map()
+    this.selectedResources.forEach((item) => {
+      const id = item?.[this.valueKey] ?? item?.value ?? item?.id
+      const name = String(item?.name || '').trim()
+      if (id !== undefined && id !== null && id !== '' && name) {
+        resourceCache.set(String(id), { value: id, name })
+      }
+    })
     return {
       draftValue: [...this.value],
       searchValue: '',
@@ -163,6 +175,7 @@ export default {
       selectedOnlyIds: this.initialSelectedOnly ? [...this.value] : [],
       expandAllNext: false,
       loading: false,
+      resourceCache,
       treeData: [],
       defaultExpandedKeys: [],
       treeProps: {
@@ -203,6 +216,19 @@ export default {
     document.removeEventListener('keydown', this.handleDialogShortcut)
   },
   methods: {
+    cacheTreeResources(nodes) {
+      nodes.forEach((node) => {
+        const id = this.getNodeId(node)
+        const name = String(this.getNodeLabel(node) || '').trim()
+        if (id !== undefined && id !== null && id !== '' && name) {
+          this.resourceCache.set(String(id), { value: id, name })
+        }
+        this.cacheTreeResources(node.children || [])
+      })
+    },
+    getSelectedResources() {
+      return this.draftValue.map((id) => this.resourceCache.get(String(id))).filter(Boolean)
+    },
     handleDialogShortcut(event) {
       if (
         event.defaultPrevented ||
@@ -308,6 +334,7 @@ export default {
           params: this.getQueryParams()
         })
         this.treeData = this.buildTree(response)
+        this.cacheTreeResources(this.treeData)
         this.defaultExpandedKeys =
           this.selectedCount > 0
             ? this.getSelectedAncestorKeys()
@@ -554,7 +581,7 @@ export default {
       this.$emit('update:visible', value)
     },
     handleConfirm() {
-      this.$emit('confirm', [...this.draftValue])
+      this.$emit('confirm', [...this.draftValue], this.getSelectedResources())
       this.$emit('update:visible', false)
     },
     handleCancel() {

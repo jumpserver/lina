@@ -76,6 +76,10 @@ export default {
       type: Array,
       default: () => []
     },
+    selectedResources: {
+      type: Array,
+      default: () => []
+    },
     initialTab: {
       type: String,
       default: 'available'
@@ -123,6 +127,14 @@ export default {
   },
   emits: ['cancel', 'confirm', 'update:visible'],
   data() {
+    const resourceCache = new Map()
+    this.selectedResources.forEach((item) => {
+      const id = item?.[this.valueKey] ?? item?.value ?? item?.id
+      const name = String(item?.name || '').trim()
+      if (id !== undefined && id !== null && id !== '' && name) {
+        resourceCache.set(String(id), { value: id, name })
+      }
+    })
     return {
       activeTab: this.initialTab,
       draftValue: [...this.value],
@@ -140,6 +152,7 @@ export default {
       selectionSpmPromiseVersion: -1,
       availableRequestQueue: Promise.resolve(),
       selectedRequestQueue: Promise.resolve(),
+      resourceCache,
       tableMetadataRequestUrl: '',
       tableMetadataRequest: null,
       sharedNodeTreeState: {
@@ -400,6 +413,18 @@ export default {
     document.removeEventListener('keydown', this.handleDialogShortcut)
   },
   methods: {
+    cacheResources(resources) {
+      resources.forEach((item) => {
+        const id = item?.[this.valueKey] ?? item?.value ?? item?.id
+        const name = String(item?.name || '').trim()
+        if (id !== undefined && id !== null && id !== '' && name) {
+          this.resourceCache.set(String(id), { value: id, name })
+        }
+      })
+    },
+    getSelectedResources() {
+      return this.draftValue.map((id) => this.resourceCache.get(String(id))).filter(Boolean)
+    },
     getSharedTableMetadata(url) {
       if (this.tableMetadataRequest && this.tableMetadataRequestUrl === url) {
         return this.tableMetadataRequest
@@ -547,7 +572,9 @@ export default {
           fields_size: 'small'
         }
       })
-      return this.normalizeResponse(response)
+      const data = this.normalizeResponse(response)
+      this.cacheResources(data.results)
+      return data
     },
     requestAvailablePage(requestUrl, axiosConfig) {
       const selectionVersion = this.selectionVersion
@@ -720,6 +747,7 @@ export default {
       table.clearSelection()
     },
     addResources(rows) {
+      this.cacheResources(rows)
       const addedIds = []
       rows
         .filter((row) => this.canSelect(row))
@@ -822,7 +850,7 @@ export default {
         this.removeResources(pendingRemovals)
       }
 
-      this.$emit('confirm', [...this.draftValue])
+      this.$emit('confirm', [...this.draftValue], this.getSelectedResources())
       this.$emit('update:visible', false)
     },
     async handleCancel() {
