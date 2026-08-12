@@ -4673,6 +4673,7 @@ __metadata:
     xss: "npm:^1.0.15"
     xterm: "npm:^5.3.0"
     xterm-addon-fit: "npm:^0.8.0"
+    xterm-theme: "npm:^1.1.0"
     zxcvbn: "npm:^4.4.2"
   languageName: unknown
   linkType: soft
@@ -7078,6 +7079,13 @@ __metadata:
   peerDependencies:
     xterm: ^5.0.0
   checksum: 10c0/39f77c9ec74bcc048ad74fbc4b9d610070c0a67971837f7edf92a8d21d65189c887986713d6ab22c04e2704253022488324d27fdb2425dc8aa95a9b679703101
+  languageName: node
+  linkType: hard
+
+"xterm-theme@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "xterm-theme@npm:1.1.0"
+  checksum: 10c0/f8630d229e59f880ec65916d2f4b1607a5d0733c0f0dd17ecc4b5aac2135956a1926cbc3422a0aabe14ccd4c582955a056983d8a94f4da316634d23e0681d61e
   languageName: node
   linkType: hard
 
