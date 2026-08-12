@@ -8,8 +8,8 @@
         <span class="approval-eyebrow">{{ t('ChatAISecureApproval') }}</span>
         <strong>{{ t('ChatAIApprovalTitle') }}</strong>
       </span>
-      <span :class="['risk-badge', `risk-${approval.risk_level || 'write'}`]">
-        {{ approval.risk_level || t('Risk') }}
+      <span :class="['risk-badge', `risk-${riskLevel}`]">
+        {{ riskLabel }}
       </span>
     </header>
 
@@ -108,6 +108,19 @@ const countdown = computed(() => {
 })
 const hasPreview = computed(() => Object.keys(props.approval.preview || {}).length > 0)
 const prettyPreview = computed(() => JSON.stringify(props.approval.preview || {}, null, 2))
+const riskLevel = computed(() => {
+  const value = String(props.approval.risk_level || 'write').toLowerCase()
+  return ['read', 'write', 'dangerous'].includes(value) ? value : 'write'
+})
+const riskLabel = computed(() => {
+  if (props.approval.recovery) return t('ChatAIWaitingApproval')
+  const labels = {
+    read: 'ChatAIRiskRead',
+    write: 'ChatAIRiskWrite',
+    dangerous: 'ChatAIRiskDangerous'
+  }
+  return t(labels[riskLevel.value])
+})
 
 onMounted(() => {
   timer = window.setInterval(() => (now.value = Date.now()), 1000)
@@ -123,11 +136,12 @@ onBeforeUnmount(() => {
   position: relative;
   width: min(100%, 620px);
   margin-top: 14px;
-  padding: 16px;
+  padding: 17px;
   overflow: hidden;
   border: 1px solid rgb(213 150 53 / 23%);
-  border-radius: 4px;
-  background: var(--el-color-warning-light-9, #fdf6ec);
+  border-radius: var(--ai-radius-lg, 12px);
+  background: #fffaf2;
+  box-shadow: 0 4px 14px rgb(121 82 30 / 6%);
 
   &__header {
     position: relative;
@@ -144,7 +158,7 @@ onBeforeUnmount(() => {
   flex: 0 0 37px;
   place-items: center;
   border: 1px solid rgb(255 255 255 / 80%);
-  border-radius: 4px;
+  border-radius: 9px;
   color: #a96815;
   background: #fff0d1;
   font-size: 17px;
@@ -174,12 +188,24 @@ onBeforeUnmount(() => {
 .risk-badge {
   padding: 4px 7px;
   border: 1px solid #f0d6a8;
-  border-radius: 7px;
+  border-radius: 999px;
   color: #a56c1b;
   background: #fff5df;
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
+
+  &.risk-read {
+    border-color: #cfe8df;
+    color: #2f7463;
+    background: #eff9f6;
+  }
+
+  &.risk-dangerous {
+    border-color: #f0c9ce;
+    color: #b84f5e;
+    background: #fff0f2;
+  }
 }
 
 .approval-description {
@@ -194,7 +220,7 @@ onBeforeUnmount(() => {
   position: relative;
   padding: 10px 11px;
   border: 1px solid rgb(92 75 48 / 8%);
-  border-radius: 4px;
+  border-radius: var(--ai-radius-sm, 8px);
   background: rgb(255 255 255 / 74%);
 
   &__route {
@@ -237,7 +263,7 @@ onBeforeUnmount(() => {
   margin-top: 9px;
   overflow: hidden;
   border: 1px solid rgb(92 75 48 / 8%);
-  border-radius: 4px;
+  border-radius: var(--ai-radius-sm, 8px);
   background: rgb(255 255 255 / 62%);
 
   summary {
@@ -251,6 +277,11 @@ onBeforeUnmount(() => {
     font-size: 10px;
     font-weight: 650;
     list-style: none;
+
+    &:focus-visible {
+      outline: 2px solid rgb(196 126 36 / 32%);
+      outline-offset: -2px;
+    }
 
     span {
       display: flex;
@@ -311,7 +342,7 @@ onBeforeUnmount(() => {
   justify-content: center;
   gap: 6px;
   padding: 0 13px;
-  border-radius: 4px;
+  border-radius: var(--ai-radius-sm, 8px);
   cursor: pointer;
   font-size: 10px;
   font-weight: 700;
@@ -320,6 +351,11 @@ onBeforeUnmount(() => {
   &:disabled {
     cursor: not-allowed;
     opacity: 0.55;
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgb(196 126 36 / 36%);
+    outline-offset: 2px;
   }
 
   &.secondary {
@@ -354,6 +390,21 @@ onBeforeUnmount(() => {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 560px) {
+  .approval-card {
+    padding: 14px;
+  }
+
+  .approval-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .approval-button {
+    width: 100%;
   }
 }
 </style>

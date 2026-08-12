@@ -1,40 +1,50 @@
 <template>
-  <AssistantWorkspace v-if="standalone" ref="workspace" :standalone="true" />
+  <el-config-provider :z-index="2700">
+    <AssistantWorkspace v-if="standalone" ref="workspace" :active="true" :standalone="true" />
 
-  <Teleport v-else to="body">
-    <div :class="['chat-ai-portal', { 'is-open': panelOpen, 'is-expanded': expanded }]">
-      <Transition name="launcher-pop">
-        <button
-          v-if="!panelOpen"
-          class="assistant-launcher"
-          type="button"
-          :aria-label="t('ChatAIName')"
-          :title="t('ChatAIName')"
-          @click="open"
-        >
-          <span class="assistant-launcher__icon">
-            <img :src="assistantIcon" alt="" />
-          </span>
-          <span class="assistant-launcher__label">
-            <strong>{{ t('ChatAIName') }}</strong>
-            <small>{{ t('ChatAIReady') }}</small>
-          </span>
-        </button>
-      </Transition>
+    <Teleport v-else to="body">
+      <div :class="['chat-ai-portal', { 'is-open': panelOpen, 'is-expanded': expanded }]">
+        <Transition name="launcher-pop">
+          <button
+            v-if="!panelOpen"
+            ref="launcher"
+            class="assistant-launcher"
+            type="button"
+            :aria-label="t('ChatAIName')"
+            aria-haspopup="dialog"
+            :title="t('ChatAIName')"
+            @click="open"
+          >
+            <span class="assistant-launcher__icon">
+              <img :src="assistantIcon" alt="" />
+            </span>
+            <span class="assistant-launcher__label">
+              <strong>{{ t('ChatAIName') }}</strong>
+              <small>{{ t('ChatAIReady') }}</small>
+            </span>
+          </button>
+        </Transition>
 
-      <Transition name="panel-slide">
-        <section v-show="panelOpen" class="assistant-panel" :aria-label="t('ChatAIName')">
-          <AssistantWorkspace
-            ref="workspace"
-            :expanded="expanded"
-            @close="close"
-            @compress="setExpanded(false)"
-            @expand="setExpanded(true)"
-          />
-        </section>
-      </Transition>
-    </div>
-  </Teleport>
+        <Transition name="panel-slide">
+          <section
+            v-show="panelOpen"
+            class="assistant-panel"
+            :aria-label="t('ChatAIName')"
+            role="dialog"
+          >
+            <AssistantWorkspace
+              ref="workspace"
+              :active="panelOpen"
+              :expanded="expanded"
+              @close="close"
+              @compress="setExpanded(false)"
+              @expand="setExpanded(true)"
+            />
+          </section>
+        </Transition>
+      </div>
+    </Teleport>
+  </el-config-provider>
 </template>
 
 <script setup>
@@ -57,6 +67,7 @@ const props = defineProps({
 
 const { t } = useI18n()
 const workspace = ref(null)
+const launcher = ref(null)
 const panelOpen = ref(props.defaultShowPanel)
 const expanded = ref(localStorage.getItem('chat_ai_expanded') === 'true')
 const initialized = ref(false)
@@ -77,8 +88,10 @@ async function open() {
   workspace.value?.focus()
 }
 
-function close() {
+async function close() {
   panelOpen.value = false
+  await nextTick()
+  launcher.value?.focus()
 }
 
 function setExpanded(value) {
@@ -118,17 +131,17 @@ onBeforeUnmount(() => {
 .assistant-launcher {
   position: fixed;
   right: 18px;
-  bottom: 116px;
+  bottom: calc(116px + env(safe-area-inset-bottom, 0px));
   display: flex;
-  height: 52px;
+  height: 54px;
   align-items: center;
   gap: 8px;
-  padding: 5px 12px 5px 5px;
+  padding: 5px 13px 5px 5px;
   border: 1px solid var(--ai-border);
-  border-radius: 6px;
+  border-radius: 12px;
   color: var(--ai-text);
   background: #fff;
-  box-shadow: 0 2px 10px rgb(0 0 0 / 14%);
+  box-shadow: 0 8px 24px rgb(24 43 38 / 16%);
   cursor: pointer;
   pointer-events: auto;
   isolation: isolate;
@@ -139,8 +152,8 @@ onBeforeUnmount(() => {
 
   &:hover {
     border-color: var(--ai-primary);
-    box-shadow: 0 4px 12px rgb(0 0 0 / 16%);
-    transform: translateY(-1px);
+    box-shadow: 0 12px 30px rgb(24 43 38 / 20%);
+    transform: translateY(-2px);
   }
 
   &:focus-visible {
@@ -150,17 +163,17 @@ onBeforeUnmount(() => {
 
   &__icon {
     display: grid;
-    width: 40px;
-    height: 40px;
-    flex: 0 0 40px;
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
     place-items: center;
     overflow: hidden;
-    border-radius: 4px;
+    border-radius: 9px;
 
     img {
       display: block;
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
     }
   }
 
@@ -187,15 +200,16 @@ onBeforeUnmount(() => {
 
 .assistant-panel {
   position: fixed;
-  right: 12px;
-  bottom: 12px;
+  right: 16px;
+  bottom: 16px;
   width: min(520px, calc(100vw - 24px));
-  height: min(760px, calc(100dvh - 24px));
+  height: min(780px, calc(100dvh - 32px));
   overflow: hidden;
+  box-sizing: border-box;
   border: 1px solid var(--ai-border);
-  border-radius: 6px;
+  border-radius: 12px;
   background: #fff;
-  box-shadow: 0 4px 18px rgb(0 0 0 / 18%);
+  box-shadow: 0 20px 56px rgb(23 43 38 / 22%);
   pointer-events: auto;
   transition:
     width 0.28s ease,
@@ -210,6 +224,8 @@ onBeforeUnmount(() => {
   bottom: 0;
   width: min(1080px, 100vw);
   height: 100dvh;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
   border-radius: 0;
 }
 
@@ -237,11 +253,11 @@ onBeforeUnmount(() => {
 @media (max-width: 620px) {
   .assistant-launcher {
     right: 12px;
-    bottom: 82px;
+    bottom: calc(82px + env(safe-area-inset-bottom, 0px));
     width: 50px;
     height: 50px;
     padding: 5px;
-    border-radius: 6px;
+    border-radius: 12px;
 
     &__icon,
     &__icon img {
@@ -262,6 +278,8 @@ onBeforeUnmount(() => {
     height: 100dvh;
     border: 0;
     border-radius: 0;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 }
 

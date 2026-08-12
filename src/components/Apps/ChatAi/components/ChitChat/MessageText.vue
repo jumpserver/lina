@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onBeforeUnmount } from 'vue'
 import MarkdownIt from 'markdown-it'
 import mdKatex from '@traptitech/markdown-it-katex'
 import linkAttributes from 'markdown-it-link-attributes'
@@ -23,6 +23,9 @@ const props = defineProps({
 })
 
 const { t } = useI18n()
+let copyTimer = null
+let copiedButton = null
+let copiedButtonLabel = ''
 
 function codeBlock(source, language) {
   const lang = language && hljs.getLanguage(language) ? language : ''
@@ -66,10 +69,26 @@ function handleClick(event) {
   const code = button.closest('.ai-code-block')?.querySelector('code')?.textContent || ''
   if (!code) return
   copy(code)
-  const original = button.textContent
+  const original = copiedButton === button ? copiedButtonLabel : button.textContent
+  if (copyTimer) window.clearTimeout(copyTimer)
+  if (copiedButton !== button && copiedButton?.isConnected) {
+    copiedButton.textContent = copiedButtonLabel
+  }
+  copiedButton = button
+  copiedButtonLabel = original
   button.textContent = t('ChatAICopied')
-  window.setTimeout(() => (button.textContent = original), 1200)
+  copyTimer = window.setTimeout(() => {
+    if (button.isConnected) button.textContent = original
+    copiedButton = null
+    copiedButtonLabel = ''
+  }, 1200)
 }
+
+onBeforeUnmount(() => {
+  if (copyTimer) window.clearTimeout(copyTimer)
+  copiedButton = null
+  copiedButtonLabel = ''
+})
 </script>
 
 <style lang="scss" scoped>
@@ -147,7 +166,7 @@ function handleClick(event) {
     margin: 10px 0;
     padding: 8px 12px;
     border-left: 3px solid var(--ai-primary, #1ab394);
-    border-radius: 0 4px 4px 0;
+    border-radius: 0 8px 8px 0;
     color: #666b7f;
     background: var(--ai-primary-light, #e8f7f3);
   }
@@ -187,7 +206,7 @@ function handleClick(event) {
     margin: 11px 0;
     overflow: hidden;
     border: 1px solid rgb(255 255 255 / 7%);
-    border-radius: 4px;
+    border-radius: var(--ai-radius-md, 10px);
     background: #151722;
     box-shadow: 0 10px 25px rgb(20 22 34 / 13%);
 
@@ -217,6 +236,11 @@ function handleClick(event) {
       &:hover {
         color: #fff;
         background: rgb(255 255 255 / 10%);
+      }
+
+      &:focus-visible {
+        outline: 2px solid rgb(255 255 255 / 42%);
+        outline-offset: 2px;
       }
     }
 

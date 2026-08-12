@@ -1,5 +1,8 @@
 <template>
-  <article :class="['chat-message', `is-${message.role}`, `status-${message.status}`]">
+  <article
+    :aria-busy="messageActive"
+    :class="['chat-message', `is-${message.role}`, `status-${message.status}`]"
+  >
     <div v-if="message.role === 'assistant'" class="chat-message__avatar">
       <AssistantMark :active="messageActive" size="small" />
     </div>
@@ -69,7 +72,7 @@
           :cards="message.result_cards"
         />
 
-        <div v-else-if="messageActive" class="thinking-state">
+        <div v-else-if="messageActive" class="thinking-state" role="status">
           <span class="thinking-orbit"><i /><i /><i /></span>
           <span>
             <strong>{{ t('ChatAIThinking') }}</strong>
@@ -107,6 +110,7 @@
       >
         <button
           v-if="message.role === 'user' && canEdit"
+          class="message-action message-action--edit"
           type="button"
           :aria-label="t('ChatAIEditMessage')"
           :title="t('ChatAIEditMessage')"
@@ -116,6 +120,7 @@
         </button>
         <button
           v-if="message.content"
+          :class="['message-action', 'message-action--copy', { 'is-success': copied }]"
           type="button"
           :aria-label="copied ? t('ChatAICopied') : t('Copy')"
           :title="copied ? t('ChatAICopied') : t('Copy')"
@@ -125,6 +130,7 @@
         </button>
         <button
           v-if="message.role === 'assistant' && message.status === 'completed' && canRegenerate"
+          class="message-action message-action--regenerate"
           type="button"
           :aria-label="t('ChatAIRegenerate')"
           :title="t('ChatAIRegenerate')"
@@ -153,9 +159,6 @@
             <el-icon><ArrowRight /></el-icon>
           </button>
         </span>
-        <span v-if="message.status === 'completed' && message.output_tokens" class="token-usage">
-          {{ t('ChatAITokens', { count: message.output_tokens }) }}
-        </span>
       </footer>
     </div>
 
@@ -166,7 +169,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, ref } from 'vue'
 import {
   ArrowLeft,
   ArrowRight,
@@ -228,6 +231,7 @@ const emit = defineEmits([
 ])
 const { t } = useI18n()
 const copied = ref(false)
+let copyTimer = null
 const editing = ref(false)
 const editor = ref(null)
 const draftContent = ref('')
@@ -247,14 +251,26 @@ const messageApproval = computed(() => {
 function formatTime(value) {
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return ''
-  return new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit' }).format(date)
+  const now = new Date()
+  const isToday = date.toDateString() === now.toDateString()
+  return new Intl.DateTimeFormat(
+    undefined,
+    isToday
+      ? { hour: '2-digit', minute: '2-digit' }
+      : { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }
+  ).format(date)
 }
 
 function copyMessage() {
   copy(props.message.content)
   copied.value = true
-  window.setTimeout(() => (copied.value = false), 1200)
+  if (copyTimer) window.clearTimeout(copyTimer)
+  copyTimer = window.setTimeout(() => (copied.value = false), 1200)
 }
+
+onBeforeUnmount(() => {
+  if (copyTimer) window.clearTimeout(copyTimer)
+})
 
 function startEdit() {
   if (!props.canEdit) return
@@ -299,7 +315,7 @@ function formatFileSize(size) {
   display: flex;
   width: 100%;
   max-width: 840px;
-  gap: 11px;
+  gap: 12px;
   margin: 0 auto;
   padding: 13px 24px;
 
@@ -342,7 +358,7 @@ function formatFileSize(size) {
     .chat-message__content {
       padding: 10px 14px;
       border: 1px solid var(--ai-primary, #1ab394);
-      border-radius: 6px 6px 0 6px;
+      border-radius: 12px 12px 3px 12px;
       color: #fff;
       background: var(--ai-primary, #1ab394);
 
@@ -359,6 +375,29 @@ function formatFileSize(size) {
         border-color: rgb(255 255 255 / 13%);
         background: rgb(255 255 255 / 12%);
       }
+
+      :deep(.markdown-body h1),
+      :deep(.markdown-body h2),
+      :deep(.markdown-body h3),
+      :deep(.markdown-body h4) {
+        color: #fff;
+      }
+
+      :deep(.markdown-body blockquote) {
+        color: rgb(255 255 255 / 88%);
+        border-left-color: rgb(255 255 255 / 55%);
+        background: rgb(255 255 255 / 10%);
+      }
+
+      :deep(.markdown-body table th),
+      :deep(.markdown-body table td) {
+        border-color: rgb(255 255 255 / 22%);
+      }
+
+      :deep(.markdown-body table th) {
+        color: #fff;
+        background: rgb(255 255 255 / 10%);
+      }
     }
 
     .message-actions {
@@ -367,6 +406,10 @@ function formatFileSize(size) {
     }
 
     &:hover .message-actions {
+      opacity: 1;
+    }
+
+    &:focus-within .message-actions {
       opacity: 1;
     }
   }
@@ -388,7 +431,8 @@ function formatFileSize(size) {
     display: block;
     width: 100%;
     max-height: 220px;
-    border-radius: 5px;
+    border: 1px solid #e4e8e6;
+    border-radius: var(--ai-radius-md, 10px);
     object-fit: cover;
   }
 }
@@ -406,7 +450,7 @@ function formatFileSize(size) {
     gap: 9px;
     padding: 8px 10px;
     border: 1px solid #e1e4ea;
-    border-radius: 5px;
+    border-radius: var(--ai-radius-sm, 8px);
     color: #555d70;
     background: #f8f9fb;
     text-decoration: none;
@@ -445,7 +489,9 @@ function formatFileSize(size) {
 
 .message-editor {
   display: flex;
-  min-width: min(520px, calc(100vw - 120px));
+  width: min(520px, 100%);
+  max-width: 100%;
+  min-width: 0;
   flex-direction: column;
   gap: 8px;
 
@@ -454,7 +500,7 @@ function formatFileSize(size) {
     min-height: 88px;
     padding: 10px 11px;
     border: 1px solid rgb(255 255 255 / 45%);
-    border-radius: 5px;
+    border-radius: var(--ai-radius-sm, 8px);
     outline: none;
     color: #35394b;
     background: #fff;
@@ -484,7 +530,7 @@ function formatFileSize(size) {
       height: 28px;
       padding: 0 10px;
       border: 1px solid #fff;
-      border-radius: 5px;
+      border-radius: var(--ai-radius-xs, 6px);
       color: var(--ai-primary-dark, #148f76);
       background: #fff;
       cursor: pointer;
@@ -542,15 +588,15 @@ function formatFileSize(size) {
 
 .user-avatar {
   display: grid;
-  width: 28px;
-  height: 28px;
-  flex: 0 0 28px;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
   margin-top: 2px;
   place-items: center;
   border: 1px solid #e6e8ef;
-  border-radius: 4px;
+  border-radius: 9px;
   color: #777e94;
-  background: #fff;
+  background: #f8faf9;
 }
 
 .thinking-state {
@@ -586,7 +632,7 @@ function formatFileSize(size) {
   align-items: center;
   justify-content: center;
   gap: 2px;
-  border-radius: 4px;
+  border-radius: var(--ai-radius-sm, 8px);
   background: var(--ai-primary-light, #e8f7f3);
 
   i {
@@ -608,36 +654,74 @@ function formatFileSize(size) {
 
 .message-actions {
   display: flex;
-  min-height: 26px;
+  min-height: 34px;
   align-items: center;
-  gap: 8px;
-  margin-top: 5px;
+  gap: 6px;
+  margin-top: 8px;
   transition: opacity 0.18s ease;
 
   button {
     display: inline-flex;
-    width: 25px;
-    height: 25px;
+    width: 32px;
+    height: 32px;
     align-items: center;
     justify-content: center;
     padding: 0;
-    border: 0;
-    border-radius: 7px;
-    color: #9ba0b1;
-    background: transparent;
+    border: 1px solid #e2e7eb;
+    border-radius: 9px;
+    color: #737c89;
+    background: #fff;
+    box-shadow: 0 1px 2px rgb(28 42 56 / 6%);
     cursor: pointer;
-    font-size: 10px;
+    font-size: 15px;
+    transition:
+      color 0.16s ease,
+      border-color 0.16s ease,
+      background-color 0.16s ease,
+      box-shadow 0.16s ease,
+      transform 0.16s ease;
+
+    .el-icon {
+      width: 16px;
+      height: 16px;
+      font-size: 16px;
+      transition: transform 0.18s ease;
+    }
 
     &:hover {
       color: var(--ai-primary-dark, #148f76);
+      border-color: rgb(26 179 148 / 35%);
       background: var(--ai-primary-light, #e8f7f3);
+      box-shadow: 0 3px 8px rgb(20 143 118 / 12%);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      box-shadow: none;
+      transform: translateY(0);
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgb(26 179 148 / 42%);
+      outline-offset: 2px;
     }
 
     &:disabled {
       cursor: not-allowed;
       opacity: 0.45;
+      transform: none;
+    }
+
+    &.is-success {
+      color: var(--ai-primary-dark, #148f76);
+      border-color: rgb(26 179 148 / 25%);
+      background: var(--ai-primary-light, #e8f7f3);
     }
   }
+}
+
+.message-action--regenerate:hover .el-icon {
+  transform: rotate(-30deg);
 }
 
 .answer-version {
@@ -648,14 +732,15 @@ function formatFileSize(size) {
   font-size: 10px;
 
   button {
-    width: 22px;
-    height: 22px;
-  }
-}
+    width: 28px;
+    height: 28px;
 
-.token-usage {
-  color: #8f959e;
-  font-size: 10px;
+    .el-icon {
+      width: 13px;
+      height: 13px;
+      font-size: 13px;
+    }
+  }
 }
 
 .message-error {
@@ -694,11 +779,10 @@ function formatFileSize(size) {
   }
 
   small {
-    overflow: hidden;
     color: #b17780;
     font-size: 10px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
   }
 
   button {
@@ -713,6 +797,29 @@ function formatFileSize(size) {
     background: #fff;
     cursor: pointer;
     font-size: 10px;
+    flex: 0 0 auto;
+
+    &:focus-visible {
+      outline: 2px solid rgb(213 92 105 / 32%);
+      outline-offset: 2px;
+    }
+  }
+}
+
+@media (hover: none) {
+  .chat-message.is-user .message-actions {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 520px) {
+  .message-error {
+    align-items: flex-start;
+    flex-wrap: wrap;
+
+    button {
+      margin-left: 38px;
+    }
   }
 }
 

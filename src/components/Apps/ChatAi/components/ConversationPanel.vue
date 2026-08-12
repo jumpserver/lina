@@ -1,5 +1,8 @@
 <template>
-  <aside :class="['conversation-panel', { 'is-open': open }]">
+  <aside
+    :aria-label="t('ChatAIConversations')"
+    :class="['conversation-panel', { 'is-open': open }]"
+  >
     <div class="conversation-panel__top">
       <div class="conversation-panel__label">
         <span>{{ t('ChatAIConversations') }}</span>
@@ -14,18 +17,40 @@
         </button>
       </div>
 
-      <button class="new-conversation" type="button" @click="emit('new')">
+      <button
+        class="new-conversation"
+        :disabled="navigationLocked"
+        :title="navigationLocked ? t('ChatAIFinishCurrentTask') : t('ChatAINewConversation')"
+        type="button"
+        @click="emit('new')"
+      >
         <span class="new-conversation__icon"
           ><el-icon><Plus /></el-icon
         ></span>
         <span>{{ t('ChatAINewConversation') }}</span>
-        <span class="new-conversation__hint">⌘ K</span>
+        <span class="new-conversation__hint">{{ shortcutHint }}</span>
       </button>
 
-      <label class="conversation-search">
+      <div class="conversation-search">
         <el-icon><Search /></el-icon>
-        <input v-model="query" :placeholder="t('ChatAISearchConversations')" type="search" />
-      </label>
+        <input
+          ref="searchInput"
+          v-model="query"
+          :aria-label="t('ChatAISearchConversations')"
+          :placeholder="t('ChatAISearchConversations')"
+          type="search"
+          @keydown.esc="handleSearchEscape"
+        />
+        <button
+          v-if="query"
+          :aria-label="t('Clear')"
+          :title="t('Clear')"
+          type="button"
+          @click="query = ''"
+        >
+          <el-icon><Close /></el-icon>
+        </button>
+      </div>
     </div>
 
     <div class="conversation-panel__scroll">
@@ -40,8 +65,10 @@
         <span class="conversation-empty__icon"
           ><el-icon><ChatLineRound /></el-icon
         ></span>
-        <strong>{{ t('ChatAIEmptyHistory') }}</strong>
-        <small>{{ t('ChatAIEmptyHistoryDescription') }}</small>
+        <strong>{{ query ? t('ChatAINoSearchResults') : t('ChatAIEmptyHistory') }}</strong>
+        <small>
+          {{ query ? t('ChatAINoSearchResultsDescription') : t('ChatAIEmptyHistoryDescription') }}
+        </small>
       </div>
 
       <template v-else>
@@ -57,14 +84,9 @@
                 'is-editing': editingId === conversation.id
               }
             ]"
-            role="button"
-            tabindex="0"
-            @click="select(conversation.id)"
-            @keydown.enter="select(conversation.id)"
           >
-            <span class="conversation-item__body">
+            <span v-if="editingId === conversation.id" class="conversation-item__body is-editing">
               <input
-                v-if="editingId === conversation.id"
                 :ref="setRenameInput"
                 v-model="draftTitle"
                 :aria-label="t('Rename')"
@@ -75,11 +97,24 @@
                 @keydown.enter.prevent.stop="commitRename(conversation)"
                 @keydown.esc.prevent.stop="cancelRename"
               />
-              <strong v-else @dblclick.stop="startRename(conversation)">
-                {{ conversation.title || t('ChatAIUntitledConversation') }}
-              </strong>
               <small>{{ formatTime(conversation.date_updated) }}</small>
             </span>
+            <button
+              v-else
+              class="conversation-item__select"
+              :disabled="navigationLocked"
+              :title="navigationLocked ? t('ChatAIFinishCurrentTask') : undefined"
+              type="button"
+              :aria-current="conversation.id === activeId ? 'page' : undefined"
+              @click="select(conversation.id)"
+            >
+              <span class="conversation-item__body">
+                <strong>
+                  {{ conversation.title || t('ChatAIUntitledConversation') }}
+                </strong>
+                <small>{{ formatTime(conversation.date_updated) }}</small>
+              </span>
+            </button>
             <span v-if="editingId !== conversation.id" class="conversation-item__actions">
               <button
                 class="conversation-item__action"
@@ -113,7 +148,7 @@
 </template>
 
 <script setup>
-import { computed, nextTick, ref } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { ChatLineRound, Close, Delete, EditPen, Plus, Search } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
 
@@ -133,15 +168,25 @@ const props = defineProps({
   open: {
     type: Boolean,
     default: false
+  },
+  navigationLocked: {
+    type: Boolean,
+    default: false
   }
 })
 
 const emit = defineEmits(['select', 'new', 'rename', 'delete', 'close'])
 const { t } = useI18n()
 const query = ref('')
+const searchInput = ref(null)
 const editingId = ref('')
 const draftTitle = ref('')
 let renameInput = null
+const shortcutHint = computed(() => {
+  if (typeof navigator === 'undefined') return 'Ctrl K'
+  const platform = navigator.userAgentData?.platform || navigator.platform || ''
+  return /mac|iphone|ipad|ipod/i.test(platform) ? '⌘ K' : 'Ctrl K'
+})
 
 const filteredConversations = computed(() => {
   const value = query.value.trim().toLowerCase()
@@ -184,7 +229,7 @@ function formatTime(value) {
 }
 
 function select(id) {
-  if (editingId.value) return
+  if (editingId.value || props.navigationLocked) return
   emit('select', id)
   emit('close')
 }
@@ -214,6 +259,29 @@ function commitRename(conversation) {
   if (!title || title === conversation.title) return
   emit('rename', conversation, title)
 }
+
+function focusSearch() {
+  window.setTimeout(() => searchInput.value?.focus(), 80)
+}
+
+function handleSearchEscape(event) {
+  event.preventDefault()
+  event.stopPropagation()
+  if (query.value) {
+    query.value = ''
+    return
+  }
+  emit('close')
+}
+
+watch(
+  () => props.open,
+  (open) => {
+    if (open) nextTick(focusSearch)
+  }
+)
+
+defineExpose({ focusSearch })
 </script>
 
 <style lang="scss" scoped>
@@ -224,10 +292,10 @@ function commitRename(conversation) {
   height: 100%;
   flex-direction: column;
   border-right: 1px solid var(--ai-border, #e9ecef);
-  background: #f5f7fa;
+  background: var(--ai-surface-muted, #f7f9f8);
 
   &__top {
-    padding: 21px 16px 12px;
+    padding: 18px 14px 12px;
   }
 
   &__label {
@@ -282,13 +350,13 @@ function commitRename(conversation) {
 .new-conversation {
   display: flex;
   width: 100%;
-  height: 44px;
+  height: 42px;
   align-items: center;
   gap: 10px;
   padding: 0 10px;
   border: 1px solid var(--ai-primary, #1ab394);
   border-color: var(--ai-primary, #1ab394);
-  border-radius: 4px;
+  border-radius: var(--ai-radius-sm, 8px);
   color: #fff;
   background: var(--ai-primary, #1ab394);
   cursor: pointer;
@@ -301,12 +369,19 @@ function commitRename(conversation) {
     background: var(--ai-primary-dark, #148f76);
   }
 
+  &:disabled {
+    border-color: #bddbd4;
+    background: #8fcdbf;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
   &__icon {
     display: grid;
     width: 26px;
     height: 26px;
     place-items: center;
-    border-radius: 4px;
+    border-radius: 7px;
     color: #fff;
     background: rgb(255 255 255 / 16%);
   }
@@ -321,13 +396,13 @@ function commitRename(conversation) {
 
 .conversation-search {
   display: flex;
-  height: 36px;
+  height: 38px;
   align-items: center;
   gap: 8px;
   margin-top: 12px;
   padding: 0 11px;
   border: 1px solid var(--ai-border, #e9ecef);
-  border-radius: 4px;
+  border-radius: var(--ai-radius-sm, 8px);
   color: #8f959e;
   background: #fff;
   transition: all 0.2s ease;
@@ -335,7 +410,7 @@ function commitRename(conversation) {
   &:focus-within {
     border-color: var(--ai-primary, #1ab394);
     background: #fff;
-    box-shadow: 0 0 0 2px var(--ai-primary-light-2, #d1efe8);
+    box-shadow: var(--ai-focus-ring, 0 0 0 3px rgb(26 179 148 / 16%));
   }
 
   input {
@@ -348,6 +423,31 @@ function commitRename(conversation) {
 
     &::placeholder {
       color: #8f959e;
+    }
+
+    &::-webkit-search-cancel-button {
+      display: none;
+    }
+  }
+
+  button {
+    display: grid;
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    padding: 0;
+    place-items: center;
+    border: 0;
+    border-radius: 6px;
+    color: #969ca9;
+    background: transparent;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--ai-primary-dark, #148f76);
+      background: var(--ai-primary-light, #e8f7f3);
+      outline: none;
     }
   }
 }
@@ -371,12 +471,11 @@ function commitRename(conversation) {
   width: 100%;
   min-height: 54px;
   align-items: center;
-  padding: 9px 9px 9px 12px;
+  padding: 0 5px 0 0;
   border: 0;
-  border-radius: 4px;
+  border-radius: var(--ai-radius-sm, 8px);
   color: #606266;
   background: transparent;
-  cursor: pointer;
   text-align: left;
   transition: all 0.18s ease;
 
@@ -393,7 +492,7 @@ function commitRename(conversation) {
   }
 
   &:hover {
-    background: #fff;
+    background: rgb(255 255 255 / 82%);
 
     .conversation-item__actions {
       opacity: 1;
@@ -404,14 +503,10 @@ function commitRename(conversation) {
     opacity: 1;
   }
 
-  &:focus-visible {
-    outline: 2px solid var(--ai-primary-light-2, #d1efe8);
-    outline-offset: -2px;
-  }
-
   &.is-active {
     color: var(--ai-text, #292827);
     background: var(--ai-primary-light, #e8f7f3);
+    box-shadow: 0 0 0 1px rgb(26 179 148 / 8%) inset;
 
     &::before {
       opacity: 1;
@@ -424,6 +519,10 @@ function commitRename(conversation) {
     flex: 1;
     flex-direction: column;
     gap: 5px;
+
+    &.is-editing {
+      padding: 9px 5px 9px 12px;
+    }
 
     strong {
       overflow: hidden;
@@ -443,14 +542,41 @@ function commitRename(conversation) {
       height: 25px;
       padding: 0 7px;
       border: 1px solid var(--ai-primary, #1ab394);
-      border-radius: 4px;
+      border-radius: 6px;
       outline: 0;
       color: var(--ai-text, #292827);
       background: #fff;
-      box-shadow: 0 0 0 2px var(--ai-primary-light-2, #d1efe8);
+      box-shadow: var(--ai-focus-ring, 0 0 0 3px rgb(26 179 148 / 16%));
       font: inherit;
       font-size: 12px;
       font-weight: 650;
+    }
+  }
+
+  &__select {
+    display: flex;
+    min-width: 0;
+    min-height: 54px;
+    flex: 1;
+    align-items: center;
+    padding: 9px 5px 9px 12px;
+    border: 0;
+    border-radius: inherit;
+    color: inherit;
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+
+    &:focus-visible {
+      outline: 2px solid var(--ai-primary-light-2, #d1efe8);
+      outline-offset: -2px;
+    }
+
+    &:disabled {
+      color: #9299a6;
+      cursor: not-allowed;
+      opacity: 0.68;
     }
   }
 
@@ -463,12 +589,12 @@ function commitRename(conversation) {
 
   &__action {
     display: grid;
-    width: 25px;
-    height: 25px;
+    width: 28px;
+    height: 28px;
     padding: 0;
     place-items: center;
     border: 0;
-    border-radius: 4px;
+    border-radius: 7px;
     color: #a0a5b7;
     background: transparent;
     cursor: pointer;
@@ -507,7 +633,7 @@ function commitRename(conversation) {
     height: 42px;
     margin-bottom: 12px;
     place-items: center;
-    border-radius: 4px;
+    border-radius: 10px;
     color: var(--ai-primary, #1ab394);
     background: var(--ai-primary-light, #e8f7f3);
     font-size: 20px;
@@ -570,11 +696,16 @@ function commitRename(conversation) {
     left: 0;
     width: min(86vw, 300px);
     transform: translateX(-105%);
+    visibility: hidden;
     box-shadow: 20px 0 50px rgb(29 33 55 / 17%);
-    transition: transform 0.25s ease;
+    transition:
+      transform 0.25s ease,
+      visibility 0s linear 0.25s;
 
     &.is-open {
       transform: translateX(0);
+      visibility: visible;
+      transition-delay: 0s;
     }
   }
 

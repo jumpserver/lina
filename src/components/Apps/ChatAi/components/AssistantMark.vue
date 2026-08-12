@@ -27,6 +27,7 @@ defineProps({
 <style lang="scss" scoped>
 .assistant-mark {
   --mark-size: 38px;
+  --mark-radius: 10px;
   position: relative;
   display: inline-flex;
   width: var(--mark-size);
@@ -37,10 +38,12 @@ defineProps({
 
   &--small {
     --mark-size: 28px;
+    --mark-radius: 8px;
   }
 
   &--large {
     --mark-size: 64px;
+    --mark-radius: 16px;
   }
 
   &__core {
@@ -50,9 +53,10 @@ defineProps({
     width: 100%;
     height: 100%;
     place-items: center;
-    border-radius: 4px;
+    border-radius: var(--mark-radius);
     color: #fff;
     background: var(--el-color-primary, #1ab394);
+    box-shadow: 0 5px 14px rgb(20 143 118 / 18%);
   }
 
   svg {
@@ -70,7 +74,9 @@ defineProps({
 
 @keyframes mark-pulse {
   50% {
-    opacity: 0.55;
+    box-shadow: 0 6px 20px rgb(20 143 118 / 30%);
+    opacity: 0.72;
+    transform: scale(1.03);
   }
 }
 

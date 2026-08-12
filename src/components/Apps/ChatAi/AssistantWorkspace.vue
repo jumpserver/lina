@@ -12,6 +12,7 @@
     <header class="assistant-header">
       <div class="assistant-header__brand">
         <button
+          ref="historyToggle"
           class="header-icon history-toggle"
           :aria-label="t('History')"
           :title="t('History')"
@@ -24,8 +25,8 @@
         <span class="brand-copy">
           <strong>{{ t('ChatAIName') }}</strong>
           <small>
-            <i :class="{ 'is-busy': busy }" />
-            {{ busy ? activityLabel : t('ChatAIReady') }}
+            <i :class="{ 'is-busy': busy || transcribing || composerRecording }" />
+            {{ busy || transcribing || composerRecording ? activityLabel : t('ChatAIReady') }}
           </small>
         </span>
       </div>
@@ -34,7 +35,8 @@
         <button
           class="new-chat-button"
           :aria-label="t('NewChat')"
-          :disabled="streaming || stopping"
+          :disabled="navigationLocked"
+          :title="navigationLocked ? t('ChatAIFinishCurrentTask') : t('NewChat')"
           type="button"
           @click="handleNew"
         >
@@ -45,6 +47,7 @@
           class="header-icon"
           :aria-label="t('ChatAIScheduledReports')"
           :title="t('ChatAIScheduledReports')"
+          :disabled="composerRecording || transcribing"
           type="button"
           @click="scheduledReportsOpen = true"
         >
@@ -55,20 +58,11 @@
           class="header-icon"
           :aria-label="t('ChatAIConversationAudit')"
           :title="t('ChatAIConversationAudit')"
+          :disabled="composerRecording || transcribing"
           type="button"
           @click="auditOpen = true"
         >
           <el-icon><DocumentChecked /></el-icon>
-        </button>
-        <button
-          v-if="isSuperAdmin"
-          class="header-icon"
-          :aria-label="t('ChatAIUsageStats')"
-          :title="t('ChatAIUsageStats')"
-          type="button"
-          @click="statsOpen = true"
-        >
-          <el-icon><DataAnalysis /></el-icon>
         </button>
         <button
           v-if="!standalone"
@@ -96,9 +90,11 @@
     <div class="assistant-body">
       <div v-if="historyOpen" class="mobile-backdrop" @click="historyOpen = false" />
       <ConversationPanel
+        ref="conversationPanel"
         :active-id="activeConversationId"
         :conversations="conversations"
         :loading="loadingConversations"
+        :navigation-locked="navigationLocked"
         :open="historyOpen"
         @close="historyOpen = false"
         @delete="handleDelete"
@@ -107,14 +103,28 @@
         @select="selectConversation"
       />
 
-      <main class="chat-stage">
+      <main class="chat-stage" :inert="historyOpen">
         <div ref="scrollArea" class="chat-scroll" @scroll="handleScroll">
-          <div v-if="loadingMessages" class="message-loading">
+          <div
+            v-if="loadingMessages || (!initialized && loadingConversations)"
+            class="message-loading"
+          >
             <div v-for="item in 3" :key="item" class="message-loading__row">
               <span class="message-loading__avatar" />
               <span class="message-loading__lines"><i /><i /><i /></span>
             </div>
           </div>
+
+          <section v-else-if="messageLoadFailed" class="message-load-error" role="alert">
+            <span class="message-load-error__icon">
+              <el-icon><Warning /></el-icon>
+            </span>
+            <h2>{{ t('ChatAILoadFailedTitle') }}</h2>
+            <p>{{ t('ChatAILoadFailedDescription') }}</p>
+            <button type="button" @click="retryLoadingMessages">
+              {{ t('ChatAIRetryLoad') }}
+            </button>
+          </section>
 
           <div v-else-if="!visibleMessages.length" class="assistant-welcome">
             <div class="welcome-orb">
@@ -186,10 +196,10 @@
             <el-dropdown
               popper-class="chat-ai-assistant-dropdown"
               trigger="click"
-              :disabled="busy"
+              :disabled="navigationLocked"
               @command="handleAssistantChange"
             >
-              <button class="assistant-mode-button" type="button" :disabled="busy">
+              <button class="assistant-mode-button" type="button" :disabled="navigationLocked">
                 <span class="assistant-mode-button__dot" />
                 <span>{{ assistantName(currentAssistant) }}</span>
                 <el-icon><ArrowDown /></el-icon>
@@ -218,15 +228,19 @@
           </div>
           <ChatInput
             ref="composer"
+            :active="active"
             :busy="busy"
             :disabled="awaitingApproval || recoverableRun"
+            :draft-key="composerDraftKey"
             :stopping="stopping"
+            :stop-disabled="approvalProcessing || backgroundQueuing || preparing"
             :transcribing="transcribing"
             :voice-transcription-mode="voiceTranscriptionMode"
             :web-search-available="webSearchAvailable"
             @audio="handleAudio"
             @error="handleMicrophoneError"
             @attachment-error="handleAttachmentError"
+            @recording-change="composerRecording = $event"
             @send="sendMessage"
             @stop="stopGeneration"
           />
@@ -245,7 +259,6 @@
       @open-conversation="handleScheduledConversation"
     />
     <ConversationAuditDialog v-if="isSuperAdmin" v-model="auditOpen" />
-    <ChatAIStatsDialog v-if="isSuperAdmin" v-model="statsOpen" />
   </section>
 </template>
 
@@ -260,7 +273,6 @@ import {
   Close,
   Coin,
   Connection,
-  DataAnalysis,
   DocumentChecked,
   EditPen,
   FullScreen,
@@ -276,7 +288,6 @@ import { useStore } from 'vuex'
 
 import { message } from '@/utils/vue/message'
 import AssistantMark from './components/AssistantMark.vue'
-import ChatAIStatsDialog from './components/ChatAIStatsDialog.vue'
 import ConversationAuditDialog from './components/ConversationAuditDialog.vue'
 import ConversationPanel from './components/ConversationPanel.vue'
 import ScheduledReportsDialog from './components/ScheduledReportsDialog.vue'
@@ -285,6 +296,10 @@ import ChatMessage from './components/ChitChat/ChatMessage.vue'
 import { useChatAi } from './composables/useChatAi'
 
 const props = defineProps({
+  active: {
+    type: Boolean,
+    default: true
+  },
   expanded: {
     type: Boolean,
     default: false
@@ -300,10 +315,12 @@ const { t } = useI18n()
 const store = useStore()
 const composer = ref(null)
 const scrollArea = ref(null)
+const conversationPanel = ref(null)
+const historyToggle = ref(null)
 const historyOpen = ref(false)
 const scheduledReportsOpen = ref(false)
 const auditOpen = ref(false)
-const statsOpen = ref(false)
+const composerRecording = ref(false)
 const stickToBottom = ref(true)
 const showScrollToLatest = ref(false)
 const voiceTranscriptionMode = computed(() => {
@@ -328,16 +345,20 @@ const {
   approval,
   loadingConversations,
   loadingMessages,
+  initialized,
   streaming,
   stopping,
   approvalProcessing,
   backgroundQueuing,
+  preparing,
   transcribing,
   awaitingApproval,
   recoverableRun,
   busy,
+  lastError,
   initialize,
   loadConversations,
+  loadMessages,
   selectConversation: selectConversationState,
   newConversation,
   selectAssistant,
@@ -356,10 +377,27 @@ const {
 const activityLabel = computed(() => {
   if (stopping.value) return t('ChatAIStopping')
   if (transcribing.value) return t('ChatAITranscribing')
+  if (composerRecording.value) return t('ChatAIRecording')
   if (backgroundQueuing.value) return t('ChatAIBackgroundQueuing')
   if (approvalProcessing.value) return t('ChatAIExecuting')
   if (awaitingApproval.value) return t('ChatAIWaitingApproval')
   return t('ChatAIWorking')
+})
+const composerDraftKey = computed(() => {
+  return activeConversationId.value || `new:${selectedAssistantKey.value}`
+})
+const messageLoadFailed = computed(() => {
+  const conversationFailed = activeConversationId.value && !visibleMessages.value.length
+  const workspaceFailed = !initialized.value && !activeConversationId.value
+  return Boolean(
+    lastError.value &&
+    !loadingConversations.value &&
+    !loadingMessages.value &&
+    (conversationFailed || workspaceFailed)
+  )
+})
+const navigationLocked = computed(() => {
+  return busy.value || composerRecording.value || transcribing.value || loadingMessages.value
 })
 
 const assistantCopy = {
@@ -446,22 +484,39 @@ function focus() {
 }
 
 async function selectConversation(id) {
+  if (navigationLocked.value) {
+    message.warning(t('ChatAIFinishCurrentTask'))
+    return
+  }
   const selected = await selectConversationState(id)
   if (!selected) message.warning(t('ChatAIFinishCurrentTask'))
   await nextTick()
   scrollToBottom(false)
+  composer.value?.focus()
 }
 
 function handleNew() {
+  if (navigationLocked.value) {
+    message.warning(t('ChatAIFinishCurrentTask'))
+    return
+  }
+  const alreadyNew = !activeConversationId.value
   if (!newConversation()) {
     message.warning(t('ChatAIFinishCurrentTask'))
     return
   }
   historyOpen.value = false
-  nextTick(() => composer.value?.focus())
+  nextTick(() => {
+    if (alreadyNew) composer.value?.clear()
+    composer.value?.focus()
+  })
 }
 
 async function handleDelete(conversation) {
+  if (conversation.id === activeConversationId.value && navigationLocked.value) {
+    message.warning(t('ChatAIFinishCurrentTask'))
+    return
+  }
   try {
     await ElMessageBox.confirm(
       t('ChatAIDeleteConversationDescription', {
@@ -476,6 +531,9 @@ async function handleDelete(conversation) {
       }
     )
     await removeConversation(conversation.id)
+    composer.value?.discardDraft(conversation.id)
+    await nextTick()
+    composer.value?.focus()
   } catch (error) {
     if (error === 'cancel' || error === 'close') return
     handleRequestError(error)
@@ -512,10 +570,17 @@ function fillSuggestion(content) {
 }
 
 async function handleAssistantChange(key) {
+  if (navigationLocked.value) return
   await selectAssistant(key)
+  await nextTick()
+  composer.value?.focus()
 }
 
 async function handleScheduledConversation(id) {
+  if (navigationLocked.value) {
+    message.warning(t('ChatAIFinishCurrentTask'))
+    return
+  }
   scheduledReportsOpen.value = false
   await loadConversations()
   const selected = await selectConversationState(id)
@@ -525,13 +590,25 @@ async function handleScheduledConversation(id) {
   }
   await nextTick()
   scrollToBottom(false)
+  composer.value?.focus()
+}
+
+async function retryLoadingMessages() {
+  if (loadingConversations.value || loadingMessages.value) return
+  if (activeConversationId.value) await loadMessages(activeConversationId.value)
+  else await initialize()
+  await nextTick()
+  if (!lastError.value) {
+    scrollToBottom(false)
+    composer.value?.focus()
+  }
 }
 
 async function handleAudio(file) {
   try {
     const language = (navigator.language || '').split(/[-_]/)[0]
     const result = await transcribe(file, language)
-    composer.value?.setValue(result.text || '')
+    composer.value?.appendValue(result.text || '')
     message.success(t('ChatAITranscriptionReady'))
   } catch {
     // The composable already surfaces a precise error.
@@ -592,6 +669,18 @@ function scrollToBottom(smooth = true, force = false) {
 }
 
 function handleShortcut(event) {
+  if (!props.active || event.defaultPrevented) return
+  if (scheduledReportsOpen.value || auditOpen.value) return
+  if (event.key === 'Escape' && historyOpen.value) {
+    event.preventDefault()
+    historyOpen.value = false
+    return
+  }
+  if (event.key === 'Escape' && !props.standalone) {
+    event.preventDefault()
+    emit('close')
+    return
+  }
   if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
     event.preventDefault()
     handleNew()
@@ -601,8 +690,13 @@ function handleShortcut(event) {
 watch(
   () =>
     visibleMessages.value
-      .map((item) => `${item.id}:${item.content.length}:${item.status}`)
-      .join('|'),
+      .map((item) => {
+        const traceState = (traces.value[item.id] || [])
+          .map((trace) => `${trace.id}:${trace.status}`)
+          .join(',')
+        return `${item.id}:${item.content.length}:${item.status}:${item.result_cards?.length || 0}:${traceState}`
+      })
+      .join('|') + `|approval:${approval.value?.id || ''}:${approval.value?.status || ''}`,
   async () => {
     await nextTick()
     scrollToBottom(streaming.value)
@@ -616,6 +710,19 @@ watch(
     scrollToBottom(false)
   }
 )
+
+watch(
+  () => props.active,
+  (active) => {
+    if (!active) historyOpen.value = false
+  }
+)
+
+watch(historyOpen, async (open) => {
+  await nextTick()
+  if (open) conversationPanel.value?.focusSearch()
+  else if (props.active) historyToggle.value?.focus()
+})
 
 onMounted(() => {
   window.addEventListener('keydown', handleShortcut)
@@ -642,6 +749,13 @@ defineExpose({ init, focus, newConversation: handleNew })
   --ai-text: var(--color-text-primary, #292827);
   --ai-text-secondary: var(--color-text-secondary, #7c7c7c);
   --ai-border: var(--color-border, #e9ecef);
+  --ai-surface-muted: #f7f9f8;
+  --ai-surface-hover: #f1f7f5;
+  --ai-radius-xs: 6px;
+  --ai-radius-sm: 8px;
+  --ai-radius-md: 10px;
+  --ai-radius-lg: 12px;
+  --ai-focus-ring: 0 0 0 3px rgb(26 179 148 / 16%);
   position: relative;
   display: flex;
   width: 100%;
@@ -659,6 +773,11 @@ defineExpose({ init, focus, newConversation: handleNew })
     sans-serif;
   flex-direction: column;
   user-select: text;
+}
+
+.assistant-workspace button:focus-visible {
+  outline: 2px solid rgb(26 179 148 / 42%);
+  outline-offset: 2px;
 }
 
 .assistant-workspace,
@@ -737,7 +856,7 @@ defineExpose({ init, focus, newConversation: handleNew })
   padding: 0;
   place-items: center;
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: var(--ai-radius-sm);
   color: var(--ai-text-secondary);
   background: transparent;
   cursor: pointer;
@@ -748,6 +867,11 @@ defineExpose({ init, focus, newConversation: handleNew })
     border-color: var(--ai-primary-light-2);
     background: var(--ai-primary-light);
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
 }
 
 .new-chat-button {
@@ -757,11 +881,11 @@ defineExpose({ init, focus, newConversation: handleNew })
   gap: 6px;
   padding: 0 11px;
   border: 1px solid var(--ai-primary);
-  border-radius: 4px;
+  border-radius: var(--ai-radius-sm);
   color: #fff;
   background: var(--ai-primary);
   cursor: pointer;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   transition: all 0.18s ease;
 
@@ -838,7 +962,7 @@ defineExpose({ init, focus, newConversation: handleNew })
   gap: 6px;
   padding: 0 7px;
   border: 0;
-  border-radius: 5px;
+  border-radius: var(--ai-radius-xs);
   color: #6f7687;
   background: transparent;
   cursor: pointer;
@@ -907,21 +1031,22 @@ defineExpose({ init, focus, newConversation: handleNew })
   right: 50%;
   bottom: 122px;
   display: grid;
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   padding: 0;
   place-items: center;
   border: 1px solid var(--ai-border);
   border-radius: 50%;
   color: #6f7687;
   background: #fff;
-  box-shadow: 0 3px 10px rgb(27 31 45 / 13%);
+  box-shadow: 0 6px 18px rgb(27 45 39 / 14%);
   cursor: pointer;
   transform: translateX(50%);
 
   &:hover {
     color: var(--ai-primary-dark);
     border-color: var(--ai-primary);
+    background: var(--ai-primary-light);
   }
 }
 
@@ -976,7 +1101,7 @@ defineExpose({ init, focus, newConversation: handleNew })
   button {
     padding: 4px 8px;
     border: 1px solid #ead0a2;
-    border-radius: 7px;
+    border-radius: var(--ai-radius-xs);
     color: #966426;
     background: #fff;
     cursor: pointer;
@@ -1024,7 +1149,7 @@ defineExpose({ init, focus, newConversation: handleNew })
 .welcome-kicker {
   padding: 4px 8px;
   border: 1px solid var(--ai-primary-light-2);
-  border-radius: 10px;
+  border-radius: 999px;
   color: var(--ai-primary-dark);
   background: var(--ai-primary-light);
   font-size: 10px;
@@ -1053,16 +1178,23 @@ defineExpose({ init, focus, newConversation: handleNew })
     gap: 9px;
     padding: 11px;
     border: 1px solid var(--ai-border);
-    border-radius: 4px;
+    border-radius: var(--ai-radius-md);
     color: #606266;
     background: #fff;
     cursor: pointer;
     text-align: left;
-    transition: all 0.2s ease;
+    box-shadow: 0 2px 7px rgb(34 52 46 / 4%);
+    transition:
+      border-color 0.2s ease,
+      background 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
 
     &:hover {
       border-color: var(--ai-primary);
       background: var(--ai-primary-light);
+      box-shadow: 0 8px 20px rgb(20 143 118 / 10%);
+      transform: translateY(-1px);
 
       .suggestion-arrow {
         opacity: 1;
@@ -1092,8 +1224,13 @@ defineExpose({ init, focus, newConversation: handleNew })
     }
 
     small {
+      display: -webkit-box;
       color: var(--ai-text-secondary);
       font-size: 10px;
+      line-height: 1.45;
+      white-space: normal;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
     }
   }
 }
@@ -1104,7 +1241,7 @@ defineExpose({ init, focus, newConversation: handleNew })
   height: 34px;
   flex: 0 0 34px;
   place-items: center;
-  border-radius: 4px;
+  border-radius: var(--ai-radius-sm);
   font-size: 15px;
 
   &.tone-primary {
@@ -1173,6 +1310,62 @@ defineExpose({ init, focus, newConversation: handleNew })
   }
 }
 
+.message-load-error {
+  display: flex;
+  width: min(440px, calc(100% - 36px));
+  min-height: 100%;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 32px 0;
+  color: var(--ai-text-secondary);
+  text-align: center;
+  flex-direction: column;
+
+  &__icon {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 13px;
+    place-items: center;
+    border-radius: var(--ai-radius-lg);
+    color: #bd6d2a;
+    background: #fff3e4;
+    font-size: 20px;
+  }
+
+  h2 {
+    margin: 0;
+    color: var(--ai-text);
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  p {
+    max-width: 360px;
+    margin: 7px 0 16px;
+    font-size: 11px;
+    line-height: 1.65;
+  }
+
+  button {
+    height: 34px;
+    padding: 0 14px;
+    border: 1px solid var(--ai-primary);
+    border-radius: var(--ai-radius-sm);
+    color: #fff;
+    background: var(--ai-primary);
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+
+    &:hover {
+      border-color: var(--ai-primary-dark);
+      background: var(--ai-primary-dark);
+    }
+  }
+}
+
 .mobile-backdrop {
   display: none;
 }
@@ -1186,11 +1379,16 @@ defineExpose({ init, focus, newConversation: handleNew })
     left: 0;
     width: min(82%, 300px);
     transform: translateX(-105%);
+    visibility: hidden;
     box-shadow: 20px 0 50px rgb(29 33 55 / 17%);
-    transition: transform 0.25s ease;
+    transition:
+      transform 0.25s ease,
+      visibility 0s linear 0.25s;
 
     &.is-open {
       transform: translateX(0);
+      visibility: visible;
+      transition-delay: 0s;
     }
   }
 
@@ -1272,6 +1470,22 @@ defineExpose({ init, focus, newConversation: handleNew })
     button {
       min-height: 58px;
     }
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-copy {
+    display: none;
+  }
+
+  .assistant-header__actions {
+    gap: 4px;
+  }
+
+  .header-icon,
+  .new-chat-button {
+    width: 34px;
+    height: 34px;
   }
 }
 

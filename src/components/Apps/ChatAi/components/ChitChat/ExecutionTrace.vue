@@ -1,6 +1,11 @@
 <template>
   <div v-if="items.length" :class="['execution-trace', { 'is-open': opened }]">
-    <button class="execution-trace__summary" type="button" @click="opened = !opened">
+    <button
+      class="execution-trace__summary"
+      type="button"
+      :aria-expanded="opened"
+      @click="toggleOpened"
+    >
       <span :class="['trace-state', { 'is-running': running }]">
         <el-icon v-if="running"><Loading /></el-icon>
         <el-icon v-else><CircleCheck /></el-icon>
@@ -43,7 +48,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { ArrowDown, Check, CircleCheck, Loading, Lock, Warning } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
 
@@ -62,6 +67,7 @@ const { t } = useI18n()
 const running = computed(() => props.items.some((item) => item.status === 'running'))
 const failed = computed(() => props.items.some((item) => item.status === 'failed'))
 const opened = ref(props.active || failed.value)
+let collapseTimer = null
 
 const summaryTitle = computed(() => {
   if (failed.value) return t('ChatAIExecutionIssue')
@@ -78,10 +84,28 @@ const summaryDescription = computed(() => {
 watch(
   () => props.active,
   (active) => {
+    if (collapseTimer) window.clearTimeout(collapseTimer)
     if (active) opened.value = true
-    else if (!failed.value) window.setTimeout(() => (opened.value = false), 700)
+    else if (!failed.value) collapseTimer = window.setTimeout(() => (opened.value = false), 3200)
   }
 )
+
+watch(failed, (hasFailed) => {
+  if (hasFailed) {
+    if (collapseTimer) window.clearTimeout(collapseTimer)
+    opened.value = true
+  }
+})
+
+onBeforeUnmount(() => {
+  if (collapseTimer) window.clearTimeout(collapseTimer)
+})
+
+function toggleOpened() {
+  if (collapseTimer) window.clearTimeout(collapseTimer)
+  collapseTimer = null
+  opened.value = !opened.value
+}
 
 function itemTitle(item) {
   if (item.type === 'agent_plan') return t('ChatAIPlanReady')
@@ -136,8 +160,8 @@ function itemDescription(item) {
   margin: 10px 0 4px;
   overflow: hidden;
   border: 1px solid var(--ai-border, #e9ecef);
-  border-radius: 4px;
-  background: #f5f7fa;
+  border-radius: var(--ai-radius-md, 10px);
+  background: var(--ai-surface-muted, #f7f9f8);
 
   &__summary {
     display: flex;
@@ -151,6 +175,16 @@ function itemDescription(item) {
     background: transparent;
     cursor: pointer;
     text-align: left;
+    transition: background 0.16s ease;
+
+    &:hover {
+      background: var(--ai-surface-hover, #f1f7f5);
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgb(26 179 148 / 38%);
+      outline-offset: -2px;
+    }
   }
 
   &__details {
@@ -165,7 +199,7 @@ function itemDescription(item) {
   height: 30px;
   flex: 0 0 30px;
   place-items: center;
-  border-radius: 4px;
+  border-radius: var(--ai-radius-sm, 8px);
   color: var(--ai-primary-dark, #148f76);
   background: var(--ai-primary-light, #e8f7f3);
 
@@ -205,7 +239,7 @@ function itemDescription(item) {
   min-width: 20px;
   height: 20px;
   place-items: center;
-  border-radius: 7px;
+  border-radius: 999px;
   color: #767c91;
   background: rgb(83 88 118 / 7%);
   font-size: 10px;

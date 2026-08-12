@@ -146,6 +146,7 @@ export function useChatAi(options = {}) {
   const stopping = ref(false)
   const approvalProcessing = ref(false)
   const backgroundQueuing = ref(false)
+  const preparing = ref(false)
   const transcribing = ref(false)
   const initialized = ref(false)
   const lastError = ref(null)
@@ -157,6 +158,7 @@ export function useChatAi(options = {}) {
   let remoteRunPollTimer = null
   let streamConversationId = ''
   let branchPending = false
+  let messagesRequestId = 0
 
   const activeConversation = computed(() => {
     return conversations.value.find((item) => item.id === activeConversationId.value) || null
@@ -196,6 +198,7 @@ export function useChatAi(options = {}) {
       stopping.value ||
       approvalProcessing.value ||
       backgroundQueuing.value ||
+      preparing.value ||
       awaitingApproval.value ||
       recoverableRun.value
     )
@@ -217,6 +220,7 @@ export function useChatAi(options = {}) {
     loadingConversations.value = true
     try {
       const response = await listConversations()
+      lastError.value = null
       conversations.value = serverResults(response)
       if (
         activeConversationId.value &&
@@ -227,8 +231,10 @@ export function useChatAi(options = {}) {
       if (selectFirst && !activeConversationId.value && conversations.value.length) {
         await selectConversation(conversations.value[0].id)
       }
+      return true
     } catch (error) {
       emitError(error)
+      return false
     } finally {
       loadingConversations.value = false
     }
@@ -304,38 +310,48 @@ export function useChatAi(options = {}) {
   }
 
   async function loadMessages(id = activeConversationId.value, { silent = false } = {}) {
+    const requestId = ++messagesRequestId
     if (!id) {
       clearRemoteRunPoll()
       revokeLocalAttachments(messages.value)
       messages.value = []
       approval.value = null
-      return
+      return true
     }
-    if (!silent) loadingMessages.value = true
+    if (!silent) {
+      loadingMessages.value = true
+      lastError.value = null
+    }
     try {
       const data = await listConversationMessages(id)
-      if (activeConversationId.value !== id) return
+      if (requestId !== messagesRequestId || activeConversationId.value !== id) return false
       revokeLocalAttachments(messages.value)
       messages.value = data.map(normalizeMessage)
       await restoreApproval()
+      lastError.value = null
+      return true
     } catch (error) {
-      if (!silent) emitError(error)
+      if (!silent && requestId === messagesRequestId && activeConversationId.value === id) {
+        emitError(error)
+      }
+      return false
     } finally {
-      if (!silent) loadingMessages.value = false
-      scheduleRemoteRunPoll(id)
+      if (!silent && requestId === messagesRequestId) loadingMessages.value = false
+      if (requestId === messagesRequestId && activeConversationId.value === id) {
+        scheduleRemoteRunPoll(id)
+      }
     }
   }
 
   async function initialize() {
     if (initialized.value) return
-    initialized.value = true
     await loadAssistants()
-    await loadConversations({ selectFirst: true })
+    initialized.value = await loadConversations({ selectFirst: true })
   }
 
   async function selectConversation(id) {
     if (!id || id === activeConversationId.value) return true
-    if (streaming.value || stopping.value || approvalProcessing.value) return false
+    if (busy.value) return false
     clearRemoteRunPoll()
     const conversation = conversations.value.find((item) => item.id === id)
     selectedAssistantKey.value = conversation?.assistant || DEFAULT_ASSISTANT.key
@@ -350,7 +366,7 @@ export function useChatAi(options = {}) {
   }
 
   function newConversation() {
-    if (streaming.value || stopping.value || approvalProcessing.value) return false
+    if (busy.value) return false
     clearRemoteRunPoll()
     activeConversationId.value = ''
     revokeLocalAttachments(messages.value)
@@ -409,6 +425,15 @@ export function useChatAi(options = {}) {
   }
 
   function transferTemporaryMessage(realId) {
+    for (const [rootId, selectedId] of Object.entries(answerVersionSelections.value)) {
+      if (selectedId === temporaryAssistantId) {
+        answerVersionSelections.value = {
+          ...answerVersionSelections.value,
+          [rootId]: realId
+        }
+        break
+      }
+    }
     const message = messageById(temporaryAssistantId)
     if (message) message.id = realId
     if (traces.value[temporaryAssistantId]) {
@@ -578,7 +603,16 @@ export function useChatAi(options = {}) {
     stopRequested = false
     clearRemoteRunPoll()
     const title = content.trim() || files[0]?.name || 'Image'
-    const conversation = await ensureConversation(title)
+    let conversation
+    preparing.value = true
+    try {
+      conversation = await ensureConversation(title)
+    } catch (error) {
+      emitError(error)
+      return false
+    } finally {
+      preparing.value = false
+    }
     if (options.background === true) {
       backgroundQueuing.value = true
       try {
@@ -586,6 +620,7 @@ export function useChatAi(options = {}) {
           webSearch: options.webSearch === true,
           notify: true
         })
+        options.onAccepted?.()
         await loadMessages(conversation.id)
         await loadConversations()
         return true
@@ -631,6 +666,7 @@ export function useChatAi(options = {}) {
       date_created: now
     })
     messages.value.push(userMessage, assistantMessage)
+    options.onAccepted?.()
     traces.value[temporaryAssistantId] = []
     streaming.value = true
     abortController = new AbortController()
@@ -673,7 +709,9 @@ export function useChatAi(options = {}) {
   }
 
   async function stopGeneration() {
-    if (stopping.value) return
+    if (stopping.value || approvalProcessing.value || backgroundQueuing.value || preparing.value) {
+      return
+    }
     const conversationId = streamConversationId || (branchPending ? '' : activeConversationId.value)
     stopping.value = true
     stopRequested = true
@@ -860,6 +898,16 @@ export function useChatAi(options = {}) {
     stopRequested = false
     clearRemoteRunPoll()
     temporaryAssistantId = temporaryId('assistant')
+    let versionRootId = messageId
+    let versionMessage = messageById(versionRootId)
+    while (versionMessage?.regenerated_from) {
+      versionRootId = versionMessage.regenerated_from
+      versionMessage = messageById(versionRootId)
+    }
+    answerVersionSelections.value = {
+      ...answerVersionSelections.value,
+      [versionRootId]: temporaryAssistantId
+    }
     activeStreamMessageId = ''
     messages.value.push(
       normalizeMessage({
@@ -931,6 +979,7 @@ export function useChatAi(options = {}) {
     stopping,
     approvalProcessing,
     backgroundQueuing,
+    preparing,
     transcribing,
     initialized,
     lastError,
