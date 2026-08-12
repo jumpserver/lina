@@ -39,10 +39,10 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/assets/assets/${this.object.id}/perm-users/`,
-        columns: ['name', 'username', 'email', 'comment', 'created_by'],
+        columns: ['name', 'username', 'email', 'comment', 'created_by', 'actions'],
         columnsShow: {
-          min: ['name', 'username'],
-          default: ['name', 'username']
+          min: ['name', 'username', 'actions'],
+          default: ['name', 'username', 'actions']
         },
         columnsMeta: {
           name: {
