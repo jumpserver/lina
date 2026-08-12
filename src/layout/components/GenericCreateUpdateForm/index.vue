@@ -328,6 +328,9 @@ export default {
     }
   },
   methods: {
+    validateField(...args) {
+      return this.$refs.form?.dataForm?.elForm?.validateField(...args)
+    },
     async getDrawerMeta() {
       return getRuntimeActionMeta(this)
     },
