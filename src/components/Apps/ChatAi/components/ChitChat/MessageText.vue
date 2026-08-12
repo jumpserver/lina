@@ -89,7 +89,7 @@ export default {
         <span class="code-block-header__actions">
         ${insertSpanHtml}
           <button class="code-block-header__copy" type="button">
-            <i aria-hidden="true" class="fa fa-copy"></i>
+            <i aria-hidden="true" class="fa-regular fa-copy"></i>
             <span>${this.$t('Copy')}</span>
           </button>
         </span>

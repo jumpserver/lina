@@ -36,7 +36,7 @@ export default {
     },
     fa: {
       type: String,
-      default: 'fa-info-circle-o'
+      default: 'fa-solid fa-circle-info'
     },
     items: {
       type: Array,

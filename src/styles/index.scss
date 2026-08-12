@@ -3,9 +3,7 @@
 //@import './transition.scss';
 @use './sidebar';
 @use './menu';
-@use './fonts';
 @use './element-form-controls';
-@import './fonts/font-awesome.min.css';
 
 :root {
   --scrollbar-size: 8px;
@@ -888,12 +886,12 @@ li.rmenu i.fa {
 
   i,
   .el-icon {
-    color: var(--color-primary);
+    color: inherit;
   }
 
-  &:hover,
-  &:focus,
-  &:active {
+  &:hover:not(.is-disabled),
+  &:focus:not(.is-disabled),
+  &:active:not(.is-disabled) {
     color: #fff;
     background-color: var(--color-primary);
     border-color: var(--color-primary);

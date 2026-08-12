@@ -245,6 +245,14 @@ $color-drop-menu-border: #e4e7ed;
 
 // 通用
 .layout {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--data-actions-gap, 1px);
+
+  &.el-button-group {
+    gap: 0;
+  }
+
   // 确保所有按钮都使用 flex 布局，内容垂直居中
   :deep(.el-button) {
     display: inline-flex;
@@ -288,7 +296,7 @@ $color-drop-menu-border: #e4e7ed;
   }
 
   .action-item {
-    margin-left: 1px;
+    margin-left: 0;
 
     .action-content,
     .action-content .pre-icon {
@@ -300,14 +308,6 @@ $color-drop-menu-border: #e4e7ed;
 
     .pre-icon + span {
       margin-left: 2px;
-    }
-
-    &.grouped {
-      margin-left: 0;
-    }
-
-    &:first-child {
-      margin-left: 0;
     }
   }
 }
@@ -357,9 +357,9 @@ $color-drop-menu-border: #e4e7ed;
   :deep(.action-item.el-button.el-button--primary.is-plain),
   :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain),
   :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain) {
-    &:hover,
-    &:focus,
-    &:active {
+    &:hover:not(.is-disabled),
+    &:focus:not(.is-disabled),
+    &:active:not(.is-disabled) {
       color: #fff;
       background-color: var(--color-primary) !important;
       border-color: var(--color-primary) !important;
@@ -404,43 +404,7 @@ $color-drop-menu-border: #e4e7ed;
   :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain .el-icon),
   :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain .pre-icon),
   :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain .el-icon) {
-    color: var(--color-primary);
-  }
-
-  :deep(.action-item.el-button.el-button--primary.is-plain:hover .pre-icon),
-  :deep(.action-item.el-button.el-button--primary.is-plain:hover .el-icon),
-  :deep(.action-item.el-button.el-button--primary.is-plain:focus .pre-icon),
-  :deep(.action-item.el-button.el-button--primary.is-plain:focus .el-icon),
-  :deep(.action-item.el-button.el-button--primary.is-plain:active .pre-icon),
-  :deep(.action-item.el-button.el-button--primary.is-plain:active .el-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:hover .pre-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:hover .el-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:focus .pre-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:focus .el-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:active .pre-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:active .el-icon),
-  :deep(
-    .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:hover .pre-icon
-  ),
-  :deep(
-    .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:hover .el-icon
-  ),
-  :deep(
-    .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:focus .pre-icon
-  ),
-  :deep(
-    .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:focus .el-icon
-  ),
-  :deep(
-    .action-item.el-dropdown
-      .el-button-group
-      .el-button.el-button--primary.is-plain:active
-      .pre-icon
-  ),
-  :deep(
-    .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:active .el-icon
-  ) {
-    color: #fff;
+    color: inherit;
   }
 
   .action-item.el-dropdown {
@@ -466,7 +430,7 @@ $color-drop-menu-border: #e4e7ed;
 
     .el-button--primary {
       :deep(.el-icon-arrow-down.el-icon--right) {
-        color: #ffffff !important;
+        color: inherit !important;
       }
 
       &.el-dropdown-selfdefine {

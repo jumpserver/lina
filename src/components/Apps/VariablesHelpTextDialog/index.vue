@@ -28,7 +28,7 @@
               @click="onCopy(row.name)"
             >
               <code>{{ row.name }}</code>
-              <i aria-hidden="true" class="fa fa-copy" />
+              <i aria-hidden="true" class="fa-regular fa-copy" />
             </button>
           </template>
         </el-table-column>
