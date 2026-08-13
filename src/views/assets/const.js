@@ -176,13 +176,13 @@ export const assetFieldsMeta = (vm, category, type) => {
       }
     },
     zone: {
-      type: 'resourceSelect',
-      component: ResourceSelect,
       disabled: false,
       el: {
         multiple: false,
-        url: '/api/v1/assets/zones/',
-        resourceName: vm.$t('Zone')
+        clearable: true,
+        ajax: {
+          url: '/api/v1/assets/zones/'
+        }
       }
     },
     accounts: {

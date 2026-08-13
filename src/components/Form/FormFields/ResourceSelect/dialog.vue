@@ -99,10 +99,6 @@ export default {
       type: String,
       default: ''
     },
-    multiple: {
-      type: Boolean,
-      default: true
-    },
     valueKey: {
       type: String,
       default: 'id'
@@ -460,17 +456,6 @@ export default {
       return sharedRequest
     },
     handleAvailableSelectionChange(rows) {
-      if (!this.multiple && rows.length > 1) {
-        const previousIds = new Set(
-          this.availableChecked.map((row) => String(row[this.valueKey]))
-        )
-        const latestRow =
-          rows.find((row) => !previousIds.has(String(row[this.valueKey]))) || rows.at(-1)
-        const table = this.$refs.availableTable?.dataTable?.dataTable
-        table?.clearSelection()
-        table?.toggleRowSelection(latestRow, true)
-        return
-      }
       this.availableChecked = rows
     },
     handleSelectedSelectionChange(rows) {
@@ -776,26 +761,6 @@ export default {
     },
     addResources(rows) {
       this.cacheResources(rows)
-      if (!this.multiple) {
-        const row = rows.filter((item) => this.canSelect(item)).at(-1)
-        if (!row) {
-          return
-        }
-        const id = row[this.valueKey]
-        if (this.draftValue.length === 1 && this.selectedIdSet.has(id)) {
-          return
-        }
-        const hadSelection = this.draftValue.length > 0
-        this.draftValue = [id]
-        this.invalidateSelectionCache()
-        if (this.availableCount !== null && !hadSelection) {
-          this.availableCount = Math.max(this.availableCount - 1, 0)
-        }
-        this.removeRowsFromTable('availableTable', [id])
-        this.refillAvailableTable()
-        this.selectedDirty = true
-        return
-      }
       const addedIds = []
       rows
         .filter((row) => this.canSelect(row))

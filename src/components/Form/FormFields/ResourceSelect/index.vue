@@ -18,7 +18,6 @@
       v-model:visible="dialogVisible"
       :page-size="pageSize"
       :initial-tab="initialTab"
-      :multiple="multiple"
       :node-filter="nodeFilter"
       :query-params="queryParams"
       :resource-name="resourceName"
@@ -99,10 +98,6 @@ export default {
       type: Number,
       default: 15
     },
-    multiple: {
-      type: Boolean,
-      default: true
-    },
     disabled: {
       type: [Boolean, Function],
       default: false
@@ -113,8 +108,9 @@ export default {
     return {
       dialogVisible: false,
       initialTab: 'available',
-      selectedValue: this.normalizeSelectedValue(
-        this.modelValue !== undefined ? this.modelValue : this.value
+      selectedValue: normalizeResourceValue(
+        this.modelValue !== undefined ? this.modelValue : this.value,
+        this.valueKey
       )
     }
   },
@@ -141,29 +137,6 @@ export default {
     }
   },
   methods: {
-    normalizeSelectedValue(value) {
-      const normalized = normalizeResourceValue(value, this.valueKey)
-      return this.multiple ? normalized : normalized.slice(0, 1)
-    },
-    updateSelectedValue(value) {
-      const normalized = this.normalizeSelectedValue(value)
-      const payload = this.multiple ? [...normalized] : normalized[0] ?? null
-      this.selectedValue = normalized
-      this.$emit('input', payload)
-      this.$emit('update:modelValue', payload)
-      this.$emit('update:model-value', payload)
-      this.$emit('change', payload)
-    },
-    syncSelectedValue(value) {
-      this.cacheSummaryResources(value)
-      const payload = this.normalizeSelectedValue(value)
-      const unchanged =
-        payload.length === this.selectedValue.length &&
-        payload.every((item, index) => String(item) === String(this.selectedValue[index]))
-      if (!unchanged) {
-        this.selectedValue = payload
-      }
-    },
     openDialog(tab = 'available') {
       if (!this.isDisabled && this.resourceUrl) {
         this.initialTab = tab
