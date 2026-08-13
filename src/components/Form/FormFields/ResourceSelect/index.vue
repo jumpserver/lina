@@ -6,6 +6,7 @@
       :has-more="summaryHasMore"
       :items="selectedSummaryItems"
       :selected-count="selectedValue.length"
+      :count-only="summaryCountOnly"
       :text="summaryText"
       @click="openDialog(selectedValue.length > 0 ? 'selected' : 'available')"
       @load-more="loadNextSummaryBatch"
