@@ -1,5 +1,9 @@
 <template>
-  <div v-loading="loadingStatus" :class="{ 'is-compact': compact }" class="table-actions-formatter">
+  <div
+    v-loading="loadingStatus"
+    :class="{ 'is-compact': compact, 'has-square-buttons': squareButtons }"
+    class="table-actions-formatter"
+  >
     <div v-if="actions.length > 0 || moreActions.length > 0" class="table-actions-group">
       <el-tooltip
         v-for="action in actions"
@@ -335,6 +339,9 @@ export default {
     },
     compact() {
       return Boolean(this.colActions.compact)
+    },
+    squareButtons() {
+      return Boolean(this.colActions.squareButtons)
     }
   },
   methods: {
@@ -449,6 +456,14 @@ export default {
     height: 20px;
     min-height: 20px;
     padding: 2px 6px;
+  }
+}
+
+.table-actions-formatter.has-square-buttons {
+  .table-actions-group :deep(.table-action-btn) {
+    width: 20px;
+    min-width: 20px;
+    padding: 0;
   }
 }
 

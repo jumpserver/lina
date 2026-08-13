@@ -1,6 +1,9 @@
 import { constantRoutes } from '@/router'
 import store from '@/store'
 import { getAssetUrlOr } from '@/utils/assets'
+import { checkPermission, getResourceNameByPath, hasPermission } from './permission'
+
+export { checkPermission, getResourceNameByPath, hasPermission } from './permission'
 
 let taskWindowOffset = 0
 
@@ -26,41 +29,6 @@ export function openTaskPage(taskId, taskType, taskUrl) {
     taskUrl = `/core/ops/${taskType}/task/${taskId}/log/?type=${taskType}`
   }
   openTaskWindow(taskUrl)
-}
-
-export function checkPermission(permsRequired, permsAll) {
-  if (!permsRequired || permsRequired.length === 0) {
-    return true
-  }
-  if (typeof permsRequired === 'string') {
-    permsRequired = [permsRequired]
-  }
-  return permsRequired.every((perm) => {
-    // 包含 | 是或的关系, 单独处理
-    if (perm.indexOf('|') === -1) {
-      return permsAll.includes(perm)
-    }
-    const permOr = perm.split('|').map((item) => item.trim())
-    return permOr.some((perm) => {
-      return permsAll.includes(perm)
-    })
-  })
-}
-
-export function hasPermission(permsRequired) {
-  const permsAll = store.getters?.currentOrgPerms || []
-  return checkPermission(permsRequired, permsAll)
-}
-
-export function getResourceNameByPath(path) {
-  const pathSlice = path.split('/')
-  const pathValue = pathSlice[pathSlice.length - 1]
-
-  let resource = pathValue.replaceAll('-', '')
-  if (resource[resource.length - 1] === 's') {
-    resource = resource.slice(0, resource.length - 1)
-  }
-  return resource
 }
 
 export function getResourceFromApiUrl(apiUrl) {

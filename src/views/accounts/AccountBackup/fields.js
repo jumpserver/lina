@@ -1,8 +1,11 @@
 import i18n from '@/i18n/i18n'
 import { periodicMeta } from '@/components/const'
+import { ResourceSelect } from '@/components/Form/FormFields'
 
 function getAccountBackupFields() {
   const recipients_part_one = {
+    type: 'resourceSelect',
+    component: ResourceSelect,
     label: i18n.t('Recipient') + ' A',
     helpText: i18n.t('RecipientHelpText'),
     hidden: (formValue) => {
@@ -10,16 +13,14 @@ function getAccountBackupFields() {
     },
     el: {
       value: [],
-      ajax: {
-        url: '/api/v1/users/users/?fields_size=mini',
-        transformOption: (item) => {
-          return { label: item.name + '(' + item.username + ')', value: item.id }
-        }
-      }
+      url: '/api/v1/users/users/?fields_size=mini',
+      resourceName: i18n.t('Users')
     }
   }
 
   const recipients_part_two = {
+    type: 'resourceSelect',
+    component: ResourceSelect,
     label: i18n.t('Recipient') + ' B',
     helpText: i18n.t('RecipientHelpText'),
     hidden: (formValue) => {
@@ -27,15 +28,13 @@ function getAccountBackupFields() {
     },
     el: {
       value: [],
-      ajax: {
-        url: '/api/v1/users/users/?fields_size=mini',
-        transformOption: (item) => {
-          return { label: item.name + '(' + item.username + ')', value: item.id }
-        }
-      }
+      url: '/api/v1/users/users/?fields_size=mini',
+      resourceName: i18n.t('Users')
     }
   }
   const obj_recipients_part_one = {
+    type: 'resourceSelect',
+    component: ResourceSelect,
     label: i18n.t('RecipientServer') + ' A',
     helpText: i18n.t('RecipientHelpText'),
     hidden: (formValue) => {
@@ -43,19 +42,14 @@ function getAccountBackupFields() {
     },
     el: {
       value: [],
-      ajax: {
-        url: '/api/v1/terminal/replay-storages/?type=sftp&fields_size=mini',
-        transformOption: (item) => {
-          return {
-            label: item.name + '(' + item.meta.SFTP_HOST + ':' + item.meta.SFTP_ROOT_PATH + ')',
-            value: item.id
-          }
-        }
-      }
+      url: '/api/v1/terminal/replay-storages/?type=sftp&fields_size=mini',
+      resourceName: i18n.t('RecipientServer')
     }
   }
 
   const obj_recipients_part_two = {
+    type: 'resourceSelect',
+    component: ResourceSelect,
     label: i18n.t('RecipientServer') + ' B',
     helpText: i18n.t('RecipientHelpText'),
     hidden: (formValue) => {
@@ -65,15 +59,8 @@ function getAccountBackupFields() {
     },
     el: {
       value: [],
-      ajax: {
-        url: '/api/v1/terminal/replay-storages/?type=sftp&fields_size=mini',
-        transformOption: (item) => {
-          return {
-            label: item.name + '(' + item.meta.SFTP_HOST + ':' + item.meta.SFTP_ROOT_PATH + ')',
-            value: item.id
-          }
-        }
-      }
+      url: '/api/v1/terminal/replay-storages/?type=sftp&fields_size=mini',
+      resourceName: i18n.t('RecipientServer')
     }
   }
 

@@ -1,7 +1,4 @@
-import { constantRoutes, viewRoutes } from '@/router'
-import empty from '@/layout/empty'
-import Layout from '@/layout/index'
-import { getResourceNameByPath, hasPermission } from '@/utils/jms/index'
+import { getResourceNameByPath, hasPermission } from '@/utils/jms/permission'
 import i18n from '@/i18n/i18n'
 import _ from 'lodash'
 
@@ -46,7 +43,7 @@ const actionMapper = {
 }
 
 function getRouteDefaultPerms(route) {
-  if (route.component === empty || route.component === Layout) {
+  if (route.component?.routeViewShell) {
     return []
   }
 
@@ -176,13 +173,15 @@ export function filterPermedRoutes(routes, parent) {
 
 const state = {
   routes: [],
+  constantRoutes: [],
   currentViewRoute: {},
   addRoutes: []
 }
 
 const mutations = {
-  SET_ROUTES: (state, { routes }) => {
+  SET_ROUTES: (state, { routes, constantRoutes }) => {
     state.addRoutes = routes
+    state.constantRoutes = constantRoutes
     state.routes = routes.concat(constantRoutes)
   },
   SET_VIEW_ROUTE: (state, viewRoute) => {
@@ -200,8 +199,8 @@ const actions = {
       const matched = path.match(re)
       if (!matched) {
         console.debug('Not match path, set default routes', path)
-        commit('SET_VIEW_ROUTE', constantRoutes[0])
-        resolve(constantRoutes[0])
+        commit('SET_VIEW_ROUTE', state.constantRoutes[0])
+        resolve(state.constantRoutes[0])
         return
       }
       const viewName = matched[1]
@@ -218,7 +217,7 @@ const actions = {
       resolve(viewRoute)
     })
   },
-  generateRoutes({ commit, dispatch, rootState }, { to, from }) {
+  generateRoutes({ commit, rootState }, { viewRoutes, constantRoutes }) {
     return new Promise((resolve) => {
       let routes = filterPermedRoutes(viewRoutes, null)
       routes = filterHiddenRoutes(routes, rootState)
@@ -227,7 +226,7 @@ const actions = {
       } else {
         console.debug('All routes in vuex: ', routes)
       }
-      commit('SET_ROUTES', { routes })
+      commit('SET_ROUTES', { routes, constantRoutes })
       resolve(routes)
     })
   }

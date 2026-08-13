@@ -27,10 +27,7 @@
             class="tree-resource-select-dialog__toolbar-button tree-resource-select-dialog__selected-only"
             @click="toggleSelectedOnly"
           >
-            <el-icon>
-              <Hide v-if="showSelectedOnly" />
-              <View v-else />
-            </el-icon>
+            <svg-icon icon-class="filter" />
           </el-button>
         </el-tooltip>
         <el-tooltip :content="expandTitle" placement="top" :show-after="300">
@@ -100,15 +97,20 @@
         :check-strictly="true"
         :data="treeData"
         :default-expanded-keys="defaultExpandedKeys"
-        :expand-on-click-node="true"
+        :expand-on-click-node="false"
         :filter-node-method="filterNode"
         :props="treeProps"
         node-key="treeKey"
         show-checkbox
         @check="handleCheck"
+        @node-click="handleNodeClick"
       >
         <template #default="{ data }">
-          <span class="tree-resource-select-dialog__node" :title="getNodeLabel(data)">
+          <span
+            class="tree-resource-select-dialog__node"
+            :title="getNodeLabel(data)"
+            @click.stop="toggleNodeChecked(data)"
+          >
             {{ getNodeLabel(data) }}
           </span>
         </template>
@@ -135,10 +137,6 @@ export default {
     selectedResources: {
       type: Array,
       default: () => []
-    },
-    initialSelectedOnly: {
-      type: Boolean,
-      default: false
     },
     treeUrl: {
       type: String,
@@ -171,8 +169,8 @@ export default {
       draftValue: [...this.value],
       searchValue: '',
       searchFocused: false,
-      showSelectedOnly: this.initialSelectedOnly,
-      selectedOnlyIds: this.initialSelectedOnly ? [...this.value] : [],
+      showSelectedOnly: false,
+      selectedOnlyIds: [],
       expandAllNext: false,
       loading: false,
       resourceCache,
@@ -335,10 +333,9 @@ export default {
         })
         this.treeData = this.buildTree(response)
         this.cacheTreeResources(this.treeData)
-        this.defaultExpandedKeys =
-          this.selectedCount > 0
-            ? this.getSelectedAncestorKeys()
-            : this.treeData.filter((node) => node.children?.length).map((node) => node.treeKey)
+        this.defaultExpandedKeys = this.treeData
+          .filter((node) => node.children?.length)
+          .map((node) => node.treeKey)
         await this.$nextTick()
         this.syncLoadedChecks()
         if (this.showSelectedOnly) {
@@ -553,13 +550,11 @@ export default {
       }
       this.$nextTick(() => this.applyTreeFilter())
     },
-    handleCheck(node, { checkedKeys }) {
+    updateNodeChecked(node, checked) {
       const id = this.getNodeId(node)
       if (id === undefined || id === null) {
         return
       }
-      const treeKey = this.getTreeKey(node)
-      const checked = checkedKeys.some((key) => String(key) === String(treeKey))
       const normalizedId = String(id)
       if (checked && !this.selectedIdSet.has(normalizedId)) {
         this.draftValue.push(id)
@@ -569,6 +564,35 @@ export default {
       this.expandAllNext = false
       if (this.showSelectedOnly) {
         this.$nextTick(() => this.applyTreeFilter())
+      }
+    },
+    handleCheck(node, { checkedKeys }) {
+      const treeKey = this.getTreeKey(node)
+      const checked = checkedKeys.some((key) => String(key) === String(treeKey))
+      this.updateNodeChecked(node, checked)
+    },
+    toggleNodeChecked(node) {
+      const tree = this.$refs.tree
+      const treeKey = this.getTreeKey(node)
+      const treeNode = tree?.getNode(treeKey)
+      if (!treeNode) {
+        return
+      }
+      const checked = !treeNode.checked
+      tree.setChecked(treeKey, checked, false)
+      this.updateNodeChecked(node, checked)
+    },
+    handleNodeClick(node, treeNode, component, event) {
+      if (
+        !treeNode?.childNodes?.length ||
+        event?.target?.closest?.('.el-checkbox, .tree-resource-select-dialog__node')
+      ) {
+        return
+      }
+      if (treeNode.expanded) {
+        treeNode.collapse()
+      } else {
+        treeNode.expand()
       }
     },
     filterNode(visibleKeys, data) {
@@ -739,9 +763,14 @@ export default {
   }
 
   .tree-resource-select-dialog__node {
-    display: inline-block;
+    display: inline-flex;
+    flex: 1 0 auto;
+    align-self: stretch;
+    align-items: center;
+    min-width: max-content;
     padding-right: 10px;
     color: var(--el-text-color-regular);
+    cursor: pointer;
     font-size: 13px;
     white-space: nowrap;
   }
