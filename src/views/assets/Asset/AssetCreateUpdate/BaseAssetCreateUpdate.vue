@@ -86,10 +86,6 @@ export default {
           const values = _.cloneDeep(validValues)
           const submitMethod = id ? 'put' : 'post'
 
-          if (values.nodes && values.nodes.length === 0) {
-            delete values['nodes']
-          }
-
           if (submitMethod === 'put') {
             url = getUpdateObjURL(url, id)
             delete values['accounts']

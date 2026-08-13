@@ -67,10 +67,6 @@ export default {
       type: Object,
       default: () => ({})
     },
-    omitUnchangedManyToMany: {
-      type: Boolean,
-      default: true
-    },
     // 获取 meta
     afterGetRemoteMeta: {
       type: Function,
@@ -404,72 +400,8 @@ export default {
       let handler = this.onSubmit || this.defaultOnSubmit
       handler = handler.bind(this)
       values = this.cleanFormValue(values)
-      const initialValues = formName?.getInitialFormValue?.() || this.initialFormValue
-      values = this.removeUnchangedManyToManyFields(values, initialValues, formName)
       values = this.encryptFields(values)
       return handler(values, formName, addContinue)
-    },
-    normalizeManyToManyValue(value, valueKey = 'id') {
-      const values = Array.isArray(value) ? value : value == null || value === '' ? [] : [value]
-      const normalized = values
-        .map((item) => {
-          if (!item || typeof item !== 'object') {
-            return item
-          }
-          return item[valueKey] ?? item.value ?? item.id
-        })
-        .filter((item) => item !== undefined && item !== null && item !== '')
-        .map((item) => String(item))
-      return [...new Set(normalized)].sort()
-    },
-    getManyToManyFields(formInstance) {
-      const fields = new Map(Object.entries(this.fieldsMeta))
-      const collectFields = (items = []) => {
-        items.forEach((item) => {
-          if (!item || typeof item !== 'object') {
-            return
-          }
-          const componentName = item.component?.name || item.component?.__name
-          if (
-            ['resourceSelect', 'treeResourceSelect'].includes(item.type) ||
-            ['ResourceSelect', 'TreeResourceSelect'].includes(componentName)
-          ) {
-            fields.set(item.id || item.prop, item)
-          }
-          collectFields(item.fields || item.children || [])
-        })
-      }
-      collectFields(formInstance?.innerContent)
-      return fields
-    },
-    removeUnchangedManyToManyFields(values, initialValues = this.initialFormValue, formInstance) {
-      if (
-        !this.omitUnchangedManyToMany ||
-        !this.isUpdateMethod() ||
-        !values ||
-        Array.isArray(values)
-      ) {
-        return values
-      }
-
-      const payload = { ...values }
-      this.getManyToManyFields(formInstance).forEach((fieldMeta, fieldName) => {
-        const componentName = fieldMeta?.component?.name || fieldMeta?.component?.__name
-        const isRelationSelect =
-          ['resourceSelect', 'treeResourceSelect'].includes(fieldMeta?.type) ||
-          ['ResourceSelect', 'TreeResourceSelect'].includes(componentName)
-        if (!isRelationSelect || !Object.prototype.hasOwnProperty.call(payload, fieldName)) {
-          return
-        }
-
-        const valueKey = fieldMeta?.el?.valueKey || 'id'
-        const initialValue = this.normalizeManyToManyValue(initialValues?.[fieldName], valueKey)
-        const currentValue = this.normalizeManyToManyValue(payload[fieldName], valueKey)
-        if (JSON.stringify(initialValue) === JSON.stringify(currentValue)) {
-          delete payload[fieldName]
-        }
-      })
-      return payload
     },
     defaultOnSubmit(validValues, formName, addContinue) {
       this.isSubmitting = true
