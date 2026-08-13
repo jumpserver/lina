@@ -187,6 +187,7 @@ export default {
     },
     onSubmit(form) {
       this.$emit('input', form)
+      this.$emit('submit', form)
       this.isVisible = false
       this.$emit('update:visible', this.isVisible)
     },
