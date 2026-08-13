@@ -58,18 +58,6 @@
               class="boolean-value-radio"
             />
             <span class="field-menu-option__label">{{ data.label }}</span>
-            <el-tooltip
-              v-if="node.level === 1 && data.helpText"
-              :content="data.helpText"
-              :show-after="300"
-              placement="right"
-            >
-              <i
-                :aria-label="data.helpText"
-                class="fa fa-question-circle-o field-menu-option__help"
-                @click.stop
-              />
-            </el-tooltip>
           </span>
         </template>
       </el-cascader>
