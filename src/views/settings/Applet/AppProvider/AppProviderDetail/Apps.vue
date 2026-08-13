@@ -1,19 +1,23 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="20" :sm="24">
-      <ListTable :header-actions="headerConfig" :table-config="config" />
-    </el-col>
-  </el-row>
+  <TwoCol>
+    <ListTable :header-actions="headerConfig" :table-config="config" />
+    <template #right>
+      <QuickActions :actions="quickActions" type="primary" />
+    </template>
+  </TwoCol>
 </template>
 
 <script lang="jsx">
-import { DrawerListTable as ListTable } from '@/components'
+import { DrawerListTable as ListTable, QuickActions } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import { openTaskPage } from '@/utils/jms/index'
 export default {
   name: 'Apps',
   components: {
-    ListTable
+    ListTable,
+    QuickActions,
+    TwoCol
   },
   props: {
     object: {
@@ -117,7 +121,44 @@ export default {
             }
           }
         }
-      }
+      },
+      quickActions: [
+        {
+          title: this.$t('InitialDeploy'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('Deploy'),
+            disabled: !this.object.host || !this.$hasPerm('terminal.add_appproviderdeployment')
+          },
+          callbacks: {
+            click: () => {
+              this.$axios
+                .post('/api/v1/terminal/app-provider-deployments/', {
+                  provider: this.object.id
+                })
+                .then((res) => openTaskPage(res.task))
+            }
+          }
+        },
+        {
+          title: this.$t('PublishAllVirtualApps'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('Publish'),
+            disabled: !this.object.host || !this.$hasPerm('terminal.change_virtualapppublication')
+          },
+          callbacks: {
+            click: () => {
+              this.$axios
+                .post(`/api/v1/terminal/app-providers/${this.object.id}/publish-apps/`)
+                .then((res) => {
+                  if (res.task) openTaskPage(res.task)
+                  else this.$message.info(this.$t('NoData'))
+                })
+            }
+          }
+        }
+      ]
     }
   },
   methods: {

@@ -2398,5 +2398,7 @@
   "ChatAIFieldUpdatedBy": "更新者",
   "WebScriptStepsHelp": "每步可指定 origin。interactive 暂停等待人工验证；success 必须是最后一步。Web Proxy 支持同一窗口内的页面跳转，暂不支持 iframe 和独立弹窗登录。",
   "WebAllowedSites": "访问白名单",
-  "WebAllowedSitesHelp": "留空允许访问所有站点。配置后，只允许打开资产地址及白名单中的站点。输入完整 HTTP/HTTPS 站点地址（协议、主机和端口），不含路径或通配符，按回车确认；页面资源加载不受限制。"
+  "WebAllowedSitesHelp": "留空允许访问所有站点。配置后，只允许打开资产地址及白名单中的站点。输入完整 HTTP/HTTPS 站点地址（协议、主机和端口），不含路径或通配符，按回车确认；页面资源加载不受限制。",
+  "PublishAllVirtualApps": "发布所有虚拟应用",
+  "AppProviderHelpMessage": "应用提供者仅会从已成功发布该应用且在线的节点中选择；优先选择负载较低、运行容器较少的节点，并尽量复用用户上次使用的节点。"
 }

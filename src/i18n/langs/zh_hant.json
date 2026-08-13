@@ -2395,5 +2395,7 @@
   "ChatAIFieldUpdatedBy": "更新者",
   "WebScriptStepsHelp": "每步可指定 origin。interactive 暫停等待人工驗證；success 必須是最後一步。Web Proxy 支援同一視窗內的頁面跳轉，暫不支援 iframe 和獨立彈出視窗登入。",
   "WebAllowedSites": "存取白名單",
-  "WebAllowedSitesHelp": "留空允許存取所有站點。設定後，只允許開啟資產位址及白名單中的站點。輸入完整 HTTP/HTTPS 站點位址（協定、主機和連接埠），不含路徑或萬用字元，按 Enter 確認；頁面資源載入不受限制。"
+  "WebAllowedSitesHelp": "留空允許存取所有站點。設定後，只允許開啟資產位址及白名單中的站點。輸入完整 HTTP/HTTPS 站點位址（協定、主機和連接埠），不含路徑或萬用字元，按 Enter 確認；頁面資源載入不受限制。",
+  "PublishAllVirtualApps": "發佈所有虛擬應用",
+  "AppProviderHelpMessage": "應用提供者僅會從已成功發布該應用且在線的節點中選擇；優先選擇負載較低、執行中容器較少的節點，並儘量重用使用者上次使用的節點。"
 }
