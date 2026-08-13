@@ -205,10 +205,12 @@ export default {
           set(this.savedPreferenceValues, fieldPath, restoredValue)
           if (this.autoSaveVersions[fieldKey] === version) {
             const formRenderer = this.$refs.form?.$refs.form?.dataForm?.elForm
+            const currentGroupValue = cloneDeep(
+              get(formRenderer?.getFormValue?.(), [groupName], {})
+            )
+            set(currentGroupValue, [fieldName], restoredValue)
             formRenderer?.updateForm({
-              [groupName]: {
-                [fieldName]: restoredValue
-              }
+              [groupName]: currentGroupValue
             })
             this.$message.success(this.$t('SaveSuccess'))
           }
