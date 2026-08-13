@@ -1,19 +1,37 @@
 <template>
   <div class="resource-select-summary" :class="{ 'is-disabled': disabled }">
-    <div
-      :aria-disabled="disabled"
+    <button
+      v-if="countOnly"
       :aria-label="ariaLabel"
-      :class="{ 'is-disabled': disabled }"
-      :tabindex="disabled ? -1 : 0"
-      class="resource-select-summary__control"
-      role="button"
+      :disabled="disabled"
+      class="resource-select-summary__count-only"
+      type="button"
       @click="handleClick"
-      @keydown.enter.prevent="handleClick"
-      @keydown.space.prevent="handleClick"
     >
-      <template v-if="selectedCount > 0">
-        <div class="resource-select-summary__content">
-          <span class="resource-select-summary__count">{{ countText }}</span>
+      {{ selectedCount > 0 ? countText : text }}
+    </button>
+    <template v-else>
+      <button
+        v-if="selectedCount > 0"
+        :disabled="disabled"
+        class="resource-select-summary__count"
+        type="button"
+        @click="handleClick"
+      >
+        {{ countText }}
+      </button>
+      <div
+        :aria-disabled="disabled"
+        :aria-label="ariaLabel"
+        :class="{ 'is-disabled': disabled }"
+        :tabindex="disabled ? -1 : 0"
+        class="resource-select-summary__control"
+        role="button"
+        @click="handleClick"
+        @keydown.enter.prevent="handleClick"
+        @keydown.space.prevent="handleClick"
+      >
+        <template v-if="selectedCount > 0">
           <div
             v-if="items.length > 0"
             ref="names"
@@ -40,10 +58,10 @@
               </span>
             </span>
           </div>
-        </div>
-      </template>
-      <span v-else class="resource-select-summary__placeholder">{{ text }}</span>
-    </div>
+        </template>
+        <span v-else class="resource-select-summary__placeholder">{{ text }}</span>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -66,6 +84,10 @@ export default {
     countText: {
       type: String,
       default: ''
+    },
+    countOnly: {
+      type: Boolean,
+      default: false
     },
     hasMore: {
       type: Boolean,
@@ -128,6 +150,8 @@ export default {
 
 <style lang="scss" scoped>
 .resource-select-summary {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   min-height: 30px;
   color: var(--el-input-text-color, var(--el-text-color-regular));
@@ -174,16 +198,36 @@ export default {
   }
 }
 
-.resource-select-summary__content {
-  display: block;
-  overflow: hidden;
+.resource-select-summary__count-only {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  min-height: 30px;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--el-color-primary);
+  cursor: pointer;
+  font: inherit;
+  line-height: 30px;
+  text-align: left;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--el-color-primary-light-3);
+  }
+
+  &:disabled {
+    color: var(--el-disabled-text-color);
+    cursor: not-allowed;
+  }
 }
 
 .resource-select-summary__names {
   width: 100%;
-  min-height: 29px;
-  max-height: 85px;
-  margin-top: 4px;
+  min-height: 36px;
+  max-height: 100px;
   overflow-x: hidden;
   overflow-y: auto;
   scrollbar-color: transparent transparent;
@@ -224,11 +268,12 @@ export default {
   align-items: flex-start;
   align-content: flex-start;
   column-gap: 10px;
-  row-gap: 6px;
+  row-gap: 10px;
   width: 100%;
-  min-height: 29px;
+  min-height: 36px;
   padding-top: 7px;
   padding-right: 7px;
+  padding-bottom: 7px;
 }
 
 .resource-select-summary__count,
@@ -310,6 +355,28 @@ export default {
 
 .resource-select-summary__count {
   display: block;
+  align-self: flex-start;
+  min-height: 30px;
+  margin-bottom: 4px;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--el-color-primary);
+  cursor: pointer;
+  font: inherit;
+  line-height: 30px;
+  text-align: left;
   white-space: nowrap;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--el-color-primary-light-3);
+  }
+
+  &:disabled {
+    color: var(--el-disabled-text-color);
+    cursor: not-allowed;
+  }
 }
 </style>

@@ -1,3 +1,5 @@
+import { createSourceIdCache } from '@/api/common'
+
 export function getResourceId(item, valueKey) {
   if (item && typeof item === 'object') {
     return item[valueKey] ?? item.value ?? item.id
@@ -14,6 +16,10 @@ export function normalizeResourceValue(value, valueKey) {
 
 export default {
   props: {
+    summaryCountOnly: {
+      type: Boolean,
+      default: false
+    },
     summaryNameLimit: {
       type: Number,
       default: 20
@@ -23,6 +29,8 @@ export default {
     return {
       selectedSummaryItems: [],
       summaryLoadedCount: 0,
+      summaryLoading: false,
+      summaryRequestVersion: 0,
       summaryResourceCache: new Map(),
       skippedSummaryValueSignature: ''
     }
@@ -35,7 +43,7 @@ export default {
       return Math.max(1, Math.floor(this.summaryNameLimit || 20))
     },
     summaryHasMore() {
-      return this.summaryLoadedCount < this.selectedValue.length
+      return !this.summaryCountOnly && this.summaryLoadedCount < this.selectedValue.length
     },
     summaryText() {
       if (this.selectedValue.length === 0) {
@@ -74,6 +82,9 @@ export default {
       return JSON.stringify(value.map((item) => String(item)))
     },
     cacheSummaryResources(resources) {
+      if (this.summaryCountOnly) {
+        return
+      }
       const values = Array.isArray(resources) ? resources : resources ? [resources] : []
       values.forEach((item) => {
         if (!item || typeof item !== 'object') {
@@ -88,6 +99,9 @@ export default {
       })
     },
     getSelectedSummaryResources() {
+      if (this.summaryCountOnly) {
+        return []
+      }
       return this.selectedValue
         .map((id) => this.summaryResourceCache.get(String(id)))
         .filter(Boolean)
@@ -99,20 +113,66 @@ export default {
         .filter(Boolean)
     },
     resetSelectedSummaryItems() {
+      this.summaryRequestVersion += 1
+      this.summaryLoading = false
       this.summaryLoadedCount = 0
       this.selectedSummaryItems = []
-      this.loadNextSummaryBatch()
+      if (!this.summaryCountOnly) {
+        this.loadNextSummaryBatch()
+      }
     },
-    loadNextSummaryBatch() {
-      if (!this.summaryHasMore) {
+    normalizeSummaryResponse(response) {
+      return Array.isArray(response) ? response : response?.results || []
+    },
+    async fetchSummaryResources(ids) {
+      if (ids.length === 0 || !this.resourceUrl) {
+        return []
+      }
+      const { spm } = await createSourceIdCache(ids)
+      const response = await this.$axios.get(this.resourceUrl, {
+        params: {
+          spm,
+          fields_size: 'mini',
+          limit: ids.length,
+          offset: 0
+        }
+      })
+      return this.normalizeSummaryResponse(response)
+    },
+    async loadNextSummaryBatch() {
+      if (!this.summaryHasMore || this.summaryLoading) {
         return
       }
-      this.cacheSummaryResources(this.externalValue)
-      this.summaryLoadedCount = Math.min(
-        this.summaryLoadedCount + this.normalizedSummaryNameLimit,
-        this.selectedValue.length
+
+      const requestVersion = this.summaryRequestVersion
+      const start = this.summaryLoadedCount
+      const end = Math.min(start + this.normalizedSummaryNameLimit, this.selectedValue.length)
+      const batchIds = this.selectedValue.slice(start, end)
+      const missingIds = batchIds.filter(
+        (resourceId) => !this.summaryResourceCache.has(String(resourceId))
       )
-      this.syncSelectedSummaryItems()
+
+      this.summaryLoading = true
+      try {
+        if (missingIds.length > 0) {
+          const resources = await this.fetchSummaryResources(missingIds)
+          if (requestVersion !== this.summaryRequestVersion) {
+            return
+          }
+          this.cacheSummaryResources(resources)
+        }
+        if (requestVersion !== this.summaryRequestVersion) {
+          return
+        }
+        this.summaryLoadedCount = end
+        this.syncSelectedSummaryItems()
+      } catch {
+        // Keep this batch pending so a later downward scroll can retry it.
+      } finally {
+        if (requestVersion === this.summaryRequestVersion) {
+          this.summaryLoading = false
+        }
+      }
     },
     updateSelectedValue(value) {
       const payload = [...value]
@@ -137,8 +197,14 @@ export default {
         return
       }
       const normalizedValue = String(value)
+      const removedIndex = this.selectedValue.findIndex((item) => String(item) === normalizedValue)
       const payload = this.selectedValue.filter((item) => String(item) !== normalizedValue)
+      if (removedIndex > -1 && removedIndex < this.summaryLoadedCount) {
+        this.summaryLoadedCount -= 1
+      }
       this.summaryLoadedCount = Math.min(this.summaryLoadedCount, payload.length)
+      this.summaryRequestVersion += 1
+      this.summaryLoading = false
       this.skippedSummaryValueSignature = this.getSelectedValueSignature(payload)
       this.updateSelectedValue(payload)
       this.syncSelectedSummaryItems()

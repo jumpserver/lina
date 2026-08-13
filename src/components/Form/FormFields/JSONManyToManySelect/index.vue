@@ -10,6 +10,7 @@
       v-if="iValue.type === 'ids'"
       v-model="ids"
       :resource-name="resource"
+      summary-count-only
       @change="onChangeEmit"
     />
     <div v-if="iValue.type === 'attrs'">
