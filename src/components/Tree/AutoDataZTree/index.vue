@@ -250,12 +250,17 @@ export default {
         return
       }
 
-      const originalAssetsAmount = treeNode.meta.data['assetsAmount'] || 0
+      const originalAssetsAmount = treeNode.meta.data['assetsAmount']
 
       this.$axios.patch(url, { 'value': treeNode.name }).then(res => {
-        treeNode.name = treeNode.name + ' (' + originalAssetsAmount + ')'
+        treeNode.name = originalAssetsAmount === undefined
+          ? treeNode.name
+          : treeNode.name + ' (' + originalAssetsAmount + ')'
         treeNode.meta.data = Object.assign({}, treeNode.meta.data, res)
-        treeNode.meta.data['assetsAmount'] = originalAssetsAmount
+
+        if (originalAssetsAmount !== undefined) {
+          treeNode.meta.data['assetsAmount'] = originalAssetsAmount
+        }
 
         this.zTree.updateNode(treeNode)
         this.$message.success(this.$tc('UpdateSuccessMsg'))
