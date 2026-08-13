@@ -1,4 +1,5 @@
 {
+  "PublishAllVirtualApps": "Publish all virtual apps",
   "PinColumn": "Pin column",
   "UnpinColumn": "Unpin column",
   "FieldRequiredError": "This field is required.",
@@ -119,5 +120,6 @@
   "LabelFilterAllValues": "All values",
   "LabelFilterSelectKey": "Select a label key",
   "LabelFilterKeyLabel": "Key",
-  "LabelFilterValueLabel": "Value"
+  "LabelFilterValueLabel": "Value",
+  "AppProviderHelpMessage": "An application provider is selected only from online nodes where the application has been published successfully. Nodes with lower load and fewer running containers are preferred, while the user's previously used node is reused when possible."
 }

@@ -1,4 +1,5 @@
 {
+  "PublishAllVirtualApps": "发布所有虚拟应用",
   "PinColumn": "钉住列",
   "UnpinColumn": "解除钉住",
   "FieldRequiredError": "这个字段是必需的。",
@@ -117,5 +118,6 @@
   "LabelFilterAllValues": "全部值",
   "LabelFilterSelectKey": "请选择标签键",
   "LabelFilterKeyLabel": "键",
-  "LabelFilterValueLabel": "值"
+  "LabelFilterValueLabel": "值",
+  "AppProviderHelpMessage": "应用提供者仅会从已成功发布该应用且在线的节点中选择；优先选择负载较低、运行容器较少的节点，并尽量复用用户上次使用的节点。"
 }

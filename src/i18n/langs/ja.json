@@ -1,4 +1,5 @@
 {
+  "PublishAllVirtualApps": "すべての仮想アプリを公開",
   "PinColumn": "列を固定",
   "UnpinColumn": "固定を解除",
   "FieldRequiredError": "这个字段是必需的。",
@@ -100,5 +101,6 @@
   "LabelFilterAllValues": "すべての値",
   "LabelFilterSelectKey": "ラベルキーを選択",
   "LabelFilterKeyLabel": "キー",
-  "LabelFilterValueLabel": "値"
+  "LabelFilterValueLabel": "値",
+  "AppProviderHelpMessage": "アプリケーション提供者は、アプリケーションが正常に公開済みでオンラインのノードからのみ選択されます。負荷が低く実行中のコンテナが少ないノードを優先し、可能な場合はユーザーが前回使用したノードを再利用します。"
 }

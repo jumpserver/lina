@@ -1,4 +1,5 @@
 {
+  "PublishAllVirtualApps": "發佈所有虛擬應用",
   "PinColumn": "釘住欄",
   "UnpinColumn": "解除釘住",
   "FieldRequiredError": "这个字段是必需的。",
@@ -99,5 +100,6 @@
   "LabelFilterAllValues": "全部值",
   "LabelFilterSelectKey": "請選擇標籤鍵",
   "LabelFilterKeyLabel": "鍵",
-  "LabelFilterValueLabel": "值"
+  "LabelFilterValueLabel": "值",
+  "AppProviderHelpMessage": "應用提供者僅會從已成功發布該應用且在線的節點中選擇；優先選擇負載較低、執行中容器較少的節點，並儘量重用使用者上次使用的節點。"
 }

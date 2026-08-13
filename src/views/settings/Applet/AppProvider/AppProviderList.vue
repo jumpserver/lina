@@ -1,6 +1,15 @@
 <template>
   <div>
-    <ListTable v-bind="$data" class="App-Provider" />
+    <el-alert type="info">
+      <span ref="helpRef" class="app-provider-help" />
+    </el-alert>
+    <ListTable
+      v-bind="$data"
+      ref="table"
+      class="app-provider"
+      :create-drawer="createDrawer"
+      :resource="$t('AppProvider')"
+    />
   </div>
 </template>
 
@@ -15,6 +24,8 @@ export default {
   },
   data() {
     return {
+      createDrawer: () => import('./AppProviderCreateUpdate.vue'),
+      detailDrawer: () => import('./AppProviderDetail/index.vue'),
       tableConfig: {
         url: '/api/v1/terminal/app-providers/',
         columnsShow: {
@@ -48,8 +59,11 @@ export default {
             formatterArgs: {
               hasClone: false,
               hasUpload: false,
-              hasUpdate: false,
-              canDelete: false,
+              hasUpdate: true,
+              canUpdate: this.$hasPerm('terminal.change_appprovider'),
+              updateRoute: 'AppProviderUpdate',
+              hasDelete: true,
+              canDelete: this.$hasPerm('terminal.delete_appprovider'),
               performDelete: ({ row }) => {
                 const id = row.id
                 const url = `/api/v1/terminal/app-providers/${id}/`
@@ -68,12 +82,28 @@ export default {
         canBulkDelete: false
       }
     }
+  },
+  mounted() {
+    this.renderHelp()
+  },
+  activated() {
+    this.renderHelp()
+  },
+  methods: {
+    renderHelp() {
+      this.$nextTick(() => {
+        const el = this.$refs.helpRef
+        if (el) {
+          el.innerHTML = this.$xss.process(String(this.$t('AppProviderHelpMessage') || ''))
+        }
+      })
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.App-Provider :deep(.protocol) {
+.app-provider :deep(.protocol) {
   margin-left: 3px;
 }
 </style>

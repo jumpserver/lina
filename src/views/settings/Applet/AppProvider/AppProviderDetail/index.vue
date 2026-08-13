@@ -9,8 +9,10 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Apps from './Apps.vue'
+import Accounts from './Accounts.vue'
 import Containers from './Containers'
 import Detail from './Detail'
+import Deployments from './Deployments'
 
 export default {
   name: 'AppProviderDetail',
@@ -18,19 +20,32 @@ export default {
     GenericDetailPage,
     Detail,
     Apps,
+    Accounts,
     TabPage,
-    Containers
+    Containers,
+    Deployments
+  },
+  props: {
+    initialActiveMenu: {
+      type: String,
+      default: 'Detail'
+    }
   },
   data() {
     return {
       host: {},
       config: {
         url: '/api/v1/terminal/app-providers',
-        activeMenu: 'Detail',
+        activeMenu: this.initialActiveMenu,
         submenu: [
           {
             title: this.$t('Basic'),
             name: 'Detail'
+          },
+          {
+            title: this.$t('Accounts'),
+            name: 'Accounts',
+            hidden: () => !this.$hasPerm('accounts.view_account')
           },
           {
             title: this.$t('VirtualApps'),
@@ -39,13 +54,17 @@ export default {
           {
             title: this.$t('Containers'),
             name: 'Containers'
+          },
+          {
+            title: this.$t('HostDeployment'),
+            name: 'Deployments'
           }
         ],
         hasRightSide: true,
         actions: {
-          hasDelete: false,
+          hasDelete: true,
           hasUpdate: true,
-          canDelete: this.$hasPerm('terminal.delete_virtualhost'),
+          canDelete: this.$hasPerm('terminal.delete_appprovider'),
           canUpdate: this.$hasPerm('terminal.change_appprovider'),
           updateRoute: 'AppProviderUpdate',
           deleteSuccessRoute: 'Applets'
