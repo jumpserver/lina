@@ -1110,13 +1110,11 @@ export default {
             this.$refs.Cascade?.togglePopperVisible?.(true)
           }, 0)
         } else if (selectedPath.length >= 2) {
-          this.fieldMenuValue = null
-          this.$refs.Cascade.handleClear()
+          this.clearFieldMenuSelection()
           this.$refs.Cascade?.togglePopperVisible?.(false)
         } else if (selectedPath.length === 1) {
-          this.fieldMenuValue = null
+          this.clearFieldMenuSelection()
           this.pendingFieldFocusSearchInput = true
-          this.$refs.Cascade.handleClear()
           this.$refs.Cascade?.togglePopperVisible?.(false)
         }
       })
@@ -1173,10 +1171,13 @@ export default {
       this.filterKey = this.defaultFilterKey
       this.filterOperator = 'icontains_any'
       this.valueLabel = ''
-      this.fieldMenuValue = null
-      this.$refs.Cascade?.handleClear?.()
+      this.clearFieldMenuSelection()
       this.$refs.Cascade?.togglePopperVisible?.(false)
       this.$nextTick(() => this.focusSearchInput())
+    },
+    clearFieldMenuSelection() {
+      this.fieldMenuValue = null
+      this.$refs.Cascade?.cascaderPanelRef?.clearCheckedNodes?.()
     },
     handleSearchEscape() {
       this.$refs.Cascade?.togglePopperVisible?.(false)
@@ -1514,11 +1515,12 @@ $origin-white-color: #ffffff;
     }
   }
 
-  &.has-selected-field .filter-selector {
+  &.has-selected-field > .filter-selector:not(.operator-selector) {
     justify-content: flex-start;
     width: auto;
     min-width: 0;
     padding-left: 10px;
+    flex: 0 1 auto;
   }
 
   .operator-selector {
