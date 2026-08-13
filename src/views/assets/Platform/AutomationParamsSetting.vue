@@ -39,6 +39,7 @@ export default {
     Dialog,
     AutoDataForm
   },
+  emits: ['input', 'submit', 'update:visible', 'canSetting'],
   props: {
     value: {
       type: [String, Object],
