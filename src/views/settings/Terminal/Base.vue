@@ -5,6 +5,7 @@
 </template>
 <script>
 import IBox from '@/components/Common/IBox'
+import BootstrapTokenButton from './components/BootstrapTokenButton.vue'
 import { GenericCreateUpdateForm } from '@/layout/components'
 
 export default {
@@ -20,6 +21,12 @@ export default {
           this.$t('Basic'),
           [
             'SECURITY_SERVICE_ACCOUNT_REGISTRATION'
+          ]
+        ],
+        [
+          this.$t('BootstrapToken'),
+          [
+            'BOOTSTRAP_TOKEN'
           ]
         ],
         [
@@ -45,6 +52,11 @@ export default {
         ]
       ],
       fieldsMeta: {
+        BOOTSTRAP_TOKEN: {
+          label: this.$t('BootstrapToken'),
+          helpTip: this.$t('BootstrapTokenTip'),
+          component: BootstrapTokenButton
+        },
         TERMINAL_RAZOR_ENABLED: {
           hidden: () => {
             return !this.$store.getters.hasValidLicense

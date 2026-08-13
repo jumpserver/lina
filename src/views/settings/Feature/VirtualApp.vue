@@ -24,8 +24,12 @@ export default {
     return {
       visible: false,
       config: {
-        fields: ['VIRTUAL_APP_ENABLED'],
+        fields: ['VIRTUAL_APP_ENABLED', 'PANDA_HOST'],
         fieldsMeta: {
+          PANDA_HOST: {
+            label: 'Panda URL',
+            helpTip: this.$t('PandaURLTip')
+          }
         },
         successUrl: { name: 'Settings', params: { activeMenu: 'Basic' } },
         url: '/api/v1/settings/setting/?category=virtualapp',
