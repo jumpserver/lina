@@ -4,7 +4,7 @@
 
 <script>
 import rules from '@/components/Form/DataForm/rules'
-import { Select2 } from '@/components/Form/FormFields'
+import { ResourceSelect, Select2 } from '@/components/Form/FormFields'
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { assetJSONSelectMeta } from '@/views/assets/const'
 import { userJSONSelectMeta } from '@/views/users/const'
@@ -42,16 +42,14 @@ export default {
           }
         },
         reviewers: {
+          type: 'resourceSelect',
+          component: ResourceSelect,
           hidden: (item) => item.action !== 'review',
           rules: [rules.RequiredChange],
           el: {
             value: [],
-            ajax: {
-              url: '/api/v1/users/users/?fields_size=mini',
-              transformOption: (item) => {
-                return { label: item.name + '(' + item.username + ')', value: item.id }
-              }
-            }
+            url: '/api/v1/users/users/?fields_size=mini',
+            resourceName: this.$t('Users')
           }
         }
       },

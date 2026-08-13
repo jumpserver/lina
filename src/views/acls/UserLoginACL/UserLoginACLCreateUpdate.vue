@@ -4,7 +4,7 @@
 
 <script>
 import { Required } from '@/components/Form/DataForm/rules'
-import { TagInput, WeekCronSelect } from '@/components/Form/FormFields'
+import { ResourceSelect, TagInput, WeekCronSelect } from '@/components/Form/FormFields'
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { userJSONSelectMeta } from '@/views/users/const'
 
@@ -40,14 +40,12 @@ export default {
         },
         users: userJSONSelectMeta(this, true),
         reviewers: {
+          type: 'resourceSelect',
+          component: ResourceSelect,
           el: {
             value: [],
-            ajax: {
-              url: '/api/v1/users/users/?fields_size=mini&all=true',
-              transformOption: (item) => {
-                return { label: item.name + '(' + item.username + ')', value: item.id }
-              }
-            }
+            url: '/api/v1/users/users/?fields_size=mini&all=true',
+            resourceName: this.$t('Users')
           },
           rules: [Required],
           hidden: (formValue) => {

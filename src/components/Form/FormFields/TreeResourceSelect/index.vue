@@ -7,7 +7,7 @@
       :items="selectedSummaryItems"
       :selected-count="selectedValue.length"
       :text="summaryText"
-      @click="openDialog(selectedValue.length > 0)"
+      @click="openDialog"
       @load-more="loadNextSummaryBatch"
       @remove="removeSummaryResource"
     />
@@ -15,7 +15,6 @@
     <TreeResourceSelectDialog
       v-if="dialogVisible"
       v-model:visible="dialogVisible"
-      :initial-selected-only="initialSelectedOnly"
       :query-params="queryParams"
       :resource-name="resourceName"
       :selected-resources="getSelectedSummaryResources()"
@@ -76,7 +75,6 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      initialSelectedOnly: false,
       selectedValue: normalizeResourceValue(
         this.modelValue !== undefined ? this.modelValue : this.value,
         this.valueKey
@@ -112,9 +110,8 @@ export default {
     }
   },
   methods: {
-    openDialog(selectedOnly = false) {
+    openDialog() {
       if (!this.isDisabled && this.resourceUrl) {
-        this.initialSelectedOnly = selectedOnly
         this.dialogVisible = true
       }
     },

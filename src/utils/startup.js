@@ -1,6 +1,6 @@
 // import getPageTitle from '@/utils/get-page-title'
 import store from '@/store'
-import router, { addDynamicRoute, resetRouter } from '@/router'
+import router, { addDynamicRoute, constantRoutes, resetRouter, viewRoutes } from '@/router'
 import { message } from '@/utils/vue/message'
 import orgUtil from '@/utils/jms/org'
 import orgs from '@/api/orgs'
@@ -110,7 +110,10 @@ export async function generatePageRoutes({ to, from }) {
   try {
     // try get user profile
     // generate accessible routes map based on roles
-    const accessRoutes = await store.dispatch('permission/generateRoutes', { to, from })
+    const accessRoutes = await store.dispatch('permission/generateRoutes', {
+      constantRoutes,
+      viewRoutes
+    })
     // dynamically add accessible routes
     console.debug(
       'All routes:',

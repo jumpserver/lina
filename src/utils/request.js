@@ -7,7 +7,7 @@ import { ElMessageBox as MessageBox } from 'element-plus'
 import { message } from '@/utils/vue/message'
 import store from '@/store'
 import axiosRetry from 'axios-retry'
-import router from '@/router'
+import { getRouter } from '@/router/registry'
 import { BASE_API, LOGIN_PATH, LOGOUT_PATH } from '@/utils/env'
 
 // create an axios instance
@@ -22,7 +22,8 @@ function beforeRequestAddToken(config) {
   if (csrfToken) {
     config.headers['X-CSRFToken'] = csrfToken
   }
-  const currentRoute = router.currentRoute?.value || router.currentRoute
+  const router = getRouter()
+  const currentRoute = router?.currentRoute?.value || router?.currentRoute
   const queryOrgId = currentRoute?.query?.oid
   const storeOrgId = store.getters.currentOrg?.id
   const orgId = queryOrgId || storeOrgId

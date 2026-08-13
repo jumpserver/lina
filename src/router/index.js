@@ -35,6 +35,7 @@ import pamViewRoutes from './pam'
 import reportsViewRoutes from './reports'
 import { getPropView } from '@/utils/jms/index'
 import store from '@/store'
+import { setResetRouterHandler, setRouter } from './registry'
 
 /**
  * constantRoutes
@@ -115,6 +116,8 @@ const createRouterInstance = () =>
 const router = createRouterInstance()
 const dynamicRouteRemovers = []
 
+setRouter(router)
+
 export function addDynamicRoute(route) {
   const removeRoute = router.addRoute(route)
   dynamicRouteRemovers.push(removeRoute)
@@ -123,5 +126,7 @@ export function addDynamicRoute(route) {
 export function resetRouter() {
   dynamicRouteRemovers.splice(0).forEach((removeRoute) => removeRoute())
 }
+
+setResetRouterHandler(resetRouter)
 
 export default router
