@@ -8,6 +8,7 @@ import { periodicMeta } from '@/components/const'
 import { ResourceSelect, TagInput, TreeResourceSelect } from '@/components/Form/FormFields'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
+import AccountPushPasswordRule from './AccountPushPasswordRule.vue'
 
 export default {
   name: 'AccountPushCreateUpdate',
@@ -15,6 +16,8 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
+    const changeSecretFields = getChangeSecretFields()
+
     return {
       nodeIds: [],
       assetIds: [],
@@ -52,7 +55,11 @@ export default {
       ],
       fieldsMeta: {
         ...periodicMeta,
-        ...getChangeSecretFields(),
+        ...changeSecretFields,
+        password_rules: {
+          ...changeSecretFields.password_rules,
+          component: AccountPushPasswordRule
+        },
         assets: {
           type: 'resourceSelect',
           component: ResourceSelect,

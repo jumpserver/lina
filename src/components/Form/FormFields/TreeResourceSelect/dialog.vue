@@ -333,9 +333,12 @@ export default {
         })
         this.treeData = this.buildTree(response)
         this.cacheTreeResources(this.treeData)
-        this.defaultExpandedKeys = this.treeData
+        // 默认展开一级根；若有已选节点，再展开其祖先路径，避免嵌套二三级时看不到勾选
+        const firstLevelKeys = this.treeData
           .filter((node) => node.children?.length)
           .map((node) => node.treeKey)
+        const selectedAncestorKeys = this.getSelectedAncestorKeys()
+        this.defaultExpandedKeys = [...new Set([...firstLevelKeys, ...selectedAncestorKeys])]
         await this.$nextTick()
         this.syncLoadedChecks()
         if (this.showSelectedOnly) {

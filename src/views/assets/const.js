@@ -206,7 +206,7 @@ export const assetFieldsMeta = (vm, category, type) => {
       component: TreeResourceSelect,
       rules: [rules.RequiredChange],
       el: {
-        value: [],
+        // 不要在 el 里写 value: []，会作为 prop 透传并在表单绑定时干扰节点回填
         url: '/api/v1/assets/nodes/?fields_size=mini',
         treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
         resourceName: vm.$t('Nodes')
@@ -217,7 +217,6 @@ export const assetFieldsMeta = (vm, category, type) => {
       type: 'resourceSelect',
       component: ResourceSelect,
       el: {
-        value: [],
         url: '/api/v1/labels/labels/',
         resourceName: vm.$t('Labels'),
         columns: ['name', 'id', 'value', 'color', 'comment'],

@@ -1,8 +1,22 @@
 import { createSourceIdCache } from '@/api/common'
 
-export function getResourceId(item, valueKey) {
+export function getResourceId(item, valueKey = 'id') {
   if (item && typeof item === 'object') {
-    return item[valueKey] ?? item.value ?? item.id
+    // Prefer the configured key / real identity fields first.
+    // Do not fall back to item.value before id/pk: Node.value is a display name.
+    const byKey = valueKey ? item[valueKey] : undefined
+    if (byKey !== undefined && byKey !== null && byKey !== '') {
+      return byKey
+    }
+    const byId = item.id ?? item.pk
+    if (byId !== undefined && byId !== null && byId !== '') {
+      return byId
+    }
+    // Select2 / summary option shape: { value, label/name }
+    if (item.value !== undefined && item.value !== null && item.value !== '') {
+      return item.value
+    }
+    return undefined
   }
   return item
 }
@@ -12,6 +26,15 @@ export function normalizeResourceValue(value, valueKey) {
   return values
     .map((item) => getResourceId(item, valueKey))
     .filter((item) => item !== undefined && item !== null && item !== '')
+}
+
+function isPlainId(item) {
+  return item === null || item === undefined || typeof item !== 'object'
+}
+
+export function resourceValueNeedsNormalize(value, valueKey = 'id') {
+  const values = Array.isArray(value) ? value : value == null || value === '' ? [] : [value]
+  return values.some((item) => !isPlainId(item))
 }
 
 export default {
@@ -76,6 +99,11 @@ export default {
     normalizedSummaryNameLimit() {
       this.resetSelectedSummaryItems()
     }
+  },
+  mounted() {
+    // 详情回填的对象列表在挂载时规范化为主键并写回表单
+    const external = this.modelValue !== undefined ? this.modelValue : this.value
+    this.syncSelectedValue(external)
   },
   methods: {
     getSelectedValueSignature(value) {
@@ -190,6 +218,18 @@ export default {
         payload.every((item, index) => String(item) === String(this.selectedValue[index]))
       if (!unchanged) {
         this.selectedValue = payload
+      }
+      // API 回填多为对象列表；写回主键数组，避免 PUT 时仍带对象或丢 id
+      if (resourceValueNeedsNormalize(value, this.valueKey)) {
+        const externalIds = normalizeResourceValue(value, this.valueKey)
+        const sameAsExternal =
+          externalIds.length === payload.length &&
+          externalIds.every((item, index) => String(item) === String(payload[index]))
+        if (sameAsExternal) {
+          this.$emit('input', payload)
+          this.$emit('update:modelValue', payload)
+          this.$emit('update:model-value', payload)
+        }
       }
     },
     removeSummaryResource(value) {
