@@ -100,6 +100,7 @@ export default {
                   name: 'log',
                   type: 'primary',
                   title: this.$t('Log'),
+                  icon: 'fa-terminal',
                   callback: function ({ row }) {
                     openTaskPage(row['id'])
                   }
