@@ -15,8 +15,10 @@ export default {
       const hasStyle = ['fa-solid', 'fa-regular', 'fa-brands', 'fas', 'far', 'fab'].some((style) =>
         classes.includes(style)
       )
+      // Free 版大量图标仅 solid 可用；FA7 的 .fa 默认 weight 也是 900(solid)。
+      // 未显式指定样式时默认 fa-solid，避免 fa-regular 导致 solid-only 图标空白。
       if (!hasStyle) {
-        classes.unshift('fa-regular')
+        classes.unshift('fa-solid')
       }
       return [...new Set(['fa', ...classes])]
     },
