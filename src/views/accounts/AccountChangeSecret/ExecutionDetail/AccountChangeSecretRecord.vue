@@ -78,12 +78,12 @@ export default {
             label: this.$t('Success'),
             formatter: (row) => {
               if (row.status === 'pending') {
-                return <i class="fa  fa fa-spinner fa-spin" />
+                return <i class="fa fa-spinner fa-spin" />
               }
               if (row.is_success) {
-                return <i class="fa fa-check text-primary" />
+                return <i class="fa fa-check-circle text-primary" />
               }
-              return <i class="fa fa-times text-danger" />
+              return <i class="fa fa-times-circle text-danger" />
             }
           },
           verification_status: {
@@ -93,10 +93,10 @@ export default {
                 return <i class="fa fa-spinner fa-spin" />
               }
               if (row.verification_status === 'success') {
-                return <i class="fa fa-check text-primary" />
+                return <i class="fa fa-check-circle text-primary" />
               }
               if (row.verification_status === 'failed') {
-                return <i class="fa fa-times text-danger" title={row.verification_error} />
+                return <i class="fa fa-times-circle text-danger" title={row.verification_error} />
               }
               if (row.verification_status === 'unverified') {
                 return <i class="fa fa-exclamation-triangle text-warning" />
