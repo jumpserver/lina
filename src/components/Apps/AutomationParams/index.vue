@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import i18n from '@/i18n/i18n'
 import { getActionMeta } from '@/api/common'
 import Dialog from '../../Dialog'
 import AutoDataForm from '../../Form/AutoDataForm'
@@ -51,9 +52,7 @@ export default {
     },
     title: {
       type: String,
-      default: function () {
-        return 'PushParams'
-      }
+      default: () => i18n.t('PushParams')
     },
     assets: {
       type: Array,

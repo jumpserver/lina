@@ -21,8 +21,8 @@
     </span>
     <el-tooltip
       v-if="!isEdit"
-      :content="currentValue"
-      :disabled="!isShow"
+      :content="vaultUnavailable ? $t('VaultSecretUnavailableTip') : currentValue"
+      :disabled="!isShow && !vaultUnavailable"
       :show-after="500"
       placement="top"
     >
@@ -71,7 +71,8 @@ export default {
       realValue: this.cellValue,
       formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs || {}),
       isShow: false,
-      getIt: false
+      getIt: false,
+      vaultUnavailable: false
     }
   },
   computed: {
@@ -82,13 +83,13 @@ export default {
       return this.formatterArgs.hasShow
     },
     hasDownload: function () {
-      return this.formatterArgs.hasDownload
+      return this.formatterArgs.hasDownload && !this.vaultUnavailable
     },
     hasCopy: function () {
-      return this.formatterArgs.hasCopy
+      return this.formatterArgs.hasCopy && !this.vaultUnavailable
     },
     hasEdit: function () {
-      return this.formatterArgs.hasEdit
+      return this.formatterArgs.hasEdit && !this.vaultUnavailable
     },
     name: function () {
       return this.formatterArgs.name
@@ -128,6 +129,9 @@ export default {
       return actions
     },
     currentValue() {
+      if (this.vaultUnavailable) {
+        return this.$t('VaultSecretUnavailable')
+      }
       if (this.isShow) {
         return this.realValue || '-'
       } else {
@@ -153,27 +157,38 @@ export default {
     async getAccountSecret() {
       if (this.publicSettings.SECURITY_DISABLE_VIEW_SECRET) {
         this.$message.warning(this.$tc('AccountSecretReadDisabled'))
-        return
+        return false
       }
       if (this.formatterArgs.secretFrom === 'cellValue' || this.getIt) {
-        return
+        return true
       }
-      const res = await this.$axios.get(`/api/v1/accounts/account-secrets/${this.row.id}/`)
-      this.realValue = res.secret
+      try {
+        const res = await this.$axios.get(`/api/v1/accounts/account-secrets/${this.row.id}/`)
+        this.realValue = res.secret
+        this.getIt = true
+        this.vaultUnavailable = false
+        return true
+      } catch (error) {
+        if (error?.response?.data?.code === 'vault_unavailable') {
+          this.vaultUnavailable = true
+          return false
+        }
+        throw error
+      }
     },
     async onShow() {
-      await this.getAccountSecret()
+      if (!(await this.getAccountSecret())) return
       this.isShow = !this.isShow
       setTimeout(() => {
         this.isShow = false
       }, 10000)
     },
     async onCopy() {
-      await this.getAccountSecret()
+      if (!(await this.getAccountSecret())) return
       copy(this.realValue)
     },
     async onDownload() {
-      await this.getAccountSecret()
+      if (!(await this.getAccountSecret())) return
       downloadText(this.realValue, this.name + '.txt')
     },
     async onEdit() {
@@ -184,7 +199,7 @@ export default {
         this.confirmEdit()
         return
       }
-      await this.getAccountSecret()
+      if (!(await this.getAccountSecret())) return
       this.isEdit = true
       this.$nextTick(() => {
         this.$refs.editInput?.focus()
