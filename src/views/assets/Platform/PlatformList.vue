@@ -207,7 +207,7 @@ export default {
     async setCategoriesTab() {
       const categoryIcon = {
         host: 'fa-inbox',
-        device: 'fa-microchip',
+        device: 'fa-solid fa-network-wired',
         database: 'fa-database',
         cloud: 'fa-cloud',
         web: 'fa-globe',
