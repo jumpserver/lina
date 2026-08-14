@@ -5,10 +5,27 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { encryptPassword } from '@/utils/session-encrypt'
-import { getUpdateObjURL, setUrlParam, getBrowserQueryParam } from '@/utils/common/index'
+import { getUpdateObjURL, setUrlParam, getSelectedAssetNodeId } from '@/utils/common/index'
 import { assetFieldsMeta } from '@/views/assets/const'
 
 const getRelatedId = (value) => value?.pk ?? value?.id ?? value?.value ?? value
+
+// Node 的 value 字段是显示名，不能当作 id；只取真正的主键。
+const getNodeId = (value) => {
+  if (value && typeof value === 'object') {
+    return value.id ?? value.pk ?? null
+  }
+  return value
+}
+
+const normalizeNodeIds = (nodes) => {
+  if (!Array.isArray(nodes)) {
+    return []
+  }
+  return nodes
+    .map((item) => getNodeId(item))
+    .filter((item) => item !== undefined && item !== null && item !== '')
+}
 
 const hasRemovedPlatformProtocol = (selectedProtocols, platformProtocols) => {
   const selectedNames = new Set(
@@ -85,6 +102,23 @@ export default {
           const id = this.$context.get('id')
           const values = _.cloneDeep(validValues)
           const submitMethod = id ? 'put' : 'post'
+
+          // 后端 validate_nodes：nodes 为空会落到组织根节点。
+          // 更新时表单里的 nodes 可能仍是对象列表、或未触碰字段时被清空成 []，
+          // 这里统一成主键列表，并在 PUT 时空值回退到初始节点，避免误挪到根节点。
+          const initialNodeIds = normalizeNodeIds(this.initialFormValue?.nodes)
+          let nodeIds = normalizeNodeIds(values.nodes)
+          if (submitMethod === 'put' && nodeIds.length === 0 && initialNodeIds.length > 0) {
+            nodeIds = initialNodeIds
+          }
+          if (nodeIds.length > 0) {
+            values.nodes = nodeIds
+          } else if (submitMethod === 'put') {
+            // 保持与历史行为一致：PUT 不显式提交空 nodes，避免后端写回 org_root
+            delete values.nodes
+          } else {
+            values.nodes = nodeIds
+          }
 
           if (submitMethod === 'put') {
             url = getUpdateObjURL(url, id)
@@ -181,8 +215,7 @@ export default {
     },
     async setInitial(requestedPlatformID) {
       const { defaultConfig } = this
-      const nodeId =
-        this.$context.get('node') || this.$context.get('node_id') || getBrowserQueryParam('node_id')
+      const nodeId = getSelectedAssetNodeId(this)
       const nodesInitial = nodeId ? [nodeId] : []
       const platformId = requestedPlatformID || this.platformID || 'Linux'
       const url = `/api/v1/assets/platforms/${platformId}/`

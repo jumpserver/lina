@@ -158,6 +158,21 @@ export function getBrowserQueryParam(name) {
   return new URLSearchParams(hashQuery).get(name) || ''
 }
 
+/**
+ * 资产树点击通过 setRouterQuery({ browserOnly: true }) 只改浏览器地址里的 node_id，
+ * 不会同步 Vue Router 的 $route.query。创建抽屉若曾用 syncLegacyRouteState 写入 query.node，
+ * $context.get('node') 会一直读到旧节点。优先读浏览器 URL 中的实时选中节点。
+ */
+export function getSelectedAssetNodeId(vm) {
+  return (
+    getBrowserQueryParam('node_id') ||
+    getBrowserQueryParam('node') ||
+    vm?.$context?.get?.('node_id') ||
+    vm?.$context?.get?.('node') ||
+    ''
+  )
+}
+
 export function getErrorResponseMsg(error) {
   let msg = ''
   let data = ''
