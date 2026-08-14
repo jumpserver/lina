@@ -143,7 +143,17 @@
     >
       <template #suffix>
         <button
-          v-if="showSearchAction"
+          v-if="showClearDraftAction"
+          :aria-label="$t('Clear')"
+          class="search-submit-button clear-draft-button"
+          type="button"
+          @click.stop="handleClearSearchDraft"
+          @mousedown.stop.prevent
+        >
+          <el-icon><Close /></el-icon>
+        </button>
+        <button
+          v-else-if="showSearchAction"
           :aria-label="$t('Search')"
           class="search-submit-button"
           type="button"
@@ -154,6 +164,15 @@
         </button>
       </template>
     </el-input>
+    <el-tooltip
+      :content="placeholder"
+      :disabled="!showPlaceholderTooltip"
+      :show-after="400"
+      :virtual-ref="searchInputElement"
+      placement="top"
+      popper-class="tag-search-placeholder-tooltip"
+      virtual-triggering
+    />
     <span v-if="!showSearchAction" class="keydown-focus">/</span>
   </div>
 </template>
@@ -191,6 +210,7 @@ export default {
       filterKey: 'search',
       filterValue: '',
       filterOperator: 'icontains_any',
+      searchInputElement: null,
       valueLabel: '',
       fieldMenuValue: null,
       filterTags: this.default || {},
@@ -252,7 +272,10 @@ export default {
       return this.filterValue != null
     },
     showSearchAction() {
-      return this.focus || this.hasSearchValue
+      return this.showClearDraftAction || this.focus || this.hasSearchValue
+    },
+    showClearDraftAction() {
+      return this.hasSelectedField && !this.hasSearchValue
     },
     keyLabel() {
       if (!this.filterKey) return ''
@@ -425,6 +448,16 @@ export default {
       }
       const operator = this.hasSelectedField ? this.filterOperator : 'icontains_any'
       return this.getOperatorDescription(operator)
+    },
+    showPlaceholderTooltip() {
+      const hasInputContent = String(this.filterValue ?? '').length > 0
+      return Boolean(
+        this.searchInputElement &&
+        this.placeholder &&
+        !hasInputContent &&
+        (!this.cascaderVisible || !this.hasSelectedField) &&
+        !this.operatorMenuVisible
+      )
     }
   },
   watch: {
@@ -471,11 +504,15 @@ export default {
   mounted() {
     document.addEventListener('keyup', this.handleKeyUp)
     document.addEventListener('keydown', this.handleDocumentKeyDown, true)
+    document.addEventListener('pointerdown', this.handleDocumentPointerDown, true)
+    this.searchInputElement =
+      this.$refs.SearchInput?.input || this.$refs.SearchInput?.$el?.querySelector?.('input') || null
     this.initVisibilityObserver()
   },
   beforeUnmount() {
     document.removeEventListener('keyup', this.handleKeyUp)
     document.removeEventListener('keydown', this.handleDocumentKeyDown, true)
+    document.removeEventListener('pointerdown', this.handleDocumentPointerDown, true)
     this.visibilityObserver?.disconnect()
     clearTimeout(this.operatorFocusTimer)
     clearTimeout(this.fieldMenuOpenTimer)
@@ -1163,6 +1200,10 @@ export default {
       this.$refs.Cascade?.togglePopperVisible?.(false)
       this.$nextTick(() => this.focusSearchInput())
     },
+    handleClearSearchDraft() {
+      this.filterValue = ''
+      this.clearSelectedField()
+    },
     clearFieldMenuSelection() {
       this.fieldMenuValue = null
       this.$refs.Cascade?.cascaderPanelRef?.clearCheckedNodes?.()
@@ -1436,6 +1477,24 @@ export default {
       this.$refs.Cascade?.togglePopperVisible?.(false)
       this.$nextTick(() => this.$refs.SearchInput?.blur?.())
     },
+    handleDocumentPointerDown(event) {
+      if (!this.cascaderVisible) {
+        return
+      }
+      const target = event.target
+      const cascaderContent = this.$refs.Cascade?.contentRef
+      const fieldMenuPopper =
+        cascaderContent?.closest?.('.tag-search-field-popper') || cascaderContent
+      if (this.$el?.contains(target) || fieldMenuPopper?.contains?.(target)) {
+        return
+      }
+
+      clearTimeout(this.fieldMenuOpenTimer)
+      this.pendingFieldFocusSearchInput = false
+      this.restoreFieldMenuOnVisible = false
+      this.$refs.Cascade?.togglePopperVisible?.(false)
+      this.$refs.SearchInput?.blur?.()
+    },
     // 删除查询条件时改变url
     checkUrlFields(evt) {
       let newQuery = _.omit(this.$route.query, this.getConditionQueryKeys(evt))
@@ -1507,11 +1566,19 @@ $origin-white-color: #ffffff;
     justify-content: flex-start;
     width: auto;
     min-width: 0;
+    max-width: none;
     padding-left: 10px;
-    flex: 0 1 auto;
+    flex: 0 0 auto;
+
+    .filter-selector__label {
+      overflow: visible;
+      text-overflow: clip;
+    }
   }
 
   .operator-selector {
+    width: auto;
+    min-width: max-content;
     max-width: 150px;
     padding-left: 10px;
     white-space: nowrap;
@@ -1550,8 +1617,10 @@ $origin-white-color: #ffffff;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 18px;
-      padding: 3px 5px;
+      box-sizing: border-box;
+      width: max-content;
+      min-width: 22px;
+      padding: 3px 6px;
       color: var(--el-text-color-primary);
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 12px;
@@ -1626,6 +1695,10 @@ $origin-white-color: #ffffff;
     &.no-options {
       --jms-input-padding-inline-start: 11px;
     }
+  }
+
+  &.has-selected-field .search-input {
+    min-width: 48px;
   }
 
   &:not(.is-input-focus):not(.has-search-action) .search-input {
@@ -1944,5 +2017,13 @@ a {
     font-weight: 500;
     flex: 0 0 32px;
   }
+}
+
+.tag-search-placeholder-tooltip.el-popper {
+  max-width: min(360px, calc(100vw - 24px));
+  line-height: 18px;
+  overflow-wrap: anywhere;
+  text-align: left;
+  white-space: normal;
 }
 </style>

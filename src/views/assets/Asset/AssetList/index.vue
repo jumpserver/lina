@@ -35,7 +35,7 @@ export default {
           },
           {
             name: 'device',
-            icon: 'fa-solid fa-microchip',
+            icon: 'fa-solid fa-network-wired',
             hidden: true,
             component: () => import('@/views/assets/Asset/AssetList/DeviceList.vue')
           },
