@@ -78,7 +78,8 @@ export default {
       }
     },
     emitValue() {
-      const payload = this.iValue
+      const value = this.iValue
+      const payload = Array.isArray(value) ? value : [value]
       this.$emit('input', payload)
       this.$emit('update:modelValue', payload)
     },
