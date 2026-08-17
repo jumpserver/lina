@@ -231,7 +231,10 @@ export default {
   },
   methods: {
     normalizeConnectivity(connectivity) {
-      return connectivity?.value ?? connectivity
+      if (connectivity && Object.prototype.hasOwnProperty.call(connectivity, 'value')) {
+        return connectivity.value
+      }
+      return connectivity
     },
     stopConnectivityPolling(assetId) {
       const key = String(assetId)
