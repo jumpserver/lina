@@ -31,16 +31,17 @@ export default {
   },
   data() {
     const vm = this
+    const category = this.$route.query.category || 'host'
     return {
       object: null,
       table: {
         tableConfig: {
-          url: '',
+          url: '/api/v1/xpack/cloud/accounts/',
           permissions: {
             app: 'xpack',
             resource: 'account'
           },
-          extraQuery: {}
+          extraQuery: { category }
         },
         subComponentProps: {
           handleUpdate: (obj) => {
@@ -168,10 +169,6 @@ export default {
         }
       }
     }
-  },
-  mounted() {
-    this.table.tableConfig.url = '/api/v1/xpack/cloud/accounts/'
-    this.table.tableConfig.extraQuery = { category: this.iCategory }
   },
   methods: {
     valid(status) {
