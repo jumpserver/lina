@@ -39,7 +39,7 @@
           <span
             :class="{
               'has-checkbox': isMultiChoiceNode(node),
-              'has-radio': isBooleanChoiceNode(node),
+              'has-radio': isSingleChoiceNode(node),
               'is-current-field': isCurrentFieldOption(node, data)
             }"
             class="field-menu-option"
@@ -52,10 +52,10 @@
               class="choice-value-checkbox"
             />
             <span
-              v-if="isBooleanChoiceNode(node)"
-              :class="{ 'is-checked': isBooleanValueSelected(node, data) }"
+              v-if="isSingleChoiceNode(node)"
+              :class="{ 'is-checked': isSingleChoiceValueSelected(node, data) }"
               aria-hidden="true"
-              class="boolean-value-radio"
+              class="choice-value-radio"
             />
             <span class="field-menu-option__label">{{ data.label }}</span>
           </span>
@@ -1011,13 +1011,21 @@ export default {
         return false
       }
       const field = this.getOptionByKey(this.getCascaderRootValue(node))
-      return !this.isBooleanOption(field) && ['choice', 'labeled_choice'].includes(field?.type)
+      return (
+        !this.isBooleanOption(field) &&
+        field?.multiple !== false &&
+        ['choice', 'labeled_choice'].includes(field?.type)
+      )
     },
-    isBooleanChoiceNode(node) {
+    isSingleChoiceNode(node) {
       if (!node || node.level < 2) {
         return false
       }
-      return this.isBooleanOption(this.getOptionByKey(this.getCascaderRootValue(node)))
+      const field = this.getOptionByKey(this.getCascaderRootValue(node))
+      return (
+        this.isBooleanOption(field) ||
+        (field?.multiple === false && ['choice', 'labeled_choice'].includes(field?.type))
+      )
     },
     getChoiceConditionValues(fieldKey) {
       const values = []
@@ -1032,7 +1040,7 @@ export default {
       const fieldKey = this.getCascaderRootValue(node)
       return this.getChoiceConditionValues(fieldKey).includes(String(option.value))
     },
-    isBooleanValueSelected(node, option) {
+    isSingleChoiceValueSelected(node, option) {
       const fieldKey = this.getCascaderRootValue(node)
       const selectedValues = this.getChoiceConditionValues(fieldKey).map((value) =>
         value.toLowerCase()
@@ -1070,7 +1078,7 @@ export default {
         operator
       }
     },
-    selectBooleanValue(node, option) {
+    selectSingleChoiceValue(node, option) {
       const fieldKey = this.getCascaderRootValue(node)
       const field = this.getOptionByKey(fieldKey)
       if (!field) {
@@ -1090,10 +1098,10 @@ export default {
       }
     },
     handleFieldOptionClick(event, node, option) {
-      if (this.isBooleanChoiceNode(node)) {
+      if (this.isSingleChoiceNode(node)) {
         event.preventDefault()
         event.stopPropagation()
-        this.selectBooleanValue(node, option)
+        this.selectSingleChoiceValue(node, option)
         return
       }
       if (this.isMultiChoiceNode(node)) {
@@ -1878,7 +1886,7 @@ a {
     }
   }
 
-  .boolean-value-radio {
+  .choice-value-radio {
     position: relative;
     display: inline-flex;
     box-sizing: border-box;

@@ -131,6 +131,9 @@ export default {
         hasImport: false,
         hasExport: this.$hasPerm('terminal.view_command'),
         hasDatePicker: true,
+        searchConfig: {
+          singleChoiceFields: ['risk_level']
+        },
         datePicker: {
           dateStart: dateFrom,
           dateEnd: dateTo
