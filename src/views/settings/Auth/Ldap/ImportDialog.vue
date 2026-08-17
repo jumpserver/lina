@@ -93,7 +93,15 @@ export default {
       },
       tableConfig: {
         url: `/api/v1/settings/ldap/users/?category=${this.category}`,
-        columns: ['status', 'username', 'name', 'email', 'groups', 'existing'],
+        columns: [
+          'status',
+          'username',
+          'name',
+          'email',
+          'mapped_groups',
+          ...(this.category === 'ldap' ? ['mapped_roles'] : []),
+          'existing'
+        ],
         columnsMeta: {
           ...getStatusColumnMeta.bind(this)('status'),
           username: {
@@ -104,10 +112,18 @@ export default {
             label: this.$t('Name'),
             width: '180px'
           },
-          groups: {
+          mapped_groups: {
+            contentMaxWidth: 300,
             label: this.$t('UserGroups'),
             formatter: function (row) {
-              return <span> {row.groups.join(' | ')} </span>
+              return (row.mapped_groups || []).join(' | ') || '-'
+            }
+          },
+          mapped_roles: {
+            contentMaxWidth: 300,
+            label: this.$t('Role'),
+            formatter: function (row) {
+              return (row.mapped_roles || []).join(' | ') || '-'
             }
           },
           email: {
