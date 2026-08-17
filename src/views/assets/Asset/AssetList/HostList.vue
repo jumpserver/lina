@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BaseList v-bind="config" />
+    <BaseList ref="baseList" v-bind="config" />
     <GatewayDialog
       :cell="GatewayCell"
       :port="GatewayPort"
@@ -78,6 +78,7 @@ export default {
                           { action: 'test' }
                         ).then(res => {
                           openTaskPage(res['task'])
+                          this.$refs.baseList.startConnectivityPolling(row)
                         })
                       }
                     }

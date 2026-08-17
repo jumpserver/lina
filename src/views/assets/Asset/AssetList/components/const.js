@@ -242,6 +242,7 @@ export function getDefaultConfig(vm) {
                     .post(`/api/v1/assets/assets/${row.id}/tasks/`, { action: 'test' })
                     .then(res => {
                       openTaskPage(res['task'])
+                      vm.startConnectivityPolling(row)
                     })
                 }
               }
