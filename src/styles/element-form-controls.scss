@@ -345,6 +345,19 @@
   @include jms-form-control-items;
 }
 
+// 统一控件使用真实 border，并关闭了 Element Plus 默认的 inset box-shadow。
+// 因此错误态也必须通过 border-color 显式恢复，且放在基础/聚焦规则之后。
+.el-form .el-form-item.is-error > .el-form-item__content {
+  > .el-input > .el-input__wrapper,
+  > .el-select > .el-select__wrapper,
+  > .el-cascader .el-input__wrapper,
+  > .el-input-number .el-input__wrapper,
+  > .el-autocomplete .el-input__wrapper,
+  > .el-date-editor .el-input__wrapper {
+    border-color: var(--el-color-danger) !important;
+  }
+}
+
 // 普通 el-form（非 DataForm）的间距与标签对齐
 .el-form:not(.form-fields) {
   .el-form-item {
