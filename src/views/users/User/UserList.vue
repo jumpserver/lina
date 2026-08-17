@@ -13,6 +13,7 @@
       v-model:visible="updateSelectedDialogSetting.visible"
       :form-setting="updateSelectedDialogSetting.formSetting"
       :selected-rows="updateSelectedDialogSetting.selectedRows"
+      :target-resource-setting="updateSelectedDialogSetting.targetResourceSetting"
       @update="handleDialogUpdate"
     />
     <InviteUsersDialog :setting="InviteDialogSetting" @close="handleInviteDialogClose" />
@@ -23,6 +24,7 @@
 import { createSourceIdCache } from '@/api/common'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 import DetailFormatter from '@/components/Table/TableFormatters/DetailFormatter.vue'
+import { ResourceSelect } from '@/components/Form/FormFields'
 import { GenericListPage, GenericUpdateFormDialog } from '@/layout/components'
 import store from '@/store'
 import { getDayFuture } from '@/utils/common/time'
@@ -373,6 +375,11 @@ export default {
       updateSelectedDialogSetting: {
         selectedRows: [],
         visible: false,
+        targetResourceSetting: {
+          label: this.$t('User'),
+          url: '/api/v1/users/users/?fields_size=mini',
+          resourceName: this.$t('Users')
+        },
         formSetting: {
           initial: {
             date_expired: getDayFuture(36500, new Date()).toISOString()
@@ -382,13 +389,13 @@ export default {
           url: '/api/v1/users/users/',
           fieldsMeta: {
             groups: {
+              type: 'resourceSelect',
+              component: ResourceSelect,
               label: this.$t('UserGroups'),
               el: {
-                multiple: true,
                 disabled: vm.$store.getters.currentOrgIsRoot,
-                ajax: {
-                  url: '/api/v1/users/groups/'
-                },
+                url: '/api/v1/users/groups/?fields_size=mini&order=name',
+                resourceName: this.$t('UserGroups'),
                 value: []
               }
             },

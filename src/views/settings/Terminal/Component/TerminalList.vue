@@ -7,31 +7,29 @@
       :create-drawer="createDrawer"
       :detail-drawer="detailDrawer"
     />
-    <Dialog
+    <GenericUpdateFormDialog
+      v-if="dialogSettings.visible"
       v-model:visible="dialogSettings.visible"
-      :destroy-on-close="true"
-      :show-cancel="false"
-      :show-confirm="false"
+      :form-setting="dialogSettings.iFormSetting"
+      :selected-rows="dialogSettings.selectedRows"
+      :target-resource-setting="dialogSettings.targetResourceSetting"
       :title="$tc('TerminalUpdateStorage')"
-    >
-      <GenericCreateUpdateForm v-bind="dialogSettings.iFormSetting" />
-    </Dialog>
+      @update="handleBulkUpdateDone"
+    />
   </div>
 </template>
 
 <script>
-import Dialog from '@/components/Dialog'
 import Select2 from '@/components/Form/FormFields/Select2'
 
 import { DrawerListTable as ListTable } from '@/components'
-import { GenericCreateUpdateForm } from '@/layout/components'
+import { GenericUpdateFormDialog } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {
     ListTable,
-    Dialog,
-    GenericCreateUpdateForm
+    GenericUpdateFormDialog
   },
   data() {
     const vm = this
@@ -41,6 +39,11 @@ export default {
       dialogSettings: {
         selectedRows: [],
         visible: false,
+        targetResourceSetting: {
+          label: this.$t('Component'),
+          url: '/api/v1/terminal/terminals/?fields_size=mini',
+          resourceName: this.$tc('Component', 2)
+        },
         iFormSetting: {
           url: '/api/v1/terminal/terminals/',
           getUrl: () => '/api/v1/terminal/terminals/',
@@ -66,41 +69,6 @@ export default {
                 multiple: false
               }
             }
-          },
-          submitMethod: () => 'post',
-          cleanFormValue: (value) => {
-            const formValue = []
-            let object = {}
-            for (const row of this.dialogSettings.selectedRows) {
-              object = Object.assign({}, value, { id: row.id })
-              formValue.push(object)
-            }
-            return formValue
-          },
-          onSubmit: (validValues) => {
-            const url = '/api/v1/terminal/terminals/'
-            const msg = this.$t('UpdateSuccessMsg')
-            validValues = Object.values(validValues)
-            this.$axios
-              .patch(url, validValues)
-              .then((res) => {
-                this.$message.success(msg)
-                this.dialogSettings.visible = false
-              })
-              .catch((error) => {
-                this.$emit('submitError', error)
-                const response = error.response
-                const data = response.data
-                if (response.status === 400) {
-                  for (const key of Object.keys(data)) {
-                    let value = data[key]
-                    if (value instanceof Array) {
-                      value = value.join(';')
-                    }
-                    this.$refs.form.setFieldError(key, value)
-                  }
-                }
-              })
           },
           hasSaveContinue: false
         }
@@ -186,6 +154,12 @@ export default {
           this.dialogSettings.visible = true
         }
       }
+    }
+  },
+  methods: {
+    handleBulkUpdateDone() {
+      this.dialogSettings.visible = false
+      this.$refs.ListTable.reloadTable()
     }
   }
 }

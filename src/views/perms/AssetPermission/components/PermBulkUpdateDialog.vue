@@ -3,6 +3,7 @@
     v-if="visible"
     :form-setting="formSetting"
     :selected-rows="selectedRows"
+    :target-resource-setting="targetResourceSetting"
     :visible="visible"
     @update="$emit('update', $event)"
     @update:visible="$emit('update:visible', $event)"
@@ -35,6 +36,7 @@ export default {
   },
   data() {
     return {
+      targetResourceSetting: {},
       formSetting: {
         url: '',
         hasSaveContinue: false,
@@ -80,6 +82,11 @@ export default {
           assets: fieldsManager.assets,
           nodes: fieldsManager.nodes
         })
+      }
+      this.$data.targetResourceSetting = {
+        label: this.$t('AssetPermission'),
+        url: `${url}?fields_size=mini`,
+        resourceName: this.$t('AssetPermission')
       }
       this.$data.formSetting.url = url
       this.$data.formSetting.fields = fields
