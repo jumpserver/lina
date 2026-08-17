@@ -17,6 +17,11 @@ export function getDefaultConfig(vm) {
   }
   const extraQuery = vm.$route.params?.extraQuery || {}
   const defaultHeaderActions = {
+    // 资产导入表格只读，不允许在导入预览中修改；失败时不显示"继续"，直接"完成"
+    importOptions: {
+      canEdit: false,
+      disableContinue: true
+    },
     onCreate: () => {
       vm.showPlatform = false
       setTimeout(() => {

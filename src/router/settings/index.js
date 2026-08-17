@@ -581,25 +581,25 @@ export default {
         }
       ]
     },
-    {
-      path: '/settings/jdmc',
-      name: 'DeviceManager',
-      meta: {
-        title: i18n.t('DeviceManager'),
-        icon: 'device',
-        permissions: ['rbac.view_jdmc'],
-        externalAction: {
-          type: 'jdmc',
-          nextPath: '/jdmc/'
-        },
-        // 在开启 JDMC 且有 rbac.view_jdmc 权限时，才显示
-        hidden: ({ settings }) => !settings['JDMC_ENABLED']
-      },
-      beforeEnter: (_to, from, next) => {
-        openJDMC('/jdmc/')
-        redirectAfterExternalAction(from, next)
-      }
-    },
+    // {
+    //   path: '/settings/jdmc',
+    //   name: 'DeviceManager',
+    //   meta: {
+    //     title: i18n.t('DeviceManager'),
+    //     icon: 'device',
+    //     permissions: ['rbac.view_jdmc'],
+    //     externalAction: {
+    //       type: 'jdmc',
+    //       nextPath: '/jdmc/'
+    //     },
+    //     // 在开启 JDMC 且有 rbac.view_jdmc 权限时，才显示
+    //     hidden: ({ settings }) => !settings['JDMC_ENABLED']
+    //   },
+    //   beforeEnter: (_to, from, next) => {
+    //     openJDMC('/jdmc/')
+    //     redirectAfterExternalAction(from, next)
+    //   }
+    // },
     {
       path: '/settings/license',
       name: 'License',

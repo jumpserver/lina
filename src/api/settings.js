@@ -16,6 +16,24 @@ export function testEmailSetting(data) {
   })
 }
 
+export function testSyslogSetting(data) {
+  return request({
+    disableFlashErrorMsg: true,
+    url: '/api/v1/settings/syslog/testing/',
+    method: 'post',
+    data: data
+  })
+}
+
+export function testNasSetting(data) {
+  return request({
+    disableFlashErrorMsg: true,
+    url: '/api/v1/settings/nas/testing/',
+    method: 'post',
+    data: data
+  })
+}
+
 export function importLicense(formData) {
   return request({
     url: '/api/v1/xpack/license/import',

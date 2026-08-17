@@ -10,10 +10,11 @@
 import TabPage from '@/layout/components/TabPage/index.vue'
 import TaskList from './TaskList.vue'
 import Clean from './Clean.vue'
+import Storage from './Storage.vue'
 
 export default {
   name: 'Index',
-  components: { TabPage, TaskList, Clean },
+  components: { TabPage, TaskList, Clean, Storage },
   data() {
     return {
       activeMenu: 'TaskList',
@@ -26,6 +27,10 @@ export default {
           title: this.$t('Cleaning'),
           name: 'Clean',
           hidden: !this.$hasPerm('settings.change_clean')
+        },
+        {
+          title: this.$t('StorageReclamation'),
+          name: 'Storage'
         }
       ]
     }
