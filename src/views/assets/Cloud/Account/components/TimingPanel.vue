@@ -35,7 +35,7 @@ export default {
         defaultButton: false,
         submitMethod: 'put',
         getUrl: () => {
-          return `${this.settings.url}${this.object.task.id}/`
+          return `${this.settings.url}${this.object.id}/`
         },
         moreButtons: [
           {
@@ -54,7 +54,7 @@ export default {
           }
         ],
         getNextRoute: (res, method) => {
-          return { name: 'CloudAccountDetail', params: { id: res.account.id } }
+          return { name: 'CloudAccountDetail', params: { id: res.account } }
         }
       }
     }
