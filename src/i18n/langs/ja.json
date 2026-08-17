@@ -117,5 +117,10 @@
   "LabelNamePlaceholder": "名前を入力",
   "LabelColor": "色",
   "CreateAndSelect": "作成して選択",
-  "LabelCreateSuccess": "ラベルを作成して選択しました"
+  "LabelCreateSuccess": "ラベルを作成して選択しました",
+  "PingParams": "接続テストパラメータ",
+  "GatherFactsParams": "アセット情報収集パラメータ",
+  "VerifyAccountParams": "アカウント検証パラメータ",
+  "GatherAccountsParams": "アカウント収集パラメータ",
+  "RemoveAccountParams": "アカウント削除パラメータ"
 }
