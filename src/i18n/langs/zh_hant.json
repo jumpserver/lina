@@ -116,5 +116,10 @@
   "LabelNamePlaceholder": "請輸入名稱",
   "LabelColor": "顏色",
   "CreateAndSelect": "建立並選擇",
-  "LabelCreateSuccess": "標籤已建立並選擇"
+  "LabelCreateSuccess": "標籤已建立並選擇",
+  "PingParams": "連線測試參數",
+  "GatherFactsParams": "資產資訊採集參數",
+  "VerifyAccountParams": "帳號驗證參數",
+  "GatherAccountsParams": "帳號收集參數",
+  "RemoveAccountParams": "帳號移除參數"
 }

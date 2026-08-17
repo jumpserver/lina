@@ -16,7 +16,7 @@
       :title="paramsTitle"
       :url="paramsUrl"
       :value="currentParams"
-      @input="onParamsInput"
+      @submit="onParamsSubmit"
     />
   </div>
 </template>
@@ -68,7 +68,7 @@ export default {
       default: () => ({})
     }
   },
-  emits: ['change', 'paramsChange'],
+  emits: ['change'],
   setup() {
     // 注入(automation 子表单的) form-renderer 上下文，用于读回同级 _params 的当前值
     const formCtx = inject(FORM_RENDERER_KEY, { getElForm: null, updateForm: null })
@@ -98,10 +98,12 @@ export default {
       // 并触发字段配置里的 on.change（如 change_secret 的联动）。
       this.$emit('change', val)
     },
-    onParamsInput(params) {
-      // 参数属于同级的 _params 字段，通过自定义事件让字段配置里的 on.paramsChange
-      // 借助 updateForm 写回，避免直接操作只读的表单值。
-      this.$emit('paramsChange', params)
+    onParamsSubmit(params) {
+      // 参数属于 automation 子表单中的同级 _params 字段。直接写回当前
+      // form-renderer，确保外层提交读取到最新参数，不再依赖 fieldsMeta 的事件转接。
+      if (this.paramsKey) {
+        this.formCtx?.updateForm?.({ [this.paramsKey]: params })
+      }
     }
   }
 }

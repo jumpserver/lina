@@ -134,5 +134,10 @@
   "LabelNamePlaceholder": "请输入名称",
   "LabelColor": "颜色",
   "CreateAndSelect": "创建并选择",
-  "LabelCreateSuccess": "标签已创建并选择"
+  "LabelCreateSuccess": "标签已创建并选择",
+  "PingParams": "连接测试参数",
+  "GatherFactsParams": "资产信息采集参数",
+  "VerifyAccountParams": "账号验证参数",
+  "GatherAccountsParams": "账号收集参数",
+  "RemoveAccountParams": "账号移除参数"
 }

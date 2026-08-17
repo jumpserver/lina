@@ -136,5 +136,10 @@
   "LabelNamePlaceholder": "Enter a name",
   "LabelColor": "Color",
   "CreateAndSelect": "Create and select",
-  "LabelCreateSuccess": "Label created and selected"
+  "LabelCreateSuccess": "Label created and selected",
+  "PingParams": "Connectivity test parameters",
+  "GatherFactsParams": "Asset information collection parameters",
+  "VerifyAccountParams": "Account verification parameters",
+  "GatherAccountsParams": "Account collection parameters",
+  "RemoveAccountParams": "Account removal parameters"
 }
