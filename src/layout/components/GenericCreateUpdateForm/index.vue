@@ -6,6 +6,7 @@
       ref="form"
       :fields-meta="fieldsMeta"
       :form="form"
+      :can-submit="canSubmit"
       :has-reset="iHasReset"
       :has-save-continue="iHasSaveContinue"
       :is-submitting="isSubmitting"
@@ -80,6 +81,10 @@ export default {
     hasReset: {
       type: Boolean,
       default: null
+    },
+    canSubmit: {
+      type: Boolean,
+      default: true
     },
     // 如何提交数据
     performSubmit: {
