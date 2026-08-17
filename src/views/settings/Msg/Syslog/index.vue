@@ -14,6 +14,7 @@
 <script>
 import { IBox } from '@/components'
 import { GenericCreateUpdateForm } from '@/layout/components'
+import AddressInput from '@/components/Form/FormFields/AddressInput'
 import { testSyslogSetting } from '@/api/settings'
 
 export default {
@@ -28,15 +29,20 @@ export default {
       helpText: this.$t('SyslogHelpText'),
       fields: [
         [this.$t('Basic'), ['SYSLOG_ENABLED']],
-        [this.$t('Server'), ['SYSLOG_ADDR', 'SYSLOG_FACILITY', 'SYSLOG_SOCKTYPE']]
+        [this.$t('Server'), ['SYSLOG_HOST', 'SYSLOG_PORT', 'SYSLOG_FACILITY', 'SYSLOG_SOCKTYPE']]
       ],
       fieldsMeta: {
         SYSLOG_ENABLED: {
           type: 'checkbox',
           label: this.$t('SyslogEnable')
         },
-        SYSLOG_ADDR: {
-          label: this.$t('SyslogAddr'),
+        SYSLOG_HOST: {
+          label: this.$t('SyslogHost'),
+          component: AddressInput,
+          hidden: (formValue) => !formValue.SYSLOG_ENABLED
+        },
+        SYSLOG_PORT: {
+          label: this.$t('SyslogPort'),
           hidden: (formValue) => !formValue.SYSLOG_ENABLED
         },
         SYSLOG_FACILITY: {
@@ -54,12 +60,13 @@ export default {
         }
       },
       afterGetFormValue(obj) {
-        obj.SYSLOG_ENABLED = !!obj.SYSLOG_ADDR
+        obj.SYSLOG_ENABLED = !!obj.SYSLOG_HOST
         return obj
       },
       cleanFormValue(data) {
         if (!data.SYSLOG_ENABLED) {
-          data.SYSLOG_ADDR = ''
+          data.SYSLOG_HOST = ''
+          data.SYSLOG_PORT = 514
           data.SYSLOG_FACILITY = ''
         }
         delete data.SYSLOG_ENABLED
@@ -77,7 +84,8 @@ export default {
           loading: false,
           callback: function(value, form, btn) {
             const testValue = {}
-            testValue['SYSLOG_ADDR'] = value['SYSLOG_ADDR']
+            testValue['SYSLOG_HOST'] = value['SYSLOG_HOST']
+            testValue['SYSLOG_PORT'] = value['SYSLOG_PORT']
             testValue['SYSLOG_FACILITY'] = value['SYSLOG_FACILITY']
             testValue['SYSLOG_SOCKTYPE'] = value['SYSLOG_SOCKTYPE']
             btn.loading = true

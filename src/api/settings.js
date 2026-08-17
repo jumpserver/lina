@@ -34,15 +34,6 @@ export function testNasSetting(data) {
   })
 }
 
-export function archiveStorage(data) {
-  return request({
-    disableFlashErrorMsg: true,
-    url: '/api/v1/settings/nas/archive/',
-    method: 'post',
-    data: data
-  })
-}
-
 export function importLicense(formData) {
   return request({
     url: '/api/v1/xpack/license/import',

@@ -1,6 +1,8 @@
 <template>
   <div :class="device" class="table-header clearfix container">
     <slot name="header">
+      <span v-if="title" class="table-title">{{ title }}</span>
+
       <LeftSide
         v-if="iHasLeftActions"
         :selected-rows="selectedRows"
@@ -81,6 +83,10 @@ export default {
       default: () => ({})
     },
     tableUrl: {
+      type: String,
+      default: ''
+    },
+    title: {
       type: String,
       default: ''
     },
@@ -224,6 +230,14 @@ $headerHeight: 30px;
 
 .left-side {
   order: 1;
+}
+
+.table-title {
+  order: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 30px;
+  color: var(--color-text-primary);
 }
 
 .search {

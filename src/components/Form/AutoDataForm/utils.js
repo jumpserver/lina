@@ -217,8 +217,12 @@ export class FormFieldGenerator {
     }
   }
 
-  afterGenerateField(field) {
-    field.label = toSentenceCase(field.label)
+  afterGenerateField(field, fieldMeta) {
+    // 页面在 fieldsMeta 中明确指定的 label（通常是已翻译文案）原样展示，
+    // 不做句子大小写转换，避免与后端翻译不一致（如 "syslog address" 被转成 "Syslog address"）
+    if (!fieldMeta.label) {
+      field.label = toSentenceCase(field.label)
+    }
 
     if (field.placeholder) {
       field.el.placeholder = field.placeholder
@@ -243,7 +247,7 @@ export class FormFieldGenerator {
     field.rules = rules
     field = this.setHelpText(field, remoteFieldMeta)
     field = this.setPlaceholder(field, remoteFieldMeta)
-    field = this.afterGenerateField(field)
+    field = this.afterGenerateField(field, fieldMeta)
     _.set(field, 'attrs.error', '')
     Vue.$log.debug('Generate field: ', name, field)
     return field

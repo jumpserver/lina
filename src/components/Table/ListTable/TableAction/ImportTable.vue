@@ -103,6 +103,10 @@ export default {
       type: Boolean,
       default: false
     },
+    disableContinue: {
+      type: Boolean,
+      default: false
+    },
     origin: {
       type: String,
       default: ''
@@ -161,7 +165,7 @@ export default {
         case 'started':
           return 'stop'
       }
-      if (this.totalCount === this.successCount) {
+      if (this.totalCount === this.successCount || this.disableContinue) {
         return 'finished'
       } else {
         return 'continue'

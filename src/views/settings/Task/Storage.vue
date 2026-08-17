@@ -5,14 +5,7 @@
       <GenericCreateUpdateForm v-bind="$data" />
     </IBox>
     <IBox>
-      <el-tabs v-model="activeTab">
-        <el-tab-pane :label="$t('ReclamationLogs')" name="reclamation">
-          <ListTable :key="activeTab" :table-config="reclamationLogConfig" :header-actions="logHeaderActions" />
-        </el-tab-pane>
-        <el-tab-pane :label="$t('ArchiveLogs')" name="archive">
-          <ListTable :key="activeTab" :table-config="archiveLogConfig" :header-actions="logHeaderActions" />
-        </el-tab-pane>
-      </el-tabs>
+      <ListTable :table-config="reclamationLogConfig" :header-actions="logHeaderActions" />
     </IBox>
   </div>
 </template>
@@ -21,7 +14,7 @@
 import { IBox, DrawerListTable as ListTable } from '@/components'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { toSafeLocalDateStr } from '@/utils/common/time'
-import { testNasSetting, archiveStorage } from '@/api/settings'
+import { testNasSetting } from '@/api/settings'
 
 export default {
   name: 'Storage',
@@ -31,20 +24,17 @@ export default {
     ListTable
   },
   data() {
-    const vm = this
     return {
-      activeTab: 'reclamation',
       url: '/api/v1/settings/setting/?category=storage',
       hasDetailInMsg: false,
       encryptedFields: ['NAS_PASSWORD'],
       helpText: this.$t('StorageHelpText'),
       fields: [
         [
-          this.$t('Basic'),
+          this.$t('ReclamationSettings'),
           [
-            'FTP_FILE_MAX_STORE',
             'STORAGE_USAGE_THRESHOLD',
-            'STORAGE_RECLAMATION_TARGETS'
+            'STORAGE_RECLAMATION_METHOD'
           ]
         ],
         [
@@ -53,28 +43,25 @@ export default {
             'NAS_ENABLED',
             'NAS_TYPE',
             'NAS_HOST',
+            'NAS_PORT',
             'NAS_SHARE_NAME',
-            'NAS_MOUNT_PATH',
             'NAS_USERNAME',
-            'NAS_PASSWORD',
-            'ARCHIVE_DATE'
+            'NAS_PASSWORD'
           ]
         ]
       ],
       fieldsMeta: {
-        FTP_FILE_MAX_STORE: {
-          label: this.$t('FTPFileMaxStore')
-        },
         STORAGE_USAGE_THRESHOLD: {
           label: this.$t('StorageUsageThreshold')
         },
-        STORAGE_RECLAMATION_TARGETS: {
-          label: this.$t('StorageReclamationTargets'),
-          type: 'checkbox-group',
-          component: null,
+        STORAGE_RECLAMATION_METHOD: {
+          label: this.$t('StorageReclamationMethod'),
+          type: 'select',
           options: [
-            { label: this.$t('SessionReplay'), value: 'session_replay' },
-            { label: this.$t('FileTransfer'), value: 'file_transfer' }
+            { label: this.$t('DeleteEarliestDay'), value: 'delete_day' },
+            { label: this.$t('ArchiveEarliestDay'), value: 'archive_day' },
+            { label: this.$t('DeleteEarliestMonth'), value: 'delete_month' },
+            { label: this.$t('ArchiveEarliestMonth'), value: 'archive_month' }
           ]
         },
         NAS_ENABLED: {
@@ -85,45 +72,50 @@ export default {
           label: this.$t('NasType'),
           type: 'radio-group',
           options: [
-            { label: 'Unix(NFS)', value: 'nfs' },
-            { label: 'Windows(CIFS)', value: 'cifs' }
-          ]
+            { label: 'Linux(NFS)', value: 'nfs' },
+            { label: 'Windows(SMB)', value: 'cifs' }
+          ],
+          on: {
+            // 切换 NAS 类型时清空相关配置，避免残留
+            change: ([value], updateForm) => {
+              updateForm({
+                NAS_HOST: '',
+                NAS_PORT: '',
+                NAS_SHARE_NAME: '',
+                NAS_USERNAME: '',
+                NAS_PASSWORD: ''
+              })
+            }
+          }
         },
         NAS_HOST: {
           hidden: (formValue) => !formValue.NAS_ENABLED,
           label: this.$t('NasHost')
         },
+        NAS_PORT: {
+          hidden: (formValue) => !formValue.NAS_ENABLED,
+          label: this.$t('NasPort')
+        },
         NAS_SHARE_NAME: {
           hidden: (formValue) => !formValue.NAS_ENABLED,
           label: this.$t('NasShareName')
         },
-        NAS_MOUNT_PATH: {
-          hidden: (formValue) => !formValue.NAS_ENABLED,
-          label: this.$t('NasMountPath')
-        },
         NAS_USERNAME: {
-          hidden: (formValue) => !formValue.NAS_ENABLED,
+          hidden: (formValue) => !formValue.NAS_ENABLED || formValue.NAS_TYPE === 'nfs',
           label: this.$t('NasUsername')
         },
         NAS_PASSWORD: {
-          hidden: (formValue) => !formValue.NAS_ENABLED,
+          hidden: (formValue) => !formValue.NAS_ENABLED || formValue.NAS_TYPE === 'nfs',
           label: this.$t('NasPassword')
-        },
-        ARCHIVE_DATE: {
-          hidden: (formValue) => !formValue.NAS_ENABLED,
-          label: this.$t('ArchiveDate'),
-          type: 'date-picker',
-          el: {
-            type: 'date',
-            valueFormat: 'yyyy-MM-dd'
-          }
         }
       },
       cleanFormValue(data) {
         if (!data['NAS_PASSWORD']) {
           delete data['NAS_PASSWORD']
         }
-        delete data['ARCHIVE_DATE']
+        if (!data['NAS_ENABLED']) {
+          data['NAS_PORT'] = 0
+        }
         return data
       },
       submitMethod() {
@@ -133,35 +125,14 @@ export default {
         {
           title: this.$t('NasTest'),
           loading: false,
-          callback: function(value, form, btn) {
+          callback: (value, _form, btn) => {
             btn.loading = true
             testNasSetting(value)
               .then(res => {
-                vm.$message.success(res['msg'])
+                this.$message.success(res['msg'])
               })
               .catch(res => {
-                vm.$message.error(res['response']['data']['error'])
-              })
-              .finally(() => {
-                btn.loading = false
-              })
-          }
-        },
-        {
-          title: this.$t('Archive'),
-          loading: false,
-          callback: function(value, form, btn) {
-            if (!value['ARCHIVE_DATE']) {
-              vm.$message.warning(vm.$t('PleaseSelectArchiveDate'))
-              return
-            }
-            btn.loading = true
-            archiveStorage({ date: value['ARCHIVE_DATE'] })
-              .then(res => {
-                vm.$message.success(res['msg'])
-              })
-              .catch(res => {
-                vm.$message.error(res['response']['data']['error'])
+                this.$message.error(res['response']['data']['error'])
               })
               .finally(() => {
                 btn.loading = false
@@ -170,6 +141,7 @@ export default {
         }
       ],
       logHeaderActions: {
+        title: this.$t('ReclamationLogs'),
         hasCreate: false,
         hasMoreActions: false,
         hasImport: false,
@@ -179,74 +151,54 @@ export default {
       reclamationLogConfig: {
         url: '/api/v1/audits/storage-reclamation-logs/',
         columns: [
-          'session_id', 'target_type', 'file_path', 'file_size', 'date_created'
+          'date_created', 'method', 'data_start', 'data_end', 'result'
         ],
         columnsShow: {
           default: [
-            'session_id', 'target_type', 'file_path', 'file_size', 'date_created'
+            'date_created', 'method', 'data_start', 'data_end', 'result'
           ]
         },
         columnsMeta: {
-          target_type: {
-            label: this.$t('TargetType'),
+          date_created: {
+            label: this.$t('ExecutionTime'),
+            formatter: (row) => {
+              return row.date_created ? toSafeLocalDateStr(row.date_created) : '-'
+            }
+          },
+          method: {
+            label: this.$t('StorageReclamationMethod'),
             formatter: (row) => {
               const map = {
-                session_replay: this.$t('SessionReplay'),
-                file_transfer: this.$t('FileTransfer')
+                delete_day: this.$t('DeleteEarliestDay'),
+                archive_day: this.$t('ArchiveEarliestDay'),
+                delete_month: this.$t('DeleteEarliestMonth'),
+                archive_month: this.$t('ArchiveEarliestMonth'),
+                delete: this.$t('Delete'),
+                archive: this.$t('Archive')
               }
-              return map[row.target_type] || row.target_type
+              return map[row.method?.value] || row.method?.label || row.method || '-'
             }
           },
-          file_path: {
-            label: this.$t('FilePath')
-          },
-          file_size: {
-            label: this.$t('FileSize'),
+          data_start: {
+            label: this.$t('DataStart'),
             formatter: (row) => {
-              return vm.formatFileSize(row.file_size)
+              return row.data_start ? toSafeLocalDateStr(row.data_start) : '-'
             }
           },
-          date_created: {
-            label: this.$t('DateCreated'),
+          data_end: {
+            label: this.$t('DataEnd'),
             formatter: (row) => {
-              if (row.date_created) {
-                return toSafeLocalDateStr(row.date_created)
+              return row.data_end ? toSafeLocalDateStr(row.data_end) : '-'
+            }
+          },
+          result: {
+            label: this.$t('Result'),
+            formatter: (row) => {
+              const map = {
+                success: this.$t('Success'),
+                fail: this.$t('Fail')
               }
-              return '-'
-            }
-          },
-          actions: {
-            has: false
-          }
-        }
-      },
-      archiveLogConfig: {
-        url: '/api/v1/audits/storage-archive-logs/',
-        columns: [
-          'session_id', 'file_path', 'file_size', 'date_created'
-        ],
-        columnsShow: {
-          default: [
-            'session_id', 'file_path', 'file_size', 'date_created'
-          ]
-        },
-        columnsMeta: {
-          file_path: {
-            label: this.$t('FilePath')
-          },
-          file_size: {
-            label: this.$t('FileSize'),
-            formatter: (row) => {
-              return vm.formatFileSize(row.file_size)
-            }
-          },
-          date_created: {
-            label: this.$t('DateCreated'),
-            formatter: (row) => {
-              if (row.date_created) {
-                return toSafeLocalDateStr(row.date_created)
-              }
-              return '-'
+              return map[row.result?.value] || row.result?.label || row.result || '-'
             }
           },
           actions: {
@@ -255,18 +207,7 @@ export default {
         }
       }
     }
-  },
-  methods: {
-    formatFileSize(bytes) {
-      if (bytes == null) return '-'
-      if (bytes === 0) return '0 B'
-      const units = ['B', 'KB', 'MB', 'GB', 'TB']
-      const k = 1024
-      const i = Math.floor(Math.log(bytes) / Math.log(k))
-      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + units[i]
-    }
   }
-}
-</script>
+}</script>
 
 <style scoped></style>
