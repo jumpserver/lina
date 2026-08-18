@@ -219,6 +219,7 @@ export default {
       isFocus: false,
       cascaderVisible: false,
       fieldMenuOpenTimer: null,
+      waitForInputClickToOpenFieldMenu: false,
       pendingFieldFocusSearchInput: false,
       operatorMenuVisible: false,
       pendingOperatorFocusSearchInput: false,
@@ -567,11 +568,15 @@ export default {
     handleFocus() {
       this.focus = true
       this.isFocus = true
+      if (this.waitForInputClickToOpenFieldMenu) {
+        return
+      }
       if (!this.hasSelectedField && this.selectorOptions.length > 0) {
         this.scheduleFilterMenuOpen()
       }
     },
     handleInputMouseDown() {
+      this.waitForInputClickToOpenFieldMenu = false
       if (!this.cascaderVisible && !this.hasSelectedField && this.selectorOptions.length > 0) {
         this.scheduleFilterMenuOpen()
       }
@@ -1178,11 +1183,30 @@ export default {
       this.$refs.Cascade?.togglePopperVisible?.(true)
     },
     handleFieldMenuKeydown(event) {
-      if (this.filterValue !== '' || this.selectorOptions.length === 0) {
+      if (this.filterValue !== '') {
         return
       }
       event.preventDefault()
       event.stopPropagation()
+      this.waitForInputClickToOpenFieldMenu = false
+
+      if (this.hasSelectedField && this.supportsOperatorSelection) {
+        this.$refs.Cascade?.togglePopperVisible?.(false)
+        this.$refs.OperatorDropdown?.handleOpen?.()
+        this.$nextTick(() => {
+          setTimeout(() => {
+            const firstOperator = document.querySelector(
+              '.tag-search-operator-popper .el-dropdown-menu__item:not(.is-disabled)'
+            )
+            firstOperator?.focus()
+          }, 0)
+        })
+        return
+      }
+
+      if (this.selectorOptions.length === 0) {
+        return
+      }
       const cascader = this.$refs.Cascade
       cascader?.togglePopperVisible?.(true)
       this.$nextTick(() => {
@@ -1231,6 +1255,14 @@ export default {
         }
         this.handleFocus()
       }, 0)
+    },
+    focusSearchInputAfterSubmit() {
+      clearTimeout(this.fieldMenuOpenTimer)
+      this.waitForInputClickToOpenFieldMenu = true
+      this.pendingFieldFocusSearchInput = false
+      this.restoreFieldMenuOnVisible = false
+      this.$refs.Cascade?.togglePopperVisible?.(false)
+      this.$nextTick(() => this.focusSearchInput())
     },
     handleTagClose(evt) {
       const fieldKey = this.filterTags[evt]?.key || evt
@@ -1331,7 +1363,7 @@ export default {
         }
         this.resetFilterInputState()
         if (!keepFieldMenuOpen) {
-          this.$nextTick(() => this.focusSearchInput())
+          this.focusSearchInputAfterSubmit()
         }
         return
       }
@@ -1346,7 +1378,7 @@ export default {
         }
         this.resetFilterInputState()
         if (!keepFieldMenuOpen) {
-          this.$nextTick(() => this.focusSearchInput())
+          this.focusSearchInputAfterSubmit()
         }
         return
       }
@@ -1419,7 +1451,7 @@ export default {
         this.valueLabel = ''
       } else {
         this.resetFilterInputState()
-        this.$nextTick(() => this.focusSearchInput())
+        this.focusSearchInputAfterSubmit()
       }
     },
     resetFilterInputState() {
