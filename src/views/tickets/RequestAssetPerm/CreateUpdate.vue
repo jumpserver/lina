@@ -9,7 +9,6 @@
 
 <script>
 import Select2 from '@/components/Form/FormFields/Select2'
-import { RequiredChange } from '@/components/Form/DataForm/rules'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import store from '@/store'
 import { getDaysFuture } from '@/utils/common/time'
@@ -148,7 +147,6 @@ export default {
         flow_id: {
           component: Select2,
           label: this.$t('TicketFlow'),
-          rules: [RequiredChange],
           el: {
             multiple: false,
             clearable: false,
@@ -185,6 +183,10 @@ export default {
             }
           }
         })
+        // 只有一个可用工单流时，后端会自动选用它。空字符串不能作为 UUID 提交。
+        if (!value.flow_id) {
+          delete value.flow_id
+        }
         delete value.cc_users
         return value
       },
