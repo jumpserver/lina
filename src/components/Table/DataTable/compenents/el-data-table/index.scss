@@ -20,9 +20,10 @@
   box-sizing: border-box;
 }
 
-// Keep the table's outer bottom border as the separator above pagination.
-.el-data-table :deep(.el-table__body tbody tr:last-child td.el-table__cell) {
-  border-bottom: none;
+// The last row already provides the separator above pagination. Removing the
+// duplicate outer border also keeps the fixed action column joined to the row.
+.el-data-table :deep(.el-table__inner-wrapper::before) {
+  display: none;
 }
 
 .el-data-table :deep(.el-form-item) {
