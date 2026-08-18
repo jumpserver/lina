@@ -21,7 +21,7 @@ const compactColumnWidth = {
   min: 120,
   max: 180
 }
-const defaultActionColumnWidth = '120px'
+const defaultActionColumnWidth = '110px'
 const expandColumnWidth = '48px'
 
 function getColumnName(column) {
@@ -35,9 +35,7 @@ export function orderActionColumn(columns, position = 'end') {
   }
 
   const otherColumns = columns.filter((column) => column !== actionColumn)
-  return position === 'start'
-    ? [actionColumn, ...otherColumns]
-    : [...otherColumns, actionColumn]
+  return position === 'start' ? [actionColumn, ...otherColumns] : [...otherColumns, actionColumn]
 }
 
 function getOverflowTooltipOptions() {

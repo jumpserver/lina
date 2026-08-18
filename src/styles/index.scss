@@ -387,8 +387,8 @@ input[type='file'] {
     padding: 6px 0;
   }
 
-  th:not(:first-child) > .cell,
-  td:not(:first-child) > .cell {
+  th:not(:first-child):not(:last-child) > .cell,
+  td:not(:first-child):not(:last-child) > .cell {
     padding-left: 17px;
   }
 
