@@ -80,17 +80,20 @@ export default {
       return this.modelValue !== '' && this.modelValue != null ? this.modelValue : this.value
     },
     currentParams() {
-      // 参数字段已隐藏、值不再经 model-value 传入，这里从当前层表单值实时读回，
-      // 保证编辑已有平台时弹窗能回填已保存的参数。
-      try {
-        const model = this.formCtx?.getElForm?.()?.model
-        if (model && this.paramsKey && model[this.paramsKey] != null) {
-          return model[this.paramsKey]
+      // 隐藏的 *_params 可能在 model 里是 {}，不能因此丢掉 object / paramsValue 里已保存的值。
+      // formCtx 也可能是外层平台表单，这时参数在 model.automation[paramsKey]。
+      const model = this.formCtx?.getElForm?.()?.model
+      const candidates = [
+        model?.[this.paramsKey],
+        model?.automation?.[this.paramsKey],
+        this.paramsValue
+      ]
+      for (const val of candidates) {
+        if (val && typeof val === 'object' && !Array.isArray(val) && Object.keys(val).length > 0) {
+          return val
         }
-      } catch (e) {
-        // ignore
       }
-      return this.paramsValue || {}
+      return {}
     }
   },
   methods: {

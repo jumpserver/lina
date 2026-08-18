@@ -142,14 +142,23 @@ export default {
     normalizeForm(val) {
       return val && typeof val === 'object' && !Array.isArray(val) ? { ...val } : {}
     },
-    getSavedMethodParams() {
-      const fromValue = this.value?.[this.method]
-      const fromPush = this.pushAccountParams?.[this.method]
-      if (fromValue && typeof fromValue === 'object') {
-        return fromValue
+    hasParams(val) {
+      return val && typeof val === 'object' && !Array.isArray(val) && Object.keys(val).length > 0
+    },
+    getResolvedParams() {
+      if (this.hasParams(this.value)) {
+        return this.value
       }
-      if (fromPush && typeof fromPush === 'object') {
-        return fromPush
+      if (this.hasParams(this.pushAccountParams)) {
+        return this.pushAccountParams
+      }
+      return {}
+    },
+    getSavedMethodParams() {
+      const resolved = this.getResolvedParams()
+      const fromResolved = resolved?.[this.method]
+      if (this.hasParams(fromResolved)) {
+        return fromResolved
       }
       return {}
     },
@@ -209,7 +218,8 @@ export default {
       this.config.fieldsMeta = fieldsMeta
     },
     onSetting() {
-      this.form = this.normalizeForm(this.value)
+      const params = this.getResolvedParams()
+      this.form = this.normalizeForm(params)
       this.setFormConfig()
       this.isVisible = true
     },
