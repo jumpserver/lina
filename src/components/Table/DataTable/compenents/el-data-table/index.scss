@@ -1,7 +1,7 @@
 .el-data-table {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 1px;
   min-width: 0;
 }
 
@@ -11,6 +11,18 @@
 
 .el-data-table :deep(.el-table th) {
   //padding: 4px 0;
+}
+
+// Element Plus overlays its custom horizontal scrollbar on the scroll view.
+// Reserve space below the last row only when the table actually overflows horizontally.
+.el-data-table :deep(.el-table--scrollable-x .el-table__body-wrapper .el-scrollbar__wrap) {
+  padding-bottom: var(--scrollbar-size);
+  box-sizing: border-box;
+}
+
+// Keep the table's outer bottom border as the separator above pagination.
+.el-data-table :deep(.el-table__body tbody tr:last-child td.el-table__cell) {
+  border-bottom: none;
 }
 
 .el-data-table :deep(.el-form-item) {
