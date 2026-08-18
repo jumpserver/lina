@@ -53,6 +53,7 @@ export function getDefaultConfig(vm) {
             .post('/api/v1/assets/assets/tasks/', { action: 'test', assets: ids })
             .then(res => {
               openTaskPage(res['task'])
+              vm.startTaskPolling(res['task'])
             })
             .catch(err => {
               vm.$message.error(vm.$tc('common.bulkVerifyErrorMsg' + ' ' + err))
@@ -242,7 +243,7 @@ export function getDefaultConfig(vm) {
                     .post(`/api/v1/assets/assets/${row.id}/tasks/`, { action: 'test' })
                     .then(res => {
                       openTaskPage(res['task'])
-                      vm.startConnectivityPolling(row)
+                      vm.startTaskPolling(res['task'])
                     })
                 }
               }

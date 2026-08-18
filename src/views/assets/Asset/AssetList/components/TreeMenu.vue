@@ -169,6 +169,7 @@ export default {
         { 'action': 'test' }
       ).then((res) => {
         openTaskPage(res['task'])
+        this.$emit('task-created', res['task'])
       }).catch(error => {
         this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
       })

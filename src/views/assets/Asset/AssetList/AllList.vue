@@ -10,6 +10,7 @@
         slot="rMenu"
         :tree="treeRef"
         @showAll="showAll"
+        @task-created="handleNodeTaskCreated"
       />
       <BaseList
         ref="baseList"
@@ -88,6 +89,9 @@ export default {
       this.decorateRMenu()
       const url = `${this.treeSetting.url}?node_id=${node.meta.data.id}&show_current_asset=${showCurrentAsset}`
       this.$refs.AssetTreeTable.$refs.TreeList.handleUrlChange(url)
+    },
+    handleNodeTaskCreated(taskId) {
+      this.$refs.baseList.startTaskPolling(taskId)
     },
     getAssetsUrl(treeNode) {
       let url = '/api/v1/assets/assets/'

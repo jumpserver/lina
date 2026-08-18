@@ -83,6 +83,7 @@ export default {
       )
         .then((res) => {
           openTaskPage(res['task'])
+          this.$emit('task-created', res['task'])
         }).finally(() => {
           this.iVisible = false
         })

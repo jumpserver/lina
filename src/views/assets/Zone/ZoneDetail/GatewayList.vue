@@ -12,6 +12,7 @@
       :cell="testConfig.cell"
       :port="testConfig.port"
       :visible.sync="testConfig.visible"
+      @task-created="handleGatewayTaskCreated"
     />
     <AddGatewayDialog
       v-if="addGatewaySetting.addGatewayDialogVisible"
@@ -29,6 +30,7 @@ import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
 import { ArrayFormatter, ChoicesFormatter, DetailFormatter, TagsFormatter } from '@/components/Table/TableFormatters'
 import AddGatewayDialog from '@/views/assets/Zone/components/AddGatewayDialog'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import taskExecutionPoller from '@/mixins/taskExecutionPoller'
 
 export default {
   components: {
@@ -37,6 +39,7 @@ export default {
     GatewayTestDialog,
     AddGatewayDialog
   },
+  mixins: [taskExecutionPoller],
   props: {
     object: {
       type: Object,
@@ -212,6 +215,9 @@ export default {
     }
   },
   methods: {
+    handleGatewayTaskCreated(taskId) {
+      this.startTaskPolling(taskId)
+    },
     reloadTable() {
       this.$refs.ListTable.$refs.ListTable.reloadTable()
     },

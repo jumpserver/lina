@@ -5,6 +5,7 @@
       :cell="GatewayCell"
       :port="GatewayPort"
       :visible.sync="GatewayVisible"
+      @task-created="handleGatewayTaskCreated"
     />
   </div>
 </template>
@@ -78,7 +79,7 @@ export default {
                           { action: 'test' }
                         ).then(res => {
                           openTaskPage(res['task'])
-                          this.$refs.baseList.startConnectivityPolling(row)
+                          this.$refs.baseList.startTaskPolling(res['task'])
                         })
                       }
                     }
@@ -95,6 +96,9 @@ export default {
     this.config.optionInfo = await this.optionAndGenFields()
   },
   methods: {
+    handleGatewayTaskCreated(taskId) {
+      this.$refs.baseList.startTaskPolling(taskId)
+    },
     async optionAndGenFields() {
       const data = await this.$store.dispatch('common/getUrlMeta', { url: this.config.url })
       const remoteMeta = data.actions['GET'] || {}

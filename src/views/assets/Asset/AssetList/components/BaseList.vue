@@ -28,6 +28,7 @@
       :cell="gatewayCell"
       :port="gatewayPort"
       :visible.sync="gatewayVisible"
+      @task-created="handleGatewayTaskCreated"
     />
     <AccountDiscoverDialog :asset="discoveryDialog.asset" :visible.sync="discoveryDialog.visible" />
     <AccountCreateUpdate
@@ -48,9 +49,7 @@ import AccountDiscoverDialog from './AccountDiscoverDialog.vue'
 import AccountCreateUpdate from '@/components/Apps/AccountListTable/AccountCreateUpdate.vue'
 import { getDefaultConfig } from './const'
 import { mapState } from 'vuex'
-
-const CONNECTIVITY_POLL_INTERVAL = 5000
-const CONNECTIVITY_POLL_MAX_DURATION = 5 * 60 * 1000
+import taskExecutionPoller from '@/mixins/taskExecutionPoller'
 
 export default {
   components: {
@@ -61,6 +60,7 @@ export default {
     AccountDiscoverDialog,
     AssetBulkUpdateDialog
   },
+  mixins: [taskExecutionPoller],
   props: {
     url: {
       type: String,
@@ -159,7 +159,6 @@ export default {
       asset: {},
       gatewayCell: '',
       gatewayVisible: false,
-      connectivityPollingTimers: {},
       defaultConfig: defaultConfig['tableConfig'],
       defaultHeaderActions: defaultConfig['defaultHeaderActions'],
       updateSelectedDialogSetting: {
@@ -223,75 +222,12 @@ export default {
   activated() {
     this.setRecentPlatforms()
   },
-  beforeDestroy() {
-    Object.keys(this.connectivityPollingTimers).forEach(key => {
-      clearTimeout(this.connectivityPollingTimers[key])
-    })
-    this.connectivityPollingTimers = {}
-  },
   methods: {
-    normalizeConnectivity(connectivity) {
-      if (connectivity && Object.prototype.hasOwnProperty.call(connectivity, 'value')) {
-        return connectivity.value
-      }
-      return connectivity
+    handleGatewayTaskCreated(taskId) {
+      this.startTaskPolling(taskId)
     },
-    stopConnectivityPolling(assetId) {
-      const key = String(assetId)
-      const timer = this.connectivityPollingTimers[key]
-      if (!timer) {
-        return
-      }
-      clearTimeout(timer)
-      this.$delete(this.connectivityPollingTimers, key)
-    },
-    startConnectivityPolling(row) {
-      const assetId = row.id
-      const key = String(assetId)
-      const initialValue = this.normalizeConnectivity(row.connectivity)
-      const deadline = Date.now() + CONNECTIVITY_POLL_MAX_DURATION
-
-      this.stopConnectivityPolling(assetId)
-
-      const poll = async () => {
-        if (this._isDestroyed) {
-          return
-        }
-
-        try {
-          const { data } = await this.$axios.get(`/api/v1/assets/assets/${assetId}/`)
-          if (this._isDestroyed) {
-            return
-          }
-
-          const currentValue = this.normalizeConnectivity(data.connectivity)
-          if (currentValue !== initialValue) {
-            this.stopConnectivityPolling(assetId)
-            this.$refs.ListTable.reloadTable()
-            return
-          }
-        } catch (error) {
-          const status = error?.response?.status
-          if ([401, 403, 404].includes(status)) {
-            this.stopConnectivityPolling(assetId)
-            return
-          }
-          this.$log.debug('Asset connectivity polling request failed', assetId, error)
-        }
-
-        if (this._isDestroyed) {
-          return
-        }
-
-        if (Date.now() >= deadline) {
-          this.stopConnectivityPolling(assetId)
-          return
-        }
-
-        this.$set(this.connectivityPollingTimers, key, setTimeout(poll, CONNECTIVITY_POLL_INTERVAL))
-      }
-
-      this.$set(this.connectivityPollingTimers, key, setTimeout(poll, CONNECTIVITY_POLL_INTERVAL))
+    reloadTable() {
+      this.$refs.ListTable.reloadTable()
     },
     async updateOrCloneAsset(row, action) {
       this.createDrawer = this.drawer[row.category.value]
