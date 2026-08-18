@@ -231,8 +231,12 @@ export default {
      */
     updateForm(newValue) {
       newValue = transformInputValue(newValue, this.innerContent)
-      mergeValue(this.value, newValue, this.innerContent)
-      this.value = { ...this.value }
+      // 先拷再合：mergeValue 会就地改对象。若先改 this.value 再浅拷，
+      // value watch 的 old/new 内容相同，_.isEqual 为 true，不会向外 emit。
+      // 隐藏的 *_params 正是走这条路径，结果改密参数进不了提交 payload。
+      const next = { ...this.value }
+      mergeValue(next, newValue, this.innerContent)
+      this.value = next
     },
     /**
      * update select options
