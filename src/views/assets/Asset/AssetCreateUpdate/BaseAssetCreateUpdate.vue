@@ -6,7 +6,7 @@
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { encryptPassword } from '@/utils/session-encrypt'
 import { getUpdateObjURL, setUrlParam, getSelectedAssetNodeId } from '@/utils/common/index'
-import { assetFieldsMeta } from '@/views/assets/const'
+import { assetFieldsMeta, getWebAssetSettingDefaults } from '@/views/assets/const'
 
 const getRelatedId = (value) => value?.pk ?? value?.id ?? value?.value ?? value
 
@@ -233,6 +233,9 @@ export default {
         nodes: nodesInitial,
         platform: parseInt(this.platform.id),
         protocols: []
+      }
+      if (this.platform.category?.value === 'web') {
+        Object.assign(initial, getWebAssetSettingDefaults(this.platform.protocols))
       }
       if (this.updateInitial) {
         await this.updateInitial(initial)
