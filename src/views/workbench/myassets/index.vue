@@ -159,27 +159,17 @@ export default {
 }
 </script>
 
-<style>
-.el-card {
-  border: 0 !important;
-}
-
-.row_disabled,
-.row_disabled:hover,
-.row_disabled:hover > td {
+<style lang="scss" scoped>
+:deep(.row_disabled),
+:deep(.row_disabled:hover),
+:deep(.row_disabled:hover > td) {
   cursor: not-allowed;
   background-color: rgba(192, 196, 204, 0.28) !important;
 }
 
-.link-more {
-  margin-left: 10px;
-  border-bottom: solid 1px;
-  font-size: 12px;
-}
-
-.my-assets-table .table-actions {
+:deep(.my-assets-table .table-actions) {
   .el-button .el-tooltip__trigger .pre-icon .fa {
-    margin-right: 0px;
+    margin-right: 0;
   }
 }
 </style>

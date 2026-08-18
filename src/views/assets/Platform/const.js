@@ -182,7 +182,11 @@ export const setAutomations = (vm) => {
     )
     _.set(autoFieldsMeta, `${itemMethodKey}.el.paramsTitle`, vm.$t(automationParamsTitleKeys[item]))
     _.set(autoFieldsMeta, `${itemMethodKey}.el.paramsKey`, itemParamsKey)
-    _.set(autoFieldsMeta, `${itemMethodKey}.el.paramsValue`, initial[itemParamsKey] || {})
+    _.set(
+      autoFieldsMeta,
+      `${itemMethodKey}.el.paramsValue`,
+      vm.object?.automation?.[itemParamsKey] || initial[itemParamsKey] || {}
+    )
     _.set(initial, `${itemMethodKey}`, options[0]?.value)
   }
 }

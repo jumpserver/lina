@@ -13,6 +13,7 @@
       class="automation-method__append"
       :disabled="disabled"
       :method="iValue"
+      :push-account-params="currentParams"
       :title="paramsTitle"
       :url="paramsUrl"
       :value="currentParams"
@@ -101,9 +102,11 @@ export default {
     onParamsSubmit(params) {
       // 参数属于 automation 子表单中的同级 _params 字段。直接写回当前
       // form-renderer，确保外层提交读取到最新参数，不再依赖 fieldsMeta 的事件转接。
-      if (this.paramsKey) {
-        this.formCtx?.updateForm?.({ [this.paramsKey]: params })
+      if (!this.paramsKey) {
+        return
       }
+      const payload = params && typeof params === 'object' ? { ...params } : {}
+      this.formCtx?.updateForm?.({ [this.paramsKey]: payload })
     }
   }
 }

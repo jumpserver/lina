@@ -18,6 +18,7 @@
       @update:visible="handleVisibleChange"
     >
       <AutoDataForm
+        v-if="isVisible"
         v-bind="config"
         ref="autoDataForm"
         :form="form"
@@ -108,6 +109,12 @@ export default {
     visible(val) {
       this.isVisible = val
     },
+    value: {
+      handler(val) {
+        this.form = this.normalizeForm(val)
+      },
+      deep: true
+    },
     method(iNew, iOld) {
       if (iNew !== iOld) {
         this.getUrlMeta()
@@ -132,18 +139,35 @@ export default {
       this.$emit('canSetting', this.canSetting)
       return this.canSetting
     },
+    normalizeForm(val) {
+      return val && typeof val === 'object' && !Array.isArray(val) ? { ...val } : {}
+    },
+    getSavedMethodParams() {
+      const fromValue = this.value?.[this.method]
+      const fromPush = this.pushAccountParams?.[this.method]
+      if (fromValue && typeof fromValue === 'object') {
+        return fromValue
+      }
+      if (fromPush && typeof fromPush === 'object') {
+        return fromPush
+      }
+      return {}
+    },
     setFormConfig() {
       let fields = []
       const fieldsMeta = {}
       const { method } = this
       const filterField = this.remoteMeta[method]
+      if (!filterField) {
+        return
+      }
       fields = [[filterField.label, [method]]]
       fieldsMeta[method] = {
         fields: [],
         fieldsMeta: {}
       }
 
-      const param = this.pushAccountParams[method]
+      const param = this.getSavedMethodParams()
       if (Object.keys(filterField?.children || {}).length > 0) {
         for (const [k, v] of Object.entries(filterField.children)) {
           let component = 'el-input'
@@ -154,17 +178,19 @@ export default {
               break
             case 'boolean':
               component = Switcher
-              // component = 'checkbox'
               break
             case 'text':
               el['text'] = 'textarea'
               break
           }
 
-          if (param) {
-            v.default = param[k] || v.default
+          const saved = param[k]
+          const item = {
+            ...v,
+            component,
+            el,
+            default: saved !== undefined && saved !== null ? saved : v.default
           }
-          const item = { ...v, component: component, el: el }
           fieldsMeta[method].fields.push(k)
           fieldsMeta[method].fieldsMeta[k] = item
         }
@@ -183,6 +209,8 @@ export default {
       this.config.fieldsMeta = fieldsMeta
     },
     onSetting() {
+      this.form = this.normalizeForm(this.value)
+      this.setFormConfig()
       this.isVisible = true
     },
     onSubmit(form) {
