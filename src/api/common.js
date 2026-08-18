@@ -16,8 +16,13 @@ export function createSourceIdCache(ids) {
 }
 
 export function optionUrlMeta(url) {
+  const suffixIndex = url.search(/[?#]/)
+  const path = suffixIndex === -1 ? url : url.slice(0, suffixIndex)
+  const suffix = suffixIndex === -1 ? '' : url.slice(suffixIndex)
+  const normalizedUrl = path.endsWith('/') ? url : `${path}/${suffix}`
+
   return request({
-    url: url,
+    url: normalizedUrl,
     method: 'options'
   })
 }
