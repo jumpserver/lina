@@ -28,8 +28,7 @@ export default {
     return {
       helpText: this.$t('SyslogHelpText'),
       fields: [
-        [this.$t('Basic'), ['SYSLOG_ENABLED']],
-        [this.$t('Server'), ['SYSLOG_HOST', 'SYSLOG_PORT', 'SYSLOG_FACILITY', 'SYSLOG_SOCKTYPE']]
+        [this.$t('Server'), ['SYSLOG_ENABLED', 'SYSLOG_HOST', 'SYSLOG_PORT', 'SYSLOG_FACILITY', 'SYSLOG_SOCKTYPE']]
       ],
       fieldsMeta: {
         SYSLOG_ENABLED: {

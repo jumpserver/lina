@@ -13,6 +13,7 @@
 <script>
 import { IBox, DrawerListTable as ListTable } from '@/components'
 import { GenericCreateUpdateForm } from '@/layout/components'
+import AddressInput from '@/components/Form/FormFields/AddressInput'
 import { toSafeLocalDateStr } from '@/utils/common/time'
 import { testNasSetting } from '@/api/settings'
 
@@ -90,6 +91,7 @@ export default {
         },
         NAS_HOST: {
           hidden: (formValue) => !formValue.NAS_ENABLED,
+          component: AddressInput,
           label: this.$t('NasHost')
         },
         NAS_PORT: {

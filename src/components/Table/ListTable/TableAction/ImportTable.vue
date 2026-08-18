@@ -306,6 +306,14 @@ export default {
             item[field] = encryptPassword(item[field])
           }
         }
+        if (Array.isArray(item.accounts)) {
+          item.accounts = item.accounts.map(account => {
+            if (account && account.secret) {
+              account.secret = encryptPassword(account.secret)
+            }
+            return account
+          })
+        }
         totalData.push(item)
       })
       return totalData
