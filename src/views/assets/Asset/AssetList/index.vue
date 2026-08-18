@@ -45,16 +45,16 @@ export default {
             component: () => import('@/views/assets/Asset/AssetList/DatabaseList.vue')
           },
           {
-            icon: 'fa-cloud',
-            name: 'cloud',
-            hidden: true,
-            component: () => import('@/views/assets/Asset/AssetList/CloudList.vue')
-          },
-          {
             icon: 'fa-globe',
             name: 'web',
             hidden: true,
             component: () => import('@/views/assets/Asset/AssetList/WebList.vue')
+          },
+          {
+            icon: 'fa-cloud',
+            name: 'cloud',
+            hidden: true,
+            component: () => import('@/views/assets/Asset/AssetList/CloudList.vue')
           },
           {
             icon: 'fa-id-card-o',
