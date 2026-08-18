@@ -182,18 +182,35 @@ export const setAutomations = (vm) => {
     )
     _.set(autoFieldsMeta, `${itemMethodKey}.el.paramsTitle`, vm.$t(automationParamsTitleKeys[item]))
     _.set(autoFieldsMeta, `${itemMethodKey}.el.paramsKey`, itemParamsKey)
-    _.set(
-      autoFieldsMeta,
-      `${itemMethodKey}.el.paramsValue`,
-      vm.object?.automation?.[itemParamsKey] || initial[itemParamsKey] || {}
-    )
-    _.set(initial, `${itemMethodKey}`, options[0]?.value)
+    const existingParams = vm.object?.automation?.[itemParamsKey] || initial[itemParamsKey] || {}
+    _.set(autoFieldsMeta, `${itemMethodKey}.el.paramsValue`, existingParams)
+    if (
+      existingParams &&
+      typeof existingParams === 'object' &&
+      Object.keys(existingParams).length
+    ) {
+      initial[itemParamsKey] = existingParams
+    }
+    if (!initial[itemMethodKey]) {
+      _.set(initial, `${itemMethodKey}`, options[0]?.value)
+    }
   }
 }
 
 export const updateAutomationParams = (vm, obj) => {
+  const auto = obj?.automation || {}
+  const autoFieldsMeta = vm.fieldsMeta.automation.fieldsMeta
+  vm.fieldsMeta.automation.fields
+    .filter((item) => item.endsWith('_method'))
+    .forEach((itemMethodKey) => {
+      const prefix = itemMethodKey.replace('_method', '')
+      const params = auto[`${prefix}_params`]
+      if (params && typeof params === 'object' && Object.keys(params).length) {
+        _.set(autoFieldsMeta, `${itemMethodKey}.el.paramsValue`, params)
+      }
+    })
   needSettingParamsFields.forEach((v) => {
-    const value = _.get(obj.automation, `${v}_method`)
-    _.set(vm.fieldsMeta.automation.fieldsMeta, `${v}_params.el.method`, value)
+    const value = _.get(auto, `${v}_method`)
+    _.set(autoFieldsMeta, `${v}_params.el.method`, value)
   })
 }

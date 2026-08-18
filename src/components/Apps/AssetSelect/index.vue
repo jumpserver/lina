@@ -244,6 +244,11 @@ export default {
     },
     getSelectedValue() {
       return _.cloneDeep(this.selectedValue)
+    },
+    clearSelected() {
+      this.selectedValue = []
+      this.selectedRows = []
+      this.emitValue([])
     }
   }
 }
