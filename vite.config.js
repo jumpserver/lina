@@ -146,7 +146,8 @@ export default defineConfig(({ mode }) => {
         '/facelive/': createProxy('http://localhost:9999', true),
         '/core/': createProxy(coreHost),
         '/static/': createProxy(coreHost),
-        '/media/': createProxy(coreHost)
+        '/media/': createProxy(coreHost),
+        '/private-media/': createProxy(coreHost)
       }
     },
     preview: {
