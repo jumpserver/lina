@@ -144,7 +144,7 @@ export default {
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  padding: 15px 20px;
+  padding: 10px 20px;
 }
 
 :deep(.el-pagination .el-pagination__total) {
