@@ -11,7 +11,7 @@
         <ActionsGroup :actions="pageActions" class="header-buttons" />
       </span>
     </template>
-    <div v-if="!loading && object?.id">
+    <div v-if="!loading">
       <slot />
     </div>
   </TabPage>
@@ -125,6 +125,9 @@ export default {
 
   computed: {
     ...mapGetters(['currentOrgIsRoot']),
+    hasLoadedObject() {
+      return !!(this.object && Object.keys(this.object).length > 0)
+    },
     pageActions() {
       return [
         {
@@ -182,7 +185,7 @@ export default {
     await this.loadObject()
   },
   async activated() {
-    if (this.object?.id || this.loading) return
+    if (this.loading || this.hasLoadedObject) return
     await this.loadObject()
   },
   methods: {

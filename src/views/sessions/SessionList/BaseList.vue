@@ -34,8 +34,8 @@ export default {
       type: Object,
       default: () => {
         return {
-          min: ['id', 'actions'],
-          default: ['id', 'user', 'asset', 'account', 'protocol', 'date_start', 'actions']
+          min: ['number', 'actions'],
+          default: ['number', 'user', 'asset', 'account', 'protocol', 'date_start', 'actions']
         }
       }
     },
@@ -53,11 +53,12 @@ export default {
       detailDrawer: () => import('../SessionDetail/index.vue'),
       tableConfig: {
         url: this.url,
-        columnsExclude: ['terminal', ...this.columnsExclude],
+        columnsExclude: ['id', 'terminal', ...this.columnsExclude],
+        columnsAdd: ['number'],
         columnsShow: this.columnsShow,
         columnsMeta: {
-          id: {
-            prop: 'id',
+          number: {
+            prop: 'number',
             label: this.$t('Number'),
             width: '80px',
             align: 'center',
