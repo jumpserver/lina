@@ -186,6 +186,7 @@ export default {
   components: {
     codemirror: Codemirror
   },
+  emits: ['input', 'update:modelValue'],
   props: {
     toolbar: {
       type: [Array, Object],
