@@ -16,19 +16,21 @@ import { IBox } from '@/components'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import AddressInput from '@/components/Form/FormFields/AddressInput'
 import { testSyslogSetting } from '@/api/settings'
+import SyslogDocDownloadButton from './components/SyslogDocDownloadButton.vue'
 
 export default {
   name: 'Syslog',
   components: {
     GenericCreateUpdateForm,
-    IBox
+    IBox,
+    SyslogDocDownloadButton
   },
   data() {
     const vm = this
     return {
       helpText: this.$t('SyslogHelpText'),
       fields: [
-        [this.$t('Server'), ['SYSLOG_ENABLED', 'SYSLOG_HOST', 'SYSLOG_PORT', 'SYSLOG_FACILITY', 'SYSLOG_SOCKTYPE']]
+        [this.$t('Server'), ['SYSLOG_ENABLED', 'SYSLOG_HOST', 'SYSLOG_PORT', 'SYSLOG_FACILITY', 'SYSLOG_SOCKTYPE', 'SYSLOG_DOC']]
       ],
       fieldsMeta: {
         SYSLOG_ENABLED: {
@@ -62,6 +64,11 @@ export default {
             { label: 'UDP', value: 2 },
             { label: 'TCP', value: 1 }
           ]
+        },
+        SYSLOG_DOC: {
+          hidden: (formValue) => !formValue.SYSLOG_ENABLED,
+          label: this.$t('SyslogDoc'),
+          component: SyslogDocDownloadButton
         }
       },
       afterGetFormValue(obj) {
@@ -75,6 +82,7 @@ export default {
           data.SYSLOG_FACILITY = ''
         }
         delete data.SYSLOG_ENABLED
+        delete data.SYSLOG_DOC
         return data
       },
       hasDetailInMsg: false,
