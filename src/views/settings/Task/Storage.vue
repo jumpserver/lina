@@ -77,11 +77,11 @@ export default {
             { label: 'Windows(SMB)', value: 'cifs' }
           ],
           on: {
-            // 切换 NAS 类型时清空相关配置，避免残留
+            // 切换 NAS 类型时清空相关配置，避免残留，并填入对应默认端口
             change: ([value], updateForm) => {
               updateForm({
                 NAS_HOST: '',
-                NAS_PORT: '',
+                NAS_PORT: value === 'cifs' ? 445 : 2049,
                 NAS_SHARE_NAME: '',
                 NAS_USERNAME: '',
                 NAS_PASSWORD: ''
@@ -96,7 +96,13 @@ export default {
         },
         NAS_PORT: {
           hidden: (formValue) => !formValue.NAS_ENABLED,
-          label: this.$t('NasPort')
+          label: this.$t('NasPort'),
+          type: 'input-number',
+          el: {
+            min: 1,
+            max: 65535,
+            step: 1
+          }
         },
         NAS_SHARE_NAME: {
           hidden: (formValue) => !formValue.NAS_ENABLED,
@@ -110,6 +116,13 @@ export default {
           hidden: (formValue) => !formValue.NAS_ENABLED || formValue.NAS_TYPE === 'nfs',
           label: this.$t('NasPassword')
         }
+      },
+      afterGetFormValue(data) {
+        // 端口为 0 时表示使用默认端口，前端显示对应类型的默认端口
+        if (!data['NAS_PORT']) {
+          data['NAS_PORT'] = data['NAS_TYPE'] === 'cifs' ? 445 : 2049
+        }
+        return data
       },
       cleanFormValue(data) {
         if (!data['NAS_PASSWORD']) {

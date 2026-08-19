@@ -42,7 +42,13 @@ export default {
         },
         SYSLOG_PORT: {
           label: this.$t('SyslogPort'),
-          hidden: (formValue) => !formValue.SYSLOG_ENABLED
+          hidden: (formValue) => !formValue.SYSLOG_ENABLED,
+          type: 'input-number',
+          el: {
+            min: 1,
+            max: 65535,
+            step: 1
+          }
         },
         SYSLOG_FACILITY: {
           label: this.$t('SyslogFacility'),
