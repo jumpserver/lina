@@ -11,7 +11,7 @@
         <ActionsGroup :actions="pageActions" class="header-buttons" />
       </span>
     </template>
-    <div v-if="!loading">
+    <div v-if="!loading && object?.id">
       <slot />
     </div>
   </TabPage>
@@ -179,15 +179,22 @@ export default {
     }
   },
   async created() {
-    try {
-      this.loading = true
-      await this.checkDrawer()
-      await this.getObject()
-    } finally {
-      this.loading = false
-    }
+    await this.loadObject()
+  },
+  async activated() {
+    if (this.object?.id || this.loading) return
+    await this.loadObject()
   },
   methods: {
+    async loadObject() {
+      try {
+        this.loading = true
+        await this.checkDrawer()
+        await this.getObject()
+      } finally {
+        this.loading = false
+      }
+    },
     async getDrawerMeta() {
       return getRuntimeActionMeta(this)
     },
@@ -247,6 +254,7 @@ export default {
             } else {
               this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
             }
+            done()
           } finally {
             instance.confirmButtonLoading = false
           }

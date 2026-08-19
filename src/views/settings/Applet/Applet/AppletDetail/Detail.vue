@@ -48,7 +48,7 @@ export default {
             return (
               <span>
                 {' '}
-                {this.object.protocols.map((p, i) => (
+                {(this.object.protocols || []).map((p, i) => (
                   <el-tag key={i} type={types[i % 4]} size="small">
                     {p}
                   </el-tag>
@@ -64,7 +64,7 @@ export default {
             return (
               <span>
                 {' '}
-                {this.object.tags.map((p, i) => (
+                {(this.object.tags || []).map((p, i) => (
                   <el-tag key={i} type={types[i % 4]} size="small">
                     {p}
                   </el-tag>
@@ -75,7 +75,7 @@ export default {
         },
         {
           key: this.$t('Type'),
-          value: this.object.type.label
+          formatter: () => this.object.type?.label || this.object.type || ''
         },
         {
           key: this.$t('Active'),
