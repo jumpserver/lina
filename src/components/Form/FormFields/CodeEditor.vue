@@ -451,7 +451,17 @@ export default {
       overflow: auto;
     }
 
-    :deep(.cm-activeLine),
+    :deep(.cm-content),
+    :deep(.cm-line) {
+      cursor: text;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    :deep(.cm-activeLine) {
+      background: transparent;
+    }
+
     :deep(.cm-activeLineGutter) {
       background: var(--color-disabled-background);
     }
