@@ -3,6 +3,7 @@
     v-bind="settings"
     ref="form"
     class="form"
+    :object="object"
     @perform-finished="handlePerformFinished"
     @submit-success="handleSubmitSuccess"
   />
@@ -54,7 +55,7 @@ export default {
           }
         ],
         getNextRoute: (res, method) => {
-          return { name: 'CloudAccountDetail', params: { id: res.account } }
+          return { name: 'CloudAccountDetail', params: { id: res.account.id } }
         }
       }
     }
