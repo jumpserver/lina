@@ -24,8 +24,8 @@ export default {
     return {
       url: `/api/v1/terminal/sessions/?asset_id=${this.object.id}&order=is_finished,-date_end`,
       columnsShow: {
-        min: ['id'],
-        default: ['id', 'user', 'asset', 'account', 'date_start', 'duration']
+        min: ['number'],
+        default: ['number', 'user', 'asset', 'account', 'date_start', 'duration']
       },
       columnsMeta: {
         id: {
