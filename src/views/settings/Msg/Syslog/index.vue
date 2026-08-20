@@ -30,21 +30,19 @@ export default {
     return {
       helpText: this.$t('SyslogHelpText'),
       fields: [
-        [this.$t('Server'), ['SYSLOG_ENABLED', 'SYSLOG_HOST', 'SYSLOG_PORT', 'SYSLOG_FACILITY', 'SYSLOG_SOCKTYPE', 'SYSLOG_DOC']]
+        [this.$t('Server'), ['SYSLOG_ENABLE', 'SYSLOG_HOST', 'SYSLOG_PORT', 'SYSLOG_FACILITY', 'SYSLOG_SOCKTYPE', 'SYSLOG_DOC']]
       ],
       fieldsMeta: {
-        SYSLOG_ENABLED: {
+        SYSLOG_ENABLE: {
           type: 'checkbox',
           label: this.$t('SyslogEnable')
         },
         SYSLOG_HOST: {
           label: this.$t('SyslogHost'),
-          component: AddressInput,
-          hidden: (formValue) => !formValue.SYSLOG_ENABLED
+          component: AddressInput
         },
         SYSLOG_PORT: {
           label: this.$t('SyslogPort'),
-          hidden: (formValue) => !formValue.SYSLOG_ENABLED,
           type: 'input-number',
           el: {
             min: 1,
@@ -53,11 +51,9 @@ export default {
           }
         },
         SYSLOG_FACILITY: {
-          label: this.$t('SyslogFacility'),
-          hidden: (formValue) => !formValue.SYSLOG_ENABLED
+          label: this.$t('SyslogFacility')
         },
         SYSLOG_SOCKTYPE: {
-          hidden: (formValue) => !formValue.SYSLOG_ENABLED,
           label: this.$t('SyslogSockType'),
           type: 'radio-group',
           options: [
@@ -66,22 +62,11 @@ export default {
           ]
         },
         SYSLOG_DOC: {
-          hidden: (formValue) => !formValue.SYSLOG_ENABLED,
           label: this.$t('SyslogDoc'),
           component: SyslogDocDownloadButton
         }
       },
-      afterGetFormValue(obj) {
-        obj.SYSLOG_ENABLED = !!obj.SYSLOG_HOST
-        return obj
-      },
       cleanFormValue(data) {
-        if (!data.SYSLOG_ENABLED) {
-          data.SYSLOG_HOST = ''
-          data.SYSLOG_PORT = 514
-          data.SYSLOG_FACILITY = ''
-        }
-        delete data.SYSLOG_ENABLED
         delete data.SYSLOG_DOC
         return data
       },
