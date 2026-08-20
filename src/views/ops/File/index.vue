@@ -18,7 +18,10 @@
     </el-alert>
     <div class="job-container">
       <div class="select-assets">
-        <SelectJobAssetDialog @change="handleSelectAssets" />
+        <SelectJobAssetDialog
+          base-url="/api/v1/perms/users/self/assets/?category__in!=database,web"
+          @change="handleSelectAssets"
+        />
       </div>
       <div class="transition-box">
         <div class="transfer-toolbar">
