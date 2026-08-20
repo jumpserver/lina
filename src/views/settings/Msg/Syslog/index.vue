@@ -20,7 +20,6 @@ import SyslogDocDownloadButton from './components/SyslogDocDownloadButton.vue'
 import i18n from '@/i18n/i18n'
 import { isValidAddress, ADDRESS_KINDS } from '@/utils/addressType'
 
-// SYSLOG 服务器地址仅允许 IP/域名
 const SYSLOG_ADDRESS_KINDS = ADDRESS_KINDS.network
 
 export default {
@@ -35,10 +34,10 @@ export default {
     return {
       helpText: this.$t('SyslogHelpText'),
       fields: [
-        [this.$t('Server'), ['SYSLOG_ENABLED', 'SYSLOG_HOST', 'SYSLOG_PORT', 'SYSLOG_FACILITY', 'SYSLOG_SOCKTYPE', 'SYSLOG_DOC']]
+        [this.$t('Server'), ['SYSLOG_ENABLE', 'SYSLOG_HOST', 'SYSLOG_PORT', 'SYSLOG_FACILITY', 'SYSLOG_SOCKTYPE', 'SYSLOG_DOC']]
       ],
       fieldsMeta: {
-        SYSLOG_ENABLED: {
+        SYSLOG_ENABLE: {
           type: 'checkbox',
           label: this.$t('SyslogEnable')
         },
@@ -66,7 +65,6 @@ export default {
         },
         SYSLOG_PORT: {
           label: this.$t('SyslogPort'),
-          hidden: (formValue) => !formValue.SYSLOG_ENABLED,
           type: 'input-number',
           el: {
             min: 1,
@@ -75,11 +73,9 @@ export default {
           }
         },
         SYSLOG_FACILITY: {
-          label: this.$t('SyslogFacility'),
-          hidden: (formValue) => !formValue.SYSLOG_ENABLED
+          label: this.$t('SyslogFacility')
         },
         SYSLOG_SOCKTYPE: {
-          hidden: (formValue) => !formValue.SYSLOG_ENABLED,
           label: this.$t('SyslogSockType'),
           type: 'radio-group',
           options: [
@@ -88,22 +84,11 @@ export default {
           ]
         },
         SYSLOG_DOC: {
-          hidden: (formValue) => !formValue.SYSLOG_ENABLED,
           label: this.$t('SyslogDoc'),
           component: SyslogDocDownloadButton
         }
       },
-      afterGetFormValue(obj) {
-        obj.SYSLOG_ENABLED = !!obj.SYSLOG_HOST
-        return obj
-      },
       cleanFormValue(data) {
-        if (!data.SYSLOG_ENABLED) {
-          data.SYSLOG_HOST = ''
-          data.SYSLOG_PORT = 514
-          data.SYSLOG_FACILITY = ''
-        }
-        delete data.SYSLOG_ENABLED
         delete data.SYSLOG_DOC
         return data
       },
