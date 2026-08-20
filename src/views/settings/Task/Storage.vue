@@ -16,6 +16,10 @@ import { GenericCreateUpdateForm } from '@/layout/components'
 import AddressInput from '@/components/Form/FormFields/AddressInput'
 import { toSafeLocalDateStr } from '@/utils/common/time'
 import { testNasSetting } from '@/api/settings'
+import i18n from '@/i18n/i18n'
+import { isValidAddress, ADDRESS_KINDS } from '@/utils/addressType'
+
+const RECLAMATION_ADDRESS_KINDS = ADDRESS_KINDS.network
 
 export default {
   name: 'Storage',
@@ -77,7 +81,6 @@ export default {
             { label: 'Windows(SMB)', value: 'cifs' }
           ],
           on: {
-            // 切换 NAS 类型时清空相关配置，避免残留，并填入对应默认端口
             change: ([value], updateForm) => {
               updateForm({
                 NAS_HOST: '',
@@ -92,7 +95,24 @@ export default {
         NAS_HOST: {
           hidden: (formValue) => !formValue.NAS_ENABLED,
           component: AddressInput,
-          label: this.$t('NasHost')
+          el: {
+            kinds: RECLAMATION_ADDRESS_KINDS
+          },
+          label: this.$t('NasHost'),
+          rules: [
+            {
+              validator: (rule, value, callback) => {
+                value = value?.trim()
+                if (!value) return callback()
+                if (isValidAddress(value, RECLAMATION_ADDRESS_KINDS)) {
+                  callback()
+                } else {
+                  callback(new Error(i18n.t('InvalidAddress')))
+                }
+              },
+              trigger: ['blur', 'change']
+            }
+          ]
         },
         NAS_PORT: {
           hidden: (formValue) => !formValue.NAS_ENABLED,
@@ -118,7 +138,6 @@ export default {
         }
       },
       afterGetFormValue(data) {
-        // 端口为 0 时表示使用默认端口，前端显示对应类型的默认端口
         if (!data['NAS_PORT']) {
           data['NAS_PORT'] = data['NAS_TYPE'] === 'cifs' ? 445 : 2049
         }
@@ -140,18 +159,21 @@ export default {
         {
           title: this.$t('NasTest'),
           loading: false,
-          callback: (value, _form, btn) => {
-            btn.loading = true
-            testNasSetting(value)
-              .then(res => {
-                this.$message.success(res['msg'])
-              })
-              .catch(res => {
-                this.$message.error(res['response']['data']['error'])
-              })
-              .finally(() => {
-                btn.loading = false
-              })
+          callback: (value, form, btn) => {
+            form.validate(valid => {
+              if (!valid) return
+              btn.loading = true
+              testNasSetting(value)
+                .then(res => {
+                  this.$message.success(res['msg'])
+                })
+                .catch(res => {
+                  this.$message.error(res['response']['data']['error'])
+                })
+                .finally(() => {
+                  btn.loading = false
+                })
+            })
           }
         }
       ],

@@ -17,6 +17,11 @@ import { GenericCreateUpdateForm } from '@/layout/components'
 import AddressInput from '@/components/Form/FormFields/AddressInput'
 import { testSyslogSetting } from '@/api/settings'
 import SyslogDocDownloadButton from './components/SyslogDocDownloadButton.vue'
+import i18n from '@/i18n/i18n'
+import { isValidAddress, ADDRESS_KINDS } from '@/utils/addressType'
+
+// SYSLOG 服务器地址仅允许 IP/域名
+const SYSLOG_ADDRESS_KINDS = ADDRESS_KINDS.network
 
 export default {
   name: 'Syslog',
@@ -39,7 +44,25 @@ export default {
         },
         SYSLOG_HOST: {
           label: this.$t('SyslogHost'),
-          component: AddressInput
+          component: AddressInput,
+          hidden: (formValue) => !formValue.SYSLOG_ENABLED,
+          el: {
+            kinds: SYSLOG_ADDRESS_KINDS
+          },
+          rules: [
+            {
+              validator: (rule, value, callback) => {
+                value = value?.trim()
+                if (!value) return callback()
+                if (isValidAddress(value, SYSLOG_ADDRESS_KINDS)) {
+                  callback()
+                } else {
+                  callback(new Error(i18n.t('InvalidAddress')))
+                }
+              },
+              trigger: ['blur', 'change']
+            }
+          ]
         },
         SYSLOG_PORT: {
           label: this.$t('SyslogPort'),
@@ -81,22 +104,25 @@ export default {
           title: this.$t('SyslogTest'),
           loading: false,
           callback: function(value, form, btn) {
-            const testValue = {}
-            testValue['SYSLOG_HOST'] = value['SYSLOG_HOST']
-            testValue['SYSLOG_PORT'] = value['SYSLOG_PORT']
-            testValue['SYSLOG_FACILITY'] = value['SYSLOG_FACILITY']
-            testValue['SYSLOG_SOCKTYPE'] = value['SYSLOG_SOCKTYPE']
-            btn.loading = true
-            testSyslogSetting(value)
-              .then(res => {
-                vm.$message.success(res['msg'])
-              })
-              .catch(res => {
-                vm.$message.error(res['response']['data']['error'])
-              })
-              .finally(() => {
-                btn.loading = false
-              })
+            form.validate(valid => {
+              if (!valid) return
+              const testValue = {}
+              testValue['SYSLOG_HOST'] = value['SYSLOG_HOST']
+              testValue['SYSLOG_PORT'] = value['SYSLOG_PORT']
+              testValue['SYSLOG_FACILITY'] = value['SYSLOG_FACILITY']
+              testValue['SYSLOG_SOCKTYPE'] = value['SYSLOG_SOCKTYPE']
+              btn.loading = true
+              testSyslogSetting(value)
+                .then(res => {
+                  vm.$message.success(res['msg'])
+                })
+                .catch(res => {
+                  vm.$message.error(res['response']['data']['error'])
+                })
+                .finally(() => {
+                  btn.loading = false
+                })
+            })
           }
         }
       ]

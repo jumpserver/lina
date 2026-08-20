@@ -5,6 +5,37 @@ import AssetAccounts from '@/views/assets/Asset/AssetCreateUpdate/components/Ass
 import rules from '@/components/Form/DataForm/rules'
 import { JSONManyToManySelect, NestedObjectSelect2, Select2 } from '@/components/Form/FormFields'
 import { message } from '@/utils/vue/message'
+import { isValidAddress, ADDRESS_KINDS } from '@/utils/addressType'
+
+const ADDRESS_CATEGORY_KINDS = {
+  host: ADDRESS_KINDS.network,
+  device: ADDRESS_KINDS.network,
+  database: ADDRESS_KINDS.network,
+  ds: ADDRESS_KINDS.network,
+  cloud: ADDRESS_KINDS.url,
+  web: ADDRESS_KINDS.url
+}
+
+function getAddressKinds(category) {
+  return ADDRESS_CATEGORY_KINDS[category] || []
+}
+
+function createAddressRule(category) {
+  const kinds = getAddressKinds(category)
+  if (!kinds.length) return null
+  return {
+    validator: (rule, value, callback) => {
+      value = value?.trim()
+      if (!value) return callback()
+      if (isValidAddress(value, kinds)) {
+        callback()
+      } else {
+        callback(new Error(i18n.t('InvalidAddress')))
+      }
+    },
+    trigger: ['blur', 'change']
+  }
+}
 
 export const filterSelectValues = values => {
   if (!values) return
@@ -62,10 +93,14 @@ export const assetFieldsMeta = (vm, category, type) => {
   const platformProtocols = []
   const secretTypes = []
   const asset = { address: 'https://example:8443' }
+  const addressRule = createAddressRule(platformCategory)
   return {
     address: {
       component: AddressInput,
-      rules: [rules.specialEmojiCheck, rules.RequiredChange],
+      el: {
+        kinds: getAddressKinds(platformCategory)
+      },
+      rules: [rules.specialEmojiCheck, rules.RequiredChange, addressRule].filter(Boolean),
       on: {
         change: ([event], updateForm) => {
           asset.address = event
