@@ -110,7 +110,8 @@ export default {
                   callback(new Error(i18n.t('InvalidAddress')))
                 }
               },
-              trigger: ['blur', 'change']
+              trigger: ['blur', 'change'],
+              required: true
             }
           ]
         },

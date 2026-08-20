@@ -45,7 +45,6 @@ export default {
         SYSLOG_HOST: {
           label: this.$t('SyslogHost'),
           component: AddressInput,
-          hidden: (formValue) => !formValue.SYSLOG_ENABLED,
           el: {
             kinds: SYSLOG_ADDRESS_KINDS
           },
@@ -60,7 +59,8 @@ export default {
                   callback(new Error(i18n.t('InvalidAddress')))
                 }
               },
-              trigger: ['blur', 'change']
+              trigger: ['blur', 'change'],
+              required: true
             }
           ]
         },
