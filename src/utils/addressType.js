@@ -41,10 +41,22 @@ export function detectAddressType(value) {
   return 'unknown'
 }
 
-export const ADDRESS_TYPE_LABELS = {
-  ipv4: 'IPv4',
-  ipv6: 'IPv6',
-  url: 'URL',
-  domain: 'Domain',
-  unknown: 'Unknown'
+/*
+ * 不同资产类型允许的地址类型。
+ * host/device/database/ds 只允许 IP/域名，cloud/web 只允许 URL。
+ */
+export const ADDRESS_KINDS = {
+  network: ['ipv4', 'ipv6', 'domain'],
+  url: ['url']
+}
+
+/**
+ * 判断地址是否属于允许的类型集合
+ * @param {string} value
+ * @param {Array<string>} kinds 允许的地址类型，如 ADDRESS_KINDS.network
+ * @returns {boolean}
+ */
+export function isValidAddress(value, kinds) {
+  if (!Array.isArray(kinds) || kinds.length === 0) return true
+  return kinds.includes(detectAddressType(value))
 }
