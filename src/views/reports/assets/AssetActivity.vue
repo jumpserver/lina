@@ -37,7 +37,8 @@
             data-report-name="UserAssetActivity"
           >
             <div class="chart-container-title">
-              <UserAssetActivity :days="days" :metrics="user_asset_activity_metrics" />
+              <div class="chart-container-title-text">{{ $t('UserAssetActivity') }}</div>
+              <UserAssetActivity embedded :days="days" :metrics="user_asset_activity_metrics" />
             </div>
           </div>
 
@@ -166,7 +167,8 @@ import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
 import UserAssetActivity from '@/views/reports/console/UserAssetActivity.vue'
 import * as echarts from 'echarts'
 import Echart from '@/components/Dashboard/Echart.vue'
-import { mixColors } from '@/views/reports/const'
+import { colorToRgba } from '@/utils/theme/color'
+import { getDistributionOptions, mixColors } from '@/views/reports/const'
 import reportPageMixin from '@/views/reports/base/reportPageMixin'
 import ReportToolbar from '@/views/reports/base/ReportToolbar.vue'
 
@@ -269,108 +271,13 @@ export default {
       ]
     },
     LoginEntryOptions() {
-      return {
-        tooltip: {
-          trigger: 'item'
-        },
-        legend: {
-          top: 'bottom'
-        },
-        series: [
-          {
-            type: 'pie',
-            minAngle: 5,
-            radius: ['40%', '70%'],
-            data: this.pie.asset_login_by_from,
-            itemStyle: {
-              borderRadius: 10,
-              borderColor: '#fff',
-              borderWidth: 2
-            },
-            label: {
-              show: false,
-              position: 'center'
-            },
-            emphasis: {
-              label: {
-                show: true,
-                fontSize: 15,
-                fontWeight: 'bold'
-              }
-            }
-          }
-        ]
-      }
+      return getDistributionOptions(this.pie.asset_login_by_from, this.$t('Total'))
     },
     LoginProtocolOptions() {
-      return {
-        tooltip: {
-          trigger: 'item'
-        },
-        legend: {
-          orient: 'vertical',
-          left: 'left'
-        },
-        series: [
-          {
-            type: 'pie',
-            minAngle: 5,
-            radius: ['40%', '70%'],
-            itemStyle: {
-              borderRadius: 10,
-              borderColor: '#fff',
-              borderWidth: 2
-            },
-            label: {
-              show: false,
-              position: 'center'
-            },
-            emphasis: {
-              label: {
-                show: true,
-                fontSize: 15,
-                fontWeight: 'bold'
-              }
-            },
-            data: this.pie.asset_login_by_protocol
-          }
-        ]
-      }
+      return getDistributionOptions(this.pie.asset_login_by_protocol, this.$t('Total'))
     },
     LoginOSOptions() {
-      return {
-        tooltip: {
-          trigger: 'item'
-        },
-        legend: {
-          orient: 'vertical',
-          left: 'left'
-        },
-        series: [
-          {
-            type: 'pie',
-            minAngle: 5,
-            radius: ['40%', '70%'],
-            itemStyle: {
-              borderRadius: 10,
-              borderColor: '#fff',
-              borderWidth: 2
-            },
-            label: {
-              show: false,
-              position: 'center'
-            },
-            emphasis: {
-              label: {
-                show: true,
-                fontSize: 15,
-                fontWeight: 'bold'
-              }
-            },
-            data: this.pie.asset_login_by_type
-          }
-        ]
-      }
+      return getDistributionOptions(this.pie.asset_login_by_type, this.$t('Total'))
     },
     loginTrendOptions() {
       const { primary } = mixColors()
@@ -466,20 +373,20 @@ export default {
                   [
                     {
                       offset: 0,
-                      color: 'rgba(249, 199, 79, 0.6)'
+                      color: colorToRgba(primary, 0.3)
                     },
                     {
                       offset: 0.6,
-                      color: 'rgba(249, 199, 79, 0.2)'
+                      color: colorToRgba(primary, 0.1)
                     },
                     {
                       offset: 0.8,
-                      color: 'rgba(249, 199, 79, 0.1)'
+                      color: colorToRgba(primary, 0.05)
                     }
                   ],
                   false
                 ),
-                shadowColor: 'rgba(249, 199, 79, 0.1)',
+                shadowColor: colorToRgba(primary, 0.08),
                 shadowBlur: 6
               }
             },
