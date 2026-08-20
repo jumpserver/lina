@@ -5,6 +5,7 @@
     :disabled="disabled"
     :fields="iFields"
     :form="iValue"
+    :server-errors="serverErrors"
     class="sub-form"
     @update:form="updateValue($event)"
   />
@@ -66,23 +67,13 @@ export default {
       }
     },
     iFields() {
-      const fields = this.fields
-      if (this.errors && typeof this.errors === 'object') {
-        // eslint-disable-next-line prefer-const
-        for (let [name, error] of Object.entries(this.errors)) {
-          const field = fields.find((v) => v.prop === name)
-          if (!field) {
-            continue
-          }
-          this.$log.debug(`${name}: ${error}`)
-          if (typeof error === 'object' && !Array.isArray(error)) {
-            error = this.objectToString(error)
-          }
-          field.attrs.error = error.toString()
-        }
+      return this.fields
+    },
+    serverErrors() {
+      if (!this.errors || typeof this.errors !== 'object' || Array.isArray(this.errors)) {
+        return {}
       }
-      this.$log.debug('Fields change: ', fields, this.errors)
-      return fields
+      return this.errors
     }
   },
   watch: {
@@ -116,17 +107,6 @@ export default {
       }
       this.iValue = val
       this.outputValue(val)
-    },
-    objectToString(obj) {
-      let data = ''
-      // eslint-disable-next-line prefer-const
-      for (let [key, value] of Object.entries(obj)) {
-        if (typeof value === 'object') {
-          value = this.objectToString(value)
-        }
-        data += ` ${key}: ${value} `
-      }
-      return data
     }
   }
 }

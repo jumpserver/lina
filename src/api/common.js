@@ -16,35 +16,30 @@ export function createSourceIdCache(ids) {
 }
 
 export function optionUrlMeta(url) {
+  const suffixIndex = url.search(/[?#]/)
+  const path = suffixIndex === -1 ? url : url.slice(0, suffixIndex)
+  const suffix = suffixIndex === -1 ? '' : url.slice(suffixIndex)
+  const normalizedUrl = path.endsWith('/') ? url : `${path}/${suffix}`
+
   return request({
-    url: url,
+    url: normalizedUrl,
     method: 'options'
   })
 }
 
 export function getActionMeta(meta, method = 'GET') {
   const normalizedMethod = String(method || 'GET').toUpperCase()
+  return meta?.actions?.[normalizedMethod] || {}
+}
 
-  if (!meta || typeof meta !== 'object') {
-    return {}
-  }
+export function getFilterMeta(meta) {
+  return meta?.filters || {}
+}
 
-  if (meta.actions && typeof meta.actions === 'object') {
-    return meta.actions[normalizedMethod] || {}
-  }
+export function getOrderingMeta(meta) {
+  return meta?.ordering || {}
+}
 
-  if (meta[normalizedMethod] && typeof meta[normalizedMethod] === 'object') {
-    return meta[normalizedMethod]
-  }
-
-  const looksLikeFieldMap = Object.values(meta).some((value) => {
-    return (
-      value &&
-      typeof value === 'object' &&
-      !Array.isArray(value) &&
-      ('label' in value || 'type' in value || 'children' in value)
-    )
-  })
-
-  return looksLikeFieldMap ? meta : {}
+export function getSearchMeta(meta) {
+  return meta?.search || {}
 }

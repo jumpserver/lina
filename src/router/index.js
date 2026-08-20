@@ -35,6 +35,7 @@ import pamViewRoutes from './pam'
 import reportsViewRoutes from './reports'
 import { getPropView } from '@/utils/jms/index'
 import store from '@/store'
+import { setResetRouterHandler, setRouter } from './registry'
 
 /**
  * constantRoutes
@@ -78,6 +79,14 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
+  {
+    // The dynamic tickets route removes this branch when the user lacks its
+    // permission. Keep a lower-priority fallback so direct access is not blank.
+    path: '/tickets/flow/:pathMatch(.*)*',
+    name: 'TicketFlowForbidden',
+    component: () => import('@/views/403'),
+    hidden: true
+  },
   ...commonRoutes
 ]
 
@@ -107,6 +116,8 @@ const createRouterInstance = () =>
 const router = createRouterInstance()
 const dynamicRouteRemovers = []
 
+setRouter(router)
+
 export function addDynamicRoute(route) {
   const removeRoute = router.addRoute(route)
   dynamicRouteRemovers.push(removeRoute)
@@ -115,5 +126,7 @@ export function addDynamicRoute(route) {
 export function resetRouter() {
   dynamicRouteRemovers.splice(0).forEach((removeRoute) => removeRoute())
 }
+
+setResetRouterHandler(resetRouter)
 
 export default router

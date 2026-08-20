@@ -146,14 +146,7 @@ export default {
         hasImport: false,
         hasCreate: false,
         searchConfig: {
-          getUrlQuery: true,
-          exclude: ['asset'],
-          options: [
-            {
-              label: this.$t('AssetName'),
-              value: 'asset_name'
-            }
-          ]
+          getUrlQuery: true
         },
         hasMoreActions: false
       }

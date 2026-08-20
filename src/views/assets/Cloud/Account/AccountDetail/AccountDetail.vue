@@ -32,7 +32,7 @@
       :show-buttons="false"
       :title="$tc('Timer')"
     >
-      <TimingPanel v-model:visible="showTimer" :object="object" />
+      <TimingPanel v-model:visible="showTimer" :object="object.task" />
     </Dialog>
   </div>
 </template>

@@ -4,7 +4,8 @@
 
 <script lang="jsx">
 import { GenericListTable } from '@/layout/components'
-import { DetailFormatter } from '@/components/Table/TableFormatters'
+import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import { openTaskPage } from '@/utils/jms/index'
 export default {
   name: 'AccountPushRecord',
   components: {
@@ -18,10 +19,11 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
       tableConfig: {
         url: '/api/v1/accounts/push-account-records/',
-        columns: ['asset', 'account', 'date_finished', 'is_success', 'error'],
+        columns: ['asset', 'account', 'date_finished', 'is_success', 'error', 'actions'],
         columnsMeta: {
           asset: {
             label: this.$t('Asset'),
@@ -80,14 +82,43 @@ export default {
             }
           },
           actions: {
-            has: false
+            formatter: ActionsFormatter,
+            formatterArgs: {
+              hasUpdate: false,
+              hasDelete: false,
+              hasClone: false,
+              moreActionsTitle: this.$t('More'),
+              extraActions: [
+                {
+                  name: 'Test',
+                  title: this.$t('Test'),
+                  icon: 'fa-circle-play',
+                  tip: this.$t('PushAccountRecordTestTip'),
+                  can: () =>
+                    !this.$store.getters.currentOrgIsRoot &&
+                    this.$hasPerm('accounts.verify_account'),
+                  type: 'primary',
+                  callback: ({ row }) => vm.executeAccounts('verify', [row.account.id])
+                },
+                {
+                  name: 'Push',
+                  title: this.$t('Push'),
+                  icon: 'fa-solid fa-upload',
+                  tip: this.$t('PushAccountRecordPushTip'),
+                  can: () =>
+                    !this.$store.getters.currentOrgIsRoot && this.$hasPerm('accounts.push_account'),
+                  type: 'primary',
+                  callback: ({ row }) => vm.executeAccounts('push', [row.account.id])
+                }
+              ]
+            }
           }
         }
       },
       headerActions: {
         hasSearch: true,
         hasRefresh: true,
-        hasLeftActions: false,
+        hasLeftActions: true,
         hasRightActions: true,
         hasExport: false,
         hasImport: false,
@@ -95,44 +126,58 @@ export default {
         hasBulkDelete: false,
         hasBulkUpdate: false,
         searchConfig: {
-          getUrlQuery: true,
-          exclude: ['id', 'status', 'execution'],
-          options: [
-            {
-              label: this.$t('Asset'),
-              value: 'asset_name'
-            },
-            {
-              label: this.$t('Accounts'),
-              value: 'account_username'
-            },
-            {
-              value: 'status',
-              label: this.$t('Status'),
-              type: 'choice',
-              children: [
-                {
-                  default: true,
-                  value: 'success',
-                  label: this.$t('Success')
-                },
-                {
-                  value: 'failed',
-                  label: this.$t('Failed')
-                },
-                {
-                  value: 'pending',
-                  label: this.$t('Pending')
-                }
-              ]
-            },
-            {
-              label: this.$t('ExecutionID'),
-              value: 'execution_id'
+          getUrlQuery: true
+        },
+        extraMoreActions: [
+          {
+            name: 'TestSelected',
+            title: this.$t('TestSelected'),
+            type: 'primary',
+            icon: 'fa-circle-play',
+            tip: this.$t('PushAccountRecordsTestTip'),
+            showHelp: true,
+            can: ({ selectedRows }) =>
+              selectedRows.length > 0 &&
+              !vm.$store.getters.currentOrgIsRoot &&
+              vm.$hasPerm('accounts.verify_account'),
+            callback: ({ selectedRows }) => {
+              vm.executeAccounts(
+                'verify',
+                selectedRows.map((row) => row.account.id)
+              )
             }
-          ]
-        }
+          },
+          {
+            name: 'PushSelected',
+            title: this.$t('Push'),
+            type: 'primary',
+            icon: 'fa-solid fa-upload',
+            tip: this.$t('PushAccountRecordsPushTip'),
+            showHelp: true,
+            can: ({ selectedRows }) =>
+              selectedRows.length > 0 &&
+              !vm.$store.getters.currentOrgIsRoot &&
+              vm.$hasPerm('accounts.push_account'),
+            callback: ({ selectedRows }) => {
+              vm.executeAccounts(
+                'push',
+                selectedRows.map((row) => row.account.id)
+              )
+            }
+          }
+        ]
       }
+    }
+  },
+  methods: {
+    executeAccounts(action, accountIds) {
+      const ids = [...new Set(accountIds)]
+      this.$axios
+        .post('/api/v1/accounts/accounts/tasks/', {
+          action,
+          accounts: ids
+        })
+        .then((res) => openTaskPage(res.task))
     }
   }
 }

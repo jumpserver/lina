@@ -1,6 +1,6 @@
 <template>
-  <IBox>
-    <GenericCreateUpdateForm v-bind="$data" :object="object" class="form" />
+  <IBox v-loading="loading">
+    <GenericCreateUpdateForm v-if="!loading" v-bind="$data" :object="object" class="form" />
   </IBox>
 </template>
 
@@ -31,7 +31,7 @@ export default {
           ansible_enabled: true
         }
       },
-      url: `/api/v1/assets/platforms/?_meta_cache=0`,
+      url: '/api/v1/assets/platforms/',
       disabled: !canEdit,
       hasReset: false,
       hasDetailInMsg: false,

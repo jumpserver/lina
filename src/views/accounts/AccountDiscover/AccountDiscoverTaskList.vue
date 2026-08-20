@@ -11,6 +11,7 @@
 <script lang="jsx">
 import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 import { openTaskPage } from '@/utils/jms/index'
 export default {
   name: 'AccountDiscoverTaskList',
@@ -34,10 +35,24 @@ export default {
           app: 'accounts',
           resource: 'gatheraccountsautomation'
         },
-        columns: ['name', 'nodes', 'assets', 'is_periodic', 'periodic_display', 'executed_amount'],
+        columns: [
+          'name',
+          'nodes_amount',
+          'assets_amount',
+          'is_periodic',
+          'periodic_display',
+          'executed_amount'
+        ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'nodes', 'assets', 'is_periodic', 'periodic_display', 'executed_amount']
+          default: [
+            'name',
+            'nodes_amount',
+            'assets_amount',
+            'is_periodic',
+            'periodic_display',
+            'executed_amount'
+          ]
         },
         columnsMeta: {
           name: {
@@ -54,9 +69,20 @@ export default {
               })
             }
           },
-          nodes: {
-            formatter: function (row, column, cellValue, index) {
-              return cellValue.map((v) => v['name']).join(', ')
+          assets_amount: {
+            formatter: AmountFormatter,
+            formatterArgs: {
+              async: true,
+              drawer: false,
+              preventClick: true
+            }
+          },
+          nodes_amount: {
+            formatter: AmountFormatter,
+            formatterArgs: {
+              async: true,
+              drawer: false,
+              preventClick: true
             }
           },
           is_periodic: {

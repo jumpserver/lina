@@ -29,7 +29,6 @@ export default {
       helpMessage: this.$t('EndpointListHelpMessage'),
       tableConfig: {
         url: '/api/v1/terminal/endpoints/',
-        columnsExclude: ['magnus_listen_db_port'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
@@ -41,13 +40,7 @@ export default {
             'ssh_port',
             'rdp_port',
             'vnc_port',
-            'mysql_port',
-            'mariadb_port',
-            'postgresql_port',
-            'redis_port',
-            'sqlserver_port',
-            'oracle_port',
-            'mongodb_port',
+            'magnus_port',
             'is_active'
           ]
         },

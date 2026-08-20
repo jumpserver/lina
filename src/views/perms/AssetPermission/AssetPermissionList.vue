@@ -20,7 +20,7 @@
 import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import Page from '@/layout/components/Page'
 import { mapGetters } from 'vuex'
-import { AssetPermissionListPageSearchConfigOptions, AssetPermissionTableMeta } from '../const.js'
+import { AssetPermissionTableMeta } from '../const.js'
 import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
 
 export default {
@@ -91,6 +91,7 @@ export default {
         hasTree: true,
         columnsExtra: ['action'],
         columns: [
+          'id',
           'name',
           'users_amount',
           'user_groups_amount',
@@ -138,10 +139,6 @@ export default {
       headerActions: {
         hasLabelSearch: true,
         hasBulkDelete: true,
-        searchConfig: {
-          url: '',
-          options: AssetPermissionListPageSearchConfigOptions
-        },
         hasBulkUpdate: true,
         handleBulkUpdate: ({ selectedRows }) => {
           this.updateSelectedDialogSetting.selectedRows = selectedRows
@@ -152,19 +149,26 @@ export default {
         visible: false,
         selectedRows: []
       },
-      activatedReloadTimer: null
+      activatedReloadTimer: null,
+      hasBeenDeactivated: false
     }
   },
   computed: {
     ...mapGetters(['currentOrgIsRoot'])
   },
   activated() {
+    // activated is also called after the first mount. The table has just loaded
+    // at that point, so scheduling another reload only duplicates the initial GET.
+    if (!this.hasBeenDeactivated) {
+      return
+    }
     clearTimeout(this.activatedReloadTimer)
     this.activatedReloadTimer = setTimeout(() => {
       this.reloadAssetTreeTable()
     }, 500)
   },
   deactivated() {
+    this.hasBeenDeactivated = true
     clearTimeout(this.activatedReloadTimer)
     this.activatedReloadTimer = null
   },

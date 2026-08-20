@@ -22,9 +22,9 @@
       </IBox>
       <PlatformDetailUpdateDialog
         v-if="visible"
+        v-model:visible="visible"
         :object="object"
         :show-fields="fields"
-        :visible="visible"
       />
     </template>
   </TwoCol>

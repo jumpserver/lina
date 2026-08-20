@@ -61,11 +61,7 @@ export default {
               type: 'primary',
               can: !this.$store.getters.currentOrgIsRoot,
               callback: () => {
-                this.$route.params.id = this.object.id
                 this.addAssetSetting.addAssetDialogVisible = true
-                setTimeout(() => {
-                  this.$route.params.id = null
-                }, 500)
               }
             }
           ]
@@ -75,7 +71,7 @@ export default {
             name: this.$t('RemoveSelected'),
             title: this.$t('RemoveSelected'),
             type: 'primary',
-            icon: 'fa fa-minus',
+            icon: 'fa-solid fa-minus',
             can({ selectedRows }) {
               return selectedRows.length > 0
             },
@@ -103,7 +99,6 @@ export default {
   methods: {
     handleAddAssetDialogClose() {
       this.addAssetSetting.addAssetDialogVisible = false
-      this.$route.params.id = null
       this.reloadTable()
     },
     removeAsset(rows) {

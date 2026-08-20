@@ -6,7 +6,6 @@
       </el-button>
     </div>
     <Dialog
-      v-bind="$attrs"
       v-if="visible"
       v-model:visible="visible"
       :destroy-on-close="true"
@@ -27,6 +26,7 @@
 </template>
 
 <script>
+import i18n from '@/i18n/i18n'
 import { getActionMeta } from '@/api/common'
 import Dialog from '../../Dialog'
 import AutoDataForm from '../../Form/AutoDataForm'
@@ -42,6 +42,8 @@ export default {
     Dialog,
     AutoDataForm
   },
+  inheritAttrs: false,
+  emits: ['input'],
   props: {
     value: {
       type: [Object, Boolean],
@@ -50,9 +52,7 @@ export default {
     },
     title: {
       type: String,
-      default: function () {
-        return 'PushParams'
-      }
+      default: () => i18n.t('PushParams')
     },
     assets: {
       type: Array,

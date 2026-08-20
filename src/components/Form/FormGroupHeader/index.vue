@@ -2,7 +2,9 @@
   <div ref="formGroup" class="form-group-header">
     <div v-if="line" class="hr-line-dashed" />
     <div v-if="group['title']" class="form-group-header__row">
-      <h3 class="form-group-header__title" @click="toggle">{{ group['title'] }}</h3>
+      <h3 class="form-group-header__title" @click="toggle">
+        {{ group['title'] }}
+      </h3>
       <button class="form-group-header__toggle" type="button" @click="toggle">
         <el-icon><component :is="iconClass" /></el-icon>
       </button>
@@ -33,7 +35,7 @@ export default {
   },
   computed: {
     iconClass() {
-      return this.isVisible ? 'ArrowDown' : 'ArrowUp'
+      return this.isVisible ? 'ArrowDown' : 'ArrowRight'
     }
   },
   methods: {

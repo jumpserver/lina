@@ -201,6 +201,7 @@ export default {
     flex-direction: column;
     overflow-x: hidden;
     overflow-y: auto !important;
+    scrollbar-gutter: stable;
 
     :deep(> div) {
       // 这个当时为什么设置的

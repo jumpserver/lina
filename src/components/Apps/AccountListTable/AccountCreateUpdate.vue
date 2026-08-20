@@ -58,6 +58,10 @@ export default {
       default() {
         return 'AddAccount'
       }
+    },
+    operationFlag: {
+      type: String,
+      default: ''
     }
   },
   emits: ['update:visible', 'add', 'bulk-create-done'],
@@ -123,7 +127,7 @@ export default {
     },
     editAccount(form) {
       const data = { ...form }
-      const flag = this.$route.query.flag
+      const flag = this.operationFlag
 
       switch (flag) {
         case 'copy':
@@ -197,7 +201,6 @@ export default {
     },
     handleCloseDrawer() {
       this.$emit('update:visible', false)
-      // Reflect.deleteProperty(this.$route.query, 'flag')
     },
     handleAccountOperation(id, path, data) {
       this.$axios

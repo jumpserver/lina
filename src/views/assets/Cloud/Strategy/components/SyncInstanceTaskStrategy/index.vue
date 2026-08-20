@@ -4,9 +4,9 @@
     <DataTable :config="tableConfig" />
     <AttrDialog
       v-if="visible"
+      v-model:visible="visible"
       :table-config="tableConfig"
       :value="attrValue"
-      :visible="visible"
       @confirm="onAttrDialogConfirm"
     />
     <el-button size="small" type="primary" @click="handleCreate">

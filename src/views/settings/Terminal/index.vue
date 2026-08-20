@@ -9,6 +9,7 @@
 <script>
 import TabPage from '@/layout/components/TabPage'
 import Basic from './Base'
+import LunaSetting from './Luna'
 import TerminalList from './Component/TerminalList'
 import Monitor from './Monitor'
 import EndpointList from './Endpoint/EndpointList'
@@ -19,6 +20,7 @@ export default {
   components: {
     TabPage,
     Basic,
+    LunaSetting,
     Monitor,
     TerminalList,
     EndpointList,
@@ -33,6 +35,10 @@ export default {
         {
           title: this.$t('Basic'),
           name: 'Basic'
+        },
+        {
+          title: this.$t('WebTerminal'),
+          name: 'LunaSetting'
         },
         {
           title: this.$t('Components'),

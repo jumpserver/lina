@@ -115,19 +115,6 @@ export default {
         hasLeftActions: false,
         importOptions: {
           canImportUpdate: false
-        },
-        searchConfig: {
-          exclude: ['user', 'scope', 'role', 'org'],
-          options: [
-            {
-              label: this.$t('Username'),
-              value: 'user__username'
-            },
-            {
-              label: this.$t('User'),
-              value: 'user__name'
-            }
-          ]
         }
       }
     }

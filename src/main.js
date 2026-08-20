@@ -3,6 +3,8 @@ import ElementPlus from 'element-plus'
 import { getElementLocale } from '@/i18n/langs'
 import { getLangCode } from '@/i18n/utils'
 import 'element-plus/dist/index.css'
+import '@fortawesome/fontawesome-free/css/all.min.css'
+import '@fortawesome/fontawesome-free/css/v4-shims.min.css'
 // 导入 Element Plus CSS 变量配置（需要在 Element Plus 样式之后，自定义样式之前）
 import '@/styles/element-plus-vars.scss'
 // 导入默认主题配置（包含 :root CSS 变量定义）
@@ -23,15 +25,18 @@ import '@/guards' // permission control
 import { installDirectives } from '@/directive'
 import i18n, { fetchTranslationsFromAPI } from './i18n/i18n'
 import ChartsPlugin from '@/libs/charts'
+import createContextService from '@/libs/context'
 import { setupErrorHandler } from '@/libs/errors'
 import CookiePlugin from '@/libs/cookie'
 import ResourceActivity from '@/components/Apps/ResourceActivity'
 import request from '@/utils/request'
 import { message } from '@/utils/vue/message'
+import { toPlainTextMessage } from '@/utils/common/message'
 import xss from '@/utils/secure'
 import moment from 'moment'
 import DOMPurify from 'dompurify'
 import _ from 'lodash'
+import { ElMessageBox } from 'element-plus'
 
 moment.locale('zh-cn')
 
@@ -74,6 +79,7 @@ async function initApp() {
   })
   app.use(CookiePlugin)
   app.use(ChartsPlugin)
+  app.use(createContextService({ router }))
 
   // v-sanitize: 手动注册(v-sanitize npm 包用 Vue.prototype 不兼容 Vue 3)
   const sanitizeOptions = {
@@ -97,6 +103,10 @@ async function initApp() {
   app.config.globalProperties.$moment = moment
   app.config.globalProperties.$axios = request
   app.config.globalProperties.$message = message
+  app.config.globalProperties.$alert = (msg, title, options = {}) => {
+    const plainText = typeof msg === 'string' ? toPlainTextMessage(msg) : msg
+    return ElMessageBox.alert(plainText, title, options)
+  }
   app.config.globalProperties.$xss = xss
   app.config.globalProperties.$eventBus = eventBus
   app.config.globalProperties._ = _

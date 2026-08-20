@@ -34,11 +34,12 @@
 <script>
 import { getStoredDrawerWidth, useDrawerResize } from '@/composables/useDrawerResize'
 import { resolveAsyncComponentCompat } from '@/utils/vue'
-import { TAB_NAVIGATION_CONTEXT, TAB_NAVIGATION_SCOPE } from './context'
+import { DRAWER_RUNTIME_CONTEXT, TAB_NAVIGATION_CONTEXT, TAB_NAVIGATION_SCOPE } from './context'
 
 export default {
   provide() {
     return {
+      [DRAWER_RUNTIME_CONTEXT]: this.componentProps?.drawerContext || null,
       [TAB_NAVIGATION_CONTEXT]: {
         scope: TAB_NAVIGATION_SCOPE.LOCAL
       }
@@ -422,7 +423,7 @@ export default {
       &.el-form--label-top {
         .el-radio-group {
           .el-radio {
-            display: block;
+            display: inline-flex;
             padding-bottom: 3px;
           }
         }
@@ -516,6 +517,11 @@ export default {
     //    color: var(--color-text-primary);
     //  }
     //}
+  }
+
+  // DataForm 由自身容器宽度决定标签布局，不继承旧抽屉表单的固定最小宽度。
+  :deep(.form-fields.el-form .el-form-item) {
+    min-width: 0;
   }
 }
 </style>

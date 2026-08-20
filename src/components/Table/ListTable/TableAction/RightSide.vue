@@ -83,14 +83,9 @@ export default {
     canBulkUpdate: {
       type: [Boolean, Function, String],
       default: false
-    },
-    hasQuickFilter: defaultTrue,
-    quickFilterExpand: {
-      type: Boolean,
-      default: true
     }
   },
-  emits: ['update:quick-filter-expand', 'importDialogClose'],
+  emits: ['importDialogClose'],
   data() {
     return {
       dialogExportVisible: false
@@ -99,13 +94,6 @@ export default {
   computed: {
     defaultRightSideActions() {
       return [
-        {
-          name: 'actionFilter',
-          icon: 'filter',
-          tip: this.$t('Filter'),
-          has: this.hasQuickFilter,
-          callback: this.handleFilterClick.bind(this)
-        },
         {
           name: 'actionSetting',
           icon: 'system-setting',
@@ -192,9 +180,6 @@ export default {
     },
     defaultHandleRefreshClickFn() {
       this.reloadTable()
-    },
-    handleFilterClick() {
-      this.$emit('update:quick-filter-expand', !this.quickFilterExpand)
     },
     handleTagSearch(val) {
       this.searchTable(val)

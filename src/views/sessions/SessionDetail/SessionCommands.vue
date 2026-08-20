@@ -13,11 +13,16 @@ export default {
     ListTable
   },
   data() {
+    const sessionId = this.$context.get('id')
     return {
       tableConfig: {
         hasSelection: false,
-        url: `/api/v1/terminal/commands/?session_id=${this.$route.params.id}`,
+        url: `/api/v1/terminal/commands/?session_id=${sessionId}`,
         columns: ['expandCol', 'index', 'input', 'timestamp'],
+        columnsShow: {
+          min: ['expandCol', 'index'],
+          default: ['expandCol', 'index', 'input', 'timestamp']
+        },
         columnsMeta: {
           expandCol: {
             type: 'expand',
@@ -25,8 +30,7 @@ export default {
           },
           index: {
             type: 'index',
-            label: 'ID',
-            sortable: 'custom'
+            label: this.$t('RowNumber')
           },
           input: {
             label: this.$t('Command'),
@@ -55,13 +59,6 @@ export default {
         hasSearch: false,
         hasRightActions: false
       }
-    }
-  },
-  async mounted() {
-    const drawActionMeta = await this.$store.dispatch('common/getDrawerActionMeta')
-
-    if (drawActionMeta && drawActionMeta.id) {
-      this.tableConfig.url = `/api/v1/terminal/commands/?session_id=${drawActionMeta.id}`
     }
   }
 }

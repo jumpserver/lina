@@ -3,16 +3,16 @@
     <div>
       <el-button size="small" type="primary" @click="onOpenDialog">
         {{ $tc('View') }}
-        <span>({{ $tc('LockedIP', ipCounts) }})</span>
+        <span>({{ $t('LockedIP', { count: ipCounts }) }})</span>
       </el-button>
     </div>
     <Dialog
       v-bind="$attrs"
+      v-model:visible="visible"
       :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
-      :title="title"
-      :visible="visible"
+      :title="dialogTitle"
       width="40%"
       @update:visible="$emit('update:visible', $event)"
     >
@@ -39,7 +39,7 @@ export default {
     title: {
       type: String,
       default: function () {
-        return 'BlockedIPS'
+        return ''
       }
     },
     url: {
@@ -60,6 +60,11 @@ export default {
         fields: [],
         fieldsMeta: {}
       }
+    }
+  },
+  computed: {
+    dialogTitle() {
+      return this.title || this.$t('BlockedIPS')
     }
   },
   created() {

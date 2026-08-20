@@ -10,6 +10,7 @@
 
 <script lang="jsx">
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 import { openTaskPage } from '@/utils/jms/index'
 import { GenericListTable } from '@/layout/components'
 export default {
@@ -27,6 +28,8 @@ export default {
         columns: [
           'name',
           'accounts',
+          'assets_amount',
+          'nodes_amount',
           'secret_strategy',
           'is_periodic',
           'periodic_display',
@@ -39,6 +42,8 @@ export default {
           default: [
             'name',
             'accounts',
+            'assets_amount',
+            'nodes_amount',
             'periodic_display',
             'executed_amount',
             'is_active',
@@ -63,10 +68,22 @@ export default {
             }
           },
           assets_amount: {
-            label: vm.$t('AssetsOfNumber')
+            label: vm.$t('AssetsOfNumber'),
+            formatter: AmountFormatter,
+            formatterArgs: {
+              async: true,
+              drawer: false,
+              preventClick: true
+            }
           },
           nodes_amount: {
-            label: vm.$t('NodeOfNumber')
+            label: vm.$t('NodeOfNumber'),
+            formatter: AmountFormatter,
+            formatterArgs: {
+              async: true,
+              drawer: false,
+              preventClick: true
+            }
           },
           password_strategy_display: {
             label: vm.$t('PasswordStrategy'),
@@ -121,7 +138,7 @@ export default {
           {
             name: 'BatchDisable',
             title: this.$t('DisableSelected'),
-            icon: 'fa fa-ban',
+            icon: 'fa-solid fa-ban',
             can: ({ selectedRows }) =>
               selectedRows.length > 0 && this.$hasPerm('accounts.change_pushaccountautomation'),
             callback: ({ selectedRows, reloadTable }) =>
@@ -130,7 +147,7 @@ export default {
           {
             name: 'BatchActivate',
             title: this.$t('ActivateSelected'),
-            icon: 'fa fa-check-circle-o',
+            icon: 'fa-circle-check',
             can: ({ selectedRows }) =>
               selectedRows.length > 0 && this.$hasPerm('accounts.change_pushaccountautomation'),
             callback: ({ selectedRows, reloadTable }) =>

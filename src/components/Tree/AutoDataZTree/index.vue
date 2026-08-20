@@ -56,21 +56,21 @@ export default {
         {
           id: 'm_create',
           name: this.$t('CreateNode'),
-          icon: 'fa-plus-square-o',
+          icon: 'fa-square-plus',
           callback: this.createTreeNode,
           has: () => this.setting.showCreate
         },
         {
           id: 'm_edit',
           name: this.$t('RenameNode'),
-          icon: 'fa-pencil-square-o',
+          icon: 'fa-pen-to-square',
           callback: this.editTreeNode,
           has: () => this.setting.showUpdate
         },
         {
           id: 'm_del',
           name: this.$t('DeleteNode'),
-          icon: 'fa-minus-square',
+          icon: 'fa-square-minus',
           callback: this.removeTreeNode,
           has: () => this.setting.showDelete
         }
@@ -290,24 +290,28 @@ export default {
     },
     showRMenu: function (type, x, y) {
       const rMenuID = this.$refs.dataztree.$refs.ztree.iRMenuID
-      const zTreeID = this.$refs.dataztree.$refs.ztree.iZTreeID
-      const offset = $(`#${zTreeID}`).offset()
-      const scrollTop = document.querySelector('.treebox')?.scrollTop
-      x -= offset.left
-      x = x < 0 ? 0 : x
+      const menu = document.querySelector(`#${rMenuID} ul`)
+      const viewportGap = 8
 
-      // Tmp
-      y -= (offset.top + scrollTop) / 3 - 10
-      x += document.body.scrollLeft
-      y += document.body.scrollTop + document.documentElement.scrollTop
+      this.rMenu.css({ top: 0, left: 0, visibility: 'hidden' })
+      $(menu).css({ display: 'block', maxHeight: 'none' })
 
-      if (y + $(`#${rMenuID} ul`).height() >= window.innerHeight) {
-        y -= $(`#${rMenuID} ul`).height()
-      }
-      y = y < 0 ? 0 : y
+      const menuWidth = menu.offsetWidth
+      const menuHeight = menu.scrollHeight
+      const availableBelow = window.innerHeight - y - viewportGap
+      const availableAbove = y - viewportGap
+      const openAbove = menuHeight > availableBelow && availableAbove > availableBelow
+      const availableHeight = Math.max(openAbove ? availableAbove : availableBelow, 0)
+      const renderedHeight = Math.min(menuHeight, availableHeight)
+      const top = openAbove ? y - renderedHeight : y
+      const left = Math.min(Math.max(x, viewportGap), window.innerWidth - menuWidth - viewportGap)
 
-      this.rMenu.css({ top: y + 'px', left: x + 'px', visibility: 'visible' })
-      $(`#${rMenuID} ul`).show()
+      $(menu).css({ maxHeight: `${availableHeight}px` })
+      this.rMenu.css({
+        top: `${Math.max(top, viewportGap)}px`,
+        left: `${Math.max(left, viewportGap)}px`,
+        visibility: 'visible'
+      })
       $('body').bind('mousedown', this.onBodyMouseDown)
     },
     onRightClick: function (event, treeId, treeNode) {
@@ -449,7 +453,7 @@ export default {
 }
 
 .data-z-tree :deep(.icon) {
-  width: 10px;
-  margin-right: 3px;
+  width: 20px;
+  margin-right: 0;
 }
 </style>

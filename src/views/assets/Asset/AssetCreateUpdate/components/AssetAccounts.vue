@@ -72,6 +72,7 @@
 
     <Drawer
       v-model:visible="drawerVisible"
+      :component-props="drawerComponentProps"
       :title="$t('Account')"
       :component="drawerComponent"
       :has-footer="false"
@@ -104,7 +105,7 @@ export default {
     isUpdate: {
       type: Function,
       default: (vm) => {
-        return vm.$route.params.id
+        return vm.$context.get('id')
       }
     }
   },
@@ -116,6 +117,7 @@ export default {
       drawerRefName: null,
       account: {},
       drawerVisible: false,
+      drawerComponentProps: {},
       initial: false,
       addAccountDialogVisible: false,
       templateDialogVisible: false,
@@ -165,7 +167,7 @@ export default {
     },
     onSelectTemplate() {},
     goToAssetAccountsPage() {
-      const assetId = this.$route.params.id
+      const assetId = this.$context.get('id')
       // todo: 临时解决方案，后续需要优化 发布机的组织是 system，所以需要判断一下，否则
       // 会跳转到其他组织的资产详情页，而不是发布机详情页
       if (this.$router.currentRoute.name === 'AppletHostUpdate') {
@@ -179,13 +181,18 @@ export default {
         return
       }
 
-      this.$store.dispatch('common/setDrawerActionMeta', {
-        action: 'detail',
-        row: {},
-        col: {},
-        id: assetId
-      })
-
+      this.drawerComponentProps = {
+        drawerContext: {
+          isDrawer: true,
+          action: 'detail',
+          row: {},
+          col: {},
+          id: assetId,
+          params: { id: assetId },
+          query: {},
+          routeName: this.$route.name || ''
+        }
+      }
       this.drawerVisible = true
     }
   }

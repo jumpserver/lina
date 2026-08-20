@@ -1,11 +1,5 @@
 <template>
-  <el-row :gutter="20">
-    <ListTable
-      :header-actions="headerActions"
-      :table-config="config"
-      :detail-drawer="detailDrawer"
-    />
-  </el-row>
+  <ListTable :header-actions="headerActions" :table-config="config" :detail-drawer="detailDrawer" />
 </template>
 
 <script lang="jsx">
@@ -32,13 +26,11 @@ export default {
         hasImport: false,
         hasExport: false,
         hasBulkDelete: false,
-        searchConfig: {
-          exclude: ['applet']
-        },
         extraMoreActions: [
           {
             name: 'SyncSelected',
             title: this.$t('BatchDeployment'),
+            icon: 'fa-solid fa-rotate',
             type: 'primary',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0

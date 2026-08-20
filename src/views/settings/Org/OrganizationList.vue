@@ -1,7 +1,7 @@
 <template>
   <div>
     <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
-    <Dialog :show-buttons="false" :title="$tc('General')" :visible="visible">
+    <Dialog v-model:visible="visible" :show-buttons="false" :title="$tc('General')">
       <GenericCreateUpdateForm v-bind="form" @submit-success="visible = false" />
     </Dialog>
   </div>
@@ -70,7 +70,7 @@ export default {
             width: '100px'
           },
           'resource_statistics.assets_amount': {
-            label: this.$t('Assets'),
+            label: this.$t('AssetManagement'),
             width: '100px'
           },
           'resource_statistics.asset_perms_amount': {

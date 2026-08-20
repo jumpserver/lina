@@ -29,6 +29,7 @@ import { basicSetup } from 'codemirror'
 import { StreamLanguage } from '@codemirror/language'
 import { json } from '@codemirror/legacy-modes/mode/javascript'
 import { markRaw } from 'vue'
+import _isEqual from 'lodash/isEqual'
 
 function stringifyValue(value) {
   if (typeof value === 'string') {
@@ -51,7 +52,9 @@ export default {
   },
   props: {
     value: {
-      type: [String, Object, Array],
+      // JSON 顶层可以是任意合法值(数组/对象/字符串/数字/布尔/null),
+      // 若只声明 String|Object|Array,用户输入 123/true 等回灌时会触发类型告警。
+      type: [String, Object, Array, Number, Boolean],
       default: () => ({})
     },
     resize: {
@@ -60,7 +63,12 @@ export default {
       default: 'vertical'
     }
   },
-  emits: ['change'],
+  // 声明 input / update:modelValue：DataForm 的 render-form-item 会向每个字段组件
+  // 透传 input 处理器。若不在 emits 里声明，Vue 会把 onInput 当作原生 DOM 监听器
+  // 落到根 <div> 上,而 CodeMirror 的 contenteditable 每次按键都会冒泡原生 input 事件,
+  // 于是原始事件对象被当成字段值写回(显示为 {"isTrusted":true,"_vts":...})。
+  // 声明后 Vue 将其视为组件事件(本组件从不 $emit),从而不再作为原生监听器透传。
+  emits: ['change', 'input', 'update:modelValue'],
   data() {
     return {
       editorValue: stringifyValue(this.value),
@@ -83,6 +91,16 @@ export default {
     value: {
       deep: true,
       handler(newValue) {
+        // 语义相等则保留用户手写的原始文本(含换行/缩进),不做回灌覆盖。
+        // 否则用户敲 "[\n]" 停顿后本组件 emit 出 [],父级回灌 [] → stringify 成 "[]"
+        // 与 "[\n]" 文本不等被覆盖,表现为"换行后自动塌回 []"。
+        try {
+          if (_isEqual(this.parseEditorValue(), newValue)) {
+            return
+          }
+        } catch (e) {
+          // 当前文本非法 JSON,按下方常规逻辑用回灌值重写
+        }
         const nextValue = stringifyValue(newValue)
         if (nextValue !== this.editorValue) {
           this.editorValue = nextValue
@@ -113,7 +131,8 @@ export default {
         try {
           this.$emit('change', this.parseEditorValue())
         } catch (error) {
-          this.$message.error(this.$tc('FormatError'))
+          // 输入过程中(如刚敲了半个对象)文本暂时非法是正常现象,静默跳过,
+          // 不弹"格式错误"打断输入;失焦(handleBlur)时再统一校验并提示。
         }
       }, 300)
     },
@@ -125,7 +144,17 @@ export default {
       }
     },
     handleBlur() {
-      this.formatJson()
+      // 失焦时只校验合法性并提交,不再自动重排格式——否则用户手写的
+      // "[\n]" 等换行会被 JSON.stringify 塌缩回 "[]"。需要规整时点工具栏的格式化按钮。
+      if (!this.editorValue.trim()) {
+        return
+      }
+      try {
+        const parsed = this.parseEditorValue()
+        this.$emit('change', parsed)
+      } catch (error) {
+        this.$message.error(this.$tc('FormatError'))
+      }
     }
   }
 }

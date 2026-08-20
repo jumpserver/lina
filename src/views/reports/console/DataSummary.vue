@@ -32,7 +32,7 @@ export default {
         color: '#FFD260',
         chartTitle: this.$t('LoginUserToday'),
         data: [],
-        route: { name: 'UserList' }
+        route: this.$hasPerm('users.view_user') ? { name: 'UserList' } : null
       },
       assetConfig: {
         title: this.$t('AssetData'),
@@ -43,7 +43,7 @@ export default {
         color: themeColor,
         chartTitle: this.$t('LoginAssetToday'),
         data: [],
-        route: { name: 'AssetList' }
+        route: this.$hasPerm('assets.view_asset') ? { name: 'AssetList' } : null
       }
     }
   },

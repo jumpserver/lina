@@ -24,23 +24,23 @@ export default {
           {
             name: 'all',
             title: this.$t('All'),
-            icon: 'fa-bars',
+            icon: 'fa-solid fa-bars',
             component: () => import('@/views/assets/Asset/AssetList/AllList.vue')
           },
           {
-            icon: 'fa-inbox',
+            icon: 'fa-solid fa-inbox',
             name: 'host',
             component: () => import('@/views/assets/Asset/AssetList/HostList.vue'),
             hidden: true
           },
           {
             name: 'device',
-            icon: 'fa-microchip',
+            icon: 'fa-solid fa-network-wired',
             hidden: true,
             component: () => import('@/views/assets/Asset/AssetList/DeviceList.vue')
           },
           {
-            icon: 'fa-database',
+            icon: 'fa-solid fa-database',
             name: 'database',
             component: () => import('@/views/assets/Asset/AssetList/DatabaseList.vue')
           },
@@ -51,13 +51,13 @@ export default {
             component: () => import('@/views/assets/Asset/AssetList/CloudList.vue')
           },
           {
-            icon: 'fa-globe',
+            icon: 'fa-solid fa-globe',
             name: 'web',
             hidden: true,
             component: () => import('@/views/assets/Asset/AssetList/WebList.vue')
           },
           {
-            icon: 'fa-id-card-o',
+            icon: 'fa-id-card',
             name: 'ds',
             hidden: true,
             component: () => import('@/views/assets/Asset/AssetList/DSList.vue')
@@ -69,7 +69,7 @@ export default {
             component: () => import('@/views/assets/Asset/AssetList/GPTList.vue')
           },
           {
-            icon: 'fa-cube',
+            icon: 'fa-solid fa-cube',
             name: 'custom',
             hidden: true,
             component: () => import('@/views/assets/Asset/AssetList/CustomList.vue')

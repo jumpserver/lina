@@ -28,8 +28,8 @@ export default {
         url: '/api/v1/accounts/check-account-automations/',
         columns: [
           'name',
-          'assets',
-          'nodes',
+          'assets_amount',
+          'nodes_amount',
           'is_periodic',
           'periodic_display',
           'is_active',
@@ -39,8 +39,8 @@ export default {
           min: ['name', 'actions'],
           default: [
             'name',
-            'assets',
-            'nodes',
+            'assets_amount',
+            'nodes_amount',
             'periodic_display',
             'executed_amount',
             'is_active',
@@ -59,18 +59,20 @@ export default {
               })
             }
           },
-          assets: {
+          assets_amount: {
+            label: vm.$t('AssetsOfNumber'),
             formatter: AmountFormatter,
             formatterArgs: {
-              async: false,
+              async: true,
               drawer: false,
               preventClick: true
             }
           },
-          nodes: {
+          nodes_amount: {
+            label: vm.$t('NodeOfNumber'),
             formatter: AmountFormatter,
             formatterArgs: {
-              async: false,
+              async: true,
               drawer: false,
               preventClick: true
             }
@@ -89,12 +91,6 @@ export default {
                 return username
               }
             }
-          },
-          assets_amount: {
-            label: vm.$t('AssetsOfNumber')
-          },
-          nodes_amount: {
-            label: vm.$t('NodeOfNumber')
           },
           password_strategy_display: {
             label: vm.$t('PasswordStrategy'),

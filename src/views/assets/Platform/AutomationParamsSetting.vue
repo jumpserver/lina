@@ -15,9 +15,10 @@
       :show-confirm="false"
       :title="title"
       width="860px"
-      @close="onDialogClose"
+      @update:visible="handleVisibleChange"
     >
       <AutoDataForm
+        v-if="isVisible"
         v-bind="config"
         ref="autoDataForm"
         :form="form"
@@ -29,6 +30,7 @@
 </template>
 
 <script>
+import i18n from '@/i18n/i18n'
 import { getActionMeta } from '@/api/common'
 import Dialog from '@/components/Dialog'
 import AutoDataForm from '@/components/Form/AutoDataForm'
@@ -39,6 +41,7 @@ export default {
     Dialog,
     AutoDataForm
   },
+  emits: ['input', 'submit', 'update:visible', 'canSetting'],
   props: {
     value: {
       type: [String, Object],
@@ -46,9 +49,7 @@ export default {
     },
     title: {
       type: String,
-      default: function () {
-        return 'PushParams'
-      }
+      default: () => i18n.t('PushParams')
     },
     btnText: {
       type: String,
@@ -108,6 +109,12 @@ export default {
     visible(val) {
       this.isVisible = val
     },
+    value: {
+      handler(val) {
+        this.form = this.normalizeForm(val)
+      },
+      deep: true
+    },
     method(iNew, iOld) {
       if (iNew !== iOld) {
         this.getUrlMeta()
@@ -132,18 +139,44 @@ export default {
       this.$emit('canSetting', this.canSetting)
       return this.canSetting
     },
+    normalizeForm(val) {
+      return val && typeof val === 'object' && !Array.isArray(val) ? { ...val } : {}
+    },
+    hasParams(val) {
+      return val && typeof val === 'object' && !Array.isArray(val) && Object.keys(val).length > 0
+    },
+    getResolvedParams() {
+      if (this.hasParams(this.value)) {
+        return this.value
+      }
+      if (this.hasParams(this.pushAccountParams)) {
+        return this.pushAccountParams
+      }
+      return {}
+    },
+    getSavedMethodParams() {
+      const resolved = this.getResolvedParams()
+      const fromResolved = resolved?.[this.method]
+      if (this.hasParams(fromResolved)) {
+        return fromResolved
+      }
+      return {}
+    },
     setFormConfig() {
       let fields = []
       const fieldsMeta = {}
       const { method } = this
       const filterField = this.remoteMeta[method]
+      if (!filterField) {
+        return
+      }
       fields = [[filterField.label, [method]]]
       fieldsMeta[method] = {
         fields: [],
         fieldsMeta: {}
       }
 
-      const param = this.pushAccountParams[method]
+      const param = this.getSavedMethodParams()
       if (Object.keys(filterField?.children || {}).length > 0) {
         for (const [k, v] of Object.entries(filterField.children)) {
           let component = 'el-input'
@@ -154,17 +187,19 @@ export default {
               break
             case 'boolean':
               component = Switcher
-              // component = 'checkbox'
               break
             case 'text':
               el['text'] = 'textarea'
               break
           }
 
-          if (param) {
-            v.default = param[k] || v.default
+          const saved = param[k]
+          const item = {
+            ...v,
+            component,
+            el,
+            default: saved !== undefined && saved !== null ? saved : v.default
           }
-          const item = { ...v, component: component, el: el }
           fieldsMeta[method].fields.push(k)
           fieldsMeta[method].fieldsMeta[k] = item
         }
@@ -183,15 +218,20 @@ export default {
       this.config.fieldsMeta = fieldsMeta
     },
     onSetting() {
+      const params = this.getResolvedParams()
+      this.form = this.normalizeForm(params)
+      this.setFormConfig()
       this.isVisible = true
     },
     onSubmit(form) {
       this.$emit('input', form)
+      this.$emit('submit', form)
       this.isVisible = false
       this.$emit('update:visible', this.isVisible)
     },
-    onDialogClose() {
-      this.$emit('update:visible', this.isVisible)
+    handleVisibleChange(visible) {
+      this.isVisible = visible
+      this.$emit('update:visible', visible)
     }
   }
 }

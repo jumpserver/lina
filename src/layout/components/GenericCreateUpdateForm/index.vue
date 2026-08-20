@@ -4,7 +4,9 @@
       v-bind="$attrs"
       v-if="!loading"
       ref="form"
+      :fields-meta="fieldsMeta"
       :form="form"
+      :can-submit="canSubmit"
       :has-reset="iHasReset"
       :has-save-continue="iHasSaveContinue"
       :is-submitting="isSubmitting"
@@ -21,6 +23,7 @@ import { ElLink } from 'element-plus'
 import AutoDataForm from '@/components/Form/AutoDataForm'
 import { getUpdateObjURL } from '@/utils/common/index'
 import { encryptPassword } from '@/utils/secure'
+import { getRuntimeActionMeta } from '@/libs/context/runtime'
 import deepmerge from 'deepmerge'
 
 export default {
@@ -61,6 +64,10 @@ export default {
       type: Function,
       default: (value) => value
     },
+    fieldsMeta: {
+      type: Object,
+      default: () => ({})
+    },
     // 获取 meta
     afterGetRemoteMeta: {
       type: Function,
@@ -74,6 +81,10 @@ export default {
     hasReset: {
       type: Boolean,
       default: null
+    },
+    canSubmit: {
+      type: Boolean,
+      default: true
     },
     // 如何提交数据
     performSubmit: {
@@ -278,7 +289,8 @@ export default {
       action: '',
       actionId: '',
       row: {},
-      method: 'post'
+      method: 'post',
+      initialFormValue: {}
     }
   },
   computed: {
@@ -311,18 +323,25 @@ export default {
       this.$log.debug('Final object is: ', values)
       const formValue = Object.assign(this.form, values)
       this.form = this.afterGetFormValue(formValue)
+      this.initialFormValue = _.cloneDeep(this.form)
     } finally {
       this.loading = false
     }
   },
   methods: {
+    validateField(...args) {
+      return this.$refs.form?.dataForm?.elForm?.validateField(...args)
+    },
+    async getDrawerMeta() {
+      return getRuntimeActionMeta(this)
+    },
     async setDrawerMeta() {
-      const drawActionMeta = await this.$store.dispatch('common/getDrawerActionMeta')
+      const drawActionMeta = await this.getDrawerMeta()
       if (drawActionMeta && drawActionMeta.action) {
         this.drawer = true
         this.action = drawActionMeta.action
         this.row = drawActionMeta.row
-        this.actionId = this.row?.id
+        this.actionId = drawActionMeta.id || this.row?.id
       }
     },
     setMethod() {
@@ -333,7 +352,7 @@ export default {
       }
       // this.$log.debug('Drawer: ', this.drawer, this.submitMethod, this.action)
       if (!this.drawer && !this.method) {
-        this.method = this.$route.params['id'] ? 'put' : 'post'
+        this.method = this.$context.get('id') ? 'put' : 'post'
       }
       if (this.drawer && !this.submitMethod) {
         if (this.action === 'clone' || this.action === 'create') {
@@ -346,16 +365,14 @@ export default {
     getUpdateId() {
       if (this.actionId && this.action === 'update') {
         return this.actionId
-      } else {
-        return this.$route.params['id']
       }
+      return this.$context.get('id')
     },
     getCloneId() {
       if (this.actionId && this.action === 'clone') {
         return this.actionId
-      } else {
-        return this.$route.query['clone_from']
       }
+      return this.$context.get('clone_from')
     },
     isUpdateMethod() {
       return ['put', 'patch'].indexOf(this.method.toLowerCase()) > -1

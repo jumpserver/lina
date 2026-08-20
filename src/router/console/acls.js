@@ -220,6 +220,53 @@ export default [
         ]
       },
       {
+        path: 'clipboard-acls',
+        component: empty,
+        redirect: {
+          name: 'ClipboardACLList'
+        },
+        name: 'ClipboardACLs',
+        meta: {
+          title: i18n.t('ClipboardACLs'),
+          licenseRequired: true,
+          app: 'acls',
+          resource: 'clipboardacl'
+        },
+        children: [
+          {
+            path: '',
+            name: 'ClipboardACLList',
+            component: () => import('@/views/acls/ClipboardACL/ClipboardAclList.vue'),
+            meta: {
+              title: i18n.t('ClipboardACLs'),
+              activeMenu: '',
+              menuTitle: i18n.t('Clipboard')
+            }
+          },
+          {
+            path: 'create',
+            name: 'ClipboardACLCreate',
+            component: () => import('@/views/acls/ClipboardACL/ClipboardAclCreateUpdate.vue'),
+            hidden: true,
+            meta: { title: i18n.t('ClipboardACLCreate'), activeMenu: '' }
+          },
+          {
+            path: ':id',
+            name: 'ClipboardACLDetail',
+            component: () => import('@/views/acls/ClipboardACL/ClipboardAclDetail/index'),
+            hidden: true,
+            meta: { title: i18n.t('ClipboardACLDetail'), activeMenu: '' }
+          },
+          {
+            path: ':id/update',
+            name: 'ClipboardACLUpdate',
+            component: () => import('@/views/acls/ClipboardACL/ClipboardAclCreateUpdate.vue'),
+            hidden: true,
+            meta: { title: i18n.t('ClipboardACLUpdate'), activeMenu: '' }
+          }
+        ]
+      },
+      {
         path: 'cmd-groups',
         component: empty,
         redirect: {

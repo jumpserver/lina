@@ -86,6 +86,7 @@ export const accountOtherActions = (vm) => {
     {
       name: 'UpdateSecret',
       title: vm.$t('EditSecret'),
+      icon: 'fa-solid fa-key',
       can: ({ row }) => {
         return (
           vm.$hasPerm('accounts.change_account') &&
@@ -154,6 +155,7 @@ export const accountOtherActions = (vm) => {
     {
       name: 'ClearSecret',
       title: vm.$t('ClearSecret'),
+      icon: 'fa-solid fa-eraser',
       can: ({ row }) => {
         return vm.$hasPerm('accounts.change_account') && !isDirectoryServiceAccount(row, vm)
       },
@@ -169,6 +171,7 @@ export const accountOtherActions = (vm) => {
     {
       name: 'SecretHistory',
       title: vm.$t('HistoryPassword'),
+      icon: 'fa-solid fa-clock-rotate-left',
       can: () => vm.$hasPerm('accounts.view_accountsecret'),
       type: 'primary',
       callback: ({ row }) => {
@@ -184,6 +187,7 @@ export const accountOtherActions = (vm) => {
     {
       name: 'CopyToOther',
       title: vm.$t('CopyToAsset'),
+      icon: 'fa-copy',
       type: 'primary',
       divided: true,
       can: ({ row }) => {
@@ -198,7 +202,7 @@ export const accountOtherActions = (vm) => {
       },
       callback: ({ row }) => {
         vm.accountCreateUpdateTitle = vm.$t('CopyToOther')
-        vm.$route.query.flag = 'copy'
+        vm.accountOperationFlag = 'copy'
         vm.iAsset = vm.asset
         vm.account = row
         vm.showAddDialog = true
@@ -207,6 +211,7 @@ export const accountOtherActions = (vm) => {
     {
       name: 'MoveToOther',
       title: vm.$t('MoveToAsset'),
+      icon: 'fa-solid fa-right-left',
       type: 'primary',
       can: ({ row }) => {
         return (
@@ -220,7 +225,7 @@ export const accountOtherActions = (vm) => {
       },
       callback: ({ row }) => {
         vm.accountCreateUpdateTitle = vm.$t('MoveToOther')
-        vm.$route.query.flag = 'move'
+        vm.accountOperationFlag = 'move'
         vm.iAsset = vm.asset
         vm.account = row
         vm.showAddDialog = true

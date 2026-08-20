@@ -12,10 +12,7 @@
 
 <script>
 import { DrawerListTable } from '@/components'
-import {
-  AssetPermissionTableMeta,
-  UserAssetPermissionListPageSearchConfigOptions
-} from '@/views/perms/const'
+import { AssetPermissionTableMeta } from '@/views/perms/const'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
@@ -55,11 +52,7 @@ export default {
       headerActions: {
         hasLeftActions: false,
         hasExport: false,
-        hasImport: false,
-        searchConfig: {
-          url: '',
-          options: UserAssetPermissionListPageSearchConfigOptions
-        }
+        hasImport: false
       }
     }
   }

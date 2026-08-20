@@ -2,6 +2,8 @@ import i18n from '@/i18n/i18n'
 import { message } from '@/utils/vue/message'
 import { getBasePath } from '@/utils/storage'
 import { toSentenceCase } from './string'
+import { ObjectLocalStorage } from './objectLocalStorage'
+import { toPlainTextMessage } from './message'
 import _ from 'lodash'
 
 export { toSentenceCase }
@@ -156,6 +158,21 @@ export function getBrowserQueryParam(name) {
   return new URLSearchParams(hashQuery).get(name) || ''
 }
 
+/**
+ * 资产树点击通过 setRouterQuery({ browserOnly: true }) 只改浏览器地址里的 node_id，
+ * 不会同步 Vue Router 的 $route.query。创建抽屉若曾用 syncLegacyRouteState 写入 query.node，
+ * $context.get('node') 会一直读到旧节点。优先读浏览器 URL 中的实时选中节点。
+ */
+export function getSelectedAssetNodeId(vm) {
+  return (
+    getBrowserQueryParam('node_id') ||
+    getBrowserQueryParam('node') ||
+    vm?.$context?.get?.('node_id') ||
+    vm?.$context?.get?.('node') ||
+    ''
+  )
+}
+
 export function getErrorResponseMsg(error) {
   let msg = ''
   let data = ''
@@ -176,7 +193,7 @@ export function getErrorResponseMsg(error) {
       .filter((i) => i)
       .join('; ')
   } else if (typeof data === 'string') {
-    return data
+    return toPlainTextMessage(data)
   } else if (_.isPlainObject(data)) {
     const msg = Object.values(data)
       .map((item) => getErrorResponseMsg(item))
@@ -186,7 +203,7 @@ export function getErrorResponseMsg(error) {
   } else {
     msg = error.toString()
   }
-  return msg
+  return toPlainTextMessage(msg)
 }
 
 // 将一组错误信息拼接为单条字符串，过滤掉空值并去重。
@@ -469,54 +486,7 @@ export function setShowCurrentAssetValue(cookie, value) {
   }
 }
 
-export class ObjectLocalStorage {
-  constructor(key, attr) {
-    this.key = key
-    this.attr = attr
-  }
-
-  b64(val) {
-    return btoa(unescape(encodeURIComponent(val)))
-  }
-
-  getObject() {
-    const stored = window.localStorage.getItem(this.key)
-    let value = {}
-    try {
-      value = JSON.parse(stored)
-    } catch (e) {
-      console.warn('localStorage value is not a valid JSON: ', this.key)
-    }
-    if (!value || typeof value !== 'object') {
-      value = {}
-    }
-    return value
-  }
-
-  get(attr, defaults) {
-    const obj = this.getObject(this.key)
-    if (!attr && this.attr) {
-      attr = this.attr
-    }
-    const attrSafe = this.b64(attr)
-    const val = obj[attrSafe]
-    if (val === undefined) {
-      return defaults
-    }
-    return val
-  }
-
-  set(attr, value) {
-    const obj = this.getObject(this.key)
-    if (value === undefined && this.attr) {
-      value = attr
-      attr = this.attr
-    }
-    const attrSafe = this.b64(attr)
-    obj[attrSafe] = value
-    window.localStorage.setItem(this.key, JSON.stringify(obj))
-  }
-}
+export { ObjectLocalStorage }
 
 export function randomString(length, includeSymbols = false) {
   const upperCase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'

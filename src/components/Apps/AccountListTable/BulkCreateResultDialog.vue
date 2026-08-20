@@ -87,6 +87,7 @@ export default {
             prop: 'state',
             label: this.$t('Status'),
             width: '200px',
+            showOverflowTooltip: true,
             formatter: StateFormatter
           }
         ],

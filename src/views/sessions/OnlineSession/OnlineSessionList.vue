@@ -88,6 +88,7 @@ export default {
                 {
                   name: 'OfflineSession',
                   title: this.$t('Offline'),
+                  icon: 'fa-solid fa-power-off',
                   can: ({ row }) => {
                     return vm.$hasPerm('audits.offline_usersession') && !row.is_current_user_session
                   },
@@ -113,19 +114,6 @@ export default {
         hasBulkDelete: false,
         hasLeftActions: true,
         hasRightActions: true,
-        searchConfig: {
-          exclude: ['is_active'],
-          options: [
-            {
-              value: 'is_active',
-              label: this.$t('Active'),
-              children: [
-                { value: true, label: this.$t('Yes') },
-                { value: false, label: this.$t('No') }
-              ]
-            }
-          ]
-        },
         extraMoreActions: [
           {
             name: 'OfflineSelected',

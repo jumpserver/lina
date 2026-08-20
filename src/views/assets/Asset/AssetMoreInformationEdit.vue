@@ -44,10 +44,10 @@ export default {
   },
   methods: {
     getUrl() {
-      const params = this.$route.params
       let url = this.url
-      if (params.id) {
-        url = `${url}${params.id}/`
+      const id = this.$context.get('id')
+      if (id) {
+        url = `${url}${id}/`
       }
       return url
     },

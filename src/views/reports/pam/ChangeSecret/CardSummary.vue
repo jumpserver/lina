@@ -68,7 +68,7 @@ export default {
           }
         },
         {
-          title: this.$t('Assets'),
+          title: this.$t('AssetManagement'),
           body: {
             count: this.data.total_count_change_secret_assets
           }

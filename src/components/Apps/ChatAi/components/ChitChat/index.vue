@@ -53,6 +53,7 @@ import { useChat } from '../../useChat.js'
 import io from 'socket.io-client'
 import { v4 as uuidv4 } from 'uuid'
 import yaml from 'js-yaml'
+import axiosRetry from 'axios-retry'
 import request from '@/utils/request'
 import { closeWebSocket, createWebSocket, onSend, ws } from '@/utils/request'
 
@@ -216,7 +217,20 @@ export default {
       this.promptsLoading = true
       try {
         const data = await request.get('/api/v1/settings/chatai-prompts/', {
-          disableFlashErrorMsg: true
+          disableFlashErrorMsg: true,
+          'axios-retry': {
+            retries: 2,
+            shouldResetTimeout: true,
+            retryCondition: (error) => {
+              if (axiosRetry.isNetworkError(error)) {
+                return true
+              }
+
+              const status = error?.response?.status
+              return status === 408 || status === 429 || (status >= 500 && status < 600)
+            },
+            retryDelay: (retryCount) => retryCount * 500
+          }
         })
         const prompts = Array.isArray(data) ? data : data?.results || []
         const roleKeys = new Set()

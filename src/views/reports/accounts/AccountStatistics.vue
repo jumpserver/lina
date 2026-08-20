@@ -135,7 +135,7 @@ import BaseReport from '../base/BaseReport.vue'
 import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
 import * as echarts from 'echarts'
 import Echart from '@/components/Dashboard/Echart.vue'
-import { mixColors } from '@/views/reports/const'
+import { getDistributionOptions, mixColors } from '@/views/reports/const'
 import RankTable from '@/views/reports/users/components/RankTable.vue'
 import reportPageMixin from '@/views/reports/base/reportPageMixin'
 import ReportToolbar from '@/views/reports/base/ReportToolbar.vue'
@@ -279,74 +279,10 @@ export default {
       ]
     },
     SourceOptions() {
-      return {
-        tooltip: {
-          trigger: 'item'
-        },
-        legend: {
-          orient: 'vertical',
-          left: 'left'
-        },
-        series: [
-          {
-            type: 'pie',
-            minAngle: 5,
-            radius: ['40%', '70%'],
-            itemStyle: {
-              borderRadius: 10,
-              borderColor: '#fff',
-              borderWidth: 2
-            },
-            label: {
-              show: false,
-              position: 'center'
-            },
-            emphasis: {
-              label: {
-                show: true,
-                fontSize: 15,
-                fontWeight: 'bold'
-              }
-            },
-            data: this.config.source_pie
-          }
-        ]
-      }
+      return getDistributionOptions(this.config.source_pie, this.$t('Total'))
     },
     ConnectivityOptions() {
-      return {
-        tooltip: {
-          trigger: 'item'
-        },
-        legend: {
-          orient: 'vertical',
-          left: 'left'
-        },
-        series: [
-          {
-            type: 'pie',
-            minAngle: 5,
-            radius: ['40%', '70%'],
-            itemStyle: {
-              borderRadius: 10,
-              borderColor: '#fff',
-              borderWidth: 2
-            },
-            label: {
-              show: false,
-              position: 'center'
-            },
-            emphasis: {
-              label: {
-                show: true,
-                fontSize: 15,
-                fontWeight: 'bold'
-              }
-            },
-            data: this.config.by_connectivity
-          }
-        ]
-      }
+      return getDistributionOptions(this.config.by_connectivity, this.$t('Total'))
     },
     ChangeSecretOptions() {
       const { primary, TwoLevelColor, ThreeLevelColor, shadowColor } = mixColors()

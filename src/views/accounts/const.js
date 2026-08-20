@@ -131,21 +131,12 @@ export const gatherAccountHeaderActions = (vm) => {
     hasCreate: false,
     hasImport: false,
     hasExport: true,
-    searchConfig: {
-      exclude: ['asset', 'id'],
-      options: [
-        {
-          label: vm.$t('AssetName'),
-          value: 'asset_name'
-        }
-      ]
-    },
     extraMoreActions: [
       {
         name: 'SyncSelected',
         title: vm.$t('SyncSelected'),
         type: 'primary',
-        icon: 'fa fa-check',
+        icon: 'fa-solid fa-check',
         can: ({ selectedRows }) => {
           return (
             selectedRows.length > 0 &&
@@ -174,7 +165,7 @@ export const gatherAccountHeaderActions = (vm) => {
         name: 'SyncDeleteSelected',
         title: vm.$t('SyncDeleteSelected'),
         type: 'primary',
-        icon: 'fa fa-exchange',
+        icon: 'fa-solid fa-right-left',
         can: ({ selectedRows }) => {
           return (
             selectedRows.length > 0 &&

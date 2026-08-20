@@ -20,7 +20,7 @@
       </template>
       <slot />
       <el-form ref="comments" :model="form" label-width="45px" style="padding-top: 20px">
-        <el-form-item v-if="!isAuditRoute" :label="$tc('Reply')">
+        <el-form-item v-if="canComment && !isAuditRoute" :label="$tc('Reply')">
           <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
         </el-form-item>
         <el-form-item style="float: right">
@@ -52,7 +52,7 @@
             <i class="fa fa-times" /> {{ $t('CancelTicket') }}
           </el-button>
           <el-button
-            v-if="!isAuditRoute"
+            v-if="canComment && !isAuditRoute"
             :disabled="object.status.value === 'closed'"
             size="small"
             type="info"
@@ -119,6 +119,11 @@ export default {
     isSelfTicket() {
       const profile = this.$store.state.users.profile
       return this.object.applicant === `${profile.name}(${profile.username})`
+    },
+    canComment() {
+      const profile = this.$store.state.users.profile
+      const isCcUser = (this.object.cc_users || []).some((user) => user.id === profile.id)
+      return !isCcUser || this.hasActionPerm || this.isSelfTicket
     }
   },
   setup() {
@@ -163,46 +168,22 @@ export default {
     defaultApprove() {
       this.createComment(function () {})
       const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/approve/`
-      this.$axios
-        .put(url)
-        .then((res) => {
-          this.reloadPage()
-        })
-        .catch((err) => {
-          this.$message.error(err)
-        })
-        .finally(() => {
-          this.isDisabled = false
-        })
+      return this.$axios.put(url).then((res) => {
+        this.reloadPage()
+      })
     },
     defaultReject() {
       this.createComment(function () {})
       const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/reject/`
-      this.$axios
-        .put(url)
-        .then((res) => {
-          this.reloadPage()
-        })
-        .catch((err) => {
-          this.$message.error(err)
-        })
-        .finally(() => {
-          this.isDisabled = false
-        })
+      return this.$axios.put(url).then((res) => {
+        this.reloadPage()
+      })
     },
     defaultClose() {
       const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/close/`
-      this.$axios
-        .put(url)
-        .then((res) => {
-          this.reloadPage()
-        })
-        .catch((err) => {
-          this.$message.error(err)
-        })
-        .finally(() => {
-          this.isDisabled = false
-        })
+      return this.$axios.put(url).then((res) => {
+        this.reloadPage()
+      })
     },
     createComment(successCallback) {
       const commentText = this.form.comments
@@ -223,7 +204,7 @@ export default {
         }
       })
     },
-    handleAction(actionType) {
+    async handleAction(actionType) {
       if (this.isDisabled) {
         return
       }
@@ -246,9 +227,16 @@ export default {
       }
 
       if (handler) {
-        handler()
+        try {
+          await handler()
+        } catch (err) {
+          this.$message.error(err)
+        } finally {
+          this.isDisabled = false
+        }
       } else {
         this.$message.error('No handler for action')
+        this.isDisabled = false
       }
     },
     handleApprove() {
@@ -327,5 +315,37 @@ export default {
 
 .text-muted {
   color: #888888;
+}
+
+:deep(.markdown-body) {
+  padding: 0;
+}
+
+:deep(.markdown-body table) {
+  width: 100%;
+  margin: 10px 0 0;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+:deep(.markdown-body th),
+:deep(.markdown-body td) {
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  border: 1px solid var(--el-border-color-lighter);
+}
+
+:deep(.markdown-body th) {
+  color: var(--el-text-color-regular);
+  font-weight: 600;
+  background: var(--el-fill-color-lighter);
+}
+
+:deep(.markdown-body th:first-child),
+:deep(.markdown-body td:first-child) {
+  width: 18%;
 }
 </style>

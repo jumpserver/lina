@@ -36,8 +36,12 @@ export default {
   },
   methods: {
     async copy() {
-      const text = await this.formatterArgs.getText({ cellValue: this.cellValue, row: this.row })
-      copy(text)
+      try {
+        const text = await this.formatterArgs.getText({ cellValue: this.cellValue, row: this.row })
+        copy(text)
+      } catch (error) {
+        if (!error?.isAxiosError) throw error
+      }
     }
   }
 }

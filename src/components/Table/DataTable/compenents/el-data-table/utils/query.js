@@ -15,7 +15,18 @@ export const queryPattern = new RegExp(queryFlag + '.*' + paramSeparator)
  */
 export function stringify(query, equal = valueSeparator, delimiter = paramSeparator) {
   return Object.keys(query)
-    .map((k) => `${k}${equal}${encodeURIComponent(query[k])}`)
+    .flatMap((k) => {
+      const value = query[k]
+      const shouldRepeat =
+        equal === '=' &&
+        delimiter === '&' &&
+        /__(?:exact|icontains|startswith|in|icontains_any|icontains_all)$/.test(k) &&
+        Array.isArray(value)
+      const values = shouldRepeat ? value : [value]
+      return values.map(
+        (item) => `${k}${equal}${encodeURIComponent(item)}`
+      )
+    })
     .join(delimiter)
 }
 

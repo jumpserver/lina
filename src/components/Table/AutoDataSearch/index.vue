@@ -6,16 +6,19 @@
     <TagSearch
       v-bind="tagSearchAttrs()"
       v-show="!shouldFold"
-      :options="iOption"
+      ref="tagSearch"
+      :options="internalOptions"
+      :search-config="searchMeta"
       class="auto-data-search__field"
       @blur="handleBlur"
+      @conditions-change="$emit('conditionsChange', $event)"
       @tag-search="handleTagSearch"
     />
   </span>
 </template>
 
 <script>
-import { getActionMeta } from '@/api/common'
+import { getFilterMeta, getSearchMeta } from '@/api/common'
 import TagSearch from '@/components/Table/TagSearch/index.vue'
 import i18n from '@/i18n/i18n'
 
@@ -24,19 +27,17 @@ export default {
   components: {
     TagSearch
   },
-  emits: ['tagSearch'],
+  emits: ['conditionsChange', 'tagSearch'],
   props: {
     url: {
       type: String,
       default: ''
     },
-    // 增加选项
-    options: {
-      type: Array,
-      default: () => []
+    getTableMetadata: {
+      type: Function,
+      default: null
     },
-    // 排除选项
-    exclude: {
+    singleChoiceFields: {
       type: Array,
       default: () => []
     },
@@ -50,14 +51,12 @@ export default {
     return {
       internalOptions: [],
       tags: [],
-      manualSearch: false
+      manualSearch: false,
+      searchMeta: {},
+      optionsRequestId: 0
     }
   },
   computed: {
-    iOption() {
-      const options = this.options.concat(this.internalOptions)
-      return _.uniqWith(options, _.isEqual)
-    },
     hasTags() {
       if (Array.isArray(this.tags)) {
         return this.tags.length > 0
@@ -72,9 +71,6 @@ export default {
     }
   },
   watch: {
-    options() {
-      // 空函数，方便子组件刷新
-    },
     url() {
       this.genericOptions()
     }
@@ -85,6 +81,20 @@ export default {
     }
   },
   methods: {
+    async focusSearch() {
+      this.manualSearch = true
+      await this.$nextTick()
+      return this.$refs.tagSearch?.focusSearch()
+    },
+    removeCondition(key) {
+      return this.$refs.tagSearch?.handleTagClose(key)
+    },
+    clearConditions() {
+      return this.$refs.tagSearch?.clearConditions()
+    },
+    applyConditions(conditions) {
+      return this.$refs.tagSearch?.applyConditions(conditions)
+    },
     tagSearchAttrs() {
       const attrs = { ...this.$attrs }
       delete attrs.class
@@ -104,33 +114,35 @@ export default {
     handleBlur() {
       this.manualSearch = false
     },
-    handleManualSearch() {
+    async handleManualSearch() {
       this.manualSearch = true
+      await this.$nextTick()
+      this.$refs.tagSearch?.focusSearch()
     },
     async genericOptions() {
-      const vm = this // 透传This
-      vm.internalOptions = [] // 重置
+      const requestId = ++this.optionsRequestId
       const data = await this.optionUrlMeta()
-      const meta = getActionMeta(data, 'GET')
-      for (const [name, field] of Object.entries(meta)) {
-        if (!field.filter) {
-          continue
-        }
-        if (vm.exclude.includes(name)) {
-          continue
-        }
+      const filters = getFilterMeta(data)
+      const options = []
+      for (const [name, field] of Object.entries(filters)) {
         const option = {
+          custom: field.custom === true,
           label: field.label,
+          multiple: field.multiple !== false && !this.singleChoiceFields.includes(name),
+          operators: field.operators,
           type: field.type,
           value: name
         }
         if (['choice', 'labeled_choice'].indexOf(field.type) > -1 && field.choices) {
+          option.isBooleanChoice =
+            field.choices.length > 0 &&
+            field.choices.every((item) => typeof item.value === 'boolean')
           option.children = field.choices.map((item) => {
             if (typeof item.value === 'boolean') {
               if (item.value) {
-                return { label: item.label, value: 'True' }
+                return { label: item.label, value: 'true' }
               } else {
-                return { label: item.label, value: 'False' }
+                return { label: item.label, value: 'false' }
               }
             }
             return { label: item.label, value: item.value }
@@ -138,22 +150,27 @@ export default {
         }
         if (field.type === 'boolean') {
           option.children = [
-            { label: i18n.t('Yes'), value: true },
-            { label: i18n.t('No'), value: false }
+            { label: i18n.t('Yes'), value: 'true' },
+            { label: i18n.t('No'), value: 'false' }
           ]
         }
         if (option.value === 'id') {
           option.label = 'ID'
         }
-        vm.internalOptions.push(option)
+        options.push(option)
       }
+      if (requestId !== this.optionsRequestId) {
+        return
+      }
+      this.searchMeta = getSearchMeta(data)
+      this.internalOptions = options
     },
     optionUrlMeta() {
-      const url =
-        this.url.indexOf('?') === -1
-          ? `${this.url}?draw=1&display=1`
-          : `${this.url}&draw=1&display=1`
-      return this.$store.dispatch('common/getUrlMeta', { url: url })
+      if (this.getTableMetadata) {
+        return this.getTableMetadata()
+      }
+      const url = this.url.indexOf('?') === -1 ? `${this.url}?display=1` : `${this.url}&display=1`
+      return this.$store.dispatch('common/getUrlMeta', { url })
     }
   }
 }
@@ -164,7 +181,9 @@ export default {
   display: inline-flex;
   align-items: center;
   box-sizing: border-box;
+  width: 100%;
   min-width: 0;
+  max-width: 100%;
 
   &.is-folded {
     width: auto;
@@ -174,12 +193,7 @@ export default {
 .auto-data-search__field {
   width: 100%;
   min-width: 0;
-  height: 100%;
-
-  :deep(.search-input) {
-    min-width: 0;
-    height: 100%;
-  }
+  min-height: 28px;
 }
 
 .search-btn {

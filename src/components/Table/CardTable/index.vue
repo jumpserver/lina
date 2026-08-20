@@ -118,7 +118,8 @@ export default {
         }
       },
       detailDrawerVisible: false,
-      detailTitle: ''
+      detailTitle: '',
+      skipNextActivate: true
     }
   },
   computed: {
@@ -134,6 +135,14 @@ export default {
       this.loading = false
     }
   },
+  activated() {
+    // First keep-alive insert also fires activated after mounted; skip that one.
+    if (this.skipNextActivate) {
+      this.skipNextActivate = false
+      return
+    }
+    this.reloadTable()
+  },
   methods: {
     isDisabled(item) {
       return item.edition?.value === 'enterprise' && !this.hasValidLicense
@@ -146,7 +155,14 @@ export default {
       return `<i class="fa ${iconClass}" />`
     },
     getPageQuery(currentPage, pageSize) {
-      return this.$refs.pagination.getPageQuery(currentPage, pageSize)
+      // TagSearch emits immediately during setup, before Pagination is mounted.
+      if (this.$refs.pagination) {
+        return this.$refs.pagination.getPageQuery(currentPage, pageSize)
+      }
+      return {
+        limit: pageSize,
+        offset: (currentPage - 1) * pageSize
+      }
     },
     async getList() {
       if (this.tableConfig.totalData) {
@@ -199,7 +215,7 @@ export default {
       this.$router.push(detailRoute)
     },
     defaultPerformDelete(obj) {
-      this.$axios.delete(`${this.tableConfig.url}${obj.id}/`)
+      return this.$axios.delete(`${this.tableConfig.url}${obj.id}/`)
     },
     async onView(obj) {
       if (this.isDisabled(obj)) {

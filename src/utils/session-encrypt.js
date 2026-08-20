@@ -49,6 +49,8 @@ function rsaDecrypt(cipher, pkey) {
 window.rsaEncrypt = rsaEncrypt
 window.rsaDecrypt = rsaDecrypt
 
+const encryptedSeparator = '::encrypted::'
+
 function hexToBytes(hex) {
   if (!hex) return new Uint8Array([])
   hex = hex.toString().trim().toLowerCase()
@@ -87,7 +89,7 @@ function rsaEncryptPassword(password, rsaPublicKey) {
   // public key 是 base64 存储的
   const keyCipher = rsaEncrypt(aesKey, rsaPublicKey)
   const passwordCipher = aesEncrypt(password, aesKey)
-  return `${keyCipher}:${passwordCipher}`
+  return `${keyCipher}${encryptedSeparator}${passwordCipher}`
 }
 
 function ensureSm2PublicKey(sm2PublicKey) {
@@ -131,7 +133,7 @@ function gmEncryptPassword(password, sm2PublicKey) {
   // - sm4 decrypt: base64.urlsafe_b64decode
   const keyCipherB64 = bytesToBase64(hexToBytes(keyCipher))
   const passwordCipherB64 = bytesToBase64(hexToBytes(passwordCipher))
-  return `${keyCipherB64}:${passwordCipherB64}`
+  return `${keyCipherB64}${encryptedSeparator}${passwordCipherB64}`
 }
 
 export function encryptPassword(password) {

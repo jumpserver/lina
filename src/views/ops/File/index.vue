@@ -1,5 +1,11 @@
 <template>
   <Page>
+    <ConfirmRunAssetsDialog
+      v-model:visible="showConfirmRunAssetsDialog"
+      :is-running="running"
+      :assets="classifiedAssets"
+      @submit="onConfirmRunAsset"
+    />
     <el-alert :center="false" class="announcement" type="info">
       <span
         v-for="(tip, index) of FileTransferBootStepHelpTips"
@@ -12,7 +18,10 @@
     </el-alert>
     <div class="job-container">
       <div class="select-assets">
-        <SelectJobAssetDialog @change="handleSelectAssets" />
+        <SelectJobAssetDialog
+          base-url="/api/v1/perms/users/self/assets/?category__in!=database,web"
+          @change="handleSelectAssets"
+        />
       </div>
       <div class="transition-box">
         <div class="transfer-toolbar">
@@ -36,6 +45,20 @@
           >
             <template #prepend> <span class="required-mark">*</span>{{ $t('Account') }} </template>
           </el-autocomplete>
+
+          <div class="policy-field">
+            <span class="field-label">{{ $t('RunasPolicy') }}</span>
+            <el-tooltip :content="$tc('RunasPolicyHelpText')">
+              <el-select v-model="runasPolicy">
+                <el-option
+                  v-for="option in runasPolicyOptions"
+                  :key="option.value"
+                  :label="option.label"
+                  :value="option.value"
+                />
+              </el-select>
+            </el-tooltip>
+          </div>
 
           <el-input
             v-if="dstPathInput.type === 'input'"
@@ -147,10 +170,12 @@ import { createJob, getTaskDetail, JobUploadFile } from '@/api/ops'
 import { formatFileSize } from '@/utils/common/index'
 import store from '@/store'
 import SelectJobAssetDialog from '@/views/ops/Adhoc/components/SelectJobAssetDialog.vue'
+import ConfirmRunAssetsDialog from '@/views/ops/Adhoc/components/ConfirmRunAssetsDialog.vue'
 
 export default {
   name: 'FileTransfer',
   components: {
+    ConfirmRunAssetsDialog,
     SelectJobAssetDialog,
     Page,
     IBox,
@@ -169,6 +194,12 @@ export default {
       },
       xtermConfig: {},
       runas: '',
+      runasPolicy: 'skip',
+      runasPolicyOptions: [
+        { label: this.$tc('Skip'), value: 'skip' },
+        { label: this.$tc('PrivilegedFirst'), value: 'privileged_first' },
+        { label: this.$tc('PrivilegedOnly'), value: 'privileged_only' }
+      ],
       dstPath: '',
       runButton: {
         type: 'button',
@@ -241,7 +272,12 @@ export default {
       speedText: '',
       loadedSize: '',
       totalSize: '',
-      selectHosts: []
+      selectHosts: [],
+      showConfirmRunAssetsDialog: false,
+      classifiedAssets: {
+        error: [],
+        runnable: []
+      }
     }
   },
   computed: {
@@ -399,19 +435,41 @@ export default {
         return
       }
 
-      // 立即禁用按钮并显示旋转图标
+      const payload = {
+        assets: hosts,
+        nodes: nodes,
+        module: 'shell',
+        type: 'upload_file',
+        runas: this.runas,
+        runas_policy: this.runasPolicy
+      }
+      this.$axios.post('/api/v1/ops/classified-hosts/', payload).then((data) => {
+        this.classifiedAssets = data
+        if (data.error.length === 0) {
+          this.onConfirmRunAsset(hosts)
+        } else {
+          this.showConfirmRunAssetsDialog = true
+        }
+      })
+    },
+    onConfirmRunAsset(assets) {
+      if (assets.length === 0) {
+        this.$message.error(this.$tc('RequiredAssetOrNode'))
+        return
+      }
+
       this.setButtonLoading()
       this.showProgress = true
       this.progressLength = 0
 
       const data = {
-        assets: hosts,
-        nodes: nodes,
+        assets: assets,
+        nodes: [],
         module: 'shell',
         args: JSON.stringify({ dst_path: this.dstPath }),
         type: 'upload_file',
         runas: this.runas,
-        runas_policy: 'skip',
+        runas_policy: this.runasPolicy,
         instant: false,
         is_periodic: false,
         timeout: -1
@@ -516,6 +574,32 @@ export default {
   :deep(.dstpath-field) {
     height: 30px;
     width: 360px;
+  }
+
+  .policy-field {
+    display: flex;
+    height: 30px;
+
+    .field-label {
+      display: inline-flex;
+      align-items: center;
+      padding: 0 12px;
+      color: var(--color-text-secondary);
+      background: var(--el-fill-color-light);
+      border: 1px solid var(--el-border-color);
+      border-right: 0;
+      border-radius: 4px 0 0 4px;
+      white-space: nowrap;
+    }
+
+    :deep(.el-select) {
+      width: 160px;
+
+      .el-select__wrapper {
+        min-height: 30px;
+        border-radius: 0 4px 4px 0;
+      }
+    }
   }
 
   // 让 prepend 里的必填星号与文字对齐

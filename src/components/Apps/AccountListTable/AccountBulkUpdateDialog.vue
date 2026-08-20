@@ -4,6 +4,7 @@
     v-if="visible"
     :form-setting="formSetting"
     :selected-rows="selectedRows"
+    :target-resource-setting="targetResourceSetting"
     :visible="visible"
     @update="$emit('update', $event)"
     @update:visible="$emit('update:visible', $event)"
@@ -32,7 +33,17 @@ export default {
     }
   },
   data() {
+    const selectedSecretType = this.selectedRows[0]?.secret_type
+    const secretType = selectedSecretType?.value || selectedSecretType || 'password'
     return {
+      targetResourceSetting: {
+        label: this.$t('Account'),
+        url: '/api/v1/accounts/accounts/?fields_size=mini',
+        resourceName: this.$t('Accounts'),
+        queryParams: {
+          secret_type: secretType
+        }
+      },
       formSetting: {
         url: '/api/v1/accounts/accounts/',
         hasSaveContinue: false,
@@ -60,7 +71,8 @@ export default {
       let fields = ['privileged']
       const fieldsMeta = {}
       const secretFields = ['password', 'ssh_key', 'passphrase', 'token', 'access_key', 'api_key']
-      const secret_type = this.selectedRows[0].secret_type?.value || 'password'
+      const selectedSecretType = this.selectedRows[0]?.secret_type
+      const secret_type = selectedSecretType?.value || selectedSecretType || 'password'
       for (const field of secretFields) {
         if (secret_type === 'ssh_key' && field === 'passphrase') {
           fields.push('passphrase')

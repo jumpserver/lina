@@ -12,12 +12,14 @@
       v-bind="iHeaderActions"
       v-if="hasActions"
       v-model:quick-filter-expand="filterExpand"
+      ref="tableAction"
       :class="{ 'filter-expand': filterExpand }"
       :date-pick="handleDateChange"
       :has-quick-filter="iHasQuickFilter"
       :reload-table="reloadTable"
       :search-table="search"
       :selected-rows="selectedRows"
+      :get-table-metadata="getTableMetadata"
       :table-url="tableUrl"
       @done="handleActionInitialDone"
     />
@@ -29,6 +31,7 @@
           ref="dataTable"
           :config="iTableConfig"
           :filter-table="filter"
+          :get-table-metadata="getTableMetadata"
           @selection-change="handleSelectionChange"
         />
       </IBox>
@@ -46,7 +49,7 @@ import TableAction from './TableAction/index.vue'
 import AutoDataTable from '../AutoDataTable/index.vue'
 import QuickFilter from './TableAction/QuickFilter.vue'
 import { getDayEnd, getDaysAgo } from '@/utils/common/time'
-import { ObjectLocalStorage } from '@/utils/common/index'
+import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
 import i18n from '@/i18n/i18n'
 import _ from 'lodash'
 
@@ -90,6 +93,10 @@ export default {
     quickSummary: {
       type: Array,
       default: () => null
+    },
+    tableMetadataProvider: {
+      type: Function,
+      default: null
     }
   },
   data() {
@@ -127,7 +134,9 @@ export default {
       iFilterExpand: null,
       reloadTable: _.debounce(this._reloadTable, 300),
       searchQuery: {},
-      filterQuery: {}
+      filterQuery: {},
+      metadataRequestUrl: '',
+      metadataRequest: null
     }
   },
   computed: {
@@ -288,6 +297,38 @@ export default {
     })
   },
   methods: {
+    getTableMetadata() {
+      if (!this.tableUrl) {
+        return Promise.resolve({})
+      }
+      const url =
+        this.tableUrl.indexOf('?') === -1
+          ? `${this.tableUrl}?display=1`
+          : `${this.tableUrl}&display=1`
+      if (this.metadataRequest && this.metadataRequestUrl === url) {
+        return this.metadataRequest
+      }
+
+      this.metadataRequestUrl = url
+      const request = this.tableMetadataProvider
+        ? this.tableMetadataProvider(url)
+        : this.$store.dispatch('common/getUrlMeta', { url })
+      const sharedRequest = request.catch((error) => {
+        if (this.metadataRequest === sharedRequest) {
+          this.metadataRequest = null
+          this.metadataRequestUrl = ''
+        }
+        throw error
+      })
+      this.metadataRequest = sharedRequest
+      return this.metadataRequest
+    },
+    focusSearch() {
+      return this.$refs.tableAction?.focusSearch()
+    },
+    closeNodeSearch() {
+      return this.$refs.tableAction?.closeNodeSearch()
+    },
     handleTableSettingClick() {
       this.$refs.dataTable?.openColumnSetting()
     },
@@ -320,6 +361,7 @@ export default {
     },
     handleSelectionChange(val) {
       this.selectedRows = Array.isArray(val) ? [...val] : []
+      this.$emit('selection-change', this.selectedRows)
     },
     _reloadTable() {
       this.dataTable?.getList()
@@ -399,12 +441,6 @@ export default {
   flex-direction: column;
   gap: 8px;
   min-width: 0;
-}
-
-.filter-expand {
-  :deep(button.actionFilter) {
-    background-color: rgb(0, 0, 0, 0.08) !important;
-  }
 }
 
 .table-content {

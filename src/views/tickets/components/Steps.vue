@@ -1,6 +1,6 @@
 <template>
-  <IBox>
-    <div style="height: 660px">
+  <IBox class="ticket-steps-box">
+    <div class="ticket-steps">
       <el-steps :active="ticketSteps" direction="vertical">
         <el-step
           :description="`${$t('Applicant')}：${object.rel_snapshot.applicant}`"
@@ -15,33 +15,37 @@
         </el-step>
         <el-step v-for="(item, i) in process_map" :key="i" :title="$tc('HandleTicket')">
           <template #description>
-            <div>
-              <div class="processors">
-                <div class="processors-content">
-                  <span
-                    v-for="assignee of item.assignees_display.slice(0, 4)"
-                    :key="assignee"
-                    style="display: block"
-                  >
-                    {{ assignee }}
-                  </span>
-                </div>
-                <el-button
-                  v-if="item.assignees.length > 4"
-                  link
-                  @click="lookOver(item.assignees_display)"
+            <div class="step-description">
+              <div v-if="item.state === 'pending'" class="assignees">
+                <span
+                  v-for="assignee of getAssignees(item).slice(0, 2)"
+                  :key="assignee"
+                  :title="assignee"
+                  class="assignee-chip"
                 >
-                  {{ $tc('CheckViewAcceptor') }}
+                  {{ assignee }}
+                </span>
+                <el-button
+                  v-if="getAssignees(item).length > 2"
+                  :title="$t('TicketViewAllAssignees', { count: getAssignees(item).length })"
+                  class="more-assignees"
+                  link
+                  @click="lookOver(getAssignees(item))"
+                >
+                  {{ $t('TicketViewAllAssignees', { count: getAssignees(item).length }) }}
                 </el-button>
+                <span v-if="getAssignees(item).length === 0" class="empty-value">-</span>
               </div>
-            </div>
-            <div v-if="item.state === 'closed'">
-              <div>{{ $t('Assignee') }}: {{ object.rel_snapshot.applicant }}</div>
-              <div>{{ $t('DateFinished') }}: {{ toSafeLocalDateStr(item.approval_date) }}</div>
-            </div>
-            <div v-if="item.state !== 'pending' && item.state !== 'closed'">
-              <div>{{ $t('Assignee') }}: {{ item.processor_display }}</div>
-              <div>{{ $t('DateFinished') }}: {{ toSafeLocalDateStr(item.approval_date) }}</div>
+              <template v-else>
+                <div class="meta-line">
+                  <span class="meta-label">{{ $t('Assignee') }}:</span>
+                  <span class="meta-value">{{ getProcessor(item) || '-' }}</span>
+                </div>
+                <div class="meta-line">
+                  <span class="meta-label">{{ $t('DateFinished') }}:</span>
+                  <span class="meta-value">{{ toSafeLocalDateStr(item.approval_date) }}</span>
+                </div>
+              </template>
             </div>
           </template>
         </el-step>
@@ -54,18 +58,23 @@
         </el-step>
       </el-steps>
     </div>
+    <UserListDialog
+      v-model="assigneesDialogVisible"
+      :title="$t('RelevantAssignees')"
+      :users="dialogAssignees"
+    />
   </IBox>
 </template>
 
 <script>
-import { h } from 'vue'
 import IBox from '@/components/Common/IBox'
 import { useDateTime } from '@/composables/useDateTime'
 import { STATE_MAP } from '../const'
+import UserListDialog from './UserListDialog'
 
 export default {
   name: 'Steps',
-  components: { IBox },
+  components: { IBox, UserListDialog },
   props: {
     object: {
       type: Object,
@@ -75,10 +84,11 @@ export default {
   data() {
     return {
       status: { open: 2, close: 3 },
-      process_map:
-        this.object.process_map.sort((a, b) => {
-          return a.approval_level - b.approval_level
-        }) || [],
+      process_map: [...(this.object.process_map || [])].sort((a, b) => {
+        return a.approval_level - b.approval_level
+      }),
+      assigneesDialogVisible: false,
+      dialogAssignees: [],
       vm: this,
       statusMap: STATE_MAP
     }
@@ -102,45 +112,105 @@ export default {
     return useDateTime()
   },
   methods: {
+    getAssignees(item) {
+      return item.assignees_display || []
+    },
+    getProcessor(item) {
+      if (item.state === 'closed') {
+        return this.object.rel_snapshot.applicant
+      }
+      return item.processor_display
+    },
     lookOver(assignees_display) {
-      const content = []
-      assignees_display.forEach((item) => {
-        content.push(h('p', null, item))
-      })
-      this.$msgbox({
-        title: this.$t('RelevantAssignees'),
-        customClass: 'acceptance',
-        message: h('p', null, content),
-        showCancelButton: false,
-        showConfirmButton: false
-      })
+      this.dialogAssignees = assignees_display
+      this.assigneesDialogVisible = true
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-:deep(.acceptance .el-message-box__content) {
-  overflow-y: auto;
-  max-height: 400px;
-}
-
 .box {
   margin-bottom: 15px;
 }
 
-.processors {
-  margin-bottom: 10px;
+.ticket-steps {
+  padding: 4px 6px 0;
 }
 
-.processors-content {
-  overflow-y: auto;
-  max-height: 400px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+.step-description {
+  min-width: 0;
+  padding-top: 3px;
+}
+
+.assignees {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  min-height: 24px;
+}
+
+.assignee-chip {
+  display: inline-block;
+  overflow: hidden;
+  max-width: 150px;
+  padding: 1px 8px;
+  color: var(--color-text-regular);
+  font-size: 12px;
+  line-height: 22px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: var(--el-fill-color-light);
+  border-radius: 12px;
+}
+
+.more-assignees {
+  height: 24px;
+  padding: 0 5px;
+  font-size: 12px;
+}
+
+.meta-line {
+  display: flex;
+  gap: 5px;
+  min-width: 0;
+  line-height: 22px;
+}
+
+.meta-label {
+  flex: none;
+  color: var(--color-help-text);
+}
+
+.meta-value {
+  overflow: hidden;
+  color: var(--color-text-regular);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.empty-value {
+  color: var(--color-help-text);
 }
 
 .el-steps {
+  :deep(.el-step__main) {
+    min-width: 0;
+    padding-bottom: 18px;
+  }
+
+  :deep(.el-step__title) {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 24px;
+  }
+
+  :deep(.el-step__description) {
+    padding-right: 0;
+    line-height: 22px;
+  }
+
   .el-step__main .el-step__title {
     color: var(--color-text-primary);
   }

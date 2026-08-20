@@ -8,6 +8,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage/index.vue'
+import { getRuntimeActionMeta } from '@/libs/context/runtime'
 import { downloadText } from '@/utils/common/index'
 
 export default {
@@ -78,11 +79,11 @@ export default {
   },
   computed: {
     isCreateAction() {
-      return this.meta?.action === 'create'
+      return (this.meta?.action || this.$context.get('action') || 'create') === 'create'
     }
   },
   async mounted() {
-    this.meta = await this.$store.dispatch('common/getDrawerActionMeta')
+    this.meta = await getRuntimeActionMeta(this)
     setTimeout(() => {
       this.loading = false
     })

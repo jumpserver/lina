@@ -15,7 +15,7 @@ export function getDefaultConfig(vm) {
   const onAction = async (row, action) => {
     await vm.updateOrCloneAsset(row, action.toLowerCase())
   }
-  const extraQuery = vm.$route.params?.extraQuery || {}
+  const extraQuery = vm.$context.get('extraQuery') ?? {}
   const defaultHeaderActions = {
     onCreate: () => {
       vm.showPlatform = false
@@ -137,6 +137,7 @@ export function getDefaultConfig(vm) {
         'address',
         'accounts_amount',
         'platform',
+        'date_last_login',
         'connectivity',
         'actions'
       ]
@@ -155,6 +156,9 @@ export function getDefaultConfig(vm) {
         width: '160px',
         sortable: true,
         formatter: PlatformFormatter
+      },
+      date_last_login: {
+        label: vm.$t('LastLoginTime')
       },
       protocols: {
         showFullContent: true,
@@ -244,6 +248,7 @@ export function getDefaultConfig(vm) {
             {
               name: 'AddAccount',
               title: vm.$t('AddAccount'),
+              icon: 'fa-solid fa-key',
               divided: true,
               has: ({ row }) =>
                 !vm.$store.getters.currentOrgIsRoot && vm.$hasPerm('accounts.add_account'),
@@ -255,6 +260,7 @@ export function getDefaultConfig(vm) {
             {
               name: 'DiscoverAccounts',
               title: vm.$t('AccountDiscover'),
+              icon: 'fa-solid fa-magnifying-glass',
               has: ({ row }) =>
                 !vm.$store.getters.currentOrgIsRoot &&
                 vm.$hasPerm('accounts.add_gatheraccountsexecution'),

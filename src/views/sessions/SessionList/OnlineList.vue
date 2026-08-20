@@ -25,6 +25,7 @@ export default {
         {
           name: 'terminate',
           title: this.$t('Terminate'),
+          icon: 'fa-solid fa-stop',
           type: 'danger',
           can: ({ row }) => row['can_terminate'] && vm.$hasPerm('terminal.terminate_session'),
           callback: function ({ reload, row }) {
@@ -42,6 +43,7 @@ export default {
         {
           name: 'pause',
           title: this.$t('Pause'),
+          icon: 'fa-solid fa-pause',
           type: 'warning',
           can: ({ row }) => {
             const terminalType = row['terminal']['type']
@@ -65,6 +67,7 @@ export default {
         {
           name: 'resume',
           title: this.$t('Resume'),
+          icon: 'fa-solid fa-unlock',
           type: 'warning',
           can: ({ row }) => {
             const terminalType = row['terminal']['type']
@@ -88,6 +91,7 @@ export default {
         {
           name: 'join',
           title: this.$t('Monitor'),
+          icon: 'fa-eye',
           type: 'primary',
           can: ({ row, cellValue }) => {
             return row['can_join'] && this.$hasPerm('terminal.monitor_session')

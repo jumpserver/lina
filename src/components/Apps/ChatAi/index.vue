@@ -51,7 +51,7 @@ import Sidebar from './components/Sidebar/index.vue'
 import Chat from './components/ChitChat/index.vue'
 import { getInputFocus } from './useChat.js'
 import DrawerPanel from '@/components/Apps/DrawerPanel/index.vue'
-import { ObjectLocalStorage } from '@/utils/common'
+import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
 import i18n from '@/i18n/i18n'
 import { getAssetUrl } from '@/utils/assets'
 import { mapGetters } from 'vuex'
@@ -88,7 +88,10 @@ export default {
       expanded: false,
       clientOffset: {},
       currentTerminalContent: {},
-      initialized: false
+      initialized: false,
+      messageListenerAttached: false,
+      pendingPanelVisibility: null,
+      iframeReadyPosted: false
     }
   },
   computed: {
@@ -97,20 +100,31 @@ export default {
   watch: {
     'publicSettings.CHAT_AI_METHOD': {
       handler(newVal) {
-        this.visible = newVal === 'api'
+        if (newVal === 'api') {
+          this.startApiMode()
+          return
+        }
+
+        this.visible = false
+        this.iframeReadyPosted = false
+        this.pendingPanelVisibility = null
+        this.initialized = false
       }
     }
   },
   mounted() {
     this.handleStartChat()
   },
+  beforeUnmount() {
+    if (this.messageListenerAttached) {
+      window.removeEventListener('message', this.onWindowMessage)
+      this.messageListenerAttached = false
+    }
+  },
   methods: {
     handleStartChat() {
       if (this.publicSettings.CHAT_AI_METHOD === 'api') {
-        this.visible = true
-        const expanded = aiPannelLocalStorage.get('expanded')
-        this.updateExpandedState(expanded)
-        this.handlePostMessage()
+        this.startApiMode()
       } else if (this.publicSettings.CHAT_AI_METHOD === 'embed') {
         const embedScriptId = 'chat-ai-embed-id'
         if (document.getElementById(embedScriptId)) {
@@ -130,30 +144,131 @@ export default {
         document.body.appendChild(script)
       }
     },
+    startApiMode() {
+      this.visible = true
+      const expanded = aiPannelLocalStorage.get('expanded')
+      this.updateExpandedState(expanded, false)
+      this.handlePostMessage()
+      this.ensureApiModeReady()
+    },
+    ensureApiModeReady(attempt = 0) {
+      if (this.publicSettings.CHAT_AI_METHOD !== 'api' || !this.visible) return
+
+      this.$nextTick(() => {
+        const drawer = this.$refs.drawer
+        const component = this.$refs.component
+
+        if (!drawer || !component) {
+          if (attempt < 20) {
+            this.ensureApiModeReady(attempt + 1)
+          }
+          return
+        }
+
+        if (this.pendingPanelVisibility !== null && drawer.show !== this.pendingPanelVisibility) {
+          drawer.show = this.pendingPanelVisibility
+        }
+
+        if (!this.iframeReadyPosted) {
+          window.parent.postMessage(
+            {
+              name: 'CHAT_IFRAME_READY'
+            },
+            window.location.origin
+          )
+          this.iframeReadyPosted = true
+        }
+
+        if (this.currentTerminalContent && Object.keys(this.currentTerminalContent).length > 0) {
+          component.onTerminalContext?.(this.currentTerminalContent)
+        }
+
+        if (drawer.show) {
+          this.initAssistant()
+        }
+
+        this.pendingPanelVisibility = null
+      })
+    },
     initAssistant() {
       if (this.initialized) return
-      this.initialized = true
       this.$nextTick(() => {
-        this.$refs.component?.init()
+        if (this.initialized) return
+        const component = this.$refs.component
+        if (!component) return
+        this.initialized = true
+        component.init()
       })
     },
     handlePostMessage() {
-      window.addEventListener('message', (event) => {
-        if (event.data === 'show-chat-panel') {
-          this.$refs.drawer.show = true
+      if (this.messageListenerAttached) return
+      window.addEventListener('message', this.onWindowMessage)
+      this.messageListenerAttached = true
+    },
+    isTrustedParentMessage(event) {
+      const trustedSource = event.source === window.parent || event.source === window
+      return trustedSource && event.origin === window.location.origin
+    },
+    onWindowMessage(event) {
+      if (!this.isTrustedParentMessage(event)) return
+
+      const msg = event.data
+      if (msg === 'show-chat-panel') {
+        this.setPanelVisibility(true)
+        return
+      }
+      if (msg === 'hide-chat-panel') {
+        this.setPanelVisibility(false)
+        return
+      }
+      if (!msg || typeof msg !== 'object') return
+
+      switch (msg.name) {
+        case 'CHAT_PANEL_COMMAND':
+          if (msg.data?.action === 'open') {
+            this.setPanelVisibility(true)
+          } else if (msg.data?.action === 'close') {
+            this.setPanelVisibility(false)
+          }
+          break
+        case 'current_terminal_content':
+          // {content: '...', terminalId: '',sessionId: '',viewId: '',viewName: ''}
+          this.$log.debug('current_terminal_content', msg)
+          this.currentTerminalContent = msg.data
+          this.$refs.component?.onTerminalContext(msg.data)
+          break
+      }
+    },
+    setPanelVisibility(show) {
+      const drawer = this.$refs.drawer
+      if (!drawer) {
+        this.pendingPanelVisibility = show
+        this.ensureApiModeReady()
+        return
+      }
+
+      if (drawer.show === show) {
+        this.postPanelState(show)
+        if (show) {
           this.initAssistant()
-          return
+          getInputFocus()
         }
-        const msg = event.data
-        switch (msg.name) {
-          case 'current_terminal_content':
-            // {content: '...', terminalId: '',sessionId: '',viewId: '',viewName: ''}
-            this.$log.debug('current_terminal_content', msg)
-            this.currentTerminalContent = msg.data
-            this.$refs.component?.onTerminalContext(msg.data)
-            break
-        }
-      })
+        return
+      }
+
+      drawer.show = show
+    },
+    postPanelState(open) {
+      window.parent.postMessage(
+        {
+          name: 'CHAT_PANEL_STATE',
+          data: {
+            open,
+            mode: this.expanded ? 'expanded' : 'compact'
+          }
+        },
+        window.location.origin
+      )
     },
     handleMoveMouseDown(event) {
       this.$refs.drawer.handleHeaderMoveDown(event)
@@ -167,7 +282,7 @@ export default {
       this.$refs.drawer.handleHeaderMoveUp(event)
     },
     onClose() {
-      this.$refs.drawer.show = false
+      this.setPanelVisibility(false)
     },
     expandFull() {
       this.updateExpandedState(true)
@@ -180,9 +295,12 @@ export default {
     savePanelSettings() {
       aiPannelLocalStorage.set('expanded', this.expanded)
     },
-    updateExpandedState(expanded) {
-      this.expanded = expanded
-      this.height = expanded ? '100%' : '400px'
+    updateExpandedState(expanded, notify = true) {
+      this.expanded = !!expanded
+      this.height = this.expanded ? '100%' : '400px'
+      if (notify) {
+        this.postPanelState(this.$refs.drawer?.show ?? false)
+      }
     },
     onNewChat() {
       this.active = 'chat'
@@ -192,6 +310,7 @@ export default {
       })
     },
     onToggle(status) {
+      this.postPanelState(status)
       if (status) {
         this.initAssistant()
         getInputFocus()

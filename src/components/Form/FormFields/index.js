@@ -20,6 +20,8 @@ import NestedObjectSelect2 from './NestedObjectSelect2.vue'
 import DatetimeRangePicker from './DatetimeRangePicker.vue'
 import JSONManyToManySelect from './JSONManyToManySelect/index.vue'
 import PasswordRule from './PasswordRule.vue'
+import ResourceSelect from './ResourceSelect/index.vue'
+import TreeResourceSelect from './TreeResourceSelect/index.vue'
 
 export default {
   Link,
@@ -43,7 +45,9 @@ export default {
   BoolTextReadonly,
   NestedObjectSelect2,
   DatetimeRangePicker,
-  JSONManyToManySelect
+  JSONManyToManySelect,
+  ResourceSelect,
+  TreeResourceSelect
 }
 
 export {
@@ -68,5 +72,7 @@ export {
   BoolTextReadonly,
   NestedObjectSelect2,
   DatetimeRangePicker,
-  JSONManyToManySelect
+  JSONManyToManySelect,
+  ResourceSelect,
+  TreeResourceSelect
 }

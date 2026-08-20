@@ -34,8 +34,8 @@ export default {
       type: Object,
       default: () => {
         return {
-          min: ['id', 'actions'],
-          default: ['id', 'user', 'asset', 'account', 'protocol', 'date_start', 'actions']
+          min: ['number', 'actions'],
+          default: ['number', 'user', 'asset', 'account', 'protocol', 'date_start', 'actions']
         }
       }
     },
@@ -54,11 +54,13 @@ export default {
       tableConfig: {
         url: this.url,
         columnsExclude: ['terminal', ...this.columnsExclude],
+        columnsAdd: ['number'],
         columnsShow: this.columnsShow,
         columnsMeta: {
-          id: {
-            prop: 'id',
-            label: this.$t('Number'),
+          number: {
+            prop: 'number',
+            type: 'index',
+            label: this.$t('RowNumber'),
             width: '80px',
             align: 'center',
             formatter: DetailFormatter,
@@ -186,8 +188,7 @@ export default {
         hasReportExport: true,
         hasDatePicker: true,
         searchConfig: {
-          getUrlQuery: false,
-          exclude: ['is_finished']
+          getUrlQuery: false
         }
       }
     }

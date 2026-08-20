@@ -85,10 +85,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-        'currentUserIsSuperAdmin',
-        'publicSettings'
-      ])
+    ...mapGetters(['currentUserIsSuperAdmin', 'publicSettings'])
   },
   methods: {
     handleTabClick(tab) {

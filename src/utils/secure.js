@@ -85,6 +85,8 @@ export function rsaEncrypt(text, pubKey) {
   return jsEncrypt.encrypt(text)
 }
 
+const encryptedSeparator = '::encrypted::'
+
 export function getCookie(name) {
   return VueCookie.getCookie(name)
 }
@@ -103,7 +105,7 @@ export function encryptPassword(password) {
   const rsaPublicKey = atob(rsaPublicKeyText)
   const keyCipher = rsaEncrypt(aesKey, rsaPublicKey)
   const passwordCipher = aesEncrypt(String(password), aesKey)
-  return `${keyCipher}:${passwordCipher}`
+  return `${keyCipher}${encryptedSeparator}${passwordCipher}`
 }
 
 window.aesEncrypt = aesEncrypt

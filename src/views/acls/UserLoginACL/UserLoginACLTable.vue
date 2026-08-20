@@ -63,13 +63,28 @@ export default {
         hasImport: false,
         hasMoreActions: false,
         createRoute: 'UserLoginACLCreate'
-      }
+      },
+      activatedReloadTimer: null,
+      hasBeenDeactivated: false
     }
   },
   activated() {
-    setTimeout(() => {
-      this.$refs.listTable.reloadTable()
+    if (!this.hasBeenDeactivated) {
+      return
+    }
+    clearTimeout(this.activatedReloadTimer)
+    this.activatedReloadTimer = setTimeout(() => {
+      this.$refs.listTable?.reloadTable?.()
     }, 300)
+  },
+  deactivated() {
+    this.hasBeenDeactivated = true
+    clearTimeout(this.activatedReloadTimer)
+    this.activatedReloadTimer = null
+  },
+  beforeUnmount() {
+    clearTimeout(this.activatedReloadTimer)
+    this.activatedReloadTimer = null
   }
 }
 </script>

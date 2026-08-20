@@ -5,8 +5,36 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { encryptPassword } from '@/utils/session-encrypt'
-import { getUpdateObjURL, setUrlParam, getBrowserQueryParam } from '@/utils/common/index'
-import { assetFieldsMeta } from '@/views/assets/const'
+import { getUpdateObjURL, setUrlParam, getSelectedAssetNodeId } from '@/utils/common/index'
+import { assetFieldsMeta, getWebAssetSettingDefaults } from '@/views/assets/const'
+
+const getRelatedId = (value) => value?.pk ?? value?.id ?? value?.value ?? value
+
+// Node 的 value 字段是显示名，不能当作 id；只取真正的主键。
+const getNodeId = (value) => {
+  if (value && typeof value === 'object') {
+    return value.id ?? value.pk ?? null
+  }
+  return value
+}
+
+const normalizeNodeIds = (nodes) => {
+  if (!Array.isArray(nodes)) {
+    return []
+  }
+  return nodes
+    .map((item) => getNodeId(item))
+    .filter((item) => item !== undefined && item !== null && item !== '')
+}
+
+const hasRemovedPlatformProtocol = (selectedProtocols, platformProtocols) => {
+  const selectedNames = new Set(
+    (Array.isArray(selectedProtocols) ? selectedProtocols : []).map(({ name }) => name)
+  )
+  return (Array.isArray(platformProtocols) ? platformProtocols : []).some(
+    ({ name }) => !selectedNames.has(name)
+  )
+}
 
 export default {
   components: { GenericCreateUpdatePage },
@@ -51,7 +79,7 @@ export default {
       initPromise: null,
       pendingInit: false,
       // 在 meta 中，可能改变 platform id
-      platformID: this.$route.query.platform || '',
+      platformID: this.$context.get('platform'),
       meta: {},
       iConfig: {},
       defaultConfig: {
@@ -71,12 +99,25 @@ export default {
         fieldsMeta: {},
         performSubmit(validValues) {
           let url = this.url
-          const { id = '' } = this.$route.params
+          const id = this.$context.get('id')
           const values = _.cloneDeep(validValues)
           const submitMethod = id ? 'put' : 'post'
 
-          if (values.nodes && values.nodes.length === 0) {
-            delete values['nodes']
+          // 后端 validate_nodes：nodes 为空会落到组织根节点。
+          // 更新时表单里的 nodes 可能仍是对象列表、或未触碰字段时被清空成 []，
+          // 这里统一成主键列表，并在 PUT 时空值回退到初始节点，避免误挪到根节点。
+          const initialNodeIds = normalizeNodeIds(this.initialFormValue?.nodes)
+          let nodeIds = normalizeNodeIds(values.nodes)
+          if (submitMethod === 'put' && nodeIds.length === 0 && initialNodeIds.length > 0) {
+            nodeIds = initialNodeIds
+          }
+          if (nodeIds.length > 0) {
+            values.nodes = nodeIds
+          } else if (submitMethod === 'put') {
+            // 保持与历史行为一致：PUT 不显式提交空 nodes，避免后端写回 org_root
+            delete values.nodes
+          } else {
+            values.nodes = nodeIds
           }
 
           if (submitMethod === 'put') {
@@ -89,7 +130,27 @@ export default {
               return item
             })
           }
-          return this.$axios[submitMethod](url, values)
+
+          const initialPlatformId = getRelatedId(this.initialFormValue?.platform)
+          const selectedPlatformId = getRelatedId(values.platform)
+          const platformChanged =
+            submitMethod === 'put' && String(initialPlatformId) !== String(selectedPlatformId)
+          const platformProtocols = this.fieldsMeta?.protocols?.el?.choices
+          const shouldSyncProtocols =
+            platformChanged && hasRemovedPlatformProtocol(values.protocols, platformProtocols)
+
+          const request = this.$axios[submitMethod](url, values)
+          if (!shouldSyncProtocols) {
+            return request
+          }
+
+          // 平台切换时后端会补齐新平台协议；待平台更新完成后再同步用户最终选择。
+          // 返回完整 Promise 链，确保抽屉关闭和列表刷新发生在第二次请求之后。
+          return request.then(() =>
+            this.$axios.patch(url, {
+              protocols: values.protocols
+            })
+          )
         }
       }
     }
@@ -127,7 +188,7 @@ export default {
       const { addFields, addFieldsMeta, defaultConfig } = this
       defaultConfig.fieldsMeta = assetFieldsMeta(this)
       let url = this.url
-      const id = this.$route.params.id
+      const id = this.$context.get('id')
       if (!id) {
         url = setUrlParam(url, 'platform', this.platformID)
       }
@@ -152,13 +213,20 @@ export default {
       }
       this.iConfig = config
     },
-    async setInitial() {
+    async setInitial(requestedPlatformID) {
       const { defaultConfig } = this
-      const nodeId = getBrowserQueryParam('node_id')
+      const nodeId = getSelectedAssetNodeId(this)
       const nodesInitial = nodeId ? [nodeId] : []
-      const platformId = this.platformID || 'Linux'
+      const platformId = requestedPlatformID || this.platformID || 'Linux'
       const url = `/api/v1/assets/platforms/${platformId}/`
-      this.platform = await this.$axios.get(url)
+      const platform = await this.$axios.get(url)
+      if (
+        requestedPlatformID !== undefined &&
+        String(this.platformID) !== String(requestedPlatformID)
+      ) {
+        return false
+      }
+      this.platform = platform
       const initial = {
         labels: [],
         is_active: true,
@@ -166,10 +234,14 @@ export default {
         platform: parseInt(this.platform.id),
         protocols: []
       }
+      if (this.platform.category?.value === 'web') {
+        Object.assign(initial, getWebAssetSettingDefaults(this.platform.protocols))
+      }
       if (this.updateInitial) {
         await this.updateInitial(initial)
       }
       this.iConfig.initial = Object.assign({}, initial, defaultConfig.initial)
+      return true
     },
     async setPlatformConstrains() {
       const { platform } = this
@@ -184,6 +256,7 @@ export default {
       })
       const protocolChoices = this.iConfig.fieldsMeta.protocols.el.choices
       protocolChoices.splice(0, protocolChoices.length, ...protocols)
+      this.iConfig.fieldsMeta.protocols.el.key = `asset-protocols-${platform.id}`
       this.iConfig.fieldsMeta.accounts.el.platform = platform
     }
   }

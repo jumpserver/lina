@@ -1,7 +1,7 @@
 import store from '@/store'
 import { Select2 } from '@/components/Form/FormFields'
 import i18n from '@/i18n/i18n'
-import { ObjectLocalStorage } from '@/utils/common/index'
+import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
 import { getAssetUrl } from '@/utils/assets'
 
 const t = i18n.global.t.bind(i18n.global)

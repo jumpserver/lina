@@ -66,9 +66,10 @@ export default {
       flag: false,
       componentKey: 1,
       renderVersion: 0,
+      activeTreeName: '',
       activeTreeSetting: {},
       showText: true,
-      keyMap: {}
+      hideOverflowingText: null
     }
   },
   computed: {
@@ -78,7 +79,6 @@ export default {
       },
       set(item) {
         this.$emit('update:activeMenu', item)
-        this.changeTreeSetting(item)
       }
     },
     tabIndices() {
@@ -98,19 +98,29 @@ export default {
     }
   },
   async mounted() {
-    this.iActiveMenu = await this.getPropActiveTab()
+    const activeMenu = await this.getPropActiveTab()
+    if (activeMenu !== this.activeMenu) {
+      this.$emit('update:activeMenu', activeMenu)
+    }
+    this.changeTreeSetting(activeMenu)
     this.hiddenTextIfNeed()
+  },
+  beforeUnmount() {
+    if (this.hideOverflowingText) {
+      window.removeEventListener('resize', this.hideOverflowingText)
+      this.hideOverflowingText.cancel?.()
+    }
   },
   methods: {
     hiddenTextIfNeed() {
       const vm = this
-      const hideOverflowingText = _.debounce(function () {
+      this.hideOverflowingText = _.debounce(function () {
         const tabs = document.querySelector('.tree-tab .el-tabs__nav-wrap.is-scrollable')
         vm.showText = !tabs
       }, 800)
 
-      hideOverflowingText()
-      window.addEventListener('resize', hideOverflowingText)
+      this.hideOverflowingText()
+      window.addEventListener('resize', this.hideOverflowingText)
     },
     hideRMenu() {
       this.$refs.AutoDataZTree?.hideRMenu()
@@ -128,12 +138,7 @@ export default {
       this.$emit('urlChange', url)
     },
     handleTabClick(tab) {
-      this.componentKey = this.keyMap[tab.name]
-      if (!this.componentKey) {
-        this.componentKey = this.$route.name + '_' + tab.name
-      }
       this.$emit('tab-click', tab)
-      this.$emit('update:activeMenu', tab.name)
       this.$cookie.set(ACTIVE_TREE_TAB_KEY, tab.name, 1)
 
       if (this.$route?.query?.[ACTIVE_TREE_TAB_KEY]) {
@@ -146,20 +151,23 @@ export default {
       }
     },
     changeTreeSetting(tabName) {
-      const vm = this
-      try {
-        this.flag = false
-        for (const tab of this.submenu) {
-          if (tab.name === tabName) {
-            vm.activeTreeSetting = tab.treeSetting
-            this.renderVersion += 1
-            this.componentKey = `${this.$route.name || 'tree'}_${tabName}_${this.renderVersion}`
-            break
-          }
-        }
-      } finally {
-        this.flag = true
+      const tab = this.submenu.find((item) => item.name === tabName)
+      if (!tab) {
+        return
       }
+      if (
+        this.flag &&
+        this.activeTreeName === tabName &&
+        this.activeTreeSetting === tab.treeSetting
+      ) {
+        return
+      }
+
+      this.activeTreeName = tabName
+      this.activeTreeSetting = tab.treeSetting
+      this.renderVersion += 1
+      this.componentKey = `${this.$route.name || 'tree'}_${tabName}_${this.renderVersion}`
+      this.flag = true
     },
     getPropActiveTab() {
       let activeTab = ''

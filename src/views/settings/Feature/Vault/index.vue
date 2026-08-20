@@ -16,6 +16,7 @@ import { GenericCreateUpdateForm } from '@/layout/components'
 import IBox from '@/components/Common/IBox/index.vue'
 import { openTaskPage } from '@/utils/jms/index'
 import store from '@/store'
+import OpenBaoKV from './OpenBao.vue'
 import HashiCorpKV from './HCP.vue'
 import AzureKV from './Azure.vue'
 import AwsSM from './Aws.vue'
@@ -37,24 +38,29 @@ export default {
           loading: false,
           disabled: !store.getters.publicSettings['VAULT_ENABLED'],
           callback: function (value, form, btn) {
-            btn.loading = true
-            vm.$axios
-              .post('/api/v1/settings/vault/sync/', value)
-              .then((res) => {
-                openTaskPage(res['task'])
-              })
-              .catch(() => {
-                vm.$log.error('err occur')
-              })
-              .finally(() => {
-                btn.loading = false
-              })
+            vm.runVaultTask('/api/v1/settings/vault/sync/', value, btn)
+          }
+        },
+        {
+          title: this.$t('RestoreToDatabase'),
+          type: 'warning',
+          plain: true,
+          loading: false,
+          disabled: !store.getters.publicSettings['VAULT_ENABLED'],
+          callback: function (value, form, btn) {
+            vm.$confirm(vm.$t('RestoreVaultConfirm'), vm.$t('RestoreToDatabase'), {
+              confirmButtonText: vm.$t('Confirm'),
+              cancelButtonText: vm.$t('Cancel'),
+              type: 'warning'
+            }).then(() => {
+              vm.runVaultTask('/api/v1/settings/vault/restore/', value, btn)
+            })
           }
         }
       ],
       fields: [
         [this.$t('Basic'), ['VAULT_ENABLED', 'VAULT_BACKEND', 'HISTORY_ACCOUNT_CLEAN_LIMIT']],
-        [this.$t('Provider'), ['HCP', 'AZURE', 'AWS']]
+        [this.$t('Provider'), ['OPENBAO', 'HCP', 'AZURE', 'AWS']]
       ],
       fieldsMeta: {
         HISTORY_ACCOUNT_CLEAN_LIMIT: {
@@ -71,6 +77,13 @@ export default {
             return !formValue.VAULT_ENABLED || formValue['VAULT_BACKEND'] === 'local'
           },
           disabled: true
+        },
+        OPENBAO: {
+          label: this.$t('OpenBao'),
+          component: OpenBaoKV,
+          hidden: (formValue) => {
+            return !formValue.VAULT_ENABLED || formValue['VAULT_BACKEND'] !== 'openbao'
+          }
         },
         HCP: {
           label: this.$t('HashicorpVault'),
@@ -97,6 +110,22 @@ export default {
       submitMethod() {
         return 'patch'
       }
+    }
+  },
+  methods: {
+    runVaultTask(url, value, btn) {
+      btn.loading = true
+      this.$axios
+        .post(url, value)
+        .then((res) => {
+          openTaskPage(res['task'])
+        })
+        .catch(() => {
+          this.$log.error('err occur')
+        })
+        .finally(() => {
+          btn.loading = false
+        })
     }
   }
 }

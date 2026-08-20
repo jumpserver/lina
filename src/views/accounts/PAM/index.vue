@@ -22,14 +22,14 @@ export default {
           {
             name: 'account',
             title: this.$t('Accounts'),
-            icon: 'fa-key',
+            icon: 'fa-id-card',
             hidden: !this.$hasPerm('accounts.view_account'),
             component: () => import('@/views/accounts/PAM/AccountList.vue')
           },
           {
             name: 'asset',
-            title: this.$t('Assets'),
-            icon: 'fa-inbox',
+            title: this.$t('AssetManagement'),
+            icon: 'fa-solid fa-inbox',
             hidden: !this.$hasPerm('assets.view_asset'),
             component: () => import('@/views/accounts/PAM/AssetList.vue')
           },

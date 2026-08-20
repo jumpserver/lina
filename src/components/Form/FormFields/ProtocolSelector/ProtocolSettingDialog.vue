@@ -35,6 +35,7 @@
 <script>
 import { AutoDataForm, Dialog } from '@/components'
 import JsonEditor from '@/components/Form/FormFields/JsonEditor.vue'
+import { getRuntimeActionMeta } from '@/libs/context/runtime'
 
 export default {
   name: 'ProtocolSetting',
@@ -60,7 +61,7 @@ export default {
   },
   data() {
     const vm = this
-    const platform = this.$route.query.platform
+    const platform = this.$context.get('platform')
     return {
       platform: '',
       loading: true,
@@ -107,7 +108,7 @@ export default {
   },
   async mounted() {
     try {
-      const drawActionMeta = await this.$store.dispatch('common/getDrawerActionMeta')
+      const drawActionMeta = await getRuntimeActionMeta(this)
       const platform = drawActionMeta?.row?.platform?.id
       const name = drawActionMeta?.row?.platform?.name
 

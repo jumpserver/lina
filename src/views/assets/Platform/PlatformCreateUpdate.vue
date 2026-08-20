@@ -124,19 +124,21 @@ export default {
       this.initial.su_method = this.suMethodLimits[0]
     },
     async setCategories() {
-      const category = this.$route.query.category
-      const type = this.$route.query.type
+      const category = this.$context.get('category')
+      const type = this.$context.get('type')
       const state = await this.$store.dispatch('assets/getAssetCategories')
       this.fieldsMeta.category_type.el.options = state.assetCategoriesCascader
       if (category && type) {
         this.initial.category_type = [category, type]
       }
-      this.url += `?category=${category}&type=${type}`
+      if (category && type) {
+        this.url += `?category=${category}&type=${type}`
+      }
       return new Promise((resolve, reject) => resolve(true))
     },
     async setConstraints() {
-      const category = this.$route.query.category
-      const type = this.$route.query.type
+      const category = this.$context.get('category')
+      const type = this.$context.get('type')
       const url = `/api/v1/assets/categories/constraints/?category=${category}&type=${type}`
       const constraints = await this.$axios.get(url)
       this.defaultOptions = constraints

@@ -1,31 +1,26 @@
 import { constantRoutes } from '@/router'
 import store from '@/store'
 import { getAssetUrlOr } from '@/utils/assets'
+import { checkPermission, getResourceNameByPath, hasPermission } from './permission'
 
-let openedTaskWindow = null // 保存已打开的窗口对象
+export { checkPermission, getResourceNameByPath, hasPermission } from './permission'
 
-function openOrReuseWindow(
-  url,
-  windowName = 'task',
-  windowFeatures = '',
-  iWidth = 900,
-  iHeight = 600
-) {
-  const iTop = (window.screen.height - 30 - iHeight) / 2
-  const iLeft = (window.screen.width - 10 - iWidth) / 2
+let taskWindowOffset = 0
 
-  // 检查窗口是否已经打开
-  if (openedTaskWindow && !openedTaskWindow.closed) {
-    openedTaskWindow.location.href = url // 如果窗口未关闭，更新其地址
-    openedTaskWindow.focus() // 将窗口置于前台
-  } else {
-    // 如果窗口未打开或已关闭，创建新窗口
-    openedTaskWindow = window.open(
-      url,
-      windowName,
-      'height=' + iHeight + ',width=' + iWidth + ',top=' + iTop + ',left=' + iLeft
-    )
-  }
+function openTaskWindow(url, iWidth = 900, iHeight = 600) {
+  const offset = taskWindowOffset * 30
+  const maxTop = Math.max(0, window.screen.height - iHeight)
+  const maxLeft = Math.max(0, window.screen.width - iWidth)
+  const iTop = Math.min(maxTop, Math.max(0, (maxTop - 30) / 2 + offset))
+  const iLeft = Math.min(maxLeft, Math.max(0, (maxLeft - 10) / 2 + offset))
+
+  taskWindowOffset = (taskWindowOffset + 1) % 6
+
+  window.open(
+    url,
+    '_blank',
+    'height=' + iHeight + ',width=' + iWidth + ',top=' + iTop + ',left=' + iLeft
+  )
 }
 
 export function openTaskPage(taskId, taskType, taskUrl) {
@@ -33,42 +28,7 @@ export function openTaskPage(taskId, taskType, taskUrl) {
   if (!taskUrl) {
     taskUrl = `/core/ops/${taskType}/task/${taskId}/log/?type=${taskType}`
   }
-  openOrReuseWindow(taskUrl)
-}
-
-export function checkPermission(permsRequired, permsAll) {
-  if (!permsRequired || permsRequired.length === 0) {
-    return true
-  }
-  if (typeof permsRequired === 'string') {
-    permsRequired = [permsRequired]
-  }
-  return permsRequired.every((perm) => {
-    // 包含 | 是或的关系, 单独处理
-    if (perm.indexOf('|') === -1) {
-      return permsAll.includes(perm)
-    }
-    const permOr = perm.split('|').map((item) => item.trim())
-    return permOr.some((perm) => {
-      return permsAll.includes(perm)
-    })
-  })
-}
-
-export function hasPermission(permsRequired) {
-  const permsAll = store.getters?.currentOrgPerms || []
-  return checkPermission(permsRequired, permsAll)
-}
-
-export function getResourceNameByPath(path) {
-  const pathSlice = path.split('/')
-  const pathValue = pathSlice[pathSlice.length - 1]
-
-  let resource = pathValue.replaceAll('-', '')
-  if (resource[resource.length - 1] === 's') {
-    resource = resource.slice(0, resource.length - 1)
-  }
-  return resource
+  openTaskWindow(taskUrl)
 }
 
 export function getResourceFromApiUrl(apiUrl) {

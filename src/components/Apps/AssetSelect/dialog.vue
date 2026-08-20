@@ -3,7 +3,7 @@
     v-bind="dialogAttrs"
     :close-on-click-modal="false"
     :visible="visible"
-    :title="$tc('Assets')"
+    :title="$tc('AssetManagement')"
     class="asset-dialog"
     top="2vh"
     width="1000px"

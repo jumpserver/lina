@@ -1,16 +1,16 @@
 <template>
   <Drawer
+    v-model:visible="iVisible"
     :destroy-on-close="true"
     :show-buttons="false"
     :title="$tc('CloudAccountUpdate')"
-    :visible="visible"
     class="drawer"
   >
     <IBox>
       <AuthPanel
         :object="object"
         :provider="object.provider.value"
-        :visible="visible"
+        v-model:visible="iVisible"
         origin="update"
         @submit-success="onSubmitSuccess"
       />
@@ -22,6 +22,7 @@
 import AuthPanel from '@/views/assets/Cloud/Account/components/AuthPanel.vue'
 import Drawer from '@/components/Drawer/index.vue'
 import IBox from '@/components/Common/IBox/index.vue'
+import { useVModel } from '@/utils/vue/useVModel'
 
 export default {
   name: 'UpdateDialog',
@@ -37,6 +38,12 @@ export default {
     }
   },
   emits: ['update:visible', 'submitSuccess'],
+  setup(props, { emit }) {
+    const iVisible = useVModel(props, emit, 'visible')
+    return {
+      iVisible
+    }
+  },
   methods: {
     onSubmitSuccess() {
       this.$emit('submitSuccess')

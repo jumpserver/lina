@@ -12,6 +12,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter.vue'
 import rules from '@/components/Form/DataForm/rules'
+import { ResourceSelect } from '@/components/Form/FormFields'
 import { userJSONSelectMeta } from '@/views/users/const'
 import { assetJSONSelectMeta } from '@/views/assets/const'
 
@@ -49,27 +50,23 @@ export default {
         },
         action: {},
         command_groups: {
+          type: 'resourceSelect',
+          component: ResourceSelect,
           el: {
             value: [],
-            ajax: {
-              url: '/api/v1/acls/command-groups/?fields_size=mini',
-              transformOption: (item) => {
-                return { label: item.name, value: item.id }
-              }
-            }
+            url: '/api/v1/acls/command-groups/?fields_size=mini',
+            resourceName: this.$tc('CommandGroup', 2)
           }
         },
         reviewers: {
+          type: 'resourceSelect',
+          component: ResourceSelect,
           hidden: (item) => !['review', 'warning', 'notify_and_warn'].includes(item.action),
           rules: [rules.RequiredChange],
           el: {
             value: [],
-            ajax: {
-              url: '/api/v1/users/users/?fields_size=mini',
-              transformOption: (item) => {
-                return { label: item.name + '(' + item.username + ')', value: item.id }
-              }
-            }
+            url: '/api/v1/users/users/?fields_size=mini',
+            resourceName: this.$t('Users')
           }
         },
         is_active: {

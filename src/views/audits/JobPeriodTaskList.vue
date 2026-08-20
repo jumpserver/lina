@@ -60,8 +60,7 @@ export default {
             )
           },
           is_periodic_display: {
-            width: '100px',
-            label: this.$t('Periodic')
+            width: '100px'
           },
           is_periodic: {
             width: '140px',

@@ -2,7 +2,13 @@ import i18n from '@/i18n/i18n'
 import ProtocolSelector from '@/components/Form/FormFields/ProtocolSelector'
 import AssetAccounts from '@/views/assets/Asset/AssetCreateUpdate/components/AssetAccounts'
 import rules from '@/components/Form/DataForm/rules'
-import { JSONManyToManySelect, NestedObjectSelect2, Select2 } from '@/components/Form/FormFields'
+import { ColorSwatchFormatter } from '@/components/Table/TableFormatters'
+import {
+  JSONManyToManySelect,
+  ResourceSelect,
+  Select2,
+  TreeResourceSelect
+} from '@/components/Form/FormFields'
 import { message } from '@/utils/vue/message'
 
 export const filterSelectValues = (values) => {
@@ -26,51 +32,101 @@ export const filterSelectValues = (values) => {
   return selects
 }
 
-function updatePlatformProtocols(vm, platformType, updateForm, platformChanged = false) {
-  setTimeout(
-    () =>
-      vm.init().then(() => {
-        const drawerAction = vm.$store.state.common.drawerActionMeta?.action
-        const isCreate =
-          !vm.$route.params.id &&
-          vm.$route.query.clone_from === undefined &&
-          drawerAction !== 'clone'
-        const needModify = isCreate || platformChanged
-        const platformProtocols = vm.platform.protocols
-        if (!needModify) return
-        if (platformType === 'website') {
-          const setting = Array.isArray(platformProtocols)
-            ? platformProtocols[0].setting
-            : platformProtocols.setting
-          updateForm({
-            autofill: setting.autofill ? setting.autofill : 'basic',
-            password_selector: setting.password_selector,
-            script: setting.script,
-            submit_selector: setting.submit_selector,
-            username_selector: setting.username_selector
-          })
-        }
-        // 这里不能清空，比如 gateway 切换时，protocol 没有变化，就会出现 bug, tapd: 1053282
-        // updateForm({ protocols: [] })
-        vm.iConfig.fieldsMeta.protocols.el.choices = platformProtocols
-      }),
-    100
+export const reloadPlatformProtocols = (platformProtocols, currentProtocols) => {
+  const currentByName = new Map(
+    (Array.isArray(currentProtocols) ? currentProtocols : []).map((protocol) => [
+      protocol.name,
+      protocol
+    ])
   )
+
+  return (Array.isArray(platformProtocols) ? platformProtocols : []).map(({ name, port }) => ({
+    name,
+    port: currentByName.get(name)?.port ?? port
+  }))
+}
+
+export const getWebAssetSettingDefaults = (platformProtocols) => {
+  const protocols = Array.isArray(platformProtocols) ? platformProtocols : [platformProtocols]
+  const protocol =
+    protocols.find((item) => item?.name === 'http') ||
+    protocols.find((item) => item?.primary) ||
+    protocols[0]
+  const setting = protocol?.setting
+  if (!setting) {
+    return {}
+  }
+  return {
+    autofill: setting.autofill || 'basic',
+    password_selector: setting.password_selector,
+    script: setting.script,
+    submit_selector: setting.submit_selector,
+    username_selector: setting.username_selector
+  }
+}
+
+async function updatePlatformProtocols(
+  vm,
+  platformCategory,
+  updateForm,
+  platformChanged,
+  currentProtocols,
+  isLatest
+) {
+  const requestedPlatformID = vm.platformID
+  const initialized = await vm.setInitial(requestedPlatformID)
+  if (!initialized || !isLatest() || String(vm.platformID) !== String(requestedPlatformID)) {
+    return
+  }
+
+  await vm.setPlatformConstrains()
+  if (!isLatest()) return
+  const platformProtocols = vm.platform.protocols || []
+
+  const formUpdates = {}
+  if (platformChanged) {
+    formUpdates.protocols = reloadPlatformProtocols(platformProtocols, currentProtocols)
+  }
+
+  const isCreate = !vm.$context.get('id') && !vm.$context.get('clone_from')
+  if (platformCategory === 'web' && (isCreate || platformChanged)) {
+    Object.assign(formUpdates, getWebAssetSettingDefaults(platformProtocols))
+  }
+
+  if (Object.keys(formUpdates).length > 0) {
+    updateForm(formUpdates)
+  }
 }
 
 export const assetFieldsMeta = (vm, category, type) => {
-  const platformCategory = category || vm.$route.query.category
-  const platformType = type || vm.$route.query.type
+  const platformCategory = category || vm.$context.get('category')
+  const platformType = type || vm.$context.get('type')
   const platformProtocols = []
   const secretTypes = []
   const asset = { address: 'https://example:8443' }
-  const updatePlatform = _.debounce(([event], updateForm) => {
-    const pk = event?.pk
-    const platformChanged = pk !== undefined && String(pk) !== String(vm.platformID)
+  let selectedProtocols = []
+  let refreshSequence = 0
+  const updatePlatform = _.debounce(async ([event], updateForm) => {
+    // Select2 emits the selected id in Vue 3, while older form controls emitted
+    // the selected option object. Accept both shapes so the platform detail and
+    // its protocol choices are refreshed after a platform change.
+    const pk = event?.pk ?? event?.id ?? event?.value ?? event
+    const hasPlatform = pk !== undefined && pk !== null && pk !== ''
+    const platformChanged = hasPlatform && String(pk) !== String(vm.platformID)
+    const sequence = ++refreshSequence
     if (platformChanged) {
       vm.platformID = pk
     }
-    updatePlatformProtocols(vm, platformType, updateForm, platformChanged)
+    const currentProtocols =
+      selectedProtocols.length > 0 ? selectedProtocols : vm.iConfig.initial?.protocols
+    await updatePlatformProtocols(
+      vm,
+      platformCategory,
+      updateForm,
+      platformChanged,
+      currentProtocols,
+      () => sequence === refreshSequence
+    )
   }, 200)
   return {
     address: {
@@ -94,6 +150,9 @@ export const assetFieldsMeta = (vm, category, type) => {
       helpText: i18n.t('AssetProtocolHelpText'),
       on: {
         input: ([value]) => {
+          selectedProtocols = Array.isArray(value)
+            ? value.map(({ name, port }) => ({ name, port }))
+            : []
           const protocolSecretTypes = platformProtocols.reduce((pre, cur) => {
             pre[cur.name] = cur['secret_types']
             return pre
@@ -153,29 +212,31 @@ export const assetFieldsMeta = (vm, category, type) => {
       }
     },
     nodes: {
-      component: Select2,
+      type: 'treeResourceSelect',
+      component: TreeResourceSelect,
       rules: [rules.RequiredChange],
       el: {
-        multiple: true,
-        ajax: {
-          url: '/api/v1/assets/nodes/',
-          transformOption: (item) => {
-            return { label: `${item.full_value}`, value: item.id }
-          }
-        },
-        clearable: true
+        // 不要在 el 里写 value: []，会作为 prop 透传并在表单绑定时干扰节点回填
+        url: '/api/v1/assets/nodes/?fields_size=mini',
+        treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
+        resourceName: vm.$t('Nodes')
       }
     },
     labels: {
       name: 'labels',
-      type: 'm2m',
-      component: NestedObjectSelect2,
+      type: 'resourceSelect',
+      component: ResourceSelect,
       el: {
-        multiple: true,
         url: '/api/v1/labels/labels/',
-        ajax: {
-          transformOption: (item) => {
-            return { label: `${item.name}:${item.value}`, value: `${item.id}` }
+        resourceName: vm.$t('Labels'),
+        columns: ['name', 'id', 'value', 'color', 'comment'],
+        columnsShow: {
+          default: ['name', 'value', 'color', 'actions'],
+          min: ['name', 'actions']
+        },
+        columnsMeta: {
+          color: {
+            formatter: ColorSwatchFormatter
           }
         }
       }
@@ -223,9 +284,14 @@ export const assetJSONSelectMeta = (vm) => {
     component: JSONManyToManySelect,
     el: {
       value: [],
-      resource: vm.$t('Asset'),
+      resource: vm.$t('Assets'),
       select2: {
         url: '/api/v1/assets/assets/',
+        nodeFilter: {
+          treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
+          typeTreeUrl: '/api/v1/assets/nodes/category/tree/?count_resource=none',
+          includeDescendants: true
+        },
         ajax: {
           transformOption: (item) => {
             return { label: item.name + '(' + item.address + ')', value: item.id }

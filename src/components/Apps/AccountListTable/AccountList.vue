@@ -25,6 +25,7 @@
       :account="account"
       :add-template="addTemplate"
       :asset="iAsset"
+      :operation-flag="accountOperationFlag"
       :title="accountCreateUpdateTitle"
       @add="addAccountSuccess"
       @bulk-create-done="showBulkCreateResult($event)"
@@ -161,6 +162,9 @@ export default {
       showResultDialog: false,
       showAddDialog: false,
       showAddTemplateDialog: false,
+      activatedReloadTimer: null,
+      tabDeactivated: false,
+      accountOperationFlag: null,
       detailDrawer: () => import('@/views/accounts/Account/AccountDetail/index.vue'),
       createAccountResults: [],
       iAsset: this.asset,
@@ -427,8 +431,7 @@ export default {
         ],
         canBulkDelete: vm.$hasPerm('accounts.delete_account'),
         searchConfig: {
-          getUrlQuery: false,
-          exclude: ['asset']
+          getUrlQuery: false
         },
         hasSearch: true
       },
@@ -462,11 +465,18 @@ export default {
   activated() {
     // 由于组件嵌套较深，有可能导致 Error in activated hook: "TypeError: Cannot read properties of undefined (reading 'getList')" 的问题
     if (this.tabDeactivated) {
-      setTimeout(() => this.refresh(), 300)
+      clearTimeout(this.activatedReloadTimer)
+      this.activatedReloadTimer = setTimeout(() => this.refresh(), 300)
     }
   },
   deactivated() {
     this.tabDeactivated = true
+    clearTimeout(this.activatedReloadTimer)
+    this.activatedReloadTimer = null
+  },
+  beforeUnmount() {
+    clearTimeout(this.activatedReloadTimer)
+    this.activatedReloadTimer = null
   },
   methods: {
     setActions() {
@@ -484,7 +494,7 @@ export default {
       Object.assign(this.account, account)
     },
     addAccountSuccess() {
-      // Reflect.deleteProperty(this.$route.query, 'flag')
+      this.accountOperationFlag = null
       this.isUpdateAccount = false
       this.$refs.ListTable.reloadTable()
     },
@@ -516,6 +526,7 @@ export default {
 
       setTimeout(() => {
         this.showAddDialog = false
+        this.accountOperationFlag = null
       }, 800)
 
       setTimeout(() => {

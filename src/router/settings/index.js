@@ -1,11 +1,12 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
-import store from '@/store'
+import { getStore } from '@/store/registry'
 import { openJDMC } from '@/utils/jdmc'
 import { hasPermission } from '@/utils/jms'
 import { getFirstAccessibleChildPath } from '@/utils/vue'
 
-const getSettings = () => store.state.settings.publicSettings || {}
+const getSettings = () => getStore()?.state?.settings?.publicSettings || {}
+const useJDMCLicense = (settings) => settings?.JDMC_ENABLED && !settings?.KOTL_ENABLED
 
 const Setting = () => import('@/views/settings/index')
 const globalSubmenu = () => import('@/layout/globalOrg.vue')
@@ -49,7 +50,7 @@ export default {
         title: i18n.t('BasicSettings'),
         icon: 'basic',
         disableGoBack: true,
-        permissions: ['settings.change_other']
+        permissions: ['settings.change_basic']
       }
     },
     {
@@ -605,7 +606,7 @@ export default {
       component: () => import('@/views/settings/License'),
       beforeEnter: (_to, from, next) => {
         const settings = getSettings()
-        if (settings?.JDMC_ENABLED) {
+        if (useJDMCLicense(settings)) {
           openJDMC('/jdmc/sys-management/sys-auth')
           redirectAfterExternalAction(from, next)
         } else {
@@ -619,12 +620,10 @@ export default {
         externalAction: {
           type: 'jdmc',
           nextPath: '/jdmc/sys-management/sys-auth',
-          enabled: ({ settings }) => settings?.JDMC_ENABLED
+          enabled: ({ settings }) => useJDMCLicense(settings)
         },
-        // 开启 JDMC 但没有 rbac.view_jdmc 权限时，隐藏
-        // 开启 JDMC 且有 rbac.view_jdmc 权限时显示
-        // 没有开启 JDMC 时，显示
-        hidden: ({ settings }) => settings['JDMC_ENABLED'] && !hasPermission('rbac.view_jdmc')
+        // 旧 JDMC 许可证模式需要 rbac.view_jdmc 权限，KOTL 和普通模式均由 Core 管理
+        hidden: ({ settings }) => useJDMCLicense(settings) && !hasPermission('rbac.view_jdmc')
       }
     }
   ]

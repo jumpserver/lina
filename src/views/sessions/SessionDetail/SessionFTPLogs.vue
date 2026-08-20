@@ -12,10 +12,11 @@ export default {
     ListTable
   },
   data() {
+    const sessionId = this.$context.get('id')
     return {
       tableConfig: {
         hasSelection: false,
-        url: `/api/v1/audits/ftp-logs/?session=${this.$route.params.id}`,
+        url: `/api/v1/audits/ftp-logs/?session=${sessionId}`,
         columnsShow: {
           default: [
             'id',
@@ -78,13 +79,6 @@ export default {
         hasSearch: false,
         hasRightActions: false
       }
-    }
-  },
-  async mounted() {
-    const drawActionMeta = await this.$store.dispatch('common/getDrawerActionMeta')
-
-    if (drawActionMeta && drawActionMeta.id) {
-      this.tableConfig.url = `/api/v1/audits/ftp-logs/?session=${drawActionMeta.id}`
     }
   }
 }

@@ -13,6 +13,7 @@ import CopyableFormatter from './CopyableFormatter.vue'
 import StatusFormatter from './StatusFormatter.vue'
 import TagsFormatter from './TagsFormatter.vue'
 import LabelsFormatter from './LabelsFormatter.vue'
+import ColorSwatchFormatter from './ColorSwatchFormatter.vue'
 import ObjectRelatedFormatter from './ObjectRelatedFormatter.vue'
 import TwoTabFormatter from './TwoTabFormatter.vue'
 import ProtocolsFormatter from './ProtocolsFormatter.vue'
@@ -42,6 +43,7 @@ export default {
   ProtocolsFormatter,
   TagChoicesFormatter,
   LabelsFormatter,
+  ColorSwatchFormatter,
   SwitchFormatter,
   PlatformFormatter,
   AccountInfoFormatter,
@@ -70,6 +72,7 @@ export {
   ProtocolsFormatter,
   TagChoicesFormatter,
   LabelsFormatter,
+  ColorSwatchFormatter,
   SwitchFormatter,
   PlatformFormatter,
   DiscoverConfirmFormatter,

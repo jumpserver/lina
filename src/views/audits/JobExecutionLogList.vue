@@ -52,6 +52,7 @@ export default {
                 {
                   title: this.$t('View'),
                   name: 'logging',
+                  icon: 'fa-eye',
                   can: true,
                   type: 'primary',
                   callback: ({ row }) => {
@@ -110,15 +111,7 @@ export default {
         hasLeftActions: false,
         hasReportExport: true,
         hasDatePicker: true,
-        hasImport: false,
-        searchConfig: {
-          options: [
-            {
-              label: this.$t('User'),
-              value: 'creator__name'
-            }
-          ]
-        }
+        hasImport: false
       }
     }
   }

@@ -46,7 +46,6 @@
         <div class="transition-box" style="width: calc(100% - 7px)">
           <slot name="table">
             <ListTable
-              :key="componentKey"
               ref="ListTable"
               :header-actions="headerActions"
               :quick-filters="quickFilters"
@@ -71,6 +70,23 @@ import AutoDataZTree from '@/components/Tree/AutoDataZTree/index.vue'
 import { setUrlParam } from '@/utils/common/index'
 import { omitVueListeners, pickVueListeners } from '@/utils/vue'
 import TabTree from '../TabTree/index.vue'
+
+function buildInitialTableConfig(tableConfig, routeQuery = {}) {
+  const config = { ...tableConfig }
+  let url = config.url || ''
+
+  if (!url) {
+    return config
+  }
+  if (routeQuery.asset) {
+    url = setUrlParam(url, 'asset', routeQuery.asset)
+  }
+  if (routeQuery.node) {
+    url = setUrlParam(url, 'node', routeQuery.node)
+  }
+
+  return { ...config, url }
+}
 
 export default {
   name: 'TreeTable',
@@ -128,9 +144,11 @@ export default {
   },
   data() {
     return {
-      iTableConfig: this.tableConfig,
+      // The table must receive its final URL before its children mount. Updating
+      // it from mounted() caused AutoDataSearch and AutoDataTable to initialise
+      // once with the base URL and once again with empty asset/node parameters.
+      iTableConfig: buildInitialTableConfig(this.tableConfig, this.$route.query),
       iShowTree: this.showTree,
-      componentKey: 0,
       componentTreeKey: 0
     }
   },
@@ -158,33 +176,16 @@ export default {
       this.iShowTree = val
     }
   },
-  mounted() {
-    // debug(this.treeSetting)
-    this.initSetTableUrl()
-  },
   methods: {
-    initSetTableUrl() {
-      const { asset = '', node = '' } = this.$route.query || {}
-      let url = this.iTableConfig?.url || ''
-      if (url) {
-        url = setUrlParam(url, 'asset', asset)
-        url = setUrlParam(url, 'node', node)
-        this.iTableConfig = {
-          ...this.iTableConfig,
-          url
-        }
-      }
-    },
     handleUrlChange(url) {
+      if (!url || url === this.iTableConfig.url) {
+        return
+      }
       this.iTableConfig = {
         ...this.iTableConfig,
         url
       }
       this.$emit('urlChange', url)
-      this.forceRerender()
-    },
-    forceRerender() {
-      this.componentKey += 1
     },
     forceRerenderTree() {
       this.componentTreeKey += 1
