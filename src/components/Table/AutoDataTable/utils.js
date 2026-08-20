@@ -23,6 +23,7 @@ const compactColumnWidth = {
 }
 const defaultActionColumnWidth = '110px'
 const expandColumnWidth = '48px'
+const indexColumnWidth = '80px'
 
 function getColumnName(column) {
   return typeof column === 'object' ? column?.prop : column
@@ -428,9 +429,15 @@ export class TableColumnsGenerator {
     const isIdField = col.prop === 'id' || String(col.prop || '').includes('_id')
     const isAmountField = isAmountColumn(col)
     const isExpandColumn = col.type === 'expand'
+    const isIndexColumn = col.type === 'index'
     if (isExpandColumn) {
       const configuredWidth = col.width ?? col.minWidth
       col.width = configuredWidth || expandColumnWidth
+      delete col.minWidth
+      col.fitWidth = false
+    } else if (isIndexColumn) {
+      const configuredWidth = col.width ?? col.minWidth
+      col.width = configuredWidth || indexColumnWidth
       delete col.minWidth
       col.fitWidth = false
     } else if (isBooleanField) {
@@ -448,7 +455,8 @@ export class TableColumnsGenerator {
       col.fitWidth = false
     }
 
-    const isCompactColumn = col.prop === 'actions' || col.type === 'selection' || isExpandColumn
+    const isCompactColumn =
+      col.prop === 'actions' || col.type === 'selection' || isExpandColumn || isIndexColumn
     col.isCustomRender =
       col.isCustomRender ?? Boolean(col.formatter && typeof col.formatter !== 'function')
     if (!isCompactColumn && !isBooleanField && !isAmountField && !isIdField) {

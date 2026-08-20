@@ -53,13 +53,14 @@ export default {
       detailDrawer: () => import('../SessionDetail/index.vue'),
       tableConfig: {
         url: this.url,
-        columnsExclude: ['id', 'terminal', ...this.columnsExclude],
+        columnsExclude: ['terminal', ...this.columnsExclude],
         columnsAdd: ['number'],
         columnsShow: this.columnsShow,
         columnsMeta: {
           number: {
             prop: 'number',
-            label: this.$t('Number'),
+            type: 'index',
+            label: this.$t('RowNumber'),
             width: '80px',
             align: 'center',
             formatter: DetailFormatter,
