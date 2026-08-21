@@ -11,9 +11,7 @@
 </template>
 
 <script>
-// eslint-disable-next-line no-unused-vars
-import * as echarts from 'echarts'
-import { mix } from '@/utils/theme/color'
+import { colorToRgba, getCssVar } from '@/utils/theme/color'
 import Echart from '@/components/Dashboard/Echart.vue'
 
 export default {
@@ -56,22 +54,11 @@ export default {
     }
   },
   computed: {
-    mixColors() {
-      const documentStyle = document.documentElement.style
-      const primary = documentStyle.getPropertyValue('--color-primary')
-      const colorValue = primary.replace(/#/g, '')
-      const TwoLevelColor = mix(colorValue, 'ffffff', 38)
-      const ThreeLevelColor = mix(colorValue, 'ffffff', 20)
-      const shadowColor = mix(colorValue, 'ffffff', 1)
-      return {
-        primary,
-        TwoLevelColor,
-        ThreeLevelColor,
-        shadowColor
-      }
-    },
     options() {
-      const { primary, TwoLevelColor, ThreeLevelColor, shadowColor } = this.mixColors
+      const primary = getCssVar('--color-primary')
+      const secondary = getCssVar('--color-warning')
+      const textSecondary = getCssVar('--color-text-secondary')
+      const border = getCssVar('--color-border')
       return {
         title: {
           show: false
@@ -81,9 +68,10 @@ export default {
           axisPointer: {
             type: 'cross',
             label: {
-              backgroundColor: '#6a7985'
+              backgroundColor: getCssVar('--color-icon-primary')
             }
-          }
+          },
+          appendToBody: true
         },
         legend: {
           top: 0,
@@ -92,7 +80,11 @@ export default {
           // 图例标记的图形宽度
           itemWidth: 10,
           itemHeight: 10,
-          itemGap: 12
+          itemGap: 12,
+          textStyle: {
+            color: textSecondary,
+            fontSize: 12
+          }
         },
         grid: {
           left: '3%',
@@ -101,18 +93,18 @@ export default {
           bottom: 8,
           containLabel: true
         },
-        color: [primary, '#F3B44B'],
+        color: [primary, secondary],
         xAxis: [
           {
             type: 'category',
             boundaryGap: false,
             axisLine: {
               lineStyle: {
-                color: '#8F959E'
+                color: border
               }
             },
             axisLabel: {
-              color: '#8F959E'
+              color: textSecondary
             },
             axisTick: {
               show: false
@@ -127,11 +119,11 @@ export default {
             axisLine: {
               show: false,
               lineStyle: {
-                color: '#fff'
+                color: border
               }
             },
             axisLabel: {
-              color: '#8F959E'
+              color: textSecondary
             },
             axisTick: {
               show: false
@@ -140,7 +132,7 @@ export default {
             splitLine: {
               show: true,
               lineStyle: {
-                color: '#EFF0F1'
+                color: border
               }
             }
           }
@@ -152,31 +144,13 @@ export default {
             name: this.primaryName,
             type: 'line',
             smooth: true,
+            symbol: 'circle',
+            symbolSize: 5,
+            lineStyle: {
+              width: 2
+            },
             areaStyle: {
-              // 区域填充样式
-              color: new echarts.graphic.LinearGradient(
-                0,
-                0,
-                0,
-                1,
-                [
-                  {
-                    offset: 0,
-                    color: primary
-                  },
-                  {
-                    offset: 0.6,
-                    color: TwoLevelColor
-                  },
-                  {
-                    offset: 0.8,
-                    color: ThreeLevelColor
-                  }
-                ],
-                false
-              ),
-              shadowColor: shadowColor,
-              shadowBlur: 5
+              color: colorToRgba(primary, 0.12)
             },
             data: this.primaryData
           },
@@ -184,31 +158,13 @@ export default {
             name: this.secondaryName,
             type: 'line',
             smooth: true,
+            symbol: 'circle',
+            symbolSize: 5,
+            lineStyle: {
+              width: 2
+            },
             areaStyle: {
-              // 区域填充样式
-              color: new echarts.graphic.LinearGradient(
-                0,
-                0,
-                0,
-                1,
-                [
-                  {
-                    offset: 0,
-                    color: 'rgba(249, 199, 79, 0.6)'
-                  },
-                  {
-                    offset: 0.6,
-                    color: 'rgba(249, 199, 79, 0.2)'
-                  },
-                  {
-                    offset: 0.8,
-                    color: 'rgba(249, 199, 79, 0.1)'
-                  }
-                ],
-                false
-              ),
-              shadowColor: 'rgba(249, 199, 79, 0.1)',
-              shadowBlur: 6
+              color: colorToRgba(secondary, 0.12)
             },
             data: this.secondaryData
           }

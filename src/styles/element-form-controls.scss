@@ -68,6 +68,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    max-width: 100%;
     min-height: 30px;
   }
 
@@ -75,8 +76,30 @@
     font-size: 13px;
   }
 
+  // Element Plus 默认将 radio 文案限制为单行且固定高度。多语言长文案需要
+  // 在内容区内换行并撑高选项，同时让选中圆点与首行文字对齐。
+  .el-radio-group .el-radio {
+    align-items: flex-start;
+    max-width: 100%;
+    min-height: 30px;
+    height: auto;
+    white-space: normal;
+  }
+
+  .el-radio-group .el-radio__input {
+    flex: 0 0 auto;
+    margin-top: 8px;
+  }
+
   .el-radio-group .el-radio__label {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    overflow-wrap: anywhere;
+    line-height: 20px;
     font-size: 13px;
+    white-space: normal;
   }
 
   .el-input:not(.el-date-editor),
@@ -320,6 +343,19 @@
 .el-form .el-form-item__content,
 .jms-form-controls {
   @include jms-form-control-items;
+}
+
+// 统一控件使用真实 border，并关闭了 Element Plus 默认的 inset box-shadow。
+// 因此错误态也必须通过 border-color 显式恢复，且放在基础/聚焦规则之后。
+.el-form .el-form-item.is-error > .el-form-item__content {
+  > .el-input > .el-input__wrapper,
+  > .el-select > .el-select__wrapper,
+  > .el-cascader .el-input__wrapper,
+  > .el-input-number .el-input__wrapper,
+  > .el-autocomplete .el-input__wrapper,
+  > .el-date-editor .el-input__wrapper {
+    border-color: var(--el-color-danger) !important;
+  }
 }
 
 // 普通 el-form（非 DataForm）的间距与标签对齐

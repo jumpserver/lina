@@ -13,13 +13,7 @@
     <div v-if="tip !== ''" class="help-block">{{ tip }}</div>
     <input :value="value" hidden type="text" @input="onInput($event.target.value)" />
     <div v-if="preview" class="upload-field__preview" :class="{ 'show-bg': showBG }">
-      <el-image
-        :style="previewStyle"
-        :preview-src-list="[preview]"
-        :src="preview"
-        fit="contain"
-        preview-teleported
-      />
+      <img :alt="fileName || 'preview'" :src="preview" :style="previewStyle" />
     </div>
   </div>
 </template>
@@ -27,6 +21,10 @@
 <script>
 export default {
   props: {
+    modelValue: {
+      type: String,
+      default: ''
+    },
     value: {
       type: String,
       default: () => ''
@@ -53,14 +51,19 @@ export default {
       default: ''
     }
   },
+  emits: ['input', 'fileChange', 'customEvent', 'update:modelValue', 'update:model-value'],
   data() {
     return {
       fileName: '',
-      initial: this.value,
-      preview: this.value
+      initial: this.value || this.modelValue,
+      preview: this.value || this.modelValue,
+      objectUrl: ''
     }
   },
   computed: {
+    iValue() {
+      return this.modelValue !== '' && this.modelValue != null ? this.modelValue : this.value
+    },
     previewStyle() {
       const toPx = (v) => (typeof v === 'number' ? `${v}px` : v)
       const style = {}
@@ -74,17 +77,27 @@ export default {
     }
   },
   watch: {
-    value(value) {
+    iValue(value) {
       this.$emit('customEvent', value)
-      this.preview = this.value
+      if (!this.fileName) {
+        this.preview = value || ''
+      }
     }
+  },
+  unmounted() {
+    this.revokeObjectUrl()
   },
   methods: {
     onUpLoad() {
       this.$refs.upLoadFile.click()
     },
     onInput(val) {
+      this.emitValue(val)
+    },
+    emitValue(val) {
       this.$emit('input', val)
+      this.$emit('update:modelValue', val)
+      this.$emit('update:model-value', val)
     },
     Onchange(e) {
       const upLoadFile = e.target.files[0]
@@ -94,25 +107,29 @@ export default {
       }
 
       this.fileName = upLoadFile?.name || ''
+      const url = this.getObjectURL(upLoadFile)
+      this.preview = url
       this.$emit('fileChange', upLoadFile)
-      this.$emit('input', this.getObjectURL(upLoadFile))
+      this.emitValue(url)
     },
     resetUpload() {
+      this.revokeObjectUrl()
       this.fileName = ''
-      this.preview = ''
+      this.preview = this.initial || ''
       this.$refs.upLoadFile.value = ''
-      this.$emit('input', '')
+      this.emitValue('')
       this.$emit('fileChange', null)
     },
-    getObjectURL(file) {
-      let url = null
-      if (window.createObjectURL !== undefined) {
-        url = window.createObjectURL(file)
-      } else if (window.URL !== undefined) {
-        url = window.URL.createObjectURL(file)
-      } else if (window.webkitURL !== undefined) {
-        url = window.webkitURL.createObjectURL(file)
+    revokeObjectUrl() {
+      if (this.objectUrl) {
+        URL.revokeObjectURL(this.objectUrl)
+        this.objectUrl = ''
       }
+    },
+    getObjectURL(file) {
+      this.revokeObjectUrl()
+      const url = URL.createObjectURL(file)
+      this.objectUrl = url
       return url
     }
   }
@@ -149,11 +166,9 @@ export default {
   background: #fff;
   box-sizing: content-box;
 
-  :deep(.el-image) {
-    display: inline-flex;
-  }
-
-  :deep(.el-image__inner) {
+  img {
+    display: block;
+    max-width: 100%;
     object-fit: contain;
   }
 }

@@ -87,6 +87,11 @@ export default {
 
 <style scoped>
 #terminal {
+  --terminal-scrollbar-track: rgba(255, 255, 255, 0.08);
+  --terminal-scrollbar-thumb: rgba(49, 184, 157, 0.72);
+  --terminal-scrollbar-thumb-hover: rgba(66, 211, 181, 0.9);
+  --terminal-scrollbar-thumb-active: #24a88e;
+
   height: 100%;
   width: 100%;
   background-color: #1f1b1b;
@@ -94,5 +99,34 @@ export default {
 }
 #terminal.xterm {
   height: 100vh;
+}
+
+#terminal :deep(.xterm-viewport) {
+  scrollbar-color: var(--terminal-scrollbar-thumb) var(--terminal-scrollbar-track);
+  scrollbar-width: thin;
+}
+
+#terminal :deep(.xterm-viewport::-webkit-scrollbar) {
+  width: 10px;
+  height: 10px;
+}
+
+#terminal :deep(.xterm-viewport::-webkit-scrollbar-track) {
+  background: var(--terminal-scrollbar-track);
+}
+
+#terminal :deep(.xterm-viewport::-webkit-scrollbar-thumb) {
+  background-color: var(--terminal-scrollbar-thumb);
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+
+#terminal :deep(.xterm-viewport::-webkit-scrollbar-thumb:hover) {
+  background-color: var(--terminal-scrollbar-thumb-hover);
+}
+
+#terminal :deep(.xterm-viewport::-webkit-scrollbar-thumb:active) {
+  background-color: var(--terminal-scrollbar-thumb-active);
 }
 </style>

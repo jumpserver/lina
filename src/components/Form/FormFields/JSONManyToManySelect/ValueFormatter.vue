@@ -62,10 +62,21 @@ export default {
   methods: {
     async getValue() {
       this.attr = this.formatterArgs.attrs.find((attr) => attr.name === this.row.name)
+      if (!this.attr) {
+        this.value = ''
+        return
+      }
       const match = this.row.match
       this.$log.debug('ValueFormatter: ', this.attr, this.row.name)
       if (this.attr.type === 'm2m') {
-        const url = setUrlParam(this.attr.el.url, 'ids', this.cellValue.join(','))
+        const ids = Array.isArray(this.cellValue) ? this.cellValue.filter(Boolean) : []
+        // 空的 ids 参数会被资源接口解释为未筛选，进而返回全部选项。属性规则的空值
+        // 应保持为空，而不能在列表中显示为已选择全部值。
+        if (ids.length === 0) {
+          this.value = ''
+          return
+        }
+        const url = setUrlParam(this.attr.el.url, 'ids', ids.join(','))
         const data = (await this.$axios.get(url)) || []
         if (data.length > 0) {
           if (this.attr.name === 'labels') {

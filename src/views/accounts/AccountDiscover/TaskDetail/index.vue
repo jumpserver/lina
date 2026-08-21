@@ -39,7 +39,7 @@ export default {
         activeMenu: 'Detail',
         titlePrefix: this.$t('AccountDiscoverDetail'),
         assetNodeProps: {
-          url: '/api/v1/accounts/gather-account-automations'
+          relationUrl: '/api/v1/accounts/gather-account'
         },
         actions: {
           deleteSuccessRoute: 'AccountDiscoverList',

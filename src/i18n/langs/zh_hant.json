@@ -1,4 +1,5 @@
 {
+  "RowNumber": "序號",
   "PinColumn": "釘住欄",
   "UnpinColumn": "解除釘住",
   "FieldRequiredError": "这个字段是必需的。",
@@ -121,5 +122,26 @@
   "LabelFilterAllValues": "全部值",
   "LabelFilterSelectKey": "請選擇標籤鍵",
   "LabelFilterKeyLabel": "鍵",
-  "LabelFilterValueLabel": "值"
+  "LabelFilterValueLabel": "值",
+  "SelectedLabels": "已選標籤",
+  "NoSelectedLabels": "暫未選擇標籤",
+  "LabelFilterSearchSelected": "搜尋已選標籤",
+  "Remove": "移除",
+  "QuickCreateLabel": "快速建立標籤",
+  "QuickCreate": "快速建立",
+  "LabelKey": "Key",
+  "LabelKeyPlaceholder": "請輸入標籤鍵",
+  "LabelValue": "Value",
+  "LabelValuePlaceholder": "請輸入標籤值",
+  "CreateLabel": "建立並選擇",
+  "LabelName": "名稱",
+  "LabelNamePlaceholder": "請輸入名稱",
+  "LabelColor": "顏色",
+  "CreateAndSelect": "建立並選擇",
+  "LabelCreateSuccess": "標籤已建立並選擇",
+  "PingParams": "連線測試參數",
+  "GatherFactsParams": "資產資訊採集參數",
+  "VerifyAccountParams": "帳號驗證參數",
+  "GatherAccountsParams": "帳號收集參數",
+  "RemoveAccountParams": "帳號移除參數"
 }

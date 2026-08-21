@@ -23,6 +23,7 @@ import { markRaw } from 'vue'
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
 import { downloadText } from '@/utils/common/index'
+import { colorToRgba, getCssVar } from '@/utils/theme/color'
 
 export default {
   name: 'Term',
@@ -39,6 +40,7 @@ export default {
     }
   },
   data() {
+    const selectionColor = colorToRgba(getCssVar('--color-text-primary'), 0.18)
     return {
       xterm: markRaw(
         new Terminal(
@@ -51,7 +53,8 @@ export default {
               theme: {
                 background: '#fff',
                 foreground: '#000',
-                selection: '#363535'
+                selectionBackground: selectionColor,
+                selectionInactiveBackground: selectionColor
               }
             },
             this.xtermConfig

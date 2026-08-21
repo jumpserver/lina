@@ -21,6 +21,23 @@ const compactColumnWidth = {
   min: 120,
   max: 180
 }
+const defaultActionColumnWidth = '110px'
+const expandColumnWidth = '48px'
+const indexColumnWidth = '80px'
+
+function getColumnName(column) {
+  return typeof column === 'object' ? column?.prop : column
+}
+
+export function orderActionColumn(columns, position = 'end') {
+  const actionColumn = columns.find((column) => getColumnName(column) === 'actions')
+  if (!actionColumn) {
+    return columns
+  }
+
+  const otherColumns = columns.filter((column) => column !== actionColumn)
+  return position === 'start' ? [actionColumn, ...otherColumns] : [...otherColumns, actionColumn]
+}
 
 function getOverflowTooltipOptions() {
   return {
@@ -150,7 +167,10 @@ export class TableColumnsGenerator {
     if (!hasColumnActions) {
       configColumns = [...configColumns.filter((i) => i !== 'actions'), 'actions']
     }
-    configColumns = orderPrimaryColumns(configColumns)
+    configColumns = orderActionColumn(
+      orderPrimaryColumns(configColumns),
+      config.actionsColumnPosition
+    )
 
     for (let col of configColumns) {
       if (typeof col === 'object') {
@@ -223,7 +243,8 @@ export class TableColumnsGenerator {
           prop: 'actions',
           label: i18n.t('Actions'),
           align: 'center',
-          width: '120px',
+          headerAlign: 'center',
+          width: defaultActionColumnWidth,
           formatter: ActionsFormatter,
           fixed: 'right',
           formatterArgs: {}
@@ -389,6 +410,16 @@ export class TableColumnsGenerator {
       col.className = this.appendClassName(col.className, 'bounded-content-table-column')
     }
 
+    if (col.prop === 'actions') {
+      col.width = col.width || col.minWidth || defaultActionColumnWidth
+      delete col.minWidth
+      col.align = 'center'
+      col.headerAlign = 'center'
+      col.fixed = this.config.actionsColumnPosition === 'start' ? 'left' : 'right'
+      col.fitWidth = false
+      col.resizable = false
+    }
+
     const fieldMeta = this.meta[col.prop] || {}
     const isBooleanChoice =
       Array.isArray(fieldMeta.choices) &&
@@ -397,7 +428,19 @@ export class TableColumnsGenerator {
     const isBooleanField = fieldMeta.type === 'boolean' || isBooleanChoice
     const isIdField = col.prop === 'id' || String(col.prop || '').includes('_id')
     const isAmountField = isAmountColumn(col)
-    if (isBooleanField) {
+    const isExpandColumn = col.type === 'expand'
+    const isIndexColumn = col.type === 'index'
+    if (isExpandColumn) {
+      const configuredWidth = col.width ?? col.minWidth
+      col.width = configuredWidth || expandColumnWidth
+      delete col.minWidth
+      col.fitWidth = false
+    } else if (isIndexColumn) {
+      const configuredWidth = col.width ?? col.minWidth
+      col.width = configuredWidth || indexColumnWidth
+      delete col.minWidth
+      col.fitWidth = false
+    } else if (isBooleanField) {
       col.width = `${getBooleanColumnWidth(col)}px`
       delete col.minWidth
       col.fitWidth = false
@@ -412,7 +455,8 @@ export class TableColumnsGenerator {
       col.fitWidth = false
     }
 
-    const isCompactColumn = col.prop === 'actions' || col.type === 'selection'
+    const isCompactColumn =
+      col.prop === 'actions' || col.type === 'selection' || isExpandColumn || isIndexColumn
     col.isCustomRender =
       col.isCustomRender ?? Boolean(col.formatter && typeof col.formatter !== 'function')
     if (!isCompactColumn && !isBooleanField && !isAmountField && !isIdField) {

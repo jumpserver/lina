@@ -88,6 +88,7 @@ export default {
                 {
                   name: 'OfflineSession',
                   title: this.$t('Offline'),
+                  icon: 'fa-solid fa-power-off',
                   can: ({ row }) => {
                     return vm.$hasPerm('audits.offline_usersession') && !row.is_current_user_session
                   },

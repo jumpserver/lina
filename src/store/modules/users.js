@@ -7,8 +7,8 @@ import {
   setPreOrgLocal
 } from '@/utils/jms/auth'
 import orgUtil from '@/utils/jms/org'
-import { resetRouter } from '@/router'
 import store from '@/store'
+import { resetRegisteredRouter } from '@/router/registry'
 import _ from 'lodash'
 
 const getDefaultState = () => {
@@ -136,7 +136,7 @@ const actions = {
       logout(state.token)
         .then(() => {
           // removeToken() // must remove  token  first
-          resetRouter()
+          resetRegisteredRouter()
           commit('RESET_STATE')
           resolve()
         })

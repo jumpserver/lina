@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import { AssetSelect } from '@/components'
 import { periodicMeta } from '@/components/const'
-import { Select2 } from '@/components/Form/FormFields'
+import { RequiredChange } from '@/components/Form/DataForm/rules'
+import { ResourceSelect, Select2, TreeResourceSelect } from '@/components/Form/FormFields'
 import i18n from '@/i18n/i18n'
 import { GenericCreateUpdatePage } from '@/layout/components'
 
@@ -32,11 +32,18 @@ export default {
       ],
       fieldsMeta: {
         assets: {
-          type: 'assetSelect',
-          component: AssetSelect,
+          type: 'resourceSelect',
+          component: ResourceSelect,
           rules: [{ required: false }],
           el: {
-            baseUrl: '/api/v1/assets/assets/?push_account_enabled=true'
+            value: [],
+            url: '/api/v1/assets/assets/?push_account_enabled=true&fields_size=mini',
+            resourceName: this.$t('Assets'),
+            nodeFilter: {
+              treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
+              typeTreeUrl: '/api/v1/assets/nodes/category/tree/?count_resource=none',
+              includeDescendants: true
+            }
           },
           on: {
             input: ([value]) => {
@@ -46,47 +53,41 @@ export default {
         },
         engines: {
           component: Select2,
+          rules: [RequiredChange],
+          helpText: i18n.t('RiskDetectionAccountSourceHelpText'),
           el: {
             url: '/api/v1/accounts/account-check-engines/',
             multiple: true,
             ajax: {
               transformOption: (item) => {
-                let name = item.name
-                let disabled = false
-                if (item.slug === 'check_gathered_account') {
-                  name = `${name} (使用创建账号发现任务替代)`
-                  disabled = true
-                }
-                return { label: name, value: item.slug, disabled: disabled }
+                return { label: item.name, value: item.slug }
               }
             }
           }
         },
         recipients: {
+          type: 'resourceSelect',
+          component: ResourceSelect,
           helpText: i18n.t('OnlyMailSend'),
           el: {
             value: [],
-            ajax: {
-              url: '/api/v1/users/users/?fields_size=mini',
-              transformOption: (item) => {
-                return { label: item.name + '(' + item.username + ')', value: item.id }
-              }
-            }
+            url: '/api/v1/users/users/?fields_size=mini',
+            resourceName: this.$t('Users')
           }
         },
         nodes: {
+          type: 'treeResourceSelect',
+          component: TreeResourceSelect,
+          rules: [{ required: false }],
           el: {
-            multiple: true,
-            ajax: {
-              transformOption: (item) => {
-                return { label: item['full_value'], value: item.id }
-              },
-              url: '/api/v1/assets/nodes/'
-            }
+            value: [],
+            url: '/api/v1/assets/nodes/?fields_size=mini',
+            treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
+            resourceName: this.$t('Nodes')
           },
           on: {
             input: ([value]) => {
-              this.nodeIds = value?.map((i) => i.pk)
+              this.nodeIds = value || []
             }
           }
         },

@@ -1,6 +1,6 @@
 // import getPageTitle from '@/utils/get-page-title'
 import store from '@/store'
-import router, { addDynamicRoute, resetRouter } from '@/router'
+import router, { addDynamicRoute, constantRoutes, resetRouter, viewRoutes } from '@/router'
 import { message } from '@/utils/vue/message'
 import orgUtil from '@/utils/jms/org'
 import orgs from '@/api/orgs'
@@ -110,7 +110,10 @@ export async function generatePageRoutes({ to, from }) {
   try {
     // try get user profile
     // generate accessible routes map based on roles
-    const accessRoutes = await store.dispatch('permission/generateRoutes', { to, from })
+    const accessRoutes = await store.dispatch('permission/generateRoutes', {
+      constantRoutes,
+      viewRoutes
+    })
     // dynamically add accessible routes
     console.debug(
       'All routes:',
@@ -196,6 +199,21 @@ export async function checkUserFirstLogin({ to, from, next }) {
 
 export async function changeCurrentViewIfNeed({ to, from }) {
   let viewName = to.path.split('/')[1]
+  if (viewName === 'settings') {
+    const perms = store.getters.currentOrgPerms || []
+    const hasSettingsPerm = perms.includes('settings.view_setting')
+
+    if (!hasSettingsPerm) {
+      const preferView = getPropView()
+      // 如果没有可用视图，直接放行，避免无限重定向
+      if (!preferView || preferView === viewName) {
+        return true
+      }
+      await store.dispatch('app/reset')
+      return `/${preferView}`
+    }
+    return true
+  }
   // 这几个是需要检测的, 切换视图组织时，避免 404, 这里不能加 settings, 因为 默认没有返回 setting 组织(System) 的管理权限
   if (['console', 'audit', 'pam', 'workbench', 'tickets', ''].indexOf(viewName) === -1) {
     console.debug('Current view no need check', viewName)

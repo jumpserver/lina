@@ -23,6 +23,7 @@ import { useResizeHandler } from '@/utils/vue/useResizeHandler'
 
 export default {
   name: 'Layout',
+  routeViewShell: true,
   components: {
     NavLeft,
     NavHeader,

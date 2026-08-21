@@ -50,7 +50,7 @@ export default {
         title: i18n.t('BasicSettings'),
         icon: 'basic',
         disableGoBack: true,
-        permissions: ['settings.change_other']
+        permissions: ['settings.change_basic']
       }
     },
     {

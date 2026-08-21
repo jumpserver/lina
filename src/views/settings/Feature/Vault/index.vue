@@ -38,18 +38,23 @@ export default {
           loading: false,
           disabled: !store.getters.publicSettings['VAULT_ENABLED'],
           callback: function (value, form, btn) {
-            btn.loading = true
-            vm.$axios
-              .post('/api/v1/settings/vault/sync/', value)
-              .then((res) => {
-                openTaskPage(res['task'])
-              })
-              .catch(() => {
-                vm.$log.error('err occur')
-              })
-              .finally(() => {
-                btn.loading = false
-              })
+            vm.runVaultTask('/api/v1/settings/vault/sync/', value, btn)
+          }
+        },
+        {
+          title: this.$t('RestoreToDatabase'),
+          type: 'warning',
+          plain: true,
+          loading: false,
+          disabled: !store.getters.publicSettings['VAULT_ENABLED'],
+          callback: function (value, form, btn) {
+            vm.$confirm(vm.$t('RestoreVaultConfirm'), vm.$t('RestoreToDatabase'), {
+              confirmButtonText: vm.$t('Confirm'),
+              cancelButtonText: vm.$t('Cancel'),
+              type: 'warning'
+            }).then(() => {
+              vm.runVaultTask('/api/v1/settings/vault/restore/', value, btn)
+            })
           }
         }
       ],
@@ -105,6 +110,22 @@ export default {
       submitMethod() {
         return 'patch'
       }
+    }
+  },
+  methods: {
+    runVaultTask(url, value, btn) {
+      btn.loading = true
+      this.$axios
+        .post(url, value)
+        .then((res) => {
+          openTaskPage(res['task'])
+        })
+        .catch(() => {
+          this.$log.error('err occur')
+        })
+        .finally(() => {
+          btn.loading = false
+        })
     }
   }
 }

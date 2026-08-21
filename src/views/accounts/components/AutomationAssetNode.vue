@@ -3,7 +3,6 @@
     <DrawerListTable
       v-if="tableConfig"
       :key="tableKey"
-      ref="listTable"
       :header-actions="headerActions"
       :table-config="tableConfig"
     />
@@ -46,13 +45,12 @@
 </template>
 
 <script>
-import { createSourceIdCache } from '@/api/common'
 import AssetRelationCard from '@/components/Apps/AssetRelationCard/index.vue'
 import RelationCard from '@/components/Cards/RelationCard/index.vue'
 import DrawerListTable from '@/components/Table/DrawerListTable/index.vue'
 import { DeleteActionFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-import { getAutomationAssetIds, getRelationIds } from './automation'
+import { getRelationIds } from './automation'
 
 export default {
   name: 'AutomationAssetNode',
@@ -69,7 +67,9 @@ export default {
       required: true,
       default: () => ({})
     },
-    url: {
+    // 关系端点基路径,如 /api/v1/accounts/gather-account
+    // 资产/节点的分页与增删全部走后端 RelationView 端点,前端不展开节点。
+    relationUrl: {
       type: String,
       required: true
     }
@@ -81,7 +81,6 @@ export default {
       nodeOptions: this.getRelationOptions(this.object.nodes),
       tableConfig: null,
       tableKey: 0,
-      assetTableRequestId: 0,
       headerActions: {
         hasSearch: true,
         hasRefresh: true,
@@ -100,7 +99,7 @@ export default {
         title: this.$t('AddAsset'),
         disabled: this.$store.getters.currentOrgIsRoot,
         canSelect: (row) => !this.assetIds.includes(row.id),
-        performAdd: (items) => this.updateRelations('assets', [...this.assetIds, ...items]),
+        performAdd: (items) => this.addAssets(items),
         onAddSuccess: (items) => {
           this.assetIds = [...new Set([...this.assetIds, ...items])]
           this.$message.success(this.$tc('UpdateSuccessMsg'))
@@ -110,8 +109,8 @@ export default {
       nodeRelationConfig: this.createNodeRelationConfig()
     }
   },
-  mounted() {
-    this.refreshAssetTable()
+  created() {
+    this.tableConfig = this.createTableConfig()
   },
   methods: {
     createNodeRelationConfig() {
@@ -126,7 +125,7 @@ export default {
           transformOption: (item) => ({ label: item.full_value, value: item.id })
         },
         performAdd: (items, relationCard) => {
-          return this.updateRelations('nodes', [...this.nodeIds, ...this.getRelationIds(items)])
+          return this.updateNodes('add', this.getRelationIds(items))
         },
         onAddSuccess: (items, relationCard) => {
           const currentIds = this.getRelationIds(this.nodeOptions)
@@ -154,10 +153,7 @@ export default {
       })
     },
     removeNode(node) {
-      this.updateRelations(
-        'nodes',
-        this.nodeIds.filter((nodeId) => nodeId !== node.value)
-      )
+      this.updateNodes('remove', [node.value])
         .then(() => {
           this.nodeIds = this.nodeIds.filter((nodeId) => nodeId !== node.value)
           this.nodeOptions = this.nodeOptions.filter((item) => item.value !== node.value)
@@ -169,54 +165,40 @@ export default {
           this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
         })
     },
-    async refreshAssetTable() {
-      const requestId = ++this.assetTableRequestId
-      try {
-        const assetIds = await getAutomationAssetIds(this.$axios, this.assetIds, this.nodeIds)
-        const { spm } = await createSourceIdCache(assetIds)
-        if (requestId !== this.assetTableRequestId) {
-          return
-        }
-        this.tableConfig = {
-          url: `/api/v1/assets/assets/?spm=${spm}`,
-          columns: ['name', 'address', 'delete_action'],
-          columnsMeta: {
-            name: {
-              formatter: DetailFormatter,
-              formatterArgs: {
-                drawer: true,
-                route: 'AssetDetail',
-                can: this.$hasPerm('assets.view_asset')
-              }
-            },
-            delete_action: {
-              prop: 'id',
-              label: this.$t('Actions'),
-              align: 'center',
-              objects: this.assetIds.map((id) => ({ id })),
-              formatter: DeleteActionFormatter,
-              onDelete: this.removeAsset.bind(this)
-            },
-            actions: {
-              has: false
+    // 表格直接指向后端分页端点,由后端 get_all_assets() 求「直接绑定 ∪ 节点展开」并集并分页,
+    // 前端不再展开节点。删除按钮仅挂直接绑定资产(assetIds),节点派生行不可单独删除。
+    createTableConfig() {
+      return {
+        url: `${this.relationUrl}/${this.object.id}/assets/`,
+        columns: ['name', 'address', 'delete_action'],
+        columnsMeta: {
+          name: {
+            formatter: DetailFormatter,
+            formatterArgs: {
+              drawer: true,
+              route: 'AssetDetail',
+              can: this.$hasPerm('assets.view_asset')
             }
           },
-          tableAttrs: {
-            border: false
+          delete_action: {
+            prop: 'id',
+            label: this.$t('Actions'),
+            align: 'center',
+            objects: this.assetIds.map((id) => ({ id })),
+            formatter: DeleteActionFormatter,
+            onDelete: this.removeAsset.bind(this)
+          },
+          actions: {
+            has: false
           }
-        }
-        this.tableKey += 1
-      } catch (error) {
-        if (requestId === this.assetTableRequestId) {
-          this.$message.error(this.$tc('UpdateErrorMsg') + ' ' + error)
+        },
+        tableAttrs: {
+          border: false
         }
       }
     },
     removeAsset(col, row) {
-      this.updateRelations(
-        'assets',
-        this.assetIds.filter((assetId) => assetId !== row.id)
-      )
+      this.removeAssets([row.id])
         .then(() => {
           this.assetIds = this.assetIds.filter((assetId) => assetId !== row.id)
           this.$message.success(this.$tc('DeleteSuccessMsg'))
@@ -226,13 +208,25 @@ export default {
           this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
         })
     },
-    updateRelations(field, items) {
-      return this.$axios.patch(`${this.url}/${this.object.id}/`, {
-        [field]: [...new Set(items)]
+    addAssets(assetIds) {
+      return this.$axios.patch(`${this.relationUrl}/${this.object.id}/asset/add/`, {
+        assets: [...new Set(assetIds)]
+      })
+    },
+    removeAssets(assetIds) {
+      return this.$axios.patch(`${this.relationUrl}/${this.object.id}/asset/remove/`, {
+        assets: assetIds
+      })
+    },
+    updateNodes(action, nodeIds) {
+      return this.$axios.patch(`${this.relationUrl}/${this.object.id}/nodes/?action=${action}`, {
+        nodes: nodeIds
       })
     },
     refreshRelations() {
-      this.refreshAssetTable()
+      // 重建 tableConfig 让 delete 按钮的 objects(直接绑定资产)同步,并重新拉取分页数据
+      this.tableConfig = this.createTableConfig()
+      this.tableKey += 1
       this.$emit('reload-table')
     }
   }

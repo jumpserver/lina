@@ -141,7 +141,8 @@
 <script>
 import BaseReport from '@/views/reports/base/BaseReport.vue'
 import * as echarts from 'echarts'
-import { mixColors } from '@/views/reports/const'
+import { colorToRgba } from '@/utils/theme/color'
+import { getDistributionOptions, getReportChartTheme, mixColors } from '@/views/reports/const'
 import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
 import Echart from '@/components/Dashboard/Echart.vue'
 import reportPageMixin from '@/views/reports/base/reportPageMixin'
@@ -288,42 +289,11 @@ export default {
       return items.filter((item) => !(item.key === 'face_vector' && Number(item.body.count) === 0))
     },
     LoginSourceOptions() {
-      return {
-        tooltip: {
-          trigger: 'item'
-        },
-        legend: {
-          orient: 'vertical',
-          left: 'left'
-        },
-        series: [
-          {
-            type: 'pie',
-            minAngle: 5,
-            radius: ['40%', '70%'],
-            itemStyle: {
-              borderRadius: 10,
-              borderColor: '#fff',
-              borderWidth: 2
-            },
-            label: {
-              show: false,
-              position: 'center'
-            },
-            emphasis: {
-              label: {
-                show: true,
-                fontSize: 15,
-                fontWeight: 'bold'
-              }
-            },
-            data: this.pie.user_by_source
-          }
-        ]
-      }
+      return getDistributionOptions(this.pie.user_by_source, this.$t('Total'))
     },
     loginTrendOptions() {
       const { primary, TwoLevelColor, ThreeLevelColor, shadowColor } = mixColors()
+      const { warning } = getReportChartTheme()
       return {
         title: {
           show: false
@@ -450,20 +420,20 @@ export default {
                   [
                     {
                       offset: 0,
-                      color: 'rgba(249, 199, 79, 0.6)'
+                      color: colorToRgba(warning, 0.3)
                     },
                     {
                       offset: 0.6,
-                      color: 'rgba(249, 199, 79, 0.2)'
+                      color: colorToRgba(warning, 0.1)
                     },
                     {
                       offset: 0.8,
-                      color: 'rgba(249, 199, 79, 0.1)'
+                      color: colorToRgba(warning, 0.05)
                     }
                   ],
                   false
                 ),
-                shadowColor: 'rgba(249, 199, 79, 0.1)',
+                shadowColor: colorToRgba(warning, 0.08),
                 shadowBlur: 6
               }
             },
@@ -473,20 +443,67 @@ export default {
       }
     },
     loginMethodOptions() {
+      const { palette, textSecondary, border } = getReportChartTheme()
       return {
+        color: palette,
         tooltip: {
-          trigger: 'axis'
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          },
+          appendToBody: true
+        },
+        legend: {
+          top: 0,
+          left: 0,
+          icon: 'rect',
+          itemWidth: 10,
+          itemHeight: 10,
+          itemGap: 12,
+          textStyle: {
+            color: textSecondary,
+            fontSize: 12
+          }
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          top: 42,
+          bottom: 8,
+          containLabel: true
         },
         xAxis: {
           type: 'category',
           data: this.config.user_login_method_metrics.dates_metrics_date,
+          axisLine: {
+            lineStyle: {
+              color: border
+            }
+          },
           axisLabel: {
-            rotate: 45
+            color: textSecondary,
+            rotate: 30
+          },
+          axisTick: {
+            show: false
           }
         },
         yAxis: {
           type: 'value',
-          name: ''
+          axisLine: {
+            show: false
+          },
+          axisLabel: {
+            color: textSecondary
+          },
+          axisTick: {
+            show: false
+          },
+          splitLine: {
+            lineStyle: {
+              color: border
+            }
+          }
         },
         barCategoryGap: '70%',
         series: Object.keys(this.config.user_login_method_metrics.dates_metrics_total).map(
@@ -494,18 +511,46 @@ export default {
             name,
             stack: 'name',
             type: 'bar',
+            barMaxWidth: 32,
+            itemStyle: {
+              borderRadius: 0
+            },
             data: this.config.user_login_method_metrics.dates_metrics_total[name]
           })
         )
       }
     },
     VisitTimeOptions() {
-      const max = Math.max(...Object.values(this.config.user_login_time_metrics))
+      const values = Object.values(this.config.user_login_time_metrics)
+      const max = Math.max(...values, 1)
+      const { primary, textSecondary, border } = getReportChartTheme()
       return {
+        color: [primary],
         tooltip: {
-          trigger: 'item'
+          trigger: 'item',
+          appendToBody: true
         },
         radar: {
+          center: ['50%', '52%'],
+          radius: '68%',
+          splitNumber: 4,
+          axisName: {
+            color: textSecondary,
+            fontSize: 12
+          },
+          axisLine: {
+            lineStyle: {
+              color: border
+            }
+          },
+          splitLine: {
+            lineStyle: {
+              color: border
+            }
+          },
+          splitArea: {
+            show: false
+          },
           indicator: [
             { name: '00:00-06:00', max: max },
             { name: '06:00-12:00', max: max },
@@ -519,10 +564,19 @@ export default {
             type: 'radar',
             data: [
               {
-                value: Object.values(this.config.user_login_time_metrics),
+                value: values,
                 name: this.$t('Visits'),
+                symbol: 'circle',
+                symbolSize: 6,
+                lineStyle: {
+                  color: primary,
+                  width: 2
+                },
+                itemStyle: {
+                  color: primary
+                },
                 areaStyle: {
-                  opacity: 0.3
+                  color: colorToRgba(primary, 0.12)
                 }
               }
             ]

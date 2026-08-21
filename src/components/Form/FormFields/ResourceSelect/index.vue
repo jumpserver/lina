@@ -1,9 +1,16 @@
 <template>
   <div :class="rootClass" :style="$attrs.style">
     <ResourceSelectSummary
+      :count-text="summaryCountText"
       :disabled="isDisabled"
+      :has-more="summaryHasMore"
+      :items="selectedSummaryItems"
+      :selected-count="selectedValue.length"
+      :count-only="summaryCountOnly"
       :text="summaryText"
       @click="openDialog(selectedValue.length > 0 ? 'selected' : 'available')"
+      @load-more="loadNextSummaryBatch"
+      @remove="removeSummaryResource"
     />
 
     <ResourceSelectDialog
@@ -14,6 +21,7 @@
       :node-filter="nodeFilter"
       :query-params="queryParams"
       :resource-name="resourceName"
+      :selected-resources="getSelectedSummaryResources()"
       :can-select="canSelect"
       :columns="columns"
       :columns-meta="columnsMeta"
@@ -88,7 +96,7 @@ export default {
     },
     pageSize: {
       type: Number,
-      default: 15
+      default: 10
     },
     disabled: {
       type: [Boolean, Function],
@@ -124,7 +132,7 @@ export default {
     externalValue: {
       deep: true,
       handler(value) {
-        this.selectedValue = normalizeResourceValue(value, this.valueKey)
+        this.syncSelectedValue(value)
       }
     }
   },
@@ -135,13 +143,9 @@ export default {
         this.dialogVisible = true
       }
     },
-    handleConfirm(value) {
-      const payload = [...value]
-      this.selectedValue = payload
-      this.$emit('input', payload)
-      this.$emit('update:modelValue', payload)
-      this.$emit('update:model-value', payload)
-      this.$emit('change', payload)
+    handleConfirm(value, resources) {
+      this.cacheSummaryResources(resources)
+      this.updateSelectedValue(value)
       this.dialogVisible = false
     },
     handleCancel() {

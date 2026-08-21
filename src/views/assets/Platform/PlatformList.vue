@@ -137,11 +137,11 @@ export default {
         importOptions: {
           url: vm.url,
           canImportPackage: true,
-          importPackageLabel: vm.$t('Package'),
+          importPackageLabel: vm.$t('PlatformPackage'),
           packageUploadUrl: '/api/v1/assets/platforms/upload/',
           packageUploadAccept: '.zip',
           packageUploadConfirmText: vm.$t('Upload'),
-          packageUploadTitle: vm.$t('Package')
+          packageUploadTitle: vm.$t('PlatformPackage')
         },
         // eslint-disable-next-line vue/no-computed-properties-in-data
         exportOptions: {
@@ -206,14 +206,14 @@ export default {
     },
     async setCategoriesTab() {
       const categoryIcon = {
-        host: 'fa-inbox',
-        device: 'fa-microchip',
-        database: 'fa-database',
-        cloud: 'fa-cloud',
-        web: 'fa-globe',
-        gpt: 'fa-comment',
-        ds: 'fa-id-card-o',
-        custom: 'fa-cube'
+        host: 'fa-solid fa-inbox',
+        device: 'fa-solid fa-network-wired',
+        database: 'fa-solid fa-database',
+        cloud: 'fa-solid fa-cloud',
+        web: 'fa-solid fa-globe',
+        gpt: 'fa-solid fa-comment',
+        ds: 'fa-solid fa-id-card',
+        custom: 'fa-solid fa-cube'
       }
       const state = await this.$store.dispatch('assets/getAssetCategories')
       for (const item of state.assetCategories) {

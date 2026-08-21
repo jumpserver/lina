@@ -116,6 +116,19 @@ function createContextService({ router } = {}) {
     if (scope === 'route') {
       return getRouteSnapshot(vm)
     }
+    if (scope === 'overlay') {
+      // Drawer runtime keeps create/update args under query/params; flatten so
+      // $context.get('platform'|'node'|...) works without nesting.
+      const store = getOverlayScope(vm)
+      if (!store) {
+        return {}
+      }
+      return {
+        ...store,
+        ...(store.params || {}),
+        ...(store.query || {})
+      }
+    }
     return { ...(getScopeStore(vm, scope) || {}) }
   }
 

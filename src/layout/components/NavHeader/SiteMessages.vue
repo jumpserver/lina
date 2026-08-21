@@ -84,7 +84,7 @@
       @confirm="markAsRead([currentMsg])"
     >
       <div class="msg-detail">
-        <div class="msg-detail-txt">
+        <div class="msg-detail-txt" @click.capture="handleMessageContentClick">
           <span class="msg-detail-time">{{ formatDate(currentMsg.date_created) }}</span>
           <MarkDown :html="true" :value="currentMsg.content.message" />
         </div>
@@ -111,12 +111,18 @@ export default {
       hoverMsgId: '',
       msgDetailVisible: false,
       currentMsg: null,
-      unreadMsgCount: 0
+      unreadMsgCount: 0,
+      markingMessageIds: []
     }
   },
   computed: {
     width() {
       return this.$store.state.app.device === 'mobile' ? '70%' : '450px'
+    }
+  },
+  watch: {
+    '$route.fullPath'() {
+      this.msgDetailVisible = false
     }
   },
   mounted() {
@@ -182,6 +188,53 @@ export default {
         /* 取消*/
       })
     },
+    async handleMessageContentClick(event) {
+      const anchor = event.composedPath().find((element) => element?.nodeName === 'A')
+      if (!anchor || !this.currentMsg) return
+
+      const href = anchor.getAttribute('href')
+      if (!href) return
+
+      let url
+      try {
+        url = new URL(href, window.location.href)
+      } catch {
+        return
+      }
+
+      const openInNewTab = anchor.target === '_blank' || event.ctrlKey || event.metaKey
+      const currentMsg = this.currentMsg
+
+      event.preventDefault()
+      this.msgDetailVisible = false
+      this.markAsRead([currentMsg])
+
+      if (openInNewTab) {
+        window.open(url.href, '_blank', 'noopener,noreferrer')
+        return
+      }
+
+      // 先让 Dialog 完成卸载，再执行导航，避免 Hash 路由切换与弹窗关闭竞争。
+      await this.$nextTick()
+
+      const routerBase = this.$router.options.history.base.replace(/\/$/, '')
+      const targetBase = url.pathname.replace(/\/$/, '')
+      const isLinaRoute =
+        url.origin === window.location.origin &&
+        targetBase === routerBase &&
+        url.hash.startsWith('#/')
+
+      if (isLinaRoute) {
+        try {
+          await this.$router.push(url.hash.slice(1))
+        } catch {
+          window.location.assign(url.href)
+        }
+        return
+      }
+
+      window.location.assign(url.href)
+    },
     markAsReadAll(msgs) {
       const url = `/api/v1/notifications/site-messages/mark-as-read-all/`
       this.$axios
@@ -196,10 +249,12 @@ export default {
     },
     markAsRead(msgs) {
       const url = `/api/v1/notifications/site-messages/mark-as-read/`
-      const msgIds = []
-      for (const item of msgs) {
-        msgIds.push(item.id)
-      }
+      const msgIds = [...new Set(msgs.filter(Boolean).map((item) => item.id))].filter(
+        (id) => !this.markingMessageIds.includes(id)
+      )
+      if (!msgIds.length) return
+
+      this.markingMessageIds.push(...msgIds)
       this.$axios
         .patch(url, { ids: msgIds })
         .then((res) => {
@@ -208,6 +263,9 @@ export default {
         })
         .catch((err) => {
           this.$message(err.detail)
+        })
+        .finally(() => {
+          this.markingMessageIds = this.markingMessageIds.filter((id) => !msgIds.includes(id))
         })
     },
     cancelRead() {
@@ -392,7 +450,8 @@ export default {
     }
 
     :deep(ul:has(> li > strong:first-child) > li) {
-      padding: 9px 2px;
+      // 为字段值预留固定起始列，长文本换行后继续与值对齐，而不是退回字段名左侧。
+      padding: 9px 2px 9px 90px;
       border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
       line-height: 20px;
 
@@ -403,6 +462,7 @@ export default {
       strong {
         display: inline-block;
         min-width: 72px;
+        margin-left: -88px;
         margin-right: 16px;
         color: var(--el-text-color-secondary, #8a9099);
         font-weight: 400;

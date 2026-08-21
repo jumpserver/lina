@@ -84,9 +84,7 @@ export default {
         [this.$t('Footer'), ['footer_content']]
       ],
       fieldsMeta: {
-        login_title: {
-          helpText: this.$t('LoginTitleTip')
-        },
+        login_title: {},
         theme: {
           on: {
             change: ([value]) => {

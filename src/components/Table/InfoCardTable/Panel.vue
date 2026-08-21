@@ -4,7 +4,7 @@
       <div class="panel-title">
         <el-avatar :src="imageUrl" shape="square" />
         <div class="title-display">
-          <span class="name">{{ object.name }}</span>
+          <span class="name" :title="object.name">{{ object.name }}</span>
           <span class="comment">{{ object.provider.label }}</span>
         </div>
       </div>
@@ -177,18 +177,27 @@ div.info-panel {
 
     .panel-title {
       display: flex;
+      flex: 1 1 auto;
       align-items: center;
+      min-width: 0;
       font-weight: 600;
       gap: 10px;
 
       .title-display {
         display: flex;
+        flex: 1 1 auto;
         flex-direction: column;
+        min-width: 0;
+        overflow: hidden;
         text-align: left;
 
         .name {
+          width: 100%;
+          overflow: hidden;
           font-size: 1.1em;
           color: #555555;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
 
         .comment {
@@ -199,12 +208,14 @@ div.info-panel {
       }
 
       :deep(.el-avatar) {
+        flex-shrink: 0;
         background: #fff;
       }
     }
 
     .panel-actions {
       display: flex;
+      flex: 0 0 auto;
       align-items: center;
 
       :deep(.el-button.el-button--small) {

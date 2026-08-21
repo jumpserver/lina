@@ -427,6 +427,7 @@ export default {
   :deep(.page-content) {
     overflow-y: hidden !important;
     padding: 0;
+    scrollbar-gutter: auto;
   }
 
   .tab-page-content {

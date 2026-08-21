@@ -2,17 +2,24 @@
   <el-row :gutter="20" class="task-detail">
     <el-col :md="20" :sm="24">
       <DetailCard :items="detailCardItems" :title="cardTitle" />
+      <ExpirationNoticeSettings
+        v-if="$hasPerm('settings.change_security')"
+        :key="object.name"
+        :task-name="object.name"
+      />
     </el-col>
   </el-row>
 </template>
 
 <script>
 import DetailCard from '@/components/Cards/DetailCard/index.vue'
+import ExpirationNoticeSettings from './ExpirationNoticeSettings.vue'
 
 export default {
   name: 'TaskDetail',
   components: {
-    DetailCard
+    DetailCard,
+    ExpirationNoticeSettings
   },
   props: {
     object: {

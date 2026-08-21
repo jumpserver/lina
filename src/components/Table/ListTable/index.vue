@@ -93,6 +93,10 @@ export default {
     quickSummary: {
       type: Array,
       default: () => null
+    },
+    tableMetadataProvider: {
+      type: Function,
+      default: null
     }
   },
   data() {
@@ -306,7 +310,9 @@ export default {
       }
 
       this.metadataRequestUrl = url
-      const request = this.$store.dispatch('common/getUrlMeta', { url })
+      const request = this.tableMetadataProvider
+        ? this.tableMetadataProvider(url)
+        : this.$store.dispatch('common/getUrlMeta', { url })
       const sharedRequest = request.catch((error) => {
         if (this.metadataRequest === sharedRequest) {
           this.metadataRequest = null

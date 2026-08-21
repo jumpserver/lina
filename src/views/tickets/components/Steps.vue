@@ -27,12 +27,12 @@
                 </span>
                 <el-button
                   v-if="getAssignees(item).length > 2"
-                  :title="$tc('CheckViewAcceptor')"
+                  :title="$t('TicketViewAllAssignees', { count: getAssignees(item).length })"
                   class="more-assignees"
                   link
                   @click="lookOver(getAssignees(item))"
                 >
-                  +{{ getAssignees(item).length - 2 }}
+                  {{ $t('TicketViewAllAssignees', { count: getAssignees(item).length }) }}
                 </el-button>
                 <span v-if="getAssignees(item).length === 0" class="empty-value">-</span>
               </div>

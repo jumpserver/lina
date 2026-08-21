@@ -452,7 +452,7 @@ export default {
 }
 
 .import-form {
-  padding-left: 20px;
+  padding: 0 30px 0 20px;
 }
 
 // 导入选项行用 flex：创建/更新单选项 + 下载模板链接一行内均匀排列、垂直居中、可换行

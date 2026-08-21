@@ -248,6 +248,7 @@ export function getDefaultConfig(vm) {
             {
               name: 'AddAccount',
               title: vm.$t('AddAccount'),
+              icon: 'fa-solid fa-key',
               divided: true,
               has: ({ row }) =>
                 !vm.$store.getters.currentOrgIsRoot && vm.$hasPerm('accounts.add_account'),
@@ -259,6 +260,7 @@ export function getDefaultConfig(vm) {
             {
               name: 'DiscoverAccounts',
               title: vm.$t('AccountDiscover'),
+              icon: 'fa-solid fa-magnifying-glass',
               has: ({ row }) =>
                 !vm.$store.getters.currentOrgIsRoot &&
                 vm.$hasPerm('accounts.add_gatheraccountsexecution'),

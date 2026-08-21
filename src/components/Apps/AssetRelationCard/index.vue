@@ -76,7 +76,16 @@ export default {
   methods: {
     addObjects() {
       const objects = this.$refs.assetSelect.getSelectedValue()
-      this.performAdd(objects, this).then(() => this.onAddSuccess(objects, this))
+      if (!objects.length) {
+        return
+      }
+      this.performAdd(objects, this).then(() => {
+        try {
+          this.onAddSuccess(objects, this)
+        } finally {
+          this.$refs.assetSelect?.clearSelected()
+        }
+      })
     }
   }
 }

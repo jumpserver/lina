@@ -4,7 +4,7 @@
 
 <script>
 import rules from '@/components/Form/DataForm/rules'
-import { TagInput, WeekCronSelect } from '@/components/Form/FormFields'
+import { ResourceSelect, TagInput, WeekCronSelect } from '@/components/Form/FormFields'
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { assetJSONSelectMeta } from '@/views/assets/const'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter.vue'
@@ -68,18 +68,16 @@ export default {
           }
         },
         reviewers: {
+          type: 'resourceSelect',
+          component: ResourceSelect,
           hidden: (formValue) => {
             return !['review', 'notice'].includes(formValue.action)
           },
           rules: [rules.RequiredChange],
           el: {
             value: [],
-            ajax: {
-              url: '/api/v1/users/users/?fields_size=mini',
-              transformOption: (item) => {
-                return { label: item.name + '(' + item.username + ')', value: item.id }
-              }
-            }
+            url: '/api/v1/users/users/?fields_size=mini',
+            resourceName: this.$t('Users')
           }
         }
       },

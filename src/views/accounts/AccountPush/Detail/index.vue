@@ -31,7 +31,7 @@ export default {
         activeMenu: 'AccountPushInfo',
         url: '/api/v1/accounts/push-account-automations',
         assetNodeProps: {
-          url: '/api/v1/accounts/push-account-automations'
+          relationUrl: '/api/v1/accounts/push-account'
         },
         submenu: [
           {

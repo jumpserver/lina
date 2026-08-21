@@ -191,8 +191,13 @@ export default {
       }
       return this.itemValue
     },
-    // 解构运算符会处理 undefined 的情况
-    componentProps: ({ data: { el }, propsInner }) => ({ ...el, ...propsInner }),
+    componentProps() {
+      const props = { ...this.data.el, ...this.propsInner }
+      if (this.isNestedServerError) {
+        props.errors = this.serverError
+      }
+      return props
+    },
     hasReadonlyContent: ({ data: { type } }) => _includes(['input', 'select'], type),
     hiddenStatus: ({ data: { hidden = () => false }, data, value }) => hidden(value, data),
     enableWhenStatus: ({ data: { enableWhen }, value }) => getEnableWhenStatus(enableWhen, value),
@@ -203,10 +208,56 @@ export default {
     classes() {
       return 'el-form-item-' + this.data.prop + ' ' + (this.data.attrs?.class || '')
     },
+    serverError() {
+      return this.serverErrors ? this.serverErrors[this.data.prop] : ''
+    },
+    isNestedServerError() {
+      return (
+        this.data.type === 'nested-field' &&
+        this.serverError &&
+        typeof this.serverError === 'object' &&
+        !Array.isArray(this.serverError)
+      )
+    },
+    unmatchedNestedServerError() {
+      if (!this.isNestedServerError) {
+        return null
+      }
+      const visibleChildProps = new Set(
+        (this.data.el?.fields || [])
+          .filter((field) => {
+            const hidden =
+              typeof field.hidden === 'function'
+                ? field.hidden(this.itemValue, field)
+                : field.hidden
+            return !hidden && getEnableWhenStatus(field.enableWhen, this.itemValue)
+          })
+          .map((field) => field.prop)
+      )
+      const unmatched = Object.entries(this.serverError).filter(
+        ([name]) => !visibleChildProps.has(name)
+      )
+      return unmatched.length > 0 ? Object.fromEntries(unmatched) : null
+    },
     errorText() {
       const fromAttrs = this.data?.attrs?.error
-      const fromServer = this.serverErrors ? this.serverErrors[this.data.prop] : ''
-      return fromAttrs || fromServer || ''
+      if (fromAttrs) {
+        return fromAttrs
+      }
+      if (typeof this.serverError === 'string') {
+        return this.serverError
+      }
+      if (this.serverError == null) {
+        return ''
+      }
+      // NestedField renders object errors beside its child inputs. Other custom fields
+      // retain the previous object-string fallback so no server feedback is lost.
+      if (this.isNestedServerError) {
+        return this.unmatchedNestedServerError
+          ? JSON.stringify(this.unmatchedNestedServerError)
+          : ''
+      }
+      return JSON.stringify(this.serverError)
     },
     listeners() {
       const {
@@ -232,6 +283,9 @@ export default {
         ),
         // 手动更新表单数据
         input: (value, ...rest) => {
+          if (this.data.type === 'checkbox-group' && value?.target) {
+            return
+          }
           this.handleValueUpdate({
             id,
             value,

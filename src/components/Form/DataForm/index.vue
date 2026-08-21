@@ -167,13 +167,15 @@ export default {
   emits: ['submit', 'invalid', 'input', 'update:form'],
   data() {
     return {
-      basicForm: this.form,
       id: randomString(16),
       iSubmitBtnText: this.submitBtnText,
       inDialog: false
     }
   },
   computed: {
+    basicForm() {
+      return this.form
+    },
     elForm() {
       return this.$refs.form
     },
@@ -340,28 +342,26 @@ export default {
       display: inline-flex;
       align-items: center;
       justify-content: flex-end;
+      height: auto;
       min-height: 30px;
       padding: 0;
+      overflow: visible;
       line-height: 30px;
       font-size: 13px;
       color: var(--color-text-primary);
       box-sizing: border-box;
 
-      span {
-        display: unset;
-      }
-
       i {
         color: var(--color-icon-primary);
       }
 
-      span {
-        max-width: calc(100% - 25px);
-        //white-space: nowrap; /* 禁止换行 */
-        //text-overflow: ellipsis;
-        overflow: hidden;
+      > span {
+        max-width: 100%;
+        overflow: visible;
+        overflow-wrap: anywhere;
         display: inline-block;
         line-height: 16px;
+        white-space: normal;
       }
     }
 
@@ -431,6 +431,7 @@ export default {
 
 .form-fields.el-form.dialog-mode {
   padding: 0;
+  margin-right: 30px;
 
   :deep(.form-group-header) {
     &:first-child {
@@ -474,7 +475,7 @@ export default {
  * 设置页即使运行在 desktop 设备上，也可能因抽屉或分栏被压缩。此处按表单自身宽度
  * 切换布局，避免百分比 label 被挤成逐字换行，并让帮助文案跟随控件完整展示。
  */
-@container data-form (max-width: 520px) {
+@container data-form (max-width: 640px) {
   .form-fields.el-form {
     :deep(.el-form-item) {
       flex-direction: column;

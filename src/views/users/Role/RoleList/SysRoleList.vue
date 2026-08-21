@@ -12,10 +12,29 @@ export default {
   components: {
     BaseRoleList
   },
+  data() {
+    return {
+      activatedReloadTimer: null,
+      hasBeenDeactivated: false
+    }
+  },
   activated() {
-    setTimeout(() => {
+    if (!this.hasBeenDeactivated) {
+      return
+    }
+    clearTimeout(this.activatedReloadTimer)
+    this.activatedReloadTimer = setTimeout(() => {
       this.$refs.roleList?.reloadTable()
     })
+  },
+  deactivated() {
+    this.hasBeenDeactivated = true
+    clearTimeout(this.activatedReloadTimer)
+    this.activatedReloadTimer = null
+  },
+  beforeUnmount() {
+    clearTimeout(this.activatedReloadTimer)
+    this.activatedReloadTimer = null
   }
 }
 </script>

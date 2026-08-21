@@ -122,7 +122,7 @@ import BaseReport from '../base/BaseReport.vue'
 import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
 import * as echarts from 'echarts'
 import Echart from '@/components/Dashboard/Echart.vue'
-import { mixColors } from '@/views/reports/const'
+import { getReportChartTheme, mixColors } from '@/views/reports/const'
 import reportPageMixin from '@/views/reports/base/reportPageMixin'
 import ReportToolbar from '@/views/reports/base/ReportToolbar.vue'
 
@@ -217,7 +217,9 @@ export default {
       ]
     },
     AssetTypeOptions() {
+      const { palette, textSecondary, border } = getReportChartTheme()
       return {
+        color: palette,
         tooltip: {
           trigger: 'axis',
           axisPointer: { type: 'shadow' },
@@ -229,19 +231,68 @@ export default {
               result += `${p.marker}${p.seriesName}: ${p.value}<br/>`
             })
             return result
-          }
+          },
+          appendToBody: true
         },
         legend: {
+          top: 0,
+          left: 0,
+          icon: 'rect',
+          itemWidth: 10,
+          itemHeight: 10,
+          itemGap: 12,
+          textStyle: {
+            color: textSecondary,
+            fontSize: 12
+          },
           data: Array.from(this.assets_by_type_category.typeLabelMap.values())
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          top: 42,
+          bottom: 8,
+          containLabel: true
         },
         xAxis: {
           type: 'category',
-          data: this.assets_by_type_category.categories
+          data: this.assets_by_type_category.categories,
+          axisLine: {
+            lineStyle: {
+              color: border
+            }
+          },
+          axisLabel: {
+            color: textSecondary
+          },
+          axisTick: {
+            show: false
+          }
         },
         yAxis: {
-          type: 'value'
+          type: 'value',
+          axisLine: {
+            show: false
+          },
+          axisLabel: {
+            color: textSecondary
+          },
+          axisTick: {
+            show: false
+          },
+          splitLine: {
+            lineStyle: {
+              color: border
+            }
+          }
         },
-        series: this.assets_by_type_category.series,
+        series: this.assets_by_type_category.series.map((series) => ({
+          ...series,
+          barMaxWidth: 32,
+          itemStyle: {
+            borderRadius: 0
+          }
+        })),
         barCategoryGap: '70%'
       }
     },

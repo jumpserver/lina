@@ -704,6 +704,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fortawesome/fontawesome-free@npm:7.3.1":
+  version: 7.3.1
+  resolution: "@fortawesome/fontawesome-free@npm:7.3.1"
+  checksum: 10c0/85b70ea64e69b9635ff0b949871acaaf0e6c6fd41860b8a78a5067123a42dd71144f7f7feea7aee013a485166ee8bf8ee3aafb15146dc0f55512d07015adddee
+  languageName: node
+  linkType: hard
+
 "@intlify/core-base@npm:11.4.6":
   version: 11.4.6
   resolution: "@intlify/core-base@npm:11.4.6"
@@ -4575,6 +4582,7 @@ __metadata:
     "@codemirror/legacy-modes": "npm:^6"
     "@element-plus/icons-vue": "npm:^2.3.2"
     "@fontsource/open-sans": "npm:^5.2.7"
+    "@fortawesome/fontawesome-free": "npm:7.3.1"
     "@kangc/v-md-editor": "npm:^2.3.18"
     "@traptitech/markdown-it-katex": "npm:^3.6.0"
     "@vitejs/plugin-vue": "npm:^6.0.0"
@@ -4643,6 +4651,7 @@ __metadata:
     xss: "npm:^1.0.15"
     xterm: "npm:^5.3.0"
     xterm-addon-fit: "npm:^0.8.0"
+    xterm-theme: "npm:^1.1.0"
     zxcvbn: "npm:^4.4.2"
   languageName: unknown
   linkType: soft
@@ -5392,11 +5401,11 @@ __metadata:
   linkType: hard
 
 "nanoid@npm:^3.3.12":
-  version: 3.3.15
-  resolution: "nanoid@npm:3.3.15"
+  version: 3.3.18
+  resolution: "nanoid@npm:3.3.18"
   bin:
     nanoid: bin/nanoid.cjs
-  checksum: 10c0/e0b12e3a1d361f74150fa4b25631d0ae29f7162dab01a12f0f1be1f53b7a2a219f9b729504e474d4821207d0fe349bd3c97569ab5cf7ec2fff6aa94711956c93
+  checksum: 10c0/b994b4e396730f8be2520923284e2040d61eaee55cc6d4935ef6d38d34bafdc46133eda4d3faea5073bda545aa6079d82b886caeac5c731cf9ac18bcc1301425
   languageName: node
   linkType: hard
 
@@ -6528,9 +6537,9 @@ __metadata:
   linkType: hard
 
 "undici@npm:^6.25.0":
-  version: 6.27.0
-  resolution: "undici@npm:6.27.0"
-  checksum: 10c0/f88c3dae3957dbf9d93cb481440aced317bd3c4941b5914fea5efba516d51138988cdb5c76006f0bb1337e41d56c3443351055d492e73af2428521c37ba2a76f
+  version: 6.28.0
+  resolution: "undici@npm:6.28.0"
+  checksum: 10c0/3029a70df06b38b5b2f30732932a1e92544c753cd82c8abdf0d35afad48e0ba91612e79fe3a442dbbb9434d6a9eba2b714d5ea28984c903dda2b5d5444f38354
   languageName: node
   linkType: hard
 
@@ -7004,6 +7013,13 @@ __metadata:
   peerDependencies:
     xterm: ^5.0.0
   checksum: 10c0/39f77c9ec74bcc048ad74fbc4b9d610070c0a67971837f7edf92a8d21d65189c887986713d6ab22c04e2704253022488324d27fdb2425dc8aa95a9b679703101
+  languageName: node
+  linkType: hard
+
+"xterm-theme@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "xterm-theme@npm:1.1.0"
+  checksum: 10c0/f8630d229e59f880ec65916d2f4b1607a5d0733c0f0dd17ecc4b5aac2135956a1926cbc3422a0aabe14ccd4c582955a056983d8a94f4da316634d23e0681d61e
   languageName: node
   linkType: hard
 

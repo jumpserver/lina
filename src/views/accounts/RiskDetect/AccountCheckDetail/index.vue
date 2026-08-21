@@ -30,7 +30,7 @@ export default {
         titlePrefix: this.$t('AccountCheckDetail'),
         url: '/api/v1/accounts/check-account-automations',
         assetNodeProps: {
-          url: '/api/v1/accounts/check-account-automations'
+          relationUrl: '/api/v1/accounts/check-account'
         },
         submenu: [
           {

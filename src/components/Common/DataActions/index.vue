@@ -46,15 +46,28 @@
               >
                 <el-tooltip
                   :content="option.tip"
-                  :disabled="!option.tip"
+                  :disabled="!option.tip || option.showHelp"
                   :show-after="500"
                   placement="top"
                 >
                   <div class="dropdown-item__content">
-                    <span v-if="actionsHasIcon(action.dropdown)" class="pre-icon">
+                    <span
+                      v-if="actionsHasIcon(action.dropdown) && option.iconPlaceholder !== false"
+                      class="pre-icon"
+                    >
                       <Icon v-if="option.icon" :icon="option.icon" />
                     </span>
                     <span class="dropdown-item__label">{{ option.title }}</span>
+                    <el-tooltip
+                      v-if="option.showHelp && option.tip"
+                      :content="option.tip"
+                      :show-after="300"
+                      placement="right"
+                    >
+                      <span class="dropdown-item__help" @click.stop>
+                        <Icon icon="fa-question-circle-o" />
+                      </span>
+                    </el-tooltip>
                   </div>
                 </el-tooltip>
               </el-dropdown-item>
@@ -69,10 +82,10 @@
         :class="[action.name, { grouped: action.grouped }]"
         :size="size"
         class="action-item"
-        @click="handleClick(action)"
+        @click="handleClick(action, $event)"
       >
         <el-tooltip :content="action.tip" :disabled="!action.tip" :show-after="500" placement="top">
-          <div>
+          <div class="action-content">
             <Icon v-if="action.icon" :icon="action.icon" class="pre-icon" />
             <span v-if="action.title">
               {{ action.title }}
@@ -148,9 +161,12 @@ export default {
     toSentenceCase(s) {
       return toSentenceCase(s)
     },
-    handleClick(action) {
+    handleClick(action, event) {
       if (action.disabled) {
         return
+      }
+      if (event?.detail > 0) {
+        event.currentTarget?.blur?.()
       }
       if (action && action.callback) {
         action.callback(action)
@@ -229,6 +245,14 @@ $color-drop-menu-border: #e4e7ed;
 
 // 通用
 .layout {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--data-actions-gap, 1px);
+
+  &.el-button-group {
+    gap: 0;
+  }
+
   // 确保所有按钮都使用 flex 布局，内容垂直居中
   :deep(.el-button) {
     display: inline-flex;
@@ -242,21 +266,48 @@ $color-drop-menu-border: #e4e7ed;
       align-items: center;
       line-height: 1;
     }
+
+    > span > .el-tooltip__trigger {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+  }
+
+  .pre-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  .dropdown-item__help {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 2px;
+    color: var(--el-text-color-placeholder);
+    cursor: help;
+
+    &:hover {
+      color: var(--el-color-primary);
+    }
   }
 
   .action-item {
-    margin-left: 1px;
+    margin-left: 0;
+
+    .action-content,
+    .action-content .pre-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
 
     .pre-icon + span {
-      margin-left: 3px;
-    }
-
-    &.grouped {
-      margin-left: 0;
-    }
-
-    &:first-child {
-      margin-left: 0;
+      margin-left: 2px;
     }
   }
 }
@@ -306,9 +357,9 @@ $color-drop-menu-border: #e4e7ed;
   :deep(.action-item.el-button.el-button--primary.is-plain),
   :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain),
   :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain) {
-    &:hover,
-    &:focus,
-    &:active {
+    &:hover:not(.is-disabled),
+    &:focus:not(.is-disabled),
+    &:active:not(.is-disabled) {
       color: #fff;
       background-color: var(--color-primary) !important;
       border-color: var(--color-primary) !important;
@@ -353,43 +404,7 @@ $color-drop-menu-border: #e4e7ed;
   :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain .el-icon),
   :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain .pre-icon),
   :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain .el-icon) {
-    color: var(--color-primary);
-  }
-
-  :deep(.action-item.el-button.el-button--primary.is-plain:hover .pre-icon),
-  :deep(.action-item.el-button.el-button--primary.is-plain:hover .el-icon),
-  :deep(.action-item.el-button.el-button--primary.is-plain:focus .pre-icon),
-  :deep(.action-item.el-button.el-button--primary.is-plain:focus .el-icon),
-  :deep(.action-item.el-button.el-button--primary.is-plain:active .pre-icon),
-  :deep(.action-item.el-button.el-button--primary.is-plain:active .el-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:hover .pre-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:hover .el-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:focus .pre-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:focus .el-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:active .pre-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain:active .el-icon),
-  :deep(
-    .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:hover .pre-icon
-  ),
-  :deep(
-    .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:hover .el-icon
-  ),
-  :deep(
-    .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:focus .pre-icon
-  ),
-  :deep(
-    .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:focus .el-icon
-  ),
-  :deep(
-    .action-item.el-dropdown
-      .el-button-group
-      .el-button.el-button--primary.is-plain:active
-      .pre-icon
-  ),
-  :deep(
-    .action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain:active .el-icon
-  ) {
-    color: #fff;
+    color: inherit;
   }
 
   .action-item.el-dropdown {
@@ -415,7 +430,7 @@ $color-drop-menu-border: #e4e7ed;
 
     .el-button--primary {
       :deep(.el-icon-arrow-down.el-icon--right) {
-        color: #ffffff !important;
+        color: inherit !important;
       }
 
       &.el-dropdown-selfdefine {
@@ -468,11 +483,10 @@ $color-drop-menu-border: #e4e7ed;
   align-items: center;
   justify-content: flex-start;
   flex: 0 0 auto;
-  // 固定宽度：无图标的项（如「批量处理」标题）也占满同样的图标列宽，
-  // 保证所有项的文字左边缘对齐，不会因空图标塌成 0 宽而左移。
+  // 固定图标列宽，保证使用图标占位的下拉项文字左边缘对齐。
   width: 18px;
   height: 16px;
-  margin-right: 6px;
+  margin-right: 2px;
   line-height: 1;
 }
 

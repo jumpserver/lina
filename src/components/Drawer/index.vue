@@ -423,7 +423,7 @@ export default {
       &.el-form--label-top {
         .el-radio-group {
           .el-radio {
-            display: block;
+            display: inline-flex;
             padding-bottom: 3px;
           }
         }
@@ -517,6 +517,11 @@ export default {
     //    color: var(--color-text-primary);
     //  }
     //}
+  }
+
+  // DataForm 由自身容器宽度决定标签布局，不继承旧抽屉表单的固定最小宽度。
+  :deep(.form-fields.el-form .el-form-item) {
+    min-width: 0;
   }
 }
 </style>

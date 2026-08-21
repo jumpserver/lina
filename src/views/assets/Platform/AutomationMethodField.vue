@@ -13,10 +13,11 @@
       class="automation-method__append"
       :disabled="disabled"
       :method="iValue"
+      :push-account-params="currentParams"
       :title="paramsTitle"
       :url="paramsUrl"
       :value="currentParams"
-      @input="onParamsInput"
+      @submit="onParamsSubmit"
     />
   </div>
 </template>
@@ -68,7 +69,7 @@ export default {
       default: () => ({})
     }
   },
-  emits: ['change', 'paramsChange'],
+  emits: ['change'],
   setup() {
     // 注入(automation 子表单的) form-renderer 上下文，用于读回同级 _params 的当前值
     const formCtx = inject(FORM_RENDERER_KEY, { getElForm: null, updateForm: null })
@@ -79,17 +80,20 @@ export default {
       return this.modelValue !== '' && this.modelValue != null ? this.modelValue : this.value
     },
     currentParams() {
-      // 参数字段已隐藏、值不再经 model-value 传入，这里从当前层表单值实时读回，
-      // 保证编辑已有平台时弹窗能回填已保存的参数。
-      try {
-        const model = this.formCtx?.getElForm?.()?.model
-        if (model && this.paramsKey && model[this.paramsKey] != null) {
-          return model[this.paramsKey]
+      // 隐藏的 *_params 可能在 model 里是 {}，不能因此丢掉 object / paramsValue 里已保存的值。
+      // formCtx 也可能是外层平台表单，这时参数在 model.automation[paramsKey]。
+      const model = this.formCtx?.getElForm?.()?.model
+      const candidates = [
+        model?.[this.paramsKey],
+        model?.automation?.[this.paramsKey],
+        this.paramsValue
+      ]
+      for (const val of candidates) {
+        if (val && typeof val === 'object' && !Array.isArray(val) && Object.keys(val).length > 0) {
+          return val
         }
-      } catch (e) {
-        // ignore
       }
-      return this.paramsValue || {}
+      return {}
     }
   },
   methods: {
@@ -98,10 +102,14 @@ export default {
       // 并触发字段配置里的 on.change（如 change_secret 的联动）。
       this.$emit('change', val)
     },
-    onParamsInput(params) {
-      // 参数属于同级的 _params 字段，通过自定义事件让字段配置里的 on.paramsChange
-      // 借助 updateForm 写回，避免直接操作只读的表单值。
-      this.$emit('paramsChange', params)
+    onParamsSubmit(params) {
+      // 参数属于 automation 子表单中的同级 _params 字段。直接写回当前
+      // form-renderer，确保外层提交读取到最新参数，不再依赖 fieldsMeta 的事件转接。
+      if (!this.paramsKey) {
+        return
+      }
+      const payload = params && typeof params === 'object' ? { ...params } : {}
+      this.formCtx?.updateForm?.({ [this.paramsKey]: payload })
     }
   }
 }

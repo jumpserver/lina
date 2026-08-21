@@ -13,7 +13,6 @@ import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 import { openTaskPage } from '@/utils/jms/index'
-import AutomationAssetAmountFormatter from '@/views/accounts/components/AutomationAssetAmountFormatter.vue'
 export default {
   name: 'AccountChangeSecretList',
   components: {
@@ -31,8 +30,8 @@ export default {
         columns: [
           'name',
           'accounts',
-          'assets',
-          'nodes',
+          'assets_amount',
+          'nodes_amount',
           'secret_strategy',
           'is_periodic',
           'periodic_display',
@@ -45,8 +44,8 @@ export default {
           default: [
             'name',
             'accounts',
-            'assets',
-            'nodes',
+            'assets_amount',
+            'nodes_amount',
             'periodic_display',
             'executed_amount',
             'is_active',
@@ -73,18 +72,18 @@ export default {
               return row.accounts.join(', ')
             }
           },
-          assets: {
-            formatter: AutomationAssetAmountFormatter,
+          assets_amount: {
+            formatter: AmountFormatter,
             formatterArgs: {
-              async: false,
+              async: true,
               drawer: false,
               preventClick: true
             }
           },
-          nodes: {
+          nodes_amount: {
             formatter: AmountFormatter,
             formatterArgs: {
-              async: false,
+              async: true,
               drawer: false,
               preventClick: true
             }
@@ -149,7 +148,7 @@ export default {
           {
             name: 'BatchDisable',
             title: this.$t('DisableSelected'),
-            icon: 'fa fa-ban',
+            icon: 'fa-solid fa-ban',
             can: ({ selectedRows }) =>
               selectedRows.length > 0 && this.$hasPerm('accounts.change_changesecretautomation'),
             callback: ({ selectedRows, reloadTable }) =>
@@ -158,7 +157,7 @@ export default {
           {
             name: 'BatchActivate',
             title: this.$t('ActivateSelected'),
-            icon: 'fa fa-check-circle-o',
+            icon: 'fa-circle-check',
             can: ({ selectedRows }) =>
               selectedRows.length > 0 && this.$hasPerm('accounts.change_changesecretautomation'),
             callback: ({ selectedRows, reloadTable }) =>

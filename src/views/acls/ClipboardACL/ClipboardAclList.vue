@@ -21,6 +21,10 @@ export default {
       helpMsg: this.$t('ClipboardACLHelpMsg'),
       tableConfig: {
         url: '/api/v1/acls/clipboard-acls/',
+        permissions: {
+          app: 'acls',
+          resource: 'clipboardacl'
+        },
         columnsExclude: [
           'users',
           'assets',
@@ -67,6 +71,8 @@ export default {
           },
           actions: {
             formatterArgs: {
+              canUpdate: () => this.$hasPerm('acls.change_clipboardacl'),
+              canClone: () => this.$hasPerm('acls.add_clipboardacl'),
               updateRoute: 'ClipboardACLUpdate',
               cloneRoute: 'ClipboardACLCreate'
             }

@@ -27,10 +27,7 @@
             class="tree-resource-select-dialog__toolbar-button tree-resource-select-dialog__selected-only"
             @click="toggleSelectedOnly"
           >
-            <el-icon>
-              <Hide v-if="showSelectedOnly" />
-              <View v-else />
-            </el-icon>
+            <svg-icon icon-class="filter" />
           </el-button>
         </el-tooltip>
         <el-tooltip :content="expandTitle" placement="top" :show-after="300">
@@ -100,15 +97,20 @@
         :check-strictly="true"
         :data="treeData"
         :default-expanded-keys="defaultExpandedKeys"
-        :expand-on-click-node="true"
+        :expand-on-click-node="false"
         :filter-node-method="filterNode"
         :props="treeProps"
         node-key="treeKey"
         show-checkbox
         @check="handleCheck"
+        @node-click="handleNodeClick"
       >
         <template #default="{ data }">
-          <span class="tree-resource-select-dialog__node" :title="getNodeLabel(data)">
+          <span
+            class="tree-resource-select-dialog__node"
+            :title="getNodeLabel(data)"
+            @click.stop="toggleNodeChecked(data)"
+          >
             {{ getNodeLabel(data) }}
           </span>
         </template>
@@ -132,9 +134,9 @@ export default {
       type: Array,
       default: () => []
     },
-    initialSelectedOnly: {
-      type: Boolean,
-      default: false
+    selectedResources: {
+      type: Array,
+      default: () => []
     },
     treeUrl: {
       type: String,
@@ -155,13 +157,23 @@ export default {
   },
   emits: ['cancel', 'confirm', 'update:visible'],
   data() {
+    const resourceCache = new Map()
+    this.selectedResources.forEach((item) => {
+      const id = item?.[this.valueKey] ?? item?.value ?? item?.id
+      const name = String(item?.name || '').trim()
+      if (id !== undefined && id !== null && id !== '' && name) {
+        resourceCache.set(String(id), { value: id, name })
+      }
+    })
     return {
       draftValue: [...this.value],
       searchValue: '',
       searchFocused: false,
-      showSelectedOnly: this.initialSelectedOnly,
+      showSelectedOnly: false,
+      selectedOnlyIds: [],
       expandAllNext: false,
       loading: false,
+      resourceCache,
       treeData: [],
       defaultExpandedKeys: [],
       treeProps: {
@@ -179,6 +191,9 @@ export default {
     },
     selectedIdSet() {
       return new Set(this.draftValue.map((id) => String(id)))
+    },
+    selectedOnlyIdSet() {
+      return new Set(this.selectedOnlyIds.map((id) => String(id)))
     },
     selectedOnlyTitle() {
       return this.showSelectedOnly
@@ -199,6 +214,19 @@ export default {
     document.removeEventListener('keydown', this.handleDialogShortcut)
   },
   methods: {
+    cacheTreeResources(nodes) {
+      nodes.forEach((node) => {
+        const id = this.getNodeId(node)
+        const name = String(this.getNodeLabel(node) || '').trim()
+        if (id !== undefined && id !== null && id !== '' && name) {
+          this.resourceCache.set(String(id), { value: id, name })
+        }
+        this.cacheTreeResources(node.children || [])
+      })
+    },
+    getSelectedResources() {
+      return this.draftValue.map((id) => this.resourceCache.get(String(id))).filter(Boolean)
+    },
     handleDialogShortcut(event) {
       if (
         event.defaultPrevented ||
@@ -304,10 +332,13 @@ export default {
           params: this.getQueryParams()
         })
         this.treeData = this.buildTree(response)
-        this.defaultExpandedKeys =
-          this.selectedCount > 0
-            ? this.getSelectedAncestorKeys()
-            : this.treeData.filter((node) => node.children?.length).map((node) => node.treeKey)
+        this.cacheTreeResources(this.treeData)
+        // 默认展开一级根；若有已选节点，再展开其祖先路径，避免嵌套二三级时看不到勾选
+        const firstLevelKeys = this.treeData
+          .filter((node) => node.children?.length)
+          .map((node) => node.treeKey)
+        const selectedAncestorKeys = this.getSelectedAncestorKeys()
+        this.defaultExpandedKeys = [...new Set([...firstLevelKeys, ...selectedAncestorKeys])]
         await this.$nextTick()
         this.syncLoadedChecks()
         if (this.showSelectedOnly) {
@@ -406,7 +437,7 @@ export default {
       if (this.showSelectedOnly) {
         visibleKeys = this.getPathKeySet((node) => {
           const id = this.getNodeId(node)
-          return id !== undefined && id !== null && this.selectedIdSet.has(String(id))
+          return id !== undefined && id !== null && this.selectedOnlyIdSet.has(String(id))
         })
       }
 
@@ -441,7 +472,9 @@ export default {
       }
     },
     toggleSelectedOnly() {
-      this.showSelectedOnly = !this.showSelectedOnly
+      const showSelectedOnly = !this.showSelectedOnly
+      this.selectedOnlyIds = showSelectedOnly ? [...this.draftValue] : []
+      this.showSelectedOnly = showSelectedOnly
       this.expandAllNext = false
       this.applyTreeFilter()
     },
@@ -515,17 +548,16 @@ export default {
       this.expandAllNext = false
       this.$refs.tree?.setCheckedKeys([])
       if (this.showSelectedOnly) {
+        this.selectedOnlyIds = []
         this.showSelectedOnly = false
       }
       this.$nextTick(() => this.applyTreeFilter())
     },
-    handleCheck(node, { checkedKeys }) {
+    updateNodeChecked(node, checked) {
       const id = this.getNodeId(node)
       if (id === undefined || id === null) {
         return
       }
-      const treeKey = this.getTreeKey(node)
-      const checked = checkedKeys.some((key) => String(key) === String(treeKey))
       const normalizedId = String(id)
       if (checked && !this.selectedIdSet.has(normalizedId)) {
         this.draftValue.push(id)
@@ -535,6 +567,35 @@ export default {
       this.expandAllNext = false
       if (this.showSelectedOnly) {
         this.$nextTick(() => this.applyTreeFilter())
+      }
+    },
+    handleCheck(node, { checkedKeys }) {
+      const treeKey = this.getTreeKey(node)
+      const checked = checkedKeys.some((key) => String(key) === String(treeKey))
+      this.updateNodeChecked(node, checked)
+    },
+    toggleNodeChecked(node) {
+      const tree = this.$refs.tree
+      const treeKey = this.getTreeKey(node)
+      const treeNode = tree?.getNode(treeKey)
+      if (!treeNode) {
+        return
+      }
+      const checked = !treeNode.checked
+      tree.setChecked(treeKey, checked, false)
+      this.updateNodeChecked(node, checked)
+    },
+    handleNodeClick(node, treeNode, component, event) {
+      if (
+        !treeNode?.childNodes?.length ||
+        event?.target?.closest?.('.el-checkbox, .tree-resource-select-dialog__node')
+      ) {
+        return
+      }
+      if (treeNode.expanded) {
+        treeNode.collapse()
+      } else {
+        treeNode.expand()
       }
     },
     filterNode(visibleKeys, data) {
@@ -547,7 +608,7 @@ export default {
       this.$emit('update:visible', value)
     },
     handleConfirm() {
-      this.$emit('confirm', [...this.draftValue])
+      this.$emit('confirm', [...this.draftValue], this.getSelectedResources())
       this.$emit('update:visible', false)
     },
     handleCancel() {
@@ -705,9 +766,14 @@ export default {
   }
 
   .tree-resource-select-dialog__node {
-    display: inline-block;
+    display: inline-flex;
+    flex: 1 0 auto;
+    align-self: stretch;
+    align-items: center;
+    min-width: max-content;
     padding-right: 10px;
     color: var(--el-text-color-regular);
+    cursor: pointer;
     font-size: 13px;
     white-space: nowrap;
   }

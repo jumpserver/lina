@@ -1,6 +1,6 @@
 <template>
-  <div class="box">
-    <div class="head">
+  <div class="box" :class="{ embedded }">
+    <div v-if="!embedded" class="head">
       <Title :config="config" />
     </div>
     <LineChart v-if="loading" v-bind="lineChartConfig" />
@@ -24,6 +24,10 @@ export default {
     metrics: {
       type: Object,
       default: () => ({})
+    },
+    embedded: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -98,6 +102,15 @@ export default {
   margin-top: 16px;
   padding: 20px;
   background: #fff;
+
+  &.embedded {
+    margin-top: 0;
+    padding: 0;
+
+    :deep(.echarts) {
+      height: 260px;
+    }
+  }
 
   .head {
     display: flex;

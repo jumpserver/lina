@@ -1,10 +1,6 @@
 <template>
   <section class="app-main">
-    <router-view v-slot="{ Component }">
-      <keep-alive :max="10">
-        <component :is="Component" :key="key" />
-      </keep-alive>
-    </router-view>
+    <CachedRouterView />
 
     <ChatAI v-if="chatAiEnabled" />
   </section>
@@ -54,8 +50,7 @@ export default {
     chatAiEnabled() {
       return this.$route.name !== 'ChatAi'
     }
-  },
-  methods: {}
+  }
 }
 </script>
 
