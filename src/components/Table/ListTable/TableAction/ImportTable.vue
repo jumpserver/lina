@@ -341,6 +341,9 @@ export default {
       const data = []
       // eslint-disable-next-line prefer-const
       for (let [key, value] of Object.entries(errorData)) {
+        if (key === "nodes") {
+          key = "nodes_display"
+        }
         if (Array.isArray(value)) {
           value = JSON.stringify(value)
         } else if (typeof value === 'object') {
@@ -449,8 +452,14 @@ export default {
         await handler.bind(this)(item)
         item['@status'] = 'ok'
       } catch (error) {
-        const errorData = error?.response?.data
-        const _error = this.beautifyErrorData(errorData)
+        let _error
+        if (error?.response?.status === 500) {
+          // 后端服务端异常时，隐藏内部错误详情，统一提示数据异常
+          _error = this.$t('DataError')
+        } else {
+          const errorData = error?.response?.data
+          _error = this.beautifyErrorData(errorData)
+        }
         item['@status'] = {
           name: 'error',
           error: _error
