@@ -81,6 +81,7 @@ export default {
             name: 'CustomTree',
             icon: 'fa-tree',
             treeSetting: {
+              ...this.treeSetting,
               showAssets,
               showMenu: false,
               showRefresh: true,
@@ -100,8 +101,7 @@ export default {
                     vm.$router.replace({ query: query })
                   }, 100)
                 }
-              },
-              ...this.treeSetting
+              }
             }
           },
           {
