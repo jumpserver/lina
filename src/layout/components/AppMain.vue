@@ -8,10 +8,12 @@
 
 <script>
 import ChatAI from '@/components/Apps/ChatAi'
+import CachedRouterView from '@/layout/components/CachedRouterView.vue'
 
 export default {
   name: 'AppMain',
   components: {
+    CachedRouterView,
     ChatAI
   },
   computed: {
