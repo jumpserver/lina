@@ -114,7 +114,14 @@ export default {
       headerActions: {
         hasLeftActions: false,
         hasExport: false,
-        hasImport: false
+        hasImport: false,
+        searchConfig: {
+          queryKeyMap: {
+            id: 'id__icontains',
+            platform: 'platform__name__icontains',
+            zone: 'zone__name__icontains'
+          }
+        }
       }
     }
   },

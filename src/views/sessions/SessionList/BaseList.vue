@@ -186,7 +186,11 @@ export default {
         hasDatePicker: true,
         searchConfig: {
           getUrlQuery: false,
-          exclude: ['is_finished']
+          exclude: ['is_finished'],
+          queryKeyMap: {
+            id: 'id__icontains',
+            terminal: 'terminal'
+          }
         }
       }
     }

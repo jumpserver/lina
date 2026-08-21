@@ -35,7 +35,7 @@ export default {
           ]
         },
         columns: [
-          'user_display', 'backend_display', 'city', 'type',
+          'user_display', 'backend_display', 'ip', 'city', 'type',
           'date_created', 'is_active', 'date_expired', 'user_agent', 'actions'
         ],
         columnsMeta: {
@@ -101,6 +101,10 @@ export default {
         hasRightActions: true,
         searchConfig: {
           exclude: ['is_active'],
+          queryKeyMap: {
+            id: 'id__icontains',
+            ip: 'ip__icontains'
+          },
           options: [
             {
               value: 'is_active',

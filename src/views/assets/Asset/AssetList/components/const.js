@@ -30,7 +30,12 @@ export function getDefaultConfig(vm) {
     },
     hasLabelSearch: true,
     searchConfig: {
-      getUrlQuery: false
+      getUrlQuery: false,
+      queryKeyMap: {
+        platform: 'platform__name__icontains',
+        zone: 'zone__name__icontains',
+        protocols: 'protocols'
+      }
     },
     hasCreate: false,
     extraMoreActions: [

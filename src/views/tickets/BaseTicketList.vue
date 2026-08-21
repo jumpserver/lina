@@ -200,6 +200,13 @@ export default {
         hasBulkDelete: false,
         searchConfig: {
           exclude: ['id', 'title', 'type', 'applicant'],
+          queryKeyMap: {
+            id: 'id__icontains',
+            applicant_username_name: 'applicant_username_name',
+            relevant_asset: 'relevant_asset',
+            relevant_command: 'relevant_command',
+            org_name: 'org_name'
+          },
           options: [
             {
               value: 'id',
@@ -243,6 +250,10 @@ export default {
             {
               value: 'relevant_command',
               label: this.$t('ApplyRunCommand')
+            },
+            {
+              value: 'org_name',
+              label: this.$tc('OrgName')
             }
           ]
         },

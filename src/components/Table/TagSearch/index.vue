@@ -61,6 +61,10 @@ export default {
     default: {
       type: Object,
       default: null
+    },
+    queryKeyMap: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -279,6 +283,9 @@ export default {
       )
     },
     getQueryKey(key) {
+      if (this.queryKeyMap[key]) {
+        return this.queryKeyMap[key]
+      }
       if (this.shouldUseExactQuery(key)) {
         return key
       }

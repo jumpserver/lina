@@ -6,6 +6,7 @@
     <TagSearch
       v-show="!shouldFold"
       :options="iOption"
+      :query-key-map="queryKeyMap"
       v-bind="$attrs"
       @blur="handleBlur"
       v-on="$listeners"
@@ -37,6 +38,10 @@ export default {
     exclude: {
       type: Array,
       default: () => []
+    },
+    queryKeyMap: {
+      type: Object,
+      default: () => ({})
     },
     // 建议折叠
     fold: {
