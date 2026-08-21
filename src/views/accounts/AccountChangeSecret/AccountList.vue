@@ -138,7 +138,7 @@ export default {
             name: 'DeleteSelected',
             title: this.$t('DeleteSelected'),
             type: 'primary',
-            fa: 'fa-retweet',
+            icon: 'fa-solid fa-trash-can',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0
             },

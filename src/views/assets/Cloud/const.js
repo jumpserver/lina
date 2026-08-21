@@ -213,7 +213,7 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
   [fc]: {
     name: fc,
     title: i18n.t('FC'),
-    attrs: ['api_endpoint', 'username', 'password'],
+    attrs: ['api_endpoint', 'username', 'password', 'user_type'],
     image: getAssetUrl('img/cloud/huawei.svg')
   },
   [ctyun_private]: {

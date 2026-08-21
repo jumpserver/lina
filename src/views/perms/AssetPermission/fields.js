@@ -1,52 +1,57 @@
-import AssetSelect from '@/components/Apps/AssetSelect'
+import { ResourceSelect, TreeResourceSelect } from '@/components/Form/FormFields'
 import AccountFormatter from './components/AccountFormatter'
 
 function getFields() {
   const users = {
+    type: 'resourceSelect',
+    component: ResourceSelect,
     hidden: () => false,
+    rules: [{ required: false }],
     el: {
       value: [],
-      ajax: {
-        url: '/api/v1/users/users/?fields_size=mini',
-        transformOption: (item) => {
-          return { label: item.name + '(' + item.username + ')', value: item.id }
-        }
-      }
+      url: '/api/v1/users/users/?fields_size=mini',
+      resourceName: this.$t('Users')
     }
   }
 
   const user_groups = {
+    type: 'resourceSelect',
+    component: ResourceSelect,
     hidden: () => false,
+    rules: [{ required: false }],
     el: {
       value: [],
-      url: '/api/v1/users/groups/'
+      url: '/api/v1/users/groups/?fields_size=mini',
+      resourceName: this.$t('UserGroups')
     }
   }
 
   const assets = {
-    type: 'assetSelect',
+    type: 'resourceSelect',
     hidden: () => false,
-    component: AssetSelect,
-    rules: [
-      {
-        required: false
-      }
-    ],
+    component: ResourceSelect,
+    rules: [{ required: false }],
     el: {
-      value: []
+      value: [],
+      url: '/api/v1/assets/assets/?fields_size=mini',
+      resourceName: this.$t('Assets'),
+      nodeFilter: {
+        treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
+        typeTreeUrl: '/api/v1/assets/nodes/category/tree/?count_resource=none',
+        includeDescendants: true
+      }
     }
   }
 
   const nodes = {
+    type: 'treeResourceSelect',
+    component: TreeResourceSelect,
     hidden: () => false,
+    rules: [{ required: false }],
     el: {
-      value: [],
-      ajax: {
-        url: '/api/v1/assets/nodes/',
-        transformOption: (item) => {
-          return { label: item.full_value, value: item.id }
-        }
-      }
+      url: '/api/v1/assets/nodes/?fields_size=mini',
+      treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
+      resourceName: this.$t('Nodes')
     }
   }
 
@@ -68,15 +73,14 @@ function getFields() {
   }
 
   const applications = {
+    type: 'resourceSelect',
+    component: ResourceSelect,
     hidden: () => false,
+    rules: [{ required: false }],
     el: {
       value: [],
-      ajax: {
-        url: `/api/v1/applications/applications/`,
-        transformOption: (item) => {
-          return { label: item.name + ' (' + item.type_display + ')', value: item.id }
-        }
-      }
+      url: '/api/v1/applications/applications/?fields_size=mini',
+      resourceName: this.$t('Applications')
     }
   }
 

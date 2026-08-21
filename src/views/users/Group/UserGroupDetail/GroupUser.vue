@@ -67,7 +67,13 @@ export default {
       ],
       tableConfig: {
         url: `/api/v1/users/users/?group_id=${this.object.id}`,
-        columns: ['name', 'delete_action'],
+        columnsExclude: ['id'],
+        columns: ['name', 'actions'],
+        actionsColumnPosition: 'end',
+        columnsShow: {
+          default: ['name', 'actions'],
+          min: ['actions']
+        },
         columnsMeta: {
           name: {
             formatter: DetailFormatter,
@@ -76,8 +82,7 @@ export default {
               getTitle: ({ row }) => row.name + '(' + row.username + ')'
             }
           },
-          delete_action: {
-            prop: 'id',
+          actions: {
             label: this.$t('Actions'),
             align: 'center',
             width: 150,
@@ -103,9 +108,6 @@ export default {
                   this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
                 })
             }.bind(this)
-          },
-          actions: {
-            has: false
           }
         },
         tableAttrs: {

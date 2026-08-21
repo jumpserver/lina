@@ -140,5 +140,10 @@
   "CAPublicKey": "CA 公钥",
   "LoadCAPublicKey": "获取 CA 公钥",
   "SSHCertificate": "SSH 证书",
-  "DynamicCredential": "动态凭据"
+  "DynamicCredential": "动态凭据",
+  "PingParams": "连接测试参数",
+  "GatherFactsParams": "资产信息采集参数",
+  "VerifyAccountParams": "账号验证参数",
+  "GatherAccountsParams": "账号收集参数",
+  "RemoveAccountParams": "账号移除参数"
 }

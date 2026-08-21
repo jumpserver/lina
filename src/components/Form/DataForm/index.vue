@@ -167,13 +167,15 @@ export default {
   emits: ['submit', 'invalid', 'input', 'update:form'],
   data() {
     return {
-      basicForm: this.form,
       id: randomString(16),
       iSubmitBtnText: this.submitBtnText,
       inDialog: false
     }
   },
   computed: {
+    basicForm() {
+      return this.form
+    },
     elForm() {
       return this.$refs.form
     },

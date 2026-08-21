@@ -123,5 +123,10 @@
   "CAPublicKey": "CA 公開鍵",
   "LoadCAPublicKey": "CA 公開鍵を取得",
   "SSHCertificate": "SSH 証明書",
-  "DynamicCredential": "動的認証情報"
+  "DynamicCredential": "動的認証情報",
+  "PingParams": "接続テストパラメータ",
+  "GatherFactsParams": "アセット情報収集パラメータ",
+  "VerifyAccountParams": "アカウント検証パラメータ",
+  "GatherAccountsParams": "アカウント収集パラメータ",
+  "RemoveAccountParams": "アカウント削除パラメータ"
 }

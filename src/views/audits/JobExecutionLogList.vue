@@ -52,6 +52,7 @@ export default {
                 {
                   title: this.$t('View'),
                   name: 'logging',
+                  icon: 'fa-eye',
                   can: true,
                   type: 'primary',
                   callback: ({ row }) => {

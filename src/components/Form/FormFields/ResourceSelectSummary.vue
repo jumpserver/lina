@@ -1,41 +1,67 @@
 <template>
   <div class="resource-select-summary" :class="{ 'is-disabled': disabled }">
-    <div
-      :aria-disabled="disabled"
+    <button
+      v-if="countOnly"
       :aria-label="ariaLabel"
-      :class="{ 'is-disabled': disabled }"
-      :tabindex="disabled ? -1 : 0"
-      class="resource-select-summary__control"
-      role="button"
+      :disabled="disabled"
+      class="resource-select-summary__count-only"
+      type="button"
       @click="handleClick"
-      @keydown.enter.prevent="handleClick"
-      @keydown.space.prevent="handleClick"
     >
-      <template v-if="selectedCount > 0">
-        <span class="resource-select-summary__content">
-          <span class="resource-select-summary__count">{{ countText }}</span>
-          <span v-if="items.length > 0" class="resource-select-summary__names">
-            <span
-              v-for="item in items"
-              :key="String(item.value)"
-              class="resource-select-summary__name"
-            >
-              <span class="resource-select-summary__name-text">{{ item.name }}</span>
-              <button
-                v-if="!disabled"
-                :aria-label="`${$t('Remove')} ${item.name}`"
-                class="resource-select-summary__remove"
-                type="button"
-                @click.stop="$emit('remove', item.value)"
+      {{ selectedCount > 0 ? countText : text }}
+    </button>
+    <template v-else>
+      <div
+        :aria-disabled="disabled"
+        :aria-label="ariaLabel"
+        :class="{ 'is-disabled': disabled }"
+        :tabindex="disabled ? -1 : 0"
+        class="resource-select-summary__control"
+        role="button"
+        @click="handleClick"
+        @keydown.enter.prevent="handleClick"
+        @keydown.space.prevent="handleClick"
+      >
+        <template v-if="selectedCount > 0">
+          <div
+            v-if="items.length > 0"
+            ref="names"
+            class="resource-select-summary__names"
+            @scroll.passive="handleScroll"
+            @wheel.passive="handleWheel"
+          >
+            <span class="resource-select-summary__names-content">
+              <span
+                v-for="item in items"
+                :key="String(item.value)"
+                class="resource-select-summary__name"
               >
-                <el-icon><CircleCloseFilled /></el-icon>
-              </button>
+                <span class="resource-select-summary__name-text">{{ item.name }}</span>
+                <button
+                  v-if="!disabled"
+                  :aria-label="`${$t('Remove')} ${item.name}`"
+                  class="resource-select-summary__remove"
+                  type="button"
+                  @click.stop="$emit('remove', item.value)"
+                >
+                  <el-icon><Close /></el-icon>
+                </button>
+              </span>
             </span>
-          </span>
-        </span>
-      </template>
-      <span v-else class="resource-select-summary__placeholder">{{ text }}</span>
-    </div>
+          </div>
+        </template>
+        <span v-else class="resource-select-summary__placeholder">{{ text }}</span>
+      </div>
+      <button
+        v-if="selectedCount > 0"
+        :disabled="disabled"
+        class="resource-select-summary__count"
+        type="button"
+        @click="handleClick"
+      >
+        {{ countText }}
+      </button>
+    </template>
   </div>
 </template>
 
@@ -59,12 +85,25 @@ export default {
       type: String,
       default: ''
     },
+    countOnly: {
+      type: Boolean,
+      default: false
+    },
+    hasMore: {
+      type: Boolean,
+      default: false
+    },
     disabled: {
       type: Boolean,
       default: false
     }
   },
-  emits: ['click', 'remove'],
+  emits: ['click', 'load-more', 'remove'],
+  data() {
+    return {
+      loadMoreRequested: false
+    }
+  },
   computed: {
     ariaLabel() {
       if (this.selectedCount === 0) {
@@ -78,6 +117,32 @@ export default {
       if (!this.disabled) {
         this.$emit('click')
       }
+    },
+    handleScroll(event) {
+      const container = event.currentTarget
+      if (!container) {
+        return
+      }
+      const scrollableDistance = container.scrollHeight - container.clientHeight
+      if (scrollableDistance > 0 && container.scrollTop >= scrollableDistance / 2) {
+        this.requestLoadMore()
+      }
+    },
+    handleWheel(event) {
+      const container = this.$refs.names
+      if (event.deltaY > 0 && container && container.scrollHeight <= container.clientHeight + 1) {
+        this.requestLoadMore()
+      }
+    },
+    requestLoadMore() {
+      if (!this.hasMore || this.loadMoreRequested) {
+        return
+      }
+      this.loadMoreRequested = true
+      this.$emit('load-more')
+      this.$nextTick(() => {
+        this.loadMoreRequested = false
+      })
     }
   }
 }
@@ -85,6 +150,8 @@ export default {
 
 <style lang="scss" scoped>
 .resource-select-summary {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   min-height: 30px;
   color: var(--el-input-text-color, var(--el-text-color-regular));
@@ -97,12 +164,13 @@ export default {
 
 .resource-select-summary__control {
   box-sizing: border-box;
-  display: block;
+  display: flex;
+  align-items: center;
   width: 100%;
   min-height: 30px;
   height: auto;
   overflow: hidden;
-  padding: 4px 11px;
+  padding: 0;
   border: 1px solid var(--el-border-color);
   border-radius: 0;
   outline: none;
@@ -131,25 +199,69 @@ export default {
   }
 }
 
-.resource-select-summary__content {
-  display: block;
-  overflow: hidden;
+.resource-select-summary__count-only {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  min-height: 30px;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--el-color-primary);
+  cursor: pointer;
+  font: inherit;
+  line-height: 30px;
+  text-align: left;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--el-color-primary-light-3);
+  }
+
+  &:disabled {
+    color: var(--el-disabled-text-color);
+    cursor: not-allowed;
+  }
 }
 
 .resource-select-summary__names {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 10px;
-  margin-top: 4px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding-top: 7px;
-  padding-right: 7px;
-  scrollbar-width: none;
+  width: 100%;
+  min-height: 28px;
+  max-height: 80px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-color: var(--el-border-color) transparent;
+  scrollbar-width: thin;
 
   &::-webkit-scrollbar {
-    display: none;
+    width: 4px;
   }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background: var(--el-border-color);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--el-text-color-placeholder);
+  }
+}
+
+.resource-select-summary__names-content {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: center;
+  column-gap: 0;
+  row-gap: 0;
+  width: 100%;
+  min-height: 28px;
 }
 
 .resource-select-summary__count,
@@ -157,30 +269,29 @@ export default {
   color: var(--el-text-color-secondary);
 }
 
+.resource-select-summary__placeholder {
+  padding: 0 11px;
+}
+
 .resource-select-summary__name {
   box-sizing: border-box;
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
-  position: relative;
-  min-height: 22px;
-  padding: 1px 10px 1px 6px;
+  max-width: 100%;
+  height: 22px;
+  margin: 2px 0 2px 6px;
+  padding: 0 8px;
   border: 1px solid #e5e6e7;
-  border-radius: 3px;
+  border-radius: 4px;
   background: #f1f1f1;
   color: var(--el-text-color-regular);
   line-height: 18px;
-  white-space: nowrap;
+  white-space: normal;
   transition:
     background-color var(--el-transition-duration-fast),
     border-color var(--el-transition-duration-fast),
     color var(--el-transition-duration-fast);
-
-  &:hover .resource-select-summary__remove,
-  &:focus-within .resource-select-summary__remove {
-    opacity: 0.72;
-    pointer-events: auto;
-  }
 
   &:hover,
   &:focus-within {
@@ -188,44 +299,65 @@ export default {
     background: var(--el-fill-color);
     color: var(--el-text-color-primary);
   }
+}
 
-  &:hover .resource-select-summary__remove:hover,
-  &:focus-within .resource-select-summary__remove:focus-visible {
-    opacity: 1;
-  }
+.resource-select-summary__name-text {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .resource-select-summary__remove {
-  position: absolute;
-  top: 0;
-  right: 0;
   display: inline-flex;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
+  margin-left: 4px;
   padding: 0;
   border: 0;
+  border-radius: 50%;
   outline: none;
   background: transparent;
-  color: var(--el-text-color-secondary);
+  color: var(--color-text-primary);
   cursor: pointer;
-  font-size: 14px;
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(50%, -50%);
+  font-size: 10px;
+  overflow: hidden;
   transition:
-    color var(--el-transition-duration-fast),
-    opacity var(--el-transition-duration-fast);
+    background-color var(--el-transition-duration-fast),
+    color var(--el-transition-duration-fast);
 
   &:hover,
   &:focus-visible {
-    color: var(--el-text-color-primary);
+    background: var(--el-text-color-secondary);
+    color: var(--el-color-white);
   }
 }
 
 .resource-select-summary__count {
   display: block;
+  align-self: flex-start;
+  min-height: 20px;
+  margin-top: 4px;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--el-color-primary);
+  cursor: pointer;
+  font: inherit;
+  line-height: 20px;
+  text-align: left;
   white-space: nowrap;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--el-color-primary-light-3);
+  }
+
+  &:disabled {
+    color: var(--el-disabled-text-color);
+    cursor: not-allowed;
+  }
 }
 </style>

@@ -50,7 +50,7 @@ export default {
           }
         }
       ],
-      url: `/api/v1/perms/asset-permissions/${this.object.id}`,
+      url: `/api/v1/perms/asset-permissions/${this.object.id}/`,
       detailFields: [
         'id',
         'name',

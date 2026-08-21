@@ -3,6 +3,7 @@
     v-if="visible"
     :form-setting="formSetting"
     :selected-rows="selectedRows"
+    :target-resource-setting="targetResourceSetting"
     :tips="tips"
     :visible="visible"
     @update="$emit('update', $event)"
@@ -40,6 +41,17 @@ export default {
     const platformQuery = this.category === 'all' ? '' : this.category
     return {
       tips: this.$t('AssetBulkUpdateTips'),
+      targetResourceSetting: {
+        label: this.$t('Asset'),
+        url: '/api/v1/assets/assets/?fields_size=mini',
+        resourceName: this.$t('Assets'),
+        queryParams: this.category === 'all' ? {} : { category: this.category },
+        nodeFilter: {
+          treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
+          typeTreeUrl: '/api/v1/assets/nodes/category/tree/?count_resource=none',
+          includeDescendants: true
+        }
+      },
       formSetting: {
         url: '/api/v1/assets/assets/',
         hasSaveContinue: false,

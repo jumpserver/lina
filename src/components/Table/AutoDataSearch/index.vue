@@ -37,6 +37,10 @@ export default {
       type: Function,
       default: null
     },
+    singleChoiceFields: {
+      type: Array,
+      default: () => []
+    },
     // 建议折叠
     fold: {
       type: Boolean,
@@ -124,6 +128,7 @@ export default {
         const option = {
           custom: field.custom === true,
           label: field.label,
+          multiple: field.multiple !== false && !this.singleChoiceFields.includes(name),
           operators: field.operators,
           type: field.type,
           value: name

@@ -75,7 +75,7 @@
             >
               <template #header>
                 <span class="column-header-content">
-                  <span :title="col.label">{{ col.label }}</span>
+                  <span v-if="!col.hideHeaderLabel" :title="col.label">{{ col.label }}</span>
                   <button
                     v-if="col.pinState?.visible"
                     :aria-label="$t(col.pinState.pinned ? 'UnpinColumn' : 'PinColumn')"
@@ -100,7 +100,7 @@
                   :cell-value="tableRow[col.prop]"
                   :col="col"
                   :column="column"
-                  :index="$index"
+                  :index="(page - 1) * size + $index"
                   :reload="getList"
                   :row="tableRow"
                   :table-data="data"
@@ -978,8 +978,12 @@ export default {
       // 函数类型的 formatter 已经通过 :formatter 显式传递了
       // 但是我们需要保留 formatter 在 v-bind 中，以便 template slot 可以访问到
       // 所以这里不排除 formatter，而是在 el-data-table-column 中处理
-      const { pinOriginalFixed, pinState, ...columnProps } = col
-      return { align: this.columnsAlign, ...columnProps }
+      const { hideHeaderLabel, pinOriginalFixed, pinState, ...columnProps } = col
+      const props = { align: this.columnsAlign, ...columnProps }
+      if (col.type === 'index' && !props.index) {
+        props.index = (index) => (this.page - 1) * this.size + index + 1
+      }
+      return props
     },
     getQuery() {
       // 构造query对象

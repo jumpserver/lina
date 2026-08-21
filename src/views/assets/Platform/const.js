@@ -6,6 +6,16 @@ import AutomationMethodField from './AutomationMethodField'
 
 const needSettingParamsFields = ['push_account', 'change_secret']
 
+const automationParamsTitleKeys = {
+  ping: 'PingParams',
+  gather_facts: 'GatherFactsParams',
+  change_secret: 'ChangeSecretParams',
+  push_account: 'PushParams',
+  verify_account: 'VerifyAccountParams',
+  gather_accounts: 'GatherAccountsParams',
+  remove_account: 'RemoveAccountParams'
+}
+
 export const platformFieldsMeta = (vm) => {
   const assetMeta = assetFieldsMeta(vm)
   return {
@@ -66,7 +76,6 @@ export const platformFieldsMeta = (vm) => {
         change_secret_params: {
           label: '',
           el: {
-            title: vm.$t('ChangeSecretParams'),
             method: 'change_secret_posix'
           }
         },
@@ -171,32 +180,37 @@ export const setAutomations = (vm) => {
       `${itemMethodKey}.el.paramsUrl`,
       '/api/v1/assets/platform-automation-methods/'
     )
-    _.set(
-      autoFieldsMeta,
-      `${itemMethodKey}.el.paramsTitle`,
-      autoFieldsMeta[itemParamsKey]?.el?.title
-    )
+    _.set(autoFieldsMeta, `${itemMethodKey}.el.paramsTitle`, vm.$t(automationParamsTitleKeys[item]))
     _.set(autoFieldsMeta, `${itemMethodKey}.el.paramsKey`, itemParamsKey)
-    _.set(autoFieldsMeta, `${itemMethodKey}.el.paramsValue`, initial[itemParamsKey] || {})
-    _.set(initial, `${itemMethodKey}`, options[0]?.value)
-
-    // 参数写回:组合组件抛出的 paramsChange 事件,借助 updateForm 合并回 _params 字段;
-    // 保留 method 已有的 on(如 change_secret 的联动 change)。
-    const existingOn = autoFieldsMeta[itemMethodKey].on || {}
-    _.set(autoFieldsMeta, `${itemMethodKey}.on`, {
-      ...existingOn,
-      paramsChange: (args, updateForm) => {
-        if (updateForm) {
-          updateForm({ [itemParamsKey]: args[0] })
-        }
-      }
-    })
+    const existingParams = vm.object?.automation?.[itemParamsKey] || initial[itemParamsKey] || {}
+    _.set(autoFieldsMeta, `${itemMethodKey}.el.paramsValue`, existingParams)
+    if (
+      existingParams &&
+      typeof existingParams === 'object' &&
+      Object.keys(existingParams).length
+    ) {
+      initial[itemParamsKey] = existingParams
+    }
+    if (!initial[itemMethodKey]) {
+      _.set(initial, `${itemMethodKey}`, options[0]?.value)
+    }
   }
 }
 
 export const updateAutomationParams = (vm, obj) => {
+  const auto = obj?.automation || {}
+  const autoFieldsMeta = vm.fieldsMeta.automation.fieldsMeta
+  vm.fieldsMeta.automation.fields
+    .filter((item) => item.endsWith('_method'))
+    .forEach((itemMethodKey) => {
+      const prefix = itemMethodKey.replace('_method', '')
+      const params = auto[`${prefix}_params`]
+      if (params && typeof params === 'object' && Object.keys(params).length) {
+        _.set(autoFieldsMeta, `${itemMethodKey}.el.paramsValue`, params)
+      }
+    })
   needSettingParamsFields.forEach((v) => {
-    const value = _.get(obj.automation, `${v}_method`)
-    _.set(vm.fieldsMeta.automation.fieldsMeta, `${v}_params.el.method`, value)
+    const value = _.get(auto, `${v}_method`)
+    _.set(autoFieldsMeta, `${v}_params.el.method`, value)
   })
 }

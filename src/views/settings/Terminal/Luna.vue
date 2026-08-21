@@ -17,7 +17,9 @@
 import cloneDeep from 'lodash/cloneDeep'
 import isEqual from 'lodash/isEqual'
 import IBox from '@/components/Common/IBox'
+import { Select2 } from '@/components'
 import { GenericCreateUpdateForm } from '@/layout/components'
+import { terminalThemeOptions } from '@/utils/terminal-theme'
 
 export default {
   name: 'LunaSetting',
@@ -52,7 +54,8 @@ export default {
         [
           'LUNA_DEFAULT_CHARACTER_TERMINAL_FONT_SIZE',
           'LUNA_DEFAULT_IS_BACKSPACE_AS_CTRL_H',
-          'LUNA_DEFAULT_IS_RIGHT_CLICK_QUICKLY_PASTE'
+          'LUNA_DEFAULT_IS_RIGHT_CLICK_QUICKLY_PASTE',
+          'LUNA_DEFAULT_TERMINAL_THEME_NAME'
         ]
       ]
     ]
@@ -68,6 +71,15 @@ export default {
           }
         }
       })
+    fieldsMeta.LUNA_DEFAULT_TERMINAL_THEME_NAME = {
+      ...fieldsMeta.LUNA_DEFAULT_TERMINAL_THEME_NAME,
+      component: Select2,
+      el: {
+        clearable: false,
+        multiple: false,
+        options: terminalThemeOptions
+      }
+    }
 
     return {
       fields,

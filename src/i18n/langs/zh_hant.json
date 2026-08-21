@@ -122,5 +122,10 @@
   "CAPublicKey": "CA 公鑰",
   "LoadCAPublicKey": "取得 CA 公鑰",
   "SSHCertificate": "SSH 憑證",
-  "DynamicCredential": "動態憑據"
+  "DynamicCredential": "動態憑據",
+  "PingParams": "連線測試參數",
+  "GatherFactsParams": "資產資訊採集參數",
+  "VerifyAccountParams": "帳號驗證參數",
+  "GatherAccountsParams": "帳號收集參數",
+  "RemoveAccountParams": "帳號移除參數"
 }

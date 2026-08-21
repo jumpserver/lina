@@ -17,7 +17,18 @@
           <span>{{ account['username'] }}</span>
         </el-form-item>
         <el-form-item :label="secretTypeLabel">
+          <el-tooltip
+            v-if="vaultUnavailable"
+            :content="$t('VaultSecretUnavailableTip')"
+            placement="top"
+          >
+            <span class="vault-secret-unavailable">
+              <i class="fa fa-exclamation-circle" />
+              {{ $t('VaultSecretUnavailable') }}
+            </span>
+          </el-tooltip>
           <SecretViewerFormatter
+            v-else
             :cell-value="secretInfo.secret"
             :col="{
               formatterArgs: {
@@ -111,6 +122,7 @@ export default {
       secretInfo: {},
       versions: '-',
       showSecret: false,
+      vaultUnavailable: false,
       mfaDialogVisible: true,
       sshKeyFingerprint: '-',
       sshKeyFingerprintSha256: '-',
@@ -133,16 +145,17 @@ export default {
   setup() {
     return useDateTime()
   },
-  mounted() {
+  async mounted() {
     if (this.showPasswordRecord) {
       const url = `/api/v1/accounts/account-secrets/${this.account.id}/histories/?limit=1`
-      this.$axios.get(url, { disableFlashErrorMsg: true }).then((resp) => {
+      try {
+        const resp = await this.$axios.get(url, { disableFlashErrorMsg: true })
         this.versions = resp.count
-        this.showSecretDialog()
-      })
-    } else {
-      this.showSecretDialog()
+      } catch (error) {
+        // The secret request below displays a dedicated Vault status when applicable.
+      }
     }
+    this.showSecretDialog()
   },
   methods: {
     accountConfirmHandle() {
@@ -166,12 +179,22 @@ export default {
         this.$message.warning(this.$tc('AccountSecretReadDisabled'))
         return
       }
-      return this.$axios.get(this.url, { disableFlashErrorMsg: true }).then((res) => {
-        this.secretInfo = res
-        this.sshKeyFingerprint = res?.spec_info?.ssh_key_fingerprint || '-'
-        this.sshKeyFingerprintSha256 = res?.spec_info?.ssh_key_fingerprint_sha256 || '-'
-        this.showSecret = true
-      })
+      return this.$axios
+        .get(this.url, { disableFlashErrorMsg: true })
+        .then((res) => {
+          this.vaultUnavailable = false
+          this.secretInfo = res
+          this.sshKeyFingerprint = res?.spec_info?.ssh_key_fingerprint || '-'
+          this.sshKeyFingerprintSha256 = res?.spec_info?.ssh_key_fingerprint_sha256 || '-'
+          this.showSecret = true
+        })
+        .catch((error) => {
+          if (error?.response?.data?.code !== 'vault_unavailable') {
+            throw error
+          }
+          this.vaultUnavailable = true
+          this.showSecret = true
+        })
     },
     exit() {
       this.$emit('update:visible', false)
@@ -190,6 +213,14 @@ export default {
 <style lang="scss" scoped>
 .item-textarea :deep(.el-textarea__inner) {
   height: 110px;
+}
+
+.vault-secret-unavailable {
+  color: var(--el-color-warning);
+
+  .fa {
+    margin-right: 4px;
+  }
 }
 
 .el-form-item {

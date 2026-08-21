@@ -56,6 +56,7 @@ export default {
         },
         columns: [
           'expandCol',
+          ...(this.assetId ? ['index', 'id'] : []),
           'input',
           'risk_level',
           'user',
@@ -65,9 +66,10 @@ export default {
           'timestamp'
         ],
         columnsShow: {
-          min: ['output'],
+          min: ['output', ...(this.assetId ? ['index'] : [])],
           default: [
             'output',
+            ...(this.assetId ? ['index'] : []),
             'input',
             'risk_level',
             'user',
@@ -87,6 +89,10 @@ export default {
             prop: 'output',
             label: '',
             formatter: OutputExpandFormatter
+          },
+          index: {
+            type: 'index',
+            label: this.$t('RowNumber')
           },
           risk_level: {
             formatter: (row, col, cellValue) => {
@@ -131,6 +137,9 @@ export default {
         hasImport: false,
         hasExport: this.$hasPerm('terminal.view_command'),
         hasDatePicker: true,
+        searchConfig: {
+          singleChoiceFields: ['risk_level']
+        },
         datePicker: {
           dateStart: dateFrom,
           dateEnd: dateTo

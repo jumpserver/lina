@@ -251,33 +251,49 @@ export default {
     setErrors(errors) {
       const mapped = {}
       Object.entries(errors || {}).forEach(([k, v]) => {
-        let msg = v
-        console.log(k, v)
-        // v是数组并且数组都是字符串，则拼接为字符串
-        if (Array.isArray(v) && v.every((item) => typeof item === 'string')) msg = v.join('; ')
-        // 处理 [{"port":["请确保该值小于或者等于 65535。"]},{},{}] 这种情况
-        else if (Array.isArray(v) && v.every((item) => _.isPlainObject(item))) {
-          const subMsg = []
-          v.forEach((subItem) => {
-            Object.values(subItem).forEach((subMsgArr) => {
-              if (Array.isArray(subMsgArr)) {
-                subMsg.push(...subMsgArr)
-              }
-            })
-          })
-          msg = subMsg.join(' ')
-        } else if (typeof v === 'object' && v !== null) msg = JSON.stringify(v)
-        mapped[k] = String(msg || '')
+        mapped[k] = this.normalizeError(v)
       })
       this.serverErrors = mapped
       const elForm = this._getElFormInstance()
       if (elForm && Array.isArray(elForm.fields)) {
         elForm.fields.forEach((item) => {
-          const msg = mapped[item.prop] || ''
+          const error = mapped[item.prop]
+          const msg = typeof error === 'string' ? error : ''
           item.validateMessage = msg
           item.validateState = msg ? 'error' : ''
         })
       }
+    },
+    normalizeError(error) {
+      // DRF nested serializers return objects such as
+      // { meta: { SFTP_HOST: ['This field is required.'] } }.
+      // Keep that structure so NestedField can route each message to its input.
+      if (_.isPlainObject(error)) {
+        return Object.fromEntries(
+          Object.entries(error).map(([key, value]) => [key, this.normalizeError(value)])
+        )
+      }
+      // Join ordinary field messages while preserving the existing list-serializer fallback.
+      if (Array.isArray(error) && error.every((item) => typeof item === 'string')) {
+        return error.join('; ')
+      }
+      if (Array.isArray(error) && error.every((item) => _.isPlainObject(item))) {
+        const messages = []
+        error.forEach((item) => {
+          Object.values(item).forEach((value) => {
+            if (Array.isArray(value)) {
+              messages.push(...value)
+            }
+          })
+        })
+        return messages.join(' ')
+      }
+      // Preserve the previous JSON fallback for unsupported arrays and other
+      // object-shaped errors instead of exposing values such as "[object Object]".
+      if (typeof error === 'object' && error !== null) {
+        return JSON.stringify(error) || ''
+      }
+      return String(error || '')
     },
     groupHidden(group, i) {
       for (const field of group.fields) {

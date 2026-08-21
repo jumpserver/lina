@@ -96,15 +96,13 @@ export default {
           }
         },
         recipients: {
+          type: 'resourceSelect',
+          component: ResourceSelect,
           helpText: this.$t('OnlyMailSend'),
           el: {
             value: [],
-            ajax: {
-              url: '/api/v1/users/users/?fields_size=mini',
-              transformOption: (item) => {
-                return { label: item.name + '(' + item.username + ')', value: item.id }
-              }
-            }
+            url: '/api/v1/users/users/?fields_size=mini',
+            resourceName: this.$t('Users')
           }
         }
       },

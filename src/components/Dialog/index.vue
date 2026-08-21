@@ -10,6 +10,10 @@
     :width="iWidth"
     @update:model-value="handleVisibleChange"
   >
+    <template v-if="$slots.header" #header="headerProps">
+      <slot name="header" v-bind="headerProps" />
+    </template>
+
     <div v-loading="disabledStatus">
       <slot />
     </div>

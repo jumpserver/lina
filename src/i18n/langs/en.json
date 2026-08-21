@@ -142,5 +142,10 @@
   "CAPublicKey": "CA public key",
   "LoadCAPublicKey": "Load CA public key",
   "SSHCertificate": "SSH certificate",
-  "DynamicCredential": "Dynamic credential"
+  "DynamicCredential": "Dynamic credential",
+  "PingParams": "Connectivity test parameters",
+  "GatherFactsParams": "Asset information collection parameters",
+  "VerifyAccountParams": "Account verification parameters",
+  "GatherAccountsParams": "Account collection parameters",
+  "RemoveAccountParams": "Account removal parameters"
 }

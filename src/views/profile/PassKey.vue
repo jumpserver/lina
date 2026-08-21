@@ -85,6 +85,7 @@ export default {
                   title: ({ row }) => {
                     return row.is_active ? this.$t('Disable') : this.$t('Enable')
                   },
+                  icon: ({ row }) => (row.is_active ? 'fa-solid fa-ban' : 'fa-circle-check'),
                   type: 'info',
                   can: () => this.$hasPerm('authentication.change_passkey'),
                   callback: function ({ row }) {

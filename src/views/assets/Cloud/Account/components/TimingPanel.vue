@@ -3,6 +3,7 @@
     v-bind="settings"
     ref="form"
     class="form"
+    :object="object"
     @perform-finished="handlePerformFinished"
     @submit-success="handleSubmitSuccess"
   />
@@ -35,7 +36,7 @@ export default {
         defaultButton: false,
         submitMethod: 'put',
         getUrl: () => {
-          return `${this.settings.url}${this.object.task.id}/`
+          return `${this.settings.url}${this.object.id}/`
         },
         moreButtons: [
           {

@@ -38,6 +38,12 @@ const CELL_WHEEL_ACCELERATION_RATIO = 1.35
 const CELL_WHEEL_ACCELERATION_EPSILON = 0.5
 const COLUMN_WIDTH_CHANGE_TOLERANCE = 1
 const TABLE_CELL_SELECTOR = '.el-table__body td.el-table__cell .cell'
+const DEFAULT_HIDDEN_COLUMN_NAMES = new Set(['id'])
+
+function isDefaultHiddenColumn(column) {
+  const name = typeof column === 'object' ? column?.prop : column
+  return DEFAULT_HIDDEN_COLUMN_NAMES.has(name)
+}
 
 function getWheelEventTarget(event) {
   return event.target instanceof Element ? event.target : event.target?.parentElement
@@ -608,10 +614,11 @@ export default {
       if (defaultColumnsNames.length === 0) {
         defaultColumnsNames = totalColumnsNames
       }
+      defaultColumnsNames = defaultColumnsNames.filter((name) => !isDefaultHiddenColumn(name))
 
       // 最小列
-      const minColumnsNames = _.get(this.iConfig, 'columnsShow.min', ['actions', 'id']).filter(
-        (n) => totalColumnsNames.includes(n)
+      const minColumnsNames = _.get(this.iConfig, 'columnsShow.min', ['actions']).filter(
+        (name) => !isDefaultHiddenColumn(name) && totalColumnsNames.includes(name)
       )
 
       const configShowColumnsNames = this.tableColumnsStorage.get()

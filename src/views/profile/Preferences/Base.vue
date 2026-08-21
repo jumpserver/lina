@@ -200,10 +200,18 @@ export default {
           const values = await this.$axios.delete(this.url, {
             data: { names: [fieldName] }
           })
-          this.savedPreferenceValues = cloneDeep(values)
+          const fieldPath = [groupName, fieldName]
+          const restoredValue = cloneDeep(get(values, fieldPath))
+          set(this.savedPreferenceValues, fieldPath, restoredValue)
           if (this.autoSaveVersions[fieldKey] === version) {
             const formRenderer = this.$refs.form?.$refs.form?.dataForm?.elForm
-            formRenderer?.updateForm(values)
+            const currentGroupValue = cloneDeep(
+              get(formRenderer?.getFormValue?.(), [groupName], {})
+            )
+            set(currentGroupValue, [fieldName], restoredValue)
+            formRenderer?.updateForm({
+              [groupName]: currentGroupValue
+            })
             this.$message.success(this.$t('SaveSuccess'))
           }
         } catch (error) {

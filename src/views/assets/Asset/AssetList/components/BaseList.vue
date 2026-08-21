@@ -53,7 +53,7 @@ import GatewayDialog from '@/components/Apps/GatewayTestDialog'
 import AccountDiscoverDialog from './AccountDiscoverDialog.vue'
 import AccountCreateUpdate from '@/components/Apps/AccountListTable/AccountCreateUpdate.vue'
 import { getDefaultConfig } from './const'
-import { getBrowserQueryParam } from '@/utils/common/index'
+import { getSelectedAssetNodeId } from '@/utils/common/index'
 import { mapState } from 'vuex'
 
 export default {
@@ -249,15 +249,15 @@ export default {
     createAsset(platform) {
       this.showPlatform = false
       this.createDrawer = this.drawer[platform.category.value]
+      // 必须优先用浏览器 URL 中的 node_id（树点击实时写入），不能先读 $context/$route.query.node：
+      // 后者可能被上次创建抽屉 syncLegacyRouteState 写脏，且树切换不会更新 Vue Router state。
+      const nodeId = getSelectedAssetNodeId(this)
       const createProps = {
         platform: platform.id,
         type: platform.type.value,
         category: platform.category.value,
-        node:
-          this.$context.get('node') ||
-          this.$context.get('node_id') ||
-          getBrowserQueryParam('node_id') ||
-          ''
+        node: nodeId,
+        node_id: nodeId
       }
       this.$log.debug('createProps', createProps)
       this.$refs.ListTable.onCreate({ query: createProps })

@@ -2,26 +2,64 @@
   <Dialog
     :before-close="handleBeforeDialogClose"
     :close-on-click-modal="false"
-    :title="$t('ResourceSelectDialogTitle', { resource: displayResourceName })"
+    :title="dialogTitle"
     :visible="visible"
     class="resource-select-dialog"
-    max-width="1000px"
-    top="7vh"
-    width="74vw"
+    max-width="940px"
+    top="4vh"
+    width="70vw"
     @cancel="handleCancel"
     @confirm="handleConfirm"
     @update:visible="handleVisibleChange"
   >
-    <el-tabs
-      v-model="activeTab"
-      :before-leave="handleBeforeTabLeave"
-      class="resource-select-dialog__tabs"
-    >
-      <el-tab-pane name="available">
-        <template #label>
-          {{ $t('ResourceSelectUnselectedResources', { resource: displayResourceName }) }}
-          <span v-if="availableCount !== null">({{ availableCount }})</span>
-        </template>
+    <template #header="{ titleId, titleClass }">
+      <div class="resource-select-dialog__header-content">
+        <div :id="titleId" :class="[titleClass, 'resource-select-dialog__title']">
+          {{ dialogTitle }}
+        </div>
+        <div :aria-label="dialogTitle" class="resource-select-dialog__tabs" role="tablist">
+          <button
+            :aria-selected="activeTab === 'selected'"
+            :class="{ 'is-active': activeTab === 'selected' }"
+            :tabindex="activeTab === 'selected' ? 0 : -1"
+            class="resource-select-dialog__tab"
+            role="tab"
+            type="button"
+            @click="selectDialogTab('selected')"
+            @keydown.right.prevent="selectDialogTab('available')"
+          >
+            <span>{{
+              $t('ResourceSelectSelectedResources', {
+                resource: displayResourceName
+              })
+            }}</span>
+            <span class="resource-select-dialog__tab-count">({{ selectedCount }})</span>
+          </button>
+          <button
+            :aria-selected="activeTab === 'available'"
+            :class="{ 'is-active': activeTab === 'available' }"
+            :tabindex="activeTab === 'available' ? 0 : -1"
+            class="resource-select-dialog__tab"
+            role="tab"
+            type="button"
+            @click="selectDialogTab('available')"
+            @keydown.left.prevent="selectDialogTab('selected')"
+          >
+            <span>{{
+              $t('ResourceSelectUnselectedResources', {
+                resource: displayResourceName
+              })
+            }}</span>
+            <span v-if="availableCount !== null" class="resource-select-dialog__tab-count">
+              ({{ availableCount }})
+            </span>
+          </button>
+        </div>
+      </div>
+    </template>
+
+    <div class="resource-select-dialog__content">
+      <div v-show="activeTab === 'available'" class="resource-select-dialog__panel">
         <ListTable
           ref="availableTable"
           :header-actions="availableHeaderActions"
@@ -29,14 +67,9 @@
           :table-metadata-provider="getSharedTableMetadata"
           @selection-change="handleAvailableSelectionChange"
         />
-      </el-tab-pane>
+      </div>
 
-      <el-tab-pane name="selected">
-        <template #label>
-          {{ $t('ResourceSelectSelectedResources', { resource: displayResourceName }) }} ({{
-            selectedCount
-          }})
-        </template>
+      <div v-show="activeTab === 'selected'" class="resource-select-dialog__panel">
         <ListTable
           ref="selectedTable"
           :header-actions="selectedHeaderActions"
@@ -44,8 +77,8 @@
           :table-metadata-provider="getSharedTableMetadata"
           @selection-change="handleSelectedSelectionChange"
         />
-      </el-tab-pane>
-    </el-tabs>
+      </div>
+    </div>
   </Dialog>
 </template>
 
@@ -73,6 +106,10 @@ export default {
       default: false
     },
     value: {
+      type: Array,
+      default: () => []
+    },
+    selectedResources: {
       type: Array,
       default: () => []
     },
@@ -118,11 +155,19 @@ export default {
     },
     pageSize: {
       type: Number,
-      default: 15
+      default: 10
     }
   },
   emits: ['cancel', 'confirm', 'update:visible'],
   data() {
+    const resourceCache = new Map()
+    this.selectedResources.forEach((item) => {
+      const id = item?.[this.valueKey] ?? item?.value ?? item?.id
+      const name = String(item?.name || '').trim()
+      if (id !== undefined && id !== null && id !== '' && name) {
+        resourceCache.set(String(id), { value: id, name })
+      }
+    })
     return {
       activeTab: this.initialTab,
       draftValue: [...this.value],
@@ -140,6 +185,7 @@ export default {
       selectionSpmPromiseVersion: -1,
       availableRequestQueue: Promise.resolve(),
       selectedRequestQueue: Promise.resolve(),
+      resourceCache,
       tableMetadataRequestUrl: '',
       tableMetadataRequest: null,
       sharedNodeTreeState: {
@@ -221,7 +267,7 @@ export default {
               {
                 name: 'clearSelectedResources',
                 title: this.$t('ResourceSelectRemoveAll'),
-                icon: 'fa-minus-square-o',
+                icon: 'fa-square-minus',
                 can: () => this.selectedCount > 0,
                 callback: () => this.clearSelected()
               }
@@ -232,6 +278,9 @@ export default {
     },
     displayResourceName() {
       return this.resourceName || ''
+    },
+    dialogTitle() {
+      return this.$t('ResourceSelectDialogTitle', { resource: this.displayResourceName })
     },
     selectedCount() {
       return this.draftValue.length
@@ -277,7 +326,7 @@ export default {
         url: this.tableUrl,
         id: this.valueKey,
         paginationSize: this.effectivePageSize,
-        paginationSizes: [...new Set([this.effectivePageSize, 30, 50, 100])]
+        paginationSizes: [...new Set([10, 15, this.effectivePageSize, 30, 50, 100])]
           .filter((size) => size <= 100)
           .sort((a, b) => a - b),
         persistSelection: false,
@@ -287,7 +336,7 @@ export default {
         },
         actionsColumnPosition: 'start',
         selectionFixed: 'left',
-        selectionWidth: 48,
+        selectionWidth: 40,
         columnsShow: {
           ...this.columnsShow,
           min: this.minimumColumns,
@@ -311,11 +360,14 @@ export default {
         columnsMeta: {
           ...this.commonTableConfig.columnsMeta,
           actions: {
+            className: 'resource-select-action-column',
             fitWidth: false,
             fixed: 'left',
-            width: '80px',
+            hideHeaderLabel: true,
+            width: '60px',
             formatterArgs: {
               compact: true,
+              squareButtons: true,
               hasUpdate: false,
               hasDelete: false,
               hasClone: false,
@@ -323,7 +375,7 @@ export default {
                 {
                   name: 'add',
                   title: this.$t('Add'),
-                  icon: 'fa-plus',
+                  icon: 'fa-solid fa-plus',
                   showTip: false,
                   can: ({ row }) => this.canSelect(row),
                   callback: ({ row }) => this.addResources([row])
@@ -342,11 +394,14 @@ export default {
         columnsMeta: {
           ...this.commonTableConfig.columnsMeta,
           actions: {
+            className: 'resource-select-action-column',
             fitWidth: false,
             fixed: 'left',
-            width: '80px',
+            hideHeaderLabel: true,
+            width: '60px',
             formatterArgs: {
               compact: true,
+              squareButtons: true,
               hasUpdate: false,
               hasDelete: false,
               hasClone: false,
@@ -354,8 +409,8 @@ export default {
                 {
                   name: 'remove',
                   title: this.$t('Remove'),
-                  icon: 'fa-minus',
-                  iconStyle: { transform: 'scale(0.78)' },
+                  icon: 'fa-solid fa-minus',
+                  iconStyle: { transform: 'scaleX(0.78) scaleY(1.25)' },
                   showTip: false,
                   hoverType: 'danger',
                   callback: ({ row }) => this.removeResources([row])
@@ -400,6 +455,18 @@ export default {
     document.removeEventListener('keydown', this.handleDialogShortcut)
   },
   methods: {
+    cacheResources(resources) {
+      resources.forEach((item) => {
+        const id = item?.[this.valueKey] ?? item?.value ?? item?.id
+        const name = String(item?.name || '').trim()
+        if (id !== undefined && id !== null && id !== '' && name) {
+          this.resourceCache.set(String(id), { value: id, name })
+        }
+      })
+    },
+    getSelectedResources() {
+      return this.draftValue.map((id) => this.resourceCache.get(String(id))).filter(Boolean)
+    },
     getSharedTableMetadata(url) {
       if (this.tableMetadataRequest && this.tableMetadataRequestUrl === url) {
         return this.tableMetadataRequest
@@ -468,6 +535,16 @@ export default {
       const currentTable = currentTab === 'selected' ? 'selectedTable' : 'availableTable'
       await this.$refs[currentTable]?.closeNodeSearch()
       return true
+    },
+    async selectDialogTab(nextTab) {
+      const currentTab = this.activeTab
+      if (nextTab === currentTab) {
+        return
+      }
+      const canLeave = await this.handleBeforeTabLeave(nextTab, currentTab)
+      if (canLeave !== false) {
+        this.activeTab = nextTab
+      }
     },
     syncTablePageSize(refName) {
       const table = this.$refs[refName]?.dataTable?.dataTable
@@ -547,7 +624,9 @@ export default {
           fields_size: 'small'
         }
       })
-      return this.normalizeResponse(response)
+      const data = this.normalizeResponse(response)
+      this.cacheResources(data.results)
+      return data
     },
     requestAvailablePage(requestUrl, axiosConfig) {
       const selectionVersion = this.selectionVersion
@@ -720,6 +799,7 @@ export default {
       table.clearSelection()
     },
     addResources(rows) {
+      this.cacheResources(rows)
       const addedIds = []
       rows
         .filter((row) => this.canSelect(row))
@@ -822,7 +902,7 @@ export default {
         this.removeResources(pendingRemovals)
       }
 
-      this.$emit('confirm', [...this.draftValue])
+      this.$emit('confirm', [...this.draftValue], this.getSelectedResources())
       this.$emit('update:visible', false)
     },
     async handleCancel() {
@@ -836,18 +916,138 @@ export default {
 
 <style lang="scss">
 .resource-select-dialog.el-dialog {
-  height: min(700px, 76vh);
+  height: min(680px, 94vh);
   display: flex;
   flex-direction: column;
+
+  .el-dialog__header {
+    padding: 8px 24px !important;
+  }
 
   .el-dialog__body {
     flex: 1 1 auto;
     min-height: 0;
+    padding: 8px 24px 0 !important;
     overflow: auto;
   }
 
+  .el-dialog__footer {
+    padding: 4px 24px 6px !important;
+  }
+
   .el-dialog__body > .el-loading-parent--relative {
-    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .resource-select-dialog__header-content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 8px;
+  }
+
+  .resource-select-dialog__title {
+    color: var(--color-text-primary);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+  }
+
+  .resource-select-dialog__tabs {
+    display: flex;
+    align-items: center;
+    max-width: calc(100% - 40px);
+    height: 30px;
+    gap: 24px;
+  }
+
+  .resource-select-dialog__tab {
+    display: inline-flex;
+    align-items: center;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--el-text-color-regular);
+    cursor: pointer;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 24px;
+    white-space: nowrap;
+    gap: 4px;
+    transition: color var(--el-transition-duration-fast);
+
+    &:hover:not(.is-active) {
+      color: var(--el-color-primary);
+    }
+
+    &:focus-visible {
+      box-shadow: inset 0 0 0 2px var(--el-color-primary-light-5);
+    }
+
+    &.is-active {
+      color: var(--el-color-primary);
+      font-weight: 500;
+    }
+
+    &.is-active .resource-select-dialog__tab-count {
+      color: var(--el-color-primary);
+    }
+  }
+
+  .resource-select-dialog__tab-count {
+    color: var(--el-text-color-placeholder);
+    font-size: 12px;
+  }
+
+  .resource-select-dialog__content,
+  .resource-select-dialog__panel {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .list-table {
+    flex: 1 1 auto;
+    height: 100%;
+    min-height: 0;
+    gap: 4px;
+  }
+
+  .table-content {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .table-content > .el-card,
+  .table-content > .el-card > .el-card__body,
+  .auto-data-table,
+  .auto-data-table > .el-loading-parent--relative,
+  .auto-data-table .el-data-table {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .auto-data-table .el-data-table {
+    gap: 4px;
+  }
+
+  .auto-data-table .el-data-table > .el-loading-parent--relative {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .el-data-table .el-pagination {
+    flex: 0 0 auto;
+    padding: 6px 12px 8px;
   }
 
   .el-dialog__body .table-action .table-action__toolbar .search {
@@ -856,6 +1056,10 @@ export default {
     &.has-label-filter .search-primary {
       margin-left: 0;
     }
+  }
+
+  .resource-select-action-column {
+    border-right-color: transparent !important;
   }
 }
 </style>

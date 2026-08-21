@@ -3,10 +3,13 @@
     <ResourceSelectSummary
       :count-text="summaryCountText"
       :disabled="isDisabled"
+      :has-more="summaryHasMore"
       :items="selectedSummaryItems"
       :selected-count="selectedValue.length"
+      :count-only="summaryCountOnly"
       :text="summaryText"
       @click="openDialog(selectedValue.length > 0 ? 'selected' : 'available')"
+      @load-more="loadNextSummaryBatch"
       @remove="removeSummaryResource"
     />
 
@@ -18,6 +21,7 @@
       :node-filter="nodeFilter"
       :query-params="queryParams"
       :resource-name="resourceName"
+      :selected-resources="getSelectedSummaryResources()"
       :can-select="canSelect"
       :columns="columns"
       :columns-meta="columnsMeta"
@@ -92,7 +96,7 @@ export default {
     },
     pageSize: {
       type: Number,
-      default: 15
+      default: 10
     },
     disabled: {
       type: [Boolean, Function],
@@ -139,7 +143,8 @@ export default {
         this.dialogVisible = true
       }
     },
-    handleConfirm(value) {
+    handleConfirm(value, resources) {
+      this.cacheSummaryResources(resources)
       this.updateSelectedValue(value)
       this.dialogVisible = false
     },

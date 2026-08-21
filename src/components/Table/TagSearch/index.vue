@@ -39,7 +39,7 @@
           <span
             :class="{
               'has-checkbox': isMultiChoiceNode(node),
-              'has-radio': isBooleanChoiceNode(node),
+              'has-radio': isSingleChoiceNode(node),
               'is-current-field': isCurrentFieldOption(node, data)
             }"
             class="field-menu-option"
@@ -52,10 +52,10 @@
               class="choice-value-checkbox"
             />
             <span
-              v-if="isBooleanChoiceNode(node)"
-              :class="{ 'is-checked': isBooleanValueSelected(node, data) }"
+              v-if="isSingleChoiceNode(node)"
+              :class="{ 'is-checked': isSingleChoiceValueSelected(node, data) }"
               aria-hidden="true"
-              class="boolean-value-radio"
+              class="choice-value-radio"
             />
             <span class="field-menu-option__label">{{ data.label }}</span>
           </span>
@@ -76,11 +76,7 @@
       @command="handleOperatorChange"
       @visible-change="handleOperatorVisibleChange"
     >
-      <span
-        :aria-label="operatorLabel"
-        :title="operatorLabel"
-        class="operator-selector__trigger"
-      >
+      <span :aria-label="operatorLabel" :title="operatorLabel" class="operator-selector__trigger">
         <span class="operator-selector__symbol">{{ operatorSymbol }}</span>
       </span>
       <template #dropdown>
@@ -147,7 +143,17 @@
     >
       <template #suffix>
         <button
-          v-if="showSearchAction"
+          v-if="showClearDraftAction"
+          :aria-label="$t('Clear')"
+          class="search-submit-button clear-draft-button"
+          type="button"
+          @click.stop="handleClearSearchDraft"
+          @mousedown.stop.prevent
+        >
+          <el-icon><Close /></el-icon>
+        </button>
+        <button
+          v-else-if="showSearchAction"
           :aria-label="$t('Search')"
           class="search-submit-button"
           type="button"
@@ -158,6 +164,15 @@
         </button>
       </template>
     </el-input>
+    <el-tooltip
+      :content="placeholder"
+      :disabled="!showPlaceholderTooltip"
+      :show-after="400"
+      :virtual-ref="searchInputElement"
+      placement="top"
+      popper-class="tag-search-placeholder-tooltip"
+      virtual-triggering
+    />
     <span v-if="!showSearchAction" class="keydown-focus">/</span>
   </div>
 </template>
@@ -195,6 +210,7 @@ export default {
       filterKey: 'search',
       filterValue: '',
       filterOperator: 'icontains_any',
+      searchInputElement: null,
       valueLabel: '',
       fieldMenuValue: null,
       filterTags: this.default || {},
@@ -203,6 +219,7 @@ export default {
       isFocus: false,
       cascaderVisible: false,
       fieldMenuOpenTimer: null,
+      waitForInputClickToOpenFieldMenu: false,
       pendingFieldFocusSearchInput: false,
       operatorMenuVisible: false,
       pendingOperatorFocusSearchInput: false,
@@ -256,7 +273,10 @@ export default {
       return this.filterValue != null
     },
     showSearchAction() {
-      return this.focus || this.hasSearchValue
+      return this.showClearDraftAction || this.focus || this.hasSearchValue
+    },
+    showClearDraftAction() {
+      return this.hasSelectedField && !this.hasSearchValue
     },
     keyLabel() {
       if (!this.filterKey) return ''
@@ -328,9 +348,7 @@ export default {
       return groups
         .map((group) => ({
           ...group,
-          options: group.options.filter((option) =>
-            this.supportedOperators.includes(option.value)
-          )
+          options: group.options.filter((option) => this.supportedOperators.includes(option.value))
         }))
         .filter((group) => group.options.length > 0)
     },
@@ -358,24 +376,21 @@ export default {
         } else {
           data[queryKey] = Array.isArray(currentValue)
             ? [...currentValue, value]
-          : [currentValue, value]
+            : [currentValue, value]
         }
       }
       const appendMergedValues = (queryKey, value) => {
-        data[queryKey] = data[queryKey] === undefined
-          ? this.mergeConditionValues(value)
-          : this.mergeConditionValues(data[queryKey], value)
+        data[queryKey] =
+          data[queryKey] === undefined
+            ? this.mergeConditionValues(value)
+            : this.mergeConditionValues(data[queryKey], value)
       }
       const appendContainsValue = (queryKey, value, forceAll = false) => {
-        const baseKey = queryKey.replace(
-          /__(?:icontains|icontains_all)$/,
-          ''
-        )
+        const baseKey = queryKey.replace(/__(?:icontains|icontains_all)$/, '')
         const containsKey = `${baseKey}__icontains`
         const containsAllKey = `${baseKey}__icontains_all`
         const hasPreviousValue =
-          data[containsKey] !== undefined ||
-          data[containsAllKey] !== undefined
+          data[containsKey] !== undefined || data[containsAllKey] !== undefined
 
         if (!forceAll && !hasPreviousValue) {
           data[containsKey] = value
@@ -392,9 +407,7 @@ export default {
         if (!batch) {
           return
         }
-        data[keyword] = data[keyword]
-          ? `${data[keyword]},${batch}`
-          : batch
+        data[keyword] = data[keyword] ? `${data[keyword]},${batch}` : batch
       }
       for (const conditionKey in this.filterTags) {
         const condition = this.filterTags[conditionKey]
@@ -406,16 +419,14 @@ export default {
           key = keyword
         }
         if (key.startsWith(keyword)) {
-          const operator =
-            condition.operator || this.getDefaultOperator(key, value)
+          const operator = condition.operator || this.getDefaultOperator(key, value)
           if (operator === 'icontains_all') {
             appendValue('search__icontains_all', value)
           } else {
             appendDefaultSearchBatch(value)
           }
         } else {
-          const operator =
-            condition.operator || this.getDefaultOperator(key, value)
+          const operator = condition.operator || this.getDefaultOperator(key, value)
           const queryKey = this.getQueryKeyForOperator(key, operator)
           if (this.isMethodOption(key)) {
             data[queryKey] = value
@@ -436,10 +447,18 @@ export default {
       if (!this.focus) {
         return this.$t('SearchShortcutPlaceholder')
       }
-      const operator = this.hasSelectedField
-        ? this.filterOperator
-        : 'icontains_any'
+      const operator = this.hasSelectedField ? this.filterOperator : 'icontains_any'
       return this.getOperatorDescription(operator)
+    },
+    showPlaceholderTooltip() {
+      const hasInputContent = String(this.filterValue ?? '').length > 0
+      return Boolean(
+        this.searchInputElement &&
+        this.placeholder &&
+        !hasInputContent &&
+        (!this.cascaderVisible || !this.hasSelectedField) &&
+        !this.operatorMenuVisible
+      )
     }
   },
   watch: {
@@ -486,11 +505,15 @@ export default {
   mounted() {
     document.addEventListener('keyup', this.handleKeyUp)
     document.addEventListener('keydown', this.handleDocumentKeyDown, true)
+    document.addEventListener('pointerdown', this.handleDocumentPointerDown, true)
+    this.searchInputElement =
+      this.$refs.SearchInput?.input || this.$refs.SearchInput?.$el?.querySelector?.('input') || null
     this.initVisibilityObserver()
   },
   beforeUnmount() {
     document.removeEventListener('keyup', this.handleKeyUp)
     document.removeEventListener('keydown', this.handleDocumentKeyDown, true)
+    document.removeEventListener('pointerdown', this.handleDocumentPointerDown, true)
     this.visibilityObserver?.disconnect()
     clearTimeout(this.operatorFocusTimer)
     clearTimeout(this.fieldMenuOpenTimer)
@@ -545,16 +568,16 @@ export default {
     handleFocus() {
       this.focus = true
       this.isFocus = true
+      if (this.waitForInputClickToOpenFieldMenu) {
+        return
+      }
       if (!this.hasSelectedField && this.selectorOptions.length > 0) {
         this.scheduleFilterMenuOpen()
       }
     },
     handleInputMouseDown() {
-      if (
-        !this.cascaderVisible &&
-        !this.hasSelectedField &&
-        this.selectorOptions.length > 0
-      ) {
+      this.waitForInputClickToOpenFieldMenu = false
+      if (!this.cascaderVisible && !this.hasSelectedField && this.selectorOptions.length > 0) {
         this.scheduleFilterMenuOpen()
       }
     },
@@ -597,20 +620,14 @@ export default {
         const values = Array.isArray(rawValue) ? rawValue : [rawValue]
         for (const value of values) {
           const valueDecode = decodeURI(value)
-          const isSearch = [
-            'search',
-            'search__icontains_any',
-            'search__icontains_all'
-          ].includes(key)
+          const isSearch = ['search', 'search__icontains_any', 'search__icontains_all'].includes(
+            key
+          )
 
           if (isSearch) {
-            const operator =
-              key === 'search__icontains_all'
-                ? 'icontains_all'
-                : 'icontains_any'
-            const batches = key === 'search'
-              ? valueDecode.split(',').filter(Boolean)
-              : [valueDecode]
+            const operator = key === 'search__icontains_all' ? 'icontains_all' : 'icontains_any'
+            const batches =
+              key === 'search' ? valueDecode.split(',').filter(Boolean) : [valueDecode]
             for (const batch of batches) {
               const conditionKey = this.getUniqueConditionStorageKey(
                 'search',
@@ -710,18 +727,12 @@ export default {
       return ''
     },
     getTagTitle(tag) {
-      let operator = tag?.operator ||
-        this.getDefaultOperator(tag?.key, tag?.value)
-      if (
-        this.isSearchKey(tag?.key) &&
-        !this.hasMultipleConditionValues(tag?.value)
-      ) {
+      let operator = tag?.operator || this.getDefaultOperator(tag?.key, tag?.value)
+      if (this.isSearchKey(tag?.key) && !this.hasMultipleConditionValues(tag?.value)) {
         operator = 'icontains'
       }
       const operatorLabel = this.getOperatorLabel(operator)
-      const label = tag?.label
-        ? `${tag.label} ${operatorLabel}: `
-        : `${operatorLabel}: `
+      const label = tag?.label ? `${tag.label} ${operatorLabel}: ` : `${operatorLabel}: `
       const value =
         tag?.valueLabel !== '' && tag?.valueLabel != null ? tag.valueLabel : (tag?.value ?? '')
       return `${label}${value}`
@@ -760,11 +771,7 @@ export default {
     getConditionStorageKey(key, operator) {
       return `${key}::${operator}`
     },
-    getUniqueConditionStorageKey(
-      key,
-      operator,
-      conditions = this.filterTags
-    ) {
+    getUniqueConditionStorageKey(key, operator, conditions = this.filterTags) {
       const baseKey = this.getConditionStorageKey(key, operator)
       if (!conditions[baseKey]) {
         return baseKey
@@ -806,10 +813,7 @@ export default {
       return this.hasExplicitLookup(key) || this.isFixedChoiceOption(option)
     },
     getQueryKey(key) {
-      return this.getQueryKeyForOperator(
-        key,
-        this.shouldUseExactQuery(key) ? 'exact' : 'icontains'
-      )
+      return this.getQueryKeyForOperator(key, this.shouldUseExactQuery(key) ? 'exact' : 'icontains')
     },
     getMultipleQueryKey(key) {
       return this.getQueryKeyForOperator(key, 'in')
@@ -834,15 +838,10 @@ export default {
       if (this.options.some((field) => field.value === key)) {
         return key
       }
-      return key.replace(
-        /__(?:exact|icontains|startswith|in|icontains_any|icontains_all)$/,
-        ''
-      )
+      return key.replace(/__(?:exact|icontains|startswith|in|icontains_any|icontains_all)$/, '')
     },
     getOperatorFromQueryKey(key) {
-      const match = key.match(
-        /__(exact|icontains|startswith|in|icontains_any|icontains_all)$/
-      )
+      const match = key.match(/__(exact|icontains|startswith|in|icontains_any|icontains_all)$/)
       return match?.[1] || 'exact'
     },
     getDefaultOperator(key, value) {
@@ -865,9 +864,7 @@ export default {
     },
     getCompatibleOperator(operator, value, key = this.filterKey) {
       if (this.isSearchKey(key)) {
-        return operator === 'icontains_all'
-          ? 'icontains_all'
-          : 'icontains_any'
+        return operator === 'icontains_all' ? 'icontains_all' : 'icontains_any'
       }
       if (this.hasExplicitLookup(key)) {
         return this.getOperatorFromQueryKey(key)
@@ -876,9 +873,7 @@ export default {
         return this.hasMultipleConditionValues(value) ? 'in' : 'exact'
       }
       const supportedOperators = this.getSupportedOperators(key)
-      return supportedOperators.includes(operator)
-        ? operator
-        : supportedOperators[0] || 'icontains'
+      return supportedOperators.includes(operator) ? operator : supportedOperators[0] || 'icontains'
     },
     getSupportedOperators(key) {
       if (this.isSearchKey(key)) {
@@ -892,23 +887,11 @@ export default {
       const option = this.getOptionByKey(key)
       const operators = Array.isArray(option?.operators)
         ? option.operators
-        : [
-            'icontains',
-            'exact',
-            'startswith',
-            'icontains_any',
-            'icontains_all',
-            'in'
-          ]
+        : ['icontains', 'exact', 'startswith', 'icontains_any', 'icontains_all', 'in']
       return operators.filter((operator) =>
-        [
-          'icontains',
-          'exact',
-          'startswith',
-          'icontains_any',
-          'icontains_all',
-          'in'
-        ].includes(operator)
+        ['icontains', 'exact', 'startswith', 'icontains_any', 'icontains_all', 'in'].includes(
+          operator
+        )
       )
     },
     getOperatorLabel(operator) {
@@ -983,27 +966,18 @@ export default {
     },
     getConditionQueryKeys(key) {
       if (this.isSearchKey(key)) {
-        return [
-          'search',
-          'search__icontains_any',
-          'search__icontains_all'
-        ]
+        return ['search', 'search__icontains_any', 'search__icontains_all']
       }
       const baseKey = this.getTagKeyFromQueryKey(key)
-      const operators = [
-        'icontains',
-        'icontains_any',
-        'icontains_all',
-        'in'
+      const operators = ['icontains', 'icontains_any', 'icontains_all', 'in']
+      return [
+        ...new Set([
+          key,
+          baseKey,
+          `${baseKey}__exact`,
+          ...operators.map((operator) => this.getQueryKeyForOperator(baseKey, operator))
+        ])
       ]
-      return [...new Set([
-        key,
-        baseKey,
-        `${baseKey}__exact`,
-        ...operators.map((operator) =>
-          this.getQueryKeyForOperator(baseKey, operator)
-        )
-      ])]
     },
     findOptionPath(value, options = this.options, parentPath = []) {
       for (const option of options) {
@@ -1030,10 +1004,12 @@ export default {
       return this.hasSelectedField && node?.level === 1 && option?.value === this.filterKey
     },
     getCascaderRootValue(node) {
-      return node?.pathValues?.[0] ||
+      return (
+        node?.pathValues?.[0] ||
         node?.pathNodes?.[0]?.value ||
         node?.parent?.value ||
         node?.parent?.data?.value
+      )
     },
     isMultiChoiceNode(node) {
       if (!node || node.level < 2) {
@@ -1042,15 +1018,18 @@ export default {
       const field = this.getOptionByKey(this.getCascaderRootValue(node))
       return (
         !this.isBooleanOption(field) &&
+        field?.multiple !== false &&
         ['choice', 'labeled_choice'].includes(field?.type)
       )
     },
-    isBooleanChoiceNode(node) {
+    isSingleChoiceNode(node) {
       if (!node || node.level < 2) {
         return false
       }
-      return this.isBooleanOption(
-        this.getOptionByKey(this.getCascaderRootValue(node))
+      const field = this.getOptionByKey(this.getCascaderRootValue(node))
+      return (
+        this.isBooleanOption(field) ||
+        (field?.multiple === false && ['choice', 'labeled_choice'].includes(field?.type))
       )
     },
     getChoiceConditionValues(fieldKey) {
@@ -1064,14 +1043,12 @@ export default {
     },
     isChoiceValueSelected(node, option) {
       const fieldKey = this.getCascaderRootValue(node)
-      return this.getChoiceConditionValues(fieldKey).includes(
-        String(option.value)
-      )
+      return this.getChoiceConditionValues(fieldKey).includes(String(option.value))
     },
-    isBooleanValueSelected(node, option) {
+    isSingleChoiceValueSelected(node, option) {
       const fieldKey = this.getCascaderRootValue(node)
-      const selectedValues = this.getChoiceConditionValues(fieldKey).map(
-        (value) => value.toLowerCase()
+      const selectedValues = this.getChoiceConditionValues(fieldKey).map((value) =>
+        value.toLowerCase()
       )
       return selectedValues.includes(String(option.value).toLowerCase())
     },
@@ -1097,9 +1074,7 @@ export default {
       }
 
       const operator = nextValues.length === 1 ? 'exact' : 'in'
-      const valueLabels = nextValues.map(
-        (item) => this.getValueLabel(fieldKey, item) || item
-      )
+      const valueLabels = nextValues.map((item) => this.getValueLabel(fieldKey, item) || item)
       this.filterTags[this.getConditionStorageKey(fieldKey, operator)] = {
         key: fieldKey,
         label: field.label,
@@ -1108,7 +1083,7 @@ export default {
         operator
       }
     },
-    selectBooleanValue(node, option) {
+    selectSingleChoiceValue(node, option) {
       const fieldKey = this.getCascaderRootValue(node)
       const field = this.getOptionByKey(fieldKey)
       if (!field) {
@@ -1128,10 +1103,10 @@ export default {
       }
     },
     handleFieldOptionClick(event, node, option) {
-      if (this.isBooleanChoiceNode(node)) {
+      if (this.isSingleChoiceNode(node)) {
         event.preventDefault()
         event.stopPropagation()
-        this.selectBooleanValue(node, option)
+        this.selectSingleChoiceValue(node, option)
         return
       }
       if (this.isMultiChoiceNode(node)) {
@@ -1161,10 +1136,7 @@ export default {
       } else if (selectedPath.length >= 2) {
         this.filterKey = selectedPath[0]
         this.filterValue = selectedPath[selectedPath.length - 1]
-        this.filterOperator = this.getDefaultOperator(
-          this.filterKey,
-          this.filterValue
-        )
+        this.filterOperator = this.getDefaultOperator(this.filterKey, this.filterValue)
         this.valueLabel = this.getValueLabel(this.filterKey, this.filterValue)
         this.handleConfirm({ keepFieldMenuOpen: true })
         this.filterKey = this.defaultFilterKey
@@ -1176,13 +1148,11 @@ export default {
             this.$refs.Cascade?.togglePopperVisible?.(true)
           }, 0)
         } else if (selectedPath.length >= 2) {
-          this.fieldMenuValue = null
-          this.$refs.Cascade.handleClear()
+          this.clearFieldMenuSelection()
           this.$refs.Cascade?.togglePopperVisible?.(false)
         } else if (selectedPath.length === 1) {
-          this.fieldMenuValue = null
+          this.clearFieldMenuSelection()
           this.pendingFieldFocusSearchInput = true
-          this.$refs.Cascade.handleClear()
           this.$refs.Cascade?.togglePopperVisible?.(false)
         }
       })
@@ -1213,11 +1183,30 @@ export default {
       this.$refs.Cascade?.togglePopperVisible?.(true)
     },
     handleFieldMenuKeydown(event) {
-      if (this.filterValue !== '' || this.selectorOptions.length === 0) {
+      if (this.filterValue !== '') {
         return
       }
       event.preventDefault()
       event.stopPropagation()
+      this.waitForInputClickToOpenFieldMenu = false
+
+      if (this.hasSelectedField && this.supportsOperatorSelection) {
+        this.$refs.Cascade?.togglePopperVisible?.(false)
+        this.$refs.OperatorDropdown?.handleOpen?.()
+        this.$nextTick(() => {
+          setTimeout(() => {
+            const firstOperator = document.querySelector(
+              '.tag-search-operator-popper .el-dropdown-menu__item:not(.is-disabled)'
+            )
+            firstOperator?.focus()
+          }, 0)
+        })
+        return
+      }
+
+      if (this.selectorOptions.length === 0) {
+        return
+      }
       const cascader = this.$refs.Cascade
       cascader?.togglePopperVisible?.(true)
       this.$nextTick(() => {
@@ -1239,10 +1228,17 @@ export default {
       this.filterKey = this.defaultFilterKey
       this.filterOperator = 'icontains_any'
       this.valueLabel = ''
-      this.fieldMenuValue = null
-      this.$refs.Cascade?.handleClear?.()
+      this.clearFieldMenuSelection()
       this.$refs.Cascade?.togglePopperVisible?.(false)
       this.$nextTick(() => this.focusSearchInput())
+    },
+    handleClearSearchDraft() {
+      this.filterValue = ''
+      this.clearSelectedField()
+    },
+    clearFieldMenuSelection() {
+      this.fieldMenuValue = null
+      this.$refs.Cascade?.cascaderPanelRef?.clearCheckedNodes?.()
     },
     handleSearchEscape() {
       this.$refs.Cascade?.togglePopperVisible?.(false)
@@ -1260,6 +1256,14 @@ export default {
         this.handleFocus()
       }, 0)
     },
+    focusSearchInputAfterSubmit() {
+      clearTimeout(this.fieldMenuOpenTimer)
+      this.waitForInputClickToOpenFieldMenu = true
+      this.pendingFieldFocusSearchInput = false
+      this.restoreFieldMenuOnVisible = false
+      this.$refs.Cascade?.togglePopperVisible?.(false)
+      this.$nextTick(() => this.focusSearchInput())
+    },
     handleTagClose(evt) {
       const fieldKey = this.filterTags[evt]?.key || evt
       delete this.filterTags[evt]
@@ -1275,9 +1279,7 @@ export default {
       this.filterTags = {}
       if (this.getUrlQuery && conditionKeys.length > 0) {
         const queryKeys = conditionKeys.flatMap((conditionKey) =>
-          this.getConditionQueryKeys(
-            conditions[conditionKey]?.key || conditionKey
-          )
+          this.getConditionQueryKeys(conditions[conditionKey]?.key || conditionKey)
         )
         const query = _.omit(this.$route.query, [...queryKeys, 'search'])
         this.$router.replace({ query })
@@ -1309,11 +1311,7 @@ export default {
         }
         const conditionKey = this.shouldOverwriteCondition(tag.key, operator)
           ? this.getConditionStorageKey(tag.key, operator)
-          : this.getUniqueConditionStorageKey(
-              tag.key,
-              operator,
-              result
-            )
+          : this.getUniqueConditionStorageKey(tag.key, operator, result)
         result[conditionKey] = {
           ...tag,
           operator
@@ -1345,26 +1343,18 @@ export default {
         }
       }
       const incomingValue = this.mergeConditionValues(this.filterValue)
-      const requestedOperator = this.getCompatibleOperator(
-        this.filterOperator,
-        incomingValue
-      )
+      const requestedOperator = this.getCompatibleOperator(this.filterOperator, incomingValue)
       if (this.shouldOverwriteCondition(this.filterKey, requestedOperator)) {
         for (const conditionKey of Object.keys(this.filterTags)) {
           const condition = this.filterTags[conditionKey]
           if (
             condition?.key === this.filterKey &&
-            this.shouldOverwriteCondition(
-              this.filterKey,
-              condition.operator
-            )
+            this.shouldOverwriteCondition(this.filterKey, condition.operator)
           ) {
             delete this.filterTags[conditionKey]
           }
         }
-        this.filterTags[
-          this.getConditionStorageKey(this.filterKey, requestedOperator)
-        ] = {
+        this.filterTags[this.getConditionStorageKey(this.filterKey, requestedOperator)] = {
           key: this.filterKey,
           label: this.keyLabel,
           value: incomingValue,
@@ -1373,15 +1363,12 @@ export default {
         }
         this.resetFilterInputState()
         if (!keepFieldMenuOpen) {
-          this.$nextTick(() => this.focusSearchInput())
+          this.focusSearchInputAfterSubmit()
         }
         return
       }
       if (!shouldMergeCondition) {
-        const conditionKey = this.getUniqueConditionStorageKey(
-          this.filterKey,
-          requestedOperator
-        )
+        const conditionKey = this.getUniqueConditionStorageKey(this.filterKey, requestedOperator)
         this.filterTags[conditionKey] = {
           key: this.filterKey,
           label: this.keyLabel,
@@ -1391,16 +1378,13 @@ export default {
         }
         this.resetFilterInputState()
         if (!keepFieldMenuOpen) {
-          this.$nextTick(() => this.focusSearchInput())
+          this.focusSearchInputAfterSubmit()
         }
         return
       }
       const requestedConditionKey = shouldMergeCondition
         ? this.getConditionStorageKey(this.filterKey, requestedOperator)
-        : this.getUniqueConditionStorageKey(
-            this.filterKey,
-            requestedOperator
-          )
+        : this.getUniqueConditionStorageKey(this.filterKey, requestedOperator)
       let existingConditionKey = requestedConditionKey
       let existingTag = this.filterTags[existingConditionKey]
       if (
@@ -1409,10 +1393,7 @@ export default {
         this.isFixedChoiceOption(selectedOption) &&
         requestedOperator === 'exact'
       ) {
-        const multipleConditionKey = this.getConditionStorageKey(
-          this.filterKey,
-          'in'
-        )
+        const multipleConditionKey = this.getConditionStorageKey(this.filterKey, 'in')
         if (this.filterTags[multipleConditionKey]) {
           existingConditionKey = multipleConditionKey
           existingTag = this.filterTags[multipleConditionKey]
@@ -1425,18 +1406,10 @@ export default {
       const valueLabel = shouldMerge
         ? this.mergeConditionValues(existingTag.valueLabel, this.valueLabel)
         : this.mergeConditionValues(this.valueLabel)
-      const operator = this.getCompatibleOperator(
-        requestedOperator,
-        value
-      )
-      const conditionKey = this.getConditionStorageKey(
-        this.filterKey,
-        operator
-      )
+      const operator = this.getCompatibleOperator(requestedOperator, value)
+      const conditionKey = this.getConditionStorageKey(this.filterKey, operator)
       const compatibleTag =
-        conditionKey === existingConditionKey
-          ? null
-          : this.filterTags[conditionKey]
+        conditionKey === existingConditionKey ? null : this.filterTags[conditionKey]
       const finalValue = compatibleTag
         ? this.mergeConditionValues(compatibleTag.value, value)
         : value
@@ -1478,7 +1451,7 @@ export default {
         this.valueLabel = ''
       } else {
         this.resetFilterInputState()
-        this.$nextTick(() => this.focusSearchInput())
+        this.focusSearchInputAfterSubmit()
       }
     },
     resetFilterInputState() {
@@ -1515,8 +1488,7 @@ export default {
 
       this.filterKey = v.key
       this.filterValue = v.value
-      this.filterOperator =
-        v.operator || this.getDefaultOperator(v.key, v.value)
+      this.filterOperator = v.operator || this.getDefaultOperator(v.key, v.value)
       this.focusSearchInput()
     },
     handleKeyUp(event) {
@@ -1545,12 +1517,27 @@ export default {
       this.$refs.Cascade?.togglePopperVisible?.(false)
       this.$nextTick(() => this.$refs.SearchInput?.blur?.())
     },
+    handleDocumentPointerDown(event) {
+      if (!this.cascaderVisible) {
+        return
+      }
+      const target = event.target
+      const cascaderContent = this.$refs.Cascade?.contentRef
+      const fieldMenuPopper =
+        cascaderContent?.closest?.('.tag-search-field-popper') || cascaderContent
+      if (this.$el?.contains(target) || fieldMenuPopper?.contains?.(target)) {
+        return
+      }
+
+      clearTimeout(this.fieldMenuOpenTimer)
+      this.pendingFieldFocusSearchInput = false
+      this.restoreFieldMenuOnVisible = false
+      this.$refs.Cascade?.togglePopperVisible?.(false)
+      this.$refs.SearchInput?.blur?.()
+    },
     // 删除查询条件时改变url
     checkUrlFields(evt) {
-      let newQuery = _.omit(
-        this.$route.query,
-        this.getConditionQueryKeys(evt)
-      )
+      let newQuery = _.omit(this.$route.query, this.getConditionQueryKeys(evt))
       if (this.getUrlQuery && evt.startsWith('search')) {
         if (newQuery.search) delete newQuery.search
         const filterMapsSearch = this.filterMaps.search || ''
@@ -1615,14 +1602,23 @@ $origin-white-color: #ffffff;
     }
   }
 
-  &.has-selected-field .filter-selector {
+  &.has-selected-field > .filter-selector:not(.operator-selector) {
     justify-content: flex-start;
     width: auto;
     min-width: 0;
+    max-width: none;
     padding-left: 10px;
+    flex: 0 0 auto;
+
+    .filter-selector__label {
+      overflow: visible;
+      text-overflow: clip;
+    }
   }
 
   .operator-selector {
+    width: auto;
+    min-width: max-content;
     max-width: 150px;
     padding-left: 10px;
     white-space: nowrap;
@@ -1661,8 +1657,10 @@ $origin-white-color: #ffffff;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 18px;
-      padding: 3px 5px;
+      box-sizing: border-box;
+      width: max-content;
+      min-width: 22px;
+      padding: 3px 6px;
       color: var(--el-text-color-primary);
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 12px;
@@ -1737,6 +1735,10 @@ $origin-white-color: #ffffff;
     &.no-options {
       --jms-input-padding-inline-start: 11px;
     }
+  }
+
+  &.has-selected-field .search-input {
+    min-width: 48px;
   }
 
   &:not(.is-input-focus):not(.has-search-action) .search-input {
@@ -1879,6 +1881,12 @@ a {
       text-overflow: clip;
       white-space: nowrap;
     }
+
+    &__help {
+      margin-left: 6px;
+      color: var(--el-text-color-placeholder);
+      cursor: help;
+    }
   }
 
   .choice-value-checkbox {
@@ -1910,7 +1918,7 @@ a {
     }
   }
 
-  .boolean-value-radio {
+  .choice-value-radio {
     position: relative;
     display: inline-flex;
     box-sizing: border-box;
@@ -2049,5 +2057,13 @@ a {
     font-weight: 500;
     flex: 0 0 32px;
   }
+}
+
+.tag-search-placeholder-tooltip.el-popper {
+  max-width: min(360px, calc(100vw - 24px));
+  line-height: 18px;
+  overflow-wrap: anywhere;
+  text-align: left;
+  white-space: normal;
 }
 </style>

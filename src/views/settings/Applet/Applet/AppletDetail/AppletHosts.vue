@@ -30,6 +30,7 @@ export default {
           {
             name: 'SyncSelected',
             title: this.$t('BatchDeployment'),
+            icon: 'fa-solid fa-rotate',
             type: 'primary',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0

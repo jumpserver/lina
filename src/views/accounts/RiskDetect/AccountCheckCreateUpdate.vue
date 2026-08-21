@@ -4,6 +4,7 @@
 
 <script>
 import { periodicMeta } from '@/components/const'
+import { RequiredChange } from '@/components/Form/DataForm/rules'
 import { ResourceSelect, Select2, TreeResourceSelect } from '@/components/Form/FormFields'
 import i18n from '@/i18n/i18n'
 import { GenericCreateUpdatePage } from '@/layout/components'
@@ -52,32 +53,26 @@ export default {
         },
         engines: {
           component: Select2,
+          rules: [RequiredChange],
+          helpText: i18n.t('RiskDetectionAccountSourceHelpText'),
           el: {
             url: '/api/v1/accounts/account-check-engines/',
             multiple: true,
             ajax: {
               transformOption: (item) => {
-                let name = item.name
-                let disabled = false
-                if (item.slug === 'check_gathered_account') {
-                  name = `${name} (使用创建账号发现任务替代)`
-                  disabled = true
-                }
-                return { label: name, value: item.slug, disabled: disabled }
+                return { label: item.name, value: item.slug }
               }
             }
           }
         },
         recipients: {
+          type: 'resourceSelect',
+          component: ResourceSelect,
           helpText: i18n.t('OnlyMailSend'),
           el: {
             value: [],
-            ajax: {
-              url: '/api/v1/users/users/?fields_size=mini',
-              transformOption: (item) => {
-                return { label: item.name + '(' + item.username + ')', value: item.id }
-              }
-            }
+            url: '/api/v1/users/users/?fields_size=mini',
+            resourceName: this.$t('Users')
           }
         },
         nodes: {

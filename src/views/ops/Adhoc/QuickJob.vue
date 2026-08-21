@@ -103,7 +103,7 @@ export default {
             type: 'button',
             name: this.$t('Execute'),
             align: 'left',
-            icon: 'fa fa-play',
+            icon: 'fa fa-solid fa-play',
             tip: this.$t('RunCommand'),
             disabled: this.$store.getters.currentOrgIsRoot,
             el: {
@@ -121,7 +121,7 @@ export default {
             type: 'button',
             name: this.$t('Stop'),
             align: 'left',
-            icon: 'fa fa-stop',
+            icon: 'fa fa-solid fa-stop',
             tip: this.$t('StopJob'),
             isVisible: true,
             el: {
@@ -535,7 +535,7 @@ export default {
     setBtn() {
       if (!this.isRunning) {
         clearInterval(this.executionInfo.cancel)
-        this.toolbar.left.run.icon = 'fa fa-play'
+        this.toolbar.left.run.icon = 'fa fa-solid fa-play'
       }
       this.toolbar.left.run.isVisible = this.isRunning
       this.toolbar.left.stop.isVisible = !this.isRunning

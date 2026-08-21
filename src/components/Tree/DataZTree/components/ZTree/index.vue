@@ -193,15 +193,20 @@ export default {
         </a>`
       const treeActions = `${showSearch ? searchIcon : ''}${showRefresh ? refreshIcon : ''}`
       const icons = `
-        <span style="float: right; margin-right: 10px;" class='tree-actions'>
+        <span class="tree-actions">
           ${treeActions}
         </span>`
       if (rootNode) {
         const $rootNodeRef = $('#' + rootNode.tId + '_a')
+        const $rootNodeItem = $rootNodeRef.closest('li')
+        $rootNodeItem.css('position', 'relative')
+        $rootNodeItem.children('.tree-actions').remove()
         $rootNodeRef.css({
-          width: 'calc(100% - 68px)',
+          display: 'inline-block',
+          width: 'calc(100% - 64px)',
           overflow: 'hidden',
-          'text-overflow': 'ellipsis'
+          'text-overflow': 'ellipsis',
+          'white-space': 'nowrap'
         })
         $rootNodeRef.after(icons)
       }
@@ -439,7 +444,7 @@ export default {
 }
 
 div.rMenu {
-  position: absolute;
+  position: fixed;
   visibility: hidden;
   text-align: left;
   top: 0;
@@ -497,8 +502,7 @@ div.rMenu li {
   text-shadow: none;
   top: 100%;
   z-index: 1000;
-  max-height: 320px;
-  min-height: 150px;
+  max-height: none;
   overflow: auto;
 }
 
@@ -712,5 +716,16 @@ div.rMenu li {
 
 :deep(.tree-action-btn) {
   display: none;
+}
+
+:deep(.tree-actions) {
+  position: absolute;
+  top: 0;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  gap: 4px;
+  white-space: nowrap;
 }
 </style>

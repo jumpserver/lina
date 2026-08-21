@@ -46,9 +46,28 @@ export const reloadPlatformProtocols = (platformProtocols, currentProtocols) => 
   }))
 }
 
+export const getWebAssetSettingDefaults = (platformProtocols) => {
+  const protocols = Array.isArray(platformProtocols) ? platformProtocols : [platformProtocols]
+  const protocol =
+    protocols.find((item) => item?.name === 'http') ||
+    protocols.find((item) => item?.primary) ||
+    protocols[0]
+  const setting = protocol?.setting
+  if (!setting) {
+    return {}
+  }
+  return {
+    autofill: setting.autofill || 'basic',
+    password_selector: setting.password_selector,
+    script: setting.script,
+    submit_selector: setting.submit_selector,
+    username_selector: setting.username_selector
+  }
+}
+
 async function updatePlatformProtocols(
   vm,
-  platformType,
+  platformCategory,
   updateForm,
   platformChanged,
   currentProtocols,
@@ -70,17 +89,8 @@ async function updatePlatformProtocols(
   }
 
   const isCreate = !vm.$context.get('id') && !vm.$context.get('clone_from')
-  if (platformType === 'website' && (isCreate || platformChanged)) {
-    const setting = Array.isArray(platformProtocols)
-      ? platformProtocols[0].setting
-      : platformProtocols.setting
-    Object.assign(formUpdates, {
-      autofill: setting.autofill ? setting.autofill : 'basic',
-      password_selector: setting.password_selector,
-      script: setting.script,
-      submit_selector: setting.submit_selector,
-      username_selector: setting.username_selector
-    })
+  if (platformCategory === 'web' && (isCreate || platformChanged)) {
+    Object.assign(formUpdates, getWebAssetSettingDefaults(platformProtocols))
   }
 
   if (Object.keys(formUpdates).length > 0) {
@@ -111,7 +121,7 @@ export const assetFieldsMeta = (vm, category, type) => {
       selectedProtocols.length > 0 ? selectedProtocols : vm.iConfig.initial?.protocols
     await updatePlatformProtocols(
       vm,
-      platformType,
+      platformCategory,
       updateForm,
       platformChanged,
       currentProtocols,
@@ -206,7 +216,7 @@ export const assetFieldsMeta = (vm, category, type) => {
       component: TreeResourceSelect,
       rules: [rules.RequiredChange],
       el: {
-        value: [],
+        // 不要在 el 里写 value: []，会作为 prop 透传并在表单绑定时干扰节点回填
         url: '/api/v1/assets/nodes/?fields_size=mini',
         treeUrl: '/api/v1/assets/nodes/children/tree/?asset_amount=0&all=all',
         resourceName: vm.$t('Nodes')
@@ -217,7 +227,6 @@ export const assetFieldsMeta = (vm, category, type) => {
       type: 'resourceSelect',
       component: ResourceSelect,
       el: {
-        value: [],
         url: '/api/v1/labels/labels/',
         resourceName: vm.$t('Labels'),
         columns: ['name', 'id', 'value', 'color', 'comment'],

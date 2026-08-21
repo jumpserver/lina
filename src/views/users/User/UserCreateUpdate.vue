@@ -51,9 +51,7 @@ export default {
       ],
       url: '/api/v1/users/users/',
       fieldsMeta: {
-        name: {
-          uniqueCheck: true
-        },
+        name: {},
         username: {
           uniqueCheck: true,
           el: {
