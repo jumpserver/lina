@@ -64,7 +64,11 @@ export default {
   data() {
     const showAssets = this.treeSetting?.showAssets || this.showAssets
     const treeUrlQuery = this.setTreeUrlQuery()
-    const assetTreeUrl = `${this.treeUrl}?assets=${showAssets ? '1' : '0'}&${treeUrlQuery}`
+    let assetTreeUrl = setUrlParam(this.treeUrl, 'assets', showAssets ? '1' : '0')
+    assetTreeUrl = setUrlParam(assetTreeUrl, 'asset_amount', '0')
+    if (treeUrlQuery) {
+      assetTreeUrl += `${assetTreeUrl.includes('?') ? '&' : '?'}${treeUrlQuery}`
+    }
     const vm = this
 
     return {
@@ -111,7 +115,7 @@ export default {
               customTreeHeaderName: this.$t('TypeTree'),
               url: this.typeUrl,
               nodeUrl: this.treeSetting?.nodeUrl || this.nodeUrl,
-              treeUrl: `${this.typeUrl}?assets=${showAssets ? '1' : '0'}&count_resource=${this.treeSetting.countResource || 'asset'}`,
+              treeUrl: `${this.typeUrl}?assets=${showAssets ? '1' : '0'}&asset_amount=0&count_resource=${this.treeSetting.countResource || 'asset'}`,
               callback: {
                 onSelected: (event, treeNode) => this.getAssetsUrl(treeNode)
               },
