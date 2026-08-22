@@ -168,8 +168,9 @@ export default {
                 .then(res => {
                   this.$message.success(res['msg'])
                 })
-                .catch(res => {
-                  this.$message.error(res['response']['data']['error'])
+                .catch(error => {
+                  const message = error?.response?.data?.error || error?.message || 'NAS connection test failed'
+                  this.$message.error(message)
                 })
                 .finally(() => {
                   btn.loading = false
