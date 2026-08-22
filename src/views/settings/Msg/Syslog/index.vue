@@ -111,7 +111,7 @@ export default {
               testValue['SYSLOG_FACILITY'] = value['SYSLOG_FACILITY']
               testValue['SYSLOG_SOCKTYPE'] = value['SYSLOG_SOCKTYPE']
               btn.loading = true
-              testSyslogSetting(value)
+              testSyslogSetting(testValue)
                 .then(res => {
                   vm.$message.success(res['msg'])
                 })
