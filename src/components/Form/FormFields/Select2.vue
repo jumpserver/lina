@@ -142,7 +142,7 @@ export default {
     },
     fallbackPlacements: {
       type: Array,
-      default: () => ['bottom-start']
+      default: () => ['bottom-start', 'top-start', 'right', 'left']
     },
     fitInputWidth: {
       type: Boolean,
