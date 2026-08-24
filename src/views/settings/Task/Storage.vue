@@ -83,11 +83,7 @@ export default {
           on: {
             change: ([value], updateForm) => {
               updateForm({
-                NAS_HOST: '',
-                NAS_PORT: value === 'cifs' ? 445 : 2049,
-                NAS_SHARE_NAME: '',
-                NAS_USERNAME: '',
-                NAS_PASSWORD: ''
+                NAS_PORT: value === 'cifs' ? 445 : 2049
               })
             }
           }
