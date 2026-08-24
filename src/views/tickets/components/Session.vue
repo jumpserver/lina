@@ -11,7 +11,14 @@
         <el-row class="item">
           <el-col>
             <span class="item-label">{{ $t('SessionID') }}：</span>
-            <span class="item-value">{{ session.id }}</span>
+            <el-link
+              v-if="$hasPerm('terminal.view_session')"
+              type="primary"
+              @click="onOpenSessionDetail"
+            >
+              {{ session.id }}
+            </el-link>
+            <span v-else class="item-value">{{ session.id }}</span>
           </el-col>
           <el-col>
             <span class="item-label">{{ $t('TargetResources') }}：</span>
@@ -56,15 +63,22 @@
         </el-button>
       </div>
     </IBox>
+    <Drawer
+      v-model:visible="drawerVisible"
+      :title="$t('Session')"
+      :has-footer="false"
+      :component="SessionDetail"
+    />
   </div>
 </template>
 
 <script>
 import IBox from '@/components/Common/IBox'
+import Drawer from '@/components/Drawer/index.vue'
 import { IsSupportPauseSessionType } from '@/utils/jms/index'
 
 export default {
-  components: { IBox },
+  components: { IBox, Drawer },
   props: {
     object: {
       type: Object,
@@ -76,7 +90,9 @@ export default {
       session: {},
       curTimer: null,
       loading: false,
-      supportedLock: false
+      supportedLock: false,
+      drawerVisible: false,
+      SessionDetail: () => import('@/views/sessions/SessionDetail')
     }
   },
   computed: {
@@ -97,6 +113,17 @@ export default {
     this.curTimer = null
   },
   methods: {
+    onOpenSessionDetail() {
+      this.$store.dispatch('common/setDrawerActionMeta', {
+        action: 'detail',
+        row: {},
+        col: {},
+        id: this.session.id
+      })
+      this.$nextTick(() => {
+        this.drawerVisible = true
+      })
+    },
     init() {
       this.loading = true
       const url = `/api/v1/tickets/tickets/${this.object.id}/session/`
