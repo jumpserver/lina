@@ -33,7 +33,8 @@
             :col="{
               formatterArgs: {
                 name: account['name'],
-                secretType: secretType || ''
+                secretType: secretType || '',
+                showActionsOnHover: false
               }
             }"
             @input="onShowKeyCopyFormatterChange"
