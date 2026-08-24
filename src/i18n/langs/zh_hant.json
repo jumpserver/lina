@@ -88,6 +88,8 @@
   "NodeFilterClear": "清除篩選",
   "NodeFilterExpandAll": "展開全部",
   "NodeFilterCollapse": "逐級摺疊",
+  "ExpandNode": "展開節點",
+  "CollapseNode": "摺疊節點",
   "NodeFilterSearch": "搜尋節點",
   "TreeResourceSelectShowSelected": "僅查看已選節點",
   "TreeResourceSelectShowAll": "查看全部節點",

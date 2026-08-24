@@ -23,7 +23,8 @@
     <transition appear mode="out-in" name="fade-transform">
       <slot>
         <keep-alive v-if="flag">
-          <AutoDataZTree
+          <component
+            :is="treeComponent"
             :key="componentKey"
             ref="AutoDataZTree"
             :setting="activeTreeSetting"
@@ -34,7 +35,7 @@
                 <slot :data="data" name="rMenu" />
               </div>
             </template>
-          </AutoDataZTree>
+          </component>
         </keep-alive>
       </slot>
     </transition>
@@ -43,13 +44,15 @@
 
 <script>
 import AutoDataZTree from '@/components/Tree/AutoDataZTree/index.vue'
+import XTree from '@/components/Tree/XTree/index.vue'
 
 const ACTIVE_TREE_TAB_KEY = 'activeTreeTab'
 
 export default {
   name: 'TabTree',
   components: {
-    AutoDataZTree
+    AutoDataZTree,
+    XTree
   },
   props: {
     submenu: {
@@ -59,6 +62,10 @@ export default {
     activeMenu: {
       type: String,
       required: true
+    },
+    treeComponent: {
+      type: String,
+      default: 'AutoDataZTree'
     }
   },
   data() {

@@ -83,6 +83,8 @@
   "NodeFilterClear": "清除筛选",
   "NodeFilterExpandAll": "展开全部",
   "NodeFilterCollapse": "逐级折叠",
+  "ExpandNode": "展开节点",
+  "CollapseNode": "折叠节点",
   "NodeFilterSearch": "搜索节点",
   "TreeResourceSelectShowSelected": "仅查看已选节点",
   "TreeResourceSelectShowAll": "查看全部节点",

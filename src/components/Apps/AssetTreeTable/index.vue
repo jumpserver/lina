@@ -72,6 +72,7 @@ export default {
       treeComponent: 'TabTree',
       treeTabConfig: {
         activeMenu: 'CustomTree',
+        treeComponent: 'XTree',
         submenu: [
           {
             title: this.$t('AssetTree'),
@@ -188,23 +189,24 @@ export default {
     getAssetsUrl(treeNode) {
       let url = this.treeSetting?.url || this.url
       const showCurrentAsset = getShowCurrentAssetValue(this.$cookie)
+      const nodeType = treeNode.meta?.type
 
-      if (treeNode.meta.type === 'node') {
+      if (nodeType === 'node') {
         const nodeId = treeNode.meta.data.id
         url = setUrlParam(url, 'node_id', nodeId)
         url = setUrlParam(url, 'asset_id', '')
         url = setUrlParam(url, 'show_current_asset', showCurrentAsset)
-      } else if (treeNode.meta.type === 'asset') {
+      } else if (nodeType === 'asset') {
         const assetId = treeNode.meta.data?.id || treeNode.id
         url = setUrlParam(url, 'node_id', '')
         url = setUrlParam(url, 'asset_id', assetId)
         url = setUrlParam(url, 'show_current_asset', showCurrentAsset)
-      } else if (treeNode.meta.type === 'category') {
+      } else if (nodeType === 'category') {
         url = setUrlParam(url, 'category', treeNode.meta.category)
-      } else if (treeNode.meta.type === 'type') {
+      } else if (nodeType === 'type') {
         url = setUrlParam(url, 'category', treeNode.meta.category)
         url = setUrlParam(url, 'type', treeNode.meta._type)
-      } else if (treeNode.meta.type === 'platform') {
+      } else if (nodeType === 'platform') {
         url = setUrlParam(url, 'platform', treeNode.id)
       }
       url = this.appendTreeUrlQuery(url)

@@ -101,20 +101,21 @@ export default {
     },
     getAssetsUrl(treeNode) {
       let url = '/api/v1/assets/assets/'
-      if (treeNode.meta.type === 'node') {
+      const nodeType = treeNode.meta?.type
+      if (nodeType === 'node') {
         const nodeId = treeNode.meta.data.id
         url = setUrlParam(url, 'node', nodeId)
         url = setUrlParam(url, 'asset', '')
-      } else if (treeNode.meta.type === 'asset') {
+      } else if (nodeType === 'asset') {
         const assetId = treeNode.meta.data?.id || treeNode.id
         url = setUrlParam(url, 'node', '')
         url = setUrlParam(url, 'asset', assetId)
-      } else if (treeNode.meta.type === 'category') {
+      } else if (nodeType === 'category') {
         url = setUrlParam(url, 'category', treeNode.meta.category)
-      } else if (treeNode.meta.type === 'type') {
+      } else if (nodeType === 'type') {
         url = setUrlParam(url, 'category', treeNode.meta.category)
         url = setUrlParam(url, 'type', treeNode.meta._type)
-      } else if (treeNode.meta.type === 'platform') {
+      } else if (nodeType === 'platform') {
         url = setUrlParam(url, 'platform', treeNode.id)
       }
       this.tableConfig['url'] = url

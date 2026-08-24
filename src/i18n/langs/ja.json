@@ -89,6 +89,8 @@
   "NodeFilterClear": "フィルターをクリア",
   "NodeFilterExpandAll": "すべて展開",
   "NodeFilterCollapse": "段階的に折りたたむ",
+  "ExpandNode": "ノードを展開",
+  "CollapseNode": "ノードを折りたたむ",
   "NodeFilterSearch": "ノードを検索",
   "TreeResourceSelectShowSelected": "選択済みノードのみ表示",
   "TreeResourceSelectShowAll": "すべてのノードを表示",

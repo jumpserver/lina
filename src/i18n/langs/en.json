@@ -85,6 +85,8 @@
   "NodeFilterClear": "Clear filter",
   "NodeFilterExpandAll": "Expand all",
   "NodeFilterCollapse": "Collapse stepwise",
+  "ExpandNode": "Expand node",
+  "CollapseNode": "Collapse node",
   "NodeFilterSearch": "Search nodes",
   "TreeResourceSelectShowSelected": "Show selected nodes only",
   "TreeResourceSelectShowAll": "Show all nodes",
