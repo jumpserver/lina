@@ -11,9 +11,14 @@
         <el-row class="item">
           <el-col>
             <span class="item-label">{{ $t('SessionID') }}：</span>
-            <el-link type="primary" @click="onOpenSessionDetail">
+            <el-link
+              v-if="$hasPerm('terminal.view_session')"
+              type="primary"
+              @click="onOpenSessionDetail"
+            >
               {{ session.id }}
             </el-link>
+            <span v-else class="item-value">{{ session.id }}</span>
           </el-col>
           <el-col>
             <span class="item-label">{{ $t('TargetResources') }}：</span>
