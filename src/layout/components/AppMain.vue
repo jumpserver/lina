@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import ChatAI from '@/components/Apps/ChatAi'
 import CachedRouterView from '@/layout/components/CachedRouterView.vue'
 
@@ -17,6 +18,7 @@ export default {
     ChatAI
   },
   computed: {
+    ...mapGetters(['publicSettings']),
     key() {
       // 想让创建后回来 List 页面不刷新，但是完全不刷新 table 会不对，所以创建完成后，会更新 order 和 updated
       // query 去掉这两个，如果变了再刷新
@@ -50,7 +52,13 @@ export default {
       return key
     },
     chatAiEnabled() {
-      return this.$route.name !== 'ChatAi'
+      const activeTab = String(this.$route.query.tab || '').toLowerCase()
+      const isChatAiSettings = this.$route.name === 'Feature' && activeTab === 'chat'
+      return (
+        this.publicSettings?.CHAT_AI_ENABLED === true &&
+        this.$route.name !== 'ChatAi' &&
+        !isChatAiSettings
+      )
     }
   }
 }
