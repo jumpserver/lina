@@ -116,7 +116,10 @@ export default {
         hasRightActions: false,
         hasLabelSearch: true,
         searchConfig: {
-          getUrlQuery: false
+          getUrlQuery: false,
+          queryKeyMap: {
+            platform: 'platform__name__icontains'
+          }
         }
       }
     }
