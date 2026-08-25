@@ -54,7 +54,7 @@
     </div>
 
     <div class="conversation-panel__scroll">
-      <template v-if="loading">
+      <template v-if="loading && !conversations.length">
         <div v-for="item in 5" :key="item" class="conversation-skeleton">
           <span />
           <span />

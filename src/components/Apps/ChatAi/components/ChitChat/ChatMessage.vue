@@ -19,6 +19,8 @@
         </span>
       </header>
 
+      <ExecutionTrace v-if="message.role === 'assistant'" :active="messageActive" :items="trace" />
+
       <div :class="['chat-message__content', { 'has-error': message.status === 'failed' }]">
         <div v-if="message.images?.length" class="message-images">
           <img
@@ -68,11 +70,11 @@
         </template>
 
         <ResultCards
-          v-if="message.role === 'assistant' && message.result_cards?.length"
-          :cards="message.result_cards"
+          v-if="message.role === 'assistant' && visibleResultCards.length"
+          :cards="visibleResultCards"
         />
 
-        <div v-else-if="messageActive" class="thinking-state" role="status">
+        <div v-if="showThinking" class="thinking-state" role="status">
           <span class="thinking-orbit"><i /><i /><i /></span>
           <span>
             <strong>{{ t('ChatAIThinking') }}</strong>
@@ -93,8 +95,6 @@
           </button>
         </div>
       </div>
-
-      <ExecutionTrace v-if="message.role === 'assistant'" :active="messageActive" :items="trace" />
 
       <ApprovalCard
         v-if="messageApproval"
@@ -236,6 +236,19 @@ const editing = ref(false)
 const editor = ref(null)
 const draftContent = ref('')
 const messageActive = computed(() => ['pending', 'streaming'].includes(props.message.status))
+const visibleResultCards = computed(() => {
+  return (props.message.result_cards || []).filter((card) => {
+    return card?.type === 'sources' || card?.source?.type === 'web_search'
+  })
+})
+const showThinking = computed(() => {
+  return (
+    messageActive.value &&
+    !props.message.content &&
+    !props.trace.length &&
+    !visibleResultCards.value.length
+  )
+})
 const editSubmittable = computed(() => {
   const hasAttachments = props.message.images?.length || props.message.files?.length
   return (

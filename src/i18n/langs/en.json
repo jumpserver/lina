@@ -350,6 +350,7 @@
   "ChatAIConversationAuditNotice": "Restricted security audit: opening a conversation is recorded in the operation log. Messages are read-only and sensitive values are redacted.",
   "ChatAIAuditConversationList": "Conversation records",
   "ChatAIAuditConversationCount": "{count} conversations",
+  "ChatAIAuditMessageCount": "{count} messages",
   "ChatAIAuditSearchPlaceholder": "Search by title, name, or username",
   "ChatAIAuditOwner": "Owner",
   "ChatAIConversationTitle": "Conversation",

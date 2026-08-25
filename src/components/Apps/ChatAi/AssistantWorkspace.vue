@@ -44,17 +44,6 @@
           <span>{{ t('NewChat') }}</span>
         </button>
         <button
-          v-if="isSuperAdmin"
-          class="header-icon"
-          :aria-label="t('ChatAIConversationAudit')"
-          :title="t('ChatAIConversationAudit')"
-          :disabled="composerRecording || transcribing"
-          type="button"
-          @click="auditOpen = true"
-        >
-          <el-icon><DocumentChecked /></el-icon>
-        </button>
-        <button
           v-if="!standalone"
           class="header-icon"
           :aria-label="expanded ? t('ChatAICompress') : t('ChatAIExpand')"
@@ -145,7 +134,7 @@
           <div v-else class="message-list">
             <ChatMessage
               v-for="item in visibleMessages"
-              :key="item.id"
+              :key="item.version?.root_id || item._render_key || item.id"
               :approval="approval"
               :approval-processing="approvalProcessing"
               :assistant-name="assistantName(currentAssistant)"
@@ -241,8 +230,6 @@
         </footer>
       </main>
     </div>
-
-    <ConversationAuditDialog v-if="isSuperAdmin" v-model="auditOpen" />
   </section>
 </template>
 
@@ -256,7 +243,6 @@ import {
   Close,
   Coin,
   Connection,
-  DocumentChecked,
   EditPen,
   FullScreen,
   Lock,
@@ -271,7 +257,6 @@ import { useStore } from 'vuex'
 
 import { message } from '@/utils/vue/message'
 import AssistantMark from './components/AssistantMark.vue'
-import ConversationAuditDialog from './components/ConversationAuditDialog.vue'
 import ConversationPanel from './components/ConversationPanel.vue'
 import ChatInput from './components/ChitChat/ChatInput.vue'
 import ChatMessage from './components/ChitChat/ChatMessage.vue'
@@ -300,7 +285,6 @@ const scrollArea = ref(null)
 const conversationPanel = ref(null)
 const historyToggle = ref(null)
 const historyOpen = ref(false)
-const auditOpen = ref(false)
 const composerRecording = ref(false)
 const stickToBottom = ref(true)
 const showScrollToLatest = ref(false)
@@ -312,7 +296,6 @@ const voiceTranscriptionMode = computed(() => {
 const webSearchAvailable = computed(() => {
   return Boolean(store.getters.publicSettings?.CHAT_AI_WEB_SEARCH_ENABLED)
 })
-const isSuperAdmin = computed(() => Boolean(store.getters.currentUserIsSuperAdmin))
 
 const {
   conversations,
@@ -634,7 +617,6 @@ function scrollToBottom(smooth = true, force = false) {
 
 function handleShortcut(event) {
   if (!props.active || event.defaultPrevented) return
-  if (auditOpen.value) return
   if (event.key === 'Escape' && historyOpen.value) {
     event.preventDefault()
     historyOpen.value = false

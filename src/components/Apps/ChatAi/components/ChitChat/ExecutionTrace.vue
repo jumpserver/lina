@@ -1,5 +1,5 @@
 <template>
-  <div v-if="items.length" :class="['execution-trace', { 'is-open': opened }]">
+  <div v-if="displayedItems.length" :class="['execution-trace', { 'is-open': opened }]">
     <button
       class="execution-trace__summary"
       type="button"
@@ -14,16 +14,16 @@
         <strong>{{ summaryTitle }}</strong>
         <small>{{ summaryDescription }}</small>
       </span>
-      <span class="trace-count">{{ items.length }}</span>
+      <span class="trace-count">{{ displayedItems.length }}</span>
       <el-icon class="summary-arrow"><ArrowDown /></el-icon>
     </button>
 
     <transition name="trace-slide">
       <div v-show="opened" class="execution-trace__details">
         <div
-          v-for="(item, index) in items"
+          v-for="(item, index) in displayedItems"
           :key="item.id"
-          :class="['trace-item', `is-${item.status}`]"
+          :class="['trace-item', `is-${item.type}`, `is-${item.status}`]"
         >
           <span class="trace-item__rail">
             <span class="trace-item__dot">
@@ -32,14 +32,14 @@
               <el-icon v-else-if="item.status === 'approval'"><Lock /></el-icon>
               <el-icon v-else><Check /></el-icon>
             </span>
-            <span v-if="index < items.length - 1" class="trace-item__line" />
+            <span v-if="index < displayedItems.length - 1" class="trace-item__line" />
           </span>
           <span class="trace-item__content">
-            <strong>{{ itemTitle(item) }}</strong>
-            <small>{{ itemDescription(item) }}</small>
-            <span v-if="item.data?.status_code" class="status-code">
-              HTTP {{ item.data.status_code }}
+            <span class="trace-item__title">
+              <strong>{{ itemTitle(item) }}</strong>
+              <span v-if="item.count > 1" class="trace-item__count">×{{ item.count }}</span>
             </span>
+            <small v-if="itemDescription(item)">{{ itemDescription(item) }}</small>
           </span>
         </div>
       </div>
@@ -64,22 +64,79 @@ const props = defineProps({
 })
 
 const { t } = useI18n()
-const running = computed(() => props.items.some((item) => item.status === 'running'))
-const failed = computed(() => props.items.some((item) => item.status === 'failed'))
+const displayedItems = computed(() => {
+  const result = []
+  for (const sourceItem of props.items) {
+    const item = { ...sourceItem, data: { ...sourceItem.data }, count: 1 }
+    if (item.type !== 'api_call') {
+      result.push(item)
+      continue
+    }
+
+    const key = item.data?.operation_id || item.data?.summary || item.id
+    const existingIndex = result.findIndex((entry) => entry._groupKey === key)
+    if (existingIndex < 0) {
+      result.push({ ...item, _groupKey: key })
+      continue
+    }
+
+    const existing = result.splice(existingIndex, 1)[0]
+    result.push({
+      ...existing,
+      id: item.id,
+      status: mergedStatus(existing.status, item.status),
+      data: { ...existing.data, ...item.data },
+      count: existing.count + 1,
+      _groupKey: key
+    })
+  }
+  return result
+})
+const running = computed(() => displayedItems.value.some((item) => item.status === 'running'))
+const failed = computed(() => displayedItems.value.some((item) => item.status === 'failed'))
 const opened = ref(props.active || failed.value)
+const clock = ref(Date.now())
 let collapseTimer = null
+let clockTimer = null
 
 const summaryTitle = computed(() => {
-  if (failed.value) return t('ChatAIExecutionIssue')
   if (running.value || props.active) return t('ChatAIWorking')
+  if (failed.value) return t('ChatAIExecutionIssue')
   return t('ChatAIExecutionComplete')
 })
 
 const summaryDescription = computed(() => {
   const current = [...props.items].reverse().find((item) => item.status === 'running')
-  if (current) return itemTitle(current)
-  return t('ChatAIExecutionSummary', { count: props.items.length })
+  if (current) {
+    const title = itemTitle(current)
+    return elapsedLabel.value ? `${title} · ${elapsedLabel.value}` : title
+  }
+  const summary = t('ChatAIExecutionSummary', { count: displayedItems.value.length })
+  return elapsedLabel.value ? `${summary} · ${elapsedLabel.value}` : summary
 })
+
+const elapsedLabel = computed(() => {
+  const timestamps = props.items
+    .map((item) => Number(item.timestamp))
+    .filter((value) => Number.isFinite(value) && value > 0)
+  if (!timestamps.length) return ''
+  const startedAt = Math.min(...timestamps)
+  const endedAt = props.active || running.value ? clock.value : Math.max(...timestamps)
+  return formatDuration(Math.max(endedAt - startedAt, 1000))
+})
+
+watch(
+  [() => props.active, running],
+  ([active, hasRunning]) => {
+    if (clockTimer) window.clearInterval(clockTimer)
+    clockTimer = null
+    if (active || hasRunning) {
+      clock.value = Date.now()
+      clockTimer = window.setInterval(() => (clock.value = Date.now()), 1000)
+    }
+  },
+  { immediate: true }
+)
 
 watch(
   () => props.active,
@@ -99,6 +156,7 @@ watch(failed, (hasFailed) => {
 
 onBeforeUnmount(() => {
   if (collapseTimer) window.clearTimeout(collapseTimer)
+  if (clockTimer) window.clearInterval(clockTimer)
 })
 
 function toggleOpened() {
@@ -107,18 +165,37 @@ function toggleOpened() {
   opened.value = !opened.value
 }
 
+function mergedStatus(previous, current) {
+  return current || previous || 'completed'
+}
+
+function formatDuration(milliseconds) {
+  const totalSeconds = Math.max(1, Math.round(milliseconds / 1000))
+  const hours = Math.floor(totalSeconds / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  const seconds = totalSeconds % 60
+  const parts = [minutes, seconds].map((value) => String(value).padStart(2, '0'))
+  if (hours) parts.unshift(String(hours))
+  return parts.join(':')
+}
+
 function itemTitle(item) {
-  if (item.type === 'agent_plan') return t('ChatAIPlanReady')
+  if (item.type === 'progress') return item.data?.content || t('ChatAIWorking')
   if (item.type === 'api_search') {
+    if (item.data?.action) return item.data.action
     return item.status === 'running'
       ? t('ChatAISearchingCapabilities')
       : t('ChatAICapabilitiesFound')
   }
   if (item.type === 'web_search') {
+    if (item.data?.action) return item.data.action
     if (item.status === 'failed') return t('ChatAIWebSearchFailed')
     return item.status === 'running' ? t('ChatAIWebSearching') : t('ChatAIWebSearchComplete')
   }
   if (item.type === 'api_call') {
+    if (item.data?.action) return item.data.action
+    const summary = readableSummary(item.data?.summary)
+    if (summary) return summary
     if (item.status === 'approval') return t('ChatAIWaitingApproval')
     if (item.status === 'failed') return t('ChatAICallFailed')
     if (item.status === 'completed') return t('ChatAICallComplete')
@@ -128,15 +205,18 @@ function itemTitle(item) {
   return t('ChatAIWorking')
 }
 
+function readableSummary(value) {
+  const summary = String(value || '').trim()
+  if (!summary) return ''
+  if (/^[a-z0-9]+(?:_[a-z0-9]+)+$/i.test(summary)) return ''
+  if (/^(GET|POST|PUT|PATCH)\s+\//i.test(summary)) return ''
+  return summary
+}
+
 function itemDescription(item) {
-  if (item.type === 'agent_plan') {
-    return t('ChatAIPlanDescription', {
-      steps: item.data?.max_steps || 0,
-      calls: item.data?.max_api_calls || 0
-    })
-  }
+  if (item.type === 'progress') return ''
   if (item.type === 'api_search') {
-    if (item.status === 'running') return item.data?.query || t('ChatAISearchingCapabilities')
+    if (item.status === 'running') return t('ChatAISearchingCapabilities')
     return t('ChatAICapabilityCount', { count: item.data?.operationCount || 0 })
   }
   if (item.type === 'web_search') {
@@ -145,9 +225,10 @@ function itemDescription(item) {
     return t('ChatAIWebSourceCount', { count: item.data?.sourceCount || 0 })
   }
   if (item.type === 'api_call') {
-    const method = item.data?.method || ''
-    const path = item.data?.path || item.data?.operation_id || ''
-    return [method, path].filter(Boolean).join(' · ')
+    if (item.status === 'approval') return t('ChatAIWaitingApproval')
+    if (item.status === 'failed') return t('ChatAICallFailed')
+    if (item.status === 'running') return t('ChatAICallingCapability')
+    return t('ChatAICallComplete')
   }
   if (item.type === 'error') return item.data?.detail || item.data?.code || ''
   return ''
@@ -158,18 +239,14 @@ function itemDescription(item) {
 .execution-trace {
   max-width: 620px;
   margin: 10px 0 4px;
-  overflow: hidden;
-  border: 1px solid var(--ai-border, #e9ecef);
-  border-radius: var(--ai-radius-md, 10px);
-  background: var(--ai-surface-muted, #f7f9f8);
 
   &__summary {
     display: flex;
     width: 100%;
-    min-height: 52px;
+    min-height: 36px;
     align-items: center;
     gap: 10px;
-    padding: 9px 11px;
+    padding: 5px 0;
     border: 0;
     color: #4b5067;
     background: transparent;
@@ -178,7 +255,7 @@ function itemDescription(item) {
     transition: background 0.16s ease;
 
     &:hover {
-      background: var(--ai-surface-hover, #f1f7f5);
+      color: var(--ai-primary-dark, #148f76);
     }
 
     &:focus-visible {
@@ -188,16 +265,15 @@ function itemDescription(item) {
   }
 
   &__details {
-    padding: 2px 14px 12px;
-    border-top: 1px solid rgb(78 84 118 / 7%);
+    padding: 2px 0 8px 9px;
   }
 }
 
 .trace-state {
   display: grid;
-  width: 30px;
-  height: 30px;
-  flex: 0 0 30px;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
   place-items: center;
   border-radius: var(--ai-radius-sm, 8px);
   color: var(--ai-primary-dark, #148f76);
@@ -256,7 +332,7 @@ function itemDescription(item) {
 
 .trace-item {
   display: flex;
-  min-height: 44px;
+  min-height: 38px;
   gap: 10px;
   padding-top: 10px;
 
@@ -299,6 +375,10 @@ function itemDescription(item) {
     flex-direction: column;
     gap: 3px;
 
+    > small {
+      font-family: inherit;
+    }
+
     strong {
       color: #5c6175;
       font-size: 11px;
@@ -313,6 +393,17 @@ function itemDescription(item) {
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__count {
+    color: #999eb0;
+    font-size: 10px;
   }
 
   &.is-running {
@@ -338,17 +429,30 @@ function itemDescription(item) {
     border-color: #f0d4ab;
     background: #fff7e8;
   }
-}
 
-.status-code {
-  width: fit-content;
-  margin-top: 2px;
-  padding: 2px 5px;
-  border-radius: 5px;
-  color: #7d8396;
-  background: #eceef3;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 10px;
+  &.is-progress {
+    min-height: 48px;
+    padding-top: 12px;
+
+    .trace-item__dot {
+      width: 7px;
+      height: 7px;
+      margin-top: 7px;
+      border: 0;
+      background: #a9d9cd;
+
+      .el-icon {
+        display: none;
+      }
+    }
+
+    .trace-item__content strong {
+      color: #454a5e;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.65;
+    }
+  }
 }
 
 .trace-slide-enter-active,

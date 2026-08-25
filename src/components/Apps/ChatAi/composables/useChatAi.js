@@ -103,6 +103,7 @@ function forgetApproval(conversationId) {
 function normalizeMessage(message) {
   return {
     id: message.id,
+    _render_key: message._render_key || message.id,
     role: message.role,
     content: message.content || '',
     status: message.status || 'completed',
@@ -118,6 +119,49 @@ function normalizeMessage(message) {
     regenerated_from: message.regenerated_from || null,
     date_created: message.date_created || new Date().toISOString()
   }
+}
+
+function restoredTrace(message) {
+  const items = []
+  for (const [index, card] of (message.result_cards || []).entries()) {
+    if (card?.type === 'progress' && card?.content?.text) {
+      items.push({
+        id: `restored-progress-${message.id}-${index}`,
+        type: 'progress',
+        status: 'completed',
+        data: { content: card.content.text },
+        timestamp: Date.parse(card.content.timestamp || '') || 0
+      })
+      continue
+    }
+    if (card?.source?.type === 'core_api') {
+      items.push({
+        id: `restored-api-${message.id}-${index}`,
+        type: 'api_call',
+        status: Number(card.source.status_code) >= 400 ? 'failed' : 'completed',
+        data: {
+          operation_id: card.source.operation_id || '',
+          action: card.source.action || '',
+          summary: card.title || ''
+        },
+        timestamp: Date.parse(card.source.timestamp || '') || 0
+      })
+      continue
+    }
+    if (card?.type === 'sources' || card?.source?.type === 'web_search') {
+      items.push({
+        id: `restored-web-${message.id}-${index}`,
+        type: 'web_search',
+        status: 'completed',
+        data: {
+          action: card.source?.action || '',
+          sourceCount: card.content?.sources?.length || 0
+        },
+        timestamp: Date.parse(card.source?.timestamp || '') || 0
+      })
+    }
+  }
+  return items
 }
 
 function revokeLocalAttachments(items) {
@@ -216,8 +260,8 @@ export function useChatAi(options = {}) {
     conversations.value.sort((a, b) => new Date(b.date_updated) - new Date(a.date_updated))
   }
 
-  async function loadConversations({ selectFirst = false } = {}) {
-    loadingConversations.value = true
+  async function loadConversations({ selectFirst = false, silent = false } = {}) {
+    if (!silent) loadingConversations.value = true
     try {
       const response = await listConversations()
       lastError.value = null
@@ -236,7 +280,7 @@ export function useChatAi(options = {}) {
       emitError(error)
       return false
     } finally {
-      loadingConversations.value = false
+      if (!silent) loadingConversations.value = false
     }
   }
 
@@ -325,8 +369,20 @@ export function useChatAi(options = {}) {
     try {
       const data = await listConversationMessages(id)
       if (requestId !== messagesRequestId || activeConversationId.value !== id) return false
+      const renderKeys = new Map(
+        messages.value.map((message) => [message.id, message._render_key || message.id])
+      )
       revokeLocalAttachments(messages.value)
-      messages.value = data.map(normalizeMessage)
+      messages.value = data.map((message) => {
+        const normalized = normalizeMessage(message)
+        normalized._render_key = renderKeys.get(normalized.id) || normalized._render_key
+        return normalized
+      })
+      traces.value = Object.fromEntries(
+        messages.value
+          .map((message) => [message.id, restoredTrace(message)])
+          .filter(([, items]) => items.length)
+      )
       await restoreApproval()
       lastError.value = null
       return true
@@ -472,7 +528,17 @@ export function useChatAi(options = {}) {
     const item = [...items].reverse().find((entry) => {
       return entry.type === type && (!matcher || matcher(entry))
     })
-    if (item) Object.assign(item, changes)
+    if (item) {
+      const nextChanges = typeof changes === 'function' ? changes(item) : changes
+      Object.assign(item, nextChanges)
+      item.timestamp = Date.now()
+    }
+  }
+
+  function touchLastTrace() {
+    const messageId = activeStreamMessageId || temporaryAssistantId
+    const item = (traces.value[messageId] || []).at(-1)
+    if (item) item.timestamp = Date.now()
   }
 
   function handleStreamEvent({ event, data }) {
@@ -487,31 +553,36 @@ export function useChatAi(options = {}) {
         if (target) target.content += data.content || ''
         break
       }
-      case 'agent_plan':
-        appendTrace('agent_plan', data, 'completed')
+      case 'agent_progress':
+        appendTrace('progress', { content: data.content || '' }, 'completed')
         break
       case 'api_search_start':
         appendTrace('api_search', data, 'running')
         break
       case 'api_search_result':
-        updateLastTrace('api_search', null, {
+        updateLastTrace('api_search', null, (entry) => ({
           status: 'completed',
-          data: { ...data, operationCount: data.operations?.length || 0 }
-        })
+          data: { ...entry.data, ...data, operationCount: data.operations?.length || 0 }
+        }))
         break
       case 'web_search_start':
         appendTrace('web_search', data, 'running')
         break
       case 'web_search_result':
-        updateLastTrace('web_search', null, {
+        updateLastTrace('web_search', null, (entry) => ({
           status: data.ok ? 'completed' : 'failed',
-          data: { ...data, sourceCount: data.sources?.length || 0 }
-        })
+          data: { ...entry.data, ...data, sourceCount: data.sources?.length || 0 }
+        }))
         if (data.ok && data.sources?.length) {
           appendResultCard({
             type: 'sources',
             title: data.query || '',
-            source: { type: 'web_search', provider: data.provider || '' },
+            source: {
+              type: 'web_search',
+              provider: data.provider || '',
+              action: data.action || '',
+              timestamp: new Date().toISOString()
+            },
             content: { sources: data.sources }
           })
         }
@@ -523,9 +594,11 @@ export function useChatAi(options = {}) {
         updateLastTrace(
           'api_call',
           (entry) => entry.data.operation_id === data.operation_id && entry.status === 'running',
-          { status: data.ok ? 'completed' : 'failed', data: { ...data } }
+          (entry) => ({
+            status: data.ok ? 'completed' : 'failed',
+            data: { ...entry.data, ...data }
+          })
         )
-        appendResultCard(data.presentation)
         break
       case 'approval_required': {
         const messageId = activeStreamMessageId || temporaryAssistantId
@@ -537,13 +610,18 @@ export function useChatAi(options = {}) {
           messageId
         }
         rememberApproval(activeConversationId.value, data.approval_id)
-        updateLastTrace('api_call', (entry) => entry.data.operation_id === data.operation_id, {
-          status: 'approval',
-          data: { ...entryData(data) }
-        })
+        updateLastTrace(
+          'api_call',
+          (entry) => entry.data.operation_id === data.operation_id,
+          (entry) => ({
+            status: 'approval',
+            data: { ...entry.data, ...entryData(data) }
+          })
+        )
         break
       }
       case 'message_done': {
+        touchLastTrace()
         const target = messageById(data.message_id) || assistant
         if (target) {
           target.status = data.status
@@ -622,7 +700,7 @@ export function useChatAi(options = {}) {
         })
         options.onAccepted?.()
         await loadMessages(conversation.id)
-        await loadConversations()
+        await loadConversations({ silent: true })
         return true
       } catch (error) {
         emitError(error)
@@ -702,8 +780,8 @@ export function useChatAi(options = {}) {
       temporaryAssistantId = ''
       activeStreamMessageId = ''
       if (!stopRequested) {
-        await loadMessages(conversation.id)
-        await loadConversations()
+        await loadMessages(conversation.id, { silent: true })
+        await loadConversations({ silent: true })
       }
     }
   }
@@ -729,7 +807,7 @@ export function useChatAi(options = {}) {
       forgetApproval(conversationId)
       approval.value = null
       await loadMessages(conversationId)
-      await loadConversations()
+      await loadConversations({ silent: true })
       stopping.value = false
       stopRequested = false
     }
@@ -743,7 +821,7 @@ export function useChatAi(options = {}) {
       forgetApproval(activeConversationId.value)
       approval.value = null
       await loadMessages()
-      await loadConversations()
+      await loadConversations({ silent: true })
       return response
     } catch (error) {
       emitError(error)
@@ -765,7 +843,7 @@ export function useChatAi(options = {}) {
       forgetApproval(activeConversationId.value)
       approval.value = null
       await loadMessages()
-      await loadConversations()
+      await loadConversations({ silent: true })
     } catch (error) {
       emitError(error)
       throw error
@@ -882,9 +960,9 @@ export function useChatAi(options = {}) {
       temporaryAssistantId = ''
       activeStreamMessageId = ''
       if (branchConversationId && !stopRequested) {
-        await loadMessages(branchConversationId)
+        await loadMessages(branchConversationId, { silent: true })
       }
-      await loadConversations()
+      await loadConversations({ silent: true })
     }
   }
 
@@ -946,8 +1024,8 @@ export function useChatAi(options = {}) {
       temporaryAssistantId = ''
       activeStreamMessageId = ''
       if (!stopRequested) {
-        await loadMessages(conversationId)
-        await loadConversations()
+        await loadMessages(conversationId, { silent: true })
+        await loadConversations({ silent: true })
       }
     }
   }

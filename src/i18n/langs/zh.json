@@ -348,6 +348,7 @@
   "ChatAIConversationAuditNotice": "受限安全审计：打开会话会记录到操作日志；消息仅供只读查看，敏感值会被脱敏。",
   "ChatAIAuditConversationList": "会话记录",
   "ChatAIAuditConversationCount": "共 {count} 条会话",
+  "ChatAIAuditMessageCount": "{count} 条消息",
   "ChatAIAuditSearchPlaceholder": "按标题、姓名或用户名搜索",
   "ChatAIAuditOwner": "所属用户",
   "ChatAIConversationTitle": "会话",
