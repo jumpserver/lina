@@ -44,16 +44,6 @@
           <span>{{ t('NewChat') }}</span>
         </button>
         <button
-          class="header-icon"
-          :aria-label="t('ChatAIScheduledReports')"
-          :title="t('ChatAIScheduledReports')"
-          :disabled="composerRecording || transcribing"
-          type="button"
-          @click="scheduledReportsOpen = true"
-        >
-          <el-icon><Calendar /></el-icon>
-        </button>
-        <button
           v-if="isSuperAdmin"
           class="header-icon"
           :aria-label="t('ChatAIConversationAudit')"
@@ -252,12 +242,6 @@
       </main>
     </div>
 
-    <ScheduledReportsDialog
-      v-model="scheduledReportsOpen"
-      :assistants="localizedAssistants"
-      :web-search-available="webSearchAvailable"
-      @open-conversation="handleScheduledConversation"
-    />
     <ConversationAuditDialog v-if="isSuperAdmin" v-model="auditOpen" />
   </section>
 </template>
@@ -268,7 +252,6 @@ import {
   ArrowDown,
   ArrowRight,
   Bottom,
-  Calendar,
   Check,
   Close,
   Coin,
@@ -290,7 +273,6 @@ import { message } from '@/utils/vue/message'
 import AssistantMark from './components/AssistantMark.vue'
 import ConversationAuditDialog from './components/ConversationAuditDialog.vue'
 import ConversationPanel from './components/ConversationPanel.vue'
-import ScheduledReportsDialog from './components/ScheduledReportsDialog.vue'
 import ChatInput from './components/ChitChat/ChatInput.vue'
 import ChatMessage from './components/ChitChat/ChatMessage.vue'
 import { useChatAi } from './composables/useChatAi'
@@ -318,7 +300,6 @@ const scrollArea = ref(null)
 const conversationPanel = ref(null)
 const historyToggle = ref(null)
 const historyOpen = ref(false)
-const scheduledReportsOpen = ref(false)
 const auditOpen = ref(false)
 const composerRecording = ref(false)
 const stickToBottom = ref(true)
@@ -576,23 +557,6 @@ async function handleAssistantChange(key) {
   composer.value?.focus()
 }
 
-async function handleScheduledConversation(id) {
-  if (navigationLocked.value) {
-    message.warning(t('ChatAIFinishCurrentTask'))
-    return
-  }
-  scheduledReportsOpen.value = false
-  await loadConversations()
-  const selected = await selectConversationState(id)
-  if (!selected) {
-    message.warning(t('ChatAIFinishCurrentTask'))
-    return
-  }
-  await nextTick()
-  scrollToBottom(false)
-  composer.value?.focus()
-}
-
 async function retryLoadingMessages() {
   if (loadingConversations.value || loadingMessages.value) return
   if (activeConversationId.value) await loadMessages(activeConversationId.value)
@@ -670,7 +634,7 @@ function scrollToBottom(smooth = true, force = false) {
 
 function handleShortcut(event) {
   if (!props.active || event.defaultPrevented) return
-  if (scheduledReportsOpen.value || auditOpen.value) return
+  if (auditOpen.value) return
   if (event.key === 'Escape' && historyOpen.value) {
     event.preventDefault()
     historyOpen.value = false

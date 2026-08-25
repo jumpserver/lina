@@ -102,48 +102,6 @@ export function sendBackgroundConversationMessage(id, content, options = {}) {
   })
 }
 
-export function listScheduledReports(params = {}) {
-  return quietRequest({
-    url: `${CHAT_AI_BASE}/scheduled-reports/`,
-    method: 'get',
-    params: {
-      limit: PAGE_SIZE,
-      ordering: '-date_updated',
-      ...params
-    }
-  })
-}
-
-export function createScheduledReport(data) {
-  return quietRequest({
-    url: `${CHAT_AI_BASE}/scheduled-reports/`,
-    method: 'post',
-    data
-  })
-}
-
-export function updateScheduledReport(id, data) {
-  return quietRequest({
-    url: `${CHAT_AI_BASE}/scheduled-reports/${id}/`,
-    method: 'patch',
-    data
-  })
-}
-
-export function deleteScheduledReport(id) {
-  return quietRequest({
-    url: `${CHAT_AI_BASE}/scheduled-reports/${id}/`,
-    method: 'delete'
-  })
-}
-
-export function runScheduledReport(id) {
-  return quietRequest({
-    url: `${CHAT_AI_BASE}/scheduled-reports/${id}/run/`,
-    method: 'post'
-  })
-}
-
 export function getChatAIStats(days = 30) {
   return quietRequest({
     url: `${CHAT_AI_BASE}/stats/`,

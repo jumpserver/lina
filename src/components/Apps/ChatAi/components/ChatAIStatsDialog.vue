@@ -65,7 +65,7 @@ const emit = defineEmits(['update:modelValue'])
 const { t } = useI18n()
 const days = ref(30)
 const loading = ref(false)
-const stats = ref({ usage: {}, schedules: {}, top_operations: [] })
+const stats = ref({ usage: {}, top_operations: [] })
 
 function number(value) {
   return Number(value || 0).toLocaleString()
@@ -73,7 +73,6 @@ function number(value) {
 
 const cards = computed(() => {
   const usage = stats.value.usage || {}
-  const schedules = stats.value.schedules || {}
   return [
     {
       label: t('ChatAITotalRuns'),
@@ -101,11 +100,6 @@ const cards = computed(() => {
       hint: t('ChatAIAverageDuration', {
         count: number(Math.round(Number(usage.average_model_duration_ms || 0)))
       })
-    },
-    {
-      label: t('ChatAIScheduledReports'),
-      value: number(schedules.total),
-      hint: t('ChatAIActiveSchedules', { count: number(schedules.active) })
     }
   ]
 })
