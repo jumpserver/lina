@@ -105,6 +105,7 @@ export default {
             type: 'primary',
             label: this.$t('Test'),
             disabled:
+              vm.object.secret_type?.value === 'ssh_certificate' ||
               !vm.$hasPerm('accounts.verify_account') ||
               !vm.object.asset.auto_config?.ansible_enabled ||
               !vm.object.asset.auto_config?.ping_enabled ||
@@ -129,6 +130,7 @@ export default {
             type: 'primary',
             label: this.$t('Push'),
             disabled:
+              vm.object.secret_type?.value === 'ssh_certificate' ||
               !vm.$hasPerm('accounts.push_account') ||
               !vm.object.asset.auto_config?.push_account_enabled ||
               this.$store.getters.currentOrgIsRoot
@@ -155,7 +157,9 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('View'),
-            disabled: !vm.$hasPerm('accounts.view_accountsecret')
+            disabled:
+              vm.object.secret_type?.value === 'ssh_certificate' ||
+              !vm.$hasPerm('accounts.view_accountsecret')
           },
           callbacks: Object.freeze({
             click: () => {
@@ -171,7 +175,9 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('Clear'),
-            disabled: !vm.$hasPerm('accounts.change_account')
+            disabled:
+              vm.object.secret_type?.value === 'ssh_certificate' ||
+              !vm.$hasPerm('accounts.change_account')
           },
           callbacks: Object.freeze({
             click: () => {
@@ -207,7 +213,9 @@ export default {
               }
             },
             disabled:
-              !vm.$hasPerm('accounts.change_account') || !vm.object.asset.auto_config?.su_enabled
+              vm.object.secret_type?.value === 'ssh_certificate' ||
+              !vm.$hasPerm('accounts.change_account') ||
+              !vm.object.asset.auto_config?.su_enabled
           },
           callbacks: Object.freeze({
             change: (value) => {

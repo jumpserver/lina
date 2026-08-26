@@ -118,7 +118,9 @@ export default {
                 {
                   name: 'View',
                   title: this.$t('View'),
-                  can: this.$hasPerm('accounts.view_accountsecret'),
+                  can: ({ row }) =>
+                    this.$hasPerm('accounts.view_accountsecret') &&
+                    row.secret_type.value !== 'ssh_certificate',
                   type: 'primary',
                   callback: ({ row }) => {
                     vm.secretUrl = `/api/v1/accounts/account-secrets/${row.id}/`
