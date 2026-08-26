@@ -287,6 +287,26 @@ function appendUrlParam(url, key, value) {
   return `${url}${separator}${encodeURIComponent(key)}=${encodeURIComponent(value)}`
 }
 
+function getAssetScopeValue(cookie, setting = {}) {
+  const storageKey = setting.assetScopeStorageKey
+  if (!storageKey) {
+    return getShowCurrentAssetValue(cookie)
+  }
+  const stored = typeof window !== 'undefined' ? window.localStorage.getItem(storageKey) : null
+  return stored === '0' || stored === '1' ? stored : String(setting.defaultAssetScope || '0')
+}
+
+function setAssetScopeValue(cookie, setting, value) {
+  const storageKey = setting.assetScopeStorageKey
+  if (!storageKey) {
+    setShowCurrentAssetValue(cookie, value)
+    return
+  }
+  if (typeof window !== 'undefined') {
+    window.localStorage.setItem(storageKey, String(value))
+  }
+}
+
 export default {
   name: 'XTree',
   components: { Icon },
@@ -305,7 +325,7 @@ export default {
       loading: false,
       treeKey: 0,
       searchValue: '',
-      assetScope: getShowCurrentAssetValue(this.$cookie),
+      assetScope: getAssetScopeValue(this.$cookie, this.setting),
       searchMode: false,
       menuVisible: false,
       menuPosition: { x: 0, y: 0 },
@@ -1149,7 +1169,7 @@ export default {
         return
       }
       this.assetScope = nextValue
-      setShowCurrentAssetValue(this.$cookie, this.assetScope)
+      setAssetScopeValue(this.$cookie, this.treeSetting, this.assetScope)
       this.cancelAmountLoading()
       this.clearNodeAmounts()
       this.enqueueVisibleNodeAmounts()
@@ -1163,7 +1183,7 @@ export default {
       this.$refs.tree?.setCurrentKey(data.id)
       const onSelected = this.treeSetting.callback?.onSelected
       if (onSelected) {
-        onSelected(event, data)
+        onSelected(event, data, { assetScope: this.assetScope })
       } else {
         this.emitSelectedUrl(data)
       }
@@ -1173,7 +1193,7 @@ export default {
         return
       }
       const separator = this.treeSetting.url.includes('?') ? '&' : '?'
-      const showCurrentAsset = getShowCurrentAssetValue(this.$cookie)
+      const showCurrentAsset = getAssetScopeValue(this.$cookie, this.treeSetting)
       let url = ''
       if (treeNode.meta?.type === 'node') {
         url = `${this.treeSetting.url}${separator}node_id=${treeNode.meta.data.id}&show_current_asset=${showCurrentAsset}`

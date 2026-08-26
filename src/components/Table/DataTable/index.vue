@@ -190,7 +190,9 @@ export default {
       this.$emit('loaded')
     },
     handleSizeChange(val) {
-      this.objTableSize.set(this.pathName, val)
+      if (this.config.savePageSize !== false) {
+        this.objTableSize.set(this.pathName, val)
+      }
     }
   }
 }

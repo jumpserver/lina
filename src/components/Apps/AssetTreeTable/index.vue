@@ -105,7 +105,8 @@ export default {
               countUrl: assetTreeAmountUrl,
               lazyLoad: showAssets,
               callback: {
-                onSelected: (event, treeNode) => this.getAssetsUrl(treeNode),
+                onSelected: (event, treeNode, context) =>
+                  this.getAssetsUrl(treeNode, context?.assetScope),
                 beforeRefresh: () => {
                   const query = { ...vm.$route.query, node_id: '', asset_id: '' }
                   setTimeout(() => {
@@ -191,9 +192,9 @@ export default {
       return url
     },
 
-    getAssetsUrl(treeNode) {
+    getAssetsUrl(treeNode, selectedAssetScope) {
       let url = this.treeSetting?.url || this.url
-      const showCurrentAsset = getShowCurrentAssetValue(this.$cookie)
+      const showCurrentAsset = selectedAssetScope ?? getShowCurrentAssetValue(this.$cookie)
       const nodeType = treeNode.meta?.type
 
       if (nodeType === 'node') {
