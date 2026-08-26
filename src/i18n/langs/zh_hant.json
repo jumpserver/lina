@@ -2,6 +2,7 @@
   "NodeMoveConfirmTitle": "移動節點",
   "NodeMoveConfirmMessage": "確認將節點（{src}）移動到節點（{dst}）下嗎？",
   "RowNumber": "序號",
+  "NodeTree": "節點樹",
   "PinColumn": "釘住欄",
   "UnpinColumn": "解除釘住",
   "FieldRequiredError": "这个字段是必需的。",

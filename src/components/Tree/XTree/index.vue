@@ -1,5 +1,5 @@
 <template>
-  <div class="x-tree">
+  <div :class="{ 'is-search-visible': treeSetting.showSearch && searchVisible }" class="x-tree">
     <div
       v-if="
         treeSetting.showSearch ||
@@ -7,23 +7,26 @@
         treeSetting.showRefresh ||
         treeSetting.showAssetScope
       "
-      class="x-tree__toolbar"
+      class="x-tree__header-actions"
     >
-      <el-input
+      <el-tooltip
         v-if="treeSetting.showSearch"
-        v-model="searchValue"
-        :placeholder="$t('NodeFilterSearch')"
-        class="x-tree__search"
-        clearable
-        @input="handleSearchInput"
+        :content="$t('NodeFilterSearch')"
+        :show-after="500"
+        placement="top"
       >
-        <template #prefix>
-          <el-icon><Search /></el-icon>
-        </template>
-      </el-input>
-      <div
+        <el-button
+          :aria-label="$t('NodeFilterSearch')"
+          :class="{ 'is-active': searchVisible }"
+          :title="$t('NodeFilterSearch')"
+          class="x-tree__tool-button"
+          @click="toggleSearch"
+        >
+          <el-icon class="x-tree__tool-icon"><Search /></el-icon>
+        </el-button>
+      </el-tooltip>
+      <template
         v-if="treeSetting.showCollapse || treeSetting.showRefresh || treeSetting.showAssetScope"
-        class="x-tree__toolbar-actions"
       >
         <el-tooltip
           v-if="treeSetting.showCollapse"
@@ -43,6 +46,7 @@
         </el-tooltip>
         <el-dropdown
           v-if="treeSetting.showAssetScope"
+          ref="settingsDropdown"
           :hide-on-click="false"
           placement="bottom-end"
           popper-class="x-tree-settings-popper"
@@ -98,8 +102,25 @@
             <svg-icon class="x-tree__tool-icon" icon-class="refresh" />
           </el-button>
         </el-tooltip>
-      </div>
+      </template>
     </div>
+
+    <el-collapse-transition>
+      <div v-show="treeSetting.showSearch && searchVisible" class="x-tree__search-row">
+        <el-input
+          ref="searchInput"
+          v-model="searchValue"
+          :placeholder="$t('NodeFilterSearch')"
+          class="x-tree__search"
+          clearable
+          @input="handleSearchInput"
+        >
+          <template #prefix>
+            <el-icon><Search /></el-icon>
+          </template>
+        </el-input>
+      </div>
+    </el-collapse-transition>
 
     <div
       v-loading="loading"
@@ -109,6 +130,7 @@
         'is-virtual': useVirtualTree
       }"
       class="x-tree__body"
+      @scroll.capture.passive="handleTreeAmountScroll"
     >
       <el-tree-v2
         v-if="useVirtualTree"
@@ -131,7 +153,7 @@
         <template #default="{ node, data }">
           <span
             :draggable="canDragData(data)"
-            :title="getNodeLabel(data)"
+            :title="getNodeTitle(data)"
             :class="{ 'is-virtual-drop-target': isVirtualDropTarget(data) }"
             class="x-tree__node"
             @dragend="handleVirtualDragEnd"
@@ -201,7 +223,7 @@
         @node-expand="handleNodeExpand"
       >
         <template #default="{ node, data }">
-          <span class="x-tree__node" :title="getNodeLabel(data)">
+          <span class="x-tree__node" :title="getNodeTitle(data)">
             <button
               :aria-label="getNodeLabel(data)"
               class="x-tree__node-toggle"
@@ -256,7 +278,7 @@
       @contextmenu.prevent
       @mousedown.stop
     >
-      <ul class="x-tree-context-menu__list">
+      <ul class="x-tree-context-menu__list" @click="handleContextMenuClick">
         <template v-for="item in menu" :key="item.id">
           <li
             v-if="hasMenuItem(item)"
@@ -325,6 +347,7 @@ export default {
       loading: false,
       treeKey: 0,
       searchValue: '',
+      searchVisible: false,
       assetScope: getAssetScopeValue(this.$cookie, this.setting),
       searchMode: false,
       menuVisible: false,
@@ -341,6 +364,10 @@ export default {
       amountQueuedIds: new Set(),
       nodeAmounts: new Map(),
       amountWorkerRunning: false,
+      amountScrollFrame: null,
+      amountLoadedRowEnd: 0,
+      amountAllRowsScheduled: false,
+      suppressExpandAmountLoading: false,
       expandedNodeIds: new Set(),
       treeNodeCount: 0,
       normalTreeNodeCount: 0,
@@ -382,6 +409,8 @@ export default {
           structureUrl: '',
           countUrl: '',
           countBatchSize: 100,
+          countProgressiveBatchSize: 100,
+          nodeRowHeight: 30,
           lazyLoad: true,
           virtualThreshold: 1000,
           virtualize: true,
@@ -508,6 +537,11 @@ export default {
     },
     getNodeLabel(node) {
       return node?.name || node?.meta?.data?.value || ''
+    },
+    getNodeTitle(node) {
+      const label = this.getNodeLabel(node)
+      const amount = this.getNodeAmount(node)
+      return Number.isFinite(amount) ? `${label} (${amount})` : label
     },
     isLeafNode(node) {
       return Boolean(node?._isLeaf)
@@ -680,6 +714,7 @@ export default {
       return { roots, count: normalized.length }
     },
     cancelAmountLoading() {
+      this.cancelAmountScrollFrame()
       this.amountRequestId += 1
       this.amountAbortController?.abort()
       this.amountAbortController = null
@@ -690,21 +725,52 @@ export default {
     clearNodeAmounts() {
       this.nodeAmounts.clear()
     },
-    collectVisibleAmountNodes(roots) {
-      const nodes = []
-      const queue = [...roots]
-      let index = 0
-      while (index < queue.length) {
-        const node = queue[index]
-        index += 1
-        if (node.meta?.type === 'node' && node.meta?.data?.id) {
-          nodes.push(node)
+    resetProgressiveAmountLoading() {
+      this.amountLoadedRowEnd = 0
+      this.amountAllRowsScheduled = false
+    },
+    collectExpandedTreeRows(roots, limit = Number.POSITIVE_INFINITY) {
+      const rows = []
+      const stack = [{ index: 0, nodes: roots }]
+      while (stack.length) {
+        const frame = stack[stack.length - 1]
+        if (frame.index >= frame.nodes.length) {
+          stack.pop()
+          continue
         }
-        if (this.expandedNodeIds.has(String(node.id)) && node.children?.length) {
-          queue.push(...node.children)
+        const node = frame.nodes[frame.index]
+        frame.index += 1
+        rows.push(node)
+        if (rows.length >= limit) {
+          break
         }
+        if (!this.expandedNodeIds.has(String(node.id)) || !node.children?.length) {
+          continue
+        }
+        stack.push({ index: 0, nodes: node.children })
       }
-      return nodes
+      return rows
+    },
+    getTreeAmountScrollElement() {
+      const treeBody = this.$refs.treeBody
+      if (!treeBody) {
+        return null
+      }
+      if (this.useVirtualTree) {
+        return treeBody.querySelector('.el-tree-virtual-list') || treeBody
+      }
+      return treeBody
+    },
+    getProgressiveAmountBatchSize() {
+      return Math.max(1, Number(this.treeSetting.countProgressiveBatchSize) || 100)
+    },
+    collectProgressiveAmountNodes(startIndex, endIndex) {
+      return this.collectExpandedTreeRows(this.treeData, endIndex).slice(startIndex, endIndex)
+    },
+    getTreeAmountScrollIndex(scrollElement = this.getTreeAmountScrollElement()) {
+      const rowHeight = Math.max(1, Number(this.treeSetting.nodeRowHeight) || 30)
+      const scrollTop = Math.max(0, Number(scrollElement?.scrollTop) || 0)
+      return Math.floor(scrollTop / rowHeight)
     },
     async requestNodeAmounts(nodeIds, signal) {
       if (!nodeIds.length) {
@@ -742,8 +808,64 @@ export default {
         this.processAmountQueue()
       }
     },
-    enqueueVisibleNodeAmounts() {
-      this.enqueueNodeAmounts(this.collectVisibleAmountNodes(this.treeData))
+    enqueueNextProgressiveAmountBatch() {
+      if (
+        this.amountAllRowsScheduled ||
+        (!this.treeSetting.countUrl && typeof this.treeSetting.loadNodeAmounts !== 'function')
+      ) {
+        return
+      }
+      const batchSize = this.getProgressiveAmountBatchSize()
+      const startIndex = this.amountLoadedRowEnd
+      const endIndex = startIndex + batchSize
+      const nodes = this.collectProgressiveAmountNodes(startIndex, endIndex)
+      if (!nodes.length) {
+        this.amountAllRowsScheduled = true
+        return
+      }
+      this.amountLoadedRowEnd = startIndex + nodes.length
+      this.amountAllRowsScheduled = nodes.length < batchSize
+      this.enqueueNodeAmounts(nodes)
+    },
+    startProgressiveAmountLoading() {
+      this.resetProgressiveAmountLoading()
+      this.enqueueNextProgressiveAmountBatch()
+    },
+    maybeEnqueueNextProgressiveAmountBatch(scrollElement) {
+      if (
+        this.amountAllRowsScheduled ||
+        this.amountLoadedRowEnd === 0 ||
+        this.amountWorkerRunning ||
+        this.amountQueue.length
+      ) {
+        return
+      }
+      const batchSize = this.getProgressiveAmountBatchSize()
+      const triggerIndex = Math.max(0, this.amountLoadedRowEnd - Math.ceil(batchSize / 2))
+      if (this.getTreeAmountScrollIndex(scrollElement) >= triggerIndex) {
+        this.enqueueNextProgressiveAmountBatch()
+      }
+    },
+    cancelAmountScrollFrame() {
+      if (this.amountScrollFrame === null) {
+        return
+      }
+      window.cancelAnimationFrame(this.amountScrollFrame)
+      this.amountScrollFrame = null
+    },
+    scheduleProgressiveAmountLoading(scrollElement) {
+      if (this.amountScrollFrame !== null) {
+        return
+      }
+      this.amountScrollFrame = window.requestAnimationFrame(() => {
+        this.amountScrollFrame = null
+        this.maybeEnqueueNextProgressiveAmountBatch(
+          scrollElement || this.getTreeAmountScrollElement()
+        )
+      })
+    },
+    handleTreeAmountScroll(event) {
+      this.scheduleProgressiveAmountLoading(event.target)
     },
     refreshNodeAmounts(nodes) {
       if (this.assetScope === '1') {
@@ -767,14 +889,15 @@ export default {
         return
       }
 
-      const pendingVisibleNodes = this.collectVisibleAmountNodes(this.treeData).filter(
-        (node) => !Number.isFinite(this.getNodeAmount(node))
-      )
+      const pendingLoadedNodes = this.collectProgressiveAmountNodes(
+        0,
+        this.amountLoadedRowEnd
+      ).filter((node) => !Number.isFinite(this.getNodeAmount(node)))
       this.cancelAmountLoading()
       uniqueNodes.forEach((node) => {
         this.setNodeAmount(node, null)
       })
-      this.enqueueNodeAmounts([...uniqueNodes, ...pendingVisibleNodes])
+      this.enqueueNodeAmounts([...uniqueNodes, ...pendingLoadedNodes])
     },
     refreshAssetRelationAmounts(affectedNodeIds) {
       const affectedIds = new Set((affectedNodeIds || []).map(String))
@@ -782,7 +905,6 @@ export default {
         return
       }
 
-      const matchedNodes = []
       const matchedWithAncestors = []
       const visited = new Set()
       const stack = this.normalTreeData.map((node) => ({ node, ancestors: [] }))
@@ -790,7 +912,6 @@ export default {
         const { node, ancestors } = stack.pop()
         const nodeId = node?.meta?.data?.id
         if (nodeId && affectedIds.has(String(nodeId))) {
-          matchedNodes.push(node)
           for (const item of [...ancestors, node]) {
             const key = this.getNodeAmountKey(item)
             if (key && !visited.has(key)) {
@@ -805,7 +926,7 @@ export default {
         }
       }
 
-      this.forceRefreshNodeAmounts(this.assetScope === '1' ? matchedNodes : matchedWithAncestors)
+      this.forceRefreshNodeAmounts(matchedWithAncestors)
     },
     async processAmountQueue() {
       if (this.amountWorkerRunning) {
@@ -864,6 +985,8 @@ export default {
           this.amountWorkerRunning = false
           if (this.amountQueue.length) {
             this.processAmountQueue()
+          } else {
+            this.scheduleProgressiveAmountLoading()
           }
         }
       }
@@ -890,6 +1013,7 @@ export default {
     async loadRoot(refresh = false) {
       const requestId = ++this.structureRequestId
       this.cancelAmountLoading()
+      this.resetProgressiveAmountLoading()
       const url = this.getRefreshUrl(refresh)
       if (!url) {
         this.nodeAmounts.clear()
@@ -914,44 +1038,50 @@ export default {
         this.searchMode = false
         this.treeKey += 1
         await this.$nextTick()
-        this.expandInitialNodes()
+        await this.expandInitialNodes()
         this.$emit('tree-init-finish', this)
-        this.enqueueVisibleNodeAmounts()
+        this.startProgressiveAmountLoading()
       } finally {
         if (requestId === this.structureRequestId) {
           this.loading = false
         }
       }
     },
-    expandInitialNodes() {
-      this.expandedNodeIds.clear()
-      if (this.useVirtualTree) {
-        const keys = this.initialExpandedKeys
-        keys.forEach((key) => this.expandedNodeIds.add(String(key)))
-        this.$refs.tree?.setExpandedKeys(keys)
-        return
-      }
-      if (this.searchMode) {
-        const stack = [...this.treeData]
-        while (stack.length) {
-          const item = stack.pop()
-          if (item.children?.length) {
-            this.expandedNodeIds.add(String(item.id))
-            this.$refs.tree?.getNode(item.id)?.expand()
-            stack.push(...item.children)
-          }
+    async expandInitialNodes() {
+      this.suppressExpandAmountLoading = true
+      try {
+        this.expandedNodeIds.clear()
+        if (this.useVirtualTree) {
+          const keys = this.initialExpandedKeys
+          keys.forEach((key) => this.expandedNodeIds.add(String(key)))
+          this.$refs.tree?.setExpandedKeys(keys)
+          return
         }
-        return
+        if (this.searchMode) {
+          const stack = [...this.treeData]
+          while (stack.length) {
+            const item = stack.pop()
+            if (item.children?.length) {
+              this.expandedNodeIds.add(String(item.id))
+              this.$refs.tree?.getNode(item.id)?.expand()
+              stack.push(...item.children)
+            }
+          }
+          return
+        }
+        const firstRoot = this.treeData[0]
+        const keys = this.treeData.filter((node) => node.open).map((node) => node.id)
+        if (firstRoot && keys.length === 0) {
+          keys.push(firstRoot.id)
+        }
+        keys.forEach((key) => {
+          this.expandedNodeIds.add(String(key))
+          this.$refs.tree?.getNode(key)?.expand()
+        })
+      } finally {
+        await this.$nextTick()
+        this.suppressExpandAmountLoading = false
       }
-      const firstRoot = this.treeData[0]
-      const keys = this.treeData.filter((node) => node.open).map((node) => node.id)
-      if (firstRoot && keys.length === 0) {
-        keys.push(firstRoot.id)
-      }
-      keys.forEach((key) => {
-        this.expandedNodeIds.add(String(key))
-        this.$refs.tree?.getNode(key)?.expand()
-      })
     },
     async loadNode(node, resolve) {
       if (node.level === 0) {
@@ -977,6 +1107,9 @@ export default {
     async handleNodeExpand(data, node) {
       if (data?.id !== undefined && data?.id !== null) {
         this.expandedNodeIds.add(String(data.id))
+      }
+      if (this.suppressExpandAmountLoading) {
+        return
       }
       await this.$nextTick()
       const children = data?.children?.length
@@ -1041,6 +1174,16 @@ export default {
     },
     handleSearchInput(value) {
       this.debouncedSearch(value.trim())
+    },
+    toggleSearch() {
+      this.searchVisible = !this.searchVisible
+      if (!this.searchVisible) {
+        this.searchValue = ''
+        this.debouncedSearch.cancel()
+        this.searchTree('')
+        return
+      }
+      this.$nextTick(() => this.$refs.searchInput?.focus?.())
     },
     async filterTreeLocally(keyword, isCurrent) {
       const query = keyword.toLocaleLowerCase()
@@ -1135,8 +1278,8 @@ export default {
         this.treeNodeCount = this.normalTreeNodeCount
         this.treeKey += 1
         await this.$nextTick()
-        this.expandInitialNodes()
-        this.enqueueVisibleNodeAmounts()
+        await this.expandInitialNodes()
+        this.startProgressiveAmountLoading()
         return
       }
 
@@ -1152,8 +1295,8 @@ export default {
       this.treeNodeCount = filtered.count
       this.treeKey += 1
       await this.$nextTick()
-      this.expandInitialNodes()
-      this.enqueueVisibleNodeAmounts()
+      await this.expandInitialNodes()
+      this.startProgressiveAmountLoading()
     },
     async refresh() {
       this.hideRMenu()
@@ -1172,7 +1315,8 @@ export default {
       setAssetScopeValue(this.$cookie, this.treeSetting, this.assetScope)
       this.cancelAmountLoading()
       this.clearNodeAmounts()
-      this.enqueueVisibleNodeAmounts()
+      this.startProgressiveAmountLoading()
+      this.$nextTick(() => this.$refs.settingsDropdown?.handleClose?.())
       this.treeSetting.callback?.onAssetScopeChange?.(this.assetScope, this.currentNode)
       if (this.currentNode) {
         this.handleNodeLabelClick(null, this.currentNode)
@@ -1235,6 +1379,13 @@ export default {
     },
     hideRMenu() {
       this.menuVisible = false
+    },
+    handleContextMenuClick(event) {
+      const menuItem = event.target?.closest?.('.rmenu')
+      if (!menuItem || menuItem.classList.contains('disabled')) {
+        return
+      }
+      this.hideRMenu()
     },
     hasMenuItem(item) {
       return typeof item.has === 'function' ? item.has(this.currentNode) : item.has !== false
@@ -1795,12 +1946,20 @@ export default {
   background: var(--el-bg-color, #fff);
 }
 
-.x-tree__toolbar {
-  display: flex;
+.x-tree__header-actions {
+  position: absolute;
+  z-index: 4;
+  top: 5px;
+  right: 8px;
+  display: inline-flex;
+  flex: none;
   align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-  padding: 10px 12px 8px;
+  gap: 1px;
+}
+
+.x-tree__search-row {
+  flex: none;
+  padding: 8px 12px;
   border-bottom: 1px solid var(--el-border-color-lighter);
 }
 
@@ -1844,14 +2003,7 @@ export default {
   }
 }
 
-.x-tree__toolbar-actions {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  gap: 1px;
-}
-
-.x-tree__toolbar-actions > .x-tree__tool-button + .x-tree__tool-button {
+.x-tree__header-actions > .x-tree__tool-button + .x-tree__tool-button {
   margin-left: 0;
 }
 
@@ -1863,14 +2015,16 @@ export default {
   min-width: 30px;
   width: 30px;
   height: 30px;
-  padding: 7px;
+  padding: 5px;
   border: none;
+  border-radius: 4px;
   color: var(--color-text-primary);
   background-color: transparent;
 }
 
 .x-tree__tool-button:hover,
-.x-tree__tool-button:focus-visible {
+.x-tree__tool-button:focus-visible,
+.x-tree__tool-button.is-active {
   color: var(--color-text-primary);
   background-color: rgba(0, 0, 0, 0.05);
 }
@@ -1887,6 +2041,15 @@ export default {
   min-height: 0;
   overflow: auto;
   padding: 6px 8px 12px;
+  border-top: 1px solid var(--el-border-color-lighter);
+
+  &::-webkit-scrollbar:horizontal {
+    height: 0;
+  }
+}
+
+.x-tree.is-search-visible .x-tree__body {
+  border-top: 0;
 }
 
 .x-tree__body.is-virtual {
@@ -1895,6 +2058,11 @@ export default {
 
 .x-tree__body.is-virtual :deep(.el-tree-virtual-list) {
   min-width: 100%;
+  overflow-x: auto !important;
+}
+
+.x-tree__body.is-virtual :deep(.el-tree-virtual-list)::-webkit-scrollbar:horizontal {
+  height: 0;
 }
 
 .x-tree__body :deep(.el-tree) {
@@ -1993,9 +2161,10 @@ export default {
 }
 
 .x-tree__node-label {
-  overflow: hidden;
+  flex: none;
+  overflow: visible;
   color: var(--el-text-color-primary);
-  text-overflow: ellipsis;
+  text-overflow: clip;
   white-space: nowrap;
 }
 

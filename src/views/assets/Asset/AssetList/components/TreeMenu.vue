@@ -57,6 +57,7 @@
     <NodeAssetsUpdateDialog
       v-bind="nodeAssetsUpdateDialog"
       v-if="nodeAssetsUpdateDialog.visible"
+      :tree="tree"
       v-model:visible="nodeAssetsUpdateDialog.visible"
       @hide-menu="hideMenu"
     />
