@@ -22,7 +22,6 @@
 <script>
 import TreeTable from '../../Table/TreeTable/index.vue'
 import { getShowCurrentAssetValue, setRouterQuery, setUrlParam } from '@/utils/common/index'
-import $ from '@/utils/jquery-vendor'
 
 export default {
   components: {
@@ -45,6 +44,10 @@ export default {
       type: String,
       default: '/api/v1/assets/nodes/children/tree/'
     },
+    treeAmountUrl: {
+      type: String,
+      default: '/api/v1/assets/nodes/assets-amount/'
+    },
     treeUrlQuery: {
       type: Object,
       default: () => ({})
@@ -66,6 +69,13 @@ export default {
     const showAssets = this.treeSetting?.showAssets || this.showAssets
     const treeUrlQuery = this.setTreeUrlQuery()
     const assetTreeUrl = `${this.treeUrl}?assets=${showAssets ? '1' : '0'}&${treeUrlQuery}`
+    const assetTreeLazyUrl = setUrlParam(assetTreeUrl, 'asset_amount', '0')
+    const assetTreeStructureUrl = showAssets
+      ? assetTreeLazyUrl
+      : setUrlParam(assetTreeLazyUrl, 'all', 'all')
+    const assetTreeAmountUrl = this.treeUrl.includes('/api/v1/assets/nodes/')
+      ? this.treeAmountUrl
+      : ''
     const vm = this
 
     return {
@@ -82,6 +92,7 @@ export default {
               showAssets,
               showMenu: false,
               showRefresh: true,
+              showCollapse: true,
               showCreate: true,
               showUpdate: true,
               showDelete: true,
@@ -89,7 +100,10 @@ export default {
               showSearch: true,
               url: this.url,
               nodeUrl: this.nodeUrl,
-              treeUrl: assetTreeUrl,
+              treeUrl: assetTreeLazyUrl,
+              structureUrl: assetTreeStructureUrl,
+              countUrl: assetTreeAmountUrl,
+              lazyLoad: showAssets,
               callback: {
                 onSelected: (event, treeNode) => this.getAssetsUrl(treeNode),
                 beforeRefresh: () => {
@@ -108,8 +122,10 @@ export default {
             name: 'BuiltinTree',
             treeSetting: {
               showRefresh: true,
+              showCollapse: true,
               showAssets: false,
-              showSearch: false,
+              showSearch: true,
+              lazyLoad: false,
               customTreeHeaderName: this.$t('TypeTree'),
               url: this.typeUrl,
               nodeUrl: this.treeSetting?.nodeUrl || this.nodeUrl,
@@ -141,7 +157,6 @@ export default {
     }
   },
   mounted() {
-    this.decorateRMenu()
     const treeSetting = this.treeTabConfig.submenu[0].treeSetting
     treeSetting.hasRightMenu = !this.currentOrgIsRoot
     treeSetting.showCreate = this.$hasPerm('assets.add_node')
@@ -160,16 +175,6 @@ export default {
       str = str.substr(0, str.length - 1)
 
       return str
-    },
-    decorateRMenu() {
-      const show_current_asset = getShowCurrentAssetValue(this.$cookie)
-      if (show_current_asset === '1') {
-        $('#m_show_asset_all_children_node').css('color', '#606266')
-        $('#m_show_asset_only_current_node').css('color', 'green')
-      } else {
-        $('#m_show_asset_all_children_node').css('color', 'green')
-        $('#m_show_asset_only_current_node').css('color', '#606266')
-      }
     },
     updateTableUrl(url) {
       const treeList = this.$refs.TreeList

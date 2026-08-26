@@ -287,6 +287,9 @@ export default {
     selectNode: function (node) {
       return this.$refs.AutoDataZTree.selectNode(node)
     },
+    refreshAssetRelationAmounts(nodeIds) {
+      return this.$refs.AutoDataZTree?.refreshAssetRelationAmounts?.(nodeIds)
+    },
     reloadTable() {
       this.$refs.ListTable.reloadTable()
     }
@@ -308,11 +311,14 @@ $origin-color: #ffffff;
   }
 
   .left {
+    box-sizing: border-box;
     flex: none;
     min-width: 0;
+    border-right: 1px solid var(--el-border-color-lighter);
     overflow: hidden;
     background: $origin-color;
     color: var(--color-border);
+    transition: border-color 0.15s ease;
 
     // title 部分
     .title {
@@ -366,31 +372,14 @@ $origin-color: #ffffff;
   cursor: col-resize;
   background: transparent;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 3px;
-    width: 1px;
-    background: var(--el-border-color-lighter);
-    transition:
-      width 0.15s ease,
-      left 0.15s ease,
-      background 0.15s ease;
-  }
-
-  &:hover {
-    &::before {
-      left: 2px;
-      width: 3px;
-      background: var(--el-color-primary-light-5);
-    }
-  }
-
   &.is-collapsed {
     cursor: default;
   }
+}
+
+.tree-table-content:has(.tree-resizer:hover) .left,
+.tree-table-content.is-resizing .left {
+  border-right-color: var(--el-color-primary-light-5);
 }
 
 .el-tree {

@@ -72,7 +72,6 @@ export default {
     return {
       flag: false,
       componentKey: 1,
-      renderVersion: 0,
       activeTreeName: '',
       activeTreeSetting: {},
       showText: true,
@@ -141,6 +140,9 @@ export default {
     selectNode: function (node) {
       return this.$refs.AutoDataZTree.selectNode(node)
     },
+    refreshAssetRelationAmounts(nodeIds) {
+      return this.$refs.AutoDataZTree?.refreshAssetRelationAmounts?.(nodeIds)
+    },
     handleUrlChange(url) {
       this.$emit('urlChange', url)
     },
@@ -172,8 +174,9 @@ export default {
 
       this.activeTreeName = tabName
       this.activeTreeSetting = tab.treeSetting
-      this.renderVersion += 1
-      this.componentKey = `${this.$route.name || 'tree'}_${tabName}_${this.renderVersion}`
+      // Keep the key stable for each tab so keep-alive can restore the same
+      // tree instance, including its data, expanded nodes and search state.
+      this.componentKey = `${this.$route.name || 'tree'}_${tabName}`
       this.flag = true
     },
     getPropActiveTab() {

@@ -51,32 +51,6 @@
       v-if="$hasPerm('assets.change_assetnodes | assets.test_assetconnectivity')"
       class="divider"
     />
-    <li
-      id="m_show_asset_only_current_node"
-      class="rmenu"
-      tabindex="-1"
-      @click="rMenuShowAssetOnlyCurrentNode"
-    >
-      <i class="fa fa-indent" /> {{ $t('ShowAssetOnlyCurrentNode') }}
-    </li>
-    <li
-      id="m_show_asset_all_children_node"
-      class="rmenu"
-      tabindex="-1"
-      @click="rMenuShowAssetAllChildrenNode"
-    >
-      <i class="fa fa-align-justify" /> {{ $t('ShowAssetAllChildrenNode') }}
-    </li>
-    <li class="divider" />
-    <li
-      id="m_check_assets_amount"
-      v-if="$hasPerm('assets.change_node')"
-      class="rmenu"
-      tabindex="-1"
-      @click="rCheckAssetsAmount"
-    >
-      <i class="fa fa-clone" /> {{ $t('CheckAssetsAmount') }}
-    </li>
     <li id="m_show_node_info" class="rmenu" tabindex="-1" @click="rMenuShowNodeInfo">
       <i class="fa fa-info-circle" /> {{ $t('ShowNodeInfo') }}
     </li>
@@ -189,22 +163,6 @@ export default {
           this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
         })
     },
-    rMenuShowAssetOnlyCurrentNode() {
-      this.hideMenu()
-      const currentNode = this.getSelectedNodes()[0]
-      if (!currentNode) {
-        return
-      }
-      this.$emit('showAll', { node: currentNode, showCurrentAsset: 1 })
-    },
-    rMenuShowAssetAllChildrenNode() {
-      this.hideMenu()
-      const currentNode = this.getSelectedNodes()[0]
-      if (!currentNode) {
-        return
-      }
-      this.$emit('showAll', { node: currentNode, showCurrentAsset: 0 })
-    },
     async rMenuShowNodeInfo() {
       const currentNode = this.getSelectedNodes()[0]
       if (!currentNode) return
@@ -222,16 +180,6 @@ export default {
         this.$message.error(this.$tc('ErrorMsg' + ' ' + error))
       }
     },
-    rCheckAssetsAmount() {
-      this.$axios
-        .post(`/api/v1/assets/nodes/check_assets_amount_task/`)
-        .then((res) => {
-          openTaskPage(res['task'])
-        })
-        .catch((error) => {
-          this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
-        })
-    },
     hideMenu() {
       this.tree.hideRMenu()
     },
@@ -243,44 +191,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.rmenu {
-  font-size: 12px;
-  padding: 0 16px;
-  position: relative;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: #606266;
-  height: 24px;
-  line-height: 24px;
-  box-sizing: border-box;
-  cursor: pointer;
-}
-
-div.rMenu li {
-  margin: 6px 0;
-  cursor: pointer;
-  list-style: none outside none;
-}
-
-.rmenu > a:hover,
-.dropdown-menu > a:focus {
-  color: #262626;
-  text-decoration: none;
-  background-color: #f5f5f5;
-}
-
-.rmenu:hover {
-  background-color: #f5f7fa;
-}
-
-.divider {
-  margin: 1px 0;
-  list-style: none outside none;
-  background-color: #e5e5e5;
-  height: 1px;
-}
-
 .el-row {
   margin-bottom: 20px;
 

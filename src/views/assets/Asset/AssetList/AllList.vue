@@ -8,7 +8,7 @@
       @url-change="handleTreeUrlChange"
     >
       <template #rMenu>
-        <TreeMenu :tree="treeRef" @show-all="showAll" />
+        <TreeMenu :tree="treeRef" />
       </template>
       <template #table>
         <BaseList
@@ -27,13 +27,7 @@ import { AssetTreeTable } from '@/components'
 import { mapGetters } from 'vuex'
 import TreeMenu from './components/TreeMenu'
 import BaseList from './components/BaseList'
-import $ from '@/utils/jquery-vendor'
-import {
-  getShowCurrentAssetValue,
-  setRouterQuery,
-  setShowCurrentAssetValue,
-  setUrlParam
-} from '@/utils/common/index'
+import { setRouterQuery, setUrlParam } from '@/utils/common/index'
 
 export default {
   components: {
@@ -50,6 +44,7 @@ export default {
       treeSetting: {
         url: '/api/v1/assets/assets/',
         showMenu: !this.$store.getters.currentOrgIsRoot,
+        showAssetScope: true,
         showDefaultMenu: true,
         selectSyncToRoute: false,
         menu: []
@@ -73,22 +68,6 @@ export default {
     this.treeRef = this.$refs.AssetTreeTable.$refs.TreeList
   },
   methods: {
-    decorateRMenu() {
-      const show_current_asset = getShowCurrentAssetValue(this.$cookie)
-      if (show_current_asset === '1') {
-        $('#m_show_asset_all_children_node').css('color', '#606266')
-        $('#m_show_asset_only_current_node').css('color', 'green')
-      } else {
-        $('#m_show_asset_all_children_node').css('color', 'green')
-        $('#m_show_asset_only_current_node').css('color', '#606266')
-      }
-    },
-    showAll({ node, showCurrentAsset }) {
-      setShowCurrentAssetValue(this.$cookie, showCurrentAsset)
-      this.decorateRMenu()
-      const url = `${this.treeSetting.url}?node_id=${node.meta.data.id}&show_current_asset=${showCurrentAsset}`
-      this.handleTreeUrlChange(url)
-    },
     handleTreeUrlChange(url) {
       this.tableConfig = {
         ...this.tableConfig,
