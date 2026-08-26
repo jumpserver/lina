@@ -14,10 +14,11 @@ import Ticket from './Ticket.vue'
 import Ops from './Ops.vue'
 import Chat from './Chat.vue'
 import VirtualApp from './VirtualApp.vue'
+import SSHCA from './SSHCA.vue'
 
 export default {
   name: 'Feature',
-  components: { TabPage, Announcement, Vault, Ticket, Ops, Chat, VirtualApp },
+  components: { TabPage, Announcement, Vault, Ticket, Ops, Chat, VirtualApp, SSHCA },
   data() {
     return {
       activeMenu: 'Announcement',
@@ -41,6 +42,11 @@ export default {
           title: this.$t('AccountStorage'),
           name: 'Vault',
           hidden: !this.$store.getters.hasValidLicense || !this.$hasPerm('settings.change_vault')
+        },
+        {
+          title: this.$t('OpenBaoSSHCA'),
+          name: 'SSHCA',
+          hidden: !this.$hasPerm('settings.change_vault')
         },
         {
           title: this.$t('ChatAI'),

@@ -5,8 +5,9 @@
     :visible="visible"
     :title="$tc('AssetManagement')"
     class="asset-dialog"
-    top="2vh"
-    width="1000px"
+    max-width="1100px"
+    top="3vh"
+    width="78vw"
     @cancel="handleCancel"
     @close="handleClose"
     @confirm="handleConfirm"
@@ -71,6 +72,10 @@ export default {
     treeSetting: {
       type: Object,
       default: () => ({})
+    },
+    pageSize: {
+      type: Number,
+      default: 10
     }
   },
   data() {
@@ -80,33 +85,28 @@ export default {
       rowSelected: _.cloneDeep(this.value) || [],
       rowsAdd: [],
       tableConfig: {
+        name: `AssetSelectDialog_${new URL(this.baseUrl, location.origin).pathname.replaceAll(
+          '/',
+          '_'
+        )}`,
         url: this.baseUrl,
         hasTree: true,
         canSelect: this.canSelect,
-        columns: [
-          {
-            prop: 'name',
-            label: this.$t('Name'),
-            sortable: true
+        savePageSize: false,
+        paginationSize: Math.min(Math.max(this.pageSize, 1), 100),
+        paginationSizes: [10, 20, 50, 100],
+        columnsShow: {
+          default: ['name', 'address', 'platform'],
+          min: ['name']
+        },
+        columnsMeta: {
+          platform: {
+            formatter: (row) => row.platform?.name || ''
           },
-          {
-            prop: 'address',
-            label: this.$t('Address'),
-            sortable: 'custom'
-          },
-          {
-            prop: 'platform',
-            label: this.$t('Platform'),
-            sortable: true,
-            formatter: function (row) {
-              return row.platform.name
-            }
-          },
-          {
-            prop: 'actions',
+          actions: {
             has: false
           }
-        ],
+        },
         listeners: {
           'toggle-row-selection': (isSelected, row) => {
             if (isSelected) {
@@ -122,7 +122,11 @@ export default {
       },
       headerActions: {
         hasLeftActions: false,
-        hasRightActions: false,
+        hasRightActions: true,
+        hasColumnSetting: true,
+        hasImport: false,
+        hasExport: false,
+        hasRefresh: false,
         hasLabelSearch: true,
         searchConfig: {
           getUrlQuery: false
@@ -135,7 +139,12 @@ export default {
       return { ...this.$attrs }
     },
     iTreeSetting() {
-      return { ...this.treeSetting, selectSyncToRoute: false }
+      return {
+        showAssetScope: true,
+        assetScopeStorageKey: 'asset_select_dialog_show_current_asset',
+        ...this.treeSetting,
+        selectSyncToRoute: false
+      }
     }
   },
   methods: {
@@ -186,11 +195,33 @@ export default {
    - 左:资产树侧栏,满高(tab 作头部);右:搜索 + 表格,自带内边距。
    - 高度随右侧表格自然铺开,竖线满高,分页贴底,无多余空白。
    ===================================================================== */
-.asset-dialog {
+.asset-dialog.el-dialog {
+  display: flex;
+  flex-direction: column;
+  height: min(680px, 94vh);
+
   // Dialog 组件全局有 `.el-dialog.dialog .el-dialog__body { padding:20px 30px!important }`(0,3,0),
   // 这里必须用更高优先级(0,4,0)才能压过它,让内容真正满幅铺到边缘。
-  &.el-dialog.dialog .el-dialog__body {
+  &.dialog .el-dialog__body {
+    flex: 1 1 auto;
+    min-height: 0;
     padding: 0 !important;
+    overflow: hidden;
+  }
+
+  .el-dialog__header {
+    padding: 10px 24px !important;
+  }
+
+  .el-dialog__footer {
+    padding: 8px 24px !important;
+  }
+
+  .el-dialog__body > .el-loading-parent--relative {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
   }
 
   .page-heading {
@@ -198,8 +229,15 @@ export default {
   }
 
   .tree-table {
+    flex: 1 1 auto;
     display: flex;
     align-items: stretch;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .tree-table.tree-table-content {
+    height: 100%;
   }
 
   // ---------- 左:资产树 / 类型树 侧栏 ----------
@@ -237,13 +275,53 @@ export default {
 
   // ---------- 右:搜索 + 表格 ----------
   .tree-table .right {
+    display: flex;
     min-width: 0; // 允许表格在弹窗内正确收缩
+    min-height: 0;
 
     // 折叠按钮隐藏后,表格区填满右栏
     .transition-box {
+      display: flex;
+      flex-direction: column;
       flex: 1 1 auto;
       min-width: 0;
+      min-height: 0;
       padding: 14px 20px;
+    }
+
+    .list-table {
+      flex: 1 1 auto;
+      height: 100%;
+      min-height: 0;
+      gap: 6px;
+    }
+
+    .table-content {
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+
+    .table-content > .el-card,
+    .table-content > .el-card > .el-card__body,
+    .auto-data-table,
+    .auto-data-table > .el-loading-parent--relative,
+    .auto-data-table .el-data-table {
+      height: 100%;
+      min-height: 0;
+    }
+
+    .auto-data-table .el-data-table {
+      gap: 4px;
+    }
+
+    .auto-data-table .el-data-table > .el-loading-parent--relative {
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+
+    .el-data-table .el-pagination {
+      flex: 0 0 auto;
+      padding: 6px 0 0;
     }
 
     // 顶部工具栏:把「标签按钮 + 搜索框」收成一个统一边框的紧凑控件(按内容宽度,不拉满整行),

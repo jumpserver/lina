@@ -41,6 +41,14 @@ export default {
       type: Array,
       default: () => []
     },
+    excludeFields: {
+      type: Array,
+      default: () => []
+    },
+    fieldLabels: {
+      type: Object,
+      default: () => ({})
+    },
     // 建议折叠
     fold: {
       type: Boolean,
@@ -125,9 +133,12 @@ export default {
       const filters = getFilterMeta(data)
       const options = []
       for (const [name, field] of Object.entries(filters)) {
+        if (this.excludeFields.includes(name)) {
+          continue
+        }
         const option = {
           custom: field.custom === true,
-          label: field.label,
+          label: this.fieldLabels[name] || field.label,
           multiple: field.multiple !== false && !this.singleChoiceFields.includes(name),
           operators: field.operators,
           type: field.type,

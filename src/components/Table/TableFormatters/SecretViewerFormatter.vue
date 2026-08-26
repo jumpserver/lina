@@ -82,19 +82,22 @@ export default {
       publicSettings: 'publicSettings'
     }),
     hasShow: function () {
-      return this.formatterArgs.hasShow
+      return this.formatterArgs.hasShow && !this.isSSHCertificate && !this.vaultUnavailable
     },
     hasDownload: function () {
-      return this.formatterArgs.hasDownload && !this.vaultUnavailable
+      return this.formatterArgs.hasDownload && !this.isSSHCertificate && !this.vaultUnavailable
     },
     hasCopy: function () {
-      return this.formatterArgs.hasCopy && !this.vaultUnavailable
+      return this.formatterArgs.hasCopy && !this.isSSHCertificate && !this.vaultUnavailable
     },
     hasEdit: function () {
-      return this.formatterArgs.hasEdit && !this.vaultUnavailable
+      return this.formatterArgs.hasEdit && !this.isSSHCertificate && !this.vaultUnavailable
     },
     name: function () {
       return this.formatterArgs.name
+    },
+    isSSHCertificate() {
+      return this.row?.secret_type?.value === 'ssh_certificate'
     },
     iActions() {
       const actions = [
@@ -133,6 +136,9 @@ export default {
       return actions
     },
     currentValue() {
+      if (this.isSSHCertificate) {
+        return this.$t('DynamicCredential')
+      }
       if (this.vaultUnavailable) {
         return this.$t('VaultSecretUnavailable')
       }

@@ -23,7 +23,8 @@
     <transition appear mode="out-in" name="fade-transform">
       <slot>
         <keep-alive v-if="flag">
-          <AutoDataZTree
+          <component
+            :is="treeComponent"
             :key="componentKey"
             ref="AutoDataZTree"
             :setting="activeTreeSetting"
@@ -34,7 +35,7 @@
                 <slot :data="data" name="rMenu" />
               </div>
             </template>
-          </AutoDataZTree>
+          </component>
         </keep-alive>
       </slot>
     </transition>
@@ -43,13 +44,15 @@
 
 <script>
 import AutoDataZTree from '@/components/Tree/AutoDataZTree/index.vue'
+import XTree from '@/components/Tree/XTree/index.vue'
 
 const ACTIVE_TREE_TAB_KEY = 'activeTreeTab'
 
 export default {
   name: 'TabTree',
   components: {
-    AutoDataZTree
+    AutoDataZTree,
+    XTree
   },
   props: {
     submenu: {
@@ -59,13 +62,16 @@ export default {
     activeMenu: {
       type: String,
       required: true
+    },
+    treeComponent: {
+      type: String,
+      default: 'AutoDataZTree'
     }
   },
   data() {
     return {
       flag: false,
       componentKey: 1,
-      renderVersion: 0,
       activeTreeName: '',
       activeTreeSetting: {},
       showText: true,
@@ -134,6 +140,9 @@ export default {
     selectNode: function (node) {
       return this.$refs.AutoDataZTree.selectNode(node)
     },
+    refreshAssetRelationAmounts(nodeIds) {
+      return this.$refs.AutoDataZTree?.refreshAssetRelationAmounts?.(nodeIds)
+    },
     handleUrlChange(url) {
       this.$emit('urlChange', url)
     },
@@ -165,8 +174,9 @@ export default {
 
       this.activeTreeName = tabName
       this.activeTreeSetting = tab.treeSetting
-      this.renderVersion += 1
-      this.componentKey = `${this.$route.name || 'tree'}_${tabName}_${this.renderVersion}`
+      // Keep the key stable for each tab so keep-alive can restore the same
+      // tree instance, including its data, expanded nodes and search state.
+      this.componentKey = `${this.$route.name || 'tree'}_${tabName}`
       this.flag = true
     },
     getPropActiveTab() {
