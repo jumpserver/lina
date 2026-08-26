@@ -30,7 +30,7 @@ export default {
         fields: ['VIRTUAL_APP_ENABLED', 'PANDA_HOST'],
         fieldsMeta: {
           PANDA_HOST: {
-            label: 'Panda URL',
+            label: this.$t('VirtualAppServiceURL'),
             component: AddressInput,
             el: {
               kinds: ADDRESS_KINDS.url
