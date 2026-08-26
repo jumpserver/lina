@@ -3,7 +3,7 @@
     v-bind="dialogAttrs"
     :close-on-click-modal="false"
     :visible="visible"
-    :title="$tc('AssetManagement')"
+    :title="dialogTitle"
     class="asset-dialog"
     max-width="1100px"
     top="3vh"
@@ -55,6 +55,10 @@ export default {
       type: Boolean,
       default: false
     },
+    title: {
+      type: String,
+      default: ''
+    },
     canSelect: {
       type: Function,
       default(row, index) {
@@ -95,6 +99,10 @@ export default {
         savePageSize: false,
         paginationSize: Math.min(Math.max(this.pageSize, 1), 100),
         paginationSizes: [10, 20, 50, 100],
+        tableAttrs: {
+          height: '100%',
+          scrollbarAlwaysOn: true
+        },
         columnsShow: {
           default: ['name', 'address', 'platform'],
           min: ['name']
@@ -126,7 +134,7 @@ export default {
         hasColumnSetting: true,
         hasImport: false,
         hasExport: false,
-        hasRefresh: false,
+        hasRefresh: true,
         hasLabelSearch: true,
         searchConfig: {
           getUrlQuery: false
@@ -135,11 +143,15 @@ export default {
     }
   },
   computed: {
+    dialogTitle() {
+      return this.title || this.$tc('AssetManagement')
+    },
     dialogAttrs() {
       return { ...this.$attrs }
     },
     iTreeSetting() {
       return {
+        showCollapse: false,
         showAssetScope: true,
         assetScopeStorageKey: 'asset_select_dialog_show_current_asset',
         ...this.treeSetting,
@@ -192,8 +204,8 @@ export default {
    - body 与双栏容器都不留 padding:内容铺到弹窗内容区边缘。
      框架由标题栏底线、底部按钮栏顶线,以及中间一条贯穿竖线共同构成,
      不再用浮动卡片,也就没有卡片边框内的空洞。
-   - 左:资产树侧栏,满高(tab 作头部);右:搜索 + 表格,自带内边距。
-   - 高度随右侧表格自然铺开,竖线满高,分页贴底,无多余空白。
+   - 左:资产树侧栏,始终占满弹窗内容区;右:搜索 + 表格,自带内边距。
+   - 双栏使用弹窗固定内容高度,互不依赖内容高度,分页贴底。
    ===================================================================== */
 .asset-dialog.el-dialog {
   display: flex;
@@ -203,6 +215,8 @@ export default {
   // Dialog 组件全局有 `.el-dialog.dialog .el-dialog__body { padding:20px 30px!important }`(0,3,0),
   // 这里必须用更高优先级(0,4,0)才能压过它,让内容真正满幅铺到边缘。
   &.dialog .el-dialog__body {
+    display: flex;
+    flex-direction: column;
     flex: 1 1 auto;
     min-height: 0;
     padding: 0 !important;
@@ -217,11 +231,13 @@ export default {
     padding: 8px 24px !important;
   }
 
-  .el-dialog__body > .el-loading-parent--relative {
+  .el-dialog__body > div {
     display: flex;
+    flex: 1 1 0;
     flex-direction: column;
-    height: 100%;
+    width: 100%;
     min-height: 0;
+    overflow: hidden;
   }
 
   .page-heading {
@@ -229,20 +245,24 @@ export default {
   }
 
   .tree-table {
-    flex: 1 1 auto;
+    flex: 1 1 0;
     display: flex;
     align-items: stretch;
-    height: 100%;
+    height: auto !important;
     min-height: 0;
+    overflow: hidden;
   }
 
   .tree-table.tree-table-content {
-    height: 100%;
+    flex: 1 1 0;
   }
 
   // ---------- 左:资产树 / 类型树 侧栏 ----------
-  .tree-table .left {
-    position: relative; // 锚点:树体绝对定位、不参与撑高,侧栏高度自动 = 右侧表格高度
+  .tree-table > .left {
+    position: relative;
+    align-self: stretch;
+    height: 100%;
+    min-height: 0;
     border-right: 1px solid var(--color-border); // 中间贯穿竖线
 
     // tab + 树体铺满整个侧栏
@@ -251,12 +271,19 @@ export default {
       inset: 0;
       display: flex;
       flex-direction: column;
+      height: 100%;
+      min-height: 0;
     }
 
-    // tab 作侧栏头部:左右留白
-    .page-submenu {
+    .x-tree {
+      height: 100% !important;
+      min-height: 0 !important;
+    }
+
+    // 树视图选择器作为侧栏头部，保留右侧工具按钮空间。
+    .tree-view-header {
       flex: 0 0 auto;
-      padding: 0 16px;
+      padding-left: 16px;
     }
 
     // 树体:填满头部下方并独立滚动
@@ -264,7 +291,7 @@ export default {
       flex: 1 1 auto;
       min-height: 0;
       padding: 8px 12px;
-      overflow: auto;
+      overflow: hidden;
     }
 
     .ztree,
@@ -274,8 +301,10 @@ export default {
   }
 
   // ---------- 右:搜索 + 表格 ----------
-  .tree-table .right {
+  .tree-table > .right {
     display: flex;
+    align-self: stretch;
+    height: 100%;
     min-width: 0; // 允许表格在弹窗内正确收缩
     min-height: 0;
 
@@ -286,7 +315,16 @@ export default {
       flex: 1 1 auto;
       min-width: 0;
       min-height: 0;
-      padding: 14px 20px;
+      padding: 14px 20px 14px 8px;
+    }
+
+    .transition-box > div {
+      display: flex;
+      flex: 1 1 auto;
+      flex-direction: column;
+      width: 100%;
+      min-height: 0;
+      overflow: hidden;
     }
 
     .list-table {
@@ -299,12 +337,13 @@ export default {
     .table-content {
       flex: 1 1 auto;
       min-height: 0;
+      overflow: hidden;
     }
 
     .table-content > .el-card,
     .table-content > .el-card > .el-card__body,
     .auto-data-table,
-    .auto-data-table > .el-loading-parent--relative,
+    .auto-data-table > div:first-child,
     .auto-data-table .el-data-table {
       height: 100%;
       min-height: 0;
@@ -314,56 +353,31 @@ export default {
       gap: 4px;
     }
 
-    .auto-data-table .el-data-table > .el-loading-parent--relative {
+    .auto-data-table .el-data-table > div:first-child {
       flex: 1 1 auto;
       min-height: 0;
+      overflow: hidden;
     }
 
     .el-data-table .el-pagination {
       flex: 0 0 auto;
-      padding: 6px 0 0;
-    }
+      box-sizing: border-box;
+      min-height: 48px;
+      padding: 10px 20px 12px;
 
-    // 顶部工具栏:把「标签按钮 + 搜索框」收成一个统一边框的紧凑控件(按内容宽度,不拉满整行),
-    // 消除并排小框与框中框(标签按钮自带边框、搜索框自带边框、框内 / 徽标又带边框)。
-    .search {
-      flex: 0 0 auto; // 按内容宽度收紧,右侧多余空间归工具栏(无边框),避免拉出空的带框盒子
-      width: auto;
-      margin-right: 0; // 覆盖全局 `.container:not(:has(.left-side)) .search { margin-right:auto }`
-      margin-left: auto; // 将搜索控件推到工具栏右侧
-      align-items: center;
-      min-height: 30px;
-      border: 1px solid var(--color-border);
-      border-radius: 4px;
-      background-color: #fff;
-
-      .label-search {
-        margin-right: 0;
+      .el-pagination__total {
+        margin-right: auto;
       }
 
-      // 标签按钮:去掉自身边框,仅以一条右分隔线与搜索框分隔
-      .label-button {
-        height: 28px;
-        border: none !important;
-        border-right: 1px solid var(--color-border) !important;
-        border-radius: 0 !important;
-      }
-
-      // 搜索框:去掉自身外层边框(统一由 .search 提供),保持其自然宽度
-      .right-side-item.action-search {
-        border: none !important;
-        border-radius: 0 !important;
-      }
-
-      // 隐藏搜索框内的「/」快捷键徽标(自带边框,嵌在搜索框内形成框中框)
-      .keydown-focus {
-        display: none;
+      .el-pagination__sizes {
+        margin-left: 12px;
       }
     }
   }
 
-  // 满幅主从布局下树折叠按钮意义不大,隐藏以保持整洁
-  .tree-table .mini {
+  // 弹窗内始终保留资产树，仅允许拖动分隔线调整宽度。
+  .tree-table .mini,
+  .tree-table .tree-toggle {
     display: none;
   }
 }

@@ -85,14 +85,14 @@ export default {
         treeComponent: 'XTree',
         submenu: [
           {
-            title: this.$t('AssetTree'),
+            title: this.$t('NodeTree'),
             name: 'CustomTree',
             icon: 'fa-solid fa-tree',
             treeSetting: {
               showAssets,
               showMenu: false,
               showRefresh: true,
-              showCollapse: true,
+              showCollapse: this.treeSetting?.showCollapse !== false,
               showCreate: true,
               showUpdate: true,
               showDelete: true,

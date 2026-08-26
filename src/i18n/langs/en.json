@@ -1,5 +1,6 @@
 {
   "RowNumber": "No.",
+  "NodeTree": "Node tree",
   "PinColumn": "Pin column",
   "UnpinColumn": "Unpin column",
   "FieldRequiredError": "This field is required.",

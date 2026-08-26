@@ -6,7 +6,7 @@
       :class="{ 'is-resizing': resizing }"
       class="tree-table-content"
     >
-      <div v-show="iShowTree" :style="leftStyle" class="left">
+      <div v-show="iShowTree" ref="treePanel" :style="leftStyle" class="left">
         <span v-if="component === 'AutoDataZTree'" class="title">
           {{ title }}
         </span>
@@ -30,11 +30,15 @@
         class="tree-resizer"
         role="separator"
         tabindex="0"
-        @dblclick="resetTreeWidth"
         @keydown.left.prevent="resizeByKeyboard(-16)"
         @keydown.right.prevent="resizeByKeyboard(16)"
-        @pointerdown="startResize"
       >
+        <span
+          v-if="iShowTree"
+          class="tree-resize-handle"
+          @dblclick="fitTreeWidth"
+          @pointerdown="startResize"
+        />
         <button
           :aria-expanded="iShowTree"
           class="tree-toggle"
@@ -199,21 +203,24 @@ export default {
     this.stopResize()
   },
   methods: {
-    initializeTreeWidth() {
-      const containerWidth = this.$refs.treeTableContent?.clientWidth || 0
-      if (!containerWidth) {
-        return
-      }
+    getConfiguredTreeWidth(containerWidth) {
       const configuredWidth = String(this.treeWidth).trim()
       const parsedWidth = Number.parseFloat(configuredWidth)
       const width = configuredWidth.endsWith('%')
         ? (containerWidth * parsedWidth) / 100
         : parsedWidth
-      this.leftWidth = this.clampTreeWidth(Number.isFinite(width) ? width : containerWidth * 0.236)
+      return Number.isFinite(width) ? width : containerWidth * 0.236
     },
-    clampTreeWidth(width) {
+    initializeTreeWidth() {
       const containerWidth = this.$refs.treeTableContent?.clientWidth || 0
-      const minWidth = Math.min(240, containerWidth * 0.4)
+      if (!containerWidth) {
+        return
+      }
+      this.leftWidth = this.clampTreeWidth(this.getConfiguredTreeWidth(containerWidth))
+    },
+    clampTreeWidth(width, minimumWidth = 240) {
+      const containerWidth = this.$refs.treeTableContent?.clientWidth || 0
+      const minWidth = Math.min(minimumWidth, containerWidth * 0.4)
       const maxWidth = Math.max(minWidth, Math.min(620, containerWidth - 480))
       return Math.round(Math.min(Math.max(width, minWidth), maxWidth))
     },
@@ -223,8 +230,7 @@ export default {
       }
       this.resizing = true
       this.resizeStartX = event.clientX
-      this.resizeStartWidth =
-        this.leftWidth || event.currentTarget.previousElementSibling.offsetWidth
+      this.resizeStartWidth = this.leftWidth || this.$refs.treePanel?.offsetWidth || 0
       document.addEventListener('pointermove', this.handleResize)
       document.addEventListener('pointerup', this.stopResize)
       document.body.style.cursor = 'col-resize'
@@ -255,9 +261,48 @@ export default {
       }
       this.leftWidth = this.clampTreeWidth((this.leftWidth || 0) + offset)
     },
-    resetTreeWidth() {
+    fitTreeWidth() {
       const containerWidth = this.$refs.treeTableContent?.clientWidth || 0
-      this.leftWidth = this.clampTreeWidth(containerWidth * 0.236)
+      const treePanel = this.$refs.treePanel
+      const treeBody = treePanel?.querySelector('.x-tree__body')
+      if (!containerWidth) {
+        return
+      }
+      if (!treeBody) {
+        this.leftWidth = this.clampTreeWidth(this.getConfiguredTreeWidth(containerWidth))
+        return
+      }
+
+      const scrollElement = treeBody.querySelector('.el-tree-virtual-list') || treeBody
+      const bodyRect = scrollElement.getBoundingClientRect()
+      const scrollLeft = scrollElement.scrollLeft || 0
+      const contentElements = treeBody.querySelectorAll('.x-tree__node-amount, .x-tree__node-label')
+      let contentWidth = 0
+      contentElements.forEach((element) => {
+        const rect = element.getBoundingClientRect()
+        if (!rect.width || !rect.height) {
+          return
+        }
+        contentWidth = Math.max(contentWidth, rect.right - bodyRect.left + scrollLeft)
+      })
+
+      const horizontalPadding = 20
+      const contentComfortGap = 16
+      const treeViewSelector = treePanel.querySelector('.tree-view-selector')
+      const headerActions = treePanel.querySelector('.x-tree__header-actions')
+      const headerGap = 8
+      const headerWidth =
+        (treeViewSelector?.scrollWidth || 0) + (headerActions?.offsetWidth || 0) + headerGap
+      const minimumFitWidth = Math.max(180, headerWidth)
+      const preferredWidth = Math.max(
+        minimumFitWidth,
+        contentWidth + horizontalPadding + contentComfortGap
+      )
+      this.leftWidth = this.clampTreeWidth(preferredWidth, minimumFitWidth)
+
+      this.$nextTick(() => {
+        scrollElement.scrollLeft = 0
+      })
     },
     toggleTree() {
       this.iShowTree = !this.iShowTree
@@ -342,7 +387,7 @@ $origin-color: #ffffff;
       overflow: auto;
       height: 100%;
 
-      &.tree-tab :deep(.page-submenu) {
+      &.tree-tab :deep(.tree-view-header) {
         height: 40px;
       }
     }
@@ -367,17 +412,32 @@ $origin-color: #ffffff;
 .tree-resizer {
   position: relative;
   z-index: 5;
-  flex: 0 0 8px;
-  width: 8px;
-  cursor: col-resize;
+  flex: 0 0 14px;
+  width: 14px;
   background: transparent;
 
   &.is-collapsed {
+    flex-basis: 0;
+    width: 0;
     cursor: default;
+
+    .tree-toggle {
+      transform: translate(-20px, -50%);
+    }
   }
 }
 
-.tree-table-content:has(.tree-resizer:hover) .left,
+.tree-resize-handle {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  left: -6px;
+  width: 11px;
+  cursor: col-resize;
+}
+
+.tree-table-content:has(.tree-resize-handle:hover) .left,
 .tree-table-content.is-resizing .left {
   border-right-color: var(--el-color-primary-light-5);
 }
@@ -389,25 +449,32 @@ $origin-color: #ffffff;
 .tree-toggle {
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 0;
   z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
+  width: 14px;
   height: 34px;
   padding: 0;
   border: 1px solid var(--el-border-color);
-  border-radius: 3px;
+  border-left: 0;
+  border-radius: 0 6px 6px 0;
   color: var(--el-text-color-secondary);
   background: var(--el-bg-color);
   cursor: pointer;
-  transform: translate(-50%, -50%);
+  transform: translateY(-50%);
   opacity: 0;
   transition:
     opacity 0.15s ease,
     color 0.15s ease,
-    border-color 0.15s ease;
+    background-color 0.15s ease;
+
+  &::before {
+    position: absolute;
+    inset: -10px -3px;
+    content: '';
+  }
 
   .icon-left {
     font-size: 11px;
@@ -415,7 +482,7 @@ $origin-color: #ffffff;
 
   &:hover {
     color: var(--el-color-primary);
-    border-color: var(--el-color-primary-light-5);
+    background: var(--el-color-primary-light-9);
   }
 }
 
