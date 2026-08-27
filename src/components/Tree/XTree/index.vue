@@ -1,68 +1,52 @@
 <template>
   <div :class="{ 'is-search-visible': treeSetting.showSearch && searchVisible }" class="x-tree">
-    <div
-      v-if="
-        treeSetting.showSearch ||
-        treeSetting.showCollapse ||
-        treeSetting.showRefresh ||
-        treeSetting.showAssetScope
-      "
-      class="x-tree__header-actions"
-    >
-      <el-tooltip
-        v-if="treeSetting.showSearch"
-        :content="$t('NodeFilterSearch')"
-        :show-after="500"
-        placement="top"
+    <div v-if="hasTreeTools" class="x-tree__header-actions">
+      <el-dropdown
+        ref="toolsDropdown"
+        :hide-timeout="160"
+        placement="bottom-start"
+        popper-class="x-tree-tools-popper"
+        :show-timeout="80"
+        trigger="hover"
+        @command="handleTreeToolCommand"
       >
         <el-button
-          :aria-label="$t('NodeFilterSearch')"
-          :class="{ 'is-active': searchVisible }"
-          :title="$t('NodeFilterSearch')"
+          :aria-label="$t('TreeActions')"
+          :title="$t('TreeActions')"
           class="x-tree__tool-button"
-          @click="toggleSearch"
         >
-          <el-icon class="x-tree__tool-icon"><Search /></el-icon>
+          <el-icon class="x-tree__tool-icon x-tree__more-icon"><More /></el-icon>
         </el-button>
-      </el-tooltip>
-      <template
-        v-if="treeSetting.showCollapse || treeSetting.showRefresh || treeSetting.showAssetScope"
-      >
-        <el-tooltip
-          v-if="treeSetting.showCollapse"
-          :content="$t('NodeFilterCollapse')"
-          :show-after="500"
-          placement="top"
-        >
-          <el-button
-            :aria-label="$t('NodeFilterCollapse')"
-            :disabled="loading || treeData.length === 0"
-            :title="$t('NodeFilterCollapse')"
-            class="x-tree__tool-button"
-            @click="collapseTreeStepwise"
-          >
-            <svg-icon class="x-tree__tool-icon" icon-class="tree-collapse-all" />
-          </el-button>
-        </el-tooltip>
-        <el-dropdown
-          v-if="treeSetting.showAssetScope"
-          ref="settingsDropdown"
-          :hide-on-click="false"
-          placement="bottom-end"
-          popper-class="x-tree-settings-popper"
-          trigger="click"
-        >
-          <el-button
-            :aria-label="$t('TreeSettings')"
-            :title="$t('TreeSettings')"
-            class="x-tree__tool-button"
-          >
-            <svg-icon class="x-tree__tool-icon" icon-class="system-setting" />
-          </el-button>
-          <template #dropdown>
-            <el-dropdown-menu class="x-tree-settings__menu">
+        <template #dropdown>
+          <el-dropdown-menu class="x-tree-tools__menu">
+            <el-dropdown-item
+              v-if="treeSetting.showSearch"
+              :class="{ 'is-active': searchVisible }"
+              command="search"
+            >
+              <span class="x-tree-tools__icon"
+                ><el-icon><Search /></el-icon
+              ></span>
+              <span>{{ $t('TreeActionSearch') }}</span>
+            </el-dropdown-item>
+            <el-dropdown-item
+              v-if="treeSetting.showCollapse"
+              :disabled="loading || treeData.length === 0"
+              command="collapse"
+            >
+              <span class="x-tree-tools__icon">
+                <svg-icon icon-class="tree-collapse-all" />
+              </span>
+              <span>{{ $t('TreeActionCollapse') }}</span>
+            </el-dropdown-item>
+            <el-dropdown-item v-if="treeSetting.showRefresh" command="refresh">
+              <span class="x-tree-tools__icon"><svg-icon icon-class="refresh" /></span>
+              <span>{{ $t('Refresh') }}</span>
+            </el-dropdown-item>
+            <template v-if="treeSetting.showAssetScope">
+              <li v-if="hasTreeOperations" class="x-tree-tools__divider" />
               <li class="x-tree-settings__title">{{ $t('AssetScope') }}</li>
-              <li class="x-tree-settings__radio-list">
+              <li class="x-tree-settings__radio-list" @click.capture="closeToolsDropdown">
                 <el-radio-group :model-value="assetScope" @change="handleAssetScopeChange">
                   <el-tooltip
                     :content="$t('AssetScopeWithDescendantsHelp')"
@@ -84,29 +68,18 @@
                   </el-tooltip>
                 </el-radio-group>
               </li>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-        <el-tooltip
-          v-if="treeSetting.showRefresh"
-          :content="$t('Refresh')"
-          :show-after="500"
-          placement="top"
-        >
-          <el-button
-            :aria-label="$t('Refresh')"
-            :title="$t('Refresh')"
-            class="x-tree__tool-button"
-            @click="refresh"
-          >
-            <svg-icon class="x-tree__tool-icon" icon-class="refresh" />
-          </el-button>
-        </el-tooltip>
-      </template>
+            </template>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </div>
 
-    <el-collapse-transition>
-      <div v-show="treeSetting.showSearch && searchVisible" class="x-tree__search-row">
+    <transition
+      :duration="{ enter: 110, leave: 0 }"
+      name="x-tree-search"
+      @after-enter="focusSearchInput"
+    >
+      <div v-if="treeSetting.showSearch && searchVisible" class="x-tree__search-row">
         <el-input
           ref="searchInput"
           v-model="searchValue"
@@ -120,7 +93,7 @@
           </template>
         </el-input>
       </div>
-    </el-collapse-transition>
+    </transition>
 
     <div
       v-loading="loading"
@@ -154,7 +127,10 @@
           <span
             :draggable="canDragData(data)"
             :title="getNodeTitle(data)"
-            :class="{ 'is-virtual-drop-target': isVirtualDropTarget(data) }"
+            :class="{
+              'is-operation-target': isOperationTarget(data),
+              'is-virtual-drop-target': isVirtualDropTarget(data)
+            }"
             class="x-tree__node"
             @dragend="handleVirtualDragEnd"
             @dragenter="handleVirtualDragOver($event, data)"
@@ -223,7 +199,11 @@
         @node-expand="handleNodeExpand"
       >
         <template #default="{ node, data }">
-          <span class="x-tree__node" :title="getNodeTitle(data)">
+          <span
+            :class="{ 'is-operation-target': isOperationTarget(data) }"
+            class="x-tree__node"
+            :title="getNodeTitle(data)"
+          >
             <button
               :aria-label="getNodeLabel(data)"
               class="x-tree__node-toggle"
@@ -348,6 +328,7 @@ export default {
       treeKey: 0,
       searchValue: '',
       searchVisible: false,
+      searchFocusFrame: null,
       assetScope: getAssetScopeValue(this.$cookie, this.setting),
       searchMode: false,
       menuVisible: false,
@@ -373,6 +354,7 @@ export default {
       normalTreeNodeCount: 0,
       virtualTreeHeight: 500,
       treeResizeObserver: null,
+      treeResizeFrame: null,
       virtualDraggingNode: null,
       virtualDropTargetId: '',
       dragPreviewElement: null,
@@ -410,6 +392,8 @@ export default {
           countUrl: '',
           countBatchSize: 100,
           countProgressiveBatchSize: 100,
+          operationNodeId: '',
+          readOnly: false,
           nodeRowHeight: 30,
           lazyLoad: true,
           virtualThreshold: 1000,
@@ -419,6 +403,14 @@ export default {
         },
         this.setting
       )
+    },
+    hasTreeOperations() {
+      return (
+        this.treeSetting.showSearch || this.treeSetting.showCollapse || this.treeSetting.showRefresh
+      )
+    },
+    hasTreeTools() {
+      return this.hasTreeOperations || this.treeSetting.showAssetScope
     },
     defaultMenu() {
       return [
@@ -450,7 +442,11 @@ export default {
       return items.concat(this.treeSetting.menu || [])
     },
     canMove() {
-      return !this.searchMode && this.treeSetting.edit?.drag?.isMove !== false
+      return (
+        !this.treeSetting.readOnly &&
+        !this.searchMode &&
+        this.treeSetting.edit?.drag?.isMove !== false
+      )
     },
     useVirtualTree() {
       return (
@@ -499,16 +495,26 @@ export default {
     this.cancelAmountLoading()
     this.removeDragPreview()
     this.treeResizeObserver?.disconnect()
+    window.cancelAnimationFrame(this.treeResizeFrame)
+    window.cancelAnimationFrame(this.searchFocusFrame)
     document.removeEventListener('mousedown', this.hideRMenu)
     document.removeEventListener('scroll', this.hideRMenu, true)
   },
   methods: {
     setupTreeResizeObserver() {
       const updateHeight = () => {
-        const height = this.$refs.treeBody?.clientHeight || 0
-        if (height) {
-          this.virtualTreeHeight = Math.max(200, height - 18)
-        }
+        window.cancelAnimationFrame(this.treeResizeFrame)
+        this.treeResizeFrame = window.requestAnimationFrame(() => {
+          this.treeResizeFrame = null
+          const height = this.$refs.treeBody?.clientHeight || 0
+          if (!height) {
+            return
+          }
+          const nextHeight = Math.max(200, Math.round(height - 18))
+          if (nextHeight !== this.virtualTreeHeight) {
+            this.virtualTreeHeight = nextHeight
+          }
+        })
       }
       this.$nextTick(updateHeight)
       if (typeof ResizeObserver !== 'undefined') {
@@ -1055,6 +1061,7 @@ export default {
           const keys = this.initialExpandedKeys
           keys.forEach((key) => this.expandedNodeIds.add(String(key)))
           this.$refs.tree?.setExpandedKeys(keys)
+          await this.revealOperationNode()
           return
         }
         if (this.searchMode) {
@@ -1067,6 +1074,7 @@ export default {
               stack.push(...item.children)
             }
           }
+          await this.revealOperationNode()
           return
         }
         const firstRoot = this.treeData[0]
@@ -1078,10 +1086,67 @@ export default {
           this.expandedNodeIds.add(String(key))
           this.$refs.tree?.getNode(key)?.expand()
         })
+        await this.revealOperationNode()
       } finally {
         await this.$nextTick()
         this.suppressExpandAmountLoading = false
       }
+    },
+    getOperationNodePath() {
+      const operationNodeId = this.treeSetting.operationNodeId
+      if (operationNodeId === undefined || operationNodeId === null || operationNodeId === '') {
+        return []
+      }
+
+      const stack = this.normalTreeData.map((node) => ({ node, parent: null }))
+      while (stack.length) {
+        const entry = stack.pop()
+        if (this.isOperationTarget(entry.node)) {
+          const path = []
+          let current = entry
+          while (current) {
+            path.unshift(current.node)
+            current = current.parent
+          }
+          return path
+        }
+        for (const child of entry.node.children || []) {
+          stack.push({ node: child, parent: entry })
+        }
+      }
+      return []
+    },
+    async revealOperationNode() {
+      const path = this.getOperationNodePath()
+      if (!path.length) {
+        return
+      }
+
+      const target = path.at(-1)
+      path.slice(0, -1).forEach((node) => {
+        this.expandedNodeIds.add(String(node.id))
+        if (!this.useVirtualTree) {
+          this.$refs.tree?.getNode(node.id)?.expand()
+        }
+      })
+
+      if (this.useVirtualTree) {
+        this.$refs.tree?.setExpandedKeys([...this.expandedNodeIds])
+        await this.$nextTick()
+        this.$refs.tree?.scrollToNode(target.id, 'center')
+        return
+      }
+
+      await this.$nextTick()
+      const container = this.$refs.treeBody
+      const element = container?.querySelector('.x-tree__node.is-operation-target')
+      if (!container || !element) {
+        return
+      }
+      const containerRect = container.getBoundingClientRect()
+      const elementRect = element.getBoundingClientRect()
+      container.scrollTop +=
+        elementRect.top - containerRect.top - (containerRect.height - elementRect.height) / 2
     },
     async loadNode(node, resolve) {
       if (node.level === 0) {
@@ -1175,6 +1240,18 @@ export default {
     handleSearchInput(value) {
       this.debouncedSearch(value.trim())
     },
+    handleTreeToolCommand(command) {
+      if (command === 'search') {
+        this.toggleSearch()
+      } else if (command === 'collapse') {
+        this.collapseTreeStepwise()
+      } else if (command === 'refresh') {
+        this.refresh()
+      }
+    },
+    closeToolsDropdown() {
+      this.$nextTick(() => this.$refs.toolsDropdown?.handleClose?.())
+    },
     toggleSearch() {
       this.searchVisible = !this.searchVisible
       if (!this.searchVisible) {
@@ -1183,7 +1260,19 @@ export default {
         this.searchTree('')
         return
       }
-      this.$nextTick(() => this.$refs.searchInput?.focus?.())
+      this.focusSearchInput()
+    },
+    focusSearchInput() {
+      this.$nextTick(() => {
+        window.cancelAnimationFrame(this.searchFocusFrame)
+        this.searchFocusFrame = window.requestAnimationFrame(() => {
+          this.searchFocusFrame = null
+          const input = this.$refs.searchInput
+          input?.focus?.()
+          const nativeInput = input?.input || input?.$el?.querySelector?.('input')
+          nativeInput?.focus?.({ preventScroll: true })
+        })
+      })
     },
     async filterTreeLocally(keyword, isCurrent) {
       const query = keyword.toLocaleLowerCase()
@@ -1308,6 +1397,7 @@ export default {
     },
     handleAssetScopeChange(value) {
       const nextValue = String(value)
+      this.closeToolsDropdown()
       if (nextValue === this.assetScope) {
         return
       }
@@ -1316,7 +1406,6 @@ export default {
       this.cancelAmountLoading()
       this.clearNodeAmounts()
       this.startProgressiveAmountLoading()
-      this.$nextTick(() => this.$refs.settingsDropdown?.handleClose?.())
       this.treeSetting.callback?.onAssetScopeChange?.(this.assetScope, this.currentNode)
       if (this.currentNode) {
         this.handleNodeLabelClick(null, this.currentNode)
@@ -1349,6 +1438,9 @@ export default {
       }
     },
     shouldShowMenu(data) {
+      if (this.treeSetting.readOnly) {
+        return false
+      }
       let showMenu = this.treeSetting.showMenu
       if (typeof showMenu === 'function') {
         showMenu = showMenu(data)
@@ -1597,6 +1689,18 @@ export default {
       return Boolean(
         this.virtualDropTargetId && String(this.virtualDropTargetId) === String(data.id)
       )
+    },
+    isOperationTarget(data) {
+      const operationNodeId = this.treeSetting.operationNodeId
+      if (
+        operationNodeId === undefined ||
+        operationNodeId === null ||
+        operationNodeId === '' ||
+        data?.meta?.type !== 'node'
+      ) {
+        return false
+      }
+      return this.getNodeAmountKey(data) === String(operationNodeId)
     },
     handleVirtualDragOver(event, data) {
       if (!this.canUseVirtualDropTarget(data)) {
@@ -1963,6 +2067,18 @@ export default {
   border-bottom: 1px solid var(--el-border-color-lighter);
 }
 
+.x-tree-search-enter-active {
+  will-change: opacity, transform;
+  transition:
+    opacity 0.11s ease-out,
+    transform 0.11s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.x-tree-search-enter-from {
+  opacity: 0;
+  transform: translate3d(0, -4px, 0);
+}
+
 .x-tree__search {
   box-sizing: border-box;
   flex: 1;
@@ -2003,10 +2119,6 @@ export default {
   }
 }
 
-.x-tree__header-actions > .x-tree__tool-button + .x-tree__tool-button {
-  margin-left: 0;
-}
-
 .x-tree__tool-button {
   display: inline-flex;
   flex: none;
@@ -2016,15 +2128,24 @@ export default {
   width: 30px;
   height: 30px;
   padding: 5px;
-  border: none;
+  border: none !important;
   border-radius: 4px;
   color: var(--color-text-primary);
   background-color: transparent;
 }
 
-.x-tree__tool-button:hover,
-.x-tree__tool-button:focus-visible,
-.x-tree__tool-button.is-active {
+.x-tree__tool-button:focus,
+.x-tree__tool-button:focus-visible {
+  border: none !important;
+  outline: none;
+  box-shadow: none !important;
+  color: var(--color-text-primary);
+  background-color: transparent;
+}
+
+.x-tree__tool-button:hover {
+  border: none !important;
+  box-shadow: none !important;
   color: var(--color-text-primary);
   background-color: rgba(0, 0, 0, 0.05);
 }
@@ -2034,6 +2155,10 @@ export default {
   height: 13px;
   margin: 0;
   font-size: 13px;
+}
+
+.x-tree__more-icon {
+  transform: rotate(90deg);
 }
 
 .x-tree__body {
@@ -2085,6 +2210,15 @@ export default {
 .x-tree__body :deep(.el-tree-node.is-current > .el-tree-node__content) {
   color: var(--el-color-primary);
   background: var(--el-color-primary-light-9);
+}
+
+.x-tree__body
+  :deep(.el-tree-node__content:has(.x-tree__node.is-operation-target))
+  .x-tree__node-label,
+.x-tree__body
+  :deep(.el-tree-node__content:has(.x-tree__node.is-operation-target))
+  .x-tree__node-amount {
+  color: var(--el-color-warning-dark-2);
 }
 
 .x-tree__body :deep(.el-tree-node.is-drop-inner > .el-tree-node__content) {
@@ -2235,7 +2369,7 @@ export default {
   white-space: nowrap;
 }
 
-.x-tree-settings-popper {
+.x-tree-tools-popper {
   width: max-content;
   min-width: 200px;
   box-sizing: border-box;
@@ -2246,8 +2380,73 @@ export default {
   box-shadow: var(--el-box-shadow-light) !important;
 }
 
-.x-tree-settings-popper .x-tree-settings__menu {
+// Dropdown items reclaim focus while the hover popper is leaving. Closing the
+// tools menu immediately keeps focus on controls opened by a menu command.
+.x-tree-tools-popper.el-zoom-in-top-leave-active {
+  transition-duration: 0s !important;
+}
+
+.x-tree-tools-popper .x-tree-tools__menu {
   padding: 0;
+}
+
+.x-tree-tools-popper .el-dropdown-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  height: 32px;
+  margin: 0;
+  padding: 0 10px;
+  border-radius: 5px;
+  color: var(--el-text-color-regular);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 32px;
+}
+
+.x-tree-tools-popper .el-dropdown-menu__item:not(.is-disabled):hover,
+.x-tree-tools-popper .el-dropdown-menu__item:not(.is-disabled):focus,
+.x-tree-tools-popper .el-dropdown-menu__item.is-active {
+  color: var(--el-color-primary);
+  background: var(--el-color-primary-light-9);
+}
+
+.x-tree-tools-popper .el-dropdown-menu__item.is-disabled {
+  color: var(--el-text-color-disabled);
+  background: transparent;
+}
+
+.x-tree-tools__icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  color: var(--el-text-color-secondary);
+  font-size: 13px;
+}
+
+.x-tree-tools__icon > .el-icon,
+.x-tree-tools__icon > .svg-icon {
+  width: 13px;
+  height: 13px;
+  margin: 0;
+  color: inherit;
+}
+
+.x-tree-tools-popper .el-dropdown-menu__item:not(.is-disabled):hover .x-tree-tools__icon,
+.x-tree-tools-popper .el-dropdown-menu__item.is-active .x-tree-tools__icon {
+  color: var(--el-color-primary);
+}
+
+.x-tree-tools__divider {
+  height: 1px;
+  margin: 5px 4px;
+  background: var(--el-border-color-lighter);
+  list-style: none;
 }
 
 .x-tree-settings__title {
@@ -2272,7 +2471,7 @@ export default {
   width: 100%;
 }
 
-.x-tree-settings-popper .x-tree-settings__radio {
+.x-tree-tools-popper .x-tree-settings__radio {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -2292,14 +2491,14 @@ export default {
   cursor: pointer;
 }
 
-.x-tree-settings-popper .x-tree-settings__radio:hover,
-.x-tree-settings-popper .x-tree-settings__radio:focus-visible {
+.x-tree-tools-popper .x-tree-settings__radio:hover,
+.x-tree-tools-popper .x-tree-settings__radio:focus-visible {
   outline: none;
   color: var(--el-color-primary);
   background: var(--el-color-primary-light-9);
 }
 
-.x-tree-settings-popper .x-tree-settings__radio .el-radio__label {
+.x-tree-tools-popper .x-tree-settings__radio .el-radio__label {
   padding-left: 8px;
   color: inherit;
   font-size: 13px;

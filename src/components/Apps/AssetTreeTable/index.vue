@@ -2,14 +2,17 @@
   <TreeTable
     v-bind="$attrs"
     ref="TreeList"
-    v-model:active-menu="treeTableConfig.activeMenu"
+    v-model:active-menu="treeTabConfig.activeMenu"
     :component="treeComponent"
     :table-config="tableConfig"
-    :tree-tab-config="treeTableConfig"
+    :tree-tab-config="visibleTreeTabConfig"
     :tree-width="treeWidth"
   >
-    <template #table>
+    <template v-if="$slots.table" #table>
       <slot name="table" />
+    </template>
+    <template v-if="$slots['search-after']" #search-after>
+      <slot name="search-after" />
     </template>
     <template #rMenu="{ data }">
       <div>
@@ -76,8 +79,6 @@ export default {
     const assetTreeAmountUrl = this.treeUrl.includes('/api/v1/assets/nodes/')
       ? this.treeAmountUrl
       : ''
-    const vm = this
-
     return {
       treeComponent: 'TabTree',
       treeTabConfig: {
@@ -108,9 +109,11 @@ export default {
                 onSelected: (event, treeNode, context) =>
                   this.getAssetsUrl(treeNode, context?.assetScope),
                 beforeRefresh: () => {
-                  const query = { ...vm.$route.query, node_id: '', asset_id: '' }
+                  const query = { ...this.$route.query, node_id: '', asset_id: '' }
                   setTimeout(() => {
-                    setRouterQuery(vm, `?${new URLSearchParams(query)}`, { browserOnly: true })
+                    setRouterQuery(this, `?${new URLSearchParams(query)}`, {
+                      browserOnly: true
+                    })
                   }, 100)
                 }
               },
@@ -149,12 +152,14 @@ export default {
     treeWidth() {
       return '23.6%'
     },
-    treeTableConfig() {
-      if (this.treeSetting.notShowBuiltinTree) {
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.treeTabConfig.submenu.splice(1, 1)
+    visibleTreeTabConfig() {
+      if (!this.treeSetting.notShowBuiltinTree) {
+        return this.treeTabConfig
       }
-      return this.treeTabConfig
+      return {
+        ...this.treeTabConfig,
+        submenu: this.treeTabConfig.submenu.filter((item) => item.name !== 'BuiltinTree')
+      }
     }
   },
   mounted() {
@@ -168,14 +173,13 @@ export default {
     reloadTable() {
       this.$refs.TreeList.reloadTable()
     },
+    toggleRowSelection(row, isSelected) {
+      return this.$refs.TreeList?.toggleRowSelection(row, isSelected)
+    },
     setTreeUrlQuery() {
-      let str = ''
-      for (const key in this.treeUrlQuery) {
-        str += `${key}=${this.treeUrlQuery[key]}&`
-      }
-      str = str.substr(0, str.length - 1)
-
-      return str
+      return Object.entries(this.treeUrlQuery)
+        .map(([key, value]) => `${key}=${value}`)
+        .join('&')
     },
     updateTableUrl(url) {
       const treeList = this.$refs.TreeList

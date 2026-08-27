@@ -29,6 +29,34 @@ function getColumnName(column) {
   return typeof column === 'object' ? column?.prop : column
 }
 
+function getPlainTextValue(row, prop, cellValue) {
+  if (prop === 'labels' && Array.isArray(cellValue)) {
+    return cellValue
+      .map((label) => {
+        if (!label || typeof label !== 'object') {
+          return getDisplayValue(label)
+        }
+        const name = getDisplayValue(label.name)
+        const value = getDisplayValue(label.value)
+        return [name, value].filter(Boolean).join(': ')
+      })
+      .filter(Boolean)
+      .join(', ')
+  }
+
+  const displayValue = row?.[`${prop}_display`]
+  const value = displayValue === undefined ? cellValue : displayValue
+  if (typeof value === 'boolean') {
+    return i18n.t(value ? 'Yes' : 'No')
+  }
+  return getDisplayValue(value)
+}
+
+function PlainTextFormatter(row, column, cellValue) {
+  const prop = column?.property || column?.prop || ''
+  return h('span', getPlainTextValue(row, prop, cellValue) || '-')
+}
+
 export function orderActionColumn(columns, position = 'end') {
   const actionColumn = columns.find((column) => getColumnName(column) === 'actions')
   if (!actionColumn) {
@@ -37,17 +65,6 @@ export function orderActionColumn(columns, position = 'end') {
 
   const otherColumns = columns.filter((column) => column !== actionColumn)
   return position === 'start' ? [actionColumn, ...otherColumns] : [...otherColumns, actionColumn]
-}
-
-function getOverflowTooltipOptions() {
-  return {
-    popperStyle: {
-      maxWidth: 'min(500px, calc(100vw - 32px))',
-      overflowWrap: 'anywhere',
-      whiteSpace: 'normal',
-      wordBreak: 'break-word'
-    }
-  }
 }
 
 export function orderPrimaryColumns(columns) {
@@ -174,7 +191,8 @@ export class TableColumnsGenerator {
 
     for (let col of configColumns) {
       if (typeof col === 'object') {
-        columns.push(this.prepareAdaptiveColumn({ ...col }))
+        col = this.setPlainTextFormatterIfNeed({ ...col })
+        columns.push(this.prepareAdaptiveColumn(col))
       } else if (typeof col === 'string') {
         col = this.generateColumn(col)
         columns.push(col)
@@ -222,8 +240,20 @@ export class TableColumnsGenerator {
     col = this.addFilterIfNeed(col)
     col = this.addOrderingIfNeed(col)
     col = this.updateLabelIfNeed(col)
+    col = this.setPlainTextFormatterIfNeed(col)
     col = this.prepareAdaptiveColumn(col)
     return col
+  }
+
+  setPlainTextFormatterIfNeed(col) {
+    if (!this.config.plainTextCells || col?.prop === 'actions') {
+      return col
+    }
+    return {
+      ...col,
+      formatter: PlainTextFormatter,
+      formatterArgs: {}
+    }
   }
 
   generateColumnByName(name, col) {
@@ -278,7 +308,6 @@ export class TableColumnsGenerator {
         break
       case 'comment':
         col.contentMaxWidth = 300
-        col.showOverflowTooltip = true
     }
     return col
   }
@@ -404,9 +433,6 @@ export class TableColumnsGenerator {
     }
 
     if (col.contentMaxWidth) {
-      if (col.showOverflowTooltip === undefined) {
-        col.showOverflowTooltip = true
-      }
       col.className = this.appendClassName(col.className, 'bounded-content-table-column')
     }
 
@@ -465,16 +491,12 @@ export class TableColumnsGenerator {
 
     if (!isCompactColumn && !col.contentMaxWidth) {
       let contentClass = 'overflow-content-table-column'
-      if (col.prop === 'name') {
-        if (col.showOverflowTooltip === undefined) {
-          col.showOverflowTooltip = getOverflowTooltipOptions()
+      if (col.prop !== 'name') {
+        if (col.isCustomRender) {
+          contentClass = 'custom-render-table-column'
+        } else if (col.showFullContent) {
+          contentClass = 'full-content-table-column'
         }
-      } else if (col.isCustomRender) {
-        contentClass = 'custom-render-table-column'
-      } else if (col.showFullContent) {
-        contentClass = 'full-content-table-column'
-      } else if (col.showOverflowTooltip === undefined) {
-        col.showOverflowTooltip = getOverflowTooltipOptions()
       }
       col.className = this.appendClassName(col.className, contentClass)
     }

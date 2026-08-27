@@ -51,6 +51,7 @@
             @conditions-change="handleTagConditionsChange"
             @tag-search="handleTagSearch"
           />
+          <slot name="search-after" />
           <el-popover
             v-if="savedSearchPresets.length"
             v-model:visible="searchHistoryVisible"
