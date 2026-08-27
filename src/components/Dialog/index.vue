@@ -27,7 +27,7 @@
           <el-button
             v-if="showConfirm && showButtons"
             :disabled="disabledStatus"
-            type="primary"
+            :type="confirmType"
             @click="onConfirm"
           >
             {{ $t(confirmTitle) }}
@@ -68,6 +68,10 @@ export default {
       default() {
         return 'Confirm'
       }
+    },
+    confirmType: {
+      type: String,
+      default: 'primary'
     },
     showCancel: {
       type: Boolean,

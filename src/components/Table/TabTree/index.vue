@@ -62,6 +62,7 @@
             :key="componentKey"
             ref="AutoDataZTree"
             :setting="activeTreeSetting"
+            @tree-init-finish="$emit('tree-init-finish', $event)"
             @url-change="handleUrlChange"
           >
             <template #rMenu="{ data }">
@@ -121,14 +122,10 @@ export default {
       }
     },
     tabIndices() {
-      const map = []
-      this.submenu.forEach((v) => {
-        const hidden = typeof v.hidden === 'function' ? v.hidden() : v.hidden
-        if (!hidden) {
-          map.push(v)
-        }
+      return this.submenu.filter((item) => {
+        const hidden = typeof item.hidden === 'function' ? item.hidden() : item.hidden
+        return !hidden
       })
-      return map
     },
     activeTreeItem() {
       return this.tabIndices.find((item) => item.name === this.iActiveMenu) || this.tabIndices[0]
@@ -207,8 +204,6 @@ export default {
       this.flag = true
     },
     getPropActiveTab() {
-      let activeTab = ''
-
       const preActiveTabs = [
         this.$route.query[ACTIVE_TREE_TAB_KEY],
         this.$cookie.get(ACTIVE_TREE_TAB_KEY),
@@ -225,8 +220,7 @@ export default {
         }
       }
 
-      activeTab = this.tabIndices[0]?.name || this.activeMenu || ''
-      return activeTab
+      return this.tabIndices[0]?.name || this.activeMenu || ''
     }
   }
 }
@@ -245,7 +239,7 @@ export default {
   padding: 0 8px;
 
   &.has-tree-actions {
-    padding-right: 132px;
+    padding-right: 48px;
   }
 }
 

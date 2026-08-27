@@ -3,7 +3,15 @@
     <AssetDialog
       v-if="visible"
       :base-url="assetsUrl"
+      :can-select="canSelectAsset"
+      :confirm-title="confirmTitle"
+      :confirm-type="confirmType"
+      :danger-selection="dangerSelection"
+      :plain-text-cells="true"
+      :show-selected-items="true"
+      :show-tree="showTree"
       :title="dialogTitle"
+      :tree-setting="dialogTreeSetting"
       :visible="visible"
       @cancel="assetTreeTableDialogHandleCancel"
       @confirm="assetTreeTableDialogHandleConfirm"
@@ -14,6 +22,30 @@
 
 <script>
 import AssetDialog from '@/components/Apps/AssetSelect/dialog.vue'
+
+const ACTION_CONFIG = {
+  add: {
+    titleKey: 'AddAssetToNode',
+    confirmKey: 'NodeAssetActionAdd',
+    confirmType: 'primary',
+    endpoint: 'add',
+    showTree: true
+  },
+  move: {
+    titleKey: 'MoveAssetToNode',
+    confirmKey: 'NodeAssetActionMove',
+    confirmType: 'primary',
+    endpoint: 'replace',
+    showTree: true
+  },
+  remove: {
+    titleKey: 'RemoveAssetFromNode',
+    confirmKey: 'NodeAssetActionRemove',
+    confirmType: 'danger',
+    endpoint: 'remove',
+    showTree: false
+  }
+}
 
 export default {
   name: 'NodeAssetsUpdate',
@@ -39,31 +71,99 @@ export default {
     }
   },
   emits: ['update:visible', 'hide-menu'],
-  data() {
-    return {
-      dialogVisible: false
-    }
-  },
   computed: {
+    actionConfig() {
+      return ACTION_CONFIG[this.action]
+    },
     dialogTitle() {
-      const actionTitleKeys = {
-        add: 'AddAssetToNode',
-        move: 'MoveAssetToNode',
-        remove: 'RemoveAssetFromNode'
-      }
-      const title = this.$t(actionTitleKeys[this.action] || 'AssetManagement')
+      const title = this.$t(this.actionConfig?.titleKey || 'AssetManagement')
       const nodeName = this.selectNode?.name || this.selectNode?.meta?.data?.value
       return nodeName ? `${title} - ${nodeName}` : title
     },
+    confirmTitle() {
+      return this.actionConfig?.confirmKey || 'Confirm'
+    },
+    confirmType() {
+      return this.actionConfig?.confirmType || 'primary'
+    },
+    dangerSelection() {
+      return this.action === 'remove'
+    },
     assetsUrl() {
       if (this.action === 'remove') {
-        return '/api/v1/assets/assets/?node_id=' + this.selectNode.meta.data.id
+        return `/api/v1/assets/assets/?node_id=${encodeURIComponent(this.targetNodeId)}&show_current_asset=1`
       } else {
         return `/api/v1/assets/assets/`
       }
+    },
+    targetNodeId() {
+      return this.selectNode?.meta?.data?.id || this.selectNode?.id || ''
+    },
+    dialogTreeSetting() {
+      return {
+        operationNodeId: this.targetNodeId
+      }
+    },
+    showTree() {
+      return this.actionConfig?.showTree !== false
+    },
+    targetNodeScopeIds() {
+      const targetNodeId = String(this.targetNodeId)
+      const nodeIds = new Set(targetNodeId ? [targetNodeId] : [])
+      let assetTree = this.tree
+      for (let depth = 0; depth < 3; depth += 1) {
+        const innerTree = assetTree?.$refs?.AutoDataZTree
+        if (!innerTree || innerTree === assetTree) {
+          break
+        }
+        assetTree = innerTree
+      }
+      if (!targetNodeId || assetTree?.assetScope === '1') {
+        return nodeIds
+      }
+
+      const roots = Array.isArray(assetTree?.normalTreeData) ? assetTree.normalTreeData : []
+      const pending = [...roots]
+      let targetNode = null
+      while (pending.length) {
+        const node = pending.pop()
+        if (String(node?.meta?.data?.id || '') === targetNodeId) {
+          targetNode = node
+          break
+        }
+        pending.push(...(node?.children || []))
+      }
+
+      if (!targetNode) {
+        return nodeIds
+      }
+      const descendants = [targetNode]
+      while (descendants.length) {
+        const node = descendants.pop()
+        const nodeId = node?.meta?.data?.id
+        if (nodeId) {
+          nodeIds.add(String(nodeId))
+        }
+        descendants.push(...(node?.children || []))
+      }
+      return nodeIds
     }
   },
   methods: {
+    canSelectAsset(asset) {
+      if (this.action !== 'add') {
+        return true
+      }
+      return !this.getAssetNodeIds(asset).some((nodeId) =>
+        this.targetNodeScopeIds.has(String(nodeId))
+      )
+    },
+    getAssetNodeIds(asset) {
+      const nodes = Array.isArray(asset?.nodes) ? asset.nodes : []
+      return nodes
+        .map((node) => (typeof node === 'object' ? node?.id || node?.pk : node))
+        .filter((nodeId) => nodeId !== undefined && nodeId !== null && nodeId !== '')
+    },
     handleVisibleChange(val) {
       this.$emit('hide-menu')
       this.$emit('update:visible', val)
@@ -77,27 +177,17 @@ export default {
         return
       }
       const affectedNodeIds = this.getAffectedNodeIds(assetsSelected, assetRows, currentNode)
-      let url
-      switch (this.action) {
-        case 'add':
-          url = `/api/v1/assets/nodes/${currentNode.meta.data.id}/assets/add/`
-          break
-        case 'move':
-          url = `/api/v1/assets/nodes/${currentNode.meta.data.id}/assets/replace/`
-          break
-        case 'remove':
-          url = `/api/v1/assets/nodes/${currentNode.meta.data.id}/assets/remove/`
-          break
-        default:
-          return
+      const endpoint = this.actionConfig?.endpoint
+      if (!endpoint) {
+        return
       }
+      const url = `/api/v1/assets/nodes/${currentNode.meta.data.id}/assets/${endpoint}/`
       this.$axios
         .put(url, { assets: assetsSelected })
         .then(() => {
           this.tree?.refreshAssetRelationAmounts?.(affectedNodeIds)
           this.$emit('hide-menu')
           this.$emit('update:visible', false)
-          this.assetsSelected = []
           this.$message.success(this.$tc('UpdateSuccessMsg'))
         })
         .catch((error) => {
@@ -116,12 +206,8 @@ export default {
       selectedAssetRows
         .filter((asset) => selectedAssetIds.has(String(asset.id)))
         .forEach((asset) => {
-          const assetNodeIds = Array.isArray(asset.nodes) ? asset.nodes : []
-          assetNodeIds.forEach((node) => {
-            const nodeId = typeof node === 'object' ? node?.id : node
-            if (nodeId) {
-              nodeIds.add(String(nodeId))
-            }
+          this.getAssetNodeIds(asset).forEach((nodeId) => {
+            nodeIds.add(String(nodeId))
           })
         })
       return [...nodeIds]
@@ -132,5 +218,3 @@ export default {
   }
 }
 </script>
-
-<style scoped></style>

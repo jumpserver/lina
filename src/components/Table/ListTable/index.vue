@@ -22,7 +22,11 @@
       :get-table-metadata="getTableMetadata"
       :table-url="tableUrl"
       @done="handleActionInitialDone"
-    />
+    >
+      <template v-if="$slots['search-after']" #search-after>
+        <slot name="search-after" />
+      </template>
+    </TableAction>
     <div v-loading="!actionInit" class="table-content">
       <IBox>
         <AutoDataTable

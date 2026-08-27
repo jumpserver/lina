@@ -4,10 +4,10 @@
     :close-on-click-modal="false"
     :visible="visible"
     :title="dialogTitle"
-    class="asset-dialog"
-    max-width="1100px"
+    :class="['asset-dialog', { 'asset-dialog--danger-selection': dangerSelection }]"
+    max-width="1000px"
     top="3vh"
-    width="78vw"
+    width="72vw"
     @cancel="handleCancel"
     @close="handleClose"
     @confirm="handleConfirm"
@@ -17,6 +17,8 @@
       ref="ListPage"
       :header-actions="headerActions"
       :node-url="baseNodeUrl"
+      :auto-fit-tree-width="showTree"
+      :show-tree="showTree"
       :sync-select-to-url="false"
       :table-config="tableConfig"
       :tree-setting="iTreeSetting"
@@ -24,8 +26,54 @@
       :tree-url="`${baseNodeUrl}children/tree/`"
       :url="baseUrl"
       class="tree-table"
-      @loaded="handleTableLoaded"
-    />
+    >
+      <template v-if="showSelectedItems" #search-after>
+        <el-popover
+          v-model:visible="selectedItemsVisible"
+          :width="360"
+          placement="bottom-start"
+          :popper-class="selectedItemsPopperClass"
+          trigger="click"
+        >
+          <div class="asset-selected-items">
+            <div class="asset-selected-items__header">
+              {{ $t('AssetSelectSelectedCount', { count: rowSelected.length }) }}
+            </div>
+            <el-scrollbar class="asset-selected-items__scroll" max-height="260px">
+              <div v-if="rowsAdd.length" class="asset-selected-items__list">
+                <div v-for="row in rowsAdd" :key="row.id" class="asset-selected-items__row">
+                  <el-checkbox
+                    :model-value="isRowSelected(row)"
+                    @change="toggleSelectedItem(row, $event)"
+                  >
+                    <span :title="getRowName(row)" class="asset-selected-items__name">
+                      {{ getRowName(row) }}
+                    </span>
+                  </el-checkbox>
+                </div>
+              </div>
+              <el-empty
+                v-else
+                :description="$t('ResourceSelectEmpty')"
+                :image-size="48"
+                class="asset-selected-items__empty"
+              />
+            </el-scrollbar>
+          </div>
+          <template #reference>
+            <el-button class="asset-selected-items__trigger">
+              <span>{{ $t('ResourceSelectSelected') }} ({{ rowSelected.length }})</span>
+              <el-icon
+                :class="{ 'is-open': selectedItemsVisible }"
+                class="asset-selected-items__arrow"
+              >
+                <ArrowDown />
+              </el-icon>
+            </el-button>
+          </template>
+        </el-popover>
+      </template>
+    </AssetTreeTable>
   </Dialog>
 </template>
 
@@ -77,6 +125,22 @@ export default {
       type: Object,
       default: () => ({})
     },
+    showTree: {
+      type: Boolean,
+      default: true
+    },
+    showSelectedItems: {
+      type: Boolean,
+      default: false
+    },
+    plainTextCells: {
+      type: Boolean,
+      default: false
+    },
+    dangerSelection: {
+      type: Boolean,
+      default: false
+    },
     pageSize: {
       type: Number,
       default: 10
@@ -85,7 +149,8 @@ export default {
   data() {
     const vm = this
     return {
-      isLoaded: false,
+      selectedItemsVisible: false,
+      keepRowOnDeselect: false,
       rowSelected: _.cloneDeep(this.value) || [],
       rowsAdd: [],
       tableConfig: {
@@ -96,6 +161,7 @@ export default {
         url: this.baseUrl,
         hasTree: true,
         canSelect: this.canSelect,
+        plainTextCells: this.plainTextCells,
         savePageSize: false,
         paginationSize: Math.min(Math.max(this.pageSize, 1), 100),
         paginationSizes: [10, 20, 50, 100],
@@ -120,12 +186,12 @@ export default {
             if (isSelected) {
               vm.addRowToSelect(row)
             } else {
-              vm.removeRowFromSelect(row)
+              vm.removeRowFromSelect(row, !vm.keepRowOnDeselect)
             }
           }
         },
         theRowDefaultIsSelected: (row) => {
-          return this.value.indexOf(row.id) > -1
+          return vm.isRowSelected(row)
         }
       },
       headerActions: {
@@ -149,27 +215,53 @@ export default {
     dialogAttrs() {
       return { ...this.$attrs }
     },
+    selectedItemsPopperClass() {
+      return [
+        'asset-selected-items-popper',
+        this.dangerSelection ? 'asset-selected-items-popper--danger' : ''
+      ]
+        .filter(Boolean)
+        .join(' ')
+    },
     iTreeSetting() {
       return {
-        showCollapse: false,
+        showCollapse: true,
         showAssetScope: true,
         assetScopeStorageKey: 'asset_select_dialog_show_current_asset',
         ...this.treeSetting,
+        readOnly: true,
+        showMenu: false,
+        hasRightMenu: false,
+        edit: {
+          ...this.treeSetting.edit,
+          drag: {
+            ...this.treeSetting.edit?.drag,
+            isMove: false
+          }
+        },
         selectSyncToRoute: false
       }
     }
   },
+  watch: {
+    selectedItemsVisible(visible) {
+      if (!visible) {
+        this.pruneDeselectedRows()
+      }
+    }
+  },
   methods: {
-    handleTableLoaded() {
-      this.isLoaded = true
-    },
     handleClose() {
       this.$refs.ListPage.$refs.TreeList.componentKey += 1
     },
     handleVisibleChange(val) {
+      if (!val) {
+        this.selectedItemsVisible = false
+      }
       this.$emit('update:visible', val)
     },
     handleConfirm() {
+      this.pruneDeselectedRows()
       this.$emit('update:visible', false)
       this.$emit('confirm', this.rowSelected, this.rowsAdd)
       if (this.rowSelected.length > 0) {
@@ -182,16 +274,56 @@ export default {
       this.handleClose()
     },
     addRowToSelect(row) {
-      const selectValueIndex = this.rowSelected.indexOf(row.id)
+      const selectValueIndex = this.findSelectedIndex(row.id)
       if (selectValueIndex === -1) {
         this.rowSelected.push(row.id)
+      }
+      const rowIndex = this.rowsAdd.findIndex((item) => String(item.id) === String(row.id))
+      if (rowIndex === -1) {
         this.rowsAdd.push(row)
+      } else {
+        this.rowsAdd.splice(rowIndex, 1, { ...this.rowsAdd[rowIndex], ...row })
       }
     },
-    removeRowFromSelect(row) {
-      const selectValueIndex = this.rowSelected.indexOf(row.id)
+    removeRowFromSelect(row, removeCachedRow = true) {
+      const selectValueIndex = this.findSelectedIndex(row.id)
       if (selectValueIndex > -1) {
         this.rowSelected.splice(selectValueIndex, 1)
+      }
+      if (removeCachedRow) {
+        const rowIndex = this.rowsAdd.findIndex((item) => String(item.id) === String(row.id))
+        if (rowIndex > -1) {
+          this.rowsAdd.splice(rowIndex, 1)
+        }
+      }
+    },
+    findSelectedIndex(id) {
+      return this.rowSelected.findIndex((item) => String(item) === String(id))
+    },
+    isRowSelected(row) {
+      return this.findSelectedIndex(row?.id) > -1
+    },
+    getRowName(row) {
+      return row?.name || String(row?.id || '')
+    },
+    pruneDeselectedRows() {
+      this.rowsAdd = this.rowsAdd.filter((row) => this.isRowSelected(row))
+    },
+    toggleSelectedItem(row, isSelected) {
+      const listPage = this.$refs.ListPage
+      if (typeof listPage?.toggleRowSelection === 'function') {
+        this.keepRowOnDeselect = true
+        try {
+          listPage.toggleRowSelection(row, isSelected)
+        } finally {
+          this.keepRowOnDeselect = false
+        }
+        return
+      }
+      if (isSelected) {
+        this.addRowToSelect(row)
+      } else {
+        this.removeRowFromSelect(row, false)
       }
     }
   }
@@ -199,21 +331,13 @@ export default {
 </script>
 
 <style lang="scss">
-/* =====================================================================
-   资产选择弹窗 —— 满幅「主从」布局
-   - body 与双栏容器都不留 padding:内容铺到弹窗内容区边缘。
-     框架由标题栏底线、底部按钮栏顶线,以及中间一条贯穿竖线共同构成,
-     不再用浮动卡片,也就没有卡片边框内的空洞。
-   - 左:资产树侧栏,始终占满弹窗内容区;右:搜索 + 表格,自带内边距。
-   - 双栏使用弹窗固定内容高度,互不依赖内容高度,分页贴底。
-   ===================================================================== */
+// 资产选择弹窗采用固定高度的双栏布局，树与表格各自管理滚动区域。
 .asset-dialog.el-dialog {
   display: flex;
   flex-direction: column;
-  height: min(680px, 94vh);
+  height: min(620px, 94vh);
 
-  // Dialog 组件全局有 `.el-dialog.dialog .el-dialog__body { padding:20px 30px!important }`(0,3,0),
-  // 这里必须用更高优先级(0,4,0)才能压过它,让内容真正满幅铺到边缘。
+  // 提高选择器优先级，覆盖 Dialog 的默认 body padding。
   &.dialog .el-dialog__body {
     display: flex;
     flex-direction: column;
@@ -224,11 +348,52 @@ export default {
   }
 
   .el-dialog__header {
-    padding: 10px 24px !important;
+    padding: 14px 24px !important;
   }
 
   .el-dialog__footer {
     padding: 8px 24px !important;
+  }
+
+  .asset-selected-items__trigger {
+    height: 30px;
+    margin: 0;
+    padding: 0 10px;
+    color: var(--color-text-primary) !important;
+    border-color: var(--color-border);
+    background-color: #fff;
+
+    > span {
+      display: flex;
+      align-items: center;
+    }
+
+    .el-icon {
+      color: var(--el-text-color-secondary);
+    }
+
+    &:hover,
+    &:focus,
+    &:focus-visible,
+    &:active {
+      color: var(--color-text-primary) !important;
+      border-color: var(--color-border);
+      background-color: rgba(0, 0, 0, 0.05);
+
+      .el-icon {
+        color: var(--el-text-color-secondary);
+      }
+    }
+  }
+
+  .asset-selected-items__arrow {
+    flex: 0 0 auto;
+    margin-left: 6px;
+    transition: transform 0.15s ease-out;
+
+    &.is-open {
+      transform: rotate(180deg);
+    }
   }
 
   .el-dialog__body > div {
@@ -261,9 +426,12 @@ export default {
   .tree-table > .left {
     position: relative;
     align-self: stretch;
-    height: 100%;
+    height: auto;
     min-height: 0;
-    border-right: 1px solid var(--color-border); // 中间贯穿竖线
+    margin: 4px 0 14px 8px;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--el-card-border-radius, 4px);
 
     // tab + 树体铺满整个侧栏
     .auto-data-ztree.tree-tab {
@@ -283,7 +451,30 @@ export default {
     // 树视图选择器作为侧栏头部，保留右侧工具按钮空间。
     .tree-view-header {
       flex: 0 0 auto;
+      height: 36px;
       padding-left: 16px;
+      min-width: 0;
+      overflow: hidden;
+
+      &.has-tree-actions {
+        padding-right: 42px;
+      }
+    }
+
+    .tree-view-selector {
+      overflow: hidden;
+    }
+
+    .x-tree__header-actions {
+      right: 6px;
+      gap: 0;
+    }
+
+    .x-tree__tool-button {
+      width: 28px;
+      min-width: 28px;
+      height: 28px;
+      padding: 4px;
     }
 
     // 树体:填满头部下方并独立滚动
@@ -315,7 +506,7 @@ export default {
       flex: 1 1 auto;
       min-width: 0;
       min-height: 0;
-      padding: 14px 20px 14px 8px;
+      padding: 4px 20px 14px 8px;
     }
 
     .transition-box > div {
@@ -349,6 +540,20 @@ export default {
       min-height: 0;
     }
 
+    .table-content > .el-card {
+      border: 1px solid var(--el-border-color-lighter);
+      box-shadow: none;
+    }
+
+    // 卡片已经提供完整的四周边框，移除表格自身重复绘制的上、左、右外边框。
+    .table-content .el-table--border::before,
+    .table-content .el-table--border::after,
+    .table-content .el-table--border > .el-table__inner-wrapper::after,
+    .table-content .el-table__border-left-patch,
+    .table-content .el-table__border-right-patch {
+      display: none;
+    }
+
     .auto-data-table .el-data-table {
       gap: 4px;
     }
@@ -380,5 +585,94 @@ export default {
   .tree-table .tree-toggle {
     display: none;
   }
+}
+
+.asset-selected-items-popper.el-popper {
+  padding: 0;
+  overflow: hidden;
+  border-color: var(--el-border-color-light);
+  border-radius: 6px;
+  box-shadow: var(--el-box-shadow-light);
+}
+
+.asset-dialog--danger-selection,
+.asset-selected-items-popper--danger {
+  .el-checkbox {
+    --el-checkbox-checked-input-border-color: var(--el-color-danger);
+    --el-checkbox-checked-bg-color: var(--el-color-danger);
+    --el-checkbox-input-border-color-hover: var(--el-color-danger);
+  }
+}
+
+.asset-selected-items {
+  color: var(--el-text-color-regular);
+  background: var(--el-bg-color);
+}
+
+.asset-selected-items__header {
+  display: flex;
+  align-items: center;
+  height: 42px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--el-border-color-lighter);
+  font-size: 13px;
+  color: var(--el-text-color-primary);
+}
+
+.asset-selected-items__scroll {
+  max-height: 260px;
+
+  .el-scrollbar__wrap {
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .el-scrollbar__bar.is-horizontal {
+    display: none;
+  }
+}
+
+.asset-selected-items__list {
+  width: max-content;
+  min-width: 100%;
+  padding: 6px;
+}
+
+.asset-selected-items__row {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: max-content;
+  min-width: 100%;
+  height: 34px;
+  padding: 0 8px;
+  border-radius: 4px;
+
+  &:hover {
+    background: var(--el-fill-color-light);
+  }
+
+  .el-checkbox {
+    width: max-content;
+    min-width: 100%;
+  }
+
+  .el-checkbox__label {
+    padding-left: 8px;
+  }
+}
+
+.asset-selected-items__name {
+  display: block;
+  color: var(--el-text-color-regular);
+  white-space: nowrap;
+}
+
+.asset-selected-items__empty {
+  padding: 18px 0;
 }
 </style>

@@ -17,6 +17,7 @@
           ref="AutoDataZTree"
           :setting="treeSetting"
           class="auto-data-ztree"
+          @tree-init-finish="handleTreeInitFinish"
           @url-change="handleUrlChange"
           v-on="forwardedListeners"
         >
@@ -26,6 +27,7 @@
         </component>
       </div>
       <div
+        ref="treeResizer"
         :class="{ 'is-collapsed': !iShowTree }"
         class="tree-resizer"
         role="separator"
@@ -41,6 +43,7 @@
         />
         <button
           :aria-expanded="iShowTree"
+          :style="treeToggleStyle"
           class="tree-toggle"
           type="button"
           @click.stop="toggleTree"
@@ -64,7 +67,11 @@
               :table-config="iTableConfig"
               :create-drawer="createDrawer"
               v-on="forwardedListeners"
-            />
+            >
+              <template v-if="$slots['search-after']" #search-after>
+                <slot name="search-after" />
+              </template>
+            </ListTable>
           </slot>
         </div>
       </div>
@@ -81,6 +88,15 @@ import AutoDataZTree from '@/components/Tree/AutoDataZTree/index.vue'
 import { setUrlParam } from '@/utils/common/index'
 import { omitVueListeners, pickVueListeners } from '@/utils/vue'
 import TabTree from '../TabTree/index.vue'
+
+const DEFAULT_TREE_WIDTH_RATIO = 0.236
+const DEFAULT_TREE_MIN_WIDTH = 240
+const TREE_MAX_WIDTH = 620
+const TABLE_MIN_WIDTH = 480
+const TREE_FIT_MIN_WIDTH = 180
+const TREE_CONTENT_HORIZONTAL_PADDING = 20
+const TREE_CONTENT_COMFORT_GAP = 16
+const TREE_HEADER_GAP = 8
 
 function buildInitialTableConfig(tableConfig, routeQuery = {}) {
   const config = { ...tableConfig }
@@ -133,6 +149,10 @@ export default {
       type: String,
       default: () => '23.6%'
     },
+    autoFitTreeWidth: {
+      type: Boolean,
+      default: false
+    },
     quickFilters: {
       type: Array,
       default: null
@@ -164,7 +184,11 @@ export default {
       leftWidth: null,
       resizing: false,
       resizeStartX: 0,
-      resizeStartWidth: 0
+      resizeStartWidth: 0,
+      treeToggleTop: null,
+      treeToggleResizeObserver: null,
+      treeTogglePositionFrame: null,
+      treeFitFrame: null
     }
   },
   computed: {
@@ -172,6 +196,9 @@ export default {
       return {
         width: this.leftWidth === null ? this.treeWidth : `${this.leftWidth}px`
       }
+    },
+    treeToggleStyle() {
+      return this.treeToggleTop === null ? {} : { top: `${this.treeToggleTop}px` }
     },
     rootAttrs() {
       return omitVueListeners(this.$attrs)
@@ -197,10 +224,25 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(this.initializeTreeWidth)
+    this.$nextTick(() => {
+      this.initializeTreeWidth()
+      this.syncTreeToggleTop()
+      this.observeTreeTogglePosition()
+      window.addEventListener('resize', this.scheduleTreeToggleTop)
+      window.addEventListener('scroll', this.scheduleTreeToggleTop, true)
+    })
   },
   beforeUnmount() {
     this.stopResize()
+    this.treeToggleResizeObserver?.disconnect()
+    window.removeEventListener('resize', this.scheduleTreeToggleTop)
+    window.removeEventListener('scroll', this.scheduleTreeToggleTop, true)
+    if (this.treeTogglePositionFrame !== null) {
+      window.cancelAnimationFrame(this.treeTogglePositionFrame)
+    }
+    if (this.treeFitFrame !== null) {
+      window.cancelAnimationFrame(this.treeFitFrame)
+    }
   },
   methods: {
     getConfiguredTreeWidth(containerWidth) {
@@ -209,7 +251,7 @@ export default {
       const width = configuredWidth.endsWith('%')
         ? (containerWidth * parsedWidth) / 100
         : parsedWidth
-      return Number.isFinite(width) ? width : containerWidth * 0.236
+      return Number.isFinite(width) ? width : containerWidth * DEFAULT_TREE_WIDTH_RATIO
     },
     initializeTreeWidth() {
       const containerWidth = this.$refs.treeTableContent?.clientWidth || 0
@@ -218,10 +260,13 @@ export default {
       }
       this.leftWidth = this.clampTreeWidth(this.getConfiguredTreeWidth(containerWidth))
     },
-    clampTreeWidth(width, minimumWidth = 240) {
+    clampTreeWidth(width, minimumWidth = DEFAULT_TREE_MIN_WIDTH) {
       const containerWidth = this.$refs.treeTableContent?.clientWidth || 0
       const minWidth = Math.min(minimumWidth, containerWidth * 0.4)
-      const maxWidth = Math.max(minWidth, Math.min(620, containerWidth - 480))
+      const maxWidth = Math.max(
+        minWidth,
+        Math.min(TREE_MAX_WIDTH, containerWidth - TABLE_MIN_WIDTH)
+      )
       return Math.round(Math.min(Math.max(width, minWidth), maxWidth))
     },
     startResize(event) {
@@ -286,17 +331,14 @@ export default {
         contentWidth = Math.max(contentWidth, rect.right - bodyRect.left + scrollLeft)
       })
 
-      const horizontalPadding = 20
-      const contentComfortGap = 16
       const treeViewSelector = treePanel.querySelector('.tree-view-selector')
       const headerActions = treePanel.querySelector('.x-tree__header-actions')
-      const headerGap = 8
       const headerWidth =
-        (treeViewSelector?.scrollWidth || 0) + (headerActions?.offsetWidth || 0) + headerGap
-      const minimumFitWidth = Math.max(180, headerWidth)
+        (treeViewSelector?.scrollWidth || 0) + (headerActions?.offsetWidth || 0) + TREE_HEADER_GAP
+      const minimumFitWidth = Math.max(TREE_FIT_MIN_WIDTH, headerWidth)
       const preferredWidth = Math.max(
         minimumFitWidth,
-        contentWidth + horizontalPadding + contentComfortGap
+        contentWidth + TREE_CONTENT_HORIZONTAL_PADDING + TREE_CONTENT_COMFORT_GAP
       )
       this.leftWidth = this.clampTreeWidth(preferredWidth, minimumFitWidth)
 
@@ -304,8 +346,54 @@ export default {
         scrollElement.scrollLeft = 0
       })
     },
+    handleTreeInitFinish(tree) {
+      if (this.autoFitTreeWidth) {
+        this.$nextTick(() => {
+          if (this.treeFitFrame !== null) {
+            window.cancelAnimationFrame(this.treeFitFrame)
+          }
+          this.treeFitFrame = window.requestAnimationFrame(() => {
+            this.treeFitFrame = null
+            this.fitTreeWidth()
+          })
+        })
+      }
+      this.$emit('tree-init-finish', tree)
+    },
+    syncTreeToggleTop() {
+      const treeResizer = this.$refs.treeResizer
+      const rect = treeResizer?.getBoundingClientRect()
+      if (!rect?.height) {
+        return
+      }
+      const buttonHalfHeight = 17
+      const viewportTarget = window.innerHeight / 3
+      const minimumTop = Math.min(buttonHalfHeight, rect.height / 2)
+      const maximumTop = Math.max(minimumTop, rect.height - buttonHalfHeight)
+      const relativeTop = viewportTarget - rect.top
+      this.treeToggleTop = Math.round(Math.min(Math.max(relativeTop, minimumTop), maximumTop))
+    },
+    scheduleTreeToggleTop() {
+      if (this.treeTogglePositionFrame !== null) {
+        return
+      }
+      this.treeTogglePositionFrame = window.requestAnimationFrame(() => {
+        this.treeTogglePositionFrame = null
+        this.syncTreeToggleTop()
+      })
+    },
+    observeTreeTogglePosition() {
+      if (!window.ResizeObserver || !this.$refs.treeTableContent) {
+        return
+      }
+      this.treeToggleResizeObserver = new window.ResizeObserver(() => {
+        this.scheduleTreeToggleTop()
+      })
+      this.treeToggleResizeObserver.observe(this.$refs.treeTableContent)
+    },
     toggleTree() {
       this.iShowTree = !this.iShowTree
+      this.$nextTick(this.scheduleTreeToggleTop)
     },
     handleUrlChange(url) {
       if (!url || url === this.iTableConfig.url) {
@@ -337,6 +425,9 @@ export default {
     },
     reloadTable() {
       this.$refs.ListTable.reloadTable()
+    },
+    toggleRowSelection(row, isSelected) {
+      return this.$refs.ListTable?.toggleRowSelection(row, isSelected)
     }
   }
 }
@@ -448,7 +539,7 @@ $origin-color: #ffffff;
 
 .tree-toggle {
   position: absolute;
-  top: 50%;
+  top: 33.333%;
   left: 0;
   z-index: 2;
   display: flex;
