@@ -6,11 +6,12 @@
       :class="{ 'is-resizing': resizing }"
       class="tree-table-content"
     >
-      <div v-show="iShowTree" ref="treePanel" :style="leftStyle" class="left">
+      <div v-show="mountTree && iShowTree" ref="treePanel" :style="leftStyle" class="left">
         <span v-if="component === 'AutoDataZTree'" class="title">
           {{ title }}
         </span>
         <component
+          v-if="mountTree"
           v-bind="treeTabConfig"
           :is="component"
           :key="componentTreeKey"
@@ -27,6 +28,7 @@
         </component>
       </div>
       <div
+        v-if="mountTree"
         ref="treeResizer"
         :class="{ 'is-collapsed': !iShowTree }"
         class="tree-resizer"
@@ -43,7 +45,6 @@
         />
         <button
           :aria-expanded="iShowTree"
-          :style="treeToggleStyle"
           class="tree-toggle"
           type="button"
           @click.stop="toggleTree"
@@ -136,6 +137,10 @@ export default {
       type: Boolean,
       default: true
     },
+    mountTree: {
+      type: Boolean,
+      default: true
+    },
     // 默认引用的Tree组件
     component: {
       type: String,
@@ -148,6 +153,14 @@ export default {
     treeWidth: {
       type: String,
       default: () => '23.6%'
+    },
+    treeMinWidth: {
+      type: Number,
+      default: DEFAULT_TREE_MIN_WIDTH
+    },
+    treeInitialMaxWidth: {
+      type: Number,
+      default: TREE_MAX_WIDTH
     },
     autoFitTreeWidth: {
       type: Boolean,
@@ -185,9 +198,6 @@ export default {
       resizing: false,
       resizeStartX: 0,
       resizeStartWidth: 0,
-      treeToggleTop: null,
-      treeToggleResizeObserver: null,
-      treeTogglePositionFrame: null,
       treeFitFrame: null
     }
   },
@@ -196,9 +206,6 @@ export default {
       return {
         width: this.leftWidth === null ? this.treeWidth : `${this.leftWidth}px`
       }
-    },
-    treeToggleStyle() {
-      return this.treeToggleTop === null ? {} : { top: `${this.treeToggleTop}px` }
     },
     rootAttrs() {
       return omitVueListeners(this.$attrs)
@@ -226,20 +233,10 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.initializeTreeWidth()
-      this.syncTreeToggleTop()
-      this.observeTreeTogglePosition()
-      window.addEventListener('resize', this.scheduleTreeToggleTop)
-      window.addEventListener('scroll', this.scheduleTreeToggleTop, true)
     })
   },
   beforeUnmount() {
     this.stopResize()
-    this.treeToggleResizeObserver?.disconnect()
-    window.removeEventListener('resize', this.scheduleTreeToggleTop)
-    window.removeEventListener('scroll', this.scheduleTreeToggleTop, true)
-    if (this.treeTogglePositionFrame !== null) {
-      window.cancelAnimationFrame(this.treeTogglePositionFrame)
-    }
     if (this.treeFitFrame !== null) {
       window.cancelAnimationFrame(this.treeFitFrame)
     }
@@ -258,9 +255,13 @@ export default {
       if (!containerWidth) {
         return
       }
-      this.leftWidth = this.clampTreeWidth(this.getConfiguredTreeWidth(containerWidth))
+      const configuredWidth = Math.min(
+        this.getConfiguredTreeWidth(containerWidth),
+        this.treeInitialMaxWidth
+      )
+      this.leftWidth = this.clampTreeWidth(configuredWidth)
     },
-    clampTreeWidth(width, minimumWidth = DEFAULT_TREE_MIN_WIDTH) {
+    clampTreeWidth(width, minimumWidth = this.treeMinWidth) {
       const containerWidth = this.$refs.treeTableContent?.clientWidth || 0
       const minWidth = Math.min(minimumWidth, containerWidth * 0.4)
       const maxWidth = Math.max(
@@ -335,7 +336,7 @@ export default {
       const headerActions = treePanel.querySelector('.x-tree__header-actions')
       const headerWidth =
         (treeViewSelector?.scrollWidth || 0) + (headerActions?.offsetWidth || 0) + TREE_HEADER_GAP
-      const minimumFitWidth = Math.max(TREE_FIT_MIN_WIDTH, headerWidth)
+      const minimumFitWidth = Math.max(this.treeMinWidth, TREE_FIT_MIN_WIDTH, headerWidth)
       const preferredWidth = Math.max(
         minimumFitWidth,
         contentWidth + TREE_CONTENT_HORIZONTAL_PADDING + TREE_CONTENT_COMFORT_GAP
@@ -360,40 +361,8 @@ export default {
       }
       this.$emit('tree-init-finish', tree)
     },
-    syncTreeToggleTop() {
-      const treeResizer = this.$refs.treeResizer
-      const rect = treeResizer?.getBoundingClientRect()
-      if (!rect?.height) {
-        return
-      }
-      const buttonHalfHeight = 17
-      const viewportTarget = window.innerHeight / 3
-      const minimumTop = Math.min(buttonHalfHeight, rect.height / 2)
-      const maximumTop = Math.max(minimumTop, rect.height - buttonHalfHeight)
-      const relativeTop = viewportTarget - rect.top
-      this.treeToggleTop = Math.round(Math.min(Math.max(relativeTop, minimumTop), maximumTop))
-    },
-    scheduleTreeToggleTop() {
-      if (this.treeTogglePositionFrame !== null) {
-        return
-      }
-      this.treeTogglePositionFrame = window.requestAnimationFrame(() => {
-        this.treeTogglePositionFrame = null
-        this.syncTreeToggleTop()
-      })
-    },
-    observeTreeTogglePosition() {
-      if (!window.ResizeObserver || !this.$refs.treeTableContent) {
-        return
-      }
-      this.treeToggleResizeObserver = new window.ResizeObserver(() => {
-        this.scheduleTreeToggleTop()
-      })
-      this.treeToggleResizeObserver.observe(this.$refs.treeTableContent)
-    },
     toggleTree() {
       this.iShowTree = !this.iShowTree
-      this.$nextTick(this.scheduleTreeToggleTop)
     },
     handleUrlChange(url) {
       if (!url || url === this.iTableConfig.url) {
@@ -416,6 +385,12 @@ export default {
     },
     getNodes: function () {
       return this.$refs.AutoDataZTree.getNodes()
+    },
+    getAllNodes: function () {
+      return this.$refs.AutoDataZTree.getAllNodes?.() || this.getNodes()
+    },
+    getTreeSnapshot: function () {
+      return this.$refs.AutoDataZTree.getTreeSnapshot?.()
     },
     selectNode: function (node) {
       return this.$refs.AutoDataZTree.selectNode(node)
@@ -478,8 +453,12 @@ $origin-color: #ffffff;
       overflow: auto;
       height: 100%;
 
-      &.tree-tab :deep(.tree-view-header) {
-        height: 40px;
+      &.tree-tab {
+        overflow: hidden;
+
+        :deep(.tree-view-header) {
+          height: 40px;
+        }
       }
     }
 
@@ -513,7 +492,7 @@ $origin-color: #ffffff;
     cursor: default;
 
     .tree-toggle {
-      transform: translate(-20px, -50%);
+      transform: translateX(-20px);
     }
   }
 }
@@ -539,7 +518,7 @@ $origin-color: #ffffff;
 
 .tree-toggle {
   position: absolute;
-  top: 33.333%;
+  top: 40px;
   left: 0;
   z-index: 2;
   display: flex;
@@ -554,7 +533,6 @@ $origin-color: #ffffff;
   color: var(--el-text-color-secondary);
   background: var(--el-bg-color);
   cursor: pointer;
-  transform: translateY(-50%);
   opacity: 0;
   transition:
     opacity 0.15s ease,
@@ -575,6 +553,10 @@ $origin-color: #ffffff;
     color: var(--el-color-primary);
     background: var(--el-color-primary-light-9);
   }
+}
+
+.tree-table-content:has(.x-tree.is-search-visible) .tree-toggle {
+  top: 87px;
 }
 
 .tree-table-content:hover .tree-toggle,

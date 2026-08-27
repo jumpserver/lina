@@ -10,11 +10,7 @@
         trigger="hover"
         @command="handleTreeToolCommand"
       >
-        <el-button
-          :aria-label="$t('TreeActions')"
-          :title="$t('TreeActions')"
-          class="x-tree__tool-button"
-        >
+        <el-button :aria-label="$t('TreeActions')" class="x-tree__tool-button">
           <el-icon class="x-tree__tool-icon x-tree__more-icon"><More /></el-icon>
         </el-button>
         <template #dropdown>
@@ -389,6 +385,9 @@ export default {
           hasRightMenu: true,
           selectSyncToRoute: true,
           structureUrl: '',
+          initialData: null,
+          initialAmounts: null,
+          initialAssetScope: '',
           countUrl: '',
           countBatchSize: 100,
           countProgressiveBatchSize: 100,
@@ -592,6 +591,17 @@ export default {
         delete node.assets_amount
         if (node.children?.length) {
           stack.push(...node.children)
+        }
+      }
+      if (String(this.treeSetting.initialAssetScope) === String(this.assetScope)) {
+        const initialAmounts = this.treeSetting.initialAmounts
+        const entries =
+          initialAmounts instanceof Map ? initialAmounts : Object.entries(initialAmounts || {})
+        for (const [key, amount] of entries) {
+          const value = Number(amount)
+          if (Number.isFinite(value)) {
+            amounts.set(String(key), value)
+          }
         }
       }
       this.nodeAmounts = amounts
@@ -1021,14 +1031,16 @@ export default {
       this.cancelAmountLoading()
       this.resetProgressiveAmountLoading()
       const url = this.getRefreshUrl(refresh)
-      if (!url) {
+      const initialData = refresh ? null : this.treeSetting.initialData
+      const hasInitialData = Array.isArray(initialData) && initialData.length > 0
+      if (!url && !hasInitialData) {
         this.nodeAmounts.clear()
         this.treeData = []
         return
       }
       this.loading = true
       try {
-        const response = await this.requestTree(url)
+        const response = hasInitialData ? initialData : await this.requestTree(url)
         const normalized = await this.normalizeTreeAsync(
           response,
           () => requestId === this.structureRequestId
@@ -1951,6 +1963,16 @@ export default {
     getNodes() {
       return this.treeData
     },
+    getAllNodes() {
+      return this.normalTreeData
+    },
+    getTreeSnapshot() {
+      return {
+        nodes: this.normalTreeData,
+        amounts: Object.fromEntries(this.nodeAmounts),
+        assetScope: this.assetScope
+      }
+    },
     appendRawTreeNode(parent, node) {
       parent.children ||= []
       if (!parent.children.some((item) => String(item.id) === String(node.id))) {
@@ -2169,6 +2191,7 @@ export default {
   border-top: 1px solid var(--el-border-color-lighter);
 
   &::-webkit-scrollbar:horizontal {
+    display: none;
     height: 0;
   }
 }
@@ -2187,7 +2210,12 @@ export default {
 }
 
 .x-tree__body.is-virtual :deep(.el-tree-virtual-list)::-webkit-scrollbar:horizontal {
+  display: none;
   height: 0;
+}
+
+.x-tree__body.is-virtual :deep(.el-scrollbar__bar.is-horizontal) {
+  display: none;
 }
 
 .x-tree__body :deep(.el-tree) {

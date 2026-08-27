@@ -16,6 +16,7 @@
     <AssetTreeTable
       ref="ListPage"
       :header-actions="headerActions"
+      :mount-tree="showTree"
       :node-url="baseNodeUrl"
       :auto-fit-tree-width="showTree"
       :show-tree="showTree"
@@ -24,6 +25,8 @@
       :tree-setting="iTreeSetting"
       :tree-url-query="treeUrlQuery"
       :tree-url="`${baseNodeUrl}children/tree/`"
+      :tree-min-width="280"
+      tree-width="300px"
       :url="baseUrl"
       class="tree-table"
     >
@@ -124,6 +127,18 @@ export default {
     treeSetting: {
       type: Object,
       default: () => ({})
+    },
+    initialTreeData: {
+      type: Array,
+      default: () => []
+    },
+    initialTreeAmounts: {
+      type: Object,
+      default: () => ({})
+    },
+    initialTreeAssetScope: {
+      type: [String, Number],
+      default: ''
     },
     showTree: {
       type: Boolean,
@@ -229,6 +244,9 @@ export default {
         showAssetScope: true,
         assetScopeStorageKey: 'asset_select_dialog_show_current_asset',
         ...this.treeSetting,
+        initialData: this.initialTreeData,
+        initialAmounts: this.initialTreeAmounts,
+        initialAssetScope: this.initialTreeAssetScope,
         readOnly: true,
         showMenu: false,
         hasRightMenu: false,
