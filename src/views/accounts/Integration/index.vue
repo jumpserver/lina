@@ -28,12 +28,6 @@ export default {
             title: this.$t('CallRecords'),
             hidden: !this.$hasPerm('audits.view_integrationapplicationlog'),
             component: () => import('@/views/accounts/Integration/components/CallRecords.vue')
-          },
-          {
-            name: 'docs',
-            title: this.$t('Documentation'),
-            hidden: !this.$hasPerm('accounts.view_integrationapplication'),
-            component: () => import('@/views/accounts/Integration/SDKList.vue')
           }
         ]
       }

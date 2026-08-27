@@ -47,22 +47,19 @@
           <el-dropdown-menu style="overflow: auto; max-height: 60vh">
             <template v-for="action in moreActions" :key="action.name">
               <el-dropdown-item :command="action" :disabled="action.disabled">
-                <div class="dropdown-item__content">
-                  <span v-if="action.icon" class="pre-icon">
-                    <Icon :icon="action.icon" />
-                  </span>
-                  <span class="dropdown-item__label">{{ action.title }}</span>
-                  <el-tooltip
-                    v-if="action.tip"
-                    :content="action.tip"
-                    :show-after="300"
-                    placement="right"
-                  >
-                    <span class="dropdown-item__help" @click.stop>
-                      <Icon icon="fa-question-circle-o" />
+                <el-tooltip
+                  :content="action.tip"
+                  :disabled="!action.tip"
+                  :show-after="300"
+                  placement="right"
+                >
+                  <div class="dropdown-item__content">
+                    <span v-if="action.icon" class="pre-icon">
+                      <Icon :icon="action.icon" />
                     </span>
-                  </el-tooltip>
-                </div>
+                    <span class="dropdown-item__label">{{ action.title }}</span>
+                  </div>
+                </el-tooltip>
               </el-dropdown-item>
             </template>
           </el-dropdown-menu>
@@ -235,10 +232,13 @@ export default {
         return {
           hasUpdate: true,
           canUpdate: true,
+          updateTip: '',
           hasDelete: true,
           canDelete: true,
+          deleteTip: '',
           hasClone: true,
           canClone: true,
+          cloneTip: '',
           updateRoute: 'GroupUpdate',
           cloneRoute: 'GroupCreate',
           performDelete: defaultPerformDelete,
@@ -262,6 +262,7 @@ export default {
         icon: ACTION_ICON_MAP.update,
         has: colActions.hasUpdate,
         can: colActions.canUpdate,
+        tip: colActions.updateTip,
         callback: colActions.onUpdate,
         order: 10
       },
@@ -272,6 +273,7 @@ export default {
         type: 'danger',
         has: colActions.hasDelete,
         can: colActions.canDelete,
+        tip: colActions.deleteTip,
         callback: colActions.onDelete,
         order: 20
       },
@@ -281,6 +283,7 @@ export default {
         icon: ACTION_ICON_MAP.clone,
         has: colActions.hasClone,
         can: colActions.canClone,
+        tip: colActions.cloneTip,
         callback: colActions.onClone,
         order: 30
       }
@@ -373,6 +376,7 @@ export default {
     getButtonProps(action) {
       const { type, disabled, plain, loading, hoverType } = action
       return {
+        'aria-label': action.icon ? action.title : undefined,
         size: 'small',
         type,
         disabled,
@@ -537,18 +541,5 @@ export default {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-}
-
-:global(.action-dropdown.el-dropdown__popper .dropdown-item__help) {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 2px;
-  color: var(--el-text-color-placeholder);
-  cursor: help;
-}
-
-:global(.action-dropdown.el-dropdown__popper .dropdown-item__help:hover) {
-  color: var(--el-color-primary);
 }
 </style>

@@ -13,13 +13,15 @@
 <script>
 import { GenericDetailPage } from '@/layout/components'
 import IntegrationApplicationAccount from '../components/AccountList.vue'
-import ServiceCallRecords from '../components/CallRecords.vue'
+import CredentialActivities from './CredentialActivities.vue'
+import CredentialPolicies from './CredentialPolicies.vue'
 import IntegrationApplicationInfo from './ServiceInfo.vue'
 
 export default {
   components: {
     GenericDetailPage,
-    ServiceCallRecords,
+    CredentialActivities,
+    CredentialPolicies,
     IntegrationApplicationInfo,
     IntegrationApplicationAccount
   },
@@ -42,9 +44,20 @@ export default {
             hidden: () => !this.$hasPerm('accounts.view_integrationapplication')
           },
           {
-            name: 'ServiceCallRecords',
-            title: this.$t('CallRecords'),
-            hidden: () => !this.$hasPerm('audits.view_integrationapplicationlog')
+            name: 'CredentialPolicies',
+            title: this.$t('CredentialPolicies'),
+            hidden: () => !this.$hasPerm('accounts.view_credentialpolicy')
+          },
+          {
+            name: 'CredentialActivities',
+            title: this.$t('CredentialActivities'),
+            hidden: () =>
+              !this.$hasPerm('accounts.view_credentialpolicy') ||
+              ![
+                'accounts.view_credentialpolicyversion',
+                'accounts.view_credentialissuerequest',
+                'accounts.view_credentiallease'
+              ].some((permission) => this.$hasPerm(permission))
           }
         ]
       }
