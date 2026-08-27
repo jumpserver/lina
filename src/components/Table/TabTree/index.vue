@@ -153,6 +153,12 @@ export default {
     getNodes: function () {
       return this.$refs.AutoDataZTree.getNodes()
     },
+    getAllNodes: function () {
+      return this.$refs.AutoDataZTree.getAllNodes?.() || this.getNodes()
+    },
+    getTreeSnapshot: function () {
+      return this.$refs.AutoDataZTree.getTreeSnapshot?.()
+    },
     selectNode: function (node) {
       return this.$refs.AutoDataZTree.selectNode(node)
     },

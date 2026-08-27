@@ -7,6 +7,9 @@
       :confirm-title="confirmTitle"
       :confirm-type="confirmType"
       :danger-selection="dangerSelection"
+      :initial-tree-amounts="dialogTreeAmounts"
+      :initial-tree-asset-scope="dialogTreeAssetScope"
+      :initial-tree-data="dialogTreeData"
       :plain-text-cells="true"
       :show-selected-items="true"
       :show-tree="showTree"
@@ -103,6 +106,33 @@ export default {
       return {
         operationNodeId: this.targetNodeId
       }
+    },
+    dialogTreeSnapshot() {
+      if (!this.showTree) {
+        return null
+      }
+      const snapshot = this.tree?.getTreeSnapshot?.()
+      const nodes = snapshot?.nodes || this.tree?.getAllNodes?.()
+      if (!Array.isArray(nodes) || nodes.length === 0) {
+        return null
+      }
+      if (nodes[0]?.meta?.type !== 'node') {
+        return null
+      }
+      return {
+        nodes,
+        amounts: snapshot?.amounts || {},
+        assetScope: snapshot?.assetScope ?? ''
+      }
+    },
+    dialogTreeData() {
+      return this.dialogTreeSnapshot?.nodes || []
+    },
+    dialogTreeAmounts() {
+      return this.dialogTreeSnapshot?.amounts || {}
+    },
+    dialogTreeAssetScope() {
+      return this.dialogTreeSnapshot?.assetScope ?? ''
     },
     showTree() {
       return this.actionConfig?.showTree !== false

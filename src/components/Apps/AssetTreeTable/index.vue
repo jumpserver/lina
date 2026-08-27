@@ -6,6 +6,7 @@
     :component="treeComponent"
     :table-config="tableConfig"
     :tree-tab-config="visibleTreeTabConfig"
+    :tree-initial-max-width="treeInitialMaxWidth"
     :tree-width="treeWidth"
   >
     <template v-if="$slots.table" #table>
@@ -66,6 +67,14 @@ export default {
     showAssets: {
       type: Boolean,
       default: false
+    },
+    treeWidth: {
+      type: String,
+      default: '20%'
+    },
+    treeInitialMaxWidth: {
+      type: Number,
+      default: 320
     }
   },
   data() {
@@ -73,12 +82,14 @@ export default {
     const treeUrlQuery = this.setTreeUrlQuery()
     const assetTreeUrl = `${this.treeUrl}?assets=${showAssets ? '1' : '0'}&${treeUrlQuery}`
     const assetTreeLazyUrl = setUrlParam(assetTreeUrl, 'asset_amount', '0')
-    const assetTreeStructureUrl = showAssets
+    const isAssetNodeTree = this.treeUrl.includes('/api/v1/assets/nodes/')
+    let assetTreeStructureUrl = showAssets
       ? assetTreeLazyUrl
       : setUrlParam(assetTreeLazyUrl, 'all', 'all')
-    const assetTreeAmountUrl = this.treeUrl.includes('/api/v1/assets/nodes/')
-      ? this.treeAmountUrl
-      : ''
+    if (!showAssets && isAssetNodeTree) {
+      assetTreeStructureUrl = setUrlParam(assetTreeStructureUrl, 'compact', '1')
+    }
+    const assetTreeAmountUrl = isAssetNodeTree ? this.treeAmountUrl : ''
     return {
       treeComponent: 'TabTree',
       treeTabConfig: {
@@ -149,9 +160,6 @@ export default {
     }
   },
   computed: {
-    treeWidth() {
-      return '23.6%'
-    },
     visibleTreeTabConfig() {
       if (!this.treeSetting.notShowBuiltinTree) {
         return this.treeTabConfig
