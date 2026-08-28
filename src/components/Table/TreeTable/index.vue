@@ -333,7 +333,9 @@ export default {
       })
 
       const treeViewSelector = treePanel.querySelector('.tree-view-selector')
-      const headerActions = treePanel.querySelector('.x-tree__header-actions')
+      const headerActions = treePanel.querySelector(
+        '.node-asset-tree__header-actions, .x-tree__header-actions'
+      )
       const headerWidth =
         (treeViewSelector?.scrollWidth || 0) + (headerActions?.offsetWidth || 0) + TREE_HEADER_GAP
       const minimumFitWidth = Math.max(this.treeMinWidth, TREE_FIT_MIN_WIDTH, headerWidth)
@@ -397,6 +399,12 @@ export default {
     },
     refreshAssetRelationAmounts(nodeIds) {
       return this.$refs.AutoDataZTree?.refreshAssetRelationAmounts?.(nodeIds)
+    },
+    reloadVisibleMetrics(options) {
+      return this.$refs.AutoDataZTree?.reloadVisibleMetrics?.(options)
+    },
+    invalidateNormalMetrics() {
+      return this.$refs.AutoDataZTree?.invalidateNormalMetrics?.()
     },
     reloadTable() {
       this.$refs.ListTable.reloadTable()
@@ -555,7 +563,8 @@ $origin-color: #ffffff;
   }
 }
 
-.tree-table-content:has(.x-tree.is-search-visible) .tree-toggle {
+.tree-table-content:has(.x-tree.is-search-visible) .tree-toggle,
+.tree-table-content:has(.node-asset-tree.is-search-visible) .tree-toggle {
   top: 87px;
 }
 
