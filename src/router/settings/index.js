@@ -1,5 +1,6 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
+import store from '@/store'
 import { openJDMC } from '@/utils/jdmc'
 import { getFirstAccessibleChildPath } from '@/utils/vue'
 
@@ -603,6 +604,15 @@ export default {
         title: i18n.t('License'),
         icon: 'license',
         permissions: ['settings.change_license']
+      },
+      beforeEnter: (_to, from, next) => {
+        if (!store.getters.publicSettings?.['JDMC_ENABLED']) {
+          next()
+          return
+        }
+
+        openJDMC('/jdmc/sys-management/sys-auth')
+        redirectAfterExternalAction(from, next)
       }
     }
   ]
