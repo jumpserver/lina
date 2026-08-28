@@ -22,7 +22,11 @@
       :get-table-metadata="getTableMetadata"
       :table-url="tableUrl"
       @done="handleActionInitialDone"
-    />
+    >
+      <template v-if="$slots['search-after']" #search-after>
+        <slot name="search-after" />
+      </template>
+    </TableAction>
     <div v-loading="!actionInit" class="table-content">
       <IBox>
         <AutoDataTable
@@ -301,10 +305,11 @@ export default {
       if (!this.tableUrl) {
         return Promise.resolve({})
       }
-      const url =
-        this.tableUrl.indexOf('?') === -1
-          ? `${this.tableUrl}?display=1`
-          : `${this.tableUrl}&display=1`
+      // OPTIONS describes the resource schema. List filters such as node_id,
+      // category and pagination only affect GET data and must not create a new
+      // metadata cache entry whenever the user changes the current tree node.
+      const resourceUrl = this.tableUrl.split(/[?#]/, 1)[0]
+      const url = `${resourceUrl}?display=1`
       if (this.metadataRequest && this.metadataRequestUrl === url) {
         return this.metadataRequest
       }

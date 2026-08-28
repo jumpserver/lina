@@ -6,17 +6,19 @@
       :class="{ 'is-resizing': resizing }"
       class="tree-table-content"
     >
-      <div v-show="iShowTree" :style="leftStyle" class="left">
+      <div v-show="mountTree && iShowTree" ref="treePanel" :style="leftStyle" class="left">
         <span v-if="component === 'AutoDataZTree'" class="title">
           {{ title }}
         </span>
         <component
+          v-if="mountTree"
           v-bind="treeTabConfig"
           :is="component"
           :key="componentTreeKey"
           ref="AutoDataZTree"
           :setting="treeSetting"
           class="auto-data-ztree"
+          @tree-init-finish="handleTreeInitFinish"
           @url-change="handleUrlChange"
           v-on="forwardedListeners"
         >
@@ -26,15 +28,21 @@
         </component>
       </div>
       <div
+        v-if="mountTree"
+        ref="treeResizer"
         :class="{ 'is-collapsed': !iShowTree }"
         class="tree-resizer"
         role="separator"
         tabindex="0"
-        @dblclick="resetTreeWidth"
         @keydown.left.prevent="resizeByKeyboard(-16)"
         @keydown.right.prevent="resizeByKeyboard(16)"
-        @pointerdown="startResize"
       >
+        <span
+          v-if="iShowTree"
+          class="tree-resize-handle"
+          @dblclick="fitTreeWidth"
+          @pointerdown="startResize"
+        />
         <button
           :aria-expanded="iShowTree"
           class="tree-toggle"
@@ -60,7 +68,11 @@
               :table-config="iTableConfig"
               :create-drawer="createDrawer"
               v-on="forwardedListeners"
-            />
+            >
+              <template v-if="$slots['search-after']" #search-after>
+                <slot name="search-after" />
+              </template>
+            </ListTable>
           </slot>
         </div>
       </div>
@@ -77,6 +89,15 @@ import AutoDataZTree from '@/components/Tree/AutoDataZTree/index.vue'
 import { setUrlParam } from '@/utils/common/index'
 import { omitVueListeners, pickVueListeners } from '@/utils/vue'
 import TabTree from '../TabTree/index.vue'
+
+const DEFAULT_TREE_WIDTH_RATIO = 0.236
+const DEFAULT_TREE_MIN_WIDTH = 240
+const TREE_MAX_WIDTH = 620
+const TABLE_MIN_WIDTH = 480
+const TREE_FIT_MIN_WIDTH = 180
+const TREE_CONTENT_HORIZONTAL_PADDING = 20
+const TREE_CONTENT_COMFORT_GAP = 16
+const TREE_HEADER_GAP = 8
 
 function buildInitialTableConfig(tableConfig, routeQuery = {}) {
   const config = { ...tableConfig }
@@ -116,6 +137,10 @@ export default {
       type: Boolean,
       default: true
     },
+    mountTree: {
+      type: Boolean,
+      default: true
+    },
     // 默认引用的Tree组件
     component: {
       type: String,
@@ -128,6 +153,18 @@ export default {
     treeWidth: {
       type: String,
       default: () => '23.6%'
+    },
+    treeMinWidth: {
+      type: Number,
+      default: DEFAULT_TREE_MIN_WIDTH
+    },
+    treeInitialMaxWidth: {
+      type: Number,
+      default: TREE_MAX_WIDTH
+    },
+    autoFitTreeWidth: {
+      type: Boolean,
+      default: false
     },
     quickFilters: {
       type: Array,
@@ -160,7 +197,8 @@ export default {
       leftWidth: null,
       resizing: false,
       resizeStartX: 0,
-      resizeStartWidth: 0
+      resizeStartWidth: 0,
+      treeFitFrame: null
     }
   },
   computed: {
@@ -193,28 +231,43 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(this.initializeTreeWidth)
+    this.$nextTick(() => {
+      this.initializeTreeWidth()
+    })
   },
   beforeUnmount() {
     this.stopResize()
+    if (this.treeFitFrame !== null) {
+      window.cancelAnimationFrame(this.treeFitFrame)
+    }
   },
   methods: {
-    initializeTreeWidth() {
-      const containerWidth = this.$refs.treeTableContent?.clientWidth || 0
-      if (!containerWidth) {
-        return
-      }
+    getConfiguredTreeWidth(containerWidth) {
       const configuredWidth = String(this.treeWidth).trim()
       const parsedWidth = Number.parseFloat(configuredWidth)
       const width = configuredWidth.endsWith('%')
         ? (containerWidth * parsedWidth) / 100
         : parsedWidth
-      this.leftWidth = this.clampTreeWidth(Number.isFinite(width) ? width : containerWidth * 0.236)
+      return Number.isFinite(width) ? width : containerWidth * DEFAULT_TREE_WIDTH_RATIO
     },
-    clampTreeWidth(width) {
+    initializeTreeWidth() {
       const containerWidth = this.$refs.treeTableContent?.clientWidth || 0
-      const minWidth = Math.min(240, containerWidth * 0.4)
-      const maxWidth = Math.max(minWidth, Math.min(620, containerWidth - 480))
+      if (!containerWidth) {
+        return
+      }
+      const configuredWidth = Math.min(
+        this.getConfiguredTreeWidth(containerWidth),
+        this.treeInitialMaxWidth
+      )
+      this.leftWidth = this.clampTreeWidth(configuredWidth)
+    },
+    clampTreeWidth(width, minimumWidth = this.treeMinWidth) {
+      const containerWidth = this.$refs.treeTableContent?.clientWidth || 0
+      const minWidth = Math.min(minimumWidth, containerWidth * 0.4)
+      const maxWidth = Math.max(
+        minWidth,
+        Math.min(TREE_MAX_WIDTH, containerWidth - TABLE_MIN_WIDTH)
+      )
       return Math.round(Math.min(Math.max(width, minWidth), maxWidth))
     },
     startResize(event) {
@@ -223,8 +276,7 @@ export default {
       }
       this.resizing = true
       this.resizeStartX = event.clientX
-      this.resizeStartWidth =
-        this.leftWidth || event.currentTarget.previousElementSibling.offsetWidth
+      this.resizeStartWidth = this.leftWidth || this.$refs.treePanel?.offsetWidth || 0
       document.addEventListener('pointermove', this.handleResize)
       document.addEventListener('pointerup', this.stopResize)
       document.body.style.cursor = 'col-resize'
@@ -255,9 +307,59 @@ export default {
       }
       this.leftWidth = this.clampTreeWidth((this.leftWidth || 0) + offset)
     },
-    resetTreeWidth() {
+    fitTreeWidth() {
       const containerWidth = this.$refs.treeTableContent?.clientWidth || 0
-      this.leftWidth = this.clampTreeWidth(containerWidth * 0.236)
+      const treePanel = this.$refs.treePanel
+      const treeBody = treePanel?.querySelector('.x-tree__body')
+      if (!containerWidth) {
+        return
+      }
+      if (!treeBody) {
+        this.leftWidth = this.clampTreeWidth(this.getConfiguredTreeWidth(containerWidth))
+        return
+      }
+
+      const scrollElement = treeBody.querySelector('.el-tree-virtual-list') || treeBody
+      const bodyRect = scrollElement.getBoundingClientRect()
+      const scrollLeft = scrollElement.scrollLeft || 0
+      const contentElements = treeBody.querySelectorAll('.x-tree__node-amount, .x-tree__node-label')
+      let contentWidth = 0
+      contentElements.forEach((element) => {
+        const rect = element.getBoundingClientRect()
+        if (!rect.width || !rect.height) {
+          return
+        }
+        contentWidth = Math.max(contentWidth, rect.right - bodyRect.left + scrollLeft)
+      })
+
+      const treeViewSelector = treePanel.querySelector('.tree-view-selector')
+      const headerActions = treePanel.querySelector('.x-tree__header-actions')
+      const headerWidth =
+        (treeViewSelector?.scrollWidth || 0) + (headerActions?.offsetWidth || 0) + TREE_HEADER_GAP
+      const minimumFitWidth = Math.max(this.treeMinWidth, TREE_FIT_MIN_WIDTH, headerWidth)
+      const preferredWidth = Math.max(
+        minimumFitWidth,
+        contentWidth + TREE_CONTENT_HORIZONTAL_PADDING + TREE_CONTENT_COMFORT_GAP
+      )
+      this.leftWidth = this.clampTreeWidth(preferredWidth, minimumFitWidth)
+
+      this.$nextTick(() => {
+        scrollElement.scrollLeft = 0
+      })
+    },
+    handleTreeInitFinish(tree) {
+      if (this.autoFitTreeWidth) {
+        this.$nextTick(() => {
+          if (this.treeFitFrame !== null) {
+            window.cancelAnimationFrame(this.treeFitFrame)
+          }
+          this.treeFitFrame = window.requestAnimationFrame(() => {
+            this.treeFitFrame = null
+            this.fitTreeWidth()
+          })
+        })
+      }
+      this.$emit('tree-init-finish', tree)
     },
     toggleTree() {
       this.iShowTree = !this.iShowTree
@@ -284,6 +386,12 @@ export default {
     getNodes: function () {
       return this.$refs.AutoDataZTree.getNodes()
     },
+    getAllNodes: function () {
+      return this.$refs.AutoDataZTree.getAllNodes?.() || this.getNodes()
+    },
+    getTreeSnapshot: function () {
+      return this.$refs.AutoDataZTree.getTreeSnapshot?.()
+    },
     selectNode: function (node) {
       return this.$refs.AutoDataZTree.selectNode(node)
     },
@@ -292,6 +400,9 @@ export default {
     },
     reloadTable() {
       this.$refs.ListTable.reloadTable()
+    },
+    toggleRowSelection(row, isSelected) {
+      return this.$refs.ListTable?.toggleRowSelection(row, isSelected)
     }
   }
 }
@@ -342,8 +453,12 @@ $origin-color: #ffffff;
       overflow: auto;
       height: 100%;
 
-      &.tree-tab :deep(.page-submenu) {
-        height: 40px;
+      &.tree-tab {
+        overflow: hidden;
+
+        :deep(.tree-view-header) {
+          height: 40px;
+        }
       }
     }
 
@@ -367,17 +482,32 @@ $origin-color: #ffffff;
 .tree-resizer {
   position: relative;
   z-index: 5;
-  flex: 0 0 8px;
-  width: 8px;
-  cursor: col-resize;
+  flex: 0 0 14px;
+  width: 14px;
   background: transparent;
 
   &.is-collapsed {
+    flex-basis: 0;
+    width: 0;
     cursor: default;
+
+    .tree-toggle {
+      transform: translateX(-20px);
+    }
   }
 }
 
-.tree-table-content:has(.tree-resizer:hover) .left,
+.tree-resize-handle {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  left: -6px;
+  width: 11px;
+  cursor: col-resize;
+}
+
+.tree-table-content:has(.tree-resize-handle:hover) .left,
 .tree-table-content.is-resizing .left {
   border-right-color: var(--el-color-primary-light-5);
 }
@@ -388,26 +518,32 @@ $origin-color: #ffffff;
 
 .tree-toggle {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 40px;
+  left: 0;
   z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
+  width: 14px;
   height: 34px;
   padding: 0;
   border: 1px solid var(--el-border-color);
-  border-radius: 3px;
+  border-left: 0;
+  border-radius: 0 6px 6px 0;
   color: var(--el-text-color-secondary);
   background: var(--el-bg-color);
   cursor: pointer;
-  transform: translate(-50%, -50%);
   opacity: 0;
   transition:
     opacity 0.15s ease,
     color 0.15s ease,
-    border-color 0.15s ease;
+    background-color 0.15s ease;
+
+  &::before {
+    position: absolute;
+    inset: -10px -3px;
+    content: '';
+  }
 
   .icon-left {
     font-size: 11px;
@@ -415,8 +551,12 @@ $origin-color: #ffffff;
 
   &:hover {
     color: var(--el-color-primary);
-    border-color: var(--el-color-primary-light-5);
+    background: var(--el-color-primary-light-9);
   }
+}
+
+.tree-table-content:has(.x-tree.is-search-visible) .tree-toggle {
+  top: 87px;
 }
 
 .tree-table-content:hover .tree-toggle,

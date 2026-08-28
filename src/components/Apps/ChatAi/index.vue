@@ -15,23 +15,45 @@
     <Teleport v-else to="body">
       <div :class="['chat-ai-portal', { 'is-open': panelOpen, 'is-expanded': expanded }]">
         <Transition name="launcher-pop">
-          <button
-            v-if="!panelOpen"
-            ref="launcher"
-            class="assistant-launcher"
-            type="button"
-            :aria-label="t('ChatAIName')"
-            aria-haspopup="dialog"
-            :title="t('ChatAIName')"
-            @click="open"
+          <div
+            v-if="!panelOpen && !launcherHidden"
+            :class="['assistant-launcher-wrap', { 'is-dragging': launcherDragging }]"
+            :style="launcherStyle"
           >
-            <span class="assistant-launcher__icon">
-              <img :src="assistantIcon" alt="" />
-            </span>
-            <span class="assistant-launcher__label">
-              <strong>{{ t('ChatAIName') }}</strong>
-              <small>{{ t('ChatAIReady') }}</small>
-            </span>
+            <button
+              ref="launcher"
+              class="assistant-launcher"
+              type="button"
+              :aria-label="t('ChatAIName')"
+              aria-haspopup="dialog"
+              :title="t('ChatAIName')"
+              @click="handleLauncherClick"
+              @pointerdown="startLauncherDrag"
+            >
+              <img :src="assistantIcon" alt="" draggable="false" />
+            </button>
+            <button
+              class="assistant-launcher__hide"
+              type="button"
+              :aria-label="t('ChatAIHideLauncher')"
+              :title="t('ChatAIHideLauncher')"
+              @click.stop="hideLauncher"
+              @pointerdown.stop
+            >
+              <el-icon><Close /></el-icon>
+            </button>
+          </div>
+
+          <button
+            v-else-if="!panelOpen"
+            :class="['assistant-launcher-restore', `is-${launcherSide}`]"
+            :style="restoreStyle"
+            type="button"
+            :aria-label="t('ChatAIShowLauncher')"
+            :title="t('ChatAIShowLauncher')"
+            @click="showLauncher"
+          >
+            <img :src="assistantIcon" alt="" />
           </button>
         </Transition>
 
@@ -120,7 +142,24 @@ const launcher = ref(null)
 const iframe = ref(null)
 const panelOpen = ref(props.defaultShowPanel)
 const expanded = ref(localStorage.getItem('chat_ai_expanded') === 'true')
+const launcherHidden = ref(localStorage.getItem('chat_ai_launcher_hidden') === 'true')
+const launcherDragging = ref(false)
+const launcherPosition = ref(null)
+const launcherSide = ref('right')
 const initialized = ref(false)
+const launcherStyle = computed(() => {
+  if (!launcherPosition.value) return undefined
+  return {
+    left: `${launcherPosition.value.x}px`,
+    top: `${launcherPosition.value.y}px`,
+    right: 'auto',
+    bottom: 'auto'
+  }
+})
+const restoreStyle = computed(() => {
+  const y = launcherPosition.value?.y ?? getDefaultLauncherPosition().y
+  return { top: `${clamp(y, VIEWPORT_GAP, window.innerHeight - RESTORE_HEIGHT - VIEWPORT_GAP)}px` }
+})
 const standalone = computed(() => props.drawerPanelVisible)
 const iframeMode = computed(() =>
   ['embed', 'iframe'].includes(store.getters.publicSettings?.CHAT_AI_METHOD)
@@ -136,6 +175,132 @@ const iframeSource = computed(() => {
   }
 })
 const assistantIcon = getAssetUrl('img/ai-assistant.svg')
+const LAUNCHER_POSITION_KEY = 'chat_ai_launcher_position'
+const LAUNCHER_HIDDEN_KEY = 'chat_ai_launcher_hidden'
+const LAUNCHER_SIZE = 50
+const RESTORE_HEIGHT = 46
+const VIEWPORT_GAP = 12
+const dragState = {
+  startX: 0,
+  startY: 0,
+  originX: 0,
+  originY: 0,
+  moved: false
+}
+let ignoreLauncherClick = false
+let ignoreLauncherClickTimer
+
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), Math.max(min, max))
+}
+
+function getDefaultLauncherPosition() {
+  const mobile = window.innerWidth <= 620
+  const right = mobile ? 12 : 18
+  const bottom = mobile ? 82 : 116
+  return {
+    x: window.innerWidth - LAUNCHER_SIZE - right,
+    y: window.innerHeight - LAUNCHER_SIZE - bottom
+  }
+}
+
+function clampLauncherPosition(position) {
+  return {
+    x: clamp(position.x, VIEWPORT_GAP, window.innerWidth - LAUNCHER_SIZE - VIEWPORT_GAP),
+    y: clamp(position.y, VIEWPORT_GAP, window.innerHeight - LAUNCHER_SIZE - VIEWPORT_GAP)
+  }
+}
+
+function updateLauncherSide() {
+  const center = (launcherPosition.value?.x || 0) + LAUNCHER_SIZE / 2
+  launcherSide.value = center < window.innerWidth / 2 ? 'left' : 'right'
+}
+
+function saveLauncherPosition() {
+  if (!launcherPosition.value) return
+  localStorage.setItem(LAUNCHER_POSITION_KEY, JSON.stringify(launcherPosition.value))
+}
+
+function initLauncherPosition() {
+  let position
+  try {
+    const saved = JSON.parse(localStorage.getItem(LAUNCHER_POSITION_KEY))
+    if (Number.isFinite(saved?.x) && Number.isFinite(saved?.y)) position = saved
+  } catch {
+    // Ignore invalid saved positions and fall back to the default placement.
+  }
+  launcherPosition.value = clampLauncherPosition(position || getDefaultLauncherPosition())
+  updateLauncherSide()
+}
+
+function startLauncherDrag(event) {
+  if (event.button !== 0) return
+  if (!launcherPosition.value) initLauncherPosition()
+  dragState.startX = event.clientX
+  dragState.startY = event.clientY
+  dragState.originX = launcherPosition.value.x
+  dragState.originY = launcherPosition.value.y
+  dragState.moved = false
+  event.currentTarget.setPointerCapture?.(event.pointerId)
+  window.addEventListener('pointermove', moveLauncher)
+  window.addEventListener('pointerup', stopLauncherDrag)
+  window.addEventListener('pointercancel', stopLauncherDrag)
+}
+
+function moveLauncher(event) {
+  const deltaX = event.clientX - dragState.startX
+  const deltaY = event.clientY - dragState.startY
+  if (!dragState.moved && Math.hypot(deltaX, deltaY) < 4) return
+  dragState.moved = true
+  launcherDragging.value = true
+  launcherPosition.value = clampLauncherPosition({
+    x: dragState.originX + deltaX,
+    y: dragState.originY + deltaY
+  })
+  event.preventDefault()
+}
+
+function stopLauncherDrag() {
+  window.removeEventListener('pointermove', moveLauncher)
+  window.removeEventListener('pointerup', stopLauncherDrag)
+  window.removeEventListener('pointercancel', stopLauncherDrag)
+  launcherDragging.value = false
+  const moved = dragState.moved
+  dragState.moved = false
+  if (!moved) return
+  updateLauncherSide()
+  saveLauncherPosition()
+  ignoreLauncherClick = true
+  clearTimeout(ignoreLauncherClickTimer)
+  ignoreLauncherClickTimer = window.setTimeout(() => {
+    ignoreLauncherClick = false
+  })
+}
+
+async function handleLauncherClick() {
+  if (ignoreLauncherClick) return
+  await open()
+}
+
+function hideLauncher() {
+  launcherHidden.value = true
+  updateLauncherSide()
+  localStorage.setItem(LAUNCHER_HIDDEN_KEY, 'true')
+}
+
+async function showLauncher() {
+  launcherHidden.value = false
+  localStorage.removeItem(LAUNCHER_HIDDEN_KEY)
+  await nextTick()
+  launcher.value?.focus()
+}
+
+function handleViewportResize() {
+  if (!launcherPosition.value) return
+  launcherPosition.value = clampLauncherPosition(launcherPosition.value)
+  updateLauncherSide()
+  saveLauncherPosition()
+}
 
 async function initWorkspace() {
   if (initialized.value) return
@@ -178,11 +343,16 @@ watch(iframeMode, () => {
 
 onMounted(async () => {
   window.addEventListener('message', handleWindowMessage)
+  window.addEventListener('resize', handleViewportResize)
+  if (!standalone.value) initLauncherPosition()
   if (!iframeMode.value && (standalone.value || panelOpen.value)) await initWorkspace()
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener('message', handleWindowMessage)
+  window.removeEventListener('resize', handleViewportResize)
+  stopLauncherDrag()
+  clearTimeout(ignoreLauncherClickTimer)
 })
 </script>
 
@@ -200,23 +370,45 @@ onBeforeUnmount(() => {
   pointer-events: none;
 }
 
-.assistant-launcher {
+.assistant-launcher-wrap {
   position: fixed;
   right: 18px;
   bottom: calc(116px + env(safe-area-inset-bottom, 0px));
-  display: flex;
-  height: 54px;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 13px 5px 5px;
+  width: 50px;
+  height: 50px;
+  pointer-events: auto;
+
+  &:hover .assistant-launcher__hide,
+  &:focus-within .assistant-launcher__hide {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  &.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+
+    .assistant-launcher {
+      cursor: grabbing;
+      transform: scale(1.03);
+    }
+  }
+}
+
+.assistant-launcher {
+  display: grid;
+  width: 50px;
+  height: 50px;
+  padding: 4px;
   border: 1px solid var(--ai-border);
   border-radius: 12px;
   color: var(--ai-text);
   background: #fff;
   box-shadow: 0 8px 24px rgb(24 43 38 / 16%);
-  cursor: pointer;
-  pointer-events: auto;
+  cursor: grab;
   isolation: isolate;
+  place-items: center;
+  touch-action: none;
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease,
@@ -233,40 +425,97 @@ onBeforeUnmount(() => {
     outline-offset: 3px;
   }
 
-  &__icon {
-    display: grid;
+  img {
+    display: block;
     width: 42px;
     height: 42px;
-    flex: 0 0 42px;
-    place-items: center;
-    overflow: hidden;
     border-radius: 9px;
-
-    img {
-      display: block;
-      width: 42px;
-      height: 42px;
-    }
+    pointer-events: none;
   }
 
-  &__label {
-    display: flex;
-    min-width: 86px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
-    text-align: left;
+  &__hide {
+    position: absolute;
+    z-index: 1;
+    top: -7px;
+    right: -7px;
+    display: grid;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: 1px solid var(--ai-border);
+    border-radius: 50%;
+    opacity: 0;
+    color: var(--ai-text-secondary);
+    background: #fff;
+    box-shadow: 0 3px 9px rgb(24 43 38 / 18%);
+    cursor: pointer;
+    place-items: center;
+    transform: scale(0.75);
+    transition:
+      opacity 0.15s ease,
+      color 0.15s ease,
+      transform 0.15s ease;
 
-    strong {
-      font-size: 13px;
-      font-weight: 600;
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+      color: var(--ai-primary-dark);
+      outline: none;
+      transform: scale(1);
     }
 
-    small {
-      color: var(--ai-text-secondary);
-      font-size: 10px;
-      white-space: nowrap;
+    .el-icon {
+      font-size: 12px;
     }
+  }
+}
+
+.assistant-launcher-restore {
+  position: fixed;
+  z-index: 1;
+  top: 50%;
+  display: flex;
+  width: 16px;
+  height: 46px;
+  align-items: center;
+  overflow: hidden;
+  padding: 3px;
+  border: 1px solid var(--ai-border);
+  background: #fff;
+  box-shadow: 0 5px 16px rgb(24 43 38 / 16%);
+  cursor: pointer;
+  pointer-events: auto;
+  transition:
+    width 0.18s ease,
+    box-shadow 0.18s ease;
+
+  img {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    border-radius: 8px;
+  }
+
+  &.is-left {
+    left: 0;
+    justify-content: flex-end;
+    border-left: 0;
+    border-radius: 0 10px 10px 0;
+  }
+
+  &.is-right {
+    right: 0;
+    justify-content: flex-start;
+    border-right: 0;
+    border-radius: 10px 0 0 10px;
+  }
+
+  &:hover,
+  &:focus-visible {
+    width: 46px;
+    border-color: var(--ai-primary);
+    outline: none;
+    box-shadow: 0 8px 22px rgb(24 43 38 / 22%);
   }
 }
 
@@ -419,22 +668,20 @@ onBeforeUnmount(() => {
 
 @media (max-width: 620px) {
   .assistant-launcher {
-    right: 12px;
-    bottom: calc(82px + env(safe-area-inset-bottom, 0px));
     width: 50px;
     height: 50px;
-    padding: 5px;
+    padding: 4px;
     border-radius: 12px;
 
-    &__icon,
-    &__icon img {
-      width: 38px;
-      height: 38px;
+    img {
+      width: 42px;
+      height: 42px;
     }
+  }
 
-    &__label {
-      display: none;
-    }
+  .assistant-launcher-wrap {
+    right: 12px;
+    bottom: calc(82px + env(safe-area-inset-bottom, 0px));
   }
 
   .assistant-panel,
@@ -452,6 +699,7 @@ onBeforeUnmount(() => {
 
 @media (prefers-reduced-motion: reduce) {
   .assistant-launcher,
+  .assistant-launcher-restore,
   .assistant-panel {
     transition: none;
     animation: none;

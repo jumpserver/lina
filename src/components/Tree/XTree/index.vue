@@ -1,64 +1,48 @@
 <template>
-  <div class="x-tree">
-    <div
-      v-if="
-        treeSetting.showSearch ||
-        treeSetting.showCollapse ||
-        treeSetting.showRefresh ||
-        treeSetting.showAssetScope
-      "
-      class="x-tree__toolbar"
-    >
-      <el-input
-        v-if="treeSetting.showSearch"
-        v-model="searchValue"
-        :placeholder="$t('NodeFilterSearch')"
-        class="x-tree__search"
-        clearable
-        @input="handleSearchInput"
+  <div :class="{ 'is-search-visible': treeSetting.showSearch && searchVisible }" class="x-tree">
+    <div v-if="hasTreeTools" class="x-tree__header-actions">
+      <el-dropdown
+        ref="toolsDropdown"
+        :hide-timeout="160"
+        placement="bottom-start"
+        popper-class="x-tree-tools-popper"
+        :show-timeout="80"
+        trigger="hover"
+        @command="handleTreeToolCommand"
       >
-        <template #prefix>
-          <el-icon><Search /></el-icon>
-        </template>
-      </el-input>
-      <div
-        v-if="treeSetting.showCollapse || treeSetting.showRefresh || treeSetting.showAssetScope"
-        class="x-tree__toolbar-actions"
-      >
-        <el-tooltip
-          v-if="treeSetting.showCollapse"
-          :content="$t('NodeFilterCollapse')"
-          :show-after="500"
-          placement="top"
-        >
-          <el-button
-            :aria-label="$t('NodeFilterCollapse')"
-            :disabled="loading || treeData.length === 0"
-            :title="$t('NodeFilterCollapse')"
-            class="x-tree__tool-button"
-            @click="collapseTreeStepwise"
-          >
-            <svg-icon class="x-tree__tool-icon" icon-class="tree-collapse-all" />
-          </el-button>
-        </el-tooltip>
-        <el-dropdown
-          v-if="treeSetting.showAssetScope"
-          :hide-on-click="false"
-          placement="bottom-end"
-          popper-class="x-tree-settings-popper"
-          trigger="click"
-        >
-          <el-button
-            :aria-label="$t('TreeSettings')"
-            :title="$t('TreeSettings')"
-            class="x-tree__tool-button"
-          >
-            <svg-icon class="x-tree__tool-icon" icon-class="system-setting" />
-          </el-button>
-          <template #dropdown>
-            <el-dropdown-menu class="x-tree-settings__menu">
+        <el-button :aria-label="$t('TreeActions')" class="x-tree__tool-button">
+          <el-icon class="x-tree__tool-icon x-tree__more-icon"><More /></el-icon>
+        </el-button>
+        <template #dropdown>
+          <el-dropdown-menu class="x-tree-tools__menu">
+            <el-dropdown-item
+              v-if="treeSetting.showSearch"
+              :class="{ 'is-active': searchVisible }"
+              command="search"
+            >
+              <span class="x-tree-tools__icon"
+                ><el-icon><Search /></el-icon
+              ></span>
+              <span>{{ $t('TreeActionSearch') }}</span>
+            </el-dropdown-item>
+            <el-dropdown-item
+              v-if="treeSetting.showCollapse"
+              :disabled="loading || treeData.length === 0"
+              command="collapse"
+            >
+              <span class="x-tree-tools__icon">
+                <svg-icon icon-class="tree-collapse-all" />
+              </span>
+              <span>{{ $t('TreeActionCollapse') }}</span>
+            </el-dropdown-item>
+            <el-dropdown-item v-if="treeSetting.showRefresh" command="refresh">
+              <span class="x-tree-tools__icon"><svg-icon icon-class="refresh" /></span>
+              <span>{{ $t('Refresh') }}</span>
+            </el-dropdown-item>
+            <template v-if="treeSetting.showAssetScope">
+              <li v-if="hasTreeOperations" class="x-tree-tools__divider" />
               <li class="x-tree-settings__title">{{ $t('AssetScope') }}</li>
-              <li class="x-tree-settings__radio-list">
+              <li class="x-tree-settings__radio-list" @click.capture="closeToolsDropdown">
                 <el-radio-group :model-value="assetScope" @change="handleAssetScopeChange">
                   <el-tooltip
                     :content="$t('AssetScopeWithDescendantsHelp')"
@@ -80,26 +64,32 @@
                   </el-tooltip>
                 </el-radio-group>
               </li>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-        <el-tooltip
-          v-if="treeSetting.showRefresh"
-          :content="$t('Refresh')"
-          :show-after="500"
-          placement="top"
-        >
-          <el-button
-            :aria-label="$t('Refresh')"
-            :title="$t('Refresh')"
-            class="x-tree__tool-button"
-            @click="refresh"
-          >
-            <svg-icon class="x-tree__tool-icon" icon-class="refresh" />
-          </el-button>
-        </el-tooltip>
-      </div>
+            </template>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </div>
+
+    <transition
+      :duration="{ enter: 110, leave: 0 }"
+      name="x-tree-search"
+      @after-enter="focusSearchInput"
+    >
+      <div v-if="treeSetting.showSearch && searchVisible" class="x-tree__search-row">
+        <el-input
+          ref="searchInput"
+          v-model="searchValue"
+          :placeholder="$t('NodeFilterSearch')"
+          class="x-tree__search"
+          clearable
+          @input="handleSearchInput"
+        >
+          <template #prefix>
+            <el-icon><Search /></el-icon>
+          </template>
+        </el-input>
+      </div>
+    </transition>
 
     <div
       v-loading="loading"
@@ -109,6 +99,7 @@
         'is-virtual': useVirtualTree
       }"
       class="x-tree__body"
+      @scroll.capture.passive="handleTreeAmountScroll"
     >
       <el-tree-v2
         v-if="useVirtualTree"
@@ -131,8 +122,11 @@
         <template #default="{ node, data }">
           <span
             :draggable="canDragData(data)"
-            :title="getNodeLabel(data)"
-            :class="{ 'is-virtual-drop-target': isVirtualDropTarget(data) }"
+            :title="getNodeTitle(data)"
+            :class="{
+              'is-operation-target': isOperationTarget(data),
+              'is-virtual-drop-target': isVirtualDropTarget(data)
+            }"
             class="x-tree__node"
             @dragend="handleVirtualDragEnd"
             @dragenter="handleVirtualDragOver($event, data)"
@@ -201,7 +195,11 @@
         @node-expand="handleNodeExpand"
       >
         <template #default="{ node, data }">
-          <span class="x-tree__node" :title="getNodeLabel(data)">
+          <span
+            :class="{ 'is-operation-target': isOperationTarget(data) }"
+            class="x-tree__node"
+            :title="getNodeTitle(data)"
+          >
             <button
               :aria-label="getNodeLabel(data)"
               class="x-tree__node-toggle"
@@ -256,7 +254,7 @@
       @contextmenu.prevent
       @mousedown.stop
     >
-      <ul class="x-tree-context-menu__list">
+      <ul class="x-tree-context-menu__list" @click="handleContextMenuClick">
         <template v-for="item in menu" :key="item.id">
           <li
             v-if="hasMenuItem(item)"
@@ -325,6 +323,8 @@ export default {
       loading: false,
       treeKey: 0,
       searchValue: '',
+      searchVisible: false,
+      searchFocusFrame: null,
       assetScope: getAssetScopeValue(this.$cookie, this.setting),
       searchMode: false,
       menuVisible: false,
@@ -341,11 +341,16 @@ export default {
       amountQueuedIds: new Set(),
       nodeAmounts: new Map(),
       amountWorkerRunning: false,
+      amountScrollFrame: null,
+      amountLoadedRowEnd: 0,
+      amountAllRowsScheduled: false,
+      suppressExpandAmountLoading: false,
       expandedNodeIds: new Set(),
       treeNodeCount: 0,
       normalTreeNodeCount: 0,
       virtualTreeHeight: 500,
       treeResizeObserver: null,
+      treeResizeFrame: null,
       virtualDraggingNode: null,
       virtualDropTargetId: '',
       dragPreviewElement: null,
@@ -380,8 +385,15 @@ export default {
           hasRightMenu: true,
           selectSyncToRoute: true,
           structureUrl: '',
+          initialData: null,
+          initialAmounts: null,
+          initialAssetScope: '',
           countUrl: '',
           countBatchSize: 100,
+          countProgressiveBatchSize: 100,
+          operationNodeId: '',
+          readOnly: false,
+          nodeRowHeight: 30,
           lazyLoad: true,
           virtualThreshold: 1000,
           virtualize: true,
@@ -390,6 +402,14 @@ export default {
         },
         this.setting
       )
+    },
+    hasTreeOperations() {
+      return (
+        this.treeSetting.showSearch || this.treeSetting.showCollapse || this.treeSetting.showRefresh
+      )
+    },
+    hasTreeTools() {
+      return this.hasTreeOperations || this.treeSetting.showAssetScope
     },
     defaultMenu() {
       return [
@@ -421,7 +441,11 @@ export default {
       return items.concat(this.treeSetting.menu || [])
     },
     canMove() {
-      return !this.searchMode && this.treeSetting.edit?.drag?.isMove !== false
+      return (
+        !this.treeSetting.readOnly &&
+        !this.searchMode &&
+        this.treeSetting.edit?.drag?.isMove !== false
+      )
     },
     useVirtualTree() {
       return (
@@ -470,16 +494,26 @@ export default {
     this.cancelAmountLoading()
     this.removeDragPreview()
     this.treeResizeObserver?.disconnect()
+    window.cancelAnimationFrame(this.treeResizeFrame)
+    window.cancelAnimationFrame(this.searchFocusFrame)
     document.removeEventListener('mousedown', this.hideRMenu)
     document.removeEventListener('scroll', this.hideRMenu, true)
   },
   methods: {
     setupTreeResizeObserver() {
       const updateHeight = () => {
-        const height = this.$refs.treeBody?.clientHeight || 0
-        if (height) {
-          this.virtualTreeHeight = Math.max(200, height - 18)
-        }
+        window.cancelAnimationFrame(this.treeResizeFrame)
+        this.treeResizeFrame = window.requestAnimationFrame(() => {
+          this.treeResizeFrame = null
+          const height = this.$refs.treeBody?.clientHeight || 0
+          if (!height) {
+            return
+          }
+          const nextHeight = Math.max(200, Math.round(height - 18))
+          if (nextHeight !== this.virtualTreeHeight) {
+            this.virtualTreeHeight = nextHeight
+          }
+        })
       }
       this.$nextTick(updateHeight)
       if (typeof ResizeObserver !== 'undefined') {
@@ -508,6 +542,11 @@ export default {
     },
     getNodeLabel(node) {
       return node?.name || node?.meta?.data?.value || ''
+    },
+    getNodeTitle(node) {
+      const label = this.getNodeLabel(node)
+      const amount = this.getNodeAmount(node)
+      return Number.isFinite(amount) ? `${label} (${amount})` : label
     },
     isLeafNode(node) {
       return Boolean(node?._isLeaf)
@@ -552,6 +591,17 @@ export default {
         delete node.assets_amount
         if (node.children?.length) {
           stack.push(...node.children)
+        }
+      }
+      if (String(this.treeSetting.initialAssetScope) === String(this.assetScope)) {
+        const initialAmounts = this.treeSetting.initialAmounts
+        const entries =
+          initialAmounts instanceof Map ? initialAmounts : Object.entries(initialAmounts || {})
+        for (const [key, amount] of entries) {
+          const value = Number(amount)
+          if (Number.isFinite(value)) {
+            amounts.set(String(key), value)
+          }
         }
       }
       this.nodeAmounts = amounts
@@ -680,6 +730,7 @@ export default {
       return { roots, count: normalized.length }
     },
     cancelAmountLoading() {
+      this.cancelAmountScrollFrame()
       this.amountRequestId += 1
       this.amountAbortController?.abort()
       this.amountAbortController = null
@@ -690,21 +741,52 @@ export default {
     clearNodeAmounts() {
       this.nodeAmounts.clear()
     },
-    collectVisibleAmountNodes(roots) {
-      const nodes = []
-      const queue = [...roots]
-      let index = 0
-      while (index < queue.length) {
-        const node = queue[index]
-        index += 1
-        if (node.meta?.type === 'node' && node.meta?.data?.id) {
-          nodes.push(node)
+    resetProgressiveAmountLoading() {
+      this.amountLoadedRowEnd = 0
+      this.amountAllRowsScheduled = false
+    },
+    collectExpandedTreeRows(roots, limit = Number.POSITIVE_INFINITY) {
+      const rows = []
+      const stack = [{ index: 0, nodes: roots }]
+      while (stack.length) {
+        const frame = stack[stack.length - 1]
+        if (frame.index >= frame.nodes.length) {
+          stack.pop()
+          continue
         }
-        if (this.expandedNodeIds.has(String(node.id)) && node.children?.length) {
-          queue.push(...node.children)
+        const node = frame.nodes[frame.index]
+        frame.index += 1
+        rows.push(node)
+        if (rows.length >= limit) {
+          break
         }
+        if (!this.expandedNodeIds.has(String(node.id)) || !node.children?.length) {
+          continue
+        }
+        stack.push({ index: 0, nodes: node.children })
       }
-      return nodes
+      return rows
+    },
+    getTreeAmountScrollElement() {
+      const treeBody = this.$refs.treeBody
+      if (!treeBody) {
+        return null
+      }
+      if (this.useVirtualTree) {
+        return treeBody.querySelector('.el-tree-virtual-list') || treeBody
+      }
+      return treeBody
+    },
+    getProgressiveAmountBatchSize() {
+      return Math.max(1, Number(this.treeSetting.countProgressiveBatchSize) || 100)
+    },
+    collectProgressiveAmountNodes(startIndex, endIndex) {
+      return this.collectExpandedTreeRows(this.treeData, endIndex).slice(startIndex, endIndex)
+    },
+    getTreeAmountScrollIndex(scrollElement = this.getTreeAmountScrollElement()) {
+      const rowHeight = Math.max(1, Number(this.treeSetting.nodeRowHeight) || 30)
+      const scrollTop = Math.max(0, Number(scrollElement?.scrollTop) || 0)
+      return Math.floor(scrollTop / rowHeight)
     },
     async requestNodeAmounts(nodeIds, signal) {
       if (!nodeIds.length) {
@@ -742,8 +824,64 @@ export default {
         this.processAmountQueue()
       }
     },
-    enqueueVisibleNodeAmounts() {
-      this.enqueueNodeAmounts(this.collectVisibleAmountNodes(this.treeData))
+    enqueueNextProgressiveAmountBatch() {
+      if (
+        this.amountAllRowsScheduled ||
+        (!this.treeSetting.countUrl && typeof this.treeSetting.loadNodeAmounts !== 'function')
+      ) {
+        return
+      }
+      const batchSize = this.getProgressiveAmountBatchSize()
+      const startIndex = this.amountLoadedRowEnd
+      const endIndex = startIndex + batchSize
+      const nodes = this.collectProgressiveAmountNodes(startIndex, endIndex)
+      if (!nodes.length) {
+        this.amountAllRowsScheduled = true
+        return
+      }
+      this.amountLoadedRowEnd = startIndex + nodes.length
+      this.amountAllRowsScheduled = nodes.length < batchSize
+      this.enqueueNodeAmounts(nodes)
+    },
+    startProgressiveAmountLoading() {
+      this.resetProgressiveAmountLoading()
+      this.enqueueNextProgressiveAmountBatch()
+    },
+    maybeEnqueueNextProgressiveAmountBatch(scrollElement) {
+      if (
+        this.amountAllRowsScheduled ||
+        this.amountLoadedRowEnd === 0 ||
+        this.amountWorkerRunning ||
+        this.amountQueue.length
+      ) {
+        return
+      }
+      const batchSize = this.getProgressiveAmountBatchSize()
+      const triggerIndex = Math.max(0, this.amountLoadedRowEnd - Math.ceil(batchSize / 2))
+      if (this.getTreeAmountScrollIndex(scrollElement) >= triggerIndex) {
+        this.enqueueNextProgressiveAmountBatch()
+      }
+    },
+    cancelAmountScrollFrame() {
+      if (this.amountScrollFrame === null) {
+        return
+      }
+      window.cancelAnimationFrame(this.amountScrollFrame)
+      this.amountScrollFrame = null
+    },
+    scheduleProgressiveAmountLoading(scrollElement) {
+      if (this.amountScrollFrame !== null) {
+        return
+      }
+      this.amountScrollFrame = window.requestAnimationFrame(() => {
+        this.amountScrollFrame = null
+        this.maybeEnqueueNextProgressiveAmountBatch(
+          scrollElement || this.getTreeAmountScrollElement()
+        )
+      })
+    },
+    handleTreeAmountScroll(event) {
+      this.scheduleProgressiveAmountLoading(event.target)
     },
     refreshNodeAmounts(nodes) {
       if (this.assetScope === '1') {
@@ -767,14 +905,15 @@ export default {
         return
       }
 
-      const pendingVisibleNodes = this.collectVisibleAmountNodes(this.treeData).filter(
-        (node) => !Number.isFinite(this.getNodeAmount(node))
-      )
+      const pendingLoadedNodes = this.collectProgressiveAmountNodes(
+        0,
+        this.amountLoadedRowEnd
+      ).filter((node) => !Number.isFinite(this.getNodeAmount(node)))
       this.cancelAmountLoading()
       uniqueNodes.forEach((node) => {
         this.setNodeAmount(node, null)
       })
-      this.enqueueNodeAmounts([...uniqueNodes, ...pendingVisibleNodes])
+      this.enqueueNodeAmounts([...uniqueNodes, ...pendingLoadedNodes])
     },
     refreshAssetRelationAmounts(affectedNodeIds) {
       const affectedIds = new Set((affectedNodeIds || []).map(String))
@@ -782,7 +921,6 @@ export default {
         return
       }
 
-      const matchedNodes = []
       const matchedWithAncestors = []
       const visited = new Set()
       const stack = this.normalTreeData.map((node) => ({ node, ancestors: [] }))
@@ -790,7 +928,6 @@ export default {
         const { node, ancestors } = stack.pop()
         const nodeId = node?.meta?.data?.id
         if (nodeId && affectedIds.has(String(nodeId))) {
-          matchedNodes.push(node)
           for (const item of [...ancestors, node]) {
             const key = this.getNodeAmountKey(item)
             if (key && !visited.has(key)) {
@@ -805,7 +942,7 @@ export default {
         }
       }
 
-      this.forceRefreshNodeAmounts(this.assetScope === '1' ? matchedNodes : matchedWithAncestors)
+      this.forceRefreshNodeAmounts(matchedWithAncestors)
     },
     async processAmountQueue() {
       if (this.amountWorkerRunning) {
@@ -864,6 +1001,8 @@ export default {
           this.amountWorkerRunning = false
           if (this.amountQueue.length) {
             this.processAmountQueue()
+          } else {
+            this.scheduleProgressiveAmountLoading()
           }
         }
       }
@@ -890,15 +1029,18 @@ export default {
     async loadRoot(refresh = false) {
       const requestId = ++this.structureRequestId
       this.cancelAmountLoading()
+      this.resetProgressiveAmountLoading()
       const url = this.getRefreshUrl(refresh)
-      if (!url) {
+      const initialData = refresh ? null : this.treeSetting.initialData
+      const hasInitialData = Array.isArray(initialData) && initialData.length > 0
+      if (!url && !hasInitialData) {
         this.nodeAmounts.clear()
         this.treeData = []
         return
       }
       this.loading = true
       try {
-        const response = await this.requestTree(url)
+        const response = hasInitialData ? initialData : await this.requestTree(url)
         const normalized = await this.normalizeTreeAsync(
           response,
           () => requestId === this.structureRequestId
@@ -914,44 +1056,109 @@ export default {
         this.searchMode = false
         this.treeKey += 1
         await this.$nextTick()
-        this.expandInitialNodes()
+        await this.expandInitialNodes()
         this.$emit('tree-init-finish', this)
-        this.enqueueVisibleNodeAmounts()
+        this.startProgressiveAmountLoading()
       } finally {
         if (requestId === this.structureRequestId) {
           this.loading = false
         }
       }
     },
-    expandInitialNodes() {
-      this.expandedNodeIds.clear()
-      if (this.useVirtualTree) {
-        const keys = this.initialExpandedKeys
-        keys.forEach((key) => this.expandedNodeIds.add(String(key)))
-        this.$refs.tree?.setExpandedKeys(keys)
-        return
-      }
-      if (this.searchMode) {
-        const stack = [...this.treeData]
-        while (stack.length) {
-          const item = stack.pop()
-          if (item.children?.length) {
-            this.expandedNodeIds.add(String(item.id))
-            this.$refs.tree?.getNode(item.id)?.expand()
-            stack.push(...item.children)
-          }
+    async expandInitialNodes() {
+      this.suppressExpandAmountLoading = true
+      try {
+        this.expandedNodeIds.clear()
+        if (this.useVirtualTree) {
+          const keys = this.initialExpandedKeys
+          keys.forEach((key) => this.expandedNodeIds.add(String(key)))
+          this.$refs.tree?.setExpandedKeys(keys)
+          await this.revealOperationNode()
+          return
         }
+        if (this.searchMode) {
+          const stack = [...this.treeData]
+          while (stack.length) {
+            const item = stack.pop()
+            if (item.children?.length) {
+              this.expandedNodeIds.add(String(item.id))
+              this.$refs.tree?.getNode(item.id)?.expand()
+              stack.push(...item.children)
+            }
+          }
+          await this.revealOperationNode()
+          return
+        }
+        const firstRoot = this.treeData[0]
+        const keys = this.treeData.filter((node) => node.open).map((node) => node.id)
+        if (firstRoot && keys.length === 0) {
+          keys.push(firstRoot.id)
+        }
+        keys.forEach((key) => {
+          this.expandedNodeIds.add(String(key))
+          this.$refs.tree?.getNode(key)?.expand()
+        })
+        await this.revealOperationNode()
+      } finally {
+        await this.$nextTick()
+        this.suppressExpandAmountLoading = false
+      }
+    },
+    getOperationNodePath() {
+      const operationNodeId = this.treeSetting.operationNodeId
+      if (operationNodeId === undefined || operationNodeId === null || operationNodeId === '') {
+        return []
+      }
+
+      const stack = this.normalTreeData.map((node) => ({ node, parent: null }))
+      while (stack.length) {
+        const entry = stack.pop()
+        if (this.isOperationTarget(entry.node)) {
+          const path = []
+          let current = entry
+          while (current) {
+            path.unshift(current.node)
+            current = current.parent
+          }
+          return path
+        }
+        for (const child of entry.node.children || []) {
+          stack.push({ node: child, parent: entry })
+        }
+      }
+      return []
+    },
+    async revealOperationNode() {
+      const path = this.getOperationNodePath()
+      if (!path.length) {
         return
       }
-      const firstRoot = this.treeData[0]
-      const keys = this.treeData.filter((node) => node.open).map((node) => node.id)
-      if (firstRoot && keys.length === 0) {
-        keys.push(firstRoot.id)
-      }
-      keys.forEach((key) => {
-        this.expandedNodeIds.add(String(key))
-        this.$refs.tree?.getNode(key)?.expand()
+
+      const target = path.at(-1)
+      path.slice(0, -1).forEach((node) => {
+        this.expandedNodeIds.add(String(node.id))
+        if (!this.useVirtualTree) {
+          this.$refs.tree?.getNode(node.id)?.expand()
+        }
       })
+
+      if (this.useVirtualTree) {
+        this.$refs.tree?.setExpandedKeys([...this.expandedNodeIds])
+        await this.$nextTick()
+        this.$refs.tree?.scrollToNode(target.id, 'center')
+        return
+      }
+
+      await this.$nextTick()
+      const container = this.$refs.treeBody
+      const element = container?.querySelector('.x-tree__node.is-operation-target')
+      if (!container || !element) {
+        return
+      }
+      const containerRect = container.getBoundingClientRect()
+      const elementRect = element.getBoundingClientRect()
+      container.scrollTop +=
+        elementRect.top - containerRect.top - (containerRect.height - elementRect.height) / 2
     },
     async loadNode(node, resolve) {
       if (node.level === 0) {
@@ -977,6 +1184,9 @@ export default {
     async handleNodeExpand(data, node) {
       if (data?.id !== undefined && data?.id !== null) {
         this.expandedNodeIds.add(String(data.id))
+      }
+      if (this.suppressExpandAmountLoading) {
+        return
       }
       await this.$nextTick()
       const children = data?.children?.length
@@ -1041,6 +1251,40 @@ export default {
     },
     handleSearchInput(value) {
       this.debouncedSearch(value.trim())
+    },
+    handleTreeToolCommand(command) {
+      if (command === 'search') {
+        this.toggleSearch()
+      } else if (command === 'collapse') {
+        this.collapseTreeStepwise()
+      } else if (command === 'refresh') {
+        this.refresh()
+      }
+    },
+    closeToolsDropdown() {
+      this.$nextTick(() => this.$refs.toolsDropdown?.handleClose?.())
+    },
+    toggleSearch() {
+      this.searchVisible = !this.searchVisible
+      if (!this.searchVisible) {
+        this.searchValue = ''
+        this.debouncedSearch.cancel()
+        this.searchTree('')
+        return
+      }
+      this.focusSearchInput()
+    },
+    focusSearchInput() {
+      this.$nextTick(() => {
+        window.cancelAnimationFrame(this.searchFocusFrame)
+        this.searchFocusFrame = window.requestAnimationFrame(() => {
+          this.searchFocusFrame = null
+          const input = this.$refs.searchInput
+          input?.focus?.()
+          const nativeInput = input?.input || input?.$el?.querySelector?.('input')
+          nativeInput?.focus?.({ preventScroll: true })
+        })
+      })
     },
     async filterTreeLocally(keyword, isCurrent) {
       const query = keyword.toLocaleLowerCase()
@@ -1135,8 +1379,8 @@ export default {
         this.treeNodeCount = this.normalTreeNodeCount
         this.treeKey += 1
         await this.$nextTick()
-        this.expandInitialNodes()
-        this.enqueueVisibleNodeAmounts()
+        await this.expandInitialNodes()
+        this.startProgressiveAmountLoading()
         return
       }
 
@@ -1152,8 +1396,8 @@ export default {
       this.treeNodeCount = filtered.count
       this.treeKey += 1
       await this.$nextTick()
-      this.expandInitialNodes()
-      this.enqueueVisibleNodeAmounts()
+      await this.expandInitialNodes()
+      this.startProgressiveAmountLoading()
     },
     async refresh() {
       this.hideRMenu()
@@ -1165,6 +1409,7 @@ export default {
     },
     handleAssetScopeChange(value) {
       const nextValue = String(value)
+      this.closeToolsDropdown()
       if (nextValue === this.assetScope) {
         return
       }
@@ -1172,7 +1417,7 @@ export default {
       setAssetScopeValue(this.$cookie, this.treeSetting, this.assetScope)
       this.cancelAmountLoading()
       this.clearNodeAmounts()
-      this.enqueueVisibleNodeAmounts()
+      this.startProgressiveAmountLoading()
       this.treeSetting.callback?.onAssetScopeChange?.(this.assetScope, this.currentNode)
       if (this.currentNode) {
         this.handleNodeLabelClick(null, this.currentNode)
@@ -1205,6 +1450,9 @@ export default {
       }
     },
     shouldShowMenu(data) {
+      if (this.treeSetting.readOnly) {
+        return false
+      }
       let showMenu = this.treeSetting.showMenu
       if (typeof showMenu === 'function') {
         showMenu = showMenu(data)
@@ -1235,6 +1483,13 @@ export default {
     },
     hideRMenu() {
       this.menuVisible = false
+    },
+    handleContextMenuClick(event) {
+      const menuItem = event.target?.closest?.('.rmenu')
+      if (!menuItem || menuItem.classList.contains('disabled')) {
+        return
+      }
+      this.hideRMenu()
     },
     hasMenuItem(item) {
       return typeof item.has === 'function' ? item.has(this.currentNode) : item.has !== false
@@ -1446,6 +1701,18 @@ export default {
       return Boolean(
         this.virtualDropTargetId && String(this.virtualDropTargetId) === String(data.id)
       )
+    },
+    isOperationTarget(data) {
+      const operationNodeId = this.treeSetting.operationNodeId
+      if (
+        operationNodeId === undefined ||
+        operationNodeId === null ||
+        operationNodeId === '' ||
+        data?.meta?.type !== 'node'
+      ) {
+        return false
+      }
+      return this.getNodeAmountKey(data) === String(operationNodeId)
     },
     handleVirtualDragOver(event, data) {
       if (!this.canUseVirtualDropTarget(data)) {
@@ -1696,6 +1963,16 @@ export default {
     getNodes() {
       return this.treeData
     },
+    getAllNodes() {
+      return this.normalTreeData
+    },
+    getTreeSnapshot() {
+      return {
+        nodes: this.normalTreeData,
+        amounts: Object.fromEntries(this.nodeAmounts),
+        assetScope: this.assetScope
+      }
+    },
     appendRawTreeNode(parent, node) {
       parent.children ||= []
       if (!parent.children.some((item) => String(item.id) === String(node.id))) {
@@ -1795,13 +2072,33 @@ export default {
   background: var(--el-bg-color, #fff);
 }
 
-.x-tree__toolbar {
-  display: flex;
+.x-tree__header-actions {
+  position: absolute;
+  z-index: 4;
+  top: 5px;
+  right: 8px;
+  display: inline-flex;
+  flex: none;
   align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-  padding: 10px 12px 8px;
+  gap: 1px;
+}
+
+.x-tree__search-row {
+  flex: none;
+  padding: 8px 12px;
   border-bottom: 1px solid var(--el-border-color-lighter);
+}
+
+.x-tree-search-enter-active {
+  will-change: opacity, transform;
+  transition:
+    opacity 0.11s ease-out,
+    transform 0.11s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.x-tree-search-enter-from {
+  opacity: 0;
+  transform: translate3d(0, -4px, 0);
 }
 
 .x-tree__search {
@@ -1844,17 +2141,6 @@ export default {
   }
 }
 
-.x-tree__toolbar-actions {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  gap: 1px;
-}
-
-.x-tree__toolbar-actions > .x-tree__tool-button + .x-tree__tool-button {
-  margin-left: 0;
-}
-
 .x-tree__tool-button {
   display: inline-flex;
   flex: none;
@@ -1863,14 +2149,25 @@ export default {
   min-width: 30px;
   width: 30px;
   height: 30px;
-  padding: 7px;
-  border: none;
+  padding: 5px;
+  border: none !important;
+  border-radius: 4px;
   color: var(--color-text-primary);
   background-color: transparent;
 }
 
-.x-tree__tool-button:hover,
+.x-tree__tool-button:focus,
 .x-tree__tool-button:focus-visible {
+  border: none !important;
+  outline: none;
+  box-shadow: none !important;
+  color: var(--color-text-primary);
+  background-color: transparent;
+}
+
+.x-tree__tool-button:hover {
+  border: none !important;
+  box-shadow: none !important;
   color: var(--color-text-primary);
   background-color: rgba(0, 0, 0, 0.05);
 }
@@ -1882,11 +2179,25 @@ export default {
   font-size: 13px;
 }
 
+.x-tree__more-icon {
+  transform: rotate(90deg);
+}
+
 .x-tree__body {
   flex: 1;
   min-height: 0;
   overflow: auto;
   padding: 6px 8px 12px;
+  border-top: 1px solid var(--el-border-color-lighter);
+
+  &::-webkit-scrollbar:horizontal {
+    display: none;
+    height: 0;
+  }
+}
+
+.x-tree.is-search-visible .x-tree__body {
+  border-top: 0;
 }
 
 .x-tree__body.is-virtual {
@@ -1895,6 +2206,16 @@ export default {
 
 .x-tree__body.is-virtual :deep(.el-tree-virtual-list) {
   min-width: 100%;
+  overflow-x: auto !important;
+}
+
+.x-tree__body.is-virtual :deep(.el-tree-virtual-list)::-webkit-scrollbar:horizontal {
+  display: none;
+  height: 0;
+}
+
+.x-tree__body.is-virtual :deep(.el-scrollbar__bar.is-horizontal) {
+  display: none;
 }
 
 .x-tree__body :deep(.el-tree) {
@@ -1917,6 +2238,15 @@ export default {
 .x-tree__body :deep(.el-tree-node.is-current > .el-tree-node__content) {
   color: var(--el-color-primary);
   background: var(--el-color-primary-light-9);
+}
+
+.x-tree__body
+  :deep(.el-tree-node__content:has(.x-tree__node.is-operation-target))
+  .x-tree__node-label,
+.x-tree__body
+  :deep(.el-tree-node__content:has(.x-tree__node.is-operation-target))
+  .x-tree__node-amount {
+  color: var(--el-color-warning-dark-2);
 }
 
 .x-tree__body :deep(.el-tree-node.is-drop-inner > .el-tree-node__content) {
@@ -1993,9 +2323,10 @@ export default {
 }
 
 .x-tree__node-label {
-  overflow: hidden;
+  flex: none;
+  overflow: visible;
   color: var(--el-text-color-primary);
-  text-overflow: ellipsis;
+  text-overflow: clip;
   white-space: nowrap;
 }
 
@@ -2066,7 +2397,7 @@ export default {
   white-space: nowrap;
 }
 
-.x-tree-settings-popper {
+.x-tree-tools-popper {
   width: max-content;
   min-width: 200px;
   box-sizing: border-box;
@@ -2077,8 +2408,73 @@ export default {
   box-shadow: var(--el-box-shadow-light) !important;
 }
 
-.x-tree-settings-popper .x-tree-settings__menu {
+// Dropdown items reclaim focus while the hover popper is leaving. Closing the
+// tools menu immediately keeps focus on controls opened by a menu command.
+.x-tree-tools-popper.el-zoom-in-top-leave-active {
+  transition-duration: 0s !important;
+}
+
+.x-tree-tools-popper .x-tree-tools__menu {
   padding: 0;
+}
+
+.x-tree-tools-popper .el-dropdown-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  height: 32px;
+  margin: 0;
+  padding: 0 10px;
+  border-radius: 5px;
+  color: var(--el-text-color-regular);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 32px;
+}
+
+.x-tree-tools-popper .el-dropdown-menu__item:not(.is-disabled):hover,
+.x-tree-tools-popper .el-dropdown-menu__item:not(.is-disabled):focus,
+.x-tree-tools-popper .el-dropdown-menu__item.is-active {
+  color: var(--el-color-primary);
+  background: var(--el-color-primary-light-9);
+}
+
+.x-tree-tools-popper .el-dropdown-menu__item.is-disabled {
+  color: var(--el-text-color-disabled);
+  background: transparent;
+}
+
+.x-tree-tools__icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  color: var(--el-text-color-secondary);
+  font-size: 13px;
+}
+
+.x-tree-tools__icon > .el-icon,
+.x-tree-tools__icon > .svg-icon {
+  width: 13px;
+  height: 13px;
+  margin: 0;
+  color: inherit;
+}
+
+.x-tree-tools-popper .el-dropdown-menu__item:not(.is-disabled):hover .x-tree-tools__icon,
+.x-tree-tools-popper .el-dropdown-menu__item.is-active .x-tree-tools__icon {
+  color: var(--el-color-primary);
+}
+
+.x-tree-tools__divider {
+  height: 1px;
+  margin: 5px 4px;
+  background: var(--el-border-color-lighter);
+  list-style: none;
 }
 
 .x-tree-settings__title {
@@ -2103,7 +2499,7 @@ export default {
   width: 100%;
 }
 
-.x-tree-settings-popper .x-tree-settings__radio {
+.x-tree-tools-popper .x-tree-settings__radio {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -2123,14 +2519,14 @@ export default {
   cursor: pointer;
 }
 
-.x-tree-settings-popper .x-tree-settings__radio:hover,
-.x-tree-settings-popper .x-tree-settings__radio:focus-visible {
+.x-tree-tools-popper .x-tree-settings__radio:hover,
+.x-tree-tools-popper .x-tree-settings__radio:focus-visible {
   outline: none;
   color: var(--el-color-primary);
   background: var(--el-color-primary-light-9);
 }
 
-.x-tree-settings-popper .x-tree-settings__radio .el-radio__label {
+.x-tree-tools-popper .x-tree-settings__radio .el-radio__label {
   padding-left: 8px;
   color: inherit;
   font-size: 13px;

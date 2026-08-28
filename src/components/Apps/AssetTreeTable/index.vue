@@ -2,14 +2,18 @@
   <TreeTable
     v-bind="$attrs"
     ref="TreeList"
-    v-model:active-menu="treeTableConfig.activeMenu"
+    v-model:active-menu="treeTabConfig.activeMenu"
     :component="treeComponent"
     :table-config="tableConfig"
-    :tree-tab-config="treeTableConfig"
+    :tree-tab-config="visibleTreeTabConfig"
+    :tree-initial-max-width="treeInitialMaxWidth"
     :tree-width="treeWidth"
   >
-    <template #table>
+    <template v-if="$slots.table" #table>
       <slot name="table" />
+    </template>
+    <template v-if="$slots['search-after']" #search-after>
+      <slot name="search-after" />
     </template>
     <template #rMenu="{ data }">
       <div>
@@ -63,6 +67,14 @@ export default {
     showAssets: {
       type: Boolean,
       default: false
+    },
+    treeWidth: {
+      type: String,
+      default: '20%'
+    },
+    treeInitialMaxWidth: {
+      type: Number,
+      default: 320
     }
   },
   data() {
@@ -70,14 +82,14 @@ export default {
     const treeUrlQuery = this.setTreeUrlQuery()
     const assetTreeUrl = `${this.treeUrl}?assets=${showAssets ? '1' : '0'}&${treeUrlQuery}`
     const assetTreeLazyUrl = setUrlParam(assetTreeUrl, 'asset_amount', '0')
-    const assetTreeStructureUrl = showAssets
+    const isAssetNodeTree = this.treeUrl.includes('/api/v1/assets/nodes/')
+    let assetTreeStructureUrl = showAssets
       ? assetTreeLazyUrl
       : setUrlParam(assetTreeLazyUrl, 'all', 'all')
-    const assetTreeAmountUrl = this.treeUrl.includes('/api/v1/assets/nodes/')
-      ? this.treeAmountUrl
-      : ''
-    const vm = this
-
+    if (!showAssets && isAssetNodeTree) {
+      assetTreeStructureUrl = setUrlParam(assetTreeStructureUrl, 'compact', '1')
+    }
+    const assetTreeAmountUrl = isAssetNodeTree ? this.treeAmountUrl : ''
     return {
       treeComponent: 'TabTree',
       treeTabConfig: {
@@ -85,14 +97,14 @@ export default {
         treeComponent: 'XTree',
         submenu: [
           {
-            title: this.$t('AssetTree'),
+            title: this.$t('NodeTree'),
             name: 'CustomTree',
             icon: 'fa-solid fa-tree',
             treeSetting: {
               showAssets,
               showMenu: false,
               showRefresh: true,
-              showCollapse: true,
+              showCollapse: this.treeSetting?.showCollapse !== false,
               showCreate: true,
               showUpdate: true,
               showDelete: true,
@@ -108,9 +120,11 @@ export default {
                 onSelected: (event, treeNode, context) =>
                   this.getAssetsUrl(treeNode, context?.assetScope),
                 beforeRefresh: () => {
-                  const query = { ...vm.$route.query, node_id: '', asset_id: '' }
+                  const query = { ...this.$route.query, node_id: '', asset_id: '' }
                   setTimeout(() => {
-                    setRouterQuery(vm, `?${new URLSearchParams(query)}`, { browserOnly: true })
+                    setRouterQuery(this, `?${new URLSearchParams(query)}`, {
+                      browserOnly: true
+                    })
                   }, 100)
                 }
               },
@@ -146,15 +160,14 @@ export default {
     }
   },
   computed: {
-    treeWidth() {
-      return '23.6%'
-    },
-    treeTableConfig() {
-      if (this.treeSetting.notShowBuiltinTree) {
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.treeTabConfig.submenu.splice(1, 1)
+    visibleTreeTabConfig() {
+      if (!this.treeSetting.notShowBuiltinTree) {
+        return this.treeTabConfig
       }
-      return this.treeTabConfig
+      return {
+        ...this.treeTabConfig,
+        submenu: this.treeTabConfig.submenu.filter((item) => item.name !== 'BuiltinTree')
+      }
     }
   },
   mounted() {
@@ -168,14 +181,13 @@ export default {
     reloadTable() {
       this.$refs.TreeList.reloadTable()
     },
+    toggleRowSelection(row, isSelected) {
+      return this.$refs.TreeList?.toggleRowSelection(row, isSelected)
+    },
     setTreeUrlQuery() {
-      let str = ''
-      for (const key in this.treeUrlQuery) {
-        str += `${key}=${this.treeUrlQuery[key]}&`
-      }
-      str = str.substr(0, str.length - 1)
-
-      return str
+      return Object.entries(this.treeUrlQuery)
+        .map(([key, value]) => `${key}=${value}`)
+        .join('&')
     },
     updateTableUrl(url) {
       const treeList = this.$refs.TreeList

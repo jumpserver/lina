@@ -33,6 +33,11 @@ export default {
     const userTableActions = this.config.tableActions || {}
     const objTableSize = new ObjectLocalStorage('tableSize')
     const pathName = newURL(this.config.url).pathname
+    const paginationSizes = [15, 30, 50, 100]
+    const savedPaginationSize = Number(objTableSize.get(pathName))
+    const paginationSize = paginationSizes.includes(savedPaginationSize)
+      ? savedPaginationSize
+      : paginationSizes[0]
     return {
       objTableSize: objTableSize,
       pathName: pathName,
@@ -78,8 +83,8 @@ export default {
         },
         pageCount: 5,
         paginationLayout: 'total, sizes, prev, pager, next',
-        paginationSize: objTableSize.get(pathName) || 15,
-        paginationSizes: [15, 30, 50, 100],
+        paginationSize,
+        paginationSizes,
         paginationBackground: true,
         transformQuery: (query) => {
           if (query.page && query.size) {
