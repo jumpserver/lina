@@ -237,22 +237,6 @@ export async function changeCurrentViewIfNeed({ to, from }) {
   return `/${viewName}`
 }
 
-function onI18nLoaded() {
-  return new Promise((resolve) => {
-    const load = store.state.app.i18nLoaded
-    if (load) {
-      resolve()
-    }
-    const itv = setInterval(() => {
-      const load = store.state.app.i18nLoaded
-      if (load) {
-        clearInterval(itv)
-        resolve()
-      }
-    }, 100)
-  })
-}
-
 export async function startup({ to, from, next }) {
   // if (store.getters.inited) { return true }
   if (store.getters.inited) {
@@ -274,7 +258,6 @@ export async function startup({ to, from, next }) {
     // await getOpenPublicSetting({ to, from, next })
     await getPublicSetting({ to, from }, true)
     await checkLogin({ to, from })
-    await onI18nLoaded()
     await getPublicSetting({ to, from }, false)
     const viewResult = await changeCurrentViewIfNeed({ to, from })
     if (viewResult && viewResult !== true) return viewResult
