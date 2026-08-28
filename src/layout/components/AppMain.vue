@@ -56,6 +56,7 @@ export default {
       const isChatAiSettings = this.$route.name === 'Feature' && activeTab === 'chat'
       return (
         this.publicSettings?.CHAT_AI_ENABLED === true &&
+        this.$hasPerm('chat_ai.use_chatai') &&
         this.$route.name !== 'ChatAi' &&
         !isChatAiSettings
       )

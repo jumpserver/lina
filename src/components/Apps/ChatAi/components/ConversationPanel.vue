@@ -287,22 +287,22 @@ defineExpose({ focusSearch })
 <style lang="scss" scoped>
 .conversation-panel {
   display: flex;
-  width: 272px;
-  min-width: 272px;
+  width: 248px;
+  min-width: 248px;
   height: 100%;
   flex-direction: column;
   border-right: 1px solid var(--ai-border, #e9ecef);
   background: var(--ai-surface-muted, #f7f9f8);
 
   &__top {
-    padding: 18px 14px 12px;
+    padding: 14px 12px 10px;
   }
 
   &__label {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 0 4px 14px;
+    margin: 0 4px 10px;
     color: var(--ai-text-secondary, #7c7c7c);
     font-size: 10px;
     font-weight: 700;
@@ -312,7 +312,7 @@ defineExpose({ focusSearch })
 
   &__scroll {
     flex: 1;
-    padding: 2px 10px 18px;
+    padding: 2px 8px 14px;
     overflow: auto;
     scrollbar-width: thin;
     scrollbar-color: rgb(79 88 125 / 18%) transparent;
@@ -321,12 +321,12 @@ defineExpose({ focusSearch })
   &__footer {
     display: flex;
     align-items: center;
-    gap: 8px;
-    min-height: 45px;
-    padding: 10px 18px;
+    gap: 7px;
+    min-height: 40px;
+    padding: 8px 14px;
     border-top: 1px solid var(--ai-border, #e9ecef);
     color: var(--ai-text-secondary, #7c7c7c);
-    font-size: 11px;
+    font-size: 10px;
   }
 }
 
@@ -350,57 +350,57 @@ defineExpose({ focusSearch })
 .new-conversation {
   display: flex;
   width: 100%;
-  height: 42px;
+  height: 36px;
   align-items: center;
-  gap: 10px;
-  padding: 0 10px;
-  border: 1px solid var(--ai-primary, #1ab394);
-  border-color: var(--ai-primary, #1ab394);
+  gap: 8px;
+  padding: 0 8px;
+  border: 1px solid #d5e5e0;
   border-radius: var(--ai-radius-sm, 8px);
-  color: #fff;
-  background: var(--ai-primary, #1ab394);
+  color: var(--ai-primary-dark, #148f76);
+  background: #fff;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 650;
   transition: all 0.2s ease;
 
   &:hover {
-    border-color: var(--ai-primary-dark, #148f76);
-    background: var(--ai-primary-dark, #148f76);
+    border-color: var(--ai-primary, #1ab394);
+    background: var(--ai-primary-light, #e8f7f3);
   }
 
   &:disabled {
-    border-color: #bddbd4;
-    background: #8fcdbf;
+    border-color: #e1e8e6;
+    color: #96aaa5;
+    background: #f6f8f7;
     box-shadow: none;
     cursor: not-allowed;
   }
 
   &__icon {
     display: grid;
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
     place-items: center;
     border-radius: 7px;
-    color: #fff;
-    background: rgb(255 255 255 / 16%);
+    color: var(--ai-primary-dark, #148f76);
+    background: var(--ai-primary-light, #e8f7f3);
   }
 
   &__hint {
     margin-left: auto;
-    color: rgb(255 255 255 / 70%);
-    font-size: 10px;
+    color: #9aa5a2;
+    font-size: 9px;
     font-weight: 500;
   }
 }
 
 .conversation-search {
   display: flex;
-  height: 38px;
+  height: 34px;
   align-items: center;
   gap: 8px;
-  margin-top: 12px;
-  padding: 0 11px;
+  margin-top: 9px;
+  padding: 0 9px;
   border: 1px solid var(--ai-border, #e9ecef);
   border-radius: var(--ai-radius-sm, 8px);
   color: #8f959e;
@@ -453,10 +453,10 @@ defineExpose({ focusSearch })
 }
 
 .conversation-group {
-  margin-top: 14px;
+  margin-top: 12px;
 
   &__title {
-    padding: 0 10px 6px;
+    padding: 0 8px 5px;
     color: #8f959e;
     font-size: 10px;
     font-weight: 700;
@@ -469,7 +469,7 @@ defineExpose({ focusSearch })
   position: relative;
   display: flex;
   width: 100%;
-  min-height: 54px;
+  min-height: 48px;
   align-items: center;
   padding: 0 5px 0 0;
   border: 0;
@@ -481,8 +481,8 @@ defineExpose({ focusSearch })
 
   &::before {
     position: absolute;
-    top: 12px;
-    bottom: 12px;
+    top: 10px;
+    bottom: 10px;
     left: 0;
     width: 3px;
     border-radius: 4px;
@@ -518,15 +518,15 @@ defineExpose({ focusSearch })
     min-width: 0;
     flex: 1;
     flex-direction: column;
-    gap: 5px;
+    gap: 3px;
 
     &.is-editing {
-      padding: 9px 5px 9px 12px;
+      padding: 7px 4px 7px 10px;
     }
 
     strong {
       overflow: hidden;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 650;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -534,7 +534,7 @@ defineExpose({ focusSearch })
 
     small {
       color: #a2a7b8;
-      font-size: 10px;
+      font-size: 9px;
     }
 
     input {
@@ -556,10 +556,10 @@ defineExpose({ focusSearch })
   &__select {
     display: flex;
     min-width: 0;
-    min-height: 54px;
+    min-height: 48px;
     flex: 1;
     align-items: center;
-    padding: 9px 5px 9px 12px;
+    padding: 7px 4px 7px 10px;
     border: 0;
     border-radius: inherit;
     color: inherit;
@@ -589,8 +589,8 @@ defineExpose({ focusSearch })
 
   &__action {
     display: grid;
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
     padding: 0;
     place-items: center;
     border: 0;
