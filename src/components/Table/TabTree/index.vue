@@ -12,7 +12,7 @@
       class="tree-view-header"
     >
       <el-dropdown
-        :disabled="tabIndices.length === 1"
+        :disabled="!hasMultipleTreeViews"
         :hide-timeout="160"
         placement="bottom-start"
         popper-class="tree-view-popper"
@@ -22,8 +22,12 @@
         @visible-change="treeViewDropdownVisible = $event"
       >
         <button
-          :class="{ 'is-open': treeViewDropdownVisible }"
+          :class="{
+            'is-open': treeViewDropdownVisible,
+            'is-static': !hasMultipleTreeViews
+          }"
           class="tree-view-selector"
+          :disabled="!hasMultipleTreeViews"
           type="button"
         >
           <i
@@ -33,7 +37,9 @@
             class="tree-view-selector__icon"
           />
           <span class="tree-view-selector__label">{{ activeTreeItem?.title }}</span>
-          <el-icon class="tree-view-selector__arrow"><ArrowDown /></el-icon>
+          <el-icon v-if="hasMultipleTreeViews" class="tree-view-selector__arrow">
+            <ArrowDown />
+          </el-icon>
         </button>
         <template #dropdown>
           <el-dropdown-menu class="tree-view-menu">
@@ -158,6 +164,9 @@ export default {
     },
     activeTreeItem() {
       return this.tabIndices.find((item) => item.name === this.iActiveMenu) || this.tabIndices[0]
+    },
+    hasMultipleTreeViews() {
+      return this.tabIndices.length > 1
     },
     activeTreeComponent() {
       return this.activeTreeItem?.treeComponent || this.treeComponent
@@ -333,11 +342,15 @@ export default {
     color 0.15s ease,
     background-color 0.15s ease;
 
-  &:hover,
-  &:focus-visible {
+  &:not(.is-static):hover,
+  &:not(.is-static):focus-visible {
     outline: none;
     color: var(--el-color-primary);
     background: var(--el-fill-color-light);
+  }
+
+  &.is-static {
+    cursor: default;
   }
 }
 

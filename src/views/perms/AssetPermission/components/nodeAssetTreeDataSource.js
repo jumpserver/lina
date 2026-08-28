@@ -38,12 +38,12 @@ export function createAssetPermissionTreeDataSource(request) {
         signal
       })
     },
-    children({ assetOrder, assetsLimit, level, parent, signal }) {
+    children({ assetOrder, assetsLimit, includeAssets = true, level, parent, signal }) {
       return request.get(NODE_TREE_URL, {
         params: {
           asset_amount: 0,
           asset_order: assetOrder,
-          assets: 1,
+          assets: includeAssets ? 1 : 0,
           assets_limit: assetsLimit,
           key: parent.treeKey,
           lv: level
@@ -51,11 +51,11 @@ export function createAssetPermissionTreeDataSource(request) {
         signal
       })
     },
-    search({ keyword, limit, scopeNodeId, signal, target }) {
+    search({ includeParents, keyword, limit, signal, target }) {
       return request.get(NODE_ASSET_SEARCH_URL, {
         params: {
+          include_ancestors: target === 'asset' ? includeParents : undefined,
           limit,
-          node_id: scopeNodeId || undefined,
           search: keyword,
           target
         },
@@ -78,7 +78,6 @@ export function createAssetPermissionTreeDataSource(request) {
           fresh,
           items,
           metric: mode,
-          node_id: mode === 'search_assets' ? search?.scopeNodeId || undefined : undefined,
           search: mode === 'search_assets' ? search?.keyword : undefined
         },
         { signal }

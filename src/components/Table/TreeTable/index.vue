@@ -526,7 +526,7 @@ $origin-color: #ffffff;
 
 .tree-toggle {
   position: absolute;
-  top: 40px;
+  top: 0;
   left: 0;
   z-index: 2;
   display: flex;
@@ -561,11 +561,6 @@ $origin-color: #ffffff;
     color: var(--el-color-primary);
     background: var(--el-color-primary-light-9);
   }
-}
-
-.tree-table-content:has(.x-tree.is-search-visible) .tree-toggle,
-.tree-table-content:has(.node-asset-tree.is-search-visible) .tree-toggle {
-  top: 87px;
 }
 
 .tree-table-content:hover .tree-toggle,

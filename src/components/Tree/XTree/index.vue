@@ -179,12 +179,7 @@
                 ({{ getNodeAmount(data) }})
               </span>
             </span>
-            <slot
-              :data="data"
-              :expanded="node.expanded"
-              :node="node"
-              name="node-actions"
-            />
+            <slot :data="data" :expanded="node.expanded" :node="node" name="node-actions" />
           </span>
         </template>
       </el-tree-v2>
@@ -200,8 +195,8 @@
         empty-text=""
         :expand-on-click-node="true"
         :filter-node-method="filterNode"
-        :lazy="treeSetting.lazyLoad && !searchMode"
-        :load="treeSetting.lazyLoad && !searchMode ? loadNode : undefined"
+        :lazy="treeSetting.lazyLoad"
+        :load="treeSetting.lazyLoad ? loadNode : undefined"
         :props="treeProps"
         highlight-current
         node-key="id"
@@ -265,12 +260,7 @@
                 ({{ getNodeAmount(data) }})
               </span>
             </span>
-            <slot
-              :data="data"
-              :expanded="node.expanded"
-              :node="node"
-              name="node-actions"
-            />
+            <slot :data="data" :expanded="node.expanded" :node="node" name="node-actions" />
           </span>
         </template>
       </el-tree>
@@ -450,6 +440,7 @@ export default {
           lazyLoad: true,
           virtualThreshold: 1000,
           virtualize: true,
+          virtualizeSearch: true,
           menu: [],
           callback: {}
         },
@@ -511,6 +502,7 @@ export default {
     useVirtualTree() {
       return (
         this.treeSetting.virtualize !== false &&
+        (!this.searchMode || this.treeSetting.virtualizeSearch !== false) &&
         (this.searchMode || !this.treeSetting.showAssets) &&
         this.treeNodeCount >= this.treeSetting.virtualThreshold
       )
@@ -792,16 +784,6 @@ export default {
     normalizeTree(response) {
       const entries = this.flattenRawNodes(this.getResponseNodes(response))
       return this.buildTreeFromEntries(entries)
-    },
-    markCompleteTreeLeafState(roots) {
-      const stack = [...roots]
-      while (stack.length) {
-        const node = stack.pop()
-        node._isLeaf = !node.children?.length
-        if (node.children?.length) {
-          stack.push(...node.children)
-        }
-      }
     },
     async normalizeTreeAsync(response, isCurrent = () => true) {
       const entries = this.flattenRawNodes(this.getResponseNodes(response))
@@ -1848,10 +1830,18 @@ export default {
           metadata = Array.isArray(response)
             ? {}
             : {
+                assetLimit: response?.asset_limit,
+                assetTruncated: Boolean(response?.asset_truncated),
                 hasMore: Boolean(response?.has_more),
                 limit: response?.limit,
+                matchedAssetCount: response?.matched_asset_count,
                 matchedCount: response?.matched_count,
+                matchedNodeCount: response?.matched_node_count,
+                nodeLimit: response?.node_limit,
+                nodeTruncated: Boolean(response?.node_truncated),
+                returnedAssetCount: response?.returned_asset_count,
                 returnedCount: response?.returned_count,
+                returnedNodeCount: response?.returned_node_count,
                 total: response?.total,
                 truncated: Boolean(response?.truncated || response?.has_more)
               }
@@ -1895,7 +1885,6 @@ export default {
       }
       this.searchMode = true
       this.treeData = filtered.roots
-      this.markCompleteTreeLeafState(this.treeData)
       this.treeNodeCount = filtered.count
       this.initializeNodeAmounts(filtered.roots)
       this.treeKey += 1

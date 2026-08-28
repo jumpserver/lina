@@ -146,39 +146,91 @@
       @after-enter="focusSearchInput"
     >
       <div v-if="treeSetting.showSearch && searchVisible" class="node-asset-tree__search-row">
-        <el-select
-          v-model="searchTarget"
-          :aria-label="$t('NodeAssetTreeSearchTarget')"
-          class="node-asset-tree__search-control node-asset-tree__search-target"
-          @change="handleSearchOptionChange"
+        <el-tooltip
+          :content="searchPlaceholder"
+          :disabled="!showSearchPlaceholderTooltip"
+          :show-after="400"
+          placement="top"
         >
-          <el-option :label="$t('NodeAssetTreeSearchNodes')" value="node" />
-          <el-option :label="$t('NodeAssetTreeSearchAssets')" value="asset" />
-        </el-select>
+          <el-input
+            ref="searchInput"
+            v-model="searchKeyword"
+            :placeholder="searchPlaceholder"
+            class="node-asset-tree__search-control node-asset-tree__search-input"
+            clearable
+            @input="handleSearchInput"
+            @keydown.enter.prevent="handleSearchEnter"
+          >
+            <template #prefix>
+              <el-icon><Search /></el-icon>
+            </template>
+            <template #suffix>
+              <el-popover
+                ref="searchSettingsPopover"
+                :width="268"
+                placement="bottom-start"
+                popper-class="node-asset-tree-search-settings-popper"
+                trigger="click"
+              >
+                <template #reference>
+                  <button
+                    :aria-label="$t('NodeAssetTreeSearchAdvanced')"
+                    :class="{ 'is-filtered': hasCustomSearchSettings }"
+                    class="node-asset-tree__search-settings-trigger"
+                    type="button"
+                    @click.stop
+                    @pointerdown.stop
+                  >
+                    <el-icon><Operation /></el-icon>
+                  </button>
+                </template>
 
-        <el-input
-          ref="searchInput"
-          v-model="searchKeyword"
-          :placeholder="searchPlaceholder"
-          class="node-asset-tree__search-control node-asset-tree__search-input"
-          clearable
-          @input="handleSearchInput"
-          @keydown.enter.prevent="handleSearchEnter"
-        >
-          <template #prefix>
-            <el-icon><Search /></el-icon>
-          </template>
-        </el-input>
+                <div class="node-asset-tree-search-settings">
+                  <section class="node-asset-tree-search-settings__section">
+                    <div class="node-asset-tree-search-settings__title">
+                      {{ $t('NodeAssetTreeSearchTarget') }}
+                    </div>
+                    <el-radio-group
+                      :model-value="searchTarget"
+                      class="node-asset-tree-search-settings__radios"
+                      @change="handleSearchTargetChange"
+                    >
+                      <div
+                        v-for="option in searchTargetOptions"
+                        :key="option.value"
+                        class="node-asset-tree-search-settings__target-option"
+                      >
+                        <el-radio :value="option.value">
+                          {{ option.label }}
+                        </el-radio>
+                        <el-icon
+                          v-if="option.value === 'asset'"
+                          class="node-asset-tree-search-settings__submenu-arrow"
+                        >
+                          <ArrowRight />
+                        </el-icon>
 
-        <el-select
-          v-model="searchScope"
-          :aria-label="$t('NodeAssetTreeSearchScope')"
-          class="node-asset-tree__search-control node-asset-tree__search-scope"
-          @change="handleSearchOptionChange"
-        >
-          <el-option :label="allSearchScopeLabel" value="all" />
-          <el-option :disabled="!scopeNode" :label="currentNodeScopeLabel" value="current" />
-        </el-select>
+                        <div
+                          v-if="option.value === 'asset' && searchTarget === 'asset'"
+                          class="node-asset-tree-search-settings__asset-submenu"
+                          @click.stop
+                        >
+                          <el-checkbox
+                            :model-value="searchIncludeParents"
+                            class="node-asset-tree-search-settings__asset-option"
+                            @change="handleSearchIncludeParentsChange"
+                          >
+                            {{ $t('NodeAssetTreeSearchIncludeParents') }}
+                          </el-checkbox>
+                        </div>
+                      </div>
+                    </el-radio-group>
+                  </section>
+                </div>
+              </el-popover>
+            </template>
+          </el-input>
+        </el-tooltip>
       </div>
     </transition>
 
@@ -198,7 +250,7 @@
     <XTree
       ref="tree"
       :setting="xTreeSetting"
-      @tree-init-finish="$emit('tree-init-finish', $event)"
+      @tree-init-finish="handleTreeInitFinish"
       @url-change="$emit('url-change', $event)"
     >
       <template #node-icon="{ data, expanded, leaf }">
@@ -305,6 +357,7 @@ const ASSET_ICON_MAP = Object.freeze({
 })
 
 const SETTINGS_CACHE_PREFIX = 'jms.node-asset-tree.settings.'
+const MAX_ASSET_SEARCH_RESULTS = 100
 const ASSET_ORDER_VALUES = Object.freeze(['name', 'address'])
 const NODE_DISPLAY_VALUES = Object.freeze(['both', 'nodes', 'assets'])
 
@@ -353,9 +406,9 @@ function responseWithResults(response, results) {
  * know permission endpoint URLs. A source may implement:
  *
  * - root({ refresh, assetsLimit, signal })
- * - children({ parent, level, assetsLimit, signal }) -> Array or
+ * - children({ parent, level, includeAssets, assetsLimit, signal }) -> Array or
  *   { results, assets_truncated, assets_limit }
- * - search({ keyword, target, scopeNodeId, limit, signal })
+ * - search({ keyword, target, limit, signal })
  * - metrics({ nodes, nodeIds, mode, search, fresh, signal })
  *
  * Every visual asset occurrence gets a composite tree ID. Selection events
@@ -364,8 +417,8 @@ function responseWithResults(response, results) {
  * the active metric, permission scope and search context. Public ref methods
  * include `refresh()`, `collapseTreeStepwise()`,
  * `reloadVisibleMetrics({ fresh, resetNormal })`, `setMetricMode(mode)`,
- * `invalidateNormalMetrics()`, `setPermissionScope(scope)`,
- * `setSearchScopeNode(node)`, `selectNode(node)` and the tree/snapshot getters.
+ * `invalidateNormalMetrics()`, `setPermissionScope(scope)`, `selectNode(node)`
+ * and the tree/snapshot getters.
  * See `provider.js` for the normalized resource contract.
  */
 export default {
@@ -393,9 +446,18 @@ export default {
   ],
   data() {
     const cachedSettings = readCachedSettings(this.setting)
-    const defaultTarget = NODE_ASSET_SEARCH_TARGETS.includes(this.setting.defaultSearchTarget)
+    const configuredDefaultTarget = NODE_ASSET_SEARCH_TARGETS.includes(
+      this.setting.defaultSearchTarget
+    )
       ? this.setting.defaultSearchTarget
-      : 'node'
+      : 'all'
+    const defaultTarget = NODE_ASSET_SEARCH_TARGETS.includes(cachedSettings.searchTarget)
+      ? cachedSettings.searchTarget
+      : configuredDefaultTarget
+    const defaultSearchIncludeParents =
+      typeof cachedSettings.searchIncludeParents === 'boolean'
+        ? cachedSettings.searchIncludeParents
+        : this.setting.defaultSearchIncludeParents !== false
     const configuredDefaultMode = isNodeAssetMetricMode(this.setting.defaultMetricMode)
       ? this.setting.defaultMetricMode
       : 'permission_effective'
@@ -426,10 +488,11 @@ export default {
       metricMode: defaultMode,
       nodeSettings: new Map(),
       permissionScope: defaultPermissionScope,
-      scopeNode: null,
       searchFocusFrame: null,
+      searchIncludeParents: defaultSearchIncludeParents,
       searchKeyword: '',
-      searchScope: 'all',
+      searchPlaceholderOverflow: false,
+      searchPlaceholderResizeObserver: null,
       searchState: { active: false, truncated: false },
       searchTarget: defaultTarget,
       searchVisible: false
@@ -456,9 +519,7 @@ export default {
       return this.dataSource || this.treeSetting.dataSource || {}
     },
     effectiveMetricMode() {
-      return this.searchState.active && this.searchState.target === 'asset'
-        ? 'search_assets'
-        : this.metricMode
+      return this.metricMode
     },
     activeAmountTypes() {
       return this.effectiveMetricMode.startsWith('permission_') ? ['node', 'asset'] : ['node']
@@ -568,30 +629,41 @@ export default {
       return this.treeSetting.showSearch || this.hasToolsMenu
     },
     searchPlaceholder() {
-      return this.searchTarget === 'asset'
-        ? this.$t('NodeAssetTreeSearchAssetPlaceholder')
-        : this.$t('NodeAssetTreeSearchNodePlaceholder')
-    },
-    allSearchScopeLabel() {
-      return this.searchTarget === 'asset'
-        ? this.$t('NodeAssetTreeSearchAllAssets')
-        : this.$t('NodeAssetTreeSearchAllNodes')
-    },
-    currentNodeScopeLabel() {
-      if (!this.scopeNode) {
-        return this.$t('NodeAssetTreeSearchCurrentNode')
+      const keyMap = {
+        all: 'NodeAssetTreeSearchAllPlaceholder',
+        asset: 'NodeAssetTreeSearchAssetPlaceholder',
+        node: 'NodeAssetTreeSearchNodePlaceholder'
       }
-      return this.$t('NodeAssetTreeSearchCurrentNodeNamed', {
-        name: this.scopeNode.data?.name || this.scopeNode.treeKey || ''
-      })
+      return this.$t(keyMap[this.searchTarget] || keyMap.all)
+    },
+    searchTargetOptions() {
+      return [
+        { label: this.$t('NodeAssetTreeSearchAll'), value: 'all' },
+        { label: this.$t('NodeAssetTreeSearchNodes'), value: 'node' },
+        { label: this.$t('NodeAssetTreeSearchAssets'), value: 'asset' }
+      ]
+    },
+    hasCustomSearchSettings() {
+      return (
+        this.searchTarget !== 'all' || (this.searchTarget === 'asset' && !this.searchIncludeParents)
+      )
+    },
+    showSearchPlaceholderTooltip() {
+      return !this.searchKeyword && this.searchPlaceholderOverflow
     },
     searchTruncatedText() {
-      const key =
-        this.searchState.target === 'node'
-          ? 'NodeAssetTreeSearchNodesTruncated'
-          : 'NodeAssetTreeSearchAssetsTruncated'
+      const keyMap = {
+        all: 'NodeAssetTreeSearchAllTruncated',
+        asset: 'NodeAssetTreeSearchAssetsTruncated',
+        node: 'NodeAssetTreeSearchNodesTruncated'
+      }
+      const key = keyMap[this.searchState.target] || keyMap.all
       return this.$t(key, {
-        limit: this.searchState.limit || this.treeSetting.searchLimit
+        assetLimit:
+          this.searchState.assetLimit || this.searchState.limit || this.treeSetting.searchLimit,
+        limit: this.searchState.limit || this.treeSetting.searchLimit,
+        nodeLimit:
+          this.searchState.nodeLimit || this.searchState.limit || this.treeSetting.searchLimit
       })
     },
     latestChildTruncation() {
@@ -608,10 +680,13 @@ export default {
       })
     },
     currentSearchContext() {
-      const scopedNode = this.searchScope === 'current' ? this.scopeNode : null
+      const configuredLimit = Number(this.treeSetting.searchLimit) || 1000
       return {
-        limit: Number(this.treeSetting.searchLimit) || 1000,
-        scopeNodeId: scopedNode?.resourceId || null,
+        includeParents: this.searchTarget === 'asset' ? this.searchIncludeParents : true,
+        limit:
+          this.searchTarget === 'asset'
+            ? Math.min(configuredLimit, MAX_ASSET_SEARCH_RESULTS)
+            : configuredLimit,
         target: this.searchTarget
       }
     },
@@ -652,15 +727,26 @@ export default {
         showCollapse: false,
         showRefresh: false,
         showSearch: false,
-        virtualThreshold: this.treeSetting.virtualThreshold || 800
+        virtualThreshold: this.treeSetting.virtualThreshold || 800,
+        // Element Plus' virtual tree has no lazy-load hook. Search results can
+        // contain a real branch whose children were intentionally omitted, so
+        // keep the regular lazy tree here and let its arrow fetch those direct
+        // children on demand. Search results are capped by the provider.
+        virtualizeSearch: false
       }
     }
   },
   created() {
     this.debouncedSearch = _.debounce(this.searchNow, 250)
   },
+  watch: {
+    searchPlaceholder() {
+      this.$nextTick(this.updateSearchPlaceholderOverflow)
+    }
+  },
   beforeUnmount() {
     this.debouncedSearch?.cancel()
+    this.searchPlaceholderResizeObserver?.disconnect()
     clearTimeout(this.metricSubmenuCloseTimer)
     window.cancelAnimationFrame(this.searchFocusFrame)
   },
@@ -709,6 +795,7 @@ export default {
       const response = await this.provider.children({
         assetOrder: this.getNodeSetting(parent, 'assetOrder', this.assetOrder),
         assetsLimit: this.assetLoadLimit,
+        includeAssets: !(this.searchState.active && this.searchState.target === 'node'),
         level,
         parent: toNodeAssetResource(parent),
         signal
@@ -722,11 +809,9 @@ export default {
       }
       const response = await this.provider.search({
         ...payload,
-        limit: Math.min(Number(payload.limit) || 1000, 1000),
-        scopeNodeId: payload.scopeNodeId || null
+        limit: Math.min(Number(payload.limit) || 1000, 1000)
       })
-      const metricMode = payload.target === 'asset' ? 'search_assets' : this.metricMode
-      return normalizeNodeAssetResponse(this.withMetricValues(response, metricMode))
+      return normalizeNodeAssetResponse(this.withMetricValues(response, this.metricMode))
     },
     async loadMetrics(nodeIds, { fresh, nodes, signal }) {
       if (typeof this.provider.metrics !== 'function') {
@@ -740,7 +825,6 @@ export default {
         search: this.searchState.active
           ? {
               keyword: this.searchState.keyword,
-              scopeNodeId: this.searchState.scopeNodeId,
               target: this.searchState.target
             }
           : null,
@@ -797,10 +881,23 @@ export default {
       this.debouncedSearch.cancel()
       return this.searchNow()
     },
-    handleSearchOptionChange() {
-      if (this.searchScope === 'current' && !this.scopeNode) {
-        this.searchScope = 'all'
+    handleSearchTargetChange(value) {
+      if (!NODE_ASSET_SEARCH_TARGETS.includes(value) || value === this.searchTarget) {
+        return
       }
+      this.searchTarget = value
+      this.handleSearchOptionChange()
+    },
+    handleSearchIncludeParentsChange(value) {
+      const includeParents = Boolean(value)
+      if (includeParents === this.searchIncludeParents) {
+        return
+      }
+      this.searchIncludeParents = includeParents
+      this.handleSearchOptionChange()
+    },
+    handleSearchOptionChange() {
+      this.persistSettings()
       if (this.searchKeyword.trim()) {
         this.debouncedSearch.cancel()
         this.searchNow()
@@ -813,6 +910,10 @@ export default {
     toggleSearch() {
       this.searchVisible = !this.searchVisible
       if (!this.searchVisible) {
+        this.searchPlaceholderResizeObserver?.disconnect()
+        this.searchPlaceholderResizeObserver = null
+        this.searchPlaceholderOverflow = false
+        this.$refs.searchSettingsPopover?.hide?.()
         this.searchKeyword = ''
         this.debouncedSearch.cancel()
         this.searchNow()
@@ -824,8 +925,43 @@ export default {
         this.searchFocusFrame = window.requestAnimationFrame(() => {
           this.searchFocusFrame = null
           this.$refs.searchInput?.focus?.()
+          this.observeSearchPlaceholder()
         })
       })
+    },
+    observeSearchPlaceholder() {
+      this.searchPlaceholderResizeObserver?.disconnect()
+      const input = this.$refs.searchInput?.input
+      if (!input) {
+        return
+      }
+      if (typeof ResizeObserver !== 'undefined') {
+        this.searchPlaceholderResizeObserver = new ResizeObserver(
+          this.updateSearchPlaceholderOverflow
+        )
+        this.searchPlaceholderResizeObserver.observe(input)
+      }
+      this.updateSearchPlaceholderOverflow()
+    },
+    updateSearchPlaceholderOverflow() {
+      const input = this.$refs.searchInput?.input
+      if (!input || typeof window === 'undefined') {
+        this.searchPlaceholderOverflow = false
+        return
+      }
+      const style = window.getComputedStyle(input)
+      const canvas = document.createElement('canvas')
+      const context = canvas.getContext('2d')
+      if (!context) {
+        this.searchPlaceholderOverflow = false
+        return
+      }
+      context.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`
+      const horizontalPadding =
+        (Number.parseFloat(style.paddingLeft) || 0) + (Number.parseFloat(style.paddingRight) || 0)
+      const availableWidth = Math.max(0, input.clientWidth - horizontalPadding)
+      this.searchPlaceholderOverflow =
+        context.measureText(this.searchPlaceholder).width > availableWidth + 1
     },
     handleSearchStateChange(state) {
       if (state.error) {
@@ -838,17 +974,11 @@ export default {
       this.$emit('search-state-change', state)
       this.treeSetting.callback?.onSearchStateChange?.(state)
     },
+    handleTreeInitFinish(tree) {
+      this.$emit('tree-init-finish', tree)
+    },
     handleSelected(event, data) {
       const resource = toNodeAssetResource(data)
-      if (
-        resource.type === 'node' &&
-        (this.searchScope !== 'current' || !this.searchState.active)
-      ) {
-        this.scopeNode = resource
-      } else if (resource.type === 'asset' && !this.searchState.active) {
-        this.scopeNode = null
-        this.searchScope = 'all'
-      }
       const context = {
         metricMode: this.effectiveMetricMode,
         permissionAll: this.permissionScope === 'direct' ? '0' : '1',
@@ -923,17 +1053,6 @@ export default {
         this.handleSelected(null, current)
       }
     },
-    setSearchScopeNode(node) {
-      if (!node) {
-        this.scopeNode = null
-        this.searchScope = 'all'
-        return
-      }
-      const resource = node.resourceId ? node : toNodeAssetResource(node)
-      if (resource.type === 'node') {
-        this.scopeNode = resource
-      }
-    },
     handleToolCommand(command) {
       if (command === 'collapse') {
         this.collapseTreeStepwise()
@@ -957,7 +1076,9 @@ export default {
       writeCachedSettings(this.treeSetting, {
         assetOrder: this.assetOrder,
         metricMode: this.metricMode,
-        permissionScope: this.permissionScope
+        permissionScope: this.permissionScope,
+        searchIncludeParents: this.searchIncludeParents,
+        searchTarget: this.searchTarget
       })
     },
     async handleAssetOrderChange(value) {
@@ -1073,15 +1194,7 @@ export default {
       return name && address ? `${name}（${address}）` : name || address
     },
     shouldHandleAmount(data) {
-      // XTree flips searchMode before it initializes/searches metric rows. Read
-      // that state directly so an asset search never briefly queues asset
-      // permission metrics while the parent's search-state event is rendering.
-      const mode =
-        this.$refs.tree?.searchMode && this.searchTarget === 'asset'
-          ? 'search_assets'
-          : this.metricMode
-      const types = mode.startsWith('permission_') ? ['node', 'asset'] : ['node']
-      return types.includes(data?.meta?.type)
+      return this.activeAmountTypes.includes(data?.meta?.type)
     },
     getAssetIcon(data) {
       if (typeof this.treeSetting.getAssetIcon === 'function') {
@@ -1180,9 +1293,7 @@ export default {
 .node-asset-tree__search-row {
   @include treeToolbar.search-row;
 
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  display: block;
 }
 
 @include treeToolbar.search-transition('x-tree-search');
@@ -1191,18 +1302,8 @@ export default {
   @include treeToolbar.search-control;
 }
 
-.node-asset-tree__search-target {
-  flex: 0 0 76px;
-}
-
 .node-asset-tree__search-input {
-  flex: 1 1 auto;
-  min-width: 90px;
-}
-
-.node-asset-tree__search-scope {
-  flex: 0 1 142px;
-  min-width: 92px;
+  width: 100%;
 }
 
 .node-asset-tree__search-control :deep(.el-input__wrapper),
@@ -1223,6 +1324,45 @@ export default {
 .node-asset-tree__search-control :deep(.el-input__inner) {
   height: 28px;
   font-size: 13px;
+}
+
+.node-asset-tree__search-input :deep(.el-input__suffix-inner) {
+  min-width: 0;
+}
+
+.node-asset-tree__search-settings-trigger {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  outline: none;
+  color: var(--el-text-color-secondary);
+  background: transparent;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible,
+  &[aria-expanded='true'] {
+    color: var(--el-text-color-primary);
+    background: var(--el-fill-color-light);
+  }
+
+  &.is-filtered::after {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--el-color-primary);
+    content: '';
+  }
 }
 
 .node-asset-tree__search-hint {
@@ -1355,6 +1495,108 @@ export default {
   padding: 0;
 }
 
+.node-asset-tree-search-settings-popper.el-popover {
+  padding: 8px 0;
+  border-color: var(--el-border-color-lighter);
+  border-radius: 8px;
+  box-shadow: var(--el-box-shadow-light);
+}
+
+.node-asset-tree-search-settings__section {
+  padding: 5px 14px 8px;
+}
+
+.node-asset-tree-search-settings__title {
+  margin-bottom: 7px;
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.node-asset-tree-search-settings__radios {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1px;
+  width: 100%;
+}
+
+.node-asset-tree-search-settings__target-option {
+  position: relative;
+  width: 100%;
+}
+
+.node-asset-tree-search-settings__target-option .el-radio {
+  align-items: flex-start;
+  width: 100%;
+  min-height: 30px;
+  height: auto;
+  margin-right: 0;
+  padding: 6px 4px;
+  border-radius: 4px;
+  color: var(--el-text-color-regular);
+}
+
+.node-asset-tree-search-settings__target-option .el-radio:hover {
+  background: var(--el-fill-color-light);
+}
+
+.node-asset-tree-search-settings__target-option .el-radio__input {
+  margin-top: 2px;
+}
+
+.node-asset-tree-search-settings__target-option .el-radio__label {
+  min-width: 0;
+  padding-left: 9px;
+  padding-right: 22px;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
+}
+
+.node-asset-tree-search-settings__submenu-arrow {
+  position: absolute;
+  top: 50%;
+  right: 7px;
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.node-asset-tree-search-settings__asset-submenu {
+  position: absolute;
+  top: 0;
+  left: calc(100% + 20px);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  width: max-content;
+  min-width: 166px;
+  min-height: 38px;
+  padding: 4px 8px;
+  border: 1px solid var(--el-border-color-lighter);
+  border-radius: 8px;
+  box-sizing: border-box;
+  background: var(--el-bg-color-overlay);
+  box-shadow: var(--el-box-shadow-light);
+}
+
+.node-asset-tree-search-settings__asset-option {
+  width: 100%;
+  height: 30px;
+  margin: 0;
+  padding: 0 6px;
+  color: var(--el-text-color-regular);
+}
+
+.node-asset-tree-search-settings__asset-option .el-checkbox__label {
+  padding-left: 9px;
+  font-size: 13px;
+  font-weight: 400;
+}
+
 .node-asset-tree-node-tools-popper .el-dropdown-menu__item {
   min-height: 32px;
   padding: 0 10px;
@@ -1376,13 +1618,15 @@ export default {
   background: var(--el-bg-color-overlay, #fff);
 }
 
-.node-asset-tree-node-tools-popper .el-dropdown-menu__item.is-selected
+.node-asset-tree-node-tools-popper
+  .el-dropdown-menu__item.is-selected
   .node-asset-tree-node-tools__radio {
   border-color: var(--el-color-primary);
   background: var(--el-color-primary);
 }
 
-.node-asset-tree-node-tools-popper .el-dropdown-menu__item.is-selected
+.node-asset-tree-node-tools-popper
+  .el-dropdown-menu__item.is-selected
   .node-asset-tree-node-tools__radio::after {
   position: absolute;
   top: 4px;

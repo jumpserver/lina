@@ -86,7 +86,7 @@ export default {
         showSearch: true,
         defaultMetricMode: 'asset_all',
         defaultPermissionScope: 'effective',
-        defaultSearchTarget: 'node',
+        defaultSearchTarget: 'all',
         settingsCacheKey: 'asset-permission',
         searchLimit: 1000,
         dataSource: createAssetPermissionTreeDataSource(this.$axios),

@@ -11,7 +11,7 @@ export const NODE_ASSET_METRIC_MODES = Object.freeze([
   'permission_effective'
 ])
 
-export const NODE_ASSET_SEARCH_TARGETS = Object.freeze(['node', 'asset'])
+export const NODE_ASSET_SEARCH_TARGETS = Object.freeze(['all', 'node', 'asset'])
 
 function unwrapResults(response) {
   if (Array.isArray(response)) {
