@@ -459,6 +459,9 @@ export default {
         return []
       }
       if (!this.searchMode) {
+        if (this.$store.getters.currentOrgIsRoot) {
+          return []
+        }
         const keys = this.treeData.filter((node) => node.open).map((node) => node.id)
         return keys.length ? keys : [this.treeData[0].id]
       }
@@ -1089,11 +1092,7 @@ export default {
           await this.revealOperationNode()
           return
         }
-        const firstRoot = this.treeData[0]
-        const keys = this.treeData.filter((node) => node.open).map((node) => node.id)
-        if (firstRoot && keys.length === 0) {
-          keys.push(firstRoot.id)
-        }
+        const keys = this.initialExpandedKeys
         keys.forEach((key) => {
           this.expandedNodeIds.add(String(key))
           this.$refs.tree?.getNode(key)?.expand()
@@ -1215,7 +1214,8 @@ export default {
       const isFirstLevelState =
         this.expandedNodeIds.size === firstLevelKeySet.size &&
         [...this.expandedNodeIds].every((key) => firstLevelKeySet.has(String(key)))
-      const nextExpandedKeys = isFirstLevelState ? [] : firstLevelKeys
+      const nextExpandedKeys =
+        this.$store.getters.currentOrgIsRoot || isFirstLevelState ? [] : firstLevelKeys
 
       this.expandedNodeIds = new Set(nextExpandedKeys)
       if (this.useVirtualTree) {
