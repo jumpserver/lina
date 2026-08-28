@@ -1,7 +1,17 @@
 <template>
   <div :class="{ 'is-search-visible': treeSetting.showSearch && searchVisible }" class="x-tree">
     <div v-if="hasTreeTools" class="x-tree__header-actions">
+      <el-button
+        v-if="treeSetting.showSearch"
+        :aria-label="$t('TreeActionSearch')"
+        :class="{ 'is-active': searchVisible }"
+        class="x-tree__tool-button"
+        @click="toggleSearch"
+      >
+        <el-icon class="x-tree__tool-icon"><Search /></el-icon>
+      </el-button>
       <el-dropdown
+        v-if="hasTreeMenu"
         ref="toolsDropdown"
         :hide-timeout="160"
         placement="bottom-start"
@@ -11,20 +21,10 @@
         @command="handleTreeToolCommand"
       >
         <el-button :aria-label="$t('TreeActions')" class="x-tree__tool-button">
-          <el-icon class="x-tree__tool-icon x-tree__more-icon"><More /></el-icon>
+          <el-icon class="x-tree__tool-icon"><More /></el-icon>
         </el-button>
         <template #dropdown>
           <el-dropdown-menu class="x-tree-tools__menu">
-            <el-dropdown-item
-              v-if="treeSetting.showSearch"
-              :class="{ 'is-active': searchVisible }"
-              command="search"
-            >
-              <span class="x-tree-tools__icon"
-                ><el-icon><Search /></el-icon
-              ></span>
-              <span>{{ $t('TreeActionSearch') }}</span>
-            </el-dropdown-item>
             <el-dropdown-item
               v-if="treeSetting.showCollapse"
               :disabled="loading || treeData.length === 0"
@@ -40,7 +40,7 @@
               <span>{{ $t('Refresh') }}</span>
             </el-dropdown-item>
             <template v-if="treeSetting.showAssetScope">
-              <li v-if="hasTreeOperations" class="x-tree-tools__divider" />
+              <li v-if="hasTreeMenuOperations" class="x-tree-tools__divider" />
               <li class="x-tree-settings__title">{{ $t('AssetScope') }}</li>
               <li class="x-tree-settings__radio-list" @click.capture="closeToolsDropdown">
                 <el-radio-group :model-value="assetScope" @change="handleAssetScopeChange">
@@ -403,13 +403,14 @@ export default {
         this.setting
       )
     },
-    hasTreeOperations() {
-      return (
-        this.treeSetting.showSearch || this.treeSetting.showCollapse || this.treeSetting.showRefresh
-      )
+    hasTreeMenuOperations() {
+      return this.treeSetting.showCollapse || this.treeSetting.showRefresh
+    },
+    hasTreeMenu() {
+      return this.hasTreeMenuOperations || this.treeSetting.showAssetScope
     },
     hasTreeTools() {
-      return this.hasTreeOperations || this.treeSetting.showAssetScope
+      return this.treeSetting.showSearch || this.hasTreeMenu
     },
     defaultMenu() {
       return [
@@ -1253,9 +1254,7 @@ export default {
       this.debouncedSearch(value.trim())
     },
     handleTreeToolCommand(command) {
-      if (command === 'search') {
-        this.toggleSearch()
-      } else if (command === 'collapse') {
+      if (command === 'collapse') {
         this.collapseTreeStepwise()
       } else if (command === 'refresh') {
         this.refresh()
@@ -2172,15 +2171,15 @@ export default {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
+.x-tree__tool-button.is-active {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
 .x-tree__tool-icon {
   width: 13px;
   height: 13px;
   margin: 0;
   font-size: 13px;
-}
-
-.x-tree__more-icon {
-  transform: rotate(90deg);
 }
 
 .x-tree__body {
