@@ -328,9 +328,9 @@ function formatFileSize(size) {
   display: flex;
   width: 100%;
   max-width: 840px;
-  gap: 12px;
+  gap: 10px;
   margin: 0 auto;
-  padding: 13px 24px;
+  padding: 11px 20px;
 
   &__avatar {
     padding-top: 2px;
@@ -338,15 +338,15 @@ function formatFileSize(size) {
 
   &__main {
     min-width: 0;
-    max-width: calc(100% - 42px);
+    max-width: calc(100% - 36px);
     flex: 1;
   }
 
   &__meta {
     display: flex;
-    min-height: 25px;
+    min-height: 22px;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     color: #7c7c7c;
     font-size: 10px;
   }
@@ -360,8 +360,8 @@ function formatFileSize(size) {
   &.is-user {
     max-width: 840px;
     justify-content: flex-end;
-    padding-top: 18px;
-    padding-bottom: 18px;
+    padding-top: 15px;
+    padding-bottom: 15px;
 
     .chat-message__main {
       max-width: min(78%, 620px);
@@ -369,7 +369,7 @@ function formatFileSize(size) {
     }
 
     .chat-message__content {
-      padding: 10px 14px;
+      padding: 8px 12px;
       border: 1px solid var(--ai-primary, #1ab394);
       border-radius: 12px 12px 3px 12px;
       color: #fff;
@@ -601,9 +601,9 @@ function formatFileSize(size) {
 
 .user-avatar {
   display: grid;
-  width: 30px;
-  height: 30px;
-  flex: 0 0 30px;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
   margin-top: 2px;
   place-items: center;
   border: 1px solid #e6e8ef;
@@ -667,32 +667,28 @@ function formatFileSize(size) {
 
 .message-actions {
   display: flex;
-  min-height: 34px;
+  min-height: 30px;
   align-items: center;
-  gap: 6px;
-  margin-top: 8px;
+  gap: 2px;
+  margin-top: 6px;
   transition: opacity 0.18s ease;
 
   button {
     display: inline-flex;
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     align-items: center;
     justify-content: center;
     padding: 0;
-    border: 1px solid #e2e7eb;
-    border-radius: 9px;
+    border: 0;
+    border-radius: 7px;
     color: #737c89;
-    background: #fff;
-    box-shadow: 0 1px 2px rgb(28 42 56 / 6%);
+    background: transparent;
     cursor: pointer;
     font-size: 15px;
     transition:
       color 0.16s ease,
-      border-color 0.16s ease,
-      background-color 0.16s ease,
-      box-shadow 0.16s ease,
-      transform 0.16s ease;
+      background-color 0.16s ease;
 
     .el-icon {
       width: 16px;
@@ -703,15 +699,11 @@ function formatFileSize(size) {
 
     &:hover {
       color: var(--ai-primary-dark, #148f76);
-      border-color: rgb(26 179 148 / 35%);
       background: var(--ai-primary-light, #e8f7f3);
-      box-shadow: 0 3px 8px rgb(20 143 118 / 12%);
-      transform: translateY(-1px);
     }
 
     &:active {
-      box-shadow: none;
-      transform: translateY(0);
+      background: var(--ai-primary-light-2, #d1efe8);
     }
 
     &:focus-visible {
@@ -722,12 +714,10 @@ function formatFileSize(size) {
     &:disabled {
       cursor: not-allowed;
       opacity: 0.45;
-      transform: none;
     }
 
     &.is-success {
       color: var(--ai-primary-dark, #148f76);
-      border-color: rgb(26 179 148 / 25%);
       background: var(--ai-primary-light, #e8f7f3);
     }
   }
@@ -745,8 +735,8 @@ function formatFileSize(size) {
   font-size: 10px;
 
   button {
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
 
     .el-icon {
       width: 13px;

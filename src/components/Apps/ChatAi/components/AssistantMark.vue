@@ -26,8 +26,8 @@ defineProps({
 
 <style lang="scss" scoped>
 .assistant-mark {
-  --mark-size: 38px;
-  --mark-radius: 10px;
+  --mark-size: 34px;
+  --mark-radius: 9px;
   position: relative;
   display: inline-flex;
   width: var(--mark-size);
@@ -37,13 +37,13 @@ defineProps({
   justify-content: center;
 
   &--small {
-    --mark-size: 28px;
-    --mark-radius: 8px;
+    --mark-size: 26px;
+    --mark-radius: 7px;
   }
 
   &--large {
-    --mark-size: 64px;
-    --mark-radius: 16px;
+    --mark-size: 56px;
+    --mark-radius: 14px;
   }
 
   &__core {
@@ -56,7 +56,7 @@ defineProps({
     border-radius: var(--mark-radius);
     color: #fff;
     background: var(--el-color-primary, #1ab394);
-    box-shadow: 0 5px 14px rgb(20 143 118 / 18%);
+    box-shadow: 0 4px 12px rgb(20 143 118 / 17%);
   }
 
   svg {

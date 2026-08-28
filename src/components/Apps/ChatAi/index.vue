@@ -177,7 +177,7 @@ const iframeSource = computed(() => {
 const assistantIcon = getAssetUrl('img/ai-assistant.svg')
 const LAUNCHER_POSITION_KEY = 'chat_ai_launcher_position'
 const LAUNCHER_HIDDEN_KEY = 'chat_ai_launcher_hidden'
-const LAUNCHER_SIZE = 50
+const LAUNCHER_SIZE = 44
 const RESTORE_HEIGHT = 46
 const VIEWPORT_GAP = 12
 const dragState = {
@@ -374,8 +374,8 @@ onBeforeUnmount(() => {
   position: fixed;
   right: 18px;
   bottom: calc(116px + env(safe-area-inset-bottom, 0px));
-  width: 50px;
-  height: 50px;
+  width: 44px;
+  height: 44px;
   pointer-events: auto;
 
   &:hover .assistant-launcher__hide,
@@ -397,26 +397,23 @@ onBeforeUnmount(() => {
 
 .assistant-launcher {
   display: grid;
-  width: 50px;
-  height: 50px;
-  padding: 4px;
-  border: 1px solid var(--ai-border);
-  border-radius: 12px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
   color: var(--ai-text);
-  background: #fff;
-  box-shadow: 0 8px 24px rgb(24 43 38 / 16%);
+  background: transparent;
   cursor: grab;
   isolation: isolate;
   place-items: center;
   touch-action: none;
   transition:
     transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
+    filter 0.2s ease;
 
   &:hover {
-    border-color: var(--ai-primary);
-    box-shadow: 0 12px 30px rgb(24 43 38 / 20%);
+    filter: drop-shadow(0 7px 8px rgb(24 43 38 / 18%));
     transform: translateY(-2px);
   }
 
@@ -427,9 +424,8 @@ onBeforeUnmount(() => {
 
   img {
     display: block;
-    width: 42px;
-    height: 42px;
-    border-radius: 9px;
+    width: 44px;
+    height: 44px;
     pointer-events: none;
   }
 
@@ -668,14 +664,12 @@ onBeforeUnmount(() => {
 
 @media (max-width: 620px) {
   .assistant-launcher {
-    width: 50px;
-    height: 50px;
-    padding: 4px;
-    border-radius: 12px;
+    width: 44px;
+    height: 44px;
 
     img {
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
     }
   }
 
