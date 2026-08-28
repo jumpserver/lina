@@ -83,7 +83,7 @@ export default {
             treeSetting: {
               ...this.treeSetting,
               showAssets,
-              showMenu: false,
+              showMenu: this.treeSetting.showMenu == null ? false : this.treeSetting.showMenu,
               showRefresh: true,
               showCreate: true,
               showUpdate: true,
