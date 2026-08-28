@@ -333,7 +333,9 @@ export default {
       })
 
       const treeViewSelector = treePanel.querySelector('.tree-view-selector')
-      const headerActions = treePanel.querySelector('.x-tree__header-actions')
+      const headerActions = treePanel.querySelector(
+        '.node-asset-tree__header-actions, .x-tree__header-actions'
+      )
       const headerWidth =
         (treeViewSelector?.scrollWidth || 0) + (headerActions?.offsetWidth || 0) + TREE_HEADER_GAP
       const minimumFitWidth = Math.max(this.treeMinWidth, TREE_FIT_MIN_WIDTH, headerWidth)
@@ -397,6 +399,12 @@ export default {
     },
     refreshAssetRelationAmounts(nodeIds) {
       return this.$refs.AutoDataZTree?.refreshAssetRelationAmounts?.(nodeIds)
+    },
+    reloadVisibleMetrics(options) {
+      return this.$refs.AutoDataZTree?.reloadVisibleMetrics?.(options)
+    },
+    invalidateNormalMetrics() {
+      return this.$refs.AutoDataZTree?.invalidateNormalMetrics?.()
     },
     reloadTable() {
       this.$refs.ListTable.reloadTable()
@@ -518,7 +526,7 @@ $origin-color: #ffffff;
 
 .tree-toggle {
   position: absolute;
-  top: 40px;
+  top: 0;
   left: 0;
   z-index: 2;
   display: flex;
@@ -553,10 +561,6 @@ $origin-color: #ffffff;
     color: var(--el-color-primary);
     background: var(--el-color-primary-light-9);
   }
-}
-
-.tree-table-content:has(.x-tree.is-search-visible) .tree-toggle {
-  top: 87px;
 }
 
 .tree-table-content:hover .tree-toggle,

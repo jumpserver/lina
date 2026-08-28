@@ -1,12 +1,18 @@
 <template>
-  <div :class="{ 'is-x-tree': treeComponent === 'XTree' }" class="tree-tab">
+  <div
+    :class="{
+      'is-node-asset-tree': activeTreeComponent === 'NodeAssetTree',
+      'is-x-tree': isModernTree
+    }"
+    class="tree-tab"
+  >
     <div
       v-if="tabIndices.length > 0"
-      :class="{ 'has-tree-actions': treeComponent === 'XTree' }"
+      :class="{ 'has-tree-actions': isModernTree }"
       class="tree-view-header"
     >
       <el-dropdown
-        :disabled="tabIndices.length === 1"
+        :disabled="!hasMultipleTreeViews"
         :hide-timeout="160"
         placement="bottom-start"
         popper-class="tree-view-popper"
@@ -16,8 +22,12 @@
         @visible-change="treeViewDropdownVisible = $event"
       >
         <button
-          :class="{ 'is-open': treeViewDropdownVisible }"
+          :class="{
+            'is-open': treeViewDropdownVisible,
+            'is-static': !hasMultipleTreeViews
+          }"
           class="tree-view-selector"
+          :disabled="!hasMultipleTreeViews"
           type="button"
         >
           <i
@@ -27,7 +37,9 @@
             class="tree-view-selector__icon"
           />
           <span class="tree-view-selector__label">{{ activeTreeItem?.title }}</span>
-          <el-icon class="tree-view-selector__arrow"><ArrowDown /></el-icon>
+          <el-icon v-if="hasMultipleTreeViews" class="tree-view-selector__arrow">
+            <ArrowDown />
+          </el-icon>
         </button>
         <template #dropdown>
           <el-dropdown-menu class="tree-view-menu">
@@ -58,12 +70,13 @@
       <slot>
         <keep-alive v-if="flag">
           <component
-            :is="treeComponent"
+            :is="activeTreeComponent"
             :key="componentKey"
             ref="AutoDataZTree"
             :setting="activeTreeSetting"
             @tree-init-finish="$emit('tree-init-finish', $event)"
             @url-change="handleUrlChange"
+            v-on="forwardedTreeEventListeners"
           >
             <template #rMenu="{ data }">
               <div>
@@ -79,16 +92,38 @@
 
 <script>
 import AutoDataZTree from '@/components/Tree/AutoDataZTree/index.vue'
+import NodeAssetTree from '@/components/Tree/NodeAssetTree/index.vue'
 import XTree from '@/components/Tree/XTree/index.vue'
 
 const ACTIVE_TREE_TAB_KEY = 'activeTreeTab'
+const FORWARDED_TREE_EVENTS = Object.freeze([
+  'children-truncated',
+  'metric-change',
+  'permission-scope-change',
+  'search-state-change',
+  'select',
+  'selected'
+])
 
 export default {
   name: 'TabTree',
   components: {
     AutoDataZTree,
+    NodeAssetTree,
     XTree
   },
+  emits: [
+    'children-truncated',
+    'metric-change',
+    'permission-scope-change',
+    'search-state-change',
+    'select',
+    'selected',
+    'tab-click',
+    'tree-init-finish',
+    'update:activeMenu',
+    'urlChange'
+  ],
   props: {
     submenu: {
       type: Array,
@@ -129,6 +164,23 @@ export default {
     },
     activeTreeItem() {
       return this.tabIndices.find((item) => item.name === this.iActiveMenu) || this.tabIndices[0]
+    },
+    hasMultipleTreeViews() {
+      return this.tabIndices.length > 1
+    },
+    activeTreeComponent() {
+      return this.activeTreeItem?.treeComponent || this.treeComponent
+    },
+    isModernTree() {
+      return this.activeTreeComponent === 'XTree' || this.activeTreeComponent === 'NodeAssetTree'
+    },
+    forwardedTreeEventListeners() {
+      // Vue component events do not bubble through dynamic component wrappers.
+      // Forward only the public tree contract; callbacks remain owned by the
+      // child setting and are not invoked again here.
+      return Object.fromEntries(
+        FORWARDED_TREE_EVENTS.map((event) => [event, (...args) => this.$emit(event, ...args)])
+      )
     }
   },
   watch: {
@@ -164,6 +216,12 @@ export default {
     },
     refreshAssetRelationAmounts(nodeIds) {
       return this.$refs.AutoDataZTree?.refreshAssetRelationAmounts?.(nodeIds)
+    },
+    reloadVisibleMetrics(options) {
+      return this.$refs.AutoDataZTree?.reloadVisibleMetrics?.(options)
+    },
+    invalidateNormalMetrics() {
+      return this.$refs.AutoDataZTree?.invalidateNormalMetrics?.()
     },
     handleUrlChange(url) {
       this.$emit('urlChange', url)
@@ -237,6 +295,25 @@ export default {
   position: relative;
 }
 
+.tree-tab.is-node-asset-tree {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+
+  > .tree-view-header {
+    flex: none;
+  }
+
+  > :deep(.node-asset-tree.is-fill-height) {
+    flex: 1 1 auto;
+  }
+
+  > :deep(.node-asset-tree:not(.is-fill-height)) {
+    flex: none;
+  }
+}
+
 .tree-view-header {
   box-sizing: border-box;
   display: flex;
@@ -265,11 +342,15 @@ export default {
     color 0.15s ease,
     background-color 0.15s ease;
 
-  &:hover,
-  &:focus-visible {
+  &:not(.is-static):hover,
+  &:not(.is-static):focus-visible {
     outline: none;
     color: var(--el-color-primary);
     background: var(--el-fill-color-light);
+  }
+
+  &.is-static {
+    cursor: default;
   }
 }
 

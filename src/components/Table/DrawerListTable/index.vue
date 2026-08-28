@@ -98,7 +98,8 @@ export default {
         'close-drawer': this.handleDrawerRequestClose,
         'detail-delete-success': this.handleDetailDeleteSuccess,
         'open-update-drawer': this.handleDrawerRequestUpdate,
-        'reload-table': this.reloadTable
+        'reload-table': this.reloadTable,
+        submitSuccess: this.handleDrawerSubmitSuccess
       }
     },
     mergedDrawerProps() {
@@ -547,6 +548,9 @@ export default {
     },
     handleDetailDeleteSuccess(payload) {
       this.$emit('detail-delete-success', payload)
+    },
+    handleDrawerSubmitSuccess(payload) {
+      this.$emit('resource-change', payload)
     },
     handleDrawerShellClose() {
       this.$store.dispatch('common/cleanDrawerActionMeta')

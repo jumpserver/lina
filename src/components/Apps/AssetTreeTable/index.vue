@@ -97,9 +97,14 @@ export default {
         treeComponent: 'XTree',
         submenu: [
           {
-            title: this.$t('NodeTree'),
+            title:
+              this.treeSetting?.treeTitle ||
+              (this.treeSetting?.treeComponent === 'NodeAssetTree'
+                ? this.$t('NodeAssetTree')
+                : this.$t('NodeTree')),
             name: 'CustomTree',
             icon: 'fa-solid fa-tree',
+            treeComponent: this.treeSetting?.treeComponent || 'XTree',
             treeSetting: {
               showAssets,
               showMenu: false,
@@ -135,6 +140,7 @@ export default {
             title: this.$t('TypeTree'),
             icon: 'fa-solid fa-list-ul',
             name: 'BuiltinTree',
+            treeComponent: 'XTree',
             treeSetting: {
               showRefresh: true,
               showCollapse: true,
@@ -180,6 +186,15 @@ export default {
   methods: {
     reloadTable() {
       this.$refs.TreeList.reloadTable()
+    },
+    getTreeSnapshot() {
+      return this.$refs.TreeList?.getTreeSnapshot?.()
+    },
+    reloadVisibleTreeMetrics(options) {
+      return this.$refs.TreeList?.reloadVisibleMetrics?.(options)
+    },
+    invalidateNormalMetrics() {
+      return this.$refs.TreeList?.invalidateNormalMetrics?.()
     },
     toggleRowSelection(row, isSelected) {
       return this.$refs.TreeList?.toggleRowSelection(row, isSelected)
