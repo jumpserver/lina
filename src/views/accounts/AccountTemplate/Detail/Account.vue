@@ -22,6 +22,11 @@
       :url="secretUrl"
       :visible.sync="showViewSecretDialog"
     />
+    <ViewOTPCode
+      v-if="showViewOTPCodeDialog"
+      :account="account"
+      :visible.sync="showViewOTPCodeDialog"
+    />
   </div>
 </template>
 
@@ -33,12 +38,14 @@ import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableForma
 
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret'
+import ViewOTPCode from '@/components/Apps/AccountListTable/ViewOTPCode'
 
 export default {
   name: 'AccountTemplateChangeSecret',
   components: {
     TwoCol,
     ViewSecret,
+    ViewOTPCode,
     QuickActions,
     GenericListTable
   },
@@ -54,8 +61,10 @@ export default {
     return {
       detailDrawer: () => import('@/views/accounts/AccountDiscover/TaskDetail/index.vue'),
       visible: false,
+      account: {},
       secretUrl: '',
       showViewSecretDialog: false,
+      showViewOTPCodeDialog: false,
       quickActions: [
         {
           title: this.$t('SyncUpdateAccountInfo'),
@@ -118,6 +127,20 @@ export default {
               hasClone: false,
               moreActionsTitle: this.$t('More'),
               extraActions: [
+                {
+                  name: 'OTPCode',
+                  title: this.$t('OTPCode'),
+                  has: ({ row }) => !!row.has_otp_secret_key,
+                  can: this.$hasPerm('accounts.view_accountsecret'),
+                  type: 'primary',
+                  callback: ({ row }) => {
+                    vm.account = row
+                    vm.showViewOTPCodeDialog = false
+                    setTimeout(() => {
+                      vm.showViewOTPCodeDialog = true
+                    })
+                  }
+                },
                 {
                   name: 'View',
                   title: this.$t('View'),

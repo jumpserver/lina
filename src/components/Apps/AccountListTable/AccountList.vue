@@ -13,6 +13,11 @@
       :url="secretUrl"
       :visible.sync="showViewSecretDialog"
     />
+    <ViewOTPCode
+      v-if="showViewOTPCodeDialog"
+      :account="account"
+      :visible.sync="showViewOTPCodeDialog"
+    />
     <UpdateSecretInfo
       v-if="showUpdateSecretDialog"
       :account="account"
@@ -60,6 +65,7 @@ import {
   SecretViewerFormatter
 } from '@/components/Table/TableFormatters'
 import ViewSecret from './ViewSecret.vue'
+import ViewOTPCode from './ViewOTPCode.vue'
 import UpdateSecretInfo from './UpdateSecretInfo.vue'
 import ResultDialog from './BulkCreateResultDialog.vue'
 import AccountCreateUpdate from './AccountCreateUpdate.vue'
@@ -71,6 +77,7 @@ export default {
   name: 'AccountListTable',
   components: {
     ViewSecret,
+    ViewOTPCode,
     ResultDialog,
     DrawerListTable,
     UpdateSecretInfo,
@@ -157,6 +164,7 @@ export default {
       currentAccountColumn: {},
       showPasswordHistoryDialog: false,
       showViewSecretDialog: false,
+      showViewOTPCodeDialog: false,
       showUpdateSecretDialog: false,
       showResultDialog: false,
       showAddDialog: false,

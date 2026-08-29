@@ -59,6 +59,21 @@ export const accountOtherActions = vm => {
       }
     },
     {
+      name: 'OTPCode',
+      title: vm.$t('OTPCode'),
+      has: ({ row }) => !!row.has_otp_secret_key,
+      can: vm.$hasPerm('accounts.view_accountsecret'),
+      type: 'primary',
+      order: 2,
+      callback: ({ row }) => {
+        vm.account = row
+        vm.showViewOTPCodeDialog = false
+        setTimeout(() => {
+          vm.showViewOTPCodeDialog = true
+        })
+      }
+    },
+    {
       name: 'Update',
       title: vm.$t('Edit'),
       can: ({ row }) => {

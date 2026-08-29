@@ -3,6 +3,7 @@ import Select2 from '@/components/Form/FormFields/Select2.vue'
 import AssetSelect from '@/components/Apps/AssetSelect/index.vue'
 import { Required, RequiredChange } from '@/components/Form/DataForm/rules'
 import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
+import OTPSecretInput from '@/components/Apps/AccountCreateUpdateForm/OTPSecretInput.vue'
 
 export const accountFieldsMeta = (vm) => {
   const defaultPrivilegedAccounts = ['root', 'administrator']
@@ -214,6 +215,17 @@ export const accountFieldsMeta = (vm) => {
         }
       },
       hidden: (formValue) => formValue.secret_type !== 'api_key' || vm.addTemplate
+    },
+    otp_secret_key: {
+      label: vm.$t('OTPSecretKey'),
+      component: OTPSecretInput,
+      helpText: vm.$t('OTPSecretKeyHelpText'),
+      el: {
+        get disabled() {
+          return vm.isDisabled
+        }
+      },
+      hidden: () => vm.addTemplate
     },
     secret_type: {
       type: 'radio-group',

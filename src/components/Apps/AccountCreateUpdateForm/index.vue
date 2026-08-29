@@ -77,6 +77,7 @@ export default {
             'access_key',
             'passphrase',
             'api_key',
+            'otp_secret_key',
             'secret_reset'
           ]
         ],
@@ -160,6 +161,9 @@ export default {
       const secretType = form.secret_type || 'password'
       form.secret = form[secretType]
       form.secret = this.encryptPassword ? encryptPassword(form.secret) : form.secret
+      if (form.otp_secret_key) {
+        form.otp_secret_key = encryptPassword(form.otp_secret_key)
+      }
 
       // 如果不删除会明文显示
       delete form[secretType]
