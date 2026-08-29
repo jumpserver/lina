@@ -8,19 +8,36 @@
         v-bind="$data"
       />
     </IBox>
+    <Dialog
+      :visible.sync="testDialogVisible"
+      :title="$t('EmailTest')"
+      :disabled-status="testButtonLoading"
+      width="500px"
+      @confirm="handleTestConfirm"
+      @cancel="handleTestCancel"
+    >
+      <el-form label-width="100px">
+        <el-form-item :label="$t('Recipient')" :error="testRecipientError">
+          <el-input
+            v-model.trim="testRecipient"
+            @keyup.enter.native="handleTestConfirm"
+          />
+        </el-form-item>
+      </el-form>
+    </Dialog>
   </div>
 </template>
 
 <script>
-import { IBox } from '@/components'
+import { Dialog, IBox } from '@/components'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { testEmailSetting } from '@/api/settings'
 import rules from '@/components/Form/DataForm/rules'
-import EmailTemplate from './EmailTemplate.vue'
 
 export default {
   name: 'Email',
   components: {
+    Dialog,
     GenericCreateUpdateForm,
     IBox
   },
@@ -41,24 +58,13 @@ export default {
             'EMAIL_FROM',
             'EMAIL_SECURITY_PROTOCOL'
           ]
-        ],
-        [this.$t('Other'), ['CREATE_USER_MSG']],
-        [this.$t('Test'), ['EMAIL_RECIPIENT']]
+        ]
       ],
       fieldsMeta: {
         EMAIL_PORT: {
           hidden: formValue => formValue.EMAIL_PROTOCOL !== 'smtp'
         },
-        EMAIL_CUSTOM_USER_CREATED_BODY: {
-          el: {
-            type: 'textarea',
-            rows: 3
-          }
-        },
         EMAIL_FROM: {
-          rules: [rules.EmailCheck]
-        },
-        EMAIL_RECIPIENT: {
           rules: [rules.EmailCheck]
         },
         EMAIL_SECURITY_PROTOCOL: {
@@ -71,12 +77,6 @@ export default {
             { label: this.$t('SSL'), value: 'ssl' },
             { label: this.$t('TLS'), value: 'tls' }
           ]
-        },
-
-        CREATE_USER_MSG: {
-          label: this.$t('EmailTemplate'),
-          component: EmailTemplate,
-          helpTip: this.$t('EmailTemplateHelpTip')
         }
       },
       afterGetFormValue(obj) {
@@ -92,30 +92,26 @@ export default {
       hasDetailInMsg: false,
       successUrl: { name: 'Msg' },
       url: '/api/v1/settings/setting/?category=email',
+      testDialogVisible: false,
+      testButtonLoading: false,
+      testRecipient: '',
+      testRecipientError: '',
+      testFormValue: {},
       moreButtons: [
         {
           title: this.$t('EmailTest'),
           loading: false,
-          callback: function (value, form, btn) {
-            const testValue = {}
-            testValue['EMAIL_FROM'] = value['EMAIL_FROM']
-            testValue['EMAIL_RECIPIENT'] = value['EMAIL_RECIPIENT']
-            btn.loading = true
-            testEmailSetting(value)
-              .then(res => {
-                vm.$message.success(res['msg'])
-              })
-              .catch(res => {
-                vm.$message.error(res['response']['data']['error'])
-              })
-              .finally(() => {
-                btn.loading = false
-              })
+          callback: function(value, form, btn) {
+            vm.testFormValue = { ...value }
+            vm.testRecipient = ''
+            vm.testRecipientError = ''
+            vm.testButtonLoading = false
+            vm.testDialogVisible = true
           }
         }
       ],
       cleanFormValue(data) {
-        Object.keys(data).forEach(function (key) {
+        Object.keys(data).forEach(function(key) {
           if (data[key] === null) {
             delete data[key]
           }
@@ -144,7 +140,41 @@ export default {
       }
     }
   },
-  methods: {}
+  methods: {
+    handleTestCancel() {
+      this.testDialogVisible = false
+      this.testButtonLoading = false
+      this.testRecipientError = ''
+    },
+    handleTestConfirm() {
+      const recipient = this.testRecipient
+      if (!recipient) {
+        this.testRecipientError = this.$t('FieldRequiredError')
+        return
+      }
+      if (!/\S+@\S+\.\S+/.test(recipient)) {
+        this.testRecipientError = this.$t('InputEmailAddress')
+        return
+      }
+
+      this.testRecipientError = ''
+      this.testButtonLoading = true
+      testEmailSetting({
+        EMAIL_FROM: this.testFormValue.EMAIL_FROM,
+        EMAIL_RECIPIENT: recipient
+      })
+        .then(res => {
+          this.$message.success(res.msg)
+          this.testDialogVisible = false
+        })
+        .catch(res => {
+          this.$message.error(res.response.data.error)
+        })
+        .finally(() => {
+          this.testButtonLoading = false
+        })
+    }
+  }
 }
 </script>
 
