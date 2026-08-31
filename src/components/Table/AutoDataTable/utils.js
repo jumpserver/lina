@@ -381,15 +381,17 @@ export class TableColumnsGenerator {
     }
 
     const formatterName = col.formatter?.name || col.formatter?.__name || ''
-    let typeWidth = 180
+    let typeWidth = 140
     if (col.contentMaxWidth) {
       typeWidth = col.contentMaxWidth
     } else if (col.prop === 'name') {
-      typeWidth = 260
+      typeWidth = 180
     } else if (col.prop === 'platform' || formatterName === 'PlatformFormatter') {
       typeWidth = 220
     } else if (formatterName === 'DateFormatter') {
-      typeWidth = 190
+      typeWidth = 160
+    } else if (formatterName === 'ChoicesFormatter') {
+      typeWidth = 100
     } else if (col.prop === 'labels' || col.prop === 'protocols' || col.isCustomRender) {
       typeWidth = 280
     }
@@ -397,20 +399,10 @@ export class TableColumnsGenerator {
     const preferredWidth = Math.max(getColumnHeaderWidth(col), typeWidth)
     const preferredWidthPx = `${preferredWidth}px`
 
-    const configuredWidth = col.width ?? col.minWidth
-    const configuredPixels =
-      typeof configuredWidth === 'number'
-        ? configuredWidth
-        : Number.parseFloat(String(configuredWidth || '').replace(/px$/, ''))
-    const isPixelWidth =
-      typeof configuredWidth === 'number' || /^\d+(\.\d+)?px$/.test(String(configuredWidth))
-
-    if (!configuredWidth || !isPixelWidth || configuredPixels < preferredWidth) {
-      if (col.width) {
-        col.width = preferredWidthPx
-      } else {
-        col.minWidth = preferredWidthPx
-      }
+    // An explicitly configured width is authoritative. Only columns without a
+    // width participate in Element Plus' fit calculation through minWidth.
+    if (col.width == null && col.minWidth == null) {
+      col.minWidth = preferredWidthPx
     }
     return col
   }
@@ -442,7 +434,6 @@ export class TableColumnsGenerator {
       col.align = 'center'
       col.headerAlign = 'center'
       col.fixed = this.config.actionsColumnPosition === 'start' ? 'left' : 'right'
-      col.fitWidth = false
       col.resizable = false
     }
 
@@ -460,25 +451,22 @@ export class TableColumnsGenerator {
       const configuredWidth = col.width ?? col.minWidth
       col.width = configuredWidth || expandColumnWidth
       delete col.minWidth
-      col.fitWidth = false
     } else if (isIndexColumn) {
       const configuredWidth = col.width ?? col.minWidth
       col.width = configuredWidth || indexColumnWidth
       delete col.minWidth
-      col.fitWidth = false
     } else if (isBooleanField) {
-      col.width = `${getBooleanColumnWidth(col)}px`
+      const configuredWidth = col.width ?? col.minWidth
+      col.width = configuredWidth || `${getBooleanColumnWidth(col)}px`
       delete col.minWidth
-      col.fitWidth = false
     } else if (isAmountField) {
       const configuredWidth = col.width ?? col.minWidth
       col.width = configuredWidth || `${getAmountColumnWidth(col)}px`
       delete col.minWidth
-      col.fitWidth = false
     } else if (isIdField) {
-      col.width = '308px'
+      const configuredWidth = col.width ?? col.minWidth
+      col.width = configuredWidth || '308px'
       delete col.minWidth
-      col.fitWidth = false
     }
 
     const isCompactColumn =

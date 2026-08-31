@@ -186,7 +186,7 @@ export default {
         },
         columnsMeta: {
           name: {
-            minWidth: '60px',
+            minWidth: '180px',
             formatterArgs: {
               can: () => vm.$hasPerm('accounts.view_account'),
               getRoute: ({ row }) => ({
@@ -251,7 +251,7 @@ export default {
             }
           },
           username: {
-            minWidth: '60px',
+            minWidth: '180px',
             formatter: function (row) {
               if (row.ds && row.ds['domain_name']) {
                 return `${row.username}@${row.ds['domain_name']}`

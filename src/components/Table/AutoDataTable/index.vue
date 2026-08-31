@@ -36,7 +36,6 @@ import _ from 'lodash'
 const CELL_WHEEL_GESTURE_GAP = 120
 const CELL_WHEEL_ACCELERATION_RATIO = 1.35
 const CELL_WHEEL_ACCELERATION_EPSILON = 0.5
-const COLUMN_WIDTH_CHANGE_TOLERANCE = 1
 const TABLE_CELL_SELECTOR = '.el-table__body td.el-table__cell .cell'
 const DEFAULT_HIDDEN_COLUMN_NAMES = new Set(['id'])
 
@@ -130,12 +129,8 @@ export default {
       isDeactivated: false,
       tableColumnsStorage: this.getTableColumnsStorage(),
       sortable: null,
-      columnResizeObserver: null,
-      columnResizeFrame: null,
-      columnContainerWidth: 0,
       pinningMediaQuery: null,
       pinningDisabled: typeof window !== 'undefined' ? window.innerWidth < 992 : false,
-      naturalColumnWidths: {},
       pinnedColumnProps: [],
       cellWheelGesture: null,
       inited: false
@@ -182,20 +177,6 @@ export default {
   },
   mounted() {
     this.initPinningMediaQuery()
-    if (typeof ResizeObserver === 'undefined') {
-      return
-    }
-    this.columnResizeObserver = new ResizeObserver(([entry]) => {
-      const width = Math.floor(entry?.contentRect.width || 0)
-      if (!width || Math.abs(width - this.columnContainerWidth) <= COLUMN_WIDTH_CHANGE_TOLERANCE) {
-        return
-      }
-
-      this.columnContainerWidth = width
-      this.scheduleColumnFit(width)
-    })
-    this.columnResizeObserver.observe(this.$el)
-    this.initializeStaticColumnWidths()
   },
   beforeUnmount() {
     this.clearCellWheelGesture()
@@ -206,14 +187,10 @@ export default {
         this.pinningMediaQuery.removeListener(this.handlePinningMediaChange)
       }
     }
-    this.columnResizeObserver?.disconnect()
-    this.cancelColumnFit()
   },
   deactivated() {
     this.isDeactivated = true
     this.clearCellWheelGesture()
-    this.cancelColumnFit()
-    this.columnContainerWidth = 0
   },
   activated() {
     this.isDeactivated = false
@@ -288,138 +265,6 @@ export default {
     },
     handlePinningMediaChange(event) {
       this.pinningDisabled = event.matches
-    },
-    scheduleColumnFit(containerWidth) {
-      this.cancelColumnFit()
-      this.columnResizeFrame = requestAnimationFrame(() => {
-        this.columnResizeFrame = null
-        this.fitColumnsToContainer(undefined, containerWidth)
-      })
-    },
-    cancelColumnFit() {
-      if (!this.columnResizeFrame) {
-        return
-      }
-      cancelAnimationFrame(this.columnResizeFrame)
-      this.columnResizeFrame = null
-    },
-    initializeStaticColumnWidths() {
-      if (!Array.isArray(this.iConfig.columns)) {
-        return
-      }
-
-      const columns = this.iConfig.columns.map((currentColumn) => {
-        const col = { ...currentColumn }
-        col.width = col.width || col.minWidth
-        delete col.minWidth
-        return col
-      })
-
-      this.naturalColumnWidths = Object.fromEntries(columns.map((item) => [item.prop, item.width]))
-      const containerWidth = Math.floor(this.$el.clientWidth || 0)
-      if (containerWidth) {
-        this.columnContainerWidth = containerWidth
-      }
-      this.fitColumnsToContainer(columns, containerWidth)
-    },
-    fitColumnsToContainer(sourceColumns = this.iConfig.columns, observedWidth = 0) {
-      if (
-        !Array.isArray(sourceColumns) ||
-        sourceColumns.length === 0 ||
-        Object.keys(this.naturalColumnWidths).length === 0
-      ) {
-        return
-      }
-
-      const containerWidth = observedWidth || this.$el.clientWidth
-      if (!containerWidth) {
-        this.commitColumnWidths(sourceColumns)
-        return
-      }
-
-      const selectionColumn = this.$el.querySelector(
-        [
-          '.el-table__header .el-table-column--selection',
-          '.el-table__body-header .el-table-column--selection'
-        ].join(', ')
-      )
-      const selectionWidth = selectionColumn?.getBoundingClientRect().width || 0
-      const availableWidth = Math.max(0, Math.floor(containerWidth - selectionWidth - 2))
-
-      const naturalColumns = sourceColumns.map((currentColumn) => {
-        const col = { ...currentColumn }
-        const naturalWidth = this.naturalColumnWidths[col.prop]
-        if (naturalWidth) {
-          col.width = naturalWidth
-          delete col.minWidth
-        }
-        return col
-      })
-      const pixelWidths = naturalColumns.map((col) => Number.parseFloat(col.width) || 0)
-      const naturalTotalWidth = pixelWidths.reduce((total, width) => total + width, 0)
-      if (!naturalTotalWidth) {
-        return
-      }
-
-      let flexibleColumnIndexes = naturalColumns
-        .map((col, index) => ({ col, index }))
-        .filter(({ col }) => !col.fixed && col.fitWidth !== false)
-        .map(({ index }) => index)
-
-      // Compact-only views (for example, id + actions) have no naturally flexible
-      // column. Let the first data column absorb the empty space so the fixed-width
-      // actions column still reaches the right edge of the table.
-      if (naturalTotalWidth < availableWidth && flexibleColumnIndexes.length === 0) {
-        const fallbackIndex = naturalColumns.findIndex(
-          (col) => col.prop !== 'actions' && !col.fixed
-        )
-        if (fallbackIndex !== -1) {
-          flexibleColumnIndexes = [fallbackIndex]
-        }
-      }
-      const flexibleColumnIndexSet = new Set(flexibleColumnIndexes)
-      const fixedTotalWidth = pixelWidths.reduce((total, width, index) => {
-        return flexibleColumnIndexSet.has(index) ? total : total + width
-      }, 0)
-      const flexibleTotalWidth = naturalTotalWidth - fixedTotalWidth
-      const flexibleAvailableWidth = Math.max(0, availableWidth - fixedTotalWidth)
-      const scale =
-        naturalTotalWidth < availableWidth && flexibleTotalWidth > 0
-          ? flexibleAvailableWidth / flexibleTotalWidth
-          : 1
-      const fittedColumns = naturalColumns.map((col, index) => {
-        const isFlexible = flexibleColumnIndexSet.has(index)
-        const width = Math.floor(pixelWidths[index] * (isFlexible ? scale : 1))
-        col.width = `${width}px`
-        return col
-      })
-
-      if (flexibleColumnIndexes.length > 0) {
-        const fittedTotalWidth = fittedColumns.reduce(
-          (total, col) => total + (Number.parseFloat(col.width) || 0),
-          0
-        )
-        const remainingWidth = Math.max(0, availableWidth - fittedTotalWidth)
-        if (remainingWidth > 0) {
-          const targetIndex = flexibleColumnIndexes[0]
-          const targetWidth = Number.parseFloat(fittedColumns[targetIndex].width) || 0
-          fittedColumns[targetIndex].width = `${targetWidth + remainingWidth}px`
-        }
-      }
-
-      this.commitColumnWidths(fittedColumns)
-    },
-    commitColumnWidths(columns) {
-      const currentSignature = this.iConfig.columns.map((item) => [item.prop, item.width])
-      const nextSignature = columns.map((item) => [item.prop, item.width])
-      if (_.isEqual(currentSignature, nextSignature)) {
-        return
-      }
-
-      this.iConfig = {
-        ...this.iConfig,
-        columns
-      }
     },
     openColumnSetting() {
       this.$refs.columnSettingPopover?.open()
@@ -652,7 +497,6 @@ export default {
       this.iConfig.columns = this.applyPinnedColumns(showFields)
 
       this.$nextTick(() => {
-        this.initializeStaticColumnWidths()
         if (reload && this.$refs.dataTable) {
           this.$refs.dataTable.getList()
         }
