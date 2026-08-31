@@ -2342,5 +2342,18 @@
   "OfflineImageDeleteConfirm": "Удалить архив автономного образа «{filename}»? Будет удалён только исходный архив в Core. Образы, уже загруженные на поставщиков приложений, сохранятся.",
   "OfflineImageUploadCancelled": "Запрос на загрузку отменён. Обновите список образов, чтобы проверить, сохранился ли архив.",
   "OfflineImageUploadTimeout": "Время ожидания запроса на загрузку истекло. Обновите список образов, чтобы проверить результат, и при необходимости загрузите архив снова.",
-  "OfflineImageUploadNetworkError": "Соединение при загрузке прервано. Проверьте сеть и обновите список образов перед повторной попыткой."
+  "OfflineImageUploadNetworkError": "Соединение при загрузке прервано. Проверьте сеть и обновите список образов перед повторной попыткой.",
+  "ExpireNotice": "Expiration notice",
+  "SystemExpireNotice": "System expiration notice",
+  "ControlledByGlobalSettings": "Controlled by global system settings",
+  "GlobalExpireNoticePolicy": "Notify once {first} days before expiration; notify daily during the last {daily} days",
+  "ModifyGlobalSettings": "Modify global settings",
+  "ShortExpireNotice": "Near-expiration notice",
+  "ShortExpireNoticeMinutes": "Notify in advance",
+  "Minutes": "minutes",
+  "ShortExpireNoticePreview": "A reminder will be sent at {time}",
+  "ShortExpireNoticeDefaultHelp": "The initial value comes from system settings and is saved separately for this authorization.",
+  "ShortExpireNoticeFutureError": "Enter a positive whole number that keeps the reminder time in the future.",
+  "DefaultShortNoticeMinutes": "Default near-expiration notice",
+  "DefaultShortNoticeMinutesHelpText": "Default advance minutes offered when enabling a near-expiration notice. Existing authorizations are not changed."
 }

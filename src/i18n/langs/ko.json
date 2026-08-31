@@ -2342,5 +2342,18 @@
   "OfflineImageDeleteConfirm": "오프라인 이미지 아카이브 \"{filename}\"을(를) 삭제하시겠습니까? Core의 원본 아카이브만 삭제됩니다. 애플리케이션 제공자에 이미 로드된 이미지는 유지됩니다.",
   "OfflineImageUploadCancelled": "업로드 요청이 취소되었습니다. 이미지 목록을 새로 고쳐 아카이브가 저장되었는지 확인하세요.",
   "OfflineImageUploadTimeout": "업로드 요청 시간이 초과되었습니다. 이미지 목록을 새로 고쳐 결과를 확인한 후 필요한 경우 다시 업로드하세요.",
-  "OfflineImageUploadNetworkError": "업로드 연결이 중단되었습니다. 네트워크를 확인하고 이미지 목록을 새로 고친 후 다시 시도하세요."
+  "OfflineImageUploadNetworkError": "업로드 연결이 중단되었습니다. 네트워크를 확인하고 이미지 목록을 새로 고친 후 다시 시도하세요.",
+  "ExpireNotice": "Expiration notice",
+  "SystemExpireNotice": "System expiration notice",
+  "ControlledByGlobalSettings": "Controlled by global system settings",
+  "GlobalExpireNoticePolicy": "Notify once {first} days before expiration; notify daily during the last {daily} days",
+  "ModifyGlobalSettings": "Modify global settings",
+  "ShortExpireNotice": "Near-expiration notice",
+  "ShortExpireNoticeMinutes": "Notify in advance",
+  "Minutes": "minutes",
+  "ShortExpireNoticePreview": "A reminder will be sent at {time}",
+  "ShortExpireNoticeDefaultHelp": "The initial value comes from system settings and is saved separately for this authorization.",
+  "ShortExpireNoticeFutureError": "Enter a positive whole number that keeps the reminder time in the future.",
+  "DefaultShortNoticeMinutes": "Default near-expiration notice",
+  "DefaultShortNoticeMinutesHelpText": "Default advance minutes offered when enabling a near-expiration notice. Existing authorizations are not changed."
 }
