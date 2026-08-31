@@ -288,9 +288,16 @@ export function useChatAi(options = {}) {
     try {
       const response = await listAssistants()
       const items = serverResults(response)
-      assistants.value = items.length ? items : [DEFAULT_ASSISTANT]
-    } catch {
-      assistants.value = [DEFAULT_ASSISTANT]
+      if (!items.length) throw new Error()
+      assistants.value = items
+      if (!items.some((item) => item.key === selectedAssistantKey.value)) {
+        selectedAssistantKey.value = items[0].key
+      }
+      return true
+    } catch (error) {
+      assistants.value = []
+      emitError(error)
+      return false
     }
   }
 
@@ -401,7 +408,7 @@ export function useChatAi(options = {}) {
 
   async function initialize() {
     if (initialized.value) return
-    await loadAssistants()
+    if (!(await loadAssistants())) return
     initialized.value = await loadConversations({ selectFirst: true })
   }
 

@@ -854,11 +854,11 @@ defineExpose({ focus, setValue, appendValue, clear, discardDraft })
 .chat-composer {
   position: relative;
   width: min(100%, 780px);
-  min-height: 80px;
+  min-height: 64px;
   margin: 0 auto;
-  padding: 12px 13px 10px;
+  padding: 7px 9px 6px;
   border: 1px solid #d9dfdd;
-  border-radius: var(--ai-radius-lg, 12px);
+  border-radius: 14px;
   background: #fff;
   box-shadow: 0 2px 10px rgb(31 49 43 / 5%);
   transition:
@@ -886,9 +886,9 @@ defineExpose({ focus, setValue, appendValue, clear, discardDraft })
   textarea {
     display: block;
     width: 100%;
-    min-height: 34px;
-    max-height: 150px;
-    padding: 1px 4px 5px;
+    min-height: 28px;
+    max-height: 130px;
+    padding: 1px 3px 3px;
     overflow: auto;
     border: 0;
     outline: 0;
@@ -896,7 +896,7 @@ defineExpose({ focus, setValue, appendValue, clear, discardDraft })
     background: transparent;
     font-family: inherit;
     font-size: 13px;
-    line-height: 1.6;
+    line-height: 1.55;
     resize: none;
 
     &::placeholder {
@@ -911,16 +911,16 @@ defineExpose({ focus, setValue, appendValue, clear, discardDraft })
 
 .composer-toolbar {
   display: flex;
-  min-height: 32px;
+  min-height: 28px;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
 
   &__left {
     display: flex;
     min-width: 0;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
   }
 }
 
@@ -937,9 +937,9 @@ defineExpose({ focus, setValue, appendValue, clear, discardDraft })
 
 .attachment-item {
   position: relative;
-  width: 64px;
-  height: 64px;
-  flex: 0 0 64px;
+  width: 58px;
+  height: 58px;
+  flex: 0 0 58px;
 
   img {
     display: block;
@@ -1018,14 +1018,14 @@ defineExpose({ focus, setValue, appendValue, clear, discardDraft })
 
 .composer-icon-button {
   display: grid;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   padding: 0;
   place-items: center;
-  border: 1px solid #e9eaf0;
+  border: 1px solid transparent;
   border-radius: var(--ai-radius-sm, 8px);
   color: #747b91;
-  background: #fafafd;
+  background: transparent;
   cursor: pointer;
   transition: all 0.18s ease;
 
@@ -1048,10 +1048,10 @@ defineExpose({ focus, setValue, appendValue, clear, discardDraft })
 
 .tool-mode-chip {
   display: inline-flex;
-  height: 28px;
+  height: 26px;
   align-items: center;
   gap: 5px;
-  padding: 0 8px;
+  padding: 0 7px;
   border: 1px solid var(--ai-primary, #1ab394);
   border-radius: 999px;
   color: var(--ai-primary-dark, #148f76);
@@ -1073,7 +1073,7 @@ defineExpose({ focus, setValue, appendValue, clear, discardDraft })
 
 :global(.chat-ai-tool-dropdown .el-dropdown-menu__item) {
   display: flex;
-  min-height: 52px;
+  min-height: 46px;
   align-items: center;
   gap: 10px;
   padding: 7px 12px;
@@ -1105,7 +1105,7 @@ defineExpose({ focus, setValue, appendValue, clear, discardDraft })
 .input-hint {
   overflow: hidden;
   color: #8f959e;
-  font-size: 10px;
+  font-size: 9px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1113,12 +1113,12 @@ defineExpose({ focus, setValue, appendValue, clear, discardDraft })
 .send-button,
 .stop-button {
   display: inline-flex;
-  height: 34px;
+  height: 30px;
   align-items: center;
   justify-content: center;
   gap: 6px;
   padding: 0 12px;
-  border-radius: 9px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 10px;
   font-weight: 700;
@@ -1131,8 +1131,9 @@ defineExpose({ focus, setValue, appendValue, clear, discardDraft })
 }
 
 .send-button {
-  width: 34px;
+  width: 30px;
   padding: 0;
+  border-radius: 50%;
   border: 1px solid var(--ai-primary, #1ab394);
   color: #fff;
   background: var(--ai-primary, #1ab394);
@@ -1172,7 +1173,7 @@ defineExpose({ focus, setValue, appendValue, clear, discardDraft })
 
 .recording-strip {
   display: flex;
-  min-height: 70px;
+  min-height: 62px;
   align-items: center;
   gap: 10px;
   padding: 4px;
@@ -1227,7 +1228,7 @@ defineExpose({ focus, setValue, appendValue, clear, discardDraft })
 
 .recording-cancel,
 .recording-finish {
-  height: 31px;
+  height: 30px;
   padding: 0 10px;
   border-radius: var(--ai-radius-sm, 8px);
   cursor: pointer;

@@ -1,0 +1,95 @@
+@mixin header-actions {
+  position: absolute;
+  z-index: 4;
+  top: 5px;
+  right: 8px;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 1px;
+}
+
+@mixin search-row {
+  flex: none;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--el-border-color-lighter);
+}
+
+@mixin search-transition($name) {
+  .#{$name}-enter-active {
+    will-change: opacity, transform;
+    transition:
+      opacity 0.11s ease-out,
+      transform 0.11s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .#{$name}-enter-from {
+    opacity: 0;
+    transform: translate3d(0, -4px, 0);
+  }
+}
+
+@mixin search-control {
+  box-sizing: border-box;
+  height: 30px;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 13px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  outline: none;
+  background-color: var(--el-bg-color, #fff);
+  box-shadow: none;
+  transition: none;
+
+  &:hover,
+  &:focus,
+  &:focus-visible,
+  &:focus-within {
+    border-color: var(--color-border) !important;
+    outline: none;
+    box-shadow: none !important;
+  }
+}
+
+@mixin tool-button {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  border: none !important;
+  border-radius: 4px;
+  color: var(--color-text-primary);
+  background-color: transparent;
+
+  &:focus,
+  &:focus-visible {
+    border: none !important;
+    outline: none;
+    box-shadow: none !important;
+    color: var(--color-text-primary);
+    background-color: transparent;
+  }
+
+  &:hover {
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--color-text-primary);
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  &.is-active {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}
+
+@mixin tool-icon {
+  width: 13px;
+  height: 13px;
+  margin: 0;
+  font-size: 13px;
+}

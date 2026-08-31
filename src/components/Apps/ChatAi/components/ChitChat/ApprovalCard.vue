@@ -136,7 +136,7 @@ onBeforeUnmount(() => {
   position: relative;
   width: min(100%, 620px);
   margin-top: 14px;
-  padding: 17px;
+  padding: 15px;
   overflow: hidden;
   border: 1px solid rgb(213 150 53 / 23%);
   border-radius: var(--ai-radius-lg, 12px);
@@ -147,21 +147,21 @@ onBeforeUnmount(() => {
     position: relative;
     display: flex;
     align-items: center;
-    gap: 11px;
+    gap: 9px;
   }
 }
 
 .approval-icon {
   display: grid;
-  width: 37px;
-  height: 37px;
-  flex: 0 0 37px;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
   place-items: center;
   border: 1px solid rgb(255 255 255 / 80%);
   border-radius: 9px;
   color: #a96815;
   background: #fff0d1;
-  font-size: 17px;
+  font-size: 15px;
 }
 
 .approval-title {
@@ -172,7 +172,7 @@ onBeforeUnmount(() => {
 
   strong {
     color: #55401f;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 720;
   }
 }
@@ -332,16 +332,16 @@ onBeforeUnmount(() => {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
-  margin-top: 14px;
+  margin-top: 12px;
 }
 
 .approval-button {
   display: inline-flex;
-  height: 34px;
+  height: 30px;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 0 13px;
+  padding: 0 11px;
   border-radius: var(--ai-radius-sm, 8px);
   cursor: pointer;
   font-size: 10px;

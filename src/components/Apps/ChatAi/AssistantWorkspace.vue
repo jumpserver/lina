@@ -21,7 +21,7 @@
         >
           <el-icon><Menu /></el-icon>
         </button>
-        <AssistantMark :active="streaming" />
+        <AssistantMark :active="streaming" size="small" />
         <span class="brand-copy">
           <strong>{{ t('ChatAIName') }}</strong>
           <small>
@@ -106,10 +106,6 @@
           </section>
 
           <div v-else-if="!visibleMessages.length" class="assistant-welcome">
-            <div class="welcome-orb">
-              <AssistantMark size="large" />
-            </div>
-            <span class="welcome-kicker">{{ t('ChatAIWorkspace') }}</span>
             <h1>{{ t('ChatAIWelcomeTitle') }}</h1>
             <p>{{ t('ChatAIWelcomeDescription') }}</p>
             <div :class="['suggestion-grid', { 'is-two': suggestions.length === 2 }]">
@@ -224,8 +220,7 @@
             @stop="stopGeneration"
           />
           <div class="composer-disclaimer">
-            <el-icon><Lock /></el-icon>
-            <span>{{ t('ChatAIDisclaimer') }}</span>
+            <span :title="t('ChatAIDisclaimer')">{{ t('ChatAIDisclaimer') }}</span>
           </div>
         </footer>
       </main>
@@ -240,15 +235,16 @@ import {
   ArrowRight,
   Bottom,
   Check,
+  ChatDotRound,
   Close,
   Coin,
   Connection,
   EditPen,
   FullScreen,
-  Lock,
   Menu,
   Monitor,
   ScaleToOriginal,
+  Setting,
   Warning
 } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
@@ -368,8 +364,14 @@ const assistantCopy = {
   general: {
     name: 'ChatAIAssistantGeneral',
     description: 'ChatAIAssistantGeneralDescription',
+    starters: ['ChatAIStarterProductHelp', 'ChatAIStarterSafeUsage'],
+    icon: ChatDotRound
+  },
+  management: {
+    name: 'ChatAIAssistantManagement',
+    description: 'ChatAIAssistantManagementDescription',
     starters: ['ChatAIStarterEnvironment', 'ChatAIStarterExceptions'],
-    icon: Coin
+    icon: Setting
   },
   asset: {
     name: 'ChatAIAssistantAsset',
@@ -687,7 +689,7 @@ defineExpose({ init, focus, newConversation: handleNew })
 }
 
 .assistant-workspace {
-  --ai-header-height: 56px;
+  --ai-header-height: 52px;
   --ai-primary: var(--el-color-primary, #1ab394);
   --ai-primary-dark: var(--el-color-primary-dark-2, #148f76);
   --ai-primary-light: var(--el-color-primary-light-9, #e8f7f3);
@@ -739,7 +741,7 @@ defineExpose({ init, focus, newConversation: handleNew })
   min-height: var(--ai-header-height);
   align-items: center;
   justify-content: space-between;
-  padding: 0 14px;
+  padding: 0 12px;
   border-bottom: 1px solid var(--ai-border);
   background: #fff;
 
@@ -751,11 +753,11 @@ defineExpose({ init, focus, newConversation: handleNew })
 
   &__brand {
     min-width: 0;
-    gap: 10px;
+    gap: 8px;
   }
 
   &__actions {
-    gap: 7px;
+    gap: 4px;
   }
 }
 
@@ -768,7 +770,7 @@ defineExpose({ init, focus, newConversation: handleNew })
   strong {
     overflow: hidden;
     color: var(--ai-text);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -797,8 +799,8 @@ defineExpose({ init, focus, newConversation: handleNew })
 
 .header-icon {
   display: grid;
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   padding: 0;
   place-items: center;
   border: 1px solid transparent;
@@ -821,28 +823,31 @@ defineExpose({ init, focus, newConversation: handleNew })
 }
 
 .new-chat-button {
-  display: inline-flex;
-  height: 33px;
-  align-items: center;
-  gap: 6px;
-  padding: 0 11px;
-  border: 1px solid var(--ai-primary);
+  display: inline-grid;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid transparent;
   border-radius: var(--ai-radius-sm);
-  color: #fff;
-  background: var(--ai-primary);
+  color: var(--ai-text-secondary);
+  background: transparent;
   cursor: pointer;
-  font-size: 11px;
-  font-weight: 600;
   transition: all 0.18s ease;
 
   &:hover:not(:disabled) {
-    border-color: var(--ai-primary-dark);
-    background: var(--ai-primary-dark);
+    border-color: var(--ai-primary-light-2);
+    color: var(--ai-primary-dark);
+    background: var(--ai-primary-light);
   }
 
   &:disabled {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: 0.45;
+  }
+
+  span {
+    display: none;
   }
 }
 
@@ -877,7 +882,7 @@ defineExpose({ init, focus, newConversation: handleNew })
 
 .message-list {
   width: 100%;
-  padding: 15px 0 20px;
+  padding: 12px 0 16px;
 }
 
 .scroll-anchor {
@@ -888,22 +893,21 @@ defineExpose({ init, focus, newConversation: handleNew })
 .composer-area {
   position: relative;
   z-index: 10;
-  padding: 9px 20px 10px;
-  border-top: 1px solid var(--ai-border);
-  background: #fff;
+  padding: 6px 14px 6px;
+  background: linear-gradient(180deg, rgb(255 255 255 / 72%), #fff 14px);
 }
 
 .composer-mode-bar {
   display: flex;
   width: min(100%, 780px);
-  min-height: 26px;
+  min-height: 22px;
   align-items: center;
-  margin: 0 auto 5px;
+  margin: 0 auto 2px;
 }
 
 .assistant-mode-button {
   display: inline-flex;
-  height: 25px;
+  height: 22px;
   align-items: center;
   gap: 6px;
   padding: 0 7px;
@@ -975,10 +979,10 @@ defineExpose({ init, focus, newConversation: handleNew })
   position: absolute;
   z-index: 12;
   right: 50%;
-  bottom: 122px;
+  bottom: 108px;
   display: grid;
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   padding: 0;
   place-items: center;
   border: 1px solid var(--ai-border);
@@ -1010,16 +1014,19 @@ defineExpose({ init, focus, newConversation: handleNew })
 }
 
 .composer-disclaimer {
-  display: flex;
-  min-height: 21px;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
+  min-height: 15px;
+  padding: 2px 4px 0;
+  overflow: hidden;
   color: #8f959e;
-  font-size: 10px;
+  font-size: 9px;
+  line-height: 13px;
+  text-align: center;
 
-  .el-icon {
-    font-size: 10px;
+  span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 
@@ -1062,14 +1069,14 @@ defineExpose({ init, focus, newConversation: handleNew })
   align-items: center;
   justify-content: center;
   margin: 0 auto;
-  padding: 38px 0 26px;
+  padding: 24px 0;
   text-align: center;
   flex-direction: column;
 
   h1 {
-    margin: 8px 0 7px;
+    margin: 0 0 8px;
     color: var(--ai-text);
-    font-size: clamp(20px, 3vw, 29px);
+    font-size: clamp(20px, 2vw, 24px);
     font-weight: 500;
     line-height: 1.25;
   }
@@ -1083,33 +1090,12 @@ defineExpose({ init, focus, newConversation: handleNew })
   }
 }
 
-.welcome-orb {
-  position: relative;
-  display: grid;
-  width: 72px;
-  height: 72px;
-  margin-bottom: 8px;
-  place-items: center;
-}
-
-.welcome-kicker {
-  padding: 4px 8px;
-  border: 1px solid var(--ai-primary-light-2);
-  border-radius: 999px;
-  color: var(--ai-primary-dark);
-  background: var(--ai-primary-light);
-  font-size: 10px;
-  font-weight: 750;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
 .suggestion-grid {
   display: grid;
   width: 100%;
-  margin-top: 25px;
+  margin-top: 18px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 9px;
+  gap: 8px;
 
   &.is-two {
     max-width: 540px;
@@ -1119,10 +1105,10 @@ defineExpose({ init, focus, newConversation: handleNew })
   button {
     display: flex;
     min-width: 0;
-    min-height: 76px;
+    min-height: 64px;
     align-items: center;
     gap: 9px;
-    padding: 11px;
+    padding: 9px 10px;
     border: 1px solid var(--ai-border);
     border-radius: var(--ai-radius-md);
     color: #606266;
@@ -1183,12 +1169,12 @@ defineExpose({ init, focus, newConversation: handleNew })
 
 .suggestion-icon {
   display: grid;
-  width: 34px;
-  height: 34px;
-  flex: 0 0 34px;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
   place-items: center;
   border-radius: var(--ai-radius-sm);
-  font-size: 15px;
+  font-size: 14px;
 
   &.tone-primary {
     color: var(--ai-primary-dark);
@@ -1323,7 +1309,7 @@ defineExpose({ init, focus, newConversation: handleNew })
     top: 0;
     bottom: 0;
     left: 0;
-    width: min(82%, 300px);
+    width: min(78%, 264px);
     transform: translateX(-105%);
     visibility: hidden;
     box-shadow: 20px 0 50px rgb(29 33 55 / 17%);
@@ -1359,7 +1345,7 @@ defineExpose({ init, focus, newConversation: handleNew })
     grid-template-columns: 1fr;
 
     button {
-      min-height: 58px;
+      min-height: 54px;
     }
   }
 }
@@ -1395,16 +1381,6 @@ defineExpose({ init, focus, newConversation: handleNew })
     padding-left: 10px;
   }
 
-  .new-chat-button span {
-    display: none;
-  }
-
-  .new-chat-button {
-    width: 32px;
-    padding: 0;
-    justify-content: center;
-  }
-
   .composer-area {
     padding-right: 10px;
     padding-left: 10px;
@@ -1414,7 +1390,7 @@ defineExpose({ init, focus, newConversation: handleNew })
     grid-template-columns: 1fr;
 
     button {
-      min-height: 58px;
+      min-height: 54px;
     }
   }
 }
@@ -1430,17 +1406,12 @@ defineExpose({ init, focus, newConversation: handleNew })
 
   .header-icon,
   .new-chat-button {
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
   }
 }
 
 @media (max-height: 650px) {
-  .welcome-orb {
-    width: 74px;
-    height: 74px;
-  }
-
   .assistant-welcome {
     padding-top: 20px;
   }
