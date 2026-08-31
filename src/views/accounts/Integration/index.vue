@@ -7,14 +7,14 @@ import { TabPage } from '@/layout/components'
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'Integrationn',
+  name: 'Integration',
   components: {
     TabPage
   },
   data() {
     return {
       loading: true,
-      activeMenu: 'service',
+      activeMenu: 'application',
       tab: {
         submenu: [
           {
@@ -24,16 +24,10 @@ export default {
             component: () => import('@/views/accounts/Integration/ApplicationList.vue')
           },
           {
-            name: 'records',
-            title: this.$t('CallRecords'),
-            hidden: !this.$hasPerm('audits.view_integrationapplicationlog'),
-            component: () => import('@/views/accounts/Integration/components/CallRecords.vue')
-          },
-          {
-            name: 'docs',
-            title: this.$t('Documentation'),
+            name: 'switches',
+            title: this.$t('AccountSwitchTasks'),
             hidden: !this.$hasPerm('accounts.view_integrationapplication'),
-            component: () => import('@/views/accounts/Integration/SDKList.vue')
+            component: () => import('@/views/accounts/Integration/components/AccountSwitchList.vue')
           }
         ]
       }

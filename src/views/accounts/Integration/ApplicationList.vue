@@ -12,6 +12,14 @@
 import CopyableFormatter from '@/components/Table/TableFormatters/CopyableFormatter.vue'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { GenericListTable } from '@/layout/components'
+
+const AGENT_STATUS_TYPE_MAP = {
+  online: 'success',
+  offline: 'warning',
+  error: 'danger',
+  unregistered: 'info'
+}
+
 export default {
   name: 'CloudAccountList',
   components: {
@@ -49,6 +57,17 @@ export default {
             width: '100px',
             formatter: (row) => {
               return row.accounts_amount
+            }
+          },
+          owner: {
+            formatter: (row) => row.owner?.name || '-'
+          },
+          agent: {
+            label: this.$t('AgentStatus'),
+            formatter: (row) => {
+              const status = row.agent?.status
+              const type = AGENT_STATUS_TYPE_MAP[status?.value] || 'info'
+              return <el-tag type={type}>{status?.label || '-'}</el-tag>
             }
           },
           name: {
@@ -100,7 +119,17 @@ export default {
         },
         columnsExtra: ['secret'],
         columnsShow: {
-          default: ['logo', 'name', 'id', 'secret', 'accounts_amount', 'date_last_used', 'active']
+          default: [
+            'logo',
+            'name',
+            'id',
+            'secret',
+            'owner',
+            'accounts_amount',
+            'agent',
+            'date_last_used',
+            'is_active'
+          ]
         },
         permissions: {
           app: 'accounts',

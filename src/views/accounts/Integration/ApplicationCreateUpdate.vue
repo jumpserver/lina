@@ -18,11 +18,23 @@ export default {
       logo_file: null,
       url: '/api/v1/accounts/integration-applications/',
       fields: [
-        [this.$t('Basic'), ['name', 'logo']],
+        [this.$t('Basic'), ['name', 'logo', 'owner']],
         [this.$t('AccountPolicy'), ['accounts', 'ip_group']],
         [this.$t('Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
+        owner: {
+          el: {
+            multiple: false,
+            ajax: {
+              url: '/api/v1/users/users/?fields_size=mini',
+              transformOption: (item) => ({
+                label: `${item.name} (${item.username})`,
+                value: item.id
+              })
+            }
+          }
+        },
         accounts: {
           component: JSONManyToManySelect,
           el: {
@@ -69,10 +81,12 @@ export default {
       },
       hasSaveContinue: false,
       createSuccessNextRoute: {
-        name: 'ApplicationDetail'
+        name: 'IntegrationApplicationDetail'
       },
       performSubmit(values) {
         const formData = new FormData()
+        const owner = Array.isArray(values.owner) ? values.owner[0] : values.owner
+        values.owner = owner?.id || owner?.pk || owner?.value || owner
         delete values['logo']
 
         if (!Array.isArray(values.ip_group)) {
