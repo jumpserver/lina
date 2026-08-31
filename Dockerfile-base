@@ -19,6 +19,6 @@ RUN corepack enable && corepack prepare yarn@4.13.0 --activate
 COPY package.json yarn.lock .yarnrc.yml ./
 
 ARG NPM_MIRROR="https://registry.npmjs.org"
-RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,sharing=locked,id=yarn-cache \
+RUN --mount=type=cache,target=/root/.yarn/berry/cache,id=lina-yarn-cache \
     yarn config set npmRegistryServer "${NPM_MIRROR}" \
     && yarn install --immutable
