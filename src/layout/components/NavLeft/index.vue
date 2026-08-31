@@ -1,8 +1,5 @@
 <template>
-  <div
-    :class="{ 'has-logo': showLogo, 'show-orgs': showOrgs, collapsed: isCollapse }"
-    class="left-side-wrapper"
-  >
+  <div :class="{ 'show-orgs': showOrgs, collapsed: isCollapse }" class="left-side-wrapper">
     <div class="nav-header">
       <div class="active-mobile">
         <Organization v-if="showOrgs" class="organization" />
@@ -51,15 +48,19 @@
         />
       </el-menu>
     </div>
-    <div class="nav-footer">
-      <div class="toggle-bar">
-        <Hamburger
-          :is-active="sidebar.opened"
-          class="hamburger-container"
-          @toggle-click="toggleSideBar"
-        />
-      </div>
-    </div>
+    <button
+      class="sidebar-toggle"
+      type="button"
+      :aria-expanded="sidebar.opened"
+      :aria-label="$t(isCollapse ? 'ExpandSidebar' : 'CollapseSidebar')"
+      :title="$t(isCollapse ? 'ExpandSidebar' : 'CollapseSidebar')"
+      @click="toggleSideBar"
+    >
+      <el-icon aria-hidden="true">
+        <ArrowRightBold v-if="isCollapse" />
+        <ArrowLeftBold v-else />
+      </el-icon>
+    </button>
     <div :class="{ 'is-show': viewShown }" class="mobile-menu" @click="viewShown = false">
       <ViewSwitcher :mode="'vertical'" />
     </div>
@@ -69,14 +70,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import SidebarItem from './SidebarItem'
-import Hamburger from '@/components/Widgets/Hamburger'
 import ViewSwitcher from '../NavHeader/ViewSwitcher'
 import Organization from '../NavHeader/Organization'
 
 export default {
   components: {
     SidebarItem,
-    Hamburger,
     ViewSwitcher,
     Organization
   },
@@ -114,9 +113,6 @@ export default {
       }
       this.$log.debug('Active menu path3: ', locPath)
       return locPath
-    },
-    showLogo() {
-      return this.$store.state.settings.sidebarLogo
     },
     showOrgs() {
       return this.$route.meta?.showOrganization !== false && this.$hasLicense()
@@ -158,14 +154,13 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@use '@/styles/variables' as *;
-
 $mobileHeight: 40px;
 $origin-color: #ffffff;
 
 .left-side-wrapper {
   .nav-header {
     display: flex;
+    flex: none;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
@@ -223,7 +218,9 @@ $origin-color: #ffffff;
       overflow: hidden;
       white-space: nowrap;
       cursor: pointer;
-      transition: all 0.3s;
+      transition:
+        color 0.12s,
+        background-color 0.12s;
       color: var(--menu-text);
       background-color: var(--menu-bg);
       border-bottom: 1px solid var(--menu-border, var(--color-border));
@@ -272,39 +269,48 @@ $origin-color: #ffffff;
     }
   }
 
-  .nav-footer {
+  .sidebar-toggle {
+    position: absolute;
+    right: -0.5px;
+    bottom: 24px;
+    z-index: 1;
     display: flex;
-    justify-content: flex-start;
-    color: var(--menu-text);
-    border-top: 1px solid var(--menu-border, rgba(31, 35, 41, 0.15));
-    background-color: $subMenuBg;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    transform: translateX(50%);
+    border: 1px solid var(--el-border-color);
+    border-radius: 50%;
+    background-color: var(--el-bg-color);
+    color: var(--el-text-color-secondary);
+    font-size: 13px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    transition:
+      background-color 0.12s,
+      color 0.12s;
 
-    .toggle-bar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 54px;
-      height: 40px;
-      border: 0;
-      cursor: pointer;
+    &::before {
+      position: absolute;
+      inset: -4px;
+      border-radius: inherit;
+      content: '';
+    }
 
-      :deep(.hamburger-container) {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-        padding: 0 !important;
+    &:hover {
+      background-color: var(--el-color-primary-light-9);
+      color: var(--el-color-primary);
+    }
 
-        .svg-icon {
-          margin-right: 0 !important;
-        }
-      }
+    &:active {
+      background-color: var(--el-color-primary-light-8);
+    }
 
-      &:hover {
-        color: var(--menu-text-active);
-        background-color: var(--menu-hover-bg, var(--menu-hover));
-      }
+    &:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 3px;
     }
   }
 

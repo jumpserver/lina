@@ -1,6 +1,6 @@
 <template>
   <div class="auto-data-table" @wheel="handleCellWheel">
-    <div v-loading="loading">
+    <div v-loading="loading" class="auto-data-table__content">
       <DataTable
         v-bind="$attrs"
         v-if="!loading"
@@ -32,11 +32,13 @@ import Sortable from 'sortablejs'
 import ColumnSettingPopover from './components/ColumnSettingPopover.vue'
 import { orderActionColumn, orderPrimaryColumns, TableColumnsGenerator } from './utils'
 import _ from 'lodash'
+import { toRaw } from 'vue'
 
 const CELL_WHEEL_GESTURE_GAP = 120
 const CELL_WHEEL_ACCELERATION_RATIO = 1.35
 const CELL_WHEEL_ACCELERATION_EPSILON = 0.5
 const COLUMN_WIDTH_CHANGE_TOLERANCE = 1
+const DEFAULT_SELECTION_COLUMN_WIDTH = 48
 const TABLE_CELL_SELECTOR = '.el-table__body td.el-table__cell .cell'
 const DEFAULT_HIDDEN_COLUMN_NAMES = new Set(['id'])
 
@@ -138,42 +140,52 @@ export default {
       naturalColumnWidths: {},
       pinnedColumnProps: [],
       cellWheelGesture: null,
+      columnConfigVersion: 0,
+      columnConfigPending: false,
       inited: false
+    }
+  },
+  computed: {
+    sourceConfig() {
+      // Snapshot editable settings without cloning Vue component definitions
+      // or potentially large static data. In-place settings edits remain visible.
+      return _.cloneDeepWith(this.config, (value, key) => {
+        if (key === 'formatter' || key === 'totalData') {
+          return toRaw(value)
+        }
+      })
     }
   },
   watch: {
     pinningDisabled() {
       this.refreshPinningAvailability()
     },
-    'config.url': {
-      handler: _.debounce(function (newUrl, oldUrl) {
-        if (this.isDeactivated || !this.inited || !newUrl || newUrl === oldUrl) {
-          return
-        }
+    sourceConfig(next, previous) {
+      if (this.isDeactivated || !this.inited || !next.url) {
+        return
+      }
+      const { url: nextUrl, ...nextOptions } = next
+      const { url: previousUrl, ...previousOptions } = previous
+      const urlChanged = nextUrl !== previousUrl
+      const configChanged = !_.isEqual(nextOptions, previousOptions)
+      if (!urlChanged && !configChanged) {
+        return
+      }
 
-        this.optionUrlMetaAndGenCols({ reload: false })
-        this.$log.debug('AutoDataTable URL change found')
-      }, 200)
-    },
-    config: {
-      immediate: false,
-      handler: _.debounce(function (iNew, iOld) {
-        if (this.isDeactivated || !this.inited) {
-          return
-        }
-        // URL changes are handled separately so later column/config updates
-        // cannot overwrite the pending URL refresh in this debounced watcher.
-        if (iNew?.url !== iOld?.url) {
-          return
-        }
-        const changed = this.isConfigChanged(iNew, iOld)
-        if (!changed) {
-          return
-        }
+      // ListTable metadata is scoped to the resource path, not its filters.
+      // Selecting a node must retain column/component identity and fitted widths.
+      if (
+        urlChanged &&
+        !configChanged &&
+        !this.columnConfigPending &&
+        this.getTableMetadata &&
+        nextUrl.split(/[?#]/, 1)[0] === previousUrl?.split(/[?#]/, 1)[0]
+      ) {
+        this.iConfig.url = nextUrl
+        return
+      }
 
-        this.optionUrlMetaAndGenCols({ reload: true })
-        this.$log.debug('AutoDataTable Config change found')
-      }, 200)
+      this.optionUrlMetaAndGenCols({ reload: !urlChanged })
     }
   },
   async created() {
@@ -186,6 +198,9 @@ export default {
       return
     }
     this.columnResizeObserver = new ResizeObserver(([entry]) => {
+      if (this.isDeactivated || !this.$el.isConnected) {
+        return
+      }
       const width = Math.floor(entry?.contentRect.width || 0)
       if (!width || Math.abs(width - this.columnContainerWidth) <= COLUMN_WIDTH_CHANGE_TOLERANCE) {
         return
@@ -198,6 +213,7 @@ export default {
     this.initializeStaticColumnWidths()
   },
   beforeUnmount() {
+    this.columnConfigVersion += 1
     this.clearCellWheelGesture()
     if (this.pinningMediaQuery) {
       if (typeof this.pinningMediaQuery.removeEventListener === 'function') {
@@ -213,7 +229,6 @@ export default {
     this.isDeactivated = true
     this.clearCellWheelGesture()
     this.cancelColumnFit()
-    this.columnContainerWidth = 0
   },
   activated() {
     this.isDeactivated = false
@@ -316,7 +331,7 @@ export default {
       })
 
       this.naturalColumnWidths = Object.fromEntries(columns.map((item) => [item.prop, item.width]))
-      const containerWidth = Math.floor(this.$el.clientWidth || 0)
+      const containerWidth = Math.floor(this.$el?.clientWidth || 0)
       if (containerWidth) {
         this.columnContainerWidth = containerWidth
       }
@@ -331,19 +346,32 @@ export default {
         return
       }
 
-      const containerWidth = observedWidth || this.$el.clientWidth
+      const containerWidth = observedWidth || this.$el?.clientWidth
       if (!containerWidth) {
         this.commitColumnWidths(sourceColumns)
         return
       }
 
-      const selectionColumn = this.$el.querySelector(
+      const selectionColumn = this.$el?.querySelector(
         [
           '.el-table__header .el-table-column--selection',
           '.el-table__body-header .el-table-column--selection'
         ].join(', ')
       )
-      const selectionWidth = selectionColumn?.getBoundingClientRect().width || 0
+      const hasSelection =
+        this.$attrs['has-selection'] ??
+        this.$attrs.hasSelection ??
+        this.iConfig.hasSelection ??
+        true
+      const configuredSelectionWidth =
+        this.$attrs['selection-width'] ?? this.$attrs.selectionWidth ?? this.iConfig.selectionWidth
+      // Before the table mounts, reserve the same space as its selection column
+      // instead of fitting all data columns first and shrinking them afterwards.
+      const selectionWidth =
+        selectionColumn?.getBoundingClientRect().width ||
+        (!this.iConfig.isTree && hasSelection
+          ? Number.parseFloat(configuredSelectionWidth) || DEFAULT_SELECTION_COLUMN_WIDTH
+          : 0)
       const availableWidth = Math.max(0, Math.floor(containerWidth - selectionWidth - 2))
 
       const naturalColumns = sourceColumns.map((currentColumn) => {
@@ -437,35 +465,6 @@ export default {
       }
       return []
     },
-    isConfigChanged(iNew, iOld) {
-      const normalizeConfig = (config) => {
-        const rest = { ...(config || {}) }
-        delete rest.columns
-        const columnsMeta = rest.columnsMeta
-        const normalizedMeta = Object.fromEntries(
-          Object.entries(columnsMeta || {}).map(([key, value]) => {
-            if (!value || typeof value !== 'object') {
-              return [key, value]
-            }
-            const meta = { ...value }
-            delete meta.formatter
-            return [key, meta]
-          })
-        )
-        return { ...rest, columnsMeta: normalizedMeta }
-      }
-      const _iNew = normalizeConfig(iNew)
-      const _iOld = normalizeConfig(iOld)
-
-      try {
-        if (JSON.stringify(_iNew) === JSON.stringify(_iOld)) {
-          return false
-        }
-      } catch (error) {
-        this.$log.error('JsonStringify Error: ', error)
-      }
-      return true
-    },
     setColumnDraggable() {
       const el = this.$el.querySelector(
         '.el-table__header-wrapper thead tr, .el-table__body-header tr'
@@ -542,7 +541,6 @@ export default {
     generateTotalColumns() {
       const generator = new TableColumnsGenerator(this.config, this.meta, this)
       this.totalColumns = generator.generateColumns()
-      this.config.columns = this.totalColumns
       this.iConfig = {
         ...this.config,
         columns: [...this.totalColumns],
@@ -556,6 +554,8 @@ export default {
       if (!this.config.url) {
         return
       }
+      const version = ++this.columnConfigVersion
+      this.columnConfigPending = true
       const url =
         this.config.url.indexOf('?') === -1
           ? `${this.config.url}?display=1`
@@ -569,6 +569,9 @@ export default {
         const data = this.getTableMetadata
           ? await this.getTableMetadata()
           : await this.$store.dispatch('common/getUrlMeta', { url })
+        if (version !== this.columnConfigVersion) {
+          return
+        }
         const method = this.method.toUpperCase()
         const actionMeta = getActionMeta(data, method)
         const filters = getFilterMeta(data)
@@ -582,6 +585,10 @@ export default {
         this.setColumnDraggable()
       } catch (error) {
         this.$log.error('Error occur: ', error)
+      } finally {
+        if (version === this.columnConfigVersion) {
+          this.columnConfigPending = false
+        }
       }
     },
     applyQueryCapabilities(actionMeta, filters, ordering) {
@@ -648,11 +655,10 @@ export default {
         return showFieldNames.indexOf(obj.prop) > -1
       })
       showFields = this.orderingColumns(showFields)
-      this.config.columns = showFields
       this.iConfig.columns = this.applyPinnedColumns(showFields)
+      this.initializeStaticColumnWidths()
 
       this.$nextTick(() => {
-        this.initializeStaticColumnWidths()
         if (reload && this.$refs.dataTable) {
           this.$refs.dataTable.getList()
         }

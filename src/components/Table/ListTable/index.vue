@@ -1,5 +1,5 @@
 <template>
-  <div class="list-table">
+  <div ref="listRoot" class="list-table" :class="{ 'list-table--fill-height': fillHeight }">
     <QuickFilter
       v-if="iHasQuickFilter"
       v-model:expand="filterExpand"
@@ -34,6 +34,7 @@
           v-if="actionInit"
           ref="dataTable"
           :config="iTableConfig"
+          :fill-height="fillHeight"
           :filter-table="filter"
           :get-table-metadata="getTableMetadata"
           @selection-change="handleSelectionChange"
@@ -52,6 +53,7 @@ import IBox from '@/components/Common/IBox/index.vue'
 import TableAction from './TableAction/index.vue'
 import AutoDataTable from '../AutoDataTable/index.vue'
 import QuickFilter from './TableAction/QuickFilter.vue'
+import { useListTableViewport } from './useListTableViewport'
 import { getDayEnd, getDaysAgo } from '@/utils/common/time'
 import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
 import i18n from '@/i18n/i18n'
@@ -77,7 +79,7 @@ export default {
       tableConfig: null
     }
     provide(LIST_TABLE_KEY, listTableContext)
-    return { listTableContext }
+    return { listTableContext, ...useListTableViewport() }
   },
   props: {
     // 定义 table 的配置
@@ -197,9 +199,20 @@ export default {
       return this.iHeaderActions.has === undefined ? true : this.iHeaderActions.has
     },
     iTableConfig() {
-      const config = deepmerge(this.tableConfig, {
-        extraQuery: this.extraQuery
-      })
+      // Keep formatter component identities stable when only the URL changes.
+      // Clone only the metadata we write below, not the Vue component definitions.
+      const config = {
+        ...this.tableConfig,
+        extraQuery: deepmerge(this.tableConfig.extraQuery || {}, this.extraQuery),
+        columnsMeta: { ...this.tableConfig.columnsMeta }
+      }
+      for (const name of ['name', 'actions']) {
+        const meta = config.columnsMeta[name]
+        config.columnsMeta[name] = {
+          ...meta,
+          formatterArgs: { ...meta?.formatterArgs }
+        }
+      }
       const checkRoot = !(this.$route.meta?.disableOrgsChange === true)
       const checkPermAndRoot = (action) => {
         if (!this.hasActionPerm(action)) {
@@ -450,6 +463,12 @@ export default {
 
 .table-content {
   min-width: 0;
+
+  > :deep(.ibox) {
+    // Element Plus transitions all card properties by default, including the
+    // flex sizing applied when a list fills its page. Never animate that layout.
+    transition: none;
+  }
 
   :deep(.el-card__body) {
     padding: 0;

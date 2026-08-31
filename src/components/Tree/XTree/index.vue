@@ -541,6 +541,7 @@ export default {
   },
   mounted() {
     document.addEventListener('mousedown', this.hideRMenu)
+    document.addEventListener('keydown', this.handleContextMenuKeydown, true)
     document.addEventListener('scroll', this.hideRMenu, true)
     document.addEventListener('scroll', this.handleDocumentAmountScroll, true)
     this.setupTreeResizeObserver()
@@ -558,6 +559,7 @@ export default {
     window.cancelAnimationFrame(this.treeResizeFrame)
     window.cancelAnimationFrame(this.searchFocusFrame)
     document.removeEventListener('mousedown', this.hideRMenu)
+    document.removeEventListener('keydown', this.handleContextMenuKeydown, true)
     document.removeEventListener('scroll', this.hideRMenu, true)
     document.removeEventListener('scroll', this.handleDocumentAmountScroll, true)
   },
@@ -571,7 +573,7 @@ export default {
           if (!height) {
             return
           }
-          const nextHeight = Math.max(200, Math.round(height - 18))
+          const nextHeight = Math.max(1, Math.round(height - 18))
           if (nextHeight !== this.virtualTreeHeight) {
             this.virtualTreeHeight = nextHeight
           }
@@ -1992,6 +1994,14 @@ export default {
     hideRMenu() {
       this.menuVisible = false
     },
+    handleContextMenuKeydown(event) {
+      if (!this.menuVisible || event.key !== 'Escape') {
+        return
+      }
+      event.preventDefault()
+      event.stopPropagation()
+      this.hideRMenu()
+    },
     handleContextMenuClick(event) {
       const menuItem = event.target?.closest?.('.rmenu')
       if (!menuItem || menuItem.classList.contains('disabled')) {
@@ -2698,11 +2708,14 @@ export default {
   flex: 1;
   min-height: 0;
   overflow: auto;
+  overscroll-behavior-y: none;
+  // Standard scrollbar styling overrides the axis-specific WebKit rules.
+  scrollbar-width: auto;
+  scrollbar-color: auto;
   padding: 6px 8px 12px;
   border-top: 1px solid var(--el-border-color-lighter);
 
-  &::-webkit-scrollbar:horizontal {
-    display: none;
+  &::-webkit-scrollbar {
     height: 0;
   }
 }
@@ -2718,15 +2731,12 @@ export default {
 .x-tree__body.is-virtual :deep(.el-tree-virtual-list) {
   min-width: 100%;
   overflow-x: auto !important;
+  overscroll-behavior-y: none;
 }
 
 .x-tree__body.is-virtual :deep(.el-tree-virtual-list)::-webkit-scrollbar:horizontal {
   display: none;
   height: 0;
-}
-
-.x-tree__body.is-virtual :deep(.el-scrollbar__bar.is-horizontal) {
-  display: none;
 }
 
 .x-tree__body :deep(.el-tree) {

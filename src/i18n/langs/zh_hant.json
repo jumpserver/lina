@@ -2026,6 +2026,8 @@
   "Package": "套件包",
   "ExpandNode": "展開節點",
   "CollapseNode": "摺疊節點",
+  "CollapseSidebar": "摺疊側邊欄",
+  "ExpandSidebar": "展開側邊欄",
   "TreeSettings": "樹設定",
   "AssetScope": "資產範圍",
   "AssetScopeWithDescendants": "包含子節點",

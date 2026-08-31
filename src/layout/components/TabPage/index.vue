@@ -52,13 +52,13 @@
         >
           <span v-sanitize="iHelpMessage" class="announcement-main" />
         </el-alert>
-        <transition v-if="!loading" appear mode="out-in" name="fade-transform">
+        <template v-if="!loading">
           <slot>
             <keep-alive v-if="computeActiveComponent">
               <component :is="computeActiveComponent" />
             </keep-alive>
           </slot>
-        </transition>
+        </template>
       </div>
     </div>
   </Page>
@@ -483,18 +483,14 @@ export default {
   }
 
   /*
-   * <transition mode="out-in"> 与 <keep-alive> 要求单一根节点，内容组件因此普遍用一个
+   * <keep-alive> 要求单一根节点，内容组件因此普遍用一个
    * <div>（无 class 或 class=""）包裹多个区块（如 el-alert + IBox）。该 wrapper 会成为唯一的
    * flex 子节点，使外层 gap 对其内部区块失效。这里让纯结构 wrapper 自身成为 flex 列并复用同样的
-   * gap，既恢复区块间距，又保留 wrapper 的盒子以维持 fade-transform 过渡动画。
-   *
-   * 过渡动画期间 Vue 会给 wrapper 加上 fade-transform-* 类，此时 :not([class]) 不再命中，
-   * 故补充 [class^="fade-transform"] 让其在动画期间仍保持 flex，避免间距闪烁。
+   * gap，恢复区块间距。
    * 带 class 的 wrapper（如 .auth-container）class 以自身类名开头，均不命中，保持不变。
    */
   .tab-page-content > :deep(div:not([class])),
-  .tab-page-content > :deep(div[class='']),
-  .tab-page-content > :deep(div[class^='fade-transform']) {
+  .tab-page-content > :deep(div[class='']) {
     display: flex;
     flex-direction: column;
     gap: 8px;

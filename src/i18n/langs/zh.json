@@ -2009,6 +2009,8 @@
   "Package": "包",
   "ExpandNode": "展开节点",
   "CollapseNode": "折叠节点",
+  "CollapseSidebar": "折叠侧边栏",
+  "ExpandSidebar": "展开侧边栏",
   "TreeSettings": "树设置",
   "AssetScope": "资产范围",
   "AssetScopeWithDescendants": "包含子节点",

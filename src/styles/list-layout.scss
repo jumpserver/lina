@@ -1,0 +1,99 @@
+// Only active page lists opt in. Forms, detail cards and embedded/dialog lists
+// keep their existing scrolling. Intermediate view wrappers share the space
+// left by the page heading and tab navigation, without viewport pixel offsets.
+.page .page-content.wrapper-content[data-list-layout='viewport'],
+.page.tab-page .tab-page-content[data-list-layout='viewport'] {
+  overflow: hidden !important;
+  scrollbar-gutter: auto;
+  padding-bottom: 8px;
+}
+
+.page.tab-page .tab-page-content[data-list-layout='viewport'] {
+  &::after {
+    display: none;
+  }
+
+  > [data-list-layout='container'] {
+    flex-shrink: 1;
+    min-width: 0;
+  }
+}
+
+.page [data-list-layout='container'] {
+  display: flex !important;
+  flex: 1 1 0%;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+
+  > .el-alert {
+    flex: none;
+  }
+
+  // Teleported dialogs sometimes leave an empty view wrapper in this flex
+  // column. It must not consume a gap below the table.
+  > div:not([class]):empty,
+  > div[class='']:empty {
+    display: none;
+  }
+
+  &.list-table {
+    margin-bottom: 0;
+  }
+
+  &.tree-table-content {
+    flex-direction: row;
+
+    > .left {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+
+      > .auto-data-ztree,
+      .x-tree,
+      .node-asset-tree {
+        flex: 1 1 0%;
+        min-height: 0;
+        height: auto;
+      }
+
+      .tree-tab.is-x-tree {
+        display: flex;
+        flex-direction: column;
+
+        > .tree-view-header {
+          flex: none;
+        }
+      }
+    }
+  }
+}
+
+.page .list-table--fill-height {
+  > :not(.table-content) {
+    flex: none;
+  }
+
+  > .table-content {
+    display: flex;
+    flex: 1 1 0%;
+    min-height: 0;
+
+    > .ibox,
+    > .ibox > .el-card__body,
+    .auto-data-table,
+    .auto-data-table__content {
+      display: flex;
+      flex: 1 1 0%;
+      flex-direction: column;
+      min-height: 0;
+      min-width: 0;
+    }
+
+    > .ibox,
+    > .ibox > .el-card__body {
+      // Override PageContent/TabPage's deliberately unbounded detail cards.
+      overflow: hidden !important;
+    }
+  }
+}

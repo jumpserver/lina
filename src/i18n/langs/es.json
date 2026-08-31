@@ -200,6 +200,8 @@
   "AssetScopeWithDescendantsHelp": "Mostrar los activos del nodo actual y de todos sus descendientes; el recuento del nodo elimina duplicados dentro del mismo ámbito",
   "AssetTree": "Árbol de activos",
   "CollapseNode": "Contraer nodo",
+  "CollapseSidebar": "Contraer barra lateral",
+  "ExpandSidebar": "Expandir barra lateral",
   "ExpandNode": "Expandir nodo",
   "NodeMoveConfirmMessage": "¿Mover el nodo ({src}) debajo del nodo ({dst})?",
   "NodeMoveConfirmTitle": "Mover nodo",

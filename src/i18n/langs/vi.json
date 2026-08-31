@@ -200,6 +200,8 @@
   "AssetScopeWithDescendantsHelp": "Hiển thị tài sản của nút hiện tại và tất cả nút con; số lượng của nút được khử trùng lặp trong cùng phạm vi",
   "AssetTree": "Cây tài sản",
   "CollapseNode": "Thu gọn nút",
+  "CollapseSidebar": "Thu gọn thanh bên",
+  "ExpandSidebar": "Mở rộng thanh bên",
   "ExpandNode": "Mở rộng nút",
   "NodeMoveConfirmMessage": "Di chuyển nút ({src}) xuống dưới nút ({dst})?",
   "NodeMoveConfirmTitle": "Di chuyển nút",

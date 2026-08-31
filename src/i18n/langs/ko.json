@@ -200,6 +200,8 @@
   "AssetScopeWithDescendantsHelp": "현재 노드와 모든 하위 노드의 자산을 표시하며, 동일한 범위에서 중복을 제거하여 노드 수량을 계산합니다",
   "AssetTree": "자산 트리",
   "CollapseNode": "노드 접기",
+  "CollapseSidebar": "사이드바 접기",
+  "ExpandSidebar": "사이드바 펼치기",
   "ExpandNode": "노드 펼치기",
   "NodeMoveConfirmMessage": "노드({src})를 노드({dst}) 아래로 이동하시겠습니까?",
   "NodeMoveConfirmTitle": "노드 이동",
