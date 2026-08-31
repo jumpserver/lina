@@ -13,13 +13,15 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail'
+import Publications from './Publications'
 
 export default {
   name: 'VirtualAppDetail',
   components: {
     GenericDetailPage,
     TabPage,
-    Detail
+    Detail,
+    Publications
   },
   data() {
     return {
@@ -31,17 +33,23 @@ export default {
           {
             title: this.$t('Basic'),
             name: 'Detail'
+          },
+          {
+            title: this.$t('AppProvider'),
+            name: 'Publications'
           }
         ],
         hasRightSide: true,
         actions: {
-          hasUpdate: false,
+          hasUpdate: true,
+          canUpdate: () => this.$hasPerm('terminal.change_virtualapp'),
           canDelete: () => {
-            return this.$hasPerm('terminal.delete_applet')
+            return this.$hasPerm('terminal.delete_virtualapp')
           },
+          updateRoute: 'VirtualAppUpdate',
           deleteSuccessRoute: 'Applets'
         },
-        titlePrefix: this.$tc('AppletDetail')
+        titlePrefix: this.$tc('VirtualAppDetail')
       }
     }
   },

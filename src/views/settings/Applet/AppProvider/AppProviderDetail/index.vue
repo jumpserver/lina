@@ -44,9 +44,10 @@ export default {
         hasRightSide: true,
         actions: {
           hasDelete: false,
-          hasUpdate: false,
+          hasUpdate: true,
           canDelete: this.$hasPerm('terminal.delete_virtualhost'),
-          canUpdate: this.$hasPerm('terminal.change_virtualhost'),
+          canUpdate: this.$hasPerm('terminal.change_appprovider'),
+          updateRoute: 'AppProviderUpdate',
           deleteSuccessRoute: 'Applets'
           // updateCallback: () => {
           //   this.$router.push({
