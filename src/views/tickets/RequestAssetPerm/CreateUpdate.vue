@@ -13,6 +13,12 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import store from '@/store'
 import { getDaysFuture } from '@/utils/common/time'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
+import ExpireNoticePolicy from '@/views/perms/AssetPermission/components/ExpireNoticePolicy.vue'
+import ShortExpireNoticeMinutes from '@/views/perms/AssetPermission/components/ShortExpireNoticeMinutes.vue'
+import {
+  isShortNoticeAtFuture,
+  normalizeExpireNoticePayload
+} from '@/views/perms/AssetPermission/expireNotice'
 import CcUsers from '@/views/tickets/components/CcUsers'
 import { mapGetters, mapState } from 'vuex'
 
@@ -27,6 +33,7 @@ export default {
     const dividend = unit === 'hour' ? 24 : 1
     const date_expired = getDaysFuture(time / dividend, new Date()).toISOString()
     const date_start = now.toISOString()
+    const shortNoticeMinutes = store.getters.publicSettings.PERM_EXPIRED_SHORT_NOTICE_MINUTES ?? 15
     return {
       // 工单创建 隐藏提示信息中的跳转连接
       hasDetailInMsg: false,
@@ -36,6 +43,9 @@ export default {
         ips_or_not: true,
         apply_date_expired: date_expired,
         apply_date_start: date_start,
+        apply_expire_notice_policy: '',
+        apply_short_expire_notice_enabled: false,
+        apply_short_expire_notice_minutes: shortNoticeMinutes,
         apply_assets: [],
         org_id: '',
         flow_id: '',
@@ -52,7 +62,10 @@ export default {
             'apply_accounts',
             'apply_actions',
             'apply_date_start',
-            'apply_date_expired'
+            'apply_date_expired',
+            'apply_expire_notice_policy',
+            'apply_short_expire_notice_enabled',
+            'apply_short_expire_notice_minutes'
           ]
         ],
         [this.$t('Other'), ['comment']]
@@ -112,6 +125,41 @@ export default {
             this.fieldsMeta.apply_accounts.el.assets = formValue.apply_assets
             this.fieldsMeta.apply_accounts.el.nodes = formValue.apply_nodes
           }
+        },
+        apply_expire_notice_policy: {
+          component: ExpireNoticePolicy,
+          label: this.$t('SystemExpireNotice')
+        },
+        apply_short_expire_notice_enabled: {
+          type: 'switch',
+          label: this.$t('ShortExpireNotice')
+        },
+        apply_short_expire_notice_minutes: {
+          component: ShortExpireNoticeMinutes,
+          label: this.$t('ShortExpireNoticeMinutes'),
+          el: {},
+          hidden: (formValue, field) => {
+            field.el.dateExpired = formValue.apply_date_expired
+            field.el.disabled = !formValue.apply_short_expire_notice_enabled
+            return false
+          },
+          rules: [
+            {
+              validator: (rule, value, callback, source) => {
+                if (
+                  source.apply_short_expire_notice_enabled &&
+                  (!Number.isInteger(value) ||
+                    value <= 0 ||
+                    !isShortNoticeAtFuture(source.apply_date_expired, value))
+                ) {
+                  callback(new Error(this.$t('ShortExpireNoticeFutureError')))
+                  return
+                }
+                callback()
+              },
+              trigger: ['blur', 'change']
+            }
+          ]
         },
         org_id: {
           label: this.$t('Organization'),
@@ -188,7 +236,7 @@ export default {
           delete value.flow_id
         }
         delete value.cc_users
-        return value
+        return normalizeExpireNoticePayload(value, 'apply_')
       },
       url: '/api/v1/tickets/apply-asset-tickets/?state=pending',
       createSuccessNextRoute: {

@@ -2333,5 +2333,18 @@
   "GatherFactsParams": "资产信息采集参数",
   "VerifyAccountParams": "账号验证参数",
   "GatherAccountsParams": "账号收集参数",
-  "RemoveAccountParams": "账号移除参数"
+  "RemoveAccountParams": "账号移除参数",
+  "ExpireNotice": "到期提醒",
+  "SystemExpireNotice": "系统到期提醒",
+  "ControlledByGlobalSettings": "由系统全局配置决定",
+  "GlobalExpireNoticePolicy": "提前 {first} 天提醒一次；到期前 {daily} 天内每天提醒",
+  "ModifyGlobalSettings": "修改全局配置",
+  "ShortExpireNotice": "临近到期提醒",
+  "ShortExpireNoticeMinutes": "提前提醒",
+  "Minutes": "分钟",
+  "ShortExpireNoticePreview": "将在 {time} 提醒",
+  "ShortExpireNoticeDefaultHelp": "初始值来自系统设置，并单独保存在当前授权中。",
+  "ShortExpireNoticeFutureError": "请输入正整数，并确保计算出的提醒时间仍在未来。",
+  "DefaultShortNoticeMinutes": "临近到期提醒默认提前时间",
+  "DefaultShortNoticeMinutesHelpText": "作为开启临近到期提醒时提供的默认提前分钟数，不会修改已有授权。"
 }

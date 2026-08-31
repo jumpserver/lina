@@ -44,6 +44,19 @@
         <el-form-item :label="$tc('DateExpired')" required>
           <el-date-picker v-model="requestForm.apply_date_expired" type="datetime" />
         </el-form-item>
+        <el-form-item :label="$t('SystemExpireNotice')">
+          <ExpireNoticePolicy />
+        </el-form-item>
+        <el-form-item :label="$t('ShortExpireNotice')">
+          <el-switch v-model="requestForm.apply_short_expire_notice_enabled" />
+        </el-form-item>
+        <el-form-item :label="$t('ShortExpireNoticeMinutes')">
+          <ShortExpireNoticeMinutes
+            v-model="requestForm.apply_short_expire_notice_minutes"
+            :date-expired="requestForm.apply_date_expired"
+            :disabled="!requestForm.apply_short_expire_notice_enabled"
+          />
+        </el-form-item>
         <el-form-item :label="$tc('Action')">
           <BasicTree v-model="requestForm.actions" :tree="treeNodes" style="width: 100%" />
         </el-form-item>
@@ -57,6 +70,9 @@ import IBox from '@/components/Common/IBox'
 import BasicTree from '@/components/Form/FormFields/BasicTree'
 import Select2 from '@/components/Form/FormFields/Select2'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
+import ExpireNoticePolicy from '@/views/perms/AssetPermission/components/ExpireNoticePolicy.vue'
+import ShortExpireNoticeMinutes from '@/views/perms/AssetPermission/components/ShortExpireNoticeMinutes.vue'
+import { isShortNoticeAtFuture } from '@/views/perms/AssetPermission/expireNotice'
 import { AccountLabelMapper } from '@/views/perms/const'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 import { STATUS_MAP, treeNodes } from '../../const'
@@ -67,6 +83,8 @@ export default {
     IBox,
     Select2,
     AccountFormatter,
+    ExpireNoticePolicy,
+    ShortExpireNoticeMinutes,
     BasicTree
   },
   props: {
@@ -89,7 +107,9 @@ export default {
         actions: this.object.apply_actions,
         oid: this.object.org_id,
         apply_date_expired: this.object.apply_date_expired,
-        apply_date_start: this.object.apply_date_start
+        apply_date_start: this.object.apply_date_start,
+        apply_short_expire_notice_enabled: this.object.apply_short_expire_notice_enabled,
+        apply_short_expire_notice_minutes: this.object.apply_short_expire_notice_minutes
       },
       nodeSelect2: {
         multiple: true,
@@ -166,6 +186,14 @@ export default {
         {
           key: this.$tc('DateExpired'),
           value: object.apply_date_expired
+        },
+        {
+          key: this.$t('SystemExpireNotice'),
+          value: this.getSystemExpireNoticeDescription()
+        },
+        {
+          key: this.$t('ShortExpireNotice'),
+          value: this.getExpireNoticeDescription(object)
         }
       ]
     },
@@ -220,6 +248,14 @@ export default {
         {
           key: this.$tc('DateExpired'),
           value: object.apply_date_expired
+        },
+        {
+          key: this.$t('SystemExpireNotice'),
+          value: this.getSystemExpireNoticeDescription()
+        },
+        {
+          key: this.$t('ShortExpireNotice'),
+          value: this.getExpireNoticeDescription(object)
         }
       ]
     },
@@ -250,6 +286,17 @@ export default {
           return
         }
       }
+      if (this.requestForm.apply_short_expire_notice_enabled) {
+        const minutes = this.requestForm.apply_short_expire_notice_minutes
+        if (
+          !Number.isInteger(minutes) ||
+          minutes <= 0 ||
+          !isShortNoticeAtFuture(this.requestForm.apply_date_expired, minutes)
+        ) {
+          this.$message.error(this.$t('ShortExpireNoticeFutureError'))
+          return
+        }
+      }
       return this.$axios
         .patch(`/api/v1/tickets/apply-asset-tickets/${this.object.id}/approve/`, {
           apply_nodes: nodes || [],
@@ -258,7 +305,9 @@ export default {
           org_id: this.object.org_id,
           apply_actions: this.requestForm.actions,
           apply_date_start: this.requestForm.apply_date_start,
-          apply_date_expired: this.requestForm.apply_date_expired
+          apply_date_expired: this.requestForm.apply_date_expired,
+          apply_short_expire_notice_enabled: this.requestForm.apply_short_expire_notice_enabled,
+          apply_short_expire_notice_minutes: this.requestForm.apply_short_expire_notice_minutes
         })
         .then(() => {
           this.$message.success(this.$tc('UpdateSuccessMsg'))
@@ -278,6 +327,22 @@ export default {
         .put(url)
         .then((res) => this.reloadPage())
         .catch((err) => this.$message.error(err))
+    },
+    getExpireNoticeDescription(object) {
+      if (!object.apply_short_expire_notice_enabled) {
+        return this.$t('Disabled')
+      }
+      return `${object.apply_short_expire_notice_minutes} ${this.$t('Minutes')}`
+    },
+    getSystemExpireNoticeDescription() {
+      const settings = this.$store.getters.publicSettings
+      return [
+        this.$t('GlobalExpireNoticePolicy', {
+          first: settings.PERM_EXPIRED_FIRST_NOTICE_DAYS,
+          daily: settings.PERM_EXPIRED_DAILY_NOTICE_DAYS
+        }),
+        this.$t('ControlledByGlobalSettings')
+      ].join('; ')
     }
   }
 }
