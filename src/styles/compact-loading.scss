@@ -1,0 +1,41 @@
+.compact-loading > .el-loading-mask {
+  --el-loading-spinner-size: 24px;
+  transition: opacity 120ms ease-out;
+
+  .el-loading-spinner .circular {
+    display: none;
+    animation: none;
+  }
+
+  // A separate HTML layer can rotate without repainting SVG during tree/table updates.
+  .el-loading-spinner::before {
+    content: '';
+    display: block;
+    box-sizing: border-box;
+    width: var(--el-loading-spinner-size);
+    height: var(--el-loading-spinner-size);
+    margin: 0 auto;
+    border: 2px solid var(--el-color-primary);
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: compact-loading-rotate 1s linear infinite;
+    will-change: transform;
+  }
+}
+
+@keyframes compact-loading-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .compact-loading > .el-loading-mask {
+    transition: none;
+
+    .el-loading-spinner::before {
+      animation: none;
+      will-change: auto;
+    }
+  }
+}

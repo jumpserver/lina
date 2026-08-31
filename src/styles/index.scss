@@ -5,6 +5,7 @@
 @use './menu';
 @use './element-form-controls';
 @use './list-layout';
+@use './compact-loading';
 
 :root {
   --scrollbar-size: 8px;

@@ -10,7 +10,7 @@
         导致跨页选择（persistSelection）被覆盖，只剩当页数据。
         选择事件统一走 selectStrategy，在内部维护全量 selected 并向外 emit。
       -->
-      <div v-loading="tableLoading" class="el-data-table__body">
+      <div ref="tableBody" v-loading="tableLoading" class="el-data-table__body compact-loading">
         <el-table
           v-bind="tableAttrs"
           ref="table"
@@ -969,6 +969,7 @@ export default {
       if (query) {
         this.page = parseInt(query[this.pageKey])
         this.size = parseInt(query[this.pageSizeKey])
+        this.pageSizeInitialized = this.size > 0
 
         // 恢复查询条件，但对 slot = search 无效
         if (this.$refs.searchForm) {
@@ -979,7 +980,13 @@ export default {
       }
     }
     if (this.totalData) {
-      this.getList()
+      // Let the page's mounted hook apply its fill-height layout first.
+      const requestId = this.listRequestId
+      this.$nextTick(() => {
+        if (requestId === this.listRequestId) {
+          this.getList()
+        }
+      })
     }
   },
   created() {
@@ -1005,24 +1012,34 @@ export default {
 
       const table = this.$refs.table?.$el
       const body = table?.querySelector('.el-table__body-wrapper .el-scrollbar__wrap')
-      if (!body?.clientHeight) return
+      const bodyHeight = this.$refs.tableBody?.clientHeight
+      if (!bodyHeight || !body) return
 
-      // In auto layout the header lives inside the scroll view. Also exclude
-      // the horizontal scrollbar's reserved padding from the data-row space.
-      const header = body.querySelector('thead')
+      // Measure our flex container, not Element Plus's scroll view: its inline
+      // height can still reflect the previous layout during the initial request.
+      const header = table.querySelector('thead')
+      const tableStyle = getComputedStyle(table)
       const style = getComputedStyle(body)
       const availableHeight =
-        body.clientHeight -
+        bodyHeight -
         (header?.getBoundingClientRect().height || 0) -
+        (Number.parseFloat(tableStyle.borderTopWidth) || 0) -
+        (Number.parseFloat(tableStyle.borderBottomWidth) || 0) -
         (Number.parseFloat(style.paddingTop) || 0) -
         (Number.parseFloat(style.paddingBottom) || 0)
       const rowHeight = Number.parseFloat(
         getComputedStyle(this.$el).getPropertyValue('--list-table-row-height')
       )
-      if (rowHeight > 0) {
-        this.pageSizeInitialized = true
-        this.size = availableHeight > rowHeight * 15 ? 30 : 15
-      }
+      if (!(rowHeight > 0) || availableHeight <= 0) return
+
+      // Choose once per page instance, even when the initial choice stays at 15.
+      // Resizing, filtering and returning to a cached page must not change it.
+      this.pageSizeInitialized = true
+      const size = availableHeight > rowHeight * 15 ? 30 : 15
+      if (size === this.size) return
+      // Only user actions emit sizeChange; automatic choices must not be persisted.
+      this.size = size
+      this.page = defaultFirstPage
     },
     getFormatterComponent(col) {
       if (!col?.formatter || typeof col.formatter === 'function') {
@@ -1156,8 +1173,7 @@ export default {
         return
       }
 
-      // Measure once after mount, before constructing the very first query.
-      // Assign directly so automatic defaults are never saved as user choices.
+      // Select the initial size before building the query, without another request.
       this.initializePageSize()
       const query = this.getQuery()
       let formValue = {}
@@ -1285,9 +1301,9 @@ export default {
     },
     handleSizeChange(val) {
       this.pageSizeInitialized = true
-      if (this.size === val) return
       this.$emit('update:page-size', val)
       this.$emit('sizeChange', val)
+      if (this.size === val) return
       this.page = defaultFirstPage
       this.size = val
       this.getList()

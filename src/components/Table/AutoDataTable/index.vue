@@ -1,6 +1,6 @@
 <template>
   <div class="auto-data-table" @wheel="handleCellWheel">
-    <div v-loading="loading" class="auto-data-table__content">
+    <div v-loading="loading" class="auto-data-table__content compact-loading">
       <DataTable
         v-bind="$attrs"
         v-if="!loading"

@@ -27,7 +27,7 @@
         <slot name="search-after" />
       </template>
     </TableAction>
-    <div v-loading="!actionInit" class="table-content">
+    <div v-loading="!actionInit" class="table-content compact-loading">
       <IBox>
         <AutoDataTable
           v-bind="$attrs"
