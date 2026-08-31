@@ -255,14 +255,12 @@
     >
       <template #node-icon="{ data, expanded, leaf }">
         <Icon v-if="isAsset(data)" :icon="getAssetIcon(data)" class="node-asset-tree__asset-icon" />
-        <el-icon
+        <TreeFolderIcon
           v-else
-          :class="{ 'is-branch': !leaf }"
-          class="x-tree__node-icon node-asset-tree__node-icon"
-        >
-          <FolderOpened v-if="expanded && !leaf" />
-          <Folder v-else />
-        </el-icon>
+          :leaf="leaf"
+          :expanded="expanded"
+          class="node-asset-tree__node-icon"
+        />
       </template>
       <template #node-actions="{ data, expanded }">
         <span
@@ -332,6 +330,7 @@
 
 <script>
 import Icon from '@/components/Widgets/Icon'
+import TreeFolderIcon from '@/components/Tree/TreeFolderIcon.vue'
 import XTree from '@/components/Tree/XTree/index.vue'
 import {
   isNodeAssetMetricMode,
@@ -423,7 +422,7 @@ function responseWithResults(response, results) {
  */
 export default {
   name: 'NodeAssetTree',
-  components: { Icon, XTree },
+  components: { Icon, TreeFolderIcon, XTree },
   props: {
     dataSource: {
       type: Object,
@@ -1393,12 +1392,7 @@ export default {
   flex: none;
   width: 16px;
   margin-right: 4px;
-  color: var(--el-text-color-secondary);
   text-align: center;
-}
-
-.node-asset-tree__node-icon.is-branch {
-  color: var(--el-text-color-primary);
 }
 
 .node-asset-tree__asset-icon {
@@ -1463,7 +1457,6 @@ export default {
 }
 
 .node-asset-tree :deep(.el-tree-node__content) {
-  height: 32px;
   border-radius: 6px;
 }
 

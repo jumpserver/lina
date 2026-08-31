@@ -2016,6 +2016,8 @@
   "Package": "Package",
   "ExpandNode": "Expand node",
   "CollapseNode": "Collapse node",
+  "CollapseSidebar": "Collapse sidebar",
+  "ExpandSidebar": "Expand sidebar",
   "TreeSettings": "Tree settings",
   "AssetScope": "Asset scope",
   "AssetScopeWithDescendants": "Include descendants",

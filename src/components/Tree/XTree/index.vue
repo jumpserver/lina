@@ -1,5 +1,9 @@
 <template>
-  <div :class="{ 'is-search-visible': treeSetting.showSearch && searchVisible }" class="x-tree">
+  <div
+    :class="{ 'is-search-visible': treeSetting.showSearch && searchVisible }"
+    :style="{ '--x-tree-row-height': `${nodeRowHeight}px` }"
+    class="x-tree"
+  >
     <div v-if="hasTreeTools" class="x-tree__header-actions">
       <el-button
         v-if="treeSetting.showSearch"
@@ -98,7 +102,7 @@
         'is-empty': !loading && treeData.length === 0,
         'is-virtual': useVirtualTree
       }"
-      class="x-tree__body"
+      class="x-tree__body compact-loading"
       @scroll.capture.passive="handleTreeAmountScroll"
     >
       <el-tree-v2
@@ -108,12 +112,13 @@
         :data="treeData"
         :default-expanded-keys="initialExpandedKeys"
         empty-text=""
-        :expand-on-click-node="true"
+        :expand-on-click-node="false"
         :filter-method="filterNode"
         :height="virtualTreeHeight"
-        :item-size="30"
+        :item-size="nodeRowHeight"
         :props="virtualTreeProps"
         highlight-current
+        @node-click="handleNodeRowClick"
         @node-contextmenu="handleNodeContextMenu"
         @node-collapse="handleNodeCollapse"
         @node-drop="handleVirtualNodeDrop"
@@ -147,11 +152,7 @@
                 :node="node"
                 name="node-icon"
               >
-                <el-icon class="x-tree__node-icon">
-                  <Folder v-if="isLeafNode(data)" />
-                  <FolderOpened v-else-if="node.expanded" />
-                  <Folder v-else />
-                </el-icon>
+                <TreeFolderIcon :leaf="isLeafNode(data)" :expanded="node.expanded" />
               </slot>
             </button>
             <el-input
@@ -200,6 +201,7 @@
         :props="treeProps"
         highlight-current
         node-key="id"
+        @node-click="handleNodeRowClick"
         @node-contextmenu="handleNodeContextMenu"
         @node-collapse="handleNodeCollapse"
         @node-drag-end="handleNodeDragEnd"
@@ -226,11 +228,7 @@
                 :node="node"
                 name="node-icon"
               >
-                <el-icon class="x-tree__node-icon">
-                  <Folder v-if="isLeafNode(data)" />
-                  <FolderOpened v-else-if="node.expanded" />
-                  <Folder v-else />
-                </el-icon>
+                <TreeFolderIcon :leaf="isLeafNode(data)" :expanded="node.expanded" />
               </slot>
             </button>
             <el-input
@@ -304,7 +302,10 @@
 <script>
 import axiosRetry from 'axios-retry'
 import Icon from '@/components/Widgets/Icon'
+import TreeFolderIcon from '@/components/Tree/TreeFolderIcon.vue'
 import { getShowCurrentAssetValue, setShowCurrentAssetValue } from '@/utils/common/index'
+
+const DEFAULT_NODE_ROW_HEIGHT = 28
 
 function appendUrlParam(url, key, value) {
   const separator = url.includes('?') ? '&' : '?'
@@ -333,7 +334,7 @@ function setAssetScopeValue(cookie, setting, value) {
 
 export default {
   name: 'XTree',
-  components: { Icon },
+  components: { Icon, TreeFolderIcon },
   props: {
     setting: {
       type: Object,
@@ -436,7 +437,7 @@ export default {
           amountTypes: ['node'],
           operationNodeId: '',
           readOnly: false,
-          nodeRowHeight: 30,
+          nodeRowHeight: DEFAULT_NODE_ROW_HEIGHT,
           lazyLoad: true,
           virtualThreshold: 1000,
           virtualize: true,
@@ -453,6 +454,9 @@ export default {
         merged.amountTypes = [...this.setting.amountTypes]
       }
       return merged
+    },
+    nodeRowHeight() {
+      return Math.max(1, Number(this.treeSetting.nodeRowHeight) || DEFAULT_NODE_ROW_HEIGHT)
     },
     hasTreeMenuOperations() {
       return this.treeSetting.showCollapse || this.treeSetting.showRefresh
@@ -541,6 +545,7 @@ export default {
   },
   mounted() {
     document.addEventListener('mousedown', this.hideRMenu)
+    document.addEventListener('keydown', this.handleContextMenuKeydown, true)
     document.addEventListener('scroll', this.hideRMenu, true)
     document.addEventListener('scroll', this.handleDocumentAmountScroll, true)
     this.setupTreeResizeObserver()
@@ -558,6 +563,7 @@ export default {
     window.cancelAnimationFrame(this.treeResizeFrame)
     window.cancelAnimationFrame(this.searchFocusFrame)
     document.removeEventListener('mousedown', this.hideRMenu)
+    document.removeEventListener('keydown', this.handleContextMenuKeydown, true)
     document.removeEventListener('scroll', this.hideRMenu, true)
     document.removeEventListener('scroll', this.handleDocumentAmountScroll, true)
   },
@@ -571,7 +577,7 @@ export default {
           if (!height) {
             return
           }
-          const nextHeight = Math.max(200, Math.round(height - 18))
+          const nextHeight = Math.max(1, Math.round(height - 18))
           if (nextHeight !== this.virtualTreeHeight) {
             this.virtualTreeHeight = nextHeight
           }
@@ -917,7 +923,7 @@ export default {
       return this.collectExpandedTreeRows(this.treeData, endIndex).slice(startIndex, endIndex)
     },
     getTreeAmountScrollIndex(scrollElement = this.getTreeAmountScrollElement()) {
-      const rowHeight = Math.max(1, Number(this.treeSetting.nodeRowHeight) || 30)
+      const rowHeight = this.nodeRowHeight
       const internalScrollTop = Math.max(0, Number(scrollElement?.scrollTop) || 0)
       const hasInternalOverflow =
         Number(scrollElement?.scrollHeight) > Number(scrollElement?.clientHeight) + 1
@@ -1928,6 +1934,20 @@ export default {
         this.handleNodeLabelClick(null, this.currentNode)
       }
     },
+    handleNodeRowClick(data, node, ...args) {
+      if (this.isLeafNode(data)) {
+        // Both tree components pass the mouse event last, after different node arguments.
+        this.handleNodeLabelClick(args.at(-1), data)
+      } else if (this.useVirtualTree) {
+        // TreeV2's automatic row expansion also toggles leaves, so only toggle branches here.
+        const tree = this.$refs.tree
+        if (node.expanded) {
+          tree?.collapseNode(node)
+        } else {
+          tree?.expandNode(node)
+        }
+      }
+    },
     handleNodeLabelClick(event, data) {
       this.currentNode = data
       this.$refs.tree?.setCurrentKey(data.id)
@@ -1991,6 +2011,14 @@ export default {
     },
     hideRMenu() {
       this.menuVisible = false
+    },
+    handleContextMenuKeydown(event) {
+      if (!this.menuVisible || event.key !== 'Escape') {
+        return
+      }
+      event.preventDefault()
+      event.stopPropagation()
+      this.hideRMenu()
     },
     handleContextMenuClick(event) {
       const menuItem = event.target?.closest?.('.rmenu')
@@ -2698,11 +2726,14 @@ export default {
   flex: 1;
   min-height: 0;
   overflow: auto;
+  overscroll-behavior-y: none;
+  // Standard scrollbar styling overrides the axis-specific WebKit rules.
+  scrollbar-width: auto;
+  scrollbar-color: auto;
   padding: 6px 8px 12px;
   border-top: 1px solid var(--el-border-color-lighter);
 
-  &::-webkit-scrollbar:horizontal {
-    display: none;
+  &::-webkit-scrollbar {
     height: 0;
   }
 }
@@ -2718,15 +2749,12 @@ export default {
 .x-tree__body.is-virtual :deep(.el-tree-virtual-list) {
   min-width: 100%;
   overflow-x: auto !important;
+  overscroll-behavior-y: none;
 }
 
 .x-tree__body.is-virtual :deep(.el-tree-virtual-list)::-webkit-scrollbar:horizontal {
   display: none;
   height: 0;
-}
-
-.x-tree__body.is-virtual :deep(.el-scrollbar__bar.is-horizontal) {
-  display: none;
 }
 
 .x-tree__body :deep(.el-tree) {
@@ -2736,7 +2764,7 @@ export default {
 }
 
 .x-tree__body :deep(.el-tree-node__content) {
-  height: 30px;
+  height: var(--x-tree-row-height);
   border-radius: 4px;
   padding-right: 8px;
   user-select: none;
@@ -2820,7 +2848,6 @@ export default {
 
 .x-tree__node-icon {
   flex: none;
-  color: var(--el-text-color-secondary);
 }
 
 .x-tree__node-select {

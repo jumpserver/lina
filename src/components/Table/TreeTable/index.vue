@@ -50,11 +50,10 @@
           @click.stop="toggleTree"
           @pointerdown.stop
         >
-          <svg-icon
-            :style="{ transform: iShowTree ? 'none' : 'rotate(180deg)' }"
-            class="icon-left"
-            icon-class="double-left"
-          />
+          <el-icon class="tree-toggle__icon" aria-hidden="true">
+            <ArrowLeftBold v-if="iShowTree" />
+            <ArrowRightBold v-else />
+          </el-icon>
         </button>
       </div>
       <div class="right">
@@ -433,7 +432,8 @@ $origin-color: #ffffff;
     box-sizing: border-box;
     flex: none;
     min-width: 0;
-    border-right: 1px solid var(--el-border-color-lighter);
+    border: 1px solid var(--el-border-color-lighter);
+    border-radius: var(--el-card-border-radius, 4px);
     overflow: hidden;
     background: $origin-color;
     color: var(--color-border);
@@ -500,7 +500,7 @@ $origin-color: #ffffff;
     cursor: default;
 
     .tree-toggle {
-      transform: translateX(-20px);
+      transform: translate(-20px, -50%);
     }
   }
 }
@@ -526,8 +526,9 @@ $origin-color: #ffffff;
 
 .tree-toggle {
   position: absolute;
-  top: 0;
+  top: 40%;
   left: 0;
+  transform: translateY(-50%);
   z-index: 2;
   display: flex;
   align-items: center;
@@ -553,7 +554,7 @@ $origin-color: #ffffff;
     content: '';
   }
 
-  .icon-left {
+  .tree-toggle__icon {
     font-size: 11px;
   }
 

@@ -200,6 +200,8 @@
   "AssetScopeWithDescendantsHelp": "Mostrar os ativos do nó atual e de todos os seus descendentes; a contagem do nó remove duplicatas no mesmo escopo",
   "AssetTree": "Árvore de ativos",
   "CollapseNode": "Recolher nó",
+  "CollapseSidebar": "Recolher barra lateral",
+  "ExpandSidebar": "Expandir barra lateral",
   "ExpandNode": "Expandir nó",
   "NodeMoveConfirmMessage": "Mover o nó ({src}) para baixo do nó ({dst})?",
   "NodeMoveConfirmTitle": "Mover nó",

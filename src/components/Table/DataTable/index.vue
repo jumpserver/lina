@@ -35,9 +35,7 @@ export default {
     const pathName = newURL(this.config.url).pathname
     const paginationSizes = [15, 30, 50, 100]
     const savedPaginationSize = Number(objTableSize.get(pathName))
-    const paginationSize = paginationSizes.includes(savedPaginationSize)
-      ? savedPaginationSize
-      : paginationSizes[0]
+    const hasSavedPageSize = paginationSizes.includes(savedPaginationSize)
     return {
       objTableSize: objTableSize,
       pathName: pathName,
@@ -83,8 +81,13 @@ export default {
         },
         pageCount: 5,
         paginationLayout: 'total, sizes, prev, pager, next',
-        paginationSize,
+        paginationSize: hasSavedPageSize ? savedPaginationSize : paginationSizes[0],
         paginationSizes,
+        autoPageSize:
+          !hasSavedPageSize &&
+          this.config.paginationSize == null &&
+          this.$attrs.paginationSize == null &&
+          this.$attrs['pagination-size'] == null,
         paginationBackground: true,
         transformQuery: (query) => {
           if (query.page && query.size) {

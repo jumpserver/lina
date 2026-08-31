@@ -212,8 +212,9 @@ export default {
   }
 
   .rmenu > .tree-menu__external-icon {
-    display: none;
-    width: auto;
+    display: inline-flex;
+    width: 9px;
+    visibility: hidden;
     color: var(--el-text-color-placeholder);
     font-size: 9px;
     line-height: 1;
@@ -221,7 +222,7 @@ export default {
 
   .tree-menu__external-item:hover > .tree-menu__external-icon,
   .tree-menu__external-item:focus-visible > .tree-menu__external-icon {
-    display: inline-flex;
+    visibility: visible;
   }
 }
 

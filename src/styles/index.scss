@@ -4,6 +4,8 @@
 @use './sidebar';
 @use './menu';
 @use './element-form-controls';
+@use './list-layout';
+@use './compact-loading';
 
 :root {
   --scrollbar-size: 8px;
@@ -335,7 +337,7 @@ input[type='file'] {
 
 // table 相关通用样式
 .el-data-table .el-table {
-  border-radius: 5px 5px 0 0;
+  border-radius: var(--el-card-border-radius, 4px) var(--el-card-border-radius, 4px) 0 0;
   overflow: hidden;
 
   .el-table__inner-wrapper,

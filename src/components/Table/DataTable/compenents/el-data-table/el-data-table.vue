@@ -10,11 +10,12 @@
         导致跨页选择（persistSelection）被覆盖，只剩当页数据。
         选择事件统一走 selectStrategy，在内部维护全量 selected 并向外 emit。
       -->
-      <div v-loading="tableLoading">
+      <div ref="tableBody" v-loading="tableLoading" class="el-data-table__body compact-loading">
         <el-table
           v-bind="tableAttrs"
           ref="table"
           :data="data"
+          :height="fillHeight ? '100%' : tableAttrs.height"
           :row-class-name="rowClassName"
           @select="selectStrategy.onSelect"
           v-on="forwardListeners"
@@ -496,6 +497,10 @@ export default {
       type: Number,
       default: 10
     },
+    autoPageSize: {
+      type: Boolean,
+      default: false
+    },
     /**
      * @deprecated
      * 不分页时的size的大小(建议接口约定，不分页时传参page=-1，故一般不会用到此属性)
@@ -537,6 +542,10 @@ export default {
      * 树形结构相关: 是否展开所有节点
      */
     expandAll: {
+      type: Boolean,
+      default: false
+    },
+    fillHeight: {
       type: Boolean,
       default: false
     },
@@ -747,10 +756,12 @@ export default {
     return {
       data: [],
       size: this.paginationSize || this.paginationSizes[0],
+      pageSizeInitialized: false,
       page: defaultFirstPage,
       // https://github.com/ElemeFE/element/issues/1153
       total: null,
       tableLoading: false,
+      listRequestId: 0,
       // 多选项的数组
       selected: [],
 
@@ -866,7 +877,7 @@ export default {
       return attrs
     },
     rootClass() {
-      return ['el-data-table', this.$attrs.class]
+      return ['el-data-table', { 'el-data-table--fill-height': this.fillHeight }, this.$attrs.class]
     },
     rootStyle() {
       return this.$attrs.style
@@ -922,10 +933,18 @@ export default {
   watch: {
     url: {
       handler(val) {
-        if (!val) return
+        const requestId = this.invalidateListRequest()
+        if (!val) {
+          this.tableLoading = false
+          return
+        }
         this.page = defaultFirstPage
         // mounted处有updateForm的行为，所以至少在初始执行时要等到nextTick
-        this.$nextTick(this.getList)
+        this.$nextTick(() => {
+          if (requestId === this.listRequestId) {
+            this.getList({ debounce: false })
+          }
+        })
       },
       immediate: true
     },
@@ -950,6 +969,7 @@ export default {
       if (query) {
         this.page = parseInt(query[this.pageKey])
         this.size = parseInt(query[this.pageSizeKey])
+        this.pageSizeInitialized = this.size > 0
 
         // 恢复查询条件，但对 slot = search 无效
         if (this.$refs.searchForm) {
@@ -960,13 +980,67 @@ export default {
       }
     }
     if (this.totalData) {
-      this.getList()
+      // Let the page's mounted hook apply its fill-height layout first.
+      const requestId = this.listRequestId
+      this.$nextTick(() => {
+        if (requestId === this.listRequestId) {
+          this.getList()
+        }
+      })
     }
   },
   created() {
     this.debouncedGetListFromRemote = _.debounce(this.getListFromRemote, 300)
   },
+  beforeUnmount() {
+    this.invalidateListRequest()
+  },
   methods: {
+    invalidateListRequest() {
+      this.debouncedGetListFromRemote?.cancel()
+      return ++this.listRequestId
+    },
+    initializePageSize() {
+      if (
+        this.pageSizeInitialized ||
+        !this.autoPageSize ||
+        !this.fillHeight ||
+        !this.hasPagination
+      ) {
+        return
+      }
+
+      const table = this.$refs.table?.$el
+      const body = table?.querySelector('.el-table__body-wrapper .el-scrollbar__wrap')
+      const bodyHeight = this.$refs.tableBody?.clientHeight
+      if (!bodyHeight || !body) return
+
+      // Measure our flex container, not Element Plus's scroll view: its inline
+      // height can still reflect the previous layout during the initial request.
+      const header = table.querySelector('thead')
+      const tableStyle = getComputedStyle(table)
+      const style = getComputedStyle(body)
+      const availableHeight =
+        bodyHeight -
+        (header?.getBoundingClientRect().height || 0) -
+        (Number.parseFloat(tableStyle.borderTopWidth) || 0) -
+        (Number.parseFloat(tableStyle.borderBottomWidth) || 0) -
+        (Number.parseFloat(style.paddingTop) || 0) -
+        (Number.parseFloat(style.paddingBottom) || 0)
+      const rowHeight = Number.parseFloat(
+        getComputedStyle(this.$el).getPropertyValue('--list-table-row-height')
+      )
+      if (!(rowHeight > 0) || availableHeight <= 0) return
+
+      // Choose once per page instance, even when the initial choice stays at 15.
+      // Resizing, filtering and returning to a cached page must not change it.
+      this.pageSizeInitialized = true
+      const size = availableHeight > rowHeight * 15 ? 30 : 15
+      if (size === this.size) return
+      // Only user actions emit sizeChange; automatic choices must not be persisted.
+      this.size = size
+      this.page = defaultFirstPage
+    },
     getFormatterComponent(col) {
       if (!col?.formatter || typeof col.formatter === 'function') {
         return null
@@ -1027,14 +1101,23 @@ export default {
     hasNextPage() {
       return this.page < this.lastPageNum
     },
-    getList({ loading = true } = {}) {
+    getList({ loading = true, debounce = true } = {}) {
+      // Invalidate immediately, including while the next search is debounced.
+      const requestId = this.invalidateListRequest()
+      if (this.fillHeight && loading) {
+        // A new page/filter starts at the first row, not the previous page's
+        // scroll position. Background refreshes keep the reading position.
+        this.$refs.table?.setScrollTop(0)
+      }
       const { url } = this
       if (this.totalData) {
         return this.getListFromStaticData({ loading: true })
       }
       if (url) {
-        return this.debouncedGetListFromRemote({ loading })
+        const options = { loading, requestId }
+        return debounce ? this.debouncedGetListFromRemote(options) : this.getListFromRemote(options)
       }
+      this.tableLoading = false
       // this.$log.debug("last page is: ", this.lastPageNum)
     },
     filterTotalData() {
@@ -1051,6 +1134,7 @@ export default {
       return totalData
     },
     getListFromStaticData({ loading = true } = {}) {
+      this.initializePageSize()
       if (loading) {
         this.tableLoading = true
       }
@@ -1083,12 +1167,14 @@ export default {
      * @public
      * @param {object} options 方法选项
      */
-    getListFromRemote({ loading = true } = {}) {
+    getListFromRemote({ loading = true, requestId = this.invalidateListRequest() } = {}) {
       const { url } = this
-      if (!url) {
+      if (!url || requestId !== this.listRequestId) {
         return
       }
 
+      // Select the initial size before building the query, without another request.
+      this.initializePageSize()
       const query = this.getQuery()
       let formValue = {}
       if (this.$refs.searchForm) {
@@ -1109,8 +1195,11 @@ export default {
       }
 
       const request = this.request || ((requestUrl, config) => this.$axios.get(requestUrl, config))
-      Promise.resolve(request(url + queryStr, this.axiosConfig))
+      return Promise.resolve(request(url + queryStr, this.axiosConfig))
         .then(({ data: resp }) => {
+          if (requestId !== this.listRequestId) {
+            return
+          }
           let data = []
 
           // 不分页
@@ -1145,17 +1234,22 @@ export default {
 
           // 开启persistSelection时，需要同步selected状态到el-table中
           this.$nextTick(() => {
-            this.selectStrategy?.updateElTableSelection()
+            if (requestId === this.listRequestId) {
+              this.selectStrategy?.updateElTableSelection()
+            }
           })
         })
         .catch((err) => {
+          if (requestId !== this.listRequestId) {
+            return
+          }
+          this.total = 0
+          this.tableLoading = false
           /**
            * 请求数据失败，返回err对象
            * @event error
            */
           this.$emit('error', err)
-          this.total = 0
-          this.tableLoading = false
         })
     },
     search(attrs, reset) {
@@ -1206,9 +1300,10 @@ export default {
       })
     },
     handleSizeChange(val) {
-      if (this.size === val) return
+      this.pageSizeInitialized = true
       this.$emit('update:page-size', val)
       this.$emit('sizeChange', val)
+      if (this.size === val) return
       this.page = defaultFirstPage
       this.size = val
       this.getList()

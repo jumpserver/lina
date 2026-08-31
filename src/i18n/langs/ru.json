@@ -200,6 +200,8 @@
   "AssetScopeWithDescendantsHelp": "Показывать активы текущего узла и всех его дочерних узлов; количество узла рассчитывается без дубликатов в той же области",
   "AssetTree": "Дерево активов",
   "CollapseNode": "Свернуть узел",
+  "CollapseSidebar": "Свернуть боковую панель",
+  "ExpandSidebar": "Развернуть боковую панель",
   "ExpandNode": "Развернуть узел",
   "NodeMoveConfirmMessage": "Переместить узел ({src}) под узел ({dst})?",
   "NodeMoveConfirmTitle": "Переместить узел",

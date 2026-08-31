@@ -2027,6 +2027,8 @@
   "Package": "パッケージ",
   "ExpandNode": "ノードを展開",
   "CollapseNode": "ノードを折りたたむ",
+  "CollapseSidebar": "サイドバーを折りたたむ",
+  "ExpandSidebar": "サイドバーを展開",
   "TreeSettings": "ツリー設定",
   "AssetScope": "アセット範囲",
   "AssetScopeWithDescendants": "子ノードを含む",

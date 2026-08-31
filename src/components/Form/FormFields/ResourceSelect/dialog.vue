@@ -325,6 +325,7 @@ export default {
       return {
         url: this.tableUrl,
         id: this.valueKey,
+        savePageSize: false,
         paginationSize: this.effectivePageSize,
         paginationSizes: [...new Set([10, 15, this.effectivePageSize, 30, 50, 100])]
           .filter((size) => size <= 100)
