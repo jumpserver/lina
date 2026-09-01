@@ -76,7 +76,9 @@ export default {
   background: #fff;
   padding: 1.25rem;
   height: 100%;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  border: 1px solid var(--panel-border-color, var(--el-border-color));
+  border-radius: var(--el-card-border-radius, 4px);
+  box-shadow: none;
   transition: all 0.3s;
 
   :deep(.card-content) {

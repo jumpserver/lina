@@ -189,6 +189,7 @@ export default {
   flex-direction: column;
   overflow-y: hidden;
   overflow-x: hidden;
+  background-color: var(--page-background-color, #fff);
 
   .el-alert {
     margin: 0 !important;

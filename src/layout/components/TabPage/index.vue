@@ -6,6 +6,7 @@
           v-if="tabIndices.length > 1"
           v-model="iActiveMenu"
           class="page-submenu"
+          type="card"
           @tab-click="handleTabClick"
         >
           <template v-for="item in tabIndices" :key="item.name">
@@ -271,33 +272,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.page.no-title {
-  :deep(.page-submenu) {
-    .el-tabs__header {
-      margin-top: 0;
-    }
-
-    .tab-page-content {
-      height: calc(100% - 45px);
-    }
-  }
-}
-
 .page-submenu {
+  --el-border-color-light: var(--panel-border-color, var(--el-border-color));
+  --el-tabs-header-height: var(--tab-page-header-height, 34px);
+
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
 }
 
 .page-submenu :deep(.el-tabs__header) {
-  background-color: white;
-  margin-top: -10px;
-  margin-bottom: 0;
-  padding: 0 20px;
   display: flex;
   align-items: stretch;
-  min-height: 40px;
-  border-bottom: 1px solid #ebeef5;
+  height: var(--tab-page-header-height, 34px);
+  min-height: var(--tab-page-header-height, 34px);
+  margin: 0 0 -1px;
+  padding: 0 var(--tab-page-inline-padding, 20px);
+  box-sizing: border-box;
+  background-color: var(--page-background-color, #fff);
+  border-bottom: 0;
 }
 
 .page-submenu :deep(.el-tabs__nav-wrap),
@@ -307,39 +300,99 @@ export default {
   align-items: stretch;
 }
 
-.page-submenu :deep(.el-tabs__nav-wrap) {
+.page-submenu :deep(.el-tabs__nav-wrap.is-top) {
+  position: relative;
   flex: 1 1 auto;
-  margin: 0;
+  margin: 0 0 -1px;
 
   &::after {
-    display: none;
+    content: '';
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    bottom: 1px;
+    left: 0;
+    display: block;
+    height: 1px;
+    background-color: var(--panel-border-color, var(--el-border-color));
+    pointer-events: none;
   }
+}
+
+.page-submenu :deep(.el-tabs__header .el-tabs__nav) {
+  position: relative;
+  z-index: 2;
+  gap: 0;
+  border: 0;
+  border-radius: 0;
 }
 
 .page-submenu :deep(.el-tabs__active-bar) {
-  height: 2px;
+  display: none;
 }
 
-.page-submenu :deep(.el-tabs__item) {
+.page-submenu :deep(.el-tabs__header .el-tabs__item),
+.page-submenu :deep(.el-tabs__header .el-tabs__item.is-top) {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  height: 40px;
-  line-height: 40px;
-  padding: 0 18px;
-  font-size: 14px;
+  height: var(--tab-page-header-height, 34px);
+  margin-top: 0;
+  padding: 0 14px;
+  font-size: 13px;
   font-weight: 500;
-  color: var(--color-text-primary);
-
-  .pre-icon {
-    width: 16px;
-    display: inline-block;
-    opacity: 0.6;
-  }
+  color: var(--el-text-color-regular, #606266);
+  background-color: var(--page-background-color, #fff);
+  border: 1px solid var(--panel-border-color, var(--el-border-color));
+  border-radius: 0;
+  user-select: none;
+  transition:
+    color 120ms ease,
+    background-color 120ms ease,
+    border-color 120ms ease;
 
   &.is-active {
+    z-index: 2;
+    color: var(--el-color-primary);
+    background-color: var(--page-background-color, #fff);
+    border-color: var(--panel-border-color, var(--el-border-color));
+    border-top-color: var(--el-color-primary);
+    border-bottom-color: var(--page-background-color, #fff);
+    box-shadow: inset 0 1px 0 var(--el-color-primary);
+
     .pre-icon {
       opacity: 1;
+    }
+  }
+
+  &:not(.is-active, .is-disabled):hover {
+    color: var(--el-color-primary);
+    background-color: var(--el-fill-color-light, #f5f7fa);
+    border-color: var(--el-border-color-darker, #cdd0d6);
+  }
+
+  .pre-icon {
+    width: 14px;
+    height: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 14px;
+    font-size: 14px;
+    line-height: 1;
+    vertical-align: middle;
+    opacity: 0.6;
+
+    > .fa,
+    > .el-icon,
+    > .svg-icon,
+    > svg {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px;
+      height: 14px;
+      line-height: 1;
+      vertical-align: middle;
     }
   }
 
@@ -350,6 +403,19 @@ export default {
       color: #c0c4cc;
     }
   }
+}
+
+.page-submenu :deep(.el-tabs__header .el-tabs__item + .el-tabs__item) {
+  margin-left: -1px;
+}
+
+.page-submenu :deep(.tab-page-submenu-item-wrapper) {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+  padding: 0;
+  line-height: 1;
 }
 
 .page-submenu :deep(.el-tabs__item .el-tooltip__trigger),
@@ -377,6 +443,14 @@ export default {
 }
 
 .page-submenu :deep(.el-tabs__header) {
+  .el-tabs__nav-next,
+  .el-tabs__nav-prev {
+    top: 0;
+    height: var(--tab-page-header-height, 34px);
+    line-height: var(--tab-page-header-height, 34px);
+    background-color: var(--page-background-color, #fff);
+  }
+
   .el-tabs__nav-next {
     right: 10px;
   }
@@ -396,9 +470,11 @@ export default {
 
   .tab-page-submenu {
     display: flex;
-    align-items: center;
-    background-color: white;
-    margin-bottom: 5px;
+    align-items: stretch;
+    min-height: var(--tab-page-header-height, 34px);
+    box-sizing: border-box;
+    background-color: var(--page-background-color, #fff);
+    border-bottom: 0;
     overflow: visible;
   }
 
@@ -418,10 +494,6 @@ export default {
 
   .tab-page-submenu-right :deep(.el-button) {
     padding: 5px 8px;
-  }
-
-  :deep(.page-heading) {
-    border-bottom: none;
   }
 
   :deep(.page-content) {

@@ -223,8 +223,8 @@ $origin-color: #ffffff;
         background-color 0.12s;
       color: var(--menu-text);
       background-color: var(--menu-bg);
-      border-bottom: 1px solid var(--menu-border, var(--color-border));
-      border-top: 1px solid var(--menu-border, var(--color-border));
+      border-bottom: 1px solid var(--menu-border, var(--panel-border-color, var(--el-border-color)));
+      border-top: 1px solid var(--menu-border, var(--panel-border-color, var(--el-border-color)));
 
       .switch-view {
         width: 100%;
@@ -277,15 +277,15 @@ $origin-color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
     padding: 0;
     transform: translateX(50%);
     border: 1px solid var(--el-border-color);
     border-radius: 50%;
     background-color: var(--el-bg-color);
     color: var(--el-text-color-secondary);
-    font-size: 13px;
+    font-size: 11px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
     cursor: pointer;
     transition:
@@ -360,9 +360,9 @@ $origin-color: #ffffff;
 <style lang="scss">
 .el-popper.is-light.el-tooltip.el-popover.view-switcher-popper {
   --el-popper-bg-color-light: var(--menu-bg);
-  --el-border-color-light: var(--menu-border, var(--color-border));
+  --el-border-color-light: var(--menu-border, var(--panel-border-color, var(--el-border-color)));
   --el-popover-bg-color: var(--menu-bg);
-  --el-popover-border-color: var(--menu-border, var(--color-border));
+  --el-popover-border-color: var(--menu-border, var(--panel-border-color, var(--el-border-color)));
   --el-popover-padding: 0;
 
   min-width: 0 !important;
@@ -370,11 +370,11 @@ $origin-color: #ffffff;
   padding: 6px !important;
   color: var(--menu-text);
   background: var(--menu-bg);
-  border: 1px solid var(--menu-border, var(--color-border));
+  border: 1px solid var(--menu-border, var(--panel-border-color, var(--el-border-color)));
 
   > .el-popper__arrow::before {
     background: var(--menu-bg);
-    border-color: var(--menu-border, var(--color-border));
+    border-color: var(--menu-border, var(--panel-border-color, var(--el-border-color)));
   }
 }
 </style>

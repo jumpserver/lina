@@ -69,7 +69,9 @@ export default {
 @use '@/styles/variables' as *;
 
 .app-main {
-  background-color: #f3f3f4;
+  --el-card-border-color: var(--panel-border-color, var(--el-border-color));
+
+  background-color: var(--page-background-color, #fff);
   height: 100%;
   //height: 100vh !important;
   width: 100%;

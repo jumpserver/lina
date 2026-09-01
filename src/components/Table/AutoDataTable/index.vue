@@ -346,7 +346,8 @@ export default {
         return
       }
 
-      const containerWidth = observedWidth || this.$el?.clientWidth
+      const scrollViewport = this.$el?.querySelector('.el-table__body-wrapper .el-scrollbar__wrap')
+      const containerWidth = scrollViewport?.clientWidth || observedWidth || this.$el?.clientWidth
       if (!containerWidth) {
         this.commitColumnWidths(sourceColumns)
         return
@@ -546,6 +547,7 @@ export default {
         columns: [...this.totalColumns],
         tableAttrs: {
           tableLayout: 'auto',
+          nativeScrollbar: true,
           ...this.config.tableAttrs
         }
       }
@@ -832,7 +834,7 @@ export default {
     word-break: normal !important;
   }
 
-  :deep(.el-table__body td.el-table__cell .cell > :not(.label-container)) {
+  :deep(.el-table__body td.el-table__cell .cell > :not(.label-container):not(.copyable)) {
     min-width: max-content;
     max-width: none !important;
   }

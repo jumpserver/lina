@@ -2,10 +2,15 @@
   <div v-loading="loading">
     <TreeTable
       ref="CommandTreeTable"
+      v-model:active-menu="treeTabConfig.activeMenu"
+      component="TabTree"
       :title="title"
       :header-actions="headerActions"
       :table-config="tableConfig"
       :tree-setting="treeSetting"
+      :tree-tab-config="treeTabConfig"
+      :tree-initial-max-width="320"
+      tree-width="20%"
       class="command-list-table"
       @tag-date-change="handleDateChange"
       @tag-filter="handleFilterChange"
@@ -23,7 +28,6 @@ import { getDayEnd, getDaysAgo } from '@/utils/common/time'
 import { OutputExpandFormatter } from '../formatters'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import isFalsey from '@/components/Table/DataTable/compenents/el-data-table/utils/is-falsey'
-import deepmerge from 'deepmerge'
 import * as queryUtil from '@/components/Table/DataTable/compenents/el-data-table/utils/query'
 import { createSourceIdCache } from '@/api/common'
 import { download } from '@/utils/common/index'
@@ -41,9 +45,37 @@ export default {
   data() {
     const dateFrom = getDaysAgo(7).toISOString()
     const dateTo = this.$moment(getDayEnd()).add(1, 'day').toISOString()
+    const treeSetting = {
+      showDefaultMenu: false,
+      showMenu: false,
+      showRefresh: true,
+      showCollapse: true,
+      showSearch: true,
+      showAssets: false,
+      readOnly: true,
+      lazyLoad: false,
+      expandRootInGlobalOrg: true,
+      treeUrl: '/api/v1/terminal/command-storages/tree/?real=1',
+      amountPredicate: (node) => node.id !== 'root' && node.valid !== false,
+      loadNodeAmounts: (nodeIds, options) => this.loadStorageAmounts(nodeIds, options),
+      edit: {
+        drag: {
+          isMove: false
+        }
+      },
+      callback: {
+        onSelected: (_event, treeNode) => this.handleStorageSelected(treeNode)
+      }
+    }
     return {
       title: this.$t('CommandStorage'),
       loading: true,
+      query: {
+        date_from: dateFrom,
+        date_to: dateTo
+      },
+      treeFilterQuery: {},
+      treeSearchQuery: {},
       tableConfig: {
         url: '/api/v1/terminal/commands/',
         tableAttrs: {
@@ -168,40 +200,19 @@ export default {
           }
         }
       },
-      treeSetting: {
-        showMenu: false,
-        showRefresh: true,
-        showAssets: false,
-        // ?assets=0不显示资产. =1显示资产
-        treeUrl: `/api/v1/terminal/command-storages/tree/?real=1&date_from=${dateFrom}&date_to=${dateTo}&asset_id=${this.assetId}`,
-        view: {
-          // 添加禁用颜色区分
-          fontCss: (treeId, treeNode) => {
-            if (treeNode.chkDisabled) {
-              return {
-                opacity: '0.4'
-              }
-            }
-            return {}
+      treeSetting,
+      treeTabConfig: {
+        activeMenu: 'CommandStorageTree',
+        treeComponent: 'XTree',
+        submenu: [
+          {
+            title: this.$t('CommandStorage'),
+            name: 'CommandStorageTree',
+            icon: 'fa-solid fa-database',
+            treeComponent: 'XTree',
+            treeSetting
           }
-        },
-        callback: {
-          onSelected: (event, treeNode) => {
-            // 禁止点击根节点
-            if (treeNode.id === 'root') {
-              return
-            }
-            if (!treeNode.valid) {
-              this.$message.error(this.$tc('EsDisabled'))
-              return
-            }
-            this.tableConfig.url = `/api/v1/terminal/commands/?command_storage_id=${treeNode.id}&order=-timestamp`
-            if (this.assetId) {
-              this.tableConfig.url += `&asset_id=${this.assetId}`
-            }
-            this.treeTable.handleUrlChange(this.tableConfig.url)
-          }
-        }
+        ]
       }
     }
   },
@@ -212,50 +223,75 @@ export default {
   },
   watch: {},
   methods: {
+    handleStorageSelected(treeNode) {
+      if (treeNode.id === 'root') {
+        return
+      }
+      if (!treeNode.valid) {
+        this.$message.error(this.$tc('EsDisabled'))
+        return
+      }
+      let url = `/api/v1/terminal/commands/?command_storage_id=${treeNode.id}&order=-timestamp`
+      if (this.assetId) {
+        url += `&asset_id=${this.assetId}`
+      }
+      this.tableConfig.url = url
+      this.treeTable.handleUrlChange(url)
+    },
     checkFirstNode(obj) {
-      const ztree = obj
-      const nodes = ztree.getNodes()
+      const nodes = obj.getNodes()
       const firstChild = nodes[0]?.children?.[0]
       if (firstChild) {
-        ztree.selectNode(firstChild)
+        obj.selectNode(firstChild)
       }
       this.loading = false
     },
+    loadStorageAmounts(nodeIds, { signal } = {}) {
+      return this.$axios.post(
+        '/api/v1/terminal/command-storages/tree-metrics/',
+        { node_ids: nodeIds },
+        {
+          params: this.getTreeMetricsQuery(),
+          signal
+        }
+      )
+    },
+    getTreeMetricsQuery() {
+      return {
+        ...this.query,
+        ...this.treeSearchQuery,
+        ...this.treeFilterQuery,
+        ...(this.assetId ? { asset_id: this.assetId } : {})
+      }
+    },
+    reloadTreeMetrics() {
+      return this.treeTable?.reloadVisibleMetrics({
+        fresh: true,
+        resetNormal: true
+      })
+    },
     handleTagChange(query) {
-      const _query = this.cleanUrl(query)
-      const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`
-      const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(_query, '=', '&')
-      const treeUrl = url + queryStr
-      this.treeSetting['treeUrl'] = treeUrl
+      this.treeSearchQuery = this.cleanQuery(query)
+      this.reloadTreeMetrics()
     },
     handleFilterChange(query) {
-      const _query = this.cleanUrl(query)
-      const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`
-      const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(_query, '=', '&')
-      const treeUrl = url + queryStr
-      this.treeSetting['treeUrl'] = treeUrl
+      this.treeFilterQuery = this.cleanQuery(query)
+      this.reloadTreeMetrics()
     },
     handleDateChange(object) {
       this.query = {
         date_from: object[0].toISOString(),
         date_to: object[1].toISOString()
       }
-      const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`
-      const queryStr =
-        (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(this.query, '=', '&')
-      const treeUrl = url + queryStr
-      this.treeSetting['treeUrl'] = treeUrl
-      this.treeTable.forceRerenderTree()
+      this.reloadTreeMetrics()
     },
-    cleanUrl(query) {
-      query = Object.keys(query)
+    cleanQuery(query) {
+      return Object.keys(query)
         .filter((k) => !isFalsey(query[k]))
         .reduce((obj, k) => {
           obj[k] = query[k].toString().trim()
           return obj
         }, {})
-      query = deepmerge(this.query, query)
-      return query
     }
   }
 }

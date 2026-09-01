@@ -198,7 +198,7 @@ export default {
   padding: 12px 16px;
   margin-bottom: 0;
   justify-content: center;
-  border: 1px solid var(--el-border-color-lighter);
+  border: 1px solid var(--panel-border-color, var(--el-border-color));
   border-radius: 4px;
   background-color: #fff;
   box-shadow: none;

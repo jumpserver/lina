@@ -24,8 +24,9 @@
     left: 0;
     z-index: 1001;
     overflow: visible;
-    border-right: 1px solid var(--menu-border, var(--color-border));
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    border-right: 1px solid var(--el-border-color);
+    border-radius: 0;
+    box-shadow: none;
 
     @media print {
       display: none;
@@ -54,7 +55,25 @@
       overflow-x: hidden;
       overflow-y: auto;
       scrollbar-width: thin;
-      scrollbar-color: color-mix(in srgb, var(--menu-text) 38%, var(--menu-bg)) var(--menu-bg);
+      scrollbar-color: transparent transparent;
+
+      &::-webkit-scrollbar-thumb,
+      &::-webkit-scrollbar-thumb:hover {
+        background-color: transparent;
+      }
+    }
+
+    &:hover .menu-wrap,
+    &:focus-within .menu-wrap {
+      scrollbar-color: color-mix(in srgb, var(--menu-text) 38%, var(--menu-bg)) transparent;
+
+      &::-webkit-scrollbar-thumb {
+        background-color: color-mix(in srgb, var(--menu-text) 38%, var(--menu-bg));
+      }
+
+      &::-webkit-scrollbar-thumb:hover {
+        background-color: color-mix(in srgb, var(--menu-text) 55%, var(--menu-bg));
+      }
     }
 
     .is-horizontal {

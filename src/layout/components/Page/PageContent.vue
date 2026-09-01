@@ -12,7 +12,7 @@ export default {
 
 <style scoped>
 .wrapper-content {
-  padding: 12px 20px 22px 20px;
+  padding: 0 20px 22px;
   box-sizing: border-box;
   min-height: 100%;
   display: flex;

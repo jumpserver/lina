@@ -14,6 +14,7 @@ function normalizeJoin(base, url) {
 }
 
 export const IS_DEV = env.DEV
+// export const IS_DEV = false
 export const IS_PROD = env.PROD
 export const NODE_ENV = IS_DEV ? 'development' : 'production'
 export const APP_ENV = env.VITE_APP_ENV || NODE_ENV

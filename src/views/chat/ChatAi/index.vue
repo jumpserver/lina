@@ -14,6 +14,6 @@ import ChatAI from '@/components/Apps/ChatAi'
   height: 100%;
   min-height: calc(100vh - 94px);
   overflow: hidden;
-  background: #fbfbfd;
+  background: var(--page-background-color, #fff);
 }
 </style>

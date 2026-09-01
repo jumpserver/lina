@@ -2,10 +2,10 @@
   <div>
     <el-row :gutter="16">
       <el-col :lg="12" :md="24" class="margin-top-10 card-left">
-        <SummaryCountCard :config="logConfig" :items="LogItems" />
+        <SummaryCountCard :config="logConfig" :items="LogItems" class="dashboard-panel" />
       </el-col>
       <el-col :lg="12" :md="24" class="margin-top-10 card-right">
-        <SummaryCountCard :config="sessionConfig" :items="sessionItems" />
+        <SummaryCountCard :config="sessionConfig" :items="sessionItems" class="dashboard-panel" />
       </el-col>
     </el-row>
   </div>

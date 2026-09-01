@@ -6,6 +6,7 @@
   overflow: hidden !important;
   scrollbar-gutter: auto;
   padding-bottom: 8px;
+  background-color: #fff;
 }
 
 .page.tab-page .tab-page-content[data-list-layout='viewport'] {
@@ -78,6 +79,48 @@
     display: flex;
     flex: 1 1 0%;
     min-height: 0;
+
+    // Page lists sit directly on the content background. Remove the outer
+    // card edges so the table does not look like a nested card.
+    > .ibox {
+      border-top: 0;
+      border-right: 0;
+      border-bottom: 0;
+      border-left: 0;
+      border-radius: 0;
+
+      .el-table__header thead > tr > th,
+      .el-table__body-header > tr > th {
+        background-color: var(--el-fill-color-light, #f5f7fa);
+      }
+
+      .el-data-table__body > .el-table,
+      .el-table__header thead > tr > th:first-child,
+      .el-table__header thead > tr > th:last-child,
+      .el-table__body-header > tr > th:first-child,
+      .el-table__body-header > tr > th:last-child {
+        border-radius: 0;
+      }
+
+      .el-data-table__body > .el-table--border {
+        --el-table-border-color: var(--el-border-color);
+
+        &::before,
+        &::after {
+          display: none;
+        }
+
+        > .el-table__inner-wrapper > .el-table__border-left-patch,
+        > .el-table__inner-wrapper > .el-table__border-right-patch,
+        > .el-table__inner-wrapper > .el-table__border-bottom-patch {
+          display: none;
+        }
+
+        tr > .el-table__cell:last-child {
+          border-right: 0 !important;
+        }
+      }
+    }
 
     > .ibox,
     > .ibox > .el-card__body,

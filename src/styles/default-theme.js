@@ -13,6 +13,8 @@ export default {
   '--color-disabled-background': '#f5f7fa',
   '--color-disabled': '#bbb',
   '--color-help-text': '#8f959e',
+  '--page-background-color': '#ffffff',
+  '--panel-border-color': 'var(--el-border-color)',
   '--banner-bg': '#148f76',
   '--submenu-bg': '#ffffff',
   '--menu-bg': '#ffffff',

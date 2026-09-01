@@ -13,7 +13,7 @@
           <DataSummary class="data-summery" />
         </el-col>
         <el-col :span="10" :xs="24">
-          <MissionSummery class="mission-summery" />
+          <MissionSummery class="dashboard-panel mission-summery" />
         </el-col>
       </el-row>
       <el-row :gutter="20">
@@ -24,7 +24,7 @@
           :span="14"
           :xs="24"
         >
-          <AccountSecretSummary class="account-secret-summary" />
+          <AccountSecretSummary class="account-secret-summary dashboard-panel" />
         </el-col>
         <el-col
           :span="
@@ -34,13 +34,13 @@
           "
           :xs="24"
         >
-          <RiskSummary class="risk-summary" />
+          <RiskSummary class="dashboard-panel risk-summary" />
         </el-col>
       </el-row>
 
       <el-row>
         <el-col :span="24">
-          <AssetProportionSummary :url="url" class="asset-proportion-summary" />
+          <AssetProportionSummary :url="url" class="asset-proportion-summary dashboard-panel" />
         </el-col>
       </el-row>
     </div>

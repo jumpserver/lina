@@ -114,20 +114,21 @@
         </el-table>
       </div>
 
-      <el-pagination
-        v-if="hasPagination"
-        v-bind="{
-          ...normalizedExtraPaginationAttrs,
-          currentPage: paginationCurrentPage,
-          pageSize: paginationPageSize,
-          background: paginationBackground,
-          layout: paginationLayout,
-          pageSizes: paginationSizes,
-          total: total || 0,
-          'onUpdate:current-page': handleCurrentChange,
-          'onUpdate:page-size': handleSizeChange
-        }"
-      />
+      <div v-if="hasPagination" class="el-data-table__pagination-viewport">
+        <el-pagination
+          v-bind="{
+            ...normalizedExtraPaginationAttrs,
+            currentPage: paginationCurrentPage,
+            pageSize: paginationPageSize,
+            background: paginationBackground,
+            layout: paginationLayout,
+            pageSizes: paginationSizes,
+            total: total || 0,
+            'onUpdate:current-page': handleCurrentChange,
+            'onUpdate:page-size': handleSizeChange
+          }"
+        />
+      </div>
 
       <the-dialog
         ref="dialog"

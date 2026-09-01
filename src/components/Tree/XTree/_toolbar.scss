@@ -12,7 +12,7 @@
 @mixin search-row {
   flex: none;
   padding: 8px 12px;
-  border-bottom: 1px solid var(--el-border-color-lighter);
+  border-bottom: 1px solid var(--panel-border-color, var(--el-border-color));
 }
 
 @mixin search-transition($name) {

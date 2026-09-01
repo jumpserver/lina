@@ -149,7 +149,8 @@ $single-menu-height: 38px;
       // 存在三级子菜单
       .level1-menu {
         &.el-sub-menu.is-opened {
-          border-top: solid 1px var(--menu-border, var(--color-border));
+          border-top: solid 1px
+            var(--menu-border, var(--panel-border-color, var(--el-border-color)));
           background-color: var(--menu-is-open-bg, var(--menu-bg));
         }
 
