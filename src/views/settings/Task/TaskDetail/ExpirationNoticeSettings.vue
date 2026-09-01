@@ -28,7 +28,7 @@ const taskNoticeFields = {
   'perms.tasks.check_asset_permission_will_expired': {
     first: 'PERM_EXPIRED_FIRST_NOTICE_DAYS',
     daily: 'PERM_EXPIRED_DAILY_NOTICE_DAYS',
-    short: 'PERM_EXPIRED_SHORT_NOTICE_MINUTES'
+    soon: 'PERM_EXPIRED_SOON_NOTICE_MINUTES'
   }
 }
 
@@ -49,7 +49,7 @@ export default {
       return taskNoticeFields[this.taskName]
     },
     fields() {
-      return [this.noticeFields.first, this.noticeFields.daily, this.noticeFields.short].filter(
+      return [this.noticeFields.first, this.noticeFields.daily, this.noticeFields.soon].filter(
         Boolean
       )
     },
@@ -69,12 +69,12 @@ export default {
           rules: [{ validator: this.validateDailyNotice, trigger: ['blur', 'change'] }]
         }
       }
-      if (this.noticeFields.short) {
-        fields[this.noticeFields.short] = {
-          label: this.$t('DefaultShortNoticeMinutes'),
-          helpTip: this.$t('DefaultShortNoticeMinutesHelpText'),
+      if (this.noticeFields.soon) {
+        fields[this.noticeFields.soon] = {
+          label: this.$t('DefaultExpireSoonNoticeMinutes'),
+          helpTip: this.$t('DefaultExpireSoonNoticeMinutesHelpText'),
           el: { inputmode: 'numeric' },
-          rules: [{ validator: this.validateShortNotice, trigger: ['blur', 'change'] }]
+          rules: [{ validator: this.validateExpireSoonNotice, trigger: ['blur', 'change'] }]
         }
       }
       return fields
@@ -131,7 +131,7 @@ export default {
       }
       callback()
     },
-    validateShortNotice(rule, value, callback) {
+    validateExpireSoonNotice(rule, value, callback) {
       const notice = this.parseNoticeDays(value)
       if (notice.error) {
         callback(new Error(notice.error))

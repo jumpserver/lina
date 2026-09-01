@@ -84,14 +84,14 @@ export default {
           ].join('; ')
         },
         {
-          key: this.$t('ShortExpireNotice'),
-          value: this.object.short_expire_notice_enabled
-            ? `${this.object.short_expire_notice_minutes} ${this.$t('Minutes')}`
+          key: this.$t('ExpireSoonNotice'),
+          value: this.object.expire_soon_notice_enabled
+            ? `${this.object.expire_soon_notice_minutes} ${this.$t('Minutes')}`
             : this.$t('Disabled')
         },
         {
-          key: `${this.$t('ShortExpireNotice')} - ${this.$t('Date')}`,
-          value: this.object.short_expire_notice_at || '-'
+          key: `${this.$t('ExpireSoonNotice')} - ${this.$t('Date')}`,
+          value: this.object.expire_soon_notice_at || '-'
         },
         'date_created',
         'created_by',
