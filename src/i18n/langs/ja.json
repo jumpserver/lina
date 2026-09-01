@@ -2102,5 +2102,6 @@
   "ExpireSoonNoticePreview": "{time} に通知します",
   "ExpireSoonNoticeFutureError": "通知時刻が未来になる正の整数を入力してください。",
   "DefaultExpireSoonNoticeMinutes": "期限直前通知のデフォルト",
-  "DefaultExpireSoonNoticeMinutesHelpText": "期限直前通知を有効にする際の既定分数です。既存の権限は変更されません。"
+  "DefaultExpireSoonNoticeMinutesHelpText": "期限直前通知を有効にする際の既定分数です。既存の権限は変更されません。",
+  "ValidityPeriod": "有効期間"
 }

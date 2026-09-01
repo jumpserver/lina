@@ -74,17 +74,16 @@ export default {
         [this.$t('Protocol'), ['protocols']],
         [this.$t('Action'), ['actions']],
         [
-          this.$t('Other'),
+          this.$t('ValidityPeriod'),
           [
-            'is_active',
             'date_start',
             'date_expired',
             'expire_notice_policy',
             'expire_soon_notice_enabled',
-            'expire_soon_notice_minutes',
-            'comment'
+            'expire_soon_notice_minutes'
           ]
-        ]
+        ],
+        [this.$t('Other'), ['is_active', 'comment']]
       ],
       url: '/api/v1/perms/asset-permissions/',
       createSuccessNextRoute: { name: 'AssetPermissionDetail' },

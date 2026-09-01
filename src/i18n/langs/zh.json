@@ -2345,5 +2345,6 @@
   "ExpireSoonNoticePreview": "将在 {time} 提醒",
   "ExpireSoonNoticeFutureError": "请输入正整数，并确保计算出的提醒时间仍在未来。",
   "DefaultExpireSoonNoticeMinutes": "临近到期提醒默认提前时间",
-  "DefaultExpireSoonNoticeMinutesHelpText": "作为开启临近到期提醒时提供的默认提前分钟数，不会修改已有授权。"
+  "DefaultExpireSoonNoticeMinutesHelpText": "作为开启临近到期提醒时提供的默认提前分钟数，不会修改已有授权。",
+  "ValidityPeriod": "有效期"
 }

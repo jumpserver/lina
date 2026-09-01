@@ -61,11 +61,11 @@ export default {
         [this.$t('Basic'), ['title', 'org_id', 'flow_id', 'cc_users']],
         [
           this.$t('RequestPerm'),
+          ['apply_nodes', 'apply_assets', 'apply_accounts', 'apply_actions']
+        ],
+        [
+          this.$t('ValidityPeriod'),
           [
-            'apply_nodes',
-            'apply_assets',
-            'apply_accounts',
-            'apply_actions',
             'apply_date_start',
             'apply_date_expired',
             'apply_expire_notice_policy',
