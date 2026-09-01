@@ -3,10 +3,24 @@ function toTimestamp(value) {
   return Number.isFinite(timestamp) ? timestamp : null
 }
 
-export function getShortNoticeAt(dateExpired, minutes) {
+const FALLBACK_EXPIRE_SOON_NOTICE_MINUTES = 15
+
+export function isPositiveInteger(value) {
+  return Number.isInteger(value) && value > 0
+}
+
+export function getDefaultExpireSoonNoticeMinutes(publicSettings) {
+  return publicSettings.PERM_EXPIRED_SOON_NOTICE_MINUTES ?? FALLBACK_EXPIRE_SOON_NOTICE_MINUTES
+}
+
+export function resolveExpireSoonNoticeMinutes(enabled, minutes, defaultMinutes) {
+  return enabled && (minutes === null || minutes === undefined) ? defaultMinutes : minutes
+}
+
+export function getExpireSoonNoticeAt(dateExpired, minutes) {
   const expired = toTimestamp(dateExpired)
   const noticeMinutes = Number(minutes)
-  if (expired === null || !Number.isInteger(noticeMinutes) || noticeMinutes <= 0) {
+  if (expired === null || !isPositiveInteger(noticeMinutes)) {
     return null
   }
   return new Date(expired - noticeMinutes * 60000)
@@ -20,8 +34,8 @@ export function formatNoticeDate(value) {
   )
 }
 
-export function isShortNoticeAtFuture(dateExpired, minutes) {
-  const noticeAt = getShortNoticeAt(dateExpired, minutes)
+export function isExpireSoonNoticeAtFuture(dateExpired, minutes) {
+  const noticeAt = getExpireSoonNoticeAt(dateExpired, minutes)
   return noticeAt !== null && noticeAt.getTime() > Date.now()
 }
 

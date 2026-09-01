@@ -14,10 +14,16 @@ import ResourceSelect from '@/components/Form/FormFields/ResourceSelect'
 import TreeResourceSelect from '@/components/Form/FormFields/TreeResourceSelect'
 import AccountFormatter from './components/AccountFormatter'
 import ExpireNoticePolicy from './components/ExpireNoticePolicy.vue'
-import ShortExpireNoticeMinutes from './components/ShortExpireNoticeMinutes.vue'
+import ExpireSoonNoticeMinutes from './components/ExpireSoonNoticeMinutes.vue'
 import { AllAccount } from '../const'
 import ProtocolsSelect from '@/components/Form/FormFields/AllOrSpec.vue'
-import { isShortNoticeAtFuture, normalizeExpireNoticePayload } from './expireNotice'
+import {
+  getDefaultExpireSoonNoticeMinutes,
+  isExpireSoonNoticeAtFuture,
+  isPositiveInteger,
+  normalizeExpireNoticePayload,
+  resolveExpireSoonNoticeMinutes
+} from './expireSoonNotice'
 
 function normalizeResourceIds(values) {
   if (!Array.isArray(values)) {
@@ -47,16 +53,17 @@ export default {
     if (this.$route.query['asset_id']) {
       assetsInitial.push(this.$route.query.asset_id)
     }
-    const shortNoticeMinutes =
-      this.$store.getters.publicSettings.PERM_EXPIRED_SHORT_NOTICE_MINUTES ?? 15
+    const defaultExpireSoonNoticeMinutes = getDefaultExpireSoonNoticeMinutes(
+      this.$store.getters.publicSettings
+    )
     return {
       initial: {
         nodes: nodesInitial,
         assets: assetsInitial,
         accounts: [AllAccount],
         expire_notice_policy: '',
-        short_expire_notice_enabled: false,
-        short_expire_notice_minutes: shortNoticeMinutes
+        expire_soon_notice_enabled: false,
+        expire_soon_notice_minutes: defaultExpireSoonNoticeMinutes
       },
       fields: [
         [this.$t('Basic'), ['name']],
@@ -73,8 +80,8 @@ export default {
             'date_start',
             'date_expired',
             'expire_notice_policy',
-            'short_expire_notice_enabled',
-            'short_expire_notice_minutes',
+            'expire_soon_notice_enabled',
+            'expire_soon_notice_minutes',
             'comment'
           ]
         ]
@@ -185,29 +192,37 @@ export default {
           component: ExpireNoticePolicy,
           label: this.$t('SystemExpireNotice')
         },
-        short_expire_notice_enabled: {
+        expire_soon_notice_enabled: {
           type: 'switch',
-          label: this.$t('ShortExpireNotice')
+          label: this.$t('ExpireSoonNotice'),
+          helpTip: this.$t('ExpireSoonNoticeHelpText'),
+          el: {
+            style: { marginTop: '4px' }
+          }
         },
-        short_expire_notice_minutes: {
-          component: ShortExpireNoticeMinutes,
-          label: this.$t('ShortExpireNoticeMinutes'),
+        expire_soon_notice_minutes: {
+          component: ExpireSoonNoticeMinutes,
+          label: this.$t('ExpireSoonNoticeMinutes'),
           el: {},
           hidden: (formValue, field) => {
             field.el.dateExpired = formValue.date_expired
-            field.el.disabled = !formValue.short_expire_notice_enabled
+            field.el.disabled = !formValue.expire_soon_notice_enabled
+            formValue.expire_soon_notice_minutes = resolveExpireSoonNoticeMinutes(
+              formValue.expire_soon_notice_enabled,
+              formValue.expire_soon_notice_minutes,
+              defaultExpireSoonNoticeMinutes
+            )
             return false
           },
           rules: [
             {
               validator: (rule, value, callback, source) => {
                 if (
-                  source.short_expire_notice_enabled &&
-                  (!Number.isInteger(value) ||
-                    value <= 0 ||
-                    !isShortNoticeAtFuture(source.date_expired, value))
+                  source.expire_soon_notice_enabled &&
+                  (!isPositiveInteger(value) ||
+                    !isExpireSoonNoticeAtFuture(source.date_expired, value))
                 ) {
-                  callback(new Error(this.$t('ShortExpireNoticeFutureError')))
+                  callback(new Error(this.$t('ExpireSoonNoticeFutureError')))
                   return
                 }
                 callback()

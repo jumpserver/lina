@@ -1,5 +1,5 @@
 <template>
-  <div class="short-expire-notice-minutes">
+  <div class="expire-soon-notice-minutes">
     <div class="input-row">
       <el-input-number
         :min="1"
@@ -12,16 +12,16 @@
       <span>{{ $t('Minutes') }}</span>
     </div>
     <div v-if="preview" class="preview">
-      {{ $t('ShortExpireNoticePreview', { time: preview }) }}
+      {{ $t('ExpireSoonNoticePreview', { time: preview }) }}
     </div>
   </div>
 </template>
 
 <script>
-import { formatNoticeDate, getShortNoticeAt } from '../expireNotice'
+import { formatNoticeDate, getExpireSoonNoticeAt, isPositiveInteger } from '../expireSoonNotice'
 
 export default {
-  name: 'ShortExpireNoticeMinutes',
+  name: 'ExpireSoonNoticeMinutes',
   props: {
     modelValue: {
       type: Number,
@@ -39,10 +39,10 @@ export default {
   emits: ['update:modelValue'],
   computed: {
     preview() {
-      if (!Number.isInteger(this.modelValue) || this.modelValue <= 0) {
+      if (!isPositiveInteger(this.modelValue)) {
         return ''
       }
-      const noticeAt = getShortNoticeAt(this.dateExpired, this.modelValue)
+      const noticeAt = getExpireSoonNoticeAt(this.dateExpired, this.modelValue)
       return noticeAt && noticeAt.getTime() > Date.now() ? formatNoticeDate(noticeAt) : ''
     }
   }
@@ -50,7 +50,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.short-expire-notice-minutes {
+.expire-soon-notice-minutes {
   .input-row {
     display: flex;
     align-items: center;

@@ -10,9 +10,6 @@
     </div>
     <div class="help">
       {{ $t('ControlledByGlobalSettings') }}
-      <router-link v-if="canModify" :to="settingsRoute">
-        {{ $t('ModifyGlobalSettings') }}
-      </router-link>
     </div>
   </div>
 </template>
@@ -26,19 +23,6 @@ export default {
     },
     dailyNoticeDays() {
       return this.$store.getters.publicSettings.PERM_EXPIRED_DAILY_NOTICE_DAYS
-    },
-    canModify() {
-      return (
-        this.$hasPerm('settings.change_security') &&
-        this.$hasPerm('settings.change_ops') &&
-        this.$hasPerm('ops.view_celerytask')
-      )
-    },
-    settingsRoute() {
-      return {
-        name: 'TaskDetail',
-        params: { id: 'perms.tasks.check_asset_permission_will_expired' }
-      }
     }
   }
 }
@@ -50,11 +34,6 @@ export default {
 
   .help {
     color: var(--el-text-color-secondary);
-
-    a {
-      margin-left: 8px;
-      color: var(--el-color-primary);
-    }
   }
 }
 </style>

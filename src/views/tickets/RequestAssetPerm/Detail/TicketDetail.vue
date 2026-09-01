@@ -47,14 +47,30 @@
         <el-form-item :label="$t('SystemExpireNotice')">
           <ExpireNoticePolicy />
         </el-form-item>
-        <el-form-item :label="$t('ShortExpireNotice')">
-          <el-switch v-model="requestForm.apply_short_expire_notice_enabled" />
+        <el-form-item :label="$t('ExpireSoonNotice')">
+          <template #label>
+            {{ $t('ExpireSoonNotice') }}
+            <el-tooltip
+              :content="$t('ExpireSoonNoticeHelpText')"
+              :show-after="500"
+              effect="dark"
+              placement="right"
+              popper-class="help-tips"
+            >
+              <i class="fa fa-question-circle-o" />
+            </el-tooltip>
+          </template>
+          <el-switch
+            v-model="requestForm.apply_expire_soon_notice_enabled"
+            style="margin-top: 4px"
+            @change="handleExpireSoonNoticeEnabledChange"
+          />
         </el-form-item>
-        <el-form-item :label="$t('ShortExpireNoticeMinutes')">
-          <ShortExpireNoticeMinutes
-            v-model="requestForm.apply_short_expire_notice_minutes"
+        <el-form-item :label="$t('ExpireSoonNoticeMinutes')">
+          <ExpireSoonNoticeMinutes
+            v-model="requestForm.apply_expire_soon_notice_minutes"
             :date-expired="requestForm.apply_date_expired"
-            :disabled="!requestForm.apply_short_expire_notice_enabled"
+            :disabled="!requestForm.apply_expire_soon_notice_enabled"
           />
         </el-form-item>
         <el-form-item :label="$tc('Action')">
@@ -71,8 +87,12 @@ import BasicTree from '@/components/Form/FormFields/BasicTree'
 import Select2 from '@/components/Form/FormFields/Select2'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
 import ExpireNoticePolicy from '@/views/perms/AssetPermission/components/ExpireNoticePolicy.vue'
-import ShortExpireNoticeMinutes from '@/views/perms/AssetPermission/components/ShortExpireNoticeMinutes.vue'
-import { isShortNoticeAtFuture } from '@/views/perms/AssetPermission/expireNotice'
+import ExpireSoonNoticeMinutes from '@/views/perms/AssetPermission/components/ExpireSoonNoticeMinutes.vue'
+import {
+  getDefaultExpireSoonNoticeMinutes,
+  isPositiveInteger,
+  resolveExpireSoonNoticeMinutes
+} from '@/views/perms/AssetPermission/expireSoonNotice'
 import { AccountLabelMapper } from '@/views/perms/const'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 import { STATUS_MAP, treeNodes } from '../../const'
@@ -84,7 +104,7 @@ export default {
     Select2,
     AccountFormatter,
     ExpireNoticePolicy,
-    ShortExpireNoticeMinutes,
+    ExpireSoonNoticeMinutes,
     BasicTree
   },
   props: {
@@ -108,8 +128,8 @@ export default {
         oid: this.object.org_id,
         apply_date_expired: this.object.apply_date_expired,
         apply_date_start: this.object.apply_date_start,
-        apply_short_expire_notice_enabled: this.object.apply_short_expire_notice_enabled,
-        apply_short_expire_notice_minutes: this.object.apply_short_expire_notice_minutes
+        apply_expire_soon_notice_enabled: this.object.apply_expire_soon_notice_enabled,
+        apply_expire_soon_notice_minutes: this.object.apply_expire_soon_notice_minutes
       },
       nodeSelect2: {
         multiple: true,
@@ -192,7 +212,7 @@ export default {
           value: this.getSystemExpireNoticeDescription()
         },
         {
-          key: this.$t('ShortExpireNotice'),
+          key: this.$t('ExpireSoonNotice'),
           value: this.getExpireNoticeDescription(object)
         }
       ]
@@ -254,7 +274,7 @@ export default {
           value: this.getSystemExpireNoticeDescription()
         },
         {
-          key: this.$t('ShortExpireNotice'),
+          key: this.$t('ExpireSoonNotice'),
           value: this.getExpireNoticeDescription(object)
         }
       ]
@@ -286,14 +306,10 @@ export default {
           return
         }
       }
-      if (this.requestForm.apply_short_expire_notice_enabled) {
-        const minutes = this.requestForm.apply_short_expire_notice_minutes
-        if (
-          !Number.isInteger(minutes) ||
-          minutes <= 0 ||
-          !isShortNoticeAtFuture(this.requestForm.apply_date_expired, minutes)
-        ) {
-          this.$message.error(this.$t('ShortExpireNoticeFutureError'))
+      if (this.requestForm.apply_expire_soon_notice_enabled) {
+        const minutes = this.requestForm.apply_expire_soon_notice_minutes
+        if (!isPositiveInteger(minutes)) {
+          this.$message.error(this.$t('PositiveIntegerRequired'))
           return
         }
       }
@@ -306,8 +322,8 @@ export default {
           apply_actions: this.requestForm.actions,
           apply_date_start: this.requestForm.apply_date_start,
           apply_date_expired: this.requestForm.apply_date_expired,
-          apply_short_expire_notice_enabled: this.requestForm.apply_short_expire_notice_enabled,
-          apply_short_expire_notice_minutes: this.requestForm.apply_short_expire_notice_minutes
+          apply_expire_soon_notice_enabled: this.requestForm.apply_expire_soon_notice_enabled,
+          apply_expire_soon_notice_minutes: this.requestForm.apply_expire_soon_notice_minutes
         })
         .then(() => {
           this.$message.success(this.$tc('UpdateSuccessMsg'))
@@ -328,11 +344,18 @@ export default {
         .then((res) => this.reloadPage())
         .catch((err) => this.$message.error(err))
     },
+    handleExpireSoonNoticeEnabledChange(enabled) {
+      this.requestForm.apply_expire_soon_notice_minutes = resolveExpireSoonNoticeMinutes(
+        enabled,
+        this.requestForm.apply_expire_soon_notice_minutes,
+        getDefaultExpireSoonNoticeMinutes(this.$store.getters.publicSettings)
+      )
+    },
     getExpireNoticeDescription(object) {
-      if (!object.apply_short_expire_notice_enabled) {
+      if (!object.apply_expire_soon_notice_enabled) {
         return this.$t('Disabled')
       }
-      return `${object.apply_short_expire_notice_minutes} ${this.$t('Minutes')}`
+      return `${object.apply_expire_soon_notice_minutes} ${this.$t('Minutes')}`
     },
     getSystemExpireNoticeDescription() {
       const settings = this.$store.getters.publicSettings

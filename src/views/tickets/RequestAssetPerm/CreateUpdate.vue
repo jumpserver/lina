@@ -14,11 +14,14 @@ import store from '@/store'
 import { getDaysFuture } from '@/utils/common/time'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
 import ExpireNoticePolicy from '@/views/perms/AssetPermission/components/ExpireNoticePolicy.vue'
-import ShortExpireNoticeMinutes from '@/views/perms/AssetPermission/components/ShortExpireNoticeMinutes.vue'
+import ExpireSoonNoticeMinutes from '@/views/perms/AssetPermission/components/ExpireSoonNoticeMinutes.vue'
 import {
-  isShortNoticeAtFuture,
-  normalizeExpireNoticePayload
-} from '@/views/perms/AssetPermission/expireNotice'
+  getDefaultExpireSoonNoticeMinutes,
+  isExpireSoonNoticeAtFuture,
+  isPositiveInteger,
+  normalizeExpireNoticePayload,
+  resolveExpireSoonNoticeMinutes
+} from '@/views/perms/AssetPermission/expireSoonNotice'
 import CcUsers from '@/views/tickets/components/CcUsers'
 import { mapGetters, mapState } from 'vuex'
 
@@ -33,7 +36,9 @@ export default {
     const dividend = unit === 'hour' ? 24 : 1
     const date_expired = getDaysFuture(time / dividend, new Date()).toISOString()
     const date_start = now.toISOString()
-    const shortNoticeMinutes = store.getters.publicSettings.PERM_EXPIRED_SHORT_NOTICE_MINUTES ?? 15
+    const defaultExpireSoonNoticeMinutes = getDefaultExpireSoonNoticeMinutes(
+      store.getters.publicSettings
+    )
     return {
       // 工单创建 隐藏提示信息中的跳转连接
       hasDetailInMsg: false,
@@ -44,8 +49,8 @@ export default {
         apply_date_expired: date_expired,
         apply_date_start: date_start,
         apply_expire_notice_policy: '',
-        apply_short_expire_notice_enabled: false,
-        apply_short_expire_notice_minutes: shortNoticeMinutes,
+        apply_expire_soon_notice_enabled: false,
+        apply_expire_soon_notice_minutes: defaultExpireSoonNoticeMinutes,
         apply_assets: [],
         org_id: '',
         flow_id: '',
@@ -64,8 +69,8 @@ export default {
             'apply_date_start',
             'apply_date_expired',
             'apply_expire_notice_policy',
-            'apply_short_expire_notice_enabled',
-            'apply_short_expire_notice_minutes'
+            'apply_expire_soon_notice_enabled',
+            'apply_expire_soon_notice_minutes'
           ]
         ],
         [this.$t('Other'), ['comment']]
@@ -130,29 +135,37 @@ export default {
           component: ExpireNoticePolicy,
           label: this.$t('SystemExpireNotice')
         },
-        apply_short_expire_notice_enabled: {
+        apply_expire_soon_notice_enabled: {
           type: 'switch',
-          label: this.$t('ShortExpireNotice')
+          label: this.$t('ExpireSoonNotice'),
+          helpTip: this.$t('ExpireSoonNoticeHelpText'),
+          el: {
+            style: { marginTop: '4px' }
+          }
         },
-        apply_short_expire_notice_minutes: {
-          component: ShortExpireNoticeMinutes,
-          label: this.$t('ShortExpireNoticeMinutes'),
+        apply_expire_soon_notice_minutes: {
+          component: ExpireSoonNoticeMinutes,
+          label: this.$t('ExpireSoonNoticeMinutes'),
           el: {},
           hidden: (formValue, field) => {
             field.el.dateExpired = formValue.apply_date_expired
-            field.el.disabled = !formValue.apply_short_expire_notice_enabled
+            field.el.disabled = !formValue.apply_expire_soon_notice_enabled
+            formValue.apply_expire_soon_notice_minutes = resolveExpireSoonNoticeMinutes(
+              formValue.apply_expire_soon_notice_enabled,
+              formValue.apply_expire_soon_notice_minutes,
+              defaultExpireSoonNoticeMinutes
+            )
             return false
           },
           rules: [
             {
               validator: (rule, value, callback, source) => {
                 if (
-                  source.apply_short_expire_notice_enabled &&
-                  (!Number.isInteger(value) ||
-                    value <= 0 ||
-                    !isShortNoticeAtFuture(source.apply_date_expired, value))
+                  source.apply_expire_soon_notice_enabled &&
+                  (!isPositiveInteger(value) ||
+                    !isExpireSoonNoticeAtFuture(source.apply_date_expired, value))
                 ) {
-                  callback(new Error(this.$t('ShortExpireNoticeFutureError')))
+                  callback(new Error(this.$t('ExpireSoonNoticeFutureError')))
                   return
                 }
                 callback()
