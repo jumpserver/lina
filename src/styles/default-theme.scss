@@ -17,6 +17,8 @@ $color-input-border: #bbbfc4;
 $color-disabled-background: #f5f7fa;
 $color-disabled: #bbb;
 $color-help-text: #8f959e;
+$page-background-color: #ffffff;
+$panel-border-color: var(--el-border-color);
 $banner-bg: #148f76;
 $submenu-bg: #ffffff;
 $menu-bg: #ffffff;
@@ -46,6 +48,10 @@ $menu-hover: #ffffff;
   --color-disabled-background: #{$color-disabled-background};
   --color-disabled: #{$color-disabled};
   --color-help-text: #{$color-help-text};
+
+  /* 页面画布与内容分区 */
+  --page-background-color: #{$page-background-color};
+  --panel-border-color: #{$panel-border-color};
 
   /* 菜单相关 */
   --banner-bg: #{$banner-bg};

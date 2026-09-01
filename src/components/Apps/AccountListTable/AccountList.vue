@@ -148,6 +148,10 @@ export default {
     showActions: {
       type: Boolean,
       default: true
+    },
+    reloadOnActivated: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -468,11 +472,11 @@ export default {
     this.setActions()
   },
   activated() {
-    // 由于组件嵌套较深，有可能导致 Error in activated hook: "TypeError: Cannot read properties of undefined (reading 'getList')" 的问题
-    if (this.tabDeactivated) {
-      clearTimeout(this.activatedReloadTimer)
-      this.activatedReloadTimer = setTimeout(() => this.refresh(), 300)
+    if (!this.reloadOnActivated || !this.tabDeactivated) {
+      return
     }
+    clearTimeout(this.activatedReloadTimer)
+    this.activatedReloadTimer = setTimeout(() => this.refresh(), 300)
   },
   deactivated() {
     this.tabDeactivated = true

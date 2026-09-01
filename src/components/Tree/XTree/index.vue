@@ -129,6 +129,7 @@
             :draggable="canDragData(data)"
             :title="getNodeTitle(data)"
             :class="{
+              'is-disabled': isNodeDisabled(data),
               'is-operation-target': isOperationTarget(data),
               'is-virtual-drop-target': isVirtualDropTarget(data)
             }"
@@ -211,7 +212,10 @@
       >
         <template #default="{ node, data }">
           <span
-            :class="{ 'is-operation-target': isOperationTarget(data) }"
+            :class="{
+              'is-disabled': isNodeDisabled(data),
+              'is-operation-target': isOperationTarget(data)
+            }"
             class="x-tree__node"
             :title="getNodeTitle(data)"
           >
@@ -516,7 +520,10 @@ export default {
         return []
       }
       if (!this.searchMode) {
-        if (this.$store.getters.currentOrgIsRoot) {
+        if (
+          this.$store.getters.currentOrgIsRoot &&
+          this.treeSetting.expandRootInGlobalOrg !== true
+        ) {
           return []
         }
         const keys = this.treeData.filter((node) => node.open).map((node) => node.id)
@@ -637,6 +644,12 @@ export default {
       }
       return Boolean(node?._isLeaf)
     },
+    isNodeDisabled(node) {
+      if (typeof this.treeSetting.isNodeDisabled === 'function') {
+        return Boolean(this.treeSetting.isNodeDisabled(node))
+      }
+      return Boolean(node?.disabled || node?.chkDisabled || node?.valid === false)
+    },
     getNodeAmountKey(node) {
       if (typeof this.treeSetting.getAmountKey === 'function') {
         const key = this.treeSetting.getAmountKey(node)
@@ -647,6 +660,12 @@ export default {
           ? node
           : (node?.meta?.data?.id ?? node?.id)
       return nodeId === undefined || nodeId === null ? '' : String(nodeId)
+    },
+    getNodeAmountResourceId(node) {
+      if (typeof this.treeSetting.getNodeAmountResourceId === 'function') {
+        return this.treeSetting.getNodeAmountResourceId(node)
+      }
+      return node?.meta?.data?.id ?? node?.id
     },
     getAmountResultKey(item) {
       if (typeof this.treeSetting.getAmountResultKey === 'function') {
@@ -880,6 +899,9 @@ export default {
       this.clearNodeAmounts()
       this.startProgressiveAmountLoading(Boolean(normalizedOptions.fresh))
     },
+    reloadVisibleMetrics(options = {}) {
+      return this.reloadVisibleNodeAmounts(options)
+    },
     resetProgressiveAmountLoading() {
       this.amountLoadedRowEnd = 0
       this.amountAllRowsScheduled = false
@@ -962,7 +984,7 @@ export default {
       // Expanding while an explicit refresh batch is in flight must not turn
       // its retried request back into an ordinary cacheable read.
       nodes.forEach((node) => {
-        const nodeId = node?.meta?.data?.id
+        const nodeId = this.getNodeAmountResourceId(node)
         if (nodeId && pendingFreshNodeIds.has(String(nodeId))) {
           this.freshAmountNodeIds.add(String(nodeId))
         }
@@ -991,7 +1013,7 @@ export default {
       }
     },
     async requestNodeAmounts(nodes, signal) {
-      const nodeIds = nodes.map((node) => node?.meta?.data?.id).filter(Boolean)
+      const nodeIds = nodes.map((node) => this.getNodeAmountResourceId(node)).filter(Boolean)
       if (!nodeIds.length) {
         return { results: [] }
       }
@@ -1025,7 +1047,6 @@ export default {
         return
       }
       nodes.forEach((node) => {
-        const nodeId = node?.meta?.data?.id
         const queueKey = this.getNodeAmountKey(node)
         if (
           !queueKey ||
@@ -1062,7 +1083,7 @@ export default {
             return
           }
           this.setNodeAmount(node, null)
-          const resourceId = node?.meta?.data?.id
+          const resourceId = this.getNodeAmountResourceId(node)
           if (resourceId) {
             this.freshAmountNodeIds.add(String(resourceId))
           }
@@ -1158,7 +1179,7 @@ export default {
       this.cancelAmountLoading()
       uniqueNodes.forEach((node) => {
         this.setNodeAmount(node, null)
-        const nodeId = node?.meta?.data?.id
+        const nodeId = this.getNodeAmountResourceId(node)
         if (nodeId) {
           this.freshAmountNodeIds.add(String(nodeId))
         }
@@ -1176,7 +1197,7 @@ export default {
       const stack = this.normalTreeData.map((node) => ({ node, ancestors: [] }))
       while (stack.length) {
         const { node, ancestors } = stack.pop()
-        const nodeId = node?.meta?.data?.id
+        const nodeId = this.getNodeAmountResourceId(node)
         if (nodeId && affectedIds.has(String(nodeId))) {
           for (const item of [...ancestors, node]) {
             const key = this.getNodeAmountKey(item)
@@ -1229,7 +1250,7 @@ export default {
             ])
           )
           batch.forEach((node) => {
-            const nodeId = String(node.meta.data.id)
+            const nodeId = String(this.getNodeAmountResourceId(node))
             const amountKey = this.getNodeAmountKey(node)
             const amount = amountMap.get(amountKey) ?? amountMap.get(nodeId)
             if (Number.isFinite(amount)) {
@@ -2731,7 +2752,7 @@ export default {
   scrollbar-width: auto;
   scrollbar-color: auto;
   padding: 6px 8px 12px;
-  border-top: 1px solid var(--el-border-color-lighter);
+  border-top: 1px solid var(--panel-border-color, var(--el-border-color));
 
   &::-webkit-scrollbar {
     height: 0;
@@ -2829,6 +2850,10 @@ export default {
   align-items: center;
   min-width: 0;
   height: 100%;
+}
+
+.x-tree__node.is-disabled {
+  opacity: 0.45;
 }
 
 .x-tree__node-toggle {

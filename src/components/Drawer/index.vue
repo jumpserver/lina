@@ -237,6 +237,8 @@ export default {
   }
 
   :deep(.page.tab-page) {
+    --tab-page-inline-padding: 30px;
+
     height: 100%;
     min-height: 0;
     display: flex;
@@ -259,57 +261,6 @@ export default {
     min-height: 0;
   }
 
-  :deep(.page.tab-page .page-submenu) {
-    display: flex;
-    flex: 0 0 auto;
-    flex-direction: column;
-    background: #fff;
-  }
-
-  :deep(.page.tab-page .page-submenu .el-tabs__header) {
-    display: flex;
-    align-items: stretch;
-    min-height: 40px;
-    margin: 0;
-    padding: 0 30px;
-    background: #fff;
-    border-bottom: 1px solid #ebeef5;
-  }
-
-  :deep(.page.tab-page .page-submenu .el-tabs__nav-wrap),
-  :deep(.page.tab-page .page-submenu .el-tabs__nav-scroll),
-  :deep(.page.tab-page .page-submenu .el-tabs__nav) {
-    display: flex;
-    align-items: stretch;
-  }
-
-  :deep(.page.tab-page .page-submenu .el-tabs__nav-wrap) {
-    position: static;
-    flex: 1 1 auto;
-    margin: 0;
-
-    &::after {
-      display: none;
-    }
-  }
-
-  :deep(.page.tab-page .page-submenu .el-tabs__active-bar) {
-    height: 2px;
-  }
-
-  :deep(.page.tab-page .page-submenu .el-tabs__item),
-  :deep(.page.tab-page .page-submenu .el-tabs__item.is-top) {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    height: 40px;
-    line-height: 40px;
-    padding: 0 18px;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--color-text-primary);
-  }
-
   :deep(.page.tab-page .tab-page-content) {
     display: flex;
     flex: 1 1 auto;
@@ -320,7 +271,7 @@ export default {
     box-sizing: border-box;
     overflow: auto;
     overscroll-behavior: contain;
-    background: #f3f3f3;
+    background: var(--page-background-color, #fff);
   }
 
   :deep(.page.tab-page .tab-page-content .el-form),

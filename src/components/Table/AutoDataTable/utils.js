@@ -261,7 +261,6 @@ export class TableColumnsGenerator {
       case 'id':
         if (!col.formatter) {
           col.formatter = CopyableFormatter
-          col.iconPosition = 'left'
         }
         break
       case 'name':

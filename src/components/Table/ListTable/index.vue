@@ -71,6 +71,7 @@ export default {
     TableAction,
     IBox
   },
+  emits: ['selection-change', 'tag-date-change', 'tag-filter', 'tag-search'],
   setup() {
     // Provide list table instance to child components
     // This replaces $parent chain access
@@ -280,7 +281,7 @@ export default {
     }
   },
   mounted() {
-    this.urlUpdated[this.tableUrl] = location.href
+    this.urlUpdated[this.getTableResourceKey()] = this.getActivationRouteKey()
     // Populate the provided context with component references.
     // Note: $refs.dataTable is AutoDataTable, whose inner DataTable is rendered
     // with `v-if="!loading"` and mounts only after its OPTIONS metadata loads —
@@ -303,17 +304,39 @@ export default {
   activated() {
     this.$nextTick(() => {
       this.isDeactivated = false
-      const cleanUrl = this.tableUrl.split('?')[0]
-      const preURL = this.urlUpdated[cleanUrl]
+      const tableResourceKey = this.getTableResourceKey()
+      const previousRouteKey = this.urlUpdated[tableResourceKey]
+      const currentRouteKey = this.getActivationRouteKey()
 
-      if (!preURL || preURL === location.href) return
+      if (!previousRouteKey) {
+        this.urlUpdated[tableResourceKey] = currentRouteKey
+        return
+      }
+      if (previousRouteKey === currentRouteKey) return
 
-      this.urlUpdated[this.tableUrl] = location.href
-      this.$log.debug('Reload the table get latest data: pre ', preURL, ' current: ', location.href)
+      this.urlUpdated[tableResourceKey] = currentRouteKey
+      this.$log.debug(
+        'Reload the table get latest data: pre ',
+        previousRouteKey,
+        ' current: ',
+        currentRouteKey
+      )
       this.reloadTable()
     })
   },
   methods: {
+    getTableResourceKey() {
+      return this.tableUrl.split(/[?#]/, 1)[0]
+    },
+    getActivationRouteKey() {
+      const query = { ...this.$route.query }
+      delete query.tab
+      return this.$router.resolve({
+        path: this.$route.path,
+        query,
+        hash: this.$route.hash
+      }).fullPath
+    },
     getTableMetadata() {
       if (!this.tableUrl) {
         return Promise.resolve({})
@@ -408,13 +431,13 @@ export default {
       this.searchQuery = attrs
       const merged = this.getMergedQuery()
       this.$log.debug('ListTable: search table', attrs)
-      this.$emit('TagSearch', attrs)
+      this.$emit('tag-search', attrs)
       this.$refs.dataTable?.$refs.dataTable?.search(merged, true)
     },
     filter(attrs) {
       this.filterQuery = attrs
       const merged = this.getMergedQuery()
-      this.$emit('TagFilter', attrs)
+      this.$emit('tag-filter', attrs)
       this.$log.debug('ListTable: found filter change', attrs)
       this.$refs.dataTable?.$refs.dataTable?.search(merged, true)
     },
@@ -443,7 +466,7 @@ export default {
         date_from: dateFrom,
         date_to: dateTo
       }
-      this.$emit('TagDateChange', attrs)
+      this.$emit('tag-date-change', attrs)
       return this.dataTable.searchDate(query)
     },
     toggleRowSelection(row, isSelected) {

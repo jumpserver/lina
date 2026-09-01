@@ -2,10 +2,10 @@
   <div>
     <el-row :gutter="16">
       <el-col :lg="12" :sm="12">
-        <DataCard :config="userConfig" />
+        <DataCard :config="userConfig" class="dashboard-panel" />
       </el-col>
       <el-col :lg="12" :sm="12">
-        <DataCard :config="assetConfig" />
+        <DataCard :config="assetConfig" class="dashboard-panel" />
       </el-col>
     </el-row>
   </div>

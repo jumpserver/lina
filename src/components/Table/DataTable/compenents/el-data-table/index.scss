@@ -7,6 +7,7 @@
   // Contain horizontal edge gestures in both page and dialog tables.
   :deep(.el-table__body-wrapper .el-scrollbar__wrap) {
     overscroll-behavior-x: none;
+    scrollbar-gutter: stable;
   }
 }
 
@@ -32,9 +33,16 @@
     overscroll-behavior-y: none;
   }
 
-  > :deep(.el-pagination) {
+  > .el-data-table__pagination-viewport {
     flex: none;
-    border-top: 1px solid var(--el-border-color-lighter);
+    min-width: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+
+    > :deep(.el-pagination) {
+      border-top: 1px solid var(--el-border-color-lighter);
+    }
   }
 }
 
@@ -46,16 +54,10 @@
   //padding: 4px 0;
 }
 
-// Element Plus overlays its custom horizontal scrollbar on the scroll view.
-// Reserve space below the last row only when the table actually overflows horizontally.
-.el-data-table :deep(.el-table--scrollable-x .el-table__body-wrapper .el-scrollbar__wrap) {
-  padding-bottom: var(--scrollbar-size);
-  box-sizing: border-box;
-}
-
-// The last row already provides the separator above pagination. Removing the
-// duplicate outer border also keeps the fixed action column joined to the row.
-.el-data-table :deep(.el-table__inner-wrapper::before) {
+// Header and body cells already draw their own separators. Remove Element
+// Plus's extra top and bottom lines.
+.el-data-table :deep(.el-table__inner-wrapper::before),
+.el-data-table :deep(.el-table__inner-wrapper::after) {
   display: none;
 }
 

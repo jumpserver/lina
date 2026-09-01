@@ -969,7 +969,7 @@ $color-drop-menu-border: #e4e7ed;
   gap: 6px;
   min-width: 0;
   padding: 8px 10px;
-  border: 1px solid var(--el-border-color-lighter);
+  border: 1px solid var(--panel-border-color, var(--el-border-color));
   border-radius: 4px;
   background-color: #fff;
 

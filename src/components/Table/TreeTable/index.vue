@@ -1,82 +1,80 @@
 <template>
-  <el-collapse-transition>
-    <div
-      v-bind="rootAttrs"
-      ref="treeTableContent"
-      :class="{ 'is-resizing': resizing }"
-      class="tree-table-content"
-    >
-      <div v-show="mountTree && iShowTree" ref="treePanel" :style="leftStyle" class="left">
-        <span v-if="component === 'AutoDataZTree'" class="title">
-          {{ title }}
-        </span>
-        <component
-          v-if="mountTree"
-          v-bind="treeTabConfig"
-          :is="component"
-          :key="componentTreeKey"
-          ref="AutoDataZTree"
-          :setting="treeSetting"
-          class="auto-data-ztree"
-          @tree-init-finish="handleTreeInitFinish"
-          @url-change="handleUrlChange"
-          v-on="forwardedListeners"
-        >
-          <template #rMenu="{ data }">
-            <slot :data="data" name="rMenu" />
-          </template>
-        </component>
-      </div>
-      <div
+  <div
+    v-bind="rootAttrs"
+    ref="treeTableContent"
+    :class="{ 'is-resizing': resizing }"
+    class="tree-table-content"
+  >
+    <div v-show="mountTree && iShowTree" ref="treePanel" :style="leftStyle" class="left">
+      <span v-if="component === 'AutoDataZTree'" class="title">
+        {{ title }}
+      </span>
+      <component
         v-if="mountTree"
-        ref="treeResizer"
-        :class="{ 'is-collapsed': !iShowTree }"
-        class="tree-resizer"
-        role="separator"
-        tabindex="0"
-        @keydown.left.prevent="resizeByKeyboard(-16)"
-        @keydown.right.prevent="resizeByKeyboard(16)"
+        v-bind="treeTabConfig"
+        :is="component"
+        :key="componentTreeKey"
+        ref="AutoDataZTree"
+        :setting="treeSetting"
+        class="auto-data-ztree"
+        @tree-init-finish="handleTreeInitFinish"
+        @url-change="handleUrlChange"
+        v-on="forwardedListeners"
       >
-        <span
-          v-if="iShowTree"
-          class="tree-resize-handle"
-          @dblclick="fitTreeWidth"
-          @pointerdown="startResize"
-        />
-        <button
-          :aria-expanded="iShowTree"
-          class="tree-toggle"
-          type="button"
-          @click.stop="toggleTree"
-          @pointerdown.stop
-        >
-          <el-icon class="tree-toggle__icon" aria-hidden="true">
-            <ArrowLeftBold v-if="iShowTree" />
-            <ArrowRightBold v-else />
-          </el-icon>
-        </button>
-      </div>
-      <div class="right">
-        <div class="transition-box">
-          <slot name="table">
-            <ListTable
-              ref="ListTable"
-              :header-actions="headerActions"
-              :quick-filters="quickFilters"
-              :quick-summary="quickSummary"
-              :table-config="iTableConfig"
-              :create-drawer="createDrawer"
-              v-on="forwardedListeners"
-            >
-              <template v-if="$slots['search-after']" #search-after>
-                <slot name="search-after" />
-              </template>
-            </ListTable>
-          </slot>
-        </div>
+        <template #rMenu="{ data }">
+          <slot :data="data" name="rMenu" />
+        </template>
+      </component>
+    </div>
+    <div
+      v-if="mountTree"
+      ref="treeResizer"
+      :class="{ 'is-collapsed': !iShowTree }"
+      class="tree-resizer"
+      role="separator"
+      tabindex="0"
+      @keydown.left.prevent="resizeByKeyboard(-16)"
+      @keydown.right.prevent="resizeByKeyboard(16)"
+    >
+      <span
+        v-if="iShowTree"
+        class="tree-resize-handle"
+        @dblclick="fitTreeWidth"
+        @pointerdown="startResize"
+      />
+      <button
+        :aria-expanded="iShowTree"
+        class="tree-toggle"
+        type="button"
+        @click.stop="toggleTree"
+        @pointerdown.stop
+      >
+        <el-icon class="tree-toggle__icon" aria-hidden="true">
+          <ArrowLeftBold v-if="iShowTree" />
+          <ArrowRightBold v-else />
+        </el-icon>
+      </button>
+    </div>
+    <div class="right">
+      <div class="transition-box">
+        <slot name="table">
+          <ListTable
+            ref="ListTable"
+            :header-actions="headerActions"
+            :quick-filters="quickFilters"
+            :quick-summary="quickSummary"
+            :table-config="iTableConfig"
+            :create-drawer="createDrawer"
+            v-on="forwardedListeners"
+          >
+            <template v-if="$slots['search-after']" #search-after>
+              <slot name="search-after" />
+            </template>
+          </ListTable>
+        </slot>
       </div>
     </div>
-  </el-collapse-transition>
+  </div>
 </template>
 
 <script>
@@ -432,7 +430,7 @@ $origin-color: #ffffff;
     box-sizing: border-box;
     flex: none;
     min-width: 0;
-    border: 1px solid var(--el-border-color-lighter);
+    border: 1px solid var(--panel-border-color, var(--el-border-color));
     border-radius: var(--el-card-border-radius, 4px);
     overflow: hidden;
     background: $origin-color;
@@ -536,7 +534,7 @@ $origin-color: #ffffff;
   width: 14px;
   height: 34px;
   padding: 0;
-  border: 1px solid var(--el-border-color);
+  border: 1px solid var(--panel-border-color, var(--el-border-color));
   border-left: 0;
   border-radius: 0 6px 6px 0;
   color: var(--el-text-color-secondary);
@@ -582,8 +580,8 @@ $origin-color: #ffffff;
 }
 
 .transition-box.left {
-  background: white;
-  border: 1px solid #e0e0e0;
+  background: var(--page-background-color, #fff);
+  border: 1px solid var(--panel-border-color, var(--el-border-color));
   border-radius: 2px;
 }
 </style>
