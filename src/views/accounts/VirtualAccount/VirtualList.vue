@@ -16,6 +16,7 @@ export default {
     return {
       updateDrawer: () => import('@/views/accounts/VirtualAccount/VirtualUpdate.vue'),
       config: {
+        activationRefresh: 'never',
         tableConfig: {
           url: '/api/v1/accounts/virtual-accounts/',
           columns: ['name', 'username', 'comment'],

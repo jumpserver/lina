@@ -3,6 +3,7 @@
     <DrawerListTable
       ref="ListTable"
       :detail-drawer="detailDrawer"
+      :activation-refresh="activationRefresh"
       :header-actions="headerActions"
       :quick-filters="quickFilters"
       :table-config="tableConfig"
@@ -149,9 +150,9 @@ export default {
       type: Boolean,
       default: true
     },
-    reloadOnActivated: {
-      type: Boolean,
-      default: true
+    activationRefresh: {
+      type: String,
+      default: 'always'
     }
   },
   data() {
@@ -166,8 +167,6 @@ export default {
       showResultDialog: false,
       showAddDialog: false,
       showAddTemplateDialog: false,
-      activatedReloadTimer: null,
-      tabDeactivated: false,
       accountOperationFlag: null,
       detailDrawer: () => import('@/views/accounts/Account/AccountDetail/index.vue'),
       createAccountResults: [],
@@ -470,22 +469,6 @@ export default {
   },
   mounted() {
     this.setActions()
-  },
-  activated() {
-    if (!this.reloadOnActivated || !this.tabDeactivated) {
-      return
-    }
-    clearTimeout(this.activatedReloadTimer)
-    this.activatedReloadTimer = setTimeout(() => this.refresh(), 300)
-  },
-  deactivated() {
-    this.tabDeactivated = true
-    clearTimeout(this.activatedReloadTimer)
-    this.activatedReloadTimer = null
-  },
-  beforeUnmount() {
-    clearTimeout(this.activatedReloadTimer)
-    this.activatedReloadTimer = null
   },
   methods: {
     setActions() {

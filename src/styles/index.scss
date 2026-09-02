@@ -349,8 +349,6 @@ input[type='file'] {
 
 // table 相关通用样式
 .el-data-table .el-table {
-  --el-table-row-hover-bg-color: var(--el-fill-color-lighter, #fafafa);
-
   border-radius: var(--el-card-border-radius, 4px) var(--el-card-border-radius, 4px) 0 0;
   overflow: hidden;
 
@@ -491,10 +489,6 @@ input[type='file'] {
           vertical-align: unset;
         }
       }
-    }
-
-    &.selected-row {
-      background-color: #f5f7fa;
     }
   }
 }
