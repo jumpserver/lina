@@ -377,22 +377,23 @@ export default {
       this.componentTreeKey += 1
     },
     hideRMenu() {
-      this.$refs.AutoDataZTree.hideRMenu()
+      return this.$refs.AutoDataZTree?.hideRMenu?.()
     },
     getSelectedNodes: function () {
-      return this.$refs.AutoDataZTree.getSelectedNodes()
+      return this.$refs.AutoDataZTree?.getSelectedNodes?.() || []
     },
     getNodes: function () {
-      return this.$refs.AutoDataZTree.getNodes()
+      return this.$refs.AutoDataZTree?.getNodes?.() || []
     },
     getAllNodes: function () {
-      return this.$refs.AutoDataZTree.getAllNodes?.() || this.getNodes()
+      const tree = this.$refs.AutoDataZTree
+      return tree?.getAllNodes?.() || tree?.getNodes?.() || []
     },
     getTreeSnapshot: function () {
-      return this.$refs.AutoDataZTree.getTreeSnapshot?.()
+      return this.$refs.AutoDataZTree?.getTreeSnapshot?.()
     },
     selectNode: function (node) {
-      return this.$refs.AutoDataZTree.selectNode(node)
+      return this.$refs.AutoDataZTree?.selectNode?.(node)
     },
     refreshAssetRelationAmounts(nodeIds) {
       return this.$refs.AutoDataZTree?.refreshAssetRelationAmounts?.(nodeIds)
@@ -407,7 +408,7 @@ export default {
       return this.$refs.AutoDataZTree?.setNodeMetric?.(id, amount)
     },
     reloadTable() {
-      this.$refs.ListTable.reloadTable()
+      return this.$refs.ListTable?.reloadTable?.()
     },
     toggleRowSelection(row, isSelected) {
       return this.$refs.ListTable?.toggleRowSelection(row, isSelected)
