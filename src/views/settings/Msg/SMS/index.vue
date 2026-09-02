@@ -79,6 +79,13 @@ export default {
           }
         }
       },
+      afterGetRemoteMeta(meta) {
+        const choices = meta?.SMS_BACKEND?.choices
+        if (Array.isArray(choices)) {
+          // 暂时隐藏“自定义（文件）”，保留相关实现以便后续重新开放
+          meta.SMS_BACKEND.choices = choices.filter(item => item.value !== 'custom_file')
+        }
+      },
       submitMethod() {
         return 'patch'
       },
