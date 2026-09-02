@@ -6,7 +6,7 @@
   overflow: hidden !important;
   scrollbar-gutter: auto;
   padding-bottom: 8px;
-  background-color: #fff;
+  background-color: var(--page-background-color, #fff);
 }
 
 .page.tab-page .tab-page-content[data-list-layout='viewport'] {

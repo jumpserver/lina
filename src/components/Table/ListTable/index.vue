@@ -1,5 +1,9 @@
 <template>
-  <div ref="listRoot" class="list-table" :class="{ 'list-table--fill-height': fillHeight }">
+  <div
+    ref="listRoot"
+    class="list-table"
+    :class="{ 'list-table--fill-height': resolvedFillHeight }"
+  >
     <QuickFilter
       v-if="iHasQuickFilter"
       v-model:expand="filterExpand"
@@ -34,7 +38,7 @@
           v-if="actionInit"
           ref="dataTable"
           :config="iTableConfig"
-          :fill-height="fillHeight"
+          :fill-height="resolvedFillHeight"
           :filter-table="filter"
           :get-table-metadata="getTableMetadata"
           @loaded="handleTableLoaded"
@@ -49,7 +53,7 @@
 import { getResourceFromApiUrl } from '@/utils/jms/index'
 import deepmerge from 'deepmerge'
 import { mapGetters } from 'vuex'
-import { provide } from 'vue'
+import { computed, provide } from 'vue'
 import IBox from '@/components/Common/IBox/index.vue'
 import TableAction from './TableAction/index.vue'
 import AutoDataTable from '../AutoDataTable/index.vue'
@@ -82,7 +86,7 @@ export default {
     'tag-filter',
     'tag-search'
   ],
-  setup() {
+  setup(props) {
     // Provide list table instance to child components
     // This replaces $parent chain access
     const listTableContext = {
@@ -90,9 +94,16 @@ export default {
       tableConfig: null
     }
     provide(LIST_TABLE_KEY, listTableContext)
-    return { listTableContext, ...useListTableViewport() }
+    const { listRoot, fillHeight: viewportFillHeight } = useListTableViewport()
+    const resolvedFillHeight = computed(() => props.fillHeight || viewportFillHeight.value)
+    return { listTableContext, listRoot, resolvedFillHeight }
   },
   props: {
+    // Embedded lists can opt into the same fixed-header/body-scroll layout as pages.
+    fillHeight: {
+      type: Boolean,
+      default: false
+    },
     // 定义 table 的配置
     tableConfig: {
       type: Object,
@@ -561,6 +572,8 @@ export default {
 
 <style lang="scss" scoped>
 .list-table {
+  --list-corner-radius: 4px;
+
   display: flex;
   flex-direction: column;
   gap: 8px;

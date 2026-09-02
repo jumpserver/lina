@@ -57,6 +57,7 @@ $origin-color: #ffffff;
 .page-heading {
   display: flex;
   align-items: center;
+  box-sizing: border-box;
   height: 50px;
   background-color: var(--page-background-color, #{$origin-color});
 

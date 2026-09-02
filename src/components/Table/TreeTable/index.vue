@@ -538,7 +538,7 @@ $origin-color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 14px;
+  width: 13px;
   height: 34px;
   padding: 0;
   border: 1px solid var(--panel-border-color, var(--el-border-color));

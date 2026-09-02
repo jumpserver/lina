@@ -761,7 +761,7 @@ $color-drop-menu-border: #e4e7ed;
       max-width: 280px;
       font-size: 13px;
       border: 1px solid var(--color-border);
-      border-radius: 4px;
+      border-radius: var(--list-corner-radius, 4px);
       overflow: hidden;
       outline: none;
       box-shadow: none;
@@ -799,7 +799,7 @@ $color-drop-menu-border: #e4e7ed;
       padding: 0;
       color: var(--color-text-primary) !important;
       border: 0;
-      border-radius: 4px;
+      border-radius: var(--list-corner-radius, 4px);
       background-color: transparent;
 
       .svg-icon {
@@ -848,6 +848,30 @@ $color-drop-menu-border: #e4e7ed;
   margin: 0;
   padding: 0;
   gap: 10px 4px;
+
+  :deep(.el-button:not(.is-circle)) {
+    border-radius: var(--list-corner-radius, 4px);
+  }
+
+  :deep(.el-button-group) {
+    border-radius: var(--list-corner-radius, 4px);
+  }
+
+  :deep(.el-button-group .el-button) {
+    border-radius: 0;
+  }
+
+  :deep(.el-button-group > .el-button:first-child) {
+    border-radius: var(--list-corner-radius, 4px) 0 0 var(--list-corner-radius, 4px);
+  }
+
+  :deep(.el-button-group > .el-button:last-child) {
+    border-radius: 0 var(--list-corner-radius, 4px) var(--list-corner-radius, 4px) 0;
+  }
+
+  :deep(.el-button-group > .el-button:only-child) {
+    border-radius: var(--list-corner-radius, 4px);
+  }
 
   &.mobile {
     justify-content: flex-start;
@@ -984,7 +1008,7 @@ $color-drop-menu-border: #e4e7ed;
   min-width: 0;
   padding: 8px 10px;
   border: 1px solid var(--panel-border-color, var(--el-border-color));
-  border-radius: 4px;
+  border-radius: var(--list-corner-radius, 4px);
   background-color: #fff;
 
   &__active,

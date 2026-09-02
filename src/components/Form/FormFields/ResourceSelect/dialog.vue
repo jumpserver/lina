@@ -62,6 +62,7 @@
       <div v-show="activeTab === 'available'" class="resource-select-dialog__panel">
         <ListTable
           ref="availableTable"
+          fill-height
           :header-actions="availableHeaderActions"
           :table-config="availableTableConfig"
           :table-metadata-provider="getSharedTableMetadata"
@@ -72,6 +73,7 @@
       <div v-show="activeTab === 'selected'" class="resource-select-dialog__panel">
         <ListTable
           ref="selectedTable"
+          fill-height
           :header-actions="selectedHeaderActions"
           :table-config="selectedTableConfig"
           :table-metadata-provider="getSharedTableMetadata"
@@ -917,26 +919,31 @@ export default {
 
 <style lang="scss">
 .resource-select-dialog.el-dialog {
-  height: min(680px, 94vh);
+  --resource-select-dialog-max-height: min(680px, 94vh);
+
+  height: auto;
+  max-height: var(--resource-select-dialog-max-height);
   display: flex;
   flex-direction: column;
 
   .el-dialog__header {
-    padding: 8px 24px !important;
+    padding: 8px 24px 0 !important;
+    border-bottom: 0;
   }
 
   .el-dialog__body {
     flex: 1 1 auto;
     min-height: 0;
-    padding: 8px 24px 0 !important;
-    overflow: auto;
+    padding: 8px 24px 10px !important;
+    overflow: hidden;
   }
 
   .el-dialog__footer {
     padding: 4px 24px 6px !important;
+    border-top-color: var(--panel-border-color, var(--el-border-color));
   }
 
-  .el-dialog__body > .el-loading-parent--relative {
+  .el-dialog__body > div {
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -947,7 +954,7 @@ export default {
     display: flex;
     flex-direction: column;
     min-width: 0;
-    gap: 8px;
+    gap: 12px;
   }
 
   .resource-select-dialog__title {
@@ -958,46 +965,89 @@ export default {
   }
 
   .resource-select-dialog__tabs {
+    position: relative;
     display: flex;
     align-items: center;
-    max-width: calc(100% - 40px);
-    height: 30px;
-    gap: 24px;
+    width: 100%;
+    height: var(--tab-page-header-height, 34px);
+    gap: 4px;
+
+    &::after {
+      content: '';
+      position: absolute;
+      z-index: 1;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 1px;
+      background-color: var(--panel-border-color, var(--el-border-color));
+      pointer-events: none;
+    }
   }
 
   .resource-select-dialog__tab {
+    position: relative;
+    z-index: 2;
     display: inline-flex;
     align-items: center;
-    height: 28px;
-    padding: 0;
+    height: var(--tab-page-header-height, 34px);
+    padding: 0 14px;
     border: 0;
+    border-radius: 0;
     outline: none;
-    background: transparent;
-    color: var(--el-text-color-regular);
+    background-color: var(--page-background-color, #fff);
+    color: var(--el-text-color-regular, #606266);
     cursor: pointer;
     font: inherit;
     font-size: 13px;
-    font-weight: 400;
-    line-height: 24px;
+    font-weight: 500;
+    line-height: 1;
+    user-select: none;
     white-space: nowrap;
     gap: 4px;
-    transition: color var(--el-transition-duration-fast);
+    transition:
+      color 120ms ease,
+      background-color 120ms ease;
 
     &:hover:not(.is-active) {
-      color: var(--el-color-primary);
+      color: var(--el-text-color-regular, #606266);
+      background-color: var(--page-background-color, #fff);
     }
 
-    &:focus-visible {
-      box-shadow: inset 0 0 0 2px var(--el-color-primary-light-5);
+    &:not(.is-active) {
+      border-bottom: 1px solid var(--panel-border-color, var(--el-border-color));
     }
 
     &.is-active {
       color: var(--el-color-primary);
       font-weight: 500;
+      border: 1px solid var(--panel-border-color, var(--el-border-color));
+      border-bottom: 0;
+      border-radius: 4px 4px 0 0;
+      box-shadow: none;
+
+      &::after {
+        content: '';
+        position: absolute;
+        z-index: 3;
+        right: 0;
+        bottom: -2px;
+        left: 0;
+        height: 3px;
+        background-color: var(--page-background-color, #fff);
+        pointer-events: none;
+      }
     }
 
     &.is-active .resource-select-dialog__tab-count {
       color: var(--el-color-primary);
+    }
+
+    &:focus,
+    &:focus:active,
+    &:focus-visible {
+      outline: none;
+      box-shadow: none;
     }
   }
 
@@ -1031,24 +1081,21 @@ export default {
   .table-content > .el-card,
   .table-content > .el-card > .el-card__body,
   .auto-data-table,
-  .auto-data-table > .el-loading-parent--relative,
+  .auto-data-table > .auto-data-table__content,
   .auto-data-table .el-data-table {
     height: 100%;
     min-height: 0;
   }
 
-  .auto-data-table .el-data-table {
-    gap: 4px;
+  .table-content > .el-card {
+    border: 0;
   }
 
-  .auto-data-table .el-data-table > .el-loading-parent--relative {
-    flex: 1 1 auto;
-    min-height: 0;
-  }
-
-  .el-data-table .el-pagination {
-    flex: 0 0 auto;
-    padding: 6px 12px 8px;
+  .auto-data-table .el-data-table > .el-data-table__surface {
+    // Header, tabs, toolbar, dialog padding and footer use 171px in total.
+    // The table can therefore size to its rows without ever growing the
+    // dialog beyond its existing maximum height.
+    max-height: calc(var(--resource-select-dialog-max-height) - 171px);
   }
 
   .el-dialog__body .table-action .table-action__toolbar .search {
@@ -1061,6 +1108,25 @@ export default {
 
   .resource-select-action-column {
     border-right-color: transparent !important;
+  }
+
+  .el-data-table__body > .el-table--border {
+    --el-table-border-color: var(--panel-border-color, var(--el-border-color));
+
+    &::before,
+    &::after {
+      display: none;
+    }
+
+    > .el-table__inner-wrapper > .el-table__border-left-patch,
+    > .el-table__inner-wrapper > .el-table__border-right-patch,
+    > .el-table__inner-wrapper > .el-table__border-bottom-patch {
+      display: none;
+    }
+
+    tr > .el-table__cell:last-child {
+      border-right: 0 !important;
+    }
   }
 }
 </style>

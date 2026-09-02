@@ -140,6 +140,8 @@ export default {
   async created() {
     await this.optionUrlMetaAndGenCols()
     this.loading = false
+    await this.$nextTick()
+    this.fitColumnsToContainer()
   },
   mounted() {
     this.initPinningMediaQuery()
@@ -441,6 +443,7 @@ export default {
         ...this.config,
         columns: [...this.totalColumns],
         tableAttrs: {
+          fit: false,
           tableLayout: 'auto',
           nativeScrollbar: true,
           ...this.config.tableAttrs

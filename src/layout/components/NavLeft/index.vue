@@ -224,7 +224,6 @@ $origin-color: #ffffff;
       color: var(--menu-text);
       background-color: var(--menu-bg);
       border-bottom: 1px solid var(--menu-border, var(--panel-border-color, var(--el-border-color)));
-      border-top: 1px solid var(--menu-border, var(--panel-border-color, var(--el-border-color)));
 
       .switch-view {
         width: 100%;

@@ -5,129 +5,135 @@
       <slot name="no-data" />
     </template>
     <template v-else>
-      <!--
-        过滤 selection 相关事件的透传，避免父组件收到 el-table 原生的“当前页” selection，
-        导致跨页选择（persistSelection）被覆盖，只剩当页数据。
-        选择事件统一走 selectStrategy，在内部维护全量 selected 并向外 emit。
-      -->
-      <div ref="tableBody" v-loading="tableLoading" class="el-data-table__body compact-loading">
-        <el-table
-          v-bind="tableAttrs"
-          ref="table"
-          :data="data"
-          :height="fillHeight ? '100%' : tableAttrs.height"
-          :row-class-name="rowClassName"
-          @select="selectStrategy.onSelect"
-          v-on="forwardListeners"
-          @selection-change="selectStrategy.onSelectionChange"
-          @select-all="handleSelectAll($event, canSelect)"
-          @sort-change="onSortChange"
-        >
-          <template v-if="isTree">
-            <el-data-table-column
-              v-bind="{ align: columnsAlign, ...columns[0] }"
-              v-if="hasSelect"
-              key="selection-key"
-            />
-            <el-data-table-column
-              v-bind="treeControlColumn"
-              :key="treeControlColumn.prop || 'tree-ctrl'"
-            >
-              <template #default="scope">
-                <span v-for="space in scope.row._level" :key="space" class="ms-tree-space" />
-                <span
-                  v-if="iconShow(scope.$index, scope.row)"
-                  class="tree-ctrl"
-                  @click="toggleExpanded(scope.$index)"
-                >
-                  <el-icon><component :is="scope.row._expanded ? 'Minus' : 'Plus'" /></el-icon>
-                </span>
-                {{ scope.row[treeLabelProp] }}
-              </template>
-            </el-data-table-column>
-
-            <el-data-table-column
-              v-bind="{ align: columnsAlign, ...col }"
-              v-for="col in treeDataColumns"
-              :key="col.prop"
-            />
-          </template>
-
-          <!--非树-->
-          <template v-else>
-            <el-data-table-column
-              v-if="hasSelection"
-              :align="selectionAlign"
-              :fixed="selectionFixed"
-              :selectable="canSelect"
-              :width="selectionWidth || undefined"
-              type="selection"
-            />
-            <el-table-column
-              v-bind="getColumnBindProps(col)"
-              v-for="col in displayColumns"
-              :key="col.prop"
-              :filter-method="typeof col.filterMethod === 'function' ? col.filterMethod : null"
-              :filter-multiple="false"
-              :filters="col.filters || null"
-              :formatter="typeof col.formatter === 'function' ? col.formatter : null"
-              :title="col.label"
-              :prop="col.prop"
-            >
-              <template #header>
-                <span class="column-header-content">
-                  <span v-if="!col.hideHeaderLabel" :title="col.label">{{ col.label }}</span>
-                  <button
-                    v-if="col.pinState?.visible"
-                    :aria-label="$t(col.pinState.pinned ? 'UnpinColumn' : 'PinColumn')"
-                    :class="['column-pin-button', { 'is-pinned': col.pinState.pinned }]"
-                    :title="$t(col.pinState.pinned ? 'UnpinColumn' : 'PinColumn')"
-                    type="button"
-                    @click.stop="$emit('column-pin-toggle', col.prop)"
-                    @mousedown.stop
-                  >
-                    <i class="fa fa-thumb-tack" />
-                  </button>
-                </span>
-              </template>
-
-              <template
-                v-if="col.formatter && typeof col.formatter !== 'function'"
-                #default="{ row: tableRow, column, $index }"
+      <div
+        :class="['el-data-table__surface', { 'is-paginated': hasPagination }]"
+        :style="tableSurfaceStyle"
+      >
+        <!--
+          过滤 selection 相关事件的透传，避免父组件收到 el-table 原生的“当前页” selection，
+          导致跨页选择（persistSelection）被覆盖，只剩当页数据。
+          选择事件统一走 selectStrategy，在内部维护全量 selected 并向外 emit。
+        -->
+        <div ref="tableBody" v-loading="tableLoading" class="el-data-table__body compact-loading">
+          <el-table
+            v-bind="tableAttrs"
+            :key="tableStructureKey"
+            ref="table"
+            :data="data"
+            :height="fillHeight ? '100%' : tableAttrs.height"
+            :row-class-name="rowClassName"
+            @select="selectStrategy.onSelect"
+            v-on="forwardListeners"
+            @selection-change="selectStrategy.onSelectionChange"
+            @select-all="handleSelectAll($event, canSelect)"
+            @sort-change="onSortChange"
+          >
+            <template v-if="isTree">
+              <el-data-table-column
+                v-bind="{ align: columnsAlign, ...columns[0] }"
+                v-if="hasSelect"
+                key="selection-key"
+              />
+              <el-data-table-column
+                v-bind="treeControlColumn"
+                :key="treeControlColumn.prop || 'tree-ctrl'"
               >
-                <component
-                  :is="getFormatterComponent(col)"
-                  :key="tableRow.id"
-                  :cell-value="tableRow[col.prop]"
-                  :col="col"
-                  :column="column"
-                  :index="(page - 1) * size + $index"
-                  :reload="getList"
-                  :row="tableRow"
-                  :table-data="data"
-                  :url="url"
-                />
-              </template>
-            </el-table-column>
-          </template>
-          <slot />
-        </el-table>
-      </div>
+                <template #default="scope">
+                  <span v-for="space in scope.row._level" :key="space" class="ms-tree-space" />
+                  <span
+                    v-if="iconShow(scope.$index, scope.row)"
+                    class="tree-ctrl"
+                    @click="toggleExpanded(scope.$index)"
+                  >
+                    <el-icon><component :is="scope.row._expanded ? 'Minus' : 'Plus'" /></el-icon>
+                  </span>
+                  {{ scope.row[treeLabelProp] }}
+                </template>
+              </el-data-table-column>
 
-      <div v-if="hasPagination" class="el-data-table__pagination-viewport">
-        <el-pagination
-          v-bind="{
-            ...normalizedExtraPaginationAttrs,
-            currentPage: paginationCurrentPage,
-            pageSize: paginationPageSize,
-            background: paginationBackground,
-            layout: paginationLayout,
-            pageSizes: paginationSizes,
-            total: total || 0,
-            'onUpdate:current-page': handleCurrentChange,
-            'onUpdate:page-size': handleSizeChange
-          }"
-        />
+              <el-data-table-column
+                v-bind="{ align: columnsAlign, ...col }"
+                v-for="col in treeDataColumns"
+                :key="col.prop"
+              />
+            </template>
+
+            <!--非树-->
+            <template v-else>
+              <el-data-table-column
+                v-if="hasSelection"
+                :align="selectionAlign"
+                :fixed="selectionFixed"
+                :selectable="canSelect"
+                :width="selectionWidth || undefined"
+                type="selection"
+              />
+              <el-table-column
+                v-bind="getColumnBindProps(col)"
+                v-for="col in displayColumns"
+                :key="col.prop"
+                :filter-method="typeof col.filterMethod === 'function' ? col.filterMethod : null"
+                :filter-multiple="false"
+                :filters="col.filters || null"
+                :formatter="typeof col.formatter === 'function' ? col.formatter : null"
+                :title="col.label"
+                :prop="col.prop"
+              >
+                <template #header>
+                  <span class="column-header-content">
+                    <span v-if="!col.hideHeaderLabel" :title="col.label">{{ col.label }}</span>
+                    <button
+                      v-if="col.pinState?.visible"
+                      :aria-label="$t(col.pinState.pinned ? 'UnpinColumn' : 'PinColumn')"
+                      :class="['column-pin-button', { 'is-pinned': col.pinState.pinned }]"
+                      :title="$t(col.pinState.pinned ? 'UnpinColumn' : 'PinColumn')"
+                      type="button"
+                      @click.stop="$emit('column-pin-toggle', col.prop)"
+                      @mousedown.stop
+                    >
+                      <i class="fa fa-thumb-tack" />
+                    </button>
+                  </span>
+                </template>
+
+                <template
+                  v-if="col.formatter && typeof col.formatter !== 'function'"
+                  #default="{ row: tableRow, column, $index }"
+                >
+                  <component
+                    :is="getFormatterComponent(col)"
+                    :key="tableRow.id"
+                    :cell-value="tableRow[col.prop]"
+                    :col="col"
+                    :column="column"
+                    :index="(page - 1) * size + $index"
+                    :reload="getList"
+                    :row="tableRow"
+                    :table-data="data"
+                    :url="url"
+                  />
+                </template>
+              </el-table-column>
+            </template>
+            <slot />
+          </el-table>
+        </div>
+
+        <div v-if="hasPagination" class="el-data-table__pagination-viewport">
+          <el-pagination
+            v-bind="{
+              ...normalizedExtraPaginationAttrs,
+              currentPage: paginationCurrentPage,
+              pageSize: paginationPageSize,
+              background: paginationBackground,
+              layout: paginationLayout,
+              pageSizes: paginationSizes,
+              total: total || 0,
+              'onUpdate:current-page': handleCurrentChange,
+              'onUpdate:page-size': handleSizeChange
+            }"
+          />
+        </div>
       </div>
 
       <the-dialog
@@ -498,10 +504,6 @@ export default {
       type: Number,
       default: 10
     },
-    autoPageSize: {
-      type: Boolean,
-      default: false
-    },
     /**
      * @deprecated
      * 不分页时的size的大小(建议接口约定，不分页时传参page=-1，故一般不会用到此属性)
@@ -757,7 +759,6 @@ export default {
     return {
       data: [],
       size: this.paginationSize || this.paginationSizes[0],
-      pageSizeInitialized: false,
       page: defaultFirstPage,
       // https://github.com/ElemeFE/element/issues/1153
       total: null,
@@ -778,6 +779,21 @@ export default {
     }
   },
   computed: {
+    tableSurfaceStyle() {
+      if (!this.fillHeight) {
+        return undefined
+      }
+      // Element Plus renders a 40px header plus its 1px bottom separator.
+      const headerHeight = 41
+      const rowHeight = 40
+      const emptyBodyHeight = 96
+      const loadingRows = this.tableLoading && !this.data.length && this.hasPagination
+      const visibleRows = loadingRows ? this.size : this.data.length
+      const rowsHeight = visibleRows ? visibleRows * rowHeight : emptyBodyHeight
+      const paginationHeight = this.hasPagination ? 45 : 0
+      const surfaceContentHeight = headerHeight + rowsHeight + paginationHeight + 2
+      return { '--el-data-table-content-height': `${surfaceContentHeight}px` }
+    },
     displayColumns() {
       if (this.actionsColumnPosition !== 'start') {
         return this.columns
@@ -787,6 +803,17 @@ export default {
         return this.columns
       }
       return [actions, ...this.columns.filter((column) => column !== actions)]
+    },
+    tableStructureKey() {
+      const columns = this.isTree ? this.columns : this.displayColumns
+      return [
+        this.isTree ? 'tree' : 'table',
+        this.hasSelection ? 'selection' : 'plain',
+        ...columns.map((column, index) => {
+          const identity = column.prop || column.type || index
+          return `${identity}:${column.fixed || ''}`
+        })
+      ].join('|')
     },
     paginationCurrentPage: {
       get() {
@@ -932,6 +959,9 @@ export default {
     }
   },
   watch: {
+    tableStructureKey() {
+      this.$nextTick(() => this.selectStrategy.updateElTableSelection())
+    },
     url: {
       handler(val) {
         const requestId = this.invalidateListRequest()
@@ -970,8 +1000,6 @@ export default {
       if (query) {
         this.page = parseInt(query[this.pageKey])
         this.size = parseInt(query[this.pageSizeKey])
-        this.pageSizeInitialized = this.size > 0
-
         // 恢复查询条件，但对 slot = search 无效
         if (this.$refs.searchForm) {
           delete query[this.pageKey]
@@ -1000,47 +1028,6 @@ export default {
     invalidateListRequest() {
       this.debouncedGetListFromRemote?.cancel()
       return ++this.listRequestId
-    },
-    initializePageSize() {
-      if (
-        this.pageSizeInitialized ||
-        !this.autoPageSize ||
-        !this.fillHeight ||
-        !this.hasPagination
-      ) {
-        return
-      }
-
-      const table = this.$refs.table?.$el
-      const body = table?.querySelector('.el-table__body-wrapper .el-scrollbar__wrap')
-      const bodyHeight = this.$refs.tableBody?.clientHeight
-      if (!bodyHeight || !body) return
-
-      // Measure our flex container, not Element Plus's scroll view: its inline
-      // height can still reflect the previous layout during the initial request.
-      const header = table.querySelector('thead')
-      const tableStyle = getComputedStyle(table)
-      const style = getComputedStyle(body)
-      const availableHeight =
-        bodyHeight -
-        (header?.getBoundingClientRect().height || 0) -
-        (Number.parseFloat(tableStyle.borderTopWidth) || 0) -
-        (Number.parseFloat(tableStyle.borderBottomWidth) || 0) -
-        (Number.parseFloat(style.paddingTop) || 0) -
-        (Number.parseFloat(style.paddingBottom) || 0)
-      const rowHeight = Number.parseFloat(
-        getComputedStyle(this.$el).getPropertyValue('--list-table-row-height')
-      )
-      if (!(rowHeight > 0) || availableHeight <= 0) return
-
-      // Choose once per page instance, even when the initial choice stays at 15.
-      // Resizing, filtering and returning to a cached page must not change it.
-      this.pageSizeInitialized = true
-      const size = availableHeight > rowHeight * 15 ? 30 : 15
-      if (size === this.size) return
-      // Only user actions emit sizeChange; automatic choices must not be persisted.
-      this.size = size
-      this.page = defaultFirstPage
     },
     getFormatterComponent(col) {
       if (!col?.formatter || typeof col.formatter === 'function') {
@@ -1135,7 +1122,6 @@ export default {
       return totalData
     },
     getListFromStaticData({ loading = true } = {}) {
-      this.initializePageSize()
       if (loading) {
         this.tableLoading = true
       }
@@ -1174,8 +1160,6 @@ export default {
         return
       }
 
-      // Select the initial size before building the query, without another request.
-      this.initializePageSize()
       const query = this.getQuery()
       let formValue = {}
       if (this.$refs.searchForm) {
@@ -1301,7 +1285,6 @@ export default {
       })
     },
     handleSizeChange(val) {
-      this.pageSizeInitialized = true
       this.$emit('update:page-size', val)
       this.$emit('sizeChange', val)
       if (this.size === val) return

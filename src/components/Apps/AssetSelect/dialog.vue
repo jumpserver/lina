@@ -552,7 +552,7 @@ export default {
     .table-content > .el-card,
     .table-content > .el-card > .el-card__body,
     .auto-data-table,
-    .auto-data-table > div:first-child,
+    .auto-data-table > .auto-data-table__content,
     .auto-data-table .el-data-table {
       height: 100%;
       min-height: 0;
@@ -576,7 +576,7 @@ export default {
       gap: 4px;
     }
 
-    .auto-data-table .el-data-table > div:first-child {
+    .auto-data-table .el-data-table > .el-data-table__surface {
       flex: 1 1 auto;
       min-height: 0;
       overflow: hidden;
@@ -585,8 +585,6 @@ export default {
     .el-data-table .el-pagination {
       flex: 0 0 auto;
       box-sizing: border-box;
-      min-height: 48px;
-      padding: 10px 20px 12px;
 
       .el-pagination__total {
         margin-right: auto;
