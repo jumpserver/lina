@@ -1,7 +1,7 @@
 <template>
   <div
     :class="{
-      'is-node-asset-tree': activeTreeComponent === 'NodeAssetTree',
+      'is-domain-tree': isDomainTree,
       'is-x-tree': isModernTree
     }"
     class="tree-tab"
@@ -66,7 +66,7 @@
         </template>
       </el-dropdown>
     </div>
-    <transition appear mode="out-in" name="fade-transform">
+    <transition appear mode="out-in" name="fade-transform" @after-enter="handleActiveTreeReady">
       <slot>
         <keep-alive v-if="flag">
           <component
@@ -93,6 +93,7 @@
 <script>
 import AutoDataZTree from '@/components/Tree/AutoDataZTree/index.vue'
 import NodeAssetTree from '@/components/Tree/NodeAssetTree/index.vue'
+import UserTree from '@/components/Tree/UserTree/index.vue'
 import XTree from '@/components/Tree/XTree/index.vue'
 
 const ACTIVE_TREE_TAB_KEY = 'activeTreeTab'
@@ -102,7 +103,9 @@ const FORWARDED_TREE_EVENTS = Object.freeze([
   'permission-scope-change',
   'search-state-change',
   'select',
-  'selected'
+  'selected',
+  'selection-clear',
+  'sort-change'
 ])
 
 export default {
@@ -110,15 +113,19 @@ export default {
   components: {
     AutoDataZTree,
     NodeAssetTree,
+    UserTree,
     XTree
   },
   emits: [
+    'active-tree-ready',
     'children-truncated',
     'metric-change',
     'permission-scope-change',
     'search-state-change',
     'select',
     'selected',
+    'selection-clear',
+    'sort-change',
     'tab-click',
     'tree-init-finish',
     'update:activeMenu',
@@ -172,7 +179,10 @@ export default {
       return this.activeTreeItem?.treeComponent || this.treeComponent
     },
     isModernTree() {
-      return this.activeTreeComponent === 'XTree' || this.activeTreeComponent === 'NodeAssetTree'
+      return ['XTree', 'NodeAssetTree', 'UserTree'].includes(this.activeTreeComponent)
+    },
+    isDomainTree() {
+      return ['NodeAssetTree', 'UserTree'].includes(this.activeTreeComponent)
     },
     forwardedTreeEventListeners() {
       // Vue component events do not bubble through dynamic component wrappers.
@@ -196,6 +206,19 @@ export default {
     this.changeTreeSetting(activeMenu)
   },
   methods: {
+    handleActiveTreeReady() {
+      this.$nextTick(() => {
+        const tree = this.$refs.AutoDataZTree
+        if (!tree) {
+          return
+        }
+        this.$emit('active-tree-ready', {
+          item: this.activeTreeItem,
+          name: this.iActiveMenu,
+          tree
+        })
+      })
+    },
     hideRMenu() {
       return this.$refs.AutoDataZTree?.hideRMenu?.()
     },
@@ -226,6 +249,9 @@ export default {
     },
     setNodeMetric(id, amount) {
       return this.$refs.AutoDataZTree?.setNodeMetric?.(id, amount)
+    },
+    setPermissionScope(scope) {
+      return this.$refs.AutoDataZTree?.setPermissionScope?.(scope)
     },
     handleUrlChange(url) {
       this.$emit('urlChange', url)
@@ -299,7 +325,7 @@ export default {
   position: relative;
 }
 
-.tree-tab.is-node-asset-tree {
+.tree-tab.is-domain-tree {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -309,11 +335,14 @@ export default {
     flex: none;
   }
 
-  > :deep(.node-asset-tree.is-fill-height) {
+  > :deep(.node-asset-tree.is-fill-height),
+  > :deep(.user-tree.is-fill-height) {
     flex: 1 1 auto;
+    min-height: 0;
   }
 
-  > :deep(.node-asset-tree:not(.is-fill-height)) {
+  > :deep(.node-asset-tree:not(.is-fill-height)),
+  > :deep(.user-tree:not(.is-fill-height)) {
     flex: none;
   }
 }

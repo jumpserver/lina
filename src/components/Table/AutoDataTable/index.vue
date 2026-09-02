@@ -1,5 +1,5 @@
 <template>
-  <div class="auto-data-table" @wheel="handleCellWheel">
+  <div class="auto-data-table">
     <div v-loading="loading" class="auto-data-table__content compact-loading">
       <DataTable
         v-bind="$attrs"
@@ -34,63 +34,13 @@ import { orderActionColumn, orderPrimaryColumns, TableColumnsGenerator } from '.
 import _ from 'lodash'
 import { toRaw } from 'vue'
 
-const CELL_WHEEL_GESTURE_GAP = 120
-const CELL_WHEEL_ACCELERATION_RATIO = 1.35
-const CELL_WHEEL_ACCELERATION_EPSILON = 0.5
 const COLUMN_WIDTH_CHANGE_TOLERANCE = 1
 const DEFAULT_SELECTION_COLUMN_WIDTH = 48
-const TABLE_CELL_SELECTOR = '.el-table__body td.el-table__cell .cell'
 const DEFAULT_HIDDEN_COLUMN_NAMES = new Set(['id'])
 
 function isDefaultHiddenColumn(column) {
   const name = typeof column === 'object' ? column?.prop : column
   return DEFAULT_HIDDEN_COLUMN_NAMES.has(name)
-}
-
-function getWheelEventTarget(event) {
-  return event.target instanceof Element ? event.target : event.target?.parentElement
-}
-
-function getHorizontalWheelDelta(event, hasActiveGesture, pageWidth) {
-  let delta = 0
-  if (event.shiftKey) {
-    delta = event.deltaX || event.deltaY
-  } else if (hasActiveGesture && event.deltaX) {
-    delta = event.deltaX
-  } else if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
-    delta = event.deltaX
-  }
-
-  if (!delta) {
-    return 0
-  }
-
-  const scale = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? pageWidth || 1 : 1
-  return delta * scale
-}
-
-function findCellScrollTarget(root, target) {
-  const cell = target?.closest(TABLE_CELL_SELECTOR)
-  if (!cell || !root.contains(cell)) {
-    return null
-  }
-
-  const scrollContainer = [target.closest('.label-wrapper'), cell].find(
-    (element) => element && element.scrollWidth > element.clientWidth + 1
-  )
-  return scrollContainer ? { cell, scrollContainer } : null
-}
-
-function shouldRestartCellWheelGesture(gesture, target, delta, now) {
-  if (target && gesture.cell.contains(target)) {
-    return false
-  }
-
-  const directionChanged = Math.sign(delta) !== Math.sign(gesture.lastDelta)
-  const accelerated =
-    Math.abs(delta) >
-    Math.abs(gesture.lastDelta) * CELL_WHEEL_ACCELERATION_RATIO + CELL_WHEEL_ACCELERATION_EPSILON
-  return now - gesture.lastTime > CELL_WHEEL_GESTURE_GAP || directionChanged || accelerated
 }
 
 export default {
@@ -139,7 +89,6 @@ export default {
       pinningDisabled: typeof window !== 'undefined' ? window.innerWidth < 992 : false,
       naturalColumnWidths: {},
       pinnedColumnProps: [],
-      cellWheelGesture: null,
       columnConfigVersion: 0,
       columnConfigPending: false,
       inited: false
@@ -214,7 +163,6 @@ export default {
   },
   beforeUnmount() {
     this.columnConfigVersion += 1
-    this.clearCellWheelGesture()
     if (this.pinningMediaQuery) {
       if (typeof this.pinningMediaQuery.removeEventListener === 'function') {
         this.pinningMediaQuery.removeEventListener('change', this.handlePinningMediaChange)
@@ -227,7 +175,6 @@ export default {
   },
   deactivated() {
     this.isDeactivated = true
-    this.clearCellWheelGesture()
     this.cancelColumnFit()
   },
   activated() {
@@ -236,58 +183,6 @@ export default {
   methods: {
     handleLoaded(payload) {
       this.$emit('loaded', payload)
-    },
-    handleCellWheel(event) {
-      const delta = getHorizontalWheelDelta(
-        event,
-        Boolean(this.cellWheelGesture),
-        this.$el.clientWidth
-      )
-      if (!delta) {
-        return
-      }
-
-      const target = getWheelEventTarget(event)
-      const now = performance.now()
-      let gesture = this.cellWheelGesture
-      if (
-        gesture &&
-        (!gesture.scrollContainer.isConnected ||
-          !this.$el.contains(gesture.scrollContainer) ||
-          shouldRestartCellWheelGesture(gesture, target, delta, now))
-      ) {
-        this.clearCellWheelGesture()
-        gesture = null
-      }
-
-      if (!gesture) {
-        const scrollTarget = findCellScrollTarget(this.$el, target)
-        if (!scrollTarget) {
-          return
-        }
-        gesture = {
-          ...scrollTarget,
-          lastDelta: delta,
-          lastTime: now,
-          timer: null
-        }
-        this.cellWheelGesture = gesture
-      }
-
-      event.preventDefault()
-      event.stopPropagation()
-      gesture.scrollContainer.scrollLeft += delta
-      gesture.lastDelta = delta
-      gesture.lastTime = now
-      this.scheduleCellWheelGestureEnd(gesture)
-    },
-    scheduleCellWheelGestureEnd(gesture) {
-      clearTimeout(gesture.timer)
-      gesture.timer = setTimeout(this.clearCellWheelGesture, CELL_WHEEL_GESTURE_GAP)
-    },
-    clearCellWheelGesture() {
-      clearTimeout(this.cellWheelGesture?.timer)
-      this.cellWheelGesture = null
     },
     initPinningMediaQuery() {
       if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {

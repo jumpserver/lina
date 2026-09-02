@@ -60,6 +60,10 @@ export default {
       type: Object,
       default: () => ({})
     },
+    additionalTreeViews: {
+      type: Array,
+      default: () => []
+    },
     tableConfig: {
       type: Object,
       default: () => ({})
@@ -160,7 +164,8 @@ export default {
                 }
               }
             }
-          }
+          },
+          ...this.additionalTreeViews
         ]
       }
     }
@@ -190,11 +195,17 @@ export default {
     getTreeSnapshot() {
       return this.$refs.TreeList?.getTreeSnapshot?.()
     },
+    getSelectedNodes() {
+      return this.$refs.TreeList?.getSelectedNodes?.() || []
+    },
     reloadVisibleTreeMetrics(options) {
       return this.$refs.TreeList?.reloadVisibleMetrics?.(options)
     },
     invalidateNormalMetrics() {
       return this.$refs.TreeList?.invalidateNormalMetrics?.()
+    },
+    setPermissionScope(scope) {
+      return this.$refs.TreeList?.setPermissionScope?.(scope)
     },
     toggleRowSelection(row, isSelected) {
       return this.$refs.TreeList?.toggleRowSelection(row, isSelected)

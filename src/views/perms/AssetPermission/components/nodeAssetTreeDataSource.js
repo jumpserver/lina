@@ -1,6 +1,5 @@
 const NODE_TREE_URL = '/api/v1/assets/nodes/children/tree/'
 const NODE_ASSET_SEARCH_URL = '/api/v1/assets/node-assets/tree/search/'
-const ASSET_METRICS_URL = '/api/v1/assets/nodes/tree-metrics/'
 const PERMISSION_METRICS_URL = '/api/v1/perms/asset-permissions/tree-metrics/'
 
 function resourceItems(nodes) {
@@ -62,26 +61,12 @@ export function createAssetPermissionTreeDataSource(request) {
         signal
       })
     },
-    metrics({ fresh, mode, nodes, search, signal }) {
+    metrics({ mode, nodes, signal }) {
       const items = resourceItems(nodes)
       if (!items.length) {
         return { results: [] }
       }
-
-      if (mode === 'permission_direct' || mode === 'permission_effective') {
-        return request.post(PERMISSION_METRICS_URL, { items, metric: mode }, { signal })
-      }
-
-      return request.post(
-        ASSET_METRICS_URL,
-        {
-          fresh,
-          items,
-          metric: mode,
-          search: mode === 'search_assets' ? search?.keyword : undefined
-        },
-        { signal }
-      )
+      return request.post(PERMISSION_METRICS_URL, { items, metric: mode }, { signal })
     }
   }
 }

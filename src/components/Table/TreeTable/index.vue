@@ -407,6 +407,9 @@ export default {
     setNodeMetric(id, amount) {
       return this.$refs.AutoDataZTree?.setNodeMetric?.(id, amount)
     },
+    setPermissionScope(scope) {
+      return this.$refs.AutoDataZTree?.setPermissionScope?.(scope)
+    },
     reloadTable() {
       return this.$refs.ListTable?.reloadTable?.()
     },

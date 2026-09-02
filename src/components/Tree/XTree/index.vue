@@ -698,6 +698,18 @@ export default {
       }
       return Boolean(node?.disabled || node?.chkDisabled || node?.valid === false)
     },
+    isNodeSelectable(node) {
+      if (typeof this.treeSetting.selectPredicate === 'function') {
+        return Boolean(this.treeSetting.selectPredicate(node))
+      }
+      return true
+    },
+    isNodeChildrenProjection(node) {
+      if (typeof this.treeSetting.childrenProjectionPredicate === 'function') {
+        return Boolean(this.treeSetting.childrenProjectionPredicate(node))
+      }
+      return Boolean(node?._childrenProjection)
+    },
     getNodeAmountKey(node) {
       if (typeof this.treeSetting.getAmountKey === 'function') {
         const key = this.treeSetting.getAmountKey(node)
@@ -1616,7 +1628,10 @@ export default {
         resolve(this.treeData)
         return
       }
-      if (node.data?.children?.length || node.data?._isLeaf) {
+      const reloadProjectedChildren = Boolean(
+        this.isNodeChildrenProjection(node.data) && node.data?._reloadProjectedChildren
+      )
+      if ((node.data?.children?.length && !reloadProjectedChildren) || node.data?._isLeaf) {
         if (node.data?.children?.length) {
           this.rememberNodeChildrenViewSource(node.data, node.data.children)
         }
@@ -1652,6 +1667,8 @@ export default {
         // avoiding duplicate lazy requests, this lets an async search swap the
         // visible tree out and later restore the exact expanded structure.
         node.data.children = children
+        node.data._childrenProjection = false
+        node.data._reloadProjectedChildren = false
         node.data._isLeaf = children.length === 0
         this.rememberNodeChildrenViewSource(node.data, children, { replace: true })
         resolve(children)
@@ -1694,6 +1711,13 @@ export default {
     async handleNodeCollapse(data) {
       if (data?.id !== undefined && data?.id !== null) {
         this.expandedNodeIds.delete(String(data.id))
+      }
+      if (this.searchMode && this.isNodeChildrenProjection(data)) {
+        const node = this.$refs.tree?.getNode?.(data.id)
+        if (node?.loaded) {
+          data._reloadProjectedChildren = true
+          node.loaded = false
+        }
       }
       if (this.suppressExpandAmountLoading) {
         return
@@ -2055,6 +2079,16 @@ export default {
       }
     },
     handleNodeLabelClick(event, data) {
+      if (
+        typeof this.treeSetting.beforeNodeSelect === 'function' &&
+        this.treeSetting.beforeNodeSelect(event, data, { tree: this }) === false
+      ) {
+        return
+      }
+      if (!this.isNodeSelectable(data)) {
+        this.toggleNodeExpansion(data)
+        return
+      }
       this.currentNode = data
       this.$refs.tree?.setCurrentKey(data.id)
       this.$emit('selected', data, {
@@ -2065,6 +2099,27 @@ export default {
         onSelected(event, data, { assetScope: this.assetScope })
       } else {
         this.emitSelectedUrl(data)
+      }
+    },
+    toggleNodeExpansion(data) {
+      if (!data || this.isLeafNode(data)) {
+        return
+      }
+      const tree = this.$refs.tree
+      const node = tree?.getNode?.(data.id)
+      if (!node) {
+        return
+      }
+      if (this.useVirtualTree) {
+        if (node.expanded) {
+          tree.collapseNode?.(node)
+        } else {
+          tree.expandNode?.(node)
+        }
+      } else if (node.expanded) {
+        node.collapse?.()
+      } else {
+        node.expand?.()
       }
     },
     emitSelectedUrl(treeNode) {
@@ -2602,6 +2657,12 @@ export default {
     getSelectedNodes() {
       return this.currentNode ? [this.currentNode] : []
     },
+    clearSelection() {
+      const previous = this.currentNode
+      this.currentNode = null
+      this.$refs.tree?.setCurrentKey(null)
+      return previous
+    },
     getNodes() {
       return this.treeData
     },
@@ -2832,7 +2893,6 @@ export default {
   flex: 1;
   min-height: 0;
   overflow: auto;
-  overscroll-behavior-y: none;
   // Standard scrollbar styling overrides the axis-specific WebKit rules.
   scrollbar-width: auto;
   scrollbar-color: auto;
@@ -2855,7 +2915,6 @@ export default {
 .x-tree__body.is-virtual :deep(.el-tree-virtual-list) {
   min-width: 100%;
   overflow-x: auto !important;
-  overscroll-behavior-y: none;
 }
 
 .x-tree__body.is-virtual :deep(.el-tree-virtual-list)::-webkit-scrollbar:horizontal {

@@ -52,9 +52,7 @@
     background-color: var(--list-table-selected-hover-bg-color);
   }
 
-  // Contain horizontal edge gestures in both page and dialog tables.
   :deep(.el-table__body-wrapper .el-scrollbar__wrap) {
-    overscroll-behavior-x: none;
     scrollbar-gutter: stable;
   }
 }
@@ -76,17 +74,11 @@
     overflow: hidden;
   }
 
-  // Keep momentum scrolling from bouncing the sticky header or chaining to the page.
-  :deep(.el-table__body-wrapper .el-scrollbar__wrap) {
-    overscroll-behavior-y: none;
-  }
-
   > .el-data-table__pagination-viewport {
     flex: none;
     min-width: 0;
     overflow-x: auto;
     overflow-y: auto;
-    overscroll-behavior-x: contain;
     scrollbar-gutter: stable;
     scrollbar-width: none;
 
