@@ -98,7 +98,7 @@
             <template v-if="treeSetting.showPermissionScope">
               <li class="x-tree-tools__divider" />
               <li class="x-tree-settings__title">
-                {{ $t('NodeAssetTreePermissionScope') }}
+                {{ $t('PermissionScope') }}
               </li>
               <li class="x-tree-settings__radio-list" @click.capture="closeToolsDropdown">
                 <el-radio-group
@@ -360,6 +360,14 @@ const MAX_ASSET_SEARCH_RESULTS = 100
 const ASSET_ORDER_VALUES = Object.freeze(['name', 'address'])
 const NODE_DISPLAY_VALUES = Object.freeze(['both', 'nodes', 'assets'])
 
+function getAllowedMetricModes(setting = {}) {
+  const configured = Array.isArray(setting.metricModes)
+    ? setting.metricModes
+    : NODE_ASSET_METRIC_MODES
+  const allowed = configured.filter((value) => isNodeAssetMetricMode(value))
+  return allowed.length ? allowed : [...NODE_ASSET_METRIC_MODES]
+}
+
 function getSettingsCacheKey(setting = {}) {
   const key = String(setting.settingsCacheKey || '').trim()
   return key ? `${SETTINGS_CACHE_PREFIX}${key}` : ''
@@ -445,6 +453,7 @@ export default {
   ],
   data() {
     const cachedSettings = readCachedSettings(this.setting)
+    const allowedMetricModes = getAllowedMetricModes(this.setting)
     const configuredDefaultTarget = NODE_ASSET_SEARCH_TARGETS.includes(
       this.setting.defaultSearchTarget
     )
@@ -457,10 +466,20 @@ export default {
       typeof cachedSettings.searchIncludeParents === 'boolean'
         ? cachedSettings.searchIncludeParents
         : this.setting.defaultSearchIncludeParents !== false
-    const configuredDefaultMode = isNodeAssetMetricMode(this.setting.defaultMetricMode)
+    let defaultPermissionScope =
+      cachedSettings.permissionScope === 'direct' || cachedSettings.permissionScope === 'effective'
+        ? cachedSettings.permissionScope
+        : this.setting.defaultPermissionScope === 'direct'
+          ? 'direct'
+          : 'effective'
+    const permissionScopeMode =
+      defaultPermissionScope === 'direct' ? 'permission_direct' : 'permission_effective'
+    const configuredDefaultMode = allowedMetricModes.includes(this.setting.defaultMetricMode)
       ? this.setting.defaultMetricMode
-      : 'permission_effective'
-    const defaultMode = isNodeAssetMetricMode(cachedSettings.metricMode)
+      : allowedMetricModes.includes(permissionScopeMode)
+        ? permissionScopeMode
+        : allowedMetricModes[0]
+    const defaultMode = allowedMetricModes.includes(cachedSettings.metricMode)
       ? cachedSettings.metricMode
       : configuredDefaultMode
     const defaultAssetOrder = ASSET_ORDER_VALUES.includes(cachedSettings.assetOrder)
@@ -468,12 +487,6 @@ export default {
       : ASSET_ORDER_VALUES.includes(this.setting.defaultAssetOrder)
         ? this.setting.defaultAssetOrder
         : 'name'
-    let defaultPermissionScope =
-      cachedSettings.permissionScope === 'direct' || cachedSettings.permissionScope === 'effective'
-        ? cachedSettings.permissionScope
-        : this.setting.defaultPermissionScope === 'direct'
-          ? 'direct'
-          : 'effective'
     if (defaultMode === 'permission_direct') {
       defaultPermissionScope = 'direct'
     } else if (defaultMode === 'permission_effective') {
@@ -541,12 +554,12 @@ export default {
     permissionOptions() {
       return [
         {
-          label: this.$t('NodeAssetTreePermissionEffective'),
+          label: this.$t('PermissionScopeEffective'),
           metricValue: 'permission_effective',
           scopeValue: 'effective'
         },
         {
-          label: this.$t('NodeAssetTreePermissionDirect'),
+          label: this.$t('PermissionScopeDirect'),
           metricValue: 'permission_direct',
           scopeValue: 'direct'
         }
@@ -581,8 +594,7 @@ export default {
       ]
     },
     metricGroups() {
-      const configured = this.treeSetting.metricModes || NODE_ASSET_METRIC_MODES
-      const available = new Set(configured.filter((value) => isNodeAssetMetricMode(value)))
+      const available = new Set(getAllowedMetricModes(this.treeSetting))
       return [
         {
           label: this.$t('NodeAssetTreeMetricAsset'),
@@ -993,7 +1005,7 @@ export default {
       this.closeToolsDropdown()
     },
     setMetricMode(value) {
-      if (!isNodeAssetMetricMode(value)) {
+      if (!getAllowedMetricModes(this.treeSetting).includes(value)) {
         return
       }
       const previousMode = this.metricMode

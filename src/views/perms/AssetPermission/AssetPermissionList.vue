@@ -2,13 +2,16 @@
   <Page v-bind="$attrs" :help-tip="helpMsg">
     <AssetTreeTable
       ref="AssetTreeTable"
+      :additional-tree-views="additionalTreeViews"
       :header-actions="headerActions"
       :table-config="tableConfig"
       :tree-setting="treeSetting"
       :quick-filters="quickFilter"
       :create-drawer="createDrawer"
+      @active-tree-ready="handlePermissionTreeReady"
       @detail-delete-success="reloadVisiblePermissionMetrics"
       @resource-change="reloadVisiblePermissionMetrics"
+      @selection-clear="handlePermissionTreeSelectionClear"
     />
     <PermBulkUpdateDialog
       v-bind="updateSelectedDialogSetting"
@@ -27,6 +30,7 @@ import { createSourceIdCache } from '@/api/common'
 import { AssetPermissionTableMeta } from '../const.js'
 import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
 import { createAssetPermissionTreeDataSource } from './components/nodeAssetTreeDataSource'
+import { createAssetPermissionUserTreeDataSource } from './components/userTreeDataSource'
 
 export default {
   components: {
@@ -77,14 +81,16 @@ export default {
       ],
       treeSetting: {
         treeComponent: 'NodeAssetTree',
+        treeTitle: this.$t('AssetTree'),
         showMenu: false,
         showAssets: true,
         showCollapse: true,
-        showMetrics: true,
+        showMetrics: false,
         showPermissionScope: true,
         showRefresh: true,
         showSearch: true,
-        defaultMetricMode: 'asset_all',
+        metricModes: ['permission_direct', 'permission_effective'],
+        defaultMetricMode: 'permission_effective',
         defaultPermissionScope: 'effective',
         defaultSearchTarget: 'all',
         settingsCacheKey: 'asset-permission',
@@ -109,6 +115,31 @@ export default {
           }
         }
       },
+      additionalTreeViews: [
+        {
+          title: this.$t('UserTree'),
+          name: 'UserTree',
+          icon: 'fa-solid fa-users',
+          treeComponent: 'UserTree',
+          treeSetting: {
+            showCollapse: true,
+            showPermissionScope: true,
+            showRefresh: true,
+            showSearch: true,
+            showUserOrder: true,
+            defaultPermissionScope: 'effective',
+            settingsCacheKey: 'asset-permission',
+            searchLimit: 1000,
+            dataSource: createAssetPermissionUserTreeDataSource(this.$axios),
+            readOnly: true,
+            callback: {
+              onSelected: (event, treeNode, context) => {
+                this.handlePermissionUserTreeSelected(treeNode, context)
+              }
+            }
+          }
+        }
+      ],
       tableConfig: {
         url: '/api/v1/perms/asset-permissions/',
         hasTree: true,
@@ -211,6 +242,12 @@ export default {
     this.activatedReloadTimer = null
   },
   methods: {
+    clearPermissionTreeFilters(url) {
+      for (const key of ['node_id', 'asset_id', 'user_id', 'user_group_id', 'all']) {
+        url = setUrlParam(url, key, '')
+      }
+      return url
+    },
     handlePermissionTreeSelected(treeNode, context = {}) {
       const type = treeNode?.meta?.type
       const resourceId = treeNode?.meta?.data?.id
@@ -218,10 +255,44 @@ export default {
         return
       }
 
-      let url = this.treeSetting.url
+      let url = this.clearPermissionTreeFilters(this.treeSetting.url)
       url = setUrlParam(url, 'node_id', type === 'node' ? resourceId : '')
       url = setUrlParam(url, 'asset_id', type === 'asset' ? resourceId : '')
       url = setUrlParam(url, 'all', context.permissionScope === 'direct' ? '0' : '1')
+      this.$refs.AssetTreeTable?.updateTableUrl?.(url)
+    },
+    handlePermissionUserTreeSelected(treeNode, context = {}) {
+      const type = treeNode?.meta?.type
+      const resourceId = treeNode?.meta?.data?.resource_id ?? treeNode?.meta?.data?.id
+      if (!resourceId || !['organization', 'user_group', 'user'].includes(type)) {
+        return
+      }
+
+      let url = this.clearPermissionTreeFilters(this.treeSetting.url)
+      if (type === 'user_group') {
+        url = setUrlParam(url, 'user_group_id', resourceId)
+      } else if (type === 'user') {
+        url = setUrlParam(url, 'user_id', resourceId)
+      }
+      if (type !== 'organization') {
+        url = setUrlParam(url, 'all', context.permissionScope === 'direct' ? '0' : '1')
+      }
+      this.$refs.AssetTreeTable?.updateTableUrl?.(url)
+    },
+    handlePermissionTreeReady({ tree } = {}) {
+      const selected = tree?.getSelectedNodes?.()[0]
+      const context = tree?.getTreeSnapshot?.() || {}
+      const type = selected?.meta?.type
+      if (['node', 'asset'].includes(type)) {
+        this.handlePermissionTreeSelected(selected, context)
+      } else if (['organization', 'user_group', 'user'].includes(type)) {
+        this.handlePermissionUserTreeSelected(selected, context)
+      } else {
+        this.handlePermissionTreeSelectionClear()
+      }
+    },
+    handlePermissionTreeSelectionClear() {
+      const url = this.clearPermissionTreeFilters(this.treeSetting.url)
       this.$refs.AssetTreeTable?.updateTableUrl?.(url)
     },
     reloadAssetTreeTable() {
@@ -229,21 +300,7 @@ export default {
       this.reloadVisiblePermissionMetrics()
     },
     reloadVisiblePermissionMetrics() {
-      const snapshot = this.$refs.AssetTreeTable?.getTreeSnapshot?.()
-      const effectiveMetricMode = snapshot?.effectiveMetricMode || snapshot?.metricMode
-      const permissionMetricModes = ['permission_direct', 'permission_effective']
-      // Permission CRUD cannot change asset-relation counts. Avoid bypassing
-      // that metric's cache unless a permission count is actually visible.
-      if (permissionMetricModes.includes(effectiveMetricMode)) {
-        this.$refs.AssetTreeTable?.reloadVisibleTreeMetrics?.()
-        return
-      }
-      if (
-        effectiveMetricMode === 'search_assets' &&
-        permissionMetricModes.includes(snapshot?.metricMode)
-      ) {
-        this.$refs.AssetTreeTable?.invalidateNormalMetrics?.()
-      }
+      this.$refs.AssetTreeTable?.reloadVisibleTreeMetrics?.()
     },
     handlePermBulkUpdate() {
       this.updateSelectedDialogSetting.visible = false
