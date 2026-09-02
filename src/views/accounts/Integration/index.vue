@@ -30,6 +30,12 @@ export default {
             component: () => import('@/views/accounts/Integration/components/CallRecords.vue')
           },
           {
+            name: 'rotations',
+            title: this.$t('AccountRotation'),
+            hidden: !this.$hasPerm('accounts.view_integrationapplication'),
+            component: () => import('@/views/accounts/Integration/AccountRotationPrototype.vue')
+          },
+          {
             name: 'docs',
             title: this.$t('Documentation'),
             hidden: !this.$hasPerm('accounts.view_integrationapplication'),

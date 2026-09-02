@@ -46,6 +46,36 @@ export default [
         }
       },
       {
+        path: 'credential-policies/create',
+        component: () => import('@/views/accounts/Integration/AccountRotationCreateUpdate.vue'),
+        name: 'CredentialPolicyCreate',
+        hidden: true,
+        meta: {
+          title: i18n.t('CreateRotationConfiguration'),
+          permissions: ['accounts.add_credentialpolicy']
+        }
+      },
+      {
+        path: 'credential-policies/:id/update',
+        component: () => import('@/views/accounts/Integration/AccountRotationCreateUpdate.vue'),
+        name: 'CredentialPolicyUpdate',
+        hidden: true,
+        meta: {
+          title: i18n.t('EditRotationConfiguration'),
+          permissions: ['accounts.change_credentialpolicy']
+        }
+      },
+      {
+        path: 'credential-policies/:id',
+        component: () => import('@/views/accounts/Integration/AccountRotationDetail/index.vue'),
+        name: 'CredentialPolicyDetail',
+        hidden: true,
+        meta: {
+          title: i18n.t('AccountRotation'),
+          permissions: ['accounts.view_credentialpolicy']
+        }
+      },
+      {
         path: ':id',
         component: () => import('@/views/accounts/Integration/ApplicationDetail/index.vue'),
         name: 'IntegrationApplicationDetail',

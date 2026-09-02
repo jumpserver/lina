@@ -13,13 +13,13 @@
 <script>
 import { GenericDetailPage } from '@/layout/components'
 import IntegrationApplicationAccount from '../components/AccountList.vue'
-import ServiceCallRecords from '../components/CallRecords.vue'
+import ClientAccessPrototype from './ClientAccessPrototype.vue'
 import IntegrationApplicationInfo from './ServiceInfo.vue'
 
 export default {
   components: {
     GenericDetailPage,
-    ServiceCallRecords,
+    ClientAccessPrototype,
     IntegrationApplicationInfo,
     IntegrationApplicationAccount
   },
@@ -42,9 +42,9 @@ export default {
             hidden: () => !this.$hasPerm('accounts.view_integrationapplication')
           },
           {
-            name: 'ServiceCallRecords',
-            title: this.$t('CallRecords'),
-            hidden: () => !this.$hasPerm('audits.view_integrationapplicationlog')
+            title: this.$t('ClientAccess'),
+            name: 'ClientAccessPrototype',
+            hidden: () => !this.$hasPerm('accounts.view_integrationapplication')
           }
         ]
       }
