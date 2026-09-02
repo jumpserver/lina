@@ -83,11 +83,6 @@ export default {
         paginationLayout: 'total, sizes, prev, pager, next',
         paginationSize: hasSavedPageSize ? savedPaginationSize : paginationSizes[0],
         paginationSizes,
-        autoPageSize:
-          !hasSavedPageSize &&
-          this.config.paginationSize == null &&
-          this.$attrs.paginationSize == null &&
-          this.$attrs['pagination-size'] == null,
         paginationBackground: true,
         transformQuery: (query) => {
           if (query.page && query.size) {

@@ -1,7 +1,7 @@
 .el-data-table {
   // Keep the complete table state palette in one place so page lists,
   // drawers and dialogs render the same visual hierarchy.
-  --list-table-header-bg-color: var(--el-fill-color-light, #f5f7fa);
+  --list-table-header-bg-color: var(--el-bg-color, #fff);
   --list-table-stripe-bg-color: color-mix(in srgb, var(--el-fill-color-light, #f5f7fa) 28%, #fff);
   --list-table-row-hover-bg-color: color-mix(
     in srgb,
@@ -14,10 +14,10 @@
     var(--el-color-primary-light-9, #ecf5ff) 72%,
     var(--el-color-primary-light-8, #d9ecff)
   );
+  --list-table-scrollbar-size: 12px;
 
   display: flex;
   flex-direction: column;
-  gap: 1px;
   min-width: 0;
 
   :deep(.el-table) {
@@ -40,11 +40,20 @@
     background-color: var(--list-table-row-hover-bg-color);
   }
 
+  :deep(
+    .el-table__body tr.el-table__row:has(.el-checkbox.is-checked) > td.el-table__cell
+  ),
   :deep(.el-table__body tr.el-table__row.selected-row > td.el-table__cell),
   :deep(.el-table__body tr.el-table__row.current-row > td.el-table__cell) {
     background-color: var(--list-table-selected-bg-color);
   }
 
+  :deep(
+    .el-table__body tr.el-table__row:has(.el-checkbox.is-checked):hover > td.el-table__cell
+  ),
+  :deep(
+    .el-table__body tr.el-table__row:has(.el-checkbox.is-checked).hover-row > td.el-table__cell
+  ),
   :deep(.el-table__body tr.el-table__row.selected-row:hover > td.el-table__cell),
   :deep(.el-table__body tr.el-table__row.selected-row.hover-row > td.el-table__cell),
   :deep(.el-table__body tr.el-table__row.current-row:hover > td.el-table__cell),
@@ -52,9 +61,26 @@
     background-color: var(--list-table-selected-hover-bg-color);
   }
 
-  :deep(.el-table__body-wrapper .el-scrollbar__wrap) {
-    scrollbar-gutter: stable;
+  :deep(.el-table__body > tbody > tr:last-child > td.el-table__cell) {
+    border-bottom: 0;
   }
+
+  :deep(.el-table__body-wrapper .el-scrollbar__wrap) {
+    // Let the axis-specific WebKit dimensions below control the horizontal
+    // scrollbar; `scrollbar-width: thin` suppresses those rules in Chromium.
+    scrollbar-width: auto;
+    scrollbar-color: auto;
+  }
+}
+
+.el-data-table__surface {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  background-color: var(--el-bg-color, #fff);
 }
 
 .el-data-table--fill-height {
@@ -68,13 +94,34 @@
     height: var(--list-table-row-height);
   }
 
-  > .el-data-table__body {
-    flex: 1 1 0%;
+  > .el-data-table__surface {
+    // Native overflow owns the scrollbar space: no horizontal overflow means
+    // no empty track; add its height only when Element detects real overflow.
+    --el-data-table-horizontal-scrollbar-height: 0px;
+    --el-data-table-surface-height: calc(
+      var(--el-data-table-content-height, 100%) +
+        var(--el-data-table-horizontal-scrollbar-height)
+    );
+
+    flex: 0 1 var(--el-data-table-surface-height, 100%);
+    height: var(--el-data-table-surface-height, 100%);
+    max-height: 100%;
+    border: 1px solid var(--panel-border-color, var(--el-border-color));
+    border-radius: var(--list-corner-radius, 4px);
+    overflow: hidden;
+
+    &:has(.el-table--scrollable-x) {
+      --el-data-table-horizontal-scrollbar-height: var(--list-table-scrollbar-size);
+    }
+  }
+
+  > .el-data-table__surface > .el-data-table__body {
+    flex: 1 1 auto;
     min-height: 0;
     overflow: hidden;
   }
 
-  > .el-data-table__pagination-viewport {
+  > .el-data-table__surface > .el-data-table__pagination-viewport {
     flex: none;
     min-width: 0;
     overflow-x: auto;
@@ -87,11 +134,11 @@
     &::-webkit-scrollbar:horizontal {
       height: 0;
     }
-
-    > :deep(.el-pagination) {
-      border-top: 1px solid var(--el-border-color-lighter);
-    }
   }
+}
+
+.el-data-table__surface.is-paginated > .el-data-table__pagination-viewport {
+  border-top: 1px solid var(--panel-border-color, var(--el-border-color));
 }
 
 .el-data-table :deep(.el-table td) {
@@ -100,6 +147,23 @@
 
 .el-data-table :deep(.el-table th) {
   //padding: 4px 0;
+}
+
+.el-data-table__body :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar) {
+  box-sizing: border-box;
+  width: var(--list-table-scrollbar-size);
+  height: var(--list-table-scrollbar-size);
+  background-clip: padding-box;
+}
+
+.el-data-table__body :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar:vertical) {
+  border-left: 1px solid var(--panel-border-color, var(--el-border-color));
+  border-right: 1px solid transparent;
+}
+
+.el-data-table__body :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar:horizontal) {
+  border-top: 1px solid var(--panel-border-color, var(--el-border-color));
+  border-bottom: 1px solid transparent;
 }
 
 // Header and body cells already draw their own separators. Remove Element
@@ -119,7 +183,7 @@
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  padding: 15px 20px;
+  padding: 8px 20px;
 
   .el-pagination__total {
     margin-right: auto;

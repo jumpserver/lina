@@ -1,6 +1,9 @@
 <template>
   <Page v-bind="$attrs" :title="title" class="tab-page">
-    <div class="tab-page-wrapper">
+    <div
+      :class="{ 'has-tab-navigation': tabIndices.length > 1 }"
+      class="tab-page-wrapper"
+    >
       <div v-if="tabIndices.length > 1 || $slots.headingRightSide" class="tab-page-submenu">
         <el-tabs
           v-if="tabIndices.length > 1"
@@ -322,7 +325,7 @@ export default {
 .page-submenu :deep(.el-tabs__header .el-tabs__nav) {
   position: relative;
   z-index: 2;
-  gap: 0;
+  gap: 4px;
   border: 0;
   border-radius: 0;
 }
@@ -333,6 +336,7 @@ export default {
 
 .page-submenu :deep(.el-tabs__header .el-tabs__item),
 .page-submenu :deep(.el-tabs__header .el-tabs__item.is-top) {
+  position: relative;
   display: inline-flex;
   align-items: center;
   height: var(--tab-page-header-height, 34px);
@@ -342,32 +346,56 @@ export default {
   font-weight: 500;
   color: var(--el-text-color-regular, #606266);
   background-color: var(--page-background-color, #fff);
-  border: 1px solid var(--panel-border-color, var(--el-border-color));
+  border: 0;
   border-radius: 0;
   user-select: none;
   transition:
     color 120ms ease,
-    background-color 120ms ease,
-    border-color 120ms ease;
+    background-color 120ms ease;
+
+  &:not(.is-active) {
+    border-bottom: 1px solid var(--panel-border-color, var(--el-border-color));
+  }
 
   &.is-active {
     z-index: 2;
     color: var(--el-color-primary);
     background-color: var(--page-background-color, #fff);
-    border-color: var(--panel-border-color, var(--el-border-color));
-    border-top-color: var(--el-color-primary);
-    border-bottom-color: var(--page-background-color, #fff);
-    box-shadow: inset 0 1px 0 var(--el-color-primary);
+    border: 1px solid var(--panel-border-color, var(--el-border-color));
+    border-bottom: 0;
+    border-radius: 4px 4px 0 0;
+    box-shadow: none;
+
+    &::after {
+      content: '';
+      position: absolute;
+      z-index: 3;
+      right: 0;
+      bottom: -2px;
+      left: 0;
+      height: 3px;
+      background-color: var(--page-background-color, #fff);
+      pointer-events: none;
+    }
 
     .pre-icon {
       opacity: 1;
     }
   }
 
+  &.is-active:focus,
+  &.is-active:focus:active,
+  &.is-active:focus-visible {
+    outline: none;
+    border-color: var(--panel-border-color, var(--el-border-color));
+    border-bottom: 0;
+    box-shadow: none;
+  }
+
   &:not(.is-active, .is-disabled):hover {
-    color: var(--el-color-primary);
-    background-color: var(--el-fill-color-light, #f5f7fa);
-    border-color: var(--el-border-color-darker, #cdd0d6);
+    color: var(--el-text-color-regular, #606266);
+    background-color: var(--page-background-color, #fff);
+    cursor: pointer;
   }
 
   .pre-icon {
@@ -406,7 +434,7 @@ export default {
 }
 
 .page-submenu :deep(.el-tabs__header .el-tabs__item + .el-tabs__item) {
-  margin-left: -1px;
+  margin-left: 0;
 }
 
 .page-submenu :deep(.tab-page-submenu-item-wrapper) {
@@ -466,6 +494,10 @@ export default {
     display: flex;
     flex-direction: column;
     min-height: 0;
+
+    &.has-tab-navigation > .tab-page-content {
+      padding-top: 16px;
+    }
   }
 
   .tab-page-submenu {
@@ -498,7 +530,7 @@ export default {
 
   :deep(.page-content) {
     overflow-y: hidden !important;
-    padding: 0;
+    padding: 12px 0 0;
     scrollbar-gutter: auto;
   }
 

@@ -287,6 +287,7 @@ export default {
             }
           },
           actions: {
+            width: '90px',
             formatterArgs: {
               hasDelete: hasDelete,
               canUpdate: ({ row }) => {
