@@ -22,6 +22,7 @@
 import Dialog from '@/components/Dialog'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { Select2 } from '@/components'
+import { confirmZoneOverwrite } from '../utils'
 
 export default {
   components: {
@@ -76,6 +77,13 @@ export default {
             data.push(d)
           })
           return data
+        },
+        onSubmit: async function(validValues, formName, addContinue) {
+          const assetIds = validValues.map(item => item.id)
+          const confirmed = await confirmZoneOverwrite(this, assetIds, vm.object.id)
+          if (confirmed) {
+            this.defaultOnSubmit(validValues, formName, addContinue)
+          }
         }
       }
     }

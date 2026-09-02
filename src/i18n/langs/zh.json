@@ -20,5 +20,9 @@
     "Other": "其他",
     "Details": "详情",
     "Confirm": "确认",
-    "Ignore": "忽略"
+    "Cancel": "取消",
+    "Ignore": "忽略",
+    "AssetsInOtherZonesTitle": "确认变更资产网域",
+    "AssetsInOtherZonesConfirm": "以下资产当前已属于其他网域，继续操作将变更其所属网域：{assets}。是否继续？",
+    "AssetsInOtherZonesRemaining": "另有 {count} 个资产未展示"
 }
