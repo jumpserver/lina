@@ -37,6 +37,7 @@
           :fill-height="fillHeight"
           :filter-table="filter"
           :get-table-metadata="getTableMetadata"
+          @loaded="handleTableLoaded"
           @selection-change="handleSelectionChange"
         />
       </IBox>
@@ -56,10 +57,12 @@ import QuickFilter from './TableAction/QuickFilter.vue'
 import { useListTableViewport } from './useListTableViewport'
 import { getDayEnd, getDaysAgo } from '@/utils/common/time'
 import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
+import isFalsey from '@/components/Table/DataTable/compenents/el-data-table/utils/is-falsey'
 import i18n from '@/i18n/i18n'
 import _ from 'lodash'
 
 const LIST_TABLE_KEY = Symbol('listTable')
+const ACTIVATION_REFRESH_POLICIES = ['always', 'route-change', 'never']
 
 export { LIST_TABLE_KEY }
 
@@ -71,7 +74,14 @@ export default {
     TableAction,
     IBox
   },
-  emits: ['selection-change', 'tag-date-change', 'tag-filter', 'tag-search'],
+  emits: [
+    'loaded',
+    'query-change',
+    'selection-change',
+    'tag-date-change',
+    'tag-filter',
+    'tag-search'
+  ],
   setup() {
     // Provide list table instance to child components
     // This replaces $parent chain access
@@ -104,6 +114,11 @@ export default {
     tableMetadataProvider: {
       type: Function,
       default: null
+    },
+    activationRefresh: {
+      type: String,
+      default: 'route-change',
+      validator: (value) => ACTIVATION_REFRESH_POLICIES.includes(value)
     }
   },
   data() {
@@ -112,10 +127,11 @@ export default {
       ...(order && { order })
     }
     if (this.headerActions.hasDatePicker) {
+      const datePicker = this.headerActions.datePicker || {}
       extraQuery = {
         ...extraQuery,
-        date_from: getDaysAgo(7).toISOString(),
-        date_to: this.$moment(getDayEnd()).add(1, 'day').toISOString()
+        date_from: datePicker.dateStart || getDaysAgo(7).toISOString(),
+        date_to: datePicker.dateEnd || this.$moment(getDayEnd()).add(1, 'day').toISOString()
       }
       this.headerActions.datePicker = Object.assign(
         {
@@ -131,8 +147,8 @@ export default {
     return {
       selectedRows: [],
       init: false,
-      urlUpdated: {},
-      isDeactivated: false,
+      activationRoutes: {},
+      activationPending: false,
       extraQuery: extraQuery,
       actionInit: this.headerActions.has === false,
       initQuery: {},
@@ -142,6 +158,7 @@ export default {
       reloadTable: _.debounce(this._reloadTable, 300),
       searchQuery: {},
       filterQuery: {},
+      lastEmittedQuery: null,
       metadataRequestUrl: '',
       metadataRequest: null
     }
@@ -270,6 +287,13 @@ export default {
     extraQuery: {
       handler() {
         this.$log.debug('ListTable: found extraQuery change')
+        this.emitQueryChange()
+      },
+      deep: true
+    },
+    'tableConfig.extraQuery': {
+      handler() {
+        this.emitQueryChange()
       },
       deep: true
     },
@@ -281,7 +305,7 @@ export default {
     }
   },
   mounted() {
-    this.urlUpdated[this.getTableResourceKey()] = this.getActivationRouteKey()
+    this.activationRoutes[this.getTableResourceKey()] = this.getActivationRouteKey()
     // Populate the provided context with component references.
     // Note: $refs.dataTable is AutoDataTable, whose inner DataTable is rendered
     // with `v-if="!loading"` and mounts only after its OPTIONS metadata loads —
@@ -297,34 +321,44 @@ export default {
       get: () => this.tableConfig,
       enumerable: true
     })
+    this.emitQueryChange()
+  },
+  beforeUnmount() {
+    this.reloadTable.cancel()
   },
   deactivated() {
-    this.isDeactivated = true
+    this.activationPending = true
   },
   activated() {
-    this.$nextTick(() => {
-      this.isDeactivated = false
-      const tableResourceKey = this.getTableResourceKey()
-      const previousRouteKey = this.urlUpdated[tableResourceKey]
-      const currentRouteKey = this.getActivationRouteKey()
-
-      if (!previousRouteKey) {
-        this.urlUpdated[tableResourceKey] = currentRouteKey
-        return
-      }
-      if (previousRouteKey === currentRouteKey) return
-
-      this.urlUpdated[tableResourceKey] = currentRouteKey
-      this.$log.debug(
-        'Reload the table get latest data: pre ',
-        previousRouteKey,
-        ' current: ',
-        currentRouteKey
-      )
-      this.reloadTable()
-    })
+    if (!this.activationPending) {
+      return
+    }
+    this.activationPending = false
+    this.$nextTick(this.handleActivationRefresh)
   },
   methods: {
+    handleActivationRefresh() {
+      const tableResourceKey = this.getTableResourceKey()
+      const previousRouteKey = this.activationRoutes[tableResourceKey]
+      const currentRouteKey = this.getActivationRouteKey()
+      this.activationRoutes[tableResourceKey] = currentRouteKey
+
+      if (this.activationRefresh === 'never') {
+        return
+      }
+      if (
+        this.activationRefresh === 'route-change' &&
+        (!previousRouteKey || previousRouteKey === currentRouteKey)
+      ) {
+        return
+      }
+      this.$log.debug('Reload the table on activation', {
+        policy: this.activationRefresh,
+        previousRouteKey,
+        currentRouteKey
+      })
+      this._reloadTable()
+    },
     getTableResourceKey() {
       return this.tableUrl.split(/[?#]/, 1)[0]
     },
@@ -396,9 +430,8 @@ export default {
       }
     },
     handleActionInitialDone() {
-      setTimeout(() => {
-        this.actionInit = true
-      }, 100)
+      this.actionInit = true
+      this.emitQueryChange()
     },
     handleSelectionChange(val) {
       this.selectedRows = Array.isArray(val) ? [...val] : []
@@ -407,38 +440,78 @@ export default {
     _reloadTable() {
       this.dataTable?.getList()
     },
-    updateInitQuery(attrs) {
-      if (!this.actionInit) {
-        this.initQuery = attrs
-        for (const key in attrs) {
-          this.extraQuery[key] = attrs[key]
+    updateInitQuery() {
+      const tableReady = Boolean(this.$refs.dataTable?.$refs.dataTable)
+      if (!this.actionInit || !tableReady) {
+        const query = this.getMergedQuery()
+        for (const key of Object.keys(this.initQuery)) {
+          if (isFalsey(query[key])) {
+            delete this.extraQuery[key]
+          }
+        }
+        this.initQuery = { ...query }
+        for (const key in query) {
+          this.extraQuery[key] = query[key]
         }
         return true
       }
-      const removeKeys = Object.keys(this.initQuery).filter((key) => !attrs[key])
-      for (const key of removeKeys) {
+      for (const key of Object.keys(this.initQuery)) {
         delete this.extraQuery[key]
       }
+      this.initQuery = {}
+      return false
     },
     getMergedQuery() {
       return { ...this.searchQuery, ...this.filterQuery }
     },
-    search(attrs) {
-      const init = this.updateInitQuery(attrs)
+    normalizeQuery(query) {
+      return Object.keys(query || {})
+        .filter((key) => !isFalsey(query[key]))
+        .reduce((result, key) => {
+          result[key] = query[key].toString().trim()
+          return result
+        }, {})
+    },
+    getEffectiveQuery() {
+      const extraQuery = deepmerge(this.tableConfig.extraQuery || {}, this.extraQuery)
+      return this.normalizeQuery({
+        ...extraQuery,
+        ...this.getMergedQuery()
+      })
+    },
+    emitQueryChange() {
+      if (this.hasActions && !this.actionInit) {
+        return
+      }
+      const query = this.getEffectiveQuery()
+      if (_.isEqual(query, this.lastEmittedQuery)) {
+        return
+      }
+      this.lastEmittedQuery = _.cloneDeep(query)
+      this.$emit('query-change', query)
+    },
+    search(attrs = {}) {
+      this.searchQuery = attrs || {}
+      const init = this.updateInitQuery()
+      this.$log.debug('ListTable: search table', attrs)
+      this.$emit('tag-search', attrs)
+      this.emitQueryChange()
       if (init) {
         return
       }
-      this.searchQuery = attrs
       const merged = this.getMergedQuery()
-      this.$log.debug('ListTable: search table', attrs)
-      this.$emit('tag-search', attrs)
       this.$refs.dataTable?.$refs.dataTable?.search(merged, true)
     },
-    filter(attrs) {
-      this.filterQuery = attrs
+    filter(attrs = {}) {
+      this.filterQuery = attrs || {}
+      const init = this.updateInitQuery()
       const merged = this.getMergedQuery()
       this.$emit('tag-filter', attrs)
+      this.emitQueryChange()
       this.$log.debug('ListTable: found filter change', attrs)
+      if (init) {
+        return
+      }
       this.$refs.dataTable?.$refs.dataTable?.search(merged, true)
     },
     hasActionPerm(action) {
@@ -467,7 +540,17 @@ export default {
         date_to: dateTo
       }
       this.$emit('tag-date-change', attrs)
-      return this.dataTable.searchDate(query)
+      this.emitQueryChange()
+      return this.dataTable?.searchDate(query)
+    },
+    handleTableLoaded(payload = {}) {
+      const event = {
+        ...payload,
+        query: this.getEffectiveQuery(),
+        requestQuery: payload.query || {},
+        url: this.tableUrl
+      }
+      this.$emit('loaded', event)
     },
     toggleRowSelection(row, isSelected) {
       return this.dataTable.toggleRowSelection(row, isSelected)

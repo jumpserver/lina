@@ -27,7 +27,7 @@ export default {
   components: {
     TagSearch
   },
-  emits: ['conditionsChange', 'tagSearch'],
+  emits: ['conditionsChange', 'ready', 'tagSearch'],
   props: {
     url: {
       type: String,
@@ -83,9 +83,17 @@ export default {
       this.genericOptions()
     }
   },
-  mounted() {
-    if (this.url) {
-      this.genericOptions()
+  async mounted() {
+    try {
+      if (this.url) {
+        await this.genericOptions()
+      }
+    } finally {
+      // TagSearch derives route filters from the async field metadata. Wait
+      // until those watchers have emitted the initial query before allowing
+      // ListTable to mount its data table and issue the first GET.
+      await this.$nextTick()
+      this.$emit('ready')
     }
   },
   methods: {

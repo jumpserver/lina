@@ -223,6 +223,9 @@ export default {
     invalidateNormalMetrics() {
       return this.$refs.AutoDataZTree?.invalidateNormalMetrics?.()
     },
+    setNodeMetric(id, amount) {
+      return this.$refs.AutoDataZTree?.setNodeMetric?.(id, amount)
+    },
     handleUrlChange(url) {
       this.$emit('urlChange', url)
     },

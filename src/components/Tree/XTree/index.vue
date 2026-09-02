@@ -390,6 +390,8 @@ export default {
       treeNodeCount: 0,
       normalTreeNodeCount: 0,
       virtualTreeHeight: 500,
+      runtimeEffectsActive: false,
+      runtimeEffectsGeneration: 0,
       treeResizeObserver: null,
       treeResizeFrame: null,
       virtualDraggingNode: null,
@@ -551,35 +553,72 @@ export default {
     this.debouncedSearch = _.debounce(this.searchTree, 200)
   },
   mounted() {
-    document.addEventListener('mousedown', this.hideRMenu)
-    document.addEventListener('keydown', this.handleContextMenuKeydown, true)
-    document.addEventListener('scroll', this.hideRMenu, true)
-    document.addEventListener('scroll', this.handleDocumentAmountScroll, true)
-    this.setupTreeResizeObserver()
+    this.setupRuntimeEffects()
     this.loadRoot()
   },
+  activated() {
+    this.setupRuntimeEffects()
+  },
+  deactivated() {
+    this.teardownRuntimeEffects({ preserveAmountRefresh: true })
+  },
   beforeUnmount() {
+    this.teardownRuntimeEffects()
     this.debouncedSearch?.cancel()
     this.searchAbortController?.abort()
     this.structureAbortController?.abort()
     this.childrenAbortControllers.forEach((controller) => controller.abort())
     this.childrenAbortControllers.clear()
-    this.cancelAmountLoading()
     this.removeDragPreview()
-    this.treeResizeObserver?.disconnect()
-    window.cancelAnimationFrame(this.treeResizeFrame)
-    window.cancelAnimationFrame(this.searchFocusFrame)
-    document.removeEventListener('mousedown', this.hideRMenu)
-    document.removeEventListener('keydown', this.handleContextMenuKeydown, true)
-    document.removeEventListener('scroll', this.hideRMenu, true)
-    document.removeEventListener('scroll', this.handleDocumentAmountScroll, true)
   },
   methods: {
-    setupTreeResizeObserver() {
+    setupRuntimeEffects() {
+      if (this.runtimeEffectsActive) {
+        return
+      }
+      this.runtimeEffectsActive = true
+      const generation = ++this.runtimeEffectsGeneration
+      document.addEventListener('mousedown', this.hideRMenu)
+      document.addEventListener('keydown', this.handleContextMenuKeydown, true)
+      document.addEventListener('scroll', this.hideRMenu, true)
+      document.addEventListener('scroll', this.handleDocumentAmountScroll, true)
+      this.setupTreeResizeObserver(generation)
+      this.$nextTick(() => {
+        if (this.isRuntimeEffectsCurrent(generation) && this.treeData.length) {
+          this.rebuildProgressiveAmountWindow()
+        }
+      })
+    },
+    teardownRuntimeEffects({ preserveAmountRefresh = false } = {}) {
+      this.runtimeEffectsActive = false
+      this.runtimeEffectsGeneration += 1
+      this.hideRMenu()
+      document.removeEventListener('mousedown', this.hideRMenu)
+      document.removeEventListener('keydown', this.handleContextMenuKeydown, true)
+      document.removeEventListener('scroll', this.hideRMenu, true)
+      document.removeEventListener('scroll', this.handleDocumentAmountScroll, true)
+      this.treeResizeObserver?.disconnect()
+      this.treeResizeObserver = null
+      window.cancelAnimationFrame(this.treeResizeFrame)
+      window.cancelAnimationFrame(this.searchFocusFrame)
+      this.treeResizeFrame = null
+      this.searchFocusFrame = null
+      this.cancelAmountLoading({ preserveFresh: preserveAmountRefresh })
+    },
+    isRuntimeEffectsCurrent(generation) {
+      return this.runtimeEffectsActive && generation === this.runtimeEffectsGeneration
+    },
+    setupTreeResizeObserver(generation = this.runtimeEffectsGeneration) {
       const updateHeight = () => {
+        if (!this.isRuntimeEffectsCurrent(generation)) {
+          return
+        }
         window.cancelAnimationFrame(this.treeResizeFrame)
         this.treeResizeFrame = window.requestAnimationFrame(() => {
           this.treeResizeFrame = null
+          if (!this.isRuntimeEffectsCurrent(generation)) {
+            return
+          }
           const height = this.$refs.treeBody?.clientHeight || 0
           if (!height) {
             return
@@ -590,12 +629,21 @@ export default {
           }
         })
       }
-      this.$nextTick(updateHeight)
+      this.$nextTick(() => {
+        if (this.isRuntimeEffectsCurrent(generation)) {
+          updateHeight()
+        }
+      })
       if (typeof ResizeObserver !== 'undefined') {
-        this.treeResizeObserver = new ResizeObserver(updateHeight)
+        const observer = new ResizeObserver(updateHeight)
+        this.treeResizeObserver = observer
         this.$nextTick(() => {
-          if (this.$refs.treeBody) {
-            this.treeResizeObserver.observe(this.$refs.treeBody)
+          if (
+            this.isRuntimeEffectsCurrent(generation) &&
+            this.treeResizeObserver === observer &&
+            this.$refs.treeBody
+          ) {
+            observer.observe(this.$refs.treeBody)
           }
         })
       }
@@ -702,6 +750,23 @@ export default {
       } else {
         this.nodeAmounts.delete(key)
       }
+    },
+    setNodeMetric(id, amount) {
+      const visibleNode = this.findTreeNodeIn(this.treeData, id)
+      const normalNode = this.findTreeNodeIn(this.normalTreeData, id)
+      const nodes = [visibleNode, normalNode].filter(Boolean)
+      const uniqueNodes = [...new Set(nodes)]
+      uniqueNodes.forEach((node) => this.setNodeAmount(node, amount))
+
+      const normalKey = normalNode ? this.getNodeAmountKey(normalNode) : ''
+      if (normalKey && this.normalNodeAmounts) {
+        if (Number.isFinite(amount)) {
+          this.normalNodeAmounts.set(normalKey, amount)
+        } else {
+          this.normalNodeAmounts.delete(normalKey)
+        }
+      }
+      return uniqueNodes.length > 0
     },
     collectInitialNodeAmounts(nodes) {
       const amounts = new Map()
@@ -859,15 +924,17 @@ export default {
       }
       return { roots, count: normalized.length }
     },
-    cancelAmountLoading() {
+    cancelAmountLoading({ preserveFresh = false } = {}) {
       this.cancelAmountScrollFrame()
       this.amountRequestId += 1
       this.amountAbortController?.abort()
       this.amountAbortController = null
       this.amountQueue = []
       this.amountQueuedIds.clear()
-      this.freshAmountNodeIds.clear()
-      this.nextAmountBatchFresh = false
+      if (!preserveFresh) {
+        this.freshAmountNodeIds.clear()
+        this.nextAmountBatchFresh = false
+      }
       this.amountWorkerRunning = false
     },
     clearNodeAmounts() {
@@ -960,7 +1027,7 @@ export default {
       return Math.floor(scrollTop / rowHeight)
     },
     rebuildProgressiveAmountWindow() {
-      if (!this.hasNodeAmountLoader()) {
+      if (!this.runtimeEffectsActive || !this.hasNodeAmountLoader()) {
         return
       }
       const scrollElement = this.getTreeAmountScrollElement()
@@ -976,6 +1043,7 @@ export default {
       const windowNodes = this.collectProgressiveAmountNodes(0, windowEnd + 1)
       const nodes = windowNodes.slice(0, windowEnd)
       const pendingFreshNodeIds = new Set(this.freshAmountNodeIds)
+      const refreshWindow = this.nextAmountBatchFresh
 
       this.cancelAmountLoading()
       this.resetProgressiveAmountLoading()
@@ -985,7 +1053,13 @@ export default {
       // its retried request back into an ordinary cacheable read.
       nodes.forEach((node) => {
         const nodeId = this.getNodeAmountResourceId(node)
-        if (nodeId && pendingFreshNodeIds.has(String(nodeId))) {
+        if (!nodeId || !this.shouldHandleNodeAmount(node)) {
+          return
+        }
+        if (refreshWindow) {
+          this.setNodeAmount(node, null)
+          this.freshAmountNodeIds.add(String(nodeId))
+        } else if (pendingFreshNodeIds.has(String(nodeId))) {
           this.freshAmountNodeIds.add(String(nodeId))
         }
       })
@@ -1043,7 +1117,7 @@ export default {
       )
     },
     enqueueNodeAmounts(nodes) {
-      if (!this.hasNodeAmountLoader()) {
+      if (!this.runtimeEffectsActive || !this.hasNodeAmountLoader()) {
         return
       }
       nodes.forEach((node) => {
@@ -1093,6 +1167,10 @@ export default {
       this.enqueueNodeAmounts(nodes)
     },
     startProgressiveAmountLoading(fresh = false) {
+      if (!this.runtimeEffectsActive) {
+        this.nextAmountBatchFresh ||= Boolean(fresh)
+        return
+      }
       this.resetProgressiveAmountLoading()
       this.nextAmountBatchFresh = Boolean(fresh)
       this.enqueueNextProgressiveAmountBatch()
@@ -1120,7 +1198,7 @@ export default {
       this.amountScrollFrame = null
     },
     scheduleProgressiveAmountLoading(scrollElement) {
-      if (this.amountScrollFrame !== null) {
+      if (!this.runtimeEffectsActive || this.amountScrollFrame !== null) {
         return
       }
       this.amountScrollFrame = window.requestAnimationFrame(() => {
@@ -1216,7 +1294,7 @@ export default {
       this.forceRefreshNodeAmounts(matchedWithAncestors)
     },
     async processAmountQueue() {
-      if (this.amountWorkerRunning) {
+      if (!this.runtimeEffectsActive || this.amountWorkerRunning) {
         return
       }
       this.amountWorkerRunning = true
@@ -1700,10 +1778,17 @@ export default {
       this.focusSearchInput()
     },
     focusSearchInput() {
+      const generation = this.runtimeEffectsGeneration
       this.$nextTick(() => {
+        if (!this.isRuntimeEffectsCurrent(generation)) {
+          return
+        }
         window.cancelAnimationFrame(this.searchFocusFrame)
         this.searchFocusFrame = window.requestAnimationFrame(() => {
           this.searchFocusFrame = null
+          if (!this.isRuntimeEffectsCurrent(generation)) {
+            return
+          }
           const input = this.$refs.searchInput
           input?.focus?.()
           const nativeInput = input?.input || input?.$el?.querySelector?.('input')

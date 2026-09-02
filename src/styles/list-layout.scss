@@ -89,11 +89,6 @@
       border-left: 0;
       border-radius: 0;
 
-      .el-table__header thead > tr > th,
-      .el-table__body-header > tr > th {
-        background-color: var(--el-fill-color-light, #f5f7fa);
-      }
-
       .el-data-table__body > .el-table,
       .el-table__header thead > tr > th:first-child,
       .el-table__header thead > tr > th:last-child,

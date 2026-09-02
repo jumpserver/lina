@@ -234,8 +234,8 @@ export default {
     this.isDeactivated = false
   },
   methods: {
-    handleLoaded() {
-      this.$emit('loaded')
+    handleLoaded(payload) {
+      this.$emit('loaded', payload)
     },
     handleCellWheel(event) {
       const delta = getHorizontalWheelDelta(

@@ -184,6 +184,12 @@ export default {
       if (!Array.isArray(data)) {
         return
       }
+      this.$emit('loaded', {
+        data,
+        query: this.dataTable?.getQuery?.() || {},
+        response,
+        total: Number(this.dataTable?.total) || 0
+      })
       const theRowDefaultIsSelected = this.tableConfig.theRowDefaultIsSelected
       if (!theRowDefaultIsSelected || typeof theRowDefaultIsSelected !== 'function') {
         return
@@ -194,8 +200,6 @@ export default {
           this.toggleRowSelection(row, true)
         }
       }
-
-      this.$emit('loaded')
     },
     handleSizeChange(val) {
       if (this.config.savePageSize !== false) {

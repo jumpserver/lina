@@ -1,8 +1,56 @@
 .el-data-table {
+  // Keep the complete table state palette in one place so page lists,
+  // drawers and dialogs render the same visual hierarchy.
+  --list-table-header-bg-color: var(--el-fill-color-light, #f5f7fa);
+  --list-table-stripe-bg-color: color-mix(in srgb, var(--el-fill-color-light, #f5f7fa) 28%, #fff);
+  --list-table-row-hover-bg-color: color-mix(
+    in srgb,
+    var(--el-fill-color-light, #f5f7fa) 58%,
+    #fff
+  );
+  --list-table-selected-bg-color: var(--el-color-primary-light-9, #ecf5ff);
+  --list-table-selected-hover-bg-color: color-mix(
+    in srgb,
+    var(--el-color-primary-light-9, #ecf5ff) 72%,
+    var(--el-color-primary-light-8, #d9ecff)
+  );
+
   display: flex;
   flex-direction: column;
   gap: 1px;
   min-width: 0;
+
+  :deep(.el-table) {
+    --el-table-header-bg-color: var(--list-table-header-bg-color);
+    --el-table-row-hover-bg-color: var(--list-table-row-hover-bg-color);
+    --el-table-current-row-bg-color: var(--list-table-selected-bg-color);
+  }
+
+  :deep(.el-table__header thead > tr > th.el-table__cell),
+  :deep(.el-table__body-header > tr > th.el-table__cell) {
+    background-color: var(--list-table-header-bg-color);
+  }
+
+  :deep(.el-table__body tr.el-table__row--striped > td.el-table__cell) {
+    background-color: var(--list-table-stripe-bg-color);
+  }
+
+  :deep(.el-table__body tr.el-table__row:hover > td.el-table__cell),
+  :deep(.el-table__body tr.el-table__row.hover-row > td.el-table__cell) {
+    background-color: var(--list-table-row-hover-bg-color);
+  }
+
+  :deep(.el-table__body tr.el-table__row.selected-row > td.el-table__cell),
+  :deep(.el-table__body tr.el-table__row.current-row > td.el-table__cell) {
+    background-color: var(--list-table-selected-bg-color);
+  }
+
+  :deep(.el-table__body tr.el-table__row.selected-row:hover > td.el-table__cell),
+  :deep(.el-table__body tr.el-table__row.selected-row.hover-row > td.el-table__cell),
+  :deep(.el-table__body tr.el-table__row.current-row:hover > td.el-table__cell),
+  :deep(.el-table__body tr.el-table__row.current-row.hover-row > td.el-table__cell) {
+    background-color: var(--list-table-selected-hover-bg-color);
+  }
 
   // Contain horizontal edge gestures in both page and dialog tables.
   :deep(.el-table__body-wrapper .el-scrollbar__wrap) {
@@ -36,9 +84,17 @@
   > .el-data-table__pagination-viewport {
     flex: none;
     min-width: 0;
-    overflow-x: hidden;
+    overflow-x: auto;
     overflow-y: auto;
+    overscroll-behavior-x: contain;
     scrollbar-gutter: stable;
+    scrollbar-width: none;
+
+    // Keep pagination reachable in narrow drawers/dialogs without adding a
+    // permanent second scrollbar to the table chrome.
+    &::-webkit-scrollbar:horizontal {
+      height: 0;
+    }
 
     > :deep(.el-pagination) {
       border-top: 1px solid var(--el-border-color-lighter);

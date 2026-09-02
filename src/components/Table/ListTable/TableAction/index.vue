@@ -49,6 +49,7 @@
             :get-table-metadata="getTableMetadata"
             class="right-side-item action-search search-primary"
             @conditions-change="handleTagConditionsChange"
+            @ready="handleSearchReady"
             @tag-search="handleTagSearch"
           />
           <slot name="search-after" />
@@ -295,7 +296,8 @@ export default {
       applyingSearchPreset: false,
       presetSaveVisible: false,
       presetName: '',
-      searchHistoryVisible: false
+      searchHistoryVisible: false,
+      initializationDone: false
     }
   },
   computed: {
@@ -387,10 +389,22 @@ export default {
       immediate: true
     }
   },
-  created() {
-    this.$emit('done')
+  mounted() {
+    if (!this.hasSearch) {
+      this.completeInitialization()
+    }
   },
   methods: {
+    completeInitialization() {
+      if (this.initializationDone) {
+        return
+      }
+      this.initializationDone = true
+      this.$emit('done')
+    },
+    handleSearchReady() {
+      this.completeInitialization()
+    },
     focusSearch() {
       return this.$refs.autoDataSearch?.focusSearch()
     },
