@@ -1,6 +1,6 @@
 <template>
-  <Page v-bind="$attrs">
-    <TwoCol>
+  <Page v-loading="profileLoading" v-bind="$attrs">
+    <TwoCol v-if="!profileLoading">
       <template>
         <DetailCard :items="detailCardItems" />
       </template>
@@ -69,6 +69,7 @@ import { PhoneInput } from '@/components/Form/FormFields'
 import Page from '@/layout/components/Page'
 import DetailCard from '@/components/Cards/DetailCard'
 import { toSafeLocalDateStr } from '@/utils/common/time'
+import { refreshProfile } from '@/utils/session-monitor'
 import store from '@/store'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
@@ -90,6 +91,7 @@ export default {
   data() {
     return {
       url: `/api/v1/users/profile/`,
+      profileLoading: true,
       showPasswordDialog: false,
       currentEdit: '',
       biometricFeaturesActions: [
@@ -426,6 +428,11 @@ export default {
       }
       return url
     }
+  },
+  created() {
+    refreshProfile().finally(() => {
+      this.profileLoading = false
+    })
   },
   methods: {
     updateProfile() {

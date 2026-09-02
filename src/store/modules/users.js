@@ -58,6 +58,14 @@ const mutations = {
     state.currentOrg = getCurrentOrgLocal(profile.username)
     state.preOrg = getPreOrgLocal(profile.username)
   },
+  MERGE_PROFILE: (state, profile) => {
+    // 保留对象引用，使已打开的个人信息页面也能响应轮询结果
+    Object.entries(profile).forEach(([key, value]) => {
+      Vue.set(state.profile, key, value)
+    })
+    state.username = profile.username
+    state.isSuperAdmin = profile['is_superuser']
+  },
   SET_USING_ORGS: (state, orgs) => {
     state.usingOrgs = orgs
   },

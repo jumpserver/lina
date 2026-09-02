@@ -12,8 +12,8 @@ export function start() {
   if (timer) {
     return
   }
-  timer = setInterval(checkSession, 60 * 1000)
-  setTimeout(checkSession, 0)
+  timer = setInterval(refreshProfile, 60 * 1000)
+  setTimeout(refreshProfile, 0)
 }
 
 export function stop() {
@@ -23,17 +23,21 @@ export function stop() {
   }
 }
 
-function checkSession() {
+export function refreshProfile() {
   if (inflight) {
     return inflight
   }
   inflight = (async () => {
     try {
       const { default: request } = await import('@/utils/request')
-      await request({
+      const profile = await request({
         url: '/api/v1/users/profile/',
         method: 'get'
       })
+      if (profile && typeof profile === 'object') {
+        const { default: store } = await import('@/store')
+        store.commit('users/MERGE_PROFILE', profile)
+      }
     } catch (e) {
       console.warn(e)
       // 401 已由 request 拦截器处理跳转，无需额外逻辑
