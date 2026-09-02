@@ -316,7 +316,8 @@ export default {
         return
       }
 
-      const scrollElement = treeBody.querySelector('.el-tree-virtual-list') || treeBody
+      const scrollElement =
+        treeBody.querySelector('.el-tree-virtual-list, .x-tree__viewport') || treeBody
       const bodyRect = scrollElement.getBoundingClientRect()
       const scrollLeft = scrollElement.scrollLeft || 0
       const contentElements = treeBody.querySelectorAll('.x-tree__node-amount, .x-tree__node-label')
