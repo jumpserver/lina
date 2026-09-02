@@ -27,7 +27,8 @@ const taskNoticeFields = {
   },
   'perms.tasks.check_asset_permission_will_expired': {
     first: 'PERM_EXPIRED_FIRST_NOTICE_DAYS',
-    daily: 'PERM_EXPIRED_DAILY_NOTICE_DAYS'
+    daily: 'PERM_EXPIRED_DAILY_NOTICE_DAYS',
+    soon: 'PERM_EXPIRED_SOON_NOTICE_MINUTES'
   }
 }
 
@@ -48,10 +49,12 @@ export default {
       return taskNoticeFields[this.taskName]
     },
     fields() {
-      return [this.noticeFields.first, this.noticeFields.daily]
+      return [this.noticeFields.first, this.noticeFields.daily, this.noticeFields.soon].filter(
+        Boolean
+      )
     },
     fieldsMeta() {
-      return {
+      const fields = {
         [this.noticeFields.first]: {
           label: this.$t('FirstNotice'),
           helpTip: this.$t('FirstNoticeHelpText'),
@@ -66,6 +69,15 @@ export default {
           rules: [{ validator: this.validateDailyNotice, trigger: ['blur', 'change'] }]
         }
       }
+      if (this.noticeFields.soon) {
+        fields[this.noticeFields.soon] = {
+          label: this.$t('DefaultExpireSoonNoticeMinutes'),
+          helpTip: this.$t('DefaultExpireSoonNoticeMinutesHelpText'),
+          el: { inputmode: 'numeric' },
+          rules: [{ validator: this.validateExpireSoonNotice, trigger: ['blur', 'change'] }]
+        }
+      }
+      return fields
     }
   },
   methods: {
@@ -76,16 +88,10 @@ export default {
       this.$message.success(this.$t('UpdateSuccessMsg'))
     },
     normalizeFormValue(value) {
-      return {
-        [this.noticeFields.first]: String(value[this.noticeFields.first] ?? ''),
-        [this.noticeFields.daily]: String(value[this.noticeFields.daily] ?? '')
-      }
+      return Object.fromEntries(this.fields.map((name) => [name, String(value[name] ?? '')]))
     },
     cleanFormValue(value) {
-      return {
-        [this.noticeFields.first]: Number(value[this.noticeFields.first]),
-        [this.noticeFields.daily]: Number(value[this.noticeFields.daily])
-      }
+      return Object.fromEntries(this.fields.map((name) => [name, Number(value[name])]))
     },
     parseNoticeDays(value, max, maxMessage) {
       const text = String(value ?? '').trim()
@@ -99,7 +105,7 @@ export default {
       if (days < 1) {
         return { error: this.$t('PositiveIntegerRequired') }
       }
-      if (days > max) {
+      if (max && days > max) {
         return { error: this.$t(maxMessage) }
       }
       return { days }
@@ -121,6 +127,14 @@ export default {
       const daily = this.parseNoticeDays(value, 365, 'DailyNoticeMaxDays')
       if (daily.error) {
         callback(new Error(daily.error))
+        return
+      }
+      callback()
+    },
+    validateExpireSoonNotice(rule, value, callback) {
+      const notice = this.parseNoticeDays(value)
+      if (notice.error) {
+        callback(new Error(notice.error))
         return
       }
       callback()

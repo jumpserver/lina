@@ -73,6 +73,26 @@ export default {
         },
         'date_start',
         'date_expired',
+        {
+          key: this.$t('SystemExpireNotice'),
+          value: [
+            this.$t('GlobalExpireNoticePolicy', {
+              first: this.$store.getters.publicSettings.PERM_EXPIRED_FIRST_NOTICE_DAYS,
+              daily: this.$store.getters.publicSettings.PERM_EXPIRED_DAILY_NOTICE_DAYS
+            }),
+            this.$t('ControlledByGlobalSettings')
+          ].join('; ')
+        },
+        {
+          key: this.$t('ExpireSoonNotice'),
+          value: this.object.expire_soon_notice_enabled
+            ? `${this.object.expire_soon_notice_minutes} ${this.$t('Minutes')}`
+            : this.$t('Disabled')
+        },
+        {
+          key: `${this.$t('ExpireSoonNotice')} - ${this.$t('Date')}`,
+          value: this.object.expire_soon_notice_at || '-'
+        },
         'date_created',
         'created_by',
         'comment'

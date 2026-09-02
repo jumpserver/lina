@@ -2102,5 +2102,18 @@
   "GatherFactsParams": "資產資訊採集參數",
   "VerifyAccountParams": "帳號驗證參數",
   "GatherAccountsParams": "帳號收集參數",
-  "RemoveAccountParams": "帳號移除參數"
+  "RemoveAccountParams": "帳號移除參數",
+  "ExpireNotice": "到期提醒",
+  "SystemExpireNotice": "系統到期提醒",
+  "ControlledByGlobalSettings": "由系統全域設定決定",
+  "GlobalExpireNoticePolicy": "提前 {first} 天提醒一次；到期前 {daily} 天內每天提醒",
+  "ExpireSoonNotice": "臨近到期提醒",
+  "ExpireSoonNoticeHelpText": "適用於短時授權情境，可與系統全域到期提醒同時生效。",
+  "ExpireSoonNoticeMinutes": "提前提醒",
+  "Minutes": "分鐘",
+  "ExpireSoonNoticePreview": "將在 {time} 提醒",
+  "ExpireSoonNoticeFutureError": "請輸入正整數，並確保計算出的提醒時間仍在未來。",
+  "DefaultExpireSoonNoticeMinutes": "臨近到期提醒預設提前時間",
+  "DefaultExpireSoonNoticeMinutesHelpText": "作為開啟臨近到期提醒時提供的預設提前分鐘數，不會修改已有授權。",
+  "ValidityPeriod": "有效期"
 }

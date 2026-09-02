@@ -2103,5 +2103,18 @@
   "GatherFactsParams": "アセット情報収集パラメータ",
   "VerifyAccountParams": "アカウント検証パラメータ",
   "GatherAccountsParams": "アカウント収集パラメータ",
-  "RemoveAccountParams": "アカウント削除パラメータ"
+  "RemoveAccountParams": "アカウント削除パラメータ",
+  "ExpireNotice": "有効期限通知",
+  "SystemExpireNotice": "システム有効期限通知",
+  "ControlledByGlobalSettings": "システムのグローバル設定で制御",
+  "GlobalExpireNoticePolicy": "期限の {first} 日前に一度通知し、最後の {daily} 日間は毎日通知します",
+  "ExpireSoonNotice": "期限直前通知",
+  "ExpireSoonNoticeHelpText": "短時間の権限付与に適しており、システムのグローバル期限通知と併用できます。",
+  "ExpireSoonNoticeMinutes": "事前通知",
+  "Minutes": "分",
+  "ExpireSoonNoticePreview": "{time} に通知します",
+  "ExpireSoonNoticeFutureError": "通知時刻が未来になる正の整数を入力してください。",
+  "DefaultExpireSoonNoticeMinutes": "期限直前通知のデフォルト",
+  "DefaultExpireSoonNoticeMinutesHelpText": "期限直前通知を有効にする際の既定分数です。既存の権限は変更されません。",
+  "ValidityPeriod": "有効期間"
 }
