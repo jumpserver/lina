@@ -1,9 +1,4 @@
-import {
-  ResourceSelect,
-  TreeResourceSelect,
-  UpdateToken,
-  UploadSecret
-} from '@/components/Form/FormFields'
+import { ResourceSelect, NodeSelect, UpdateToken, UploadSecret } from '@/components/Form/FormFields'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
 import { Required, RequiredChange } from '@/components/Form/DataForm/rules'
 import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
@@ -20,8 +15,8 @@ export const accountFieldsMeta = (vm) => {
 
   return {
     nodes: {
-      type: 'treeResourceSelect',
-      component: TreeResourceSelect,
+      type: 'nodeSelect',
+      component: NodeSelect,
       label: vm.$t('Node'),
       el: {
         value: [],
