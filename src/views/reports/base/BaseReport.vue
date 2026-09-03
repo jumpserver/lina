@@ -688,6 +688,7 @@ export default {
     height: auto;
     overflow-y: hidden;
     overflow-x: hidden;
+    background-color: transparent;
 
     .title-bar {
       margin: 0 30px;
@@ -701,7 +702,9 @@ export default {
   }
 
   .charts-zone {
+    width: 100%;
     padding: 2px 0;
+    background-color: transparent;
   }
 }
 

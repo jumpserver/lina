@@ -3,19 +3,9 @@
   // drawers and dialogs render the same visual hierarchy.
   --list-table-header-bg-color: var(--el-bg-color, #fff);
   --list-table-stripe-bg-color: color-mix(in srgb, var(--el-fill-color-light, #f5f7fa) 28%, #fff);
-  --list-table-row-hover-bg-color: color-mix(
-    in srgb,
-    var(--el-fill-color-light, #f5f7fa) 58%,
-    #fff
-  );
-  --list-table-selected-bg-color: var(--el-color-primary-light-9, #ecf5ff);
-  --list-table-selected-hover-bg-color: color-mix(
-    in srgb,
-    var(--el-color-primary-light-9, #ecf5ff) 72%,
-    var(--el-color-primary-light-8, #d9ecff)
-  );
-  --list-table-scrollbar-size: 12px;
-
+  --list-table-row-hover-bg-color: var(--el-fill-color-light, #f5f7fa);
+  --list-table-selected-bg-color: var(--list-table-row-hover-bg-color);
+  --list-table-selected-hover-bg-color: var(--list-table-row-hover-bg-color);
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -40,17 +30,13 @@
     background-color: var(--list-table-row-hover-bg-color);
   }
 
-  :deep(
-    .el-table__body tr.el-table__row:has(.el-checkbox.is-checked) > td.el-table__cell
-  ),
+  :deep(.el-table__body tr.el-table__row:has(.el-checkbox.is-checked) > td.el-table__cell),
   :deep(.el-table__body tr.el-table__row.selected-row > td.el-table__cell),
   :deep(.el-table__body tr.el-table__row.current-row > td.el-table__cell) {
     background-color: var(--list-table-selected-bg-color);
   }
 
-  :deep(
-    .el-table__body tr.el-table__row:has(.el-checkbox.is-checked):hover > td.el-table__cell
-  ),
+  :deep(.el-table__body tr.el-table__row:has(.el-checkbox.is-checked):hover > td.el-table__cell),
   :deep(
     .el-table__body tr.el-table__row:has(.el-checkbox.is-checked).hover-row > td.el-table__cell
   ),
@@ -66,8 +52,8 @@
   }
 
   :deep(.el-table__body-wrapper .el-scrollbar__wrap) {
-    // Let the axis-specific WebKit dimensions below control the horizontal
-    // scrollbar; `scrollbar-width: thin` suppresses those rules in Chromium.
+    // Element Plus hides the native bar by default. Restore the browser's
+    // platform scrollbar without changing its size, colors or track.
     scrollbar-width: auto;
     scrollbar-color: auto;
   }
@@ -95,24 +81,12 @@
   }
 
   > .el-data-table__surface {
-    // Native overflow owns the scrollbar space: no horizontal overflow means
-    // no empty track; add its height only when Element detects real overflow.
-    --el-data-table-horizontal-scrollbar-height: 0px;
-    --el-data-table-surface-height: calc(
-      var(--el-data-table-content-height, 100%) +
-        var(--el-data-table-horizontal-scrollbar-height)
-    );
-
-    flex: 0 1 var(--el-data-table-surface-height, 100%);
-    height: var(--el-data-table-surface-height, 100%);
+    flex: 0 1 var(--el-data-table-content-height, 100%);
+    height: var(--el-data-table-content-height, 100%);
     max-height: 100%;
     border: 1px solid var(--panel-border-color, var(--el-border-color));
     border-radius: var(--list-corner-radius, 4px);
     overflow: hidden;
-
-    &:has(.el-table--scrollable-x) {
-      --el-data-table-horizontal-scrollbar-height: var(--list-table-scrollbar-size);
-    }
   }
 
   > .el-data-table__surface > .el-data-table__body {
@@ -147,23 +121,6 @@
 
 .el-data-table :deep(.el-table th) {
   //padding: 4px 0;
-}
-
-.el-data-table__body :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar) {
-  box-sizing: border-box;
-  width: var(--list-table-scrollbar-size);
-  height: var(--list-table-scrollbar-size);
-  background-clip: padding-box;
-}
-
-.el-data-table__body :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar:vertical) {
-  border-left: 1px solid var(--panel-border-color, var(--el-border-color));
-  border-right: 1px solid transparent;
-}
-
-.el-data-table__body :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar:horizontal) {
-  border-top: 1px solid var(--panel-border-color, var(--el-border-color));
-  border-bottom: 1px solid transparent;
 }
 
 // Header and body cells already draw their own separators. Remove Element

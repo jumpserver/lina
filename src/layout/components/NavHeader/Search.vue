@@ -441,6 +441,32 @@ export default {
     }
   }
 }
+
+@media screen and (max-width: 992px) {
+  .global-search {
+    width: 36px;
+    min-width: 36px;
+    margin-right: 0;
+
+    .search-trigger .search-input {
+      --jms-input-padding-inline: 10px;
+
+      :deep(.el-input__inner),
+      :deep(.el-input__suffix) {
+        display: none;
+      }
+
+      :deep(.el-input__prefix) {
+        position: static;
+        width: 100%;
+      }
+
+      :deep(.el-input__prefix-inner > :last-child) {
+        margin-right: 0;
+      }
+    }
+  }
+}
 </style>
 
 <style lang="scss">

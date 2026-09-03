@@ -3,31 +3,29 @@
 #app {
   .main-container {
     position: relative;
-    // 导航栏空间已由 .app-wrapper 的 padding-top 统一预留（见 layout/index.vue），
-    // 这里不再用 margin-top/top 二次下移，否则会与 padding 叠加出顶部空白。
-    min-height: 100%;
-    height: 100%;
-    // Apply the final width once; animating this margin repeatedly refits table columns.
-    margin-left: $sideBarWidth;
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
+    min-width: 0;
+    width: 100%;
+    overflow: hidden;
+    background-color: var(--page-content-background-color, #f3f3f4);
   }
 
   .sidebar-container {
     width: $sideBarWidth !important;
+    flex: 0 0 $sideBarWidth;
     background-color: $menuBg;
-    height: auto;
-    position: fixed;
+    height: 100%;
+    min-height: 0;
+    position: relative;
     display: flex;
     flex-direction: column;
     font-size: 0;
-    top: $headerHeight;
-    bottom: 0;
-    left: 0;
-    z-index: 1001;
+    z-index: 2;
     overflow: visible;
-    border-right: 1px solid var(--el-border-color);
     border-radius: 0;
-    box-shadow: none;
-
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.06);
     @media print {
       display: none;
     }
@@ -40,44 +38,44 @@
         0s padding-right ease-in-out;
     }
 
-    .scrollbar-wrapper {
-      overflow-x: hidden !important;
-    }
-
-    .el-scrollbar__bar.is-vertical {
-      right: 0;
-    }
-
     .menu-wrap {
       flex: 1;
       min-height: 0;
-      margin-top: 5px;
       overflow-x: hidden;
       overflow-y: auto;
       scrollbar-width: thin;
       scrollbar-color: transparent transparent;
 
-      &::-webkit-scrollbar-thumb,
-      &::-webkit-scrollbar-thumb:hover {
-        background-color: transparent;
+      &::-webkit-scrollbar {
+        -webkit-appearance: none;
+        width: 6px;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
       }
-    }
 
-    &:hover .menu-wrap,
-    &:focus-within .menu-wrap {
-      scrollbar-color: color-mix(in srgb, var(--menu-text) 38%, var(--menu-bg)) transparent;
+      &::-webkit-scrollbar-track,
+      &::-webkit-scrollbar-track-piece {
+        -webkit-appearance: none;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+      }
 
       &::-webkit-scrollbar-thumb {
-        background-color: color-mix(in srgb, var(--menu-text) 38%, var(--menu-bg));
-      }
-
-      &::-webkit-scrollbar-thumb:hover {
-        background-color: color-mix(in srgb, var(--menu-text) 55%, var(--menu-bg));
+        border: 0;
+        border-radius: 999px;
+        background-color: transparent;
+        box-shadow: none;
       }
     }
 
-    .is-horizontal {
-      display: none;
+    &:hover .menu-wrap {
+      scrollbar-color: color-mix(in srgb, var(--menu-text) 45%, transparent) transparent;
+
+      &::-webkit-scrollbar-thumb {
+        background-color: color-mix(in srgb, var(--menu-text) 45%, transparent);
+      }
     }
 
     a {
@@ -90,10 +88,7 @@
   .hideSidebar {
     .sidebar-container {
       width: 54px !important;
-    }
-
-    .main-container {
-      margin-left: 54px;
+      flex-basis: 54px;
     }
 
     .submenu-title-noDropdown {
@@ -129,14 +124,21 @@
   // mobile responsive
   .mobile {
     .main-container {
-      margin-left: 0;
+      overflow: hidden;
     }
 
     .sidebar-container {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1001;
       transition: transform 0.28s;
       width: $sideBarWidth !important;
+      height: 100%;
+      flex-basis: $sideBarWidth;
 
-      .sidebar-toggle {
+      .sidebar-footer {
         display: none;
       }
     }
@@ -151,7 +153,6 @@
   }
 
   .withoutAnimation {
-    .main-container,
     .sidebar-container {
       transition: none;
     }

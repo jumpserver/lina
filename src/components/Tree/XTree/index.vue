@@ -104,174 +104,177 @@
       }"
       class="x-tree__body compact-loading"
       @scroll.capture.passive="handleTreeAmountScroll"
+      @wheel.capture.passive="handleTreeWheelCapture"
     >
-      <el-tree-v2
-        v-if="useVirtualTree"
-        :key="treeKey"
-        ref="tree"
-        :data="treeData"
-        :default-expanded-keys="initialExpandedKeys"
-        empty-text=""
-        :expand-on-click-node="false"
-        :filter-method="filterNode"
-        :height="virtualTreeHeight"
-        :item-size="nodeRowHeight"
-        :props="virtualTreeProps"
-        highlight-current
-        @node-click="handleNodeRowClick"
-        @node-contextmenu="handleNodeContextMenu"
-        @node-collapse="handleNodeCollapse"
-        @node-drop="handleVirtualNodeDrop"
-        @node-expand="handleNodeExpand"
-      >
-        <template #default="{ node, data }">
-          <span
-            :draggable="canDragData(data)"
-            :title="getNodeTitle(data)"
-            :class="{
-              'is-disabled': isNodeDisabled(data),
-              'is-operation-target': isOperationTarget(data),
-              'is-virtual-drop-target': isVirtualDropTarget(data)
-            }"
-            class="x-tree__node"
-            @dragend="handleVirtualDragEnd"
-            @dragenter="handleVirtualDragOver($event, data)"
-            @dragleave="handleVirtualDragLeave($event, data)"
-            @dragover="handleVirtualDragOver($event, data)"
-            @dragstart.stop="handleVirtualDragStart($event, data, node)"
-          >
-            <button
-              :aria-label="getNodeLabel(data)"
-              class="x-tree__node-toggle"
-              type="button"
-              @click.stop="handleNodeLabelClick($event, data)"
-            >
-              <slot
-                :data="data"
-                :expanded="node.expanded"
-                :leaf="isLeafNode(data)"
-                :node="node"
-                name="node-icon"
-              >
-                <TreeFolderIcon :leaf="isLeafNode(data)" :expanded="node.expanded" />
-              </slot>
-            </button>
-            <el-input
-              v-if="editingKey === String(data.id)"
-              ref="renameInput"
-              v-model="editValue"
-              class="x-tree__rename"
-              size="small"
-              @blur="finishRename(data)"
-              @click.stop
-              @keydown.enter.prevent="$event.target.blur()"
-              @keydown.esc.prevent="cancelRename"
-            />
+      <div ref="treeViewport" class="x-tree__viewport">
+        <el-tree-v2
+          v-if="useVirtualTree"
+          :key="treeKey"
+          ref="tree"
+          :data="treeData"
+          :default-expanded-keys="initialExpandedKeys"
+          empty-text=""
+          :expand-on-click-node="false"
+          :filter-method="filterNode"
+          :height="virtualTreeHeight"
+          :item-size="nodeRowHeight"
+          :props="virtualTreeProps"
+          highlight-current
+          @node-click="handleNodeRowClick"
+          @node-contextmenu="handleNodeContextMenu"
+          @node-collapse="handleNodeCollapse"
+          @node-drop="handleVirtualNodeDrop"
+          @node-expand="handleNodeExpand"
+        >
+          <template #default="{ node, data }">
             <span
-              v-else
-              class="x-tree__node-select"
-              @click.stop="handleNodeLabelClick($event, data)"
+              :draggable="canDragData(data)"
+              :title="getNodeTitle(data)"
+              :class="{
+                'is-disabled': isNodeDisabled(data),
+                'is-operation-target': isOperationTarget(data),
+                'is-virtual-drop-target': isVirtualDropTarget(data)
+              }"
+              class="x-tree__node"
+              @dragend="handleVirtualDragEnd"
+              @dragenter="handleVirtualDragOver($event, data)"
+              @dragleave="handleVirtualDragLeave($event, data)"
+              @dragover="handleVirtualDragOver($event, data)"
+              @dragstart.stop="handleVirtualDragStart($event, data, node)"
             >
-              <span class="x-tree__node-label">{{ getNodeLabel(data) }}</span>
+              <button
+                :aria-label="getNodeLabel(data)"
+                class="x-tree__node-toggle"
+                type="button"
+                @click.stop="handleNodeLabelClick($event, data)"
+              >
+                <slot
+                  :data="data"
+                  :expanded="node.expanded"
+                  :leaf="isLeafNode(data)"
+                  :node="node"
+                  name="node-icon"
+                >
+                  <TreeFolderIcon :leaf="isLeafNode(data)" :expanded="node.expanded" />
+                </slot>
+              </button>
+              <el-input
+                v-if="editingKey === String(data.id)"
+                ref="renameInput"
+                v-model="editValue"
+                class="x-tree__rename"
+                size="small"
+                @blur="finishRename(data)"
+                @click.stop
+                @keydown.enter.prevent="$event.target.blur()"
+                @keydown.esc.prevent="cancelRename"
+              />
               <span
-                v-if="hasNodeAmount(data)"
-                :title="getNodeAmountTitle(data) || undefined"
-                class="x-tree__node-amount"
+                v-else
+                class="x-tree__node-select"
+                @click.stop="handleNodeLabelClick($event, data)"
               >
-                ({{ getNodeAmount(data) }})
+                <span class="x-tree__node-label">{{ getNodeLabel(data) }}</span>
+                <span
+                  v-if="hasNodeAmount(data)"
+                  :title="getNodeAmountTitle(data) || undefined"
+                  class="x-tree__node-amount"
+                >
+                  ({{ getNodeAmount(data) }})
+                </span>
               </span>
+              <slot :data="data" :expanded="node.expanded" :node="node" name="node-actions" />
             </span>
-            <slot :data="data" :expanded="node.expanded" :node="node" name="node-actions" />
-          </span>
-        </template>
-      </el-tree-v2>
+          </template>
+        </el-tree-v2>
 
-      <el-tree
-        v-else
-        :key="treeKey"
-        ref="tree"
-        :allow-drag="allowDrag"
-        :allow-drop="allowDrop"
-        :data="treeData"
-        :draggable="canMove"
-        empty-text=""
-        :expand-on-click-node="true"
-        :filter-node-method="filterNode"
-        :lazy="treeSetting.lazyLoad"
-        :load="treeSetting.lazyLoad ? loadNode : undefined"
-        :props="treeProps"
-        highlight-current
-        node-key="id"
-        @node-click="handleNodeRowClick"
-        @node-contextmenu="handleNodeContextMenu"
-        @node-collapse="handleNodeCollapse"
-        @node-drag-end="handleNodeDragEnd"
-        @node-drag-start="handleNodeDragStart"
-        @node-drop="handleNodeDrop"
-        @node-expand="handleNodeExpand"
-      >
-        <template #default="{ node, data }">
-          <span
-            :class="{
-              'is-disabled': isNodeDisabled(data),
-              'is-operation-target': isOperationTarget(data)
-            }"
-            class="x-tree__node"
-            :title="getNodeTitle(data)"
-          >
-            <button
-              :aria-label="getNodeLabel(data)"
-              class="x-tree__node-toggle"
-              type="button"
-              @click.stop="handleNodeLabelClick($event, data)"
-            >
-              <slot
-                :data="data"
-                :expanded="node.expanded"
-                :leaf="isLeafNode(data)"
-                :node="node"
-                name="node-icon"
-              >
-                <TreeFolderIcon :leaf="isLeafNode(data)" :expanded="node.expanded" />
-              </slot>
-            </button>
-            <el-input
-              v-if="editingKey === String(data.id)"
-              ref="renameInput"
-              v-model="editValue"
-              class="x-tree__rename"
-              size="small"
-              @blur="finishRename(data)"
-              @click.stop
-              @keydown.enter.prevent="$event.target.blur()"
-              @keydown.esc.prevent="cancelRename"
-            />
+        <el-tree
+          v-else
+          :key="treeKey"
+          ref="tree"
+          :allow-drag="allowDrag"
+          :allow-drop="allowDrop"
+          :data="treeData"
+          :draggable="canMove"
+          empty-text=""
+          :expand-on-click-node="true"
+          :filter-node-method="filterNode"
+          :lazy="treeSetting.lazyLoad"
+          :load="treeSetting.lazyLoad ? loadNode : undefined"
+          :props="treeProps"
+          highlight-current
+          node-key="id"
+          @node-click="handleNodeRowClick"
+          @node-contextmenu="handleNodeContextMenu"
+          @node-collapse="handleNodeCollapse"
+          @node-drag-end="handleNodeDragEnd"
+          @node-drag-start="handleNodeDragStart"
+          @node-drop="handleNodeDrop"
+          @node-expand="handleNodeExpand"
+        >
+          <template #default="{ node, data }">
             <span
-              v-else
-              class="x-tree__node-select"
-              @click.stop="handleNodeLabelClick($event, data)"
+              :class="{
+                'is-disabled': isNodeDisabled(data),
+                'is-operation-target': isOperationTarget(data)
+              }"
+              class="x-tree__node"
+              :title="getNodeTitle(data)"
             >
-              <span class="x-tree__node-label">
-                {{ getNodeLabel(data) }}
-              </span>
-              <span
-                v-if="hasNodeAmount(data)"
-                :title="getNodeAmountTitle(data) || undefined"
-                class="x-tree__node-amount"
+              <button
+                :aria-label="getNodeLabel(data)"
+                class="x-tree__node-toggle"
+                type="button"
+                @click.stop="handleNodeLabelClick($event, data)"
               >
-                ({{ getNodeAmount(data) }})
+                <slot
+                  :data="data"
+                  :expanded="node.expanded"
+                  :leaf="isLeafNode(data)"
+                  :node="node"
+                  name="node-icon"
+                >
+                  <TreeFolderIcon :leaf="isLeafNode(data)" :expanded="node.expanded" />
+                </slot>
+              </button>
+              <el-input
+                v-if="editingKey === String(data.id)"
+                ref="renameInput"
+                v-model="editValue"
+                class="x-tree__rename"
+                size="small"
+                @blur="finishRename(data)"
+                @click.stop
+                @keydown.enter.prevent="$event.target.blur()"
+                @keydown.esc.prevent="cancelRename"
+              />
+              <span
+                v-else
+                class="x-tree__node-select"
+                @click.stop="handleNodeLabelClick($event, data)"
+              >
+                <span class="x-tree__node-label">
+                  {{ getNodeLabel(data) }}
+                </span>
+                <span
+                  v-if="hasNodeAmount(data)"
+                  :title="getNodeAmountTitle(data) || undefined"
+                  class="x-tree__node-amount"
+                >
+                  ({{ getNodeAmount(data) }})
+                </span>
               </span>
+              <slot :data="data" :expanded="node.expanded" :node="node" name="node-actions" />
             </span>
-            <slot :data="data" :expanded="node.expanded" :node="node" name="node-actions" />
-          </span>
-        </template>
-      </el-tree>
+          </template>
+        </el-tree>
 
-      <el-empty
-        v-if="!loading && treeData.length === 0"
-        :description="$t('Empty')"
-        :image-size="56"
-      />
+        <el-empty
+          v-if="!loading && treeData.length === 0"
+          :description="$t('Empty')"
+          :image-size="56"
+        />
+      </div>
     </div>
 
     <div
@@ -619,11 +622,11 @@ export default {
           if (!this.isRuntimeEffectsCurrent(generation)) {
             return
           }
-          const height = this.$refs.treeBody?.clientHeight || 0
+          const height = this.$refs.treeViewport?.clientHeight || 0
           if (!height) {
             return
           }
-          const nextHeight = Math.max(1, Math.round(height - 18))
+          const nextHeight = Math.max(1, Math.round(height))
           if (nextHeight !== this.virtualTreeHeight) {
             this.virtualTreeHeight = nextHeight
           }
@@ -1015,7 +1018,12 @@ export default {
       if (this.useVirtualTree) {
         return treeBody.querySelector('.el-tree-virtual-list') || treeBody
       }
-      return treeBody
+      return this.$refs.treeViewport || treeBody
+    },
+    handleTreeWheelCapture(event) {
+      if (this.useVirtualTree) {
+        event.stopPropagation()
+      }
     },
     getProgressiveAmountBatchSize() {
       return Math.max(1, Number(this.treeSetting.countProgressiveBatchSize) || 100)
@@ -1613,7 +1621,7 @@ export default {
       }
 
       await this.$nextTick()
-      const container = this.$refs.treeBody
+      const container = this.getTreeAmountScrollElement()
       const element = container?.querySelector('.x-tree__node.is-operation-target')
       if (!container || !element) {
         return
@@ -2890,17 +2898,56 @@ export default {
 }
 
 .x-tree__body {
+  --tree-scrollbar-size: 6px;
+
   flex: 1;
   min-height: 0;
-  overflow: auto;
-  // Standard scrollbar styling overrides the axis-specific WebKit rules.
-  scrollbar-width: auto;
-  scrollbar-color: auto;
-  padding: 6px 8px 12px;
+  overflow: hidden;
+  padding: 0;
   border-top: 1px solid var(--panel-border-color, var(--el-border-color));
+}
+
+.x-tree__viewport {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
 
   &::-webkit-scrollbar {
-    height: 0;
+    -webkit-appearance: none;
+    width: var(--tree-scrollbar-size);
+    height: var(--tree-scrollbar-size);
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  &::-webkit-scrollbar-track,
+  &::-webkit-scrollbar-track-piece,
+  &::-webkit-scrollbar-corner {
+    -webkit-appearance: none;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border: 0;
+    border-radius: 999px;
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  &:hover {
+    scrollbar-color: color-mix(in srgb, var(--el-text-color-secondary) 45%, transparent) transparent;
+  }
+
+  &:hover::-webkit-scrollbar-thumb {
+    background-color: color-mix(in srgb, var(--el-text-color-secondary) 45%, transparent);
   }
 }
 
@@ -2908,18 +2955,54 @@ export default {
   border-top: 0;
 }
 
-.x-tree__body.is-virtual {
+.x-tree__body.is-virtual .x-tree__viewport {
   overflow: hidden;
 }
 
 .x-tree__body.is-virtual :deep(.el-tree-virtual-list) {
   min-width: 100%;
-  overflow-x: auto !important;
+  overflow: auto !important;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
 }
 
-.x-tree__body.is-virtual :deep(.el-tree-virtual-list)::-webkit-scrollbar:horizontal {
-  display: none;
-  height: 0;
+.x-tree__body.is-virtual :deep(.el-tree-virtual-list)::-webkit-scrollbar {
+  -webkit-appearance: none;
+  display: block;
+  width: var(--tree-scrollbar-size);
+  height: var(--tree-scrollbar-size);
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.x-tree__body.is-virtual :deep(.el-tree-virtual-list)::-webkit-scrollbar-track,
+.x-tree__body.is-virtual :deep(.el-tree-virtual-list)::-webkit-scrollbar-track-piece,
+.x-tree__body.is-virtual :deep(.el-tree-virtual-list)::-webkit-scrollbar-corner {
+  -webkit-appearance: none;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.x-tree__body.is-virtual :deep(.el-tree-virtual-list)::-webkit-scrollbar-thumb {
+  border: 0;
+  border-radius: 999px;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.x-tree__body.is-virtual :deep(.el-tree-virtual-list:hover) {
+  scrollbar-color: color-mix(in srgb, var(--el-text-color-secondary) 45%, transparent) transparent;
+}
+
+.x-tree__body.is-virtual :deep(.el-tree-virtual-list:hover)::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--el-text-color-secondary) 45%, transparent);
+}
+
+.x-tree__body.is-virtual :deep(.el-virtual-scrollbar) {
+  display: none !important;
 }
 
 .x-tree__body :deep(.el-tree) {

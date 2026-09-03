@@ -337,6 +337,20 @@ export default {
     .navbar-left {
       display: none;
     }
+
+    .navbar-right {
+      min-width: 0;
+      margin-right: 4px;
+
+      .header-item {
+        padding-right: 6px;
+        padding-left: 6px;
+      }
+
+      .header-profile {
+        padding-right: 2px;
+      }
+    }
   }
 }
 

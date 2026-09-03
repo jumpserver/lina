@@ -14,6 +14,7 @@ export default {
   '--color-disabled': '#bbb',
   '--color-help-text': '#8f959e',
   '--page-background-color': '#ffffff',
+  '--page-content-background-color': '#f3f3f4',
   '--panel-border-color': 'var(--el-border-color)',
   '--banner-bg': '#148f76',
   '--submenu-bg': '#ffffff',

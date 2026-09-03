@@ -66,36 +66,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables' as *;
-
 .app-main {
   --el-card-border-color: var(--panel-border-color, var(--el-border-color));
 
-  background-color: var(--page-background-color, #fff);
+  display: block;
+  flex: 1 1 auto;
+  background-color: var(--page-content-background-color, #f3f3f4);
   height: 100%;
-  //height: 100vh !important;
+  min-height: 0;
+  min-width: 0;
   width: 100%;
   position: relative;
   overflow: auto;
-  /*padding: 10px 20px 10px;*/
-}
 
-// 注意：.main-container 已通过 `position: relative; top: $headerHeight` 整体下移避开固定头部
-// （见 styles/sidebar.scss），因此这里 **不能** 再加 padding-top，否则会双重下移 $headerHeight，
-// 在头部下方留出一条空白（点右键只会命中 app-wrapper，因为那是 app-main padding 区）。
-.fixed-header + .app-main {
-  padding-top: 0;
+  // 路由可能经过多层 EmptyLayout。每层 shell 都必须继承主区高度，
+  // 否则 Page 的 100% 会退化成内容高度，外层又出现第二根滚动条。
+  :deep(.route-view-shell) {
+    height: 100%;
+    min-height: 0;
+    min-width: 0;
+  }
 }
 
 .hasTagsView {
   .app-main {
-    /* navbar + tags-view = $headerHeight + 34 */
-    min-height: calc(100vh - #{$headerHeight} - 34px);
-  }
-
-  // tags-view 高 34px，main-container 已偏移 $headerHeight，这里只需再补 tags-view 高度
-  .fixed-header + .app-main {
-    padding-top: 34px;
+    min-height: 0;
   }
 }
 </style>

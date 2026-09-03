@@ -1,12 +1,12 @@
-// Only active page lists opt in. Forms, detail cards and embedded/dialog lists
-// keep their existing scrolling. Intermediate view wrappers share the space
-// left by the page heading and tab navigation, without viewport pixel offsets.
+// Page lists grow with their rows. The page content owns vertical scrolling;
+// embedded/dialog lists keep their explicitly configured sizing.
 .page .page-content.wrapper-content[data-list-layout='viewport'],
 .page.tab-page .tab-page-content[data-list-layout='viewport'] {
-  overflow: hidden !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
   scrollbar-gutter: auto;
-  padding-bottom: 8px;
-  background-color: var(--page-background-color, #fff);
+  padding-bottom: var(--list-viewport-bottom-offset, 44px);
+  background-color: var(--page-content-background-color, #f3f3f4);
 }
 
 .page.tab-page .tab-page-content[data-list-layout='viewport'] {
@@ -15,15 +15,16 @@
   }
 
   > [data-list-layout='container'] {
-    flex-shrink: 1;
+    flex-shrink: 0;
     min-width: 0;
   }
 }
 
 .page [data-list-layout='container'] {
   display: flex !important;
-  flex: 1 1 0%;
+  flex: 0 0 auto;
   flex-direction: column;
+  max-height: none;
   min-height: 0;
   min-width: 0;
 
@@ -70,6 +71,16 @@
   }
 }
 
+// Tree/list pages own the full available content height independently of the
+// number of rows in the table. The list remains content-sized inside the right
+// pane, while the tree keeps a stable viewport and scrolls internally.
+.page [data-list-layout='container']:has(> .tree-table-content),
+.page [data-list-layout='container'].tree-table-content {
+  flex: 0 0 auto;
+  height: auto;
+  min-height: 100%;
+}
+
 .page .list-table--fill-height {
   > :not(.table-content) {
     flex: none;
@@ -77,8 +88,12 @@
 
   > .table-content {
     display: flex;
-    flex: 1 1 0%;
+    flex: 0 1 auto;
+    flex-direction: column;
+    max-height: 100%;
     min-height: 0;
+    min-width: 0;
+    width: 100%;
 
     // Page lists sit directly on the content background. Remove the outer
     // card edges so the table does not look like a nested card.
@@ -122,16 +137,46 @@
     .auto-data-table,
     .auto-data-table__content {
       display: flex;
-      flex: 1 1 0%;
+      flex: 0 1 auto;
       flex-direction: column;
+      max-height: 100%;
       min-height: 0;
       min-width: 0;
+    }
+
+    // `fill-height` still provides fixed-header/body scrolling, but a page
+    // list follows the measured surface height until the viewport becomes
+    // smaller. Explicit fill-height tables outside pages keep their original
+    // host-filling behavior.
+    .el-data-table--fill-height {
+      flex: 0 1 auto;
+      height: auto;
+      max-height: 100%;
     }
 
     > .ibox,
     > .ibox > .el-card__body {
       // Override PageContent/TabPage's deliberately unbounded detail cards.
       overflow: hidden !important;
+    }
+  }
+}
+
+// 手机窄屏下将树放到表格上方，各自保留独立的可用区域。
+// 表格仍只在自身内部横向滚动，不会把整页撑宽。
+@media screen and (max-width: 767px) {
+  .page [data-list-layout='container'].tree-table-content {
+    flex-direction: column;
+
+    > .left {
+      flex: 0 1 min(34%, 240px);
+      width: 100% !important;
+      max-height: 240px;
+    }
+
+    > .right {
+      flex: 1 1 0%;
+      width: 100%;
     }
   }
 }

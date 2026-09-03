@@ -353,6 +353,7 @@ export default {
   align-items: center;
   height: 40px;
   padding: 0 8px;
+  background-color: var(--el-fill-color-lighter, #fafafa);
 
   &.has-tree-actions {
     padding-right: 48px;

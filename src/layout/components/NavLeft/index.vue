@@ -48,19 +48,22 @@
         />
       </el-menu>
     </div>
-    <button
-      class="sidebar-toggle"
-      type="button"
-      :aria-expanded="sidebar.opened"
-      :aria-label="$t(isCollapse ? 'ExpandSidebar' : 'CollapseSidebar')"
-      :title="$t(isCollapse ? 'ExpandSidebar' : 'CollapseSidebar')"
-      @click="toggleSideBar"
-    >
-      <el-icon aria-hidden="true">
-        <ArrowRightBold v-if="isCollapse" />
-        <ArrowLeftBold v-else />
-      </el-icon>
-    </button>
+    <div class="sidebar-footer">
+      <button
+        class="sidebar-collapse-button"
+        type="button"
+        :aria-expanded="sidebar.opened"
+        :aria-label="$t(isCollapse ? 'ExpandSidebar' : 'CollapseSidebar')"
+        :title="$t(isCollapse ? 'ExpandSidebar' : 'CollapseSidebar')"
+        @click="toggleSideBar"
+      >
+        <svg-icon
+          aria-hidden="true"
+          class="sidebar-collapse-icon"
+          :icon-class="isCollapse ? 'sidebar-panel' : 'sidebar-panel-expanded'"
+        />
+      </button>
+    </div>
     <div :class="{ 'is-show': viewShown }" class="mobile-menu" @click="viewShown = false">
       <ViewSwitcher :mode="'vertical'" />
     </div>
@@ -223,7 +226,12 @@ $origin-color: #ffffff;
         background-color 0.12s;
       color: var(--menu-text);
       background-color: var(--menu-bg);
-      border-bottom: 1px solid var(--menu-border, var(--panel-border-color, var(--el-border-color)));
+      border-bottom: 1px solid
+        color-mix(
+          in srgb,
+          var(--menu-border, var(--panel-border-color, var(--el-border-color))) 55%,
+          transparent
+        );
 
       .switch-view {
         width: 100%;
@@ -268,48 +276,54 @@ $origin-color: #ffffff;
     }
   }
 
-  .sidebar-toggle {
-    position: absolute;
-    right: -0.5px;
-    bottom: 24px;
-    z-index: 1;
+  .sidebar-footer {
+    display: flex;
+    flex: 0 0 var(--sidebar-footer-height, 44px);
+    align-items: center;
+    min-width: 0;
+    padding: 0 8px;
+    border-top: 1px solid var(--menu-border, var(--panel-border-color, var(--el-border-color)));
+    background-color: var(--menu-bg);
+  }
+
+  .sidebar-collapse-button {
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    padding: 0;
-    transform: translateX(50%);
-    border: 1px solid var(--el-border-color);
-    border-radius: 50%;
-    background-color: var(--el-bg-color);
-    color: var(--el-text-color-secondary);
-    font-size: 11px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    justify-content: flex-start;
+    width: 100%;
+    height: 32px;
+    min-width: 0;
+    padding: 0 8px;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--menu-text);
+    font-size: 13px;
     cursor: pointer;
     transition:
       background-color 0.12s,
       color 0.12s;
 
-    &::before {
-      position: absolute;
-      inset: -4px;
-      border-radius: inherit;
-      content: '';
+    .sidebar-collapse-icon {
+      flex: 0 0 auto;
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+      opacity: 0.72;
     }
 
     &:hover {
-      background-color: var(--el-color-primary-light-9);
-      color: var(--el-color-primary);
+      background-color: var(--menu-hover);
+      color: var(--menu-text-active);
     }
 
     &:active {
-      background-color: var(--el-color-primary-light-8);
+      background-color: var(--el-color-primary-light-9);
     }
 
     &:focus-visible {
-      outline: 2px solid var(--color-primary);
-      outline-offset: 3px;
+      outline: 2px solid var(--menu-text-active);
+      outline-offset: 1px;
     }
   }
 
@@ -345,6 +359,13 @@ $origin-color: #ffffff;
       .switch-view .icon {
         margin-left: 0;
       }
+    }
+  }
+
+  &.collapsed {
+    .sidebar-collapse-button {
+      justify-content: center;
+      padding: 0;
     }
   }
 }

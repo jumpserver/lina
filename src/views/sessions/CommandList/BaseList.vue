@@ -467,6 +467,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.command-list-table {
+  --tree-table-header-height: 39px;
+}
+
 .command-list-table :deep(.risk-command) {
   background-color: oldlace;
 
