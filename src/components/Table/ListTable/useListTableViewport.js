@@ -24,10 +24,11 @@ function acquireLayout(element, layout) {
 
 export function useListTableViewport() {
   const listRoot = ref(null)
+  const fillHeight = ref(false)
   let releaseLayout = []
   function activate() {
-    // Mark page-level list wrappers so their scrolling and spacing can be
-    // coordinated without assigning a height to the table itself.
+    // Page lists use the available page height as their upper bound. The data
+    // table can still shrink to its rows, but overflow stays inside the table.
     if (releaseLayout.length || !listRoot.value) {
       return
     }
@@ -48,6 +49,7 @@ export function useListTableViewport() {
 
     releaseLayout = path.map((element) => acquireLayout(element, 'container'))
     releaseLayout.push(acquireLayout(parent, 'viewport'))
+    fillHeight.value = true
   }
 
   function deactivate() {
@@ -60,5 +62,5 @@ export function useListTableViewport() {
   onDeactivated(deactivate)
   onBeforeUnmount(deactivate)
 
-  return { listRoot }
+  return { listRoot, fillHeight }
 }

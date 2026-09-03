@@ -6,6 +6,9 @@
   --list-table-row-hover-bg-color: var(--el-fill-color-light, #f5f7fa);
   --list-table-selected-bg-color: var(--list-table-row-hover-bg-color);
   --list-table-selected-hover-bg-color: var(--list-table-row-hover-bg-color);
+  --list-table-scrollbar-background: transparent;
+  --list-table-scrollbar-space: 16px;
+
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -52,10 +55,49 @@
   }
 
   :deep(.el-table__body-wrapper .el-scrollbar__wrap) {
-    // Element Plus hides the native bar by default. Restore the browser's
-    // platform scrollbar without changing its size, colors or track.
+    // Show the native horizontal scrollbar only while the table is hovered.
+    overflow-x: hidden;
     scrollbar-width: auto;
     scrollbar-color: auto;
+
+    &::-webkit-scrollbar:horizontal {
+      height: var(--list-table-scrollbar-space);
+      border: 0;
+      background: var(--list-table-scrollbar-background);
+    }
+
+    &::-webkit-scrollbar-track:horizontal {
+      border: 0;
+      background: var(--list-table-scrollbar-background);
+      box-shadow: none;
+    }
+
+    &::-webkit-scrollbar:vertical,
+    &::-webkit-scrollbar-track:vertical {
+      background: var(--list-table-scrollbar-background);
+    }
+
+    &::-webkit-scrollbar-track:vertical {
+      border-left: 1px solid var(--panel-border-color, var(--el-border-color));
+    }
+
+    &::-webkit-scrollbar-thumb:horizontal {
+      min-width: 32px;
+      border: 4px solid transparent;
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--el-scrollbar-bg-color, #909399) 45%, transparent)
+        content-box;
+    }
+  }
+
+  :deep(.el-data-table__body:hover .el-table__body-wrapper .el-scrollbar__wrap) {
+    overflow-x: auto;
+  }
+
+  :deep(.el-table:has(.el-table__empty-block) .el-table__body-wrapper .el-scrollbar__wrap) {
+    // Element Plus sizes the empty block before the native horizontal bar
+    // takes its space, which otherwise creates a meaningless vertical bar.
+    overflow-y: hidden;
   }
 }
 
@@ -81,12 +123,21 @@
   }
 
   > .el-data-table__surface {
-    flex: 0 1 var(--el-data-table-content-height, 100%);
-    height: var(--el-data-table-content-height, 100%);
+    --el-data-table-horizontal-scrollbar-height: 0px;
+    --el-data-table-surface-height: calc(
+      var(--el-data-table-content-height, 100%) + var(--el-data-table-horizontal-scrollbar-height)
+    );
+
+    flex: 0 1 var(--el-data-table-surface-height, 100%);
+    height: var(--el-data-table-surface-height, 100%);
     max-height: 100%;
     border: 1px solid var(--panel-border-color, var(--el-border-color));
     border-radius: var(--list-corner-radius, 4px);
     overflow: hidden;
+
+    &:has(.el-table--scrollable-x) {
+      --el-data-table-horizontal-scrollbar-height: var(--list-table-scrollbar-space);
+    }
   }
 
   > .el-data-table__surface > .el-data-table__body {
