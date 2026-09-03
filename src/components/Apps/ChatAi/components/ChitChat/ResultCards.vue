@@ -320,7 +320,7 @@ function formatFieldValue(key, value) {
     strong {
       overflow: hidden;
       color: #454b5c;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 650;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -335,16 +335,16 @@ function formatFieldValue(key, value) {
 
     small {
       overflow: hidden;
-      color: #9298a7;
-      font-size: 9px;
+      color: #737b87;
+      font-size: 11px;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
     .el-icon {
       flex: 0 0 auto;
-      color: #a0a5b2;
-      font-size: 11px;
+      color: #747c89;
+      font-size: 14px;
       transition: transform 0.18s ease;
     }
   }
@@ -359,6 +359,12 @@ function formatFieldValue(key, value) {
   gap: 1px;
   padding: 6px;
 
+  .el-icon {
+    flex: 0 0 auto;
+    color: #667181;
+    font-size: 14px;
+  }
+
   a,
   > span {
     display: flex;
@@ -368,8 +374,8 @@ function formatFieldValue(key, value) {
     gap: 8px;
     padding: 6px 8px;
     border-radius: var(--ai-radius-sm, 8px);
-    color: #4d6070;
-    font-size: 10px;
+    color: #405464;
+    font-size: 11px;
     text-decoration: none;
   }
 
@@ -391,7 +397,7 @@ function formatFieldValue(key, value) {
 .result-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 10px;
+  font-size: 11px;
 
   th,
   td {
@@ -478,7 +484,7 @@ function formatFieldValue(key, value) {
     code {
       color: #747d8c;
       font-family: inherit;
-      font-size: 10px;
+      font-size: 11px;
     }
   }
 
@@ -491,7 +497,7 @@ function formatFieldValue(key, value) {
     border-radius: 999px;
     color: #8a5b2d;
     background: #fff6e8;
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 600;
 
     i {
@@ -519,7 +525,7 @@ function formatFieldValue(key, value) {
     gap: 7px;
     padding-left: 40px;
     color: #7f8795;
-    font-size: 9px;
+    font-size: 11px;
 
     > span:not(.asset-result__verified) {
       max-width: 160px;
@@ -555,8 +561,8 @@ function formatFieldValue(key, value) {
 .result-total {
   display: block;
   padding: 6px 9px 8px;
-  color: #9298a7;
-  font-size: 9px;
+  color: #737b87;
+  font-size: 11px;
 }
 
 .result-details {
@@ -564,7 +570,7 @@ function formatFieldValue(key, value) {
   grid-template-columns: minmax(90px, 0.35fr) minmax(0, 1fr);
   margin: 0;
   padding: 7px 10px 10px;
-  font-size: 10px;
+  font-size: 11px;
 
   dt,
   dd {
@@ -591,7 +597,7 @@ function formatFieldValue(key, value) {
   color: #4d5364;
   background: #fff;
   font-family: inherit;
-  font-size: 10px;
+  font-size: 11px;
   white-space: pre-wrap;
 }
 </style>
