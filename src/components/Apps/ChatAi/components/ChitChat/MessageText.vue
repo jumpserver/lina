@@ -95,7 +95,7 @@ onBeforeUnmount(() => {
 .message-text {
   min-width: 0;
   color: inherit;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.72;
   user-select: text;
 }

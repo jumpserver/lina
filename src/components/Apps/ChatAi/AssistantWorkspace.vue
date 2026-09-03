@@ -631,12 +631,9 @@ defineExpose({ init, focus, newConversation: handleNew })
   color: var(--ai-text);
   background: #fff;
   font-family:
-    'Open Sans',
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    sans-serif;
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif;
+  font-size: 14px;
   flex-direction: column;
   user-select: text;
 }
@@ -688,7 +685,7 @@ defineExpose({ init, focus, newConversation: handleNew })
   strong {
     overflow: hidden;
     color: var(--ai-text);
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -699,7 +696,7 @@ defineExpose({ init, focus, newConversation: handleNew })
     align-items: center;
     gap: 6px;
     color: var(--ai-text-secondary);
-    font-size: 10px;
+    font-size: 11px;
 
     i {
       width: 6px;
@@ -726,6 +723,7 @@ defineExpose({ init, focus, newConversation: handleNew })
   color: var(--ai-text-secondary);
   background: transparent;
   cursor: pointer;
+  font-size: 16px;
   transition: all 0.18s ease;
 
   &:hover {
@@ -751,6 +749,7 @@ defineExpose({ init, focus, newConversation: handleNew })
   color: var(--ai-text-secondary);
   background: transparent;
   cursor: pointer;
+  font-size: 16px;
   transition: all 0.18s ease;
 
   &:hover:not(:disabled) {
@@ -854,12 +853,12 @@ defineExpose({ init, focus, newConversation: handleNew })
 }
 
 .composer-disclaimer {
-  min-height: 15px;
+  min-height: 16px;
   padding: 2px 4px 0;
   overflow: hidden;
-  color: #8f959e;
-  font-size: 9px;
-  line-height: 13px;
+  color: #737b87;
+  font-size: 11px;
+  line-height: 14px;
   text-align: center;
 
   span {
@@ -883,7 +882,7 @@ defineExpose({ init, focus, newConversation: handleNew })
   border-radius: 11px;
   color: #91652a;
   background: #fff8e9;
-  font-size: 10px;
+  font-size: 11px;
 
   span {
     display: inline-flex;
@@ -898,7 +897,7 @@ defineExpose({ init, focus, newConversation: handleNew })
     color: #966426;
     background: #fff;
     cursor: pointer;
-    font-size: 10px;
+    font-size: 11px;
   }
 }
 
@@ -991,14 +990,14 @@ defineExpose({ init, focus, newConversation: handleNew })
 
     strong {
       color: var(--ai-text);
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 700;
     }
 
     small {
       display: -webkit-box;
       color: var(--ai-text-secondary);
-      font-size: 10px;
+      font-size: 11px;
       line-height: 1.45;
       white-space: normal;
       -webkit-box-orient: vertical;
