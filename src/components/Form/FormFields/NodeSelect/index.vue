@@ -26,6 +26,7 @@
           :items="selectedSummaryItems"
           :selected-count="selectedValue.length"
           :text="summaryText"
+          @clear="clearSummaryResources"
           @load-more="loadNextSummaryBatch"
           @remove="removeSummaryResource"
         />
