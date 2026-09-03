@@ -42,6 +42,53 @@ export default [
         })
       },
       {
+        path: 'login-mfa-acls',
+        component: globalSubmenu,
+        redirect: {
+          name: 'UserLoginMFAACLList'
+        },
+        meta: {
+          title: i18n.t('UserLoginMFAACL'),
+          app: 'acls',
+          resource: 'loginmfaacl',
+          disableOrgsChange: true,
+          licenseRequired: true
+        },
+        children: [
+          {
+            path: '',
+            name: 'UserLoginMFAACLList',
+            component: () => import('@/views/acls/UserLoginMFAACL/UserLoginMFAACLList.vue'),
+            meta: {
+              title: i18n.t('UserLoginMFAACL'),
+              menuTitle: i18n.t('UserLoginMFA'),
+              activeMenu: ''
+            }
+          },
+          {
+            path: 'create',
+            name: 'UserLoginMFAACLCreate',
+            component: () => import('@/views/acls/UserLoginMFAACL/UserLoginMFAACLCreateUpdate.vue'),
+            hidden: true,
+            meta: { title: i18n.t('UserLoginMFAACLCreate'), activeMenu: '' }
+          },
+          {
+            path: ':id',
+            name: 'UserLoginMFAACLDetail',
+            component: () => import('@/views/acls/UserLoginMFAACL/UserDetail/index'),
+            hidden: true,
+            meta: { title: i18n.t('UserLoginMFAACLDetail'), activeMenu: '' }
+          },
+          {
+            path: ':id/update',
+            name: 'UserLoginMFAACLUpdate',
+            component: () => import('@/views/acls/UserLoginMFAACL/UserLoginMFAACLCreateUpdate.vue'),
+            hidden: true,
+            meta: { title: i18n.t('UserLoginMFAACLUpdate'), activeMenu: '' }
+          }
+        ]
+      },
+      {
         path: 'cmd-acls',
         component: empty,
         redirect: {
