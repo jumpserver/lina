@@ -35,8 +35,8 @@ export default {
 }
 
 /*
- * 统一原则：卡片自身不出现内部滚动条，只有外层 .wrapper-content（page-content）整体滚动。
- * 强制卡片相关容器不自带滚动 / 高度上限，把溢出交还给外层滚动容器。
+ * 普通内容卡片不出现内部滚动条，由 .wrapper-content 整体滚动。列表页会由
+ * list-layout.scss 单独覆盖为表格内部滚动。
  */
 .wrapper-content :deep(.el-card__body),
 .wrapper-content :deep(.ibox),

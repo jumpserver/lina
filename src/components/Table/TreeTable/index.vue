@@ -2,7 +2,7 @@
   <div
     v-bind="rootAttrs"
     ref="treeTableContent"
-    :class="{ 'is-resizing': resizing, 'is-page-sticky': treePanelViewportHeight !== null }"
+    :class="{ 'is-resizing': resizing }"
     class="tree-table-content"
   >
     <div v-show="mountTree && iShowTree" ref="treePanel" :style="leftStyle" class="left">
@@ -30,7 +30,6 @@
       v-if="mountTree"
       ref="treeResizer"
       :class="{ 'is-collapsed': !iShowTree }"
-      :style="treeResizerStyle"
       class="tree-resizer"
       role="separator"
       tabindex="0"
@@ -196,31 +195,13 @@ export default {
       resizing: false,
       resizeStartX: 0,
       resizeStartWidth: 0,
-      treeFitFrame: null,
-      treePanelViewportHeight: null,
-      treePanelStickyTop: 0,
-      treeViewportElement: null,
-      treeViewportObserver: null
+      treeFitFrame: null
     }
   },
   computed: {
     leftStyle() {
-      const style = {
-        width: this.leftWidth === null ? this.treeWidth : `${this.leftWidth}px`
-      }
-      if (this.treePanelViewportHeight !== null) {
-        style.height = `${this.treePanelViewportHeight}px`
-        style.top = `${this.treePanelStickyTop}px`
-      }
-      return style
-    },
-    treeResizerStyle() {
-      if (this.treePanelViewportHeight === null) {
-        return undefined
-      }
       return {
-        height: `${this.treePanelViewportHeight}px`,
-        top: `${this.treePanelStickyTop}px`
+        width: this.leftWidth === null ? this.treeWidth : `${this.leftWidth}px`
       }
     },
     rootAttrs() {
@@ -249,50 +230,15 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.initializeTreeWidth()
-      this.setupStickyTreeViewport()
     })
   },
   beforeUnmount() {
     this.stopResize()
-    this.teardownStickyTreeViewport()
     if (this.treeFitFrame !== null) {
       window.cancelAnimationFrame(this.treeFitFrame)
     }
   },
   methods: {
-    setupStickyTreeViewport() {
-      const viewport = this.$refs.treeTableContent?.closest('[data-list-layout="viewport"]')
-      if (!viewport) {
-        return
-      }
-      this.treeViewportElement = viewport
-      this.updateStickyTreeViewport()
-      window.addEventListener('resize', this.updateStickyTreeViewport)
-      if (typeof ResizeObserver !== 'undefined') {
-        this.treeViewportObserver = new ResizeObserver(this.updateStickyTreeViewport)
-        this.treeViewportObserver.observe(viewport)
-      }
-    },
-    teardownStickyTreeViewport() {
-      window.removeEventListener('resize', this.updateStickyTreeViewport)
-      this.treeViewportObserver?.disconnect()
-      this.treeViewportObserver = null
-      this.treeViewportElement = null
-    },
-    updateStickyTreeViewport() {
-      const viewport = this.treeViewportElement
-      if (!viewport) {
-        return
-      }
-      const viewportStyle = window.getComputedStyle(viewport)
-      const paddingTop = Number.parseFloat(viewportStyle.paddingTop) || 0
-      const paddingBottom = Number.parseFloat(viewportStyle.paddingBottom) || 0
-      this.treePanelStickyTop = 0
-      this.treePanelViewportHeight = Math.max(
-        120,
-        Math.round(viewport.clientHeight - paddingTop - paddingBottom)
-      )
-    },
     getConfiguredTreeWidth(containerWidth) {
       const configuredWidth = String(this.treeWidth).trim()
       const parsedWidth = Number.parseFloat(configuredWidth)
@@ -486,16 +432,6 @@ $origin-color: #ffffff;
 
   &.is-resizing {
     cursor: col-resize;
-  }
-
-  &.is-page-sticky {
-    align-items: flex-start;
-
-    > .left,
-    > .tree-resizer {
-      position: sticky;
-      align-self: flex-start;
-    }
   }
 
   .left {

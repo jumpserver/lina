@@ -270,7 +270,7 @@ export default {
         (!this.iConfig.isTree && hasSelection
           ? Number.parseFloat(configuredSelectionWidth) || DEFAULT_SELECTION_COLUMN_WIDTH
           : 0)
-      const availableWidth = Math.max(0, Math.floor(containerWidth - selectionWidth - 2))
+      const availableWidth = Math.max(0, Math.floor(containerWidth - selectionWidth))
 
       const naturalColumns = sourceColumns.map((currentColumn) => {
         const col = { ...currentColumn }
