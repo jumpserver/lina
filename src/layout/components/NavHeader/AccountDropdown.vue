@@ -3,7 +3,7 @@
     <el-dropdown popper-class="nav-header-dropdown" :show-timeout="50" @command="handleClick">
       <span class="el-dropdown-link">
         <el-avatar :src="avatarUrl" class="header-avatar" />
-        {{ currentUser.name }}
+        <span v-if="!isMobile">{{ currentUser.name }}</span>
         <el-icon class="el-icon--right"><ArrowDown /></el-icon>
       </span>
       <template #dropdown>
@@ -49,7 +49,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentUser'])
+    ...mapGetters(['currentUser', 'isMobile'])
   },
   created() {},
   methods: {
@@ -117,10 +117,6 @@ export default {
   margin-right: 5px;
   vertical-align: middle;
   background: white;
-}
-
-.mobile .header-avatar {
-  display: none;
 }
 
 .icon {

@@ -24,11 +24,10 @@ function acquireLayout(element, layout) {
 
 export function useListTableViewport() {
   const listRoot = ref(null)
-  const fillHeight = ref(false)
   let releaseLayout = []
   function activate() {
-    // Mounted/activated hooks already have the attached DOM. Restore its sizing
-    // before the table's next layout pass, rather than painting an unbounded list.
+    // Mark page-level list wrappers so their scrolling and spacing can be
+    // coordinated without assigning a height to the table itself.
     if (releaseLayout.length || !listRoot.value) {
       return
     }
@@ -49,14 +48,11 @@ export function useListTableViewport() {
 
     releaseLayout = path.map((element) => acquireLayout(element, 'container'))
     releaseLayout.push(acquireLayout(parent, 'viewport'))
-    fillHeight.value = true
   }
 
   function deactivate() {
     releaseLayout.forEach((release) => release())
     releaseLayout = []
-    // KeepAlive retains the table: do not switch it back to content height while
-    // hidden, which forces another table layout when the page is shown again.
   }
 
   onMounted(activate)
@@ -64,5 +60,5 @@ export function useListTableViewport() {
   onDeactivated(deactivate)
   onBeforeUnmount(deactivate)
 
-  return { listRoot, fillHeight }
+  return { listRoot }
 }

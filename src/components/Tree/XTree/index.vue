@@ -104,6 +104,7 @@
       }"
       class="x-tree__body compact-loading"
       @scroll.capture.passive="handleTreeAmountScroll"
+      @wheel.capture.passive="handleTreeWheelCapture"
     >
       <div ref="treeViewport" class="x-tree__viewport">
         <el-tree-v2
@@ -1018,6 +1019,11 @@ export default {
         return treeBody.querySelector('.el-tree-virtual-list') || treeBody
       }
       return this.$refs.treeViewport || treeBody
+    },
+    handleTreeWheelCapture(event) {
+      if (this.useVirtualTree) {
+        event.stopPropagation()
+      }
     },
     getProgressiveAmountBatchSize() {
       return Math.max(1, Number(this.treeSetting.countProgressiveBatchSize) || 100)
@@ -2892,12 +2898,12 @@ export default {
 }
 
 .x-tree__body {
-  --scrollbar-size: 12px;
+  --tree-scrollbar-size: 6px;
 
   flex: 1;
   min-height: 0;
   overflow: hidden;
-  padding: 10px 2px 14px 8px;
+  padding: 0;
   border-top: 1px solid var(--panel-border-color, var(--el-border-color));
 }
 
@@ -2907,12 +2913,41 @@ export default {
   min-width: 0;
   min-height: 0;
   overflow: auto;
-  // Standard scrollbar styling overrides the axis-specific WebKit rules.
-  scrollbar-width: auto;
-  scrollbar-color: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
 
   &::-webkit-scrollbar {
-    height: 0;
+    -webkit-appearance: none;
+    width: var(--tree-scrollbar-size);
+    height: var(--tree-scrollbar-size);
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  &::-webkit-scrollbar-track,
+  &::-webkit-scrollbar-track-piece,
+  &::-webkit-scrollbar-corner {
+    -webkit-appearance: none;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border: 0;
+    border-radius: 999px;
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  &:hover {
+    scrollbar-color: color-mix(in srgb, var(--el-text-color-secondary) 45%, transparent) transparent;
+  }
+
+  &:hover::-webkit-scrollbar-thumb {
+    background-color: color-mix(in srgb, var(--el-text-color-secondary) 45%, transparent);
   }
 }
 
@@ -2926,31 +2961,48 @@ export default {
 
 .x-tree__body.is-virtual :deep(.el-tree-virtual-list) {
   min-width: 100%;
-  overflow-x: auto !important;
+  overflow: auto !important;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
 }
 
-.x-tree__body.is-virtual :deep(.el-tree-virtual-list)::-webkit-scrollbar:horizontal {
-  display: none;
-  height: 0;
+.x-tree__body.is-virtual :deep(.el-tree-virtual-list)::-webkit-scrollbar {
+  -webkit-appearance: none;
+  display: block;
+  width: var(--tree-scrollbar-size);
+  height: var(--tree-scrollbar-size);
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.x-tree__body.is-virtual :deep(.el-tree-virtual-list)::-webkit-scrollbar-track,
+.x-tree__body.is-virtual :deep(.el-tree-virtual-list)::-webkit-scrollbar-track-piece,
+.x-tree__body.is-virtual :deep(.el-tree-virtual-list)::-webkit-scrollbar-corner {
+  -webkit-appearance: none;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.x-tree__body.is-virtual :deep(.el-tree-virtual-list)::-webkit-scrollbar-thumb {
+  border: 0;
+  border-radius: 999px;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.x-tree__body.is-virtual :deep(.el-tree-virtual-list:hover) {
+  scrollbar-color: color-mix(in srgb, var(--el-text-color-secondary) 45%, transparent) transparent;
+}
+
+.x-tree__body.is-virtual :deep(.el-tree-virtual-list:hover)::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--el-text-color-secondary) 45%, transparent);
 }
 
 .x-tree__body.is-virtual :deep(.el-virtual-scrollbar) {
-  right: 0 !important;
-  width: var(--scrollbar-size) !important;
-  border-radius: 999px !important;
-}
-
-.x-tree__body.is-virtual :deep(.el-virtual-scrollbar .el-scrollbar__thumb) {
-  box-sizing: border-box;
-  border: 2px solid transparent;
-  background-color: var(--scrollbar-thumb);
-  background-clip: padding-box;
-  border-radius: 999px;
-  opacity: 1;
-}
-
-.x-tree__body.is-virtual :deep(.el-virtual-scrollbar:hover .el-scrollbar__thumb) {
-  background-color: var(--scrollbar-thumb-hover);
+  display: none !important;
 }
 
 .x-tree__body :deep(.el-tree) {

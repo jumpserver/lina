@@ -1,9 +1,5 @@
 <template>
-  <div
-    ref="listRoot"
-    class="list-table"
-    :class="{ 'list-table--fill-height': resolvedFillHeight }"
-  >
+  <div ref="listRoot" class="list-table" :class="{ 'list-table--fill-height': resolvedFillHeight }">
     <QuickFilter
       v-if="iHasQuickFilter"
       v-model:expand="filterExpand"
@@ -94,8 +90,8 @@ export default {
       tableConfig: null
     }
     provide(LIST_TABLE_KEY, listTableContext)
-    const { listRoot, fillHeight: viewportFillHeight } = useListTableViewport()
-    const resolvedFillHeight = computed(() => props.fillHeight || viewportFillHeight.value)
+    const { listRoot } = useListTableViewport()
+    const resolvedFillHeight = computed(() => props.fillHeight)
     return { listTableContext, listRoot, resolvedFillHeight }
   },
   props: {
@@ -580,17 +576,42 @@ export default {
   min-width: 0;
 }
 
-.table-content {
+.list-table .table-content {
   min-width: 0;
 
   > :deep(.ibox) {
     // Element Plus transitions all card properties by default, including the
     // flex sizing applied when a list fills its page. Never animate that layout.
     transition: none;
+    // The outer card owns the list border and rounded corners. Clip the inner
+    // table so its square layers cannot interrupt the four corner arcs.
+    overflow: hidden !important;
   }
 
   :deep(.el-card__body) {
     padding: 0;
+  }
+
+  :deep(.el-data-table__body > .el-table),
+  :deep(.el-table__inner-wrapper) {
+    border-radius: 0;
+  }
+
+  :deep(.el-data-table__body > .el-table--border) {
+    &::before,
+    &::after {
+      display: none;
+    }
+
+    > .el-table__inner-wrapper > .el-table__border-left-patch,
+    > .el-table__inner-wrapper > .el-table__border-right-patch,
+    > .el-table__inner-wrapper > .el-table__border-bottom-patch {
+      display: none;
+    }
+
+    tr > .el-table__cell:last-child {
+      border-right: 0 !important;
+    }
   }
 
   :deep(.el-table__row .cell) {

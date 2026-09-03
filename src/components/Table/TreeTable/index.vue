@@ -2,7 +2,7 @@
   <div
     v-bind="rootAttrs"
     ref="treeTableContent"
-    :class="{ 'is-resizing': resizing }"
+    :class="{ 'is-resizing': resizing, 'is-page-sticky': treePanelViewportHeight !== null }"
     class="tree-table-content"
   >
     <div v-show="mountTree && iShowTree" ref="treePanel" :style="leftStyle" class="left">
@@ -30,6 +30,7 @@
       v-if="mountTree"
       ref="treeResizer"
       :class="{ 'is-collapsed': !iShowTree }"
+      :style="treeResizerStyle"
       class="tree-resizer"
       role="separator"
       tabindex="0"
@@ -195,13 +196,31 @@ export default {
       resizing: false,
       resizeStartX: 0,
       resizeStartWidth: 0,
-      treeFitFrame: null
+      treeFitFrame: null,
+      treePanelViewportHeight: null,
+      treePanelStickyTop: 0,
+      treeViewportElement: null,
+      treeViewportObserver: null
     }
   },
   computed: {
     leftStyle() {
-      return {
+      const style = {
         width: this.leftWidth === null ? this.treeWidth : `${this.leftWidth}px`
+      }
+      if (this.treePanelViewportHeight !== null) {
+        style.height = `${this.treePanelViewportHeight}px`
+        style.top = `${this.treePanelStickyTop}px`
+      }
+      return style
+    },
+    treeResizerStyle() {
+      if (this.treePanelViewportHeight === null) {
+        return undefined
+      }
+      return {
+        height: `${this.treePanelViewportHeight}px`,
+        top: `${this.treePanelStickyTop}px`
       }
     },
     rootAttrs() {
@@ -230,15 +249,50 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.initializeTreeWidth()
+      this.setupStickyTreeViewport()
     })
   },
   beforeUnmount() {
     this.stopResize()
+    this.teardownStickyTreeViewport()
     if (this.treeFitFrame !== null) {
       window.cancelAnimationFrame(this.treeFitFrame)
     }
   },
   methods: {
+    setupStickyTreeViewport() {
+      const viewport = this.$refs.treeTableContent?.closest('[data-list-layout="viewport"]')
+      if (!viewport) {
+        return
+      }
+      this.treeViewportElement = viewport
+      this.updateStickyTreeViewport()
+      window.addEventListener('resize', this.updateStickyTreeViewport)
+      if (typeof ResizeObserver !== 'undefined') {
+        this.treeViewportObserver = new ResizeObserver(this.updateStickyTreeViewport)
+        this.treeViewportObserver.observe(viewport)
+      }
+    },
+    teardownStickyTreeViewport() {
+      window.removeEventListener('resize', this.updateStickyTreeViewport)
+      this.treeViewportObserver?.disconnect()
+      this.treeViewportObserver = null
+      this.treeViewportElement = null
+    },
+    updateStickyTreeViewport() {
+      const viewport = this.treeViewportElement
+      if (!viewport) {
+        return
+      }
+      const viewportStyle = window.getComputedStyle(viewport)
+      const paddingTop = Number.parseFloat(viewportStyle.paddingTop) || 0
+      const paddingBottom = Number.parseFloat(viewportStyle.paddingBottom) || 0
+      this.treePanelStickyTop = 0
+      this.treePanelViewportHeight = Math.max(
+        120,
+        Math.round(viewport.clientHeight - paddingTop - paddingBottom)
+      )
+    },
     getConfiguredTreeWidth(containerWidth) {
       const configuredWidth = String(this.treeWidth).trim()
       const parsedWidth = Number.parseFloat(configuredWidth)
@@ -434,6 +488,16 @@ $origin-color: #ffffff;
     cursor: col-resize;
   }
 
+  &.is-page-sticky {
+    align-items: flex-start;
+
+    > .left,
+    > .tree-resizer {
+      position: sticky;
+      align-self: flex-start;
+    }
+  }
+
   .left {
     box-sizing: border-box;
     flex: none;
@@ -471,7 +535,7 @@ $origin-color: #ffffff;
         overflow: hidden;
 
         :deep(.tree-view-header) {
-          height: 40px;
+          height: var(--tree-table-header-height, 37px);
         }
       }
     }
@@ -506,6 +570,7 @@ $origin-color: #ffffff;
     cursor: default;
 
     .tree-toggle {
+      border-left: 1px solid var(--panel-border-color, var(--el-border-color));
       transform: translate(-20px, -50%);
     }
   }
@@ -539,7 +604,7 @@ $origin-color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 13px;
+  width: 14px;
   height: 34px;
   padding: 0;
   border: 1px solid var(--panel-border-color, var(--el-border-color));
@@ -591,5 +656,45 @@ $origin-color: #ffffff;
   background: var(--page-background-color, #fff);
   border: 1px solid var(--panel-border-color, var(--el-border-color));
   border-radius: 2px;
+}
+
+@media screen and (max-width: 767px) {
+  .tree-table-content {
+    flex-direction: column;
+  }
+
+  .tree-table-content .left {
+    position: static;
+    width: 100% !important;
+    min-height: 120px;
+    max-height: 240px;
+  }
+
+  .tree-resizer,
+  .tree-resizer.is-collapsed {
+    position: static;
+    flex: 0 0 0;
+    width: 100%;
+    height: 0 !important;
+  }
+
+  .tree-resize-handle {
+    display: none;
+  }
+
+  .tree-toggle,
+  .tree-resizer.is-collapsed .tree-toggle {
+    top: 0;
+    right: 10px;
+    left: auto;
+    transform: translateY(-50%) rotate(90deg);
+    opacity: 1;
+  }
+
+  .right,
+  .transition-box {
+    min-height: 0;
+    width: 100%;
+  }
 }
 </style>

@@ -179,25 +179,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables' as *;
-
 .page {
-  // 这个不加的话，page title 也会滚动
-  // 高度需与固定头部 $headerHeight（40px）一致，否则底部内容滚不到 / 顶部留白
-  height: calc(100vh - #{$headerHeight});
+  --page-heading-icon-inset: 6px;
+
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  overflow-y: hidden;
-  overflow-x: hidden;
+  overflow: hidden;
   background-color: var(--page-background-color, #fff);
+
+  .page-head {
+    flex: none;
+    min-width: 0;
+  }
 
   .el-alert {
     margin: 0 !important;
   }
 
   .page-content {
-    flex: 1; /* 占用剩余高度 */
-    min-height: 0; /* flex 子项默认 min-height:auto 不会收缩，导致内部滚动底部被裁剪 */
+    flex: 1 1 auto;
+    min-height: 0;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
@@ -234,7 +240,7 @@ export default {
   border: none;
   width: 30px;
   height: 30px;
-  padding: 6px;
+  padding: var(--page-heading-icon-inset);
   min-height: 30px;
   min-width: 30px;
 }

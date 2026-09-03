@@ -1,15 +1,16 @@
 <template>
-  <Page v-bind="$attrs" :title="title" class="tab-page">
-    <div
-      :class="{ 'has-tab-navigation': tabIndices.length > 1 }"
-      class="tab-page-wrapper"
-    >
+  <Page
+    v-bind="$attrs"
+    :class="{ 'has-tab-navigation': tabIndices.length > 1 }"
+    :title="title"
+    class="tab-page"
+  >
+    <div :class="{ 'has-tab-navigation': tabIndices.length > 1 }" class="tab-page-wrapper">
       <div v-if="tabIndices.length > 1 || $slots.headingRightSide" class="tab-page-submenu">
         <el-tabs
           v-if="tabIndices.length > 1"
           v-model="iActiveMenu"
           class="page-submenu"
-          type="card"
           @tab-click="handleTabClick"
         >
           <template v-for="item in tabIndices" :key="item.name">
@@ -276,12 +277,13 @@ export default {
 
 <style lang="scss" scoped>
 .page-submenu {
-  --el-border-color-light: var(--panel-border-color, var(--el-border-color));
   --el-tabs-header-height: var(--tab-page-header-height, 34px);
+  --tab-page-navigation-background-color: var(--page-background-color, #fff);
 
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
+  background-color: var(--tab-page-navigation-background-color);
 }
 
 .page-submenu :deep(.el-tabs__header) {
@@ -289,11 +291,11 @@ export default {
   align-items: stretch;
   height: var(--tab-page-header-height, 34px);
   min-height: var(--tab-page-header-height, 34px);
-  margin: 0 0 -1px;
-  padding: 0 var(--tab-page-inline-padding, 20px);
+  margin: 0;
+  padding: 0 var(--tab-page-inline-padding, var(--page-inline-padding, 20px));
   box-sizing: border-box;
-  background-color: var(--page-background-color, #fff);
-  border-bottom: 0;
+  background-color: var(--tab-page-navigation-background-color);
+  border: 0;
 }
 
 .page-submenu :deep(.el-tabs__nav-wrap),
@@ -301,37 +303,46 @@ export default {
 .page-submenu :deep(.el-tabs__nav) {
   display: flex;
   align-items: stretch;
+  background-color: var(--tab-page-navigation-background-color);
 }
 
 .page-submenu :deep(.el-tabs__nav-wrap.is-top) {
   position: relative;
   flex: 1 1 auto;
-  margin: 0 0 -1px;
+  margin: 0;
+  border: 0;
 
   &::after {
-    content: '';
-    position: absolute;
-    z-index: 1;
-    right: 0;
-    bottom: 1px;
-    left: 0;
-    display: block;
-    height: 1px;
-    background-color: var(--panel-border-color, var(--el-border-color));
-    pointer-events: none;
+    display: none;
   }
 }
 
 .page-submenu :deep(.el-tabs__header .el-tabs__nav) {
   position: relative;
   z-index: 2;
-  gap: 4px;
+  gap: 0;
   border: 0;
   border-radius: 0;
 }
 
 .page-submenu :deep(.el-tabs__active-bar) {
-  display: none;
+  z-index: 3;
+  bottom: 1px;
+  display: block;
+  height: 2px;
+  background-color: transparent;
+  transition: transform 240ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -6px;
+    bottom: 0;
+    left: -6px;
+    background-color: var(--el-color-primary);
+    border-radius: 3px;
+  }
 }
 
 .page-submenu :deep(.el-tabs__header .el-tabs__item),
@@ -341,11 +352,11 @@ export default {
   align-items: center;
   height: var(--tab-page-header-height, 34px);
   margin-top: 0;
-  padding: 0 14px;
-  font-size: 13px;
+  padding: 0 24px;
+  font-size: 14px;
   font-weight: 500;
-  color: var(--el-text-color-regular, #606266);
-  background-color: var(--page-background-color, #fff);
+  color: var(--el-text-color-primary, #303133);
+  background-color: var(--tab-page-navigation-background-color);
   border: 0;
   border-radius: 0;
   user-select: none;
@@ -353,32 +364,16 @@ export default {
     color 120ms ease,
     background-color 120ms ease;
 
-  &:not(.is-active) {
-    border-bottom: 1px solid var(--panel-border-color, var(--el-border-color));
-  }
-
   &.is-active {
     z-index: 2;
-    color: var(--el-color-primary);
-    background-color: var(--page-background-color, #fff);
-    border: 1px solid var(--panel-border-color, var(--el-border-color));
-    border-bottom: 0;
+    color: var(--el-text-color-primary, #303133);
+    background-color: var(--tab-page-navigation-background-color);
+    border: 0;
     border-radius: 4px 4px 0 0;
     box-shadow: none;
 
-    &::after {
-      content: '';
-      position: absolute;
-      z-index: 3;
-      right: 0;
-      bottom: -2px;
-      left: 0;
-      height: 3px;
-      background-color: var(--page-background-color, #fff);
-      pointer-events: none;
-    }
-
     .pre-icon {
+      color: var(--el-text-color-primary, #303133);
       opacity: 1;
     }
   }
@@ -387,14 +382,13 @@ export default {
   &.is-active:focus:active,
   &.is-active:focus-visible {
     outline: none;
-    border-color: var(--panel-border-color, var(--el-border-color));
-    border-bottom: 0;
+    border: 0;
     box-shadow: none;
   }
 
   &:not(.is-active, .is-disabled):hover {
-    color: var(--el-text-color-regular, #606266);
-    background-color: var(--page-background-color, #fff);
+    color: var(--el-text-color-primary, #303133);
+    background-color: var(--tab-page-navigation-background-color);
     cursor: pointer;
   }
 
@@ -408,7 +402,7 @@ export default {
     font-size: 14px;
     line-height: 1;
     vertical-align: middle;
-    opacity: 0.6;
+    opacity: 0.62;
 
     > .fa,
     > .el-icon,
@@ -435,6 +429,10 @@ export default {
 
 .page-submenu :deep(.el-tabs__header .el-tabs__item + .el-tabs__item) {
   margin-left: 0;
+}
+
+.page-submenu :deep(.el-tabs__nav > .el-tabs__active-bar + .el-tabs__item) {
+  padding-left: var(--page-heading-icon-inset, 6px);
 }
 
 .page-submenu :deep(.tab-page-submenu-item-wrapper) {
@@ -476,7 +474,7 @@ export default {
     top: 0;
     height: var(--tab-page-header-height, 34px);
     line-height: var(--tab-page-header-height, 34px);
-    background-color: var(--page-background-color, #fff);
+    background-color: var(--tab-page-navigation-background-color);
   }
 
   .el-tabs__nav-next {
@@ -489,6 +487,13 @@ export default {
 }
 
 .tab-page {
+  --tab-page-header-height: 40px;
+
+  &.has-tab-navigation > :deep(.page-head .page-heading) {
+    height: 44px;
+    border-bottom: 0;
+  }
+
   .tab-page-wrapper {
     height: 100%;
     display: flex;
@@ -497,6 +502,23 @@ export default {
 
     &.has-tab-navigation > .tab-page-content {
       padding-top: 16px;
+    }
+
+    &.has-tab-navigation > .tab-page-submenu {
+      position: relative;
+      border-bottom: 0;
+
+      &::after {
+        content: '';
+        position: absolute;
+        z-index: 3;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 1px;
+        background-color: var(--panel-border-color, var(--el-border-color));
+        pointer-events: none;
+      }
     }
   }
 
@@ -520,7 +542,7 @@ export default {
     align-items: center;
     justify-content: flex-end;
     margin-left: 12px;
-    padding-right: 20px;
+    padding-right: var(--page-inline-padding, 20px);
     flex-shrink: 0;
   }
 
@@ -528,27 +550,35 @@ export default {
     padding: 5px 8px;
   }
 
-  :deep(.page-content) {
+  > :deep(.page-content) {
     overflow-y: hidden !important;
-    padding: 12px 0 0;
+    padding: var(--page-content-top-padding, 12px) 0 0;
     scrollbar-gutter: auto;
+    background-color: var(--page-content-background-color, #f3f3f4);
+  }
+
+  &.has-tab-navigation > :deep(.page-content) {
+    padding-top: 0;
+    background-color: var(--page-content-background-color, #f3f3f4);
   }
 
   .tab-page-content {
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--page-section-gap, 8px);
     min-height: 0;
-    padding: 10px 20px 0;
+    min-width: 0;
+    padding: 10px var(--page-inline-padding, 20px) 0;
     overflow: auto;
-    scrollbar-gutter: stable;
+    scrollbar-gutter: auto;
+    background-color: var(--page-content-background-color, #f3f3f4);
 
-    // Tab 内容保留统一的可用宽度；视口或抽屉继续收窄时由内容区滚动，
-    // 不再让表单、帮助文案和复杂控件无限压缩。
+    // 子页跟随可用宽度收缩；表格等需要最小列宽的组件自己承担横向滚动。
     > :deep(*) {
       flex-shrink: 0;
-      min-width: 600px;
+      min-width: 0;
+      max-width: 100%;
       box-sizing: border-box;
     }
 
@@ -597,7 +627,7 @@ export default {
   .tab-page-content > :deep(div[class='']) {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--page-section-gap, 8px);
   }
 
   .tab-page-content :deep(.tab-page-alert) {
