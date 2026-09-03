@@ -133,7 +133,7 @@
               :key="item.version?.root_id || item._render_key || item.id"
               :approval="approval"
               :approval-processing="approvalProcessing"
-              :assistant-name="assistantName(currentAssistant)"
+              :assistant-name="t('ChatAIName')"
               :can-edit="!busy"
               :can-regenerate="item.id === latestAssistantMessageId"
               :message="item"
@@ -141,7 +141,7 @@
               @cancel-approval="handleCancelApproval"
               @branch="handleBranchMessage"
               @confirm-approval="handleConfirmApproval"
-              @retry="regenerateMessage"
+              @retry="handleRegenerateMessage"
               @select-version="selectAnswerVersion(item.version?.root_id, $event)"
             />
           </div>
@@ -166,40 +166,6 @@
               ><el-icon><Warning /></el-icon> {{ t('ChatAIRunRecovery') }}</span
             >
             <button type="button" @click="stopGeneration">{{ t('ChatAICancelTask') }}</button>
-          </div>
-          <div class="composer-mode-bar">
-            <el-dropdown
-              popper-class="chat-ai-assistant-dropdown"
-              trigger="click"
-              :disabled="navigationLocked"
-              @command="handleAssistantChange"
-            >
-              <button class="assistant-mode-button" type="button" :disabled="navigationLocked">
-                <span class="assistant-mode-button__dot" />
-                <span>{{ assistantName(currentAssistant) }}</span>
-                <el-icon><ArrowDown /></el-icon>
-              </button>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item
-                    v-for="assistant in assistants"
-                    :key="assistant.key"
-                    :command="assistant.key"
-                  >
-                    <span class="assistant-option-copy">
-                      <strong>{{ assistantName(assistant) }}</strong>
-                      <small>{{ assistantDescription(assistant) }}</small>
-                    </span>
-                    <el-icon
-                      v-if="assistant.key === selectedAssistantKey"
-                      class="assistant-option-check"
-                    >
-                      <Check />
-                    </el-icon>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown>
           </div>
           <ChatInput
             ref="composer"
@@ -231,13 +197,9 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import {
-  ArrowDown,
   ArrowRight,
   Bottom,
-  Check,
-  ChatDotRound,
   Close,
-  Coin,
   Connection,
   EditPen,
   FullScreen,
@@ -295,9 +257,6 @@ const webSearchAvailable = computed(() => {
 
 const {
   conversations,
-  assistants,
-  currentAssistant,
-  selectedAssistantKey,
   activeConversationId,
   visibleMessages,
   latestAssistantMessageId,
@@ -321,7 +280,6 @@ const {
   loadMessages,
   selectConversation: selectConversationState,
   newConversation,
-  selectAssistant,
   selectAnswerVersion,
   removeConversation,
   renameConversation,
@@ -344,7 +302,7 @@ const activityLabel = computed(() => {
   return t('ChatAIWorking')
 })
 const composerDraftKey = computed(() => {
-  return activeConversationId.value || `new:${selectedAssistantKey.value}`
+  return activeConversationId.value || 'new'
 })
 const messageLoadFailed = computed(() => {
   const conversationFailed = activeConversationId.value && !visibleMessages.value.length
@@ -360,67 +318,28 @@ const navigationLocked = computed(() => {
   return busy.value || composerRecording.value || transcribing.value || loadingMessages.value
 })
 
-const assistantCopy = {
-  general: {
-    name: 'ChatAIAssistantGeneral',
-    description: 'ChatAIAssistantGeneralDescription',
-    starters: ['ChatAIStarterProductHelp', 'ChatAIStarterSafeUsage'],
-    icon: ChatDotRound
-  },
-  management: {
-    name: 'ChatAIAssistantManagement',
-    description: 'ChatAIAssistantManagementDescription',
-    starters: ['ChatAIStarterEnvironment', 'ChatAIStarterExceptions'],
-    icon: Setting
-  },
-  asset: {
-    name: 'ChatAIAssistantAsset',
-    description: 'ChatAIAssistantAssetDescription',
-    starters: ['ChatAIStarterAssets', 'ChatAIStarterNodes'],
-    icon: Monitor
-  },
-  session_audit: {
-    name: 'ChatAIAssistantAudit',
-    description: 'ChatAIAssistantAuditDescription',
-    starters: ['ChatAIStarterFailedLogins', 'ChatAIStarterSessionTimeline'],
-    icon: Connection
-  },
-  ops: {
-    name: 'ChatAIAssistantOps',
-    description: 'ChatAIAssistantOpsDescription',
-    starters: ['ChatAIStarterFailedJobs', 'ChatAIStarterTerminalHealth'],
-    icon: Coin
-  }
-}
-
 const suggestions = computed(() => {
-  const assistant = currentAssistant.value
-  const copy = assistantCopy[assistant.key]
-  const prompts = copy?.starters?.map((key) => t(key)) || assistant.starter_prompts || []
-  const tones = ['primary', 'info', 'warning']
-  return prompts.map((text, index) => ({
-    icon: copy?.icon || Coin,
-    tone: tones[index % tones.length],
-    title: assistantName(assistant),
-    text
-  }))
+  return [
+    {
+      icon: Monitor,
+      tone: 'primary',
+      title: t('ChatAISuggestionAssetsTitle'),
+      text: t('ChatAISuggestionAssets')
+    },
+    {
+      icon: Connection,
+      tone: 'info',
+      title: t('ChatAISuggestionNodesTitle'),
+      text: t('ChatAISuggestionNodes')
+    },
+    {
+      icon: Setting,
+      tone: 'warning',
+      title: t('ChatAISuggestionCreateTitle'),
+      text: t('ChatAISuggestionCreate')
+    }
+  ]
 })
-const localizedAssistants = computed(() => {
-  return assistants.value.map((assistant) => ({
-    ...assistant,
-    name: assistantName(assistant)
-  }))
-})
-
-function assistantName(assistant) {
-  const copy = assistantCopy[assistant?.key]
-  return copy ? t(copy.name) : assistant?.name || t('ChatAIName')
-}
-
-function assistantDescription(assistant) {
-  const copy = assistantCopy[assistant?.key]
-  return copy ? t(copy.description) : assistant?.description || ''
-}
 
 function friendlyError(error) {
   const code = error?.code || error?.response?.data?.code
@@ -525,21 +444,20 @@ async function sendMessage(content, images, options) {
 
 async function handleBranchMessage(messageId, content) {
   stickToBottom.value = true
-  const branched = await branchMessage(messageId, content)
+  const options = webSearchAvailable.value ? {} : { webSearch: false }
+  const branched = await branchMessage(messageId, content, options)
   if (!branched) return
   await nextTick()
   scrollToBottom(true, true)
 }
 
-function fillSuggestion(content) {
-  composer.value?.setValue(content)
+function handleRegenerateMessage(messageId) {
+  const options = webSearchAvailable.value ? {} : { webSearch: false }
+  return regenerateMessage(messageId, options)
 }
 
-async function handleAssistantChange(key) {
-  if (navigationLocked.value) return
-  await selectAssistant(key)
-  await nextTick()
-  composer.value?.focus()
+function fillSuggestion(content) {
+  composer.value?.setValue(content)
 }
 
 async function retryLoadingMessages() {
@@ -895,84 +813,6 @@ defineExpose({ init, focus, newConversation: handleNew })
   z-index: 10;
   padding: 6px 14px 6px;
   background: linear-gradient(180deg, rgb(255 255 255 / 72%), #fff 14px);
-}
-
-.composer-mode-bar {
-  display: flex;
-  width: min(100%, 780px);
-  min-height: 22px;
-  align-items: center;
-  margin: 0 auto 2px;
-}
-
-.assistant-mode-button {
-  display: inline-flex;
-  height: 22px;
-  align-items: center;
-  gap: 6px;
-  padding: 0 7px;
-  border: 0;
-  border-radius: var(--ai-radius-xs);
-  color: #6f7687;
-  background: transparent;
-  cursor: pointer;
-  font-size: 10px;
-
-  &:hover {
-    color: var(--ai-primary-dark);
-    background: var(--ai-primary-light);
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.55;
-  }
-
-  &__dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--ai-primary);
-  }
-}
-
-:global(.chat-ai-assistant-dropdown) {
-  z-index: 3000 !important;
-  width: min(330px, calc(100vw - 24px));
-}
-
-:global(.chat-ai-assistant-dropdown .el-dropdown-menu__item) {
-  display: flex;
-  min-height: 54px;
-  align-items: center;
-  gap: 10px;
-  padding: 7px 12px;
-}
-
-:global(.chat-ai-assistant-dropdown .assistant-option-copy) {
-  display: flex;
-  min-width: 0;
-  flex: 1;
-  flex-direction: column;
-  gap: 2px;
-}
-
-:global(.chat-ai-assistant-dropdown .assistant-option-copy strong) {
-  color: #414755;
-  font-size: 11px;
-  font-weight: 650;
-}
-
-:global(.chat-ai-assistant-dropdown .assistant-option-copy small) {
-  overflow: hidden;
-  color: #9298a7;
-  font-size: 9px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-:global(.chat-ai-assistant-dropdown .assistant-option-check) {
-  color: var(--el-color-primary, #1ab394);
 }
 
 .scroll-latest-button {
