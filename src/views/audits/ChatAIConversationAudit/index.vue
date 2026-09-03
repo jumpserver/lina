@@ -22,9 +22,6 @@
               <h3>{{ selected.title || t('ChatAIUntitledConversation') }}</h3>
               <p>{{ userDisplay(selected.user) }}</p>
               <div class="audit-detail__metadata">
-                <span class="audit-assistant-badge">
-                  {{ assistantLabel(selected.assistant) }}
-                </span>
                 <span>{{ formatDate(selected.date_updated) }}</span>
               </div>
             </div>
@@ -133,7 +130,7 @@ const tableConfig = computed(() => ({
   },
   columnsShow: {
     min: ['user', 'title'],
-    default: ['user', 'title', 'assistant', 'question_count', 'date_updated', 'actions']
+    default: ['user', 'title', 'question_count', 'date_updated', 'actions']
   },
   columnsMeta: {
     user: {
@@ -145,11 +142,6 @@ const tableConfig = computed(() => ({
       label: t('ChatAIConversationTitle'),
       minWidth: '260px',
       formatter: (row) => row.title || t('ChatAIUntitledConversation')
-    },
-    assistant: {
-      label: t('ChatAIAssistant'),
-      width: '140px',
-      formatter: (row) => assistantLabel(row.assistant)
     },
     question_count: {
       label: t('ChatAIAuditQuestions'),
@@ -223,16 +215,6 @@ function userDisplay(user) {
 function userInitial(user) {
   const value = user?.name || user?.username || '?'
   return String(value).trim().charAt(0).toUpperCase() || '?'
-}
-
-function assistantLabel(value) {
-  const labels = {
-    general: t('ChatAIAssistantGeneral'),
-    asset: t('ChatAIAssistantAsset'),
-    session_audit: t('ChatAIAssistantAudit'),
-    ops: t('ChatAIAssistantOps')
-  }
-  return labels[value] || value || '—'
 }
 
 function roleLabel(value) {
@@ -362,22 +344,6 @@ watch(
     border-radius: 12px;
     font-size: 16px;
   }
-}
-
-.audit-assistant-badge {
-  display: inline-flex;
-  max-width: 100%;
-  align-items: center;
-  padding: 5px 9px;
-  overflow: hidden;
-  border: 1px solid #d8ebe6;
-  border-radius: 999px;
-  color: #367064;
-  background: #f3faf8;
-  font-size: 10.5px;
-  font-weight: 600;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .audit-access-logged {

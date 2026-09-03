@@ -8,7 +8,6 @@ import {
   createConversation,
   deleteConversation as deleteConversationRequest,
   getApproval,
-  listAssistants,
   listConversationMessages,
   listConversations,
   regenerateConversationMessage,
@@ -19,12 +18,6 @@ import {
 } from '@/api/chatAi'
 
 const APPROVAL_STORAGE_KEY = 'jumpserver_chat_ai_pending_approvals'
-const DEFAULT_ASSISTANT = {
-  key: 'general',
-  name: 'JumpServer assistant',
-  description: '',
-  starter_prompts: []
-}
 
 function temporaryId(prefix) {
   return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`
@@ -116,6 +109,7 @@ function normalizeMessage(message) {
     result_cards: Array.isArray(message.result_cards)
       ? message.result_cards.map((card) => ({ ...card }))
       : [],
+    web_search: message.web_search === true,
     regenerated_from: message.regenerated_from || null,
     date_created: message.date_created || new Date().toISOString()
   }
@@ -177,8 +171,6 @@ function revokeLocalAttachments(items) {
 
 export function useChatAi(options = {}) {
   const conversations = ref([])
-  const assistants = ref([DEFAULT_ASSISTANT])
-  const selectedAssistantKey = ref(DEFAULT_ASSISTANT.key)
   const activeConversationId = ref('')
   const messages = ref([])
   const answerVersionSelections = ref({})
@@ -206,14 +198,6 @@ export function useChatAi(options = {}) {
 
   const activeConversation = computed(() => {
     return conversations.value.find((item) => item.id === activeConversationId.value) || null
-  })
-
-  const currentAssistant = computed(() => {
-    return (
-      assistants.value.find((item) => item.key === selectedAssistantKey.value) ||
-      assistants.value[0] ||
-      DEFAULT_ASSISTANT
-    )
   })
 
   const rawVisibleMessages = computed(() => {
@@ -281,23 +265,6 @@ export function useChatAi(options = {}) {
       return false
     } finally {
       if (!silent) loadingConversations.value = false
-    }
-  }
-
-  async function loadAssistants() {
-    try {
-      const response = await listAssistants()
-      const items = serverResults(response)
-      if (!items.length) throw new Error()
-      assistants.value = items
-      if (!items.some((item) => item.key === selectedAssistantKey.value)) {
-        selectedAssistantKey.value = items[0].key
-      }
-      return true
-    } catch (error) {
-      assistants.value = []
-      emitError(error)
-      return false
     }
   }
 
@@ -408,7 +375,6 @@ export function useChatAi(options = {}) {
 
   async function initialize() {
     if (initialized.value) return
-    if (!(await loadAssistants())) return
     initialized.value = await loadConversations({ selectFirst: true })
   }
 
@@ -416,8 +382,6 @@ export function useChatAi(options = {}) {
     if (!id || id === activeConversationId.value) return true
     if (busy.value) return false
     clearRemoteRunPoll()
-    const conversation = conversations.value.find((item) => item.id === id)
-    selectedAssistantKey.value = conversation?.assistant || DEFAULT_ASSISTANT.key
     activeConversationId.value = id
     revokeLocalAttachments(messages.value)
     messages.value = []
@@ -437,22 +401,6 @@ export function useChatAi(options = {}) {
     approval.value = null
     lastError.value = null
     return true
-  }
-
-  async function selectAssistant(key) {
-    if (!key || key === selectedAssistantKey.value) return true
-    if (busy.value || !assistants.value.some((item) => item.key === key)) return false
-    selectedAssistantKey.value = key
-    if (!activeConversationId.value) return true
-    try {
-      const conversation = await updateConversation(activeConversationId.value, { assistant: key })
-      updateConversationLocally(conversation.id, conversation)
-      return true
-    } catch (error) {
-      selectedAssistantKey.value = activeConversation.value?.assistant || DEFAULT_ASSISTANT.key
-      emitError(error)
-      return false
-    }
   }
 
   function selectAnswerVersion(rootId, messageId) {
@@ -665,7 +613,7 @@ export function useChatAi(options = {}) {
 
   async function ensureConversation(content) {
     if (activeConversationId.value) return activeConversation.value
-    const conversation = await createConversation({ assistant: selectedAssistantKey.value })
+    const conversation = await createConversation()
     conversations.value.unshift(conversation)
     activeConversationId.value = conversation.id
     updateConversationLocally(conversation.id, {
@@ -679,6 +627,7 @@ export function useChatAi(options = {}) {
     const content = String(rawContent || '')
     const images = Array.from(imageFiles || [])
     const files = Array.from(options.files || [])
+    const webSearch = options.webSearch === true
     if ((!content.trim() && !images.length && !files.length) || busy.value) return false
     if (options.background === true && (images.length || files.length || !content.trim())) {
       return false
@@ -702,7 +651,7 @@ export function useChatAi(options = {}) {
       backgroundQueuing.value = true
       try {
         await sendBackgroundConversationMessage(conversation.id, content, {
-          webSearch: options.webSearch === true,
+          webSearch,
           notify: true
         })
         options.onAccepted?.()
@@ -738,6 +687,7 @@ export function useChatAi(options = {}) {
         file,
         local: true
       })),
+      web_search: webSearch,
       status: 'completed',
       date_created: now
     })
@@ -748,6 +698,7 @@ export function useChatAi(options = {}) {
       role: 'assistant',
       content: '',
       status: 'streaming',
+      web_search: webSearch,
       date_created: now
     })
     messages.value.push(userMessage, assistantMessage)
@@ -765,7 +716,7 @@ export function useChatAi(options = {}) {
       await streamConversationMessage(conversation.id, content, {
         images,
         files,
-        webSearch: options.webSearch === true,
+        webSearch,
         signal: abortController.signal,
         onEvent: handleStreamEvent
       })
@@ -875,6 +826,10 @@ export function useChatAi(options = {}) {
     const sourceConversation = activeConversation.value
     const sourceMessage = messageById(messageId)
     const content = String(rawContent || '')
+    const webSearch =
+      typeof options.webSearch === 'boolean'
+        ? options.webSearch
+        : sourceMessage?.web_search === true
     if (
       !sourceConversation ||
       sourceMessage?.role !== 'user' ||
@@ -893,6 +848,7 @@ export function useChatAi(options = {}) {
       ...sourceMessage,
       id: temporaryId('user'),
       content,
+      web_search: webSearch,
       date_created: now
     })
     temporaryAssistantId = temporaryId('assistant')
@@ -900,6 +856,7 @@ export function useChatAi(options = {}) {
       id: temporaryAssistantId,
       role: 'assistant',
       status: 'streaming',
+      web_search: webSearch,
       date_created: now
     })
     let branchConversationId = ''
@@ -940,7 +897,7 @@ export function useChatAi(options = {}) {
 
     try {
       await branchConversationMessage(sourceConversation.id, messageId, content, {
-        webSearch: options.webSearch === true,
+        webSearch,
         signal: abortController.signal,
         onConversation: activateBranch,
         onEvent: (packet) => {
@@ -977,6 +934,11 @@ export function useChatAi(options = {}) {
     if (!messageId || busy.value) return false
     const conversationId = activeConversationId.value
     if (!conversationId) return false
+    const sourceMessage = messageById(messageId)
+    const webSearch =
+      typeof options.webSearch === 'boolean'
+        ? options.webSearch
+        : sourceMessage?.web_search === true
     streamConversationId = conversationId
 
     lastError.value = null
@@ -999,6 +961,7 @@ export function useChatAi(options = {}) {
         id: temporaryAssistantId,
         role: 'assistant',
         status: 'streaming',
+        web_search: webSearch,
         regenerated_from: messageId,
         date_created: new Date().toISOString()
       })
@@ -1009,7 +972,7 @@ export function useChatAi(options = {}) {
 
     try {
       await regenerateConversationMessage(conversationId, messageId, {
-        webSearch: options.webSearch === true,
+        webSearch,
         signal: abortController.signal,
         onEvent: handleStreamEvent
       })
@@ -1048,9 +1011,6 @@ export function useChatAi(options = {}) {
 
   return {
     conversations,
-    assistants,
-    currentAssistant,
-    selectedAssistantKey,
     activeConversation,
     activeConversationId,
     messages,
@@ -1073,11 +1033,9 @@ export function useChatAi(options = {}) {
     busy,
     initialize,
     loadConversations,
-    loadAssistants,
     loadMessages,
     selectConversation,
     newConversation,
-    selectAssistant,
     selectAnswerVersion,
     removeConversation,
     renameConversation,

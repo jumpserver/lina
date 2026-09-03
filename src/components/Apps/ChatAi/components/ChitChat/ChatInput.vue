@@ -429,7 +429,6 @@ function appendValue(content) {
 function clear() {
   value.value = ''
   clearAttachments()
-  webSearch.value = false
   background.value = false
   draftStore.delete(activeDraftKey)
   nextTick(resize)
@@ -459,9 +458,7 @@ function send() {
 }
 
 function hasDraftContent(draft) {
-  return Boolean(
-    draft.value.trim() || draft.attachments.length || draft.webSearch || draft.background
-  )
+  return Boolean(draft.value.trim() || draft.attachments.length || draft.background)
 }
 
 function saveDraft(key = activeDraftKey) {
@@ -469,7 +466,6 @@ function saveDraft(key = activeDraftKey) {
   const draft = {
     value: value.value,
     attachments: [...attachments.value],
-    webSearch: webSearch.value,
     background: background.value
   }
   if (hasDraftContent(draft)) draftStore.set(key, draft)
@@ -480,7 +476,6 @@ function restoreDraft(key) {
   const draft = draftStore.get(key)
   value.value = draft?.value || ''
   attachments.value = draft?.attachments ? [...draft.attachments] : []
-  webSearch.value = Boolean(draft?.webSearch && props.webSearchAvailable)
   background.value = Boolean(draft?.background && !attachments.value.length)
   nextTick(resize)
 }
