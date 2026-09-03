@@ -21,7 +21,7 @@ import DatetimeRangePicker from './DatetimeRangePicker.vue'
 import JSONManyToManySelect from './JSONManyToManySelect/index.vue'
 import PasswordRule from './PasswordRule.vue'
 import ResourceSelect from './ResourceSelect/index.vue'
-import TreeResourceSelect from './TreeResourceSelect/index.vue'
+import NodeSelect from './NodeSelect/index.vue'
 
 export default {
   Link,
@@ -47,7 +47,7 @@ export default {
   DatetimeRangePicker,
   JSONManyToManySelect,
   ResourceSelect,
-  TreeResourceSelect
+  NodeSelect
 }
 
 export {
@@ -74,5 +74,5 @@ export {
   DatetimeRangePicker,
   JSONManyToManySelect,
   ResourceSelect,
-  TreeResourceSelect
+  NodeSelect
 }
