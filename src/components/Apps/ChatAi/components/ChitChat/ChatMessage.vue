@@ -237,9 +237,7 @@ const editor = ref(null)
 const draftContent = ref('')
 const messageActive = computed(() => ['pending', 'streaming'].includes(props.message.status))
 const visibleResultCards = computed(() => {
-  return (props.message.result_cards || []).filter((card) => {
-    return card?.type === 'sources' || card?.source?.type === 'web_search'
-  })
+  return (props.message.result_cards || []).filter((card) => card && card.type !== 'progress')
 })
 const showThinking = computed(() => {
   return (

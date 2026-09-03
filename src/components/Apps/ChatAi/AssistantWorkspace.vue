@@ -19,7 +19,7 @@
           type="button"
           @click="historyOpen = !historyOpen"
         >
-          <el-icon><Menu /></el-icon>
+          <el-icon><Clock /></el-icon>
         </button>
         <AssistantMark :active="streaming" size="small" />
         <span class="brand-copy">
@@ -108,7 +108,13 @@
           <div v-else-if="!visibleMessages.length" class="assistant-welcome">
             <h1>{{ t('ChatAIWelcomeTitle') }}</h1>
             <p>{{ t('ChatAIWelcomeDescription') }}</p>
-            <div :class="['suggestion-grid', { 'is-two': suggestions.length === 2 }]">
+            <div
+              v-if="suggestions.length"
+              :class="[
+                'suggestion-grid',
+                { 'is-one': suggestions.length === 1, 'is-two': suggestions.length === 2 }
+              ]"
+            >
               <button
                 v-for="suggestion in suggestions"
                 :key="suggestion.text"
@@ -200,10 +206,10 @@ import {
   ArrowRight,
   Bottom,
   Close,
+  Clock,
   Connection,
   EditPen,
   FullScreen,
-  Menu,
   Monitor,
   ScaleToOriginal,
   Setting,
@@ -319,26 +325,30 @@ const navigationLocked = computed(() => {
 })
 
 const suggestions = computed(() => {
+  const permissions = new Set(store.getters.currentOrgPerms || [])
   return [
     {
+      permission: 'assets.view_asset',
       icon: Monitor,
       tone: 'primary',
       title: t('ChatAISuggestionAssetsTitle'),
       text: t('ChatAISuggestionAssets')
     },
     {
+      permission: 'assets.view_node',
       icon: Connection,
       tone: 'info',
       title: t('ChatAISuggestionNodesTitle'),
       text: t('ChatAISuggestionNodes')
     },
     {
+      permission: 'assets.add_asset',
       icon: Setting,
       tone: 'warning',
       title: t('ChatAISuggestionCreateTitle'),
       text: t('ChatAISuggestionCreate')
     }
-  ]
+  ].filter((suggestion) => permissions.has(suggestion.permission))
 })
 
 function friendlyError(error) {
@@ -862,10 +872,12 @@ defineExpose({ init, focus, newConversation: handleNew })
   text-align: center;
 
   span {
-    display: block;
+    display: -webkit-box;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: normal;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
 }
 
@@ -935,6 +947,11 @@ defineExpose({ init, focus, newConversation: handleNew })
   margin-top: 18px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
+
+  &.is-one {
+    max-width: 280px;
+    grid-template-columns: minmax(0, 1fr);
+  }
 
   &.is-two {
     max-width: 540px;
