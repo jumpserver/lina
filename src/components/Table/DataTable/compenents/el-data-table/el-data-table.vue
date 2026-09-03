@@ -14,7 +14,16 @@
           导致跨页选择（persistSelection）被覆盖，只剩当页数据。
           选择事件统一走 selectStrategy，在内部维护全量 selected 并向外 emit。
         -->
-        <div ref="tableBody" v-loading="tableLoading" class="el-data-table__body compact-loading">
+        <div
+          ref="tableBody"
+          v-loading="tableLoading"
+          :class="[
+            'el-data-table__body compact-loading',
+            { 'is-scrollbar-visible': tableScrollbarVisible }
+          ]"
+          @mouseenter="showTableScrollbar"
+          @mouseleave="scheduleTableScrollbarHide"
+        >
           <el-table
             v-bind="tableAttrs"
             :key="tableStructureKey"
@@ -763,6 +772,8 @@ export default {
       // https://github.com/ElemeFE/element/issues/1153
       total: null,
       tableLoading: false,
+      tableScrollbarVisible: false,
+      tableScrollbarHideTimer: null,
       listRequestId: 0,
       // 多选项的数组
       selected: [],
@@ -1022,9 +1033,22 @@ export default {
     this.debouncedGetListFromRemote = _.debounce(this.getListFromRemote, 300)
   },
   beforeUnmount() {
+    clearTimeout(this.tableScrollbarHideTimer)
     this.invalidateListRequest()
   },
   methods: {
+    showTableScrollbar() {
+      clearTimeout(this.tableScrollbarHideTimer)
+      this.tableScrollbarHideTimer = null
+      this.tableScrollbarVisible = true
+    },
+    scheduleTableScrollbarHide() {
+      clearTimeout(this.tableScrollbarHideTimer)
+      this.tableScrollbarHideTimer = setTimeout(() => {
+        this.tableScrollbarVisible = false
+        this.tableScrollbarHideTimer = null
+      }, 400)
+    },
     invalidateListRequest() {
       this.debouncedGetListFromRemote?.cancel()
       return ++this.listRequestId

@@ -51,11 +51,69 @@
     border-bottom: 0;
   }
 
-  :deep(.el-table__body-wrapper .el-scrollbar__wrap) {
-    // Element Plus hides the native bar by default. Restore the browser's
-    // platform scrollbar without changing its size, colors or track.
-    scrollbar-width: auto;
-    scrollbar-color: auto;
+  @media (hover: hover) {
+    :deep(.el-table__body-wrapper .el-scrollbar__wrap) {
+      scrollbar-width: thin;
+      scrollbar-color: transparent transparent;
+    }
+
+    :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar) {
+      -webkit-appearance: none;
+      width: 7px;
+      height: 7px;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar-track),
+    :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar-track-piece),
+    :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar-corner),
+    :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar-thumb) {
+      -webkit-appearance: none;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar-thumb) {
+      border-radius: 999px;
+    }
+
+    :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar-thumb:horizontal) {
+      background-color: color-mix(in srgb, var(--menu-text) 22%, transparent);
+    }
+
+    .el-data-table__body :deep(.el-table .el-scrollbar__bar.is-horizontal) {
+      --el-scrollbar-bg-color: color-mix(in srgb, var(--menu-text) 22%, transparent);
+      --el-scrollbar-opacity: 1;
+
+      display: block !important;
+      height: 7px;
+      opacity: 1;
+    }
+
+    .el-data-table__body :deep(.el-table .el-scrollbar__bar.is-vertical) {
+      width: 7px;
+    }
+
+    .el-data-table__body.is-scrollbar-visible {
+      :deep(.el-table__body-wrapper .el-scrollbar__wrap) {
+        scrollbar-color: color-mix(in srgb, var(--menu-text) 45%, transparent) transparent;
+      }
+
+      :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar-thumb) {
+        background-color: color-mix(in srgb, var(--menu-text) 45%, transparent);
+      }
+
+      :deep(.el-table .el-scrollbar__bar) {
+        --el-scrollbar-bg-color: color-mix(in srgb, var(--menu-text) 45%, transparent);
+        --el-scrollbar-opacity: 1;
+
+        display: block !important;
+        opacity: 1;
+      }
+    }
   }
 }
 

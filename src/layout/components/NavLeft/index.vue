@@ -25,7 +25,7 @@
         </span>
       </div>
     </div>
-    <div class="menu-wrap el-scrollbar">
+    <el-scrollbar class="menu-wrap">
       <el-menu
         active-text-color="var(--menu-text-active)"
         background-color="var(--menu-bg)"
@@ -47,7 +47,7 @@
           :item="route"
         />
       </el-menu>
-    </div>
+    </el-scrollbar>
     <div class="sidebar-footer">
       <button
         class="sidebar-collapse-button"
