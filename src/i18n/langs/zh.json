@@ -2121,6 +2121,7 @@
   "ChatAISettingsSaved": "AI 小助手配置已保存",
   "ChatAIRequestFailed": "请求失败，请检查模型服务配置",
   "ChatAIName": "JumpServer AI",
+  "ChatAIWindowAdjustHint": "使用方向键移动窗口，按住 Shift 调整大小",
   "ChatAIReady": "随时可以帮你",
   "ChatAIWorking": "正在处理你的任务",
   "ChatAIConversations": "最近会话",

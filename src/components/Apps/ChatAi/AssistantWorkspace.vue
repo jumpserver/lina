@@ -5,15 +5,27 @@
       {
         'is-standalone': standalone,
         'is-expanded': expanded,
-        'is-compact': !standalone && !expanded
+        'is-compact': compact,
+        'is-windowed': windowed
       }
     ]"
   >
-    <header class="assistant-header">
+    <header
+      class="assistant-header"
+      :aria-keyshortcuts="windowed && !expanded ? windowAdjustShortcuts : undefined"
+      :aria-label="windowed && !expanded ? t('ChatAIWindowAdjustHint') : undefined"
+      :tabindex="windowed && !expanded ? 0 : undefined"
+      :title="windowed && !expanded ? t('ChatAIWindowAdjustHint') : undefined"
+      @dblclick="handleHeaderDoubleClick"
+      @keydown="handleHeaderKeyDown"
+      @pointerdown="handleHeaderPointerDown"
+    >
       <div class="assistant-header__brand">
         <button
           ref="historyToggle"
           class="header-icon history-toggle"
+          :aria-controls="compact ? historyPanelId : undefined"
+          :aria-expanded="compact ? historyOpen : undefined"
           :aria-label="t('History')"
           :title="t('History')"
           type="button"
@@ -44,9 +56,21 @@
           <span>{{ t('NewChat') }}</span>
         </button>
         <button
-          v-if="!standalone"
+          v-if="!standalone && windowed"
+          class="header-icon"
+          :aria-label="t('RestoreDefault')"
+          :disabled="windowTransitioning"
+          :title="t('RestoreDefault')"
+          type="button"
+          @click="emit('reset-window')"
+        >
+          <el-icon><RefreshLeft /></el-icon>
+        </button>
+        <button
+          v-if="!standalone && windowed"
           class="header-icon"
           :aria-label="expanded ? t('ChatAICompress') : t('ChatAIExpand')"
+          :disabled="windowTransitioning"
           :title="expanded ? t('ChatAICompress') : t('ChatAIExpand')"
           type="button"
           @click="emit(expanded ? 'compress' : 'expand')"
@@ -67,8 +91,9 @@
     </header>
 
     <div class="assistant-body">
-      <div v-if="historyOpen" class="mobile-backdrop" @click="historyOpen = false" />
+      <div v-if="compact && historyOpen" class="mobile-backdrop" @click="historyOpen = false" />
       <ConversationPanel
+        :id="historyPanelId"
         ref="conversationPanel"
         :active-id="activeConversationId"
         :conversations="conversations"
@@ -82,7 +107,7 @@
         @select="selectConversation"
       />
 
-      <main class="chat-stage" :inert="historyOpen">
+      <main class="chat-stage" :inert="compact && historyOpen">
         <div ref="scrollArea" class="chat-scroll" @scroll="handleScroll">
           <div
             v-if="loadingMessages || (!initialized && loadingConversations)"
@@ -216,6 +241,7 @@ import {
   EditPen,
   FullScreen,
   Monitor,
+  RefreshLeft,
   ScaleToOriginal,
   Setting,
   Warning
@@ -223,6 +249,7 @@ import {
 import { ElMessageBox } from 'element-plus'
 import { useI18n } from 'vue-i18n'
 
+import store from '@/store'
 import { message } from '@/utils/vue/message'
 import AssistantMark from './components/AssistantMark.vue'
 import ConversationPanel from './components/ConversationPanel.vue'
@@ -239,14 +266,36 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  compact: {
+    type: Boolean,
+    default: false
+  },
   standalone: {
+    type: Boolean,
+    default: false
+  },
+  windowed: {
+    type: Boolean,
+    default: false
+  },
+  windowTransitioning: {
     type: Boolean,
     default: false
   }
 })
 
-const emit = defineEmits(['close', 'expand', 'compress'])
+const emit = defineEmits([
+  'close',
+  'expand',
+  'compress',
+  'reset-window',
+  'window-drag-start',
+  'window-keyboard-adjust'
+])
 const { t } = useI18n()
+const historyPanelId = 'chat-ai-conversation-panel'
+const windowAdjustShortcuts =
+  'ArrowUp ArrowDown ArrowLeft ArrowRight Shift+ArrowUp Shift+ArrowDown Shift+ArrowLeft Shift+ArrowRight'
 const composer = ref(null)
 const scrollArea = ref(null)
 const conversationPanel = ref(null)
@@ -316,6 +365,57 @@ const messageLoadFailed = computed(() => {
 const navigationLocked = computed(() => {
   return busy.value || composerRecording.value || loadingMessages.value
 })
+
+watch(
+  () => props.compact,
+  (compact) => {
+    if (!compact) historyOpen.value = false
+  }
+)
+
+function isHeaderControl(target) {
+  return Boolean(
+    target?.closest?.(
+      'button, a, input, textarea, select, [role="button"], [contenteditable="true"]'
+    )
+  )
+}
+
+function handleHeaderPointerDown(event) {
+  if (
+    !props.windowed ||
+    props.expanded ||
+    props.windowTransitioning ||
+    event.button !== 0 ||
+    isHeaderControl(event.target)
+  ) {
+    return
+  }
+  emit('window-drag-start', event)
+}
+
+function handleHeaderDoubleClick(event) {
+  if (!props.windowed || props.windowTransitioning || isHeaderControl(event.target)) return
+  event.preventDefault()
+  emit(props.expanded ? 'compress' : 'expand')
+}
+
+function handleHeaderKeyDown(event) {
+  if (
+    event.target !== event.currentTarget ||
+    !props.windowed ||
+    props.expanded ||
+    props.windowTransitioning ||
+    event.altKey ||
+    event.ctrlKey ||
+    event.metaKey ||
+    !['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)
+  ) {
+    return
+  }
+  event.preventDefault()
+  emit('window-keyboard-adjust', { key: event.key, resize: event.shiftKey })
+}
 
 const suggestions = computed(() => {
   const permissions = new Set(store.getters.currentOrgPerms || [])
@@ -701,6 +801,18 @@ defineExpose({ init, focus, newConversation: handleNew })
   }
 }
 
+.assistant-workspace.is-windowed:not(.is-expanded) .assistant-header {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.assistant-workspace.is-windowed:not(.is-expanded) .assistant-header:focus-visible {
+  z-index: 41;
+  outline: 2px solid rgb(26 179 148 / 42%);
+  outline-offset: -2px;
+}
+
 .brand-copy {
   display: flex;
   min-width: 0;
@@ -751,7 +863,7 @@ defineExpose({ init, focus, newConversation: handleNew })
   font-size: 16px;
   transition: all 0.18s ease;
 
-  &:hover {
+  &:hover:not(:disabled) {
     color: var(--ai-primary-dark);
     border-color: var(--ai-primary-light-2);
     background: var(--ai-primary-light);
@@ -1206,6 +1318,10 @@ defineExpose({ init, focus, newConversation: handleNew })
     inset: 0;
     background: rgb(27 30 45 / 18%);
     backdrop-filter: blur(2px);
+  }
+
+  :deep(.icon-button.mobile-close) {
+    display: inline-grid;
   }
 
   .assistant-welcome {
