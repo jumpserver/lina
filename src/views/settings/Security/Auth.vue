@@ -30,6 +30,7 @@ export default {
             'MFA',
             [
               'SECURITY_MFA_AUTH',
+              'SECURITY_MFA_METHODS',
               'SECURITY_MFA_IN_LOGIN_PAGE',
               'SECURITY_MFA_BY_EMAIL',
               'SECURITY_MFA_AUTH_ENABLED_FOR_THIRD_PARTY',

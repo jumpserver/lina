@@ -43,6 +43,7 @@ export default {
             'password',
             'need_update_password',
             'mfa_level',
+            'allowed_mfa_types',
             'source'
           ]
         ],
