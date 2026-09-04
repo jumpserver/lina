@@ -1,649 +1,519 @@
 <template>
-  <div class="client-access-prototype">
-    <IBox :title="$t('ClientInstances')" class="detail-block client-instances-card">
-      <GenericListTable
-        ref="clientTable"
-        :header-actions="clientHeaderActions"
-        :table-config="clientTableConfig"
-      />
-    </IBox>
+  <div class="client-access-page">
+    <ListTable
+      v-if="viewMode === 'list'"
+      ref="configurationTable"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+    />
 
-    <Drawer v-model:visible="accessDrawerVisible" :has-footer="false" :title="$t('ClientAccess')">
-      <div class="access-drawer-content">
-        <TwoCol :gutter="20" :left="17" :right="7" class="overview-layout">
-          <DetailCard
-            :items="connectionItems"
-            :title="$t('ConnectionParameters')"
-            class="overview-card"
-          />
+    <Drawer
+      v-model:visible="formVisible"
+      :title="
+        editingConfiguration
+          ? $t('EditClientAccessConfiguration')
+          : $t('NewClientAccessConfiguration')
+      "
+      :close-on-click-modal="!saving"
+      :close-on-press-escape="!saving"
+      :show-close="!saving"
+    >
+      <ClientAccessCreateUpdate
+        v-if="formVisible"
+        :application="object"
+        :configuration="editingConfiguration"
+        @cancel="formVisible = false"
+        @saved="handleConfigurationSaved"
+        @submitting="saving = $event"
+      />
+    </Drawer>
+
+    <template v-if="viewMode === 'detail' && selectedConfiguration">
+      <div v-if="selectedConfiguration" class="client-access-detail">
+        <TwoCol :gutter="20" :left="16" :right="8" class="detail-overview">
+          <DetailCard :items="connectionItems" :title="$t('ConnectionParameters')" />
           <template #right>
-            <QuickActions
-              :actions="accessActions"
-              :title="$t('CurrentAction')"
-              class="overview-actions"
-            />
+            <QuickActions :actions="detailActions" :title="$t('CurrentAction')" />
           </template>
         </TwoCol>
 
-        <IBox :title="$t('CurrentAccessMode')" class="detail-block access-guide-card">
-          <el-tabs v-model="activeMode">
-            <el-tab-pane :label="$t('PythonSDK')" name="sdk">
-              <el-row :gutter="20">
-                <el-col :lg="12" :md="24" :sm="24" :xs="24">
-                  <section class="access-section">
-                    <div class="section-heading">
-                      <h4>{{ $t('EnvironmentVariables') }}</h4>
-                      <el-button link type="primary" @click="copyText(environmentVariables)">
-                        {{ $t('Copy') }}
-                      </el-button>
-                    </div>
-                    <pre><code>{{ environmentVariables }}</code></pre>
-
-                    <div class="section-heading section-heading--spaced">
-                      <h4>{{ $t('InstallCommand') }}</h4>
-                      <el-button link type="primary" @click="copyText(sdkInstallCommand)">
-                        {{ $t('Copy') }}
-                      </el-button>
-                    </div>
-                    <pre><code>{{ sdkInstallCommand }}</code></pre>
-                  </section>
-                </el-col>
-                <el-col :lg="12" :md="24" :sm="24" :xs="24">
-                  <section class="access-section">
-                    <div class="section-heading">
-                      <h4>{{ $t('PythonSDK') }}</h4>
-                      <el-button link type="primary" @click="copyText(sdkCode)">
-                        {{ $t('Copy') }}
-                      </el-button>
-                    </div>
-                    <p>{{ $t('SDKDescription') }}</p>
-                    <pre class="code-sample"><code>{{ sdkCode }}</code></pre>
-                  </section>
-                </el-col>
-              </el-row>
-            </el-tab-pane>
-
-            <el-tab-pane :label="$t('AgentAccess')" name="agent">
-              <el-row :gutter="20">
-                <el-col :lg="14" :md="24" :sm="24" :xs="24">
-                  <section class="access-section">
-                    <p>{{ $t('AgentDescription') }}</p>
-                    <template v-if="!agentOnline">
-                      <div class="section-heading section-heading--spaced">
-                        <h4>{{ $t('InstallCommand') }}</h4>
-                        <el-button link type="primary" @click="copyText(agentInstallCommand)">
-                          {{ $t('Copy') }}
-                        </el-button>
-                      </div>
-                      <pre><code>{{ agentInstallCommand || $t('GenerateAgentCommandHelp') }}</code></pre>
-                      <el-button
-                        class="section-action"
-                        type="primary"
-                        @click="generateAgentCommand"
-                      >
-                        {{
-                          registrationToken
-                            ? $t('RegenerateToken')
-                            : $t('GenerateRegistrationToken')
-                        }}
-                      </el-button>
-                    </template>
-                    <el-alert
-                      v-else
-                      :closable="false"
-                      :title="$t('AgentRegistrationComplete')"
-                      class="section-heading--spaced"
-                      show-icon
-                      type="success"
-                    />
-                  </section>
-                </el-col>
-                <el-col :lg="10" :md="24" :sm="24" :xs="24">
-                  <section class="access-section agent-parameters">
-                    <div class="parameter-row">
-                      <span>{{ $t('CredentialKey') }}</span>
-                      <el-select
-                        v-model="agentCredentialKeys"
-                        :placeholder="$t('SelectCredentialKeys')"
-                        filterable
-                        multiple
-                      >
-                        <el-option
-                          v-for="policy in availablePolicies"
-                          :key="policy.id"
-                          :label="`${policy.name} (${policy.key})`"
-                          :value="policy.key"
-                        />
-                      </el-select>
-                    </div>
-                    <div class="parameter-row">
-                      <span>{{ $t('ApplicationRunUser') }}</span>
-                      <el-input v-model="agentAppUser" placeholder="app-user" />
-                    </div>
-                    <div v-if="registrationToken && !agentOnline" class="parameter-row">
-                      <span>{{ $t('RegistrationToken') }}</span>
-                      <CopyValue :value="registrationToken" />
-                    </div>
-                    <div class="parameter-row">
-                      <span>{{ $t('LocalEndpoint') }}</span>
-                      <CopyValue :value="localEndpoint" />
-                    </div>
-                  </section>
-                </el-col>
-              </el-row>
-            </el-tab-pane>
-          </el-tabs>
+        <IBox :title="$t('ClientInstances')" class="detail-block">
+          <DataTable ref="instancesTable" :config="instanceTableConfig" />
         </IBox>
       </div>
+    </template>
+
+    <Drawer
+      v-model:visible="materialsVisible"
+      :title="$t('GenerateConfiguration')"
+      :close-on-click-modal="!generating"
+      :close-on-press-escape="!generating"
+      :show-close="!generating"
+      @closed="clearMaterials"
+    >
+      <IBox v-if="materialsVisible" v-loading="generating" class="generated-material">
+        <el-empty v-if="!generated" :description="$t('GenerateAccessMaterialHelp')">
+          <el-button
+            :disabled="!canGenerate || generating"
+            type="primary"
+            @click="generateMaterials"
+          >
+            {{ $t('GenerateConfiguration') }}
+          </el-button>
+        </el-empty>
+        <template v-else>
+          <template v-if="selectedConfiguration.type === 'sdk'">
+            <div class="material-heading">
+              <div>
+                <h4>{{ $t('ConfigurationFile') }}</h4>
+                <p>{{ configFileName }}</p>
+              </div>
+              <div>
+                <el-button link type="primary" @click="copyText(configurationText)">
+                  {{ $t('Copy') }}
+                </el-button>
+                <el-button link type="primary" @click="downloadConfiguration">
+                  {{ $t('Download') }}
+                </el-button>
+              </div>
+            </div>
+            <pre><code>{{ configurationText }}</code></pre>
+            <h4>{{ $t('InstallCommand') }}</h4>
+            <pre><code>{{ installCommand }}</code></pre>
+          </template>
+
+          <div class="material-heading material-heading--spaced">
+            <div>
+              <h4>
+                {{
+                  selectedConfiguration.type === 'sdk' ? $t('MinimalCode') : $t('InstallCommand')
+                }}
+              </h4>
+              <p>
+                {{
+                  selectedConfiguration.type === 'sdk'
+                    ? $t('MinimalCodeHelp')
+                    : $t('InstallCommandHelp')
+                }}
+              </p>
+            </div>
+            <el-button link type="primary" @click="copyText(executionText)">
+              {{ $t('Copy') }}
+            </el-button>
+          </div>
+          <pre><code>{{ executionText }}</code></pre>
+        </template>
+      </IBox>
     </Drawer>
   </div>
 </template>
 
-<script>
-import { defineComponent, h } from 'vue'
-import { CopyDocument } from '@element-plus/icons-vue'
-import DetailCard from '@/components/Cards/DetailCard/index.vue'
+<script lang="jsx">
+import { IBox, ListTable, QuickActions } from '@/components'
+import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import Drawer from '@/components/Drawer/index.vue'
-import { IBox, QuickActions } from '@/components'
-import { DateFormatter, TagChoicesFormatter } from '@/components/Table/TableFormatters'
-import GenericListTable from '@/layout/components/GenericListTable'
+import DetailCard from '@/components/Cards/DetailCard/index.vue'
+import DataTable from '@/components/Table/DataTable/index.vue'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { BASE_URL, copy } from '@/utils/common/index'
 import { mapGetters } from 'vuex'
+import ClientAccessCreateUpdate from './ClientAccessCreateUpdate.vue'
 import {
-  createAgentRegistration,
-  listCredentialBindings,
-  listCredentialClients,
-  listCredentialPolicies,
-  updateIntegrationApplication
-} from '@/api/accountRotation'
-
-const valueOf = (value) => value?.value ?? value
-const resultsOf = (value) => (Array.isArray(value) ? value : value?.results || [])
-
-const CopyValue = defineComponent({
-  name: 'PrototypeCopyValue',
-  props: {
-    value: {
-      type: String,
-      default: '-'
-    }
-  },
-  setup(props) {
-    return () =>
-      h(
-        'button',
-        {
-          class: 'copy-value-button',
-          type: 'button',
-          title: props.value,
-          onClick: () => copy(props.value)
-        },
-        [h('span', props.value), h(CopyDocument)]
-      )
-  }
-})
+  deleteClientAccessConfiguration,
+  accessConfigurationUrl,
+  requestAccessConfigurationTable,
+  generateClientAccessMaterials,
+  getClientAccessConfiguration,
+  setClientInstanceActive
+} from '@/api/applicationCredential'
 
 export default {
-  name: 'IntegrationApplicationClientAccessPrototype',
+  name: 'IntegrationApplicationClientAccess',
   components: {
-    CopyValue,
+    ClientAccessCreateUpdate,
+    DataTable,
     DetailCard,
     Drawer,
-    GenericListTable,
     IBox,
+    ListTable,
     QuickActions,
     TwoCol
   },
   props: {
     object: {
       type: Object,
-      required: true,
-      default: () => ({})
+      required: true
     }
   },
   data() {
     return {
-      activeMode: 'sdk',
-      configuredMode: 'sdk',
-      applicationSecret: '',
-      accessDrawerVisible: false,
-      bindings: [],
-      clients: [],
-      policies: [],
-      agentCredentialKeys: [],
-      agentAppUser: '',
-      registrationToken: '',
-      agentInstallCommand: '',
-      baseUrl: BASE_URL,
-      clientTableConfig: {
-        url: '/api/v1/accounts/credential-client-instances/',
+      configurationText: '',
+      editingConfiguration: null,
+      executionText: '',
+      generated: false,
+      generating: false,
+      materialsVisible: false,
+      formVisible: false,
+      installCommand: '',
+      saving: false,
+      selectedConfiguration: null,
+      viewMode: 'list',
+      tableConfig: {
+        url: accessConfigurationUrl,
+        request: requestAccessConfigurationTable,
+        extraQuery: { application: this.object.id },
         hasSelection: false,
-        columns: ['instance_id', 'type', 'online', 'date_last_seen', 'is_active', 'actions'],
-        columnsShow: {
-          min: ['instance_id', 'online', 'actions'],
-          default: ['instance_id', 'type', 'online', 'date_last_seen', 'is_active', 'actions']
-        },
-        columnsMeta: {
-          instance_id: {
-            label: this.$t('InstanceID'),
-            minWidth: 180
+        hasPagination: true,
+        columns: [
+          {
+            prop: 'name',
+            label: this.$t('Name'),
+            minWidth: '190px',
+            formatter: DetailFormatter,
+            formatterArgs: {
+              onClick: ({ row }) => this.openDetail(row)
+            }
           },
-          type: {
-            label: this.$t('ClientType')
+          {
+            prop: 'type',
+            label: this.$t('ClientType'),
+            width: '110px',
+            formatter: (row) => (
+              <el-tag effect="plain" type={row.type === 'sdk' ? 'primary' : 'success'}>
+                {row.type === 'sdk' ? this.$t('SDKAccess') : this.$t('AgentAccess')}
+              </el-tag>
+            )
           },
-          online: {
+          {
+            prop: 'credentials',
+            label: this.$t('ApplicationCredentials'),
+            minWidth: '240px',
+            formatter: (row) => row.credentials.map((item) => item.name).join(', ')
+          },
+          {
+            prop: 'instances',
+            label: this.$t('ClientInstances'),
+            width: '110px'
+          },
+          {
+            prop: 'status',
             label: this.$t('ClientStatus'),
-            formatter: TagChoicesFormatter,
-            formatterArgs: {
-              getTagLabel: ({ cellValue }) => (cellValue ? this.$t('Online') : this.$t('Offline')),
-              getTagType: ({ cellValue }) => (cellValue ? 'success' : 'info')
-            }
+            width: '110px',
+            formatter: (row) => (
+              <el-tag type={row.status === 'online' ? 'success' : 'info'}>
+                {row.status === 'disabled'
+                  ? this.$t('Disabled')
+                  : row.status === 'online'
+                    ? this.$t('Online')
+                    : this.$t('Offline')}
+              </el-tag>
+            )
           },
-          date_last_seen: {
+          {
+            prop: 'last_reported',
             label: this.$t('LastReportedAt'),
-            formatter: DateFormatter,
-            minWidth: 170
+            width: '175px',
+            formatter: (row) => this.formatDate(row.last_reported)
           },
-          is_active: {
-            label: this.$t('EnableStatus'),
-            formatter: TagChoicesFormatter,
-            formatterArgs: {
-              getTagLabel: ({ cellValue }) =>
-                cellValue ? this.$t('Enabled') : this.$t('Disabled'),
-              getTagType: ({ cellValue }) => (cellValue ? 'success' : 'info')
-            }
-          },
-          actions: {
+          {
+            prop: 'actions',
             label: this.$t('Actions'),
-            width: 120,
+            align: 'center',
+            width: '130px',
+            formatter: ActionsFormatter,
             formatterArgs: {
-              hasUpdate: false,
-              hasDelete: ({ row }) => !row.online,
-              canDelete: () => this.$hasPerm('accounts.delete_credentialclientinstance'),
-              afterDelete: this.loadAccessData,
               hasClone: false,
-              squareButtons: true,
-              extraActions: [
-                {
-                  name: 'ToggleClient',
-                  title: ({ row }) => (row.is_active ? this.$t('Disable') : this.$t('Enable')),
-                  icon: ({ row }) => (row.is_active ? 'fa-solid fa-ban' : 'fa-circle-check'),
-                  order: 10,
-                  type: 'primary',
-                  has: ({ row }) => !row.is_active || !row.online,
-                  can: () => this.$hasPerm('accounts.change_credentialclientinstance'),
-                  callback: this.toggleClient
-                }
-              ]
+              canUpdate: () => this.$hasPerm('accounts.change_clientaccessconfiguration'),
+              canDelete: () => this.$hasPerm('accounts.delete_clientaccessconfiguration'),
+              onUpdate: ({ row }) => this.openEdit(row),
+              onDelete: ({ row }) => this.remove(row)
             }
           }
-        }
-      },
-      clientHeaderActions: {
-        hasSearch: true,
-        hasRefresh: true,
-        hasLeftActions: true,
-        hasRightActions: true,
-        hasExport: false,
-        hasImport: false,
-        hasCreate: true,
-        hasMoreActions: false,
-        createTitle: this.$t('ClientAccess'),
-        onCreate: () => {
-          this.accessDrawerVisible = true
-        },
-        searchConfig: {
-          getUrlQuery: false
-        }
+        ]
       }
     }
   },
   computed: {
     ...mapGetters(['currentOrg']),
-    applicationId() {
-      return this.object.id || ''
+    headerActions() {
+      return {
+        hasCreate: this.$hasPerm('accounts.add_clientaccessconfiguration'),
+        canCreate: this.$hasPerm('accounts.add_clientaccessconfiguration'),
+        onCreate: this.openCreate,
+        hasBulkDelete: false,
+        hasMoreActions: false,
+        hasImport: false,
+        hasExport: false,
+        searchConfig: { getUrlQuery: false }
+      }
     },
-    organizationId() {
-      return this.currentOrg?.id || '-'
-    },
-    allowedSourceIp() {
-      const groups = this.object.ip_group || []
-      return groups.length ? groups.join(', ') : '*'
-    },
-    agentOnline() {
-      return this.clients.some((client) => valueOf(client.type) === 'agent' && client.online)
-    },
-    latestClient() {
-      return [...this.clients].sort((a, b) =>
-        String(b.date_last_seen || '').localeCompare(String(a.date_last_seen || ''))
-      )[0]
-    },
-    availablePolicies() {
-      const accounts = this.object.accounts
-      if (accounts?.type !== 'ids') return this.policies
-      const ids = new Set(accounts.ids || [])
-      return this.policies.filter(
-        (policy) => ids.has(policy.primary_account?.id) && ids.has(policy.backup_account?.id)
+    canGenerate() {
+      return (
+        this.selectedConfiguration?.is_active &&
+        this.$hasPerm('accounts.change_clientaccessconfiguration') &&
+        this.$hasPerm('accounts.change_integrationapplication')
       )
     },
-    firstCredentialKey() {
-      return this.bindings[0]?.credentialKey || '<CREDENTIAL_KEY>'
+    instanceTableConfig() {
+      return {
+        url: '/api/v1/accounts/credential-client-instances/',
+        extraQuery: { configuration: this.selectedConfiguration.id },
+        hasSelection: false,
+        columns: [
+          { prop: 'instance_id', label: this.$t('InstanceID'), minWidth: 160 },
+          {
+            prop: 'online',
+            label: this.$t('ClientStatus'),
+            width: 110,
+            formatter: (row) =>
+              !row.is_active
+                ? this.$t('Disabled')
+                : row.online
+                  ? this.$t('Online')
+                  : this.$t('Offline')
+          },
+          {
+            prop: 'date_last_seen',
+            label: this.$t('LastReportedAt'),
+            width: 175,
+            formatter: (row) => this.formatDate(row.date_last_seen)
+          },
+          {
+            prop: 'actions',
+            label: this.$t('Actions'),
+            width: 100,
+            formatter: ActionsFormatter,
+            formatterArgs: {
+              hasUpdate: false,
+              hasDelete: false,
+              hasClone: false,
+              extraActions: [
+                {
+                  name: 'toggle',
+                  title: ({ row }) => this.$t(row.is_active ? 'Disable' : 'Enable'),
+                  icon: ({ row }) => (row.is_active ? 'fa-solid fa-ban' : 'fa-circle-check'),
+                  type: 'primary',
+                  can: () => this.$hasPerm('accounts.change_credentialclientinstance'),
+                  callback: ({ row }) => this.toggleInstance(row)
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    configFileName() {
+      return 'jms-pam.json'
     },
     connectionItems() {
+      const item = this.selectedConfiguration || {}
       return [
-        { key: this.$t('JumpServerAddress'), value: this.baseUrl, component: CopyValue },
-        { key: this.$t('ApplicationID'), value: this.applicationId, component: CopyValue },
-        { key: this.$t('OrganizationID'), value: this.organizationId, component: CopyValue },
-        { key: this.$t('AccessIP'), value: this.allowedSourceIp },
+        { key: this.$t('Name'), value: item.name },
         {
-          key: this.$t('ApplicationSecret'),
-          value: this.applicationSecret || this.$t('ClickGetApplicationSecret'),
-          component: CopyValue
+          key: this.$t('ClientType'),
+          value: item.type === 'sdk' ? this.$t('SDKAccess') : this.$t('AgentAccess')
         },
         {
-          key: this.$t('CurrentAccessMode'),
-          value: this.configuredMode === 'sdk' ? this.$t('PythonSDK') : this.$t('AgentAccess')
+          key: this.$t('ApplicationCredentials'),
+          value: (item.credentials || [])
+            .map((credential) => `${credential.name} · ${credential.key}`)
+            .join('\n')
         },
+        { key: this.$t('ClientAccessConfigurationID'), value: item.id },
+        { key: this.$t('JumpServerAddress'), value: BASE_URL },
+        { key: this.$t('ApplicationID'), value: this.object.id },
+        { key: this.$t('OrganizationID'), value: this.currentOrg?.id || '-' },
         {
           key: this.$t('ClientStatus'),
-          value: this.latestClient?.online
-            ? this.configuredMode === 'agent'
-              ? this.$t('AgentOnline')
-              : this.$t('Online')
-            : this.configuredMode === 'agent'
-              ? this.$t('AgentOffline')
-              : this.$t('Offline')
+          value:
+            item.status === 'disabled'
+              ? this.$t('Disabled')
+              : item.status === 'online'
+                ? this.$t('Online')
+                : this.$t('Offline')
         },
-        {
-          key: this.$t('LastReportedAt'),
-          value: this.latestClient?.date_last_seen || '-'
-        }
+        { key: this.$t('LastReportedAt'), value: this.formatDate(item.last_reported) }
       ]
     },
-    accessActions() {
+    detailActions() {
       return [
         {
-          title: this.$t('CurrentAccessMode'),
+          title: this.$t('GeneratedAccessMaterial'),
+          has: this.canGenerate,
           attrs: {
             type: 'primary',
-            disabled: !this.$hasPerm('accounts.change_integrationapplication'),
-            label: this.configuredMode === 'sdk' ? this.$t('SwitchToAgent') : this.$t('SwitchToSDK')
+            label: this.$t('GenerateConfiguration'),
+            loading: this.generating
           },
-          callbacks: { click: this.switchAccessMode }
+          callbacks: { click: this.generateMaterials }
         },
         {
-          title: this.$t('ApplicationSecret'),
-          attrs: { type: 'primary', label: this.$t('View') },
-          callbacks: { click: this.getApplicationSecret }
+          title: this.$t('Configuration'),
+          has: this.$hasPerm('accounts.change_clientaccessconfiguration'),
+          attrs: { label: this.$t('Edit') },
+          callbacks: { click: () => this.openEdit(this.selectedConfiguration) }
         }
       ]
-    },
-    environmentVariables() {
-      return [
-        `JMS_URL=${this.baseUrl}`,
-        `JMS_APP_ID=${this.applicationId}`,
-        `JMS_APP_SECRET=${this.applicationSecret || '<APPLICATION_SECRET>'}`,
-        `JMS_ORG_ID=${this.organizationId}`
-      ].join('\n')
-    },
-    sdkInstallCommand() {
-      return `python3 -m pip install ${this.baseUrl}/api/v1/accounts/python-sdk/`
-    },
-    sdkCode() {
-      return [
-        'from jms_pam import JumpServerPAMClient',
-        'import os',
-        '',
-        'client = JumpServerPAMClient(',
-        "    endpoint=os.environ['JMS_URL'],",
-        "    app_id=os.environ['JMS_APP_ID'],",
-        "    app_secret=os.environ['JMS_APP_SECRET'],",
-        "    org_id=os.environ['JMS_ORG_ID'],",
-        ')',
-        `credential = client.get_credential("${this.firstCredentialKey}")`,
-        '# 应用连接成功后显式确认，心跳会继续上报使用状态',
-        'client.confirm_applied(credential)'
-      ].join('\n')
-    },
-    localEndpoint() {
-      return 'http://127.0.0.1:8081/v1/health'
     }
   },
   watch: {
-    applicationId: {
+    'object.id': {
       immediate: true,
-      handler(applicationId) {
-        if (!applicationId) return
-        this.clientTableConfig.url = `/api/v1/accounts/credential-client-instances/?application=${applicationId}`
-        this.configuredMode = valueOf(this.object.credential_access_mode) || 'sdk'
-        this.activeMode = this.configuredMode
-        this.loadAccessData()
+      async handler(id) {
+        if (id) await this.loadData()
       }
-    },
-    'object.credential_access_mode'(mode) {
-      this.configuredMode = valueOf(mode) || 'sdk'
-      this.activeMode = this.configuredMode
     }
   },
   methods: {
+    formatDate(value) {
+      return value ? toSafeLocalDateStr(value) : '-'
+    },
+    async loadData() {
+      await this.$nextTick()
+      return this.$refs.configurationTable?.reloadTable()
+    },
+    openCreate() {
+      this.editingConfiguration = null
+      this.formVisible = true
+    },
+    async openEdit(row) {
+      this.editingConfiguration = await getClientAccessConfiguration(row.id)
+      this.formVisible = true
+    },
+    async openDetail(row) {
+      this.selectedConfiguration = await getClientAccessConfiguration(row.id)
+      this.clearMaterials()
+      this.viewMode = 'detail'
+    },
+    async handleConfigurationSaved(saved) {
+      this.formVisible = false
+      await this.loadData()
+      if (this.viewMode === 'detail') await this.openDetail(saved)
+    },
+    async remove(row) {
+      await this.$confirm(
+        this.$t('DeleteClientAccessConfirm', { name: row.name }),
+        this.$t('Warning'),
+        { type: 'warning' }
+      )
+      await deleteClientAccessConfiguration(row.id)
+      await this.loadData()
+      this.$message.success(this.$t('DeleteSuccessMsg'))
+    },
     copyText(value) {
       copy(value)
     },
-    async loadAccessData() {
-      const [bindingData, clientData, policyData] = await Promise.all([
-        listCredentialBindings({ application: this.applicationId, limit: 100 }),
-        listCredentialClients({ application: this.applicationId, limit: 100 }),
-        listCredentialPolicies({ limit: 100 })
-      ])
-      this.clients = resultsOf(clientData)
-      const policies = resultsOf(policyData)
-      this.policies = policies
-      this.bindings = resultsOf(bindingData).map((binding) => {
-        const policy = policies.find((item) => item.id === binding.policy?.id) || binding.policy
-        return { credentialKey: policy.key }
-      })
-      if (!this.agentCredentialKeys.length) {
-        this.agentCredentialKeys = this.bindings.map((item) => item.credentialKey)
-      }
+    clearMaterials() {
+      this.generated = false
+      this.configurationText = ''
+      this.executionText = ''
+      this.installCommand = ''
     },
-    async generateAgentCommand() {
-      if (!this.agentCredentialKeys.length || !this.agentAppUser) {
-        this.$message.warning(this.$t('AgentParametersRequired'))
+    async generateMaterials() {
+      if (!this.canGenerate || this.generating) return
+      try {
+        await this.$confirm(this.$t('GenerateSensitiveMaterialConfirm'), this.$t('Warning'), {
+          type: 'warning'
+        })
+      } catch {
         return
       }
-      if (this.configuredMode !== 'agent') await this.selectAccessMode('agent')
-      const data = await createAgentRegistration(this.applicationId, {
-        credential_keys: this.agentCredentialKeys,
-        app_user: this.agentAppUser,
-        instance_id: `${this.object.name || 'application'}-agent`
-      })
-      this.registrationToken = data.token
-      this.agentInstallCommand = data.install_command
-      this.$message.success(this.$t('GenerateSuccessMsg'))
+      this.generating = true
+      this.clearMaterials()
+      this.materialsVisible = true
+      try {
+        const materials = await generateClientAccessMaterials(this.selectedConfiguration.id)
+        this.configurationText = materials.config ? JSON.stringify(materials.config, null, 2) : ''
+        this.installCommand = materials.install_command
+        this.executionText = materials.type === 'sdk' ? materials.code : materials.install_command
+        this.generated = true
+        this.$message.success(this.$t('ConfigurationGenerated'))
+      } finally {
+        this.generating = false
+      }
     },
-    async selectAccessMode(mode) {
-      await updateIntegrationApplication(this.applicationId, {
-        credential_access_mode: mode
-      })
-      this.configuredMode = mode
-      this.activeMode = mode
-      this.object.credential_access_mode = mode
-      this.$message.success(this.$t('UpdateSuccessMsg'))
+    async toggleInstance(row) {
+      if (row.is_active) {
+        await this.$confirm(this.$t('DisableCredentialClientConfirm'), this.$t('Warning'), {
+          type: 'warning'
+        })
+      }
+      await setClientInstanceActive(row.id, !row.is_active)
+      await this.$refs.instancesTable.getList()
     },
-    async switchAccessMode() {
-      const mode = this.configuredMode === 'sdk' ? 'agent' : 'sdk'
-      await this.selectAccessMode(mode)
-    },
-    async toggleClient({ row, reload }) {
-      await this.$axios.patch(`/api/v1/accounts/credential-client-instances/${row.id}/`, {
-        is_active: !row.is_active
-      })
-      reload()
-      await this.loadAccessData()
-      this.$message.success(this.$t('UpdateSuccessMsg'))
-    },
-    async getApplicationSecret() {
-      const data = await this.$axios.get(
-        `/api/v1/accounts/integration-applications/${this.applicationId}/secret/`
-      )
-      this.applicationSecret = data.secret
+    downloadConfiguration() {
+      const blob = new Blob([this.configurationText], { type: 'application/json;charset=utf-8' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = this.configFileName
+      link.click()
+      URL.revokeObjectURL(url)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.material-heading p {
+  margin: 4px 0 0;
+  color: var(--color-help-text);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.client-access-detail {
+  padding-bottom: 15px;
+}
+
+.detail-overview,
 .detail-block {
   margin-bottom: 15px;
 }
 
-.access-drawer-content {
-  padding: 15px;
-}
-
-.overview-layout {
-  margin-bottom: 15px;
-}
-
-.overview-layout :deep(.el-col) {
+.material-heading {
   display: flex;
-}
-
-.overview-card,
-.overview-actions {
-  width: 100%;
-  height: 100%;
-}
-
-.access-guide-card :deep(.el-card__body) {
-  padding-top: 4px;
-}
-
-.client-instances-card :deep(.list-table) {
-  margin-bottom: 0;
-}
-
-.access-section {
-  min-width: 0;
-  padding: 12px 0 4px;
-}
-
-.access-section p {
-  margin: 0 0 14px;
-  color: var(--color-text-secondary);
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-.section-heading {
-  display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
+  gap: 16px;
   margin-bottom: 10px;
 }
 
-.section-heading--spaced {
-  margin-top: 20px;
+.material-heading--spaced {
+  margin-top: 24px;
 }
 
-.section-heading h4 {
+.material-heading h4 {
   margin: 0;
   color: var(--color-text-primary);
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 pre {
   max-width: 100%;
   margin: 0;
-  padding: 12px 14px;
+  padding: 14px 16px;
   overflow: auto;
   border: 1px solid var(--el-border-color-lighter);
+  border-radius: 4px;
   background: var(--el-fill-color-lighter);
   color: var(--color-text-primary);
   font-size: 12px;
-  line-height: 1.6;
+  line-height: 1.65;
   white-space: pre-wrap;
   word-break: break-word;
 }
 
-.code-sample {
-  min-height: 176px;
-}
-
-.section-action {
-  margin-top: 12px;
-}
-
-.agent-parameters {
-  padding-top: 16px;
-}
-
-.parameter-row {
-  padding: 10px 0;
-  border-bottom: 1px dashed var(--el-border-color-lighter);
-}
-
-.parameter-row > span:first-child {
-  display: block;
-  margin-bottom: 5px;
-  color: var(--color-help-text);
-  font-size: 12px;
-}
-
-.parameter-row :deep(.el-select) {
-  width: 100%;
-}
-
-.agent-parameters > .el-button {
-  margin-top: 16px;
-}
-
-:deep(.copy-value-button) {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-width: 0;
-  max-width: 100%;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--color-link);
-  cursor: pointer;
-  font: inherit;
-  text-align: left;
-}
-
-:deep(.copy-value-button span) {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-:deep(.copy-value-button svg) {
-  flex: 0 0 auto;
-  width: 13px;
-  height: 13px;
-}
-
-@media (max-width: 991px) {
-  .overview-layout :deep(.el-col) {
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
-
-  .overview-layout :deep(.el-col + .el-col) {
-    margin-top: 15px;
-  }
-}
-
 @media (max-width: 767px) {
-  .client-access-prototype {
-    width: calc(100vw - 40px);
-    min-width: 0;
+  .material-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .client-access-detail {
+    padding: 10px;
   }
 }
 </style>

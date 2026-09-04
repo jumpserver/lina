@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       loading: true,
-      activeMenu: 'service',
+      activeMenu: 'application',
       tab: {
         submenu: [
           {
@@ -31,8 +31,8 @@ export default {
           },
           {
             name: 'rotations',
-            title: this.$t('AccountRotation'),
-            hidden: !this.$hasPerm('accounts.view_integrationapplication'),
+            title: this.$t('ApplicationCredentials'),
+            hidden: !this.$hasPerm('accounts.view_applicationcredential'),
             component: () => import('@/views/accounts/Integration/AccountRotationPrototype.vue')
           },
           {
