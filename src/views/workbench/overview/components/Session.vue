@@ -75,7 +75,7 @@ export default {
                   name: 'connect',
                   icon: 'fa-desktop',
                   type: 'primary',
-                  can: ({ row }) => row.is_active,
+                  can: ({ row }) => Boolean(row.asset_id),
                   callback: ({ row }) => {
                     if (this.preference?.basic?.connect_default_open_method === 'new') {
                       openNewWindow(
