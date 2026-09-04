@@ -684,6 +684,8 @@
   "DownloadCenter": "Centro de descargas",
   "DownloadImportTemplateMsg": "Descargar crear plantilla",
   "DownloadReplay": "Descargar grabación",
+  "DownloadReplayNoneAvailable": "Ninguna de las sesiones seleccionadas tiene una grabación descargable.",
+  "DownloadReplayPartialConfirm": "Se seleccionaron {selected} sesiones: se pueden descargar {available} grabaciones y {unavailable} no. ¿Continuar con las grabaciones disponibles?",
   "DownloadUpdateTemplateMsg": "Descargar plantilla de actualización",
   "DragUploadFileInfo": "Arrastre los archivos aquí o haga clic aquí para cargar",
   "DriverInstanceCreateFailed": "Error al crear la instancia del controlador",

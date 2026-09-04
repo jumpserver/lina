@@ -684,6 +684,8 @@
   "DownloadCenter": "Центр загрузок",
   "DownloadImportTemplateMsg": "Скачать шаблон создания",
   "DownloadReplay": "Скачать запись",
+  "DownloadReplayNoneAvailable": "Среди выбранных сеансов нет записей, доступных для скачивания.",
+  "DownloadReplayPartialConfirm": "Выбрано сеансов: {selected}. Доступно записей: {available}, недоступно: {unavailable}. Продолжить скачивание доступных записей?",
   "DownloadUpdateTemplateMsg": "Скачать шаблон обновления",
   "DragUploadFileInfo": "Перетащите файл сюда или нажмите здесь, чтобы загрузить",
   "DriverInstanceCreateFailed": "Не удалось создать экземпляр драйвера",

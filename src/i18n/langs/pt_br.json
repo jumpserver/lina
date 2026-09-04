@@ -684,6 +684,8 @@
   "DownloadCenter": "Centro de Download",
   "DownloadImportTemplateMsg": "Baixar Modelo Criado",
   "DownloadReplay": " Baixar vídeo",
+  "DownloadReplayNoneAvailable": "Nenhuma das sessões selecionadas possui uma gravação disponível para download.",
+  "DownloadReplayPartialConfirm": "{selected} sessões selecionadas: {available} gravações podem ser baixadas e {unavailable} não. Continuar com as gravações disponíveis?",
   "DownloadUpdateTemplateMsg": "Baixar modelo atualizado",
   "DragUploadFileInfo": " Arraste arquivos aqui, ou clique aqui para carregar ",
   "DriverInstanceCreateFailed": "Falha ao criar instância do driver",
