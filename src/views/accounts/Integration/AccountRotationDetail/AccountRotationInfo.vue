@@ -1,61 +1,25 @@
 <template>
-  <TwoCol :gutter="20" :left="17" :right="7">
-    <AutoDetailCard
-      :key="detailCardKey"
-      :fields="detailFields"
-      :object="object"
-      :url="detailUrl"
-      class="detail-block"
-    />
-
-    <IBox :title="$t('AffectedApplications')" class="detail-block applications-card">
-      <el-table v-loading="applicationsLoading" :data="applications" row-key="id">
-        <el-table-column :label="$t('Applications')" min-width="180">
-          <template #default="{ row }">
-            {{ row.name }}
-            <div class="cell-secondary">{{ row.instanceId }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('ClientType')" width="130">
-          <template #default="{ row }">
-            {{ row.accessMode === 'sdk' ? $t('PythonSDK') : $t('AgentAccess') }}
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('ClientStatus')" width="110">
-          <template #default="{ row }">
-            <el-tag :type="row.online ? 'success' : 'info'" size="small">
-              {{ row.online ? $t('Online') : $t('Offline') }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('AppliedAccount')" min-width="130">
-          <template #default="{ row }">
-            <el-tag
-              :type="row.appliedAccount === backupAccount ? 'success' : 'warning'"
-              effect="plain"
-              size="small"
-            >
-              {{ row.appliedAccount }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('LastReportedAt')" min-width="175" prop="reportedAt" />
-      </el-table>
+  <TwoCol :gutter="20" :left="16" :right="8">
+    <DetailCard :items="detailItems" :title="$t('BasicInfo')" class="detail-block" />
+    <IBox v-if="object.blockers?.length" :title="$t('WaitingForApplications')" class="detail-block">
+      <DataTable :config="blockerTableConfig" />
     </IBox>
 
     <template #right>
-      <QuickActions :actions="detailActions" :title="$t('CurrentAction')" class="detail-block" />
+      <QuickActions :actions="quickActions" :title="$t('CurrentAction')" class="detail-block" />
 
-      <IBox :title="$t('RotationProgress')" class="detail-block rotation-steps">
-        <el-steps :active="activeStep" direction="vertical" finish-status="success">
-          <el-step :description="$t('WaitingForClientReport')" :title="$t('SwitchingToBackup')" />
-          <el-step :description="$t('SecretChangeGuard')" :title="$t('CheckUsageStatus')" />
-          <el-step :description="$t('ReadyForSecretChange')" :title="$t('ChangeAndVerifySecret')" />
+      <IBox
+        v-if="object.type === 'rotation'"
+        :title="$t('RotationProgress')"
+        class="detail-block rotation-steps"
+      >
+        <el-steps :active="rotationStep" direction="vertical" finish-status="success">
           <el-step
-            :description="$t('AllApplicationsOnBackup')"
-            :title="$t('SwitchBackToPrimary')"
+            v-for="step in rotationSteps"
+            :key="step.title"
+            :description="step.description"
+            :title="step.title"
           />
-          <el-step :title="$t('RotationCompleted')" />
         </el-steps>
       </IBox>
     </template>
@@ -63,223 +27,296 @@
 </template>
 
 <script lang="jsx">
-import {
-  listCredentialBindings,
-  listCredentialClients,
-  runCredentialPolicyAction
-} from '@/api/accountRotation'
 import { IBox, QuickActions } from '@/components'
-import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
-import { toSafeLocalDateStr } from '@/composables/useDateTime'
+import { ActionsFormatter } from '@/components/Table/TableFormatters'
+import DetailCard from '@/components/Cards/DetailCard/index.vue'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import DataTable from '@/components/Table/DataTable/index.vue'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
+import {
+  advanceApplicationCredentialRotation,
+  cancelApplicationCredentialRotation,
+  getApplicationCredential,
+  setClientInstanceActive
+} from '@/api/applicationCredential'
 
-const valueOf = (value) => value?.value ?? value
-const resultsOf = (value) => (Array.isArray(value) ? value : value?.results || [])
-const accountName = (value) => value?.username || value?.name || '-'
+const accountName = (account) => account?.username || account?.name || '-'
 
 export default {
-  name: 'AccountRotationInfo',
-  components: {
-    AutoDetailCard,
-    IBox,
-    QuickActions,
-    TwoCol
-  },
+  name: 'ApplicationCredentialInfo',
+  components: { DetailCard, IBox, QuickActions, TwoCol, DataTable },
   props: {
     object: {
       type: Object,
-      default: () => ({})
+      required: true
     }
   },
-  emits: ['refresh', 'reload-table'],
+  emits: ['edit', 'updated'],
   data() {
-    return {
-      actionLoading: false,
-      applications: [],
-      applicationsLoading: false
-    }
+    return { actionLoading: false }
   },
   computed: {
-    status() {
-      return valueOf(this.object.status)
+    rotationStep() {
+      if (this.object.status === 'idle') {
+        return this.object.date_last_rotated ? this.rotationSteps.length : 0
+      }
+      const dual = {
+        waiting_backup: 0,
+        ready_for_change: 1,
+        changing_secret: 2,
+        waiting_primary: 3
+      }
+      const single = { ready_for_change: 0, changing_secret: 0, waiting_primary: 1 }
+      return (this.object.rotation_mode === 'dual' ? dual : single)[this.object.status] || 0
     },
-    backupAccount() {
-      return accountName(this.object.backup_account)
+    blockerTableConfig() {
+      return {
+        url: '',
+        totalData: this.object.blockers,
+        hasPagination: false,
+        hasSelection: false,
+        columns: [
+          { prop: 'application.name', label: this.$t('Applications'), minWidth: 130 },
+          { prop: 'client.instance_id', label: this.$t('InstanceID'), minWidth: 150 },
+          {
+            prop: 'reason',
+            label: this.$t('Status'),
+            minWidth: 130,
+            formatter: (row) =>
+              row.reason === 'offline' ? this.$t('Offline') : this.$t('WaitingForClientReport')
+          },
+          {
+            prop: 'actions',
+            label: this.$t('Actions'),
+            width: 100,
+            formatter: ActionsFormatter,
+            formatterArgs: {
+              hasUpdate: false,
+              hasDelete: false,
+              hasClone: false,
+              extraActions: [
+                {
+                  name: 'disable',
+                  title: this.$t('Disable'),
+                  type: 'danger',
+                  can: () =>
+                    this.$hasPerm('accounts.change_credentialclientinstance') &&
+                    !this.actionLoading,
+                  callback: ({ row }) => this.disableClient(row)
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
-    detailUrl() {
-      return `/api/v1/accounts/credential-policies/${this.object.id}/`
+    typeLabel() {
+      return this.object.type === 'fixed' ? this.$t('FixedAccount') : this.$t('AccountRotation')
     },
-    detailCardKey() {
-      return `${this.object.id || ''}-${this.object.revision || 0}-${this.status || ''}`
+    rotationModeLabel() {
+      if (this.object.type === 'fixed') return '-'
+      return this.object.rotation_mode === 'dual'
+        ? this.$t('DualAccountRotation')
+        : this.$t('SingleAccountRotation')
     },
-    detailFields() {
+    detailItems() {
       const asset = this.object.asset || {}
-      const platform = asset.platform || {}
-      return [
-        { key: this.$t('RotationPurpose'), value: this.object.name },
+      const items = [
+        { key: this.$t('Name'), value: this.object.name },
         { key: this.$t('CredentialKey'), value: this.object.key },
+        { key: this.$t('CredentialType'), value: this.typeLabel },
         {
-          key: this.$t('Asset'),
-          value: asset.name ? `${asset.name} (${asset.address || '-'})` : '-'
-        },
-        { key: this.$t('AssetType'), value: platform.name || platform.type || '-' },
-        { key: this.$t('PrimaryAccount'), value: accountName(this.object.primary_account) },
-        { key: this.$t('BackupAccount'), value: this.backupAccount },
-        { key: this.$t('ActiveAccount'), value: accountName(this.object.published_account) },
-        {
-          key: this.$t('CurrentStatus'),
-          value: this.status,
-          formatter: () => (
-            <el-tag type={this.statusMeta.type} size="small">
-              {this.statusMeta.label}
+          key: this.$t('Status'),
+          value: this.object.is_active,
+          formatter: (_item, value) => (
+            <el-tag type={value ? 'success' : 'info'}>
+              {value ? this.$t('Enabled') : this.$t('Disabled')}
             </el-tag>
           )
         },
-        { key: this.$t('LastRotation'), value: this.object.date_last_rotated || '-' }
+        {
+          key: this.$t('Asset'),
+          value: asset.name ? `${asset.name} (${asset.address})` : '-'
+        },
+        { key: this.$t('AssetType'), value: asset.platform?.name || '-' }
       ]
-    },
-    statusMeta() {
-      const statusMap = {
-        idle: { label: this.$t('RotationNormal'), type: 'info' },
-        waiting_backup: { label: this.$t('WaitingForApplications'), type: 'warning' },
-        ready_for_change: { label: this.$t('ReadyForSecretChange'), type: 'success' },
-        waiting_primary: { label: this.$t('SwitchingBack'), type: 'primary' }
+      if (this.object.rotation_mode === 'dual') {
+        items.push(
+          { key: this.$t('RotationMode'), value: this.rotationModeLabel },
+          { key: this.$t('PrimaryAccount'), value: accountName(this.object.primary_account) },
+          { key: this.$t('BackupAccount'), value: accountName(this.object.backup_account) },
+          { key: this.$t('ActiveAccount'), value: accountName(this.object.published_account) }
+        )
+      } else {
+        if (this.object.type === 'rotation') {
+          items.push({ key: this.$t('RotationMode'), value: this.rotationModeLabel })
+        }
+        items.push({ key: this.$t('Account'), value: accountName(this.object.primary_account) })
       }
-      return statusMap[this.status] || { label: this.status || '-', type: 'info' }
-    },
-    activeStep() {
-      const steps = {
-        idle: 0,
-        waiting_backup: 1,
-        ready_for_change: 2,
-        waiting_primary: 3
+      items.push(
+        { key: this.$t('LastFetched'), value: this.formatDate(this.object.last_fetched) },
+        { key: this.$t('LastRotation'), value: this.formatDate(this.object.date_last_rotated) },
+        { key: this.$t('Comment'), value: this.object.comment || '-' }
+      )
+      if (this.object.change_execution) {
+        items.push({
+          key: this.$t('ChangeSecretExecution'),
+          value: this.object.change_execution.id
+        })
       }
-      return steps[this.status] || 0
+      return items
     },
-    currentActionLabel() {
-      const labels = {
-        idle: 'StartRotation',
-        waiting_backup: 'CheckUsageStatus',
-        ready_for_change: 'CheckSecretChangeResult',
-        waiting_primary: 'ConfirmApplicationsBack'
+    rotationSteps() {
+      if (this.object.rotation_mode === 'dual') {
+        return [
+          {
+            title: this.$t('SwitchingToBackup'),
+            description: this.$t('WaitingForClientReport')
+          },
+          {
+            title: this.$t('ConfirmApplicationsOnBackup'),
+            description: this.$t('SecretChangeGuard')
+          },
+          {
+            title: this.$t('ChangeAndVerifySecret'),
+            description: this.$t('ChangePrimaryAccountSecretHelp')
+          },
+          {
+            title: this.$t('SwitchBackToPrimary'),
+            description: this.$t('WaitingForClientReport')
+          },
+          {
+            title: this.$t('RotationCompleted'),
+            description: this.$t('AllClientsConfirmed')
+          }
+        ]
       }
-      return this.$t(labels[this.status] || 'StartRotation')
-    },
-    detailActions() {
       return [
         {
-          title: this.$t('NextStep'),
-          attrs: {
-            type: 'primary',
-            label: this.currentActionLabel,
-            loading: this.actionLoading
-          },
-          callbacks: { click: this.handleCurrentAction }
+          title: this.$t('ChangeAndVerifySecret'),
+          description: this.$t('ChangeSingleAccountSecretHelp')
         },
         {
-          title: this.$t('AccountChangeSecret'),
-          has: this.status === 'ready_for_change',
-          attrs: { label: this.$t('GoChangeSecret') },
-          callbacks: { click: this.openChangeSecret }
+          title: this.$t('WaitingForApplications'),
+          description: this.$t('WaitingForClientReport')
+        },
+        {
+          title: this.$t('RotationCompleted'),
+          description: this.$t('AllClientsConfirmed')
+        }
+      ]
+    },
+    quickActions() {
+      return [
+        {
+          title: this.$t('Configuration'),
+          has: this.$hasPerm('accounts.change_applicationcredential'),
+          attrs: { label: this.$t('Edit'), disabled: this.object.status !== 'idle' },
+          callbacks: { click: () => this.$emit('edit', this.object) }
+        },
+        {
+          title: this.$t('AccountRotation'),
+          has:
+            this.object.type === 'rotation' &&
+            this.$hasPerm('accounts.change_applicationcredential'),
+          attrs: {
+            type: 'primary',
+            label:
+              this.object.status === 'idle'
+                ? this.$t('StartRotation')
+                : this.object.status === 'ready_for_change'
+                  ? this.$t('ChangeSecret')
+                  : this.object.status === 'changing_secret'
+                    ? this.$t('CheckSecretChangeResult')
+                    : this.$t('ContinueRotation'),
+            loading: this.actionLoading,
+            disabled:
+              !this.object.is_active ||
+              (this.object.status === 'ready_for_change' &&
+                !this.$hasPerm('accounts.add_changesecretautomation'))
+          },
+          callbacks: { click: this.advanceRotation }
+        },
+        {
+          title: this.$t('ChangeSecret'),
+          has:
+            this.object.type === 'rotation' &&
+            this.object.status === 'changing_secret' &&
+            this.$hasPerm('accounts.change_applicationcredential') &&
+            this.$hasPerm('accounts.add_changesecretautomation'),
+          attrs: {
+            label: this.$t('Create'),
+            disabled: this.actionLoading || !this.object.is_active
+          },
+          callbacks: { click: this.openChangeSecretForm }
         },
         {
           title: this.$t('Cancel'),
-          has: ['waiting_backup', 'ready_for_change'].includes(this.status),
-          attrs: { label: this.$t('CancelRotation') },
+          has:
+            this.object.type === 'rotation' &&
+            ['waiting_backup', 'ready_for_change'].includes(this.object.status) &&
+            this.$hasPerm('accounts.change_applicationcredential'),
+          attrs: { label: this.$t('CancelRotation'), disabled: this.actionLoading },
           callbacks: { click: this.cancelRotation }
+        },
+        {
+          title: this.$t('Status'),
+          attrs: { label: this.$t('Refresh'), disabled: this.actionLoading },
+          callbacks: { click: this.refresh }
         }
       ]
     }
   },
-  watch: {
-    'object.id': {
-      immediate: true,
-      handler(id) {
-        if (id) this.loadApplications()
-      }
-    }
-  },
   methods: {
-    async loadApplications() {
-      this.applicationsLoading = true
-      try {
-        const [bindingData, clientData] = await Promise.all([
-          listCredentialBindings({ policy: this.object.id, limit: 100 }),
-          listCredentialClients({ policy: this.object.id, limit: 100 })
-        ])
-        const clients = resultsOf(clientData)
-        const applications = clients.map((client) => {
-          const state = (client.credential_statuses || []).find(
-            (item) => item.policy?.id === this.object.id
-          )
-          return {
-            id: client.id,
-            name: client.application?.name || '-',
-            instanceId: client.instance_id,
-            accessMode: valueOf(client.type),
-            online: client.online,
-            appliedAccount: accountName(state?.applied_account),
-            reportedAt: this.formatDate(state?.date_last_seen || client.date_last_seen)
-          }
-        })
-        resultsOf(bindingData).forEach((binding) => {
-          if (clients.some((client) => client.application?.id === binding.application?.id)) return
-          applications.push({
-            id: binding.id,
-            name: binding.application?.name || '-',
-            instanceId: '-',
-            accessMode: valueOf(binding.application?.credential_access_mode),
-            online: false,
-            appliedAccount: '-',
-            reportedAt: '-'
-          })
-        })
-        this.applications = applications
-      } finally {
-        this.applicationsLoading = false
-      }
-    },
     formatDate(value) {
       return value ? toSafeLocalDateStr(value) : '-'
     },
-    async handleCurrentAction() {
-      const action = {
-        idle: 'start',
-        waiting_backup: 'check-usage',
-        ready_for_change: 'check-secret-change',
-        waiting_primary: 'complete'
-      }[this.status]
-      if (!action || this.actionLoading) return
-      await this.runAction(action)
-    },
-    async cancelRotation() {
-      if (this.actionLoading) return
-      await this.runAction('cancel')
-    },
-    async runAction(action) {
+    async advanceRotation() {
+      const createTask = this.object.status === 'ready_for_change'
+      if (createTask && !this.$hasPerm('accounts.add_changesecretautomation')) return
       this.actionLoading = true
       try {
-        const policy = await runCredentialPolicyAction(this.object.id, action)
-        this.$emit('refresh', policy)
-        this.$emit('reload-table')
-        await this.loadApplications()
-        this.$message.success(this.$t('UpdateSuccessMsg'))
-      } catch (error) {
-        const blockers = error.response?.data?.blockers || []
-        if (blockers.length) {
-          this.$message.warning(
-            this.$t('ApplicationsStillUsingAccount', { count: blockers.length })
-          )
+        const updated = await advanceApplicationCredentialRotation(this.object)
+        this.$emit('updated', updated)
+        if (createTask) {
+          await this.openChangeSecretForm()
           return
         }
-        const detail = error.response?.data?.detail
-        if (detail) this.$message.error(detail)
+        this.$message.success(
+          updated.status === 'idle' ? this.$t('RotationCompleted') : this.$t('StepCompleted')
+        )
+      } catch (error) {
+        if (error.response?.data?.blockers) await this.refresh()
       } finally {
         this.actionLoading = false
       }
     },
-    openChangeSecret() {
-      this.$router.push({ name: 'AccountChangeSecretList' })
+    openChangeSecretForm() {
+      if (!this.$hasPerm('accounts.add_changesecretautomation')) return
+      return this.$router.push({
+        name: 'AccountChangeSecretCreate',
+        query: { application_credential: this.object.id }
+      })
+    },
+    async cancelRotation() {
+      this.actionLoading = true
+      try {
+        const updated = await cancelApplicationCredentialRotation(this.object.id)
+        this.$emit('updated', updated)
+        this.$message.success(this.$t('UpdateSuccessMsg'))
+      } finally {
+        this.actionLoading = false
+      }
+    },
+    async refresh() {
+      this.$emit('updated', await getApplicationCredential(this.object.id))
+    },
+    async disableClient(row) {
+      await this.$confirm(this.$t('DisableCredentialClientConfirm'), this.$t('Warning'), {
+        type: 'warning'
+      })
+      await setClientInstanceActive(row.client.id, false)
+      await this.refresh()
     }
   }
 }
@@ -290,34 +327,21 @@ export default {
   margin-bottom: 15px;
 }
 
-.applications-card :deep(.el-card__body) {
-  padding: 0;
+.rotation-steps :deep(.el-step__main) {
+  min-width: 0;
+  padding-bottom: 18px;
 }
 
-.cell-secondary {
-  display: block;
-  margin-top: 2px;
-  color: var(--color-text-secondary);
-  font-size: 12px;
+.rotation-steps :deep(.el-step__title) {
+  color: var(--color-text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 24px;
 }
 
-.rotation-steps {
-  :deep(.el-step__main) {
-    min-width: 0;
-    padding-bottom: 18px;
-  }
-
-  :deep(.el-step__title) {
-    color: var(--color-text-primary);
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 24px;
-  }
-
-  :deep(.el-step__description) {
-    padding-right: 0;
-    color: var(--color-help-text);
-    line-height: 22px;
-  }
+.rotation-steps :deep(.el-step__description) {
+  padding-right: 0;
+  color: var(--color-help-text);
+  line-height: 20px;
 }
 </style>
