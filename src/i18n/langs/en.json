@@ -2128,6 +2128,7 @@
   "ChatAISettingsSaved": "AI assistant settings saved",
   "ChatAIRequestFailed": "Request failed. Check the model provider configuration.",
   "ChatAIName": "JumpServer AI",
+  "ChatAIWindowAdjustHint": "Use the arrow keys to move this window; hold Shift to resize it",
   "ChatAIReady": "Ready to help",
   "ChatAIWorking": "Working on your request",
   "ChatAIConversations": "Conversations",
