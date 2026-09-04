@@ -1,4 +1,4 @@
-import { ResourceSelect, TreeResourceSelect } from '@/components/Form/FormFields'
+import { NodeSelect, ResourceSelect } from '@/components/Form/FormFields'
 import AccountFormatter from './components/AccountFormatter'
 
 function getFields() {
@@ -44,8 +44,8 @@ function getFields() {
   }
 
   const nodes = {
-    type: 'treeResourceSelect',
-    component: TreeResourceSelect,
+    type: 'nodeSelect',
+    component: NodeSelect,
     hidden: () => false,
     rules: [{ required: false }],
     el: {

@@ -429,7 +429,6 @@ function appendValue(content) {
 function clear() {
   value.value = ''
   clearAttachments()
-  webSearch.value = false
   background.value = false
   draftStore.delete(activeDraftKey)
   nextTick(resize)
@@ -459,9 +458,7 @@ function send() {
 }
 
 function hasDraftContent(draft) {
-  return Boolean(
-    draft.value.trim() || draft.attachments.length || draft.webSearch || draft.background
-  )
+  return Boolean(draft.value.trim() || draft.attachments.length || draft.background)
 }
 
 function saveDraft(key = activeDraftKey) {
@@ -469,7 +466,6 @@ function saveDraft(key = activeDraftKey) {
   const draft = {
     value: value.value,
     attachments: [...attachments.value],
-    webSearch: webSearch.value,
     background: background.value
   }
   if (hasDraftContent(draft)) draftStore.set(key, draft)
@@ -480,7 +476,6 @@ function restoreDraft(key) {
   const draft = draftStore.get(key)
   value.value = draft?.value || ''
   attachments.value = draft?.attachments ? [...draft.attachments] : []
-  webSearch.value = Boolean(draft?.webSearch && props.webSearchAvailable)
   background.value = Boolean(draft?.background && !attachments.value.length)
   nextTick(resize)
 }
@@ -895,12 +890,12 @@ defineExpose({ focus, setValue, appendValue, clear, discardDraft })
     color: var(--ai-text, #292827);
     background: transparent;
     font-family: inherit;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 1.55;
     resize: none;
 
     &::placeholder {
-      color: #8f959e;
+      color: #737b87;
     }
 
     &:disabled {
@@ -1024,9 +1019,10 @@ defineExpose({ focus, setValue, appendValue, clear, discardDraft })
   place-items: center;
   border: 1px solid transparent;
   border-radius: var(--ai-radius-sm, 8px);
-  color: #747b91;
+  color: #5f6878;
   background: transparent;
   cursor: pointer;
+  font-size: 15px;
   transition: all 0.18s ease;
 
   &:hover:not(:disabled) {
@@ -1057,12 +1053,12 @@ defineExpose({ focus, setValue, appendValue, clear, discardDraft })
   color: var(--ai-primary-dark, #148f76);
   background: var(--ai-primary-light, #e8f7f3);
   cursor: pointer;
-  font-size: 10px;
+  font-size: 11px;
 
   &__close {
     margin-left: 1px;
-    color: #6e8d84;
-    font-size: 9px;
+    color: #56796f;
+    font-size: 12px;
   }
 }
 
@@ -1104,8 +1100,8 @@ defineExpose({ focus, setValue, appendValue, clear, discardDraft })
 
 .input-hint {
   overflow: hidden;
-  color: #8f959e;
-  font-size: 9px;
+  color: #737b87;
+  font-size: 11px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1137,6 +1133,12 @@ defineExpose({ focus, setValue, appendValue, clear, discardDraft })
   border: 1px solid var(--ai-primary, #1ab394);
   color: #fff;
   background: var(--ai-primary, #1ab394);
+
+  .el-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
 
   &:hover:not(:disabled) {
     border-color: var(--ai-primary-dark, #148f76);

@@ -7,7 +7,7 @@
     class="resource-select-dialog"
     max-width="940px"
     top="4vh"
-    width="70vw"
+    width="940px"
     @cancel="handleCancel"
     @confirm="handleConfirm"
     @update:visible="handleVisibleChange"
@@ -920,15 +920,18 @@ export default {
 <style lang="scss">
 .resource-select-dialog.el-dialog {
   --resource-select-dialog-max-height: min(680px, 94vh);
+  --tab-page-header-height: 40px;
+  --tab-page-navigation-background-color: var(--page-background-color, #fff);
 
-  height: auto;
+  height: var(--resource-select-dialog-max-height);
   max-height: var(--resource-select-dialog-max-height);
   display: flex;
   flex-direction: column;
 
   .el-dialog__header {
+    flex: 0 0 auto;
     padding: 8px 24px 0 !important;
-    border-bottom: 0;
+    border-bottom: 1px solid var(--panel-border-color, var(--el-border-color));
   }
 
   .el-dialog__body {
@@ -939,8 +942,9 @@ export default {
   }
 
   .el-dialog__footer {
-    padding: 4px 24px 6px !important;
-    border-top-color: var(--panel-border-color, var(--el-border-color));
+    flex: 0 0 auto;
+    padding: 10px 24px !important;
+    border-top: 1px solid var(--panel-border-color, var(--el-border-color));
   }
 
   .el-dialog__body > div {
@@ -967,22 +971,11 @@ export default {
   .resource-select-dialog__tabs {
     position: relative;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     width: 100%;
-    height: var(--tab-page-header-height, 34px);
-    gap: 4px;
-
-    &::after {
-      content: '';
-      position: absolute;
-      z-index: 1;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      height: 1px;
-      background-color: var(--panel-border-color, var(--el-border-color));
-      pointer-events: none;
-    }
+    height: var(--tab-page-header-height);
+    gap: 0;
+    background-color: var(--tab-page-navigation-background-color);
   }
 
   .resource-select-dialog__tab {
@@ -990,16 +983,16 @@ export default {
     z-index: 2;
     display: inline-flex;
     align-items: center;
-    height: var(--tab-page-header-height, 34px);
-    padding: 0 14px;
+    height: var(--tab-page-header-height);
+    padding: 0 24px;
     border: 0;
     border-radius: 0;
     outline: none;
-    background-color: var(--page-background-color, #fff);
+    background-color: var(--tab-page-navigation-background-color);
     color: var(--el-text-color-regular, #606266);
     cursor: pointer;
     font: inherit;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
     line-height: 1;
     user-select: none;
@@ -1009,38 +1002,33 @@ export default {
       color 120ms ease,
       background-color 120ms ease;
 
-    &:hover:not(.is-active) {
-      color: var(--el-text-color-regular, #606266);
-      background-color: var(--page-background-color, #fff);
+    &:first-child {
+      padding-left: 0;
     }
 
-    &:not(.is-active) {
-      border-bottom: 1px solid var(--panel-border-color, var(--el-border-color));
+    & + .resource-select-dialog__tab::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 1px;
+      height: 14px;
+      background-color: var(--panel-border-color, var(--el-border-color));
+      transform: translateY(-50%);
+      pointer-events: none;
     }
 
     &.is-active {
       color: var(--el-color-primary);
-      font-weight: 500;
-      border: 1px solid var(--panel-border-color, var(--el-border-color));
-      border-bottom: 0;
+      background-color: var(--tab-page-navigation-background-color);
+      border: 0;
       border-radius: 4px 4px 0 0;
       box-shadow: none;
-
-      &::after {
-        content: '';
-        position: absolute;
-        z-index: 3;
-        right: 0;
-        bottom: -2px;
-        left: 0;
-        height: 3px;
-        background-color: var(--page-background-color, #fff);
-        pointer-events: none;
-      }
     }
 
-    &.is-active .resource-select-dialog__tab-count {
-      color: var(--el-color-primary);
+    &:not(.is-active):hover {
+      color: var(--el-text-color-regular, #606266);
+      background-color: var(--tab-page-navigation-background-color);
     }
 
     &:focus,
@@ -1052,8 +1040,9 @@ export default {
   }
 
   .resource-select-dialog__tab-count {
-    color: var(--el-text-color-placeholder);
-    font-size: 12px;
+    color: inherit;
+    font-size: inherit;
+    opacity: 0.62;
   }
 
   .resource-select-dialog__content,
@@ -1070,7 +1059,7 @@ export default {
     flex: 1 1 auto;
     height: 100%;
     min-height: 0;
-    gap: 4px;
+    gap: 8px;
   }
 
   .table-content {
@@ -1093,8 +1082,7 @@ export default {
 
   .auto-data-table .el-data-table > .el-data-table__surface {
     // Header, tabs, toolbar, dialog padding and footer use 171px in total.
-    // The table can therefore size to its rows without ever growing the
-    // dialog beyond its existing maximum height.
+    // Keep the table inside the dialog's fixed-height content area.
     max-height: calc(var(--resource-select-dialog-max-height) - 171px);
   }
 

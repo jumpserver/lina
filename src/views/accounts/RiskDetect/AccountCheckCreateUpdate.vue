@@ -5,7 +5,7 @@
 <script>
 import { periodicMeta } from '@/components/const'
 import { RequiredChange } from '@/components/Form/DataForm/rules'
-import { ResourceSelect, Select2, TreeResourceSelect } from '@/components/Form/FormFields'
+import { NodeSelect, ResourceSelect, Select2 } from '@/components/Form/FormFields'
 import i18n from '@/i18n/i18n'
 import { GenericCreateUpdatePage } from '@/layout/components'
 
@@ -76,8 +76,8 @@ export default {
           }
         },
         nodes: {
-          type: 'treeResourceSelect',
-          component: TreeResourceSelect,
+          type: 'nodeSelect',
+          component: NodeSelect,
           rules: [{ required: false }],
           el: {
             value: [],

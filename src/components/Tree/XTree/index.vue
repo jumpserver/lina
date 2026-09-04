@@ -18,9 +18,10 @@
         v-if="hasTreeMenu"
         ref="toolsDropdown"
         :hide-timeout="160"
-        placement="bottom-start"
+        :placement="treeSetting.toolsPlacement"
         popper-class="x-tree-tools-popper"
         :show-timeout="80"
+        :teleported="treeSetting.toolsTeleported"
         trigger="hover"
         @command="handleTreeToolCommand"
       >
@@ -69,6 +70,7 @@
                 </el-radio-group>
               </li>
             </template>
+            <slot :close="closeToolsDropdown" name="tools-menu" />
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -362,6 +364,8 @@ export default {
       searchFocusFrame: null,
       assetScope: getAssetScopeValue(this.$cookie, this.setting),
       searchMode: false,
+      localFilterMode: false,
+      localFilterNodeIds: new Set(),
       menuVisible: false,
       menuPosition: { x: 0, y: 0 },
       editingKey: '',
@@ -433,6 +437,8 @@ export default {
           showCollapse: false,
           showRefresh: false,
           showAssetScope: false,
+          toolsPlacement: 'bottom-start',
+          toolsTeleported: true,
           showAssets: false,
           hasRightMenu: true,
           selectSyncToRoute: true,
@@ -471,7 +477,11 @@ export default {
       return this.treeSetting.showCollapse || this.treeSetting.showRefresh
     },
     hasTreeMenu() {
-      return this.hasTreeMenuOperations || this.treeSetting.showAssetScope
+      return (
+        this.hasTreeMenuOperations ||
+        this.treeSetting.showAssetScope ||
+        Boolean(this.$slots['tools-menu'])
+      )
     },
     hasTreeTools() {
       return this.treeSetting.showSearch || this.hasTreeMenu
@@ -762,8 +772,14 @@ export default {
       }
       if (Number.isFinite(amount)) {
         this.nodeAmounts.set(key, amount)
+        if (this.localFilterMode && this.normalNodeAmounts) {
+          this.normalNodeAmounts.set(key, amount)
+        }
       } else {
         this.nodeAmounts.delete(key)
+        if (this.localFilterMode && this.normalNodeAmounts) {
+          this.normalNodeAmounts.delete(key)
+        }
       }
     },
     setNodeMetric(id, amount) {
@@ -1828,8 +1844,7 @@ export default {
         })
       })
     },
-    async filterTreeLocally(keyword, isCurrent) {
-      const query = keyword.toLocaleLowerCase()
+    async filterTreeByPredicate(matches, isCurrent) {
       const entries = []
       const stack = []
       const chunkSize = 2000
@@ -1841,7 +1856,7 @@ export default {
         const { node, parentIndex } = stack.pop()
         const entryIndex = entries.length
         entries.push({
-          matches: this.getNodeLabel(node).toLocaleLowerCase().includes(query),
+          matches: Boolean(matches(node)),
           node,
           parentIndex
         })
@@ -1912,11 +1927,87 @@ export default {
       }
       return { count: visibleIndexes.size, roots }
     },
+    filterTreeLocally(keyword, isCurrent) {
+      const query = keyword.toLocaleLowerCase()
+      return this.filterTreeByPredicate(
+        (node) => this.getNodeLabel(node).toLocaleLowerCase().includes(query),
+        isCurrent
+      )
+    },
+    async showOnlyNodes(nodeIds, options = {}) {
+      const includedIds = new Set(
+        Array.from(nodeIds || [])
+          .filter((id) => id !== undefined && id !== null && id !== '')
+          .map(String)
+      )
+      const query = String(options.keyword ?? this.searchValue)
+        .trim()
+        .toLocaleLowerCase()
+      const requestId = ++this.searchRequestId
+      this.debouncedSearch.cancel()
+      this.searchAbortController?.abort()
+      this.searchAbortController = null
+      this.searchLoading = false
+      this.cancelAmountLoading()
+
+      const filtered = await this.filterTreeByPredicate(
+        (node) => {
+          const ids = [this.getNodeAmountResourceId(node), node?.id]
+          const selected = ids.some(
+            (id) => id !== undefined && id !== null && includedIds.has(String(id))
+          )
+          return selected && (!query || this.getNodeLabel(node).toLocaleLowerCase().includes(query))
+        },
+        () => requestId === this.searchRequestId
+      )
+      if (!filtered || requestId !== this.searchRequestId) {
+        return
+      }
+      this.cancelAmountLoading()
+      if (!this.searchMode && !this.normalTreeDeferredBySearch) {
+        this.normalNodeAmounts = new Map(this.nodeAmounts)
+        this.normalExpandedNodeIds = new Set(this.expandedNodeIds)
+      } else if (!this.localFilterMode && this.normalNodeAmounts) {
+        this.nodeAmounts.forEach((amount, key) => this.normalNodeAmounts.set(key, amount))
+        this.nodeAmounts = new Map(this.normalNodeAmounts)
+      }
+
+      this.localFilterMode = true
+      this.localFilterNodeIds = includedIds
+      this.searchMode = true
+      this.treeData = filtered.roots
+      this.treeNodeCount = filtered.count
+      this.treeKey += 1
+      await this.$nextTick()
+      await this.expandInitialNodes()
+      const currentNode = this.currentNode
+        ? this.findTreeNodeIn(this.treeData, this.currentNode.id)
+        : null
+      this.currentNode = currentNode
+      this.$refs.tree?.setCurrentKey(currentNode?.id ?? null)
+      this.notifySearchState({
+        active: Boolean(query),
+        keyword: query,
+        resultCount: filtered.count,
+        selectedOnly: true,
+        ...options.context
+      })
+      this.startProgressiveAmountLoading()
+    },
+    restoreAllNodes() {
+      this.localFilterMode = false
+      this.localFilterNodeIds.clear()
+      this.searchVisible = false
+      return this.searchTree('')
+    },
     notifySearchState(state) {
       this.treeSetting.callback?.onSearchStateChange?.(state)
       this.$emit('search-state-change', state)
     },
     async searchTree(keyword, context = {}) {
+      if (this.localFilterMode) {
+        return this.showOnlyNodes(this.localFilterNodeIds, { context, keyword })
+      }
       const requestId = ++this.searchRequestId
       this.searchAbortController?.abort()
       const controller = new AbortController()
@@ -2051,6 +2142,8 @@ export default {
       this.searchAbortController = null
       this.searchLoading = false
       this.searchMode = false
+      this.localFilterMode = false
+      this.localFilterNodeIds.clear()
       this.normalTreeDeferredBySearch = false
       this.normalNodeAmounts = null
       this.normalExpandedNodeIds = null
@@ -2249,8 +2342,8 @@ export default {
         delete node.assets_amount
         this.setNodeAmount(node, 0)
         if (this.useVirtualTree) {
-          this.appendRawTreeNode(parent, node)
-          this.appendNodeToNormalTreeWhenSearching(parent, node)
+          this.prependRawTreeNode(parent, node)
+          this.prependNodeToNormalTreeWhenSearching(parent, node)
           this.treeNodeCount += 1
           this.normalTreeNodeCount += 1
           // Rebuild only el-tree-v2's local flattened index. Calling loadRoot
@@ -2259,10 +2352,15 @@ export default {
           await this.activateCreatedNode(parent, node)
           return
         }
-        this.$refs.tree?.append(node, parent)
+        const firstChild = parent.children?.[0]
+        if (firstChild) {
+          this.$refs.tree?.insertBefore(node, firstChild)
+        } else {
+          this.$refs.tree?.append(node, parent)
+        }
         this.setTreeNodeLeafState(node, true)
         this.setTreeNodeLeafState(this.$refs.tree?.getNode(parent.id) || parent, false)
-        this.appendNodeToNormalTreeWhenSearching(parent, node)
+        this.prependNodeToNormalTreeWhenSearching(parent, node)
         this.treeNodeCount += 1
         this.normalTreeNodeCount += 1
         await this.activateCreatedNode(parent, node)
@@ -2756,10 +2854,10 @@ export default {
         assetScope: this.assetScope
       }
     },
-    appendRawTreeNode(parent, node) {
+    prependRawTreeNode(parent, node) {
       parent.children ||= []
       if (!parent.children.some((item) => String(item.id) === String(node.id))) {
-        parent.children.push(node)
+        parent.children.unshift(node)
       }
       this.setTreeNodeLeafState(node, true)
       this.setTreeNodeLeafState(parent, false)
@@ -2808,13 +2906,13 @@ export default {
       }
       return null
     },
-    appendNodeToNormalTreeWhenSearching(parent, node) {
+    prependNodeToNormalTreeWhenSearching(parent, node) {
       if (!this.searchMode) {
         return
       }
       const normalParent = this.findTreeNodeIn(this.normalTreeData, parent.id)
       if (normalParent && normalParent !== parent) {
-        this.appendRawTreeNode(normalParent, node)
+        this.prependRawTreeNode(normalParent, node)
       }
     },
     findTreeNodeIn(roots, id) {

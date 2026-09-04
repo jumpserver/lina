@@ -90,8 +90,8 @@ export default {
       tableConfig: null
     }
     provide(LIST_TABLE_KEY, listTableContext)
-    const { listRoot } = useListTableViewport()
-    const resolvedFillHeight = computed(() => props.fillHeight)
+    const { listRoot, fillHeight: viewportFillHeight } = useListTableViewport()
+    const resolvedFillHeight = computed(() => props.fillHeight || viewportFillHeight.value)
     return { listTableContext, listRoot, resolvedFillHeight }
   },
   props: {

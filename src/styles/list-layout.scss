@@ -1,9 +1,9 @@
-// Page lists grow with their rows. The page content owns vertical scrolling;
-// embedded/dialog lists keep their explicitly configured sizing.
+// Only active page lists opt in. Forms, detail cards and embedded/dialog lists
+// keep their existing scrolling. A page list is content-sized up to the space
+// above the sidebar footer; overflow then stays inside the table body.
 .page .page-content.wrapper-content[data-list-layout='viewport'],
 .page.tab-page .tab-page-content[data-list-layout='viewport'] {
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
+  overflow: hidden !important;
   scrollbar-gutter: auto;
   padding-bottom: var(--list-viewport-bottom-offset, 44px);
   background-color: var(--page-content-background-color, #f3f3f4);
@@ -15,16 +15,15 @@
   }
 
   > [data-list-layout='container'] {
-    flex-shrink: 0;
+    flex-shrink: 1;
     min-width: 0;
   }
 }
 
 .page [data-list-layout='container'] {
   display: flex !important;
-  flex: 0 0 auto;
+  flex: 1 1 0%;
   flex-direction: column;
-  max-height: none;
   min-height: 0;
   min-width: 0;
 
@@ -71,16 +70,6 @@
   }
 }
 
-// Tree/list pages own the full available content height independently of the
-// number of rows in the table. The list remains content-sized inside the right
-// pane, while the tree keeps a stable viewport and scrolls internally.
-.page [data-list-layout='container']:has(> .tree-table-content),
-.page [data-list-layout='container'].tree-table-content {
-  flex: 0 0 auto;
-  height: auto;
-  min-height: 100%;
-}
-
 .page .list-table--fill-height {
   > :not(.table-content) {
     flex: none;
@@ -88,21 +77,19 @@
 
   > .table-content {
     display: flex;
-    flex: 0 1 auto;
-    flex-direction: column;
-    max-height: 100%;
+    flex: 1 1 0%;
     min-height: 0;
-    min-width: 0;
-    width: 100%;
 
     // Page lists sit directly on the content background. Remove the outer
-    // card edges so the table does not look like a nested card.
+    // card edges and white fill so the area below a short table keeps the
+    // page background. The table surface itself remains white.
     > .ibox {
       border-top: 0;
       border-right: 0;
       border-bottom: 0;
       border-left: 0;
       border-radius: 0;
+      background-color: var(--page-content-background-color, #f3f3f4);
 
       .el-data-table__body > .el-table,
       .el-table__header thead > tr > th:first-child,
@@ -137,21 +124,10 @@
     .auto-data-table,
     .auto-data-table__content {
       display: flex;
-      flex: 0 1 auto;
+      flex: 1 1 0%;
       flex-direction: column;
-      max-height: 100%;
       min-height: 0;
       min-width: 0;
-    }
-
-    // `fill-height` still provides fixed-header/body scrolling, but a page
-    // list follows the measured surface height until the viewport becomes
-    // smaller. Explicit fill-height tables outside pages keep their original
-    // host-filling behavior.
-    .el-data-table--fill-height {
-      flex: 0 1 auto;
-      height: auto;
-      max-height: 100%;
     }
 
     > .ibox,

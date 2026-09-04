@@ -59,13 +59,6 @@ export function deleteConversation(id) {
   })
 }
 
-export function listAssistants() {
-  return quietRequest({
-    url: `${CHAT_AI_BASE}/assistants/`,
-    method: 'get'
-  })
-}
-
 export async function listConversationMessages(id) {
   let next = `${CHAT_AI_BASE}/conversations/${id}/messages/?limit=${PAGE_SIZE}`
   const messages = []
@@ -227,7 +220,7 @@ function parseEventBlock(block, onEvent) {
     if (field === 'data') data.push(value)
   }
 
-  if (!data.length) return
+  if (!data.length) return ''
 
   const raw = data.join('\n')
   let payload = raw
@@ -237,6 +230,7 @@ function parseEventBlock(block, onEvent) {
     // Keep non-JSON event data readable instead of dropping the stream.
   }
   onEvent?.({ event, data: payload })
+  return event
 }
 
 function nextBoundary(buffer) {
@@ -324,6 +318,7 @@ async function consumeEventStream(response, onEvent) {
   const reader = response.body.getReader()
   const decoder = new TextDecoder('utf-8')
   let buffer = ''
+  const terminalEvents = new Set(['message_done', 'message_error'])
 
   while (true) {
     const { value, done } = await reader.read()
@@ -333,7 +328,11 @@ async function consumeEventStream(response, onEvent) {
     while (boundary) {
       const block = buffer.slice(0, boundary.index)
       buffer = buffer.slice(boundary.index + boundary.length)
-      if (block.trim()) parseEventBlock(block, onEvent)
+      const event = block.trim() ? parseEventBlock(block, onEvent) : ''
+      if (terminalEvents.has(event)) {
+        await reader.cancel()
+        return
+      }
       boundary = nextBoundary(buffer)
     }
 

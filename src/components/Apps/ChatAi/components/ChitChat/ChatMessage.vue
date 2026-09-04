@@ -237,9 +237,7 @@ const editor = ref(null)
 const draftContent = ref('')
 const messageActive = computed(() => ['pending', 'streaming'].includes(props.message.status))
 const visibleResultCards = computed(() => {
-  return (props.message.result_cards || []).filter((card) => {
-    return card?.type === 'sources' || card?.source?.type === 'web_search'
-  })
+  return (props.message.result_cards || []).filter((card) => card && card.type !== 'progress')
 })
 const showThinking = computed(() => {
   return (
@@ -347,14 +345,14 @@ function formatFileSize(size) {
     min-height: 22px;
     align-items: center;
     gap: 6px;
-    color: #7c7c7c;
-    font-size: 10px;
+    color: #68707c;
+    font-size: 11px;
   }
 
   &__content {
     position: relative;
     min-width: 0;
-    color: #35394b;
+    color: #303544;
   }
 
   &.is-user {
@@ -429,8 +427,8 @@ function formatFileSize(size) {
 }
 
 .assistant-name {
-  color: #555a70;
-  font-size: 10px;
+  color: #444b5d;
+  font-size: 11px;
   font-weight: 720;
 }
 
@@ -489,13 +487,13 @@ function formatFileSize(size) {
     }
 
     strong {
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 600;
     }
 
     small {
-      color: #9298a7;
-      font-size: 9px;
+      color: #737b87;
+      font-size: 11px;
     }
   }
 }

@@ -11,7 +11,7 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import ResourceSelect from '@/components/Form/FormFields/ResourceSelect'
-import TreeResourceSelect from '@/components/Form/FormFields/TreeResourceSelect'
+import NodeSelect from '@/components/Form/FormFields/NodeSelect'
 import AccountFormatter from './components/AccountFormatter'
 import { AllAccount } from '../const'
 import ProtocolsSelect from '@/components/Form/FormFields/AllOrSpec.vue'
@@ -111,8 +111,8 @@ export default {
           }
         },
         nodes: {
-          type: 'treeResourceSelect',
-          component: TreeResourceSelect,
+          type: 'nodeSelect',
+          component: NodeSelect,
           rules: [
             {
               required: false

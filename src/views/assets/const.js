@@ -5,9 +5,9 @@ import rules from '@/components/Form/DataForm/rules'
 import { ColorSwatchFormatter } from '@/components/Table/TableFormatters'
 import {
   JSONManyToManySelect,
+  NodeSelect,
   ResourceSelect,
-  Select2,
-  TreeResourceSelect
+  Select2
 } from '@/components/Form/FormFields'
 import { message } from '@/utils/vue/message'
 
@@ -212,8 +212,8 @@ export const assetFieldsMeta = (vm, category, type) => {
       }
     },
     nodes: {
-      type: 'treeResourceSelect',
-      component: TreeResourceSelect,
+      type: 'nodeSelect',
+      component: NodeSelect,
       rules: [rules.RequiredChange],
       el: {
         // 不要在 el 里写 value: []，会作为 prop 透传并在表单绑定时干扰节点回填
