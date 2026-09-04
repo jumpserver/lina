@@ -25,8 +25,8 @@
         <span class="brand-copy">
           <strong>{{ t('ChatAIName') }}</strong>
           <small>
-            <i :class="{ 'is-busy': busy || transcribing || composerRecording }" />
-            {{ busy || transcribing || composerRecording ? activityLabel : t('ChatAIReady') }}
+            <i :class="{ 'is-busy': busy || composerRecording }" />
+            {{ busy || composerRecording ? activityLabel : t('ChatAIReady') }}
           </small>
         </span>
       </div>
@@ -134,8 +134,8 @@
               :approval="approval"
               :approval-processing="approvalProcessing"
               :assistant-name="t('ChatAIName')"
-              :can-edit="!busy"
-              :can-regenerate="item.id === latestAssistantMessageId"
+              :can-edit="!busy && features.branch"
+              :can-regenerate="features.regenerate && item.id === latestAssistantMessageId"
               :message="item"
               :trace="traces[item.id] || []"
               @cancel-approval="handleCancelApproval"
@@ -174,11 +174,7 @@
             :disabled="awaitingApproval || recoverableRun"
             :draft-key="composerDraftKey"
             :stopping="stopping"
-            :stop-disabled="approvalProcessing || backgroundQueuing || preparing"
-            :transcribing="transcribing"
-            :voice-transcription-mode="voiceTranscriptionMode"
-            :web-search-available="webSearchAvailable"
-            @audio="handleAudio"
+            :stop-disabled="approvalProcessing"
             @error="handleMicrophoneError"
             @attachment-error="handleAttachmentError"
             @recording-change="composerRecording = $event"
@@ -195,7 +191,16 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import {
+  computed,
+  nextTick,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  ref,
+  watch
+} from 'vue'
 import {
   ArrowRight,
   Bottom,
@@ -211,7 +216,6 @@ import {
 } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
 import { useI18n } from 'vue-i18n'
-import { useStore } from 'vuex'
 
 import { message } from '@/utils/vue/message'
 import AssistantMark from './components/AssistantMark.vue'
@@ -237,7 +241,6 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'expand', 'compress'])
 const { t } = useI18n()
-const store = useStore()
 const composer = ref(null)
 const scrollArea = ref(null)
 const conversationPanel = ref(null)
@@ -246,14 +249,6 @@ const historyOpen = ref(false)
 const composerRecording = ref(false)
 const stickToBottom = ref(true)
 const showScrollToLatest = ref(false)
-const voiceTranscriptionMode = computed(() => {
-  return store.getters.publicSettings?.CHAT_AI_VOICE_TRANSCRIPTION_MODE === 'server'
-    ? 'server'
-    : 'browser'
-})
-const webSearchAvailable = computed(() => {
-  return Boolean(store.getters.publicSettings?.CHAT_AI_WEB_SEARCH_ENABLED)
-})
 
 const {
   conversations,
@@ -268,13 +263,12 @@ const {
   streaming,
   stopping,
   approvalProcessing,
-  backgroundQueuing,
   preparing,
-  transcribing,
   awaitingApproval,
   recoverableRun,
   busy,
   lastError,
+  features,
   initialize,
   loadConversations,
   loadMessages,
@@ -287,16 +281,15 @@ const {
   stopGeneration,
   confirmApproval,
   rejectApproval,
-  transcribe,
   branchMessage,
-  regenerateMessage
+  regenerateMessage,
+  activateLifecycle,
+  deactivateLifecycle
 } = useChatAi({ onError: handleRequestError })
 
 const activityLabel = computed(() => {
   if (stopping.value) return t('ChatAIStopping')
-  if (transcribing.value) return t('ChatAITranscribing')
   if (composerRecording.value) return t('ChatAIRecording')
-  if (backgroundQueuing.value) return t('ChatAIBackgroundQueuing')
   if (approvalProcessing.value) return t('ChatAIExecuting')
   if (awaitingApproval.value) return t('ChatAIWaitingApproval')
   return t('ChatAIWorking')
@@ -315,7 +308,7 @@ const messageLoadFailed = computed(() => {
   )
 })
 const navigationLocked = computed(() => {
-  return busy.value || composerRecording.value || transcribing.value || loadingMessages.value
+  return busy.value || composerRecording.value || loadingMessages.value
 })
 
 const suggestions = computed(() => {
@@ -343,12 +336,7 @@ const suggestions = computed(() => {
 
 function friendlyError(error) {
   const code = error?.code || error?.response?.data?.code
-  if (code === 'CONVERSATION_BUSY') return t('ChatAIConversationBusy')
-  if (code === 'MODEL_UNAVAILABLE') return t('ChatAIModelUnavailable')
-  if (code === 'MODEL_TIMEOUT') return t('ChatAIModelTimeout')
-  if (code === 'audio_too_long') return t('ChatAIAudioTooLong')
-  if (code === 'audio_file_too_large') return t('ChatAIAudioTooLarge')
-  if (code === 'transcription_busy') return t('ChatAITranscriptionBusy')
+  if (['conversation_busy', 'run_queue_full'].includes(code)) return t('ChatAIConversationBusy')
   return error?.detail || error?.response?.data?.detail || error?.message || t('ServerBusyRetry')
 }
 
@@ -435,8 +423,7 @@ async function handleRename(conversation, title) {
 
 async function sendMessage(content, images, options) {
   stickToBottom.value = true
-  const sent = await sendMessageState(content, images, options)
-  if (sent && options?.background) message.success(t('ChatAIBackgroundQueued'))
+  await sendMessageState(content, images, options)
   await nextTick()
   stickToBottom.value = true
   scrollToBottom(true, true)
@@ -444,16 +431,14 @@ async function sendMessage(content, images, options) {
 
 async function handleBranchMessage(messageId, content) {
   stickToBottom.value = true
-  const options = webSearchAvailable.value ? {} : { webSearch: false }
-  const branched = await branchMessage(messageId, content, options)
+  const branched = await branchMessage(messageId, content)
   if (!branched) return
   await nextTick()
   scrollToBottom(true, true)
 }
 
 function handleRegenerateMessage(messageId) {
-  const options = webSearchAvailable.value ? {} : { webSearch: false }
-  return regenerateMessage(messageId, options)
+  return regenerateMessage(messageId)
 }
 
 function fillSuggestion(content) {
@@ -471,17 +456,6 @@ async function retryLoadingMessages() {
   }
 }
 
-async function handleAudio(file) {
-  try {
-    const language = (navigator.language || '').split(/[-_]/)[0]
-    const result = await transcribe(file, language)
-    composer.value?.appendValue(result.text || '')
-    message.success(t('ChatAITranscriptionReady'))
-  } catch {
-    // The composable already surfaces a precise error.
-  }
-}
-
 function handleMicrophoneError() {
   message.warning(t('ChatAIMicrophonePermission'))
 }
@@ -493,7 +467,8 @@ function handleAttachmentError(detail) {
 async function handleConfirmApproval() {
   try {
     const result = await confirmApproval()
-    if (result?.result?.ok) message.success(t('ChatAIExecutionSucceeded'))
+    if (['approved', 'consumed'].includes(result?.status)) message.success(t('ChatAIExecuting'))
+    else if (result?.result?.ok) message.success(t('ChatAIExecutionSucceeded'))
     else message.warning(t('ChatAIExecutionIssue'))
   } catch {
     // The composable already surfaces a precise error.
@@ -553,6 +528,38 @@ function handleShortcut(event) {
   }
 }
 
+let shortcutListening = false
+let workspaceSuspended = false
+
+function attachShortcut() {
+  if (shortcutListening || !props.active) return
+  window.addEventListener('keydown', handleShortcut)
+  shortcutListening = true
+}
+
+function detachShortcut() {
+  if (!shortcutListening) return
+  window.removeEventListener('keydown', handleShortcut)
+  shortcutListening = false
+}
+
+function suspendWorkspace() {
+  if (workspaceSuspended) return
+  workspaceSuspended = true
+  detachShortcut()
+  deactivateLifecycle()
+}
+
+async function resumeWorkspace() {
+  if (!workspaceSuspended) {
+    attachShortcut()
+    return
+  }
+  workspaceSuspended = false
+  attachShortcut()
+  await activateLifecycle()
+}
+
 watch(
   () =>
     visibleMessages.value
@@ -580,7 +587,12 @@ watch(
 watch(
   () => props.active,
   (active) => {
-    if (!active) historyOpen.value = false
+    if (!active) {
+      historyOpen.value = false
+      detachShortcut()
+      return
+    }
+    if (!workspaceSuspended) attachShortcut()
   }
 )
 
@@ -591,12 +603,15 @@ watch(historyOpen, async (open) => {
 })
 
 onMounted(() => {
-  window.addEventListener('keydown', handleShortcut)
+  attachShortcut()
 })
 
-onBeforeUnmount(() => {
-  window.removeEventListener('keydown', handleShortcut)
+onActivated(() => {
+  resumeWorkspace()
 })
+
+onDeactivated(suspendWorkspace)
+onBeforeUnmount(suspendWorkspace)
 
 defineExpose({ init, focus, newConversation: handleNew })
 </script>

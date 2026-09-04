@@ -23,12 +23,10 @@
 
       <div :class="['chat-message__content', { 'has-error': message.status === 'failed' }]">
         <div v-if="message.images?.length" class="message-images">
-          <img
+          <AuthenticatedImage
             v-for="image in message.images"
             :key="image.id || image.url"
-            :alt="image.name"
-            :src="resolveImageUrl(image.url)"
-            loading="lazy"
+            :attachment="image"
           />
         </div>
         <div v-if="message.files?.length" class="message-files">
@@ -36,9 +34,14 @@
             v-for="file in message.files"
             :key="file.id || file.url"
             :download="file.name"
-            :href="resolveAttachmentUrl(file.url)"
+            href=""
+            :aria-busy="downloadingAttachment === (file.id || file.name)"
+            @click.prevent="downloadFile(file)"
           >
-            <el-icon><Document /></el-icon>
+            <el-icon>
+              <Loading v-if="downloadingAttachment === (file.id || file.name)" class="spin" />
+              <Document v-else />
+            </el-icon>
             <span>
               <strong>{{ file.name }}</strong>
               <small>{{ formatFileSize(file.size) }}</small>
@@ -177,15 +180,18 @@ import {
   CopyDocument,
   Document,
   EditPen,
+  Loading,
   RefreshRight,
   UserFilled,
   Warning
 } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
 
+import { fetchChatAIArtifact } from '@/api/chatAi'
 import { copy } from '@/utils/common/index'
-import { withBaseApi } from '@/utils/env'
+import { message as flashMessage } from '@/utils/vue/message'
 import ApprovalCard from './ApprovalCard.vue'
+import AuthenticatedImage from './AuthenticatedImage.vue'
 import ExecutionTrace from './ExecutionTrace.vue'
 import MessageText from './MessageText.vue'
 import ResultCards from './ResultCards.vue'
@@ -231,16 +237,14 @@ const emit = defineEmits([
 ])
 const { t } = useI18n()
 const copied = ref(false)
+const downloadingAttachment = ref('')
+const downloadObjectUrls = new Set()
 let copyTimer = null
 const editing = ref(false)
 const editor = ref(null)
 const draftContent = ref('')
 const messageActive = computed(() => ['pending', 'streaming'].includes(props.message.status))
-const visibleResultCards = computed(() => {
-  return (props.message.result_cards || []).filter((card) => {
-    return card?.type === 'sources' || card?.source?.type === 'web_search'
-  })
-})
+const visibleResultCards = computed(() => props.message.result_cards || [])
 const showThinking = computed(() => {
   return (
     messageActive.value &&
@@ -283,6 +287,8 @@ function copyMessage() {
 
 onBeforeUnmount(() => {
   if (copyTimer) window.clearTimeout(copyTimer)
+  for (const url of downloadObjectUrls) URL.revokeObjectURL(url)
+  downloadObjectUrls.clear()
 })
 
 function startEdit() {
@@ -306,20 +312,38 @@ function submitEdit() {
   cancelEdit()
 }
 
-function resolveImageUrl(url) {
-  if (/^(blob:|data:|https?:)/.test(url || '')) return url
-  return withBaseApi(url)
-}
-
-function resolveAttachmentUrl(url) {
-  if (/^(blob:|data:|https?:)/.test(url || '')) return url
-  return withBaseApi(url)
+async function downloadFile(attachment) {
+  const key = attachment.id || attachment.name
+  if (!key || downloadingAttachment.value) return
+  downloadingAttachment.value = key
+  try {
+    const file = await fetchChatAIArtifact(attachment)
+    const url = URL.createObjectURL(file)
+    downloadObjectUrls.add(url)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = file.name || attachment.name || 'attachment'
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    window.setTimeout(() => {
+      URL.revokeObjectURL(url)
+      downloadObjectUrls.delete(url)
+    }, 1000)
+  } catch (error) {
+    flashMessage.error(
+      error?.detail || error?.response?.data?.detail || error?.message || t('ServerBusyRetry')
+    )
+  } finally {
+    downloadingAttachment.value = ''
+  }
 }
 
 function formatFileSize(size) {
-  if (size < 1024) return `${size} B`
-  if (size < 1024 * 1024) return `${Math.ceil(size / 1024)} KiB`
-  return `${(size / (1024 * 1024)).toFixed(1)} MiB`
+  const value = Number(size || 0)
+  if (value < 1024) return `${value} B`
+  if (value < 1024 * 1024) return `${Math.ceil(value / 1024)} KiB`
+  return `${(value / (1024 * 1024)).toFixed(1)} MiB`
 }
 </script>
 

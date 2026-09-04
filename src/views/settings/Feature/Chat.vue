@@ -37,172 +37,75 @@
             </div>
             <div class="provider-value">
               <span class="provider-value__status" />
-              <span>{{
-                iframeMode ? t('ChatAIIframeMethod') : t('ChatAICompatibleProvider')
-              }}</span>
-              <el-tag effect="plain" size="small" type="success">
-                {{ iframeMode ? 'iframe' : 'OpenAI API' }}
-              </el-tag>
+              <span>{{ t('ChatAICompatibleProvider') }}</span>
+              <el-tag effect="plain" size="small" type="success">OpenAI API</el-tag>
             </div>
           </header>
 
           <div class="form-grid">
-            <el-form-item class="form-field--full" :label="t('ChatAIMethod')">
-              <el-radio-group v-model="form.CHAT_AI_METHOD">
-                <el-radio-button value="api">{{ t('ChatAIBuiltInMethod') }}</el-radio-button>
-                <el-radio-button value="iframe">{{ t('ChatAIIframeMethod') }}</el-radio-button>
-              </el-radio-group>
-              <div class="help-block">{{ t('ChatAIMethodHint') }}</div>
-            </el-form-item>
-
-            <el-form-item v-if="iframeMode" class="form-field--full" :label="t('ChatAIIframeURL')">
+            <el-form-item class="form-field--full" :label="t('ChatAIBaseURL')">
               <el-input
-                v-model.trim="form.CHAT_AI_EMBED_URL"
+                v-model.trim="form.CHAT_AI_BASE_URL"
                 autocomplete="off"
-                :placeholder="t('ChatAIIframeURLPlaceholder')"
+                :placeholder="t('ChatAIBaseURLPlaceholder')"
               />
-              <div class="help-block">{{ t('ChatAIIframeURLHint') }}</div>
+              <div class="help-block">{{ t('ChatAIBaseURLHint') }}</div>
             </el-form-item>
 
-            <template v-else>
-              <el-form-item class="form-field--full" :label="t('ChatAIBaseURL')">
-                <el-input
-                  v-model.trim="form.CHAT_AI_BASE_URL"
-                  autocomplete="off"
-                  :placeholder="t('ChatAIBaseURLPlaceholder')"
-                />
-                <div class="help-block">{{ t('ChatAIBaseURLHint') }}</div>
-              </el-form-item>
-
-              <el-form-item :label="t('ChatAIAPIKey')">
-                <el-input
-                  v-model="form.CHAT_AI_API_KEY"
-                  autocomplete="new-password"
-                  :placeholder="t('ChatAIAPIKeyPlaceholder')"
-                  show-password
-                  type="password"
-                >
-                  <template #prefix><Lock /></template>
-                </el-input>
-                <div class="help-block">{{ t('ChatAIAPIKeySavedHint') }}</div>
-              </el-form-item>
-
-              <el-form-item :label="t('ChatAIProxy')">
-                <el-input
-                  v-model.trim="form.CHAT_AI_PROXY"
-                  autocomplete="off"
-                  :placeholder="t('ChatAIProxyPlaceholder')"
-                />
-                <div class="help-block">{{ t('ChatAIProxyHint') }}</div>
-              </el-form-item>
-
-              <el-form-item class="form-field--full model-field" :label="t('ChatAIModel')">
-                <div class="model-picker">
-                  <el-select
-                    v-model="form.CHAT_AI_MODEL"
-                    allow-create
-                    default-first-option
-                    filterable
-                    :loading="discovering"
-                    :placeholder="t('ChatAIModelPlaceholder')"
-                  >
-                    <el-option
-                      v-for="model in modelOptions"
-                      :key="model.id"
-                      :label="model.label"
-                      :value="model.id"
-                    />
-                  </el-select>
-                  <el-button
-                    :disabled="!endpointReady"
-                    :loading="discovering"
-                    @click="refreshModels()"
-                  >
-                    <el-icon><Refresh /></el-icon>
-                    {{ t('ChatAIRefreshModels') }}
-                  </el-button>
-                </div>
-                <div class="help-block model-help">
-                  <span>{{ t('ChatAIManualModelHint') }}</span>
-                  <span v-if="modelsDiscovered" class="model-count">
-                    {{ t('ChatAIModelsLoaded', { count: modelOptions.length }) }}
-                  </span>
-                </div>
-              </el-form-item>
-
-              <el-form-item
-                class="form-field--full voice-field"
-                :label="t('ChatAIVoiceTranscriptionMode')"
-              >
-                <el-radio-group v-model="form.CHAT_AI_VOICE_TRANSCRIPTION_MODE">
-                  <el-radio-button value="browser">
-                    {{ t('ChatAIBrowserSpeechRecognition') }}
-                  </el-radio-button>
-                </el-radio-group>
-                <div class="help-block">{{ t('ChatAIVoiceTranscriptionModeHint') }}</div>
-              </el-form-item>
-            </template>
-          </div>
-        </section>
-
-        <section
-          v-if="!iframeMode"
-          class="settings-panel web-search-panel"
-          :class="{ 'is-enabled': form.CHAT_AI_WEB_SEARCH_ENABLED }"
-        >
-          <header class="section-header">
-            <div class="section-heading">
-              <span class="section-heading__icon section-heading__icon--search" aria-hidden="true">
-                <Search />
-              </span>
-              <div>
-                <h3>{{ t('ChatAIWebSearch') }}</h3>
-                <p>{{ t('ChatAIWebSearchDescription') }}</p>
-              </div>
-            </div>
-            <el-switch v-model="form.CHAT_AI_WEB_SEARCH_ENABLED" />
-          </header>
-
-          <div v-if="form.CHAT_AI_WEB_SEARCH_ENABLED" class="form-grid">
-            <el-form-item :label="t('ChatAIWebSearchProvider')">
-              <el-select v-model="form.CHAT_AI_WEB_SEARCH_PROVIDER">
-                <el-option label="Tavily" value="tavily" />
-                <el-option label="SearXNG" value="searxng" />
-              </el-select>
-            </el-form-item>
-
-            <el-form-item :label="t('ChatAIWebSearchBaseURL')">
+            <el-form-item :label="t('ChatAIAPIKey')">
               <el-input
-                v-model.trim="form.CHAT_AI_WEB_SEARCH_BASE_URL"
-                autocomplete="off"
-                :placeholder="t('ChatAIWebSearchBaseURLPlaceholder')"
-              />
-              <div class="help-block">{{ t('ChatAIWebSearchBaseURLHint') }}</div>
-            </el-form-item>
-
-            <el-form-item
-              v-if="form.CHAT_AI_WEB_SEARCH_PROVIDER === 'tavily'"
-              :label="t('ChatAIWebSearchAPIKey')"
-            >
-              <el-input
-                v-model="form.CHAT_AI_WEB_SEARCH_API_KEY"
+                v-model="form.CHAT_AI_API_KEY"
                 autocomplete="new-password"
-                :placeholder="t('ChatAIWebSearchAPIKeyPlaceholder')"
+                :placeholder="t('ChatAIAPIKeyPlaceholder')"
                 show-password
                 type="password"
               >
                 <template #prefix><Lock /></template>
               </el-input>
-              <div class="help-block">{{ t('ChatAIWebSearchAPIKeyHint') }}</div>
+              <div class="help-block">{{ t('ChatAIAPIKeySavedHint') }}</div>
             </el-form-item>
 
-            <el-form-item :label="t('ChatAIWebSearchProxy')">
+            <el-form-item :label="t('ChatAIProxy')">
               <el-input
-                v-model.trim="form.CHAT_AI_WEB_SEARCH_PROXY"
+                v-model.trim="form.CHAT_AI_PROXY"
                 autocomplete="off"
                 :placeholder="t('ChatAIProxyPlaceholder')"
               />
-              <div class="help-block">{{ t('ChatAIWebSearchProxyHint') }}</div>
+              <div class="help-block">{{ t('ChatAIProxyHint') }}</div>
+            </el-form-item>
+
+            <el-form-item class="form-field--full model-field" :label="t('ChatAIModel')">
+              <div class="model-picker">
+                <el-select
+                  v-model="form.CHAT_AI_MODEL"
+                  allow-create
+                  default-first-option
+                  filterable
+                  :loading="discovering"
+                  :placeholder="t('ChatAIModelPlaceholder')"
+                >
+                  <el-option
+                    v-for="model in modelOptions"
+                    :key="model.id"
+                    :label="model.label"
+                    :value="model.id"
+                  />
+                </el-select>
+                <el-button
+                  :disabled="!endpointReady"
+                  :loading="discovering"
+                  @click="refreshModels()"
+                >
+                  <el-icon><Refresh /></el-icon>
+                  {{ t('ChatAIRefreshModels') }}
+                </el-button>
+              </div>
+              <div class="help-block model-help">
+                <span>{{ t('ChatAIManualModelHint') }}</span>
+                <span v-if="modelsDiscovered" class="model-count">
+                  {{ t('ChatAIModelsLoaded', { count: modelOptions.length }) }}
+                </span>
+              </div>
             </el-form-item>
           </div>
         </section>
@@ -214,7 +117,6 @@
           </div>
           <div class="form-action-buttons">
             <el-button
-              v-if="!iframeMode"
               :disabled="!endpointReady || !modelReady"
               :loading="testing"
               @click="testConfiguration"
@@ -243,53 +145,42 @@
             <span :style="{ width: `${readinessPercentage}%` }" />
           </div>
           <div class="configuration-status__items">
-            <div v-if="iframeMode" class="status-item" :class="{ complete: iframeReady }">
+            <div class="status-item" :class="{ complete: endpointReady }">
               <span class="status-item__icon"><Check /></span>
               <div>
-                <strong>{{ t('ChatAIIframeURL') }}</strong>
-                <span>{{ iframeReady ? t('ChatAIConfigured') : t('ChatAIWaitingIframeURL') }}</span>
+                <strong>{{ t('ChatAIEndpointReady') }}</strong>
+                <span>{{
+                  endpointReady ? t('ChatAIConfigured') : t('ChatAIWaitingConfiguration')
+                }}</span>
               </div>
             </div>
-            <template v-else>
-              <div class="status-item" :class="{ complete: endpointReady }">
-                <span class="status-item__icon"><Check /></span>
-                <div>
-                  <strong>{{ t('ChatAIEndpointReady') }}</strong>
-                  <span>{{
-                    endpointReady ? t('ChatAIConfigured') : t('ChatAIWaitingConfiguration')
-                  }}</span>
-                </div>
+            <div class="status-item" :class="{ complete: modelReady }">
+              <span class="status-item__icon"><Check /></span>
+              <div>
+                <strong>{{ t('ChatAIModelReady') }}</strong>
+                <span>{{ form.CHAT_AI_MODEL || t('ChatAIWaitingModel') }}</span>
               </div>
-              <div class="status-item" :class="{ complete: modelReady }">
-                <span class="status-item__icon"><Check /></span>
-                <div>
-                  <strong>{{ t('ChatAIModelReady') }}</strong>
-                  <span>{{ form.CHAT_AI_MODEL || t('ChatAIWaitingModel') }}</span>
-                </div>
+            </div>
+            <div
+              class="status-item"
+              :class="{ complete: testState === 'success', failed: testState === 'failed' }"
+            >
+              <span class="status-item__icon"><Check /></span>
+              <div>
+                <strong>{{ t('ChatAIToolCallingReady') }}</strong>
+                <span>{{ testStatusText }}</span>
               </div>
-              <div
-                class="status-item"
-                :class="{ complete: testState === 'success', failed: testState === 'failed' }"
-              >
-                <span class="status-item__icon"><Check /></span>
-                <div>
-                  <strong>{{ t('ChatAIToolCallingReady') }}</strong>
-                  <span>{{ testStatusText }}</span>
-                </div>
-              </div>
-            </template>
+            </div>
           </div>
         </section>
 
         <section class="capability-note">
           <span class="capability-note__icon" aria-hidden="true"><MagicStick /></span>
-          <h3>{{ iframeMode ? t('ChatAIIframeMethod') : t('ChatAICapabilityTitle') }}</h3>
-          <p>{{ iframeMode ? t('ChatAIIframeCapabilityHint') : t('ChatAICapabilityHint') }}</p>
+          <h3>{{ t('ChatAICapabilityTitle') }}</h3>
+          <p>{{ t('ChatAICapabilityHint') }}</p>
           <div class="security-note">
             <Lock />
-            <span>{{
-              iframeMode ? t('ChatAIIframeSecurity') : t('ChatAICredentialSecurity')
-            }}</span>
+            <span>{{ t('ChatAICredentialSecurity') }}</span>
           </div>
         </section>
       </aside>
@@ -301,7 +192,7 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
-import { Check, Connection, Lock, MagicStick, Refresh, Search } from '@element-plus/icons-vue'
+import { Check, Connection, Lock, MagicStick, Refresh } from '@element-plus/icons-vue'
 import { IBox } from '@/components'
 import {
   discoverChatAIModels,
@@ -327,41 +218,27 @@ const hydrated = ref(false)
 
 const form = reactive({
   CHAT_AI_ENABLED: false,
-  CHAT_AI_METHOD: 'api',
-  CHAT_AI_EMBED_URL: '',
   CHAT_AI_BASE_URL: '',
   CHAT_AI_API_KEY: '',
   CHAT_AI_PROXY: '',
-  CHAT_AI_MODEL: '',
-  CHAT_AI_VOICE_TRANSCRIPTION_MODE: 'browser',
-  CHAT_AI_WEB_SEARCH_ENABLED: false,
-  CHAT_AI_WEB_SEARCH_PROVIDER: 'tavily',
-  CHAT_AI_WEB_SEARCH_BASE_URL: 'https://api.tavily.com',
-  CHAT_AI_WEB_SEARCH_API_KEY: '',
-  CHAT_AI_WEB_SEARCH_PROXY: ''
+  CHAT_AI_MODEL: ''
 })
 
-const iframeMode = computed(() => form.CHAT_AI_METHOD === 'iframe')
-const iframeReady = computed(() => Boolean(form.CHAT_AI_EMBED_URL))
 const endpointReady = computed(() => Boolean(form.CHAT_AI_BASE_URL))
 const modelReady = computed(() => Boolean(form.CHAT_AI_MODEL))
-const readinessTotal = computed(() => (iframeMode.value ? 1 : 3))
+const readinessTotal = 3
 const readinessCount = computed(() => {
-  if (iframeMode.value) return Number(iframeReady.value)
   return (
     Number(endpointReady.value) + Number(modelReady.value) + Number(testState.value === 'success')
   )
 })
-const readinessPercentage = computed(() => (readinessCount.value / readinessTotal.value) * 100)
+const readinessPercentage = computed(() => (readinessCount.value / readinessTotal) * 100)
 const readinessState = computed(() => {
-  if (readinessCount.value === readinessTotal.value) return 'ready'
+  if (readinessCount.value === readinessTotal) return 'ready'
   if (testState.value === 'failed') return 'failed'
   return 'pending'
 })
 const testStatusText = computed(() => {
-  if (iframeMode.value) {
-    return iframeReady.value ? t('ChatAIIframeReady') : t('ChatAIWaitingIframeURL')
-  }
   if (testing.value) return t('ChatAITestingCapability')
   if (testState.value === 'success') return t('ChatAITestPassed')
   if (testState.value === 'failed') return t('ChatAITestFailed')
@@ -389,19 +266,6 @@ function providerPayload() {
   return payload
 }
 
-function webSearchPayload() {
-  const payload = {
-    CHAT_AI_WEB_SEARCH_ENABLED: form.CHAT_AI_WEB_SEARCH_ENABLED,
-    CHAT_AI_WEB_SEARCH_PROVIDER: form.CHAT_AI_WEB_SEARCH_PROVIDER,
-    CHAT_AI_WEB_SEARCH_BASE_URL: form.CHAT_AI_WEB_SEARCH_BASE_URL,
-    CHAT_AI_WEB_SEARCH_PROXY: form.CHAT_AI_WEB_SEARCH_PROXY
-  }
-  if (form.CHAT_AI_WEB_SEARCH_API_KEY) {
-    payload.CHAT_AI_WEB_SEARCH_API_KEY = encryptPassword(form.CHAT_AI_WEB_SEARCH_API_KEY)
-  }
-  return payload
-}
-
 function updatePublicSettings(values) {
   const publicSettings = store.getters.publicSettings || {}
   return store.dispatch('settings/changeSetting', {
@@ -414,12 +278,7 @@ function updatePublicSettings(values) {
 }
 
 async function changeChatAIEnabled(enabled) {
-  if (enabled && iframeMode.value && !iframeReady.value) {
-    form.CHAT_AI_ENABLED = false
-    message.warning(t('ChatAIIframeURLRequired'))
-    return
-  }
-  if (enabled && !iframeMode.value && !form.CHAT_AI_MODEL) {
+  if (enabled && !form.CHAT_AI_MODEL) {
     form.CHAT_AI_ENABLED = false
     message.warning(t('ChatAIModelRequired'))
     return
@@ -427,16 +286,8 @@ async function changeChatAIEnabled(enabled) {
 
   switchingEnabled.value = true
   try {
-    const payload = { CHAT_AI_ENABLED: enabled }
-    const publicSettings = { CHAT_AI_ENABLED: enabled }
-    if (enabled) {
-      payload.CHAT_AI_METHOD = form.CHAT_AI_METHOD
-      payload.CHAT_AI_EMBED_URL = form.CHAT_AI_EMBED_URL
-      publicSettings.CHAT_AI_METHOD = form.CHAT_AI_METHOD
-      publicSettings.CHAT_AI_EMBED_URL = form.CHAT_AI_EMBED_URL
-    }
-    await saveChatAISettings(payload)
-    await updatePublicSettings(publicSettings)
+    await saveChatAISettings({ CHAT_AI_ENABLED: enabled })
+    await updatePublicSettings({ CHAT_AI_ENABLED: enabled })
     message.success(t('ChatAISettingsSaved'))
   } catch (error) {
     form.CHAT_AI_ENABLED = !enabled
@@ -479,7 +330,6 @@ async function refreshModels(options = {}) {
 }
 
 async function testConfiguration() {
-  if (iframeMode.value) return
   if (!form.CHAT_AI_MODEL) {
     message.warning(t('ChatAIModelRequired'))
     return
@@ -499,38 +349,19 @@ async function testConfiguration() {
 }
 
 async function saveConfiguration() {
-  if (form.CHAT_AI_ENABLED && iframeMode.value && !iframeReady.value) {
-    message.warning(t('ChatAIIframeURLRequired'))
-    return
-  }
-  if (form.CHAT_AI_ENABLED && !iframeMode.value && !form.CHAT_AI_MODEL) {
+  if (form.CHAT_AI_ENABLED && !form.CHAT_AI_MODEL) {
     message.warning(t('ChatAIModelRequired'))
-    return
-  }
-  if (!iframeMode.value && form.CHAT_AI_WEB_SEARCH_ENABLED && !form.CHAT_AI_WEB_SEARCH_BASE_URL) {
-    message.warning(t('ChatAIWebSearchBaseURLRequired'))
     return
   }
   saving.value = true
   try {
     await saveChatAISettings({
       CHAT_AI_ENABLED: form.CHAT_AI_ENABLED,
-      CHAT_AI_METHOD: form.CHAT_AI_METHOD,
-      CHAT_AI_EMBED_URL: form.CHAT_AI_EMBED_URL,
-      CHAT_AI_VOICE_TRANSCRIPTION_MODE: form.CHAT_AI_VOICE_TRANSCRIPTION_MODE,
-      ...webSearchPayload(),
       ...providerPayload()
     })
-    await updatePublicSettings({
-      CHAT_AI_ENABLED: form.CHAT_AI_ENABLED,
-      CHAT_AI_METHOD: form.CHAT_AI_METHOD,
-      CHAT_AI_EMBED_URL: form.CHAT_AI_EMBED_URL,
-      CHAT_AI_WEB_SEARCH_ENABLED: form.CHAT_AI_WEB_SEARCH_ENABLED,
-      CHAT_AI_VOICE_TRANSCRIPTION_MODE: form.CHAT_AI_VOICE_TRANSCRIPTION_MODE
-    })
+    await updatePublicSettings({ CHAT_AI_ENABLED: form.CHAT_AI_ENABLED })
     hydrated.value = false
     form.CHAT_AI_API_KEY = ''
-    form.CHAT_AI_WEB_SEARCH_API_KEY = ''
     hydrated.value = true
     message.success(t('ChatAISettingsSaved'))
   } catch (error) {
@@ -541,14 +372,7 @@ async function saveConfiguration() {
 }
 
 watch(
-  () => [
-    form.CHAT_AI_METHOD,
-    form.CHAT_AI_EMBED_URL,
-    form.CHAT_AI_BASE_URL,
-    form.CHAT_AI_API_KEY,
-    form.CHAT_AI_PROXY,
-    form.CHAT_AI_MODEL
-  ],
+  () => [form.CHAT_AI_BASE_URL, form.CHAT_AI_API_KEY, form.CHAT_AI_PROXY, form.CHAT_AI_MODEL],
   () => {
     if (!hydrated.value) return
     testState.value = 'idle'
@@ -561,24 +385,14 @@ onMounted(async () => {
     const settings = await getChatAISettings()
     Object.assign(form, {
       CHAT_AI_ENABLED: Boolean(settings?.CHAT_AI_ENABLED),
-      CHAT_AI_METHOD: ['embed', 'iframe'].includes(settings?.CHAT_AI_METHOD) ? 'iframe' : 'api',
-      CHAT_AI_EMBED_URL: settings?.CHAT_AI_EMBED_URL || '',
       CHAT_AI_BASE_URL: settings?.CHAT_AI_BASE_URL || '',
       CHAT_AI_API_KEY: '',
       CHAT_AI_PROXY: settings?.CHAT_AI_PROXY || '',
-      CHAT_AI_MODEL: settings?.CHAT_AI_MODEL || '',
-      CHAT_AI_VOICE_TRANSCRIPTION_MODE: 'browser',
-      CHAT_AI_WEB_SEARCH_ENABLED: Boolean(settings?.CHAT_AI_WEB_SEARCH_ENABLED),
-      CHAT_AI_WEB_SEARCH_PROVIDER:
-        settings?.CHAT_AI_WEB_SEARCH_PROVIDER === 'searxng' ? 'searxng' : 'tavily',
-      CHAT_AI_WEB_SEARCH_BASE_URL:
-        settings?.CHAT_AI_WEB_SEARCH_BASE_URL || 'https://api.tavily.com',
-      CHAT_AI_WEB_SEARCH_API_KEY: '',
-      CHAT_AI_WEB_SEARCH_PROXY: settings?.CHAT_AI_WEB_SEARCH_PROXY || ''
+      CHAT_AI_MODEL: settings?.CHAT_AI_MODEL || ''
     })
     ensureCurrentModel([])
     hydrated.value = true
-    if (!iframeMode.value && (form.CHAT_AI_BASE_URL || form.CHAT_AI_MODEL)) {
+    if (form.CHAT_AI_BASE_URL || form.CHAT_AI_MODEL) {
       await refreshModels({ silent: true })
     }
   } catch (error) {
@@ -721,8 +535,7 @@ onMounted(async () => {
   padding: 16px 20px;
 }
 
-.connection-panel .section-header,
-.web-search-panel.is-enabled .section-header {
+.connection-panel .section-header {
   border-bottom: 1px solid #edf0ee;
 }
 
@@ -761,11 +574,6 @@ onMounted(async () => {
   svg {
     width: 16px;
   }
-}
-
-.section-heading__icon--search {
-  color: #3c83d5;
-  background: rgb(60 131 213 / 9%);
 }
 
 .provider-value {

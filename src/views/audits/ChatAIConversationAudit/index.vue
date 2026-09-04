@@ -65,30 +65,33 @@
                   <MessageText v-if="item.content" :content="item.content" />
                   <span v-else>{{ item.error || '—' }}</span>
                 </div>
-                <div v-if="attachmentCount(item)" class="audit-message__attachments">
-                  <span>{{ t('ChatAIAuditAttachmentMetadata') }}</span>
-                  <el-tag
-                    v-for="file in [...(item.images || []), ...(item.files || [])]"
-                    :key="file.id"
-                    effect="plain"
-                    size="small"
-                  >
-                    {{ file.name }} · {{ formatFileSize(file.size) }}
-                  </el-tag>
-                </div>
               </article>
             </div>
           </section>
         </section>
       </template>
 
-      <GenericListTable v-else :header-actions="headerActions" :table-config="tableConfig" />
+      <GenericListTable
+        v-else
+        :header-actions="headerActions"
+        :table-config="tableConfig"
+        :table-metadata-provider="auditTableMetadata"
+      />
     </div>
   </Page>
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import {
+  computed,
+  nextTick,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  ref,
+  watch
+} from 'vue'
 import { ChatDotRound, Check } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -105,6 +108,7 @@ const router = useRouter()
 const selected = ref(null)
 const detailLoading = ref(false)
 const detailError = ref('')
+const routeActive = ref(false)
 const detailId = computed(() => String(route.params.id || ''))
 const auditHelpMessage = computed(
   () => `${t('ChatAIAuditSecurityTitle')}: ${t('ChatAIConversationAuditNotice')}`
@@ -114,20 +118,22 @@ const headerActions = {
   hasImport: false,
   hasExport: false,
   hasDatePicker: false,
-  searchConfig: {
-    getUrlQuery: true,
-    excludeFields: ['id'],
-    fieldLabels: {
-      title: t('ChatAIConversationTitle')
-    }
-  }
+  hasSearch: false
 }
+const auditTableMetadata = () =>
+  Promise.resolve({
+    actions: {
+      GET: {
+        id: { type: 'string', label: 'ID' },
+        user: { type: 'object', label: t('ChatAIAuditOwner') },
+        title: { type: 'string', label: t('ChatAIConversationTitle') },
+        question_count: { type: 'integer', label: t('ChatAIAuditQuestions') },
+        date_updated: { type: 'datetime', label: t('ChatAIAuditUpdated') }
+      }
+    }
+  })
 const tableConfig = computed(() => ({
-  url: '/api/v1/chat-ai/audit/conversations/',
-  permissions: {
-    app: 'chat_ai',
-    resource: 'conversation'
-  },
+  url: '/kael/api/v1/admin/audit/conversations',
   columnsShow: {
     min: ['user', 'title'],
     default: ['user', 'title', 'question_count', 'date_updated', 'actions']
@@ -172,6 +178,10 @@ const tableConfig = computed(() => ({
     }
   }
 }))
+let detailAbortController = null
+let detailRequestVersion = 0
+let detailSyncVersion = 0
+let routeUnmounted = false
 
 function errorDetail(error) {
   return error?.detail || error?.response?.data?.detail || error?.message || t('ServerBusyRetry')
@@ -185,18 +195,71 @@ async function openDetail(conversation) {
   })
 }
 
+function cancelDetailRequest() {
+  detailRequestVersion += 1
+  detailAbortController?.abort()
+  detailAbortController = null
+  detailLoading.value = false
+}
+
 async function loadDetail() {
-  if (!detailId.value) return
+  const id = detailId.value
+  if (!routeActive.value || !id) return
+  cancelDetailRequest()
+  const requestVersion = ++detailRequestVersion
+  const controller = new AbortController()
+  detailAbortController = controller
   selected.value = null
   detailError.value = ''
   detailLoading.value = true
   try {
-    selected.value = await getAuditedConversation(detailId.value)
+    const conversation = await getAuditedConversation(id, { signal: controller.signal })
+    if (requestVersion !== detailRequestVersion || !routeActive.value || detailId.value !== id) {
+      return
+    }
+    selected.value = conversation
   } catch (error) {
+    if (
+      controller.signal.aborted ||
+      error?.name === 'AbortError' ||
+      error?.code === 'ERR_CANCELED'
+    ) {
+      return
+    }
+    if (requestVersion !== detailRequestVersion || !routeActive.value || detailId.value !== id) {
+      return
+    }
     detailError.value = errorDetail(error)
   } finally {
-    detailLoading.value = false
+    if (requestVersion === detailRequestVersion) {
+      detailAbortController = null
+      detailLoading.value = false
+    }
   }
+}
+
+function syncDetail() {
+  if (!routeActive.value) return
+  if (detailId.value) {
+    loadDetail()
+    return
+  }
+  cancelDetailRequest()
+  selected.value = null
+  detailError.value = ''
+}
+
+function scheduleDetailSync() {
+  const syncVersion = ++detailSyncVersion
+  nextTick(() => {
+    if (syncVersion === detailSyncVersion && routeActive.value) syncDetail()
+  })
+}
+
+function deactivateRoute() {
+  routeActive.value = false
+  detailSyncVersion += 1
+  cancelDetailRequest()
 }
 
 function goBack() {
@@ -209,11 +272,11 @@ function goBack() {
 function userDisplay(user) {
   if (!user) return '—'
   if (user.name && user.username) return `${user.name} (${user.username})`
-  return user.name || user.username || '—'
+  return user.name || user.username || user.id || '—'
 }
 
 function userInitial(user) {
-  const value = user?.name || user?.username || '?'
+  const value = user?.name || user?.username || user?.id || '?'
   return String(value).trim().charAt(0).toUpperCase() || '?'
 }
 
@@ -235,28 +298,27 @@ function formatDate(value) {
   }).format(date)
 }
 
-function formatFileSize(size) {
-  const value = Number(size || 0)
-  if (value < 1024) return `${value} B`
-  if (value < 1024 * 1024) return `${Math.ceil(value / 1024)} KiB`
-  return `${(value / (1024 * 1024)).toFixed(1)} MiB`
-}
+watch(detailId, () => scheduleDetailSync())
 
-function attachmentCount(item) {
-  return (item.images?.length || 0) + (item.files?.length || 0)
-}
+onMounted(() => {
+  nextTick(() => {
+    if (routeUnmounted || routeActive.value) return
+    routeActive.value = true
+    syncDetail()
+  })
+})
 
-watch(
-  detailId,
-  () => {
-    if (detailId.value) {
-      loadDetail()
-    } else {
-      selected.value = null
-    }
-  },
-  { immediate: true }
-)
+onActivated(() => {
+  if (routeActive.value) return
+  routeActive.value = true
+  syncDetail()
+})
+
+onDeactivated(deactivateRoute)
+onBeforeUnmount(() => {
+  routeUnmounted = true
+  deactivateRoute()
+})
 </script>
 
 <style scoped lang="scss">
@@ -511,23 +573,6 @@ watch(
   display: block;
   max-width: 100%;
   overflow-x: auto;
-}
-
-.audit-message__attachments {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  margin-top: 10px;
-
-  > span {
-    color: #7f8983;
-    font-size: 11px;
-  }
-
-  :deep(.el-tag) {
-    border-radius: 5px;
-  }
 }
 
 @media (max-width: 720px) {

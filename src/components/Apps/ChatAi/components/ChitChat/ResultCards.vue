@@ -16,22 +16,7 @@
       </summary>
 
       <div class="result-card__body">
-        <div v-if="card.type === 'sources'" class="source-list">
-          <template v-for="(source, sourceIndex) in sources(card)" :key="source.url || sourceIndex">
-            <a
-              v-if="safeUrl(source.url)"
-              :href="safeUrl(source.url)"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <span>{{ source.title || source.url }}</span>
-              <el-icon><TopRight /></el-icon>
-            </a>
-            <span v-else>{{ source.title || source.url }}</span>
-          </template>
-        </div>
-
-        <div v-else-if="isAssetList(card)" class="asset-result-list">
+        <div v-if="isAssetList(card)" class="asset-result-list">
           <article
             v-for="(row, rowIndex) in rows(card)"
             :key="row?._key || row?.id || rowIndex"
@@ -105,7 +90,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { ArrowDown, TopRight } from '@element-plus/icons-vue'
+import { ArrowDown } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
 
 defineProps({
@@ -159,26 +144,11 @@ function cardTitle(card) {
 }
 
 function sourceLabel(source = {}) {
-  if (source.type === 'web_search') return source.provider || t('ChatAIWebSearch')
   return [t('ChatAIResultSource'), source.method].filter(Boolean).join(' · ')
 }
 
 function sourceDescription(source = {}) {
-  if (source.type === 'web_search') return source.provider || t('ChatAIWebSearch')
   return [source.method, source.path].filter(Boolean).join(' ')
-}
-
-function sources(card) {
-  return Array.isArray(card?.content?.sources) ? card.content.sources : []
-}
-
-function safeUrl(value) {
-  try {
-    const url = new URL(value)
-    return ['http:', 'https:'].includes(url.protocol) ? url.href : ''
-  } catch {
-    return ''
-  }
 }
 
 function isTabular(card) {
@@ -351,42 +321,6 @@ function formatFieldValue(key, value) {
 
   &__body {
     min-width: 0;
-  }
-}
-
-.source-list {
-  display: grid;
-  gap: 1px;
-  padding: 6px;
-
-  .el-icon {
-    flex: 0 0 auto;
-    color: #667181;
-    font-size: 14px;
-  }
-
-  a,
-  > span {
-    display: flex;
-    min-height: 32px;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    padding: 6px 8px;
-    border-radius: var(--ai-radius-sm, 8px);
-    color: #405464;
-    font-size: 11px;
-    text-decoration: none;
-  }
-
-  a:hover {
-    color: var(--ai-primary-dark, #148f76);
-    background: var(--ai-primary-light, #e8f7f3);
-  }
-
-  a:focus-visible {
-    outline: 2px solid rgb(26 179 148 / 36%);
-    outline-offset: -2px;
   }
 }
 
