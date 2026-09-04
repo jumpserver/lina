@@ -5,9 +5,9 @@
     :title="dialogTitle"
     :visible="visible"
     class="resource-select-dialog"
-    max-width="940px"
-    top="4vh"
-    width="940px"
+    max-width="880px"
+    top="6vh"
+    width="880px"
     @cancel="handleCancel"
     @confirm="handleConfirm"
     @update:visible="handleVisibleChange"
@@ -28,12 +28,14 @@
             @click="selectDialogTab('selected')"
             @keydown.right.prevent="selectDialogTab('available')"
           >
-            <span>{{
-              $t('ResourceSelectSelectedResources', {
-                resource: displayResourceName
-              })
-            }}</span>
-            <span class="resource-select-dialog__tab-count">({{ selectedCount }})</span>
+            <span class="resource-select-dialog__tab-label">
+              <span>{{
+                $t('ResourceSelectSelectedResources', {
+                  resource: displayResourceName
+                })
+              }}</span>
+              <span class="resource-select-dialog__tab-count">({{ selectedCount }})</span>
+            </span>
           </button>
           <button
             :aria-selected="activeTab === 'available'"
@@ -45,13 +47,15 @@
             @click="selectDialogTab('available')"
             @keydown.left.prevent="selectDialogTab('selected')"
           >
-            <span>{{
-              $t('ResourceSelectUnselectedResources', {
-                resource: displayResourceName
-              })
-            }}</span>
-            <span v-if="availableCount !== null" class="resource-select-dialog__tab-count">
-              ({{ availableCount }})
+            <span class="resource-select-dialog__tab-label">
+              <span>{{
+                $t('ResourceSelectUnselectedResources', {
+                  resource: displayResourceName
+                })
+              }}</span>
+              <span v-if="availableCount !== null" class="resource-select-dialog__tab-count">
+                ({{ availableCount }})
+              </span>
             </span>
           </button>
         </div>
@@ -221,7 +225,11 @@ export default {
         hasRefresh: false,
         hasLabelSearch: true,
         labelSearchConfig: {
-          boundarySelector: '.resource-select-dialog.el-dialog'
+          alignToBoundaryEnd: true,
+          boundaryEndGap: 5,
+          boundarySelector: '.resource-select-dialog.el-dialog',
+          maxWidth: 640,
+          placement: 'bottom-end'
         },
         hasNodeSearch: Boolean(this.nodeFilter),
         nodeSearchConfig: {
@@ -919,7 +927,8 @@ export default {
 
 <style lang="scss">
 .resource-select-dialog.el-dialog {
-  --resource-select-dialog-max-height: min(680px, 94vh);
+  --resource-select-dialog-max-height: min(620px, 88vh);
+  --resource-select-dialog-body-background: var(--el-fill-color-lighter, #fafafa);
   --tab-page-header-height: 40px;
   --tab-page-navigation-background-color: var(--page-background-color, #fff);
 
@@ -939,6 +948,7 @@ export default {
     min-height: 0;
     padding: 8px 24px 10px !important;
     overflow: hidden;
+    background: var(--resource-select-dialog-body-background);
   }
 
   .el-dialog__footer {
@@ -961,13 +971,6 @@ export default {
     gap: 12px;
   }
 
-  .resource-select-dialog__title {
-    color: var(--color-text-primary);
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 24px;
-  }
-
   .resource-select-dialog__tabs {
     position: relative;
     display: flex;
@@ -984,7 +987,7 @@ export default {
     display: inline-flex;
     align-items: center;
     height: var(--tab-page-header-height);
-    padding: 0 24px;
+    padding: 0 18px;
     border: 0;
     border-radius: 0;
     outline: none;
@@ -997,7 +1000,6 @@ export default {
     line-height: 1;
     user-select: none;
     white-space: nowrap;
-    gap: 4px;
     transition:
       color 120ms ease,
       background-color 120ms ease;
@@ -1006,23 +1008,11 @@ export default {
       padding-left: 0;
     }
 
-    & + .resource-select-dialog__tab::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 0;
-      width: 1px;
-      height: 14px;
-      background-color: var(--panel-border-color, var(--el-border-color));
-      transform: translateY(-50%);
-      pointer-events: none;
-    }
-
     &.is-active {
       color: var(--el-color-primary);
       background-color: var(--tab-page-navigation-background-color);
       border: 0;
-      border-radius: 4px 4px 0 0;
+      border-radius: 0;
       box-shadow: none;
     }
 
@@ -1039,6 +1029,13 @@ export default {
     }
   }
 
+  .resource-select-dialog__tab-label {
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
+    gap: 4px;
+  }
+
   .resource-select-dialog__tab-count {
     color: inherit;
     font-size: inherit;
@@ -1053,6 +1050,7 @@ export default {
     height: 100%;
     min-width: 0;
     min-height: 0;
+    background: var(--resource-select-dialog-body-background);
   }
 
   .list-table {
@@ -1060,6 +1058,7 @@ export default {
     height: 100%;
     min-height: 0;
     gap: 8px;
+    background: var(--resource-select-dialog-body-background);
   }
 
   .table-content {
@@ -1074,6 +1073,7 @@ export default {
   .auto-data-table .el-data-table {
     height: 100%;
     min-height: 0;
+    background: var(--resource-select-dialog-body-background);
   }
 
   .table-content > .el-card {

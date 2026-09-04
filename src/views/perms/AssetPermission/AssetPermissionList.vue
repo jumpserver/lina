@@ -82,6 +82,7 @@ export default {
       treeSetting: {
         treeComponent: 'NodeAssetTree',
         treeTitle: this.$t('AssetTree'),
+        assetIconMode: 'platform',
         showMenu: false,
         showAssets: true,
         showCollapse: true,
@@ -119,7 +120,7 @@ export default {
         {
           title: this.$t('UserTree'),
           name: 'UserTree',
-          icon: 'fa-solid fa-users',
+          icon: 'fa-solid fa-user',
           treeComponent: 'UserTree',
           treeSetting: {
             showCollapse: true,

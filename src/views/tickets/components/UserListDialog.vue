@@ -91,8 +91,6 @@ export default {
 
   .el-dialog__title {
     color: var(--color-text-primary);
-    font-size: 17px;
-    font-weight: 600;
   }
 
   .el-dialog__headerbtn {

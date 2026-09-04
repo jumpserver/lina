@@ -15,9 +15,9 @@
     <template v-if="$slots['search-after']" #search-after>
       <slot name="search-after" />
     </template>
-    <template #rMenu="{ data }">
+    <template #rMenu="slotProps">
       <div>
-        <slot :data="data" name="rMenu" />
+        <slot name="rMenu" v-bind="slotProps" />
       </div>
     </template>
   </TreeTable>
@@ -25,6 +25,7 @@
 
 <script>
 import TreeTable from '../../Table/TreeTable/index.vue'
+import { createXTreeSetting } from '@/components/Tree/XTree/config'
 import { getShowCurrentAssetValue, setRouterQuery, setUrlParam } from '@/utils/common/index'
 
 export default {
@@ -107,9 +108,13 @@ export default {
                 ? this.$t('NodeAssetTree')
                 : this.$t('NodeTree')),
             name: 'CustomTree',
-            icon: 'fa-solid fa-tree',
+            icon:
+              this.treeSetting?.treeIcon ||
+              (this.treeSetting?.treeComponent === 'NodeAssetTree'
+                ? 'fa-solid fa-desktop'
+                : 'fa-solid fa-diagram-project'),
             treeComponent: this.treeSetting?.treeComponent || 'XTree',
-            treeSetting: {
+            treeSetting: createXTreeSetting({
               showAssets,
               showMenu: false,
               showRefresh: true,
@@ -138,14 +143,14 @@ export default {
                 }
               },
               ...this.treeSetting
-            }
+            })
           },
           {
             title: this.$t('TypeTree'),
-            icon: 'fa-solid fa-list-ul',
+            icon: 'fa-solid fa-shapes',
             name: 'BuiltinTree',
             treeComponent: 'XTree',
-            treeSetting: {
+            treeSetting: createXTreeSetting({
               showRefresh: true,
               showCollapse: true,
               showAssets: false,
@@ -163,9 +168,13 @@ export default {
                   isMove: false
                 }
               }
-            }
+            })
           },
-          ...this.additionalTreeViews
+          ...this.additionalTreeViews.map((item) => ({
+            ...item,
+            treeComponent: item.treeComponent || 'XTree',
+            treeSetting: createXTreeSetting(item.treeSetting || {})
+          }))
         ]
       }
     }

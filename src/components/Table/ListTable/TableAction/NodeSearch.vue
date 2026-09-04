@@ -27,129 +27,43 @@
         </el-button>
       </template>
 
-      <div class="node-search-panel">
+      <div class="node-search-panel" @click.stop @mousedown.stop @pointerdown.stop>
         <div class="node-search-panel__header">
           <span :title="selectedNodeLabel" class="node-search-panel__title">
             {{ selectedNodeLabel || $t('NodeFilterAll') }}
           </span>
         </div>
 
-        <div class="node-search-panel__tabs-wrap">
-          <el-tabs v-model="activeTree" class="node-search-panel__tabs">
-            <el-tab-pane :label="$t('AssetTree')" name="asset">
-              <div class="node-search-panel__search">
-                <el-input
-                  v-model="nodeQueries.asset"
-                  :placeholder="$t('NodeFilterSearch')"
-                  clearable
-                >
-                  <template #prefix>
-                    <el-icon><Search /></el-icon>
-                  </template>
-                </el-input>
-              </div>
-              <div v-loading="treeState.asset.loading" class="node-search-panel__tree">
-                <el-tree
-                  ref="assetTree"
-                  :check-on-click-node="false"
-                  :check-strictly="true"
-                  :data="treeState.asset.data"
-                  :default-expanded-keys="treeState.asset.defaultExpandedKeys"
-                  :expand-on-click-node="true"
-                  :filter-node-method="filterNode"
-                  :props="treeProps"
-                  node-key="id"
-                  show-checkbox
-                  @check="handleAssetCheck"
-                >
-                  <template #default="{ data }">
-                    <span :title="getNodeLabel(data)" class="node-search-panel__node-label">
-                      {{ getNodeLabel(data) }}
-                    </span>
-                  </template>
-                </el-tree>
-              </div>
-            </el-tab-pane>
-
-            <el-tab-pane :label="$t('TypeTree')" name="type">
-              <div class="node-search-panel__search">
-                <el-input
-                  v-model="nodeQueries.type"
-                  :placeholder="$t('NodeFilterSearch')"
-                  clearable
-                >
-                  <template #prefix>
-                    <el-icon><Search /></el-icon>
-                  </template>
-                </el-input>
-              </div>
-              <div v-loading="treeState.type.loading" class="node-search-panel__tree">
-                <el-tree
-                  ref="typeTree"
-                  :check-on-click-node="false"
-                  :check-strictly="true"
-                  :data="treeState.type.data"
-                  :default-expanded-keys="treeState.type.defaultExpandedKeys"
-                  :expand-on-click-node="true"
-                  :filter-node-method="filterNode"
-                  :props="treeProps"
-                  node-key="id"
-                  show-checkbox
-                  @check="handleTypeCheck"
-                >
-                  <template #default="{ data }">
-                    <span :title="getNodeLabel(data)" class="node-search-panel__node-label">
-                      {{ getNodeLabel(data) }}
-                    </span>
-                  </template>
-                </el-tree>
-              </div>
-            </el-tab-pane>
-          </el-tabs>
-
-          <div class="node-search-panel__tree-actions">
-            <el-tooltip :content="activeExpandTitle" placement="top" :show-after="300">
-              <span class="node-search-panel__tree-action-trigger">
-                <el-button
-                  :aria-label="activeExpandTitle"
-                  :disabled="!treeState[activeTree].loaded || treeState[activeTree].loading"
-                  class="node-search-panel__tree-action"
-                  link
-                  @click.stop="setActiveTreeExpanded(true)"
-                >
-                  <svg-icon v-if="activeExpandUsesAll" icon-class="tree-expand-all" />
-                  <el-icon v-else><Aim /></el-icon>
-                </el-button>
-              </span>
-            </el-tooltip>
-            <el-tooltip :content="$t('NodeFilterCollapse')" placement="top" :show-after="300">
-              <span class="node-search-panel__tree-action-trigger">
-                <el-button
-                  :aria-label="$t('NodeFilterCollapse')"
-                  :disabled="!treeState[activeTree].loaded || treeState[activeTree].loading"
-                  class="node-search-panel__tree-action"
-                  link
-                  @click.stop="setActiveTreeExpanded(false)"
-                >
-                  <svg-icon icon-class="tree-collapse-all" />
-                </el-button>
-              </span>
-            </el-tooltip>
-            <el-tooltip :content="$t('NodeFilterClear')" placement="top" :show-after="300">
-              <span class="node-search-panel__tree-action-trigger">
-                <el-button
-                  :aria-label="$t('NodeFilterClear')"
-                  :disabled="!selectedNode"
-                  class="node-search-panel__tree-action"
-                  link
-                  @click.stop="clearSelection"
-                >
-                  <el-icon class="node-search-panel__clear-icon"><Brush /></el-icon>
-                </el-button>
-              </span>
-            </el-tooltip>
-          </div>
-        </div>
+        <TabTree
+          v-model:active-menu="activeTree"
+          ref="nodeTree"
+          :submenu="treeViews"
+          fill-height
+          :view-menu-teleported="false"
+          class="node-search-panel__tree-switcher"
+          @active-tree-ready="handleActiveTreeReady"
+          @selected="handleTreeSelected(activeTree, $event)"
+          @tab-click="handleTreeTabClick"
+          @tree-init-finish="handleTreeReady(activeTree)"
+        >
+          <template #tools-menu="{ close }">
+            <NodeSearchTreeMenu
+              :clear-disabled="!selectedNode"
+              :collapse-disabled="isTreeActionDisabled(activeTree)"
+              @clear="clearSelection(close)"
+              @collapse="collapseTree(activeTree, close)"
+            />
+          </template>
+          <template #node-actions="{ data }">
+            <span class="node-search-panel__checkbox" @click.stop @pointerdown.stop>
+              <el-checkbox
+                :aria-label="getNodeLabel(data)"
+                :model-value="isTreeNodeSelected(activeTree, data)"
+                @change="setTreeNodeSelected(activeTree, data, $event)"
+              />
+            </span>
+          </template>
+        </TabTree>
       </div>
     </el-popover>
 
@@ -166,8 +80,17 @@
 </template>
 
 <script>
+import TabTree from '@/components/Table/TabTree/index.vue'
+import {
+  createXTreeDataSource,
+  createXTreeSetting,
+  X_TREE_LOAD_MODES
+} from '@/components/Tree/XTree/config'
+import NodeSearchTreeMenu from './NodeSearchTreeMenu.vue'
+
 export default {
   name: 'NodeSearch',
+  components: { NodeSearchTreeMenu, TabTree },
   props: {
     treeUrl: {
       type: String,
@@ -188,6 +111,18 @@ export default {
     includeDescendants: {
       type: Boolean,
       default: true
+    },
+    treeAmountUrl: {
+      type: [String, Function],
+      default: '/api/v1/assets/nodes/assets-amount/'
+    },
+    treeAmountLoader: {
+      type: Function,
+      default: null
+    },
+    treeAmountTypes: {
+      type: Array,
+      default: () => ['node']
     },
     width: {
       type: Number,
@@ -211,35 +146,29 @@ export default {
       popoverForceHidden: false,
       popoverInstant: false,
       preserveExpansionOnNextOpen: false,
-      treeExpandAllNext: {
-        asset: false,
-        type: false
-      },
       selectedNode: null,
       selectedNodePath: '',
       selectedTreeKey: '',
       selectedTreeType: '',
-      nodeQueries: {
-        asset: '',
-        type: ''
+      treeReady: {
+        asset: false,
+        type: false
       },
       localTreeState: {
         asset: {
           data: [],
           defaultExpandedKeys: [],
           loaded: false,
-          loading: false
+          loading: false,
+          loadPromise: null
         },
         type: {
           data: [],
           defaultExpandedKeys: [],
           loaded: false,
-          loading: false
+          loading: false,
+          loadPromise: null
         }
-      },
-      treeProps: {
-        label: 'name',
-        children: 'children'
       }
     }
   },
@@ -285,16 +214,29 @@ export default {
     buttonTitle() {
       return this.selectedNodeLabel || this.$t('NodeFilterTitle')
     },
-    hasActiveTreeSelection() {
-      return this.selectedTreeType === this.activeTree && Boolean(this.selectedTreeKey)
+    treeSettings() {
+      return {
+        asset: this.createTreeSetting('asset'),
+        type: this.createTreeSetting('type')
+      }
     },
-    activeExpandUsesAll() {
-      return !this.hasActiveTreeSelection || this.treeExpandAllNext[this.activeTree]
-    },
-    activeExpandTitle() {
-      return this.activeExpandUsesAll
-        ? this.$t('NodeFilterExpandAll')
-        : this.$t('TreeResourceSelectExpandSelected')
+    treeViews() {
+      return [
+        {
+          name: 'asset',
+          title: this.$t('NodeTree'),
+          icon: 'fa-solid fa-diagram-project',
+          treeComponent: 'XTree',
+          treeSetting: this.treeSettings.asset
+        },
+        {
+          name: 'type',
+          title: this.$t('TypeTree'),
+          icon: 'fa-solid fa-shapes',
+          treeComponent: 'XTree',
+          treeSetting: this.treeSettings.type
+        }
+      ]
     }
   },
   watch: {
@@ -309,22 +251,13 @@ export default {
           this.prepareTreeExpansionForOpen()
         }
       } else {
-        this.nodeQueries.asset = ''
-        this.nodeQueries.type = ''
+        this.resetTreeSearch()
       }
     },
     activeTree(treeType) {
       if (this.popoverVisible) {
-        this.loadTree(treeType).then(() => {
-          this.filterTree(treeType, this.nodeQueries[treeType])
-        })
+        this.loadTree(treeType)
       }
-    },
-    'nodeQueries.asset'(value) {
-      this.filterTree('asset', value)
-    },
-    'nodeQueries.type'(value) {
-      this.filterTree('type', value)
     }
   },
   mounted() {
@@ -404,6 +337,62 @@ export default {
       const params = typeof this.queryParams === 'function' ? this.queryParams() : this.queryParams
       return { ...(params || {}) }
     },
+    createTreeSetting(treeType) {
+      const dataSourceDefinitions = {
+        root: {
+          load: ({ refresh }) => this.loadTree(treeType, { refresh })
+        }
+      }
+      if (treeType === 'asset' && this.treeAmountLoader) {
+        dataSourceDefinitions.metrics = (payload) =>
+          this.treeAmountLoader({
+            ...payload,
+            includeDescendants: this.includeDescendants,
+            queryParams: this.getQueryParams()
+          })
+      } else if (treeType === 'asset' && this.treeAmountUrl) {
+        dataSourceDefinitions.metrics = {
+          url: this.treeAmountUrl,
+          method: 'post',
+          data: ({ fresh, nodeIds }) => ({
+            fresh,
+            include_descendants: this.includeDescendants,
+            node_ids: nodeIds
+          })
+        }
+      }
+      return createXTreeSetting({
+        amountTypes: treeType === 'asset' ? this.treeAmountTypes : [],
+        dataSource: createXTreeDataSource(this.$axios, dataSourceDefinitions),
+        edit: { drag: { isMove: false } },
+        hasRightMenu: false,
+        initialExpandedKeys: () => this.treeState[treeType].defaultExpandedKeys,
+        loadMode: X_TREE_LOAD_MODES.EAGER,
+        readOnly: true,
+        selectSyncToRoute: false,
+        showAssets: false,
+        showCollapse: false,
+        showCreate: false,
+        showDefaultMenu: false,
+        showDelete: false,
+        showRefresh: false,
+        showSearch: true,
+        showUpdate: false,
+        toolsPlacement: 'bottom-start',
+        toolsTeleported: false,
+        virtualize: true,
+        virtualizeSearch: true
+      })
+    },
+    getTreePanel(treeType) {
+      return treeType === this.activeTree ? this.$refs.nodeTree : null
+    },
+    resetTreeSearch() {
+      this.$refs.nodeTree?.restoreAllNodes()
+    },
+    showOnlyNodes(nodeIds, options) {
+      return this.$refs.nodeTree?.showOnlyNodes?.(nodeIds, options)
+    },
     getSelectionSnapshot() {
       if (!this.selectedNode || !this.selectedTreeType || !this.selectedTreeKey) {
         return null
@@ -421,31 +410,19 @@ export default {
         return
       }
       await this.loadTree(snapshot.treeType)
-      const findNode = (nodes) => {
-        for (const node of nodes || []) {
-          if (String(this.getTreeKey(node)) === String(snapshot.treeKey)) {
-            return node
-          }
-          const matched = findNode(node.children)
-          if (matched) {
-            return matched
-          }
-        }
-        return null
-      }
-      const node = findNode(this.treeState[snapshot.treeType]?.data)
+      const node = this.findTreeNode(this.treeState[snapshot.treeType]?.data, snapshot.treeKey)
       if (!node) {
         this.clearSelection()
         return
       }
       const treeKey = this.getTreeKey(node)
-      this.$refs.assetTree?.setCheckedKeys(snapshot.treeType === 'asset' ? [treeKey] : [])
-      this.$refs.typeTree?.setCheckedKeys(snapshot.treeType === 'type' ? [treeKey] : [])
       this.selectedNode = node
       this.selectedNodePath =
         snapshot.label || this.getNodePathLabel(snapshot.treeType, treeKey, node)
       this.selectedTreeKey = String(treeKey)
       this.selectedTreeType = snapshot.treeType
+      await this.$nextTick()
+      this.syncTreeSelection()
       const query = snapshot.query || this.getFilterQuery(snapshot.treeType, node)
       this.$emit('nodeSearch', query, this.getSelectionSnapshot())
     },
@@ -458,32 +435,41 @@ export default {
     getNodeLabel(node) {
       return node?.name || node?.meta?.data?.value || ''
     },
-    filterNode(query, node) {
-      const keyword = query.trim().toLocaleLowerCase()
-      if (!keyword) {
-        return true
-      }
-      return this.getNodeLabel(node).toLocaleLowerCase().includes(keyword)
-    },
-    filterTree(treeType, query) {
-      this.$nextTick(() => {
-        this.$refs[`${treeType}Tree`]?.filter(query)
-      })
-    },
     getParentTreeKey(node) {
       return node?.pId ?? node?.parent_key ?? node?.meta?.data?.parent_key
     },
-    getNodePathLabel(treeType, treeKey, node) {
-      const treeNode = this.$refs[`${treeType}Tree`]?.getNode(treeKey)
-      const labels = []
-      let currentNode = treeNode
-      while (currentNode?.level > 0) {
-        const label = this.getNodeLabel(currentNode.data)
-        if (label) {
-          labels.unshift(label)
+    findTreeNode(nodes, treeKey) {
+      const target = String(treeKey)
+      const stack = [...(nodes || [])]
+      while (stack.length) {
+        const node = stack.pop()
+        if (String(this.getTreeKey(node)) === target) {
+          return node
         }
-        currentNode = currentNode.parent
+        if (node.children?.length) {
+          stack.push(...node.children)
+        }
       }
+      return null
+    },
+    findTreeNodePath(nodes, treeKey) {
+      const target = String(treeKey)
+      const stack = (nodes || []).map((node) => ({ node, path: [node] }))
+      while (stack.length) {
+        const { node, path } = stack.pop()
+        if (String(this.getTreeKey(node)) === target) {
+          return path
+        }
+        for (const child of node.children || []) {
+          stack.push({ node: child, path: [...path, child] })
+        }
+      }
+      return []
+    },
+    getNodePathLabel(treeType, treeKey, node) {
+      const labels = this.findTreeNodePath(this.treeState[treeType]?.data, treeKey)
+        .map((item) => this.getNodeLabel(item))
+        .filter(Boolean)
       const path = labels.join(' / ') || this.getNodeLabel(node)
       return path ? `/ ${path}` : ''
     },
@@ -519,37 +505,45 @@ export default {
       })
       return roots
     },
-    async loadTree(treeType) {
+    async loadTree(treeType, { refresh = false } = {}) {
       const state = this.treeState[treeType]
-      if (state.loaded || state.loading) {
-        return
+      if (state.loading && state.loadPromise) {
+        return state.loadPromise
+      }
+      if (state.loaded && !refresh) {
+        return state.data
       }
       const url = treeType === 'type' ? this.typeTreeUrl : this.treeUrl
       if (!url) {
-        return
+        return []
       }
       state.loading = true
-      try {
-        const response = await this.$axios.get(url, {
-          params: this.getQueryParams()
-        })
-        const treeData = this.buildTree(response)
-        if (treeType === 'asset') {
-          state.defaultExpandedKeys = treeData.map((node) => node.id)
-        } else {
-          state.defaultExpandedKeys = treeData.flatMap((node) => [
-            node.id,
-            ...node.children.map((child) => child.id)
-          ])
+      state.loadPromise = (async () => {
+        try {
+          const response = await this.$axios.get(url, {
+            params: this.getQueryParams()
+          })
+          const treeData = this.buildTree(response)
+          if (treeType === 'asset') {
+            state.defaultExpandedKeys = treeData.map((node) => node.id)
+          } else {
+            state.defaultExpandedKeys = treeData.flatMap((node) => [
+              node.id,
+              ...node.children.map((child) => child.id)
+            ])
+          }
+          state.data = treeData
+          state.loaded = true
+          return treeData
+        } catch (error) {
+          state.data = []
+          return []
+        } finally {
+          state.loading = false
+          state.loadPromise = null
         }
-        state.data = treeData
-        state.loaded = true
-        this.filterTree(treeType, this.nodeQueries[treeType])
-      } catch (error) {
-        state.data = []
-      } finally {
-        state.loading = false
-      }
+      })()
+      return state.loadPromise
     },
     async prepareTreeExpansionForOpen() {
       await this.preloadTrees()
@@ -557,125 +551,48 @@ export default {
         this.activeTree = this.selectedTreeType
       }
       await this.$nextTick()
-      this.resetTreeExpansionToSelection()
+      await this.resetTreeExpansionToSelection()
     },
-    resetTreeExpansionToSelection() {
-      const treeTypes = ['asset', 'type']
-      treeTypes.forEach((treeType) => {
-        const tree = this.$refs[`${treeType}Tree`]
-        if (!tree) {
-          return
-        }
-
-        const expandableNodes = []
-        const visit = (nodes) => {
-          nodes.forEach((item) => {
-            if (item.children.length === 0) {
-              return
-            }
-            expandableNodes.push(item)
-            visit(item.children)
-          })
-        }
-        visit(this.treeState[treeType].data)
-
-        const selectedAncestorKeys = new Set()
-        const hasSelectedNode = this.selectedTreeType === treeType && Boolean(this.selectedTreeKey)
-        let selectedTreeNode = hasSelectedNode ? tree.getNode(this.selectedTreeKey) : null
-        const selectedNodeFound = Boolean(selectedTreeNode)
-        const initialExpandedKeys = new Set(
-          this.treeState[treeType].defaultExpandedKeys.map((key) => String(key))
-        )
-        selectedTreeNode = selectedTreeNode?.parent
-        while (selectedTreeNode?.level > 0) {
-          selectedAncestorKeys.add(String(this.getTreeKey(selectedTreeNode.data)))
-          selectedTreeNode = selectedTreeNode.parent
-        }
-
-        expandableNodes.forEach((item) => {
-          const node = tree.getNode(item.id)
-          const itemKey = String(item.id)
-          const shouldExpand = selectedNodeFound
-            ? selectedAncestorKeys.has(itemKey)
-            : initialExpandedKeys.has(itemKey)
-          if (shouldExpand) {
-            node?.expand()
-          } else {
-            node?.collapse()
+    async resetTreeExpansionToSelection(treeTypes = ['asset', 'type']) {
+      await Promise.all(
+        treeTypes.map((treeType) => {
+          const tree = this.getTreePanel(treeType)
+          if (!tree || !this.treeReady?.[treeType]) {
+            return undefined
           }
+          const hasSelectedNode =
+            this.selectedTreeType === treeType && Boolean(this.selectedTreeKey)
+          return hasSelectedNode
+            ? tree.expandToNode(this.selectedTreeKey)
+            : tree.setExpandedKeys(this.treeState[treeType].defaultExpandedKeys)
         })
-        this.treeExpandAllNext[treeType] = selectedNodeFound
-      })
-    },
-    setActiveTreeExpanded(expanded) {
-      const treeType = this.activeTree
-      const tree = this.$refs[`${treeType}Tree`]
-      if (!tree) {
-        return
-      }
-
-      const expandableNodes = []
-      const visit = (nodes) => {
-        nodes.forEach((item) => {
-          if (item.children.length === 0) {
-            return
-          }
-          expandableNodes.push(item)
-          visit(item.children)
-        })
-      }
-      visit(this.treeState[treeType].data)
-
-      if (expanded) {
-        if (this.activeExpandUsesAll) {
-          expandableNodes.forEach((item) => tree.getNode(item.id)?.expand())
-          this.treeExpandAllNext[treeType] = false
-          return
-        }
-
-        const selectedAncestorKeys = new Set()
-        let selectedTreeNode = tree.getNode(this.selectedTreeKey)?.parent
-        while (selectedTreeNode?.level > 0) {
-          selectedAncestorKeys.add(String(this.getTreeKey(selectedTreeNode.data)))
-          selectedTreeNode = selectedTreeNode.parent
-        }
-        expandableNodes.forEach((item) => {
-          const node = tree.getNode(item.id)
-          if (selectedAncestorKeys.has(String(item.id))) {
-            node?.expand()
-          } else {
-            node?.collapse()
-          }
-        })
-        this.treeExpandAllNext[treeType] = true
-        return
-      }
-
-      const initialExpandedKeys = new Set(
-        this.treeState[treeType].defaultExpandedKeys.map((key) => String(key))
       )
-      const isInitialState = expandableNodes.every((item) => {
-        const node = tree.getNode(item.id)
-        return Boolean(node?.expanded) === initialExpandedKeys.has(String(item.id))
-      })
-      const allCollapsed = expandableNodes.every((item) => !tree.getNode(item.id)?.expanded)
-      if (!expanded && allCollapsed) {
+    },
+    handleTreeReady(treeType) {
+      this.treeReady ||= { asset: false, type: false }
+      this.treeReady[treeType] = true
+      this.syncTreeSelection()
+      this.resetTreeExpansionToSelection([treeType])
+    },
+    handleActiveTreeReady({ name }) {
+      if (!this.treeReady?.[name]) {
         return
       }
-      const restoreInitialState = !expanded && !isInitialState
-
-      expandableNodes.forEach((item) => {
-        const node = tree.getNode(item.id)
-        if (!node) {
-          return
-        }
-        const shouldExpand = restoreInitialState && initialExpandedKeys.has(String(item.id))
-        if (shouldExpand) {
-          node.expand()
-        } else {
-          node.collapse()
-        }
-      })
+      this.syncTreeSelection()
+    },
+    handleTreeTabClick() {
+      this.$refs.nodeTree?.restoreAllNodes()
+    },
+    isTreeActionDisabled(treeType) {
+      return !this.treeReady?.[treeType] || this.treeState[treeType].loading
+    },
+    async collapseTree(treeType, close) {
+      close?.()
+      const tree = this.getTreePanel(treeType)
+      if (!tree || this.isTreeActionDisabled(treeType)) {
+        return
+      }
+      await tree.collapseAll()
     },
     getEmptyFilterQuery() {
       return {
@@ -709,50 +626,59 @@ export default {
       }
       return query
     },
-    handleAssetCheck(node, state) {
-      this.handleCheck('asset', node, state)
+    isTreeNodeSelected(treeType, node) {
+      return (
+        this.selectedTreeType === treeType && this.selectedTreeKey === String(this.getTreeKey(node))
+      )
     },
-    handleTypeCheck(node, state) {
-      this.handleCheck('type', node, state)
+    setTreeNodeSelected(treeType, node, selected) {
+      if (selected) {
+        this.selectTreeNode(treeType, node)
+      } else if (this.isTreeNodeSelected(treeType, node)) {
+        this.clearSelection()
+      }
     },
-    handleCheck(treeType, node, { checkedKeys }) {
+    handleTreeSelected(treeType, node) {
+      this.selectTreeNode(treeType, node)
+    },
+    selectTreeNode(treeType, node) {
       const treeKey = this.getTreeKey(node)
       if (treeKey === undefined || treeKey === null) {
         return
       }
-
-      const normalizedTreeKey = String(treeKey)
-      const checked = checkedKeys.some((key) => String(key) === normalizedTreeKey)
-      if (!checked) {
-        if (this.selectedTreeType === treeType && this.selectedTreeKey === normalizedTreeKey) {
-          this.clearSelection()
-        }
-        return
-      }
-
       const query = this.getFilterQuery(treeType, node)
       if (!query) {
         return
       }
-
-      this.$refs.assetTree?.setCheckedKeys(treeType === 'asset' ? [treeKey] : [])
-      this.$refs.typeTree?.setCheckedKeys(treeType === 'type' ? [treeKey] : [])
       this.selectedNode = node
       this.selectedNodePath = this.getNodePathLabel(treeType, treeKey, node)
-      this.selectedTreeKey = normalizedTreeKey
+      this.selectedTreeKey = String(treeKey)
       this.selectedTreeType = treeType
-      this.treeExpandAllNext[treeType] = false
+      this.syncTreeSelection()
       this.$emit('nodeSearch', query, this.getSelectionSnapshot())
     },
-    clearSelection() {
-      this.$refs.assetTree?.setCheckedKeys([])
-      this.$refs.typeTree?.setCheckedKeys([])
+    syncTreeSelection() {
+      const treeType = this.activeTree
+      const tree = this.getTreePanel(treeType)
+      if (!tree || !this.treeReady?.[treeType]) {
+        return
+      }
+      if (this.selectedTreeType !== treeType || !this.selectedTreeKey) {
+        tree.clearSelection()
+        return
+      }
+      const node = this.findTreeNode(tree.getAllNodes(), this.selectedTreeKey)
+      if (node) {
+        tree.selectNode(node)
+      }
+    },
+    clearSelection(close) {
+      close?.()
+      this.$refs.nodeTree?.clearSelection()
       this.selectedNode = null
       this.selectedNodePath = ''
       this.selectedTreeKey = ''
       this.selectedTreeType = ''
-      this.treeExpandAllNext.asset = false
-      this.treeExpandAllNext.type = false
       this.$emit('nodeSearch', this.getEmptyFilterQuery(), null)
     }
   }
@@ -847,6 +773,8 @@ export default {
 
   .node-search-panel {
     min-width: 0;
+    border-radius: var(--el-popover-border-radius, 4px);
+    background: var(--el-bg-color-overlay, #fff);
   }
 
   .node-search-panel__header {
@@ -868,104 +796,32 @@ export default {
     overflow-wrap: anywhere;
   }
 
-  .node-search-panel__tabs {
-    .el-tabs__header {
-      margin: 0;
-      padding: 0 94px 0 12px;
-      border-bottom: 1px solid var(--el-border-color-light);
-    }
-
-    .el-tabs__nav-wrap::after {
-      display: none;
-    }
-
-    .el-tabs__item {
-      height: 36px;
-      padding: 0 12px;
-      font-size: 13px;
-      font-weight: 400;
-    }
+  .node-search-panel__tree-switcher.tree-tab.is-fill-height {
+    width: 100%;
+    height: min(400px, 60vh);
+    min-height: 260px;
   }
 
-  .node-search-panel__tabs-wrap {
-    position: relative;
+  .node-search-panel__tree-switcher > .tree-panel > .x-tree {
+    min-height: 0;
   }
 
-  .node-search-panel__tree-actions {
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    right: 8px;
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    height: 36px;
+  .node-search-panel__tree-switcher > .tree-panel > .x-tree > .x-tree__body {
+    border-radius: 0 0 var(--el-popover-border-radius, 4px) var(--el-popover-border-radius, 4px);
   }
 
-  .node-search-panel__search {
-    padding: 10px 10px 2px;
-
-    .el-input__wrapper {
-      min-height: 30px;
-      border-radius: 3px;
-      box-shadow: 0 0 0 1px var(--el-border-color) inset !important;
-
-      &:hover,
-      &.is-focus {
-        box-shadow: 0 0 0 1px var(--el-border-color) inset !important;
-      }
-    }
-  }
-
-  .node-search-panel__tree-action-trigger {
+  .node-search-panel__checkbox {
+    order: -1;
     display: inline-flex;
+    flex: none;
+    align-items: center;
+    align-self: stretch;
+    padding-left: 2px;
   }
 
-  .node-search-panel__tree-action.el-button {
-    width: 24px;
-    height: 24px;
-    margin-left: 0;
-    padding: 0;
-    border-radius: 4px;
-    color: var(--el-text-color-secondary);
-    font-size: 16px;
-
-    &:hover:not(.is-disabled),
-    &:focus-visible:not(.is-disabled) {
-      background: var(--el-fill-color-light);
-      color: var(--el-text-color-primary);
-    }
-
-    .svg-icon {
-      width: 16px;
-      height: 16px;
-    }
-
-    .el-icon {
-      font-size: 14px;
-    }
-  }
-
-  .node-search-panel__clear-icon {
-    transform: rotate(180deg);
-  }
-
-  .node-search-panel__tree {
-    max-height: min(360px, 55vh);
-    overflow: auto;
-    padding: 8px;
-
-    .el-tree {
-      width: max-content;
-      min-width: 100%;
-    }
-  }
-
-  .node-search-panel__node-label {
-    display: block;
-    padding-right: 8px;
-    font-size: 13px;
-    white-space: nowrap;
+  .node-search-panel__checkbox .el-checkbox {
+    height: 100%;
+    margin-right: 2px;
   }
 }
 
