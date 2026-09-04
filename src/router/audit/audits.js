@@ -92,12 +92,7 @@ export default [
       permissions: [],
       hidden: () => {
         const settings = store.getters.publicSettings || {}
-        const method = settings.CHAT_AI_METHOD || 'api'
-        return (
-          !store.getters.currentUserIsSuperAdmin ||
-          settings.CHAT_AI_ENABLED !== true ||
-          method !== 'api'
-        )
+        return !store.getters.currentUserIsSuperAdmin || settings.CHAT_AI_ENABLED !== true
       }
     }
   },

@@ -24,5 +24,5 @@ export const LOGOUT_PATH = env.VITE_LOGOUT_PATH || '/core/auth/logout/'
 export const WS_PORT = env.VITE_WS_PORT || ''
 
 export function withBaseApi(url) {
-  return IS_PROD ? url : normalizeJoin(BASE_API, url)
+  return normalizeJoin(BASE_API, url)
 }

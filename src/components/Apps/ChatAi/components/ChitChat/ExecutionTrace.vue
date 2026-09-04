@@ -187,11 +187,6 @@ function itemTitle(item) {
       ? t('ChatAISearchingCapabilities')
       : t('ChatAICapabilitiesFound')
   }
-  if (item.type === 'web_search') {
-    if (item.data?.action) return item.data.action
-    if (item.status === 'failed') return t('ChatAIWebSearchFailed')
-    return item.status === 'running' ? t('ChatAIWebSearching') : t('ChatAIWebSearchComplete')
-  }
   if (item.type === 'api_call') {
     if (item.data?.action) return item.data.action
     const summary = readableSummary(item.data?.summary)
@@ -218,11 +213,6 @@ function itemDescription(item) {
   if (item.type === 'api_search') {
     if (item.status === 'running') return t('ChatAISearchingCapabilities')
     return t('ChatAICapabilityCount', { count: item.data?.operationCount || 0 })
-  }
-  if (item.type === 'web_search') {
-    if (item.status === 'running') return item.data?.query || t('ChatAIWebSearching')
-    if (item.status === 'failed') return item.data?.error || t('ChatAIWebSearchFailed')
-    return t('ChatAIWebSourceCount', { count: item.data?.sourceCount || 0 })
   }
   if (item.type === 'api_call') {
     if (item.status === 'approval') return t('ChatAIWaitingApproval')

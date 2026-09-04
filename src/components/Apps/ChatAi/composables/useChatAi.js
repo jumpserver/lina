@@ -8,46 +8,79 @@ import {
   createConversation,
   deleteConversation as deleteConversationRequest,
   getApproval,
+  getChatAIBootstrap,
   listConversationMessages,
   listConversations,
   regenerateConversationMessage,
-  sendBackgroundConversationMessage,
   streamConversationMessage,
-  transcribeAudio,
   updateConversation
 } from '@/api/chatAi'
 
 const APPROVAL_STORAGE_KEY = 'jumpserver_chat_ai_pending_approvals'
+const OUTPUT_EVENTS = new Set([
+  'model.requested',
+  'message.delta',
+  'tool.call',
+  'tool.progress',
+  'tool.completed',
+  'tool.failed',
+  'tool.cancelled',
+  'approval.required',
+  'message.completed'
+])
 
 function temporaryId(prefix) {
   return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`
 }
 
+function isAbortError(error) {
+  return (
+    error?.name === 'AbortError' ||
+    error?.name === 'CanceledError' ||
+    error?.code === 'ERR_CANCELED'
+  )
+}
+
 function serverResults(response) {
-  return Array.isArray(response) ? response : response?.results || []
+  return response?.results || []
 }
 
 function versionedMessages(items, selections) {
   const entries = []
+  const answersBySource = new Map()
+  let latestUserId = ''
+
   for (const message of items) {
-    const previous = entries.at(-1)
-    if (
-      message.role === 'assistant' &&
-      message.regenerated_from &&
-      previous?._versions?.some((version) => version.id === message.regenerated_from)
-    ) {
-      previous._versions.push(message)
+    if (message.role === 'user') {
+      latestUserId = message.id
+      entries.push(message)
       continue
     }
-    if (message.role === 'assistant') entries.push({ _versions: [message] })
-    else entries.push(message)
+
+    if (message.role !== 'assistant') {
+      entries.push(message)
+      continue
+    }
+
+    // Kael records regenerated_from_id as the source user message, so every
+    // answer for the same user turn belongs to one version group.
+    const sourceUserId = message.regenerated_from_id || latestUserId
+    let group = answersBySource.get(sourceUserId)
+    if (!group) {
+      group = { _source_user_id: sourceUserId, _versions: [] }
+      answersBySource.set(sourceUserId, group)
+      const sourceIndex = entries.findIndex((entry) => entry.id === sourceUserId)
+      if (message.regenerated_from_id && sourceIndex >= 0) entries.splice(sourceIndex + 1, 0, group)
+      else entries.push(group)
+    }
+    group._versions.push(message)
   }
 
   return entries.map((entry) => {
     if (!entry._versions) return entry
     const versions = entry._versions
     if (versions.length === 1) return versions[0]
-    const rootId = versions[0].id
+    const rootId = entry._source_user_id || versions[0].id
     const selectedId = selections[rootId]
     let index = versions.findIndex((version) => version.id === selectedId)
     if (index < 0) index = versions.length - 1
@@ -63,6 +96,16 @@ function versionedMessages(items, selections) {
       }
     }
   })
+}
+
+function sourceUserMessageId(items, messageId) {
+  let index = items.findIndex((message) => message.id === messageId)
+  const regeneratedFromId = items[index]?.regenerated_from_id
+  if (regeneratedFromId && items.some((message) => message.id === regeneratedFromId)) {
+    return regeneratedFromId
+  }
+  while (index >= 0 && items[index].role !== 'user') index -= 1
+  return items[index]?.id || ''
 }
 
 function readApprovalStorage() {
@@ -93,6 +136,19 @@ function forgetApproval(conversationId) {
   writeApprovalStorage(value)
 }
 
+function approvalView(value, messageId) {
+  const preview = value.preview || {}
+  return {
+    ...value,
+    operation_id: preview.operation_id || value.tool_call_id,
+    method: preview.method || 'TOOL',
+    path: preview.path || preview.tool_name || value.tool_call_id,
+    risk_level: value.risk,
+    preview,
+    messageId
+  }
+}
+
 function normalizeMessage(message) {
   return {
     id: message.id,
@@ -109,8 +165,9 @@ function normalizeMessage(message) {
     result_cards: Array.isArray(message.result_cards)
       ? message.result_cards.map((card) => ({ ...card }))
       : [],
-    web_search: message.web_search === true,
-    regenerated_from: message.regenerated_from || null,
+    regenerated_from_id: message.regenerated_from_id || null,
+    pending_approval_id: message.pending_approval_id || '',
+    run_state: message.run_state || '',
     date_created: message.date_created || new Date().toISOString()
   }
 }
@@ -140,19 +197,6 @@ function restoredTrace(message) {
         },
         timestamp: Date.parse(card.source.timestamp || '') || 0
       })
-      continue
-    }
-    if (card?.type === 'sources' || card?.source?.type === 'web_search') {
-      items.push({
-        id: `restored-web-${message.id}-${index}`,
-        type: 'web_search',
-        status: 'completed',
-        data: {
-          action: card.source?.action || '',
-          sourceCount: card.content?.sources?.length || 0
-        },
-        timestamp: Date.parse(card.source?.timestamp || '') || 0
-      })
     }
   }
   return items
@@ -181,11 +225,14 @@ export function useChatAi(options = {}) {
   const streaming = ref(false)
   const stopping = ref(false)
   const approvalProcessing = ref(false)
-  const backgroundQueuing = ref(false)
   const preparing = ref(false)
-  const transcribing = ref(false)
   const initialized = ref(false)
   const lastError = ref(null)
+  const features = ref({
+    artifacts: false,
+    branch: false,
+    regenerate: false
+  })
 
   let abortController = null
   let temporaryAssistantId = ''
@@ -193,12 +240,21 @@ export function useChatAi(options = {}) {
   let stopRequested = false
   let remoteRunPollTimer = null
   let streamConversationId = ''
-  let branchPending = false
+  let streamTools = new Map()
   let messagesRequestId = 0
+  let lifecycleActive = true
 
   const activeConversation = computed(() => {
     return conversations.value.find((item) => item.id === activeConversationId.value) || null
   })
+
+  function isGeneralConversation(value) {
+    return value?.kind === 'general'
+  }
+
+  function generalConversation(id) {
+    return conversations.value.find((item) => item.id === id && isGeneralConversation(item)) || null
+  }
 
   const rawVisibleMessages = computed(() => {
     return messages.value.filter((item) => item.role !== 'tool' && item.role !== 'system')
@@ -208,24 +264,32 @@ export function useChatAi(options = {}) {
     return versionedMessages(rawVisibleMessages.value, answerVersionSelections.value)
   })
 
-  const lastMessage = computed(() => rawVisibleMessages.value.at(-1) || null)
   const latestAssistantMessageId = computed(() => {
     return (
       [...rawVisibleMessages.value].reverse().find((item) => item.role === 'assistant')?.id || ''
     )
   })
+  const pendingApprovalMessage = computed(() => {
+    return (
+      [...rawVisibleMessages.value]
+        .reverse()
+        .find((item) => item.pending_approval_id || item.status === 'awaiting_approval') || null
+    )
+  })
   const awaitingApproval = computed(() => {
-    return approval.value?.status === 'pending' || lastMessage.value?.status === 'awaiting_approval'
+    return approval.value?.status === 'pending' || Boolean(pendingApprovalMessage.value)
+  })
+  const remoteRunActive = computed(() => {
+    return !streaming.value && rawVisibleMessages.value.some((item) => Boolean(item.run_state))
   })
   const recoverableRun = computed(() => {
-    return !streaming.value && ['pending', 'streaming'].includes(lastMessage.value?.status)
+    return remoteRunActive.value && !awaitingApproval.value
   })
   const busy = computed(() => {
     return (
       streaming.value ||
       stopping.value ||
       approvalProcessing.value ||
-      backgroundQueuing.value ||
       preparing.value ||
       awaitingApproval.value ||
       recoverableRun.value
@@ -247,9 +311,9 @@ export function useChatAi(options = {}) {
   async function loadConversations({ selectFirst = false, silent = false } = {}) {
     if (!silent) loadingConversations.value = true
     try {
-      const response = await listConversations()
+      const response = await listConversations({ kind: 'general' })
       lastError.value = null
-      conversations.value = serverResults(response)
+      conversations.value = serverResults(response).filter(isGeneralConversation)
       if (
         activeConversationId.value &&
         !conversations.value.some((item) => item.id === activeConversationId.value)
@@ -271,17 +335,18 @@ export function useChatAi(options = {}) {
   async function restoreApproval() {
     approval.value = null
     const conversationId = activeConversationId.value
-    const last = lastMessage.value
-    if (!conversationId || last?.status !== 'awaiting_approval') return
+    const message = pendingApprovalMessage.value
+    if (!conversationId) return
 
-    const approvalId = readApprovalStorage()[conversationId]
+    const approvalId = message?.pending_approval_id || readApprovalStorage()[conversationId]
     if (!approvalId) {
+      if (!message) return
       approval.value = {
         id: '',
         status: 'pending',
         recovery: true,
         conversation: conversationId,
-        messageId: last.id
+        messageId: message.id
       }
       return
     }
@@ -290,24 +355,19 @@ export function useChatAi(options = {}) {
       const data = await getApproval(approvalId)
       if (data.status !== 'pending') {
         forgetApproval(conversationId)
-        approval.value = {
-          id: '',
-          status: 'pending',
-          recovery: true,
-          conversation: conversationId,
-          messageId: last.id
-        }
         return
       }
-      approval.value = { ...data, messageId: last.id }
+      if (!message) return
+      rememberApproval(conversationId, data.id)
+      approval.value = approvalView(data, message.id)
     } catch {
-      forgetApproval(conversationId)
+      if (!message) return
       approval.value = {
         id: '',
         status: 'pending',
         recovery: true,
         conversation: conversationId,
-        messageId: last.id
+        messageId: message.id
       }
     }
   }
@@ -318,11 +378,11 @@ export function useChatAi(options = {}) {
   }
 
   function scheduleRemoteRunPoll(id) {
-    if (activeConversationId.value !== id) return
     clearRemoteRunPoll()
-    if (!recoverableRun.value) return
+    if (!lifecycleActive || activeConversationId.value !== id || !remoteRunActive.value) return
     remoteRunPollTimer = window.setTimeout(async () => {
       remoteRunPollTimer = null
+      if (!lifecycleActive) return
       await loadMessages(id, { silent: true })
     }, 2000)
   }
@@ -335,6 +395,14 @@ export function useChatAi(options = {}) {
       messages.value = []
       approval.value = null
       return true
+    }
+    if (!generalConversation(id)) {
+      clearRemoteRunPoll()
+      if (activeConversationId.value === id) activeConversationId.value = ''
+      revokeLocalAttachments(messages.value)
+      messages.value = []
+      approval.value = null
+      return false
     }
     if (!silent) {
       loadingMessages.value = true
@@ -375,11 +443,24 @@ export function useChatAi(options = {}) {
 
   async function initialize() {
     if (initialized.value) return
+    try {
+      const bootstrap = await getChatAIBootstrap()
+      features.value = {
+        artifacts: bootstrap.features.artifacts === true,
+        branch: bootstrap.features.branch === true,
+        regenerate: bootstrap.features.regenerate === true
+      }
+    } catch (error) {
+      emitError(error)
+      return
+    }
     initialized.value = await loadConversations({ selectFirst: true })
   }
 
   async function selectConversation(id) {
-    if (!id || id === activeConversationId.value) return true
+    if (!id) return true
+    if (!generalConversation(id)) return false
+    if (id === activeConversationId.value) return true
     if (busy.value) return false
     clearRemoteRunPoll()
     activeConversationId.value = id
@@ -469,14 +550,6 @@ export function useChatAi(options = {}) {
     traces.value[messageId] = items
   }
 
-  function appendResultCard(card) {
-    if (!card || typeof card !== 'object') return
-    const messageId = activeStreamMessageId || temporaryAssistantId
-    const message = messageById(messageId)
-    if (!message) return
-    message.result_cards.push({ ...card })
-  }
-
   function updateLastTrace(type, matcher, changes) {
     const messageId = activeStreamMessageId || temporaryAssistantId
     const items = traces.value[messageId] || []
@@ -487,7 +560,9 @@ export function useChatAi(options = {}) {
       const nextChanges = typeof changes === 'function' ? changes(item) : changes
       Object.assign(item, nextChanges)
       item.timestamp = Date.now()
+      return true
     }
+    return false
   }
 
   function touchLastTrace() {
@@ -496,130 +571,188 @@ export function useChatAi(options = {}) {
     if (item) item.timestamp = Date.now()
   }
 
-  function handleStreamEvent({ event, data }) {
+  function toolTraceData(delivery) {
+    const payload = delivery.payload || {}
+    const toolCallId = delivery.tool_call_id || payload.tool_call_id || ''
+    const previous = streamTools.get(toolCallId) || {}
+    const argumentsValue = payload.arguments || previous.arguments || {}
+    const preview = payload.preview || {}
+    const toolName = payload.tool_name || previous.tool_name || ''
+    const data = {
+      operation_id:
+        argumentsValue.operation_id || preview.operation_id || previous.operation_id || toolCallId,
+      action: argumentsValue.action || previous.action || toolName,
+      method: preview.method || previous.method || 'TOOL',
+      path: preview.path || previous.path || toolName,
+      tool_name: toolName,
+      tool_call_id: toolCallId,
+      arguments: argumentsValue,
+      risk_level: payload.risk || previous.risk_level || ''
+    }
+    if (toolCallId) streamTools.set(toolCallId, data)
+    return data
+  }
+
+  function isApiSearch(data) {
+    return (
+      String(data.tool_name || data.path || '')
+        .split('.')
+        .at(-1) === 'search_core_api'
+    )
+  }
+
+  function handleStreamEvent(delivery) {
+    const event = delivery.type
+    const data = delivery.payload || {}
+    if (!activeStreamMessageId && delivery.message_id && OUTPUT_EVENTS.has(event)) {
+      transferTemporaryMessage(delivery.message_id)
+    }
     const assistant = messageById(activeStreamMessageId || temporaryAssistantId)
 
     switch (event) {
-      case 'message_start':
-        transferTemporaryMessage(data.message_id)
-        break
-      case 'message_delta': {
+      case 'message.delta': {
         const target = messageById(activeStreamMessageId || temporaryAssistantId)
-        if (target) target.content += data.content || ''
+        if (target) target.content += data.delta || ''
         break
       }
-      case 'agent_progress':
-        appendTrace('progress', { content: data.content || '' }, 'completed')
+      case 'tool.call': {
+        const trace = toolTraceData(delivery)
+        const traceType = isApiSearch(trace) ? 'api_search' : 'api_call'
+        const traceData =
+          traceType === 'api_search' ? { ...trace, query: trace.arguments.query || '' } : trace
+        const updated =
+          Boolean(trace.tool_call_id) &&
+          updateLastTrace(
+            traceType,
+            (entry) => entry.data.tool_call_id === trace.tool_call_id,
+            (entry) => ({ status: 'running', data: { ...entry.data, ...traceData } })
+          )
+        if (!updated) appendTrace(traceType, traceData, 'running')
         break
-      case 'api_search_start':
-        appendTrace('api_search', data, 'running')
+      }
+      case 'tool.progress': {
+        const content = data.message || data.detail || ''
+        if (content) appendTrace('progress', { content }, 'completed')
         break
-      case 'api_search_result':
-        updateLastTrace('api_search', null, (entry) => ({
-          status: 'completed',
-          data: { ...entry.data, ...data, operationCount: data.operations?.length || 0 }
-        }))
-        break
-      case 'web_search_start':
-        appendTrace('web_search', data, 'running')
-        break
-      case 'web_search_result':
-        updateLastTrace('web_search', null, (entry) => ({
-          status: data.ok ? 'completed' : 'failed',
-          data: { ...entry.data, ...data, sourceCount: data.sources?.length || 0 }
-        }))
-        if (data.ok && data.sources?.length) {
-          appendResultCard({
-            type: 'sources',
-            title: data.query || '',
-            source: {
-              type: 'web_search',
-              provider: data.provider || '',
-              action: data.action || '',
-              timestamp: new Date().toISOString()
-            },
-            content: { sources: data.sources }
-          })
+      }
+      case 'tool.completed':
+      case 'tool.failed':
+      case 'tool.cancelled': {
+        const trace = toolTraceData(delivery)
+        const result = data.result || {}
+        const ok = event === 'tool.completed' && data.status !== 'failed' && result.ok !== false
+        const completed = {
+          ...trace,
+          ...result,
+          ok,
+          status: result.ok === false ? result.status_code || data.status : data.status,
+          status_code: result.status_code,
+          error: data.error || result.error || ''
         }
-        break
-      case 'api_call_start':
-        appendTrace('api_call', data, 'running')
-        break
-      case 'api_call_result':
+        const traceType = isApiSearch(trace) ? 'api_search' : 'api_call'
         updateLastTrace(
-          'api_call',
-          (entry) => entry.data.operation_id === data.operation_id && entry.status === 'running',
+          traceType,
+          (entry) => entry.data.tool_call_id === trace.tool_call_id,
           (entry) => ({
-            status: data.ok ? 'completed' : 'failed',
-            data: { ...entry.data, ...data }
+            status: ok ? 'completed' : 'failed',
+            data: {
+              ...entry.data,
+              ...completed,
+              ...(traceType === 'api_search'
+                ? { operationCount: result.operations?.length || 0 }
+                : {})
+            }
           })
         )
         break
-      case 'approval_required': {
+      }
+      case 'approval.required': {
         const messageId = activeStreamMessageId || temporaryAssistantId
-        approval.value = {
-          ...data,
-          id: data.approval_id,
-          status: 'pending',
-          conversation: activeConversationId.value,
+        const trace = toolTraceData(delivery)
+        const preview = data.preview || {}
+        const approvalId = delivery.approval_id || data.approval_id
+        approval.value = approvalView(
+          {
+            ...data,
+            id: approvalId,
+            approval_id: approvalId,
+            status: 'pending',
+            conversation: delivery.conversation_id,
+            preview: {
+              ...preview,
+              operation_id: preview.operation_id || trace.operation_id,
+              method: preview.method || trace.method,
+              path: preview.path || trace.path
+            }
+          },
           messageId
-        }
-        rememberApproval(activeConversationId.value, data.approval_id)
-        updateLastTrace(
+        )
+        rememberApproval(activeConversationId.value, approvalId)
+        const updated = updateLastTrace(
           'api_call',
-          (entry) => entry.data.operation_id === data.operation_id,
+          (entry) => entry.data.tool_call_id === trace.tool_call_id,
           (entry) => ({
             status: 'approval',
-            data: { ...entry.data, ...entryData(data) }
+            data: { ...entry.data, ...trace }
           })
         )
+        if (!updated) appendTrace('api_call', trace, 'approval')
         break
       }
-      case 'message_done': {
+      case 'approval.resolved': {
+        const conversationId = delivery.conversation_id || activeConversationId.value
+        const approvalId = delivery.approval_id || data.approval_id
+        const storedApprovalId = readApprovalStorage()[conversationId]
+        if (storedApprovalId === approvalId) forgetApproval(conversationId)
+        if (
+          approval.value?.id === approvalId ||
+          (approval.value?.recovery && storedApprovalId === approvalId)
+        ) {
+          approval.value = null
+        }
+        break
+      }
+      case 'message.completed': {
         touchLastTrace()
-        const target = messageById(data.message_id) || assistant
+        const target = messageById(delivery.message_id) || assistant
         if (target) {
           target.status = data.status
-          if (data.usage) {
-            target.input_tokens = data.usage.input_tokens || 0
-            target.output_tokens = data.usage.output_tokens || 0
-          }
+          target.error = data.error || ''
+          target.input_tokens = data.input_tokens || 0
+          target.output_tokens = data.output_tokens || 0
         }
         break
       }
-      case 'message_error': {
-        const target = messageById(data.message_id) || assistant
+      case 'run.failed': {
+        const target = messageById(delivery.message_id) || assistant
         if (target) {
           target.status = 'failed'
-          target.error = data.detail || data.code
+          target.error = data.reason || data.error_code
         }
-        appendTrace('error', data, 'failed')
+        appendTrace('error', { detail: data.reason, code: data.error_code }, 'failed')
         break
       }
+      case 'run.cancelled':
+        if (assistant) assistant.status = 'cancelled'
+        break
       default:
         break
     }
   }
 
-  function entryData(data) {
-    return {
-      operation_id: data.operation_id,
-      method: data.method,
-      path: data.path,
-      risk_level: data.risk_level,
-      preview: data.preview
+  async function ensureConversation(content, requestOptions = {}) {
+    if (activeConversationId.value && isGeneralConversation(activeConversation.value)) {
+      return activeConversation.value
     }
-  }
-
-  async function ensureConversation(content) {
-    if (activeConversationId.value) return activeConversation.value
-    const conversation = await createConversation()
-    conversations.value.unshift(conversation)
-    activeConversationId.value = conversation.id
-    updateConversationLocally(conversation.id, {
-      title: content.trim().replace(/\s+/g, ' ').slice(0, 80),
-      date_updated: new Date().toISOString()
-    })
+    activeConversationId.value = ''
+    const title = content.trim().replace(/\s+/g, ' ').slice(0, 80)
+    const conversation = await createConversation(
+      { kind: 'general', profile: 'general', title },
+      requestOptions
+    )
+    if (!isGeneralConversation(conversation)) {
+      throw new Error('Kael returned a non-general conversation to the Lina assistant.')
+    }
     return conversation
   }
 
@@ -627,9 +760,7 @@ export function useChatAi(options = {}) {
     const content = String(rawContent || '')
     const images = Array.from(imageFiles || [])
     const files = Array.from(options.files || [])
-    const webSearch = options.webSearch === true
-    if ((!content.trim() && !images.length && !files.length) || busy.value) return false
-    if (options.background === true && (images.length || files.length || !content.trim())) {
+    if ((!content.trim() && !images.length && !files.length) || busy.value || !lifecycleActive) {
       return false
     }
 
@@ -637,36 +768,42 @@ export function useChatAi(options = {}) {
     stopRequested = false
     clearRemoteRunPoll()
     const title = content.trim() || files[0]?.name || 'Image'
+    const requestController = new AbortController()
+    abortController = requestController
     let conversation
     preparing.value = true
     try {
-      conversation = await ensureConversation(title)
+      conversation = await ensureConversation(title, { signal: requestController.signal })
     } catch (error) {
-      emitError(error)
+      if (!isAbortError(error) && !stopRequested) emitError(error)
+      if (abortController === requestController) abortController = null
+      streamConversationId = ''
+      if (!stopping.value) stopRequested = false
       return false
     } finally {
       preparing.value = false
     }
-    if (options.background === true) {
-      backgroundQueuing.value = true
-      try {
-        await sendBackgroundConversationMessage(conversation.id, content, {
-          webSearch,
-          notify: true
-        })
-        options.onAccepted?.()
-        await loadMessages(conversation.id)
-        await loadConversations({ silent: true })
-        return true
-      } catch (error) {
-        emitError(error)
-        return false
-      } finally {
-        backgroundQueuing.value = false
-      }
+    if (requestController.signal.aborted || stopRequested || !lifecycleActive) {
+      if (abortController === requestController) abortController = null
+      streamConversationId = ''
+      if (!stopping.value) stopRequested = false
+      return false
     }
     streamConversationId = conversation.id
+    streamTools = new Map()
     const now = new Date().toISOString()
+    let accepted = false
+    function acceptMessage() {
+      if (accepted) return
+      accepted = true
+      if (!generalConversation(conversation.id)) conversations.value.unshift(conversation)
+      activeConversationId.value = conversation.id
+      updateConversationLocally(conversation.id, {
+        title: conversation.title || title.replace(/\s+/g, ' ').slice(0, 80),
+        date_updated: now
+      })
+      options.onAccepted?.()
+    }
     const userMessage = normalizeMessage({
       id: temporaryId('user'),
       role: 'user',
@@ -687,7 +824,6 @@ export function useChatAi(options = {}) {
         file,
         local: true
       })),
-      web_search: webSearch,
       status: 'completed',
       date_created: now
     })
@@ -698,31 +834,24 @@ export function useChatAi(options = {}) {
       role: 'assistant',
       content: '',
       status: 'streaming',
-      web_search: webSearch,
       date_created: now
     })
     messages.value.push(userMessage, assistantMessage)
-    options.onAccepted?.()
     traces.value[temporaryAssistantId] = []
     streaming.value = true
-    abortController = new AbortController()
-
-    updateConversationLocally(conversation.id, {
-      title: conversation.title || title.replace(/\s+/g, ' ').slice(0, 80),
-      date_updated: now
-    })
 
     try {
       await streamConversationMessage(conversation.id, content, {
+        conversation,
         images,
         files,
-        webSearch,
-        signal: abortController.signal,
-        onEvent: handleStreamEvent
+        signal: requestController.signal,
+        onEvent: handleStreamEvent,
+        onAccepted: acceptMessage
       })
       return true
     } catch (error) {
-      if (error?.name !== 'AbortError' && !stopRequested) {
+      if (!isAbortError(error) && !stopRequested) {
         const target = messageById(activeStreamMessageId || temporaryAssistantId)
         if (target) {
           target.status = 'failed'
@@ -733,11 +862,11 @@ export function useChatAi(options = {}) {
       return false
     } finally {
       streaming.value = false
-      abortController = null
+      if (abortController === requestController) abortController = null
       streamConversationId = ''
       temporaryAssistantId = ''
       activeStreamMessageId = ''
-      if (!stopRequested) {
+      if (!stopRequested && lifecycleActive) {
         await loadMessages(conversation.id, { silent: true })
         await loadConversations({ silent: true })
       }
@@ -745,16 +874,14 @@ export function useChatAi(options = {}) {
   }
 
   async function stopGeneration() {
-    if (stopping.value || approvalProcessing.value || backgroundQueuing.value || preparing.value) {
-      return
-    }
-    const conversationId = streamConversationId || (branchPending ? '' : activeConversationId.value)
+    if (stopping.value || approvalProcessing.value) return
+    const conversationId = streamConversationId || activeConversationId.value
     stopping.value = true
     stopRequested = true
     abortController?.abort()
     if (!conversationId) {
       stopping.value = false
-      stopRequested = false
+      if (!preparing.value) stopRequested = false
       return
     }
     try {
@@ -764,8 +891,10 @@ export function useChatAi(options = {}) {
     } finally {
       forgetApproval(conversationId)
       approval.value = null
-      await loadMessages(conversationId)
-      await loadConversations({ silent: true })
+      if (lifecycleActive) {
+        await loadMessages(conversationId)
+        await loadConversations({ silent: true })
+      }
       stopping.value = false
       stopRequested = false
     }
@@ -773,13 +902,18 @@ export function useChatAi(options = {}) {
 
   async function confirmApproval() {
     if (!approval.value?.id || approvalProcessing.value) return null
+    const approvalId = approval.value.id
+    const conversationId = activeConversationId.value
+    const liveStream = streaming.value && streamConversationId === conversationId
     approvalProcessing.value = true
     try {
-      const response = await confirmApprovalRequest(approval.value.id)
-      forgetApproval(activeConversationId.value)
-      approval.value = null
-      await loadMessages()
-      await loadConversations({ silent: true })
+      const response = await confirmApprovalRequest(approvalId)
+      forgetApproval(conversationId)
+      if (approval.value?.id === approvalId) approval.value = null
+      if (!liveStream) {
+        await loadMessages(conversationId)
+        await loadConversations({ silent: true })
+      }
       return response
     } catch (error) {
       emitError(error)
@@ -795,13 +929,18 @@ export function useChatAi(options = {}) {
       await stopGeneration()
       return
     }
+    const approvalId = approval.value.id
+    const conversationId = activeConversationId.value
+    const liveStream = streaming.value && streamConversationId === conversationId
     approvalProcessing.value = true
     try {
-      await cancelApprovalRequest(approval.value.id)
-      forgetApproval(activeConversationId.value)
-      approval.value = null
-      await loadMessages()
-      await loadConversations({ silent: true })
+      await cancelApprovalRequest(approvalId)
+      forgetApproval(conversationId)
+      if (approval.value?.id === approvalId) approval.value = null
+      if (!liveStream) {
+        await loadMessages(conversationId)
+        await loadConversations({ silent: true })
+      }
     } catch (error) {
       emitError(error)
       throw error
@@ -810,26 +949,10 @@ export function useChatAi(options = {}) {
     }
   }
 
-  async function transcribe(file, language = '') {
-    transcribing.value = true
-    try {
-      return await transcribeAudio(file, language)
-    } catch (error) {
-      emitError(error)
-      throw error
-    } finally {
-      transcribing.value = false
-    }
-  }
-
-  async function branchMessage(messageId, rawContent, options = {}) {
+  async function branchMessage(messageId, rawContent) {
     const sourceConversation = activeConversation.value
     const sourceMessage = messageById(messageId)
     const content = String(rawContent || '')
-    const webSearch =
-      typeof options.webSearch === 'boolean'
-        ? options.webSearch
-        : sourceMessage?.web_search === true
     if (
       !sourceConversation ||
       sourceMessage?.role !== 'user' ||
@@ -848,7 +971,6 @@ export function useChatAi(options = {}) {
       ...sourceMessage,
       id: temporaryId('user'),
       content,
-      web_search: webSearch,
       date_created: now
     })
     temporaryAssistantId = temporaryId('assistant')
@@ -856,7 +978,6 @@ export function useChatAi(options = {}) {
       id: temporaryAssistantId,
       role: 'assistant',
       status: 'streaming',
-      web_search: webSearch,
       date_created: now
     })
     let branchConversationId = ''
@@ -865,7 +986,6 @@ export function useChatAi(options = {}) {
     function activateBranch(id) {
       if (!id || branchActivated) return
       branchActivated = true
-      branchPending = false
       branchConversationId = id
       streamConversationId = id
       activeConversationId.value = id
@@ -891,23 +1011,19 @@ export function useChatAi(options = {}) {
     clearRemoteRunPoll()
     activeStreamMessageId = ''
     streaming.value = true
-    branchPending = true
     streamConversationId = ''
+    streamTools = new Map()
     abortController = new AbortController()
 
     try {
       await branchConversationMessage(sourceConversation.id, messageId, content, {
-        webSearch,
         signal: abortController.signal,
         onConversation: activateBranch,
-        onEvent: (packet) => {
-          if (packet.event === 'message_start') activateBranch(packet.data?.conversation_id)
-          handleStreamEvent(packet)
-        }
+        onEvent: handleStreamEvent
       })
       return true
     } catch (error) {
-      if (error?.name !== 'AbortError' && !stopRequested) {
+      if (!isAbortError(error) && !stopRequested) {
         const target = messageById(activeStreamMessageId || temporaryAssistantId)
         if (branchActivated && target) {
           target.status = 'failed'
@@ -918,39 +1034,30 @@ export function useChatAi(options = {}) {
       return false
     } finally {
       streaming.value = false
-      branchPending = false
       streamConversationId = ''
       abortController = null
       temporaryAssistantId = ''
       activeStreamMessageId = ''
-      if (branchConversationId && !stopRequested) {
+      if (branchConversationId && !stopRequested && lifecycleActive) {
         await loadMessages(branchConversationId, { silent: true })
       }
-      await loadConversations({ silent: true })
+      if (lifecycleActive) await loadConversations({ silent: true })
     }
   }
 
-  async function regenerateMessage(messageId, options = {}) {
+  async function regenerateMessage(messageId) {
     if (!messageId || busy.value) return false
     const conversationId = activeConversationId.value
     if (!conversationId) return false
-    const sourceMessage = messageById(messageId)
-    const webSearch =
-      typeof options.webSearch === 'boolean'
-        ? options.webSearch
-        : sourceMessage?.web_search === true
+    const versionRootId = sourceUserMessageId(messages.value, messageId)
+    if (!versionRootId) return false
     streamConversationId = conversationId
+    streamTools = new Map()
 
     lastError.value = null
     stopRequested = false
     clearRemoteRunPoll()
     temporaryAssistantId = temporaryId('assistant')
-    let versionRootId = messageId
-    let versionMessage = messageById(versionRootId)
-    while (versionMessage?.regenerated_from) {
-      versionRootId = versionMessage.regenerated_from
-      versionMessage = messageById(versionRootId)
-    }
     answerVersionSelections.value = {
       ...answerVersionSelections.value,
       [versionRootId]: temporaryAssistantId
@@ -961,8 +1068,7 @@ export function useChatAi(options = {}) {
         id: temporaryAssistantId,
         role: 'assistant',
         status: 'streaming',
-        web_search: webSearch,
-        regenerated_from: messageId,
+        regenerated_from_id: versionRootId,
         date_created: new Date().toISOString()
       })
     )
@@ -972,13 +1078,12 @@ export function useChatAi(options = {}) {
 
     try {
       await regenerateConversationMessage(conversationId, messageId, {
-        webSearch,
         signal: abortController.signal,
         onEvent: handleStreamEvent
       })
       return true
     } catch (error) {
-      if (error?.name !== 'AbortError' && !stopRequested) {
+      if (!isAbortError(error) && !stopRequested) {
         const target = messageById(activeStreamMessageId || temporaryAssistantId)
         if (target) {
           target.status = 'failed'
@@ -993,19 +1098,40 @@ export function useChatAi(options = {}) {
       streamConversationId = ''
       temporaryAssistantId = ''
       activeStreamMessageId = ''
-      if (!stopRequested) {
+      if (!stopRequested && lifecycleActive) {
         await loadMessages(conversationId, { silent: true })
         await loadConversations({ silent: true })
       }
     }
   }
 
-  onBeforeUnmount(() => {
+  function deactivateLifecycle() {
+    if (!lifecycleActive) return
+    lifecycleActive = false
     clearRemoteRunPoll()
+    messagesRequestId += 1
+    loadingMessages.value = false
     if (abortController) {
       stopRequested = true
       abortController.abort()
     }
+  }
+
+  async function activateLifecycle() {
+    if (lifecycleActive) return
+    lifecycleActive = true
+    if (!initialized.value) return
+    await loadConversations({ silent: true })
+    if (!lifecycleActive) return
+    if (!activeConversationId.value) {
+      await loadMessages('', { silent: true })
+      return
+    }
+    await loadMessages(activeConversationId.value, { silent: true })
+  }
+
+  onBeforeUnmount(() => {
+    deactivateLifecycle()
     revokeLocalAttachments(messages.value)
   })
 
@@ -1023,11 +1149,10 @@ export function useChatAi(options = {}) {
     streaming,
     stopping,
     approvalProcessing,
-    backgroundQueuing,
     preparing,
-    transcribing,
     initialized,
     lastError,
+    features,
     awaitingApproval,
     recoverableRun,
     busy,
@@ -1043,8 +1168,9 @@ export function useChatAi(options = {}) {
     stopGeneration,
     confirmApproval,
     rejectApproval,
-    transcribe,
     branchMessage,
-    regenerateMessage
+    regenerateMessage,
+    activateLifecycle,
+    deactivateLifecycle
   }
 }

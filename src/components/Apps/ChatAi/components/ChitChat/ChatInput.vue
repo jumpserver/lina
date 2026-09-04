@@ -1,13 +1,13 @@
 <template>
   <div
-    :aria-busy="busy || transcribing || recordingPending"
+    :aria-busy="busy || recordingPending"
     :class="[
       'chat-composer',
       {
         'is-focused': focused,
         'is-recording': recording,
         'is-dragging': dragging,
-        'is-disabled': disabled || busy || transcribing || recordingPending
+        'is-disabled': disabled || busy || recordingPending
       }
     ]"
     @dragenter.prevent="handleDragEnter"
@@ -78,8 +78,8 @@
         ref="textarea"
         v-model="value"
         :aria-label="t('ChatAIMessagePlaceholder')"
-        :disabled="disabled || busy || transcribing || recordingPending"
-        :placeholder="transcribing ? t('ChatAITranscribing') : t('ChatAIMessagePlaceholder')"
+        :disabled="disabled || busy || recordingPending"
+        :placeholder="t('ChatAIMessagePlaceholder')"
         rows="1"
         @blur="focused = false"
         @focus="focused = true"
@@ -102,13 +102,13 @@
             placement="top-start"
             popper-class="chat-ai-tool-dropdown"
             trigger="click"
-            :disabled="disabled || busy || transcribing || recordingPending"
+            :disabled="disabled || busy || recordingPending"
             @command="handleToolCommand"
           >
             <button
               class="composer-icon-button"
               :aria-label="t('ChatAITools')"
-              :disabled="disabled || busy || transcribing || recordingPending"
+              :disabled="disabled || busy || recordingPending"
               :title="t('ChatAITools')"
               type="button"
             >
@@ -116,67 +116,25 @@
             </button>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item :disabled="background" command="attachment">
+                <el-dropdown-item command="attachment">
                   <el-icon><Paperclip /></el-icon>
                   <span class="tool-menu-copy">
                     <strong>{{ t('ChatAIAttachmentInput') }}</strong>
                     <small>{{ t('ChatAIAttachmentInputHint') }}</small>
                   </span>
                 </el-dropdown-item>
-                <el-dropdown-item :disabled="Boolean(attachments.length)" command="background">
-                  <el-icon><Clock /></el-icon>
-                  <span class="tool-menu-copy">
-                    <strong>{{ t('ChatAIBackgroundRun') }}</strong>
-                    <small>{{ t('ChatAIBackgroundRunHint') }}</small>
-                  </span>
-                  <el-icon v-if="background" class="tool-menu-check"><Check /></el-icon>
-                </el-dropdown-item>
-                <el-dropdown-item v-if="webSearchAvailable" command="web-search">
-                  <el-icon><Search /></el-icon>
-                  <span class="tool-menu-copy">
-                    <strong>{{ t('ChatAIWebSearch') }}</strong>
-                    <small>{{ t('ChatAIWebSearchInputHint') }}</small>
-                  </span>
-                  <el-icon v-if="webSearch" class="tool-menu-check"><Check /></el-icon>
-                </el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
           <button
-            v-if="background"
-            class="tool-mode-chip"
-            :aria-label="t('ChatAIBackgroundRun')"
-            :aria-pressed="true"
-            :title="t('ChatAIBackgroundRun')"
-            type="button"
-            @click="background = false"
-          >
-            <el-icon><Clock /></el-icon>
-            <span>{{ t('ChatAIBackgroundRun') }}</span>
-            <el-icon class="tool-mode-chip__close"><Close /></el-icon>
-          </button>
-          <button
-            v-if="webSearch"
-            class="tool-mode-chip"
-            :aria-label="t('ChatAIWebSearch')"
-            :aria-pressed="true"
-            :title="t('ChatAIWebSearch')"
-            type="button"
-            @click="webSearch = false"
-          >
-            <el-icon><Search /></el-icon>
-            <span>{{ t('ChatAIWebSearch') }}</span>
-            <el-icon class="tool-mode-chip__close"><Close /></el-icon>
-          </button>
-          <button
             class="composer-icon-button"
             :aria-label="t('ChatAIVoiceInput')"
-            :disabled="disabled || busy || transcribing || recordingPending || !voiceSupported"
+            :disabled="disabled || busy || recordingPending || !voiceSupported"
             :title="voiceSupported ? t('ChatAIVoiceInput') : t('ChatAIVoiceUnavailable')"
             type="button"
             @click="startRecording"
           >
-            <el-icon v-if="transcribing" class="spin"><Loading /></el-icon>
+            <el-icon v-if="recordingPending" class="spin"><Loading /></el-icon>
             <el-icon v-else><Microphone /></el-icon>
           </button>
           <span class="input-hint">{{ t('ChatAIInputHint') }}</span>
@@ -214,15 +172,13 @@
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import {
   Check,
-  Clock,
   Close,
   Document,
   Loading,
   Microphone,
   Paperclip,
   Plus,
-  Promotion,
-  Search
+  Promotion
 } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
 
@@ -247,32 +203,18 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  transcribing: {
-    type: Boolean,
-    default: false
-  },
-  voiceTranscriptionMode: {
-    type: String,
-    default: 'browser'
-  },
-  webSearchAvailable: {
-    type: Boolean,
-    default: false
-  },
   draftKey: {
     type: String,
     default: 'new'
   }
 })
 
-const emit = defineEmits(['send', 'stop', 'audio', 'error', 'attachment-error', 'recording-change'])
+const emit = defineEmits(['send', 'stop', 'error', 'attachment-error', 'recording-change'])
 const { t } = useI18n()
 const textarea = ref(null)
 const attachmentInput = ref(null)
 const value = ref('')
 const attachments = ref([])
-const webSearch = ref(false)
-const background = ref(false)
 const focused = ref(false)
 const dragging = ref(false)
 const recording = ref(false)
@@ -280,29 +222,17 @@ const recordingPending = ref(false)
 const recordingSeconds = ref(0)
 const browserSpeechRecognition =
   typeof window === 'undefined' ? null : window.SpeechRecognition || window.webkitSpeechRecognition
-const transcriptionMode = computed(() => {
-  return props.voiceTranscriptionMode === 'server' ? 'server' : 'browser'
-})
-const voiceSupported = computed(() => {
-  if (transcriptionMode.value === 'browser') return Boolean(browserSpeechRecognition)
-  return Boolean(
-    typeof window !== 'undefined' && window.MediaRecorder && navigator.mediaDevices?.getUserMedia
-  )
-})
+const voiceSupported = computed(() => Boolean(browserSpeechRecognition))
 
-let recorder = null
 let recognition = null
-let stream = null
-let chunks = []
 let recordingTimer = null
 let discardRecording = false
 let recognizedText = ''
 let dragDepth = 0
-let mediaRequestId = 0
 let activeDraftKey = props.draftKey
 const draftStore = new Map()
 
-const supportedImageTypes = new Set(['image/gif', 'image/jpeg', 'image/png', 'image/webp'])
+const supportedImageTypes = new Set(['image/gif', 'image/jpeg', 'image/png'])
 const supportedFileExtensions = new Set([
   '.bash',
   '.bat',
@@ -315,7 +245,6 @@ const supportedFileExtensions = new Set([
   '.css',
   '.csv',
   '.cxx',
-  '.docx',
   '.env',
   '.fish',
   '.go',
@@ -337,10 +266,8 @@ const supportedFileExtensions = new Set([
   '.markdown',
   '.md',
   '.mjs',
-  '.pdf',
   '.php',
   '.pl',
-  '.pptx',
   '.properties',
   '.ps1',
   '.py',
@@ -358,36 +285,18 @@ const supportedFileExtensions = new Set([
   '.tsx',
   '.txt',
   '.vue',
-  '.xlsx',
   '.xml',
   '.yaml',
   '.yml',
   '.zsh'
 ])
-const fileAccept = [
-  'image/gif',
-  'image/jpeg',
-  'image/png',
-  'image/webp',
-  ...supportedFileExtensions
-].join(',')
+const fileAccept = ['image/gif', 'image/jpeg', 'image/png', ...supportedFileExtensions].join(',')
 
 const canSend = computed(() => {
-  if (background.value) {
-    return Boolean(
-      value.value.trim() &&
-      !attachments.value.length &&
-      !props.disabled &&
-      !props.busy &&
-      !props.transcribing &&
-      !recordingPending.value
-    )
-  }
   return Boolean(
     (value.value.trim() || attachments.value.length) &&
     !props.disabled &&
     !props.busy &&
-    !props.transcribing &&
     !recordingPending.value
   )
 })
@@ -415,21 +324,9 @@ function setValue(content) {
   })
 }
 
-function appendValue(content) {
-  const text = String(content || '').trim()
-  if (!text) return
-  const separator = value.value.trim() ? ' ' : ''
-  value.value = `${value.value}${separator}${text}`
-  nextTick(() => {
-    resize()
-    focus()
-  })
-}
-
 function clear() {
   value.value = ''
   clearAttachments()
-  background.value = false
   draftStore.delete(activeDraftKey)
   nextTick(resize)
 }
@@ -438,8 +335,6 @@ function send() {
   if (!canSend.value) return
   const submittedDraftKey = activeDraftKey
   const content = value.value
-  const runInBackground = background.value
-  const searchWeb = webSearch.value
   const images = attachments.value
     .filter((attachment) => attachment.kind === 'image')
     .map((attachment) => attachment.file)
@@ -448,8 +343,6 @@ function send() {
     .map((attachment) => attachment.file)
   emit('send', content, images, {
     files,
-    webSearch: searchWeb,
-    background: runInBackground,
     onAccepted: () => {
       if (activeDraftKey === submittedDraftKey) clear()
       else discardDraft(submittedDraftKey)
@@ -458,15 +351,14 @@ function send() {
 }
 
 function hasDraftContent(draft) {
-  return Boolean(draft.value.trim() || draft.attachments.length || draft.background)
+  return Boolean(draft.value.trim() || draft.attachments.length)
 }
 
 function saveDraft(key = activeDraftKey) {
   if (!key) return
   const draft = {
     value: value.value,
-    attachments: [...attachments.value],
-    background: background.value
+    attachments: [...attachments.value]
   }
   if (hasDraftContent(draft)) draftStore.set(key, draft)
   else draftStore.delete(key)
@@ -476,7 +368,6 @@ function restoreDraft(key) {
   const draft = draftStore.get(key)
   value.value = draft?.value || ''
   attachments.value = draft?.attachments ? [...draft.attachments] : []
-  background.value = Boolean(draft?.background && !attachments.value.length)
   nextTick(resize)
 }
 
@@ -499,32 +390,9 @@ watch(
 
 function handleToolCommand(command) {
   if (command === 'attachment') {
-    if (background.value) {
-      emit('attachment-error', t('ChatAIBackgroundNoAttachments'))
-      return
-    }
     attachmentInput.value?.click()
-    return
-  }
-  if (command === 'background') {
-    if (attachments.value.length) {
-      emit('attachment-error', t('ChatAIBackgroundNoAttachments'))
-      return
-    }
-    background.value = !background.value
-    return
-  }
-  if (command === 'web-search' && props.webSearchAvailable) {
-    webSearch.value = !webSearch.value
   }
 }
-
-watch(
-  () => props.webSearchAvailable,
-  (available) => {
-    if (!available) webSearch.value = false
-  }
-)
 
 watch([recording, recordingPending], ([active, pending]) => {
   emit('recording-change', active || pending)
@@ -534,12 +402,9 @@ watch(
   () => props.active,
   (active) => {
     if (!active) {
-      mediaRequestId += 1
-      recordingPending.value = false
       discardRecording = true
       if (recognition) recognition.abort()
-      if (recorder && recorder.state !== 'inactive') recorder.stop()
-      if (recording.value) stopRecording(false)
+      cleanupRecognition()
     }
   }
 )
@@ -555,12 +420,17 @@ function fileExtension(file) {
   return index < 0 ? '' : file.name.slice(index).toLowerCase()
 }
 
+function normalizeTextFile(file) {
+  const extension = fileExtension(file)
+  let type = 'text/plain'
+  if (extension === '.htm' || extension === '.html') type = 'text/html'
+  if (extension === '.xml') type = 'text/xml'
+  if (file.type === type) return file
+  return new File([file], file.name, { type, lastModified: file.lastModified })
+}
+
 function addAttachments(files) {
-  if (!props.active || props.disabled || props.busy || props.transcribing) return
-  if (background.value) {
-    emit('attachment-error', t('ChatAIBackgroundNoAttachments'))
-    return
-  }
+  if (!props.active || props.disabled || props.busy) return
   const candidates = Array.from(files || [])
   const images = candidates.filter((file) => file.type.startsWith('image/'))
   const documents = candidates.filter((file) => !file.type.startsWith('image/'))
@@ -613,11 +483,14 @@ function addAttachments(files) {
       kind: 'image',
       url: URL.createObjectURL(file)
     })),
-    ...documents.map((file) => ({
-      id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-      file,
-      kind: 'file'
-    }))
+    ...documents.map((file) => {
+      const normalizedFile = normalizeTextFile(file)
+      return {
+        id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        file: normalizedFile,
+        kind: 'file'
+      }
+    })
   )
 }
 
@@ -640,7 +513,7 @@ function hasDraggedFiles(dataTransfer) {
 }
 
 function handleDragEnter(event) {
-  if (!props.active || props.disabled || props.busy || props.transcribing) return
+  if (!props.active || props.disabled || props.busy) return
   if (!hasDraggedFiles(event.dataTransfer)) return
   dragDepth += 1
   dragging.value = true
@@ -676,16 +549,10 @@ function formatFileSize(size) {
   return `${(size / (1024 * 1024)).toFixed(1)} MiB`
 }
 
-function preferredMimeType() {
-  const types = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus']
-  return types.find((type) => window.MediaRecorder.isTypeSupported(type)) || ''
-}
-
-async function startRecording() {
+function startRecording() {
   if (
     !props.active ||
     props.disabled ||
-    props.transcribing ||
     !voiceSupported.value ||
     recording.value ||
     recordingPending.value ||
@@ -693,45 +560,7 @@ async function startRecording() {
   ) {
     return
   }
-  if (transcriptionMode.value === 'browser') {
-    startBrowserRecognition()
-    return
-  }
-  const requestId = ++mediaRequestId
-  recordingPending.value = true
-  try {
-    const nextStream = await navigator.mediaDevices.getUserMedia({
-      audio: {
-        echoCancellation: true,
-        noiseSuppression: true,
-        autoGainControl: true
-      }
-    })
-    if (requestId !== mediaRequestId || !props.active) {
-      nextStream.getTracks().forEach((track) => track.stop())
-      return
-    }
-    stream = nextStream
-    chunks = []
-    discardRecording = false
-    const mimeType = preferredMimeType()
-    recorder = new window.MediaRecorder(stream, mimeType ? { mimeType } : undefined)
-    recorder.ondataavailable = (event) => {
-      if (event.data?.size) chunks.push(event.data)
-    }
-    recorder.onstop = finishRecording
-    recorder.start()
-    recording.value = true
-    recordingSeconds.value = 0
-    recordingTimer = window.setInterval(() => recordingSeconds.value++, 1000)
-  } catch (error) {
-    if (requestId === mediaRequestId) {
-      cleanupRecorder()
-      emit('error', error)
-    }
-  } finally {
-    if (requestId === mediaRequestId) recordingPending.value = false
-  }
+  startBrowserRecognition()
 }
 
 function startBrowserRecognition() {
@@ -781,33 +610,7 @@ function stopRecording(submit) {
     } else recognition.abort()
     return
   }
-  if (recorder && recorder.state !== 'inactive') {
-    if (submit) recordingPending.value = true
-    recorder.stop()
-  } else cleanupRecorder()
-}
-
-function finishRecording() {
-  const mimeType = recorder?.mimeType || chunks[0]?.type || 'audio/webm'
-  if (!discardRecording && chunks.length) {
-    const extension = mimeType.includes('mp4') ? 'm4a' : mimeType.includes('ogg') ? 'ogg' : 'webm'
-    const blob = new Blob(chunks, { type: mimeType })
-    const file = new File([blob], `jumpserver-ai-${Date.now()}.${extension}`, { type: mimeType })
-    emit('audio', file)
-  }
-  cleanupRecorder()
-}
-
-function cleanupRecorder() {
-  if (recordingTimer) window.clearInterval(recordingTimer)
-  recordingTimer = null
-  stream?.getTracks().forEach((track) => track.stop())
-  stream = null
-  recorder = null
-  chunks = []
-  recording.value = false
-  recordingPending.value = false
-  recordingSeconds.value = 0
+  cleanupRecognition()
 }
 
 function cleanupRecognition() {
@@ -821,12 +624,9 @@ function cleanupRecognition() {
 }
 
 onBeforeUnmount(() => {
-  mediaRequestId += 1
   discardRecording = true
   if (recognition) recognition.abort()
-  if (recorder && recorder.state !== 'inactive') recorder.stop()
   cleanupRecognition()
-  cleanupRecorder()
   saveDraft()
   const urls = new Set()
   for (const draft of draftStore.values()) {
@@ -842,7 +642,7 @@ onBeforeUnmount(() => {
   attachments.value = []
 })
 
-defineExpose({ focus, setValue, appendValue, clear, discardDraft })
+defineExpose({ focus, setValue, clear, discardDraft })
 </script>
 
 <style lang="scss" scoped>
@@ -1042,26 +842,6 @@ defineExpose({ focus, setValue, appendValue, clear, discardDraft })
   }
 }
 
-.tool-mode-chip {
-  display: inline-flex;
-  height: 26px;
-  align-items: center;
-  gap: 5px;
-  padding: 0 7px;
-  border: 1px solid var(--ai-primary, #1ab394);
-  border-radius: 999px;
-  color: var(--ai-primary-dark, #148f76);
-  background: var(--ai-primary-light, #e8f7f3);
-  cursor: pointer;
-  font-size: 11px;
-
-  &__close {
-    margin-left: 1px;
-    color: #56796f;
-    font-size: 12px;
-  }
-}
-
 :global(.chat-ai-tool-dropdown) {
   z-index: 3000 !important;
   min-width: 250px;
@@ -1092,10 +872,6 @@ defineExpose({ focus, setValue, appendValue, clear, discardDraft })
 :global(.chat-ai-tool-dropdown .tool-menu-copy small) {
   color: #969ba6;
   font-size: 10px;
-}
-
-:global(.chat-ai-tool-dropdown .tool-menu-check) {
-  color: var(--ai-primary, #1ab394);
 }
 
 .input-hint {
@@ -1346,17 +1122,6 @@ defineExpose({ focus, setValue, appendValue, clear, discardDraft })
 @media (max-width: 420px) {
   .composer-toolbar__left {
     gap: 6px;
-  }
-
-  .tool-mode-chip {
-    width: 32px;
-    padding: 0;
-    justify-content: center;
-
-    span,
-    &__close {
-      display: none;
-    }
   }
 }
 

@@ -66,10 +66,10 @@ function createAssetFileName(assetInfo) {
   return `${assetsDir}/[name].[hash][extname]`
 }
 
-function createProxy(target, ws = false) {
+function createProxy(target, ws = false, changeOrigin = true) {
   return {
     target,
-    changeOrigin: true,
+    changeOrigin,
     ws
   }
 }
@@ -86,7 +86,7 @@ export default defineConfig(({ mode }) => {
   const env = createClientEnv(mode)
   const publicPath = normalizePublicPath(env.VITE_PUBLIC_PATH || '/ui/')
   const coreHost = env.VITE_CORE_HOST || 'http://127.0.0.1:8080'
-  const aiHost = env.VITE_AI_HOST || 'http://127.0.0.1:8088'
+  const kaelHost = env.VITE_KAEL_HOST || 'http://127.0.0.1:8083'
   const kokoHost = env.VITE_KOKO_HOST || 'http://127.0.0.1:5000'
   const port = Number(process.env.PORT || process.env.port || process.env.npm_config_port || 9528)
 
@@ -138,7 +138,8 @@ export default defineConfig(({ mode }) => {
       open: false,
       cors: createCorsOptions(),
       proxy: {
-        '/api/v1/chat-ai/': createProxy(aiHost),
+        // Keep the browser-facing Host so Kael can verify Origin as same-origin.
+        '/kael/': createProxy(kaelHost, false, false),
         '/api/': createProxy(coreHost),
         '/ws/': createProxy(coreHost, true),
         '/koko/': createProxy(kokoHost, true),
