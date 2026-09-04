@@ -25,8 +25,11 @@
 
 <script>
 import TreeTable from '../../Table/TreeTable/index.vue'
-import { createXTreeSetting } from '@/components/Tree/XTree/config'
+import { createXTreeSetting, X_TREE_LOAD_MODES } from '@/components/Tree/XTree/config'
 import { getShowCurrentAssetValue, setRouterQuery, setUrlParam } from '@/utils/common/index'
+
+const NODE_ASSET_SEARCH_URL = '/api/v1/assets/node-assets/tree/search/'
+const NODE_TREE_PAGE_SIZE = 100
 
 export default {
   components: {
@@ -88,13 +91,37 @@ export default {
     const assetTreeUrl = `${this.treeUrl}?assets=${showAssets ? '1' : '0'}&${treeUrlQuery}`
     const assetTreeLazyUrl = setUrlParam(assetTreeUrl, 'asset_amount', '0')
     const isAssetNodeTree = this.treeUrl.includes('/api/v1/assets/nodes/')
-    let assetTreeStructureUrl = showAssets
-      ? assetTreeLazyUrl
-      : setUrlParam(assetTreeLazyUrl, 'all', 'all')
-    if (!showAssets && isAssetNodeTree) {
+    const isGlobalOrg = this.$store.getters.currentOrgIsRoot
+    const paginateNodeChildren = isAssetNodeTree && !showAssets
+    const assetTreeChildrenUrl = paginateNodeChildren
+      ? setUrlParam(assetTreeLazyUrl, 'node_limit', NODE_TREE_PAGE_SIZE)
+      : assetTreeLazyUrl
+    let assetTreeStructureUrl =
+      isAssetNodeTree || showAssets
+        ? assetTreeChildrenUrl
+        : setUrlParam(assetTreeChildrenUrl, 'all', 'all')
+    if (!showAssets && !isAssetNodeTree) {
       assetTreeStructureUrl = setUrlParam(assetTreeStructureUrl, 'compact', '1')
     }
     const assetTreeAmountUrl = isAssetNodeTree ? this.treeAmountUrl : ''
+    const searchAssetTree = isAssetNodeTree
+      ? ({ keyword, signal }) =>
+          this.$axios.get(NODE_ASSET_SEARCH_URL, {
+            params: {
+              include_ancestors: true,
+              limit: 1000,
+              search: keyword,
+              target: showAssets ? 'all' : 'node'
+            },
+            signal
+          })
+      : undefined
+    const typeTreeUrl = `${this.typeUrl}?assets=${showAssets ? '1' : '0'}&count_resource=${this.treeSetting.countResource || 'asset'}`
+    const searchTypeTree = ({ keyword, signal }) =>
+      this.$axios.get(typeTreeUrl, {
+        params: { search: keyword },
+        signal
+      })
     return {
       treeComponent: 'TabTree',
       treeTabConfig: {
@@ -126,13 +153,22 @@ export default {
               showSearch: true,
               url: this.url,
               nodeUrl: this.nodeUrl,
-              treeUrl: assetTreeLazyUrl,
+              treeUrl: assetTreeChildrenUrl,
               structureUrl: assetTreeStructureUrl,
               countUrl: assetTreeAmountUrl,
-              lazyLoad: showAssets,
+              childrenPagination: paginateNodeChildren,
+              initialExpandedKeys: isAssetNodeTree && isGlobalOrg ? [] : null,
+              loadMode:
+                isAssetNodeTree || showAssets ? X_TREE_LOAD_MODES.LAZY : X_TREE_LOAD_MODES.EAGER,
+              search: searchAssetTree,
               callback: {
                 onSelected: (event, treeNode, context) =>
                   this.getAssetsUrl(treeNode, context?.assetScope),
+                onAssetScopeChange: (assetScope, currentNode) => {
+                  if (!currentNode) {
+                    this.updateAssetScopeUrl(assetScope)
+                  }
+                },
                 beforeRefresh: () => {
                   const query = { ...this.$route.query, node_id: '', asset_id: '' }
                   setTimeout(() => {
@@ -155,11 +191,12 @@ export default {
               showCollapse: true,
               showAssets: false,
               showSearch: true,
+              search: searchTypeTree,
               lazyLoad: false,
               customTreeHeaderName: this.$t('TypeTree'),
               url: this.typeUrl,
               nodeUrl: this.treeSetting?.nodeUrl || this.nodeUrl,
-              treeUrl: `${this.typeUrl}?assets=${showAssets ? '1' : '0'}&count_resource=${this.treeSetting.countResource || 'asset'}`,
+              treeUrl: typeTreeUrl,
               callback: {
                 onSelected: (event, treeNode) => this.getAssetsUrl(treeNode)
               },
@@ -237,6 +274,14 @@ export default {
         url = setUrlParam(url, key, value)
       }
       return url
+    },
+    updateAssetScopeUrl(assetScope) {
+      const currentUrl = this.$refs.TreeList?.iTableConfig?.url || this.treeSetting?.url || this.url
+      const url = setUrlParam(currentUrl, 'show_current_asset', assetScope)
+      this.updateTableUrl(url)
+      if (this.treeSetting.selectSyncToRoute !== false) {
+        setRouterQuery(this, url, { browserOnly: true })
+      }
     },
 
     getAssetsUrl(treeNode, selectedAssetScope) {

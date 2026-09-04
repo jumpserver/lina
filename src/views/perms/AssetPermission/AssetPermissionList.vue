@@ -96,6 +96,9 @@ export default {
         defaultSearchTarget: 'all',
         settingsCacheKey: 'asset-permission',
         searchLimit: 1000,
+        childrenAssetLimit: 100,
+        childrenNodeLimit: 100,
+        childrenPagination: true,
         dataSource: createAssetPermissionTreeDataSource(this.$axios),
         notShowBuiltinTree: true,
         // 选中节点只过滤表格，不把选择同步到路由。否则路由变化会触发整棵树重新初始化、闪烁。
@@ -108,6 +111,9 @@ export default {
         callback: {
           onSelected: (event, treeNode, context) => {
             this.handlePermissionTreeSelected(treeNode, context)
+          },
+          onPermissionScopeChange: (permissionScope, currentNode) => {
+            this.handlePermissionScopeChange(permissionScope, currentNode)
           }
         },
         edit: {
@@ -131,11 +137,16 @@ export default {
             defaultPermissionScope: 'effective',
             settingsCacheKey: 'asset-permission',
             searchLimit: 1000,
+            childrenLimit: 100,
+            childrenPagination: true,
             dataSource: createAssetPermissionUserTreeDataSource(this.$axios),
             readOnly: true,
             callback: {
               onSelected: (event, treeNode, context) => {
                 this.handlePermissionUserTreeSelected(treeNode, context)
+              },
+              onPermissionScopeChange: (permissionScope, currentNode) => {
+                this.handlePermissionScopeChange(permissionScope, currentNode)
               }
             }
           }
@@ -294,6 +305,15 @@ export default {
     },
     handlePermissionTreeSelectionClear() {
       const url = this.clearPermissionTreeFilters(this.treeSetting.url)
+      this.$refs.AssetTreeTable?.updateTableUrl?.(url)
+    },
+    handlePermissionScopeChange(permissionScope, currentNode) {
+      if (currentNode) {
+        return
+      }
+      const currentUrl =
+        this.$refs.AssetTreeTable?.$refs.TreeList?.iTableConfig?.url || this.treeSetting.url
+      const url = setUrlParam(currentUrl, 'all', permissionScope === 'direct' ? '0' : '1')
       this.$refs.AssetTreeTable?.updateTableUrl?.(url)
     },
     reloadAssetTreeTable() {

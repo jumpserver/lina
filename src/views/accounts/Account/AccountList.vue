@@ -70,9 +70,6 @@ export default {
         url
       }
       setRouterQuery(this, url, { browserOnly: true })
-      this.$nextTick(() => {
-        this.$refs.table?.refresh?.()
-      })
     }
   }
 }

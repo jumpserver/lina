@@ -30,23 +30,40 @@ export function createAssetPermissionTreeDataSource(request) {
   return createXTreeDataSource(request, {
     root: {
       url: NODE_TREE_URL,
-      params: ({ assetOrder, assetsLimit }) => ({
+      params: ({ assetOrder, nodeLimit }) => ({
         asset_amount: 0,
         asset_order: assetOrder,
-        assets: 1,
-        assets_limit: assetsLimit
+        assets: 0,
+        node_limit: nodeLimit
       })
     },
     children: {
-      url: NODE_TREE_URL,
-      params: ({ assetOrder, assetsLimit, includeAssets = true, level, parent }) => ({
-        asset_amount: 0,
-        asset_order: assetOrder,
-        assets: includeAssets ? 1 : 0,
-        assets_limit: assetsLimit,
-        key: parent.treeKey,
-        lv: level
-      })
+      url: ({ next }) => (typeof next === 'string' && next ? next : NODE_TREE_URL),
+      params: ({
+        assetOrder,
+        assetsLimit,
+        includeAssets = true,
+        level,
+        next,
+        nodeLimit,
+        parent
+      }) => {
+        if (typeof next === 'string' && next) {
+          return undefined
+        }
+        const assetPage = next?.phase === 'assets'
+        return {
+          asset_amount: 0,
+          asset_order: assetOrder,
+          assets: assetPage && includeAssets ? 1 : 0,
+          assets_limit: assetPage && includeAssets ? assetsLimit : undefined,
+          assets_offset: assetPage ? Number(next?.offset) || 0 : undefined,
+          key: parent.treeKey,
+          lv: level,
+          node_limit: assetPage ? undefined : nodeLimit,
+          nodes: assetPage ? 0 : 1
+        }
+      }
     },
     search: {
       url: NODE_ASSET_SEARCH_URL,

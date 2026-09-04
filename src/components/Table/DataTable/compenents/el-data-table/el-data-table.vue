@@ -974,17 +974,20 @@ export default {
       this.$nextTick(() => this.selectStrategy.updateElTableSelection())
     },
     url: {
-      handler(val) {
+      handler(val, oldVal) {
         const requestId = this.invalidateListRequest()
         if (!val) {
           this.tableLoading = false
           return
         }
         this.page = defaultFirstPage
+        const resourceChanged = !oldVal || val.split(/[?#]/, 1)[0] !== oldVal.split(/[?#]/, 1)[0]
         // mounted处有updateForm的行为，所以至少在初始执行时要等到nextTick
         this.$nextTick(() => {
           if (requestId === this.listRequestId) {
-            this.getList({ debounce: false })
+            // Query-only changes (for example, switching the asset scope) keep
+            // the current rows visible until the latest response arrives.
+            this.getList({ debounce: false, loading: resourceChanged })
           }
         })
       },
