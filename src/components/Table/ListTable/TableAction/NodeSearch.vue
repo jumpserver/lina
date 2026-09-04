@@ -88,6 +88,9 @@ import {
 } from '@/components/Tree/XTree/config'
 import NodeSearchTreeMenu from './NodeSearchTreeMenu.vue'
 
+const NODE_ASSET_SEARCH_URL = '/api/v1/assets/node-assets/tree/search/'
+const NODE_TREE_PAGE_SIZE = 100
+
 export default {
   name: 'NodeSearch',
   components: { NodeSearchTreeMenu, TabTree },
@@ -160,14 +163,16 @@ export default {
           defaultExpandedKeys: [],
           loaded: false,
           loading: false,
-          loadPromise: null
+          loadPromise: null,
+          response: null
         },
         type: {
           data: [],
           defaultExpandedKeys: [],
           loaded: false,
           loading: false,
-          loadPromise: null
+          loadPromise: null,
+          response: null
         }
       }
     }
@@ -340,8 +345,34 @@ export default {
     createTreeSetting(treeType) {
       const dataSourceDefinitions = {
         root: {
-          load: ({ refresh }) => this.loadTree(treeType, { refresh })
+          load: async ({ refresh }) => {
+            await this.loadTree(treeType, { refresh })
+            const state = this.treeState[treeType]
+            return state.response || state.data
+          }
         }
+      }
+      if (treeType === 'asset') {
+        dataSourceDefinitions.children = (payload) => this.loadAssetTreeChildren(payload)
+        dataSourceDefinitions.search = ({ keyword, signal }) =>
+          this.$axios.get(NODE_ASSET_SEARCH_URL, {
+            params: {
+              include_ancestors: true,
+              limit: 1000,
+              search: keyword,
+              target: 'node'
+            },
+            signal
+          })
+      } else {
+        dataSourceDefinitions.search = ({ keyword, signal }) =>
+          this.$axios.get(this.typeTreeUrl, {
+            params: {
+              ...this.getQueryParams(),
+              search: keyword
+            },
+            signal
+          })
       }
       if (treeType === 'asset' && this.treeAmountLoader) {
         dataSourceDefinitions.metrics = (payload) =>
@@ -363,11 +394,12 @@ export default {
       }
       return createXTreeSetting({
         amountTypes: treeType === 'asset' ? this.treeAmountTypes : [],
+        childrenPagination: treeType === 'asset',
         dataSource: createXTreeDataSource(this.$axios, dataSourceDefinitions),
         edit: { drag: { isMove: false } },
         hasRightMenu: false,
         initialExpandedKeys: () => this.treeState[treeType].defaultExpandedKeys,
-        loadMode: X_TREE_LOAD_MODES.EAGER,
+        loadMode: treeType === 'asset' ? X_TREE_LOAD_MODES.LAZY : X_TREE_LOAD_MODES.EAGER,
         readOnly: true,
         selectSyncToRoute: false,
         showAssets: false,
@@ -467,11 +499,37 @@ export default {
       return []
     },
     getNodePathLabel(treeType, treeKey, node) {
-      const labels = this.findTreeNodePath(this.treeState[treeType]?.data, treeKey)
-        .map((item) => this.getNodeLabel(item))
-        .filter(Boolean)
+      const loadedPath = this.getTreePanel(treeType)?.getNodePath?.(treeKey) || []
+      const pathNodes = loadedPath.length
+        ? loadedPath
+        : this.findTreeNodePath(this.treeState[treeType]?.data, treeKey)
+      const labels = pathNodes.map((item) => this.getNodeLabel(item)).filter(Boolean)
       const path = labels.join(' / ') || this.getNodeLabel(node)
       return path ? `/ ${path}` : ''
+    },
+    getPagedNodeTreeUrl() {
+      const url = new URL(this.treeUrl, location.origin)
+      url.searchParams.set('all', '0')
+      url.searchParams.set('asset_amount', '0')
+      url.searchParams.set('assets', '0')
+      url.searchParams.set('node_limit', String(NODE_TREE_PAGE_SIZE))
+      url.searchParams.set('nodes', '1')
+      return url.origin === location.origin
+        ? `${url.pathname}${url.search}${url.hash}`
+        : url.toString()
+    },
+    loadAssetTreeChildren({ level, next, parent, signal }) {
+      if (typeof next === 'string' && next) {
+        return this.$axios.get(next, { signal })
+      }
+      return this.$axios.get(this.getPagedNodeTreeUrl(), {
+        params: {
+          ...this.getQueryParams(),
+          key: this.getTreeKey(parent),
+          lv: level
+        },
+        signal
+      })
     },
     buildTree(response) {
       const nodes = Array.isArray(response) ? response : response?.results || []
@@ -505,6 +563,9 @@ export default {
       })
       return roots
     },
+    buildTreeResponse(response, treeData) {
+      return Array.isArray(response) ? treeData : { ...response, results: treeData }
+    },
     async loadTree(treeType, { refresh = false } = {}) {
       const state = this.treeState[treeType]
       if (state.loading && state.loadPromise) {
@@ -513,7 +574,7 @@ export default {
       if (state.loaded && !refresh) {
         return state.data
       }
-      const url = treeType === 'type' ? this.typeTreeUrl : this.treeUrl
+      const url = treeType === 'type' ? this.typeTreeUrl : this.getPagedNodeTreeUrl()
       if (!url) {
         return []
       }
@@ -525,7 +586,9 @@ export default {
           })
           const treeData = this.buildTree(response)
           if (treeType === 'asset') {
-            state.defaultExpandedKeys = treeData.map((node) => node.id)
+            state.defaultExpandedKeys = this.$store.getters.currentOrgIsRoot
+              ? []
+              : treeData.map((node) => node.id)
           } else {
             state.defaultExpandedKeys = treeData.flatMap((node) => [
               node.id,
@@ -533,10 +596,12 @@ export default {
             ])
           }
           state.data = treeData
+          state.response = this.buildTreeResponse(response, treeData)
           state.loaded = true
           return treeData
         } catch (error) {
           state.data = []
+          state.response = null
           return []
         } finally {
           state.loading = false
@@ -768,12 +833,16 @@ export default {
 }
 
 .node-search-popper.el-popper {
+  --node-search-border-radius: 8px;
+
   max-width: calc(100vw - 24px);
   padding: 0;
+  border-radius: var(--node-search-border-radius);
+  overflow: hidden;
 
   .node-search-panel {
     min-width: 0;
-    border-radius: var(--el-popover-border-radius, 4px);
+    border-radius: var(--node-search-border-radius);
     background: var(--el-bg-color-overlay, #fff);
   }
 
@@ -807,7 +876,7 @@ export default {
   }
 
   .node-search-panel__tree-switcher > .tree-panel > .x-tree > .x-tree__body {
-    border-radius: 0 0 var(--el-popover-border-radius, 4px) var(--el-popover-border-radius, 4px);
+    border-radius: 0 0 var(--node-search-border-radius) var(--node-search-border-radius);
   }
 
   .node-search-panel__checkbox {

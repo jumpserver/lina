@@ -199,13 +199,15 @@ export default {
           data: [],
           defaultExpandedKeys: [],
           loaded: false,
-          loading: false
+          loading: false,
+          response: null
         },
         type: {
           data: [],
           defaultExpandedKeys: [],
           loaded: false,
-          loading: false
+          loading: false,
+          response: null
         }
       }
     }

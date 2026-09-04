@@ -50,10 +50,6 @@
     background-color: var(--list-table-selected-hover-bg-color);
   }
 
-  :deep(.el-table__body > tbody > tr:last-child > td.el-table__cell) {
-    border-bottom: 0;
-  }
-
   :deep(.el-table__body-wrapper .el-scrollbar__wrap) {
     // Show the native horizontal scrollbar only while the table is hovered.
     overflow-x: hidden;
@@ -87,6 +83,11 @@
       border-radius: 8px;
       background: color-mix(in srgb, var(--el-scrollbar-bg-color, #909399) 45%, transparent)
         content-box;
+    }
+
+    &::-webkit-scrollbar-thumb:vertical {
+      min-height: 32px;
+      border-radius: 8px;
     }
   }
 
@@ -151,6 +152,10 @@
 
     .el-data-table__body :deep(.el-table .el-scrollbar__bar.is-vertical) {
       width: 8px;
+    }
+
+    .el-data-table__body :deep(.el-table .el-scrollbar__bar.is-vertical .el-scrollbar__thumb) {
+      border-radius: 8px;
     }
 
     .el-data-table__body.is-scrollbar-visible {

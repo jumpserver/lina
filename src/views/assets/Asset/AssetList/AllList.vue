@@ -74,9 +74,6 @@ export default {
         url
       }
       setRouterQuery(this, url, { browserOnly: true })
-      this.$nextTick(() => {
-        this.$refs.baseList?.$refs.ListTable?.reloadTable?.()
-      })
     },
     getAssetsUrl(treeNode) {
       let url = '/api/v1/assets/assets/'

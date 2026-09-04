@@ -519,7 +519,8 @@ export default {
         fillHeight: true,
         height: '100%',
         minHeight: '360px',
-        childrenAssetLimit: 1000,
+        childrenAssetLimit: 100,
+        childrenNodeLimit: 100,
         searchLimit: MAX_SEARCH_RESULTS,
         ...this.setting,
         loadMode: this.setting.loadMode || X_TREE_LOAD_MODES.LAZY
@@ -538,7 +539,10 @@ export default {
       return this.effectiveMetricMode.startsWith('permission_') ? ['node', 'asset'] : ['node']
     },
     assetLoadLimit() {
-      return Math.min(Math.max(1, Number(this.treeSetting.childrenAssetLimit) || 1000), 1000)
+      return Math.min(Math.max(1, Number(this.treeSetting.childrenAssetLimit) || 100), 1000)
+    },
+    nodeLoadLimit() {
+      return Math.min(Math.max(1, Number(this.treeSetting.childrenNodeLimit) || 100), 100)
     },
     treeStyle() {
       const toCssSize = (value, fallback) => {
@@ -752,6 +756,36 @@ export default {
       }
       return responseWithResults(response, responseResults(response).map(addMetric))
     },
+    withChildrenPagination(response, { includeAssets = true, next = null } = {}) {
+      if (Array.isArray(response)) {
+        return response
+      }
+      const assetPage = next?.phase === 'assets'
+      const pagination = assetPage ? response?.asset_pagination : response?.node_pagination
+      if (!pagination) {
+        return response
+      }
+      const hasMore = Boolean(pagination.has_more)
+      let nextPage = pagination.next || ''
+      if (assetPage) {
+        nextPage = hasMore
+          ? {
+              offset: Number(pagination.next_offset) || 0,
+              phase: 'assets'
+            }
+          : ''
+      } else if (!hasMore && includeAssets) {
+        nextPage = { offset: 0, phase: 'assets' }
+      }
+      return {
+        ...response,
+        node_pagination: {
+          ...pagination,
+          has_more: hasMore || Boolean(nextPage),
+          next: nextPage
+        }
+      }
+    },
     async loadRoot(payload) {
       if (typeof this.provider.root !== 'function') {
         return []
@@ -760,10 +794,14 @@ export default {
       const response = await this.provider.root({
         ...payload,
         assetOrder: this.assetOrder,
-        assetsLimit: this.assetLoadLimit
+        assetsLimit: this.assetLoadLimit,
+        nodeLimit: this.nodeLoadLimit
       })
       const normalized = normalizeNodeAssetResponse(
-        this.withMetricValues(response, this.metricMode)
+        this.withMetricValues(
+          this.withChildrenPagination(response, { includeAssets: true }),
+          this.metricMode
+        )
       )
       this.updateChildTruncation(this.findResponseRootNode(normalized), normalized, {
         identity: '__root__',
@@ -772,7 +810,7 @@ export default {
       })
       return normalized
     },
-    async loadChildren({ level, parent, signal }) {
+    async loadChildren({ level, next, parent, signal }) {
       if (typeof this.provider.children !== 'function') {
         return []
       }
@@ -781,11 +819,17 @@ export default {
         assetsLimit: this.assetLoadLimit,
         includeAssets: !(this.searchState.active && this.searchState.target === 'node'),
         level,
+        next,
+        nodeLimit: this.nodeLoadLimit,
         parent: toNodeAssetResource(parent),
         signal
       })
-      this.updateChildTruncation(parent, response)
-      return normalizeNodeAssetResponse(this.withMetricValues(response, this.effectiveMetricMode))
+      const paginated = this.withChildrenPagination(response, {
+        includeAssets: !(this.searchState.active && this.searchState.target === 'node'),
+        next
+      })
+      this.updateChildTruncation(parent, paginated)
+      return normalizeNodeAssetResponse(this.withMetricValues(paginated, this.effectiveMetricMode))
     },
     async search(payload) {
       if (typeof this.provider.search !== 'function') {
@@ -844,7 +888,7 @@ export default {
         return
       }
       this.childTruncations = this.childTruncations.filter((item) => item.identity !== identity)
-      if (!response?.assets_truncated) {
+      if (response?.asset_pagination || !response?.assets_truncated) {
         return
       }
       const truncation = {
@@ -991,7 +1035,7 @@ export default {
       }
       this.persistSettings()
       if (previousMode !== value) {
-        this.reloadVisibleMetrics({ fresh: false, resetNormal: true })
+        this.reloadVisibleMetrics({ allLoaded: true, fresh: false, resetNormal: true })
         this.notifyMetricModeChange(value)
       }
       if (previousScope !== this.permissionScope) {
@@ -1024,7 +1068,7 @@ export default {
       }
       this.persistSettings()
       if (previousMode !== this.metricMode) {
-        this.reloadVisibleMetrics({ fresh: false, resetNormal: true })
+        this.reloadVisibleMetrics({ allLoaded: true, fresh: false, resetNormal: true })
         this.notifyMetricModeChange(this.metricMode)
       }
       this.notifyPermissionScopeChange(value)
@@ -1457,8 +1501,6 @@ export default {
 }
 
 .node-asset-tree.is-search-visible :deep(.x-tree__body) {
-  margin-top: 0;
-  padding-top: 0;
   border-top: 0;
 }
 </style>

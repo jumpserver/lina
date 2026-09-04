@@ -442,6 +442,8 @@ export default {
       },
       virtualTreeProps: {
         children: 'children',
+        class: (data) =>
+          this.treeSetting.childrenPagination && !data?._isLeaf ? 'x-tree-node--loadable' : '',
         label: 'name',
         value: 'id'
       }
@@ -478,8 +480,9 @@ export default {
             initialAmounts: null,
             initialAssetScope: '',
             countUrl: '',
-            countBatchSize: 100,
+            countBatchSize: 200,
             countProgressiveBatchSize: 100,
+            childrenPagination: false,
             amountTypes: ['node'],
             operationNodeId: '',
             readOnly: false,
@@ -577,7 +580,8 @@ export default {
         this.treeSetting.virtualize !== false &&
         (!this.searchMode || this.treeSetting.virtualizeSearch !== false) &&
         (this.searchMode || !this.treeSetting.showAssets) &&
-        this.treeNodeCount >= this.treeSetting.virtualThreshold
+        ((!this.searchMode && this.treeSetting.childrenPagination) ||
+          this.treeNodeCount >= this.treeSetting.virtualThreshold)
       )
     },
     initialExpandedKeys() {
@@ -983,6 +987,50 @@ export default {
       const entries = this.flattenRawNodes(this.getResponseNodes(response))
       return this.buildTreeFromEntries(entries)
     },
+    getNodeChildrenPagination(response) {
+      if (!this.treeSetting.childrenPagination) {
+        return null
+      }
+      const pagination = response?.node_pagination
+      if (!pagination) {
+        return null
+      }
+      const next = pagination.next || ''
+      return {
+        hasMore: Boolean(pagination.has_more ?? next),
+        loading: false,
+        next
+      }
+    },
+    applyNodeChildrenPagination(parent, response) {
+      if (!parent) {
+        return null
+      }
+      const pagination = this.getNodeChildrenPagination(response)
+      if (pagination) {
+        parent._childrenPagination = pagination
+      } else {
+        delete parent._childrenPagination
+      }
+      return pagination
+    },
+    applyRootChildrenPagination(roots, response) {
+      const pagination = this.getNodeChildrenPagination(response)
+      if (!pagination || !roots.length) {
+        return
+      }
+      const parentKey = response.node_pagination?.parent_key
+      const parent =
+        roots.find((node) => String(node.id) === String(parentKey)) ||
+        this.findTreeNodeIn(roots, parentKey) ||
+        roots[0]
+      parent._childrenPagination = pagination
+    },
+    normalizeNodeChildrenResponse(response, parent) {
+      const normalized = this.normalizeTree(response)
+      const projectedParent = normalized.find((node) => String(node.id) === String(parent?.id))
+      return projectedParent ? projectedParent.children || [] : normalized
+    },
     async normalizeTreeAsync(response, isCurrent = () => true) {
       const entries = this.flattenRawNodes(this.getResponseNodes(response))
       if (entries.length < 2000) {
@@ -1072,6 +1120,22 @@ export default {
       }
       this.cancelAmountLoading()
       this.clearNodeAmounts()
+      if (normalizedOptions.allLoaded) {
+        const nodes = this.collectLoadedTreeRows(this.treeData)
+        this.resetProgressiveAmountLoading()
+        this.amountLoadedRowEnd = this.collectExpandedTreeRows(this.treeData).length
+        this.amountAllRowsScheduled = true
+        if (normalizedOptions.fresh) {
+          nodes.forEach((node) => {
+            const nodeId = this.getNodeAmountResourceId(node)
+            if (nodeId && this.shouldHandleNodeAmount(node)) {
+              this.freshAmountNodeIds.add(String(nodeId))
+            }
+          })
+        }
+        this.enqueueNodeAmounts(nodes)
+        return
+      }
       this.startProgressiveAmountLoading(Boolean(normalizedOptions.fresh))
     },
     reloadVisibleMetrics(options = {}) {
@@ -1102,6 +1166,142 @@ export default {
         stack.push({ index: 0, nodes: node.children })
       }
       return rows
+    },
+    collectLoadedTreeRows(roots) {
+      const rows = []
+      const stack = [...roots].reverse()
+      while (stack.length) {
+        const node = stack.pop()
+        rows.push(node)
+        for (let index = (node.children?.length || 0) - 1; index >= 0; index -= 1) {
+          stack.push(node.children[index])
+        }
+      }
+      return rows
+    },
+    collectExpandedTreeRowEntries() {
+      const entries = []
+      const stack = []
+      for (let index = this.treeData.length - 1; index >= 0; index -= 1) {
+        stack.push({ depth: 0, node: this.treeData[index] })
+      }
+      while (stack.length) {
+        const entry = stack.pop()
+        entries.push(entry)
+        if (!this.expandedNodeIds.has(String(entry.node.id)) || !entry.node.children?.length) {
+          continue
+        }
+        for (let index = entry.node.children.length - 1; index >= 0; index -= 1) {
+          stack.push({ depth: entry.depth + 1, node: entry.node.children[index] })
+        }
+      }
+      return entries
+    },
+    getExpandedSubtreeBoundaries(entries) {
+      const boundaries = new Map()
+      const stack = []
+      entries.forEach((entry, index) => {
+        while (stack.length && stack.at(-1).depth >= entry.depth) {
+          boundaries.set(stack.pop().index, index - 1)
+        }
+        stack.push({ depth: entry.depth, index })
+      })
+      while (stack.length) {
+        boundaries.set(stack.pop().index, entries.length - 1)
+      }
+      return boundaries
+    },
+    getTreeVisibleRowCount(scrollElement) {
+      const hasInternalOverflow =
+        Number(scrollElement?.scrollHeight) > Number(scrollElement?.clientHeight) + 1
+      const viewportHeight = hasInternalOverflow
+        ? Number(scrollElement?.clientHeight) || 0
+        : typeof window !== 'undefined'
+          ? window.innerHeight
+          : 0
+      return Math.max(1, Math.ceil(viewportHeight / this.nodeRowHeight))
+    },
+    maybeLoadNextNodeChildrenPage(scrollElement) {
+      if (!this.treeSetting.childrenPagination) {
+        return
+      }
+      const entries = this.collectExpandedTreeRowEntries()
+      if (!entries.length) {
+        return
+      }
+      const firstVisibleIndex = this.getTreeAmountScrollIndex(scrollElement)
+      const prefetchEnd = firstVisibleIndex + this.getTreeVisibleRowCount(scrollElement) + 20
+      const boundaries = this.getExpandedSubtreeBoundaries(entries)
+      const candidate = entries
+        .map((entry, index) => ({
+          ...entry,
+          endIndex: boundaries.get(index) ?? index
+        }))
+        .filter(({ endIndex, node }) => {
+          const pagination = node._childrenPagination
+          return (
+            this.expandedNodeIds.has(String(node.id)) &&
+            pagination?.hasMore &&
+            !pagination.loading &&
+            endIndex >= firstVisibleIndex &&
+            endIndex <= prefetchEnd
+          )
+        })
+        .sort((left, right) => left.endIndex - right.endIndex || right.depth - left.depth)[0]
+      if (candidate) {
+        this.loadNextNodeChildrenPage(candidate.node)
+      }
+    },
+    async loadNextNodeChildrenPage(parent) {
+      const pagination = parent?._childrenPagination
+      if (!pagination?.hasMore || pagination.loading || !pagination.next) {
+        return
+      }
+      const requestKey = `next:${parent.id}`
+      this.childrenAbortControllers.get(requestKey)?.abort()
+      const controller = new AbortController()
+      this.childrenAbortControllers.set(requestKey, controller)
+      pagination.loading = true
+      try {
+        const response = await this.requestNodeChildren(parent, {
+          next: pagination.next,
+          signal: controller.signal
+        })
+        const page = this.normalizeNodeChildrenResponse(response, parent)
+        const existingIds = new Set((parent.children || []).map((node) => String(node.id)))
+        const appended = page.filter((node) => !existingIds.has(String(node.id)))
+        const nextPagination = this.applyNodeChildrenPagination(parent, response)
+        if (nextPagination) {
+          // Keep the replacement cursor state locked while the rendered tree
+          // is being updated. Tree DOM updates can emit scroll events before
+          // this request finishes and must not start overlapping next pages.
+          nextPagination.loading = true
+        }
+        if (!appended.length) {
+          if (nextPagination) {
+            nextPagination.hasMore = false
+          }
+          return
+        }
+        const children = [...(parent.children || []), ...appended]
+        this.rememberNodeChildrenViewSource(parent, children, { replace: true })
+        await this.setNodeChildrenView(parent)
+        this.registerLoadedNodeChildren(appended)
+        this.enqueueNodeAmounts(appended)
+        this.scheduleProgressiveAmountLoading()
+      } catch (error) {
+        if (error?.code !== 'ERR_CANCELED' && error?.name !== 'AbortError') {
+          this.$log?.warn?.('Load next tree node page failed', error)
+        }
+      } finally {
+        pagination.loading = false
+        if (parent?._childrenPagination) {
+          parent._childrenPagination.loading = false
+        }
+        if (this.childrenAbortControllers.get(requestKey) === controller) {
+          this.childrenAbortControllers.delete(requestKey)
+        }
+      }
     },
     getTreeAmountScrollElement() {
       const treeBody = this.$refs.treeBody
@@ -1286,6 +1486,24 @@ export default {
       }
       this.resetProgressiveAmountLoading()
       this.nextAmountBatchFresh = Boolean(fresh)
+      if (this.treeSetting.childrenPagination) {
+        const nodes = this.collectExpandedTreeRows(this.treeData)
+        if (fresh) {
+          nodes.forEach((node) => {
+            const nodeId = this.getNodeAmountResourceId(node)
+            if (!nodeId || !this.shouldHandleNodeAmount(node)) {
+              return
+            }
+            this.setNodeAmount(node, null)
+            this.freshAmountNodeIds.add(String(nodeId))
+          })
+        }
+        this.amountLoadedRowEnd = nodes.length
+        this.amountAllRowsScheduled = true
+        this.nextAmountBatchFresh = false
+        this.enqueueNodeAmounts(nodes)
+        return
+      }
       this.enqueueNextProgressiveAmountBatch()
     },
     maybeEnqueueNextProgressiveAmountBatch(scrollElement) {
@@ -1316,9 +1534,9 @@ export default {
       }
       this.amountScrollFrame = window.requestAnimationFrame(() => {
         this.amountScrollFrame = null
-        this.maybeEnqueueNextProgressiveAmountBatch(
-          scrollElement || this.getTreeAmountScrollElement()
-        )
+        const target = scrollElement || this.getTreeAmountScrollElement()
+        this.maybeEnqueueNextProgressiveAmountBatch(target)
+        this.maybeLoadNextNodeChildrenPage(target)
       })
     },
     handleTreeAmountScroll(event) {
@@ -1600,6 +1818,7 @@ export default {
         if (!normalized || requestId !== this.structureRequestId) {
           return
         }
+        this.applyRootChildrenPagination(normalized.roots, response)
         this.nodeChildrenViewSources.clear()
         const normalAmounts = this.collectInitialNodeAmounts(normalized.roots)
         this.normalTreeData = normalized.roots
@@ -1634,6 +1853,7 @@ export default {
         await this.expandInitialNodes()
         this.$emit('tree-init-finish', this)
         this.startProgressiveAmountLoading(refresh)
+        this.scheduleProgressiveAmountLoading()
       } catch (error) {
         if (
           requestId !== this.structureRequestId ||
@@ -1741,6 +1961,80 @@ export default {
       container.scrollTop +=
         elementRect.top - containerRect.top - (containerRect.height - elementRect.height) / 2
     },
+    requestNodeChildren(parent, options = {}) {
+      const { level = 0, next = '', signal } = options
+      const payload = {
+        append: Boolean(next),
+        level,
+        next,
+        parent,
+        signal,
+        tree: this
+      }
+      const childrenLoader = this.treeSetting.loadChildren
+      const dataSourceChildren = this.treeSetting.dataSource?.children
+      if (typeof childrenLoader === 'function') {
+        return childrenLoader(payload)
+      }
+      if (typeof dataSourceChildren === 'function') {
+        return this.loadFromDataSource('children', payload)
+      }
+      if (next) {
+        return this.requestTree(next, {}, { signal })
+      }
+      return this.requestTree(
+        this.treeSetting.treeUrl,
+        {
+          key: parent.id,
+          n: parent.name,
+          lv: level
+        },
+        { signal }
+      )
+    },
+    async requestFirstPopulatedNodeChildren(parent, options = {}) {
+      let response = await this.requestNodeChildren(parent, options)
+      let children = this.normalizeNodeChildrenResponse(response, parent)
+      let pagination = this.getNodeChildrenPagination(response)
+      const visitedCursors = new Set()
+      while (!children.length && pagination?.hasMore && pagination.next) {
+        const cursorKey =
+          typeof pagination.next === 'string' ? pagination.next : JSON.stringify(pagination.next)
+        if (visitedCursors.has(cursorKey)) {
+          break
+        }
+        visitedCursors.add(cursorKey)
+        response = await this.requestNodeChildren(parent, {
+          ...options,
+          next: pagination.next
+        })
+        children = this.normalizeNodeChildrenResponse(response, parent)
+        pagination = this.getNodeChildrenPagination(response)
+      }
+      return { children, response }
+    },
+    storeLoadedNodeChildren(parent, response, normalizedChildren = null) {
+      const children = normalizedChildren || this.normalizeNodeChildrenResponse(response, parent)
+      const pagination = this.applyNodeChildrenPagination(parent, response)
+      // Keep successfully loaded children on the data object. Besides
+      // avoiding duplicate lazy requests, this lets an async search swap the
+      // visible tree out and later restore the exact expanded structure.
+      parent.children = children
+      parent._childrenProjection = false
+      parent._reloadProjectedChildren = false
+      parent._isLeaf = children.length === 0 && !pagination?.hasMore
+      this.rememberNodeChildrenViewSource(parent, children, { replace: true })
+      return children
+    },
+    registerLoadedNodeChildren(children) {
+      if (!children.length) {
+        return
+      }
+      this.treeNodeCount += children.length
+      if (!this.searchMode) {
+        this.normalTreeNodeCount = this.treeNodeCount
+      }
+    },
     async loadNode(node, resolve, reject) {
       if (node.level === 0) {
         resolve(this.treeData)
@@ -1761,42 +2055,16 @@ export default {
       const controller = new AbortController()
       this.childrenAbortControllers.set(requestKey, controller)
       try {
-        const childrenLoader = this.treeSetting.loadChildren
-        const dataSourceChildren = this.treeSetting.dataSource?.children
-        const response =
-          typeof childrenLoader === 'function'
-            ? await childrenLoader({
-                level: node.level,
-                parent: node.data,
-                signal: controller.signal,
-                tree: this
-              })
-            : typeof dataSourceChildren === 'function'
-              ? await this.loadFromDataSource('children', {
-                  level: node.level,
-                  parent: node.data,
-                  signal: controller.signal
-                })
-              : await this.requestTree(
-                  this.treeSetting.treeUrl,
-                  {
-                    key: node.data.id,
-                    n: node.data.name,
-                    lv: node.level
-                  },
-                  { signal: controller.signal }
-                )
-        const children = this.normalizeTree(response)
-        // Keep successfully loaded children on the data object. Besides
-        // avoiding duplicate lazy requests, this lets an async search swap the
-        // visible tree out and later restore the exact expanded structure.
-        node.data.children = children
-        node.data._childrenProjection = false
-        node.data._reloadProjectedChildren = false
-        node.data._isLeaf = children.length === 0
-        this.rememberNodeChildrenViewSource(node.data, children, { replace: true })
+        const { children: normalizedChildren, response } =
+          await this.requestFirstPopulatedNodeChildren(node.data, {
+            level: node.level,
+            signal: controller.signal
+          })
+        const children = this.storeLoadedNodeChildren(node.data, response, normalizedChildren)
         resolve(children)
+        this.registerLoadedNodeChildren(children)
         await this.$nextTick()
+        this.scheduleProgressiveAmountLoading()
         if (
           children.length &&
           this.expandedNodeIds.has(String(node.data.id)) &&
@@ -1822,6 +2090,45 @@ export default {
         }
       }
     },
+    async loadVirtualNodeChildren(data) {
+      const reloadProjectedChildren = Boolean(
+        this.isNodeChildrenProjection(data) && data?._reloadProjectedChildren
+      )
+      if (
+        !this.isLazyLoad ||
+        data?._isLeaf ||
+        data?._childrenLoading ||
+        (data?.children?.length && !reloadProjectedChildren)
+      ) {
+        return
+      }
+      const requestKey = String(data.id)
+      this.childrenAbortControllers.get(requestKey)?.abort()
+      const controller = new AbortController()
+      this.childrenAbortControllers.set(requestKey, controller)
+      data._childrenLoading = true
+      try {
+        const { children: normalizedChildren, response } =
+          await this.requestFirstPopulatedNodeChildren(data, {
+            signal: controller.signal
+          })
+        const children = this.storeLoadedNodeChildren(data, response, normalizedChildren)
+        this.registerLoadedNodeChildren(children)
+        this.$refs.tree?.setData(this.treeData)
+        await this.$nextTick()
+        this.$refs.tree?.setExpandedKeys([...this.expandedNodeIds])
+        this.scheduleProgressiveAmountLoading()
+      } catch (error) {
+        if (error?.code !== 'ERR_CANCELED' && error?.name !== 'AbortError') {
+          this.$log?.warn?.('Load tree node children failed', error)
+        }
+      } finally {
+        data._childrenLoading = false
+        if (this.childrenAbortControllers.get(requestKey) === controller) {
+          this.childrenAbortControllers.delete(requestKey)
+        }
+      }
+    },
     async handleNodeExpand(data) {
       if (data?.id !== undefined && data?.id !== null) {
         this.expandedNodeIds.add(String(data.id))
@@ -1829,8 +2136,12 @@ export default {
       if (this.suppressExpandAmountLoading) {
         return
       }
+      if (this.useVirtualTree) {
+        await this.loadVirtualNodeChildren(data)
+      }
       await this.$nextTick()
       this.enqueueDirectChildAmounts(data?.children)
+      this.scheduleProgressiveAmountLoading()
     },
     async handleNodeCollapse(data) {
       if (data?.id !== undefined && data?.id !== null) {
@@ -2265,7 +2576,7 @@ export default {
       }
       this.assetScope = nextValue
       setAssetScopeValue(this.$cookie, this.treeSetting, this.assetScope)
-      this.reloadVisibleNodeAmounts({ resetNormal: true })
+      this.reloadVisibleNodeAmounts({ allLoaded: true, resetNormal: true })
       this.treeSetting.callback?.onAssetScopeChange?.(this.assetScope, this.currentNode)
       if (this.currentNode) {
         this.handleNodeLabelClick(null, this.currentNode)
@@ -3223,8 +3534,6 @@ export default {
   flex: 1;
   min-height: 0;
   overflow: hidden;
-  margin-top: var(--x-tree-body-separator-space-before, 5px);
-  padding-top: var(--x-tree-body-separator-space-after, 5px);
   padding-right: var(--x-tree-body-inline-padding, 0);
   padding-left: var(--x-tree-body-inline-padding, 0);
   border-top: var(
@@ -3235,10 +3544,11 @@ export default {
 
 .x-tree__viewport {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 3px);
   min-width: 0;
   min-height: 0;
   overflow: auto;
+  margin-top: 3px;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
@@ -3278,8 +3588,6 @@ export default {
 }
 
 .x-tree.is-search-visible .x-tree__body {
-  margin-top: 0;
-  padding-top: 0;
   border-top: 0;
 }
 
@@ -3393,6 +3701,17 @@ export default {
   color: var(--el-text-color-secondary);
   font-size: 11px;
   transition: transform 0.12s ease-out;
+}
+
+.x-tree__body.is-virtual
+  :deep(
+    .el-tree-node.x-tree-node--loadable
+      > .el-tree-node__content
+      > .el-tree-node__expand-icon.is-leaf
+  ) {
+  visibility: visible;
+  color: var(--el-text-color-secondary);
+  cursor: pointer;
 }
 
 .x-tree__body :deep(.el-collapse-transition-enter-active),
