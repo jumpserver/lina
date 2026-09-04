@@ -13,7 +13,7 @@
   flex: none;
   padding: 8px 12px;
   border-bottom: 1px solid var(--panel-border-color, var(--el-border-color));
-  background-color: var(--el-fill-color-light, #f5f7fa);
+  background-color: var(--el-bg-color, #fff);
 }
 
 @mixin search-transition($name) {

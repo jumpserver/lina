@@ -5,7 +5,7 @@
 <script>
 import { AutomationParams } from '@/components'
 import { periodicMeta } from '@/components/const'
-import { ResourceSelect, TagInput, TreeResourceSelect } from '@/components/Form/FormFields'
+import { NodeSelect, ResourceSelect, TagInput } from '@/components/Form/FormFields'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
 import AccountPushPasswordRule from './AccountPushPasswordRule.vue'
@@ -81,8 +81,8 @@ export default {
           }
         },
         nodes: {
-          type: 'treeResourceSelect',
-          component: TreeResourceSelect,
+          type: 'nodeSelect',
+          component: NodeSelect,
           rules: [{ required: false }],
           el: {
             value: [],

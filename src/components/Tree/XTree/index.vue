@@ -1,12 +1,36 @@
 <template>
   <div
-    :class="{ 'is-search-visible': treeSetting.showSearch && searchVisible }"
+    :class="{ 'is-search-visible': isPanelSearchVisible }"
     :style="{ '--x-tree-row-height': `${nodeRowHeight}px` }"
     class="x-tree"
   >
-    <div v-if="hasTreeTools" class="x-tree__header-actions">
+    <div
+      v-if="hasTreeTools"
+      :class="{ 'has-header-search': isHeaderSearch }"
+      class="x-tree__header-actions"
+    >
+      <el-input
+        v-if="isHeaderSearch"
+        ref="searchInput"
+        v-model="searchValue"
+        :placeholder="$t('NodeFilterSearch')"
+        class="x-tree__search x-tree__header-search"
+        clearable
+        @input="handleSearchInput"
+      >
+        <template #prefix>
+          <el-icon><Search /></el-icon>
+        </template>
+      </el-input>
+      <span v-if="$slots['toolbar-prepend']" class="x-tree__toolbar-prepend">
+        <slot
+          :collapse-disabled="loading || treeData.length === 0"
+          :loading="loading"
+          name="toolbar-prepend"
+        />
+      </span>
       <el-button
-        v-if="treeSetting.showSearch"
+        v-if="hasSearchToggle"
         :aria-label="$t('TreeActionSearch')"
         :class="{ 'is-active': searchVisible }"
         class="x-tree__tool-button"
@@ -18,9 +42,10 @@
         v-if="hasTreeMenu"
         ref="toolsDropdown"
         :hide-timeout="160"
-        placement="bottom-start"
+        :placement="treeSetting.toolsPlacement"
         popper-class="x-tree-tools-popper"
         :show-timeout="80"
+        :teleported="treeSetting.toolsTeleported"
         trigger="hover"
         @command="handleTreeToolCommand"
       >
@@ -50,8 +75,10 @@
                 <el-radio-group :model-value="assetScope" @change="handleAssetScopeChange">
                   <el-tooltip
                     :content="$t('AssetScopeWithDescendantsHelp')"
+                    :persistent="false"
                     :show-after="400"
                     placement="right"
+                    :teleported="false"
                   >
                     <el-radio class="x-tree-settings__radio" value="0">
                       {{ $t('AssetScopeWithDescendants') }}
@@ -59,8 +86,10 @@
                   </el-tooltip>
                   <el-tooltip
                     :content="$t('AssetScopeDirectHelp')"
+                    :persistent="false"
                     :show-after="400"
                     placement="right"
+                    :teleported="false"
                   >
                     <el-radio class="x-tree-settings__radio" value="1">
                       {{ $t('AssetScopeDirect') }}
@@ -69,6 +98,7 @@
                 </el-radio-group>
               </li>
             </template>
+            <slot :close="closeToolsDropdown" name="tools-menu" />
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -79,7 +109,7 @@
       name="x-tree-search"
       @after-enter="focusSearchInput"
     >
-      <div v-if="treeSetting.showSearch && searchVisible" class="x-tree__search-row">
+      <div v-if="isPanelSearchVisible" class="x-tree__search-row">
         <el-input
           ref="searchInput"
           v-model="searchValue"
@@ -199,8 +229,8 @@
           empty-text=""
           :expand-on-click-node="true"
           :filter-node-method="filterNode"
-          :lazy="treeSetting.lazyLoad"
-          :load="treeSetting.lazyLoad ? loadNode : undefined"
+          :lazy="isLazyLoad"
+          :load="isLazyLoad ? loadNode : undefined"
           :props="treeProps"
           highlight-current
           node-key="id"
@@ -300,7 +330,7 @@
           </li>
           <li v-if="item.divided" class="divider x-tree-context-menu__divider" />
         </template>
-        <slot name="rMenu" />
+        <slot :close="hideRMenu" :data="currentNode" name="rMenu" />
       </ul>
     </div>
   </div>
@@ -311,6 +341,7 @@ import axiosRetry from 'axios-retry'
 import Icon from '@/components/Widgets/Icon'
 import TreeFolderIcon from '@/components/Tree/TreeFolderIcon.vue'
 import { getShowCurrentAssetValue, setShowCurrentAssetValue } from '@/utils/common/index'
+import { createXTreeSetting, X_TREE_LOAD_MODES, X_TREE_SEARCH_PLACEMENTS } from './config'
 
 const DEFAULT_NODE_ROW_HEIGHT = 28
 
@@ -362,6 +393,8 @@ export default {
       searchFocusFrame: null,
       assetScope: getAssetScopeValue(this.$cookie, this.setting),
       searchMode: false,
+      localFilterMode: false,
+      localFilterNodeIds: new Set(),
       menuVisible: false,
       menuPosition: { x: 0, y: 0 },
       editingKey: '',
@@ -422,39 +455,45 @@ export default {
       return this.searchLoading || (!this.searchMode && this.structureLoading)
     },
     treeSetting() {
-      const merged = _.merge(
-        {
-          showDefaultMenu: true,
-          showMenu: false,
-          showCreate: true,
-          showDelete: true,
-          showUpdate: true,
-          showSearch: false,
-          showCollapse: false,
-          showRefresh: false,
-          showAssetScope: false,
-          showAssets: false,
-          hasRightMenu: true,
-          selectSyncToRoute: true,
-          structureUrl: '',
-          initialData: null,
-          initialAmounts: null,
-          initialAssetScope: '',
-          countUrl: '',
-          countBatchSize: 100,
-          countProgressiveBatchSize: 100,
-          amountTypes: ['node'],
-          operationNodeId: '',
-          readOnly: false,
-          nodeRowHeight: DEFAULT_NODE_ROW_HEIGHT,
-          lazyLoad: true,
-          virtualThreshold: 1000,
-          virtualize: true,
-          virtualizeSearch: true,
-          menu: [],
-          callback: {}
-        },
-        this.setting
+      const merged = createXTreeSetting(
+        _.merge(
+          {
+            showDefaultMenu: true,
+            showMenu: false,
+            showCreate: true,
+            showDelete: true,
+            showUpdate: true,
+            showSearch: false,
+            searchPlacement: X_TREE_SEARCH_PLACEMENTS.PANEL,
+            showCollapse: false,
+            showRefresh: false,
+            showAssetScope: false,
+            toolsPlacement: 'bottom-start',
+            toolsTeleported: true,
+            showAssets: false,
+            hasRightMenu: true,
+            selectSyncToRoute: true,
+            structureUrl: '',
+            initialData: null,
+            initialAmounts: null,
+            initialAssetScope: '',
+            countUrl: '',
+            countBatchSize: 100,
+            countProgressiveBatchSize: 100,
+            amountTypes: ['node'],
+            operationNodeId: '',
+            readOnly: false,
+            nodeRowHeight: DEFAULT_NODE_ROW_HEIGHT,
+            initialExpandedKeys: null,
+            lazyLoad: true,
+            virtualThreshold: 1000,
+            virtualize: true,
+            virtualizeSearch: true,
+            menu: [],
+            callback: {}
+          },
+          this.setting
+        )
       )
       // Lodash merges arrays by index, but amountTypes is a replace-style
       // allowlist. Preserve an explicitly empty list and avoid leaking the
@@ -464,17 +503,38 @@ export default {
       }
       return merged
     },
+    isLazyLoad() {
+      return this.treeSetting.loadMode === X_TREE_LOAD_MODES.LAZY
+    },
     nodeRowHeight() {
       return Math.max(1, Number(this.treeSetting.nodeRowHeight) || DEFAULT_NODE_ROW_HEIGHT)
+    },
+    isHeaderSearch() {
+      return (
+        this.treeSetting.showSearch &&
+        this.treeSetting.searchPlacement === X_TREE_SEARCH_PLACEMENTS.HEADER
+      )
+    },
+    hasSearchToggle() {
+      return this.treeSetting.showSearch && !this.isHeaderSearch
+    },
+    isPanelSearchVisible() {
+      return this.hasSearchToggle && this.searchVisible
     },
     hasTreeMenuOperations() {
       return this.treeSetting.showCollapse || this.treeSetting.showRefresh
     },
     hasTreeMenu() {
-      return this.hasTreeMenuOperations || this.treeSetting.showAssetScope
+      return (
+        this.hasTreeMenuOperations ||
+        this.treeSetting.showAssetScope ||
+        Boolean(this.$slots['tools-menu'])
+      )
     },
     hasTreeTools() {
-      return this.treeSetting.showSearch || this.hasTreeMenu
+      return (
+        Boolean(this.$slots['toolbar-prepend']) || this.treeSetting.showSearch || this.hasTreeMenu
+      )
     },
     defaultMenu() {
       return [
@@ -525,6 +585,13 @@ export default {
         return []
       }
       if (!this.searchMode) {
+        const configuredKeys =
+          typeof this.treeSetting.initialExpandedKeys === 'function'
+            ? this.treeSetting.initialExpandedKeys({ nodes: this.treeData, tree: this })
+            : this.treeSetting.initialExpandedKeys
+        if (Array.isArray(configuredKeys)) {
+          return [...configuredKeys]
+        }
         if (
           this.$store.getters.currentOrgIsRoot &&
           this.treeSetting.expandRootInGlobalOrg !== true
@@ -575,6 +642,26 @@ export default {
     this.removeDragPreview()
   },
   methods: {
+    getDataSourcePayload(operation, payload = {}) {
+      const basePayload = {
+        operation,
+        ...payload,
+        tree: this
+      }
+      const source = this.treeSetting.dataSourceContext
+      const context = typeof source === 'function' ? source(basePayload) : source
+      return {
+        ...(context || {}),
+        ...basePayload
+      }
+    },
+    loadFromDataSource(operation, payload = {}) {
+      const loader = this.treeSetting.dataSource?.[operation]
+      if (typeof loader !== 'function') {
+        return undefined
+      }
+      return loader(this.getDataSourcePayload(operation, payload))
+    },
     setupRuntimeEffects() {
       if (this.runtimeEffectsActive) {
         return
@@ -762,8 +849,14 @@ export default {
       }
       if (Number.isFinite(amount)) {
         this.nodeAmounts.set(key, amount)
+        if (this.localFilterMode && this.normalNodeAmounts) {
+          this.normalNodeAmounts.set(key, amount)
+        }
       } else {
         this.nodeAmounts.delete(key)
+        if (this.localFilterMode && this.normalNodeAmounts) {
+          this.normalNodeAmounts.delete(key)
+        }
       }
     },
     setNodeMetric(id, amount) {
@@ -1122,7 +1215,7 @@ export default {
         })
       }
       if (typeof this.treeSetting.dataSource?.metrics === 'function') {
-        return this.treeSetting.dataSource.metrics({
+        return this.loadFromDataSource('metrics', {
           fresh,
           includeDescendants,
           nodeIds,
@@ -1455,11 +1548,23 @@ export default {
         this.cancelAmountLoading()
         this.resetProgressiveAmountLoading()
       }
-      const url = this.getRefreshUrl(refresh)
-      const initialData = refresh ? null : this.treeSetting.initialData
-      const hasInitialData = Array.isArray(initialData) && initialData.length > 0
-      const rootLoader = this.treeSetting.loadRoot || this.treeSetting.dataSource?.root
-      if (!url && !hasInitialData && typeof rootLoader !== 'function') {
+      const staticMode = this.treeSetting.loadMode === X_TREE_LOAD_MODES.STATIC
+      const url = staticMode ? '' : this.getRefreshUrl(refresh)
+      const initialData = staticMode
+        ? this.treeSetting.initialData
+        : refresh
+          ? null
+          : this.treeSetting.initialData
+      const hasInitialData =
+        initialData != null && (staticMode || !Array.isArray(initialData) || initialData.length > 0)
+      const rootLoader = staticMode ? null : this.treeSetting.loadRoot
+      const dataSourceRoot = staticMode ? null : this.treeSetting.dataSource?.root
+      if (
+        !url &&
+        !hasInitialData &&
+        typeof rootLoader !== 'function' &&
+        typeof dataSourceRoot !== 'function'
+      ) {
         this.structureAbortController = null
         this.structureLoading = false
         this.normalTreeData = []
@@ -1482,7 +1587,12 @@ export default {
           ? initialData
           : typeof rootLoader === 'function'
             ? await rootLoader({ refresh, signal: controller.signal, tree: this })
-            : await this.requestTree(url, {}, { signal: controller.signal })
+            : typeof dataSourceRoot === 'function'
+              ? await this.loadFromDataSource('root', {
+                  refresh,
+                  signal: controller.signal
+                })
+              : await this.requestTree(url, {}, { signal: controller.signal })
         const normalized = await this.normalizeTreeAsync(
           response,
           () => requestId === this.structureRequestId
@@ -1651,8 +1761,8 @@ export default {
       const controller = new AbortController()
       this.childrenAbortControllers.set(requestKey, controller)
       try {
-        const childrenLoader =
-          this.treeSetting.loadChildren || this.treeSetting.dataSource?.children
+        const childrenLoader = this.treeSetting.loadChildren
+        const dataSourceChildren = this.treeSetting.dataSource?.children
         const response =
           typeof childrenLoader === 'function'
             ? await childrenLoader({
@@ -1661,15 +1771,21 @@ export default {
                 signal: controller.signal,
                 tree: this
               })
-            : await this.requestTree(
-                this.treeSetting.treeUrl,
-                {
-                  key: node.data.id,
-                  n: node.data.name,
-                  lv: node.level
-                },
-                { signal: controller.signal }
-              )
+            : typeof dataSourceChildren === 'function'
+              ? await this.loadFromDataSource('children', {
+                  level: node.level,
+                  parent: node.data,
+                  signal: controller.signal
+                })
+              : await this.requestTree(
+                  this.treeSetting.treeUrl,
+                  {
+                    key: node.data.id,
+                    n: node.data.name,
+                    lv: node.level
+                  },
+                  { signal: controller.signal }
+                )
         const children = this.normalizeTree(response)
         // Keep successfully loaded children on the data object. Besides
         // avoiding duplicate lazy requests, this lets an async search swap the
@@ -1749,8 +1865,7 @@ export default {
       const isFirstLevelState =
         this.expandedNodeIds.size === firstLevelKeySet.size &&
         [...this.expandedNodeIds].every((key) => firstLevelKeySet.has(String(key)))
-      const nextExpandedKeys =
-        this.$store.getters.currentOrgIsRoot || isFirstLevelState ? [] : firstLevelKeys
+      const nextExpandedKeys = isFirstLevelState ? [] : firstLevelKeys
 
       this.suppressExpandAmountLoading = true
       try {
@@ -1828,8 +1943,7 @@ export default {
         })
       })
     },
-    async filterTreeLocally(keyword, isCurrent) {
-      const query = keyword.toLocaleLowerCase()
+    async filterTreeByPredicate(matches, isCurrent) {
       const entries = []
       const stack = []
       const chunkSize = 2000
@@ -1841,7 +1955,7 @@ export default {
         const { node, parentIndex } = stack.pop()
         const entryIndex = entries.length
         entries.push({
-          matches: this.getNodeLabel(node).toLocaleLowerCase().includes(query),
+          matches: Boolean(matches(node)),
           node,
           parentIndex
         })
@@ -1912,11 +2026,89 @@ export default {
       }
       return { count: visibleIndexes.size, roots }
     },
+    filterTreeLocally(keyword, isCurrent) {
+      const query = keyword.toLocaleLowerCase()
+      return this.filterTreeByPredicate(
+        (node) => this.getNodeLabel(node).toLocaleLowerCase().includes(query),
+        isCurrent
+      )
+    },
+    async showOnlyNodes(nodeIds, options = {}) {
+      const includedIds = new Set(
+        Array.from(nodeIds || [])
+          .filter((id) => id !== undefined && id !== null && id !== '')
+          .map(String)
+      )
+      const query = String(options.keyword ?? this.searchValue)
+        .trim()
+        .toLocaleLowerCase()
+      const requestId = ++this.searchRequestId
+      this.debouncedSearch.cancel()
+      this.searchAbortController?.abort()
+      this.searchAbortController = null
+      this.searchLoading = false
+      this.cancelAmountLoading()
+
+      const filtered = await this.filterTreeByPredicate(
+        (node) => {
+          const ids = [this.getNodeAmountResourceId(node), node?.id]
+          const selected = ids.some(
+            (id) => id !== undefined && id !== null && includedIds.has(String(id))
+          )
+          return selected && (!query || this.getNodeLabel(node).toLocaleLowerCase().includes(query))
+        },
+        () => requestId === this.searchRequestId
+      )
+      if (!filtered || requestId !== this.searchRequestId) {
+        return
+      }
+      this.cancelAmountLoading()
+      if (!this.searchMode && !this.normalTreeDeferredBySearch) {
+        this.normalNodeAmounts = new Map(this.nodeAmounts)
+        this.normalExpandedNodeIds = new Set(this.expandedNodeIds)
+      } else if (!this.localFilterMode && this.normalNodeAmounts) {
+        this.nodeAmounts.forEach((amount, key) => this.normalNodeAmounts.set(key, amount))
+        this.nodeAmounts = new Map(this.normalNodeAmounts)
+      }
+
+      this.localFilterMode = true
+      this.localFilterNodeIds = includedIds
+      this.searchMode = true
+      this.treeData = filtered.roots
+      this.treeNodeCount = filtered.count
+      this.treeKey += 1
+      await this.$nextTick()
+      await this.expandInitialNodes()
+      const currentNode = this.currentNode
+        ? this.findTreeNodeIn(this.treeData, this.currentNode.id)
+        : null
+      this.currentNode = currentNode
+      this.$refs.tree?.setCurrentKey(currentNode?.id ?? null)
+      this.notifySearchState({
+        active: Boolean(query),
+        keyword: query,
+        resultCount: filtered.count,
+        selectedOnly: true,
+        ...options.context
+      })
+      this.startProgressiveAmountLoading()
+    },
+    restoreAllNodes() {
+      this.localFilterMode = false
+      this.localFilterNodeIds.clear()
+      this.searchValue = ''
+      this.searchVisible = false
+      this.debouncedSearch.cancel()
+      return this.searchTree('')
+    },
     notifySearchState(state) {
       this.treeSetting.callback?.onSearchStateChange?.(state)
       this.$emit('search-state-change', state)
     },
     async searchTree(keyword, context = {}) {
+      if (this.localFilterMode) {
+        return this.showOnlyNodes(this.localFilterNodeIds, { context, keyword })
+      }
       const requestId = ++this.searchRequestId
       this.searchAbortController?.abort()
       const controller = new AbortController()
@@ -1952,17 +2144,22 @@ export default {
         return
       }
 
-      const searchLoader = this.treeSetting.search || this.treeSetting.dataSource?.search
+      const searchLoader = this.treeSetting.search
+      const dataSourceSearch = this.treeSetting.dataSource?.search
       let filtered
       let metadata = {}
       try {
-        if (typeof searchLoader === 'function') {
-          const response = await searchLoader({
+        if (typeof searchLoader === 'function' || typeof dataSourceSearch === 'function') {
+          const payload = {
             ...context,
             keyword,
             signal: controller.signal,
             tree: this
-          })
+          }
+          const response =
+            typeof searchLoader === 'function'
+              ? await searchLoader(payload)
+              : await this.loadFromDataSource('search', payload)
           const normalized = await this.normalizeTreeAsync(
             response,
             () => requestId === this.searchRequestId
@@ -2051,6 +2248,8 @@ export default {
       this.searchAbortController = null
       this.searchLoading = false
       this.searchMode = false
+      this.localFilterMode = false
+      this.localFilterNodeIds.clear()
       this.normalTreeDeferredBySearch = false
       this.normalNodeAmounts = null
       this.normalExpandedNodeIds = null
@@ -2236,7 +2435,10 @@ export default {
       await this.ensureExpanded(parent)
       const url = `${this.treeSetting.nodeUrl}${parent.meta.data.id}/children/`
       try {
-        const response = await this.$axios.post(url, {})
+        const response =
+          typeof this.treeSetting.dataSource?.create === 'function'
+            ? await this.loadFromDataSource('create', { parent })
+            : await this.$axios.post(url, {})
         const node = this.normalizeNode({
           id: response.key,
           name: response.value,
@@ -2249,8 +2451,8 @@ export default {
         delete node.assets_amount
         this.setNodeAmount(node, 0)
         if (this.useVirtualTree) {
-          this.appendRawTreeNode(parent, node)
-          this.appendNodeToNormalTreeWhenSearching(parent, node)
+          this.prependRawTreeNode(parent, node)
+          this.prependNodeToNormalTreeWhenSearching(parent, node)
           this.treeNodeCount += 1
           this.normalTreeNodeCount += 1
           // Rebuild only el-tree-v2's local flattened index. Calling loadRoot
@@ -2259,10 +2461,15 @@ export default {
           await this.activateCreatedNode(parent, node)
           return
         }
-        this.$refs.tree?.append(node, parent)
+        const firstChild = parent.children?.[0]
+        if (firstChild) {
+          this.$refs.tree?.insertBefore(node, firstChild)
+        } else {
+          this.$refs.tree?.append(node, parent)
+        }
         this.setTreeNodeLeafState(node, true)
         this.setTreeNodeLeafState(this.$refs.tree?.getNode(parent.id) || parent, false)
-        this.appendNodeToNormalTreeWhenSearching(parent, node)
+        this.prependNodeToNormalTreeWhenSearching(parent, node)
         this.treeNodeCount += 1
         this.normalTreeNodeCount += 1
         await this.activateCreatedNode(parent, node)
@@ -2318,10 +2525,10 @@ export default {
         return
       }
       try {
-        const response = await this.$axios.patch(
-          `${this.treeSetting.nodeUrl}${node.meta.data.id}/`,
-          { value }
-        )
+        const response =
+          typeof this.treeSetting.dataSource?.update === 'function'
+            ? await this.loadFromDataSource('update', { node, value })
+            : await this.$axios.patch(`${this.treeSetting.nodeUrl}${node.meta.data.id}/`, { value })
         node.meta.data = { ...node.meta.data, ...response }
         node.name = value
         this.$message.success(this.$tc('UpdateSuccessMsg'))
@@ -2341,7 +2548,11 @@ export default {
       const visibleRemovedCount = this.countTreeNodes(node)
       const normalRemovedCount = this.countTreeNodes(normalNode)
       const wasVirtualTree = this.useVirtualTree
-      await this.$axios.delete(`${this.treeSetting.nodeUrl}${node.meta.data.id}/`)
+      if (typeof this.treeSetting.dataSource?.remove === 'function') {
+        await this.loadFromDataSource('remove', { node })
+      } else {
+        await this.$axios.delete(`${this.treeSetting.nodeUrl}${node.meta.data.id}/`)
+      }
 
       if (wasVirtualTree) {
         this.removeRawTreeNode(this.treeData, node.id)
@@ -2640,10 +2851,18 @@ export default {
         return
       }
       try {
-        await this.$axios.put(
-          `${this.treeSetting.nodeUrl}${dropNode.data.meta.data.id}/children/add/`,
-          { nodes: [draggingNode.data.meta.data.id] }
-        )
+        if (typeof this.treeSetting.dataSource?.move === 'function') {
+          await this.loadFromDataSource('move', {
+            node: draggingNode.data,
+            sourceAncestors,
+            target: dropNode.data
+          })
+        } else {
+          await this.$axios.put(
+            `${this.treeSetting.nodeUrl}${dropNode.data.meta.data.id}/children/add/`,
+            { nodes: [draggingNode.data.meta.data.id] }
+          )
+        }
         const targetAncestors = this.collectAncestorNodeData(dropNode, true)
         if (this.useVirtualTree) {
           this.moveVirtualTreeNode(draggingNode.data, dropNode.data, sourceAncestors)
@@ -2756,10 +2975,10 @@ export default {
         assetScope: this.assetScope
       }
     },
-    appendRawTreeNode(parent, node) {
+    prependRawTreeNode(parent, node) {
       parent.children ||= []
       if (!parent.children.some((item) => String(item.id) === String(node.id))) {
-        parent.children.push(node)
+        parent.children.unshift(node)
       }
       this.setTreeNodeLeafState(node, true)
       this.setTreeNodeLeafState(parent, false)
@@ -2808,13 +3027,13 @@ export default {
       }
       return null
     },
-    appendNodeToNormalTreeWhenSearching(parent, node) {
+    prependNodeToNormalTreeWhenSearching(parent, node) {
       if (!this.searchMode) {
         return
       }
       const normalParent = this.findTreeNodeIn(this.normalTreeData, parent.id)
       if (normalParent && normalParent !== parent) {
-        this.appendRawTreeNode(normalParent, node)
+        this.prependRawTreeNode(normalParent, node)
       }
     },
     findTreeNodeIn(roots, id) {
@@ -2833,6 +3052,77 @@ export default {
     },
     findTreeNode(id) {
       return this.findTreeNodeIn(this.treeData, id)
+    },
+    getExpandedKeys() {
+      return [...this.expandedNodeIds]
+    },
+    getNodePath(id) {
+      const target = String(id)
+      const stack = this.treeData.map((node) => ({ node, path: [node] }))
+      while (stack.length) {
+        const { node, path } = stack.pop()
+        if (String(node.id) === target) {
+          return path
+        }
+        for (const child of node.children || []) {
+          stack.push({ node: child, path: [...path, child] })
+        }
+      }
+      return []
+    },
+    async setExpandedKeys(keys = []) {
+      const tree = this.$refs.tree
+      if (!tree) {
+        return
+      }
+      const normalizedKeys = [...new Set(keys.map((key) => String(key)))]
+      this.suppressExpandAmountLoading = true
+      try {
+        if (this.useVirtualTree) {
+          tree.setExpandedKeys(normalizedKeys)
+        } else {
+          const renderedNodes = []
+          const stack = [...(tree.store?.root?.childNodes || [])]
+          while (stack.length) {
+            const node = stack.pop()
+            renderedNodes.push(node)
+            if (node.childNodes?.length) {
+              stack.push(...node.childNodes)
+            }
+          }
+          renderedNodes.reverse().forEach((node) => node.collapse())
+          normalizedKeys.forEach((key) => tree.getNode(key)?.expand())
+        }
+        await this.$nextTick()
+        this.expandedNodeIds = new Set(normalizedKeys)
+      } finally {
+        this.suppressExpandAmountLoading = false
+      }
+      this.rebuildProgressiveAmountWindow()
+    },
+    expandAll() {
+      const keys = []
+      const stack = [...this.treeData]
+      while (stack.length) {
+        const node = stack.pop()
+        if (!this.isLeafNode(node)) {
+          keys.push(node.id)
+        }
+        if (node.children?.length) {
+          stack.push(...node.children)
+        }
+      }
+      return this.setExpandedKeys(keys)
+    },
+    collapseAll() {
+      return this.setExpandedKeys([])
+    },
+    collapseStepwise() {
+      return this.collapseTreeStepwise()
+    },
+    expandToNode(id) {
+      const path = this.getNodePath(id)
+      return this.setExpandedKeys(path.slice(0, -1).map((node) => node.id))
     },
     selectNode(node) {
       if (!node) {
@@ -2859,6 +3149,30 @@ export default {
 
 .x-tree__header-actions {
   @include treeToolbar.header-actions;
+
+  &.has-header-search {
+    position: static;
+    z-index: auto;
+    box-sizing: border-box;
+    width: 100%;
+    height: var(--x-tree-toolbar-height, 40px);
+    min-width: 0;
+    padding: var(--x-tree-toolbar-padding-block, 5px) var(--x-tree-toolbar-padding-inline, 8px);
+  }
+}
+
+.x-tree__toolbar-prepend {
+  display: contents;
+
+  :deep(.x-tree__tool-button) {
+    @include treeToolbar.tool-button;
+
+    margin: 0;
+  }
+
+  :deep(.x-tree__tool-icon) {
+    @include treeToolbar.tool-icon;
+  }
 }
 
 .x-tree__search-row {
@@ -2889,6 +3203,11 @@ export default {
   }
 }
 
+.x-tree__header-search {
+  min-width: 80px;
+  margin-right: 7px;
+}
+
 .x-tree__tool-button {
   @include treeToolbar.tool-button;
 }
@@ -2900,11 +3219,18 @@ export default {
 .x-tree__body {
   --tree-scrollbar-size: 6px;
 
+  box-sizing: border-box;
   flex: 1;
   min-height: 0;
   overflow: hidden;
-  padding: 0;
-  border-top: 1px solid var(--panel-border-color, var(--el-border-color));
+  margin-top: var(--x-tree-body-separator-space-before, 5px);
+  padding-top: var(--x-tree-body-separator-space-after, 5px);
+  padding-right: var(--x-tree-body-inline-padding, 0);
+  padding-left: var(--x-tree-body-inline-padding, 0);
+  border-top: var(
+    --x-tree-body-border-top,
+    1px solid var(--panel-border-color, var(--el-border-color))
+  );
 }
 
 .x-tree__viewport {
@@ -2952,6 +3278,8 @@ export default {
 }
 
 .x-tree.is-search-visible .x-tree__body {
+  margin-top: 0;
+  padding-top: 0;
   border-top: 0;
 }
 
@@ -3063,6 +3391,7 @@ export default {
 
 .x-tree__body :deep(.el-tree-node__expand-icon) {
   color: var(--el-text-color-secondary);
+  font-size: 11px;
   transition: transform 0.12s ease-out;
 }
 

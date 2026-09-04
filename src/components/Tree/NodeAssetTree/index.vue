@@ -2,7 +2,6 @@
   <div
     :style="treeStyle"
     :class="{
-      'has-tree-hint': searchState.truncated || (latestChildTruncation && !searchState.active),
       'is-fill-height': treeSetting.fillHeight,
       'is-search-visible': treeSetting.showSearch && searchVisible
     }"
@@ -234,19 +233,6 @@
       </div>
     </transition>
 
-    <div v-if="searchState.truncated" class="node-asset-tree__search-hint">
-      {{ searchTruncatedText }}
-    </div>
-
-    <div
-      v-if="latestChildTruncation && !searchState.active"
-      class="node-asset-tree__search-hint node-asset-tree__search-hint--warning"
-      role="status"
-    >
-      <el-icon><InfoFilled /></el-icon>
-      <span>{{ childTruncatedText }}</span>
-    </div>
-
     <XTree
       ref="tree"
       :setting="xTreeSetting"
@@ -254,7 +240,17 @@
       @url-change="$emit('url-change', $event)"
     >
       <template #node-icon="{ data, expanded, leaf }">
-        <Icon v-if="isAsset(data)" :icon="getAssetIcon(data)" class="node-asset-tree__asset-icon" />
+        <img
+          v-if="isAsset(data) && usesPlatformAssetIcons"
+          :src="getAssetPlatformIcon(data)"
+          alt=""
+          class="node-asset-tree__asset-icon node-asset-tree__platform-icon"
+        />
+        <Icon
+          v-else-if="isAsset(data)"
+          :icon="getAssetIcon(data)"
+          class="node-asset-tree__asset-icon"
+        />
         <TreeFolderIcon
           v-else
           :leaf="leaf"
@@ -321,8 +317,8 @@
           </el-dropdown>
         </span>
       </template>
-      <template #rMenu>
-        <slot name="rMenu" />
+      <template #rMenu="slotProps">
+        <slot name="rMenu" v-bind="slotProps" />
       </template>
     </XTree>
   </div>
@@ -332,6 +328,8 @@
 import Icon from '@/components/Widgets/Icon'
 import TreeFolderIcon from '@/components/Tree/TreeFolderIcon.vue'
 import XTree from '@/components/Tree/XTree/index.vue'
+import { createXTreeSetting, X_TREE_LOAD_MODES } from '@/components/Tree/XTree/config'
+import { loadPlatformIcon } from '@/utils/jms/index'
 import {
   isNodeAssetMetricMode,
   NODE_ASSET_METRIC_MODES,
@@ -340,6 +338,10 @@ import {
   toNodeAssetResource
 } from './provider'
 
+const SETTINGS_CACHE_PREFIX = 'jms.node-asset-tree.settings.'
+const MAX_SEARCH_RESULTS = 100
+const ASSET_ORDER_VALUES = Object.freeze(['name', 'address'])
+const NODE_DISPLAY_VALUES = Object.freeze(['both', 'nodes', 'assets'])
 const ASSET_ICON_MAP = Object.freeze({
   database: 'fa-database',
   device: 'fa-network-wired',
@@ -354,11 +356,6 @@ const ASSET_ICON_MAP = Object.freeze({
   unix: 'fa-terminal',
   windows: 'fa-brands fa-windows'
 })
-
-const SETTINGS_CACHE_PREFIX = 'jms.node-asset-tree.settings.'
-const MAX_ASSET_SEARCH_RESULTS = 100
-const ASSET_ORDER_VALUES = Object.freeze(['name', 'address'])
-const NODE_DISPLAY_VALUES = Object.freeze(['both', 'nodes', 'assets'])
 
 function getAllowedMetricModes(setting = {}) {
   const configured = Array.isArray(setting.metricModes)
@@ -512,7 +509,7 @@ export default {
   },
   computed: {
     treeSetting() {
-      return {
+      return createXTreeSetting({
         showCollapse: true,
         showMetrics: true,
         showPermissionScope: true,
@@ -523,12 +520,16 @@ export default {
         height: '100%',
         minHeight: '360px',
         childrenAssetLimit: 1000,
-        searchLimit: 1000,
-        ...this.setting
-      }
+        searchLimit: MAX_SEARCH_RESULTS,
+        ...this.setting,
+        loadMode: this.setting.loadMode || X_TREE_LOAD_MODES.LAZY
+      })
     },
     provider() {
       return this.dataSource || this.treeSetting.dataSource || {}
+    },
+    usesPlatformAssetIcons() {
+      return this.treeSetting.assetIconMode === 'platform'
     },
     effectiveMetricMode() {
       return this.metricMode
@@ -662,42 +663,14 @@ export default {
     showSearchPlaceholderTooltip() {
       return !this.searchKeyword && this.searchPlaceholderOverflow
     },
-    searchTruncatedText() {
-      const keyMap = {
-        all: 'NodeAssetTreeSearchAllTruncated',
-        asset: 'NodeAssetTreeSearchAssetsTruncated',
-        node: 'NodeAssetTreeSearchNodesTruncated'
-      }
-      const key = keyMap[this.searchState.target] || keyMap.all
-      return this.$t(key, {
-        assetLimit:
-          this.searchState.assetLimit || this.searchState.limit || this.treeSetting.searchLimit,
-        limit: this.searchState.limit || this.treeSetting.searchLimit,
-        nodeLimit:
-          this.searchState.nodeLimit || this.searchState.limit || this.treeSetting.searchLimit
-      })
-    },
-    latestChildTruncation() {
-      return this.childTruncations.at(-1) || null
-    },
-    childTruncatedText() {
-      const item = this.latestChildTruncation
-      if (!item) {
-        return ''
-      }
-      return this.$t('NodeAssetTreeChildrenAssetsTruncated', {
-        limit: item.limit,
-        name: item.name
-      })
-    },
     currentSearchContext() {
-      const configuredLimit = Number(this.treeSetting.searchLimit) || 1000
+      const configuredLimit = Math.max(
+        1,
+        Number(this.treeSetting.searchLimit) || MAX_SEARCH_RESULTS
+      )
       return {
         includeParents: this.searchTarget === 'asset' ? this.searchIncludeParents : true,
-        limit:
-          this.searchTarget === 'asset'
-            ? Math.min(configuredLimit, MAX_ASSET_SEARCH_RESULTS)
-            : configuredLimit,
+        limit: Math.min(configuredLimit, MAX_SEARCH_RESULTS),
         target: this.searchTarget
       }
     },
@@ -1202,7 +1175,7 @@ export default {
       }
       const name = data?.meta?.data?.name || data?.name || ''
       const address = data?.address || data?.meta?.data?.address || ''
-      return name && address ? `${name}（${address}）` : name || address
+      return name && address ? `${name} (${address})` : name || address
     },
     shouldHandleAmount(data) {
       return this.activeAmountTypes.includes(data?.meta?.type)
@@ -1215,6 +1188,19 @@ export default {
         data?.iconSkin || data?.meta?.data?.icon_skin || data?.meta?.data?.platform_type || 'file'
       ).toLowerCase()
       return ASSET_ICON_MAP[skin] || 'fa-server'
+    },
+    getAssetPlatformIcon(data) {
+      const asset = data?.meta?.data || {}
+      const platform = asset.platform || data?.platform || {}
+      const platformName = asset.platform_name || platform.name || data?.platform_name || ''
+      const platformType =
+        asset.platform_type ||
+        platform.type?.value ||
+        platform.type ||
+        data?.platform_type ||
+        data?.iconSkin ||
+        'other'
+      return loadPlatformIcon(platformName, String(platformType).toLowerCase())
     },
     getMetricAmountTitle(node) {
       const keyMap = {
@@ -1376,40 +1362,23 @@ export default {
   }
 }
 
-.node-asset-tree__search-hint {
-  display: flex;
-  flex: none;
-  align-items: flex-start;
-  gap: 5px;
-  padding: 5px 10px;
-  color: var(--el-text-color-secondary);
-  font-size: 12px;
-  background: var(--el-fill-color-lighter);
-}
-
-.node-asset-tree__search-hint--warning {
-  color: var(--el-color-warning-dark-2);
-  background: var(--el-color-warning-light-9);
-  cursor: default;
-  user-select: none;
-
-  .el-icon {
-    flex: none;
-    margin-top: 1px;
-  }
-}
-
 .node-asset-tree__asset-icon,
 .node-asset-tree__node-icon {
   flex: none;
-  width: 16px;
+  width: 14px;
   margin-right: 4px;
   text-align: center;
 }
 
 .node-asset-tree__asset-icon {
   color: var(--el-color-info);
-  font-size: 13px;
+  font-size: 12px;
+}
+
+.node-asset-tree__platform-icon {
+  display: inline-block;
+  height: 14px;
+  object-fit: contain;
 }
 
 .node-asset-tree__node-tools {
@@ -1441,6 +1410,7 @@ export default {
   cursor: pointer;
 
   .el-icon {
+    font-size: 12px;
     transform: rotate(90deg);
   }
 
@@ -1487,6 +1457,8 @@ export default {
 }
 
 .node-asset-tree.is-search-visible :deep(.x-tree__body) {
+  margin-top: 0;
+  padding-top: 0;
   border-top: 0;
 }
 </style>

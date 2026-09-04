@@ -858,10 +858,6 @@ export default {
       padding: 10px 14px !important;
     }
 
-    .el-dialog__title {
-      font-size: 16px;
-    }
-
     .el-dialog__body {
       min-height: 0;
       flex: 1;

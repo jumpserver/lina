@@ -99,6 +99,76 @@
     // takes its space, which otherwise creates a meaningless vertical bar.
     overflow-y: hidden;
   }
+
+  @media (hover: hover) {
+    @supports not selector(::-webkit-scrollbar) {
+      :deep(.el-table__body-wrapper .el-scrollbar__wrap) {
+        scrollbar-width: thin;
+        scrollbar-color: transparent transparent;
+      }
+
+      .el-data-table__body.is-scrollbar-visible {
+        :deep(.el-table__body-wrapper .el-scrollbar__wrap) {
+          scrollbar-color: color-mix(in srgb, var(--menu-text) 45%, transparent) transparent;
+        }
+      }
+    }
+
+    :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar) {
+      -webkit-appearance: none;
+      width: 8px;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar-track-piece),
+    :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar-corner) {
+      -webkit-appearance: none;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar-thumb:horizontal) {
+      background-color: color-mix(in srgb, var(--menu-text) 22%, transparent);
+    }
+
+    :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar-thumb:hover) {
+      background-color: color-mix(in srgb, var(--menu-text) 60%, transparent);
+    }
+
+    .el-data-table__body :deep(.el-table .el-scrollbar__bar.is-horizontal) {
+      --el-scrollbar-bg-color: color-mix(in srgb, var(--menu-text) 22%, transparent);
+      --el-scrollbar-hover-bg-color: color-mix(in srgb, var(--menu-text) 60%, transparent);
+      --el-scrollbar-opacity: 1;
+      --el-scrollbar-hover-opacity: 1;
+
+      display: block !important;
+      height: 8px;
+      opacity: 1;
+    }
+
+    .el-data-table__body :deep(.el-table .el-scrollbar__bar.is-vertical) {
+      width: 8px;
+    }
+
+    .el-data-table__body.is-scrollbar-visible {
+      :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar-thumb) {
+        background-color: color-mix(in srgb, var(--menu-text) 45%, transparent);
+      }
+
+      :deep(.el-table .el-scrollbar__bar) {
+        --el-scrollbar-bg-color: color-mix(in srgb, var(--menu-text) 45%, transparent);
+        --el-scrollbar-hover-bg-color: color-mix(in srgb, var(--menu-text) 60%, transparent);
+        --el-scrollbar-opacity: 1;
+        --el-scrollbar-hover-opacity: 1;
+
+        display: block !important;
+        opacity: 1;
+      }
+    }
+  }
 }
 
 .el-data-table__surface {

@@ -39,42 +39,25 @@
     }
 
     .menu-wrap {
+      --el-scrollbar-bg-color: color-mix(in srgb, var(--menu-text) 45%, transparent);
+      --el-scrollbar-hover-bg-color: color-mix(in srgb, var(--menu-text) 60%, transparent);
+      --el-scrollbar-opacity: 1;
+      --el-scrollbar-hover-opacity: 1;
+
       flex: 1;
       min-height: 0;
-      overflow-x: hidden;
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: transparent transparent;
 
-      &::-webkit-scrollbar {
-        -webkit-appearance: none;
+      .el-scrollbar__wrap {
+        overflow-x: hidden;
+      }
+
+      .el-scrollbar__bar.is-vertical {
+        right: 0;
         width: 6px;
-        border: 0;
-        background: transparent;
-        box-shadow: none;
       }
 
-      &::-webkit-scrollbar-track,
-      &::-webkit-scrollbar-track-piece {
-        -webkit-appearance: none;
-        border: 0;
-        background: transparent;
-        box-shadow: none;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        border: 0;
-        border-radius: 999px;
-        background-color: transparent;
-        box-shadow: none;
-      }
-    }
-
-    &:hover .menu-wrap {
-      scrollbar-color: color-mix(in srgb, var(--menu-text) 45%, transparent) transparent;
-
-      &::-webkit-scrollbar-thumb {
-        background-color: color-mix(in srgb, var(--menu-text) 45%, transparent);
+      .el-scrollbar__thumb {
+        cursor: default;
       }
     }
 

@@ -19,24 +19,49 @@
       }}
     </p>
 
-    <div v-if="!approval.recovery" class="operation-card">
-      <div class="operation-card__route">
-        <span class="method">{{ approval.method }}</span>
-        <code>{{ approval.path }}</code>
-      </div>
-      <div v-if="approval.operation_id" class="operation-id">
-        {{ approval.operation_id }}
-      </div>
-    </div>
-
-    <details v-if="hasPreview && !approval.recovery" class="approval-preview">
-      <summary>
+    <div v-if="previewSections.length && !approval.recovery" class="approval-changes">
+      <div class="approval-changes__header">
         <span
           ><el-icon><View /></el-icon> {{ t('ChatAIReviewChanges') }}</span
         >
+      </div>
+      <section v-for="section in previewSections" :key="section.key">
+        <h3>{{ section.label }}</h3>
+        <dl>
+          <template v-for="([key, value], index) in section.entries" :key="`${key}-${index}`">
+            <dt>{{ fieldLabel(key) }}</dt>
+            <dd>{{ formatPreviewValue(value) }}</dd>
+          </template>
+        </dl>
+        <small v-if="section.total > section.entries.length">
+          {{ t('ChatAIApprovalMoreFields', { count: section.total - section.entries.length }) }}
+        </small>
+      </section>
+    </div>
+
+    <p v-if="isPreviewTruncated && !approval.recovery" class="approval-preview-notice">
+      {{ t('ChatAIApprovalPreviewTruncated') }}
+    </p>
+
+    <details v-if="!approval.recovery" class="approval-technical" :open="isPreviewTruncated">
+      <summary>
+        <span
+          ><el-icon><View /></el-icon> {{ t('ChatAIApprovalTechnicalDetails') }}</span
+        >
         <el-icon><ArrowDown /></el-icon>
       </summary>
-      <pre>{{ prettyPreview }}</pre>
+      <div class="approval-technical__body">
+        <div class="operation-card">
+          <div class="operation-card__route">
+            <span class="method">{{ approval.method }}</span>
+            <code>{{ approval.path }}</code>
+          </div>
+          <div v-if="approval.operation_id" class="operation-id">
+            {{ approval.operation_id }}
+          </div>
+        </div>
+        <pre v-if="hasPreview">{{ prettyPreview }}</pre>
+      </div>
     </details>
 
     <div class="approval-meta">
@@ -93,6 +118,7 @@ const emit = defineEmits(['confirm', 'cancel'])
 const { t } = useI18n()
 const now = ref(Date.now())
 let timer = null
+const previewEntryLimit = 12
 
 const expiresAt = computed(() => {
   if (!props.approval.expires_at) return 0
@@ -106,8 +132,43 @@ const countdown = computed(() => {
   const minutes = Math.floor(seconds / 60)
   return `${String(minutes).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`
 })
-const hasPreview = computed(() => Object.keys(props.approval.preview || {}).length > 0)
-const prettyPreview = computed(() => JSON.stringify(props.approval.preview || {}, null, 2))
+const preview = computed(() => props.approval.preview)
+const hasPreview = computed(() => hasValue(preview.value))
+const isPreviewTruncated = computed(() => {
+  return Boolean(
+    isPlainObject(preview.value) && preview.value.truncated === true && preview.value.preview
+  )
+})
+const prettyPreview = computed(() => {
+  try {
+    return JSON.stringify(preview.value, null, 2) || String(preview.value || '')
+  } catch {
+    return String(preview.value || '')
+  }
+})
+const previewSections = computed(() => {
+  if (!hasPreview.value || isPreviewTruncated.value) return []
+
+  const value = preview.value
+  if (!isPlainObject(value)) {
+    return [createPreviewSection('details', t('ChatAIApprovalChangeDetails'), value)]
+  }
+
+  const knownSections = [
+    ['body', t('ChatAIApprovalChangeDetails')],
+    ['path_params', t('ChatAIApprovalTarget')],
+    ['query_params', t('ChatAIApprovalOptions')]
+  ]
+  const hasKnownStructure = knownSections.some(([key]) =>
+    Object.prototype.hasOwnProperty.call(value, key)
+  )
+  if (!hasKnownStructure) {
+    return [createPreviewSection('details', t('ChatAIApprovalChangeDetails'), value)]
+  }
+  return knownSections
+    .filter(([key]) => hasValue(value[key]))
+    .map(([key, label]) => createPreviewSection(key, label, value[key]))
+})
 const riskLevel = computed(() => {
   const value = String(props.approval.risk_level || 'write').toLowerCase()
   return ['read', 'write', 'dangerous'].includes(value) ? value : 'write'
@@ -121,6 +182,81 @@ const riskLabel = computed(() => {
   }
   return t(labels[riskLevel.value])
 })
+
+function isPlainObject(value) {
+  return Boolean(value && typeof value === 'object' && !Array.isArray(value))
+}
+
+function hasValue(value) {
+  if (value === null || value === undefined || value === '') return false
+  if (Array.isArray(value)) return value.length > 0
+  if (isPlainObject(value)) return Object.keys(value).length > 0
+  return true
+}
+
+function createPreviewSection(key, label, value) {
+  let entries
+  if (isPlainObject(value)) entries = Object.entries(value)
+  else if (Array.isArray(value)) entries = [['items', value]]
+  else entries = [['value', value]]
+  return {
+    key,
+    label,
+    total: entries.length,
+    entries: entries.slice(0, previewEntryLimit)
+  }
+}
+
+function fieldLabel(value) {
+  const key = String(value || '')
+  const known = {
+    id: 'ID',
+    name: t('ChatAIFieldName'),
+    address: t('ChatAIFieldAddress'),
+    username: t('ChatAIFieldUsername'),
+    status: t('ChatAIFieldStatus'),
+    is_active: t('ChatAIFieldActive'),
+    date_created: t('ChatAIFieldDateCreated'),
+    date_updated: t('ChatAIFieldDateUpdated'),
+    org_name: t('ChatAIFieldOrganization'),
+    platform: t('ChatAIFieldPlatform'),
+    node: t('Node'),
+    nodes: t('Nodes')
+  }
+  if (known[key]) return known[key]
+  return key
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+    .replace(/[_-]+/g, ' ')
+    .replace(/\b\w/g, (character) => character.toUpperCase())
+}
+
+function formatPreviewValue(value) {
+  if (value === null || value === undefined || value === '') return '—'
+  if (typeof value === 'boolean') return value ? t('ChatAIYes') : t('ChatAINo')
+  let formatted
+  if (typeof value === 'string' || typeof value === 'number') {
+    formatted = String(value)
+  } else if (
+    Array.isArray(value) &&
+    value.every((item) => item === null || ['string', 'number', 'boolean'].includes(typeof item))
+  ) {
+    formatted =
+      value
+        .map((item) => {
+          if (item === null || item === '') return '—'
+          if (typeof item === 'boolean') return item ? t('ChatAIYes') : t('ChatAINo')
+          return String(item)
+        })
+        .join(', ') || '—'
+  } else {
+    try {
+      formatted = JSON.stringify(value)
+    } catch {
+      formatted = String(value)
+    }
+  }
+  return formatted.length > 240 ? `${formatted.slice(0, 239)}…` : formatted
+}
 
 onMounted(() => {
   timer = window.setInterval(() => (now.value = Date.now()), 1000)
@@ -216,6 +352,92 @@ onBeforeUnmount(() => {
   line-height: 1.65;
 }
 
+.approval-changes {
+  overflow: hidden;
+  border: 1px solid rgb(151 111 48 / 13%);
+  border-radius: var(--ai-radius-sm, 8px);
+  background: rgb(255 255 255 / 82%);
+
+  &__header {
+    display: flex;
+    min-height: 36px;
+    align-items: center;
+    padding: 0 11px;
+    border-bottom: 1px solid rgb(151 111 48 / 10%);
+    color: #5c4b31;
+    background: rgb(255 249 237 / 76%);
+    font-size: 11px;
+    font-weight: 700;
+
+    span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+  }
+
+  > section {
+    padding: 10px 11px;
+
+    + section {
+      border-top: 1px solid rgb(151 111 48 / 9%);
+    }
+  }
+
+  h3 {
+    margin: 0 0 7px;
+    color: #a17636;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  dl {
+    display: grid;
+    margin: 0;
+    grid-template-columns: minmax(94px, 0.42fr) minmax(0, 1fr);
+    gap: 6px 12px;
+  }
+
+  dt,
+  dd {
+    min-width: 0;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  dt {
+    overflow: hidden;
+    color: #8d806e;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  dd {
+    margin: 0;
+    color: #453d33;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
+
+  small {
+    display: block;
+    margin-top: 7px;
+    color: #a08d70;
+    font-size: 9px;
+  }
+}
+
+.approval-preview-notice {
+  margin: 0;
+  padding: 10px 11px;
+  border: 1px solid rgb(213 150 53 / 22%);
+  border-radius: var(--ai-radius-sm, 8px);
+  color: #8d652a;
+  background: rgb(255 244 222 / 78%);
+  font-size: 10px;
+  line-height: 1.55;
+}
+
 .operation-card {
   position: relative;
   padding: 10px 11px;
@@ -259,7 +481,7 @@ onBeforeUnmount(() => {
   white-space: nowrap;
 }
 
-.approval-preview {
+.approval-technical {
   margin-top: 9px;
   overflow: hidden;
   border: 1px solid rgb(92 75 48 / 8%);
@@ -298,14 +520,21 @@ onBeforeUnmount(() => {
     transform: rotate(180deg);
   }
 
+  &__body {
+    padding: 9px;
+    border-top: 1px solid rgb(92 75 48 / 7%);
+    background: rgb(246 240 228 / 38%);
+  }
+
   pre {
     max-height: 180px;
-    margin: 0;
-    padding: 10px 11px;
+    margin: 8px 0 0;
+    padding: 9px 10px;
     overflow: auto;
-    border-top: 1px solid rgb(92 75 48 / 7%);
+    border: 1px solid rgb(92 75 48 / 7%);
+    border-radius: var(--ai-radius-xs, 6px);
     color: #675e51;
-    background: rgb(246 240 228 / 55%);
+    background: rgb(255 255 255 / 72%);
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 10px;
     line-height: 1.6;
