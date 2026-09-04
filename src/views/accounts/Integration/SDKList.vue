@@ -30,6 +30,13 @@
             </el-steps>
           </el-tab-pane>
         </el-tabs>
+        <h4>{{ $t('InstallCommand') }}</h4>
+        <p>
+          <code
+            >python3 -m pip install --index-url https://pypi.org/simple "{{ sdkPackageUrl }}"</code
+          >
+        </p>
+        <el-alert :title="$t('SDKInstallationNotice')" :closable="false" show-icon type="info" />
       </IBox>
 
       <template #right>
@@ -42,6 +49,7 @@
 <script>
 import { IBox, QuickActions } from '@/components'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import { BASE_URL } from '@/utils/common/index'
 
 export default {
   name: 'SDKList',
@@ -56,6 +64,9 @@ export default {
     }
   },
   computed: {
+    sdkPackageUrl() {
+      return `${BASE_URL}/api/v1/accounts/python-sdk/`
+    },
     guideActions() {
       return [
         {
