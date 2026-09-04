@@ -112,34 +112,27 @@
       </div>
     </transition>
 
-    <div v-if="searchState.truncated" class="user-tree__search-hint">
-      {{ $t('UserTreeSearchTruncated', { limit: searchState.limit || treeSetting.searchLimit }) }}
-    </div>
-
-    <div
-      v-if="latestChildTruncation"
-      class="user-tree__search-hint user-tree__search-hint--warning"
-      role="status"
-    >
-      <el-icon><InfoFilled /></el-icon>
-      <span>{{ childTruncatedText }}</span>
-    </div>
-
     <XTree
       ref="tree"
       :setting="xTreeSetting"
       @tree-init-finish="$emit('tree-init-finish', $event)"
       @url-change="$emit('url-change', $event)"
     >
-      <template #node-icon="{ data }">
+      <template #node-icon="{ data, expanded, leaf }">
         <Icon
-          :class="`user-tree__resource-icon--${getResourceType(data)}`"
-          :icon="getResourceIcon(data)"
+          v-if="getResourceType(data) === 'user'"
+          icon="fa-user"
           class="user-tree__resource-icon"
         />
+        <Icon
+          v-else-if="getResourceType(data) === 'load_more'"
+          icon="fa-ellipsis-h"
+          class="user-tree__resource-icon"
+        />
+        <TreeFolderIcon v-else :expanded="expanded" :leaf="leaf" class="user-tree__resource-icon" />
       </template>
-      <template #rMenu>
-        <slot name="rMenu" />
+      <template #rMenu="slotProps">
+        <slot name="rMenu" v-bind="slotProps" />
       </template>
     </XTree>
   </div>
@@ -147,7 +140,9 @@
 
 <script>
 import Icon from '@/components/Widgets/Icon'
+import TreeFolderIcon from '@/components/Tree/TreeFolderIcon.vue'
 import XTree from '@/components/Tree/XTree/index.vue'
+import { createXTreeSetting, X_TREE_LOAD_MODES } from '@/components/Tree/XTree/config'
 import {
   isUserTreeOrder,
   normalizeUserTreeResponse,
@@ -159,12 +154,6 @@ const SETTINGS_CACHE_PREFIX = 'jms.user-tree.settings.'
 const PERMISSION_SCOPES = Object.freeze(['direct', 'effective'])
 const METRIC_RESOURCE_TYPES = Object.freeze(['organization', 'user_group', 'user'])
 const LOAD_MORE_RESOURCE_TYPE = 'load_more'
-const RESOURCE_ICON_MAP = Object.freeze({
-  load_more: 'fa-ellipsis-h',
-  organization: 'fa-building',
-  user: 'fa-user',
-  user_group: 'fa-users'
-})
 
 function getSettingsCacheKey(setting = {}) {
   const key = String(setting.settingsCacheKey || '').trim()
@@ -263,7 +252,7 @@ function markSearchChildrenProjections(response) {
  */
 export default {
   name: 'UserTree',
-  components: { Icon, XTree },
+  components: { Icon, TreeFolderIcon, XTree },
   props: {
     dataSource: {
       type: Object,
@@ -311,7 +300,7 @@ export default {
   },
   computed: {
     treeSetting() {
-      return {
+      return createXTreeSetting({
         showCollapse: true,
         showPermissionScope: true,
         showRefresh: true,
@@ -322,8 +311,9 @@ export default {
         minHeight: '360px',
         childrenLimit: 1000,
         searchLimit: 1000,
-        ...this.setting
-      }
+        ...this.setting,
+        loadMode: this.setting.loadMode || X_TREE_LOAD_MODES.LAZY
+      })
     },
     provider() {
       return this.dataSource || this.treeSetting.dataSource || {}
@@ -355,26 +345,6 @@ export default {
     },
     hasHeaderActions() {
       return this.treeSetting.showSearch || this.hasToolsMenu
-    },
-    latestChildTruncation() {
-      const searchActive = Boolean(this.searchState.active)
-      for (let index = this.childTruncations.length - 1; index >= 0; index -= 1) {
-        const item = this.childTruncations[index]
-        if (Boolean(item.searchActive) === searchActive) {
-          return item
-        }
-      }
-      return null
-    },
-    childTruncatedText() {
-      const item = this.latestChildTruncation
-      if (!item) {
-        return ''
-      }
-      return this.$t('UserTreeChildrenTruncated', {
-        limit: item.limit,
-        name: item.name
-      })
     },
     treeStyle() {
       const toCssSize = (value, fallback) => {
@@ -790,10 +760,6 @@ export default {
     getResourceType(data) {
       return toUserTreeResource(data).type
     },
-    getResourceIcon(data) {
-      const type = this.getResourceType(data)
-      return RESOURCE_ICON_MAP[type] || RESOURCE_ICON_MAP.user
-    },
     getResourceLabel(data) {
       const type = this.getResourceType(data)
       if (type === LOAD_MORE_RESOURCE_TYPE) {
@@ -978,44 +944,13 @@ export default {
   font-size: 13px;
 }
 
-.user-tree__search-hint {
-  display: flex;
-  flex: none;
-  align-items: flex-start;
-  gap: 5px;
-  padding: 5px 10px;
-  color: var(--el-text-color-secondary);
-  font-size: 12px;
-  background: var(--el-fill-color-lighter);
-}
-
-.user-tree__search-hint--warning {
-  color: var(--el-color-warning-dark-2);
-  background: var(--el-color-warning-light-9);
-  cursor: default;
-  user-select: none;
-
-  .el-icon {
-    flex: none;
-    margin-top: 1px;
-  }
-}
-
 .user-tree__resource-icon {
   flex: none;
-  width: 16px;
+  width: 14px;
   margin-right: 4px;
   color: var(--el-text-color-secondary);
-  font-size: 13px;
+  font-size: 12px;
   text-align: center;
-}
-
-.user-tree__resource-icon--organization {
-  color: var(--el-color-primary-light-3);
-}
-
-.user-tree__resource-icon--user_group {
-  color: var(--el-color-info-dark-2);
 }
 
 .user-tree :deep(.x-tree__header-actions) {
@@ -1029,6 +964,8 @@ export default {
 }
 
 .user-tree.is-search-visible :deep(.x-tree__body) {
+  margin-top: 0;
+  padding-top: 0;
   border-top: 0;
 }
 </style>

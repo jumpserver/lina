@@ -21,8 +21,8 @@
         @url-change="handleUrlChange"
         v-on="forwardedListeners"
       >
-        <template #rMenu="{ data }">
-          <slot :data="data" name="rMenu" />
+        <template #rMenu="slotProps">
+          <slot name="rMenu" v-bind="slotProps" />
         </template>
       </component>
     </div>

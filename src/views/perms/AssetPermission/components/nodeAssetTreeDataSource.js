@@ -1,3 +1,5 @@
+import { createXTreeDataSource } from '@/components/Tree/XTree/config'
+
 const NODE_TREE_URL = '/api/v1/assets/nodes/children/tree/'
 const NODE_ASSET_SEARCH_URL = '/api/v1/assets/node-assets/tree/search/'
 const PERMISSION_METRICS_URL = '/api/v1/perms/asset-permissions/tree-metrics/'
@@ -20,53 +22,50 @@ function resourceItems(nodes) {
 }
 
 /**
- * Map the reusable NodeAssetTree provider contract to the admin asset and
- * permission APIs. Keeping this adapter on the page boundary allows workbench
- * and Luna trees to reuse the component with their own permission-aware APIs.
+ * Configure the shared XTree data-source contract for the admin asset and
+ * permission APIs. The feature component supplies permission-specific state;
+ * XTree remains the only tree renderer and loading engine.
  */
 export function createAssetPermissionTreeDataSource(request) {
-  return {
-    root({ assetOrder, assetsLimit, signal } = {}) {
-      return request.get(NODE_TREE_URL, {
-        params: {
-          asset_amount: 0,
-          asset_order: assetOrder,
-          assets: 1,
-          assets_limit: assetsLimit
-        },
-        signal
+  return createXTreeDataSource(request, {
+    root: {
+      url: NODE_TREE_URL,
+      params: ({ assetOrder, assetsLimit }) => ({
+        asset_amount: 0,
+        asset_order: assetOrder,
+        assets: 1,
+        assets_limit: assetsLimit
       })
     },
-    children({ assetOrder, assetsLimit, includeAssets = true, level, parent, signal }) {
-      return request.get(NODE_TREE_URL, {
-        params: {
-          asset_amount: 0,
-          asset_order: assetOrder,
-          assets: includeAssets ? 1 : 0,
-          assets_limit: assetsLimit,
-          key: parent.treeKey,
-          lv: level
-        },
-        signal
+    children: {
+      url: NODE_TREE_URL,
+      params: ({ assetOrder, assetsLimit, includeAssets = true, level, parent }) => ({
+        asset_amount: 0,
+        asset_order: assetOrder,
+        assets: includeAssets ? 1 : 0,
+        assets_limit: assetsLimit,
+        key: parent.treeKey,
+        lv: level
       })
     },
-    search({ includeParents, keyword, limit, signal, target }) {
-      return request.get(NODE_ASSET_SEARCH_URL, {
-        params: {
-          include_ancestors: target === 'asset' ? includeParents : undefined,
-          limit,
-          search: keyword,
-          target
-        },
-        signal
+    search: {
+      url: NODE_ASSET_SEARCH_URL,
+      params: ({ includeParents, keyword, limit, target }) => ({
+        include_ancestors: target === 'asset' ? includeParents : undefined,
+        limit,
+        search: keyword,
+        target
       })
     },
-    metrics({ mode, nodes, signal }) {
-      const items = resourceItems(nodes)
-      if (!items.length) {
-        return { results: [] }
-      }
-      return request.post(PERMISSION_METRICS_URL, { items, metric: mode }, { signal })
+    metrics: {
+      method: 'post',
+      url: PERMISSION_METRICS_URL,
+      when: ({ nodes }) => resourceItems(nodes).length > 0,
+      empty: { results: [] },
+      data: ({ mode, nodes }) => ({
+        items: resourceItems(nodes),
+        metric: mode
+      })
     }
-  }
+  })
 }

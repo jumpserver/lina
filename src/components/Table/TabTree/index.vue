@@ -2,88 +2,95 @@
   <div
     :class="{
       'is-domain-tree': isDomainTree,
+      'is-fill-height': treePanelFillHeight,
       'is-x-tree': isModernTree
     }"
     class="tree-tab"
   >
-    <div
-      v-if="tabIndices.length > 0"
-      :class="{ 'has-tree-actions': isModernTree }"
-      class="tree-view-header"
-    >
-      <el-dropdown
-        :disabled="!hasMultipleTreeViews"
-        :hide-timeout="160"
-        placement="bottom-start"
-        popper-class="tree-view-popper"
-        :show-timeout="80"
-        trigger="hover"
-        @command="handleTreeViewChange"
-        @visible-change="treeViewDropdownVisible = $event"
-      >
-        <button
-          :class="{
-            'is-open': treeViewDropdownVisible,
-            'is-static': !hasMultipleTreeViews
-          }"
-          class="tree-view-selector"
-          :disabled="!hasMultipleTreeViews"
-          type="button"
-        >
-          <i
-            v-if="activeTreeItem?.icon"
-            :class="activeTreeItem.icon"
-            aria-hidden="true"
-            class="tree-view-selector__icon"
-          />
-          <span class="tree-view-selector__label">{{ activeTreeItem?.title }}</span>
-          <el-icon v-if="hasMultipleTreeViews" class="tree-view-selector__arrow">
-            <ArrowDown />
-          </el-icon>
-        </button>
-        <template #dropdown>
-          <el-dropdown-menu class="tree-view-menu">
-            <el-dropdown-item
-              v-for="item in tabIndices"
-              :key="item.name"
-              :class="{ 'is-active': item.name === iActiveMenu }"
-              :command="item.name"
-              :disabled="item.disabled"
-            >
-              <i
-                v-if="item.icon"
-                :class="item.icon"
-                aria-hidden="true"
-                class="tree-view-menu__icon"
-              />
-              <span class="tree-view-menu__label">{{ item.title }}</span>
-              <slot :tab="item.name" name="badge" />
-              <el-icon v-if="item.name === iActiveMenu" class="tree-view-menu__check">
-                <Check />
-              </el-icon>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
-    </div>
     <transition appear mode="out-in" name="fade-transform" @after-enter="handleActiveTreeReady">
       <slot>
         <keep-alive v-if="flag">
-          <component
-            :is="activeTreeComponent"
+          <TreePanel
             :key="componentKey"
             ref="AutoDataZTree"
+            :component="activeTreeComponent"
+            :fill-height="treePanelFillHeight"
+            :header-actions="isModernTree"
             :setting="activeTreeSetting"
+            :show-header="tabIndices.length > 0"
             @tree-init-finish="$emit('tree-init-finish', $event)"
             @url-change="handleUrlChange"
             v-on="forwardedTreeEventListeners"
           >
-            <template #rMenu="{ data }">
+            <template #header>
+              <el-dropdown
+                :disabled="!hasMultipleTreeViews"
+                :hide-timeout="160"
+                placement="bottom-start"
+                popper-class="tree-view-popper"
+                :show-timeout="80"
+                :teleported="viewMenuTeleported"
+                trigger="hover"
+                @command="handleTreeViewChange"
+                @visible-change="treeViewDropdownVisible = $event"
+              >
+                <button
+                  :class="{
+                    'is-open': treeViewDropdownVisible,
+                    'is-static': !hasMultipleTreeViews
+                  }"
+                  class="tree-view-selector"
+                  :disabled="!hasMultipleTreeViews"
+                  type="button"
+                >
+                  <i
+                    v-if="activeTreeItem?.icon"
+                    :class="activeTreeItem.icon"
+                    aria-hidden="true"
+                    class="tree-view-selector__icon"
+                  />
+                  <span class="tree-view-selector__label">{{ activeTreeItem?.title }}</span>
+                  <el-icon v-if="hasMultipleTreeViews" class="tree-view-selector__arrow">
+                    <ArrowDown />
+                  </el-icon>
+                </button>
+                <template #dropdown>
+                  <el-dropdown-menu class="tree-view-menu">
+                    <el-dropdown-item
+                      v-for="item in tabIndices"
+                      :key="item.name"
+                      :class="{ 'is-active': item.name === iActiveMenu }"
+                      :command="item.name"
+                      :disabled="item.disabled"
+                    >
+                      <i
+                        v-if="item.icon"
+                        :class="item.icon"
+                        aria-hidden="true"
+                        class="tree-view-menu__icon"
+                      />
+                      <span class="tree-view-menu__label">{{ item.title }}</span>
+                      <slot :tab="item.name" name="badge" />
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </template>
+            <template v-if="$slots['tools-menu']" #tools-menu="slotProps">
+              <slot name="tools-menu" v-bind="slotProps" />
+            </template>
+            <template v-if="$slots['node-icon']" #node-icon="slotProps">
+              <slot name="node-icon" v-bind="slotProps" />
+            </template>
+            <template v-if="$slots['node-actions']" #node-actions="slotProps">
+              <slot name="node-actions" v-bind="slotProps" />
+            </template>
+            <template #rMenu="slotProps">
               <div>
-                <slot :data="data" name="rMenu" />
+                <slot name="rMenu" v-bind="slotProps" />
               </div>
             </template>
-          </component>
+          </TreePanel>
         </keep-alive>
       </slot>
     </transition>
@@ -93,10 +100,12 @@
 <script>
 import AutoDataZTree from '@/components/Tree/AutoDataZTree/index.vue'
 import NodeAssetTree from '@/components/Tree/NodeAssetTree/index.vue'
+import TreePanel from '@/components/Tree/TreePanel/index.vue'
 import UserTree from '@/components/Tree/UserTree/index.vue'
 import XTree from '@/components/Tree/XTree/index.vue'
 
 const ACTIVE_TREE_TAB_KEY = 'activeTreeTab'
+const TREE_COMPONENTS = Object.freeze({ AutoDataZTree, NodeAssetTree, UserTree, XTree })
 const FORWARDED_TREE_EVENTS = Object.freeze([
   'children-truncated',
   'metric-change',
@@ -110,12 +119,7 @@ const FORWARDED_TREE_EVENTS = Object.freeze([
 
 export default {
   name: 'TabTree',
-  components: {
-    AutoDataZTree,
-    NodeAssetTree,
-    UserTree,
-    XTree
-  },
+  components: { TreePanel },
   emits: [
     'active-tree-ready',
     'children-truncated',
@@ -140,9 +144,17 @@ export default {
       type: String,
       required: true
     },
+    fillHeight: {
+      type: Boolean,
+      default: false
+    },
     treeComponent: {
       type: String,
-      default: 'AutoDataZTree'
+      default: 'XTree'
+    },
+    viewMenuTeleported: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -175,14 +187,20 @@ export default {
     hasMultipleTreeViews() {
       return this.tabIndices.length > 1
     },
-    activeTreeComponent() {
+    activeTreeComponentName() {
       return this.activeTreeItem?.treeComponent || this.treeComponent
     },
+    activeTreeComponent() {
+      return TREE_COMPONENTS[this.activeTreeComponentName] || this.activeTreeComponentName
+    },
     isModernTree() {
-      return ['XTree', 'NodeAssetTree', 'UserTree'].includes(this.activeTreeComponent)
+      return ['XTree', 'NodeAssetTree', 'UserTree'].includes(this.activeTreeComponentName)
     },
     isDomainTree() {
-      return ['NodeAssetTree', 'UserTree'].includes(this.activeTreeComponent)
+      return ['NodeAssetTree', 'UserTree'].includes(this.activeTreeComponentName)
+    },
+    treePanelFillHeight() {
+      return this.fillHeight || (this.isModernTree && this.activeTreeSetting.fillHeight !== false)
     },
     forwardedTreeEventListeners() {
       // Vue component events do not bubble through dynamic component wrappers.
@@ -206,9 +224,13 @@ export default {
     this.changeTreeSetting(activeMenu)
   },
   methods: {
+    getTree() {
+      const tree = this.$refs.AutoDataZTree
+      return tree?.getTree?.() || tree
+    },
     handleActiveTreeReady() {
       this.$nextTick(() => {
-        const tree = this.$refs.AutoDataZTree
+        const tree = this.getTree()
         if (!tree) {
           return
         }
@@ -232,11 +254,41 @@ export default {
       const tree = this.$refs.AutoDataZTree
       return tree?.getAllNodes?.() || tree?.getNodes?.() || []
     },
+    getExpandedKeys() {
+      return this.$refs.AutoDataZTree?.getExpandedKeys?.() || []
+    },
+    getNodePath(id) {
+      return this.$refs.AutoDataZTree?.getNodePath?.(id) || []
+    },
+    setExpandedKeys(keys) {
+      return this.$refs.AutoDataZTree?.setExpandedKeys?.(keys)
+    },
+    expandAll() {
+      return this.$refs.AutoDataZTree?.expandAll?.()
+    },
+    collapseAll() {
+      return this.$refs.AutoDataZTree?.collapseAll?.()
+    },
+    collapseStepwise() {
+      return this.$refs.AutoDataZTree?.collapseStepwise?.()
+    },
+    expandToNode(id) {
+      return this.$refs.AutoDataZTree?.expandToNode?.(id)
+    },
     getTreeSnapshot: function () {
       return this.$refs.AutoDataZTree?.getTreeSnapshot?.()
     },
     selectNode: function (node) {
       return this.$refs.AutoDataZTree?.selectNode?.(node)
+    },
+    clearSelection() {
+      return this.$refs.AutoDataZTree?.clearSelection?.()
+    },
+    restoreAllNodes() {
+      return this.$refs.AutoDataZTree?.restoreAllNodes?.()
+    },
+    showOnlyNodes(nodeIds, options) {
+      return this.$refs.AutoDataZTree?.showOnlyNodes?.(nodeIds, options)
     },
     refreshAssetRelationAmounts(nodeIds) {
       return this.$refs.AutoDataZTree?.refreshAssetRelationAmounts?.(nodeIds)
@@ -325,38 +377,31 @@ export default {
   position: relative;
 }
 
+.tree-tab.is-fill-height {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+
+  > .tree-panel {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+}
+
 .tree-tab.is-domain-tree {
   display: flex;
   flex-direction: column;
   height: 100%;
   min-height: 0;
 
-  > .tree-view-header {
+  > .tree-panel {
     flex: none;
   }
 
-  > :deep(.node-asset-tree.is-fill-height),
-  > :deep(.user-tree.is-fill-height) {
+  > .tree-panel.is-fill-height {
     flex: 1 1 auto;
     min-height: 0;
-  }
-
-  > :deep(.node-asset-tree:not(.is-fill-height)),
-  > :deep(.user-tree:not(.is-fill-height)) {
-    flex: none;
-  }
-}
-
-.tree-view-header {
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  height: 40px;
-  padding: 0 8px;
-  background-color: var(--el-fill-color-lighter, #fafafa);
-
-  &.has-tree-actions {
-    padding-right: 48px;
   }
 }
 
@@ -379,8 +424,8 @@ export default {
   &:not(.is-static):hover,
   &:not(.is-static):focus-visible {
     outline: none;
-    color: var(--el-color-primary);
-    background: var(--el-fill-color-light);
+    color: var(--el-text-color-primary);
+    background: rgba(0, 0, 0, 0.05);
   }
 
   &.is-static {
@@ -397,12 +442,14 @@ export default {
 }
 
 .tree-view-selector__icon {
+  display: inline-flex;
   flex: none;
+  align-items: center;
+  justify-content: center;
   width: 14px;
   margin-right: 6px;
-  font-size: 12px;
-  text-align: center;
   color: var(--el-text-color-secondary);
+  font-size: 12px;
 }
 
 .tree-view-selector__arrow {
@@ -427,12 +474,16 @@ export default {
 </style>
 
 <style lang="scss">
-.tree-view-popper {
+.tree-view-popper.el-popper {
+  box-sizing: border-box;
   min-width: 132px;
+  border: 1px solid var(--el-border-color-light);
+  border-radius: 6px;
 }
 
 .tree-view-popper .tree-view-menu {
   padding: 4px;
+  border-radius: 5px;
 }
 
 .tree-view-popper .el-dropdown-menu__item {
@@ -447,8 +498,14 @@ export default {
 }
 
 .tree-view-popper .el-dropdown-menu__item.is-active {
-  color: var(--el-color-primary);
-  background: var(--el-color-primary-light-9);
+  color: var(--el-text-color-regular);
+  background: transparent;
+}
+
+.tree-view-popper .el-dropdown-menu__item:not(.is-disabled):hover,
+.tree-view-popper .el-dropdown-menu__item:not(.is-disabled):focus {
+  color: var(--el-text-color-regular);
+  background: var(--el-fill-color-light);
 }
 
 .tree-view-menu__label {
@@ -459,19 +516,14 @@ export default {
 .tree-view-menu__icon {
   flex: none;
   width: 14px;
-  margin-right: 8px;
+  margin-right: 12px;
+  color: var(--el-text-color-secondary);
   font-size: 12px;
   text-align: center;
-  color: var(--el-text-color-secondary);
 }
 
-.tree-view-popper .el-dropdown-menu__item.is-active .tree-view-menu__icon {
+.tree-view-popper .el-dropdown-menu__item.is-active .tree-view-menu__label {
   color: var(--el-color-primary);
-}
-
-.tree-view-menu__check {
-  flex: none;
-  margin-left: 16px;
-  font-size: 13px;
+  font-weight: 500;
 }
 </style>

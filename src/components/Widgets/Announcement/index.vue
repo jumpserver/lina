@@ -208,7 +208,6 @@ export default {
 
   .el-dialog__title {
     color: black;
-    font-weight: 600;
   }
 }
 

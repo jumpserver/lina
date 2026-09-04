@@ -7,7 +7,7 @@
       :popper-style="popperStyle"
       :show-arrow="false"
       :width="popoverWidth"
-      placement="bottom-start"
+      :placement="placement"
       popper-class="label-filter-popper"
       trigger="click"
       @hide="handlePopoverVisibleChange(false)"
@@ -120,9 +120,21 @@ export default {
       type: String,
       default: ''
     },
+    alignToBoundaryEnd: {
+      type: Boolean,
+      default: false
+    },
+    boundaryEndGap: {
+      type: Number,
+      default: 0
+    },
     maxWidth: {
       type: Number,
       default: 600
+    },
+    placement: {
+      type: String,
+      default: 'bottom-start'
     }
   },
   data() {
@@ -130,7 +142,8 @@ export default {
       popoverVisible: false,
       labelValue: [],
       boundaryVersion: 0,
-      popoverAvailableWidth: null
+      popoverAvailableWidth: null,
+      popoverBoundaryEndOffset: 0
     }
   },
   computed: {
@@ -150,23 +163,34 @@ export default {
       }
     },
     popperOptions() {
-      return {
-        modifiers: [
-          {
-            name: 'flip',
-            enabled: false
-          },
-          {
-            name: 'preventOverflow',
-            options: {
-              mainAxis: true,
-              altAxis: false,
-              tether: false,
-              boundary: this.boundaryElement || 'viewport',
-              padding: 16
-            }
+      const modifiers = [
+        {
+          name: 'flip',
+          enabled: false
+        },
+        {
+          name: 'preventOverflow',
+          options: {
+            mainAxis: true,
+            altAxis: false,
+            tether: false,
+            boundary: this.boundaryElement || 'viewport',
+            padding: this.alignToBoundaryEnd
+              ? { top: 16, right: this.boundaryEndGap, bottom: 16, left: 16 }
+              : 16
           }
-        ]
+        }
+      ]
+      if (this.alignToBoundaryEnd) {
+        modifiers.push({
+          name: 'offset',
+          options: {
+            offset: [this.popoverBoundaryEndOffset, 12]
+          }
+        })
+      }
+      return {
+        modifiers
       }
     }
   },
@@ -210,11 +234,22 @@ export default {
       const referenceElement = this.$el?.querySelector('.label-button')
       if (!boundaryElement || !referenceElement) {
         this.popoverAvailableWidth = null
+        this.popoverBoundaryEndOffset = 0
         return
       }
       const boundaryRect = boundaryElement.getBoundingClientRect()
       const referenceRect = referenceElement.getBoundingClientRect()
-      this.popoverAvailableWidth = boundaryRect.right - referenceRect.left - 16
+      if (this.alignToBoundaryEnd) {
+        this.popoverAvailableWidth = boundaryRect.width - 16 - this.boundaryEndGap
+        this.popoverBoundaryEndOffset =
+          boundaryRect.right - referenceRect.right - this.boundaryEndGap
+        return
+      }
+      this.popoverBoundaryEndOffset = 0
+      const opensFromRight = this.placement.endsWith('-end')
+      this.popoverAvailableWidth = opensFromRight
+        ? referenceRect.right - boundaryRect.left - 16
+        : boundaryRect.right - referenceRect.left - 16
     },
     getSelectionSnapshot() {
       return _.cloneDeep(this.labelValue)
@@ -355,6 +390,38 @@ export default {
       min-height: 0;
       padding: 6px;
       overflow: auto;
+      scrollbar-color: color-mix(in srgb, var(--el-text-color-secondary) 36%, transparent)
+        transparent;
+      scrollbar-width: thin;
+
+      &::-webkit-scrollbar {
+        -webkit-appearance: none;
+        width: 6px;
+        height: 6px;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      &::-webkit-scrollbar-track,
+      &::-webkit-scrollbar-track-piece,
+      &::-webkit-scrollbar-corner {
+        -webkit-appearance: none;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        border: 0;
+        border-radius: 999px;
+        background-color: color-mix(in srgb, var(--el-text-color-secondary) 36%, transparent);
+        box-shadow: none;
+      }
+
+      &:hover::-webkit-scrollbar-thumb {
+        background-color: color-mix(in srgb, var(--el-text-color-secondary) 48%, transparent);
+      }
     }
 
     &__option {
