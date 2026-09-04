@@ -647,6 +647,8 @@
   "DownloadCenter": "Download",
   "DownloadImportTemplateMsg": "Download creation template",
   "DownloadReplay": "Download recording",
+  "DownloadReplayNoneAvailable": "None of the selected sessions has a downloadable recording.",
+  "DownloadReplayPartialConfirm": "{selected} sessions selected: {available} recordings can be downloaded and {unavailable} cannot. Continue with the available recordings?",
   "DownloadUpdateTemplateMsg": "Download update template",
   "DragUploadFileInfo": "Drag files here, or click to upload",
   "DriverInstanceCreateFailed": "Driver instance creation failed",

@@ -684,6 +684,8 @@
   "DownloadCenter": "다운로드 센터",
   "DownloadImportTemplateMsg": "템플릿 다운로드 생성",
   "DownloadReplay": "녹화 다운로드",
+  "DownloadReplayNoneAvailable": "선택한 세션에 다운로드할 수 있는 녹화가 없습니다.",
+  "DownloadReplayPartialConfirm": "{selected}개 세션을 선택했습니다. {available}개 녹화는 다운로드할 수 있고 {unavailable}개는 다운로드할 수 없습니다. 가능한 녹화를 계속 다운로드하시겠습니까?",
   "DownloadUpdateTemplateMsg": "업데이트 템플릿 다운로드",
   "DragUploadFileInfo": "여기에 파일을 드래그하거나 클릭하여 업로드하십시오",
   "DriverInstanceCreateFailed": "드라이버 인스턴스 생성 실패",

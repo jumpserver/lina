@@ -646,6 +646,8 @@
   "DownloadCenter": "下載中心",
   "DownloadImportTemplateMsg": "下載創建模板",
   "DownloadReplay": "下載錄影",
+  "DownloadReplayNoneAvailable": "所選會話中沒有可下載的錄影。",
+  "DownloadReplayPartialConfirm": "已選擇 {selected} 個會話，其中 {available} 個錄影可下載，{unavailable} 個不可下載。是否繼續下載可用錄影？",
   "DownloadUpdateTemplateMsg": "下載更新範本",
   "DragUploadFileInfo": " 將檔案拖曳至此處，或點擊此處上傳",
   "DriverInstanceCreateFailed": "驅動實例建立失敗",

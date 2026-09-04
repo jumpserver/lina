@@ -646,6 +646,8 @@
   "DownloadCenter": "ダウンロードセンター",
   "DownloadImportTemplateMsg": "テンプレートをダウンロードで作成",
   "DownloadReplay": "ビデオのダウンロード",
+  "DownloadReplayNoneAvailable": "選択したセッションにダウンロード可能な録画がありません。",
+  "DownloadReplayPartialConfirm": "{selected} 件のセッションを選択しました。{available} 件はダウンロード可能、{unavailable} 件はダウンロードできません。利用可能な録画を続けてダウンロードしますか？",
   "DownloadUpdateTemplateMsg": "更新テンプレートをダウンロード",
   "DragUploadFileInfo": "ここにファイルをドラッグするか、ここをクリックしてアップロードしてください",
   "DriverInstanceCreateFailed": "ドライバーインスタンスの作成に失敗しました",

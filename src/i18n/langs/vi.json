@@ -684,6 +684,8 @@
   "DownloadCenter": "Trung tâm tải xuống",
   "DownloadImportTemplateMsg": "tải xuống mẫu tạo",
   "DownloadReplay": "Tải video xuống",
+  "DownloadReplayNoneAvailable": "Không có phiên nào đã chọn có bản ghi có thể tải xuống.",
+  "DownloadReplayPartialConfirm": "Đã chọn {selected} phiên: có thể tải {available} bản ghi và không thể tải {unavailable} bản ghi. Tiếp tục tải các bản ghi khả dụng?",
   "DownloadUpdateTemplateMsg": "Tải xuống mẫu cập nhật",
   "DragUploadFileInfo": "Kéo tệp vào đây, hoặc nhấp vào đây để tải lên",
   "DriverInstanceCreateFailed": "Tạo instance driver thất bại",
