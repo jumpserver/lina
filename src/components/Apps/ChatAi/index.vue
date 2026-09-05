@@ -14,6 +14,7 @@
           'chat-ai-portal',
           {
             'is-open': panelOpen,
+            'is-launcher-dragging': launcherDragging,
             'is-expanded': expanded,
             'is-window-moving': panelMoving,
             'is-window-resizing': panelResizing,
@@ -22,6 +23,7 @@
             'is-panel-transitioning': panelTransitioning
           }
         ]"
+        :style="launcherStyle"
       >
         <Transition name="launcher-pop">
           <div v-if="!panelOpen && !launcherHidden" class="assistant-launcher-wrap">
@@ -40,8 +42,11 @@
               type="button"
               :aria-label="t('ChatAIName')"
               aria-haspopup="dialog"
+              aria-keyshortcuts="ArrowUp ArrowDown"
               :title="t('ChatAIName')"
-              @click="open"
+              @click="handleLauncherClick"
+              @pointerdown="startLauncherDrag"
+              @keydown="handleLauncherKeyboardMove"
             >
               <img :src="assistantIcon" alt="" draggable="false" />
             </button>
@@ -145,6 +150,10 @@ import AssistantWorkspace from './AssistantWorkspace.vue'
 
 const EXPANDED_KEY = 'chat_ai_expanded'
 const LAUNCHER_HIDDEN_KEY = 'chat_ai_launcher_hidden'
+const LAUNCHER_Y_KEY = 'chat_ai_launcher_y'
+const LAUNCHER_SIZE = 44
+const LAUNCHER_GAP = 16
+const LAUNCHER_DRAG_THRESHOLD = 5
 const PANEL_RECT_KEY = 'chat_ai_panel_rect'
 const PANEL_GAP = 16
 const PANEL_DEFAULT_WIDTH = 520
@@ -184,6 +193,8 @@ const panelElement = ref(null)
 const panelOpen = ref(props.defaultShowPanel)
 const expanded = ref(readStorage(EXPANDED_KEY) === 'true')
 const launcherHidden = ref(readStorage(LAUNCHER_HIDDEN_KEY) === 'true')
+const launcherY = ref(readLauncherY())
+const launcherDragging = ref(false)
 const panelRect = ref(null)
 const panelMoving = ref(false)
 const panelResizing = ref(false)
@@ -206,6 +217,18 @@ const focusTrapActive = computed(() => {
   return componentActive.value && panelOpen.value && modalPanel.value && !standalone.value
 })
 const compactViewport = computed(() => layoutViewportWidth.value <= PANEL_COMPACT_BREAKPOINT)
+const launcherStyle = computed(() => {
+  const min = viewportTop.value + LAUNCHER_GAP
+  const max = viewportTop.value + viewportHeight.value - LAUNCHER_SIZE - LAUNCHER_GAP
+  const defaultY =
+    viewportTop.value + viewportHeight.value - LAUNCHER_SIZE - (mobileViewport.value ? 82 : 116)
+  const preferred = Number.isFinite(launcherY.value)
+    ? `${viewportTop.value + launcherY.value}px`
+    : `calc(${defaultY}px - env(safe-area-inset-bottom, 0px))`
+  return {
+    '--launcher-top': `clamp(calc(${min}px + env(safe-area-inset-top, 0px)), ${preferred}, calc(${max}px - env(safe-area-inset-bottom, 0px)))`
+  }
+})
 const renderedPanelRect = computed(() => {
   return panelRect.value ? clampPanelRect(panelRect.value) : null
 })
@@ -239,6 +262,14 @@ const panelCompact = computed(() => {
   return width <= PANEL_COMPACT_BREAKPOINT
 })
 const assistantIcon = getAssetUrl('img/ai-assistant.svg')
+const launcherInteraction = {
+  pointerId: null,
+  captureTarget: null,
+  startX: 0,
+  startY: 0,
+  startTop: 0
+}
+let suppressLauncherClick = false
 const panelInteraction = {
   type: '',
   direction: '',
@@ -294,6 +325,104 @@ function removeStorage(key) {
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), Math.max(min, max))
+}
+
+function readLauncherY() {
+  try {
+    const saved = JSON.parse(readStorage(LAUNCHER_Y_KEY))
+    return Number.isFinite(saved) ? saved : null
+  } catch {
+    return null
+  }
+}
+
+function clampLauncherY(y) {
+  return clamp(y, LAUNCHER_GAP, viewportHeight.value - LAUNCHER_SIZE - LAUNCHER_GAP)
+}
+
+function startLauncherDrag(event) {
+  if (
+    event.button !== 0 ||
+    !event.isPrimary ||
+    panelOpen.value ||
+    launcherHidden.value ||
+    launcherInteraction.pointerId !== null
+  ) {
+    return
+  }
+  suppressLauncherClick = false
+  launcherInteraction.pointerId = event.pointerId
+  launcherInteraction.captureTarget = event.currentTarget
+  launcherInteraction.startX = event.clientX
+  launcherInteraction.startY = event.clientY
+  launcherInteraction.startTop =
+    event.currentTarget.parentElement.getBoundingClientRect().top - viewportTop.value
+  event.currentTarget.setPointerCapture(event.pointerId)
+  event.currentTarget.addEventListener('lostpointercapture', finishLauncherDrag)
+  window.addEventListener('pointermove', handleLauncherPointerMove, { passive: false })
+  window.addEventListener('pointerup', finishLauncherDrag)
+  window.addEventListener('pointercancel', finishLauncherDrag)
+  window.addEventListener('blur', finishLauncherDrag)
+}
+
+function handleLauncherPointerMove(event) {
+  if (event.pointerId !== launcherInteraction.pointerId) return
+  const deltaX = event.clientX - launcherInteraction.startX
+  const deltaY = event.clientY - launcherInteraction.startY
+  if (!launcherDragging.value && Math.hypot(deltaX, deltaY) <= LAUNCHER_DRAG_THRESHOLD) {
+    return
+  }
+  launcherDragging.value = true
+  suppressLauncherClick = true
+  lockDocumentInteraction('ns-resize')
+  launcherY.value = clampLauncherY(launcherInteraction.startTop + deltaY)
+  event.preventDefault()
+}
+
+function finishLauncherDrag(event) {
+  const { pointerId, captureTarget } = launcherInteraction
+  if (pointerId === null || (Number.isFinite(event?.pointerId) && event.pointerId !== pointerId)) {
+    return
+  }
+  if (event?.type === 'pointerup') handleLauncherPointerMove(event)
+  window.removeEventListener('pointermove', handleLauncherPointerMove)
+  window.removeEventListener('pointerup', finishLauncherDrag)
+  window.removeEventListener('pointercancel', finishLauncherDrag)
+  window.removeEventListener('blur', finishLauncherDrag)
+  captureTarget.removeEventListener('lostpointercapture', finishLauncherDrag)
+  launcherInteraction.pointerId = null
+  launcherInteraction.captureTarget = null
+  if (captureTarget.hasPointerCapture(pointerId)) captureTarget.releasePointerCapture(pointerId)
+  if (launcherDragging.value) writeStorage(LAUNCHER_Y_KEY, String(launcherY.value))
+  launcherDragging.value = false
+  unlockDocumentInteraction()
+}
+
+function handleLauncherClick(event) {
+  const wasDragging = suppressLauncherClick
+  suppressLauncherClick = false
+  if (wasDragging && event.detail !== 0) {
+    event.preventDefault()
+    return
+  }
+  open()
+}
+
+function handleLauncherKeyboardMove(event) {
+  if (
+    !['ArrowUp', 'ArrowDown'].includes(event.key) ||
+    event.altKey ||
+    event.ctrlKey ||
+    event.metaKey ||
+    launcherInteraction.pointerId !== null
+  ) {
+    return
+  }
+  event.preventDefault()
+  const currentY = launcher.value.parentElement.getBoundingClientRect().top - viewportTop.value
+  const step = event.shiftKey ? 40 : 16
+  launcherY.value = clampLauncherY(currentY + (event.key === 'ArrowUp' ? -step : step))
+  writeStorage(LAUNCHER_Y_KEY, String(launcherY.value))
 }
 
 function getDefaultPanelRect() {
@@ -521,6 +650,7 @@ function finishPanelInteraction(event) {
 }
 
 async function hideLauncher() {
+  finishLauncherDrag()
   launcherHidden.value = true
   writeStorage(LAUNCHER_HIDDEN_KEY, 'true')
   await nextTick()
@@ -535,6 +665,7 @@ async function showLauncher() {
 }
 
 function handleViewportResize() {
+  finishLauncherDrag()
   const wasMobile = mobileViewport.value
   const viewport = getViewportMetrics()
   viewportLeft.value = viewport.left
@@ -673,6 +804,7 @@ async function initWorkspace() {
 }
 
 async function open() {
+  finishLauncherDrag()
   if (!standalone.value && !mobileViewport.value && !panelRect.value) initPanelRect()
   panelOpen.value = true
   await initWorkspace()
@@ -717,6 +849,7 @@ function attachWindowListeners() {
 }
 
 function detachWindowListeners() {
+  finishLauncherDrag()
   if (!windowListenersAttached) return
   window.removeEventListener('message', handleWindowMessage)
   window.removeEventListener('resize', scheduleViewportResize)
@@ -778,8 +911,8 @@ onBeforeUnmount(() => {
 
 .assistant-launcher-wrap {
   position: fixed;
+  top: var(--launcher-top);
   right: 18px;
-  bottom: calc(116px + env(safe-area-inset-bottom, 0px));
   width: 44px;
   height: 44px;
   pointer-events: auto;
@@ -801,11 +934,12 @@ onBeforeUnmount(() => {
   border-radius: 50%;
   color: var(--ai-text);
   background: transparent;
-  cursor: pointer;
+  cursor: ns-resize;
   filter: drop-shadow(0 4px 10px rgb(16 72 62 / 18%));
   isolation: isolate;
   place-items: center;
-  touch-action: manipulation;
+  touch-action: none;
+  user-select: none;
   transition:
     transform 0.16s ease,
     filter 0.16s ease;
@@ -883,8 +1017,8 @@ onBeforeUnmount(() => {
 .assistant-launcher-restore {
   position: fixed;
   z-index: 1;
+  top: calc(var(--launcher-top) - 1px);
   right: 0;
-  bottom: calc(115px + env(safe-area-inset-bottom, 0px));
   display: block;
   width: 46px;
   height: 46px;
@@ -938,6 +1072,18 @@ onBeforeUnmount(() => {
   &:focus-visible &__surface {
     outline: 2px solid var(--el-color-primary-light-7, #a3dfd1);
     outline-offset: -2px;
+  }
+}
+
+.is-launcher-dragging {
+  .assistant-launcher {
+    transform: none;
+    transition: none;
+  }
+
+  .assistant-launcher__hide {
+    opacity: 0;
+    pointer-events: none;
   }
 }
 
@@ -1106,11 +1252,6 @@ onBeforeUnmount(() => {
 
   .assistant-launcher-wrap {
     right: 12px;
-    bottom: calc(82px + env(safe-area-inset-bottom, 0px));
-  }
-
-  .assistant-launcher-restore {
-    bottom: calc(81px + env(safe-area-inset-bottom, 0px));
   }
 
   .assistant-panel,
