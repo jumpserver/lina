@@ -10,7 +10,7 @@
   >
     <template v-if="data.label" #label>
       <span :title="data.label">
-        <span v-if="data.required">* </span>
+        <span v-if="data.required" class="form-item-required-mark">*</span>
         {{ data.label }}
         <el-tooltip
           v-if="data.helpTip"
@@ -428,6 +428,11 @@ export default {
   opacity: 0.8;
   line-height: 2;
   width: 300px;
+}
+
+.form-item-required-mark {
+  margin-right: 4px;
+  color: var(--el-color-danger, #ed5565);
 }
 
 .help-block {

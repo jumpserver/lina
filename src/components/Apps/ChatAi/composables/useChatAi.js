@@ -15,6 +15,12 @@ import {
   streamConversationMessage,
   updateConversation
 } from '@/api/chatAi'
+import {
+  canRetryMessage,
+  failureFromError,
+  messageFailure,
+  normalizeFailure
+} from '../utils/failurePresentation'
 
 const APPROVAL_STORAGE_KEY = 'jumpserver_chat_ai_pending_approvals'
 const OUTPUT_EVENTS = new Set([
@@ -158,6 +164,9 @@ function normalizeMessage(message) {
     status: message.status || 'completed',
     model: message.model || '',
     error: message.error || '',
+    error_code: message.error_code || message.failure?.code || '',
+    failure: normalizeFailure(message.failure),
+    parts: Array.isArray(message.parts) ? message.parts.map((part) => ({ ...part })) : [],
     input_tokens: message.input_tokens || 0,
     output_tokens: message.output_tokens || 0,
     images: (message.images || []).map((image) => ({ ...image })),
@@ -192,6 +201,8 @@ function restoredTrace(message) {
         status: Number(card.source.status_code) >= 400 ? 'failed' : 'completed',
         data: {
           operation_id: card.source.operation_id || '',
+          method: card.source.method || '',
+          tool_name: card.source.tool_name || '',
           action: card.source.action || '',
           summary: card.title || ''
         },
@@ -296,7 +307,14 @@ export function useChatAi(options = {}) {
     )
   })
 
-  function emitError(error) {
+  function emitError(error, stage = '') {
+    if (stage && error && typeof error === 'object') {
+      try {
+        error.chatAiStage = stage
+      } catch {
+        // Some browser errors are immutable; their standard failure text is still usable.
+      }
+    }
     lastError.value = error
     options.onError?.(error)
   }
@@ -414,15 +432,30 @@ export function useChatAi(options = {}) {
       const renderKeys = new Map(
         messages.value.map((message) => [message.id, message._render_key || message.id])
       )
+      const previousMessages = new Map(messages.value.map((message) => [message.id, message]))
       revokeLocalAttachments(messages.value)
       messages.value = data.map((message) => {
         const normalized = normalizeMessage(message)
         normalized._render_key = renderKeys.get(normalized.id) || normalized._render_key
+        const previous = previousMessages.get(normalized.id)
+        if (
+          !normalized.failure &&
+          ['failed', 'cancelled'].includes(normalized.status) &&
+          previous?.failure
+        ) {
+          normalized.failure = previous.failure
+          normalized.error_code ||= previous.error_code
+        }
         return normalized
       })
       traces.value = Object.fromEntries(
         messages.value
-          .map((message) => [message.id, restoredTrace(message)])
+          .map((message) => [
+            message.id,
+            message.status !== 'completed' && traces.value[message.id]?.length
+              ? traces.value[message.id]
+              : restoredTrace(message)
+          ])
           .filter(([, items]) => items.length)
       )
       await restoreApproval()
@@ -578,6 +611,7 @@ export function useChatAi(options = {}) {
     const argumentsValue = payload.arguments || previous.arguments || {}
     const preview = payload.preview || {}
     const toolName = payload.tool_name || previous.tool_name || ''
+    const risk = payload.risk || previous.risk_level || ''
     const data = {
       operation_id:
         argumentsValue.operation_id || preview.operation_id || previous.operation_id || toolCallId,
@@ -587,7 +621,9 @@ export function useChatAi(options = {}) {
       tool_name: toolName,
       tool_call_id: toolCallId,
       arguments: argumentsValue,
-      risk_level: payload.risk || previous.risk_level || ''
+      risk_level: risk,
+      // The server assigns risk from the authorized tool policy, including reads without previews.
+      read_only: risk ? risk === 'read' : previous.read_only
     }
     if (toolCallId) streamTools.set(toolCallId, data)
     return data
@@ -644,13 +680,16 @@ export function useChatAi(options = {}) {
         const completed = {
           ...trace,
           ...result,
+          // A result body must not override the policy captured by tool.call / approval.required.
+          read_only: trace.read_only,
+          risk_level: trace.risk_level,
           ok,
           status: result.ok === false ? result.status_code || data.status : data.status,
           status_code: result.status_code,
           error: data.error || result.error || ''
         }
         const traceType = isApiSearch(trace) ? 'api_search' : 'api_call'
-        updateLastTrace(
+        const updated = updateLastTrace(
           traceType,
           (entry) => entry.data.tool_call_id === trace.tool_call_id,
           (entry) => ({
@@ -664,6 +703,7 @@ export function useChatAi(options = {}) {
             }
           })
         )
+        if (!updated) appendTrace(traceType, completed, ok ? 'completed' : 'failed')
         break
       }
       case 'approval.required': {
@@ -716,8 +756,10 @@ export function useChatAi(options = {}) {
         touchLastTrace()
         const target = messageById(delivery.message_id) || assistant
         if (target) {
-          target.status = data.status
+          target.status = data.status || target.status
           target.error = data.error || ''
+          target.error_code = data.error_code || data.failure?.code || target.error_code || ''
+          target.failure = normalizeFailure(data.failure) || target.failure
           target.input_tokens = data.input_tokens || 0
           target.output_tokens = data.output_tokens || 0
         }
@@ -728,15 +770,39 @@ export function useChatAi(options = {}) {
         if (target) {
           target.status = 'failed'
           target.error = data.reason || data.error_code
+          target.error_code = data.error_code || data.failure?.code || 'run_failed'
+          target.failure = normalizeFailure(data.failure)
         }
-        appendTrace('error', { detail: data.reason, code: data.error_code }, 'failed')
+        appendTrace('error', { code: data.error_code }, 'failed')
         break
       }
-      case 'run.cancelled':
-        if (assistant) assistant.status = 'cancelled'
+      case 'run.cancelled': {
+        const target = messageById(delivery.message_id) || assistant
+        if (target) {
+          target.status = 'cancelled'
+          target.error_code = data.error_code || data.failure?.code || 'cancelled'
+          target.failure = normalizeFailure(data.failure)
+        }
         break
+      }
       default:
         break
+    }
+  }
+
+  function markFailed(target, error, stage = 'interrupted') {
+    if (!target) return
+    target.status = 'failed'
+    target.error_code =
+      target.failure?.code || error?.code || error?.response?.data?.code || 'run_failed'
+    target.error = ''
+    if (!target.failure || target.failure.local) {
+      target.failure = normalizeFailure(
+        messageFailure(
+          { ...target, failure: failureFromError(error, stage) },
+          traces.value[target.id] || []
+        )
+      )
     }
   }
 
@@ -775,7 +841,7 @@ export function useChatAi(options = {}) {
     try {
       conversation = await ensureConversation(title, { signal: requestController.signal })
     } catch (error) {
-      if (!isAbortError(error) && !stopRequested) emitError(error)
+      if (!isAbortError(error) && !stopRequested) emitError(error, 'preparing')
       if (abortController === requestController) abortController = null
       streamConversationId = ''
       if (!stopping.value) stopRequested = false
@@ -808,6 +874,9 @@ export function useChatAi(options = {}) {
       id: temporaryId('user'),
       role: 'user',
       content,
+      parts: options.pageContext
+        ? [{ type: 'data', data: { kind: 'page_context', context: options.pageContext } }]
+        : [],
       images: images.map((image) => ({
         name: image.name,
         content_type: image.type,
@@ -839,12 +908,14 @@ export function useChatAi(options = {}) {
     messages.value.push(userMessage, assistantMessage)
     traces.value[temporaryAssistantId] = []
     streaming.value = true
+    let preserveLocalFailure = false
 
     try {
       await streamConversationMessage(conversation.id, content, {
         conversation,
         images,
         files,
+        pageContext: options.pageContext,
         signal: requestController.signal,
         onEvent: handleStreamEvent,
         onAccepted: acceptMessage
@@ -853,11 +924,15 @@ export function useChatAi(options = {}) {
     } catch (error) {
       if (!isAbortError(error) && !stopRequested) {
         const target = messageById(activeStreamMessageId || temporaryAssistantId)
-        if (target) {
-          target.status = 'failed'
-          target.error = error.detail || error.message
+        markFailed(target, error, accepted ? 'interrupted' : 'preparing')
+        preserveLocalFailure = accepted
+        if (accepted) {
+          // The saved user message and its inline failure card already explain
+          // the error. Keep lastError for diagnostics without a duplicate toast.
+          lastError.value = error
+        } else {
+          emitError(error, 'preparing')
         }
-        emitError(error)
       }
       return false
     } finally {
@@ -867,7 +942,7 @@ export function useChatAi(options = {}) {
       temporaryAssistantId = ''
       activeStreamMessageId = ''
       if (!stopRequested && lifecycleActive) {
-        await loadMessages(conversation.id, { silent: true })
+        if (!preserveLocalFailure) await loadMessages(conversation.id, { silent: true })
         await loadConversations({ silent: true })
       }
     }
@@ -1025,10 +1100,7 @@ export function useChatAi(options = {}) {
     } catch (error) {
       if (!isAbortError(error) && !stopRequested) {
         const target = messageById(activeStreamMessageId || temporaryAssistantId)
-        if (branchActivated && target) {
-          target.status = 'failed'
-          target.error = error.detail || error.message
-        }
+        if (branchActivated) markFailed(target, error)
         emitError(error)
       }
       return false
@@ -1047,6 +1119,10 @@ export function useChatAi(options = {}) {
 
   async function regenerateMessage(messageId) {
     if (!messageId || busy.value) return false
+    const sourceMessage = messageById(messageId)
+    if (!sourceMessage || !canRetryMessage(sourceMessage, traces.value[messageId] || [])) {
+      return false
+    }
     const conversationId = activeConversationId.value
     if (!conversationId) return false
     const versionRootId = sourceUserMessageId(messages.value, messageId)
@@ -1085,10 +1161,7 @@ export function useChatAi(options = {}) {
     } catch (error) {
       if (!isAbortError(error) && !stopRequested) {
         const target = messageById(activeStreamMessageId || temporaryAssistantId)
-        if (target) {
-          target.status = 'failed'
-          target.error = error.detail || error.message
-        }
+        markFailed(target, error)
         emitError(error)
       }
       return false

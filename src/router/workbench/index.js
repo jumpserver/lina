@@ -66,6 +66,16 @@ export default {
           }
         },
         {
+          path: 'personal-credentials',
+          name: 'PersonalCredentialList',
+          component: () => import('@/views/workbench/PersonalCredential'),
+          meta: {
+            title: i18n.t('PersonalCredentials'),
+            icon: 'password',
+            permissions: []
+          }
+        },
+        {
           path: `${BASE_URL}/koko/elfinder/sftp/`,
           name: '',
           meta: {

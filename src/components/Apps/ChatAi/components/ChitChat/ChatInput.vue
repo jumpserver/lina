@@ -74,6 +74,25 @@
         </div>
       </div>
 
+      <div v-if="pageContextEnabled && pageContext" class="page-context-preview" role="status">
+        <el-icon><Monitor /></el-icon>
+        <div class="page-context-preview__copy">
+          <strong>{{ pageContext.page.title || pageContext.page.name }}</strong>
+          <span v-if="pageContext.selected_assets.length">{{ pageContextAssetsLabel }}</span>
+          <small>{{ t('ChatAIPageContextPrivacy') }}</small>
+        </div>
+        <button
+          class="composer-icon-button"
+          type="button"
+          :aria-label="t('ChatAIRemovePageContext')"
+          :title="t('ChatAIRemovePageContext')"
+          :disabled="disabled || busy"
+          @click="emit('toggle-page-context')"
+        >
+          <el-icon><Close /></el-icon>
+        </button>
+      </div>
+
       <textarea
         ref="textarea"
         v-model="value"
@@ -122,6 +141,22 @@
                     <strong>{{ t('ChatAIAttachmentInput') }}</strong>
                     <small>{{ t('ChatAIAttachmentInputHint') }}</small>
                   </span>
+                </el-dropdown-item>
+                <el-dropdown-item
+                  command="page-context"
+                  :disabled="!pageContext"
+                  :class="{ 'is-selected': pageContextEnabled }"
+                >
+                  <el-icon><Monitor /></el-icon>
+                  <span class="tool-menu-copy">
+                    <strong>{{
+                      t(pageContextEnabled ? 'ChatAIRemovePageContext' : 'ChatAIReferencePage')
+                    }}</strong>
+                    <small>{{
+                      t(pageContext ? 'ChatAIPageContextPrivacy' : 'ChatAIPageContextUnavailable')
+                    }}</small>
+                  </span>
+                  <el-icon v-if="pageContextEnabled" class="tool-menu-check"><Check /></el-icon>
                 </el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -176,6 +211,7 @@ import {
   Document,
   Loading,
   Microphone,
+  Monitor,
   Paperclip,
   Plus,
   Promotion
@@ -203,14 +239,46 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  pageContext: {
+    type: Object,
+    default: null
+  },
+  pageContextEnabled: {
+    type: Boolean,
+    default: false
+  },
   draftKey: {
     type: String,
     default: 'new'
   }
 })
 
-const emit = defineEmits(['send', 'stop', 'error', 'attachment-error', 'recording-change'])
+const emit = defineEmits([
+  'send',
+  'stop',
+  'error',
+  'attachment-error',
+  'recording-change',
+  'toggle-page-context'
+])
 const { t } = useI18n()
+const pageContextAssetsLabel = computed(() => {
+  const context = props.pageContext
+  const count = context?.selected_assets.length || 0
+  const names = (context?.selected_assets || [])
+    .slice(0, 3)
+    .map((asset) => asset.name || asset.address || asset.id)
+    .join('、')
+  const label = t(
+    context?.selection_kind === 'detail'
+      ? 'ChatAIPageContextAssetDetail'
+      : context?.selection_truncated
+        ? 'ChatAIPageContextAssetsLimited'
+        : 'ChatAIPageContextAssets',
+    { count }
+  )
+  return `${label} · ${names}${count > 3 ? '…' : ''}`
+})
 const textarea = ref(null)
 const attachmentInput = ref(null)
 const value = ref('')
@@ -391,7 +459,9 @@ watch(
 function handleToolCommand(command) {
   if (command === 'attachment') {
     attachmentInput.value?.click()
+    return
   }
+  if (command === 'page-context' && props.pageContext) emit('toggle-page-context')
 }
 
 watch([recording, recordingPending], ([active, pending]) => {
@@ -872,6 +942,44 @@ defineExpose({ focus, setValue, clear, discardDraft })
 :global(.chat-ai-tool-dropdown .tool-menu-copy small) {
   color: #969ba6;
   font-size: 10px;
+}
+
+:global(.chat-ai-tool-dropdown .el-dropdown-menu__item.is-selected) {
+  color: var(--ai-primary-dark, #148f76);
+  background: var(--ai-primary-light, #e8f7f3);
+}
+
+:global(.chat-ai-tool-dropdown .tool-menu-check) {
+  flex: 0 0 auto;
+  color: var(--ai-primary-dark, #148f76);
+}
+
+.page-context-preview {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 4px 0 8px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  color: var(--ai-primary-dark, #148f76);
+  background: var(--ai-primary-light, #e8f7f3);
+
+  &__copy {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    flex-direction: column;
+    gap: 3px;
+    font-size: 11px;
+    overflow-wrap: anywhere;
+
+    strong {
+      font-weight: 600;
+    }
+    small {
+      color: #65756f;
+    }
+  }
 }
 
 .input-hint {
