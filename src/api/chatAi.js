@@ -3,6 +3,10 @@ import store from '@/store'
 import { withBaseApi } from '@/utils/env'
 import { getTokenFromCookie } from '@/utils/jms/auth'
 import request from '@/utils/request'
+import {
+  getMessagePageContext,
+  sanitizePageContext
+} from '@/components/Apps/ChatAi/utils/pageContext'
 
 const KAEL_BASE = '/kael/api/v1'
 const PAGE_SIZE = 100
@@ -36,6 +40,7 @@ export class ChatAIRequestError extends Error {
     this.detail = options.detail || message
     this.retryable = options.retryable === true
     this.requestId = options.requestId || ''
+    this.failure = options.failure || null
   }
 }
 
@@ -473,6 +478,7 @@ async function responseError(response) {
     code: payload?.code || '',
     detail,
     retryable: payload?.retryable === true,
+    failure: payload?.failure || null,
     requestId: payload?.request_id || response.headers.get('X-Request-ID') || ''
   })
 }
@@ -528,7 +534,8 @@ async function consumeEventStream(response, panel, run, cursor, onEvent) {
         delivery.type === 'run.failed'
           ? {
               code: delivery.payload.error_code || 'run_failed',
-              detail: delivery.payload.reason || 'Chat AI run failed.'
+              detail: delivery.payload.reason || 'Chat AI run failed.',
+              failure: delivery.payload.failure || null
             }
           : null
     }
@@ -626,17 +633,39 @@ async function deleteArtifacts(values) {
   )
 }
 
-async function createUserMessage(conversationId, content, images = [], files = [], signal) {
+async function createUserMessage(
+  conversationId,
+  content,
+  images = [],
+  files = [],
+  signal,
+  pageContext
+) {
   const uploaded = []
   try {
-    for (const file of images) uploaded.push(await uploadArtifact(file, 'image', signal))
-    for (const file of files) uploaded.push(await uploadArtifact(file, 'file', signal))
+    for (const file of images) {
+      assertPageContextOrganization(pageContext)
+      uploaded.push(await uploadArtifact(file, 'image', signal))
+    }
+    for (const file of files) {
+      assertPageContextOrganization(pageContext)
+      uploaded.push(await uploadArtifact(file, 'file', signal))
+    }
+    assertPageContextOrganization(pageContext)
     const message = await quietRequest({
       url: KAEL_BASE + '/conversations/' + conversationId + '/messages',
       method: 'post',
       data: {
         role: 'user',
         content,
+        ...(pageContext
+          ? {
+              parts: [
+                ...(content ? [{ type: 'text', text: content }] : []),
+                { type: 'data', data: { kind: 'page_context', context: pageContext } }
+              ]
+            }
+          : {}),
         artifact_ids: uploaded.map((artifact) => artifact.id),
         idempotency_key: randomId()
       },
@@ -662,6 +691,45 @@ function createPanel(conversation, signal) {
     },
     signal
   })
+}
+
+function assertPageContextOrganization(context) {
+  if (!context) return
+  const organizationId = currentRoute().query?.oid || store.getters.currentOrg?.id
+  if (String(context.organization.id) !== String(organizationId || '')) {
+    throw new ChatAIRequestError('The organization changed after the page was referenced.', {
+      code: 'page_context_organization_changed'
+    })
+  }
+}
+
+async function updatePanelPageContext(panel, pageContext, signal) {
+  const context = sanitizePageContext(pageContext)
+  if (!context) return
+  assertPageContextOrganization(context)
+  try {
+    await quietRequest({
+      url: KAEL_BASE + '/panel-sessions/' + panel.id + '/context',
+      method: 'put',
+      data: {
+        base_version: panel.context_version || 0,
+        domain: 'jumpserver',
+        surface: panel.surface || 'lina.chat',
+        sensitivity: 'internal',
+        data: context
+      },
+      signal
+    })
+  } catch (error) {
+    if (signal?.aborted) throw abortError()
+    const payload = error?.response?.data
+    throw new ChatAIRequestError('The referenced page could not be attached to this request.', {
+      code: 'page_context_failed',
+      status: error?.status || error?.response?.status || 0,
+      requestId: error?.requestId || payload?.request_id || '',
+      retryable: true
+    })
+  }
 }
 
 function capabilityMode(conversation) {
@@ -757,6 +825,8 @@ async function createAndStreamRun(conversation, inputMessageId, options, attempt
   let run
   try {
     throwIfRunAttemptCancelled(attempt)
+    await updatePanelPageContext(panel, options.pageContext, options.signal)
+    throwIfRunAttemptCancelled(attempt)
     try {
       run = await createRun()
     } catch (error) {
@@ -769,15 +839,13 @@ async function createAndStreamRun(conversation, inputMessageId, options, attempt
     await closePanel(panel.id)
     throw error
   }
-  try {
-    options.onAccepted?.(run)
-  } catch {
-    // UI acknowledgement must not interrupt an accepted Run.
-  }
   await streamPanelRun(conversation, panel, run, options)
 }
 
 export async function streamConversationMessage(id, content, options = {}) {
+  // Freeze the opt-in snapshot before any upload or network request can yield.
+  options = { ...options, pageContext: sanitizePageContext(options.pageContext) }
+  assertPageContextOrganization(options.pageContext)
   const attempt = beginRunAttempt(id, options.signal)
   try {
     let conversation = options.conversation || (await getConversation(id, options.signal))
@@ -799,8 +867,14 @@ export async function streamConversationMessage(id, content, options = {}) {
       String(content || ''),
       options.images || [],
       options.files || [],
-      options.signal
+      options.signal,
+      options.pageContext
     )
+    try {
+      options.onAccepted?.(message)
+    } catch {
+      // UI acknowledgement must not interrupt a message that is already saved.
+    }
     throwIfRunAttemptCancelled(attempt)
     await createAndStreamRun(conversation, message.id, options, attempt)
   } catch (error) {
@@ -888,6 +962,8 @@ export async function regenerateConversationMessage(id, messageId, options = {})
     let run
     try {
       throwIfRunAttemptCancelled(attempt)
+      await updatePanelPageContext(panel, getMessagePageContext(input), options.signal)
+      throwIfRunAttemptCancelled(attempt)
       run = await quietRequest({
         url: KAEL_BASE + '/messages/' + input.id + '/regenerations',
         method: 'post',
@@ -958,6 +1034,7 @@ export async function branchConversationMessage(id, messageId, content, options 
     moveRunAttempt(attempt, branch.id)
     options.onConversation?.(branch.id)
     throwIfRunAttemptCancelled(attempt)
+    const pageContext = getMessagePageContext(source)
     const cloned = await cloneAttachments(source, options.signal)
     throwIfRunAttemptCancelled(attempt)
     const message = await createUserMessage(
@@ -965,10 +1042,11 @@ export async function branchConversationMessage(id, messageId, content, options 
       String(content || ''),
       cloned.images,
       cloned.files,
-      options.signal
+      options.signal,
+      pageContext
     )
     throwIfRunAttemptCancelled(attempt)
-    await createAndStreamRun(branch, message.id, options, attempt)
+    await createAndStreamRun(branch, message.id, { ...options, pageContext }, attempt)
   } catch (error) {
     if (attempt.cancelled) {
       await reconcileRunAttemptCancellation(attempt)

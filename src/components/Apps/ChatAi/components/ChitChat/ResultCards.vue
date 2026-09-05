@@ -25,7 +25,16 @@
             <div class="asset-result__identity">
               <span class="asset-result__avatar">{{ assetInitial(row) }}</span>
               <span class="asset-result__name">
-                <strong :title="formatValue(row?.name)">{{ formatValue(row?.name) }}</strong>
+                <RouterLink
+                  v-if="detailRoute(card, row)"
+                  :to="detailRoute(card, row)"
+                  class="result-detail-link asset-result__link"
+                  :title="t('ChatAIResultOpenNamedDetail', { name: formatValue(row?.name) })"
+                >
+                  <strong>{{ formatValue(row?.name) }}</strong>
+                  <el-icon><ArrowRight /></el-icon>
+                </RouterLink>
+                <strong v-else :title="formatValue(row?.name)">{{ formatValue(row?.name) }}</strong>
                 <code :title="formatValue(row?.address)">{{ formatValue(row?.address) }}</code>
               </span>
             </div>
@@ -57,12 +66,26 @@
             <thead>
               <tr>
                 <th v-for="column in columns(card)" :key="column">{{ fieldLabel(column) }}</th>
+                <th v-if="hasDetailLinks(card)" class="result-table__action">
+                  {{ t('ChatAIResultDetail') }}
+                </th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="(row, rowIndex) in rows(card)" :key="rowIndex">
                 <td v-for="column in columns(card)" :key="column">
                   {{ formatFieldValue(column, row?.[column]) }}
+                </td>
+                <td v-if="hasDetailLinks(card)" class="result-table__action">
+                  <RouterLink
+                    v-if="detailRoute(card, row)"
+                    :to="detailRoute(card, row)"
+                    class="result-detail-link"
+                    :aria-label="detailLinkLabel(row)"
+                  >
+                    {{ t('ChatAIResultOpenDetail') }}
+                    <el-icon><ArrowRight /></el-icon>
+                  </RouterLink>
                 </td>
               </tr>
             </tbody>
@@ -83,6 +106,19 @@
         </dl>
 
         <pre v-else class="result-value">{{ formatValue(card.content) }}</pre>
+        <div
+          v-if="!isTabular(card) && detailRoute(card, card.content)"
+          class="result-detail-action"
+        >
+          <RouterLink
+            :to="detailRoute(card, card.content)"
+            class="result-detail-link"
+            :aria-label="detailLinkLabel(card.content)"
+          >
+            {{ t('ChatAIResultOpenDetail') }}
+            <el-icon><ArrowRight /></el-icon>
+          </RouterLink>
+        </div>
       </div>
     </details>
   </section>
@@ -90,8 +126,10 @@
 
 <script setup>
 import { ref } from 'vue'
-import { ArrowDown } from '@element-plus/icons-vue'
+import { ArrowDown, ArrowRight } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
+import { resultDetailRoute } from './resultNavigation'
 
 defineProps({
   cards: {
@@ -101,6 +139,8 @@ defineProps({
 })
 
 const { t } = useI18n()
+const router = useRouter()
+const route = useRoute()
 const cardOpenState = ref({})
 const assetListOperations = new Set([
   'assets_assets_list',
@@ -161,6 +201,21 @@ function columns(card) {
 
 function rows(card) {
   return Array.isArray(card?.content?.rows) ? card.content.rows : []
+}
+
+function detailRoute(card, row) {
+  return resultDetailRoute(card, row, router, route)
+}
+
+function hasDetailLinks(card) {
+  return rows(card).some((row) => detailRoute(card, row))
+}
+
+function detailLinkLabel(row) {
+  const name = row?.name || row?.username || row?._resource_id || row?.id
+  return name
+    ? t('ChatAIResultOpenNamedDetail', { name: formatValue(name) })
+    : t('ChatAIResultOpenDetail')
 }
 
 function assetInitial(row) {
@@ -328,6 +383,36 @@ function formatFieldValue(key, value) {
   overflow-x: auto;
 }
 
+.result-detail-link {
+  display: inline-flex;
+  max-width: 100%;
+  align-items: center;
+  gap: 4px;
+  border-radius: 3px;
+  color: var(--ai-primary-dark, #148f76);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--ai-primary-dark, #148f76);
+    outline-offset: 3px;
+  }
+
+  .el-icon {
+    flex: 0 0 auto;
+    font-size: 12px;
+  }
+}
+
+.result-detail-action {
+  padding: 0 10px 10px;
+  font-size: 11px;
+}
+
 .result-table {
   width: 100%;
   border-collapse: collapse;
@@ -341,6 +426,11 @@ function formatFieldValue(key, value) {
     text-align: left;
     vertical-align: top;
     word-break: normal;
+  }
+
+  &__action {
+    width: 1%;
+    white-space: nowrap;
   }
 
   th {
@@ -420,6 +510,10 @@ function formatFieldValue(key, value) {
       font-family: inherit;
       font-size: 11px;
     }
+  }
+
+  &__link strong {
+    color: inherit;
   }
 
   &__status {

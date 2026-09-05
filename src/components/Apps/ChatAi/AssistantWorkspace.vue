@@ -204,11 +204,14 @@
             :busy="busy"
             :disabled="awaitingApproval || recoverableRun"
             :draft-key="composerDraftKey"
+            :page-context="currentPageContext"
+            :page-context-enabled="pageContextEnabled"
             :stopping="stopping"
             :stop-disabled="approvalProcessing"
             @error="handleMicrophoneError"
             @attachment-error="handleAttachmentError"
             @recording-change="composerRecording = $event"
+            @toggle-page-context="pageContextEnabled = !pageContextEnabled"
             @send="sendMessage"
             @stop="stopGeneration"
           />
@@ -248,6 +251,7 @@ import {
 } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 
 import store from '@/store'
 import { message } from '@/utils/vue/message'
@@ -256,6 +260,8 @@ import ConversationPanel from './components/ConversationPanel.vue'
 import ChatInput from './components/ChitChat/ChatInput.vue'
 import ChatMessage from './components/ChitChat/ChatMessage.vue'
 import { useChatAi } from './composables/useChatAi'
+import { capturePageContext, pageContextScope } from './utils/pageContext'
+import { friendlyChatError } from './utils/failurePresentation'
 
 const props = defineProps({
   active: {
@@ -302,6 +308,17 @@ const conversationPanel = ref(null)
 const historyToggle = ref(null)
 const historyOpen = ref(false)
 const composerRecording = ref(false)
+const route = useRoute()
+const pageContextEnabled = ref(false)
+const currentPageContext = computed(() => capturePageContext(route, store.getters.currentOrg))
+
+watch(
+  () => pageContextScope(route, store.getters.currentOrg),
+  () => {
+    pageContextEnabled.value = false
+  },
+  { flush: 'sync' }
+)
 const stickToBottom = ref(true)
 const showScrollToLatest = ref(false)
 
@@ -445,9 +462,7 @@ const suggestions = computed(() => {
 })
 
 function friendlyError(error) {
-  const code = error?.code || error?.response?.data?.code
-  if (['conversation_busy', 'run_queue_full'].includes(code)) return t('ChatAIConversationBusy')
-  return error?.detail || error?.response?.data?.detail || error?.message || t('ServerBusyRetry')
+  return friendlyChatError(error, t)
 }
 
 function handleRequestError(error) {
@@ -533,7 +548,10 @@ async function handleRename(conversation, title) {
 
 async function sendMessage(content, images, options) {
   stickToBottom.value = true
-  await sendMessageState(content, images, options)
+  const pageContext = pageContextEnabled.value
+    ? capturePageContext(route, store.getters.currentOrg)
+    : null
+  await sendMessageState(content, images, { ...options, pageContext })
   await nextTick()
   stickToBottom.value = true
   scrollToBottom(true, true)

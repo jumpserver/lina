@@ -22,6 +22,17 @@
       <ExecutionTrace v-if="message.role === 'assistant'" :active="messageActive" :items="trace" />
 
       <div :class="['chat-message__content', { 'has-error': message.status === 'failed' }]">
+        <div v-if="message.role === 'user' && pageContext" class="message-page-context">
+          <el-icon><Document /></el-icon>
+          <span>{{
+            t('ChatAIFailureContextAttached', {
+              page: pageContext.page.title || pageContext.page.name
+            })
+          }}</span>
+          <small v-if="pageContext.selected_assets.length">{{
+            pageContext.selected_assets.map((asset) => asset.name || asset.address).join('、')
+          }}</small>
+        </div>
         <div v-if="message.images?.length" class="message-images">
           <AuthenticatedImage
             v-for="image in message.images"
@@ -85,18 +96,13 @@
           </span>
         </div>
 
-        <div v-if="message.status === 'failed'" class="message-error">
-          <span class="message-error__icon"
-            ><el-icon><Warning /></el-icon
-          ></span>
-          <span>
-            <strong>{{ t('ChatAIResponseInterrupted') }}</strong>
-            <small>{{ message.error || t('ServerBusyRetry') }}</small>
-          </span>
-          <button type="button" @click="emit('retry', message.id)">
-            <el-icon><RefreshRight /></el-icon> {{ t('Retry') }}
-          </button>
-        </div>
+        <FailureCard
+          v-if="message.role === 'assistant' && ['failed', 'cancelled'].includes(message.status)"
+          :failure="failure"
+          :cancelled="message.status === 'cancelled'"
+          :can-retry="canRegenerate && safeToRetry"
+          @retry="emit('retry', message.id)"
+        />
       </div>
 
       <ApprovalCard
@@ -132,7 +138,12 @@
           <el-icon><Check v-if="copied" /><CopyDocument v-else /></el-icon>
         </button>
         <button
-          v-if="message.role === 'assistant' && message.status === 'completed' && canRegenerate"
+          v-if="
+            message.role === 'assistant' &&
+            message.status === 'completed' &&
+            canRegenerate &&
+            safeToRetry
+          "
           class="message-action message-action--regenerate"
           type="button"
           :aria-label="t('ChatAIRegenerate')"
@@ -182,8 +193,7 @@ import {
   EditPen,
   Loading,
   RefreshRight,
-  UserFilled,
-  Warning
+  UserFilled
 } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
 
@@ -193,9 +203,12 @@ import { message as flashMessage } from '@/utils/vue/message'
 import ApprovalCard from './ApprovalCard.vue'
 import AuthenticatedImage from './AuthenticatedImage.vue'
 import ExecutionTrace from './ExecutionTrace.vue'
+import FailureCard from './FailureCard.vue'
 import MessageText from './MessageText.vue'
 import ResultCards from './ResultCards.vue'
 import AssistantMark from '../AssistantMark.vue'
+import { canRetryMessage, messageFailure } from '../../utils/failurePresentation'
+import { getMessagePageContext } from '../../utils/pageContext'
 
 const props = defineProps({
   message: {
@@ -245,6 +258,9 @@ const editor = ref(null)
 const draftContent = ref('')
 const messageActive = computed(() => ['pending', 'streaming'].includes(props.message.status))
 const visibleResultCards = computed(() => props.message.result_cards || [])
+const failure = computed(() => messageFailure(props.message, props.trace))
+const safeToRetry = computed(() => canRetryMessage(props.message, props.trace))
+const pageContext = computed(() => getMessagePageContext(props.message))
 const showThinking = computed(() => {
   return (
     messageActive.value &&
@@ -770,83 +786,26 @@ function formatFileSize(size) {
   }
 }
 
-.message-error {
+.message-page-context {
   display: flex;
-  width: min(100%, 600px);
+  flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
-  margin-top: 10px;
-  padding: 10px 11px;
-  border: 1px solid #f0d0d4;
-  border-radius: 12px;
-  color: #8f4d58;
-  background: #fff5f6;
-
-  &__icon {
-    display: grid;
-    width: 28px;
-    height: 28px;
-    flex: 0 0 28px;
-    place-items: center;
-    border-radius: 9px;
-    color: #c85664;
-    background: #ffe5e8;
-  }
-
-  > span:nth-child(2) {
-    display: flex;
-    min-width: 0;
-    flex: 1;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  strong {
-    font-size: 10px;
-  }
+  gap: 4px 6px;
+  margin-bottom: 8px;
+  color: #65756f;
+  font-size: 11px;
+  line-height: 1.5;
 
   small {
-    color: #b17780;
-    font-size: 10px;
-    line-height: 1.45;
+    width: 100%;
+    padding-left: 20px;
     overflow-wrap: anywhere;
-  }
-
-  button {
-    display: inline-flex;
-    height: 28px;
-    align-items: center;
-    gap: 4px;
-    padding: 0 8px;
-    border: 1px solid #edc7cc;
-    border-radius: 8px;
-    color: #a54e5a;
-    background: #fff;
-    cursor: pointer;
-    font-size: 10px;
-    flex: 0 0 auto;
-
-    &:focus-visible {
-      outline: 2px solid rgb(213 92 105 / 32%);
-      outline-offset: 2px;
-    }
   }
 }
 
 @media (hover: none) {
   .chat-message.is-user .message-actions {
     opacity: 1;
-  }
-}
-
-@media (max-width: 520px) {
-  .message-error {
-    align-items: flex-start;
-    flex-wrap: wrap;
-
-    button {
-      margin-left: 38px;
-    }
   }
 }
 

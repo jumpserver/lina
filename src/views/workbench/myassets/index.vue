@@ -8,6 +8,9 @@
       :name="name"
       :table-url="tableUrl"
       :tree-url="treeUrl"
+      @selection-change="updateAssistantSelection"
+      @query-change="clearAssistantSelection"
+      @url-change="clearAssistantSelection"
     />
   </Page>
 </template>
@@ -17,6 +20,10 @@ import { getPreference } from '@/api/settings'
 import GrantedAssets from '@/components/Apps/GrantedAssets/index.vue'
 import { EditableInputFormatter } from '@/components/Table/TableFormatters'
 import Page from '@/layout/components/Page/index.vue'
+import {
+  publishAssetPageContext,
+  clearAssetPageContext
+} from '@/components/Apps/ChatAi/utils/pageContext'
 import { addBasePath, openNewWindow } from '@/utils/common/index'
 
 export default {
@@ -94,7 +101,27 @@ export default {
       this.preference = resp
     })
   },
+  watch: {
+    '$route.fullPath'() {
+      clearAssetPageContext(this)
+    },
+    '$store.getters.currentOrg.id'() {
+      clearAssetPageContext(this)
+    }
+  },
+  deactivated() {
+    clearAssetPageContext(this)
+  },
+  beforeUnmount() {
+    clearAssetPageContext(this)
+  },
   methods: {
+    clearAssistantSelection() {
+      clearAssetPageContext(this)
+    },
+    updateAssistantSelection(rows) {
+      publishAssetPageContext(this, this.$route, this.$store.getters.currentOrg, rows)
+    },
     refreshAllFavorites() {
       const formatterArgs = this.actions.formatterArgs
       formatterArgs.loading = true
