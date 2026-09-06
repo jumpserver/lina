@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import 'github-markdown-css/github-markdown-light.css'
+import "github-markdown-css/github-markdown-light.css"
 import DOMPurify from 'dompurify'
 import VueMarkdown from '@/components/Widgets/VueMarkdown/index.vue'
 
