@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import 'highlight.js/styles/atom-one-light.css'
+import "highlight.js/styles/atom-one-light.css"
 import { IBox } from '@/components'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import hljs from 'highlight.js'
