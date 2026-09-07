@@ -39,101 +39,136 @@
               <span class="section-heading__icon" aria-hidden="true"><Connection /></span>
               <div>
                 <h3>{{ t('ChatAIConnectionSection') }}</h3>
-                <p>{{ t('ChatAIConnectionDescription') }}</p>
+                <p>
+                  {{
+                    iframeMode
+                      ? t('ChatAIIframeConnectionDescription')
+                      : t('ChatAIConnectionDescription')
+                  }}
+                </p>
               </div>
             </div>
             <div class="provider-value">
               <span class="provider-value__status" />
-              <span>{{ t('ChatAICompatibleProvider') }}</span>
-              <el-tag effect="plain" size="small" type="success">OpenAI API</el-tag>
+              <span>{{
+                iframeMode ? t('ChatAIIframeMethod') : t('ChatAICompatibleProvider')
+              }}</span>
+              <el-tag effect="plain" size="small" type="success">
+                {{ iframeMode ? 'iframe' : 'OpenAI API' }}
+              </el-tag>
             </div>
           </header>
 
           <div class="form-grid">
+            <el-form-item class="form-field--full method-field" :label="t('ChatAIMethod')">
+              <el-radio-group v-model="form.CHAT_AI_METHOD">
+                <el-radio-button value="api">{{ t('ChatAIBuiltInMethod') }}</el-radio-button>
+                <el-radio-button value="iframe">{{ t('ChatAIIframeMethod') }}</el-radio-button>
+              </el-radio-group>
+              <div class="help-block">{{ t('ChatAIMethodHint') }}</div>
+            </el-form-item>
+
             <el-form-item
-              class="form-field--full"
-              :label="t('ChatAIBaseURL')"
-              prop="CHAT_AI_BASE_URL"
+              v-if="iframeMode"
+              class="form-field--full iframe-url-field"
+              :label="t('ChatAIIframeURL')"
+              prop="CHAT_AI_EMBED_URL"
               required
             >
-              <template #label>
-                <span>{{ t('ChatAIBaseURL') }}</span>
-              </template>
-              <el-tooltip
-                :content="form.CHAT_AI_BASE_URL"
-                :disabled="!baseUrlOverflow"
-                :popper-style="{
-                  maxWidth: 'min(720px, calc(100vw - 32px))',
-                  overflowWrap: 'anywhere'
-                }"
-                :show-after="300"
-                placement="top"
-              >
-                <el-input
-                  ref="baseUrlInput"
-                  v-model.trim="form.CHAT_AI_BASE_URL"
-                  autocomplete="off"
-                  :placeholder="t('ChatAIBaseURLPlaceholder')"
-                />
-              </el-tooltip>
-              <div class="help-block">{{ t('ChatAIBaseURLHint') }}</div>
-            </el-form-item>
-
-            <el-form-item :label="t('ChatAIAPIKey')">
               <el-input
-                v-model="form.CHAT_AI_API_KEY"
-                autocomplete="new-password"
-                :placeholder="t('ChatAIAPIKeyPlaceholder')"
-                show-password
-                type="password"
-              >
-                <template #prefix><Lock /></template>
-              </el-input>
-              <div class="help-block">{{ t('ChatAIAPIKeySavedHint') }}</div>
-            </el-form-item>
-
-            <el-form-item :label="t('ChatAIProxy')">
-              <el-input
-                v-model.trim="form.CHAT_AI_PROXY"
+                v-model.trim="form.CHAT_AI_EMBED_URL"
                 autocomplete="off"
-                :placeholder="t('ChatAIProxyPlaceholder')"
+                :placeholder="t('ChatAIIframeURLPlaceholder')"
               />
-              <div class="help-block">{{ t('ChatAIProxyHint') }}</div>
+              <div class="help-block">{{ t('ChatAIIframeURLHint') }}</div>
             </el-form-item>
 
-            <el-form-item class="form-field--full model-field" :label="t('ChatAIModel')">
-              <div class="model-picker">
-                <el-select
-                  v-model="form.CHAT_AI_MODEL"
-                  allow-create
-                  default-first-option
-                  filterable
-                  :loading="discovering"
-                  :placeholder="t('ChatAIModelPlaceholder')"
+            <template v-else>
+              <el-form-item
+                class="form-field--full base-url-field"
+                :label="t('ChatAIBaseURL')"
+                prop="CHAT_AI_BASE_URL"
+                required
+              >
+                <template #label>
+                  <span>{{ t('ChatAIBaseURL') }}</span>
+                </template>
+                <el-tooltip
+                  :content="form.CHAT_AI_BASE_URL"
+                  :disabled="!baseUrlOverflow"
+                  :popper-style="{
+                    maxWidth: 'min(720px, calc(100vw - 32px))',
+                    overflowWrap: 'anywhere'
+                  }"
+                  :show-after="300"
+                  placement="top"
                 >
-                  <el-option
-                    v-for="model in modelOptions"
-                    :key="model.id"
-                    :label="model.label"
-                    :value="model.id"
+                  <el-input
+                    ref="baseUrlInput"
+                    v-model.trim="form.CHAT_AI_BASE_URL"
+                    autocomplete="off"
+                    :placeholder="t('ChatAIBaseURLPlaceholder')"
                   />
-                </el-select>
-                <el-button
-                  :disabled="!endpointReady"
-                  :loading="discovering"
-                  @click="refreshModels()"
+                </el-tooltip>
+                <div class="help-block">{{ t('ChatAIBaseURLHint') }}</div>
+              </el-form-item>
+
+              <el-form-item class="api-key-field" :label="t('ChatAIAPIKey')">
+                <el-input
+                  v-model="form.CHAT_AI_API_KEY"
+                  autocomplete="new-password"
+                  :placeholder="t('ChatAIAPIKeyPlaceholder')"
+                  show-password
+                  type="password"
                 >
-                  <el-icon><Refresh /></el-icon>
-                  {{ t('ChatAIRefreshModels') }}
-                </el-button>
-              </div>
-              <div class="help-block model-help">
-                <span>{{ t('ChatAIManualModelHint') }}</span>
-                <span v-if="modelsDiscovered" class="model-count">
-                  {{ t('ChatAIModelsLoaded', { count: modelOptions.length }) }}
-                </span>
-              </div>
-            </el-form-item>
+                  <template #prefix><Lock /></template>
+                </el-input>
+                <div class="help-block">{{ t('ChatAIAPIKeySavedHint') }}</div>
+              </el-form-item>
+
+              <el-form-item class="proxy-field" :label="t('ChatAIProxy')">
+                <el-input
+                  v-model.trim="form.CHAT_AI_PROXY"
+                  autocomplete="off"
+                  :placeholder="t('ChatAIProxyPlaceholder')"
+                />
+                <div class="help-block">{{ t('ChatAIProxyHint') }}</div>
+              </el-form-item>
+
+              <el-form-item class="form-field--full model-field" :label="t('ChatAIModel')">
+                <div class="model-picker">
+                  <el-select
+                    v-model="form.CHAT_AI_MODEL"
+                    allow-create
+                    default-first-option
+                    filterable
+                    :loading="discovering"
+                    :placeholder="t('ChatAIModelPlaceholder')"
+                  >
+                    <el-option
+                      v-for="model in modelOptions"
+                      :key="model.id"
+                      :label="model.label"
+                      :value="model.id"
+                    />
+                  </el-select>
+                  <el-button
+                    :disabled="!endpointReady"
+                    :loading="discovering"
+                    @click="refreshModels()"
+                  >
+                    <el-icon><Refresh /></el-icon>
+                    {{ t('ChatAIRefreshModels') }}
+                  </el-button>
+                </div>
+                <div class="help-block model-help">
+                  <span>{{ t('ChatAIManualModelHint') }}</span>
+                  <span v-if="modelsDiscovered" class="model-count">
+                    {{ t('ChatAIModelsLoaded', { count: modelOptions.length }) }}
+                  </span>
+                </div>
+              </el-form-item>
+            </template>
           </div>
         </section>
 
@@ -144,6 +179,7 @@
           </div>
           <div class="form-action-buttons">
             <el-button
+              v-if="!iframeMode"
               :disabled="!endpointReady || !modelReady"
               :loading="testing"
               @click="testConfiguration"
@@ -172,42 +208,53 @@
             <span :style="{ width: `${readinessPercentage}%` }" />
           </div>
           <div class="configuration-status__items">
-            <div class="status-item" :class="{ complete: endpointReady }">
+            <div v-if="iframeMode" class="status-item" :class="{ complete: iframeReady }">
               <span class="status-item__icon"><Check /></span>
               <div>
-                <strong>{{ t('ChatAIEndpointReady') }}</strong>
-                <span>{{
-                  endpointReady ? t('ChatAIConfigured') : t('ChatAIWaitingConfiguration')
-                }}</span>
+                <strong>{{ t('ChatAIIframeURL') }}</strong>
+                <span>{{ iframeReady ? t('ChatAIConfigured') : t('ChatAIWaitingIframeURL') }}</span>
               </div>
             </div>
-            <div class="status-item" :class="{ complete: modelReady }">
-              <span class="status-item__icon"><Check /></span>
-              <div>
-                <strong>{{ t('ChatAIModelReady') }}</strong>
-                <span>{{ form.CHAT_AI_MODEL || t('ChatAIWaitingModel') }}</span>
+            <template v-else>
+              <div class="status-item" :class="{ complete: endpointReady }">
+                <span class="status-item__icon"><Check /></span>
+                <div>
+                  <strong>{{ t('ChatAIEndpointReady') }}</strong>
+                  <span>{{
+                    endpointReady ? t('ChatAIConfigured') : t('ChatAIWaitingConfiguration')
+                  }}</span>
+                </div>
               </div>
-            </div>
-            <div
-              class="status-item"
-              :class="{ complete: testState === 'success', failed: testState === 'failed' }"
-            >
-              <span class="status-item__icon"><Check /></span>
-              <div>
-                <strong>{{ t('ChatAIToolCallingReady') }}</strong>
-                <span>{{ testStatusText }}</span>
+              <div class="status-item" :class="{ complete: modelReady }">
+                <span class="status-item__icon"><Check /></span>
+                <div>
+                  <strong>{{ t('ChatAIModelReady') }}</strong>
+                  <span>{{ form.CHAT_AI_MODEL || t('ChatAIWaitingModel') }}</span>
+                </div>
               </div>
-            </div>
+              <div
+                class="status-item"
+                :class="{ complete: testState === 'success', failed: testState === 'failed' }"
+              >
+                <span class="status-item__icon"><Check /></span>
+                <div>
+                  <strong>{{ t('ChatAIToolCallingReady') }}</strong>
+                  <span>{{ testStatusText }}</span>
+                </div>
+              </div>
+            </template>
           </div>
         </section>
 
         <section class="capability-note">
           <span class="capability-note__icon" aria-hidden="true"><MagicStick /></span>
-          <h3>{{ t('ChatAICapabilityTitle') }}</h3>
-          <p>{{ t('ChatAICapabilityHint') }}</p>
+          <h3>{{ iframeMode ? t('ChatAIIframeMethod') : t('ChatAICapabilityTitle') }}</h3>
+          <p>{{ iframeMode ? t('ChatAIIframeCapabilityHint') : t('ChatAICapabilityHint') }}</p>
           <div class="security-note">
             <Lock />
-            <span>{{ t('ChatAICredentialSecurity') }}</span>
+            <span>{{
+              iframeMode ? t('ChatAIIframeSecurity') : t('ChatAICredentialSecurity')
+            }}</span>
           </div>
         </section>
       </aside>
@@ -249,12 +296,23 @@ let baseUrlResizeObserver
 
 const form = reactive({
   CHAT_AI_ENABLED: false,
+  CHAT_AI_METHOD: 'api',
+  CHAT_AI_EMBED_URL: '',
   CHAT_AI_BASE_URL: '',
   CHAT_AI_API_KEY: '',
   CHAT_AI_PROXY: '',
   CHAT_AI_MODEL: ''
 })
 const formRules = computed(() => ({
+  CHAT_AI_EMBED_URL: [
+    {
+      required: true,
+      whitespace: true,
+      message: t('FieldRequiredError'),
+      trigger: ['blur', 'change']
+    },
+    { validator: validateIframeUrlFormat, trigger: ['blur', 'change'] }
+  ],
   CHAT_AI_BASE_URL: [
     {
       required: true,
@@ -266,21 +324,27 @@ const formRules = computed(() => ({
   ]
 }))
 
+const iframeMode = computed(() => form.CHAT_AI_METHOD === 'iframe')
+const iframeReady = computed(() => isValidIframeUrl(form.CHAT_AI_EMBED_URL))
 const endpointReady = computed(() => isValidBaseUrl(form.CHAT_AI_BASE_URL))
 const modelReady = computed(() => Boolean(form.CHAT_AI_MODEL))
-const readinessTotal = 3
+const readinessTotal = computed(() => (iframeMode.value ? 1 : 3))
 const readinessCount = computed(() => {
+  if (iframeMode.value) return Number(iframeReady.value)
   return (
     Number(endpointReady.value) + Number(modelReady.value) + Number(testState.value === 'success')
   )
 })
-const readinessPercentage = computed(() => (readinessCount.value / readinessTotal) * 100)
+const readinessPercentage = computed(() => (readinessCount.value / readinessTotal.value) * 100)
 const readinessState = computed(() => {
-  if (readinessCount.value === readinessTotal) return 'ready'
+  if (readinessCount.value === readinessTotal.value) return 'ready'
   if (testState.value === 'failed') return 'failed'
   return 'pending'
 })
 const testStatusText = computed(() => {
+  if (iframeMode.value) {
+    return iframeReady.value ? t('ChatAIIframeReady') : t('ChatAIWaitingIframeURL')
+  }
   if (testing.value) return t('ChatAITestingCapability')
   if (testState.value === 'success') return t('ChatAITestPassed')
   if (testState.value === 'failed') return t('ChatAITestFailed')
@@ -301,6 +365,9 @@ function updateBaseUrlOverflow() {
 }
 
 function observeBaseUrlInput() {
+  baseUrlResizeObserver?.disconnect()
+  baseUrlResizeObserver = undefined
+
   const input = getBaseUrlNativeInput()
   if (!input || typeof ResizeObserver === 'undefined') return
 
@@ -320,11 +387,31 @@ function isValidBaseUrl(value) {
   }
 }
 
+function isValidIframeUrl(value) {
+  const embedUrl = String(value || '').trim()
+  if (!embedUrl || !/^[\x21-\x7e]+$/.test(embedUrl)) return false
+
+  try {
+    const url = new URL(embedUrl)
+    return ['http:', 'https:'].includes(url.protocol) && Boolean(url.hostname)
+  } catch {
+    return false
+  }
+}
+
 function validateBaseUrlFormat(_rule, value, callback) {
   if (!String(value || '').trim() || isValidBaseUrl(value)) {
     callback()
   } else {
     callback(new Error(t('ChatAIBaseURLInvalid')))
+  }
+}
+
+function validateIframeUrlFormat(_rule, value, callback) {
+  if (!String(value || '').trim() || isValidIframeUrl(value)) {
+    callback()
+  } else {
+    callback(new Error(t('ChatAIIframeURLInvalid')))
   }
 }
 
@@ -335,6 +422,19 @@ async function validateBaseUrlField() {
   } catch {
     return false
   }
+}
+
+async function validateIframeUrlField() {
+  try {
+    await providerForm.value?.validateField('CHAT_AI_EMBED_URL')
+    return true
+  } catch {
+    return false
+  }
+}
+
+function validateCurrentConnection() {
+  return iframeMode.value ? validateIframeUrlField() : validateBaseUrlField()
 }
 
 function getErrorMessage(error) {
@@ -370,11 +470,11 @@ function updatePublicSettings(values) {
 }
 
 async function changeChatAIEnabled(enabled) {
-  if (enabled && !(await validateBaseUrlField())) {
+  if (enabled && !(await validateCurrentConnection())) {
     form.CHAT_AI_ENABLED = false
     return
   }
-  if (enabled && !form.CHAT_AI_MODEL) {
+  if (enabled && !iframeMode.value && !form.CHAT_AI_MODEL) {
     form.CHAT_AI_ENABLED = false
     message.warning(t('ChatAIModelRequired'))
     return
@@ -382,8 +482,20 @@ async function changeChatAIEnabled(enabled) {
 
   switchingEnabled.value = true
   try {
-    await saveChatAISettings({ CHAT_AI_ENABLED: enabled })
-    await updatePublicSettings({ CHAT_AI_ENABLED: enabled })
+    const payload = { CHAT_AI_ENABLED: enabled }
+    const publicSettings = { CHAT_AI_ENABLED: enabled }
+    if (enabled) {
+      Object.assign(payload, {
+        CHAT_AI_METHOD: form.CHAT_AI_METHOD,
+        CHAT_AI_EMBED_URL: form.CHAT_AI_EMBED_URL
+      })
+      Object.assign(publicSettings, {
+        CHAT_AI_METHOD: form.CHAT_AI_METHOD,
+        CHAT_AI_EMBED_URL: form.CHAT_AI_EMBED_URL
+      })
+    }
+    await saveChatAISettings(payload)
+    await updatePublicSettings(publicSettings)
     message.success(t('ChatAISettingsSaved'))
   } catch (error) {
     form.CHAT_AI_ENABLED = !enabled
@@ -426,6 +538,7 @@ async function refreshModels(options = {}) {
 }
 
 async function testConfiguration() {
+  if (iframeMode.value) return
   if (!(await validateBaseUrlField())) return
   if (!form.CHAT_AI_MODEL) {
     message.warning(t('ChatAIModelRequired'))
@@ -446,8 +559,8 @@ async function testConfiguration() {
 }
 
 async function saveConfiguration() {
-  if (!(await validateBaseUrlField())) return
-  if (form.CHAT_AI_ENABLED && !form.CHAT_AI_MODEL) {
+  if (!(await validateCurrentConnection())) return
+  if (form.CHAT_AI_ENABLED && !iframeMode.value && !form.CHAT_AI_MODEL) {
     message.warning(t('ChatAIModelRequired'))
     return
   }
@@ -455,9 +568,15 @@ async function saveConfiguration() {
   try {
     await saveChatAISettings({
       CHAT_AI_ENABLED: form.CHAT_AI_ENABLED,
+      CHAT_AI_METHOD: form.CHAT_AI_METHOD,
+      CHAT_AI_EMBED_URL: form.CHAT_AI_EMBED_URL,
       ...providerPayload()
     })
-    await updatePublicSettings({ CHAT_AI_ENABLED: form.CHAT_AI_ENABLED })
+    await updatePublicSettings({
+      CHAT_AI_ENABLED: form.CHAT_AI_ENABLED,
+      CHAT_AI_METHOD: form.CHAT_AI_METHOD,
+      CHAT_AI_EMBED_URL: form.CHAT_AI_EMBED_URL
+    })
     hydrated.value = false
     form.CHAT_AI_API_KEY = ''
     hydrated.value = true
@@ -470,7 +589,14 @@ async function saveConfiguration() {
 }
 
 watch(
-  () => [form.CHAT_AI_BASE_URL, form.CHAT_AI_API_KEY, form.CHAT_AI_PROXY, form.CHAT_AI_MODEL],
+  () => [
+    form.CHAT_AI_METHOD,
+    form.CHAT_AI_EMBED_URL,
+    form.CHAT_AI_BASE_URL,
+    form.CHAT_AI_API_KEY,
+    form.CHAT_AI_PROXY,
+    form.CHAT_AI_MODEL
+  ],
   () => {
     if (!hydrated.value) return
     testState.value = 'idle'
@@ -480,11 +606,20 @@ watch(
 
 watch(() => form.CHAT_AI_BASE_URL, updateBaseUrlOverflow, { flush: 'post' })
 
+watch(iframeMode, async () => {
+  providerForm.value?.clearValidate(['CHAT_AI_BASE_URL', 'CHAT_AI_EMBED_URL'])
+  await nextTick()
+  observeBaseUrlInput()
+  updateBaseUrlOverflow()
+})
+
 onMounted(async () => {
   try {
     const settings = await getChatAISettings()
     Object.assign(form, {
       CHAT_AI_ENABLED: Boolean(settings?.CHAT_AI_ENABLED),
+      CHAT_AI_METHOD: ['embed', 'iframe'].includes(settings?.CHAT_AI_METHOD) ? 'iframe' : 'api',
+      CHAT_AI_EMBED_URL: settings?.CHAT_AI_EMBED_URL || '',
       CHAT_AI_BASE_URL: settings?.CHAT_AI_BASE_URL || '',
       CHAT_AI_API_KEY: '',
       CHAT_AI_PROXY: settings?.CHAT_AI_PROXY || '',
@@ -492,7 +627,7 @@ onMounted(async () => {
     })
     ensureCurrentModel([])
     hydrated.value = true
-    if (form.CHAT_AI_BASE_URL || form.CHAT_AI_MODEL) {
+    if (!iframeMode.value && (form.CHAT_AI_BASE_URL || form.CHAT_AI_MODEL)) {
       await refreshModels({ silent: true })
     }
   } catch (error) {
@@ -511,13 +646,13 @@ onBeforeUnmount(() => baseUrlResizeObserver?.disconnect())
 <style lang="scss" scoped>
 .chat-ai-settings {
   :deep(.el-card__header) {
-    padding: 16px 24px;
+    padding: 16px 20px;
     background: linear-gradient(110deg, #fff 0%, #f4fbf8 100%);
   }
 
   :deep(.el-card__body) {
     display: block;
-    padding: 24px;
+    padding: 16px 20px 20px;
     background: #f5f7f6;
   }
 }
@@ -603,18 +738,16 @@ onBeforeUnmount(() => baseUrlResizeObserver?.disconnect())
 .settings-shell {
   display: grid;
   width: 100%;
-  max-width: 1560px;
-  margin: 0 auto;
   align-items: start;
-  gap: 20px;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 320px);
+  gap: 16px;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 380px);
 }
 
 .provider-form {
   display: flex;
   min-width: 0;
   flex-direction: column;
-  gap: 16px;
+  gap: 0;
 }
 
 .settings-panel,
@@ -629,6 +762,7 @@ onBeforeUnmount(() => baseUrlResizeObserver?.disconnect())
 
 .settings-panel {
   overflow: hidden;
+  border-radius: 8px 8px 0 0;
 }
 
 .section-header {
@@ -740,6 +874,8 @@ onBeforeUnmount(() => baseUrlResizeObserver?.disconnect())
   justify-content: space-between;
   gap: 16px;
   padding: 13px 16px;
+  border-top: 0;
+  border-radius: 0 0 8px 8px;
 }
 
 .form-action-buttons {
@@ -1005,7 +1141,29 @@ onBeforeUnmount(() => baseUrlResizeObserver?.disconnect())
   line-height: 18px;
 }
 
-@media (width <= 980px) {
+@media (width >= 1500px) {
+  .form-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .base-url-field {
+    grid-column: span 7;
+  }
+
+  .api-key-field {
+    grid-column: span 5;
+  }
+
+  .proxy-field {
+    grid-column: span 5;
+  }
+
+  .model-field {
+    grid-column: span 7;
+  }
+}
+
+@media (width <= 1180px) {
   .settings-shell {
     grid-template-columns: 1fr;
   }

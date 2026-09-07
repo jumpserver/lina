@@ -154,6 +154,69 @@
 import IBox from '@/components/Common/IBox/index.vue'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { copy, downloadText } from '@/utils/common/index'
+import { encryptPassword } from '@/utils/secure'
+
+function isValidOpenBaoAddress(value) {
+  const address = String(value || '').trim()
+  if (!address || !/^[\x21-\x7e]+$/.test(address)) {
+    return false
+  }
+
+  try {
+    const url = new URL(address)
+    return ['http:', 'https:'].includes(url.protocol) && Boolean(url.hostname)
+  } catch {
+    return false
+  }
+}
+
+function isValidIPv4Address(value) {
+  const parts = value.split('.')
+  return (
+    parts.length === 4 &&
+    parts.every((part) => {
+      if (!/^\d{1,3}$/.test(part) || (part.length > 1 && part.startsWith('0'))) {
+        return false
+      }
+      return Number(part) <= 255
+    })
+  )
+}
+
+function isValidIPv6Address(value) {
+  try {
+    const url = new URL(`http://[${value}]/`)
+    return Boolean(url.hostname)
+  } catch {
+    return false
+  }
+}
+
+function isValidCIDR(value) {
+  const parts = value.split('/')
+  if (
+    parts.length !== 2 ||
+    !/^\d{1,3}$/.test(parts[1]) ||
+    (parts[1].length > 1 && parts[1].startsWith('0'))
+  ) {
+    return false
+  }
+
+  const [address, prefixText] = parts
+  const prefix = Number(prefixText)
+  if (address.includes(':')) {
+    return prefix <= 128 && isValidIPv6Address(address)
+  }
+  return prefix <= 32 && isValidIPv4Address(address)
+}
+
+function isValidCIDRList(value) {
+  const cidrs = String(value || '')
+    .split(',')
+    .map((item) => item.trim())
+
+  return cidrs.length > 0 && cidrs.every((cidr) => cidr && isValidCIDR(cidr))
+}
 
 export default {
   name: 'SSHCA',
@@ -163,10 +226,31 @@ export default {
   },
   data() {
     const vm = this
+    const validateOpenBaoAddress = (rule, value, callback) => {
+      const address = String(value || '').trim()
+      if (!address && !vm.testingConnection) {
+        callback()
+      } else if (!address) {
+        callback(new Error(vm.$t('FieldRequiredError')))
+      } else if (!isValidOpenBaoAddress(address)) {
+        callback(new Error(vm.$t('FormatError')))
+      } else {
+        callback()
+      }
+    }
+    const validateAllowedSources = (rule, value, callback) => {
+      const sourceAddresses = String(value || '').trim()
+      if (!sourceAddresses || isValidCIDRList(sourceAddresses)) {
+        callback()
+      } else {
+        callback(new Error(vm.$t('FormatError')))
+      }
+    }
     return {
       url: '/api/v1/settings/setting/?category=ssh_ca',
       publicKey: '',
       publicKeyLoading: false,
+      testingConnection: false,
       hasReset: false,
       hasDetailInMsg: false,
       labelWidth: '30%',
@@ -180,7 +264,7 @@ export default {
           icon: 'Connection',
           loading: false,
           callback(value, form, btn) {
-            vm.testConnection(value, btn)
+            vm.testConnection(value, form, btn)
           }
         }
       ],
@@ -209,6 +293,7 @@ export default {
           label: this.$t('SSHCAOpenBaoAddress'),
           helpText: this.$t('SSHCAAddressHelp'),
           helpTextAsTip: true,
+          rules: [{ validator: validateOpenBaoAddress, trigger: ['blur', 'change'] }],
           el: {
             placeholder: 'https://openbao.example.com:8200'
           }
@@ -240,6 +325,7 @@ export default {
           label: this.$t('SSHCAAllowedSources'),
           helpText: this.$t('SSHCAAllowedSourcesHelp'),
           helpTextAsTip: false,
+          rules: [{ validator: validateAllowedSources, trigger: ['blur', 'change'] }],
           el: {
             placeholder: '10.20.30.0/24, 10.40.50.10/32'
           }
@@ -251,10 +337,23 @@ export default {
     }
   },
   methods: {
-    testConnection(value, btn) {
+    async testConnection(value, form, btn) {
+      this.testingConnection = true
+      try {
+        await form.validate()
+      } catch {
+        return
+      } finally {
+        this.testingConnection = false
+      }
+
+      const testValue = { ...value }
+      if (testValue.SSH_CA_OPENBAO_TOKEN) {
+        testValue.SSH_CA_OPENBAO_TOKEN = encryptPassword(testValue.SSH_CA_OPENBAO_TOKEN)
+      }
       btn.loading = true
       this.$axios
-        .post('/api/v1/settings/ssh-ca/openbao/testing/', value)
+        .post('/api/v1/settings/ssh-ca/openbao/testing/', testValue)
         .then((res) => {
           this.publicKey = res.public_key
           this.$message.success(res.msg)
