@@ -19,6 +19,10 @@ export default {
   },
   data() {
     const vm = this
+    const isOwnFlow = (row) => {
+      const currentOrg = vm.$store.getters.currentOrg
+      return currentOrg.is_root || row.org_id === currentOrg.id
+    }
     return {
       createDrawer: () => import('@/views/tickets/TicketFlow/FlowCreateUpdate'),
       detailDrawer: () => import('@/views/tickets/TicketFlow/Detail'),
@@ -72,9 +76,7 @@ export default {
               hasClone: false,
               hasDelete: true,
               canDelete: ({ row }) => {
-                const currentOrg = vm.$store.getters.currentOrg
-                const isOwnFlow = currentOrg.is_root || row.org_id === currentOrg.id
-                return vm.$hasPerm('tickets.delete_ticketflow') && isOwnFlow
+                return vm.$hasPerm('tickets.delete_ticketflow') && isOwnFlow(row)
               },
               canUpdate: () => {
                 return vm.$hasPerm('tickets.change_ticketflow')
@@ -85,7 +87,7 @@ export default {
       },
       headerActions: {
         hasLeftActions: true,
-        hasBulkDelete: false,
+        hasBulkDelete: true,
         createRoute: { name: 'TicketFlowCreate' },
         hasSearch: false,
         hasImport: false
