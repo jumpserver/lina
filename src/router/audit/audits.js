@@ -88,7 +88,8 @@ export default [
     component: () => import('@/views/audits/ChatAIConversationAudit/index.vue'),
     meta: {
       title: i18n.t('ChatAIConversationAudit'),
-      icon: 'chat',
+      menuTitle: i18n.t('ChatAI'),
+      icon: 'short-message',
       permissions: [],
       hidden: () => {
         const settings = store.getters.publicSettings || {}
