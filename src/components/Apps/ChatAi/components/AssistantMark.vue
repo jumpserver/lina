@@ -20,7 +20,7 @@ defineProps({
   }
 })
 
-const assistantIcon = getAssetUrl('img/ai-assistant.svg')
+const assistantIcon = getAssetUrl('img/robot-assistant.png')
 </script>
 
 <style lang="scss" scoped>
@@ -36,6 +36,11 @@ const assistantIcon = getAssetUrl('img/ai-assistant.svg')
 
   &--small {
     --mark-size: 26px;
+
+    img {
+      width: 22px;
+      height: 22px;
+    }
   }
 
   &--large {

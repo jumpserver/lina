@@ -34,7 +34,7 @@
               :title="t('ChatAIHideLauncher')"
               @click.stop="hideLauncher"
             >
-              <el-icon><ArrowRightBold /></el-icon>
+              <el-icon><Close /></el-icon>
             </button>
             <button
               ref="launcher"
@@ -142,7 +142,6 @@ import {
   watch
 } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { ArrowRightBold } from '@element-plus/icons-vue'
 import ElFocusTrap from 'element-plus/es/components/focus-trap/index.mjs'
 
 import { getAssetUrl } from '@/utils/assets'
@@ -261,7 +260,7 @@ const panelCompact = computed(() => {
       : renderedPanelRect.value?.width || PANEL_DEFAULT_WIDTH
   return width <= PANEL_COMPACT_BREAKPOINT
 })
-const assistantIcon = getAssetUrl('img/ai-assistant.svg')
+const assistantIcon = getAssetUrl('img/robot-assistant.png')
 const launcherInteraction = {
   pointerId: null,
   captureTarget: null,
@@ -921,7 +920,7 @@ onBeforeUnmount(() => {
   &:focus-within .assistant-launcher__hide {
     opacity: 1;
     pointer-events: auto;
-    transform: translateX(0);
+    transform: scale(1);
   }
 }
 
@@ -956,28 +955,30 @@ onBeforeUnmount(() => {
 
   img {
     display: block;
-    width: 44px;
-    height: 44px;
+    width: 22px;
+    height: 22px;
     pointer-events: none;
   }
 
   &__hide {
     position: absolute;
-    z-index: 1;
-    top: 0;
-    left: -36px;
+    z-index: 2;
+    top: 3px;
+    right: 3px;
     display: grid;
-    width: 36px;
-    height: 44px;
+    width: 16px;
+    height: 16px;
     padding: 0;
     border: 0;
+    border-radius: 50%;
     opacity: 0;
     color: var(--ai-text-secondary);
-    background: transparent;
+    background: rgb(255 255 255 / 96%);
+    box-shadow: 0 1px 5px rgb(24 43 38 / 20%);
     cursor: pointer;
     pointer-events: none;
     place-items: center;
-    transform: translateX(4px);
+    transform: scale(0.82);
     transition:
       opacity 0.15s ease,
       color 0.15s ease,
@@ -989,22 +990,18 @@ onBeforeUnmount(() => {
       opacity: 1;
       color: var(--ai-primary-dark);
       outline: none;
-      transform: translateX(0);
+      transform: scale(1);
     }
 
     .el-icon {
-      width: 24px;
-      height: 24px;
-      border-radius: 7px;
-      background: rgb(255 255 255 / 94%);
-      box-shadow: 0 2px 8px rgb(24 43 38 / 11%);
-      font-size: 11px;
-      transition: background 0.15s ease;
+      width: 10px;
+      height: 10px;
+      font-size: 10px;
     }
 
     &:hover .el-icon,
     &:focus-visible .el-icon {
-      background: var(--el-color-primary-light-9, #e8f7f3);
+      color: var(--ai-primary-dark);
     }
 
     &:focus-visible .el-icon {
@@ -1051,9 +1048,9 @@ onBeforeUnmount(() => {
       box-shadow 0.18s ease;
 
     img {
-      width: 38px;
-      height: 38px;
-      flex: 0 0 38px;
+      width: 22px;
+      height: 22px;
+      flex: 0 0 22px;
       border-radius: 50%;
     }
   }
@@ -1245,8 +1242,8 @@ onBeforeUnmount(() => {
     height: 44px;
 
     img {
-      width: 44px;
-      height: 44px;
+      width: 22px;
+      height: 22px;
     }
   }
 
@@ -1270,11 +1267,9 @@ onBeforeUnmount(() => {
 
 @media (pointer: coarse) {
   .assistant-launcher__hide {
-    left: -44px;
-    width: 44px;
     opacity: 0.72;
     pointer-events: auto;
-    transform: translateX(0);
+    transform: scale(1);
   }
 
   .assistant-resize-handle {
