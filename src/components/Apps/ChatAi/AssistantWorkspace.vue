@@ -21,18 +21,6 @@
       @pointerdown="handleHeaderPointerDown"
     >
       <div class="assistant-header__brand">
-        <button
-          ref="historyToggle"
-          class="header-icon history-toggle"
-          :aria-controls="compact ? historyPanelId : undefined"
-          :aria-expanded="compact ? historyOpen : undefined"
-          :aria-label="t('History')"
-          :title="t('History')"
-          type="button"
-          @click="historyOpen = !historyOpen"
-        >
-          <el-icon><Clock /></el-icon>
-        </button>
         <AssistantMark :active="streaming" size="small" />
         <span class="brand-copy">
           <strong>{{ t('ChatAIName') }}</strong>
@@ -77,6 +65,30 @@
         >
           <el-icon><component :is="expanded ? ScaleToOriginal : FullScreen" /></el-icon>
         </button>
+        <el-dropdown
+          class="header-more-dropdown"
+          popper-class="chat-ai-header-actions-dropdown"
+          trigger="click"
+          @command="handleHeaderAction"
+        >
+          <button
+            ref="headerActionsToggle"
+            class="header-icon"
+            :aria-label="t('MoreActions')"
+            :title="t('MoreActions')"
+            type="button"
+          >
+            <el-icon><More /></el-icon>
+          </button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="history">
+                <el-icon><Clock /></el-icon>
+                <span>{{ t('History') }}</span>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
         <button
           v-if="!standalone"
           class="header-icon"
@@ -159,22 +171,41 @@
           </div>
 
           <div v-else class="message-list">
-            <ChatMessage
+            <template
               v-for="item in visibleMessages"
               :key="item.version?.root_id || item._render_key || item.id"
-              :approval="approval"
-              :approval-processing="approvalProcessing"
-              :assistant-name="t('ChatAIName')"
-              :can-edit="!busy && features.branch"
-              :can-regenerate="features.regenerate && item.id === latestAssistantMessageId"
-              :message="item"
-              :trace="traces[item.id] || []"
-              @cancel-approval="handleCancelApproval"
-              @branch="handleBranchMessage"
-              @confirm-approval="handleConfirmApproval"
-              @retry="handleRegenerateMessage"
-              @select-version="selectAnswerVersion(item.version?.root_id, $event)"
-            />
+            >
+              <ChatMessage
+                :approval="approval"
+                :approval-processing="approvalProcessing"
+                :assistant-name="t('ChatAIName')"
+                :can-edit="!busy && features.branch"
+                :can-regenerate="features.regenerate && item.id === latestAssistantMessageId"
+                :message="item"
+                :trace="traces[item.id] || []"
+                @cancel-approval="handleCancelApproval"
+                @branch="handleBranchMessage"
+                @confirm-approval="handleConfirmApproval"
+                @retry="handleRegenerateMessage"
+                @select-version="selectAnswerVersion(item.version?.root_id, $event)"
+              />
+              <div
+                v-if="conversationDisclaimerVisible && item.id === firstUserMessageId"
+                class="conversation-disclaimer"
+                role="status"
+              >
+                <el-icon class="conversation-disclaimer__icon"><Warning /></el-icon>
+                <span>{{ t('ChatAIDisclaimer') }}</span>
+                <button
+                  type="button"
+                  :aria-label="t('Close')"
+                  :title="t('Close')"
+                  @click="dismissConversationDisclaimer"
+                >
+                  <el-icon><Close /></el-icon>
+                </button>
+              </div>
+            </template>
           </div>
         </div>
 
@@ -215,9 +246,6 @@
             @send="sendMessage"
             @stop="stopGeneration"
           />
-          <div class="composer-disclaimer">
-            <span :title="t('ChatAIDisclaimer')">{{ t('ChatAIDisclaimer') }}</span>
-          </div>
         </footer>
       </main>
     </div>
@@ -244,6 +272,7 @@ import {
   EditPen,
   FullScreen,
   Monitor,
+  More,
   RefreshLeft,
   ScaleToOriginal,
   Setting,
@@ -305,7 +334,7 @@ const windowAdjustShortcuts =
 const composer = ref(null)
 const scrollArea = ref(null)
 const conversationPanel = ref(null)
-const historyToggle = ref(null)
+const headerActionsToggle = ref(null)
 const historyOpen = ref(false)
 const composerRecording = ref(false)
 const route = useRoute()
@@ -321,6 +350,8 @@ watch(
 )
 const stickToBottom = ref(true)
 const showScrollToLatest = ref(false)
+const conversationDisclaimerVisible = ref(false)
+let conversationDisclaimerTimer = null
 
 const {
   conversations,
@@ -359,6 +390,9 @@ const {
   deactivateLifecycle
 } = useChatAi({ onError: handleRequestError })
 
+const firstUserMessageId = computed(() => {
+  return visibleMessages.value.find((item) => item.role === 'user')?.id || ''
+})
 const activityLabel = computed(() => {
   if (stopping.value) return t('ChatAIStopping')
   if (composerRecording.value) return t('ChatAIRecording')
@@ -434,6 +468,12 @@ function handleHeaderKeyDown(event) {
   emit('window-keyboard-adjust', { key: event.key, resize: event.shiftKey })
 }
 
+function handleHeaderAction(command) {
+  if (command === 'history') {
+    historyOpen.value = !historyOpen.value
+  }
+}
+
 const suggestions = computed(() => {
   const permissions = new Set(store.getters.currentOrgPerms || [])
   return [
@@ -486,6 +526,7 @@ async function selectConversation(id) {
     message.warning(t('ChatAIFinishCurrentTask'))
     return
   }
+  dismissConversationDisclaimer()
   const selected = await selectConversationState(id)
   if (!selected) message.warning(t('ChatAIFinishCurrentTask'))
   await nextTick()
@@ -503,6 +544,7 @@ function handleNew() {
     message.warning(t('ChatAIFinishCurrentTask'))
     return
   }
+  dismissConversationDisclaimer()
   historyOpen.value = false
   nextTick(() => {
     if (alreadyNew) composer.value?.clear()
@@ -548,13 +590,35 @@ async function handleRename(conversation, title) {
 
 async function sendMessage(content, images, options) {
   stickToBottom.value = true
+  const isFirstQuestion = visibleMessages.value.length === 0
+  const onAccepted = options?.onAccepted
   const pageContext = pageContextEnabled.value
     ? capturePageContext(route, store.getters.currentOrg)
     : null
-  await sendMessageState(content, images, { ...options, pageContext })
+  await sendMessageState(content, images, {
+    ...options,
+    pageContext,
+    onAccepted: () => {
+      onAccepted?.()
+      if (!isFirstQuestion) return
+      showConversationDisclaimer()
+    }
+  })
   await nextTick()
   stickToBottom.value = true
   scrollToBottom(true, true)
+}
+
+function showConversationDisclaimer() {
+  dismissConversationDisclaimer()
+  conversationDisclaimerVisible.value = true
+  conversationDisclaimerTimer = window.setTimeout(dismissConversationDisclaimer, 6000)
+}
+
+function dismissConversationDisclaimer() {
+  if (conversationDisclaimerTimer) window.clearTimeout(conversationDisclaimerTimer)
+  conversationDisclaimerTimer = null
+  conversationDisclaimerVisible.value = false
 }
 
 async function handleBranchMessage(messageId, content) {
@@ -727,7 +791,7 @@ watch(
 watch(historyOpen, async (open) => {
   await nextTick()
   if (open) conversationPanel.value?.focusSearch()
-  else if (props.active) historyToggle.value?.focus()
+  else if (props.active) headerActionsToggle.value?.focus()
 })
 
 onMounted(() => {
@@ -739,7 +803,10 @@ onActivated(() => {
 })
 
 onDeactivated(suspendWorkspace)
-onBeforeUnmount(suspendWorkspace)
+onBeforeUnmount(() => {
+  dismissConversationDisclaimer()
+  suspendWorkspace()
+})
 
 defineExpose({ init, focus, newConversation: handleNew })
 </script>
@@ -923,7 +990,7 @@ defineExpose({ init, focus, newConversation: handleNew })
   }
 }
 
-.history-toggle {
+.header-more-dropdown {
   display: none;
 }
 
@@ -955,6 +1022,52 @@ defineExpose({ init, focus, newConversation: handleNew })
 .message-list {
   width: 100%;
   padding: 12px 0 16px;
+}
+
+.conversation-disclaimer {
+  display: flex;
+  width: min(760px, calc(100% - 36px));
+  align-items: flex-start;
+  gap: 8px;
+  margin: -2px auto 10px;
+  padding: 8px 10px;
+  border: 1px solid #f0d6aa;
+  border-radius: var(--ai-radius-sm);
+  color: #7c5b31;
+  background: #fff9ef;
+  font-size: 11px;
+  line-height: 1.55;
+  text-align: left;
+
+  &__icon {
+    flex: 0 0 auto;
+    margin-top: 1px;
+    color: #b8792c;
+    font-size: 14px;
+  }
+
+  span {
+    min-width: 0;
+    flex: 1;
+  }
+
+  button {
+    display: grid;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    padding: 0;
+    place-items: center;
+    border: 0;
+    border-radius: var(--ai-radius-xs);
+    color: #967044;
+    background: transparent;
+    cursor: pointer;
+
+    &:hover {
+      background: #f9ebd3;
+    }
+  }
 }
 
 .scroll-anchor {
@@ -1005,25 +1118,6 @@ defineExpose({ init, focus, newConversation: handleNew })
 .scroll-latest-leave-to {
   opacity: 0;
   transform: translate(50%, 6px);
-}
-
-.composer-disclaimer {
-  min-height: 16px;
-  padding: 2px 4px 0;
-  overflow: hidden;
-  color: #737b87;
-  font-size: 11px;
-  line-height: 14px;
-  text-align: center;
-
-  span {
-    display: -webkit-box;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: normal;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-  }
 }
 
 .recovery-banner {
@@ -1325,8 +1419,8 @@ defineExpose({ init, focus, newConversation: handleNew })
     }
   }
 
-  .history-toggle {
-    display: inline-grid;
+  .header-more-dropdown {
+    display: inline-flex;
   }
 
   .mobile-backdrop {
@@ -1368,8 +1462,8 @@ defineExpose({ init, focus, newConversation: handleNew })
 }
 
 @media (max-width: 760px) {
-  .history-toggle {
-    display: inline-grid;
+  .header-more-dropdown {
+    display: inline-flex;
   }
 
   .mobile-backdrop {

@@ -1,7 +1,18 @@
 <template>
   <el-config-provider :z-index="2700">
+    <iframe
+      v-if="standalone && iframeMode"
+      ref="iframe"
+      class="iframe-assistant__frame iframe-assistant__frame--standalone"
+      :src="iframeSource"
+      :key="`${iframeSandbox}:${iframeSource}`"
+      :sandbox="iframeSandbox"
+      :title="t('ChatAIIframeMethod')"
+      referrerpolicy="no-referrer"
+    />
+
     <AssistantWorkspace
-      v-if="standalone"
+      v-else-if="standalone"
       ref="workspace"
       :active="componentActive"
       :compact="compactViewport"
@@ -95,7 +106,74 @@
               focus-start-el="container"
               @focus-after-released="handleFocusAfterReleased"
             >
+              <div v-if="iframeMode" class="iframe-assistant">
+                <header
+                  class="iframe-assistant__header"
+                  :aria-keyshortcuts="
+                    !mobileViewport && !expanded ? WINDOW_ADJUST_SHORTCUTS : undefined
+                  "
+                  :aria-label="
+                    !mobileViewport && !expanded ? t('ChatAIWindowAdjustHint') : undefined
+                  "
+                  :tabindex="!mobileViewport && !expanded ? 0 : undefined"
+                  :title="!mobileViewport && !expanded ? t('ChatAIWindowAdjustHint') : undefined"
+                  @dblclick="handleIframeHeaderDoubleClick"
+                  @keydown="handleIframeHeaderKeyDown"
+                  @pointerdown="handleIframeHeaderPointerDown"
+                >
+                  <div class="iframe-assistant__brand">
+                    <AssistantMark size="small" />
+                    <span class="iframe-assistant__brand-copy">
+                      <strong>{{ t('ChatAIName') }}</strong>
+                      <small>{{ t('ChatAIIframeMethod') }}</small>
+                    </span>
+                  </div>
+                  <div class="iframe-assistant__actions">
+                    <button
+                      v-if="!mobileViewport"
+                      :aria-label="t('RestoreDefault')"
+                      :disabled="panelTransitioning || panelVisibilityTransitioning"
+                      :title="t('RestoreDefault')"
+                      type="button"
+                      @click="resetPanelRect"
+                    >
+                      <el-icon><RefreshLeft /></el-icon>
+                    </button>
+                    <button
+                      v-if="!mobileViewport"
+                      :aria-label="expanded ? t('ChatAICompress') : t('ChatAIExpand')"
+                      :disabled="panelTransitioning || panelVisibilityTransitioning"
+                      :title="expanded ? t('ChatAICompress') : t('ChatAIExpand')"
+                      type="button"
+                      @click="setExpanded(!expanded)"
+                    >
+                      <el-icon>
+                        <component :is="expanded ? ScaleToOriginal : FullScreen" />
+                      </el-icon>
+                    </button>
+                    <button
+                      :aria-label="t('Close')"
+                      :title="t('Close')"
+                      type="button"
+                      @click="close"
+                    >
+                      <el-icon><Close /></el-icon>
+                    </button>
+                  </div>
+                </header>
+                <iframe
+                  ref="iframe"
+                  class="iframe-assistant__frame"
+                  :src="iframeSource"
+                  :key="`${iframeSandbox}:${iframeSource}`"
+                  :sandbox="iframeSandbox"
+                  :title="t('ChatAIIframeMethod')"
+                  loading="lazy"
+                  referrerpolicy="no-referrer"
+                />
+              </div>
               <AssistantWorkspace
+                v-else
                 ref="workspace"
                 :active="componentActive && panelOpen"
                 :compact="panelCompact"
@@ -141,16 +219,19 @@ import {
   ref,
   watch
 } from 'vue'
+import { Close, FullScreen, RefreshLeft, ScaleToOriginal } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
+import { useStore } from 'vuex'
 import ElFocusTrap from 'element-plus/es/components/focus-trap/index.mjs'
 
 import { getAssetUrl } from '@/utils/assets'
 import AssistantWorkspace from './AssistantWorkspace.vue'
+import AssistantMark from './components/AssistantMark.vue'
 
 const EXPANDED_KEY = 'chat_ai_expanded'
 const LAUNCHER_HIDDEN_KEY = 'chat_ai_launcher_hidden'
 const LAUNCHER_Y_KEY = 'chat_ai_launcher_y'
-const LAUNCHER_SIZE = 44
+const LAUNCHER_SIZE = 48
 const LAUNCHER_GAP = 16
 const LAUNCHER_DRAG_THRESHOLD = 5
 const PANEL_RECT_KEY = 'chat_ai_panel_rect'
@@ -161,6 +242,8 @@ const PANEL_MIN_WIDTH = 380
 const PANEL_MIN_HEIGHT = 440
 const PANEL_COMPACT_BREAKPOINT = 760
 const MOBILE_BREAKPOINT = 620
+const WINDOW_ADJUST_SHORTCUTS =
+  'ArrowUp ArrowDown ArrowLeft ArrowRight Shift+ArrowUp Shift+ArrowDown Shift+ArrowLeft Shift+ArrowRight'
 const RESIZE_DIRECTIONS = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
 const RESIZE_CURSORS = {
   n: 'ns-resize',
@@ -185,7 +268,9 @@ const props = defineProps({
 })
 
 const { t } = useI18n()
+const store = useStore()
 const workspace = ref(null)
+const iframe = ref(null)
 const launcher = ref(null)
 const launcherRestore = ref(null)
 const panelElement = ref(null)
@@ -210,6 +295,28 @@ const layoutViewportWidth = ref(window.innerWidth)
 const initialized = ref(false)
 const componentActive = ref(true)
 const standalone = computed(() => props.drawerPanelVisible)
+const iframeMode = computed(() => {
+  const method = String(store.getters.publicSettings?.CHAT_AI_METHOD || '').toLowerCase()
+  return ['embed', 'iframe'].includes(method)
+})
+const iframeUrl = computed(() => {
+  const rawUrl = String(store.getters.publicSettings?.CHAT_AI_EMBED_URL || '').trim()
+  if (!iframeMode.value || !rawUrl) return null
+  try {
+    const url = new URL(rawUrl)
+    return ['http:', 'https:'].includes(url.protocol) ? url : null
+  } catch {
+    return null
+  }
+})
+const iframeSource = computed(() => iframeUrl.value?.href || 'about:blank')
+const iframeSandbox = computed(() => {
+  const permissions = ['allow-forms', 'allow-scripts']
+  if (iframeUrl.value && iframeUrl.value.origin !== window.location.origin) {
+    permissions.push('allow-same-origin')
+  }
+  return permissions.join(' ')
+})
 const mobileViewport = computed(() => layoutViewportWidth.value <= MOBILE_BREAKPOINT)
 const modalPanel = computed(() => expanded.value || mobileViewport.value)
 const focusTrapActive = computed(() => {
@@ -552,6 +659,59 @@ function startPanelMove(event) {
   startPanelInteraction(event, 'move')
 }
 
+function isIframeHeaderControl(target) {
+  return Boolean(
+    target?.closest?.(
+      'button, a, input, textarea, select, [role="button"], [contenteditable="true"]'
+    )
+  )
+}
+
+function handleIframeHeaderPointerDown(event) {
+  if (
+    expanded.value ||
+    mobileViewport.value ||
+    panelTransitioning.value ||
+    panelVisibilityTransitioning.value ||
+    event.button !== 0 ||
+    isIframeHeaderControl(event.target)
+  ) {
+    return
+  }
+  startPanelMove(event)
+}
+
+function handleIframeHeaderDoubleClick(event) {
+  if (
+    mobileViewport.value ||
+    panelTransitioning.value ||
+    panelVisibilityTransitioning.value ||
+    isIframeHeaderControl(event.target)
+  ) {
+    return
+  }
+  event.preventDefault()
+  setExpanded(!expanded.value)
+}
+
+function handleIframeHeaderKeyDown(event) {
+  if (
+    event.target !== event.currentTarget ||
+    expanded.value ||
+    mobileViewport.value ||
+    panelTransitioning.value ||
+    panelVisibilityTransitioning.value ||
+    event.altKey ||
+    event.ctrlKey ||
+    event.metaKey ||
+    !['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)
+  ) {
+    return
+  }
+  event.preventDefault()
+  handlePanelKeyboardAdjust({ key: event.key, resize: event.shiftKey })
+}
+
 function startPanelResize(event, direction) {
   startPanelInteraction(event, 'resize', direction)
 }
@@ -796,19 +956,28 @@ function syncBackgroundInert() {
 }
 
 async function initWorkspace() {
-  if (initialized.value) return
+  if (iframeMode.value || initialized.value) return
   initialized.value = true
   await nextTick()
+  if (iframeMode.value || !workspace.value) {
+    initialized.value = false
+    return
+  }
   await workspace.value?.init()
+}
+
+function focusActiveContent() {
+  if (iframeMode.value) iframe.value?.focus()
+  else workspace.value?.focus()
 }
 
 async function open() {
   finishLauncherDrag()
   if (!standalone.value && !mobileViewport.value && !panelRect.value) initPanelRect()
   panelOpen.value = true
-  await initWorkspace()
+  if (!iframeMode.value) await initWorkspace()
   await nextTick()
-  workspace.value?.focus()
+  focusActiveContent()
 }
 
 async function close() {
@@ -834,9 +1003,23 @@ function setExpanded(value) {
 }
 
 async function handleWindowMessage(event) {
-  if (!componentActive.value || event.data !== 'show-chat-panel' || standalone.value) return
+  if (
+    !componentActive.value ||
+    event.data !== 'show-chat-panel' ||
+    event.origin !== window.location.origin ||
+    standalone.value ||
+    event.source === iframe.value?.contentWindow
+  ) {
+    return
+  }
   await open()
 }
+
+watch(iframeMode, async (enabled) => {
+  initialized.value = false
+  if (!standalone.value && panelOpen.value) await close()
+  if (!enabled && standalone.value && componentActive.value) await initWorkspace()
+})
 
 function attachWindowListeners() {
   if (windowListenersAttached) return
@@ -869,16 +1052,17 @@ onMounted(async () => {
   if (!standalone.value) {
     if (!mobileViewport.value) initPanelRect()
   }
-  if (standalone.value || panelOpen.value) await initWorkspace()
+  if (!iframeMode.value && (standalone.value || panelOpen.value)) await initWorkspace()
   syncBackgroundInert()
 })
 
 watch([componentActive, panelOpen, modalPanel, standalone], syncBackgroundInert, { flush: 'post' })
 
-onActivated(() => {
+onActivated(async () => {
   componentActive.value = true
   attachWindowListeners()
   syncBackgroundInert()
+  if (!iframeMode.value && (standalone.value || panelOpen.value)) await initWorkspace()
 })
 
 onDeactivated(() => {
@@ -912,8 +1096,8 @@ onBeforeUnmount(() => {
   position: fixed;
   top: var(--launcher-top);
   right: 18px;
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   pointer-events: auto;
 
   &:hover .assistant-launcher__hide,
@@ -926,26 +1110,41 @@ onBeforeUnmount(() => {
 
 .assistant-launcher {
   display: grid;
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   padding: 0;
-  border: 0;
+  border: 1px solid rgb(26 179 148 / 24%);
   border-radius: 50%;
   color: var(--ai-text);
-  background: transparent;
+  background: linear-gradient(145deg, #fff 10%, #e9f9f5 100%);
+  box-shadow:
+    0 8px 18px rgb(16 72 62 / 20%),
+    inset 0 1px 0 rgb(255 255 255 / 95%),
+    inset 0 -2px 3px rgb(20 143 118 / 10%);
   cursor: ns-resize;
-  filter: drop-shadow(0 4px 10px rgb(16 72 62 / 18%));
   isolation: isolate;
   place-items: center;
   touch-action: none;
   user-select: none;
   transition:
     transform 0.16s ease,
-    filter 0.16s ease;
+    border-color 0.16s ease,
+    box-shadow 0.16s ease;
 
   &:hover {
-    filter: drop-shadow(0 6px 13px rgb(16 72 62 / 24%));
-    transform: translateY(-1px);
+    border-color: rgb(26 179 148 / 48%);
+    box-shadow:
+      0 11px 24px rgb(16 72 62 / 26%),
+      inset 0 1px 0 #fff,
+      inset 0 -2px 3px rgb(20 143 118 / 12%);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    box-shadow:
+      0 4px 10px rgb(16 72 62 / 18%),
+      inset 0 2px 4px rgb(20 143 118 / 14%);
+    transform: translateY(1px);
   }
 
   &:focus-visible {
@@ -955,8 +1154,9 @@ onBeforeUnmount(() => {
 
   img {
     display: block;
-    width: 22px;
-    height: 22px;
+    width: 30px;
+    height: auto;
+    filter: drop-shadow(0 2px 2px rgb(16 72 62 / 20%));
     pointer-events: none;
   }
 
@@ -1017,8 +1217,8 @@ onBeforeUnmount(() => {
   top: calc(var(--launcher-top) - 1px);
   right: 0;
   display: block;
-  width: 46px;
-  height: 46px;
+  width: 48px;
+  height: 48px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -1031,7 +1231,7 @@ onBeforeUnmount(() => {
     right: 0;
     display: flex;
     width: 16px;
-    height: 46px;
+    height: 48px;
     align-items: center;
     overflow: hidden;
     box-sizing: border-box;
@@ -1048,9 +1248,9 @@ onBeforeUnmount(() => {
       box-shadow 0.18s ease;
 
     img {
-      width: 22px;
-      height: 22px;
-      flex: 0 0 22px;
+      width: 26px;
+      height: auto;
+      flex: 0 0 26px;
       border-radius: 50%;
     }
   }
@@ -1107,6 +1307,122 @@ onBeforeUnmount(() => {
     border-radius 0.28s ease;
 }
 
+.iframe-assistant {
+  --ai-header-height: 52px;
+
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  color: var(--ai-text);
+  background: #fff;
+  flex-direction: column;
+
+  &__header {
+    position: relative;
+    z-index: 20;
+    display: flex;
+    height: var(--ai-header-height);
+    min-height: var(--ai-header-height);
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 12px;
+    border-bottom: 1px solid var(--ai-border);
+    background: #fff;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+
+    &:focus-visible {
+      outline: 2px solid rgb(26 179 148 / 42%);
+      outline-offset: -2px;
+    }
+  }
+
+  &__brand,
+  &__actions {
+    display: flex;
+    align-items: center;
+  }
+
+  &__brand {
+    min-width: 0;
+    gap: 8px;
+  }
+
+  &__brand-copy {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
+
+    strong {
+      overflow: hidden;
+      color: var(--ai-text);
+      font-size: 14px;
+      font-weight: 600;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    small {
+      color: var(--ai-text-secondary);
+      font-size: 11px;
+    }
+  }
+
+  &__actions {
+    flex: 0 0 auto;
+    gap: 4px;
+
+    button {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      color: var(--ai-text-secondary);
+      background: transparent;
+      cursor: pointer;
+      font-size: 16px;
+      place-items: center;
+      transition: all 0.18s ease;
+
+      &:hover:not(:disabled) {
+        border-color: var(--el-color-primary-light-8, #d1efe8);
+        color: var(--ai-primary-dark);
+        background: var(--el-color-primary-light-9, #e8f7f3);
+      }
+
+      &:focus-visible {
+        outline: 2px solid rgb(26 179 148 / 42%);
+        outline-offset: 2px;
+      }
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.45;
+      }
+    }
+  }
+
+  &__frame {
+    display: block;
+    width: 100%;
+    min-height: 0;
+    flex: 1;
+    border: 0;
+    background: #fff;
+  }
+
+  &__frame--standalone {
+    height: 100%;
+  }
+}
+
 .is-expanded .assistant-panel {
   width: 100vw;
   height: 100dvh;
@@ -1129,7 +1445,16 @@ onBeforeUnmount(() => {
   cursor: grabbing;
 }
 
+.is-window-moving .assistant-panel .iframe-assistant__header {
+  cursor: grabbing;
+}
+
 .is-panel-transitioning .assistant-panel :deep(.assistant-header) {
+  cursor: default;
+}
+
+.is-expanded .assistant-panel .iframe-assistant__header,
+.is-panel-transitioning .assistant-panel .iframe-assistant__header {
   cursor: default;
 }
 
@@ -1238,12 +1563,12 @@ onBeforeUnmount(() => {
 
 @media (max-width: 620px) {
   .assistant-launcher {
-    width: 44px;
-    height: 44px;
+    width: 48px;
+    height: 48px;
 
     img {
-      width: 22px;
-      height: 22px;
+      width: 30px;
+      height: auto;
     }
   }
 
@@ -1262,6 +1587,10 @@ onBeforeUnmount(() => {
     border-radius: 0;
     padding-top: env(safe-area-inset-top, 0px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .iframe-assistant__header {
+    cursor: default;
   }
 }
 
