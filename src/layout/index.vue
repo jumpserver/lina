@@ -111,9 +111,6 @@ export default {
   flex: 0 0 $headerHeight;
   width: 100%;
   min-width: 0;
-  box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.22),
-    0 6px 14px rgba(0, 0, 0, 0.14);
 }
 
 .mobile .fixed-header {
