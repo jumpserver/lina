@@ -25,7 +25,14 @@
     </template>
 
     <div class="settings-shell">
-      <el-form class="provider-form" label-position="top" size="default">
+      <el-form
+        ref="providerForm"
+        class="provider-form"
+        label-position="top"
+        :model="form"
+        :rules="formRules"
+        size="default"
+      >
         <section class="settings-panel connection-panel">
           <header class="section-header">
             <div class="section-heading">
@@ -43,12 +50,32 @@
           </header>
 
           <div class="form-grid">
-            <el-form-item class="form-field--full" :label="t('ChatAIBaseURL')">
-              <el-input
-                v-model.trim="form.CHAT_AI_BASE_URL"
-                autocomplete="off"
-                :placeholder="t('ChatAIBaseURLPlaceholder')"
-              />
+            <el-form-item
+              class="form-field--full"
+              :label="t('ChatAIBaseURL')"
+              prop="CHAT_AI_BASE_URL"
+              required
+            >
+              <template #label>
+                <span>{{ t('ChatAIBaseURL') }}</span>
+              </template>
+              <el-tooltip
+                :content="form.CHAT_AI_BASE_URL"
+                :disabled="!baseUrlOverflow"
+                :popper-style="{
+                  maxWidth: 'min(720px, calc(100vw - 32px))',
+                  overflowWrap: 'anywhere'
+                }"
+                :show-after="300"
+                placement="top"
+              >
+                <el-input
+                  ref="baseUrlInput"
+                  v-model.trim="form.CHAT_AI_BASE_URL"
+                  autocomplete="off"
+                  :placeholder="t('ChatAIBaseURLPlaceholder')"
+                />
+              </el-tooltip>
               <div class="help-block">{{ t('ChatAIBaseURLHint') }}</div>
             </el-form-item>
 
@@ -189,7 +216,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 import { Check, Connection, Lock, MagicStick, Refresh } from '@element-plus/icons-vue'
@@ -215,6 +242,10 @@ const modelsDiscovered = ref(false)
 const modelOptions = ref([])
 const testState = ref('idle')
 const hydrated = ref(false)
+const providerForm = ref(null)
+const baseUrlInput = ref(null)
+const baseUrlOverflow = ref(false)
+let baseUrlResizeObserver
 
 const form = reactive({
   CHAT_AI_ENABLED: false,
@@ -223,8 +254,19 @@ const form = reactive({
   CHAT_AI_PROXY: '',
   CHAT_AI_MODEL: ''
 })
+const formRules = computed(() => ({
+  CHAT_AI_BASE_URL: [
+    {
+      required: true,
+      whitespace: true,
+      message: t('FieldRequiredError'),
+      trigger: ['blur', 'change']
+    },
+    { validator: validateBaseUrlFormat, trigger: ['blur', 'change'] }
+  ]
+}))
 
-const endpointReady = computed(() => Boolean(form.CHAT_AI_BASE_URL))
+const endpointReady = computed(() => isValidBaseUrl(form.CHAT_AI_BASE_URL))
 const modelReady = computed(() => Boolean(form.CHAT_AI_MODEL))
 const readinessTotal = 3
 const readinessCount = computed(() => {
@@ -244,6 +286,56 @@ const testStatusText = computed(() => {
   if (testState.value === 'failed') return t('ChatAITestFailed')
   return t('ChatAINotTested')
 })
+
+function getBaseUrlNativeInput() {
+  return baseUrlInput.value?.input || baseUrlInput.value?.$el?.querySelector('input') || null
+}
+
+function updateBaseUrlOverflow() {
+  nextTick(() => {
+    const input = getBaseUrlNativeInput()
+    baseUrlOverflow.value = Boolean(
+      form.CHAT_AI_BASE_URL && input && input.scrollWidth > input.clientWidth + 1
+    )
+  })
+}
+
+function observeBaseUrlInput() {
+  const input = getBaseUrlNativeInput()
+  if (!input || typeof ResizeObserver === 'undefined') return
+
+  baseUrlResizeObserver = new ResizeObserver(updateBaseUrlOverflow)
+  baseUrlResizeObserver.observe(input)
+}
+
+function isValidBaseUrl(value) {
+  const baseUrl = String(value || '').trim()
+  if (!baseUrl || !/^[\x21-\x7e]+$/.test(baseUrl)) return false
+
+  try {
+    const url = new URL(baseUrl)
+    return ['http:', 'https:'].includes(url.protocol) && Boolean(url.hostname)
+  } catch {
+    return false
+  }
+}
+
+function validateBaseUrlFormat(_rule, value, callback) {
+  if (!String(value || '').trim() || isValidBaseUrl(value)) {
+    callback()
+  } else {
+    callback(new Error(t('ChatAIBaseURLInvalid')))
+  }
+}
+
+async function validateBaseUrlField() {
+  try {
+    await providerForm.value?.validateField('CHAT_AI_BASE_URL')
+    return true
+  } catch {
+    return false
+  }
+}
 
 function getErrorMessage(error) {
   return (
@@ -278,6 +370,10 @@ function updatePublicSettings(values) {
 }
 
 async function changeChatAIEnabled(enabled) {
+  if (enabled && !(await validateBaseUrlField())) {
+    form.CHAT_AI_ENABLED = false
+    return
+  }
   if (enabled && !form.CHAT_AI_MODEL) {
     form.CHAT_AI_ENABLED = false
     message.warning(t('ChatAIModelRequired'))
@@ -330,6 +426,7 @@ async function refreshModels(options = {}) {
 }
 
 async function testConfiguration() {
+  if (!(await validateBaseUrlField())) return
   if (!form.CHAT_AI_MODEL) {
     message.warning(t('ChatAIModelRequired'))
     return
@@ -349,6 +446,7 @@ async function testConfiguration() {
 }
 
 async function saveConfiguration() {
+  if (!(await validateBaseUrlField())) return
   if (form.CHAT_AI_ENABLED && !form.CHAT_AI_MODEL) {
     message.warning(t('ChatAIModelRequired'))
     return
@@ -380,6 +478,8 @@ watch(
   { flush: 'sync' }
 )
 
+watch(() => form.CHAT_AI_BASE_URL, updateBaseUrlOverflow, { flush: 'post' })
+
 onMounted(async () => {
   try {
     const settings = await getChatAISettings()
@@ -399,8 +499,13 @@ onMounted(async () => {
     message.error(getErrorMessage(error))
   } finally {
     loading.value = false
+    await nextTick()
+    observeBaseUrlInput()
+    updateBaseUrlOverflow()
   }
 })
+
+onBeforeUnmount(() => baseUrlResizeObserver?.disconnect())
 </script>
 
 <style lang="scss" scoped>
@@ -885,6 +990,10 @@ onMounted(async () => {
 
 :deep(.provider-form .el-input),
 :deep(.provider-form .el-select) {
+  width: 100%;
+}
+
+:deep(.provider-form .el-tooltip__trigger) {
   width: 100%;
 }
 
