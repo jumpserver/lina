@@ -70,7 +70,12 @@ export default {
             prop: 'actions',
             formatterArgs: {
               hasClone: false,
-              hasDelete: false,
+              hasDelete: true,
+              canDelete: ({ row }) => {
+                const currentOrg = vm.$store.getters.currentOrg
+                const isOwnFlow = currentOrg.is_root || row.org_id === currentOrg.id
+                return vm.$hasPerm('tickets.delete_ticketflow') && isOwnFlow
+              },
               canUpdate: () => {
                 return vm.$hasPerm('tickets.change_ticketflow')
               }

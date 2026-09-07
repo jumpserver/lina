@@ -385,7 +385,7 @@ export default {
           initial: {
             date_expired: getDayFuture(36500, new Date()).toISOString()
           },
-          fields: ['groups', 'date_expired', 'comment'],
+          fields: ['groups', 'allowed_mfa_types', 'date_expired', 'comment'],
           hasSaveContinue: false,
           url: '/api/v1/users/users/',
           fieldsMeta: {
@@ -400,6 +400,7 @@ export default {
                 value: []
               }
             },
+            allowed_mfa_types: {},
             date_expired: {
               label: this.$t('DateExpired'),
               hidden: () => false
