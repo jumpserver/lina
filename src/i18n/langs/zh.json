@@ -643,6 +643,8 @@
   "DownloadCenter": "下载中心",
   "DownloadImportTemplateMsg": "下载创建模板",
   "DownloadReplay": "下载录像",
+  "DownloadReplayNoneAvailable": "所选会话中没有可下载的录像。",
+  "DownloadReplayPartialConfirm": "已选择 {selected} 个会话，其中 {available} 个录像可下载，{unavailable} 个不可下载。是否继续下载可用录像？",
   "DownloadUpdateTemplateMsg": "下载更新模板",
   "DragUploadFileInfo": "将文件拖到此处，或点击此处上传",
   "DriverInstanceCreateFailed": "驱动实例创建失败",
