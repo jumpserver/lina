@@ -183,7 +183,6 @@ export default {
             }
           }
         })
-        // 只有一个可用工单流时，后端会自动选用它。空字符串不能作为 UUID 提交。
         if (!value.flow_id) {
           delete value.flow_id
         }
@@ -240,7 +239,7 @@ export default {
           value: flow.id
         }))
         this.fieldsMeta.flow_id.el.disabled = flows.length <= 1
-        return flows.length === 1 ? flows[0] : null
+        return flows[0] || null
       } catch (error) {
         return null
       }
