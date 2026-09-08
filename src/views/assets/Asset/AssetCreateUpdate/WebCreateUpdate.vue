@@ -12,6 +12,7 @@ export default {
     return {
       url: '/api/v1/assets/webs/',
       addFields: [
+        [this.$t('Basic'), ['allowed_urls']],
         [
           this.$t('Selector'),
           [
@@ -27,6 +28,12 @@ export default {
         ]
       ],
       addFieldsMeta: {
+        allowed_urls: {
+          label: this.$t('WebAllowedSites'),
+          helpText: this.$t('WebAllowedSitesHelp'),
+          required: false,
+          default: []
+        },
         protocols: {
           hidden: (formValue) => {
             const address = formValue['address']

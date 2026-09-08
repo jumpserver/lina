@@ -2371,5 +2371,7 @@
   "VerifyAccountParams": "アカウント検証パラメータ",
   "GatherAccountsParams": "アカウント収集パラメータ",
   "RemoveAccountParams": "アカウント削除パラメータ",
-  "WebScriptStepsHelp": "Steps may specify an origin. interactive pauses for verification; success must be the final step. Web Proxy supports navigation within one window; frames and popup login windows are not supported."
+  "WebScriptStepsHelp": "Steps may specify an origin. interactive pauses for verification; success must be the final step. Web Proxy supports navigation within one window; frames and popup login windows are not supported.",
+  "WebAllowedSites": "アクセス許可サイト",
+  "WebAllowedSitesHelp": "空欄の場合はすべてのサイトを許可します。設定すると、アセットのアドレスと指定サイトへの移動のみ許可します。パスやワイルドカードを含まない完全な HTTP/HTTPS オリジンを入力し、Enter で確定してください。ページ内のリソースには適用されません。"
 }

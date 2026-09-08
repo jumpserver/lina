@@ -22,6 +22,7 @@ export default {
             'success_selector',
             'interactive_selector',
             'script',
+            'allowed_urls',
             'spec_info',
             'info',
             'auto_config'

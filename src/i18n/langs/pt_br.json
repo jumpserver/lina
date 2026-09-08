@@ -2274,5 +2274,7 @@
   "setVariable": "Parâmetros de configuração",
   "userId": "ID do usuário",
   "userName": "Usuário",
-  "WebScriptStepsHelp": "Steps may specify an origin. interactive pauses for verification; success must be the final step. Web Proxy supports navigation within one window; frames and popup login windows are not supported."
+  "WebScriptStepsHelp": "Steps may specify an origin. interactive pauses for verification; success must be the final step. Web Proxy supports navigation within one window; frames and popup login windows are not supported.",
+  "WebAllowedSites": "Sites permitidos",
+  "WebAllowedSitesHelp": "Deixe vazio para permitir todos os sites. Quando configurado, a navegação fica limitada ao endereço do ativo e a estes sites. Digite origens HTTP/HTTPS completas, sem caminhos ou curingas, e pressione Enter. Os recursos da página não são restringidos."
 }
