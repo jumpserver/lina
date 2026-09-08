@@ -130,6 +130,11 @@ import { ArrowDown, ArrowRight } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { resultDetailRoute } from './resultNavigation'
+import {
+  isTechnicalIdentifier,
+  localizedFieldLabel,
+  operationLabel
+} from '../../utils/presentation'
 
 defineProps({
   cards: {
@@ -138,7 +143,7 @@ defineProps({
   }
 })
 
-const { t } = useI18n()
+const { t, te } = useI18n()
 const router = useRouter()
 const route = useRoute()
 const cardOpenState = ref({})
@@ -180,7 +185,9 @@ function isAssetList(card) {
 
 function cardTitle(card) {
   if (isAssetList(card)) return t('ChatAIAssetsResult')
-  return card?.title || t('ChatAIResult')
+  const localizedOperation = operationLabel(card?.source?.operation_id, t, te)
+  if (localizedOperation) return localizedOperation
+  return isTechnicalIdentifier(card?.title) ? t('ChatAIResult') : card?.title || t('ChatAIResult')
 }
 
 function sourceLabel(source = {}) {
@@ -269,21 +276,7 @@ function formatValue(value) {
 }
 
 function fieldLabel(value) {
-  const key = String(value || '')
-  const known = {
-    id: 'ID',
-    name: t('ChatAIFieldName'),
-    address: t('ChatAIFieldAddress'),
-    username: t('ChatAIFieldUsername'),
-    status: t('ChatAIFieldStatus'),
-    is_active: t('ChatAIFieldActive'),
-    date_created: t('ChatAIFieldDateCreated'),
-    date_updated: t('ChatAIFieldDateUpdated'),
-    org_name: t('ChatAIFieldOrganization'),
-    platform: t('ChatAIFieldPlatform')
-  }
-  if (known[key]) return known[key]
-  return key.replace(/[_-]+/g, ' ').replace(/\b\w/g, (character) => character.toUpperCase())
+  return localizedFieldLabel(value, t, te)
 }
 
 function formatFieldValue(key, value) {
