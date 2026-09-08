@@ -35,6 +35,8 @@ export default {
           deploy_options: {
             fields: [
               'CORE_HOST',
+              'WEB_APPLET_RECORDING_ENABLED',
+              'WEB_PROXY_URL',
               'IGNORE_VERIFY_CERTS',
               'RDS_Licensing',
               'RDS_LicenseServer',
@@ -44,6 +46,9 @@ export default {
               'RDS_RemoteAppLogoffTimeLimit'
             ],
             fieldsMeta: {
+              WEB_PROXY_URL: {
+                hidden: (formValue) => !formValue['WEB_APPLET_RECORDING_ENABLED']
+              },
               RDS_LicenseServer: {
                 hidden: (formValue) => !formValue['RDS_Licensing']
               },

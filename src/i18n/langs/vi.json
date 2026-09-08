@@ -2245,5 +2245,7 @@
   "setVariable": "Cài đặt tham số",
   "userId": "ID người dùng",
   "userName": "Tên người dùng",
-  "WebScriptStepsHelp": "Steps may specify an origin. interactive pauses for verification; success must be the final step. Web Proxy supports navigation within one window; frames and popup login windows are not supported."
+  "WebScriptStepsHelp": "Steps may specify an origin. interactive pauses for verification; success must be the final step. Web Proxy supports navigation within one window; frames and popup login windows are not supported.",
+  "WebAllowedSites": "Trang web được phép",
+  "WebAllowedSitesHelp": "Để trống để cho phép mọi trang web. Khi được cấu hình, chỉ cho phép chuyển đến địa chỉ tài sản và các trang này. Nhập nguồn HTTP/HTTPS đầy đủ, không có đường dẫn hoặc ký tự đại diện, rồi nhấn Enter. Tài nguyên trang không bị hạn chế."
 }

@@ -2341,5 +2341,7 @@
   "VerifyAccountParams": "帳號驗證參數",
   "GatherAccountsParams": "帳號收集參數",
   "RemoveAccountParams": "帳號移除參數",
-  "WebScriptStepsHelp": "每步可指定 origin。interactive 暫停等待人工驗證；success 必須是最後一步。Web Proxy 支援同一視窗內的頁面跳轉，暫不支援 iframe 和獨立彈出視窗登入。"
+  "WebScriptStepsHelp": "每步可指定 origin。interactive 暫停等待人工驗證；success 必須是最後一步。Web Proxy 支援同一視窗內的頁面跳轉，暫不支援 iframe 和獨立彈出視窗登入。",
+  "WebAllowedSites": "存取白名單",
+  "WebAllowedSitesHelp": "留空允許存取所有站點。設定後，只允許開啟資產位址及白名單中的站點。輸入完整 HTTP/HTTPS 站點位址（協定、主機和連接埠），不含路徑或萬用字元，按 Enter 確認；頁面資源載入不受限制。"
 }

@@ -2245,5 +2245,7 @@
   "setVariable": "Задать переменную",
   "userId": "ID пользователя",
   "userName": "Имя пользователя",
-  "WebScriptStepsHelp": "Steps may specify an origin. interactive pauses for verification; success must be the final step. Web Proxy supports navigation within one window; frames and popup login windows are not supported."
+  "WebScriptStepsHelp": "Steps may specify an origin. interactive pauses for verification; success must be the final step. Web Proxy supports navigation within one window; frames and popup login windows are not supported.",
+  "WebAllowedSites": "Разрешённые сайты",
+  "WebAllowedSitesHelp": "Пустое поле разрешает все сайты. При настройке переходы ограничены адресом актива и указанными сайтами. Введите полный источник HTTP/HTTPS без пути и подстановочных знаков, затем нажмите Enter. Ресурсы страницы не ограничиваются."
 }

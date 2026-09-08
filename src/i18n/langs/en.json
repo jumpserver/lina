@@ -2351,5 +2351,7 @@
   "ChatAIFailureApprovalRejected": "You rejected this operation. This step was not executed.",
   "ChatAIFailureStoppedAt": "Stopped at:",
   "ChatAIFailureStepCreate": "Create {resource}",
-  "WebScriptStepsHelp": "Steps may specify an origin. interactive pauses for verification; success must be the final step. Web Proxy supports navigation within one window; frames and popup login windows are not supported."
+  "WebScriptStepsHelp": "Steps may specify an origin. interactive pauses for verification; success must be the final step. Web Proxy supports navigation within one window; frames and popup login windows are not supported.",
+  "WebAllowedSites": "Allowed sites",
+  "WebAllowedSitesHelp": "Leave empty to allow all sites. When configured, navigation is limited to the asset address and these sites. Enter full HTTP/HTTPS origins (scheme, host and port), without paths or wildcards, and press Enter. Page resources are unaffected."
 }
