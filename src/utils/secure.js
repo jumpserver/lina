@@ -7,6 +7,8 @@ import JSEncrypt from 'jsencrypt'
 import CryptoJS from 'crypto-js'
 import { VueCookieNext as VueCookie } from 'vue-cookie-next'
 
+export { encryptPassword } from './session-encrypt'
+
 /**
  * @param {string} path
  * @returns {Boolean}
@@ -85,27 +87,8 @@ export function rsaEncrypt(text, pubKey) {
   return jsEncrypt.encrypt(text)
 }
 
-const encryptedSeparator = '::encrypted::'
-
 export function getCookie(name) {
   return VueCookie.getCookie(name)
-}
-
-export function encryptPassword(password) {
-  if (!password) {
-    return ''
-  }
-  let rsaPublicKeyText = getCookie('jms_public_key')
-  if (!rsaPublicKeyText) {
-    return password
-  }
-  const aesKey = (Math.random() + 1).toString(36).substring(2)
-  // public key 是 base64 存储的
-  rsaPublicKeyText = rsaPublicKeyText.replaceAll('"', '')
-  const rsaPublicKey = atob(rsaPublicKeyText)
-  const keyCipher = rsaEncrypt(aesKey, rsaPublicKey)
-  const passwordCipher = aesEncrypt(String(password), aesKey)
-  return `${keyCipher}${encryptedSeparator}${passwordCipher}`
 }
 
 window.aesEncrypt = aesEncrypt
