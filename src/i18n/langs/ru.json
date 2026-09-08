@@ -1999,6 +1999,9 @@
   "TerminalUpdate": "Обновление терминала",
   "TerminalUpdateStorage": "Обновить хранилище терминала",
   "Terminate": "Прервать",
+  "TerminateSelected": "Завершить выбранные",
+  "TerminateSessionConfirmMsg": "Завершить выбранные сеансы ({count})? Их соединения будут закрыты.",
+  "TerminateTaskSendPartialMsg": "Задачи завершения отправлены для {count} из {total} сеансов. Остальные сеансы могли уже завершиться или быть недоступны. Обновите страницу для проверки.",
   "TerminateTaskSendSuccessMsg": "Команда на завершение задачи отправлена, пожалуйста, обновите страницу через некоторое время",
   "TermsAndConditions": "Условия и положения",
   "TermsOfService": "Условия обслуживания",
@@ -2241,5 +2244,6 @@
   "selectedAssets": "Выбранные активы",
   "setVariable": "Задать переменную",
   "userId": "ID пользователя",
-  "userName": "Имя пользователя"
+  "userName": "Имя пользователя",
+  "WebScriptStepsHelp": "Steps may specify an origin. interactive pauses for verification; success must be the final step. Web Proxy supports navigation within one window; frames and popup login windows are not supported."
 }

@@ -62,6 +62,7 @@ export const getWebAssetSettingDefaults = (platformProtocols) => {
     script: setting.script,
     submit_selector: setting.submit_selector,
     success_selector: setting.success_selector,
+    interactive_selector: setting.interactive_selector,
     username_selector: setting.username_selector
   }
 }

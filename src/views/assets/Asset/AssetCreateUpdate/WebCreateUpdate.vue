@@ -20,6 +20,7 @@ export default {
             'password_selector',
             'submit_selector',
             'success_selector',
+            'interactive_selector',
             'script'
           ],
           1
@@ -52,10 +53,18 @@ export default {
         submit_selector: {
           hidden: (formValue) => formValue['autofill'] !== 'basic'
         },
+        interactive_selector: {
+          required: false,
+          rules: [],
+          hidden: (formValue) => formValue['autofill'] !== 'basic'
+        },
         success_selector: {
+          required: false,
+          rules: [],
           hidden: (formValue) => formValue['autofill'] !== 'basic'
         },
         script: {
+          helpText: this.$t('WebScriptStepsHelp'),
           hidden: (formValue) => formValue['autofill'] !== 'script'
         }
       }
