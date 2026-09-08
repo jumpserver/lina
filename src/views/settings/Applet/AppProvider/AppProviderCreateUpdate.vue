@@ -27,7 +27,8 @@ export default {
           deploy_options: {
             fields: ['CORE_HOST', 'IGNORE_VERIFY_CERTS', 'PANDA_IMAGE', 'PANDA_RANGE_PORTS'],
             fieldsMeta: {
-              CORE_HOST: { helpText: this.$t('AppProviderCoreHostHelp') }
+              CORE_HOST: { helpText: this.$t('AppProviderCoreHostHelp') },
+              PANDA_IMAGE: { helpText: this.$t('AppProviderPandaImageHelp') }
             }
           }
         },

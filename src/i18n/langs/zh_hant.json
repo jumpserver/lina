@@ -2402,6 +2402,7 @@
   "AppProviderSSHHelp": "透過 SSH 連接 Linux 發布機，預設連接埠為 22。",
   "AppProviderAccountHelp": "新增可透過 SSH 登入的 root 帳號，或具有 sudo 權限的特權帳號。Ansible 使用此帳號安裝 Docker 和 Panda。",
   "AppProviderCoreHostHelp": "填寫發布機可存取的 JumpServer 位址，例如 https://jumpserver.example.com。",
-  "AppProviderDeployHelp": "發布機需預先安裝 Python 3，透過 SSH 和 Ansible 安裝 Docker、部署 Panda 並驗證服務。Panda API 僅監聽發布機本機 127.0.0.1:9001。重新部署前請停用發布機並等待現有工作階段結束。",
+  "AppProviderDeployHelp": "發布機需預先安裝 Python 3，透過 SSH 和 Ansible 部署 Panda。要求 Docker 23.0+ 原生支援 zstd，優先重用現有 Docker 和映像，缺少時使用相同架構的離線安裝套件；跨架構部署需預先準備對應資源。資源缺少時部署會報錯，不會連網下載。Panda API 僅監聽發布機本機 127.0.0.1:9001。重新部署前請停用發布機並等待現有工作階段結束。",
+  "AppProviderPandaImageHelp": "預設映像版本來自離線安裝套件，也可指定發布機上已載入的 Panda 映像。無安裝套件時需手動填寫已載入的映像參照。",
   "AppProviderHostRequired": "請先編輯發布機，設定 Linux 主機位址和 SSH 帳號。"
 }
