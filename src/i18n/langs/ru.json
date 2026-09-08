@@ -1184,6 +1184,7 @@
   "LastLoginTime": "Время последнего входа",
   "LastPublishedTime": "Последняя публикация",
   "LastThreeMonths": "Последние 3 месяца",
+  "LastUpdatedBy": "Кем обновлено",
   "LastYear": "Последний год",
   "Ldap": "LDAP",
   "LdapBulkImport": "Импорт пользователей",

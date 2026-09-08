@@ -1141,6 +1141,7 @@
   "LastLoginTime": "最終ログイン日時",
   "LastPublishedTime": "最終公開時間",
   "LastThreeMonths": "過去 3 ヶ月",
+  "LastUpdatedBy": "最終更新者",
   "LastYear": "過去 1 年",
   "Ldap": "LDAP",
   "LdapBulkImport": "ユーザーのインポート",

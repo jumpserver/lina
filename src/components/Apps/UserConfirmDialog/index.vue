@@ -196,7 +196,10 @@ export default {
       const confirmType = response.data?.code
       const confirmUrl = '/api/v1/authentication/confirm/'
       this.$axios
-        .get(confirmUrl, { params: { confirm_type: confirmType } })
+        .get(confirmUrl, {
+          params: { confirm_type: confirmType },
+          disableFlashErrorMsg: true
+        })
         .then((data) => {
           this.confirmTypeRequired = data.confirm_type
 

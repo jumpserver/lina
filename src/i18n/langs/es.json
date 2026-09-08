@@ -1184,6 +1184,7 @@
   "LastLoginTime": "Hora del último inicio de sesión",
   "LastPublishedTime": "Fecha de publicación final.",
   "LastThreeMonths": "Últimos 3 Meses",
+  "LastUpdatedBy": "Última actualización por",
   "LastYear": "Último Año",
   "Ldap": "LDAP",
   "LdapBulkImport": "Importar usuario",
