@@ -142,12 +142,13 @@ import {
   isUserTreeOrder,
   normalizeUserTreeResponse,
   toUserTreeResource,
-  USER_TREE_ORDER_VALUES
+  USER_TREE_ORDER_VALUES,
+  USER_TREE_RESOURCE_TYPES
 } from './provider'
 
 const SETTINGS_CACHE_PREFIX = 'jms.user-tree.settings.'
 const PERMISSION_SCOPES = Object.freeze(['direct', 'effective'])
-const METRIC_RESOURCE_TYPES = Object.freeze(['organization', 'user_group', 'user'])
+const METRIC_RESOURCE_TYPES = USER_TREE_RESOURCE_TYPES
 
 function getSettingsCacheKey(setting = {}) {
   const key = String(setting.settingsCacheKey || '').trim()
@@ -231,8 +232,8 @@ function markSearchChildrenProjections(response) {
 }
 
 /**
- * Reusable organization -> user group/user tree. Users without a group are
- * direct children of the organization root.
+ * Reusable organization -> user group -> user tree. A virtual ungrouped-users
+ * branch is the organization's first child and loads its users independently.
  *
  * The component is endpoint-agnostic. Its data source may implement:
  *
@@ -315,8 +316,8 @@ export default {
     },
     permissionScopeOptions() {
       return [
-        { label: this.$t('PermissionScopeEffective'), value: 'effective' },
-        { label: this.$t('PermissionScopeDirect'), value: 'direct' }
+        { label: this.$t('UserTreePermissionScopeEffective'), value: 'effective' },
+        { label: this.$t('UserTreePermissionScopeDirect'), value: 'direct' }
       ]
     },
     userOrderOptions() {
@@ -627,6 +628,9 @@ export default {
     },
     getResourceLabel(data) {
       const type = this.getResourceType(data)
+      if (type === 'ungrouped_users') {
+        return this.$t('UserTreeUngroupedUsers')
+      }
       if (type !== 'user') {
         return data?.name || data?.meta?.data?.name || ''
       }
@@ -644,10 +648,16 @@ export default {
         return this.$t('UserTreeAmountTipOrganization')
       }
       if (type === 'user_group') {
-        return this.$t('UserTreeAmountTipDirect')
+        return this.$t('UserTreeAmountTipGroupDirect')
       }
+      if (type === 'ungrouped_users') {
+        return this.$t('UserTreeAmountTipUngroupedUsers')
+      }
+      const isUngrouped = String(data?.pId || data?.parent_key || '').startsWith('ungrouped_users:')
       return this.$t(
-        this.permissionScope === 'direct' ? 'UserTreeAmountTipDirect' : 'UserTreeAmountTipEffective'
+        this.permissionScope === 'direct' || isUngrouped
+          ? 'UserTreeAmountTipUserDirect'
+          : 'UserTreeAmountTipUserEffective'
       )
     },
     async refresh() {

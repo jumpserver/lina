@@ -11,7 +11,11 @@ function resourceItems(nodes) {
     const type = node?.type
     const id = node?.resourceId
     const key = `${type}:${id}`
-    if (!id || !['organization', 'user_group', 'user'].includes(type) || seen.has(key)) {
+    if (
+      !id ||
+      !['organization', 'user_group', 'ungrouped_users', 'user'].includes(type) ||
+      seen.has(key)
+    ) {
       continue
     }
     seen.add(key)
@@ -47,7 +51,7 @@ export function createAssetPermissionUserTreeDataSource(request) {
       when: ({ nodes }) => resourceItems(nodes).length > 0,
       empty: { results: [] },
       data: ({ mode, nodes }) => ({
-        items: resourceItems(nodes),
+        resources: resourceItems(nodes),
         metric: mode
       })
     }

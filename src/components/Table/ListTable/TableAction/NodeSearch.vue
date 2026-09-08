@@ -80,6 +80,12 @@
 </template>
 
 <script>
+import {
+  NODE_TREE_METRICS_URL,
+  nodeAssetMetricsPayload,
+  createTypeTreeMetricsLoader,
+  typeTreeStructureUrl
+} from '@/components/Tree/metrics'
 import TabTree from '@/components/Table/TabTree/index.vue'
 import {
   createXTreeDataSource,
@@ -117,7 +123,7 @@ export default {
     },
     treeAmountUrl: {
       type: [String, Function],
-      default: '/api/v1/assets/nodes/assets-amount/'
+      default: NODE_TREE_METRICS_URL
     },
     treeAmountLoader: {
       type: Function,
@@ -357,8 +363,6 @@ export default {
         dataSourceDefinitions.search = ({ keyword, signal }) =>
           this.$axios.get(NODE_ASSET_SEARCH_URL, {
             params: {
-              include_ancestors: true,
-              limit: 1000,
               search: keyword,
               target: 'node'
             },
@@ -366,9 +370,12 @@ export default {
           })
       } else {
         dataSourceDefinitions.search = ({ keyword, signal }) =>
-          this.$axios.get(this.typeTreeUrl, {
+          this.$axios.get(typeTreeStructureUrl(this.typeTreeUrl), {
             params: {
               ...this.getQueryParams(),
+              ...(typeTreeStructureUrl(this.typeTreeUrl) !== this.typeTreeUrl
+                ? { count_resource: 'none' }
+                : {}),
               search: keyword
             },
             signal
@@ -385,15 +392,37 @@ export default {
         dataSourceDefinitions.metrics = {
           url: this.treeAmountUrl,
           method: 'post',
-          data: ({ fresh, nodeIds }) => ({
-            fresh,
-            include_descendants: this.includeDescendants,
-            node_ids: nodeIds
-          })
+          data: ({ fresh, nodeIds }) =>
+            nodeAssetMetricsPayload(nodeIds, {
+              fresh,
+              includeDescendants: this.includeDescendants
+            })
         }
       }
+      const countResource =
+        this.getQueryParams().count_resource ||
+        new URLSearchParams(this.typeTreeUrl.split('?')[1]).get('count_resource') ||
+        'asset'
       return createXTreeSetting({
-        amountTypes: treeType === 'asset' ? this.treeAmountTypes : [],
+        amountInLabel:
+          treeType === 'type' &&
+          countResource !== 'none' &&
+          typeTreeStructureUrl(this.typeTreeUrl) === this.typeTreeUrl,
+        loadNodeAmounts:
+          treeType === 'type'
+            ? createTypeTreeMetricsLoader(this.$axios, this.typeTreeUrl, countResource)
+            : undefined,
+        amountTypes: treeType === 'asset' ? this.treeAmountTypes : ['category', 'type', 'platform'],
+        countResource,
+        getNodeAmountTitle:
+          treeType === 'asset'
+            ? () =>
+                this.$t(
+                  this.includeDescendants
+                    ? 'NodeAssetTreeAmountTipAssetAll'
+                    : 'NodeAssetTreeAmountTipAssetDirect'
+                )
+            : undefined,
         childrenPagination: treeType === 'asset',
         dataSource: createXTreeDataSource(this.$axios, dataSourceDefinitions),
         edit: { drag: { isMove: false } },
@@ -574,7 +603,8 @@ export default {
       if (state.loaded && !refresh) {
         return state.data
       }
-      const url = treeType === 'type' ? this.typeTreeUrl : this.getPagedNodeTreeUrl()
+      const url =
+        treeType === 'type' ? typeTreeStructureUrl(this.typeTreeUrl) : this.getPagedNodeTreeUrl()
       if (!url) {
         return []
       }
@@ -582,7 +612,10 @@ export default {
       state.loadPromise = (async () => {
         try {
           const response = await this.$axios.get(url, {
-            params: this.getQueryParams()
+            params: {
+              ...this.getQueryParams(),
+              ...(treeType === 'type' && url !== this.typeTreeUrl ? { count_resource: 'none' } : {})
+            }
           })
           const treeData = this.buildTree(response)
           if (treeType === 'asset') {

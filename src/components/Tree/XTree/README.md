@@ -59,3 +59,19 @@ branches expanded and collapses fully on the next call. It also proxies
 configure a temporary visible scope without replacing the shared renderer.
 Configure `countUrl`, `loadNodeAmounts`, or `dataSource.metrics` to load counts
 asynchronously; XTree batches those requests progressively for the visible rows.
+Use `tree-metrics/` endpoints for these requests. The default `countUrl` contract
+posts `resources: [{ type: 'node', id }]` and `metric: 'asset_all' | 'asset_direct'`;
+results use `{ type, id, count }`. Account trees use the same typed resource
+identities for both nodes and assets, with `include_descendants: false` only
+when requesting direct node account counts. Batches have no 200-resource cap.
+Type trees request structure with `count_resource=none` and load counts from
+`nodes/category/tree-metrics/` independently through `createTypeTreeMetricsLoader`.
+
+NodeAssetTree pages each expanded parent's direct child nodes first, then its
+direct assets. Empty pages advance to the next cursor or phase without marking
+the parent complete while more children remain.
+
+Counts share one hover tooltip per tree. Use `getNodeAmountTitle(node, amount)`
+to describe a custom metric. For type-tree APIs that append counts to names,
+set `amountInLabel: true`, include `category`, `type`, and `platform` in
+`amountTypes`, and set `countResource` to `asset` or `account`.

@@ -59,6 +59,7 @@ export default {
       expandRootInGlobalOrg: true,
       treeUrl: '/api/v1/terminal/command-storages/tree/?real=1',
       amountPredicate: (node) => node.valid !== false,
+      getNodeAmountTitle: () => this.$t('TreeAmountTipCommands'),
       getNodeAmountResourceId: (node) => (node.id === 'root' ? null : node.id),
       loadNodeAmounts: (nodeIds, options) => this.loadStorageAmounts(nodeIds, options),
       edit: {

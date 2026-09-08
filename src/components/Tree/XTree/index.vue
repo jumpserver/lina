@@ -70,11 +70,11 @@
             </el-dropdown-item>
             <template v-if="treeSetting.showAssetScope">
               <li v-if="hasTreeMenuOperations" class="x-tree-tools__divider" />
-              <li class="x-tree-settings__title">{{ $t('AssetScope') }}</li>
+              <li class="x-tree-settings__title">{{ $t(`${countScopePrefix}Scope`) }}</li>
               <li class="x-tree-settings__radio-list" @click.capture="closeToolsDropdown">
                 <el-radio-group :model-value="assetScope" @change="handleAssetScopeChange">
                   <el-tooltip
-                    :content="$t('AssetScopeWithDescendantsHelp')"
+                    :content="$t(`${countScopePrefix}ScopeWithDescendantsHelp`)"
                     :persistent="false"
                     :show-after="400"
                     placement="right"
@@ -85,7 +85,7 @@
                     </el-radio>
                   </el-tooltip>
                   <el-tooltip
-                    :content="$t('AssetScopeDirectHelp')"
+                    :content="$t(`${countScopePrefix}ScopeDirectHelp`)"
                     :persistent="false"
                     :show-after="400"
                     placement="right"
@@ -207,8 +207,10 @@
                 <span class="x-tree__node-label">{{ getNodeLabel(data) }}</span>
                 <span
                   v-if="hasNodeAmount(data)"
-                  :title="getNodeAmountTitle(data) || undefined"
                   class="x-tree__node-amount"
+                  title=""
+                  @mouseenter="showNodeAmountTooltip($event, data)"
+                  @mouseleave="hideNodeAmountTooltip"
                 >
                   ({{ getNodeAmount(data) }})
                 </span>
@@ -288,8 +290,10 @@
                 </span>
                 <span
                   v-if="hasNodeAmount(data)"
-                  :title="getNodeAmountTitle(data) || undefined"
                   class="x-tree__node-amount"
+                  title=""
+                  @mouseenter="showNodeAmountTooltip($event, data)"
+                  @mouseleave="hideNodeAmountTooltip"
                 >
                   ({{ getNodeAmount(data) }})
                 </span>
@@ -306,6 +310,17 @@
         />
       </div>
     </div>
+
+    <el-tooltip
+      v-if="amountTooltipReference"
+      :content="amountTooltipContent"
+      :enterable="false"
+      :virtual-ref="amountTooltipReference"
+      :visible="true"
+      placement="top"
+      popper-class="x-tree-amount-tooltip"
+      virtual-triggering
+    />
 
     <div
       v-show="menuVisible"
@@ -337,6 +352,7 @@
 </template>
 
 <script>
+import { nodeAssetMetricsPayload } from '@/components/Tree/metrics'
 import axiosRetry from 'axios-retry'
 import Icon from '@/components/Widgets/Icon'
 import TreeFolderIcon from '@/components/Tree/TreeFolderIcon.vue'
@@ -385,6 +401,8 @@ export default {
       treeData: [],
       normalTreeData: [],
       currentNode: null,
+      amountTooltipReference: null,
+      amountTooltipNode: null,
       structureLoading: false,
       searchLoading: false,
       treeKey: 0,
@@ -450,11 +468,19 @@ export default {
     }
   },
   computed: {
+    amountTooltipContent() {
+      return this.amountTooltipNode ? this.getNodeAmountTitle(this.amountTooltipNode) : ''
+    },
     loading() {
       // Structure and search requests have independent generations. Once a
       // search tree is visible, a slower background root request must neither
       // clear nor keep that search result behind its loading overlay.
       return this.searchLoading || (!this.searchMode && this.structureLoading)
+    },
+    expandedTreeRowEntries() {
+      // Metrics live in a separate map, so count updates do not invalidate
+      // the flattened structure used by scroll/pagination calculations.
+      return this.collectExpandedTreeRowEntries()
     },
     treeSetting() {
       const merged = createXTreeSetting(
@@ -480,10 +506,10 @@ export default {
             initialAmounts: null,
             initialAssetScope: '',
             countUrl: '',
-            countBatchSize: 200,
             countProgressiveBatchSize: 100,
             childrenPagination: false,
             amountTypes: ['node'],
+            amountInLabel: false,
             operationNodeId: '',
             readOnly: false,
             nodeRowHeight: DEFAULT_NODE_ROW_HEIGHT,
@@ -527,6 +553,9 @@ export default {
     hasTreeMenuOperations() {
       return this.treeSetting.showCollapse || this.treeSetting.showRefresh
     },
+    countScopePrefix() {
+      return this.treeSetting.countResource === 'account' ? 'Account' : 'Asset'
+    },
     hasTreeMenu() {
       return (
         this.hasTreeMenuOperations ||
@@ -546,21 +575,30 @@ export default {
           name: this.$t('CreateNode'),
           icon: 'fa-plus-square-o',
           callback: this.createTreeNode,
-          has: () => this.treeSetting.showCreate
+          has: (node) =>
+            typeof this.treeSetting.showCreate === 'function'
+              ? this.treeSetting.showCreate(node)
+              : this.treeSetting.showCreate
         },
         {
           id: 'm_edit',
           name: this.$t('RenameNode'),
           icon: 'fa-pencil-square-o',
           callback: this.startRename,
-          has: () => this.treeSetting.showUpdate
+          has: (node) =>
+            typeof this.treeSetting.showUpdate === 'function'
+              ? this.treeSetting.showUpdate(node)
+              : this.treeSetting.showUpdate
         },
         {
           id: 'm_del',
           name: this.$t('DeleteNode'),
           icon: 'fa-minus-square',
           callback: this.removeTreeNode,
-          has: () => this.treeSetting.showDelete
+          has: (node) =>
+            typeof this.treeSetting.showDelete === 'function'
+              ? this.treeSetting.showDelete(node)
+              : this.treeSetting.showDelete
         }
       ]
     },
@@ -579,14 +617,22 @@ export default {
       return (
         this.treeSetting.virtualize !== false &&
         (!this.searchMode || this.treeSetting.virtualizeSearch !== false) &&
-        (this.searchMode || !this.treeSetting.showAssets) &&
+        (this.searchMode || !this.treeSetting.showAssets || this.treeSetting.childrenPagination) &&
         ((!this.searchMode && this.treeSetting.childrenPagination) ||
           this.treeNodeCount >= this.treeSetting.virtualThreshold)
       )
     },
-    initialExpandedKeys() {
+    initialExpandedKeys(_vm, previous) {
+      // TreeV2 resets expansion whenever this prop gets a new array. Metric
+      // settings may change without changing the initial expansion itself.
+      const stableKeys = (keys) =>
+        Array.isArray(previous) &&
+        keys.length === previous.length &&
+        keys.every((key, index) => key === previous[index])
+          ? previous
+          : keys
       if (!this.treeData.length) {
-        return []
+        return stableKeys([])
       }
       if (!this.searchMode) {
         const configuredKeys =
@@ -594,16 +640,16 @@ export default {
             ? this.treeSetting.initialExpandedKeys({ nodes: this.treeData, tree: this })
             : this.treeSetting.initialExpandedKeys
         if (Array.isArray(configuredKeys)) {
-          return [...configuredKeys]
+          return stableKeys([...configuredKeys])
         }
         if (
           this.$store.getters.currentOrgIsRoot &&
           this.treeSetting.expandRootInGlobalOrg !== true
         ) {
-          return []
+          return stableKeys([])
         }
         const keys = this.treeData.filter((node) => node.open).map((node) => node.id)
-        return keys.length ? keys : [this.treeData[0].id]
+        return stableKeys(keys.length ? keys : [this.treeData[0].id])
       }
       const keys = []
       const stack = [...this.treeData]
@@ -614,7 +660,7 @@ export default {
           stack.push(...node.children)
         }
       }
-      return keys
+      return stableKeys(keys)
     },
     menuStyle() {
       return {
@@ -625,6 +671,11 @@ export default {
   },
   created() {
     this.debouncedSearch = _.debounce(this.searchTree, 200)
+  },
+  watch: {
+    treeKey() {
+      this.hideNodeAmountTooltip()
+    }
   },
   mounted() {
     this.setupRuntimeEffects()
@@ -684,6 +735,7 @@ export default {
       })
     },
     teardownRuntimeEffects({ preserveAmountRefresh = false } = {}) {
+      this.hideNodeAmountTooltip()
       this.runtimeEffectsActive = false
       this.runtimeEffectsGeneration += 1
       this.hideRMenu()
@@ -776,9 +828,44 @@ export default {
     },
     getNodeAmountTitle(node) {
       if (typeof this.treeSetting.getNodeAmountTitle === 'function') {
-        return this.treeSetting.getNodeAmountTitle(node, this.getNodeAmount(node))
+        const title = this.treeSetting.getNodeAmountTitle(node, this.getNodeAmount(node))
+        if (title) {
+          return title
+        }
       }
-      return ''
+      const typeLabels = { category: 'Category', type: 'Type', platform: 'Platform' }
+      const typeLabel = typeLabels[node?.meta?.type]
+      if (typeLabel) {
+        return this.$t(
+          this.treeSetting.countResource === 'account'
+            ? 'TreeAmountTipAccountType'
+            : 'TreeAmountTipAssetType',
+          { type: this.$t(typeLabel) }
+        )
+      }
+      if (this.treeSetting.countResource === 'account') {
+        return this.$t(
+          String(this.assetScope) === '1'
+            ? 'NodeTreeAmountTipAccountDirect'
+            : 'NodeTreeAmountTipAccountAll'
+        )
+      }
+      return this.$t(
+        String(this.assetScope) === '1'
+          ? 'NodeAssetTreeAmountTipAssetDirect'
+          : 'NodeAssetTreeAmountTipAssetAll'
+      )
+    },
+    showNodeAmountTooltip(event, node) {
+      if (this.treeSetting.showAmountTooltip === false) {
+        return
+      }
+      this.amountTooltipNode = node
+      this.amountTooltipReference = event.currentTarget
+    },
+    hideNodeAmountTooltip() {
+      this.amountTooltipReference = null
+      this.amountTooltipNode = null
     },
     isLeafNode(node) {
       if (typeof this.treeSetting.isLeaf === 'function') {
@@ -916,7 +1003,14 @@ export default {
     normalizeNode(node, children = []) {
       const type = node.meta?.type
       const hasChildren = node.hasChildren ?? node.meta?.data?.has_children
-      const amount = node.assets_amount ?? node.meta?.data?.assets_amount
+      const label = this.getRawNodeLabel(node)
+      // Type-tree APIs append counts to labels instead of returning a field.
+      // Only configured category/type/platform rows follow this contract.
+      const labelAmount =
+        this.treeSetting.amountInLabel && ['category', 'type', 'platform'].includes(type)
+          ? label.match(/^(.*)\s+\((\d+)\)$/)
+          : null
+      const amount = node.assets_amount ?? node.meta?.data?.assets_amount ?? labelAmount?.[2]
       const isLeaf =
         children.length === 0 &&
         (hasChildren === false ||
@@ -926,7 +1020,7 @@ export default {
       return {
         ...node,
         id: this.getNodeKey(node),
-        name: this.getRawNodeLabel(node),
+        name: labelAmount ? labelAmount[1].trimEnd() : label,
         children,
         assets_amount: amount === undefined || amount === null ? null : Number(amount),
         _isLeaf: isLeaf
@@ -1225,7 +1319,7 @@ export default {
       if (!this.treeSetting.childrenPagination) {
         return
       }
-      const entries = this.collectExpandedTreeRowEntries()
+      const entries = this.expandedTreeRowEntries
       if (!entries.length) {
         return
       }
@@ -1243,6 +1337,7 @@ export default {
             this.expandedNodeIds.has(String(node.id)) &&
             pagination?.hasMore &&
             !pagination.loading &&
+            !node._childrenLoading &&
             endIndex >= firstVisibleIndex &&
             endIndex <= prefetchEnd
           )
@@ -1254,7 +1349,12 @@ export default {
     },
     async loadNextNodeChildrenPage(parent) {
       const pagination = parent?._childrenPagination
-      if (!pagination?.hasMore || pagination.loading || !pagination.next) {
+      if (
+        !pagination?.hasMore ||
+        pagination.loading ||
+        parent._childrenLoading ||
+        !pagination.next
+      ) {
         return
       }
       const requestKey = `next:${parent.id}`
@@ -1263,12 +1363,16 @@ export default {
       this.childrenAbortControllers.set(requestKey, controller)
       pagination.loading = true
       try {
-        const response = await this.requestNodeChildren(parent, {
+        const { children: page, response } = await this.requestFirstPopulatedNodeChildren(parent, {
           next: pagination.next,
           signal: controller.signal
         })
-        const page = this.normalizeNodeChildrenResponse(response, parent)
-        const existingIds = new Set((parent.children || []).map((node) => String(node.id)))
+        if (controller.signal.aborted) {
+          return
+        }
+        const loadedChildren =
+          this.nodeChildrenViewSources.get(String(parent.id))?.children || parent.children || []
+        const existingIds = new Set(loadedChildren.map((node) => String(node.id)))
         const appended = page.filter((node) => !existingIds.has(String(node.id)))
         const nextPagination = this.applyNodeChildrenPagination(parent, response)
         if (nextPagination) {
@@ -1283,10 +1387,9 @@ export default {
           }
           return
         }
-        const children = [...(parent.children || []), ...appended]
+        const children = [...loadedChildren, ...appended]
         this.rememberNodeChildrenViewSource(parent, children, { replace: true })
         await this.setNodeChildrenView(parent)
-        this.registerLoadedNodeChildren(appended)
         this.enqueueNodeAmounts(appended)
         this.scheduleProgressiveAmountLoading()
       } catch (error) {
@@ -1343,6 +1446,11 @@ export default {
       if (!this.runtimeEffectsActive || !this.hasNodeAmountLoader()) {
         return
       }
+      if (this.treeSetting.childrenPagination) {
+        // Expanding, paging and collapsing must not abort independent metrics.
+        this.startProgressiveAmountLoading()
+        return
+      }
       const scrollElement = this.getTreeAmountScrollElement()
       const batchSize = this.getProgressiveAmountBatchSize()
       const firstVisibleIndex = this.getTreeAmountScrollIndex(scrollElement)
@@ -1381,7 +1489,9 @@ export default {
     enqueueDirectChildAmounts(children) {
       const batchSize = this.getProgressiveAmountBatchSize()
       const directChildren = (children || []).filter((node) => this.shouldHandleNodeAmount(node))
-      const firstBatch = directChildren.slice(0, batchSize)
+      const firstBatch = this.treeSetting.childrenPagination
+        ? directChildren
+        : directChildren.slice(0, batchSize)
       if (!firstBatch.length) {
         return
       }
@@ -1425,7 +1535,7 @@ export default {
       }
       return this.$axios.post(
         this.treeSetting.countUrl,
-        { fresh, include_descendants: includeDescendants, node_ids: nodeIds },
+        nodeAssetMetricsPayload(nodeIds, { fresh, includeDescendants }),
         { signal }
       )
     },
@@ -1540,9 +1650,11 @@ export default {
       })
     },
     handleTreeAmountScroll(event) {
+      this.hideNodeAmountTooltip()
       this.scheduleProgressiveAmountLoading(event.target)
     },
     handleDocumentAmountScroll(event) {
+      this.hideNodeAmountTooltip()
       const scrollElement = this.getTreeAmountScrollElement()
       if (!scrollElement || event.target === scrollElement) {
         return
@@ -1632,7 +1744,6 @@ export default {
       const requestId = this.amountRequestId
       const controller = new AbortController()
       this.amountAbortController = controller
-      const batchSize = Math.min(200, Math.max(1, Number(this.treeSetting.countBatchSize) || 100))
 
       try {
         while (this.amountQueue.length) {
@@ -1643,7 +1754,7 @@ export default {
           if (requestId !== this.amountRequestId) {
             return
           }
-          const batch = this.amountQueue.splice(0, batchSize)
+          const batch = this.amountQueue.splice(0)
           if (!batch.length) {
             continue
           }
@@ -1878,6 +1989,16 @@ export default {
           const keys = expandedKeysOverride || this.initialExpandedKeys
           keys.forEach((key) => this.expandedNodeIds.add(String(key)))
           this.$refs.tree?.setExpandedKeys(keys)
+          if (!this.searchMode) {
+            // TreeV2's setExpandedKeys does not emit node-expand. Load the
+            // initial branches without blocking tree initialization or metrics.
+            keys.forEach((key) => {
+              const data = this.$refs.tree?.getNode(key)?.data
+              if (data) {
+                this.loadVirtualNodeChildren(data)
+              }
+            })
+          }
           await this.revealOperationNode()
           return
         }
@@ -1984,11 +2105,9 @@ export default {
       }
       return this.requestTree(
         this.treeSetting.treeUrl,
-        {
-          key: parent.id,
-          n: parent.name,
-          lv: level
-        },
+        this.treeSetting.treeUrl.includes('/api/v1/assets/nodes/')
+          ? { parent_key: parent.meta?.data?.tree_key ?? parent.id }
+          : { key: parent.id, n: parent.name, lv: level },
         { signal }
       )
     },
@@ -1997,7 +2116,12 @@ export default {
       let children = this.normalizeNodeChildrenResponse(response, parent)
       let pagination = this.getNodeChildrenPagination(response)
       const visitedCursors = new Set()
-      while (!children.length && pagination?.hasMore && pagination.next) {
+      while (
+        !options.signal?.aborted &&
+        !children.length &&
+        pagination?.hasMore &&
+        pagination.next
+      ) {
         const cursorKey =
           typeof pagination.next === 'string' ? pagination.next : JSON.stringify(pagination.next)
         if (visitedCursors.has(cursorKey)) {
@@ -2054,12 +2178,19 @@ export default {
       this.childrenAbortControllers.get(requestKey)?.abort()
       const controller = new AbortController()
       this.childrenAbortControllers.set(requestKey, controller)
+      node.data._childrenLoading = true
       try {
         const { children: normalizedChildren, response } =
           await this.requestFirstPopulatedNodeChildren(node.data, {
             level: node.level,
+            next: reloadProjectedChildren ? undefined : node.data._childrenPagination?.next,
             signal: controller.signal
           })
+        if (controller.signal.aborted) {
+          reject?.()
+          node.loading = false
+          return
+        }
         const children = this.storeLoadedNodeChildren(node.data, response, normalizedChildren)
         resolve(children)
         this.registerLoadedNodeChildren(children)
@@ -2085,6 +2216,7 @@ export default {
           node.loading = false
         }
       } finally {
+        node.data._childrenLoading = false
         if (this.childrenAbortControllers.get(requestKey) === controller) {
           this.childrenAbortControllers.delete(requestKey)
         }
@@ -2094,11 +2226,13 @@ export default {
       const reloadProjectedChildren = Boolean(
         this.isNodeChildrenProjection(data) && data?._reloadProjectedChildren
       )
+      // The root response may already contain an empty first child page.
+      // Its pagination cursor must own the next request, not a second lazy load.
       if (
         !this.isLazyLoad ||
         data?._isLeaf ||
         data?._childrenLoading ||
-        (data?.children?.length && !reloadProjectedChildren)
+        ((data?.children?.length || data?._childrenPagination?.hasMore) && !reloadProjectedChildren)
       ) {
         return
       }
@@ -2112,11 +2246,19 @@ export default {
           await this.requestFirstPopulatedNodeChildren(data, {
             signal: controller.signal
           })
+        if (controller.signal.aborted) {
+          return
+        }
         const children = this.storeLoadedNodeChildren(data, response, normalizedChildren)
         this.registerLoadedNodeChildren(children)
         this.$refs.tree?.setData(this.treeData)
         await this.$nextTick()
         this.$refs.tree?.setExpandedKeys([...this.expandedNodeIds])
+        if (this.expandedNodeIds.has(String(data.id))) {
+          // Initial expansion calls this loader without a node-expand event.
+          // Queue its children here as well; the amount queue deduplicates them.
+          this.enqueueDirectChildAmounts(children)
+        }
         this.scheduleProgressiveAmountLoading()
       } catch (error) {
         if (error?.code !== 'ERR_CANCELED' && error?.name !== 'AbortError') {
@@ -2752,6 +2894,7 @@ export default {
             : await this.$axios.post(url, {})
         const node = this.normalizeNode({
           id: response.key,
+          resourceId: response.resourceId ?? response.resource_id ?? response.id,
           name: response.value,
           pId: parent.id,
           hasChildren: false,
@@ -2851,6 +2994,12 @@ export default {
     async removeTreeNode() {
       const node = this.currentNode
       if (!node) {
+        return
+      }
+      if (
+        typeof this.treeSetting.beforeRemove === 'function' &&
+        (await this.treeSetting.beforeRemove(node)) === false
+      ) {
         return
       }
       const normalNode = this.searchMode
@@ -3226,6 +3375,7 @@ export default {
       return [...this.nodeChildrenViewSources.values()].map((item) => item.parent)
     },
     async setNodeChildrenView(parent, options = {}) {
+      options = { ...this.treeSetting.getChildrenViewOptions?.(parent), ...options }
       const key = String(parent?.id ?? '')
       if (!key) {
         return []
@@ -3237,7 +3387,8 @@ export default {
       const ordered = typeof options.sort === 'function' ? options.sort([...source]) : [...source]
       const visible =
         typeof options.filter === 'function' ? ordered.filter(options.filter) : ordered
-      parent._isLeaf = visible.length === 0 && source.length === 0
+      parent._isLeaf =
+        visible.length === 0 && source.length === 0 && !parent._childrenPagination?.hasMore
 
       if (this.useVirtualTree) {
         parent.children = visible
@@ -3265,7 +3416,9 @@ export default {
         this.normalTreeNodeCount = this.treeNodeCount
       }
       await this.$nextTick()
-      if (!this.useVirtualTree) {
+      if (this.useVirtualTree) {
+        this.$refs.tree?.setExpandedKeys([...this.expandedNodeIds])
+      } else {
         const stack = [...this.treeData]
         while (stack.length) {
           const node = stack.pop()
@@ -3535,7 +3688,7 @@ export default {
   min-height: 0;
   overflow: hidden;
   padding-right: var(--x-tree-body-inline-padding, 0);
-  padding-left: var(--x-tree-body-inline-padding, 0);
+  padding-left: var(--x-tree-body-padding-left, var(--x-tree-body-inline-padding, 0));
   border-top: var(
     --x-tree-body-border-top,
     1px solid var(--panel-border-color, var(--el-border-color))

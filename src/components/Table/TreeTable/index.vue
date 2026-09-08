@@ -60,6 +60,7 @@
         <slot name="table">
           <ListTable
             ref="ListTable"
+            :fill-height="fillHeight"
             :header-actions="headerActions"
             :quick-filters="quickFilters"
             :quick-summary="quickSummary"
@@ -126,6 +127,10 @@ export default {
   inheritAttrs: false,
   props: {
     ...ListTable.props,
+    fillHeight: {
+      type: Boolean,
+      default: false
+    },
     treeSetting: {
       type: Object,
       default: () => AutoDataZTree.props.setting.default()
@@ -393,6 +398,9 @@ export default {
     getTreeSnapshot: function () {
       return this.$refs.AutoDataZTree?.getTreeSnapshot?.()
     },
+    refreshTreeView(treeName) {
+      return this.$refs.AutoDataZTree?.refreshTreeView?.(treeName)
+    },
     selectNode: function (node) {
       return this.$refs.AutoDataZTree?.selectNode?.(node)
     },
@@ -500,13 +508,30 @@ $origin-color: #ffffff;
   width: 14px;
   background: transparent;
 
+  &::before {
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    bottom: 0;
+    left: -1px;
+    width: 1px;
+    background: transparent;
+    pointer-events: none;
+    content: '';
+    transition: background-color 0.15s ease;
+  }
+
   &.is-collapsed {
     flex-basis: 0;
     width: 0;
     cursor: default;
 
+    &::before {
+      display: none;
+    }
+
     .tree-toggle {
-      border-left: 1px solid var(--panel-border-color, var(--el-border-color));
+      border-left-color: var(--panel-border-color, var(--el-border-color));
       transform: translate(-20px, -50%);
     }
   }
@@ -522,9 +547,14 @@ $origin-color: #ffffff;
   cursor: col-resize;
 }
 
-.tree-table-content:has(.tree-resize-handle:hover) .left,
+.tree-table-content:has(.tree-resizer:not(.is-collapsed):hover) .left,
 .tree-table-content.is-resizing .left {
-  border-right-color: var(--el-color-primary-light-5);
+  border-right-color: var(--el-color-primary);
+}
+
+.tree-resizer:not(.is-collapsed):hover::before,
+.tree-table-content.is-resizing .tree-resizer::before {
+  background: var(--el-color-primary);
 }
 
 .el-tree {
@@ -540,11 +570,12 @@ $origin-color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
   width: 14px;
   height: 34px;
   padding: 0;
   border: 1px solid var(--panel-border-color, var(--el-border-color));
-  border-left: 0;
+  border-left-color: transparent;
   border-radius: 0 6px 6px 0;
   color: var(--el-text-color-secondary);
   background: var(--el-bg-color);
@@ -552,7 +583,6 @@ $origin-color: #ffffff;
   opacity: 0;
   transition:
     opacity 0.15s ease,
-    color 0.15s ease,
     background-color 0.15s ease;
 
   &::before {
@@ -566,8 +596,7 @@ $origin-color: #ffffff;
   }
 
   &:hover {
-    color: var(--el-color-primary);
-    background: var(--el-color-primary-light-9);
+    background: var(--el-fill-color-light, #f5f7fa);
   }
 }
 

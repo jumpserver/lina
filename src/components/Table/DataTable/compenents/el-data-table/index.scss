@@ -6,14 +6,26 @@
   --list-table-row-hover-bg-color: var(--el-fill-color-light, #f5f7fa);
   --list-table-selected-bg-color: var(--list-table-row-hover-bg-color);
   --list-table-selected-hover-bg-color: var(--list-table-row-hover-bg-color);
-  --list-table-scrollbar-background: transparent;
+  --list-table-scrollbar-thumb-color: color-mix(in srgb, var(--menu-text) 18%, transparent);
+  --list-table-scrollbar-thumb-hover-color: color-mix(in srgb, var(--menu-text) 30%, transparent);
+  --list-table-horizontal-scrollbar-thumb-color: transparent;
+  --list-table-horizontal-scrollbar-thumb-hover-color: transparent;
   --list-table-scrollbar-space: 16px;
+  --list-table-scrollbar-size: 6px;
 
   display: flex;
   flex-direction: column;
   min-width: 0;
 
+  .el-data-table__surface:hover {
+    --list-table-horizontal-scrollbar-thumb-color: var(--list-table-scrollbar-thumb-color);
+    --list-table-horizontal-scrollbar-thumb-hover-color: var(
+      --list-table-scrollbar-thumb-hover-color
+    );
+  }
+
   :deep(.el-table) {
+    --el-table-border-color: var(--panel-border-color, var(--el-border-color-lighter));
     --el-table-header-bg-color: var(--list-table-header-bg-color);
     --el-table-row-hover-bg-color: var(--list-table-row-hover-bg-color);
     --el-table-current-row-bg-color: var(--list-table-selected-bg-color);
@@ -50,128 +62,55 @@
     background-color: var(--list-table-selected-hover-bg-color);
   }
 
+  :deep(.el-table__body-wrapper > .el-scrollbar) {
+    // Keep the horizontal track outside the row viewport from the first render.
+    // Padding on the scrollbar host also respects Element Plus's inline wrap height.
+    box-sizing: border-box;
+    padding-bottom: var(--list-table-scrollbar-space);
+  }
+
   :deep(.el-table__body-wrapper .el-scrollbar__wrap) {
-    // Show the native horizontal scrollbar only while the table is hovered.
-    overflow-x: hidden;
-    scrollbar-width: auto;
-    scrollbar-color: auto;
-
-    &::-webkit-scrollbar:horizontal {
-      height: var(--list-table-scrollbar-space);
-      border: 0;
-      background: var(--list-table-scrollbar-background);
-    }
-
-    &::-webkit-scrollbar-track:horizontal {
-      border: 0;
-      background: var(--list-table-scrollbar-background);
-      box-shadow: none;
-    }
-
-    &::-webkit-scrollbar:vertical,
-    &::-webkit-scrollbar-track:vertical {
-      background: var(--list-table-scrollbar-background);
-    }
-
-    &::-webkit-scrollbar-track:vertical {
-      border-left: 1px solid var(--panel-border-color, var(--el-border-color));
-    }
-
-    &::-webkit-scrollbar-thumb:horizontal {
-      min-width: 32px;
-      border: 4px solid transparent;
-      border-radius: 8px;
-      background: color-mix(in srgb, var(--el-scrollbar-bg-color, #909399) 45%, transparent)
-        content-box;
-    }
-
-    &::-webkit-scrollbar-thumb:vertical {
-      min-height: 32px;
-      border-radius: 8px;
-    }
+    // Keep row separators full-width; only the thumb covers them as it moves.
+    scrollbar-gutter: auto;
   }
 
-  :deep(.el-data-table__body:hover .el-table__body-wrapper .el-scrollbar__wrap) {
-    overflow-x: auto;
+  :deep(.el-table--scrollable-y tr > .el-table__cell:last-child > .cell) {
+    padding-right: 20px;
   }
 
-  :deep(.el-table:has(.el-table__empty-block) .el-table__body-wrapper .el-scrollbar__wrap) {
-    // Element Plus sizes the empty block before the native horizontal bar
-    // takes its space, which otherwise creates a meaningless vertical bar.
-    overflow-y: hidden;
-  }
+  :deep(.el-table .el-scrollbar__bar) {
+    --el-scrollbar-bg-color: var(--list-table-scrollbar-thumb-color);
+    --el-scrollbar-hover-bg-color: var(--list-table-scrollbar-thumb-hover-color);
+    --el-scrollbar-opacity: 1;
+    --el-scrollbar-hover-opacity: 1;
 
-  @media (hover: hover) {
-    @supports not selector(::-webkit-scrollbar) {
-      :deep(.el-table__body-wrapper .el-scrollbar__wrap) {
-        scrollbar-width: thin;
-        scrollbar-color: transparent transparent;
-      }
+    &.is-horizontal {
+      --el-scrollbar-bg-color: var(--list-table-horizontal-scrollbar-thumb-color);
+      --el-scrollbar-hover-bg-color: var(--list-table-horizontal-scrollbar-thumb-hover-color);
 
-      .el-data-table__body.is-scrollbar-visible {
-        :deep(.el-table__body-wrapper .el-scrollbar__wrap) {
-          scrollbar-color: color-mix(in srgb, var(--menu-text) 45%, transparent) transparent;
-        }
-      }
+      bottom: calc((var(--list-table-scrollbar-space) - var(--list-table-scrollbar-size)) / 2);
+      height: var(--list-table-scrollbar-size);
     }
 
-    :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar) {
-      -webkit-appearance: none;
-      width: 8px;
-      border: 0;
+    &.is-vertical {
+      // An opaque thumb masks the row separators only beneath the thumb.
+      // The rest of the track stays transparent, including on row hover.
+      --el-scrollbar-bg-color: color-mix(in srgb, var(--menu-text) 18%, var(--el-bg-color, #fff));
+      --el-scrollbar-hover-bg-color: color-mix(
+        in srgb,
+        var(--menu-text) 30%,
+        var(--el-bg-color, #fff)
+      );
+
+      bottom: calc(var(--list-table-scrollbar-space) + 2px);
+      right: 0;
+      width: var(--list-table-scrollbar-size);
       background: transparent;
-      box-shadow: none;
+      z-index: calc(var(--el-table-index) + 3);
     }
 
-    :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar-track-piece),
-    :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar-corner) {
-      -webkit-appearance: none;
-      border: 0;
-      background: transparent;
-      box-shadow: none;
-    }
-
-    :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar-thumb:horizontal) {
-      background-color: color-mix(in srgb, var(--menu-text) 22%, transparent);
-    }
-
-    :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar-thumb:hover) {
-      background-color: color-mix(in srgb, var(--menu-text) 60%, transparent);
-    }
-
-    .el-data-table__body :deep(.el-table .el-scrollbar__bar.is-horizontal) {
-      --el-scrollbar-bg-color: color-mix(in srgb, var(--menu-text) 22%, transparent);
-      --el-scrollbar-hover-bg-color: color-mix(in srgb, var(--menu-text) 60%, transparent);
-      --el-scrollbar-opacity: 1;
-      --el-scrollbar-hover-opacity: 1;
-
-      display: block !important;
-      height: 8px;
-      opacity: 1;
-    }
-
-    .el-data-table__body :deep(.el-table .el-scrollbar__bar.is-vertical) {
-      width: 8px;
-    }
-
-    .el-data-table__body :deep(.el-table .el-scrollbar__bar.is-vertical .el-scrollbar__thumb) {
+    .el-scrollbar__thumb {
       border-radius: 8px;
-    }
-
-    .el-data-table__body.is-scrollbar-visible {
-      :deep(.el-table__body-wrapper .el-scrollbar__wrap::-webkit-scrollbar-thumb) {
-        background-color: color-mix(in srgb, var(--menu-text) 45%, transparent);
-      }
-
-      :deep(.el-table .el-scrollbar__bar) {
-        --el-scrollbar-bg-color: color-mix(in srgb, var(--menu-text) 45%, transparent);
-        --el-scrollbar-hover-bg-color: color-mix(in srgb, var(--menu-text) 60%, transparent);
-        --el-scrollbar-opacity: 1;
-        --el-scrollbar-hover-opacity: 1;
-
-        display: block !important;
-        opacity: 1;
-      }
     }
   }
 }
@@ -184,6 +123,33 @@
   min-width: 0;
   min-height: 0;
   background-color: var(--el-bg-color, #fff);
+
+  &.is-empty {
+    :deep(.el-table__body-wrapper .el-scrollbar__view),
+    :deep(.el-table__empty-block) {
+      // Element Plus gives the empty view the full body-wrapper height. Match
+      // it to the smaller scrollbar viewport after the horizontal gutter is
+      // reserved, otherwise the gutter creates false vertical overflow.
+      height: 100% !important;
+      min-height: 0 !important;
+    }
+
+    :deep(.el-table .el-scrollbar__bar.is-vertical) {
+      display: none;
+    }
+
+    :deep(.el-table__body-wrapper > .el-scrollbar::after) {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: var(--list-table-scrollbar-space);
+      left: 0;
+      height: 1px;
+      background-color: var(--panel-border-color, var(--el-border-color-lighter));
+      pointer-events: none;
+      z-index: calc(var(--el-table-index) + 2);
+    }
+  }
 }
 
 .el-data-table--fill-height {
@@ -198,7 +164,7 @@
   }
 
   > .el-data-table__surface {
-    --el-data-table-horizontal-scrollbar-height: 0px;
+    --el-data-table-horizontal-scrollbar-height: var(--list-table-scrollbar-space);
     --el-data-table-surface-height: calc(
       var(--el-data-table-content-height, 100%) + var(--el-data-table-horizontal-scrollbar-height)
     );
@@ -209,10 +175,6 @@
     border: 1px solid var(--panel-border-color, var(--el-border-color));
     border-radius: var(--list-corner-radius, 4px);
     overflow: hidden;
-
-    &:has(.el-table--scrollable-x) {
-      --el-data-table-horizontal-scrollbar-height: var(--list-table-scrollbar-space);
-    }
   }
 
   > .el-data-table__surface > .el-data-table__body {
@@ -235,10 +197,6 @@
       height: 0;
     }
   }
-}
-
-.el-data-table__surface.is-paginated > .el-data-table__pagination-viewport {
-  border-top: 1px solid var(--panel-border-color, var(--el-border-color));
 }
 
 .el-data-table :deep(.el-table td) {
