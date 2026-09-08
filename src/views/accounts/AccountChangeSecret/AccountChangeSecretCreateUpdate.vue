@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" @get-object-done="handleObjectDone" />
+  <GenericCreateUpdatePage v-if="ready" v-bind="$data" @get-object-done="handleObjectDone" />
 </template>
 
 <script>
@@ -7,6 +7,7 @@ import { AutomationParams } from '@/components'
 import { NodeSelect, ResourceSelect } from '@/components/Form/FormFields'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
+import { choiceValue, getApplicationCredential } from '@/api/applicationCredential'
 
 export default {
   name: 'AccountChangeSecretCreateUpdate',
@@ -15,6 +16,7 @@ export default {
   },
   data() {
     return {
+      ready: false,
       node_ids: [],
       asset_ids: [],
       initial: {
@@ -122,6 +124,23 @@ export default {
         return data
       }
     }
+  },
+  async created() {
+    const credentialId = this.$route.query.application_credential
+    if (this.$route.name === 'AccountChangeSecretCreate' && credentialId) {
+      const credential = await getApplicationCredential(credentialId)
+      this.asset_ids = [credential.asset.id]
+      Object.assign(this.initial, {
+        name: `${credential.name}-${this.$t('ChangeSecret')}`,
+        assets: this.asset_ids,
+        accounts: [credential.primary_account.username],
+        secret_type: choiceValue(credential.primary_account.secret_type),
+        secret_strategy: 'random',
+        check_conn_after_change: true
+      })
+      this.fieldsMeta.params.el.assets = this.asset_ids
+    }
+    this.ready = true
   },
   watch: {
     node_ids: {

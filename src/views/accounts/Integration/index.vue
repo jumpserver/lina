@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       loading: true,
-      activeMenu: 'service',
+      activeMenu: 'application',
       tab: {
         submenu: [
           {
@@ -25,9 +25,15 @@ export default {
           },
           {
             name: 'records',
-            title: this.$t('CallRecords'),
+            title: this.$t('AppAuditLogs'),
             hidden: !this.$hasPerm('audits.view_integrationapplicationlog'),
-            component: () => import('@/views/accounts/Integration/components/CallRecords.vue')
+            component: () => import('@/views/accounts/Integration/components/ApplicationAudit.vue')
+          },
+          {
+            name: 'rotations',
+            title: this.$t('ApplicationCredentials'),
+            hidden: !this.$hasPerm('accounts.view_applicationcredential'),
+            component: () => import('@/views/accounts/Integration/AccountRotationPrototype.vue')
           },
           {
             name: 'docs',

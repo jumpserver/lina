@@ -1,144 +1,115 @@
 <template>
-  <div>
-    <IBox class="radio-box">
-      <div class="code-container">
-        <el-tabs v-model="currentLanguage" @tab-click="handleInput">
-          <el-tab-pane
-            v-for="language in languages"
-            :key="language.value"
-            :label="language.label"
-            :name="language.value"
-          >
-            <two-col>
-              <vue-markdown :source="readme" class="code-markdown" />
-              <template #right>
-                <vue-markdown :source="code" class="code-demo" />
-              </template>
-            </two-col>
+  <div class="integration-guide">
+    <TwoCol :left="17" :right="7">
+      <IBox :title="$t('GeneralGuide')">
+        <el-tabs v-model="activeMode">
+          <el-tab-pane :label="$t('PythonSDK')" name="sdk">
+            <p class="guide-description">{{ $t('SDKDescription') }}</p>
+            <el-steps :active="3" direction="vertical" finish-status="success">
+              <el-step
+                :description="$t('SelectApplicationHelp')"
+                :title="$t('SelectApplication')"
+              />
+              <el-step
+                :description="$t('CopyConnectionParametersHelp')"
+                :title="$t('ConnectionParameters')"
+              />
+              <el-step :description="$t('SDKDescription')" :title="$t('PythonSDK')" />
+            </el-steps>
+          </el-tab-pane>
+
+          <el-tab-pane :label="$t('AgentAccess')" name="agent">
+            <p class="guide-description">{{ $t('AgentDescription') }}</p>
+            <el-steps :active="3" direction="vertical" finish-status="success">
+              <el-step
+                :description="$t('SelectApplicationHelp')"
+                :title="$t('SelectApplication')"
+              />
+              <el-step :description="$t('CopyInstallCommandHelp')" :title="$t('InstallCommand')" />
+              <el-step :description="$t('WaitAgentOnlineHelp')" :title="$t('ClientStatus')" />
+            </el-steps>
           </el-tab-pane>
         </el-tabs>
+        <h4>{{ $t('InstallCommand') }}</h4>
+        <p>
+          <code
+            >python3 -m pip install --index-url https://pypi.org/simple "{{ sdkPackageUrl }}"</code
+          >
+        </p>
+        <el-alert :title="$t('SDKInstallationNotice')" :closable="false" show-icon type="info" />
+      </IBox>
 
-        <div class="copy-btn">
-          <el-tooltip :content="$t('Copy')" placement="top">
-            <el-icon class="copy-btn" @click="copyContent"><CopyDocument /></el-icon>
-          </el-tooltip>
-        </div>
-      </div>
-    </IBox>
+      <template #right>
+        <QuickActions :actions="guideActions" :title="$t('CurrentAction')" />
+      </template>
+    </TwoCol>
   </div>
 </template>
 
 <script>
-import { IBox } from '@/components'
+import { IBox, QuickActions } from '@/components'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-import hljs from 'highlight.js'
-import VueMarkdown from '@/components/Widgets/VueMarkdown/index.vue'
+import { BASE_URL } from '@/utils/common/index'
 
 export default {
   name: 'SDKList',
   components: {
-    TwoCol,
     IBox,
-    VueMarkdown
+    QuickActions,
+    TwoCol
   },
   data() {
     return {
-      currentLanguage: 'curl',
-      readme: '',
-      code: '',
-      languages: [
-        { label: 'cURL', value: 'curl' },
-        { label: 'Python', value: 'python' },
-        { label: 'Go', value: 'go' },
-        { label: 'Java', value: 'java' },
-        { label: 'Node.js', value: 'node' }
+      activeMode: 'sdk'
+    }
+  },
+  computed: {
+    sdkPackageUrl() {
+      return `${BASE_URL}/api/v1/accounts/python-sdk/`
+    },
+    guideActions() {
+      return [
+        {
+          title: this.$t('Applications'),
+          attrs: { type: 'primary', label: this.$t('ViewApplications') },
+          callbacks: { click: this.openApplications }
+        }
       ]
     }
   },
-  mounted() {
-    this.getSdkInfo()
-  },
   methods: {
-    async copyContent() {
-      try {
-        await navigator.clipboard.writeText(this.code)
-        this.$message.success(this.$tc('CopySuccess'))
-      } catch (err) {
-        this.$message.error(this.$tc('CopyFailed'))
-      }
-    },
-    highlightCode() {
-      const codeBlocks = this.$el.querySelectorAll('pre code')
-      codeBlocks.forEach((block) => {
-        if (block?.dataset?.highlighted !== 'yes') {
-          hljs.highlightElement(block)
-        }
+    openApplications() {
+      this.$router.replace({
+        path: this.$route.path,
+        query: { ...this.$route.query, tab: 'application' }
       })
-    },
-    getSdkInfo() {
-      const url = `/api/v1/accounts/integration-applications/sdks/?language=${this.currentLanguage}`
-      this.$axios.get(url).then((res) => {
-        this.readme = res.readme
-        const highlightMapper = {
-          curl: 'bash',
-          python: 'python',
-          go: 'go',
-          java: 'java',
-          node: 'javascript'
-        }
-        const language = highlightMapper[this.currentLanguage] || 'bash'
-        this.code = `\`\`\`${language}\n${res.code}\n\`\`\``
-        this.$nextTick(() => {
-          this.highlightCode()
-        })
-      })
-    },
-    handleInput() {
-      this.getSdkInfo()
     }
   }
 }
 </script>
+
 <style lang="scss" scoped>
-.code-container {
-  position: relative;
+.guide-description {
+  margin: 8px 0 20px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
 }
 
-.code-markdown {
-  min-height: 210px;
-  padding: 10px 20px;
-  border: 1px solid #dcdfe6;
-
-  :deep(.table) {
-    border-collapse: collapse;
-    border-spacing: 0;
-    width: 100%;
-
-    th,
-    td {
-      border: 1px solid #ebeef5;
-      padding: 10px;
-      text-align: left;
-    }
-
-    th {
-      background-color: #f5f7fa;
-    }
-  }
+.integration-guide :deep(.el-step__main) {
+  min-width: 0;
+  padding-bottom: 20px;
 }
 
-.code-demo {
-  @import '~highlight.js/styles/atom-one-light.css';
-  min-height: 210px;
-  padding: 10px 20px;
-  border: 1px solid #dcdfe6;
+.integration-guide :deep(.el-step__title) {
+  color: var(--color-text-primary);
+  font-size: 14px;
+  font-weight: 600;
 }
 
-.copy-btn {
-  font-size: 20px;
-  position: absolute;
-  top: 8px;
-  right: 5px;
-  cursor: pointer;
+.integration-guide :deep(.el-step__description) {
+  padding-right: 0;
+  color: var(--color-help-text);
+  line-height: 22px;
 }
 </style>
