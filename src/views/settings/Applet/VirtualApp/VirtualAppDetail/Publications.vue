@@ -47,7 +47,6 @@ export default {
           'provider.name',
           'provider.hostname',
           'app_version',
-          'image_digest',
           'date_synced',
           'status',
           'actions'
@@ -66,12 +65,6 @@ export default {
           },
           'provider.hostname': { label: this.$t('Hostname') },
           app_version: { label: this.$t('Version') },
-          image_digest: {
-            label: 'Digest',
-            formatter: (row) => (
-              <span title={row.image_digest}>{vm.shortDigest(row.image_digest)}</span>
-            )
-          },
           date_synced: { label: this.$t('DateSynced') },
           status: {
             label: this.$t('PublishStatus'),
@@ -103,11 +96,6 @@ export default {
           if (openTask) openTaskPage(res.task)
           return res
         })
-    },
-    shortDigest(digest) {
-      if (!digest) return '-'
-      const value = digest.includes('@') ? digest.split('@').pop() : digest
-      return value.length > 20 ? `${value.slice(0, 20)}…` : value
     },
     statusTag(status = {}) {
       const type =

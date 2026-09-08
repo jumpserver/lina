@@ -50,15 +50,7 @@ export default {
       },
       config: {
         url: `/api/v1/terminal/virtual-app-publications/?provider=${this.object.id}`,
-        columns: [
-          'app.name',
-          'app.image_name',
-          'app_version',
-          'image_digest',
-          'date_synced',
-          'status',
-          'actions'
-        ],
+        columns: ['app.name', 'app.image_name', 'app_version', 'date_synced', 'status', 'actions'],
         columnsMeta: {
           'app.name': {
             label: this.$t('Name'),
@@ -79,12 +71,6 @@ export default {
           },
           app_version: {
             label: this.$t('Version')
-          },
-          image_digest: {
-            label: 'Digest',
-            formatter: (row) => (
-              <span title={row.image_digest}>{this.shortDigest(row.image_digest)}</span>
-            )
           },
           status: {
             label: this.$t('PublishStatus'),
@@ -169,11 +155,6 @@ export default {
           if (openTask) openTaskPage(res.task)
           return res
         })
-    },
-    shortDigest(digest) {
-      if (!digest) return '-'
-      const value = digest.includes('@') ? digest.split('@').pop() : digest
-      return value.length > 20 ? `${value.slice(0, 20)}…` : value
     }
   }
 }
