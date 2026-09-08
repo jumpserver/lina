@@ -83,7 +83,10 @@ export async function saveClientAccessConfiguration(application, form) {
     language: 'python',
     app_user: form.app_user,
     install_path: form.install_path,
-    is_active: form.is_active
+    is_active: form.is_active,
+    notification_enabled: form.notification_enabled,
+    notification_url:
+      form.notification_enabled && form.type === 'agent' ? form.notification_url : ''
   }
   const item = form.id
     ? await request.patch(`${accessConfigurationUrl}${form.id}/`, data)

@@ -6,6 +6,7 @@
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
 import rules from '@/components/Form/DataForm/rules'
+import { validNotificationUrl } from '../components/applicationAudit'
 import {
   accessConfigurationUrl,
   credentialUrl,
@@ -38,11 +39,14 @@ export default {
           language: item?.language || 'python',
           app_user: item?.app_user || '',
           install_path: item?.install_path || '/opt/jumpserver-pam',
-          is_active: item?.is_active ?? true
+          is_active: item?.is_active ?? true,
+          notification_enabled: item?.notification_enabled ?? false,
+          notification_url: item?.notification_url || ''
         },
         fields: [
           [this.$t('Basic'), ['name', 'type', 'credential_ids']],
           [this.$t('Configuration'), ['language', 'app_user', 'install_path']],
+          [this.$t('AppEventNotification'), ['notification_enabled', 'notification_url']],
           [this.$t('Other'), ['is_active']]
         ],
         fieldsMeta: {
@@ -91,12 +95,35 @@ export default {
             el: { type: 'text', placeholder: '/opt/jumpserver-pam' },
             hidden: (form) => form.type !== 'agent'
           },
-          is_active: { label: this.$t('IsActive'), type: 'checkbox' }
+          is_active: { label: this.$t('IsActive'), type: 'checkbox' },
+          notification_enabled: {
+            label: this.$t('AppNotificationEnabled'),
+            type: 'checkbox',
+            helpText: this.$t('AppNotificationOptionalHelp')
+          },
+          notification_url: {
+            label: this.$t('AppNotificationURL'),
+            hidden: (form) => !form.notification_enabled || form.type !== 'agent',
+            rules: [
+              rules.Required,
+              {
+                validator: (_rule, value, callback) =>
+                  callback(
+                    validNotificationUrl(value)
+                      ? undefined
+                      : new Error(this.$t('AppNotificationInvalidURL'))
+                  ),
+                trigger: ['blur', 'change']
+              }
+            ],
+            el: { type: 'text', placeholder: 'https://app.example.com/pam/events' }
+          }
         },
         moreButtons: [{ title: this.$t('Cancel'), callback: () => this.$emit('cancel') }],
         performSubmit: (values) => {
           this.$emit('submitting', true)
-          return saveClientAccessConfiguration(this.application, {
+          const save = saveClientAccessConfiguration
+          return save(this.application, {
             ...values,
             id: item?.id
           }).finally(() => this.$emit('submitting', false))

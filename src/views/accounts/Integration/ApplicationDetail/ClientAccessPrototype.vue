@@ -30,12 +30,21 @@
 
     <template v-if="viewMode === 'detail' && selectedConfiguration">
       <div v-if="selectedConfiguration" class="client-access-detail">
-        <TwoCol :gutter="20" :left="16" :right="8" class="detail-overview">
-          <DetailCard :items="connectionItems" :title="$t('ConnectionParameters')" />
-          <template #right>
-            <QuickActions :actions="detailActions" :title="$t('CurrentAction')" />
-          </template>
-        </TwoCol>
+        <IBox :title="$t('ConnectionParameters')" class="detail-overview">
+          <el-descriptions :column="2" :label-width="120" border class="connection-parameters">
+            <el-descriptions-item
+              v-for="item in [...connectionItems, ...identificationItems].filter(
+                (field) => field.has !== false
+              )"
+              :key="item.key"
+              :label="item.key"
+              :span="item.span || 1"
+              width="50%"
+            >
+              <ItemValue v-bind="item" />
+            </el-descriptions-item>
+          </el-descriptions>
+        </IBox>
 
         <IBox :title="$t('ClientInstances')" class="detail-block">
           <DataTable ref="instancesTable" :config="instanceTableConfig" />
@@ -78,8 +87,10 @@
               </div>
             </div>
             <pre><code>{{ configurationText }}</code></pre>
-            <h4>{{ $t('InstallCommand') }}</h4>
-            <pre><code>{{ installCommand }}</code></pre>
+            <template v-if="selectedConfiguration.type === 'sdk'">
+              <h4>{{ $t('InstallCommand') }}</h4>
+              <pre><code>{{ installCommand }}</code></pre>
+            </template>
           </template>
 
           <div class="material-heading material-heading--spaced">
@@ -109,12 +120,11 @@
 </template>
 
 <script lang="jsx">
-import { IBox, ListTable, QuickActions } from '@/components'
+import { IBox, ListTable } from '@/components'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import Drawer from '@/components/Drawer/index.vue'
-import DetailCard from '@/components/Cards/DetailCard/index.vue'
+import ItemValue from '@/components/Cards/DetailCard/ItemValue.vue'
 import DataTable from '@/components/Table/DataTable/index.vue'
-import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { BASE_URL, copy } from '@/utils/common/index'
 import { mapGetters } from 'vuex'
@@ -133,12 +143,10 @@ export default {
   components: {
     ClientAccessCreateUpdate,
     DataTable,
-    DetailCard,
+    ItemValue,
     Drawer,
     IBox,
-    ListTable,
-    QuickActions,
-    TwoCol
+    ListTable
   },
   props: {
     object: {
@@ -146,6 +154,7 @@ export default {
       required: true
     }
   },
+  emits: ['detail-actions-change'],
   data() {
     return {
       configurationText: '',
@@ -255,6 +264,38 @@ export default {
         this.$hasPerm('accounts.change_integrationapplication')
       )
     },
+    detailPageActions() {
+      if (this.viewMode !== 'detail' || !this.selectedConfiguration) return []
+      const configuration = this.selectedConfiguration
+      return [
+        {
+          name: 'generate',
+          title: this.$t('Generate'),
+          tip: this.$t('GenerateConfiguration'),
+          icon: 'fa-solid fa-file-code',
+          has: this.canGenerate,
+          loading: this.generating,
+          callback: this.generateMaterials
+        },
+        {
+          name: 'update',
+          title: this.$t('Edit'),
+          tip: this.$t('EditClientAccessConfiguration'),
+          icon: 'el-icon-edit-outline',
+          can: this.$hasPerm('accounts.change_clientaccessconfiguration'),
+          callback: () => this.openEdit(configuration)
+        },
+        {
+          name: 'delete',
+          title: this.$t('Delete'),
+          type: 'danger',
+          plain: true,
+          icon: 'el-icon-delete',
+          can: this.$hasPerm('accounts.delete_clientaccessconfiguration'),
+          callback: () => this.remove(configuration)
+        }
+      ]
+    },
     instanceTableConfig() {
       return {
         url: '/api/v1/accounts/credential-client-instances/',
@@ -315,16 +356,6 @@ export default {
           value: item.type === 'sdk' ? this.$t('SDKAccess') : this.$t('AgentAccess')
         },
         {
-          key: this.$t('ApplicationCredentials'),
-          value: (item.credentials || [])
-            .map((credential) => `${credential.name} · ${credential.key}`)
-            .join('\n')
-        },
-        { key: this.$t('ClientAccessConfigurationID'), value: item.id },
-        { key: this.$t('JumpServerAddress'), value: BASE_URL },
-        { key: this.$t('ApplicationID'), value: this.object.id },
-        { key: this.$t('OrganizationID'), value: this.currentOrg?.id || '-' },
-        {
           key: this.$t('ClientStatus'),
           value:
             item.status === 'disabled'
@@ -333,35 +364,51 @@ export default {
                 ? this.$t('Online')
                 : this.$t('Offline')
         },
-        { key: this.$t('LastReportedAt'), value: this.formatDate(item.last_reported) }
-      ]
-    },
-    detailActions() {
-      return [
+        { key: this.$t('LastReportedAt'), value: this.formatDate(item.last_reported) },
         {
-          title: this.$t('GeneratedAccessMaterial'),
-          has: this.canGenerate,
-          attrs: {
-            type: 'primary',
-            label: this.$t('GenerateConfiguration'),
-            loading: this.generating
-          },
-          callbacks: { click: this.generateMaterials }
+          key: this.$t('AppEventNotification'),
+          value: this.$t(item.notification_enabled ? 'Enabled' : 'Disabled'),
+          span: 2
         },
         {
-          title: this.$t('Configuration'),
-          has: this.$hasPerm('accounts.change_clientaccessconfiguration'),
-          attrs: { label: this.$t('Edit') },
-          callbacks: { click: () => this.openEdit(this.selectedConfiguration) }
+          key: this.$t('AppNotificationURL'),
+          value: item.notification_url,
+          has: Boolean(item.notification_enabled && item.type === 'agent'),
+          span: 2
+        },
+        {
+          key: this.$t('ApplicationCredentials'),
+          value: (item.credentials || [])
+            .map((credential) => `${credential.name} · ${credential.key}`)
+            .join('\n'),
+          span: 2
         }
+      ]
+    },
+    identificationItems() {
+      return [
+        { key: this.$t('ClientAccessConfigurationID'), value: this.selectedConfiguration?.id },
+        { key: this.$t('JumpServerAddress'), value: BASE_URL },
+        { key: this.$t('ApplicationID'), value: this.object.id },
+        { key: this.$t('OrganizationID'), value: this.currentOrg?.id || '-' }
       ]
     }
   },
   watch: {
+    detailPageActions: {
+      immediate: true,
+      handler(actions) {
+        this.$emit('detail-actions-change', actions)
+      }
+    },
     'object.id': {
       immediate: true,
       async handler(id) {
-        if (id) await this.loadData()
+        if (!id) return
+        await this.loadData()
+        if (this.$route.query.configuration) {
+          await this.openDetail({ id: this.$route.query.configuration })
+        }
       }
     }
   },
@@ -398,6 +445,10 @@ export default {
         { type: 'warning' }
       )
       await deleteClientAccessConfiguration(row.id)
+      if (this.selectedConfiguration?.id === row.id) {
+        this.viewMode = 'list'
+        this.selectedConfiguration = null
+      }
       await this.loadData()
       this.$message.success(this.$t('DeleteSuccessMsg'))
     },
@@ -470,6 +521,23 @@ export default {
 .detail-overview,
 .detail-block {
   margin-bottom: 15px;
+}
+
+.connection-parameters :deep(.el-descriptions__table) {
+  table-layout: fixed;
+}
+
+.connection-parameters :deep(.el-descriptions__label) {
+  color: var(--color-icon-primary);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.connection-parameters
+  :deep(.el-descriptions__table .el-descriptions__cell.el-descriptions__content) {
+  color: var(--color-text-primary);
+  font-size: 13px;
+  overflow-wrap: anywhere;
 }
 
 .material-heading {

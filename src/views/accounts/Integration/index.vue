@@ -25,9 +25,9 @@ export default {
           },
           {
             name: 'records',
-            title: this.$t('CallRecords'),
+            title: this.$t('AppAuditLogs'),
             hidden: !this.$hasPerm('audits.view_integrationapplicationlog'),
-            component: () => import('@/views/accounts/Integration/components/CallRecords.vue')
+            component: () => import('@/views/accounts/Integration/components/ApplicationAudit.vue')
           },
           {
             name: 'rotations',
