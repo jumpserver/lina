@@ -39,7 +39,11 @@ export default {
         hasImport: false,
         hasExport: false,
         hasLeftActions: false,
-        hasRefresh: true
+        hasRefresh: true,
+        handleRefreshClick: ({ reloadTable }) => {
+          this.$emit('refresh')
+          reloadTable()
+        }
       },
       tableConfig: {
         hasSelection: false,
@@ -120,27 +124,6 @@ export default {
           },
           callbacks: {
             click: this.deploy
-          }
-        },
-        {
-          title: this.$t('Task'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('View'),
-            disabled: !this.object.deployment?.task
-          },
-          callbacks: {
-            click: () => openTaskPage(this.object.deployment.task)
-          }
-        },
-        {
-          title: this.$t('Status'),
-          attrs: { type: 'primary', label: this.$t('Refresh') },
-          callbacks: {
-            click: () => {
-              this.$emit('refresh')
-              this.$refs.table?.reloadTable()
-            }
           }
         }
       ]
