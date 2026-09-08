@@ -19,6 +19,7 @@ export default {
             'username_selector',
             'password_selector',
             'submit_selector',
+            'success_selector',
             'script',
             'spec_info',
             'info',
