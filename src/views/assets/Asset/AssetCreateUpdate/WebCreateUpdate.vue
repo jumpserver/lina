@@ -14,7 +14,14 @@ export default {
       addFields: [
         [
           this.$t('Selector'),
-          ['autofill', 'username_selector', 'password_selector', 'submit_selector', 'script'],
+          [
+            'autofill',
+            'username_selector',
+            'password_selector',
+            'submit_selector',
+            'success_selector',
+            'script'
+          ],
           1
         ]
       ],
@@ -43,6 +50,9 @@ export default {
           hidden: (formValue) => formValue['autofill'] !== 'basic'
         },
         submit_selector: {
+          hidden: (formValue) => formValue['autofill'] !== 'basic'
+        },
+        success_selector: {
           hidden: (formValue) => formValue['autofill'] !== 'basic'
         },
         script: {

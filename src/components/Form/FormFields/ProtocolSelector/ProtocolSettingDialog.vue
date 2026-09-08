@@ -88,6 +88,9 @@ export default {
               submit_selector: {
                 hidden: (formValue) => formValue['autofill'] !== 'basic'
               },
+              success_selector: {
+                hidden: (formValue) => formValue['autofill'] !== 'basic'
+              },
               script: {
                 component: JsonEditor,
                 hidden: (formValue) => formValue['autofill'] !== 'script'
