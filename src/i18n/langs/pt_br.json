@@ -1985,6 +1985,9 @@
   "TerminalUpdate": "Atualizar terminal",
   "TerminalUpdateStorage": " Atualização do armazenamento terminal ",
   "Terminate": "final",
+  "TerminateSelected": "Encerrar selecionadas",
+  "TerminateSessionConfirmMsg": "Encerrar as {count} sessões selecionadas? As conexões serão fechadas.",
+  "TerminateTaskSendPartialMsg": "Foram enviadas tarefas de encerramento para {count} de {total} sessões. As demais podem ter terminado ou estar inacessíveis. Atualize para verificar.",
   "TerminateTaskSendSuccessMsg": "A tarefa de término foi emitida, por favor, atualize para conferir mais tarde.",
   "TermsAndConditions": "Termos e condições",
   "TermsOfService": "Termos de serviço",
@@ -2227,5 +2230,6 @@
   "selectedAssets": "Ativos selecionados",
   "setVariable": "Parâmetros de configuração",
   "userId": "ID do usuário",
-  "userName": "Usuário"
+  "userName": "Usuário",
+  "WebScriptStepsHelp": "Steps may specify an origin. interactive pauses for verification; success must be the final step. Web Proxy supports navigation within one window; frames and popup login windows are not supported."
 }

@@ -1747,6 +1747,9 @@
   "TerminalUpdate": "Update the terminal",
   "TerminalUpdateStorage": "Update the terminal storage",
   "Terminate": "Terminate",
+  "TerminateSelected": "Terminate selected",
+  "TerminateSessionConfirmMsg": "Terminate the {count} selected sessions? Their connections will be closed.",
+  "TerminateTaskSendPartialMsg": "Termination tasks were issued for {count} of {total} sessions. The remaining sessions may have ended or be inaccessible. Please refresh to check.",
   "TerminateTaskSendSuccessMsg": "Task termination has been issued, please refresh and check later",
   "TermsAndConditions": "Terms and conditions",
   "TermsOfService": "Terms of Service",
@@ -2333,5 +2336,6 @@
   "ChatAIFailureContextAttached": "Referenced page: {page}",
   "ChatAIFailureApprovalRejected": "You rejected this operation. This step was not executed.",
   "ChatAIFailureStoppedAt": "Stopped at:",
-  "ChatAIFailureStepCreate": "Create {resource}"
+  "ChatAIFailureStepCreate": "Create {resource}",
+  "WebScriptStepsHelp": "Steps may specify an origin. interactive pauses for verification; success must be the final step. Web Proxy supports navigation within one window; frames and popup login windows are not supported."
 }

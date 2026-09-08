@@ -1597,7 +1597,7 @@
   "SessionOnline": "在线会话",
   "SessionSecurity": "会话安全",
   "SessionState": "会话状态",
-  "SessionTerminate": "会话终断",
+  "SessionTerminate": "终止会话",
   "SessionTrend": "会话趋势",
   "Sessions": "会话管理",
   "SessionsAudit": "会话审计",
@@ -1741,8 +1741,11 @@
   "TerminalDetail": "组件详情",
   "TerminalUpdate": "更新终端",
   "TerminalUpdateStorage": "更新终端存储",
-  "Terminate": "终断",
-  "TerminateTaskSendSuccessMsg": "中断任务已下发，请稍后刷新查看",
+  "Terminate": "终止会话",
+  "TerminateSelected": "批量终止会话",
+  "TerminateSessionConfirmMsg": "确定终止选中的 {count} 个会话吗？连接将被断开。",
+  "TerminateTaskSendPartialMsg": "已为 {total} 个会话中的 {count} 个下发终止任务，其余会话可能已结束或不可访问，请刷新查看。",
+  "TerminateTaskSendSuccessMsg": "终止会话任务已下发，请稍后刷新查看",
   "TermsAndConditions": "条款和条件",
   "TermsOfService": "服务条款",
   "Test": "测试",
@@ -2326,5 +2329,6 @@
   "ChatAIFailureContextAttached": "已引用页面：{page}",
   "ChatAIFailureApprovalRejected": "你已拒绝这次操作，该步骤未执行。",
   "ChatAIFailureStoppedAt": "停止位置：",
-  "ChatAIFailureStepCreate": "创建{resource}"
+  "ChatAIFailureStepCreate": "创建{resource}",
+  "WebScriptStepsHelp": "每步可指定 origin。interactive 暂停等待人工验证；success 必须是最后一步。Web Proxy 支持同一窗口内的页面跳转，暂不支持 iframe 和独立弹窗登录。"
 }

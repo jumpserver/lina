@@ -1985,6 +1985,9 @@
   "TerminalUpdate": "업데이트 단말",
   "TerminalUpdateStorage": "종단 저장소 업데이트",
   "Terminate": "중단",
+  "TerminateSelected": "선택한 세션 종료",
+  "TerminateSessionConfirmMsg": "선택한 세션 {count}개를 종료하시겠습니까? 연결이 끊어집니다.",
+  "TerminateTaskSendPartialMsg": "세션 {total}개 중 {count}개에 종료 작업을 전송했습니다. 나머지 세션은 이미 종료되었거나 접근할 수 없을 수 있습니다. 새로고침하여 확인하세요.",
   "TerminateTaskSendSuccessMsg": "작업 중단이 발송되었습니다. 잠시 후 새로고침하여 확인해 주세요",
   "TermsAndConditions": "약관",
   "TermsOfService": "서비스 약관",
@@ -2227,5 +2230,6 @@
   "selectedAssets": "선택한 자산",
   "setVariable": "설정 매개변수",
   "userId": "사용자 ID",
-  "userName": "사용자명"
+  "userName": "사용자명",
+  "WebScriptStepsHelp": "Steps may specify an origin. interactive pauses for verification; success must be the final step. Web Proxy supports navigation within one window; frames and popup login windows are not supported."
 }

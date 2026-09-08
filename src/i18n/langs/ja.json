@@ -1943,6 +1943,9 @@
   "TerminalUpdate": "端末の更新",
   "TerminalUpdateStorage": "ターミナルストレージの更新",
   "Terminate": "終了",
+  "TerminateSelected": "選択したセッションを終了",
+  "TerminateSessionConfirmMsg": "選択した {count} 件のセッションを終了しますか？接続が切断されます。",
+  "TerminateTaskSendPartialMsg": "{total} 件中 {count} 件のセッションに終了タスクを送信しました。残りのセッションは終了済みか、アクセスできない可能性があります。更新して確認してください。",
   "TerminateTaskSendSuccessMsg": "タスクの中断が指示されました、少々お待ちください。",
   "TermsAndConditions": "規約と条件",
   "TermsOfService": "利用規約",
@@ -2324,5 +2327,6 @@
   "GatherFactsParams": "アセット情報収集パラメータ",
   "VerifyAccountParams": "アカウント検証パラメータ",
   "GatherAccountsParams": "アカウント収集パラメータ",
-  "RemoveAccountParams": "アカウント削除パラメータ"
+  "RemoveAccountParams": "アカウント削除パラメータ",
+  "WebScriptStepsHelp": "Steps may specify an origin. interactive pauses for verification; success must be the final step. Web Proxy supports navigation within one window; frames and popup login windows are not supported."
 }

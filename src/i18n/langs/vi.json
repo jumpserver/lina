@@ -1985,6 +1985,9 @@
   "TerminalUpdate": "Cập nhật đầu cuối",
   "TerminalUpdateStorage": "Cập nhật kho lưu trữ thiết bị",
   "Terminate": "Ngắt kết nối",
+  "TerminateSelected": "Ngắt các phiên đã chọn",
+  "TerminateSessionConfirmMsg": "Ngắt {count} phiên đã chọn? Các kết nối sẽ bị đóng.",
+  "TerminateTaskSendPartialMsg": "Đã gửi tác vụ ngắt cho {count} trong số {total} phiên. Các phiên còn lại có thể đã kết thúc hoặc không thể truy cập. Vui lòng làm mới để kiểm tra.",
   "TerminateTaskSendSuccessMsg": "Nhiệm vụ đã bị dừng đã được phát, vui lòng làm mới để xem sau.",
   "TermsAndConditions": "Điều khoản và điều kiện",
   "TermsOfService": "Điều khoản dịch vụ",
@@ -2227,5 +2230,6 @@
   "selectedAssets": "Tài sản đã chọn",
   "setVariable": "Cài đặt tham số",
   "userId": "ID người dùng",
-  "userName": "Tên người dùng"
+  "userName": "Tên người dùng",
+  "WebScriptStepsHelp": "Steps may specify an origin. interactive pauses for verification; success must be the final step. Web Proxy supports navigation within one window; frames and popup login windows are not supported."
 }

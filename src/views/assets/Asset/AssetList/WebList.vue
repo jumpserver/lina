@@ -20,6 +20,7 @@ export default {
             'password_selector',
             'submit_selector',
             'success_selector',
+            'interactive_selector',
             'script',
             'spec_info',
             'info',

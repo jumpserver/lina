@@ -1798,7 +1798,7 @@
   "SessionOnline": "在線會話",
   "SessionSecurity": "會話安全",
   "SessionState": "會話狀態",
-  "SessionTerminate": "會話終斷",
+  "SessionTerminate": "終止會話",
   "SessionTrend": "會話趨勢",
   "Sessions": "會話管理",
   "SessionsAudit": "會話審計",
@@ -1942,8 +1942,11 @@
   "TerminalDetail": "組件詳情",
   "TerminalUpdate": "更新終端機",
   "TerminalUpdateStorage": "更新終端儲存",
-  "Terminate": "終斷",
-  "TerminateTaskSendSuccessMsg": "終斷任務已下發，請稍後刷新查看",
+  "Terminate": "終止會話",
+  "TerminateSelected": "批次終止會話",
+  "TerminateSessionConfirmMsg": "確定終止選取的 {count} 個會話嗎？連線將被斷開。",
+  "TerminateTaskSendPartialMsg": "已為 {total} 個會話中的 {count} 個下發終止任務，其餘會話可能已結束或無法存取，請重新整理查看。",
+  "TerminateTaskSendSuccessMsg": "終止會話任務已下發，請稍後重新整理查看",
   "TermsAndConditions": "條款和條件",
   "TermsOfService": "服務條款",
   "Test": "測試",
@@ -2323,5 +2326,6 @@
   "GatherFactsParams": "資產資訊採集參數",
   "VerifyAccountParams": "帳號驗證參數",
   "GatherAccountsParams": "帳號收集參數",
-  "RemoveAccountParams": "帳號移除參數"
+  "RemoveAccountParams": "帳號移除參數",
+  "WebScriptStepsHelp": "每步可指定 origin。interactive 暫停等待人工驗證；success 必須是最後一步。Web Proxy 支援同一視窗內的頁面跳轉，暫不支援 iframe 和獨立彈出視窗登入。"
 }
