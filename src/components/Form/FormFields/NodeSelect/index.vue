@@ -192,7 +192,7 @@ export default {
     treeSetting() {
       return createXTreeSetting({
         amountTypes: ['node'],
-        countUrl: '/api/v1/assets/nodes/assets-amount/',
+        countUrl: '/api/v1/assets/nodes/tree-metrics/',
         edit: { drag: { isMove: false } },
         hasRightMenu: true,
         loadMode: X_TREE_LOAD_MODES.EAGER,

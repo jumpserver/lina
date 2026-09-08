@@ -3,6 +3,7 @@
     :class="[
       {
         'has-custom-header': $slots.header,
+        'has-header': showHeader,
         'has-header-actions': showHeader && headerActions,
         'is-bordered': bordered,
         'is-fill-height': fillHeight
@@ -101,6 +102,9 @@ export default {
     hideRMenu() {
       return this.getTree()?.hideRMenu?.()
     },
+    refresh() {
+      return this.getTree()?.refresh?.()
+    },
     getSelectedNodes() {
       return this.getTree()?.getSelectedNodes?.() || []
     },
@@ -173,6 +177,11 @@ export default {
   flex-direction: column;
   min-width: 0;
   background: var(--el-bg-color, #fff);
+
+  &.has-header {
+    // Header icons start at 18px; the expand icon adds its own 6px padding.
+    --x-tree-body-padding-left: 12px;
+  }
 
   &.is-bordered {
     border: 1px solid var(--panel-border-color, var(--el-border-color));

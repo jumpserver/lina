@@ -116,6 +116,21 @@
               </li>
             </template>
 
+            <template v-if="treeSetting.showAccountScope">
+              <li v-if="hasToolOperations" class="x-tree-tools__divider" />
+              <li class="x-tree-settings__title">{{ $t('AccountScope') }}</li>
+              <li class="x-tree-settings__radio-list" @click.capture="closeToolsDropdown">
+                <el-radio-group :model-value="metricMode" @change="handleMetricModeChange">
+                  <el-radio class="x-tree-settings__radio" value="account_all">
+                    {{ $t('AssetScopeWithDescendants') }}
+                  </el-radio>
+                  <el-radio class="x-tree-settings__radio" value="account_direct">
+                    {{ $t('AssetScopeDirect') }}
+                  </el-radio>
+                </el-radio-group>
+              </li>
+            </template>
+
             <template v-if="treeSetting.showAssetOrder">
               <li class="x-tree-tools__divider" />
               <li class="x-tree-settings__title">
@@ -260,7 +275,12 @@
       </template>
       <template #node-actions="{ data, expanded }">
         <span
-          v-if="expanded && !isAsset(data) && !searchState.active"
+          v-if="
+            treeSetting.showNodeActions !== false &&
+            expanded &&
+            !isAsset(data) &&
+            !searchState.active
+          "
           class="node-asset-tree__node-tools"
           @click.stop
           @pointerdown.stop
@@ -329,6 +349,7 @@ import Icon from '@/components/Widgets/Icon'
 import TreeFolderIcon from '@/components/Tree/TreeFolderIcon.vue'
 import XTree from '@/components/Tree/XTree/index.vue'
 import { createXTreeSetting, X_TREE_LOAD_MODES } from '@/components/Tree/XTree/config'
+import { combineNodeAssetPagination } from './pagination'
 import { loadPlatformIcon } from '@/utils/jms/index'
 import {
   isNodeAssetMetricMode,
@@ -339,6 +360,7 @@ import {
 } from './provider'
 
 const SETTINGS_CACHE_PREFIX = 'jms.node-asset-tree.settings.'
+const assetNameCollator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
 const MAX_SEARCH_RESULTS = 100
 const ASSET_ORDER_VALUES = Object.freeze(['name', 'address'])
 const NODE_DISPLAY_VALUES = Object.freeze(['both', 'nodes', 'assets'])
@@ -513,6 +535,7 @@ export default {
         showCollapse: true,
         showMetrics: true,
         showPermissionScope: true,
+        showAccountScope: false,
         showAssetOrder: true,
         showRefresh: true,
         showSearch: true,
@@ -529,6 +552,13 @@ export default {
     provider() {
       return this.dataSource || this.treeSetting.dataSource || {}
     },
+    mutationDataSource() {
+      return Object.fromEntries(
+        ['create', 'update', 'remove', 'move']
+          .filter((operation) => typeof this.provider[operation] === 'function')
+          .map((operation) => [operation, this.provider[operation]])
+      )
+    },
     usesPlatformAssetIcons() {
       return this.treeSetting.assetIconMode === 'platform'
     },
@@ -536,7 +566,10 @@ export default {
       return this.metricMode
     },
     activeAmountTypes() {
-      return this.effectiveMetricMode.startsWith('permission_') ? ['node', 'asset'] : ['node']
+      if (this.treeSetting.countResource === 'none') {
+        return []
+      }
+      return /^(permission|account)_/.test(this.effectiveMetricMode) ? ['node', 'asset'] : ['node']
     },
     assetLoadLimit() {
       return Math.min(Math.max(1, Number(this.treeSetting.childrenAssetLimit) || 100), 1000)
@@ -559,12 +592,12 @@ export default {
     permissionOptions() {
       return [
         {
-          label: this.$t('PermissionScopeEffective'),
+          label: this.$t('NodeAssetTreePermissionScopeEffective'),
           metricValue: 'permission_effective',
           scopeValue: 'effective'
         },
         {
-          label: this.$t('PermissionScopeDirect'),
+          label: this.$t('NodeAssetTreePermissionScopeDirect'),
           metricValue: 'permission_direct',
           scopeValue: 'direct'
         }
@@ -638,6 +671,7 @@ export default {
         this.hasToolOperations ||
         this.treeSetting.showMetrics ||
         this.treeSetting.showPermissionScope ||
+        this.treeSetting.showAccountScope ||
         this.treeSetting.showAssetOrder
       )
     },
@@ -686,12 +720,16 @@ export default {
         ...this.treeSetting,
         amountPredicate: this.shouldHandleAmount,
         amountTypes: this.activeAmountTypes,
+        countUrl: this.treeSetting.countResource === 'none' ? '' : this.treeSetting.countUrl,
         callback: {
           ...this.treeSetting.callback,
           onSearchStateChange: this.handleSearchStateChange,
           onSelected: this.handleSelected
         },
-        dataSource: undefined,
+        // NodeAssetTree owns structure, search and metric normalization. XTree
+        // only receives mutations so editable domain trees can reuse its
+        // create, rename, delete and move behavior without loading twice.
+        dataSource: this.mutationDataSource,
         getAmountKey: (node) => {
           const resource = toNodeAssetResource(node)
           return `${resource.type}:${resource.resourceId}`
@@ -701,17 +739,21 @@ export default {
           return `${item?.type || 'node'}:${id}`
         },
         getNodeLabel: this.treeSetting.getNodeLabel || this.getResourceLabel,
+        getChildrenViewOptions: this.getNodeViewOptions,
         getNodeKey: (node) => node?.meta?.data?.tree_id ?? node?.id,
         getNodeAmountTitle: this.getMetricAmountTitle,
         initialData,
         lazyLoad: true,
         loadChildren: this.loadChildren,
-        loadNodeAmounts: this.loadMetrics,
+        loadNodeAmounts:
+          this.treeSetting.countResource !== 'none' && typeof this.provider.metrics === 'function'
+            ? this.loadMetrics
+            : undefined,
         loadRoot: this.loadRoot,
         readOnly: this.treeSetting.readOnly !== false,
         search: this.search,
         showAssetScope: false,
-        showAssets: true,
+        showAssets: this.treeSetting.showAssets !== false,
         showCollapse: false,
         showRefresh: false,
         showSearch: false,
@@ -756,36 +798,6 @@ export default {
       }
       return responseWithResults(response, responseResults(response).map(addMetric))
     },
-    withChildrenPagination(response, { includeAssets = true, next = null } = {}) {
-      if (Array.isArray(response)) {
-        return response
-      }
-      const assetPage = next?.phase === 'assets'
-      const pagination = assetPage ? response?.asset_pagination : response?.node_pagination
-      if (!pagination) {
-        return response
-      }
-      const hasMore = Boolean(pagination.has_more)
-      let nextPage = pagination.next || ''
-      if (assetPage) {
-        nextPage = hasMore
-          ? {
-              offset: Number(pagination.next_offset) || 0,
-              phase: 'assets'
-            }
-          : ''
-      } else if (!hasMore && includeAssets) {
-        nextPage = { offset: 0, phase: 'assets' }
-      }
-      return {
-        ...response,
-        node_pagination: {
-          ...pagination,
-          has_more: hasMore || Boolean(nextPage),
-          next: nextPage
-        }
-      }
-    },
     async loadRoot(payload) {
       if (typeof this.provider.root !== 'function') {
         return []
@@ -799,7 +811,9 @@ export default {
       })
       const normalized = normalizeNodeAssetResponse(
         this.withMetricValues(
-          this.withChildrenPagination(response, { includeAssets: true }),
+          combineNodeAssetPagination(response, {
+            includeAssets: this.treeSetting.showAssets !== false
+          }),
           this.metricMode
         )
       )
@@ -814,20 +828,20 @@ export default {
       if (typeof this.provider.children !== 'function') {
         return []
       }
+      const includeAssets =
+        this.treeSetting.showAssets !== false &&
+        !(this.searchState.active && this.searchState.target === 'node')
       const response = await this.provider.children({
         assetOrder: this.getNodeSetting(parent, 'assetOrder', this.assetOrder),
         assetsLimit: this.assetLoadLimit,
-        includeAssets: !(this.searchState.active && this.searchState.target === 'node'),
+        includeAssets,
         level,
         next,
         nodeLimit: this.nodeLoadLimit,
         parent: toNodeAssetResource(parent),
         signal
       })
-      const paginated = this.withChildrenPagination(response, {
-        includeAssets: !(this.searchState.active && this.searchState.target === 'node'),
-        next
-      })
+      const paginated = combineNodeAssetPagination(response, { includeAssets })
       this.updateChildTruncation(parent, paginated)
       return normalizeNodeAssetResponse(this.withMetricValues(paginated, this.effectiveMetricMode))
     },
@@ -1009,6 +1023,9 @@ export default {
       const resource = toNodeAssetResource(data)
       const context = {
         metricMode: this.effectiveMetricMode,
+        ...(this.effectiveMetricMode.startsWith('account_')
+          ? { assetScope: this.effectiveMetricMode === 'account_direct' ? '1' : '0' }
+          : {}),
         permissionAll: this.permissionScope === 'direct' ? '0' : '1',
         permissionScope: this.permissionScope,
         search: this.searchState.active ? { ...this.searchState } : null
@@ -1049,6 +1066,14 @@ export default {
       }
       this.treeSetting.callback?.onMetricModeChange?.(value, context)
       this.$emit('metric-change', value, context)
+      if (value.startsWith('account_')) {
+        const current = this.getSelectedNodes()[0] || null
+        const scope = value === 'account_direct' ? '1' : '0'
+        this.treeSetting.callback?.onAssetScopeChange?.(scope, current)
+        if (current) {
+          this.handleSelected(null, current)
+        }
+      }
     },
     handlePermissionScopeChange(value) {
       this.setPermissionScope(value)
@@ -1161,17 +1186,11 @@ export default {
       const secondary = order === 'address' ? 'name' : 'address'
       const valueOf = (item, field) => String(item?.[field] ?? item?.meta?.data?.[field] ?? '')
       assets.sort((left, right) => {
-        const primaryResult = valueOf(left, order).localeCompare(valueOf(right, order), undefined, {
-          numeric: true,
-          sensitivity: 'base'
-        })
+        const primaryResult = assetNameCollator.compare(valueOf(left, order), valueOf(right, order))
         if (primaryResult) {
           return primaryResult
         }
-        return valueOf(left, secondary).localeCompare(valueOf(right, secondary), undefined, {
-          numeric: true,
-          sensitivity: 'base'
-        })
+        return assetNameCollator.compare(valueOf(left, secondary), valueOf(right, secondary))
       })
       return [...nodes, ...assets]
     },
@@ -1247,10 +1266,19 @@ export default {
       return loadPlatformIcon(platformName, String(platformType).toLowerCase())
     },
     getMetricAmountTitle(node) {
+      if (this.effectiveMetricMode.startsWith('account_')) {
+        if (this.isAsset(node)) {
+          return this.$t('AssetTreeAmountTipAccount')
+        }
+        return this.$t(
+          this.effectiveMetricMode === 'account_direct'
+            ? 'NodeTreeAmountTipAccountDirect'
+            : 'NodeTreeAmountTipAccountAll'
+        )
+      }
       const keyMap = {
         asset_all: 'NodeAssetTreeAmountTipAssetAll',
         asset_direct: 'NodeAssetTreeAmountTipAssetDirect',
-        permission_effective: 'NodeAssetTreeAmountTipPermissionEffective',
         search_assets: 'NodeAssetTreeAmountTipSearchAssets'
       }
       if (this.effectiveMetricMode === 'permission_direct') {
@@ -1258,6 +1286,13 @@ export default {
           this.isAsset(node)
             ? 'NodeAssetTreeAmountTipPermissionAssetDirect'
             : 'NodeAssetTreeAmountTipPermissionNodeDirect'
+        )
+      }
+      if (this.effectiveMetricMode === 'permission_effective') {
+        return this.$t(
+          this.isAsset(node)
+            ? 'NodeAssetTreeAmountTipPermissionAssetEffective'
+            : 'NodeAssetTreeAmountTipPermissionNodeEffective'
         )
       }
       const key = keyMap[this.effectiveMetricMode]

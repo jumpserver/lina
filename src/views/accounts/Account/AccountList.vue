@@ -16,6 +16,7 @@ import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
 import AccountListTable from '@/components/Apps/AccountListTable/AccountList.vue'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { setRouterQuery } from '@/utils/common/index'
+import { createAccountAssetTreeDataSource } from './assetTreeDataSource'
 
 export default {
   name: 'AssetAccountList',
@@ -50,11 +51,23 @@ export default {
         }
       },
       treeSetting: {
+        treeComponent: 'NodeAssetTree',
+        treeTitle: this.$t('AssetTree'),
+        assetIconMode: 'platform',
         showMenu: false,
         showAssets: true,
         selectSyncToRoute: false,
         url: '/api/v1/accounts/accounts/',
         countResource: 'account',
+        showMetrics: false,
+        showPermissionScope: false,
+        showAccountScope: true,
+        metricModes: ['account_all', 'account_direct'],
+        defaultMetricMode: 'account_all',
+        settingsCacheKey: 'account-list',
+        countUrl: '',
+        childrenPagination: true,
+        dataSource: createAccountAssetTreeDataSource(this.$axios),
         edit: {
           drag: {
             isMove: false

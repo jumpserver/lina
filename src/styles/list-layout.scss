@@ -100,7 +100,7 @@
       }
 
       .el-data-table__body > .el-table--border {
-        --el-table-border-color: var(--el-border-color);
+        --el-table-border-color: var(--panel-border-color, var(--el-border-color-lighter));
 
         &::before,
         &::after {

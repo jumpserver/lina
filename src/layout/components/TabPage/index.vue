@@ -327,7 +327,7 @@ export default {
 
 .page-submenu :deep(.el-tabs__active-bar) {
   z-index: 3;
-  bottom: 1px;
+  bottom: 0;
   display: block;
   height: 2px;
   background-color: transparent;
@@ -507,18 +507,6 @@ export default {
     &.has-tab-navigation > .tab-page-submenu {
       position: relative;
       border-bottom: 0;
-
-      &::after {
-        content: '';
-        position: absolute;
-        z-index: 3;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        height: 1px;
-        background-color: var(--panel-border-color, var(--el-border-color));
-        pointer-events: none;
-      }
     }
   }
 

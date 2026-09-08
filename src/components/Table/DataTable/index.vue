@@ -43,8 +43,7 @@ export default {
         axiosConfig: {
           raw: 1,
           params: {
-            display: 1,
-            draw: 1
+            display: 1
           }
         },
         extraQuery: {},
@@ -89,7 +88,7 @@ export default {
             const page = query.page > 0 ? query.page : 1
             const offset = (page - 1) * query.size
             const limit = query.size
-            query.offset = offset
+            if (offset) query.offset = offset
             query.limit = limit
             delete query['page']
             delete query['size']

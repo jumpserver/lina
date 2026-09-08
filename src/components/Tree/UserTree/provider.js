@@ -1,4 +1,9 @@
-export const USER_TREE_RESOURCE_TYPES = Object.freeze(['organization', 'user_group', 'user'])
+export const USER_TREE_RESOURCE_TYPES = Object.freeze([
+  'organization',
+  'user_group',
+  'ungrouped_users',
+  'user'
+])
 
 export const USER_TREE_ORDER_VALUES = Object.freeze(['name', 'username'])
 
@@ -28,7 +33,7 @@ function normalizeResourceType(raw) {
 }
 
 function hasTypedTreeId(value) {
-  return /^(organization|user_group|user):/.test(String(value || ''))
+  return /^(organization|user_group|ungrouped_users|user):/.test(String(value || ''))
 }
 
 function hasCompleteUserTreeId(value) {

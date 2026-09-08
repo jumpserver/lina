@@ -25,7 +25,7 @@
 import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import Page from '@/layout/components/Page'
 import { mapGetters } from 'vuex'
-import { setUrlParam } from '@/utils/common/index'
+import { setUrlParam, updateUrlParams } from '@/utils/common/index'
 import { createSourceIdCache } from '@/api/common'
 import { AssetPermissionTableMeta } from '../const.js'
 import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
@@ -106,7 +106,6 @@ export default {
         selectSyncToRoute: false,
         url: '/api/v1/perms/asset-permissions/',
         nodeUrl: '/api/v1/perms/asset-permissions/',
-        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1&asset_amount=0',
         readOnly: true,
         callback: {
           onSelected: (event, treeNode, context) => {
@@ -255,10 +254,15 @@ export default {
   },
   methods: {
     clearPermissionTreeFilters(url) {
-      for (const key of ['node_id', 'asset_id', 'user_id', 'user_group_id', 'all']) {
-        url = setUrlParam(url, key, '')
-      }
-      return url
+      return updateUrlParams(url, {
+        node_id: null,
+        asset_id: null,
+        user_id: null,
+        user_group_id: null,
+        ungrouped_users: null,
+        all: null,
+        include_inherited: null
+      })
     },
     handlePermissionTreeSelected(treeNode, context = {}) {
       const type = treeNode?.meta?.type
@@ -268,26 +272,35 @@ export default {
       }
 
       let url = this.clearPermissionTreeFilters(this.treeSetting.url)
-      url = setUrlParam(url, 'node_id', type === 'node' ? resourceId : '')
-      url = setUrlParam(url, 'asset_id', type === 'asset' ? resourceId : '')
-      url = setUrlParam(url, 'all', context.permissionScope === 'direct' ? '0' : '1')
+      url = updateUrlParams(url, {
+        node_id: type === 'node' ? resourceId : null,
+        asset_id: type === 'asset' ? resourceId : null,
+        include_inherited: context.permissionScope === 'direct' ? false : null
+      })
       this.$refs.AssetTreeTable?.updateTableUrl?.(url)
     },
     handlePermissionUserTreeSelected(treeNode, context = {}) {
       const type = treeNode?.meta?.type
       const resourceId = treeNode?.meta?.data?.resource_id ?? treeNode?.meta?.data?.id
-      if (!resourceId || !['organization', 'user_group', 'user'].includes(type)) {
+      if (
+        !resourceId ||
+        !['organization', 'user_group', 'ungrouped_users', 'user'].includes(type)
+      ) {
         return
       }
 
       let url = this.clearPermissionTreeFilters(this.treeSetting.url)
       if (type === 'user_group') {
         url = setUrlParam(url, 'user_group_id', resourceId)
+      } else if (type === 'ungrouped_users') {
+        url = setUrlParam(url, 'ungrouped_users', true)
       } else if (type === 'user') {
         url = setUrlParam(url, 'user_id', resourceId)
       }
-      if (type !== 'organization') {
-        url = setUrlParam(url, 'all', context.permissionScope === 'direct' ? '0' : '1')
+      if (type === 'user_group' || type === 'user') {
+        url = updateUrlParams(url, {
+          include_inherited: context.permissionScope === 'direct' ? false : null
+        })
       }
       this.$refs.AssetTreeTable?.updateTableUrl?.(url)
     },
@@ -297,7 +310,7 @@ export default {
       const type = selected?.meta?.type
       if (['node', 'asset'].includes(type)) {
         this.handlePermissionTreeSelected(selected, context)
-      } else if (['organization', 'user_group', 'user'].includes(type)) {
+      } else if (['organization', 'user_group', 'ungrouped_users', 'user'].includes(type)) {
         this.handlePermissionUserTreeSelected(selected, context)
       } else {
         this.handlePermissionTreeSelectionClear()
@@ -313,7 +326,10 @@ export default {
       }
       const currentUrl =
         this.$refs.AssetTreeTable?.$refs.TreeList?.iTableConfig?.url || this.treeSetting.url
-      const url = setUrlParam(currentUrl, 'all', permissionScope === 'direct' ? '0' : '1')
+      const url = updateUrlParams(currentUrl, {
+        all: null,
+        include_inherited: permissionScope === 'direct' ? false : null
+      })
       this.$refs.AssetTreeTable?.updateTableUrl?.(url)
     },
     reloadAssetTreeTable() {

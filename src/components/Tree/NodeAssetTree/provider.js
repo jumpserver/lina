@@ -8,7 +8,9 @@ export const NODE_ASSET_METRIC_MODES = Object.freeze([
   'asset_all',
   'asset_direct',
   'permission_direct',
-  'permission_effective'
+  'permission_effective',
+  'account_all',
+  'account_direct'
 ])
 
 export const NODE_ASSET_SEARCH_TARGETS = Object.freeze(['all', 'node', 'asset'])

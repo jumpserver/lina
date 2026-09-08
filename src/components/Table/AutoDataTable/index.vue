@@ -3,7 +3,7 @@
     <div v-loading="loading" class="auto-data-table__content compact-loading">
       <DataTable
         v-bind="$attrs"
-        v-if="!loading"
+        v-show="!loading"
         ref="dataTable"
         :config="iConfig"
         @column-pin-toggle="toggleColumnPin"
@@ -30,11 +30,11 @@ import { newURL, replaceAllUUID } from '@/utils/common/index'
 import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
 import Sortable from 'sortablejs'
 import ColumnSettingPopover from './components/ColumnSettingPopover.vue'
-import { orderActionColumn, orderPrimaryColumns, TableColumnsGenerator } from './utils'
+import { orderActionColumn, TableColumnsGenerator } from './utils'
+import { reorderColumnsByHeader } from './column-order'
 import _ from 'lodash'
-import { toRaw } from 'vue'
+import { markRaw, toRaw } from 'vue'
 
-const COLUMN_WIDTH_CHANGE_TOLERANCE = 1
 const DEFAULT_SELECTION_COLUMN_WIDTH = 48
 const DEFAULT_HIDDEN_COLUMN_NAMES = new Set(['id'])
 
@@ -69,7 +69,9 @@ export default {
       loading: true,
       method: 'get',
       meta: {},
-      iConfig: {},
+      // Start the data request while OPTIONS is in flight. Columns are filled
+      // in on the same DataTable instance, preserving its request and rows.
+      iConfig: { ...this.config, columns: [] },
       autoConfig: {},
       cleanedColumnsShow: {},
       totalColumns: [],
@@ -110,7 +112,16 @@ export default {
       this.refreshPinningAvailability()
     },
     sourceConfig(next, previous) {
-      if (this.isDeactivated || !this.inited || !next.url) {
+      if (this.isDeactivated || !next.url) {
+        return
+      }
+      if (!this.inited) {
+        this.iConfig = { ...next, columns: this.iConfig.columns }
+        // Search initialization can resolve saved filters while OPTIONS is
+        // pending. Replace the speculative request before revealing its rows.
+        if (next.url === previous.url && !_.isEqual(next.extraQuery, previous.extraQuery)) {
+          this.$nextTick(() => this.$refs.dataTable?.getList())
+        }
         return
       }
       const { url: nextUrl, ...nextOptions } = next
@@ -142,6 +153,7 @@ export default {
     this.loading = false
     await this.$nextTick()
     this.fitColumnsToContainer()
+    this.setColumnDraggable()
   },
   mounted() {
     this.initPinningMediaQuery()
@@ -152,8 +164,8 @@ export default {
       if (this.isDeactivated || !this.$el.isConnected) {
         return
       }
-      const width = Math.floor(entry?.contentRect.width || 0)
-      if (!width || Math.abs(width - this.columnContainerWidth) <= COLUMN_WIDTH_CHANGE_TOLERANCE) {
+      const width = Math.round(entry?.contentRect.width || 0)
+      if (!width || width === this.columnContainerWidth) {
         return
       }
 
@@ -174,13 +186,19 @@ export default {
     }
     this.columnResizeObserver?.disconnect()
     this.cancelColumnFit()
+    this.destroyColumnDraggable()
+  },
+  updated() {
+    this.$nextTick(() => this.setColumnDraggable())
   },
   deactivated() {
     this.isDeactivated = true
     this.cancelColumnFit()
+    this.destroyColumnDraggable()
   },
   activated() {
     this.isDeactivated = false
+    this.$nextTick(() => this.setColumnDraggable())
   },
   methods: {
     handleLoaded(payload) {
@@ -215,12 +233,12 @@ export default {
       cancelAnimationFrame(this.columnResizeFrame)
       this.columnResizeFrame = null
     },
-    initializeStaticColumnWidths() {
-      if (!Array.isArray(this.iConfig.columns)) {
+    initializeStaticColumnWidths(sourceColumns = this.iConfig.columns) {
+      if (!Array.isArray(sourceColumns)) {
         return
       }
 
-      const columns = this.iConfig.columns.map((currentColumn) => {
+      const columns = sourceColumns.map((currentColumn) => {
         const col = { ...currentColumn }
         col.width = col.width || col.minWidth
         delete col.minWidth
@@ -250,12 +268,6 @@ export default {
         return
       }
 
-      const selectionColumn = this.$el?.querySelector(
-        [
-          '.el-table__header .el-table-column--selection',
-          '.el-table__body-header .el-table-column--selection'
-        ].join(', ')
-      )
       const hasSelection =
         this.$attrs['has-selection'] ??
         this.$attrs.hasSelection ??
@@ -263,13 +275,12 @@ export default {
         true
       const configuredSelectionWidth =
         this.$attrs['selection-width'] ?? this.$attrs.selectionWidth ?? this.iConfig.selectionWidth
-      // Before the table mounts, reserve the same space as its selection column
-      // instead of fitting all data columns first and shrinking them afterwards.
+      // The header can be temporarily compressed while columns are mounting.
+      // Reserve the configured selection width rather than that transient size.
       const selectionWidth =
-        selectionColumn?.getBoundingClientRect().width ||
-        (!this.iConfig.isTree && hasSelection
+        !this.iConfig.isTree && hasSelection
           ? Number.parseFloat(configuredSelectionWidth) || DEFAULT_SELECTION_COLUMN_WIDTH
-          : 0)
+          : 0
       const availableWidth = Math.max(0, Math.floor(containerWidth - selectionWidth))
 
       const naturalColumns = sourceColumns.map((currentColumn) => {
@@ -336,105 +347,100 @@ export default {
       this.commitColumnWidths(fittedColumns)
     },
     commitColumnWidths(columns) {
-      const currentSignature = this.iConfig.columns.map((item) => [item.prop, item.width])
-      const nextSignature = columns.map((item) => [item.prop, item.width])
-      if (_.isEqual(currentSignature, nextSignature)) {
+      const currentByProp = new Map(this.iConfig.columns.map((column) => [column.prop, column]))
+      // Preserve unchanged column objects so their formatter props stay stable.
+      const nextColumns = columns.map((column) => {
+        const current = currentByProp.get(column.prop)
+        return current && _.isEqual(current, column) ? current : column
+      })
+      if (
+        nextColumns.length === this.iConfig.columns.length &&
+        nextColumns.every((column, index) => column === this.iConfig.columns[index])
+      ) {
         return
       }
 
       this.iConfig = {
         ...this.iConfig,
-        columns
+        columns: nextColumns
       }
     },
     openColumnSetting() {
       this.$refs.columnSettingPopover?.open()
     },
     normalizeColumnNames(value, fallback = []) {
-      if (Array.isArray(value)) {
-        const columns = orderPrimaryColumns(
-          value.filter((item) => item !== undefined && item !== null)
-        )
-        return orderActionColumn(columns, this.config.actionsColumnPosition)
-      }
-      if (Array.isArray(fallback)) {
-        const columns = orderPrimaryColumns([...fallback])
-        return orderActionColumn(columns, this.config.actionsColumnPosition)
-      }
-      return []
+      const source = Array.isArray(value) ? value : Array.isArray(fallback) ? fallback : []
+      // Default columns are ordered by the generator. Saved user order must
+      // also apply to ID/name instead of moving those columns back to the front.
+      const columns = source.filter((item) => item !== undefined && item !== null)
+      return orderActionColumn(columns, this.config.actionsColumnPosition)
+    },
+    destroyColumnDraggable() {
+      this.sortable?.destroy()
+      this.sortable = null
     },
     setColumnDraggable() {
+      if (this.isDeactivated || !this.$el?.isConnected) {
+        return
+      }
       const el = this.$el.querySelector(
         '.el-table__header-wrapper thead tr, .el-table__body-header tr'
       )
-      if (!el) {
-        setTimeout(() => this.setColumnDraggable(), 500)
+      if (this.sortable?.el === el) {
         return
       }
-      if (this.sortable) {
-        this.sortable.destroy()
+      this.destroyColumnDraggable()
+      if (!el) {
+        return
       }
 
-      this.sortable = Sortable.create(el, {
-        animation: 150,
-        filter: '.column-pin-button',
-        preventOnFilter: false,
-        onMove: ({ dragged, related }) => {
-          const draggedIsPinned = dragged.querySelector('.column-pin-button.is-pinned')
-          const relatedIsPinned = related?.querySelector('.column-pin-button.is-pinned')
-          return !draggedIsPinned && !relatedIsPinned
-        },
-        onEnd: (evt) => {
-          let { oldIndex, newIndex } = evt
-          if (oldIndex === newIndex) {
-            return
-          }
-          // 检测表格是否有选择列
-          const hasSelectionColumn = this.$el.querySelector('.el-table-column--selection') !== null
-          if (hasSelectionColumn) {
-            // 如果有选择列，调整索引
-            if (oldIndex > 0) oldIndex -= 1
-            if (newIndex > 0) newIndex -= 1
-          }
-
-          const displayedColumnNames = this.iConfig.columns.map((item) => item.prop)
-          // 边界
-          if (
-            oldIndex >= 0 &&
-            oldIndex < displayedColumnNames.length &&
-            newIndex >= 0 &&
-            newIndex < displayedColumnNames.length
-          ) {
-            const movedItem = displayedColumnNames.splice(oldIndex, 1)[0]
-            displayedColumnNames.splice(newIndex, 0, movedItem)
-
-            const columnNames = orderActionColumn(
-              displayedColumnNames,
-              this.config.actionsColumnPosition
+      const getProp = (cell) => cell?.querySelector('[data-column-prop]')?.dataset.columnProp
+      const getHeaders = () =>
+        Array.from(el.children).filter((cell) => cell !== Sortable.ghost && cell !== Sortable.clone)
+      let originalHeaders = []
+      this.sortable = markRaw(
+        Sortable.create(el, {
+          animation: 150,
+          direction: 'horizontal',
+          forceFallback: true,
+          fallbackTolerance: 4,
+          draggable: 'th:has(.is-column-draggable)',
+          handle: 'th',
+          filter: (event, cell) => {
+            const control = event.target.closest(
+              '.column-pin-button, .caret-wrapper, .el-table__column-filter-trigger'
             )
-
-            this.$log.debug('Column moved: ', movedItem, oldIndex, ' => ', newIndex)
-            // 保存更新的列顺序
-            this.tableColumnsStorage.set(columnNames)
-
-            // 更新内部状态
-            this.cleanedColumnsShow.show = columnNames
-            this.popoverColumns.currentCols = columnNames
-
-            // 重新应用列顺序
-            this.filterShowColumns()
-
-            this.loading = true
-            setTimeout(() => {
-              this.loading = false
-              // 在DOM完全更新后重新初始化拖拽
-              this.$nextTick(() => {
-                setTimeout(() => this.setColumnDraggable(), 200)
-              })
-            }, 300)
+            // Leave Element Plus's column resize edge available.
+            const right = cell?.getBoundingClientRect().right
+            const nearResizeEdge = typeof event.clientX === 'number' && right - event.clientX < 8
+            return !!control || nearResizeEdge
+          },
+          preventOnFilter: false,
+          onStart: () => {
+            originalHeaders = getHeaders()
+          },
+          onMove: ({ related }) => !!related?.querySelector('.is-column-draggable'),
+          onEnd: ({ item }) => {
+            const headerProps = getHeaders().map(getProp).filter(Boolean)
+            // Sortable moves real header cells. Restore Vue's previous DOM order
+            // before publishing the new model so header/body reconciliation agrees.
+            originalHeaders.forEach((header) => el.appendChild(header))
+            originalHeaders = []
+            this.applyDraggedColumnOrder(headerProps, getProp(item))
           }
-        }
-      })
+        })
+      )
+    },
+    applyDraggedColumnOrder(headerProps, movedProp) {
+      const columns = reorderColumnsByHeader(this.iConfig.columns, headerProps, movedProp)
+      if (columns === this.iConfig.columns) {
+        return
+      }
+      const columnNames = columns.map((column) => column.prop)
+      this.tableColumnsStorage.set(columnNames)
+      this.cleanedColumnsShow.show = columnNames
+      this.popoverColumns.currentCols = columnNames
+      this.iConfig = { ...this.iConfig, columns }
     },
     generateTotalColumns() {
       const generator = new TableColumnsGenerator(this.config, this.meta, this)
@@ -444,8 +450,9 @@ export default {
         columns: [...this.totalColumns],
         tableAttrs: {
           fit: false,
-          tableLayout: 'auto',
-          nativeScrollbar: true,
+          // Match the fixed-width body CSS. Auto layout remeasures pinned
+          // columns during column changes and can inflate their saved widths.
+          tableLayout: 'fixed',
           ...this.config.tableAttrs
         }
       }
@@ -482,7 +489,6 @@ export default {
         this.cleanColumnsShow()
         this.filterShowColumns({ reload })
         this.generatePopoverColumns()
-        this.setColumnDraggable()
       } catch (error) {
         this.$log.error('Error occur: ', error)
       } finally {
@@ -555,14 +561,16 @@ export default {
         return showFieldNames.indexOf(obj.prop) > -1
       })
       showFields = this.orderingColumns(showFields)
-      this.iConfig.columns = this.applyPinnedColumns(showFields)
-      this.initializeStaticColumnWidths()
+      // Publish the final fitted columns once, keeping the previous objects
+      // available for reuse instead of replacing them before fitting widths.
+      this.initializeStaticColumnWidths(this.applyPinnedColumns(showFields))
 
       this.$nextTick(() => {
         if (reload && this.$refs.dataTable) {
           this.$refs.dataTable.getList()
         }
         this.inited = true
+        this.setColumnDraggable()
       })
     },
     orderingColumns(columns) {
@@ -596,7 +604,7 @@ export default {
         columns
           .filter((item) => {
             const originalFixed = getOriginalFixed(item)
-            return item.prop !== 'actions' && originalFixed !== 'left' && originalFixed !== 'right'
+            return item.prop !== 'actions' && !originalFixed
           })
           .map((item) => item.prop)
       )
@@ -691,6 +699,15 @@ export default {
 .auto-data-table {
   width: 100%;
   min-width: 0;
+
+  :deep(th:has(.is-column-draggable) > .cell) {
+    cursor: grab;
+    user-select: none;
+  }
+
+  :deep(th.sortable-chosen > .cell) {
+    cursor: grabbing;
+  }
 
   // Headers always stay on one line. The column generator reserves enough width for
   // the complete label, and the table scrolls horizontally when the viewport is narrow.

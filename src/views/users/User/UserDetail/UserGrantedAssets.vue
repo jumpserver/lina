@@ -1,5 +1,5 @@
 <template>
-  <GrantedAssets v-bind="$data" />
+  <GrantedAssets v-bind="$data" :user="object.id" />
 </template>
 
 <script>
@@ -18,8 +18,7 @@ export default {
   },
   data() {
     return {
-      treeUrl: `/api/v1/perms/users/${this.object.id}/nodes/children/tree/`,
-      tableUrl: `/api/v1/perms/users/${this.object.id}/assets/?all=1`,
+      tableUrl: `/api/v1/perms/users/${this.object.id}/assets/`,
       actions: {
         has: false
       },

@@ -98,6 +98,21 @@ export function setUrlId(url, id) {
   return url
 }
 
+export function updateUrlParams(url, values) {
+  const [pathAndQuery, hash] = url.split('#')
+  const queryIndex = pathAndQuery.indexOf('?')
+  const path = queryIndex < 0 ? pathAndQuery : pathAndQuery.slice(0, queryIndex)
+  const params = new URLSearchParams(queryIndex < 0 ? '' : pathAndQuery.slice(queryIndex + 1))
+  for (const [key, value] of Object.entries(values)) {
+    if (value === '' || value === null || value === undefined) {
+      params.delete(key)
+    } else {
+      params.set(key, String(value))
+    }
+  }
+  return `${path}${params.size ? `?${params}` : ''}${hash === undefined ? '' : `#${hash}`}`
+}
+
 export function setUrlParam(url, name, value) {
   const urlArray = url.split('?')
   if (urlArray.length === 1) {

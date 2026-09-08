@@ -155,6 +155,10 @@ export default {
     viewMenuTeleported: {
       type: Boolean,
       default: true
+    },
+    rememberActiveMenu: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -163,6 +167,7 @@ export default {
       componentKey: 1,
       activeTreeName: '',
       activeTreeSetting: {},
+      treeRevisions: {},
       treeViewDropdownVisible: false
     }
   },
@@ -227,6 +232,15 @@ export default {
     getTree() {
       const tree = this.$refs.AutoDataZTree
       return tree?.getTree?.() || tree
+    },
+    refreshTreeView(treeName) {
+      if (treeName === this.activeTreeName) {
+        return this.$refs.AutoDataZTree?.refresh?.()
+      }
+      this.treeRevisions = {
+        ...this.treeRevisions,
+        [treeName]: (this.treeRevisions[treeName] || 0) + 1
+      }
     },
     handleActiveTreeReady() {
       this.$nextTick(() => {
@@ -318,6 +332,9 @@ export default {
     },
     handleTabClick(tab) {
       this.$emit('tab-click', tab)
+      if (!this.rememberActiveMenu) {
+        return
+      }
       this.$cookie.set(ACTIVE_TREE_TAB_KEY, tab.name, 1)
 
       if (this.$route?.query?.[ACTIVE_TREE_TAB_KEY]) {
@@ -346,15 +363,17 @@ export default {
       this.activeTreeSetting = tab.treeSetting
       // Keep the key stable for each tab so keep-alive can restore the same
       // tree instance, including its data, expanded nodes and search state.
-      this.componentKey = `${this.$route.name || 'tree'}_${tabName}`
+      this.componentKey = `${this.$route.name || 'tree'}_${tabName}_${this.treeRevisions[tabName] || 0}`
       this.flag = true
     },
     getPropActiveTab() {
-      const preActiveTabs = [
-        this.$route.query[ACTIVE_TREE_TAB_KEY],
-        this.$cookie.get(ACTIVE_TREE_TAB_KEY),
-        this.activeMenu
-      ]
+      const preActiveTabs = this.rememberActiveMenu
+        ? [
+            this.$route.query[ACTIVE_TREE_TAB_KEY],
+            this.$cookie.get(ACTIVE_TREE_TAB_KEY),
+            this.activeMenu
+          ]
+        : [this.activeMenu]
 
       for (const preTab of preActiveTabs) {
         const currentTab = typeof preTab === 'object' ? preTab?.name : preTab
