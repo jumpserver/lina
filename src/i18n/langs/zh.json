@@ -926,6 +926,7 @@
   "LastLoginTime": "上次登录时间",
   "LastPublishedTime": "最后发布时间",
   "LastThreeMonths": "最近三月",
+  "LastUpdatedBy": "最后更新人",
   "LastYear": "最近一年",
   "Ldap": "LDAP",
   "LdapBulkImport": "用户导入",

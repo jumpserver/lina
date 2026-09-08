@@ -18,7 +18,11 @@
             :prop="fieldName"
             show-overflow-tooltip
             width="150"
-          />
+          >
+            <template #default="{ row }">
+              {{ translateFieldName(row[fieldName]) }}
+            </template>
+          </el-table-column>
           <el-table-column :label="$tc('BeforeChange')" :prop="leftKeyName" show-overflow-tooltip />
           <el-table-column :label="$tc('AfterChange')" :prop="rightKeyName" show-overflow-tooltip />
         </el-table>
@@ -29,6 +33,14 @@
 
 <script>
 import Dialog from '@/components/Dialog/index'
+
+const FIELD_I18N_KEYS = {
+  'creation date': 'DateCreated',
+  'expiration date': 'DateExpired',
+  'from work order': 'FromTicket',
+  'last updated by': 'LastUpdatedBy',
+  'start date': 'DateStart'
+}
 
 export default {
   name: 'DiffDetail',
@@ -63,6 +75,13 @@ export default {
     isEmpty() {
       const content = this.diff
       return !content || JSON.stringify(content) === '{}'
+    },
+    translateFieldName(field) {
+      if (typeof field !== 'string') {
+        return field
+      }
+      const key = FIELD_I18N_KEYS[field.trim().toLowerCase()]
+      return key ? this.$t(key) : field
     },
     show(data) {
       this.diff = data

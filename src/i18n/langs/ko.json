@@ -1184,6 +1184,7 @@
   "LastLoginTime": "마지막 로그인 시간",
   "LastPublishedTime": "마지막 게시 시간",
   "LastThreeMonths": "지난 3 개월",
+  "LastUpdatedBy": "마지막 업데이트 사용자",
   "LastYear": "지난 일년",
   "Ldap": "LDAP",
   "LdapBulkImport": "사용자 가져오기",

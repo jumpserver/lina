@@ -931,6 +931,7 @@
   "LastLoginTime": "Last login time",
   "LastPublishedTime": "Last publish time",
   "LastThreeMonths": "Last 3 Months",
+  "LastUpdatedBy": "Last updated by",
   "LastYear": "Last Year",
   "Ldap": "LDAP",
   "LdapBulkImport": "User import",

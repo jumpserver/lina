@@ -1141,6 +1141,7 @@
   "LastLoginTime": "上次登入時間",
   "LastPublishedTime": "最後發布時間",
   "LastThreeMonths": "最近三月",
+  "LastUpdatedBy": "最後更新人",
   "LastYear": "最近一年",
   "Ldap": "LDAP",
   "LdapBulkImport": "使用者匯入",
