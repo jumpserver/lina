@@ -88,6 +88,9 @@ function rsaEncryptPassword(password, rsaPublicKey) {
   const aesKey = (Math.random() + 1).toString(36).substring(2)
   // public key 是 base64 存储的
   const keyCipher = rsaEncrypt(aesKey, rsaPublicKey)
+  if (!keyCipher) {
+    throw new Error('Failed to encrypt the session key')
+  }
   const passwordCipher = aesEncrypt(password, aesKey)
   return `${keyCipher}${encryptedSeparator}${passwordCipher}`
 }
