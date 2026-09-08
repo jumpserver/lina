@@ -2397,5 +2397,11 @@
   "WebAllowedSites": "存取白名單",
   "WebAllowedSitesHelp": "留空允許存取所有站點。設定後，只允許開啟資產位址及白名單中的站點。輸入完整 HTTP/HTTPS 站點位址（協定、主機和連接埠），不含路徑或萬用字元，按 Enter 確認；頁面資源載入不受限制。",
   "PublishAllVirtualApps": "發佈所有虛擬應用",
-  "AppProviderHelpMessage": "應用提供者僅會從已成功發布該應用且在線的節點中選擇；優先選擇負載較低、執行中容器較少的節點，並儘量重用使用者上次使用的節點。"
+  "AppProviderHelpMessage": "虛擬應用發布機是一台 Linux SSH 主機。建立後設定 SSH 帳號，在「發布機部署」中安裝 Panda，再發布虛擬應用。僅在啟用、在線且應用已成功發布的節點中排程。",
+  "AppProviderDeployment": "發布機部署",
+  "AppProviderSSHHelp": "透過 SSH 連接 Linux 發布機，預設連接埠為 22。",
+  "AppProviderAccountHelp": "新增可透過 SSH 登入的 root 帳號，或具有 sudo 權限的特權帳號。Ansible 使用此帳號安裝 Docker 和 Panda。",
+  "AppProviderCoreHostHelp": "填寫發布機可存取的 JumpServer 位址，例如 https://jumpserver.example.com。",
+  "AppProviderDeployHelp": "發布機需預先安裝 Python 3，透過 SSH 和 Ansible 安裝 Docker、部署 Panda 並驗證服務。Panda API 僅監聽發布機本機 127.0.0.1:9001。重新部署前請停用發布機並等待現有工作階段結束。",
+  "AppProviderHostRequired": "請先編輯發布機，設定 Linux 主機位址和 SSH 帳號。"
 }

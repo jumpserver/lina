@@ -20,44 +20,57 @@ export default {
     QuickActions,
     TwoCol
   },
+  emits: ['refresh', 'change-tab'],
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     }
   },
   data() {
-    const host = this.object.host
-    const canManageHost = Boolean(host)
     return {
       url: `/api/v1/terminal/app-providers/${this.object.id}`,
       detailFields: [
         'name',
         'hostname',
         'host',
-        'runtime_type',
-        'connection_mode',
         'deploy_options',
         'load',
         'date_created',
         'date_updated',
         'comment'
-      ],
-      quickActions: [
+      ]
+    }
+  },
+  computed: {
+    quickActions() {
+      const host = this.object.host
+      const canManageHost = Boolean(host)
+      return [
+        {
+          title: this.$t('AppProviderDeployment'),
+          attrs: { type: 'primary', label: this.$t('View') },
+          callbacks: { click: () => this.$emit('change-tab', 'Deployments') }
+        },
         {
           title: this.$t('IsActive'),
           type: 'switch',
           attrs: {
-            label: this.$t('Test'),
+            label: this.$t('IsActive'),
             model: host?.is_active || false,
             disabled: !canManageHost || !this.$hasPerm('assets.change_asset')
           },
           callbacks: {
-            change: (value) => {
+            change: (value, action) => {
               this.$axios
                 .patch(`/api/v1/assets/assets/${host.id}/`, { is_active: value })
-                .then(() => this.$message.success(this.$tc('UpdateSuccessMsg')))
-                .catch((error) => this.$message.error(`${this.$tc('UpdateErrorMsg')} ${error}`))
+                .then(() => {
+                  this.$message.success(this.$tc('UpdateSuccessMsg'))
+                  this.$emit('refresh')
+                })
+                .catch(() => {
+                  action.attrs.model = host.is_active
+                })
             }
           }
         },
@@ -90,6 +103,11 @@ export default {
                 .then((res) => openTaskPage(res.task))
             }
           }
+        },
+        {
+          title: this.$t('Status'),
+          attrs: { type: 'primary', label: this.$t('Refresh') },
+          callbacks: { click: () => this.$emit('refresh') }
         }
       ]
     }

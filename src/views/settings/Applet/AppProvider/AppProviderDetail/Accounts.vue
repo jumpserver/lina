@@ -7,6 +7,7 @@
         :object="object.host"
         :url="accountsUrl"
       />
+      <el-alert v-else :title="$t('AppProviderHostRequired')" type="warning" :closable="false" />
     </template>
     <template #right>
       <QuickActions :actions="quickActions" type="primary" />
@@ -43,8 +44,15 @@ export default {
           label: this.$t('Asset'),
           formatter: (row) => <span>{row.asset.name}</span>
         }
-      },
-      quickActions: [
+      }
+    }
+  },
+  computed: {
+    accountsUrl() {
+      return `/api/v1/terminal/app-providers/${this.object.id}/accounts/`
+    },
+    quickActions() {
+      return [
         {
           title: this.$t('TestAssetsConnective'),
           attrs: {
@@ -64,11 +72,6 @@ export default {
           }
         }
       ]
-    }
-  },
-  computed: {
-    accountsUrl() {
-      return `/api/v1/terminal/app-providers/${this.object.id}/accounts/`
     }
   }
 }
