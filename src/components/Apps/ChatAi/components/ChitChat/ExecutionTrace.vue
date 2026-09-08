@@ -51,6 +51,7 @@
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { ArrowDown, Check, CircleCheck, Loading, Lock, Warning } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
+import { operationLabel } from '../../utils/presentation'
 
 const props = defineProps({
   items: {
@@ -63,7 +64,7 @@ const props = defineProps({
   }
 })
 
-const { t } = useI18n()
+const { t, te } = useI18n()
 const displayedItems = computed(() => {
   const result = []
   for (const sourceItem of props.items) {
@@ -182,13 +183,17 @@ function formatDuration(milliseconds) {
 function itemTitle(item) {
   if (item.type === 'progress') return item.data?.content || t('ChatAIWorking')
   if (item.type === 'api_search') {
-    if (item.data?.action) return item.data.action
+    const action = readableSummary(item.data?.action)
+    if (action) return action
     return item.status === 'running'
       ? t('ChatAISearchingCapabilities')
       : t('ChatAICapabilitiesFound')
   }
   if (item.type === 'api_call') {
-    if (item.data?.action) return item.data.action
+    const localizedOperation = operationLabel(item.data?.operation_id, t, te)
+    if (localizedOperation) return localizedOperation
+    const action = readableSummary(item.data?.action)
+    if (action) return action
     const summary = readableSummary(item.data?.summary)
     if (summary) return summary
     if (item.status === 'approval') return t('ChatAIWaitingApproval')
