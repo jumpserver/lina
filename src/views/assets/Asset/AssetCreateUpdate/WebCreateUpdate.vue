@@ -12,13 +12,28 @@ export default {
     return {
       url: '/api/v1/assets/webs/',
       addFields: [
+        [this.$t('Basic'), ['allowed_urls']],
         [
           this.$t('Selector'),
-          ['autofill', 'username_selector', 'password_selector', 'submit_selector', 'script'],
+          [
+            'autofill',
+            'username_selector',
+            'password_selector',
+            'submit_selector',
+            'success_selector',
+            'interactive_selector',
+            'script'
+          ],
           1
         ]
       ],
       addFieldsMeta: {
+        allowed_urls: {
+          label: this.$t('WebAllowedSites'),
+          helpText: this.$t('WebAllowedSitesHelp'),
+          required: false,
+          default: []
+        },
         protocols: {
           hidden: (formValue) => {
             const address = formValue['address']
@@ -45,7 +60,18 @@ export default {
         submit_selector: {
           hidden: (formValue) => formValue['autofill'] !== 'basic'
         },
+        interactive_selector: {
+          required: false,
+          rules: [],
+          hidden: (formValue) => formValue['autofill'] !== 'basic'
+        },
+        success_selector: {
+          required: false,
+          rules: [],
+          hidden: (formValue) => formValue['autofill'] !== 'basic'
+        },
         script: {
+          helpText: this.$t('WebScriptStepsHelp'),
           hidden: (formValue) => formValue['autofill'] !== 'script'
         }
       }

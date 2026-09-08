@@ -102,6 +102,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { ArrowDown, Check, CircleCheck, Clock, Loading, Lock, View } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
+import { localizedFieldLabel } from '../../utils/presentation'
 
 const props = defineProps({
   approval: {
@@ -115,7 +116,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['confirm', 'cancel'])
-const { t } = useI18n()
+const { t, te } = useI18n()
 const now = ref(Date.now())
 let timer = null
 const previewEntryLimit = 12
@@ -208,26 +209,7 @@ function createPreviewSection(key, label, value) {
 }
 
 function fieldLabel(value) {
-  const key = String(value || '')
-  const known = {
-    id: 'ID',
-    name: t('ChatAIFieldName'),
-    address: t('ChatAIFieldAddress'),
-    username: t('ChatAIFieldUsername'),
-    status: t('ChatAIFieldStatus'),
-    is_active: t('ChatAIFieldActive'),
-    date_created: t('ChatAIFieldDateCreated'),
-    date_updated: t('ChatAIFieldDateUpdated'),
-    org_name: t('ChatAIFieldOrganization'),
-    platform: t('ChatAIFieldPlatform'),
-    node: t('Node'),
-    nodes: t('Nodes')
-  }
-  if (known[key]) return known[key]
-  return key
-    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
-    .replace(/[_-]+/g, ' ')
-    .replace(/\b\w/g, (character) => character.toUpperCase())
+  return localizedFieldLabel(value, t, te)
 }
 
 function formatPreviewValue(value) {

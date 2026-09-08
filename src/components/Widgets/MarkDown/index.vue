@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import 'github-markdown-css/github-markdown-light.css'
 import DOMPurify from 'dompurify'
 import VueMarkdown from '@/components/Widgets/VueMarkdown/index.vue'
 
@@ -163,7 +164,6 @@ export default {
   margin-left: 4px;
   padding: 5px 10px;
   border: 1px solid #dcdfe6;
-  @import '~github-markdown-css/github-markdown-light.css';
 }
 
 .action-bar {
