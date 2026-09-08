@@ -138,6 +138,63 @@ assert.doesNotMatch(clientAccessPage, /ClientAccessConfigurationsHelp|client-acc
 assert.match(clientAccessPage, /configurationTable\?\.reloadTable\(\)/)
 assert.doesNotMatch(clientAccessPage, /inline-view-header|BackToList|showList|credential-tags/)
 assert.doesNotMatch(clientAccessPage, /<IBox[^>]*ApplicationCredentials/)
+assert.doesNotMatch(clientAccessPage, /QuickActions|TwoCol|detailActions/)
+assert.match(clientAccessPage, /\[\.\.\.connectionItems, \.\.\.identificationItems\]/)
+assert.match(clientAccessPage, /:span="item.span \|\| 1"/)
+assert.doesNotMatch(clientAccessPage, /connection-header|connection-actions|<el-divider/)
+const detailPageActions = new Function(
+  `return ({${clientAccessPage.match(/    detailPageActions\(\) \{[\s\S]*?\n    \},/)[0]}}).detailPageActions`
+)()
+const actionTargets = []
+const clientHeaderVm = {
+  viewMode: 'detail',
+  selectedConfiguration: { id: 'configuration-id' },
+  canGenerate: true,
+  generating: false,
+  $t: (key) => key,
+  $hasPerm: () => true,
+  generateMaterials: () => actionTargets.push('generate'),
+  openEdit: (row) => actionTargets.push(['edit', row.id]),
+  remove: (row) => actionTargets.push(['delete', row.id])
+}
+const detailButtons = detailPageActions.call(clientHeaderVm)
+assert.deepEqual(
+  detailButtons.map((action) => action.name),
+  ['generate', 'update', 'delete']
+)
+assert.equal(detailButtons[0].title, 'Generate')
+assert.ok(detailButtons[0].icon)
+detailButtons.forEach((action) => action.callback())
+assert.deepEqual(actionTargets, [
+  'generate',
+  ['edit', 'configuration-id'],
+  ['delete', 'configuration-id']
+])
+clientHeaderVm.$hasPerm = () => false
+clientHeaderVm.canGenerate = false
+const readOnlyButtons = detailPageActions.call(clientHeaderVm)
+assert.equal(readOnlyButtons[0].has, false)
+assert.equal(readOnlyButtons[1].can, false)
+assert.equal(readOnlyButtons[2].can, false)
+clientHeaderVm.viewMode = 'list'
+assert.deepEqual(detailPageActions.call(clientHeaderVm), [])
+const applicationDetail = await readFile(
+  new URL('../src/views/accounts/Integration/ApplicationDetail/index.vue', import.meta.url),
+  'utf8'
+)
+assert.match(
+  applicationDetail,
+  /config.activeMenu === 'ClientAccessPrototype' && clientActions.length/
+)
+assert.match(applicationDetail, /@detail-actions-change="clientActions = \$event"/)
+const genericDetail = await readFile(
+  new URL('../src/layout/components/GenericDetailPage/index.vue', import.meta.url),
+  'utf8'
+)
+assert.match(
+  genericDetail,
+  /<slot name="headingRightSide">[\s\S]*?<ActionsGroup :actions="pageActions"[\s\S]*?<\/slot>/
+)
 const connectionItems = new Function(
   'BASE_URL',
   `return ({${clientAccessPage.match(/    connectionItems\(\) \{[\s\S]*?\n    \},/)[0]}}).connectionItems`
@@ -159,6 +216,27 @@ for (const credentials of [
     items.find((item) => item.key === 'ApplicationCredentials').value,
     credentials.map((item) => `${item.name} · ${item.key}`).join('\n')
   )
+  assert.equal(items.find((item) => item.key === 'ApplicationCredentials').span, 2)
+  assert.deepEqual(
+    items.slice(0, 4).map((item) => item.key),
+    ['Name', 'ClientType', 'ClientStatus', 'LastReportedAt']
+  )
+}
+for (const type of ['sdk', 'agent']) {
+  for (const notification_enabled of [false, true]) {
+    const items = connectionItems.call({
+      selectedConfiguration: {
+        type,
+        notification_enabled,
+        notification_url: 'http://localhost/events'
+      },
+      $t: (key) => key,
+      formatDate: () => '-'
+    })
+    const notification = items.find((item) => item.key === 'AppNotificationURL')
+    assert.equal(notification.has, type === 'agent' && notification_enabled)
+    assert.equal(notification.span, 2)
+  }
 }
 assert.match(
   clientAccessPage,
@@ -242,16 +320,20 @@ const credentialDetail = await readFile(
   new URL('../src/views/accounts/Integration/AccountRotationDetail/index.vue', import.meta.url),
   'utf8'
 )
-assert.equal((credentialDetail.match(/<ListTable\b/g) || []).length, 2)
+assert.equal((credentialDetail.match(/<ListTable\b/g) || []).length, 1)
+assert.match(credentialDetail, /<GenericListTable\b[\s\S]*?ref="accessTable"/)
 assert.doesNotMatch(credentialDetail, /<DataTable|hasRightActions: false|hasSearch: false/)
 assert.match(credentialDetail, /hasLeftActions: false/)
 assert.match(credentialDetail, /hasImport: false/)
 assert.match(credentialDetail, /hasExport: false/)
-assert.equal(
-  (credentialDetail.match(/columnsMeta: \{ actions: \{ has: false \} \}/g) || []).length,
-  2
-)
+assert.equal((credentialDetail.match(/actions: \{ has: false \}/g) || []).length, 2)
 assert.match(credentialDetail, /name: 'ApplicationCredentialAccess'/)
+assert.match(
+  credentialDetail,
+  /formatter: DetailFormatter,[\s\S]*?name: 'IntegrationApplicationDetail',[\s\S]*?query: \{ configuration: row\.id \}/
+)
+assert.match(applicationDetail, /activeMenu: this\.\$route\.query\.configuration/)
+assert.match(clientAccessPage, /openDetail\(\{ id: this\.\$route\.query\.configuration \}\)/)
 const relatedMethods = new Function(
   `return ${credentialDetail.match(/  methods: (\{[\s\S]*\n  \})\n\}\n<\/script>/)[1]}`
 )()
@@ -426,6 +508,8 @@ async function createFormConfig(path, props = {}) {
     'accessConfigurationUrl',
     'saveApplicationCredential',
     'saveClientAccessConfiguration',
+    'auditPreviewEnabled',
+    'validNotificationUrl',
     script
   )(
     {},
@@ -434,7 +518,9 @@ async function createFormConfig(path, props = {}) {
     '/api/v1/accounts/application-credentials/',
     '/api/v1/accounts/client-access-configurations/',
     api.saveApplicationCredential,
-    api.saveClientAccessConfiguration
+    api.saveClientAccessConfiguration,
+    false,
+    () => true
   )
   const events = []
   const vm = reactive({

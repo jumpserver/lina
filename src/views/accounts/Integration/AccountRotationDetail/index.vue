@@ -9,7 +9,7 @@
         :label="$t('AuthorizedAccess')"
         name="access"
       >
-        <ListTable
+        <GenericListTable
           :key="object.id"
           ref="accessTable"
           :header-actions="readOnlyHeaderActions"
@@ -30,6 +30,8 @@
 
 <script lang="jsx">
 import { ListTable } from '@/components'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
+import { GenericListTable } from '@/layout/components'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import {
   accessConfigurationUrl,
@@ -41,7 +43,7 @@ import AccountRotationInfo from './AccountRotationInfo.vue'
 
 export default {
   name: 'ApplicationCredentialDetail',
-  components: { AccountRotationInfo, ListTable },
+  components: { AccountRotationInfo, GenericListTable, ListTable },
   props: {
     object: {
       type: Object,
@@ -65,10 +67,25 @@ export default {
         request: requestAccessConfigurationTable,
         hasSelection: false,
         hasPagination: true,
-        columnsMeta: { actions: { has: false } },
+        columnsMeta: {
+          actions: { has: false },
+          name: {
+            label: this.$t('ClientAccessConfiguration'),
+            minWidth: '180px',
+            formatter: DetailFormatter,
+            formatterArgs: {
+              can: () => this.$hasPerm('accounts.view_integrationapplication'),
+              getRoute: ({ row }) => ({
+                name: 'IntegrationApplicationDetail',
+                params: { id: row.application.id },
+                query: { configuration: row.id }
+              })
+            }
+          }
+        },
         columns: [
           { prop: 'application_name', label: this.$t('Applications'), minWidth: '160px' },
-          { prop: 'name', label: this.$t('ClientAccessConfiguration'), minWidth: '180px' },
+          'name',
           {
             prop: 'type',
             label: this.$t('ClientType'),
