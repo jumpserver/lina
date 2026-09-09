@@ -1437,6 +1437,7 @@
   "OnlySearchCurrentNodePerm": "Поиск разрешений только в текущей папке",
   "Open": "Открыть",
   "OpenBao": "OpenBao",
+  "OpenBaoSSHCA": "Подписание SSH-сертификатов",
   "OpenCommand": "Открыть команду",
   "OpenStack": "OpenStack",
   "OpenStatus": "На одобрении",

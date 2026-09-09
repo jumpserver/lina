@@ -748,6 +748,7 @@ onBeforeUnmount(() => baseUrlResizeObserver?.disconnect())
   min-width: 0;
   flex-direction: column;
   gap: 0;
+  align-self: stretch;
 }
 
 .settings-panel,
@@ -761,6 +762,7 @@ onBeforeUnmount(() => baseUrlResizeObserver?.disconnect())
 }
 
 .settings-panel {
+  flex: 1;
   overflow: hidden;
   border-radius: 8px 8px 0 0;
 }
@@ -1160,6 +1162,12 @@ onBeforeUnmount(() => baseUrlResizeObserver?.disconnect())
 
   .model-field {
     grid-column: span 7;
+  }
+}
+
+@media (width > 1180px) {
+  .provider-form {
+    height: 100%;
   }
 }
 

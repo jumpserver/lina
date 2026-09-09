@@ -1437,6 +1437,7 @@
   "OnlySearchCurrentNodePerm": "Chỉ tìm kiếm quyền hạn của nút hiện tại",
   "Open": "Mở",
   "OpenBao": "OpenBao",
+  "OpenBaoSSHCA": "Ký chứng chỉ SSH",
   "OpenCommand": "Mở lệnh",
   "OpenStack": "OpenStack",
   "OpenStatus": "Đang phê duyệt",
