@@ -164,7 +164,7 @@ export default {
           }
         },
         {
-          icon: 'fa-solid fa-star',
+          icon: 'fa-regular fa-star',
           name: FAVORITE_TREE_NAME,
           title: this.$t('FavoriteTree'),
           treeComponent: 'NodeAssetTree',
@@ -177,7 +177,7 @@ export default {
                 ? this.$t('FavoriteTreeRoot')
                 : node?.name || node?.meta?.data?.value || '',
             settingsCacheKey: `${this.settingsCacheKey}:favorite-tree`,
-            treeIcon: 'fa-solid fa-star',
+            treeIcon: 'fa-regular fa-star',
             treeTitle: this.$t('FavoriteTree'),
             callback: {
               onSelected: (event, node) => this.handleFavoriteSelected(node)

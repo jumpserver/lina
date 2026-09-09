@@ -144,7 +144,7 @@ export default {
       },
       additionalTreeViews: [
         {
-          icon: 'fa-solid fa-star',
+          icon: 'fa-regular fa-star',
           name: FAVORITE_TREE_NAME,
           title: this.$t('FavoriteTree'),
           treeComponent: 'NodeAssetTree',

@@ -26,7 +26,7 @@ export default {
   flex: none;
   width: var(--x-tree-icon-size, 14px);
   height: var(--x-tree-icon-size, 14px);
-  color: var(--el-text-color-secondary);
+  color: var(--el-color-primary);
   font-size: 12px;
 }
 </style>
