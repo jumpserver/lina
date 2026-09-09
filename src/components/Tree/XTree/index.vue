@@ -4045,7 +4045,6 @@ export default {
   flex: none;
   overflow: visible;
   color: var(--el-text-color-primary);
-  font-weight: 500;
   text-overflow: clip;
   white-space: nowrap;
 }
@@ -4064,7 +4063,6 @@ export default {
   flex: none;
   margin-left: 4px;
   color: inherit;
-  font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
 
