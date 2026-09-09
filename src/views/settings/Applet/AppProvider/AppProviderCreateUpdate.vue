@@ -45,7 +45,7 @@ export default {
             value.host = {
               ...this.config.initial.host,
               name: value.name || '',
-              address: value.hostname || ''
+              address: value.address || ''
             }
           }
           return value

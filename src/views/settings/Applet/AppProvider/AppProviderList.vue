@@ -30,7 +30,7 @@ export default {
         url: '/api/v1/terminal/app-providers/',
         columnsShow: {
           min: ['name'],
-          default: ['name', 'hostname', 'load', 'actions']
+          default: ['name', 'address', 'load', 'actions']
         },
         columnsMeta: {
           name: {

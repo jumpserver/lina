@@ -13,6 +13,7 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail'
+import OfflineImages from './OfflineImages.vue'
 import Publications from './Publications'
 
 export default {
@@ -21,6 +22,7 @@ export default {
     GenericDetailPage,
     TabPage,
     Detail,
+    OfflineImages,
     Publications
   },
   data() {
@@ -33,6 +35,11 @@ export default {
           {
             title: this.$t('Basic'),
             name: 'Detail'
+          },
+          {
+            title: this.$t('OfflineImages'),
+            name: 'OfflineImages',
+            hidden: () => !this.$hasPerm('terminal.view_virtualapp')
           },
           {
             title: this.$t('AppProvider'),

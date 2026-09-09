@@ -504,7 +504,7 @@ export default {
           component: () => import('@/views/settings/Applet/VirtualApp/VirtualAppCreateUpdate'),
           hidden: true,
           meta: {
-            title: i18n.t('VirtualHostUpdate'),
+            title: i18n.t('VirtualAppUpdate'),
             permissions: ['terminal.change_virtualapp'],
             activeMenu: '/settings/applets'
           }

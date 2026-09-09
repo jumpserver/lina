@@ -32,7 +32,7 @@ export default {
       url: `/api/v1/terminal/app-providers/${this.object.id}`,
       detailFields: [
         'name',
-        'hostname',
+        'address',
         'host',
         'deploy_options',
         'load',

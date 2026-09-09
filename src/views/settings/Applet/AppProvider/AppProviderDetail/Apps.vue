@@ -70,7 +70,7 @@ export default {
             label: this.$t('ImageName')
           },
           app_version: {
-            label: this.$t('Version')
+            label: this.$t('PublishedVersion')
           },
           status: {
             label: this.$t('PublishStatus'),
@@ -90,7 +90,7 @@ export default {
             }
           },
           date_synced: {
-            label: this.$t('DateSynced')
+            label: this.$t('DateLastSync')
           },
           actions: {
             formatterArgs: {

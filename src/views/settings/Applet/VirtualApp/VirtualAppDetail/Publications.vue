@@ -45,7 +45,7 @@ export default {
         url: `/api/v1/terminal/virtual-app-publications/?app=${this.object.id}`,
         columns: [
           'provider.name',
-          'provider.hostname',
+          'provider.address',
           'app_version',
           'date_synced',
           'status',
@@ -63,9 +63,9 @@ export default {
               })
             }
           },
-          'provider.hostname': { label: this.$t('Hostname') },
-          app_version: { label: this.$t('Version') },
-          date_synced: { label: this.$t('DateSynced') },
+          'provider.address': { label: this.$t('Address') },
+          app_version: { label: this.$t('PublishedVersion') },
+          date_synced: { label: this.$t('DateLastSync') },
           status: {
             label: this.$t('PublishStatus'),
             formatter: (row) => vm.statusTag(row.status)
