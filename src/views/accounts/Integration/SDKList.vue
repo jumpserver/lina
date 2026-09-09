@@ -5,33 +5,37 @@
         <el-tabs v-model="activeMode">
           <el-tab-pane :label="$t('PythonSDK')" name="sdk">
             <p class="guide-description">{{ $t('SDKDescription') }}</p>
-            <el-steps :active="3" direction="vertical" finish-status="success">
-              <el-step
-                :description="$t('SelectApplicationHelp')"
-                :title="$t('SelectApplication')"
-              />
-              <el-step
-                :description="$t('CopyConnectionParametersHelp')"
-                :title="$t('ConnectionParameters')"
-              />
-              <el-step :description="$t('SDKDescription')" :title="$t('PythonSDK')" />
-            </el-steps>
           </el-tab-pane>
 
           <el-tab-pane :label="$t('AgentAccess')" name="agent">
             <p class="guide-description">{{ $t('AgentDescription') }}</p>
-            <el-steps :active="3" direction="vertical" finish-status="success">
-              <el-step
-                :description="$t('SelectApplicationHelp')"
-                :title="$t('SelectApplication')"
-              />
-              <el-step :description="$t('CopyInstallCommandHelp')" :title="$t('InstallCommand')" />
-              <el-step :description="$t('WaitAgentOnlineHelp')" :title="$t('ClientStatus')" />
-            </el-steps>
           </el-tab-pane>
         </el-tabs>
-        <h4>{{ $t('InstallCommand') }}</h4>
-        <p>
+        <el-steps :active="-1" direction="vertical">
+          <el-step :title="$t('AccessGuidePrepare')" :description="$t('AccessGuidePrepareHelp')" />
+          <el-step
+            :title="$t('AccessGuideAuthorize')"
+            :description="$t('AccessGuideAuthorizeHelp')"
+          />
+          <el-step
+            :title="$t('AccessGuideConfigure')"
+            :description="$t('AccessGuideConfigureHelp')"
+          />
+          <el-step
+            :title="$t('AccessGuideDeploy')"
+            :description="
+              $t(activeMode === 'sdk' ? 'AccessGuideSDKDeployHelp' : 'AccessGuideAgentDeployHelp')
+            "
+          />
+          <el-step
+            :title="$t('AccessGuideVerify')"
+            :description="
+              $t(activeMode === 'sdk' ? 'AccessGuideSDKVerifyHelp' : 'AccessGuideAgentVerifyHelp')
+            "
+          />
+        </el-steps>
+        <h4 v-if="activeMode === 'sdk'">{{ $t('InstallCommand') }}</h4>
+        <p v-if="activeMode === 'sdk'">
           <code
             >python3 -m pip install --index-url https://pypi.org/simple "{{ sdkPackageUrl }}"</code
           >
@@ -70,18 +74,26 @@ export default {
     guideActions() {
       return [
         {
+          title: this.$t('ApplicationCredentials'),
+          attrs: {
+            label: this.$t('ApplicationCredentials'),
+            disabled: !this.$hasPerm('accounts.view_applicationcredential')
+          },
+          callbacks: { click: () => this.openTab('rotations') }
+        },
+        {
           title: this.$t('Applications'),
           attrs: { type: 'primary', label: this.$t('ViewApplications') },
-          callbacks: { click: this.openApplications }
+          callbacks: { click: () => this.openTab('application') }
         }
       ]
     }
   },
   methods: {
-    openApplications() {
+    openTab(tab) {
       this.$router.replace({
         path: this.$route.path,
-        query: { ...this.$route.query, tab: 'application' }
+        query: { ...this.$route.query, tab }
       })
     }
   }

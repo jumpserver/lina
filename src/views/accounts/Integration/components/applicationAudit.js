@@ -1,3 +1,5 @@
+import { rotationStatuses } from './credentialStatus.js'
+
 export const auditEvents = {
   configuration_created: 'AppAuditConfigurationCreated',
   configuration_updated: 'AppAuditConfigurationUpdated',
@@ -15,7 +17,8 @@ export const auditEvents = {
   client_enabled: 'Enable',
   client_disabled: 'AppAuditClientDisabled',
   subscription_snapshot: 'AppAuditSubscriptionSnapshot',
-  notification: 'AppAuditNotificationDelivered'
+  notification: 'AppAuditNotificationDelivered',
+  application_secret_reset: 'ApplicationSecretReset'
 }
 export const auditResults = {
   success: 'Success',
@@ -70,6 +73,11 @@ const summaries = {
   required: 'AppAuditInvalidRequest'
 }
 
+function formatChangeValue(field, value, t) {
+  if (field === 'status' && rotationStatuses[value]) return t(rotationStatuses[value])
+  return typeof value === 'object' ? JSON.stringify(value) : String(value ?? '-')
+}
+
 export function normalizeAudit(row, t) {
   return {
     ...row,
@@ -79,14 +87,8 @@ export function normalizeAudit(row, t) {
     changes: (row.changes || []).map((change) => ({
       ...change,
       field: fieldLabels[change.field] ? t(fieldLabels[change.field]) : change.field,
-      before:
-        typeof change.before === 'object'
-          ? JSON.stringify(change.before)
-          : String(change.before ?? '-'),
-      after:
-        typeof change.after === 'object'
-          ? JSON.stringify(change.after)
-          : String(change.after ?? '-')
+      before: formatChangeValue(change.field, change.before, t),
+      after: formatChangeValue(change.field, change.after, t)
     })),
     notification: row.notification && {
       ...row.notification,

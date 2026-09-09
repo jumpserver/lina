@@ -33,6 +33,7 @@ import DetailCard from '@/components/Cards/DetailCard/index.vue'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import DataTable from '@/components/Table/DataTable/index.vue'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
+import { credentialStatusLabel } from '../components/credentialStatus.js'
 import {
   advanceApplicationCredentialRotation,
   cancelApplicationCredentialRotation,
@@ -127,10 +128,18 @@ export default {
         { key: this.$t('CredentialType'), value: this.typeLabel },
         {
           key: this.$t('Status'),
-          value: this.object.is_active,
+          value: credentialStatusLabel(this.object, this.$t),
           formatter: (_item, value) => (
-            <el-tag type={value ? 'success' : 'info'}>
-              {value ? this.$t('Enabled') : this.$t('Disabled')}
+            <el-tag
+              type={
+                !this.object.is_active
+                  ? 'info'
+                  : this.object.status === 'idle'
+                    ? 'success'
+                    : 'warning'
+              }
+            >
+              {value}
             </el-tag>
           )
         },

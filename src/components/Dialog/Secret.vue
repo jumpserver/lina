@@ -8,7 +8,7 @@
     @close="onClose"
     @confirm="visible = false"
   >
-    <el-alert type="warning" :closable="false">
+    <component :is="warningText ? 'el-alert' : 'div'" type="warning" :closable="false">
       {{ warningText }}
       <div class="secret">
         <div class="row">
@@ -22,11 +22,12 @@
           <el-icon class="copy-icon" @click="handleCopy(keyInfo.secret)"><CopyDocument /></el-icon>
         </div>
       </div>
-    </el-alert>
+    </component>
   </Dialog>
 </template>
 
 <script>
+import { ElAlert } from 'element-plus'
 import i18n from '@/i18n/i18n'
 import { copy } from '@/utils/common/index'
 import Dialog from '@/components/Dialog/index'
@@ -34,6 +35,7 @@ import Dialog from '@/components/Dialog/index'
 export default {
   name: 'Secret',
   components: {
+    ElAlert,
     Dialog
   },
   props: {

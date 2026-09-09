@@ -20,7 +20,7 @@ export default {
     application: { type: Object, required: true },
     configuration: { type: Object, default: null }
   },
-  emits: ['cancel', 'saved', 'submitting'],
+  emits: ['saved', 'submitting'],
   data() {
     const item = this.configuration
     return {
@@ -30,8 +30,6 @@ export default {
         submitMethod: item?.id ? 'patch' : 'post',
         needGetObjectDetail: false,
         hasReset: false,
-        hasSaveContinue: false,
-        submitBtnText: this.$t('Save'),
         initial: {
           name: item?.name || '',
           type: item?.type || 'sdk',
@@ -119,18 +117,32 @@ export default {
             el: { type: 'text', placeholder: 'https://app.example.com/pam/events' }
           }
         },
-        moreButtons: [{ title: this.$t('Cancel'), callback: () => this.$emit('cancel') }],
-        performSubmit: (values) => {
+        performSubmit: async (values) => {
           this.$emit('submitting', true)
           const save = saveClientAccessConfiguration
-          return save(this.application, {
-            ...values,
-            id: item?.id
-          }).finally(() => this.$emit('submitting', false))
+          try {
+            const submit = (removalReason) =>
+              save(this.application, {
+                ...values,
+                id: item?.id,
+                removal_reason: removalReason
+              })
+            let removalReason = await this.getRemovalReason(values)
+            try {
+              return await submit(removalReason)
+            } catch (error) {
+              const reasonRequired = error.response?.data?.removal_reason
+              if (removalReason || !reasonRequired) throw error
+              removalReason = await this.getRemovalReason(values, true)
+              return await submit(removalReason)
+            }
+          } finally {
+            this.$emit('submitting', false)
+          }
         },
-        onPerformSuccess: (saved) => {
-          this.$message.success(this.$t('SaveSuccess'))
-          this.$emit('saved', saved)
+        onPerformSuccess: (saved, _method, _formVm, addContinue) => {
+          this.$message.success(this.$t(addContinue ? 'SaveSuccessContinueMsg' : 'SaveSuccess'))
+          this.$emit('saved', saved, addContinue)
         },
         onPerformError: (error, _method, formVm) => {
           const response = error.response
@@ -142,6 +154,36 @@ export default {
           }
         }
       }
+    }
+  },
+  methods: {
+    async getRemovalReason(values, force = false) {
+      const selected = new Set((values.credential_ids || []).map(String))
+      const removed = (this.configuration?.credentials || []).filter(
+        (credential) => !selected.has(String(credential.id))
+      )
+      const rotating = removed.filter((credential) => {
+        const status = credential.status?.value ?? credential.status
+        return status !== 'idle'
+      })
+      if (!force && !rotating.length) return ''
+
+      const affected = rotating.length ? rotating : removed
+      const names =
+        affected.map((credential) => credential.name).join(', ') ||
+        this.$t('ApplicationCredentials')
+      const { value } = await this.$prompt(
+        this.$t('RemoveRotatingCredentialWarning', { names }),
+        this.$t('Warning'),
+        {
+          confirmButtonText: this.$t('Confirm'),
+          cancelButtonText: this.$t('Cancel'),
+          inputType: 'textarea',
+          inputPlaceholder: this.$t('PleaseEnterReason'),
+          inputValidator: (reason) => Boolean(reason?.trim()) || this.$t('PleaseEnterReason')
+        }
+      )
+      return value.trim()
     }
   }
 }

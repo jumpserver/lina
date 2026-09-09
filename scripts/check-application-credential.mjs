@@ -2,6 +2,88 @@ import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { effect, reactive, stop } from 'vue'
 import { createMemoryHistory, createRouter } from 'vue-router'
+import { normalizeAudit } from '../src/views/accounts/Integration/components/applicationAudit.js'
+import {
+  credentialStatusLabel,
+  rotationStatuses
+} from '../src/views/accounts/Integration/components/credentialStatus.js'
+
+for (const is_active of [true, false]) {
+  const enabled = is_active ? 'Enabled' : 'Disabled'
+  for (const [status, label] of Object.entries(rotationStatuses)) {
+    assert.equal(
+      credentialStatusLabel({ type: 'fixed', status, is_active }, (key) => key),
+      enabled
+    )
+    assert.equal(
+      credentialStatusLabel({ type: 'rotation', status, is_active }, (key) => key),
+      status === 'idle' ? enabled : is_active ? label : `Disabled · ${label}`
+    )
+  }
+}
+assert.equal(
+  credentialStatusLabel({ type: 'rotation', status: 'future', is_active: true }, (key) => key),
+  'future'
+)
+
+const guideSource = await readFile(
+  new URL('../src/views/accounts/Integration/SDKList.vue', import.meta.url),
+  'utf8'
+)
+assert.equal((guideSource.match(/<el-step\s/g) || []).length, 5)
+assert.ok(guideSource.includes(':active="-1"'))
+assert.ok(!guideSource.includes('finish-status="success"'))
+// Exercise the documentation links using the actual component method.
+const openGuideTab = new Function(
+  'tab',
+  guideSource.match(/    openTab\(tab\) \{([\s\S]*?)\n    \}/)[1]
+)
+for (const tab of ['application', 'rotations']) {
+  let destination
+  openGuideTab.call(
+    {
+      $route: { path: '/pam/integrations/services', query: { tab: 'docs' } },
+      $router: {
+        replace: (value) => {
+          destination = value
+        }
+      }
+    },
+    tab
+  )
+  assert.equal(destination.query.tab, tab)
+  assert.equal(destination.path, '/pam/integrations/services')
+}
+
+const statusLabels = {
+  RotationNormal: '正常',
+  WaitingForBackupAccount: '等待应用切换至备用账号',
+  ReadyForSecretChange: '可以执行改密',
+  ChangingSecret: '正在修改账号密码',
+  WaitingForPrimaryAccount: '等待应用切回主账号'
+}
+const normalizedStatuses = normalizeAudit(
+  {
+    changes: Object.keys({
+      idle: 1,
+      waiting_backup: 1,
+      ready_for_change: 1,
+      changing_secret: 1,
+      waiting_primary: 1
+    }).map((before) => ({ field: 'status', before, after: before }))
+  },
+  (key) => statusLabels[key] || key
+)
+assert.deepEqual(
+  normalizedStatuses.changes.map(({ before }) => before),
+  Object.values(statusLabels)
+)
+assert.equal(
+  normalizeAudit({ event: 'application_secret_reset', changes: [] }, (key) =>
+    key === 'ApplicationSecretReset' ? '重置应用密钥' : key
+  ).event_display,
+  '重置应用密钥'
+)
 
 // Exercise route inheritance and the same permission path used by detail header actions.
 const routeSource = await readFile(
@@ -153,6 +235,7 @@ const clientHeaderVm = {
   generating: false,
   $t: (key) => key,
   $hasPerm: () => true,
+  backToList: () => actionTargets.push('back'),
   generateMaterials: () => actionTargets.push('generate'),
   openEdit: (row) => actionTargets.push(['edit', row.id]),
   remove: (row) => actionTargets.push(['delete', row.id])
@@ -160,12 +243,13 @@ const clientHeaderVm = {
 const detailButtons = detailPageActions.call(clientHeaderVm)
 assert.deepEqual(
   detailButtons.map((action) => action.name),
-  ['generate', 'update', 'delete']
+  ['back-to-access-list', 'generate', 'update', 'delete']
 )
-assert.equal(detailButtons[0].title, 'Generate')
+assert.equal(detailButtons[0].title, 'BackToClientAccessList')
 assert.ok(detailButtons[0].icon)
 detailButtons.forEach((action) => action.callback())
 assert.deepEqual(actionTargets, [
+  'back',
   'generate',
   ['edit', 'configuration-id'],
   ['delete', 'configuration-id']
@@ -173,15 +257,31 @@ assert.deepEqual(actionTargets, [
 clientHeaderVm.$hasPerm = () => false
 clientHeaderVm.canGenerate = false
 const readOnlyButtons = detailPageActions.call(clientHeaderVm)
-assert.equal(readOnlyButtons[0].has, false)
-assert.equal(readOnlyButtons[1].can, false)
+assert.notEqual(readOnlyButtons[0].can, false)
+assert.equal(readOnlyButtons[1].has, false)
 assert.equal(readOnlyButtons[2].can, false)
+assert.equal(readOnlyButtons[3].can, false)
 clientHeaderVm.viewMode = 'list'
 assert.deepEqual(detailPageActions.call(clientHeaderVm), [])
 const applicationDetail = await readFile(
   new URL('../src/views/accounts/Integration/ApplicationDetail/index.vue', import.meta.url),
   'utf8'
 )
+const applicationList = await readFile(
+  new URL('../src/views/accounts/Integration/ApplicationList.vue', import.meta.url),
+  'utf8'
+)
+assert.match(applicationList, /width: 28px; height: 28px/)
+assert.match(applicationList, /\$confirm\([\s\S]*?ResetApplicationSecretConfirm/)
+assert.match(applicationList, /\$axios\.post\([\s\S]*?\/reset-secret\//)
+assert.doesNotMatch(applicationList, /refresh-secret/)
+const applicationInfo = await readFile(
+  new URL('../src/views/accounts/Integration/ApplicationDetail/ServiceInfo.vue', import.meta.url),
+  'utf8'
+)
+assert.match(applicationInfo, /title: this\.\$t\('ApplicationSecret'\)/)
+assert.match(applicationInfo, /label: this\.\$t\('View'\)/)
+assert.doesNotMatch(applicationInfo, /label: this\.\$t\('Generate'\)/)
 assert.match(
   applicationDetail,
   /config.activeMenu === 'ClientAccessPrototype' && clientActions.length/
@@ -295,6 +395,35 @@ assert.equal(materialVm.generating, false)
 assert.equal(materialVm.generated, false)
 assert.equal(materialVm.configurationText, '')
 
+const backToList = new Function(
+  `return ({${clientAccessPage.match(/    async backToList\(\) \{[\s\S]*?^    \},/m)[0]}}).backToList`
+)()
+for (const query of [{ tab: 'application' }, { tab: 'application', configuration: 'old' }]) {
+  const vm = {
+    object: { id: 'current-application' },
+    viewMode: 'detail',
+    selectedConfiguration: { id: 'old' },
+    $route: { query },
+    $router: {
+      replace: async ({ query }) => {
+        vm.$route.query = query
+      }
+    },
+    clearMaterials() {
+      this.cleared = true
+    },
+    async loadData() {
+      this.reloaded = this.viewMode === 'list'
+    }
+  }
+  await backToList.call(vm)
+  assert.equal(vm.selectedConfiguration, null)
+  assert.equal(vm.cleared, true)
+  assert.equal(vm.reloaded, true)
+  assert.deepEqual(vm.$route.query, { tab: 'application' })
+  assert.equal(vm.object.id, 'current-application')
+}
+
 const credentialPage = await readFile(
   new URL('../src/views/accounts/Integration/AccountRotationPrototype.vue', import.meta.url),
   'utf8'
@@ -334,6 +463,48 @@ assert.match(
 )
 assert.match(applicationDetail, /activeMenu: this\.\$route\.query\.configuration/)
 assert.match(clientAccessPage, /openDetail\(\{ id: this\.\$route\.query\.configuration \}\)/)
+const applicationWatcherBlock = clientAccessPage
+  .match(/    'object\.id': \{[\s\S]*?^    \}/m)[0]
+  .trim()
+const applicationWatcher = new Function(`return ({${applicationWatcherBlock}})`)()['object.id']
+const applicationSwitchVm = {
+  viewMode: 'detail',
+  selectedConfiguration: { id: 'old-configuration' },
+  editingConfiguration: { id: 'old-configuration' },
+  formVisible: true,
+  materialsVisible: true,
+  tableConfig: { extraQuery: { application: 'old-application' } },
+  $route: { query: {} },
+  clearMaterials() {},
+  loadData: async () => {}
+}
+await applicationWatcher.handler.call(applicationSwitchVm, 'new-application')
+assert.equal(applicationSwitchVm.viewMode, 'list')
+assert.equal(applicationSwitchVm.selectedConfiguration, null)
+assert.equal(applicationSwitchVm.editingConfiguration, null)
+assert.equal(applicationSwitchVm.formVisible, false)
+assert.equal(applicationSwitchVm.materialsVisible, false)
+assert.deepEqual(applicationSwitchVm.tableConfig.extraQuery, { application: 'new-application' })
+const openDetailBlock = clientAccessPage
+  .match(/    async openDetail\(row\) \{[\s\S]*?^    \}/m)[0]
+  .trim()
+const openDetail = new Function(
+  'getClientAccessConfiguration',
+  `return ({${openDetailBlock}}).openDetail`
+)(async () => ({ id: 'old-configuration', application: { id: 'old-application' } }))
+const replacedRoutes = []
+const staleConfigurationVm = {
+  object: { id: 'new-application' },
+  viewMode: 'list',
+  selectedConfiguration: null,
+  $route: { query: { tab: 'application', configuration: 'old-configuration' } },
+  $router: { replace: async (route) => replacedRoutes.push(route) },
+  clearMaterials() {}
+}
+await openDetail.call(staleConfigurationVm, { id: 'old-configuration' })
+assert.equal(staleConfigurationVm.viewMode, 'list')
+assert.equal(staleConfigurationVm.selectedConfiguration, null)
+assert.deepEqual(replacedRoutes, [{ query: { tab: 'application' } }])
 const relatedMethods = new Function(
   `return ${credentialDetail.match(/  methods: (\{[\s\S]*\n  \})\n\}\n<\/script>/)[1]}`
 )()
@@ -528,8 +699,10 @@ async function createFormConfig(path, props = {}) {
     $t: (key) => key,
     $context: { get: () => 'parent-application-id' },
     $message: { success() {} },
+    $prompt: props.$prompt || (async () => ({ value: 'removal reason' })),
     $emit: (...args) => events.push(args)
   })
+  Object.assign(vm, component.methods)
   Object.assign(vm, component.data.call(vm))
   return { config: vm.formConfig, events }
 }
@@ -603,6 +776,9 @@ const { config: accessCreate, events } = await createFormConfig(accessFormPath, 
 assert.equal(accessCreate.submitMethod, 'post')
 assert.equal(accessCreate.getUrl(), '/api/v1/accounts/client-access-configurations/')
 assert.equal(accessCreate.needGetObjectDetail, false)
+assert.equal(accessCreate.submitBtnText, undefined)
+assert.equal(accessCreate.hasSaveContinue, undefined)
+assert.equal(accessCreate.moreButtons, undefined)
 for (const type of ['sdk', 'agent']) {
   assert.equal(accessCreate.fieldsMeta.language.hidden({ type }), type !== 'sdk')
   assert.equal(accessCreate.fieldsMeta.app_user.hidden({ type }), type !== 'agent')
@@ -620,8 +796,31 @@ assert.deepEqual(events.slice(-2), [
   ['submitting', true],
   ['submitting', false]
 ])
-accessCreate.moreButtons[0].callback()
-assert.deepEqual(events.at(-1), ['cancel'])
+const continued = { id: 'continued' }
+accessCreate.onPerformSuccess(continued, 'post', {}, true)
+assert.deepEqual(events.at(-1), ['saved', continued, true])
+const handleConfigurationSavedBlock = clientAccessPage
+  .match(/    async handleConfigurationSaved\(saved, addContinue\) \{[\s\S]*?^    \}/m)[0]
+  .trim()
+const handleConfigurationSaved = new Function(
+  `return ({${handleConfigurationSavedBlock}}).handleConfigurationSaved`
+)()
+let configurationReloads = 0
+const configurationPageVm = {
+  formVisible: true,
+  viewMode: 'list',
+  loadData: async () => {
+    configurationReloads += 1
+  },
+  refreshAccessReadiness: async () => {},
+  openDetail: async () => {}
+}
+await handleConfigurationSaved.call(configurationPageVm, continued, true)
+assert.equal(configurationPageVm.formVisible, true)
+assert.equal(configurationReloads, 1)
+await handleConfigurationSaved.call(configurationPageVm, continued, false)
+assert.equal(configurationPageVm.formVisible, false)
+assert.equal(configurationReloads, 2)
 let fieldErrors
 accessCreate.onPerformError(
   { response: { status: 400, data: { credentials: ['Not authorized'] } } },
@@ -651,4 +850,35 @@ assert.equal(accessEdit.fieldsMeta.type.el.disabled, true)
 assert.equal(accessEdit.initial.is_active, false)
 await accessEdit.performSubmit(accessEdit.initial)
 assert.equal(calls.at(-1).url, '/api/v1/accounts/client-access-configurations/configuration-edit/')
+
+const originalPatch = request.patch
+let promptCount = 0
+request.patch = async (url, data) => {
+  if (!data.removal_reason) {
+    const error = new Error('Removal reason required')
+    error.response = { status: 400, data: { removal_reason: ['Required'] } }
+    throw error
+  }
+  return request.post(url, data)
+}
+const { config: staleAccessEdit } = await createFormConfig(accessFormPath, {
+  application: { id: 'application' },
+  configuration: {
+    id: 'stale-configuration',
+    type: 'sdk',
+    credential_ids: ['rotating', 'retained'],
+    credentials: [
+      { id: 'rotating', name: 'Rotating', status: 'idle' },
+      { id: 'retained', name: 'Retained', status: 'idle' }
+    ]
+  },
+  $prompt: async () => {
+    promptCount += 1
+    return { value: ' concurrent rotation ' }
+  }
+})
+await staleAccessEdit.performSubmit({ ...staleAccessEdit.initial, credential_ids: ['retained'] })
+assert.equal(promptCount, 1)
+assert.equal(calls.at(-1).data.removal_reason, 'concurrent rotation')
+request.patch = originalPatch
 console.log('Application credential HTTP, standard form, and layout checks passed')

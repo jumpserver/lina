@@ -40,6 +40,7 @@ import {
 } from '@/api/applicationCredential'
 import AccountRotationCreateUpdate from './AccountRotationCreateUpdate.vue'
 import AccountRotationDetail from './AccountRotationDetail/index.vue'
+import { credentialStatusLabel } from './components/credentialStatus.js'
 
 const accountName = (row) => row.published_account?.username || row.published_account?.name || '-'
 
@@ -105,11 +106,24 @@ export default {
           {
             prop: 'status',
             label: this.$t('Status'),
-            width: '110px',
+            width: '200px',
             formatter: (row) => (
-              <el-tag type={row.is_active ? 'success' : 'info'}>
-                {row.is_active ? this.$t('Enabled') : this.$t('Disabled')}
-              </el-tag>
+              <el-tooltip
+                content={this.$t('CredentialRotationLockedHelp')}
+                disabled={row.status === 'idle'}
+              >
+                <el-tag
+                  type={!row.is_active ? 'info' : row.status === 'idle' ? 'success' : 'warning'}
+                  style={{
+                    height: 'auto',
+                    minHeight: '24px',
+                    lineHeight: '20px',
+                    whiteSpace: 'normal'
+                  }}
+                >
+                  {credentialStatusLabel(row, this.$t)}
+                </el-tag>
+              </el-tooltip>
             )
           },
           {
