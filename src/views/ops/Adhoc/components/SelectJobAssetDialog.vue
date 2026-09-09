@@ -60,16 +60,13 @@
       </div>
     </IBox>
 
-    <AssetSelectDialog
-      v-bind="$attrs"
+    <UserAssetSelectDialog
       v-if="dialogVisible"
-      ref="dialog"
       v-model:visible="dialogVisible"
-      :base-node-url="baseNodeUrl"
       :base-url="baseUrl"
       :page-size="defaultPageSize"
-      :tree-setting="treeSetting"
-      :tree-url-query="treeUrlQuery"
+      settings-cache-key="job-asset-select-dialog"
+      :title="dialogTitle"
       :value="selectAssets"
       @cancel="handleCancel"
       @confirm="handleConfirm"
@@ -78,13 +75,13 @@
 </template>
 
 <script>
-import AssetSelectDialog from '@/components/Apps/AssetSelect/dialog.vue'
+import UserAssetSelectDialog from '@/components/Apps/GrantedAssets/UserAssetSelectDialog.vue'
 import IBox from '@/components/Common/IBox/index.vue'
 import { loadPlatformIcon } from '@/utils/jms/index'
 
 export default {
   componentName: 'SelectJobAssetDialog',
-  components: { AssetSelectDialog, IBox },
+  components: { UserAssetSelectDialog, IBox },
   emits: ['change'],
   props: {
     baseUrl: {
@@ -95,32 +92,20 @@ export default {
       type: Number,
       default: 10
     },
-    baseNodeUrl: {
+    dialogTitle: {
       type: String,
-      default: '/api/v1/perms/users/self/nodes/'
-    },
-    treeUrlQuery: {
-      type: Object,
-      default: () => {}
+      default: ''
     },
     value: {
       type: Array,
       default: () => []
-    },
-    treeSetting: {
-      type: Object,
-      default: () => ({})
-    },
-    disabled: {
-      type: [Boolean, Function],
-      default: false
     }
   },
   data() {
     return {
       dialogVisible: false,
       selectAssetRows: [],
-      selectAssets: []
+      selectAssets: [...this.value]
     }
   },
   computed: {

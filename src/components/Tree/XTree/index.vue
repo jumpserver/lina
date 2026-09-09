@@ -1,7 +1,10 @@
 <template>
   <div
     :class="{ 'is-search-visible': isPanelSearchVisible }"
-    :style="{ '--x-tree-row-height': `${nodeRowHeight}px` }"
+    :style="{
+      '--x-tree-row-height': `${nodeRowHeight}px`,
+      '--x-tree-content-width': treeContentWidth ? `${treeContentWidth}px` : '100%'
+    }"
     class="x-tree"
   >
     <div
@@ -448,6 +451,9 @@ export default {
       runtimeEffectsGeneration: 0,
       treeResizeObserver: null,
       treeResizeFrame: null,
+      treeContentObserver: null,
+      treeContentWidth: 0,
+      treeContentWidthFrame: null,
       virtualDraggingNode: null,
       virtualDropTargetId: '',
       dragPreviewElement: null,
@@ -675,6 +681,7 @@ export default {
   watch: {
     treeKey() {
       this.hideNodeAmountTooltip()
+      this.scheduleTreeContentWidth()
     }
   },
   mounted() {
@@ -745,9 +752,13 @@ export default {
       document.removeEventListener('scroll', this.handleDocumentAmountScroll, true)
       this.treeResizeObserver?.disconnect()
       this.treeResizeObserver = null
+      this.treeContentObserver?.disconnect()
+      this.treeContentObserver = null
       window.cancelAnimationFrame(this.treeResizeFrame)
+      window.cancelAnimationFrame(this.treeContentWidthFrame)
       window.cancelAnimationFrame(this.searchFocusFrame)
       this.treeResizeFrame = null
+      this.treeContentWidthFrame = null
       this.searchFocusFrame = null
       this.cancelAmountLoading({ preserveFresh: preserveAmountRefresh })
     },
@@ -773,11 +784,13 @@ export default {
           if (nextHeight !== this.virtualTreeHeight) {
             this.virtualTreeHeight = nextHeight
           }
+          this.scheduleTreeContentWidth()
         })
       }
       this.$nextTick(() => {
         if (this.isRuntimeEffectsCurrent(generation)) {
           updateHeight()
+          this.setupTreeContentObserver(generation)
         }
       })
       if (typeof ResizeObserver !== 'undefined') {
@@ -792,6 +805,62 @@ export default {
             observer.observe(this.$refs.treeBody)
           }
         })
+      }
+    },
+    setupTreeContentObserver(generation = this.runtimeEffectsGeneration) {
+      this.treeContentObserver?.disconnect()
+      this.treeContentObserver = null
+      const viewport = this.$refs.treeViewport
+      if (!viewport || typeof MutationObserver === 'undefined') {
+        this.scheduleTreeContentWidth()
+        return
+      }
+      const observer = new MutationObserver(() => {
+        if (this.isRuntimeEffectsCurrent(generation)) {
+          this.scheduleTreeContentWidth()
+        }
+      })
+      observer.observe(viewport, {
+        childList: true,
+        characterData: true,
+        subtree: true
+      })
+      this.treeContentObserver = observer
+      this.scheduleTreeContentWidth()
+    },
+    scheduleTreeContentWidth() {
+      if (!this.runtimeEffectsActive) {
+        return
+      }
+      window.cancelAnimationFrame(this.treeContentWidthFrame)
+      const generation = this.runtimeEffectsGeneration
+      this.treeContentWidthFrame = window.requestAnimationFrame(() => {
+        this.treeContentWidthFrame = null
+        if (this.isRuntimeEffectsCurrent(generation)) {
+          this.updateTreeContentWidth()
+        }
+      })
+    },
+    updateTreeContentWidth() {
+      const scrollElement = this.getTreeAmountScrollElement()
+      const viewport = this.$refs.treeViewport
+      if (!scrollElement || !viewport) {
+        return
+      }
+      let nextWidth = Math.max(0, scrollElement.clientWidth)
+      viewport.querySelectorAll('.el-tree-node__content').forEach((row) => {
+        const rowRect = row.getBoundingClientRect()
+        const contentElements = row.querySelectorAll(
+          '.x-tree__node-label, .x-tree__node-amount, .x-tree__rename'
+        )
+        contentElements.forEach((element) => {
+          const elementRect = element.getBoundingClientRect()
+          nextWidth = Math.max(nextWidth, elementRect.right - rowRect.left + 8)
+        })
+      })
+      nextWidth = Math.ceil(nextWidth)
+      if (nextWidth !== this.treeContentWidth) {
+        this.treeContentWidth = nextWidth
       }
     },
     yieldToBrowser() {
@@ -3606,6 +3675,8 @@ export default {
 .x-tree {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  min-width: 0;
   height: calc(100vh - 204px);
   min-height: 360px;
   background: var(--el-bg-color, #fff);
@@ -3748,6 +3819,11 @@ export default {
   overflow: hidden;
 }
 
+.x-tree__body.is-virtual :deep(.el-tree) {
+  width: 100%;
+  min-width: 0;
+}
+
 .x-tree__body.is-virtual :deep(.el-tree-virtual-list) {
   min-width: 100%;
   overflow: auto !important;
@@ -3801,7 +3877,10 @@ export default {
 }
 
 .x-tree__body :deep(.el-tree-node__content) {
+  width: calc(var(--x-tree-content-width, 100%) - 8px);
+  min-width: calc(var(--x-tree-content-width, 100%) - 8px);
   height: var(--x-tree-row-height);
+  margin: 0 4px;
   border-radius: 4px;
   padding-right: 8px;
   user-select: none;
