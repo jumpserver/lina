@@ -20,7 +20,7 @@
   }
 }
 
-.page [data-list-layout='container'] {
+.page [data-list-layout='container']:not(.el-row):not(.el-col) {
   display: flex !important;
   flex: 1 1 0%;
   flex-direction: column;
@@ -68,6 +68,24 @@
       }
     }
   }
+}
+
+// A list nested in TwoCol still needs the height chain above it, but those
+// Element Plus grid nodes must retain their own row direction and responsive
+// column flex-basis. Treating every ancestor as a generic column stacks the
+// quick-actions panel below the table and leaves almost no table body when the
+// quick filter is expanded.
+.page .el-row[data-list-layout='container'] {
+  flex: 1 1 0%;
+  min-height: 0;
+  min-width: 0;
+}
+
+.page .el-col[data-list-layout='container'] {
+  display: flex !important;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
 }
 
 .page .list-table--fill-height {

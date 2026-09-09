@@ -24,46 +24,23 @@
         <AssistantMark :active="streaming" size="small" />
         <span class="brand-copy">
           <strong>{{ t('ChatAIName') }}</strong>
-          <small>
-            <i :class="{ 'is-busy': busy || composerRecording }" />
-            {{ busy || composerRecording ? activityLabel : t('ChatAIReady') }}
+          <small v-if="busy || composerRecording">
+            <i class="is-busy" />
+            {{ activityLabel }}
           </small>
         </span>
       </div>
 
       <div class="assistant-header__actions">
         <button
-          class="new-chat-button"
+          class="header-icon"
           :aria-label="t('NewChat')"
           :disabled="navigationLocked"
           :title="navigationLocked ? t('ChatAIFinishCurrentTask') : t('NewChat')"
           type="button"
           @click="handleNew"
         >
-          <el-icon><EditPen /></el-icon>
-          <span>{{ t('NewChat') }}</span>
-        </button>
-        <button
-          v-if="!standalone && windowed"
-          class="header-icon"
-          :aria-label="t('RestoreDefault')"
-          :disabled="windowTransitioning"
-          :title="t('RestoreDefault')"
-          type="button"
-          @click="emit('reset-window')"
-        >
-          <el-icon><RefreshLeft /></el-icon>
-        </button>
-        <button
-          v-if="!standalone && windowed"
-          class="header-icon"
-          :aria-label="expanded ? t('ChatAICompress') : t('ChatAIExpand')"
-          :disabled="windowTransitioning"
-          :title="expanded ? t('ChatAICompress') : t('ChatAIExpand')"
-          type="button"
-          @click="emit(expanded ? 'compress' : 'expand')"
-        >
-          <el-icon><component :is="expanded ? ScaleToOriginal : FullScreen" /></el-icon>
+          <el-icon><Plus /></el-icon>
         </button>
         <el-dropdown
           class="header-more-dropdown"
@@ -85,6 +62,25 @@
               <el-dropdown-item command="history">
                 <el-icon><Clock /></el-icon>
                 <span>{{ t('History') }}</span>
+              </el-dropdown-item>
+              <el-dropdown-item
+                v-if="!standalone && windowed"
+                command="toggle-expand"
+                :disabled="windowTransitioning"
+                divided
+              >
+                <el-icon>
+                  <component :is="expanded ? ScaleToOriginal : FullScreen" />
+                </el-icon>
+                <span>{{ expanded ? t('ChatAICompress') : t('ChatAIExpand') }}</span>
+              </el-dropdown-item>
+              <el-dropdown-item
+                v-if="!standalone && windowed"
+                command="reset-window"
+                :disabled="windowTransitioning"
+              >
+                <el-icon><RefreshLeft /></el-icon>
+                <span>{{ t('RestoreDefault') }}</span>
               </el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -269,10 +265,10 @@ import {
   Close,
   Clock,
   Connection,
-  EditPen,
   FullScreen,
   Monitor,
   More,
+  Plus,
   RefreshLeft,
   ScaleToOriginal,
   Setting,
@@ -471,6 +467,10 @@ function handleHeaderKeyDown(event) {
 function handleHeaderAction(command) {
   if (command === 'history') {
     historyOpen.value = !historyOpen.value
+  } else if (command === 'toggle-expand') {
+    emit(props.expanded ? 'compress' : 'expand')
+  } else if (command === 'reset-window') {
+    emit('reset-window')
   }
 }
 
@@ -960,38 +960,8 @@ defineExpose({ init, focus, newConversation: handleNew })
   }
 }
 
-.new-chat-button {
-  display: inline-grid;
-  width: 30px;
-  height: 30px;
-  padding: 0;
-  place-items: center;
-  border: 1px solid transparent;
-  border-radius: var(--ai-radius-sm);
-  color: var(--ai-text-secondary);
-  background: transparent;
-  cursor: pointer;
-  font-size: 16px;
-  transition: all 0.18s ease;
-
-  &:hover:not(:disabled) {
-    border-color: var(--ai-primary-light-2);
-    color: var(--ai-primary-dark);
-    background: var(--ai-primary-light);
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.45;
-  }
-
-  span {
-    display: none;
-  }
-}
-
 .header-more-dropdown {
-  display: none;
+  display: inline-flex;
 }
 
 .assistant-body {
@@ -1078,7 +1048,7 @@ defineExpose({ init, focus, newConversation: handleNew })
 .composer-area {
   position: relative;
   z-index: 10;
-  padding: 6px 14px 6px;
+  padding: 6px 14px 10px;
   background: linear-gradient(180deg, rgb(255 255 255 / 72%), #fff 14px);
 }
 
@@ -1419,10 +1389,6 @@ defineExpose({ init, focus, newConversation: handleNew })
     }
   }
 
-  .header-more-dropdown {
-    display: inline-flex;
-  }
-
   .mobile-backdrop {
     position: absolute;
     z-index: 30;
@@ -1462,10 +1428,6 @@ defineExpose({ init, focus, newConversation: handleNew })
 }
 
 @media (max-width: 760px) {
-  .header-more-dropdown {
-    display: inline-flex;
-  }
-
   .mobile-backdrop {
     position: absolute;
     z-index: 29;
@@ -1503,8 +1465,7 @@ defineExpose({ init, focus, newConversation: handleNew })
     gap: 4px;
   }
 
-  .header-icon,
-  .new-chat-button {
+  .header-icon {
     width: 32px;
     height: 32px;
   }

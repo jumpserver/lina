@@ -93,6 +93,7 @@ export default {
               extraActions: [
                 {
                   title: this.$t('Deploy'),
+                  type: 'primary',
                   callback: function ({ row }) {
                     this.$axios
                       .post(`/api/v1/terminal/applet-host-deployments/applets/`, {
@@ -106,6 +107,7 @@ export default {
                 },
                 {
                   title: this.$t('Uninstall'),
+                  type: 'danger',
                   callback: function ({ row }) {
                     this.$axios
                       .post(`/api/v1/terminal/applet-host-deployments/uninstall/`, {

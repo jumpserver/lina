@@ -231,12 +231,12 @@ import AssistantMark from './components/AssistantMark.vue'
 const EXPANDED_KEY = 'chat_ai_expanded'
 const LAUNCHER_HIDDEN_KEY = 'chat_ai_launcher_hidden'
 const LAUNCHER_Y_KEY = 'chat_ai_launcher_y'
-const LAUNCHER_SIZE = 48
+const LAUNCHER_HEIGHT = 45
 const LAUNCHER_GAP = 16
 const LAUNCHER_DRAG_THRESHOLD = 5
 const PANEL_RECT_KEY = 'chat_ai_panel_rect'
 const PANEL_GAP = 16
-const PANEL_DEFAULT_WIDTH = 520
+const PANEL_DEFAULT_WIDTH = 450
 const PANEL_DEFAULT_HEIGHT = 780
 const PANEL_MIN_WIDTH = 380
 const PANEL_MIN_HEIGHT = 440
@@ -325,9 +325,9 @@ const focusTrapActive = computed(() => {
 const compactViewport = computed(() => layoutViewportWidth.value <= PANEL_COMPACT_BREAKPOINT)
 const launcherStyle = computed(() => {
   const min = viewportTop.value + LAUNCHER_GAP
-  const max = viewportTop.value + viewportHeight.value - LAUNCHER_SIZE - LAUNCHER_GAP
+  const max = viewportTop.value + viewportHeight.value - LAUNCHER_HEIGHT - LAUNCHER_GAP
   const defaultY =
-    viewportTop.value + viewportHeight.value - LAUNCHER_SIZE - (mobileViewport.value ? 82 : 116)
+    viewportTop.value + viewportHeight.value - LAUNCHER_HEIGHT - (mobileViewport.value ? 82 : 116)
   const preferred = Number.isFinite(launcherY.value)
     ? `${viewportTop.value + launcherY.value}px`
     : `calc(${defaultY}px - env(safe-area-inset-bottom, 0px))`
@@ -367,7 +367,7 @@ const panelCompact = computed(() => {
       : renderedPanelRect.value?.width || PANEL_DEFAULT_WIDTH
   return width <= PANEL_COMPACT_BREAKPOINT
 })
-const assistantIcon = getAssetUrl('img/robot-assistant.png')
+const assistantIcon = getAssetUrl('img/robot-assistant.gif')
 const launcherInteraction = {
   pointerId: null,
   captureTarget: null,
@@ -443,7 +443,7 @@ function readLauncherY() {
 }
 
 function clampLauncherY(y) {
-  return clamp(y, LAUNCHER_GAP, viewportHeight.value - LAUNCHER_SIZE - LAUNCHER_GAP)
+  return clamp(y, LAUNCHER_GAP, viewportHeight.value - LAUNCHER_HEIGHT - LAUNCHER_GAP)
 }
 
 function startLauncherDrag(event) {
@@ -1096,8 +1096,8 @@ onBeforeUnmount(() => {
   position: fixed;
   top: var(--launcher-top);
   right: 18px;
-  width: 48px;
-  height: 48px;
+  width: 45px;
+  height: 45px;
   pointer-events: auto;
 
   &:hover .assistant-launcher__hide,
@@ -1110,18 +1110,18 @@ onBeforeUnmount(() => {
 
 .assistant-launcher {
   display: grid;
-  width: 48px;
-  height: 48px;
+  width: 45px;
+  height: 45px;
   padding: 0;
   border: 1px solid rgb(26 179 148 / 24%);
-  border-radius: 50%;
+  border-radius: 16px;
   color: var(--ai-text);
   background: linear-gradient(145deg, #fff 10%, #e9f9f5 100%);
   box-shadow:
     0 8px 18px rgb(16 72 62 / 20%),
     inset 0 1px 0 rgb(255 255 255 / 95%),
     inset 0 -2px 3px rgb(20 143 118 / 10%);
-  cursor: ns-resize;
+  cursor: pointer;
   isolation: isolate;
   place-items: center;
   touch-action: none;
@@ -1137,7 +1137,6 @@ onBeforeUnmount(() => {
       0 11px 24px rgb(16 72 62 / 26%),
       inset 0 1px 0 #fff,
       inset 0 -2px 3px rgb(20 143 118 / 12%);
-    transform: translateY(-2px);
   }
 
   &:active {
@@ -1154,7 +1153,7 @@ onBeforeUnmount(() => {
 
   img {
     display: block;
-    width: 30px;
+    width: 26px;
     height: auto;
     filter: drop-shadow(0 2px 2px rgb(16 72 62 / 20%));
     pointer-events: none;
@@ -1163,8 +1162,8 @@ onBeforeUnmount(() => {
   &__hide {
     position: absolute;
     z-index: 2;
-    top: 3px;
-    right: 3px;
+    top: -6px;
+    right: -6px;
     display: grid;
     width: 16px;
     height: 16px;
@@ -1217,8 +1216,8 @@ onBeforeUnmount(() => {
   top: calc(var(--launcher-top) - 1px);
   right: 0;
   display: block;
-  width: 48px;
-  height: 48px;
+  width: 45px;
+  height: 45px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -1231,7 +1230,7 @@ onBeforeUnmount(() => {
     right: 0;
     display: flex;
     width: 16px;
-    height: 48px;
+    height: 45px;
     align-items: center;
     overflow: hidden;
     box-sizing: border-box;
@@ -1257,7 +1256,7 @@ onBeforeUnmount(() => {
 
   &:hover &__surface,
   &:focus-visible &__surface {
-    width: 46px;
+    width: 43px;
     border-color: var(--ai-primary);
     box-shadow: 0 8px 22px rgb(24 43 38 / 22%);
   }
@@ -1288,7 +1287,7 @@ onBeforeUnmount(() => {
   position: fixed;
   right: 16px;
   bottom: 16px;
-  width: min(520px, calc(100vw - 32px));
+  width: min(450px, calc(100vw - 32px));
   height: min(780px, calc(100dvh - 32px));
   overflow: hidden;
   box-sizing: border-box;
@@ -1563,8 +1562,8 @@ onBeforeUnmount(() => {
 
 @media (max-width: 620px) {
   .assistant-launcher {
-    width: 48px;
-    height: 48px;
+    width: 45px;
+    height: 45px;
 
     img {
       width: 30px;
