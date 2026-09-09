@@ -23,14 +23,18 @@ export default {
       config: {
         url: '/api/v1/accounts/personal-asset-credentials/',
         initial: {
-          secret_type: 'password'
+          secret_type: 'password',
+          is_active: true
         },
         fields: [
           [this.$t('Basic'), ['asset', 'username', 'secret_type', 'protocol']],
           [this.$t('Secret'), ['secret']],
-          [this.$t('Other'), ['comment']]
+          [this.$t('Other'), ['is_active', 'comment']]
         ],
         fieldsMeta: {
+          is_active: {
+            type: 'checkbox'
+          },
           asset: {
             component: Select2,
             el: {
