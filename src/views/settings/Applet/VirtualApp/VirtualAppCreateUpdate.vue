@@ -3,8 +3,9 @@
 </template>
 
 <script>
+import { markRaw } from 'vue'
 import { MatchExcludeParenthesis, Required } from '@/components/Form/DataForm/rules'
-import { ProtocolsFormatter } from '@/components/Table/TableFormatters'
+import { Select2, TagInput } from '@/components/Form/FormFields'
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 
 export default {
@@ -16,22 +17,39 @@ export default {
       loading: true,
       config: {
         url: '/api/v1/terminal/virtual-apps/',
+        initial: {
+          protocols: [],
+          tags: []
+        },
         fields: [
-          [this.$t('Basic'), ['name', 'image_name']],
+          [this.$t('Basic'), ['name', 'display_name', 'version', 'author']],
+          [this.$t('VirtualAppImages'), ['image_name', 'image_protocol', 'image_port']],
           [this.$t('Protocol'), ['protocols']],
-          [this.$t('Other'), ['is_active', 'comment']]
+          [this.$t('Other'), ['tags', 'is_active', 'comment']]
         ],
-        addFieldsMeta: {
+        fieldsMeta: {
           name: {
             rules: [Required, MatchExcludeParenthesis]
           },
           protocols: {
             label: this.$t('Protocols'),
-            formatter: ProtocolsFormatter
+            type: 'select',
+            component: markRaw(Select2),
+            el: {
+              multiple: true,
+              url: '/api/v1/assets/protocols/',
+              ajax: {
+                transformOption: (item) => ({ label: item.label, value: item.value })
+              }
+            }
+          },
+          tags: {
+            type: 'input',
+            component: markRaw(TagInput)
           }
         },
-        createSuccessNextRoute: { name: 'Applets' },
-        updateSuccessNextRoute: { name: 'Applets' }
+        objectDetailRoute: { name: 'VirtualAppDetail' },
+        getNextRoute: (res) => ({ name: 'VirtualAppDetail', params: { id: res.id } })
       }
     }
   },
