@@ -20,7 +20,7 @@ defineProps({
   }
 })
 
-const assistantIcon = getAssetUrl('img/robot-assistant.png')
+const assistantIcon = getAssetUrl('img/robot-assistant.gif')
 </script>
 
 <style lang="scss" scoped>
