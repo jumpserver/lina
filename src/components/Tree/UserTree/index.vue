@@ -121,7 +121,7 @@
       <template #node-icon="{ data, expanded, leaf }">
         <Icon
           v-if="getResourceType(data) === 'user'"
-          icon="fa-user"
+          icon="fa-regular fa-user"
           class="user-tree__resource-icon"
         />
         <TreeFolderIcon v-else :expanded="expanded" :leaf="leaf" class="user-tree__resource-icon" />

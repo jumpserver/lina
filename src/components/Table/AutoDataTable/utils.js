@@ -379,6 +379,14 @@ export class TableColumnsGenerator {
       return col
     }
 
+    // `width` and `minWidth` are deliberate per-view sizing hints. Replacing a
+    // smaller configured value with the generic formatter default makes compact
+    // columns (for example account secrets and usernames) almost as wide as the
+    // primary column.
+    if (col.width != null || col.minWidth != null) {
+      return col
+    }
+
     const formatterName = col.formatter?.name || col.formatter?.__name || ''
     let typeWidth = 180
     if (col.contentMaxWidth) {
@@ -396,21 +404,7 @@ export class TableColumnsGenerator {
     const preferredWidth = Math.max(getColumnHeaderWidth(col), typeWidth)
     const preferredWidthPx = `${preferredWidth}px`
 
-    const configuredWidth = col.width ?? col.minWidth
-    const configuredPixels =
-      typeof configuredWidth === 'number'
-        ? configuredWidth
-        : Number.parseFloat(String(configuredWidth || '').replace(/px$/, ''))
-    const isPixelWidth =
-      typeof configuredWidth === 'number' || /^\d+(\.\d+)?px$/.test(String(configuredWidth))
-
-    if (!configuredWidth || !isPixelWidth || configuredPixels < preferredWidth) {
-      if (col.width) {
-        col.width = preferredWidthPx
-      } else {
-        col.minWidth = preferredWidthPx
-      }
-    }
+    col.minWidth = preferredWidthPx
     return col
   }
 
@@ -422,6 +416,8 @@ export class TableColumnsGenerator {
     if (!col || typeof col !== 'object') {
       return col
     }
+
+    const hasExplicitWidth = col.width != null
 
     if (Array.isArray(col.columns)) {
       col.columns = col.columns.map((item) => this.prepareAdaptiveColumn({ ...item }))
@@ -466,7 +462,8 @@ export class TableColumnsGenerator {
       delete col.minWidth
       col.fitWidth = false
     } else if (isBooleanField) {
-      col.width = `${getBooleanColumnWidth(col)}px`
+      const configuredWidth = col.width ?? col.minWidth
+      col.width = configuredWidth || `${getBooleanColumnWidth(col)}px`
       delete col.minWidth
       col.fitWidth = false
     } else if (isAmountField) {
@@ -475,8 +472,15 @@ export class TableColumnsGenerator {
       delete col.minWidth
       col.fitWidth = false
     } else if (isIdField) {
-      col.width = '308px'
+      const configuredWidth = col.width ?? col.minWidth
+      col.width = configuredWidth || '308px'
       delete col.minWidth
+      col.fitWidth = false
+    }
+
+    if (hasExplicitWidth && col.fitWidth === undefined) {
+      // Match Element Plus semantics: `width` is fixed, while `minWidth`
+      // participates in filling the remaining table width.
       col.fitWidth = false
     }
 

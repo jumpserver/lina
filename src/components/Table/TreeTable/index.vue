@@ -457,7 +457,7 @@ $origin-color: #ffffff;
     .title {
       display: flex;
       align-items: center;
-      height: 40px;
+      height: 36px;
       padding: 0 20px;
       width: 100%;
       border-bottom: solid 2px var(--color-primary);
@@ -479,7 +479,7 @@ $origin-color: #ffffff;
         overflow: hidden;
 
         :deep(.tree-view-header) {
-          height: var(--tree-table-header-height, 37px);
+          height: var(--tree-table-header-height, 36px);
         }
       }
     }

@@ -1,17 +1,14 @@
 <template>
-  <Icon
-    :class="{ 'is-leaf': leaf }"
-    :icon="open ? 'fa-regular fa-folder-open' : 'fa-regular fa-folder'"
-    class="x-tree__node-icon tree-folder-icon"
+  <i
+    :class="[open ? 'fa-folder-open' : 'fa-folder', { 'is-leaf': leaf }]"
+    aria-hidden="true"
+    class="fa-regular x-tree__node-icon tree-folder-icon"
   />
 </template>
 
 <script>
-import Icon from '@/components/Widgets/Icon'
-
 export default {
   name: 'TreeFolderIcon',
-  components: { Icon },
   props: {
     leaf: Boolean,
     expanded: Boolean
@@ -25,8 +22,10 @@ export default {
 </script>
 
 <style scoped>
-.tree-folder-icon {
+.x-tree__node-icon.tree-folder-icon {
   flex: none;
+  width: var(--x-tree-icon-size, 14px);
+  height: var(--x-tree-icon-size, 14px);
   color: var(--el-text-color-secondary);
   font-size: 12px;
 }

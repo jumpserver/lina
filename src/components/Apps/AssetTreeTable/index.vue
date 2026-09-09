@@ -167,7 +167,7 @@ export default {
               this.treeSetting?.treeIcon ||
               (this.treeSetting?.treeComponent === 'NodeAssetTree'
                 ? 'fa-solid fa-desktop'
-                : 'fa-solid fa-diagram-project'),
+                : 'fa-regular fa-folder'),
             treeComponent: this.treeSetting?.treeComponent || 'XTree',
             treeSetting: createXTreeSetting({
               showAssets,
@@ -211,7 +211,7 @@ export default {
           },
           {
             title: this.$t('TypeTree'),
-            icon: 'fa-solid fa-shapes',
+            icon: 'fa-regular fa-rectangle-list',
             name: 'BuiltinTree',
             treeComponent: 'XTree',
             treeSetting: createXTreeSetting({

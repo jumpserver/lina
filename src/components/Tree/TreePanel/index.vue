@@ -178,11 +178,6 @@ export default {
   min-width: 0;
   background: var(--el-bg-color, #fff);
 
-  &.has-header {
-    // Header icons start at 18px; the expand icon adds its own 6px padding.
-    --x-tree-body-padding-left: 12px;
-  }
-
   &.is-bordered {
     border: 1px solid var(--panel-border-color, var(--el-border-color));
     border-radius: var(--el-card-border-radius, 4px);
@@ -206,21 +201,35 @@ export default {
   display: flex;
   flex: none;
   align-items: center;
-  height: 40px;
-  padding: 0 18px;
+  height: 36px;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--panel-border-color, var(--el-border-color));
   background: var(--el-bg-color, #fff);
 }
 
 .tree-panel.has-header-actions .tree-panel__header {
-  padding-right: 80px;
+  padding-right: 62px;
 }
 
 .tree-panel.has-custom-header .tree-panel__header {
-  padding-left: 8px;
+  padding-left: 0;
 }
 
 .tree-panel.has-custom-header.has-header-actions .tree-panel__header {
-  padding-right: 48px;
+  padding-right: 62px;
+}
+
+.tree-panel.has-header-actions :deep(.node-asset-tree__header-actions),
+.tree-panel.has-header-actions :deep(.x-tree__header-actions) {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.tree-panel.has-header-actions:hover :deep(.node-asset-tree__header-actions),
+.tree-panel.has-header-actions:hover :deep(.x-tree__header-actions),
+.tree-panel.has-header-actions:focus-within :deep(.node-asset-tree__header-actions),
+.tree-panel.has-header-actions:focus-within :deep(.x-tree__header-actions) {
+  opacity: 1;
 }
 
 .tree-panel__header-icon {
@@ -235,8 +244,8 @@ export default {
 .tree-panel__header-title {
   overflow: hidden;
   color: var(--el-text-color-primary);
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 400;
   text-overflow: ellipsis;
   white-space: nowrap;
 }

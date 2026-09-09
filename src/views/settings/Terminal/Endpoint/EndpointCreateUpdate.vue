@@ -22,7 +22,15 @@ export default {
         [this.$t('Basic'), ['name', 'host']],
         [
           this.$t('Port'),
-          ['http_port', 'https_port', 'ssh_port', 'rdp_port', 'vnc_port', 'magnus_port']
+          [
+            'http_port',
+            'https_port',
+            'web_proxy_port',
+            'ssh_port',
+            'rdp_port',
+            'vnc_port',
+            'magnus_port'
+          ]
         ],
         [this.$t('Other'), ['is_active', 'comment']]
       ],

@@ -125,7 +125,7 @@ export default {
         {
           title: this.$t('UserTree'),
           name: 'UserTree',
-          icon: 'fa-solid fa-user',
+          icon: 'fa-regular fa-user',
           treeComponent: 'UserTree',
           treeSetting: {
             showCollapse: true,

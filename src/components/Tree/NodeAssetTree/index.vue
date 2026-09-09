@@ -1445,13 +1445,13 @@ export default {
 .node-asset-tree__node-icon {
   flex: none;
   width: 14px;
-  margin-right: 4px;
+  height: 14px;
   text-align: center;
 }
 
 .node-asset-tree__asset-icon {
-  color: var(--el-color-info);
-  font-size: 12px;
+  color: var(--el-text-color-secondary);
+  font-size: 14px;
 }
 
 .node-asset-tree__platform-icon {
@@ -1481,23 +1481,25 @@ export default {
   width: 22px;
   height: 24px;
   padding: 0;
-  border: 0;
+  border: 0 !important;
   border-radius: 4px;
   outline: none;
   color: var(--el-text-color-secondary);
   background: transparent;
+  box-shadow: none !important;
   cursor: pointer;
 
   .el-icon {
     font-size: 12px;
-    transform: rotate(90deg);
   }
 
   &:hover,
   &:focus-visible,
   &[aria-expanded='true'] {
     color: var(--el-text-color-primary);
-    background: var(--el-fill-color-dark);
+    border: 0 !important;
+    background: transparent;
+    box-shadow: none !important;
   }
 }
 
@@ -1508,17 +1510,13 @@ export default {
 }
 
 .node-asset-tree :deep(.el-tree-node__content:hover) .node-asset-tree__node-tools {
-  background: var(--el-fill-color-light);
+  background: transparent;
 }
 
 .node-asset-tree
   :deep(.el-tree-node.is-current > .el-tree-node__content:hover)
   .node-asset-tree__node-tools {
-  background: var(--el-color-primary-light-9);
-}
-
-.node-asset-tree :deep(.el-tree-node__content) {
-  border-radius: 6px;
+  background: transparent;
 }
 
 .node-asset-tree :deep(.x-tree__header-actions) {

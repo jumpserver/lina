@@ -428,11 +428,11 @@ export default {
   display: inline-flex;
   align-items: center;
   max-width: 100%;
-  height: 30px;
+  height: 36px;
   min-width: 0;
   padding: 0 10px;
   border: 0;
-  border-radius: 5px;
+  border-radius: 0;
   color: var(--el-text-color-primary);
   background: transparent;
   cursor: pointer;
@@ -444,7 +444,7 @@ export default {
   &:not(.is-static):focus-visible {
     outline: none;
     color: var(--el-text-color-primary);
-    background: rgba(0, 0, 0, 0.05);
+    background: transparent;
   }
 
   &.is-static {
@@ -454,8 +454,8 @@ export default {
 
 .tree-view-selector__label {
   overflow: hidden;
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 400;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -468,7 +468,7 @@ export default {
   width: 14px;
   margin-right: 6px;
   color: var(--el-text-color-secondary);
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .tree-view-selector__arrow {
@@ -542,7 +542,7 @@ export default {
 }
 
 .tree-view-popper .el-dropdown-menu__item.is-active .tree-view-menu__label {
-  color: var(--el-color-primary);
+  color: var(--el-text-color-primary);
   font-weight: 500;
 }
 </style>
