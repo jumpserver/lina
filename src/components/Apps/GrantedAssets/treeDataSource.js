@@ -23,11 +23,14 @@ export function getAuthorizationAssetsUrl(baseUrl, node) {
   if (node?.meta?.type === 'asset') {
     return addUserAssetUrlParams(baseUrl, { id: resourceId })
   }
+  const parsed = new URL(baseUrl, 'http://localhost')
   if (resourceId === 'ungrouped') {
-    return baseUrl.replace('/assets/', '/nodes/ungrouped/assets/').split('?')[0]
+    parsed.pathname = parsed.pathname.replace('/assets/', '/nodes/ungrouped/assets/')
+    return `${parsed.pathname}${parsed.search}`
   }
   if (resourceId) {
-    return baseUrl.replace('/assets/', `/nodes/${resourceId}/assets/`).split('?')[0]
+    parsed.pathname = parsed.pathname.replace('/assets/', `/nodes/${resourceId}/assets/`)
+    return `${parsed.pathname}${parsed.search}`
   }
   return baseUrl
 }
