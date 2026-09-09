@@ -12,13 +12,12 @@ import Announcement from './Announcement.vue'
 import Vault from './Vault/index.vue'
 import Ticket from './Ticket.vue'
 import Ops from './Ops.vue'
-import Chat from './Chat.vue'
 import VirtualApp from './VirtualApp.vue'
 import SSHCA from './SSHCA.vue'
 
 export default {
   name: 'Feature',
-  components: { TabPage, Announcement, Vault, Ticket, Ops, Chat, VirtualApp, SSHCA },
+  components: { TabPage, Announcement, Vault, Ticket, Ops, VirtualApp, SSHCA },
   data() {
     return {
       activeMenu: 'Announcement',
@@ -47,11 +46,6 @@ export default {
           title: this.$t('OpenBaoSSHCA'),
           name: 'SSHCA',
           hidden: !this.$hasPerm('settings.change_vault')
-        },
-        {
-          title: this.$t('ChatAI'),
-          name: 'Chat',
-          hidden: !this.$hasPerm('settings.change_chatai')
         },
         {
           title: this.$t('VirtualApps'),
