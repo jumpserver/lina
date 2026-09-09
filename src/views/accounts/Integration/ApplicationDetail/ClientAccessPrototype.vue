@@ -1,5 +1,43 @@
 <template>
   <div class="client-access-page">
+    <IBox v-if="accessReadiness" :title="$t('AccessReadiness')" class="readiness-card">
+      <div class="readiness-summary">
+        <div>
+          <el-tag :type="readinessState.type">{{ $t(readinessState.title) }}</el-tag>
+          <span class="readiness-description">{{ $t(readinessState.description) }}</span>
+        </div>
+        <el-button
+          v-if="readinessState.action && readinessState.can"
+          link
+          type="primary"
+          @click="handleReadinessAction"
+        >
+          {{ $t(readinessState.action) }}
+        </el-button>
+      </div>
+      <div class="readiness-metrics">
+        <span>
+          {{ $t('AuthorizedAccountsCount', { count: accessReadiness.authorized_accounts_amount }) }}
+        </span>
+        <span>
+          {{
+            $t('AccessConfigurationsCount', {
+              count: accessReadiness.active_configurations_amount
+            })
+          }}
+        </span>
+        <span>
+          {{
+            $t('OnlineClientInstancesCount', {
+              online: accessReadiness.online_instances_amount,
+              total: accessReadiness.active_instances_amount
+            })
+          }}
+        </span>
+        <span>{{ $t('LastFetchedAt', { value: formatDate(accessReadiness.last_fetched) }) }}</span>
+      </div>
+    </IBox>
+
     <ListTable
       v-if="viewMode === 'list'"
       ref="configurationTable"
@@ -22,7 +60,6 @@
         v-if="formVisible"
         :application="object"
         :configuration="editingConfiguration"
-        @cancel="formVisible = false"
         @saved="handleConfigurationSaved"
         @submitting="saving = $event"
       />
@@ -47,7 +84,11 @@
         </IBox>
 
         <IBox :title="$t('ClientInstances')" class="detail-block">
-          <DataTable ref="instancesTable" :config="instanceTableConfig" />
+          <ListTable
+            ref="instancesTable"
+            :header-actions="instanceHeaderActions"
+            :table-config="instanceTableConfig"
+          />
         </IBox>
       </div>
     </template>
@@ -124,7 +165,6 @@ import { IBox, ListTable } from '@/components'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import Drawer from '@/components/Drawer/index.vue'
 import ItemValue from '@/components/Cards/DetailCard/ItemValue.vue'
-import DataTable from '@/components/Table/DataTable/index.vue'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { BASE_URL, copy } from '@/utils/common/index'
 import { mapGetters } from 'vuex'
@@ -142,7 +182,6 @@ export default {
   name: 'IntegrationApplicationClientAccess',
   components: {
     ClientAccessCreateUpdate,
-    DataTable,
     ItemValue,
     Drawer,
     IBox,
@@ -154,9 +193,10 @@ export default {
       required: true
     }
   },
-  emits: ['detail-actions-change'],
+  emits: ['detail-actions-change', 'edit-application'],
   data() {
     return {
+      accessReadiness: null,
       configurationText: '',
       editingConfiguration: null,
       executionText: '',
@@ -195,28 +235,15 @@ export default {
             )
           },
           {
-            prop: 'credentials',
-            label: this.$t('ApplicationCredentials'),
-            minWidth: '240px',
-            formatter: (row) => row.credentials.map((item) => item.name).join(', ')
-          },
-          {
             prop: 'instances',
-            label: this.$t('ClientInstances'),
-            width: '110px'
-          },
-          {
-            prop: 'status',
-            label: this.$t('ClientStatus'),
+            label: `${this.$t('Online')}/${this.$t('Total')}`,
             width: '110px',
             formatter: (row) => (
-              <el-tag type={row.status === 'online' ? 'success' : 'info'}>
-                {row.status === 'disabled'
-                  ? this.$t('Disabled')
-                  : row.status === 'online'
-                    ? this.$t('Online')
-                    : this.$t('Offline')}
-              </el-tag>
+              <div>
+                <span class="text-primary">{row.online_instances_amount || 0}</span>
+                /
+                <span>{row.instances}</span>
+              </div>
             )
           },
           {
@@ -245,6 +272,77 @@ export default {
   },
   computed: {
     ...mapGetters(['currentOrg']),
+    readinessState() {
+      const readiness = this.accessReadiness
+      if (!readiness.authorized_accounts_amount) {
+        return {
+          type: 'warning',
+          title: 'AccessAccountsRequired',
+          description: 'AccessAccountsRequiredHelp',
+          action: 'ManageAuthorizedAccounts',
+          can: this.$hasPerm('accounts.change_integrationapplication'),
+          task: 'accounts'
+        }
+      }
+      if (!readiness.active_configurations_amount) {
+        return {
+          type: 'warning',
+          title: 'AccessConfigurationRequired',
+          description: 'AccessConfigurationRequiredHelp',
+          action: 'NewClientAccessConfiguration',
+          can: this.$hasPerm('accounts.add_clientaccessconfiguration'),
+          task: 'configuration'
+        }
+      }
+      if (readiness.missing_authorized_accounts_amount) {
+        return {
+          type: 'danger',
+          title: 'AccessAuthorizationIncomplete',
+          description: 'AccessAuthorizationIncompleteHelp',
+          action: 'ManageAuthorizedAccounts',
+          can: this.$hasPerm('accounts.change_integrationapplication'),
+          task: 'accounts'
+        }
+      }
+      if (!readiness.active_instances_amount) {
+        return {
+          type: 'warning',
+          title: 'AccessDeploymentPending',
+          description: 'AccessDeploymentPendingHelp',
+          action: 'ViewClientAccessConfiguration',
+          can: true,
+          task: 'configuration-detail'
+        }
+      }
+      if (!readiness.online_instances_amount) {
+        return {
+          type: 'warning',
+          title: 'AccessClientsOffline',
+          description: 'AccessClientsOfflineHelp',
+          action: 'ViewClientAccessConfiguration',
+          can: true,
+          task: 'configuration-detail'
+        }
+      }
+      if (!readiness.last_fetched) {
+        return {
+          type: 'warning',
+          title: 'AccessFirstFetchPending',
+          description: 'AccessFirstFetchPendingHelp',
+          action: 'ViewClientAccessConfiguration',
+          can: true,
+          task: 'configuration-detail'
+        }
+      }
+      return {
+        type: 'success',
+        title: 'AccessReady',
+        description: 'AccessReadyHelp',
+        action: '',
+        can: false,
+        task: ''
+      }
+    },
     headerActions() {
       return {
         hasCreate: this.$hasPerm('accounts.add_clientaccessconfiguration'),
@@ -255,6 +353,24 @@ export default {
         hasImport: false,
         hasExport: false,
         searchConfig: { getUrlQuery: false }
+      }
+    },
+    instanceHeaderActions() {
+      return {
+        hasLeftActions: false,
+        hasCreate: false,
+        hasBulkDelete: false,
+        hasMoreActions: false,
+        hasSearch: true,
+        hasRightActions: true,
+        hasColumnSetting: true,
+        hasRefresh: true,
+        hasImport: false,
+        hasExport: false,
+        searchConfig: {
+          getUrlQuery: false,
+          excludeFields: ['application', 'configuration', 'type', 'is_active']
+        }
       }
     },
     canGenerate() {
@@ -268,6 +384,13 @@ export default {
       if (this.viewMode !== 'detail' || !this.selectedConfiguration) return []
       const configuration = this.selectedConfiguration
       return [
+        {
+          name: 'back-to-access-list',
+          title: this.$t('BackToClientAccessList'),
+          icon: 'fa-arrow-left',
+          plain: true,
+          callback: this.backToList
+        },
         {
           name: 'generate',
           title: this.$t('Generate'),
@@ -301,6 +424,7 @@ export default {
         url: '/api/v1/accounts/credential-client-instances/',
         extraQuery: { configuration: this.selectedConfiguration.id },
         hasSelection: false,
+        hasPagination: true,
         columns: [
           { prop: 'instance_id', label: this.$t('InstanceID'), minWidth: 160 },
           {
@@ -395,6 +519,12 @@ export default {
     }
   },
   watch: {
+    'object.access_readiness': {
+      immediate: true,
+      handler(value) {
+        this.accessReadiness = value || null
+      }
+    },
     detailPageActions: {
       immediate: true,
       handler(actions) {
@@ -405,6 +535,13 @@ export default {
       immediate: true,
       async handler(id) {
         if (!id) return
+        this.viewMode = 'list'
+        this.selectedConfiguration = null
+        this.editingConfiguration = null
+        this.formVisible = false
+        this.materialsVisible = false
+        this.clearMaterials()
+        this.tableConfig.extraQuery = { application: id }
         await this.loadData()
         if (this.$route.query.configuration) {
           await this.openDetail({ id: this.$route.query.configuration })
@@ -420,6 +557,32 @@ export default {
       await this.$nextTick()
       return this.$refs.configurationTable?.reloadTable()
     },
+    async backToList() {
+      this.viewMode = 'list'
+      this.selectedConfiguration = null
+      this.clearMaterials()
+      if (this.$route.query.configuration) {
+        const query = { ...this.$route.query }
+        delete query.configuration
+        await this.$router.replace({ query })
+      }
+      await this.loadData()
+    },
+    async refreshAccessReadiness() {
+      const application = await this.$axios.get(
+        `/api/v1/accounts/integration-applications/${this.object.id}/`
+      )
+      this.accessReadiness = application.access_readiness
+    },
+    handleReadinessAction() {
+      if (this.readinessState.task === 'accounts') {
+        this.$emit('edit-application')
+      } else if (this.readinessState.task === 'configuration') {
+        this.openCreate()
+      } else if (this.readinessState.task === 'configuration-detail') {
+        this.openDetail(this.accessReadiness.configuration)
+      }
+    },
     openCreate() {
       this.editingConfiguration = null
       this.formVisible = true
@@ -429,13 +592,23 @@ export default {
       this.formVisible = true
     },
     async openDetail(row) {
-      this.selectedConfiguration = await getClientAccessConfiguration(row.id)
+      const configuration = await getClientAccessConfiguration(row.id)
+      if (configuration.application?.id !== this.object.id) {
+        if (this.$route.query.configuration) {
+          const query = { ...this.$route.query }
+          delete query.configuration
+          await this.$router.replace({ query })
+        }
+        return
+      }
+      this.selectedConfiguration = configuration
       this.clearMaterials()
       this.viewMode = 'detail'
     },
-    async handleConfigurationSaved(saved) {
+    async handleConfigurationSaved(saved, addContinue) {
+      await Promise.all([this.loadData(), this.refreshAccessReadiness()])
+      if (addContinue) return
       this.formVisible = false
-      await this.loadData()
       if (this.viewMode === 'detail') await this.openDetail(saved)
     },
     async remove(row) {
@@ -449,7 +622,7 @@ export default {
         this.viewMode = 'list'
         this.selectedConfiguration = null
       }
-      await this.loadData()
+      await Promise.all([this.loadData(), this.refreshAccessReadiness()])
       this.$message.success(this.$t('DeleteSuccessMsg'))
     },
     copyText(value) {
@@ -491,7 +664,8 @@ export default {
         })
       }
       await setClientInstanceActive(row.id, !row.is_active)
-      await this.$refs.instancesTable.getList()
+      this.$refs.instancesTable.reloadTable()
+      await this.refreshAccessReadiness()
     },
     downloadConfiguration() {
       const blob = new Blob([this.configurationText], { type: 'application/json;charset=utf-8' })
@@ -507,6 +681,40 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.readiness-card {
+  margin-bottom: 15px;
+}
+
+.readiness-summary,
+.readiness-summary > div,
+.readiness-metrics {
+  display: flex;
+  align-items: center;
+}
+
+.readiness-summary {
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.readiness-summary > div {
+  min-width: 0;
+  gap: 10px;
+}
+
+.readiness-description {
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
+.readiness-metrics {
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin-top: 14px;
+  color: var(--color-help-text);
+  font-size: 12px;
+}
+
 .material-heading p {
   margin: 4px 0 0;
   color: var(--color-help-text);

@@ -86,7 +86,8 @@ export async function saveClientAccessConfiguration(application, form) {
     is_active: form.is_active,
     notification_enabled: form.notification_enabled,
     notification_url:
-      form.notification_enabled && form.type === 'agent' ? form.notification_url : ''
+      form.notification_enabled && form.type === 'agent' ? form.notification_url : '',
+    removal_reason: form.removal_reason || ''
   }
   const item = form.id
     ? await request.patch(`${accessConfigurationUrl}${form.id}/`, data)

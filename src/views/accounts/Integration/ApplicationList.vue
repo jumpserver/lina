@@ -6,16 +6,19 @@
     :header-actions="headerActions"
     :table-config="tableConfig"
   />
+  <SecretDialog ref="secretDialog" :title="$t('ApplicationSecret')" :warning-text="''" />
 </template>
 
 <script lang="jsx">
 import CopyableFormatter from '@/components/Table/TableFormatters/CopyableFormatter.vue'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import SecretDialog from '@/components/Dialog/Secret.vue'
 import { GenericListTable } from '@/layout/components'
 export default {
   name: 'CloudAccountList',
   components: {
-    GenericListTable
+    GenericListTable,
+    SecretDialog
   },
   data() {
     const vm = this
@@ -40,7 +43,7 @@ export default {
                 <img
                   src={row.logo}
                   alt={row.name}
-                  style="width: 40px; height: 40px; border-radius: 50%;"
+                  style="width: 28px; height: 28px; border-radius: 50%;"
                 />
               )
             }
@@ -64,7 +67,7 @@ export default {
             formatter: DetailFormatter
           },
           secret: {
-            label: 'Secret',
+            label: vm.$t('ApplicationSecret'),
             formatter: CopyableFormatter,
             formatterArgs: {
               shadow: true,
@@ -82,16 +85,20 @@ export default {
               hasClone: false,
               extraActions: [
                 {
-                  name: 'refresh-secret',
-                  title: vm.$t('RefreshSecret'),
+                  name: 'reset-secret',
+                  title: vm.$t('ResetApplicationSecret'),
                   can: vm.$hasPerm('accounts.change_integrationapplication'),
-                  type: 'primary',
+                  type: 'danger',
                   callback: async ({ row }) => {
-                    await vm.$axios.get(
-                      `/api/v1/accounts/integration-applications/${row.id}/refresh-secret/`
+                    await vm.$confirm(vm.$t('ResetApplicationSecretConfirm'), vm.$t('Warning'), {
+                      confirmButtonText: vm.$t('Confirm'),
+                      type: 'warning'
+                    })
+                    const app = await vm.$axios.post(
+                      `/api/v1/accounts/integration-applications/${row.id}/reset-secret/`
                     )
-                    vm.$message.success(vm.$t('RefreshSuccessMsg'))
-                    vm.$refs.listTable.reloadTable()
+                    vm.$refs.secretDialog.show(app)
+                    vm.$message.success(vm.$t('ResetApplicationSecretSuccess'))
                   }
                 }
               ]
@@ -117,3 +124,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+:deep(.el-table__body .copyable) {
+  display: inline-flex;
+  width: auto;
+  max-width: 100%;
+}
+</style>

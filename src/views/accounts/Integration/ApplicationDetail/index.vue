@@ -1,5 +1,6 @@
 <template>
   <GenericDetailPage
+    ref="detailPage"
     v-bind="config"
     v-model:active-menu="config.activeMenu"
     v-model:object="object"
@@ -15,6 +16,7 @@
         :is="config.activeMenu"
         :object="object"
         @detail-actions-change="clientActions = $event"
+        @edit-application="editApplication"
       />
     </keep-alive>
   </GenericDetailPage>
@@ -63,6 +65,11 @@ export default {
           }
         ]
       }
+    }
+  },
+  methods: {
+    editApplication() {
+      this.$refs.detailPage.defaultUpdate()
     }
   }
 }
