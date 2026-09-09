@@ -133,7 +133,7 @@
   "AppProviderAccountHelp": "Add an SSH root account or a privileged account with sudo access. Ansible uses this account to install Docker and Panda.",
   "AppProviderCoreHostHelp": "Enter a JumpServer URL reachable from the provider, such as https://jumpserver.example.com.",
   "AppProviderDeployHelp": "Install Python 3 on the provider before deploying Panda over SSH with Ansible. Docker 23.0+ with native zstd support is required. Existing Docker and images are reused; missing resources come from an offline installation package for the same architecture. Prepare matching resources in advance for a different architecture. Deployment fails if resources are missing; it does not download them from the internet. The Panda API listens only on the provider's 127.0.0.1:9001. Before redeploying, disable the provider and wait for existing sessions to end.",
-  "AppProviderPandaImageHelp": "The default image version comes from the offline installation package. You can also specify a Panda image already loaded on the provider. Without a package, enter the loaded image reference manually.",
+  "AppProviderPandaImageHelp": "The default Panda image comes from the offline installation package. Without offline resources, its name is generated from the current Core version. You can also specify a Panda image already loaded on the provider.",
   "AppProviderHostRequired": "Edit the provider to configure its Linux host address and SSH account first.",
   "AppletDetail": "RemoteApp",
   "AppletHelpText": "In the upload process, if the application does not exist, create the application; if it exists, update the application.",

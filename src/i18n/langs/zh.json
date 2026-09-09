@@ -2407,7 +2407,7 @@
   "AppProviderAccountHelp": "添加可通过 SSH 登录的 root 账号，或具有 sudo 权限的特权账号。Ansible 使用此账号安装 Docker 和 Panda。",
   "AppProviderCoreHostHelp": "填写发布机可访问的 JumpServer 地址，例如 https://jumpserver.example.com。",
   "AppProviderDeployHelp": "发布机需预先安装 Python 3，通过 SSH 和 Ansible 部署 Panda。要求 Docker 23.0+ 原生支持 zstd，优先复用已有 Docker 和镜像，缺失时使用同架构离线安装包；跨架构部署需预先准备对应资源。资源缺失时部署报错，不会联网下载。Panda API 仅监听发布机本地 127.0.0.1:9001。重新部署前请禁用发布机并等待现有会话结束。",
-  "AppProviderPandaImageHelp": "默认镜像版本来自离线安装包，也可指定发布机上已加载的 Panda 镜像。无安装包时需手动填写已加载的镜像引用。",
+  "AppProviderPandaImageHelp": "默认优先使用离线安装包中的 Panda 镜像，无离线资源时使用当前 Core 版本生成镜像名称。也可指定发布机上已加载的 Panda 镜像。",
   "AppProviderHostRequired": "请先编辑发布机，配置 Linux 主机地址和 SSH 账号。",
   "VirtualAppImages": "镜像",
   "VirtualAppUpdate": "更新虚拟应用",
