@@ -1437,6 +1437,7 @@
   "OnlySearchCurrentNodePerm": "Pesquisar apenas o nó atual autorizado",
   "Open": "Abrir",
   "OpenBao": "OpenBao",
+  "OpenBaoSSHCA": "Assinatura de certificados SSH",
   "OpenCommand": "Comando Abrir",
   "OpenStack": "OpenStack",
   "OpenStatus": "Em aprovação",

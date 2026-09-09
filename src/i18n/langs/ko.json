@@ -1437,6 +1437,7 @@
   "OnlySearchCurrentNodePerm": "현재 노드의 권한만 검색",
   "Open": "열기",
   "OpenBao": "OpenBao",
+  "OpenBaoSSHCA": "SSH 인증서 서명",
   "OpenCommand": "명령 열기",
   "OpenStack": "OpenStack",
   "OpenStatus": "승인 중",

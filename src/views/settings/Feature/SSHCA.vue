@@ -1,20 +1,5 @@
 <template>
   <div class="ssh-ca-page">
-    <section class="ssh-ca-hero">
-      <div aria-hidden="true" class="hero-icon">
-        <el-icon><Key /></el-icon>
-      </div>
-      <div class="hero-content">
-        <div class="hero-eyebrow">{{ $t('OpenBaoSSHCA') }}</div>
-        <h2>{{ $t('SSHCAConfiguration') }}</h2>
-        <p>{{ $t('OpenBaoSSHCAHelpText') }}</p>
-      </div>
-      <div class="hero-tags">
-        <el-tag effect="plain" type="success">{{ $t('SSHCAShortLived') }}</el-tag>
-        <el-tag effect="plain">{{ $t('SSHCAEphemeralKeys') }}</el-tag>
-      </div>
-    </section>
-
     <div class="ssh-ca-layout">
       <IBox :title="$t('SSHCAConfiguration')" class="configuration-card">
         <template #header>
@@ -389,7 +374,6 @@ export default {
 
 <style lang="scss" scoped>
 .ssh-ca-page {
-  --ssh-ca-surface: var(--el-bg-color, #fff);
   --ssh-ca-soft-bg: var(--el-fill-color-lighter, #f6f8fa);
   width: 100%;
   max-width: none;
@@ -398,80 +382,21 @@ export default {
   box-sizing: border-box;
 }
 
-.ssh-ca-hero {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 22px 24px;
-  margin-bottom: 16px;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 88% 20%, rgb(26 179 148 / 12%), transparent 28%),
-    linear-gradient(135deg, var(--ssh-ca-surface), var(--ssh-ca-soft-bg));
-  border: 1px solid var(--color-border, #e5e7eb);
-  border-radius: 8px;
-}
-
-.hero-icon {
-  display: grid;
-  flex: 0 0 48px;
-  width: 48px;
-  height: 48px;
-  font-size: 24px;
-  color: var(--color-primary, #1ab394);
-  place-items: center;
-  background: rgb(26 179 148 / 12%);
-  border-radius: 12px;
-}
-
-.hero-content {
-  min-width: 0;
-}
-
-.hero-eyebrow {
-  margin-bottom: 3px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--color-primary, #1ab394);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.hero-content h2,
 .card-heading h3 {
   margin: 0;
   color: var(--color-text-primary, #1f2937);
 }
 
-.hero-content h2 {
-  font-size: 20px;
-  line-height: 1.45;
-}
-
-.hero-content p,
 .card-heading p {
   margin: 4px 0 0;
   color: var(--color-text-secondary, #6b7280);
-}
-
-.hero-content p {
-  max-width: 720px;
-  font-size: 13px;
-  line-height: 1.65;
-}
-
-.hero-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-left: auto;
 }
 
 .ssh-ca-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(340px, 400px);
   gap: 16px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .ssh-ca-aside {
@@ -765,15 +690,6 @@ export default {
 }
 
 @media (width <= 720px) {
-  .ssh-ca-hero {
-    align-items: flex-start;
-    padding: 18px;
-  }
-
-  .hero-tags {
-    display: none;
-  }
-
   .ssh-ca-aside {
     grid-template-columns: 1fr;
   }
