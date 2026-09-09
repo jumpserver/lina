@@ -219,19 +219,6 @@ export default {
   padding-right: 62px;
 }
 
-.tree-panel.has-header-actions :deep(.node-asset-tree__header-actions),
-.tree-panel.has-header-actions :deep(.x-tree__header-actions) {
-  opacity: 0;
-  transition: opacity 0.15s ease;
-}
-
-.tree-panel.has-header-actions:hover :deep(.node-asset-tree__header-actions),
-.tree-panel.has-header-actions:hover :deep(.x-tree__header-actions),
-.tree-panel.has-header-actions:focus-within :deep(.node-asset-tree__header-actions),
-.tree-panel.has-header-actions:focus-within :deep(.x-tree__header-actions) {
-  opacity: 1;
-}
-
 .tree-panel__header-icon {
   flex: none;
   width: 14px;

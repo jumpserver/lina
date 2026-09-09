@@ -248,7 +248,7 @@ export function getDefaultConfig(vm) {
             {
               name: 'AddAccount',
               title: vm.$t('AddAccount'),
-              icon: 'fa-solid fa-key',
+              icon: 'access-token',
               divided: true,
               has: ({ row }) =>
                 !vm.$store.getters.currentOrgIsRoot && vm.$hasPerm('accounts.add_account'),

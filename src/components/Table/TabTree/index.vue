@@ -434,6 +434,7 @@ export default {
   border: 0;
   border-radius: 0;
   color: var(--el-text-color-primary);
+  font-size: 13px;
   background: transparent;
   cursor: pointer;
   transition:
@@ -454,7 +455,7 @@ export default {
 
 .tree-view-selector__label {
   overflow: hidden;
-  font-size: 12px;
+  font-size: inherit;
   font-weight: 400;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -465,16 +466,16 @@ export default {
   flex: none;
   align-items: center;
   justify-content: center;
-  width: 14px;
+  width: 1em;
   margin-right: 6px;
-  color: var(--el-text-color-secondary);
-  font-size: 14px;
+  color: var(--el-color-primary);
+  font-size: inherit;
 }
 
 .tree-view-selector__arrow {
   flex: none;
   margin-left: 5px;
-  font-size: 12px;
+  font-size: inherit;
   color: var(--el-text-color-secondary);
   transition: transform 0.15s ease;
 }
@@ -532,12 +533,12 @@ export default {
   min-width: 0;
 }
 
-.tree-view-menu__icon {
+.tree-view-popper .tree-view-menu__icon {
   flex: none;
-  width: 14px;
+  width: 1em;
   margin-right: 12px;
   color: var(--el-text-color-secondary);
-  font-size: 12px;
+  font-size: inherit;
   text-align: center;
 }
 

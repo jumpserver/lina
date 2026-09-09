@@ -709,6 +709,11 @@ export default {
     cursor: grabbing;
   }
 
+  // Element Plus sets the resize cursor on body; the cell's grab cursor must yield to it.
+  body[style*='cursor: col-resize'] & :deep(th > .cell) {
+    cursor: col-resize;
+  }
+
   // Headers always stay on one line. The column generator reserves enough width for
   // the complete label, and the table scrolls horizontally when the viewport is narrow.
   :deep(.el-table__header th .cell),

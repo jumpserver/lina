@@ -3695,7 +3695,7 @@ export default {
   --x-tree-body-inline-padding: 0;
   --x-tree-font-size: 12px;
   --x-tree-icon-size: 14px;
-  --x-tree-toggle-icon-size: 12px;
+  --x-tree-toggle-icon-size: 10px;
 
   display: flex;
   flex-direction: column;
