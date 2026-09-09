@@ -9,9 +9,10 @@
       </div>
     </div>
     <template #reference>
-      <el-button class="link-btn" plain size="small" type="primary">
-        <span class="link-btn__content">{{ $t('View') }}</span>
-      </el-button>
+      <el-link class="account-link" underline="never">
+        <span>{{ $t('View') }}</span>
+        <el-icon><ArrowDown /></el-icon>
+      </el-link>
     </template>
   </el-popover>
 </template>
@@ -80,9 +81,16 @@ export default {
   }
 }
 
-.link-btn__content {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
+.account-link {
+  --el-link-hover-text-color: var(--color-link);
+  --el-link-text-color: var(--color-link);
+
+  vertical-align: middle;
+
+  :deep(.el-link__inner) {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
 }
 </style>

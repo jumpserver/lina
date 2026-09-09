@@ -150,6 +150,8 @@
           :expand-on-click-node="false"
           :filter-method="filterNode"
           :height="virtualTreeHeight"
+          :icon="treeExpandIcon"
+          :indent="nodeIndent"
           :item-size="nodeRowHeight"
           :props="virtualTreeProps"
           highlight-current
@@ -164,6 +166,7 @@
               :draggable="canDragData(data)"
               :title="getNodeTitle(data)"
               :class="{
+                'is-asset': isAssetNode(data),
                 'is-disabled': isNodeDisabled(data),
                 'is-operation-target': isOperationTarget(data),
                 'is-virtual-drop-target': isVirtualDropTarget(data)
@@ -234,6 +237,8 @@
           empty-text=""
           :expand-on-click-node="true"
           :filter-node-method="filterNode"
+          :icon="treeExpandIcon"
+          :indent="nodeIndent"
           :lazy="isLazyLoad"
           :load="isLazyLoad ? loadNode : undefined"
           :props="treeProps"
@@ -250,6 +255,7 @@
           <template #default="{ node, data }">
             <span
               :class="{
+                'is-asset': isAssetNode(data),
                 'is-disabled': isNodeDisabled(data),
                 'is-operation-target': isOperationTarget(data)
               }"
@@ -359,10 +365,12 @@ import { nodeAssetMetricsPayload } from '@/components/Tree/metrics'
 import axiosRetry from 'axios-retry'
 import Icon from '@/components/Widgets/Icon'
 import TreeFolderIcon from '@/components/Tree/TreeFolderIcon.vue'
+import { ArrowRight } from '@element-plus/icons-vue'
 import { getShowCurrentAssetValue, setShowCurrentAssetValue } from '@/utils/common/index'
 import { createXTreeSetting, X_TREE_LOAD_MODES, X_TREE_SEARCH_PLACEMENTS } from './config'
 
-const DEFAULT_NODE_ROW_HEIGHT = 28
+const DEFAULT_NODE_INDENT = 14
+const DEFAULT_NODE_ROW_HEIGHT = 26
 
 function appendUrlParam(url, key, value) {
   const separator = url.includes('?') ? '&' : '?'
@@ -514,6 +522,7 @@ export default {
             countUrl: '',
             countProgressiveBatchSize: 100,
             childrenPagination: false,
+            nodeIndent: DEFAULT_NODE_INDENT,
             amountTypes: ['node'],
             amountInLabel: false,
             operationNodeId: '',
@@ -543,6 +552,13 @@ export default {
     },
     nodeRowHeight() {
       return Math.max(1, Number(this.treeSetting.nodeRowHeight) || DEFAULT_NODE_ROW_HEIGHT)
+    },
+    nodeIndent() {
+      const indent = Number(this.treeSetting.nodeIndent)
+      return Number.isFinite(indent) ? Math.max(0, indent) : DEFAULT_NODE_INDENT
+    },
+    treeExpandIcon() {
+      return ArrowRight
     },
     isHeaderSearch() {
       return (
@@ -894,6 +910,9 @@ export default {
       const label = this.getNodeLabel(node)
       const amount = this.getNodeAmount(node)
       return Number.isFinite(amount) ? `${label} (${amount})` : label
+    },
+    isAssetNode(node) {
+      return node?.meta?.type === 'asset'
     },
     getNodeAmountTitle(node) {
       if (typeof this.treeSetting.getNodeAmountTitle === 'function') {
@@ -3673,6 +3692,11 @@ export default {
 @use './toolbar' as treeToolbar;
 
 .x-tree {
+  --x-tree-body-inline-padding: 0;
+  --x-tree-font-size: 12px;
+  --x-tree-icon-size: 14px;
+  --x-tree-toggle-icon-size: 12px;
+
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -3680,6 +3704,8 @@ export default {
   height: calc(100vh - 204px);
   min-height: 360px;
   background: var(--el-bg-color, #fff);
+  color: var(--el-text-color-primary);
+  font-size: var(--x-tree-font-size);
 }
 
 .x-tree__header-actions {
@@ -3760,19 +3786,16 @@ export default {
   overflow: hidden;
   padding-right: var(--x-tree-body-inline-padding, 0);
   padding-left: var(--x-tree-body-padding-left, var(--x-tree-body-inline-padding, 0));
-  border-top: var(
-    --x-tree-body-border-top,
-    1px solid var(--panel-border-color, var(--el-border-color))
-  );
+  border-top: var(--x-tree-body-border-top, 0);
 }
 
 .x-tree__viewport {
   width: 100%;
-  height: calc(100% - 3px);
+  height: 100%;
   min-width: 0;
   min-height: 0;
   overflow: auto;
-  margin-top: 3px;
+  margin-top: 0;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
@@ -3780,7 +3803,7 @@ export default {
   &::-webkit-scrollbar {
     -webkit-appearance: none;
     width: var(--tree-scrollbar-size);
-    height: var(--tree-scrollbar-size);
+    height: 0;
     border: 0;
     background: transparent;
     box-shadow: none;
@@ -3836,7 +3859,7 @@ export default {
   -webkit-appearance: none;
   display: block;
   width: var(--tree-scrollbar-size);
-  height: var(--tree-scrollbar-size);
+  height: 0;
   border: 0;
   background: transparent;
   box-shadow: none;
@@ -3873,26 +3896,37 @@ export default {
 .x-tree__body :deep(.el-tree) {
   min-width: max-content;
   background: transparent;
-  color: var(--el-text-color-regular);
+  color: var(--el-text-color-primary);
+  font-size: var(--x-tree-font-size);
 }
 
 .x-tree__body :deep(.el-tree-node__content) {
-  width: calc(var(--x-tree-content-width, 100%) - 8px);
-  min-width: calc(var(--x-tree-content-width, 100%) - 8px);
+  width: var(--x-tree-content-width, 100%);
+  min-width: var(--x-tree-content-width, 100%);
   height: var(--x-tree-row-height);
-  margin: 0 4px;
-  border-radius: 4px;
-  padding-right: 8px;
+  margin: 0;
+  border-radius: 0;
+  padding-right: 4px;
   user-select: none;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
 }
 
 .x-tree__body :deep(.el-tree-node__content:hover) {
   background: var(--el-fill-color-light);
+  background: color-mix(in srgb, var(--el-text-color-primary) 8%, transparent);
 }
 
 .x-tree__body :deep(.el-tree-node.is-current > .el-tree-node__content) {
-  color: var(--el-color-primary);
-  background: var(--el-color-primary-light-9);
+  color: var(--el-text-color-primary);
+  background: var(--el-fill-color);
+  background: color-mix(in srgb, var(--el-text-color-primary) 10%, transparent);
+}
+
+.x-tree__body :deep(.el-tree-node:focus-visible > .el-tree-node__content) {
+  box-shadow: inset 0 0 0 2px var(--el-border-color);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--el-text-color-primary) 24%, transparent);
 }
 
 .x-tree__body
@@ -3930,9 +3964,17 @@ export default {
 }
 
 .x-tree__body :deep(.el-tree-node__expand-icon) {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--x-tree-icon-size);
+  height: var(--x-tree-icon-size);
+  margin-left: 10px;
+  padding: 0;
   color: var(--el-text-color-secondary);
-  font-size: 11px;
-  transition: transform 0.12s ease-out;
+  font-size: var(--x-tree-toggle-icon-size);
+  transition: transform 0.2s ease-out;
 }
 
 .x-tree__body.is-virtual
@@ -3968,9 +4010,9 @@ export default {
   flex: none;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 100%;
-  margin: 0;
+  width: var(--x-tree-icon-size);
+  height: var(--x-tree-icon-size);
+  margin: 0 0 0 4px;
   padding: 0;
   border: 0;
   color: inherit;
@@ -3979,7 +4021,14 @@ export default {
 }
 
 .x-tree__node-icon {
+  display: inline-flex;
   flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--x-tree-icon-size);
+  height: var(--x-tree-icon-size);
+  color: var(--el-text-color-secondary);
+  font-size: var(--x-tree-icon-size);
 }
 
 .x-tree__node-select {
@@ -3988,7 +4037,7 @@ export default {
   align-items: center;
   align-self: stretch;
   min-width: 0;
-  padding-left: 2px;
+  padding-left: 4px;
   cursor: pointer;
 }
 
@@ -3996,18 +4045,26 @@ export default {
   flex: none;
   overflow: visible;
   color: var(--el-text-color-primary);
+  font-weight: 500;
   text-overflow: clip;
   white-space: nowrap;
 }
 
 .x-tree__body :deep(.el-tree-node.is-current > .el-tree-node__content) .x-tree__node-label {
-  color: var(--el-color-primary);
+  color: var(--el-text-color-primary);
+}
+
+.x-tree__node.is-asset .x-tree__node-label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-variant-ligatures: none;
+  letter-spacing: 0.01em;
 }
 
 .x-tree__node-amount {
   flex: none;
   margin-left: 4px;
-  color: var(--el-text-color-secondary);
+  color: inherit;
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
 
