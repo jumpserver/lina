@@ -480,7 +480,7 @@ function handleLauncherPointerMove(event) {
   }
   launcherDragging.value = true
   suppressLauncherClick = true
-  lockDocumentInteraction('ns-resize')
+  lockDocumentInteraction('grabbing')
   launcherY.value = clampLauncherY(launcherInteraction.startTop + deltaY)
   event.preventDefault()
 }
@@ -1273,6 +1273,7 @@ onBeforeUnmount(() => {
 
 .is-launcher-dragging {
   .assistant-launcher {
+    cursor: grabbing;
     transform: none;
     transition: none;
   }

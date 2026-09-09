@@ -14,11 +14,12 @@
         <li class="divider" />
         <li
           id="m_add_favorite_assets"
-          class="rmenu"
+          class="rmenu x-tree-context-menu__item"
           tabindex="-1"
           @click="handleAddFavoriteAssets(data, close)"
         >
-          <i class="fa fa-star-o" /> {{ $t('AddFavoriteAssetsToFolder') }}
+          <Icon icon="fa-star-o" class="x-tree-context-menu__icon" />
+          <span>{{ $t('AddFavoriteAssetsToFolder') }}</span>
         </li>
       </template>
     </template>
@@ -27,6 +28,7 @@
 
 <script>
 import AssetTreeTable from '@/components/Apps/AssetTreeTable'
+import Icon from '@/components/Widgets/Icon'
 import { AccountInfoFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
 import {
@@ -44,7 +46,8 @@ import {
 export default {
   name: 'GrantedAssets',
   components: {
-    AssetTreeTable
+    AssetTreeTable,
+    Icon
   },
   props: {
     user: {
