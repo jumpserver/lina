@@ -207,6 +207,17 @@ export default {
       ]
     },
     {
+      path: '/settings/chat-ai',
+      name: 'ChatAISettings',
+      component: () => import('@/views/settings/ChatAI'),
+      meta: {
+        title: i18n.t('ChatAI'),
+        icon: 'short-message',
+        disableGoBack: true,
+        permissions: ['settings.change_chatai']
+      }
+    },
+    {
       path: '/settings/notification',
       name: 'Msg',
       component: () => import('@/views/settings/Msg'),
@@ -227,7 +238,7 @@ export default {
         icon: 'feature',
         permissions: [
           'settings.change_ticket | settings.change_ops | settings.change_vault | ' +
-            'settings.change_chatai | settings.change_virtualapp'
+            'settings.change_virtualapp'
         ]
       }
     },

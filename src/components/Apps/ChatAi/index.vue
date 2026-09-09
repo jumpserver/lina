@@ -480,7 +480,7 @@ function handleLauncherPointerMove(event) {
   }
   launcherDragging.value = true
   suppressLauncherClick = true
-  lockDocumentInteraction('ns-resize')
+  lockDocumentInteraction('grabbing')
   launcherY.value = clampLauncherY(launcherInteraction.startTop + deltaY)
   event.preventDefault()
 }
@@ -1121,7 +1121,7 @@ onBeforeUnmount(() => {
     0 8px 18px rgb(16 72 62 / 20%),
     inset 0 1px 0 rgb(255 255 255 / 95%),
     inset 0 -2px 3px rgb(20 143 118 / 10%);
-  cursor: ns-resize;
+  cursor: pointer;
   isolation: isolate;
   place-items: center;
   touch-action: none;
@@ -1163,8 +1163,8 @@ onBeforeUnmount(() => {
   &__hide {
     position: absolute;
     z-index: 2;
-    top: 3px;
-    right: 3px;
+    top: -8px;
+    right: -8px;
     display: grid;
     width: 16px;
     height: 16px;
@@ -1274,6 +1274,7 @@ onBeforeUnmount(() => {
 
 .is-launcher-dragging {
   .assistant-launcher {
+    cursor: grabbing;
     transform: none;
     transition: none;
   }

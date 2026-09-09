@@ -14,6 +14,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getFirstAccessibleChildPath } from '@/utils/vue'
+import defaultLogo from '@/assets/img/logo_text_white_spaced.png'
 
 export default {
   name: 'SidebarLogo',
@@ -30,7 +31,8 @@ export default {
     ...mapGetters(['viewRoutes', 'publicSettings']),
     // eslint-disable-next-line vue/return-in-computed-property
     logoTextSrc() {
-      return this.publicSettings['INTERFACE']['logo_index']
+      const logoIndex = this.publicSettings['INTERFACE']['logo_index']
+      return logoIndex?.includes('logo_text_white.svg') ? defaultLogo : logoIndex
     },
     logoSrc() {
       return this.publicSettings['INTERFACE']['logo_logout']
