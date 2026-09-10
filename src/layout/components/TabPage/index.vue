@@ -121,6 +121,10 @@ export default {
     rememberActiveTab: {
       type: Boolean,
       default: false
+    },
+    clearQueryKeysOnTabChange: {
+      type: Array,
+      default: () => []
     }
   },
   emits: ['update:activeMenu', 'tab-click'],
@@ -208,10 +212,14 @@ export default {
       if (this.$route.query?.tab === newValue) {
         return
       }
+      const query = { ...this.$route.query }
+      for (const key of this.clearQueryKeysOnTabChange) {
+        delete query[key]
+      }
       this.$router.replace({
         path: this.$route.path,
         query: {
-          ...this.$route.query,
+          ...query,
           tab: newValue
         },
         hash: this.$route.hash

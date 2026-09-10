@@ -19,15 +19,13 @@ export default {
     DrawerListTable
   },
   data() {
-    const _id = this.$route.query.command_filters
-    const url = `/api/v1/acls/command-groups/${_id ? `?command_filters=${_id}` : ''}`
     return {
       createDrawer: () =>
         import('@/views/acls/CommandFilterACL/CommandGroup/CommandGroupCreateUpdate.vue'),
       detailDrawer: () =>
         import('@/views/acls/CommandFilterACL/CommandGroup/CommandGroupDetail/index.vue'),
       tableConfig: {
-        url: url,
+        url: '/api/v1/acls/command-groups/',
         permissions: {
           app: 'acls',
           resource: 'commandgroup'
@@ -58,6 +56,11 @@ export default {
         hasRefresh: true,
         hasSearch: true,
         hasMoreActions: false,
+        searchConfig: {
+          fieldLabels: {
+            command_filters: this.$t('CommandFilterACL')
+          }
+        },
         createRoute: 'CommandGroupCreate',
         canCreate: () => {
           return this.$hasPerm('acls.add_commandgroup') && !this.$store.getters.currentOrgIsRoot
