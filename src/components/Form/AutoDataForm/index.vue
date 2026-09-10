@@ -138,6 +138,10 @@ export default {
     applyUniqueRules() {
       const fields = this.totalFields || []
       const currentIdGetter = () => {
+        const method = (this.method || '').toLowerCase()
+        if (!['put', 'patch'].includes(method)) {
+          return null
+        }
         return this.$route?.params?.id || this.form?.id || this.iForm?.id
       }
 
