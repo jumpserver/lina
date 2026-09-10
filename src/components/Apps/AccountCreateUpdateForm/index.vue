@@ -43,6 +43,8 @@ export default {
     }
   },
   data() {
+    const fieldsMeta = accountFieldsMeta(this)
+    fieldsMeta.privileged.helpTip = this.$t('PrivilegedAccountHelpTip')
     return {
       loading: true,
       isDisabled: false,
@@ -82,7 +84,7 @@ export default {
         ],
         [this.$t('Other'), ['push_now', 'params', 'on_invalid', 'is_active', 'comment']]
       ],
-      fieldsMeta: accountFieldsMeta(this),
+      fieldsMeta,
       hasSaveContinue: false
     }
   },
