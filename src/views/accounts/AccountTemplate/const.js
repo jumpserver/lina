@@ -2,6 +2,7 @@ import { getUuidUpdateFromUrl } from '@/utils/common/index'
 import { PasswordRule, UpdateToken, UploadSecret } from '@/components/Form/FormFields'
 import Select2 from '@/components/Form/FormFields/Select2'
 import AutomationParams from '@/components/Apps/AutomationParams'
+import { getSecretTypeOptions } from '@/components/Apps/AccountCreateUpdateForm/const'
 import i18n from '@/i18n/i18n'
 import { ref } from 'vue'
 
@@ -51,6 +52,7 @@ export const templateFieldsMeta = (vm) => {
     },
     secret_type: {
       type: 'radio-group',
+      options: getSecretTypeOptions(vm),
       on: {
         change: ([event], updateForm) => {
           if (!canRandomSecretTypes.includes(event)) {

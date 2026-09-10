@@ -12,7 +12,10 @@
 <script>
 import AutoDataForm from '@/components/Form/AutoDataForm/index.vue'
 import { encryptPassword } from '@/utils/session-encrypt'
-import { accountFieldsMeta } from '@/components/Apps/AccountCreateUpdateForm/const'
+import {
+  accountFieldsMeta,
+  getSecretTypeOptions
+} from '@/components/Apps/AccountCreateUpdateForm/const'
 
 export default {
   name: 'AccountCreateForm',
@@ -130,32 +133,7 @@ export default {
       this.iPlatform = await this.$axios.get(`/api/v1/assets/platforms/${platformId}/`)
     },
     setSecretTypeOptions() {
-      const choices = [
-        {
-          label: this.$t('Password'),
-          value: 'password'
-        },
-        {
-          label: this.$t('SSHKey'),
-          value: 'ssh_key'
-        },
-        {
-          label: this.$t('SSHCertificate'),
-          value: 'ssh_certificate'
-        },
-        {
-          label: this.$t('Token'),
-          value: 'token'
-        },
-        {
-          label: this.$t('AccessKey'),
-          value: 'access_key'
-        },
-        {
-          label: this.$t('ApiKey'),
-          value: 'api_key'
-        }
-      ]
+      const choices = getSecretTypeOptions(this)
       const secretTypes = []
       this.iPlatform.protocols?.forEach((p) => {
         secretTypes.push(...p['secret_types'])
