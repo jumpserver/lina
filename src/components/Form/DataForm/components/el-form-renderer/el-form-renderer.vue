@@ -164,6 +164,7 @@ export default {
        *   4. 因为 _isequal(v, oldV)，所以没有触发 v-model 更新
        */
       this.value = _clonedeep(this.initValue)
+      this.$emit('reset')
       this.$nextTick(this.clearValidate)
     },
     setValueFromModel() {
@@ -185,7 +186,9 @@ export default {
      * @param  {All} options.value 表单数据
      */
     updateValue({ id, value }) {
+      const changed = !_isequal(this.value[id], value)
       this.value = { ...this.value, [id]: value }
+      if (changed) this.$emit('field-change', id)
     },
     /**
      * @return {object} key is item's id, value is item's value

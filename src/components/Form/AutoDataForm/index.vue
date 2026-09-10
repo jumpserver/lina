@@ -7,6 +7,8 @@
       :form="iForm"
       :server-errors="serverErrors"
       v-bind="$attrs"
+      @field-change="clearFieldError"
+      @reset="clearAllFieldErrors"
       v-on="$listeners"
     >
       <template
@@ -192,6 +194,10 @@ export default {
       } catch (e) {
         return null
       }
+    },
+    clearFieldError(name) {
+      if (!Object.prototype.hasOwnProperty.call(this.serverErrors, name)) return
+      this.$delete(this.serverErrors, name)
     },
     /**
      * @description 仅清理 UI 的错误展示,不触发表单内容重建

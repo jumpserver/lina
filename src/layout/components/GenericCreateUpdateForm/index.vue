@@ -399,7 +399,10 @@ export default {
     defaultOnSubmit(validValues, formName, addContinue) {
       this.isSubmitting = true
       this.performSubmit(validValues)
-        .then(res => this.onPerformSuccess.bind(this)(res, this.method, this, addContinue))
+        .then(res => {
+          this.$refs.form?.clearAllFieldErrors()
+          return this.onPerformSuccess.bind(this)(res, this.method, this, addContinue)
+        })
         .catch(error => this.onPerformError(error, this.method, this))
         .finally(() => {
           setTimeout(() => {
