@@ -117,35 +117,24 @@ export default {
     // 创建成功的跳转路由
     createSuccessNextRoute: {
       type: Object,
-      default: function () {
-        // const routeName = this.$route.name?.replace('Create', 'List')
-        const routeName = 'GroupCreate'
-        return { name: routeName }
-      }
+      default: null
     },
     // 更新成功的跳转路由
     updateSuccessNextRoute: {
       type: Object,
-      default: function () {
-        // const routeName = this.$route.name?.replace('Update', 'List')
-        const routeName = 'GroupUpdate'
-        return { name: routeName }
-      }
+      default: null
     },
     objectDetailRoute: {
       type: Object,
-      default: function () {
-        // const routeName = this.$route.name?.replace('Update', 'Detail').replace('Create', 'Detail')
-        const routeName = 'GroupDetail'
-        return { name: routeName }
-      }
+      default: null
     },
     // 获取下一个路由
     getNextRoute: {
       type: Function,
       default(res, method) {
-        return { name: 'GroupList' }
-        // return method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
+        const configuredRoute =
+          method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
+        return configuredRoute || this.getDefaultResourceRoute('List')
       }
     },
     cloneNameSuffix: {
@@ -199,9 +188,15 @@ export default {
         if (res.name) {
           msgLinkName = res.name
         }
-        const detailRoute = this.objectDetailRoute
-        detailRoute.params = { id: res.id }
-        if (this.hasDetailInMsg) {
+        const detailRoute = deepmerge(
+          this.getDefaultResourceRoute('Detail'),
+          this.objectDetailRoute || {}
+        )
+        detailRoute.params = deepmerge(detailRoute.params || {}, { id: res.id })
+        const hasDetailRoute =
+          Boolean(detailRoute.path) ||
+          (Boolean(detailRoute.name) && this.$router.hasRoute(detailRoute.name))
+        if (this.hasDetailInMsg && hasDetailRoute) {
           msg = msg[0].toLowerCase() + msg.slice(1)
           this.$message({
             message: h('p', null, [
@@ -329,6 +324,11 @@ export default {
     }
   },
   methods: {
+    getDefaultResourceRoute(action) {
+      const currentRouteName = String(this.$route.name || '')
+      const routeName = currentRouteName.replace(/(List|Create|Update|Detail)$/, action)
+      return { name: routeName }
+    },
     validateField(...args) {
       return this.$refs.form?.dataForm?.elForm?.validateField(...args)
     },

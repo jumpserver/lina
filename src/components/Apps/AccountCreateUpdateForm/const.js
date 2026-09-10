@@ -3,6 +3,33 @@ import Select2 from '@/components/Form/FormFields/Select2.vue'
 import { Required, RequiredChange } from '@/components/Form/DataForm/rules'
 import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
 
+export const getSecretTypeOptions = (vm) => [
+  {
+    label: vm.$t('Password'),
+    value: 'password'
+  },
+  {
+    label: vm.$t('SSHKey'),
+    value: 'ssh_key'
+  },
+  {
+    label: vm.$t('SSHCertificate'),
+    value: 'ssh_certificate'
+  },
+  {
+    label: vm.$t('Token'),
+    value: 'token'
+  },
+  {
+    label: vm.$t('AccessKey'),
+    value: 'access_key'
+  },
+  {
+    label: vm.$t('ApiKey'),
+    value: 'api_key'
+  }
+]
+
 export const accountFieldsMeta = (vm) => {
   const defaultPrivilegedAccounts = ['root', 'administrator']
 

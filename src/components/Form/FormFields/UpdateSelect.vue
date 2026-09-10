@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="update-select">
     <el-button
       v-show="!iShowSelect"
       :disabled="disabled"
@@ -17,13 +17,13 @@
       v-model="iValue"
       :disabled="disabled"
       @change="onSelectChange"
+      @visible-change="onVisibleChange"
     />
   </div>
 </template>
 
 <script>
 import Select2 from './Select2.vue'
-import { hasUUID } from '@/utils/common/index'
 
 export default {
   components: {
@@ -32,7 +32,11 @@ export default {
   props: {
     value: {
       type: [String, Number],
-      default: () => ''
+      default: undefined
+    },
+    modelValue: {
+      type: [String, Number],
+      default: undefined
     },
     label: {
       type: String,
@@ -47,34 +51,47 @@ export default {
       default: false
     }
   },
+  emits: ['change', 'input', 'update:modelValue', 'update:model-value'],
   data() {
     return {
       iShowSelect: this.showSelect,
-      iLabel: this.label || '-'
+      iLabel: this.label || this.$t('Select')
     }
   },
   computed: {
+    externalValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value
+    },
     iValue: {
       get() {
-        return this.value
+        return this.externalValue
       },
       set(val) {
         this.$emit('input', val)
+        this.$emit('update:modelValue', val)
+        this.$emit('update:model-value', val)
       }
     }
   },
-  created() {
-    const { path } = this.$route
-    if (hasUUID(path) && this.value && !this.showSelect) {
-      this.iShowSelect = false
+  watch: {
+    label(value) {
+      this.iLabel = value || this.$t('Select')
+    },
+    showSelect(value) {
+      this.iShowSelect = value
     }
   },
   methods: {
     onSelectChange(val) {
-      const options = this.$refs.select2.options.filter((item) => item.value === val)
-      const label = options.length > 0 ? options[0].label : ''
+      const option = this.$refs.select2.iOptions.find((item) => item.value === val)
       this.iShowSelect = this.showSelect
-      this.iLabel = val ? label : '-'
+      this.iLabel = val ? option?.label || this.iLabel : this.$t('Select')
+      this.$emit('change', val)
+    },
+    onVisibleChange(visible) {
+      if (!visible && !this.showSelect) {
+        this.iShowSelect = false
+      }
     }
   }
 }
@@ -85,6 +102,17 @@ export default {
   color: #676a6c;
   padding: 5px !important;
 }
+
+.update-select {
+  display: inline-flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.update-select :deep(.select2) {
+  width: 100%;
+}
+
 .icon {
   color: #676a6c !important;
 }
