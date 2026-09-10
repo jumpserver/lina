@@ -32,6 +32,7 @@
       :base-url="baseUrl"
       :tree-setting="treeSetting"
       :tree-url-query="treeUrlQuery"
+      :can-select="canSelect"
       :value="selectedValue"
       @cancel="handleCancel"
       @confirm="handleConfirm"
@@ -103,6 +104,12 @@ export default {
     disabled: {
       type: [Boolean, Function],
       default: false
+    },
+    canSelect: {
+      type: Function,
+      default(row, index) {
+        return true
+      }
     }
   },
   emits: ['change', 'input', 'update:model-value', 'update:modelValue'],
