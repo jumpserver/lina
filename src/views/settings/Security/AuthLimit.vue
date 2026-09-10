@@ -67,6 +67,18 @@ export default {
           }
         }
       },
+      afterGetRemoteMeta: meta => {
+        for (const name of [
+          'SECURITY_LOGIN_IP_WHITE_LIST',
+          'SECURITY_LOGIN_IP_BLACK_LIST'
+        ]) {
+          this.$set(this.fieldsMeta, name, {
+            helpText: meta[name]?.help_text || '',
+            helpTextAsTip: false,
+            helpTextAsPlaceholder: false
+          })
+        }
+      },
       cleanFormValue(value) {
         const ipBlackList = value.SECURITY_LOGIN_IP_BLACK_LIST
         const ipWhiltList = value.SECURITY_LOGIN_IP_WHITE_LIST
