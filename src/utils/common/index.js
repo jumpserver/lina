@@ -387,19 +387,46 @@ export function diffObject(object, base) {
   })
 }
 
-export const copy = _.throttle(function (value) {
-  const inputDom = document.createElement('input')
-  inputDom.id = 'createInputDom'
-  inputDom.value = value
-  document.body.appendChild(inputDom)
-  inputDom.select()
-  document?.execCommand('copy')
+function copyTextFallback(value) {
+  const textarea = document.createElement('textarea')
+  textarea.value = value
+  textarea.setAttribute('readonly', '')
+  textarea.style.position = 'fixed'
+  textarea.style.opacity = '0'
+  textarea.style.pointerEvents = 'none'
+
+  try {
+    document.body.appendChild(textarea)
+    textarea.select()
+    textarea.setSelectionRange(0, textarea.value.length)
+    return document.execCommand('copy')
+  } catch {
+    return false
+  } finally {
+    textarea.remove()
+  }
+}
+
+export const copy = _.throttle(async function (value) {
+  const text = String(value ?? '')
+  let copied = false
+
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text)
+      copied = true
+    } else {
+      copied = copyTextFallback(text)
+    }
+  } catch {
+    copied = copyTextFallback(text)
+  }
+
   message({
-    message: i18n.t('CopySuccess'),
-    type: 'success',
+    message: i18n.t(copied ? 'CopySuccess' : 'CopyFailed'),
+    type: copied ? 'success' : 'error',
     duration: 1000
   })
-  document.body.removeChild(inputDom)
 }, 1400)
 
 export function getQueryFromPath(path) {
