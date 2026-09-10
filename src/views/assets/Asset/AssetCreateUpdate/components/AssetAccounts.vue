@@ -67,6 +67,7 @@
         v-if="templateDialogVisible"
         v-model:visible="templateDialogVisible"
         :accounts="accounts"
+        :asset="platform"
       />
     </div>
 
