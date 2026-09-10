@@ -23,10 +23,6 @@ export const getSecretTypeOptions = (vm) => [
   {
     label: vm.$t('AccessKey'),
     value: 'access_key'
-  },
-  {
-    label: vm.$t('ApiKey'),
-    value: 'api_key'
   }
 ]
 
