@@ -31,6 +31,7 @@
 <script>
 export default {
   name: 'PhoneInput',
+  emits: ['input', 'change'],
   props: {
     value: {
       type: [Object, String],
