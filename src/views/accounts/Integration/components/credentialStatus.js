@@ -3,6 +3,8 @@ export const rotationStatuses = {
   waiting_backup: 'WaitingForBackupAccount',
   ready_for_change: 'ReadyForSecretChange',
   changing_secret: 'ChangingSecret',
+  change_failed: 'PamChangeFailed',
+  recovery_required: 'PamRecoveryRequired',
   waiting_primary: 'WaitingForPrimaryAccount'
 }
 

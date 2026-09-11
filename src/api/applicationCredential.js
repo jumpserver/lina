@@ -63,6 +63,8 @@ export async function advanceApplicationCredentialRotation(credential) {
     waiting_backup: 'check-usage',
     ready_for_change: 'change-secret',
     changing_secret: 'check-secret-change',
+    change_failed: 'check-secret-change',
+    recovery_required: 'check-secret-change',
     waiting_primary: 'complete'
   }
   const action = actions[credential.status]
@@ -70,9 +72,15 @@ export async function advanceApplicationCredentialRotation(credential) {
   return normalizeCredential(await request.post(`${credentialUrl}${credential.id}/${action}/`))
 }
 
-export async function cancelApplicationCredentialRotation(id) {
-  return normalizeCredential(await request.post(`${credentialUrl}${id}/cancel/`))
+export async function cancelApplicationCredentialRotation(id, reason = '') {
+  return normalizeCredential(await request.post(`${credentialUrl}${id}/cancel/`, { reason }))
 }
+
+export const executeCredentialChange = (automation) =>
+  request.post('/api/v1/accounts/change-secret-executions/', { automation })
+
+export const retryCredentialChange = (id, execution_id, reason) =>
+  request.post(`${credentialUrl}${id}/retry-change/`, { execution_id, reason })
 
 export async function saveClientAccessConfiguration(application, form) {
   const data = {

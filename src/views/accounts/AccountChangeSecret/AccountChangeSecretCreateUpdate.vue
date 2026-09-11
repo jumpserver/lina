@@ -17,6 +17,8 @@ export default {
   data() {
     return {
       ready: false,
+      pamRotation: null,
+      hasSaveContinue: true,
       node_ids: [],
       asset_ids: [],
       initial: {
@@ -111,7 +113,13 @@ export default {
       createSuccessNextRoute: { name: 'AccountChangeSecretList' },
       updateSuccessNextRoute: { name: 'AccountChangeSecretList' },
       afterGetRemoteMeta: this.handleAfterGetRemoteMeta,
-      cleanFormValue(data) {
+      cleanFormValue: (data) => {
+        if (this.pamRotation) {
+          data.rotation_id = this.pamRotation.id
+          data.is_periodic = false
+          data.check_conn_after_change = true
+          data.nodes = []
+        }
         const secretType = data.secret_type || ''
         if (secretType !== 'password') {
           data.secret = data[secretType]
@@ -129,15 +137,22 @@ export default {
     const credentialId = this.$route.query.application_credential
     if (this.$route.name === 'AccountChangeSecretCreate' && credentialId) {
       const credential = await getApplicationCredential(credentialId)
+      this.pamRotation = credential.rotation
+      if (!this.pamRotation || this.pamRotation.id !== this.$route.query.credential_rotation) {
+        throw new Error(this.$t('PamRotationExpired'))
+      }
+      this.pamRotation.credential_id = credential.id
       this.asset_ids = [credential.asset.id]
       Object.assign(this.initial, {
-        name: `${credential.name}-${this.$t('ChangeSecret')}`,
+        name: `${credential.name}-${this.$t('ChangeSecret')}-${this.pamRotation.id.slice(0, 8)}`,
         assets: this.asset_ids,
         accounts: [credential.primary_account.username],
         secret_type: choiceValue(credential.primary_account.secret_type),
         secret_strategy: 'random',
+        is_periodic: false,
         check_conn_after_change: true
       })
+      this.configurePamForm()
       this.fieldsMeta.params.el.assets = this.asset_ids
     }
     this.ready = true
@@ -157,7 +172,30 @@ export default {
     }
   },
   methods: {
-    handleObjectDone({ assets = [], nodes = [] }) {
+    configurePamForm() {
+      if (!this.pamRotation) return
+      for (const name of [
+        'assets',
+        'accounts',
+        'nodes',
+        'secret_type',
+        'is_periodic',
+        'check_conn_after_change'
+      ]) {
+        const field = this.fieldsMeta[name] || (this.fieldsMeta[name] = {})
+        field.el = { ...field.el, disabled: true }
+      }
+      this.hasSaveContinue = false
+      const route = {
+        name: 'IntegrationApplicationList',
+        query: { tab: 'rotations', credential_id: this.pamRotation.credential_id }
+      }
+      this.createSuccessNextRoute = route
+      this.updateSuccessNextRoute = route
+    },
+    handleObjectDone({ assets = [], nodes = [], rotation = null }) {
+      this.pamRotation = rotation || this.pamRotation
+      this.configurePamForm()
       this.asset_ids = assets.map((item) => item.id || item.pk || item)
       this.node_ids = nodes.map((item) => item.id || item.pk || item)
     },

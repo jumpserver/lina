@@ -173,6 +173,14 @@ export default {
   deactivated() {
     this.drawerVisible = false
   },
+  watch: {
+    '$route.query.credential_id': {
+      immediate: true,
+      handler(id) {
+        if (id && this.$route.query.tab === 'rotations') this.openDetail({ id })
+      }
+    }
+  },
   methods: {
     formatDate(value) {
       return value ? toSafeLocalDateStr(value) : '-'

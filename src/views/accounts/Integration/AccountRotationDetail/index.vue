@@ -16,34 +16,23 @@
           :table-config="accessTableConfig"
         />
       </el-tab-pane>
-      <el-tab-pane v-if="object.type === 'rotation'" :label="$t('RotationRecords')" name="history">
-        <ListTable
-          :key="object.id"
-          ref="historyTable"
-          :header-actions="readOnlyHeaderActions"
-          :table-config="historyTableConfig"
-        />
-      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script lang="jsx">
-import { ListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { GenericListTable } from '@/layout/components'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import {
   accessConfigurationUrl,
-  rotationRecordUrl,
-  choiceValue,
   requestAccessConfigurationTable
 } from '@/api/applicationCredential'
 import AccountRotationInfo from './AccountRotationInfo.vue'
 
 export default {
   name: 'ApplicationCredentialDetail',
-  components: { AccountRotationInfo, GenericListTable, ListTable },
+  components: { AccountRotationInfo, GenericListTable },
   props: {
     object: {
       type: Object,
@@ -117,37 +106,6 @@ export default {
             formatter: (row) => this.formatDate(row.last_reported)
           }
         ]
-      },
-      historyTableConfig: {
-        url: rotationRecordUrl,
-        extraQuery: { credential: this.object.id },
-        hasSelection: false,
-        hasPagination: true,
-        columnsMeta: { actions: { has: false } },
-        columns: [
-          { prop: 'created_by', label: this.$t('Operator'), minWidth: '140px' },
-          {
-            prop: 'date_created',
-            label: this.$t('Date'),
-            width: '175px',
-            formatter: (row) => this.formatDate(row.date_created)
-          },
-          {
-            prop: 'status',
-            label: this.$t('Result'),
-            width: '110px',
-            formatter: (row) => (
-              <el-tag type={choiceValue(row.status) === 'success' ? 'success' : 'info'}>
-                {this.$t(
-                  { running: 'Running', success: 'Success', failed: 'Failed', cancelled: 'Cancel' }[
-                    choiceValue(row.status)
-                  ]
-                )}
-              </el-tag>
-            )
-          },
-          { prop: 'comment', label: this.$t('Detail'), minWidth: '260px' }
-        ]
       }
     }
   },
@@ -166,14 +124,11 @@ export default {
     async loadRelatedData() {
       if (!this.object.id) return
       this.accessTableConfig.extraQuery = { credentials: this.object.id }
-      this.historyTableConfig.extraQuery = { credential: this.object.id }
       await this.$nextTick()
       this.$refs.accessTable?.reloadTable()
-      this.$refs.historyTable?.reloadTable()
     },
     updated(value) {
       this.$emit('updated', value)
-      this.$refs.historyTable?.reloadTable()
     }
   }
 }

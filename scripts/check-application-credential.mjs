@@ -449,13 +449,13 @@ const credentialDetail = await readFile(
   new URL('../src/views/accounts/Integration/AccountRotationDetail/index.vue', import.meta.url),
   'utf8'
 )
-assert.equal((credentialDetail.match(/<ListTable\b/g) || []).length, 1)
+assert.equal((credentialDetail.match(/<ListTable\b/g) || []).length, 0)
 assert.match(credentialDetail, /<GenericListTable\b[\s\S]*?ref="accessTable"/)
 assert.doesNotMatch(credentialDetail, /<DataTable|hasRightActions: false|hasSearch: false/)
 assert.match(credentialDetail, /hasLeftActions: false/)
 assert.match(credentialDetail, /hasImport: false/)
 assert.match(credentialDetail, /hasExport: false/)
-assert.equal((credentialDetail.match(/actions: \{ has: false \}/g) || []).length, 2)
+assert.equal((credentialDetail.match(/actions: \{ has: false \}/g) || []).length, 1)
 assert.match(credentialDetail, /name: 'ApplicationCredentialAccess'/)
 assert.match(
   credentialDetail,
@@ -511,16 +511,15 @@ const relatedMethods = new Function(
 const relatedVm = {
   object: { id: 'credential-2' },
   accessTableConfig: { extraQuery: { credentials: 'credential-1' } },
-  historyTableConfig: { extraQuery: { credential: 'credential-1' } },
   $nextTick: async () => {},
   $refs: {
-    accessTable: { reloadTable() {} },
-    historyTable: { reloadTable() {} }
+    accessTable: { reloadTable() {} }
   }
 }
 await relatedMethods.loadRelatedData.call(relatedVm)
 assert.deepEqual(relatedVm.accessTableConfig.extraQuery, { credentials: 'credential-2' })
-assert.deepEqual(relatedVm.historyTableConfig.extraQuery, { credential: 'credential-2' })
+assert.doesNotMatch(credentialDetail, /RotationRecords|historyTable|rotationRecordUrl/)
+assert.match(credentialDetail, /activeTab: 'basic'/)
 assert.doesNotMatch(credentialPage, /credential-toolbar|toolbar-actions/)
 assert.doesNotMatch(credentialPage, /#search-after|<el-input|typeFilter|hasSearch: false/)
 assert.match(credentialPage, /searchConfig: \{\s*getUrlQuery: false/)
@@ -540,15 +539,91 @@ const credentialInfo = await readFile(
   ),
   'utf8'
 )
+let openedExecutionLog
+const getQuickActions = new Function(
+  'openTaskPage',
+  `return function() {${credentialInfo.match(/    quickActions\(\) \{([\s\S]*?)\n    \}\n  \},\n  methods:/)[1]}}`
+)((id) => {
+  openedExecutionLog = id
+})
+for (const permission of [
+  null,
+  'accounts.view_changesecretexecution',
+  'accounts.view_changesecretrecord'
+]) {
+  let resultRoute
+  const actions = getQuickActions.call({
+    object: { type: 'rotation', is_active: false, rotation: { execution_id: 'execution-1' } },
+    $t: (key) => key,
+    $hasPerm: (value) => value === permission,
+    $router: {
+      push: (route) => {
+        resultRoute = route
+      }
+    }
+  })
+  const log = actions.find((action) => action.title === 'ExecutionLog')
+  const result = actions.find((action) => action.title === 'PamChangeSecretResult')
+  assert.equal(log.has, permission === 'accounts.view_changesecretexecution')
+  assert.equal(result.has, permission === 'accounts.view_changesecretrecord')
+  assert.ok(!log.attrs.disabled && !result.attrs.disabled)
+  log.callbacks.click()
+  result.callbacks.click()
+  assert.equal(openedExecutionLog, 'execution-1')
+  assert.deepEqual(resultRoute, {
+    name: 'AccountChangeSecretList',
+    query: { tab: 'ChangeSecretRecord', execution_id: 'execution-1' }
+  })
+}
+assert.ok(!credentialInfo.includes('AccountChangeSecretExecutionDetail'))
 const rotationMethods = new Function(
   'advanceApplicationCredentialRotation',
   `return ${credentialInfo.match(/  methods: (\{[\s\S]*\n  \})\n\}\n<\/script>/)[1]}`
-)(async (credential) => ({ ...credential, status: 'changing_secret' }))
+)(async () => {
+  throw new Error('Opening the form must not start a change')
+})
+assert.match(credentialInfo, /object\.precheck\?\.status === 'checking'/)
+assert.match(credentialInfo, /beforeUnmount\(\)[\s\S]*clearTimeout\(this\.precheckTimer\)/)
+const precheckMethods = new Function(
+  'getApplicationCredential',
+  'setTimeout',
+  'clearTimeout',
+  `return ${credentialInfo.match(/  methods: (\{[\s\S]*\n  \})\n\}\n<\/script>/)[1]}`
+)(
+  async () => ({ id: 'credential-1', precheck: { status: 'failed' } }),
+  (callback) => {
+    scheduledPrecheck = callback
+    return 1
+  },
+  () => {}
+)
+let scheduledPrecheck
+const precheckVm = {
+  ...precheckMethods,
+  object: { id: 'credential-1', precheck: { status: 'checking' } },
+  disposed: false,
+  $emit(event, value) {
+    this.object = value
+  },
+  $nextTick: async () => {}
+}
+precheckVm.schedulePrecheckRefresh()
+assert.equal(typeof scheduledPrecheck, 'function')
+await scheduledPrecheck()
+assert.equal(precheckVm.object.precheck.status, 'failed')
+scheduledPrecheck = undefined
+precheckVm.schedulePrecheckRefresh()
+assert.equal(scheduledPrecheck, undefined)
 for (const rotation_mode of ['single', 'dual']) {
   const routes = []
   const vm = {
     ...rotationMethods,
-    object: { id: 'credential', status: 'ready_for_change', rotation_mode },
+    object: {
+      id: 'credential',
+      status: 'ready_for_change',
+      rotation_mode,
+      rotation: { id: 'rotation' }
+    },
     $hasPerm: () => true,
     $router: { push: async (route) => routes.push(route) },
     $emit: () => {},
@@ -559,7 +634,7 @@ for (const rotation_mode of ['single', 'dual']) {
   assert.deepEqual(routes, [
     {
       name: 'AccountChangeSecretCreate',
-      query: { application_credential: 'credential' }
+      query: { application_credential: 'credential', credential_rotation: 'rotation' }
     }
   ])
   vm.$hasPerm = () => false
@@ -580,6 +655,8 @@ const initializeChangeForm = new Function(
   `return async function() {${changeFormSource.match(/  async created\(\) \{([\s\S]*?)\n  \},\n  watch:/)[1]}}`
 )(
   async () => ({
+    id: 'credential',
+    rotation: { id: 'rotation' },
     name: 'Credential',
     asset: { id: 'asset' },
     primary_account: { username: 'root', secret_type: 'password' }
@@ -588,7 +665,13 @@ const initializeChangeForm = new Function(
 )
 for (const routeName of ['AccountChangeSecretCreate', 'AccountChangeSecretUpdate']) {
   const vm = {
-    $route: { name: routeName, query: { application_credential: 'credential' } },
+    $route: {
+      name: routeName,
+      query: { application_credential: 'credential', credential_rotation: 'rotation' }
+    },
+    configurePamForm: new Function(
+      `return ${changeFormSource.match(/  methods: (\{[\s\S]*\n  \})\n\}\n<\/script>/)[1]}`
+    )().configurePamForm,
     $t: (key) => key,
     initial: { is_periodic: false },
     fieldsMeta: { params: { el: {} } }
@@ -598,12 +681,15 @@ for (const routeName of ['AccountChangeSecretCreate', 'AccountChangeSecretUpdate
   if (routeName.endsWith('Create')) {
     assert.deepEqual(vm.initial.assets, ['asset'])
     assert.deepEqual(vm.initial.accounts, ['root'])
-    assert.equal(vm.initial.name, 'Credential-ChangeSecret')
+    assert.equal(vm.initial.name, 'Credential-ChangeSecret-rotation')
     assert.equal(vm.initial.secret_type, 'password')
     assert.equal(vm.initial.secret_strategy, 'random')
     assert.equal(vm.initial.check_conn_after_change, true)
     assert.equal(vm.initial.is_periodic, false)
     assert.deepEqual(vm.fieldsMeta.params.el.assets, ['asset'])
+    assert.equal(vm.fieldsMeta.accounts.el.disabled, true)
+    assert.equal(vm.hasSaveContinue, false)
+    assert.equal(vm.createSuccessNextRoute.query.credential_id, 'credential')
   } else {
     assert.deepEqual(vm.initial, { is_periodic: false })
   }
@@ -881,4 +967,26 @@ await staleAccessEdit.performSubmit({ ...staleAccessEdit.initial, credential_ids
 assert.equal(promptCount, 1)
 assert.equal(calls.at(-1).data.removal_reason, 'concurrent rotation')
 request.patch = originalPatch
+const tagInputSource = await readFile(
+  new URL('../src/components/Form/FormFields/TagInput.vue', import.meta.url),
+  'utf8'
+)
+const tagMethods = new Function(
+  `return ${tagInputSource.match(/  methods: (\{[\s\S]*\n  \})\n\}\n<\/script>/)[1]}`
+)()
+const lockedTags = {
+  ...tagMethods,
+  disabled: true,
+  filterTags: ['primary'],
+  filterValue: 'replacement',
+  emitTags() {
+    throw new Error('Disabled accounts must not change')
+  }
+}
+lockedTags.handleTagClose('primary')
+lockedTags.handleTagClick('primary', 0)
+lockedTags.handleConfirm()
+lockedTags.handleClearAll()
+assert.deepEqual(lockedTags.filterTags, ['primary'])
+
 console.log('Application credential HTTP, standard form, and layout checks passed')
