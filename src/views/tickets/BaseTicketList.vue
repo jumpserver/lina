@@ -34,6 +34,10 @@ export default {
     extraQuery: {
       type: Object,
       default: () => ({})
+    },
+    showApprovers: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -113,9 +117,13 @@ export default {
         url: this.url,
         extraQuery: this.extraQuery,
         columnsExclude: ['process_map', 'rel_snapshot', 'status'],
+        columnsExtra: this.showApprovers ? ['approvers'] : [],
         columnsShow: {
           min: ['title', 'serial_num', 'type', 'state', 'date_created'],
-          default: ['title', 'serial_num', 'type', 'state', 'date_created']
+          default: [
+            'title', 'serial_num', 'type',
+            ...(this.showApprovers ? ['applicant', 'approvers'] : []), 'state', 'date_created'
+          ]
         },
         columnsMeta: {
           serial_num: {
@@ -180,6 +188,12 @@ export default {
                 return row.state.label || vm.$t('Pending')
               }
             }
+          },
+          approvers: {
+            label: this.$t('Reviewer'),
+            showOverflowTooltip: true,
+            sortable: false,
+            formatter: this.formatApprovers
           },
           date_created: {
             label: this.$t('Date'),
@@ -273,6 +287,18 @@ export default {
     }, 500)
   },
   methods: {
+    formatApprovers(row) {
+      const steps = Array.isArray(row.process_map) ? row.process_map : []
+      const approvers = new Map()
+      steps
+        .filter(step => step && [APPROVE, REJECT].includes(step.state) && step.processor_display)
+        .sort((a, b) => a.approval_level - b.approval_level)
+        .forEach(step => {
+          const id = step.processor || step.processor_display
+          if (!approvers.has(id)) approvers.set(id, step.processor_display)
+        })
+      return [...approvers.values()].join(', ') || '—'
+    },
     reloadTable() {
       this.$refs.ListPage.$refs.ListTable.$refs.ListTable.reloadTable()
     }
