@@ -1,5 +1,14 @@
 <template>
   <TwoCol :gutter="20" :left="16" :right="8">
+    <el-alert
+      v-if="object.precheck && object.precheck.status !== 'passed'"
+      :title="precheckMessage"
+      :description="object.precheck.code === 'changed' ? object.precheck.detail : ''"
+      :type="object.precheck.status === 'checking' ? 'info' : 'error'"
+      :closable="false"
+      show-icon
+      class="detail-block"
+    />
     <DetailCard :items="detailItems" :title="$t('BasicInfo')" class="detail-block" />
     <IBox v-if="object.blockers?.length" :title="$t('WaitingForApplications')" class="detail-block">
       <DataTable :config="blockerTableConfig" />
@@ -34,10 +43,13 @@ import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import DataTable from '@/components/Table/DataTable/index.vue'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { credentialStatusLabel } from '../components/credentialStatus.js'
+import { openTaskPage } from '@/utils/jms'
 import {
   advanceApplicationCredentialRotation,
   cancelApplicationCredentialRotation,
   getApplicationCredential,
+  executeCredentialChange,
+  retryCredentialChange,
   setClientInstanceActive
 } from '@/api/applicationCredential'
 
@@ -54,9 +66,35 @@ export default {
   },
   emits: ['edit', 'updated'],
   data() {
-    return { actionLoading: false }
+    return { actionLoading: false, precheckTimer: null, disposed: false }
+  },
+  watch: {
+    'object.id'() {
+      this.schedulePrecheckRefresh()
+    },
+    'object.precheck.status': {
+      immediate: true,
+      handler() {
+        this.schedulePrecheckRefresh()
+      }
+    }
+  },
+  beforeUnmount() {
+    this.disposed = true
+    clearTimeout(this.precheckTimer)
   },
   computed: {
+    precheckMessage() {
+      const precheck = this.object.precheck
+      if (precheck?.status === 'checking') return this.$t('PamPrecheckRunning')
+      const keys = {
+        timeout: 'PamPrecheckTimeout',
+        changed: 'PamPrecheckChanged',
+        dispatch_failed: 'PamPrecheckDispatchFailed',
+        failed: 'PamPrecheckFailed'
+      }
+      return this.$t(keys[precheck?.code] || 'PamPrecheckFailed')
+    },
     rotationStep() {
       if (this.object.status === 'idle') {
         return this.object.date_last_rotated ? this.rotationSteps.length : 0
@@ -65,6 +103,8 @@ export default {
         waiting_backup: 0,
         ready_for_change: 1,
         changing_secret: 2,
+        change_failed: 2,
+        recovery_required: 2,
         waiting_primary: 3
       }
       const single = { ready_for_change: 0, changing_secret: 0, waiting_primary: 1 }
@@ -173,6 +213,23 @@ export default {
           value: this.object.change_execution.id
         })
       }
+      if (this.object.rotation) {
+        const rotation = this.object.rotation
+        const outcomes = {
+          running: 'Running',
+          success: 'Success',
+          unchanged: 'PamChangeFailed',
+          unverified: 'PamRecoveryRequired'
+        }
+        items.push(
+          {
+            key: this.$t('PamExecutionStatus'),
+            value: this.$t(outcomes[rotation.outcome] || 'ReadyForSecretChange')
+          },
+          { key: this.$t('DateStart'), value: this.formatDate(rotation.date_start) },
+          { key: this.$t('Error'), value: rotation.error || '-' }
+        )
+      }
       return items
     },
     rotationSteps() {
@@ -218,6 +275,21 @@ export default {
     quickActions() {
       return [
         {
+          title: this.$t('ChangeSecret'),
+          has:
+            !!this.object.rotation?.automation_id &&
+            ['ready_for_change', 'change_failed'].includes(this.object.status) &&
+            this.$hasPerm('accounts.change_changesecretautomation'),
+          attrs: { label: this.$t('Edit'), disabled: this.actionLoading },
+          callbacks: {
+            click: () =>
+              this.$router.push({
+                name: 'AccountChangeSecretUpdate',
+                params: { id: this.object.rotation.automation_id }
+              })
+          }
+        },
+        {
           title: this.$t('Configuration'),
           has: this.$hasPerm('accounts.change_applicationcredential'),
           attrs: { label: this.$t('Edit'), disabled: this.object.status !== 'idle' },
@@ -232,38 +304,86 @@ export default {
             type: 'primary',
             label:
               this.object.status === 'idle'
-                ? this.$t('StartRotation')
+                ? this.$t(
+                    this.object.precheck?.status === 'checking'
+                      ? 'PamPrecheckRunning'
+                      : 'StartRotation'
+                  )
                 : this.object.status === 'ready_for_change'
-                  ? this.$t('ChangeSecret')
-                  : this.object.status === 'changing_secret'
+                  ? this.$t(this.object.rotation?.automation_id ? 'Execute' : 'ChangeSecret')
+                  : ['changing_secret', 'change_failed', 'recovery_required'].includes(
+                        this.object.status
+                      )
                     ? this.$t('CheckSecretChangeResult')
                     : this.$t('ContinueRotation'),
             loading: this.actionLoading,
             disabled:
               !this.object.is_active ||
+              this.object.precheck?.status === 'checking' ||
+              (this.object.status === 'idle' &&
+                this.object.rotation_mode === 'dual' &&
+                !this.$hasPerm('accounts.verify_account')) ||
               (this.object.status === 'ready_for_change' &&
-                !this.$hasPerm('accounts.add_changesecretautomation'))
+                !this.$hasPerm(
+                  this.object.rotation?.automation_id
+                    ? 'accounts.add_changesecretexecution'
+                    : 'accounts.add_changesecretautomation'
+                ))
           },
           callbacks: { click: this.advanceRotation }
         },
         {
-          title: this.$t('ChangeSecret'),
+          title: this.$t('ExecutionLog'),
           has:
             this.object.type === 'rotation' &&
-            this.object.status === 'changing_secret' &&
-            this.$hasPerm('accounts.change_applicationcredential') &&
-            this.$hasPerm('accounts.add_changesecretautomation'),
+            !!this.object.rotation?.execution_id &&
+            this.$hasPerm('accounts.view_changesecretexecution'),
           attrs: {
-            label: this.$t('Create'),
-            disabled: this.actionLoading || !this.object.is_active
+            label: this.$t('View')
           },
-          callbacks: { click: this.openChangeSecretForm }
+          callbacks: { click: () => openTaskPage(this.object.rotation.execution_id) }
+        },
+        {
+          title: this.$t('PamChangeSecretResult'),
+          has:
+            this.object.type === 'rotation' &&
+            !!this.object.rotation?.execution_id &&
+            this.$hasPerm('accounts.view_changesecretrecord'),
+          attrs: { label: this.$t('View') },
+          callbacks: {
+            click: () =>
+              this.$router.push({
+                name: 'AccountChangeSecretList',
+                query: {
+                  tab: 'ChangeSecretRecord',
+                  execution_id: this.object.rotation.execution_id
+                }
+              })
+          }
+        },
+        {
+          title: this.$t('ChangeSecret'),
+          has:
+            this.object.rotation?.execution_status === 'pending' &&
+            this.$hasPerm('accounts.add_changesecretexecution') &&
+            this.$hasPerm('accounts.change_applicationcredential'),
+          attrs: { label: this.$t('PamRedispatch'), disabled: this.actionLoading },
+          callbacks: { click: this.executeSavedTask }
+        },
+        {
+          title: this.$t('Retry'),
+          has:
+            this.object.status === 'change_failed' &&
+            this.$hasPerm('accounts.add_changesecretexecution') &&
+            this.$hasPerm('accounts.change_applicationcredential'),
+          attrs: { label: this.$t('Retry'), disabled: this.actionLoading },
+          callbacks: { click: this.retryChange }
         },
         {
           title: this.$t('Cancel'),
           has:
             this.object.type === 'rotation' &&
-            ['waiting_backup', 'ready_for_change'].includes(this.object.status) &&
+            ['waiting_backup', 'ready_for_change', 'change_failed'].includes(this.object.status) &&
             this.$hasPerm('accounts.change_applicationcredential'),
           attrs: { label: this.$t('CancelRotation'), disabled: this.actionLoading },
           callbacks: { click: this.cancelRotation }
@@ -272,28 +392,51 @@ export default {
           title: this.$t('Status'),
           attrs: { label: this.$t('Refresh'), disabled: this.actionLoading },
           callbacks: { click: this.refresh }
+        },
+        {
+          title: this.$t('PamPrecheck'),
+          has: !!this.object.precheck?.execution_id && this.$hasPerm('accounts.verify_account'),
+          attrs: { label: this.$t('View') },
+          callbacks: { click: () => openTaskPage(this.object.precheck.execution_id) }
         }
       ]
     }
   },
   methods: {
+    schedulePrecheckRefresh() {
+      clearTimeout(this.precheckTimer)
+      if (this.disposed || this.object.precheck?.status !== 'checking') return
+      this.precheckTimer = setTimeout(async () => {
+        try {
+          const id = this.object.id
+          const updated = await getApplicationCredential(id)
+          if (this.disposed || this.object.id !== id) return
+          this.$emit('updated', updated)
+          await this.$nextTick()
+          this.schedulePrecheckRefresh()
+        } catch (_) {
+          // The shared request handler displays the error; manual refresh remains available.
+        }
+      }, 3000)
+    },
     formatDate(value) {
       return value ? toSafeLocalDateStr(value) : '-'
     },
     async advanceRotation() {
       const createTask = this.object.status === 'ready_for_change'
-      if (createTask && !this.$hasPerm('accounts.add_changesecretautomation')) return
+      if (createTask) {
+        if (this.object.rotation?.automation_id) return this.executeSavedTask()
+        return this.openChangeSecretForm()
+      }
       this.actionLoading = true
       try {
         const updated = await advanceApplicationCredentialRotation(this.object)
         this.$emit('updated', updated)
-        if (createTask) {
-          await this.openChangeSecretForm()
-          return
+        if (updated.status !== this.object.status) {
+          this.$message.success(
+            updated.status === 'idle' ? this.$t('RotationCompleted') : this.$t('StepCompleted')
+          )
         }
-        this.$message.success(
-          updated.status === 'idle' ? this.$t('RotationCompleted') : this.$t('StepCompleted')
-        )
       } catch (error) {
         if (error.response?.data?.blockers) await this.refresh()
       } finally {
@@ -304,13 +447,50 @@ export default {
       if (!this.$hasPerm('accounts.add_changesecretautomation')) return
       return this.$router.push({
         name: 'AccountChangeSecretCreate',
-        query: { application_credential: this.object.id }
+        query: {
+          application_credential: this.object.id,
+          credential_rotation: this.object.rotation?.id
+        }
       })
     },
-    async cancelRotation() {
+    async executeSavedTask() {
       this.actionLoading = true
       try {
-        const updated = await cancelApplicationCredentialRotation(this.object.id)
+        await executeCredentialChange(this.object.rotation.automation_id)
+        await this.refresh()
+      } finally {
+        this.actionLoading = false
+      }
+    },
+    async retryChange() {
+      const { value } = await this.$prompt(this.$t('PamChangeReason'), this.$t('Retry'), {
+        inputValidator: (value) => !!value?.trim(),
+        inputErrorMessage: this.$t('PamChangeReason')
+      })
+      this.actionLoading = true
+      try {
+        await retryCredentialChange(this.object.id, this.object.rotation.execution_id, value.trim())
+        await this.refresh()
+      } finally {
+        this.actionLoading = false
+      }
+    },
+    async cancelRotation() {
+      let reason = ''
+      if (this.object.status === 'change_failed') {
+        const { value } = await this.$prompt(
+          this.$t('PamChangeReason'),
+          this.$t('CancelRotation'),
+          {
+            inputValidator: (value) => !!value?.trim(),
+            inputErrorMessage: this.$t('PamChangeReason')
+          }
+        )
+        reason = value.trim()
+      }
+      this.actionLoading = true
+      try {
+        const updated = await cancelApplicationCredentialRotation(this.object.id, reason)
         this.$emit('updated', updated)
         this.$message.success(this.$t('UpdateSuccessMsg'))
       } finally {
