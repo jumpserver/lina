@@ -1,5 +1,5 @@
 <template>
-  <BaseTicketList v-bind="$data" :url="url" />
+  <BaseTicketList v-bind="$data" :url="url" show-approvers />
 </template>
 
 <script>
