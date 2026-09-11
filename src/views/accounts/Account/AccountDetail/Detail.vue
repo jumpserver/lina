@@ -213,7 +213,7 @@ export default {
             change: (value) => {
               const relationUrl = `/api/v1/accounts/accounts/${this.object.id}/`
               return this.$axios.patch(relationUrl, {
-                su_from: value,
+                su_from: value || null,
                 name: this.object.name
               })
             }

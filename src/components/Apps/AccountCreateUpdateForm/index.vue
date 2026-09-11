@@ -167,6 +167,11 @@ export default {
       if (!form.secret) {
         delete form['secret']
       }
+
+      if (form.su_from === '' || form.su_from === undefined) {
+        form.su_from = null
+      }
+
       if (this.account?.name) {
         if (this.account.payload && this.account.payload === 'pam_account_clone') {
           this.$emit('add', form)
