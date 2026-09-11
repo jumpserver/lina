@@ -2028,6 +2028,7 @@
   "UPPER_CASE_REQUIRED": "大文字を含む必要があります",
   "UnFavoriteSucceed": "お気に入りを解除しました",
   "UnSyncCount": "未同期化",
+  "UnsavedChangesConfirmMessage": "変更内容は保存されていません。この画面を閉じると失われます。閉じてもよろしいですか？",
   "UnavailableAccount": "使用不可アカウント",
   "Unbind": "解除",
   "UnbindHelpText": "このユーザーはローカル認証源であり、解除できません",

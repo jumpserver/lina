@@ -2019,6 +2019,7 @@
   "UPPER_CASE_REQUIRED": "須包含大寫字母",
   "UnFavoriteSucceed": "取消收藏成功",
   "UnSyncCount": "未同步",
+  "UnsavedChangesConfirmMessage": "修改尚未儲存，關閉彈窗後將會遺失。確定要關閉嗎？",
   "UnavailableAccount": "不可用帳號",
   "Unbind": "解綁",
   "UnbindHelpText": "本地用戶為此認證來源用戶，無法解綁",

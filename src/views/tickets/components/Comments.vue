@@ -26,7 +26,7 @@
         <el-form-item style="float: right">
           <template v-if="hasActionPerm && !isAuditRoute">
             <el-button
-              :disabled="isDisabled || object.status.value === 'closed'"
+              :disabled="isDisabled || isClosed"
               size="small"
               type="primary"
               @click="handleApprove"
@@ -34,7 +34,7 @@
               <i class="fa fa-check" /> {{ $t('Accept') }}
             </el-button>
             <el-button
-              :disabled="isDisabled || object.status.value === 'closed'"
+              :disabled="isDisabled || isClosed"
               size="small"
               type="warning"
               @click="handleReject"
@@ -44,7 +44,7 @@
           </template>
           <el-button
             v-if="isSelfTicket && !isAuditRoute"
-            :disabled="isDisabled || object.status.value === 'closed'"
+            :disabled="isDisabled || isClosed"
             size="small"
             type="danger"
             @click="handleClose"
@@ -53,7 +53,7 @@
           </el-button>
           <el-button
             v-if="canComment && !isAuditRoute"
-            :disabled="object.status.value === 'closed'"
+            :disabled="isClosed"
             size="small"
             type="info"
             @click="handleComment"
@@ -96,7 +96,7 @@ export default {
   data() {
     return {
       isDisabled: false,
-      comments: '',
+      comments: [],
       type_api: '',
       imageUrl: getAssetUrl('img/avatar.png'),
       form: {
@@ -109,12 +109,16 @@ export default {
     isAuditRoute() {
       return this.$route.name === 'AuditTicketList'
     },
+    isClosed() {
+      return this.object.status?.value === 'closed'
+    },
     hasActionPerm() {
-      return (
-        this.object.process_map
-          .filter((item) => item.approval_level === this.object.approval_step.value)[0]
-          .assignees.indexOf(this.$store.state.users.profile.id) !== -1
+      const approvalLevel = this.object.approval_step?.value
+      const currentStep = (this.object.process_map || []).find(
+        (item) => item.approval_level === approvalLevel
       )
+      const profileId = this.$store.state.users.profile?.id
+      return (currentStep?.assignees || []).includes(profileId)
     },
     isSelfTicket() {
       const profile = this.$store.state.users.profile
@@ -130,7 +134,7 @@ export default {
     return useDateTime()
   },
   mounted() {
-    switch (this.object.type.value) {
+    switch (this.object.type?.value) {
       case 'login_confirm':
         this.type_api = 'apply-login-tickets'
         break

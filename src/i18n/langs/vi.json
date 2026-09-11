@@ -2063,6 +2063,7 @@
   "UPPER_CASE_REQUIRED": "Phải chứa chữ cái viết hoa",
   "UnFavoriteSucceed": "Hủy bỏ yêu thích thành công",
   "UnSyncCount": "Chưa đồng bộ",
+  "UnsavedChangesConfirmMessage": "Các thay đổi chưa được lưu và sẽ bị mất khi đóng cửa sổ này. Bạn có chắc muốn đóng không?",
   "UnavailableAccount": "Tài khoản không khả dụng",
   "Unbind": "Hủy liên kết",
   "UnbindHelpText": "Người dùng cục bộ là nguồn xác thực, không thể ngắt kết nối",

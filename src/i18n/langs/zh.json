@@ -1806,6 +1806,7 @@
   "UPPER_CASE_REQUIRED": "必须包含大写字母",
   "UnFavoriteSucceed": "取消收藏成功",
   "UnSyncCount": "未同步",
+  "UnsavedChangesConfirmMessage": "修改尚未保存，关闭弹窗后将会丢失。确定要关闭吗？",
   "UnavailableAccount": "不可用账号",
   "Unbind": "解绑",
   "UnbindHelpText": "本地用户为此认证来源用户，无法解绑",

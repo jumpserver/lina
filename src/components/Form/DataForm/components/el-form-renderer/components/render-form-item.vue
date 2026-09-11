@@ -193,7 +193,7 @@ export default {
     },
     componentProps() {
       const props = { ...this.data.el, ...this.propsInner }
-      if (this.isNestedServerError) {
+      if (this.isNestedServerError || this.data.passServerErrors) {
         props.errors = this.serverError
       }
       return props
@@ -243,6 +243,9 @@ export default {
       const fromAttrs = this.data?.attrs?.error
       if (fromAttrs) {
         return fromAttrs
+      }
+      if (this.data.passServerErrors) {
+        return ''
       }
       if (typeof this.serverError === 'string') {
         return this.serverError

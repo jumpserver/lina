@@ -1,8 +1,9 @@
 <template>
-  <GenericCreateUpdatePage v-bind="config" />
+  <GenericCreateUpdatePage ref="createUpdatePage" v-bind="config" />
 </template>
 
 <script>
+import { ElMessageBox } from 'element-plus'
 import { Select2 } from '@/components/Form/FormFields'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import SecretInput from './SecretInput.vue'
@@ -132,6 +133,30 @@ export default {
           }
           return payload
         }
+      }
+    }
+  },
+  methods: {
+    async beforeDrawerClose() {
+      const isUpdate = this.currentVersion !== null
+      const hasUnsavedChanges = this.$refs.createUpdatePage?.hasUnsavedChanges()
+      if (!isUpdate || !hasUnsavedChanges) {
+        return true
+      }
+
+      try {
+        await ElMessageBox.confirm(
+          this.$t('UnsavedChangesConfirmMessage'),
+          this.$t('CloseConfirm'),
+          {
+            type: 'warning',
+            confirmButtonText: this.$t('Close'),
+            cancelButtonText: this.$t('Cancel')
+          }
+        )
+        return true
+      } catch {
+        return false
       }
     }
   }
