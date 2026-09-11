@@ -252,6 +252,7 @@ export default {
       }
       return this.$axios
         .patch(`/api/v1/tickets/apply-asset-tickets/${this.object.id}/approve/`, {
+          flow_id: this.object.flow?.id,
           apply_nodes: nodes || [],
           apply_assets: assets || [],
           apply_accounts: accounts || [],

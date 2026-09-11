@@ -2063,6 +2063,7 @@
   "UPPER_CASE_REQUIRED": "Deve conter uma letra maiúscula",
   "UnFavoriteSucceed": "Desfavoritar com sucesso",
   "UnSyncCount": "Não sincronizado",
+  "UnsavedChangesConfirmMessage": "As alterações não foram salvas e serão perdidas ao fechar esta janela. Tem certeza de que deseja fechá-la?",
   "UnavailableAccount": " Conta indisponível ",
   "Unbind": "Desvincular",
   "UnbindHelpText": "O usuário local é o usuário desta fonte de autenticação, não pode ser desvinculado",

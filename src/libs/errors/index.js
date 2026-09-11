@@ -5,9 +5,8 @@ import { IS_DEV } from '@/utils/env'
  * 防止 Vue 3 中未捕获的错误导致整个应用崩溃
  *
  * @param {Object} app - Vue 应用实例
- * @param {Object} message - 消息提示服务对象
  */
-export function setupErrorHandler(app, message) {
+export function setupErrorHandler(app) {
   app.config.errorHandler = (err, instance, info) => {
     // 在开发环境下打印详细错误信息
     if (IS_DEV) {
@@ -20,21 +19,9 @@ export function setupErrorHandler(app, message) {
       console.error('Error info:', info)
     }
 
-    // 尝试显示友好的错误提示
-    try {
-      // 使用传入的 message 函数
-      if (message && typeof message.error === 'function') {
-        message.error(err?.message || 'An error occurred. Please refresh the page.')
-      } else {
-        // 如果 message 不可用，至少输出到控制台
-        console.error('Error details:', err)
-      }
-    } catch (e) {
-      // 如果 message 服务不可用，忽略
-      console.error('Failed to show error message:', e)
-    }
-
-    // 不重新抛出错误，防止应用完全崩溃
-    // 这样即使某个组件出错，其他部分仍可正常显示
+    // Do not render an Element Plus message from the global handler. If the
+    // exception came from ElMessage itself, doing so recursively creates new
+    // message instances and floods the console. Expected request/action errors
+    // already show contextual messages at their call sites.
   }
 }

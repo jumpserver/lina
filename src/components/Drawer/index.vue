@@ -111,7 +111,14 @@ export default {
     handleResizeEnd(_event, size) {
       this.drawerSize = this.drawerResize.persistDrawerWidth(size)
     },
-    handleClose(done) {
+    async handleClose(done) {
+      const dynamicComponent = this.$refs.dynamicComponent
+      if (typeof dynamicComponent?.beforeDrawerClose === 'function') {
+        const canClose = await dynamicComponent.beforeDrawerClose()
+        if (canClose === false) {
+          return
+        }
+      }
       this.$emit('close-drawer')
       done()
     }

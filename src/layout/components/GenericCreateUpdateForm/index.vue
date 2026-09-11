@@ -13,6 +13,7 @@
       :method="method"
       :url="iUrl"
       @after-remote-meta="handleAfterRemoteMeta"
+      @form-ready="handleFormReady"
       @submit="handleSubmit"
     />
   </div>
@@ -285,7 +286,8 @@ export default {
       actionId: '',
       row: {},
       method: 'post',
-      initialFormValue: {}
+      initialFormValue: {},
+      initialRenderedFormValue: null
     }
   },
   computed: {
@@ -324,6 +326,13 @@ export default {
     }
   },
   methods: {
+    hasUnsavedChanges() {
+      if (this.loading || this.initialRenderedFormValue === null) {
+        return false
+      }
+      const currentFormValue = this.$refs.form?.dataForm?.getFormValue()
+      return !_.isEqual(currentFormValue, this.initialRenderedFormValue)
+    },
     getDefaultResourceRoute(action) {
       const currentRouteName = String(this.$route.name || '')
       const routeName = currentRouteName.replace(/(List|Create|Update|Detail)$/, action)
@@ -400,6 +409,9 @@ export default {
       }
       this.$emit('afterRemoteMeta', meta)
       return result
+    },
+    handleFormReady(value) {
+      this.initialRenderedFormValue = _.cloneDeep(value)
     },
     handleSubmit(values, formName, addContinue) {
       let handler = this.onSubmit || this.defaultOnSubmit

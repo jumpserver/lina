@@ -1820,6 +1820,7 @@
   "UPPER_CASE_REQUIRED": "Must contain uppercase letters",
   "UnFavoriteSucceed": "Unfavorite Successful",
   "UnSyncCount": "Not synced",
+  "UnsavedChangesConfirmMessage": "Your changes have not been saved and will be lost if you close this window. Are you sure you want to close it?",
   "UnavailableAccount": "Unavailable account",
   "Unbind": "Unlink",
   "UnbindHelpText": "Local users are the source of this authentication and cannot be unbound",

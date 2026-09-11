@@ -37,7 +37,7 @@ export default {
     FormGroupHeader
   },
   inheritAttrs: false,
-  emits: ['submit', 'invalid', 'afterRemoteMeta', 'afterGenerateColumns'],
+  emits: ['submit', 'invalid', 'afterRemoteMeta', 'afterGenerateColumns', 'formReady'],
   props: {
     url: {
       type: String,
@@ -127,6 +127,8 @@ export default {
       // 初始化时清空错误
       this.serverErrors = {}
       this.loading = false
+      await this.$nextTick()
+      this.$emit('formReady', this.dataForm?.getFormValue() || this.iForm)
     },
     generateColumns() {
       const generator = new FormFieldGenerator()
@@ -255,7 +257,8 @@ export default {
     setErrors(errors) {
       const mapped = {}
       Object.entries(errors || {}).forEach(([k, v]) => {
-        mapped[k] = this.normalizeError(v)
+        const field = this.totalFields.find((item) => item.prop === k)
+        mapped[k] = this.normalizeError(v, field?.passServerErrors)
       })
       this.serverErrors = mapped
       const elForm = this._getElFormInstance()
@@ -268,13 +271,16 @@ export default {
         })
       }
     },
-    normalizeError(error) {
+    normalizeError(error, preserveListStructure = false) {
       // DRF nested serializers return objects such as
       // { meta: { SFTP_HOST: ['This field is required.'] } }.
       // Keep that structure so NestedField can route each message to its input.
       if (_.isPlainObject(error)) {
         return Object.fromEntries(
-          Object.entries(error).map(([key, value]) => [key, this.normalizeError(value)])
+          Object.entries(error).map(([key, value]) => [
+            key,
+            this.normalizeError(value, preserveListStructure)
+          ])
         )
       }
       // Join ordinary field messages while preserving the existing list-serializer fallback.
@@ -282,6 +288,9 @@ export default {
         return error.join('; ')
       }
       if (Array.isArray(error) && error.every((item) => _.isPlainObject(item))) {
+        if (preserveListStructure) {
+          return error.map((item) => this.normalizeError(item, true))
+        }
         const messages = []
         error.forEach((item) => {
           Object.values(item).forEach((value) => {
