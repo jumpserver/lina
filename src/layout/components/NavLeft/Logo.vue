@@ -2,10 +2,17 @@
   <div :class="{ collapse: collapse }" class="sidebar-logo-container">
     <transition name="sidebarLogoFade">
       <a v-if="collapse" key="collapse" class="sidebar-logo-link" @click="handleClick">
-        <img :src="logoSrc" alt="logo" class="sidebar-logo" />
+        <LogoSymbol v-if="isDefaultSymbol" class="sidebar-logo" />
+        <img v-else :src="logoSrc" alt="logo" class="sidebar-logo" />
       </a>
       <a v-else key="expand" class="sidebar-logo-link" @click="handleClick">
-        <img :src="logoTextSrc" alt="logo" class="sidebar-logo-text" />
+        <span
+          class="sidebar-logo-artwork"
+          :class="{ 'has-animated-symbol': logoTextSrc === defaultLogo }"
+        >
+          <img :src="logoTextSrc" alt="logo" class="sidebar-logo-text" />
+          <LogoSymbol v-if="logoTextSrc === defaultLogo" class="sidebar-logo-symbol" />
+        </span>
       </a>
     </transition>
   </div>
@@ -15,9 +22,12 @@
 import { mapGetters } from 'vuex'
 import { getFirstAccessibleChildPath } from '@/utils/vue'
 import defaultLogo from '@/assets/img/logo_text_white_spaced.png'
+import LogoSymbol from './LogoSymbol.vue'
+import { isDefaultInterfaceLogo } from '@/utils/interfaceLogo'
 
 export default {
   name: 'SidebarLogo',
+  components: { LogoSymbol },
   props: {
     collapse: {
       type: Boolean,
@@ -25,17 +35,19 @@ export default {
     }
   },
   data() {
-    return {}
+    return { defaultLogo }
   },
   computed: {
     ...mapGetters(['viewRoutes', 'publicSettings']),
-    // eslint-disable-next-line vue/return-in-computed-property
     logoTextSrc() {
-      const logoIndex = this.publicSettings['INTERFACE']['logo_index']
-      return logoIndex?.includes('logo_text_white.svg') ? defaultLogo : logoIndex
+      const logoIndex = this.publicSettings.INTERFACE?.logo_index
+      return isDefaultInterfaceLogo(logoIndex) ? defaultLogo : logoIndex.trim()
+    },
+    isDefaultSymbol() {
+      return isDefaultInterfaceLogo(this.logoSrc)
     },
     logoSrc() {
-      return this.publicSettings['INTERFACE']['logo_logout']
+      return this.publicSettings.INTERFACE?.logo_logout?.trim()
     }
   },
   created() {},
@@ -88,6 +100,7 @@ export default {
     display: inline-block;
 
     & .sidebar-logo {
+      color: #fff;
       width: 32px;
       height: 32px;
       vertical-align: middle;
@@ -95,7 +108,29 @@ export default {
     }
 
     & .sidebar-logo-text {
+      display: block;
       height: calc(#{$headerHeight} - 10px);
+    }
+
+    & .sidebar-logo-artwork {
+      position: relative;
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    & .has-animated-symbol .sidebar-logo-text {
+      // Keep the original wordmark; the SVG replaces only the bitmap symbol.
+      clip-path: inset(0 0 0 19.52%);
+    }
+
+    & .sidebar-logo-symbol {
+      position: absolute;
+      top: 0;
+      left: 1.5244%;
+      width: 16.4634%;
+      height: 100%;
+      color: #fff;
+      pointer-events: none;
     }
 
     & .sidebar-title {
