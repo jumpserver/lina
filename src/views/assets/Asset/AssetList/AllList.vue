@@ -42,6 +42,8 @@ export default {
       showPlatform: false,
       category: 'all',
       treeSetting: {
+        treeTitle: this.$t('AssetTree'),
+        treeIcon: 'fa-solid fa-sitemap',
         url: '/api/v1/assets/assets/',
         showMenu: !this.$store.getters.currentOrgIsRoot,
         showAssetScope: true,
