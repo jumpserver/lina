@@ -29,6 +29,7 @@ export default {
       ],
       addFieldsMeta: {
         allowed_urls: {
+          hidden: () => !this.$hasLicense(),
           label: this.$t('WebAllowedSites'),
           helpText: this.$t('WebAllowedSitesHelp'),
           required: false,
@@ -63,16 +64,16 @@ export default {
         interactive_selector: {
           required: false,
           rules: [],
-          hidden: (formValue) => formValue['autofill'] !== 'basic'
+          hidden: (formValue) => !this.$hasLicense() || formValue['autofill'] !== 'basic'
         },
         success_selector: {
           required: false,
           rules: [],
-          hidden: (formValue) => formValue['autofill'] !== 'basic'
+          hidden: (formValue) => !this.$hasLicense() || formValue['autofill'] !== 'basic'
         },
         script: {
           helpText: this.$t('WebScriptStepsHelp'),
-          hidden: (formValue) => formValue['autofill'] !== 'script'
+          hidden: (formValue) => !this.$hasLicense() || formValue['autofill'] !== 'script'
         }
       }
     }

@@ -46,8 +46,12 @@ export default {
               'RDS_RemoteAppLogoffTimeLimit'
             ],
             fieldsMeta: {
+              WEB_APPLET_RECORDING_ENABLED: {
+                hidden: () => !this.$hasLicense()
+              },
               WEB_PROXY_URL: {
-                hidden: (formValue) => !formValue['WEB_APPLET_RECORDING_ENABLED']
+                hidden: (formValue) =>
+                  !this.$hasLicense() || !formValue['WEB_APPLET_RECORDING_ENABLED']
               },
               RDS_LicenseServer: {
                 hidden: (formValue) => !formValue['RDS_Licensing']
