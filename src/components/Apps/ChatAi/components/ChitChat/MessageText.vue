@@ -27,7 +27,10 @@ let copyTimer = null
 let copiedButton = null
 let copiedButtonLabel = ''
 
-function codeBlock(source, language) {
+function codeBlock(source, info) {
+  const language = String(info || '')
+    .trim()
+    .split(/\s+/u)[0]
   const lang = language && hljs.getLanguage(language) ? language : ''
   const highlighted = lang
     ? hljs.highlight(source, { language: lang }).value
@@ -40,15 +43,19 @@ function codeBlock(source, language) {
       <button class="ai-code-block__copy" type="button">${t('Copy')}</button>
     </div>
     <pre><code class="hljs ${lang}">${highlighted}</code></pre>
-  </div>`
+  </div>\n`
 }
 
 const markdown = new MarkdownIt({
   html: false,
   linkify: true,
-  breaks: true,
-  highlight: codeBlock
+  breaks: true
 })
+
+markdown.renderer.rules.fence = (tokens, index) => {
+  const token = tokens[index]
+  return codeBlock(token.content, token.info)
+}
 
 markdown.use(linkAttributes, {
   attrs: {
@@ -93,6 +100,7 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 .message-text {
+  width: 100%;
   min-width: 0;
   color: inherit;
   font-size: 14px;
@@ -101,6 +109,7 @@ onBeforeUnmount(() => {
 }
 
 .markdown-body {
+  width: 100%;
   min-width: 0;
   color: inherit;
   background: transparent;
@@ -203,6 +212,7 @@ onBeforeUnmount(() => {
   }
 
   &:deep(.ai-code-block) {
+    max-width: 100%;
     margin: 11px 0;
     overflow: hidden;
     border: 1px solid rgb(255 255 255 / 7%);
@@ -253,6 +263,9 @@ onBeforeUnmount(() => {
 
     code {
       display: block;
+      box-sizing: border-box;
+      width: max-content;
+      min-width: 100%;
       padding: 12px 14px;
       background: transparent;
       font-family: ui-monospace, SFMono-Regular, Menlo, monospace;

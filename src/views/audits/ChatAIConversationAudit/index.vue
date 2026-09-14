@@ -521,6 +521,8 @@ onBeforeUnmount(() => {
 
 .audit-message {
   box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
   max-width: min(92%, 1080px);
   padding: 15px 17px;
   border: 1px solid var(--audit-border, #e9ecef);
@@ -529,6 +531,7 @@ onBeforeUnmount(() => {
   box-shadow: 0 3px 12px rgb(38 53 48 / 5%);
 
   &.is-user {
+    width: fit-content;
     max-width: min(78%, 760px);
     margin-left: auto;
     border-color: #cceae2;
@@ -553,6 +556,7 @@ onBeforeUnmount(() => {
 }
 
 .audit-message__content {
+  min-width: 0;
   color: #303733;
   font-size: 13px;
   line-height: 1.7;
