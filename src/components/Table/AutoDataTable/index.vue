@@ -117,6 +117,13 @@ export default {
       }
       if (!this.inited) {
         this.iConfig = { ...next, columns: this.iConfig.columns }
+        // Some lists receive their URL from the parent's mounted hook. Their
+        // initial metadata load is skipped, so initialize the columns when the
+        // URL first becomes available instead of leaving an empty table.
+        if (!previous?.url) {
+          this.optionUrlMetaAndGenCols()
+          return
+        }
         // Search initialization can resolve saved filters while OPTIONS is
         // pending. Replace the speculative request before revealing its rows.
         if (next.url === previous.url && !_.isEqual(next.extraQuery, previous.extraQuery)) {
