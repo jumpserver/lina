@@ -267,7 +267,9 @@ export default {
   },
   methods: {
     hasEditPerm() {
-      return this.$hasPerm('xpack.change_account') && this.$hasPerm('xpack.change_syncinstancetask')
+      return (
+        this.$hasPerm('xpack.change_cloudaccount') && this.$hasPerm('xpack.change_syncinstancetask')
+      )
     },
     updateTaskData(data) {
       this.$axios
