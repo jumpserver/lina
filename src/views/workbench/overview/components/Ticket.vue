@@ -6,6 +6,7 @@
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import i18n from '@/i18n/i18n'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
+import { getTicketTypeLabel } from '@/views/tickets/const'
 import { mapGetters } from 'vuex'
 import HomeCard from './HomeCard'
 export default {
@@ -63,7 +64,7 @@ export default {
             label: i18n.global.t('Type'),
             width: '130px',
             formatter: (row) => {
-              return row.type.label
+              return getTicketTypeLabel(row.type)
             }
           },
           status: {
