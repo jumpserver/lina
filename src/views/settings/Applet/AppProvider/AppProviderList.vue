@@ -78,8 +78,7 @@ export default {
         createRoute: 'AppProviderCreate',
         hasRefresh: true,
         hasExport: false,
-        hasImport: false,
-        canBulkDelete: false
+        hasImport: false
       }
     }
   },
