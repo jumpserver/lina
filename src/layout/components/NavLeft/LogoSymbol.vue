@@ -27,18 +27,18 @@
 
 <style scoped>
 .logo-symbol-s {
-  animation: logo-reveal-s 450ms ease-out both;
+  animation: logo-reveal-s 200ms ease-out both;
 }
 
 .logo-symbol-arrows {
-  animation: logo-reveal-arrows 450ms 450ms ease-out both;
+  animation: logo-reveal-arrows 200ms 200ms ease-out both;
 }
 
 .logo-symbol-outline {
   /* Override the global path fill rule so the outline stays hollow. */
   fill: none !important;
   stroke-dasharray: 1;
-  animation: logo-draw-outline 850ms 950ms ease-in-out both;
+  animation: logo-draw-outline 400ms 450ms ease-in-out both;
 }
 
 @keyframes logo-reveal-s {
