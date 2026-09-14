@@ -1,6 +1,11 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm submit-method="patch" v-bind="config" />
+    <GenericCreateUpdateForm
+      submit-method="patch"
+      v-bind="config"
+      @afterGenerateColumns="onColumnsGenerated"
+      @input="onFormInput"
+    />
     <WatermarkHelpDialog :variables="sessionVariables" :visible.sync="showSessionHelpDialog" />
     <WatermarkHelpDialog :variables="consoleVariables" :visible.sync="showConsoleHelpDialog" />
   </IBox>
@@ -15,7 +20,12 @@ export default {
   name: 'SessionSecurity',
   components: { GenericCreateUpdateForm, IBox, WatermarkHelpDialog },
   data() {
+    const lifetimeField = () => ({
+      helpTextAsTip: true,
+      helpTextAsPlaceholder: false
+    })
     return {
+      reusableExpirationField: null,
       showSessionHelpDialog: false,
       showConsoleHelpDialog: false,
       sessionVariables: [
@@ -42,9 +52,25 @@ export default {
             [
               'SECURITY_SESSION_SHARE',
               'SESSION_EXPIRE_AT_BROWSER_CLOSE',
+              'SESSION_COOKIE_AGE',
               'VIEW_ASSET_ONLINE_SESSION_INFO',
               'SECURITY_MAX_IDLE_TIME',
               'SECURITY_MAX_SESSION_TIME'
+            ]
+          ],
+          [
+            this.$t('ConnectionCredentials'),
+            [
+              'CONNECTION_TOKEN_REUSABLE',
+              'CONNECTION_TOKEN_ONETIME_EXPIRATION',
+              'CONNECTION_TOKEN_REUSABLE_EXPIRATION'
+            ]
+          ],
+          [
+            this.$t('ClientLogin'),
+            [
+              'OAUTH2_PROVIDER_ACCESS_TOKEN_EXPIRE_SECONDS',
+              'OAUTH2_PROVIDER_REFRESH_TOKEN_EXPIRE_SECONDS'
             ]
           ],
           [
@@ -62,6 +88,15 @@ export default {
           ]
         ],
         fieldsMeta: {
+          SESSION_COOKIE_AGE: lifetimeField(),
+          CONNECTION_TOKEN_REUSABLE: {
+            helpTextAsTip: true,
+            helpTextAsPlaceholder: false
+          },
+          CONNECTION_TOKEN_ONETIME_EXPIRATION: lifetimeField(),
+          CONNECTION_TOKEN_REUSABLE_EXPIRATION: lifetimeField(),
+          OAUTH2_PROVIDER_ACCESS_TOKEN_EXPIRE_SECONDS: lifetimeField(),
+          OAUTH2_PROVIDER_REFRESH_TOKEN_EXPIRE_SECONDS: lifetimeField(),
           SECURITY_WATERMARK_SESSION_CONTENT: {
             helpTextFormatter: () => {
               const handleClick = () => {
@@ -109,11 +144,26 @@ export default {
             if (res) {
               this.$message.success(this.$t('UpdateSuccessMsg'))
               this.$store.commit('settings/SET_SECURITY_WATERMARK_ENABLED', res['SECURITY_WATERMARK_ENABLED'])
+              this.$store.commit('settings/SET_PUBLIC_SETTINGS', {
+                ...this.$store.getters.publicSettings,
+                CONNECTION_TOKEN_REUSABLE: res.CONNECTION_TOKEN_REUSABLE
+              })
             }
           } catch (error) {
             throw new Error(error)
           }
         }
+      }
+    }
+  },
+  methods: {
+    onColumnsGenerated(fields) {
+      this.reusableExpirationField = fields.find(field => field.id === 'CONNECTION_TOKEN_REUSABLE_EXPIRATION')
+      this.$set(this.reusableExpirationField.el, 'disabled', true)
+    },
+    onFormInput(values) {
+      if (this.reusableExpirationField) {
+        this.reusableExpirationField.el.disabled = !values.CONNECTION_TOKEN_REUSABLE
       }
     }
   }

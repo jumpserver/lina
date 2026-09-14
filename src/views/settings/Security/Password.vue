@@ -6,6 +6,7 @@
       :has-detail-in-msg="false"
       :submit-method="submitMethod"
       :url="url"
+      @submitSuccess="submitSuccess"
     />
   </IBox>
 
@@ -42,9 +43,17 @@ export default {
             'SECURITY_PASSWORD_UPPER_CASE', 'SECURITY_PASSWORD_LOWER_CASE',
             'SECURITY_PASSWORD_NUMBER', 'SECURITY_PASSWORD_SPECIAL_CHAR'
           ]
+        ],
+        [
+          this.$t('AssetAccountPasswordProtection'),
+          ['SECURITY_ACCOUNT_SECRET_READ']
         ]
       ],
       fieldsMeta: {
+        SECURITY_ACCOUNT_SECRET_READ: {
+          helpTextAsTip: true,
+          helpTextAsPlaceholder: false
+        },
         SECURITY_LEAK_PASSWORD_LIST: {
           component: LeakPasswords,
           label: this.$t('LeakPasswordList')
@@ -54,6 +63,12 @@ export default {
     }
   },
   methods: {
+    submitSuccess(res) {
+      this.$store.commit('settings/SET_PUBLIC_SETTINGS', {
+        ...this.$store.getters.publicSettings,
+        SECURITY_ACCOUNT_SECRET_READ: res.SECURITY_ACCOUNT_SECRET_READ
+      })
+    },
     submitMethod() {
       return 'patch'
     },
