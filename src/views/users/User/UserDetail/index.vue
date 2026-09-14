@@ -6,7 +6,7 @@
     v-on="$listeners"
   >
     <keep-alive>
-      <component :is="config.activeMenu" :object="user" />
+      <component :is="config.activeMenu" :object.sync="user" />
     </keep-alive>
   </GenericDetailPage>
 </template>

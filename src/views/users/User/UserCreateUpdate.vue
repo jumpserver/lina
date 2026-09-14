@@ -18,15 +18,19 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import { PhoneInput, UserPassword } from '@/components/Form/FormFields'
 import rules from '@/components/Form/DataForm/rules'
 import { MFALevel, MFASystemSetting } from '../const'
+import { confirmDisableUsers } from './activation'
 
 export default {
   components: {
     GenericCreateUpdatePage
   },
   data() {
+    const vm = this
     const roleManage = this.$t('RoleManage')
     return {
       loading: true,
+      activationUser: null,
+      systemAdminRoleId: null,
       initial: {
         need_update_password: true,
         system_roles: [],
@@ -189,6 +193,22 @@ export default {
           el: {}
         }
       },
+      async onSubmit(values, formName, addContinue) {
+        if (this.isSubmitting) return
+        if (this.isUpdateMethod() && values.is_active === false) {
+          const user = {
+            ...vm.activationUser,
+            is_superuser: vm.activationUser?.is_superuser || values.system_roles?.includes(vm.systemAdminRoleId)
+          }
+          this.isSubmitting = true
+          try {
+            if (!await confirmDisableUsers(vm, [user])) return
+          } finally {
+            this.isSubmitting = false
+          }
+        }
+        return this.defaultOnSubmit(values, formName, addContinue)
+      },
       submitMethod() {
         const params = this.$route.params
         if (params.id) {
@@ -240,6 +260,9 @@ export default {
   methods: {
     afterGetUser(user) {
       this.user = user
+      this.activationUser = {
+        id: user.id, username: user.username, is_active: user.is_active, is_superuser: user.is_superuser
+      }
       if (this.user.id === this.currentUser.id) {
         const fieldsToUpdate = ['system_roles', 'org_roles', 'is_active']
         fieldsToUpdate.forEach(field => {
@@ -256,6 +279,7 @@ export default {
     },
     async setDefaultRoles() {
       const roles = await this.$axios.get('/api/v1/rbac/roles/')
+      this.systemAdminRoleId = roles.find(role => role.name === 'SystemAdmin')?.id
       this.initial.system_roles = roles.filter(role => role.name === 'User').map(role => role.id)
       this.initial.org_roles = roles.filter(role => role.name === 'OrgUser').map(role => role.id)
     },

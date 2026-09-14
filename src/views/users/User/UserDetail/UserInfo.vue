@@ -22,6 +22,7 @@ import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import store from '@/store'
 import { MFASystemSetting } from '@/views/users/const'
+import { confirmDisableUsers } from '../activation'
 
 export default {
   name: 'UserInfo',
@@ -46,19 +47,28 @@ export default {
           type: 'switch',
           attrs: {
             model: this.object.is_active,
-            disabled: !vm.$hasPerm('users.change_user')
+            disabled: !vm.$hasPerm('users.change_user') || vm.object.id === vm.$store.getters.currentUser.id
           },
           callbacks: {
-            change: function(v, item) {
+            change: async function(v, item) {
+              const previous = vm.object.is_active
+              item.attrs.disabled = true
               const url = `/api/v1/users/users/${vm.object.id}/`
               const data = { is_active: v }
-              vm.$axios.patch(url, data).catch(() => {
-                item.attrs.model = !v
-              }).then(res => {
+              try {
+                if (!v && !await confirmDisableUsers(vm, [vm.object])) {
+                  item.attrs.model = previous
+                  return
+                }
+                const res = await vm.$axios.patch(url, data)
+                item.attrs.model = res.is_active
+                vm.$emit('update:object', { ...vm.object, is_active: res.is_active })
                 vm.$message.success(vm.$t('UpdateSuccessMsg'))
-              }).catch(err => {
-                vm.$message.error(vm.$t('UpdateErrorMsg' + ' ' + err))
-              })
+              } catch (err) {
+                item.attrs.model = previous
+              } finally {
+                item.attrs.disabled = !vm.$hasPerm('users.change_user') || vm.object.id === vm.$store.getters.currentUser.id
+              }
             }
           }
         },

@@ -32,6 +32,7 @@ import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.
 import store from '@/store'
 import { MFASystemSetting } from '../const'
 import DetailFormatter from '@/components/Table/TableFormatters/DetailFormatter.vue'
+import { confirmDisableUsers } from './activation'
 
 export default {
   components: {
@@ -447,7 +448,7 @@ export default {
     reloadTable() {
       this.$refs.GenericListPage.reloadTable()
     },
-    bulkActionCallback(selectedRows, reloadTable, actionType) {
+    async bulkActionCallback(selectedRows, reloadTable, actionType) {
       const msgs = {
         'disable': 'DisableSuccessMsg',
         'activate': 'ActivateSuccessMsg',
@@ -460,6 +461,7 @@ export default {
         return { id: row.id, is_active: actionType === 'activate' }
       })
       if (data.length === 0) return
+      if (actionType === 'disable' && !await confirmDisableUsers(this, selectedRows)) return
       this.$axios.patch(url, data).then(() => {
         reloadTable()
         vm.$message.success(vm.$t(msgs[actionType]))
