@@ -8,6 +8,7 @@
         :config="iConfig"
         @column-pin-toggle="toggleColumnPin"
         @filter-change="filterChange"
+        @header-dragend="handleColumnResize"
         @loaded="handleLoaded"
       />
     </div>
@@ -32,6 +33,7 @@ import Sortable from 'sortablejs'
 import ColumnSettingPopover from './components/ColumnSettingPopover.vue'
 import { orderActionColumn, TableColumnsGenerator } from './utils'
 import { reorderColumnsByHeader } from './column-order'
+import { getRenderedColumnWidths } from './column-width'
 import _ from 'lodash'
 import { markRaw, toRaw } from 'vue'
 
@@ -90,6 +92,7 @@ export default {
       pinningMediaQuery: null,
       pinningDisabled: typeof window !== 'undefined' ? window.innerWidth < 992 : false,
       naturalColumnWidths: {},
+      resizedColumnWidths: {},
       pinnedColumnProps: [],
       columnConfigVersion: 0,
       columnConfigPending: false,
@@ -205,11 +208,22 @@ export default {
   },
   activated() {
     this.isDeactivated = false
-    this.$nextTick(() => this.setColumnDraggable())
+    this.$nextTick(() => {
+      this.setColumnDraggable()
+      this.scheduleColumnFit()
+    })
   },
   methods: {
     handleLoaded(payload) {
       this.$emit('loaded', payload)
+      this.$nextTick(() => this.scheduleColumnFit())
+    },
+    handleColumnResize(width, previousWidth, column) {
+      if (!column.property) {
+        return
+      }
+      this.resizedColumnWidths[column.property] = width
+      this.scheduleColumnFit()
     },
     initPinningMediaQuery() {
       if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
@@ -228,6 +242,9 @@ export default {
     },
     scheduleColumnFit(containerWidth) {
       this.cancelColumnFit()
+      if (this.isDeactivated || !this.$el?.isConnected) {
+        return
+      }
       this.columnResizeFrame = requestAnimationFrame(() => {
         this.columnResizeFrame = null
         this.fitColumnsToContainer(undefined, containerWidth)
@@ -258,6 +275,7 @@ export default {
         this.columnContainerWidth = containerWidth
       }
       this.fitColumnsToContainer(columns, containerWidth)
+      this.$nextTick(() => this.scheduleColumnFit())
     },
     fitColumnsToContainer(sourceColumns = this.iConfig.columns, observedWidth = 0) {
       if (
@@ -290,11 +308,15 @@ export default {
           : 0
       const availableWidth = Math.max(0, Math.floor(containerWidth - selectionWidth))
 
+      const contentWidths = getRenderedColumnWidths(this.$el, sourceColumns)
       const naturalColumns = sourceColumns.map((currentColumn) => {
         const col = { ...currentColumn }
         const naturalWidth = this.naturalColumnWidths[col.prop]
         if (naturalWidth) {
-          col.width = naturalWidth
+          const width =
+            this.resizedColumnWidths[col.prop] ??
+            Math.max(Number.parseFloat(naturalWidth) || 0, contentWidths[col.prop] || 0)
+          col.width = `${width}px`
           delete col.minWidth
         }
         return col
@@ -307,7 +329,9 @@ export default {
 
       let flexibleColumnIndexes = naturalColumns
         .map((col, index) => ({ col, index }))
-        .filter(({ col }) => !col.fixed && col.fitWidth !== false)
+        .filter(
+          ({ col }) => !col.fixed && col.fitWidth !== false && !this.resizedColumnWidths[col.prop]
+        )
         .map(({ index }) => index)
 
       // Compact-only views (for example, id + actions) have no naturally flexible
@@ -315,25 +339,22 @@ export default {
       // actions column still reaches the right edge of the table.
       if (naturalTotalWidth < availableWidth && flexibleColumnIndexes.length === 0) {
         const fallbackIndex = naturalColumns.findIndex(
-          (col) => col.prop !== 'actions' && !col.fixed
+          (col) => col.prop !== 'actions' && !col.fixed && !this.resizedColumnWidths[col.prop]
         )
         if (fallbackIndex !== -1) {
           flexibleColumnIndexes = [fallbackIndex]
         }
       }
       const flexibleColumnIndexSet = new Set(flexibleColumnIndexes)
-      const fixedTotalWidth = pixelWidths.reduce((total, width, index) => {
-        return flexibleColumnIndexSet.has(index) ? total : total + width
-      }, 0)
-      const flexibleTotalWidth = naturalTotalWidth - fixedTotalWidth
-      const flexibleAvailableWidth = Math.max(0, availableWidth - fixedTotalWidth)
-      const scale =
-        naturalTotalWidth < availableWidth && flexibleTotalWidth > 0
-          ? flexibleAvailableWidth / flexibleTotalWidth
-          : 1
+      // Share spare space evenly after satisfying content widths. Proportional
+      // scaling would keep giving the widest column the largest empty area.
+      const extraWidth =
+        flexibleColumnIndexes.length > 0
+          ? Math.max(0, availableWidth - naturalTotalWidth) / flexibleColumnIndexes.length
+          : 0
       const fittedColumns = naturalColumns.map((col, index) => {
         const isFlexible = flexibleColumnIndexSet.has(index)
-        const width = Math.floor(pixelWidths[index] * (isFlexible ? scale : 1))
+        const width = Math.floor(pixelWidths[index] + (isFlexible ? extraWidth : 0))
         col.width = `${width}px`
         return col
       })

@@ -379,26 +379,26 @@ export class TableColumnsGenerator {
       return col
     }
 
-    // `width` and `minWidth` are deliberate per-view sizing hints. Replacing a
-    // smaller configured value with the generic formatter default makes compact
-    // columns (for example account secrets and usernames) almost as wide as the
-    // primary column.
-    if (col.width != null || col.minWidth != null) {
+    // Fixed widths are deliberate. Flexible minimums must still fit the header;
+    // their preferred widths are measured from the rendered page after loading.
+    if (col.width != null) {
+      return col
+    }
+    if (col.minWidth != null) {
+      col.minWidth = `${Math.max(Number.parseFloat(col.minWidth) || 0, getColumnHeaderWidth(col))}px`
       return col
     }
 
     const formatterName = col.formatter?.name || col.formatter?.__name || ''
-    let typeWidth = 180
-    if (col.contentMaxWidth) {
-      typeWidth = col.contentMaxWidth
-    } else if (col.prop === 'name') {
-      typeWidth = 260
+    let typeWidth = 140
+    if (col.prop === 'name') {
+      typeWidth = 180
     } else if (col.prop === 'platform' || formatterName === 'PlatformFormatter') {
-      typeWidth = 220
+      typeWidth = 160
     } else if (formatterName === 'DateFormatter') {
       typeWidth = 190
     } else if (col.prop === 'labels' || col.prop === 'protocols' || col.isCustomRender) {
-      typeWidth = 280
+      typeWidth = 180
     }
 
     const preferredWidth = Math.max(getColumnHeaderWidth(col), typeWidth)

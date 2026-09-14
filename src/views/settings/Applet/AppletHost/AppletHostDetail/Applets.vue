@@ -47,6 +47,7 @@ export default {
           'applet.display_name': {
             label: this.$t('DisplayName'),
             width: '160px',
+            className: 'applet-display-name',
             formatter: DetailFormatter,
             formatterArgs: {
               drawer: true,
@@ -185,3 +186,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+:deep(.applet-display-name .icon) {
+  margin-right: 2px;
+}
+</style>
