@@ -11,6 +11,7 @@
 <script>
 import { GenericListPage } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import { getTicketFlowLabel } from '@/views/tickets/const'
 
 export default {
   name: 'TicketFlow',
@@ -63,10 +64,10 @@ export default {
                 }
               }),
               getDrawerTitle: ({ row }) => {
-                return row.name || row.type.label
+                return getTicketFlowLabel(row, vm.$t)
               },
               getTitle: function ({ row }) {
-                return row.name || row.type.label
+                return getTicketFlowLabel(row, vm.$t)
               }
             }
           },

@@ -14,6 +14,7 @@ import store from '@/store'
 import { getDaysFuture } from '@/utils/common/time'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
 import CcUsers from '@/views/tickets/components/CcUsers'
+import { getTicketFlowLabel } from '@/views/tickets/const'
 import { mapGetters, mapState } from 'vuex'
 
 export default {
@@ -235,7 +236,7 @@ export default {
         })
         this.flowOptions = flows
         this.fieldsMeta.flow_id.el.options = flows.map((flow) => ({
-          label: flow.name || flow.type.label,
+          label: getTicketFlowLabel(flow, this.$t),
           value: flow.id
         }))
         this.fieldsMeta.flow_id.el.disabled = flows.length <= 1
