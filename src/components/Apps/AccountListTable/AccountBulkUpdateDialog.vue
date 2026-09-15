@@ -86,7 +86,7 @@ export default {
         }
         delete this.formSetting.fieldsMeta[field]
       }
-      fields = fields.concat(['is_active', 'comment'])
+      fields = fields.concat(['secret_reset', 'is_active', 'comment'])
       for (const field of fields) {
         fieldsMeta[field] = this.formSetting.fieldsMeta[field]
       }
