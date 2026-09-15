@@ -46,7 +46,7 @@ export default {
         columnsMeta: {
           'applet.display_name': {
             label: this.$t('DisplayName'),
-            width: '160px',
+            minWidth: '160px',
             className: 'applet-display-name',
             formatter: DetailFormatter,
             formatterArgs: {
@@ -67,6 +67,7 @@ export default {
           },
           status: {
             label: this.$t('Status'),
+            width: '120px',
             formatter: (row) => {
               const typeMapper = {
                 pending: 'success',

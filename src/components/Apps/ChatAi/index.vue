@@ -59,7 +59,7 @@
               @pointerdown="startLauncherDrag"
               @keydown="handleLauncherKeyboardMove"
             >
-              <img :src="assistantIcon" alt="" draggable="false" />
+              <AssistantMark class="assistant-launcher__mark" />
             </button>
           </div>
 
@@ -73,7 +73,7 @@
             @click="showLauncher"
           >
             <span class="assistant-launcher-restore__surface">
-              <img :src="assistantIcon" alt="" draggable="false" />
+              <AssistantMark class="assistant-launcher__mark" />
             </span>
           </button>
         </Transition>
@@ -224,14 +224,13 @@ import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 import ElFocusTrap from 'element-plus/es/components/focus-trap/index.mjs'
 
-import { getAssetUrl } from '@/utils/assets'
 import AssistantWorkspace from './AssistantWorkspace.vue'
 import AssistantMark from './components/AssistantMark.vue'
 
 const EXPANDED_KEY = 'chat_ai_expanded'
 const LAUNCHER_HIDDEN_KEY = 'chat_ai_launcher_hidden'
 const LAUNCHER_Y_KEY = 'chat_ai_launcher_y'
-const LAUNCHER_HEIGHT = 45
+const LAUNCHER_HEIGHT = 43
 const LAUNCHER_GAP = 16
 const LAUNCHER_DRAG_THRESHOLD = 5
 const PANEL_RECT_KEY = 'chat_ai_panel_rect'
@@ -367,7 +366,6 @@ const panelCompact = computed(() => {
       : renderedPanelRect.value?.width || PANEL_DEFAULT_WIDTH
   return width <= PANEL_COMPACT_BREAKPOINT
 })
-const assistantIcon = getAssetUrl('img/robot-assistant.gif')
 const launcherInteraction = {
   pointerId: null,
   captureTarget: null,
@@ -1095,9 +1093,9 @@ onBeforeUnmount(() => {
 .assistant-launcher-wrap {
   position: fixed;
   top: var(--launcher-top);
-  right: 18px;
-  width: 45px;
-  height: 45px;
+  right: max(12px, env(safe-area-inset-right, 0px));
+  width: 43px;
+  height: 43px;
   pointer-events: auto;
 
   &:hover .assistant-launcher__hide,
@@ -1110,17 +1108,21 @@ onBeforeUnmount(() => {
 
 .assistant-launcher {
   display: grid;
-  width: 45px;
-  height: 45px;
+  width: 43px;
+  height: 43px;
   padding: 0;
-  border: 1px solid rgb(26 179 148 / 24%);
+  border: 1px solid color-mix(in srgb, var(--ai-primary) 24%, transparent);
   border-radius: 16px;
   color: var(--ai-text);
-  background: linear-gradient(145deg, #fff 10%, #e9f9f5 100%);
+  background: linear-gradient(
+    145deg,
+    #fff 10%,
+    color-mix(in srgb, var(--ai-primary) 10%, white) 100%
+  );
   box-shadow:
-    0 8px 18px rgb(16 72 62 / 20%),
+    0 8px 18px color-mix(in srgb, var(--ai-primary) 20%, transparent),
     inset 0 1px 0 rgb(255 255 255 / 95%),
-    inset 0 -2px 3px rgb(20 143 118 / 10%);
+    inset 0 -2px 3px color-mix(in srgb, var(--ai-primary) 10%, transparent);
   cursor: pointer;
   isolation: isolate;
   place-items: center;
@@ -1132,17 +1134,17 @@ onBeforeUnmount(() => {
     box-shadow 0.16s ease;
 
   &:hover {
-    border-color: rgb(26 179 148 / 48%);
+    border-color: color-mix(in srgb, var(--ai-primary) 48%, transparent);
     box-shadow:
-      0 11px 24px rgb(16 72 62 / 26%),
+      0 11px 24px color-mix(in srgb, var(--ai-primary) 26%, transparent),
       inset 0 1px 0 #fff,
-      inset 0 -2px 3px rgb(20 143 118 / 12%);
+      inset 0 -2px 3px color-mix(in srgb, var(--ai-primary) 12%, transparent);
   }
 
   &:active {
     box-shadow:
-      0 4px 10px rgb(16 72 62 / 18%),
-      inset 0 2px 4px rgb(20 143 118 / 14%);
+      0 4px 10px color-mix(in srgb, var(--ai-primary) 18%, transparent),
+      inset 0 2px 4px color-mix(in srgb, var(--ai-primary) 14%, transparent);
     transform: translateY(1px);
   }
 
@@ -1151,12 +1153,8 @@ onBeforeUnmount(() => {
     outline-offset: 3px;
   }
 
-  img {
-    display: block;
-    width: 26px;
-    height: auto;
-    filter: drop-shadow(0 2px 2px rgb(16 72 62 / 20%));
-    pointer-events: none;
+  &__mark {
+    --mark-size: 26px;
   }
 
   &__hide {
@@ -1216,8 +1214,8 @@ onBeforeUnmount(() => {
   top: calc(var(--launcher-top) - 1px);
   right: 0;
   display: block;
-  width: 45px;
-  height: 45px;
+  width: 43px;
+  height: 43px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -1230,7 +1228,7 @@ onBeforeUnmount(() => {
     right: 0;
     display: flex;
     width: 16px;
-    height: 45px;
+    height: 43px;
     align-items: center;
     overflow: hidden;
     box-sizing: border-box;
@@ -1238,25 +1236,27 @@ onBeforeUnmount(() => {
     border: 1px solid var(--ai-border);
     border-right: 0;
     border-radius: 10px 0 0 10px;
+    opacity: 0.55;
     background: #fff;
     box-shadow: 0 5px 16px rgb(24 43 38 / 16%);
     justify-content: flex-start;
     transition:
       width 0.18s ease,
+      opacity 0.18s ease,
       border-color 0.18s ease,
+      border-radius 0.18s ease,
       box-shadow 0.18s ease;
+  }
 
-    img {
-      width: 26px;
-      height: auto;
-      flex: 0 0 26px;
-      border-radius: 50%;
-    }
+  .assistant-launcher__mark {
+    margin-inline: auto;
   }
 
   &:hover &__surface,
   &:focus-visible &__surface {
     width: 43px;
+    opacity: 1;
+    border-radius: 16px 0 0 16px;
     border-color: var(--ai-primary);
     box-shadow: 0 8px 22px rgb(24 43 38 / 22%);
   }
@@ -1563,17 +1563,12 @@ onBeforeUnmount(() => {
 
 @media (max-width: 620px) {
   .assistant-launcher {
-    width: 45px;
-    height: 45px;
+    width: 43px;
+    height: 43px;
 
-    img {
-      width: 30px;
-      height: auto;
+    .assistant-launcher__mark {
+      --mark-size: 30px;
     }
-  }
-
-  .assistant-launcher-wrap {
-    right: 12px;
   }
 
   .assistant-panel,

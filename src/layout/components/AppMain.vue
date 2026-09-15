@@ -76,6 +76,12 @@ export default {
   position: relative;
   overflow: auto;
 
+  &,
+  :deep(.wrapper-content),
+  :deep(.tab-page-content) {
+    scrollbar-width: thin;
+  }
+
   // 路由可能经过多层 EmptyLayout。每层 shell 都必须继承主区高度，
   // 否则 Page 的 100% 会退化成内容高度，外层又出现第二根滚动条。
   :deep(.route-view-shell) {
