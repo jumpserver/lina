@@ -2428,5 +2428,9 @@
   "OfflineImageDeleteConfirm": "刪除離線映像封存檔「{filename}」？僅移除 Core 中的來源封存檔，不會解除安裝發佈機上已有的映像。",
   "OfflineImageUploadCancelled": "已取消上傳請求。請重新整理映像清單，確認封存檔是否已儲存。",
   "OfflineImageUploadTimeout": "上傳請求逾時。請重新整理映像清單確認結果，必要時重新上傳。",
-  "OfflineImageUploadNetworkError": "上傳連線中斷。請檢查網路，並重新整理映像清單確認結果後重試。"
+  "OfflineImageUploadNetworkError": "上傳連線中斷。請檢查網路，並重新整理映像清單確認結果後重試。",
+  "VirtualAppCreate": "建立虛擬應用",
+  "AppProviderCreate": "建立應用提供者",
+  "AppProviderUpdate": "更新應用提供者",
+  "BatchPublish": "批次發布"
 }

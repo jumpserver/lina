@@ -2438,5 +2438,9 @@
   "OfflineImageDeleteConfirm": "Delete the offline image archive \"{filename}\"? This removes only the source archive in Core. Images already loaded on application providers will remain.",
   "OfflineImageUploadCancelled": "Upload request cancelled. Refresh the image list to check whether the archive was saved.",
   "OfflineImageUploadTimeout": "The upload request timed out. Refresh the image list to check the result, then upload again if needed.",
-  "OfflineImageUploadNetworkError": "The upload connection was interrupted. Check your network and refresh the image list before retrying."
+  "OfflineImageUploadNetworkError": "The upload connection was interrupted. Check your network and refresh the image list before retrying.",
+  "VirtualAppCreate": "Create virtual app",
+  "AppProviderCreate": "Create application provider",
+  "AppProviderUpdate": "Update application provider",
+  "BatchPublish": "Batch publish"
 }

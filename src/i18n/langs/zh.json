@@ -2431,5 +2431,9 @@
   "OfflineImageDeleteConfirm": "删除离线镜像归档“{filename}”？仅移除 Core 中的源归档，不会卸载发布机上已有的镜像。",
   "OfflineImageUploadCancelled": "已取消上传请求。请刷新镜像列表，确认归档是否已保存。",
   "OfflineImageUploadTimeout": "上传请求超时。请刷新镜像列表确认结果，必要时重新上传。",
-  "OfflineImageUploadNetworkError": "上传连接中断。请检查网络，并刷新镜像列表确认结果后重试。"
+  "OfflineImageUploadNetworkError": "上传连接中断。请检查网络，并刷新镜像列表确认结果后重试。",
+  "VirtualAppCreate": "创建虚拟应用",
+  "AppProviderCreate": "创建应用提供者",
+  "AppProviderUpdate": "更新应用提供者",
+  "BatchPublish": "批量发布"
 }
