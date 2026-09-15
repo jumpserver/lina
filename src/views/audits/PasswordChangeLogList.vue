@@ -18,6 +18,9 @@ export default {
           default: ['user', 'change_by', 'remote_addr', 'datetime']
         },
         columnsMeta: {
+          user: {
+            label: this.$t('User')
+          },
           actions: {
             has: false
           }
@@ -29,7 +32,10 @@ export default {
         hasReportExport: true,
         hasDatePicker: true,
         searchConfig: {
-          getUrlQuery: true
+          getUrlQuery: true,
+          fieldLabels: {
+            user: this.$t('User')
+          }
         }
       }
     }

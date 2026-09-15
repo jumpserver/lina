@@ -33,6 +33,11 @@ export default {
             width: 100,
             formatterArgs: {
               async: true,
+              drawer: true,
+              route: 'UserGroupDetail',
+              routeQuery: {
+                tab: 'GroupUser'
+              },
               getItem(item) {
                 return item.is_service_account ? null : item.name
               }
