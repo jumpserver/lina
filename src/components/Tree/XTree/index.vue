@@ -2374,9 +2374,7 @@ export default {
       this.scheduleProgressiveAmountLoading()
     },
     async handleNodeCollapse(data) {
-      if (data?.id !== undefined && data?.id !== null) {
-        this.expandedNodeIds.delete(String(data.id))
-      }
+      this.clearCollapsedBranchState(data)
       if (this.searchMode && this.isNodeChildrenProjection(data)) {
         const node = this.$refs.tree?.getNode?.(data.id)
         if (node?.loaded) {
@@ -2389,6 +2387,28 @@ export default {
       }
       await this.$nextTick()
       this.rebuildProgressiveAmountWindow()
+    },
+    clearCollapsedBranchState(data) {
+      if (data?.id === undefined || data?.id === null) {
+        return
+      }
+      const visited = new Set()
+      const stack = [data]
+      while (stack.length) {
+        const node = stack.pop()
+        const key = String(node?.id ?? '')
+        if (!key || visited.has(key)) {
+          continue
+        }
+        visited.add(key)
+        this.expandedNodeIds.delete(key)
+
+        // A filtered child view may hide part of the loaded branch. Clear both
+        // the visible children and their remembered source so a hidden expanded
+        // descendant cannot make Element Plus reopen this collapsed ancestor.
+        const sourceChildren = this.nodeChildrenViewSources.get(key)?.children || []
+        stack.push(...(node.children || []), ...sourceChildren)
+      }
     },
     async collapseTreeStepwise() {
       const tree = this.$refs.tree
