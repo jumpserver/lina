@@ -1971,6 +1971,7 @@
   "Ticket": "工單",
   "TicketDetail": "工單詳情",
   "TicketFlow": "工單流",
+  "TicketFlowDeleted": "工單流已刪除",
   "TicketFlowCreate": "創建審批流",
   "TicketFlowUpdate": "更新審批流",
   "TicketList": "工單列表",

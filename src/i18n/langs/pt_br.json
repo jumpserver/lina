@@ -2015,6 +2015,7 @@
   "Ticket": "Pedido de trabalho",
   "TicketDetail": "Detalhes do pedido",
   "TicketFlow": "Fluxo de ordens de serviço",
+  "TicketFlowDeleted": "Fluxo de ordens de serviço excluído",
   "TicketFlowCreate": "Criar fluxo de aprovação",
   "TicketFlowUpdate": " Atualizar fluxo de aprovação",
   "TicketList": "Lista de Ordens de Serviço",

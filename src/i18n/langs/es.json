@@ -2015,6 +2015,7 @@
   "Ticket": "Orden de trabajo",
   "TicketDetail": "Detalles del ticket",
   "TicketFlow": "Flujo de trabajo",
+  "TicketFlowDeleted": "Flujo de trabajo eliminado",
   "TicketFlowCreate": "Crear flujo de aprobación",
   "TicketFlowUpdate": "Actualizar flujo de aprobación",
   "TicketList": "Lista de órdenes de trabajo",

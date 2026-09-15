@@ -1758,6 +1758,7 @@
   "Ticket": "工单",
   "TicketDetail": "工单详情",
   "TicketFlow": "工单流",
+  "TicketFlowDeleted": "流程已删除",
   "TicketFlowCreate": "创建审批流",
   "TicketFlowUpdate": "更新审批流",
   "TicketList": "工单列表",

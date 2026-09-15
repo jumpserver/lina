@@ -2015,6 +2015,7 @@
   "Ticket": "Система заявок",
   "TicketDetail": "Сведения о заяве",
   "TicketFlow": "Поток заявок",
+  "TicketFlowDeleted": "Поток заявок удалён",
   "TicketFlowCreate": "Создать поток одобрения",
   "TicketFlowUpdate": "Обновить поток одобрения",
   "TicketList": "Список заявок",
