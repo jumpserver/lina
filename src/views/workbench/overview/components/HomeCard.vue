@@ -1,5 +1,5 @@
 <template>
-  <div id="HomeCard">
+  <div class="home-card">
     <el-card class="box-card no-border" shadow="never">
       <template #header>
         <div v-show="title || btnText" class="clearfix">
@@ -65,42 +65,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#HomeCard {
+.home-card {
   position: relative;
   width: 100%;
-  background-color: #fff;
-  transition: all 0.4s ease;
-  overflow: hidden;
+  margin-bottom: 20px;
 
-  &:nth-child(n) {
-    margin-bottom: 20px;
+  // `.no-border` has a global bottom margin. Keep the spacing on this transparent
+  // wrapper instead, otherwise the white wrapper exposes a strip below the card.
+  > .box-card {
+    margin-bottom: 0;
   }
-
-  .fa {
-    position: absolute;
-    right: -4px;
-    top: -19px;
-  }
-
-  .fa:before {
-    font-size: 110px;
-    opacity: 0.1;
-  }
-
-  .others {
-    width: 100%;
-    height: auto;
-    text-align: center;
-
-    .icon {
-      text-align: center;
-      font-size: 30px;
-    }
-  }
-}
-
-.public-height {
-  min-height: 0.1px;
 }
 
 :deep(.el-card__body) {
