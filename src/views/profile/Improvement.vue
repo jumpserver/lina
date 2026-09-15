@@ -1,5 +1,9 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" @get-object-done="disableMFAFieldIfNeed" />
+  <GenericCreateUpdatePage
+    v-bind="$data"
+    @get-object-done="disableMFAFieldIfNeed"
+    @update:form="handleFormUpdate"
+  />
 </template>
 
 <script>
@@ -67,6 +71,7 @@ export default {
         }
       },
       hasReset: false,
+      canSubmit: false,
       cleanFormValue(value) {
         value = Object.assign({}, value, { is_first_login: false })
         if (value.mfa_level === 2) {
@@ -92,6 +97,9 @@ export default {
     }
   },
   methods: {
+    handleFormUpdate(value) {
+      this.canSubmit = value.terms === true
+    },
     disableMFAFieldIfNeed(user) {
       const adminUserIsNeed =
         (user?.is_superuser || user?.is_org_admin) &&
