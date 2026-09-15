@@ -16,6 +16,7 @@
         <span class="table-action-trigger">
           <el-button
             v-bind="getButtonProps(action)"
+            :class="{ 'is-icon-action': action.icon }"
             class="table-action-btn"
             @click="handleActionClick(action)"
           >
@@ -38,7 +39,7 @@
         @command="handleDropdownCommand"
       >
         <span class="table-action-trigger">
-          <el-button v-bind="moreButtonProps" class="table-action-btn more-action">
+          <el-button v-bind="moreButtonProps" class="table-action-btn is-icon-action more-action">
             <Icon :icon="moreActionIcon" class="pre-icon" />
           </el-button>
         </span>
@@ -487,8 +488,14 @@ export default {
     line-height: 14px;
     box-shadow: none;
 
-    &.more-action {
+    &.is-icon-action {
+      min-width: 28px;
       padding: 4px 6px;
+    }
+
+    &.more-action {
+      min-width: 26px;
+      padding: 4px 5px;
     }
 
     > span {
@@ -503,6 +510,8 @@ export default {
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      width: 14px;
+      height: 14px;
     }
 
     &.el-button--danger.is-plain.is-disabled {
