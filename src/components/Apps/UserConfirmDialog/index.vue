@@ -77,6 +77,7 @@
           <iframe v-if="passkeyVisible" :src="passkeyUrl" style="display: none" />
           <iframe
             v-if="isFaceCaptureVisible && subTypeSelected === 'face' && faceCaptureUrl"
+            ref="faceCaptureFrame"
             class="user-confirm-dialog__face-frame"
             :src="faceCaptureUrl"
             allow="camera"
@@ -156,6 +157,9 @@ export default {
       isFaceCaptureVisible: false,
       faceToken: null,
       faceCaptureUrl: null,
+      faceStatusTimer: null,
+      faceStatusRequestPending: false,
+      faceCaptureGeneration: 0,
       noCodeMFA: ['face', 'passkey'],
       sendCodeMFA: ['email', 'sms', 'otp'],
       passkeyVisible: false,
@@ -170,14 +174,17 @@ export default {
   },
   mounted() {
     this.$eventBus.$on('showConfirmDialog', this.performConfirm)
+    window.addEventListener('message', this.handleFaceCaptureMessage)
   },
   beforeUnmount() {
     this.$eventBus.$off('showConfirmDialog', this.performConfirm)
+    window.removeEventListener('message', this.handleFaceCaptureMessage)
+    this.stopFaceCapture()
   },
   methods: {
     handleSubTypeChange(val) {
       if (val !== 'face') {
-        this.isFaceCaptureVisible = false
+        this.stopFaceCapture()
       }
 
       this.inputPlaceholder = this.subTypeChoices.filter(
@@ -281,37 +288,85 @@ export default {
     },
     startFaceCapture() {
       const url = '/api/v1/authentication/face/context/'
+      this.stopFaceCapture()
+      const generation = this.faceCaptureGeneration
       this.$axios
         .post(url)
         .then((data) => {
+          if (generation !== this.faceCaptureGeneration) return
           const token = data['token']
-          this.faceCaptureUrl = '/facelive/capture?token=' + token
+          const uiIndex = window.location.pathname.indexOf('/ui/')
+          const sitePrefix = uiIndex > 0 ? window.location.pathname.slice(0, uiIndex) : ''
+          this.faceToken = token
+          this.faceCaptureUrl = `${sitePrefix}/luna/facelive/capture?token=${encodeURIComponent(token)}`
           this.isFaceCaptureVisible = true
 
-          const timer = setInterval(() => {
-            this.$axios.get(url + `?token=${token}`).then((data) => {
-              if (data['is_finished']) {
-                clearInterval(timer)
+          this.faceStatusTimer = setInterval(() => {
+            if (this.faceStatusRequestPending) return
+            this.faceStatusRequestPending = true
+            this.$axios
+              .get(url + `?token=${encodeURIComponent(token)}`)
+              .then((state) => {
+                if (generation !== this.faceCaptureGeneration) return
+                if (!state['is_finished']) return
+                this.clearFaceStatusTimer()
                 this.isFaceCaptureVisible = false
-                this.handleConfirm()
-              }
-            })
+                this.faceCaptureUrl = null
+                if (state['success']) {
+                  this.handleConfirm()
+                } else {
+                  this.$message.error(state['error_message'] || this.$tc('ConfirmFailed'))
+                }
+              })
+              .catch((error) => {
+                if (generation !== this.faceCaptureGeneration) return
+                if ([403, 404].includes(error.response?.status)) {
+                  this.stopFaceCapture()
+                  this.$message.error(this.$tc('FailedToStartFaceCapture'))
+                }
+              })
+              .finally(() => {
+                if (generation === this.faceCaptureGeneration) this.faceStatusRequestPending = false
+              })
           }, 1000)
         })
         .catch(() => {
+          if (generation !== this.faceCaptureGeneration) return
           this.$message.error(this.$tc('FailedToStartFaceCapture'))
         })
     },
     handleFaceCapture() {
       this.startFaceCapture()
     },
+    clearFaceStatusTimer() {
+      if (this.faceStatusTimer) {
+        clearInterval(this.faceStatusTimer)
+        this.faceStatusTimer = null
+      }
+      this.faceStatusRequestPending = false
+    },
+    stopFaceCapture() {
+      this.faceCaptureGeneration += 1
+      this.clearFaceStatusTimer()
+      this.faceToken = null
+      this.faceCaptureUrl = null
+      this.isFaceCaptureVisible = false
+    },
+    handleFaceCaptureMessage(event) {
+      const frame = this.$refs.faceCaptureFrame
+      if (!frame || event.source !== frame.contentWindow || !this.faceCaptureUrl) return
+      if (event.origin !== new URL(this.faceCaptureUrl, window.location.origin).origin) return
+      const message = event.data
+      if (message?.source === 'jumpserver-facelive' && message.event === 'retry_requested') {
+        this.startFaceCapture()
+      }
+    },
     resetDialogState() {
       this.secretValue = ''
       this.smsBtnText = this.$t('SendVerificationCode')
       this.smsBtnDisabled = false
       this.passkeyVisible = false
-      this.faceCaptureUrl = null
-      this.isFaceCaptureVisible = false
+      this.stopFaceCapture()
       this.processing = false
     },
     handleDialogClose() {
@@ -363,8 +418,7 @@ export default {
         })
         .catch((err) => {
           this.$message.error(err.message || this.$tc('ConfirmFailed'))
-          this.faceCaptureUrl = null
-          this.isFaceCaptureVisible = false
+          this.stopFaceCapture()
         })
     }
   }
