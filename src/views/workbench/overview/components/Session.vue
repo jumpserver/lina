@@ -65,6 +65,8 @@ export default {
             sortable: false
           },
           actions: {
+            width: 70,
+            fitWidth: true,
             align: 'center',
             formatterArgs: {
               hasDelete: false,

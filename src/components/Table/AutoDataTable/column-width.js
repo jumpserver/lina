@@ -1,6 +1,20 @@
 const MAX_CONTENT_WIDTH = 360
 const MAX_SAMPLE_ROWS = 50
 
+function getGroupContentWidth(cell, selector) {
+  const group = cell?.querySelector(selector)
+  if (!group) {
+    return 0
+  }
+  const style = getComputedStyle(cell)
+  return Math.ceil(
+    group.getBoundingClientRect().width +
+      (Number.parseFloat(style.paddingLeft) || 0) +
+      (Number.parseFloat(style.paddingRight) || 0) +
+      8
+  )
+}
+
 function getCellContentWidth(cell, range) {
   const style = getComputedStyle(cell)
   let width = Number.parseFloat(style.paddingLeft) + Number.parseFloat(style.paddingRight)
@@ -56,15 +70,24 @@ export function getRenderedColumnWidths(root, columns) {
     if (!col || !columnClass) {
       continue
     }
-    let width = 0
+    const isActions = prop === 'actions'
+    let width = isActions
+      ? getGroupContentWidth(header.querySelector('.cell'), '.column-header-content')
+      : 0
     for (const row of rows) {
       const cell = row.querySelector(`td.${columnClass} > .cell`)
       if (cell) {
-        width = Math.max(width, getCellContentWidth(cell, range))
+        // Measure the whole button group, including button padding and gaps.
+        const cellWidth = isActions
+          ? getGroupContentWidth(cell, '.table-actions-group')
+          : getCellContentWidth(cell, range)
+        width = Math.max(width, cellWidth)
       }
     }
     // Bound unusually long values so one row cannot dominate the entire table.
-    widths[prop] = Math.min(width, Number.parseFloat(col.contentMaxWidth) || MAX_CONTENT_WIDTH)
+    widths[prop] = isActions
+      ? width
+      : Math.min(width, Number.parseFloat(col.contentMaxWidth) || MAX_CONTENT_WIDTH)
   }
   return widths
 }

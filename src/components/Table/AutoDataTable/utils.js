@@ -437,7 +437,7 @@ export class TableColumnsGenerator {
       col.align = 'center'
       col.headerAlign = 'center'
       col.fixed = this.config.actionsColumnPosition === 'start' ? 'left' : 'right'
-      col.fitWidth = false
+      col.fitWidth = col.fitWidth === true
       col.resizable = false
     }
 

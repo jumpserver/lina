@@ -330,7 +330,11 @@ export default {
       let flexibleColumnIndexes = naturalColumns
         .map((col, index) => ({ col, index }))
         .filter(
-          ({ col }) => !col.fixed && col.fitWidth !== false && !this.resizedColumnWidths[col.prop]
+          ({ col }) =>
+            col.prop !== 'actions' &&
+            !col.fixed &&
+            col.fitWidth !== false &&
+            !this.resizedColumnWidths[col.prop]
         )
         .map(({ index }) => index)
 
