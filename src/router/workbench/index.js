@@ -76,7 +76,7 @@ export default {
           }
         },
         {
-          path: `${BASE_URL}/koko/elfinder/sftp/`,
+          path: `${BASE_URL}/luna/files`,
           name: '',
           meta: {
             title: i18n.t('FileExplorer'),
