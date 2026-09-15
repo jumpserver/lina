@@ -40,6 +40,7 @@ export default {
             formatter: AmountFormatter,
             formatterArgs: {
               async: true,
+              drawer: false,
               getRoute({ row }) {
                 return {
                   name: 'CommandFilterACLList',

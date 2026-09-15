@@ -37,12 +37,15 @@ export default {
   },
   data() {
     const vm = this
+    const canManageUser = ['UserList', 'UserDetail'].includes(this.$route.name)
     return {
       user: { name: '', username: '', email: '', comment: '' },
       config: {
         url: '/api/v1/users/users',
         activeMenu: 'UserInfo',
         actions: {
+          hasUpdate: canManageUser,
+          hasDelete: canManageUser,
           canUpdate: () => {
             return (
               this.$hasPerm('users.change_user') &&

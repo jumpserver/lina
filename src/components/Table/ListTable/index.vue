@@ -616,6 +616,16 @@ export default {
     text-overflow: ellipsis;
   }
 
+  :deep(td.show-full-content .cell),
+  :deep(.cell:has(.col-full-content)) {
+    overflow: visible;
+    height: auto;
+    white-space: normal !important;
+    word-break: break-all !important;
+    line-height: 1.4;
+    text-overflow: clip;
+  }
+
   :deep(.el-table__expanded-cell pre) {
     max-height: 500px;
     overflow-y: scroll;

@@ -91,7 +91,8 @@ export default {
           },
           callbacks: {
             click: function () {
-              const replayUrl = '/luna/replay/' + vm.session.id
+              const oid = vm.session.org_id || ''
+              const replayUrl = `/luna/replay/${vm.session.id}${oid ? `?oid=${encodeURIComponent(oid)}` : ''}`
               window.open(replayUrl)
             }
           }
