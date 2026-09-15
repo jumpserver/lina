@@ -57,6 +57,7 @@ export default {
         hasSearch: true,
         hasMoreActions: false,
         searchConfig: {
+          getUrlQuery: true,
           fieldLabels: {
             command_filters: this.$t('CommandFilterACL')
           }

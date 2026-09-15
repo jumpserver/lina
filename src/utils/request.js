@@ -63,7 +63,7 @@ function goToLogin() {
   localStorage.setItem('next', window.location.hash.replace('#', ''))
 }
 
-function ifUnauthorized({ response, error }) {
+function ifUnauthorized({ response }) {
   if (response.status === 401) {
     response.config.disableFlashErrorMsg = true
     if (response.request.responseURL.indexOf('/users/profile/') !== -1) {
@@ -72,9 +72,11 @@ function ifUnauthorized({ response, error }) {
     }
     const title = i18n.tc('Info')
     const msg = i18n.tc('LoginRequiredMsg')
-    MessageBox.confirm(msg, title, {
+    MessageBox.alert(msg, title, {
       confirmButtonText: i18n.t('ReLogin'),
-      cancelButtonText: i18n.t('Cancel'),
+      showClose: false,
+      closeOnClickModal: false,
+      closeOnPressEscape: false,
       type: 'warning'
     }).then(() => {
       goToLogin()
@@ -125,7 +127,7 @@ export function flashErrorMsg({ response, error }) {
   }
 }
 
-function ifConfirmRequired({ response, error }) {
+function ifConfirmRequired({ response }) {
   if (response.status !== 412) {
     return null
   }

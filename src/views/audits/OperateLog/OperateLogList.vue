@@ -10,7 +10,9 @@
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
+import OverflowTooltipFormatter from '@/components/Table/TableFormatters/OverflowTooltipFormatter.vue'
 import DiffDetail from '@/components/Dialog/DiffDetail'
+import { translateOperateLogText } from './translate'
 
 export default {
   components: {
@@ -45,6 +47,19 @@ export default {
         columnsMeta: {
           user: {
             minWidth: '120px'
+          },
+          resource: {
+            width: '200px',
+            formatter: OverflowTooltipFormatter,
+            formatterArgs: {
+              getText: ({ row }) => translateOperateLogText(row.resource)
+            }
+          },
+          resource_type: {
+            formatter: (row) => translateOperateLogText(row.resource_type)
+          },
+          resource_type_display: {
+            formatter: (row) => translateOperateLogText(row.resource_type_display)
           },
           actions: {
             formatter: ActionsFormatter,

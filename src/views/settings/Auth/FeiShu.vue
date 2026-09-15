@@ -63,7 +63,7 @@ export default {
         hasDetailInMsg: false,
         moreButtons: [
           {
-            title: 'Test',
+            title: this.$t('Test'),
             loading: false,
             callback: function (value, form, btn) {
               btn.loading = true

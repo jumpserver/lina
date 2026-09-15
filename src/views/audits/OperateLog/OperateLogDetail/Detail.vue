@@ -1,7 +1,7 @@
 <template>
   <div>
     <TwoCol>
-      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
+      <AutoDetailCard :fields="detailFields" :formatters="formatters" :object="object" :url="url" />
       <template #right>
         <QuickActions
           v-if="object.id"
@@ -20,6 +20,7 @@ import { QuickActions } from '@/components'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import DiffDetail from '@/components/Dialog/DiffDetail'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import { translateOperateLogText } from '../translate'
 
 export default {
   name: 'Detail',
@@ -39,6 +40,10 @@ export default {
     return {
       url: `/api/v1/audits/operate-logs/${this.object.id}`,
       detailFields: ['id', 'user', 'remote_addr', 'resource', 'resource_type_display', 'datetime'],
+      formatters: {
+        resource: (item, val) => translateOperateLogText(val),
+        resource_type_display: (item, val) => translateOperateLogText(val)
+      },
       quickActions: [
         {
           title: this.$t('ChangeField'),

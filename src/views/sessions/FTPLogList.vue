@@ -4,6 +4,7 @@
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
+import OverflowTooltipFormatter from '@/components/Table/TableFormatters/OverflowTooltipFormatter.vue'
 import { download } from '@/utils/common/index'
 import store from '@/store'
 
@@ -29,6 +30,10 @@ export default {
         },
         url: '/api/v1/audits/ftp-logs/',
         columnsMeta: {
+          filename: {
+            width: '200px',
+            formatter: OverflowTooltipFormatter
+          },
           is_success: { width: '100px' },
           actions: {
             formatterArgs: {

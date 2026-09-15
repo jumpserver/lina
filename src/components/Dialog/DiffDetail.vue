@@ -35,11 +35,25 @@
 import Dialog from '@/components/Dialog/index'
 
 const FIELD_I18N_KEYS = {
+  'account push parameters': 'PushParams',
+  active: 'IsActive',
+  'auto push': 'AutoPush',
+  ciphertext: 'Ciphertext',
+  'ciphertext policy': 'SecretStrategy',
+  'ciphertext type': 'SecretType',
   'creation date': 'DateCreated',
+  creator: 'CreatedBy',
+  description: 'Comment',
   'expiration date': 'DateExpired',
   'from work order': 'FromTicket',
+  labels: 'Labels',
   'last updated by': 'LastUpdatedBy',
-  'start date': 'DateStart'
+  'password rules': 'PasswordRule',
+  platform: 'Platform',
+  'privileged account': 'PrivilegedAccount',
+  'start date': 'DateStart',
+  'switch from': 'SuFrom',
+  'update date': 'DateUpdated'
 }
 
 export default {
