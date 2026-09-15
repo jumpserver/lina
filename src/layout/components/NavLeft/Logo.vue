@@ -2,17 +2,13 @@
   <div :class="{ collapse: collapse }" class="sidebar-logo-container">
     <transition name="sidebarLogoFade">
       <a v-if="collapse" key="collapse" class="sidebar-logo-link" @click="handleClick">
-        <LogoSymbol v-if="isDefaultSymbol" class="sidebar-logo" />
+        <span v-if="isDefaultSymbol" role="img" aria-label="JumpServer">
+          <LogoSymbol class="sidebar-logo" />
+        </span>
         <img v-else :src="logoSrc" alt="logo" class="sidebar-logo" />
       </a>
       <a v-else key="expand" class="sidebar-logo-link" @click="handleClick">
-        <span
-          class="sidebar-logo-artwork"
-          :class="{ 'has-animated-symbol': logoTextSrc === defaultLogo }"
-        >
-          <img :src="logoTextSrc" alt="logo" class="sidebar-logo-text" />
-          <LogoSymbol v-if="logoTextSrc === defaultLogo" class="sidebar-logo-symbol" />
-        </span>
+        <img :src="logoTextSrc" alt="logo" class="sidebar-logo-text" />
       </a>
     </transition>
   </div>
@@ -34,9 +30,6 @@ export default {
       default: false
     }
   },
-  data() {
-    return { defaultLogo }
-  },
   computed: {
     ...mapGetters(['viewRoutes', 'publicSettings']),
     logoTextSrc() {
@@ -50,7 +43,6 @@ export default {
       return this.publicSettings.INTERFACE?.logo_logout?.trim()
     }
   },
-  created() {},
   methods: {
     handleClick() {
       const currentPath = this.$route.path
@@ -77,10 +69,10 @@ export default {
 @use '@/styles/variables' as *;
 
 .sidebarLogoFade-enter-active {
-  transition: opacity 1.5s;
+  transition: opacity 200ms ease-out;
 }
 
-.sidebarLogoFade-enter,
+.sidebarLogoFade-enter-from,
 .sidebarLogoFade-leave-to {
   opacity: 0;
 }
@@ -89,7 +81,6 @@ export default {
   position: relative;
   width: 100%;
   height: $headerHeight;
-  line-height: $headerHeight;
   text-align: center;
   overflow: hidden;
 
@@ -97,7 +88,9 @@ export default {
     height: 100%;
     width: 100%;
     padding: 5px;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     & .sidebar-logo {
       color: #fff;
@@ -110,52 +103,23 @@ export default {
     & .sidebar-logo-text {
       display: block;
       height: calc(#{$headerHeight} - 10px);
-    }
-
-    & .sidebar-logo-artwork {
-      position: relative;
-      display: inline-block;
-      vertical-align: top;
-    }
-
-    & .has-animated-symbol .sidebar-logo-text {
-      // Keep the original wordmark; the SVG replaces only the bitmap symbol.
-      clip-path: inset(0 0 0 19.52%);
-    }
-
-    & .sidebar-logo-symbol {
-      position: absolute;
-      top: 0;
-      left: 1.5244%;
-      width: 16.4634%;
-      height: 100%;
-      color: #fff;
-      pointer-events: none;
-    }
-
-    & .sidebar-title {
-      display: inline-block;
-      margin: 0;
-      color: #fff;
-      font-weight: 600;
-      line-height: $headerHeight;
-      font-size: 14px;
-      font-family:
-        Avenir,
-        Helvetica Neue,
-        Arial,
-        Helvetica,
-        sans-serif;
-      vertical-align: middle;
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
     }
   }
 
   &.collapse {
     height: $headerHeight;
-    line-height: $headerHeight;
     .sidebar-logo {
       margin-right: 0;
     }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebarLogoFade-enter-active {
+    transition: none;
   }
 }
 </style>
