@@ -31,6 +31,9 @@ export function getTicketTypeLabel(type, t) {
 }
 
 export function getTicketFlowLabel(ticketOrFlow, t) {
+  if (ticketOrFlow?.flow === null && ticketOrFlow?.type?.value === 'apply_asset') {
+    return translate(t, 'TicketFlowDeleted')
+  }
   const type = ticketOrFlow?.type || ticketOrFlow?.flow?.type
   const customName = ticketOrFlow?.flow?.name || ticketOrFlow?.name
   // Built-in flows reuse the backend English type label as the default name.

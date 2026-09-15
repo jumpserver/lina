@@ -2020,6 +2020,7 @@
   "Ticket": "작업 항목",
   "TicketDetail": "작업 상세보기",
   "TicketFlow": "작업 흐름",
+  "TicketFlowDeleted": "작업 흐름이 삭제됨",
   "TicketFlowCreate": "승인 흐름 생성",
   "TicketFlowUpdate": "승인 흐름 업데이트",
   "TicketList": "작업 목록",

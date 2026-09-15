@@ -2020,6 +2020,7 @@
   "Ticket": "Công việc",
   "TicketDetail": "Chi tiết công việc",
   "TicketFlow": "Quy trình công việc",
+  "TicketFlowDeleted": "Quy trình công việc đã bị xóa",
   "TicketFlowCreate": "Tạo dòng phê duyệt",
   "TicketFlowUpdate": "Cập nhật quy trình phê duyệt",
   "TicketList": "Danh sách công việc",

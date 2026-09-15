@@ -1777,6 +1777,7 @@
   "Ticket": "Ticket",
   "TicketDetail": "Ticket details",
   "TicketFlow": "Ticket flow",
+  "TicketFlowDeleted": "Ticket flow deleted",
   "TicketFlowCreate": "Create approval flow",
   "TicketFlowUpdate": "Update the approval flow",
   "TicketList": "Tickets",

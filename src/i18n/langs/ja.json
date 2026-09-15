@@ -1985,6 +1985,7 @@
   "Ticket": "チケット",
   "TicketDetail": "作業詳細",
   "TicketFlow": "ワークフロー",
+  "TicketFlowDeleted": "ワークフローは削除されました",
   "TicketFlowCreate": "承認フローの作成",
   "TicketFlowUpdate": "承認フローを更新",
   "TicketList": "作業リスト",
