@@ -146,7 +146,7 @@ export default defineConfig(({ mode }) => {
         '/chen/': createProxy('http://127.0.0.1:9523', true),
         '/guacamole/': createProxy('http://127.0.0.1:8081', true),
         '/luna/': createProxy('http://127.0.0.1:4200'),
-        '/facelive/': createProxy('http://localhost:9999', true),
+        '/facelive/': createProxy(coreHost, true),
         '/core/': createProxy(coreHost),
         '/static/': createProxy(coreHost),
         '/media/': createProxy(coreHost),
