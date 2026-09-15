@@ -22,6 +22,9 @@ export default {
         },
         url: '/api/v1/audits/login-logs/',
         columnsMeta: {
+          username: {
+            label: this.$t('User')
+          },
           actions: {
             has: false
           },
@@ -36,7 +39,10 @@ export default {
         hasReportExport: true,
         hasDatePicker: true,
         searchConfig: {
-          getUrlQuery: true
+          getUrlQuery: true,
+          fieldLabels: {
+            username: this.$t('User')
+          }
         }
       }
     }

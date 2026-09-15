@@ -254,7 +254,11 @@ export default {
             this.rememberActiveTab ? localStorage.getItem(this.activeTabStorageKey) : undefined,
             this.activeMenu
           ]
-        : [this.activeMenu]
+        : [
+            this.$context.get('tab', { scope: 'overlay' }),
+            this.$route.query['tab'],
+            this.activeMenu
+          ]
 
       for (const preTab of preActiveTabs) {
         const currentTab = typeof preTab === 'object' ? preTab?.name || '' : preTab

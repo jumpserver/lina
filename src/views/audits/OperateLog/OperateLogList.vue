@@ -46,6 +46,7 @@ export default {
         },
         columnsMeta: {
           user: {
+            label: this.$t('User'),
             minWidth: '120px'
           },
           resource: {
@@ -95,7 +96,10 @@ export default {
         hasReportExport: true,
         hasDatePicker: true,
         searchConfig: {
-          getUrlQuery: true
+          getUrlQuery: true,
+          fieldLabels: {
+            user: this.$t('User')
+          }
         }
       }
     }

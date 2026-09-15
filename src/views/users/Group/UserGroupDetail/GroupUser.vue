@@ -85,10 +85,11 @@ export default {
           actions: {
             label: this.$t('Actions'),
             align: 'center',
-            width: 150,
+            width: 56,
             objects: this.object.users,
             formatter: DeleteActionFormatter,
             formatterArgs: {
+              compact: true,
               disabled: !this.$hasPerm('users.change_usergroup')
             },
             onDelete: function (col, row, cellValue, reload) {
