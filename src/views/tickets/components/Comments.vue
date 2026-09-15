@@ -234,7 +234,12 @@ export default {
         try {
           await handler()
         } catch (err) {
-          this.$message.error(err)
+          // HTTP errors are already displayed by the global Axios interceptor.
+          // Only handle errors without a response here to avoid replacing the
+          // server detail message with an unrenderable Axios error object.
+          if (!err.response) {
+            this.$message.error(err.message || String(err))
+          }
         } finally {
           this.isDisabled = false
         }
