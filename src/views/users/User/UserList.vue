@@ -351,14 +351,14 @@ export default {
             title: this.$t('RemoveSelected'),
             name: 'RemoveSelected',
             has: hasRemove,
-            icon: 'remove',
+            icon: 'action-remove',
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.remove_user'),
             callback: this.bulkRemoveCallback.bind(this)
           },
           {
             name: 'BatchDisable',
             title: this.$t('DisableSelected'),
-            icon: 'fa-solid fa-ban',
+            icon: 'action-disable',
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
             callback: ({ selectedRows, reloadTable }) =>
               vm.bulkActionCallback(selectedRows, reloadTable, 'disable')
@@ -366,7 +366,7 @@ export default {
           {
             name: 'BatchActivate',
             title: this.$t('ActivateSelected'),
-            icon: 'fa-circle-check',
+            icon: 'action-activate',
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
             callback: ({ selectedRows, reloadTable }) =>
               vm.bulkActionCallback(selectedRows, reloadTable, 'activate')

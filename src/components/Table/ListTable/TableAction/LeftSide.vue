@@ -102,7 +102,7 @@ export default {
           title: this.$t('DeleteSelected'),
           name: 'actionDeleteSelected',
           has: this.hasBulkDelete,
-          icon: 'trash',
+          icon: 'action-delete',
           can({ selectedRows }) {
             return selectedRows.length > 0 && vm.canBulkDelete
           },
@@ -112,7 +112,7 @@ export default {
           title: this.$t('UpdateSelected'),
           name: 'actionUpdateSelected',
           has: this.hasBulkUpdate,
-          icon: 'batch-update',
+          icon: 'action-edit',
           can: function ({ selectedRows }) {
             let canBulkUpdate = vm.canBulkUpdate
             if (typeof canBulkUpdate === 'function') {

@@ -100,7 +100,20 @@
                       @click.stop="$emit('column-pin-toggle', col.prop)"
                       @mousedown.stop
                     >
-                      <i class="fa fa-thumb-tack" />
+                      <svg
+                        aria-hidden="true"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M9 3h6l-1 6 3 3v2H7v-2l3-3-1-6Z" />
+                        <path d="M12 14v7" />
+                      </svg>
                     </button>
                   </span>
                 </template>
@@ -1564,7 +1577,8 @@ export default {
       opacity 0.15s ease,
       color 0.15s ease;
 
-    i {
+    svg {
+      vertical-align: middle;
       transform: rotate(45deg);
     }
 

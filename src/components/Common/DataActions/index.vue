@@ -468,7 +468,7 @@ $color-drop-menu-border: #e4e7ed;
   height: 34px;
   line-height: 34px;
   padding: 0 20px;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 :global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .dropdown-item__content) {
@@ -481,9 +481,9 @@ $color-drop-menu-border: #e4e7ed;
 :global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon) {
   display: inline-flex;
   align-items: center;
-  justify-content: flex-start;
-  flex: 0 0 auto;
-  // 固定图标列宽，保证使用图标占位的下拉项文字左边缘对齐。
+  justify-content: center;
+  flex: 0 0 18px;
+  // 图标在固定列内居中，图标与文字的间距统一由这一层提供。
   width: 18px;
   height: 16px;
   margin-right: 2px;
@@ -493,30 +493,38 @@ $color-drop-menu-border: #e4e7ed;
 :global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon > span) {
   display: inline-flex;
   align-items: center;
-  justify-content: flex-start;
-  width: 18px;
+  justify-content: center;
+  width: 100%;
   height: 16px;
+  margin: 0;
   line-height: 1;
 }
 
-:global(
-  .action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon .fa,
-  .action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon .el-icon,
-  .action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon .svg-icon
-) {
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon .fa),
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon .el-icon),
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon .svg-icon) {
   display: inline-flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
+  flex-shrink: 0;
   width: 16px;
   height: 16px;
+  // 清除 Element Plus 给菜单内 i 元素设置的右边距，避免图标偏离列中心。
+  margin: 0;
   font-size: 14px;
+  text-align: center;
   line-height: 1;
   vertical-align: middle;
 }
 
-:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon .el-icon svg) {
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon .svg-icon) {
   width: 14px;
   height: 14px;
+}
+
+:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .pre-icon .el-icon svg) {
+  width: 16px;
+  height: 16px;
 }
 
 :global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item .dropdown-item__label) {
