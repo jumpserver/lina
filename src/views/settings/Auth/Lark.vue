@@ -2,7 +2,6 @@
   <FeiShu
     :category="category"
     :form-fields="formFields"
-    :title="$tc('setting.Lark')"
     :encrypted-fields="encryptedFields"
     :form-fields-meta="formFieldsMeta"
     :enable-field-name="enableFieldName"
