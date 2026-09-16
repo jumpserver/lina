@@ -197,6 +197,7 @@ export default {
   data() {
     return {
       accessReadiness: null,
+      configurationFileName: 'jms_pam_config.py',
       configurationText: '',
       editingConfiguration: null,
       executionText: '',
@@ -469,7 +470,7 @@ export default {
       }
     },
     configFileName() {
-      return 'jms-pam.json'
+      return this.configurationFileName
     },
     connectionItems() {
       const item = this.selectedConfiguration || {}
@@ -630,6 +631,7 @@ export default {
     },
     clearMaterials() {
       this.generated = false
+      this.configurationFileName = 'jms_pam_config.py'
       this.configurationText = ''
       this.executionText = ''
       this.installCommand = ''
@@ -648,7 +650,8 @@ export default {
       this.materialsVisible = true
       try {
         const materials = await generateClientAccessMaterials(this.selectedConfiguration.id)
-        this.configurationText = materials.config ? JSON.stringify(materials.config, null, 2) : ''
+        this.configurationText = materials.config || ''
+        this.configurationFileName = materials.filename || 'jms_pam_config.py'
         this.installCommand = materials.install_command
         this.executionText = materials.type === 'sdk' ? materials.code : materials.install_command
         this.generated = true
@@ -668,7 +671,7 @@ export default {
       await this.refreshAccessReadiness()
     },
     downloadConfiguration() {
-      const blob = new Blob([this.configurationText], { type: 'application/json;charset=utf-8' })
+      const blob = new Blob([this.configurationText], { type: 'text/x-python;charset=utf-8' })
       const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = url
