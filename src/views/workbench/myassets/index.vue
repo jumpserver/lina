@@ -85,12 +85,13 @@ export default {
               can: ({ row }) => row.is_active,
               callback: ({ row }) => {
                 const oid = this.$store.getters.currentOrg ? this.$store.getters.currentOrg.id : ''
-                const url = `/luna/connect?login_to=${row.id}`
+                const url = addBasePath(
+                  `/luna/session/${encodeURIComponent(row.id)}${oid ? `?org=${encodeURIComponent(oid)}` : ''}`
+                )
                 if (this.preference?.basic?.connect_default_open_method === 'new') {
                   openNewWindow(url)
                 } else {
-                  const url = `/luna/?login_to=${row.id}${oid ? `&oid=${oid}` : ''}`
-                  window.open(addBasePath(url), '_blank')
+                  window.open(url, '_blank')
                 }
               }
             },
