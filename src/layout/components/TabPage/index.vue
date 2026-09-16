@@ -605,17 +605,6 @@ export default {
     max-height: none !important;
   }
 
-  // 设置页表单标签在固定 label 列内统一左对齐，避免窄宽度下贴到控件右侧。
-  .tab-page-content :deep(.form-fields .el-form-item__label-wrap) {
-    display: flex;
-    justify-content: flex-start;
-  }
-
-  .tab-page-content :deep(.form-fields .el-form-item__label) {
-    justify-content: flex-start;
-    text-align: left;
-  }
-
   /*
    * <keep-alive> 要求单一根节点，内容组件因此普遍用一个
    * <div>（无 class 或 class=""）包裹多个区块（如 el-alert + IBox）。该 wrapper 会成为唯一的

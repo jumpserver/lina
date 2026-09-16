@@ -652,7 +652,7 @@ onBeforeUnmount(() => baseUrlResizeObserver?.disconnect())
 
   :deep(.el-card__body) {
     display: block;
-    padding: 16px 20px 20px;
+    padding: 10px 0 0 0;
     background: #f5f7f6;
   }
 }
