@@ -1,5 +1,5 @@
 <template>
-  <BaseAuth :config="settings" :title="$tc('OAuth2')" enable-field="AUTH_OAUTH2" />
+  <BaseAuth :config="settings" enable-field="AUTH_OAUTH2" />
 </template>
 
 <script>

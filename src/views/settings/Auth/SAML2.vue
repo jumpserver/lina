@@ -1,5 +1,5 @@
 <template>
-  <BaseAuth :config="settings" :title="$tc('SAML2')" enable-field="AUTH_SAML2" />
+  <BaseAuth :config="settings" enable-field="AUTH_SAML2" />
 </template>
 
 <script>

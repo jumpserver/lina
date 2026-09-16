@@ -1,5 +1,5 @@
 <template>
-  <BaseAuth :config="settings" :title="$tc('Slack')" enable-field="AUTH_SLACK" />
+  <BaseAuth :config="settings" enable-field="AUTH_SLACK" />
 </template>
 
 <script>
