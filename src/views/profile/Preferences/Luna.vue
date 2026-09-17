@@ -17,6 +17,7 @@ export default {
       category: 'luna',
       autoSave: true,
       canRestoreDefault: true,
+      fieldsExclude: ['basic.connect_default_open_method', 'basic.themes'],
       fieldsMeta: {
         command_line: {
           fieldsMeta: {
