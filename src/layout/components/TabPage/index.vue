@@ -1,6 +1,11 @@
 <template>
-  <Page v-bind="$attrs" :title="title" class="tab-page">
-    <div class="tab-page-wrapper">
+  <Page
+    v-bind="$attrs"
+    :class="{ 'has-tab-navigation': tabIndices.length > 1 }"
+    :title="title"
+    class="tab-page"
+  >
+    <div :class="{ 'has-tab-navigation': tabIndices.length > 1 }" class="tab-page-wrapper">
       <div v-if="tabIndices.length > 1 || $slots.headingRightSide" class="tab-page-submenu">
         <el-tabs
           v-if="tabIndices.length > 1"
@@ -52,13 +57,13 @@
         >
           <span v-sanitize="iHelpMessage" class="announcement-main" />
         </el-alert>
-        <transition v-if="!loading" appear mode="out-in" name="fade-transform">
+        <template v-if="!loading">
           <slot>
             <keep-alive v-if="computeActiveComponent">
               <component :is="computeActiveComponent" />
             </keep-alive>
           </slot>
-        </transition>
+        </template>
       </div>
     </div>
   </Page>
@@ -116,6 +121,10 @@ export default {
     rememberActiveTab: {
       type: Boolean,
       default: false
+    },
+    clearQueryKeysOnTabChange: {
+      type: Array,
+      default: () => []
     }
   },
   emits: ['update:activeMenu', 'tab-click'],
@@ -203,10 +212,14 @@ export default {
       if (this.$route.query?.tab === newValue) {
         return
       }
+      const query = { ...this.$route.query }
+      for (const key of this.clearQueryKeysOnTabChange) {
+        delete query[key]
+      }
       this.$router.replace({
         path: this.$route.path,
         query: {
-          ...this.$route.query,
+          ...query,
           tab: newValue
         },
         hash: this.$route.hash
@@ -241,7 +254,11 @@ export default {
             this.rememberActiveTab ? localStorage.getItem(this.activeTabStorageKey) : undefined,
             this.activeMenu
           ]
-        : [this.activeMenu]
+        : [
+            this.$context.get('tab', { scope: 'overlay' }),
+            this.$route.query['tab'],
+            this.activeMenu
+          ]
 
       for (const preTab of preActiveTabs) {
         const currentTab = typeof preTab === 'object' ? preTab?.name || '' : preTab
@@ -271,33 +288,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.page.no-title {
-  :deep(.page-submenu) {
-    .el-tabs__header {
-      margin-top: 0;
-    }
-
-    .tab-page-content {
-      height: calc(100% - 45px);
-    }
-  }
-}
-
 .page-submenu {
+  --el-tabs-header-height: var(--tab-page-header-height, 34px);
+  --tab-page-navigation-background-color: var(--page-background-color, #fff);
+
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
+  background-color: var(--tab-page-navigation-background-color);
 }
 
 .page-submenu :deep(.el-tabs__header) {
-  background-color: white;
-  margin-top: -10px;
-  margin-bottom: 0;
-  padding: 0 20px;
   display: flex;
   align-items: stretch;
-  min-height: 40px;
-  border-bottom: 1px solid #ebeef5;
+  height: var(--tab-page-header-height, 34px);
+  min-height: var(--tab-page-header-height, 34px);
+  margin: 0;
+  padding: 0 var(--tab-page-inline-padding, var(--page-inline-padding, 20px));
+  box-sizing: border-box;
+  background-color: var(--tab-page-navigation-background-color);
+  border: 0;
 }
 
 .page-submenu :deep(.el-tabs__nav-wrap),
@@ -305,41 +315,118 @@ export default {
 .page-submenu :deep(.el-tabs__nav) {
   display: flex;
   align-items: stretch;
+  background-color: var(--tab-page-navigation-background-color);
 }
 
-.page-submenu :deep(.el-tabs__nav-wrap) {
+.page-submenu :deep(.el-tabs__nav-wrap.is-top) {
+  position: relative;
   flex: 1 1 auto;
   margin: 0;
+  border: 0;
 
   &::after {
     display: none;
   }
 }
 
-.page-submenu :deep(.el-tabs__active-bar) {
-  height: 2px;
+.page-submenu :deep(.el-tabs__header .el-tabs__nav) {
+  position: relative;
+  z-index: 2;
+  gap: 0;
+  border: 0;
+  border-radius: 0;
 }
 
-.page-submenu :deep(.el-tabs__item) {
+.page-submenu :deep(.el-tabs__active-bar) {
+  z-index: 3;
+  bottom: 0;
+  display: block;
+  height: 2px;
+  background-color: transparent;
+  transition: transform 240ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -6px;
+    bottom: 0;
+    left: -6px;
+    background-color: var(--el-color-primary);
+    border-radius: 3px;
+  }
+}
+
+.page-submenu :deep(.el-tabs__header .el-tabs__item),
+.page-submenu :deep(.el-tabs__header .el-tabs__item.is-top) {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  height: 40px;
-  line-height: 40px;
-  padding: 0 18px;
+  height: var(--tab-page-header-height, 34px);
+  margin-top: 0;
+  padding: 0 24px;
   font-size: 14px;
   font-weight: 500;
-  color: var(--color-text-primary);
-
-  .pre-icon {
-    width: 16px;
-    display: inline-block;
-    opacity: 0.6;
-  }
+  color: var(--el-text-color-primary, #303133);
+  background-color: var(--tab-page-navigation-background-color);
+  border: 0;
+  border-radius: 0;
+  user-select: none;
+  transition:
+    color 120ms ease,
+    background-color 120ms ease;
 
   &.is-active {
+    z-index: 2;
+    color: var(--el-text-color-primary, #303133);
+    background-color: var(--tab-page-navigation-background-color);
+    border: 0;
+    border-radius: 4px 4px 0 0;
+    box-shadow: none;
+
     .pre-icon {
+      color: var(--el-text-color-primary, #303133);
       opacity: 1;
+    }
+  }
+
+  &.is-active:focus,
+  &.is-active:focus:active,
+  &.is-active:focus-visible {
+    outline: none;
+    border: 0;
+    box-shadow: none;
+  }
+
+  &:not(.is-active, .is-disabled):hover {
+    color: var(--el-text-color-primary, #303133);
+    background-color: var(--tab-page-navigation-background-color);
+    cursor: pointer;
+  }
+
+  .pre-icon {
+    width: 14px;
+    height: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 14px;
+    font-size: 14px;
+    line-height: 1;
+    vertical-align: middle;
+    opacity: 0.62;
+
+    > .fa,
+    > .el-icon,
+    > .svg-icon,
+    > svg {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px;
+      height: 14px;
+      line-height: 1;
+      vertical-align: middle;
     }
   }
 
@@ -350,6 +437,23 @@ export default {
       color: #c0c4cc;
     }
   }
+}
+
+.page-submenu :deep(.el-tabs__header .el-tabs__item + .el-tabs__item) {
+  margin-left: 0;
+}
+
+.page-submenu :deep(.el-tabs__nav > .el-tabs__active-bar + .el-tabs__item) {
+  padding-left: var(--page-heading-icon-inset, 6px);
+}
+
+.page-submenu :deep(.tab-page-submenu-item-wrapper) {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+  padding: 0;
+  line-height: 1;
 }
 
 .page-submenu :deep(.el-tabs__item .el-tooltip__trigger),
@@ -377,6 +481,14 @@ export default {
 }
 
 .page-submenu :deep(.el-tabs__header) {
+  .el-tabs__nav-next,
+  .el-tabs__nav-prev {
+    top: 0;
+    height: var(--tab-page-header-height, 34px);
+    line-height: var(--tab-page-header-height, 34px);
+    background-color: var(--tab-page-navigation-background-color);
+  }
+
   .el-tabs__nav-next {
     right: 10px;
   }
@@ -387,18 +499,36 @@ export default {
 }
 
 .tab-page {
+  --tab-page-header-height: 40px;
+
+  &.has-tab-navigation > :deep(.page-head .page-heading) {
+    height: 44px;
+    border-bottom: 0;
+  }
+
   .tab-page-wrapper {
     height: 100%;
     display: flex;
     flex-direction: column;
     min-height: 0;
+
+    &.has-tab-navigation > .tab-page-content {
+      padding-top: 16px;
+    }
+
+    &.has-tab-navigation > .tab-page-submenu {
+      position: relative;
+      border-bottom: 0;
+    }
   }
 
   .tab-page-submenu {
     display: flex;
-    align-items: center;
-    background-color: white;
-    margin-bottom: 5px;
+    align-items: stretch;
+    min-height: var(--tab-page-header-height, 34px);
+    box-sizing: border-box;
+    background-color: var(--page-background-color, #fff);
+    border-bottom: 0;
     overflow: visible;
   }
 
@@ -412,7 +542,7 @@ export default {
     align-items: center;
     justify-content: flex-end;
     margin-left: 12px;
-    padding-right: 20px;
+    padding-right: var(--page-inline-padding, 20px);
     flex-shrink: 0;
   }
 
@@ -420,31 +550,35 @@ export default {
     padding: 5px 8px;
   }
 
-  :deep(.page-heading) {
-    border-bottom: none;
+  > :deep(.page-content) {
+    overflow-y: hidden !important;
+    padding: var(--page-content-top-padding, 12px) 0 0;
+    scrollbar-gutter: auto;
+    background-color: var(--page-content-background-color, #f3f3f4);
   }
 
-  :deep(.page-content) {
-    overflow-y: hidden !important;
-    padding: 0;
-    scrollbar-gutter: auto;
+  &.has-tab-navigation > :deep(.page-content) {
+    padding-top: 0;
+    background-color: var(--page-content-background-color, #f3f3f4);
   }
 
   .tab-page-content {
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--page-section-gap, 8px);
     min-height: 0;
-    padding: 10px 20px 0;
+    min-width: 0;
+    padding: 10px var(--page-inline-padding, 20px) 0;
     overflow: auto;
-    scrollbar-gutter: stable;
+    scrollbar-gutter: auto;
+    background-color: var(--page-content-background-color, #f3f3f4);
 
-    // Tab 内容保留统一的可用宽度；视口或抽屉继续收窄时由内容区滚动，
-    // 不再让表单、帮助文案和复杂控件无限压缩。
+    // 子页跟随可用宽度收缩；表格等需要最小列宽的组件自己承担横向滚动。
     > :deep(*) {
       flex-shrink: 0;
-      min-width: 600px;
+      min-width: 0;
+      max-width: 100%;
       box-sizing: border-box;
     }
 
@@ -471,33 +605,18 @@ export default {
     max-height: none !important;
   }
 
-  // 设置页表单标签在固定 label 列内统一左对齐，避免窄宽度下贴到控件右侧。
-  .tab-page-content :deep(.form-fields .el-form-item__label-wrap) {
-    display: flex;
-    justify-content: flex-start;
-  }
-
-  .tab-page-content :deep(.form-fields .el-form-item__label) {
-    justify-content: flex-start;
-    text-align: left;
-  }
-
   /*
-   * <transition mode="out-in"> 与 <keep-alive> 要求单一根节点，内容组件因此普遍用一个
+   * <keep-alive> 要求单一根节点，内容组件因此普遍用一个
    * <div>（无 class 或 class=""）包裹多个区块（如 el-alert + IBox）。该 wrapper 会成为唯一的
    * flex 子节点，使外层 gap 对其内部区块失效。这里让纯结构 wrapper 自身成为 flex 列并复用同样的
-   * gap，既恢复区块间距，又保留 wrapper 的盒子以维持 fade-transform 过渡动画。
-   *
-   * 过渡动画期间 Vue 会给 wrapper 加上 fade-transform-* 类，此时 :not([class]) 不再命中，
-   * 故补充 [class^="fade-transform"] 让其在动画期间仍保持 flex，避免间距闪烁。
+   * gap，恢复区块间距。
    * 带 class 的 wrapper（如 .auth-container）class 以自身类名开头，均不命中，保持不变。
    */
   .tab-page-content > :deep(div:not([class])),
-  .tab-page-content > :deep(div[class='']),
-  .tab-page-content > :deep(div[class^='fade-transform']) {
+  .tab-page-content > :deep(div[class='']) {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--page-section-gap, 8px);
   }
 
   .tab-page-content :deep(.tab-page-alert) {

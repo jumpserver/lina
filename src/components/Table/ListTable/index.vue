@@ -1,5 +1,5 @@
 <template>
-  <div class="list-table">
+  <div ref="listRoot" class="list-table" :class="{ 'list-table--fill-height': resolvedFillHeight }">
     <QuickFilter
       v-if="iHasQuickFilter"
       v-model:expand="filterExpand"
@@ -22,16 +22,22 @@
       :get-table-metadata="getTableMetadata"
       :table-url="tableUrl"
       @done="handleActionInitialDone"
-    />
-    <div v-loading="!actionInit" class="table-content">
+    >
+      <template v-if="$slots['search-after']" #search-after>
+        <slot name="search-after" />
+      </template>
+    </TableAction>
+    <div v-loading="!actionInit" class="table-content compact-loading">
       <IBox>
         <AutoDataTable
           v-bind="$attrs"
-          v-if="actionInit"
+          v-show="actionInit"
           ref="dataTable"
           :config="iTableConfig"
+          :fill-height="resolvedFillHeight"
           :filter-table="filter"
           :get-table-metadata="getTableMetadata"
+          @loaded="handleTableLoaded"
           @selection-change="handleSelectionChange"
         />
       </IBox>
@@ -43,17 +49,20 @@
 import { getResourceFromApiUrl } from '@/utils/jms/index'
 import deepmerge from 'deepmerge'
 import { mapGetters } from 'vuex'
-import { provide } from 'vue'
+import { computed, provide } from 'vue'
 import IBox from '@/components/Common/IBox/index.vue'
 import TableAction from './TableAction/index.vue'
 import AutoDataTable from '../AutoDataTable/index.vue'
 import QuickFilter from './TableAction/QuickFilter.vue'
+import { useListTableViewport } from './useListTableViewport'
 import { getDayEnd, getDaysAgo } from '@/utils/common/time'
 import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
+import isFalsey from '@/components/Table/DataTable/compenents/el-data-table/utils/is-falsey'
 import i18n from '@/i18n/i18n'
 import _ from 'lodash'
 
 const LIST_TABLE_KEY = Symbol('listTable')
+const ACTIVATION_REFRESH_POLICIES = ['always', 'route-change', 'never']
 
 export { LIST_TABLE_KEY }
 
@@ -65,7 +74,15 @@ export default {
     TableAction,
     IBox
   },
-  setup() {
+  emits: [
+    'loaded',
+    'query-change',
+    'selection-change',
+    'tag-date-change',
+    'tag-filter',
+    'tag-search'
+  ],
+  setup(props) {
     // Provide list table instance to child components
     // This replaces $parent chain access
     const listTableContext = {
@@ -73,9 +90,16 @@ export default {
       tableConfig: null
     }
     provide(LIST_TABLE_KEY, listTableContext)
-    return { listTableContext }
+    const { listRoot, fillHeight: viewportFillHeight } = useListTableViewport()
+    const resolvedFillHeight = computed(() => props.fillHeight || viewportFillHeight.value)
+    return { listTableContext, listRoot, resolvedFillHeight }
   },
   props: {
+    // Embedded lists can opt into the same fixed-header/body-scroll layout as pages.
+    fillHeight: {
+      type: Boolean,
+      default: false
+    },
     // 定义 table 的配置
     tableConfig: {
       type: Object,
@@ -97,6 +121,11 @@ export default {
     tableMetadataProvider: {
       type: Function,
       default: null
+    },
+    activationRefresh: {
+      type: String,
+      default: 'route-change',
+      validator: (value) => ACTIVATION_REFRESH_POLICIES.includes(value)
     }
   },
   data() {
@@ -105,10 +134,11 @@ export default {
       ...(order && { order })
     }
     if (this.headerActions.hasDatePicker) {
+      const datePicker = this.headerActions.datePicker || {}
       extraQuery = {
         ...extraQuery,
-        date_from: getDaysAgo(7).toISOString(),
-        date_to: this.$moment(getDayEnd()).add(1, 'day').toISOString()
+        date_from: datePicker.dateStart || getDaysAgo(7).toISOString(),
+        date_to: datePicker.dateEnd || this.$moment(getDayEnd()).add(1, 'day').toISOString()
       }
       this.headerActions.datePicker = Object.assign(
         {
@@ -124,8 +154,8 @@ export default {
     return {
       selectedRows: [],
       init: false,
-      urlUpdated: {},
-      isDeactivated: false,
+      activationRoutes: {},
+      activationPending: false,
       extraQuery: extraQuery,
       actionInit: this.headerActions.has === false,
       initQuery: {},
@@ -135,6 +165,7 @@ export default {
       reloadTable: _.debounce(this._reloadTable, 300),
       searchQuery: {},
       filterQuery: {},
+      lastEmittedQuery: null,
       metadataRequestUrl: '',
       metadataRequest: null
     }
@@ -193,9 +224,20 @@ export default {
       return this.iHeaderActions.has === undefined ? true : this.iHeaderActions.has
     },
     iTableConfig() {
-      const config = deepmerge(this.tableConfig, {
-        extraQuery: this.extraQuery
-      })
+      // Keep formatter component identities stable when only the URL changes.
+      // Clone only the metadata we write below, not the Vue component definitions.
+      const config = {
+        ...this.tableConfig,
+        extraQuery: deepmerge(this.tableConfig.extraQuery || {}, this.extraQuery),
+        columnsMeta: { ...this.tableConfig.columnsMeta }
+      }
+      for (const name of ['name', 'actions']) {
+        const meta = config.columnsMeta[name]
+        config.columnsMeta[name] = {
+          ...meta,
+          formatterArgs: { ...meta?.formatterArgs }
+        }
+      }
       const checkRoot = !(this.$route.meta?.disableOrgsChange === true)
       const checkPermAndRoot = (action) => {
         if (!this.hasActionPerm(action)) {
@@ -252,6 +294,13 @@ export default {
     extraQuery: {
       handler() {
         this.$log.debug('ListTable: found extraQuery change')
+        this.emitQueryChange()
+      },
+      deep: true
+    },
+    'tableConfig.extraQuery': {
+      handler() {
+        this.emitQueryChange()
       },
       deep: true
     },
@@ -263,13 +312,9 @@ export default {
     }
   },
   mounted() {
-    this.urlUpdated[this.tableUrl] = location.href
+    this.activationRoutes[this.getTableResourceKey()] = this.getActivationRouteKey()
     // Populate the provided context with component references.
-    // Note: $refs.dataTable is AutoDataTable, whose inner DataTable is rendered
-    // with `v-if="!loading"` and mounts only after its OPTIONS metadata loads —
-    // later than this parent's mounted(). Expose it as a live getter (not a
-    // one-time snapshot) so consumers like ExportDialog always resolve the
-    // real DataTable once it exists.
+    // Keep this a live getter across child replacement and resource changes.
     Object.defineProperty(this.listTableContext, 'dataTable', {
       get: () => this.$refs.dataTable?.$refs.dataTable,
       enumerable: true,
@@ -279,32 +324,65 @@ export default {
       get: () => this.tableConfig,
       enumerable: true
     })
+    this.emitQueryChange()
+  },
+  beforeUnmount() {
+    this.reloadTable.cancel()
   },
   deactivated() {
-    this.isDeactivated = true
+    this.activationPending = true
   },
   activated() {
-    this.$nextTick(() => {
-      this.isDeactivated = false
-      const cleanUrl = this.tableUrl.split('?')[0]
-      const preURL = this.urlUpdated[cleanUrl]
-
-      if (!preURL || preURL === location.href) return
-
-      this.urlUpdated[this.tableUrl] = location.href
-      this.$log.debug('Reload the table get latest data: pre ', preURL, ' current: ', location.href)
-      this.reloadTable()
-    })
+    if (!this.activationPending) {
+      return
+    }
+    this.activationPending = false
+    this.$nextTick(this.handleActivationRefresh)
   },
   methods: {
+    handleActivationRefresh() {
+      const tableResourceKey = this.getTableResourceKey()
+      const previousRouteKey = this.activationRoutes[tableResourceKey]
+      const currentRouteKey = this.getActivationRouteKey()
+      this.activationRoutes[tableResourceKey] = currentRouteKey
+
+      if (this.activationRefresh === 'never') {
+        return
+      }
+      if (
+        this.activationRefresh === 'route-change' &&
+        (!previousRouteKey || previousRouteKey === currentRouteKey)
+      ) {
+        return
+      }
+      this.$log.debug('Reload the table on activation', {
+        policy: this.activationRefresh,
+        previousRouteKey,
+        currentRouteKey
+      })
+      this._reloadTable()
+    },
+    getTableResourceKey() {
+      return this.tableUrl.split(/[?#]/, 1)[0]
+    },
+    getActivationRouteKey() {
+      const query = { ...this.$route.query }
+      delete query.tab
+      return this.$router.resolve({
+        path: this.$route.path,
+        query,
+        hash: this.$route.hash
+      }).fullPath
+    },
     getTableMetadata() {
       if (!this.tableUrl) {
         return Promise.resolve({})
       }
-      const url =
-        this.tableUrl.indexOf('?') === -1
-          ? `${this.tableUrl}?display=1`
-          : `${this.tableUrl}&display=1`
+      // OPTIONS describes the resource schema. List filters such as node_id,
+      // category and pagination only affect GET data and must not create a new
+      // metadata cache entry whenever the user changes the current tree node.
+      const resourceUrl = this.tableUrl.split(/[?#]/, 1)[0]
+      const url = `${resourceUrl}?display=1`
       if (this.metadataRequest && this.metadataRequestUrl === url) {
         return this.metadataRequest
       }
@@ -355,9 +433,8 @@ export default {
       }
     },
     handleActionInitialDone() {
-      setTimeout(() => {
-        this.actionInit = true
-      }, 100)
+      this.actionInit = true
+      this.emitQueryChange()
     },
     handleSelectionChange(val) {
       this.selectedRows = Array.isArray(val) ? [...val] : []
@@ -366,38 +443,78 @@ export default {
     _reloadTable() {
       this.dataTable?.getList()
     },
-    updateInitQuery(attrs) {
-      if (!this.actionInit) {
-        this.initQuery = attrs
-        for (const key in attrs) {
-          this.extraQuery[key] = attrs[key]
+    updateInitQuery() {
+      const tableReady = Boolean(this.$refs.dataTable?.$refs.dataTable)
+      if (!this.actionInit || !tableReady) {
+        const query = this.getMergedQuery()
+        for (const key of Object.keys(this.initQuery)) {
+          if (isFalsey(query[key])) {
+            delete this.extraQuery[key]
+          }
+        }
+        this.initQuery = { ...query }
+        for (const key in query) {
+          this.extraQuery[key] = query[key]
         }
         return true
       }
-      const removeKeys = Object.keys(this.initQuery).filter((key) => !attrs[key])
-      for (const key of removeKeys) {
+      for (const key of Object.keys(this.initQuery)) {
         delete this.extraQuery[key]
       }
+      this.initQuery = {}
+      return false
     },
     getMergedQuery() {
       return { ...this.searchQuery, ...this.filterQuery }
     },
-    search(attrs) {
-      const init = this.updateInitQuery(attrs)
+    normalizeQuery(query) {
+      return Object.keys(query || {})
+        .filter((key) => !isFalsey(query[key]))
+        .reduce((result, key) => {
+          result[key] = query[key].toString().trim()
+          return result
+        }, {})
+    },
+    getEffectiveQuery() {
+      const extraQuery = deepmerge(this.tableConfig.extraQuery || {}, this.extraQuery)
+      return this.normalizeQuery({
+        ...extraQuery,
+        ...this.getMergedQuery()
+      })
+    },
+    emitQueryChange() {
+      if (this.hasActions && !this.actionInit) {
+        return
+      }
+      const query = this.getEffectiveQuery()
+      if (_.isEqual(query, this.lastEmittedQuery)) {
+        return
+      }
+      this.lastEmittedQuery = _.cloneDeep(query)
+      this.$emit('query-change', query)
+    },
+    search(attrs = {}) {
+      this.searchQuery = attrs || {}
+      const init = this.updateInitQuery()
+      this.$log.debug('ListTable: search table', attrs)
+      this.$emit('tag-search', attrs)
+      this.emitQueryChange()
       if (init) {
         return
       }
-      this.searchQuery = attrs
       const merged = this.getMergedQuery()
-      this.$log.debug('ListTable: search table', attrs)
-      this.$emit('TagSearch', attrs)
       this.$refs.dataTable?.$refs.dataTable?.search(merged, true)
     },
-    filter(attrs) {
-      this.filterQuery = attrs
+    filter(attrs = {}) {
+      this.filterQuery = attrs || {}
+      const init = this.updateInitQuery()
       const merged = this.getMergedQuery()
-      this.$emit('TagFilter', attrs)
+      this.$emit('tag-filter', attrs)
+      this.emitQueryChange()
       this.$log.debug('ListTable: found filter change', attrs)
+      if (init) {
+        return
+      }
       this.$refs.dataTable?.$refs.dataTable?.search(merged, true)
     },
     hasActionPerm(action) {
@@ -425,8 +542,18 @@ export default {
         date_from: dateFrom,
         date_to: dateTo
       }
-      this.$emit('TagDateChange', attrs)
-      return this.dataTable.searchDate(query)
+      this.$emit('tag-date-change', attrs)
+      this.emitQueryChange()
+      return this.dataTable?.searchDate(query)
+    },
+    handleTableLoaded(payload = {}) {
+      const event = {
+        ...payload,
+        query: this.getEffectiveQuery(),
+        requestQuery: payload.query || {},
+        url: this.tableUrl
+      }
+      this.$emit('loaded', event)
     },
     toggleRowSelection(row, isSelected) {
       return this.dataTable.toggleRowSelection(row, isSelected)
@@ -437,23 +564,66 @@ export default {
 
 <style lang="scss" scoped>
 .list-table {
+  --list-corner-radius: 4px;
+
   display: flex;
   flex-direction: column;
   gap: 8px;
   min-width: 0;
 }
 
-.table-content {
+.list-table .table-content {
   min-width: 0;
+
+  > :deep(.ibox) {
+    // Element Plus transitions all card properties by default, including the
+    // flex sizing applied when a list fills its page. Never animate that layout.
+    transition: none;
+    // The outer card owns the list border and rounded corners. Clip the inner
+    // table so its square layers cannot interrupt the four corner arcs.
+    overflow: hidden !important;
+  }
 
   :deep(.el-card__body) {
     padding: 0;
+  }
+
+  :deep(.el-data-table__body > .el-table),
+  :deep(.el-table__inner-wrapper) {
+    border-radius: 0;
+  }
+
+  :deep(.el-data-table__body > .el-table--border) {
+    &::before,
+    &::after {
+      display: none;
+    }
+
+    > .el-table__inner-wrapper > .el-table__border-left-patch,
+    > .el-table__inner-wrapper > .el-table__border-right-patch,
+    > .el-table__inner-wrapper > .el-table__border-bottom-patch {
+      display: none;
+    }
+
+    tr > .el-table__cell:last-child {
+      border-right: 0 !important;
+    }
   }
 
   :deep(.el-table__row .cell) {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+  }
+
+  :deep(td.show-full-content .cell),
+  :deep(.cell:has(.col-full-content)) {
+    overflow: visible;
+    height: auto;
+    white-space: normal !important;
+    word-break: break-all !important;
+    line-height: 1.4;
+    text-overflow: clip;
   }
 
   :deep(.el-table__expanded-cell pre) {

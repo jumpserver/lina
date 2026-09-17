@@ -28,6 +28,7 @@ import CcUsers from './CcUsers'
 import Details from './Details'
 import Session from './Session'
 import Steps from './Steps'
+import { getTicketFlowLabel, getTicketStateLabel, getTicketTypeLabel } from '../const'
 export default {
   name: 'GenericTicketDetail',
   components: {
@@ -84,18 +85,18 @@ export default {
             const tp = this.statusMap[val]
             return (
               <el-tag type={tp} size="small">
-                {this.object.state.label}
+                {getTicketStateLabel(this.object.state, this.$t)}
               </el-tag>
             )
           }
         },
         {
           key: this.$tc('Type'),
-          value: object.type.label
+          value: getTicketTypeLabel(object.type, this.$t)
         },
         {
           key: this.$t('TicketFlow'),
-          value: object.flow?.name || object.type.label
+          value: getTicketFlowLabel(object, this.$t)
         },
         {
           key: this.$tc('User'),

@@ -5,7 +5,11 @@
       ref="ListTable"
       :header-actions="iHeaderActions"
       :table-config="iTableConfig"
-    />
+    >
+      <template v-if="$slots['search-after']" #search-after>
+        <slot name="search-after" />
+      </template>
+    </ListTable>
     <Drawer
       v-if="drawerComponent"
       v-model:visible="drawerVisible"
@@ -94,7 +98,8 @@ export default {
         'close-drawer': this.handleDrawerRequestClose,
         'detail-delete-success': this.handleDetailDeleteSuccess,
         'open-update-drawer': this.handleDrawerRequestUpdate,
-        'reload-table': this.reloadTable
+        'reload-table': this.reloadTable,
+        submitSuccess: this.handleDrawerSubmitSuccess
       }
     },
     mergedDrawerProps() {
@@ -146,7 +151,6 @@ export default {
       }
       if (!val) {
         this.drawerVisible = false
-        this.reloadTable()
       }
     },
     drawerVisible: {
@@ -538,8 +542,15 @@ export default {
       }
       this.$refs.ListTable.reloadTable()
     },
+    toggleRowSelection(row, isSelected) {
+      return this.$refs.ListTable?.toggleRowSelection(row, isSelected)
+    },
     handleDetailDeleteSuccess(payload) {
       this.$emit('detail-delete-success', payload)
+    },
+    handleDrawerSubmitSuccess(payload) {
+      this.reloadTable()
+      this.$emit('resource-change', payload)
     },
     handleDrawerShellClose() {
       this.$store.dispatch('common/cleanDrawerActionMeta')

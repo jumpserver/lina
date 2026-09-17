@@ -39,6 +39,17 @@
           </span>
         </div>
       </div>
+      <div class="expand-bar-wrap">
+        <button
+          :aria-label="$t('TreeActionCollapse')"
+          :title="$t('TreeActionCollapse')"
+          class="expand-bar"
+          type="button"
+          @click="toggle"
+        >
+          <i aria-hidden="true" class="fa fa-angle-double-up" />
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -198,7 +209,7 @@ export default {
   padding: 12px 16px;
   margin-bottom: 0;
   justify-content: center;
-  border: 1px solid var(--el-border-color-lighter);
+  border: 1px solid var(--panel-border-color, var(--el-border-color));
   border-radius: 4px;
   background-color: #fff;
   box-shadow: none;
@@ -316,20 +327,37 @@ export default {
 }
 
 .expand-bar-wrap {
+  display: flex;
+  flex: 0 0 30px;
+  align-items: center;
+  justify-content: flex-end;
   margin: auto 0;
-  min-width: 60px;
 
   .expand-bar {
-    float: right;
-    display: block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    color: var(--color-text-secondary);
+    border: 0;
+    border-radius: var(--list-corner-radius, 4px);
+    background: transparent;
     cursor: pointer;
 
-    i {
-      padding: 5px;
+    &:hover,
+    &:focus-visible {
+      color: var(--color-primary);
+    }
 
-      &.shrink {
-        transform: rotate(180deg);
-      }
+    &:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    i {
+      font-size: 12px;
     }
   }
 }

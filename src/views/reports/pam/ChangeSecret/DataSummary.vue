@@ -2,7 +2,7 @@
   <div>
     <el-row :gutter="16">
       <el-col :md="24" :sm="24" class="margin-top-10">
-        <SummaryCountCard :config="logConfig" :items="LogItems" />
+        <SummaryCountCard :config="logConfig" :items="LogItems" class="dashboard-panel" />
       </el-col>
     </el-row>
   </div>

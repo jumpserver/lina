@@ -210,6 +210,11 @@ export default {
       this.$emit('update:model-value', payload)
       this.$emit('change', payload)
     },
+    clearSummaryResources() {
+      if (!this.isDisabled) {
+        this.updateSelectedValue([])
+      }
+    },
     syncSelectedValue(value) {
       this.cacheSummaryResources(value)
       const payload = normalizeResourceValue(value, this.valueKey)

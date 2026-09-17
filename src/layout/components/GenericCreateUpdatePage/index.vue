@@ -40,6 +40,11 @@ export default {
     if (actionMeta?.action) {
       this.drawer = true
     }
+  },
+  methods: {
+    hasUnsavedChanges() {
+      return this.$refs.createUpdateForm?.hasUnsavedChanges() || false
+    }
   }
 }
 </script>

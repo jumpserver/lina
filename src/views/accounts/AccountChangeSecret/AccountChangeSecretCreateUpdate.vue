@@ -4,7 +4,7 @@
 
 <script>
 import { AutomationParams } from '@/components'
-import { ResourceSelect, TreeResourceSelect } from '@/components/Form/FormFields'
+import { NodeSelect, ResourceSelect } from '@/components/Form/FormFields'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
 
@@ -72,8 +72,8 @@ export default {
           }
         },
         nodes: {
-          type: 'treeResourceSelect',
-          component: TreeResourceSelect,
+          type: 'nodeSelect',
+          component: NodeSelect,
           rules: [{ required: false }],
           el: {
             value: [],

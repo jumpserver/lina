@@ -8,6 +8,7 @@
       :selected-count="selectedValue.length"
       :count-only="summaryCountOnly"
       :text="summaryText"
+      @clear="clearSummaryResources"
       @click="openDialog(selectedValue.length > 0 ? 'selected' : 'available')"
       @load-more="loadNextSummaryBatch"
       @remove="removeSummaryResource"

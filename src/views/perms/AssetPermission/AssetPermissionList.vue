@@ -2,11 +2,16 @@
   <Page v-bind="$attrs" :help-tip="helpMsg">
     <AssetTreeTable
       ref="AssetTreeTable"
+      :additional-tree-views="additionalTreeViews"
       :header-actions="headerActions"
       :table-config="tableConfig"
       :tree-setting="treeSetting"
       :quick-filters="quickFilter"
       :create-drawer="createDrawer"
+      @active-tree-ready="handlePermissionTreeReady"
+      @detail-delete-success="reloadVisiblePermissionMetrics"
+      @resource-change="reloadVisiblePermissionMetrics"
+      @selection-clear="handlePermissionTreeSelectionClear"
     />
     <PermBulkUpdateDialog
       v-bind="updateSelectedDialogSetting"
@@ -20,8 +25,12 @@
 import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import Page from '@/layout/components/Page'
 import { mapGetters } from 'vuex'
+import { setUrlParam, updateUrlParams } from '@/utils/common/index'
+import { createSourceIdCache } from '@/api/common'
 import { AssetPermissionTableMeta } from '../const.js'
 import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
+import { createAssetPermissionTreeDataSource } from './components/nodeAssetTreeDataSource'
+import { createAssetPermissionUserTreeDataSource } from './components/userTreeDataSource'
 
 export default {
   components: {
@@ -71,21 +80,77 @@ export default {
         }
       ],
       treeSetting: {
+        treeComponent: 'NodeAssetTree',
+        treeTitle: this.$t('AssetTree'),
+        assetIconMode: 'platform',
         showMenu: false,
         showAssets: true,
+        showCollapse: true,
+        showMetrics: false,
+        showPermissionScope: true,
+        showRefresh: true,
+        showSearch: true,
+        metricModes: ['permission_direct', 'permission_effective'],
+        defaultMetricMode: 'permission_effective',
+        defaultPermissionScope: 'effective',
+        defaultSearchTarget: 'all',
+        settingsCacheKey: 'asset-permission',
+        searchLimit: 1000,
+        childrenAssetLimit: 100,
+        childrenNodeLimit: 100,
+        childrenPagination: true,
+        dataSource: createAssetPermissionTreeDataSource(this.$axios),
         notShowBuiltinTree: true,
         // 选中节点只过滤表格，不把选择同步到路由。否则路由变化会触发整棵树重新初始化、闪烁。
         // 与资产列表(AllList)、账号发现、风险列表等页面保持一致。
         selectSyncToRoute: false,
         url: '/api/v1/perms/asset-permissions/',
         nodeUrl: '/api/v1/perms/asset-permissions/',
-        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1&asset_amount=0',
+        readOnly: true,
+        callback: {
+          onSelected: (event, treeNode, context) => {
+            this.handlePermissionTreeSelected(treeNode, context)
+          },
+          onPermissionScopeChange: (permissionScope, currentNode) => {
+            this.handlePermissionScopeChange(permissionScope, currentNode)
+          }
+        },
         edit: {
           drag: {
             isMove: false
           }
         }
       },
+      additionalTreeViews: [
+        {
+          title: this.$t('UserTree'),
+          name: 'UserTree',
+          icon: 'fa-regular fa-user',
+          treeComponent: 'UserTree',
+          treeSetting: {
+            showCollapse: true,
+            showPermissionScope: true,
+            showRefresh: true,
+            showSearch: true,
+            showUserOrder: true,
+            defaultPermissionScope: 'effective',
+            settingsCacheKey: 'asset-permission',
+            searchLimit: 1000,
+            childrenLimit: 100,
+            childrenPagination: true,
+            dataSource: createAssetPermissionUserTreeDataSource(this.$axios),
+            readOnly: true,
+            callback: {
+              onSelected: (event, treeNode, context) => {
+                this.handlePermissionUserTreeSelected(treeNode, context)
+              },
+              onPermissionScopeChange: (permissionScope, currentNode) => {
+                this.handlePermissionScopeChange(permissionScope, currentNode)
+              }
+            }
+          }
+        }
+      ],
       tableConfig: {
         url: '/api/v1/perms/asset-permissions/',
         hasTree: true,
@@ -127,10 +192,13 @@ export default {
           actions: {
             formatterArgs: {
               updateRoute: 'AssetPermissionUpdate',
-              performDelete: ({ row, col }) => {
+              performDelete: ({ row }) => {
                 const id = row.id
                 const url = `/api/v1/perms/asset-permissions/${id}/`
-                return this.$axios.delete(url)
+                return this.$axios.delete(url).then((response) => {
+                  this.reloadVisiblePermissionMetrics()
+                  return response
+                })
               }
             }
           }
@@ -140,6 +208,14 @@ export default {
         hasLabelSearch: true,
         hasBulkDelete: true,
         hasBulkUpdate: true,
+        performBulkDelete: async (selectedRows) => {
+          const ids = selectedRows.map((row) => row.id)
+          const { spm } = await createSourceIdCache(ids)
+          const url = setUrlParam('/api/v1/perms/asset-permissions/', 'spm', spm)
+          const response = await this.$axios.delete(url)
+          this.reloadVisiblePermissionMetrics()
+          return response
+        },
         handleBulkUpdate: ({ selectedRows }) => {
           this.updateSelectedDialogSetting.selectedRows = selectedRows
           this.updateSelectedDialogSetting.visible = true
@@ -177,8 +253,91 @@ export default {
     this.activatedReloadTimer = null
   },
   methods: {
+    clearPermissionTreeFilters(url) {
+      return updateUrlParams(url, {
+        node_id: null,
+        asset_id: null,
+        user_id: null,
+        user_group_id: null,
+        ungrouped_users: null,
+        all: null,
+        include_inherited: null
+      })
+    },
+    handlePermissionTreeSelected(treeNode, context = {}) {
+      const type = treeNode?.meta?.type
+      const resourceId = treeNode?.meta?.data?.id
+      if (!resourceId || !['node', 'asset'].includes(type)) {
+        return
+      }
+
+      let url = this.clearPermissionTreeFilters(this.treeSetting.url)
+      url = updateUrlParams(url, {
+        node_id: type === 'node' ? resourceId : null,
+        asset_id: type === 'asset' ? resourceId : null,
+        include_inherited: context.permissionScope === 'direct' ? false : null
+      })
+      this.$refs.AssetTreeTable?.updateTableUrl?.(url)
+    },
+    handlePermissionUserTreeSelected(treeNode, context = {}) {
+      const type = treeNode?.meta?.type
+      const resourceId = treeNode?.meta?.data?.resource_id ?? treeNode?.meta?.data?.id
+      if (
+        !resourceId ||
+        !['organization', 'user_group', 'ungrouped_users', 'user'].includes(type)
+      ) {
+        return
+      }
+
+      let url = this.clearPermissionTreeFilters(this.treeSetting.url)
+      if (type === 'user_group') {
+        url = setUrlParam(url, 'user_group_id', resourceId)
+      } else if (type === 'ungrouped_users') {
+        url = setUrlParam(url, 'ungrouped_users', true)
+      } else if (type === 'user') {
+        url = setUrlParam(url, 'user_id', resourceId)
+      }
+      if (type === 'user_group' || type === 'user') {
+        url = updateUrlParams(url, {
+          include_inherited: context.permissionScope === 'direct' ? false : null
+        })
+      }
+      this.$refs.AssetTreeTable?.updateTableUrl?.(url)
+    },
+    handlePermissionTreeReady({ tree } = {}) {
+      const selected = tree?.getSelectedNodes?.()[0]
+      const context = tree?.getTreeSnapshot?.() || {}
+      const type = selected?.meta?.type
+      if (['node', 'asset'].includes(type)) {
+        this.handlePermissionTreeSelected(selected, context)
+      } else if (['organization', 'user_group', 'ungrouped_users', 'user'].includes(type)) {
+        this.handlePermissionUserTreeSelected(selected, context)
+      } else {
+        this.handlePermissionTreeSelectionClear()
+      }
+    },
+    handlePermissionTreeSelectionClear() {
+      const url = this.clearPermissionTreeFilters(this.treeSetting.url)
+      this.$refs.AssetTreeTable?.updateTableUrl?.(url)
+    },
+    handlePermissionScopeChange(permissionScope, currentNode) {
+      if (currentNode) {
+        return
+      }
+      const currentUrl =
+        this.$refs.AssetTreeTable?.$refs.TreeList?.iTableConfig?.url || this.treeSetting.url
+      const url = updateUrlParams(currentUrl, {
+        all: null,
+        include_inherited: permissionScope === 'direct' ? false : null
+      })
+      this.$refs.AssetTreeTable?.updateTableUrl?.(url)
+    },
     reloadAssetTreeTable() {
       this.$refs.AssetTreeTable?.reloadTable?.()
+      this.reloadVisiblePermissionMetrics()
+    },
+    reloadVisiblePermissionMetrics() {
+      this.$refs.AssetTreeTable?.reloadVisibleTreeMetrics?.()
     },
     handlePermBulkUpdate() {
       this.updateSelectedDialogSetting.visible = false

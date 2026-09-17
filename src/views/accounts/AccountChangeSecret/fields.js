@@ -1,5 +1,11 @@
 import i18n from '@/i18n/i18n'
-import { PasswordRule, Select2, TagInput, UpdateToken } from '@/components/Form/FormFields'
+import {
+  PasswordRule,
+  Select2,
+  TagInput,
+  UpdateToken,
+  UploadSecret
+} from '@/components/Form/FormFields'
 import { periodicMeta } from '@/components/const'
 
 export const getChangeSecretFields = () => {
@@ -16,7 +22,8 @@ export const getChangeSecretFields = () => {
     },
     secret: {
       el: {
-        autocomplete: 'new-password'
+        autocomplete: 'new-password',
+        showPassword: true
       },
       label: i18n.t('Password'),
       hidden: ({ secret_strategy, secret_type }) => {
@@ -25,8 +32,8 @@ export const getChangeSecretFields = () => {
     },
     ssh_key: {
       label: i18n.t('PrivateKey'),
+      component: UploadSecret,
       el: {
-        type: 'textarea',
         rows: 4
       },
       hidden: ({ secret_strategy, secret_type }) =>

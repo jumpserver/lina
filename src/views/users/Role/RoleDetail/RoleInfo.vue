@@ -204,9 +204,9 @@ export default {
           'assets.view_asset',
           'assets.view_node',
           'assets.view_systemuser',
-          'xpack.view_account'
+          'xpack.view_cloudaccount'
         ],
-        'xpack.view_syncinstancetask': ['xpack.view_account'],
+        'xpack.view_syncinstancetask': ['xpack.view_cloudaccount'],
         'xpack.view_syncinstancedetail': ['xpack.view_syncinstancetask'],
         'xpack.view_syncinstancetaskexecution': ['xpack.view_syncinstancetask'],
         'xpack.view_changeauthplan': ['assets.view_asset'],

@@ -2,14 +2,17 @@
   <div v-loading="loading">
     <TreeTable
       ref="CommandTreeTable"
+      v-model:active-menu="treeTabConfig.activeMenu"
+      component="TabTree"
       :title="title"
       :header-actions="headerActions"
       :table-config="tableConfig"
       :tree-setting="treeSetting"
+      :tree-tab-config="treeTabConfig"
+      :tree-initial-max-width="320"
+      tree-width="20%"
       class="command-list-table"
-      @tag-date-change="handleDateChange"
-      @tag-filter="handleFilterChange"
-      @tag-search="handleTagChange"
+      @query-change="handleQueryChange"
       @tree-init-finish="checkFirstNode"
     />
   </div>
@@ -22,8 +25,6 @@ import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { getDayEnd, getDaysAgo } from '@/utils/common/time'
 import { OutputExpandFormatter } from '../formatters'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
-import isFalsey from '@/components/Table/DataTable/compenents/el-data-table/utils/is-falsey'
-import deepmerge from 'deepmerge'
 import * as queryUtil from '@/components/Table/DataTable/compenents/el-data-table/utils/query'
 import { createSourceIdCache } from '@/api/common'
 import { download } from '@/utils/common/index'
@@ -41,9 +42,49 @@ export default {
   data() {
     const dateFrom = getDaysAgo(7).toISOString()
     const dateTo = this.$moment(getDayEnd()).add(1, 'day').toISOString()
+    const initialQuery = {
+      date_from: dateFrom,
+      date_to: dateTo,
+      ...(this.assetId ? { asset_id: this.assetId } : {})
+    }
+    const treeSetting = {
+      showDefaultMenu: false,
+      showMenu: false,
+      showRefresh: true,
+      showCollapse: true,
+      showSearch: true,
+      showAssets: false,
+      readOnly: true,
+      lazyLoad: false,
+      expandRootInGlobalOrg: true,
+      treeUrl: '/api/v1/terminal/command-storages/tree/?real=1',
+      amountPredicate: (node) => node.valid !== false,
+      getNodeAmountTitle: () => this.$t('TreeAmountTipCommands'),
+      getNodeAmountResourceId: (node) => (node.id === 'root' ? null : node.id),
+      loadNodeAmounts: (nodeIds, options) => this.loadStorageAmounts(nodeIds, options),
+      edit: {
+        drag: {
+          isMove: false
+        }
+      },
+      callback: {
+        beforeRefresh: () => this.invalidateStorageMetrics(),
+        onSelected: (_event, treeNode) => this.handleStorageSelected(treeNode)
+      }
+    }
     return {
       title: this.$t('CommandStorage'),
       loading: true,
+      treeMetricsQuery: initialQuery,
+      treeMetricsQueryKey: this.serializeQuery(initialQuery),
+      treeMetricsReady: false,
+      storageMetricsCache: new Map(),
+      storageMetricsPending: new Map(),
+      storageMetricsRequest: null,
+      storageMetricsAbortController: null,
+      storageMetricsGeneration: 0,
+      storageRootMetricReady: false,
+      selectedStorageNode: null,
       tableConfig: {
         url: '/api/v1/terminal/commands/',
         tableAttrs: {
@@ -79,10 +120,7 @@ export default {
             'timestamp'
           ]
         },
-        extraQuery: {
-          date_to: dateTo,
-          date_from: dateFrom
-        },
+        extraQuery: initialQuery,
         columnsMeta: {
           expandCol: {
             type: 'expand',
@@ -168,40 +206,19 @@ export default {
           }
         }
       },
-      treeSetting: {
-        showMenu: false,
-        showRefresh: true,
-        showAssets: false,
-        // ?assets=0不显示资产. =1显示资产
-        treeUrl: `/api/v1/terminal/command-storages/tree/?real=1&date_from=${dateFrom}&date_to=${dateTo}&asset_id=${this.assetId}`,
-        view: {
-          // 添加禁用颜色区分
-          fontCss: (treeId, treeNode) => {
-            if (treeNode.chkDisabled) {
-              return {
-                opacity: '0.4'
-              }
-            }
-            return {}
+      treeSetting,
+      treeTabConfig: {
+        activeMenu: 'CommandStorageTree',
+        treeComponent: 'XTree',
+        submenu: [
+          {
+            title: this.$t('CommandStorage'),
+            name: 'CommandStorageTree',
+            icon: 'fa-solid fa-database',
+            treeComponent: 'XTree',
+            treeSetting
           }
-        },
-        callback: {
-          onSelected: (event, treeNode) => {
-            // 禁止点击根节点
-            if (treeNode.id === 'root') {
-              return
-            }
-            if (!treeNode.valid) {
-              this.$message.error(this.$tc('EsDisabled'))
-              return
-            }
-            this.tableConfig.url = `/api/v1/terminal/commands/?command_storage_id=${treeNode.id}&order=-timestamp`
-            if (this.assetId) {
-              this.tableConfig.url += `&asset_id=${this.assetId}`
-            }
-            this.treeTable.handleUrlChange(this.tableConfig.url)
-          }
-        }
+        ]
       }
     }
   },
@@ -210,52 +227,241 @@ export default {
       return this.$refs.CommandTreeTable
     }
   },
-  watch: {},
+  activated() {
+    const storageTree = this.getStorageTreeInfo()
+    if (storageTree.loaded) {
+      this.ensureRootMetric(storageTree.ids, this.storageMetricsGeneration)
+    }
+  },
+  deactivated() {
+    this.pauseStorageMetrics()
+  },
+  beforeUnmount() {
+    this.pauseStorageMetrics()
+  },
   methods: {
+    handleStorageSelected(treeNode) {
+      if (treeNode.id === 'root') {
+        this.treeTable?.selectNode(this.selectedStorageNode)
+        return
+      }
+      if (!treeNode.valid) {
+        this.$message.error(this.$tc('EsDisabled'))
+        this.treeTable?.selectNode(this.selectedStorageNode)
+        return
+      }
+      this.selectedStorageNode = treeNode
+      const url = `/api/v1/terminal/commands/?command_storage_id=${treeNode.id}&order=-timestamp`
+      this.tableConfig.url = url
+      this.treeTable.handleUrlChange(url)
+    },
     checkFirstNode(obj) {
-      const ztree = obj
-      const nodes = ztree.getNodes()
-      const firstChild = nodes[0]?.children?.[0]
+      const nodes = obj.getNodes()
+      const firstChild = nodes[0]?.children?.find((node) => node.valid !== false)
       if (firstChild) {
-        ztree.selectNode(firstChild)
+        obj.selectNode(firstChild)
+        this.handleStorageSelected(firstChild)
+      } else if (nodes[0]?.id === 'root') {
+        this.storageRootMetricReady = true
+        this.treeTable?.setNodeMetric('root', 0)
       }
       this.loading = false
     },
-    handleTagChange(query) {
-      const _query = this.cleanUrl(query)
-      const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`
-      const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(_query, '=', '&')
-      const treeUrl = url + queryStr
-      this.treeSetting['treeUrl'] = treeUrl
-    },
-    handleFilterChange(query) {
-      const _query = this.cleanUrl(query)
-      const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`
-      const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(_query, '=', '&')
-      const treeUrl = url + queryStr
-      this.treeSetting['treeUrl'] = treeUrl
-    },
-    handleDateChange(object) {
-      this.query = {
-        date_from: object[0].toISOString(),
-        date_to: object[1].toISOString()
+    async loadStorageAmounts(nodeIds, { signal } = {}) {
+      if (!this.treeMetricsReady) {
+        return { results: [] }
       }
-      const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`
-      const queryStr =
-        (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(this.query, '=', '&')
-      const treeUrl = url + queryStr
-      this.treeSetting['treeUrl'] = treeUrl
-      this.treeTable.forceRerenderTree()
+      const storageTree = this.getStorageTreeInfo()
+      if (!storageTree.loaded) {
+        return this.requestStorageMetrics(nodeIds, signal)
+      }
+
+      const generation = this.storageMetricsGeneration
+      await this.requestAndCacheStorageMetrics(nodeIds, signal, generation)
+      const results = nodeIds
+        .map((id) => ({ id: String(id), count: this.storageMetricsCache.get(String(id)) }))
+        .filter((item) => Number.isFinite(item.count))
+      this.ensureRootMetric(storageTree.ids, generation)
+      return { results }
     },
-    cleanUrl(query) {
-      query = Object.keys(query)
-        .filter((k) => !isFalsey(query[k]))
-        .reduce((obj, k) => {
-          obj[k] = query[k].toString().trim()
-          return obj
-        }, {})
-      query = deepmerge(this.query, query)
-      return query
+    requestStorageMetrics(nodeIds, signal) {
+      if (!nodeIds.length) {
+        return Promise.resolve({ results: [] })
+      }
+      return this.$axios.post(
+        '/api/v1/terminal/command-storages/tree-metrics/',
+        { node_ids: nodeIds },
+        {
+          params: this.treeMetricsQuery,
+          signal
+        }
+      )
+    },
+    getStorageTreeInfo() {
+      const roots = this.treeTable?.getAllNodes?.() || []
+      const stack = [...roots]
+      const ids = []
+      let loaded = false
+      while (stack.length) {
+        const node = stack.pop()
+        if (node.id === 'root') {
+          loaded = true
+        } else if (node.valid !== false) {
+          ids.push(String(node.id))
+        }
+        stack.push(...(node.children || []))
+      }
+      return { ids: [...new Set(ids)], loaded }
+    },
+    createStorageMetricsAbortError() {
+      const error = new Error('Storage metrics request was superseded')
+      error.name = 'AbortError'
+      return error
+    },
+    assertStorageMetricsRequestCurrent(signal, generation) {
+      if (signal?.aborted || generation !== this.storageMetricsGeneration) {
+        throw this.createStorageMetricsAbortError()
+      }
+    },
+    cacheStorageMetrics(response, signal, generation) {
+      this.assertStorageMetricsRequestCurrent(signal, generation)
+      for (const item of response?.results || []) {
+        const count = Number(item.count)
+        if (Number.isFinite(count)) {
+          this.storageMetricsCache.set(String(item.id), count)
+        }
+      }
+    },
+    async requestAndCacheStorageMetrics(storageIds, signal, generation) {
+      const ids = [...new Set(storageIds.map(String))]
+      const waitFor = new Set()
+      const requestIds = ids.filter((id) => {
+        if (this.storageMetricsCache.has(id)) {
+          return false
+        }
+        const pending = this.storageMetricsPending.get(id)
+        if (pending) {
+          waitFor.add(pending)
+          return false
+        }
+        return true
+      })
+
+      if (requestIds.length) {
+        const request = this.requestStorageMetrics(requestIds, signal)
+          .then((response) => this.cacheStorageMetrics(response, signal, generation))
+          .finally(() => {
+            requestIds.forEach((id) => {
+              if (this.storageMetricsPending.get(id) === request) {
+                this.storageMetricsPending.delete(id)
+              }
+            })
+          })
+        requestIds.forEach((id) => this.storageMetricsPending.set(id, request))
+        waitFor.add(request)
+      }
+
+      await Promise.all(waitFor)
+      this.assertStorageMetricsRequestCurrent(signal, generation)
+    },
+    ensureRootMetric(storageIds, generation) {
+      if (
+        !this.treeMetricsReady ||
+        this.storageRootMetricReady ||
+        this.storageMetricsRequest ||
+        generation !== this.storageMetricsGeneration
+      ) {
+        return
+      }
+      if (!storageIds.length) {
+        this.storageRootMetricReady = true
+        this.treeTable?.setNodeMetric('root', 0)
+        return
+      }
+
+      const controller = new AbortController()
+      this.storageMetricsAbortController = controller
+      const request = (async () => {
+        const batchSize = 200
+        for (let index = 0; index < storageIds.length; index += batchSize) {
+          const batch = storageIds
+            .slice(index, index + batchSize)
+            .filter((id) => !this.storageMetricsCache.has(id))
+          if (batch.length) {
+            await this.requestAndCacheStorageMetrics(batch, controller.signal, generation)
+          }
+        }
+        this.assertStorageMetricsRequestCurrent(controller.signal, generation)
+        if (!storageIds.every((id) => this.storageMetricsCache.has(id))) {
+          return
+        }
+        const rootCount = storageIds.reduce(
+          (total, id) => total + this.storageMetricsCache.get(id),
+          0
+        )
+        this.storageRootMetricReady = true
+        this.treeTable?.setNodeMetric('root', rootCount)
+      })()
+      this.storageMetricsRequest = request
+      request
+        .catch((error) => {
+          if (error?.name !== 'AbortError' && error?.code !== 'ERR_CANCELED') {
+            this.$log?.warn?.('Load command storage root metric failed', error)
+          }
+        })
+        .finally(() => {
+          if (this.storageMetricsRequest === request) {
+            this.storageMetricsRequest = null
+            this.storageMetricsAbortController = null
+          }
+        })
+    },
+    reloadTreeMetrics() {
+      return this.treeTable?.reloadVisibleMetrics({
+        fresh: true,
+        resetNormal: true
+      })
+    },
+    serializeQuery(query) {
+      return JSON.stringify(
+        Object.keys(query || {})
+          .sort()
+          .reduce((result, key) => {
+            result[key] = query[key]
+            return result
+          }, {})
+      )
+    },
+    invalidateStorageMetrics() {
+      this.pauseStorageMetrics()
+      this.storageMetricsCache = new Map()
+      this.storageRootMetricReady = false
+      this.treeTable?.setNodeMetric('root', null)
+    },
+    pauseStorageMetrics() {
+      this.storageMetricsAbortController?.abort()
+      this.storageMetricsGeneration += 1
+      this.storageMetricsPending = new Map()
+      this.storageMetricsRequest = null
+      this.storageMetricsAbortController = null
+    },
+    handleQueryChange(query) {
+      const key = this.serializeQuery(query)
+      const initializing = !this.treeMetricsReady
+      this.treeMetricsReady = true
+      if (!initializing && key === this.treeMetricsQueryKey) {
+        return
+      }
+      this.treeMetricsQuery = { ...query }
+      this.treeMetricsQueryKey = key
+      this.invalidateStorageMetrics()
+      const reload = this.reloadTreeMetrics()
+      const storageTree = this.getStorageTreeInfo()
+      if (storageTree.loaded && !storageTree.ids.length) {
+        this.storageRootMetricReady = true
+        this.treeTable?.setNodeMetric('root', 0)
+      }
+      return reload
     }
   }
 }

@@ -11,56 +11,65 @@
       {{ selectedCount > 0 ? countText : text }}
     </button>
     <template v-else>
-      <div
-        :aria-disabled="disabled"
-        :aria-label="ariaLabel"
-        :class="{ 'is-disabled': disabled }"
-        :tabindex="disabled ? -1 : 0"
-        class="resource-select-summary__control"
-        role="button"
-        @click="handleClick"
-        @keydown.enter.prevent="handleClick"
-        @keydown.space.prevent="handleClick"
+      <el-tooltip
+        :content="countText"
+        :disabled="!namesOverflowing"
+        :hide-after="0"
+        placement="top-start"
+        popper-class="resource-select-summary__count-tooltip"
+        :show-after="200"
       >
-        <template v-if="selectedCount > 0">
-          <div
-            v-if="items.length > 0"
-            ref="names"
-            class="resource-select-summary__names"
-            @scroll.passive="handleScroll"
-            @wheel.passive="handleWheel"
-          >
-            <span class="resource-select-summary__names-content">
-              <span
-                v-for="item in items"
-                :key="String(item.value)"
-                class="resource-select-summary__name"
-              >
-                <span class="resource-select-summary__name-text">{{ item.name }}</span>
-                <button
-                  v-if="!disabled"
-                  :aria-label="`${$t('Remove')} ${item.name}`"
-                  class="resource-select-summary__remove"
-                  type="button"
-                  @click.stop="$emit('remove', item.value)"
+        <div
+          :aria-disabled="disabled"
+          :aria-label="ariaLabel"
+          :class="{ 'has-selection': selectedCount > 0, 'is-disabled': disabled }"
+          :tabindex="disabled ? -1 : 0"
+          class="resource-select-summary__control"
+          role="button"
+          @click="handleClick"
+          @keydown.enter.prevent="handleClick"
+          @keydown.space.prevent="handleClick"
+        >
+          <template v-if="selectedCount > 0">
+            <div
+              v-if="items.length > 0"
+              ref="names"
+              class="resource-select-summary__names"
+              @scroll.passive="handleScroll"
+              @wheel.passive="handleWheel"
+            >
+              <span ref="namesContent" class="resource-select-summary__names-content">
+                <span
+                  v-for="item in items"
+                  :key="String(item.value)"
+                  class="resource-select-summary__name"
                 >
-                  <el-icon><Close /></el-icon>
-                </button>
+                  <span class="resource-select-summary__name-text">{{ item.name }}</span>
+                  <button
+                    v-if="!disabled"
+                    :aria-label="`${$t('Remove')} ${item.name}`"
+                    class="resource-select-summary__remove"
+                    type="button"
+                    @click.stop="$emit('remove', item.value)"
+                  >
+                    <el-icon><Close /></el-icon>
+                  </button>
+                </span>
               </span>
-            </span>
-          </div>
-        </template>
-        <span v-else class="resource-select-summary__placeholder">{{ text }}</span>
-      </div>
-      <button
-        v-if="selectedCount > 0"
-        :disabled="disabled"
-        class="resource-select-summary__count"
-        type="button"
-        @click="handleClick"
-      >
-        {{ countText }}
-      </button>
+            </div>
+          </template>
+          <span v-else class="resource-select-summary__placeholder">{{ text }}</span>
+          <button
+            v-if="selectedCount > 0 && !disabled"
+            :aria-label="$t('Clear')"
+            class="resource-select-summary__clear"
+            type="button"
+            @click.stop="$emit('clear')"
+          >
+            <el-icon><CircleClose /></el-icon>
+          </button>
+        </div>
+      </el-tooltip>
     </template>
   </div>
 </template>
@@ -98,10 +107,14 @@ export default {
       default: false
     }
   },
-  emits: ['click', 'load-more', 'remove'],
+  emits: ['clear', 'click', 'load-more', 'remove'],
   data() {
     return {
-      loadMoreRequested: false
+      loadMoreRequested: false,
+      namesOverflowing: false,
+      namesResizeObserver: null,
+      observedNames: null,
+      observedNamesContent: null
     }
   },
   computed: {
@@ -111,6 +124,23 @@ export default {
       }
       return [...this.items.map((item) => item.name), this.countText].filter(Boolean).join(', ')
     }
+  },
+  watch: {
+    items: {
+      deep: true,
+      handler() {
+        this.scheduleNamesOverflowCheck()
+      }
+    },
+    selectedCount() {
+      this.scheduleNamesOverflowCheck()
+    }
+  },
+  mounted() {
+    this.scheduleNamesOverflowCheck()
+  },
+  beforeUnmount() {
+    this.disconnectNamesResizeObserver()
   },
   methods: {
     handleClick() {
@@ -132,6 +162,45 @@ export default {
       const container = this.$refs.names
       if (event.deltaY > 0 && container && container.scrollHeight <= container.clientHeight + 1) {
         this.requestLoadMore()
+      }
+    },
+    scheduleNamesOverflowCheck() {
+      this.$nextTick(() => {
+        this.syncNamesResizeObserver()
+        this.updateNamesOverflow()
+      })
+    },
+    syncNamesResizeObserver() {
+      const names = this.$refs.names || null
+      const namesContent = this.$refs.namesContent || null
+      if (names === this.observedNames && namesContent === this.observedNamesContent) {
+        return
+      }
+
+      this.disconnectNamesResizeObserver()
+      this.observedNames = names
+      this.observedNamesContent = namesContent
+      if (!names || typeof ResizeObserver === 'undefined') {
+        return
+      }
+
+      this.namesResizeObserver = new ResizeObserver(() => this.updateNamesOverflow())
+      this.namesResizeObserver.observe(names)
+      if (namesContent) {
+        this.namesResizeObserver.observe(namesContent)
+      }
+    },
+    disconnectNamesResizeObserver() {
+      this.namesResizeObserver?.disconnect()
+      this.namesResizeObserver = null
+      this.observedNames = null
+      this.observedNamesContent = null
+    },
+    updateNamesOverflow() {
+      const names = this.$refs.names
+      const overflowing = Boolean(names && names.scrollHeight > names.clientHeight + 1)
+      if (this.namesOverflowing !== overflowing) {
+        this.namesOverflowing = overflowing
       }
     },
     requestLoadMore() {
@@ -163,6 +232,7 @@ export default {
 }
 
 .resource-select-summary__control {
+  position: relative;
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -226,7 +296,9 @@ export default {
 }
 
 .resource-select-summary__names {
+  flex: 1 1 100%;
   width: 100%;
+  min-width: 0;
   min-height: 28px;
   max-height: 80px;
   overflow-x: hidden;
@@ -262,15 +334,12 @@ export default {
   row-gap: 0;
   width: 100%;
   min-height: 28px;
-}
-
-.resource-select-summary__count,
-.resource-select-summary__placeholder {
-  color: var(--el-text-color-secondary);
+  padding-right: 30px;
 }
 
 .resource-select-summary__placeholder {
   padding: 0 11px;
+  color: var(--el-text-color-secondary);
 }
 
 .resource-select-summary__name {
@@ -334,30 +403,47 @@ export default {
   }
 }
 
-.resource-select-summary__count {
-  display: block;
-  align-self: flex-start;
-  min-height: 20px;
-  margin-top: 4px;
+.resource-select-summary__clear {
+  position: absolute;
+  top: 50%;
+  right: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
   padding: 0;
   border: 0;
   outline: none;
+  opacity: 0;
   background: transparent;
-  color: var(--el-color-primary);
+  color: #c0c4cc;
   cursor: pointer;
-  font: inherit;
-  line-height: 20px;
-  text-align: left;
-  white-space: nowrap;
+  font-size: 14px;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition:
+    opacity var(--el-transition-duration-fast),
+    color var(--el-transition-duration-fast);
 
   &:hover,
   &:focus-visible {
-    color: var(--el-color-primary-light-3);
+    color: #606164;
   }
+}
 
-  &:disabled {
-    color: var(--el-disabled-text-color);
-    cursor: not-allowed;
+.resource-select-summary__control:hover .resource-select-summary__clear,
+.resource-select-summary__control:focus-within .resource-select-summary__clear {
+  opacity: 1;
+  pointer-events: auto;
+}
+</style>
+
+<style lang="scss">
+.resource-select-summary__count-tooltip[data-popper-placement^='top'] {
+  .el-popper__arrow {
+    left: 16px !important;
+    transform: none !important;
   }
 }
 </style>

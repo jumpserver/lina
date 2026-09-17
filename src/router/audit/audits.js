@@ -1,5 +1,6 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
+import store from '@/store'
 
 export default [
   {
@@ -80,5 +81,31 @@ export default [
         }
       }
     ]
+  },
+  {
+    path: 'ai-conversations',
+    name: 'ChatAIConversationAudit',
+    component: () => import('@/views/audits/ChatAIConversationAudit/index.vue'),
+    meta: {
+      title: i18n.t('ChatAIConversationAudit'),
+      menuTitle: i18n.t('ChatAI'),
+      icon: 'short-message',
+      permissions: [],
+      hidden: () => {
+        const settings = store.getters.publicSettings || {}
+        return !store.getters.currentUserIsSuperAdmin || settings.CHAT_AI_ENABLED !== true
+      }
+    }
+  },
+  {
+    path: 'ai-conversations/:id',
+    name: 'ChatAIConversationAuditDetail',
+    component: () => import('@/views/audits/ChatAIConversationAudit/index.vue'),
+    hidden: true,
+    meta: {
+      title: i18n.t('ChatAIConversationAudit'),
+      activeMenu: '/audit/audits/ai-conversations',
+      permissions: []
+    }
   }
 ]

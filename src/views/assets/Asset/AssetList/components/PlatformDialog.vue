@@ -7,6 +7,7 @@
     :show-confirm="false"
     :title="$tc('SelectPlatform')"
     :model-value="visible"
+    body-class="platform-drawer__body"
     custom-class="drawer"
     size="700px"
     top="1vh"
@@ -144,12 +145,14 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-:deep(.el-drawer__body) {
+<style lang="scss">
+.el-drawer.drawer .el-drawer__body.platform-drawer__body {
   padding: 0;
   overflow-y: auto;
 }
+</style>
 
+<style lang="scss" scoped>
 .platform-content {
   width: 100%;
   box-sizing: border-box;

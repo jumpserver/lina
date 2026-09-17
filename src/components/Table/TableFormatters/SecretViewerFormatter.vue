@@ -1,24 +1,5 @@
 <template>
   <div class="content">
-    <span :class="formatterArgs.actionLeft ? 'left' : 'right'" class="action">
-      <template v-for="(item, index) in iActions">
-        <el-tooltip
-          v-if="item.has"
-          :key="index"
-          :content="item.tooltip"
-          :show-after="500"
-          effect="dark"
-          placement="top"
-        >
-          <i
-            :class="[item.class, item.icon]"
-            class="fa"
-            @mousedown.prevent
-            @click="item.action()"
-          />
-        </el-tooltip>
-      </template>
-    </span>
     <el-tooltip
       v-if="!isEdit"
       :content="vaultUnavailable ? $t('VaultSecretUnavailableTip') : currentValue"
@@ -37,6 +18,26 @@
       size="small"
       @blur="onEditBlur"
     />
+
+    <span :class="formatterArgs.actionLeft ? 'left' : 'right'" class="action">
+      <template v-for="(item, index) in iActions">
+        <el-tooltip
+          v-if="item.has"
+          :key="index"
+          :content="item.tooltip"
+          :show-after="500"
+          effect="dark"
+          placement="top"
+        >
+          <i
+            :class="[item.class, item.icon, { 'show-on-hover': item.showOnHover }]"
+            class="fa"
+            @mousedown.prevent
+            @click="item.action()"
+          />
+        </el-tooltip>
+      </template>
+    </span>
   </div>
 </template>
 
@@ -59,6 +60,7 @@ export default {
           hasCopy: true,
           hasEdit: true,
           defaultShow: false,
+          showActionsOnHover: true,
           secretFrom: 'cellValue', // fromCellValue or api,
           actionLeft: false
         }
@@ -80,19 +82,22 @@ export default {
       publicSettings: 'publicSettings'
     }),
     hasShow: function () {
-      return this.formatterArgs.hasShow
+      return this.formatterArgs.hasShow && !this.isSSHCertificate && !this.vaultUnavailable
     },
     hasDownload: function () {
-      return this.formatterArgs.hasDownload && !this.vaultUnavailable
+      return this.formatterArgs.hasDownload && !this.isSSHCertificate && !this.vaultUnavailable
     },
     hasCopy: function () {
-      return this.formatterArgs.hasCopy && !this.vaultUnavailable
+      return this.formatterArgs.hasCopy && !this.isSSHCertificate && !this.vaultUnavailable
     },
     hasEdit: function () {
-      return this.formatterArgs.hasEdit && !this.vaultUnavailable
+      return this.formatterArgs.hasEdit && !this.isSSHCertificate && !this.vaultUnavailable
     },
     name: function () {
       return this.formatterArgs.name
+    },
+    isSSHCertificate() {
+      return this.row?.secret_type?.value === 'ssh_certificate'
     },
     iActions() {
       const actions = [
@@ -108,7 +113,8 @@ export default {
           action: () => {
             this.onShow()
           },
-          tooltip: this.$t('View')
+          tooltip: this.$t('View'),
+          showOnHover: this.formatterArgs.showActionsOnHover
         },
         {
           has: this.hasDownload,
@@ -120,7 +126,8 @@ export default {
           has: this.hasCopy,
           icon: 'fa-clone',
           action: this.onCopy,
-          tooltip: this.$t('Copy')
+          tooltip: this.$t('Copy'),
+          showOnHover: this.formatterArgs.showActionsOnHover
         }
       ]
       if (this.formatterArgs.actionLeft) {
@@ -129,6 +136,9 @@ export default {
       return actions
     },
     currentValue() {
+      if (this.isSSHCertificate) {
+        return this.$t('DynamicCredential')
+      }
       if (this.vaultUnavailable) {
         return this.$t('VaultSecretUnavailable')
       }
@@ -255,6 +265,21 @@ export default {
         color: var(--color-primary);
       }
     }
+  }
+}
+
+@media (hover: hover) {
+  .content .action .show-on-hover {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+  }
+
+  .content:hover .action .show-on-hover {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
   }
 }
 

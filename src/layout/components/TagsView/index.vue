@@ -206,7 +206,7 @@ export default {
 <style lang="scss" scoped>
 @use '@/styles/variables' as *;
 .tags-view-container {
-  background-color: #f3f3f4 !important;
+  background-color: var(--page-background-color, #fff) !important;
   border: none !important;
   height: 34px;
   width: 100%;

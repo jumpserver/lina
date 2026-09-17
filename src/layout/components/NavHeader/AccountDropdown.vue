@@ -1,9 +1,13 @@
 <template>
   <div class="header-tools header-profile">
-    <el-dropdown popper-class="nav-header-dropdown" :show-timeout="50" @command="handleClick">
+    <el-dropdown
+      popper-class="nav-header-dropdown nav-account-dropdown"
+      :show-timeout="50"
+      @command="handleClick"
+    >
       <span class="el-dropdown-link">
         <el-avatar :src="avatarUrl" class="header-avatar" />
-        {{ currentUser.name }}
+        <span v-if="!isMobile">{{ currentUser.name }}</span>
         <el-icon class="el-icon--right"><ArrowDown /></el-icon>
       </span>
       <template #dropdown>
@@ -49,7 +53,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentUser'])
+    ...mapGetters(['currentUser', 'isMobile'])
   },
   created() {},
   methods: {
@@ -81,6 +85,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+:global(.nav-header-dropdown.nav-account-dropdown.el-dropdown__popper .el-dropdown-menu__item) {
+  height: 32px;
+  line-height: 32px;
+  font-size: 12px;
+}
+
 .header-profile {
   display: flex;
   align-items: center;
@@ -119,12 +129,8 @@ export default {
   background: white;
 }
 
-.mobile .header-avatar {
-  display: none;
-}
-
 .icon {
   font-size: 14px;
-  margin-right: 3px;
+  margin-right: 10px;
 }
 </style>

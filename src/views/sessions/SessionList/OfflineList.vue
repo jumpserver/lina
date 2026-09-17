@@ -36,8 +36,8 @@ export default {
             vm.hasPerms(row, 'view') &&
             !(row.protocol === 'mongodb' && row.terminal.type === 'magnus'),
           callback: function ({ row, tableData }) {
-            // 跳转到luna页面
-            const replayUrl = '/luna/replay/' + row.id
+            const oid = row.org_id || vm.$store.getters.currentOrg?.id || ''
+            const replayUrl = `/luna/replay/${row.id}${oid ? `?oid=${encodeURIComponent(oid)}` : ''}`
             window.open(addBasePath(replayUrl))
           }
         },

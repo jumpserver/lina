@@ -124,6 +124,17 @@ export default {
   MatchExcludeParenthesis
 }
 
+// el-form.validate() 会跑 trigger: blur 的 UniqueCheck，提交时跳过，重复交给后端 400
+let skipUniqueCheck = 0
+export async function runWithoutUniqueCheck(fn) {
+  skipUniqueCheck++
+  try {
+    return await fn()
+  } finally {
+    skipUniqueCheck--
+  }
+}
+
 /**
  * @description 表单唯一性校验
  *
@@ -153,39 +164,32 @@ export function UniqueCheck(options = {}) {
   }
 
   return {
-    async validator(rule, value, callback) {
-      try {
-        let v = value
+    validator(rule, value, callback) {
+      if (skipUniqueCheck) return callback()
 
-        if (typeof v === 'string') v = v.trim()
-        if (v === '' || v === undefined || v === null) return callback()
-        if (!url || !param) return callback()
+      let v = value
+      if (typeof v === 'string') v = v.trim()
+      if (v === '' || v === undefined || v === null) return callback()
+      if (!url || !param) return callback()
 
-        const res = await request.get(url, { params: { [param]: v } })
-        let duplicated = existsInResponse(res)
-
-        if (duplicated && typeof getIgnoreId === 'function') {
-          const curId = getIgnoreId()
-          if (curId) {
-            const ids = extractIds(res)
-
-            // 查询结果只包含自身,因此不被视为重复
-            if (ids.length >= 1 && ids.every((id) => id === curId)) {
-              duplicated = false
+      request
+        .get(url, { params: { [param]: v } })
+        .then((res) => {
+          let duplicated = existsInResponse(res)
+          if (duplicated && typeof getIgnoreId === 'function') {
+            const curId = getIgnoreId()
+            if (curId) {
+              const ids = extractIds(res)
+              if (ids.length >= 1 && ids.every((id) => id === curId)) duplicated = false
             }
           }
-        }
-
-        if (duplicated) {
-          const _label = label || fieldName || ''
-          const msg = `${_label}${i18n.t('Existing')}`
-          callback(new Error(msg))
-        } else {
-          callback()
-        }
-      } catch (e) {
-        callback()
-      }
+          if (duplicated) {
+            callback(new Error(`${label || fieldName || ''}${i18n.t('Existing')}`))
+          } else {
+            callback()
+          }
+        })
+        .catch(() => callback())
     },
     trigger: ['blur']
   }

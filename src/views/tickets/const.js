@@ -5,6 +5,51 @@ export const APPROVE = 'approved'
 export const REJECT = 'rejected'
 export const CLOSED = 'closed'
 
+export const TICKET_TYPE_I18N_KEYS = {
+  apply_asset: 'ApplyAsset',
+  login_confirm: 'LoginConfirm',
+  command_confirm: 'CommandConfirm',
+  login_asset_confirm: 'LoginAssetConfirm'
+}
+
+export const TICKET_STATE_I18N_KEYS = {
+  pending: 'Pending',
+  approved: 'Approved',
+  rejected: 'Rejected',
+  closed: 'StateClosed',
+  reopen: 'Reopen'
+}
+
+function translate(t, key) {
+  return t ? t(key) : i18n.t(key)
+}
+
+export function getTicketTypeLabel(type, t) {
+  if (!type) return ''
+  const key = TICKET_TYPE_I18N_KEYS[type.value]
+  return key ? translate(t, key) : type.label || ''
+}
+
+export function getTicketFlowLabel(ticketOrFlow, t) {
+  if (ticketOrFlow?.flow === null && ticketOrFlow?.type?.value === 'apply_asset') {
+    return translate(t, 'TicketFlowDeleted')
+  }
+  const type = ticketOrFlow?.type || ticketOrFlow?.flow?.type
+  const customName = ticketOrFlow?.flow?.name || ticketOrFlow?.name
+  // Built-in flows reuse the backend English type label as the default name.
+  // Translate those; keep a user-renamed flow name as-is.
+  if (customName && customName !== type?.label) {
+    return customName
+  }
+  return getTicketTypeLabel(type, t) || customName || ''
+}
+
+export function getTicketStateLabel(state, t) {
+  if (!state) return ''
+  const key = TICKET_STATE_I18N_KEYS[state.value]
+  return key ? translate(t, key) : state.label || ''
+}
+
 export const STATUS_MAP = {
   [OPEN]: {
     type: 'success',

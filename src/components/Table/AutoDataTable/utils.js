@@ -29,6 +29,34 @@ function getColumnName(column) {
   return typeof column === 'object' ? column?.prop : column
 }
 
+function getPlainTextValue(row, prop, cellValue) {
+  if (prop === 'labels' && Array.isArray(cellValue)) {
+    return cellValue
+      .map((label) => {
+        if (!label || typeof label !== 'object') {
+          return getDisplayValue(label)
+        }
+        const name = getDisplayValue(label.name)
+        const value = getDisplayValue(label.value)
+        return [name, value].filter(Boolean).join(': ')
+      })
+      .filter(Boolean)
+      .join(', ')
+  }
+
+  const displayValue = row?.[`${prop}_display`]
+  const value = displayValue === undefined ? cellValue : displayValue
+  if (typeof value === 'boolean') {
+    return i18n.t(value ? 'Yes' : 'No')
+  }
+  return getDisplayValue(value)
+}
+
+function PlainTextFormatter(row, column, cellValue) {
+  const prop = column?.property || column?.prop || ''
+  return h('span', getPlainTextValue(row, prop, cellValue) || '-')
+}
+
 export function orderActionColumn(columns, position = 'end') {
   const actionColumn = columns.find((column) => getColumnName(column) === 'actions')
   if (!actionColumn) {
@@ -37,17 +65,6 @@ export function orderActionColumn(columns, position = 'end') {
 
   const otherColumns = columns.filter((column) => column !== actionColumn)
   return position === 'start' ? [actionColumn, ...otherColumns] : [...otherColumns, actionColumn]
-}
-
-function getOverflowTooltipOptions() {
-  return {
-    popperStyle: {
-      maxWidth: 'min(500px, calc(100vw - 32px))',
-      overflowWrap: 'anywhere',
-      whiteSpace: 'normal',
-      wordBreak: 'break-word'
-    }
-  }
 }
 
 export function orderPrimaryColumns(columns) {
@@ -174,7 +191,8 @@ export class TableColumnsGenerator {
 
     for (let col of configColumns) {
       if (typeof col === 'object') {
-        columns.push(this.prepareAdaptiveColumn({ ...col }))
+        col = this.setPlainTextFormatterIfNeed({ ...col })
+        columns.push(this.prepareAdaptiveColumn(col))
       } else if (typeof col === 'string') {
         col = this.generateColumn(col)
         columns.push(col)
@@ -222,8 +240,20 @@ export class TableColumnsGenerator {
     col = this.addFilterIfNeed(col)
     col = this.addOrderingIfNeed(col)
     col = this.updateLabelIfNeed(col)
+    col = this.setPlainTextFormatterIfNeed(col)
     col = this.prepareAdaptiveColumn(col)
     return col
+  }
+
+  setPlainTextFormatterIfNeed(col) {
+    if (!this.config.plainTextCells || col?.prop === 'actions') {
+      return col
+    }
+    return {
+      ...col,
+      formatter: PlainTextFormatter,
+      formatterArgs: {}
+    }
   }
 
   generateColumnByName(name, col) {
@@ -231,7 +261,6 @@ export class TableColumnsGenerator {
       case 'id':
         if (!col.formatter) {
           col.formatter = CopyableFormatter
-          col.iconPosition = 'left'
         }
         break
       case 'name':
@@ -278,7 +307,6 @@ export class TableColumnsGenerator {
         break
       case 'comment':
         col.contentMaxWidth = 300
-        col.showOverflowTooltip = true
     }
     return col
   }
@@ -351,38 +379,32 @@ export class TableColumnsGenerator {
       return col
     }
 
+    // Fixed widths are deliberate. Flexible minimums must still fit the header;
+    // their preferred widths are measured from the rendered page after loading.
+    if (col.width != null) {
+      return col
+    }
+    if (col.minWidth != null) {
+      col.minWidth = `${Math.max(Number.parseFloat(col.minWidth) || 0, getColumnHeaderWidth(col))}px`
+      return col
+    }
+
     const formatterName = col.formatter?.name || col.formatter?.__name || ''
-    let typeWidth = 180
-    if (col.contentMaxWidth) {
-      typeWidth = col.contentMaxWidth
-    } else if (col.prop === 'name') {
-      typeWidth = 260
+    let typeWidth = 140
+    if (col.prop === 'name') {
+      typeWidth = 180
     } else if (col.prop === 'platform' || formatterName === 'PlatformFormatter') {
-      typeWidth = 220
+      typeWidth = 160
     } else if (formatterName === 'DateFormatter') {
       typeWidth = 190
     } else if (col.prop === 'labels' || col.prop === 'protocols' || col.isCustomRender) {
-      typeWidth = 280
+      typeWidth = 180
     }
 
     const preferredWidth = Math.max(getColumnHeaderWidth(col), typeWidth)
     const preferredWidthPx = `${preferredWidth}px`
 
-    const configuredWidth = col.width ?? col.minWidth
-    const configuredPixels =
-      typeof configuredWidth === 'number'
-        ? configuredWidth
-        : Number.parseFloat(String(configuredWidth || '').replace(/px$/, ''))
-    const isPixelWidth =
-      typeof configuredWidth === 'number' || /^\d+(\.\d+)?px$/.test(String(configuredWidth))
-
-    if (!configuredWidth || !isPixelWidth || configuredPixels < preferredWidth) {
-      if (col.width) {
-        col.width = preferredWidthPx
-      } else {
-        col.minWidth = preferredWidthPx
-      }
-    }
+    col.minWidth = preferredWidthPx
     return col
   }
 
@@ -395,6 +417,8 @@ export class TableColumnsGenerator {
       return col
     }
 
+    const hasExplicitWidth = col.width != null
+
     if (Array.isArray(col.columns)) {
       col.columns = col.columns.map((item) => this.prepareAdaptiveColumn({ ...item }))
     }
@@ -404,9 +428,6 @@ export class TableColumnsGenerator {
     }
 
     if (col.contentMaxWidth) {
-      if (col.showOverflowTooltip === undefined) {
-        col.showOverflowTooltip = true
-      }
       col.className = this.appendClassName(col.className, 'bounded-content-table-column')
     }
 
@@ -416,7 +437,7 @@ export class TableColumnsGenerator {
       col.align = 'center'
       col.headerAlign = 'center'
       col.fixed = this.config.actionsColumnPosition === 'start' ? 'left' : 'right'
-      col.fitWidth = false
+      col.fitWidth = col.fitWidth === true
       col.resizable = false
     }
 
@@ -441,7 +462,8 @@ export class TableColumnsGenerator {
       delete col.minWidth
       col.fitWidth = false
     } else if (isBooleanField) {
-      col.width = `${getBooleanColumnWidth(col)}px`
+      const configuredWidth = col.width ?? col.minWidth
+      col.width = configuredWidth || `${getBooleanColumnWidth(col)}px`
       delete col.minWidth
       col.fitWidth = false
     } else if (isAmountField) {
@@ -450,8 +472,15 @@ export class TableColumnsGenerator {
       delete col.minWidth
       col.fitWidth = false
     } else if (isIdField) {
-      col.width = '308px'
+      const configuredWidth = col.width ?? col.minWidth
+      col.width = configuredWidth || '308px'
       delete col.minWidth
+      col.fitWidth = false
+    }
+
+    if (hasExplicitWidth && col.fitWidth === undefined) {
+      // Match Element Plus semantics: `width` is fixed, while `minWidth`
+      // participates in filling the remaining table width.
       col.fitWidth = false
     }
 
@@ -465,16 +494,12 @@ export class TableColumnsGenerator {
 
     if (!isCompactColumn && !col.contentMaxWidth) {
       let contentClass = 'overflow-content-table-column'
-      if (col.prop === 'name') {
-        if (col.showOverflowTooltip === undefined) {
-          col.showOverflowTooltip = getOverflowTooltipOptions()
+      if (col.prop !== 'name') {
+        if (col.isCustomRender) {
+          contentClass = 'custom-render-table-column'
+        } else if (col.showFullContent) {
+          contentClass = 'full-content-table-column'
         }
-      } else if (col.isCustomRender) {
-        contentClass = 'custom-render-table-column'
-      } else if (col.showFullContent) {
-        contentClass = 'full-content-table-column'
-      } else if (col.showOverflowTooltip === undefined) {
-        col.showOverflowTooltip = getOverflowTooltipOptions()
       }
       col.className = this.appendClassName(col.className, contentClass)
     }

@@ -101,7 +101,8 @@ export default {
           (!data.assets || data.assets.length === 0) &&
           (!data.nodes || data.nodes.length === 0)
         ) {
-          this.$message.error(this.$tc('PleaseSelectAssetOrNode'))
+          const messageKey = this.addTemplate ? 'PleaseSelectAssetOrNode' : 'pleaseSelectAssets'
+          this.$message.error(this.$t(messageKey))
           return
         }
       }

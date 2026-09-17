@@ -20,7 +20,7 @@ export default {
               name: this.$t('CloudSync'),
               title: this.$t('CloudSync'),
               icon: 'cloud-provider',
-              has: () => this.$hasPerm('xpack.view_account') && this.$hasLicense(),
+              has: () => this.$hasPerm('xpack.view_cloudaccount') && this.$hasLicense(),
               callback: () =>
                 this.$router.push({ name: 'CloudAccountList', query: { category: 'database' } })
             }

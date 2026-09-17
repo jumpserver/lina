@@ -10,7 +10,7 @@ const clouds = {
   hidden: true,
   meta: {
     app: 'xpack',
-    resource: 'account'
+    resource: 'cloudaccount'
   },
   children: [
     {
@@ -31,7 +31,7 @@ const clouds = {
       },
       meta: {
         title: i18n.t('BaseCloudAccountList'),
-        permissions: ['xpack.view_account']
+        permissions: ['xpack.view_cloudaccount']
       },
       children: [
         {
@@ -41,7 +41,7 @@ const clouds = {
           redirect: '/console/assets/cloud',
           meta: {
             title: i18n.t('CloudSync'),
-            permissions: ['xpack.view_account']
+            permissions: ['xpack.view_cloudaccount']
           }
         },
         {
@@ -51,7 +51,7 @@ const clouds = {
           hidden: true,
           meta: {
             title: i18n.t('CloudAccountDetail'),
-            permissions: ['xpack.view_account']
+            permissions: ['xpack.view_cloudaccount']
           }
         }
       ]

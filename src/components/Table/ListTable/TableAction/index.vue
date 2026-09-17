@@ -1,7 +1,9 @@
 <template>
   <div class="table-action">
     <div
+      ref="toolbar"
       :class="[device, { 'has-left-actions': iHasLeftActions }]"
+      :style="{ '--table-search-input-width': `${searchInputWidth}px` }"
       class="table-header table-action__toolbar"
     >
       <slot name="header">
@@ -25,7 +27,11 @@
           class="right-side"
         />
 
-        <div :class="[searchClass, { 'has-label-filter': hasLabelSearch }]" class="search">
+        <div
+          ref="search"
+          :class="[searchClass, { 'has-label-filter': hasLabelSearch }]"
+          class="search"
+        >
           <NodeSearch
             v-bind="nodeSearchConfig"
             v-if="hasNodeSearch"
@@ -49,8 +55,10 @@
             :get-table-metadata="getTableMetadata"
             class="right-side-item action-search search-primary"
             @conditions-change="handleTagConditionsChange"
+            @ready="handleSearchReady"
             @tag-search="handleTagSearch"
           />
+          <slot name="search-after" />
           <el-popover
             v-if="savedSearchPresets.length"
             v-model:visible="searchHistoryVisible"
@@ -206,6 +214,8 @@ import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
 
 const defaultTrue = { type: Boolean, default: true }
 const defaultFalse = { type: Boolean, default: false }
+const SEARCH_INPUT_WIDTH = 280
+const MIN_SEARCH_INPUT_WIDTH = 180
 export default {
   name: 'TableAction',
   components: {
@@ -281,6 +291,10 @@ export default {
     return {
       keyword: '',
       foldSearch: false,
+      searchInputWidth: SEARCH_INPUT_WIDTH,
+      toolbarResizeObserver: null,
+      toolbarResizeFrame: null,
+      toolbarObservedElements: new Set(),
       iHasLeftActions: this.hasLeftActions,
       leftSideRenderVersion: 0,
       tagSearchQuery: {},
@@ -294,7 +308,8 @@ export default {
       applyingSearchPreset: false,
       presetSaveVisible: false,
       presetName: '',
-      searchHistoryVisible: false
+      searchHistoryVisible: false,
+      initializationDone: false
     }
   },
   computed: {
@@ -386,10 +401,103 @@ export default {
       immediate: true
     }
   },
-  created() {
-    this.$emit('done')
+  mounted() {
+    this.updateSearchLayout()
+    if (typeof ResizeObserver !== 'undefined') {
+      this.toolbarResizeObserver = new ResizeObserver(this.scheduleSearchLayout)
+      this.observeToolbarLayout()
+    }
+    if (!this.hasSearch) {
+      this.completeInitialization()
+    }
+  },
+  beforeUnmount() {
+    this.toolbarResizeObserver?.disconnect()
+    cancelAnimationFrame(this.toolbarResizeFrame)
+  },
+  updated() {
+    this.observeToolbarLayout()
+    this.scheduleSearchLayout()
   },
   methods: {
+    observeToolbarLayout() {
+      const toolbar = this.$refs.toolbar
+      if (!toolbar || !this.toolbarResizeObserver) {
+        return
+      }
+      // Action groups change size after permissions, selection and translations
+      // resolve, without necessarily changing the toolbar's own dimensions.
+      const elements = new Set([toolbar, ...toolbar.children])
+      for (const element of this.toolbarObservedElements) {
+        if (!elements.has(element)) {
+          this.toolbarResizeObserver.unobserve(element)
+        }
+      }
+      for (const element of elements) {
+        if (!this.toolbarObservedElements.has(element)) {
+          this.toolbarResizeObserver.observe(element)
+        }
+      }
+      this.toolbarObservedElements = elements
+    },
+    scheduleSearchLayout() {
+      if (this.toolbarResizeFrame !== null) {
+        return
+      }
+      this.toolbarResizeFrame = requestAnimationFrame(() => {
+        this.toolbarResizeFrame = null
+        this.updateSearchLayout()
+      })
+    },
+    updateSearchLayout() {
+      const toolbar = this.$refs.toolbar
+      const search = this.$refs.search
+      const input = this.$refs.autoDataSearch?.$el
+      if (!toolbar?.isConnected || !toolbar.clientWidth || !search || !input) {
+        return
+      }
+      const visibleChildren = (element) =>
+        Array.from(element.children).filter((child) => child.getClientRects().length > 0)
+      const horizontalMargin = (element) => {
+        const style = getComputedStyle(element)
+        return (parseFloat(style.marginLeft) || 0) + (parseFloat(style.marginRight) || 0)
+      }
+      const outerWidth = (element) =>
+        Math.max(element.getBoundingClientRect().width, element.scrollWidth) +
+        horizontalMargin(element)
+      const gapWidth = (element, children) =>
+        (parseFloat(getComputedStyle(element).columnGap) || 0) * Math.max(0, children.length - 1)
+      const toolbarChildren = visibleChildren(toolbar)
+      const searchChildren = visibleChildren(search)
+      const reservedWidth =
+        toolbarChildren
+          .filter((child) => child !== search)
+          .reduce((sum, child) => sum + outerWidth(child), 0) +
+        searchChildren
+          .filter((child) => child !== input)
+          .reduce((sum, child) => sum + outerWidth(child), 0) +
+        gapWidth(toolbar, toolbarChildren) +
+        gapWidth(search, searchChildren) +
+        horizontalMargin(input)
+      // Measure the space around the input, not its current (possibly folded)
+      // width. This keeps the decision stable on either side of the threshold.
+      const availableWidth = Math.floor(toolbar.clientWidth - reservedWidth)
+      this.foldSearch = availableWidth < SEARCH_INPUT_WIDTH
+      this.searchInputWidth = Math.max(
+        MIN_SEARCH_INPUT_WIDTH,
+        Math.min(SEARCH_INPUT_WIDTH, availableWidth)
+      )
+    },
+    completeInitialization() {
+      if (this.initializationDone) {
+        return
+      }
+      this.initializationDone = true
+      this.$emit('done')
+    },
+    handleSearchReady() {
+      this.completeInitialization()
+    },
     focusSearch() {
       return this.$refs.autoDataSearch?.focusSearch()
     },
@@ -728,6 +836,10 @@ $color-drop-menu-border: #e4e7ed;
     gap: 2px;
     min-width: 0;
 
+    .search-filter {
+      flex: 0 0 auto;
+    }
+
     .search-primary {
       margin-right: 6px;
     }
@@ -738,15 +850,15 @@ $color-drop-menu-border: #e4e7ed;
 
     // 搜索框与前后的图标按钮保持清晰间距。
     .right-side-item.action-search {
-      flex: 0 0 280px;
+      flex: 0 1 var(--table-search-input-width, 280px);
       box-sizing: border-box;
-      width: 280px;
+      width: var(--table-search-input-width, 280px);
       min-height: 30px;
-      min-width: 280px;
+      min-width: 180px;
       max-width: 280px;
       font-size: 13px;
       border: 1px solid var(--color-border);
-      border-radius: 4px;
+      border-radius: var(--list-corner-radius, 4px);
       overflow: hidden;
       outline: none;
       box-shadow: none;
@@ -763,10 +875,11 @@ $color-drop-menu-border: #e4e7ed;
     }
 
     .right-side-item.action-search.is-folded {
-      flex: 0 0 auto;
-      width: auto;
+      flex: 0 0 30px;
+      width: 30px;
       height: 30px;
       min-width: 30px;
+      max-width: 30px;
       border: 0;
       overflow: visible;
     }
@@ -784,7 +897,7 @@ $color-drop-menu-border: #e4e7ed;
       padding: 0;
       color: var(--color-text-primary) !important;
       border: 0;
-      border-radius: 4px;
+      border-radius: var(--list-corner-radius, 4px);
       background-color: transparent;
 
       .svg-icon {
@@ -834,21 +947,33 @@ $color-drop-menu-border: #e4e7ed;
   padding: 0;
   gap: 10px 4px;
 
-  &.mobile {
-    justify-content: flex-start;
+  :deep(.el-button:not(.is-circle)) {
+    border-radius: var(--list-corner-radius, 4px);
+  }
 
-    .left-side {
-      gap: 0;
-    }
+  :deep(.el-button-group) {
+    border-radius: var(--list-corner-radius, 4px);
+  }
 
-    .search {
-      justify-content: flex-start;
-      gap: 10px;
-    }
+  :deep(.el-button-group .el-button) {
+    border-radius: 0;
+  }
+
+  :deep(.el-button-group > .el-button:first-child) {
+    border-radius: var(--list-corner-radius, 4px) 0 0 var(--list-corner-radius, 4px);
+  }
+
+  :deep(.el-button-group > .el-button:last-child) {
+    border-radius: 0 var(--list-corner-radius, 4px) var(--list-corner-radius, 4px) 0;
+  }
+
+  :deep(.el-button-group > .el-button:only-child) {
+    border-radius: var(--list-corner-radius, 4px);
   }
 }
 
 .left-side {
+  flex: 0 0 auto;
   order: 1;
   align-self: flex-start;
 }
@@ -857,109 +982,13 @@ $color-drop-menu-border: #e4e7ed;
   order: 2;
   flex: 0 1 auto;
   min-width: 0;
+  max-width: 100%;
   margin-left: auto;
 }
 
 .right-side {
+  flex: 0 0 auto;
   order: 3;
-}
-
-@media (max-width: 1100px) {
-  .table-action__toolbar {
-    display: grid;
-    grid-template-columns: auto auto minmax(0, 1fr);
-    align-items: center;
-    gap: 12px 4px;
-
-    .left-side {
-      grid-row: 1;
-      grid-column: 1 / -1;
-      justify-self: start;
-    }
-
-    .search {
-      grid-row: 1;
-      grid-column: 1;
-      justify-content: flex-start;
-      justify-self: start;
-      margin-left: 0;
-      gap: 2px;
-
-      .right-side-item.action-search {
-        flex: 0 0 clamp(240px, 28vw, 280px);
-        width: clamp(240px, 28vw, 280px);
-        min-width: clamp(240px, 28vw, 280px);
-        max-width: clamp(240px, 28vw, 280px);
-      }
-    }
-
-    .right-side {
-      grid-row: 1;
-      grid-column: 2;
-      align-self: center;
-      justify-self: start;
-    }
-
-    &.has-left-actions {
-      .search,
-      .right-side {
-        grid-row: 2;
-      }
-    }
-  }
-
-  .table-action__toolbar.mobile .search {
-    justify-content: flex-start;
-    gap: 2px;
-  }
-}
-
-@media (max-width: 640px) {
-  .table-action__toolbar {
-    grid-template-columns: minmax(0, 1fr);
-
-    .search {
-      grid-row: 1;
-      grid-column: 1;
-      justify-content: flex-start;
-      justify-self: start;
-      width: 100%;
-      min-width: 0;
-
-      .right-side-item.action-search {
-        flex: 1 1 0;
-        width: 0;
-        min-width: 0;
-        max-width: 100%;
-      }
-
-      .search-filter,
-      .quick-filter-toggle,
-      .search-history-button {
-        flex: 0 0 auto;
-      }
-    }
-
-    .right-side {
-      grid-row: 2;
-      grid-column: 1;
-      justify-self: start;
-    }
-
-    &.has-left-actions {
-      .search {
-        grid-row: 2;
-      }
-
-      .right-side {
-        grid-row: 3;
-      }
-    }
-  }
-
-  .table-action__toolbar.mobile .search {
-    justify-content: flex-start;
-  }
 }
 
 .condition-bar {
@@ -968,8 +997,8 @@ $color-drop-menu-border: #e4e7ed;
   gap: 6px;
   min-width: 0;
   padding: 8px 10px;
-  border: 1px solid var(--el-border-color-lighter);
-  border-radius: 4px;
+  border: 1px solid var(--panel-border-color, var(--el-border-color));
+  border-radius: var(--list-corner-radius, 4px);
   background-color: #fff;
 
   &__active,

@@ -102,6 +102,7 @@ export default {
               extraActions: [
                 {
                   title: this.$t('Deploy'),
+                  type: 'primary',
                   callback: function ({ row }) {
                     this.$axios
                       .post(`/api/v1/terminal/applet-host-deployments/applets/`, {

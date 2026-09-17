@@ -52,18 +52,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$origin-color: #ffffff;
-
 .page-heading {
   display: flex;
   align-items: center;
+  box-sizing: border-box;
   height: 50px;
-  background-color: $origin-color;
-  border-bottom: 1px solid rgba(31, 35, 41, 0.15);
+  background-color: var(--page-background-color, #fff);
+  border-bottom: 1px solid var(--panel-border-color, var(--el-border-color));
 
   .el-row {
     width: 100%;
-    padding: 0 20px;
+    min-width: 0;
+    padding: 0 var(--page-inline-padding, 20px);
 
     .page-heading-left,
     h2 {

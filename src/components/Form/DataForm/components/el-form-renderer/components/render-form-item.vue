@@ -10,7 +10,7 @@
   >
     <template v-if="data.label" #label>
       <span :title="data.label">
-        <span v-if="data.required">* </span>
+        <span v-if="data.required" class="form-item-required-mark">*</span>
         {{ data.label }}
         <el-tooltip
           v-if="data.helpTip"
@@ -193,7 +193,7 @@ export default {
     },
     componentProps() {
       const props = { ...this.data.el, ...this.propsInner }
-      if (this.isNestedServerError) {
+      if (this.isNestedServerError || this.data.passServerErrors) {
         props.errors = this.serverError
       }
       return props
@@ -243,6 +243,9 @@ export default {
       const fromAttrs = this.data?.attrs?.error
       if (fromAttrs) {
         return fromAttrs
+      }
+      if (this.data.passServerErrors) {
+        return ''
       }
       if (typeof this.serverError === 'string') {
         return this.serverError
@@ -428,6 +431,11 @@ export default {
   opacity: 0.8;
   line-height: 2;
   width: 300px;
+}
+
+.form-item-required-mark {
+  margin-right: 4px;
+  color: var(--el-color-danger, #ed5565);
 }
 
 .help-block {

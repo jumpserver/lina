@@ -1,28 +1,19 @@
 <template>
-  <div class="chat-container">
-    <ChatAI ref="chat" :default-show-panel="!!from" :drawer-panel-visible="true" />
+  <div class="chat-ai-page">
+    <ChatAI :drawer-panel-visible="true" />
   </div>
 </template>
 
-<script>
+<script setup>
 import ChatAI from '@/components/Apps/ChatAi'
-
-export default {
-  components: {
-    ChatAI
-  },
-  data() {
-    return {
-      from: this.$route.query.from
-    }
-  },
-  mounted() {},
-  methods: {}
-}
 </script>
 
 <style scoped>
-.chat-container {
-  height: 100vh;
+.chat-ai-page {
+  width: 100%;
+  height: 100%;
+  min-height: calc(100vh - 94px);
+  overflow: hidden;
+  background: var(--page-background-color, #fff);
 }
 </style>

@@ -15,7 +15,7 @@ export default {
       const oid = this.$store.getters.currentOrg ? this.$store.getters.currentOrg.id : ''
       let url = `${BASE_URL}/luna/?_=${Date.now()}${oid ? `&oid=${oid}` : ''}`
       if (!IS_PROD) {
-        url = url.replace('9528', '4200')
+        url = url.replace('9528', '3000')
       }
       return url
     }

@@ -1,8 +1,203 @@
 .el-data-table {
+  // Keep the complete table state palette in one place so page lists,
+  // drawers and dialogs render the same visual hierarchy.
+  --list-table-header-bg-color: var(--el-bg-color, #fff);
+  --list-table-stripe-bg-color: color-mix(in srgb, var(--el-fill-color-light, #f5f7fa) 28%, #fff);
+  --list-table-row-hover-bg-color: var(--el-fill-color-light, #f5f7fa);
+  --list-table-selected-bg-color: var(--list-table-row-hover-bg-color);
+  --list-table-selected-hover-bg-color: var(--list-table-row-hover-bg-color);
+  --list-table-scrollbar-thumb-color: color-mix(in srgb, var(--menu-text) 18%, transparent);
+  --list-table-scrollbar-thumb-hover-color: color-mix(in srgb, var(--menu-text) 30%, transparent);
+  --list-table-horizontal-scrollbar-thumb-color: transparent;
+  --list-table-horizontal-scrollbar-thumb-hover-color: transparent;
+  --list-table-scrollbar-space: 16px;
+  --list-table-scrollbar-size: 6px;
+
   display: flex;
   flex-direction: column;
-  gap: 1px;
   min-width: 0;
+
+  .el-data-table__surface:hover {
+    --list-table-horizontal-scrollbar-thumb-color: var(--list-table-scrollbar-thumb-color);
+    --list-table-horizontal-scrollbar-thumb-hover-color: var(
+      --list-table-scrollbar-thumb-hover-color
+    );
+  }
+
+  :deep(.el-table) {
+    --el-table-border-color: var(--panel-border-color, var(--el-border-color-lighter));
+    --el-table-header-bg-color: var(--list-table-header-bg-color);
+    --el-table-row-hover-bg-color: var(--list-table-row-hover-bg-color);
+    --el-table-current-row-bg-color: var(--list-table-selected-bg-color);
+  }
+
+  :deep(.el-table__header thead > tr > th.el-table__cell),
+  :deep(.el-table__body-header > tr > th.el-table__cell) {
+    background-color: var(--list-table-header-bg-color);
+  }
+
+  :deep(.el-table__body tr.el-table__row--striped > td.el-table__cell) {
+    background-color: var(--list-table-stripe-bg-color);
+  }
+
+  :deep(.el-table__body tr.el-table__row:hover > td.el-table__cell),
+  :deep(.el-table__body tr.el-table__row.hover-row > td.el-table__cell) {
+    background-color: var(--list-table-row-hover-bg-color);
+  }
+
+  :deep(.el-table__body tr.el-table__row:has(.el-checkbox.is-checked) > td.el-table__cell),
+  :deep(.el-table__body tr.el-table__row.selected-row > td.el-table__cell),
+  :deep(.el-table__body tr.el-table__row.current-row > td.el-table__cell) {
+    background-color: var(--list-table-selected-bg-color);
+  }
+
+  :deep(.el-table__body tr.el-table__row:has(.el-checkbox.is-checked):hover > td.el-table__cell),
+  :deep(
+    .el-table__body tr.el-table__row:has(.el-checkbox.is-checked).hover-row > td.el-table__cell
+  ),
+  :deep(.el-table__body tr.el-table__row.selected-row:hover > td.el-table__cell),
+  :deep(.el-table__body tr.el-table__row.selected-row.hover-row > td.el-table__cell),
+  :deep(.el-table__body tr.el-table__row.current-row:hover > td.el-table__cell),
+  :deep(.el-table__body tr.el-table__row.current-row.hover-row > td.el-table__cell) {
+    background-color: var(--list-table-selected-hover-bg-color);
+  }
+
+  :deep(.el-table__body-wrapper > .el-scrollbar) {
+    // Keep the horizontal track outside the row viewport from the first render.
+    // Padding on the scrollbar host also respects Element Plus's inline wrap height.
+    box-sizing: border-box;
+    padding-bottom: var(--list-table-scrollbar-space);
+  }
+
+  :deep(.el-table__body-wrapper .el-scrollbar__wrap) {
+    // Keep row separators full-width; only the thumb covers them as it moves.
+    scrollbar-gutter: auto;
+  }
+
+  :deep(.el-table--scrollable-y tr > .el-table__cell:last-child > .cell) {
+    padding-right: 20px;
+  }
+
+  :deep(.el-table .el-scrollbar__bar) {
+    --el-scrollbar-bg-color: var(--list-table-scrollbar-thumb-color);
+    --el-scrollbar-hover-bg-color: var(--list-table-scrollbar-thumb-hover-color);
+    --el-scrollbar-opacity: 1;
+    --el-scrollbar-hover-opacity: 1;
+
+    &.is-horizontal {
+      --el-scrollbar-bg-color: var(--list-table-horizontal-scrollbar-thumb-color);
+      --el-scrollbar-hover-bg-color: var(--list-table-horizontal-scrollbar-thumb-hover-color);
+
+      bottom: calc((var(--list-table-scrollbar-space) - var(--list-table-scrollbar-size)) / 2);
+      height: var(--list-table-scrollbar-size);
+    }
+
+    &.is-vertical {
+      // An opaque thumb masks the row separators only beneath the thumb.
+      // The rest of the track stays transparent, including on row hover.
+      --el-scrollbar-bg-color: color-mix(in srgb, var(--menu-text) 18%, var(--el-bg-color, #fff));
+      --el-scrollbar-hover-bg-color: color-mix(
+        in srgb,
+        var(--menu-text) 30%,
+        var(--el-bg-color, #fff)
+      );
+
+      bottom: calc(var(--list-table-scrollbar-space) + 2px);
+      right: 0;
+      width: var(--list-table-scrollbar-size);
+      background: transparent;
+      z-index: calc(var(--el-table-index) + 3);
+    }
+
+    .el-scrollbar__thumb {
+      border-radius: 8px;
+      cursor: default;
+    }
+  }
+}
+
+.el-data-table__surface {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  background-color: var(--el-bg-color, #fff);
+
+  &.is-empty {
+    :deep(.el-table__body-wrapper .el-scrollbar__view),
+    :deep(.el-table__empty-block) {
+      // Element Plus gives the empty view the full body-wrapper height. Match
+      // it to the smaller scrollbar viewport after the horizontal gutter is
+      // reserved, otherwise the gutter creates false vertical overflow.
+      height: 100% !important;
+      min-height: 0 !important;
+    }
+
+    :deep(.el-table .el-scrollbar__bar.is-vertical) {
+      display: none;
+    }
+
+    :deep(.el-table__body-wrapper > .el-scrollbar::after) {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: var(--list-table-scrollbar-space);
+      left: 0;
+      height: 1px;
+      background-color: var(--panel-border-color, var(--el-border-color-lighter));
+      pointer-events: none;
+      z-index: calc(var(--el-table-index) + 2);
+    }
+  }
+}
+
+.el-data-table--fill-height {
+  --list-table-row-height: 40px;
+
+  flex: 1 1 0%;
+  min-height: 0;
+  height: 100%;
+
+  :deep(.el-table__row) {
+    height: var(--list-table-row-height);
+  }
+
+  > .el-data-table__surface {
+    --el-data-table-horizontal-scrollbar-height: var(--list-table-scrollbar-space);
+    --el-data-table-surface-height: calc(
+      var(--el-data-table-content-height, 100%) + var(--el-data-table-horizontal-scrollbar-height)
+    );
+
+    flex: 0 1 var(--el-data-table-surface-height, 100%);
+    height: var(--el-data-table-surface-height, 100%);
+    max-height: 100%;
+    border: 1px solid var(--panel-border-color, var(--el-border-color));
+    border-radius: var(--list-corner-radius, 4px);
+    overflow: hidden;
+  }
+
+  > .el-data-table__surface > .el-data-table__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  > .el-data-table__surface > .el-data-table__pagination-viewport {
+    flex: none;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+    scrollbar-width: none;
+
+    // Keep pagination reachable in narrow drawers/dialogs without adding a
+    // permanent second scrollbar to the table chrome.
+    &::-webkit-scrollbar:horizontal {
+      height: 0;
+    }
+  }
 }
 
 .el-data-table :deep(.el-table td) {
@@ -13,16 +208,10 @@
   //padding: 4px 0;
 }
 
-// Element Plus overlays its custom horizontal scrollbar on the scroll view.
-// Reserve space below the last row only when the table actually overflows horizontally.
-.el-data-table :deep(.el-table--scrollable-x .el-table__body-wrapper .el-scrollbar__wrap) {
-  padding-bottom: var(--scrollbar-size);
-  box-sizing: border-box;
-}
-
-// The last row already provides the separator above pagination. Removing the
-// duplicate outer border also keeps the fixed action column joined to the row.
-.el-data-table :deep(.el-table__inner-wrapper::before) {
+// Header and body cells already draw their own separators. Remove Element
+// Plus's extra top and bottom lines.
+.el-data-table :deep(.el-table__inner-wrapper::before),
+.el-data-table :deep(.el-table__inner-wrapper::after) {
   display: none;
 }
 
@@ -36,7 +225,7 @@
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  padding: 15px 20px;
+  padding: 8px 20px;
 
   .el-pagination__total {
     margin-right: auto;

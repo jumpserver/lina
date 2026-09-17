@@ -33,6 +33,9 @@ export default {
     const userTableActions = this.config.tableActions || {}
     const objTableSize = new ObjectLocalStorage('tableSize')
     const pathName = newURL(this.config.url).pathname
+    const paginationSizes = [15, 30, 50, 100]
+    const savedPaginationSize = Number(objTableSize.get(pathName))
+    const hasSavedPageSize = paginationSizes.includes(savedPaginationSize)
     return {
       objTableSize: objTableSize,
       pathName: pathName,
@@ -40,8 +43,7 @@ export default {
         axiosConfig: {
           raw: 1,
           params: {
-            display: 1,
-            draw: 1
+            display: 1
           }
         },
         extraQuery: {},
@@ -78,15 +80,15 @@ export default {
         },
         pageCount: 5,
         paginationLayout: 'total, sizes, prev, pager, next',
-        paginationSize: objTableSize.get(pathName) || 15,
-        paginationSizes: [15, 30, 50, 100],
+        paginationSize: hasSavedPageSize ? savedPaginationSize : paginationSizes[0],
+        paginationSizes,
         paginationBackground: true,
         transformQuery: (query) => {
           if (query.page && query.size) {
             const page = query.page > 0 ? query.page : 1
             const offset = (page - 1) * query.size
             const limit = query.size
-            query.offset = offset
+            if (offset) query.offset = offset
             query.limit = limit
             delete query['page']
             delete query['size']
@@ -176,6 +178,12 @@ export default {
       if (!Array.isArray(data)) {
         return
       }
+      this.$emit('loaded', {
+        data,
+        query: this.dataTable?.getQuery?.() || {},
+        response,
+        total: Number(this.dataTable?.total) || 0
+      })
       const theRowDefaultIsSelected = this.tableConfig.theRowDefaultIsSelected
       if (!theRowDefaultIsSelected || typeof theRowDefaultIsSelected !== 'function') {
         return
@@ -186,11 +194,11 @@ export default {
           this.toggleRowSelection(row, true)
         }
       }
-
-      this.$emit('loaded')
     },
     handleSizeChange(val) {
-      this.objTableSize.set(this.pathName, val)
+      if (this.config.savePageSize !== false) {
+        this.objTableSize.set(this.pathName, val)
+      }
     }
   }
 }

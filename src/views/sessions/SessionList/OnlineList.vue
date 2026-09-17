@@ -1,6 +1,7 @@
 <template>
   <BaseList
     :extra-actions="extraActions"
+    :extra-more-actions="extraMoreActions"
     :url="url"
     :columns-meta="columnsMeta"
     :columns-exclude="columnsExclude"
@@ -21,24 +22,27 @@ export default {
     const vm = this
     return {
       url: '/api/v1/terminal/sessions/?is_finished=0',
+      isTerminating: false,
+      reloadTimer: null,
+      extraMoreActions: [
+        {
+          name: 'terminateSelected',
+          title: this.$t('TerminateSelected'),
+          icon: 'fa-solid fa-stop',
+          type: 'danger',
+          can: ({ selectedRows }) => vm.canTerminateSessions(selectedRows),
+          callback: ({ selectedRows, reloadTable }) =>
+            vm.terminateSessions(selectedRows, reloadTable)
+        }
+      ],
       extraActions: [
         {
           name: 'terminate',
           title: this.$t('Terminate'),
           icon: 'fa-solid fa-stop',
           type: 'danger',
-          can: ({ row }) => row['can_terminate'] && vm.$hasPerm('terminal.terminate_session'),
-          callback: function ({ reload, row }) {
-            // 终断 session reload
-            const data = [row.id]
-            terminateSession(data).then((res) => {
-              const msg = vm.$t('TerminateTaskSendSuccessMsg')
-              this.$message.success(msg)
-              window.setTimeout(function () {
-                reload()
-              }, 50000)
-            })
-          }
+          can: ({ row }) => vm.canTerminateSessions([row]),
+          callback: ({ reload, row }) => vm.terminateSessions([row], reload)
         },
         {
           name: 'pause',
@@ -117,6 +121,59 @@ export default {
         command_amount: {
           label: this.$t('CommandsTotal')
         }
+      }
+    }
+  },
+  beforeUnmount() {
+    window.clearTimeout(this.reloadTimer)
+  },
+  methods: {
+    canTerminateSessions(rows) {
+      return (
+        !this.isTerminating &&
+        this.$hasPerm('terminal.terminate_session') &&
+        rows.length > 0 &&
+        rows.every((row) => row.can_terminate)
+      )
+    },
+    async terminateSessions(rows, reloadTable) {
+      if (!this.canTerminateSessions(rows)) return
+      const ids = rows.map((row) => row.id)
+      this.isTerminating = true
+      try {
+        await this.$confirm(
+          this.$t('TerminateSessionConfirmMsg', { count: ids.length }),
+          this.$t('SessionTerminate'),
+          {
+            type: 'warning',
+            confirmButtonText: this.$t('Terminate'),
+            cancelButtonText: this.$t('Cancel'),
+            confirmButtonClass: 'el-button--danger'
+          }
+        )
+        const result = await terminateSession(ids)
+        const accepted = new Set(result.ok)
+        const count = ids.filter((id) => accepted.has(id)).length
+        if (count === ids.length) {
+          this.$message.success(this.$t('TerminateTaskSendSuccessMsg'))
+        } else {
+          this.$message.warning(
+            this.$t('TerminateTaskSendPartialMsg', { count, total: ids.length })
+          )
+        }
+        reloadTable()
+        if (count > 0) {
+          // Task dispatch is asynchronous; refresh again after a component heartbeat.
+          window.clearTimeout(this.reloadTimer)
+          this.reloadTimer = window.setTimeout(reloadTable, 50000)
+        }
+      } catch (error) {
+        // HTTP errors are displayed by the request interceptor.
+        if (error !== 'cancel' && error !== 'close' && !error?.response) {
+          this.$message.error(error?.message || this.$t('ErrorMsg'))
+        }
+      } finally {
+        this.isTerminating = false
       }
     }
   }

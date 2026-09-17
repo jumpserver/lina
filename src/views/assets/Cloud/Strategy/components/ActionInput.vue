@@ -215,6 +215,7 @@ export default {
           }
         ],
         totalData: this.value || [],
+        hasSelection: false,
         hasPagination: false
       }
     }

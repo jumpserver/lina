@@ -19,6 +19,10 @@ import Account from './Account.vue'
 import PermUserList from './PermUser.vue'
 import AssetSession from './AssetSession.vue'
 import AssetCommand from './AssetCommand.vue'
+import {
+  publishAssetPageContext,
+  clearAssetPageContext
+} from '@/components/Apps/ChatAi/utils/pageContext'
 
 export default {
   name: 'AssetListDetail',
@@ -80,6 +84,26 @@ export default {
         }
       }
     }
+  },
+  watch: {
+    asset: {
+      handler(asset) {
+        publishAssetPageContext(this, this.$route, this.$store.getters.currentOrg, [asset], true)
+      },
+      deep: true
+    },
+    '$route.fullPath'() {
+      clearAssetPageContext(this)
+    },
+    '$store.getters.currentOrg.id'() {
+      clearAssetPageContext(this)
+    }
+  },
+  deactivated() {
+    clearAssetPageContext(this)
+  },
+  beforeUnmount() {
+    clearAssetPageContext(this)
   },
   computed: {
     ...mapGetters(['inDrawer'])

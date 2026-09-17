@@ -157,11 +157,11 @@ export default {
     box-shadow: none !important;
     outline: none !important;
 
-    // fa 图标字形在自身 em 盒内偏上(flex 居中的是行盒而非字形),下移 1px 做视觉居中
+    // fa 图标的可见字形在行盒内偏下，上移 1px 做视觉居中
     i {
       display: block;
       line-height: 1;
-      transform: translateX(0px) translateY(1px);
+      transform: translateY(-1px);
     }
 
     &:hover,

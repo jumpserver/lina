@@ -60,6 +60,12 @@ import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFo
 import { AccountLabelMapper } from '@/views/perms/const'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 import { STATUS_MAP, treeNodes } from '../../const'
+
+const toOption = (item) => ({
+  label: item.name,
+  value: item.id
+})
+
 export default {
   name: '',
   components: {
@@ -93,34 +99,24 @@ export default {
       },
       nodeSelect2: {
         multiple: true,
-        value: this.object.apply_nodes,
+        options: (this.object.apply_nodes || []).map(toOption),
         ajax: {
           url: (function (object) {
             const oid = object.org_id
             return `/api/v1/assets/nodes/?oid=${oid}&protocol__in=rdp,vnc,ssh,telnet`
           })(this.object),
-          transformOption: (item) => {
-            return {
-              label: `${item.full_value}`,
-              value: item.id
-            }
-          }
+          transformOption: toOption
         }
       },
       assetSelect2: {
         multiple: true,
-        value: this.object.apply_assets,
+        options: (this.object.apply_assets || []).map(toOption),
         ajax: {
           url: (function (object) {
             const oid = object.org_id
             return `/api/v1/assets/assets/?oid=${oid}&protocol__in=rdp,vnc,ssh,telnet`
           })(this.object),
-          transformOption: (item) => {
-            return {
-              label: `${item.name}(${item.address})`,
-              value: item.id
-            }
-          }
+          transformOption: toOption
         }
       }
     }
@@ -252,6 +248,7 @@ export default {
       }
       return this.$axios
         .patch(`/api/v1/tickets/apply-asset-tickets/${this.object.id}/approve/`, {
+          flow_id: this.object.flow?.id,
           apply_nodes: nodes || [],
           apply_assets: assets || [],
           apply_accounts: accounts || [],

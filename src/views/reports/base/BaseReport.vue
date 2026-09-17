@@ -588,8 +588,9 @@ export default {
 .report-visibility-panel {
   margin-top: 8px;
   padding: 10px 12px;
+  border: 1px solid var(--panel-border-color, var(--el-border-color));
   border-radius: 4px;
-  background: #fff;
+  background: var(--page-background-color, #fff);
 }
 
 .report-visibility-row {
@@ -655,7 +656,7 @@ export default {
 }
 
 .content {
-  background-color: #f1f1f1;
+  background-color: var(--page-background-color, #fff);
   height: calc(100vh - 40px);
   overflow-y: auto;
 
@@ -687,6 +688,7 @@ export default {
     height: auto;
     overflow-y: hidden;
     overflow-x: hidden;
+    background-color: transparent;
 
     .title-bar {
       margin: 0 30px;
@@ -700,7 +702,9 @@ export default {
   }
 
   .charts-zone {
+    width: 100%;
     padding: 2px 0;
+    background-color: transparent;
   }
 }
 
@@ -805,10 +809,10 @@ export default {
   }
 
   :deep(.chart-container) {
-    background-color: white;
+    background-color: var(--page-background-color, #fff);
     border-radius: 4px;
     padding: 16px;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--panel-border-color, var(--el-border-color));
     transition: all 0.3s ease;
     max-width: calc(50vw - 30px);
     min-width: 300px;
@@ -878,10 +882,10 @@ export default {
       justify-content: flex-end;
     }
   }
+}
 
-  :deep(.charts-zone--no-padding) {
-    padding: 0 !important;
-  }
+.charts-zone.charts-zone--no-padding {
+  padding: 0;
 }
 
 :deep(.report-item-hidden) {

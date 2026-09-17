@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import 'highlight.js/styles/atom-one-light.css'
 import { IBox } from '@/components'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import hljs from 'highlight.js'
@@ -128,7 +129,6 @@ export default {
 }
 
 .code-demo {
-  @import '~highlight.js/styles/atom-one-light.css';
   min-height: 210px;
   padding: 10px 20px;
   border: 1px solid #dcdfe6;

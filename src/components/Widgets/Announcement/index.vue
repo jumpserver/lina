@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="announcement-root">
     <el-dialog
       v-if="enabled && showModal"
       v-model="dialogVisible"
@@ -168,6 +168,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.announcement-root {
+  display: contents;
+}
+
 .announcement-dialog :deep(.el-dialog) {
   border-radius: 5px;
 }
@@ -204,7 +208,6 @@ export default {
 
   .el-dialog__title {
     color: black;
-    font-weight: 600;
   }
 }
 

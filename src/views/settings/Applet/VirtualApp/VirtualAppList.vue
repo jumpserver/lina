@@ -24,9 +24,19 @@ export default {
       },
       headerActions: {
         onCreate: () => {
-          this.uploadDialogVisible = true
+          this.$router.push({ name: 'VirtualAppCreate' })
         },
-        createTitle: this.$t('Upload'),
+        createTitle: this.$t('Create'),
+        extraActions: [
+          {
+            name: 'UploadVirtualApp',
+            title: this.$t('Upload'),
+            icon: 'fa fa-upload',
+            callback: () => {
+              this.uploadDialogVisible = true
+            }
+          }
+        ],
         searchConfig: {
           getUrlQuery: false
         },

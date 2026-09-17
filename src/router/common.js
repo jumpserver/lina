@@ -42,7 +42,7 @@ export default [
     hidden: true,
     meta: {
       title: i18n.t('ChatAI'),
-      permissions: []
+      permissions: ['chat_ai.use_chatai']
     }
   },
   {

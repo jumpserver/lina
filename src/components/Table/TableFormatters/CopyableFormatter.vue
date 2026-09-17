@@ -11,8 +11,7 @@ export default {
       default() {
         return {
           shadow: false,
-          getText: ({ cellValue }) => cellValue,
-          iconPosition: 'right'
+          getText: ({ cellValue }) => cellValue
         }
       }
     }
@@ -29,9 +28,6 @@ export default {
       } else {
         return this.cellValue
       }
-    },
-    iconPosition() {
-      return this.formatterArgs.iconPosition
     }
   },
   methods: {
@@ -49,10 +45,8 @@ export default {
 
 <template>
   <span class="copyable">
-    <span :style="{ order: 2 }">{{ iCellValue }}</span>
-    <el-icon :style="{ order: iconPosition === 'left' ? 0 : 3 }" class="copy" @click="copy()"
-      ><CopyDocument
-    /></el-icon>
+    <span class="copyable__text">{{ iCellValue }}</span>
+    <el-icon class="copy" @click="copy()"><CopyDocument /></el-icon>
   </span>
 </template>
 
@@ -60,10 +54,21 @@ export default {
 .copyable {
   display: flex;
   align-items: center;
-  gap: 4px; /* 元素间距 */
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+}
+
+.copyable__text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .copy {
+  flex: 0 0 auto;
   cursor: pointer;
 
   &:hover {

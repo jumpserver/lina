@@ -38,7 +38,7 @@ export default [
     // hidden: true
   },
   {
-    path: `${BASE_URL}/koko/elfinder/sftp/?`,
+    path: `${BASE_URL}/luna/files`,
     name: 'FileManagement',
     meta: { title: i18n.t('FileManagement') }
   }

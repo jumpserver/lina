@@ -12,12 +12,15 @@ export default {
 
 <style scoped>
 .wrapper-content {
-  padding: 12px 20px 22px 20px;
+  padding: var(--page-content-top-padding, 12px) var(--page-inline-padding, 20px)
+    var(--page-content-bottom-padding, 22px);
   box-sizing: border-box;
   min-height: 100%;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--page-section-gap, 8px);
+  background-color: var(--page-content-background-color, #f3f3f4);
 }
 
 /*
@@ -32,8 +35,8 @@ export default {
 }
 
 /*
- * 统一原则：卡片自身不出现内部滚动条，只有外层 .wrapper-content（page-content）整体滚动。
- * 强制卡片相关容器不自带滚动 / 高度上限，把溢出交还给外层滚动容器。
+ * 普通内容卡片不出现内部滚动条，由 .wrapper-content 整体滚动。列表页会由
+ * list-layout.scss 单独覆盖为表格内部滚动。
  */
 .wrapper-content :deep(.el-card__body),
 .wrapper-content :deep(.ibox),
@@ -53,6 +56,18 @@ export default {
  */
 .wrapper-content :deep(.el-alert:not(.help-warning)) {
   margin: 0;
+}
+
+/*
+ * 列表顶部提示统一使用板块圆角。覆盖 Page / TabPage 自带提示，以及列表组件外层
+ * 直接声明的提示；不把样式扩散到表单字段、弹窗等内部 Alert。
+ */
+.wrapper-content > :deep(.el-alert:not(.help-warning)),
+.wrapper-content :deep(.tab-page-content > .el-alert:not(.help-warning)),
+.wrapper-content
+  :deep(.tab-page-content > div:not([class]) > .el-alert:first-child:not(.help-warning)),
+.wrapper-content :deep([data-list-layout='container'] > .el-alert:not(.help-warning)) {
+  border-radius: var(--page-alert-border-radius, 4px);
 }
 
 .wrapper-content :deep(.page-alert .el-alert__icon),

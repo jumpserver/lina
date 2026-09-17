@@ -2,6 +2,7 @@ import { getUuidUpdateFromUrl } from '@/utils/common/index'
 import { PasswordRule, UpdateToken, UploadSecret } from '@/components/Form/FormFields'
 import Select2 from '@/components/Form/FormFields/Select2'
 import AutomationParams from '@/components/Apps/AutomationParams'
+import { getSecretTypeOptions } from '@/components/Apps/AccountCreateUpdateForm/const'
 import i18n from '@/i18n/i18n'
 import { ref } from 'vue'
 
@@ -35,6 +36,7 @@ export const templateFieldsMeta = (vm) => {
   return {
     su_from: {
       component: Select2,
+      hidden: (formValue) => formValue.secret_type === 'ssh_certificate',
       el: {
         multiple: false,
         clearable: true,
@@ -50,6 +52,7 @@ export const templateFieldsMeta = (vm) => {
     },
     secret_type: {
       type: 'radio-group',
+      options: getSecretTypeOptions(vm),
       on: {
         change: ([event], updateForm) => {
           if (!canRandomSecretTypes.includes(event)) {
@@ -58,6 +61,9 @@ export const templateFieldsMeta = (vm) => {
             autoPushEl.disabled = true
           } else {
             autoPushEl.disabled = false
+          }
+          if (event === 'ssh_certificate') {
+            updateForm({ su_from: null })
           }
         }
       }

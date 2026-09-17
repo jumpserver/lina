@@ -2,10 +2,10 @@
   <div>
     <el-row :gutter="16">
       <el-col :lg="12" :sm="24">
-        <RankTable :config="userConfig" />
+        <RankTable :config="userConfig" class="dashboard-panel" />
       </el-col>
       <el-col :lg="12" :sm="24">
-        <RankTable :config="assetConfig" />
+        <RankTable :config="assetConfig" class="dashboard-panel" />
       </el-col>
     </el-row>
   </div>

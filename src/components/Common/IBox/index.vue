@@ -52,10 +52,11 @@ export default {
 .ibox {
   clear: both;
   padding: 0;
+  --el-card-border-color: var(--panel-border-color, var(--el-border-color));
 }
 
 .ibox :deep(.el-card__header) {
-  border-color: #e7eaec;
+  border-color: var(--panel-border-color, var(--el-border-color));
   border-image: none;
   margin-bottom: 0;
   padding: 10px 20px;

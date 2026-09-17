@@ -6,7 +6,7 @@
       :search-table="search"
       :table-url="tableUrl"
     />
-    <div v-loading="loading">
+    <div v-loading="loading" class="compact-loading">
       <el-row :class="{ 'is-empty': totalData.length === 0 }" class="the-row">
         <IBox v-if="totalData.length === 0" class="empty-box">
           <el-empty

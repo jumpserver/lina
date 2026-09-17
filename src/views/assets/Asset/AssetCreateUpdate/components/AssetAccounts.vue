@@ -67,6 +67,7 @@
         v-if="templateDialogVisible"
         v-model:visible="templateDialogVisible"
         :accounts="accounts"
+        :asset="platform"
       />
     </div>
 
@@ -94,6 +95,10 @@ export default {
     AccountTemplateDialog
   },
   props: {
+    accountsDrawer: {
+      type: Object,
+      default: null
+    },
     platform: {
       type: Object,
       default: () => ({})
@@ -168,6 +173,32 @@ export default {
     onSelectTemplate() {},
     goToAssetAccountsPage() {
       const assetId = this.$context.get('id')
+      if (this.accountsDrawer) {
+        const {
+          component,
+          componentProps = {},
+          id = assetId,
+          routeName = this.$route.name || '',
+          tab = 'Accounts'
+        } = this.accountsDrawer
+        this.drawerComponent = component || this.drawerComponent
+        this.drawerComponentProps = {
+          ...componentProps,
+          initialActiveMenu: tab,
+          drawerContext: {
+            isDrawer: true,
+            action: 'detail',
+            row: {},
+            col: {},
+            id,
+            params: { id },
+            query: { tab },
+            routeName
+          }
+        }
+        this.drawerVisible = true
+        return
+      }
       // todo: 临时解决方案，后续需要优化 发布机的组织是 system，所以需要判断一下，否则
       // 会跳转到其他组织的资产详情页，而不是发布机详情页
       if (this.$router.currentRoute.name === 'AppletHostUpdate') {

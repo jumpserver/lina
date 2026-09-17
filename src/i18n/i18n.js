@@ -1,12 +1,10 @@
 // i18n.js
-import axios from 'axios'
 import { createI18n } from 'vue-i18n'
-import { getStore } from '@/store/registry'
 import date from './date'
 import messages from './langs'
-import { getLangCode } from './utils'
+import { getI18nLocale } from './utils'
 
-const lang = getLangCode()
+const lang = getI18nLocale()
 
 const i18n = createI18n({
   legacy: false, // Use Composition API mode
@@ -55,21 +53,5 @@ function compatTc(key, choice, ...args) {
 i18n.t = i18n.global.t.bind(i18n.global)
 i18n.global.tc = compatTc
 i18n.tc = compatTc.bind(i18n.global)
-
-export async function fetchTranslationsFromAPI() {
-  try {
-    const res = await axios.get(`/api/v1/settings/i18n/lina/?lang=${lang}&flat=0`)
-    const data = res.data
-    for (const key in data) {
-      if (Object.prototype.hasOwnProperty.call(data, key)) {
-        i18n.global.mergeLocaleMessage(key, data[key])
-      }
-    }
-  } catch (error) {
-    console.log(error)
-  } finally {
-    await getStore()?.dispatch('app/setI18nLoaded', true)
-  }
-}
 
 export default i18n

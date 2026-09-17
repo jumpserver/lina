@@ -10,14 +10,14 @@
   >
     <el-row :gutter="16">
       <el-col :lg="12" :sm="24">
-        <RealTimeSummary />
-        <UserAssetActivity />
+        <RealTimeSummary class="dashboard-panel" />
+        <UserAssetActivity class="dashboard-panel" />
       </el-col>
       <el-col :lg="12" :sm="24">
         <DataSummary />
       </el-col>
     </el-row>
-    <AssetProportionSummary :url="url" />
+    <AssetProportionSummary :url="url" class="dashboard-panel" />
     <RankSummary />
   </BaseReport>
 </template>

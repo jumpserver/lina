@@ -155,7 +155,7 @@ export default {
           this.$message.success(this.$tc('CreateSuccessMsg'))
         })
         .catch((error) => {
-          if (error.response?.status === 412) {
+          if (error.response?.status === 412 || error.name === 'NotAllowedError') {
             return
           }
           const msg = getErrorResponseMsg(error)

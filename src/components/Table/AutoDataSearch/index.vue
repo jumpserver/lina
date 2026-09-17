@@ -1,6 +1,14 @@
 <template>
   <span :class="{ 'is-folded': shouldFold }" class="auto-data-search">
-    <el-button v-if="shouldFold" circle class="search-btn" size="small" @click="handleManualSearch">
+    <el-button
+      v-if="shouldFold"
+      :aria-label="$t('Search')"
+      :aria-expanded="false"
+      :title="$t('Search')"
+      class="search-btn"
+      size="small"
+      @click="handleManualSearch"
+    >
       <svg-icon icon-class="search" />
     </el-button>
     <TagSearch
@@ -12,6 +20,8 @@
       class="auto-data-search__field"
       @blur="handleBlur"
       @conditions-change="$emit('conditionsChange', $event)"
+      @interaction-change="searchInteracting = $event"
+      @request-focus="focusSearch"
       @tag-search="handleTagSearch"
     />
   </span>
@@ -27,7 +37,7 @@ export default {
   components: {
     TagSearch
   },
-  emits: ['conditionsChange', 'tagSearch'],
+  emits: ['conditionsChange', 'ready', 'tagSearch'],
   props: {
     url: {
       type: String,
@@ -41,6 +51,14 @@ export default {
       type: Array,
       default: () => []
     },
+    excludeFields: {
+      type: Array,
+      default: () => []
+    },
+    fieldLabels: {
+      type: Object,
+      default: () => ({})
+    },
     // 建议折叠
     fold: {
       type: Boolean,
@@ -52,6 +70,7 @@ export default {
       internalOptions: [],
       tags: [],
       manualSearch: false,
+      searchInteracting: false,
       searchMeta: {},
       optionsRequestId: 0
     }
@@ -67,7 +86,7 @@ export default {
       return !!this.tags
     },
     shouldFold() {
-      return this.fold && !this.hasTags && !this.manualSearch
+      return this.fold && !this.hasTags && !this.manualSearch && !this.searchInteracting
     }
   },
   watch: {
@@ -75,9 +94,17 @@ export default {
       this.genericOptions()
     }
   },
-  mounted() {
-    if (this.url) {
-      this.genericOptions()
+  async mounted() {
+    try {
+      if (this.url) {
+        await this.genericOptions()
+      }
+    } finally {
+      // TagSearch derives route filters from the async field metadata. Wait
+      // until those watchers have emitted the initial query before allowing
+      // ListTable to mount its data table and issue the first GET.
+      await this.$nextTick()
+      this.$emit('ready')
     }
   },
   methods: {
@@ -125,9 +152,12 @@ export default {
       const filters = getFilterMeta(data)
       const options = []
       for (const [name, field] of Object.entries(filters)) {
+        if (this.excludeFields.includes(name)) {
+          continue
+        }
         const option = {
           custom: field.custom === true,
-          label: field.label,
+          label: this.fieldLabels[name] || field.label,
           multiple: field.multiple !== false && !this.singleChoiceFields.includes(name),
           operators: field.operators,
           type: field.type,
@@ -202,7 +232,7 @@ export default {
   height: 30px;
   padding: 0;
   border: 1px solid var(--color-border);
-  border-radius: 50%;
+  border-radius: var(--list-corner-radius, 4px);
   background-color: #fff;
   cursor: pointer;
 

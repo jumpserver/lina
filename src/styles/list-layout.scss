@@ -1,0 +1,176 @@
+// Only active page lists opt in. Forms, detail cards and embedded/dialog lists
+// keep their existing scrolling. A page list is content-sized up to the space
+// above the sidebar footer; overflow then stays inside the table body.
+.page .page-content.wrapper-content[data-list-layout='viewport'],
+.page.tab-page .tab-page-content[data-list-layout='viewport'] {
+  overflow: hidden !important;
+  scrollbar-gutter: auto;
+  padding-bottom: var(--list-viewport-bottom-offset, 44px);
+  background-color: var(--page-content-background-color, #f3f3f4);
+}
+
+.page.tab-page .tab-page-content[data-list-layout='viewport'] {
+  &::after {
+    display: none;
+  }
+
+  > [data-list-layout='container'] {
+    flex-shrink: 1;
+    min-width: 0;
+  }
+}
+
+.page [data-list-layout='container']:not(.el-row):not(.el-col) {
+  display: flex !important;
+  flex: 1 1 0%;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+
+  > .el-alert {
+    flex: none;
+  }
+
+  // Teleported dialogs sometimes leave an empty view wrapper in this flex
+  // column. It must not consume a gap below the table.
+  > div:not([class]):empty,
+  > div[class='']:empty {
+    display: none;
+  }
+
+  &.list-table {
+    margin-bottom: 0;
+  }
+
+  &.tree-table-content {
+    flex-direction: row;
+
+    > .left {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+
+      > .auto-data-ztree,
+      .x-tree,
+      .node-asset-tree {
+        flex: 1 1 0%;
+        min-height: 0;
+        height: auto;
+      }
+
+      .tree-tab.is-x-tree {
+        display: flex;
+        flex-direction: column;
+
+        > .tree-view-header {
+          flex: none;
+        }
+      }
+    }
+  }
+}
+
+// A list nested in TwoCol still needs the height chain above it, but those
+// Element Plus grid nodes must retain their own row direction and responsive
+// column flex-basis. Treating every ancestor as a generic column stacks the
+// quick-actions panel below the table and leaves almost no table body when the
+// quick filter is expanded.
+.page .el-row[data-list-layout='container'] {
+  flex: 1 1 0%;
+  min-height: 0;
+  min-width: 0;
+}
+
+.page .el-col[data-list-layout='container'] {
+  display: flex !important;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+
+.page .list-table--fill-height {
+  > :not(.table-content) {
+    flex: none;
+  }
+
+  > .table-content {
+    display: flex;
+    flex: 1 1 0%;
+    min-height: 0;
+
+    // Page lists sit directly on the content background. Remove the outer
+    // card edges and white fill so the area below a short table keeps the
+    // page background. The table surface itself remains white.
+    > .ibox {
+      border-top: 0;
+      border-right: 0;
+      border-bottom: 0;
+      border-left: 0;
+      border-radius: 0;
+      background-color: var(--page-content-background-color, #f3f3f4);
+
+      .el-data-table__body > .el-table,
+      .el-table__header thead > tr > th:first-child,
+      .el-table__header thead > tr > th:last-child,
+      .el-table__body-header > tr > th:first-child,
+      .el-table__body-header > tr > th:last-child {
+        border-radius: 0;
+      }
+
+      .el-data-table__body > .el-table--border {
+        --el-table-border-color: var(--panel-border-color, var(--el-border-color-lighter));
+
+        &::before,
+        &::after {
+          display: none;
+        }
+
+        > .el-table__inner-wrapper > .el-table__border-left-patch,
+        > .el-table__inner-wrapper > .el-table__border-right-patch,
+        > .el-table__inner-wrapper > .el-table__border-bottom-patch {
+          display: none;
+        }
+
+        tr > .el-table__cell:last-child {
+          border-right: 0 !important;
+        }
+      }
+    }
+
+    > .ibox,
+    > .ibox > .el-card__body,
+    .auto-data-table,
+    .auto-data-table__content {
+      display: flex;
+      flex: 1 1 0%;
+      flex-direction: column;
+      min-height: 0;
+      min-width: 0;
+    }
+
+    > .ibox,
+    > .ibox > .el-card__body {
+      // Override PageContent/TabPage's deliberately unbounded detail cards.
+      overflow: hidden !important;
+    }
+  }
+}
+
+// 手机窄屏下将树放到表格上方，各自保留独立的可用区域。
+// 表格仍只在自身内部横向滚动，不会把整页撑宽。
+@media screen and (max-width: 767px) {
+  .page [data-list-layout='container'].tree-table-content {
+    flex-direction: column;
+
+    > .left {
+      flex: 0 1 min(34%, 240px);
+      width: 100% !important;
+      max-height: 240px;
+    }
+
+    > .right {
+      flex: 1 1 0%;
+      width: 100%;
+    }
+  }
+}

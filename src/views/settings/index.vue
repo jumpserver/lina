@@ -1,13 +1,16 @@
+<template>
+  <Layout />
+</template>
+
 <script>
 import Layout from '@/layout'
 import store from '@/store'
-import { useResizeHandler } from '@/utils/vue/useResizeHandler'
 
 export default {
   name: 'Setting',
-  extends: Layout,
-  setup() {
-    useResizeHandler()
+  routeViewShell: true,
+  components: {
+    Layout
   },
   async beforeRouteEnter() {
     await store.dispatch('users/enterSettingOrg')

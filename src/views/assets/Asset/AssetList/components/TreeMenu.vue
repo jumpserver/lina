@@ -1,5 +1,8 @@
 <template>
   <div>
+    <li id="m_show_node_info" class="rmenu" tabindex="-1" @click="rMenuShowNodeInfo">
+      <i class="fa fa-info-circle" /> {{ $t('ShowNodeInfo') }}
+    </li>
     <li class="divider" />
     <li
       id="m_add_asset_to_node"
@@ -32,82 +35,60 @@
     <li
       id="m_update_node_asset_hardware_info"
       v-if="$hasPerm('assets.refresh_assethardwareinfo')"
-      class="rmenu"
+      class="rmenu tree-menu__external-item"
       tabindex="-1"
       @click="rMenuUpdateNodeAssetHardwareInfo"
     >
-      <i class="fa fa-refresh" /> {{ $t('UpdateNodeAssetHardwareInfo') }}
+      <i class="fa fa-refresh" />
+      <span class="tree-menu__label">{{ $t('UpdateNodeAssetHardwareInfo') }}</span>
+      <i class="fa fa-external-link tree-menu__external-icon" />
     </li>
     <li
       id="m_test_node_asset_connectivity"
       v-if="$hasPerm('assets.test_assetconnectivity')"
-      class="rmenu"
+      class="rmenu tree-menu__external-item"
       tabindex="-1"
       @click="rMenuTestNodeAssetConnectivity"
     >
-      <i class="fa fa-link" /> {{ $t('TestNodeAssetConnectivity') }}
-    </li>
-    <li
-      v-if="$hasPerm('assets.change_assetnodes | assets.test_assetconnectivity')"
-      class="divider"
-    />
-    <li
-      id="m_show_asset_only_current_node"
-      class="rmenu"
-      tabindex="-1"
-      @click="rMenuShowAssetOnlyCurrentNode"
-    >
-      <i class="fa fa-indent" /> {{ $t('ShowAssetOnlyCurrentNode') }}
-    </li>
-    <li
-      id="m_show_asset_all_children_node"
-      class="rmenu"
-      tabindex="-1"
-      @click="rMenuShowAssetAllChildrenNode"
-    >
-      <i class="fa fa-align-justify" /> {{ $t('ShowAssetAllChildrenNode') }}
-    </li>
-    <li class="divider" />
-    <li
-      id="m_check_assets_amount"
-      v-if="$hasPerm('assets.change_node')"
-      class="rmenu"
-      tabindex="-1"
-      @click="rCheckAssetsAmount"
-    >
-      <i class="fa fa-clone" /> {{ $t('CheckAssetsAmount') }}
-    </li>
-    <li id="m_show_node_info" class="rmenu" tabindex="-1" @click="rMenuShowNodeInfo">
-      <i class="fa fa-info-circle" /> {{ $t('ShowNodeInfo') }}
+      <i class="fa fa-link" />
+      <span class="tree-menu__label">{{ $t('TestNodeAssetConnectivity') }}</span>
+      <i class="fa fa-external-link tree-menu__external-icon" />
     </li>
     <NodeAssetsUpdateDialog
       v-bind="nodeAssetsUpdateDialog"
       v-if="nodeAssetsUpdateDialog.visible"
+      :tree="tree"
       v-model:visible="nodeAssetsUpdateDialog.visible"
       @hide-menu="hideMenu"
     />
     <Dialog
       v-model:visible="nodeInfoDialogSetting.dialogVisible"
+      align-center
+      class="node-info-dialog"
+      destroy-on-close
       :show-cancel="false"
       :show-confirm="false"
       :title="$tc('NodeInformation')"
-      width="50%"
+      width="640px"
     >
-      <el-row
-        v-for="item in nodeInfoDialogSetting.items"
-        :key="'card-' + item.key"
-        :gutter="10"
-        class="item"
-      >
-        <el-col :md="6" :sm="24">
-          <div class="item-label">
-            <label>{{ item.label }}: </label>
+      <div class="node-info-dialog__details">
+        <div
+          v-for="item in nodeInfoDialogSetting.items"
+          :key="item.key"
+          class="node-info-dialog__row"
+        >
+          <div class="node-info-dialog__label">
+            {{ item.label }}
           </div>
-        </el-col>
-        <el-col :md="18" :sm="24">
-          <div class="item-text">{{ item.value }}</div>
-        </el-col>
-      </el-row>
+          <div
+            :class="{ 'is-code': item.code }"
+            :title="String(item.value || '-')"
+            class="node-info-dialog__value"
+          >
+            {{ item.value || '-' }}
+          </div>
+        </div>
+      </div>
     </Dialog>
   </div>
 </template>
@@ -189,48 +170,23 @@ export default {
           this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
         })
     },
-    rMenuShowAssetOnlyCurrentNode() {
-      this.hideMenu()
-      const currentNode = this.getSelectedNodes()[0]
-      if (!currentNode) {
-        return
-      }
-      this.$emit('showAll', { node: currentNode, showCurrentAsset: 1 })
-    },
-    rMenuShowAssetAllChildrenNode() {
-      this.hideMenu()
-      const currentNode = this.getSelectedNodes()[0]
-      if (!currentNode) {
-        return
-      }
-      this.$emit('showAll', { node: currentNode, showCurrentAsset: 0 })
-    },
     async rMenuShowNodeInfo() {
       const currentNode = this.getSelectedNodes()[0]
       if (!currentNode) return
 
+      this.hideMenu()
       try {
         const res = await this.$axios.get(`/api/v1/assets/nodes/${currentNode.meta.data.id}/`)
         this.nodeInfoDialogSetting.dialogVisible = true
         this.nodeInfoDialogSetting.items = [
-          { key: 'id', label: 'ID', value: res.id },
-          { key: 'key', label: 'KEY', value: res.key },
+          { key: 'id', label: 'ID', value: res.id, code: true },
+          { key: 'key', label: 'KEY', value: res.key, code: true },
           { key: 'name', label: this.$t('Name'), value: res.name },
           { key: 'fullName', label: this.$t('FullName'), value: res.full_value }
         ]
       } catch (error) {
         this.$message.error(this.$tc('ErrorMsg' + ' ' + error))
       }
-    },
-    rCheckAssetsAmount() {
-      this.$axios
-        .post(`/api/v1/assets/nodes/check_assets_amount_task/`)
-        .then((res) => {
-          openTaskPage(res['task'])
-        })
-        .catch((error) => {
-          this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
-        })
     },
     hideMenu() {
       this.tree.hideRMenu()
@@ -242,50 +198,106 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.rmenu {
-  font-size: 12px;
-  padding: 0 16px;
-  position: relative;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: #606266;
-  height: 24px;
-  line-height: 24px;
-  box-sizing: border-box;
-  cursor: pointer;
+<style lang="scss">
+.x-tree-context-menu {
+  .rmenu > i.fa:not(.tree-menu__external-icon) {
+    width: 16px;
+  }
+
+  .tree-menu__label {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .rmenu > .tree-menu__external-icon {
+    display: inline-flex;
+    width: 9px;
+    visibility: hidden;
+    color: var(--el-text-color-placeholder);
+    font-size: 9px;
+    line-height: 1;
+  }
+
+  .tree-menu__external-item:hover > .tree-menu__external-icon,
+  .tree-menu__external-item:focus-visible > .tree-menu__external-icon {
+    visibility: visible;
+  }
 }
 
-div.rMenu li {
-  margin: 6px 0;
-  cursor: pointer;
-  list-style: none outside none;
+.node-info-dialog.dialog {
+  border-radius: 8px;
+
+  .el-dialog__body {
+    padding: 24px !important;
+  }
+
+  .node-info-dialog__details {
+    overflow: hidden;
+    border: 1px solid var(--el-border-color-lighter);
+    border-radius: 6px;
+  }
+
+  .node-info-dialog__row {
+    display: grid;
+    grid-template-columns: 112px minmax(0, 1fr);
+    min-height: 50px;
+    border-bottom: 1px solid var(--el-border-color-lighter);
+
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  .node-info-dialog__label,
+  .node-info-dialog__value {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 12px 16px;
+  }
+
+  .node-info-dialog__label {
+    color: var(--el-text-color-secondary);
+    font-weight: 500;
+    background: var(--el-fill-color-lighter);
+    border-right: 1px solid var(--el-border-color-lighter);
+  }
+
+  .node-info-dialog__value {
+    min-width: 0;
+    color: var(--el-text-color-primary);
+    line-height: 22px;
+    overflow-wrap: anywhere;
+
+    &.is-code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+    }
+  }
 }
 
-.rmenu > a:hover,
-.dropdown-menu > a:focus {
-  color: #262626;
-  text-decoration: none;
-  background-color: #f5f5f5;
-}
+@media (max-width: 600px) {
+  .node-info-dialog.dialog {
+    .el-dialog__body {
+      padding: 18px !important;
+    }
 
-.rmenu:hover {
-  background-color: #f5f7fa;
-}
+    .node-info-dialog__row {
+      display: block;
+    }
 
-.divider {
-  margin: 1px 0;
-  list-style: none outside none;
-  background-color: #e5e5e5;
-  height: 1px;
-}
+    .node-info-dialog__label {
+      padding: 9px 12px;
+      border-right: 0;
+      border-bottom: 1px solid var(--el-border-color-lighter);
+    }
 
-.el-row {
-  margin-bottom: 20px;
-
-  &:last-child {
-    margin-bottom: 0;
+    .node-info-dialog__value {
+      min-height: 42px;
+      padding: 10px 12px;
+    }
   }
 }
 </style>

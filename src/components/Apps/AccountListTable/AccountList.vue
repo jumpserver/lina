@@ -3,6 +3,7 @@
     <DrawerListTable
       ref="ListTable"
       :detail-drawer="detailDrawer"
+      :activation-refresh="activationRefresh"
       :header-actions="headerActions"
       :quick-filters="quickFilters"
       :table-config="tableConfig"
@@ -148,6 +149,10 @@ export default {
     showActions: {
       type: Boolean,
       default: true
+    },
+    activationRefresh: {
+      type: String,
+      default: 'always'
     }
   },
   data() {
@@ -162,8 +167,6 @@ export default {
       showResultDialog: false,
       showAddDialog: false,
       showAddTemplateDialog: false,
-      activatedReloadTimer: null,
-      tabDeactivated: false,
       accountOperationFlag: null,
       detailDrawer: () => import('@/views/accounts/Account/AccountDetail/index.vue'),
       createAccountResults: [],
@@ -186,7 +189,6 @@ export default {
         },
         columnsMeta: {
           name: {
-            minWidth: '60px',
             formatterArgs: {
               can: () => vm.$hasPerm('accounts.view_account'),
               getRoute: ({ row }) => ({
@@ -251,7 +253,6 @@ export default {
             }
           },
           username: {
-            minWidth: '60px',
             formatter: function (row) {
               if (row.ds && row.ds['domain_name']) {
                 return `${row.username}@${row.ds['domain_name']}`
@@ -368,6 +369,7 @@ export default {
             can: ({ selectedRows }) => {
               return (
                 selectedRows.length > 0 &&
+                selectedRows.every((item) => item.secret_type.value !== 'ssh_certificate') &&
                 ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(
                   selectedRows[0].asset.type.value
                 ) === -1 &&
@@ -395,7 +397,11 @@ export default {
             type: 'primary',
             icon: 'clean',
             can: ({ selectedRows }) => {
-              return selectedRows.length > 0 && vm.$hasPerm('accounts.change_account')
+              return (
+                selectedRows.length > 0 &&
+                selectedRows.every((item) => item.secret_type.value !== 'ssh_certificate') &&
+                vm.$hasPerm('accounts.change_account')
+              )
             },
             callback: function ({ selectedRows }) {
               const ids = selectedRows.map((v) => {
@@ -461,22 +467,6 @@ export default {
   },
   mounted() {
     this.setActions()
-  },
-  activated() {
-    // 由于组件嵌套较深，有可能导致 Error in activated hook: "TypeError: Cannot read properties of undefined (reading 'getList')" 的问题
-    if (this.tabDeactivated) {
-      clearTimeout(this.activatedReloadTimer)
-      this.activatedReloadTimer = setTimeout(() => this.refresh(), 300)
-    }
-  },
-  deactivated() {
-    this.tabDeactivated = true
-    clearTimeout(this.activatedReloadTimer)
-    this.activatedReloadTimer = null
-  },
-  beforeUnmount() {
-    clearTimeout(this.activatedReloadTimer)
-    this.activatedReloadTimer = null
   },
   methods: {
     setActions() {

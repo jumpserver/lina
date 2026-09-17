@@ -45,7 +45,8 @@ export const accountOtherActions = (vm) => {
     {
       name: 'View',
       title: vm.$t('View'),
-      can: vm.$hasPerm('accounts.view_accountsecret'),
+      can: ({ row }) =>
+        vm.$hasPerm('accounts.view_accountsecret') && row.secret_type.value !== 'ssh_certificate',
       type: 'primary',
       order: 1,
       callback: ({ row }) => {
@@ -90,6 +91,7 @@ export const accountOtherActions = (vm) => {
       can: ({ row }) => {
         return (
           vm.$hasPerm('accounts.change_account') &&
+          row.secret_type.value !== 'ssh_certificate' &&
           !vm.$store.getters.currentOrgIsRoot &&
           !isDirectoryServiceAccount(row, vm)
         )
@@ -142,6 +144,7 @@ export const accountOtherActions = (vm) => {
       can: ({ row }) =>
         !vm.$store.getters.currentOrgIsRoot &&
         vm.$hasPerm('accounts.verify_account') &&
+        row.secret_type.value !== 'ssh_certificate' &&
         row.asset['auto_config'].ansible_enabled &&
         row.asset['auto_config'].ping_enabled,
       callback: ({ row }) => {
@@ -157,7 +160,11 @@ export const accountOtherActions = (vm) => {
       title: vm.$t('ClearSecret'),
       icon: 'fa-solid fa-eraser',
       can: ({ row }) => {
-        return vm.$hasPerm('accounts.change_account') && !isDirectoryServiceAccount(row, vm)
+        return (
+          vm.$hasPerm('accounts.change_account') &&
+          row.secret_type.value !== 'ssh_certificate' &&
+          !isDirectoryServiceAccount(row, vm)
+        )
       },
       type: 'primary',
       callback: ({ row }) => {
@@ -172,7 +179,8 @@ export const accountOtherActions = (vm) => {
       name: 'SecretHistory',
       title: vm.$t('HistoryPassword'),
       icon: 'fa-solid fa-clock-rotate-left',
-      can: () => vm.$hasPerm('accounts.view_accountsecret'),
+      can: ({ row }) =>
+        vm.$hasPerm('accounts.view_accountsecret') && row.secret_type.value !== 'ssh_certificate',
       type: 'primary',
       callback: ({ row }) => {
         vm.account = row

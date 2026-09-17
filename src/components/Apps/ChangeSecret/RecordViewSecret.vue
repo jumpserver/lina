@@ -15,7 +15,8 @@
             :cell-value="secretInfo.old_secret"
             :col="{
               formatterArgs: {
-                name: 'old_secret'
+                name: 'old_secret',
+                showActionsOnHover: false
               }
             }"
           />
@@ -25,7 +26,8 @@
             :cell-value="secretInfo.new_secret"
             :col="{
               formatterArgs: {
-                name: 'new_secret'
+                name: 'new_secret',
+                showActionsOnHover: false
               }
             }"
           />

@@ -87,37 +87,9 @@ export default {
       updateSuccessNextRoute: { name: 'AccountTemplateList' }
     }
   },
-  async mounted() {
-    this.setSecretTypeOptions()
-  },
   methods: {
-    setSecretTypeOptions() {
-      const choices = [
-        {
-          label: this.$t('Password'),
-          value: 'password'
-        },
-        {
-          label: this.$t('SSHKey'),
-          value: 'ssh_key'
-        },
-        {
-          label: this.$t('Token'),
-          value: 'token'
-        },
-        {
-          label: this.$t('AccessKey'),
-          value: 'access_key'
-        },
-        {
-          label: this.$t('ApiKey'),
-          value: 'api_key'
-        }
-      ]
-      this.fieldsMeta.secret_type.options = choices
-    },
     getObjectDone(obj) {
-      if (['token', 'access_key', 'api_key'].includes(obj.secret_type.value)) {
+      if (['token', 'access_key', 'api_key', 'ssh_certificate'].includes(obj.secret_type.value)) {
         this.fieldsMeta.auto_push.el.disabled = true
       }
     }

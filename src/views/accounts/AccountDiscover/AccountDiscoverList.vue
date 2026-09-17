@@ -33,6 +33,7 @@ import DeleteDialog from '@/views/accounts/AccountDiscover/DeleteDialog.vue'
 import { gatherAccountHeaderActions, gatherAccountTableConfig } from '@/views/accounts/const'
 import AccountDiscoverDialog from '@/views/assets/Asset/AssetList/components/AccountDiscoverDialog.vue'
 import RemoveAccount from '@/components/Apps/AccountListTable/RemoveAccount.vue'
+import { createNodeAssetTreeDataSource } from '@/components/Tree/NodeAssetTree/dataSource'
 
 export default {
   components: {
@@ -54,6 +55,17 @@ export default {
       },
       gatherAccounts: [],
       treeSetting: {
+        treeComponent: 'NodeAssetTree',
+        treeTitle: this.$t('AssetTree'),
+        assetIconMode: 'platform',
+        countResource: 'none',
+        showMetrics: false,
+        showPermissionScope: false,
+        childrenPagination: true,
+        dataSource: createNodeAssetTreeDataSource(this.$axios),
+        settingsCacheKey: 'account-discovery',
+        readOnly: false,
+        edit: { drag: { isMove: false } },
         showDefaultMenu: false,
         showMenu: (node) => {
           return node.meta.type === 'asset'
@@ -65,15 +77,13 @@ export default {
         selectSyncToRoute: false,
         url: '/api/v1/accounts/gathered-accounts/',
         nodeUrl: '/api/v1/assets/nodes/',
-        // ?assets=0不显示资产. =1显示资产
-        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1&asset_amount=0',
         menu: [
           {
             id: 'discover',
             icon: 'discovery',
             name: this.$t('DiscoverAccounts'),
             callback: (node) => {
-              this.discoveryDialog.asset = node.id
+              this.discoveryDialog.asset = node.meta.data.resource_id
               this.discoveryDialog.visible = true
             }
           }

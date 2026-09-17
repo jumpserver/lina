@@ -2,7 +2,7 @@
   <div>
     <el-row :gutter="16">
       <el-col :lg="24">
-        <SummaryChart :config="accountConfig" />
+        <SummaryChart :config="accountConfig" class="dashboard-panel" />
       </el-col>
     </el-row>
   </div>

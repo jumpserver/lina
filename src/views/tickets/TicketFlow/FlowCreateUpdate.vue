@@ -5,6 +5,7 @@
 <script>
 import { ResourceSelect } from '@/components/Form/FormFields'
 import { GenericCreateUpdatePage } from '@/layout/components'
+import { getErrorResponseMsg } from '@/utils/common'
 import FlowRuleField from './FlowRuleField'
 
 export default {
@@ -20,9 +21,16 @@ export default {
         [this.$t('ApprovalLevel'), ['approval_level', 'rules']]
       ],
       fieldsMeta: {
+        name: {
+          el: {
+            maxlength: 128,
+            showWordLimit: true
+          }
+        },
         rules: {
           label: this.$t('ApprovalProcess'),
           component: FlowRuleField,
+          passServerErrors: true,
           el: {
             level: 1
           },
@@ -57,6 +65,16 @@ export default {
           users: rule.users
         }))
         return data
+      },
+      performSubmit(validValues) {
+        return this.$axios[this.method](this.iUrl, validValues, {
+          disableFlashErrorMsg: true
+        }).catch((error) => {
+          if (error.response?.status !== 400) {
+            this.$message.error(getErrorResponseMsg(error) || error.message)
+          }
+          throw error
+        })
       },
       updateSuccessNextRoute: { name: 'TicketFlow' },
       createSuccessNextRoute: { name: 'TicketFlow' }

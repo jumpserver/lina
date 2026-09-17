@@ -1,12 +1,8 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
-import { getStore } from '@/store/registry'
+import store from '@/store'
 import { openJDMC } from '@/utils/jdmc'
-import { hasPermission } from '@/utils/jms'
 import { getFirstAccessibleChildPath } from '@/utils/vue'
-
-const getSettings = () => getStore()?.state?.settings?.publicSettings || {}
-const useJDMCLicense = (settings) => settings?.JDMC_ENABLED && !settings?.KOTL_ENABLED
 
 const Setting = () => import('@/views/settings/index')
 const globalSubmenu = () => import('@/layout/globalOrg.vue')
@@ -211,6 +207,17 @@ export default {
       ]
     },
     {
+      path: '/settings/chat-ai',
+      name: 'ChatAISettings',
+      component: () => import('@/views/settings/ChatAI'),
+      meta: {
+        title: i18n.t('ChatAI'),
+        icon: 'short-message',
+        disableGoBack: true,
+        permissions: ['settings.change_chatai']
+      }
+    },
+    {
       path: '/settings/notification',
       name: 'Msg',
       component: () => import('@/views/settings/Msg'),
@@ -231,7 +238,7 @@ export default {
         icon: 'feature',
         permissions: [
           'settings.change_ticket | settings.change_ops | settings.change_vault | ' +
-            'settings.change_chatai | settings.change_virtualapp'
+            'settings.change_virtualapp'
         ]
       }
     },
@@ -497,8 +504,30 @@ export default {
           component: () => import('@/views/settings/Applet/VirtualApp/VirtualAppCreateUpdate'),
           hidden: true,
           meta: {
-            title: i18n.t('VirtualHostUpdate'),
+            title: i18n.t('VirtualAppUpdate'),
             permissions: ['terminal.change_virtualapp'],
+            activeMenu: '/settings/applets'
+          }
+        },
+        {
+          path: 'virtual-apps/:id/publications/create',
+          name: 'VirtualAppPublicationCreate',
+          component: () => import('@/views/settings/Applet/VirtualApp/PublicationCreate'),
+          hidden: true,
+          meta: {
+            title: i18n.t('Publish'),
+            permissions: ['terminal.add_virtualapppublication'],
+            activeMenu: '/settings/applets'
+          }
+        },
+        {
+          path: 'app-providers/create',
+          name: 'AppProviderCreate',
+          component: () => import('@/views/settings/Applet/AppProvider/AppProviderCreateUpdate'),
+          hidden: true,
+          meta: {
+            title: i18n.t('AppProviderCreate'),
+            permissions: ['terminal.add_appprovider'],
             activeMenu: '/settings/applets'
           }
         },
@@ -511,6 +540,28 @@ export default {
           meta: {
             title: i18n.t('AppProviderDetail'),
             permissions: ['terminal.view_appprovider'],
+            activeMenu: '/settings/applets'
+          }
+        },
+        {
+          path: 'app-providers/:id/update',
+          name: 'AppProviderUpdate',
+          component: () => import('@/views/settings/Applet/AppProvider/AppProviderCreateUpdate'),
+          hidden: true,
+          meta: {
+            title: i18n.t('AppProviderUpdate'),
+            permissions: ['terminal.change_appprovider'],
+            activeMenu: '/settings/applets'
+          }
+        },
+        {
+          path: 'app-providers/:providerId/publications/create',
+          name: 'AppProviderPublicationCreate',
+          component: () => import('@/views/settings/Applet/VirtualApp/PublicationCreate'),
+          hidden: true,
+          meta: {
+            title: i18n.t('Publish'),
+            permissions: ['terminal.add_virtualapppublication'],
             activeMenu: '/settings/applets'
           }
         }
@@ -604,26 +655,19 @@ export default {
       path: '/settings/license',
       name: 'License',
       component: () => import('@/views/settings/License'),
-      beforeEnter: (_to, from, next) => {
-        const settings = getSettings()
-        if (useJDMCLicense(settings)) {
-          openJDMC('/jdmc/sys-management/sys-auth')
-          redirectAfterExternalAction(from, next)
-        } else {
-          next()
-        }
-      },
       meta: {
         title: i18n.t('License'),
         icon: 'license',
-        permissions: ['settings.change_license'],
-        externalAction: {
-          type: 'jdmc',
-          nextPath: '/jdmc/sys-management/sys-auth',
-          enabled: ({ settings }) => useJDMCLicense(settings)
-        },
-        // 旧 JDMC 许可证模式需要 rbac.view_jdmc 权限，KOTL 和普通模式均由 Core 管理
-        hidden: ({ settings }) => useJDMCLicense(settings) && !hasPermission('rbac.view_jdmc')
+        permissions: ['settings.change_license']
+      },
+      beforeEnter: (_to, from, next) => {
+        if (!store.getters.publicSettings?.['JDMC_ENABLED']) {
+          next()
+          return
+        }
+
+        openJDMC('/jdmc/sys-management/sys-auth')
+        redirectAfterExternalAction(from, next)
       }
     }
   ]

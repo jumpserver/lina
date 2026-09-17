@@ -1,8 +1,5 @@
 <template>
-  <div
-    :class="{ 'has-logo': showLogo, 'show-orgs': showOrgs, collapsed: isCollapse }"
-    class="left-side-wrapper"
-  >
+  <div :class="{ 'show-orgs': showOrgs, collapsed: isCollapse }" class="left-side-wrapper">
     <div class="nav-header">
       <div class="active-mobile">
         <Organization v-if="showOrgs" class="organization" />
@@ -28,7 +25,7 @@
         </span>
       </div>
     </div>
-    <div class="menu-wrap el-scrollbar">
+    <el-scrollbar class="menu-wrap">
       <el-menu
         active-text-color="var(--menu-text-active)"
         background-color="var(--menu-bg)"
@@ -50,15 +47,22 @@
           :item="route"
         />
       </el-menu>
-    </div>
-    <div class="nav-footer">
-      <div class="toggle-bar">
-        <Hamburger
-          :is-active="sidebar.opened"
-          class="hamburger-container"
-          @toggle-click="toggleSideBar"
+    </el-scrollbar>
+    <div class="sidebar-footer">
+      <button
+        class="sidebar-collapse-button"
+        type="button"
+        :aria-expanded="sidebar.opened"
+        :aria-label="$t(isCollapse ? 'ExpandSidebar' : 'CollapseSidebar')"
+        :title="$t(isCollapse ? 'ExpandSidebar' : 'CollapseSidebar')"
+        @click="toggleSideBar"
+      >
+        <svg-icon
+          aria-hidden="true"
+          class="sidebar-collapse-icon"
+          :icon-class="isCollapse ? 'sidebar-panel' : 'sidebar-panel-expanded'"
         />
-      </div>
+      </button>
     </div>
     <div :class="{ 'is-show': viewShown }" class="mobile-menu" @click="viewShown = false">
       <ViewSwitcher :mode="'vertical'" />
@@ -69,14 +73,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import SidebarItem from './SidebarItem'
-import Hamburger from '@/components/Widgets/Hamburger'
 import ViewSwitcher from '../NavHeader/ViewSwitcher'
 import Organization from '../NavHeader/Organization'
 
 export default {
   components: {
     SidebarItem,
-    Hamburger,
     ViewSwitcher,
     Organization
   },
@@ -114,9 +116,6 @@ export default {
       }
       this.$log.debug('Active menu path3: ', locPath)
       return locPath
-    },
-    showLogo() {
-      return this.$store.state.settings.sidebarLogo
     },
     showOrgs() {
       return this.$route.meta?.showOrganization !== false && this.$hasLicense()
@@ -158,14 +157,13 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@use '@/styles/variables' as *;
-
 $mobileHeight: 40px;
 $origin-color: #ffffff;
 
 .left-side-wrapper {
   .nav-header {
     display: flex;
+    flex: none;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
@@ -223,11 +221,17 @@ $origin-color: #ffffff;
       overflow: hidden;
       white-space: nowrap;
       cursor: pointer;
-      transition: all 0.3s;
+      transition:
+        color 0.12s,
+        background-color 0.12s;
       color: var(--menu-text);
       background-color: var(--menu-bg);
-      border-bottom: 1px solid var(--menu-border, var(--color-border));
-      border-top: 1px solid var(--menu-border, var(--color-border));
+      border-bottom: 1px solid
+        color-mix(
+          in srgb,
+          var(--menu-border, var(--panel-border-color, var(--el-border-color))) 55%,
+          transparent
+        );
 
       .switch-view {
         width: 100%;
@@ -272,39 +276,54 @@ $origin-color: #ffffff;
     }
   }
 
-  .nav-footer {
+  .sidebar-footer {
     display: flex;
+    flex: 0 0 var(--sidebar-footer-height, 44px);
+    align-items: center;
+    min-width: 0;
+    padding: 0 8px;
+    border-top: 1px solid var(--menu-border, var(--panel-border-color, var(--el-border-color)));
+    background-color: var(--menu-bg);
+  }
+
+  .sidebar-collapse-button {
+    display: flex;
+    align-items: center;
     justify-content: flex-start;
+    width: 100%;
+    height: 32px;
+    min-width: 0;
+    padding: 0 8px;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
     color: var(--menu-text);
-    border-top: 1px solid var(--menu-border, rgba(31, 35, 41, 0.15));
-    background-color: $subMenuBg;
+    font-size: 13px;
+    cursor: pointer;
+    transition:
+      background-color 0.12s,
+      color 0.12s;
 
-    .toggle-bar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 54px;
-      height: 40px;
-      border: 0;
-      cursor: pointer;
+    .sidebar-collapse-icon {
+      flex: 0 0 auto;
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+      opacity: 0.72;
+    }
 
-      :deep(.hamburger-container) {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-        padding: 0 !important;
+    &:hover {
+      background-color: var(--menu-hover);
+      color: var(--menu-text-active);
+    }
 
-        .svg-icon {
-          margin-right: 0 !important;
-        }
-      }
+    &:active {
+      background-color: var(--el-color-primary-light-9);
+    }
 
-      &:hover {
-        color: var(--menu-text-active);
-        background-color: var(--menu-hover-bg, var(--menu-hover));
-      }
+    &:focus-visible {
+      outline: 2px solid var(--menu-text-active);
+      outline-offset: 1px;
     }
   }
 
@@ -342,6 +361,13 @@ $origin-color: #ffffff;
       }
     }
   }
+
+  &.collapsed {
+    .sidebar-collapse-button {
+      justify-content: center;
+      padding: 0;
+    }
+  }
 }
 
 @media screen and (max-width: 992px) {
@@ -354,9 +380,9 @@ $origin-color: #ffffff;
 <style lang="scss">
 .el-popper.is-light.el-tooltip.el-popover.view-switcher-popper {
   --el-popper-bg-color-light: var(--menu-bg);
-  --el-border-color-light: var(--menu-border, var(--color-border));
+  --el-border-color-light: var(--menu-border, var(--panel-border-color, var(--el-border-color)));
   --el-popover-bg-color: var(--menu-bg);
-  --el-popover-border-color: var(--menu-border, var(--color-border));
+  --el-popover-border-color: var(--menu-border, var(--panel-border-color, var(--el-border-color)));
   --el-popover-padding: 0;
 
   min-width: 0 !important;
@@ -364,11 +390,11 @@ $origin-color: #ffffff;
   padding: 6px !important;
   color: var(--menu-text);
   background: var(--menu-bg);
-  border: 1px solid var(--menu-border, var(--color-border));
+  border: 1px solid var(--menu-border, var(--panel-border-color, var(--el-border-color)));
 
   > .el-popper__arrow::before {
     background: var(--menu-bg);
-    border-color: var(--menu-border, var(--color-border));
+    border-color: var(--menu-border, var(--panel-border-color, var(--el-border-color)));
   }
 }
 </style>

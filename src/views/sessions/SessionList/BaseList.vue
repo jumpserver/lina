@@ -30,6 +30,10 @@ export default {
       type: Array,
       default: () => []
     },
+    extraMoreActions: {
+      type: Array,
+      default: () => []
+    },
     columnsShow: {
       type: Object,
       default: () => {
@@ -183,7 +187,11 @@ export default {
         }
       },
       headerActions: {
-        hasLeftActions: false,
+        hasLeftActions: this.extraMoreActions.length > 0,
+        hasCreate: false,
+        hasBulkDelete: false,
+        hasBulkUpdate: false,
+        extraMoreActions: this.extraMoreActions,
         hasImport: false,
         hasReportExport: true,
         hasDatePicker: true,

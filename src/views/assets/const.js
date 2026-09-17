@@ -5,11 +5,12 @@ import rules from '@/components/Form/DataForm/rules'
 import { ColorSwatchFormatter } from '@/components/Table/TableFormatters'
 import {
   JSONManyToManySelect,
+  NodeSelect,
   ResourceSelect,
-  Select2,
-  TreeResourceSelect
+  Select2
 } from '@/components/Form/FormFields'
 import { message } from '@/utils/vue/message'
+import { reactive } from 'vue'
 
 export const filterSelectValues = (values) => {
   if (!values) return
@@ -61,6 +62,8 @@ export const getWebAssetSettingDefaults = (platformProtocols) => {
     password_selector: setting.password_selector,
     script: setting.script,
     submit_selector: setting.submit_selector,
+    success_selector: setting.success_selector,
+    interactive_selector: setting.interactive_selector,
     username_selector: setting.username_selector
   }
 }
@@ -103,7 +106,10 @@ export const assetFieldsMeta = (vm, category, type) => {
   const platformType = type || vm.$context.get('type')
   const platformProtocols = []
   const secretTypes = []
-  const asset = { address: 'https://example:8443' }
+  // Address updates happen through callbacks that close over this object. Keep it
+  // reactive so ProtocolSelector's deep instance watcher can derive ports marked
+  // with port_from_addr while the user edits the address.
+  const asset = reactive({ address: 'https://example:8443' })
   let selectedProtocols = []
   let refreshSequence = 0
   const updatePlatform = _.debounce(async ([event], updateForm) => {
@@ -212,8 +218,8 @@ export const assetFieldsMeta = (vm, category, type) => {
       }
     },
     nodes: {
-      type: 'treeResourceSelect',
-      component: TreeResourceSelect,
+      type: 'nodeSelect',
+      component: NodeSelect,
       rules: [rules.RequiredChange],
       el: {
         // 不要在 el 里写 value: []，会作为 prop 透传并在表单绑定时干扰节点回填
