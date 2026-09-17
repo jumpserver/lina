@@ -87,7 +87,7 @@ export default defineConfig(({ mode }) => {
   const publicPath = normalizePublicPath(env.VITE_PUBLIC_PATH || '/ui/')
   const coreHost = env.VITE_CORE_HOST || 'http://127.0.0.1:8080'
   const kaelHost = env.VITE_KAEL_HOST || 'http://127.0.0.1:8083'
-  const kokoHost = env.VITE_KOKO_HOST || 'http://127.0.0.1:5000'
+  const kokoHost = env.VITE_KOKO_HOST || 'http://127.0.0.1:5050'
   const port = Number(process.env.PORT || process.env.port || process.env.npm_config_port || 9528)
 
   return {
