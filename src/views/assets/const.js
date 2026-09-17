@@ -10,6 +10,7 @@ import {
   Select2
 } from '@/components/Form/FormFields'
 import { message } from '@/utils/vue/message'
+import { reactive } from 'vue'
 
 export const filterSelectValues = (values) => {
   if (!values) return
@@ -105,7 +106,10 @@ export const assetFieldsMeta = (vm, category, type) => {
   const platformType = type || vm.$context.get('type')
   const platformProtocols = []
   const secretTypes = []
-  const asset = { address: 'https://example:8443' }
+  // Address updates happen through callbacks that close over this object. Keep it
+  // reactive so ProtocolSelector's deep instance watcher can derive ports marked
+  // with port_from_addr while the user edits the address.
+  const asset = reactive({ address: 'https://example:8443' })
   let selectedProtocols = []
   let refreshSequence = 0
   const updatePlatform = _.debounce(async ([event], updateForm) => {
