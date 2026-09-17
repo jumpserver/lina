@@ -28,6 +28,7 @@ import ActionsGroup from '@/components/Common/ActionsGroup'
 import IntegrationApplicationAccount from '../components/AccountList.vue'
 import ClientAccessPrototype from './ClientAccessPrototype.vue'
 import IntegrationApplicationInfo from './ServiceInfo.vue'
+import IntegrationApplicationWebhookNotification from './WebhookNotification.vue'
 
 export default {
   components: {
@@ -35,7 +36,8 @@ export default {
     GenericDetailPage,
     ClientAccessPrototype,
     IntegrationApplicationInfo,
-    IntegrationApplicationAccount
+    IntegrationApplicationAccount,
+    IntegrationApplicationWebhookNotification
   },
   data() {
     return {
@@ -62,6 +64,11 @@ export default {
             title: this.$t('ClientAccess'),
             name: 'ClientAccessPrototype',
             hidden: () => !this.$hasPerm('accounts.view_clientaccessconfiguration')
+          },
+          {
+            title: this.$t('ApplicationEventNotification'),
+            name: 'IntegrationApplicationWebhookNotification',
+            hidden: () => !this.$hasPerm('accounts.view_integrationapplication')
           }
         ]
       }
