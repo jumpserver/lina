@@ -9,7 +9,7 @@
     :error="errorText"
   >
     <template v-if="data.label" #label>
-      <span :title="data.label">
+      <span :title="data.helpTip ? undefined : data.label">
         <span v-if="data.required" class="form-item-required-mark">*</span>
         {{ data.label }}
         <el-tooltip

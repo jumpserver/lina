@@ -13,6 +13,15 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import store from '@/store'
 import { getDaysFuture } from '@/utils/common/time'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
+import ExpireNoticePolicy from '@/views/perms/AssetPermission/components/ExpireNoticePolicy.vue'
+import ExpireSoonNoticeMinutes from '@/views/perms/AssetPermission/components/ExpireSoonNoticeMinutes.vue'
+import {
+  getDefaultExpireSoonNoticeMinutes,
+  hydrateExpireNoticeFormValue,
+  isExpireSoonNoticeAtFuture,
+  isPositiveInteger,
+  normalizeExpireNoticePayload
+} from '@/views/perms/AssetPermission/expireSoonNotice'
 import CcUsers from '@/views/tickets/components/CcUsers'
 import { getTicketFlowLabel } from '@/views/tickets/const'
 import { mapGetters, mapState } from 'vuex'
@@ -28,6 +37,9 @@ export default {
     const dividend = unit === 'hour' ? 24 : 1
     const date_expired = getDaysFuture(time / dividend, new Date()).toISOString()
     const date_start = now.toISOString()
+    const defaultExpireSoonNoticeMinutes = getDefaultExpireSoonNoticeMinutes(
+      store.getters.publicSettings
+    )
     return {
       // 工单创建 隐藏提示信息中的跳转连接
       hasDetailInMsg: false,
@@ -37,6 +49,9 @@ export default {
         ips_or_not: true,
         apply_date_expired: date_expired,
         apply_date_start: date_start,
+        apply_expire_notice_policy: '',
+        apply_expire_soon_notice_switch: false,
+        apply_expire_soon_notice_minutes: null,
         apply_assets: [],
         org_id: '',
         flow_id: '',
@@ -47,13 +62,16 @@ export default {
         [this.$t('Basic'), ['title', 'org_id', 'flow_id', 'cc_users']],
         [
           this.$t('RequestPerm'),
+          ['apply_nodes', 'apply_assets', 'apply_accounts', 'apply_actions']
+        ],
+        [
+          this.$t('ValidityPeriod'),
           [
-            'apply_nodes',
-            'apply_assets',
-            'apply_accounts',
-            'apply_actions',
             'apply_date_start',
-            'apply_date_expired'
+            'apply_date_expired',
+            'apply_expire_notice_policy',
+            'apply_expire_soon_notice_switch',
+            'apply_expire_soon_notice_minutes'
           ]
         ],
         [this.$t('Other'), ['comment']]
@@ -114,6 +132,44 @@ export default {
             this.fieldsMeta.apply_accounts.el.nodes = formValue.apply_nodes
           }
         },
+        apply_expire_notice_policy: {
+          component: ExpireNoticePolicy,
+          label: this.$t('SystemExpireNotice')
+        },
+        apply_expire_soon_notice_switch: {
+          type: 'switch',
+          label: this.$t('ExpireSoonNotice'),
+          helpTip: this.$t('ExpireSoonNoticeHelpText'),
+          el: {
+            style: { marginTop: '4px' }
+          }
+        },
+        apply_expire_soon_notice_minutes: {
+          component: ExpireSoonNoticeMinutes,
+          label: this.$t('ExpireSoonNoticeMinutes'),
+          el: {},
+          hidden: (formValue, field) => {
+            field.el.dateExpired = formValue.apply_date_expired
+            field.el.disabled = !formValue.apply_expire_soon_notice_switch
+            return false
+          },
+          rules: [
+            {
+              validator: (rule, value, callback, source) => {
+                if (
+                  source.apply_expire_soon_notice_switch &&
+                  (!isPositiveInteger(value) ||
+                    !isExpireSoonNoticeAtFuture(source.apply_date_expired, value))
+                ) {
+                  callback(new Error(this.$t('ExpireSoonNoticeFutureError')))
+                  return
+                }
+                callback()
+              },
+              trigger: ['blur', 'change']
+            }
+          ]
+        },
         org_id: {
           label: this.$t('Organization'),
           component: Select2,
@@ -169,6 +225,9 @@ export default {
           }
         }
       },
+      afterGetFormValue(value) {
+        return hydrateExpireNoticeFormValue(value, 'apply_', defaultExpireSoonNoticeMinutes)
+      },
       cleanFormValue(value) {
         const apply_actions = value['apply_actions'] || []
         apply_actions.forEach((item, index) => {
@@ -188,7 +247,7 @@ export default {
           delete value.flow_id
         }
         delete value.cc_users
-        return value
+        return normalizeExpireNoticePayload(value, 'apply_')
       },
       url: '/api/v1/tickets/apply-asset-tickets/?state=pending',
       createSuccessNextRoute: {
