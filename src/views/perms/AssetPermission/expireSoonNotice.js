@@ -13,10 +13,6 @@ export function getDefaultExpireSoonNoticeMinutes(publicSettings) {
   return publicSettings.PERM_EXPIRED_SOON_NOTICE_MINUTES ?? FALLBACK_EXPIRE_SOON_NOTICE_MINUTES
 }
 
-export function resolveExpireSoonNoticeMinutes(enabled, minutes, defaultMinutes) {
-  return enabled && (minutes === null || minutes === undefined) ? defaultMinutes : minutes
-}
-
 export function getExpireSoonNoticeAt(dateExpired, minutes) {
   const expired = toTimestamp(dateExpired)
   const noticeMinutes = Number(minutes)

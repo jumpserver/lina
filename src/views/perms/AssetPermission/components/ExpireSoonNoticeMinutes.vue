@@ -1,13 +1,14 @@
 <template>
   <div class="expire-soon-notice-minutes">
-    <div class="input-row">
+    <el-switch :model-value="enabled" @update:model-value="handleEnabledChange" />
+    <div v-if="enabled" class="input-row">
+      <span>{{ $t('ExpireSoonNoticeMinutes') }}</span>
       <el-input-number
         :min="1"
         :model-value="modelValue"
         :step="1"
-        :disabled="disabled"
         step-strictly
-        @update:model-value="$emit('update:modelValue', $event)"
+        @update:model-value="handleMinutesChange"
       />
       <span>{{ $t('Minutes') }}</span>
     </div>
@@ -31,13 +32,21 @@ export default {
       type: [String, Date],
       default: null
     },
-    disabled: {
-      type: Boolean,
-      default: false
+    defaultMinutes: {
+      type: Number,
+      required: true
     }
   },
   emits: ['update:modelValue'],
+  data() {
+    return {
+      previousMinutes: isPositiveInteger(this.modelValue) ? this.modelValue : this.defaultMinutes
+    }
+  },
   computed: {
+    enabled() {
+      return this.modelValue !== null && this.modelValue !== undefined
+    },
     preview() {
       if (!isPositiveInteger(this.modelValue)) {
         return ''
@@ -45,12 +54,28 @@ export default {
       const noticeAt = getExpireSoonNoticeAt(this.dateExpired, this.modelValue)
       return noticeAt && noticeAt.getTime() > Date.now() ? formatNoticeDate(noticeAt) : ''
     }
+  },
+  methods: {
+    handleEnabledChange(enabled) {
+      this.$emit('update:modelValue', enabled ? this.previousMinutes : null)
+    },
+    handleMinutesChange(minutes) {
+      if (isPositiveInteger(minutes)) {
+        this.previousMinutes = minutes
+      }
+      this.$emit('update:modelValue', minutes)
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .expire-soon-notice-minutes {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+
   .input-row {
     display: flex;
     align-items: center;
@@ -58,7 +83,6 @@ export default {
   }
 
   .preview {
-    margin-top: 6px;
     color: var(--el-text-color-secondary);
     line-height: 1.5;
   }

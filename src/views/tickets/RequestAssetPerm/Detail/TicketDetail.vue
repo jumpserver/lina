@@ -60,17 +60,10 @@
               <i class="fa fa-question-circle-o" />
             </el-tooltip>
           </template>
-          <el-switch
-            v-model="requestForm.apply_expire_soon_notice_enabled"
-            style="margin-top: 4px"
-            @change="handleExpireSoonNoticeEnabledChange"
-          />
-        </el-form-item>
-        <el-form-item :label="$t('ExpireSoonNoticeMinutes')">
           <ExpireSoonNoticeMinutes
             v-model="requestForm.apply_expire_soon_notice_minutes"
             :date-expired="requestForm.apply_date_expired"
-            :disabled="!requestForm.apply_expire_soon_notice_enabled"
+            :default-minutes="defaultExpireSoonNoticeMinutes"
           />
         </el-form-item>
         <el-form-item :label="$tc('Action')">
@@ -90,8 +83,7 @@ import ExpireNoticePolicy from '@/views/perms/AssetPermission/components/ExpireN
 import ExpireSoonNoticeMinutes from '@/views/perms/AssetPermission/components/ExpireSoonNoticeMinutes.vue'
 import {
   getDefaultExpireSoonNoticeMinutes,
-  isPositiveInteger,
-  resolveExpireSoonNoticeMinutes
+  isPositiveInteger
 } from '@/views/perms/AssetPermission/expireSoonNotice'
 import { AccountLabelMapper } from '@/views/perms/const'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
@@ -122,6 +114,9 @@ export default {
   data() {
     return {
       treeNodes,
+      defaultExpireSoonNoticeMinutes: getDefaultExpireSoonNoticeMinutes(
+        this.$store.getters.publicSettings
+      ),
       statusMap:
         this.object.status.value === 'open'
           ? STATUS_MAP['pending']
@@ -134,7 +129,6 @@ export default {
         oid: this.object.org_id,
         apply_date_expired: this.object.apply_date_expired,
         apply_date_start: this.object.apply_date_start,
-        apply_expire_soon_notice_enabled: this.object.apply_expire_soon_notice_enabled,
         apply_expire_soon_notice_minutes: this.object.apply_expire_soon_notice_minutes
       },
       nodeSelect2: {
@@ -302,8 +296,8 @@ export default {
           return
         }
       }
-      if (this.requestForm.apply_expire_soon_notice_enabled) {
-        const minutes = this.requestForm.apply_expire_soon_notice_minutes
+      const minutes = this.requestForm.apply_expire_soon_notice_minutes
+      if (minutes !== null && minutes !== undefined) {
         if (!isPositiveInteger(minutes)) {
           this.$message.error(this.$t('PositiveIntegerRequired'))
           return
@@ -319,7 +313,6 @@ export default {
           apply_actions: this.requestForm.actions,
           apply_date_start: this.requestForm.apply_date_start,
           apply_date_expired: this.requestForm.apply_date_expired,
-          apply_expire_soon_notice_enabled: this.requestForm.apply_expire_soon_notice_enabled,
           apply_expire_soon_notice_minutes: this.requestForm.apply_expire_soon_notice_minutes
         })
         .then(() => {
@@ -341,15 +334,11 @@ export default {
         .then((res) => this.reloadPage())
         .catch((err) => this.$message.error(err))
     },
-    handleExpireSoonNoticeEnabledChange(enabled) {
-      this.requestForm.apply_expire_soon_notice_minutes = resolveExpireSoonNoticeMinutes(
-        enabled,
-        this.requestForm.apply_expire_soon_notice_minutes,
-        getDefaultExpireSoonNoticeMinutes(this.$store.getters.publicSettings)
-      )
-    },
     getExpireNoticeDescription(object) {
-      if (!object.apply_expire_soon_notice_enabled) {
+      if (
+        object.apply_expire_soon_notice_minutes === null ||
+        object.apply_expire_soon_notice_minutes === undefined
+      ) {
         return this.$t('Disabled')
       }
       return `${object.apply_expire_soon_notice_minutes} ${this.$t('Minutes')}`

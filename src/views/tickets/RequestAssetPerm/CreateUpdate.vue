@@ -19,8 +19,7 @@ import {
   getDefaultExpireSoonNoticeMinutes,
   isExpireSoonNoticeAtFuture,
   isPositiveInteger,
-  normalizeExpireNoticePayload,
-  resolveExpireSoonNoticeMinutes
+  normalizeExpireNoticePayload
 } from '@/views/perms/AssetPermission/expireSoonNotice'
 import CcUsers from '@/views/tickets/components/CcUsers'
 import { getTicketFlowLabel } from '@/views/tickets/const'
@@ -50,8 +49,7 @@ export default {
         apply_date_expired: date_expired,
         apply_date_start: date_start,
         apply_expire_notice_policy: '',
-        apply_expire_soon_notice_enabled: false,
-        apply_expire_soon_notice_minutes: defaultExpireSoonNoticeMinutes,
+        apply_expire_soon_notice_minutes: null,
         apply_assets: [],
         org_id: '',
         flow_id: '',
@@ -70,7 +68,6 @@ export default {
             'apply_date_start',
             'apply_date_expired',
             'apply_expire_notice_policy',
-            'apply_expire_soon_notice_enabled',
             'apply_expire_soon_notice_minutes'
           ]
         ],
@@ -136,33 +133,23 @@ export default {
           component: ExpireNoticePolicy,
           label: this.$t('SystemExpireNotice')
         },
-        apply_expire_soon_notice_enabled: {
-          type: 'switch',
+        apply_expire_soon_notice_minutes: {
+          component: ExpireSoonNoticeMinutes,
           label: this.$t('ExpireSoonNotice'),
           helpTip: this.$t('ExpireSoonNoticeHelpText'),
           el: {
-            style: { marginTop: '4px' }
-          }
-        },
-        apply_expire_soon_notice_minutes: {
-          component: ExpireSoonNoticeMinutes,
-          label: this.$t('ExpireSoonNoticeMinutes'),
-          el: {},
+            defaultMinutes: defaultExpireSoonNoticeMinutes
+          },
           hidden: (formValue, field) => {
             field.el.dateExpired = formValue.apply_date_expired
-            field.el.disabled = !formValue.apply_expire_soon_notice_enabled
-            formValue.apply_expire_soon_notice_minutes = resolveExpireSoonNoticeMinutes(
-              formValue.apply_expire_soon_notice_enabled,
-              formValue.apply_expire_soon_notice_minutes,
-              defaultExpireSoonNoticeMinutes
-            )
             return false
           },
           rules: [
             {
               validator: (rule, value, callback, source) => {
                 if (
-                  source.apply_expire_soon_notice_enabled &&
+                  value !== null &&
+                  value !== undefined &&
                   (!isPositiveInteger(value) ||
                     !isExpireSoonNoticeAtFuture(source.apply_date_expired, value))
                 ) {

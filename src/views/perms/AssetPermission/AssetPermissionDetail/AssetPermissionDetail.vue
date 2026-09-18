@@ -85,9 +85,11 @@ export default {
         },
         {
           key: this.$t('ExpireSoonNotice'),
-          value: this.object.expire_soon_notice_enabled
-            ? `${this.object.expire_soon_notice_minutes} ${this.$t('Minutes')}`
-            : this.$t('Disabled')
+          value:
+            this.object.expire_soon_notice_minutes === null ||
+            this.object.expire_soon_notice_minutes === undefined
+              ? this.$t('Disabled')
+              : `${this.object.expire_soon_notice_minutes} ${this.$t('Minutes')}`
         },
         {
           key: `${this.$t('ExpireSoonNotice')} - ${this.$t('Date')}`,
