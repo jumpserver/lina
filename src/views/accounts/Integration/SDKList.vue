@@ -2,23 +2,22 @@
   <div class="sdk-docs-shell">
     <aside class="sdk-docs-sidebar">
       <h2>{{ $t('SDKCenter') }}</h2>
-      <div class="sidebar-group">
-        <span class="sidebar-group__label">{{ $t('PythonSDK') }}</span>
+      <nav class="sidebar-group" :aria-label="$t('SDKCenter')">
         <button
-          :class="['sidebar-link', { active: documentationTab === 'readme' }]"
+          :class="['sidebar-link', { active: documentationTab === 'agent' }]"
           type="button"
-          @click="documentationTab = 'readme'"
+          @click="selectDocumentation('agent')"
         >
-          {{ $t('Readme') }}
+          {{ $t('AgentAccess') }}
         </button>
         <button
-          :class="['sidebar-link', { active: documentationTab === 'example' }]"
+          :class="['sidebar-link', { active: documentationTab === 'sdk' }]"
           type="button"
-          @click="documentationTab = 'example'"
+          @click="selectDocumentation('sdk')"
         >
-          {{ $t('FullExample') }}
+          {{ $t('SDKAccess') }}
         </button>
-      </div>
+      </nav>
     </aside>
 
     <main ref="docsMain" class="sdk-docs-main">
@@ -35,58 +34,52 @@
       </el-empty>
 
       <template v-else>
-        <header
-          :class="{ 'documentation-header--example': documentationTab === 'example' }"
-          class="documentation-header"
-        >
-          <h1>{{ $t(documentationTab === 'readme' ? 'PythonSDK' : 'FullExample') }}</h1>
-          <template v-if="documentationTab === 'readme'">
-            <p>{{ $t('SDKDescription') }}</p>
-            <div class="documentation-meta">
+        <header class="documentation-header">
+          <h1>{{ $t(documentationTab === 'agent' ? 'AgentAccess' : 'SDKAccess') }}</h1>
+          <p>{{ $t(documentationTab === 'agent' ? 'AgentDescription' : 'SDKDescription') }}</p>
+          <div class="documentation-meta">
+            <template v-if="documentationTab === 'agent'">
+              <el-tag effect="plain" size="small">Linux</el-tag>
+              <el-tag effect="plain" size="small" type="info">systemd</el-tag>
+            </template>
+            <template v-else>
               <el-tag effect="plain" size="small">Python 3.9+</el-tag>
               <el-tag effect="plain" size="small" type="info">PyPI</el-tag>
-            </div>
-          </template>
+            </template>
+          </div>
         </header>
 
-        <template v-if="documentationTab === 'readme'">
-          <el-empty v-if="!readme" :description="$t('SDKDocumentationEmpty')" />
-          <div v-else class="documentation-layout">
-            <article class="documentation-content">
-              <MarkdownRenderer
-                :source="readme"
-                collect-headings
-                copyable-code
-                class="readme-content"
-                @headings-change="onHeadingsChange"
-              />
-            </article>
+        <el-empty v-if="!activeDocument" :description="$t('SDKDocumentationEmpty')" />
+        <div v-else class="documentation-layout">
+          <article class="documentation-content">
+            <MarkdownRenderer
+              :source="activeDocument"
+              collect-headings
+              copyable-code
+              class="readme-content"
+              @headings-change="onHeadingsChange"
+            />
+          </article>
 
-            <aside v-if="headings.length" class="documentation-outline">
-              <nav :aria-label="$t('OnThisPage')">
-                <h3>{{ $t('OnThisPage') }}</h3>
-                <button
-                  v-for="heading in headings"
-                  :key="heading.id"
-                  :class="[
-                    'outline-link',
-                    `outline-link--level-${heading.level}`,
-                    { active: activeHeading === heading.id }
-                  ]"
-                  type="button"
-                  @click="scrollToHeading(heading.id)"
-                >
-                  {{ heading.text }}
-                </button>
-              </nav>
-            </aside>
-          </div>
-        </template>
-
-        <template v-else>
-          <el-empty v-if="!code" :description="$t('SDKDocumentationEmpty')" />
-          <MarkdownRenderer v-else :source="demoMarkdown" class="demo-content" copyable-code />
-        </template>
+          <aside v-if="headings.length" class="documentation-outline">
+            <nav :aria-label="$t('OnThisPage')">
+              <h3>{{ $t('OnThisPage') }}</h3>
+              <button
+                v-for="heading in headings"
+                :key="heading.id"
+                :class="[
+                  'outline-link',
+                  `outline-link--level-${heading.level}`,
+                  { active: activeHeading === heading.id }
+                ]"
+                type="button"
+                @click="scrollToHeading(heading.id)"
+              >
+                {{ heading.text }}
+              </button>
+            </nav>
+          </aside>
+        </div>
       </template>
     </main>
   </div>
@@ -103,20 +96,25 @@ export default {
   data() {
     return {
       activeHeading: '',
-      code: '',
       documentationError: false,
       documentationLoading: false,
-      documentationTab: 'readme',
+      documentationTab: 'agent',
       headings: [],
       readme: ''
     }
   },
   computed: {
-    demoMarkdown() {
-      return `\`\`\`python\n${this.code}\n\`\`\``
+    activeDocument() {
+      const marker = `${this.documentationTab}-doc`
+      const startMarker = `<!-- ${marker}:start -->`
+      const endMarker = `<!-- ${marker}:end -->`
+      const start = this.readme.indexOf(startMarker)
+      const end = this.readme.indexOf(endMarker)
+      if (start === -1 || end === -1 || end <= start) return this.readme
+      return this.readme.slice(start + startMarker.length, end).trim()
     },
     hasDocumentation() {
-      return Boolean(this.readme || this.code)
+      return Boolean(this.readme)
     }
   },
   watch: {
@@ -136,10 +134,8 @@ export default {
           params: { language: 'python' }
         })
         this.readme = data.readme || ''
-        this.code = data.code || ''
       } catch {
         this.readme = ''
-        this.code = ''
         this.documentationError = true
       } finally {
         this.documentationLoading = false
@@ -148,6 +144,13 @@ export default {
     onHeadingsChange(headings) {
       this.headings = headings
       this.activeHeading = headings[0]?.id || ''
+    },
+    selectDocumentation(tab) {
+      if (this.documentationTab === tab) return
+      this.documentationTab = tab
+      this.headings = []
+      this.activeHeading = ''
+      this.$refs.docsMain?.scrollTo({ top: 0 })
     },
     scrollToHeading(id) {
       const target = document.getElementById(id)
@@ -201,13 +204,6 @@ export default {
   gap: 4px;
 }
 
-.sidebar-group__label {
-  padding: 0 10px 8px;
-  color: var(--color-text-secondary);
-  font-size: 12px;
-  font-weight: 600;
-}
-
 .sidebar-link {
   width: 100%;
   min-height: 38px;
@@ -251,10 +247,6 @@ export default {
   margin-bottom: 28px;
   padding-bottom: 20px;
   border-bottom: 1px solid var(--el-border-color-lighter);
-}
-
-.documentation-header--example {
-  max-width: 1120px;
 }
 
 .documentation-header h1 {
@@ -370,17 +362,12 @@ export default {
   outline-offset: 2px;
 }
 
-.readme-content,
-.demo-content {
+.readme-content {
   width: 100%;
   max-width: 880px;
   color: var(--color-text-primary);
   font-size: 14px;
   line-height: 1.75;
-}
-
-.demo-content {
-  max-width: 1120px;
 }
 
 .readme-content :deep(h1:first-child) {
@@ -469,13 +456,8 @@ export default {
   text-underline-offset: 3px;
 }
 
-.readme-content :deep(*)::selection,
-.demo-content :deep(*)::selection {
+.readme-content :deep(*)::selection {
   background: var(--el-color-primary-light-7);
-}
-
-.demo-content :deep(.markdown-code-block) {
-  margin-top: 0;
 }
 
 @media (max-width: 991px) {
@@ -502,10 +484,6 @@ export default {
 
   .sidebar-group {
     flex-direction: row;
-  }
-
-  .sidebar-group__label {
-    display: none;
   }
 
   .sidebar-link {
