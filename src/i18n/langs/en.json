@@ -2442,5 +2442,6 @@
   "VirtualAppCreate": "Create virtual app",
   "AppProviderCreate": "Create application provider",
   "AppProviderUpdate": "Update application provider",
-  "BatchPublish": "Batch publish"
+  "BatchPublish": "Batch publish",
+  "PageLoadErrorMsg": "Failed to load page resources. Check your network connection, then refresh the page and try again."
 }

@@ -147,16 +147,23 @@ export default {
     return useDateTime()
   },
   async mounted() {
-    if (this.showPasswordRecord) {
+    // Complete secret access verification before requesting the optional history count.
+    // A failed or cancelled MFA check must not trigger another protected request.
+    try {
+      await this.showSecretDialog()
+    } catch (error) {
+      this.exit()
+      return
+    }
+    if (this.showPasswordRecord && this.showSecret && !this.vaultUnavailable) {
       const url = `/api/v1/accounts/account-secrets/${this.account.id}/histories/?limit=1`
       try {
         const resp = await this.$axios.get(url, { disableFlashErrorMsg: true })
         this.versions = resp.count
       } catch (error) {
-        // The secret request below displays a dedicated Vault status when applicable.
+        // History count is optional; keep the current secret dialog available.
       }
     }
-    this.showSecretDialog()
   },
   methods: {
     accountConfirmHandle() {

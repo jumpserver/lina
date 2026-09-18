@@ -7,6 +7,15 @@ import { isSameView } from '@/utils/jms/index'
 import { toSentenceCase } from '@/utils/common/index'
 import { scopedLocalStorage as localStorage } from '@/utils/storage'
 import i18n from '@/i18n/i18n'
+import { isPageLoadError } from '@/libs/errors/page-load'
+import { message } from '@/utils/vue/message'
+
+router.onError((error) => {
+  console.error('Route navigation error:', error)
+  if (isPageLoadError(error)) {
+    message.error(i18n.t('PageLoadErrorMsg'))
+  }
+})
 
 function beforeRouteChange(to, from) {
   localStorage.setItem('activeTab', '')

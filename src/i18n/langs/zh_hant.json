@@ -2432,5 +2432,6 @@
   "VirtualAppCreate": "建立虛擬應用",
   "AppProviderCreate": "建立應用提供者",
   "AppProviderUpdate": "更新應用提供者",
-  "BatchPublish": "批次發布"
+  "BatchPublish": "批次發布",
+  "PageLoadErrorMsg": "頁面資源載入失敗，請檢查網路連線後重新整理頁面再試。"
 }

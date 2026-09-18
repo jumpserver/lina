@@ -2435,5 +2435,6 @@
   "VirtualAppCreate": "创建虚拟应用",
   "AppProviderCreate": "创建应用提供者",
   "AppProviderUpdate": "更新应用提供者",
-  "BatchPublish": "批量发布"
+  "BatchPublish": "批量发布",
+  "PageLoadErrorMsg": "页面资源加载失败，请检查网络连接后刷新页面重试。"
 }

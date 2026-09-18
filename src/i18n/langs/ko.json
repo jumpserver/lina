@@ -2340,5 +2340,6 @@
   "OfflineImageDeleteConfirm": "오프라인 이미지 아카이브 \"{filename}\"을(를) 삭제하시겠습니까? Core의 원본 아카이브만 삭제됩니다. 애플리케이션 제공자에 이미 로드된 이미지는 유지됩니다.",
   "OfflineImageUploadCancelled": "업로드 요청이 취소되었습니다. 이미지 목록을 새로 고쳐 아카이브가 저장되었는지 확인하세요.",
   "OfflineImageUploadTimeout": "업로드 요청 시간이 초과되었습니다. 이미지 목록을 새로 고쳐 결과를 확인한 후 필요한 경우 다시 업로드하세요.",
-  "OfflineImageUploadNetworkError": "업로드 연결이 중단되었습니다. 네트워크를 확인하고 이미지 목록을 새로 고친 후 다시 시도하세요."
+  "OfflineImageUploadNetworkError": "업로드 연결이 중단되었습니다. 네트워크를 확인하고 이미지 목록을 새로 고친 후 다시 시도하세요.",
+  "PageLoadErrorMsg": "페이지 리소스를 불러오지 못했습니다. 네트워크 연결을 확인한 후 페이지를 새로 고침하고 다시 시도해 주세요."
 }

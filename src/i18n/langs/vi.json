@@ -2340,5 +2340,6 @@
   "OfflineImageDeleteConfirm": "Xóa tệp lưu trữ ảnh ngoại tuyến \"{filename}\"? Chỉ tệp nguồn trong Core bị xóa. Các ảnh đã được nạp trên nhà cung cấp ứng dụng sẽ được giữ lại.",
   "OfflineImageUploadCancelled": "Đã hủy yêu cầu tải lên. Làm mới danh sách ảnh để kiểm tra tệp lưu trữ đã được lưu hay chưa.",
   "OfflineImageUploadTimeout": "Yêu cầu tải lên đã hết thời gian chờ. Làm mới danh sách ảnh để kiểm tra kết quả rồi tải lên lại nếu cần.",
-  "OfflineImageUploadNetworkError": "Kết nối tải lên bị gián đoạn. Kiểm tra mạng và làm mới danh sách ảnh trước khi thử lại."
+  "OfflineImageUploadNetworkError": "Kết nối tải lên bị gián đoạn. Kiểm tra mạng và làm mới danh sách ảnh trước khi thử lại.",
+  "PageLoadErrorMsg": "Không thể tải tài nguyên trang. Hãy kiểm tra kết nối mạng, tải lại trang rồi thử lại."
 }

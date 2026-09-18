@@ -2,6 +2,8 @@
 import store from '@/store'
 import router, { addDynamicRoute, constantRoutes, resetRouter, viewRoutes } from '@/router'
 import { message } from '@/utils/vue/message'
+import i18n from '@/i18n/i18n'
+import { isPageLoadError } from '@/libs/errors/page-load'
 import orgUtil from '@/utils/jms/org'
 import orgs from '@/api/orgs'
 import { getPropView, isViewHasOrgs } from '@/utils/jms/index'
@@ -163,7 +165,9 @@ export async function generatePageRoutes({ to, from }) {
   } catch (error) {
     // remove token and go to login page to re-login
     // await store.dispatch('user/resetToken')
-    message.error(error || 'Has Error')
+    message.error(
+      isPageLoadError(error) ? i18n.t('PageLoadErrorMsg') : error?.message || error || 'Has Error'
+    )
     console.error('Error occur: ', error)
   }
 }

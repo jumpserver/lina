@@ -2433,5 +2433,6 @@
   "VirtualAppCreate": "仮想アプリケーションの作成",
   "AppProviderCreate": "アプリケーションプロバイダーの作成",
   "AppProviderUpdate": "アプリケーションプロバイダーの更新",
-  "BatchPublish": "一括公開"
+  "BatchPublish": "一括公開",
+  "PageLoadErrorMsg": "ページのリソースを読み込めませんでした。ネットワーク接続を確認し、ページを更新して再試行してください。"
 }

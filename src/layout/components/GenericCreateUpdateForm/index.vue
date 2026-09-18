@@ -204,7 +204,17 @@ export default {
               h(
                 ElLink,
                 {
-                  onClick: () => this.$router.push(detailRoute),
+                  onClick: () => {
+                    const path = this.$router.resolve(detailRoute).path
+                    return this.$router.push({
+                      ...detailRoute,
+                      query: {
+                        ...detailRoute.query,
+                        // Recreate cached details so the title and cards use the saved data.
+                        _: `${path}:${Date.now()}`
+                      }
+                    })
+                  },
                   style: { 'vertical-align': 'top', 'margin-right': '5px' }
                 },
                 () => msgLinkName

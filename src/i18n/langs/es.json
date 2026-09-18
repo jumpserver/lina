@@ -2340,5 +2340,6 @@
   "OfflineImageDeleteConfirm": "¿Eliminar el archivo de imagen sin conexión «{filename}»? Solo se elimina el archivo de origen en Core. Se conservarán las imágenes ya cargadas en los proveedores de aplicaciones.",
   "OfflineImageUploadCancelled": "Solicitud de carga cancelada. Actualice la lista de imágenes para comprobar si se guardó el archivo.",
   "OfflineImageUploadTimeout": "La solicitud de carga agotó el tiempo de espera. Actualice la lista de imágenes para comprobar el resultado y vuelva a subir el archivo si es necesario.",
-  "OfflineImageUploadNetworkError": "Se interrumpió la conexión de carga. Compruebe la red y actualice la lista de imágenes antes de volver a intentarlo."
+  "OfflineImageUploadNetworkError": "Se interrumpió la conexión de carga. Compruebe la red y actualice la lista de imágenes antes de volver a intentarlo.",
+  "PageLoadErrorMsg": "No se pudieron cargar los recursos de la página. Compruebe la conexión de red, actualice la página e inténtelo de nuevo."
 }

@@ -2340,5 +2340,6 @@
   "OfflineImageDeleteConfirm": "Excluir o arquivo de imagem offline \"{filename}\"? Apenas o arquivo de origem no Core será removido. As imagens já carregadas nos fornecedores de aplicativos serão mantidas.",
   "OfflineImageUploadCancelled": "Solicitação de envio cancelada. Atualize a lista de imagens para verificar se o arquivo foi salvo.",
   "OfflineImageUploadTimeout": "O tempo limite da solicitação de envio foi excedido. Atualize a lista de imagens para verificar o resultado e envie novamente, se necessário.",
-  "OfflineImageUploadNetworkError": "A conexão de envio foi interrompida. Verifique a rede e atualize a lista de imagens antes de tentar novamente."
+  "OfflineImageUploadNetworkError": "A conexão de envio foi interrompida. Verifique a rede e atualize a lista de imagens antes de tentar novamente.",
+  "PageLoadErrorMsg": "Não foi possível carregar os recursos da página. Verifique a conexão de rede, atualize a página e tente novamente."
 }
