@@ -2342,5 +2342,18 @@
   "OfflineImageDeleteConfirm": "Excluir o arquivo de imagem offline \"{filename}\"? Apenas o arquivo de origem no Core será removido. As imagens já carregadas nos fornecedores de aplicativos serão mantidas.",
   "OfflineImageUploadCancelled": "Solicitação de envio cancelada. Atualize a lista de imagens para verificar se o arquivo foi salvo.",
   "OfflineImageUploadTimeout": "O tempo limite da solicitação de envio foi excedido. Atualize a lista de imagens para verificar o resultado e envie novamente, se necessário.",
-  "OfflineImageUploadNetworkError": "A conexão de envio foi interrompida. Verifique a rede e atualize a lista de imagens antes de tentar novamente."
+  "OfflineImageUploadNetworkError": "A conexão de envio foi interrompida. Verifique a rede e atualize a lista de imagens antes de tentar novamente.",
+  "ExpireNotice": "Expiration notice",
+  "SystemExpireNotice": "System expiration notice",
+  "ControlledByGlobalSettings": "Controlled by global system settings",
+  "GlobalExpireNoticePolicy": "Notify once {first} days before expiration; notify daily during the last {daily} days",
+  "ExpireSoonNotice": "Near-expiration notice",
+  "ExpireSoonNoticeHelpText": "Designed for short-duration authorizations and can work alongside global expiration reminders.",
+  "ExpireSoonNoticeMinutes": "Notify in advance",
+  "Minutes": "minutes",
+  "ExpireSoonNoticePreview": "A reminder will be sent at {time}",
+  "ExpireSoonNoticeFutureError": "Enter a positive whole number that keeps the reminder time in the future.",
+  "DefaultExpireSoonNoticeMinutes": "Default near-expiration notice",
+  "DefaultExpireSoonNoticeMinutesHelpText": "Default advance minutes offered when enabling a near-expiration notice. Existing authorizations are not changed.",
+  "ValidityPeriod": "Validity period"
 }
