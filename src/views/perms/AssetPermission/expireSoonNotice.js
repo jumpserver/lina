@@ -13,6 +13,15 @@ export function getDefaultExpireSoonNoticeMinutes(publicSettings) {
   return publicSettings.PERM_EXPIRED_SOON_NOTICE_MINUTES ?? FALLBACK_EXPIRE_SOON_NOTICE_MINUTES
 }
 
+export function hydrateExpireNoticeFormValue(value, prefix = '', defaultMinutes) {
+  const switchKey = `${prefix}expire_soon_notice_switch`
+  const minutesKey = `${prefix}expire_soon_notice_minutes`
+  const enabled = isPositiveInteger(value[minutesKey])
+  value[switchKey] = enabled
+  value[minutesKey] = enabled ? value[minutesKey] : defaultMinutes
+  return value
+}
+
 export function getExpireSoonNoticeAt(dateExpired, minutes) {
   const expired = toTimestamp(dateExpired)
   const noticeMinutes = Number(minutes)
@@ -36,6 +45,12 @@ export function isExpireSoonNoticeAtFuture(dateExpired, minutes) {
 }
 
 export function normalizeExpireNoticePayload(value, prefix = '') {
+  const switchKey = `${prefix}expire_soon_notice_switch`
+  const minutesKey = `${prefix}expire_soon_notice_minutes`
+  if (!value[switchKey]) {
+    value[minutesKey] = null
+  }
+  delete value[switchKey]
   delete value[`${prefix}expire_notice_policy`]
   return value
 }

@@ -17,6 +17,7 @@ import ExpireNoticePolicy from '@/views/perms/AssetPermission/components/ExpireN
 import ExpireSoonNoticeMinutes from '@/views/perms/AssetPermission/components/ExpireSoonNoticeMinutes.vue'
 import {
   getDefaultExpireSoonNoticeMinutes,
+  hydrateExpireNoticeFormValue,
   isExpireSoonNoticeAtFuture,
   isPositiveInteger,
   normalizeExpireNoticePayload
@@ -49,6 +50,7 @@ export default {
         apply_date_expired: date_expired,
         apply_date_start: date_start,
         apply_expire_notice_policy: '',
+        apply_expire_soon_notice_switch: false,
         apply_expire_soon_notice_minutes: null,
         apply_assets: [],
         org_id: '',
@@ -68,6 +70,7 @@ export default {
             'apply_date_start',
             'apply_date_expired',
             'apply_expire_notice_policy',
+            'apply_expire_soon_notice_switch',
             'apply_expire_soon_notice_minutes'
           ]
         ],
@@ -133,23 +136,28 @@ export default {
           component: ExpireNoticePolicy,
           label: this.$t('SystemExpireNotice')
         },
-        apply_expire_soon_notice_minutes: {
-          component: ExpireSoonNoticeMinutes,
+        apply_expire_soon_notice_switch: {
+          type: 'switch',
           label: this.$t('ExpireSoonNotice'),
           helpTip: this.$t('ExpireSoonNoticeHelpText'),
           el: {
-            defaultMinutes: defaultExpireSoonNoticeMinutes
-          },
+            style: { marginTop: '4px' }
+          }
+        },
+        apply_expire_soon_notice_minutes: {
+          component: ExpireSoonNoticeMinutes,
+          label: this.$t('ExpireSoonNoticeMinutes'),
+          el: {},
           hidden: (formValue, field) => {
             field.el.dateExpired = formValue.apply_date_expired
+            field.el.disabled = !formValue.apply_expire_soon_notice_switch
             return false
           },
           rules: [
             {
               validator: (rule, value, callback, source) => {
                 if (
-                  value !== null &&
-                  value !== undefined &&
+                  source.apply_expire_soon_notice_switch &&
                   (!isPositiveInteger(value) ||
                     !isExpireSoonNoticeAtFuture(source.apply_date_expired, value))
                 ) {
@@ -216,6 +224,9 @@ export default {
             value: []
           }
         }
+      },
+      afterGetFormValue(value) {
+        return hydrateExpireNoticeFormValue(value, 'apply_', defaultExpireSoonNoticeMinutes)
       },
       cleanFormValue(value) {
         const apply_actions = value['apply_actions'] || []

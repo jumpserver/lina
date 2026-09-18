@@ -1,14 +1,13 @@
 <template>
   <div class="expire-soon-notice-minutes">
-    <el-switch :model-value="enabled" @update:model-value="handleEnabledChange" />
-    <div v-if="enabled" class="input-row">
-      <span>{{ $t('ExpireSoonNoticeMinutes') }}</span>
+    <div class="input-row">
       <el-input-number
         :min="1"
         :model-value="modelValue"
         :step="1"
+        :disabled="disabled"
         step-strictly
-        @update:model-value="handleMinutesChange"
+        @update:model-value="$emit('update:modelValue', $event)"
       />
       <span>{{ $t('Minutes') }}</span>
     </div>
@@ -32,38 +31,19 @@ export default {
       type: [String, Date],
       default: null
     },
-    defaultMinutes: {
-      type: Number,
-      required: true
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['update:modelValue'],
-  data() {
-    return {
-      previousMinutes: isPositiveInteger(this.modelValue) ? this.modelValue : this.defaultMinutes
-    }
-  },
   computed: {
-    enabled() {
-      return this.modelValue !== null && this.modelValue !== undefined
-    },
     preview() {
-      if (!isPositiveInteger(this.modelValue)) {
+      if (this.disabled || !isPositiveInteger(this.modelValue)) {
         return ''
       }
       const noticeAt = getExpireSoonNoticeAt(this.dateExpired, this.modelValue)
       return noticeAt && noticeAt.getTime() > Date.now() ? formatNoticeDate(noticeAt) : ''
-    }
-  },
-  methods: {
-    handleEnabledChange(enabled) {
-      this.$emit('update:modelValue', enabled ? this.previousMinutes : null)
-    },
-    handleMinutesChange(minutes) {
-      if (isPositiveInteger(minutes)) {
-        this.previousMinutes = minutes
-      }
-      this.$emit('update:modelValue', minutes)
     }
   }
 }
@@ -71,11 +51,6 @@ export default {
 
 <style lang="scss" scoped>
 .expire-soon-notice-minutes {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 6px;
-
   .input-row {
     display: flex;
     align-items: center;
@@ -83,6 +58,7 @@ export default {
   }
 
   .preview {
+    margin-top: 6px;
     color: var(--el-text-color-secondary);
     line-height: 1.5;
   }

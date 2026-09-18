@@ -19,6 +19,7 @@ import { AllAccount } from '../const'
 import ProtocolsSelect from '@/components/Form/FormFields/AllOrSpec.vue'
 import {
   getDefaultExpireSoonNoticeMinutes,
+  hydrateExpireNoticeFormValue,
   isExpireSoonNoticeAtFuture,
   isPositiveInteger,
   normalizeExpireNoticePayload
@@ -61,6 +62,7 @@ export default {
         assets: assetsInitial,
         accounts: [AllAccount],
         expire_notice_policy: '',
+        expire_soon_notice_switch: false,
         expire_soon_notice_minutes: null
       },
       fields: [
@@ -73,7 +75,13 @@ export default {
         [this.$t('Action'), ['actions']],
         [
           this.$t('ValidityPeriod'),
-          ['date_start', 'date_expired', 'expire_notice_policy', 'expire_soon_notice_minutes']
+          [
+            'date_start',
+            'date_expired',
+            'expire_notice_policy',
+            'expire_soon_notice_switch',
+            'expire_soon_notice_minutes'
+          ]
         ],
         [this.$t('Other'), ['is_active', 'comment']]
       ],
@@ -183,23 +191,28 @@ export default {
           component: ExpireNoticePolicy,
           label: this.$t('SystemExpireNotice')
         },
-        expire_soon_notice_minutes: {
-          component: ExpireSoonNoticeMinutes,
+        expire_soon_notice_switch: {
+          type: 'switch',
           label: this.$t('ExpireSoonNotice'),
           helpTip: this.$t('ExpireSoonNoticeHelpText'),
           el: {
-            defaultMinutes: defaultExpireSoonNoticeMinutes
-          },
+            style: { marginTop: '4px' }
+          }
+        },
+        expire_soon_notice_minutes: {
+          component: ExpireSoonNoticeMinutes,
+          label: this.$t('ExpireSoonNoticeMinutes'),
+          el: {},
           hidden: (formValue, field) => {
             field.el.dateExpired = formValue.date_expired
+            field.el.disabled = !formValue.expire_soon_notice_switch
             return false
           },
           rules: [
             {
               validator: (rule, value, callback, source) => {
                 if (
-                  value !== null &&
-                  value !== undefined &&
+                  source.expire_soon_notice_switch &&
                   (!isPositiveInteger(value) ||
                     !isExpireSoonNoticeAtFuture(source.date_expired, value))
                 ) {
@@ -216,6 +229,9 @@ export default {
         is_active: {
           type: 'checkbox'
         }
+      },
+      afterGetFormValue(value) {
+        return hydrateExpireNoticeFormValue(value, '', defaultExpireSoonNoticeMinutes)
       },
       cleanFormValue(value) {
         if (!Array.isArray(value.accounts)) {
