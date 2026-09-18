@@ -2355,5 +2355,6 @@
   "ExpireSoonNoticeFutureError": "Enter a positive whole number that keeps the reminder time in the future.",
   "DefaultExpireSoonNoticeMinutes": "Default near-expiration notice",
   "DefaultExpireSoonNoticeMinutesHelpText": "Default advance minutes offered when enabling a near-expiration notice. Existing authorizations are not changed.",
-  "ValidityPeriod": "Validity period"
+  "ValidityPeriod": "Validity period",
+  "PageLoadErrorMsg": "페이지 리소스를 불러오지 못했습니다. 네트워크 연결을 확인한 후 페이지를 새로 고침하고 다시 시도해 주세요."
 }

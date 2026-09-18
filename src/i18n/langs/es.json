@@ -2355,5 +2355,6 @@
   "ExpireSoonNoticeFutureError": "Enter a positive whole number that keeps the reminder time in the future.",
   "DefaultExpireSoonNoticeMinutes": "Default near-expiration notice",
   "DefaultExpireSoonNoticeMinutesHelpText": "Default advance minutes offered when enabling a near-expiration notice. Existing authorizations are not changed.",
-  "ValidityPeriod": "Validity period"
+  "ValidityPeriod": "Validity period",
+  "PageLoadErrorMsg": "No se pudieron cargar los recursos de la página. Compruebe la conexión de red, actualice la página e inténtelo de nuevo."
 }
