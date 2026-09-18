@@ -29,14 +29,7 @@ export default {
   },
   data() {
     const fields = [
-      [
-        this.$t('Basic'),
-        [
-          'LUNA_DEFAULT_IS_ASYNC_ASSET_TREE',
-          'LUNA_DEFAULT_CONNECT_DEFAULT_OPEN_METHOD',
-          'LUNA_DEFAULT_THEMES'
-        ]
-      ],
+      [this.$t('Basic'), ['LUNA_DEFAULT_IS_ASYNC_ASSET_TREE']],
       [
         this.$t('Graphics'),
         [

@@ -1,11 +1,12 @@
 <template>
-  <BaseAuth :config="settings" :title="title" enable-field="enableFieldName" />
+  <BaseAuth :config="settings" enable-field="enableFieldName" />
 </template>
 
 <script>
 import BaseAuth from './Base'
 import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
 import { getOrgSelect2Meta } from '@/views/settings/Auth/const'
+import i18n from '@/i18n/i18n'
 
 export default {
   name: 'Feishu',
@@ -17,12 +18,6 @@ export default {
       type: String,
       default: 'feishu'
     },
-    title: {
-      type: String,
-      default() {
-        return 'Feishu'
-      }
-    },
     encryptedFields: {
       type: Array,
       default: () => ['FEISHU_APP_SECRET']
@@ -32,10 +27,10 @@ export default {
       default() {
         return [
           [
-            'Basic',
+            i18n.global.t('Basic'),
             ['AUTH_FEISHU', 'FEISHU_APP_ID', 'FEISHU_APP_SECRET', 'FEISHU_RENAME_ATTRIBUTES']
           ],
-          ['Other', ['FEISHU_ORG_IDS']]
+          [i18n.global.t('Other'), ['FEISHU_ORG_IDS']]
         ]
       }
     },
