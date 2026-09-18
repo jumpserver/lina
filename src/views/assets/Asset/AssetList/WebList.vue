@@ -19,7 +19,10 @@ export default {
             'username_selector',
             'password_selector',
             'submit_selector',
+            'success_selector',
+            'interactive_selector',
             'script',
+            'allowed_urls',
             'spec_info',
             'info',
             'auto_config'

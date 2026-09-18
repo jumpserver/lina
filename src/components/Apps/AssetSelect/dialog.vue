@@ -15,9 +15,12 @@
   >
     <AssetTreeTable
       ref="ListPage"
+      fill-height
+      :additional-tree-views="additionalTreeViews"
       :header-actions="headerActions"
       :mount-tree="showTree"
       :node-url="baseNodeUrl"
+      :remember-tree-view="rememberTreeView"
       :auto-fit-tree-width="showTree"
       :show-tree="showTree"
       :sync-select-to-url="false"
@@ -29,6 +32,8 @@
       tree-width="300px"
       :url="baseUrl"
       class="tree-table"
+      @active-tree-ready="handleTreeViewChange"
+      @tab-click="handleTreeViewChange"
     >
       <template v-if="showSelectedItems" #search-after>
         <el-popover
@@ -88,7 +93,7 @@ export default {
   componentName: 'AssetSelectDialog',
   components: { AssetTreeTable, Dialog },
   inheritAttrs: false,
-  emits: ['cancel', 'confirm', 'update:visible'],
+  emits: ['cancel', 'confirm', 'tree-view-change', 'update:visible'],
   props: {
     baseUrl: {
       type: String,
@@ -128,6 +133,10 @@ export default {
       type: Object,
       default: () => ({})
     },
+    additionalTreeViews: {
+      type: Array,
+      default: () => []
+    },
     initialTreeData: {
       type: Array,
       default: () => []
@@ -141,6 +150,10 @@ export default {
       default: ''
     },
     showTree: {
+      type: Boolean,
+      default: true
+    },
+    rememberTreeView: {
       type: Boolean,
       default: true
     },
@@ -269,6 +282,12 @@ export default {
     }
   },
   methods: {
+    handleTreeViewChange(payload) {
+      this.$emit('tree-view-change', payload)
+    },
+    updateTableUrl(url) {
+      this.$refs.ListPage?.updateTableUrl(url)
+    },
     handleClose() {
       this.$refs.ListPage.$refs.TreeList.componentKey += 1
     },
@@ -351,6 +370,8 @@ export default {
 <style lang="scss">
 // 资产选择弹窗采用固定高度的双栏布局，树与表格各自管理滚动区域。
 .asset-dialog.el-dialog {
+  --asset-dialog-panel-border-color: var(--panel-border-color, var(--el-border-color-lighter));
+
   display: flex;
   flex-direction: column;
   height: min(620px, 94vh);
@@ -363,6 +384,7 @@ export default {
     min-height: 0;
     padding: 0 !important;
     overflow: hidden;
+    background-color: var(--page-content-background-color, #f3f3f4);
   }
 
   .el-dialog__header {
@@ -420,6 +442,7 @@ export default {
     flex-direction: column;
     width: 100%;
     min-height: 0;
+    padding: 12px;
     overflow: hidden;
   }
 
@@ -446,10 +469,11 @@ export default {
     align-self: stretch;
     height: auto;
     min-height: 0;
-    margin: 4px 0 14px 8px;
+    margin: 0;
     overflow: hidden;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--asset-dialog-panel-border-color);
     border-radius: var(--el-card-border-radius, 4px);
+    background-color: var(--el-bg-color, #fff);
 
     // tab + 树体铺满整个侧栏
     .auto-data-ztree.tree-tab {
@@ -524,7 +548,7 @@ export default {
       flex: 1 1 auto;
       min-width: 0;
       min-height: 0;
-      padding: 4px 20px 14px 8px;
+      padding: 0 0 0 4px;
     }
 
     .transition-box > div {
@@ -559,8 +583,17 @@ export default {
     }
 
     .table-content > .el-card {
-      border: 1px solid var(--el-border-color-lighter);
+      overflow: hidden;
+      border: 1px solid var(--asset-dialog-panel-border-color);
+      border-radius: var(--el-card-border-radius, 4px);
+      background-color: var(--el-bg-color, #fff);
       box-shadow: none;
+    }
+
+    // 表格卡片负责绘制唯一的外边框，避免表格 surface 再叠加一层边框。
+    .auto-data-table .el-data-table > .el-data-table__surface {
+      border: 0;
+      border-radius: 0;
     }
 
     // 卡片已经提供完整的四周边框，移除表格自身重复绘制的上、左、右外边框。
@@ -596,10 +629,15 @@ export default {
     }
   }
 
-  // 弹窗内始终保留资产树，仅允许拖动分隔线调整宽度。
-  .tree-table .mini,
-  .tree-table .tree-toggle {
-    display: none;
+  // 折叠后将展开按钮留在内容区内，避免被弹窗的 overflow 裁掉。
+  .tree-table .tree-resizer.is-collapsed {
+    .tree-toggle {
+      transform: translate(0, -50%);
+    }
+
+    + .right .transition-box {
+      padding-left: 20px;
+    }
   }
 }
 

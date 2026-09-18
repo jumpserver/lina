@@ -31,7 +31,7 @@
       <IBox>
         <AutoDataTable
           v-bind="$attrs"
-          v-if="actionInit"
+          v-show="actionInit"
           ref="dataTable"
           :config="iTableConfig"
           :fill-height="resolvedFillHeight"
@@ -314,11 +314,7 @@ export default {
   mounted() {
     this.activationRoutes[this.getTableResourceKey()] = this.getActivationRouteKey()
     // Populate the provided context with component references.
-    // Note: $refs.dataTable is AutoDataTable, whose inner DataTable is rendered
-    // with `v-if="!loading"` and mounts only after its OPTIONS metadata loads —
-    // later than this parent's mounted(). Expose it as a live getter (not a
-    // one-time snapshot) so consumers like ExportDialog always resolve the
-    // real DataTable once it exists.
+    // Keep this a live getter across child replacement and resource changes.
     Object.defineProperty(this.listTableContext, 'dataTable', {
       get: () => this.$refs.dataTable?.$refs.dataTable,
       enumerable: true,
@@ -618,6 +614,16 @@ export default {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+  }
+
+  :deep(td.show-full-content .cell),
+  :deep(.cell:has(.col-full-content)) {
+    overflow: visible;
+    height: auto;
+    white-space: normal !important;
+    word-break: break-all !important;
+    line-height: 1.4;
+    text-overflow: clip;
   }
 
   :deep(.el-table__expanded-cell pre) {

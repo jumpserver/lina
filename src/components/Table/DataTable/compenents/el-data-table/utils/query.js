@@ -23,9 +23,7 @@ export function stringify(query, equal = valueSeparator, delimiter = paramSepara
         /__(?:exact|icontains|startswith|in|icontains_any|icontains_all)$/.test(k) &&
         Array.isArray(value)
       const values = shouldRepeat ? value : [value]
-      return values.map(
-        (item) => `${k}${equal}${encodeURIComponent(item)}`
-      )
+      return values.map((item) => `${k}${equal}${encodeURIComponent(item)}`)
     })
     .join(delimiter)
 }

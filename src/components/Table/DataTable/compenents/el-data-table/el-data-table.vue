@@ -6,7 +6,10 @@
     </template>
     <template v-else>
       <div
-        :class="['el-data-table__surface', { 'is-paginated': hasPagination }]"
+        :class="[
+          'el-data-table__surface',
+          { 'is-paginated': hasPagination, 'is-empty': !tableLoading && data.length === 0 }
+        ]"
         :style="tableSurfaceStyle"
       >
         <!--
@@ -14,22 +17,15 @@
           导致跨页选择（persistSelection）被覆盖，只剩当页数据。
           选择事件统一走 selectStrategy，在内部维护全量 selected 并向外 emit。
         -->
-        <div
-          ref="tableBody"
-          v-loading="tableLoading"
-          :class="[
-            'el-data-table__body compact-loading',
-            { 'is-scrollbar-visible': tableScrollbarVisible }
-          ]"
-          @mouseenter="showTableScrollbar"
-          @mouseleave="scheduleTableScrollbarHide"
-        >
+        <div ref="tableBody" v-loading="tableLoading" class="el-data-table__body compact-loading">
           <el-table
             v-bind="tableAttrs"
-            :key="tableStructureKey"
+            :key="tableModeKey"
             ref="table"
             :data="data"
             :height="fillHeight ? '100%' : tableAttrs.height"
+            :native-scrollbar="false"
+            scrollbar-always-on
             :row-class-name="rowClassName"
             @select="selectStrategy.onSelect"
             v-on="forwardListeners"
@@ -89,7 +85,11 @@
                 :prop="col.prop"
               >
                 <template #header>
-                  <span class="column-header-content">
+                  <span
+                    class="column-header-content"
+                    :class="{ 'is-column-draggable': isColumnDraggable(col) }"
+                    :data-column-prop="col.prop"
+                  >
                     <span v-if="!col.hideHeaderLabel" :title="col.label">{{ col.label }}</span>
                     <button
                       v-if="col.pinState?.visible"
@@ -100,21 +100,33 @@
                       @click.stop="$emit('column-pin-toggle', col.prop)"
                       @mousedown.stop
                     >
-                      <i class="fa fa-thumb-tack" />
+                      <svg
+                        aria-hidden="true"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M9 3h6l-1 6 3 3v2H7v-2l3-3-1-6Z" />
+                        <path d="M12 14v7" />
+                      </svg>
                     </button>
                   </span>
                 </template>
 
                 <template
                   v-if="col.formatter && typeof col.formatter !== 'function'"
-                  #default="{ row: tableRow, column, $index }"
+                  #default="{ row: tableRow, $index }"
                 >
                   <component
                     :is="getFormatterComponent(col)"
                     :key="tableRow.id"
                     :cell-value="tableRow[col.prop]"
                     :col="col"
-                    :column="column"
                     :index="(page - 1) * size + $index"
                     :reload="getList"
                     :row="tableRow"
@@ -180,6 +192,7 @@ import isFalsey from './utils/is-falsey'
 import * as queryUtil from './utils/query'
 import transformSearchImmediatelyItem from './utils/search-immediately-item'
 import getSelectStrategy from './utils/select-strategy'
+import { isColumnDraggable } from '@/components/Table/AutoDataTable/column-order'
 
 const defaultFirstPage = 1
 const noPaginationDataPath = 'payload'
@@ -772,9 +785,8 @@ export default {
       // https://github.com/ElemeFE/element/issues/1153
       total: null,
       tableLoading: false,
-      tableScrollbarVisible: false,
-      tableScrollbarHideTimer: null,
       listRequestId: 0,
+      listAbortController: null,
       // 多选项的数组
       selected: [],
 
@@ -801,8 +813,10 @@ export default {
       const loadingRows = this.tableLoading && !this.data.length && this.hasPagination
       const visibleRows = loadingRows ? this.size : this.data.length
       const rowsHeight = visibleRows ? visibleRows * rowHeight : emptyBodyHeight
-      const paginationHeight = this.hasPagination ? 45 : 0
-      const surfaceContentHeight = headerHeight + rowsHeight + paginationHeight + 2
+      const paginationHeight = this.hasPagination ? 44 : 0
+      const surfaceBorderHeight = 2 // 1px top and bottom borders.
+      const surfaceContentHeight =
+        headerHeight + rowsHeight + paginationHeight + surfaceBorderHeight
       return { '--el-data-table-content-height': `${surfaceContentHeight}px` }
     },
     displayColumns() {
@@ -815,16 +829,10 @@ export default {
       }
       return [actions, ...this.columns.filter((column) => column !== actions)]
     },
-    tableStructureKey() {
-      const columns = this.isTree ? this.columns : this.displayColumns
-      return [
-        this.isTree ? 'tree' : 'table',
-        this.hasSelection ? 'selection' : 'plain',
-        ...columns.map((column, index) => {
-          const identity = column.prop || column.type || index
-          return `${identity}:${column.fixed || ''}`
-        })
-      ].join('|')
+    tableModeKey() {
+      // Element Plus updates keyed columns in place. Recreating the table for
+      // visibility, order or pinning changes also recreates every cell.
+      return [this.isTree ? 'tree' : 'table', this.hasSelection ? 'selection' : 'plain'].join('|')
     },
     paginationCurrentPage: {
       get() {
@@ -970,21 +978,24 @@ export default {
     }
   },
   watch: {
-    tableStructureKey() {
+    tableModeKey() {
       this.$nextTick(() => this.selectStrategy.updateElTableSelection())
     },
     url: {
-      handler(val) {
+      handler(val, oldVal) {
         const requestId = this.invalidateListRequest()
         if (!val) {
           this.tableLoading = false
           return
         }
         this.page = defaultFirstPage
+        const resourceChanged = !oldVal || val.split(/[?#]/, 1)[0] !== oldVal.split(/[?#]/, 1)[0]
         // mounted处有updateForm的行为，所以至少在初始执行时要等到nextTick
         this.$nextTick(() => {
           if (requestId === this.listRequestId) {
-            this.getList({ debounce: false })
+            // Query-only changes (for example, switching the asset scope) keep
+            // the current rows visible until the latest response arrives.
+            this.getList({ debounce: false, loading: resourceChanged })
           }
         })
       },
@@ -1033,24 +1044,14 @@ export default {
     this.debouncedGetListFromRemote = _.debounce(this.getListFromRemote, 300)
   },
   beforeUnmount() {
-    clearTimeout(this.tableScrollbarHideTimer)
     this.invalidateListRequest()
   },
   methods: {
-    showTableScrollbar() {
-      clearTimeout(this.tableScrollbarHideTimer)
-      this.tableScrollbarHideTimer = null
-      this.tableScrollbarVisible = true
-    },
-    scheduleTableScrollbarHide() {
-      clearTimeout(this.tableScrollbarHideTimer)
-      this.tableScrollbarHideTimer = setTimeout(() => {
-        this.tableScrollbarVisible = false
-        this.tableScrollbarHideTimer = null
-      }, 400)
-    },
+    isColumnDraggable,
     invalidateListRequest() {
       this.debouncedGetListFromRemote?.cancel()
+      this.listAbortController?.abort()
+      this.listAbortController = null
       return ++this.listRequestId
     },
     getFormatterComponent(col) {
@@ -1113,7 +1114,7 @@ export default {
     hasNextPage() {
       return this.page < this.lastPageNum
     },
-    getList({ loading = true, debounce = true } = {}) {
+    getList({ loading = true, debounce = false } = {}) {
       // Invalidate immediately, including while the next search is debounced.
       const requestId = this.invalidateListRequest()
       if (this.fillHeight && loading) {
@@ -1190,6 +1191,11 @@ export default {
         formValue = this.$refs.searchForm.getFormValue()
         Object.assign(query, formValue)
       }
+      for (const key of Object.keys(query)) {
+        if (query[key] === '' || query[key] === null || query[key] === undefined) {
+          delete query[key]
+        }
+      }
       const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(query, '=', '&')
 
       // 请求开始
@@ -1204,9 +1210,15 @@ export default {
       }
 
       const request = this.request || ((requestUrl, config) => this.$axios.get(requestUrl, config))
-      return Promise.resolve(request(url + queryStr, this.axiosConfig))
+      const controller = new AbortController()
+      this.listAbortController = controller
+      const signal = this.axiosConfig?.signal
+        ? AbortSignal.any([controller.signal, this.axiosConfig.signal])
+        : controller.signal
+      return Promise.resolve()
+        .then(() => request(url + queryStr, { ...this.axiosConfig, signal }))
         .then(({ data: resp }) => {
-          if (requestId !== this.listRequestId) {
+          if (requestId !== this.listRequestId || controller.signal.aborted) {
             return
           }
           let data = []
@@ -1252,6 +1264,10 @@ export default {
           if (requestId !== this.listRequestId) {
             return
           }
+          if (signal.aborted) {
+            this.tableLoading = false
+            return
+          }
           this.total = 0
           this.tableLoading = false
           /**
@@ -1259,6 +1275,11 @@ export default {
            * @event error
            */
           this.$emit('error', err)
+        })
+        .finally(() => {
+          if (this.listAbortController === controller) {
+            this.listAbortController = null
+          }
         })
     },
     search(attrs, reset) {
@@ -1271,7 +1292,7 @@ export default {
         this.innerQuery = merge(this.innerQuery, attrs)
       }
       this.selected.splice(0, this.selected.length)
-      return this.getList()
+      return this.getList({ debounce: true })
     },
     searchDate(attrs) {
       // 重置搜索结果到第一页
@@ -1556,7 +1577,8 @@ export default {
       opacity 0.15s ease,
       color 0.15s ease;
 
-    i {
+    svg {
+      vertical-align: middle;
       transform: rotate(45deg);
     }
 

@@ -46,7 +46,8 @@ export default {
         columnsMeta: {
           'applet.display_name': {
             label: this.$t('DisplayName'),
-            width: '160px',
+            minWidth: '160px',
+            className: 'applet-display-name',
             formatter: DetailFormatter,
             formatterArgs: {
               drawer: true,
@@ -66,6 +67,7 @@ export default {
           },
           status: {
             label: this.$t('Status'),
+            width: '120px',
             formatter: (row) => {
               const typeMapper = {
                 pending: 'success',
@@ -93,6 +95,7 @@ export default {
               extraActions: [
                 {
                   title: this.$t('Deploy'),
+                  type: 'primary',
                   callback: function ({ row }) {
                     this.$axios
                       .post(`/api/v1/terminal/applet-host-deployments/applets/`, {
@@ -106,6 +109,7 @@ export default {
                 },
                 {
                   title: this.$t('Uninstall'),
+                  type: 'danger',
                   callback: function ({ row }) {
                     this.$axios
                       .post(`/api/v1/terminal/applet-host-deployments/uninstall/`, {
@@ -183,3 +187,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+:deep(.applet-display-name .icon) {
+  margin-right: 2px;
+}
+</style>

@@ -52,13 +52,10 @@ export default {
       return key
     },
     chatAiEnabled() {
-      const activeTab = String(this.$route.query.tab || '').toLowerCase()
-      const isChatAiSettings = this.$route.name === 'Feature' && activeTab === 'chat'
       return (
         this.publicSettings?.CHAT_AI_ENABLED === true &&
         this.$hasPerm('chat_ai.use_chatai') &&
-        this.$route.name !== 'ChatAi' &&
-        !isChatAiSettings
+        this.$route.name !== 'ChatAi'
       )
     }
   }
@@ -78,6 +75,12 @@ export default {
   width: 100%;
   position: relative;
   overflow: auto;
+
+  &,
+  :deep(.wrapper-content),
+  :deep(.tab-page-content) {
+    scrollbar-width: thin;
+  }
 
   // 路由可能经过多层 EmptyLayout。每层 shell 都必须继承主区高度，
   // 否则 Page 的 100% 会退化成内容高度，外层又出现第二根滚动条。

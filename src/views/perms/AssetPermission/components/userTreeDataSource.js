@@ -1,3 +1,5 @@
+import { createXTreeDataSource } from '@/components/Tree/XTree/config'
+
 const USER_TREE_URL = '/api/v1/users/users-groups/tree/'
 const PERMISSION_METRICS_URL = '/api/v1/perms/asset-permissions/tree-metrics/'
 
@@ -9,7 +11,11 @@ function resourceItems(nodes) {
     const type = node?.type
     const id = node?.resourceId
     const key = `${type}:${id}`
-    if (!id || !['organization', 'user_group', 'user'].includes(type) || seen.has(key)) {
+    if (
+      !id ||
+      !['organization', 'user_group', 'ungrouped_users', 'user'].includes(type) ||
+      seen.has(key)
+    ) {
       continue
     }
     seen.add(key)
@@ -19,38 +25,35 @@ function resourceItems(nodes) {
 }
 
 export function createAssetPermissionUserTreeDataSource(request) {
-  return {
-    root({ signal } = {}) {
-      return request.get(USER_TREE_URL, { signal })
-    },
-    children({ limit, offset, order, parent, signal }) {
-      return request.get(USER_TREE_URL, {
-        params: {
-          limit,
-          offset,
-          order,
-          parent_id: parent.resourceId,
-          parent_type: parent.type
-        },
-        signal
+  return createXTreeDataSource(request, {
+    root: USER_TREE_URL,
+    children: {
+      url: USER_TREE_URL,
+      params: ({ limit, offset, order, parent }) => ({
+        limit,
+        offset,
+        order,
+        parent_id: parent.resourceId,
+        parent_type: parent.type
       })
     },
-    search({ keyword, limit, order, signal }) {
-      return request.get(USER_TREE_URL, {
-        params: {
-          limit,
-          order,
-          search: keyword
-        },
-        signal
+    search: {
+      url: USER_TREE_URL,
+      params: ({ keyword, limit, order }) => ({
+        limit,
+        order,
+        search: keyword
       })
     },
-    metrics({ mode, nodes, signal }) {
-      const items = resourceItems(nodes)
-      if (!items.length) {
-        return { results: [] }
-      }
-      return request.post(PERMISSION_METRICS_URL, { items, metric: mode }, { signal })
+    metrics: {
+      method: 'post',
+      url: PERMISSION_METRICS_URL,
+      when: ({ nodes }) => resourceItems(nodes).length > 0,
+      empty: { results: [] },
+      data: ({ mode, nodes }) => ({
+        resources: resourceItems(nodes),
+        metric: mode
+      })
     }
-  }
+  })
 }

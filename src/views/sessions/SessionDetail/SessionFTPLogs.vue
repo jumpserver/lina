@@ -4,6 +4,7 @@
 
 <script>
 import ListTable from '@/components/Table/ListTable'
+import OverflowTooltipFormatter from '@/components/Table/TableFormatters/OverflowTooltipFormatter.vue'
 import { download } from '@/utils/common/index'
 
 export default {
@@ -34,6 +35,10 @@ export default {
         columnsMeta: {
           remote_addr: {
             width: '140px'
+          },
+          filename: {
+            width: '200px',
+            formatter: OverflowTooltipFormatter
           },
           operate: {
             width: '100px'

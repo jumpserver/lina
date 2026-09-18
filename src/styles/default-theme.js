@@ -15,7 +15,7 @@ export default {
   '--color-help-text': '#8f959e',
   '--page-background-color': '#ffffff',
   '--page-content-background-color': '#f3f3f4',
-  '--panel-border-color': 'var(--el-border-color)',
+  '--panel-border-color': 'var(--el-border-color-lighter, #ebeef5)',
   '--banner-bg': '#148f76',
   '--submenu-bg': '#ffffff',
   '--menu-bg': '#ffffff',

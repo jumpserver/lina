@@ -22,13 +22,22 @@
       <ExecutionTrace v-if="message.role === 'assistant'" :active="messageActive" :items="trace" />
 
       <div :class="['chat-message__content', { 'has-error': message.status === 'failed' }]">
+        <div v-if="message.role === 'user' && pageContext" class="message-page-context">
+          <el-icon><Document /></el-icon>
+          <span>{{
+            t('ChatAIFailureContextAttached', {
+              page: pageContext.page.title || pageContext.page.name
+            })
+          }}</span>
+          <small v-if="pageContext.selected_assets.length">{{
+            pageContext.selected_assets.map((asset) => asset.name || asset.address).join('、')
+          }}</small>
+        </div>
         <div v-if="message.images?.length" class="message-images">
-          <img
+          <AuthenticatedImage
             v-for="image in message.images"
             :key="image.id || image.url"
-            :alt="image.name"
-            :src="resolveImageUrl(image.url)"
-            loading="lazy"
+            :attachment="image"
           />
         </div>
         <div v-if="message.files?.length" class="message-files">
@@ -36,9 +45,14 @@
             v-for="file in message.files"
             :key="file.id || file.url"
             :download="file.name"
-            :href="resolveAttachmentUrl(file.url)"
+            href=""
+            :aria-busy="downloadingAttachment === (file.id || file.name)"
+            @click.prevent="downloadFile(file)"
           >
-            <el-icon><Document /></el-icon>
+            <el-icon>
+              <Loading v-if="downloadingAttachment === (file.id || file.name)" class="spin" />
+              <Document v-else />
+            </el-icon>
             <span>
               <strong>{{ file.name }}</strong>
               <small>{{ formatFileSize(file.size) }}</small>
@@ -82,18 +96,13 @@
           </span>
         </div>
 
-        <div v-if="message.status === 'failed'" class="message-error">
-          <span class="message-error__icon"
-            ><el-icon><Warning /></el-icon
-          ></span>
-          <span>
-            <strong>{{ t('ChatAIResponseInterrupted') }}</strong>
-            <small>{{ message.error || t('ServerBusyRetry') }}</small>
-          </span>
-          <button type="button" @click="emit('retry', message.id)">
-            <el-icon><RefreshRight /></el-icon> {{ t('Retry') }}
-          </button>
-        </div>
+        <FailureCard
+          v-if="message.role === 'assistant' && ['failed', 'cancelled'].includes(message.status)"
+          :failure="failure"
+          :cancelled="message.status === 'cancelled'"
+          :can-retry="canRegenerate && safeToRetry"
+          @retry="emit('retry', message.id)"
+        />
       </div>
 
       <ApprovalCard
@@ -129,7 +138,12 @@
           <el-icon><Check v-if="copied" /><CopyDocument v-else /></el-icon>
         </button>
         <button
-          v-if="message.role === 'assistant' && message.status === 'completed' && canRegenerate"
+          v-if="
+            message.role === 'assistant' &&
+            message.status === 'completed' &&
+            canRegenerate &&
+            safeToRetry
+          "
           class="message-action message-action--regenerate"
           type="button"
           :aria-label="t('ChatAIRegenerate')"
@@ -177,19 +191,24 @@ import {
   CopyDocument,
   Document,
   EditPen,
+  Loading,
   RefreshRight,
-  UserFilled,
-  Warning
+  UserFilled
 } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
 
+import { fetchChatAIArtifact } from '@/api/chatAi'
 import { copy } from '@/utils/common/index'
-import { withBaseApi } from '@/utils/env'
+import { message as flashMessage } from '@/utils/vue/message'
 import ApprovalCard from './ApprovalCard.vue'
+import AuthenticatedImage from './AuthenticatedImage.vue'
 import ExecutionTrace from './ExecutionTrace.vue'
+import FailureCard from './FailureCard.vue'
 import MessageText from './MessageText.vue'
 import ResultCards from './ResultCards.vue'
 import AssistantMark from '../AssistantMark.vue'
+import { canRetryMessage, messageFailure } from '../../utils/failurePresentation'
+import { getMessagePageContext } from '../../utils/pageContext'
 
 const props = defineProps({
   message: {
@@ -231,14 +250,17 @@ const emit = defineEmits([
 ])
 const { t } = useI18n()
 const copied = ref(false)
+const downloadingAttachment = ref('')
+const downloadObjectUrls = new Set()
 let copyTimer = null
 const editing = ref(false)
 const editor = ref(null)
 const draftContent = ref('')
 const messageActive = computed(() => ['pending', 'streaming'].includes(props.message.status))
-const visibleResultCards = computed(() => {
-  return (props.message.result_cards || []).filter((card) => card && card.type !== 'progress')
-})
+const visibleResultCards = computed(() => props.message.result_cards || [])
+const failure = computed(() => messageFailure(props.message, props.trace))
+const safeToRetry = computed(() => canRetryMessage(props.message, props.trace))
+const pageContext = computed(() => getMessagePageContext(props.message))
 const showThinking = computed(() => {
   return (
     messageActive.value &&
@@ -281,6 +303,8 @@ function copyMessage() {
 
 onBeforeUnmount(() => {
   if (copyTimer) window.clearTimeout(copyTimer)
+  for (const url of downloadObjectUrls) URL.revokeObjectURL(url)
+  downloadObjectUrls.clear()
 })
 
 function startEdit() {
@@ -304,20 +328,38 @@ function submitEdit() {
   cancelEdit()
 }
 
-function resolveImageUrl(url) {
-  if (/^(blob:|data:|https?:)/.test(url || '')) return url
-  return withBaseApi(url)
-}
-
-function resolveAttachmentUrl(url) {
-  if (/^(blob:|data:|https?:)/.test(url || '')) return url
-  return withBaseApi(url)
+async function downloadFile(attachment) {
+  const key = attachment.id || attachment.name
+  if (!key || downloadingAttachment.value) return
+  downloadingAttachment.value = key
+  try {
+    const file = await fetchChatAIArtifact(attachment)
+    const url = URL.createObjectURL(file)
+    downloadObjectUrls.add(url)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = file.name || attachment.name || 'attachment'
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    window.setTimeout(() => {
+      URL.revokeObjectURL(url)
+      downloadObjectUrls.delete(url)
+    }, 1000)
+  } catch (error) {
+    flashMessage.error(
+      error?.detail || error?.response?.data?.detail || error?.message || t('ServerBusyRetry')
+    )
+  } finally {
+    downloadingAttachment.value = ''
+  }
 }
 
 function formatFileSize(size) {
-  if (size < 1024) return `${size} B`
-  if (size < 1024 * 1024) return `${Math.ceil(size / 1024)} KiB`
-  return `${(size / (1024 * 1024)).toFixed(1)} MiB`
+  const value = Number(size || 0)
+  if (value < 1024) return `${value} B`
+  if (value < 1024 * 1024) return `${Math.ceil(value / 1024)} KiB`
+  return `${(value / (1024 * 1024)).toFixed(1)} MiB`
 }
 </script>
 
@@ -744,83 +786,26 @@ function formatFileSize(size) {
   }
 }
 
-.message-error {
+.message-page-context {
   display: flex;
-  width: min(100%, 600px);
+  flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
-  margin-top: 10px;
-  padding: 10px 11px;
-  border: 1px solid #f0d0d4;
-  border-radius: 12px;
-  color: #8f4d58;
-  background: #fff5f6;
-
-  &__icon {
-    display: grid;
-    width: 28px;
-    height: 28px;
-    flex: 0 0 28px;
-    place-items: center;
-    border-radius: 9px;
-    color: #c85664;
-    background: #ffe5e8;
-  }
-
-  > span:nth-child(2) {
-    display: flex;
-    min-width: 0;
-    flex: 1;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  strong {
-    font-size: 10px;
-  }
+  gap: 4px 6px;
+  margin-bottom: 8px;
+  color: #65756f;
+  font-size: 11px;
+  line-height: 1.5;
 
   small {
-    color: #b17780;
-    font-size: 10px;
-    line-height: 1.45;
+    width: 100%;
+    padding-left: 20px;
     overflow-wrap: anywhere;
-  }
-
-  button {
-    display: inline-flex;
-    height: 28px;
-    align-items: center;
-    gap: 4px;
-    padding: 0 8px;
-    border: 1px solid #edc7cc;
-    border-radius: 8px;
-    color: #a54e5a;
-    background: #fff;
-    cursor: pointer;
-    font-size: 10px;
-    flex: 0 0 auto;
-
-    &:focus-visible {
-      outline: 2px solid rgb(213 92 105 / 32%);
-      outline-offset: 2px;
-    }
   }
 }
 
 @media (hover: none) {
   .chat-message.is-user .message-actions {
     opacity: 1;
-  }
-}
-
-@media (max-width: 520px) {
-  .message-error {
-    align-items: flex-start;
-    flex-wrap: wrap;
-
-    button {
-      margin-left: 38px;
-    }
   }
 }
 

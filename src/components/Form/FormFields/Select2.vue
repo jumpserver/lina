@@ -591,7 +591,7 @@ export default {
       const options = this.getSelectedOptions()
       this.$log.debug('Current select options: ', options, 'Val: ', this.value)
       this.$emit('changeOptions', options)
-      this.$emit('change', _.cloneDeep(values))
+      this.$emit('change', _.cloneDeep(this.normalizeValue(values)))
     },
     onPopupScroll({ scrollTop }) {
       const wrapRef = this.selectRef?.scrollbarRef?.wrapRef

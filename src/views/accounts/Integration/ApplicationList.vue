@@ -38,7 +38,7 @@ export default {
             formatter: (row) => {
               return (
                 <img
-                  src={row.logo}
+                  src={row.logo?.replace(/^http:/, location.protocol)}
                   alt={row.name}
                   style="width: 40px; height: 40px; border-radius: 50%;"
                 />

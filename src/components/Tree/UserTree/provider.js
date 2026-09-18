@@ -1,4 +1,9 @@
-export const USER_TREE_RESOURCE_TYPES = Object.freeze(['organization', 'user_group', 'user'])
+export const USER_TREE_RESOURCE_TYPES = Object.freeze([
+  'organization',
+  'user_group',
+  'ungrouped_users',
+  'user'
+])
 
 export const USER_TREE_ORDER_VALUES = Object.freeze(['name', 'username'])
 
@@ -28,7 +33,7 @@ function normalizeResourceType(raw) {
 }
 
 function hasTypedTreeId(value) {
-  return /^(organization|user_group|user):/.test(String(value || ''))
+  return /^(organization|user_group|ungrouped_users|user):/.test(String(value || ''))
 }
 
 function hasCompleteUserTreeId(value) {
@@ -99,14 +104,9 @@ export function normalizeUserTreeResponse(response) {
     const rawTreeId = metaData.tree_id ?? raw?.tree_id ?? raw?.id
     const treeId = makeTreeId(type, resourceId, parentTreeId, rawTreeId)
     const children = (raw?.children || []).map((child) => normalize(child, treeId))
-    const hasChildren =
-      type !== 'user' &&
-      Boolean(
-        raw?.hasChildren ??
-        raw?.isParent ??
-        raw?.meta?.data?.has_children ??
-        (Number(raw?.users_amount) > 0 || children.length > 0)
-      )
+    // Organizations and groups follow the same probe-on-expand contract as
+    // node trees. The first empty child response is what marks them as leaves.
+    const hasChildren = type !== 'user'
 
     return {
       ...raw,

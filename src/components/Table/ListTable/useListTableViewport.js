@@ -36,8 +36,10 @@ export function useListTableViewport() {
     const path = [listRoot.value]
     let parent = listRoot.value.parentElement
     while (parent && !parent.matches('.page-content, .tab-page-content')) {
-      // Embedded lists keep their host's sizing, including existing asset dialogs.
-      if (parent.matches('.el-card, .el-form, .el-table, .el-dialog, .list-table')) {
+      // Embedded lists keep their host's sizing, including grids and asset dialogs.
+      if (
+        parent.matches('.el-card, .el-form, .el-table, .el-dialog, .list-table, .el-row, .el-col')
+      ) {
         return
       }
       path.push(parent)

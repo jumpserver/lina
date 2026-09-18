@@ -3,7 +3,7 @@
 </template>
 
 <script lang="jsx">
-import { STATUS_MAP } from '../const'
+import { STATUS_MAP, getTicketFlowLabel, getTicketTypeLabel } from '../const'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import CcUsers from '@/views/tickets/components/CcUsers'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
@@ -43,11 +43,11 @@ export default {
         },
         {
           key: this.$t('Type'),
-          value: object.type.lable
+          value: getTicketTypeLabel(object.type, this.$t)
         },
         {
           key: this.$t('TicketFlow'),
-          value: object.flow?.name || object.type.label
+          value: getTicketFlowLabel(object, this.$t)
         },
         {
           key: this.$t('Status'),

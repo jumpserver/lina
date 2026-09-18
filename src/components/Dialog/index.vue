@@ -174,8 +174,6 @@ export default {
   }
 
   .el-dialog__title {
-    font-size: 18px;
-    font-weight: 400;
     color: var(--color-text-primary);
   }
 

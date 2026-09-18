@@ -5,54 +5,86 @@
       {
         'is-standalone': standalone,
         'is-expanded': expanded,
-        'is-compact': !standalone && !expanded
+        'is-compact': compact,
+        'is-windowed': windowed
       }
     ]"
   >
-    <header class="assistant-header">
+    <header
+      class="assistant-header"
+      :aria-keyshortcuts="windowed && !expanded ? windowAdjustShortcuts : undefined"
+      :aria-label="windowed && !expanded ? t('ChatAIWindowAdjustHint') : undefined"
+      :tabindex="windowed && !expanded ? 0 : undefined"
+      :title="windowed && !expanded ? t('ChatAIWindowAdjustHint') : undefined"
+      @dblclick="handleHeaderDoubleClick"
+      @keydown="handleHeaderKeyDown"
+      @pointerdown="handleHeaderPointerDown"
+    >
       <div class="assistant-header__brand">
-        <button
-          ref="historyToggle"
-          class="header-icon history-toggle"
-          :aria-label="t('History')"
-          :title="t('History')"
-          type="button"
-          @click="historyOpen = !historyOpen"
-        >
-          <el-icon><Clock /></el-icon>
-        </button>
         <AssistantMark :active="streaming" size="small" />
         <span class="brand-copy">
           <strong>{{ t('ChatAIName') }}</strong>
-          <small>
-            <i :class="{ 'is-busy': busy || transcribing || composerRecording }" />
-            {{ busy || transcribing || composerRecording ? activityLabel : t('ChatAIReady') }}
+          <small v-if="busy || composerRecording">
+            <i class="is-busy" />
+            {{ activityLabel }}
           </small>
         </span>
       </div>
 
       <div class="assistant-header__actions">
         <button
-          class="new-chat-button"
+          class="header-icon"
           :aria-label="t('NewChat')"
           :disabled="navigationLocked"
           :title="navigationLocked ? t('ChatAIFinishCurrentTask') : t('NewChat')"
           type="button"
           @click="handleNew"
         >
-          <el-icon><EditPen /></el-icon>
-          <span>{{ t('NewChat') }}</span>
+          <el-icon><Plus /></el-icon>
         </button>
-        <button
-          v-if="!standalone"
-          class="header-icon"
-          :aria-label="expanded ? t('ChatAICompress') : t('ChatAIExpand')"
-          :title="expanded ? t('ChatAICompress') : t('ChatAIExpand')"
-          type="button"
-          @click="emit(expanded ? 'compress' : 'expand')"
+        <el-dropdown
+          class="header-more-dropdown"
+          popper-class="chat-ai-header-actions-dropdown"
+          trigger="click"
+          @command="handleHeaderAction"
         >
-          <el-icon><component :is="expanded ? ScaleToOriginal : FullScreen" /></el-icon>
-        </button>
+          <button
+            ref="headerActionsToggle"
+            class="header-icon"
+            :aria-label="t('MoreActions')"
+            :title="t('MoreActions')"
+            type="button"
+          >
+            <el-icon><More /></el-icon>
+          </button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="history">
+                <el-icon><Clock /></el-icon>
+                <span>{{ t('History') }}</span>
+              </el-dropdown-item>
+              <el-dropdown-item
+                v-if="!standalone && windowed"
+                command="toggle-expand"
+                :disabled="windowTransitioning"
+                divided
+              >
+                <el-icon>
+                  <component :is="expanded ? ScaleToOriginal : FullScreen" />
+                </el-icon>
+                <span>{{ expanded ? t('ChatAICompress') : t('ChatAIExpand') }}</span>
+              </el-dropdown-item>
+              <el-dropdown-item
+                v-if="!standalone && windowed"
+                command="reset-window"
+                :disabled="windowTransitioning"
+              >
+                <el-icon><RefreshLeft /></el-icon>
+                <span>{{ t('RestoreDefault') }}</span>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
         <button
           v-if="!standalone"
           class="header-icon"
@@ -67,8 +99,9 @@
     </header>
 
     <div class="assistant-body">
-      <div v-if="historyOpen" class="mobile-backdrop" @click="historyOpen = false" />
+      <div v-if="compact && historyOpen" class="mobile-backdrop" @click="historyOpen = false" />
       <ConversationPanel
+        :id="historyPanelId"
         ref="conversationPanel"
         :active-id="activeConversationId"
         :conversations="conversations"
@@ -82,7 +115,7 @@
         @select="selectConversation"
       />
 
-      <main class="chat-stage" :inert="historyOpen">
+      <main class="chat-stage" :inert="compact && historyOpen">
         <div ref="scrollArea" class="chat-scroll" @scroll="handleScroll">
           <div
             v-if="loadingMessages || (!initialized && loadingConversations)"
@@ -134,22 +167,41 @@
           </div>
 
           <div v-else class="message-list">
-            <ChatMessage
+            <template
               v-for="item in visibleMessages"
               :key="item.version?.root_id || item._render_key || item.id"
-              :approval="approval"
-              :approval-processing="approvalProcessing"
-              :assistant-name="t('ChatAIName')"
-              :can-edit="!busy"
-              :can-regenerate="item.id === latestAssistantMessageId"
-              :message="item"
-              :trace="traces[item.id] || []"
-              @cancel-approval="handleCancelApproval"
-              @branch="handleBranchMessage"
-              @confirm-approval="handleConfirmApproval"
-              @retry="handleRegenerateMessage"
-              @select-version="selectAnswerVersion(item.version?.root_id, $event)"
-            />
+            >
+              <ChatMessage
+                :approval="approval"
+                :approval-processing="approvalProcessing"
+                :assistant-name="t('ChatAIName')"
+                :can-edit="!busy && features.branch"
+                :can-regenerate="features.regenerate && item.id === latestAssistantMessageId"
+                :message="item"
+                :trace="traces[item.id] || []"
+                @cancel-approval="handleCancelApproval"
+                @branch="handleBranchMessage"
+                @confirm-approval="handleConfirmApproval"
+                @retry="handleRegenerateMessage"
+                @select-version="selectAnswerVersion(item.version?.root_id, $event)"
+              />
+              <div
+                v-if="conversationDisclaimerVisible && item.id === firstUserMessageId"
+                class="conversation-disclaimer"
+                role="status"
+              >
+                <el-icon class="conversation-disclaimer__icon"><Warning /></el-icon>
+                <span>{{ t('ChatAIDisclaimer') }}</span>
+                <button
+                  type="button"
+                  :aria-label="t('Close')"
+                  :title="t('Close')"
+                  @click="dismissConversationDisclaimer"
+                >
+                  <el-icon><Close /></el-icon>
+                </button>
+              </div>
+            </template>
           </div>
         </div>
 
@@ -179,21 +231,17 @@
             :busy="busy"
             :disabled="awaitingApproval || recoverableRun"
             :draft-key="composerDraftKey"
+            :page-context="currentPageContext"
+            :page-context-enabled="pageContextEnabled"
             :stopping="stopping"
-            :stop-disabled="approvalProcessing || backgroundQueuing || preparing"
-            :transcribing="transcribing"
-            :voice-transcription-mode="voiceTranscriptionMode"
-            :web-search-available="webSearchAvailable"
-            @audio="handleAudio"
+            :stop-disabled="approvalProcessing"
             @error="handleMicrophoneError"
             @attachment-error="handleAttachmentError"
             @recording-change="composerRecording = $event"
+            @toggle-page-context="pageContextEnabled = !pageContextEnabled"
             @send="sendMessage"
             @stop="stopGeneration"
           />
-          <div class="composer-disclaimer">
-            <span :title="t('ChatAIDisclaimer')">{{ t('ChatAIDisclaimer') }}</span>
-          </div>
         </footer>
       </main>
     </div>
@@ -201,30 +249,44 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import {
+  computed,
+  nextTick,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  ref,
+  watch
+} from 'vue'
 import {
   ArrowRight,
   Bottom,
   Close,
   Clock,
   Connection,
-  EditPen,
   FullScreen,
   Monitor,
+  More,
+  Plus,
+  RefreshLeft,
   ScaleToOriginal,
   Setting,
   Warning
 } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
 import { useI18n } from 'vue-i18n'
-import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
 
+import store from '@/store'
 import { message } from '@/utils/vue/message'
 import AssistantMark from './components/AssistantMark.vue'
 import ConversationPanel from './components/ConversationPanel.vue'
 import ChatInput from './components/ChitChat/ChatInput.vue'
 import ChatMessage from './components/ChitChat/ChatMessage.vue'
 import { useChatAi } from './composables/useChatAi'
+import { capturePageContext, pageContextScope } from './utils/pageContext'
+import { friendlyChatError } from './utils/failurePresentation'
 
 const props = defineProps({
   active: {
@@ -235,31 +297,57 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  compact: {
+    type: Boolean,
+    default: false
+  },
   standalone: {
+    type: Boolean,
+    default: false
+  },
+  windowed: {
+    type: Boolean,
+    default: false
+  },
+  windowTransitioning: {
     type: Boolean,
     default: false
   }
 })
 
-const emit = defineEmits(['close', 'expand', 'compress'])
+const emit = defineEmits([
+  'close',
+  'expand',
+  'compress',
+  'reset-window',
+  'window-drag-start',
+  'window-keyboard-adjust'
+])
 const { t } = useI18n()
-const store = useStore()
+const historyPanelId = 'chat-ai-conversation-panel'
+const windowAdjustShortcuts =
+  'ArrowUp ArrowDown ArrowLeft ArrowRight Shift+ArrowUp Shift+ArrowDown Shift+ArrowLeft Shift+ArrowRight'
 const composer = ref(null)
 const scrollArea = ref(null)
 const conversationPanel = ref(null)
-const historyToggle = ref(null)
+const headerActionsToggle = ref(null)
 const historyOpen = ref(false)
 const composerRecording = ref(false)
+const route = useRoute()
+const pageContextEnabled = ref(false)
+const currentPageContext = computed(() => capturePageContext(route, store.getters.currentOrg))
+
+watch(
+  () => pageContextScope(route, store.getters.currentOrg),
+  () => {
+    pageContextEnabled.value = false
+  },
+  { flush: 'sync' }
+)
 const stickToBottom = ref(true)
 const showScrollToLatest = ref(false)
-const voiceTranscriptionMode = computed(() => {
-  return store.getters.publicSettings?.CHAT_AI_VOICE_TRANSCRIPTION_MODE === 'server'
-    ? 'server'
-    : 'browser'
-})
-const webSearchAvailable = computed(() => {
-  return Boolean(store.getters.publicSettings?.CHAT_AI_WEB_SEARCH_ENABLED)
-})
+const conversationDisclaimerVisible = ref(false)
+let conversationDisclaimerTimer = null
 
 const {
   conversations,
@@ -274,13 +362,12 @@ const {
   streaming,
   stopping,
   approvalProcessing,
-  backgroundQueuing,
   preparing,
-  transcribing,
   awaitingApproval,
   recoverableRun,
   busy,
   lastError,
+  features,
   initialize,
   loadConversations,
   loadMessages,
@@ -293,16 +380,18 @@ const {
   stopGeneration,
   confirmApproval,
   rejectApproval,
-  transcribe,
   branchMessage,
-  regenerateMessage
+  regenerateMessage,
+  activateLifecycle,
+  deactivateLifecycle
 } = useChatAi({ onError: handleRequestError })
 
+const firstUserMessageId = computed(() => {
+  return visibleMessages.value.find((item) => item.role === 'user')?.id || ''
+})
 const activityLabel = computed(() => {
   if (stopping.value) return t('ChatAIStopping')
-  if (transcribing.value) return t('ChatAITranscribing')
   if (composerRecording.value) return t('ChatAIRecording')
-  if (backgroundQueuing.value) return t('ChatAIBackgroundQueuing')
   if (approvalProcessing.value) return t('ChatAIExecuting')
   if (awaitingApproval.value) return t('ChatAIWaitingApproval')
   return t('ChatAIWorking')
@@ -321,8 +410,69 @@ const messageLoadFailed = computed(() => {
   )
 })
 const navigationLocked = computed(() => {
-  return busy.value || composerRecording.value || transcribing.value || loadingMessages.value
+  return busy.value || composerRecording.value || loadingMessages.value
 })
+
+watch(
+  () => props.compact,
+  (compact) => {
+    if (!compact) historyOpen.value = false
+  }
+)
+
+function isHeaderControl(target) {
+  return Boolean(
+    target?.closest?.(
+      'button, a, input, textarea, select, [role="button"], [contenteditable="true"]'
+    )
+  )
+}
+
+function handleHeaderPointerDown(event) {
+  if (
+    !props.windowed ||
+    props.expanded ||
+    props.windowTransitioning ||
+    event.button !== 0 ||
+    isHeaderControl(event.target)
+  ) {
+    return
+  }
+  emit('window-drag-start', event)
+}
+
+function handleHeaderDoubleClick(event) {
+  if (!props.windowed || props.windowTransitioning || isHeaderControl(event.target)) return
+  event.preventDefault()
+  emit(props.expanded ? 'compress' : 'expand')
+}
+
+function handleHeaderKeyDown(event) {
+  if (
+    event.target !== event.currentTarget ||
+    !props.windowed ||
+    props.expanded ||
+    props.windowTransitioning ||
+    event.altKey ||
+    event.ctrlKey ||
+    event.metaKey ||
+    !['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)
+  ) {
+    return
+  }
+  event.preventDefault()
+  emit('window-keyboard-adjust', { key: event.key, resize: event.shiftKey })
+}
+
+function handleHeaderAction(command) {
+  if (command === 'history') {
+    historyOpen.value = !historyOpen.value
+  } else if (command === 'toggle-expand') {
+    emit(props.expanded ? 'compress' : 'expand')
+  } else if (command === 'reset-window') {
+    emit('reset-window')
+  }
+}
 
 const suggestions = computed(() => {
   const permissions = new Set(store.getters.currentOrgPerms || [])
@@ -352,14 +502,7 @@ const suggestions = computed(() => {
 })
 
 function friendlyError(error) {
-  const code = error?.code || error?.response?.data?.code
-  if (code === 'CONVERSATION_BUSY') return t('ChatAIConversationBusy')
-  if (code === 'MODEL_UNAVAILABLE') return t('ChatAIModelUnavailable')
-  if (code === 'MODEL_TIMEOUT') return t('ChatAIModelTimeout')
-  if (code === 'audio_too_long') return t('ChatAIAudioTooLong')
-  if (code === 'audio_file_too_large') return t('ChatAIAudioTooLarge')
-  if (code === 'transcription_busy') return t('ChatAITranscriptionBusy')
-  return error?.detail || error?.response?.data?.detail || error?.message || t('ServerBusyRetry')
+  return friendlyChatError(error, t)
 }
 
 function handleRequestError(error) {
@@ -383,6 +526,7 @@ async function selectConversation(id) {
     message.warning(t('ChatAIFinishCurrentTask'))
     return
   }
+  dismissConversationDisclaimer()
   const selected = await selectConversationState(id)
   if (!selected) message.warning(t('ChatAIFinishCurrentTask'))
   await nextTick()
@@ -400,6 +544,7 @@ function handleNew() {
     message.warning(t('ChatAIFinishCurrentTask'))
     return
   }
+  dismissConversationDisclaimer()
   historyOpen.value = false
   nextTick(() => {
     if (alreadyNew) composer.value?.clear()
@@ -445,25 +590,47 @@ async function handleRename(conversation, title) {
 
 async function sendMessage(content, images, options) {
   stickToBottom.value = true
-  const sent = await sendMessageState(content, images, options)
-  if (sent && options?.background) message.success(t('ChatAIBackgroundQueued'))
+  const isFirstQuestion = visibleMessages.value.length === 0
+  const onAccepted = options?.onAccepted
+  const pageContext = pageContextEnabled.value
+    ? capturePageContext(route, store.getters.currentOrg)
+    : null
+  await sendMessageState(content, images, {
+    ...options,
+    pageContext,
+    onAccepted: () => {
+      onAccepted?.()
+      if (!isFirstQuestion) return
+      showConversationDisclaimer()
+    }
+  })
   await nextTick()
   stickToBottom.value = true
   scrollToBottom(true, true)
 }
 
+function showConversationDisclaimer() {
+  dismissConversationDisclaimer()
+  conversationDisclaimerVisible.value = true
+  conversationDisclaimerTimer = window.setTimeout(dismissConversationDisclaimer, 6000)
+}
+
+function dismissConversationDisclaimer() {
+  if (conversationDisclaimerTimer) window.clearTimeout(conversationDisclaimerTimer)
+  conversationDisclaimerTimer = null
+  conversationDisclaimerVisible.value = false
+}
+
 async function handleBranchMessage(messageId, content) {
   stickToBottom.value = true
-  const options = webSearchAvailable.value ? {} : { webSearch: false }
-  const branched = await branchMessage(messageId, content, options)
+  const branched = await branchMessage(messageId, content)
   if (!branched) return
   await nextTick()
   scrollToBottom(true, true)
 }
 
 function handleRegenerateMessage(messageId) {
-  const options = webSearchAvailable.value ? {} : { webSearch: false }
-  return regenerateMessage(messageId, options)
+  return regenerateMessage(messageId)
 }
 
 function fillSuggestion(content) {
@@ -481,17 +648,6 @@ async function retryLoadingMessages() {
   }
 }
 
-async function handleAudio(file) {
-  try {
-    const language = (navigator.language || '').split(/[-_]/)[0]
-    const result = await transcribe(file, language)
-    composer.value?.appendValue(result.text || '')
-    message.success(t('ChatAITranscriptionReady'))
-  } catch {
-    // The composable already surfaces a precise error.
-  }
-}
-
 function handleMicrophoneError() {
   message.warning(t('ChatAIMicrophonePermission'))
 }
@@ -503,7 +659,8 @@ function handleAttachmentError(detail) {
 async function handleConfirmApproval() {
   try {
     const result = await confirmApproval()
-    if (result?.result?.ok) message.success(t('ChatAIExecutionSucceeded'))
+    if (['approved', 'consumed'].includes(result?.status)) message.success(t('ChatAIExecuting'))
+    else if (result?.result?.ok) message.success(t('ChatAIExecutionSucceeded'))
     else message.warning(t('ChatAIExecutionIssue'))
   } catch {
     // The composable already surfaces a precise error.
@@ -563,6 +720,38 @@ function handleShortcut(event) {
   }
 }
 
+let shortcutListening = false
+let workspaceSuspended = false
+
+function attachShortcut() {
+  if (shortcutListening || !props.active) return
+  window.addEventListener('keydown', handleShortcut)
+  shortcutListening = true
+}
+
+function detachShortcut() {
+  if (!shortcutListening) return
+  window.removeEventListener('keydown', handleShortcut)
+  shortcutListening = false
+}
+
+function suspendWorkspace() {
+  if (workspaceSuspended) return
+  workspaceSuspended = true
+  detachShortcut()
+  deactivateLifecycle()
+}
+
+async function resumeWorkspace() {
+  if (!workspaceSuspended) {
+    attachShortcut()
+    return
+  }
+  workspaceSuspended = false
+  attachShortcut()
+  await activateLifecycle()
+}
+
 watch(
   () =>
     visibleMessages.value
@@ -590,22 +779,33 @@ watch(
 watch(
   () => props.active,
   (active) => {
-    if (!active) historyOpen.value = false
+    if (!active) {
+      historyOpen.value = false
+      detachShortcut()
+      return
+    }
+    if (!workspaceSuspended) attachShortcut()
   }
 )
 
 watch(historyOpen, async (open) => {
   await nextTick()
   if (open) conversationPanel.value?.focusSearch()
-  else if (props.active) historyToggle.value?.focus()
+  else if (props.active) headerActionsToggle.value?.focus()
 })
 
 onMounted(() => {
-  window.addEventListener('keydown', handleShortcut)
+  attachShortcut()
 })
 
+onActivated(() => {
+  resumeWorkspace()
+})
+
+onDeactivated(suspendWorkspace)
 onBeforeUnmount(() => {
-  window.removeEventListener('keydown', handleShortcut)
+  dismissConversationDisclaimer()
+  suspendWorkspace()
 })
 
 defineExpose({ init, focus, newConversation: handleNew })
@@ -686,6 +886,18 @@ defineExpose({ init, focus, newConversation: handleNew })
   }
 }
 
+.assistant-workspace.is-windowed:not(.is-expanded) .assistant-header {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.assistant-workspace.is-windowed:not(.is-expanded) .assistant-header:focus-visible {
+  z-index: 41;
+  outline: 2px solid rgb(26 179 148 / 42%);
+  outline-offset: -2px;
+}
+
 .brand-copy {
   display: flex;
   min-width: 0;
@@ -736,35 +948,9 @@ defineExpose({ init, focus, newConversation: handleNew })
   font-size: 16px;
   transition: all 0.18s ease;
 
-  &:hover {
-    color: var(--ai-primary-dark);
-    border-color: var(--ai-primary-light-2);
-    background: var(--ai-primary-light);
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.45;
-  }
-}
-
-.new-chat-button {
-  display: inline-grid;
-  width: 30px;
-  height: 30px;
-  padding: 0;
-  place-items: center;
-  border: 1px solid transparent;
-  border-radius: var(--ai-radius-sm);
-  color: var(--ai-text-secondary);
-  background: transparent;
-  cursor: pointer;
-  font-size: 16px;
-  transition: all 0.18s ease;
-
   &:hover:not(:disabled) {
-    border-color: var(--ai-primary-light-2);
     color: var(--ai-primary-dark);
+    border-color: var(--ai-primary-light-2);
     background: var(--ai-primary-light);
   }
 
@@ -772,14 +958,10 @@ defineExpose({ init, focus, newConversation: handleNew })
     cursor: not-allowed;
     opacity: 0.45;
   }
-
-  span {
-    display: none;
-  }
 }
 
-.history-toggle {
-  display: none;
+.header-more-dropdown {
+  display: inline-flex;
 }
 
 .assistant-body {
@@ -812,6 +994,52 @@ defineExpose({ init, focus, newConversation: handleNew })
   padding: 12px 0 16px;
 }
 
+.conversation-disclaimer {
+  display: flex;
+  width: min(760px, calc(100% - 36px));
+  align-items: flex-start;
+  gap: 8px;
+  margin: -2px auto 10px;
+  padding: 8px 10px;
+  border: 1px solid #f0d6aa;
+  border-radius: var(--ai-radius-sm);
+  color: #7c5b31;
+  background: #fff9ef;
+  font-size: 11px;
+  line-height: 1.55;
+  text-align: left;
+
+  &__icon {
+    flex: 0 0 auto;
+    margin-top: 1px;
+    color: #b8792c;
+    font-size: 14px;
+  }
+
+  span {
+    min-width: 0;
+    flex: 1;
+  }
+
+  button {
+    display: grid;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    padding: 0;
+    place-items: center;
+    border: 0;
+    border-radius: var(--ai-radius-xs);
+    color: #967044;
+    background: transparent;
+    cursor: pointer;
+
+    &:hover {
+      background: #f9ebd3;
+    }
+  }
+}
+
 .scroll-anchor {
   width: 1px;
   height: 1px;
@@ -820,7 +1048,7 @@ defineExpose({ init, focus, newConversation: handleNew })
 .composer-area {
   position: relative;
   z-index: 10;
-  padding: 6px 14px 6px;
+  padding: 6px 14px 10px;
   background: linear-gradient(180deg, rgb(255 255 255 / 72%), #fff 14px);
 }
 
@@ -860,25 +1088,6 @@ defineExpose({ init, focus, newConversation: handleNew })
 .scroll-latest-leave-to {
   opacity: 0;
   transform: translate(50%, 6px);
-}
-
-.composer-disclaimer {
-  min-height: 16px;
-  padding: 2px 4px 0;
-  overflow: hidden;
-  color: #737b87;
-  font-size: 11px;
-  line-height: 14px;
-  text-align: center;
-
-  span {
-    display: -webkit-box;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: normal;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-  }
 }
 
 .recovery-banner {
@@ -1180,10 +1389,6 @@ defineExpose({ init, focus, newConversation: handleNew })
     }
   }
 
-  .history-toggle {
-    display: inline-grid;
-  }
-
   .mobile-backdrop {
     position: absolute;
     z-index: 30;
@@ -1191,6 +1396,10 @@ defineExpose({ init, focus, newConversation: handleNew })
     inset: 0;
     background: rgb(27 30 45 / 18%);
     backdrop-filter: blur(2px);
+  }
+
+  :deep(.icon-button.mobile-close) {
+    display: inline-grid;
   }
 
   .assistant-welcome {
@@ -1219,10 +1428,6 @@ defineExpose({ init, focus, newConversation: handleNew })
 }
 
 @media (max-width: 760px) {
-  .history-toggle {
-    display: inline-grid;
-  }
-
   .mobile-backdrop {
     position: absolute;
     z-index: 29;
@@ -1260,8 +1465,7 @@ defineExpose({ init, focus, newConversation: handleNew })
     gap: 4px;
   }
 
-  .header-icon,
-  .new-chat-button {
+  .header-icon {
     width: 32px;
     height: 32px;
   }

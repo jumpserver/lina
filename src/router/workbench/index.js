@@ -66,12 +66,22 @@ export default {
           }
         },
         {
-          path: `${BASE_URL}/koko/elfinder/sftp/`,
+          path: 'personal-credentials',
+          name: 'PersonalCredentialList',
+          component: () => import('@/views/workbench/PersonalCredential'),
+          meta: {
+            title: i18n.t('PersonalCredentials'),
+            icon: 'password',
+            permissions: []
+          }
+        },
+        {
+          path: `${BASE_URL}/luna/files`,
           name: '',
           meta: {
             title: i18n.t('FileExplorer'),
             activeMenu: '/assets',
-            icon: 'fa-external-link',
+            icon: 'file-manager',
             external: true,
             permissions: ['rbac.view_filemanager']
           }

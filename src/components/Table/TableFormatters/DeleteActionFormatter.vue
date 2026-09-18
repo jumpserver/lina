@@ -1,6 +1,7 @@
 <template>
   <el-button
     ref="deleteButton"
+    :circle="formatterArgs.compact"
     :disabled="iDisabled"
     :title="$t('Remove')"
     size="small"

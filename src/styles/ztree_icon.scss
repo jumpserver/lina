@@ -354,3 +354,18 @@
     content: '\f067';
   }
 }
+
+.ztree li span.button.ico_open::before,
+.ztree li span.button.ico_close::before,
+.ztree li span.button.ico_docu::before,
+.ztree li span.button.cloud_ico_open::before,
+.ztree li span.button.cloud_ico_close::before,
+.ztree li span.button.public_ico_docu::before,
+.ztree li span.button.router_ico_docu::before,
+.ztree li span.button.other_ico_docu::before,
+.ztree li span.button.firewall_ico_docu::before,
+.ztree li span.button.general_ico_docu::before {
+  font-family: 'Font Awesome 7 Free';
+  font-size: 12px;
+  font-weight: 400;
+}

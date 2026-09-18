@@ -1,10 +1,10 @@
 <template>
   <BaseList
     :extra-actions="extraActions"
+    :extra-more-actions="extraMoreActions"
     :url="url"
     :columns-meta="columnsMeta"
     :columns-exclude="columnsExclude"
-    :header-actions="headerActions"
   />
 </template>
 
@@ -28,23 +28,18 @@ export default {
   data() {
     const vm = this
     return {
-      headerActions: {
-        hasLeftActions: this.$hasPerm('terminal.download_sessionreplay'),
-        hasCreate: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false,
-        hasMoreActions: false,
-        extraActions: [
-          {
-            name: 'downloadSelectedReplays',
-            title: this.$t('DownloadReplay'),
-            type: 'primary',
-            icon: 'download',
-            can: ({ selectedRows }) => selectedRows.length > 0,
-            callback: ({ selectedRows }) => vm.downloadSelectedReplays(selectedRows)
-          }
-        ]
-      },
+      extraMoreActions: this.$hasPerm('terminal.download_sessionreplay')
+        ? [
+            {
+              name: 'downloadSelectedReplays',
+              title: this.$t('DownloadReplay'),
+              type: 'primary',
+              icon: 'download',
+              can: ({ selectedRows }) => selectedRows.length > 0,
+              callback: ({ selectedRows }) => vm.downloadSelectedReplays(selectedRows)
+            }
+          ]
+        : [],
       extraActions: [
         {
           name: 'replay',
@@ -56,8 +51,8 @@ export default {
             vm.hasPerms(row, 'view') &&
             !(row.protocol === 'mongodb' && row.terminal.type === 'magnus'),
           callback: function ({ row, tableData }) {
-            // 跳转到luna页面
-            const replayUrl = '/luna/replay/' + row.id
+            const oid = row.org_id || vm.$store.getters.currentOrg?.id || ''
+            const replayUrl = `/luna/replay/${row.id}${oid ? `?oid=${encodeURIComponent(oid)}` : ''}`
             window.open(addBasePath(replayUrl))
           }
         },

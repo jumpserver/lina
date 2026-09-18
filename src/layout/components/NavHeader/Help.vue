@@ -8,6 +8,7 @@
         <el-dropdown-menu>
           <el-dropdown-item command="docs">{{ $t('Docs') }}</el-dropdown-item>
           <el-dropdown-item command="support">{{ $t('Support') }}</el-dropdown-item>
+          <el-dropdown-item command="download">{{ $t('DownloadCenter') }}</el-dropdown-item>
           <el-dropdown-item v-if="!hasLicence" command="enterprise">{{
             $t('EnterpriseEdition')
           }}</el-dropdown-item>
@@ -20,6 +21,7 @@
 </template>
 
 <script>
+import { addBasePath } from '@/utils/common/index'
 import About from './About.vue'
 
 export default {
@@ -51,6 +53,9 @@ export default {
     },
     handleCommand(command) {
       switch (command) {
+        case 'download':
+          window.open(addBasePath('/core/download/'), '_blank', 'noopener,noreferrer')
+          break
         case 'support':
           window.open(this.URLSite.HELP_SUPPORT_URL, '_blank')
           break

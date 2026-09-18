@@ -18,6 +18,8 @@
       :header-actions="iHeaderActions"
       :resource="$tc('Asset')"
       :table-config="iTableConfig"
+      @selection-change="updateAssistantSelection"
+      @query-change="clearAssistantSelection"
     />
     <PlatformDialog
       v-model:visible="showPlatform"
@@ -55,6 +57,10 @@ import AccountCreateUpdate from '@/components/Apps/AccountListTable/AccountCreat
 import { getDefaultConfig } from './const'
 import { getSelectedAssetNodeId } from '@/utils/common/index'
 import { mapState } from 'vuex'
+import {
+  publishAssetPageContext,
+  clearAssetPageContext
+} from '@/components/Apps/ChatAi/utils/pageContext'
 
 export default {
   components: {
@@ -204,13 +210,23 @@ export default {
     }
   },
   watch: {
+    url() {
+      clearAssetPageContext(this)
+    },
+    category() {
+      clearAssetPageContext(this)
+    },
     optionInfo(iNew) {
       this.defaultConfig.columnsMeta.gathered_info.formatterArgs['info'] = iNew
     },
     helpMessage() {
       this.helpAlertVisible = true
     },
+    '$store.getters.currentOrg.id'() {
+      clearAssetPageContext(this)
+    },
     $route(iNew, old) {
+      clearAssetPageContext(this)
       const tab = iNew.query.tab
       const oldTab = old.query.tab
       if (tab !== oldTab && tab !== 'all') {
@@ -229,7 +245,19 @@ export default {
   activated() {
     this.setRecentPlatforms()
   },
+  deactivated() {
+    clearAssetPageContext(this)
+  },
+  beforeUnmount() {
+    clearAssetPageContext(this)
+  },
   methods: {
+    clearAssistantSelection() {
+      clearAssetPageContext(this)
+    },
+    updateAssistantSelection(rows) {
+      publishAssetPageContext(this, this.$route, this.$store.getters.currentOrg, rows)
+    },
     async updateOrCloneAsset(row, action) {
       this.createDrawer = this.drawer[row.category.value]
 

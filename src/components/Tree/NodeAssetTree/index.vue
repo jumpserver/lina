@@ -2,7 +2,6 @@
   <div
     :style="treeStyle"
     :class="{
-      'has-tree-hint': searchState.truncated || (latestChildTruncation && !searchState.active),
       'is-fill-height': treeSetting.fillHeight,
       'is-search-visible': treeSetting.showSearch && searchVisible
     }"
@@ -112,6 +111,21 @@
                     class="x-tree-settings__radio"
                   >
                     {{ option.label }}
+                  </el-radio>
+                </el-radio-group>
+              </li>
+            </template>
+
+            <template v-if="treeSetting.showAccountScope">
+              <li v-if="hasToolOperations" class="x-tree-tools__divider" />
+              <li class="x-tree-settings__title">{{ $t('AccountScope') }}</li>
+              <li class="x-tree-settings__radio-list" @click.capture="closeToolsDropdown">
+                <el-radio-group :model-value="metricMode" @change="handleMetricModeChange">
+                  <el-radio class="x-tree-settings__radio" value="account_all">
+                    {{ $t('AssetScopeWithDescendants') }}
+                  </el-radio>
+                  <el-radio class="x-tree-settings__radio" value="account_direct">
+                    {{ $t('AssetScopeDirect') }}
                   </el-radio>
                 </el-radio-group>
               </li>
@@ -234,19 +248,6 @@
       </div>
     </transition>
 
-    <div v-if="searchState.truncated" class="node-asset-tree__search-hint">
-      {{ searchTruncatedText }}
-    </div>
-
-    <div
-      v-if="latestChildTruncation && !searchState.active"
-      class="node-asset-tree__search-hint node-asset-tree__search-hint--warning"
-      role="status"
-    >
-      <el-icon><InfoFilled /></el-icon>
-      <span>{{ childTruncatedText }}</span>
-    </div>
-
     <XTree
       ref="tree"
       :setting="xTreeSetting"
@@ -254,7 +255,17 @@
       @url-change="$emit('url-change', $event)"
     >
       <template #node-icon="{ data, expanded, leaf }">
-        <Icon v-if="isAsset(data)" :icon="getAssetIcon(data)" class="node-asset-tree__asset-icon" />
+        <img
+          v-if="isAsset(data) && usesPlatformAssetIcons"
+          :src="getAssetPlatformIcon(data)"
+          alt=""
+          class="node-asset-tree__asset-icon node-asset-tree__platform-icon"
+        />
+        <Icon
+          v-else-if="isAsset(data)"
+          :icon="getAssetIcon(data)"
+          class="node-asset-tree__asset-icon"
+        />
         <TreeFolderIcon
           v-else
           :leaf="leaf"
@@ -264,7 +275,12 @@
       </template>
       <template #node-actions="{ data, expanded }">
         <span
-          v-if="expanded && !isAsset(data) && !searchState.active"
+          v-if="
+            treeSetting.showNodeActions !== false &&
+            expanded &&
+            !isAsset(data) &&
+            !searchState.active
+          "
           class="node-asset-tree__node-tools"
           @click.stop
           @pointerdown.stop
@@ -321,8 +337,8 @@
           </el-dropdown>
         </span>
       </template>
-      <template #rMenu>
-        <slot name="rMenu" />
+      <template #rMenu="slotProps">
+        <slot name="rMenu" v-bind="slotProps" />
       </template>
     </XTree>
   </div>
@@ -332,6 +348,9 @@
 import Icon from '@/components/Widgets/Icon'
 import TreeFolderIcon from '@/components/Tree/TreeFolderIcon.vue'
 import XTree from '@/components/Tree/XTree/index.vue'
+import { createXTreeSetting, X_TREE_LOAD_MODES } from '@/components/Tree/XTree/config'
+import { combineNodeAssetPagination } from './pagination'
+import { loadPlatformIcon } from '@/utils/jms/index'
 import {
   isNodeAssetMetricMode,
   NODE_ASSET_METRIC_MODES,
@@ -340,6 +359,11 @@ import {
   toNodeAssetResource
 } from './provider'
 
+const SETTINGS_CACHE_PREFIX = 'jms.node-asset-tree.settings.'
+const assetNameCollator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
+const MAX_SEARCH_RESULTS = 100
+const ASSET_ORDER_VALUES = Object.freeze(['name', 'address'])
+const NODE_DISPLAY_VALUES = Object.freeze(['both', 'nodes', 'assets'])
 const ASSET_ICON_MAP = Object.freeze({
   database: 'fa-database',
   device: 'fa-network-wired',
@@ -354,11 +378,6 @@ const ASSET_ICON_MAP = Object.freeze({
   unix: 'fa-terminal',
   windows: 'fa-brands fa-windows'
 })
-
-const SETTINGS_CACHE_PREFIX = 'jms.node-asset-tree.settings.'
-const MAX_ASSET_SEARCH_RESULTS = 100
-const ASSET_ORDER_VALUES = Object.freeze(['name', 'address'])
-const NODE_DISPLAY_VALUES = Object.freeze(['both', 'nodes', 'assets'])
 
 function getAllowedMetricModes(setting = {}) {
   const configured = Array.isArray(setting.metricModes)
@@ -512,32 +531,51 @@ export default {
   },
   computed: {
     treeSetting() {
-      return {
+      return createXTreeSetting({
         showCollapse: true,
         showMetrics: true,
         showPermissionScope: true,
+        showAccountScope: false,
         showAssetOrder: true,
         showRefresh: true,
         showSearch: true,
         fillHeight: true,
         height: '100%',
         minHeight: '360px',
-        childrenAssetLimit: 1000,
-        searchLimit: 1000,
-        ...this.setting
-      }
+        childrenAssetLimit: 100,
+        childrenNodeLimit: 100,
+        searchLimit: MAX_SEARCH_RESULTS,
+        ...this.setting,
+        loadMode: this.setting.loadMode || X_TREE_LOAD_MODES.LAZY
+      })
     },
     provider() {
       return this.dataSource || this.treeSetting.dataSource || {}
+    },
+    mutationDataSource() {
+      return Object.fromEntries(
+        ['create', 'update', 'remove', 'move']
+          .filter((operation) => typeof this.provider[operation] === 'function')
+          .map((operation) => [operation, this.provider[operation]])
+      )
+    },
+    usesPlatformAssetIcons() {
+      return this.treeSetting.assetIconMode === 'platform'
     },
     effectiveMetricMode() {
       return this.metricMode
     },
     activeAmountTypes() {
-      return this.effectiveMetricMode.startsWith('permission_') ? ['node', 'asset'] : ['node']
+      if (this.treeSetting.countResource === 'none') {
+        return []
+      }
+      return /^(permission|account)_/.test(this.effectiveMetricMode) ? ['node', 'asset'] : ['node']
     },
     assetLoadLimit() {
-      return Math.min(Math.max(1, Number(this.treeSetting.childrenAssetLimit) || 1000), 1000)
+      return Math.min(Math.max(1, Number(this.treeSetting.childrenAssetLimit) || 100), 1000)
+    },
+    nodeLoadLimit() {
+      return Math.min(Math.max(1, Number(this.treeSetting.childrenNodeLimit) || 100), 100)
     },
     treeStyle() {
       const toCssSize = (value, fallback) => {
@@ -554,12 +592,12 @@ export default {
     permissionOptions() {
       return [
         {
-          label: this.$t('PermissionScopeEffective'),
+          label: this.$t('NodeAssetTreePermissionScopeEffective'),
           metricValue: 'permission_effective',
           scopeValue: 'effective'
         },
         {
-          label: this.$t('PermissionScopeDirect'),
+          label: this.$t('NodeAssetTreePermissionScopeDirect'),
           metricValue: 'permission_direct',
           scopeValue: 'direct'
         }
@@ -633,6 +671,7 @@ export default {
         this.hasToolOperations ||
         this.treeSetting.showMetrics ||
         this.treeSetting.showPermissionScope ||
+        this.treeSetting.showAccountScope ||
         this.treeSetting.showAssetOrder
       )
     },
@@ -662,42 +701,14 @@ export default {
     showSearchPlaceholderTooltip() {
       return !this.searchKeyword && this.searchPlaceholderOverflow
     },
-    searchTruncatedText() {
-      const keyMap = {
-        all: 'NodeAssetTreeSearchAllTruncated',
-        asset: 'NodeAssetTreeSearchAssetsTruncated',
-        node: 'NodeAssetTreeSearchNodesTruncated'
-      }
-      const key = keyMap[this.searchState.target] || keyMap.all
-      return this.$t(key, {
-        assetLimit:
-          this.searchState.assetLimit || this.searchState.limit || this.treeSetting.searchLimit,
-        limit: this.searchState.limit || this.treeSetting.searchLimit,
-        nodeLimit:
-          this.searchState.nodeLimit || this.searchState.limit || this.treeSetting.searchLimit
-      })
-    },
-    latestChildTruncation() {
-      return this.childTruncations.at(-1) || null
-    },
-    childTruncatedText() {
-      const item = this.latestChildTruncation
-      if (!item) {
-        return ''
-      }
-      return this.$t('NodeAssetTreeChildrenAssetsTruncated', {
-        limit: item.limit,
-        name: item.name
-      })
-    },
     currentSearchContext() {
-      const configuredLimit = Number(this.treeSetting.searchLimit) || 1000
+      const configuredLimit = Math.max(
+        1,
+        Number(this.treeSetting.searchLimit) || MAX_SEARCH_RESULTS
+      )
       return {
         includeParents: this.searchTarget === 'asset' ? this.searchIncludeParents : true,
-        limit:
-          this.searchTarget === 'asset'
-            ? Math.min(configuredLimit, MAX_ASSET_SEARCH_RESULTS)
-            : configuredLimit,
+        limit: Math.min(configuredLimit, MAX_SEARCH_RESULTS),
         target: this.searchTarget
       }
     },
@@ -709,12 +720,16 @@ export default {
         ...this.treeSetting,
         amountPredicate: this.shouldHandleAmount,
         amountTypes: this.activeAmountTypes,
+        countUrl: this.treeSetting.countResource === 'none' ? '' : this.treeSetting.countUrl,
         callback: {
           ...this.treeSetting.callback,
           onSearchStateChange: this.handleSearchStateChange,
           onSelected: this.handleSelected
         },
-        dataSource: undefined,
+        // NodeAssetTree owns structure, search and metric normalization. XTree
+        // only receives mutations so editable domain trees can reuse its
+        // create, rename, delete and move behavior without loading twice.
+        dataSource: this.mutationDataSource,
         getAmountKey: (node) => {
           const resource = toNodeAssetResource(node)
           return `${resource.type}:${resource.resourceId}`
@@ -724,17 +739,21 @@ export default {
           return `${item?.type || 'node'}:${id}`
         },
         getNodeLabel: this.treeSetting.getNodeLabel || this.getResourceLabel,
+        getChildrenViewOptions: this.getNodeViewOptions,
         getNodeKey: (node) => node?.meta?.data?.tree_id ?? node?.id,
         getNodeAmountTitle: this.getMetricAmountTitle,
         initialData,
         lazyLoad: true,
         loadChildren: this.loadChildren,
-        loadNodeAmounts: this.loadMetrics,
+        loadNodeAmounts:
+          this.treeSetting.countResource !== 'none' && typeof this.provider.metrics === 'function'
+            ? this.loadMetrics
+            : undefined,
         loadRoot: this.loadRoot,
         readOnly: this.treeSetting.readOnly !== false,
         search: this.search,
         showAssetScope: false,
-        showAssets: true,
+        showAssets: this.treeSetting.showAssets !== false,
         showCollapse: false,
         showRefresh: false,
         showSearch: false,
@@ -787,10 +806,16 @@ export default {
       const response = await this.provider.root({
         ...payload,
         assetOrder: this.assetOrder,
-        assetsLimit: this.assetLoadLimit
+        assetsLimit: this.assetLoadLimit,
+        nodeLimit: this.nodeLoadLimit
       })
       const normalized = normalizeNodeAssetResponse(
-        this.withMetricValues(response, this.metricMode)
+        this.withMetricValues(
+          combineNodeAssetPagination(response, {
+            includeAssets: this.treeSetting.showAssets !== false
+          }),
+          this.metricMode
+        )
       )
       this.updateChildTruncation(this.findResponseRootNode(normalized), normalized, {
         identity: '__root__',
@@ -799,20 +824,26 @@ export default {
       })
       return normalized
     },
-    async loadChildren({ level, parent, signal }) {
+    async loadChildren({ level, next, parent, signal }) {
       if (typeof this.provider.children !== 'function') {
         return []
       }
+      const includeAssets =
+        this.treeSetting.showAssets !== false &&
+        !(this.searchState.active && this.searchState.target === 'node')
       const response = await this.provider.children({
         assetOrder: this.getNodeSetting(parent, 'assetOrder', this.assetOrder),
         assetsLimit: this.assetLoadLimit,
-        includeAssets: !(this.searchState.active && this.searchState.target === 'node'),
+        includeAssets,
         level,
+        next,
+        nodeLimit: this.nodeLoadLimit,
         parent: toNodeAssetResource(parent),
         signal
       })
-      this.updateChildTruncation(parent, response)
-      return normalizeNodeAssetResponse(this.withMetricValues(response, this.effectiveMetricMode))
+      const paginated = combineNodeAssetPagination(response, { includeAssets })
+      this.updateChildTruncation(parent, paginated)
+      return normalizeNodeAssetResponse(this.withMetricValues(paginated, this.effectiveMetricMode))
     },
     async search(payload) {
       if (typeof this.provider.search !== 'function') {
@@ -871,7 +902,7 @@ export default {
         return
       }
       this.childTruncations = this.childTruncations.filter((item) => item.identity !== identity)
-      if (!response?.assets_truncated) {
+      if (response?.asset_pagination || !response?.assets_truncated) {
         return
       }
       const truncation = {
@@ -992,6 +1023,9 @@ export default {
       const resource = toNodeAssetResource(data)
       const context = {
         metricMode: this.effectiveMetricMode,
+        ...(this.effectiveMetricMode.startsWith('account_')
+          ? { assetScope: this.effectiveMetricMode === 'account_direct' ? '1' : '0' }
+          : {}),
         permissionAll: this.permissionScope === 'direct' ? '0' : '1',
         permissionScope: this.permissionScope,
         search: this.searchState.active ? { ...this.searchState } : null
@@ -1018,7 +1052,7 @@ export default {
       }
       this.persistSettings()
       if (previousMode !== value) {
-        this.reloadVisibleMetrics({ fresh: false, resetNormal: true })
+        this.reloadVisibleMetrics({ allLoaded: true, fresh: false, resetNormal: true })
         this.notifyMetricModeChange(value)
       }
       if (previousScope !== this.permissionScope) {
@@ -1032,6 +1066,14 @@ export default {
       }
       this.treeSetting.callback?.onMetricModeChange?.(value, context)
       this.$emit('metric-change', value, context)
+      if (value.startsWith('account_')) {
+        const current = this.getSelectedNodes()[0] || null
+        const scope = value === 'account_direct' ? '1' : '0'
+        this.treeSetting.callback?.onAssetScopeChange?.(scope, current)
+        if (current) {
+          this.handleSelected(null, current)
+        }
+      }
     },
     handlePermissionScopeChange(value) {
       this.setPermissionScope(value)
@@ -1051,7 +1093,7 @@ export default {
       }
       this.persistSettings()
       if (previousMode !== this.metricMode) {
-        this.reloadVisibleMetrics({ fresh: false, resetNormal: true })
+        this.reloadVisibleMetrics({ allLoaded: true, fresh: false, resetNormal: true })
         this.notifyMetricModeChange(this.metricMode)
       }
       this.notifyPermissionScopeChange(value)
@@ -1144,17 +1186,11 @@ export default {
       const secondary = order === 'address' ? 'name' : 'address'
       const valueOf = (item, field) => String(item?.[field] ?? item?.meta?.data?.[field] ?? '')
       assets.sort((left, right) => {
-        const primaryResult = valueOf(left, order).localeCompare(valueOf(right, order), undefined, {
-          numeric: true,
-          sensitivity: 'base'
-        })
+        const primaryResult = assetNameCollator.compare(valueOf(left, order), valueOf(right, order))
         if (primaryResult) {
           return primaryResult
         }
-        return valueOf(left, secondary).localeCompare(valueOf(right, secondary), undefined, {
-          numeric: true,
-          sensitivity: 'base'
-        })
+        return assetNameCollator.compare(valueOf(left, secondary), valueOf(right, secondary))
       })
       return [...nodes, ...assets]
     },
@@ -1202,7 +1238,7 @@ export default {
       }
       const name = data?.meta?.data?.name || data?.name || ''
       const address = data?.address || data?.meta?.data?.address || ''
-      return name && address ? `${name}（${address}）` : name || address
+      return name && address ? `${name} (${address})` : name || address
     },
     shouldHandleAmount(data) {
       return this.activeAmountTypes.includes(data?.meta?.type)
@@ -1216,11 +1252,33 @@ export default {
       ).toLowerCase()
       return ASSET_ICON_MAP[skin] || 'fa-server'
     },
+    getAssetPlatformIcon(data) {
+      const asset = data?.meta?.data || {}
+      const platform = asset.platform || data?.platform || {}
+      const platformName = asset.platform_name || platform.name || data?.platform_name || ''
+      const platformType =
+        asset.platform_type ||
+        platform.type?.value ||
+        platform.type ||
+        data?.platform_type ||
+        data?.iconSkin ||
+        'other'
+      return loadPlatformIcon(platformName, String(platformType).toLowerCase())
+    },
     getMetricAmountTitle(node) {
+      if (this.effectiveMetricMode.startsWith('account_')) {
+        if (this.isAsset(node)) {
+          return this.$t('AssetTreeAmountTipAccount')
+        }
+        return this.$t(
+          this.effectiveMetricMode === 'account_direct'
+            ? 'NodeTreeAmountTipAccountDirect'
+            : 'NodeTreeAmountTipAccountAll'
+        )
+      }
       const keyMap = {
         asset_all: 'NodeAssetTreeAmountTipAssetAll',
         asset_direct: 'NodeAssetTreeAmountTipAssetDirect',
-        permission_effective: 'NodeAssetTreeAmountTipPermissionEffective',
         search_assets: 'NodeAssetTreeAmountTipSearchAssets'
       }
       if (this.effectiveMetricMode === 'permission_direct') {
@@ -1228,6 +1286,13 @@ export default {
           this.isAsset(node)
             ? 'NodeAssetTreeAmountTipPermissionAssetDirect'
             : 'NodeAssetTreeAmountTipPermissionNodeDirect'
+        )
+      }
+      if (this.effectiveMetricMode === 'permission_effective') {
+        return this.$t(
+          this.isAsset(node)
+            ? 'NodeAssetTreeAmountTipPermissionAssetEffective'
+            : 'NodeAssetTreeAmountTipPermissionNodeEffective'
         )
       }
       const key = keyMap[this.effectiveMetricMode]
@@ -1376,40 +1441,23 @@ export default {
   }
 }
 
-.node-asset-tree__search-hint {
-  display: flex;
-  flex: none;
-  align-items: flex-start;
-  gap: 5px;
-  padding: 5px 10px;
-  color: var(--el-text-color-secondary);
-  font-size: 12px;
-  background: var(--el-fill-color-lighter);
-}
-
-.node-asset-tree__search-hint--warning {
-  color: var(--el-color-warning-dark-2);
-  background: var(--el-color-warning-light-9);
-  cursor: default;
-  user-select: none;
-
-  .el-icon {
-    flex: none;
-    margin-top: 1px;
-  }
-}
-
 .node-asset-tree__asset-icon,
 .node-asset-tree__node-icon {
   flex: none;
-  width: 16px;
-  margin-right: 4px;
+  width: 14px;
+  height: 14px;
   text-align: center;
 }
 
 .node-asset-tree__asset-icon {
-  color: var(--el-color-info);
-  font-size: 13px;
+  color: var(--el-text-color-secondary);
+  font-size: 14px;
+}
+
+.node-asset-tree__platform-icon {
+  display: inline-block;
+  height: 14px;
+  object-fit: contain;
 }
 
 .node-asset-tree__node-tools {
@@ -1433,22 +1481,25 @@ export default {
   width: 22px;
   height: 24px;
   padding: 0;
-  border: 0;
+  border: 0 !important;
   border-radius: 4px;
   outline: none;
   color: var(--el-text-color-secondary);
   background: transparent;
+  box-shadow: none !important;
   cursor: pointer;
 
   .el-icon {
-    transform: rotate(90deg);
+    font-size: 12px;
   }
 
   &:hover,
   &:focus-visible,
   &[aria-expanded='true'] {
     color: var(--el-text-color-primary);
-    background: var(--el-fill-color-dark);
+    border: 0 !important;
+    background: transparent;
+    box-shadow: none !important;
   }
 }
 
@@ -1459,17 +1510,13 @@ export default {
 }
 
 .node-asset-tree :deep(.el-tree-node__content:hover) .node-asset-tree__node-tools {
-  background: var(--el-fill-color-light);
+  background: transparent;
 }
 
 .node-asset-tree
   :deep(.el-tree-node.is-current > .el-tree-node__content:hover)
   .node-asset-tree__node-tools {
-  background: var(--el-color-primary-light-9);
-}
-
-.node-asset-tree :deep(.el-tree-node__content) {
-  border-radius: 6px;
+  background: transparent;
 }
 
 .node-asset-tree :deep(.x-tree__header-actions) {

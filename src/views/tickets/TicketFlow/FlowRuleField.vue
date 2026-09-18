@@ -1,7 +1,7 @@
 <template>
   <div class="flow-rule-field">
     <div v-for="(item, i) of approveData" :key="i">
-      <el-card class="box-card">
+      <el-card :class="{ 'is-error': ruleErrors[i] }" class="box-card">
         <template #header>
           <div class="clearfix">
             <span>{{ `${i + 1} ${$t('LevelApproval')}` }}</span>
@@ -14,8 +14,12 @@
           :attrs="userComponentMeta.el.attrs"
           @input="handleInput(i, $event)"
         />
+        <div v-if="ruleErrors[i]" class="rule-error" role="alert">
+          {{ ruleErrors[i] }}
+        </div>
       </el-card>
     </div>
+    <div v-if="generalError" class="rule-error" role="alert">{{ generalError }}</div>
   </div>
 </template>
 
@@ -42,6 +46,10 @@ export default {
     level: {
       type: Number,
       default: 1
+    },
+    errors: {
+      type: [String, Array, Object],
+      default: () => []
     }
   },
   data() {
@@ -53,6 +61,15 @@ export default {
   computed: {
     approveData() {
       return this.getSortedRules()
+    },
+    ruleErrors() {
+      if (!Array.isArray(this.errors)) {
+        return []
+      }
+      return this.errors.map((error) => this.getErrorMessage(error))
+    },
+    generalError() {
+      return Array.isArray(this.errors) ? '' : this.getErrorMessage(this.errors)
     }
   },
   watch: {
@@ -70,6 +87,21 @@ export default {
     }
   },
   methods: {
+    getErrorMessage(error) {
+      if (Array.isArray(error)) {
+        return error
+          .map((item) => this.getErrorMessage(item))
+          .filter(Boolean)
+          .join('; ')
+      }
+      if (error && typeof error === 'object') {
+        return Object.values(error)
+          .map((item) => this.getErrorMessage(item))
+          .filter(Boolean)
+          .join('; ')
+      }
+      return String(error || '')
+    },
     getSortedRules() {
       return [...this.rules].sort((a, b) => a.level - b.level)
     },
@@ -155,5 +187,16 @@ export default {
   :deep(.el-card__body) {
     padding: 10px 30px !important;
   }
+
+  &.is-error {
+    border-color: var(--el-color-danger);
+  }
+}
+
+.rule-error {
+  margin-top: 8px;
+  color: var(--el-color-danger);
+  font-size: 12px;
+  line-height: 1.4;
 }
 </style>

@@ -16,7 +16,7 @@
         <AutoDetailCard
           :fields="getDetailFields(d)"
           :object="d"
-          :title="`${d.title}(${d.type.label})`"
+          :title="`${d.title}(${ticketTypeLabel(d.type)})`"
           :url="detailUrl"
         />
       </div>
@@ -29,6 +29,7 @@ import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import Dialog from '@/components/Dialog'
 import { mapGetters } from 'vuex'
 import BaseTicketList from './BaseTicketList'
+import { getTicketTypeLabel } from './const'
 
 export default {
   name: 'AssignedTicketList',
@@ -69,6 +70,9 @@ export default {
     ...mapGetters(['currentUser'])
   },
   methods: {
+    ticketTypeLabel(type) {
+      return getTicketTypeLabel(type, this.$t)
+    },
     getAjaxData() {
       let ticketType
       const data = {}

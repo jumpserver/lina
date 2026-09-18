@@ -151,7 +151,6 @@ export default {
       }
       if (!val) {
         this.drawerVisible = false
-        this.reloadTable()
       }
     },
     drawerVisible: {
@@ -550,6 +549,7 @@ export default {
       this.$emit('detail-delete-success', payload)
     },
     handleDrawerSubmitSuccess(payload) {
+      this.reloadTable()
       this.$emit('resource-change', payload)
     },
     handleDrawerShellClose() {

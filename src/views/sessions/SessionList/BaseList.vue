@@ -1,7 +1,7 @@
 <template>
   <ListTable
     :detail-drawer="detailDrawer"
-    :header-actions="iHeaderActions"
+    :header-actions="headerActions"
     :table-config="tableConfig"
   />
 </template>
@@ -30,9 +30,9 @@ export default {
       type: Array,
       default: () => []
     },
-    headerActions: {
-      type: Object,
-      default: () => ({})
+    extraMoreActions: {
+      type: Array,
+      default: () => []
     },
     columnsShow: {
       type: Object,
@@ -186,22 +186,18 @@ export default {
           ...this.columnsMeta
         }
       },
-      defaultHeaderActions: {
-        hasLeftActions: false,
+      headerActions: {
+        hasLeftActions: this.extraMoreActions.length > 0,
+        hasCreate: false,
+        hasBulkDelete: false,
+        hasBulkUpdate: false,
+        extraMoreActions: this.extraMoreActions,
         hasImport: false,
         hasReportExport: true,
         hasDatePicker: true,
         searchConfig: {
           getUrlQuery: false
         }
-      }
-    }
-  },
-  computed: {
-    iHeaderActions() {
-      return {
-        ...this.defaultHeaderActions,
-        ...this.headerActions
       }
     }
   }

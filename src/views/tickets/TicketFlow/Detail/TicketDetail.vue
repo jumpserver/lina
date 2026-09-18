@@ -7,6 +7,7 @@ import { h } from 'vue'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import GenericTicketDetail from '@/views/tickets/TicketFlow/components/GenericTicketDetail'
 import CcUsers from '@/views/tickets/components/CcUsers'
+import { getTicketFlowLabel } from '@/views/tickets/const'
 
 export default {
   name: '',
@@ -27,7 +28,7 @@ export default {
       return [
         {
           key: this.$t('Name'),
-          value: this.object.name || this.object.type.label
+          value: getTicketFlowLabel(this.object, this.$t)
         },
         {
           key: this.$t('ApprovalLevel'),

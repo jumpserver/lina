@@ -15,7 +15,8 @@
         :content="countText"
         :disabled="!namesOverflowing"
         :hide-after="0"
-        placement="top"
+        placement="top-start"
+        popper-class="resource-select-summary__count-tooltip"
         :show-after="200"
       >
         <div
@@ -435,5 +436,14 @@ export default {
 .resource-select-summary__control:focus-within .resource-select-summary__clear {
   opacity: 1;
   pointer-events: auto;
+}
+</style>
+
+<style lang="scss">
+.resource-select-summary__count-tooltip[data-popper-placement^='top'] {
+  .el-popper__arrow {
+    left: 16px !important;
+    transform: none !important;
+  }
 }
 </style>

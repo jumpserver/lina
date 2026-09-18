@@ -121,6 +121,10 @@ export default {
     rememberActiveTab: {
       type: Boolean,
       default: false
+    },
+    clearQueryKeysOnTabChange: {
+      type: Array,
+      default: () => []
     }
   },
   emits: ['update:activeMenu', 'tab-click'],
@@ -208,10 +212,14 @@ export default {
       if (this.$route.query?.tab === newValue) {
         return
       }
+      const query = { ...this.$route.query }
+      for (const key of this.clearQueryKeysOnTabChange) {
+        delete query[key]
+      }
       this.$router.replace({
         path: this.$route.path,
         query: {
-          ...this.$route.query,
+          ...query,
           tab: newValue
         },
         hash: this.$route.hash
@@ -246,7 +254,11 @@ export default {
             this.rememberActiveTab ? localStorage.getItem(this.activeTabStorageKey) : undefined,
             this.activeMenu
           ]
-        : [this.activeMenu]
+        : [
+            this.$context.get('tab', { scope: 'overlay' }),
+            this.$route.query['tab'],
+            this.activeMenu
+          ]
 
       for (const preTab of preActiveTabs) {
         const currentTab = typeof preTab === 'object' ? preTab?.name || '' : preTab
@@ -327,7 +339,7 @@ export default {
 
 .page-submenu :deep(.el-tabs__active-bar) {
   z-index: 3;
-  bottom: 1px;
+  bottom: 0;
   display: block;
   height: 2px;
   background-color: transparent;
@@ -507,18 +519,6 @@ export default {
     &.has-tab-navigation > .tab-page-submenu {
       position: relative;
       border-bottom: 0;
-
-      &::after {
-        content: '';
-        position: absolute;
-        z-index: 3;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        height: 1px;
-        background-color: var(--panel-border-color, var(--el-border-color));
-        pointer-events: none;
-      }
     }
   }
 
@@ -603,17 +603,6 @@ export default {
   .tab-page-content :deep(.el-card) {
     overflow: visible !important;
     max-height: none !important;
-  }
-
-  // 设置页表单标签在固定 label 列内统一左对齐，避免窄宽度下贴到控件右侧。
-  .tab-page-content :deep(.form-fields .el-form-item__label-wrap) {
-    display: flex;
-    justify-content: flex-start;
-  }
-
-  .tab-page-content :deep(.form-fields .el-form-item__label) {
-    justify-content: flex-start;
-    text-align: left;
   }
 
   /*

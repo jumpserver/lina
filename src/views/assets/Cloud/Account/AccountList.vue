@@ -39,7 +39,7 @@ export default {
           url: '/api/v1/xpack/cloud/accounts/',
           permissions: {
             app: 'xpack',
-            resource: 'account'
+            resource: 'cloudaccount'
           },
           extraQuery: { category }
         },

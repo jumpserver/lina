@@ -16,7 +16,7 @@
 import { GenericListPage } from '@/layout/components'
 import { DetailFormatter, TagChoicesFormatter } from '@/components/Table/TableFormatters'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
-import { APPROVE, CLOSED, OPEN, REJECT } from './const'
+import { APPROVE, CLOSED, OPEN, REJECT, getTicketStateLabel, getTicketTypeLabel } from './const'
 
 export default {
   name: 'TicketListTable',
@@ -159,7 +159,7 @@ export default {
           type: {
             label: this.$t('Type'),
             formatter: (row) => {
-              return row.type.label
+              return getTicketTypeLabel(row.type, vm.$t)
             }
           },
           status: {
@@ -193,7 +193,7 @@ export default {
                 return mapper[row.state.value] || 'warning'
               },
               getTagLabel({ row }) {
-                return row.state.label || vm.$t('Pending')
+                return getTicketStateLabel(row.state, vm.$t) || vm.$t('Pending')
               }
             }
           },

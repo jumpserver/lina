@@ -42,6 +42,8 @@ export default {
       showPlatform: false,
       category: 'all',
       treeSetting: {
+        treeTitle: this.$t('AssetTree'),
+        treeIcon: 'fa-solid fa-sitemap',
         url: '/api/v1/assets/assets/',
         showMenu: !this.$store.getters.currentOrgIsRoot,
         showAssetScope: true,
@@ -74,9 +76,6 @@ export default {
         url
       }
       setRouterQuery(this, url, { browserOnly: true })
-      this.$nextTick(() => {
-        this.$refs.baseList?.$refs.ListTable?.reloadTable?.()
-      })
     },
     getAssetsUrl(treeNode) {
       let url = '/api/v1/assets/assets/'

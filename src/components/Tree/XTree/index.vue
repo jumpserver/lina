@@ -1,12 +1,39 @@
 <template>
   <div
-    :class="{ 'is-search-visible': treeSetting.showSearch && searchVisible }"
-    :style="{ '--x-tree-row-height': `${nodeRowHeight}px` }"
+    :class="{ 'is-search-visible': isPanelSearchVisible }"
+    :style="{
+      '--x-tree-row-height': `${nodeRowHeight}px`,
+      '--x-tree-content-width': treeContentWidth ? `${treeContentWidth}px` : '100%'
+    }"
     class="x-tree"
   >
-    <div v-if="hasTreeTools" class="x-tree__header-actions">
+    <div
+      v-if="hasTreeTools"
+      :class="{ 'has-header-search': isHeaderSearch }"
+      class="x-tree__header-actions"
+    >
+      <el-input
+        v-if="isHeaderSearch"
+        ref="searchInput"
+        v-model="searchValue"
+        :placeholder="$t('NodeFilterSearch')"
+        class="x-tree__search x-tree__header-search"
+        clearable
+        @input="handleSearchInput"
+      >
+        <template #prefix>
+          <el-icon><Search /></el-icon>
+        </template>
+      </el-input>
+      <span v-if="$slots['toolbar-prepend']" class="x-tree__toolbar-prepend">
+        <slot
+          :collapse-disabled="loading || treeData.length === 0"
+          :loading="loading"
+          name="toolbar-prepend"
+        />
+      </span>
       <el-button
-        v-if="treeSetting.showSearch"
+        v-if="hasSearchToggle"
         :aria-label="$t('TreeActionSearch')"
         :class="{ 'is-active': searchVisible }"
         class="x-tree__tool-button"
@@ -46,22 +73,26 @@
             </el-dropdown-item>
             <template v-if="treeSetting.showAssetScope">
               <li v-if="hasTreeMenuOperations" class="x-tree-tools__divider" />
-              <li class="x-tree-settings__title">{{ $t('AssetScope') }}</li>
+              <li class="x-tree-settings__title">{{ $t(`${countScopePrefix}Scope`) }}</li>
               <li class="x-tree-settings__radio-list" @click.capture="closeToolsDropdown">
                 <el-radio-group :model-value="assetScope" @change="handleAssetScopeChange">
                   <el-tooltip
-                    :content="$t('AssetScopeWithDescendantsHelp')"
+                    :content="$t(`${countScopePrefix}ScopeWithDescendantsHelp`)"
+                    :persistent="false"
                     :show-after="400"
                     placement="right"
+                    :teleported="false"
                   >
                     <el-radio class="x-tree-settings__radio" value="0">
                       {{ $t('AssetScopeWithDescendants') }}
                     </el-radio>
                   </el-tooltip>
                   <el-tooltip
-                    :content="$t('AssetScopeDirectHelp')"
+                    :content="$t(`${countScopePrefix}ScopeDirectHelp`)"
+                    :persistent="false"
                     :show-after="400"
                     placement="right"
+                    :teleported="false"
                   >
                     <el-radio class="x-tree-settings__radio" value="1">
                       {{ $t('AssetScopeDirect') }}
@@ -81,7 +112,7 @@
       name="x-tree-search"
       @after-enter="focusSearchInput"
     >
-      <div v-if="treeSetting.showSearch && searchVisible" class="x-tree__search-row">
+      <div v-if="isPanelSearchVisible" class="x-tree__search-row">
         <el-input
           ref="searchInput"
           v-model="searchValue"
@@ -119,6 +150,8 @@
           :expand-on-click-node="false"
           :filter-method="filterNode"
           :height="virtualTreeHeight"
+          :icon="treeExpandIcon"
+          :indent="nodeIndent"
           :item-size="nodeRowHeight"
           :props="virtualTreeProps"
           highlight-current
@@ -133,6 +166,7 @@
               :draggable="canDragData(data)"
               :title="getNodeTitle(data)"
               :class="{
+                'is-asset': isAssetNode(data),
                 'is-disabled': isNodeDisabled(data),
                 'is-operation-target': isOperationTarget(data),
                 'is-virtual-drop-target': isVirtualDropTarget(data)
@@ -179,8 +213,10 @@
                 <span class="x-tree__node-label">{{ getNodeLabel(data) }}</span>
                 <span
                   v-if="hasNodeAmount(data)"
-                  :title="getNodeAmountTitle(data) || undefined"
                   class="x-tree__node-amount"
+                  title=""
+                  @mouseenter="showNodeAmountTooltip($event, data)"
+                  @mouseleave="hideNodeAmountTooltip"
                 >
                   ({{ getNodeAmount(data) }})
                 </span>
@@ -201,8 +237,10 @@
           empty-text=""
           :expand-on-click-node="true"
           :filter-node-method="filterNode"
-          :lazy="treeSetting.lazyLoad"
-          :load="treeSetting.lazyLoad ? loadNode : undefined"
+          :icon="treeExpandIcon"
+          :indent="nodeIndent"
+          :lazy="isLazyLoad"
+          :load="isLazyLoad ? loadNode : undefined"
           :props="treeProps"
           highlight-current
           node-key="id"
@@ -217,6 +255,7 @@
           <template #default="{ node, data }">
             <span
               :class="{
+                'is-asset': isAssetNode(data),
                 'is-disabled': isNodeDisabled(data),
                 'is-operation-target': isOperationTarget(data)
               }"
@@ -260,8 +299,10 @@
                 </span>
                 <span
                   v-if="hasNodeAmount(data)"
-                  :title="getNodeAmountTitle(data) || undefined"
                   class="x-tree__node-amount"
+                  title=""
+                  @mouseenter="showNodeAmountTooltip($event, data)"
+                  @mouseleave="hideNodeAmountTooltip"
                 >
                   ({{ getNodeAmount(data) }})
                 </span>
@@ -278,6 +319,17 @@
         />
       </div>
     </div>
+
+    <el-tooltip
+      v-if="amountTooltipReference"
+      :content="amountTooltipContent"
+      :enterable="false"
+      :virtual-ref="amountTooltipReference"
+      :visible="true"
+      placement="top"
+      popper-class="x-tree-amount-tooltip"
+      virtual-triggering
+    />
 
     <div
       v-show="menuVisible"
@@ -302,19 +354,23 @@
           </li>
           <li v-if="item.divided" class="divider x-tree-context-menu__divider" />
         </template>
-        <slot name="rMenu" />
+        <slot :close="hideRMenu" :data="currentNode" name="rMenu" />
       </ul>
     </div>
   </div>
 </template>
 
 <script>
+import { nodeAssetMetricsPayload } from '@/components/Tree/metrics'
 import axiosRetry from 'axios-retry'
 import Icon from '@/components/Widgets/Icon'
 import TreeFolderIcon from '@/components/Tree/TreeFolderIcon.vue'
+import { ArrowRight } from '@element-plus/icons-vue'
 import { getShowCurrentAssetValue, setShowCurrentAssetValue } from '@/utils/common/index'
+import { createXTreeSetting, X_TREE_LOAD_MODES, X_TREE_SEARCH_PLACEMENTS } from './config'
 
-const DEFAULT_NODE_ROW_HEIGHT = 28
+const DEFAULT_NODE_INDENT = 14
+const DEFAULT_NODE_ROW_HEIGHT = 26
 
 function appendUrlParam(url, key, value) {
   const separator = url.includes('?') ? '&' : '?'
@@ -356,6 +412,8 @@ export default {
       treeData: [],
       normalTreeData: [],
       currentNode: null,
+      amountTooltipReference: null,
+      amountTooltipNode: null,
       structureLoading: false,
       searchLoading: false,
       treeKey: 0,
@@ -401,6 +459,9 @@ export default {
       runtimeEffectsGeneration: 0,
       treeResizeObserver: null,
       treeResizeFrame: null,
+      treeContentObserver: null,
+      treeContentWidth: 0,
+      treeContentWidthFrame: null,
       virtualDraggingNode: null,
       virtualDropTargetId: '',
       dragPreviewElement: null,
@@ -413,54 +474,70 @@ export default {
       },
       virtualTreeProps: {
         children: 'children',
+        class: (data) =>
+          this.treeSetting.childrenPagination && !data?._isLeaf ? 'x-tree-node--loadable' : '',
         label: 'name',
         value: 'id'
       }
     }
   },
   computed: {
+    amountTooltipContent() {
+      return this.amountTooltipNode ? this.getNodeAmountTitle(this.amountTooltipNode) : ''
+    },
     loading() {
       // Structure and search requests have independent generations. Once a
       // search tree is visible, a slower background root request must neither
       // clear nor keep that search result behind its loading overlay.
       return this.searchLoading || (!this.searchMode && this.structureLoading)
     },
+    expandedTreeRowEntries() {
+      // Metrics live in a separate map, so count updates do not invalidate
+      // the flattened structure used by scroll/pagination calculations.
+      return this.collectExpandedTreeRowEntries()
+    },
     treeSetting() {
-      const merged = _.merge(
-        {
-          showDefaultMenu: true,
-          showMenu: false,
-          showCreate: true,
-          showDelete: true,
-          showUpdate: true,
-          showSearch: false,
-          showCollapse: false,
-          showRefresh: false,
-          showAssetScope: false,
-          toolsPlacement: 'bottom-start',
-          toolsTeleported: true,
-          showAssets: false,
-          hasRightMenu: true,
-          selectSyncToRoute: true,
-          structureUrl: '',
-          initialData: null,
-          initialAmounts: null,
-          initialAssetScope: '',
-          countUrl: '',
-          countBatchSize: 100,
-          countProgressiveBatchSize: 100,
-          amountTypes: ['node'],
-          operationNodeId: '',
-          readOnly: false,
-          nodeRowHeight: DEFAULT_NODE_ROW_HEIGHT,
-          lazyLoad: true,
-          virtualThreshold: 1000,
-          virtualize: true,
-          virtualizeSearch: true,
-          menu: [],
-          callback: {}
-        },
-        this.setting
+      const merged = createXTreeSetting(
+        _.merge(
+          {
+            showDefaultMenu: true,
+            showMenu: false,
+            showCreate: true,
+            showDelete: true,
+            showUpdate: true,
+            showSearch: false,
+            searchPlacement: X_TREE_SEARCH_PLACEMENTS.PANEL,
+            showCollapse: false,
+            showRefresh: false,
+            showAssetScope: false,
+            toolsPlacement: 'bottom-start',
+            toolsTeleported: true,
+            showAssets: false,
+            hasRightMenu: true,
+            selectSyncToRoute: true,
+            structureUrl: '',
+            initialData: null,
+            initialAmounts: null,
+            initialAssetScope: '',
+            countUrl: '',
+            countProgressiveBatchSize: 100,
+            childrenPagination: false,
+            nodeIndent: DEFAULT_NODE_INDENT,
+            amountTypes: ['node'],
+            amountInLabel: false,
+            operationNodeId: '',
+            readOnly: false,
+            nodeRowHeight: DEFAULT_NODE_ROW_HEIGHT,
+            initialExpandedKeys: null,
+            lazyLoad: true,
+            virtualThreshold: 1000,
+            virtualize: true,
+            virtualizeSearch: true,
+            menu: [],
+            callback: {}
+          },
+          this.setting
+        )
       )
       // Lodash merges arrays by index, but amountTypes is a replace-style
       // allowlist. Preserve an explicitly empty list and avoid leaking the
@@ -470,11 +547,36 @@ export default {
       }
       return merged
     },
+    isLazyLoad() {
+      return this.treeSetting.loadMode === X_TREE_LOAD_MODES.LAZY
+    },
     nodeRowHeight() {
       return Math.max(1, Number(this.treeSetting.nodeRowHeight) || DEFAULT_NODE_ROW_HEIGHT)
     },
+    nodeIndent() {
+      const indent = Number(this.treeSetting.nodeIndent)
+      return Number.isFinite(indent) ? Math.max(0, indent) : DEFAULT_NODE_INDENT
+    },
+    treeExpandIcon() {
+      return ArrowRight
+    },
+    isHeaderSearch() {
+      return (
+        this.treeSetting.showSearch &&
+        this.treeSetting.searchPlacement === X_TREE_SEARCH_PLACEMENTS.HEADER
+      )
+    },
+    hasSearchToggle() {
+      return this.treeSetting.showSearch && !this.isHeaderSearch
+    },
+    isPanelSearchVisible() {
+      return this.hasSearchToggle && this.searchVisible
+    },
     hasTreeMenuOperations() {
       return this.treeSetting.showCollapse || this.treeSetting.showRefresh
+    },
+    countScopePrefix() {
+      return this.treeSetting.countResource === 'account' ? 'Account' : 'Asset'
     },
     hasTreeMenu() {
       return (
@@ -484,7 +586,9 @@ export default {
       )
     },
     hasTreeTools() {
-      return this.treeSetting.showSearch || this.hasTreeMenu
+      return (
+        Boolean(this.$slots['toolbar-prepend']) || this.treeSetting.showSearch || this.hasTreeMenu
+      )
     },
     defaultMenu() {
       return [
@@ -493,21 +597,30 @@ export default {
           name: this.$t('CreateNode'),
           icon: 'fa-plus-square-o',
           callback: this.createTreeNode,
-          has: () => this.treeSetting.showCreate
+          has: (node) =>
+            typeof this.treeSetting.showCreate === 'function'
+              ? this.treeSetting.showCreate(node)
+              : this.treeSetting.showCreate
         },
         {
           id: 'm_edit',
           name: this.$t('RenameNode'),
           icon: 'fa-pencil-square-o',
           callback: this.startRename,
-          has: () => this.treeSetting.showUpdate
+          has: (node) =>
+            typeof this.treeSetting.showUpdate === 'function'
+              ? this.treeSetting.showUpdate(node)
+              : this.treeSetting.showUpdate
         },
         {
           id: 'm_del',
           name: this.$t('DeleteNode'),
           icon: 'fa-minus-square',
           callback: this.removeTreeNode,
-          has: () => this.treeSetting.showDelete
+          has: (node) =>
+            typeof this.treeSetting.showDelete === 'function'
+              ? this.treeSetting.showDelete(node)
+              : this.treeSetting.showDelete
         }
       ]
     },
@@ -526,23 +639,39 @@ export default {
       return (
         this.treeSetting.virtualize !== false &&
         (!this.searchMode || this.treeSetting.virtualizeSearch !== false) &&
-        (this.searchMode || !this.treeSetting.showAssets) &&
-        this.treeNodeCount >= this.treeSetting.virtualThreshold
+        (this.searchMode || !this.treeSetting.showAssets || this.treeSetting.childrenPagination) &&
+        ((!this.searchMode && this.treeSetting.childrenPagination) ||
+          this.treeNodeCount >= this.treeSetting.virtualThreshold)
       )
     },
-    initialExpandedKeys() {
+    initialExpandedKeys(_vm, previous) {
+      // TreeV2 resets expansion whenever this prop gets a new array. Metric
+      // settings may change without changing the initial expansion itself.
+      const stableKeys = (keys) =>
+        Array.isArray(previous) &&
+        keys.length === previous.length &&
+        keys.every((key, index) => key === previous[index])
+          ? previous
+          : keys
       if (!this.treeData.length) {
-        return []
+        return stableKeys([])
       }
       if (!this.searchMode) {
+        const configuredKeys =
+          typeof this.treeSetting.initialExpandedKeys === 'function'
+            ? this.treeSetting.initialExpandedKeys({ nodes: this.treeData, tree: this })
+            : this.treeSetting.initialExpandedKeys
+        if (Array.isArray(configuredKeys)) {
+          return stableKeys([...configuredKeys])
+        }
         if (
           this.$store.getters.currentOrgIsRoot &&
           this.treeSetting.expandRootInGlobalOrg !== true
         ) {
-          return []
+          return stableKeys([])
         }
         const keys = this.treeData.filter((node) => node.open).map((node) => node.id)
-        return keys.length ? keys : [this.treeData[0].id]
+        return stableKeys(keys.length ? keys : [this.treeData[0].id])
       }
       const keys = []
       const stack = [...this.treeData]
@@ -553,7 +682,7 @@ export default {
           stack.push(...node.children)
         }
       }
-      return keys
+      return stableKeys(keys)
     },
     menuStyle() {
       return {
@@ -564,6 +693,12 @@ export default {
   },
   created() {
     this.debouncedSearch = _.debounce(this.searchTree, 200)
+  },
+  watch: {
+    treeKey() {
+      this.hideNodeAmountTooltip()
+      this.scheduleTreeContentWidth()
+    }
   },
   mounted() {
     this.setupRuntimeEffects()
@@ -585,6 +720,26 @@ export default {
     this.removeDragPreview()
   },
   methods: {
+    getDataSourcePayload(operation, payload = {}) {
+      const basePayload = {
+        operation,
+        ...payload,
+        tree: this
+      }
+      const source = this.treeSetting.dataSourceContext
+      const context = typeof source === 'function' ? source(basePayload) : source
+      return {
+        ...(context || {}),
+        ...basePayload
+      }
+    },
+    loadFromDataSource(operation, payload = {}) {
+      const loader = this.treeSetting.dataSource?.[operation]
+      if (typeof loader !== 'function') {
+        return undefined
+      }
+      return loader(this.getDataSourcePayload(operation, payload))
+    },
     setupRuntimeEffects() {
       if (this.runtimeEffectsActive) {
         return
@@ -603,6 +758,7 @@ export default {
       })
     },
     teardownRuntimeEffects({ preserveAmountRefresh = false } = {}) {
+      this.hideNodeAmountTooltip()
       this.runtimeEffectsActive = false
       this.runtimeEffectsGeneration += 1
       this.hideRMenu()
@@ -612,9 +768,13 @@ export default {
       document.removeEventListener('scroll', this.handleDocumentAmountScroll, true)
       this.treeResizeObserver?.disconnect()
       this.treeResizeObserver = null
+      this.treeContentObserver?.disconnect()
+      this.treeContentObserver = null
       window.cancelAnimationFrame(this.treeResizeFrame)
+      window.cancelAnimationFrame(this.treeContentWidthFrame)
       window.cancelAnimationFrame(this.searchFocusFrame)
       this.treeResizeFrame = null
+      this.treeContentWidthFrame = null
       this.searchFocusFrame = null
       this.cancelAmountLoading({ preserveFresh: preserveAmountRefresh })
     },
@@ -640,11 +800,13 @@ export default {
           if (nextHeight !== this.virtualTreeHeight) {
             this.virtualTreeHeight = nextHeight
           }
+          this.scheduleTreeContentWidth()
         })
       }
       this.$nextTick(() => {
         if (this.isRuntimeEffectsCurrent(generation)) {
           updateHeight()
+          this.setupTreeContentObserver(generation)
         }
       })
       if (typeof ResizeObserver !== 'undefined') {
@@ -659,6 +821,62 @@ export default {
             observer.observe(this.$refs.treeBody)
           }
         })
+      }
+    },
+    setupTreeContentObserver(generation = this.runtimeEffectsGeneration) {
+      this.treeContentObserver?.disconnect()
+      this.treeContentObserver = null
+      const viewport = this.$refs.treeViewport
+      if (!viewport || typeof MutationObserver === 'undefined') {
+        this.scheduleTreeContentWidth()
+        return
+      }
+      const observer = new MutationObserver(() => {
+        if (this.isRuntimeEffectsCurrent(generation)) {
+          this.scheduleTreeContentWidth()
+        }
+      })
+      observer.observe(viewport, {
+        childList: true,
+        characterData: true,
+        subtree: true
+      })
+      this.treeContentObserver = observer
+      this.scheduleTreeContentWidth()
+    },
+    scheduleTreeContentWidth() {
+      if (!this.runtimeEffectsActive) {
+        return
+      }
+      window.cancelAnimationFrame(this.treeContentWidthFrame)
+      const generation = this.runtimeEffectsGeneration
+      this.treeContentWidthFrame = window.requestAnimationFrame(() => {
+        this.treeContentWidthFrame = null
+        if (this.isRuntimeEffectsCurrent(generation)) {
+          this.updateTreeContentWidth()
+        }
+      })
+    },
+    updateTreeContentWidth() {
+      const scrollElement = this.getTreeAmountScrollElement()
+      const viewport = this.$refs.treeViewport
+      if (!scrollElement || !viewport) {
+        return
+      }
+      let nextWidth = Math.max(0, scrollElement.clientWidth)
+      viewport.querySelectorAll('.el-tree-node__content').forEach((row) => {
+        const rowRect = row.getBoundingClientRect()
+        const contentElements = row.querySelectorAll(
+          '.x-tree__node-label, .x-tree__node-amount, .x-tree__rename'
+        )
+        contentElements.forEach((element) => {
+          const elementRect = element.getBoundingClientRect()
+          nextWidth = Math.max(nextWidth, elementRect.right - rowRect.left + 8)
+        })
+      })
+      nextWidth = Math.ceil(nextWidth)
+      if (nextWidth !== this.treeContentWidth) {
+        this.treeContentWidth = nextWidth
       }
     },
     yieldToBrowser() {
@@ -693,11 +911,49 @@ export default {
       const amount = this.getNodeAmount(node)
       return Number.isFinite(amount) ? `${label} (${amount})` : label
     },
+    isAssetNode(node) {
+      return node?.meta?.type === 'asset'
+    },
     getNodeAmountTitle(node) {
       if (typeof this.treeSetting.getNodeAmountTitle === 'function') {
-        return this.treeSetting.getNodeAmountTitle(node, this.getNodeAmount(node))
+        const title = this.treeSetting.getNodeAmountTitle(node, this.getNodeAmount(node))
+        if (title) {
+          return title
+        }
       }
-      return ''
+      const typeLabels = { category: 'Category', type: 'Type', platform: 'Platform' }
+      const typeLabel = typeLabels[node?.meta?.type]
+      if (typeLabel) {
+        return this.$t(
+          this.treeSetting.countResource === 'account'
+            ? 'TreeAmountTipAccountType'
+            : 'TreeAmountTipAssetType',
+          { type: this.$t(typeLabel) }
+        )
+      }
+      if (this.treeSetting.countResource === 'account') {
+        return this.$t(
+          String(this.assetScope) === '1'
+            ? 'NodeTreeAmountTipAccountDirect'
+            : 'NodeTreeAmountTipAccountAll'
+        )
+      }
+      return this.$t(
+        String(this.assetScope) === '1'
+          ? 'NodeAssetTreeAmountTipAssetDirect'
+          : 'NodeAssetTreeAmountTipAssetAll'
+      )
+    },
+    showNodeAmountTooltip(event, node) {
+      if (this.treeSetting.showAmountTooltip === false) {
+        return
+      }
+      this.amountTooltipNode = node
+      this.amountTooltipReference = event.currentTarget
+    },
+    hideNodeAmountTooltip() {
+      this.amountTooltipReference = null
+      this.amountTooltipNode = null
     },
     isLeafNode(node) {
       if (typeof this.treeSetting.isLeaf === 'function') {
@@ -835,7 +1091,14 @@ export default {
     normalizeNode(node, children = []) {
       const type = node.meta?.type
       const hasChildren = node.hasChildren ?? node.meta?.data?.has_children
-      const amount = node.assets_amount ?? node.meta?.data?.assets_amount
+      const label = this.getRawNodeLabel(node)
+      // Type-tree APIs append counts to labels instead of returning a field.
+      // Only configured category/type/platform rows follow this contract.
+      const labelAmount =
+        this.treeSetting.amountInLabel && ['category', 'type', 'platform'].includes(type)
+          ? label.match(/^(.*)\s+\((\d+)\)$/)
+          : null
+      const amount = node.assets_amount ?? node.meta?.data?.assets_amount ?? labelAmount?.[2]
       const isLeaf =
         children.length === 0 &&
         (hasChildren === false ||
@@ -845,7 +1108,7 @@ export default {
       return {
         ...node,
         id: this.getNodeKey(node),
-        name: this.getRawNodeLabel(node),
+        name: labelAmount ? labelAmount[1].trimEnd() : label,
         children,
         assets_amount: amount === undefined || amount === null ? null : Number(amount),
         _isLeaf: isLeaf
@@ -905,6 +1168,50 @@ export default {
     normalizeTree(response) {
       const entries = this.flattenRawNodes(this.getResponseNodes(response))
       return this.buildTreeFromEntries(entries)
+    },
+    getNodeChildrenPagination(response) {
+      if (!this.treeSetting.childrenPagination) {
+        return null
+      }
+      const pagination = response?.node_pagination
+      if (!pagination) {
+        return null
+      }
+      const next = pagination.next || ''
+      return {
+        hasMore: Boolean(pagination.has_more ?? next),
+        loading: false,
+        next
+      }
+    },
+    applyNodeChildrenPagination(parent, response) {
+      if (!parent) {
+        return null
+      }
+      const pagination = this.getNodeChildrenPagination(response)
+      if (pagination) {
+        parent._childrenPagination = pagination
+      } else {
+        delete parent._childrenPagination
+      }
+      return pagination
+    },
+    applyRootChildrenPagination(roots, response) {
+      const pagination = this.getNodeChildrenPagination(response)
+      if (!pagination || !roots.length) {
+        return
+      }
+      const parentKey = response.node_pagination?.parent_key
+      const parent =
+        roots.find((node) => String(node.id) === String(parentKey)) ||
+        this.findTreeNodeIn(roots, parentKey) ||
+        roots[0]
+      parent._childrenPagination = pagination
+    },
+    normalizeNodeChildrenResponse(response, parent) {
+      const normalized = this.normalizeTree(response)
+      const projectedParent = normalized.find((node) => String(node.id) === String(parent?.id))
+      return projectedParent ? projectedParent.children || [] : normalized
     },
     async normalizeTreeAsync(response, isCurrent = () => true) {
       const entries = this.flattenRawNodes(this.getResponseNodes(response))
@@ -995,6 +1302,22 @@ export default {
       }
       this.cancelAmountLoading()
       this.clearNodeAmounts()
+      if (normalizedOptions.allLoaded) {
+        const nodes = this.collectLoadedTreeRows(this.treeData)
+        this.resetProgressiveAmountLoading()
+        this.amountLoadedRowEnd = this.collectExpandedTreeRows(this.treeData).length
+        this.amountAllRowsScheduled = true
+        if (normalizedOptions.fresh) {
+          nodes.forEach((node) => {
+            const nodeId = this.getNodeAmountResourceId(node)
+            if (nodeId && this.shouldHandleNodeAmount(node)) {
+              this.freshAmountNodeIds.add(String(nodeId))
+            }
+          })
+        }
+        this.enqueueNodeAmounts(nodes)
+        return
+      }
       this.startProgressiveAmountLoading(Boolean(normalizedOptions.fresh))
     },
     reloadVisibleMetrics(options = {}) {
@@ -1025,6 +1348,151 @@ export default {
         stack.push({ index: 0, nodes: node.children })
       }
       return rows
+    },
+    collectLoadedTreeRows(roots) {
+      const rows = []
+      const stack = [...roots].reverse()
+      while (stack.length) {
+        const node = stack.pop()
+        rows.push(node)
+        for (let index = (node.children?.length || 0) - 1; index >= 0; index -= 1) {
+          stack.push(node.children[index])
+        }
+      }
+      return rows
+    },
+    collectExpandedTreeRowEntries() {
+      const entries = []
+      const stack = []
+      for (let index = this.treeData.length - 1; index >= 0; index -= 1) {
+        stack.push({ depth: 0, node: this.treeData[index] })
+      }
+      while (stack.length) {
+        const entry = stack.pop()
+        entries.push(entry)
+        if (!this.expandedNodeIds.has(String(entry.node.id)) || !entry.node.children?.length) {
+          continue
+        }
+        for (let index = entry.node.children.length - 1; index >= 0; index -= 1) {
+          stack.push({ depth: entry.depth + 1, node: entry.node.children[index] })
+        }
+      }
+      return entries
+    },
+    getExpandedSubtreeBoundaries(entries) {
+      const boundaries = new Map()
+      const stack = []
+      entries.forEach((entry, index) => {
+        while (stack.length && stack.at(-1).depth >= entry.depth) {
+          boundaries.set(stack.pop().index, index - 1)
+        }
+        stack.push({ depth: entry.depth, index })
+      })
+      while (stack.length) {
+        boundaries.set(stack.pop().index, entries.length - 1)
+      }
+      return boundaries
+    },
+    getTreeVisibleRowCount(scrollElement) {
+      const hasInternalOverflow =
+        Number(scrollElement?.scrollHeight) > Number(scrollElement?.clientHeight) + 1
+      const viewportHeight = hasInternalOverflow
+        ? Number(scrollElement?.clientHeight) || 0
+        : typeof window !== 'undefined'
+          ? window.innerHeight
+          : 0
+      return Math.max(1, Math.ceil(viewportHeight / this.nodeRowHeight))
+    },
+    maybeLoadNextNodeChildrenPage(scrollElement) {
+      if (!this.treeSetting.childrenPagination) {
+        return
+      }
+      const entries = this.expandedTreeRowEntries
+      if (!entries.length) {
+        return
+      }
+      const firstVisibleIndex = this.getTreeAmountScrollIndex(scrollElement)
+      const prefetchEnd = firstVisibleIndex + this.getTreeVisibleRowCount(scrollElement) + 20
+      const boundaries = this.getExpandedSubtreeBoundaries(entries)
+      const candidate = entries
+        .map((entry, index) => ({
+          ...entry,
+          endIndex: boundaries.get(index) ?? index
+        }))
+        .filter(({ endIndex, node }) => {
+          const pagination = node._childrenPagination
+          return (
+            this.expandedNodeIds.has(String(node.id)) &&
+            pagination?.hasMore &&
+            !pagination.loading &&
+            !node._childrenLoading &&
+            endIndex >= firstVisibleIndex &&
+            endIndex <= prefetchEnd
+          )
+        })
+        .sort((left, right) => left.endIndex - right.endIndex || right.depth - left.depth)[0]
+      if (candidate) {
+        this.loadNextNodeChildrenPage(candidate.node)
+      }
+    },
+    async loadNextNodeChildrenPage(parent) {
+      const pagination = parent?._childrenPagination
+      if (
+        !pagination?.hasMore ||
+        pagination.loading ||
+        parent._childrenLoading ||
+        !pagination.next
+      ) {
+        return
+      }
+      const requestKey = `next:${parent.id}`
+      this.childrenAbortControllers.get(requestKey)?.abort()
+      const controller = new AbortController()
+      this.childrenAbortControllers.set(requestKey, controller)
+      pagination.loading = true
+      try {
+        const { children: page, response } = await this.requestFirstPopulatedNodeChildren(parent, {
+          next: pagination.next,
+          signal: controller.signal
+        })
+        if (controller.signal.aborted) {
+          return
+        }
+        const loadedChildren =
+          this.nodeChildrenViewSources.get(String(parent.id))?.children || parent.children || []
+        const existingIds = new Set(loadedChildren.map((node) => String(node.id)))
+        const appended = page.filter((node) => !existingIds.has(String(node.id)))
+        const nextPagination = this.applyNodeChildrenPagination(parent, response)
+        if (nextPagination) {
+          // Keep the replacement cursor state locked while the rendered tree
+          // is being updated. Tree DOM updates can emit scroll events before
+          // this request finishes and must not start overlapping next pages.
+          nextPagination.loading = true
+        }
+        if (!appended.length) {
+          if (nextPagination) {
+            nextPagination.hasMore = false
+          }
+          return
+        }
+        const children = [...loadedChildren, ...appended]
+        this.rememberNodeChildrenViewSource(parent, children, { replace: true })
+        await this.setNodeChildrenView(parent)
+        this.enqueueNodeAmounts(appended)
+        this.scheduleProgressiveAmountLoading()
+      } catch (error) {
+        if (error?.code !== 'ERR_CANCELED' && error?.name !== 'AbortError') {
+          this.$log?.warn?.('Load next tree node page failed', error)
+        }
+      } finally {
+        pagination.loading = false
+        if (parent?._childrenPagination) {
+          parent._childrenPagination.loading = false
+        }
+        if (this.childrenAbortControllers.get(requestKey) === controller) {
+          this.childrenAbortControllers.delete(requestKey)
+        }
+      }
     },
     getTreeAmountScrollElement() {
       const treeBody = this.$refs.treeBody
@@ -1066,6 +1534,11 @@ export default {
       if (!this.runtimeEffectsActive || !this.hasNodeAmountLoader()) {
         return
       }
+      if (this.treeSetting.childrenPagination) {
+        // Expanding, paging and collapsing must not abort independent metrics.
+        this.startProgressiveAmountLoading()
+        return
+      }
       const scrollElement = this.getTreeAmountScrollElement()
       const batchSize = this.getProgressiveAmountBatchSize()
       const firstVisibleIndex = this.getTreeAmountScrollIndex(scrollElement)
@@ -1104,7 +1577,9 @@ export default {
     enqueueDirectChildAmounts(children) {
       const batchSize = this.getProgressiveAmountBatchSize()
       const directChildren = (children || []).filter((node) => this.shouldHandleNodeAmount(node))
-      const firstBatch = directChildren.slice(0, batchSize)
+      const firstBatch = this.treeSetting.childrenPagination
+        ? directChildren
+        : directChildren.slice(0, batchSize)
       if (!firstBatch.length) {
         return
       }
@@ -1138,7 +1613,7 @@ export default {
         })
       }
       if (typeof this.treeSetting.dataSource?.metrics === 'function') {
-        return this.treeSetting.dataSource.metrics({
+        return this.loadFromDataSource('metrics', {
           fresh,
           includeDescendants,
           nodeIds,
@@ -1148,7 +1623,7 @@ export default {
       }
       return this.$axios.post(
         this.treeSetting.countUrl,
-        { fresh, include_descendants: includeDescendants, node_ids: nodeIds },
+        nodeAssetMetricsPayload(nodeIds, { fresh, includeDescendants }),
         { signal }
       )
     },
@@ -1209,6 +1684,24 @@ export default {
       }
       this.resetProgressiveAmountLoading()
       this.nextAmountBatchFresh = Boolean(fresh)
+      if (this.treeSetting.childrenPagination) {
+        const nodes = this.collectExpandedTreeRows(this.treeData)
+        if (fresh) {
+          nodes.forEach((node) => {
+            const nodeId = this.getNodeAmountResourceId(node)
+            if (!nodeId || !this.shouldHandleNodeAmount(node)) {
+              return
+            }
+            this.setNodeAmount(node, null)
+            this.freshAmountNodeIds.add(String(nodeId))
+          })
+        }
+        this.amountLoadedRowEnd = nodes.length
+        this.amountAllRowsScheduled = true
+        this.nextAmountBatchFresh = false
+        this.enqueueNodeAmounts(nodes)
+        return
+      }
       this.enqueueNextProgressiveAmountBatch()
     },
     maybeEnqueueNextProgressiveAmountBatch(scrollElement) {
@@ -1239,15 +1732,17 @@ export default {
       }
       this.amountScrollFrame = window.requestAnimationFrame(() => {
         this.amountScrollFrame = null
-        this.maybeEnqueueNextProgressiveAmountBatch(
-          scrollElement || this.getTreeAmountScrollElement()
-        )
+        const target = scrollElement || this.getTreeAmountScrollElement()
+        this.maybeEnqueueNextProgressiveAmountBatch(target)
+        this.maybeLoadNextNodeChildrenPage(target)
       })
     },
     handleTreeAmountScroll(event) {
+      this.hideNodeAmountTooltip()
       this.scheduleProgressiveAmountLoading(event.target)
     },
     handleDocumentAmountScroll(event) {
+      this.hideNodeAmountTooltip()
       const scrollElement = this.getTreeAmountScrollElement()
       if (!scrollElement || event.target === scrollElement) {
         return
@@ -1337,7 +1832,6 @@ export default {
       const requestId = this.amountRequestId
       const controller = new AbortController()
       this.amountAbortController = controller
-      const batchSize = Math.min(200, Math.max(1, Number(this.treeSetting.countBatchSize) || 100))
 
       try {
         while (this.amountQueue.length) {
@@ -1348,7 +1842,7 @@ export default {
           if (requestId !== this.amountRequestId) {
             return
           }
-          const batch = this.amountQueue.splice(0, batchSize)
+          const batch = this.amountQueue.splice(0)
           if (!batch.length) {
             continue
           }
@@ -1471,11 +1965,23 @@ export default {
         this.cancelAmountLoading()
         this.resetProgressiveAmountLoading()
       }
-      const url = this.getRefreshUrl(refresh)
-      const initialData = refresh ? null : this.treeSetting.initialData
-      const hasInitialData = Array.isArray(initialData) && initialData.length > 0
-      const rootLoader = this.treeSetting.loadRoot || this.treeSetting.dataSource?.root
-      if (!url && !hasInitialData && typeof rootLoader !== 'function') {
+      const staticMode = this.treeSetting.loadMode === X_TREE_LOAD_MODES.STATIC
+      const url = staticMode ? '' : this.getRefreshUrl(refresh)
+      const initialData = staticMode
+        ? this.treeSetting.initialData
+        : refresh
+          ? null
+          : this.treeSetting.initialData
+      const hasInitialData =
+        initialData != null && (staticMode || !Array.isArray(initialData) || initialData.length > 0)
+      const rootLoader = staticMode ? null : this.treeSetting.loadRoot
+      const dataSourceRoot = staticMode ? null : this.treeSetting.dataSource?.root
+      if (
+        !url &&
+        !hasInitialData &&
+        typeof rootLoader !== 'function' &&
+        typeof dataSourceRoot !== 'function'
+      ) {
         this.structureAbortController = null
         this.structureLoading = false
         this.normalTreeData = []
@@ -1498,7 +2004,12 @@ export default {
           ? initialData
           : typeof rootLoader === 'function'
             ? await rootLoader({ refresh, signal: controller.signal, tree: this })
-            : await this.requestTree(url, {}, { signal: controller.signal })
+            : typeof dataSourceRoot === 'function'
+              ? await this.loadFromDataSource('root', {
+                  refresh,
+                  signal: controller.signal
+                })
+              : await this.requestTree(url, {}, { signal: controller.signal })
         const normalized = await this.normalizeTreeAsync(
           response,
           () => requestId === this.structureRequestId
@@ -1506,6 +2017,7 @@ export default {
         if (!normalized || requestId !== this.structureRequestId) {
           return
         }
+        this.applyRootChildrenPagination(normalized.roots, response)
         this.nodeChildrenViewSources.clear()
         const normalAmounts = this.collectInitialNodeAmounts(normalized.roots)
         this.normalTreeData = normalized.roots
@@ -1540,6 +2052,7 @@ export default {
         await this.expandInitialNodes()
         this.$emit('tree-init-finish', this)
         this.startProgressiveAmountLoading(refresh)
+        this.scheduleProgressiveAmountLoading()
       } catch (error) {
         if (
           requestId !== this.structureRequestId ||
@@ -1564,6 +2077,16 @@ export default {
           const keys = expandedKeysOverride || this.initialExpandedKeys
           keys.forEach((key) => this.expandedNodeIds.add(String(key)))
           this.$refs.tree?.setExpandedKeys(keys)
+          if (!this.searchMode) {
+            // TreeV2's setExpandedKeys does not emit node-expand. Load the
+            // initial branches without blocking tree initialization or metrics.
+            keys.forEach((key) => {
+              const data = this.$refs.tree?.getNode(key)?.data
+              if (data) {
+                this.loadVirtualNodeChildren(data)
+              }
+            })
+          }
           await this.revealOperationNode()
           return
         }
@@ -1647,6 +2170,83 @@ export default {
       container.scrollTop +=
         elementRect.top - containerRect.top - (containerRect.height - elementRect.height) / 2
     },
+    requestNodeChildren(parent, options = {}) {
+      const { level = 0, next = '', signal } = options
+      const payload = {
+        append: Boolean(next),
+        level,
+        next,
+        parent,
+        signal,
+        tree: this
+      }
+      const childrenLoader = this.treeSetting.loadChildren
+      const dataSourceChildren = this.treeSetting.dataSource?.children
+      if (typeof childrenLoader === 'function') {
+        return childrenLoader(payload)
+      }
+      if (typeof dataSourceChildren === 'function') {
+        return this.loadFromDataSource('children', payload)
+      }
+      if (next) {
+        return this.requestTree(next, {}, { signal })
+      }
+      return this.requestTree(
+        this.treeSetting.treeUrl,
+        this.treeSetting.treeUrl.includes('/api/v1/assets/nodes/')
+          ? { parent_key: parent.meta?.data?.tree_key ?? parent.id }
+          : { key: parent.id, n: parent.name, lv: level },
+        { signal }
+      )
+    },
+    async requestFirstPopulatedNodeChildren(parent, options = {}) {
+      let response = await this.requestNodeChildren(parent, options)
+      let children = this.normalizeNodeChildrenResponse(response, parent)
+      let pagination = this.getNodeChildrenPagination(response)
+      const visitedCursors = new Set()
+      while (
+        !options.signal?.aborted &&
+        !children.length &&
+        pagination?.hasMore &&
+        pagination.next
+      ) {
+        const cursorKey =
+          typeof pagination.next === 'string' ? pagination.next : JSON.stringify(pagination.next)
+        if (visitedCursors.has(cursorKey)) {
+          break
+        }
+        visitedCursors.add(cursorKey)
+        response = await this.requestNodeChildren(parent, {
+          ...options,
+          next: pagination.next
+        })
+        children = this.normalizeNodeChildrenResponse(response, parent)
+        pagination = this.getNodeChildrenPagination(response)
+      }
+      return { children, response }
+    },
+    storeLoadedNodeChildren(parent, response, normalizedChildren = null) {
+      const children = normalizedChildren || this.normalizeNodeChildrenResponse(response, parent)
+      const pagination = this.applyNodeChildrenPagination(parent, response)
+      // Keep successfully loaded children on the data object. Besides
+      // avoiding duplicate lazy requests, this lets an async search swap the
+      // visible tree out and later restore the exact expanded structure.
+      parent.children = children
+      parent._childrenProjection = false
+      parent._reloadProjectedChildren = false
+      parent._isLeaf = children.length === 0 && !pagination?.hasMore
+      this.rememberNodeChildrenViewSource(parent, children, { replace: true })
+      return children
+    },
+    registerLoadedNodeChildren(children) {
+      if (!children.length) {
+        return
+      }
+      this.treeNodeCount += children.length
+      if (!this.searchMode) {
+        this.normalTreeNodeCount = this.treeNodeCount
+      }
+    },
     async loadNode(node, resolve, reject) {
       if (node.level === 0) {
         resolve(this.treeData)
@@ -1666,37 +2266,24 @@ export default {
       this.childrenAbortControllers.get(requestKey)?.abort()
       const controller = new AbortController()
       this.childrenAbortControllers.set(requestKey, controller)
+      node.data._childrenLoading = true
       try {
-        const childrenLoader =
-          this.treeSetting.loadChildren || this.treeSetting.dataSource?.children
-        const response =
-          typeof childrenLoader === 'function'
-            ? await childrenLoader({
-                level: node.level,
-                parent: node.data,
-                signal: controller.signal,
-                tree: this
-              })
-            : await this.requestTree(
-                this.treeSetting.treeUrl,
-                {
-                  key: node.data.id,
-                  n: node.data.name,
-                  lv: node.level
-                },
-                { signal: controller.signal }
-              )
-        const children = this.normalizeTree(response)
-        // Keep successfully loaded children on the data object. Besides
-        // avoiding duplicate lazy requests, this lets an async search swap the
-        // visible tree out and later restore the exact expanded structure.
-        node.data.children = children
-        node.data._childrenProjection = false
-        node.data._reloadProjectedChildren = false
-        node.data._isLeaf = children.length === 0
-        this.rememberNodeChildrenViewSource(node.data, children, { replace: true })
+        const { children: normalizedChildren, response } =
+          await this.requestFirstPopulatedNodeChildren(node.data, {
+            level: node.level,
+            next: reloadProjectedChildren ? undefined : node.data._childrenPagination?.next,
+            signal: controller.signal
+          })
+        if (controller.signal.aborted) {
+          reject?.()
+          node.loading = false
+          return
+        }
+        const children = this.storeLoadedNodeChildren(node.data, response, normalizedChildren)
         resolve(children)
+        this.registerLoadedNodeChildren(children)
         await this.$nextTick()
+        this.scheduleProgressiveAmountLoading()
         if (
           children.length &&
           this.expandedNodeIds.has(String(node.data.id)) &&
@@ -1717,6 +2304,56 @@ export default {
           node.loading = false
         }
       } finally {
+        node.data._childrenLoading = false
+        if (this.childrenAbortControllers.get(requestKey) === controller) {
+          this.childrenAbortControllers.delete(requestKey)
+        }
+      }
+    },
+    async loadVirtualNodeChildren(data) {
+      const reloadProjectedChildren = Boolean(
+        this.isNodeChildrenProjection(data) && data?._reloadProjectedChildren
+      )
+      // The root response may already contain an empty first child page.
+      // Its pagination cursor must own the next request, not a second lazy load.
+      if (
+        !this.isLazyLoad ||
+        data?._isLeaf ||
+        data?._childrenLoading ||
+        ((data?.children?.length || data?._childrenPagination?.hasMore) && !reloadProjectedChildren)
+      ) {
+        return
+      }
+      const requestKey = String(data.id)
+      this.childrenAbortControllers.get(requestKey)?.abort()
+      const controller = new AbortController()
+      this.childrenAbortControllers.set(requestKey, controller)
+      data._childrenLoading = true
+      try {
+        const { children: normalizedChildren, response } =
+          await this.requestFirstPopulatedNodeChildren(data, {
+            signal: controller.signal
+          })
+        if (controller.signal.aborted) {
+          return
+        }
+        const children = this.storeLoadedNodeChildren(data, response, normalizedChildren)
+        this.registerLoadedNodeChildren(children)
+        this.$refs.tree?.setData(this.treeData)
+        await this.$nextTick()
+        this.$refs.tree?.setExpandedKeys([...this.expandedNodeIds])
+        if (this.expandedNodeIds.has(String(data.id))) {
+          // Initial expansion calls this loader without a node-expand event.
+          // Queue its children here as well; the amount queue deduplicates them.
+          this.enqueueDirectChildAmounts(children)
+        }
+        this.scheduleProgressiveAmountLoading()
+      } catch (error) {
+        if (error?.code !== 'ERR_CANCELED' && error?.name !== 'AbortError') {
+          this.$log?.warn?.('Load tree node children failed', error)
+        }
+      } finally {
+        data._childrenLoading = false
         if (this.childrenAbortControllers.get(requestKey) === controller) {
           this.childrenAbortControllers.delete(requestKey)
         }
@@ -1729,13 +2366,15 @@ export default {
       if (this.suppressExpandAmountLoading) {
         return
       }
+      if (this.useVirtualTree) {
+        await this.loadVirtualNodeChildren(data)
+      }
       await this.$nextTick()
       this.enqueueDirectChildAmounts(data?.children)
+      this.scheduleProgressiveAmountLoading()
     },
     async handleNodeCollapse(data) {
-      if (data?.id !== undefined && data?.id !== null) {
-        this.expandedNodeIds.delete(String(data.id))
-      }
+      this.clearCollapsedBranchState(data)
       if (this.searchMode && this.isNodeChildrenProjection(data)) {
         const node = this.$refs.tree?.getNode?.(data.id)
         if (node?.loaded) {
@@ -1748,6 +2387,28 @@ export default {
       }
       await this.$nextTick()
       this.rebuildProgressiveAmountWindow()
+    },
+    clearCollapsedBranchState(data) {
+      if (data?.id === undefined || data?.id === null) {
+        return
+      }
+      const visited = new Set()
+      const stack = [data]
+      while (stack.length) {
+        const node = stack.pop()
+        const key = String(node?.id ?? '')
+        if (!key || visited.has(key)) {
+          continue
+        }
+        visited.add(key)
+        this.expandedNodeIds.delete(key)
+
+        // A filtered child view may hide part of the loaded branch. Clear both
+        // the visible children and their remembered source so a hidden expanded
+        // descendant cannot make Element Plus reopen this collapsed ancestor.
+        const sourceChildren = this.nodeChildrenViewSources.get(key)?.children || []
+        stack.push(...(node.children || []), ...sourceChildren)
+      }
     },
     async collapseTreeStepwise() {
       const tree = this.$refs.tree
@@ -1765,8 +2426,7 @@ export default {
       const isFirstLevelState =
         this.expandedNodeIds.size === firstLevelKeySet.size &&
         [...this.expandedNodeIds].every((key) => firstLevelKeySet.has(String(key)))
-      const nextExpandedKeys =
-        this.$store.getters.currentOrgIsRoot || isFirstLevelState ? [] : firstLevelKeys
+      const nextExpandedKeys = isFirstLevelState ? [] : firstLevelKeys
 
       this.suppressExpandAmountLoading = true
       try {
@@ -1997,7 +2657,9 @@ export default {
     restoreAllNodes() {
       this.localFilterMode = false
       this.localFilterNodeIds.clear()
+      this.searchValue = ''
       this.searchVisible = false
+      this.debouncedSearch.cancel()
       return this.searchTree('')
     },
     notifySearchState(state) {
@@ -2043,17 +2705,22 @@ export default {
         return
       }
 
-      const searchLoader = this.treeSetting.search || this.treeSetting.dataSource?.search
+      const searchLoader = this.treeSetting.search
+      const dataSourceSearch = this.treeSetting.dataSource?.search
       let filtered
       let metadata = {}
       try {
-        if (typeof searchLoader === 'function') {
-          const response = await searchLoader({
+        if (typeof searchLoader === 'function' || typeof dataSourceSearch === 'function') {
+          const payload = {
             ...context,
             keyword,
             signal: controller.signal,
             tree: this
-          })
+          }
+          const response =
+            typeof searchLoader === 'function'
+              ? await searchLoader(payload)
+              : await this.loadFromDataSource('search', payload)
           const normalized = await this.normalizeTreeAsync(
             response,
             () => requestId === this.searchRequestId
@@ -2159,7 +2826,7 @@ export default {
       }
       this.assetScope = nextValue
       setAssetScopeValue(this.$cookie, this.treeSetting, this.assetScope)
-      this.reloadVisibleNodeAmounts({ resetNormal: true })
+      this.reloadVisibleNodeAmounts({ allLoaded: true, resetNormal: true })
       this.treeSetting.callback?.onAssetScopeChange?.(this.assetScope, this.currentNode)
       if (this.currentNode) {
         this.handleNodeLabelClick(null, this.currentNode)
@@ -2329,9 +2996,13 @@ export default {
       await this.ensureExpanded(parent)
       const url = `${this.treeSetting.nodeUrl}${parent.meta.data.id}/children/`
       try {
-        const response = await this.$axios.post(url, {})
+        const response =
+          typeof this.treeSetting.dataSource?.create === 'function'
+            ? await this.loadFromDataSource('create', { parent })
+            : await this.$axios.post(url, {})
         const node = this.normalizeNode({
           id: response.key,
+          resourceId: response.resourceId ?? response.resource_id ?? response.id,
           name: response.value,
           pId: parent.id,
           hasChildren: false,
@@ -2416,10 +3087,10 @@ export default {
         return
       }
       try {
-        const response = await this.$axios.patch(
-          `${this.treeSetting.nodeUrl}${node.meta.data.id}/`,
-          { value }
-        )
+        const response =
+          typeof this.treeSetting.dataSource?.update === 'function'
+            ? await this.loadFromDataSource('update', { node, value })
+            : await this.$axios.patch(`${this.treeSetting.nodeUrl}${node.meta.data.id}/`, { value })
         node.meta.data = { ...node.meta.data, ...response }
         node.name = value
         this.$message.success(this.$tc('UpdateSuccessMsg'))
@@ -2433,13 +3104,23 @@ export default {
       if (!node) {
         return
       }
+      if (
+        typeof this.treeSetting.beforeRemove === 'function' &&
+        (await this.treeSetting.beforeRemove(node)) === false
+      ) {
+        return
+      }
       const normalNode = this.searchMode
         ? this.findTreeNodeIn(this.normalTreeData, node.id) || node
         : node
       const visibleRemovedCount = this.countTreeNodes(node)
       const normalRemovedCount = this.countTreeNodes(normalNode)
       const wasVirtualTree = this.useVirtualTree
-      await this.$axios.delete(`${this.treeSetting.nodeUrl}${node.meta.data.id}/`)
+      if (typeof this.treeSetting.dataSource?.remove === 'function') {
+        await this.loadFromDataSource('remove', { node })
+      } else {
+        await this.$axios.delete(`${this.treeSetting.nodeUrl}${node.meta.data.id}/`)
+      }
 
       if (wasVirtualTree) {
         this.removeRawTreeNode(this.treeData, node.id)
@@ -2738,10 +3419,18 @@ export default {
         return
       }
       try {
-        await this.$axios.put(
-          `${this.treeSetting.nodeUrl}${dropNode.data.meta.data.id}/children/add/`,
-          { nodes: [draggingNode.data.meta.data.id] }
-        )
+        if (typeof this.treeSetting.dataSource?.move === 'function') {
+          await this.loadFromDataSource('move', {
+            node: draggingNode.data,
+            sourceAncestors,
+            target: dropNode.data
+          })
+        } else {
+          await this.$axios.put(
+            `${this.treeSetting.nodeUrl}${dropNode.data.meta.data.id}/children/add/`,
+            { nodes: [draggingNode.data.meta.data.id] }
+          )
+        }
         const targetAncestors = this.collectAncestorNodeData(dropNode, true)
         if (this.useVirtualTree) {
           this.moveVirtualTreeNode(draggingNode.data, dropNode.data, sourceAncestors)
@@ -2794,6 +3483,7 @@ export default {
       return [...this.nodeChildrenViewSources.values()].map((item) => item.parent)
     },
     async setNodeChildrenView(parent, options = {}) {
+      options = { ...this.treeSetting.getChildrenViewOptions?.(parent), ...options }
       const key = String(parent?.id ?? '')
       if (!key) {
         return []
@@ -2805,7 +3495,8 @@ export default {
       const ordered = typeof options.sort === 'function' ? options.sort([...source]) : [...source]
       const visible =
         typeof options.filter === 'function' ? ordered.filter(options.filter) : ordered
-      parent._isLeaf = visible.length === 0 && source.length === 0
+      parent._isLeaf =
+        visible.length === 0 && source.length === 0 && !parent._childrenPagination?.hasMore
 
       if (this.useVirtualTree) {
         parent.children = visible
@@ -2833,7 +3524,9 @@ export default {
         this.normalTreeNodeCount = this.treeNodeCount
       }
       await this.$nextTick()
-      if (!this.useVirtualTree) {
+      if (this.useVirtualTree) {
+        this.$refs.tree?.setExpandedKeys([...this.expandedNodeIds])
+      } else {
         const stack = [...this.treeData]
         while (stack.length) {
           const node = stack.pop()
@@ -2932,6 +3625,77 @@ export default {
     findTreeNode(id) {
       return this.findTreeNodeIn(this.treeData, id)
     },
+    getExpandedKeys() {
+      return [...this.expandedNodeIds]
+    },
+    getNodePath(id) {
+      const target = String(id)
+      const stack = this.treeData.map((node) => ({ node, path: [node] }))
+      while (stack.length) {
+        const { node, path } = stack.pop()
+        if (String(node.id) === target) {
+          return path
+        }
+        for (const child of node.children || []) {
+          stack.push({ node: child, path: [...path, child] })
+        }
+      }
+      return []
+    },
+    async setExpandedKeys(keys = []) {
+      const tree = this.$refs.tree
+      if (!tree) {
+        return
+      }
+      const normalizedKeys = [...new Set(keys.map((key) => String(key)))]
+      this.suppressExpandAmountLoading = true
+      try {
+        if (this.useVirtualTree) {
+          tree.setExpandedKeys(normalizedKeys)
+        } else {
+          const renderedNodes = []
+          const stack = [...(tree.store?.root?.childNodes || [])]
+          while (stack.length) {
+            const node = stack.pop()
+            renderedNodes.push(node)
+            if (node.childNodes?.length) {
+              stack.push(...node.childNodes)
+            }
+          }
+          renderedNodes.reverse().forEach((node) => node.collapse())
+          normalizedKeys.forEach((key) => tree.getNode(key)?.expand())
+        }
+        await this.$nextTick()
+        this.expandedNodeIds = new Set(normalizedKeys)
+      } finally {
+        this.suppressExpandAmountLoading = false
+      }
+      this.rebuildProgressiveAmountWindow()
+    },
+    expandAll() {
+      const keys = []
+      const stack = [...this.treeData]
+      while (stack.length) {
+        const node = stack.pop()
+        if (!this.isLeafNode(node)) {
+          keys.push(node.id)
+        }
+        if (node.children?.length) {
+          stack.push(...node.children)
+        }
+      }
+      return this.setExpandedKeys(keys)
+    },
+    collapseAll() {
+      return this.setExpandedKeys([])
+    },
+    collapseStepwise() {
+      return this.collapseTreeStepwise()
+    },
+    expandToNode(id) {
+      const path = this.getNodePath(id)
+      return this.setExpandedKeys(path.slice(0, -1).map((node) => node.id))
+    },
     selectNode(node) {
       if (!node) {
         return
@@ -2948,15 +3712,48 @@ export default {
 @use './toolbar' as treeToolbar;
 
 .x-tree {
+  --x-tree-body-inline-padding: 0;
+  --x-tree-font-size: 12px;
+  --x-tree-icon-size: 14px;
+  --x-tree-toggle-icon-size: 10px;
+
   display: flex;
   flex-direction: column;
+  width: 100%;
+  min-width: 0;
   height: calc(100vh - 204px);
   min-height: 360px;
   background: var(--el-bg-color, #fff);
+  color: var(--el-text-color-primary);
+  font-size: var(--x-tree-font-size);
 }
 
 .x-tree__header-actions {
   @include treeToolbar.header-actions;
+
+  &.has-header-search {
+    position: static;
+    z-index: auto;
+    box-sizing: border-box;
+    width: 100%;
+    height: var(--x-tree-toolbar-height, 40px);
+    min-width: 0;
+    padding: var(--x-tree-toolbar-padding-block, 5px) var(--x-tree-toolbar-padding-inline, 8px);
+  }
+}
+
+.x-tree__toolbar-prepend {
+  display: contents;
+
+  :deep(.x-tree__tool-button) {
+    @include treeToolbar.tool-button;
+
+    margin: 0;
+  }
+
+  :deep(.x-tree__tool-icon) {
+    @include treeToolbar.tool-icon;
+  }
 }
 
 .x-tree__search-row {
@@ -2987,6 +3784,11 @@ export default {
   }
 }
 
+.x-tree__header-search {
+  min-width: 80px;
+  margin-right: 7px;
+}
+
 .x-tree__tool-button {
   @include treeToolbar.tool-button;
 }
@@ -2998,11 +3800,13 @@ export default {
 .x-tree__body {
   --tree-scrollbar-size: 6px;
 
+  box-sizing: border-box;
   flex: 1;
   min-height: 0;
   overflow: hidden;
-  padding: 0;
-  border-top: 1px solid var(--panel-border-color, var(--el-border-color));
+  padding-right: var(--x-tree-body-inline-padding, 0);
+  padding-left: var(--x-tree-body-padding-left, var(--x-tree-body-inline-padding, 0));
+  border-top: var(--x-tree-body-border-top, 0);
 }
 
 .x-tree__viewport {
@@ -3011,6 +3815,7 @@ export default {
   min-width: 0;
   min-height: 0;
   overflow: auto;
+  margin-top: 0;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
@@ -3018,7 +3823,7 @@ export default {
   &::-webkit-scrollbar {
     -webkit-appearance: none;
     width: var(--tree-scrollbar-size);
-    height: var(--tree-scrollbar-size);
+    height: 0;
     border: 0;
     background: transparent;
     box-shadow: none;
@@ -3057,6 +3862,11 @@ export default {
   overflow: hidden;
 }
 
+.x-tree__body.is-virtual :deep(.el-tree) {
+  width: 100%;
+  min-width: 0;
+}
+
 .x-tree__body.is-virtual :deep(.el-tree-virtual-list) {
   min-width: 100%;
   overflow: auto !important;
@@ -3069,7 +3879,7 @@ export default {
   -webkit-appearance: none;
   display: block;
   width: var(--tree-scrollbar-size);
-  height: var(--tree-scrollbar-size);
+  height: 0;
   border: 0;
   background: transparent;
   box-shadow: none;
@@ -3106,23 +3916,37 @@ export default {
 .x-tree__body :deep(.el-tree) {
   min-width: max-content;
   background: transparent;
-  color: var(--el-text-color-regular);
+  color: var(--el-text-color-primary);
+  font-size: var(--x-tree-font-size);
 }
 
 .x-tree__body :deep(.el-tree-node__content) {
+  width: var(--x-tree-content-width, 100%);
+  min-width: var(--x-tree-content-width, 100%);
   height: var(--x-tree-row-height);
-  border-radius: 4px;
-  padding-right: 8px;
+  margin: 0;
+  border-radius: 0;
+  padding-right: 4px;
   user-select: none;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
 }
 
 .x-tree__body :deep(.el-tree-node__content:hover) {
   background: var(--el-fill-color-light);
+  background: color-mix(in srgb, var(--el-text-color-primary) 8%, transparent);
 }
 
 .x-tree__body :deep(.el-tree-node.is-current > .el-tree-node__content) {
-  color: var(--el-color-primary);
-  background: var(--el-color-primary-light-9);
+  color: var(--el-text-color-primary);
+  background: var(--el-fill-color);
+  background: color-mix(in srgb, var(--el-text-color-primary) 10%, transparent);
+}
+
+.x-tree__body :deep(.el-tree-node:focus-visible > .el-tree-node__content) {
+  box-shadow: inset 0 0 0 2px var(--el-border-color);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--el-text-color-primary) 24%, transparent);
 }
 
 .x-tree__body
@@ -3160,8 +3984,28 @@ export default {
 }
 
 .x-tree__body :deep(.el-tree-node__expand-icon) {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--x-tree-icon-size);
+  height: var(--x-tree-icon-size);
+  margin-left: 10px;
+  padding: 0;
   color: var(--el-text-color-secondary);
-  transition: transform 0.12s ease-out;
+  font-size: var(--x-tree-toggle-icon-size);
+  transition: transform 0.2s ease-out;
+}
+
+.x-tree__body.is-virtual
+  :deep(
+    .el-tree-node.x-tree-node--loadable
+      > .el-tree-node__content
+      > .el-tree-node__expand-icon.is-leaf
+  ) {
+  visibility: visible;
+  color: var(--el-text-color-secondary);
+  cursor: pointer;
 }
 
 .x-tree__body :deep(.el-collapse-transition-enter-active),
@@ -3186,9 +4030,9 @@ export default {
   flex: none;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 100%;
-  margin: 0;
+  width: var(--x-tree-icon-size);
+  height: var(--x-tree-icon-size);
+  margin: 0 0 0 4px;
   padding: 0;
   border: 0;
   color: inherit;
@@ -3197,7 +4041,14 @@ export default {
 }
 
 .x-tree__node-icon {
+  display: inline-flex;
   flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--x-tree-icon-size);
+  height: var(--x-tree-icon-size);
+  color: var(--el-text-color-secondary);
+  font-size: var(--x-tree-icon-size);
 }
 
 .x-tree__node-select {
@@ -3206,7 +4057,7 @@ export default {
   align-items: center;
   align-self: stretch;
   min-width: 0;
-  padding-left: 2px;
+  padding-left: 4px;
   cursor: pointer;
 }
 
@@ -3219,13 +4070,19 @@ export default {
 }
 
 .x-tree__body :deep(.el-tree-node.is-current > .el-tree-node__content) .x-tree__node-label {
-  color: var(--el-color-primary);
+  color: var(--el-text-color-primary);
+}
+
+.x-tree__node.is-asset .x-tree__node-label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-variant-ligatures: none;
+  letter-spacing: 0.01em;
 }
 
 .x-tree__node-amount {
   flex: none;
   margin-left: 4px;
-  color: var(--el-text-color-secondary);
+  color: inherit;
   font-variant-numeric: tabular-nums;
 }
 

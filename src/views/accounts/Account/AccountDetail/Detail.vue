@@ -202,7 +202,7 @@ export default {
             model: vm.object.su_from?.id || '',
             label: vm.object.su_from?.name
               ? vm.object.su_from?.name + `(${vm.object.su_from?.username})`
-              : '-',
+              : this.$t('Select'),
             ajax: {
               url: `/api/v1/accounts/accounts/su-from-accounts/?account=${vm.object.id}&fields_size=mini`,
               transformOption: (item) => {
@@ -266,4 +266,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+:deep(.su-from-select2) {
+  width: min(220px, 100%);
+}
+</style>

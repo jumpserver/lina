@@ -4,7 +4,7 @@
 
 <script lang="jsx">
 import { getPreference } from '@/api/settings'
-import { openNewWindow } from '@/utils/common/index'
+import { addBasePath, openNewWindow } from '@/utils/common/index'
 import HomeCard from './HomeCard.vue'
 export default {
   name: 'Announcement',
@@ -65,6 +65,8 @@ export default {
             sortable: false
           },
           actions: {
+            width: 70,
+            fitWidth: true,
             align: 'center',
             formatterArgs: {
               hasDelete: false,
@@ -76,15 +78,21 @@ export default {
                   icon: 'fa-desktop',
                   type: 'primary',
                   callback: ({ row }) => {
+                    const params = new URLSearchParams({
+                      protocol: row.protocol,
+                      account: row.account,
+                      accountId: row.account_id,
+                      accountMode: 'hosted'
+                    })
+                    const oid = this.$store.getters.currentOrg?.id
+                    if (oid) params.set('org', oid)
+                    const url = addBasePath(
+                      `/luna/session/${encodeURIComponent(row.asset_id)}?${params.toString()}`
+                    )
                     if (this.preference?.basic?.connect_default_open_method === 'new') {
-                      openNewWindow(
-                        `/luna/connect?login_to=${row.asset_id}&login_account=${row.account_id}`
-                      )
+                      openNewWindow(url)
                     } else {
-                      window.open(
-                        `/luna/?login_to=${row.asset_id}&login_account=${row.account_id}`,
-                        '_blank'
-                      )
+                      window.open(url, '_blank')
                     }
                   }
                 }

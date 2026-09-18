@@ -112,34 +112,22 @@
       </div>
     </transition>
 
-    <div v-if="searchState.truncated" class="user-tree__search-hint">
-      {{ $t('UserTreeSearchTruncated', { limit: searchState.limit || treeSetting.searchLimit }) }}
-    </div>
-
-    <div
-      v-if="latestChildTruncation"
-      class="user-tree__search-hint user-tree__search-hint--warning"
-      role="status"
-    >
-      <el-icon><InfoFilled /></el-icon>
-      <span>{{ childTruncatedText }}</span>
-    </div>
-
     <XTree
       ref="tree"
       :setting="xTreeSetting"
       @tree-init-finish="$emit('tree-init-finish', $event)"
       @url-change="$emit('url-change', $event)"
     >
-      <template #node-icon="{ data }">
+      <template #node-icon="{ data, expanded, leaf }">
         <Icon
-          :class="`user-tree__resource-icon--${getResourceType(data)}`"
-          :icon="getResourceIcon(data)"
+          v-if="getResourceType(data) === 'user'"
+          icon="fa-regular fa-user"
           class="user-tree__resource-icon"
         />
+        <TreeFolderIcon v-else :expanded="expanded" :leaf="leaf" class="user-tree__resource-icon" />
       </template>
-      <template #rMenu>
-        <slot name="rMenu" />
+      <template #rMenu="slotProps">
+        <slot name="rMenu" v-bind="slotProps" />
       </template>
     </XTree>
   </div>
@@ -147,24 +135,20 @@
 
 <script>
 import Icon from '@/components/Widgets/Icon'
+import TreeFolderIcon from '@/components/Tree/TreeFolderIcon.vue'
 import XTree from '@/components/Tree/XTree/index.vue'
+import { createXTreeSetting, X_TREE_LOAD_MODES } from '@/components/Tree/XTree/config'
 import {
   isUserTreeOrder,
   normalizeUserTreeResponse,
   toUserTreeResource,
-  USER_TREE_ORDER_VALUES
+  USER_TREE_ORDER_VALUES,
+  USER_TREE_RESOURCE_TYPES
 } from './provider'
 
 const SETTINGS_CACHE_PREFIX = 'jms.user-tree.settings.'
 const PERMISSION_SCOPES = Object.freeze(['direct', 'effective'])
-const METRIC_RESOURCE_TYPES = Object.freeze(['organization', 'user_group', 'user'])
-const LOAD_MORE_RESOURCE_TYPE = 'load_more'
-const RESOURCE_ICON_MAP = Object.freeze({
-  load_more: 'fa-ellipsis-h',
-  organization: 'fa-building',
-  user: 'fa-user',
-  user_group: 'fa-users'
-})
+const METRIC_RESOURCE_TYPES = USER_TREE_RESOURCE_TYPES
 
 function getSettingsCacheKey(setting = {}) {
   const key = String(setting.settingsCacheKey || '').trim()
@@ -248,8 +232,8 @@ function markSearchChildrenProjections(response) {
 }
 
 /**
- * Reusable organization -> user group/user tree. Users without a group are
- * direct children of the organization root.
+ * Reusable organization -> user group -> user tree. A virtual ungrouped-users
+ * branch is the organization's first child and loads its users independently.
  *
  * The component is endpoint-agnostic. Its data source may implement:
  *
@@ -263,7 +247,7 @@ function markSearchChildrenProjections(response) {
  */
 export default {
   name: 'UserTree',
-  components: { Icon, XTree },
+  components: { Icon, TreeFolderIcon, XTree },
   props: {
     dataSource: {
       type: Object,
@@ -299,8 +283,6 @@ export default {
       : 'name'
     const userOrder = isUserTreeOrder(cached.userOrder) ? cached.userOrder : configuredOrder
     return {
-      childTruncations: [],
-      loadingMoreNodeIds: new Set(),
       permissionScope,
       searchFocusFrame: null,
       searchKeyword: '',
@@ -311,7 +293,7 @@ export default {
   },
   computed: {
     treeSetting() {
-      return {
+      return createXTreeSetting({
         showCollapse: true,
         showPermissionScope: true,
         showRefresh: true,
@@ -320,10 +302,11 @@ export default {
         fillHeight: true,
         height: '100%',
         minHeight: '360px',
-        childrenLimit: 1000,
+        childrenLimit: 100,
         searchLimit: 1000,
-        ...this.setting
-      }
+        ...this.setting,
+        loadMode: this.setting.loadMode || X_TREE_LOAD_MODES.LAZY
+      })
     },
     provider() {
       return this.dataSource || this.treeSetting.dataSource || {}
@@ -333,8 +316,8 @@ export default {
     },
     permissionScopeOptions() {
       return [
-        { label: this.$t('PermissionScopeEffective'), value: 'effective' },
-        { label: this.$t('PermissionScopeDirect'), value: 'direct' }
+        { label: this.$t('UserTreePermissionScopeEffective'), value: 'effective' },
+        { label: this.$t('UserTreePermissionScopeDirect'), value: 'direct' }
       ]
     },
     userOrderOptions() {
@@ -356,26 +339,6 @@ export default {
     hasHeaderActions() {
       return this.treeSetting.showSearch || this.hasToolsMenu
     },
-    latestChildTruncation() {
-      const searchActive = Boolean(this.searchState.active)
-      for (let index = this.childTruncations.length - 1; index >= 0; index -= 1) {
-        const item = this.childTruncations[index]
-        if (Boolean(item.searchActive) === searchActive) {
-          return item
-        }
-      }
-      return null
-    },
-    childTruncatedText() {
-      const item = this.latestChildTruncation
-      if (!item) {
-        return ''
-      }
-      return this.$t('UserTreeChildrenTruncated', {
-        limit: item.limit,
-        name: item.name
-      })
-    },
     treeStyle() {
       const toCssSize = (value, fallback) => {
         if (typeof value === 'number') {
@@ -396,12 +359,12 @@ export default {
         ...this.treeSetting,
         amountPredicate: this.shouldHandleAmount,
         amountTypes: METRIC_RESOURCE_TYPES,
+        childrenPagination: true,
         callback: {
           ...this.treeSetting.callback,
           onSearchStateChange: this.handleSearchStateChange,
           onSelected: this.handleSelected
         },
-        beforeNodeSelect: this.beforeNodeSelect,
         dataSource: undefined,
         getAmountKey: (node) => {
           const resource = toUserTreeResource(node)
@@ -432,7 +395,6 @@ export default {
         loadRoot: this.loadRoot,
         readOnly: true,
         search: typeof this.provider.search === 'function' ? this.search : undefined,
-        selectPredicate: (node) => toUserTreeResource(node).type !== LOAD_MORE_RESOURCE_TYPE,
         showAssetScope: false,
         // Regular ElTree is required because TreeV2 does not provide a lazy-load hook.
         showAssets: true,
@@ -445,18 +407,15 @@ export default {
   },
   created() {
     this.debouncedSearch = _.debounce(this.searchNow, 250)
-    this.loadMoreAbortControllers = new Map()
   },
   deactivated() {
     this.debouncedSearch?.cancel()
-    this.cancelLoadMoreRequests()
     window.cancelAnimationFrame(this.searchFocusFrame)
     this.searchFocusFrame = null
     this.$refs.toolsDropdown?.handleClose?.()
   },
   beforeUnmount() {
     this.debouncedSearch?.cancel()
-    this.cancelLoadMoreRequests()
     window.cancelAnimationFrame(this.searchFocusFrame)
   },
   methods: {
@@ -470,21 +429,40 @@ export default {
       })
       return normalizeUserTreeResponse(response)
     },
-    async loadChildren({ level, parent, signal }) {
+    async loadChildren({ level, next, parent, signal }) {
       if (typeof this.provider.children !== 'function') {
         return []
       }
       const resource = toUserTreeResource(parent)
+      const offset = next?.phase === 'users' ? Math.max(0, Number(next.offset) || 0) : 0
       const response = await this.provider.children({
         level,
         limit: this.treeSetting.childrenLimit,
-        offset: 0,
+        offset,
         order: this.userOrder,
         parent: resource,
         signal
       })
-      this.updateChildTruncation(parent, resource, response)
-      return this.withLoadMoreNode(parent, resource, response, 0)
+      const normalized = normalizeUserTreeResponse(response)
+      if (Array.isArray(normalized)) {
+        return normalized
+      }
+      const hasMore = Boolean(response?.has_more)
+      const nextOffset = Number(
+        response?.next_offset ?? offset + Number(response?.returned_count ?? 0)
+      )
+      return {
+        ...normalized,
+        node_pagination: {
+          has_more: hasMore,
+          limit: Number(response?.limit) || Number(this.treeSetting.childrenLimit) || 100,
+          next:
+            hasMore && Number.isFinite(nextOffset) && nextOffset > offset
+              ? { offset: nextOffset, phase: 'users' }
+              : '',
+          parent_key: parent.id
+        }
+      }
     },
     async search({ keyword, limit, signal }) {
       if (typeof this.provider.search !== 'function') {
@@ -546,7 +524,6 @@ export default {
       return this.searchNow()
     },
     searchNow() {
-      this.cancelLoadMoreRequests()
       return this.$refs.tree?.searchTree?.(this.searchKeyword.trim(), {
         limit: this.treeSetting.searchLimit
       })
@@ -574,138 +551,6 @@ export default {
       this.treeSetting.callback?.onSearchStateChange?.(state)
       this.$emit('search-state-change', state)
     },
-    withLoadMoreNode(parent, resource, response, offset) {
-      const normalized = normalizeUserTreeResponse(response)
-      if (Array.isArray(response) || !response?.has_more) {
-        return normalized
-      }
-      const currentOffset = Math.max(0, Number(response.offset ?? offset) || 0)
-      const results = responseResults(normalized)
-      const nextOffset = Number(
-        response.next_offset ?? currentOffset + Number(response.returned_count ?? results.length)
-      )
-      if (!Number.isFinite(nextOffset) || nextOffset <= currentOffset) {
-        return normalized
-      }
-      const parentTreeId = String(resource.treeId || parent?.id || '')
-      if (!parentTreeId) {
-        return normalized
-      }
-      const treeId = `${LOAD_MORE_RESOURCE_TYPE}:${parentTreeId}:${nextOffset}`
-      const loadMoreNode = {
-        id: treeId,
-        pId: parentTreeId,
-        parent_key: parentTreeId,
-        name: '',
-        hasChildren: false,
-        isParent: false,
-        _isLeaf: true,
-        meta: {
-          type: LOAD_MORE_RESOURCE_TYPE,
-          data: {
-            id: treeId,
-            limit: Number(response.limit) || Number(this.treeSetting.childrenLimit) || 1000,
-            next_offset: nextOffset,
-            parent_resource_id: resource.resourceId,
-            parent_tree_id: parentTreeId,
-            parent_type: resource.type,
-            resource_id: null,
-            tree_id: treeId
-          }
-        }
-      }
-      return responseWithResults(normalized, [...results, loadMoreNode])
-    },
-    async loadMoreChildren(node) {
-      const nodeId = String(node?.id || '')
-      if (!nodeId || this.loadingMoreNodeIds.has(nodeId)) {
-        return
-      }
-      const data = node?.meta?.data || {}
-      const tree = this.$refs.tree
-      const parent = tree?.findTreeNode?.(data.parent_tree_id)
-      if (!parent || typeof this.provider.children !== 'function') {
-        return
-      }
-      const parentResource = toUserTreeResource(parent)
-      const offset = Math.max(0, Number(data.next_offset) || 0)
-      const controller = new AbortController()
-      this.loadMoreAbortControllers.set(nodeId, controller)
-      this.loadingMoreNodeIds.add(nodeId)
-      try {
-        const response = await this.provider.children({
-          limit: Number(data.limit) || Number(this.treeSetting.childrenLimit) || 1000,
-          offset,
-          order: this.userOrder,
-          parent: parentResource,
-          signal: controller.signal
-        })
-        this.updateChildTruncation(parent, parentResource, response)
-        const normalized = this.withLoadMoreNode(parent, parentResource, response, offset)
-        const additional = tree.normalizeTree(normalized)
-        const merged = []
-        const seen = new Set()
-        for (const child of [...(parent.children || []), ...additional]) {
-          if (this.getResourceType(child) === LOAD_MORE_RESOURCE_TYPE) {
-            continue
-          }
-          const key = String(child.id)
-          if (!seen.has(key)) {
-            seen.add(key)
-            merged.push(child)
-          }
-        }
-        const nextLoadMore = additional.find(
-          (child) => this.getResourceType(child) === LOAD_MORE_RESOURCE_TYPE
-        )
-        if (nextLoadMore) {
-          merged.push(nextLoadMore)
-        }
-        tree.rememberNodeChildrenViewSource(parent, merged, { replace: true })
-        await tree.setNodeChildrenView(parent)
-      } catch (error) {
-        if (error?.code !== 'ERR_CANCELED' && error?.name !== 'AbortError') {
-          this.$log?.warn?.('Load more user-tree children failed', error)
-        }
-      } finally {
-        if (this.loadMoreAbortControllers.get(nodeId) === controller) {
-          this.loadMoreAbortControllers.delete(nodeId)
-        }
-        this.loadingMoreNodeIds.delete(nodeId)
-      }
-    },
-    cancelLoadMoreRequests() {
-      this.loadMoreAbortControllers?.forEach((controller) => controller.abort())
-      this.loadMoreAbortControllers?.clear()
-      this.loadingMoreNodeIds.clear()
-    },
-    updateChildTruncation(parent, resource, response) {
-      if (Array.isArray(response)) {
-        return
-      }
-      const identity = resource.treeId || resource.resourceId
-      if (!identity) {
-        return
-      }
-      this.childTruncations = this.childTruncations.filter((item) => item.identity !== identity)
-      if (!response?.truncated && !response?.has_more) {
-        return
-      }
-      const truncation = {
-        identity,
-        limit:
-          Number(response.next_offset) ||
-          Number(response.limit) ||
-          Number(this.treeSetting.childrenLimit) ||
-          1000,
-        name: this.getResourceLabel(parent),
-        resource,
-        searchActive: Boolean(this.searchState.active)
-      }
-      this.childTruncations = [...this.childTruncations, truncation]
-      this.treeSetting.callback?.onChildrenTruncated?.(truncation)
-      this.$emit('children-truncated', truncation)
-    },
     handleSelected(event, data) {
       const resource = toUserTreeResource(data)
       const context = {
@@ -718,13 +563,6 @@ export default {
       this.treeSetting.callback?.onSelected?.(event, data, context)
       this.$emit('select', resource, context)
       this.$emit('selected', resource, context)
-    },
-    beforeNodeSelect(event, data) {
-      if (this.getResourceType(data) !== LOAD_MORE_RESOURCE_TYPE) {
-        return true
-      }
-      this.loadMoreChildren(data)
-      return false
     },
     handleToolCommand(command) {
       if (command === 'collapse') {
@@ -743,7 +581,7 @@ export default {
       }
       this.permissionScope = value
       this.persistSettings()
-      this.reloadVisibleMetrics({ fresh: false, resetNormal: true })
+      this.reloadVisibleMetrics({ allLoaded: true, fresh: false, resetNormal: true })
       const context = {
         permissionAll: value === 'direct' ? '0' : '1',
         permissionScope: value
@@ -766,12 +604,10 @@ export default {
         return
       }
       this.userOrder = value
-      this.cancelLoadMoreRequests()
       this.clearSelection('sort')
       this.persistSettings()
       this.treeSetting.callback?.onUserOrderChange?.(value)
       this.$emit('sort-change', value)
-      this.childTruncations = []
       const keyword = this.searchKeyword.trim()
       await this.$refs.tree?.refresh?.()
       if (keyword) {
@@ -790,14 +626,10 @@ export default {
     getResourceType(data) {
       return toUserTreeResource(data).type
     },
-    getResourceIcon(data) {
-      const type = this.getResourceType(data)
-      return RESOURCE_ICON_MAP[type] || RESOURCE_ICON_MAP.user
-    },
     getResourceLabel(data) {
       const type = this.getResourceType(data)
-      if (type === LOAD_MORE_RESOURCE_TYPE) {
-        return this.loadingMoreNodeIds.has(String(data?.id)) ? this.$t('Loading') : this.$t('More')
+      if (type === 'ungrouped_users') {
+        return this.$t('UserTreeUngroupedUsers')
       }
       if (type !== 'user') {
         return data?.name || data?.meta?.data?.name || ''
@@ -816,16 +648,20 @@ export default {
         return this.$t('UserTreeAmountTipOrganization')
       }
       if (type === 'user_group') {
-        return this.$t('UserTreeAmountTipDirect')
+        return this.$t('UserTreeAmountTipGroupDirect')
       }
+      if (type === 'ungrouped_users') {
+        return this.$t('UserTreeAmountTipUngroupedUsers')
+      }
+      const isUngrouped = String(data?.pId || data?.parent_key || '').startsWith('ungrouped_users:')
       return this.$t(
-        this.permissionScope === 'direct' ? 'UserTreeAmountTipDirect' : 'UserTreeAmountTipEffective'
+        this.permissionScope === 'direct' || isUngrouped
+          ? 'UserTreeAmountTipUserDirect'
+          : 'UserTreeAmountTipUserEffective'
       )
     },
     async refresh() {
-      this.cancelLoadMoreRequests()
       this.clearSelection('refresh')
-      this.childTruncations = []
       this.searchKeyword = ''
       this.searchState = { active: false, truncated: false }
       await this.$refs.tree?.refresh?.()
@@ -978,44 +814,13 @@ export default {
   font-size: 13px;
 }
 
-.user-tree__search-hint {
-  display: flex;
-  flex: none;
-  align-items: flex-start;
-  gap: 5px;
-  padding: 5px 10px;
-  color: var(--el-text-color-secondary);
-  font-size: 12px;
-  background: var(--el-fill-color-lighter);
-}
-
-.user-tree__search-hint--warning {
-  color: var(--el-color-warning-dark-2);
-  background: var(--el-color-warning-light-9);
-  cursor: default;
-  user-select: none;
-
-  .el-icon {
-    flex: none;
-    margin-top: 1px;
-  }
-}
-
 .user-tree__resource-icon {
   flex: none;
-  width: 16px;
+  width: 14px;
   margin-right: 4px;
   color: var(--el-text-color-secondary);
-  font-size: 13px;
+  font-size: 12px;
   text-align: center;
-}
-
-.user-tree__resource-icon--organization {
-  color: var(--el-color-primary-light-3);
-}
-
-.user-tree__resource-icon--user_group {
-  color: var(--el-color-info-dark-2);
 }
 
 .user-tree :deep(.x-tree__header-actions) {

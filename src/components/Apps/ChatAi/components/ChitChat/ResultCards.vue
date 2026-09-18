@@ -16,22 +16,7 @@
       </summary>
 
       <div class="result-card__body">
-        <div v-if="card.type === 'sources'" class="source-list">
-          <template v-for="(source, sourceIndex) in sources(card)" :key="source.url || sourceIndex">
-            <a
-              v-if="safeUrl(source.url)"
-              :href="safeUrl(source.url)"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <span>{{ source.title || source.url }}</span>
-              <el-icon><TopRight /></el-icon>
-            </a>
-            <span v-else>{{ source.title || source.url }}</span>
-          </template>
-        </div>
-
-        <div v-else-if="isAssetList(card)" class="asset-result-list">
+        <div v-if="isAssetList(card)" class="asset-result-list">
           <article
             v-for="(row, rowIndex) in rows(card)"
             :key="row?._key || row?.id || rowIndex"
@@ -40,7 +25,16 @@
             <div class="asset-result__identity">
               <span class="asset-result__avatar">{{ assetInitial(row) }}</span>
               <span class="asset-result__name">
-                <strong :title="formatValue(row?.name)">{{ formatValue(row?.name) }}</strong>
+                <RouterLink
+                  v-if="detailRoute(card, row)"
+                  :to="detailRoute(card, row)"
+                  class="result-detail-link asset-result__link"
+                  :title="t('ChatAIResultOpenNamedDetail', { name: formatValue(row?.name) })"
+                >
+                  <strong>{{ formatValue(row?.name) }}</strong>
+                  <el-icon><ArrowRight /></el-icon>
+                </RouterLink>
+                <strong v-else :title="formatValue(row?.name)">{{ formatValue(row?.name) }}</strong>
                 <code :title="formatValue(row?.address)">{{ formatValue(row?.address) }}</code>
               </span>
             </div>
@@ -72,12 +66,26 @@
             <thead>
               <tr>
                 <th v-for="column in columns(card)" :key="column">{{ fieldLabel(column) }}</th>
+                <th v-if="hasDetailLinks(card)" class="result-table__action">
+                  {{ t('ChatAIResultDetail') }}
+                </th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="(row, rowIndex) in rows(card)" :key="rowIndex">
                 <td v-for="column in columns(card)" :key="column">
                   {{ formatFieldValue(column, row?.[column]) }}
+                </td>
+                <td v-if="hasDetailLinks(card)" class="result-table__action">
+                  <RouterLink
+                    v-if="detailRoute(card, row)"
+                    :to="detailRoute(card, row)"
+                    class="result-detail-link"
+                    :aria-label="detailLinkLabel(row)"
+                  >
+                    {{ t('ChatAIResultOpenDetail') }}
+                    <el-icon><ArrowRight /></el-icon>
+                  </RouterLink>
                 </td>
               </tr>
             </tbody>
@@ -98,6 +106,19 @@
         </dl>
 
         <pre v-else class="result-value">{{ formatValue(card.content) }}</pre>
+        <div
+          v-if="!isTabular(card) && detailRoute(card, card.content)"
+          class="result-detail-action"
+        >
+          <RouterLink
+            :to="detailRoute(card, card.content)"
+            class="result-detail-link"
+            :aria-label="detailLinkLabel(card.content)"
+          >
+            {{ t('ChatAIResultOpenDetail') }}
+            <el-icon><ArrowRight /></el-icon>
+          </RouterLink>
+        </div>
       </div>
     </details>
   </section>
@@ -105,8 +126,15 @@
 
 <script setup>
 import { ref } from 'vue'
-import { ArrowDown, TopRight } from '@element-plus/icons-vue'
+import { ArrowDown, ArrowRight } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
+import { resultDetailRoute } from './resultNavigation'
+import {
+  isTechnicalIdentifier,
+  localizedFieldLabel,
+  operationLabel
+} from '../../utils/presentation'
 
 defineProps({
   cards: {
@@ -115,7 +143,9 @@ defineProps({
   }
 })
 
-const { t } = useI18n()
+const { t, te } = useI18n()
+const router = useRouter()
+const route = useRoute()
 const cardOpenState = ref({})
 const assetListOperations = new Set([
   'assets_assets_list',
@@ -155,30 +185,17 @@ function isAssetList(card) {
 
 function cardTitle(card) {
   if (isAssetList(card)) return t('ChatAIAssetsResult')
-  return card?.title || t('ChatAIResult')
+  const localizedOperation = operationLabel(card?.source?.operation_id, t, te)
+  if (localizedOperation) return localizedOperation
+  return isTechnicalIdentifier(card?.title) ? t('ChatAIResult') : card?.title || t('ChatAIResult')
 }
 
 function sourceLabel(source = {}) {
-  if (source.type === 'web_search') return source.provider || t('ChatAIWebSearch')
   return [t('ChatAIResultSource'), source.method].filter(Boolean).join(' · ')
 }
 
 function sourceDescription(source = {}) {
-  if (source.type === 'web_search') return source.provider || t('ChatAIWebSearch')
   return [source.method, source.path].filter(Boolean).join(' ')
-}
-
-function sources(card) {
-  return Array.isArray(card?.content?.sources) ? card.content.sources : []
-}
-
-function safeUrl(value) {
-  try {
-    const url = new URL(value)
-    return ['http:', 'https:'].includes(url.protocol) ? url.href : ''
-  } catch {
-    return ''
-  }
 }
 
 function isTabular(card) {
@@ -191,6 +208,21 @@ function columns(card) {
 
 function rows(card) {
   return Array.isArray(card?.content?.rows) ? card.content.rows : []
+}
+
+function detailRoute(card, row) {
+  return resultDetailRoute(card, row, router, route)
+}
+
+function hasDetailLinks(card) {
+  return rows(card).some((row) => detailRoute(card, row))
+}
+
+function detailLinkLabel(row) {
+  const name = row?.name || row?.username || row?._resource_id || row?.id
+  return name
+    ? t('ChatAIResultOpenNamedDetail', { name: formatValue(name) })
+    : t('ChatAIResultOpenDetail')
 }
 
 function assetInitial(row) {
@@ -244,21 +276,7 @@ function formatValue(value) {
 }
 
 function fieldLabel(value) {
-  const key = String(value || '')
-  const known = {
-    id: 'ID',
-    name: t('ChatAIFieldName'),
-    address: t('ChatAIFieldAddress'),
-    username: t('ChatAIFieldUsername'),
-    status: t('ChatAIFieldStatus'),
-    is_active: t('ChatAIFieldActive'),
-    date_created: t('ChatAIFieldDateCreated'),
-    date_updated: t('ChatAIFieldDateUpdated'),
-    org_name: t('ChatAIFieldOrganization'),
-    platform: t('ChatAIFieldPlatform')
-  }
-  if (known[key]) return known[key]
-  return key.replace(/[_-]+/g, ' ').replace(/\b\w/g, (character) => character.toUpperCase())
+  return localizedFieldLabel(value, t, te)
 }
 
 function formatFieldValue(key, value) {
@@ -354,44 +372,38 @@ function formatFieldValue(key, value) {
   }
 }
 
-.source-list {
-  display: grid;
-  gap: 1px;
-  padding: 6px;
+.result-table-wrap {
+  overflow-x: auto;
+}
+
+.result-detail-link {
+  display: inline-flex;
+  max-width: 100%;
+  align-items: center;
+  gap: 4px;
+  border-radius: 3px;
+  color: var(--ai-primary-dark, #148f76);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--ai-primary-dark, #148f76);
+    outline-offset: 3px;
+  }
 
   .el-icon {
     flex: 0 0 auto;
-    color: #667181;
-    font-size: 14px;
-  }
-
-  a,
-  > span {
-    display: flex;
-    min-height: 32px;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    padding: 6px 8px;
-    border-radius: var(--ai-radius-sm, 8px);
-    color: #405464;
-    font-size: 11px;
-    text-decoration: none;
-  }
-
-  a:hover {
-    color: var(--ai-primary-dark, #148f76);
-    background: var(--ai-primary-light, #e8f7f3);
-  }
-
-  a:focus-visible {
-    outline: 2px solid rgb(26 179 148 / 36%);
-    outline-offset: -2px;
+    font-size: 12px;
   }
 }
 
-.result-table-wrap {
-  overflow-x: auto;
+.result-detail-action {
+  padding: 0 10px 10px;
+  font-size: 11px;
 }
 
 .result-table {
@@ -407,6 +419,11 @@ function formatFieldValue(key, value) {
     text-align: left;
     vertical-align: top;
     word-break: normal;
+  }
+
+  &__action {
+    width: 1%;
+    white-space: nowrap;
   }
 
   th {
@@ -486,6 +503,10 @@ function formatFieldValue(key, value) {
       font-family: inherit;
       font-size: 11px;
     }
+  }
+
+  &__link strong {
+    color: inherit;
   }
 
   &__status {

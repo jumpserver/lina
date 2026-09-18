@@ -207,6 +207,17 @@ export default {
       ]
     },
     {
+      path: '/settings/chat-ai',
+      name: 'ChatAISettings',
+      component: () => import('@/views/settings/ChatAI'),
+      meta: {
+        title: i18n.t('ChatAI'),
+        icon: 'short-message',
+        disableGoBack: true,
+        permissions: ['settings.change_chatai']
+      }
+    },
+    {
       path: '/settings/notification',
       name: 'Msg',
       component: () => import('@/views/settings/Msg'),
@@ -227,7 +238,7 @@ export default {
         icon: 'feature',
         permissions: [
           'settings.change_ticket | settings.change_ops | settings.change_vault | ' +
-            'settings.change_chatai | settings.change_virtualapp'
+            'settings.change_virtualapp'
         ]
       }
     },
@@ -493,8 +504,30 @@ export default {
           component: () => import('@/views/settings/Applet/VirtualApp/VirtualAppCreateUpdate'),
           hidden: true,
           meta: {
-            title: i18n.t('VirtualHostUpdate'),
+            title: i18n.t('VirtualAppUpdate'),
             permissions: ['terminal.change_virtualapp'],
+            activeMenu: '/settings/applets'
+          }
+        },
+        {
+          path: 'virtual-apps/:id/publications/create',
+          name: 'VirtualAppPublicationCreate',
+          component: () => import('@/views/settings/Applet/VirtualApp/PublicationCreate'),
+          hidden: true,
+          meta: {
+            title: i18n.t('Publish'),
+            permissions: ['terminal.add_virtualapppublication'],
+            activeMenu: '/settings/applets'
+          }
+        },
+        {
+          path: 'app-providers/create',
+          name: 'AppProviderCreate',
+          component: () => import('@/views/settings/Applet/AppProvider/AppProviderCreateUpdate'),
+          hidden: true,
+          meta: {
+            title: i18n.t('AppProviderCreate'),
+            permissions: ['terminal.add_appprovider'],
             activeMenu: '/settings/applets'
           }
         },
@@ -507,6 +540,28 @@ export default {
           meta: {
             title: i18n.t('AppProviderDetail'),
             permissions: ['terminal.view_appprovider'],
+            activeMenu: '/settings/applets'
+          }
+        },
+        {
+          path: 'app-providers/:id/update',
+          name: 'AppProviderUpdate',
+          component: () => import('@/views/settings/Applet/AppProvider/AppProviderCreateUpdate'),
+          hidden: true,
+          meta: {
+            title: i18n.t('AppProviderUpdate'),
+            permissions: ['terminal.change_appprovider'],
+            activeMenu: '/settings/applets'
+          }
+        },
+        {
+          path: 'app-providers/:providerId/publications/create',
+          name: 'AppProviderPublicationCreate',
+          component: () => import('@/views/settings/Applet/VirtualApp/PublicationCreate'),
+          hidden: true,
+          meta: {
+            title: i18n.t('Publish'),
+            permissions: ['terminal.add_virtualapppublication'],
             activeMenu: '/settings/applets'
           }
         }

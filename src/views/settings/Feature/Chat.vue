@@ -25,14 +25,27 @@
     </template>
 
     <div class="settings-shell">
-      <el-form class="provider-form" label-position="top" size="default">
+      <el-form
+        ref="providerForm"
+        class="provider-form"
+        label-position="top"
+        :model="form"
+        :rules="formRules"
+        size="default"
+      >
         <section class="settings-panel connection-panel">
           <header class="section-header">
             <div class="section-heading">
               <span class="section-heading__icon" aria-hidden="true"><Connection /></span>
               <div>
                 <h3>{{ t('ChatAIConnectionSection') }}</h3>
-                <p>{{ t('ChatAIConnectionDescription') }}</p>
+                <p>
+                  {{
+                    iframeMode
+                      ? t('ChatAIIframeConnectionDescription')
+                      : t('ChatAIConnectionDescription')
+                  }}
+                </p>
               </div>
             </div>
             <div class="provider-value">
@@ -47,7 +60,7 @@
           </header>
 
           <div class="form-grid">
-            <el-form-item class="form-field--full" :label="t('ChatAIMethod')">
+            <el-form-item class="form-field--full method-field" :label="t('ChatAIMethod')">
               <el-radio-group v-model="form.CHAT_AI_METHOD">
                 <el-radio-button value="api">{{ t('ChatAIBuiltInMethod') }}</el-radio-button>
                 <el-radio-button value="iframe">{{ t('ChatAIIframeMethod') }}</el-radio-button>
@@ -55,7 +68,13 @@
               <div class="help-block">{{ t('ChatAIMethodHint') }}</div>
             </el-form-item>
 
-            <el-form-item v-if="iframeMode" class="form-field--full" :label="t('ChatAIIframeURL')">
+            <el-form-item
+              v-if="iframeMode"
+              class="form-field--full iframe-url-field"
+              :label="t('ChatAIIframeURL')"
+              prop="CHAT_AI_EMBED_URL"
+              required
+            >
               <el-input
                 v-model.trim="form.CHAT_AI_EMBED_URL"
                 autocomplete="off"
@@ -65,16 +84,36 @@
             </el-form-item>
 
             <template v-else>
-              <el-form-item class="form-field--full" :label="t('ChatAIBaseURL')">
-                <el-input
-                  v-model.trim="form.CHAT_AI_BASE_URL"
-                  autocomplete="off"
-                  :placeholder="t('ChatAIBaseURLPlaceholder')"
-                />
+              <el-form-item
+                class="form-field--full base-url-field"
+                :label="t('ChatAIBaseURL')"
+                prop="CHAT_AI_BASE_URL"
+                required
+              >
+                <template #label>
+                  <span>{{ t('ChatAIBaseURL') }}</span>
+                </template>
+                <el-tooltip
+                  :content="form.CHAT_AI_BASE_URL"
+                  :disabled="!baseUrlOverflow"
+                  :popper-style="{
+                    maxWidth: 'min(720px, calc(100vw - 32px))',
+                    overflowWrap: 'anywhere'
+                  }"
+                  :show-after="300"
+                  placement="top"
+                >
+                  <el-input
+                    ref="baseUrlInput"
+                    v-model.trim="form.CHAT_AI_BASE_URL"
+                    autocomplete="off"
+                    :placeholder="t('ChatAIBaseURLPlaceholder')"
+                  />
+                </el-tooltip>
                 <div class="help-block">{{ t('ChatAIBaseURLHint') }}</div>
               </el-form-item>
 
-              <el-form-item :label="t('ChatAIAPIKey')">
+              <el-form-item class="api-key-field" :label="t('ChatAIAPIKey')">
                 <el-input
                   v-model="form.CHAT_AI_API_KEY"
                   autocomplete="new-password"
@@ -87,7 +126,7 @@
                 <div class="help-block">{{ t('ChatAIAPIKeySavedHint') }}</div>
               </el-form-item>
 
-              <el-form-item :label="t('ChatAIProxy')">
+              <el-form-item class="proxy-field" :label="t('ChatAIProxy')">
                 <el-input
                   v-model.trim="form.CHAT_AI_PROXY"
                   autocomplete="off"
@@ -129,81 +168,7 @@
                   </span>
                 </div>
               </el-form-item>
-
-              <el-form-item
-                class="form-field--full voice-field"
-                :label="t('ChatAIVoiceTranscriptionMode')"
-              >
-                <el-radio-group v-model="form.CHAT_AI_VOICE_TRANSCRIPTION_MODE">
-                  <el-radio-button value="browser">
-                    {{ t('ChatAIBrowserSpeechRecognition') }}
-                  </el-radio-button>
-                </el-radio-group>
-                <div class="help-block">{{ t('ChatAIVoiceTranscriptionModeHint') }}</div>
-              </el-form-item>
             </template>
-          </div>
-        </section>
-
-        <section
-          v-if="!iframeMode"
-          class="settings-panel web-search-panel"
-          :class="{ 'is-enabled': form.CHAT_AI_WEB_SEARCH_ENABLED }"
-        >
-          <header class="section-header">
-            <div class="section-heading">
-              <span class="section-heading__icon section-heading__icon--search" aria-hidden="true">
-                <Search />
-              </span>
-              <div>
-                <h3>{{ t('ChatAIWebSearch') }}</h3>
-                <p>{{ t('ChatAIWebSearchDescription') }}</p>
-              </div>
-            </div>
-            <el-switch v-model="form.CHAT_AI_WEB_SEARCH_ENABLED" />
-          </header>
-
-          <div v-if="form.CHAT_AI_WEB_SEARCH_ENABLED" class="form-grid">
-            <el-form-item :label="t('ChatAIWebSearchProvider')">
-              <el-select v-model="form.CHAT_AI_WEB_SEARCH_PROVIDER">
-                <el-option label="Tavily" value="tavily" />
-                <el-option label="SearXNG" value="searxng" />
-              </el-select>
-            </el-form-item>
-
-            <el-form-item :label="t('ChatAIWebSearchBaseURL')">
-              <el-input
-                v-model.trim="form.CHAT_AI_WEB_SEARCH_BASE_URL"
-                autocomplete="off"
-                :placeholder="t('ChatAIWebSearchBaseURLPlaceholder')"
-              />
-              <div class="help-block">{{ t('ChatAIWebSearchBaseURLHint') }}</div>
-            </el-form-item>
-
-            <el-form-item
-              v-if="form.CHAT_AI_WEB_SEARCH_PROVIDER === 'tavily'"
-              :label="t('ChatAIWebSearchAPIKey')"
-            >
-              <el-input
-                v-model="form.CHAT_AI_WEB_SEARCH_API_KEY"
-                autocomplete="new-password"
-                :placeholder="t('ChatAIWebSearchAPIKeyPlaceholder')"
-                show-password
-                type="password"
-              >
-                <template #prefix><Lock /></template>
-              </el-input>
-              <div class="help-block">{{ t('ChatAIWebSearchAPIKeyHint') }}</div>
-            </el-form-item>
-
-            <el-form-item :label="t('ChatAIWebSearchProxy')">
-              <el-input
-                v-model.trim="form.CHAT_AI_WEB_SEARCH_PROXY"
-                autocomplete="off"
-                :placeholder="t('ChatAIProxyPlaceholder')"
-              />
-              <div class="help-block">{{ t('ChatAIWebSearchProxyHint') }}</div>
-            </el-form-item>
           </div>
         </section>
 
@@ -298,10 +263,10 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
-import { Check, Connection, Lock, MagicStick, Refresh, Search } from '@element-plus/icons-vue'
+import { Check, Connection, Lock, MagicStick, Refresh } from '@element-plus/icons-vue'
 import { IBox } from '@/components'
 import {
   discoverChatAIModels,
@@ -324,6 +289,10 @@ const modelsDiscovered = ref(false)
 const modelOptions = ref([])
 const testState = ref('idle')
 const hydrated = ref(false)
+const providerForm = ref(null)
+const baseUrlInput = ref(null)
+const baseUrlOverflow = ref(false)
+let baseUrlResizeObserver
 
 const form = reactive({
   CHAT_AI_ENABLED: false,
@@ -332,18 +301,32 @@ const form = reactive({
   CHAT_AI_BASE_URL: '',
   CHAT_AI_API_KEY: '',
   CHAT_AI_PROXY: '',
-  CHAT_AI_MODEL: '',
-  CHAT_AI_VOICE_TRANSCRIPTION_MODE: 'browser',
-  CHAT_AI_WEB_SEARCH_ENABLED: false,
-  CHAT_AI_WEB_SEARCH_PROVIDER: 'tavily',
-  CHAT_AI_WEB_SEARCH_BASE_URL: 'https://api.tavily.com',
-  CHAT_AI_WEB_SEARCH_API_KEY: '',
-  CHAT_AI_WEB_SEARCH_PROXY: ''
+  CHAT_AI_MODEL: ''
 })
+const formRules = computed(() => ({
+  CHAT_AI_EMBED_URL: [
+    {
+      required: true,
+      whitespace: true,
+      message: t('FieldRequiredError'),
+      trigger: ['blur', 'change']
+    },
+    { validator: validateIframeUrlFormat, trigger: ['blur', 'change'] }
+  ],
+  CHAT_AI_BASE_URL: [
+    {
+      required: true,
+      whitespace: true,
+      message: t('FieldRequiredError'),
+      trigger: ['blur', 'change']
+    },
+    { validator: validateBaseUrlFormat, trigger: ['blur', 'change'] }
+  ]
+}))
 
 const iframeMode = computed(() => form.CHAT_AI_METHOD === 'iframe')
-const iframeReady = computed(() => Boolean(form.CHAT_AI_EMBED_URL))
-const endpointReady = computed(() => Boolean(form.CHAT_AI_BASE_URL))
+const iframeReady = computed(() => isValidIframeUrl(form.CHAT_AI_EMBED_URL))
+const endpointReady = computed(() => isValidBaseUrl(form.CHAT_AI_BASE_URL))
 const modelReady = computed(() => Boolean(form.CHAT_AI_MODEL))
 const readinessTotal = computed(() => (iframeMode.value ? 1 : 3))
 const readinessCount = computed(() => {
@@ -368,6 +351,92 @@ const testStatusText = computed(() => {
   return t('ChatAINotTested')
 })
 
+function getBaseUrlNativeInput() {
+  return baseUrlInput.value?.input || baseUrlInput.value?.$el?.querySelector('input') || null
+}
+
+function updateBaseUrlOverflow() {
+  nextTick(() => {
+    const input = getBaseUrlNativeInput()
+    baseUrlOverflow.value = Boolean(
+      form.CHAT_AI_BASE_URL && input && input.scrollWidth > input.clientWidth + 1
+    )
+  })
+}
+
+function observeBaseUrlInput() {
+  baseUrlResizeObserver?.disconnect()
+  baseUrlResizeObserver = undefined
+
+  const input = getBaseUrlNativeInput()
+  if (!input || typeof ResizeObserver === 'undefined') return
+
+  baseUrlResizeObserver = new ResizeObserver(updateBaseUrlOverflow)
+  baseUrlResizeObserver.observe(input)
+}
+
+function isValidBaseUrl(value) {
+  const baseUrl = String(value || '').trim()
+  if (!baseUrl || !/^[\x21-\x7e]+$/.test(baseUrl)) return false
+
+  try {
+    const url = new URL(baseUrl)
+    return ['http:', 'https:'].includes(url.protocol) && Boolean(url.hostname)
+  } catch {
+    return false
+  }
+}
+
+function isValidIframeUrl(value) {
+  const embedUrl = String(value || '').trim()
+  if (!embedUrl || !/^[\x21-\x7e]+$/.test(embedUrl)) return false
+
+  try {
+    const url = new URL(embedUrl)
+    return ['http:', 'https:'].includes(url.protocol) && Boolean(url.hostname)
+  } catch {
+    return false
+  }
+}
+
+function validateBaseUrlFormat(_rule, value, callback) {
+  if (!String(value || '').trim() || isValidBaseUrl(value)) {
+    callback()
+  } else {
+    callback(new Error(t('ChatAIBaseURLInvalid')))
+  }
+}
+
+function validateIframeUrlFormat(_rule, value, callback) {
+  if (!String(value || '').trim() || isValidIframeUrl(value)) {
+    callback()
+  } else {
+    callback(new Error(t('ChatAIIframeURLInvalid')))
+  }
+}
+
+async function validateBaseUrlField() {
+  try {
+    await providerForm.value?.validateField('CHAT_AI_BASE_URL')
+    return true
+  } catch {
+    return false
+  }
+}
+
+async function validateIframeUrlField() {
+  try {
+    await providerForm.value?.validateField('CHAT_AI_EMBED_URL')
+    return true
+  } catch {
+    return false
+  }
+}
+
+function validateCurrentConnection() {
+  return iframeMode.value ? validateIframeUrlField() : validateBaseUrlField()
+}
+
 function getErrorMessage(error) {
   return (
     error?.response?.data?.detail ||
@@ -389,19 +458,6 @@ function providerPayload() {
   return payload
 }
 
-function webSearchPayload() {
-  const payload = {
-    CHAT_AI_WEB_SEARCH_ENABLED: form.CHAT_AI_WEB_SEARCH_ENABLED,
-    CHAT_AI_WEB_SEARCH_PROVIDER: form.CHAT_AI_WEB_SEARCH_PROVIDER,
-    CHAT_AI_WEB_SEARCH_BASE_URL: form.CHAT_AI_WEB_SEARCH_BASE_URL,
-    CHAT_AI_WEB_SEARCH_PROXY: form.CHAT_AI_WEB_SEARCH_PROXY
-  }
-  if (form.CHAT_AI_WEB_SEARCH_API_KEY) {
-    payload.CHAT_AI_WEB_SEARCH_API_KEY = encryptPassword(form.CHAT_AI_WEB_SEARCH_API_KEY)
-  }
-  return payload
-}
-
 function updatePublicSettings(values) {
   const publicSettings = store.getters.publicSettings || {}
   return store.dispatch('settings/changeSetting', {
@@ -414,9 +470,8 @@ function updatePublicSettings(values) {
 }
 
 async function changeChatAIEnabled(enabled) {
-  if (enabled && iframeMode.value && !iframeReady.value) {
+  if (enabled && !(await validateCurrentConnection())) {
     form.CHAT_AI_ENABLED = false
-    message.warning(t('ChatAIIframeURLRequired'))
     return
   }
   if (enabled && !iframeMode.value && !form.CHAT_AI_MODEL) {
@@ -430,10 +485,14 @@ async function changeChatAIEnabled(enabled) {
     const payload = { CHAT_AI_ENABLED: enabled }
     const publicSettings = { CHAT_AI_ENABLED: enabled }
     if (enabled) {
-      payload.CHAT_AI_METHOD = form.CHAT_AI_METHOD
-      payload.CHAT_AI_EMBED_URL = form.CHAT_AI_EMBED_URL
-      publicSettings.CHAT_AI_METHOD = form.CHAT_AI_METHOD
-      publicSettings.CHAT_AI_EMBED_URL = form.CHAT_AI_EMBED_URL
+      Object.assign(payload, {
+        CHAT_AI_METHOD: form.CHAT_AI_METHOD,
+        CHAT_AI_EMBED_URL: form.CHAT_AI_EMBED_URL
+      })
+      Object.assign(publicSettings, {
+        CHAT_AI_METHOD: form.CHAT_AI_METHOD,
+        CHAT_AI_EMBED_URL: form.CHAT_AI_EMBED_URL
+      })
     }
     await saveChatAISettings(payload)
     await updatePublicSettings(publicSettings)
@@ -480,6 +539,7 @@ async function refreshModels(options = {}) {
 
 async function testConfiguration() {
   if (iframeMode.value) return
+  if (!(await validateBaseUrlField())) return
   if (!form.CHAT_AI_MODEL) {
     message.warning(t('ChatAIModelRequired'))
     return
@@ -499,16 +559,9 @@ async function testConfiguration() {
 }
 
 async function saveConfiguration() {
-  if (form.CHAT_AI_ENABLED && iframeMode.value && !iframeReady.value) {
-    message.warning(t('ChatAIIframeURLRequired'))
-    return
-  }
+  if (!(await validateCurrentConnection())) return
   if (form.CHAT_AI_ENABLED && !iframeMode.value && !form.CHAT_AI_MODEL) {
     message.warning(t('ChatAIModelRequired'))
-    return
-  }
-  if (!iframeMode.value && form.CHAT_AI_WEB_SEARCH_ENABLED && !form.CHAT_AI_WEB_SEARCH_BASE_URL) {
-    message.warning(t('ChatAIWebSearchBaseURLRequired'))
     return
   }
   saving.value = true
@@ -517,20 +570,15 @@ async function saveConfiguration() {
       CHAT_AI_ENABLED: form.CHAT_AI_ENABLED,
       CHAT_AI_METHOD: form.CHAT_AI_METHOD,
       CHAT_AI_EMBED_URL: form.CHAT_AI_EMBED_URL,
-      CHAT_AI_VOICE_TRANSCRIPTION_MODE: form.CHAT_AI_VOICE_TRANSCRIPTION_MODE,
-      ...webSearchPayload(),
       ...providerPayload()
     })
     await updatePublicSettings({
       CHAT_AI_ENABLED: form.CHAT_AI_ENABLED,
       CHAT_AI_METHOD: form.CHAT_AI_METHOD,
-      CHAT_AI_EMBED_URL: form.CHAT_AI_EMBED_URL,
-      CHAT_AI_WEB_SEARCH_ENABLED: form.CHAT_AI_WEB_SEARCH_ENABLED,
-      CHAT_AI_VOICE_TRANSCRIPTION_MODE: form.CHAT_AI_VOICE_TRANSCRIPTION_MODE
+      CHAT_AI_EMBED_URL: form.CHAT_AI_EMBED_URL
     })
     hydrated.value = false
     form.CHAT_AI_API_KEY = ''
-    form.CHAT_AI_WEB_SEARCH_API_KEY = ''
     hydrated.value = true
     message.success(t('ChatAISettingsSaved'))
   } catch (error) {
@@ -556,6 +604,15 @@ watch(
   { flush: 'sync' }
 )
 
+watch(() => form.CHAT_AI_BASE_URL, updateBaseUrlOverflow, { flush: 'post' })
+
+watch(iframeMode, async () => {
+  providerForm.value?.clearValidate(['CHAT_AI_BASE_URL', 'CHAT_AI_EMBED_URL'])
+  await nextTick()
+  observeBaseUrlInput()
+  updateBaseUrlOverflow()
+})
+
 onMounted(async () => {
   try {
     const settings = await getChatAISettings()
@@ -566,15 +623,7 @@ onMounted(async () => {
       CHAT_AI_BASE_URL: settings?.CHAT_AI_BASE_URL || '',
       CHAT_AI_API_KEY: '',
       CHAT_AI_PROXY: settings?.CHAT_AI_PROXY || '',
-      CHAT_AI_MODEL: settings?.CHAT_AI_MODEL || '',
-      CHAT_AI_VOICE_TRANSCRIPTION_MODE: 'browser',
-      CHAT_AI_WEB_SEARCH_ENABLED: Boolean(settings?.CHAT_AI_WEB_SEARCH_ENABLED),
-      CHAT_AI_WEB_SEARCH_PROVIDER:
-        settings?.CHAT_AI_WEB_SEARCH_PROVIDER === 'searxng' ? 'searxng' : 'tavily',
-      CHAT_AI_WEB_SEARCH_BASE_URL:
-        settings?.CHAT_AI_WEB_SEARCH_BASE_URL || 'https://api.tavily.com',
-      CHAT_AI_WEB_SEARCH_API_KEY: '',
-      CHAT_AI_WEB_SEARCH_PROXY: settings?.CHAT_AI_WEB_SEARCH_PROXY || ''
+      CHAT_AI_MODEL: settings?.CHAT_AI_MODEL || ''
     })
     ensureCurrentModel([])
     hydrated.value = true
@@ -585,20 +634,25 @@ onMounted(async () => {
     message.error(getErrorMessage(error))
   } finally {
     loading.value = false
+    await nextTick()
+    observeBaseUrlInput()
+    updateBaseUrlOverflow()
   }
 })
+
+onBeforeUnmount(() => baseUrlResizeObserver?.disconnect())
 </script>
 
 <style lang="scss" scoped>
 .chat-ai-settings {
   :deep(.el-card__header) {
-    padding: 16px 24px;
+    padding: 16px 20px;
     background: linear-gradient(110deg, #fff 0%, #f4fbf8 100%);
   }
 
   :deep(.el-card__body) {
     display: block;
-    padding: 24px;
+    padding: 10px 0 0 0;
     background: #f5f7f6;
   }
 }
@@ -684,18 +738,17 @@ onMounted(async () => {
 .settings-shell {
   display: grid;
   width: 100%;
-  max-width: 1560px;
-  margin: 0 auto;
   align-items: start;
-  gap: 20px;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 320px);
+  gap: 16px;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 380px);
 }
 
 .provider-form {
   display: flex;
   min-width: 0;
   flex-direction: column;
-  gap: 16px;
+  gap: 0;
+  align-self: stretch;
 }
 
 .settings-panel,
@@ -709,7 +762,9 @@ onMounted(async () => {
 }
 
 .settings-panel {
+  flex: 1;
   overflow: hidden;
+  border-radius: 8px 8px 0 0;
 }
 
 .section-header {
@@ -721,8 +776,7 @@ onMounted(async () => {
   padding: 16px 20px;
 }
 
-.connection-panel .section-header,
-.web-search-panel.is-enabled .section-header {
+.connection-panel .section-header {
   border-bottom: 1px solid #edf0ee;
 }
 
@@ -761,11 +815,6 @@ onMounted(async () => {
   svg {
     width: 16px;
   }
-}
-
-.section-heading__icon--search {
-  color: #3c83d5;
-  background: rgb(60 131 213 / 9%);
 }
 
 .provider-value {
@@ -827,6 +876,8 @@ onMounted(async () => {
   justify-content: space-between;
   gap: 16px;
   padding: 13px 16px;
+  border-top: 0;
+  border-radius: 0 0 8px 8px;
 }
 
 .form-action-buttons {
@@ -1080,6 +1131,10 @@ onMounted(async () => {
   width: 100%;
 }
 
+:deep(.provider-form .el-tooltip__trigger) {
+  width: 100%;
+}
+
 :deep(.provider-form .help-block) {
   width: 100%;
   margin: 4px 0 0;
@@ -1088,7 +1143,35 @@ onMounted(async () => {
   line-height: 18px;
 }
 
-@media (width <= 980px) {
+@media (width >= 1500px) {
+  .form-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .base-url-field {
+    grid-column: span 7;
+  }
+
+  .api-key-field {
+    grid-column: span 5;
+  }
+
+  .proxy-field {
+    grid-column: span 5;
+  }
+
+  .model-field {
+    grid-column: span 7;
+  }
+}
+
+@media (width > 1180px) {
+  .provider-form {
+    height: 100%;
+  }
+}
+
+@media (width <= 1180px) {
   .settings-shell {
     grid-template-columns: 1fr;
   }

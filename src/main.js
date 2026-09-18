@@ -116,7 +116,7 @@ async function initApp() {
   app.config.globalProperties.$tc = identityTc
 
   // 设置全局错误处理器
-  setupErrorHandler(app, message)
+  setupErrorHandler(app)
 
   window._ = _
   // v-html 在模板编译阶段统一转换为 window.$xss.process(...)

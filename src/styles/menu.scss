@@ -177,14 +177,14 @@ $single-menu-height: 38px;
   // 折叠起来的样式
   &.el-menu--collapse {
     // 覆盖默认 64px 宽度
-    width: 55px;
+    width: $sideBarCollapsedWidth;
 
     .el-menu-item,
     .el-sub-menu__title,
     .submenu-title-noDropdown {
       position: relative;
       justify-content: center;
-      min-width: 55px;
+      min-width: $sideBarCollapsedWidth;
       padding: 0 !important;
     }
 
@@ -222,7 +222,7 @@ $single-menu-height: 38px;
       display: inline-block;
 
       .el-tooltip {
-        width: 55px !important;
+        width: $sideBarCollapsedWidth !important;
       }
     }
 
@@ -230,8 +230,8 @@ $single-menu-height: 38px;
     .external-action-menu-item.level1-menu {
       display: flex;
       justify-content: center;
-      min-width: 55px;
-      width: 55px;
+      min-width: $sideBarCollapsedWidth;
+      width: $sideBarCollapsedWidth;
       padding: 0;
 
       &::before {
@@ -263,7 +263,7 @@ $single-menu-height: 38px;
       }
 
       .level1-menu {
-        min-width: 55px;
+        min-width: $sideBarCollapsedWidth;
       }
 
       .nest-menu .level2-menu {
@@ -271,7 +271,7 @@ $single-menu-height: 38px;
       }
 
       .el-tooltip {
-        width: 55px !important;
+        width: $sideBarCollapsedWidth !important;
       }
     }
   }

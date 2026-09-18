@@ -8,7 +8,9 @@ export const NODE_ASSET_METRIC_MODES = Object.freeze([
   'asset_all',
   'asset_direct',
   'permission_direct',
-  'permission_effective'
+  'permission_effective',
+  'account_all',
+  'account_direct'
 ])
 
 export const NODE_ASSET_SEARCH_TARGETS = Object.freeze(['all', 'node', 'asset'])
@@ -76,10 +78,10 @@ export function normalizeNodeAssetResponse(response) {
     )
     const parentTreeId = parentSourceKey ? makeTreeId('node', parentSourceKey) : undefined
     const children = (raw.children || []).map((child) => normalize(child, rawSourceKey))
-    const hasChildren =
-      type === 'asset'
-        ? false
-        : (raw.hasChildren ?? raw.isParent ?? raw.meta?.data?.has_children ?? children.length > 0)
+    // Node children are intentionally probed lazily. Every unseen node keeps
+    // an expand arrow and becomes a leaf only after the standard child request
+    // returns no nodes or assets; backend child-existence flags are unnecessary.
+    const hasChildren = type !== 'asset'
 
     return {
       ...raw,
@@ -89,7 +91,7 @@ export function normalizeNodeAssetResponse(response) {
       children,
       hasChildren,
       isParent: hasChildren,
-      _isLeaf: type === 'asset' || !hasChildren,
+      _isLeaf: type === 'asset',
       meta: {
         ...raw.meta,
         type,

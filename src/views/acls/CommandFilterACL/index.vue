@@ -1,5 +1,9 @@
 <template>
-  <TabPage v-model:active-menu="config.activeMenu" :submenu="config.submenu" />
+  <TabPage
+    v-model:active-menu="config.activeMenu"
+    :clear-query-keys-on-tab-change="['command_filters']"
+    :submenu="config.submenu"
+  />
 </template>
 
 <script>

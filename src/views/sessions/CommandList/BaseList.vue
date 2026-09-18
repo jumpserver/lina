@@ -59,6 +59,7 @@ export default {
       expandRootInGlobalOrg: true,
       treeUrl: '/api/v1/terminal/command-storages/tree/?real=1',
       amountPredicate: (node) => node.valid !== false,
+      getNodeAmountTitle: () => this.$t('TreeAmountTipCommands'),
       getNodeAmountResourceId: (node) => (node.id === 'root' ? null : node.id),
       loadNodeAmounts: (nodeIds, options) => this.loadStorageAmounts(nodeIds, options),
       edit: {
@@ -467,10 +468,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.command-list-table {
-  --tree-table-header-height: 39px;
-}
-
 .command-list-table :deep(.risk-command) {
   background-color: oldlace;
 

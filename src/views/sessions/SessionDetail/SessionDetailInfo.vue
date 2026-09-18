@@ -45,8 +45,8 @@ export default {
           },
           callbacks: {
             click: function () {
-              // 终断 session reload
-              terminateSession(vm.session.id).then((res) => {
+              // 终止会话后刷新
+              terminateSession([vm.session.id]).then((res) => {
                 const msg = vm.$t('TerminateTaskSendSuccessMsg')
                 vm.$message.success(msg)
                 window.setTimeout(function () {
@@ -91,7 +91,8 @@ export default {
           },
           callbacks: {
             click: function () {
-              const replayUrl = '/luna/replay/' + vm.session.id
+              const oid = vm.session.org_id || ''
+              const replayUrl = `/luna/replay/${vm.session.id}${oid ? `?oid=${encodeURIComponent(oid)}` : ''}`
               window.open(replayUrl)
             }
           }

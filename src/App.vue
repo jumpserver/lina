@@ -8,7 +8,6 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { Watermark } from 'watermark-js-plus'
-import { IS_DEV } from '@/utils/env'
 
 export default {
   name: 'App',
@@ -44,30 +43,6 @@ export default {
         this.createWatermark()
       }
     }
-  },
-  // Vue 3 错误捕获钩子 - 捕获子组件错误，防止整个应用崩溃
-  errorCaptured(err, instance, info) {
-    // 在开发环境下打印详细错误信息
-    if (IS_DEV) {
-      console.error('Error Captured in App:', err)
-      console.error('Component instance:', instance)
-      console.error('Error info:', info)
-    } else {
-      console.error('Component Error:', err?.message || err)
-    }
-
-    // 尝试显示友好的错误提示
-    try {
-      if (this.$message && typeof this.$message.error === 'function') {
-        this.$message.error(err?.message || '组件加载出错，请刷新页面重试')
-      }
-    } catch (e) {
-      // 如果 message 服务不可用，忽略
-    }
-
-    // 返回 false 可以阻止错误继续向上传播
-    // 但这里返回 true，让全局错误处理器也能处理
-    return true
   },
   methods: {
     getWaterMarkFields() {

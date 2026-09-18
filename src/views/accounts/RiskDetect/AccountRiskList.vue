@@ -26,6 +26,7 @@ import RiskHandleFormatter from './RiskHandlerFormatter/index.vue'
 import BatchResolveDialog from '@/views/accounts/RiskDetect/RiskHandlerFormatter/BatchResolveDialog.vue'
 import RiskScanDialog from './RiskScanDialog.vue'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import { createNodeAssetTreeDataSource } from '@/components/Tree/NodeAssetTree/dataSource'
 export default {
   components: {
     RiskScanDialog,
@@ -42,6 +43,18 @@ export default {
         asset: ''
       },
       treeSetting: {
+        treeComponent: 'NodeAssetTree',
+        treeTitle: this.$t('AssetTree'),
+        assetIconMode: 'platform',
+        countResource: 'none',
+        showMetrics: false,
+        showPermissionScope: false,
+        showDefaultMenu: false,
+        childrenPagination: true,
+        dataSource: createNodeAssetTreeDataSource(this.$axios),
+        settingsCacheKey: 'account-risk',
+        readOnly: false,
+        edit: { drag: { isMove: false } },
         showMenu: (node) => {
           return node?.meta?.type === 'asset'
         },
@@ -52,15 +65,13 @@ export default {
         selectSyncToRoute: false,
         url: '/api/v1/accounts/account-risks/',
         nodeUrl: '/api/v1/assets/nodes/',
-        // ?assets=0不显示资产. =1显示资产
-        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1&asset_amount=0',
         menu: [
           {
             id: 'check',
             name: this.$t('RiskDetection'),
             icon: 'scan',
             callback: (node) => {
-              vm.detectDialog.asset = node.id
+              vm.detectDialog.asset = node.meta.data.resource_id
               setTimeout(() => {
                 vm.detectDialog.visible = true
               }, 100)

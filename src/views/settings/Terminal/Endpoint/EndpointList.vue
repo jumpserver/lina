@@ -37,6 +37,7 @@ export default {
             'actions',
             'http_port',
             'https_port',
+            'web_proxy_port',
             'ssh_port',
             'rdp_port',
             'vnc_port',

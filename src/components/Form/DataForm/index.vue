@@ -76,6 +76,7 @@
 import { randomString } from '@/utils/common/index'
 import { markRaw, toRaw } from 'vue'
 import ElFormRender from './components/el-form-renderer'
+import { runWithoutUniqueCheck } from './rules'
 
 const scrollToError = (
   formInstance,
@@ -263,7 +264,7 @@ export default {
     async submitForm(formName, addContinue) {
       const form = this.$refs[formName]
       try {
-        await form.validate()
+        await runWithoutUniqueCheck(() => form.validate())
         const formValue = form.getFormValue()
         this.$emit('submit', formValue, form, addContinue)
       } catch (error) {

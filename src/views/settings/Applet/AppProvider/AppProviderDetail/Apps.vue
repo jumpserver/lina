@@ -1,18 +1,23 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="20" :sm="24">
-      <ListTable :header-actions="headerConfig" :table-config="config" />
-    </el-col>
-  </el-row>
+  <TwoCol>
+    <ListTable :header-actions="headerConfig" :table-config="config" />
+    <template #right>
+      <QuickActions :actions="quickActions" type="primary" />
+    </template>
+  </TwoCol>
 </template>
 
 <script lang="jsx">
-import { DrawerListTable as ListTable } from '@/components'
+import { DrawerListTable as ListTable, QuickActions } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import { openTaskPage } from '@/utils/jms/index'
 export default {
   name: 'Apps',
   components: {
-    ListTable
+    ListTable,
+    QuickActions,
+    TwoCol
   },
   props: {
     object: {
@@ -23,14 +28,29 @@ export default {
   data() {
     return {
       headerConfig: {
-        hasLeftActions: false,
         hasImport: false,
-        hasExport: false
+        hasExport: false,
+        createRoute: {
+          name: 'AppProviderPublicationCreate',
+          params: { providerId: this.object.id }
+        },
+        createTitle: this.$t('Publish'),
+        extraMoreActions: [
+          {
+            name: 'PublishSelected',
+            title: this.$t('BatchPublish'),
+            type: 'primary',
+            can: ({ selectedRows }) => selectedRows.length > 0,
+            callback: ({ selectedRows }) =>
+              Promise.all(selectedRows.map((row) => this.publish(row, false))).then((results) => {
+                if (results[0]?.task) openTaskPage(results[0].task)
+              })
+          }
+        ]
       },
       config: {
         url: `/api/v1/terminal/virtual-app-publications/?provider=${this.object.id}`,
-        columns: ['app.name', 'app.image_name', 'date_updated', 'status'],
-        excludes: ['actions'],
+        columns: ['app.name', 'app.image_name', 'app_version', 'date_synced', 'status', 'actions'],
         columnsMeta: {
           'app.name': {
             label: this.$t('Name'),
@@ -49,14 +69,17 @@ export default {
           'app.image_name': {
             label: this.$t('ImageName')
           },
+          app_version: {
+            label: this.$t('PublishedVersion')
+          },
           status: {
             label: this.$t('PublishStatus'),
             formatter: (row) => {
               const typeMapper = {
-                pending: 'success',
-                success: 'primary',
+                pending: 'warning',
+                success: 'success',
                 failed: 'danger',
-                unknown: 'warning'
+                mismatch: 'warning'
               }
               const tp = typeMapper[row.status.value] || 'warning'
               return (
@@ -66,20 +89,72 @@ export default {
               )
             }
           },
-          date_updated: {
-            label: this.$t('Date')
+          date_synced: {
+            label: this.$t('DateLastSync')
           },
           actions: {
-            hidden: true,
             formatterArgs: {
               hasUpdate: false,
               hasDelete: true,
-              canDelete: false,
-              hasClone: false
+              hasClone: false,
+              extraActions: [
+                {
+                  title: this.$t('Publish'),
+                  can: this.$hasPerm('terminal.change_virtualapppublication'),
+                  callback: ({ row, reloadTable }) => this.publish(row).then(reloadTable)
+                }
+              ]
             }
           }
         }
-      }
+      },
+      quickActions: [
+        {
+          title: this.$t('InitialDeploy'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('Deploy'),
+            disabled: !this.object.host || !this.$hasPerm('terminal.add_appproviderdeployment')
+          },
+          callbacks: {
+            click: () => {
+              this.$axios
+                .post('/api/v1/terminal/app-provider-deployments/', {
+                  provider: this.object.id
+                })
+                .then((res) => openTaskPage(res.task))
+            }
+          }
+        },
+        {
+          title: this.$t('PublishAllVirtualApps'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('Publish'),
+            disabled: !this.object.host || !this.$hasPerm('terminal.change_virtualapppublication')
+          },
+          callbacks: {
+            click: () => {
+              this.$axios
+                .post(`/api/v1/terminal/app-providers/${this.object.id}/publish-apps/`)
+                .then((res) => {
+                  if (res.task) openTaskPage(res.task)
+                  else this.$message.info(this.$t('NoData'))
+                })
+            }
+          }
+        }
+      ]
+    }
+  },
+  methods: {
+    publish(row, openTask = true) {
+      return this.$axios
+        .post(`/api/v1/terminal/virtual-app-publications/${row.id}/publish/`)
+        .then((res) => {
+          if (openTask) openTaskPage(res.task)
+          return res
+        })
     }
   }
 }

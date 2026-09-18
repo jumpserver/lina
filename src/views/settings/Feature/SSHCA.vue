@@ -1,20 +1,5 @@
 <template>
   <div class="ssh-ca-page">
-    <section class="ssh-ca-hero">
-      <div aria-hidden="true" class="hero-icon">
-        <el-icon><Key /></el-icon>
-      </div>
-      <div class="hero-content">
-        <div class="hero-eyebrow">{{ $t('OpenBaoSSHCA') }}</div>
-        <h2>{{ $t('SSHCAConfiguration') }}</h2>
-        <p>{{ $t('OpenBaoSSHCAHelpText') }}</p>
-      </div>
-      <div class="hero-tags">
-        <el-tag effect="plain" type="success">{{ $t('SSHCAShortLived') }}</el-tag>
-        <el-tag effect="plain">{{ $t('SSHCAEphemeralKeys') }}</el-tag>
-      </div>
-    </section>
-
     <div class="ssh-ca-layout">
       <IBox :title="$t('SSHCAConfiguration')" class="configuration-card">
         <template #header>
@@ -154,6 +139,69 @@
 import IBox from '@/components/Common/IBox/index.vue'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { copy, downloadText } from '@/utils/common/index'
+import { encryptPassword } from '@/utils/secure'
+
+function isValidOpenBaoAddress(value) {
+  const address = String(value || '').trim()
+  if (!address || !/^[\x21-\x7e]+$/.test(address)) {
+    return false
+  }
+
+  try {
+    const url = new URL(address)
+    return ['http:', 'https:'].includes(url.protocol) && Boolean(url.hostname)
+  } catch {
+    return false
+  }
+}
+
+function isValidIPv4Address(value) {
+  const parts = value.split('.')
+  return (
+    parts.length === 4 &&
+    parts.every((part) => {
+      if (!/^\d{1,3}$/.test(part) || (part.length > 1 && part.startsWith('0'))) {
+        return false
+      }
+      return Number(part) <= 255
+    })
+  )
+}
+
+function isValidIPv6Address(value) {
+  try {
+    const url = new URL(`http://[${value}]/`)
+    return Boolean(url.hostname)
+  } catch {
+    return false
+  }
+}
+
+function isValidCIDR(value) {
+  const parts = value.split('/')
+  if (
+    parts.length !== 2 ||
+    !/^\d{1,3}$/.test(parts[1]) ||
+    (parts[1].length > 1 && parts[1].startsWith('0'))
+  ) {
+    return false
+  }
+
+  const [address, prefixText] = parts
+  const prefix = Number(prefixText)
+  if (address.includes(':')) {
+    return prefix <= 128 && isValidIPv6Address(address)
+  }
+  return prefix <= 32 && isValidIPv4Address(address)
+}
+
+function isValidCIDRList(value) {
+  const cidrs = String(value || '')
+    .split(',')
+    .map((item) => item.trim())
+
+  return cidrs.length > 0 && cidrs.every((cidr) => cidr && isValidCIDR(cidr))
+}
 
 export default {
   name: 'SSHCA',
@@ -163,10 +211,31 @@ export default {
   },
   data() {
     const vm = this
+    const validateOpenBaoAddress = (rule, value, callback) => {
+      const address = String(value || '').trim()
+      if (!address && !vm.testingConnection) {
+        callback()
+      } else if (!address) {
+        callback(new Error(vm.$t('FieldRequiredError')))
+      } else if (!isValidOpenBaoAddress(address)) {
+        callback(new Error(vm.$t('FormatError')))
+      } else {
+        callback()
+      }
+    }
+    const validateAllowedSources = (rule, value, callback) => {
+      const sourceAddresses = String(value || '').trim()
+      if (!sourceAddresses || isValidCIDRList(sourceAddresses)) {
+        callback()
+      } else {
+        callback(new Error(vm.$t('FormatError')))
+      }
+    }
     return {
       url: '/api/v1/settings/setting/?category=ssh_ca',
       publicKey: '',
       publicKeyLoading: false,
+      testingConnection: false,
       hasReset: false,
       hasDetailInMsg: false,
       labelWidth: '30%',
@@ -180,7 +249,7 @@ export default {
           icon: 'Connection',
           loading: false,
           callback(value, form, btn) {
-            vm.testConnection(value, btn)
+            vm.testConnection(value, form, btn)
           }
         }
       ],
@@ -209,6 +278,7 @@ export default {
           label: this.$t('SSHCAOpenBaoAddress'),
           helpText: this.$t('SSHCAAddressHelp'),
           helpTextAsTip: true,
+          rules: [{ validator: validateOpenBaoAddress, trigger: ['blur', 'change'] }],
           el: {
             placeholder: 'https://openbao.example.com:8200'
           }
@@ -240,6 +310,7 @@ export default {
           label: this.$t('SSHCAAllowedSources'),
           helpText: this.$t('SSHCAAllowedSourcesHelp'),
           helpTextAsTip: false,
+          rules: [{ validator: validateAllowedSources, trigger: ['blur', 'change'] }],
           el: {
             placeholder: '10.20.30.0/24, 10.40.50.10/32'
           }
@@ -251,10 +322,23 @@ export default {
     }
   },
   methods: {
-    testConnection(value, btn) {
+    async testConnection(value, form, btn) {
+      this.testingConnection = true
+      try {
+        await form.validate()
+      } catch {
+        return
+      } finally {
+        this.testingConnection = false
+      }
+
+      const testValue = { ...value }
+      if (testValue.SSH_CA_OPENBAO_TOKEN) {
+        testValue.SSH_CA_OPENBAO_TOKEN = encryptPassword(testValue.SSH_CA_OPENBAO_TOKEN)
+      }
       btn.loading = true
       this.$axios
-        .post('/api/v1/settings/ssh-ca/openbao/testing/', value)
+        .post('/api/v1/settings/ssh-ca/openbao/testing/', testValue)
         .then((res) => {
           this.publicKey = res.public_key
           this.$message.success(res.msg)
@@ -290,7 +374,6 @@ export default {
 
 <style lang="scss" scoped>
 .ssh-ca-page {
-  --ssh-ca-surface: var(--el-bg-color, #fff);
   --ssh-ca-soft-bg: var(--el-fill-color-lighter, #f6f8fa);
   width: 100%;
   max-width: none;
@@ -299,80 +382,21 @@ export default {
   box-sizing: border-box;
 }
 
-.ssh-ca-hero {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 22px 24px;
-  margin-bottom: 16px;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 88% 20%, rgb(26 179 148 / 12%), transparent 28%),
-    linear-gradient(135deg, var(--ssh-ca-surface), var(--ssh-ca-soft-bg));
-  border: 1px solid var(--color-border, #e5e7eb);
-  border-radius: 8px;
-}
-
-.hero-icon {
-  display: grid;
-  flex: 0 0 48px;
-  width: 48px;
-  height: 48px;
-  font-size: 24px;
-  color: var(--color-primary, #1ab394);
-  place-items: center;
-  background: rgb(26 179 148 / 12%);
-  border-radius: 12px;
-}
-
-.hero-content {
-  min-width: 0;
-}
-
-.hero-eyebrow {
-  margin-bottom: 3px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--color-primary, #1ab394);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.hero-content h2,
 .card-heading h3 {
   margin: 0;
   color: var(--color-text-primary, #1f2937);
 }
 
-.hero-content h2 {
-  font-size: 20px;
-  line-height: 1.45;
-}
-
-.hero-content p,
 .card-heading p {
   margin: 4px 0 0;
   color: var(--color-text-secondary, #6b7280);
-}
-
-.hero-content p {
-  max-width: 720px;
-  font-size: 13px;
-  line-height: 1.65;
-}
-
-.hero-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-left: auto;
 }
 
 .ssh-ca-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(340px, 400px);
   gap: 16px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .ssh-ca-aside {
@@ -666,15 +690,6 @@ export default {
 }
 
 @media (width <= 720px) {
-  .ssh-ca-hero {
-    align-items: flex-start;
-    padding: 18px;
-  }
-
-  .hero-tags {
-    display: none;
-  }
-
   .ssh-ca-aside {
     grid-template-columns: 1fr;
   }

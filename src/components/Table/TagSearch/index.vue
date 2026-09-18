@@ -182,7 +182,7 @@ const OPERATOR_MENU_FOCUS_DELAY = 320
 
 export default {
   name: 'TagSearch',
-  emits: ['blur', 'conditions-change', 'tag-search'],
+  emits: ['blur', 'conditions-change', 'interaction-change', 'request-focus', 'tag-search'],
   props: {
     config: {
       type: Object,
@@ -271,6 +271,15 @@ export default {
         return this.filterValue.trim() !== ''
       }
       return this.filterValue != null
+    },
+    hasSearchInteraction() {
+      return (
+        this.focus ||
+        this.hasSearchValue ||
+        this.hasSelectedField ||
+        this.cascaderVisible ||
+        this.operatorMenuVisible
+      )
     },
     showSearchAction() {
       return this.showClearDraftAction || this.focus || this.hasSearchValue
@@ -462,6 +471,12 @@ export default {
     }
   },
   watch: {
+    hasSearchInteraction: {
+      handler(value) {
+        this.$emit('interaction-change', value)
+      },
+      immediate: true
+    },
     options: {
       handler(newVal, oldVal) {
         if (newVal && newVal.length > 0) {
@@ -1504,6 +1519,11 @@ export default {
       // 当目标对象为一个 length 为 0 的伪数组时表明此时是在全局情况下调用
       // 若存在遮罩层等组件在调用时，其 length 将会为 1
       if (event.target.classList.length === 0 && event.key === '/') {
+        const search = this.$el?.closest('.auto-data-search') || this.$el
+        if (!search?.getClientRects().length) {
+          return
+        }
+        this.$emit('request-focus')
         this.$refs.SearchInput.focus()
         this.isFocus = true
       }

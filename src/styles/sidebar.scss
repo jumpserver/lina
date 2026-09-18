@@ -51,6 +51,11 @@
         overflow-x: hidden;
       }
 
+      // The menu scrolls vertically only; Element Plus draws its own bars.
+      .el-scrollbar__bar.is-horizontal {
+        display: none;
+      }
+
       .el-scrollbar__bar.is-vertical {
         right: 0;
         width: 6px;
@@ -70,8 +75,8 @@
 
   .hideSidebar {
     .sidebar-container {
-      width: 54px !important;
-      flex-basis: 54px;
+      width: $sideBarCollapsedWidth !important;
+      flex-basis: $sideBarCollapsedWidth;
     }
 
     .submenu-title-noDropdown {
