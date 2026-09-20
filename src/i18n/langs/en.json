@@ -264,6 +264,7 @@
   "StartRotation": "Start rotation",
   "StartCredentialRotationConfirm": "Starting rotation will move this application credential into the rotation workflow. Continue?",
   "ExecuteCredentialChangeConfirm": "This will run the secret-change task immediately and may affect applications using this credential. Continue?",
+  "CancelCredentialRotationConfirm": "Canceling will stop the current credential rotation. Continue?",
   "StillUsingPrimary": "Applications are still using the primary account",
   "SwitchBackToPrimary": "Switch back to primary",
   "SwitchToAgent": "Switch to Agent",

@@ -264,6 +264,7 @@
   "StartRotation": "开始轮换",
   "StartCredentialRotationConfirm": "开始后，应用凭据将进入轮换流程。确定要继续吗？",
   "ExecuteCredentialChangeConfirm": "此操作将立即执行改密任务，可能影响正在使用该凭据的应用。确定要继续吗？",
+  "CancelCredentialRotationConfirm": "取消后，本次凭据轮换将终止。确定要继续吗？",
   "StillUsingPrimary": "仍有应用使用主账号",
   "SwitchBackToPrimary": "切回主账号",
   "SwitchToAgent": "切换为 Agent",

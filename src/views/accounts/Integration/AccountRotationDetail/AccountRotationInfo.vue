@@ -512,6 +512,15 @@ export default {
           }
         )
         reason = value.trim()
+      } else {
+        try {
+          await this.$confirm(this.$t('CancelCredentialRotationConfirm'), this.$t('Warning'), {
+            type: 'warning',
+            confirmButtonClass: 'el-button--danger'
+          })
+        } catch {
+          return
+        }
       }
       this.actionLoading = true
       try {
