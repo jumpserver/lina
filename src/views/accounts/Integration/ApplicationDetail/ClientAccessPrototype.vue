@@ -656,10 +656,11 @@ export default {
       )
       await deleteClientAccessConfiguration(row.id)
       if (this.selectedConfiguration?.id === row.id) {
-        this.viewMode = 'list'
-        this.selectedConfiguration = null
+        await this.backToList()
+      } else {
+        await this.loadData()
       }
-      await Promise.all([this.loadData(), this.refreshAccessReadiness()])
+      await this.refreshAccessReadiness()
       this.$message.success(this.$t('DeleteSuccessMsg'))
     },
     copyText(value) {
