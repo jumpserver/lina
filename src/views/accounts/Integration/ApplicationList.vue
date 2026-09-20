@@ -6,7 +6,12 @@
     :header-actions="headerActions"
     :table-config="tableConfig"
   />
-  <SecretDialog ref="secretDialog" :title="$t('ApplicationSecret')" :warning-text="''" />
+  <SecretDialog
+    ref="secretDialog"
+    :title="$t('ApplicationSecret')"
+    :warning-text="$t('ApplicationSecretWarning')"
+    mask-secret
+  />
 </template>
 
 <script lang="jsx">

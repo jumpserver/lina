@@ -14,12 +14,47 @@
         <div class="row">
           <span class="col">ID:</span>
           <span class="value">{{ keyInfo.id }}</span>
-          <el-icon class="copy-icon" @click="handleCopy(keyInfo.id)"><CopyDocument /></el-icon>
+          <div class="row-actions">
+            <el-tooltip :content="$t('Copy')" placement="top">
+              <el-button
+                :aria-label="$t('Copy')"
+                class="icon-button"
+                text
+                @click="handleCopy(keyInfo.id)"
+              >
+                <el-icon><CopyDocument /></el-icon>
+              </el-button>
+            </el-tooltip>
+          </div>
         </div>
         <div class="row">
           <span class="col">Secret:</span>
-          <span class="value">{{ keyInfo.secret }}</span>
-          <el-icon class="copy-icon" @click="handleCopy(keyInfo.secret)"><CopyDocument /></el-icon>
+          <span class="value">{{ !maskSecret || revealed ? keyInfo.secret : maskedSecret }}</span>
+          <div class="row-actions">
+            <el-tooltip v-if="maskSecret" :content="$t(revealed ? 'Hide' : 'Show')" placement="top">
+              <el-button
+                :aria-label="$t(revealed ? 'Hide' : 'Show')"
+                class="icon-button"
+                text
+                @click="revealed = !revealed"
+              >
+                <el-icon>
+                  <Hide v-if="revealed" />
+                  <View v-else />
+                </el-icon>
+              </el-button>
+            </el-tooltip>
+            <el-tooltip :content="$t('Copy')" placement="top">
+              <el-button
+                :aria-label="$t('Copy')"
+                class="icon-button"
+                text
+                @click="handleCopy(keyInfo.secret)"
+              >
+                <el-icon><CopyDocument /></el-icon>
+              </el-button>
+            </el-tooltip>
+          </div>
         </div>
       </div>
     </component>
@@ -46,15 +81,23 @@ export default {
     warningText: {
       type: String,
       default: () => i18n.t('ApiKeyWarning')
+    },
+    maskSecret: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
       keyInfo: { id: '', secret: '' },
+      revealed: !this.maskSecret,
       visible: false
     }
   },
   computed: {
+    maskedSecret() {
+      return '•'.repeat(12)
+    },
     iVisible: {
       get() {
         return this.visible
@@ -67,10 +110,13 @@ export default {
   },
   methods: {
     show(data) {
-      this.keyInfo = data
+      this.keyInfo = { id: data.id || '', secret: data.secret || '' }
+      this.revealed = !this.maskSecret
       this.visible = true
     },
     onClose() {
+      this.keyInfo = { id: '', secret: '' }
+      this.revealed = !this.maskSecret
       this.$emit('close')
     },
     handleCopy(value) {
@@ -87,22 +133,39 @@ export default {
 }
 
 .row {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr) 64px;
+  min-height: 30px;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 10px;
 }
 
 .col {
-  width: 100px;
   text-align: left;
-  display: inline-block;
-}
-
-.copy-icon {
-  margin-left: 5px;
-  cursor: pointer;
-  transition: color 0.2s;
 }
 
 .value {
+  min-width: 0;
+  overflow-wrap: anywhere;
   font-weight: 600;
+}
+
+.row-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2px;
+}
+
+.icon-button {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  color: var(--el-text-color-secondary);
+
+  &:hover,
+  &:focus-visible {
+    color: var(--el-color-primary);
+  }
 }
 </style>

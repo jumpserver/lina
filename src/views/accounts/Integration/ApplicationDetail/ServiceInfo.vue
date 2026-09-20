@@ -6,7 +6,12 @@
         <QuickActions :actions="quickActions" type="primary" />
       </template>
     </TwoCol>
-    <SecretDialog ref="secretDialog" :title="$t('ApplicationSecret')" :warning-text="''" />
+    <SecretDialog
+      ref="secretDialog"
+      :title="$t('ApplicationSecret')"
+      :warning-text="$t('ApplicationSecretWarning')"
+      mask-secret
+    />
   </div>
 </template>
 
