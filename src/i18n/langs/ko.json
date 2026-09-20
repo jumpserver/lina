@@ -2357,5 +2357,14 @@
   "DefaultExpireSoonNoticeMinutes": "Default near-expiration notice",
   "DefaultExpireSoonNoticeMinutesHelpText": "Default advance minutes offered when enabling a near-expiration notice. Existing authorizations are not changed.",
   "ValidityPeriod": "Validity period",
-  "PageLoadErrorMsg": "페이지 리소스를 불러오지 못했습니다. 네트워크 연결을 확인한 후 페이지를 새로 고침하고 다시 시도해 주세요."
+  "PageLoadErrorMsg": "페이지 리소스를 불러오지 못했습니다. 네트워크 연결을 확인한 후 페이지를 새로 고침하고 다시 시도해 주세요.",
+  "MFAFollowSystem": "시스템 따르기",
+  "MFAFollowSystemHelp": "나중에 활성화되는 방식을 포함하여 시스템 정책을 자동으로 따릅니다.",
+  "MFACurrentAvailable": "현재 사용 가능한 방식",
+  "MFAFeatureDisabled": "기능 비활성화",
+  "MFASystemDisallowed": "시스템 정책에서 허용하지 않음",
+  "MFASystemPolicyHelp": "기능을 활성화하기 전에 방식을 설정할 수 있습니다. 활성화된 기능만 적용됩니다.",
+  "MFAStoredInactiveHelp": "비활성 선택은 유지되며 조건이 충족되면 자동으로 적용됩니다.",
+  "MFANoEffectiveMethod": "유효한 MFA 방식이 없습니다. MFA를 필수로 설정하기 전에 정책과 기능 설정을 확인하세요.",
+  "MFACapabilitiesUnavailable": "MFA 기능 상태를 불러올 수 없습니다. 새로 고친 후 편집하세요."
 }

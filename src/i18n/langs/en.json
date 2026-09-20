@@ -2459,5 +2459,14 @@
   "DefaultExpireSoonNoticeMinutes": "Default near-expiration notice",
   "DefaultExpireSoonNoticeMinutesHelpText": "Default advance minutes offered when enabling a near-expiration notice. Existing authorizations are not changed.",
   "ValidityPeriod": "Validity period",
-  "PageLoadErrorMsg": "Failed to load page resources. Check your network connection, then refresh the page and try again."
+  "PageLoadErrorMsg": "Failed to load page resources. Check your network connection, then refresh the page and try again.",
+  "MFAFollowSystem": "Follow system",
+  "MFAFollowSystemHelp": "Automatically follow system policy, including methods enabled later.",
+  "MFACurrentAvailable": "Currently available",
+  "MFAFeatureDisabled": "Feature disabled",
+  "MFASystemDisallowed": "Disallowed by system",
+  "MFASystemPolicyHelp": "You can configure methods before enabling their features. Only enabled methods take effect.",
+  "MFAStoredInactiveHelp": "Inactive selections are retained and will take effect when their prerequisites are met.",
+  "MFANoEffectiveMethod": "No MFA method is currently effective. Check the policy and feature settings before requiring MFA.",
+  "MFACapabilitiesUnavailable": "Unable to load MFA capabilities. Reload before editing."
 }

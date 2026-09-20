@@ -2552,5 +2552,14 @@
   "DefaultExpireSoonNoticeMinutes": "Notification d’expiration imminente par défaut",
   "DefaultExpireSoonNoticeMinutesHelpText": "Délai d’anticipation par défaut, en minutes, proposé lors de l’activation d’une notification d’expiration imminente. Les autorisations existantes ne sont pas modifiées.",
   "ValidityPeriod": "Période de validité",
-  "PageLoadErrorMsg": "Impossible de charger les ressources de la page. Vérifiez votre connexion réseau, puis actualisez la page et réessayez."
+  "PageLoadErrorMsg": "Impossible de charger les ressources de la page. Vérifiez votre connexion réseau, puis actualisez la page et réessayez.",
+  "MFAFollowSystem": "Suivre le système",
+  "MFAFollowSystemHelp": "Suit automatiquement la politique système, y compris les méthodes activées ultérieurement.",
+  "MFACurrentAvailable": "Méthodes disponibles",
+  "MFAFeatureDisabled": "Fonction désactivée",
+  "MFASystemDisallowed": "Interdit par le système",
+  "MFASystemPolicyHelp": "Vous pouvez configurer les méthodes à l’avance. Seules les fonctions activées prennent effet.",
+  "MFAStoredInactiveHelp": "Les sélections inactives sont conservées et prendront effet lorsque leurs conditions seront remplies.",
+  "MFANoEffectiveMethod": "Aucune méthode MFA effective. Vérifiez la politique et les fonctions avant d’imposer la MFA.",
+  "MFACapabilitiesUnavailable": "Impossible de charger les fonctions MFA. Actualisez avant de modifier."
 }

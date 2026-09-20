@@ -2357,5 +2357,14 @@
   "DefaultExpireSoonNoticeMinutes": "Default near-expiration notice",
   "DefaultExpireSoonNoticeMinutesHelpText": "Default advance minutes offered when enabling a near-expiration notice. Existing authorizations are not changed.",
   "ValidityPeriod": "Validity period",
-  "PageLoadErrorMsg": "Не удалось загрузить ресурсы страницы. Проверьте подключение к сети, обновите страницу и попробуйте ещё раз."
+  "PageLoadErrorMsg": "Не удалось загрузить ресурсы страницы. Проверьте подключение к сети, обновите страницу и попробуйте ещё раз.",
+  "MFAFollowSystem": "Следовать системе",
+  "MFAFollowSystemHelp": "Автоматически следовать системной политике, включая методы, включённые позднее.",
+  "MFACurrentAvailable": "Доступные методы",
+  "MFAFeatureDisabled": "Функция отключена",
+  "MFASystemDisallowed": "Запрещено системой",
+  "MFASystemPolicyHelp": "Методы можно настроить заранее. Действуют только включённые функции.",
+  "MFAStoredInactiveHelp": "Неактивные выбранные методы сохраняются и вступят в силу при выполнении условий.",
+  "MFANoEffectiveMethod": "Нет действующих методов MFA. Проверьте политику и функции перед включением обязательной MFA.",
+  "MFACapabilitiesUnavailable": "Не удалось загрузить состояние MFA. Обновите страницу перед редактированием."
 }

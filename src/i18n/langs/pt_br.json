@@ -2357,5 +2357,14 @@
   "DefaultExpireSoonNoticeMinutes": "Default near-expiration notice",
   "DefaultExpireSoonNoticeMinutesHelpText": "Default advance minutes offered when enabling a near-expiration notice. Existing authorizations are not changed.",
   "ValidityPeriod": "Validity period",
-  "PageLoadErrorMsg": "Não foi possível carregar os recursos da página. Verifique a conexão de rede, atualize a página e tente novamente."
+  "PageLoadErrorMsg": "Não foi possível carregar os recursos da página. Verifique a conexão de rede, atualize a página e tente novamente.",
+  "MFAFollowSystem": "Seguir o sistema",
+  "MFAFollowSystemHelp": "Segue a política do sistema, incluindo métodos ativados posteriormente.",
+  "MFACurrentAvailable": "Métodos disponíveis",
+  "MFAFeatureDisabled": "Recurso desativado",
+  "MFASystemDisallowed": "Não permitido pelo sistema",
+  "MFASystemPolicyHelp": "Você pode configurar métodos antecipadamente. Somente recursos ativados entram em vigor.",
+  "MFAStoredInactiveHelp": "As seleções inativas são mantidas e entrarão em vigor quando seus requisitos forem atendidos.",
+  "MFANoEffectiveMethod": "Nenhum método MFA efetivo. Verifique a política e os recursos antes de exigir MFA.",
+  "MFACapabilitiesUnavailable": "Não foi possível carregar os recursos MFA. Atualize antes de editar."
 }

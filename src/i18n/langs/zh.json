@@ -2452,5 +2452,14 @@
   "DefaultExpireSoonNoticeMinutes": "临近到期提醒默认提前时间",
   "DefaultExpireSoonNoticeMinutesHelpText": "作为开启临近到期提醒时提供的默认提前分钟数，不会修改已有授权。",
   "ValidityPeriod": "有效期",
-  "PageLoadErrorMsg": "页面资源加载失败，请检查网络连接后刷新页面重试。"
+  "PageLoadErrorMsg": "页面资源加载失败，请检查网络连接后刷新页面重试。",
+  "MFAFollowSystem": "跟随系统",
+  "MFAFollowSystemHelp": "自动跟随系统策略，包括以后启用的方式。",
+  "MFACurrentAvailable": "当前可用方式",
+  "MFAFeatureDisabled": "功能未开启",
+  "MFASystemDisallowed": "系统策略不允许",
+  "MFASystemPolicyHelp": "可提前配置尚未开启的方式，仅在对应功能开启后生效。",
+  "MFAStoredInactiveHelp": "已保留当前不生效的选择，满足条件后自动生效。",
+  "MFANoEffectiveMethod": "当前没有可生效的 MFA 方式，强制启用 MFA 前请检查策略和功能配置。",
+  "MFACapabilitiesUnavailable": "无法获取 MFA 功能状态，请刷新后再编辑。"
 }

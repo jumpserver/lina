@@ -2450,5 +2450,14 @@
   "DefaultExpireSoonNoticeMinutes": "期限直前通知のデフォルト",
   "DefaultExpireSoonNoticeMinutesHelpText": "期限直前通知を有効にする際の既定分数です。既存の権限は変更されません。",
   "ValidityPeriod": "有効期間",
-  "PageLoadErrorMsg": "ページのリソースを読み込めませんでした。ネットワーク接続を確認し、ページを更新して再試行してください。"
+  "PageLoadErrorMsg": "ページのリソースを読み込めませんでした。ネットワーク接続を確認し、ページを更新して再試行してください。",
+  "MFAFollowSystem": "システムに従う",
+  "MFAFollowSystemHelp": "今後有効になる方式も含め、システムポリシーに自動的に従います。",
+  "MFACurrentAvailable": "現在利用可能な方式",
+  "MFAFeatureDisabled": "機能が無効",
+  "MFASystemDisallowed": "システムポリシーで不許可",
+  "MFASystemPolicyHelp": "機能を有効にする前に方式を設定できます。有効な機能のみ適用されます。",
+  "MFAStoredInactiveHelp": "現在無効な選択は保持され、条件を満たすと自動的に有効になります。",
+  "MFANoEffectiveMethod": "有効な MFA 方式がありません。MFA を必須にする前にポリシーと機能設定を確認してください。",
+  "MFACapabilitiesUnavailable": "MFA 機能の状態を取得できません。再読み込みしてから編集してください。"
 }
