@@ -429,6 +429,16 @@ export default {
         return this.openChangeSecretForm()
       }
       const previousStatus = this.object.status
+      if (previousStatus === 'idle') {
+        try {
+          await this.$confirm(this.$t('StartCredentialRotationConfirm'), this.$t('Warning'), {
+            type: 'warning',
+            confirmButtonClass: 'el-button--danger'
+          })
+        } catch {
+          return
+        }
+      }
       this.actionLoading = true
       try {
         const updated = await advanceApplicationCredentialRotation(this.object)
@@ -461,6 +471,14 @@ export default {
       })
     },
     async executeSavedTask() {
+      try {
+        await this.$confirm(this.$t('ExecuteCredentialChangeConfirm'), this.$t('Warning'), {
+          type: 'warning',
+          confirmButtonClass: 'el-button--danger'
+        })
+      } catch {
+        return
+      }
       this.actionLoading = true
       try {
         await executeCredentialChange(this.object.rotation.automation_id)

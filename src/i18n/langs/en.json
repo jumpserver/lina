@@ -262,6 +262,8 @@
   "SelectCredentialKeys": "Select credential keys used by this application",
   "GoChangeSecret": "Change secret",
   "StartRotation": "Start rotation",
+  "StartCredentialRotationConfirm": "Starting rotation will move this application credential into the rotation workflow. Continue?",
+  "ExecuteCredentialChangeConfirm": "This will run the secret-change task immediately and may affect applications using this credential. Continue?",
   "StillUsingPrimary": "Applications are still using the primary account",
   "SwitchBackToPrimary": "Switch back to primary",
   "SwitchToAgent": "Switch to Agent",
