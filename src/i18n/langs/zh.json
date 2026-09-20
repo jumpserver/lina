@@ -1,4 +1,10 @@
 {
+  "Credentials": "凭据",
+  "SecretResetHelpText": "允许自动改密；跟随模板的账号在改密成功后自动解除跟随，使用改密后的独立凭据。",
+  "SourceTemplate": "来源模板",
+  "SourceTemplateDeleted": "模板已删除",
+  "FollowTemplate": "跟随模板",
+  "FollowTemplateHelpText": "开启后，凭据跟随模板。",
   "ACLs": "访问控制",
   "APIKey": "API Key",
   "AWS_China": "AWS(中国)",

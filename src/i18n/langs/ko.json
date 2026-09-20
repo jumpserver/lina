@@ -1,4 +1,10 @@
 {
+  "Credentials": "자격 증명",
+  "SecretResetHelpText": "자격 증명 자동 변경을 허용합니다. 템플릿을 따르는 계정은 변경에 성공하면 따르기를 해제하고 새 자격 증명을 독립적으로 사용합니다.",
+  "SourceTemplate": "원본 템플릿",
+  "SourceTemplateDeleted": "삭제된 템플릿",
+  "FollowTemplate": "템플릿 따르기",
+  "FollowTemplateHelpText": "활성화하면 자격 증명이 템플릿을 따릅니다.",
   "ACLs": "접근 제어",
   "APIKey": "API 키",
   "AWS_China": "AWS(중국)",

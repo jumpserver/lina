@@ -1,4 +1,10 @@
 {
+  "Credentials": "Thông tin xác thực",
+  "SecretResetHelpText": "Cho phép tự động đổi thông tin xác thực. Sau khi đổi thành công, tài khoản ngừng theo mẫu và sử dụng thông tin xác thực mới độc lập.",
+  "SourceTemplate": "Mẫu nguồn",
+  "SourceTemplateDeleted": "Mẫu đã bị xóa",
+  "FollowTemplate": "Theo mẫu",
+  "FollowTemplateHelpText": "Khi bật, thông tin xác thực sẽ theo mẫu.",
   "ACLs": "Kiểm soát truy cập",
   "APIKey": "Khóa API",
   "AWS_China": "AWS (Trung Quốc)",

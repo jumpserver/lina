@@ -1,4 +1,10 @@
 {
+  "Credentials": "Credentials",
+  "SecretResetHelpText": "Allow automatic credential rotation. Accounts following a template stop following after a successful rotation and use their own new credentials.",
+  "SourceTemplate": "Source template",
+  "SourceTemplateDeleted": "Template deleted",
+  "FollowTemplate": "Follow template",
+  "FollowTemplateHelpText": "When enabled, credentials follow the template.",
   "ACLs": "ACLs",
   "APIKey": "API key",
   "AWS_China": "AWS(China)",

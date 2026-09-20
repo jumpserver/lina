@@ -13,6 +13,12 @@
       @cancel="handleCancel"
       @confirm="handleConfirm"
     >
+      <el-form label-position="left" label-width="auto">
+        <el-form-item :label="$t('FollowTemplate')">
+          <el-checkbox v-model="followTemplate" :aria-label="$t('FollowTemplate')" />
+          <span class="follow-template-help">{{ $t('FollowTemplateHelpText') }}</span>
+        </el-form-item>
+      </el-form>
       <ListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
     </Dialog>
     <CreateAccountTemplateDialog
@@ -58,6 +64,7 @@ export default {
     return {
       isShowCreate: false,
       accountsSelected: [],
+      followTemplate: true,
       tableConfig: {
         url: `/api/v1/accounts/account-templates/?protocols=${protocols}`,
         columns: ['name', 'username', 'secret_type', 'privileged'],
@@ -131,6 +138,7 @@ export default {
         .map((item) => {
           return {
             template: item.id,
+            follow_template: this.followTemplate,
             name: item.name,
             username: item.username,
             secret_type: item.secret_type.value,
@@ -185,6 +193,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.follow-template-help {
+  margin-left: 12px;
+  color: var(--el-text-color-secondary);
+}
+
 .actions {
   margin-bottom: 10px;
 

@@ -1,4 +1,10 @@
 {
+  "Credentials": "Credenciais",
+  "SecretResetHelpText": "Permitir a rotação automática de credenciais. Após uma rotação bem-sucedida, as contas deixam de seguir o modelo e usam suas próprias novas credenciais.",
+  "SourceTemplate": "Modelo de origem",
+  "SourceTemplateDeleted": "Modelo excluído",
+  "FollowTemplate": "Seguir modelo",
+  "FollowTemplateHelpText": "Quando ativado, as credenciais seguem o modelo.",
   "ACLs": "Controle de acesso",
   "APIKey": "API Key",
   "AWS_China": "AWS (China)",

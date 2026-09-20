@@ -1,3 +1,4 @@
+import { unref } from 'vue'
 import { DRAWER_RUNTIME_CONTEXT } from '@/components/Drawer/context'
 
 const DEFAULT_ROUTE_KEY = 'default'
@@ -19,7 +20,7 @@ function getProvidedScope(vm, provideKey) {
   while (instance) {
     const provides = instance.provides
     if (provides && Object.prototype.hasOwnProperty.call(provides, provideKey)) {
-      return provides[provideKey] || null
+      return unref(provides[provideKey]) || null
     }
     instance = instance.parent
   }
@@ -230,14 +231,16 @@ function createContextService({ router } = {}) {
   return {
     install(app) {
       app.mixin({
+        beforeCreate() {
+          // Vue 3 reads globalProperties accessors with globalProperties as `this`,
+          // not the component proxy. Bind the facade to each component instead.
+          Object.defineProperty(this, '$context', {
+            configurable: true,
+            value: createFacade(this)
+          })
+        },
         unmounted() {
           deleteViewScope(this)
-        }
-      })
-
-      Object.defineProperty(app.config.globalProperties, '$context', {
-        get() {
-          return createFacade(this)
         }
       })
     }
