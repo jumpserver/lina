@@ -16,7 +16,6 @@ export const auditEvents = {
   client_registered: 'AppAuditClientRegistered',
   client_enabled: 'Enable',
   client_disabled: 'AppAuditClientDisabled',
-  subscription_snapshot: 'AppAuditSubscriptionSnapshot',
   notification: 'AppAuditNotificationDelivered',
   application_secret_reset: 'ApplicationSecretReset'
 }
@@ -43,25 +42,17 @@ const fieldLabels = {
   is_active: 'IsActive',
   accounts: 'Accounts',
   ip_group: 'IPGroup',
-  notification_enabled: 'AppNotificationEnabled',
-  notification_url: 'AppNotificationURL',
   app_user: 'ApplicationRunUser',
-  install_path: 'InstallPath'
+  install_path: 'InstallPath',
+  delivery_mode: 'AgentDeliveryMode',
+  systemd_unit: 'SystemdUnit',
+  systemd_action: 'SystemdAction'
 }
 const summaries = {
-  'Waiting for client delivery.': 'AppAuditPendingDelivery',
-  'Notification delivered; application confirmation is separate.': 'AppAuditDeliverySummary',
   'Notification failed; waiting for retry.': 'AppAuditRetrySummary',
-  'Notification retry limit reached.': 'AppAuditDeliveryFailedSummary',
-  'Notification retry limit or deadline reached.': 'AppAuditDeliveryFailedSummary',
   'Notification delivery deadline reached.': 'AppAuditDeadline',
-  'Event listener stopped.': 'AppAuditListenerStopped',
   'Credential access was revoked.': 'AppAuditAuthorizationRevoked',
-  'Client delivery lease expired.': 'AppAuditLeaseExpired',
   'Delivery deadline reached.': 'AppAuditDeadline',
-  callback_failed: 'AppAuditCallbackFailed',
-  http_failed: 'AppAuditHTTPFailed',
-  credential_not_ready: 'AppAuditCredentialNotReady',
   credential_not_found: 'AppAuditCredentialNotFound',
   credential_not_selected: 'AppAuditCredentialNotSelected',
   credential_not_authorized: 'AppAuditCredentialNotAuthorized',

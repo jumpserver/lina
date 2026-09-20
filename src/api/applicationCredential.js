@@ -16,6 +16,8 @@ export const normalizeAccessConfiguration = (item) => ({
   ...item,
   type: choiceValue(item.type),
   language: choiceValue(item.language),
+  delivery_mode: choiceValue(item.delivery_mode),
+  systemd_action: choiceValue(item.systemd_action),
   credential_ids: item.credentials.map((credential) => credential.id),
   application_name: item.application.name,
   instances: item.instances_amount || 0,
@@ -91,10 +93,10 @@ export async function saveClientAccessConfiguration(application, form) {
     language: 'python',
     app_user: form.app_user,
     install_path: form.install_path,
+    delivery_mode: form.delivery_mode,
+    systemd_unit: form.delivery_mode === 'environment' ? form.systemd_unit : '',
+    systemd_action: form.systemd_action,
     is_active: form.is_active,
-    notification_enabled: form.notification_enabled,
-    notification_url:
-      form.notification_enabled && form.type === 'agent' ? form.notification_url : '',
     removal_reason: form.removal_reason || ''
   }
   const item = form.id

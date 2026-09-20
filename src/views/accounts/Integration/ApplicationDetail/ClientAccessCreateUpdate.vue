@@ -6,7 +6,6 @@
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
 import rules from '@/components/Form/DataForm/rules'
-import { validNotificationUrl } from '../components/applicationAudit'
 import {
   accessConfigurationUrl,
   credentialUrl,
@@ -37,14 +36,24 @@ export default {
           language: item?.language || 'python',
           app_user: item?.app_user || '',
           install_path: item?.install_path || '/opt/jumpserver-pam',
-          is_active: item?.is_active ?? true,
-          notification_enabled: item?.notification_enabled ?? false,
-          notification_url: item?.notification_url || ''
+          delivery_mode: item?.delivery_mode || 'json',
+          systemd_unit: item?.systemd_unit || '',
+          systemd_action: item?.systemd_action || 'restart',
+          is_active: item?.is_active ?? true
         },
         fields: [
           [this.$t('Basic'), ['name', 'type', 'credential_ids']],
-          [this.$t('Configuration'), ['language', 'app_user', 'install_path']],
-          [this.$t('AppEventNotification'), ['notification_enabled', 'notification_url']],
+          [
+            this.$t('Configuration'),
+            [
+              'language',
+              'app_user',
+              'install_path',
+              'delivery_mode',
+              'systemd_unit',
+              'systemd_action'
+            ]
+          ],
           [this.$t('Other'), ['is_active']]
         ],
         fieldsMeta: {
@@ -93,29 +102,36 @@ export default {
             el: { type: 'text', placeholder: '/opt/jumpserver-pam' },
             hidden: (form) => form.type !== 'agent'
           },
-          is_active: { label: this.$t('IsActive'), type: 'checkbox' },
-          notification_enabled: {
-            label: this.$t('AppNotificationEnabled'),
-            type: 'checkbox',
-            helpText: this.$t('AppNotificationOptionalHelp')
-          },
-          notification_url: {
-            label: this.$t('AppNotificationURL'),
-            hidden: (form) => !form.notification_enabled || form.type !== 'agent',
-            rules: [
-              rules.Required,
-              {
-                validator: (_rule, value, callback) =>
-                  callback(
-                    validNotificationUrl(value)
-                      ? undefined
-                      : new Error(this.$t('AppNotificationInvalidURL'))
-                  ),
-                trigger: ['blur', 'change']
-              }
+          delivery_mode: {
+            label: this.$t('AgentDeliveryMode'),
+            type: 'select',
+            options: [
+              { label: this.$t('AgentDeliveryJSON'), value: 'json' },
+              { label: this.$t('AgentDeliveryEnvironment'), value: 'environment' },
+              { label: this.$t('AgentDeliverySocket'), value: 'socket' }
             ],
-            el: { type: 'text', placeholder: 'https://app.example.com/pam/events' }
-          }
+            rules: [rules.RequiredChange],
+            helpText: this.$t('AgentDeliveryModeHelp'),
+            hidden: (form) => form.type !== 'agent'
+          },
+          systemd_unit: {
+            label: this.$t('SystemdUnit'),
+            rules: [rules.Required],
+            el: { type: 'text', placeholder: 'my-application.service' },
+            helpText: this.$t('SystemdUnitHelp'),
+            hidden: (form) => form.type !== 'agent' || form.delivery_mode !== 'environment'
+          },
+          systemd_action: {
+            label: this.$t('SystemdAction'),
+            type: 'radio-group',
+            options: [
+              { label: this.$t('Reload'), value: 'reload' },
+              { label: this.$t('Restart'), value: 'restart' }
+            ],
+            rules: [rules.RequiredChange],
+            hidden: (form) => form.type !== 'agent' || form.delivery_mode !== 'environment'
+          },
+          is_active: { label: this.$t('IsActive'), type: 'checkbox' }
         },
         performSubmit: async (values) => {
           this.$emit('submitting', true)

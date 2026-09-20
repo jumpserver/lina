@@ -428,14 +428,21 @@ export default {
         if (this.object.rotation?.automation_id) return this.executeSavedTask()
         return this.openChangeSecretForm()
       }
+      const previousStatus = this.object.status
       this.actionLoading = true
       try {
         const updated = await advanceApplicationCredentialRotation(this.object)
         this.$emit('updated', updated)
-        if (updated.status !== this.object.status) {
+        if (updated.status !== previousStatus) {
           this.$message.success(
             updated.status === 'idle' ? this.$t('RotationCompleted') : this.$t('StepCompleted')
           )
+        } else if (previousStatus === 'changing_secret') {
+          this.$message.info(this.$t('PamChangeStillRunning'))
+        } else if (previousStatus === 'change_failed') {
+          this.$message.warning(this.$t('PamChangeReadyForRetry'))
+        } else if (previousStatus === 'recovery_required') {
+          this.$message.warning(this.$t('PamRecoveryStillRequired'))
         }
       } catch (error) {
         if (error.response?.data?.blockers) await this.refresh()

@@ -18,7 +18,7 @@ export default {
     return {
       ready: false,
       pamRotation: null,
-      hasSaveContinue: true,
+      hasSaveContinue: false,
       node_ids: [],
       asset_ids: [],
       initial: {
@@ -112,6 +112,9 @@ export default {
       },
       createSuccessNextRoute: { name: 'AccountChangeSecretList' },
       updateSuccessNextRoute: { name: 'AccountChangeSecretList' },
+      getNextRoute(res, method) {
+        return method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
+      },
       afterGetRemoteMeta: this.handleAfterGetRemoteMeta,
       cleanFormValue: (data) => {
         if (this.pamRotation) {

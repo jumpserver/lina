@@ -446,6 +446,35 @@ export default {
             formatter: (row) => this.formatDate(row.date_last_seen)
           },
           {
+            prop: 'client_version',
+            label: this.$t('ClientVersion'),
+            width: 130,
+            formatter: (row) =>
+              row.client_version
+                ? `${row.client_version} / P${row.protocol_version}`
+                : this.$t('Unknown')
+          },
+          {
+            prop: 'sync_status',
+            label: this.$t('ConfigurationSync'),
+            minWidth: 150,
+            formatter: (row) => {
+              if (row.upgrade_required) return this.$t('ClientUpgradeRequired')
+              if (!row.sync_status) return '-'
+              const label = this.$t(row.sync_status === 'success' ? 'SyncSuccess' : 'SyncFailed')
+              if (row.sync_status !== 'success') {
+                return row.sync_error ? `${label}: ${row.sync_error}` : label
+              }
+              return row.configuration_current === false ? this.$t('ConfigurationPending') : label
+            }
+          },
+          {
+            prop: 'date_last_synced',
+            label: this.$t('LastSyncedAt'),
+            width: 175,
+            formatter: (row) => this.formatDate(row.date_last_synced)
+          },
+          {
             prop: 'actions',
             label: this.$t('Actions'),
             width: 100,
@@ -491,15 +520,22 @@ export default {
         },
         { key: this.$t('LastReportedAt'), value: this.formatDate(item.last_reported) },
         {
-          key: this.$t('AppEventNotification'),
-          value: this.$t(item.notification_enabled ? 'Enabled' : 'Disabled'),
-          span: 2
+          key: this.$t('AgentDeliveryMode'),
+          value: this.$t(
+            {
+              json: 'AgentDeliveryJSON',
+              environment: 'AgentDeliveryEnvironment',
+              socket: 'AgentDeliverySocket'
+            }[item.delivery_mode] || 'Unknown'
+          ),
+          has: item.type === 'agent'
         },
         {
-          key: this.$t('AppNotificationURL'),
-          value: item.notification_url,
-          has: Boolean(item.notification_enabled && item.type === 'agent'),
-          span: 2
+          key: this.$t('SystemdUnit'),
+          value: `${item.systemd_unit} · ${this.$t(
+            item.systemd_action === 'reload' ? 'Reload' : 'Restart'
+          )}`,
+          has: item.type === 'agent' && item.delivery_mode === 'environment'
         },
         {
           key: this.$t('ApplicationCredentials'),

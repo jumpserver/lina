@@ -112,8 +112,8 @@ export default {
       const notification = this.object.notification
       return [
         {
-          key: this.$t('AppNotificationURL'),
-          value: notification.url || this.$t('AppNotificationSDKCallback'),
+          key: this.$t('WebhookURL'),
+          value: notification.url,
           span: 2
         },
         { key: this.$t('AppNotificationEventCode'), value: notification.event },
