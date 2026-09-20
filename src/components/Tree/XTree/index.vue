@@ -53,7 +53,7 @@
         @command="handleTreeToolCommand"
       >
         <el-button :aria-label="$t('TreeActions')" class="x-tree__tool-button">
-          <el-icon class="x-tree__tool-icon"><More /></el-icon>
+          <el-icon class="x-tree__tool-icon"><MoreFilled /></el-icon>
         </el-button>
         <template #dropdown>
           <el-dropdown-menu class="x-tree-tools__menu">
@@ -831,14 +831,19 @@ export default {
         this.scheduleTreeContentWidth()
         return
       }
-      const observer = new MutationObserver(() => {
-        if (this.isRuntimeEffectsCurrent(generation)) {
+      const observer = new MutationObserver((records) => {
+        if (
+          this.isRuntimeEffectsCurrent(generation) &&
+          records.some((record) => record.type !== 'attributes' || record.target !== viewport)
+        ) {
           this.scheduleTreeContentWidth()
         }
       })
       observer.observe(viewport, {
         childList: true,
         characterData: true,
+        attributes: true,
+        attributeFilter: ['style'],
         subtree: true
       })
       this.treeContentObserver = observer
@@ -864,16 +869,13 @@ export default {
         return
       }
       let nextWidth = Math.max(0, scrollElement.clientWidth)
+      // Measure from the viewport width so collapsed branches and shorter labels
+      // can shrink a previously wide tree. CSS preserves each row's minimum content.
+      viewport.style.setProperty('--x-tree-content-width', `${nextWidth}px`)
       viewport.querySelectorAll('.el-tree-node__content').forEach((row) => {
-        const rowRect = row.getBoundingClientRect()
-        const contentElements = row.querySelectorAll(
-          '.x-tree__node-label, .x-tree__node-amount, .x-tree__rename'
-        )
-        contentElements.forEach((element) => {
-          const elementRect = element.getBoundingClientRect()
-          nextWidth = Math.max(nextWidth, elementRect.right - rowRect.left + 8)
-        })
+        nextWidth = Math.max(nextWidth, row.getBoundingClientRect().width)
       })
+      viewport.style.removeProperty('--x-tree-content-width')
       nextWidth = Math.ceil(nextWidth)
       if (nextWidth !== this.treeContentWidth) {
         this.treeContentWidth = nextWidth
@@ -3716,6 +3718,7 @@ export default {
   --x-tree-font-size: 12px;
   --x-tree-icon-size: 14px;
   --x-tree-toggle-icon-size: 10px;
+  --x-tree-label-min-width: calc(var(--x-tree-font-size) * 8);
 
   display: flex;
   flex-direction: column;
@@ -3771,7 +3774,8 @@ export default {
   :deep(.el-input__wrapper:hover),
   :deep(.el-input__wrapper.is-focus) {
     width: 100%;
-    height: 28px;
+    height: 24px;
+    padding-block: 0;
     border: 0 !important;
     outline: none !important;
     background-color: transparent;
@@ -3779,8 +3783,9 @@ export default {
   }
 
   :deep(.el-input__inner) {
-    height: 28px;
-    font-size: 13px;
+    height: 24px;
+    line-height: 24px;
+    font-size: 12px;
   }
 }
 
@@ -3914,7 +3919,7 @@ export default {
 }
 
 .x-tree__body :deep(.el-tree) {
-  min-width: max-content;
+  min-width: 100%;
   background: transparent;
   color: var(--el-text-color-primary);
   font-size: var(--x-tree-font-size);
@@ -3922,7 +3927,7 @@ export default {
 
 .x-tree__body :deep(.el-tree-node__content) {
   width: var(--x-tree-content-width, 100%);
-  min-width: var(--x-tree-content-width, 100%);
+  min-width: min-content;
   height: var(--x-tree-row-height);
   margin: 0;
   border-radius: 0;
@@ -3940,8 +3945,7 @@ export default {
 
 .x-tree__body :deep(.el-tree-node.is-current > .el-tree-node__content) {
   color: var(--el-text-color-primary);
-  background: var(--el-fill-color);
-  background: color-mix(in srgb, var(--el-text-color-primary) 10%, transparent);
+  background: var(--el-color-primary-light-9);
 }
 
 .x-tree__body :deep(.el-tree-node:focus-visible > .el-tree-node__content) {
@@ -4017,7 +4021,7 @@ export default {
   display: flex;
   flex: 1;
   align-items: center;
-  min-width: 0;
+  min-width: min-content;
   height: 100%;
 }
 
@@ -4056,16 +4060,19 @@ export default {
   flex: 1;
   align-items: center;
   align-self: stretch;
-  min-width: 0;
+  min-width: min-content;
   padding-left: 4px;
   cursor: pointer;
 }
 
 .x-tree__node-label {
-  flex: none;
-  overflow: visible;
+  // Long names truncate before indentation forces horizontal scrolling.
+  width: var(--x-tree-label-min-width);
+  max-width: max-content;
+  flex: 0 1 content;
+  overflow: hidden;
   color: var(--el-text-color-primary);
-  text-overflow: clip;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -4087,7 +4094,9 @@ export default {
 }
 
 .x-tree__rename {
-  width: 180px;
+  flex: 1;
+  width: 0;
+  min-width: var(--x-tree-label-min-width);
   user-select: text;
 }
 

@@ -434,7 +434,7 @@ export default {
   border: 0;
   border-radius: 0;
   color: var(--el-text-color-primary);
-  font-size: 13px;
+  font-size: var(--el-font-size-base);
   background: transparent;
   cursor: pointer;
   transition:
@@ -475,7 +475,7 @@ export default {
 .tree-view-selector__arrow {
   flex: none;
   margin-left: 5px;
-  font-size: inherit;
+  font-size: 10px;
   color: var(--el-text-color-secondary);
   transition: transform 0.15s ease;
 }
