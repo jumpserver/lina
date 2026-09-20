@@ -1254,6 +1254,7 @@
   "LunaSetting": "Cấu hình Luna",
   "MFAAllUsers": "Toàn cầu kích hoạt: Tất cả người dùng",
   "MFAErrorMsg": "Lỗi MFA, vui lòng kiểm tra",
+  "MFAGlobalEnforcedHelpText": "MFA được bật bắt buộc theo cài đặt toàn cục. Trạng thái này tuân theo cài đặt toàn cục và không thể thay đổi tại đây.",
   "MFAOfUserFirstLoginPersonalInformationImprovementPage": "Kích hoạt xác thực nhiều yếu tố, để tài khoản an toàn hơn. <br/> Sau khi kích hoạt, bạn sẽ được đưa vào quy trình liên kết xác thực nhiều yếu tố khi đăng nhập lần tới; Bạn cũng có thể liên kết trực tiếp tại (Thông tin cá nhân-> Sửa đổi nhanh-> Thay đổi cài đặt nhiều yếu tố)!",
   "MFAOfUserFirstLoginUserGuidePage": "Để bảo vệ bạn và công ty khỏi các nguy cơ, hãy bảo quản cẩn thận tài khoản, mật khẩu và thông tin nhạy cảm quan trọng như khóa; (ví dụ: thiết lập mật khẩu phức tạp và kích hoạt xác thực đa yếu tố)<br/>Thông tin cá nhân như email và số điện thoại chỉ được sử dụng cho việc xác thực người dùng và thông báo tin nhắn nội bộ trên nền tảng.",
   "MFAOnlyAdminUsers": "Kích hoạt toàn cầu: chỉ quản trị viên",
