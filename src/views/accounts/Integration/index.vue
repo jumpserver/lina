@@ -4,7 +4,6 @@
 
 <script>
 import { TabPage } from '@/layout/components'
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'Integration',
@@ -13,7 +12,6 @@ export default {
   },
   data() {
     return {
-      loading: true,
       activeMenu: 'application',
       tab: {
         submenu: [
@@ -44,9 +42,6 @@ export default {
         ]
       }
     }
-  },
-  computed: {
-    ...mapGetters(['hasValidLicense'])
   }
 }
 </script>
