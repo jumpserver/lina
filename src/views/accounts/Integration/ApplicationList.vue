@@ -20,7 +20,7 @@ import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableForma
 import SecretDialog from '@/components/Dialog/Secret.vue'
 import { GenericListTable } from '@/layout/components'
 export default {
-  name: 'CloudAccountList',
+  name: 'IntegrationApplicationList',
   components: {
     GenericListTable,
     SecretDialog

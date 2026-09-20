@@ -7,7 +7,7 @@ import { TabPage } from '@/layout/components'
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'Integrationn',
+  name: 'Integration',
   components: {
     TabPage
   },
