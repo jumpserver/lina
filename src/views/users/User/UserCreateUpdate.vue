@@ -297,6 +297,8 @@ export default {
       }
       if (mfa_level !== null && options !== null) {
         this.fieldsMeta['mfa_level'].options = options
+        this.fieldsMeta['mfa_level'].disabled = true
+        this.fieldsMeta['mfa_level'].helpText = this.$t('MFAGlobalEnforcedHelpText')
         this.initial.mfa_level = mfa_level
       }
     }
