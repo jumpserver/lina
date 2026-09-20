@@ -113,7 +113,7 @@ export default {
       return [
         {
           key: this.$t('WebhookURL'),
-          value: notification.url,
+          value: notification.url_display || '••••••',
           span: 2
         },
         { key: this.$t('AppNotificationEventCode'), value: notification.event },
