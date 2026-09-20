@@ -99,6 +99,7 @@ export default {
       documentationError: false,
       documentationLoading: false,
       documentationTab: 'agent',
+      headingObserver: null,
       headings: [],
       readme: ''
     }
@@ -125,8 +126,14 @@ export default {
   mounted() {
     this.loadDocumentation()
   },
+  beforeUnmount() {
+    this.disconnectHeadingObserver()
+  },
   methods: {
     async loadDocumentation() {
+      this.disconnectHeadingObserver()
+      this.headings = []
+      this.activeHeading = ''
       this.documentationLoading = true
       this.documentationError = false
       try {
@@ -144,13 +151,41 @@ export default {
     onHeadingsChange(headings) {
       this.headings = headings
       this.activeHeading = headings[0]?.id || ''
+      this.$nextTick(this.observeHeadings)
     },
     selectDocumentation(tab) {
       if (this.documentationTab === tab) return
+      this.disconnectHeadingObserver()
       this.documentationTab = tab
       this.headings = []
       this.activeHeading = ''
       this.$refs.docsMain?.scrollTo({ top: 0 })
+    },
+    disconnectHeadingObserver() {
+      this.headingObserver?.disconnect()
+      this.headingObserver = null
+    },
+    observeHeadings() {
+      this.disconnectHeadingObserver()
+      const container = this.$refs.docsMain
+      if (!container || !this.headings.length || !window.IntersectionObserver) return
+
+      this.headingObserver = new IntersectionObserver(
+        (entries) => {
+          const [heading] = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
+          if (heading) this.activeHeading = heading.target.id
+        },
+        {
+          root: container,
+          rootMargin: '-16px 0px -70% 0px'
+        }
+      )
+      this.headings.forEach(({ id }) => {
+        const heading = document.getElementById(id)
+        if (heading) this.headingObserver.observe(heading)
+      })
     },
     scrollToHeading(id) {
       const target = document.getElementById(id)
