@@ -237,7 +237,7 @@ export default {
               const item = prettyKey + ': ' + value.join(', ')
               doms.push([item, <br />])
             })
-            return <div>{doms}</div>
+            return <div class="orgs-roles-list">{doms}</div>
           }
         },
         'wecom_id',
@@ -292,6 +292,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+:deep(.orgs-roles-list) {
+  max-height: 240px;
+  overflow-y: auto;
+}
+
 .mfa-setting :deep(.el-slider__runway) {
   margin-top: 0;
   margin-bottom: 0;
