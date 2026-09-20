@@ -2449,5 +2449,14 @@
   "DefaultExpireSoonNoticeMinutes": "臨近到期提醒預設提前時間",
   "DefaultExpireSoonNoticeMinutesHelpText": "作為開啟臨近到期提醒時提供的預設提前分鐘數，不會修改已有授權。",
   "ValidityPeriod": "有效期",
-  "PageLoadErrorMsg": "頁面資源載入失敗，請檢查網路連線後重新整理頁面再試。"
+  "PageLoadErrorMsg": "頁面資源載入失敗，請檢查網路連線後重新整理頁面再試。",
+  "MFAFollowSystem": "跟隨系統",
+  "MFAFollowSystemHelp": "自動跟隨系統策略，包括以後啟用的方式。",
+  "MFACurrentAvailable": "目前可用方式",
+  "MFAFeatureDisabled": "功能未開啟",
+  "MFASystemDisallowed": "系統策略不允許",
+  "MFASystemPolicyHelp": "可提前設定尚未開啟的方式，僅在對應功能開啟後生效。",
+  "MFAStoredInactiveHelp": "已保留目前不生效的選擇，滿足條件後自動生效。",
+  "MFANoEffectiveMethod": "目前沒有可生效的 MFA 方式，強制啟用 MFA 前請檢查策略和功能設定。",
+  "MFACapabilitiesUnavailable": "無法取得 MFA 功能狀態，請重新整理後再編輯。"
 }

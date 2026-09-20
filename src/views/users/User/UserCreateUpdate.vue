@@ -10,6 +10,7 @@
 </template>
 
 <script lang="jsx">
+import MFAMethodSelect from '@/components/Form/FormFields/MFAMethodSelect.vue'
 import store from '@/store'
 import { mapGetters } from 'vuex'
 import { Select2 } from '@/components'
@@ -26,6 +27,7 @@ export default {
     return {
       loading: true,
       initial: {
+        allowed_mfa_types: [],
         need_update_password: true,
         system_roles: [],
         org_roles: []
@@ -52,6 +54,10 @@ export default {
       ],
       url: '/api/v1/users/users/',
       fieldsMeta: {
+        allowed_mfa_types: {
+          component: MFAMethodSelect,
+          type: 'mfa-method-select'
+        },
         name: {},
         username: {
           uniqueCheck: true,

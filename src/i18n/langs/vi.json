@@ -2357,5 +2357,14 @@
   "DefaultExpireSoonNoticeMinutes": "Default near-expiration notice",
   "DefaultExpireSoonNoticeMinutesHelpText": "Default advance minutes offered when enabling a near-expiration notice. Existing authorizations are not changed.",
   "ValidityPeriod": "Validity period",
-  "PageLoadErrorMsg": "Không thể tải tài nguyên trang. Hãy kiểm tra kết nối mạng, tải lại trang rồi thử lại."
+  "PageLoadErrorMsg": "Không thể tải tài nguyên trang. Hãy kiểm tra kết nối mạng, tải lại trang rồi thử lại.",
+  "MFAFollowSystem": "Theo hệ thống",
+  "MFAFollowSystemHelp": "Tự động theo chính sách hệ thống, bao gồm các phương thức được bật sau này.",
+  "MFACurrentAvailable": "Phương thức hiện khả dụng",
+  "MFAFeatureDisabled": "Tính năng chưa bật",
+  "MFASystemDisallowed": "Hệ thống không cho phép",
+  "MFASystemPolicyHelp": "Có thể cấu hình trước các phương thức. Chỉ tính năng đã bật mới có hiệu lực.",
+  "MFAStoredInactiveHelp": "Các lựa chọn chưa có hiệu lực được giữ lại và sẽ áp dụng khi đáp ứng điều kiện.",
+  "MFANoEffectiveMethod": "Không có phương thức MFA có hiệu lực. Kiểm tra chính sách và tính năng trước khi bắt buộc MFA.",
+  "MFACapabilitiesUnavailable": "Không thể tải trạng thái MFA. Hãy tải lại trang trước khi chỉnh sửa."
 }
