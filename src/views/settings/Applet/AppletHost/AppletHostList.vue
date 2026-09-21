@@ -1,5 +1,6 @@
 <template>
   <div>
+    <TinkerVersionNotice :show-link="false" />
     <el-alert type="info">
       <span ref="helpRef" class="applet-host-help" />
     </el-alert>
@@ -17,11 +18,14 @@
 import { DrawerListTable } from '@/components'
 import { ProtocolsFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
+import TinkerVersion from './TinkerVersion.vue'
+import TinkerVersionNotice from './TinkerVersionNotice.vue'
 
 export default {
   name: 'AppletHost',
   components: {
-    DrawerListTable
+    DrawerListTable,
+    TinkerVersionNotice
   },
   data() {
     const appletRouteQuery = { type: 'windows', category: 'host', platform: 'RemoteAppHost' }
@@ -30,12 +34,24 @@ export default {
       detailDrawer: () => import('./AppletHostDetail/index.vue'),
       tableConfig: {
         url: '/api/v1/terminal/applet-hosts/',
-        columnsExclude: ['info', 'auto_config', 'gathered_info', 'deploy_options'],
+        columnsExclude: [
+          'info',
+          'auto_config',
+          'gathered_info',
+          'deploy_options',
+          'tinker_target_version',
+          'tinker_version_status'
+        ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'address', 'protocols', 'load', 'comment', 'actions']
+          default: ['name', 'address', 'protocols', 'load', 'tinker_version', 'comment', 'actions']
         },
         columnsMeta: {
+          tinker_version: {
+            label: this.$t('TinkerVersion'),
+            formatter: TinkerVersion,
+            minWidth: 220
+          },
           name: {
             formatterArgs: {
               getRoute: ({ row }) => {
@@ -105,6 +121,7 @@ export default {
   activated() {
     // keep-alive 切回该 tab 时也重渲，确保帮助文案一定出现
     this.renderHelp()
+    this.$refs.table?.reloadTable()
   },
   methods: {
     // 命令式渲染帮助文案：绕开 v-html 编译转换在 keep-alive/时序下对内联 $t 不重算的问题。

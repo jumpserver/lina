@@ -1,8 +1,14 @@
 <template>
   <TwoCol>
-    <ListTable :header-actions="headerConfig" :table-config="config" />
+    <ListTable ref="table" :header-actions="headerConfig" :table-config="config" />
     <template #right>
       <QuickActions :actions="quickActions" type="primary" />
+      <TinkerDeploymentActions
+        v-if="object.id"
+        :key="object.id"
+        :host-id="object.id"
+        @changed="$refs.table?.reloadTable()"
+      />
     </template>
   </TwoCol>
 </template>
@@ -11,12 +17,14 @@
 import { ListTable, QuickActions } from '@/components'
 import { openTaskPage } from '@/utils/jms/index'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import TinkerDeploymentActions from './TinkerDeploymentActions.vue'
 export default {
   name: 'Developments',
   components: {
     TwoCol,
     ListTable,
-    QuickActions
+    QuickActions,
+    TinkerDeploymentActions
   },
   props: {
     object: {
@@ -45,9 +53,12 @@ export default {
             label: this.$t('Status'),
             formatter: (row) => {
               const typeMapper = {
-                pending: 'success',
-                success: 'primary',
+                pending: 'info',
+                running: 'warning',
+                success: 'success',
                 failed: 'danger',
+                error: 'danger',
+                canceled: 'info',
                 unknown: 'warning'
               }
               const tp = typeMapper[row.status.value] || 'info'
@@ -80,6 +91,7 @@ export default {
       quickActions: [
         {
           title: this.$t('InitialDeploy'),
+          has: this.$hasPerm('terminal.add_applethostdeployment'),
           attrs: {
             type: 'primary',
             label: this.$t('Deploy')

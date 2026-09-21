@@ -2491,5 +2491,17 @@
   "MFASystemPolicyHelp": "You can configure methods before enabling their features. Only enabled methods take effect.",
   "MFAStoredInactiveHelp": "Inactive selections are retained and will take effect when their prerequisites are met.",
   "MFANoEffectiveMethod": "No MFA method is currently effective. Check the policy and feature settings before requiring MFA.",
-  "MFACapabilitiesUnavailable": "Unable to load MFA capabilities. Reload before editing."
+  "MFACapabilitiesUnavailable": "Unable to load MFA capabilities. Reload before editing.",
+  "TinkerVersion": "Tinker version",
+  "TinkerNotDeployed": "Not deployed",
+  "TinkerVersionUnknown": "Version unknown",
+  "TinkerVersionUnsupported": "Update required",
+  "TinkerVersionCompatible": "Supported",
+  "TinkerVersionNewer": "Newer version, unverified",
+  "TinkerVersionCurrent": "Recommended version",
+  "TinkerRecommendedVersion": "Recommended version: {version}",
+  "TinkerVersionAttention": "Some application hosts have unknown, unsupported or newer unverified Tinker versions. Recommended version: {version}. Review their versions and schedule any redeployment during a maintenance window.",
+  "TinkerRedeploy": "Redeploy to recommended version",
+  "TinkerRedeployConfirm": "Current version: {current}; target version: {target}. The host will go offline during redeployment, which may interrupt RemoteApp connections. Environment and service configuration will run again and a reboot may be required. Continue during a maintenance window?",
+  "TinkerDeploymentRunning": "A deployment is pending or running. Please wait for it to finish."
 }

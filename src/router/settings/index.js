@@ -429,7 +429,7 @@ export default {
           meta: {
             title: i18n.t('Applets'),
             icon: 'application',
-            permissions: ['terminal.view_applet']
+            permissions: ['terminal.view_applet | terminal.view_applethost']
           }
         },
         {
