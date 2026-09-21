@@ -2496,6 +2496,5 @@
   "TinkerRecommendedVersion": "推荐版本：{version}",
   "TinkerVersionAttention": "部分发布机的 Tinker 版本未知、低于最低要求或为尚未验证的较新版本。推荐版本：{version}。请检查版本，并在维护窗口内安排必要的重新部署。",
   "TinkerRedeploy": "重新部署至推荐版本",
-  "TinkerRedeployConfirm": "当前版本：{current}；目标版本：{target}。重新部署期间发布机会暂时离线，可能中断远程应用连接，并重新执行环境和服务配置，必要时可能重启。请确认处于维护窗口后继续。",
-  "TinkerDeploymentRunning": "已有部署任务等待执行或正在执行，请等待任务结束。"
+  "TinkerRedeployConfirm": "当前版本：{current}；目标版本：{target}。重新部署期间发布机会暂时离线，可能中断远程应用连接，并重新执行环境和服务配置，必要时可能重启。请确认处于维护窗口后继续。"
 }

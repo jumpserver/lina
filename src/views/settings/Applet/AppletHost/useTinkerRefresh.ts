@@ -1,10 +1,7 @@
 import { onActivated, onBeforeUnmount, onDeactivated, onMounted } from 'vue'
 
 // Refresh while the view is visible, for at most ten minutes after each visit/focus.
-export function useTinkerRefresh(
-  load: (signal: AbortSignal) => Promise<void>,
-  interval: () => number = () => 30000
-) {
+export function useTinkerRefresh(load: (signal: AbortSignal) => Promise<void>) {
   let active = false
   let deadline = 0
   let timer: ReturnType<typeof setTimeout> | undefined
@@ -21,7 +18,7 @@ export function useTinkerRefresh(
       // The request client handles errors; keep the last known state on failure.
     } finally {
       controller = undefined
-      if (active && Date.now() < deadline) timer = setTimeout(refresh, interval())
+      if (active && Date.now() < deadline) timer = setTimeout(refresh, 30000)
     }
   }
 

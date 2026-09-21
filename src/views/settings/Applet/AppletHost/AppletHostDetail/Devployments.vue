@@ -53,12 +53,9 @@ export default {
             label: this.$t('Status'),
             formatter: (row) => {
               const typeMapper = {
-                pending: 'info',
-                running: 'warning',
-                success: 'success',
+                pending: 'success',
+                success: 'primary',
                 failed: 'danger',
-                error: 'danger',
-                canceled: 'info',
                 unknown: 'warning'
               }
               const tp = typeMapper[row.status.value] || 'info'
@@ -91,7 +88,6 @@ export default {
       quickActions: [
         {
           title: this.$t('InitialDeploy'),
-          has: this.$hasPerm('terminal.add_applethostdeployment'),
           attrs: {
             type: 'primary',
             label: this.$t('Deploy')

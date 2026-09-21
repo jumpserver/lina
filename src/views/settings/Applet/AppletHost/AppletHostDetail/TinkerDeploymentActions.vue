@@ -13,39 +13,22 @@ const props = defineProps<{ hostId: string }>()
 const emit = defineEmits<{ changed: [] }>()
 const { t } = useI18n()
 const host = shallowRef<Record<string, string> | null>(null)
-const pending = shallowRef(false)
 const submitting = shallowRef(false)
 const canView = computed(() => hasPermission('terminal.view_applethost'))
-const canViewDeployments = computed(() => hasPermission('terminal.view_applethostdeployment'))
 const canDeploy = computed(() => hasPermission('terminal.add_applethostdeployment'))
 
-const refresh = useTinkerRefresh(
-  async (signal) => {
-    if (!canView.value) return
-    const hostRequest = request.get(`/api/v1/terminal/applet-hosts/${props.hostId}/`, { signal })
-    const taskRequest = canViewDeployments.value
-      ? request.get('/api/v1/terminal/applet-host-deployments/', {
-          params: { host: props.hostId, status__in: 'pending,running', limit: 1 },
-          signal
-        })
-      : Promise.resolve([])
-    const [currentHost, tasks] = await Promise.all([hostRequest, taskRequest])
-    if (signal.aborted) return
-    const rows = Array.isArray(tasks) ? tasks : tasks.results || []
-    if (
-      pending.value !== rows.length > 0 ||
-      host.value?.tinker_version !== currentHost.tinker_version
-    ) {
-      emit('changed')
-    }
-    host.value = currentHost
-    pending.value = rows.length > 0
-  },
-  () => (pending.value ? 5000 : 30000)
-)
+const refresh = useTinkerRefresh(async (signal) => {
+  if (!canView.value) return
+  const currentHost = await request.get(`/api/v1/terminal/applet-hosts/${props.hostId}/`, {
+    signal
+  })
+  if (signal.aborted) return
+  if (host.value?.tinker_version !== currentHost.tinker_version) emit('changed')
+  host.value = currentHost
+})
 
 async function deploy() {
-  if (!host.value || submitting.value || pending.value) return
+  if (!host.value || submitting.value) return
   submitting.value = true
   try {
     await ElMessageBox.confirm(
@@ -60,7 +43,6 @@ async function deploy() {
       host: props.hostId,
       install_applets: false
     })
-    pending.value = true
     emit('changed')
     openTaskPage(result.task)
     refresh()
@@ -76,11 +58,10 @@ async function deploy() {
   <IBox v-if="canView && host" :title="t('TinkerVersion')" class="tinker-deployment">
     <TinkerVersion :row="host" />
     <p>{{ t('TinkerRecommendedVersion', { version: host.tinker_target_version }) }}</p>
-    <p v-if="pending">{{ t('TinkerDeploymentRunning') }}</p>
     <el-button
       v-if="canDeploy && host.date_synced"
       type="primary"
-      :disabled="pending || submitting"
+      :disabled="submitting"
       :loading="submitting"
       @click="deploy"
     >

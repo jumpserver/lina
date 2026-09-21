@@ -2493,6 +2493,5 @@
   "TinkerRecommendedVersion": "建議版本：{version}",
   "TinkerVersionAttention": "部分發佈機的 Tinker 版本未知、低於最低要求或為尚未驗證的較新版本。建議版本：{version}。請檢查版本，並在維護時段內安排必要的重新部署。",
   "TinkerRedeploy": "重新部署至建議版本",
-  "TinkerRedeployConfirm": "目前版本：{current}；目標版本：{target}。重新部署期間發佈機會暫時離線，可能中斷遠端應用連線，並重新執行環境和服務設定，必要時可能重新啟動。請確認處於維護時段後繼續。",
-  "TinkerDeploymentRunning": "已有部署工作等待執行或正在執行，請等待工作結束。"
+  "TinkerRedeployConfirm": "目前版本：{current}；目標版本：{target}。重新部署期間發佈機會暫時離線，可能中斷遠端應用連線，並重新執行環境和服務設定，必要時可能重新啟動。請確認處於維護時段後繼續。"
 }
