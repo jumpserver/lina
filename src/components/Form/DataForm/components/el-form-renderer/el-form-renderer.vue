@@ -23,6 +23,7 @@ import _clonedeep from 'lodash/cloneDeep'
 import _isequal from 'lodash/isEqual'
 import _set from 'lodash/set'
 import { markRaw, provide } from 'vue'
+import { FORM_RENDERER_KEY } from './context'
 import RenderFormGroup from './components/render-form-group.vue'
 import RenderFormItem from './components/render-form-item.vue'
 import transformContent from './util/transform-content'
@@ -35,10 +36,8 @@ import {
 } from './util/utils'
 
 const GROUP = 'group'
-const FORM_RENDERER_KEY = Symbol('formRenderer')
 
 export { FORM_RENDERER_KEY }
-
 export default {
   name: 'ElFormRenderer',
   components: {
@@ -77,7 +76,8 @@ export default {
     const formRendererContext = {
       updateForm: null,
       setOptions: null,
-      getElForm: null
+      getElForm: null,
+      getFormValue: null
     }
     provide(FORM_RENDERER_KEY, formRendererContext)
     return { formRendererContext }
@@ -132,6 +132,7 @@ export default {
     this.formRendererContext.updateForm = this.updateForm
     this.formRendererContext.setOptions = this.setOptions
     this.formRendererContext.getElForm = () => this.$refs.elForm
+    this.formRendererContext.getFormValue = this.getFormValue
 
     /**
      * 与 element 相同，在 mounted 阶段存储 initValue

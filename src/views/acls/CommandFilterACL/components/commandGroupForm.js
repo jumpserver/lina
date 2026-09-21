@@ -1,4 +1,5 @@
 import CommandMatchMode from './CommandMatchMode.vue'
+import CommandRuleEditor from './CommandRuleEditor.vue'
 
 export function getCommandGroupFormConfig(vm) {
   return {
@@ -14,9 +15,8 @@ export function getCommandGroupFormConfig(vm) {
     fieldsMeta: {
       content: {
         label: vm.$t('CommandRules'),
-        type: 'input',
+        component: CommandRuleEditor,
         el: {
-          type: 'textarea',
           placeholder: 'rm\nreboot\nsystemctl restart sshd',
           rows: 6
         }
