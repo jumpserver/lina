@@ -6,6 +6,16 @@ import i18n from '@/i18n/i18n'
  */
 export default [
   {
+    path: '/ops/task/logs/',
+    component: () => import('@/views/settings/Task/TaskLogWindow.vue'),
+    name: 'TaskLogWindow',
+    hidden: true,
+    meta: {
+      title: i18n.t('CeleryTaskLog'),
+      permissions: []
+    }
+  },
+  {
     path: '/ops/celery/task/:id/log/',
     component: () => import('@/views/settings/Task/CeleryTaskLog'),
     name: 'CeleryTaskLog',
