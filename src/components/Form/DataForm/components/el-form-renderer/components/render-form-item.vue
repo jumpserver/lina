@@ -106,7 +106,7 @@ import _get from 'lodash/get'
 import _includes from 'lodash/includes'
 import _topairs from 'lodash/toPairs'
 import { markRaw, toRaw, inject } from 'vue'
-import { FORM_RENDERER_KEY } from '../el-form-renderer.vue'
+import { FORM_RENDERER_KEY } from '../context'
 import getEnableWhenStatus from '../util/enable-when'
 import { noop } from '../util/utils'
 
@@ -160,7 +160,8 @@ export default {
     const formRendererContext = inject(FORM_RENDERER_KEY, {
       updateForm: null,
       setOptions: null,
-      getElForm: null
+      getElForm: null,
+      getFormValue: null
     })
     return { formRendererContext }
   },

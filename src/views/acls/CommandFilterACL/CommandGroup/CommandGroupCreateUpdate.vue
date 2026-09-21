@@ -12,48 +12,18 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import { getCommandGroupFormConfig } from '../components/commandGroupForm'
 
 export default {
   name: 'CommandGroupCreateUpdate',
   components: { GenericCreateUpdatePage },
   data() {
-    const regexPlaceholder = 'rm.*|reboot|shutdown'
-    const commandPlaceholder = 'rm\rreboot'
-    const commandHelpText = this.$t('CommandFilterRuleContentHelpText')
-    const vm = this
+    const formConfig = getCommandGroupFormConfig(this)
     return {
-      initial: {},
-      fields: [
-        [this.$t('Basic'), ['name', 'type', 'content', 'ignore_case']],
-        [this.$t('Other'), ['comment']]
-      ],
+      ...formConfig,
       url: `/api/v1/acls/command-groups/`,
       createSuccessNextRoute: { name: 'CommandFilterACLList' },
-      updateSuccessNextRoute: { name: 'CommandFilterACLList' },
-      fieldsMeta: {
-        type: {
-          on: {
-            change: ([val]) => {
-              if (val === 'command') {
-                vm.fieldsMeta.content.el.placeholder = commandPlaceholder
-                vm.fieldsMeta.content.helpText = commandHelpText
-              } else {
-                vm.fieldsMeta.content.el.placeholder = regexPlaceholder
-                vm.fieldsMeta.content.helpText = ''
-              }
-            }
-          }
-        },
-        content: {
-          type: 'input',
-          el: {
-            type: 'textarea',
-            placeholder: commandPlaceholder,
-            rows: 4
-          },
-          helpText: ''
-        }
-      }
+      updateSuccessNextRoute: { name: 'CommandFilterACLList' }
     }
   }
 }

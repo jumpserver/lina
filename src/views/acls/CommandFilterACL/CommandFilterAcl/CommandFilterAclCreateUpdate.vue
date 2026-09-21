@@ -15,6 +15,7 @@ import rules from '@/components/Form/DataForm/rules'
 import { ResourceSelect } from '@/components/Form/FormFields'
 import { userJSONSelectMeta } from '@/views/users/const'
 import { assetJSONSelectMeta } from '@/views/assets/const'
+import CommandGroupSelect from '../components/CommandGroupSelect.vue'
 
 export default {
   name: 'CommandFilterACLCreateUpdate',
@@ -25,14 +26,13 @@ export default {
     return {
       initial: {
         is_active: true,
-        accounts: ['@ALL']
+        accounts: ['@ALL'],
+        command_groups: []
       },
       fields: [
-        [this.$t('Basic'), ['name', 'priority']],
-        [this.$t('User'), ['users']],
-        [this.$t('Asset'), ['assets']],
-        [this.$t('Account'), ['accounts']],
-        [this.$t('CommandGroup'), ['command_groups']],
+        [this.$t('BasicInfo'), ['name', 'priority']],
+        [this.$t('EffectiveScope'), ['users', 'assets', 'accounts']],
+        [this.$t('CommandMatching'), ['command_groups']],
         [this.$t('Action'), ['action', 'reviewers']],
         [this.$t('Other'), ['is_active', 'comment']]
       ],
@@ -51,7 +51,8 @@ export default {
         action: {},
         command_groups: {
           type: 'resourceSelect',
-          component: ResourceSelect,
+          label: this.$tc('CommandGroup', 2),
+          component: CommandGroupSelect,
           el: {
             value: [],
             url: '/api/v1/acls/command-groups/?fields_size=mini',
